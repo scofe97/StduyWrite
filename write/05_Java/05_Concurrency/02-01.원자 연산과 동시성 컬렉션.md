@@ -1,0 +1,108 @@
+# 원자 연산과 동시성 컬렉션
+
+---
+
+> `synchronized` 없이도 멀티스레드에서 안전한 연산을 수행할 수 있다. CAS 하드웨어 명령과 자바의 동시성 컬렉션이 그 핵심이다.
+
+## 원자적 연산이란
+
+*원자적 연산(atomic operation)*이란 더 이상 나눌 수 없는 단일 단계로 완료되는 연산이다. 실행 도중 다른 스레드가 끼어들 수 있는 중간 상태가 없으므로, 완료된 결과만 외부에 보인다. 반면 `i = i + 1` 처럼 읽기-수정-쓰기 세 단계로 나뉘는 연산은 원자적이지 않다. 두 스레드가 동시에 `i`를 읽으면 둘 다 같은 초기값을 가져가 최종 결과가 기대보다 작아지는 **경합 조건(race condition)**이 발생한다.
+
+`volatile` 키워드는 CPU 캐시와 메인 메모리 간 가시성 문제를 해결하지만, 연산의 원자성은 보장하지 않는다. `synchronized`는 원자성을 보장하지만 스레드가 `BLOCKED` 상태로 전환되는 컨텍스트 스위칭 비용이 따른다.
+
+## CAS(Compare-And-Swap) 원리
+
+**CAS**는 CPU 하드웨어가 직접 제공하는 원자적 명령으로, 락을 걸지 않고 안전한 연산을 수행하는 낙관적 접근법이다. 동작 방식은 세 단계다.
+
+- 현재 메모리 값을 읽는다.
+- 읽은 값이 기대한 값과 일치하는지 비교한다.
+- 일치하면 새 값으로 교체하고, 일치하지 않으면 재시도한다.
+
+비교와 교체가 하드웨어 수준에서 하나의 명령으로 묶여 있어, 다른 스레드가 끼어들 수 없다. 충돌이 드문 환경에서는 재시도가 거의 발생하지 않아 `synchronized`보다 1.5~2배 빠르다. 단, 충돌이 빈번한 환경에서는 재시도 오버헤드가 락 방식보다 커질 수 있으므로, 나노초 단위의 짧은 연산에만 적합하다.
+
+```java
+AtomicInteger atomicInteger = new AtomicInteger(0);
+
+// 현재 값이 0이면 1로 교체 → 성공, result1 = true
+boolean result1 = atomicInteger.compareAndSet(0, 1);
+
+// 현재 값이 1인데 0을 기대 → 실패, result2 = false
+boolean result2 = atomicInteger.compareAndSet(0, 1);
+```
+
+## AtomicInteger / AtomicLong / AtomicReference
+
+`java.util.concurrent.atomic` 패키지는 CAS 기반의 원자 타입을 제공한다. 내부적으로 `volatile` 필드와 CAS 명령을 결합해 스레드 안전성을 보장한다.
+
+```java
+// AtomicInteger: 카운터, ID 생성
+AtomicInteger counter = new AtomicInteger(0);
+int next = counter.incrementAndGet(); // 읽기-증가-쓰기를 원자적으로
+
+// AtomicReference: 객체 참조 교체
+AtomicReference<String> ref = new AtomicReference<>("초기값");
+ref.compareAndSet("초기값", "새값"); // 참조를 원자적으로 교체
+```
+
+주요 메서드는 `get()`, `set()`, `incrementAndGet()`, `getAndIncrement()`, `compareAndSet()` 이다. 읽기 전용 접근이 대부분이고 쓰기가 드문 상황에 적합하다.
+
+## LongAdder / LongAccumulator
+
+**LongAdder**는 높은 경합 상황에서 `AtomicLong`보다 훨씬 높은 성능을 낸다. `AtomicLong`은 단일 셀에 모든 스레드가 경합하지만, `LongAdder`는 내부에 여러 셀(cell)을 두고 스레드마다 다른 셀에 누적한 뒤 `sum()` 호출 시 합산한다. 카운터가 증가만 하는 통계 수집, 히트 카운트 같은 용도에 적합하다.
+
+```java
+LongAdder adder = new LongAdder();
+adder.increment();      // 경합 없이 로컬 셀에 누적
+long total = adder.sum(); // 전체 합산
+```
+
+**LongAccumulator**는 덧셈 외의 임의 연산(최댓값, 최솟값 등)을 원자적으로 누적할 때 사용한다. 생성자에 `BinaryOperator`를 전달해 누적 방식을 정의한다.
+
+## ConcurrentHashMap
+
+일반 `HashMap`은 멀티스레드 환경에서 데이터 유실이나 무한 루프(Java 7 이하)를 유발한다. **ConcurrentHashMap**은 이를 해결하기 위해 두 가지 전략을 사용한다.
+
+Java 7까지는 맵을 여러 세그먼트(segment)로 나눠 세그먼트 단위로 락을 걸었다. Java 8부터는 세그먼트를 제거하고 **노드(버킷) 단위 락**과 CAS를 결합했다. 빈 버킷에 첫 노드를 삽입할 때는 CAS를 사용하고, 이미 노드가 있는 버킷을 수정할 때만 `synchronized`로 해당 버킷 헤드를 잠근다. 이 방식은 서로 다른 버킷을 건드리는 스레드들이 완전히 병렬로 동작하게 해준다.
+
+```java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+map.put("key", 1);
+// putIfAbsent, compute 등도 원자적으로 동작
+map.compute("key", (k, v) -> v == null ? 1 : v + 1);
+```
+
+`ConcurrentModificationException`이 발생하지 않으며, 반복 중 수정도 안전하다. 단 `size()`는 정확한 스냅샷이 아니라 추정값일 수 있다.
+
+## CopyOnWriteArrayList
+
+**CopyOnWriteArrayList**는 쓰기(추가, 수정, 삭제)가 발생할 때마다 내부 배열 전체를 복사해 새 배열에 변경을 적용한다. 읽기는 기존 배열을 그대로 참조하므로 락 없이 안전하다.
+
+```java
+List<String> list = new CopyOnWriteArrayList<>(List.of("A", "B", "C"));
+Iterator<String> iter = list.iterator(); // 현재 배열 스냅샷 참조
+list.add("D");                           // 새 배열로 교체
+
+while (iter.hasNext()) {
+    System.out.println(iter.next()); // A, B, C 만 출력 (스냅샷 기준)
+}
+```
+
+읽기가 압도적으로 많고 쓰기가 드문 경우에 적합하다. 쓰기마다 전체 배열을 복사하므로 쓰기가 빈번한 상황에서는 GC 압박과 성능 저하가 심해진다. 이벤트 리스너 목록, 설정 목록처럼 변경이 드문 공유 컬렉션에 주로 쓰인다.
+
+## ConcurrentLinkedQueue
+
+**ConcurrentLinkedQueue**는 CAS 기반의 비차단(non-blocking) 큐다. 락을 사용하지 않고 CAS로 헤드와 테일 포인터를 원자적으로 갱신한다. 크기 제한이 없으며 `poll()`은 큐가 비어 있으면 `null`을 반환한다(차단하지 않는다). 생산자-소비자 패턴보다는 여러 스레드가 경합 없이 작업을 교환하는 경우에 적합하다.
+
+## 동시성 컬렉션 vs 동기화 래퍼 비교
+
+`Collections.synchronizedList(new ArrayList<>())`처럼 동기화 래퍼를 사용하면 모든 메서드에 단일 락이 적용된다. 편리하지만 정교한 제어가 불가능하고 성능 최적화에 한계가 있다.
+
+| 항목 | `Collections.synchronizedXxx` | `java.util.concurrent` 컬렉션 |
+|------|-------------------------------|-------------------------------|
+| 락 단위 | 컬렉션 전체 | 버킷/노드/세그먼트 단위 |
+| 반복 안전성 | 외부에서 별도 락 필요 | ConcurrentModificationException 없음 |
+| 성능 | 단일 스레드 수준 | 높은 경합에서 우수 |
+| 사용 편의성 | 기존 컬렉션 래핑 가능 | 별도 클래스 생성 필요 |
+| 주요 용도 | 간단한 동기화, 레거시 코드 | 고성능 멀티스레드 환경 |
+
+동기화 래퍼는 전체 컬렉션을 하나의 락으로 보호하므로 단일 스레드 처리량과 크게 다르지 않다. 경합이 높은 환경에서는 동시성 컬렉션을 사용하는 것이 원칙이다.

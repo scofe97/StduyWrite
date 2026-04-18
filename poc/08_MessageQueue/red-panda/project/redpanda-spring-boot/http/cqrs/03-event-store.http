@@ -1,0 +1,57 @@
+### ============================================================
+### CQRS Event Store 토픽 설계 검증
+### ============================================================
+### 사전 조건:
+###   1. docker-compose up -d (Redpanda)
+###   2. ./gradlew bootRun (토픽 자동 생성)
+###   3. 02-command-side.http 먼저 실행 (이벤트 발행)
+### ============================================================
+
+### --- 토픽 설정 확인 (rpk) ---
+
+### 1. post-created 토픽 설정 확인
+# docker exec -it redpanda rpk topic describe social.events.post-created
+### 확인 포인트:
+###   - retention.ms = -1 (무한 보존)
+###   - cleanup.policy = delete (compact 아님)
+###   - partitions = 3
+
+###
+
+### 2. post-liked 토픽 설정 확인
+# docker exec -it redpanda rpk topic describe social.events.post-liked
+
+###
+
+### 3. user-followed 토픽 설정 확인
+# docker exec -it redpanda rpk topic describe social.events.user-followed
+
+###
+
+### 4. user-unfollowed 토픽 설정 확인
+# docker exec -it redpanda rpk topic describe social.events.user-unfollowed
+
+###
+
+### --- Event Store 특성 검증 ---
+
+### 5. 전체 토픽 목록 확인
+# docker exec -it redpanda rpk topic list
+
+### 6. 토픽 설정 상세 (retention, cleanup.policy 등)
+# docker exec -it redpanda rpk topic describe social.events.post-created -c
+
+### 7. 파티션별 오프셋 확인 (이벤트 분포 확인)
+# docker exec -it redpanda rpk topic describe social.events.post-created -p
+
+### 8. post-created 이벤트 내용 확인
+# docker exec -it redpanda rpk topic consume social.events.post-created --offset start --num 10
+
+### 9. post-liked 이벤트 내용 확인
+# docker exec -it redpanda rpk topic consume social.events.post-liked --offset start --num 10
+
+### 10. user-followed 이벤트 내용 확인
+# docker exec -it redpanda rpk topic consume social.events.user-followed --offset start --num 10
+
+### 11. Consumer Group 리셋 (Event Replay 준비)
+# docker exec -it redpanda rpk group seek cqrs-query-group --to start --topics social.events.post-created,social.events.post-liked,social.events.user-followed,social.events.user-unfollowed

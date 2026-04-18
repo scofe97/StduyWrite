@@ -1,0 +1,62 @@
+# Devops TPS CI/CD Services
+# Jenkins + Git Provider + Redpanda Connect
+
+services:
+  # ===========================================
+  # Git Provider (gRPC + REST Gateway)
+  # ===========================================
+  git-provider:
+    build: ../git-provider
+    container_name: devops-tps-git-provider
+    ports:
+      - "50051:50051"   # gRPC
+      - "8083:8080"     # REST Gateway
+    environment:
+      KAFKA_BROKERS: "redpanda:9092"
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    networks:
+      - devops-tps-network
+
+  # ===========================================
+  # Jenkins CI Server
+  # ===========================================
+  jenkins:
+    image: jenkins/jenkins:lts-jdk17
+    container_name: devops-tps-jenkins
+    ports:
+      - "9091:8080"     # Jenkins UI
+      - "50000:50000"   # Agent
+    environment:
+      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
+      CASC_JENKINS_CONFIG: "/var/jenkins_home/casc.yaml"
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - ./jenkins-config/casc.yaml:/var/jenkins_home/casc.yaml:ro
+    networks:
+      - devops-tps-network
+
+  # ===========================================
+  # Redpanda Connect (webhook -> Kafka)
+  # ===========================================
+  redpanda-connect:
+    image: docker.redpanda.com/redpandadata/connect:4.43.0
+    container_name: devops-tps-redpanda-connect
+    ports:
+      - "4195:4195"     # HTTP (webhook receiver)
+    volumes:
+      - ./connect:/connect:ro
+    command: ["streams", "/connect/*.yaml"]
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    networks:
+      - devops-tps-network
+
+volumes:
+  jenkins-data:
+
+networks:
+  devops-tps-network:
+    driver: bridge

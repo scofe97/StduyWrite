@@ -1,0 +1,389 @@
+syntax = "proto3";
+
+package gitprovider.v1;
+
+option go_package = "github.com/runners-high/git-provider/pkg/pb/v1;pbv1";
+option java_package = "com.runnershigh.tps.infrastructure.grpc.proto";
+option java_outer_classname = "ProviderProto";
+option java_multiple_files = true;
+
+import "google/api/annotations.proto";
+
+// =============================================================================
+// 프로바이더 타입
+// =============================================================================
+
+enum ProviderType {
+  PROVIDER_TYPE_UNSPECIFIED = 0;
+  PROVIDER_TYPE_GITHUB = 1;
+  PROVIDER_TYPE_GITLAB = 2;
+  PROVIDER_TYPE_BITBUCKET = 3;
+}
+
+// =============================================================================
+// 네임스페이스 타입 (소유자 유형)
+// =============================================================================
+
+enum NamespaceType {
+  NAMESPACE_TYPE_UNSPECIFIED = 0;
+  NAMESPACE_TYPE_USER = 1;          // GitHub User, GitLab User
+  NAMESPACE_TYPE_ORGANIZATION = 2;  // GitHub Organization
+  NAMESPACE_TYPE_GROUP = 3;         // GitLab Group
+  NAMESPACE_TYPE_WORKSPACE = 4;     // Bitbucket Workspace
+}
+
+// =============================================================================
+// 프로바이더 설정
+// =============================================================================
+
+message GitHubConfig {
+  string token = 1;
+  string base_url = 2;  // 선택: Enterprise URL
+}
+
+message GitLabConfig {
+  string token = 1;
+  string base_url = 2;  // 선택: Self-hosted URL
+}
+
+message BitbucketConfig {
+  // API Token 인증 (2025년 9월 9일부터 권장)
+  string email = 1;         // Atlassian 계정 이메일
+  string api_token = 2;     // API Token (ATAT... 형식)
+  string workspace = 3;     // Workspace 이름
+}
+
+// 프로바이더 설정 (하나만 선택)
+message ProviderConfig {
+  oneof config {
+    GitHubConfig github = 1;
+    GitLabConfig gitlab = 2;
+    BitbucketConfig bitbucket = 3;
+  }
+}
+
+// =============================================================================
+// Provider 엔티티 (기존 유지)
+// =============================================================================
+
+message Provider {
+  string id = 1;
+  string name = 2;
+  ProviderType type = 3;
+  ProviderConfig config = 4;
+  string created_at = 5;
+  string updated_at = 6;
+}
+
+// =============================================================================
+// ProviderService 요청/응답 (기존 유지)
+// =============================================================================
+
+message RegisterProviderRequest {
+  string name = 1;
+  ProviderType type = 2;
+  ProviderConfig config = 3;
+}
+
+message RegisterProviderResponse {
+  Provider provider = 1;
+}
+
+message GetProviderRequest {
+  string id = 1;
+}
+
+message GetProviderResponse {
+  Provider provider = 1;
+}
+
+message ListProvidersRequest {
+  ProviderType type = 1;
+}
+
+message ListProvidersResponse {
+  repeated Provider providers = 1;
+}
+
+message DeleteProviderRequest {
+  string id = 1;
+}
+
+message DeleteProviderResponse {
+  bool success = 1;
+}
+
+// =============================================================================
+// ProviderService (기존 유지 - 나중에 사용)
+// =============================================================================
+
+service ProviderService {
+  rpc RegisterProvider(RegisterProviderRequest) returns (RegisterProviderResponse) {
+    option (google.api.http) = {
+      post: "/v1/providers"
+      body: "*"
+    };
+  }
+
+  rpc GetProvider(GetProviderRequest) returns (GetProviderResponse) {
+    option (google.api.http) = {
+      get: "/v1/providers/{id}"
+    };
+  }
+
+  rpc ListProviders(ListProvidersRequest) returns (ListProvidersResponse) {
+    option (google.api.http) = {
+      get: "/v1/providers"
+    };
+  }
+
+  rpc DeleteProvider(DeleteProviderRequest) returns (DeleteProviderResponse) {
+    option (google.api.http) = {
+      delete: "/v1/providers/{id}"
+    };
+  }
+}
+
+// =============================================================================
+// 네임스페이스 (소유자/조직 통합)
+// =============================================================================
+
+// Namespace는 저장소의 소유자 정보를 통합합니다.
+// - GitHub: User 또는 Organization
+// - GitLab: User 또는 Group (중첩 가능)
+// - Bitbucket: Workspace
+message Namespace {
+  string id = 1;              // 고유 식별자
+  string name = 2;            // 표시 이름 (login, slug)
+  string full_path = 3;       // 전체 경로 (GitLab 중첩 그룹 지원: "group/subgroup")
+  NamespaceType type = 4;     // 소유자 유형
+  string avatar_url = 5;      // 아바타 이미지 URL
+  string url = 6;             // 프로필 페이지 URL
+}
+
+// =============================================================================
+// 저장소 정보 (확장됨)
+// =============================================================================
+
+// Repository는 모든 프로바이더의 저장소를 통합합니다.
+// - GitHub: Repository
+// - GitLab: Project
+// - Bitbucket: Repository
+message Repository {
+  string id = 1;                    // 고유 식별자
+  string name = 2;                  // 저장소 이름
+  string full_name = 3;             // 전체 이름 (owner/repo)
+  string description = 4;           // 설명
+  string url = 5;                   // 웹 URL (html_url)
+  string clone_url = 6;             // HTTPS clone URL
+  string default_branch = 7;        // 기본 브랜치명
+  bool private = 8;                 // 비공개 여부
+
+  // === 새로 추가된 필드 ===
+  string ssh_url = 9;               // SSH clone URL
+  Namespace namespace = 10;         // 소유자 정보
+  string created_at = 11;           // 생성 시간 (ISO 8601)
+  string updated_at = 12;           // 수정 시간 (ISO 8601)
+  ProviderType provider = 13;       // 원본 프로바이더
+}
+
+// =============================================================================
+// 커밋 정보
+// =============================================================================
+
+// Commit은 브랜치의 마지막 커밋 정보를 담습니다.
+message Commit {
+  string sha = 1;                   // 커밋 SHA (전체 40자)
+  string message = 2;               // 커밋 메시지
+  string author_name = 3;           // 작성자 이름
+  string author_email = 4;          // 작성자 이메일
+  string date = 5;                  // 작성 시간 (ISO 8601)
+}
+
+// =============================================================================
+// 브랜치 정보
+// =============================================================================
+
+// Branch는 모든 프로바이더의 브랜치를 통합합니다.
+message Branch {
+  string name = 1;                  // 브랜치 이름
+  string sha = 2;                   // 마지막 커밋 SHA
+  bool protected = 3;               // 보호 브랜치 여부
+  bool is_default = 4;              // 기본 브랜치 여부
+  Commit last_commit = 5;           // 마지막 커밋 정보 (선택)
+}
+
+// =============================================================================
+// GitService 요청/응답 - 저장소
+// =============================================================================
+
+// 저장소 목록 조회
+message ListRepositoriesRequest {
+  ProviderConfig provider = 1;      // 프로바이더 설정
+}
+
+message ListRepositoriesResponse {
+  repeated Repository repositories = 1;
+}
+
+// 저장소 상세 조회
+message GetRepositoryRequest {
+  ProviderConfig provider = 1;      // 프로바이더 설정
+  string namespace = 2;             // 소유자 (owner/workspace)
+  string repository = 3;            // 저장소 이름
+}
+
+message GetRepositoryResponse {
+  Repository repository = 1;
+}
+
+// 저장소 생성
+message CreateRepositoryRequest {
+  ProviderConfig provider = 1;      // 프로바이더 설정
+  string name = 2;                  // 저장소 이름
+  string description = 3;           // 설명 (선택)
+  bool private = 4;                 // 비공개 여부
+  string namespace = 5;             // 소유자 (선택, 조직/그룹에 생성 시)
+  bool auto_init = 6;               // README 자동 생성
+}
+
+message CreateRepositoryResponse {
+  Repository repository = 1;
+}
+
+// 저장소 삭제
+message DeleteRepositoryRequest {
+  ProviderConfig provider = 1;      // 프로바이더 설정
+  string namespace = 2;             // 소유자
+  string repository = 3;            // 저장소 이름
+}
+
+message DeleteRepositoryResponse {
+  bool success = 1;
+}
+
+// =============================================================================
+// GitService 요청/응답 - 브랜치
+// =============================================================================
+
+// 브랜치 목록 조회
+message ListBranchesRequest {
+  ProviderConfig provider = 1;      // 프로바이더 설정
+  string namespace = 2;             // 소유자
+  string repository = 3;            // 저장소 이름
+}
+
+message ListBranchesResponse {
+  repeated Branch branches = 1;
+}
+
+// 브랜치 상세 조회
+message GetBranchRequest {
+  ProviderConfig provider = 1;      // 프로바이더 설정
+  string namespace = 2;             // 소유자
+  string repository = 3;            // 저장소 이름
+  string branch = 4;                // 브랜치 이름
+}
+
+message GetBranchResponse {
+  Branch branch = 1;
+}
+
+// 브랜치 생성
+message CreateBranchRequest {
+  ProviderConfig provider = 1;      // 프로바이더 설정
+  string namespace = 2;             // 소유자
+  string repository = 3;            // 저장소 이름
+  string branch = 4;                // 새 브랜치 이름
+  string ref = 5;                   // 시작점 (브랜치명 또는 커밋 SHA)
+}
+
+message CreateBranchResponse {
+  Branch branch = 1;
+}
+
+// 브랜치 삭제
+message DeleteBranchRequest {
+  ProviderConfig provider = 1;      // 프로바이더 설정
+  string namespace = 2;             // 소유자
+  string repository = 3;            // 저장소 이름
+  string branch = 4;                // 브랜치 이름
+}
+
+message DeleteBranchResponse {
+  bool success = 1;
+}
+
+// =============================================================================
+// GitService (저장소 + 브랜치 CRUD)
+// =============================================================================
+
+service GitService {
+  // === 저장소 ===
+
+  // 저장소 목록 조회
+  rpc ListRepositories(ListRepositoriesRequest) returns (ListRepositoriesResponse) {
+    option (google.api.http) = {
+      post: "/v1/repositories/list"
+      body: "*"
+    };
+  }
+
+  // 저장소 상세 조회
+  rpc GetRepository(GetRepositoryRequest) returns (GetRepositoryResponse) {
+    option (google.api.http) = {
+      post: "/v1/repositories/get"
+      body: "*"
+    };
+  }
+
+  // 저장소 생성
+  rpc CreateRepository(CreateRepositoryRequest) returns (CreateRepositoryResponse) {
+    option (google.api.http) = {
+      post: "/v1/repositories"
+      body: "*"
+    };
+  }
+
+  // 저장소 삭제
+  rpc DeleteRepository(DeleteRepositoryRequest) returns (DeleteRepositoryResponse) {
+    option (google.api.http) = {
+      post: "/v1/repositories/delete"
+      body: "*"
+    };
+  }
+
+  // === 브랜치 ===
+
+  // 브랜치 목록 조회
+  rpc ListBranches(ListBranchesRequest) returns (ListBranchesResponse) {
+    option (google.api.http) = {
+      post: "/v1/branches/list"
+      body: "*"
+    };
+  }
+
+  // 브랜치 상세 조회
+  rpc GetBranch(GetBranchRequest) returns (GetBranchResponse) {
+    option (google.api.http) = {
+      post: "/v1/branches/get"
+      body: "*"
+    };
+  }
+
+  // 브랜치 생성
+  rpc CreateBranch(CreateBranchRequest) returns (CreateBranchResponse) {
+    option (google.api.http) = {
+      post: "/v1/branches"
+      body: "*"
+    };
+  }
+
+  // 브랜치 삭제
+  rpc DeleteBranch(DeleteBranchRequest) returns (DeleteBranchResponse) {
+    option (google.api.http) = {
+      post: "/v1/branches/delete"
+      body: "*"
+    };
+  }
+}

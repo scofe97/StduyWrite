@@ -1,0 +1,415 @@
+syntax = "proto3";
+
+package gitprovider.v1;
+
+option go_package = "github.com/runners-high/git-provider/pkg/pb/v1;pbv1";
+
+import "google/api/annotations.proto";
+import "v1/provider.proto";
+
+// =============================================================================
+// MergeRequest 상태
+// =============================================================================
+
+// MergeRequestState는 MR/PR의 상태를 나타냅니다.
+enum MergeRequestState {
+  MERGE_REQUEST_STATE_UNSPECIFIED = 0;
+  MERGE_REQUEST_STATE_OPEN = 1;           // 열림
+  MERGE_REQUEST_STATE_CLOSED = 2;         // 닫힘 (머지 없이)
+  MERGE_REQUEST_STATE_MERGED = 3;         // 머지됨
+  MERGE_REQUEST_STATE_DRAFT = 4;          // 초안
+}
+
+// ReviewState는 리뷰 상태를 나타냅니다.
+enum ReviewState {
+  REVIEW_STATE_UNSPECIFIED = 0;
+  REVIEW_STATE_PENDING = 1;               // 리뷰 대기
+  REVIEW_STATE_APPROVED = 2;              // 승인됨
+  REVIEW_STATE_CHANGES_REQUESTED = 3;     // 변경 요청
+  REVIEW_STATE_COMMENTED = 4;             // 의견만
+  REVIEW_STATE_DISMISSED = 5;             // 기각됨
+}
+
+// MergeMethod는 머지 방법을 나타냅니다.
+enum MergeMethod {
+  MERGE_METHOD_UNSPECIFIED = 0;
+  MERGE_METHOD_MERGE = 1;                 // 일반 머지 커밋
+  MERGE_METHOD_SQUASH = 2;                // 스쿼시 머지
+  MERGE_METHOD_REBASE = 3;                // 리베이스 머지
+}
+
+// =============================================================================
+// MergeRequest 정보
+// =============================================================================
+
+// MergeRequest는 PR/MR 정보입니다.
+message MergeRequest {
+  string id = 1;                          // Provider의 MR ID
+  int32 number = 2;                       // MR 번호
+  string title = 3;                       // 제목
+  string description = 4;                 // 설명
+  MergeRequestState state = 5;            // 상태
+  string source_branch = 6;               // 소스 브랜치
+  string target_branch = 7;               // 타겟 브랜치
+  User author = 8;                        // 작성자
+  repeated User assignees = 9;            // 담당자
+  repeated User reviewers = 10;           // 리뷰어
+  repeated string labels = 11;            // 라벨
+  string url = 12;                        // Provider URL
+  bool draft = 13;                        // 초안 여부
+  bool mergeable = 14;                    // 머지 가능 여부
+  string created_at = 15;                 // 생성 시간
+  string updated_at = 16;                 // 수정 시간
+  string merged_at = 17;                  // 머지 시간
+  string closed_at = 18;                  // 닫힌 시간
+  User merged_by = 19;                    // 머지한 사람
+  string head_sha = 20;                   // 소스 브랜치의 최신 SHA
+  string base_sha = 21;                   // 타겟 브랜치의 SHA
+}
+
+// User는 사용자 정보입니다.
+message User {
+  string id = 1;                          // 사용자 ID
+  string login = 2;                       // 로그인명
+  string name = 3;                        // 표시 이름
+  string email = 4;                       // 이메일
+  string avatar_url = 5;                  // 아바타 URL
+}
+
+// MergeRequestDiff는 MR의 변경사항입니다.
+message MergeRequestDiff {
+  repeated FileDiff files = 1;            // 변경된 파일 목록
+  int32 additions = 2;                    // 추가된 라인 수
+  int32 deletions = 3;                    // 삭제된 라인 수
+  int32 changed_files = 4;                // 변경된 파일 수
+}
+
+// FileDiff는 파일별 변경사항입니다.
+message FileDiff {
+  string filename = 1;                    // 파일 경로
+  string status = 2;                      // 상태 (added, removed, modified, renamed)
+  int32 additions = 3;                    // 추가된 라인
+  int32 deletions = 4;                    // 삭제된 라인
+  string patch = 5;                       // diff 패치 내용
+  string previous_filename = 6;           // 이전 파일명 (rename의 경우)
+}
+
+// =============================================================================
+// 리뷰 관련
+// =============================================================================
+
+// Review는 리뷰 정보입니다.
+message Review {
+  string id = 1;                          // 리뷰 ID
+  User user = 2;                          // 리뷰어
+  ReviewState state = 3;                  // 리뷰 상태
+  string body = 4;                        // 리뷰 본문
+  string submitted_at = 5;                // 제출 시간
+}
+
+// Comment는 댓글 정보입니다.
+message Comment {
+  string id = 1;                          // 댓글 ID
+  User user = 2;                          // 작성자
+  string body = 3;                        // 댓글 내용
+  string path = 4;                        // 파일 경로 (라인 코멘트인 경우)
+  int32 line = 5;                         // 라인 번호 (라인 코멘트인 경우)
+  string created_at = 6;                  // 생성 시간
+  string updated_at = 7;                  // 수정 시간
+  string in_reply_to_id = 8;              // 답글 대상 ID
+}
+
+// =============================================================================
+// MergeRequestService 요청/응답
+// =============================================================================
+
+// MR 목록 조회 요청
+message ListMergeRequestsRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;                   // 저장소 소유자
+  string repository = 3;                  // 저장소 이름
+  MergeRequestState state = 4;            // 필터: 상태
+  string author = 5;                      // 필터: 작성자
+  string assignee = 6;                    // 필터: 담당자
+  string labels = 7;                      // 필터: 라벨 (콤마 구분)
+  string base = 8;                        // 필터: 타겟 브랜치
+  string head = 9;                        // 필터: 소스 브랜치
+  int32 page = 10;
+  int32 per_page = 11;
+}
+
+message ListMergeRequestsResponse {
+  repeated MergeRequest merge_requests = 1;
+  int32 total_count = 2;
+}
+
+// MR 상세 조회 요청
+message GetMergeRequestRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+  int32 number = 4;                       // MR 번호
+}
+
+message GetMergeRequestResponse {
+  MergeRequest merge_request = 1;
+}
+
+// MR 생성 요청
+message CreateMergeRequestRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+  string title = 4;                       // 제목
+  string description = 5;                 // 설명
+  string source_branch = 6;               // 소스 브랜치
+  string target_branch = 7;               // 타겟 브랜치
+  bool draft = 8;                         // 초안 여부
+  repeated string assignees = 9;          // 담당자 로그인명
+  repeated string reviewers = 10;         // 리뷰어 로그인명
+  repeated string labels = 11;            // 라벨
+}
+
+message CreateMergeRequestResponse {
+  MergeRequest merge_request = 1;
+}
+
+// MR 수정 요청
+message UpdateMergeRequestRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+  int32 number = 4;
+  string title = 5;
+  string description = 6;
+  MergeRequestState state = 7;            // 상태 변경 (OPEN, CLOSED)
+  string target_branch = 8;               // 타겟 브랜치 변경
+  repeated string assignees = 9;
+  repeated string reviewers = 10;
+  repeated string labels = 11;
+}
+
+message UpdateMergeRequestResponse {
+  MergeRequest merge_request = 1;
+}
+
+// MR 머지 요청
+message MergeMergeRequestRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+  int32 number = 4;
+  string commit_title = 5;                // 커밋 제목 (선택)
+  string commit_message = 6;              // 커밋 메시지 (선택)
+  MergeMethod merge_method = 7;           // 머지 방법
+  bool delete_source_branch = 8;          // 소스 브랜치 삭제 여부
+}
+
+message MergeMergeRequestResponse {
+  MergeRequest merge_request = 1;
+  string sha = 2;                         // 머지 커밋 SHA
+}
+
+// MR Diff 조회 요청
+message GetMergeRequestDiffRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+  int32 number = 4;
+}
+
+message GetMergeRequestDiffResponse {
+  MergeRequestDiff diff = 1;
+}
+
+// =============================================================================
+// 리뷰 관련 요청/응답
+// =============================================================================
+
+// 리뷰 목록 조회
+message ListReviewsRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+  int32 number = 4;
+}
+
+message ListReviewsResponse {
+  repeated Review reviews = 1;
+}
+
+// 리뷰 제출
+message SubmitReviewRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+  int32 number = 4;
+  ReviewState state = 5;                  // APPROVED, CHANGES_REQUESTED, COMMENTED
+  string body = 6;                        // 리뷰 본문
+}
+
+message SubmitReviewResponse {
+  Review review = 1;
+}
+
+// =============================================================================
+// 댓글 관련 요청/응답
+// =============================================================================
+
+// 댓글 목록 조회
+message ListCommentsRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+  int32 number = 4;
+}
+
+message ListCommentsResponse {
+  repeated Comment comments = 1;
+}
+
+// 댓글 생성
+message CreateCommentRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+  int32 number = 4;
+  string body = 5;                        // 댓글 내용
+  string path = 6;                        // 파일 경로 (라인 코멘트)
+  int32 line = 7;                         // 라인 번호 (라인 코멘트)
+  string commit_id = 8;                   // 커밋 ID (라인 코멘트)
+  string in_reply_to = 9;                 // 답글 대상 댓글 ID
+}
+
+message CreateCommentResponse {
+  Comment comment = 1;
+}
+
+// 댓글 수정
+message UpdateCommentRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+  int32 number = 4;                       // MR/PR 번호
+  string comment_id = 5;
+  string body = 6;
+}
+
+message UpdateCommentResponse {
+  Comment comment = 1;
+}
+
+// 댓글 삭제
+message DeleteCommentRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+  int32 number = 4;                       // MR/PR 번호
+  string comment_id = 5;
+}
+
+message DeleteCommentResponse {
+  bool success = 1;
+}
+
+// =============================================================================
+// MergeRequestService
+// =============================================================================
+
+service MergeRequestService {
+  // MR 목록 조회
+  rpc ListMergeRequests(ListMergeRequestsRequest) returns (ListMergeRequestsResponse) {
+    option (google.api.http) = {
+      post: "/v1/merge-requests/list"
+      body: "*"
+    };
+  }
+
+  // MR 상세 조회
+  rpc GetMergeRequest(GetMergeRequestRequest) returns (GetMergeRequestResponse) {
+    option (google.api.http) = {
+      post: "/v1/merge-requests/get"
+      body: "*"
+    };
+  }
+
+  // MR 생성
+  rpc CreateMergeRequest(CreateMergeRequestRequest) returns (CreateMergeRequestResponse) {
+    option (google.api.http) = {
+      post: "/v1/merge-requests/create"
+      body: "*"
+    };
+  }
+
+  // MR 수정
+  rpc UpdateMergeRequest(UpdateMergeRequestRequest) returns (UpdateMergeRequestResponse) {
+    option (google.api.http) = {
+      post: "/v1/merge-requests/update"
+      body: "*"
+    };
+  }
+
+  // MR 머지
+  rpc MergeMergeRequest(MergeMergeRequestRequest) returns (MergeMergeRequestResponse) {
+    option (google.api.http) = {
+      post: "/v1/merge-requests/merge"
+      body: "*"
+    };
+  }
+
+  // MR Diff 조회
+  rpc GetMergeRequestDiff(GetMergeRequestDiffRequest) returns (GetMergeRequestDiffResponse) {
+    option (google.api.http) = {
+      post: "/v1/merge-requests/diff"
+      body: "*"
+    };
+  }
+
+  // 리뷰 목록 조회
+  rpc ListReviews(ListReviewsRequest) returns (ListReviewsResponse) {
+    option (google.api.http) = {
+      post: "/v1/merge-requests/reviews/list"
+      body: "*"
+    };
+  }
+
+  // 리뷰 제출
+  rpc SubmitReview(SubmitReviewRequest) returns (SubmitReviewResponse) {
+    option (google.api.http) = {
+      post: "/v1/merge-requests/reviews/submit"
+      body: "*"
+    };
+  }
+
+  // 댓글 목록 조회
+  rpc ListComments(ListCommentsRequest) returns (ListCommentsResponse) {
+    option (google.api.http) = {
+      post: "/v1/merge-requests/comments/list"
+      body: "*"
+    };
+  }
+
+  // 댓글 생성
+  rpc CreateComment(CreateCommentRequest) returns (CreateCommentResponse) {
+    option (google.api.http) = {
+      post: "/v1/merge-requests/comments/create"
+      body: "*"
+    };
+  }
+
+  // 댓글 수정
+  rpc UpdateComment(UpdateCommentRequest) returns (UpdateCommentResponse) {
+    option (google.api.http) = {
+      post: "/v1/merge-requests/comments/update"
+      body: "*"
+    };
+  }
+
+  // 댓글 삭제
+  rpc DeleteComment(DeleteCommentRequest) returns (DeleteCommentResponse) {
+    option (google.api.http) = {
+      post: "/v1/merge-requests/comments/delete"
+      body: "*"
+    };
+  }
+}

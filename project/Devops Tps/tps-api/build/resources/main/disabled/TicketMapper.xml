@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.runnershigh.tps.adapter.out.persistence.TicketMapper">
+
+    <resultMap id="TicketResultMap" type="com.runnershigh.tps.domain.ticket.Ticket">
+        <id property="id" column="id" jdbcType="OTHER" typeHandler="com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler"/>
+        <result property="projectId" column="project_id" jdbcType="OTHER" typeHandler="com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler"/>
+        <result property="workflowId" column="workflow_id" jdbcType="OTHER" typeHandler="com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler"/>
+        <result property="ticketNumber" column="ticket_number"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="type" column="type" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="priority" column="priority" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="stage" column="stage" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="assigneeId" column="assignee_id" jdbcType="OTHER" typeHandler="com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler"/>
+        <result property="reporterId" column="reporter_id" jdbcType="OTHER" typeHandler="com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler"/>
+        <result property="branchId" column="branch_id" jdbcType="OTHER" typeHandler="com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler"/>
+        <result property="dueDate" column="due_date"/>
+        <result property="storyPoints" column="story_points"/>
+        <result property="labelsJson" column="labels_json"/>
+        <result property="customFieldsJson" column="custom_fields_json"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO tickets (
+            id, project_id, workflow_id, ticket_number, title, description,
+            type, priority, stage, assignee_id, reporter_id, branch_id,
+            due_date, story_points, labels_json, custom_fields_json, created_at, updated_at
+        ) VALUES (
+            #{id, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler},
+            #{projectId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler},
+            #{workflowId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler},
+            #{ticketNumber},
+            #{title},
+            #{description},
+            #{type, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+            #{priority, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+            #{stage, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+            #{assigneeId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler},
+            #{reporterId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler},
+            #{branchId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler},
+            #{dueDate},
+            #{storyPoints},
+            #{labelsJson}::jsonb,
+            #{customFieldsJson}::jsonb,
+            #{createdAt},
+            #{updatedAt}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE tickets SET
+            title = #{title},
+            description = #{description},
+            type = #{type, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+            priority = #{priority, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+            stage = #{stage, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+            assignee_id = #{assigneeId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler},
+            branch_id = #{branchId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler},
+            due_date = #{dueDate},
+            story_points = #{storyPoints},
+            labels_json = #{labelsJson}::jsonb,
+            custom_fields_json = #{customFieldsJson}::jsonb,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+    </update>
+
+    <select id="findById" resultMap="TicketResultMap">
+        SELECT * FROM tickets WHERE id = #{id, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+    </select>
+
+    <select id="findByTicketNumber" resultMap="TicketResultMap">
+        SELECT * FROM tickets WHERE ticket_number = #{ticketNumber}
+    </select>
+
+    <select id="findByProjectId" resultMap="TicketResultMap">
+        SELECT * FROM tickets
+        WHERE project_id = #{projectId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findByProjectIdAndStage" resultMap="TicketResultMap">
+        SELECT * FROM tickets
+        WHERE project_id = #{projectId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+          AND stage = #{stage, typeHandler=org.apache.ibatis.type.EnumTypeHandler}
+        ORDER BY priority, created_at DESC
+    </select>
+
+    <select id="findByProjectIdAndType" resultMap="TicketResultMap">
+        SELECT * FROM tickets
+        WHERE project_id = #{projectId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+          AND type = #{type, typeHandler=org.apache.ibatis.type.EnumTypeHandler}
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findByProjectIdAndPriority" resultMap="TicketResultMap">
+        SELECT * FROM tickets
+        WHERE project_id = #{projectId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+          AND priority = #{priority, typeHandler=org.apache.ibatis.type.EnumTypeHandler}
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findByAssigneeId" resultMap="TicketResultMap">
+        SELECT * FROM tickets
+        WHERE assignee_id = #{assigneeId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+        ORDER BY priority, due_date, created_at DESC
+    </select>
+
+    <select id="findByReporterId" resultMap="TicketResultMap">
+        SELECT * FROM tickets
+        WHERE reporter_id = #{reporterId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findByBranchId" resultMap="TicketResultMap">
+        SELECT * FROM tickets
+        WHERE branch_id = #{branchId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+    </select>
+
+    <select id="findOverdueTickets" resultMap="TicketResultMap">
+        SELECT * FROM tickets
+        WHERE project_id = #{projectId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+          AND due_date &lt; CURRENT_TIMESTAMP
+          AND stage NOT IN ('DONE', 'DEPLOYED')
+        ORDER BY due_date, priority
+    </select>
+
+    <delete id="deleteById">
+        DELETE FROM tickets WHERE id = #{id, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+    </delete>
+
+    <select id="countByProjectIdAndStage" resultType="int">
+        SELECT COUNT(*) FROM tickets
+        WHERE project_id = #{projectId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+          AND stage = #{stage, typeHandler=org.apache.ibatis.type.EnumTypeHandler}
+    </select>
+</mapper>

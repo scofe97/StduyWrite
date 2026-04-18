@@ -1,0 +1,93 @@
+### TPS API - Connection 테스트
+### Base URL
+@baseUrl = http://localhost:8089/api/v1
+
+### 테스트용 변수
+@testProjectId = 550e8400-e29b-41d4-a716-446655440000
+
+################################################################################
+### [Connection API] 연결 생성/수정/삭제
+################################################################################
+
+### 테스트 1: GitLab 연결 생성
+POST {{baseUrl}}/connections
+Content-Type: application/json
+
+{
+  "projectId": "{{testProjectId}}",
+  "providerType": "GITLAB",
+  "name": "GitLab Production",
+  "baseUrl": "https://gitlab.example.com",
+  "apiToken": "glpat-xxxxxxxxxxxx",
+  "metadata": "{\"apiVersion\": \"v4\"}"
+}
+
+### 테스트 2: GitHub 연결 생성
+POST {{baseUrl}}/connections
+Content-Type: application/json
+
+{
+  "projectId": "{{testProjectId}}",
+  "providerType": "GITHUB",
+  "name": "GitHub Enterprise",
+  "baseUrl": "https://github.example.com",
+  "apiToken": "ghp_xxxxxxxxxxxx"
+}
+
+### 테스트 3: 연결 조회
+@connectionId = [생성된_연결_ID로_교체]
+GET {{baseUrl}}/connections/{{connectionId}}
+Content-Type: application/json
+
+### 테스트 4: 프로젝트별 연결 목록
+GET {{baseUrl}}/connections/project/{{testProjectId}}
+Content-Type: application/json
+
+### 테스트 5: Provider 타입별 연결 목록
+GET {{baseUrl}}/connections/provider/GITLAB
+Content-Type: application/json
+
+### 테스트 6: 활성 연결 목록
+GET {{baseUrl}}/connections/active
+Content-Type: application/json
+
+### 테스트 7: 연결 수정
+PUT {{baseUrl}}/connections/{{connectionId}}
+Content-Type: application/json
+
+{
+  "name": "GitLab Production Updated",
+  "baseUrl": "https://gitlab.example.com/api/v4"
+}
+
+### 테스트 8: 연결 활성화
+POST {{baseUrl}}/connections/{{connectionId}}/activate
+Content-Type: application/json
+
+### 테스트 9: 연결 비활성화
+POST {{baseUrl}}/connections/{{connectionId}}/deactivate
+Content-Type: application/json
+
+### 테스트 10: 연결 테스트
+POST {{baseUrl}}/connections/{{connectionId}}/test
+Content-Type: application/json
+
+### 테스트 11: 연결 삭제
+DELETE {{baseUrl}}/connections/{{connectionId}}
+Content-Type: application/json
+
+################################################################################
+### 에러 케이스
+################################################################################
+
+### 에러 1: 필수 필드 누락 (providerType)
+POST {{baseUrl}}/connections
+Content-Type: application/json
+
+{
+  "name": "Test Connection"
+}
+
+### 에러 2: 존재하지 않는 연결 조회
+GET {{baseUrl}}/connections/00000000-0000-0000-0000-000000000000
+Content-Type: application/json

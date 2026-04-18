@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.runnershigh.tps.adapter.out.persistence.ProjectMapper">
+
+    <resultMap id="ProjectResultMap" type="com.runnershigh.tps.domain.project.Project">
+        <id property="id" column="id" jdbcType="OTHER" typeHandler="com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="projectKey" column="project_key"/>
+        <result property="ownerId" column="owner_id" jdbcType="OTHER" typeHandler="com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler"/>
+        <result property="status" column="status" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="metadata" column="metadata"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO projects (id, name, description, project_key, owner_id, status, metadata, ticket_sequence, created_at, updated_at)
+        VALUES (
+            #{id, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler},
+            #{name},
+            #{description},
+            #{projectKey},
+            #{ownerId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler},
+            #{status, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+            #{metadata}::jsonb,
+            0,
+            #{createdAt},
+            #{updatedAt}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE projects SET
+            name = #{name},
+            description = #{description},
+            project_key = #{projectKey},
+            owner_id = #{ownerId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler},
+            status = #{status, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+            metadata = #{metadata}::jsonb,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+    </update>
+
+    <select id="findById" resultMap="ProjectResultMap">
+        SELECT * FROM projects WHERE id = #{id, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+    </select>
+
+    <select id="findByProjectKey" resultMap="ProjectResultMap">
+        SELECT * FROM projects WHERE project_key = #{projectKey}
+    </select>
+
+    <select id="findByOwnerId" resultMap="ProjectResultMap">
+        SELECT * FROM projects WHERE owner_id = #{ownerId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+    </select>
+
+    <select id="findByStatus" resultMap="ProjectResultMap">
+        SELECT * FROM projects WHERE status = #{status, typeHandler=org.apache.ibatis.type.EnumTypeHandler}
+    </select>
+
+    <select id="findAll" resultMap="ProjectResultMap">
+        SELECT * FROM projects ORDER BY created_at DESC
+    </select>
+
+    <delete id="deleteById">
+        DELETE FROM projects WHERE id = #{id, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+    </delete>
+
+    <select id="existsByProjectKey" resultType="int">
+        SELECT COUNT(*) FROM projects WHERE project_key = #{projectKey}
+    </select>
+
+    <select id="getNextTicketSequence" resultType="int">
+        SELECT ticket_sequence + 1 FROM projects WHERE id = #{projectId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+    </select>
+
+    <update id="incrementTicketSequence">
+        UPDATE projects SET ticket_sequence = ticket_sequence + 1
+        WHERE id = #{projectId, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+    </update>
+</mapper>

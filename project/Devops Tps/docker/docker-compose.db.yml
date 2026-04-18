@@ -1,0 +1,54 @@
+# Devops TPS Database Services
+# PostgreSQL + Redis
+
+services:
+  # ===========================================
+  # PostgreSQL Database
+  # ===========================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: devops-tps-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: runners
+      POSTGRES_PASSWORD: runners123
+      POSTGRES_DB: runners_high
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - devops-tps-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U runners -d runners_high"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===========================================
+  # Redis Cache
+  # ===========================================
+  redis:
+    image: redis:7-alpine
+    container_name: devops-tps-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis-data:/data
+    networks:
+      - devops-tps-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:
+  redis-data:
+
+networks:
+  devops-tps-network:
+    driver: bridge

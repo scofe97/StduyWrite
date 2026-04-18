@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.runnershigh.tps.adapter.out.persistence.UserMapper">
+
+    <resultMap id="UserResultMap" type="com.runnershigh.tps.domain.user.User">
+        <id property="id" column="id" jdbcType="OTHER" typeHandler="com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler"/>
+        <result property="username" column="username"/>
+        <result property="email" column="email"/>
+        <result property="displayName" column="display_name"/>
+        <result property="role" column="role" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="status" column="status" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO users (id, username, email, display_name, role, status, created_at, updated_at)
+        VALUES (
+            #{id, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler},
+            #{username},
+            #{email},
+            #{displayName},
+            #{role, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+            #{status, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+            #{createdAt},
+            #{updatedAt}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE users SET
+            username = #{username},
+            email = #{email},
+            display_name = #{displayName},
+            role = #{role, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+            status = #{status, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+    </update>
+
+    <select id="findById" resultMap="UserResultMap">
+        SELECT * FROM users WHERE id = #{id, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+    </select>
+
+    <select id="findByUsername" resultMap="UserResultMap">
+        SELECT * FROM users WHERE username = #{username}
+    </select>
+
+    <select id="findByEmail" resultMap="UserResultMap">
+        SELECT * FROM users WHERE email = #{email}
+    </select>
+
+    <select id="findByStatus" resultMap="UserResultMap">
+        SELECT * FROM users WHERE status = #{status, typeHandler=org.apache.ibatis.type.EnumTypeHandler}
+    </select>
+
+    <select id="findAll" resultMap="UserResultMap">
+        SELECT * FROM users ORDER BY created_at DESC
+    </select>
+
+    <delete id="deleteById">
+        DELETE FROM users WHERE id = #{id, typeHandler=com.runnershigh.tps.adapter.out.persistence.typehandler.UuidTypeHandler}
+    </delete>
+
+    <select id="existsByUsername" resultType="int">
+        SELECT COUNT(*) FROM users WHERE username = #{username}
+    </select>
+
+    <select id="existsByEmail" resultType="int">
+        SELECT COUNT(*) FROM users WHERE email = #{email}
+    </select>
+</mapper>

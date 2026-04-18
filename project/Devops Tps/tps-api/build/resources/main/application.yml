@@ -1,0 +1,58 @@
+spring:
+  application:
+    name: tps-api
+  threads:
+    virtual:
+      enabled: true
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/runners_high}
+    username: ${DB_USERNAME:runners}
+    password: ${DB_PASSWORD:runners123}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.runnershigh.tps.domain
+  type-handlers-package: com.runnershigh.tps.infrastructure.mybatis
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 30
+
+server:
+  port: 8090
+  servlet:
+    context-path: /api
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+
+logging:
+  level:
+    com.runnershigh.tps: DEBUG
+    org.mybatis: DEBUG
+
+# gRPC 클라이언트 설정
+grpc:
+  client:
+    git-provider:
+      address: static://${GIT_PROVIDER_HOST:localhost}:${GIT_PROVIDER_PORT:50051}
+      negotiationType: plaintext
+      enableKeepAlive: true
+      keepAliveTime: 30s
+      keepAliveTimeout: 10s

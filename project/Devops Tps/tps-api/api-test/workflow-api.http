@@ -1,0 +1,103 @@
+### TPS API - Workflow 테스트
+### Base URL
+@baseUrl = http://localhost:8089/api/v1
+
+### 테스트용 변수
+@testProjectId = [생성된_프로젝트_ID로_교체]
+
+################################################################################
+### [Workflow API] 워크플로우 생성/수정/삭제
+################################################################################
+
+### 테스트 1: 기본 워크플로우 생성 (7단계)
+POST {{baseUrl}}/workflows/project/{{testProjectId}}/default
+Content-Type: application/json
+
+### 테스트 2: 커스텀 워크플로우 생성
+POST {{baseUrl}}/workflows
+Content-Type: application/json
+
+{
+  "projectId": "{{testProjectId}}",
+  "name": "Simple Workflow",
+  "description": "TODO → IN_PROGRESS → DONE",
+  "nodesJson": "[{\"id\": \"todo\", \"type\": \"stage\", \"label\": \"To Do\"}, {\"id\": \"in_progress\", \"type\": \"stage\", \"label\": \"In Progress\"}, {\"id\": \"done\", \"type\": \"stage\", \"label\": \"Done\"}]",
+  "edgesJson": "[{\"from\": \"todo\", \"to\": \"in_progress\"}, {\"from\": \"in_progress\", \"to\": \"done\"}]",
+  "isDefault": false
+}
+
+### 테스트 3: 워크플로우 조회
+@workflowId = [생성된_워크플로우_ID로_교체]
+GET {{baseUrl}}/workflows/{{workflowId}}
+Content-Type: application/json
+
+### 테스트 4: 프로젝트별 워크플로우 목록
+GET {{baseUrl}}/workflows/project/{{testProjectId}}
+Content-Type: application/json
+
+### 테스트 5: 상태별 워크플로우 목록 (ACTIVE)
+GET {{baseUrl}}/workflows/project/{{testProjectId}}/status/ACTIVE
+Content-Type: application/json
+
+### 테스트 6: 상태별 워크플로우 목록 (DRAFT)
+GET {{baseUrl}}/workflows/project/{{testProjectId}}/status/DRAFT
+Content-Type: application/json
+
+### 테스트 7: 기본 워크플로우 조회
+GET {{baseUrl}}/workflows/project/{{testProjectId}}/default
+Content-Type: application/json
+
+### 테스트 8: 워크플로우 수정 (DRAFT 상태만 가능)
+PUT {{baseUrl}}/workflows/{{workflowId}}
+Content-Type: application/json
+
+{
+  "name": "Simple Workflow Updated",
+  "description": "TODO → IN_PROGRESS → REVIEW → DONE",
+  "nodesJson": "[{\"id\": \"todo\", \"type\": \"stage\", \"label\": \"To Do\"}, {\"id\": \"in_progress\", \"type\": \"stage\", \"label\": \"In Progress\"}, {\"id\": \"review\", \"type\": \"stage\", \"label\": \"Review\"}, {\"id\": \"done\", \"type\": \"stage\", \"label\": \"Done\"}]",
+  "edgesJson": "[{\"from\": \"todo\", \"to\": \"in_progress\"}, {\"from\": \"in_progress\", \"to\": \"review\"}, {\"from\": \"review\", \"to\": \"done\"}]"
+}
+
+### 테스트 9: 워크플로우 발행 (DRAFT → ACTIVE)
+POST {{baseUrl}}/workflows/{{workflowId}}/publish
+Content-Type: application/json
+
+### 테스트 10: 기본 워크플로우로 설정
+POST {{baseUrl}}/workflows/{{workflowId}}/set-default
+Content-Type: application/json
+
+### 테스트 11: 워크플로우 보관
+POST {{baseUrl}}/workflows/{{workflowId}}/archive
+Content-Type: application/json
+
+### 테스트 12: 워크플로우 삭제
+DELETE {{baseUrl}}/workflows/{{workflowId}}
+Content-Type: application/json
+
+################################################################################
+### 에러 케이스
+################################################################################
+
+### 에러 1: 필수 필드 누락 (projectId)
+POST {{baseUrl}}/workflows
+Content-Type: application/json
+
+{
+  "name": "Test Workflow"
+}
+
+### 에러 2: ACTIVE 워크플로우 수정 시도
+PUT {{baseUrl}}/workflows/[active_workflow_id]
+Content-Type: application/json
+
+{
+  "name": "Cannot Update Active Workflow"
+}
+
+### 에러 3: 기본 워크플로우 삭제 시도
+DELETE {{baseUrl}}/workflows/[default_workflow_id]
+Content-Type: application/json
+
+### 에러 4: 존재하지 않는 워크플로우 조회
+GET {{baseUrl}}/workflows/00000000-0000-0000-0000-000000000000
+Content-Type: application/json

@@ -1,0 +1,29 @@
+input:
+  http_server:
+    path: /webhook/github
+    allowed_verbs: ["POST"]
+
+pipeline:
+  processors:
+    - bloblang: |
+        let event_type = if this.action.or("") == "closed" &&
+            this.pull_request.merged.or(false) == true
+          { "mr_merged" } else { "unknown" }
+
+        root.event_type = $event_type
+        root.repository = this.repository.full_name
+        root.branch = this.pull_request.base.ref.or("")
+        root.commit_sha = this.pull_request.merge_commit_sha.or("")
+        root.author = this.pull_request.merged_by.login.or("")
+        root.timestamp = now()
+
+    - bloblang: |
+        root = if this.event_type == "mr_merged" { this } else { deleted() }
+
+output:
+  kafka_franz:
+    seed_brokers: ["redpanda:9092"]
+    topic: "git-events"
+    key: ${! this.repository }
+    metadata:
+      include_patterns: []

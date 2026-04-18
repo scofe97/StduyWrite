@@ -1,0 +1,229 @@
+# Default values for sample-app Helm chart
+# 이 파일은 helm install 시 기본값으로 사용됨
+# --set flag나 -f values.yaml로 오버라이드 가능
+
+# 복제본 개수
+replicaCount: 2
+
+# 컨테이너 이미지 설정
+image:
+  # 이미지 저장소
+  repository: nginx
+  # 이미지 pull 정책 (Always, IfNotPresent, Never)
+  pullPolicy: IfNotPresent
+  # 이미지 태그 (기본값은 Chart의 appVersion 사용)
+  tag: "1.27"
+
+# 이미지 pull 시 사용할 Secret (Private registry 사용 시)
+imagePullSecrets: []
+# 예시:
+# imagePullSecrets:
+#   - name: myregistrykey
+
+# 차트 이름 오버라이드
+nameOverride: ""
+fullnameOverride: ""
+
+# ServiceAccount 설정
+serviceAccount:
+  # ServiceAccount 생성 여부
+  create: true
+  # 자동으로 토큰 마운트 여부
+  automount: true
+  # ServiceAccount 이름 (비워두면 자동 생성)
+  name: ""
+
+# Pod 어노테이션
+podAnnotations: {}
+# 예시:
+# podAnnotations:
+#   prometheus.io/scrape: "true"
+#   prometheus.io/port: "8080"
+
+# Pod 레이블
+podLabels: {}
+
+# Pod 보안 컨텍스트
+podSecurityContext: {}
+# 예시:
+# podSecurityContext:
+#   fsGroup: 2000
+#   runAsNonRoot: true
+#   runAsUser: 1000
+
+# 컨테이너 보안 컨텍스트
+securityContext: {}
+# 예시:
+# securityContext:
+#   capabilities:
+#     drop:
+#     - ALL
+#   readOnlyRootFilesystem: true
+#   runAsNonRoot: true
+#   runAsUser: 1000
+
+# Service 설정
+service:
+  # Service 타입 (ClusterIP, NodePort, LoadBalancer)
+  type: ClusterIP
+  # Service 포트
+  port: 80
+  # 컨테이너 타겟 포트
+  targetPort: 80
+  # NodePort 사용 시 포트 지정 (선택 사항)
+  # nodePort: 30080
+
+# Ingress 설정
+ingress:
+  # Ingress 활성화 여부
+  enabled: false
+  # Ingress 클래스 이름
+  className: "nginx"
+  # Ingress 어노테이션
+  annotations: {}
+  # 예시:
+  # annotations:
+  #   cert-manager.io/cluster-issuer: letsencrypt-prod
+  #   nginx.ingress.kubernetes.io/rewrite-target: /
+
+  # Ingress 호스트 설정
+  hosts:
+    - host: sample-app.local
+      paths:
+        - path: /
+          pathType: Prefix
+
+  # TLS 설정 (HTTPS 사용 시)
+  tls: []
+  # 예시:
+  # tls:
+  #   - secretName: sample-app-tls
+  #     hosts:
+  #       - sample-app.local
+
+# 리소스 제한 (Minikube 환경에 맞게 낮게 설정)
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+# HPA (Horizontal Pod Autoscaler) 설정
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+# Liveness Probe 설정
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+# Readiness Probe 설정
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+# 볼륨 마운트
+volumes: []
+# 예시:
+# volumes:
+#   - name: config
+#     configMap:
+#       name: sample-app-config
+#   - name: data
+#     persistentVolumeClaim:
+#       claimName: sample-app-pvc
+
+volumeMounts: []
+# 예시:
+# volumeMounts:
+#   - name: config
+#     mountPath: /etc/config
+#   - name: data
+#     mountPath: /data
+
+# Node Selector (특정 노드에 스케줄링)
+nodeSelector: {}
+# 예시:
+# nodeSelector:
+#   disktype: ssd
+#   environment: production
+
+# Tolerations (Taint가 있는 노드에도 스케줄링 허용)
+tolerations: []
+# 예시:
+# tolerations:
+#   - key: "key1"
+#     operator: "Equal"
+#     value: "value1"
+#     effect: "NoSchedule"
+
+# Affinity (Pod 배치 규칙)
+affinity: {}
+# 예시:
+# affinity:
+#   nodeAffinity:
+#     requiredDuringSchedulingIgnoredDuringExecution:
+#       nodeSelectorTerms:
+#       - matchExpressions:
+#         - key: kubernetes.io/hostname
+#           operator: In
+#           values:
+#           - worker-node-1
+#   podAntiAffinity:
+#     preferredDuringSchedulingIgnoredDuringExecution:
+#     - weight: 100
+#       podAffinityTerm:
+#         labelSelector:
+#           matchExpressions:
+#           - key: app
+#             operator: In
+#             values:
+#             - sample-app
+#         topologyKey: kubernetes.io/hostname
+
+# 환경 변수
+env: []
+# 예시:
+# env:
+#   - name: ENV_NAME
+#     value: "production"
+#   - name: DATABASE_URL
+#     valueFrom:
+#       secretKeyRef:
+#         name: db-secret
+#         key: url
+
+# ConfigMap 데이터 (차트에서 자동 생성)
+configMap:
+  enabled: false
+  data: {}
+  # 예시:
+  # data:
+  #   app.properties: |
+  #     server.port=8080
+  #     app.name=sample-app
+
+# Secret 데이터 (차트에서 자동 생성)
+secret:
+  enabled: false
+  data: {}
+  # 예시: (base64 인코딩된 값)
+  # data:
+  #   username: YWRtaW4=
+  #   password: cGFzc3dvcmQxMjM=

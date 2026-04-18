@@ -1,0 +1,29 @@
+input:
+  http_server:
+    path: /webhook/gitlab
+    allowed_verbs: ["POST"]
+
+pipeline:
+  processors:
+    - bloblang: |
+        let event_type = if this.event_type.or("") == "merge_request" &&
+            this.object_attributes.action.or("") == "merge"
+          { "mr_merged" } else { this.event_type.or("unknown") }
+
+        root.event_type = $event_type
+        root.repository = this.project.path_with_namespace
+        root.branch = this.object_attributes.target_branch.or("")
+        root.commit_sha = this.object_attributes.merge_commit_sha.or("")
+        root.author = this.user.username.or("")
+        root.timestamp = now()
+
+    - bloblang: |
+        root = if this.event_type == "mr_merged" { this } else { deleted() }
+
+output:
+  kafka_franz:
+    seed_brokers: ["redpanda:9092"]
+    topic: "git-events"
+    key: ${! this.repository }
+    metadata:
+      include_patterns: []

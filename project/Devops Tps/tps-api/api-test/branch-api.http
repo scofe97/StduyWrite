@@ -1,0 +1,151 @@
+### TPS API - Branch 테스트
+### Base URL
+@baseUrl = http://localhost:8089/api/v1
+
+### 테스트용 변수
+@testRepositoryId = [생성된_저장소_ID로_교체]
+
+################################################################################
+### [Branch API] 브랜치 생성/수정/삭제
+################################################################################
+
+### 테스트 1: Main 브랜치 생성
+POST {{baseUrl}}/branches
+Content-Type: application/json
+
+{
+  "repositoryId": "{{testRepositoryId}}",
+  "name": "main",
+  "branchType": "MAIN",
+  "isProtected": true,
+  "metadata": "{\"description\": \"Production branch\"}"
+}
+
+### 테스트 2: Develop 브랜치 생성
+POST {{baseUrl}}/branches
+Content-Type: application/json
+
+{
+  "repositoryId": "{{testRepositoryId}}",
+  "name": "develop",
+  "branchType": "DEVELOP",
+  "sourceBranchName": "main",
+  "isProtected": true
+}
+
+### 테스트 3: Feature 브랜치 생성
+POST {{baseUrl}}/branches
+Content-Type: application/json
+
+{
+  "repositoryId": "{{testRepositoryId}}",
+  "name": "feature/TPS-1234-new-feature",
+  "branchType": "FEATURE",
+  "sourceBranchName": "develop",
+  "metadata": "{\"jiraTicket\": \"TPS-1234\"}"
+}
+
+### 테스트 4: Release 브랜치 생성
+POST {{baseUrl}}/branches
+Content-Type: application/json
+
+{
+  "repositoryId": "{{testRepositoryId}}",
+  "name": "release/v1.0.0",
+  "branchType": "RELEASE",
+  "sourceBranchName": "develop"
+}
+
+### 테스트 5: Hotfix 브랜치 생성
+POST {{baseUrl}}/branches
+Content-Type: application/json
+
+{
+  "repositoryId": "{{testRepositoryId}}",
+  "name": "hotfix/critical-fix",
+  "branchType": "HOTFIX",
+  "sourceBranchName": "main"
+}
+
+### 테스트 6: 브랜치 조회
+@branchId = [생성된_브랜치_ID로_교체]
+GET {{baseUrl}}/branches/{{branchId}}
+Content-Type: application/json
+
+### 테스트 7: 저장소별 브랜치 목록
+GET {{baseUrl}}/branches/repository/{{testRepositoryId}}
+Content-Type: application/json
+
+### 테스트 8: 상태별 브랜치 목록 (ACTIVE)
+GET {{baseUrl}}/branches/repository/{{testRepositoryId}}/status/ACTIVE
+Content-Type: application/json
+
+### 테스트 9: 타입별 브랜치 목록 (FEATURE)
+GET {{baseUrl}}/branches/repository/{{testRepositoryId}}/type/FEATURE
+Content-Type: application/json
+
+### 테스트 10: 브랜치 수정
+PUT {{baseUrl}}/branches/{{branchId}}
+Content-Type: application/json
+
+{
+  "name": "feature/TPS-1234-updated",
+  "metadata": "{\"jiraTicket\": \"TPS-1234\", \"status\": \"in-progress\"}"
+}
+
+### 테스트 11: 브랜치 상태 변경 (MERGED)
+PATCH {{baseUrl}}/branches/{{branchId}}/status
+Content-Type: application/json
+
+{
+  "status": "MERGED"
+}
+
+### 테스트 12: 브랜치 상태 변경 (ACTIVE)
+PATCH {{baseUrl}}/branches/{{branchId}}/status
+Content-Type: application/json
+
+{
+  "status": "ACTIVE"
+}
+
+### 테스트 13: 브랜치 커밋 업데이트
+PATCH {{baseUrl}}/branches/{{branchId}}/commit
+Content-Type: application/json
+
+{
+  "commitSha": "a1b2c3d4e5f6789012345678901234567890abcd"
+}
+
+### 테스트 14: 브랜치 삭제
+DELETE {{baseUrl}}/branches/{{branchId}}
+Content-Type: application/json
+
+################################################################################
+### 에러 케이스
+################################################################################
+
+### 에러 1: 필수 필드 누락 (repositoryId)
+POST {{baseUrl}}/branches
+Content-Type: application/json
+
+{
+  "name": "feature/test"
+}
+
+### 에러 2: 중복 브랜치 생성 시도
+POST {{baseUrl}}/branches
+Content-Type: application/json
+
+{
+  "repositoryId": "{{testRepositoryId}}",
+  "name": "main"
+}
+
+### 에러 3: Protected 브랜치 삭제 시도
+DELETE {{baseUrl}}/branches/[protected_branch_id]
+Content-Type: application/json
+
+### 에러 4: 존재하지 않는 브랜치 조회
+GET {{baseUrl}}/branches/00000000-0000-0000-0000-000000000000
+Content-Type: application/json

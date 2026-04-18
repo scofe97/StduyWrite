@@ -1,0 +1,19 @@
+apiVersion: policy.linkerd.io/v1beta3
+kind: HTTPRoute
+metadata:
+  name: backend-canary
+  namespace: emojivoto
+spec:
+  parentRefs:
+    - name: web-svc
+      kind: Service
+      group: core
+      port: 80
+  rules:
+    - backendRefs:
+        - name: web-svc
+          port: 80
+          weight: 90
+        - name: web-svc-canary
+          port: 80
+          weight: 10

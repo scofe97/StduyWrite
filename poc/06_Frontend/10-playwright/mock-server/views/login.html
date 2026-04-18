@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TPS 로그인</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .header {
+            background-color: #1a237e;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 40px;
+            width: 100%;
+            max-width: 420px;
+            margin-top: 80px;
+        }
+
+        .login-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a237e;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .login-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: #1a237e;
+            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #999;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            background-color: #1a237e;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .login-button:hover {
+            background-color: #0d1b5e;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(26, 35, 126, 0.3);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border-left: 4px solid #c62828;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .field-error {
+            color: #c62828;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .field-error.show {
+            display: block;
+        }
+
+        .test-account-hint {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .test-account-hint strong {
+            color: #1a237e;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .login-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>TPS - Trombone Platform Service</h1>
+    </div>
+
+    <div class="login-container">
+        <h2 class="login-title">로그인</h2>
+        <p class="login-subtitle">계정 정보를 입력해주세요</p>
+
+        <div id="error-message"
+             role="alert"
+             class="error-message"
+             data-testid="error-message">
+        </div>
+
+        <form id="login-form" data-testid="login-form">
+            <div class="form-group">
+                <label for="username" class="form-label">아이디</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    class="form-input"
+                    aria-label="아이디"
+                    placeholder="아이디를 입력하세요"
+                    data-testid="username-input"
+                    autocomplete="username"
+                    required
+                >
+                <div id="username-error" class="field-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">비밀번호</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="form-input"
+                    aria-label="비밀번호"
+                    placeholder="비밀번호를 입력하세요"
+                    data-testid="password-input"
+                    autocomplete="current-password"
+                    required
+                >
+                <div id="password-error" class="field-error"></div>
+            </div>
+
+            <button
+                type="submit"
+                role="button"
+                aria-label="로그인"
+                class="login-button"
+                data-testid="login-button">
+                로그인
+            </button>
+        </form>
+
+        <div class="test-account-hint">
+            테스트 계정: <strong>admin / admin123</strong>
+        </div>
+    </div>
+
+    <div class="footer">
+        &copy; 2024 TPS Platform. All rights reserved.
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('login-form');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const errorMessage = document.getElementById('error-message');
+        const usernameError = document.getElementById('username-error');
+        const passwordError = document.getElementById('password-error');
+
+        // 에러 메시지 표시 함수
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('show');
+            errorMessage.style.display = 'block';
+        }
+
+        // 에러 메시지 숨김 함수
+        function hideError() {
+            errorMessage.classList.remove('show');
+            errorMessage.style.display = 'none';
+        }
+
+        // 필드별 에러 표시 함수
+        function showFieldError(element, message) {
+            element.textContent = message;
+            element.classList.add('show');
+        }
+
+        // 필드별 에러 숨김 함수
+        function hideFieldError(element) {
+            element.classList.remove('show');
+        }
+
+        // 폼 검증 함수
+        function validateForm() {
+            let isValid = true;
+            hideError();
+            hideFieldError(usernameError);
+            hideFieldError(passwordError);
+
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (!username) {
+                showFieldError(usernameError, '아이디를 입력해주세요');
+                isValid = false;
+            }
+
+            if (!password) {
+                showFieldError(passwordError, '비밀번호를 입력해주세요');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // 입력 시 에러 메시지 제거
+        usernameInput.addEventListener('input', () => {
+            hideFieldError(usernameError);
+            hideError();
+        });
+
+        passwordInput.addEventListener('input', () => {
+            hideFieldError(passwordError);
+            hideError();
+        });
+
+        // 폼 제출 처리
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // 폼 검증
+            if (!validateForm()) {
+                return;
+            }
+
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // 로그인 성공
+                    if (data.token) {
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('username', username);
+
+                        // 티켓 목록 페이지로 리다이렉트
+                        window.location.href = '/tickets';
+                    } else {
+                        showError('로그인 응답이 올바르지 않습니다');
+                    }
+                } else {
+                    // 로그인 실패
+                    showError(data.message || '아이디 또는 비밀번호가 올바르지 않습니다');
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showError('서버 연결에 실패했습니다. 잠시 후 다시 시도해주세요.');
+            }
+        });
+
+        // 페이지 로드 시 이미 로그인되어 있으면 리다이렉트
+        window.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                window.location.href = '/tickets';
+            }
+        });
+    </script>
+</body>
+</html>

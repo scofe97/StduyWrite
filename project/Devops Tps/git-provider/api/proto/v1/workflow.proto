@@ -1,0 +1,179 @@
+syntax = "proto3";
+
+package gitprovider.v1;
+
+option go_package = "github.com/runners-high/git-provider/pkg/pb/v1;pbv1";
+
+import "google/api/annotations.proto";
+
+// =============================================================================
+// Workflow 정의
+// =============================================================================
+
+message WorkflowFilter {
+  string repository = 1;    // namespace/repo
+  string branch = 2;        // "main", "develop"
+}
+
+message WorkflowStep {
+  string name = 1;           // 스텝 이름 ("deploy")
+  string type = 2;           // "cicd_build"
+  string pipeline_id = 3;    // 연결된 파이프라인 ID
+}
+
+message Workflow {
+  string id = 1;
+  string name = 2;
+  string trigger_event = 3;         // "mr_merged", "push"
+  WorkflowFilter filter = 4;
+  repeated WorkflowStep steps = 5;
+  string created_at = 6;
+  string updated_at = 7;
+}
+
+// =============================================================================
+// Execution (워크플로우 실행 인스턴스)
+// =============================================================================
+
+enum ExecutionStatus {
+  EXECUTION_STATUS_UNSPECIFIED = 0;
+  EXECUTION_STATUS_RUNNING = 1;
+  EXECUTION_STATUS_WAITING_FOR_STEP = 2;
+  EXECUTION_STATUS_COMPLETED = 3;
+  EXECUTION_STATUS_FAILED = 4;
+}
+
+message StepExecution {
+  string name = 1;
+  string type = 2;
+  string pipeline_id = 3;
+  string status = 4;       // "pending", "running", "success", "failure"
+  string started_at = 5;
+  string finished_at = 6;
+}
+
+message Execution {
+  string id = 1;
+  string workflow_id = 2;
+  ExecutionStatus status = 3;
+  int32 current_step = 4;
+  repeated StepExecution steps = 5;
+  string trigger_event = 6;        // 트리거한 이벤트 타입
+  string repository = 7;
+  string branch = 8;
+  string commit_sha = 9;
+  string started_at = 10;
+  string finished_at = 11;
+}
+
+// =============================================================================
+// Workflow CRUD 요청/응답
+// =============================================================================
+
+message CreateWorkflowRequest {
+  string name = 1;
+  string trigger_event = 2;
+  WorkflowFilter filter = 3;
+  repeated WorkflowStep steps = 4;
+}
+
+message CreateWorkflowResponse {
+  Workflow workflow = 1;
+}
+
+message GetWorkflowRequest {
+  string id = 1;
+}
+
+message GetWorkflowResponse {
+  Workflow workflow = 1;
+}
+
+message ListWorkflowsRequest {
+  string repository = 1;   // 선택: 특정 저장소 필터
+}
+
+message ListWorkflowsResponse {
+  repeated Workflow workflows = 1;
+}
+
+message DeleteWorkflowRequest {
+  string id = 1;
+}
+
+message DeleteWorkflowResponse {
+  bool success = 1;
+}
+
+// =============================================================================
+// Execution 조회 요청/응답
+// =============================================================================
+
+message GetExecutionRequest {
+  string execution_id = 1;
+}
+
+message GetExecutionResponse {
+  Execution execution = 1;
+}
+
+message ListExecutionsRequest {
+  string workflow_id = 1;
+  int32 limit = 2;          // 최대 개수 (기본 20)
+}
+
+message ListExecutionsResponse {
+  repeated Execution executions = 1;
+}
+
+// =============================================================================
+// WorkflowService
+// =============================================================================
+
+service WorkflowService {
+  // === 워크플로우 ===
+
+  rpc CreateWorkflow(CreateWorkflowRequest) returns (CreateWorkflowResponse) {
+    option (google.api.http) = {
+      post: "/v1/workflows/create"
+      body: "*"
+    };
+  }
+
+  rpc GetWorkflow(GetWorkflowRequest) returns (GetWorkflowResponse) {
+    option (google.api.http) = {
+      post: "/v1/workflows/get"
+      body: "*"
+    };
+  }
+
+  rpc ListWorkflows(ListWorkflowsRequest) returns (ListWorkflowsResponse) {
+    option (google.api.http) = {
+      post: "/v1/workflows/list"
+      body: "*"
+    };
+  }
+
+  rpc DeleteWorkflow(DeleteWorkflowRequest) returns (DeleteWorkflowResponse) {
+    option (google.api.http) = {
+      post: "/v1/workflows/delete"
+      body: "*"
+    };
+  }
+
+  // === 실행 ===
+
+  rpc GetExecution(GetExecutionRequest) returns (GetExecutionResponse) {
+    option (google.api.http) = {
+      post: "/v1/executions/get"
+      body: "*"
+    };
+  }
+
+  rpc ListExecutions(ListExecutionsRequest) returns (ListExecutionsResponse) {
+    option (google.api.http) = {
+      post: "/v1/executions/list"
+      body: "*"
+    };
+  }
+}

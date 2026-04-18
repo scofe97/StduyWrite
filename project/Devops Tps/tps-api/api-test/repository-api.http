@@ -1,0 +1,111 @@
+### TPS API - Repository 테스트
+### Base URL
+@baseUrl = http://localhost:8089/api/v1
+
+### 테스트용 변수
+@testProjectId = 550e8400-e29b-41d4-a716-446655440000
+@testConnectionId = [생성된_연결_ID로_교체]
+
+################################################################################
+### [Repository API] 저장소 생성/수정/삭제
+################################################################################
+
+### 테스트 1: 저장소 생성 (GitHub URL)
+POST {{baseUrl}}/repositories
+Content-Type: application/json
+
+{
+  "projectId": "{{testProjectId}}",
+  "connectionId": "{{testConnectionId}}",
+  "name": "workflow-api",
+  "gitUrl": "https://github.com/runnershigh/workflow-api.git",
+  "defaultBranch": "main",
+  "strategyType": "GIT_FLOW",
+  "metadata": "{\"description\": \"Workflow API repository\"}"
+}
+
+### 테스트 2: 저장소 생성 (GitLab URL)
+POST {{baseUrl}}/repositories
+Content-Type: application/json
+
+{
+  "projectId": "{{testProjectId}}",
+  "connectionId": "{{testConnectionId}}",
+  "name": "react-app",
+  "gitUrl": "https://gitlab.example.com/team/react-app.git",
+  "defaultBranch": "develop",
+  "strategyType": "GITHUB_FLOW"
+}
+
+### 테스트 3: 저장소 생성 (SSH URL)
+POST {{baseUrl}}/repositories
+Content-Type: application/json
+
+{
+  "projectId": "{{testProjectId}}",
+  "connectionId": "{{testConnectionId}}",
+  "name": "core-lib",
+  "gitUrl": "git@github.com:runnershigh/core-lib.git",
+  "strategyType": "TRUNK_BASED"
+}
+
+### 테스트 4: 저장소 조회
+@repositoryId = [생성된_저장소_ID로_교체]
+GET {{baseUrl}}/repositories/{{repositoryId}}
+Content-Type: application/json
+
+### 테스트 5: 프로젝트별 저장소 목록
+GET {{baseUrl}}/repositories/project/{{testProjectId}}
+Content-Type: application/json
+
+### 테스트 6: 연결별 저장소 목록
+GET {{baseUrl}}/repositories/connection/{{testConnectionId}}
+Content-Type: application/json
+
+### 테스트 7: 저장소 수정
+PUT {{baseUrl}}/repositories/{{repositoryId}}
+Content-Type: application/json
+
+{
+  "name": "workflow-api-v2",
+  "defaultBranch": "develop",
+  "strategyType": "GITHUB_FLOW",
+  "metadata": "{\"description\": \"Updated workflow API\"}"
+}
+
+### 테스트 8: 저장소 동기화
+POST {{baseUrl}}/repositories/{{repositoryId}}/sync
+Content-Type: application/json
+
+### 테스트 9: 저장소 삭제
+DELETE {{baseUrl}}/repositories/{{repositoryId}}
+Content-Type: application/json
+
+################################################################################
+### 에러 케이스
+################################################################################
+
+### 에러 1: 필수 필드 누락 (gitUrl)
+POST {{baseUrl}}/repositories
+Content-Type: application/json
+
+{
+  "projectId": "{{testProjectId}}",
+  "connectionId": "{{testConnectionId}}",
+  "name": "test-repo"
+}
+
+### 에러 2: 잘못된 Git URL 형식
+POST {{baseUrl}}/repositories
+Content-Type: application/json
+
+{
+  "projectId": "{{testProjectId}}",
+  "connectionId": "{{testConnectionId}}",
+  "name": "test-repo",
+  "gitUrl": "invalid-url"
+}
+
+### 에러 3: 존재하지 않는 저장소 조회
+GET {{baseUrl}}/repositories/00000000-0000-0000-0000-000000000000
+Content-Type: application/json

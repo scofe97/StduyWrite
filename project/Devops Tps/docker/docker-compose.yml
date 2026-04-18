@@ -1,0 +1,281 @@
+# Devops TPS Development Environment (All-in-One)
+# Redpanda + PostgreSQL + Redis + CI/CD + Monitoring
+
+services:
+  # ===========================================
+  # Redpanda Broker (Kafka-compatible)
+  # ===========================================
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v25.3.6
+    container_name: devops-tps-redpanda
+    command:
+      - redpanda start
+      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr internal://redpanda:9092,external://localhost:9092
+      - --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:18081
+      - --rpc-addr redpanda:33145
+      - --advertise-rpc-addr redpanda:33145
+      - --mode dev-container
+      - --smp 1
+      - --default-log-level=warn
+    ports:
+      - "9092:19092"
+      - "18081:18081"
+      - "9644:9644"
+    volumes:
+      - redpanda-data:/var/lib/redpanda/data
+    networks:
+      - devops-tps-network
+    healthcheck:
+      test: ["CMD", "rpk", "cluster", "health", "--api-urls", "localhost:9644"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===========================================
+  # Kafka UI
+  # ===========================================
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: devops-tps-kafka-ui
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    ports:
+      - "8090:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: devops-tps
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: redpanda:9092
+      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://redpanda:8081
+    networks:
+      - devops-tps-network
+
+  # ===========================================
+  # Topic Initializer
+  # ===========================================
+  redpanda-init:
+    image: docker.redpanda.com/redpandadata/redpanda:v25.3.6
+    container_name: devops-tps-redpanda-init
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        echo "Creating all topics..."
+        rpk topic create \
+          runners-high.git.commands runners-high.git.events \
+          runners-high.notifications runners-high.ticket.events \
+          runners-high.build.events runners-high.deploy.events \
+          runners-high.workflow.events runners-high.approval.events \
+          --brokers redpanda:9092 --partitions 3 --replicas 1 2>/dev/null || true
+        rpk topic create \
+          git-events cicd.commands cicd.events cicd-results workflow.events \
+          --brokers redpanda:9092 --partitions 1 --replicas 1 2>/dev/null || true
+        echo "Topics ready!"
+        rpk topic list --brokers redpanda:9092
+    networks:
+      - devops-tps-network
+    restart: "no"
+
+  # ===========================================
+  # PostgreSQL Database
+  # ===========================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: devops-tps-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: runners
+      POSTGRES_PASSWORD: runners123
+      POSTGRES_DB: runners_high
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - devops-tps-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U runners -d runners_high"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===========================================
+  # Redis Cache
+  # ===========================================
+  redis:
+    image: redis:7-alpine
+    container_name: devops-tps-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis-data:/data
+    networks:
+      - devops-tps-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===========================================
+  # Git Provider (gRPC + REST Gateway)
+  # ===========================================
+  git-provider:
+    build: ../git-provider
+    container_name: devops-tps-git-provider
+    ports:
+      - "50051:50051"
+      - "8083:8080"
+    environment:
+      KAFKA_BROKERS: "redpanda:9092"
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    networks:
+      - devops-tps-network
+
+  # ===========================================
+  # Jenkins CI Server
+  # ===========================================
+  jenkins:
+    image: jenkins/jenkins:lts-jdk17
+    container_name: devops-tps-jenkins
+    ports:
+      - "9091:8080"
+      - "50000:50000"
+    environment:
+      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
+      CASC_JENKINS_CONFIG: "/var/jenkins_home/casc.yaml"
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - ./jenkins-config/casc.yaml:/var/jenkins_home/casc.yaml:ro
+    networks:
+      - devops-tps-network
+
+  # ===========================================
+  # Redpanda Connect (webhook -> Kafka)
+  # ===========================================
+  redpanda-connect:
+    image: docker.redpanda.com/redpandadata/connect:4.43.0
+    container_name: devops-tps-redpanda-connect
+    ports:
+      - "4195:4195"
+    volumes:
+      - ./connect:/connect:ro
+    command: ["streams", "/connect/*.yaml"]
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    networks:
+      - devops-tps-network
+
+  # ===========================================
+  # OpenTelemetry Collector
+  # ===========================================
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.115.0
+    container_name: devops-tps-otel-collector
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+      - "8889:8889"
+    depends_on:
+      - jaeger
+      - loki
+    networks:
+      - devops-tps-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:13133/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===========================================
+  # Jaeger (Distributed Tracing)
+  # ===========================================
+  jaeger:
+    image: jaegertracing/all-in-one:1.53
+    container_name: devops-tps-jaeger
+    environment:
+      COLLECTOR_OTLP_ENABLED: true
+    ports:
+      - "16686:16686"
+      - "14268:14268"
+    networks:
+      - devops-tps-network
+
+  # ===========================================
+  # Prometheus (Metrics)
+  # ===========================================
+  prometheus:
+    image: prom/prometheus:v2.49.0
+    container_name: devops-tps-prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - devops-tps-network
+
+  # ===========================================
+  # Loki (Log Aggregation)
+  # ===========================================
+  loki:
+    image: grafana/loki:2.9.0
+    container_name: devops-tps-loki
+    command: -config.file=/etc/loki/loki-config.yaml
+    volumes:
+      - ./loki-config.yaml:/etc/loki/loki-config.yaml:ro
+      - loki-data:/loki
+    ports:
+      - "3100:3100"
+    networks:
+      - devops-tps-network
+
+  # ===========================================
+  # Grafana (Dashboard)
+  # ===========================================
+  grafana:
+    image: grafana/grafana:10.3.0
+    container_name: devops-tps-grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin123
+      GF_USERS_ALLOW_SIGN_UP: false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus
+      - loki
+      - jaeger
+    networks:
+      - devops-tps-network
+
+volumes:
+  redpanda-data:
+  postgres-data:
+  redis-data:
+  jenkins-data:
+  prometheus-data:
+  loki-data:
+  grafana-data:
+
+networks:
+  devops-tps-network:
+    driver: bridge

@@ -1,0 +1,105 @@
+# Devops TPS Monitoring & Observability Stack
+# OpenTelemetry Collector + Jaeger + Prometheus + Loki + Grafana
+
+services:
+  # ===========================================
+  # Jaeger (Distributed Tracing)
+  # ===========================================
+  jaeger:
+    image: jaegertracing/all-in-one:1.53
+    container_name: devops-tps-jaeger
+    environment:
+      COLLECTOR_OTLP_ENABLED: true
+    ports:
+      - "16686:16686"
+      - "14268:14268"
+    networks:
+      - devops-tps-network
+
+  # ===========================================
+  # Loki (Log Aggregation)
+  # ===========================================
+  loki:
+    image: grafana/loki:2.9.0
+    container_name: devops-tps-loki
+    command: -config.file=/etc/loki/loki-config.yaml
+    volumes:
+      - ./loki-config.yaml:/etc/loki/loki-config.yaml:ro
+      - loki-data:/loki
+    ports:
+      - "3100:3100"
+    networks:
+      - devops-tps-network
+
+  # ===========================================
+  # OpenTelemetry Collector
+  # ===========================================
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.115.0
+    container_name: devops-tps-otel-collector
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+      - "8889:8889"
+    depends_on:
+      - jaeger
+      - loki
+    networks:
+      - devops-tps-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:13133/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===========================================
+  # Prometheus (Metrics)
+  # ===========================================
+  prometheus:
+    image: prom/prometheus:v2.49.0
+    container_name: devops-tps-prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - devops-tps-network
+
+  # ===========================================
+  # Grafana (Dashboard)
+  # ===========================================
+  grafana:
+    image: grafana/grafana:10.3.0
+    container_name: devops-tps-grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin123
+      GF_USERS_ALLOW_SIGN_UP: false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus
+      - loki
+      - jaeger
+    networks:
+      - devops-tps-network
+
+volumes:
+  prometheus-data:
+  loki-data:
+  grafana-data:
+
+networks:
+  devops-tps-network:
+    driver: bridge

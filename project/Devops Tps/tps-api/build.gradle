@@ -1,0 +1,227 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.1'
+    id 'io.spring.dependency-management' version '1.1.7'
+    // gRPC Protobuf 컴파일러 플러그인
+    id 'com.google.protobuf' version '0.9.4'
+}
+
+group = 'com.runnershigh'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+// 버전 관리
+ext {
+    // OpenTelemetry - Spring Boot 3.x 호환 버전
+    openTelemetryVersion = '1.43.0'
+    openTelemetryInstrumentationVersion = '2.10.0'
+
+    // gRPC & Protobuf
+    grpcVersion = '1.60.1'
+    protobufVersion = '3.25.2'
+    grpcSpringBootVersion = '3.0.0.RELEASE'
+}
+
+dependencies {
+    // ─────────────────────────────────────────────────────────────
+    // Spring Boot Core
+    // ─────────────────────────────────────────────────────────────
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // ─────────────────────────────────────────────────────────────
+    // MyBatis ORM
+    // ─────────────────────────────────────────────────────────────
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
+
+    // ─────────────────────────────────────────────────────────────
+    // PostgreSQL Driver
+    // ─────────────────────────────────────────────────────────────
+    runtimeOnly 'org.postgresql:postgresql'
+
+    // ─────────────────────────────────────────────────────────────
+    // Lombok - 보일러플레이트 코드 감소
+    // ─────────────────────────────────────────────────────────────
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // ─────────────────────────────────────────────────────────────
+    // Jackson - JSON 직렬화/역직렬화
+    // ─────────────────────────────────────────────────────────────
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+    // ─────────────────────────────────────────────────────────────
+    // UUID Generation - Time-based UUID (v7)
+    // ─────────────────────────────────────────────────────────────
+    implementation 'com.fasterxml.uuid:java-uuid-generator:5.1.0'
+
+    // ─────────────────────────────────────────────────────────────
+    // Swagger/OpenAPI - API 문서화
+    // ─────────────────────────────────────────────────────────────
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
+
+    // ─────────────────────────────────────────────────────────────
+    // OpenTelemetry - 분산 추적, 메트릭, 로깅
+    // ─────────────────────────────────────────────────────────────
+
+    // OpenTelemetry API & SDK
+    implementation "io.opentelemetry:opentelemetry-api:${openTelemetryVersion}"
+    implementation "io.opentelemetry:opentelemetry-sdk:${openTelemetryVersion}"
+
+    // OpenTelemetry Exporter (OTLP - OpenTelemetry Protocol)
+    // Jaeger, Zipkin, Grafana Tempo 등으로 전송
+    implementation "io.opentelemetry:opentelemetry-exporter-otlp:${openTelemetryVersion}"
+
+    // OpenTelemetry Spring Boot Starter
+    // 자동 계측 (Auto-instrumentation)
+    implementation "io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter:${openTelemetryInstrumentationVersion}"
+
+    // Micrometer → OpenTelemetry Bridge
+    // Actuator 메트릭을 OpenTelemetry로 연결
+    implementation 'io.micrometer:micrometer-registry-otlp'
+
+    // ─────────────────────────────────────────────────────────────
+    // gRPC - Go 언어 Git-API와 통신
+    // ─────────────────────────────────────────────────────────────
+
+    // gRPC Spring Boot Starter (net.devh)
+    // Spring Boot와 gRPC 통합, 자동 설정 제공
+    implementation "net.devh:grpc-spring-boot-starter:${grpcSpringBootVersion}"
+
+    // gRPC Client (Git-API 호출용)
+    // Go로 작성된 Git-API 서버에 요청 전송
+    implementation "net.devh:grpc-client-spring-boot-starter:${grpcSpringBootVersion}"
+
+    // Protobuf Java Runtime
+    // .proto 파일에서 생성된 Java 클래스 실행 지원
+    implementation "com.google.protobuf:protobuf-java:${protobufVersion}"
+
+    // gRPC Protobuf
+    // Protobuf 메시지를 gRPC 서비스에서 사용
+    implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+
+    // gRPC Stub
+    // 클라이언트 스텁 생성 및 서비스 호출
+    implementation "io.grpc:grpc-stub:${grpcVersion}"
+
+    // gRPC Netty (Transport Layer)
+    // HTTP/2 기반 gRPC 통신 처리
+    runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
+
+    // javax.annotation API (gRPC 생성 코드에서 사용)
+    compileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
+
+    // javax.annotation.Generated for gRPC generated code (Java 9+ removed)
+    compileOnly 'javax.annotation:javax.annotation-api:1.3.2'
+
+    // ─────────────────────────────────────────────────────────────
+    // Test Dependencies
+    // ─────────────────────────────────────────────────────────────
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // H2 In-Memory Database for Testing
+    testRuntimeOnly 'com.h2database:h2'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// ─────────────────────────────────────────────────────────────
+// Virtual Threads 활성화 (Java 21 Project Loom)
+// ─────────────────────────────────────────────────────────────
+bootRun {
+    jvmArgs = [
+        '--enable-preview',
+        '-Dspring.threads.virtual.enabled=true'
+    ]
+}
+
+// ─────────────────────────────────────────────────────────────
+// OpenTelemetry Java Agent 설정 (선택적 - 더 깊은 계측)
+// 사용법: java -javaagent:opentelemetry-javaagent.jar -jar app.jar
+// ─────────────────────────────────────────────────────────────
+// 에이전트 다운로드: https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases
+// 환경 변수:
+//   OTEL_SERVICE_NAME=tps-api
+//   OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
+//   OTEL_TRACES_EXPORTER=otlp
+//   OTEL_METRICS_EXPORTER=otlp
+//   OTEL_LOGS_EXPORTER=otlp
+
+// ─────────────────────────────────────────────────────────────
+// Protobuf 컴파일 설정 (gRPC)
+// ─────────────────────────────────────────────────────────────
+// .proto 파일 위치: src/main/proto/
+// 생성된 Java 파일: build/generated/source/proto/
+//
+// 사용법:
+//   1. src/main/proto/ 폴더에 .proto 파일 생성
+//   2. ./gradlew generateProto 실행
+//   3. build/generated/source/proto/main/java/ 에서 생성된 클래스 확인
+// ─────────────────────────────────────────────────────────────
+protobuf {
+    // Protobuf 컴파일러 (protoc) 설정
+    protoc {
+        artifact = "com.google.protobuf:protoc:${protobufVersion}"
+    }
+
+    // gRPC 플러그인 설정
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+        }
+    }
+
+    // 모든 .proto 파일에 대해 gRPC 코드 생성
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
+}
+
+// 생성된 Protobuf 소스를 Java 소스셋에 추가
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────
+// gRPC 클라이언트 설정 (application.yml)
+// ─────────────────────────────────────────────────────────────
+// grpc:
+//   client:
+//     git-api:                              # 채널 이름
+//       address: 'static://localhost:9090'  # Git-API(Go) 서버 주소
+//       negotiationType: plaintext          # 개발 환경 (운영: TLS)
+//       enableKeepAlive: true
+//       keepAliveTime: 30s
+//       keepAliveTimeout: 10s
+//
+// 사용 예시 (Java):
+// @GrpcClient("git-api")
+// private GitServiceGrpc.GitServiceBlockingStub gitServiceStub;

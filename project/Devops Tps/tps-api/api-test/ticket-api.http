@@ -1,0 +1,242 @@
+### TPS API - Ticket 테스트
+### Base URL
+@baseUrl = http://localhost:8089/api/v1
+
+### 테스트용 변수
+@testProjectId = [생성된_프로젝트_ID로_교체]
+@testWorkflowId = [생성된_워크플로우_ID로_교체]
+@testAssigneeId = [생성된_사용자_ID로_교체]
+@testReporterId = [생성된_사용자_ID로_교체]
+@testBranchId = [생성된_브랜치_ID로_교체]
+
+################################################################################
+### [Ticket API] 티켓 생성/수정/삭제
+################################################################################
+
+### 테스트 1: 티켓 생성 (TASK)
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "projectId": "{{testProjectId}}",
+  "workflowId": "{{testWorkflowId}}",
+  "title": "Implement login feature",
+  "description": "Create login page with email/password authentication",
+  "type": "TASK",
+  "priority": "HIGH",
+  "assigneeId": "{{testAssigneeId}}",
+  "reporterId": "{{testReporterId}}",
+  "storyPoints": 5,
+  "labelsJson": "[\"frontend\", \"auth\"]"
+}
+
+### 테스트 2: 티켓 생성 (BUG)
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "projectId": "{{testProjectId}}",
+  "title": "Fix button alignment on mobile",
+  "description": "Submit button is misaligned on iOS Safari",
+  "type": "BUG",
+  "priority": "CRITICAL",
+  "storyPoints": 2
+}
+
+### 테스트 3: 티켓 생성 (STORY)
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "projectId": "{{testProjectId}}",
+  "title": "User Profile Management",
+  "description": "As a user, I want to manage my profile settings",
+  "type": "STORY",
+  "priority": "MEDIUM",
+  "dueDate": "2025-02-01T00:00:00",
+  "storyPoints": 8
+}
+
+### 테스트 4: 티켓 조회
+@ticketId = [생성된_티켓_ID로_교체]
+GET {{baseUrl}}/tickets/{{ticketId}}
+Content-Type: application/json
+
+### 테스트 5: 티켓 번호로 조회
+GET {{baseUrl}}/tickets/number/TPS-1
+Content-Type: application/json
+
+### 테스트 6: 프로젝트별 티켓 목록
+GET {{baseUrl}}/tickets/project/{{testProjectId}}
+Content-Type: application/json
+
+### 테스트 7: 단계별 티켓 목록 (BACKLOG)
+GET {{baseUrl}}/tickets/project/{{testProjectId}}/stage/BACKLOG
+Content-Type: application/json
+
+### 테스트 8: 단계별 티켓 목록 (IN_PROGRESS)
+GET {{baseUrl}}/tickets/project/{{testProjectId}}/stage/IN_PROGRESS
+Content-Type: application/json
+
+### 테스트 9: 타입별 티켓 목록 (BUG)
+GET {{baseUrl}}/tickets/project/{{testProjectId}}/type/BUG
+Content-Type: application/json
+
+### 테스트 10: 우선순위별 티켓 목록 (CRITICAL)
+GET {{baseUrl}}/tickets/project/{{testProjectId}}/priority/CRITICAL
+Content-Type: application/json
+
+### 테스트 11: 담당자별 티켓 목록
+GET {{baseUrl}}/tickets/assignee/{{testAssigneeId}}
+Content-Type: application/json
+
+### 테스트 12: 보고자별 티켓 목록
+GET {{baseUrl}}/tickets/reporter/{{testReporterId}}
+Content-Type: application/json
+
+### 테스트 13: 지연 티켓 목록
+GET {{baseUrl}}/tickets/project/{{testProjectId}}/overdue
+Content-Type: application/json
+
+### 테스트 14: 프로젝트 티켓 통계
+GET {{baseUrl}}/tickets/project/{{testProjectId}}/stats
+Content-Type: application/json
+
+### 테스트 15: 티켓 수정
+PUT {{baseUrl}}/tickets/{{ticketId}}
+Content-Type: application/json
+
+{
+  "title": "Implement login feature - Updated",
+  "description": "Create login page with email/password and OAuth authentication",
+  "priority": "CRITICAL",
+  "storyPoints": 8
+}
+
+################################################################################
+### [Ticket Stage Transitions] 단계 변경 (7-stage lifecycle)
+################################################################################
+
+### 테스트 16: BACKLOG → TODO
+PATCH {{baseUrl}}/tickets/{{ticketId}}/stage
+Content-Type: application/json
+
+{
+  "stage": "TODO"
+}
+
+### 테스트 17: TODO → IN_PROGRESS
+PATCH {{baseUrl}}/tickets/{{ticketId}}/stage
+Content-Type: application/json
+
+{
+  "stage": "IN_PROGRESS"
+}
+
+### 테스트 18: IN_PROGRESS → CODE_REVIEW
+PATCH {{baseUrl}}/tickets/{{ticketId}}/stage
+Content-Type: application/json
+
+{
+  "stage": "CODE_REVIEW"
+}
+
+### 테스트 19: CODE_REVIEW → TESTING
+PATCH {{baseUrl}}/tickets/{{ticketId}}/stage
+Content-Type: application/json
+
+{
+  "stage": "TESTING"
+}
+
+### 테스트 20: TESTING → DONE
+PATCH {{baseUrl}}/tickets/{{ticketId}}/stage
+Content-Type: application/json
+
+{
+  "stage": "DONE"
+}
+
+### 테스트 21: DONE → DEPLOYED
+PATCH {{baseUrl}}/tickets/{{ticketId}}/stage
+Content-Type: application/json
+
+{
+  "stage": "DEPLOYED"
+}
+
+### 테스트 22: DEPLOYED → IN_PROGRESS (Hotfix)
+PATCH {{baseUrl}}/tickets/{{ticketId}}/stage
+Content-Type: application/json
+
+{
+  "stage": "IN_PROGRESS"
+}
+
+################################################################################
+### [Ticket Assignment] 담당자 관리
+################################################################################
+
+### 테스트 23: 담당자 지정
+PATCH {{baseUrl}}/tickets/{{ticketId}}/assign
+Content-Type: application/json
+
+{
+  "assigneeId": "{{testAssigneeId}}"
+}
+
+### 테스트 24: 담당자 해제
+DELETE {{baseUrl}}/tickets/{{ticketId}}/assign
+Content-Type: application/json
+
+################################################################################
+### [Ticket Branch Link] 브랜치 연결
+################################################################################
+
+### 테스트 25: 브랜치 연결
+PATCH {{baseUrl}}/tickets/{{ticketId}}/branch
+Content-Type: application/json
+
+{
+  "branchId": "{{testBranchId}}"
+}
+
+### 테스트 26: 브랜치별 티켓 목록
+GET {{baseUrl}}/tickets/branch/{{testBranchId}}
+Content-Type: application/json
+
+### 테스트 27: 브랜치 연결 해제
+DELETE {{baseUrl}}/tickets/{{ticketId}}/branch
+Content-Type: application/json
+
+### 테스트 28: 티켓 삭제
+DELETE {{baseUrl}}/tickets/{{ticketId}}
+Content-Type: application/json
+
+################################################################################
+### 에러 케이스
+################################################################################
+
+### 에러 1: 필수 필드 누락 (projectId)
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "title": "Test Ticket"
+}
+
+### 에러 2: 잘못된 단계 전환 (BACKLOG → CODE_REVIEW)
+PATCH {{baseUrl}}/tickets/{{ticketId}}/stage
+Content-Type: application/json
+
+{
+  "stage": "CODE_REVIEW"
+}
+
+### 에러 3: 존재하지 않는 티켓 조회
+GET {{baseUrl}}/tickets/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+
+### 에러 4: 존재하지 않는 티켓 번호 조회
+GET {{baseUrl}}/tickets/number/INVALID-999
+Content-Type: application/json

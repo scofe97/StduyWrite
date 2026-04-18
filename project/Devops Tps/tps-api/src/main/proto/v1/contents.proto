@@ -1,0 +1,138 @@
+syntax = "proto3";
+
+package gitprovider.v1;
+
+option go_package = "github.com/runners-high/git-provider/pkg/pb/v1;pbv1";
+option java_package = "com.runnershigh.tps.infrastructure.grpc.proto";
+option java_outer_classname = "ContentsProto";
+option java_multiple_files = true;
+
+import "google/api/annotations.proto";
+import "v1/provider.proto";
+
+// =============================================================================
+// 콘텐츠 타입
+// =============================================================================
+
+enum ContentType {
+  CONTENT_TYPE_UNSPECIFIED = 0;
+  CONTENT_TYPE_FILE = 1;        // 일반 파일
+  CONTENT_TYPE_DIRECTORY = 2;   // 디렉토리
+  CONTENT_TYPE_SYMLINK = 3;     // 심볼릭 링크
+  CONTENT_TYPE_SUBMODULE = 4;   // Git 서브모듈
+}
+
+// =============================================================================
+// 트리 엔트리 (디렉토리 구조)
+// =============================================================================
+
+// TreeEntry는 Git 트리의 개별 항목을 나타냅니다.
+// 전체 파일 트리 표시에 사용됩니다.
+message TreeEntry {
+  string path = 1;              // 전체 경로 (예: src/main/java)
+  string type = 2;              // "blob" (파일) 또는 "tree" (디렉토리)
+  string sha = 3;               // Git object SHA
+  int64 size = 4;               // 파일 크기 (blob인 경우만)
+  string mode = 5;              // Git 파일 모드 (예: "100644", "040000")
+}
+
+// =============================================================================
+// 콘텐츠 엔트리 (파일/디렉토리 내용)
+// =============================================================================
+
+// ContentEntry는 파일 또는 디렉토리의 내용을 나타냅니다.
+message ContentEntry {
+  ContentType type = 1;         // 콘텐츠 타입
+  string name = 2;              // 파일/디렉토리 이름
+  string path = 3;              // 전체 경로
+  int64 size = 4;               // 파일 크기
+  string sha = 5;               // Git object SHA
+
+  // 파일인 경우
+  string content = 6;           // 파일 내용 (base64 인코딩)
+  string encoding = 7;          // 인코딩 (보통 "base64")
+
+  // 디렉토리인 경우 하위 항목
+  repeated ContentEntry entries = 8;
+
+  // 추가 메타데이터
+  string url = 9;               // Provider의 파일 URL
+  string download_url = 10;     // 다운로드 URL
+}
+
+// =============================================================================
+// ContentsService 요청/응답
+// =============================================================================
+
+// 트리 조회 요청
+message GetTreeRequest {
+  ProviderConfig provider = 1;  // 프로바이더 설정
+  string namespace = 2;         // 저장소 소유자 (owner/workspace)
+  string repository = 3;        // 저장소 이름
+  string ref = 4;               // 브랜치/태그/커밋 SHA (빈값이면 기본 브랜치)
+  bool recursive = 5;           // 전체 트리 조회 여부
+}
+
+message GetTreeResponse {
+  string sha = 1;               // 트리 SHA
+  string truncated = 2;         // 트리가 잘렸는지 여부 (GitHub)
+  repeated TreeEntry entries = 3;
+}
+
+// 콘텐츠 조회 요청
+message GetContentsRequest {
+  ProviderConfig provider = 1;  // 프로바이더 설정
+  string namespace = 2;         // 저장소 소유자
+  string repository = 3;        // 저장소 이름
+  string path = 4;              // 경로 (빈값이면 루트)
+  string ref = 5;               // 브랜치/태그/커밋 SHA
+}
+
+message GetContentsResponse {
+  ContentEntry content = 1;
+}
+
+// README 조회 요청
+message GetReadmeRequest {
+  ProviderConfig provider = 1;  // 프로바이더 설정
+  string namespace = 2;         // 저장소 소유자
+  string repository = 3;        // 저장소 이름
+  string ref = 4;               // 브랜치/태그/커밋 SHA
+}
+
+message GetReadmeResponse {
+  string name = 1;              // README 파일명 (README.md, README 등)
+  string path = 2;              // 파일 경로
+  string content = 3;           // 내용 (base64)
+  string html_content = 4;      // 렌더링된 HTML (지원 시)
+}
+
+// =============================================================================
+// ContentsService (파일 탐색)
+// =============================================================================
+
+service ContentsService {
+  // 저장소의 전체 파일 트리를 조회합니다.
+  rpc GetTree(GetTreeRequest) returns (GetTreeResponse) {
+    option (google.api.http) = {
+      post: "/v1/contents/tree"
+      body: "*"
+    };
+  }
+
+  // 특정 경로의 파일/디렉토리 내용을 조회합니다.
+  rpc GetContents(GetContentsRequest) returns (GetContentsResponse) {
+    option (google.api.http) = {
+      post: "/v1/contents/get"
+      body: "*"
+    };
+  }
+
+  // README 파일을 조회합니다.
+  rpc GetReadme(GetReadmeRequest) returns (GetReadmeResponse) {
+    option (google.api.http) = {
+      post: "/v1/contents/readme"
+      body: "*"
+    };
+  }
+}

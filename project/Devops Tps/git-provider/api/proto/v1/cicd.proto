@@ -1,0 +1,222 @@
+syntax = "proto3";
+
+package gitprovider.v1;
+
+option go_package = "github.com/runners-high/git-provider/pkg/pb/v1;pbv1";
+
+import "google/api/annotations.proto";
+
+// =============================================================================
+// CI 프로바이더 설정
+// =============================================================================
+
+message JenkinsConfig {
+  string url = 1;           // Jenkins 서버 URL (http://jenkins:8080)
+  string username = 2;      // Jenkins 사용자명
+  string api_token = 3;     // Jenkins API 토큰
+}
+
+// CI 프로바이더 설정 (하나만 선택)
+message CIConfig {
+  oneof config {
+    JenkinsConfig jenkins = 1;
+    // 향후: GitHubActionsConfig, GitLabCIConfig 등
+  }
+}
+
+// =============================================================================
+// 파이프라인 정의
+// =============================================================================
+
+message PipelineStage {
+  string name = 1;             // 스테이지 이름 ("Build", "Test", "Deploy")
+  string command = 2;          // 실행 명령어
+  int32 timeout_seconds = 3;   // 타임아웃 (초)
+}
+
+message Pipeline {
+  string id = 1;
+  string name = 2;
+  string repository = 3;              // namespace/repo
+  string branch_pattern = 4;          // "main", "feature/*"
+  repeated PipelineStage stages = 5;
+  CIConfig ci_config = 6;
+  string jenkins_job_name = 7;        // Jenkins Job 이름
+  string created_at = 8;
+  string updated_at = 9;
+}
+
+// =============================================================================
+// 빌드 정보
+// =============================================================================
+
+enum BuildStatus {
+  BUILD_STATUS_UNSPECIFIED = 0;
+  BUILD_STATUS_QUEUED = 1;
+  BUILD_STATUS_RUNNING = 2;
+  BUILD_STATUS_SUCCESS = 3;
+  BUILD_STATUS_FAILURE = 4;
+  BUILD_STATUS_ABORTED = 5;
+}
+
+message Build {
+  string id = 1;
+  string pipeline_id = 2;
+  int32 build_number = 3;
+  BuildStatus status = 4;
+  string trigger = 5;              // "push", "mr_merged", "manual"
+  string branch = 6;
+  string commit_sha = 7;
+  string started_at = 8;
+  string finished_at = 9;
+  int32 duration_seconds = 10;
+  string url = 11;                 // Jenkins 빌드 URL
+}
+
+// =============================================================================
+// Pipeline CRUD 요청/응답
+// =============================================================================
+
+message CreatePipelineRequest {
+  string name = 1;
+  string repository = 2;
+  string branch_pattern = 3;
+  repeated PipelineStage stages = 4;
+  CIConfig ci_config = 5;
+  string jenkins_job_name = 6;
+}
+
+message CreatePipelineResponse {
+  Pipeline pipeline = 1;
+}
+
+message GetPipelineRequest {
+  string id = 1;
+}
+
+message GetPipelineResponse {
+  Pipeline pipeline = 1;
+}
+
+message ListPipelinesRequest {
+  string repository = 1;      // 선택: 특정 저장소 필터
+}
+
+message ListPipelinesResponse {
+  repeated Pipeline pipelines = 1;
+}
+
+message DeletePipelineRequest {
+  string id = 1;
+}
+
+message DeletePipelineResponse {
+  bool success = 1;
+}
+
+// =============================================================================
+// Build 관리 요청/응답
+// =============================================================================
+
+message TriggerBuildRequest {
+  string pipeline_id = 1;
+  string branch = 2;          // 선택: 오버라이드 브랜치
+  string commit_sha = 3;      // 선택: 특정 커밋
+}
+
+message TriggerBuildResponse {
+  Build build = 1;
+}
+
+message GetBuildRequest {
+  string pipeline_id = 1;
+  int32 build_number = 2;
+}
+
+message GetBuildResponse {
+  Build build = 1;
+}
+
+message ListBuildsRequest {
+  string pipeline_id = 1;
+  int32 limit = 2;             // 최대 개수 (기본 20)
+}
+
+message ListBuildsResponse {
+  repeated Build builds = 1;
+}
+
+message GetBuildLogRequest {
+  string pipeline_id = 1;
+  int32 build_number = 2;
+}
+
+message GetBuildLogResponse {
+  string log = 1;
+}
+
+// =============================================================================
+// CICDService
+// =============================================================================
+
+service CICDService {
+  // === 파이프라인 ===
+
+  rpc CreatePipeline(CreatePipelineRequest) returns (CreatePipelineResponse) {
+    option (google.api.http) = {
+      post: "/v1/pipelines/create"
+      body: "*"
+    };
+  }
+
+  rpc GetPipeline(GetPipelineRequest) returns (GetPipelineResponse) {
+    option (google.api.http) = {
+      post: "/v1/pipelines/get"
+      body: "*"
+    };
+  }
+
+  rpc ListPipelines(ListPipelinesRequest) returns (ListPipelinesResponse) {
+    option (google.api.http) = {
+      post: "/v1/pipelines/list"
+      body: "*"
+    };
+  }
+
+  rpc DeletePipeline(DeletePipelineRequest) returns (DeletePipelineResponse) {
+    option (google.api.http) = {
+      post: "/v1/pipelines/delete"
+      body: "*"
+    };
+  }
+
+  // === 빌드 ===
+
+  rpc TriggerBuild(TriggerBuildRequest) returns (TriggerBuildResponse) {
+    option (google.api.http) = {
+      post: "/v1/builds/trigger"
+      body: "*"
+    };
+  }
+
+  rpc GetBuild(GetBuildRequest) returns (GetBuildResponse) {
+    option (google.api.http) = {
+      post: "/v1/builds/get"
+      body: "*"
+    };
+  }
+
+  rpc ListBuilds(ListBuildsRequest) returns (ListBuildsResponse) {
+    option (google.api.http) = {
+      post: "/v1/builds/list"
+      body: "*"
+    };
+  }
+
+  rpc GetBuildLog(GetBuildLogRequest) returns (GetBuildLogResponse) {
+    option (google.api.http) = {
+      post: "/v1/builds/log"
+      body: "*"
+    };
+  }
+}

@@ -1,0 +1,100 @@
+# Devops TPS Kafka Services
+# Redpanda (Kafka-compatible) + Kafka UI + Topic Initializer
+
+services:
+  # ===========================================
+  # Redpanda Broker (Kafka-compatible, single node)
+  # ===========================================
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v25.3.6
+    container_name: devops-tps-redpanda
+    command:
+      - redpanda start
+      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr internal://redpanda:9092,external://localhost:9092
+      - --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:18081
+      - --rpc-addr redpanda:33145
+      - --advertise-rpc-addr redpanda:33145
+      - --mode dev-container
+      - --smp 1
+      - --default-log-level=warn
+    ports:
+      - "9092:19092"    # Kafka API (host)
+      - "18081:18081"   # Schema Registry (host)
+      - "9644:9644"     # Admin API
+    volumes:
+      - redpanda-data:/var/lib/redpanda/data
+    networks:
+      - devops-tps-network
+    healthcheck:
+      test: ["CMD", "rpk", "cluster", "health", "--api-urls", "localhost:9644"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===========================================
+  # Kafka UI (for debugging)
+  # ===========================================
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: devops-tps-kafka-ui
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    ports:
+      - "8090:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: devops-tps
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: redpanda:9092
+      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://redpanda:8081
+    networks:
+      - devops-tps-network
+
+  # ===========================================
+  # Topic Initializer (all topics, runs once)
+  # ===========================================
+  redpanda-init:
+    image: docker.redpanda.com/redpandadata/redpanda:v25.3.6
+    container_name: devops-tps-redpanda-init
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        echo "Creating all topics..."
+
+        # Domain Event Topics (tps-api <-> git-api)
+        rpk topic create \
+          runners-high.git.commands \
+          runners-high.git.events \
+          runners-high.notifications \
+          runners-high.ticket.events \
+          runners-high.build.events \
+          runners-high.deploy.events \
+          runners-high.workflow.events \
+          runners-high.approval.events \
+          --brokers redpanda:9092 --partitions 3 --replicas 1 2>/dev/null || true
+
+        # CI/CD Topics (git-provider)
+        rpk topic create \
+          git-events \
+          cicd.commands \
+          cicd.events \
+          cicd-results \
+          workflow.events \
+          --brokers redpanda:9092 --partitions 1 --replicas 1 2>/dev/null || true
+
+        echo "Topics ready!"
+        rpk topic list --brokers redpanda:9092
+    networks:
+      - devops-tps-network
+    restart: "no"
+
+volumes:
+  redpanda-data:
+
+networks:
+  devops-tps-network:
+    driver: bridge

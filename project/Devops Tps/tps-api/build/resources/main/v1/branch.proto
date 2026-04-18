@@ -1,0 +1,212 @@
+syntax = "proto3";
+
+package gitprovider.v1;
+
+option go_package = "github.com/runners-high/git-provider/pkg/pb/v1;pbv1";
+option java_package = "com.runnershigh.tps.infrastructure.grpc.proto";
+option java_outer_classname = "BranchProto";
+option java_multiple_files = true;
+
+import "google/api/annotations.proto";
+import "v1/provider.proto";
+
+// =============================================================================
+// 브랜치 비교 결과
+// =============================================================================
+
+// MergeableState는 머지 가능 여부를 나타냅니다.
+enum MergeableState {
+  MERGEABLE_STATE_UNSPECIFIED = 0;
+  MERGEABLE_STATE_MERGEABLE = 1;        // 머지 가능
+  MERGEABLE_STATE_CONFLICTING = 2;      // 충돌 있음
+  MERGEABLE_STATE_UNKNOWN = 3;          // 알 수 없음 (계산 중)
+}
+
+// SuggestedAction은 권장 작업을 나타냅니다.
+enum SuggestedAction {
+  SUGGESTED_ACTION_UNSPECIFIED = 0;
+  SUGGESTED_ACTION_CREATE_MR = 1;       // MR 생성 권장
+  SUGGESTED_ACTION_REBASE = 2;          // 리베이스 권장
+  SUGGESTED_ACTION_MERGE_BASE = 3;      // 베이스 머지 권장
+  SUGGESTED_ACTION_RESOLVE_CONFLICTS = 4; // 충돌 해결 필요
+  SUGGESTED_ACTION_UP_TO_DATE = 5;      // 이미 최신
+}
+
+// BranchComparison은 두 브랜치 비교 결과입니다.
+message BranchComparison {
+  string base_branch = 1;               // 기준 브랜치
+  string compare_branch = 2;            // 비교 브랜치
+  int32 ahead_by = 3;                   // compare가 base보다 앞선 커밋 수
+  int32 behind_by = 4;                  // compare가 base보다 뒤처진 커밋 수
+  MergeableState mergeable = 5;         // 머지 가능 여부
+  string merge_status = 6;              // 머지 상태 상세 ("clean", "conflicting", "unknown")
+  SuggestedAction suggested_action = 7; // 권장 작업
+  string base_sha = 8;                  // base 브랜치의 최신 SHA
+  string compare_sha = 9;               // compare 브랜치의 최신 SHA
+  string merge_base_sha = 10;           // 공통 조상 커밋 SHA
+}
+
+// DiffStat은 변경 통계입니다.
+message DiffStat {
+  int32 files_changed = 1;              // 변경된 파일 수
+  int32 additions = 2;                  // 추가된 라인 수
+  int32 deletions = 3;                  // 삭제된 라인 수
+}
+
+// CommitInfo는 간략한 커밋 정보입니다.
+message CommitInfo {
+  string sha = 1;
+  string message = 2;
+  string author_name = 3;
+  string author_email = 4;
+  string date = 5;
+}
+
+// =============================================================================
+// 머지된 브랜치 정보
+// =============================================================================
+
+// MergedBranchInfo는 머지된 브랜치 정보입니다.
+message MergedBranchInfo {
+  string name = 1;                      // 브랜치 이름
+  string merged_at = 2;                 // 머지된 시간 (ISO 8601)
+  string merged_by = 3;                 // 머지한 사람
+  string last_commit_sha = 4;           // 마지막 커밋 SHA
+  string merged_into = 5;               // 머지된 대상 브랜치
+}
+
+// StaleBranchInfo는 오래된 브랜치 정보입니다.
+message StaleBranchInfo {
+  string name = 1;                      // 브랜치 이름
+  string last_commit_sha = 2;           // 마지막 커밋 SHA
+  string last_commit_date = 3;          // 마지막 커밋 시간
+  int32 days_inactive = 4;              // 비활성 일수
+}
+
+// CleanupResult는 브랜치 정리 결과입니다.
+message CleanupResult {
+  repeated string deleted = 1;          // 삭제된 브랜치
+  repeated string skipped = 2;          // 건너뛴 브랜치 (사유 포함)
+  repeated string failed = 3;           // 실패한 브랜치 (사유 포함)
+  bool dry_run = 4;                     // 드라이 런 여부
+}
+
+// =============================================================================
+// BranchService 요청/응답
+// =============================================================================
+
+// 브랜치 비교 요청
+message CompareBranchesRequest {
+  ProviderConfig provider = 1;          // 프로바이더 설정
+  string namespace = 2;                 // 저장소 소유자
+  string repository = 3;                // 저장소 이름
+  string base = 4;                      // 기준 브랜치 (e.g., main)
+  string compare = 5;                   // 비교 브랜치 (e.g., feature/login)
+}
+
+message CompareBranchesResponse {
+  BranchComparison comparison = 1;
+  DiffStat diff_stat = 2;               // 변경 통계 (선택)
+}
+
+// 커밋 차이 목록 요청
+message ListCommitsDiffRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+  string base = 4;
+  string compare = 5;
+  int32 page = 6;
+  int32 per_page = 7;
+}
+
+message ListCommitsDiffResponse {
+  repeated CommitInfo commits = 1;
+  int32 total_count = 2;
+}
+
+// 머지된 브랜치 목록 요청
+message ListMergedBranchesRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+  string base = 4;                      // 기준 브랜치 (default: main)
+}
+
+message ListMergedBranchesResponse {
+  repeated MergedBranchInfo branches = 1;
+}
+
+// Stale 브랜치 목록 요청
+message ListStaleBranchesRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+  int32 stale_days = 4;                 // 며칠 이상 비활성인 경우 (default: 30)
+}
+
+message ListStaleBranchesResponse {
+  repeated StaleBranchInfo branches = 1;
+}
+
+// 브랜치 정리 요청
+message CleanupBranchesRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+  bool dry_run = 4;                     // 실제 삭제 없이 시뮬레이션
+  repeated string exclude_patterns = 5; // 제외할 패턴 (e.g., "release/*", "hotfix/*")
+  int32 stale_days = 6;                 // stale 기준 일수
+  bool include_merged = 7;              // 머지된 브랜치 포함
+  bool include_stale = 8;               // stale 브랜치 포함
+}
+
+message CleanupBranchesResponse {
+  CleanupResult result = 1;
+}
+
+// =============================================================================
+// BranchService (브랜치 비교 및 관리)
+// =============================================================================
+
+service BranchService {
+  // 브랜치 비교
+  rpc CompareBranches(CompareBranchesRequest) returns (CompareBranchesResponse) {
+    option (google.api.http) = {
+      post: "/v1/branches/compare"
+      body: "*"
+    };
+  }
+
+  // 커밋 차이 목록
+  rpc ListCommitsDiff(ListCommitsDiffRequest) returns (ListCommitsDiffResponse) {
+    option (google.api.http) = {
+      post: "/v1/branches/compare/commits"
+      body: "*"
+    };
+  }
+
+  // 머지된 브랜치 목록
+  rpc ListMergedBranches(ListMergedBranchesRequest) returns (ListMergedBranchesResponse) {
+    option (google.api.http) = {
+      post: "/v1/branches/merged"
+      body: "*"
+    };
+  }
+
+  // Stale 브랜치 목록
+  rpc ListStaleBranches(ListStaleBranchesRequest) returns (ListStaleBranchesResponse) {
+    option (google.api.http) = {
+      post: "/v1/branches/stale"
+      body: "*"
+    };
+  }
+
+  // 브랜치 정리
+  rpc CleanupBranches(CleanupBranchesRequest) returns (CleanupBranchesResponse) {
+    option (google.api.http) = {
+      post: "/v1/branches/cleanup"
+      body: "*"
+    };
+  }
+}

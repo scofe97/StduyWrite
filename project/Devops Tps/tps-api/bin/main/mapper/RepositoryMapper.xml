@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.runnershigh.tps.adapter.out.persistence.RepositoryMapper">
+
+    <resultMap id="repositoryResultMap" type="com.runnershigh.tps.domain.repository.Repository">
+        <id property="id" column="id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="connectionId" column="connection_id"/>
+        <result property="name" column="name"/>
+        <result property="gitProtocol" column="git_protocol"/>
+        <result property="gitHost" column="git_host"/>
+        <result property="gitOwner" column="git_owner"/>
+        <result property="gitRepo" column="git_repo"/>
+        <result property="defaultBranch" column="default_branch"/>
+        <result property="strategyType" column="strategy_type"/>
+        <result property="status" column="status"/>
+        <result property="lastSyncAt" column="last_sync_at"/>
+        <result property="metadata" column="metadata"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="updatedBy" column="updated_by"/>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO repositories (
+            id, project_id, connection_id, name, git_protocol, git_host, git_owner, git_repo,
+            default_branch, strategy_type, status, last_sync_at, metadata,
+            created_at, updated_at, created_by, updated_by
+        ) VALUES (
+            #{id}, #{projectId}, #{connectionId}, #{name}, #{gitProtocol}, #{gitHost}, #{gitOwner}, #{gitRepo},
+            #{defaultBranch}, #{strategyType}, #{status}, #{lastSyncAt}, #{metadata}::jsonb,
+            #{createdAt}, #{updatedAt}, #{createdBy}, #{updatedBy}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE repositories SET
+            name = #{name},
+            git_protocol = #{gitProtocol},
+            git_host = #{gitHost},
+            git_owner = #{gitOwner},
+            git_repo = #{gitRepo},
+            default_branch = #{defaultBranch},
+            strategy_type = #{strategyType},
+            status = #{status},
+            last_sync_at = #{lastSyncAt},
+            metadata = #{metadata}::jsonb,
+            updated_at = #{updatedAt},
+            updated_by = #{updatedBy}
+        WHERE id = #{id}
+    </update>
+
+    <select id="findById" resultMap="repositoryResultMap">
+        SELECT * FROM repositories WHERE id = #{id}
+    </select>
+
+    <select id="findByProjectId" resultMap="repositoryResultMap">
+        SELECT * FROM repositories WHERE project_id = #{projectId} ORDER BY created_at DESC
+    </select>
+
+    <select id="findByConnectionId" resultMap="repositoryResultMap">
+        SELECT * FROM repositories WHERE connection_id = #{connectionId} ORDER BY created_at DESC
+    </select>
+
+    <select id="findByStatus" resultMap="repositoryResultMap">
+        SELECT * FROM repositories WHERE status = #{status} ORDER BY created_at DESC
+    </select>
+
+    <select id="findByProjectIdAndName" resultMap="repositoryResultMap">
+        SELECT * FROM repositories WHERE project_id = #{projectId} AND name = #{name}
+    </select>
+
+    <delete id="deleteById">
+        DELETE FROM repositories WHERE id = #{id}
+    </delete>
+
+    <select id="countById" resultType="int">
+        SELECT COUNT(*) FROM repositories WHERE id = #{id}
+    </select>
+
+</mapper>

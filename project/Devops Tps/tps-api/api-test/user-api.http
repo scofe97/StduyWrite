@@ -1,0 +1,120 @@
+### TPS API - User 테스트
+### Base URL
+@baseUrl = http://localhost:8089/api/v1
+
+################################################################################
+### [User API] 사용자 생성/수정/삭제
+################################################################################
+
+### 테스트 1: 사용자 생성 (ADMIN)
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "email": "admin@runnershigh.com",
+  "displayName": "Administrator",
+  "role": "ADMIN"
+}
+
+### 테스트 2: 사용자 생성 (MEMBER)
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "username": "john.doe",
+  "email": "john.doe@runnershigh.com",
+  "displayName": "John Doe",
+  "role": "MEMBER"
+}
+
+### 테스트 3: 사용자 생성 (MANAGER)
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "username": "jane.smith",
+  "email": "jane.smith@runnershigh.com",
+  "displayName": "Jane Smith",
+  "role": "MANAGER"
+}
+
+### 테스트 4: 사용자 조회
+@userId = [생성된_사용자_ID로_교체]
+GET {{baseUrl}}/users/{{userId}}
+Content-Type: application/json
+
+### 테스트 5: 사용자명으로 조회
+GET {{baseUrl}}/users/username/admin
+Content-Type: application/json
+
+### 테스트 6: 전체 사용자 목록
+GET {{baseUrl}}/users
+Content-Type: application/json
+
+### 테스트 7: 상태별 사용자 목록 (ACTIVE)
+GET {{baseUrl}}/users/status/ACTIVE
+Content-Type: application/json
+
+### 테스트 8: 사용자 수정
+PUT {{baseUrl}}/users/{{userId}}
+Content-Type: application/json
+
+{
+  "displayName": "John Doe Updated",
+  "email": "john.updated@runnershigh.com"
+}
+
+### 테스트 9: 역할 변경
+PATCH {{baseUrl}}/users/{{userId}}/role
+Content-Type: application/json
+
+{
+  "role": "MANAGER"
+}
+
+### 테스트 10: 사용자 비활성화
+POST {{baseUrl}}/users/{{userId}}/deactivate
+Content-Type: application/json
+
+### 테스트 11: 사용자 활성화
+POST {{baseUrl}}/users/{{userId}}/activate
+Content-Type: application/json
+
+### 테스트 12: 사용자 삭제
+DELETE {{baseUrl}}/users/{{userId}}
+Content-Type: application/json
+
+################################################################################
+### 에러 케이스
+################################################################################
+
+### 에러 1: 필수 필드 누락 (username)
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "email": "test@test.com"
+}
+
+### 에러 2: 잘못된 이메일 형식
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "invalid-email"
+}
+
+### 에러 3: 중복 사용자명
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "email": "another@test.com"
+}
+
+### 에러 4: 존재하지 않는 사용자 조회
+GET {{baseUrl}}/users/00000000-0000-0000-0000-000000000000
+Content-Type: application/json

@@ -1,0 +1,179 @@
+# 유틸리티와 표준 API
+---
+> Java는 자주 쓰이는 시스템 기능과 수학 연산, 난수 생성을 `java.lang` 패키지의 정적 유틸리티 클래스로 제공한다. 이 클래스들의 설계 원칙을 이해하면 직접 유틸리티 클래스를 만들 때도 같은 패턴을 적용할 수 있다.
+
+## 1. System 클래스
+
+`System` 클래스는 JVM과 운영 체제 사이의 인터페이스 역할을 한다. 모든 멤버가 `static`이므로 인스턴스 생성 없이 직접 호출한다.
+
+### 1-1. 시간 측정
+
+시간 측정 목적에 따라 두 메서드를 구분해 사용한다:
+
+- `currentTimeMillis()`: 에포크(Unix Epoch, 1970-01-01 00:00:00 UTC) 이후 경과한 밀리초를 반환한다. 날짜/시간 계산에 적합하다.
+- `nanoTime()`: 나노초 단위의 단조 증가 시간을 반환한다. 절대 시각이 아니라 두 호출 사이의 경과 시간 측정에만 사용해야 한다.
+
+```java
+long start = System.nanoTime();
+// 측정 대상 코드
+long elapsed = System.nanoTime() - start;
+System.out.println("경과 시간: " + elapsed + " ns");
+```
+
+`nanoTime()`의 반환값 자체는 의미가 없고, 두 값의 차이만 유효하다. 로그에 찍거나 다른 JVM과 비교하는 용도로 쓰면 안 된다.
+
+### 1-2. 환경 변수와 시스템 속성
+
+운영 체제 수준의 환경 변수(Environment Variable)와 JVM 수준의 시스템 속성(System Property)은 다른 개념이다:
+
+- `System.getenv("HOME")`: OS 환경 변수를 읽는다. 런타임 중 수정 불가능하다.
+- `System.getProperty("java.version")`: JVM 실행 시 `-D` 플래그로 전달된 속성을 읽는다. `System.setProperty()`로 런타임 수정이 가능하다.
+
+```java
+// OS 환경 변수
+String home = System.getenv("HOME");
+
+// JVM 시스템 속성
+String javaVersion = System.getProperty("java.version");
+String appEnv = System.getProperty("app.env", "local"); // 기본값 지정
+```
+
+### 1-3. 배열 고속 복사
+
+`System.arraycopy()`는 네이티브 메서드로 구현되어 반복문보다 빠르게 배열을 복사한다. 내부적으로 `memmove`를 호출하므로 대용량 배열 복사에 적합하다.
+
+```java
+char[] src = {'h', 'e', 'l', 'l', 'o'};
+char[] dst = new char[5];
+
+// arraycopy(원본, 원본시작, 대상, 대상시작, 복사길이)
+System.arraycopy(src, 0, dst, 0, src.length);
+```
+
+`Arrays.copyOf()`나 `Arrays.copyOfRange()`는 내부에서 `System.arraycopy()`를 호출하는 편의 메서드다.
+
+### 1-4. 프로그램 종료
+
+`System.exit(statusCode)`는 JVM을 즉시 종료한다. `0`은 정상 종료, 그 외는 비정상 종료를 나타낸다. 일반 애플리케이션 코드에서 호출하면 shutdown hook과 finally 블록 실행을 보장하지 않으므로, 사용을 자제한다.
+
+## 2. Math 클래스
+
+`Math` 클래스는 수학 연산을 위한 정적 메서드 모음이다. 생성자가 `private`으로 선언되어 인스턴스화가 불가능한 전형적인 정적 유틸리티 클래스 구조를 갖는다.
+
+### 2-1. 주요 메서드
+
+기본 연산과 반올림 계열 메서드를 구분하면 다음과 같다:
+
+```java
+// 기본 연산
+Math.max(10, 20);   // 20 — 최댓값
+Math.min(10, 20);   // 10 — 최솟값
+Math.abs(-10);      // 10 — 절댓값
+Math.sqrt(4.0);     // 2.0 — 제곱근
+
+// 반올림 계열
+Math.ceil(2.1);     // 3.0 — 올림 (ceiling)
+Math.floor(2.7);    // 2.0 — 내림 (floor)
+Math.round(2.5);    // 3   — 반올림 (long 반환)
+
+// 지수와 로그
+Math.pow(2, 10);    // 1024.0
+Math.log(Math.E);   // 1.0
+Math.log10(100);    // 2.0
+```
+
+### 2-2. 정밀도 주의점
+
+`Math`는 대부분 `double`을 반환하므로 부동소수점 오차가 발생할 수 있다. 금융 계산처럼 정확한 소수 연산이 필요하면 `BigDecimal`을 사용한다.
+
+```java
+// 부동소수점 오차 예시
+System.out.println(0.1 + 0.2);        // 0.30000000000000004
+System.out.println(Math.round(2.5));  // 3 (절반 반올림 — Half Up)
+System.out.println(Math.round(-2.5)); // -2 (주의: -3이 아님)
+```
+
+`Math.random()`은 `0.0` 이상 `1.0` 미만의 `double`을 반환하지만, 멀티스레드 환경에서는 `ThreadLocalRandom`이 더 적합하다.
+
+## 3. Random과 ThreadLocalRandom
+
+### 3-1. Random 기본 사용
+
+`java.util.Random`은 의사 난수(Pseudo Random Number)를 생성한다. 시드(Seed) 값이 같으면 항상 동일한 수열을 생성하므로, 재현 가능한 테스트에서 유용하다.
+
+```java
+Random random = new Random();          // 시드: 현재 시각
+Random seeded = new Random(42);        // 시드 고정 → 항상 같은 결과
+
+int value = random.nextInt(100);       // 0 ~ 99
+double d = random.nextDouble();        // 0.0 ~ 1.0 미만
+boolean b = random.nextBoolean();
+
+// 범위 지정 (Java 17+)
+int inRange = random.nextInt(1, 11);   // 1 ~ 10 (bound 포함)
+```
+
+### 3-2. 스레드 안전성과 ThreadLocalRandom
+
+`Random`은 스레드 안전(Thread-safe)하지만, 여러 스레드가 동시에 접근하면 CAS(Compare-and-Swap) 경합이 발생해 성능이 저하된다. 멀티스레드 환경에서는 `ThreadLocalRandom`을 사용한다.
+
+```java
+// 각 스레드가 독립적인 Random 인스턴스를 가짐
+int value = ThreadLocalRandom.current().nextInt(1, 101); // 1 ~ 100
+double d = ThreadLocalRandom.current().nextDouble(0.0, 1.0);
+```
+
+`ThreadLocalRandom`은 스레드 로컬 변수로 관리되므로 인스턴스를 직접 생성하지 않고 `current()`로 접근한다. 병렬 스트림(`parallelStream`)에서는 자동으로 `ThreadLocalRandom`이 사용된다.
+
+### 3-3. Java 21: RandomGenerator 인터페이스
+
+Java 17에서 도입된 `RandomGenerator` 인터페이스는 다양한 난수 알고리즘을 통일된 API로 사용할 수 있게 한다. `Random`, `ThreadLocalRandom`, `SplittableRandom` 모두 이 인터페이스를 구현한다.
+
+```java
+// 알고리즘 이름으로 인스턴스 생성
+RandomGenerator rng = RandomGenerator.of("L64X128MixRandom"); // Java 17+
+int value = rng.nextInt(100);
+
+// 스트림 지원
+rng.ints(5, 1, 101).forEach(System.out::println); // 1~100 난수 5개
+```
+
+`SplittableRandom`은 병렬 처리를 위해 독립적인 하위 인스턴스로 분리(split)할 수 있어, 포크-조인(Fork-Join) 작업에 적합하다.
+
+## 4. 정적 유틸리티 클래스 설계
+
+`System`, `Math`처럼 인스턴스 상태 없이 기능만 제공하는 클래스를 **정적 유틸리티 클래스(Static Utility Class)**라고 한다.
+
+### 4-1. 인스턴스화 방지 패턴
+
+유틸리티 클래스는 `private` 생성자를 선언해 인스턴스화를 막는다. 기본 생성자가 없으면 컴파일러가 `public` 기본 생성자를 자동 생성하므로 반드시 명시해야 한다.
+
+```java
+public final class StringUtils {
+
+    // 인스턴스화 방지 — 절대 호출되어서는 안 된다
+    private StringUtils() {
+        throw new AssertionError("유틸리티 클래스는 인스턴스화할 수 없습니다.");
+    }
+
+    public static boolean isBlank(String s) {
+        return s == null || s.isBlank();
+    }
+
+    public static String capitalize(String s) {
+        if (isBlank(s)) return s;
+        return Character.toUpperCase(s.charAt(0)) + s.substring(1);
+    }
+}
+```
+
+`final` 키워드를 붙여 상속도 막는다. 유틸리티 클래스를 상속하면 인스턴스화 방지 의도가 우회될 수 있기 때문이다.
+
+### 4-2. 설계 기준
+
+유틸리티 클래스가 적합한 경우와 그렇지 않은 경우를 구분해야 한다:
+
+- 적합한 경우: 순수 함수(Pure Function)만 포함하고, 전역 상태가 없으며, 특정 타입에 종속되지 않는 범용 로직
+- 부적합한 경우: 공유 가변 상태가 필요하거나, 의존성 주입이 필요한 서비스 로직
+
+Spring 환경에서는 `@Component` 빈으로 관리되는 서비스 클래스를 정적 유틸리티로 만들면 테스트와 의존성 관리가 어려워진다. 외부 의존성이 있는 로직은 인스턴스 클래스로 설계하는 것이 원칙이다.

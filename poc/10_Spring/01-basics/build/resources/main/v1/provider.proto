@@ -1,0 +1,226 @@
+syntax = "proto3";
+
+package gitprovider.v1;
+
+option java_package = "com.runnershigh.poc.grpc.generated";
+option java_outer_classname = "GitProviderProto";
+option java_multiple_files = true;
+
+// =============================================================================
+// 프로바이더 타입
+// =============================================================================
+
+enum ProviderType {
+  PROVIDER_TYPE_UNSPECIFIED = 0;
+  PROVIDER_TYPE_GITHUB = 1;
+  PROVIDER_TYPE_GITLAB = 2;
+  PROVIDER_TYPE_BITBUCKET = 3;
+}
+
+// =============================================================================
+// 네임스페이스 타입 (소유자 유형)
+// =============================================================================
+
+enum NamespaceType {
+  NAMESPACE_TYPE_UNSPECIFIED = 0;
+  NAMESPACE_TYPE_USER = 1;
+  NAMESPACE_TYPE_ORGANIZATION = 2;
+  NAMESPACE_TYPE_GROUP = 3;
+  NAMESPACE_TYPE_WORKSPACE = 4;
+}
+
+// =============================================================================
+// 프로바이더 설정
+// =============================================================================
+
+message GitHubConfig {
+  string token = 1;
+  string base_url = 2;
+}
+
+message GitLabConfig {
+  string token = 1;
+  string base_url = 2;
+}
+
+message BitbucketConfig {
+  string email = 1;
+  string api_token = 2;
+  string workspace = 3;
+}
+
+message ProviderConfig {
+  oneof config {
+    GitHubConfig github = 1;
+    GitLabConfig gitlab = 2;
+    BitbucketConfig bitbucket = 3;
+  }
+}
+
+// =============================================================================
+// 네임스페이스
+// =============================================================================
+
+message Namespace {
+  string id = 1;
+  string name = 2;
+  string full_path = 3;
+  NamespaceType type = 4;
+  string avatar_url = 5;
+  string url = 6;
+}
+
+// =============================================================================
+// 저장소 정보
+// =============================================================================
+
+message Repository {
+  string id = 1;
+  string name = 2;
+  string full_name = 3;
+  string description = 4;
+  string url = 5;
+  string clone_url = 6;
+  string default_branch = 7;
+  bool private = 8;
+  string ssh_url = 9;
+  Namespace namespace = 10;
+  string created_at = 11;
+  string updated_at = 12;
+  ProviderType provider = 13;
+}
+
+// =============================================================================
+// 커밋 정보
+// =============================================================================
+
+message Commit {
+  string sha = 1;
+  string message = 2;
+  string author_name = 3;
+  string author_email = 4;
+  string date = 5;
+}
+
+// =============================================================================
+// 브랜치 정보
+// =============================================================================
+
+message Branch {
+  string name = 1;
+  string sha = 2;
+  bool protected = 3;
+  bool is_default = 4;
+  Commit last_commit = 5;
+}
+
+// =============================================================================
+// GitService 요청/응답 - 저장소
+// =============================================================================
+
+message ListRepositoriesRequest {
+  ProviderConfig provider = 1;
+}
+
+message ListRepositoriesResponse {
+  repeated Repository repositories = 1;
+}
+
+message GetRepositoryRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+}
+
+message GetRepositoryResponse {
+  Repository repository = 1;
+}
+
+message CreateRepositoryRequest {
+  ProviderConfig provider = 1;
+  string name = 2;
+  string description = 3;
+  bool private = 4;
+  string namespace = 5;
+  bool auto_init = 6;
+}
+
+message CreateRepositoryResponse {
+  Repository repository = 1;
+}
+
+message DeleteRepositoryRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+}
+
+message DeleteRepositoryResponse {
+  bool success = 1;
+}
+
+// =============================================================================
+// GitService 요청/응답 - 브랜치
+// =============================================================================
+
+message ListBranchesRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+}
+
+message ListBranchesResponse {
+  repeated Branch branches = 1;
+}
+
+message GetBranchRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+  string branch = 4;
+}
+
+message GetBranchResponse {
+  Branch branch = 1;
+}
+
+message CreateBranchRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+  string branch = 4;
+  string ref = 5;
+}
+
+message CreateBranchResponse {
+  Branch branch = 1;
+}
+
+message DeleteBranchRequest {
+  ProviderConfig provider = 1;
+  string namespace = 2;
+  string repository = 3;
+  string branch = 4;
+}
+
+message DeleteBranchResponse {
+  bool success = 1;
+}
+
+// =============================================================================
+// GitService
+// =============================================================================
+
+service GitService {
+  // 저장소
+  rpc ListRepositories(ListRepositoriesRequest) returns (ListRepositoriesResponse);
+  rpc GetRepository(GetRepositoryRequest) returns (GetRepositoryResponse);
+  rpc CreateRepository(CreateRepositoryRequest) returns (CreateRepositoryResponse);
+  rpc DeleteRepository(DeleteRepositoryRequest) returns (DeleteRepositoryResponse);
+
+  // 브랜치
+  rpc ListBranches(ListBranchesRequest) returns (ListBranchesResponse);
+  rpc GetBranch(GetBranchRequest) returns (GetBranchResponse);
+  rpc CreateBranch(CreateBranchRequest) returns (CreateBranchResponse);
+  rpc DeleteBranch(DeleteBranchRequest) returns (DeleteBranchResponse);
+}
