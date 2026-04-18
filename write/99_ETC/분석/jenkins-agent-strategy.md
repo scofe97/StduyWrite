@@ -1,3 +1,11 @@
+---
+title: jenkins-agent-strategy
+tags: []
+status: draft
+related: []
+updated: 2026-04-19
+---
+
 # Jenkins Agent 전략: 고정 Pod vs 동적 Pod
 ---
 > GCP 3노드 K8s 클러스터(4vCPU/8GB × 3)에서 Jenkins Master 1 + Agent 2 구성을 고정 Pod와 동적 Pod 중 어떤 방식으로 운영할지 결정하기 위한 비교 분석이다.

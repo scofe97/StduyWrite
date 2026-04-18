@@ -1,3 +1,11 @@
+---
+title: 03-reconciliation-genealogy
+tags: []
+status: draft
+related: []
+updated: 2026-04-19
+---
+
 # Reconciliation Loop의 계보: 제어이론에서 GitOps까지
 ---
 > "desired state와 actual state를 비교하여 수렴시킨다"는 한 문장에는 250년 제어이론, 70년 사이버네틱스, 30년 설정관리의 DNA가 압축되어 있다. 이 문서는 그 한 문장을 구성하는 모든 용어의 기원을 추적한다.

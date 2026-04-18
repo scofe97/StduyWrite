@@ -1,3 +1,11 @@
+---
+title: 02-support-tool-analysis
+tags: []
+status: draft
+related: []
+updated: 2026-04-19
+---
+
 # 개발지원도구(SupportTool) 사용 분석
 
 TPS 플랫폼에서 개발지원도구란 Jenkins, GitLab, SonarQube, Harbor, Nexus 등 소프트웨어 개발 생명주기에 필요한 외부 도구들을 중앙에서 등록하고 관리하는 시스템이다. 핵심 테이블 `TbTpsCm150`에 도구의 접속 정보(URL, 인증)를 저장하고, 파이프라인이나 워크플로우에서 이 정보를 참조하여 외부 도구와 통신한다. 도구 등록은 pipeline-api가 담당하고, GitLab 사용자/멤버 자동 등록은 ppln-logging-api의 스케줄러가 처리한다.
