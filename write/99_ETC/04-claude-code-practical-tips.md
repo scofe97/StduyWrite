@@ -1,3 +1,11 @@
+---
+title: 04-claude-code-practical-tips
+tags: []
+status: draft
+related: []
+updated: 2026-04-19
+---
+
 # Claude Code 실전 활용 10가지 팁
 ---
 > Claude Code를 단순 코드 생성기가 아닌 개발 파트너로 쓰려면, 컨텍스트 관리와 워크플로우 설계가 핵심이다. 이 문서는 중급 사용자를 위한 10가지 실전 팁을 정리한다.

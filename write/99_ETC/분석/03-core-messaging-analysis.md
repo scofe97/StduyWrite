@@ -1,3 +1,11 @@
+---
+title: 03-core-messaging-analysis
+tags: []
+status: draft
+related: []
+updated: 2026-04-19
+---
+
 # core-messaging 후속 조사 분석
 
 ---

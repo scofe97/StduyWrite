@@ -1,3 +1,11 @@
+---
+title: jenkins-pipeline-batch-ordering-impl
+tags: []
+status: draft
+related: []
+updated: 2026-04-19
+---
+
 # Jenkins 파이프라인 묶음 순서 보장: Redpanda-Spring Boot 구현 설계
 ---
 > 2-토픽 패턴을 기존 redpanda-spring-boot 프로젝트의 패턴(Avro + KafkaTemplate + CqrsEventPublisher)에 맞춰 구체적인 토픽, 스키마, 패키지 구성으로 매핑한다.

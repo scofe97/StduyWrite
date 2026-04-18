@@ -1,3 +1,11 @@
+---
+title: 01-jenkins-analysis
+tags: []
+status: draft
+related: []
+updated: 2026-04-19
+---
+
 # Jenkins 사용 분석
 
 TPS 플랫폼에서 Jenkins는 CI/CD 파이프라인의 핵심 실행 엔진이다. pipeline-api가 파이프라인의 생명주기(생성/수정/삭제/실행)를 관리하고, ppln-logging-api가 실행 결과의 상태 추적과 로그 수집을 담당한다. 두 모듈이 동일한 Jenkins 서버를 바라보되 역할을 분리함으로써, 파이프라인 관리와 모니터링이 독립적으로 확장 가능한 구조를 갖추고 있다.

@@ -1,3 +1,11 @@
+---
+title: jenkins-pipeline-batch-ordering
+tags: []
+status: draft
+related: []
+updated: 2026-04-19
+---
+
 # Jenkins 파이프라인 묶음 순서 보장: 2-토픽 패턴 적용
 ---
 > 메시지큐의 2-토픽 파이프라인 패턴을 Jenkins 오케스트레이션에 매핑하여, 묶음(Pipeline Group) 간 순서를 보장하면서 묶음 내부에서는 병렬/순차 실행을 유연하게 제어하는 설계를 다룬다.
