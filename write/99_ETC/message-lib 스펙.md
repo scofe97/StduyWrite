@@ -1,3 +1,11 @@
+---
+title: message-lib 스펙
+tags: []
+status: draft
+related: []
+updated: 2026-04-19
+---
+
 # message-lib
 
 ---

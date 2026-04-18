@@ -1,3 +1,11 @@
+---
+title: 05-spring-boot-gradle-version-compatibility
+tags: []
+status: draft
+related: []
+updated: 2026-04-19
+---
+
 # Spring Boot 버전 업그레이드와 Gradle/라이브러리 호환성
 ---
 > 멀티모듈 프로젝트에서 새 모듈에만 Spring Boot 3.5.x를 적용하고, 기존 모듈은 3.2.x에 유지할 때 Gradle과 라이브러리 호환성 이슈를 정리한다.

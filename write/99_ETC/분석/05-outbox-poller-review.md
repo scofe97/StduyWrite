@@ -1,3 +1,11 @@
+---
+title: 05-outbox-poller-review
+tags: []
+status: draft
+related: []
+updated: 2026-04-19
+---
+
 # OutboxPoller 코드 리뷰
 ---
 > redpanda-playground의 `OutboxPoller`는 Transactional Outbox 패턴의 Polling Publisher 구현체다. 이 문서는 순서 보장 결함과 트랜잭션 범위 문제를 중심으로 프로덕션 수준의 개선 방향을 정리한다.

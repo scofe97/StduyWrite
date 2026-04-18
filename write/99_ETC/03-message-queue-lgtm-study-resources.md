@@ -1,3 +1,11 @@
+---
+title: 03-message-queue-lgtm-study-resources
+tags: []
+status: draft
+related: []
+updated: 2026-04-19
+---
+
 # 메시지 큐 & LGTM 모니터링 학습 자료 조사
 
 메시지 큐(Kafka/Redpanda)를 활용한 미들웨어 통신 관리와 LGTM(Loki+Grafana+Tempo+Mimir) 모니터링 스택은 현대 분산 시스템의 두 축이다. 메시지 큐는 서비스 간 순서 보장, 재시도, 실패 로깅을 담당하고, LGTM 스택은 로그·메트릭·트레이스를 통합 수집하여 시스템 상태를 관측한다. 이 문서는 두 영역의 한국어 학습 자료를 조사하여 정리한 결과다.

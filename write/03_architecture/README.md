@@ -1,3 +1,11 @@
+---
+title: README
+tags: []
+status: draft
+related: []
+updated: 2026-04-19
+---
+
 # 아키텍처 시리즈
 ---
 > Spring Boot 4.x와 Java 25를 기준으로 애플리케이션 아키텍처를 정리한다.

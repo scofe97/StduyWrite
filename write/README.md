@@ -1,3 +1,11 @@
+---
+title: README
+tags: []
+status: draft
+related: []
+updated: 2026-04-19
+---
+
 # runners-high / write — 학습 MOC
 
 > 최종본만 모이는 공간이다. 실험은 `poc/`에서, 결과만 여기로 올린다. 하네스는 `~/.claude/skills/writing/references/second-brain-harness.md` 참조.
