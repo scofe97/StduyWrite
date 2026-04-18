@@ -1,3 +1,11 @@
+---
+title: 06-eda-messaging-patterns
+tags: []
+status: draft
+related: []
+updated: 2026-04-19
+---
+
 # RabbitMQ 기반 EDA 메시징 패턴
 ---
 > 메시지 브로커를 활용한 Event-Driven Architecture의 핵심 흐름을 정리한다. Producer/Consumer 구조, Exchange 라우팅, 신뢰성 패턴(ACK, DLQ, Outbox)을 중심으로 Kafka와의 차이점도 비교한다.

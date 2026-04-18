@@ -1,3 +1,11 @@
+---
+title: kafka-api-batch-ordering-primitives
+tags: []
+status: draft
+related: []
+updated: 2026-04-19
+---
+
 # Kafka API만으로 묶음 순서 보장이 가능한가?
 ---
 > 커스텀 컴포넌트(Dispatcher, Coordinator) 없이 Kafka/Redpanda API 원시 기능만으로 묶음(batch) 간 순서를 제어할 수 있는지 분석한다. 결론부터 말하면, Level 2(묶음 간 순서) 보장은 Kafka API만으로 불가능하다. 배리어 로직은 반드시 애플리케이션 레이어에 존재해야 하지만, `pause()`/`resume()` API를 활용하면 별도 프로세스 없이 Consumer 내부에서 배리어를 구현할 수 있다.
