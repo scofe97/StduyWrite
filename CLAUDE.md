@@ -1,167 +1,60 @@
-# Runners-High 프로젝트
-## 프로젝트 개요
-
-Runners-High는 TPS(Trombone Platform System)를 기반으로 한 Polyglot 아키텍처 학습 프로젝트입니다.
-
-- **Java (tps-api)**: 핵심 비즈니스 로직, 메타데이터 관리
-- **Go (git-api)**: 외부 Git API 연동 (GitHub, GitLab)
-
+# runners-high — 개발 학습 세컨드 브레인
 ---
+> Typora와 Markdown만으로 운용하는 개인 학습 저장소다. `write/`에 최종본을 모으고, `poc/`는 실험 흔적, `journal/`은 일지와 리뷰가 쌓인다.
 
-## 프로젝트 구조
+## 저장소 정체성
 
-```
-runners-high/
-├── CLAUDE.md              # 이 파일 (프로젝트 지침)
-├── README.md              # 프로젝트 소개
-├── PROGRESS.md            # 진행 상황 추적
-│
-├── research/              # 📚 리서치 문서 (skill: research-plan-implement)
-│   ├── tps-analysis.md    # TPS 분석
-│   └── _archive/          # 완료된 리서치
-│
-├── plans/                 # 📝 계획 문서 (skill: research-plan-implement)
-│   ├── implementation-plan.md
-│   ├── architecture-decisions.md
-│   └── _archive/          # 완료된 계획
-│
-├── project/               # 💻 소스 코드 (Go 모듈 분리)
-│   ├── git-api/           # Go 모듈 (github.com/runners-high/git-api)
-│   │   ├── cmd/server/    # 진입점 (main.go)
-│   │   ├── internal/      # 내부 패키지
-│   │   │   ├── client/    # Git Provider 클라이언트
-│   │   │   │   ├── github_client.go   # GitHub API
-│   │   │   │   ├── gitlab_client.go   # GitLab API
-│   │   │   │   └── bitbucket_client.go # Bitbucket API (예정)
-│   │   │   ├── config/    # 설정 관리
-│   │   │   ├── handler/   # Kafka 핸들러
-│   │   │   └── service/   # 비즈니스 로직
-│   │   └── pkg/           # 공개 패키지
-│   │       ├── event/     # Kafka 이벤트 타입
-│   │       └── kafka/     # Kafka Producer/Consumer
-│   │
-│   ├── tps-api/           # Java Spring Boot (향후)
-│   └── docker/            # Docker Compose 환경
-│
-├── docs/                  # 참고 문서
-│   └── TPS/               # TPS 시스템 설계 문서
-│       └── tech/git-api/  # Git-API 기술 문서
-│
-├── poc/                   # PoC 코드
-└── skills/                # 프로젝트 특화 skill
-```
+저장소 목적은 두 가지다. 첫째, 공부한 내용을 "남에게 설명할 수 있는 수준의 문서"로 정착시키는 것이다. 둘째, 같은 개념을 시간이 지나 다시 만났을 때 빠르게 복습 가능한 MOC(Map of Content) 구조를 유지하는 것이다.
 
----
+Obsidian·Zotero 같은 별도 도구는 쓰지 않는다. Typora가 지원하는 순수 Markdown + YAML 프론트매터만으로 연결·수명 관리가 가능한 구조를 선택했다. 이유는 단순하다. 도구가 죽어도 파일은 남기 때문이다.
 
-## ⚠️ 필수 워크플로우
+## 디렉토리 역할
 
-### research-plan-implement Skill 적용
+| 디렉토리 | 역할 | 특징 |
+|----------|------|------|
+| `write/` | **최종본** — 공유 가능한 완성 학습 문서 | 프론트매터·카테고리 규칙 강제 (하네스 적용) |
+| `poc/` | 실험장 — 새 기술을 직접 써 본 흔적 | 러프 노트 허용. 이관 후 삭제 예정 |
+| `journal/` | 일지·주간·월간·분기·연간 리뷰 | daily/weekly/monthly/quarterly/yearly/goals |
+| `digest/` | 외부 뉴스·아티클 수집 요약 | 소비용 자료 |
+| `project/` | 실습 프로젝트 루트 | 독립 리포(submodule)이기도 함 |
+| `docs/` | 과거 흔적 — write/로 이관 예정 | 신규 작성 금지 |
 
-이 프로젝트는 **반드시** `research-plan-implement` skill을 따릅니다:
+## Claude / 에이전트 가드레일
 
-```
-📚 1단계: 리서치     →     📝 2단계: 계획     →     💻 3단계: 구현
-research/[name].md        plans/[name].md           project/코드
-```
+`write/` 디렉토리 작업은 자동으로 두 가지 가드레일을 적용한다.
 
-**자동 활성화 키워드**:
-- `분석`, `분석해줘`, `리서치`, `research`
-- `조사`, `파악해줘`, `코드 분석`
-- `아키텍처 분석`, `구조 분석`
+첫째, Markdown 스타일 규칙 1~4부 (`~/.claude/skills/writing/SKILL.md`) — 문단형 우선, 어미 다양화, AI 강조어 금지, "왜?" 포함.
 
-**중요 규칙**:
-- ❌ `claudedocs/`에 저장 금지
-- ✅ `research/`에 분석 결과 저장
-- ✅ `plans/`에 계획 저장 (plan/ 아님, plans/!)
+둘째, 세컨드 브레인 하네스 (`~/.claude/skills/writing/references/second-brain-harness.md`) — 카테고리 맵, 파일명 규칙, 프론트매터 포맷, 이관 프로토콜.
 
----
+신규 문서 작성·이관·리네이밍 전 하네스 §2 진입 체크리스트를 먼저 실행한다. 체크리스트를 통과하지 못하면 작업을 중단한다.
 
-## 아키텍처 결정 사항 (ADR)
+## 금지 사항
 
-| ID | 제목 | 상태 |
-|----|------|------|
-| ADR-001 | Polyglot 아키텍처 | ✅ 승인 |
-| ADR-002 | Java/Go 서비스 분리 | ✅ 승인 (Go 분리) |
-| ADR-003 | Kafka 비동기 통신 | ✅ 승인 |
-| ADR-004 | 4계층 도메인 구조 | ✅ 승인 |
-| ADR-005 | MyBatis 매퍼 | ✅ 승인 |
+- Obsidian wiki-link(`[[파일명]]`) 사용 — Typora 비호환
+- 파일명 날짜 prefix(`2026-04-19-xxx.md`) — 날짜는 프론트매터 `updated` 필드 담당
+- 사내 자료를 `_company/` 외 경로에 배치 — `.gitignore` 보호가 무력화된다
+- 합니다체·한다체 혼용 — 한 문서 내에서 문체 하나만
+- `write/` 루트 고아 `.md` 배치 — 반드시 대분류에 귀속
 
-상세: `plans/architecture-decisions.md`
+## 시작점
 
----
-
-## 서비스 구성
-
-### TPS-API (Java)
-- **역할**: 메타데이터 CRUD, 비즈니스 로직
-- **도메인**: Connection, Repository, Branch, Project, Workflow, Ticket, User
-- **기술**: Spring Boot, MyBatis, PostgreSQL
-
-### Git-API (Go)
-- **역할**: 외부 Git API 호출 (Polyglot 아키텍처)
-- **모듈**: `github.com/runners-high/git-api` (Go 모듈 분리)
-- **위치**: `project/git-api/`
-- **기능**: 브랜치 생성/삭제, 저장소 동기화, PR/MR 생성
-- **지원 Provider**:
-  - GitHub (Cloud, Enterprise)
-  - GitLab (Cloud, Self-hosted)
-  - Bitbucket (Cloud, Server/DC) - 예정
-- **기술**: Go 1.21, Kafka, go-github, go-gitlab
-- **인증**: TPS-API에서 Connection/Credential 관리, Kafka를 통해 토큰 전달
-
-### Kafka Topics
-```
-runners-high.git.commands  # TPS-API → Git-API (명령)
-runners-high.git.events    # Git-API → TPS-API (결과)
-runners-high.notifications # 알림
-```
-
----
-
-## 개발 환경
-
-### Docker Compose 시작
-```bash
-cd project/docker
-docker compose up -d
-```
-
-### 서비스 포트
-| 서비스 | 포트 |
-|--------|------|
-| Kafka | 9092 |
-| Kafka UI | 8080 |
-| PostgreSQL | 5432 |
-| Redis | 6379 |
-| Zookeeper | 2181 |
-
----
-
-## 참조 Skill
-
-| Skill | 용도 | 위치 |
-|-------|------|------|
-| `research-plan-implement` | 분석/계획/구현 워크플로우 | `~/.claude/skills/` |
-
----
-
-## 세션 시작 시 확인사항
-
-1. 현재 작업 위치 확인
-2. `PROGRESS.md` 진행 상황 확인
-3. `research/`, `plans/` 기존 문서 확인
-4. 새 기능 시 리서치부터 시작
-
----
+| 질문 | 경로 |
+|------|------|
+| 어디서부터 읽지? | [STUDY_INDEX.md](STUDY_INDEX.md) |
+| write/ 구조는? | [write/README.md](write/README.md) |
+| 이번 달 목표는? | [journal/goals/current.md](journal/goals/) |
+| 최근 학습 일지는? | [journal/daily/](journal/daily/) |
 
 ## 커밋 규칙
 
-```
-[프로젝트][이슈] 타입: 설명
+개인 저장소이므로 티켓 번호를 요구하지 않는다. 커밋 타입만 지킨다.
 
-예시:
-[tps-api][RH-001] feat: 브랜치 동기화 API 구현
-[git-api][RH-002] fix: GitHub API 토큰 갱신 오류 수정
+```
+chore: 구조 변경, 파일 이동
+refactor: 카테고리·파일명 리팩터
+docs: 문서 추가·갱신
+fix: 링크 수정, 프론트매터 오류 수정
 ```
 
-타입: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`
+히스토리가 얇아지지 않도록 카테고리·주제 단위로 쪼개 커밋한다. 한 번에 300개 파일을 묶어 "restructure"로 덮는 식의 커밋은 피한다.
