@@ -18,7 +18,12 @@
 | 08 | [`write/08_devops/`](write/08_devops/) | CI/CD, Jenkins, Nexus, Sonarqube |
 | 09 | [`write/09_cloud/`](write/09_cloud/) | Cloud Native, K8s, Service Mesh (미래) |
 | 10 | [`write/10_tools/`](write/10_tools/) | tmux, vim, Claude Code, Git |
+| 11 | [`write/11_security/`](write/11_security/) | OAuth/JWT, OWASP, 위협 모델링, Spring Security |
 | 99 | [`write/99_ETC/`](write/99_ETC/) | 분류 보류 — 3개월 체류 후 재배치 또는 아카이브 |
+
+## Spring 학습 진입점
+
+Spring 문서는 주제별로 분산 배치된다. 전 카테고리 집계는 [`write/01_language/java/spring/README.md`](write/01_language/java/spring/README.md)에서 확인한다.
 
 ## 예약 폴더
 
