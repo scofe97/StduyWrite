@@ -1,0 +1,246 @@
+" IdeaVim 설정 (Ch12: IdeaVim)
+" 이 파일을 ~/.ideavimrc에 복사하여 사용
+
+" ========================================
+" 기본 설정
+" ========================================
+set number
+set relativenumber
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
+set showmode
+set scrolloff=8
+set clipboard+=unnamed
+
+" Leader 키
+let mapleader = " "
+
+" ========================================
+" IdeaVim 전용 설정
+" ========================================
+set ideajoin                    " J로 스마트 줄 합치기
+set idearefactormode=keep       " 리팩토링 후 모드 유지
+
+" ========================================
+" 에뮬레이트 플러그인
+" ========================================
+set surround                    " ys, cs, ds (vim-surround)
+set commentary                  " gc (vim-commentary)
+set highlightedyank             " yank 하이라이트
+set NERDTree                    " 파일 탐색기
+set sneak                       " s로 두 글자 점프
+set which-key                   " leader 키 가이드
+set notimeout                   " which-key 대기 시간 무제한
+
+Plug 'machakann/vim-highlightedyank'
+
+" ========================================
+" Insert 모드
+" ========================================
+imap jk <Esc>
+
+" ========================================
+" Normal 모드 - 네비게이션
+" ========================================
+" 빠른 저장/종료
+nmap <leader>w :w<CR>
+nmap <leader>q :q<CR>
+
+" 검색 하이라이트 끄기
+nmap <leader>h :nohlsearch<CR>
+
+" 화면 중앙 유지
+nmap <C-d> <C-d>zz
+nmap <C-u> <C-u>zz
+nmap n nzzzv
+nmap N Nzzzv
+
+" ========================================
+" IntelliJ Action 매핑
+" ========================================
+
+" --- 파일 탐색 ---
+nmap <leader>ff <Action>(GotoFile)
+nmap <leader>fg <Action>(FindInPath)
+nmap <leader>fr <Action>(RecentFiles)
+nmap <leader>fb <Action>(Switcher)
+nmap <leader>fc <Action>(GotoClass)
+nmap <leader>fs <Action>(GotoSymbol)
+
+" --- 코드 네비게이션 ---
+nmap gd <Action>(GotoDeclaration)
+nmap gr <Action>(FindUsages)
+nmap gi <Action>(GotoImplementation)
+nmap gI <Action>(GotoSuperMethod)
+nmap K <Action>(QuickJavaDoc)
+nmap gy <Action>(GotoTypeDeclaration)
+
+" --- 리팩토링 ---
+nmap <leader>rn <Action>(RenameElement)
+nmap <leader>rr <Action>(Refactorings.QuickListPopupAction)
+nmap <leader>rm <Action>(ExtractMethod)
+nmap <leader>rv <Action>(IntroduceVariable)
+nmap <leader>rf <Action>(IntroduceField)
+nmap <leader>rc <Action>(IntroduceConstant)
+nmap <leader>rp <Action>(IntroduceParameter)
+nmap <leader>ri <Action>(Inline)
+nmap <leader>ca <Action>(ShowIntentionActions)
+nmap <leader>cf <Action>(ReformatCode)
+nmap <leader>co <Action>(OptimizeImports)
+
+" --- 에러 네비게이션 ---
+nmap [d <Action>(GotoPreviousError)
+nmap ]d <Action>(GotoNextError)
+nmap [c <Action>(VcsShowPrevChangeMarker)
+nmap ]c <Action>(VcsShowNextChangeMarker)
+
+" --- 디버깅 ---
+nmap <leader>db <Action>(ToggleLineBreakpoint)
+nmap <leader>dr <Action>(Debug)
+nmap <leader>dc <Action>(Resume)
+nmap <leader>do <Action>(StepOver)
+nmap <leader>di <Action>(StepInto)
+nmap <leader>dO <Action>(StepOut)
+nmap <leader>de <Action>(EvaluateExpression)
+nmap <leader>dw <Action>(Debugger.AddToWatches)
+
+" --- 실행 ---
+nmap <leader>R <Action>(Run)
+nmap <leader>S <Action>(Stop)
+nmap <leader>rc <Action>(ChooseRunConfiguration)
+nmap <leader>rr <Action>(Rerun)
+nmap <leader>rt <Action>(RerunTests)
+
+" --- 도구 윈도우 ---
+nmap <leader>e <Action>(ActivateProjectToolWindow)
+nmap <leader>t <Action>(ActivateTerminalToolWindow)
+nmap <leader>g <Action>(ActivateVersionControlToolWindow)
+nmap <leader>D <Action>(ActivateDebugToolWindow)
+nmap <leader>T <Action>(ActivateRunToolWindow)
+nmap <leader>P <Action>(ActivateProblemsViewToolWindow)
+nmap <leader>s <Action>(ActivateStructureToolWindow)
+
+" 도구 윈도우 숨기기
+nmap <leader>z <Action>(HideAllWindows)
+
+" --- Git/VCS ---
+nmap <leader>ga <Action>(Annotate)
+nmap <leader>gb <Action>(Git.Branches)
+nmap <leader>gc <Action>(CheckinProject)
+nmap <leader>gh <Action>(Vcs.ShowTabbedFileHistory)
+nmap <leader>gp <Action>(Vcs.Push)
+nmap <leader>gu <Action>(Vcs.UpdateProject)
+nmap <leader>gr <Action>(Vcs.RollbackChangedLines)
+
+" --- 테스트 ---
+nmap <leader>tn <Action>(RunClass)
+nmap <leader>tm <Action>(RunMethod)
+nmap <leader>tl <Action>(Rerun)
+nmap <leader>tf <Action>(RerunFailedTests)
+
+" --- 빌드 ---
+nmap <leader>bb <Action>(CompileDirty)
+nmap <leader>br <Action>(Rebuild)
+nmap <leader>bc <Action>(CleanProject)
+
+" --- 윈도우 분할 ---
+nmap <C-h> <C-w>h
+nmap <C-j> <C-w>j
+nmap <C-k> <C-w>k
+nmap <C-l> <C-w>l
+
+nmap <leader>sv <Action>(SplitVertically)
+nmap <leader>sh <Action>(SplitHorizontally)
+nmap <leader>sm <Action>(MoveEditorToOppositeTabGroup)
+nmap <leader>sc <Action>(Unsplit)
+nmap <leader>sC <Action>(UnsplitAll)
+
+" --- 탭/버퍼 관리 ---
+nmap <leader>bn <Action>(NextTab)
+nmap <leader>bp <Action>(PreviousTab)
+nmap <leader>bd <Action>(CloseContent)
+nmap <leader>bD <Action>(CloseAllEditors)
+nmap <leader>bo <Action>(CloseAllEditorsButActive)
+nmap <S-l> <Action>(NextTab)
+nmap <S-h> <Action>(PreviousTab)
+
+" --- 코드 접기 ---
+nmap zc <Action>(CollapseRegion)
+nmap zo <Action>(ExpandRegion)
+nmap zC <Action>(CollapseAllRegions)
+nmap zO <Action>(ExpandAllRegions)
+
+" --- 기타 유용한 액션 ---
+nmap <leader>a <Action>(GotoAction)
+nmap <leader>/ <Action>(FindInPath)
+nmap <leader>* <Action>(FindUsages)
+nmap <leader>l <Action>(RecentLocations)
+nmap <leader>j <Action>(JumpToLastChange)
+nmap <leader>m <Action>(ShowBookmarks)
+nmap <leader>M <Action>(ToggleBookmark)
+
+" --- 코드 생성 ---
+nmap <leader>cg <Action>(Generate)
+nmap <leader>cc <Action>(GenerateConstructor)
+nmap <leader>cG <Action>(GenerateGetter)
+nmap <leader>cS <Action>(GenerateSetter)
+nmap <leader>ce <Action>(GenerateEquals)
+nmap <leader>ct <Action>(GenerateTestMethod)
+
+" --- 선택 확장/축소 ---
+nmap <C-w> <Action>(EditorSelectWord)
+nmap <C-S-w> <Action>(EditorUnSelectWord)
+
+" ========================================
+" Visual 모드
+" ========================================
+
+" 줄 이동
+vmap J :m '>+1<CR>gv=gv
+vmap K :m '<-2<CR>gv=gv
+
+" 들여쓰기 유지
+vmap < <gv
+vmap > >gv
+
+" 시스템 클립보드
+vmap <leader>y "+y
+vmap <leader>d "_d
+
+" 리팩토링
+vmap <leader>rm <Action>(ExtractMethod)
+vmap <leader>rv <Action>(IntroduceVariable)
+vmap <leader>rf <Action>(IntroduceField)
+vmap <leader>rc <Action>(IntroduceConstant)
+vmap <leader>rp <Action>(IntroduceParameter)
+
+" ========================================
+" 커스텀 명령
+" ========================================
+
+" 빠른 명령 모드
+nmap ; :
+
+" 현재 파일 경로 복사
+nmap <leader>fp <Action>(CopyPaths)
+nmap <leader>fn <Action>(CopyFileName)
+
+" 최근 수정 위치로 이동
+nmap g; <Action>(JumpToLastChange)
+nmap g, <Action>(JumpToNextChange)
+
+" 북마크 토글 (숫자)
+nmap m1 <Action>(ToggleBookmark1)
+nmap m2 <Action>(ToggleBookmark2)
+nmap m3 <Action>(ToggleBookmark3)
+nmap m4 <Action>(ToggleBookmark4)
+nmap m5 <Action>(ToggleBookmark5)
+
+" 북마크로 이동
+nmap '1 <Action>(GotoBookmark1)
+nmap '2 <Action>(GotoBookmark2)
+nmap '3 <Action>(GotoBookmark3)
+nmap '4 <Action>(GotoBookmark4)
+nmap '5 <Action>(GotoBookmark5)

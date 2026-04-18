@@ -1,0 +1,162 @@
+# 람다 표현식 심화
+---
+> 람다가 어떻게 동작하는지 내부 구조까지 이해하면, 변수 캡처 제약이 왜 존재하는지와 디버깅 시 스택 트레이스를 어떻게 읽어야 하는지를 납득할 수 있다.
+
+## 1. 클로저와 effectively final 변수 캡처
+
+람다는 자신이 정의된 스코프의 변수를 캡처(Capture)할 수 있다. 이처럼 외부 환경을 함께 포획한 함수를 *클로저(Closure)*라 부른다:
+
+```java
+int portNumber = 1337;
+Runnable r = () -> System.out.println(portNumber); // portNumber를 캡처
+```
+
+단, 캡처 대상 지역 변수는 반드시 **effectively final**이어야 한다. `final` 키워드를 붙이지 않아도 되지만, 한 번 할당된 뒤 값이 바뀌지 않아야 한다는 뜻이다:
+
+```java
+int portNumber = 1337;
+Runnable r = () -> System.out.println(portNumber);
+portNumber = 31337; // 컴파일 에러: 캡처된 변수를 변경할 수 없다
+```
+
+이 제약이 존재하는 이유는 메모리 모델 때문이다. 지역 변수는 스택에 존재하지만, 람다 인스턴스는 힙에 존재한다. 스택 프레임이 사라진 뒤에도 람다가 살아 있을 수 있으므로, 자바는 캡처 시점에 지역 변수의 값을 복사해 람다 인스턴스 내부에 보관한다. 원본과 복사본의 값이 달라지면 어느 쪽이 맞는지 알 수 없으므로, 변경 자체를 금지한다.
+
+인스턴스 변수와 정적 변수는 힙과 메서드 영역에 존재하므로 이 제약을 받지 않는다. 람다 내에서 인스턴스 변수를 자유롭게 읽고 쓸 수 있다.
+
+## 2. 타깃 타이핑과 형식 추론
+
+람다 그 자체는 특정 타입이 없다. 람다가 대입되는 함수형 인터페이스의 타입에 의해 결정된다. 이를 **타깃 타이핑(Target Typing)**이라 한다:
+
+```java
+// 동일한 람다식이 서로 다른 함수형 인터페이스에 대입된다
+Comparator<Apple> c1 =
+        (Apple a1, Apple a2) -> a1.getWeight().compareTo(a2.getWeight());
+
+ToIntBiFunction<Apple, Apple> c2 =
+        (Apple a1, Apple a2) -> a1.getWeight().compareTo(a2.getWeight());
+
+BiFunction<Apple, Apple, Integer> c3 =
+        (Apple a1, Apple a2) -> a1.getWeight().compareTo(a2.getWeight());
+```
+
+세 인터페이스 모두 `(Apple, Apple) -> int` 형식의 함수 디스크립터를 갖기 때문에 동일한 람다식을 사용할 수 있다. 반면, 타입이 한 번 결정된 뒤에는 다른 인터페이스 변수에 대입할 수 없다. 시그니처가 같더라도 타입 시스템상 별개의 타입이기 때문이다.
+
+컴파일러는 람다가 사용되는 문맥, 즉 메서드의 파라미터 타입이나 대입 대상 변수의 타입을 보고 람다의 파라미터 타입을 추론한다. 따라서 파라미터 타입을 명시하지 않아도 된다:
+
+```java
+// 타입 명시
+Comparator<Apple> c = (Apple a1, Apple a2) -> a1.getWeight().compareTo(a2.getWeight());
+
+// 타입 추론 (컴파일러가 Apple임을 안다)
+Comparator<Apple> c = (a1, a2) -> a1.getWeight().compareTo(a2.getWeight());
+```
+
+타입 추론이 코드를 더 간결하게 만들지만, 파라미터 이름이 문맥을 명확히 설명한다면 타입을 명시하는 쪽이 읽기 쉬울 수 있다. 상황에 따라 선택한다.
+
+## 3. 람다의 바이트코드와 invokedynamic
+
+익명 클래스와 람다는 바이트코드 수준에서 완전히 다르게 컴파일된다. 익명 클래스는 `OuterClass$1.class`처럼 별도 클래스 파일이 생성된다. 반면 람다는 `invokedynamic` JVM 명령어를 사용한다.
+
+`invokedynamic`은 자바 7에서 동적 언어 지원을 위해 도입된 명령어다. 람다가 처음 실행될 때 JVM은 `LambdaMetafactory`를 통해 람다 구현체를 동적으로 생성한다. 클래스 파일을 미리 만들지 않으므로 클래스 로딩 오버헤드가 없고, JIT 컴파일러가 람다를 인라이닝하는 등 더 공격적으로 최적화할 수 있다.
+
+실제로 실행 결과로 확인하면 익명 클래스와 람다의 내부 클래스 이름이 다르게 나타난다:
+
+```java
+// 익명 클래스
+Procedure p1 = new Procedure() {
+    @Override public void run() { System.out.println("hello"); }
+};
+System.out.println(p1.getClass()); // class OuterClass$1
+
+// 람다
+Procedure p2 = () -> System.out.println("hello");
+System.out.println(p2.getClass()); // class OuterClass$$Lambda/0x...
+```
+
+`$`가 하나면 익명 클래스, `$$`가 붙고 뒤에 복잡한 식별자가 따라오면 람다다. 이 식별자는 JVM이 런타임에 생성한 람다 구현체를 가리킨다.
+
+## 4. 직렬화 가능 람다
+
+람다는 기본적으로 직렬화(Serialization)되지 않는다. 직렬화가 필요하면 대상 함수형 인터페이스가 `Serializable`을 구현하거나, 람다를 `Serializable`로 캐스팅해야 한다:
+
+```java
+// Serializable과 함수형 인터페이스를 동시에 캐스팅
+Comparator<Apple> c = (Comparator<Apple> & Serializable)
+        (a1, a2) -> a1.getWeight().compareTo(a2.getWeight());
+```
+
+그러나 람다 직렬화는 권장하지 않는다. `invokedynamic`으로 생성된 람다 구현 클래스의 이름은 JVM과 컴파일러 버전에 따라 달라질 수 있기 때문에, 직렬화된 람다를 다른 환경에서 역직렬화하면 `InvalidClassException`이 발생할 수 있다. 직렬화가 필요한 동작은 별도 클래스로 정의하는 것이 안전하다.
+
+## 5. 람다 디버깅
+
+람다를 포함한 코드에서 예외가 발생하면 스택 트레이스가 읽기 어렵다. 익명 내부 클래스와 달리 이름이 없기 때문이다:
+
+```
+Exception in thread "main" java.lang.NullPointerException
+    at com.example.Main.lambda$main$0(Main.java:12)
+    at java.util.Arrays$ArrayList.forEach(Arrays.java:3896)
+```
+
+`lambda$main$0` 형식이 람다를 가리킨다. `main`은 람다가 정의된 메서드 이름이고, `0`은 해당 메서드 내 첫 번째 람다임을 나타낸다. 람다가 여럿이면 `lambda$main$1`, `lambda$main$2`처럼 번호가 올라간다. 라인 번호(`Main.java:12`)로 소스 파일을 찾아가면 해당 람다의 위치를 특정할 수 있다.
+
+디버깅을 쉽게 하는 팁이 몇 가지 있다.
+
+복잡한 람다를 메서드 참조로 추출하면 스택 트레이스에 실제 메서드 이름이 나타나 위치 파악이 쉬워진다:
+
+```java
+// 디버깅 어려움
+list.stream()
+    .map(s -> s.toUpperCase().trim())
+    .forEach(System.out::println);
+
+// 디버깅 쉬움: 스택 트레이스에 normalizeString이 표시된다
+list.stream()
+    .map(this::normalizeString)
+    .forEach(System.out::println);
+
+private String normalizeString(String s) {
+    return s.toUpperCase().trim();
+}
+```
+
+스트림 파이프라인 중간에 `peek`을 삽입하면 중간 결과를 확인할 수 있다. `peek`은 소비하지 않고 통과만 시키는 중간 연산이다:
+
+```java
+list.stream()
+    .filter(s -> s.length() > 3)
+    .peek(s -> System.out.println("filter 통과: " + s))
+    .map(String::toUpperCase)
+    .peek(s -> System.out.println("map 결과: " + s))
+    .collect(Collectors.toList());
+```
+
+## 6. 람다 vs 메서드 참조 선택 기준
+
+람다와 메서드 참조 중 무엇을 선택할지는 가독성을 기준으로 결정한다. 핵심 질문은 "이 코드를 처음 보는 사람이 의도를 즉시 파악하는가?"다.
+
+메서드 참조를 선택하는 경우:
+
+- 람다 본문이 단순히 하나의 기존 메서드를 호출할 때
+- 메서드 이름이 동작을 명확하게 설명할 때
+
+```java
+// 메서드 참조가 더 명확하다
+list.stream().map(String::toUpperCase).collect(Collectors.toList());
+inventory.sort(Comparator.comparing(Apple::getWeight));
+```
+
+람다를 선택하는 경우:
+
+- 파라미터 이름이 의도를 드러낼 때
+- 람다 본문이 두 메서드 이상을 조합할 때
+- 메서드 참조로 바꾸면 오히려 읽기 어려울 때
+
+```java
+// 파라미터 이름 order, item이 의도를 명확히 설명한다
+orders.forEach((order, item) -> order.addItem(item));
+
+// 두 메서드를 합산하는 로직 — 메서드 참조로 표현하기 어렵다
+list.stream().map(s -> s.trim().toLowerCase()).collect(Collectors.toList());
+```
+
+람다 표현식은 3줄을 넘으면 가독성이 급격히 떨어진다. 람다 내부에 이름이 없으므로 문서화도 불가능하다. 로직이 복잡해지면 람다 대신 명명된 메서드로 추출하고, 메서드 참조로 전달하는 것이 유지보수에 유리하다.

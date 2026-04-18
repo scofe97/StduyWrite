@@ -1,0 +1,83 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: sample-topic
+  namespace: ch11-kafka
+  labels:
+    strimzi.io/cluster: kafka-cluster
+spec:
+  # 파티션 수
+  partitions: 1
+
+  # Replication Factor (브로커 1개이므로 1로 설정)
+  replicas: 1
+
+  # Topic 설정 (topic-level config)
+  config:
+    # 메시지 보관 기간 (밀리초)
+    retention.ms: 86400000  # 24시간
+
+    # 세그먼트 크기
+    segment.bytes: 1073741824  # 1GB
+
+    # 압축 정책 (delete: 삭제만, compact: 압축, compact,delete: 둘 다)
+    cleanup.policy: delete
+
+    # 최소 동기화 복제본 수
+    min.insync.replicas: 1
+
+    # 메시지 최대 크기
+    max.message.bytes: 1048576  # 1MB
+
+    # 압축 타입 (producer, uncompressed, snappy, lz4, gzip, zstd)
+    compression.type: producer
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: test-events
+  namespace: ch11-kafka
+  labels:
+    strimzi.io/cluster: kafka-cluster
+spec:
+  partitions: 3
+  replicas: 1
+  config:
+    retention.ms: 3600000  # 1시간
+    cleanup.policy: delete
+    min.insync.replicas: 1
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: user-activity
+  namespace: ch11-kafka
+  labels:
+    strimzi.io/cluster: kafka-cluster
+spec:
+  partitions: 1
+  replicas: 1
+  config:
+    retention.ms: 604800000  # 7일
+    cleanup.policy: compact
+    min.insync.replicas: 1
+    segment.ms: 3600000  # 1시간마다 새 세그먼트
+
+---
+# Topic 관리 명령어:
+#
+# Topic 목록 확인:
+#   kubectl get kafkatopic -n ch11-kafka
+#
+# Topic 상세 확인:
+#   kubectl describe kafkatopic sample-topic -n ch11-kafka
+#
+# Topic 삭제:
+#   kubectl delete kafkatopic sample-topic -n ch11-kafka
+#
+# Topic 정보 확인 (Kafka CLI 사용):
+#   kubectl run kafka-cli -ti --image=quay.io/strimzi/kafka:latest-kafka-3.6.0 --rm=true --restart=Never \
+#     -- bin/kafka-topics.sh --bootstrap-server kafka-cluster-kafka-bootstrap.ch11-kafka.svc.cluster.local:9092 \
+#     --describe --topic sample-topic

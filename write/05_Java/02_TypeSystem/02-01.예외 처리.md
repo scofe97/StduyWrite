@@ -1,0 +1,220 @@
+# 예외 처리
+
+---
+
+> 예외는 프로그램 흐름을 제어하는 도구가 아니라 비정상 상황을 알리는 신호다. 어느 계층에서 잡고, 어떻게 변환하고, 무엇을 남길지 설계하는 것이 예외 처리의 핵심이다.
+
+## 예외 계층 구조
+
+Java의 예외 시스템은 `Throwable`을 최상위로 하는 계층 구조로 이루어진다. `Throwable`은 두 개의 직계 하위 타입을 가진다.
+
+- `Error`: JVM 수준의 심각한 오류다. `OutOfMemoryError`, `StackOverflowError`가 대표적이며 애플리케이션 코드에서 처리하지 않는다.
+- `Exception`: 개발자가 처리할 수 있는 예외적 상황이다. 이 아래에서 체크 예외와 언체크 예외로 나뉜다.
+- `RuntimeException`: `Exception`의 하위 타입으로, 언체크 예외 계층의 루트다.
+
+`RuntimeException`을 상속하면 언체크 예외, 그 외 `Exception`을 직접 상속하면 체크 예외(checked exception)가 된다.
+
+## 체크 예외 vs 언체크 예외
+
+두 예외 유형은 컴파일러의 강제 여부에서 근본적으로 다르다. 체크 예외는 반드시 `try-catch`로 잡거나 `throws`로 선언해야 하며, 이를 어기면 컴파일이 실패한다. 언체크 예외는 이 의무가 없어 자동으로 호출 스택 위로 전파된다.
+
+| 항목 | 체크 예외 | 언체크 예외 |
+|---|---|---|
+| 컴파일 강제 | 있음 (`throws` 선언 필수) | 없음 |
+| 주요 사용 시점 | 호출자가 복구 가능한 외부 조건 | 프로그래밍 오류, 복구 불가 상황 |
+| 복구 가능성 | 높음 (파일 없음, 네트워크 실패 등) | 낮음 (`NullPointerException`, `IllegalArgumentException` 등) |
+| 상속 루트 | `Exception` | `RuntimeException` |
+| 실무 비중 | 낮음 (Spring 생태계는 대부분 언체크) | 높음 |
+
+실무에서 체크 예외의 가장 큰 문제는 **예외 전파 오염**이다. Repository에서 발생한 `SQLException`이 Service, Controller까지 `throws` 선언으로 전염된다. 기술 스택이 바뀌면 모든 계층의 시그니처를 수정해야 한다.
+
+## 체크 예외를 언체크 예외로 전환하기
+
+체크 예외를 언체크 예외로 감싸서 다시 던지면 전파 오염 문제를 해결할 수 있다. 전환 시 반드시 원인 예외(cause)를 생성자에 전달해야 한다. 그렇지 않으면 스택 트레이스에서 최초 원인을 찾을 수 없다:
+
+```java
+static class Repository {
+    public void call() {
+        try {
+            runSQL();
+        } catch (SQLException e) {
+            // cause를 반드시 포함한다 — 누락하면 StackTrace 추적 불가
+            throw new RuntimeSQLException(e);
+        }
+    }
+
+    private void runSQL() throws SQLException {
+        throw new SQLException("ex");
+    }
+}
+
+static class RuntimeSQLException extends RuntimeException {
+    public RuntimeSQLException(Throwable cause) {
+        super(cause);
+    }
+}
+```
+
+이렇게 전환하면 Service와 Controller의 `throws` 선언이 사라지고, 각 계층은 자신의 관심사에만 집중할 수 있다.
+
+## try-catch-finally vs try-with-resources
+
+자원을 반납해야 하는 코드에서 `finally` 블록은 중첩 구조가 복잡해지고, 예외가 `finally` 안에서 또 발생하면 원래 예외가 묻힌다는 문제가 있다. Java 7부터 도입된 `try-with-resources`가 이를 해결한다:
+
+```java
+// try-finally: 중첩이 깊고 예외가 묻힐 수 있다
+static void copy(String src, String dst) throws IOException {
+    InputStream in = new FileInputStream(src);
+    try {
+        OutputStream out = new FileOutputStream(dst);
+        try {
+            byte[] buf = new byte[BUFFER_SIZE];
+            int n;
+            while ((n = in.read(buf)) >= 0)
+                out.write(buf, 0, n);
+        } finally {
+            out.close();
+        }
+    } finally {
+        in.close();
+    }
+}
+
+// try-with-resources: AutoCloseable을 구현한 자원은 자동으로 닫힌다
+static void copy(String src, String dst) throws IOException {
+    try (InputStream in = new FileInputStream(src)
+            ; OutputStream out = new FileOutputStream(dst)) {
+        byte[] buf = new byte[BUFFER_SIZE];
+        int n;
+        while ((n = in.read(buf)) >= 0)
+            out.write(buf, 0, n);
+    }
+}
+```
+
+`try-with-resources`를 사용하려면 자원 클래스가 `AutoCloseable` 인터페이스를 구현해야 한다. Java 표준 라이브러리의 I/O 클래스는 대부분 이미 구현되어 있다.
+
+## 커스텀 예외 설계
+
+도메인 계층별로 예외 계층을 설계하면 예외만 보고도 문제 발생 위치와 성격을 파악할 수 있다. 루트 예외를 정의하고 그 아래로 도메인별 예외를 확장하는 구조가 일반적이다:
+
+```java
+// 애플리케이션 루트 예외
+public class AppException extends RuntimeException {
+    private final ErrorCode errorCode;
+
+    public AppException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
+    }
+
+    public AppException(ErrorCode errorCode, Throwable cause) {
+        super(errorCode.getMessage(), cause);
+        this.errorCode = errorCode;
+    }
+
+    public ErrorCode getErrorCode() {
+        return errorCode;
+    }
+}
+
+// 도메인별 확장
+public class OrderNotFoundException extends AppException {
+    public OrderNotFoundException(Long orderId) {
+        super(ErrorCode.ORDER_NOT_FOUND);
+    }
+}
+
+public class InsufficientStockException extends AppException {
+    public InsufficientStockException(Long itemId, int requested, int available) {
+        super(ErrorCode.INSUFFICIENT_STOCK);
+    }
+}
+```
+
+`ErrorCode`를 enum으로 관리하면 에러 코드와 메시지를 한 곳에서 관리할 수 있고, `@ControllerAdvice`에서 일괄 처리하기도 쉬워진다.
+
+## 예외 번역(Exception Translation)
+
+메서드가 던지는 예외는 해당 메서드의 추상화 수준과 일치해야 한다. Repository에서 발생한 `DataAccessException`이 그대로 Service 바깥으로 노출되면, 호출자는 내부 구현(JPA인지 MyBatis인지)을 알아야 예외를 처리할 수 있다.
+
+상위 계층에서 저수준 예외를 잡아 현재 추상화 수준에 맞는 예외로 바꿔 던지는 것을 **예외 번역**이라 한다:
+
+```java
+public class BankService {
+    public void withdraw(String accountId, double amount) {
+        try {
+            checkBalanceAndWithdraw(accountId, amount);
+        } catch (DatabaseAccessException e) {
+            // 저수준 예외(DB)를 도메인 예외로 번역한다
+            // cause를 포함해 StackTrace를 보존한다
+            throw new InsufficientFundsException("잔액이 부족합니다.", e);
+        }
+    }
+}
+```
+
+예외 번역 시 항상 원인 예외를 생성자에 전달해야 한다. 이를 **예외 연쇄(exception chaining)**라 하며, 디버깅 시 원래 예외까지 거슬러 올라갈 수 있게 한다.
+
+## 표준 예외 활용
+
+직접 예외를 정의하기 전에 Java 표준 예외를 먼저 검토한다. 표준 예외는 API 사용자에게 친숙하고, 불필요한 클래스를 줄인다:
+
+- `IllegalArgumentException`: 메서드에 부적절한 인수가 전달될 때
+- `IllegalStateException`: 객체가 메서드 호출을 처리할 준비가 안 된 상태일 때
+- `NullPointerException`: null 참조를 잘못 사용할 때
+- `IndexOutOfBoundsException`: 인덱스가 범위를 벗어날 때
+- `UnsupportedOperationException`: 요청받은 작업을 지원하지 않을 때
+
+## 실무 안티패턴
+
+잘못된 예외 처리는 문제를 숨기거나 성능을 저하시킨다. 대표적인 안티패턴 세 가지를 피해야 한다.
+
+**빈 catch 블록**: 예외를 잡고 아무것도 하지 않으면 문제가 발생했다는 신호를 무시하는 것이다. 최소한 로그라도 남겨야 한다.
+
+```java
+// 절대 금지: 예외를 삼켜버린다
+try {
+    doSomething();
+} catch (Exception e) {
+    // 아무것도 안 함
+}
+```
+
+**catch-log-rethrow**: 예외를 잡아 로그를 남기고 다시 던지면 같은 예외가 스택을 오르면서 여러 번 로깅된다. 로깅은 최종 처리 지점 한 곳에서만 한다.
+
+```java
+// 안티패턴: 중복 로그 발생
+try {
+    doSomething();
+} catch (Exception e) {
+    log.error("error", e);  // 여기서 한 번
+    throw e;                // 상위에서 또 한 번
+}
+```
+
+**예외를 제어 흐름에 사용**: 예외는 성능이 2배 정도 느리며, 코드 가독성도 크게 떨어진다. 상태 검사 메서드(`hasNext()`, `isEmpty()` 등)가 있다면 그것을 사용한다.
+
+```java
+// 안티패턴: 예외로 루프 종료
+try {
+    int i = 0;
+    while (true)
+        range[i++].climb();
+} catch (ArrayIndexOutOfBoundsException e) {}
+
+// 올바른 방법: 상태 검사 메서드 사용
+for (Iterator<Foo> i = collection.iterator(); i.hasNext(); ) {
+    Foo foo = i.next();
+}
+```
+
+## Java 21 베스트 프랙티스
+
+Java 21 환경에서의 예외 처리 핵심 원칙을 정리하면 다음과 같다:
+
+- 복구 가능한 외부 조건(파일 없음, 네트워크 실패)에만 체크 예외를 사용하고, 나머지는 언체크 예외로 설계한다.
+- 자원 반납이 필요한 모든 코드에 `try-with-resources`를 사용한다.
+- 예외 전환 시 항상 원인 예외(cause)를 보존해 StackTrace가 끊기지 않도록 한다.
+- 도메인별 예외 계층을 설계하고 `@ControllerAdvice`에서 일괄 처리한다.
+- 로깅은 예외가 최종 처리되는 한 지점에서만 수행한다.

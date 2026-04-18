@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Redpanda Playground Executor Flow Visualization</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #1a1a2e;
+  color: #e0e0e0;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: 18px;
+}
+h1 {
+  text-align: center;
+  color: #fff;
+  font-size: 1.35rem;
+  margin-bottom: 6px;
+}
+.sub {
+  text-align: center;
+  color: #8b93a7;
+  margin-bottom: 18px;
+  font-size: 0.9rem;
+}
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.tab {
+  background: #16213e;
+  color: #8b93a7;
+  border: 1px solid #2f3854;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  padding: 9px 14px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.tab.active {
+  color: #fff;
+  border-color: #4fc3f7;
+  background: #1c2b44;
+}
+.controls {
+  text-align: center;
+  margin-bottom: 14px;
+}
+.controls button {
+  border: none;
+  border-radius: 7px;
+  padding: 8px 18px;
+  margin: 0 4px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-next { background: #4fc3f7; color: #102131; }
+.btn-auto { background: #66bb6a; color: #132317; }
+.btn-reset { background: #4f596d; color: #fff; }
+.step {
+  margin-top: 8px;
+  color: #9fb0c5;
+  font-size: 0.84rem;
+}
+.step strong { color: #4fc3f7; }
+.narration {
+  background: #16213e;
+  border: 1px solid #2f3854;
+  border-radius: 10px;
+  padding: 14px 16px;
+  min-height: 82px;
+  margin-bottom: 14px;
+  line-height: 1.65;
+  font-size: 0.92rem;
+}
+.hl { color: #4fc3f7; font-weight: 700; }
+.ok { color: #81c784; font-weight: 700; }
+.warn { color: #ffb74d; font-weight: 700; }
+.err { color: #ef5350; font-weight: 700; }
+.info { color: #ce93d8; font-weight: 700; }
+.scene {
+  display: none;
+  gap: 14px;
+}
+.scene.active {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.panel {
+  background: #16213e;
+  border: 1px solid #2f3854;
+  border-radius: 12px;
+  padding: 14px;
+}
+.panel h3 {
+  font-size: 0.76rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #9fb0c5;
+  margin-bottom: 10px;
+}
+.panel.kafka { border-color: #e67e22; }
+.panel.kafka h3 { color: #ffb366; }
+.panel.db { border-color: #2e7d32; }
+.panel.db h3 { color: #81c784; }
+.panel.jenkins { border-color: #7e57c2; }
+.panel.jenkins h3 { color: #d1c4e9; }
+.panel.ops { border-color: #f9a825; }
+.panel.ops h3 { color: #ffe082; }
+.track {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.box {
+  min-width: 82px;
+  text-align: center;
+  border-radius: 7px;
+  padding: 8px 10px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  background: #2b3147;
+  color: #7e8ba6;
+  border: 1px solid #39445f;
+  transition: all 0.25s ease;
+}
+.box.small { min-width: 64px; }
+.box.active {
+  color: #fff;
+  border-color: #4fc3f7;
+  box-shadow: 0 0 0 1px rgba(79, 195, 247, 0.35);
+}
+.box.pending { background: #62420f; border-color: #d38b18; color: #ffdb9a; }
+.box.dispatch { background: #0c4a6e; border-color: #4fc3f7; color: #d9f4ff; }
+.box.running { background: #1b5e20; border-color: #66bb6a; color: #e8ffe9; animation: pulse 1.6s infinite; }
+.box.done { background: #2e7d32; border-color: #a5d6a7; color: #fff; }
+.box.failed { background: #8e2430; border-color: #ef5350; color: #fff; }
+.box.retry { background: #7b4f00; border-color: #ffb74d; color: #fff4d6; animation: pulse 1.6s infinite; }
+.box.dead { background: #4a1830; border-color: #f06292; color: #ffd5e4; }
+.arrow {
+  color: #60708d;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.label {
+  width: 110px;
+  color: #b6c3d8;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.value {
+  flex: 1;
+  border-radius: 8px;
+  background: #222b40;
+  border: 1px solid #34405c;
+  padding: 9px 10px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+.metric {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  background: #263249;
+  color: #c7d2e2;
+}
+.metric.good { background: #1f4d2c; color: #d8f7de; }
+.metric.bad { background: #5a1f25; color: #ffd6da; }
+.metric.mid { background: #5f470a; color: #fff1cd; }
+.db-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.79rem;
+}
+.db-table th,
+.db-table td {
+  border-bottom: 1px solid #2f3854;
+  padding: 7px 6px;
+  text-align: left;
+}
+.db-table th {
+  color: #9fb0c5;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+.scenario-note {
+  margin-top: 8px;
+  color: #96a5bf;
+  font-size: 0.79rem;
+  line-height: 1.5;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
+}
+@media (max-width: 880px) {
+  .scene.active {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+<h1>Redpanda Playground Executor Flow</h1>
+<p class="sub">Kafka 명령 수신, DB 상태 전이, Jenkins 실행, 재시도, DLT, 크래시 복구를 단계별로 보여준다.</p>
+
+<div class="wrap">
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab(0)">1. 정상 실행</div>
+    <div class="tab" onclick="switchTab(1)">2. Jenkins 트리거 실패 후 재시도</div>
+    <div class="tab" onclick="switchTab(2)">3. RUNNING Timeout + Jenkins 장애</div>
+    <div class="tab" onclick="switchTab(3)">4. Kafka DLT + 크래시 복구</div>
+  </div>
+
+  <div class="controls">
+    <button class="btn-next" onclick="nextStep()">다음 단계 ▶</button>
+    <button class="btn-auto" onclick="autoPlay()">자동 재생 ▶▶</button>
+    <button class="btn-reset" onclick="resetScene()">처음으로 ↺</button>
+    <div class="step"><strong id="stepLabel">Step 0 / 5</strong></div>
+  </div>
+
+  <div class="narration" id="narration">탭을 고르고 다음 단계를 눌러 흐름을 시작하세요.</div>
+
+  <div class="scene active" id="scene0">
+    <div class="col">
+      <div class="panel kafka">
+        <h3>Kafka Flow</h3>
+        <div class="track">
+          <div class="box" id="s0-k1">job-dispatch</div>
+          <div class="arrow">→</div>
+          <div class="box" id="s0-k2">execution_job</div>
+          <div class="arrow">→</div>
+          <div class="box" id="s0-k3">job-execute</div>
+          <div class="arrow">→</div>
+          <div class="box" id="s0-k4">job-started</div>
+          <div class="arrow">→</div>
+          <div class="box" id="s0-k5">job-completed</div>
+        </div>
+      </div>
+
+      <div class="panel db">
+        <h3>execution_job State</h3>
+        <div class="track">
+          <div class="box small" id="s0-st1">PENDING</div>
+          <div class="arrow">→</div>
+          <div class="box small" id="s0-st2">DISPATCHED</div>
+          <div class="arrow">→</div>
+          <div class="box small" id="s0-st3">RUNNING</div>
+          <div class="arrow">→</div>
+          <div class="box small" id="s0-st4">COMPLETED</div>
+        </div>
+        <div class="scenario-note" id="s0-db-note">레코드가 아직 생성되지 않았다.</div>
+      </div>
+
+      <div class="panel ops">
+        <h3>Method Focus</h3>
+        <div class="list">
+          <div class="row"><div class="label">Receiver</div><div class="value" id="s0-m1">대기</div></div>
+          <div class="row"><div class="label">Scheduler</div><div class="value" id="s0-m2">대기</div></div>
+          <div class="row"><div class="label">Dispatcher</div><div class="value" id="s0-m3">대기</div></div>
+          <div class="row"><div class="label">Callback</div><div class="value" id="s0-m4">대기</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="panel jenkins">
+        <h3>Jenkins Instance</h3>
+        <div class="list">
+          <div class="row"><div class="label">Instance</div><div class="value" id="s0-j1">k8s-jenkins / HEALTHY / slot 1</div></div>
+          <div class="row"><div class="label">Executor</div><div class="value" id="s0-j2"><span class="metric good">idle</span><span class="metric">maxConcurrent=2</span></div></div>
+          <div class="row"><div class="label">Build</div><div class="value" id="s0-j3">아직 트리거되지 않았다.</div></div>
+        </div>
+      </div>
+
+      <div class="panel db">
+        <h3>DB Snapshot</h3>
+        <table class="db-table">
+          <thead>
+            <tr><th>필드</th><th>값</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>execution_job_id</td><td id="s0-f1">-</td></tr>
+            <tr><td>status</td><td id="s0-f2">-</td></tr>
+            <tr><td>retry_count</td><td id="s0-f3">-</td></tr>
+            <tr><td>started_at</td><td id="s0-f4">-</td></tr>
+            <tr><td>completed_at</td><td id="s0-f5">-</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene" id="scene1">
+    <div class="col">
+      <div class="panel kafka">
+        <h3>Retry Topic</h3>
+        <div class="track">
+          <div class="box" id="s1-r0">job-execute</div>
+          <div class="arrow">→</div>
+          <div class="box" id="s1-r1">retry-0</div>
+          <div class="arrow">→</div>
+          <div class="box" id="s1-r2">retry-1</div>
+          <div class="arrow">→</div>
+          <div class="box" id="s1-r3">재성공</div>
+        </div>
+      </div>
+
+      <div class="panel db">
+        <h3>execution_job State</h3>
+        <div class="track">
+          <div class="box small" id="s1-st1">PENDING</div>
+          <div class="arrow">→</div>
+          <div class="box small" id="s1-st2">DISPATCHED</div>
+          <div class="arrow">→</div>
+          <div class="box small" id="s1-st3">PENDING</div>
+          <div class="arrow">→</div>
+          <div class="box small" id="s1-st4">RUNNING</div>
+        </div>
+        <div class="scenario-note" id="s1-db-note">Jenkins API 호출 실패가 비즈니스 재시도와 Kafka retry를 모두 자극한다.</div>
+      </div>
+
+      <div class="panel ops">
+        <h3>Retry Counters</h3>
+        <div class="list">
+          <div class="row"><div class="label">retry_count</div><div class="value" id="s1-c1">0</div></div>
+          <div class="row"><div class="label">Scheduler</div><div class="value" id="s1-c2">다음 주기 대기</div></div>
+          <div class="row"><div class="label">StatusManager</div><div class="value" id="s1-c3">호출 전</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="panel jenkins">
+        <h3>Jenkins API</h3>
+        <div class="list">
+          <div class="row"><div class="label">Health</div><div class="value" id="s1-j1"><span class="metric mid">DEGRADED</span><span class="metric">HTTP connect 실패</span></div></div>
+          <div class="row"><div class="label">Trigger</div><div class="value" id="s1-j2">`buildWithParameters` 호출 전</div></div>
+          <div class="row"><div class="label">Outcome</div><div class="value" id="s1-j3">아직 결과가 없다.</div></div>
+        </div>
+      </div>
+
+      <div class="panel db">
+        <h3>DB Snapshot</h3>
+        <table class="db-table">
+          <thead>
+            <tr><th>필드</th><th>값</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>status</td><td id="s1-f1">PENDING</td></tr>
+            <tr><td>retry_count</td><td id="s1-f2">0</td></tr>
+            <tr><td>log</td><td id="s1-f3">초기 상태</td></tr>
+            <tr><td>error_message</td><td id="s1-f4">-</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene" id="scene2">
+    <div class="col">
+      <div class="panel db">
+        <h3>execution_job State</h3>
+        <div class="track">
+          <div class="box small" id="s2-st1">RUNNING</div>
+          <div class="arrow">→</div>
+          <div class="box small" id="s2-st2">Timeout</div>
+          <div class="arrow">→</div>
+          <div class="box small" id="s2-st3">PENDING</div>
+          <div class="arrow">→</div>
+          <div class="box small" id="s2-st4">실패 통지</div>
+        </div>
+      </div>
+
+      <div class="panel ops">
+        <h3>Checker Roles</h3>
+        <div class="list">
+          <div class="row"><div class="label">Timeout</div><div class="value" id="s2-o1">`findByStatusAndStartedAtBefore()` 대기</div></div>
+          <div class="row"><div class="label">Health</div><div class="value" id="s2-o2">`/api/json` 점검 전</div></div>
+          <div class="row"><div class="label">StatusManager</div><div class="value" id="s2-o3">재시도 또는 즉시 통지 분기 전</div></div>
+        </div>
+      </div>
+
+      <div class="panel db">
+        <h3>Runtime Snapshot</h3>
+        <table class="db-table">
+          <thead>
+            <tr><th>필드</th><th>값</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>status</td><td id="s2-f1">RUNNING</td></tr>
+            <tr><td>started_at</td><td id="s2-f2">12:00:00</td></tr>
+            <tr><td>jobTimeoutMinutes</td><td id="s2-f3">5</td></tr>
+            <tr><td>health_status</td><td id="s2-f4">HEALTHY</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="panel jenkins">
+        <h3>Jenkins Instance</h3>
+        <div class="list">
+          <div class="row"><div class="label">Status</div><div class="value" id="s2-j1"><span class="metric good">HEALTHY</span><span class="metric">busyExecutors=1</span></div></div>
+          <div class="row"><div class="label">Build</div><div class="value" id="s2-j2">hang 의심 없음</div></div>
+          <div class="row"><div class="label">Notification</div><div class="value" id="s2-j3">없음</div></div>
+        </div>
+      </div>
+
+      <div class="panel kafka">
+        <h3>Published Event</h3>
+        <div class="track">
+          <div class="box" id="s2-k1">timeout check</div>
+          <div class="arrow">→</div>
+          <div class="box" id="s2-k2">JOB_DISPATCH_FAILED</div>
+        </div>
+        <div class="scenario-note" id="s2-note">헬스체커는 인프라 장애로 판단하면 `retryOrNotify(job, 0, ...)`를 호출한다.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene" id="scene3">
+    <div class="col">
+      <div class="panel kafka">
+        <h3>Kafka Failure Path</h3>
+        <div class="track">
+          <div class="box" id="s3-k1">job-completed</div>
+          <div class="arrow">→</div>
+          <div class="box" id="s3-k2">retry-0</div>
+          <div class="arrow">→</div>
+          <div class="box" id="s3-k3">retry-1</div>
+          <div class="arrow">→</div>
+          <div class="box" id="s3-k4">DLT</div>
+        </div>
+      </div>
+
+      <div class="panel ops">
+        <h3>Crash Recovery</h3>
+        <div class="list">
+          <div class="row"><div class="label">앱 상태</div><div class="value" id="s3-o1">정상 실행 중</div></div>
+          <div class="row"><div class="label">DISPATCHED Job</div><div class="value" id="s3-o2">0</div></div>
+          <div class="row"><div class="label">Recovery</div><div class="value" id="s3-o3">아직 없음</div></div>
+        </div>
+      </div>
+
+      <div class="panel db">
+        <h3>DB Snapshot</h3>
+        <table class="db-table">
+          <thead>
+            <tr><th>필드</th><th>값</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>job-completed consumer</td><td id="s3-f1">정상</td></tr>
+            <tr><td>DLT handler</td><td id="s3-f2">미도달</td></tr>
+            <tr><td>dispatch status</td><td id="s3-f3">PENDING / DISPATCHED 혼재</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="panel jenkins">
+        <h3>Outcome Interpretation</h3>
+        <div class="list">
+          <div class="row"><div class="label">Consumer</div><div class="value" id="s3-j1">`JobCompletionConsumer`가 역직렬화 또는 DB 저장 실패</div></div>
+          <div class="row"><div class="label">DLT</div><div class="value" id="s3-j2">운영자가 로그를 보고 수동 재처리해야 함</div></div>
+          <div class="row"><div class="label">Startup</div><div class="value" id="s3-j3">`CrashRecoveryHandler`가 DISPATCHED를 PENDING으로 롤백</div></div>
+        </div>
+      </div>
+
+      <div class="panel db">
+        <h3>Recovered Rows</h3>
+        <div class="scenario-note" id="s3-note">크래시 후에는 Jenkins가 이미 받았는지 불명확하므로 모호한 상태를 다시 `PENDING`으로 돌려 재평가한다.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const scenes = [
+  [
+    {
+      text: 'Operator가 <span class="hl">playground.executor.commands.job-dispatch</span>에 메시지를 넣는다. <span class="hl">JobReceiver.onJobDispatch()</span>가 이를 받아 아직 실행하지 않고 DB에 적재할 준비를 한다.',
+      run() {
+        mark('s0-k1', 'active');
+        setText('s0-m1', '`JobReceiver`가 Avro 역직렬화 후 멱등 키를 검사한다.');
+        setText('s0-f1', '9001');
+      }
+    },
+    {
+      text: '<span class="ok">execution_job 레코드가 생성</span>된다. 이 시점 상태는 <span class="warn">PENDING</span>이며, 아직 Jenkins 호출은 없다. 핵심은 실행 의도를 영속화했다는 점이다.',
+      run() {
+        mark('s0-k2', 'pending');
+        mark('s0-st1', 'pending');
+        setText('s0-db-note', 'execution_job(status=PENDING, retry_count=0)이 생성됐다.');
+        setText('s0-f2', 'PENDING');
+        setText('s0-f3', '0');
+        setText('s0-m1', '`ExecutionJob.create()`와 `save()`가 완료됐다.');
+      }
+    },
+    {
+      text: '<span class="hl">ExecutorScheduler.dispatchReadyJobs()</span>가 활성 Jenkins를 순회하고, <span class="hl">findDispatchableJobs()</span>로 후보를 조회한다. 슬롯이 있으면 <span class="info">job-execute</span> 명령을 발행한다.',
+      run() {
+        mark('s0-k3', 'dispatch');
+        mark('s0-st2', 'dispatch');
+        setText('s0-m2', '`getAvailableSlots()` 결과 slot 1, batchSize 1로 계산됐다.');
+        setText('s0-f2', 'DISPATCHED');
+        setText('s0-j3', 'Jenkins 호출 전, Kafka 소비 대기 상태다.');
+      }
+    },
+    {
+      text: '<span class="hl">JobExecuteConsumer.onJobExecute()</span>가 메시지를 소비하고 <span class="hl">JenkinsDispatcher.dispatch()</span>를 호출한다. <span class="ok">buildWithParameters</span>가 성공하면 상태는 <span class="ok">RUNNING</span>이 된다.',
+      run() {
+        mark('s0-k4', 'running');
+        mark('s0-st3', 'running');
+        setText('s0-m3', '`triggerBuild()` 성공 후 `JOB_STARTED`를 outbox로 발행한다.');
+        setText('s0-j2', '<span class="metric good">busyExecutors=1</span><span class="metric">maxConcurrent=2</span>');
+        setText('s0-j3', '빌드가 시작됐고 Jenkins onFinalized 콜백을 기다린다.');
+        setText('s0-f2', 'RUNNING');
+        setText('s0-f4', '12:00:03');
+      }
+    },
+    {
+      text: 'Jenkins가 완료 이벤트를 보내면 <span class="hl">JobCompletionConsumer.onJobCompleted()</span>가 이를 반영한다. 성공이면 <span class="ok">COMPLETED</span>, 실패면 FAILED로 종료한다. 여기서는 정상 종료 시나리오다.',
+      run() {
+        mark('s0-k5', 'done');
+        mark('s0-st4', 'done');
+        setText('s0-m4', 'JSON 또는 Avro를 파싱해 terminal state를 저장한다.');
+        setText('s0-f2', 'COMPLETED');
+        setText('s0-f5', '12:02:31');
+        setText('s0-j3', '<span class="ok">SUCCESS</span> 콜백이 들어와 종료 반영이 끝났다.');
+      }
+    }
+  ],
+  [
+    {
+      text: '스케줄러가 이미 <span class="hl">job-execute</span>를 발행했고, 소비자는 Jenkins REST 호출을 시도한다. 그런데 여기서는 네트워크 또는 인증 문제로 첫 호출이 실패한다.',
+      run() {
+        mark('s1-r0', 'dispatch');
+        mark('s1-st1', 'pending');
+        mark('s1-st2', 'dispatch');
+        setText('s1-j2', '`buildWithParameters` 첫 호출 시도');
+      }
+    },
+    {
+      text: '<span class="err">Jenkins trigger 실패</span>가 발생하면 <span class="hl">JobStatusManager.retryOrNotify()</span>가 불린다. `retry_count < maxRetries`이므로 상태를 다시 <span class="warn">PENDING</span>으로 돌린다.',
+      run() {
+        mark('s1-r1', 'retry');
+        mark('s1-st3', 'pending');
+        setText('s1-c1', '1');
+        setText('s1-c3', '`Retry #1: connection refused` 로그를 남기고 PENDING 복귀');
+        setText('s1-f1', 'PENDING');
+        setText('s1-f2', '1');
+        setText('s1-f3', 'Retry #1: connection refused');
+        setText('s1-j1', '<span class="metric mid">DEGRADED</span><span class="metric bad">connect 실패</span>');
+        setText('s1-j3', '즉시 terminal failure로 끝내지 않고 다시 큐에 넣는다.');
+      }
+    },
+    {
+      text: '동시에 Kafka 소비 자체도 <span class="hl">@RetryableTopic</span> 보호를 받는다. 메시지 처리 예외가 유지되면 retry topic으로 넘어가지만, 비즈니스 상태는 이미 PENDING이므로 다음 스케줄 주기에서도 재선정 가능하다.',
+      run() {
+        mark('s1-r2', 'retry');
+        setText('s1-c2', '다음 3초 스케줄 주기에서 다시 후보가 된다.');
+        setText('s1-db-note', '이 구현은 Kafka retry와 DB 상태 재큐잉이 동시에 존재한다.');
+      }
+    },
+    {
+      text: 'Jenkins가 복구되면 다시 선택된 Job이 재발행되고, 이번에는 트리거가 성공한다. 상태는 <span class="ok">RUNNING</span>으로 올라간다.',
+      run() {
+        mark('s1-r3', 'running');
+        mark('s1-st4', 'running');
+        setText('s1-j1', '<span class="metric good">HEALTHY</span><span class="metric">응답 복구</span>');
+        setText('s1-j2', '`buildWithParameters` 재시도 성공');
+        setText('s1-j3', '<span class="ok">빌드 시작</span>');
+        setText('s1-f1', 'RUNNING');
+      }
+    },
+    {
+      text: '핵심은 <span class="hl">실행 실패가 곧 유실이 아니라는 점</span>이다. `execution_job`는 남아 있고, `retry_count`와 로그가 누적되며, 스케줄러는 다시 기회를 준다.',
+      run() {
+        setText('s1-f4', 'Max retries 전이므로 비어 있음');
+      }
+    }
+  ],
+  [
+    {
+      text: 'Job은 이미 <span class="ok">RUNNING</span> 상태다. `started_at`이 기록되어 있고, Jenkins 인스턴스는 아직 HEALTHY다. 이 시점에서는 단순히 오래 걸리는 빌드로 보인다.',
+      run() {
+        mark('s2-st1', 'running');
+        setText('s2-o1', '`RunningJobTimeoutChecker`가 아직 cutoff 이전이라 통과');
+      }
+    },
+    {
+      text: '<span class="warn">5분 cutoff</span>를 넘기면 <span class="hl">findByStatusAndStartedAtBefore()</span>가 이 Job을 잡는다. Jenkins가 HEALTHY이므로 timeout checker가 개별 Job hang로 해석하고 재시도를 건다.',
+      run() {
+        mark('s2-st2', 'retry');
+        mark('s2-st3', 'pending');
+        setText('s2-o1', '`Build timed out after 5 minutes`로 retryOrNotify 호출');
+        setText('s2-f1', 'PENDING');
+        setText('s2-f2', '12:00:00 → timeout 감지');
+      }
+    },
+    {
+      text: '그 뒤 Jenkins 자체가 계속 응답하지 않으면 <span class="hl">JenkinsHealthChecker.checkAll()</span>가 `/api/json` 점검 실패를 누적한다. HEALTHY에서 <span class="warn">DEGRADED</span>, 이후 <span class="err">UNHEALTHY</span>로 간다.',
+      run() {
+        setText('s2-j1', '<span class="metric mid">DEGRADED</span><span class="metric bad">timeout 2회</span>');
+        setText('s2-o2', '연속 실패 누적 중');
+        setText('s2-f4', 'DEGRADED');
+      }
+    },
+    {
+      text: '상태가 <span class="err">UNHEALTHY</span>가 되면 헬스체커는 해당 인스턴스의 RUNNING Job에 대해 <span class="hl">retryOrNotify(job, 0, ...)</span>를 호출한다. 이 경로는 <span class="err">즉시 실패 통지</span>다.',
+      run() {
+        mark('s2-st4', 'failed');
+        mark('s2-k2', 'failed');
+        setText('s2-j1', '<span class="metric bad">UNHEALTHY</span><span class="metric bad">connect refused</span>');
+        setText('s2-j2', '개별 Job hang가 아니라 인프라 장애로 판정');
+        setText('s2-j3', '`JOB_DISPATCH_FAILED` 이벤트 발행');
+        setText('s2-o2', 'notifyRunningJobs() 실행');
+        setText('s2-o3', 'maxRetries=0 이므로 바로 실패 통지');
+      }
+    },
+    {
+      text: '이 구현에서 눈여겨볼 점은 timeout과 health check가 역할을 나눈다는 점이다. <span class="hl">건강한 Jenkins에서 오래 걸리는 Job</span>은 재시도하고, <span class="hl">죽은 Jenkins 위 Job</span>은 빠르게 실패 통지를 보낸다.',
+      run() {
+        setText('s2-note', '현재 코드상 이 실패 통지는 항상 DB FAILED로 닫히지 않을 수 있다. event-first 설계가 남아 있다.');
+      }
+    }
+  ],
+  [
+    {
+      text: '<span class="hl">JobCompletionConsumer</span>가 완료 이벤트를 읽었지만, 역직렬화 오류나 DB 저장 장애가 반복된다고 가정한다. 이 경우 Spring Kafka retry topic 체인으로 흘러간다.',
+      run() {
+        mark('s3-k1', 'dispatch');
+        mark('s3-k2', 'retry');
+        setText('s3-f1', 'consume 실패, retry-0 진입');
+      }
+    },
+    {
+      text: 'retry-0, retry-1에서도 계속 실패하면 메시지는 <span class="err">DLT</span>로 이동한다. 현재 구현의 `@DltHandler`는 topic, key, partition, offset을 <span class="warn">로그만 남긴다</span>.',
+      run() {
+        mark('s3-k3', 'retry');
+        mark('s3-k4', 'dead');
+        setText('s3-f2', 'DltHandler logging');
+        setText('s3-j2', '자동 재주입 로직은 없고 운영자 수동 조치가 필요하다.');
+      }
+    },
+    {
+      text: '이제 다른 축이다. 프로세스가 죽기 직전 `job-execute`는 발행됐지만, 실제 Jenkins가 받았는지 애매한 `DISPATCHED` Job이 남아 있을 수 있다.',
+      run() {
+        setText('s3-o1', '<span class="err">프로세스 종료</span>');
+        setText('s3-o2', '2');
+        setText('s3-f3', 'PENDING 3 / DISPATCHED 2');
+      }
+    },
+    {
+      text: '애플리케이션 재기동 후 <span class="hl">CrashRecoveryHandler.recoverOnStartup()</span>가 실행된다. 여기서 <span class="warn">DISPATCHED → PENDING</span>으로 되돌려 모호한 상태를 다시 평가한다.',
+      run() {
+        setText('s3-o1', '<span class="ok">재기동 완료</span>');
+        setText('s3-o3', '`Reset after crash recovery (was DISPATCHED)`');
+        setText('s3-j3', '재기동 시점에 rollback 수행');
+      }
+    },
+    {
+      text: '즉 `executor`의 실패 처리에는 두 층이 있다. <span class="hl">Kafka DLT</span>는 소비 실패를 보관하고, <span class="hl">Crash Recovery</span>는 상태 머신의 모호한 중간 상태를 되감는다. 둘 다 자동 만능 복구가 아니라 <span class="info">운영 판단을 위한 안전망</span>에 가깝다.',
+      run() {
+        setText('s3-note', 'DLT는 메시지를 버리지 않고 남기고, CrashRecovery는 모호한 상태를 다시 큐에 넣는다.');
+      }
+    }
+  ]
+];
+
+let currentScene = 0;
+let currentStep = 0;
+let timer = null;
+
+function setText(id, html) {
+  document.getElementById(id).innerHTML = html;
+}
+
+function clearMarks(sceneId) {
+  document.querySelectorAll('#scene' + sceneId + ' .box').forEach((el) => {
+    el.classList.remove('active', 'pending', 'dispatch', 'running', 'done', 'failed', 'retry', 'dead');
+  });
+}
+
+function mark(id, cls) {
+  const el = document.getElementById(id);
+  el.classList.add(cls);
+  if (!['pending', 'dispatch', 'running', 'done', 'failed', 'retry', 'dead'].includes(cls)) {
+    el.classList.add('active');
+  }
+}
+
+function resetSceneState(sceneId) {
+  clearMarks(sceneId);
+}
+
+function sceneDefaults(sceneId) {
+  if (sceneId === 0) {
+    setText('s0-m1', '대기');
+    setText('s0-m2', '대기');
+    setText('s0-m3', '대기');
+    setText('s0-m4', '대기');
+    setText('s0-j1', 'k8s-jenkins / HEALTHY / slot 1');
+    setText('s0-j2', '<span class="metric good">idle</span><span class="metric">maxConcurrent=2</span>');
+    setText('s0-j3', '아직 트리거되지 않았다.');
+    setText('s0-f1', '-');
+    setText('s0-f2', '-');
+    setText('s0-f3', '-');
+    setText('s0-f4', '-');
+    setText('s0-f5', '-');
+    setText('s0-db-note', '레코드가 아직 생성되지 않았다.');
+  }
+  if (sceneId === 1) {
+    setText('s1-c1', '0');
+    setText('s1-c2', '다음 주기 대기');
+    setText('s1-c3', '호출 전');
+    setText('s1-j1', '<span class="metric mid">DEGRADED</span><span class="metric">HTTP connect 실패</span>');
+    setText('s1-j2', '`buildWithParameters` 호출 전');
+    setText('s1-j3', '아직 결과가 없다.');
+    setText('s1-f1', 'PENDING');
+    setText('s1-f2', '0');
+    setText('s1-f3', '초기 상태');
+    setText('s1-f4', '-');
+    setText('s1-db-note', 'Jenkins API 호출 실패가 비즈니스 재시도와 Kafka retry를 모두 자극한다.');
+  }
+  if (sceneId === 2) {
+    setText('s2-o1', '`findByStatusAndStartedAtBefore()` 대기');
+    setText('s2-o2', '`/api/json` 점검 전');
+    setText('s2-o3', '재시도 또는 즉시 통지 분기 전');
+    setText('s2-f1', 'RUNNING');
+    setText('s2-f2', '12:00:00');
+    setText('s2-f3', '5');
+    setText('s2-f4', 'HEALTHY');
+    setText('s2-j1', '<span class="metric good">HEALTHY</span><span class="metric">busyExecutors=1</span>');
+    setText('s2-j2', 'hang 의심 없음');
+    setText('s2-j3', '없음');
+    setText('s2-note', '헬스체커는 인프라 장애로 판단하면 `retryOrNotify(job, 0, ...)`를 호출한다.');
+  }
+  if (sceneId === 3) {
+    setText('s3-o1', '정상 실행 중');
+    setText('s3-o2', '0');
+    setText('s3-o3', '아직 없음');
+    setText('s3-f1', '정상');
+    setText('s3-f2', '미도달');
+    setText('s3-f3', 'PENDING / DISPATCHED 혼재');
+    setText('s3-j1', '`JobCompletionConsumer`가 역직렬화 또는 DB 저장 실패');
+    setText('s3-j2', '운영자가 로그를 보고 수동 재처리해야 함');
+    setText('s3-j3', '`CrashRecoveryHandler`가 DISPATCHED를 PENDING으로 롤백');
+    setText('s3-note', '크래시 후에는 Jenkins가 이미 받았는지 불명확하므로 모호한 상태를 다시 `PENDING`으로 돌려 재평가한다.');
+  }
+}
+
+function updateStepLabel() {
+  setText('stepLabel', 'Step ' + currentStep + ' / ' + scenes[currentScene].length);
+}
+
+function resetScene() {
+  currentStep = 0;
+  resetSceneState(currentScene);
+  sceneDefaults(currentScene);
+  setText('narration', '탭을 고르고 다음 단계를 눌러 흐름을 시작하세요.');
+  updateStepLabel();
+}
+
+function nextStep() {
+  const steps = scenes[currentScene];
+  if (currentStep >= steps.length) {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+    return;
+  }
+  const step = steps[currentStep];
+  step.run();
+  setText('narration', step.text);
+  currentStep += 1;
+  updateStepLabel();
+}
+
+function switchTab(idx) {
+  currentScene = idx;
+  if (timer) {
+    clearInterval(timer);
+    timer = null;
+  }
+  document.querySelectorAll('.tab').forEach((el, i) => el.classList.toggle('active', i === idx));
+  document.querySelectorAll('.scene').forEach((el, i) => el.classList.toggle('active', i === idx));
+  resetScene();
+}
+
+function autoPlay() {
+  if (timer) {
+    clearInterval(timer);
+    timer = null;
+    return;
+  }
+  timer = setInterval(() => {
+    if (currentStep >= scenes[currentScene].length) {
+      clearInterval(timer);
+      timer = null;
+      return;
+    }
+    nextStep();
+  }, 2800);
+}
+
+resetScene();
+</script>
+</body>
+</html>

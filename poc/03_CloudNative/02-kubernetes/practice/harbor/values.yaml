@@ -1,0 +1,88 @@
+# Harbor - Local Development (Kind)
+# Usage: helm install harbor harbor/harbor -n harbor -f harbor/values.yaml --create-namespace
+#
+# UI: http://localhost:30000
+# Credentials: admin / Harbor12345
+
+expose:
+  type: nodePort
+  tls:
+    enabled: false
+  nodePort:
+    ports:
+      http:
+        nodePort: 30000
+      https:
+        nodePort: 30001
+
+externalURL: http://localhost:30000
+
+harborAdminPassword: "Harbor12345"
+
+persistence:
+  persistentVolumeClaim:
+    registry:
+      size: 1Gi
+    database:
+      size: 1Gi
+    redis:
+      size: 1Gi
+    trivy:
+      size: 1Gi
+
+# 로컬 리소스 절약
+registry:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+core:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+portal:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
+database:
+  internal:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+
+redis:
+  internal:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
+
+trivy:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 512Mi

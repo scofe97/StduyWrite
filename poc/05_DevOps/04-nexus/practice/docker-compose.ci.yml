@@ -1,0 +1,18 @@
+# Usage: docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
+services:
+  jenkins:
+    image: jenkins/jenkins:lts-jdk17
+    container_name: nexus-jenkins
+    ports:
+      - "8080:8080"
+    volumes:
+      - jenkins-data:/var/jenkins_home
+    environment:
+      JAVA_OPTS: "-Xmx512m"
+    depends_on:
+      nexus:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  jenkins-data:

@@ -1,0 +1,102 @@
+apiVersion: mysql.oracle.com/v2
+kind: InnoDBCluster
+metadata:
+  name: mysql-cluster
+  namespace: ch08-mysql
+spec:
+  # MySQL 버전
+  version: "8.0.35"
+
+  # 클러스터 멤버 수 (HA 구성: 3노드 권장)
+  instances: 3
+
+  # MySQL Router 설정 (애플리케이션 연결 프록시)
+  router:
+    instances: 1
+    # Router 리소스 제한 (Minikube 환경)
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 50m
+        memory: 64Mi
+
+  # MySQL 서버 인스턴스 설정
+  secretName: mysql-cluster-secret  # Root 비밀번호를 담은 Secret (자동 생성됨)
+
+  # 데이터 저장소 설정
+  datadirVolumeClaimTemplate:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 2Gi  # Minikube: 작은 용량으로 설정
+    # storageClassName: standard  # Minikube의 기본 StorageClass 사용
+
+  # MySQL 서버 리소스 제한 (Minikube 환경)
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+  # MySQL 설정 (my.cnf 오버라이드)
+  # mycnf: |
+  #   [mysqld]
+  #   max_connections=200
+  #   innodb_buffer_pool_size=256M
+
+  # 백업 설정 (선택 사항)
+  # backupProfiles:
+  #   - name: daily-backup
+  #     dumpInstance:
+  #       storage:
+  #         persistentVolumeClaim:
+  #           claimName: mysql-backup-pvc
+
+  # 백업 스케줄 (선택 사항)
+  # backupSchedules:
+  #   - name: daily
+  #     schedule: "0 2 * * *"  # 매일 새벽 2시
+  #     backupProfileName: daily-backup
+  #     enabled: true
+
+  # Pod 템플릿 설정 (선택 사항)
+  # podSpec:
+  #   affinity:
+  #     podAntiAffinity:
+  #       preferredDuringSchedulingIgnoredDuringExecution:
+  #       - weight: 100
+  #         podAffinityTerm:
+  #           labelSelector:
+  #             matchExpressions:
+  #             - key: app.kubernetes.io/name
+  #               operator: In
+  #               values:
+  #               - mysql-innodbcluster
+  #           topologyKey: kubernetes.io/hostname
+
+---
+# MySQL Root 비밀번호 Secret (자동 생성되지만 수동으로도 생성 가능)
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: mysql-cluster-secret
+#   namespace: ch08-mysql
+# type: Opaque
+# stringData:
+#   rootPassword: "SuperSecretPassword123!"
+#   rootUser: "root"
+
+---
+# MySQL 클라이언트 접속용 Service (Operator가 자동 생성)
+# Service 이름: mysql-cluster (Read/Write)
+# Service 이름: mysql-cluster-ro (Read Only)
+# 접속 예시:
+#   mysql -h mysql-cluster.ch08-mysql.svc.cluster.local -uroot -p
+#
+# Router를 통한 접속:
+#   mysql -h mysql-cluster-router.ch08-mysql.svc.cluster.local -uroot -p

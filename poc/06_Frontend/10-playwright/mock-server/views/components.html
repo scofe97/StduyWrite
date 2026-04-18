@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>컴포넌트 데모 - Playwright 테스트</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 100px 20px 40px;
+        }
+
+        .header {
+            background-color: #1a237e;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .demo-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .demo-section h2 {
+            font-size: 20px;
+            color: #1a237e;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .btn, button {
+            background-color: #1a237e;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 4px 4px 4px 0;
+        }
+
+        .btn:hover, button:hover {
+            background-color: #0d1b5e;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(26, 35, 126, 0.3);
+        }
+
+        .btn:active, button:active {
+            transform: translateY(0);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            position: relative;
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            z-index: 2001;
+        }
+
+        .modal-content h3 {
+            font-size: 20px;
+            color: #1a237e;
+            margin-bottom: 12px;
+        }
+
+        .modal-content p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 24px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        /* Spinner */
+        .spinner {
+            display: inline-block;
+            padding: 12px;
+            color: #1a237e;
+            font-weight: 500;
+        }
+
+        /* File Upload */
+        input[type="file"] {
+            display: block;
+            padding: 8px;
+            margin-bottom: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        #fileInfo {
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 6px;
+            margin-top: 12px;
+        }
+
+        #fileInfo span {
+            display: block;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        /* Drag and Drop */
+        .dnd-container {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .drag-item {
+            padding: 20px 32px;
+            background: #1a237e;
+            color: white;
+            border-radius: 8px;
+            cursor: move;
+            user-select: none;
+            font-weight: 500;
+        }
+
+        .drop-zone {
+            flex: 1;
+            padding: 40px;
+            border: 3px dashed #ccc;
+            border-radius: 8px;
+            text-align: center;
+            color: #999;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone.drag-over {
+            border-color: #1a237e;
+            background: #f0f0ff;
+            color: #1a237e;
+        }
+
+        /* Result text */
+        span[id$="Result"], span[id$="result"] {
+            display: inline-block;
+            margin-left: 12px;
+            padding: 6px 12px;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* Counter area */
+        #counter-area {
+            margin: 16px 0;
+        }
+
+        #counterValue {
+            display: inline-block;
+            min-width: 60px;
+            padding: 8px 16px;
+            background: #1a237e;
+            color: white;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 8px;
+        }
+
+        /* Toggle target */
+        #toggleTarget {
+            margin-top: 12px;
+            padding: 12px;
+            background: #e3f2fd;
+            border-radius: 6px;
+            color: #1976d2;
+            font-weight: 500;
+        }
+
+        /* Delayed content */
+        #delayed-container {
+            margin-top: 16px;
+        }
+
+        #delayed-content {
+            padding: 16px;
+            background: #f5f5f5;
+            border-radius: 6px;
+        }
+
+        #delayed-content p {
+            font-weight: 600;
+            color: #1a237e;
+            margin-bottom: 12px;
+        }
+
+        #delayed-content ul {
+            list-style-position: inside;
+            color: #666;
+        }
+
+        #delayed-content li {
+            padding: 4px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .dnd-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Playwright 컴포넌트 데모</h1>
+    </div>
+
+    <div class="demo-grid">
+        <!-- Section 1: Dialogs/Modals -->
+        <section data-testid="section-dialogs" class="demo-section">
+            <h2>다이얼로그 / 모달</h2>
+
+            <button aria-label="확인 다이얼로그" data-testid="btn-confirm-dialog" onclick="showConfirmDialog()">
+                확인 다이얼로그
+            </button>
+            <span id="confirmResult" data-testid="confirm-result"></span>
+            <br><br>
+
+            <button aria-label="알림 다이얼로그" data-testid="btn-alert-dialog" onclick="alert('저장되었습니다')">
+                알림 다이얼로그
+            </button>
+            <br><br>
+
+            <button aria-label="입력 다이얼로그" data-testid="btn-prompt-dialog" onclick="showPromptDialog()">
+                입력 다이얼로그
+            </button>
+            <span id="promptResult" data-testid="prompt-result"></span>
+            <br><br>
+
+            <button aria-label="커스텀 모달 열기" data-testid="btn-open-modal" onclick="openModal()">
+                커스텀 모달 열기
+            </button>
+            <span id="modalResult" data-testid="modal-result"></span>
+
+            <div id="customModal" role="dialog" aria-label="확인 모달" aria-modal="true"
+                 class="modal" style="display:none" data-testid="custom-modal">
+                <div class="modal-overlay" onclick="closeModal()"></div>
+                <div class="modal-content">
+                    <h3>작업 확인</h3>
+                    <p>이 작업을 진행하시겠습니까?</p>
+                    <div class="modal-actions">
+                        <button aria-label="취소" data-testid="modal-btn-cancel" onclick="closeModal()">취소</button>
+                        <button aria-label="확인" data-testid="modal-btn-confirm" onclick="confirmModal()">확인</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: iframe -->
+        <section data-testid="section-iframe" class="demo-section">
+            <h2>iframe 테스트</h2>
+
+            <iframe id="embedded-frame" name="embedded-frame" data-testid="embedded-iframe"
+                    srcdoc='
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { padding: 16px; font-family: sans-serif; }
+        button { padding: 8px 16px; background: #7c4dff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 200px; }
+    </style>
+</head>
+<body>
+    <h3 data-testid="iframe-title">임베디드 콘텐츠</h3>
+    <p data-testid="iframe-text">이 콘텐츠는 iframe 안에 있습니다.</p>
+    <button data-testid="iframe-button" onclick="document.getElementById(&quot;iframe-result&quot;).textContent=&quot;클릭됨&quot;">
+        iframe 내부 버튼
+    </button>
+    <span id="iframe-result" data-testid="iframe-result" style="margin-left: 8px; color: #7c4dff; font-weight: 500;"></span>
+    <br><br>
+    <input data-testid="iframe-input" aria-label="iframe 입력" placeholder="iframe 내부 입력">
+</body>
+</html>
+                    ' width="100%" height="240" style="border:1px solid #ddd;border-radius:8px;">
+            </iframe>
+        </section>
+
+        <!-- Section 3: Shadow DOM -->
+        <section data-testid="section-shadow-dom" class="demo-section">
+            <h2>Shadow DOM 테스트</h2>
+            <div id="shadow-host" data-testid="shadow-host"></div>
+        </section>
+
+        <!-- Section 4: Dynamic Content -->
+        <section data-testid="section-dynamic" class="demo-section">
+            <h2>동적 콘텐츠</h2>
+
+            <button aria-label="지연 콘텐츠 로드" data-testid="btn-load-delayed" onclick="loadDelayed()">
+                3초 후 콘텐츠 로드
+            </button>
+            <div id="delayed-container" data-testid="delayed-container">
+                <div id="loading-spinner" class="spinner" style="display:none" data-testid="loading-spinner">
+                    로딩 중...
+                </div>
+                <div id="delayed-content" data-testid="delayed-content" style="display:none">
+                    <p>지연 로드된 콘텐츠입니다!</p>
+                    <ul>
+                        <li data-testid="delayed-item-1">항목 1</li>
+                        <li data-testid="delayed-item-2">항목 2</li>
+                        <li data-testid="delayed-item-3">항목 3</li>
+                    </ul>
+                </div>
+            </div>
+
+            <br>
+            <div data-testid="counter-area">
+                <button aria-label="카운터 시작" data-testid="btn-start-counter" onclick="startCounter()">
+                    카운터 시작
+                </button>
+                <span data-testid="counter-value" id="counterValue">0</span>
+                <button aria-label="카운터 중지" data-testid="btn-stop-counter" onclick="stopCounter()">
+                    카운터 중지
+                </button>
+            </div>
+
+            <br>
+            <button aria-label="요소 토글" data-testid="btn-toggle" onclick="toggleElement()">
+                요소 표시/숨김
+            </button>
+            <div id="toggleTarget" data-testid="toggle-target">이 요소는 보이거나 숨겨집니다</div>
+        </section>
+
+        <!-- Section 5: File Upload -->
+        <section data-testid="section-upload" class="demo-section">
+            <h2>파일 업로드</h2>
+            <input type="file" id="fileInput" aria-label="파일 선택" data-testid="file-input" accept=".txt,.csv,.json">
+            <div id="fileInfo" data-testid="file-info" style="display:none">
+                <span data-testid="file-name" id="fileName"></span>
+                <span data-testid="file-size" id="fileSize"></span>
+            </div>
+        </section>
+
+        <!-- Section 6: Drag and Drop -->
+        <section data-testid="section-dnd" class="demo-section">
+            <h2>드래그 앤 드롭</h2>
+            <div class="dnd-container">
+                <div id="dragSource" draggable="true" data-testid="drag-source" class="drag-item">
+                    드래그 요소
+                </div>
+                <div id="dropTarget" data-testid="drop-target" class="drop-zone">
+                    여기에 놓으세요
+                </div>
+            </div>
+            <span id="dndResult" data-testid="dnd-result"></span>
+        </section>
+    </div>
+
+    <script>
+        // ========== Section 1: Dialogs/Modals ==========
+        function showConfirmDialog() {
+            const result = window.confirm("진행하시겠습니까?");
+            document.getElementById('confirmResult').textContent = result ? '확인' : '취소';
+        }
+
+        function showPromptDialog() {
+            const result = window.prompt("티켓번호를 입력하세요");
+            document.getElementById('promptResult').textContent = result || '취소됨';
+        }
+
+        function openModal() {
+            document.getElementById('customModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('customModal').style.display = 'none';
+        }
+
+        function confirmModal() {
+            document.getElementById('modalResult').textContent = '확인됨';
+            closeModal();
+        }
+
+        // ========== Section 3: Shadow DOM ==========
+        window.addEventListener('DOMContentLoaded', () => {
+            const shadowHost = document.getElementById('shadow-host');
+            const shadowRoot = shadowHost.attachShadow({ mode: 'open' });
+            shadowRoot.innerHTML = `
+                <style>
+                    .shadow-card {
+                        padding: 16px;
+                        border: 2px solid #7c4dff;
+                        border-radius: 8px;
+                        background: #f5f3ff;
+                    }
+                    .shadow-btn {
+                        background: #7c4dff;
+                        color: white;
+                        border: none;
+                        padding: 8px 16px;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        font-weight: 500;
+                    }
+                    .shadow-btn:hover {
+                        background: #6a3de8;
+                    }
+                    .shadow-input {
+                        padding: 8px;
+                        border: 1px solid #ccc;
+                        border-radius: 4px;
+                        margin-right: 8px;
+                        width: 200px;
+                    }
+                    h4 { margin: 0 0 8px 0; color: #7c4dff; }
+                    p { margin: 0 0 12px 0; color: #666; font-size: 14px; }
+                    #shadow-result {
+                        margin-left: 8px;
+                        padding: 4px 8px;
+                        background: #e8f5e9;
+                        color: #2e7d32;
+                        border-radius: 4px;
+                        font-size: 13px;
+                    }
+                </style>
+                <div class="shadow-card">
+                    <h4>Shadow DOM 컴포넌트</h4>
+                    <p id="shadow-text">이 콘텐츠는 Shadow DOM 안에 있습니다.</p>
+                    <input class="shadow-input" id="shadow-input" placeholder="Shadow DOM 입력">
+                    <button class="shadow-btn" id="shadow-button">Shadow 버튼</button>
+                    <span id="shadow-result"></span>
+                </div>
+            `;
+
+            shadowRoot.getElementById('shadow-button').addEventListener('click', () => {
+                shadowRoot.getElementById('shadow-result').textContent =
+                    shadowRoot.getElementById('shadow-input').value || '클릭됨';
+            });
+        });
+
+        // ========== Section 4: Dynamic Content ==========
+        function loadDelayed() {
+            document.getElementById('loading-spinner').style.display = 'block';
+            document.getElementById('delayed-content').style.display = 'none';
+
+            setTimeout(() => {
+                document.getElementById('loading-spinner').style.display = 'none';
+                document.getElementById('delayed-content').style.display = 'block';
+            }, 3000);
+        }
+
+        let counterInterval;
+        function startCounter() {
+            let count = parseInt(document.getElementById('counterValue').textContent) || 0;
+            counterInterval = setInterval(() => {
+                count++;
+                document.getElementById('counterValue').textContent = count;
+            }, 500);
+        }
+
+        function stopCounter() {
+            clearInterval(counterInterval);
+        }
+
+        function toggleElement() {
+            const target = document.getElementById('toggleTarget');
+            target.style.display = target.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // ========== Section 5: File Upload ==========
+        document.getElementById('fileInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                document.getElementById('fileName').textContent = `파일명: ${file.name}`;
+                document.getElementById('fileSize').textContent = `크기: ${file.size} bytes`;
+                document.getElementById('fileInfo').style.display = 'block';
+            }
+        });
+
+        // ========== Section 6: Drag and Drop ==========
+        const dragSource = document.getElementById('dragSource');
+        const dropTarget = document.getElementById('dropTarget');
+
+        dragSource.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', '드래그 요소');
+        });
+
+        dropTarget.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropTarget.classList.add('drag-over');
+        });
+
+        dropTarget.addEventListener('dragleave', () => {
+            dropTarget.classList.remove('drag-over');
+        });
+
+        dropTarget.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropTarget.classList.remove('drag-over');
+            document.getElementById('dndResult').textContent = '드롭 성공!';
+        });
+    </script>
+</body>
+</html>

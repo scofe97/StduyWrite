@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "TransactionEvent",
+  "namespace": "com.study.redpanda.avro",
+  "doc": "Ch08: 트랜잭션 패턴 실습용 이벤트. 여러 토픽에 원자적으로 발행하는 시나리오에 사용.",
+  "fields": [
+    {"name": "eventId", "type": "string", "doc": "고유 이벤트 ID (UUID)"},
+    {"name": "eventType", "type": "string", "doc": "이벤트 유형 (ORDER_CREATED, INVENTORY_RESERVED, PAYMENT_PROCESSED 등)"},
+    {"name": "timestamp", "type": "long", "logicalType": "timestamp-millis", "doc": "이벤트 발생 시각"},
+    {"name": "orderId", "type": "string", "doc": "주문 ID (파티션 키로 사용)"},
+    {"name": "step", "type": "int", "doc": "SAGA 단계 번호 (1=주문, 2=재고, 3=결제)"},
+    {"name": "payload", "type": ["null", "string"], "default": null, "doc": "추가 데이터 (JSON)"},
+    {"name": "success", "type": "boolean", "default": true, "doc": "처리 성공 여부 (abort 시나리오 테스트용)"}
+  ]
+}

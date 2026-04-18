@@ -1,0 +1,35 @@
+apiVersion: policy.linkerd.io/v1beta3
+kind: Server
+metadata:
+  name: web-server
+  namespace: emojivoto
+spec:
+  podSelector:
+    matchLabels:
+      app: web-svc
+  port: 8080
+  proxyProtocol: HTTP/2
+---
+apiVersion: policy.linkerd.io/v1alpha1
+kind: AuthorizationPolicy
+metadata:
+  name: web-allow-vote
+  namespace: emojivoto
+spec:
+  targetRef:
+    group: policy.linkerd.io
+    kind: Server
+    name: web-server
+  requiredAuthenticationRefs:
+    - name: mesh-tls
+      kind: MeshTLSAuthentication
+      group: policy.linkerd.io
+---
+apiVersion: policy.linkerd.io/v1alpha1
+kind: MeshTLSAuthentication
+metadata:
+  name: mesh-tls
+  namespace: emojivoto
+spec:
+  identities:
+    - "*.emojivoto.serviceaccount.identity.linkerd.cluster.local"

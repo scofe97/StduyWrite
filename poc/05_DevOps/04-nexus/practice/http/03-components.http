@@ -1,0 +1,32 @@
+### 리포지토리 컴포넌트 목록
+GET http://localhost:8081/service/rest/v1/components?repository=maven-releases
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+Accept: application/json
+
+### Raw 리포지토리에 파일 업로드
+POST http://localhost:8081/service/rest/v1/components?repository=raw-hosted
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="raw.directory"
+
+/test
+--boundary
+Content-Disposition: form-data; name="raw.asset1"; filename="hello.txt"
+Content-Type: text/plain
+
+Hello from Nexus!
+--boundary
+Content-Disposition: form-data; name="raw.asset1.filename"
+
+hello.txt
+--boundary--
+
+### Raw 파일 직접 다운로드
+GET http://localhost:8081/repository/raw-hosted/test/hello.txt
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+
+### 컴포넌트 삭제 (ID 필요)
+# DELETE http://localhost:8081/service/rest/v1/components/{componentId}
+# Authorization: Basic YWRtaW46YWRtaW4xMjM=

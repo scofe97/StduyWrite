@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.0'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring Boot Web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Spring Boot Actuator (Observability)
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // ========== OTLP 방식 (Jaeger 권장) ==========
+    // Micrometer Tracing with OpenTelemetry
+    implementation 'io.micrometer:micrometer-tracing-bridge-otel'
+
+    // OpenTelemetry OTLP Exporter (Jaeger 4318 포트로 전송)
+    implementation 'io.opentelemetry:opentelemetry-exporter-otlp'
+    // =============================================
+
+    // ========== Kafka ==========
+    implementation 'org.springframework.kafka:spring-kafka'
+    // ===========================
+
+    // Test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

@@ -1,0 +1,102 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.0'
+    id 'io.spring.dependency-management' version '1.1.5'
+    id 'com.github.davidmc24.gradle.plugin.avro' version '1.9.1'
+    // I4: Schema Registry 등록/호환성 검증 플러그인
+    id 'com.github.imflog.kafka-schema-registry-gradle-plugin' version '2.1.0'
+}
+
+group = 'com.study'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://packages.confluent.io/maven/'
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'org.postgresql:postgresql'
+    implementation 'org.springframework.kafka:spring-kafka'
+    // Kafka Streams (ch09: CQRS + Event Sourcing)
+    implementation 'org.apache.kafka:kafka-streams'
+    implementation 'io.confluent:kafka-streams-avro-serde:7.6.0'
+
+    // Avro + Schema Registry
+    implementation 'org.apache.avro:avro:1.11.3'
+    implementation 'io.confluent:kafka-avro-serializer:7.6.0'
+
+    // Jackson (ch09: JSON Serde for Kafka Streams)
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+    // Resilience4j (ch02 C8: Circuit Breaker)
+    implementation 'io.github.resilience4j:resilience4j-circuitbreaker:2.2.0'
+
+    // UUID v7 (ch04: 시간순 정렬 가능한 Saga ID 생성)
+    implementation 'com.github.f4b6a3:uuid-creator:6.0.0'
+
+    compileOnly 'org.projectlombok:lombok:1.18.42'
+    annotationProcessor 'org.projectlombok:lombok:1.18.42'
+    testCompileOnly 'org.projectlombok:lombok:1.18.42'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.42'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+    testImplementation 'org.testcontainers:redpanda'
+    testImplementation 'org.testcontainers:postgresql'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.awaitility:awaitility'
+}
+
+// Avro 스키마에서 Java 클래스 생성 설정
+avro {
+    stringType = 'String'
+    fieldVisibility = 'PRIVATE'
+    createSetters = true
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    testLogging {
+        showStandardStreams = true
+    }
+}
+
+// I4: Schema Registry 등록 전략
+// - ./gradlew schemaRegistryTestCompatibility : 호환성 검증만 (MR/PR 파이프라인)
+// - ./gradlew schemaRegistryRegister          : 스키마 등록 (develop/main 머지 후)
+schemaRegistry {
+    url = project.findProperty('schemaRegistryUrl') ?: 'http://localhost:18081'
+
+    register {
+        // src/main/avro/*.avsc 파일을 동적 스캔하여 등록 대상으로 설정
+        // .avsc 파일 추가/삭제 시 build.gradle 수정 불필요
+        fileTree('src/main/avro').matching { include '**/*.avsc' }.each { file ->
+            def subjectName = file.name.replace('.avsc', '-value')
+            subject(subjectName, file.path, 'AVRO')
+        }
+    }
+
+    compatibility {
+        // register와 동일한 subject 목록으로 호환성만 검증
+        fileTree('src/main/avro').matching { include '**/*.avsc' }.each { file ->
+            def subjectName = file.name.replace('.avsc', '-value')
+            subject(subjectName, file.path, 'AVRO')
+        }
+    }
+}

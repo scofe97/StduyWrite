@@ -1,0 +1,41 @@
+server:
+  port: 8070
+
+spring:
+  application:
+    name: service-a
+
+  # Kafka 설정
+  kafka:
+    bootstrap-servers: localhost:9095
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: service-a-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.use.type.headers: false
+        spring.json.value.default.type: com.example.servicea.dto.PaymentEvent
+    # Kafka Tracing 활성화 (Spring Boot 3.x)
+    listener:
+      observation-enabled: true
+    template:
+      observation-enabled: true
+
+# Micrometer Tracing 설정 (OTLP → Collector 경유)
+management:
+  tracing:
+    sampling:
+      probability: 1.0  # 앱에서는 100% 전송, Collector에서 Tail Sampling
+  otlp:
+    tracing:
+      endpoint: http://localhost:4319/v1/traces  # OTel Collector (Tail Sampling)
+
+# 로깅에 TraceID 포함
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
