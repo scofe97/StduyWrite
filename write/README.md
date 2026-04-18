@@ -24,7 +24,12 @@ updated: 2026-04-19
 | 08 | [08_devops/](08_devops/) | CI/CD, Jenkins, Nexus, Sonarqube |
 | 09 | [09_cloud/](09_cloud/) | Cloud Native, K8s, Service Mesh (미래) |
 | 10 | [10_tools/](10_tools/) | tmux, vim, Claude Code, Git |
+| 11 | [11_security/](11_security/) | OAuth/JWT, OWASP, 위협 모델링, Spring Security |
 | 99 | [99_ETC/](99_ETC/) | 분류 보류 — 3개월 내 재배치 또는 `_archive`로 |
+
+## Spring 전용 통합 인덱스
+
+Spring 문서는 주제별로 분산 배치되지만 [`01_language/java/spring/README.md`](01_language/java/spring/README.md)가 전 카테고리 집계점 역할을 한다.
 
 ## 예약 폴더 (일반 최종본 아님)
 
