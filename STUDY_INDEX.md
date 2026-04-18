@@ -1,63 +1,60 @@
-# 학습 주제 인덱스
-
-> docs(이론)와 poc(실습)를 연결하는 학습 가이드
-
-## 빠른 탐색
-
-| 번호 | 주제 | 이론 (docs/) | 실습 (poc/) |
-|------|------|-------------|-------------|
-| 01 | AI | [01_AI](docs/01_AI/) | [01_AI](poc/01_AI/) |
-| 02 | Architecture | [02_Architecture](docs/02_Architecture/) | [02_Architecture](poc/02_Architecture/) |
-| 03 | CloudNative | [03_CloudNative](docs/03_CloudNative/) | [03_CloudNative](poc/03_CloudNative/) |
-| 04 | Database | [04_Database](docs/04_Database/) | [04_Database](poc/04_Database/) |
-| 05 | DevOps | [05_DevOps](docs/05_DevOps/) | [05_DevOps](poc/05_DevOps/) |
-| 06 | Frontend | [06_Frontend](docs/06_Frontend/) | [06_Frontend](poc/06_Frontend/) |
-| 07 | Observability | [07_Observability](docs/07_Observability/) | [07_Observability](poc/07_Observability/) |
-| 08 | MessageQueue | [08_MessageQueue](docs/08_MessageQueue/) | [08_MessageQueue](poc/08_MessageQueue/) |
-| 09 | Go | [09_goLang](docs/09_goLang/) | [09_goLang](poc/09_goLang/) |
-| 10 | Spring | [10_Spring](docs/10_Spring/) | [10_Spring](poc/10_Spring/) |
-| 11 | DevTools | [11_DevTools](docs/11_DevTools/) | [11_DevTools](poc/11_DevTools/) |
-
+# runners-high 학습 인덱스
 ---
+> 최종본은 [`write/`](write/)에 모인다. `poc/`는 실험 흔적이며 이관이 끝나는 대로 삭제될 예정이다.
 
-## 권장 학습 순서
+## 카테고리 맵
 
-1. **Database 기본 → 분산시스템** (docs/04_Database)
-2. **Go 기초 → 동시성 → 웹** (docs/09_goLang + poc/09_goLang)
-3. **Frontend 기초 → React → 실시간통신** (docs/06_Frontend + poc/06_Frontend)
-4. **Observability 이론 → OpenTelemetry 실습** (docs/07_Observability + poc/07_Observability)
+하네스 §4.2의 v1 체계를 그대로 따른다. 주제 중심이며 언어별 분류는 하위 폴더로 내린다.
 
----
+| # | 카테고리 | 범위 |
+|---|----------|------|
+| 01 | [`write/01_language/`](write/01_language/) | Java, Go, TS 등 언어별 문법·관용구·표준 API |
+| 02 | [`write/02_runtime/`](write/02_runtime/) | JVM, GC, 메모리 모델, 컨커런시 — 런타임 지식 |
+| 03 | [`write/03_architecture/`](write/03_architecture/) | DDD, Hexagonal, Clean, 설계 원칙·패턴 |
+| 04 | [`write/04_distributed/`](write/04_distributed/) | CAP, Consistency, Saga, Outbox 이론 |
+| 05 | [`write/05_messaging/`](write/05_messaging/) | Kafka, Redpanda, Avro, Schema Registry, EDA 구현 |
+| 06 | [`write/06_data/`](write/06_data/) | DB, CDC, Transaction, Indexing (미래) |
+| 07 | [`write/07_observability/`](write/07_observability/) | Logging, Tracing, Metrics, OpenTelemetry |
+| 08 | [`write/08_devops/`](write/08_devops/) | CI/CD, Jenkins, Nexus, Sonarqube |
+| 09 | [`write/09_cloud/`](write/09_cloud/) | Cloud Native, K8s, Service Mesh (미래) |
+| 10 | [`write/10_tools/`](write/10_tools/) | tmux, vim, Claude Code, Git |
+| 99 | [`write/99_ETC/`](write/99_ETC/) | 분류 보류 — 3개월 체류 후 재배치 또는 아카이브 |
 
-## 교차 참조 맵
+## 예약 폴더
 
-여러 관점에서 다뤄지는 주제들의 연결:
+- [`write/_meta/`](write/_meta/) — 저장소 컨벤션, 워크플로우 가이드
+- `write/_company/` — 사내 전용 분석 (`.gitignore` 보호)
+- [`write/_archive/`](write/_archive/) — 6개월 무갱신·무참조 문서 보관
 
-| 주제 | 이론 (docs/) | 실습 (poc/) |
-|------|-------------|-------------|
-| **WebSocket** | - | [06_Frontend/08-websocket](poc/06_Frontend/08-websocket/), [09_goLang/04-web/02-websocket](poc/09_goLang/04-web/02-websocket/) |
-| **SSE** | - | [06_Frontend/09-sse](poc/06_Frontend/09-sse/) |
-| **I/O 모델** | [09_goLang](docs/09_goLang/) | [09_goLang/12-system-programming](poc/09_goLang/12-system-programming/) |
-| **동시성** | [09_goLang](docs/09_goLang/) | [09_goLang/03-concurrency](poc/09_goLang/03-concurrency/) |
+## 최근 추가된 final 문서
 
----
+현재는 Step D의 프론트매터 주입으로 대부분 `status: draft`다. 사용자가 리뷰를 거쳐 `final`로 승격하는 과정이 끝나면 이 섹션을 자동으로 채울 예정이다. 갱신 방식은 다음 grep 명령을 기반으로 한다.
 
-## 심화 학습 경로
-
-```
-이론 (docs/)
-    │
-    ├── 06_Frontend/ ──────────▶ WebSocket/SSE 실습 (poc/06_Frontend/)
-    │
-    ├── 08_MessageQueue/ ──────▶ Kafka 실습 (poc/08_MessageQueue/)
-    │
-    └── 09_goLang/ ────────────▶ Go 시스템 프로그래밍 (poc/09_goLang/12-system-programming/)
-                                 Go 동시성 (poc/09_goLang/03-concurrency/)
+```bash
+grep -rl "status: final" write/ --include="*.md" \
+  | xargs grep -H "^updated:" \
+  | sort -k2 -r | head -5
 ```
 
-## 문서 구조
+## 아카이브 후보
 
-- **docs/**: 책 요약, 개념 정리, 이론 학습 문서
-- **poc/**: Proof of Concept 실습 코드
+`status: final`이면서 `updated` 기준 6개월 이상 경과하고, 다른 문서의 `related`로 참조되지 않는 파일이 후보다. 월간 리뷰(`journal/monthly/`)에서 점검한다.
 
-> 프로젝트 개요는 [README.md](README.md) 참조
+## 하네스와 규칙
+
+`write/` 작업 규약과 파일명·프론트매터 포맷은 하네스 문서에 있다.
+
+- 하네스: `~/.claude/skills/writing/references/second-brain-harness.md`
+- 작성 스타일: `~/.claude/skills/writing/SKILL.md`
+- 이 저장소의 한 페이지 요약: [`write/_meta/conventions.md`](write/_meta/conventions.md)
+
+## 이관 진척
+
+`poc/` → `write/` 이관 상태를 추적한다. 카테고리 전체 이관이 완료되면 `poc/<카테고리>/README.md` 상단에 삭제 예정일이 기재된다.
+
+| 카테고리 | 이관 대상 | 진척 |
+|----------|----------|------|
+| 05_messaging | poc/08_MessageQueue, poc/03_CloudNative/kafka 등 | 부분 이관 |
+| 07_observability | poc/07_Observability | 일부 이관 (Grafana 시리즈 완료) |
+| 03_architecture | poc/02_Architecture | 1차 이관 (분할 작업 남음) |
+| 나머지 | — | 미착수 |
