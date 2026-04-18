@@ -14,8 +14,8 @@ updated: 2026-04-19
 
 | # | 경로 | 범위 |
 |---|------|------|
-| 01 | [01_language/](01_language/) | Java, Go, TS 등 언어별 문법·관용구·생태계 |
-| 02 | [02_runtime/](02_runtime/) | JVM, GC, 메모리 모델, 동시성 — 언어 경계 넘는 런타임 지식 |
+| 01 | [01_language/](01_language/) | Java·Go·TS 등 언어별 문법·관용구·생태계. JVM은 Java 하위 `09_jvm/` |
+| 02 | _(예약)_ | Kotlin/Scala 문서가 쌓이면 `02_runtime/`으로 JVM 공통분 분리 예정 |
 | 03 | [03_architecture/](03_architecture/) | DDD, Hexagonal, Clean, 설계 원칙·패턴 |
 | 04 | [04_distributed/](04_distributed/) | CAP, Consistency, Saga, Outbox 등 분산 이론·패턴 |
 | 05 | [05_messaging/](05_messaging/) | Kafka, Redpanda, Avro, Schema Registry, EDA 구현 |

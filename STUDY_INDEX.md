@@ -8,8 +8,8 @@
 
 | # | 카테고리 | 범위 |
 |---|----------|------|
-| 01 | [`write/01_language/`](write/01_language/) | Java, Go, TS 등 언어별 문법·관용구·표준 API |
-| 02 | [`write/02_runtime/`](write/02_runtime/) | JVM, GC, 메모리 모델, 컨커런시 — 런타임 지식 |
+| 01 | [`write/01_language/`](write/01_language/) | Java·Go·TS 등 언어별 문법·관용구·표준 API. JVM은 Java 하위 `09_jvm/` |
+| 02 | _(예약)_ | Kotlin/Scala 문서가 쌓이면 JVM 공통분을 `02_runtime/`으로 분리 예정 |
 | 03 | [`write/03_architecture/`](write/03_architecture/) | DDD, Hexagonal, Clean, 설계 원칙·패턴 |
 | 04 | [`write/04_distributed/`](write/04_distributed/) | CAP, Consistency, Saga, Outbox 이론 |
 | 05 | [`write/05_messaging/`](write/05_messaging/) | Kafka, Redpanda, Avro, Schema Registry, EDA 구현 |
