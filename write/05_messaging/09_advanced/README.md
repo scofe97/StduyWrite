@@ -17,6 +17,7 @@ updated: 2026-05-09
 - [09-02.Saga 엔진 비교](09-02.Saga%20엔진%20비교.md) — 손코딩 오케스트레이션 vs Temporal/Cadence/Camunda 8/Conductor/Step Functions, 도입 시그널과 마이그레이션 비용
 - [09-03.스트림 처리 진화](09-03.스트림%20처리%20진화.md) — Kafka Streams → Flink/ksqlDB/Materialize/RisingWave, exactly-once 보장 비교
 - [09-04.스키마 거버넌스](09-04.스키마%20거버넌스.md) — 호환성 자동화·subject naming·RBAC·contract testing(Pact, Microcks)·데이터 카탈로그
+- [09-05.Outbox 재시도 레이어 분리](09-05.Outbox%20재시도%20레이어%20분리.md) — Producer 메모리 재시도와 DB 영속 재시도의 시간 척도 분리, 단순화 시그널 메트릭
 
 ## 사용법
 

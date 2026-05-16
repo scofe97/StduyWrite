@@ -26,3 +26,4 @@ Step C에서 옮겨진 고아 파일:
 - `01-jenkins-analysis.md` → `08_devops/02_Jenkins/`로 이동 검토
 - `03-message-queue-lgtm-study-resources.md` → 리소스 성격이면 `_meta/`로
 - `06-harness-engineering.md` → `_meta/` 후보
+- `07-test-code-start-and-mock.md` → 테스트 관련 문서 5건 누적 시 `12_testing/`로 신규 카테고리 신설 후 이동

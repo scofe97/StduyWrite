@@ -38,6 +38,7 @@ updated: 2026-05-09
 - [03-01.토픽 디자인](03-01.토픽%20디자인.md) — 명명 규칙, 파티션 수, 키 선택의 트레이드오프
 - [03-02.토픽 파이프라인](03-02.토픽%20파이프라인.md) — 다단계 처리에서 토픽을 단계 사이의 인터페이스로 쓰기
 - [03-03.AsyncAPI 명세](03-03.AsyncAPI%20명세.md) — 토픽 계약을 코드 외부에 명세로 고정하기
+- [03-04.한 토픽 다수 message 형태](03-04.한%20토픽%20다수%20message%20형태.md) — RecordNameStrategy로 한 토픽에 별개 Avro record 공존시키기
 
 ### 04 브로커 아키텍처
 
@@ -47,6 +48,9 @@ updated: 2026-05-09
 - [04-04.리밸런스 프로토콜](04-04.리밸런스%20프로토콜.md) — Stop-the-World 트리거와 점진적 리밸런스
 - [04-05.Redpanda 아키텍처](04-05.Redpanda%20아키텍처.md) — 단일 바이너리·Raft per partition·thread-per-core
 - [04-06.Redpanda Console 인증](04-06.Redpanda%20Console%20인증.md) — 무료 라이선스에서 게이트를 세우는 4가지 옵션
+- [04-07.Kafka·Redpanda SASL 인증](04-07.Kafka·Redpanda%20SASL%20인증.md) — 메시지 큐 본체(브로커)에 SASL/ACL/TLS로 인증·인가를 다는 표준 경로
+- [04-08.Exactly-once 의미론과 Consumer Idempotency](04-08.Exactly-once%20의미론과%20Consumer%20Idempotency.md) — Kafka EOS의 실제 범위와 DB가 끼면 깨지는 이유, Inbox 멱등 테이블 패턴
+- [04-10.Kafka 공통 정책 스타터 패턴](04-10.Kafka%20공통%20정책%20스타터%20패턴.md) — 조직 차원에서 retry·DLT·로그·메트릭 정책을 starter로 묶어 강제·권고를 구분하는 거버넌스 패턴. EnvironmentPostProcessor와 AutoConfiguration 두 경로 활용
 
 ### 05 일관성 패턴
 
@@ -56,6 +60,8 @@ updated: 2026-05-09
 - [05-04.Outbox 스케일링](05-04.Outbox%20스케일링.md) — 폴러 베이스라인 측정과 병렬화 전략
 - [05-05.Inbox](05-05.Inbox.md) — 소비 측 멱등성과 후속 처리 분리
 - [05-06.CDC](05-06.CDC.md) — Debezium 기반 변경 데이터 캡처
+- [05-07.Inbox 트랜잭션 오염과 멱등 어댑터](05-07.Inbox%20트랜잭션%20오염과%20멱등%20어댑터.md) — 멱등 INSERT의 트랜잭션 오염과 INSERT IGNORE 어댑터
+- [05-08.컨슈머 진입점 트랜잭션 경계와 Inbox의 사정거리](05-08.컨슈머%20진입점%20트랜잭션%20경계와%20Inbox의%20사정거리.md) — 영수증 vs 실행 큐 분리, 외부 호출 멱등성과의 직교 관계
 
 ### 06 스트림 처리
 
