@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/deepdive/04-02.Ingress와 Gateway API 점검.md (2026-04-19) -->
+
 # Ch19. Ingress & Gateway API 점검 질문
 
 ## Q1: Ingress Controller가 없으면 Ingress 리소스가 무용지물인 이유
@@ -143,3 +145,8 @@
 - **Conformance Test**: Gateway API는 Controller가 스펙을 올바르게 구현했는지 검증하는 Conformance Test Suite를 제공한다. 각 Controller는 테스트 통과 결과를 공개하며, 사용자는 "이 Controller가 HTTPRoute의 headerMatch를 올바르게 지원하는가?"를 테스트 결과로 확인할 수 있다. Ingress에는 이런 표준 테스트가 없어서 Controller 간 동작 차이를 발견하려면 직접 테스트해야 했다.
 
 **심화 질문**: 어노테이션 기반 설정의 장점도 있다 — 단순하고, 별도 CRD 없이 Ingress 리소스 하나로 모든 설정을 관리할 수 있다. 소규모 팀에서 Ingress + 어노테이션이 Gateway API보다 더 적합한 경우는 언제인가? "YAGNI(You Ain't Gonna Need It)" 원칙을 적용하면 언제 Gateway API로 전환하는 것이 적절한가?
+
+
+---
+
+> **[이관 완료]** write/09_cloud/kubernetes/04-02.Ingress와 Gateway API.md · deepdive/04-02.Ingress와 Gateway API 점검.md (2026-04-19)

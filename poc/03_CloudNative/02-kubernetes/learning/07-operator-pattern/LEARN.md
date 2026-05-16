@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/07-01.Operator 패턴.md (2026-04-19) -->
+
 # Ch07: Operator 패턴 - Kubernetes의 운영 지식 자동화
 
 > 📌 **핵심 요약**

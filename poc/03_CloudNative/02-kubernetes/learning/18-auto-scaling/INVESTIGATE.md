@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/deepdive/12-01.오토스케일링 점검.md (2026-04-19) -->
+
 # Ch18. Auto-scaling 점검 질문
 
 ## Q1: HPA 스케일 아웃 시 쿨다운 기간의 필요성
@@ -147,3 +149,8 @@
 - **Missing Metrics 처리**: 일부 Pod에서 메트릭이 수집되지 않으면(metrics-server 지연, Pod 네트워크 문제), HPA는 해당 Pod를 제외하고 나머지 Pod의 평균으로 계산한다. 단, 누락된 Pod의 비율이 높으면 HPA가 스케일링을 보류하고 이벤트에 경고를 기록한다. `kubectl describe hpa`에서 "unable to fetch metrics" 같은 메시지가 나타나면 metrics-server의 상태를 확인해야 한다.
 
 **심화 질문**: HPA Controller의 `--horizontal-pod-autoscaler-sync-period`(기본 15초)를 5초로 줄이면 반응 속도가 빨라지지만, kube-apiserver에 대한 메트릭 조회 부하가 증가한다. 대규모 클러스터(수천 개 HPA)에서 이 주기를 조정할 때의 트레이드오프는 무엇인가?
+
+
+---
+
+> **[이관 완료]** write/09_cloud/kubernetes/12-01.오토스케일링.md · deepdive/12-01.오토스케일링 점검.md (2026-04-19)

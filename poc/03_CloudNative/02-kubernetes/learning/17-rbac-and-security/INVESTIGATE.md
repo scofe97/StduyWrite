@@ -151,3 +151,8 @@
 - **Operator 취약점의 파급 효과**: Operator 이미지에 CVE(취약점)가 발견되면, Operator의 높은 RBAC 권한 때문에 일반 애플리케이션 Pod의 취약점보다 파급력이 크다. 따라서 Operator 이미지를 정기적으로 스캔(Trivy, Snyk)하고, 새 버전이 출시되면 우선적으로 업데이트해야 한다.
 
 **심화 질문**: Operator를 OLM(Operator Lifecycle Manager)으로 관리할 때, OLM이 자동 생성하는 RBAC 리소스는 어떤 것이 있으며, Operator 업그레이드 시 RBAC 권한이 자동으로 확장되는 위험을 어떻게 방지하는가?
+
+
+---
+
+> **[이관 완료]** write/09_cloud/kubernetes/11-01.RBAC과 보안.md · deepdive/11-01.RBAC과 보안 점검.md (2026-04-19)

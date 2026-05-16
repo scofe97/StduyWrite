@@ -225,3 +225,8 @@
 - **한계**: (1) Ephemeral container는 리소스 제한(requests/limits)을 설정할 수 없다. (2) 추가 후 삭제가 자동화되지 않아 Pod가 남아 있으면 계속 실행된다 (메모리 소비). (3) 일부 네임스페이스는 공유되지 않는다 (예: User 네임스페이스). (4) 모든 Kubernetes 버전/배포판에서 지원되지 않을 수 있다 (Feature Gate 확인 필요).
 
 **심화 질문**: `kubectl debug`로 복사본 Pod를 생성하는 방법(`--copy-to`)은? 원본 Pod를 건드리지 않고 디버깅용 복사본을 만들어 이미지나 커맨드를 변경하는 시나리오는 언제 유용한가? 프로덕션에서 ephemeral container를 사용할 때 보안 고려사항은?
+
+
+---
+
+> **[이관 완료]** write/09_cloud/kubernetes/10-01.모니터링과 트러블슈팅.md · deepdive/10-01.모니터링과 트러블슈팅 점검.md (2026-04-19)

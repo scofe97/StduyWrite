@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/deepdive/06-01.Operator 패턴 점검.md (2026-04-19) -->
+
 # Ch07: Operator 패턴 - 점검 질문
 
 ## 질문 1: CRD와 ConfigMap의 차이 - 왜 CRD를 만들어야 하는가?

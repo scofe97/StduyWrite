@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/deepdive/01-01.로컬 클러스터 구성 점검.md (2026-04-19) -->
+
 # Ch01. 로컬 클러스터 구성 - 점검 질문
 
 ## Q1: minikube vs kind vs k3d 선택 기준은 무엇인가?

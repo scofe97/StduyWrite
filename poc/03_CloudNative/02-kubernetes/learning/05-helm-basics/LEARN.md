@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/05-01.Helm 기초.md (2026-04-19) -->
+
 # Ch05: Helm 기초 - 쿠버네티스 패키지 관리자
 
 > 📌 **핵심 요약**

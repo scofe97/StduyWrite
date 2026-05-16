@@ -987,3 +987,8 @@ curl myapp.test.local/v2
 - **멀티팀, 복잡한 라우팅, 다중 프로토콜**: Gateway API가 적합하다. 역할 분리와 표준화된 기능이 운영 효율성을 높인다
 - **새 프로젝트**: Gateway API로 시작하는 것을 권장한다. Ingress는 더 이상 새로운 기능이 추가되지 않는다
 - **기존 프로젝트**: 어노테이션 의존도가 높으면 점진적 전환, 낮으면 전면 전환을 고려한다
+
+
+---
+
+> **[이관 완료]** write/09_cloud/kubernetes/04-02.Ingress와 Gateway API.md · deepdive/04-02.Ingress와 Gateway API 점검.md (2026-04-19)

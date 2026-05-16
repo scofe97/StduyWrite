@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/08-01.MySQL Operator.md (2026-04-19) -->
+
 # Ch08. MySQL Operator for Kubernetes - K8s 위에서 MySQL HA 자동화하기
 
 > 📌 **핵심 요약**

@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/13-01.SonarQube on K8s.md (2026-04-19) -->
+
 # Ch13. SonarQube on Kubernetes - 코드 품질 자동화
 
 > 📌 **핵심 요약**

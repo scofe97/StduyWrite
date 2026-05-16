@@ -148,3 +148,8 @@
 
 **심화 질문**: Tiered Storage에서 객체 스토리지의 데이터를 읽는 컨슈머의 레이턴시는 로컬 디스크 대비 어떻게 달라지는가? 실시간 처리와 배치 처리에서 Tiered Storage의 적용 전략은 어떻게 다른가?
 
+
+
+---
+
+> **[이관 완료]** write/09_cloud/kubernetes/06-06.Redpanda Operator.md · deepdive/06-06.Redpanda Operator 점검.md (2026-04-19)

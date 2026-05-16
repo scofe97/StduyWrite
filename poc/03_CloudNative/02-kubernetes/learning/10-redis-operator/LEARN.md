@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/10-01.Redis Operator.md (2026-04-19) -->
+
 # Ch10: Redis Operator로 Redis Cluster/Sentinel 운영하기
 
 > 📌 **핵심 요약**

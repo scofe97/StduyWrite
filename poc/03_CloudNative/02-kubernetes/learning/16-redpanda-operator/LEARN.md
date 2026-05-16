@@ -811,3 +811,8 @@ helm uninstall redpanda-operator -n redpanda
 - [Redpanda vs Kafka 벤치마크](https://redpanda.com/blog/kafka-vs-redpanda-performance-benchmark)
 - [Strimzi 공식 문서](https://strimzi.io/documentation/) (비교 참조)
 - [Ch11: Strimzi Kafka Operator](../11-kafka-operator/LEARN.md) (이전 챕터 참조)
+
+
+---
+
+> **[이관 완료]** write/09_cloud/kubernetes/06-06.Redpanda Operator.md · deepdive/06-06.Redpanda Operator 점검.md (2026-04-19)

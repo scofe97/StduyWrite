@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/12-01.Jenkins on K8s.md (2026-04-19) -->
+
 # Ch12. Jenkins on Kubernetes - 네이티브 CI/CD 플랫폼 구축
 
 > 📌 **핵심 요약**

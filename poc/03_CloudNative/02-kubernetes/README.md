@@ -1,5 +1,7 @@
 # 02-kubernetes: 쿠버네티스 실전 운영 실습
 
+> 이 카테고리는 write/09_cloud/kubernetes/로 이관 완료. 삭제 예정 (2026-05-19). 최종본과 실습은 `write/09_cloud/kubernetes/`를 기준으로 참조한다.
+
 ## 프로젝트 개요
 
 쿠버네티스를 로컬 환경에서 직접 운영하며 핵심 개념과 패턴을 체득합니다. CKA 이론은 `docs/03_CloudNative/02_Kubernetes/`에서 이미 23챕터를 다루고 있지만, 이론만으로는 프로덕션 환경의 복잡성을 이해하기 어렵습니다. 이 프로젝트는 Minikube로 프로덕션 유사 환경을 구축하고, Helm과 Operator 패턴을 통해 MySQL/PostgreSQL/Redis/Kafka 같은 Stateful 워크로드를 직접 운영하면서 "왜 쿠버네티스가 필요한지"를 체감하는 것이 목표입니다.

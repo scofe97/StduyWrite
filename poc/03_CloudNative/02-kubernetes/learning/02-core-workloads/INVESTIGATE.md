@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/deepdive/02-01.핵심 워크로드 점검.md (2026-04-19) -->
+
 # Ch02. 핵심 워크로드 - 점검 질문
 
 ## Q1: Pod 안에 여러 컨테이너를 넣는 경우는 언제인가?

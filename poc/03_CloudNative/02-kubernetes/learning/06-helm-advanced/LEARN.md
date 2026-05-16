@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/06-01.Helm 고급.md (2026-04-19) -->
+
 # Ch06: Helm 고급 - 차트 개발과 템플릿 설계
 
 > 📌 **핵심 요약**

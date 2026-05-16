@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/deepdive/06-03.PostgreSQL Operator 점검.md (2026-04-19) -->
+
 # Ch09. CloudNativePG 점검 질문
 
 ## Q1. CloudNativePG vs Zalando Postgres Operator 선택 기준

@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/deepdive/03-01.스토리지와 상태 점검.md (2026-04-19) -->
+
 # Ch03. 스토리지와 상태 관리 - 점검 질문
 
 ## Q1. emptyDir vs hostPath vs PVC 선택 기준

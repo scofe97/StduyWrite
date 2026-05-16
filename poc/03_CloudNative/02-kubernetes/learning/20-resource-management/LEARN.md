@@ -869,3 +869,8 @@ Kubernetes 리소스 관리는 클러스터 안정성과 비용 효율성의 핵
 7. **모니터링**: `kubectl top`으로 빠른 확인, Prometheus + Grafana로 장기 트렌드 분석, CPU throttling 비율과 메모리 사용률을 핵심 지표로 관찰한다.
 
 **다음 단계**: 실제 프로덕션 클러스터에서 VPA를 `Off` 모드로 설치하여 추천값을 수집하고, LimitRange + ResourceQuota를 네임스페이스별로 설정한다. Grafana 대시보드에 리소스 효율성 패널을 추가하여 팀 전체가 리소스 사용 현황을 모니터링할 수 있는 환경을 구축한다.
+
+
+---
+
+> **[이관 완료]** write/09_cloud/kubernetes/13-01.자원 관리.md · deepdive/13-01.자원 관리 점검.md (2026-04-19)

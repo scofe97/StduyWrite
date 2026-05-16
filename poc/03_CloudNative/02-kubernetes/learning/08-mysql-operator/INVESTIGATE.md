@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/deepdive/06-02.MySQL Operator 점검.md (2026-04-19) -->
+
 # Ch08. MySQL Operator 점검 질문
 
 ## Q1. InnoDB Cluster에서 Group Replication의 역할과 동작 원리

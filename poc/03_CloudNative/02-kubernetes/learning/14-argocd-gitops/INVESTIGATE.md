@@ -291,3 +291,8 @@
   모든 리소스가 배포된 후, 헬스체크 Job으로 엔드투엔드 테스트를 수행한다. 실패 시 전체 Sync가 실패로 표시된다.
 
 **심화 질문**: Sync Wave 중간에 실패하면 어떻게 되는가? 이미 생성된 이전 Wave의 리소스는 롤백되는가, 아니면 그대로 남는가? Rollback을 자동화하려면 어떤 전략을 사용해야 하는가?
+
+
+---
+
+> **[이관 완료]** write/09_cloud/kubernetes/09-01.ArgoCD와 GitOps.md · deepdive/09-01.ArgoCD와 GitOps 점검.md (2026-04-19)
