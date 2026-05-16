@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/18-01.Istio 성능 튜닝.md (2026-04-19) -->
+
 # Ch18. Istio 성능 튜닝
 ---
 > 📌 Istio 컨트롤 플레인은 서비스 수와 설정 변경 빈도에 비례해 부하가 증가한다. Golden Signals로 병목 위치를 정확히 짚고, Sidecar CRD · discoverySelectors · 디바운스 튜닝 · 리소스 스케일링을 순서대로 적용하면 대부분의 성능 문제를 해결할 수 있다.

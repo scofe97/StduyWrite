@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/23-01.비교 매트릭스.md (2026-04-19) -->
+
 # Ch23. Linkerd vs Istio vs Cilium 비교
 
 > **핵심 요약**

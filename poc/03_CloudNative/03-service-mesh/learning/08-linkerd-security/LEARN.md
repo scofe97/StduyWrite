@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/08-01.Linkerd 보안.md @2026-04-19 -->
+
 # Ch08. Linkerd 보안과 정책
 
 > **핵심 요약**

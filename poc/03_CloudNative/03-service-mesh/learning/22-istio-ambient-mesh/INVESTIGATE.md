@@ -1,3 +1,8 @@
+<!-- migrated:
+  - write/09_cloud/service-mesh/deepdive/22-01.Istio Ambient Mesh 실습.md
+  - write/09_cloud/service-mesh/deepdive/22-02.Istio Ambient Mesh 점검.md
+  (2026-04-19) -->
+
 # Ch22. Istio Ambient Mesh — Deep Dive Questions
 
 ## Q1. ztunnel DaemonSet 장애 시 폭발 반경(blast radius)은 어떻게 결정되는가?

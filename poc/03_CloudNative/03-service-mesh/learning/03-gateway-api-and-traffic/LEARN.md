@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/03-01.Gateway API와 트래픽.md (2026-04-19) -->
+
 # Ch03. Gateway API와 트래픽 관리
 
 > **📌 핵심 요약**

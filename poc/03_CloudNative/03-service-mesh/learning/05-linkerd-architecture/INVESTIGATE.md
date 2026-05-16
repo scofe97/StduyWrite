@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/deepdive/05-02.Linkerd 아키텍처 점검.md (2026-04-19) -->
+
 # Ch05. Linkerd 아키텍처 — Deep Dive Questions
 
 ## Q1. Buoyant Enterprise for Linkerd(BEL) 라이선스 변경이 오픈소스 생태계에 미친 실질적 영향은 무엇인가?

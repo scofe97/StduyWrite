@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/deepdive/11-01.Istio 설치 실습.md (2026-04-19) -->
+
 # Ch11. Istio 설치와 메시 구성 — Deep Dive Questions
 
 ## Q1. 리비전 기반 카나리 업그레이드에서 롤백이 예상대로 동작하지 않는 시나리오는 무엇인가?

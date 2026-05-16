@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/24-01.eBPF와 Cilium.md (2026-04-19) -->
+
 # Ch24. eBPF와 Cilium Service Mesh
 
 > **핵심 요약**

@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/deepdive/17-01.Istio 트러블슈팅 실습.md (2026-04-19) -->
+
 # Ch17. Istio 트러블슈팅 — Deep Dive Questions
 
 ---

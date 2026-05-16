@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/deepdive/08-01.Linkerd 보안 실습.md (2026-04-19) -->
+
 # Ch08. Linkerd 보안과 정책 — Deep Dive Questions
 
 ## Q1. 기존 허용 중심 네트워크에서 default-deny 정책으로 마이그레이션할 때 어떤 장애 시나리오가 발생하며, 이를 안전하게 전환하는 순서는 무엇인가?

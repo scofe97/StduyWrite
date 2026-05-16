@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/deepdive/16-01.Istio 관측성 실습.md (2026-04-19) -->
+
 # Ch16. Istio 관측성 — Deep Dive Questions
 
 ## Q1. 메트릭 레이블이 늘어날 때 카디널리티 폭발이 발생하는 지점은 어디인가?

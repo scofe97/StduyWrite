@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/deepdive/15-01.Istio 보안 실습.md (2026-04-19) -->
+
 # Ch15. Istio 보안 — Deep Dive Questions
 
 ## Q1. STRICT mTLS로 마이그레이션하는 과정에서 어떤 연결이 끊기는가?

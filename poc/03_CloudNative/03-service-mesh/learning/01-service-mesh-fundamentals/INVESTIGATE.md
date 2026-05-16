@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/deepdive/01-02.서비스 메시 기초 점검.md (2026-04-19) -->
+
 # Ch01. Service Mesh 기초와 2026 지형도 — Deep Dive Questions
 
 ## Q1. 라이브러리 방식(Hystrix, Resilience4j)이 이미 재시도·서킷 브레이커를 제공하는데, 사이드카 기반 메시는 어떤 문제를 실제로 해결하는가?

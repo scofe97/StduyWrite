@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/19-01.Istio EnvoyFilter.md (2026-04-19) -->
+
 # Ch19. EnvoyFilter
 ---
 > 📌 EnvoyFilter는 Istio가 공식 API로 노출하지 않은 Envoy 프록시 내부 동작을 직접 제어하는 탈출구다. 강력하지만 잘못 쓰면 메시 전체를 중단시킬 수 있어, 표준 API가 한계에 부딪혔을 때만 사용한다.

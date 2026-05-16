@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/deepdive/12-01.Istio Ingress Gateway 실습.md (2026-04-19) -->
+
 # Ch12. Istio Ingress Gateway — Deep Dive Questions
 
 ## Q1. Istio Gateway API와 Kubernetes Gateway API 중 어느 것을 선택해야 하는가? 마이그레이션 경로는?

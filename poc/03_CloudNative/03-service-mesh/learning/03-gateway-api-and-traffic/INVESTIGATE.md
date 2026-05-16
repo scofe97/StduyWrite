@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/deepdive/03-02.Gateway API와 트래픽 점검.md (2026-04-19) -->
+
 # Ch03. Gateway API와 트래픽 관리 — Deep Dive Questions
 
 ## Q1. Kubernetes Gateway API는 Ingress의 어떤 근본적인 한계를 해결하려 했는가? 그리고 그 해결책이 도입하는 새로운 복잡성은 무엇인가?

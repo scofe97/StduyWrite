@@ -1,3 +1,8 @@
+<!-- migrated:
+  - write/09_cloud/service-mesh/deepdive/24-01.eBPF와 Cilium 실습.md
+  - write/09_cloud/service-mesh/deepdive/24-02.eBPF와 Cilium 점검.md
+  (2026-04-19) -->
+
 # Ch24. eBPF와 Cilium Service Mesh — Deep Dive Questions
 
 ## Q1. eBPF Verifier의 한계가 복잡한 프로그램 개발에 어떤 영향을 미치는가?

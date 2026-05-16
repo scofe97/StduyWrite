@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/deepdive/14-01.Istio 레질리언스 실습.md (2026-04-19) -->
+
 # Ch14. 네트워크 복원력 — Deep Dive Questions
 ---
 > Istio가 제공하는 복원력 기능(로드 밸런싱, 재시도, 서킷 브레이킹, 이상값 감지, Connection Pool, 타임아웃)의 설계 의도와 상호작용, 그리고 실무에서 어떻게 계층적으로 조합하는지를 탐구한다.

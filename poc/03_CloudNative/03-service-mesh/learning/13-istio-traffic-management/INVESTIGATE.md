@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/deepdive/13-01.Istio 트래픽 관리 실습.md (2026-04-19) -->
+
 # Ch13. Istio 트래픽 관리 — Deep Dive Questions
 
 ## Q1. VirtualService에서 Kubernetes Gateway API로 마이그레이션할 때 표현 불가능한 기능은 무엇인가?

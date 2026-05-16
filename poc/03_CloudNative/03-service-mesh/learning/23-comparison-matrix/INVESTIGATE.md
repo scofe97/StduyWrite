@@ -1,3 +1,8 @@
+<!-- migrated:
+  - write/09_cloud/service-mesh/deepdive/23-01.비교 매트릭스 실습.md
+  - write/09_cloud/service-mesh/deepdive/23-02.비교 매트릭스 점검.md
+  (2026-04-19) -->
+
 # Ch23. Linkerd vs Istio vs Cilium 비교 — Deep Dive Questions
 
 ## Q1. 벤치마크 수치는 얼마나 신뢰할 수 있는가 — 합성 테스트와 실제 워크로드의 차이

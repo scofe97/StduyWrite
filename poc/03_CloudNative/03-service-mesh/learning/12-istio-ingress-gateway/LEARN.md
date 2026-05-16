@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/12-01.Istio Ingress Gateway.md @2026-04-19 -->
+
 # Ch12. Istio Ingress Gateway
 
 > 📌 **핵심 요약**: Ingress Gateway는 외부 트래픽이 서비스 메시로 진입하는 첫 번째 문이다. Kubernetes Ingress가 단순한 HTTP 라우팅만 제공한다면, Istio Gateway는 TLS 종료, SNI 기반 멀티 호스트, TCP 프록시까지 처리한다. Gateway 리소스로 "어떤 포트와 호스트를 열것인가"를 정의하고, VirtualService로 "어느 백엔드로 보낼 것인가"를 연결하는 이분법적 설계가 핵심이다.
