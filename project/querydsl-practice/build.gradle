@@ -1,0 +1,63 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.3'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.runnershigh'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // datasource-proxy — SQL + 결과 한 블록 출력 (학습용 가독성)
+    implementation 'com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter:1.9.1'
+    implementation 'net.ttddyy:datasource-proxy:1.10'
+
+    // QueryDSL — OpenFeign fork (원조 archived → io.github.openfeign.querydsl 좌표)
+    // 자세한 거버넌스 배경: write/06_data/spring/querydsl/01-01.QueryDSL 입문과 6.12의 위치.md
+    implementation 'io.github.openfeign.querydsl:querydsl-jpa:6.12'
+    annotationProcessor 'io.github.openfeign.querydsl:querydsl-apt:6.12:jakarta'
+    annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+    annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    // DB — H2 in-memory
+    runtimeOnly 'com.h2database:h2'
+
+    // Test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.assertj:assertj-core'
+}
+
+// QueryDSL 6.12 — Q클래스가 build/generated/sources/annotationProcessor/java/main 에 생성됨.
+// 별도 sourceSets 등록은 Spring Boot 3 + Gradle 8 에서 plugin 이 자동 처리하므로 불필요.
+// clean 시 함께 지워지도록 generated dir 만 명시.
+clean {
+    delete file('build/generated')
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    testLogging {
+        showStandardStreams = true
+        events 'passed', 'skipped', 'failed'
+    }
+}
