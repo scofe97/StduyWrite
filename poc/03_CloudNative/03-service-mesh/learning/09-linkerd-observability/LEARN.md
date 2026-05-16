@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/09-01.Linkerd 관측성.md @2026-04-19 -->
+
 # Ch09. Linkerd 관측성
 
 > **핵심 요약**

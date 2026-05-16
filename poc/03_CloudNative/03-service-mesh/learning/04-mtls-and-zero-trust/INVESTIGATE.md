@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/deepdive/04-02.mTLS와 제로 트러스트 점검.md (2026-04-19) -->
+
 # Ch04. mTLS와 제로 트러스트 — Deep Dive Questions
 
 ## Q1. 인증서 교체(certificate rotation) 실패 시나리오는 어떻게 되고, 그것이 서비스 전체 장애로 이어지지 않도록 어떤 설계가 필요한가?

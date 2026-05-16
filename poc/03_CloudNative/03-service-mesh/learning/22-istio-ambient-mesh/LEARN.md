@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/22-01.Istio Ambient Mesh.md (2026-04-19) -->
+
 # Ch22. Istio Ambient Mesh
 
 > **핵심 요약**

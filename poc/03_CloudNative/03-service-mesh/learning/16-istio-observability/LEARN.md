@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/16-01.Istio 관측성.md (2026-04-19) -->
+
 # Ch16. Istio 관측성
 
 > **📌 핵심 요약**

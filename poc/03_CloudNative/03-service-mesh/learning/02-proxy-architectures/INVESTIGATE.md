@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/deepdive/02-02.프록시 아키텍처 점검.md (2026-04-19) -->
+
 # Ch02. 프록시 아키텍처 비교 — Deep Dive Questions
 
 ## Q1. Envoy가 왜 서비스 메시 표준 데이터 플레인이 되었는가? 기술적 설계 결정 중 어떤 것이 이 위치를 만들었고, 그 선택이 가져온 트레이드오프는 무엇인가?

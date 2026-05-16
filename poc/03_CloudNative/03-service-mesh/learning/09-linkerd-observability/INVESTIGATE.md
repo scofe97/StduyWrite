@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/deepdive/09-01.Linkerd 관측성 실습.md (2026-04-19) -->
+
 # Ch09. Linkerd 관측성 — Deep Dive Questions
 
 ## Q1. Linkerd viz 익스텐션이 프로덕션 클러스터에서 소비하는 리소스는 얼마이며, 어떤 조건에서 이 비용이 정당화되는가?

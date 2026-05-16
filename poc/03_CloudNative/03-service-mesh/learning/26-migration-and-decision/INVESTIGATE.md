@@ -1,3 +1,8 @@
+<!-- migrated:
+  - write/09_cloud/service-mesh/deepdive/26-01.도입 전략과 의사결정 실습.md
+  - write/09_cloud/service-mesh/deepdive/26-02.도입 전략과 의사결정 점검.md
+  (2026-04-19) -->
+
 # Ch26. 도입 전략과 의사결정 — Deep Dive Questions
 
 ## Q1. 서비스 메시를 제거(De-Mesh)해야 할 때 어떤 전략이 있으며, 이것이 실제로 가능한가?

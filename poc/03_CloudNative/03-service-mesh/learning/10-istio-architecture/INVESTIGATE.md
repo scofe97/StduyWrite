@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/deepdive/10-01.Istio 아키텍처 실습.md (2026-04-19) -->
+
 # Ch10. Istio 아키텍처 — Deep Dive Questions
 
 ## Q1. istiod 모놀리식 전환은 실제로 안전한가? Mixer 시절과 비교했을 때 장애 폭발 반경은 줄었을까?

@@ -1,5 +1,7 @@
 # Service Mesh 학습 프로젝트
 
+> 이 카테고리는 write/09_cloud/service-mesh/로 이관 완료. 삭제 예정 (2026-05-19). 최종본과 실습은 `write/09_cloud/service-mesh/`를 기준으로 참조한다.
+
 Service Mesh 핵심 개념(Linkerd + Istio + Cilium)을 학습하고 Kind 클러스터에서 실습하는 프로젝트.
 
 ## 구조

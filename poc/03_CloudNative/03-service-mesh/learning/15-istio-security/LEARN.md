@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/15-01.Istio 보안.md (2026-04-19) -->
+
 # Ch15. Istio 보안
 
 > **📌 핵심 요약**

@@ -1,3 +1,8 @@
+<!-- migrated:
+  - write/09_cloud/service-mesh/deepdive/20-01.멀티클러스터 실습.md
+  - write/09_cloud/service-mesh/deepdive/20-02.멀티클러스터 점검.md
+  (2026-04-19) -->
+
 # Ch20. 멀티클러스터 서비스 메시 — Deep Dive Questions
 
 ## Q1. 멀티클러스터 환경에서 Split-Brain이 발생했을 때, 서비스 메시는 어떻게 일관성을 유지해야 하는가?

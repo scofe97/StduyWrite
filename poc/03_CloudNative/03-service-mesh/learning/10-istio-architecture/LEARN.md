@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/10-01.Istio 아키텍처.md @2026-04-19 -->
+
 # Ch10. Istio 아키텍처 (v1.29)
 
 > **핵심 요약**

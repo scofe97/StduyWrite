@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/06-01.Linkerd 설치.md (2026-04-19) -->
+
 # Ch06. Linkerd 설치와 메시 구성
 
 > **핵심 요약**

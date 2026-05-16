@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/17-01.Istio 트러블슈팅.md (2026-04-19) -->
+
 # Ch17. Istio 트러블슈팅
 
 > 📌 **핵심 요약**: Istio 트러블슈팅은 "데이터 플레인 문제인가, 컨트롤 플레인 문제인가"를 먼저 구분하는 것에서 시작한다. `istioctl proxy-status`로 동기화 상태를 확인하고, Envoy Admin Interface와 `istioctl proxy-config` 명령어 체계로 설정 불일치를 추적한다. 텔레메트리(Grafana 클라이언트/서버 관점 비교, Prometheus `response_flags` 쿼리)는 문제의 범위를 좁히는 데 쓰고, Envoy Access Log와 Response Flag는 최종 원인을 확정하는 데 활용한다.

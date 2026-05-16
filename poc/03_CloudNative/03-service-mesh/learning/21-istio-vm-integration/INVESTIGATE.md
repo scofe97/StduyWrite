@@ -1,3 +1,8 @@
+<!-- migrated:
+  - write/09_cloud/service-mesh/deepdive/21-01.Istio VM 통합 실습.md
+  - write/09_cloud/service-mesh/deepdive/21-02.Istio VM 통합 점검.md
+  (2026-04-19) -->
+
 # Ch21. Istio와 가상머신 통합 — Deep Dive Questions
 
 ---

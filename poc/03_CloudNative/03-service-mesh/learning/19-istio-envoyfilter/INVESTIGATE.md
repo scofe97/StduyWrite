@@ -1,3 +1,8 @@
+<!-- migrated:
+  - write/09_cloud/service-mesh/deepdive/19-01.Istio EnvoyFilter 실습.md
+  - write/09_cloud/service-mesh/deepdive/19-02.Istio EnvoyFilter 점검.md
+  (2026-04-19) -->
+
 # Ch19. EnvoyFilter — 심화 탐구
 ---
 > 📌 EnvoyFilter는 올바르게 사용하면 강력한 확장 수단이지만, 잘못된 선택과 관리 부재는 장기적인 운영 부채를 남긴다. 이 문서는 실제 운영에서 마주치는 판단 문제를 다룬다.

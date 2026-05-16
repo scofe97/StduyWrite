@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/13-01.Istio 트래픽 관리.md (2026-04-19) -->
+
 # Ch13. Istio 트래픽 관리
 
 > 📌 **핵심 요약**: 트래픽 관리는 Istio의 핵심 가치다. VirtualService와 DestinationRule로 코드 한 줄 바꾸지 않고 카나리 배포, 장애 주입, 서킷 브레이킹을 구현할 수 있다. Gateway API로의 전환이 진행 중이므로, 두 방식을 함께 이해하는 것이 현실적인 접근이다.

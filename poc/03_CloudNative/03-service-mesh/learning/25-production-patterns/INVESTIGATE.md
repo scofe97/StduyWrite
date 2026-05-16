@@ -1,3 +1,8 @@
+<!-- migrated:
+  - write/09_cloud/service-mesh/deepdive/25-01.프로덕션 패턴 실습.md
+  - write/09_cloud/service-mesh/deepdive/25-02.프로덕션 패턴 점검.md
+  (2026-04-19) -->
+
 # Ch25. 프로덕션 패턴 — Deep Dive Questions
 
 ## Q1. 카나리 분석에서 어떤 메트릭을 선택하면 실제로 의미 있는 배포 안전성을 확보할 수 있는가?

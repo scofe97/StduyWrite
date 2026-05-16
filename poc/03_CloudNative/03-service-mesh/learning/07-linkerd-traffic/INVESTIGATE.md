@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/deepdive/07-01.Linkerd 트래픽 실습.md (2026-04-19) -->
+
 # Ch07. Linkerd 트래픽 관리 — Deep Dive Questions
 
 ## Q1. EWMA 기반 로드 밸런싱이 Round Robin보다 실제로 유리한 시나리오는 어디이며, 그 반대는 어디인가?

@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/deepdive/06-02.Linkerd 설치 점검.md (2026-04-19) -->
+
 # Ch06. Linkerd 설치와 메시 구성 — Deep Dive Questions
 
 ## Q1. 프로덕션 환경에서 신뢰 앵커(trust anchor)를 교체할 때 어떤 중단 없이 수행할 수 있는가?

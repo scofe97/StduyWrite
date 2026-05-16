@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/01-01.서비스 메시 기초.md (2026-04-19) -->
+
 # Ch01. Service Mesh 기초와 2026 지형도
 
 > **📌 핵심 요약**

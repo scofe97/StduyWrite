@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/service-mesh/05-01.Linkerd 아키텍처.md (2026-04-19) -->
+
 # Ch05. Linkerd 아키텍처
 
 > **핵심 요약**
