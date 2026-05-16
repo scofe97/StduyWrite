@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/deepdive/07-01.Jenkins on K8s 점검.md (2026-04-19) -->
+
 # Ch12. Jenkins on Kubernetes - 심화 점검
 
 ## 점검 질문

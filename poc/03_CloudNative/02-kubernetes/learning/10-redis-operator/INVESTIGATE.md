@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/deepdive/06-04.Redis Operator 점검.md (2026-04-19) -->
+
 # Ch10: Redis Operator 점검 질문
 
 ## Q1: Redis Sentinel vs Cluster 모드 선택 기준

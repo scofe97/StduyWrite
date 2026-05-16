@@ -885,3 +885,8 @@ kubectl get roles,clusterroles -A -o json | jq '.items[] | select(.rules[]?.verb
 - [External Secrets Operator](https://external-secrets.io/)
 - [Kubernetes Audit](https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/)
 - [CIS Kubernetes Benchmark](https://www.cisecurity.org/benchmark/kubernetes)
+
+
+---
+
+> **[이관 완료]** write/09_cloud/kubernetes/11-01.RBAC과 보안.md · deepdive/11-01.RBAC과 보안 점검.md (2026-04-19)

@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/09-01.PostgreSQL Operator.md (2026-04-19) -->
+
 # Ch09. CloudNativePG Operator - PostgreSQL을 K8s 네이티브하게 관리하기
 
 > 📌 **핵심 요약**

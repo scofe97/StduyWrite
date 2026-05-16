@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/deepdive/13-01.자원 관리 점검.md (2026-04-19) -->
+
 # Ch20. Resource Management 점검 질문
 
 ## Q1: Requests 없이 Limits만 설정하면 어떻게 되는가?
@@ -158,3 +160,8 @@
 - **실무 권장 조합**: 대부분의 경우 HPA를 메인으로 사용하고, VPA는 Off 모드로 추천값만 참고한다. 메모리 최적화가 필요한 워크로드(Java의 JVM Heap)에는 VPA를 메모리에만 적용하고, HPA는 CPU 또는 커스텀 메트릭으로 운영한다.
 
 **심화 질문**: KEDA(Kubernetes Event-Driven Autoscaling)는 HPA/VPA와 어떻게 다른가? KEDA는 이벤트 소스(Kafka lag, Redis queue length)를 기반으로 스케일링하는데, VPA와 함께 사용할 때 주의할 점은 무엇인가?
+
+
+---
+
+> **[이관 완료]** write/09_cloud/kubernetes/13-01.자원 관리.md · deepdive/13-01.자원 관리 점검.md (2026-04-19)

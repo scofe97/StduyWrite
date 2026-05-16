@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/deepdive/05-01.Helm 기초 점검.md (2026-04-19) -->
+
 # Ch05: Helm 기초 - 점검 질문
 
 이 문서는 Ch05에서 배운 Helm 기본 개념을 실전 관점에서 점검합니다. 각 질문은 실무에서 자주 마주치는 상황을 다룹니다.

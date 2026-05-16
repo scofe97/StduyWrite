@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/02-01.핵심 워크로드.md (2026-04-19) -->
+
 # Ch02. 핵심 워크로드 - Pod, Deployment, Service의 삼각관계
 
 > 📌 **핵심 요약**

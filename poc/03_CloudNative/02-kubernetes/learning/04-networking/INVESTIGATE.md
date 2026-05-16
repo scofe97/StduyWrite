@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/deepdive/04-01.네트워킹 점검.md (2026-04-19) -->
+
 # Ch04. 네트워킹 - 점검 질문
 
 ## Q1. kube-proxy의 iptables 모드와 IPVS 모드 차이

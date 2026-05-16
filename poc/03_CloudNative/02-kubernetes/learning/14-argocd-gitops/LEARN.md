@@ -829,3 +829,8 @@ GitOps는 단순히 배포 자동화를 넘어, 클러스터 운영의 투명성
 8. **Rollback**: `argocd app rollback` 또는 `git revert` (후자 권장)
 
 **다음 단계**: Ch15에서 kube-prometheus-stack으로 ArgoCD 자체를 모니터링하고, Sync 실패 시 AlertManager로 알림을 받는 방법을 다룬다. GitOps로 배포한 애플리케이션의 헬스체크, 로그 수집, 트러블슈팅 기법을 학습한다.
+
+
+---
+
+> **[이관 완료]** write/09_cloud/kubernetes/09-01.ArgoCD와 GitOps.md · deepdive/09-01.ArgoCD와 GitOps 점검.md (2026-04-19)

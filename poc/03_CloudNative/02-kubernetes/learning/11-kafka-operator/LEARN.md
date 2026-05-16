@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/11-01.Kafka Operator.md (2026-04-19) -->
+
 # Ch11: Strimzi Kafka Operator로 Kafka 클러스터 관리하기
 
 > 📌 **핵심 요약**

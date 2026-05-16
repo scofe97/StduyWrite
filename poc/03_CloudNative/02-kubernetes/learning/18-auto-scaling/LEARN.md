@@ -837,3 +837,8 @@ spec:
 ```
 
 **Graceful Shutdown**: Pod가 축소될 때 처리 중인 요청을 정상적으로 완료해야 한다. `terminationGracePeriodSeconds`를 충분히 설정하고, 애플리케이션에서 SIGTERM 시그널을 처리하여 진행 중인 작업을 마무리하도록 구현해야 한다.
+
+
+---
+
+> **[이관 완료]** write/09_cloud/kubernetes/12-01.오토스케일링.md · deepdive/12-01.오토스케일링 점검.md (2026-04-19)

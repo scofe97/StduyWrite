@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/deepdive/06-05.Kafka Operator 점검.md (2026-04-19) -->
+
 # Ch11: Strimzi Kafka Operator 점검 질문
 
 ## Q1: Strimzi의 Cluster/Entity/Topic/User Operator 각각의 역할

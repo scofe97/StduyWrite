@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/01-01.로컬 클러스터 구성.md (2026-04-19) -->
+
 # Ch01. 로컬 클러스터 구성 - minikube로 시작하는 Kubernetes
 
 > 📌 **핵심 요약**

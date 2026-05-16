@@ -1,3 +1,5 @@
+<!-- migrated: write/09_cloud/kubernetes/04-01.네트워킹.md (2026-04-19) -->
+
 # Ch04. 네트워킹
 
 > 📌 **핵심 요약**
