@@ -4,13 +4,13 @@ tags: [moc, spring, spring-boot]
 status: final
 related:
   - ../README.md
-  - ../../../03_architecture/spring/README.md
+  - ../../../03_architecture/README.md
   - ../../../05_messaging/spring/README.md
   - ../../../06_data/spring/README.md
   - ../../../07_observability/spring/README.md
   - ../../../09_cloud/spring/README.md
   - ../../../11_security/02_spring-security/README.md
-updated: 2026-04-19
+updated: 2026-05-09
 ---
 
 # Spring 학습 통합 MOC
@@ -30,16 +30,17 @@ updated: 2026-04-19
 | [01_core/](01_core/) | IoC, DI, AOP, Bean Lifecycle, ApplicationContext |
 | [02_boot/](02_boot/) | auto-configuration, starter, profiles, properties |
 | [03_web/](03_web/) | Spring MVC, Controller, Filter/Interceptor |
-| [04_webflux/](04_webflux/) | Reactive, WebClient, Mono/Flux |
+| [04_webflux/](04_webflux/) | Reactive, WebClient, Mono/Flux (2026-05-09 WebClient 11편 묶음 추가) |
+| [05_testing/](05_testing/) | JUnit5/Mockito/MockMvc/@SpringBootTest/Testcontainers/EmbeddedKafka/ArchUnit/WireMock (2026-05-09 9편 묶음 추가) |
 | [05_internals/](05_internals/) | Proxy 기반 AOP, ClassLoader, Reflection 심화 |
 
 ### 도메인별 통합 (다른 카테고리)
 
 | 주제 | 경로 | 다루는 내용 |
 |------|------|------------|
-| 설계 철학 | [`03_architecture/spring/`](../../../03_architecture/spring/) | IoC를 설계 패턴 관점으로, AOP의 Decorator 해석 |
+| 설계 철학 | [`03_architecture/`](../../../03_architecture/README.md) "10. 후속 주제" | IoC를 설계 패턴 관점으로, AOP의 Decorator 해석 (예정) |
 | 메시징 | [`05_messaging/spring/`](../../../05_messaging/spring/) | `@KafkaListener`, Producer Config, Error Handler |
-| 영속성 | [`06_data/spring/`](../../../06_data/spring/) | Spring Data JPA, R2DBC, `@Transactional` |
+| 영속성 | [`06_data/spring/`](../../../06_data/spring/) | Spring Data JPA, R2DBC, `@Transactional`, [QueryDSL 6.12 학습 묶음](../../../06_data/spring/querydsl/README.md) |
 | 관측성 | [`07_observability/spring/`](../../../07_observability/spring/) | Spring Actuator, Micrometer 통합 |
 | 클라우드 | [`09_cloud/spring/`](../../../09_cloud/spring/) | Spring Cloud, Gateway, Config Server |
 | 보안 | [`11_security/02_spring-security/`](../../../11_security/02_spring-security/) | Filter Chain, AuthenticationManager, Method Security |

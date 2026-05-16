@@ -33,7 +33,7 @@ title: EDA 기초
 tags: [kafka, event-driven]
 status: draft       # draft | final | archived
 related:
-  - ../03_architecture/04_EventDriven/04-01.이벤트 기반.md
+  - ../03_architecture/03_distributed/03-06.이벤트 기반 아키텍처.md
 updated: 2026-04-19
 ---
 ```
