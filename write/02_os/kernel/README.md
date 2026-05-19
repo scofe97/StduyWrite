@@ -24,6 +24,8 @@ updated: 2026-04-26
 | 01-03 | [마운트 네임스페이스와 propagation](./01-03.마운트%20네임스페이스와%20propagation.md) | private/shared/slave/unbindable 4종과 K8s `mountPropagation` 옵션은 CSI·HostPath 사고를 어떻게 결정하는가? |
 | 01-04 | [cgroup 파일시스템 실습](./01-04.cgroup%20파일시스템%20실습.md) | `/sys/fs/cgroup` 트리에서 Pod별 디렉토리를 찾아 `memory.max`·`cpu.max`와 K8s `requests`/`limits`를 어떻게 매핑하는가? |
 | 01-05 | [namespace 실습 — 8가지 격리와 unshare](./01-05.namespace%20실습%20—%208가지%20격리와%20unshare.md) | `unshare`로 PID·UTS·MNT·NET 격리를 직접 만들고 호스트(2)–Pod(3)–컨테이너(2) 그루핑으로 외울 수 있는가? |
+| 01-06 | [cgroup 사례 — Endowus OOMKilled](./01-06.cgroup%20사례%20—%20Endowus%20OOMKilled.md) | Pod 6GB·JVM 힙 4.37GB인데 OOMKilled가 반복되는 이유는? cgroup의 RSS 기준이 JVM 힙과 어떻게 다르며, jimage·Akka·Netty가 만든 사각지대 1.63GB를 어떻게 추적했는가? |
+| 01-07 | [OverlayFS와 user namespace — Netflix UID 격리](./01-07.OverlayFS와%20user%20namespace%20—%20Netflix%20UID%20격리.md) | user namespace + ID map이 보안을 어떻게 강화했고, OverlayFS lowerdir 마운트가 글로벌 락 폭주를 일으켜 노드 마비로 번진 5단계 나비 효과는? Linux 6.3 recursive bind mount의 해결 원리는? |
 
 
 
