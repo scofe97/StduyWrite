@@ -4,7 +4,7 @@ tags: [moc, python, testing, pytest, integration-test, qa]
 status: final
 related:
   - ../README.md
-  - ../../java/spring/05_testing/README.md
+  - ../../../12_spring/05_testing/README.md
 updated: 2026-05-10
 ---
 
@@ -18,7 +18,7 @@ Spring Boot 애플리케이션을 외부에서 pytest로 검증하는 Python 클
 
 ## 이 묶음의 위치
 
-[`01_language/java/spring/05_testing/`](../../java/spring/05_testing/README.md) 묶음이 Spring Boot 애플리케이션 *내부*에서 단위·슬라이스·통합·E2E를 어떻게 쌓는지 다룬다면, 이 묶음은 같은 애플리케이션을 *외부* 프로세스에서 두드려 검증하는 시각을 담는다. 두 묶음은 같은 시스템을 안에서 보는 눈과 밖에서 보는 눈으로, 한쪽으로는 못 잡는 결함을 다른 쪽이 잡는다. 예컨대 컨테이너 인프라 단절(Redpanda stop, Jenkins 차단)이나 동시 50건 burst 부하 같은 시나리오는 외부 검증이 아니면 진짜로 잡기 어렵다.
+[`12_spring/05_testing/`](../../../12_spring/05_testing/README.md) 묶음이 Spring Boot 애플리케이션 *내부*에서 단위·슬라이스·통합·E2E를 어떻게 쌓는지 다룬다면, 이 묶음은 같은 애플리케이션을 *외부* 프로세스에서 두드려 검증하는 시각을 담는다. 두 묶음은 같은 시스템을 안에서 보는 눈과 밖에서 보는 눈으로, 한쪽으로는 못 잡는 결함을 다른 쪽이 잡는다. 예컨대 컨테이너 인프라 단절(Redpanda stop, Jenkins 차단)이나 동시 50건 burst 부하 같은 시나리오는 외부 검증이 아니면 진짜로 잡기 어렵다.
 
 
 
@@ -65,5 +65,5 @@ Spring Boot 애플리케이션을 외부에서 pytest로 검증하는 Python 클
 
 ## 관련 문서
 
-- [Spring 테스트 학습 묶음](../../java/spring/05_testing/README.md) — 같은 시스템을 안에서 검증. Testcontainers·EmbeddedKafka·ArchUnit 중심.
+- [Spring 테스트 학습 묶음](../../../12_spring/05_testing/README.md) — 같은 시스템을 안에서 검증. Testcontainers·EmbeddedKafka·ArchUnit 중심.
 - [01_language/python](../README.md) — 상위 카테고리 MOC.

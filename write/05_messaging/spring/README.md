@@ -4,7 +4,7 @@ tags: [moc, spring, kafka, spring-kafka]
 status: final
 related:
   - ../README.md
-  - ../../01_language/java/spring/README.md
+  - ../../12_spring/README.md
 updated: 2026-05-14
 ---
 
@@ -89,4 +89,4 @@ updated: 2026-05-14
 ## 관련 문서
 
 - [상위 MOC](../README.md)
-- [Spring 통합 MOC](../../01_language/java/spring/README.md)
+- [Spring 통합 MOC](../../12_spring/README.md)

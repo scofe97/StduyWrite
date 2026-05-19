@@ -18,6 +18,6 @@ updated: 2026-05-10
 
 ## 경계 기준
 
-`testing/`은 "Spring Boot 애플리케이션을 외부에서 검증하는 Python 클라이언트"의 결정을 담는다. Spring 측의 통합 테스트는 [`01_language/java/spring/05_testing/`](../java/spring/05_testing/README.md)에 별도로 있고, 두 묶음은 같은 시스템을 양쪽에서 검증하는 보완 관계다.
+`testing/`은 "Spring Boot 애플리케이션을 외부에서 검증하는 Python 클라이언트"의 결정을 담는다. Spring 측의 통합 테스트는 [`12_spring/05_testing/`](../../12_spring/05_testing/README.md)에 별도로 있고, 두 묶음은 같은 시스템을 양쪽에서 검증하는 보완 관계다.
 
 Django·FastAPI 같은 웹 프레임워크 문서는 채워지면 별도 하위 폴더(예: `web/fastapi/`)로 분리한다. 데이터 분석·과학 계산 영역은 5개 이상 쌓이면 `data/` 하위 폴더로 옮긴다.

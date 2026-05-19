@@ -13,7 +13,7 @@ source:
 related:
   - ../04_distributed/README.md
   - ../05_messaging/README.md
-  - ../01_language/java/spring/README.md
+  - ../12_spring/README.md
 updated: 2026-05-14
 ---
 
@@ -115,4 +115,4 @@ ORM 레벨의 락(JPA `@Lock`, QueryDSL `setLockMode`)은 [`spring/querydsl/02-0
 
 - [`../04_distributed/README.md`](../04_distributed/README.md) — 분산 환경의 합의·복제·샤딩
 - [`../05_messaging/README.md`](../05_messaging/README.md) — Kafka·Redpanda 같은 메시지 도구
-- [`../01_language/java/spring/README.md`](../01_language/java/spring/README.md) — Spring 카테고리 전체 진입
+- [`../12_spring/README.md`](../12_spring/README.md) — Spring 카테고리 전체 진입
