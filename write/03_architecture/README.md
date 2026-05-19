@@ -3,7 +3,7 @@ title: 03_architecture — Spring Boot 아키텍처 시리즈
 tags: [moc, architecture, spring-boot]
 status: final
 related:
-  - ../01_language/java/spring/README.md
+  - ../12_spring/README.md
 updated: 2026-05-16
 ---
 
@@ -162,7 +162,7 @@ flowchart TD
 
 ## 7. 후속 주제 (예정)
 
-Spring의 **설계 철학** 관점은 별도 추가가 예정되어 있다. Spring Framework의 구현 디테일은 [`01_language/java/spring/01_core/`](../01_language/java/spring/01_core/)에 속하며, 본 시리즈는 아키텍처 원칙과의 연결만 다룬다.
+Spring의 **설계 철학** 관점은 별도 추가가 예정되어 있다. Spring Framework의 구현 디테일은 [`12_spring/`](../12_spring/)에 속하며, 본 시리즈는 아키텍처 원칙과의 연결만 다룬다.
 
 - `IoC를 GoF·DIP 관점으로 해석` — IoC가 풀고자 했던 설계 문제
 - `AOP가 해결하는 횡단 관심사` — Decorator 패턴의 프레임워크화

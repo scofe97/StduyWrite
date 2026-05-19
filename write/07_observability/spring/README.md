@@ -4,7 +4,7 @@ tags: [moc, spring, actuator, micrometer]
 status: final
 related:
   - ../README.md
-  - ../../01_language/java/spring/README.md
+  - ../../12_spring/README.md
 updated: 2026-04-19
 ---
 
@@ -26,4 +26,4 @@ updated: 2026-04-19
 
 ## 관련 문서
 
-- [Spring 통합 MOC](../../01_language/java/spring/README.md)
+- [Spring 통합 MOC](../../12_spring/README.md)
