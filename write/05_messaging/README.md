@@ -87,6 +87,7 @@ updated: 2026-05-09
 
 - [`01_Connect/`](01_Connect/) — Redpanda Connect 커넥터 실습
 - [`02_DAG/`](02_DAG/) — DAG 워크플로우 엔진 학습
+- [`08_workflow/`](08_workflow/) — Temporal 기반 Workflow 오케스트레이션과 EDA+CDC+Temporal 통합 아키텍처
 - [`spring/`](spring/) — TPS `message-lib` 코드 디테일
 
 ## 심화 자료
