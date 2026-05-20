@@ -7,7 +7,7 @@ source:
   - https://docs.spring.io/spring-boot/docs/3.2.3/reference/htmlsingle/
 related:
   - ../README.md
-  - ../../../01_language/java/spring/README.md
+  - ../../12_spring/README.md
 updated: 2026-05-07
 ---
 
@@ -78,7 +78,7 @@ QueryDSL은 그 지점에서 들어온다. 정적 타입 메타모델(Q클래스
 3. Spring Boot 프로젝트에 의존성을 추가하고 `JpaRepository`를 만들 수 있다.
 4. 페치 조인과 일반 조인의 차이를 한두 문장으로 구분할 수 있다.
 
-위 항목 중 막히는 부분이 있다면 [`06_data/`](../../) 직접 하위와 [`01_language/java/spring/`](../../../01_language/java/spring/)을 먼저 보고 돌아오는 편이 빠르다.
+위 항목 중 막히는 부분이 있다면 [`06_data/`](../) 직접 하위와 [`spring/`](../../12_spring/)을 먼저 보고 돌아오는 편이 빠르다.
 
 
 
@@ -101,7 +101,7 @@ QueryDSL은 그 지점에서 들어온다. 정적 타입 메타모델(Q클래스
 
 ## 관련 문서
 
-- [Spring 통합 MOC](../../../01_language/java/spring/README.md) — 영속성 외 Spring 카테고리 진입점
-- [`06_data/spring/`](../README.md) — Spring 영속성 통합 MOC
+- [Spring 통합 MOC](../../12_spring/README.md) — 영속성 외 Spring 카테고리 진입점
+- [`06_data/`](../README.md) — 데이터 카테고리 진입
 - [Spring Data JPA Reference](https://docs.spring.io/spring-data/jpa/reference/) — 외부 공식 문서
 - [OpenFeign/querydsl GitHub](https://github.com/OpenFeign/querydsl) — 6.12 릴리즈 노트와 이슈 트래커
