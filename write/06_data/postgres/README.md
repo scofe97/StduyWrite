@@ -8,7 +8,7 @@ source:
 related:
   - ../README.md
   - ../README.md
-  - ../spring/querydsl/README.md
+  - ../querydsl/README.md
 updated: 2026-05-07
 ---
 
@@ -44,7 +44,7 @@ PostgreSQL 은 단순 RDBMS 를 넘어 JSON 문서·시계열·지리공간·메
 
 ## 경계 — 어디까지 이 묶음인가
 
-본 묶음은 PostgreSQL **제품 특화 주제**다. 격리 수준·MVCC 의 일반 이론은 [`../01-04.트랜잭션과 격리 수준.md`](../01-04.트랜잭션과%20격리%20수준.md) 가 담당한다. 분산 환경의 복제·샤딩(Citus, 논리 복제 위 위 전략)은 [`../../04_distributed/`](../../04_distributed/) 영역이다. JPA·QueryDSL 으로 PostgreSQL 을 다루는 ORM 측면은 [`../spring/querydsl/`](../spring/querydsl/) 으로 간다.
+본 묶음은 PostgreSQL **제품 특화 주제**다. 격리 수준·MVCC 의 일반 이론은 [`../01-04.트랜잭션과 격리 수준.md`](../01-04.트랜잭션과%20격리%20수준.md) 가 담당한다. 분산 환경의 복제·샤딩(Citus, 논리 복제 위 위 전략)은 [`../../04_distributed/`](../../04_distributed/) 영역이다. JPA·QueryDSL 으로 PostgreSQL 을 다루는 ORM 측면은 [`../querydsl/`](../querydsl/) 으로 간다.
 
 ## 환경과 버전
 
@@ -66,4 +66,4 @@ PostgreSQL 은 단순 RDBMS 를 넘어 JSON 문서·시계열·지리공간·메
 
 - [`../README.md`](../README.md) — 06_data 카테고리 진입
 - [`../README.md`](../README.md) — DB 자체 이론
-- [`../spring/querydsl/README.md`](../spring/querydsl/README.md) — ORM 레벨 영속성
+- [`../querydsl/README.md`](../querydsl/README.md) — ORM 레벨 영속성

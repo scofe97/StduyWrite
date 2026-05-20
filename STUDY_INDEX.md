@@ -23,7 +23,7 @@
 
 ## Spring 학습 진입점
 
-Spring 문서는 주제별로 분산 배치된다. 전 카테고리 집계는 [`write/01_language/java/spring/README.md`](write/01_language/java/spring/README.md)에서 확인한다.
+Spring 문서는 주제별로 분산 배치된다. 전 카테고리 집계는 [`write/spring/README.md`](write/spring/README.md)에서 확인한다.
 
 ## 예약 폴더
 
