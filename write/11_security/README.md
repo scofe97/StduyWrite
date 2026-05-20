@@ -5,7 +5,7 @@ status: final
 related:
   - ../03_architecture/README.md
   - ../12_spring/README.md
-updated: 2026-04-19
+updated: 2026-05-20
 ---
 
 # 11_security
@@ -21,7 +21,7 @@ updated: 2026-04-19
 | 폴더 | 범위 |
 |------|------|
 | [01_concepts/](01_concepts/) | 프레임워크 독립 이론 — OAuth2, OIDC, JWT, 세션 vs 토큰, 암호학 기초 |
-| [02_spring-security/](02_spring-security/) | Spring Security Filter Chain, AuthenticationManager, Method Security |
+| [02_spring-security/](02_spring-security/) | Spring Security 6.x Filter Chain·OAuth2 Login·JWT 인증 — 8편 (2026-05-20 Notion 자료 이관) |
 | [03_vulnerabilities/](03_vulnerabilities/) | OWASP Top 10 — SQL Injection, XSS, CSRF 등 |
 | [04_threat-modeling/](04_threat-modeling/) | STRIDE, Attack Tree, 공격자 관점 설계 분석 |
 
