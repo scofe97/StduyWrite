@@ -17,12 +17,18 @@ updated: 2026-05-22
 
 ## 빠른 시작
 
-오늘이 복습을 시작할 좋은 날인가? 아래 두 갈래 중 하나:
+> **복붙 전용 프롬프트 모음** → [_template/coworker-prompts.md](_template/coworker-prompts.md)
+>
+> 시나리오별로 코드 블록 *한 개만 복사* 해 Claude 에게 붙여넣으면 자동 실행.
 
-- **신규 학습 문서를 push 한 직후** → [routine §7.1 신규 회차 1 시작](_template/review-routine.md#71-신규-회차-1-시작--최근-푸시된-문서-자동-식별) 프롬프트 복붙
-- **회차 2 이상의 예정 날짜가 오늘** → [routine §7.4 캘린더 트리거](_template/review-routine.md#74-회차-2-이상--캘린더-기반-트리거) 프롬프트 복붙
+| 상황 | 어디로 점프 |
+|------|----------|
+| 학습 문서 새로 푸시했음 → 회차 1 만들기 | [coworker-prompts §1](_template/coworker-prompts.md#1-신규-회차-1-시작--새-학습-문서-푸시-후) |
+| 복습 파일 한 편 열어 Q&A 진행 | [coworker-prompts §2](_template/coworker-prompts.md#2-한-편-복습-진행--q1q5-순회) |
+| 한 세션 (5편) 끝 → 점수 정리 | [coworker-prompts §3](_template/coworker-prompts.md#3-회차-종합-평가--한-세션-끝났을-때) |
+| 평일 아침 → 오늘 예정 복습 확인 | [coworker-prompts §4](_template/coworker-prompts.md#4-캘린더-트리거--예정된-회차-자동-시작) |
 
-두 갈래 모두 *Claude 에게 프롬프트 한 줄 복붙* 으로 자동 시작.
+운영 가이드·졸업 기준·간격 표 같은 상세 맥락은 [review-routine.md](_template/review-routine.md) 참조.
 
 ## 구조
 
