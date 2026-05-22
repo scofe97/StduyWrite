@@ -17,16 +17,20 @@ updated: 2026-05-22
 
 ## 빠른 시작
 
-> **복붙 전용 프롬프트 모음** → [_template/coworker-prompts.md](_template/coworker-prompts.md)
+> **단일 통합 프롬프트 1개** → [_template/coworker-prompts.md](_template/coworker-prompts.md)
 >
-> 시나리오별로 코드 블록 *한 개만 복사* 해 Claude 에게 붙여넣으면 자동 실행.
+> 이 프롬프트 하나만 Claude routine 에 박거나 직접 복붙하면 *상황을 알아서 판단* 해 회차 1·2·3·종합 평가 중 필요한 동작을 자동 실행합니다. 시나리오마다 다른 프롬프트 고를 필요 없음.
 
-| 상황 | 어디로 점프 |
-|------|----------|
-| 학습 문서 새로 푸시했음 → 회차 1 만들기 | [coworker-prompts §1](_template/coworker-prompts.md#1-신규-회차-1-시작--새-학습-문서-푸시-후) |
-| 복습 파일 한 편 열어 Q&A 진행 | [coworker-prompts §2](_template/coworker-prompts.md#2-한-편-복습-진행--q1q5-순회) |
-| 한 세션 (5편) 끝 → 점수 정리 | [coworker-prompts §3](_template/coworker-prompts.md#3-회차-종합-평가--한-세션-끝났을-때) |
-| 평일 아침 → 오늘 예정 복습 확인 | [coworker-prompts §4](_template/coworker-prompts.md#4-캘린더-트리거--예정된-회차-자동-시작) |
+**실행 주기**: 매주 월·수·금 오전 9시 (`cron: 0 9 * * 1,3,5`) — 학술 근거 기반 ([routine §5](_template/review-routine.md#5-pomodoro-결합-권장-패턴))
+
+**자동 등록 (`/schedule` 활용)**:
+
+```
+/schedule 등록:
+이름: weekly-review
+cron: 0 9 * * 1,3,5
+프롬프트: write/_review/_template/coworker-prompts.md 의 "통합 프롬프트" 섹션 그대로 실행
+```
 
 운영 가이드·졸업 기준·간격 표 같은 상세 맥락은 [review-routine.md](_template/review-routine.md) 참조.
 
