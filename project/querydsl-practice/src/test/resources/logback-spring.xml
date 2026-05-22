@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  test profile 전역 logback 설정. log4jdbc profile 이 아니면 logger 이름이
+  안 맞아 필터 식은 no-op 으로 통과한다.
+-->
+<configuration>
+
+    <springProperty name="APP_NAME" source="spring.application.name" defaultValue="querydsl-practice"/>
+    <springProperty name="ROOT_LOG_LEVEL" source="logging.level.root" defaultValue="INFO"/>
+
+    <property name="CONSOLE_PATTERN"
+              value="%d{HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n"/>
+
+
+    <!--
+      CONSOLE
+      onion-poller-* 스레드의 log4jdbc/jdbc/hibernate.SQL 로그만 차단하고
+      다른 스레드의 SQL 디버깅은 그대로 통과시킨다.
+
+      event.getThreadName() 은 Janino 가 thread 변수를 자동 주입하지 않아
+      메서드 호출로 우회한 것.
+      OnMatch=DENY / OnMismatch=NEUTRAL.
+    -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.JaninoEventEvaluator">
+                <expression>
+                    return event.getThreadName() != null
+                           &amp;&amp; event.getThreadName().startsWith("onion-poller-")
+                           &amp;&amp; (logger.startsWith("log4jdbc.")
+                               || logger.startsWith("jdbc.")
+                               || logger.equals("org.hibernate.SQL"));
+                </expression>
+            </evaluator>
+            <OnMismatch>NEUTRAL</OnMismatch>
+            <OnMatch>DENY</OnMatch>
+        </filter>
+        <encoder>
+            <pattern>${CONSOLE_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+    <!--
+      CONSOLE_R1_KEYWORD
+      formattedMessage.contains("MEMBER") 는 SQL 본문 1줄만 잡고
+      audit/resultset 라인은 통과시켜 한 사이클 ~15줄 중 ~14줄이 새어 나간다.
+      ROOT 에 묶지 않으며, 비교용으로 필요할 때만 동적으로 연결한다.
+    -->
+    <appender name="CONSOLE_R1_KEYWORD" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.JaninoEventEvaluator">
+                <expression>
+                    return formattedMessage != null
+                           &amp;&amp; formattedMessage.contains("MEMBER")
+                           &amp;&amp; (logger.equals("org.hibernate.SQL")
+                               || logger.startsWith("log4jdbc.")
+                               || logger.startsWith("jdbc."));
+                </expression>
+            </evaluator>
+            <OnMismatch>NEUTRAL</OnMismatch>
+            <OnMatch>DENY</OnMatch>
+        </filter>
+        <encoder>
+            <pattern>${CONSOLE_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+    <root level="${ROOT_LOG_LEVEL}">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>
