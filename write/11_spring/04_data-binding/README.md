@@ -16,7 +16,7 @@ updated: 2026-05-23
 
 ---
 
-> `DispatcherServlet` 이 받은 HTTP 요청을 컨트롤러 파라미터로 만들고, 컨트롤러 반환값을 HTTP 응답으로 직렬화하는 *바인딩 계층* 을 모은 묶음입니다. `@RequestParam`/`@RequestBody` 가 어떻게 동작하는지부터 Jackson 의 `ObjectMapper`, Multipart 파일 업로드, Bean Validation 까지 한 흐름으로 정리합니다.
+> `DispatcherServlet` 이 받은 HTTP 요청을 컨트롤러 파라미터로 만들고, 컨트롤러 반환값을 HTTP 응답으로 직렬화하는 *바인딩 계층* 을 모은 묶음입니다. `@RequestParam`/`@RequestBody` 가 어떻게 동작하는지부터 Jackson 의 `ObjectMapper`, Multipart 파일 업로드, Bean Validation, 그리고 그 위에서 응답·검증 메시지의 언어를 결정하는 메시지·국제화까지 한 흐름으로 정리합니다.
 
 ## 왜 별도 묶음인가
 
@@ -29,15 +29,16 @@ updated: 2026-05-23
 
 ## 학습 순서
 
-> 1장은 *바인딩 자체* (요청·응답·파일), 2장은 *검증* 입니다. 3편을 순서대로 따라가면 컨트롤러 시그니처를 두고 고민하는 일이 줄어듭니다.
+> 1장은 *바인딩 자체* (요청·응답·파일), 2장은 *검증*, 3장은 그 위에서 *응답·검증 메시지의 언어를 결정* 하는 국제화입니다. 4편을 순서대로 따라가면 컨트롤러 시그니처를 두고 고민하는 일이 줄어듭니다.
 
 | # | 문서 | 다루는 핵심 |
 |---|------|-----------|
 | 01-01 | [HTTP 요청·응답과 메시지 컨버터](01-01.HTTP%20요청·응답과%20메시지%20컨버터.md) | DTO 패턴 / `@RequestParam`·`@PathVariable`·`@ModelAttribute`·`@RequestBody`·`@RequestHeader` / `@ResponseBody`·`@RestController`·`@ResponseStatus` / `Converter`·`Formatter`·`ConversionService` / `HttpMessageConverter` / Jackson `ObjectMapper` |
 | 01-02 | [파일 업로드 — Multipart](01-02.파일%20업로드%20—%20Multipart.md) | `multipart/form-data` 바디 / `spring.servlet.multipart.*` 설정 / `MultipartFile` / `@RequestPart` / 파일 저장·다운로드 / WebFlux 와의 차이 |
 | 02-01 | [Validation — BindingResult에서 Bean Validation까지](02-01.Validation%20—%20BindingResult에서%20Bean%20Validation까지.md) | 수동 검증 vs Bean Validation / `BindingResult` / `@Valid`·`@Validated` / 제약 어노테이션 / 그룹 검증 / 커스텀 `ConstraintValidator` / 에러 메시지·`MessageSource` |
+| 03-01 | [메시지·국제화 — MessageSource와 LocaleResolver](03-01.메시지·국제화%20—%20MessageSource와%20LocaleResolver.md) | `MessageSource` 자동 구성 / Locale 폴백 체인 / `LocaleResolver` 3종 (Accept-Header·Session·Cookie) / `LocaleChangeInterceptor` / `LocaleContextHolder` ThreadLocal / 검증 메시지와의 연결 |
 
-처음 보는 학습자는 01-01 부터 순서대로 따라갑니다. 파일 업로드만 급하다면 01-02 로 직행해도 됩니다. 검증 책임을 어디에 둘지 헷갈리는 단계라면 02-01 의 §2 (두 갈래 결정 트리) 와 §4 (`@Valid`/`@Validated`) 만 읽어도 큰 도움이 됩니다.
+처음 보는 학습자는 01-01 부터 순서대로 따라갑니다. 파일 업로드만 급하다면 01-02 로 직행해도 됩니다. 검증 책임을 어디에 둘지 헷갈리는 단계라면 02-01 의 §2 (두 갈래 결정 트리) 와 §4 (`@Valid`/`@Validated`) 만 읽어도 큰 도움이 됩니다. 다국어 응답이 *어느 Locale 로 결정되는지* 가 막막하다면 03-01 의 §3 (LocaleResolver 3 종) 과 §5 (한 흐름으로) 를 먼저 봅니다.
 
 ## 환경과 버전
 
@@ -59,7 +60,7 @@ updated: 2026-05-23
 
 ## 면접 대비 체크리스트
 
-> 3편을 다 읽은 뒤 다음 질문에 모두 답할 수 있어야 합니다.
+> 4편을 다 읽은 뒤 다음 질문에 모두 답할 수 있어야 합니다.
 
 1. 같은 요청 데이터를 `@RequestParam`·`@ModelAttribute`·`@RequestBody` 중 어떻게 고르나요? 각각 어떤 `HandlerMethodArgumentResolver` 가 처리합니까?
 2. `Converter`·`Formatter`·`HttpMessageConverter` 셋의 책임을 한 문장씩으로 구분할 수 있나요?
@@ -68,6 +69,7 @@ updated: 2026-05-23
 5. `BindingResult` 를 파라미터에 두느냐 안 두느냐로 어떤 동작이 갈리나요?
 6. `@Valid` 와 `@Validated` 의 차이, 그리고 그룹 검증이 필요한 상황은 언제인가요?
 7. 검증 에러를 컨트롤러에서 직접 처리하지 않고 `@ControllerAdvice` 로 넘기면 얻는 이득과 손실은 각각 무엇인가요?
+8. `LocaleResolver` 의 기본 구현체 세 가지와 각각의 Locale 출처는? `LocaleChangeInterceptor` 가 `AcceptHeaderLocaleResolver` 와 함께 쓰면 안 되는 이유는?
 
 ## 관련 문서
 
