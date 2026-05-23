@@ -6,26 +6,25 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.runnershigh.querydsl.config.QuerydslConfig;
 import com.runnershigh.querydsl.domain.OrderStatus;
 import com.runnershigh.querydsl.support.TestDataLoader;
+import com.runnershigh.querydsl.support.TestDataLoader.Fixture;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 
 /**
- * Ch04 — 동적 쿼리 (학습 노트: 01-04.동적 쿼리.md)
- * <p>
- * 핵심: BooleanBuilder vs BooleanExpression null-return 패턴.
- * OrderRepositoryImpl 의 search() 가 BooleanExpression 패턴을 사용한다.
- * <p>
- * 실습:
- * - [ ] BooleanBuilder 로 같은 검색을 다시 짜 보고 가독성 비교
- * - [ ] memberName + status 두 조건 조합 시 SQL 한 번만 나가는지 확인
- * - [ ] minTotalAmount(주문 합계) 조건은 having 절이 필요 — 직접 추가해 보기
+ * Ch04 — 동적 쿼리. 10,000건 시드 기준 재작성.
+ * canceledCount = memberCount/10 = 1,000.
  */
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = Replace.NONE)
+@ActiveProfiles("test")
 @Import({QuerydslConfig.class, OrderRepositoryImpl.class})
 class Ch04_DynamicQueryTest {
 
@@ -36,32 +35,56 @@ class Ch04_DynamicQueryTest {
     private JPAQueryFactory queryFactory;
 
     private OrderRepositoryImpl repository;
+    private final Fixture fixture = new Fixture(
+            1000, 900, 100, 1L, 1000L, 1L, 100L, 1L);
 
     @BeforeEach
     void setUp() {
-        new TestDataLoader(em).loadDefault();
         repository = new OrderRepositoryImpl(queryFactory);
     }
 
     @Test
-    @DisplayName("[Green] 모든 조건 null 이면 전체 반환")
-    void 모든_조건_null_이면_전체_반환() {
+    @DisplayName("모든 조건 null — 전체 반환")
+    void all_null_returns_all() {
         var condition = OrderSearchCondition.builder().build();
-        assertThat(repository.search(condition)).hasSize(3);
+        assertThat(repository.search(condition)).hasSize(fixture.memberCount());
     }
 
     @Test
-    @DisplayName("[Green] status=CANCELED 만 1건 반환")
-    void status_CANCELED_만_1건_반환() {
+    @DisplayName("status=CANCELED — memberCount/10 건")
+    void status_canceled_one_tenth() {
         var condition = OrderSearchCondition.builder()
                 .status(OrderStatus.CANCELED)
                 .build();
-        assertThat(repository.search(condition))
-                .singleElement()
-                .satisfies(o -> assertThat(o.getMember().getUsername()).isEqualTo("charlie"));
+        assertThat(repository.search(condition)).hasSize(fixture.canceledCount());
     }
 
-    // TODO [실습 1] memberName="bob" + status=ORDERED 조합 결과 검증
-    // TODO [실습 2] BooleanBuilder 버전 OrderRepositoryImpl#searchWithBuilder 를 추가하고 같은 케이스로 비교
-    // TODO [실습 3] orderDateFrom/To 조건 검증 — 경계값 포함/제외 의미 확인
+    @Test
+    @DisplayName("memberName 지정 — 단건")
+    void member_name_single() {
+        var condition = OrderSearchCondition.builder()
+                .memberName(fixture.firstUsername())
+                .build();
+        assertThat(repository.search(condition))
+                .singleElement()
+                .satisfies(o -> assertThat(o.getMember().getUsername()).isEqualTo(fixture.firstUsername()));
+    }
+
+    @Test
+    @DisplayName("status + memberName — 교차 조건")
+    void status_and_member_name() {
+        // user_00010 은 i=10 → 시드에서 CANCELED
+        var condition = OrderSearchCondition.builder()
+                .memberName("user_00010")
+                .status(OrderStatus.CANCELED)
+                .build();
+        assertThat(repository.search(condition)).hasSize(1);
+
+        // user_00010 은 ORDERED 상태가 아님 → 0건
+        var noMatch = OrderSearchCondition.builder()
+                .memberName("user_00010")
+                .status(OrderStatus.ORDERED)
+                .build();
+        assertThat(repository.search(noMatch)).isEmpty();
+    }
 }

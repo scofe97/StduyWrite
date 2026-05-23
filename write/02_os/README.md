@@ -31,11 +31,11 @@ updated: 2026-04-26
 - 커널 네트워크 자료구조(netns, veth, conntrack, netfilter) → `networking/`
 - 컨테이너 런타임 격리·자원 제한(namespace, cgroup, seccomp) → `kernel/`
 - 시스템 콜 인터페이스, /proc, VFS, 메모리 관리 → `kernel/`
-- 컨테이너 이미지 포맷·OCI 표준 같은 빌드 측면은 `08_devops/`에 둔다 (런타임 측면이 아니므로 본 카테고리 아님)
+- 컨테이너 이미지 포맷·OCI 표준 같은 빌드 측면은 `07_devops/`에 둔다 (런타임 측면이 아니므로 본 카테고리 아님)
 
 
 
 ## 관련 문서
 
 - [write/ MOC](../README.md) — 전체 카테고리 지도
-- [09_cloud/kubernetes/](../09_cloud/kubernetes/README.md) — 본 카테고리의 활용처
+- [08_cloud/kubernetes/](../08_cloud/kubernetes/README.md) — 본 카테고리의 활용처

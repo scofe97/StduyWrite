@@ -21,7 +21,7 @@ updated: 2026-04-19
 
 정규 패턴 `^[0-9]{2}-[0-9]{2}\.`와 불일치하지만 의도적으로 유지하는 파일 총 55개.
 
-### 08_devops/02_Jenkins/ — 27개
+### 07_devops/02_Jenkins/ — 27개
 
 세 가지 하위 패턴이 혼재한다.
 
@@ -35,12 +35,12 @@ updated: 2026-04-19
 
 분류 보류 공간이므로 의도적으로 규칙을 완화한다. 대부분은 원래 카테고리가 정해지면 함께 개명될 예정이다.
 
-- `01-jenkins-analysis.md` 등 하이픈 구분 영문 제목 파일 8개 — TPS 분석 문서. 재배치 후보지는 `08_devops/02_Jenkins/_archive/` 또는 별도 분석 카테고리.
+- `01-jenkins-analysis.md` 등 하이픈 구분 영문 제목 파일 8개 — TPS 분석 문서. 재배치 후보지는 `07_devops/02_Jenkins/_archive/` 또는 별도 분석 카테고리.
 - `03-reconciliation-genealogy.md`, `06-harness-engineering.md` — 메타 성격. `_meta/`로 이관 후보.
 - `manifest.md`, `TodoList.md`, `message-lib 스펙.md` — 번호 prefix 자체가 없다. 재배치 시 번호 부여 필요.
 - `분석/` 하위 8개 — 배치 분석 시리즈. 재배치 대상이 확정되지 않아 보류.
 
-### 05_messaging/ — 10개
+### 04_messaging/ — 10개
 
 두 하위 폴더에 `0x-XX` 형식의 초안이 남아 있다.
 
@@ -54,5 +54,5 @@ updated: 2026-04-19
 월 1회 (`journal/monthly/` 리뷰 시점):
 
 - 예외 파일 중 `99_ETC/`에 3개월 이상 체류한 항목을 재배치 또는 `_archive/`로 이동
-- 05_messaging의 `0x-` 초안이 최종본으로 승격되면 정규 번호로 개명
-- 08_devops 심화 시리즈 규칙을 하네스에 정식화할지 결정
+- 04_messaging의 `0x-` 초안이 최종본으로 승격되면 정규 번호로 개명
+- 07_devops 심화 시리즈 규칙을 하네스에 정식화할지 결정
