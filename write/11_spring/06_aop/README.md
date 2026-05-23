@@ -26,14 +26,15 @@ updated: 2026-05-23
 
 ## 학습 순서
 
-> 현재 1편이 출간되어 있으며, 횡단 관심사 등장부터 `@Aspect` 까지를 한 문서에 압축해 담았습니다. 후속 편은 트랜잭션·캐시 같은 응용 영역으로 확장됩니다.
+> 핵심 1편이 횡단 관심사 등장부터 `@Aspect` 까지를 압축하고, 01-03 이 그 직전 단계로서 객체지향 패턴 두 가지의 한계를 보여 줍니다. 01-02 는 같은 폴더에 두는 별 주제(스프링 스케줄링)로, 횡단 관심사와는 직접 관계가 없습니다.
 
 | # | 문서 | 다루는 핵심 |
 |---|------|-----------|
 | 01-01 | [횡단 관심사와 AOP — 프록시로 풀어내기](01-01.횡단%20관심사와%20AOP%20—%20프록시로%20풀어내기.md) | 횡단 관심사 / Filter·Interceptor 한계 / JDK·CGLIB 동적 프록시 / ProxyFactory / 빈 후처리기 / `@Aspect` / Pointcut 표현식 / Advice 5종 / internal call / proxy-target-class |
+| 01-03 | [템플릿·콜백과 ThreadLocal — AOP 등장 직전의 두 시도](01-03.템플릿·콜백과%20ThreadLocal%20—%20AOP%20등장%20직전의%20두%20시도.md) | 템플릿 메서드 패턴 / 콜백 패턴 (`JdbcTemplate`·`TransactionTemplate` 의 뿌리) / `ThreadLocal` 상태 격리와 누수 / 세 도구의 공통 한계 — *호출부 협조 강제* / AOP 가 가져온 전환 |
 | 01-02 | [스프링 스케줄링 — @Scheduled에서 Quartz까지](01-02.스프링%20스케줄링%20—%20@Scheduled에서%20Quartz까지.md) | 배치 vs 스케줄러 / `@Scheduled` / `ThreadPoolTaskScheduler` / Quartz 4구성 / JobStore(RAM·JDBC) / Trigger(Simple·Cron) / Cluster 모드 / Stateful Job / 결정 트리 |
 
-처음 보는 학습자는 01-01 부터 순서대로 따라갑니다. AOP 어노테이션은 이미 써봤지만 내부 동작이 흐릿하다면, §3 (JDK 동적 프록시) 와 §5 (빈 후처리기) 만 골라 읽어도 큰 도움이 됩니다. `@Transactional` 의 internal call 문제로 디버깅 중이라면 §9 로 직행합니다.
+학습 동선은 두 가지로 갈립니다. AOP 의 *왜* 부터 차근차근 본다면 01-03 → 01-01 순으로 진입해, 객체지향 패턴의 한계를 먼저 보고 AOP 가 그 한계를 어떻게 푸는지를 이어 읽습니다. AOP 어노테이션을 이미 써 본 입장이라면 01-01 §3·§5 로 직진한 뒤 01-03 으로 뒤돌아 *왜 굳이 동적 프록시인가* 의 동기만 확인해도 됩니다. `@Transactional` 의 internal call 문제로 디버깅 중이라면 01-01 §9 로 직행합니다.
 
 ## 환경과 버전
 
