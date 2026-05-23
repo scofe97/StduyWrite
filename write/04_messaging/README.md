@@ -16,7 +16,7 @@ updated: 2026-05-23
 
 각 폴더 안에서는 카테고리 안 첫 두 자리(예: `01-01`, `01-02` …) 순서로 읽으면 개념에서 코드 디테일을 거쳐 운영으로 진행이 자연스럽습니다. 처음 읽을 때는 각 폴더의 `01` 문서만 따라가도 전체 골격이 잡힙니다.
 
-> EDA 사고 모델·요청-응답 통합 같은 EDA 도입부는 이 폴더에서 제외되어 [`../03_architecture/04_edd/05_KafkaApplied/`](../03_architecture/04_edd/05_KafkaApplied/)로 이동했습니다(2026-05-23 재구성). 이론 측 `04_edd`와 한 자리에서 같이 봅니다.
+> EDA 사고 모델·요청-응답 통합 같은 EDA 도입부는 이 폴더에서 제외되어 [`../03_architecture/04_edd/`](../03_architecture/04_edd/)로 이동했습니다(2026-05-23 재구성). 이론 측 `04_edd`와 한 자리에서 같이 봅니다.
 
 ## 폴더 구조와 인덱스
 
@@ -123,7 +123,7 @@ updated: 2026-05-23
 | 영역 | 다루는 것 |
 |------|----------|
 | 본 폴더 (`04_messaging/`) | Kafka·Redpanda·Avro 도구 레벨 선택과 Spring Kafka 운영. EDA·DDD를 도구로 적용할 때의 패턴 |
-| [`../03_architecture/04_edd/`](../03_architecture/04_edd/) | EDA 이론·원칙·결정 기준 (Why 토폴로지·단일 작성자·CQRS 모델). EDA의 적용 측은 `04_edd/05_KafkaApplied/`에 같이 둠 |
+| [`../03_architecture/04_edd/`](../03_architecture/04_edd/) | EDA 이론·원칙·결정 기준 (Why 토폴로지·단일 작성자·CQRS 모델). EDA의 적용 측은 `04_edd/`에 같이 둠 |
 | `05_data/` | 분산 시스템 일반 이론 (CAP, Saga 보상 트랜잭션 구조 일반론) |
 
 > 2026-05-23 변경 요약: `01_MessageContract`와 `01_Connect`가 둘 다 `01` prefix로 충돌해 `01_Connect`를 빼고 나머지 카테고리를 한 칸씩 밀어 prefix 유일성을 확보했습니다(02_MessageContract … 07_CQRS_EventSourcing). 옛 `08_workflow`와 `09_advanced`는 둘 다 심화 성격이라 `08_advanced/` 한 폴더로 흡수했습니다(`01_variants/`, `02_workflow/` 두 갈래). 단행본 실습 폴더 명명은 `_code/`에서 `_practice/`로 통일했습니다.

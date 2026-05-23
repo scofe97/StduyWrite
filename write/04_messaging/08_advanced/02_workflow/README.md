@@ -26,7 +26,7 @@ updated: 2026-05-23
 
 > EDA만으로 모든 운영 부담이 풀리지는 않는다. 단순 컨슈머는 *분기 많은 긴 흐름*과 *부분 실패의 보상*에서 한계를 보인다.
 
-`[05-02.Orchestration Saga](../../05_ConsistencyPattern/01-02.Orchestration%20Saga.md)`가 Saga의 일반 구조를 다뤘고, `[09-02.Saga 엔진 비교](../01_variants/01-02.Saga%20%EC%97%94%EC%A7%84%20%EB%B9%84%EA%B5%90.md)`가 손코딩과 엔진들의 트레이드오프 매트릭스를 제공한다. 본 폴더는 그중 *Temporal* 한 도구를 깊이 들여다보고, EDA + CDC 학습 트리와 어떻게 결합되는지 단계적으로 따라간다.
+`[01-02.Orchestration Saga](../../05_ConsistencyPattern/01-02.Orchestration%20Saga.md)`가 Saga의 일반 구조를 다뤘고, `[09-02.Saga 엔진 비교](../01_variants/01-02.Saga%20%EC%97%94%EC%A7%84%20%EB%B9%84%EA%B5%90.md)`가 손코딩과 엔진들의 트레이드오프 매트릭스를 제공한다. 본 폴더는 그중 *Temporal* 한 도구를 깊이 들여다보고, EDA + CDC 학습 트리와 어떻게 결합되는지 단계적으로 따라간다.
 
 
 
@@ -65,10 +65,10 @@ updated: 2026-05-23
 
 > 본 폴더는 다음을 안다고 가정한다.
 
-1. EDA의 기본 모델 — `[01-01.EDA 기초](../../../03_architecture/04_edd/05_KafkaApplied/05-01.EDA%20기초.md)` 수준.
-2. Outbox 패턴 — `[05-03.Outbox](../../05_ConsistencyPattern/01-03.Outbox.md)` 수준.
-3. CDC와 Debezium 설정 — `[05-06.CDC](../../05_ConsistencyPattern/01-06.CDC.md)` 수준.
-4. Saga의 코레오그래피/오케스트레이션 차이 — `[05-01](../../05_ConsistencyPattern/01-01.Choreography%20Saga.md)`, `[05-02](../../05_ConsistencyPattern/01-02.Orchestration%20Saga.md)` 수준.
+1. EDA의 기본 모델 — `[01-01.EDA 기초](../../../03_architecture/04_edd/05-01.EDA%20기초.md)` 수준.
+2. Outbox 패턴 — `[01-03.Outbox](../../05_ConsistencyPattern/01-03.Outbox.md)` 수준.
+3. CDC와 Debezium 설정 — `[01-06.CDC](../../05_ConsistencyPattern/01-06.CDC.md)` 수준.
+4. Saga의 코레오그래피/오케스트레이션 차이 — `[01-01](../../05_ConsistencyPattern/01-01.Choreography%20Saga.md)`, `[01-02](../../05_ConsistencyPattern/01-02.Orchestration%20Saga.md)` 수준.
 
 이 사전 지식 없이 02-01을 먼저 읽으면 책임 분리의 의도가 부분적으로만 보인다.
 
@@ -102,9 +102,9 @@ updated: 2026-05-23
 > 본 폴더가 *다루지 않는 것*을 명시한다.
 
 - Kafka 기본·Producer/Consumer 디테일 — `[../04_NN](../README.md)` 그룹
-- Debezium 설정과 EventRouter 디테일 — `[05-06.CDC](../../05_ConsistencyPattern/01-06.CDC.md)`
-- Outbox 테이블 설계 자체 — `[05-03.Outbox](../../05_ConsistencyPattern/01-03.Outbox.md)`
-- Saga 패턴의 일반 구조 — `[05-01](../../05_ConsistencyPattern/01-01.Choreography%20Saga.md)`, `[05-02](../../05_ConsistencyPattern/01-02.Orchestration%20Saga.md)`
+- Debezium 설정과 EventRouter 디테일 — `[01-06.CDC](../../05_ConsistencyPattern/01-06.CDC.md)`
+- Outbox 테이블 설계 자체 — `[01-03.Outbox](../../05_ConsistencyPattern/01-03.Outbox.md)`
+- Saga 패턴의 일반 구조 — `[01-01](../../05_ConsistencyPattern/01-01.Choreography%20Saga.md)`, `[01-02](../../05_ConsistencyPattern/01-02.Orchestration%20Saga.md)`
 - 분산 시스템 일반 이론 — `[../../05_data/](../../../05_data/README.md)`
 
 본 폴더는 *Workflow 엔진*과 *그 엔진이 EDA·CDC와 결합될 때의 통합 패턴*에만 집중한다.
