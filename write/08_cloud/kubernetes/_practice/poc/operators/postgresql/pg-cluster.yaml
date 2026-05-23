@@ -1,0 +1,129 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pg-cluster
+  namespace: ch09-pg
+spec:
+  # PostgreSQL 인스턴스 수 (Primary 1 + Replica 2)
+  instances: 3
+
+  # PostgreSQL 버전 (컨테이너 이미지)
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.1
+
+  # Primary 업데이트 전략
+  primaryUpdateStrategy: unsupervised  # 자동 failover 허용
+
+  # 스토리지 설정
+  storage:
+    size: 1Gi  # Minikube: 작은 용량
+    # storageClass: standard  # Minikube 기본 StorageClass 사용
+
+  # 리소스 제한 (Minikube 환경)
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "250m"
+
+  # PostgreSQL 설정 (postgresql.conf 오버라이드)
+  postgresql:
+    parameters:
+      max_connections: "100"
+      shared_buffers: "64MB"
+      effective_cache_size: "192MB"
+      maintenance_work_mem: "16MB"
+      checkpoint_completion_target: "0.9"
+      wal_buffers: "2MB"
+      default_statistics_target: "100"
+      random_page_cost: "1.1"
+      effective_io_concurrency: "200"
+      work_mem: "655kB"
+      min_wal_size: "80MB"
+      max_wal_size: "1GB"
+
+  # Bootstrap 설정 (초기화)
+  bootstrap:
+    initdb:
+      database: appdb
+      owner: appuser
+      # 초기화 시 실행할 SQL (선택 사항)
+      # postInitSQL:
+      #   - CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
+      #   - CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+  # 백업 설정 (선택 사항)
+  backup:
+    # 백업 보관 정책
+    retentionPolicy: "7d"  # 7일간 보관
+
+    # 백업 저장 위치 (PVC 사용)
+    volumeSnapshot:
+      className: standard  # Minikube StorageClass
+
+    # WAL 아카이빙 설정
+    # barmanObjectStore:
+    #   destinationPath: s3://backup-bucket/pg-cluster
+    #   s3Credentials:
+    #     accessKeyId:
+    #       name: s3-credentials
+    #       key: ACCESS_KEY_ID
+    #     secretAccessKey:
+    #       name: s3-credentials
+    #       key: SECRET_ACCESS_KEY
+    #   wal:
+    #     compression: gzip
+    #     encryption: AES256
+
+  # 스케줄된 백업 (선택 사항)
+  # scheduledBackup:
+  #   - name: daily-backup
+  #     schedule: "0 2 * * *"  # 매일 새벽 2시
+  #     backupOwnerReference: self
+  #     immediate: false
+
+  # 모니터링 설정
+  monitoring:
+    enablePodMonitor: true  # Prometheus ServiceMonitor 생성
+
+  # Affinity 설정 (Pod를 다른 노드에 분산 배치)
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: preferred  # preferred (권장) or required (필수)
+
+  # 노드 선택 (선택 사항)
+  # nodeSelector:
+  #   workload: database
+
+  # Tolerations (선택 사항)
+  # tolerations:
+  #   - key: "database"
+  #     operator: "Equal"
+  #     value: "true"
+  #     effect: "NoSchedule"
+
+---
+# 애플리케이션 사용자 Secret (선택 사항)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pg-cluster-app-user
+  namespace: ch09-pg
+type: kubernetes.io/basic-auth
+stringData:
+  username: appuser
+  password: CHANGEME  # 실습용 placeholder — 실제 적용 시 교체
+
+---
+# 접속 정보:
+# - Primary (Read/Write): pg-cluster-rw.ch09-pg.svc.cluster.local:5432
+# - Replica (Read Only): pg-cluster-ro.ch09-pg.svc.cluster.local:5432
+# - Any instance: pg-cluster-r.ch09-pg.svc.cluster.local:5432
+#
+# 접속 예시:
+#   psql -h pg-cluster-rw.ch09-pg.svc.cluster.local -U appuser -d appdb
+#
+# Superuser 비밀번호는 Secret에 저장됨:
+#   kubectl get secret pg-cluster-superuser -n ch09-pg -o jsonpath='{.data.password}' | base64 -d

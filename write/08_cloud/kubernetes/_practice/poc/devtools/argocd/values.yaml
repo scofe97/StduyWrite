@@ -1,0 +1,227 @@
+# ArgoCD Helm Chart Values Override
+# Minikube 환경에 최적화된 설정
+
+# Global 설정
+global:
+  image:
+    repository: quay.io/argoproj/argocd
+    tag: "v2.9.3"
+
+# ArgoCD Server 설정
+server:
+  # 복제본 수 (Minikube: HA 비활성화)
+  replicas: 1
+
+  # 리소스 제한
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+
+  # Service 설정
+  service:
+    type: ClusterIP
+    servicePortHttp: 80
+    servicePortHttps: 443
+
+  # Ingress 설정 (선택 사항)
+  ingress:
+    enabled: false
+    # className: nginx
+    # hosts:
+    #   - argocd.local
+    # annotations:
+    #   nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    #   nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+
+  # Insecure mode (TLS 비활성화 - 로컬 개발용)
+  extraArgs:
+    - --insecure
+
+  # Config 설정
+  config:
+    # URL 설정 (선택 사항)
+    # url: https://argocd.local
+
+    # 익명 사용자 읽기 권한 (선택 사항)
+    # users.anonymous.enabled: "true"
+
+    # Repository 자격증명 템플릿 (선택 사항)
+    # repositories: |
+    #   - url: https://github.com/example/repo
+    #     passwordSecret:
+    #       name: github-secret
+    #       key: password
+    #     usernameSecret:
+    #       name: github-secret
+    #       key: username
+
+# ArgoCD Application Controller
+controller:
+  # 복제본 수
+  replicas: 1
+
+  # 리소스 제한
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+# ArgoCD Repo Server
+repoServer:
+  # 복제본 수
+  replicas: 1
+
+  # 리소스 제한
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+# ArgoCD ApplicationSet Controller
+applicationSet:
+  # 활성화 여부
+  enabled: true
+
+  # 복제본 수
+  replicas: 1
+
+  # 리소스 제한
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
+# ArgoCD Notifications Controller
+notifications:
+  # 활성화 여부
+  enabled: false
+
+# ArgoCD Dex (SSO)
+dex:
+  # 활성화 여부 (Minikube: 비활성화)
+  enabled: false
+
+# Redis 설정 (내장 사용)
+redis:
+  enabled: true
+
+  # 리소스 제한
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
+# Redis HA (Minikube: 비활성화)
+redis-ha:
+  enabled: false
+
+# RBAC 설정
+configs:
+  # RBAC 정책
+  rbac:
+    policy.default: role:readonly
+    policy.csv: |
+      p, role:org-admin, applications, *, */*, allow
+      p, role:org-admin, clusters, get, *, allow
+      p, role:org-admin, repositories, *, *, allow
+      p, role:org-admin, logs, get, *, allow
+      p, role:org-admin, exec, create, */*, allow
+      g, admin, role:admin
+
+  # CM (ConfigMap) 설정
+  cm:
+    # Application 자동 삭제 시 리소스도 삭제
+    application.instanceLabelKey: argocd.argoproj.io/instance
+
+    # Timeout 설정
+    timeout.reconciliation: 180s
+
+  # Secret 설정 (자격증명)
+  secret:
+    # GitHub/GitLab Personal Access Token (선택 사항)
+    # githubSecret: ""
+    # gitlabSecret: ""
+
+# Service Account
+serviceAccount:
+  create: true
+  name: argocd-server
+
+# 초기 관리자 비밀번호 (자동 생성됨)
+# Secret 'argocd-initial-admin-secret'에서 확인 가능
+
+---
+# 사용 가이드:
+#
+# 1. ArgoCD 설치:
+#    helm install argocd argo/argo-cd -n ch14-argocd -f devtools/argocd/values.yaml
+#
+# 2. 초기 관리자 비밀번호 확인:
+#    kubectl get secret argocd-initial-admin-secret -n ch14-argocd -o jsonpath='{.data.password}' | base64 -d
+#
+# 3. ArgoCD 접속 (Port Forward):
+#    kubectl port-forward svc/argocd-server 8080:443 -n ch14-argocd
+#    https://localhost:8080 (insecure mode: http://localhost:8080)
+#
+# 4. ArgoCD CLI 로그인:
+#    argocd login localhost:8080 --username admin --password <password> --insecure
+#
+# 5. 애플리케이션 생성 (CLI):
+#    argocd app create sample-app \
+#      --repo https://github.com/example/repo \
+#      --path manifests \
+#      --dest-server https://kubernetes.default.svc \
+#      --dest-namespace default
+#
+# 6. 애플리케이션 생성 (YAML):
+#    apiVersion: argoproj.io/v1alpha1
+#    kind: Application
+#    metadata:
+#      name: sample-app
+#      namespace: ch14-argocd
+#    spec:
+#      project: default
+#      source:
+#        repoURL: https://github.com/example/repo
+#        targetRevision: HEAD
+#        path: manifests
+#      destination:
+#        server: https://kubernetes.default.svc
+#        namespace: default
+#      syncPolicy:
+#        automated:
+#          prune: true
+#          selfHeal: true
+#
+# 7. 동기화:
+#    argocd app sync sample-app
+#
+# 8. 상태 확인:
+#    argocd app get sample-app
+#    argocd app list
+#
+# 9. Git Repository 등록:
+#    argocd repo add https://github.com/example/repo \
+#      --username <username> \
+#      --password <token>
+#
+# 주의사항:
+# - insecure mode는 개발 환경 전용 (프로덕션에서는 TLS 활성화)
+# - 초기 비밀번호는 보안을 위해 변경 필요
+# - Private repository 사용 시 자격증명 등록 필요
