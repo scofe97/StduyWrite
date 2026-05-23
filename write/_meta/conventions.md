@@ -44,7 +44,7 @@ updated: 2026-04-19
 
 ## 카테고리 결정 원칙
 
-주제 중심으로 고른다. 언어별 분류는 `01_language/` 하위로만 내린다. JVM은 언어가 아닌 런타임이므로 `02_runtime/jvm/`에 둔다. 메시징은 "패턴 이론"과 "구현 기술"이 나뉜다 — Saga·Outbox의 이론 측면은 `04_distributed/`, Kafka·Avro의 구현은 `05_messaging/`.
+주제 중심으로 고른다. 언어별 분류는 `01_language/` 하위로만 내린다. JVM은 언어가 아닌 런타임이므로 `02_runtime/jvm/`에 둔다. 메시징은 "패턴 이론"과 "구현 기술"이 나뉜다 — Saga·Outbox의 이론 측면은 `05_data/`, Kafka·Avro의 구현은 `04_messaging/`.
 
 확신이 서지 않으면 `99_ETC/`에 먼저 넣고 월간 리뷰 때 재배치한다.
 

@@ -74,8 +74,8 @@ write/_review/
 
 | 카테고리 | _mistakes.md 경로 | 누적 패턴 수 |
 |---------|------------------|------------|
-| querydsl | `../06_data/querydsl/_mistakes.md` | 0 |
-| JDBC wrap | `../06_data/_mistakes.md` | 0 |
+| querydsl | `../05_data/querydsl/_mistakes.md` | 0 |
+| JDBC wrap | `../05_data/_mistakes.md` | 0 |
 
 복습 회차에서 *quality ≤ 3 인 질문* 이 발생할 때마다 해당 카테고리 `_mistakes.md` 에 append. 같은 패턴 *3회 이상* 반복 시 원본 챕터 본문 보강 트리거.
 

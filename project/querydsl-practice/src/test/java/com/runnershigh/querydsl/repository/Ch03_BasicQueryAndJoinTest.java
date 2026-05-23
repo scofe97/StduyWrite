@@ -1,132 +1,108 @@
 package com.runnershigh.querydsl.repository;
 
-import static com.runnershigh.querydsl.domain.QItem.item;
 import static com.runnershigh.querydsl.domain.QMember.member;
 import static com.runnershigh.querydsl.domain.QOrder.order;
-import static com.runnershigh.querydsl.domain.QOrderItem.orderItem;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.runnershigh.querydsl.config.QuerydslConfig;
 import com.runnershigh.querydsl.domain.Member;
-import com.runnershigh.querydsl.domain.Order;
 import com.runnershigh.querydsl.domain.OrderStatus;
-import com.runnershigh.querydsl.support.TestDataLoader;
 import com.runnershigh.querydsl.support.TestDataLoader.Fixture;
-import jakarta.persistence.EntityManager;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
+
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 
 /**
- * Ch03 — 기본 문법과 조인 (학습 노트: write/06_data/spring/querydsl/01-03.기본 문법과 조인.md)
- * <p>
- * 본 파일은 완성본 레퍼런스다. 다른 챕터 스캐폴드(Ch04~)를 채울 때 이 패턴을 참고한다.
+ * Ch03 — 기본 문법과 조인 (학습 노트: write/05_data/querydsl/01-03.기본 문법과 조인.md).
+ * Supabase querydsl_practice 스키마에 사전 적재된 1,000 회원 / 1,000 주문 시드 기준.
  */
+@Slf4j
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = Replace.NONE)
+@ActiveProfiles("test")
 @Import(QuerydslConfig.class)
 class Ch03_BasicQueryAndJoinTest {
 
     @Autowired
-    private EntityManager em;
-
-    @Autowired
     private JPAQueryFactory queryFactory;
 
-    private Fixture fixture;
-
-    @BeforeEach
-    void setUp() {
-        fixture = new TestDataLoader(em).loadDefault();
-    }
+    private final Fixture fixture = new Fixture(
+            1000, 900, 100, 1L, 1000L, 1L, 100L, 1L);
 
     @Test
-    @DisplayName("[Green] selectFrom + where 로 회원 단건 조회")
-    void selectFrom_where_회원_단건_조회() {
+    @DisplayName("selectFrom + where — username 으로 단건 조회")
+    void selectFrom_where_username() {
         Member found = queryFactory
                 .selectFrom(member)
-                .where(member.username.eq("alice"))
+                .where(member.username.eq("user_00001"))
                 .fetchOne();
 
+        Member member1 = queryFactory
+                .selectFrom(member)
+                .fetchFirst();   // limit(1) + fetchOne — 노트 L99
+
+        log.info("first member: {}", member1);
+
         assertThat(found).isNotNull();
-        assertThat(found.getEmail()).isEqualTo("alice@runners.io");
         assertThat(found.getAddress().getCity()).isEqualTo("Seoul");
     }
 
     @Test
-    @DisplayName("[Green] inner join — 주문과 회원 결합")
-    void inner_join_주문과_회원_결합() {
+    @DisplayName("count — 총 회원 수가 시드 메타와 일치")
+    void count_total_members() {
+        long total = queryFactory.select(member.count()).from(member).fetchOne();
+        assertThat(total).isEqualTo(fixture.memberCount());
+    }
+
+    @Test
+    @DisplayName("inner join — 주문과 회원 결합 (페이지 100건)")
+    void inner_join_orders_with_members() {
         List<Tuple> rows = queryFactory
                 .select(order.id, member.username, order.status)
                 .from(order)
                 .join(order.member, member)
                 .orderBy(order.id.asc())
+                .limit(100)
                 .fetch();
 
-        assertThat(rows).hasSize(3);
-        assertThat(rows).extracting(t -> t.get(member.username))
-                .containsExactly("alice", "bob", "charlie");
+        assertThat(rows).hasSize(100);
     }
 
     @Test
-    @DisplayName("[Green] left join — 주문 없는 회원도 포함")
-    void left_join_주문_없는_회원도_포함() {
-        List<Tuple> rows = queryFactory
-                .select(member.username, order.id)
-                .from(member)
-                .leftJoin(order).on(order.member.eq(member))
-                .orderBy(member.username.asc())
-                .fetch();
-
-        // dave 는 주문이 없어 order.id 가 null.
-        assertThat(rows).extracting(t -> t.get(member.username))
-                .contains("dave");
-        assertThat(rows.stream()
-                .filter(t -> "dave".equals(t.get(member.username)))
-                .findFirst().orElseThrow()
-                .get(order.id))
-                .isNull();
-    }
-
-    @Test
-    @DisplayName("[Green] fetch join — 컬렉션 (orderItems) 즉시 로딩")
-    void fetch_join_컬렉션_orderItems_즉시_로딩() {
-        // 주의: 컬렉션 fetch join + Pageable 는 HHH000104 — Ch06 에서 다룬다.
-        List<Order> orders = queryFactory
-                .selectFrom(order)
-                .join(order.member, member).fetchJoin()
-                .leftJoin(order.orderItems, orderItem).fetchJoin()
-                .leftJoin(orderItem.item, item).fetchJoin()
-                .where(order.status.eq(OrderStatus.ORDERED))
-                .distinct()
-                .fetch();
-
-        assertThat(orders).isNotEmpty();
-        // 영속성 컨텍스트를 비워도 N+1 없이 접근 가능해야 한다.
-        em.clear();
-        // 위에서 이미 fetchJoin 으로 가져왔으므로 컬렉션 접근 시 추가 SQL 없음 (수동 검증 가능).
-    }
-
-    @Test
-    @DisplayName("[Green] 집계 — 회원당 주문 건수 group by")
-    void 집계_회원당_주문_건수_group_by() {
-        List<Tuple> rows = queryFactory
-                .select(member.username, order.count())
+    @DisplayName("where status — CANCELED 는 전체의 1/10 (i%10==0)")
+    void canceled_count_is_one_tenth() {
+        long canceled = queryFactory.select(order.count())
                 .from(order)
-                .join(order.member, member)
-                .groupBy(member.username)
-                .orderBy(member.username.asc())
+                .where(order.status.eq(OrderStatus.CANCELED))
+                .fetchOne();
+        assertThat(canceled).isEqualTo(fixture.canceledCount());
+        assertThat(canceled).isEqualTo(fixture.memberCount() / 10);
+    }
+
+    @Test
+    @DisplayName("group by — 도시별 회원 수는 균등 분포")
+    void group_by_city_is_uniform() {
+        List<Tuple> rows = queryFactory
+                .select(member.address.city, member.count())
+                .from(member)
+                .groupBy(member.address.city)
+                .orderBy(member.address.city.asc())
                 .fetch();
 
-        assertThat(rows).hasSize(3);
-        assertThat(rows).extracting(t -> t.get(member.username))
-                .containsExactly("alice", "bob", "charlie");
-        assertThat(rows).extracting(t -> t.get(order.count()))
-                .containsExactly(1L, 1L, 1L);
+        // 도시 4개 균등 분포 → 각 도시 = memberCount / 4
+        assertThat(rows).hasSize(4);
+        long perCity = fixture.memberCount() / 4;
+        assertThat(rows).extracting(t -> t.get(member.count()))
+                .containsExactly(perCity, perCity, perCity, perCity);
     }
 }

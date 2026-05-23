@@ -5,7 +5,7 @@ status: final
 related:
   - ../README.md
   - ../networking/README.md
-  - ../../09_cloud/kubernetes/README.md
+  - ../../08_cloud/kubernetes/README.md
 updated: 2026-04-26
 ---
 
@@ -33,4 +33,4 @@ updated: 2026-04-26
 
 - 상위: [02_os/ MOC](../README.md)
 - 이웃: [02_os/networking/](../networking/README.md) — netns·veth·bridge·netfilter·conntrack·TC·eBPF 깊이
-- 활용처: [09_cloud/kubernetes/](../../09_cloud/kubernetes/README.md) — Pod·자원 관리·보안 운영
+- 활용처: [08_cloud/kubernetes/](../../08_cloud/kubernetes/README.md) — Pod·자원 관리·보안 운영

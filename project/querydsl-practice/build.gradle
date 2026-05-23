@@ -26,8 +26,20 @@ dependencies {
     implementation 'com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter:1.9.1'
     implementation 'net.ttddyy:datasource-proxy:1.10'
 
+    // log4jdbc-log4j2 — wrap 라이브러리 비교 학습용 (test profile 'log4jdbc' 에서만 활성)
+    // 학습 문서: write/05_data/05-01.JDBC 드라이버 wrap 로깅의 운영 비용.md
+    // logback EvaluatorFilter 가 Janino 컴파일러를 요구하므로 함께 추가.
+    testRuntimeOnly 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
+    testRuntimeOnly 'org.codehaus.janino:janino:3.1.12'
+
+    // log4j2 API + log4j -> SLF4J bridge.
+    // Log4j2SpyLogDelegator 가 log4j2 API 로 출력하므로, 그 호출을 logback 으로 흘려보내려면 필요.
+    // Slf4jSpyLogDelegator (기본) 만 쓰는 경우 본 줄은 의존성 0 이라 무영향.
+    testRuntimeOnly 'org.apache.logging.log4j:log4j-api:2.23.1'
+    testRuntimeOnly 'org.apache.logging.log4j:log4j-to-slf4j:2.23.1'
+
     // QueryDSL — OpenFeign fork (원조 archived → io.github.openfeign.querydsl 좌표)
-    // 자세한 거버넌스 배경: write/06_data/spring/querydsl/01-01.QueryDSL 입문과 6.12의 위치.md
+    // 자세한 거버넌스 배경: write/05_data/spring/querydsl/01-01.QueryDSL 입문과 6.12의 위치.md
     implementation 'io.github.openfeign.querydsl:querydsl-jpa:6.12'
     annotationProcessor 'io.github.openfeign.querydsl:querydsl-apt:6.12:jakarta'
     annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
@@ -39,8 +51,10 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
-    // DB — H2 in-memory
+    // DB — H2 in-memory (default profile)
     runtimeOnly 'com.h2database:h2'
+    // DB — PostgreSQL (test profile, Supabase)
+    runtimeOnly 'org.postgresql:postgresql'
 
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

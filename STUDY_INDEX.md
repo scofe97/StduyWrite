@@ -9,21 +9,21 @@
 | # | 카테고리 | 범위 |
 |---|----------|------|
 | 01 | [`write/01_language/`](write/01_language/) | Java·Go·TS 등 언어별 문법·관용구·표준 API. JVM은 Java 하위 `09_jvm/` |
-| 02 | _(예약)_ | Kotlin/Scala 문서가 쌓이면 JVM 공통분을 `02_runtime/`으로 분리 예정 |
+| 02 | [`write/02_os/`](write/02_os/) | OS·시스템 콜·프로세스·메모리·파일시스템 |
 | 03 | [`write/03_architecture/`](write/03_architecture/) | DDD, Hexagonal, Clean, 설계 원칙·패턴 |
-| 04 | [`write/04_distributed/`](write/04_distributed/) | CAP, Consistency, Saga, Outbox 이론 |
-| 05 | [`write/05_messaging/`](write/05_messaging/) | Kafka, Redpanda, Avro, Schema Registry, EDA 구현 |
-| 06 | [`write/06_data/`](write/06_data/) | DB, CDC, Transaction, Indexing (미래) |
-| 07 | [`write/07_observability/`](write/07_observability/) | Logging, Tracing, Metrics, OpenTelemetry |
-| 08 | [`write/08_devops/`](write/08_devops/) | CI/CD, Jenkins, Nexus, Sonarqube |
-| 09 | [`write/09_cloud/`](write/09_cloud/) | Cloud Native, K8s, Service Mesh (미래) |
-| 10 | [`write/10_tools/`](write/10_tools/) | tmux, vim, Claude Code, Git |
-| 11 | [`write/11_security/`](write/11_security/) | OAuth/JWT, OWASP, 위협 모델링, Spring Security |
+| 04 | [`write/04_messaging/`](write/04_messaging/) | Kafka, Redpanda, Avro, Schema Registry, EDA 구현 |
+| 05 | [`write/05_data/`](write/05_data/) | DDIA 이론·분산 시스템·데이터 처리·DB 운영·드라이버 관측 (DB, CDC, Transaction, Indexing, Replication, Sharding, Consensus) |
+| 06 | [`write/06_observability/`](write/06_observability/) | Logging, Tracing, Metrics, OpenTelemetry |
+| 07 | [`write/07_devops/`](write/07_devops/) | CI/CD, Jenkins, Nexus, Sonarqube |
+| 08 | [`write/08_cloud/`](write/08_cloud/) | Cloud Native, K8s, Service Mesh (미래) |
+| 09 | [`write/09_tools/`](write/09_tools/) | tmux, vim, Claude Code, Git |
+| 10 | [`write/10_security/`](write/10_security/) | OAuth/JWT, OWASP, 위협 모델링, Spring Security |
+| 11 | [`write/11_spring/`](write/11_spring/) | Spring Framework, Spring Boot, Spring Cloud |
 | 99 | [`write/99_ETC/`](write/99_ETC/) | 분류 보류 — 3개월 체류 후 재배치 또는 아카이브 |
 
 ## Spring 학습 진입점
 
-Spring 문서는 주제별로 분산 배치된다. 전 카테고리 집계는 [`write/spring/README.md`](write/spring/README.md)에서 확인한다.
+Spring 문서는 주제별로 분산 배치된다. 전 카테고리 집계는 [`write/11_spring/README.md`](write/11_spring/README.md)에서 확인한다.
 
 ## 예약 폴더
 
@@ -59,7 +59,7 @@ grep -rl "status: final" write/ --include="*.md" \
 
 | 카테고리 | 이관 대상 | 진척 |
 |----------|----------|------|
-| 05_messaging | poc/08_MessageQueue, poc/03_CloudNative/kafka 등 | 부분 이관 |
-| 07_observability | poc/07_Observability | 일부 이관 (Grafana 시리즈 완료) |
+| 04_messaging | poc/08_MessageQueue, poc/03_CloudNative/kafka 등 | 부분 이관 |
+| 06_observability | poc/07_Observability | 일부 이관 (Grafana 시리즈 완료) |
 | 03_architecture | poc/02_Architecture | 1차 이관 (분할 작업 남음) |
 | 나머지 | — | 미착수 |

@@ -5,7 +5,7 @@ status: final
 related:
   - ../README.md
   - ../kernel/README.md
-  - ../../09_cloud/kubernetes/README.md
+  - ../../08_cloud/kubernetes/README.md
 updated: 2026-04-26
 ---
 
@@ -27,4 +27,4 @@ updated: 2026-04-26
 
 - 상위: [02_os/ MOC](../README.md)
 - 이웃: [02_os/kernel/](../kernel/README.md) — 커널 일반 메커니즘(시스템 콜·namespace·cgroup·/proc)
-- 활용처: [09_cloud/kubernetes/](../../09_cloud/kubernetes/README.md), [09_cloud/service-mesh/](../../09_cloud/service-mesh/README.md)
+- 활용처: [08_cloud/kubernetes/](../../08_cloud/kubernetes/README.md), [08_cloud/service-mesh/](../../08_cloud/service-mesh/README.md)

@@ -6,14 +6,25 @@ import com.runnershigh.querydsl.domain.Item;
 import com.runnershigh.querydsl.domain.Member;
 import com.runnershigh.querydsl.domain.Order;
 import com.runnershigh.querydsl.domain.OrderItem;
+import com.runnershigh.querydsl.domain.OrderStatus;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * 테스트용 더미 데이터 빌더.
- * 각 테스트 클래스에서 호출해 시나리오에 맞는 그래프를 만든다.
+ * 결정론적 대량 시드 — 10,000명 회원, 100상품, 4 카테고리, 10,000 주문.
+ * 모든 값이 인덱스에서 파생되므로 시드를 다시 적재해도 동일한 분포가 보장된다.
  */
 public class TestDataLoader {
+
+    public static final int DEFAULT_MEMBER_COUNT = 1_000;
+    public static final int ITEM_COUNT = 100;
+    public static final int CATEGORY_COUNT = 4;
+
+    private static final String[] CITIES = {"Seoul", "Busan", "Incheon", "Daegu"};
+    private static final String[] CATEGORY_NAMES = {"도서", "식품", "가전", "의류"};
+    private static final LocalDateTime BASE_DATE = LocalDateTime.of(2026, 1, 1, 0, 0);
 
     private final EntityManager em;
 
@@ -21,73 +32,109 @@ public class TestDataLoader {
         this.em = em;
     }
 
+    public Fixture loadBulk() {
+        return loadBulk(DEFAULT_MEMBER_COUNT);
+    }
+
     /**
-     * 회원 4명 + 카테고리 2개 + 상품 4개 + 주문 3건의 기본 그래프.
-     * - alice(서울, 25), bob(서울, 31), charlie(부산, 28), dave(부산, 40)
-     * - 카테고리: 도서 / 식품
-     * - 상품: 자바책(2만), 코틀린책(2.5만), 사과(1천), 우유(2.5천)
-     * - 주문: alice—자바책×1, bob—사과×10+우유×2, charlie—코틀린책×1+자바책×2(취소)
+     * memberCount 만큼 회원과 1:1 주문을 만든다. 카테고리/상품 수는 고정.
+     * 회원 i (1-based): username=user_00001 형식, city=CITIES[(i-1)%4], age=20+((i-1)%40)
+     * 상품 j (1-based): name=item_001 형식, price=1000*j, stock=100_000, category=cats[(j-1)%4]
+     * 주문 i: 회원 i → 상품 ((i-1)%100)+1, count=1+((i-1)%5). i % 10 == 0 이면 CANCELED.
      */
-    public Fixture loadDefault() {
-        Member alice = Member.builder()
-                .username("alice").email("alice@runners.io").age(25)
-                .address(new Address("Seoul", "Gangnam", "06000"))
-                .build();
-        Member bob = Member.builder()
-                .username("bob").email("bob@runners.io").age(31)
-                .address(new Address("Seoul", "Mapo", "04000"))
-                .build();
-        Member charlie = Member.builder()
-                .username("charlie").email("charlie@runners.io").age(28)
-                .address(new Address("Busan", "Haeundae", "48000"))
-                .build();
-        Member dave = Member.builder()
-                .username("dave").email("dave@runners.io").age(40)
-                .address(new Address("Busan", "Suyeong", "48200"))
-                .build();
-        em.persist(alice);
-        em.persist(bob);
-        em.persist(charlie);
-        em.persist(dave);
+    public Fixture loadBulk(int memberCount) {
+        List<Category> categories = new ArrayList<>(CATEGORY_COUNT);
+        for (int c = 0; c < CATEGORY_COUNT; c++) {
+            Category cat = Category.builder().name(CATEGORY_NAMES[c]).build();
+            em.persist(cat);
+            categories.add(cat);
+        }
 
-        Category book = Category.builder().name("도서").build();
-        Category food = Category.builder().name("식품").build();
-        em.persist(book);
-        em.persist(food);
+        List<Item> items = new ArrayList<>(ITEM_COUNT);
+        for (int j = 1; j <= ITEM_COUNT; j++) {
+            Item it = Item.builder()
+                    .name(String.format("item_%03d", j))
+                    .price(1_000 * j)
+                    .stockQuantity(100_000)
+                    .category(categories.get((j - 1) % CATEGORY_COUNT))
+                    .build();
+            em.persist(it);
+            items.add(it);
+        }
+        em.flush();
 
-        Item javaBook = Item.builder().name("자바 인 액션").price(20_000).stockQuantity(100).category(book).build();
-        Item kotlinBook = Item.builder().name("코틀린 핸드북").price(25_000).stockQuantity(50).category(book).build();
-        Item apple = Item.builder().name("사과").price(1_000).stockQuantity(500).category(food).build();
-        Item milk = Item.builder().name("우유").price(2_500).stockQuantity(200).category(food).build();
-        em.persist(javaBook);
-        em.persist(kotlinBook);
-        em.persist(apple);
-        em.persist(milk);
+        int orderedCount = 0;
+        int canceledCount = 0;
+        Member firstMember = null;
+        Member lastMember = null;
+        for (int i = 1; i <= memberCount; i++) {
+            String city = CITIES[(i - 1) % CITIES.length];
+            int age = 20 + ((i - 1) % 40);
+            Member m = Member.builder()
+                    .username(String.format("user_%05d", i))
+                    .email(String.format("user_%05d@runners.io", i))
+                    .age(age)
+                    .address(new Address(city, "street_" + i, String.format("%05d", 10_000 + i)))
+                    .build();
+            em.persist(m);
+            if (i == 1) firstMember = m;
+            if (i == memberCount) lastMember = m;
 
-        Order aliceOrder = Order.create(alice, LocalDateTime.of(2026, 5, 1, 10, 0),
-                OrderItem.create(javaBook, 20_000, 1));
-        Order bobOrder = Order.create(bob, LocalDateTime.of(2026, 5, 2, 11, 30),
-                OrderItem.create(apple, 1_000, 10),
-                OrderItem.create(milk, 2_500, 2));
-        Order charlieOrder = Order.create(charlie, LocalDateTime.of(2026, 5, 3, 9, 0),
-                OrderItem.create(kotlinBook, 25_000, 1),
-                OrderItem.create(javaBook, 20_000, 2));
-        charlieOrder.cancel();
-        em.persist(aliceOrder);
-        em.persist(bobOrder);
-        em.persist(charlieOrder);
+            Item target = items.get((i - 1) % ITEM_COUNT);
+            int count = 1 + ((i - 1) % 5);
+            Order ord = Order.create(m, BASE_DATE.plusMinutes(i),
+                    OrderItem.create(target, target.getPrice(), count));
+            if (i % 10 == 0) {
+                ord.cancel();
+                canceledCount++;
+            } else {
+                orderedCount++;
+            }
+            em.persist(ord);
 
+            if (i % 500 == 0) {
+                em.flush();
+                em.clear();
+                // 재참조용으로 첫/마지막 회원만 다시 끌어옴 (clear 후 detached 됨)
+                if (firstMember != null) firstMember = em.find(Member.class, firstMember.getId());
+                lastMember = em.find(Member.class, m.getId());
+                // items/categories 도 detached → 다음 루프에서 다시 참조하려면 재조회
+                for (int k = 0; k < items.size(); k++) {
+                    items.set(k, em.find(Item.class, items.get(k).getId()));
+                }
+                for (int k = 0; k < categories.size(); k++) {
+                    categories.set(k, em.find(Category.class, categories.get(k).getId()));
+                }
+            }
+        }
         em.flush();
         em.clear();
 
-        return new Fixture(alice, bob, charlie, dave, book, food, javaBook, kotlinBook, apple, milk,
-                aliceOrder, bobOrder, charlieOrder);
+        return new Fixture(memberCount, orderedCount, canceledCount,
+                firstMember == null ? null : firstMember.getId(),
+                lastMember == null ? null : lastMember.getId(),
+                items.get(0).getId(),
+                items.get(ITEM_COUNT - 1).getId(),
+                categories.get(0).getId());
     }
 
+    /**
+     * 시드 식별자 + 분포 메타데이터.
+     */
     public record Fixture(
-            Member alice, Member bob, Member charlie, Member dave,
-            Category book, Category food,
-            Item javaBook, Item kotlinBook, Item apple, Item milk,
-            Order aliceOrder, Order bobOrder, Order charlieOrder
-    ) {}
+            int memberCount,
+            int orderedCount,
+            int canceledCount,
+            Long firstMemberId,
+            Long lastMemberId,
+            Long firstItemId,
+            Long lastItemId,
+            Long firstCategoryId
+    ) {
+        public String firstUsername() { return String.format("user_%05d", 1); }
+        public String lastUsername()  { return String.format("user_%05d", memberCount); }
+        public OrderStatus statusFor(int memberIndex1Based) {
+            return memberIndex1Based % 10 == 0 ? OrderStatus.CANCELED : OrderStatus.ORDERED;
+        }
+    }
 }

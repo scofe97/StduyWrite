@@ -13,7 +13,7 @@ updated: 2026-05-20
 
 > Notion export(`~/Downloads/개인 페이지 & 공유된 페이지 4/기술 블로그/공부 데이터베이스/`)에서 `write/`로 이관한 문서를 기록한다. second-brain-harness §9.1.8의 "원본 추적" 의무를 충족하기 위한 manifest다. Downloads 폴더는 git 추적 밖이라 원본에 주석을 남길 수 없어 본 파일이 그 역할을 대신한다.
 
-## 1차 이관 — Spring Security 9편 → 11_security/02_spring-security/ (2026-05-20)
+## 1차 이관 — Spring Security 9편 → 10_security/02_spring-security/ (2026-05-20)
 
 총 9편 중 8편을 본문 문서로 이관, 1편(`00 Spring Security 시작`)은 출처 정보만 담긴 진입 페이지라 `02_spring-security/README.md` 학습 출처 섹션으로 흡수.
 
@@ -40,16 +40,16 @@ updated: 2026-05-20
 
 ### 결과
 
-- 영향 받은 파일: 본문 8편 신규 + `02_spring-security/README.md` MOC 갱신 + `11_security/README.md` 카운트 갱신 = 10개 파일
+- 영향 받은 파일: 본문 8편 신규 + `02_spring-security/README.md` MOC 갱신 + `10_security/README.md` 카운트 갱신 = 10개 파일
 - 카테고리 완결성: 이전에는 README만 있는 placeholder, 현재는 8편 본문 + MOC 살아 있음
 
 ## 2차 이관 (예정)
 
 인덱싱 보고서(`~/.claude-work/plans/notion-export-index.md`)의 우선순위에 따라 사용자 결정 후 진행.
 
-- ★★ Spring WebSocket 7편 → `12_spring/06_websocket/` 신설 후보
-- ★★ Spring TDD 6편 → `12_spring/05_testing/tdd/` 하위 폴더 흡수 후보
-- ★★ Spring Netty 10편 → `12_spring/05_internals/` 신설 후보
+- ★★ Spring WebSocket 7편 → `11_spring/06_websocket/` 신설 후보
+- ★★ Spring TDD 6편 → `11_spring/05_testing/tdd/` 하위 폴더 흡수 후보
+- ★★ Spring Netty 10편 → `11_spring/05_internals/` 신설 후보
 - ★ Spring MSA 30편 — 카테고리 분산 이관 (도메인·메시징·관측성·클라우드)
 - ★ Spring Study 51편 — 신설 폴더 다수 필요, 대규모
 
