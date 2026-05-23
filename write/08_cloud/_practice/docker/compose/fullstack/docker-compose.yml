@@ -1,0 +1,83 @@
+# 전체 스택 Docker Compose (frontend + backend + db + cache)
+version: '3.8'
+
+services:
+  frontend:
+    image: nginx:alpine
+    container_name: fullstack-frontend
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./html:/usr/share/nginx/html:ro
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - fullstack-net
+
+  backend:
+    build:
+      context: ../../sample-apps/go-api
+      dockerfile: Dockerfile
+    container_name: fullstack-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - DB_HOST=db
+      - DB_PORT=5432
+      - REDIS_HOST=cache
+      - REDIS_PORT=6379
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - fullstack-net
+
+  db:
+    image: postgres:15-alpine
+    container_name: fullstack-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=dbpass
+      - POSTGRES_DB=appdb
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dbuser"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - fullstack-net
+
+  cache:
+    image: redis:alpine
+    container_name: fullstack-cache
+    ports:
+      - "6379:6379"
+    volumes:
+      - cache-data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - fullstack-net
+
+networks:
+  fullstack-net:
+    driver: bridge
+
+volumes:
+  db-data:
+    driver: local
+  cache-data:
+    driver: local

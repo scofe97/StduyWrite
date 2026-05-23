@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>14-05 — Cilium + Istio Ambient 통합 패킷 흐름</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100vh; }
+    body {
+      background: #0d0d0d;
+      color: #e8e4df;
+      font-family: 'Pretendard', -apple-system, system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .container { max-width: 1080px; width: 100%; margin: 0 auto; padding: 20px 24px; display: flex; flex-direction: column; height: 100%; }
+    .fixed-header { flex-shrink: 0; }
+    .scroll-content { flex: 1; overflow-y: auto; padding-top: 12px; }
+
+    h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .subtitle { color: rgb(138, 133, 128); font-size: 13px; margin-bottom: 16px; }
+
+    .scenario-selector { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+    .scenario-pill { background: rgb(26, 26, 26); border: 1px solid rgb(42, 37, 32); border-radius: 20px; color: rgb(138, 133, 128); padding: 6px 16px; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+    .scenario-pill.active { background: rgba(212, 168, 83, 0.15); border-color: rgb(212, 168, 83); color: rgb(212, 168, 83); }
+    .scenario-pill:hover { color: #e8e4df; }
+
+    .pipeline { display: flex; align-items: center; justify-content: flex-start; padding: 16px 0; overflow-x: auto; gap: 0; }
+    .pipeline-step { display: flex; flex-direction: column; align-items: center; cursor: pointer; min-width: 64px; }
+    .step-circle { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgb(26, 26, 26); border: 2px solid rgb(42, 37, 32); color: rgb(138, 133, 128); font-size: 13px; font-weight: 600; transition: all 0.3s; }
+    .step-label { margin-top: 6px; font-size: 10px; color: rgb(138, 133, 128); white-space: nowrap; transition: color 0.3s; text-align: center; }
+    .pipeline-step.active .step-circle { background: rgba(212, 168, 83, 0.2); border-color: rgb(212, 168, 83); color: rgb(212, 168, 83); box-shadow: 0 0 8px rgba(212, 168, 83, 0.4); animation: node-glow 2s ease-in-out infinite; }
+    .pipeline-step.active .step-label { color: rgb(212, 168, 83); }
+    .pipeline-step.completed .step-circle { background: rgba(212, 168, 83, 0.1); border-color: rgb(212, 168, 83); color: rgb(212, 168, 83); }
+    .pipeline-step.completed .step-label { color: rgb(212, 168, 83); }
+    .pipeline-connector { width: 24px; height: 2px; background: rgb(42, 37, 32); margin-bottom: 22px; transition: background 0.5s; flex-shrink: 0; }
+    .pipeline-connector.filled { background: rgb(212, 168, 83); }
+
+    .panel { background: #0d0d0d; border: 1px solid rgb(42, 37, 32); border-radius: 8px; padding: 18px; margin-bottom: 14px; }
+
+    .start-overlay { text-align: center; padding: 32px; }
+    .btn-start { background: rgba(212, 168, 83, 0.15); border: 1px solid rgb(212, 168, 83); border-radius: 8px; color: rgb(212, 168, 83); padding: 12px 32px; font-size: 16px; cursor: pointer; transition: all 0.2s; }
+    .btn-start:hover { background: rgba(212, 168, 83, 0.25); }
+    .start-hint { color: rgb(138, 133, 128); font-size: 13px; margin-top: 8px; }
+
+    .controls { display: flex; align-items: center; gap: 16px; padding: 8px 0; border-top: 1px solid rgb(42, 37, 32); margin-top: 8px; }
+    .controls-nav { display: flex; gap: 8px; }
+    .btn-ctrl { background: rgb(26, 26, 26); border: 1px solid rgb(42, 37, 32); border-radius: 6px; color: #e8e4df; padding: 6px 14px; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+    .btn-ctrl:hover { border-color: rgb(212, 168, 83); color: rgb(212, 168, 83); }
+    .btn-play { min-width: 80px; }
+    .speed-group { display: flex; gap: 4px; margin-left: auto; }
+    .speed-btn { background: transparent; border: 1px solid transparent; border-radius: 4px; color: rgb(138, 133, 128); padding: 4px 10px; font-size: 12px; cursor: pointer; }
+    .speed-btn.active { border-color: rgb(42, 37, 32); color: #e8e4df; }
+    .step-counter { color: rgb(138, 133, 128); font-size: 13px; font-variant-numeric: tabular-nums; min-width: 56px; text-align: right; }
+
+    /* 토폴로지: 두 노드 + Pod + ztunnel + waypoint + Cilium eBPF */
+    .topology { display: flex; gap: 16px; padding: 16px; background: rgb(20, 20, 20); border: 1px solid rgb(42, 37, 32); border-radius: 8px; margin-bottom: 14px; min-height: 300px; flex-wrap: wrap; }
+    .node { flex: 1; min-width: 320px; border: 1px solid rgb(60, 55, 48); border-radius: 8px; padding: 12px; background: rgb(15, 15, 15); }
+    .node-title { font-size: 11px; color: rgb(138, 133, 128); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 600; }
+    .iface-row { display: flex; gap: 8px; margin: 6px 0; align-items: center; flex-wrap: wrap; }
+    .iface { background: rgb(26, 26, 26); border: 1px solid rgb(42, 37, 32); border-radius: 6px; padding: 6px 10px; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 12px; color: #e8e4df; transition: all 0.4s; }
+    .iface.active { background: rgba(212, 168, 83, 0.2); border-color: rgb(212, 168, 83); color: rgb(212, 168, 83); box-shadow: 0 0 10px rgba(212, 168, 83, 0.5); }
+    .iface.passed { background: rgba(212, 168, 83, 0.08); border-color: rgba(212, 168, 83, 0.4); color: rgba(212, 168, 83, 0.8); }
+    .iface.dropped { background: rgba(244, 67, 54, 0.18); border-color: #f44336; color: #f44336; box-shadow: 0 0 10px rgba(244, 67, 54, 0.4); }
+
+    .layer-pod { border: 1px dashed rgb(80, 100, 130); border-radius: 6px; padding: 8px 10px; margin: 6px 0; background: rgba(30, 50, 80, 0.15); }
+    .layer-cilium { border: 1px dashed rgb(70, 110, 140); border-radius: 6px; padding: 8px 10px; margin: 6px 0; background: rgba(30, 70, 90, 0.15); }
+    .layer-ambient { border: 1px dashed rgb(150, 110, 60); border-radius: 6px; padding: 8px 10px; margin: 6px 0; background: rgba(70, 50, 30, 0.15); }
+    .layer-waypoint { border: 1px dashed rgb(140, 90, 170); border-radius: 6px; padding: 8px 10px; margin: 6px 0; background: rgba(60, 40, 70, 0.15); }
+    .layer-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; font-weight: 600; }
+    .label-pod { color: rgb(120, 150, 180); }
+    .label-cilium { color: rgb(110, 170, 200); }
+    .label-ambient { color: rgb(220, 170, 100); }
+    .label-waypoint { color: rgb(200, 150, 230); }
+
+    .narration-step-title { font-size: 11px; font-weight: 600; color: rgb(212, 168, 83); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+    .narration-body { font-size: 14px; line-height: 1.6; color: #e8e4df; }
+    .hl { color: rgb(212, 168, 83); font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.9em; }
+    .ok { color: #66bb6a; }
+    .warn { color: rgb(212, 168, 83); }
+    .fail { color: #f44336; }
+    .bf { color: #ce93d8; font-weight: 600; }
+
+    .db-panel { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 13px; line-height: 1.5; }
+    .db-table { width: 100%; border-collapse: collapse; }
+    .db-table td { padding: 6px 10px; border-bottom: 1px solid rgb(32, 28, 24); }
+    .db-table tr:last-child td { border-bottom: none; }
+    .db-key { color: rgb(138, 133, 128); white-space: nowrap; width: 1%; padding-right: 16px; vertical-align: top; }
+    .db-val { color: #e8e4df; word-break: break-all; }
+    .db-section-title { font-size: 11px; font-weight: 600; color: rgb(138, 133, 128); text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 10px 4px; border-bottom: 1px solid rgb(42, 37, 32); }
+    .db-note { color: rgb(138, 133, 128); font-style: italic; font-size: 12px; padding: 8px 10px 0; }
+    .changed { color: rgb(212, 168, 83); font-weight: 600; text-shadow: 0 0 6px rgba(212, 168, 83, 0.3); }
+    .dead-val { color: #f44336; font-weight: 600; }
+
+    @keyframes node-glow {
+      0%   { box-shadow: 0 0 4px rgba(212, 168, 83, 0.2); }
+      50%  { box-shadow: 0 0 12px rgba(212, 168, 83, 0.6); }
+      100% { box-shadow: 0 0 4px rgba(212, 168, 83, 0.2); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="fixed-header">
+      <h1>Cilium + Istio Ambient 통합 패킷 흐름</h1>
+      <p class="subtitle">14-05 인터랙티브 시각화 — 메시 비활성 / Ambient L4 mTLS / waypoint L7 정책 세 모드를 비교한다</p>
+
+      <div class="scenario-selector">
+        <button class="scenario-pill active" onclick="switchScenario(0)">케이스 1: Cilium만 (메시 비활성)</button>
+        <button class="scenario-pill" onclick="switchScenario(1)">케이스 2: Ambient L4 mTLS</button>
+        <button class="scenario-pill" onclick="switchScenario(2)">케이스 3: waypoint L7 정책 차단</button>
+      </div>
+
+      <div class="pipeline" id="pipeline"></div>
+
+      <div class="controls" id="controlBar">
+        <div class="controls-nav">
+          <button class="btn-ctrl" onclick="prevStep()">◀ 이전</button>
+          <button class="btn-ctrl btn-play" onclick="togglePlay()" id="playBtn">▶ 재생</button>
+          <button class="btn-ctrl" onclick="nextStep()">다음 ▶</button>
+        </div>
+        <div class="speed-group">
+          <button class="speed-btn" onclick="setSpeed(0.5)">0.5x</button>
+          <button class="speed-btn active" onclick="setSpeed(1)">1x</button>
+          <button class="speed-btn" onclick="setSpeed(2)">2x</button>
+        </div>
+        <span class="step-counter" id="stepCounter">0 / 0</span>
+      </div>
+    </div>
+
+    <div class="scroll-content" id="scrollContent">
+      <div class="start-overlay" id="startOverlay">
+        <button class="btn-start" onclick="startSimulation()">시뮬레이션 시작 ▶</button>
+        <p class="start-hint">시나리오를 선택하고 단계별로 패킷이 어느 계층을 거치는지 따라간다</p>
+      </div>
+
+      <div id="contentPanel" style="display: none;">
+        <div class="topology" id="topology"></div>
+        <div class="panel" id="narration"></div>
+        <div class="panel db-panel" id="dbPanel"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentStep = -1;
+    let currentScenario = 0;
+    let isPlaying = false;
+    let playSpeed = 1;
+    let timer = null;
+
+    function topo(activeIds, passedIds, droppedIds) {
+      droppedIds = droppedIds || [];
+      const cls = (id) => {
+        if (droppedIds.includes(id)) return 'iface dropped';
+        if (activeIds.includes(id)) return 'iface active';
+        if (passedIds.includes(id)) return 'iface passed';
+        return 'iface';
+      };
+      return `
+        <div class="node">
+          <div class="node-title">Node A — checkout 네임스페이스</div>
+          <div class="layer-pod">
+            <div class="layer-label label-pod">Pod (앱 컨테이너)</div>
+            <div class="iface-row">
+              <span class="${cls('a-app')}">checkout app<br>curl payment:8080</span>
+            </div>
+          </div>
+          <div class="layer-cilium">
+            <div class="layer-label label-cilium">Cilium eBPF (L3/L4 + Service)</div>
+            <div class="iface-row">
+              <span class="${cls('a-ebpf')}">eBPF TC hook</span>
+              <span class="${cls('a-cnp')}">CiliumNetworkPolicy</span>
+              <span class="${cls('a-svc')}">Service VIP 해석</span>
+            </div>
+          </div>
+          <div class="layer-ambient">
+            <div class="layer-label label-ambient">Ambient ztunnel (L4 mTLS)</div>
+            <div class="iface-row">
+              <span class="${cls('a-ztun')}">ztunnel A</span>
+              <span class="${cls('a-hbone')}">HBONE 송신</span>
+            </div>
+          </div>
+        </div>
+        <div class="node">
+          <div class="node-title">Node B — payment 네임스페이스</div>
+          <div class="layer-ambient">
+            <div class="layer-label label-ambient">Ambient ztunnel (L4 mTLS)</div>
+            <div class="iface-row">
+              <span class="${cls('b-hbone')}">HBONE 수신</span>
+              <span class="${cls('b-ztun')}">ztunnel B</span>
+            </div>
+          </div>
+          <div class="layer-waypoint">
+            <div class="layer-label label-waypoint">waypoint (L7, 선택)</div>
+            <div class="iface-row">
+              <span class="${cls('b-wp')}">waypoint Envoy</span>
+              <span class="${cls('b-authz')}">AuthorizationPolicy</span>
+            </div>
+          </div>
+          <div class="layer-cilium">
+            <div class="layer-label label-cilium">Cilium eBPF</div>
+            <div class="iface-row">
+              <span class="${cls('b-ebpf')}">eBPF TC hook</span>
+            </div>
+          </div>
+          <div class="layer-pod">
+            <div class="layer-label label-pod">Pod (앱 컨테이너)</div>
+            <div class="iface-row">
+              <span class="${cls('b-app')}">payment app:8080</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function db(rows, opts) {
+      let html = '<table class="db-table">';
+      if (opts && opts.section) {
+        html += '<tr><td colspan="2" class="db-section-title">' + opts.section + '</td></tr>';
+      }
+      rows.forEach(r => {
+        html += '<tr><td class="db-key">' + r[0] + '</td><td class="db-val">' + r[1] + '</td></tr>';
+      });
+      html += '</table>';
+      if (opts && opts.note) {
+        html += '<div class="db-note">' + opts.note + '</div>';
+      }
+      return html;
+    }
+    function dbMulti(sections) {
+      return sections.map(s => db(s.rows, s)).join('');
+    }
+
+    const scenarios = {
+      // ============ 케이스 1: Cilium만 (메시 비활성) ============
+      0: {
+        title: '케이스 1: Cilium만',
+        nodes: [
+          {
+            label: 'app curl',
+            topo: () => topo(['a-app'], []),
+            narration: 'checkout 앱이 <span class="hl">curl http://payment:8080</span>를 호출한다. 네임스페이스에 ambient 라벨이 없어 메시 계층은 비활성 상태다.',
+            db: () => db([
+              ['namespace label', 'istio.io/dataplane-mode = (없음)'],
+              ['mTLS', '<span class="warn">평문</span>'],
+              ['L7 정책', '없음']
+            ])
+          },
+          {
+            label: 'eBPF + CNP',
+            topo: () => topo(['a-ebpf', 'a-cnp'], ['a-app']),
+            narration: 'Cilium의 <span class="hl">eBPF TC hook</span>이 패킷을 가로채 <span class="hl">CiliumNetworkPolicy</span>를 평가한다. checkout → payment:8080은 화이트리스트에 있어 통과한다.',
+            db: () => dbMulti([
+              { section: 'CiliumNetworkPolicy', rows: [
+                ['policy', 'allow-checkout-to-payment'],
+                ['from', 'app=checkout'],
+                ['to port', '8080/TCP'],
+                ['verdict', '<span class="changed">ALLOWED</span>']
+              ]}
+            ], { note: 'Hubble UI에서 같은 흐름을 녹색으로 확인 가능' })
+          },
+          {
+            label: 'Service VIP',
+            topo: () => topo(['a-svc'], ['a-app', 'a-ebpf', 'a-cnp']),
+            narration: 'Cilium이 kube-proxy를 대체하므로 Service VIP <span class="hl">10.96.50.20:8080</span>이 eBPF 맵 한 번 조회로 endpoint Pod IP로 변환된다.',
+            db: () => db([
+              ['Service', 'payment.payment.svc.cluster.local'],
+              ['ClusterIP', '10.96.50.20:8080'],
+              ['eBPF map lookup', '<span class="changed">→ 10.244.1.7:8080</span>'],
+              ['mode', 'kubeProxyReplacement: true']
+            ])
+          },
+          {
+            label: 'underlay',
+            topo: () => topo([], ['a-app', 'a-ebpf', 'a-cnp', 'a-svc']),
+            narration: '패킷이 노드 underlay를 거쳐 Node B로 전달된다. ztunnel을 거치지 않으므로 평문 그대로다.',
+            db: () => db([
+              ['src', '10.244.0.5 (checkout Pod)'],
+              ['dst', '10.244.1.7:8080 (payment Pod)'],
+              ['encryption', '<span class="warn">없음 — 평문</span>']
+            ])
+          },
+          {
+            label: 'Node B eBPF',
+            topo: () => topo(['b-ebpf'], ['a-app', 'a-ebpf', 'a-cnp', 'a-svc']),
+            narration: 'Node B의 eBPF가 ingress 정책을 한 번 더 검사한다. payment 네임스페이스에서 checkout 출처를 허용하면 통과.',
+            db: () => db([
+              ['ingress check', 'payment 네임스페이스 정책'],
+              ['source identity', 'checkout/checkout-sa'],
+              ['verdict', '<span class="changed">ALLOWED</span>']
+            ])
+          },
+          {
+            label: 'Pod 도착',
+            topo: () => topo(['b-app'], ['a-app', 'a-ebpf', 'a-cnp', 'a-svc', 'b-ebpf']),
+            narration: 'payment 앱이 8080에서 패킷을 받는다. 출발지 IP는 보존되고 mTLS는 없다. <span class="bf">가장 단순한 모드 — L7 정책이나 신원 검증이 필요 없는 워크로드</span>.',
+            db: () => db([
+              ['received src', '10.244.0.5'],
+              ['received dst', '10.244.1.7:8080'],
+              ['관련 컴포넌트', '<span class="bf">Cilium eBPF · CiliumNetworkPolicy · Hubble</span>']
+            ], { note: 'mTLS·L7 정책 필요 시 케이스 2/3로 진행' })
+          }
+        ]
+      },
+
+      // ============ 케이스 2: Ambient L4 mTLS ============
+      1: {
+        title: '케이스 2: Ambient L4 mTLS',
+        nodes: [
+          {
+            label: 'app curl',
+            topo: () => topo(['a-app'], []),
+            narration: 'checkout 네임스페이스에 <span class="hl">istio.io/dataplane-mode=ambient</span> 라벨이 붙어 있어 ztunnel이 트래픽을 가로챌 준비가 된 상태다.',
+            db: () => db([
+              ['namespace label', 'istio.io/dataplane-mode = ambient'],
+              ['PeerAuthentication', 'STRICT'],
+              ['waypoint', '없음 (L4만 사용)']
+            ])
+          },
+          {
+            label: 'eBPF + CNP',
+            topo: () => topo(['a-ebpf', 'a-cnp'], ['a-app']),
+            narration: 'Cilium의 L3/L4 정책은 ambient와 무관하게 그대로 적용된다. ztunnel로 가는 트래픽도 일단 eBPF에서 한 번 검사된다.',
+            db: () => db([
+              ['CiliumNetworkPolicy', 'allow-checkout-to-payment'],
+              ['verdict', '<span class="changed">ALLOWED</span>'],
+              ['note', 'L4 화이트리스트는 메시 위/아래 모두 적용']
+            ])
+          },
+          {
+            label: 'ztunnel A',
+            topo: () => topo(['a-ztun'], ['a-app', 'a-ebpf', 'a-cnp']),
+            narration: '같은 노드의 <span class="hl">ztunnel A</span>가 패킷을 가로챈다. checkout Pod의 SPIFFE 신원을 인증서로 확인하고 HBONE 터널 수립을 시작한다.',
+            db: () => dbMulti([
+              { section: 'ztunnel A', rows: [
+                ['identity', 'spiffe://cluster.local/ns/checkout/sa/checkout'],
+                ['cert TTL', '24h (자동 갱신)'],
+                ['target', 'payment.payment.svc → ztunnel B']
+              ]}
+            ])
+          },
+          {
+            label: 'HBONE',
+            topo: () => topo(['a-hbone', 'b-hbone'], ['a-app', 'a-ebpf', 'a-cnp', 'a-ztun']),
+            narration: '<span class="hl">HBONE</span>(HTTP/2 CONNECT 위 mTLS)으로 패킷이 감싸진다. 표준 HTTP/2 포트를 쓰므로 underlay 방화벽과 호환되고, 양 끝 ztunnel 사이의 신원이 상호 인증된다.',
+            db: () => dbMulti([
+              { section: 'HBONE 터널', rows: [
+                ['프로토콜', 'HTTP/2 CONNECT + mTLS'],
+                ['암호화', '<span class="changed">TLS 1.3</span>'],
+                ['상호 인증', 'SPIFFE 양방향']
+              ]}
+            ])
+          },
+          {
+            label: 'ztunnel B',
+            topo: () => topo(['b-ztun'], ['a-app', 'a-ebpf', 'a-cnp', 'a-ztun', 'a-hbone', 'b-hbone']),
+            narration: '<span class="hl">ztunnel B</span>가 HBONE을 풀고 L4 인가 정책을 평가한다. PeerAuthentication STRICT 덕분에 평문 진입은 차단되어 있다.',
+            db: () => db([
+              ['mode', 'PeerAuthentication: STRICT'],
+              ['client identity', 'checkout-sa (검증 통과)'],
+              ['L4 정책', '통과']
+            ])
+          },
+          {
+            label: 'Node B eBPF',
+            topo: () => topo(['b-ebpf'], ['a-app', 'a-ebpf', 'a-cnp', 'a-ztun', 'a-hbone', 'b-hbone', 'b-ztun']),
+            narration: 'ztunnel B에서 Pod로 가는 마지막 hop도 Cilium eBPF의 ingress 정책을 한 번 더 통과한다.',
+            db: () => db([
+              ['ingress check', 'allow-checkout-to-payment'],
+              ['verdict', '<span class="changed">ALLOWED</span>']
+            ])
+          },
+          {
+            label: 'payment Pod',
+            topo: () => topo(['b-app'], ['a-app', 'a-ebpf', 'a-cnp', 'a-ztun', 'a-hbone', 'b-hbone', 'b-ztun', 'b-ebpf']),
+            narration: 'payment 앱이 패킷을 받는다. 노드 사이 트래픽이 mTLS로 암호화됐고, SPIFFE 신원이 검증됐다. <span class="bf">사이드카 없이 신원 기반 zero-trust 통신을 만든 모드</span>.',
+            db: () => db([
+              ['received', '8080 (평문, ztunnel이 풀어 전달)'],
+              ['관련 컴포넌트', '<span class="bf">Cilium eBPF + ztunnel(HBONE) + PeerAuthentication</span>'],
+              ['CPU 절감 vs 사이드카', '~70% (1000 Pod 기준)']
+            ], { note: 'L7 정책이 필요하면 케이스 3으로' })
+          }
+        ]
+      },
+
+      // ============ 케이스 3: waypoint L7 정책 차단 ============
+      2: {
+        title: '케이스 3: waypoint L7 차단',
+        nodes: [
+          {
+            label: 'PUT 호출',
+            topo: () => topo(['a-app'], []),
+            narration: 'checkout 앱이 이번에는 <span class="hl">curl -X PUT http://payment/api/v1/pay</span>를 호출한다. AuthorizationPolicy에 PUT은 등록되지 않았다.',
+            db: () => db([
+              ['method', '<span class="warn">PUT</span> (정책 외)'],
+              ['path', '/api/v1/pay'],
+              ['waypoint enrolled', '예 (payment 네임스페이스)']
+            ])
+          },
+          {
+            label: 'eBPF + CNP',
+            topo: () => topo(['a-ebpf', 'a-cnp'], ['a-app']),
+            narration: 'L4 화이트리스트는 통과한다. CiliumNetworkPolicy는 8080 포트만 보고 method를 알 수 없다. <span class="hl">L7 차단은 다음 계층에서 일어난다</span>.',
+            db: () => db([
+              ['CiliumNetworkPolicy', 'L4 통과 (8080/TCP)'],
+              ['L7 인식?', '아니오 — eBPF L4 화이트리스트 한정']
+            ])
+          },
+          {
+            label: 'ztunnel A',
+            topo: () => topo(['a-ztun'], ['a-app', 'a-ebpf', 'a-cnp']),
+            narration: 'ztunnel A가 가로채 SPIFFE 신원을 검증하고 HBONE 터널을 수립한다. waypoint 라우팅은 ztunnel이 인지한다.',
+            db: () => db([
+              ['target', 'waypoint(payment-waypoint) → ztunnel B'],
+              ['identity', 'checkout-sa']
+            ])
+          },
+          {
+            label: 'HBONE → waypoint',
+            topo: () => topo(['a-hbone', 'b-hbone', 'b-wp'], ['a-app', 'a-ebpf', 'a-cnp', 'a-ztun']),
+            narration: 'HBONE 터널이 ztunnel B가 아니라 같은 클러스터의 <span class="hl">waypoint Envoy</span>로 향한다. waypoint는 Gateway API의 Gateway 리소스로 만들어진 노드 외부 Envoy다.',
+            db: () => db([
+              ['waypoint', 'payment-waypoint (Gateway API)'],
+              ['gatewayClassName', 'istio-waypoint'],
+              ['L7 처리 권한', '예']
+            ])
+          },
+          {
+            label: 'AuthorizationPolicy',
+            topo: () => topo(['b-authz'], ['a-app', 'a-ebpf', 'a-cnp', 'a-ztun', 'a-hbone', 'b-hbone', 'b-wp']),
+            narration: 'waypoint가 <span class="hl">AuthorizationPolicy</span>를 평가한다. allow 규칙은 GET·POST만 명시했고 PUT은 매칭되지 않는다.',
+            db: () => dbMulti([
+              { section: 'AuthorizationPolicy', rows: [
+                ['name', 'payment-api-allow'],
+                ['allowed methods', 'GET, POST'],
+                ['request method', '<span class="dead-val">PUT (no match)</span>'],
+                ['default action', 'DENY']
+              ]}
+            ])
+          },
+          {
+            label: '403 차단',
+            topo: () => topo([], ['a-app', 'a-ebpf', 'a-cnp', 'a-ztun', 'a-hbone', 'b-hbone', 'b-wp'], ['b-authz']),
+            narration: 'waypoint가 <span class="fail">HTTP 403 Forbidden</span>으로 응답한다. payment Pod는 호출 자체를 못 본다. <span class="bf">L4는 통과해도 L7에서 막히는 다층 방어의 핵심 그림</span>.',
+            db: () => dbMulti([
+              { section: '응답', rows: [
+                ['status', '<span class="dead-val">403 Forbidden</span>'],
+                ['source', 'waypoint Envoy'],
+                ['payment Pod', '호출 미수신']
+              ]},
+              { section: '관측', rows: [
+                ['Hubble', 'L7 deny 표시'],
+                ['Kiali', '에러 트래픽 빨간색']
+              ]}
+            ], { note: '메서드를 GET/POST로 제한하는 화이트리스트 보안 패턴' })
+          }
+        ]
+      }
+    };
+
+    function renderPipeline() {
+      const pipeline = document.getElementById('pipeline');
+      const nodes = scenarios[currentScenario].nodes;
+      pipeline.innerHTML = '';
+      nodes.forEach((node, i) => {
+        if (i > 0) {
+          const conn = document.createElement('div');
+          conn.className = 'pipeline-connector' + (i <= currentStep ? ' filled' : '');
+          pipeline.appendChild(conn);
+        }
+        const el = document.createElement('div');
+        el.className = 'pipeline-step'
+          + (i === currentStep ? ' active' : '')
+          + (i < currentStep ? ' completed' : '');
+        el.onclick = () => goToStep(i);
+        el.innerHTML = '<div class="step-circle">' + (i + 1) + '</div>'
+          + '<div class="step-label">' + node.label + '</div>';
+        pipeline.appendChild(el);
+      });
+    }
+
+    function goToStep(n) {
+      const nodes = scenarios[currentScenario].nodes;
+      if (n < 0 || n >= nodes.length) return;
+      currentStep = n;
+      const node = nodes[n];
+      document.getElementById('topology').innerHTML = node.topo();
+      document.getElementById('narration').innerHTML
+        = '<div class="narration-step-title">Step ' + (n + 1) + ': ' + node.label + '</div>'
+        + '<div class="narration-body">' + node.narration + '</div>';
+      document.getElementById('dbPanel').innerHTML
+        = typeof node.db === 'function' ? node.db() : (node.db || '');
+      document.getElementById('stepCounter').textContent = (n + 1) + ' / ' + nodes.length;
+      renderPipeline();
+    }
+
+    function nextStep() { goToStep(currentStep + 1); }
+    function prevStep() { goToStep(currentStep - 1); }
+
+    function switchScenario(index) {
+      currentScenario = index;
+      currentStep = -1;
+      stopPlay();
+      document.querySelectorAll('.scenario-pill').forEach((el, i) => {
+        el.classList.toggle('active', i === index);
+      });
+      renderPipeline();
+      document.getElementById('stepCounter').textContent = '0 / ' + scenarios[index].nodes.length;
+      const overlay = document.getElementById('startOverlay');
+      if (overlay.style.display !== 'none') return;
+      goToStep(0);
+    }
+
+    function startSimulation() {
+      document.getElementById('startOverlay').style.display = 'none';
+      document.getElementById('contentPanel').style.display = 'block';
+      goToStep(0);
+    }
+
+    function togglePlay() {
+      if (document.getElementById('startOverlay').style.display !== 'none') {
+        startSimulation();
+      }
+      if (isPlaying) { stopPlay(); return; }
+      if (currentStep === -1) goToStep(0);
+      isPlaying = true;
+      document.getElementById('playBtn').textContent = '⏸ 정지';
+      timer = setInterval(() => {
+        const nodes = scenarios[currentScenario].nodes;
+        if (currentStep >= nodes.length - 1) { stopPlay(); return; }
+        nextStep();
+      }, 3000 / playSpeed);
+    }
+
+    function stopPlay() {
+      isPlaying = false;
+      if (timer) { clearInterval(timer); timer = null; }
+      document.getElementById('playBtn').textContent = '▶ 재생';
+    }
+
+    function setSpeed(speed) {
+      playSpeed = speed;
+      document.querySelectorAll('.speed-btn').forEach(el => {
+        el.classList.toggle('active', parseFloat(el.textContent) === speed);
+      });
+      if (isPlaying) { stopPlay(); togglePlay(); }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderPipeline();
+      document.getElementById('stepCounter').textContent = '0 / ' + scenarios[0].nodes.length;
+    });
+  </script>
+</body>
+</html>

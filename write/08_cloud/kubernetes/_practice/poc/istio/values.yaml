@@ -1,0 +1,29 @@
+# Istio - Local Development (Kind)
+# Usage:
+#   helm install istio-base istio/base -n istio-system --wait
+#   helm install istiod istio/istiod -n istio-system -f istio/values.yaml --wait
+
+meshConfig:
+  accessLogFile: /dev/stdout
+  defaultConfig:
+    holdApplicationUntilProxyStarts: true
+  enableAutoMtls: true
+
+global:
+  proxy:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 40Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
+
+pilot:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 100Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
