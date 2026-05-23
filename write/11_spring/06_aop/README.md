@@ -31,6 +31,7 @@ updated: 2026-05-23
 | # | 문서 | 다루는 핵심 |
 |---|------|-----------|
 | 01-01 | [횡단 관심사와 AOP — 프록시로 풀어내기](01-01.횡단%20관심사와%20AOP%20—%20프록시로%20풀어내기.md) | 횡단 관심사 / Filter·Interceptor 한계 / JDK·CGLIB 동적 프록시 / ProxyFactory / 빈 후처리기 / `@Aspect` / Pointcut 표현식 / Advice 5종 / internal call / proxy-target-class |
+| 01-02 | [스프링 스케줄링 — @Scheduled에서 Quartz까지](01-02.스프링%20스케줄링%20—%20@Scheduled에서%20Quartz까지.md) | 배치 vs 스케줄러 / `@Scheduled` / `ThreadPoolTaskScheduler` / Quartz 4구성 / JobStore(RAM·JDBC) / Trigger(Simple·Cron) / Cluster 모드 / Stateful Job / 결정 트리 |
 
 처음 보는 학습자는 01-01 부터 순서대로 따라갑니다. AOP 어노테이션은 이미 써봤지만 내부 동작이 흐릿하다면, §3 (JDK 동적 프록시) 와 §5 (빈 후처리기) 만 골라 읽어도 큰 도움이 됩니다. `@Transactional` 의 internal call 문제로 디버깅 중이라면 §9 로 직행합니다.
 
