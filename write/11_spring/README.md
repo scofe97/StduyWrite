@@ -5,7 +5,7 @@ status: final
 related:
   - ../README.md
   - ../03_architecture/README.md
-  - ../04_messaging/spring/README.md
+  - ../04_messaging/README.md
   - ../05_data/README.md
 updated: 2026-05-23
 ---
@@ -42,7 +42,7 @@ updated: 2026-05-23
 | 주제 | 경로 | 다루는 내용 |
 |------|------|------------|
 | 설계 철학 | [`03_architecture/`](../03_architecture/README.md) "10. 후속 주제" | IoC를 설계 패턴 관점으로, AOP의 Decorator 해석 (예정) |
-| 메시징 | [`04_messaging/spring/`](../04_messaging/spring/) | `@KafkaListener`, Producer Config, Error Handler |
+| 메시징 | [`04_messaging/`](../04_messaging/) | `@KafkaListener`, Producer Config, Error Handler (스프링 부분은 04_BrokerArchitecture·05_ConsistencyPattern 등 주제별로 흡수) |
 | 영속성 | [`05_data/`](../05_data/) | [QueryDSL 6.12 학습 묶음](../05_data/querydsl/README.md) (Spring Data JPA, R2DBC, `@Transactional` 예정) |
 
 ## 전체 Spring 문서 목록 집계
@@ -65,7 +65,7 @@ grep -rl "^  - spring$\|tags:.*spring" write/ --include="*.md" | sort
 4. **`08_exception-handling/`** — MVC 위에서 예외 처리 전 흐름 (서블릿 → BasicErrorController → HandlerExceptionResolver → @ControllerAdvice).
 5. **`04_webflux/`** — WebClient·Reactive. RestTemplate 경험이 있다면 01-01 부터 진입.
 6. **`05_testing/`** — 단위·통합·E2E 전 범위. Spring Boot 3.x 기준.
-7. **도메인별** — 본인 관심 영역. 메시징이면 [`04_messaging/spring/`](../04_messaging/spring/), 데이터·ORM 이면 [`05_data/querydsl/`](../05_data/querydsl/), 보안이면 [`10_security/`](../10_security/).
+7. **도메인별** — 본인 관심 영역. 메시징이면 [`04_messaging/`](../04_messaging/), 데이터·ORM 이면 [`05_data/querydsl/`](../05_data/querydsl/), 보안이면 [`10_security/`](../10_security/).
 
 ## 이관 진척
 
