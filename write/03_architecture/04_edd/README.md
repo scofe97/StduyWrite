@@ -16,7 +16,7 @@ updated: 2026-05-23
 
 본 시리즈는 **이론·원칙·결정 기준**과, EDA를 Kafka로 *적용*하는 도입부 일부까지 다룬다. Kafka·Outbox·Saga·CQRS·Event Sourcing 같은 *순수 도구 레벨 구현 디테일*은 `write/04_messaging/` 이 별도 시리즈로 두텁게 다룬다. 두 시리즈는 상호 `related:` 로 교차 링크된다.
 
-> 2026-05-23 재정의 — 옛 04_messaging/01_EDA/ (EDA 기초·요청응답·202 Polling)는 이 시리즈의 [`05_KafkaApplied/`](05_KafkaApplied/)로 흡수됐다. "EDA 사고 모델 + Kafka 적용"이 이론 측 (01~04절) 옆에 같이 있는 게 학습 동선상 자연스럽다.
+> 2026-05-23 재정의 — 옛 04_messaging/01_EDA/ (EDA 기초·요청응답·202 Polling)는 이 시리즈의 04_edd 05번대(아래 표)로 흡수됐다. "EDA 사고 모델 + Kafka 적용"이 이론 측 (01~04절) 옆에 같이 있는 게 학습 동선상 자연스럽다.
 
 ## 절 체계
 
@@ -69,15 +69,15 @@ updated: 2026-05-23
 
 | # | 문서 | 다루는 질문 | 상태 |
 |---|------|------------|------|
-| 05-01 | [EDA 기초](05_KafkaApplied/05-01.EDA%20기초.md) | 전통 동기 아키텍처의 한계와 이벤트 기반 사고로의 전환 | draft |
-| 05-02 | [EDA 기반 요청응답 통합](05_KafkaApplied/05-02.EDA%20기반%20요청응답%20통합.md) | 비동기 토픽 위에 요청-응답 의미를 얹는 6가지 구조 | draft |
-| 05-03 | [202 Accepted + Polling 패턴](05_KafkaApplied/05-03.202%20Accepted%20+%20Polling%20패턴.md) | 오래 걸리는 작업을 동기 API 인터페이스로 노출하는 표준 패턴 | draft |
+| 05-01 | [EDA 기초](05-01.EDA%20기초.md) | 전통 동기 아키텍처의 한계와 이벤트 기반 사고로의 전환 | draft |
+| 05-02 | [EDA 기반 요청응답 통합](05-02.EDA%20기반%20요청응답%20통합.md) | 비동기 토픽 위에 요청-응답 의미를 얹는 6가지 구조 | draft |
+| 05-03 | [202 Accepted + Polling 패턴](05-03.202%20Accepted%20+%20Polling%20패턴.md) | 오래 걸리는 작업을 동기 API 인터페이스로 노출하는 표준 패턴 | draft |
 
 ## 04_messaging 와의 분담
 
 | 본 시리즈가 다루는 것 | 04_messaging 이 다루는 것 |
 |----------------------|--------------------------|
-| EDA 도입 동기, 사고 모델 (05_KafkaApplied) | (없음 — 05_KafkaApplied로 이관됨) |
+| EDA 도입 동기, 사고 모델 (05번대) | (없음 — 04_edd 05번대로 이관됨) |
 | 왜 토폴로지인가, 단일 작성자 원칙의 의미 | Kafka 토픽 디자인 실무 |
 | 데이터 계약의 정의·진화 원칙 | Avro · Schema Registry 운영, Confluent wire format |
 | Outbox · CDC 선택 기준 | Outbox 구현 패턴, CDC 운영, DLT/Backoff |
