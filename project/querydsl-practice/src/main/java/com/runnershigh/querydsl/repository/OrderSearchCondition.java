@@ -17,4 +17,7 @@ public class OrderSearchCondition {
     private LocalDateTime orderDateFrom;
     private LocalDateTime orderDateTo;
     private Integer minTotalAmount;
+
+    private String sortKey;   // "orderDate" | "memberName" | (기타→기본 id)
+    private boolean ascending; // true=ASC, false=DESC
 }
