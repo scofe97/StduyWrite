@@ -29,7 +29,7 @@ import org.springframework.test.context.ActiveProfiles;
 @Slf4j
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-@ActiveProfiles("test")
+@ActiveProfiles("log4jdbc")
 @Import(QuerydslConfig.class)
 class Ch03_BasicQueryAndJoinTest {
 
@@ -60,8 +60,11 @@ class Ch03_BasicQueryAndJoinTest {
     @Test
     @DisplayName("count — 총 회원 수가 시드 메타와 일치")
     void count_total_members() {
-        long total = queryFactory.select(member.count()).from(member).fetchOne();
+        Long total = queryFactory.select(member.count()).from(member).fetchOne();
+
+        Long total2 = queryFactory.select(member.countDistinct()).from(member).fetchOne();
         assertThat(total).isEqualTo(fixture.memberCount());
+        assertThat(total2).isEqualTo(fixture.memberCount());   // PK 전부 고유 → count == countDistinct
     }
 
     @Test
@@ -75,13 +78,19 @@ class Ch03_BasicQueryAndJoinTest {
                 .limit(100)
                 .fetch();
 
+        queryFactory
+                .select(member.id, member.username, order.status, order.orderItems)
+                .from(member)
+                        .join
+
         assertThat(rows).hasSize(100);
     }
 
     @Test
     @DisplayName("where status — CANCELED 는 전체의 1/10 (i%10==0)")
     void canceled_count_is_one_tenth() {
-        long canceled = queryFactory.select(order.count())
+        var canceled = queryFactory
+                .select(order.count())
                 .from(order)
                 .where(order.status.eq(OrderStatus.CANCELED))
                 .fetchOne();
