@@ -2,9 +2,11 @@ package com.runnershigh.querydsl.repository;
 
 import static com.runnershigh.querydsl.domain.QMember.member;
 import static com.runnershigh.querydsl.domain.QOrder.order;
+import static com.runnershigh.querydsl.domain.QOrderItem.orderItem;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.querydsl.core.Tuple;
+import com.runnershigh.querydsl.domain.Order;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.runnershigh.querydsl.config.QuerydslConfig;
 import com.runnershigh.querydsl.domain.Member;
@@ -78,12 +80,90 @@ class Ch03_BasicQueryAndJoinTest {
                 .limit(100)
                 .fetch();
 
-        queryFactory
-                .select(member.id, member.username, order.status, order.orderItems)
-                .from(member)
-                        .join
-
         assertThat(rows).hasSize(100);
+    }
+
+    @Test
+    @DisplayName("join 세 방식(연관경로·on theta·from 나열)은 결과가 같다 — 노트 01-03")
+    void join_three_styles_same_result() {
+        // ① 연관 경로 조인 (표준) — @ManyToOne 매핑 따라감
+        List<Long> byPath = queryFactory
+                .select(order.id)
+                .from(order)
+                .join(order.member, member)
+                .where(member.age.goe(20))
+                .orderBy(order.id.asc())
+                .fetch();
+
+        // ② on 절 theta join — 엔티티 루트 + 조건 직접
+        List<Long> byOn = queryFactory
+                .select(order.id)
+                .from(order)
+                .join(member).on(order.member.eq(member))
+                .where(member.age.goe(20))
+                .orderBy(order.id.asc())
+                .fetch();
+
+        // ③ from 절 나열 (묵시적 조인) — cross join + where
+        List<Long> byFrom = queryFactory
+                .select(order.id)
+                .from(order, member)
+                .where(order.member.eq(member), member.age.goe(20))
+                .orderBy(order.id.asc())
+                .fetch();
+
+        // 세 방식 모두 같은 inner join 결과
+        assertThat(byPath).isEqualTo(byOn);
+        assertThat(byPath).isEqualTo(byFrom);
+    }
+
+    @Test
+    @DisplayName("fetch join 실측 — 일반 join vs 단건 fetch vs 컬렉션 fetch 행 수 비교 (노트 01-03 심화)")
+    void fetch_join_actual_row_counts() {
+        // 회원당 주문 수 분포: 주문 1000 / 회원 1000 = 회원당 1건 (1:1)
+        // 주문당 항목 수 분포: 시드가 주문당 OrderItem 1개만 생성 → 데카르트 곱이 미미
+
+        // ── 시나리오: 회원 1번이 낸 주문들 ──
+        Long memberId = 1L;
+
+        // ① 단건 fetch join (order.member) — 행 수 = 주문 수 그대로
+        List<Order> singleFetch = queryFactory
+                .selectFrom(order)
+                .join(order.member, member).fetchJoin()
+                .where(member.id.eq(memberId))
+                .fetch();
+        log.info("① 단건 fetch join (order.member) 결과 행 수 = {}", singleFetch.size());
+
+        // ② 컬렉션 fetch join (order.orderItems) — 항목 수만큼 행 증식 (현 시드는 1개라 동일)
+        List<Order> collectionFetch = queryFactory
+                .selectFrom(order)
+                .join(order.orderItems, orderItem).fetchJoin()
+                .where(order.member.id.eq(memberId))
+                .fetch();
+        log.info("② 컬렉션 fetch join (order.orderItems) 결과 행 수 = {}", collectionFetch.size());
+
+        // ③ 컬렉션 fetch join + distinct — PK 기준 중복 제거
+        List<Order> collectionDistinct = queryFactory
+                .selectFrom(order).distinct()
+                .join(order.orderItems, orderItem).fetchJoin()
+                .where(order.member.id.eq(memberId))
+                .fetch();
+        log.info("③ 컬렉션 fetch join + distinct 결과 행 수 = {}", collectionDistinct.size());
+
+        // 전체 주문에서 "주문당 항목 수" 분포도 실측
+        List<Tuple> itemsPerOrder = queryFactory
+                .select(order.id, orderItem.count())
+                .from(order)
+                .join(order.orderItems, orderItem)
+                .groupBy(order.id)
+                .orderBy(orderItem.count().desc())
+                .limit(3)
+                .fetch();
+        itemsPerOrder.forEach(t ->
+                log.info("   주문 {} → 항목 {}개", t.get(order.id), t.get(orderItem.count())));
+
+        // 단건 fetch 는 항상 주문 수 = distinct 결과와 동일
+        assertThat(singleFetch.size()).isEqualTo(collectionDistinct.size());
     }
 
     @Test
