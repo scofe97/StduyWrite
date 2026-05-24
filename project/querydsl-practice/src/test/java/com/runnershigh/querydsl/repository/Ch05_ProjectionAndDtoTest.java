@@ -3,6 +3,7 @@ package com.runnershigh.querydsl.repository;
 import static com.runnershigh.querydsl.domain.QMember.member;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.runnershigh.querydsl.config.QuerydslConfig;
@@ -73,7 +74,33 @@ class Ch05_ProjectionAndDtoTest {
     @Test
     @DisplayName("DTO 전체 카운트")
     void dto_total_count() {
-        long count = queryFactory.select(member.count()).from(member).fetchOne();
+        Long count = queryFactory.select(member.count()).from(member).fetchOne();
         assertThat(count).isEqualTo(fixture.memberCount());
+    }
+
+    @Test
+    @DisplayName("Tuple — 방식 1, DTO 없이 표현식 키로 꺼냄 (constructor 결과와 동일)")
+    void tuple_projection_first10() {
+        // 방식 1 — Tuple: 가장 가볍지만 row.get(표현식) 으로 매번 꺼내야 함
+        List<Tuple> tuples = queryFactory
+                .select(member.username, member.age, member.address.city)
+                .from(member)
+                .orderBy(member.username.asc())
+                .limit(10)
+                .fetch();
+
+        // 방식 3 — Projections.constructor: DTO 로 받음
+        List<MemberSearchDto> dtos = queryFactory
+                .select(Projections.constructor(MemberSearchDto.class,
+                        member.username, member.age, member.address.city))
+                .from(member)
+                .orderBy(member.username.asc())
+                .limit(10)
+                .fetch();
+
+        assertThat(tuples).hasSize(10);
+        // 같은 쿼리 → Tuple 의 표현식 추출값과 DTO 필드가 1:1 로 일치
+        assertThat(tuples.get(0).get(member.username)).isEqualTo(dtos.get(0).getUsername());
+        assertThat(tuples.get(0).get(member.address.city)).isEqualTo(dtos.get(0).getCity());
     }
 }
