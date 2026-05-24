@@ -4,6 +4,7 @@ import static com.runnershigh.querydsl.domain.QMember.member;
 import static com.runnershigh.querydsl.domain.QOrder.order;
 import static com.runnershigh.querydsl.domain.QOrderItem.orderItem;
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -34,7 +35,9 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
     @Override
     public List<Order> search(OrderSearchCondition condition) {
-        return baseQuery(condition).fetch();
+        return baseQuery(condition)
+                .orderBy(orderBySortKey(condition.getSortKey(), condition.isAscending()))
+                .fetch();
     }
 
     @Override
@@ -117,5 +120,19 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
     private BooleanExpression orderDateLoe(LocalDateTime to) {
         return to == null ? null : order.orderDate.loe(to);
+    }
+
+    private OrderSpecifier<?> orderBySortKey(String sortKey, boolean asc) {
+        // com.querydsl.core.types.Order 는 정렬 방향 enum (ASC/DESC).
+        // 도메인 Order 엔티티와 이름이 충돌해 FQN 으로 구분한다.
+        com.querydsl.core.types.Order direction =
+                asc ? com.querydsl.core.types.Order.ASC : com.querydsl.core.types.Order.DESC;
+
+        // 화이트리스트 — 허용된 키만 컬럼에 매핑 (잘못된 키·인젝션 방어).
+        return switch (sortKey == null ? "" : sortKey) {
+            case "orderDate"  -> new OrderSpecifier<>(direction, order.orderDate);
+            case "memberName" -> new OrderSpecifier<>(direction, member.username);
+            default           -> new OrderSpecifier<>(direction, order.id);
+        };
     }
 }

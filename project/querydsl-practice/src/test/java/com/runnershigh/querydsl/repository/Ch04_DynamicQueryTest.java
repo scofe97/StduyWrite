@@ -4,7 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.runnershigh.querydsl.config.QuerydslConfig;
+import com.runnershigh.querydsl.domain.Order;
 import com.runnershigh.querydsl.domain.OrderStatus;
+import java.util.Comparator;
+import java.util.List;
 import com.runnershigh.querydsl.support.TestDataLoader;
 import com.runnershigh.querydsl.support.TestDataLoader.Fixture;
 import jakarta.persistence.EntityManager;
@@ -86,5 +89,37 @@ class Ch04_DynamicQueryTest {
                 .status(OrderStatus.ORDERED)
                 .build();
         assertThat(repository.search(noMatch)).isEmpty();
+    }
+
+    @Test
+    @DisplayName("동적 정렬 — orderDate 내림차순")
+    void sort_by_order_date_desc() {
+        var condition = OrderSearchCondition.builder()
+                .sortKey("orderDate")
+                .ascending(false)
+                .build();
+
+        List<Order> result = repository.search(condition);
+
+        assertThat(result).hasSize(fixture.memberCount());
+        assertThat(result)
+                .extracting(Order::getOrderDate)
+                .isSortedAccordingTo(Comparator.reverseOrder());   // 내림차순 검증
+    }
+
+    @Test
+    @DisplayName("동적 정렬 — 잘못된 sortKey 는 기본 order.id 오름차순")
+    void sort_by_unknown_key_falls_back_to_id() {
+        var condition = OrderSearchCondition.builder()
+                .sortKey("hacker'; DROP TABLE--")   // 화이트리스트 밖 → default
+                .ascending(true)
+                .build();
+
+        List<Order> result = repository.search(condition);
+
+        assertThat(result).hasSize(fixture.memberCount());
+        assertThat(result)
+                .extracting(Order::getId)
+                .isSortedAccordingTo(Comparator.naturalOrder());   // id 오름차순 fallback
     }
 }
