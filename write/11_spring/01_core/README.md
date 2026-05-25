@@ -26,7 +26,8 @@ updated: 2026-05-24
 |----|---|------|-----------|
 | 01 컨테이너 | 01-01 | [객체지향 원리 적용 — DI와 IoC](01-01.객체지향%20원리%20적용%20—%20DI와%20IoC.md) | AppConfig 등장 배경, IoC 와 DI 의 관계, BeanFactory / ApplicationContext, 빈 등록 세 방식, 생성자 주입 권장 이유, 다중 빈 처리(@Qualifier·@Primary·Map/List), CGLIB 싱글톤 보장, 생명주기 7단계, 스코프 7종과 프록시 |
 | 01 컨테이너 | 01-02 | [Spring과 디자인 패턴](01-02.Spring과%20디자인%20패턴.md) | 컨테이너가 구현하는 디자인 패턴 — 싱글톤·프록시·전략·팩토리 등 |
-| 02 서블릿 | 02-01 | [WAS와 서블릿 — HTTP 처리의 토대](02-01.WAS와%20서블릿%20—%20HTTP%20처리의%20토대.md) | Web Server vs WAS, 서블릿 표준과 라이프사이클, 멀티 스레드·스레드 풀, 쿠키/세션, WAR/내장톰캣 부록 |
+| 02 서블릿 | 02-01 | [WAS와 서블릿 — HTTP 처리의 토대](02-01.WAS와%20서블릿%20—%20HTTP%20처리의%20토대.md) | Web Server vs WAS, 서블릿 표준과 라이프사이클, 멀티 스레드·스레드 풀, 쿠키/세션 |
+| 02 서블릿 | 02-02 | [내장 톰캣과 SpringApplication — JAR로 WAS를 품다](02-02.내장%20톰캣과%20SpringApplication%20—%20JAR로%20WAS를%20품다.md) | WAR 배포 단점, 내장 톰캣 원리, SpringApplication.run(), ServletWebServerFactory, 실행 가능 JAR |
 | 03 MVC | 03-01 | [Spring MVC — FrontController에서 DispatcherServlet까지](03-01.Spring%20MVC%20—%20FrontController에서%20DispatcherServlet까지.md) | MVC 패턴 등장, FrontController V1~V5 진화, DispatcherServlet 8단계, HandlerMapping/Adapter/ViewResolver, Controller 인터페이스 vs @Controller, PRG 패턴 |
 | 03 MVC | 03-02 | [예외 처리 — 서블릿에서 @ControllerAdvice까지](03-02.예외%20처리%20—%20서블릿에서%20@ControllerAdvice까지.md) | 서블릿 재디스패치, BasicErrorController, HandlerExceptionResolver 체인 4종, @ExceptionHandler / @ControllerAdvice / @ResponseStatus |
 
