@@ -46,7 +46,9 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
         // 페치 조인 + Pageable 동시 사용은 HHH000104 — 메모리 페이징을 일으킨다.
         // 권장 패턴: 컨텐츠는 페이지 단위로 ID 만 끊고, 별도 쿼리로 fetch join 으로 채운다.
         // 본 메서드는 가장 단순한 안전 형태(@BatchSize 또는 EntityGraph 와 결합 가정).
+        // 정렬은 content 쿼리에만 — count 는 건수만 세므로 order by 가 무의미하고 일부 DB 에서 에러.
         List<Order> content = baseQuery(condition)
+                .orderBy(orderBySortKey(condition.getSortKey(), condition.isAscending()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

@@ -4,9 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.runnershigh.querydsl.config.QuerydslConfig;
+import com.runnershigh.querydsl.domain.Order;
 import com.runnershigh.querydsl.support.TestDataLoader;
 import com.runnershigh.querydsl.support.TestDataLoader.Fixture;
 import jakarta.persistence.EntityManager;
+import java.util.Comparator;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,7 +39,11 @@ class Ch06_PagingAndFetchJoinTest {
 
     private OrderRepositoryImpl repository;
     private final Fixture fixture = new Fixture(
-            1000, 900, 100, 1L, 1000L, 1L, 100L, 1L);
+            1000
+            , 900
+            , 100
+            , 1L
+            , 1000L, 1L, 100L, 1L);
 
     @BeforeEach
     void setUp() {
@@ -64,5 +71,23 @@ class Ch06_PagingAndFetchJoinTest {
         assertThat(page.getContent()).hasSize(fixture.memberCount());
         assertThat(page.getTotalElements()).isEqualTo(fixture.memberCount());
         assertThat(page.getTotalPages()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("searchPage — orderDate 내림차순 정렬된 첫 페이지")
+    void search_page_sorted_by_order_date_desc() {
+        var condition = OrderSearchCondition.builder()
+                .sortKey("orderDate")
+                .ascending(false)
+                .build();
+
+        Page<Order> page = repository.searchPage(condition, PageRequest.of(0, 50));
+
+        List<Order> content = page.getContent();
+        assertThat(content).hasSize(50);
+        // content 가 orderDate 내림차순 — 정렬이 content 쿼리에만 적용됨을 검증
+        assertThat(content)
+                .extracting(Order::getOrderDate)
+                .isSortedAccordingTo(Comparator.reverseOrder());
     }
 }
