@@ -1,0 +1,131 @@
+### ============================================================
+### CQRS Command Side 테스트
+### ============================================================
+### 사전 조건:
+###   1. docker-compose up -d (Redpanda + Schema Registry)
+###   2. ./gradlew bootRun
+### ============================================================
+### 이 파일이 모든 Command API의 원본(canonical)이다.
+### 03~05 파일은 이 파일에서 생성된 데이터를 기반으로 검증한다.
+### ============================================================
+
+### --- 게시물 (Posts) ---
+
+### 1. 게시물 생성
+POST http://localhost:8080/api/cqrs/commands/posts
+Content-Type: application/json
+
+{
+  "userId": "user-001",
+  "content": "Hello CQRS! 첫 번째 게시물입니다."
+}
+
+> {%
+    client.global.set("postId", response.body.postId);
+    client.log("postId saved: " + response.body.postId);
+%}
+
+### 예상: 202 Accepted + {"eventId": "...", "postId": "..."}
+### Kafka: social.events.post-created 토픽에 PostCreated 이벤트 발행
+
+###
+
+### 2. 게시물 좋아요 (위 #1에서 캡처한 postId 사용)
+POST http://localhost:8080/api/cqrs/commands/posts/like
+Content-Type: application/json
+
+{
+  "postId": "{{postId}}",
+  "userId": "user-002"
+}
+
+### 예상: 202 Accepted + {"eventId": "..."}
+### Kafka: social.events.post-liked 토픽에 PostLiked 이벤트 발행
+
+###
+
+### --- 팔로우 (Follows) ---
+
+### 3. 사용자 팔로우
+POST http://localhost:8080/api/cqrs/commands/follows
+Content-Type: application/json
+
+{
+  "followerId": "user-001",
+  "followeeId": "user-002"
+}
+
+### 예상: 202 Accepted + {"eventId": "..."}
+### Kafka: social.events.user-followed 토픽에 UserFollowed 이벤트 발행
+
+###
+
+### 4. 사용자 언팔로우
+DELETE http://localhost:8080/api/cqrs/commands/follows
+Content-Type: application/json
+
+{
+  "followerId": "user-001",
+  "followeeId": "user-002"
+}
+
+### 예상: 202 Accepted + {"eventId": "..."}
+### Kafka: social.events.user-unfollowed 토픽에 UserUnfollowed 이벤트 발행
+
+###
+
+### --- 시나리오: 여러 게시물 + 팔로우 흐름 ---
+
+### 5. user-001이 게시물 작성
+POST http://localhost:8080/api/cqrs/commands/posts
+Content-Type: application/json
+
+{
+  "userId": "user-001",
+  "content": "CQRS에서는 쓰기와 읽기가 분리된다."
+}
+
+> {%
+    client.global.set("postId2", response.body.postId);
+%}
+
+###
+
+### 6. user-002가 user-001을 팔로우
+POST http://localhost:8080/api/cqrs/commands/follows
+Content-Type: application/json
+
+{
+  "followerId": "user-002",
+  "followeeId": "user-001"
+}
+
+###
+
+### 7. user-003이 user-001 게시물에 좋아요 (#5에서 캡처한 postId2 사용)
+POST http://localhost:8080/api/cqrs/commands/posts/like
+Content-Type: application/json
+
+{
+  "postId": "{{postId2}}",
+  "userId": "user-003"
+}
+
+###
+
+### --- 토픽 확인 (rpk) ---
+
+### 8. Post Created 이벤트 토픽 확인
+# docker exec -it redpanda rpk topic consume social.events.post-created --offset start --num 10
+
+### 9. Post Liked 이벤트 토픽 확인
+# docker exec -it redpanda rpk topic consume social.events.post-liked --offset start --num 10
+
+### 10. User Followed 이벤트 토픽 확인
+# docker exec -it redpanda rpk topic consume social.events.user-followed --offset start --num 10
+
+### 11. User Unfollowed 이벤트 토픽 확인
+# docker exec -it redpanda rpk topic consume social.events.user-unfollowed --offset start --num 10
+
+### 12. Redpanda Console
+# http://localhost:8070

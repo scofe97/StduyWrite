@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TPS - 티켓 관리</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        /* 헤더 */
+        .header {
+            background-color: #1a237e;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* 사이드바 (접힌 상태) */
+        .sidebar {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 60px;
+            height: calc(100vh - 70px);
+            background-color: #283593;
+            box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+            z-index: 999;
+        }
+
+        /* 메인 컨텐츠 */
+        .main-content {
+            margin-top: 70px;
+            margin-left: 60px;
+            padding: 24px;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* 페이지 헤더 */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb ol {
+            display: flex;
+            list-style: none;
+            gap: 8px;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .breadcrumb li {
+            color: #666;
+        }
+
+        .breadcrumb li::after {
+            content: '>';
+            margin-left: 8px;
+            color: #999;
+        }
+
+        .breadcrumb li:last-child::after {
+            content: '';
+        }
+
+        .breadcrumb li.active {
+            color: #1a237e;
+            font-weight: 600;
+        }
+
+        .breadcrumb a {
+            color: #666;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: #1a237e;
+        }
+
+        /* 헤더 액션 버튼 */
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* 버튼 공통 스타일 */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background-color: #1a237e;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #0d1b5e;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(26, 35, 126, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: #5c6bc0;
+            color: white;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background-color: #3949ab;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(92, 107, 192, 0.3);
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background-color: #c82333;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-search {
+            background-color: #607d8b;
+            color: white;
+        }
+
+        .btn-search:hover {
+            background-color: #455a64;
+        }
+
+        /* 검색 영역 */
+        .search-area {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 16px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .search-area select,
+        .search-area input {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-area select {
+            min-width: 150px;
+        }
+
+        .search-area input {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-area select:focus,
+        .search-area input:focus {
+            border-color: #1a237e;
+            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
+        }
+
+        /* 상태 탭 */
+        .status-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            background: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .status-tabs button {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .status-tabs button:hover {
+            background-color: #f5f5f5;
+        }
+
+        .status-tabs button[aria-selected="true"] {
+            background-color: #1a237e;
+            color: white;
+            border-color: #1a237e;
+        }
+
+        /* 테이블 컨테이너 */
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        /* 테이블 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        th {
+            padding: 14px 12px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: #495057;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th:hover {
+            background-color: #e9ecef;
+        }
+
+        th[data-sort]::after {
+            content: ' ⇅';
+            color: #adb5bd;
+            font-size: 10px;
+        }
+
+        th[data-sort][data-direction="asc"]::after {
+            content: ' ↑';
+            color: #1a237e;
+        }
+
+        th[data-sort][data-direction="desc"]::after {
+            content: ' ↓';
+            color: #1a237e;
+        }
+
+        td {
+            padding: 14px 12px;
+            font-size: 14px;
+            color: #212529;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background-color: #f8f9fa;
+            cursor: pointer;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #fafbfc;
+        }
+
+        tbody tr:nth-child(even):hover {
+            background-color: #f8f9fa;
+        }
+
+        /* 체크박스 */
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        /* 상태 뱃지 */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 70px;
+        }
+
+        .status-badge.draft {
+            background-color: #9e9e9e;
+            color: white;
+        }
+
+        .status-badge.approval-requested {
+            background-color: #ff9800;
+            color: white;
+        }
+
+        .status-badge.approved {
+            background-color: #2196f3;
+            color: white;
+        }
+
+        .status-badge.progress {
+            background-color: #1976d2;
+            color: white;
+        }
+
+        .status-badge.complete {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .status-badge.fail {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .status-badge.rejected {
+            background-color: #d32f2f;
+            color: white;
+        }
+
+        /* 페이지네이션 */
+        .pagination-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .page-size select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .page-size select:focus {
+            border-color: #1a237e;
+        }
+
+        .page-nav {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .page-nav button {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .page-nav button:hover:not(:disabled) {
+            background-color: #1a237e;
+            color: white;
+            border-color: #1a237e;
+        }
+
+        .page-nav button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            font-size: 14px;
+            color: #666;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .total-count {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .total-count strong {
+            color: #1a237e;
+            font-weight: 600;
+        }
+
+        /* 로딩 스피너 */
+        .loading-spinner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            display: none;
+        }
+
+        .loading-spinner.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1a237e;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .spinner-text {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* 로딩 오버레이 */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 9998;
+            display: none;
+        }
+
+        .loading-overlay.active {
+            display: block;
+        }
+
+        /* 빈 상태 */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .empty-state-text {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state-subtext {
+            font-size: 14px;
+            color: #bbb;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                padding: 16px;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .search-area {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-area input {
+                max-width: 100%;
+            }
+
+            .status-tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 10px 8px;
+            }
+
+            .pagination-area {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <h1>TPS - Trombone Platform Service</h1>
+    </header>
+
+    <!-- 사이드바 (접힌 상태) -->
+    <aside class="sidebar"></aside>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="main-content">
+        <!-- 페이지 헤더 -->
+        <div class="page-header" data-testid="page-header">
+            <nav class="breadcrumb" aria-label="breadcrumb">
+                <ol>
+                    <li><a href="#">워크플로우</a></li>
+                    <li class="active" aria-current="page">티켓</li>
+                </ol>
+            </nav>
+            <div class="header-actions">
+                <button
+                    aria-label="삭제"
+                    data-testid="btn-delete"
+                    class="btn btn-danger"
+                    id="btn-delete"
+                    disabled>
+                    삭제
+                </button>
+                <button
+                    aria-label="등록(CI/CD)"
+                    data-testid="btn-create-cicd"
+                    class="btn btn-primary"
+                    onclick="location.href='/tickets/create/cicd'">
+                    등록(CI/CD)
+                </button>
+                <button
+                    aria-label="등록(PMS)"
+                    data-testid="btn-create-pms"
+                    class="btn btn-secondary"
+                    onclick="location.href='/tickets/create/pms'">
+                    등록(PMS)
+                </button>
+            </div>
+        </div>
+
+        <!-- 검색 영역 -->
+        <div class="search-area" data-testid="column-search">
+            <select id="searchColumn" aria-label="검색 컬럼" data-testid="search-column-select">
+                <option value="tcktNo">티켓번호</option>
+                <option value="tcktNm">티켓명</option>
+                <option value="rgtrId">등록자</option>
+            </select>
+            <input
+                type="text"
+                id="searchKeyword"
+                aria-label="검색어"
+                placeholder="검색어를 입력하세요"
+                data-testid="search-keyword-input">
+            <button
+                aria-label="검색"
+                data-testid="btn-search"
+                class="btn btn-search"
+                id="btn-search">
+                검색
+            </button>
+        </div>
+
+        <!-- 상태 필터 탭 -->
+        <div class="status-tabs" role="tablist" data-testid="status-tabs">
+            <button role="tab" aria-selected="true" data-status="ALL">전체</button>
+            <button role="tab" aria-selected="false" data-status="DRAFT">작성중</button>
+            <button role="tab" aria-selected="false" data-status="PROGRESS">진행중</button>
+            <button role="tab" aria-selected="false" data-status="COMPLETE">완료</button>
+            <button role="tab" aria-selected="false" data-status="FAIL">실패</button>
+        </div>
+
+        <!-- 테이블 -->
+        <div class="table-container">
+            <table data-testid="ticket-table">
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">
+                            <input
+                                type="checkbox"
+                                aria-label="전체선택"
+                                data-testid="select-all"
+                                id="select-all">
+                        </th>
+                        <th data-sort="tcktNo" style="width: 120px;">티켓번호</th>
+                        <th data-sort="tcktNm">티켓명</th>
+                        <th data-sort="tcktKnd" style="width: 100px;">티켓종류</th>
+                        <th data-sort="taskNm" style="width: 120px;">업무</th>
+                        <th data-sort="devlopPicNm" style="width: 100px;">담당자</th>
+                        <th data-sort="tcktStts" style="width: 100px;">상태</th>
+                        <th data-sort="regDt" style="width: 120px;">등록일</th>
+                    </tr>
+                </thead>
+                <tbody id="ticket-tbody" data-testid="ticket-tbody">
+                    <!-- Rows loaded dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 페이지네이션 -->
+        <div class="pagination-area" data-testid="pagination">
+            <div class="page-size">
+                <select id="pageSize" aria-label="페이지 크기" data-testid="page-size-select">
+                    <option value="10">10건</option>
+                    <option value="20">20건</option>
+                    <option value="50">50건</option>
+                </select>
+            </div>
+            <div class="page-nav" data-testid="page-nav">
+                <button
+                    aria-label="이전 페이지"
+                    data-testid="btn-prev"
+                    id="btn-prev">
+                    &lt;
+                </button>
+                <span class="page-info" data-testid="page-info" id="page-info">1 / 1</span>
+                <button
+                    aria-label="다음 페이지"
+                    data-testid="btn-next"
+                    id="btn-next">
+                    &gt;
+                </button>
+            </div>
+            <div class="total-count" data-testid="total-count">
+                총 <strong id="totalCount">0</strong>건
+            </div>
+        </div>
+    </main>
+
+    <!-- 로딩 오버레이 -->
+    <div id="loading-overlay" class="loading-overlay"></div>
+
+    <!-- 로딩 스피너 -->
+    <div id="loading-spinner" class="loading-spinner">
+        <div class="spinner"></div>
+        <div class="spinner-text">로딩 중...</div>
+    </div>
+
+    <script>
+        // 전역 상태
+        let currentPage = 1;
+        let pageSize = 10;
+        let currentFilter = {
+            column: 'tcktNo',
+            keyword: '',
+            status: 'ALL'
+        };
+        let tickets = [];
+        let totalCount = 0;
+        let sortColumn = null;
+        let sortDirection = 'asc';
+
+        // API 호출
+        async function fetchTickets() {
+            showLoading();
+            try {
+                const params = new URLSearchParams({
+                    page: currentPage,
+                    pageSize: pageSize,
+                    column: currentFilter.column,
+                    keyword: currentFilter.keyword,
+                    status: currentFilter.status !== 'ALL' ? currentFilter.status : ''
+                });
+
+                const token = localStorage.getItem('token');
+                const response = await fetch(`/api/v1/tickets?${params}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        window.location.href = '/login';
+                        return;
+                    }
+                    throw new Error(`Failed to fetch tickets: ${response.status}`);
+                }
+
+                const data = await response.json();
+                tickets = data.data || [];
+                totalCount = data.totalCount || 0;
+
+                renderTable(tickets);
+                renderPagination();
+            } catch (error) {
+                console.error('Error fetching tickets:', error);
+                showError('티켓 목록을 불러오는데 실패했습니다');
+                renderEmptyState('데이터를 불러올 수 없습니다');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // 테이블 렌더링
+        function renderTable(tickets) {
+            const tbody = document.getElementById('ticket-tbody');
+
+            if (tickets.length === 0) {
+                renderEmptyState('검색 결과가 없습니다');
+                return;
+            }
+
+            tbody.innerHTML = tickets.map(ticket => `
+                <tr onclick="navigateToDetail('${ticket.tcktNo}')">
+                    <td>
+                        <input
+                            type="checkbox"
+                            onclick="event.stopPropagation(); updateDeleteButton();"
+                            value="${ticket.tcktNo}"
+                            data-testid="ticket-checkbox">
+                    </td>
+                    <td>${escapeHtml(ticket.tcktNo)}</td>
+                    <td>${escapeHtml(ticket.tcktNm)}</td>
+                    <td>${escapeHtml(ticket.tcktKnd)}</td>
+                    <td>${escapeHtml(ticket.taskNm || '-')}</td>
+                    <td>${escapeHtml(ticket.devlopPicNm || '-')}</td>
+                    <td>
+                        <span class="status-badge ${getStatusClass(ticket.tcktStts)}">
+                            ${getStatusLabel(ticket.tcktStts)}
+                        </span>
+                    </td>
+                    <td>${formatDate(ticket.regDt)}</td>
+                </tr>
+            `).join('');
+        }
+
+        // 빈 상태 렌더링
+        function renderEmptyState(message) {
+            const tbody = document.getElementById('ticket-tbody');
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <div class="empty-state-text">${message}</div>
+                        <div class="empty-state-subtext">필터 조건을 변경하거나 새 티켓을 등록해주세요</div>
+                    </td>
+                </tr>
+            `;
+        }
+
+        // 페이지네이션 렌더링
+        function renderPagination() {
+            const totalPages = Math.ceil(totalCount / pageSize);
+            document.getElementById('page-info').textContent = `${currentPage} / ${Math.max(1, totalPages)}`;
+            document.getElementById('totalCount').textContent = totalCount;
+
+            document.getElementById('btn-prev').disabled = currentPage === 1;
+            document.getElementById('btn-next').disabled = currentPage >= totalPages || totalPages === 0;
+        }
+
+        // 검색
+        document.getElementById('btn-search').addEventListener('click', () => {
+            currentFilter.column = document.getElementById('searchColumn').value;
+            currentFilter.keyword = document.getElementById('searchKeyword').value.trim();
+            currentPage = 1;
+            fetchTickets();
+        });
+
+        // Enter 키로 검색
+        document.getElementById('searchKeyword').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('btn-search').click();
+            }
+        });
+
+        // 상태 필터
+        document.querySelectorAll('[data-status]').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                document.querySelectorAll('[data-status]').forEach(t => t.setAttribute('aria-selected', 'false'));
+                e.target.setAttribute('aria-selected', 'true');
+                currentFilter.status = e.target.dataset.status;
+                currentPage = 1;
+                fetchTickets();
+            });
+        });
+
+        // 컬럼 정렬
+        document.querySelectorAll('th[data-sort]').forEach(th => {
+            th.addEventListener('click', () => {
+                const column = th.dataset.sort;
+
+                // 정렬 방향 토글
+                if (sortColumn === column) {
+                    sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+                } else {
+                    sortColumn = column;
+                    sortDirection = 'asc';
+                }
+
+                // 모든 헤더의 정렬 표시 제거
+                document.querySelectorAll('th[data-sort]').forEach(header => {
+                    delete header.dataset.direction;
+                });
+
+                // 현재 헤더에 정렬 표시
+                th.dataset.direction = sortDirection;
+
+                // 정렬 수행
+                sortTable(column, sortDirection);
+            });
+        });
+
+        // 테이블 정렬
+        function sortTable(column, direction) {
+            tickets.sort((a, b) => {
+                let valA = a[column];
+                let valB = b[column];
+
+                // null/undefined 처리
+                if (valA == null) valA = '';
+                if (valB == null) valB = '';
+
+                // 문자열로 변환
+                valA = String(valA);
+                valB = String(valB);
+
+                if (direction === 'asc') {
+                    return valA.localeCompare(valB);
+                } else {
+                    return valB.localeCompare(valA);
+                }
+            });
+
+            renderTable(tickets);
+        }
+
+        // 페이지네이션 - 이전
+        document.getElementById('btn-prev').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                fetchTickets();
+            }
+        });
+
+        // 페이지네이션 - 다음
+        document.getElementById('btn-next').addEventListener('click', () => {
+            const totalPages = Math.ceil(totalCount / pageSize);
+            if (currentPage < totalPages) {
+                currentPage++;
+                fetchTickets();
+            }
+        });
+
+        // 페이지 크기 변경
+        document.getElementById('pageSize').addEventListener('change', (e) => {
+            pageSize = parseInt(e.target.value);
+            currentPage = 1;
+            fetchTickets();
+        });
+
+        // 체크박스 전체 선택
+        document.getElementById('select-all').addEventListener('change', (e) => {
+            document.querySelectorAll('#ticket-tbody input[type="checkbox"]').forEach(cb => {
+                cb.checked = e.target.checked;
+            });
+            updateDeleteButton();
+        });
+
+        // 체크박스 선택 시 삭제 버튼 활성화
+        function updateDeleteButton() {
+            const checkedCount = document.querySelectorAll('#ticket-tbody input[type="checkbox"]:checked').length;
+            document.getElementById('btn-delete').disabled = checkedCount === 0;
+
+            // 전체 선택 체크박스 상태 업데이트
+            const totalCheckboxes = document.querySelectorAll('#ticket-tbody input[type="checkbox"]').length;
+            const selectAllCheckbox = document.getElementById('select-all');
+            if (totalCheckboxes > 0) {
+                selectAllCheckbox.checked = checkedCount === totalCheckboxes;
+                selectAllCheckbox.indeterminate = checkedCount > 0 && checkedCount < totalCheckboxes;
+            }
+        }
+
+        // 삭제 버튼 클릭
+        document.getElementById('btn-delete').addEventListener('click', () => {
+            const checkedTickets = Array.from(
+                document.querySelectorAll('#ticket-tbody input[type="checkbox"]:checked')
+            ).map(cb => cb.value);
+
+            if (checkedTickets.length === 0) return;
+
+            if (confirm(`선택한 ${checkedTickets.length}개 티켓을 삭제하시겠습니까?`)) {
+                deleteTickets(checkedTickets);
+            }
+        });
+
+        // 티켓 삭제 (실제 구현은 API 연동 필요)
+        async function deleteTickets(ticketNos) {
+            try {
+                // TODO: 실제 삭제 API 호출
+                console.log('Deleting tickets:', ticketNos);
+                alert('삭제 기능은 구현 예정입니다');
+                // fetchTickets(); // 삭제 후 목록 갱신
+            } catch (error) {
+                console.error('Error deleting tickets:', error);
+                showError('티켓 삭제에 실패했습니다');
+            }
+        }
+
+        // 상세 페이지로 이동
+        function navigateToDetail(tcktNo) {
+            window.location.href = `/tickets/${tcktNo}/progress`;
+        }
+
+        // 헬퍼 함수: 상태 CSS 클래스
+        function getStatusClass(status) {
+            const map = {
+                'DRAFT': 'draft',
+                'APPROVAL_REQUESTED': 'approval-requested',
+                'APPROVED': 'approved',
+                'PROGRESS': 'progress',
+                'COMPLETE': 'complete',
+                'FAIL': 'fail',
+                'REJECTED': 'rejected'
+            };
+            return map[status] || 'draft';
+        }
+
+        // 헬퍼 함수: 상태 라벨
+        function getStatusLabel(status) {
+            const map = {
+                'DRAFT': '작성중',
+                'APPROVAL_REQUESTED': '승인요청',
+                'APPROVED': '승인완료',
+                'PROGRESS': '진행중',
+                'COMPLETE': '완료',
+                'FAIL': '실패',
+                'REJECTED': '반려'
+            };
+            return map[status] || status;
+        }
+
+        // 헬퍼 함수: 날짜 포맷
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+
+            try {
+                const date = new Date(dateStr);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            } catch (e) {
+                return dateStr.substring(0, 10);
+            }
+        }
+
+        // 헬퍼 함수: HTML 이스케이프
+        function escapeHtml(text) {
+            if (text == null) return '';
+            const div = document.createElement('div');
+            div.textContent = String(text);
+            return div.innerHTML;
+        }
+
+        // 로딩 표시
+        function showLoading() {
+            document.getElementById('loading-spinner').classList.add('active');
+            document.getElementById('loading-overlay').classList.add('active');
+        }
+
+        // 로딩 숨김
+        function hideLoading() {
+            document.getElementById('loading-spinner').classList.remove('active');
+            document.getElementById('loading-overlay').classList.remove('active');
+        }
+
+        // 에러 표시
+        function showError(message) {
+            alert(message); // 실제로는 토스트 알림 사용
+        }
+
+        // 페이지 초기화
+        window.addEventListener('DOMContentLoaded', () => {
+            // 인증 체크
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/login';
+                return;
+            }
+
+            // 초기 데이터 로드
+            fetchTickets();
+        });
+    </script>
+</body>
+</html>
