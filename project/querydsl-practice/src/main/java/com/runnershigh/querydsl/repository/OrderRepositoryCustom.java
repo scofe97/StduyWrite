@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 /**
  * 학습 노트:
- * - 02-01.커스텀 리포지토리 패턴
+ * - jpa/03-05.커스텀 리포지토리 패턴
  * - 01-04.동적 쿼리 (search)
  * - 01-06.페이징과 fetch join 함정 (searchPage)
  */
