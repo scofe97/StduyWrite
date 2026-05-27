@@ -8,7 +8,7 @@ updated: 2026-05-23
 
 # 04_messaging — 이벤트 기반 메시징
 
-> Kafka·Redpanda·Avro·Schema Registry 같은 메시징 구현 기술과 EDA 적용 문서를 모은 영역입니다. 분산 시스템의 일반 이론(CAP, Saga 보상 트랜잭션의 구조 일반론)은 `05_data/`로, EDA 원칙·결정 기준 같은 이론은 [`../03_architecture/04_edd/`](../03_architecture/04_edd/)로 분리돼 있습니다. 여기서는 도구 레벨의 구체적 선택(예: Producer idempotent 옵션 튜닝, Confluent wire format, Spring Kafka concurrency 운영)을 다룹니다.
+> Kafka·Redpanda·Avro·Schema Registry 같은 메시징 구현 기술과 EDA 적용 문서를 모은 영역입니다. 분산 시스템의 일반 이론(CAP, Saga 보상 트랜잭션의 구조 일반론)은 `05_data/`로, EDA 원칙·결정 기준 같은 이론은 [`../03_architecture/05_edd/`](../03_architecture/05_edd/)로 분리돼 있습니다. 여기서는 도구 레벨의 구체적 선택(예: Producer idempotent 옵션 튜닝, Confluent wire format, Spring Kafka concurrency 운영)을 다룹니다.
 
 ## 학습 흐름
 
@@ -16,7 +16,7 @@ updated: 2026-05-23
 
 각 폴더 안에서는 카테고리 안 첫 두 자리(예: `01-01`, `01-02` …) 순서로 읽으면 개념에서 코드 디테일을 거쳐 운영으로 진행이 자연스럽습니다. 처음 읽을 때는 각 폴더의 `01` 문서만 따라가도 전체 골격이 잡힙니다.
 
-> EDA 사고 모델·요청-응답 통합 같은 EDA 도입부는 이 폴더에서 제외되어 [`../03_architecture/04_edd/`](../03_architecture/04_edd/)로 이동했습니다(2026-05-23 재구성). 이론 측 `04_edd`와 한 자리에서 같이 봅니다.
+> EDA 사고 모델·요청-응답 통합 같은 EDA 도입부는 이 폴더에서 제외되어 [`../03_architecture/05_edd/`](../03_architecture/05_edd/)로 이동했습니다(2026-05-23 재구성). 이론 측 `05_edd`와 한 자리에서 같이 봅니다.
 
 ## 폴더 구조와 인덱스
 
@@ -40,12 +40,12 @@ updated: 2026-05-23
 - [01-02.Schema Registry](02_MessageContract/01-02.Schema%20Registry.md) — 메시지 계약을 인프라 수준에서 강제하는 중앙 저장소
 - [01-03.Avro](02_MessageContract/01-03.Avro.md) — 스키마 분리 바이너리 직렬화와 Confluent wire format
 - [01-04.EventEnvelope 적용](02_MessageContract/01-04.EventEnvelope%20적용.md) — 메타데이터 표준화와 CloudEvents
-- [01-05.Avro 직렬화 예외처리 전략](02_MessageContract/01-05.Avro%20직렬화%20예외처리%20전략.md) — 정합성이 깨지는 두 시점과 대응
-- [01-06.Avro 스키마 진화 패턴](02_MessageContract/01-06.Avro%20스키마%20진화%20패턴.md) — 호환성 모드와 배포 순서, 필드 변경 안전 규칙
-- [01-07.한 토픽 다수 message 형태](02_MessageContract/01-07.한%20토픽%20다수%20message%20형태.md) — RecordNameStrategy로 한 토픽에 별개 Avro record 공존시키기
-- [01-08.Avro Consumer 수신 패턴](02_MessageContract/01-08.Avro%20Consumer%20수신%20패턴.md) — 앱 내부 Avro vs 외부 JSON, 토픽 분리 원칙
-- [01-09.CloudEventsHeaderInterceptor](02_MessageContract/01-09.CloudEventsHeaderInterceptor.md) — Envelope 공통 헤더 자동 부착, TPS 코드의 인터셉터 풀버전
-- [01-10.trace-id와 traceparent](02_MessageContract/01-10.trace-id와%20traceparent.md) — MDC 운영용 vs W3C Trace Context 표준
+- [02-01.Avro 직렬화 예외처리 전략](02_MessageContract/02-01.Avro%20직렬화%20예외처리%20전략.md) — 정합성이 깨지는 두 시점과 대응
+- [02-02.Avro 스키마 진화 패턴](02_MessageContract/02-02.Avro%20스키마%20진화%20패턴.md) — 호환성 모드와 배포 순서, 필드 변경 안전 규칙
+- [02-03.한 토픽 다수 message 형태](02_MessageContract/02-03.한%20토픽%20다수%20message%20형태.md) — RecordNameStrategy로 한 토픽에 별개 Avro record 공존시키기
+- [02-04.Avro Consumer 수신 패턴](02_MessageContract/02-04.Avro%20Consumer%20수신%20패턴.md) — 앱 내부 Avro vs 외부 JSON, 토픽 분리 원칙
+- [03-01.CloudEventsHeaderInterceptor](02_MessageContract/03-01.CloudEventsHeaderInterceptor.md) — Envelope 공통 헤더 자동 부착, TPS 코드의 인터셉터 풀버전
+- [03-02.trace-id와 traceparent](02_MessageContract/03-02.trace-id와%20traceparent.md) — MDC 운영용 vs W3C Trace Context 표준
 
 ### 03_TopicDesign — 토픽 설계
 
@@ -64,16 +64,17 @@ updated: 2026-05-23
 - [01-02.리더 선출](04_BrokerArchitecture/01-02.리더%20선출.md) — Raft 합의 프로토콜의 3가지 역할
 - [01-03.Consumer Group](04_BrokerArchitecture/01-03.Consumer%20Group.md) — 발행·소비 기본 구조와 그룹 프로토콜
 - [01-04.리밸런스 프로토콜](04_BrokerArchitecture/01-04.리밸런스%20프로토콜.md) — Stop-the-World 트리거와 점진적 리밸런스
-- [01-05.Redpanda 아키텍처](04_BrokerArchitecture/01-05.Redpanda%20아키텍처.md) — 단일 바이너리·Raft per partition·thread-per-core
-- [01-06.Redpanda Console 인증](04_BrokerArchitecture/01-06.Redpanda%20Console%20인증.md) — 무료 라이선스에서 게이트를 세우는 4가지 옵션
-- [01-07.Kafka·Redpanda SASL 인증](04_BrokerArchitecture/01-07.Kafka·Redpanda%20SASL%20인증.md) — 브로커 본체에 SASL/ACL/TLS로 인증·인가
-- [01-08.Kafka 공통 정책 스타터 패턴](04_BrokerArchitecture/01-08.Kafka%20공통%20정책%20스타터%20패턴.md) — retry·DLT·로그·메트릭 정책을 starter로 묶기
-- [01-09.Spring Kafka 운영 고급](04_BrokerArchitecture/01-09.Spring%20Kafka%20운영%20고급.md) — Vertical scaling(`concurrency`), 런타임 컨슈머, blocking vs non-blocking retry
-- [01-10.Manual Ack와 Offset Commit 정책](04_BrokerArchitecture/01-10.Manual%20Ack와%20Offset%20Commit%20정책.md) — Auto commit vs Manual ack 결정 기준
-- [01-11.Batch Listener와 부분 실패 처리](04_BrokerArchitecture/01-11.Batch%20Listener와%20부분%20실패%20처리.md) — 단건 vs Batch, 부분 실패 패턴 3가지
-- [01-12.message-lib config 5개 클래스 종합](04_BrokerArchitecture/01-12.message-lib%20config%205개%20클래스%20종합.md) — config 다섯 클래스의 기동 순서·책임·상호작용
-- [01-13.message-lib config 학습 검증](04_BrokerArchitecture/01-13.message-lib%20config%20학습%20검증.md) — config 종합 문서 자체의 학습 검증 노트
-- [01-14.message-lib config 운영 이식 가이드](04_BrokerArchitecture/01-14.message-lib%20config%20운영%20이식%20가이드.md) — 다른 프로젝트로 옮길 때의 체크리스트
+- [02-01.Redpanda 아키텍처](04_BrokerArchitecture/02-01.Redpanda%20아키텍처.md) — 단일 바이너리·Raft per partition·thread-per-core
+- [02-02.Redpanda Console 인증](04_BrokerArchitecture/02-02.Redpanda%20Console%20인증.md) — 무료 라이선스에서 게이트를 세우는 4가지 옵션
+- [02-03.Kafka·Redpanda SASL 인증](04_BrokerArchitecture/02-03.Kafka·Redpanda%20SASL%20인증.md) — 브로커 본체에 SASL/ACL/TLS로 인증·인가
+- [03-01.Kafka 공통 정책 스타터 패턴](04_BrokerArchitecture/03-01.Kafka%20공통%20정책%20스타터%20패턴.md) — retry·DLT·로그·메트릭 정책을 starter로 묶기
+- [03-02.Spring Kafka 운영 고급](04_BrokerArchitecture/03-02.Spring%20Kafka%20운영%20고급.md) — Vertical scaling(`concurrency`), 런타임 컨슈머, blocking vs non-blocking retry
+- [03-03.Manual Ack와 Offset Commit 정책](04_BrokerArchitecture/03-03.Manual%20Ack와%20Offset%20Commit%20정책.md) — Auto commit vs Manual ack 결정 기준
+- [03-04.Batch Listener와 부분 실패 처리](04_BrokerArchitecture/03-04.Batch%20Listener와%20부분%20실패%20처리.md) — 단건 vs Batch, 부분 실패 패턴 3가지
+- [03-05.다중 직렬화 컨슈머 구성 3방식](04_BrokerArchitecture/03-05.다중%20직렬화%20컨슈머%20구성%203방식.md) — 한 앱에서 Avro·JSON 동시 소비: 빈 정의 / 어노테이션 오버라이드 / 설정 런타임 생성
+- [04-01.message-lib config 5개 클래스 종합](04_BrokerArchitecture/04-01.message-lib%20config%205개%20클래스%20종합.md) — config 다섯 클래스의 기동 순서·책임·상호작용
+- [04-02.message-lib config 학습 검증](04_BrokerArchitecture/04-02.message-lib%20config%20학습%20검증.md) — config 종합 문서 자체의 학습 검증 노트
+- [04-03.message-lib config 운영 이식 가이드](04_BrokerArchitecture/04-03.message-lib%20config%20운영%20이식%20가이드.md) — 다른 프로젝트로 옮길 때의 체크리스트
 
 ### 05_ConsistencyPattern — 일관성 패턴·예외 처리
 
@@ -81,18 +82,18 @@ updated: 2026-05-23
 
 - [01-01.Choreography Saga](05_ConsistencyPattern/01-01.Choreography%20Saga.md) — 중앙 조정자 없는 자율 협력 워크플로우
 - [01-02.Orchestration Saga](05_ConsistencyPattern/01-02.Orchestration%20Saga.md) — 명시적 조정자가 단계를 지시하는 방식
-- [01-03.Outbox](05_ConsistencyPattern/01-03.Outbox.md) — DB 트랜잭션과 이벤트 발행의 원자성
-- [01-04.Outbox 스케일링](05_ConsistencyPattern/01-04.Outbox%20스케일링.md) — 폴러 베이스라인 측정과 병렬화
-- [01-05.Inbox](05_ConsistencyPattern/01-05.Inbox.md) — 소비 측 멱등성과 후속 처리 분리
-- [01-06.CDC](05_ConsistencyPattern/01-06.CDC.md) — Debezium 기반 변경 데이터 캡처
-- [01-07.Inbox 트랜잭션 오염과 멱등 어댑터](05_ConsistencyPattern/01-07.Inbox%20트랜잭션%20오염과%20멱등%20어댑터.md) — 멱등 INSERT의 트랜잭션 오염
-- [01-08.컨슈머 진입점 트랜잭션 경계와 Inbox의 사정거리](05_ConsistencyPattern/01-08.컨슈머%20진입점%20트랜잭션%20경계와%20Inbox의%20사정거리.md) — 영수증 vs 실행 큐 분리
-- [01-09.Exactly-once 의미론과 Consumer Idempotency](05_ConsistencyPattern/01-09.Exactly-once%20의미론과%20Consumer%20Idempotency.md) — Kafka EOS의 실제 범위와 DB가 끼면 깨지는 이유
-- [01-10.Spring Kafka DLT와 Producer Config](05_ConsistencyPattern/01-10.Spring%20Kafka%20DLT와%20Producer%20Config.md) — `DefaultErrorHandler + DeadLetterPublishingRecoverer` 흐름
-- [01-11.DlqConsumer](05_ConsistencyPattern/01-11.DlqConsumer.md) — DLQ 끝단 소비자
-- [01-12.Kafka 예외 처리 통합](05_ConsistencyPattern/01-12.Kafka%20예외%20처리%20통합.md) — `KafkaErrorConfig`를 축으로 한 통합 가이드
-- [01-13.KafkaErrorConfig DLT 헤더 폭증 사고](05_ConsistencyPattern/01-13.KafkaErrorConfig%20DLT%20헤더%20폭증%20사고.md) — 2026-05-14 무한 루프 사고 회고
-- [01-14.Backoff 전략 비교와 선택](05_ConsistencyPattern/01-14.Backoff%20전략%20비교와%20선택.md) — Fixed/Exponential/WithMaxRetries 곡선과 jitter
+- [02-01.Outbox](05_ConsistencyPattern/02-01.Outbox.md) — DB 트랜잭션과 이벤트 발행의 원자성
+- [02-02.Outbox 스케일링](05_ConsistencyPattern/02-02.Outbox%20스케일링.md) — 폴러 베이스라인 측정과 병렬화
+- [03-01.Inbox](05_ConsistencyPattern/03-01.Inbox.md) — 소비 측 멱등성과 후속 처리 분리
+- [03-02.Inbox 트랜잭션 오염과 멱등 어댑터](05_ConsistencyPattern/03-02.Inbox%20트랜잭션%20오염과%20멱등%20어댑터.md) — 멱등 INSERT의 트랜잭션 오염
+- [03-03.컨슈머 진입점 트랜잭션 경계와 Inbox의 사정거리](05_ConsistencyPattern/03-03.컨슈머%20진입점%20트랜잭션%20경계와%20Inbox의%20사정거리.md) — 영수증 vs 실행 큐 분리
+- [03-04.Exactly-once 의미론과 Consumer Idempotency](05_ConsistencyPattern/03-04.Exactly-once%20의미론과%20Consumer%20Idempotency.md) — Kafka EOS의 실제 범위와 DB가 끼면 깨지는 이유
+- [04-01.CDC](05_ConsistencyPattern/04-01.CDC.md) — Debezium 기반 변경 데이터 캡처
+- [05-01.Spring Kafka DLT와 Producer Config](05_ConsistencyPattern/05-01.Spring%20Kafka%20DLT와%20Producer%20Config.md) — `DefaultErrorHandler + DeadLetterPublishingRecoverer` 흐름
+- [05-02.DlqConsumer](05_ConsistencyPattern/05-02.DlqConsumer.md) — DLQ 끝단 소비자
+- [05-03.Kafka 예외 처리 통합](05_ConsistencyPattern/05-03.Kafka%20예외%20처리%20통합.md) — `KafkaErrorConfig`를 축으로 한 통합 가이드
+- [05-04.KafkaErrorConfig DLT 헤더 폭증 사고](05_ConsistencyPattern/05-04.KafkaErrorConfig%20DLT%20헤더%20폭증%20사고.md) — 2026-05-14 무한 루프 사고 회고
+- [05-05.Backoff 전략 비교와 선택](05_ConsistencyPattern/05-05.Backoff%20전략%20비교와%20선택.md) — Fixed/Exponential/WithMaxRetries 곡선과 jitter
 
 ### 06_StreamProcessing — 스트림 처리
 
@@ -123,7 +124,7 @@ updated: 2026-05-23
 | 영역 | 다루는 것 |
 |------|----------|
 | 본 폴더 (`04_messaging/`) | Kafka·Redpanda·Avro 도구 레벨 선택과 Spring Kafka 운영. EDA·DDD를 도구로 적용할 때의 패턴 |
-| [`../03_architecture/04_edd/`](../03_architecture/04_edd/) | EDA 이론·원칙·결정 기준 (Why 토폴로지·단일 작성자·CQRS 모델). EDA의 적용 측은 `04_edd/`에 같이 둠 |
+| [`../03_architecture/05_edd/`](../03_architecture/05_edd/) | EDA 이론·원칙·결정 기준 (Why 토폴로지·단일 작성자·CQRS 모델). EDA의 적용 측은 `05_edd/`에 같이 둠 |
 | `05_data/` | 분산 시스템 일반 이론 (CAP, Saga 보상 트랜잭션 구조 일반론) |
 
 > 2026-05-23 변경 요약: `01_MessageContract`와 `01_Connect`가 둘 다 `01` prefix로 충돌해 `01_Connect`를 빼고 나머지 카테고리를 한 칸씩 밀어 prefix 유일성을 확보했습니다(02_MessageContract … 07_CQRS_EventSourcing). 옛 `08_workflow`와 `09_advanced`는 둘 다 심화 성격이라 `08_advanced/` 한 폴더로 흡수했습니다(`01_variants/`, `02_workflow/` 두 갈래). 단행본 실습 폴더 명명은 `_code/`에서 `_practice/`로 통일했습니다.

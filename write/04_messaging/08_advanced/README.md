@@ -38,7 +38,7 @@ updated: 2026-05-23
 - [01-05.Outbox 재시도 레이어 분리](01_variants/01-05.Outbox%20재시도%20레이어%20분리.md) — Producer 메모리 재시도와 DB 영속 재시도의 시간 척도 분리, 단순화 시그널 메트릭
 - [01-06.Outbox 폴러 0건 SELECT 와 polling cadence](01_variants/01-06.Outbox%20폴러%200건%20SELECT%20와%20polling%20cadence.md) — 0건 SELECT의 세 비용(DB 부하·로그 폭주·SLA 트레이드오프), cadence 결정 변수, adaptive backoff, CDC 대안 비교
 
-각 문서는 출발점·변종 비교·외부 사례·TPS 적용 가능성의 4단 구조를 따릅니다. 출발점은 본 학습 트리에서 다룬 기본형이고(예: 01-01의 출발점은 [05_ConsistencyPattern/01-03.Outbox](../05_ConsistencyPattern/01-03.Outbox.md)의 폴링 Relay), 변종 비교는 5개 이상의 대안과 트레이드오프 매트릭스이며, 외부 사례는 회사 엔지니어링 블로그·공식 문서 같은 1차 자료를 출처 URL과 함께 인용합니다. 마지막으로 현재 `okestro/tps-gitlab2` 코드 기준으로 도입 시그널·리스크·이행 단계를 정리합니다.
+각 문서는 출발점·변종 비교·외부 사례·TPS 적용 가능성의 4단 구조를 따릅니다. 출발점은 본 학습 트리에서 다룬 기본형이고(예: 01-01의 출발점은 [05_ConsistencyPattern/01-03.Outbox](../05_ConsistencyPattern/02-01.Outbox.md)의 폴링 Relay), 변종 비교는 5개 이상의 대안과 트레이드오프 매트릭스이며, 외부 사례는 회사 엔지니어링 블로그·공식 문서 같은 1차 자료를 출처 URL과 함께 인용합니다. 마지막으로 현재 `okestro/tps-gitlab2` 코드 기준으로 도입 시그널·리스크·이행 단계를 정리합니다.
 
 
 
@@ -75,5 +75,5 @@ updated: 2026-05-23
 
 - [../README.md](../README.md) — 04_messaging 진입점
 - [02_workflow/README.md](02_workflow/README.md) — Temporal 워크플로우 갈래 진입점
-- [../05_ConsistencyPattern/01-03.Outbox.md](../05_ConsistencyPattern/01-03.Outbox.md) — 01-01 변종 비교의 출발점
+- [../05_ConsistencyPattern/02-01.Outbox.md](../05_ConsistencyPattern/02-01.Outbox.md) — 01-01 변종 비교의 출발점
 - [../05_ConsistencyPattern/01-02.Orchestration Saga.md](../05_ConsistencyPattern/01-02.Orchestration%20Saga.md) — 01-02 Saga 엔진 비교의 패턴 토대
