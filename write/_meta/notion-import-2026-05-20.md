@@ -48,7 +48,7 @@ updated: 2026-05-20
 인덱싱 보고서(`~/.claude-work/plans/notion-export-index.md`)의 우선순위에 따라 사용자 결정 후 진행.
 
 - ★★ Spring WebSocket 7편 → `11_spring/06_websocket/` 신설 후보
-- ★★ Spring TDD 6편 → `11_spring/05_testing/tdd/` 하위 폴더 흡수 후보
+- ★★ Spring TDD 6편 → `11_spring/04_testing/tdd/` 하위 폴더 흡수 후보
 - ★★ Spring Netty 10편 → `11_spring/05_internals/` 신설 후보
 - ★ Spring MSA 30편 — 카테고리 분산 이관 (도메인·메시징·관측성·클라우드)
 - ★ Spring Study 51편 — 신설 폴더 다수 필요, 대규모
