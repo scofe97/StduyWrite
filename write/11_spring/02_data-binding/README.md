@@ -8,7 +8,7 @@ source:
 related:
   - ../README.md
   - ../01_core/
-  - ../03_webflux/
+  - ../03_network/
 updated: 2026-05-23
 ---
 
@@ -76,7 +76,7 @@ updated: 2026-05-23
 - [Spring 통합 MOC](../README.md) — Spring 학습 문서 전체 진입점
 - [Spring MVC — FrontController 에서 DispatcherServlet 까지](../01_core/03-01.Spring%20MVC%20—%20FrontController에서%20DispatcherServlet까지.md) — 본 묶음의 전제. `DispatcherServlet` 흐름과 핸들러 어댑터 구조
 - [예외 처리 — 서블릿에서 @ControllerAdvice 까지](../01_core/03-02.예외%20처리%20—%20서블릿에서%20@ControllerAdvice까지.md) — 검증 실패를 전역에서 잡는 방법
-- [Spring WebClient 학습 MOC](../03_webflux/README.md) — 반대편(아웃바운드) 의 바디 직렬화·역직렬화
+- [Spring WebClient 학습 MOC](../03_network/webflux/README.md) — 반대편(아웃바운드) 의 바디 직렬화·역직렬화
 
 ## 후속 편 계획
 
