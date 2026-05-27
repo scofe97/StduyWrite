@@ -5,7 +5,7 @@ status: draft
 related:
   - ../README.md
   - ../01_core/README.md
-updated: 2026-05-25
+updated: 2026-05-27
 ---
 
 # 스프링 부트 자동 구성과 외부 설정 학습 MOC
@@ -24,6 +24,7 @@ updated: 2026-05-25
 | 01 자동 구성 | 01-01 | [스타터와 라이브러리 버전 관리](01-01.스타터와%20라이브러리%20버전%20관리.md) | 라이브러리 직접 관리의 고통, BOM 버전 관리, 스타터 묶음 제공 |
 | 01 자동 구성 | 01-02 | [자동 구성 — @AutoConfiguration과 @Conditional](01-02.자동%20구성%20—%20@AutoConfiguration과%20@Conditional.md) | 등록 안 한 빈이 존재하는 미스터리, @Conditional, ImportSelector, @EnableAutoConfiguration |
 | 01 자동 구성 | 01-03 | [커스텀 스타터 만들기](01-03.커스텀%20스타터%20만들기.md) | 자동 구성 원리를 내 라이브러리에 적용, AutoConfiguration.imports 등록 |
+| 01 자동 구성 | 01-04 | [자동 구성 심화 — 순서·게이트·기본값 주입](01-04.자동%20구성%20심화%20—%20순서·게이트·기본값%20주입.md) | `@AutoConfiguration(after)`, `@ConditionalOnBean`, `@ConditionalOnProperty` 키-존재, `EnvironmentPostProcessor`, `ObjectProvider` |
 | 02 외부 설정 | 02-01 | [외부 설정 — 커맨드라인부터 application.yml까지](02-01.외부%20설정%20—%20커맨드라인부터%20application.yml까지.md) | 네 가지 설정 통로, Environment 단일 창구, 우선순위 |
 | 02 외부 설정 | 02-02 | [@ConfigurationProperties와 타입 안전 설정](02-02.@ConfigurationProperties와%20타입%20안전%20설정.md) | @Value vs @ConfigurationProperties, 생성자 바인딩, 시작 시점 검증 |
 | 02 외부 설정 | 02-03 | [프로필 — 환경별 설정 분리](02-03.프로필%20—%20환경별%20설정%20분리.md) | 프로필별 파일, YAML 문서 분리, @Profile 빈 등록 |
@@ -56,6 +57,9 @@ updated: 2026-05-25
 4. 외부 설정의 네 통로와 우선순위는? `Environment` 는 무엇을 통일하는가?
 5. `@Value` 와 `@ConfigurationProperties` 의 차이는? 후자가 타입 안전·검증에서 나은 이유는?
 6. 프로필별 설정 파일 규칙과 `@Profile` 빈 등록은 어떻게 동작하는가?
+7. `@AutoConfiguration(after = ...)` 는 무엇을 보장하는가? `@DependsOn` 과 단위가 어떻게 다른가?
+8. `@ConditionalOnBean` 과 `@ConditionalOnClass` 의 평가 시점·기준은 어떻게 다른가? 같은 자동 구성에 둘이 함께 쓰이는 이유는?
+9. `EnvironmentPostProcessor` 가 `@Configuration` 으로는 못 푸는 일은 무엇인가? `addLast`/`addFirst` 의 우선순위 함의는? 왜 `META-INF/spring.factories` 에 등록해야 하는가?
 
 ## 원본 학습 자료
 
