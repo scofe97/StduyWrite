@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * 학습 노트:
- * - 02-01.커스텀 리포지토리 패턴 — Impl 명명 규칙
+ * - jpa/03-05.커스텀 리포지토리 패턴 — Impl 명명 규칙
  * - 01-04.동적 쿼리 — BooleanExpression null-return 패턴
  * - 01-05.프로젝션과 DTO 매핑 — @QueryProjection
  */

@@ -33,6 +33,8 @@ QueryDSL은 그 지점에서 들어온다. 정적 타입 메타모델(Q클래스
 
 > 16개를 세 장으로 나눈다. 1장은 *표준 이론* — Q-class·동적 쿼리·프로젝션·페이징 같은 새 프로젝트에서 바로 쓰는 문법. 2장은 *심화 이론* — 1장 표준만으로는 운영 코드를 읽기 어려운 자리(PathBuilder·서브쿼리 합성·NULLS LAST/countDistinct/ExpressionUtils.as·Hooks/ThreadLocal/BooleanBuilder 누적 같은 표현식 합성 패턴)를 보충. 3장은 *실무 변형* — 커스텀 리포지토리·테스트·마이그레이션·실무 변형 모음·락·ROW_NUMBER 대체 같이 팀에 적용할 때 마주치는 패턴.
 
+> 커스텀 리포지토리 패턴(`RepositoryCustom` + `Impl`)은 Spring Data JPA 주제라 [`jpa/03-05`](../jpa/03-05.커스텀%20리포지토리%20패턴.md) 로 분리해 두었다.
+
 | # | 문서 | 다루는 핵심 |
 |---|------|-----------|
 | 01-01 | [입문과 6.12의 위치](01-01.QueryDSL%20입문과%206.12의%20위치.md) | 등장 동기, 원조 archived 사실, 6.12 vs 7.x 선택 |
@@ -46,15 +48,14 @@ QueryDSL은 그 지점에서 들어온다. 정적 타입 메타모델(Q클래스
 | **02-02** | **[JPAExpressions — 서브쿼리 합성](02-02.JPAExpressions%20%E2%80%94%20%EC%84%9C%EB%B8%8C%EC%BF%BC%EB%A6%AC%20%ED%95%A9%EC%84%B1.md)** | **scalar / EXISTS / IN 세 형태, 상관 서브쿼리, sub-query LIMIT 제약** |
 | **02-03** | **[정렬·집계·프로젝션 보충](02-03.%EC%A0%95%EB%A0%AC%C2%B7%EC%A7%91%EA%B3%84%C2%B7%ED%94%84%EB%A1%9C%EC%A0%9D%EC%85%98%20%EB%B3%B4%EC%B6%A9.md)** | **NULLS LAST API / CASE 기반, countDistinct, ExpressionUtils.as 로 서브쿼리에 alias** |
 | **02-04** | **[Hooks·ThreadLocal·BooleanBuilder 누적 — 표현식 합성 패턴](02-04.Hooks%C2%B7ThreadLocal%C2%B7BooleanBuilder%20%EB%88%84%EC%A0%81%20%E2%80%94%20%ED%91%9C%ED%98%84%EC%8B%9D%20%ED%95%A9%EC%84%B1%20%ED%8C%A8%ED%84%B4.md)** | **Functional Predicate Supplier 람다 binding, Hooks 4 분할, ThreadLocal userId 캡처, BooleanBuilder.or() 가상값 누적, transform(groupBy) 결합** |
-| 03-01 | [커스텀 리포지토리 패턴](03-01.커스텀%20리포지토리%20패턴.md) | `RepositoryCustom` + `Impl`, fragment composition |
-| 03-02 | [테스트와 멀티모듈](03-02.테스트와%20멀티모듈.md) | `@DataJpaTest` + `JPAQueryFactory`, Q클래스 가시성 |
-| 03-03 | [대안 비교와 6.12→7.x 마이그레이션](03-03.대안%20비교와%206.12-7.x%20마이그레이션.md) | MyBatis/JOOQ 비교, OpenFeign 좌표 이전, 7.x 차이 |
-| 03-04 | [실무 변형 모음](03-04.실무%20변형%20모음.md) | PathBuilder·Embedded ID·상관 서브쿼리·JPQL limit 한계·동적 검색 추상 베이스·`nullExpression` |
-| 03-05 | [락과 동시성 제어](03-05.락과%20동시성%20제어.md) | `@Version` 낙관, `PESSIMISTIC_WRITE/READ`, `setLockMode` ↔ `@Lock`, 데드락 방어 |
-| 03-06 | [window 함수 없는 JPA QueryDSL의 ROW_NUMBER 대체](03-06.window%20함수%20없는%20JPA%20QueryDSL의%20ROW_NUMBER%20대체.md) | 상관 sub-select + `CaseBuilder` 정렬로 `ROW_NUMBER`/`PARTITION BY` 의미 동등 표현, group by 이식성 함정 |
-| 03-07 | [스프링 데이터 페이징 통합](03-07.스프링%20데이터%20페이징%20통합.md) | `JpaRepository` + `MemberRepositoryCustom` + `Impl` 합치기, 분리 카운트 패턴, `PageableExecutionUtils.getPage` |
+| 03-01 | [테스트와 멀티모듈](03-01.테스트와%20멀티모듈.md) | `@DataJpaTest` + `JPAQueryFactory`, Q클래스 가시성 |
+| 03-02 | [대안 비교와 6.12→7.x 마이그레이션](03-02.대안%20비교와%206.12-7.x%20마이그레이션.md) | MyBatis/JOOQ 비교, OpenFeign 좌표 이전, 7.x 차이 |
+| 03-03 | [실무 변형 모음](03-03.실무%20변형%20모음.md) | PathBuilder·Embedded ID·상관 서브쿼리·JPQL limit 한계·동적 검색 추상 베이스·`nullExpression` |
+| 03-04 | [락과 동시성 제어](03-04.락과%20동시성%20제어.md) | `@Version` 낙관, `PESSIMISTIC_WRITE/READ`, `setLockMode` ↔ `@Lock`, 데드락 방어 |
+| 03-05 | [window 함수 없는 JPA QueryDSL의 ROW_NUMBER 대체](03-05.window%20함수%20없는%20JPA%20QueryDSL의%20ROW_NUMBER%20대체.md) | 상관 sub-select + `CaseBuilder` 정렬로 `ROW_NUMBER`/`PARTITION BY` 의미 동등 표현, group by 이식성 함정 |
+| 03-06 | [스프링 데이터 페이징 통합](03-06.스프링%20데이터%20페이징%20통합.md) | `JpaRepository` + `MemberRepositoryCustom` + `Impl` 합치기, 분리 카운트 패턴, `PageableExecutionUtils.getPage` |
 
-처음 학습자는 01-01부터 순서대로. 1장을 끝낸 시점에 *표준 QueryDSL 문법으로 일반 검색* 을 짤 수 있다. 운영 코드(예: TPS operator 결재 도메인)에서 PathBuilder·서브쿼리·NULLS LAST·countDistinct 가 등장하면 2장으로. 2장까지 끝내면 *운영 코드의 모든 QueryDSL API* 를 1차 이해할 수 있다. 3장은 팀에 적용하는 패턴 — 운영 코드베이스의 비표준 패턴을 마주쳤다면 03-04, 재고·결제처럼 동시성 충돌이 도메인에 박혀 있다면 03-05, native SQL의 CTE·window 함수를 JPA로 옮겨야 한다면 03-06 을 먼저 펼친다.
+처음 학습자는 01-01부터 순서대로. 1장을 끝낸 시점에 *표준 QueryDSL 문법으로 일반 검색* 을 짤 수 있다. 운영 코드(예: TPS operator 결재 도메인)에서 PathBuilder·서브쿼리·NULLS LAST·countDistinct 가 등장하면 2장으로. 2장까지 끝내면 *운영 코드의 모든 QueryDSL API* 를 1차 이해할 수 있다. 3장은 팀에 적용하는 패턴 — 운영 코드베이스의 비표준 패턴을 마주쳤다면 03-03, 재고·결제처럼 동시성 충돌이 도메인에 박혀 있다면 03-04, native SQL의 CTE·window 함수를 JPA로 옮겨야 한다면 03-05 를 먼저 펼친다.
 
 
 
@@ -90,7 +91,7 @@ QueryDSL은 그 지점에서 들어온다. 정적 타입 메타모델(Q클래스
 
 ## 면접 대비 체크리스트
 
-> 1장 + 2장(총 9편)을 다 읽은 뒤 다음 질문에 모두 답할 수 있어야 한다. 3장 실무 변형(03-04, 03-06)과 락(03-05)은 운영 환경에서 마주쳤을 때 추가로 점검한다.
+> 1장 + 2장(총 9편)을 다 읽은 뒤 다음 질문에 모두 답할 수 있어야 한다. 3장 실무 변형(03-03, 03-05)과 락(03-04)은 운영 환경에서 마주쳤을 때 추가로 점검한다.
 
 ### 1장 — 표준 이론 (1~5번)
 

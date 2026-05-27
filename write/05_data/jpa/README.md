@@ -33,6 +33,7 @@ updated: 2026-05-23
 | 03-02 | [쿼리 메소드](03-02.쿼리%20메소드.md) |
 | 03-03 | [프록시와 N+1](03-03.프록시와%20N+1.md) |
 | 03-04 | [Auditing, 페이징, Projection](03-04.Auditing%2C%20페이징%2C%20Projection.md) |
+| 03-05 | [커스텀 리포지토리 패턴](03-05.커스텀%20리포지토리%20패턴.md) — `RepositoryCustom` + `Impl` + fragment composition (QueryDSL 결합 예제 포함) |
 
 ## 04번대 — 트랜잭션·JPQL·락
 

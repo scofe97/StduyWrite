@@ -3,6 +3,7 @@ package com.runnershigh.querydsl.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.runnershigh.querydsl.config.QuerydslConfig;
+import com.runnershigh.querydsl.domain.Member;
 import com.runnershigh.querydsl.support.TestDataLoader;
 import com.runnershigh.querydsl.support.TestDataLoader.Fixture;
 import jakarta.persistence.EntityManager;
@@ -17,7 +18,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
- * Ch07 — 커스텀 리포지토리 패턴. 10,000건 시드.
+ * Ch07 — 커스텀 리포지토리 패턴 (학습 노트: jpa/03-05). 10,000건 시드.
  */
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -41,7 +42,7 @@ class Ch07_CustomRepositoryTest {
 
         // user_00001 ~ user_10000 중 'user_00001' 부분 일치 = 1건
         assertThat(memberRepository.findByUsernameContains("user_00001"))
-                .extracting(m -> m.getUsername())
+                .extracting(Member::getUsername)
                 .containsExactly("user_00001");
     }
 
