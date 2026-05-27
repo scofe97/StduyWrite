@@ -47,10 +47,10 @@ QueryDSL은 그 지점에서 들어온다. 정적 타입 메타모델(Q클래스
 | **02-01** | **[PathBuilder — 동적 path 빌더 깊이](02-01.PathBuilder%20%E2%80%94%20%EB%8F%99%EC%A0%81%20path%20%EB%B9%8C%EB%8D%94%20%EA%B9%8A%EC%9D%B4.md)** | **정의·생성·자료형 접근·SQL 별칭·트레이드오프, EmbeddedId 두 단계 접근, self-join 동기** |
 | **02-02** | **[JPAExpressions — 서브쿼리 합성](02-02.JPAExpressions%20%E2%80%94%20%EC%84%9C%EB%B8%8C%EC%BF%BC%EB%A6%AC%20%ED%95%A9%EC%84%B1.md)** | **scalar / EXISTS / IN 세 형태, 상관 서브쿼리, sub-query LIMIT 제약** |
 | **02-03** | **[정렬·집계·프로젝션 보충](02-03.%EC%A0%95%EB%A0%AC%C2%B7%EC%A7%91%EA%B3%84%C2%B7%ED%94%84%EB%A1%9C%EC%A0%9D%EC%85%98%20%EB%B3%B4%EC%B6%A9.md)** | **NULLS LAST API / CASE 기반, countDistinct, ExpressionUtils.as 로 서브쿼리에 alias** |
-| **02-04** | **[Hooks·ThreadLocal·BooleanBuilder 누적 — 표현식 합성 패턴](02-04.Hooks%C2%B7ThreadLocal%C2%B7BooleanBuilder%20%EB%88%84%EC%A0%81%20%E2%80%94%20%ED%91%9C%ED%98%84%EC%8B%9D%20%ED%95%A9%EC%84%B1%20%ED%8C%A8%ED%84%B4.md)** | **Functional Predicate Supplier 람다 binding, Hooks 4 분할, ThreadLocal userId 캡처, BooleanBuilder.or() 가상값 누적, transform(groupBy) 결합** |
+| **02-04** | **[표현식 합성 — Functional Predicate Supplier 와 transform groupBy](02-04.Hooks%C2%B7ThreadLocal%C2%B7BooleanBuilder%20%EB%88%84%EC%A0%81%20%E2%80%94%20%ED%91%9C%ED%98%84%EC%8B%9D%20%ED%95%A9%EC%84%B1%20%ED%8C%A8%ED%84%B4.md)** | **Functional Predicate Supplier 람다 binding (지연 평가 함정), transform(groupBy) 1:N 재조립** |
 | 03-01 | [테스트와 멀티모듈](03-01.테스트와%20멀티모듈.md) | `@DataJpaTest` + `JPAQueryFactory`, Q클래스 가시성 |
 | 03-02 | [대안 비교와 6.12→7.x 마이그레이션](03-02.대안%20비교와%206.12-7.x%20마이그레이션.md) | MyBatis/JOOQ 비교, OpenFeign 좌표 이전, 7.x 차이 |
-| 03-03 | [실무 변형 모음](03-03.실무%20변형%20모음.md) | PathBuilder·Embedded ID·상관 서브쿼리·JPQL limit 한계·동적 검색 추상 베이스·`nullExpression` |
+| 03-03 | [실무 변형 모음](03-03.실무%20변형%20모음.md) | PathBuilder·Embedded ID·상관 서브쿼리·JPQL limit 한계·동적 검색 추상 베이스·`nullExpression`, **Hooks 4 분할·ThreadLocal userId 캡처·BooleanBuilder.or() 가상값 누적** (02-04 에서 이동) |
 | 03-04 | [락과 동시성 제어](03-04.락과%20동시성%20제어.md) | `@Version` 낙관, `PESSIMISTIC_WRITE/READ`, `setLockMode` ↔ `@Lock`, 데드락 방어 |
 | 03-05 | [window 함수 없는 JPA QueryDSL의 ROW_NUMBER 대체](03-05.window%20함수%20없는%20JPA%20QueryDSL의%20ROW_NUMBER%20대체.md) | 상관 sub-select + `CaseBuilder` 정렬로 `ROW_NUMBER`/`PARTITION BY` 의미 동등 표현, group by 이식성 함정 |
 | 03-06 | [스프링 데이터 페이징 통합](03-06.스프링%20데이터%20페이징%20통합.md) | `JpaRepository` + `MemberRepositoryCustom` + `Impl` 합치기, 분리 카운트 패턴, `PageableExecutionUtils.getPage` |

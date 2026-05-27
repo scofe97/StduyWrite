@@ -1,0 +1,45 @@
+# log4jdbc 학습 전용 profile — 기존 test profile (application-test.yml) 과 분리.
+# 차이는 두 줄: driver-class-name → DriverSpy, url 앞에 jdbc:log4jdbc: 접두사.
+# 학습 문서: write/05_data/05-01.JDBC 드라이버 wrap 로깅의 운영 비용.md (§1 Driver 교체형)
+
+spring:
+  datasource:
+    url: jdbc:log4jdbc:postgresql://aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?sslmode=require&prepareThreshold=0&currentSchema=querydsl_practice
+    username: postgres.vhirdstmzdzfkvofycfc
+    password: 47Ivx19vxSO8HniV
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: false
+        default_batch_fetch_size: 100
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+# datasource-proxy starter 는 log4jdbc 학습 동안 끔 — 두 wrap 라이브러리가 동시에 끼면
+# 라인 수 비교 (§2) 가 흐려진다. log4jdbc 단독 채널만 본다.
+decorator:
+  datasource:
+    enabled: false
+
+logging:
+  level:
+    root: warn
+    # log4jdbc 채널들 — INFO 레벨이라야 wrap 라인이 콘솔에 흐른다 (§4 (3) 의 logger level).
+    log4jdbc.log4j2: info
+    jdbc.sqlonly: info
+    jdbc.sqltiming: info
+    jdbc.audit: info
+    jdbc.resultset: info
+    jdbc.connection: info
+    # Hibernate 측 채널은 학습 외 노이즈라 끔.
+    org.hibernate.SQL: warn
+    org.hibernate.orm.jdbc.bind: warn
+    com.runnershigh: info
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %-5level [%thread] %logger{0} - %msg%n"
