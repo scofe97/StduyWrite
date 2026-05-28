@@ -17,7 +17,7 @@ updated: 2026-05-07
 
 ## 경계 기준
 
-이 카테고리는 아티팩트 저장소로서의 Nexus 자체를 다룬다. CI/CD 파이프라인 그루비 작성법은 `02_Jenkins/`로, Nexus가 만들어내는 메트릭의 대시보드 구성은 `06_observability/`로 분담한다. Docker Registry 일반 개념(Registry HTTP API V2 등)은 본 카테고리에 두되, 컨테이너 이미지 빌드 자체는 `02_Jenkins/04-03.컨테이너 이미지 빌드`를 우선 참고한다.
+이 카테고리는 아티팩트 저장소로서의 Nexus 자체를 다룬다. CI/CD 파이프라인 그루비 작성법은 `02_Jenkins/`로, Nexus가 만들어내는 메트릭의 대시보드 구성은 `06_observability/`로 분담한다. Docker Registry 일반 개념(Registry HTTP API V2 등)은 본 카테고리에 두되, 컨테이너 이미지 빌드 자체는 `02_Jenkins/03_agent/01-03.컨테이너 이미지 빌드`를 우선 참고한다.
 
 
 
