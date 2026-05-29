@@ -17,7 +17,7 @@ updated: 2026-05-30
 
 ## 왜 한 폴더로 묶었는가
 
-네트워킹은 한 장으로 끝내기에 너무 두꺼운 주제라 여섯 편으로 나눴습니다. 다만 여섯 편은 서로 독립이 아니라 한 줄의 계층 상승입니다. Linux 네임스페이스와 veth 같은 커널 기반(04-02)이 맨 아래에 있고, 그 위에 노드를 넘는 오버레이·라우팅(04-03), 변하는 Pod 집합을 안정 진입점으로 묶는 Service(04-04), 이름을 IP 로 푸는 DNS(04-05), 그리고 외부 HTTP 진입을 다루는 Ingress·Gateway(04-06)가 차례로 쌓입니다.
+네트워킹은 한 장으로 끝내기에 너무 두꺼운 주제라 여섯 편으로 나눴습니다. 다만 여섯 편은 서로 독립이 아니라 한 줄의 계층 상승입니다. Linux 네임스페이스와 veth 같은 커널 기반(02-02)이 맨 아래에 있고, 그 위에 노드를 넘는 오버레이·라우팅(02-03), 변하는 Pod 집합을 안정 진입점으로 묶는 Service(02-04), 이름을 IP 로 푸는 DNS(02-05), 그리고 외부 HTTP 진입을 다루는 Ingress·Gateway(02-06)가 차례로 쌓입니다.
 
 번호 순서대로 읽으면 추상 한 칸씩 위로 올라가므로, 한 편을 건너뛰면 다음 편의 전제가 비어 막힙니다. 그래서 같은 폴더에 묶어 "아래에서 위로" 읽도록 했습니다. 04-01 은 이 여섯 편의 전체 지도 역할을 합니다.
 
@@ -25,12 +25,12 @@ updated: 2026-05-30
 
 | 장 | 문서 | 다루는 핵심 |
 |----|------|-----------|
-| 04-01 | [네트워킹](04-01.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9.md) | Ch04 전체 지도 — 트래픽이 거치는 계층 개관 |
-| 04-02 | [Pod 네트워크와 Linux 기반](04-02.Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%99%80%20Linux%20%EA%B8%B0%EB%B0%98.md) | Pause·netns·veth·Pod CIDR·CNI·kube-proxy dataplane ([시각화](04-02-pod-network.html)) |
-| 04-03 | [오버레이와 노드 간 트래픽](04-03.%EC%98%A4%EB%B2%84%EB%A0%88%EC%9D%B4%EC%99%80%20%EB%85%B8%EB%93%9C%20%EA%B0%84%20%ED%8A%B8%EB%9E%98%ED%94%BD.md) | VXLAN·네이티브 라우팅·BGP·ECMP·MetalLB ([시각화](04-03-overlay-bgp.html)) |
-| 04-04 | [Service와 EndpointSlice](04-04.Service%EC%99%80%20EndpointSlice.md) | ClusterIP·VIP·EndpointSlice·트래픽 정책 |
-| 04-05 | [DNS와 CoreDNS](04-05.DNS%EC%99%80%20CoreDNS.md) | Service/Pod DNS 레코드·Headless·CoreDNS ConfigMap |
-| 04-06 | [Ingress와 Gateway API](04-06.Ingress%EC%99%80%20Gateway%20API.md) | Ingress·Gateway API·cert-manager TLS 자동화 |
+| 02-01 | [네트워킹](02-01.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9.md) | Ch04 전체 지도 — 트래픽이 거치는 계층 개관 |
+| 02-02 | [Pod 네트워크와 Linux 기반](02-02.Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%99%80%20Linux%20%EA%B8%B0%EB%B0%98.md) | Pause·netns·veth·Pod CIDR·CNI·kube-proxy dataplane ([시각화](02-02-pod-network.html)) |
+| 02-03 | [오버레이와 노드 간 트래픽](02-03.%EC%98%A4%EB%B2%84%EB%A0%88%EC%9D%B4%EC%99%80%20%EB%85%B8%EB%93%9C%20%EA%B0%84%20%ED%8A%B8%EB%9E%98%ED%94%BD.md) | VXLAN·네이티브 라우팅·BGP·ECMP·MetalLB ([시각화](02-03-overlay-bgp.html)) |
+| 02-04 | [Service와 EndpointSlice](02-04.Service%EC%99%80%20EndpointSlice.md) | ClusterIP·VIP·EndpointSlice·트래픽 정책 |
+| 02-05 | [DNS와 CoreDNS](02-05.DNS%EC%99%80%20CoreDNS.md) | Service/Pod DNS 레코드·Headless·CoreDNS ConfigMap |
+| 02-06 | [Ingress와 Gateway API](02-06.Ingress%EC%99%80%20Gateway%20API.md) | Ingress·Gateway API·cert-manager TLS 자동화 |
 
 각 본문에는 같은 이름의 ` 점검.md` 가 짝으로 들어 있어 장마다 자가 점검을 할 수 있습니다.
 

@@ -26,10 +26,10 @@ ArgoCD 는 이 폴더에서 입문 수준으로만 다룹니다. App of Apps·Ap
 
 | 장 | 문서 | 다루는 핵심 |
 |----|------|-----------|
-| 07-01 | [Jenkins on K8s](07-01.Jenkins%20on%20K8s.md) | K8s 네이티브 Jenkins — 동적 에이전트·Pod 템플릿 |
-| 07-02 | [SonarQube on K8s](07-02.SonarQube%20on%20K8s.md) | SonarQube 영속성 전략·품질 게이트 |
-| 07-03 | [ArgoCD와 GitOps](07-03.ArgoCD%EC%99%80%20GitOps.md) | Git 을 단일 진실 공급원으로 삼는 선언적 배포 |
-| 07-04 | [Harbor](07-04.Harbor.md) | 컨테이너 이미지·OCI Helm chart 통합 레지스트리 |
+| 04-01 | [Jenkins on K8s](04-01.Jenkins%20on%20K8s.md) | K8s 네이티브 Jenkins — 동적 에이전트·Pod 템플릿 |
+| 04-02 | [SonarQube on K8s](04-02.SonarQube%20on%20K8s.md) | SonarQube 영속성 전략·품질 게이트 |
+| 04-03 | [ArgoCD와 GitOps](04-03.ArgoCD%EC%99%80%20GitOps.md) | Git 을 단일 진실 공급원으로 삼는 선언적 배포 |
+| 04-04 | [Harbor](04-04.Harbor.md) | 컨테이너 이미지·OCI Helm chart 통합 레지스트리 |
 
 각 본문에는 같은 이름의 ` 점검.md` 가 짝으로 들어 있습니다.
 

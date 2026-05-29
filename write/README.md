@@ -52,7 +52,7 @@ Spring 문서는 주제별로 분산 배치되지만 [`11_spring/README.md`](11_
 - 2026-04-26 — [`02_os/kernel/01-02`](02_os/kernel/01-02.cgroup%20v2%20깊이.md) cgroup v2 깊이 — 단일 트리, 컨트롤러 인터페이스, PSI, kubepods.slice·QoS 매핑, throttling/OOM 분석
 - 2026-04-26 — [`02_os/kernel/01-03`](02_os/kernel/01-03.마운트%20네임스페이스와%20propagation.md) 마운트 네임스페이스와 propagation — 4종 타입, K8s mountPropagation, CSI 드라이버가 Bidirectional을 요구하는 이유
 - 2026-04-26 — K8s 04-* 파일 번호를 학습 순서로 재정렬 — 04-02 Pod·Linux, 04-03 오버레이/BGP, 04-04 Service, 04-05 DNS, 04-06 Ingress
-- 2026-04-25 — [`08_cloud/kubernetes/04-02`](08_cloud/kubernetes/04-02.Pod%20네트워크와%20Linux%20기반.md) Pod 네트워크 Linux 기반 + [`04-03`](08_cloud/kubernetes/04-03.오버레이와%20노드%20간%20트래픽.md) 오버레이/BGP 추가, 인터랙티브 시각화 2종 포함
+- 2026-04-25 — [`08_cloud/kubernetes/04-02`](08_cloud/kubernetes/02-02.Pod%20네트워크와%20Linux%20기반.md) Pod 네트워크 Linux 기반 + [`04-03`](08_cloud/kubernetes/02-03.오버레이와%20노드%20간%20트래픽.md) 오버레이/BGP 추가, 인터랙티브 시각화 2종 포함
 - 2026-04-25 — [`08_cloud/service-mesh/14-05`](08_cloud/service-mesh/14-05.Cilium과%20Istio%20Ambient%20통합%20전략.md) Cilium+Ambient 통합 전략 추가
 - 2026-04-19 — [`08_cloud/kubernetes/`](08_cloud/kubernetes/README.md) 20장 + 실습 20편 이관 (로컬 클러스터·Helm·Operator·DB/DevTools·GitOps·보안·오토스케일링·자원 관리)
 - 2026-04-19 — [`08_cloud/service-mesh/`](08_cloud/service-mesh/README.md) 26장 + 실습 26편 이관 (기초·Linkerd·Istio·멀티클러스터·eBPF·도입 전략)

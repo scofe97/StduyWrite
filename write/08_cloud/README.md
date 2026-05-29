@@ -34,7 +34,7 @@ updated: 2026-05-23
 
 ## 경계 기준
 
-CI/CD 파이프라인 작성 자체는 [`07_devops/`](../07_devops/)로 간다. 반대로 K8s 매니페스트 설계, 네트워크 정책, 서비스 메시 사이드카처럼 "클러스터 내부에서 어떻게 돌아가는가"는 여기다. GitOps 도구 중에서도 ArgoCD는 문서 양과 운영 주제가 커져 별도 `argocd/` 서브카테고리로 분리했다. 메시징 미들웨어(Kafka, Redpanda) 자체는 [`04_messaging/`](../04_messaging/)에 있고, 그것을 K8s 위에 올리는 Operator 패턴 관점은 `kubernetes/06-05` `06-06`에서 다룬다.
+CI/CD 파이프라인 작성 자체는 [`07_devops/`](../07_devops/)로 간다. 반대로 K8s 매니페스트 설계, 네트워크 정책, 서비스 메시 사이드카처럼 "클러스터 내부에서 어떻게 돌아가는가"는 여기다. GitOps 도구 중에서도 ArgoCD는 문서 양과 운영 주제가 커져 별도 `argocd/` 서브카테고리로 분리했다. 메시징 미들웨어(Kafka, Redpanda) 자체는 [`04_messaging/`](../04_messaging/)에 있고, 그것을 K8s 위에 올리는 Operator 패턴 관점은 `kubernetes/03-09` `06-06`에서 다룬다.
 
 ## 이관 연혁
 
