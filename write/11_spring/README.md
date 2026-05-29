@@ -34,18 +34,15 @@ updated: 2026-05-23
 | [06_events/](06_events/) | 스프링 이벤트 — @EventListener vs @TransactionalEventListener·트랜잭션 Phase·전파 조합·내부 동작·동기/비동기(@Async) (2026-05-24 이벤트 리스너 4편 묶음) |
 | [07_autoconfig/](07_autoconfig/) | 스프링 부트 자동 구성·외부 설정 — 스타터/BOM·@AutoConfiguration·@Conditional·커스텀 스타터·외부 설정·@ConfigurationProperties·프로필 (2026-05-25 boot zip 6편 묶음) |
 | [08_transaction/](08_transaction/) | 트랜잭션 집계 MOC — 본체는 [`05_data/jpa/04-01`](../05_data/jpa/04-01.스프링%20트랜잭션.md)에 두고, Spring 관점에서 비어 있던 격리 수준·@Transactional 테스트 2편만 보강 (2026-05-29 MOC+2편) |
+| [09_validation/](09_validation/) | 입력 검증 — 수동 검증·BindingResult / Bean Validation·그룹 / 커스텀 ConstraintValidator. 옛 02_data-binding 의 단일 편을 분할·확장 (2026-05-29 MOC+3편) |
 
 > Boot 자체(auto-config/Properties/Profile)는 [`07_autoconfig/`](07_autoconfig/), 내장 톰캣은 [`01_core/02-02`](01_core/), 액츄에이터·메트릭은 [`06_observability/05_SpringActuator/`](../06_observability/05_SpringActuator/) 에 정식 문서로 작성됐다(2026-05-25, 김영한 스프링 부트 강의 기반). 노션 import raw 는 [`_notion_import/`](_notion_import/) 에 있으며, 재작성이 끝난 묶음부터 위 표에 행을 추가한다.
 
 ### 예정 카테고리
 
-도메인 결합도가 큰 주제(메시징·영속성)는 기존 위치 그대로 두고, Spring 본질 영역에 신설할 후보만 여기에 둔다.
+도메인 결합도가 큰 주제(메시징·영속성)는 기존 위치 그대로 두고, Spring 본질 영역에 신설할 후보만 여기에 둔다. 현재 검토 중인 후보는 없다. 신설 시점은 second-brain-harness §4.4 — 최소 5편 확보 시 신설, 미만이면 기존 카테고리 하위에서 시작 — 을 따른다.
 
-1. **09_validation 독립화** — 현재 `02_data-binding/` 에 묶여 있는 Bean Validation 분리. 바인딩(요청 본문 → 객체 변환)과 검증(제약 조건 검사)은 DispatcherServlet 파이프라인에서 다른 단계이고, Custom Constraint / Group Validation / `@Validated` vs `@Valid` 만 해도 6~8편 분량이 나온다.
-
-신설 시점은 second-brain-harness §4.4 — 최소 5편 확보 시 신설, 미만이면 기존 카테고리 하위에서 시작 — 을 따른다.
-
-> 2026-05-29 — 검토하던 `08_transaction` 은 신설 완료했다. 단, 당초 명분("트랜잭션 본체가 비어 있다")은 사실과 달랐다. 트랜잭션 본체(추상화·동기화·AOP·전파·락)는 이미 [`05_data/jpa/04-01`](../05_data/jpa/04-01.스프링%20트랜잭션.md)·`04-01b`·`04-02` 에 final 로 정리돼 있었다. 그래서 본체를 새로 쓰지 않고, 흩어진 트랜잭션 문서를 모으는 집계 MOC + Spring 관점에서 비어 있던 격리 수준·테스트 2편만 보강하는 방향으로 마무리했다.
+> 2026-05-29 — 검토하던 `08_transaction` 과 `09_validation` 을 신설 완료했다. 두 건 모두 당초 명분이 실제 자산과 어긋나 방향을 정정했다. ① `08_transaction`: 트랜잭션 본체(추상화·동기화·AOP·전파·락)는 이미 [`05_data/jpa/04-01`](../05_data/jpa/04-01.스프링%20트랜잭션.md)·`04-01b`·`04-02` 에 final 로 있어, 본체를 새로 쓰지 않고 집계 MOC + 격리 수준·테스트 2편만 보강했다. ② `09_validation`: "6~8편 분량" 이라 적었지만 실제로는 `02_data-binding/02-01` 단일 편(583줄)이 거의 전 범위를 다루고 있었다. 그래서 그 단일 편을 수동 검증·Bean Validation 두 편으로 분할해 옮기고, 목차에 없던 커스텀 `ConstraintValidator` 1편만 신규로 보강했다(분할 2 + 신규 1).
 
 ### 도메인별 통합 (다른 카테고리)
 
