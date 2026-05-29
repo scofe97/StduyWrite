@@ -84,5 +84,5 @@ Spring Boot 의 기본값 `spring.aop.proxy-target-class=true` 가 적용되어 
 
 > 본 묶음은 1편으로 시작했고, 다음 두 방향으로 확장할 예정입니다.
 
-- **트랜잭션 AOP** — `@Transactional` 이 어떤 `Advisor` 로 등록되며, propagation·rollbackFor 옵션이 프록시 안에서 어떻게 해석되는지 추적합니다.
+- **트랜잭션 AOP** — `@Transactional` 이 어떤 `Advisor` 로 등록되며, propagation·rollbackFor 옵션이 프록시 안에서 어떻게 해석되는지 추적합니다. 트랜잭션 본체는 [`05_data/jpa/04-01`](../../05_data/jpa/04-01.스프링%20트랜잭션.md) 에, Spring 관점 집계는 [`08_transaction/`](../08_transaction/README.md) 에 정리돼 있으니, 본 항목은 AOP 프록시 메커니즘 각도로만 좁혀 다룹니다.
 - **응용 패턴** — `@Async`, `@Cacheable`, `@Retryable` 같은 어노테이션 기반 AOP 가 모두 같은 빈 후처리기 메커니즘 위에 서 있는 사실을 비교 정리합니다.
