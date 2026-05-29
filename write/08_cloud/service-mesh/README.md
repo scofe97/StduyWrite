@@ -101,4 +101,4 @@ updated: 2026-04-19
 
 
 - [kubernetes MOC](../kubernetes/README.md) — 본 카테고리의 전제. Pod·Service·Ingress 이해가 선행돼야 한다
-- [Ingress와 Gateway API](../kubernetes/04-06.Ingress와%20Gateway%20API.md) — 03-01과 주제 겹침, K8s 진입 계층 관점에서 본 서술
+- [Ingress와 Gateway API](../kubernetes/02-06.Ingress와%20Gateway%20API.md) — 03-01과 주제 겹침, K8s 진입 계층 관점에서 본 서술
