@@ -18,7 +18,7 @@ updated: 2026-05-24
 
 컨테이너·서블릿·MVC 는 따로 떼면 각각 입문 주제처럼 보이지만, 실제로는 한 요청을 처리하기 위해 맞물려 도는 톱니입니다. `DispatcherServlet` 은 서블릿이면서(02장) 동시에 Spring 빈으로 등록되어 컨테이너의 관리를 받고(01장), 그 안에서 핸들러를 찾아 호출하는 구조가 MVC(03장)입니다. 세 주제를 인접한 장 번호로 두면 "어디까지가 서블릿 표준이고 어디부터가 Spring 의 손길인가"라는 경계가 선명해집니다.
 
-번호는 학습 순서이자 의존 방향입니다. 01장(컨테이너) → 02장(서블릿) → 03장(MVC) 순으로, 앞 장이 뒷 장의 전제가 됩니다.
+번호는 학습 순서이자 의존 방향입니다. 01장(컨테이너) → 02장(서블릿) → 03장(MVC) 순으로, 앞 장이 뒷 장의 전제가 됩니다. 04장(WebFlux)은 03장 서블릿 MVC 의 *대비* 로, 같은 "요청을 받아 처리한다" 를 리액티브 논블로킹 스택으로 푸는 갈래입니다. 외부로 *요청을 보내는* WebClient(아웃바운드)는 [`../03_network/webflux/`](../03_network/webflux/README.md) 에 있고, 본 04장은 요청을 *받는* 서버측(인바운드)을 다룹니다.
 
 ## 학습 순서
 
@@ -30,6 +30,8 @@ updated: 2026-05-24
 | 02 서블릿 | 02-02 | [내장 톰캣과 SpringApplication — JAR로 WAS를 품다](02-02.내장%20톰캣과%20SpringApplication%20—%20JAR로%20WAS를%20품다.md) | WAR 배포 단점, 내장 톰캣 원리, SpringApplication.run(), ServletWebServerFactory, 실행 가능 JAR |
 | 03 MVC | 03-01 | [Spring MVC — FrontController에서 DispatcherServlet까지](03-01.Spring%20MVC%20—%20FrontController에서%20DispatcherServlet까지.md) | MVC 패턴 등장, FrontController V1~V5 진화, DispatcherServlet 8단계, HandlerMapping/Adapter/ViewResolver, Controller 인터페이스 vs @Controller, PRG 패턴 |
 | 03 MVC | 03-02 | [예외 처리 — 서블릿에서 @ControllerAdvice까지](03-02.예외%20처리%20—%20서블릿에서%20@ControllerAdvice까지.md) | 서블릿 재디스패치, BasicErrorController, HandlerExceptionResolver 체인 4종, @ExceptionHandler / @ControllerAdvice / @ResponseStatus |
+| 04 WebFlux | 04-01 | [WebFlux 서버 — 리액티브 스택과 어노테이션 모델](04-01.WebFlux%20서버%20—%20리액티브%20스택과%20어노테이션%20모델.md) | 서블릿 vs 리액티브 스택, DispatcherServlet vs DispatcherHandler, Netty, 어노테이션 모델(Mono/Flux 반환), 언제 WebFlux 인가·block 함정 |
+| 04 WebFlux | 04-02 | [WebFlux 함수형 엔드포인트 — RouterFunction과 HandlerFunction](04-02.WebFlux%20함수형%20엔드포인트%20—%20RouterFunction과%20HandlerFunction.md) | HandlerFunction·RouterFunction 라우팅 DSL, 어노테이션 vs 함수형 결정, WebFlux.fn vs WebMvc.fn 구분 |
 
 처음 보는 학습자는 01-01 부터 순서대로 따라가면 됩니다. 이미 `@Autowired` 로 빈을 주입받아 본 입장이라면 01장은 빠르게 훑고 02장(서블릿)부터 진입해도 됩니다. `@RestController` 로 API 만 만들어 본 사람이라면 03-01 §4(DispatcherServlet)에서 출발해 03-02(예외 처리)로 이어 본 뒤, 부품 이름의 출처가 궁금할 때 02장과 03장 §3(FrontController)으로 거슬러 올라가는 경로가 빠릅니다.
 
