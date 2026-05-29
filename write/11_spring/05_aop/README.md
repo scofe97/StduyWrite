@@ -32,6 +32,7 @@ updated: 2026-05-24
 |---|------|-----------|
 | 01-01 | [횡단 관심사와 AOP — 프록시로 풀어내기](01-01.횡단%20관심사와%20AOP%20—%20프록시로%20풀어내기.md) | 횡단 관심사 / Filter·Interceptor 한계 / JDK·CGLIB 동적 프록시 / ProxyFactory / 빈 후처리기 / `@Aspect` / Pointcut 표현식 / Advice 5종 / internal call / proxy-target-class |
 | 01-03 | [템플릿·콜백과 ThreadLocal — AOP 등장 직전의 두 시도](01-03.템플릿·콜백과%20ThreadLocal%20—%20AOP%20등장%20직전의%20두%20시도.md) | 템플릿 메서드 패턴 / 콜백 패턴 (`JdbcTemplate`·`TransactionTemplate` 의 뿌리) / `ThreadLocal` 상태 격리와 누수 / 세 도구의 공통 한계 — *호출부 협조 강제* / AOP 가 가져온 전환 |
+| 01-04 | [어노테이션 기반 AOP 응용 — @Async·@Cacheable·@Retryable](01-04.어노테이션%20기반%20AOP%20응용%20—%20@Async·@Cacheable·@Retryable.md) | 세 어노테이션의 공통 프록시 토대 / `@Async`(EnableAsync·반환 Future·void 예외) / `@Cacheable`(EnableCaching·CacheManager) / `@Retryable`(Spring Retry·@Recover) / 공유 함정 — 자기호출 |
 | 01-02 | [스프링 스케줄링 — @Scheduled에서 Quartz까지](01-02.스프링%20스케줄링%20—%20@Scheduled에서%20Quartz까지.md) | 배치 vs 스케줄러 / `@Scheduled` / `ThreadPoolTaskScheduler` / Quartz 4구성 / JobStore(RAM·JDBC) / Trigger(Simple·Cron) / Cluster 모드 / Stateful Job / 결정 트리 |
 
 학습 동선은 두 가지로 갈립니다. AOP 의 *왜* 부터 차근차근 본다면 01-03 → 01-01 순으로 진입해, 객체지향 패턴의 한계를 먼저 보고 AOP 가 그 한계를 어떻게 푸는지를 이어 읽습니다. AOP 어노테이션을 이미 써 본 입장이라면 01-01 §3·§5 로 직진한 뒤 01-03 으로 뒤돌아 *왜 굳이 동적 프록시인가* 의 동기만 확인해도 됩니다. `@Transactional` 의 internal call 문제로 디버깅 중이라면 01-01 §9 로 직행합니다.
@@ -82,7 +83,6 @@ Spring Boot 의 기본값 `spring.aop.proxy-target-class=true` 가 적용되어 
 
 ## 후속 편 계획
 
-> 본 묶음은 1편으로 시작했고, 다음 두 방향으로 확장할 예정입니다.
+> 응용 패턴 편은 [`01-04.어노테이션 기반 AOP 응용`](01-04.어노테이션%20기반%20AOP%20응용%20—%20@Async·@Cacheable·@Retryable.md) 으로 작성 완료했습니다. `@Async`·`@Cacheable`·`@Retryable` 이 같은 프록시 토대 위에 선 응용이라는 비교를 다룹니다.
 
-- **트랜잭션 AOP** — `@Transactional` 이 어떤 `Advisor` 로 등록되며, propagation·rollbackFor 옵션이 프록시 안에서 어떻게 해석되는지 추적합니다. 트랜잭션 본체는 [`05_data/jpa/04-01`](../../05_data/jpa/04-01.스프링%20트랜잭션.md) 에, Spring 관점 집계는 [`08_transaction/`](../08_transaction/README.md) 에 정리돼 있으니, 본 항목은 AOP 프록시 메커니즘 각도로만 좁혀 다룹니다.
-- **응용 패턴** — `@Async`, `@Cacheable`, `@Retryable` 같은 어노테이션 기반 AOP 가 모두 같은 빈 후처리기 메커니즘 위에 서 있는 사실을 비교 정리합니다.
+트랜잭션 AOP 는 별도 편으로 두지 않습니다. `@Transactional` 이 `Advisor` 로 등록돼 프록시 안에서 해석되는 *메커니즘* 은 [`01-01 §4·§5`](01-01.횡단%20관심사와%20AOP%20—%20프록시로%20풀어내기.md) 가 일반론으로 다루고, 트랜잭션 *본체* (전파·격리·롤백)는 [`08_transaction/`](../08_transaction/README.md) 와 [`05_data/jpa/04-01`](../../05_data/jpa/04-01.스프링%20트랜잭션.md) 에 정리돼 있어, 둘을 합치면 별도 편 없이 트랜잭션 AOP 가 설명됩니다.
