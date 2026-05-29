@@ -54,9 +54,9 @@ updated: 2026-05-27
 
 > 이 묶음은 다음을 안다고 가정합니다.
 
-1. Spring MVC 의 `@GetMapping`, `@PathVariable`, `@RequestBody` 어노테이션이 어떻게 동작하는지 한 문장으로 설명할 수 있다.
-2. Spring Boot 프로젝트에 의존성을 추가하고 `@SpringBootApplication` 부트스트랩이 어떻게 작동하는지 안다.
-3. RestTemplate 이나 WebClient 중 하나로 외부 HTTP 호출을 해 본 적이 있다 (비교 기준이 있어야 OpenFeign 의 가치가 보입니다).
+1. Spring MVC 의 `@GetMapping`, `@PathVariable`, `@RequestBody` 어노테이션이 어떻게 동작하는지 한 문장으로 설명할 수 있습니다.
+2. Spring Boot 프로젝트에 의존성을 추가하고 `@SpringBootApplication` 부트스트랩이 어떻게 작동하는지 압니다.
+3. RestTemplate 이나 WebClient 중 하나로 외부 HTTP 호출을 해 본 적이 있습니다 (비교 기준이 있어야 OpenFeign 의 가치가 보입니다).
 
 
 
