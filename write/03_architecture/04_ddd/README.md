@@ -6,14 +6,14 @@ related:
   - ../README.md
   - ./GAP.md
   - ../../../docs/02_Architecture/02_DDD/
-updated: 2026-05-23
+updated: 2026-05-28
 ---
 
 # 03_ddd — 도메인 주도 설계 시리즈
 ---
-> Evans/Vernon 의 DDD 를 Spring Boot 4.x · Java 25 컨텍스트에서 다시 정리한다. SSOT 는 `docs/02_Architecture/02_DDD/` 13편.
+> Evans/Vernon 의 DDD 를 Spring Boot 4.x · Java 25 컨텍스트에서 다시 정리합니다. SSOT 는 `docs/02_Architecture/02_DDD/` 13편.
 
-본 시리즈는 4개 절(전략적 설계 · 전술적 설계 · 진화·전환 · 사례·통합) 로 묶인다. CQRS · Event Sourcing 같이 EDD 와 겹치는 주제는 05_edd 가 구현 측을 다루고, 본 시리즈는 모델 의미만 다룬다.
+본 시리즈는 4개 절(전략적 설계 · 전술적 설계 · 진화·전환 · 사례·통합) 로 묶입니다. CQRS · Event Sourcing 같이 EDD 와 겹치는 주제는 05_edd 가 구현 측을 다루고, 본 시리즈는 모델 의미만 다룹니다. 모든 final 문서에는 *학습 목표 + Mermaid 2개 + 실제 사례 + 면접 Q&A/정답* 5블록이 박혀 있습니다.
 
 ## 절 체계
 
@@ -63,4 +63,4 @@ updated: 2026-05-23
 
 ## SSOT 매핑 / 갭
 
-[`GAP.md`](GAP.md) 가 `docs/02_Architecture/02_DDD/` 13편 ↔ 본 시리즈의 매핑과 미작성 챕터를 박제한다.
+[`GAP.md`](GAP.md) 가 `docs/02_Architecture/02_DDD/` 13편 ↔ 본 시리즈의 매핑과 미작성 챕터를 박제합니다.
