@@ -37,6 +37,8 @@ updated: 2026-05-23
 |---|------|-----------|
 | 01-01 | [HTTP 요청·응답과 메시지 컨버터](01-01.HTTP%20요청·응답과%20메시지%20컨버터.md) | DTO 패턴 / `@RequestParam`·`@PathVariable`·`@ModelAttribute`·`@RequestBody`·`@RequestHeader` / `@ResponseBody`·`@RestController`·`@ResponseStatus` / `Converter`·`Formatter`·`ConversionService` / `HttpMessageConverter` / Jackson `ObjectMapper` |
 | 01-02 | [파일 업로드 — Multipart](01-02.파일%20업로드%20—%20Multipart.md) | `multipart/form-data` 바디 / `spring.servlet.multipart.*` 설정 / `MultipartFile` / `@RequestPart` / 파일 저장·다운로드 / WebFlux 와의 차이 |
+| 01-03 | [JSON 직렬화 심화 — 커스텀 Serializer·@JsonView·다형성](01-03.JSON%20직렬화%20심화%20—%20커스텀%20Serializer·@JsonView·다형성.md) | 커스텀 `JsonSerializer`/`JsonDeserializer`·`@JsonComponent` / `@JsonView` 화면별 노출 / `@JsonTypeInfo`·`@JsonSubTypes` 다형성 / default typing 보안 주의 |
+| 01-04 | [메시지 컨버터 자동 설정 — WebMvcAutoConfiguration과 등록 결정](01-04.메시지%20컨버터%20자동%20설정%20—%20WebMvcAutoConfiguration과%20등록%20결정.md) | `WebMvcAutoConfiguration` 기본 컨버터 / `Jackson2ObjectMapperBuilderCustomizer` / `configureMessageConverters` vs `extendMessageConverters` / `@EnableWebMvc` opt-out 함정 |
 | 03-01 | [메시지·국제화 — MessageSource와 LocaleResolver](03-01.메시지·국제화%20—%20MessageSource와%20LocaleResolver.md) | `MessageSource` 자동 구성 / Locale 폴백 체인 / `LocaleResolver` 3종 (Accept-Header·Session·Cookie) / `LocaleChangeInterceptor` / `LocaleContextHolder` ThreadLocal / 검증 메시지와의 연결 |
 
 처음 보는 학습자는 01-01 부터 순서대로 따라갑니다. 파일 업로드만 급하다면 01-02 로 직행해도 됩니다. 입력 검증을 어디에 둘지 헷갈리는 단계라면 [`09_validation/01-01`](../09_validation/01-01.수동%20검증과%20BindingResult.md) 부터 봅니다. 다국어 응답이 *어느 Locale 로 결정되는지* 가 막막하다면 03-01 의 §3 (LocaleResolver 3 종) 과 §5 (한 흐름으로) 를 먼저 봅니다.
@@ -79,7 +81,7 @@ updated: 2026-05-23
 
 ## 후속 편 계획
 
-> 본 묶음은 3편으로 시작했고, 다음 방향으로 확장할 예정입니다.
+> 검토하던 두 방향을 모두 작성 완료했습니다. 1장(바인딩) 연장으로 [`01-03`](01-03.JSON%20직렬화%20심화%20—%20커스텀%20Serializer·@JsonView·다형성.md)·[`01-04`](01-04.메시지%20컨버터%20자동%20설정%20—%20WebMvcAutoConfiguration과%20등록%20결정.md) 에 둡니다.
 
-- **JSON 직렬화 심화** — Jackson 의 `JsonSerializer`/`JsonDeserializer` 커스텀, `@JsonView`, polymorphic 타입 처리
-- **Spring Boot 자동 설정 안의 메시지 컨버터** — `WebMvcAutoConfiguration` 이 어떤 컨버터를 등록하는지, `extendMessageConverters` 와 `configureMessageConverters` 의 결정 트리
+- ✅ **JSON 직렬화 심화** — [`01-03`](01-03.JSON%20직렬화%20심화%20—%20커스텀%20Serializer·@JsonView·다형성.md): 커스텀 `JsonSerializer`/`JsonDeserializer`, `@JsonView`, `@JsonTypeInfo` 다형성.
+- ✅ **메시지 컨버터 자동 설정** — [`01-04`](01-04.메시지%20컨버터%20자동%20설정%20—%20WebMvcAutoConfiguration과%20등록%20결정.md): `WebMvcAutoConfiguration` 기본 컨버터, `extendMessageConverters` vs `configureMessageConverters` 결정 트리.
