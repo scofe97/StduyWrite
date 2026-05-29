@@ -32,7 +32,7 @@ WebClient([`../webflux/`](../webflux/README.md))도 기본 전송으로 Reactor 
 | 정식 # | 주제 | raw 원본 | 상태 |
 |--------|------|---------|------|
 | 01-01 | [Reactor Netty 입문 — WebFlux의 하부 전송 계층](01-01.Reactor%20Netty%20입문%20—%20WebFlux의%20하부%20전송%20계층.md) | netty/01 | 작성 완료 |
-| (예정) | 이벤트 기반 프로그래밍·논블로킹 I/O | netty/02, NIO/BIO Connector | 이관 예정 |
+| 01-02 | [이벤트 기반 프로그래밍과 BIO vs NIO](01-02.이벤트%20기반%20프로그래밍과%20BIO%20vs%20NIO.md) | netty/02, NIO/BIO Connector | 작성 완료 |
 | (예정) | 부트스트랩 | netty/03 | 이관 예정 |
 | (예정) | 채널 파이프라인과 코덱 ⭐ | netty/04 | 이관 예정 |
 | (예정) | 바이트 버퍼 (ByteBuf) | netty/05 | 이관 예정 |
