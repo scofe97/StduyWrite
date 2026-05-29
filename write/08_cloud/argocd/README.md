@@ -89,5 +89,5 @@ ArgoCD를 실무에 붙이면 플러그인, 자동 태그 갱신, 점진 배포,
 > Kubernetes 기초, DevOps 카테고리, 기존 브리지 문서와의 관계를 함께 본다.
 
 - [kubernetes MOC](../kubernetes/README.md) — Helm, Ingress, RBAC, Operator 같은 선행 개념
-- [ArgoCD와 GitOps](../kubernetes/07-03.ArgoCD와%20GitOps.md) — Kubernetes 카테고리 안의 입문/브리지 문서
+- [ArgoCD와 GitOps](../kubernetes/04-03.ArgoCD와%20GitOps.md) — Kubernetes 카테고리 안의 입문/브리지 문서
 - [devops MOC](../../07_devops/README.md) — Jenkins, SonarQube, CI 파이프라인 자체 설계

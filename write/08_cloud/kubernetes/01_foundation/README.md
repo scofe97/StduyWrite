@@ -27,10 +27,10 @@ Kubernetes 입문에서 가장 먼저 필요한 것은 실습할 클러스터입
 |----|------|-----------|
 | 01 | [로컬 클러스터 구성](01-01.%EB%A1%9C%EC%BB%AC%20%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EA%B5%AC%EC%84%B1.md) | Minikube·KinD로 프로덕션 유사 환경을 빠르게 재현하는 법 |
 | 01 | [로컬 클러스터 구성 점검](01-01.%EB%A1%9C%EC%BB%AC%20%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EA%B5%AC%EC%84%B1%20%EC%A0%90%EA%B2%80.md) | 01장 자가 점검 |
-| 02 | [핵심 워크로드](02-01.%ED%95%B5%EC%8B%AC%20%EC%9B%8C%ED%81%AC%EB%A1%9C%EB%93%9C.md) | Pod·ReplicaSet·Deployment·Service·ConfigMap·Probe의 역할 분담 |
-| 02 | [핵심 워크로드 점검](02-01.%ED%95%B5%EC%8B%AC%20%EC%9B%8C%ED%81%AC%EB%A1%9C%EB%93%9C%20%EC%A0%90%EA%B2%80.md) | 02장 자가 점검 |
-| 03 | [스토리지와 상태](03-01.%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80%EC%99%80%20%EC%83%81%ED%83%9C.md) | PV·PVC·StorageClass·StatefulSet — Stateful 워크로드 전략 |
-| 03 | [스토리지와 상태 점검](03-01.%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80%EC%99%80%20%EC%83%81%ED%83%9C%20%EC%A0%90%EA%B2%80.md) | 03장 자가 점검 |
+| 02 | [핵심 워크로드](01-02.%ED%95%B5%EC%8B%AC%20%EC%9B%8C%ED%81%AC%EB%A1%9C%EB%93%9C.md) | Pod·ReplicaSet·Deployment·Service·ConfigMap·Probe의 역할 분담 |
+| 02 | [핵심 워크로드 점검](01-02.%ED%95%B5%EC%8B%AC%20%EC%9B%8C%ED%81%AC%EB%A1%9C%EB%93%9C%20%EC%A0%90%EA%B2%80.md) | 02장 자가 점검 |
+| 03 | [스토리지와 상태](01-03.%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80%EC%99%80%20%EC%83%81%ED%83%9C.md) | PV·PVC·StorageClass·StatefulSet — Stateful 워크로드 전략 |
+| 03 | [스토리지와 상태 점검](01-03.%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80%EC%99%80%20%EC%83%81%ED%83%9C%20%EC%A0%90%EA%B2%80.md) | 03장 자가 점검 |
 
 처음 보는 학습자는 01부터 순서대로 읽습니다. 이미 `kubectl run`·`kubectl apply` 로 Pod 를 띄워 본 사람은 02 부터 진입해도 흐름이 끊기지 않습니다.
 
