@@ -1,19 +1,21 @@
 ---
 title: Spring 네트워크 통신 학습 MOC
-tags: [moc, spring, spring-boot, network, http-client, webclient, openfeign]
+tags: [moc, spring, spring-boot, network, http-client, webclient, openfeign, reactor-netty, websocket]
 status: final
 related:
   - ../README.md
   - webflux/README.md
   - feign/README.md
-updated: 2026-05-27
+  - reactive-net/README.md
+  - websocket/README.md
+updated: 2026-05-30
 ---
 
 # Spring 네트워크 통신 학습 MOC
 
 ---
 
-> Spring 환경에서 외부 HTTP 호출을 다루는 자리입니다. 같은 "외부로 요청을 보낸다" 라는 문제를 두 갈래의 다른 패러다임 — 리액티브 빌더(WebClient) 와 선언적 인터페이스(OpenFeign) — 가 어떻게 풀어내는지 한 폴더에서 비교합니다.
+> Spring 환경에서 네트워크 통신을 다루는 자리입니다. 외부로 *요청을 보내는* 클라이언트 두 갈래(리액티브 빌더 WebClient·선언적 인터페이스 OpenFeign), 그 호출이 실제 소켓을 오가는 *전송 엔진*(Reactor Netty), 그리고 *실시간 양방향* 통신(WebSocket·SSE)까지를 한 폴더에 모읍니다. 외부 호출의 두 클라이언트 비교가 출발점이고, 그 아래·옆으로 전송 계층과 실시간 통신이 붙는 구조입니다.
 
 
 
@@ -41,6 +43,8 @@ flowchart TB
 
 이 결정 트리는 두 가지를 함께 알려줍니다. 첫째, 본 폴더가 다루는 두 갈래는 *상호 배타가 아니라 상호 보완* 입니다. 한 프로젝트 안에 둘이 공존하는 게 자연스러운 경우가 많습니다. 둘째, RestClient 는 본 폴더의 범위가 아니지만 결정 트리에는 등장합니다 — 동기·블로킹·내부 호출이 아닌 자리에서 RestClient 가 자주 정답이기 때문입니다.
 
+> 이 결정 트리는 *외부로 보내는 클라이언트* 를 고르는 축입니다. 그 아래 전송 엔진([`reactive-net/`](reactive-net/README.md))과 실시간 양방향 통신([`websocket/`](websocket/README.md))은 클라이언트 선택과 다른 축이라 결정 트리에 넣지 않고 별도 묶음으로 둡니다.
+
 
 
 ## 두 갈래의 분업
@@ -66,8 +70,10 @@ flowchart TB
 |------|------------|------|------|
 | [webflux/](webflux/) | WebClient 입문·빌드·요청·응답·에러·필터·multipart·동기/비동기·테스트·TPS 사례 | 11편 | Spring Framework 6.2 / Reactor Netty 1.1 기준. 2026-05-09 작성 |
 | [feign/](feign/) | OpenFeign 입문(WebClient 비교 포함) + 기본 설정과 인터페이스 선언 | 2편 (압축본) | Spring Cloud 2023.0.x 기준. 2026-05-27 작성 |
+| [reactive-net/](reactive-net/) | Reactor Netty — WebClient·WebFlux 가 올라타는 전송 엔진. 입문(논블로킹 소켓·계층 관계) | 1편 + 이관 예정 | netty raw 10편을 1편/세션 이관 중. 2026-05-30 착수 |
+| [websocket/](websocket/) | WebSocket·STOMP·SSE — 실시간 양방향 통신 | 예정 | _notion_import raw 7편 이관 예정. 폴더·계획 예약 |
 
-> webflux/ 는 풀 학습 묶음이고, feign/ 는 학습 시작점인 압축본 2편입니다. feign/ 풀 보강은 본인 프로젝트에서 실제로 OpenFeign 을 도입하기로 한 시점에 진행하는 편이 비용 대비 효과가 좋습니다.
+> webflux/ 와 feign/ 는 *외부 호출 클라이언트* 두 갈래이고, reactive-net/ 은 그 호출이 올라타는 *전송 엔진*, websocket/ 은 요청-응답이 아닌 *실시간 양방향* 입니다. feign/ 풀 보강은 본인 프로젝트에서 실제로 OpenFeign 을 도입하기로 한 시점에, reactive-net/·websocket/ 의 나머지 편은 raw 이관 순서대로 채웁니다.
 
 
 
