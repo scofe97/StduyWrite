@@ -46,7 +46,7 @@ updated: 2026-05-30
 
 | 항목 | 값 | 비고 |
 |------|-----|------|
-| Istio | 1.30 / Ambient 1.24 GA | |
+| Istio | 1.24 계열 / Ambient 1.24 GA | |
 | Linkerd | 2.14 이상 | |
 | Cilium | 1.17 계열 | eBPF 데이터플레인 |
 | 실습 클러스터 | 개인 GCP K8s | [`gcp` 스킬](../../../../.claude/skills/gcp/SKILL.md) |
