@@ -76,6 +76,7 @@ updated: 2026-05-23
 - [04-02.message-lib config 학습 검증](04_BrokerArchitecture/04-02.message-lib%20config%20학습%20검증.md) — config 종합 문서 자체의 학습 검증 노트
 - [04-03.message-lib config 운영 이식 가이드](04_BrokerArchitecture/04-03.message-lib%20config%20운영%20이식%20가이드.md) — 다른 프로젝트로 옮길 때의 체크리스트
 - [05-01.Producer 아키텍처](04_BrokerArchitecture/05-01.Producer%20아키텍처.md) — send-path 파이프라인과 ProducerRecord·RecordMetadata 해부
+- [05-02.Producer 생성과 전송 모드](04_BrokerArchitecture/05-02.Producer%20생성과%20전송%20모드.md) — 3 필수 설정과 fire-and-forget·동기·비동기 전송, retriable 오류 구분
 
 ### 05_ConsistencyPattern — 일관성 패턴·예외 처리
 
