@@ -66,6 +66,7 @@ updated: 2026-05-23
 - [01-04.리밸런스 프로토콜](04_BrokerArchitecture/01-04.리밸런스%20프로토콜.md) — Stop-the-World 트리거와 점진적 리밸런스
 - [01-05.오프셋 커밋 API](04_BrokerArchitecture/01-05.오프셋%20커밋%20API.md) — commitSync·commitAsync·지정 offset 커밋과 중복·유실 방향성
 - [01-06.Consumer poll 루프와 종료](04_BrokerArchitecture/01-06.Consumer%20poll%20루프와%20종료.md) — poll 루프·1 consumer per thread·seek·wakeup 종료
+- [01-07.Consumer 설정 심화](04_BrokerArchitecture/01-07.Consumer%20설정%20심화.md) — fetch 크기·타임아웃·client.rack·오프셋 보존
 - [02-01.Redpanda 아키텍처](04_BrokerArchitecture/02-01.Redpanda%20아키텍처.md) — 단일 바이너리·Raft per partition·thread-per-core
 - [02-02.Redpanda Console 인증](04_BrokerArchitecture/02-02.Redpanda%20Console%20인증.md) — 무료 라이선스에서 게이트를 세우는 4가지 옵션
 - [02-03.Kafka·Redpanda SASL 인증](04_BrokerArchitecture/02-03.Kafka·Redpanda%20SASL%20인증.md) — 브로커 본체에 SASL/ACL/TLS로 인증·인가
