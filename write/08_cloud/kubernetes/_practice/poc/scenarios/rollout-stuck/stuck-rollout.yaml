@@ -1,0 +1,51 @@
+# 롤링업데이트 중단 재현 — readiness probe 가 영원히 실패해 rollout 정지
+#
+# 적용:   kubectl apply -f stuck-rollout.yaml
+#         kubectl rollout status deploy/stuck-rollout -n ch02-core --timeout=30s
+#         → "Waiting for ... rollout to finish" 에서 멈춤(timeout)
+# 진단:   kubectl get pods -n ch02-core -l scenario=rollout-stuck
+#         → 새 ReplicaSet Pod 가 READY 0/1 (probe 실패)
+#         kubectl describe pod <new-pod> -n ch02-core | grep -A3 Readiness
+#         → Readiness probe failed: HTTP probe failed (포트 9999 미응답)
+# 원인:   maxUnavailable 만큼만 구버전이 내려가고, 새 Pod 가 Ready 안 되니
+#         rollout 이 더 진행 못 함. 구버전 일부는 남아 서비스는 유지.
+# 해결:   readinessProbe 포트를 80(실제 동작 포트)으로 수정 후 재적용,
+#         또는 kubectl rollout undo deploy/stuck-rollout -n ch02-core
+# 정리:   kubectl delete -f stuck-rollout.yaml
+#
+# 학습: 01-02.핵심 워크로드 (RollingUpdate maxSurge/maxUnavailable, Readiness Probe)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stuck-rollout
+  namespace: ch02-core
+  labels:
+    scenario: rollout-stuck
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0      # Ready 안 된 Pod 가 있으면 rollout 정지
+  selector:
+    matchLabels:
+      app: stuck-rollout
+  template:
+    metadata:
+      labels:
+        app: stuck-rollout
+        scenario: rollout-stuck
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              # 9999 는 nginx 가 듣지 않는 포트 → probe 영원히 실패
+              path: /
+              port: 9999
+            initialDelaySeconds: 3
+            periodSeconds: 5

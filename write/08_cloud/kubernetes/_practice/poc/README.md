@@ -157,72 +157,56 @@ kubectl get <cr-type> -n <namespace>
 kubectl describe <cr-type> <cr-name> -n <namespace>
 ```
 
-## Troubleshooting FAQ
+## 실무 장애 시나리오 (Troubleshooting Scenarios)
 
-### 1. Minikube가 시작되지 않음
+실무에서 자주 만나는 장애를 직접 재현하고 진단하는 실습입니다. "증상이 보이면 → 어떤 명령으로 진단하고 → 어느 학습문서를 보는가"를 한 줄로 잇습니다. 일부 시나리오는 `scenarios/` 아래에 재현 매니페스트를 두어 `kubectl apply` 한 번으로 장애를 띄울 수 있습니다.
+
+| # | 증상 | 1차 진단 명령 | 원인·해결 요지 | 학습문서 | 재현 |
+|---|------|--------------|---------------|---------|------|
+| 1 | Pod가 `OOMKilled`(exit 137) 반복, `CrashLoopBackOff` | `kubectl describe pod <p>`의 Last State Reason | 컨테이너 RSS가 cgroup `memory.max` 초과 → limit 상향 또는 JVM `MaxRAMPercentage` 하향 | [OOMKilled 사례](../../05_operations/05-12.OOMKilled%20%EC%82%AC%EB%A1%80%20%EB%B6%84%EC%84%9D.md) · [자원 관리](../../05_operations/05-10.%EC%9E%90%EC%9B%90%20%EA%B4%80%EB%A6%AC.md) | `scenarios/oomkilled/` |
+| 2 | `ImagePullBackOff` / `ErrImagePull` | `kubectl describe pod <p>` Events | 이미지명·태그 오타, 프라이빗 레지스트리 시크릿 누락 → 태그 확인, `imagePullSecrets` 설정 | [핵심 워크로드](../../01_foundation/01-02.%ED%95%B5%EC%8B%AC%20%EC%9B%8C%ED%81%AC%EB%A1%9C%EB%93%9C.md) | `scenarios/imagepull/` |
+| 3 | PVC가 `Pending`에서 안 넘어감 | `kubectl describe pvc <pvc>` Events | StorageClass 부재 또는 동적 프로비저너 없음 → `kubectl get sc`로 확인, 존재하는 SC로 교체 | [스토리지와 상태](../../01_foundation/01-03.%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80%EC%99%80%20%EC%83%81%ED%83%9C.md) | `scenarios/pvc-pending/` |
+| 4 | 롤링업데이트가 멈춤(`rollout` 진행 안 됨) | `kubectl rollout status deploy/<d>` | readiness probe 실패로 새 Pod가 Ready 안 됨 + `maxUnavailable:0` → probe 수정 또는 `rollout undo` | [핵심 워크로드](../../01_foundation/01-02.%ED%95%B5%EC%8B%AC%20%EC%9B%8C%ED%81%AC%EB%A1%9C%EB%93%9C.md) | `scenarios/rollout-stuck/` |
+| 5 | Service로 연결 안 됨, `nslookup` 실패 | `kubectl get endpoints <svc>` / Pod에서 `nslookup <svc>` | selector-라벨 불일치로 endpoint 0개, 또는 ndots·search domain·CoreDNS 문제 | [Service와 EndpointSlice](../../02_networking/02-04.Service%EC%99%80%20EndpointSlice.md) · [DNS와 CoreDNS](../../02_networking/02-05.DNS%EC%99%80%20CoreDNS.md) | 명령 재현 |
+| 6 | HPA가 스케일 안 함(`<unknown>/50%`) | `kubectl get hpa` / `kubectl top pods` | metrics-server 미설치·미동작 → `minikube addons enable metrics-server`, requests 설정 확인 | [오토스케일링](../../05_operations/05-11.%EC%98%A4%ED%86%A0%EC%8A%A4%EC%BC%80%EC%9D%BC%EB%A7%81.md) | 명령 재현 |
+| 7 | `Forbidden` — 리소스 접근 거부 | `kubectl auth can-i <verb> <res> --as=system:serviceaccount:<ns>:<sa>` | ServiceAccount에 Role/RoleBinding 부족 → 필요한 verb를 Role에 추가 | [RBAC과 보안](../../05_operations/05-09.RBAC%EA%B3%BC%20%EB%B3%B4%EC%95%88.md) | `scenarios/rbac-forbidden/` |
+
+### 재현 매니페스트 사용법
+
+`scenarios/` 아래 각 디렉토리에는 장애를 일부러 띄우는 매니페스트와 진단·정리 명령이 주석으로 들어 있습니다. 예를 들어 OOMKilled를 재현하려면 다음처럼 합니다.
+
 ```bash
-# Docker Desktop 실행 확인
+# 장애 띄우기 (해당 ns는 클러스터 시작 시 생성돼 있어야 함)
+kubectl apply -f scenarios/oomkilled/oom-pod.yaml
+
+# 증상 관찰 — Running → OOMKilled → CrashLoopBackOff
+kubectl get pod oom-demo -n ch06-hpa -w
+
+# 진단 — Last State에 Reason: OOMKilled, Exit Code 137
+kubectl describe pod oom-demo -n ch06-hpa | grep -A3 "Last State"
+
+# 정리
+kubectl delete -f scenarios/oomkilled/oom-pod.yaml
+```
+
+각 매니페스트 상단 주석의 `적용/관찰/진단/정리` 4단계를 그대로 따라가면 됩니다. 재현 컬럼이 "명령 재현"인 시나리오(DNS·HPA)는 매니페스트 없이 위 1차 진단 명령으로 상태를 만들고 확인합니다.
+
+### 기본 환경 FAQ
+
+장애 시나리오와 별개로, 실습 환경 자체가 안 뜰 때 보는 항목입니다.
+
+```bash
+# Minikube가 시작되지 않음 — Docker 실행 확인 후 재생성
 docker ps
+minikube delete && minikube start --cpus=4 --memory=8192 --driver=docker
 
-# 기존 클러스터 삭제 후 재시작
-minikube delete
-minikube start --cpus=4 --memory=8192 --driver=docker
-```
-
-### 2. Pod가 Pending 상태
-```bash
-# 이벤트 확인 (리소스 부족, PVC 바인딩 실패 등)
-kubectl describe pod <pod-name> -n <namespace>
-
-# 노드 리소스 확인
-kubectl top nodes
-```
-
-### 3. ImagePullBackOff 에러
-```bash
-# 이미지 이름 확인
-kubectl describe pod <pod-name> -n <namespace>
-
-# Minikube Docker 환경에서 직접 pull 테스트
-minikube ssh
-docker pull <image-name>
-```
-
-### 4. Service 연결 안 됨
-```bash
-# Service Endpoints 확인
-kubectl get endpoints <service-name> -n <namespace>
-
-# Pod Selector 확인
-kubectl get svc <service-name> -n <namespace> -o yaml | grep selector -A 5
-
-# NetworkPolicy 확인
-kubectl get networkpolicy -n <namespace>
-```
-
-### 5. Helm 설치 실패
-```bash
-# Repository 업데이트
+# Helm 설치 실패 — repo 갱신 + dry-run 검증 후 재설치
 helm repo update
+helm install <release> <chart> -n <ns> -f values.yaml --dry-run --debug
 
-# Dry-run으로 검증
-helm install <release> <chart> -n <namespace> -f values.yaml --dry-run --debug
-
-# 기존 릴리스 제거 후 재설치
-helm uninstall <release> -n <namespace>
-kubectl delete ns <namespace>
-```
-
-### 6. Operator CR이 Ready 안 됨
-```bash
-# Operator Pod 로그 확인
-kubectl logs -f -n <operator-namespace> <operator-pod>
-
-# CR Status 확인
-kubectl get <cr-type> <cr-name> -n <namespace> -o yaml | grep -A 20 status
-
-# CRD 버전 확인
-kubectl get crd <crd-name> -o yaml | grep version
+# Operator CR이 Ready 안 됨 — Operator 로그와 CR status 확인
+kubectl logs -f -n <operator-ns> <operator-pod>
+kubectl get <cr-type> <cr-name> -n <ns> -o yaml | grep -A 20 status
 ```
 
 ## Data Management

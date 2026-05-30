@@ -1,0 +1,28 @@
+# PVC Pending 재현 — 존재하지 않는 StorageClass 요구
+#
+# 적용:   kubectl apply -f bad-pvc.yaml
+# 관찰:   kubectl get pvc bad-pvc -n ch03-storage
+#         → STATUS: Pending (영원히)
+# 진단:   kubectl describe pvc bad-pvc -n ch03-storage | grep -A3 Events
+#         → storageclass "nonexistent-fast-ssd" not found
+#   비교: kubectl get storageclass   (실제 존재하는 SC 이름 확인)
+# 해결:   존재하는 StorageClass로 교체하거나, 동적 프로비저너 설치.
+#         minikube 는 'standard'(addon storage-provisioner)가 기본.
+# 정리:   kubectl delete -f bad-pvc.yaml
+#
+# 학습: 01-03.스토리지와 상태 (정적/동적 프로비저닝, StorageClass)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: bad-pvc
+  namespace: ch03-storage
+  labels:
+    scenario: pvc-pending
+spec:
+  # 존재하지 않는 StorageClass → 바인딩할 PV 를 만들 프로비저너가 없음
+  storageClassName: nonexistent-fast-ssd
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

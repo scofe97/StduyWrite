@@ -1,0 +1,24 @@
+# ImagePullBackOff 재현 — 존재하지 않는 이미지 태그
+#
+# 적용:   kubectl apply -f bad-image.yaml
+# 관찰:   kubectl get pod bad-image-demo -n ch02-core -w
+#         → Pending → ErrImagePull → ImagePullBackOff
+# 진단:   kubectl describe pod bad-image-demo -n ch02-core | grep -A5 Events
+#         → Failed to pull image ... manifest unknown
+# 정리:   kubectl delete -f bad-image.yaml
+#
+# 학습: 01-02.핵심 워크로드 (Pod 라이프사이클 — Pending/Waiting)
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bad-image-demo
+  namespace: ch02-core
+  labels:
+    scenario: imagepull
+spec:
+  containers:
+    - name: app
+      # 존재하지 않는 태그 → 레지스트리에서 manifest 못 찾음
+      image: nginx:this-tag-does-not-exist-9999
+      ports:
+        - containerPort: 80

@@ -1,0 +1,46 @@
+# RBAC forbidden 재현 — Pod 읽기만 허용된 ServiceAccount
+#
+# 적용:   kubectl apply -f restricted-sa.yaml
+# 검증:   # 허용된 동작 (Role 에 있음) → yes
+#         kubectl auth can-i get pods -n ch02-core \
+#           --as=system:serviceaccount:ch02-core:restricted-sa
+#         # 금지된 동작 (Role 에 없음) → no
+#         kubectl auth can-i delete pods -n ch02-core \
+#           --as=system:serviceaccount:ch02-core:restricted-sa
+#         kubectl auth can-i get secrets -n ch02-core \
+#           --as=system:serviceaccount:ch02-core:restricted-sa
+# 실제 호출 시: Error from server (Forbidden): pods is forbidden:
+#         User "system:serviceaccount:..." cannot delete resource "pods"
+# 정리:   kubectl delete -f restricted-sa.yaml
+#
+# 학습: 05-09.RBAC과 보안 (Role/RoleBinding, ServiceAccount, auth can-i)
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: restricted-sa
+  namespace: ch02-core
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pod-reader
+  namespace: ch02-core
+rules:
+  # get/list/watch pods 만 허용 — delete, secrets 등은 미허용
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pod-reader-binding
+  namespace: ch02-core
+subjects:
+  - kind: ServiceAccount
+    name: restricted-sa
+    namespace: ch02-core
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
