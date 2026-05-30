@@ -41,7 +41,7 @@ updated: 2026-05-30
 
 | 항목 | 값 | 비고 |
 |------|-----|------|
-| Istio | 1.30 (현재 안정) | Ambient 1.24 GA, 멀티클러스터 Ambient는 1.27 알파 |
+| Istio | 1.24 계열 (Ambient GA) | Ambient 1.24 GA, 멀티클러스터 Ambient는 1.27 알파 |
 | Kubernetes | 1.28 이상 | 멀티클러스터는 2개 이상 클러스터 |
 | 실습 환경 | 개인 GCP K8s + 추가 GCE VM | [`gcp` 스킬](../../../../.claude/skills/gcp/SKILL.md) |
 

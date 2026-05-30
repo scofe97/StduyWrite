@@ -54,7 +54,7 @@ Istio는 Linkerd보다 다루는 표면이 훨씬 넓습니다. 설치 방법만
 
 | 항목 | 값 | 비고 |
 |------|-----|------|
-| Istio | 1.30 (현재 안정), 직전 1.29 | Ambient는 1.24 GA |
+| Istio | 1.24 계열 (Ambient GA) | Ambient는 1.24 GA |
 | 설치 | istioctl·Helm 권장 | in-cluster IstioOperator는 1.24 제거 |
 | Kubernetes | 1.28 이상 | |
 | 실습 클러스터 | 개인 GCP K8s | [`gcp` 스킬](../../../../.claude/skills/gcp/SKILL.md) |
