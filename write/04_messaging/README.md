@@ -78,6 +78,7 @@ updated: 2026-05-23
 - [05-01.Producer 아키텍처](04_BrokerArchitecture/05-01.Producer%20아키텍처.md) — send-path 파이프라인과 ProducerRecord·RecordMetadata 해부
 - [05-02.Producer 생성과 전송 모드](04_BrokerArchitecture/05-02.Producer%20생성과%20전송%20모드.md) — 3 필수 설정과 fire-and-forget·동기·비동기 전송, retriable 오류 구분
 - [05-03.Producer 파티셔너](04_BrokerArchitecture/05-03.Producer%20파티셔너.md) — key 기반 매핑·sticky(2.4+)·사용자 정의 파티셔너, Consumer 할당과의 구분
+- [05-04.Quota와 Throttling](04_BrokerArchitecture/05-04.Quota와%20Throttling.md) — produce·consume·request quota, 동적 설정과 throttling 동작
 
 ### 05_ConsistencyPattern — 일관성 패턴·예외 처리
 
