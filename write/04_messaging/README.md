@@ -75,6 +75,7 @@ updated: 2026-05-23
 - [04-01.message-lib config 5개 클래스 종합](04_BrokerArchitecture/04-01.message-lib%20config%205개%20클래스%20종합.md) — config 다섯 클래스의 기동 순서·책임·상호작용
 - [04-02.message-lib config 학습 검증](04_BrokerArchitecture/04-02.message-lib%20config%20학습%20검증.md) — config 종합 문서 자체의 학습 검증 노트
 - [04-03.message-lib config 운영 이식 가이드](04_BrokerArchitecture/04-03.message-lib%20config%20운영%20이식%20가이드.md) — 다른 프로젝트로 옮길 때의 체크리스트
+- [05-01.Producer 아키텍처](04_BrokerArchitecture/05-01.Producer%20아키텍처.md) — send-path 파이프라인과 ProducerRecord·RecordMetadata 해부
 
 ### 05_ConsistencyPattern — 일관성 패턴·예외 처리
 
