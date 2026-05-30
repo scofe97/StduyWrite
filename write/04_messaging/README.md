@@ -63,8 +63,8 @@ updated: 2026-05-23
 - [01-01.메시지 큐 아키텍처](04_BrokerArchitecture/01-01.메시지%20큐%20아키텍처.md) — 분산 커밋 로그라는 구조의 의미
 - [01-02.리더 선출](04_BrokerArchitecture/01-02.리더%20선출.md) — Raft 합의 프로토콜의 3가지 역할
 - [01-03.Consumer Group](04_BrokerArchitecture/01-03.Consumer%20Group.md) — 발행·소비 기본 구조와 그룹 프로토콜
-- [01-04.리밸런스 프로토콜](04_BrokerArchitecture/01-04.리밸런스%20프로토콜.md) — Stop-the-World 트리거와 점진적 리밸런스
-- [01-05.오프셋 커밋 API](04_BrokerArchitecture/01-05.오프셋%20커밋%20API.md) — commitSync·commitAsync·지정 offset 커밋과 중복·유실 방향성
+- [01-04.리밸런스 프로토콜](04_BrokerArchitecture/01-04.리밸런스%20프로토콜.md) — Stop-the-World 트리거와 점진적 리밸런스 ([시각화](04_BrokerArchitecture/01-04-rebalance.html))
+- [01-05.오프셋 커밋 API](04_BrokerArchitecture/01-05.오프셋%20커밋%20API.md) — commitSync·commitAsync·지정 offset 커밋과 중복·유실 방향성 ([시각화](04_BrokerArchitecture/01-05-offset-commit.html))
 - [01-06.Consumer poll 루프와 종료](04_BrokerArchitecture/01-06.Consumer%20poll%20루프와%20종료.md) — poll 루프·1 consumer per thread·seek·wakeup 종료
 - [01-07.Consumer 설정 심화](04_BrokerArchitecture/01-07.Consumer%20설정%20심화.md) — fetch 크기·타임아웃·client.rack·오프셋 보존
 - [02-01.Redpanda 아키텍처](04_BrokerArchitecture/02-01.Redpanda%20아키텍처.md) — 단일 바이너리·Raft per partition·thread-per-core
