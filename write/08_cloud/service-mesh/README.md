@@ -47,4 +47,4 @@ updated: 2026-05-30
 > 본 카테고리의 전제가 되는 kubernetes MOC와 진입 계층 문서를 안내합니다.
 
 - [kubernetes MOC](../kubernetes/README.md) — 본 카테고리의 전제. Pod·Service·Ingress 이해가 선행돼야 합니다.
-- [Ingress와 Gateway API](../kubernetes/02_networking/04-06.Ingress%EC%99%80%20Gateway%20API.md) — `01_foundation/03-01`과 주제가 겹치며, K8s 진입 계층 관점에서 서술합니다.
+- [Ingress와 Gateway API](../kubernetes/02_networking/02-06.Ingress%EC%99%80%20Gateway%20API.md) — `01_foundation/03-01`과 주제가 겹치며, K8s 진입 계층 관점에서 서술합니다.
