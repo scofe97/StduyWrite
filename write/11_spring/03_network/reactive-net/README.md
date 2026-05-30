@@ -27,12 +27,12 @@ WebClient([`../webflux/`](../webflux/README.md))도 기본 전송으로 Reactor 
 
 ## 학습 순서
 
-> `_notion_import/netty/` 의 raw 10편을 정식 편으로 한 편씩 재작성해 옮깁니다. 노션 export 라 위젯 마크업·이미지 의존이 있어, 본문은 완전한 문장과 Mermaid 로 다시 씁니다(`feedback_12spring_full_rewrite_cadence` — 풀 재작성 1편/세션).
+> `_notion_import/netty/` 의 raw 본문(01~06 + NIO/BIO Connector + 동기 비동기)을 정식 7편으로 재작성해 옮겼습니다. 노션 export 라 위젯 마크업·이미지 의존이 있어, 본문은 완전한 문장과 Mermaid 로 다시 씁니다(`feedback_12spring_full_rewrite_cadence` — 풀 재작성 1편/세션). 이관 완료.
 
 | 정식 # | 주제 | raw 원본 | 상태 |
 |--------|------|---------|------|
 | 01-01 | [Reactor Netty 입문 — WebFlux의 하부 전송 계층](01-01.Reactor%20Netty%20입문%20—%20WebFlux의%20하부%20전송%20계층.md) | netty/01 | 작성 완료 |
-| 01-02 | [이벤트 기반 프로그래밍과 BIO vs NIO](01-02.이벤트%20기반%20프로그래밍과%20BIO%20vs%20NIO.md) | netty/02, NIO/BIO Connector | 작성 완료 |
+| 01-02 | [이벤트 기반 프로그래밍과 BIO vs NIO](01-02.이벤트%20기반%20프로그래밍과%20BIO%20vs%20NIO.md) | netty/02, NIO/BIO Connector, 동기 비동기 | 작성 완료 |
 | 01-03 | [부트스트랩 — Netty 네트워크 프로그램의 시작점](01-03.부트스트랩.md) | netty/03 | 작성 완료 |
 | 01-04 | [채널 파이프라인과 코덱 ⭐](01-04.채널%20파이프라인과%20코덱.md) | netty/04 | 작성 완료 |
 | 01-05 | [바이트 버퍼 (ByteBuf)](01-05.바이트%20버퍼.md) | netty/05 | 작성 완료 |
