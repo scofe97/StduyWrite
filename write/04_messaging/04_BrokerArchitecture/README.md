@@ -26,9 +26,10 @@ graph TD
     G4 --> G5["05 Producer"]
     G5 --> G6["06 AdminClient"]
     G6 --> G7["07 신뢰성 검증"]
+    G7 --> G8["08 메시지 정리"]
 
     style G1 fill:#cce5ff,stroke:#004085,color:#000
-    style G7 fill:#d4edda,stroke:#27ae60,color:#000
+    style G8 fill:#d4edda,stroke:#27ae60,color:#000
 ```
 
 
@@ -112,6 +113,15 @@ graph TD
 | 문서 | 범위 |
 |------|------|
 | [07-01.신뢰성 검증과 모니터링](07-01.신뢰성%20검증과%20모니터링.md) | Kafka 4대 보장, VerifiableProducer/Consumer·Trogdor·Burrow·JMX 3계층 검증 |
+
+
+## 08. 메시지 정리
+
+> 쌓인 메시지를 브로커가 어떻게 정리하는지, log retention(나이 기반)·log compaction(키별 최신)·tombstone(선택 삭제)의 메커니즘을 다룬다.
+
+| 문서 | 범위 |
+|------|------|
+| [08-01.메시지 정리 — Log Retention·Compaction·Tombstone](08-01.메시지%20정리%20—%20Log%20Retention·Compaction·Tombstone.md) | log cleaner의 세그먼트 단위 동작, retention.ms 7일 함정, dirty ratio·compaction lag, tombstone 삭제 |
 
 
 ## 관련 문서
