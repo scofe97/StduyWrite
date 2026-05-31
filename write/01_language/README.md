@@ -12,8 +12,10 @@ updated: 2026-04-19
 
 ## 하위
 
+- [_writing/](_writing/) — 언어중립 코드 작성·리팩토링 원칙(클린 코드·리팩토링). 언어 폴더보다 앞에 두는 공통 묶음
 - [java/](java/) — Java 언어·표준 라이브러리·JVM·빌드
   - `01_Core`, `02_TypeSystem`, `03_Collections`, `04_Lambda`, `05_Concurrency`, `06_Modern`, `07_DesignPatterns`, `08_Testing`, **`09_jvm`** (JVM·GC·바이트코드), `10_IO`, `11_Build`
+- [python/](python/) — Python 선택 기준·통합 테스트·자동화 스크립트
 
 ## 경계 기준
 
