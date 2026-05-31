@@ -22,7 +22,7 @@ updated: 2026-05-23
 
 ### 01_Connect — 커넥터와 데이터 통합
 
-외부 시스템과 토픽 사이를 잇는 커넥터를 다룹니다. Redpanda Connect의 개념·문법·실습과 운영 측 에러 핸들링·고가용성을 포함합니다.
+외부 시스템과 토픽 사이를 잇는 커넥터를 다룹니다. Redpanda Connect의 개념·문법·실습과 운영 측 에러 핸들링·고가용성, 그리고 Apache Kafka에 내장된 Kafka Connect의 아키텍처·REST API·SMT·JDBC/Debezium 실전을 포함합니다.
 
 - [01-01. SourceSink](01_Connect/01-01.%20SourceSink%20.md) — Source와 Sink의 기본 모델
 - [01-02.커넥터가 필요한 이유와 실전 사례](01_Connect/01-02.커넥터가%20필요한%20이유와%20실전%20사례.md) — 직접 구현 대신 커넥터를 쓰는 판단 기준
@@ -31,6 +31,9 @@ updated: 2026-05-23
 - [02-03. 실습 시나리오](01_Connect/02-03.%20실습%20시나리오.md) — 손으로 따라가는 파이프라인 구성
 - [03-01.에러 핸들링과 로그 수집](01_Connect/03-01.에러%20핸들링과%20로그%20수집.md) — 실패 경로 설계
 - [03-02.장애 복구와 고가용성](01_Connect/03-02.장애%20복구와%20고가용성.md) — 커넥터 운영의 가용성 확보
+- [04-01.Kafka Connect 아키텍처와 운영 모드](01_Connect/04-01.Kafka%20Connect%20아키텍처와%20운영%20모드.md) — source/sink 모델, Distributed/Standalone Mode, worker·task, 스케일·장애 복원
+- [04-02.Kafka Connect REST API·worker 설정·SMT](01_Connect/04-02.Kafka%20Connect%20REST%20API·worker%20설정·SMT.md) — 커넥터 CRUD·pause/restart, converter·errors 설정, SMT 변환 체인
+- [04-03.JDBC Source vs Debezium CDC 실전](01_Connect/04-03.JDBC%20Source%20vs%20Debezium%20CDC%20실전.md) — JDBC mode(incrementing/timestamp/bulk)의 한계와 트랜잭션 로그 기반 CDC
 
 ### 02_MessageContract — 메시지 모델·계약
 
