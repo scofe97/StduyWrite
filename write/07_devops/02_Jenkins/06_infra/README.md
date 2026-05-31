@@ -1,6 +1,6 @@
 ---
-title: Jenkins 인프라 계획·배포 학습 MOC
-tags: [moc, jenkins, infra, planning, capacity, well-architected, iac, terraform, jcasc, helm]
+title: Jenkins 인프라 계획·배포·통합 학습 MOC
+tags: [moc, jenkins, infra, planning, capacity, well-architected, iac, terraform, jcasc, helm, integration, github, sonarqube, artifactory]
 status: draft
 related:
   - ../README.md
@@ -10,11 +10,11 @@ related:
 updated: 2026-05-31
 ---
 
-# Jenkins 인프라 계획·배포 학습 MOC
+# Jenkins 인프라 계획·배포·통합 학습 MOC
 
 ---
 
-> Jenkins를 "어떻게 쓰는가"가 아니라 "어떻게 계획하고 배포하고 운영하는가"를 다루는 묶음입니다. 본 묶음을 끝내면 controller 사양을 근거 있게 산정하고, 5가지 배포 형태를 Well-Architected 6 pillars로 평가하며, Terraform·JCasC·Helm으로 Jenkins를 코드로 재현 가능하게 배포하는 흐름을 한 번에 설명할 수 있습니다.
+> Jenkins를 "어떻게 쓰는가"가 아니라 "어떻게 계획하고 배포하고, 외부 CI 도구와 통합하는가"를 다루는 묶음입니다. 본 묶음을 끝내면 controller 사양을 근거 있게 산정하고, 5가지 배포 형태를 Well-Architected 6 pillars로 평가하며, Terraform·JCasC·Helm으로 Jenkins를 코드로 재현 가능하게 배포하고, GitHub·SonarQube·Artifactory를 동일한 4단계로 연결하는 흐름을 한 번에 설명할 수 있습니다.
 
 ## 왜 한 폴더로 묶었는가
 
@@ -28,8 +28,12 @@ updated: 2026-05-31
 | 06 계획·배포 | 06-01 | [Jenkins 서버 용량 산정과 시스템 요구사항](06-01.Jenkins%20서버%20용량%20산정과%20시스템%20요구사항.md) | controller 자원 소비, CPU·RAM·디스크 추정식, 포트, JVM 튜닝 |
 | 06 계획·배포 | 06-02 | [배포 시나리오와 Well-Architected 평가](06-02.배포%20시나리오와%20Well-Architected%20평가.md) | serverless·container·VM·bare metal, 6 pillars 평가, use-case 매핑 |
 | 06 계획·배포 | 06-03 | [IaC로 Jenkins 배포 — Terraform·JCasC·Helm](06-03.IaC로%20Jenkins%20배포%20%E2%80%94%20Terraform%C2%B7JCasC%C2%B7Helm.md) | 재현성, JCasC 3종 파일, Terraform 흐름, K8s vs VM 선택 |
+| 06 통합 | 06-04 | [GitHub 연동 — 플러그인·PAT·웹훅](06-04.GitHub%20연동%20%E2%80%94%20플러그인%C2%B7PAT%C2%B7웹훅.md) | GitHub 플러그인, PAT 스코프(admin:repo_hook·repo), 크레덴셜 2종, Test Connection |
+| 06 통합 | 06-05 | [SonarQube 연동 — 정적분석 게이트](06-05.SonarQube%20연동%20%E2%80%94%20정적분석%20게이트.md) | SonarQube Helm 배포, Scanner 플러그인, analysis token, Quality Gate |
+| 06 통합 | 06-06 | [Artifactory 연동 — 아티팩트 저장소](06-06.Artifactory%20연동%20%E2%80%94%20아티팩트%20저장소.md) | Artifactory Helm 배포(OSS), user·permission, JFrog 플러그인 설정 |
+| 06 통합 | 06-07 | [외부 도구 통합 4단계 비교](06-07.외부%20도구%20통합%204단계%20비교.md) | 공통 4단계, 도구별 토큰 경로·크레덴셜 타입 차이, 전역 설정이 마지막인 이유 |
 
-용량부터 보려면 06-01, 배포 형태 결정이 먼저면 06-02, 코드화 구현이 급하면 06-03부터 진입합니다. 세 편은 06-01(얼마나) → 06-02(어디에) → 06-03(어떻게 코드로) 순으로 자연스럽게 이어집니다.
+용량부터 보려면 06-01, 배포 형태 결정이 먼저면 06-02, 코드화 구현이 급하면 06-03부터 진입합니다. 계획·배포 세 편은 06-01(얼마나) → 06-02(어디에) → 06-03(어떻게 코드로) 순으로 이어집니다. 외부 도구 연동은 06-04~06-06을 도구별로 보고, 06-07 비교표로 공통 4단계를 정리합니다.
 
 ## 환경과 버전
 
@@ -56,12 +60,14 @@ updated: 2026-05-31
 
 ## 면접 대비 체크리스트
 
-> 세 편을 다 읽은 뒤 다음 질문에 답할 수 있어야 합니다.
+> 일곱 편을 다 읽은 뒤 다음 질문에 답할 수 있어야 합니다.
 
 1. controller가 빌드를 직접 돌리지 않는데도 CPU·RAM 산정이 중요한 이유는? 책 추정식(요청÷250, agent×3)의 한계는?
 2. controller가 쓰는 네 포트(8080·443·50000·22)는 각각 무엇이며, 50000이 막히면 어떤 증상이 납니까?
 3. 5가지 배포 형태를 6 pillars로 평가하면 어디가 종합 최적이고, bare metal은 무엇을 포기합니까?
 4. JCasC 배포 3종 파일(jenkins.yaml·plugins.txt·override.conf)의 역할과 처리 순서는? 순서를 어기면?
 5. `terraform init·plan·apply`는 각각 무엇을 하며, K8s Helm 배포와 VM Terraform 배포를 가르는 기준은?
+6. GitHub·SonarQube·Artifactory 통합의 공통 4단계는 무엇이며, "전역 설정"이 항상 마지막인 이유는?
+7. secret text와 username&password 크레덴셜은 각각 언제 쓰며, GitHub가 둘 다 쓰는 이유는?
 
 각 질문에 막히면 해당 절로 돌아갑니다.
