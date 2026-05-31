@@ -86,6 +86,7 @@ updated: 2026-05-23
 - [06-02.AdminClient 설정·컨슈머그룹·클러스터](04_BrokerArchitecture/06-02.AdminClient%20설정·컨슈머그룹·클러스터.md) — 설정 describe·수정, 컨슈머 그룹 offset·lag·reset, 클러스터 메타데이터
 - [06-03.AdminClient 고급 작업과 테스트](04_BrokerArchitecture/06-03.AdminClient%20고급%20작업과%20테스트.md) — 파티션 추가·레코드 삭제·리더 선출·replica 재배치·MockAdminClient
 - [07-01.신뢰성 검증과 모니터링](04_BrokerArchitecture/07-01.신뢰성%20검증과%20모니터링.md) — Kafka 4대 보장, VerifiableProducer/Consumer·Trogdor·Burrow·JMX 3계층 검증
+- [08-01.메시지 정리 — Log Retention·Compaction·Tombstone](04_BrokerArchitecture/08-01.메시지%20정리%20—%20Log%20Retention·Compaction·Tombstone.md) — log cleaner의 세그먼트 단위 정리, retention 7일 함정, compaction dirty ratio, tombstone
 
 ### 05_ConsistencyPattern — 일관성 패턴·예외 처리
 
