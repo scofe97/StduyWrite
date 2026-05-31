@@ -25,7 +25,7 @@ graph TD
     G3 --> G4["04 message-lib config"]
     G4 --> G5["05 Producer"]
     G5 --> G6["06 AdminClient"]
-    G6 --> G7["07 신뢰성 검증"]
+    G6 --> G7["07 신뢰성·모니터링"]
     G7 --> G8["08 메시지 정리"]
 
     style G1 fill:#cce5ff,stroke:#004085,color:#000
@@ -106,13 +106,15 @@ graph TD
 | [06-03.AdminClient 고급 작업과 테스트](06-03.AdminClient%20고급%20작업과%20테스트.md) | 파티션 추가·레코드 삭제·리더 선출·replica 재배치·MockAdminClient |
 
 
-## 07. 신뢰성 검증
+## 07. 신뢰성·모니터링
 
-> 신뢰성을 시스템 속성으로 보는 framing과, 설정·앱·프로덕션 3계층으로 검증·모니터링하는 방법을 다룬다.
+> 신뢰성을 시스템 속성으로 보는 framing과 3계층 검증, 그리고 infra·broker·client 메트릭 카탈로그와 배포환경별 모니터링을 다룬다.
 
 | 문서 | 범위 |
 |------|------|
 | [07-01.신뢰성 검증과 모니터링](07-01.신뢰성%20검증과%20모니터링.md) | Kafka 4대 보장, VerifiableProducer/Consumer·Trogdor·Burrow·JMX 3계층 검증 |
+| [07-02.Kafka 메트릭 카탈로그 — Infra·Broker](07-02.Kafka%20메트릭%20카탈로그%20—%20Infra·Broker.md) | infra 60% 임계, broker MBean(UnderReplicated·UnderMinIsr·NetworkProcessorAvgIdle·ActiveController), 모니터링 허브 |
+| [07-03.Kafka 클라이언트·운영 모니터링](07-03.Kafka%20클라이언트·운영%20모니터링%20—%20Client·Streams·배포환경.md) | producer·consumer(lag/lead)·Connect·Streams 메트릭, alerting(06_observability 위임), 배포환경별 모니터링 |
 
 
 ## 08. 메시지 정리
