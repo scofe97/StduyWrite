@@ -99,6 +99,8 @@ updated: 2026-05-23
 - [03-02.Inbox 트랜잭션 오염과 멱등 어댑터](05_ConsistencyPattern/03-02.Inbox%20트랜잭션%20오염과%20멱등%20어댑터.md) — 멱등 INSERT의 트랜잭션 오염
 - [03-03.컨슈머 진입점 트랜잭션 경계와 Inbox의 사정거리](05_ConsistencyPattern/03-03.컨슈머%20진입점%20트랜잭션%20경계와%20Inbox의%20사정거리.md) — 영수증 vs 실행 큐 분리
 - [03-04.Exactly-once 의미론과 Consumer Idempotency](05_ConsistencyPattern/03-04.Exactly-once%20의미론과%20Consumer%20Idempotency.md) — Kafka EOS의 실제 범위와 DB가 끼면 깨지는 이유
+- [03-05.Idempotent Producer — PID·시퀀스·중복 방지](05_ConsistencyPattern/03-05.Idempotent%20Producer%20—%20PID·시퀀스·중복%20방지.md) — 발행 측 retry 중복을 PID·시퀀스로 거르는 원리와 실패 시나리오
+- [03-06.Kafka Transactions 내부 — Zombie Fencing·2PC](05_ConsistencyPattern/03-06.Kafka%20Transactions%20내부%20—%20Zombie%20Fencing·2PC.md) — atomic multipartition write·epoch fencing·__transaction_state 2단계 커밋
 - [04-01.CDC](05_ConsistencyPattern/04-01.CDC.md) — Debezium 기반 변경 데이터 캡처
 - [05-01.Spring Kafka DLT와 Producer Config](05_ConsistencyPattern/05-01.Spring%20Kafka%20DLT와%20Producer%20Config.md) — `DefaultErrorHandler + DeadLetterPublishingRecoverer` 흐름
 - [05-02.DlqConsumer](05_ConsistencyPattern/05-02.DlqConsumer.md) — DLQ 끝단 소비자
