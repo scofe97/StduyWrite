@@ -1,6 +1,6 @@
 ---
-title: Jenkins 계획·배포 학습 MOC
-tags: [moc, jenkins, planning, capacity, well-architected, iac, terraform, jcasc, helm]
+title: Jenkins 인프라 계획·배포 학습 MOC
+tags: [moc, jenkins, infra, planning, capacity, well-architected, iac, terraform, jcasc, helm]
 status: draft
 related:
   - ../README.md
@@ -10,7 +10,7 @@ related:
 updated: 2026-05-31
 ---
 
-# Jenkins 계획·배포 학습 MOC
+# Jenkins 인프라 계획·배포 학습 MOC
 
 ---
 
@@ -18,7 +18,7 @@ updated: 2026-05-31
 
 ## 왜 한 폴더로 묶었는가
 
-01_core~05_operations가 "Jenkins를 어떻게 쓰는가"(파이프라인·Agent·API·내구성)에 집중한다면, 06_planning은 그 앞단인 "Jenkins 자체를 어떻게 세우는가"를 다룹니다. 용량 산정·배포 형태 선택·IaC 배포는 코드를 작성하기 전 인프라 설계 단계의 결정이고, 한 번 굳으면 바꾸기 어렵습니다. 세 주제는 결국 *처음 한 번을 제대로 세운다*는 같은 목적을 가집니다 — 용량 산정이 "얼마나 큰 서버가 필요한가"에, 배포 평가가 "어디에 어떤 방식으로 올릴까"에, IaC가 "그 결정을 어떻게 코드로 재현할까"에 답합니다. 한 폴더에 두면 "Jenkins를 진지하게 배포하려면 무엇을 먼저 정해야 하는가"의 답이 한 페이지에 잡힙니다.
+01_core~05_operations가 "Jenkins를 어떻게 쓰는가"(파이프라인·Agent·API·내구성)에 집중한다면, 06_infra는 그 앞단인 "Jenkins 자체를 어떻게 세우는가"를 다룹니다. 용량 산정·배포 형태 선택·IaC 배포는 코드를 작성하기 전 인프라 설계 단계의 결정이고, 한 번 굳으면 바꾸기 어렵습니다. 세 주제는 결국 *처음 한 번을 제대로 세운다*는 같은 목적을 가집니다 — 용량 산정이 "얼마나 큰 서버가 필요한가"에, 배포 평가가 "어디에 어떤 방식으로 올릴까"에, IaC가 "그 결정을 어떻게 코드로 재현할까"에 답합니다. 한 폴더에 두면 "Jenkins를 진지하게 배포하려면 무엇을 먼저 정해야 하는가"의 답이 한 페이지에 잡힙니다.
 
 ## 학습 순서
 
