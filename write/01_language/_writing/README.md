@@ -23,6 +23,7 @@ updated: 2026-05-31
 - [02-06.데이터 방어](02-06.데이터%20방어.md) — Five Lines of Code Ch6 기반(1부 마지막): Do not use getters or setters·Eliminate getter or setter·Never have common affixes·Encapsulate data·Enforce sequence·private constructor enum (캡슐화로 *데이터를 방어*)
 - [03-01.컴파일러와 협업](03-01.컴파일러와%20협업.md) — Five Lines of Code Ch7 기반(2부 시작): halting problem·컴파일러 강점 4(reachability·definite assignment·access control·type checking)·약점 6·싸우지 않기·불변식 6단계 사다리·경고 0 (컴파일러를 *팀의 일원으로*)
 - [03-02.주석 멀리하기](03-02.주석%20멀리하기.md) — Five Lines of Code Ch8 기반: 주석의 위험·"코드가 말할 수 없는 것만"·주석 5분류(낡음·주석처리코드·trivial·메서드명화·불변식문서화)와 각각의 처리 (주석은 *리팩토링 단계에서 정리*)
+- [03-03.코드 삭제를 사랑하라](03-03.코드%20삭제를%20사랑하라.md) — Five Lines of Code Ch9 기반: 코드는 부채·매몰비용 오류·incidental complexity 4갈래(무지·낭비·부채·끌림)·strangler fig로 레거시 측정·spike and stabilize·브랜치/문서/테스트/설정/라이브러리/기능 삭제 기준 (제 몫 못 하는 것을 *덜어내기*)
 
 > **번호 체계**: `01-`=클린 코드(Martin) / `02-`=Five Lines of Code 1부(Ch1~6, 게임 예제로 익히는 리팩토링 *절차*) / `03-`=Five Lines of Code 2부(Ch7~, 그 절차를 떠받치는 *일반 원칙*). prefix는 출처 묶음, 끝 번호는 챕터 순서다.
 
