@@ -18,6 +18,7 @@ updated: 2026-05-31
 - [02-01.리팩토링 절차와 규칙](02-01.리팩토링%20절차와%20규칙.md) — Five Lines of Code Ch1 기반: 리팩토링 정의·Skills/Culture/Tools 세 축·6단계 워크플로·테스트 없이 안전하게 (그 기준에 *도달하는 법*)
 - [02-02.리팩토링의 기술적 토대](02-02.리팩토링의%20기술적%20토대.md) — Five Lines of Code Ch2 기반: 가독성·유지보수성·불변식 지역화·상속보다 조합·추가에 의한 변경 (리팩토링이 *기술적으로 무엇을 좋게 만드는가*)
 - [02-03.긴 함수 쪼개기](02-03.긴%20함수%20쪼개기.md) — Five Lines of Code Ch3 기반: Five lines 규칙·Extract method 패턴·Either call or pass·if only at the start (긴 함수를 *실제로 쪼개는 규칙과 절차*)
+- [02-04.타입 코드를 다형성으로](02-04.타입%20코드를%20다형성으로.md) — Five Lines of Code Ch4 기반: Never use if with else·Replace type code with classes·Push code into classes·Never use switch·Specialize method·Only inherit from interfaces (enum/if-else를 *다형성으로 바꿔 if를 제거*)
 
 ## 경계 기준
 
