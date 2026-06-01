@@ -19,6 +19,7 @@ updated: 2026-05-31
 - [02-02.리팩토링의 기술적 토대](02-02.리팩토링의%20기술적%20토대.md) — Five Lines of Code Ch2 기반: 가독성·유지보수성·불변식 지역화·상속보다 조합·추가에 의한 변경 (리팩토링이 *기술적으로 무엇을 좋게 만드는가*)
 - [02-03.긴 함수 쪼개기](02-03.긴%20함수%20쪼개기.md) — Five Lines of Code Ch3 기반: Five lines 규칙·Extract method 패턴·Either call or pass·if only at the start (긴 함수를 *실제로 쪼개는 규칙과 절차*)
 - [02-04.타입 코드를 다형성으로](02-04.타입%20코드를%20다형성으로.md) — Five Lines of Code Ch4 기반: Never use if with else·Replace type code with classes·Push code into classes·Never use switch·Specialize method·Only inherit from interfaces (enum/if-else를 *다형성으로 바꿔 if를 제거*)
+- [02-05.유사 코드 통합](02-05.유사%20코드%20통합.md) — Five Lines of Code Ch5 기반: Unify similar classes·Combine ifs·조건 산술·Use pure conditions·Introduce strategy pattern·No interface with only one implementation·UML (비슷한 *코드를 하나로 합치는* 패턴)
 
 ## 경계 기준
 
