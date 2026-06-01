@@ -1,6 +1,6 @@
 ---
-title: Jenkins 인프라 계획·배포·통합·확장 학습 MOC
-tags: [moc, jenkins, infra, planning, capacity, well-architected, iac, terraform, jcasc, helm, integration, github, sonarqube, artifactory, scaling, azure-vm-agents]
+title: Jenkins 인프라 계획·배포·통합·확장·AI활용·CI설계 학습 MOC
+tags: [moc, jenkins, infra, planning, capacity, well-architected, iac, terraform, jcasc, helm, integration, github, sonarqube, artifactory, scaling, azure-vm-agents, ai, llm, chatgpt, ci-design, docker-registry]
 status: draft
 related:
   - ../README.md
@@ -10,11 +10,11 @@ related:
 updated: 2026-05-31
 ---
 
-# Jenkins 인프라 계획·배포·통합·확장 학습 MOC
+# Jenkins 인프라 계획·배포·통합·확장·AI활용·CI설계 학습 MOC
 
 ---
 
-> Jenkins를 "어떻게 쓰는가"가 아니라 "어떻게 계획하고 배포하고, 외부 CI 도구와 통합하는가"를 다루는 묶음입니다. 본 묶음을 끝내면 controller 사양을 근거 있게 산정하고, 5가지 배포 형태를 Well-Architected 6 pillars로 평가하며, Terraform·JCasC·Helm으로 Jenkins를 코드로 재현 가능하게 배포하고, GitHub·SonarQube·Artifactory를 동일한 4단계로 연결하는 흐름을 한 번에 설명할 수 있습니다.
+> Jenkins를 "어떻게 쓰는가"가 아니라 "어떻게 계획하고 배포하고, 외부 CI 도구와 통합하고, 확장하고, 하나의 CI 파이프라인으로 설계하는가"를 다루는 묶음입니다. 본 묶음을 끝내면 controller 사양을 근거 있게 산정하고, 5가지 배포 형태를 Well-Architected 6 pillars로 평가하며, Terraform·JCasC·Helm으로 Jenkins를 코드로 재현 가능하게 배포하고, GitHub·SonarQube·Artifactory를 동일한 4단계로 연결하며, VM·K8s 동적 Agent로 수평 확장하고, LLM으로 파이프라인 초안을 짜되 반드시 검증하며, 이 모든 조각을 스테이지 순서가 있는 하나의 CI 파이프라인으로 설계하는 흐름을 한 번에 설명할 수 있습니다.
 
 ## 왜 한 폴더로 묶었는가
 
@@ -33,8 +33,10 @@ updated: 2026-05-31
 | 06 통합 | 06-06 | [Artifactory 연동 — 아티팩트 저장소](06-06.Artifactory%20연동%20%E2%80%94%20아티팩트%20저장소.md) | Artifactory Helm 배포(OSS), user·permission, JFrog 플러그인 설정 |
 | 06 통합 | 06-07 | [외부 도구 통합 4단계 비교](06-07.외부%20도구%20통합%204단계%20비교.md) | 공통 4단계, 도구별 토큰 경로·크레덴셜 타입 차이, 전역 설정이 마지막인 이유 |
 | 06 확장 | 06-08 | [클라우드 VM 동적 Agent — Azure VM Agents 플러그인](06-08.클라우드%20VM%20동적%20Agent%20%E2%80%94%20Azure%20VM%20Agents%20플러그인.md) | VM vs K8s on-demand, service principal 인증, retention 3전략, 이미지 캐싱 |
+| 06 AI 활용 | 06-09 | [AI로 파이프라인 초안 짜기 — Describe·Run·Troubleshoot·Refine](06-09.AI로%20파이프라인%20초안%20짜기%20%E2%80%94%20Describe%C2%B7Run%C2%B7Troubleshoot%C2%B7Refine.md) | LLM 4단계 협업 루프, 요구사항 기술, 환경 추측 오류, AI 코드 검증 의무 |
+| 06 CI 설계 | 06-10 | [CI 파이프라인 전체 설계 — 스테이지 순서·Docker 레지스트리·인증](06-10.CI%20파이프라인%20전체%20설계%20%E2%80%94%20스테이지%20순서%C2%B7Docker%20레지스트리%C2%B7인증.md) | 7스테이지 순서·이유, webhook 트리거, Artifactory Docker 레지스트리, Kaniko 인증 Secret |
 
-용량부터 보려면 06-01, 배포 형태 결정이 먼저면 06-02, 코드화 구현이 급하면 06-03부터 진입합니다. 계획·배포 세 편은 06-01(얼마나) → 06-02(어디에) → 06-03(어떻게 코드로) 순으로 이어집니다. 외부 도구 연동은 06-04~06-06을 도구별로 보고, 06-07 비교표로 공통 4단계를 정리합니다. 06-08은 03_agent의 K8s 동적 Agent와 짝을 이루는 VM 기반 동적 Agent 편으로, 수평 확장의 두 갈래를 비교합니다.
+용량부터 보려면 06-01, 배포 형태 결정이 먼저면 06-02, 코드화 구현이 급하면 06-03부터 진입합니다. 계획·배포 세 편은 06-01(얼마나) → 06-02(어디에) → 06-03(어떻게 코드로) 순으로 이어집니다. 외부 도구 연동은 06-04~06-06을 도구별로 보고, 06-07 비교표로 공통 4단계를 정리합니다. 06-08은 03_agent의 K8s 동적 Agent와 짝을 이루는 VM 기반 동적 Agent 편으로, 수평 확장의 두 갈래를 비교합니다. 06-09는 LLM으로 파이프라인 초안을 짜는 방법론과 그 검증 의무를 다루며, 06-05·06-06의 플러그인 step과 이어집니다. 06-10은 06-04~06-06과 03_agent Kaniko를 한 순서로 잇는 CI 파이프라인 전체 설계도로, 개별 도구를 배운 뒤 큰 그림을 잡는 마무리 편입니다.
 
 ## 환경과 버전
 
@@ -61,7 +63,7 @@ updated: 2026-05-31
 
 ## 면접 대비 체크리스트
 
-> 여덟 편을 다 읽은 뒤 다음 질문에 답할 수 있어야 합니다.
+> 열 편을 다 읽은 뒤 다음 질문에 답할 수 있어야 합니다.
 
 1. controller가 빌드를 직접 돌리지 않는데도 CPU·RAM 산정이 중요한 이유는? 책 추정식(요청÷250, agent×3)의 한계는?
 2. controller가 쓰는 네 포트(8080·443·50000·22)는 각각 무엇이며, 50000이 막히면 어떤 증상이 납니까?
@@ -71,5 +73,7 @@ updated: 2026-05-31
 6. GitHub·SonarQube·Artifactory 통합의 공통 4단계는 무엇이며, "전역 설정"이 항상 마지막인 이유는?
 7. secret text와 username&password 크레덴셜은 각각 언제 쓰며, GitHub가 둘 다 쓰는 이유는?
 8. VM 동적 Agent와 K8s on-demand는 각각 어떤 워크로드에 유리하며, VM의 retention 3전략(Idle·Pool·Once)은 어떻게 다릅니까?
+9. LLM으로 파이프라인을 짤 때 Describe→Run→Troubleshoot→Refine 중 가장 중요한 단계는? AI 생성 코드를 그대로 믿으면 안 되는 이유와 검증 원칙은?
+10. CI 파이프라인 스테이지 순서(Clone→Test→SCA→Quality Gate→Build→Publish)에서 SCA·Gate가 Build 앞에 오는 이유는? Artifactory를 Docker 레지스트리로 쓸 때 package type과 Kaniko 인증 Secret의 namespace는?
 
 각 질문에 막히면 해당 절로 돌아갑니다.
