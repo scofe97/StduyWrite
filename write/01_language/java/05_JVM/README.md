@@ -27,6 +27,7 @@ related:
   - ./05-04.Structured Concurrency.md
   - ./ch14_jpe-evolution/01-01.Java와 JVM의 성능 진화사.md
   - ./ch15_jpe-type-system/01-01.타입 시스템의 진화와 성능.md
+  - ./ch16_jpe-modular/01-01.모놀리식에서 모듈러로 — JPMS와 모듈 시스템.md
 updated: 2026-06-02
 ---
 
@@ -148,8 +149,9 @@ updated: 2026-06-02
 |----|----------|------|------|------|
 | 1장 | The Performance Evolution of Java | [`ch14_jpe-evolution/`](./ch14_jpe-evolution/) | ✅ Java/JVM 성능 진화사 1편(01-01): HotSpot 실행엔진·tiered compilation·deopt·generational GC·Java 1.1~17 연대기 | — |
 | 2장 | Performance and Type System | [`ch15_jpe-type-system/`](./ch15_jpe-type-system/) | ✅ 타입 시스템 진화와 성능 1편(01-01): 강한 정적 타입·generics·VarHandle·sealed/record·JOL object layout·Project Valhalla value class | — |
+| 3장 | From Monolithic to Modular Java | [`ch16_jpe-modular/`](./ch16_jpe-modular/) | ✅ 모놀리식에서 모듈러로 1편(01-01): JPMS·module-info·ServiceLoader·ModuleLayer로 JAR hell versioning 우회·OSGi 비교·jdeps/jlink/jmod/jdeprscan | — |
 
-> 새 책의 나머지 장(3장 Monolithic to Modular 이후)은 해당 원문이 들어올 때 `ch16_*`/`ch17_*`처럼 번호를 이어 폴더를 신설한다.
+> 새 책의 나머지 장(4장 Unified Logging System 이후)은 해당 원문이 들어올 때 `ch17_*`/`ch18_*`처럼 번호를 이어 폴더를 신설한다.
 
 ## 작성 규칙
 
