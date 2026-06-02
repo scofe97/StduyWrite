@@ -26,6 +26,7 @@ related:
   - ./05-03.Virtual Threads Pinning.md
   - ./05-04.Structured Concurrency.md
   - ./ch14_jpe-evolution/01-01.Java와 JVM의 성능 진화사.md
+  - ./ch15_jpe-type-system/01-01.타입 시스템의 진화와 성능.md
 updated: 2026-06-02
 ---
 
@@ -146,8 +147,9 @@ updated: 2026-06-02
 | 장 | 영어 제목 | 폴더 | 진척 | 실습 |
 |----|----------|------|------|------|
 | 1장 | The Performance Evolution of Java | [`ch14_jpe-evolution/`](./ch14_jpe-evolution/) | ✅ Java/JVM 성능 진화사 1편(01-01): HotSpot 실행엔진·tiered compilation·deopt·generational GC·Java 1.1~17 연대기 | — |
+| 2장 | Performance and Type System | [`ch15_jpe-type-system/`](./ch15_jpe-type-system/) | ✅ 타입 시스템 진화와 성능 1편(01-01): 강한 정적 타입·generics·VarHandle·sealed/record·JOL object layout·Project Valhalla value class | — |
 
-> 새 책의 나머지 장(2장 Performance and Type System 이후)은 해당 원문이 들어올 때 `ch15_*`/`ch16_*`처럼 번호를 이어 폴더를 신설한다.
+> 새 책의 나머지 장(3장 Monolithic to Modular 이후)은 해당 원문이 들어올 때 `ch16_*`/`ch17_*`처럼 번호를 이어 폴더를 신설한다.
 
 ## 작성 규칙
 
