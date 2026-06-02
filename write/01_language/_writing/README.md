@@ -25,6 +25,7 @@ updated: 2026-05-31
 - [03-02.주석 멀리하기](03-02.주석%20멀리하기.md) — Five Lines of Code Ch8 기반: 주석의 위험·"코드가 말할 수 없는 것만"·주석 5분류(낡음·주석처리코드·trivial·메서드명화·불변식문서화)와 각각의 처리 (주석은 *리팩토링 단계에서 정리*)
 - [03-03.코드 삭제를 사랑하라](03-03.코드%20삭제를%20사랑하라.md) — Five Lines of Code Ch9 기반: 코드는 부채·매몰비용 오류·incidental complexity 4갈래(무지·낭비·부채·끌림)·strangler fig로 레거시 측정·spike and stabilize·브랜치/문서/테스트/설정/라이브러리/기능 삭제 기준 (제 몫 못 하는 것을 *덜어내기*)
 - [03-04.코드 추가를 두려워 말라](03-04.코드%20추가를%20두려워%20말라.md) — Five Lines of Code Ch10 기반: 코드 추가 공포 4증상(enter the danger·spike·80:20·developer life)·코드 추가가 수정보다 안전·중복의 global/local velocity·accidental vs essential complexity·하위 호환 versioning·feature toggle 5단계·branch by abstraction (수정 대신 *추가*로 위험 낮추기)
+- [03-05.코드의 구조를 따르라](03-05.코드의%20구조를%20따르라.md) — Five Lines of Code Ch11 기반(2부 종합편): 구조 공간 4범주(scope×origin)·Conway's law·행동을 담는 세 자리(제어 흐름·자료구조·데이터)·예측 대신 관찰·코드 이해 없이 안전 얻는 5방법·미활용 구조 4신호(공백·중복·공통 접사·런타임 타입) (구조를 *읽고 따르는* 일관된 사고)
 
 > **번호 체계**: `01-`=클린 코드(Martin) / `02-`=Five Lines of Code 1부(Ch1~6, 게임 예제로 익히는 리팩토링 *절차*) / `03-`=Five Lines of Code 2부(Ch7~, 그 절차를 떠받치는 *일반 원칙*). prefix는 출처 묶음, 끝 번호는 챕터 순서다.
 
