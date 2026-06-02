@@ -25,12 +25,15 @@ related:
   - ./05-02.Virtual Threads 기초.md
   - ./05-03.Virtual Threads Pinning.md
   - ./05-04.Structured Concurrency.md
+  - ./ch14_jpe-evolution/01-01.Java와 JVM의 성능 진화사.md
 updated: 2026-06-02
 ---
 
 # JVM 학습 인덱스
 ---
 > 이 폴더는 단행본 《JVM 밑바닥까지 파헤치기》의 **절 단위 정독 노트** 갈래(`chNN_*/02-NN`)와 **루트 직속의 동시성 학습 노트** 갈래(`03-xx` ~ `05-xx`)로 구성된다. 과거의 "부 단위 루트 요약" 레이어는 정독 폴더로 흡수했다 — 책 1·3·4부 요약은 [`ch01_java-tech/`](./ch01_java-tech/) 의 `01-NN` 파일(개관 갈래)로, 2부 요약은 [`ch03_gc/`](./ch03_gc/) 의 `01-NN` 파일로 이동했고, 5부 요약은 정독 폴더 신설 전까지 [`_temp/`](./_temp/) 에 보류 중이다. 각 폴더 안에서 `01-NN`은 *개관/운영 갈래*, `02-NN`은 *책의 절 정독 갈래*로 구분된다. 실습 코드는 `_practice/` 서브폴더에서 챕터별 Gradle 모듈로 모인다.
+>
+> 2026-06-02부터 두 번째 정독 대상 책 《JVM Performance Engineering》(Monica Beckwith) 갈래가 합류했다. 《밑바닥》이 `ch01`~`ch13` 번호대를 점유하므로, 새 책은 충돌을 피해 **`ch14`부터** 시작한다(예: [`ch14_jpe-evolution/`](./ch14_jpe-evolution/)). 새 책은 *한 폴더 = 책의 한 장*이고 파일 prefix는 장 안 소주제 순번을 뜻하는 `01-NN`이다 — 《밑바닥》의 `01-`(개관 흡수)/`02-`(절 정독) 의미와 다르니, 책마다 폴더가 갈려 출처가 섞이지 않는다. 책 구분은 각 노트의 `source` 필드가 1차 기준이다.
 
 ## 정독 대상 책
 
@@ -45,6 +48,18 @@ updated: 2026-06-02
 | 실습 JDK | OpenJDK 21 (Temurin 21.0.3) |
 
 정확한 ISBN·페이지·역자 정보는 책 판권면 스크린샷 확보 시점에 보강한다.
+
+### 두 번째 정독 대상 책 (2026-06-02 합류)
+
+| 항목 | 내용 |
+|------|------|
+| 제목 | JVM Performance Engineering: Inside OpenJDK and the HotSpot VM |
+| 저자 | Monica Beckwith (전 AMD Server Perf/Java Labs, Microsoft JDK 팀 리드) |
+| 출판사 | Addison-Wesley (Pearson) |
+| 폴더 갈래 | `ch14_*/` 이후 (《밑바닥》 ch01~13 번호대와 충돌 회피) |
+| 파일 prefix | `01-NN` = 장 안 소주제 순번 (《밑바닥》 prefix 의미와 별개) |
+
+정확한 ISBN·판차 정보는 책 판권면 확보 시점에 보강한다.
 
 ## 폴더 구조
 
@@ -124,10 +139,21 @@ updated: 2026-06-02
 
 미작성 폴더는 해당 장 스크린샷이 들어올 때 비로소 생성한다. 빈 폴더 사전 생성은 하지 않는다.
 
+## 두 번째 책 ↔ 정독 노트 매핑 (JVM Performance Engineering)
+
+《JVM Performance Engineering》(Monica Beckwith) 갈래는 `ch14`부터 번호를 잇는다. 한 폴더가 책의 한 장에 대응하고, `01-NN`은 그 장 안 소주제 순번이다.
+
+| 장 | 영어 제목 | 폴더 | 진척 | 실습 |
+|----|----------|------|------|------|
+| 1장 | The Performance Evolution of Java | [`ch14_jpe-evolution/`](./ch14_jpe-evolution/) | ✅ Java/JVM 성능 진화사 1편(01-01): HotSpot 실행엔진·tiered compilation·deopt·generational GC·Java 1.1~17 연대기 | — |
+
+> 새 책의 나머지 장(2장 Performance and Type System 이후)은 해당 원문이 들어올 때 `ch15_*`/`ch16_*`처럼 번호를 이어 폴더를 신설한다.
+
 ## 작성 규칙
 
-- 파일명: `{장 폴더}/01-{NN}.{개관·운영 흡수본 제목}.md` 또는 `{장 폴더}/02-{절}.{책의 절 제목}.md`
-- 프론트매터 필수 5필드: `title`, `tags`, `status`, `related`, `updated`
+- 파일명 (《밑바닥》): `{장 폴더}/01-{NN}.{개관·운영 흡수본 제목}.md` 또는 `{장 폴더}/02-{절}.{책의 절 제목}.md`
+- 파일명 (《JVM Performance Engineering》): `ch14_*/01-{NN}.{소주제 제목}.md` — 폴더가 장, `01-NN`은 장 안 소주제 순번
+- 프론트매터 필수 필드: `title`, `tags`, `status`, `related`, `updated` (정독 노트는 `source`로 책 §범위+공식 스펙 URL 명시)
 - 본문 톤: 한다체 통일, 문단형 우선, "왜?" 포함, AI 강조어("매우/굉장히/획기적/혁신적") 금지
 - Mermaid 도식: pastel `fill` + `color:#000` 명시, sequenceDiagram에 `rect` 금지
 
