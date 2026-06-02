@@ -29,6 +29,8 @@ related:
   - ./ch15_jpe-type-system/01-01.타입 시스템의 진화와 성능.md
   - ./ch16_jpe-modular/01-01.모놀리식에서 모듈러로 — JPMS와 모듈 시스템.md
   - ./ch17_jpe-logging/01-01.통합 JVM 로깅 — Xlog와 비동기 로깅.md
+  - ./ch18_jpe-perf-eng/01-01.성능 엔지니어링과 하드웨어·메모리 모델.md
+  - ./ch18_jpe-perf-eng/01-02.동기화와 NUMA, JMH 벤치마킹.md
 updated: 2026-06-02
 ---
 
@@ -152,8 +154,9 @@ updated: 2026-06-02
 | 2장 | Performance and Type System | [`ch15_jpe-type-system/`](./ch15_jpe-type-system/) | ✅ 타입 시스템 진화와 성능 1편(01-01): 강한 정적 타입·generics·VarHandle·sealed/record·JOL object layout·Project Valhalla value class | — |
 | 3장 | From Monolithic to Modular Java | [`ch16_jpe-modular/`](./ch16_jpe-modular/) | ✅ 모놀리식에서 모듈러로 1편(01-01): JPMS·module-info·ServiceLoader·ModuleLayer로 JAR hell versioning 우회·OSGi 비교·jdeps/jlink/jmod/jdeprscan | — |
 | 4장 | Unified Logging System | [`ch17_jpe-logging/`](./ch17_jpe-logging/) | ✅ 통합 JVM 로깅 1편(01-01): JEP 158 -Xlog 네 축(tag·level·decorator·output)·계층적 레벨·jcmd 런타임 동적 조정·비동기 로깅(-Xlog:async) | — |
+| 5장 | End-to-End Performance Optimization | [`ch18_jpe-perf-eng/`](./ch18_jpe-perf-eng/) | ✅ 2편: 01-01 성능 엔지니어링과 하드웨어·메모리 모델(footprint/responsiveness/throughput/availability·STW·SMT·store buffering), 01-02 동기화와 NUMA·JMH 벤치마킹(barrier/fence/volatile·happens-before·CAS/LSE·perfasm) | — |
 
-> 새 책의 나머지 장(5장 End-to-End Performance Optimization 이후)은 해당 원문이 들어올 때 `ch18_*`/`ch19_*`처럼 번호를 이어 폴더를 신설한다.
+> 새 책의 나머지 장(6장 Advanced Memory Management 이후)은 해당 원문이 들어올 때 `ch19_*`/`ch20_*`처럼 번호를 이어 폴더를 신설한다.
 
 ## 작성 규칙
 
