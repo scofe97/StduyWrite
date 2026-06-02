@@ -1,0 +1,120 @@
+<svg viewBox="0 0 900 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>객체 접근 두 방식 — 핸들 vs 다이렉트 포인터</title>
+  <desc>핸들 방식은 스택 참조가 핸들 슬롯을 거쳐 객체 본체를 가리키므로 GC가 객체를 옮길 때 슬롯 안 주소 1곳만 고치면 된다. 다이렉트 포인터(HotSpot 채택)는 스택 참조가 본체를 직접 가리켜 접근은 한 번의 점프로 빠르지만, 객체를 옮길 때 그 객체를 가리키는 모든 참조 N개를 다 찾아 고쳐야 한다. 접근은 1초에 수억 번, 이사는 가끔이라 빈도로 보면 다이렉트가 총비용에서 이긴다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: rgb(138,133,128); }
+      .col   { font-size: 14px; font-weight: 800; fill: #e8e4df; }
+      .nm    { font-size: 11px; font-weight: 700; fill: #e8e4df; }
+      .mt    { font-size: 10px; fill: rgb(138,133,128); }
+      .tick  { font-size: 10px; fill: rgb(212,168,83); font-weight: 700; }
+      .amb   { font-size: 11px; fill: rgb(212,168,83); font-weight: 800; }
+      .bad   { font-size: 11px; fill: #f44336; font-weight: 800; }
+      .mono  { font-family: 'JetBrains Mono', monospace; }
+    </style>
+    <marker id="ref" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="rgb(138,133,128)"/>
+    </marker>
+    <marker id="upd" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="bad" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="#f44336"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="500" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">객체 접근 두 방식 — 핸들 vs 다이렉트 포인터</text>
+  <text x="28" y="58" class="sub">한 객체를 여러 참조가 가리킨다 · GC가 그 객체를 옮길 때 고칠 자리가 1곳이냐 N곳이냐가 갈림</text>
+
+  <!-- ===== 왼쪽: 핸들 방식 ===== -->
+  <rect x="28" y="78" width="408" height="362" rx="10" fill="rgba(102,187,106,0.07)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="48" y="104" class="col">① 핸들 방식</text>
+  <text x="48" y="123" class="mt">스택 참조 → 핸들 슬롯 → 본체 (2번 점프, 느림)</text>
+
+  <!-- 참조 3개 (스택) -->
+  <rect x="44" y="138" width="96" height="22" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="92" y="153" class="mt mono" text-anchor="middle">지역변수 a</text>
+  <rect x="44" y="166" width="96" height="22" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="92" y="181" class="mt mono" text-anchor="middle">필드 obj.f</text>
+  <rect x="44" y="194" width="96" height="22" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="92" y="209" class="mt mono" text-anchor="middle">배열 arr[3]</text>
+
+  <!-- 참조 3개 → 핸들 슬롯 -->
+  <line x1="140" y1="149" x2="196" y2="172" stroke="rgb(138,133,128)" stroke-width="1.3" marker-end="url(#ref)"/>
+  <line x1="140" y1="177" x2="196" y2="177" stroke="rgb(138,133,128)" stroke-width="1.3" marker-end="url(#ref)"/>
+  <line x1="140" y1="205" x2="196" y2="182" stroke="rgb(138,133,128)" stroke-width="1.3" marker-end="url(#ref)"/>
+
+  <!-- 핸들 슬롯 -->
+  <rect x="200" y="158" width="96" height="40" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="248" y="174" class="tick" text-anchor="middle">핸들 슬롯</text>
+  <text x="248" y="190" class="mt" text-anchor="middle">본체 주소 1곳</text>
+
+  <!-- 핸들 슬롯 → 본체 -->
+  <line x1="296" y1="178" x2="344" y2="178" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#ref)"/>
+
+  <!-- 객체 본체 -->
+  <rect x="348" y="158" width="72" height="40" rx="6" fill="rgba(96,165,224,0.20)" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="384" y="182" class="nm" text-anchor="middle">객체 X</text>
+
+  <!-- GC 이사: 슬롯 1곳만 갱신 -->
+  <rect x="44" y="240" width="376" height="186" rx="8" fill="rgb(26,26,26)" stroke="rgb(212,168,83)"/>
+  <text x="60" y="262" class="amb">GC가 X를 이사시키면</text>
+  <rect x="200" y="278" width="96" height="40" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="248" y="294" class="tick" text-anchor="middle">핸들 슬롯</text>
+  <text x="248" y="310" class="amb" text-anchor="middle">주소만 수정</text>
+  <rect x="348" y="330" width="72" height="36" rx="6" fill="rgba(96,165,224,0.20)" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="384" y="352" class="nm" text-anchor="middle">X (새 위치)</text>
+  <line x1="290" y1="318" x2="350" y2="346" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#upd)"/>
+  <text x="60" y="392" class="amb mono">갱신 = 1곳</text>
+  <text x="150" y="392" class="mt">바깥 참조 N개는 슬롯을 가리키므로</text>
+  <text x="60" y="410" class="mt">손대지 않아도 된다 · 어디 있는지 스캔할 필요도 없다</text>
+
+  <!-- ===== 오른쪽: 다이렉트 포인터 ===== -->
+  <rect x="464" y="78" width="408" height="362" rx="10" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="484" y="104" class="col">② 다이렉트 포인터 (HotSpot 채택)</text>
+  <text x="484" y="123" class="mt">스택 참조 → 본체 직접 (1번 점프, 빠름 ⚡)</text>
+
+  <!-- 참조 3개 -->
+  <rect x="480" y="138" width="96" height="22" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="528" y="153" class="mt mono" text-anchor="middle">지역변수 a</text>
+  <rect x="480" y="166" width="96" height="22" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="528" y="181" class="mt mono" text-anchor="middle">필드 obj.f</text>
+  <rect x="480" y="194" width="96" height="22" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="528" y="209" class="mt mono" text-anchor="middle">배열 arr[3]</text>
+
+  <!-- 참조 3개 → 본체 직접 -->
+  <line x1="576" y1="149" x2="720" y2="172" stroke="rgb(138,133,128)" stroke-width="1.3" marker-end="url(#ref)"/>
+  <line x1="576" y1="177" x2="720" y2="178" stroke="rgb(138,133,128)" stroke-width="1.3" marker-end="url(#ref)"/>
+  <line x1="576" y1="205" x2="720" y2="184" stroke="rgb(138,133,128)" stroke-width="1.3" marker-end="url(#ref)"/>
+
+  <!-- 객체 본체 -->
+  <rect x="724" y="158" width="80" height="40" rx="6" fill="rgba(96,165,224,0.20)" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="764" y="182" class="nm" text-anchor="middle">객체 X</text>
+
+  <!-- GC 이사: N곳 모두 갱신 -->
+  <rect x="480" y="240" width="376" height="186" rx="8" fill="rgb(26,26,26)" stroke="#f44336"/>
+  <text x="496" y="262" class="bad">GC가 X를 이사시키면</text>
+
+  <rect x="496" y="276" width="96" height="20" rx="4" fill="rgb(26,26,26)" stroke="#f44336" stroke-width="1.2"/>
+  <text x="544" y="290" class="mt mono" text-anchor="middle">a 수정</text>
+  <rect x="496" y="300" width="96" height="20" rx="4" fill="rgb(26,26,26)" stroke="#f44336" stroke-width="1.2"/>
+  <text x="544" y="314" class="mt mono" text-anchor="middle">obj.f 수정</text>
+  <rect x="496" y="324" width="96" height="20" rx="4" fill="rgb(26,26,26)" stroke="#f44336" stroke-width="1.2"/>
+  <text x="544" y="338" class="mt mono" text-anchor="middle">arr[3] 수정</text>
+
+  <rect x="724" y="320" width="80" height="36" rx="6" fill="rgba(96,165,224,0.20)" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="764" y="342" class="nm" text-anchor="middle">X (새 위치)</text>
+  <line x1="592" y1="286" x2="726" y2="332" stroke="#f44336" stroke-width="1.6" stroke-dasharray="5 3" marker-end="url(#bad)"/>
+  <line x1="592" y1="310" x2="726" y2="336" stroke="#f44336" stroke-width="1.6" stroke-dasharray="5 3" marker-end="url(#bad)"/>
+  <line x1="592" y1="334" x2="726" y2="340" stroke="#f44336" stroke-width="1.6" stroke-dasharray="5 3" marker-end="url(#bad)"/>
+
+  <text x="496" y="392" class="bad mono">갱신 = N곳</text>
+  <text x="586" y="392" class="mt">가리키는 참조를 전부 찾아 고쳐야 한다</text>
+  <text x="496" y="410" class="mt">(어디 흩어졌는지 스캔 비용도 든다 → 카드 테이블·OopMap로 절감)</text>
+
+  <!-- ===== 하단: 한 문장 ===== -->
+  <rect x="28" y="452" width="844" height="38" rx="10" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="450" y="476" class="nm" text-anchor="middle">🔑 접근은 1초에 수억 번(핫패스), 이사는 가끔 — 빈도로 보면 빠른 접근을 택하고 GC 비용은 도구로 깎는 다이렉트가 총비용에서 이긴다</text>
+</svg>
