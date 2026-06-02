@@ -26,6 +26,7 @@ updated: 2026-05-31
 - [03-03.코드 삭제를 사랑하라](03-03.코드%20삭제를%20사랑하라.md) — Five Lines of Code Ch9 기반: 코드는 부채·매몰비용 오류·incidental complexity 4갈래(무지·낭비·부채·끌림)·strangler fig로 레거시 측정·spike and stabilize·브랜치/문서/테스트/설정/라이브러리/기능 삭제 기준 (제 몫 못 하는 것을 *덜어내기*)
 - [03-04.코드 추가를 두려워 말라](03-04.코드%20추가를%20두려워%20말라.md) — Five Lines of Code Ch10 기반: 코드 추가 공포 4증상(enter the danger·spike·80:20·developer life)·코드 추가가 수정보다 안전·중복의 global/local velocity·accidental vs essential complexity·하위 호환 versioning·feature toggle 5단계·branch by abstraction (수정 대신 *추가*로 위험 낮추기)
 - [03-05.코드의 구조를 따르라](03-05.코드의%20구조를%20따르라.md) — Five Lines of Code Ch11 기반(2부 종합편): 구조 공간 4범주(scope×origin)·Conway's law·행동을 담는 세 자리(제어 흐름·자료구조·데이터)·예측 대신 관찰·코드 이해 없이 안전 얻는 5방법·미활용 구조 4신호(공백·중복·공통 접사·런타임 타입) (구조를 *읽고 따르는* 일관된 사고)
+- [03-06.최적화와 일반성을 피하라](03-06.최적화와%20일반성을%20피하라.md) — Five Lines of Code Ch12 기반: 일반성·최적화가 coupling·invariant로 인지 부하를 늘림·최소로 짓기(Kent Beck)·비슷한 안정성끼리 통합·성능 테스트 3종(benchmark·load·approval)·제약 이론과 resource pooling·프로파일링과 80:20·자료구조 교체·캐싱 3종(멱등·임시 멱등·내부)·performance tuning 격리 (성능·유연성을 *증명 없이 사지 않기*)
 
 > **번호 체계**: `01-`=클린 코드(Martin) / `02-`=Five Lines of Code 1부(Ch1~6, 게임 예제로 익히는 리팩토링 *절차*) / `03-`=Five Lines of Code 2부(Ch7~, 그 절차를 떠받치는 *일반 원칙*). prefix는 출처 묶음, 끝 번호는 챕터 순서다.
 
