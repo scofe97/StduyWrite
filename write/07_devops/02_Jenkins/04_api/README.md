@@ -46,8 +46,9 @@ REST API 묶음은 책 한 권 분량(약 280KB) 입니다. 다른 주제(보안
 | 상태 | 06-02 | [빌드 상태 추적 모델과 TPS 패턴 (2.222+)](06-02.빌드%20상태%20추적%20모델과%20TPS%20패턴%20%282.222+%29.md) | TPS 상태 폴링 vs 콜백 패턴 |
 | 상태 | 06-03 | [상태 추적 API 현대화와 Blue Ocean 해석](06-03.상태%20추적%20API%20현대화와%20Blue%20Ocean%20해석.md) | Blue Ocean API 가 노출하는 상태 모델 차이 |
 | 로그 | 07-01 | [API 로그 조회와 적재](07-01.API%20로그%20조회와%20적재.md) | consoleText, progressiveText, TPS 적재 패턴 |
-| 로그 | 07-02 | [wfapi 상세 스펙과 활용](07-02.wfapi%20상세%20스펙과%20활용.md) | wfapi(workflow API) 의 stage 트리 모델 |
-| 로그 | 07-03 | [wfapi 로그 모델과 Blue Ocean 구현 판단](07-03.wfapi%20로그%20모델과%20Blue%20Ocean%20구현%20판단.md) | wfapi vs Blue Ocean — TPS 구현 선택 |
+| 로그 | 07-02 | [Blue Ocean 폐기 흐름과 wfapi 전환](07-02.Blue%20Ocean%20폐기%20흐름과%20wfapi%20전환.md) | 폐기 사유·시점, UI 대안, stage 조회는 무엇으로 |
+| 로그 | 07-03 | [wfapi 상세 스펙과 활용](07-03.wfapi%20상세%20스펙과%20활용.md) | wfapi(workflow API) 의 stage 트리 모델 |
+| 로그 | 07-04 | [wfapi 로그 모델과 Blue Ocean 구현 판단](07-04.wfapi%20로그%20모델과%20Blue%20Ocean%20구현%20판단.md) | wfapi vs Blue Ocean — TPS 구현 선택 |
 | 크레덴셜 | 08-01 | [API 크레덴셜 관리](08-01.API%20크레덴셜%20관리.md) | credentials API, store/domain 모델 |
 | 크레덴셜 | 08-02 | [API 크레덴셜 관리 현대화 (2.222+)](08-02.API%20크레덴셜%20관리%20현대화%20%282.222+%29.md) | 권한 모델, 도메인 분리, upsert 패턴 |
 | 크레덴셜 | 08-03 | [SSL 적용과 인증서 관리](08-03.SSL%20적용과%20인증서%20관리.md) | TLS 종단, 자기서명 인증서 처리 |
