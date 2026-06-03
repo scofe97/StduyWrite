@@ -1,0 +1,44 @@
+<svg viewBox="0 0 680 520" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>/proc/PID/maps 한 줄의 7개 필드와 VMA</title>
+  <desc>/proc/PID/maps 각 줄은 유저 VAS의 한 매핑(세그먼트)을 나타내며 7개 필드로 구성된다. start_uva-end_uva, mode/mapping(rwxp), offset, major:minor, inode#, 경로. 각 매핑은 커널의 VMA(virtual memory area) 메타데이터 하나에 대응하고, mmap() 시 생성된다. 커널 VAS는 VMA가 없다.</desc>
+  <rect x="0" y="0" width="680" height="520" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">/proc/PID/maps — 7개 필드와 VMA</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">각 줄 = 유저 VAS 의 한 매핑(세그먼트). 커널 VMA 메타데이터 하나에서 추출됩니다</text>
+
+  <!-- 샘플 라인 -->
+  <text x="20" y="84" fill="rgb(138,133,128)" font-size="11">샘플 (cat 프로세스의 한 줄):</text>
+  <rect x="20" y="92" width="642" height="30" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="32" y="112" fill="#66bb6a" font-family="'JetBrains Mono',monospace" font-size="12">558822d66000-558822d6a000 r-xp 00002000 08:01 7340181 /usr/bin/cat</text>
+
+  <!-- 7개 필드 분해 -->
+  <rect x="20" y="138" width="642" height="44" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="32" y="158" fill="rgb(212,168,83)" font-size="12">① start_uva - end_uva</text>
+  <text x="32" y="175" fill="rgb(138,133,128)" font-size="10">매핑의 시작·끝 UVA · 길이 = end - start (여기선 16KB) · 64비트라도 상위 16비트 0은 생략 표시</text>
+
+  <rect x="20" y="190" width="642" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="32" y="210" fill="#e8e4df" font-size="12">② mode/mapping (r-xp)</text>
+  <text x="32" y="227" fill="rgb(138,133,128)" font-size="10">앞 3글자 = 권한(rwx) · 4번째 = p(private)/s(shared) · mmap() 의 flags 가 결정 · r-xp = text 세그먼트</text>
+
+  <rect x="20" y="242" width="642" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="32" y="262" fill="#e8e4df" font-size="12">③ offset (00002000)</text>
+  <text x="32" y="277" fill="rgb(138,133,128)" font-size="10">파일 시작에서의 오프셋 · 파일 매핑일 때만 유효</text>
+
+  <rect x="20" y="290" width="642" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="32" y="310" fill="#e8e4df" font-size="12">④ major:minor (08:01)</text>
+  <text x="32" y="325" fill="rgb(138,133,128)" font-size="10">이미지가 있는 블록 디바이스의 major:minor 번호 · 파일 매핑일 때만 (아니면 00:00)</text>
+
+  <rect x="20" y="338" width="642" height="44" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/>
+  <text x="32" y="358" fill="#66bb6a" font-size="12">⑤ inode# (7340181)</text>
+  <text x="32" y="375" fill="rgb(138,133,128)" font-size="10">이미지 파일의 inode 번호 · 0 이면 anonymous 매핑(heap·stack 등) — 파일/익명 구분의 빠른 방법</text>
+
+  <rect x="20" y="390" width="642" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="32" y="410" fill="#e8e4df" font-size="12">⑥ 경로 (/usr/bin/cat)</text>
+  <text x="32" y="425" fill="rgb(138,133,128)" font-size="10">매핑된 파일 경로 · 익명 매핑이면 빈칸 · [heap]·[stack]·[vdso] 등 특수 표기</text>
+
+  <!-- VMA -->
+  <rect x="20" y="442" width="642" height="62" fill="rgba(173,216,230,0.12)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="464" fill="#9cc3df" font-size="13" font-weight="bold">VMA (Virtual Memory Area)</text>
+  <text x="38" y="484" fill="#e8e4df" font-size="11">각 매핑 = 커널 VMA 메타데이터 1개 (vm_area_struct) · mmap() 시 생성 · current->mm->mmap 에 연결(RB tree)</text>
+  <text x="38" y="500" fill="rgb(138,133,128)" font-size="11">유저 매핑만 VMA 로 관리 · 커널 VAS 는 VMA 가 없음 · 모든 모던 OS 의 page fault 처리에 핵심</text>
+</svg>

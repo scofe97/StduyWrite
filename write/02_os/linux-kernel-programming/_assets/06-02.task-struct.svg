@@ -1,0 +1,80 @@
+<svg viewBox="0 0 680 540" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>task_struct — 스레드의 루트 메타데이터와 current·task 리스트</title>
+  <desc>모든 스레드는 task_struct로 표현된다. 이 구조는 스레드의 모든 속성(스케줄링·메모리mm·PID/TGID·자격·시그널·열린 파일·하드웨어 컨텍스트)을 담는다. 모든 task_struct는 순환 이중 연결 리스트(task list)에 묶이고, current 매크로가 지금 실행 중인 스레드의 task_struct 포인터를 준다. TGID/PID로 프로세스와 스레드를 구분한다.</desc>
+  <rect x="0" y="0" width="680" height="540" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">task_struct — 스레드의 루트 메타데이터</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">모든 스레드(유저·커널)는 task_struct 로 표현됩니다 · 6.1.25 에서 약 13,120 바이트</text>
+
+  <!-- task_struct 내용 -->
+  <rect x="20" y="74" width="408" height="282" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="96" fill="#66bb6a" font-size="13" font-weight="bold">struct task_struct (include/linux/sched.h)</text>
+
+  <rect x="38" y="108" width="186" height="36" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="50" y="125" fill="#e8e4df" font-size="11">thread_info · __state</text>
+  <text x="50" y="139" fill="rgb(138,133,128)" font-size="10">플래그·상태 비트</text>
+  <rect x="232" y="108" width="186" height="36" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="244" y="125" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11">void *stack</text>
+  <text x="244" y="139" fill="rgb(138,133,128)" font-size="10">커널 모드 스택 위치</text>
+
+  <rect x="38" y="148" width="186" height="36" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="50" y="165" fill="#e8e4df" font-size="11">스케줄링: prio·policy·se</text>
+  <text x="50" y="179" fill="rgb(138,133,128)" font-size="10">Ch 10·11</text>
+  <rect x="232" y="148" width="186" height="36" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="244" y="165" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11">mm_struct *mm</text>
+  <text x="244" y="179" fill="rgb(138,133,128)" font-size="10">메모리 관리 (Ch 7)</text>
+
+  <rect x="38" y="188" width="186" height="36" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="50" y="205" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="11">pid_t pid, tgid</text>
+  <text x="50" y="219" fill="rgb(138,133,128)" font-size="10">스레드·프로세스 식별</text>
+  <rect x="232" y="188" width="186" height="36" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="244" y="205" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11">cred *cred</text>
+  <text x="244" y="219" fill="rgb(138,133,128)" font-size="10">자격 (UID·EUID)</text>
+
+  <rect x="38" y="228" width="186" height="36" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="50" y="245" fill="#e8e4df" font-size="11">시그널: signal·sighand</text>
+  <rect x="232" y="228" width="186" height="36" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="244" y="245" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11">files_struct *files</text>
+  <text x="244" y="259" fill="rgb(138,133,128)" font-size="10">열린 파일</text>
+
+  <rect x="38" y="268" width="186" height="36" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="50" y="285" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11">char comm[]</text>
+  <text x="50" y="299" fill="rgb(138,133,128)" font-size="10">태스크 이름</text>
+  <rect x="232" y="268" width="186" height="36" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="244" y="285" fill="#e8e4df" font-size="11">thread_struct thread</text>
+  <text x="244" y="299" fill="rgb(138,133,128)" font-size="10">하드웨어 컨텍스트</text>
+
+  <text x="38" y="328" fill="rgb(138,133,128)" font-size="10">fork/pthread_create 시 일부는 상속, 일부는 기본값 리셋</text>
+  <text x="38" y="346" fill="rgb(138,133,128)" font-size="10">접근은 헬퍼 권장: task_pid_nr() · from_kuid() (직접 current->pid 보다)</text>
+
+  <!-- current 매크로 -->
+  <rect x="444" y="74" width="218" height="130" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="460" y="96" fill="rgb(212,168,83)" font-size="13" font-weight="bold">current 매크로</text>
+  <text x="460" y="118" fill="#e8e4df" font-size="11">지금 커널 코드를 실행 중인</text>
+  <text x="460" y="134" fill="#e8e4df" font-size="11">스레드의 task_struct 포인터</text>
+  <text x="460" y="156" fill="rgb(138,133,128)" font-size="10">OOP 의 this 와 유사</text>
+  <text x="460" y="174" fill="rgb(138,133,128)" font-size="10">arch별 구현 (보통 O(1))</text>
+  <text x="460" y="190" fill="rgb(138,133,128)" font-size="10">프로세스 컨텍스트에서만 유효</text>
+
+  <!-- 컨텍스트 판별 -->
+  <rect x="444" y="214" width="218" height="142" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="460" y="236" fill="#e8e4df" font-size="13" font-weight="bold">컨텍스트 판별</text>
+  <text x="460" y="258" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11">if (in_task())</text>
+  <text x="460" y="276" fill="rgb(138,133,128)" font-size="10">  프로세스 컨텍스트</text>
+  <text x="460" y="290" fill="rgb(138,133,128)" font-size="10">  (보통 sleep 가능)</text>
+  <text x="460" y="312" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11">else</text>
+  <text x="460" y="330" fill="rgb(138,133,128)" font-size="10">  atomic — sleep 금지</text>
+  <text x="460" y="348" fill="rgb(244,67,54,0.9)" font-size="10">atomic 에서 sleep → 커널 버그</text>
+
+  <!-- task 리스트 + TGID/PID -->
+  <rect x="20" y="368" width="642" height="80" fill="rgba(173,216,230,0.12)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="390" fill="#9cc3df" font-size="13" font-weight="bold">task 리스트 — 순환 이중 연결 리스트</text>
+  <text x="38" y="412" fill="#e8e4df" font-size="11">모든 task_struct 가 묶임 · for_each_process() / for_each_process_thread() 로 순회</text>
+  <text x="38" y="432" fill="rgb(138,133,128)" font-size="11">init_task = head(코어의 idle 스레드) · get_task_struct()/put_task_struct() 로 참조 보호</text>
+
+  <!-- TGID/PID -->
+  <rect x="20" y="458" width="642" height="74" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="480" fill="#e8e4df" font-size="13" font-weight="bold">TGID/PID 로 프로세스 vs 스레드 구분</text>
+  <text x="38" y="500" fill="#e8e4df" font-size="11">단일 스레드: TGID == PID · 멀티스레드 main: TGID == PID · 나머지 스레드: TGID==main PID, 고유 PID</text>
+  <text x="38" y="518" fill="rgb(138,133,128)" font-size="11">ps -LA 의 PID 열=TGID, LWP 열=PID · 모든 스레드가 고유 PID 를 가지되 같은 TGID 를 공유</text>
+</svg>

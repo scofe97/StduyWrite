@@ -1,0 +1,69 @@
+<svg viewBox="0 0 680 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>slab 할당자 — page 할당자 위의 캐시 계층과 kmalloc 낭비</title>
+  <desc>slab 할당자(현대 구현은 SLUB)는 page 할당자 위에 layered된다. 두 목적: ① 자주 쓰는 커널 객체(task_struct·inode 등)를 부팅 시 캐시해 빠른 (de)할당, ② 페이지보다 작은 크기 요청의 큰 낭비를 완화. kmalloc/kzalloc/kfree가 핵심 API이며 kmalloc-N(8~8192B) 캐시에서 best-fit 할당한다. 8KB 초과 요청은 page 할당자로 위임되어 최대 4MB까지. ksize()로 실제 할당량을 확인할 수 있고, 임계값을 넘으면 낭비가 100% 가까이 치솟는다.</desc>
+  <rect x="0" y="0" width="680" height="560" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">slab 할당자 (SLUB)</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">page 할당자 위에 layered — 페이지보다 작은 할당을 효율적으로 처리합니다</text>
+
+  <!-- 계층 관계 -->
+  <rect x="20" y="74" width="320" height="124" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="96" fill="#e8e4df" font-size="13" font-weight="bold">계층 — slab 은 page 위에</text>
+
+  <rect x="50" y="108" width="260" height="32" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/>
+  <text x="180" y="128" fill="#66bb6a" font-size="11" text-anchor="middle">slab 할당자 (kmalloc·kzalloc)</text>
+  <defs>
+    <marker id="ar82" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <line x1="180" y1="140" x2="180" y2="158" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar82)"/>
+  <rect x="50" y="160" width="260" height="32" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="180" y="180" fill="rgb(212,168,83)" font-size="11" text-anchor="middle">page 할당자 (BSA) — 물리 RAM</text>
+
+  <!-- 두 목적 -->
+  <rect x="350" y="74" width="312" height="124" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="368" y="96" fill="rgb(212,168,83)" font-size="13" font-weight="bold">존재 이유 두 가지</text>
+
+  <rect x="368" y="108" width="276" height="36" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="382" y="126" fill="#e8e4df" font-size="11">① object 캐싱</text>
+  <text x="382" y="139" fill="rgb(138,133,128)" font-size="10">task_struct·inode·sk_buff 부팅 시 사전 할당 → 빠름</text>
+
+  <rect x="368" y="150" width="276" height="36" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="382" y="168" fill="#e8e4df" font-size="11">② 작은 할당 낭비 완화</text>
+  <text x="382" y="181" fill="rgb(138,133,128)" font-size="10">페이지 조각 크기의 generic 캐시 제공</text>
+
+  <!-- kmalloc-N 캐시 -->
+  <rect x="20" y="210" width="642" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="232" fill="#e8e4df" font-size="13" font-weight="bold">kmalloc-N 캐시 — best-fit 할당 (8 ~ 8192 바이트)</text>
+  <text x="38" y="250" fill="rgb(138,133,128)" font-size="10">12바이트 요청 → kmalloc-16 에서 16바이트 (page 할당자라면 4KB 통째로 줬을 것)</text>
+
+  <rect x="38" y="262" width="70" height="30" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/>
+  <text x="73" y="281" fill="#66bb6a" font-size="11" text-anchor="middle">k-8</text>
+  <rect x="116" y="262" width="70" height="30" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="151" y="281" fill="#e8e4df" font-size="11" text-anchor="middle">k-16</text>
+  <rect x="194" y="262" width="70" height="30" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="229" y="281" fill="#e8e4df" font-size="11" text-anchor="middle">k-32</text>
+  <text x="278" y="281" fill="rgb(138,133,128)" font-size="12">⋯</text>
+  <rect x="304" y="262" width="80" height="30" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="344" y="281" fill="#e8e4df" font-size="11" text-anchor="middle">k-4k</text>
+  <rect x="392" y="262" width="80" height="30" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="432" y="281" fill="#e8e4df" font-size="11" text-anchor="middle">k-8k</text>
+
+  <text x="38" y="312" fill="rgb(138,133,128)" font-size="11">8KB 초과 요청은 page 할당자로 위임 → 최대 4MB (2^(MAX_ORDER-1) 페이지). 반환은 KVA(lowmem)</text>
+
+  <!-- 핵심 API -->
+  <rect x="20" y="342" width="642" height="80" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="364" fill="#66bb6a" font-size="13" font-weight="bold">핵심 API</text>
+  <text x="38" y="384" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11">void *kmalloc(size, gfp)   void *kzalloc(size, gfp)   void kfree(ptr)</text>
+  <text x="38" y="402" fill="rgb(138,133,128)" font-size="10">kzalloc 권장 (0 초기화 → UMR 버그 방지). 물리 연속 + CPU cacheline 정렬 보장</text>
+  <text x="38" y="416" fill="rgb(138,133,128)" font-size="10">resource-managed: devm_kzalloc() (probe/init 에서 — 자동 해제). 보안 해제: kfree_sensitive()</text>
+
+  <!-- 낭비 경고 -->
+  <rect x="20" y="434" width="642" height="106" fill="rgba(244,67,54,0.10)" stroke="#f44336" stroke-width="2"/>
+  <text x="38" y="456" fill="#f44336" font-size="13" font-weight="bold">⚠ 낭비는 여전 — ksize() 로 실제 할당량 확인</text>
+  <text x="38" y="476" fill="#e8e4df" font-size="11">20바이트 요청 → 32바이트 할당 (12바이트·60% 낭비). 임계값 직전엔 낭비 적고, 넘으면 급증</text>
+  <text x="38" y="494" fill="#e8e4df" font-size="11">2,252,900바이트 요청 → 4MB 할당 → 86% 낭비! (saw-tooth 그래프)</text>
+  <text x="38" y="512" fill="rgb(138,133,128)" font-size="11">규칙: 1페이지 미만이면 slab, 그 이상이면 ksize()·slabinfo·alloc_traces 로 낭비 검증</text>
+  <text x="38" y="530" fill="rgb(138,133,128)" font-size="10">slub_debug=FZPU 부팅 → /sys/kernel/debug/slab/kmalloc-*/alloc_traces 로 낭비+호출스택 추적</text>
+</svg>

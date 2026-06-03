@@ -1,0 +1,64 @@
+<svg viewBox="0 0 660 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>크로스 컴파일 — x86_64 호스트에서 AArch64 타깃 커널 빌드</title>
+  <desc>x86_64 Ubuntu 호스트에서 aarch64-linux-gnu- 툴체인으로 Raspberry Pi 4(AArch64) 커널을 빌드한다. ARCH=arm64 가 어느 arch/ 디렉토리를 쓸지, CROSS_COMPILE=aarch64-linux-gnu- 가 어느 툴체인을 쓸지 정한다. 산출물은 Image.gz(압축 커널)·vmlinux(디버그)·DTB.</desc>
+  <rect x="0" y="0" width="660" height="440" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">크로스 컴파일 — x86_64 호스트 → AArch64 타깃</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">호스트에서 빌드한 코드가 다른 CPU(타깃)에서 실행됩니다 — 임베디드 개발의 정석</text>
+
+  <!-- 호스트 -->
+  <rect x="20" y="74" width="300" height="200" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="38" y="98" fill="#e8e4df" font-size="13" font-weight="bold">호스트 (빌드 머신)</text>
+  <text x="38" y="118" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="11">x86_64 Ubuntu 22.04</text>
+
+  <rect x="38" y="132" width="264" height="58" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="56" y="153" fill="rgb(212,168,83)" font-size="12">크로스 툴체인</text>
+  <text x="56" y="172" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11">aarch64-linux-gnu-gcc</text>
+  <text x="56" y="186" fill="rgb(138,133,128)" font-size="10">/usr/bin/ · binutils 동반</text>
+
+  <rect x="38" y="200" width="264" height="58" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="56" y="221" fill="#e8e4df" font-size="12">Raspberry Pi 커널 소스</text>
+  <text x="56" y="240" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">github.com/raspberrypi/linux</text>
+  <text x="56" y="253" fill="rgb(138,133,128)" font-size="10">branch rpi-6.1.y</text>
+
+  <!-- 화살표: 두 환경변수가 빌드를 잇는다 -->
+  <defs>
+    <marker id="arX" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <line x1="320" y1="174" x2="392" y2="174" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arX)"/>
+  <text x="356" y="164" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">make</text>
+
+  <!-- 타깃 -->
+  <rect x="392" y="74" width="248" height="200" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="410" y="98" fill="#66bb6a" font-size="13" font-weight="bold">타깃 (DUT)</text>
+  <text x="410" y="118" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="11">Raspberry Pi 4 · AArch64</text>
+
+  <rect x="410" y="132" width="212" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="516" y="150" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="middle">Image.gz</text>
+  <text x="516" y="165" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">압축 커널 (부팅용)</text>
+
+  <rect x="410" y="178" width="212" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="516" y="196" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="middle">vmlinux</text>
+  <text x="516" y="211" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">비압축 (디버깅용)</text>
+
+  <rect x="410" y="224" width="212" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="516" y="242" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10" text-anchor="middle">bcm2711-rpi-4-b.dtb</text>
+  <text x="516" y="257" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">Device Tree Blob</text>
+
+  <!-- 두 환경변수 설명 -->
+  <text x="20" y="306" fill="rgb(138,133,128)" font-size="12">두 환경변수가 크로스 컴파일을 제어합니다</text>
+
+  <rect x="20" y="318" width="305" height="98" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="340" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="13">ARCH=arm64</text>
+  <text x="38" y="362" fill="#e8e4df" font-size="11">어느 arch/ 디렉토리를 쓸지 결정</text>
+  <text x="38" y="382" fill="rgb(138,133,128)" font-size="10">arm64 = AArch64 · arm = ARM-32</text>
+  <text x="38" y="400" fill="rgb(138,133,128)" font-size="10">defconfig: bcm2711_defconfig</text>
+
+  <rect x="335" y="318" width="305" height="98" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="353" y="340" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="12">CROSS_COMPILE=</text>
+  <text x="353" y="358" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="12">aarch64-linux-gnu-</text>
+  <text x="353" y="380" fill="#e8e4df" font-size="11">툴체인 접두사 — 모든 도구의 prefix</text>
+  <text x="353" y="400" fill="rgb(138,133,128)" font-size="10">target triplet: MACHINE-VENDOR-OS</text>
+</svg>
