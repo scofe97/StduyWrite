@@ -6,7 +6,9 @@ related:
   - ../README.md
   - ./networking/README.md
   - ./kernel/README.md
-updated: 2026-04-26
+  - ./linux-kernel-programming/README.md
+  - ./container-security/README.md
+updated: 2026-06-03
 ---
 
 # 02_os
@@ -23,6 +25,8 @@ updated: 2026-04-26
 |------|------|
 | [networking/](./networking/README.md) | Linux 네트워크 네임스페이스·veth·bridge·netfilter·conntrack·TC·eBPF |
 | [kernel/](./kernel/README.md) | 유저/커널 스페이스, 시스템 콜, 커널 코어 영역, namespace·cgroup, /proc, K8s 노드 필수 커널 파라미터 |
+| [linux-kernel-programming/](./linux-kernel-programming/README.md) | 커널 개발자 관점의 리눅스 내부 — LKM 모듈 개발, 커널 빌드, 메모리 관리, CPU 스케줄러, 동기화 (책 기반) |
+| [container-security/](./container-security/README.md) | 보안 관점의 컨테이너 — 커널 기초(namespace·cgroup·root 변경) 위의 이미지·공급망·런타임·통신 보안 (책 기반) |
 
 
 
@@ -30,8 +34,12 @@ updated: 2026-04-26
 
 - 커널 네트워크 자료구조(netns, veth, conntrack, netfilter) → `networking/`
 - 컨테이너 런타임 격리·자원 제한(namespace, cgroup, seccomp) → `kernel/`
-- 시스템 콜 인터페이스, /proc, VFS, 메모리 관리 → `kernel/`
+- 시스템 콜 인터페이스, /proc, VFS, 메모리 관리 → `kernel/` (K8s 운영자 관점) 또는 `linux-kernel-programming/` (커널 모듈 작성자 관점)
+- 커널 모듈(LKM) 개발, 커널 소스 빌드, 메모리 할당 API, 스케줄러·동기화 내부 → `linux-kernel-programming/`
 - 컨테이너 이미지 포맷·OCI 표준 같은 빌드 측면은 `07_devops/`에 둔다 (런타임 측면이 아니므로 본 카테고리 아님)
+- 컨테이너 보안(격리 메커니즘을 보안 관점에서 보기, 이미지·공급망·런타임 위협) → `container-security/`. namespace·cgroup 같은 메커니즘 자체는 `kernel/`이 SSOT이고 교차참조한다
+
+> `kernel/`과 `linux-kernel-programming/`은 둘 다 커널을 다루지만 시선이 다르다. 전자는 "K8s가 cgroup 파일을 어떻게 쓰는가"(운영자), 후자는 "모듈에서 커널 메모리를 어떻게 할당하는가"(개발자) 관점이다. 같은 메커니즘이 양쪽에 나오면 교차참조한다.
 
 
 
