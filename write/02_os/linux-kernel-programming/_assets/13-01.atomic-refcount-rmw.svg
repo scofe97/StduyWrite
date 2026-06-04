@@ -1,0 +1,62 @@
+<svg viewBox="0 0 680 580" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>atomic_t·refcount_t와 RMW 연산자 — 정수 원자 연산·비트 조작</title>
+  <desc>정수 연산은 mutex·spinlock보다 atomic_t·refcount_t 인터페이스가 효율적이다. atomic_t는 부호 있는 32비트(atomic64_t는 64비트) 범용 카운팅, refcount_t(4.11+)는 객체 참조 카운팅 전용으로 1~INT_MAX-1 범위에서 saturate되어 IoF·UAF 버그를 막는다. 접근은 반드시 accessor(atomic_read/set/inc/dec, refcount_*)로만 한다. RMW(Read-Modify-Write) atomic 연산자는 arithmetic·bitwise·swap·refcount로 나뉘며, 디바이스 레지스터 비트 조작에 set_bit/clear_bit/test_and_set_bit 등을 쓴다. spinlock으로 수동 RMW하는 것보다 훨씬 빠르고 간단하다.</desc>
+  <rect x="0" y="0" width="680" height="580" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">atomic_t·refcount_t 와 RMW 연산자</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">정수·비트 연산은 락보다 원자 연산자가 빠르고 간단합니다</text>
+
+  <!-- atomic_t vs refcount_t -->
+  <rect x="20" y="74" width="320" height="156" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="96" fill="rgb(212,168,83)" font-size="13" font-weight="bold">atomic_t (구) vs refcount_t (4.11+)</text>
+
+  <rect x="38" y="108" width="284" height="50" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="128" fill="#e8e4df" font-size="11">atomic_t — 부호 있는 32비트 범용</text>
+  <text x="52" y="144" fill="rgb(138,133,128)" font-size="10">atomic64_t = 64비트 · 모든 카운팅</text>
+
+  <rect x="38" y="164" width="284" height="58" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/>
+  <text x="52" y="184" fill="#66bb6a" font-size="11">refcount_t — 객체 참조 카운팅 전용</text>
+  <text x="52" y="200" fill="rgb(138,133,128)" font-size="10">범위 1~INT_MAX-1 · saturate 로 IoF·UAF 방지</text>
+  <text x="52" y="214" fill="rgb(138,133,128)" font-size="10">초과 시 WARN_ONCE · 32·64비트 모두</text>
+
+  <!-- accessor -->
+  <rect x="350" y="74" width="312" height="156" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="368" y="96" fill="#e8e4df" font-size="13" font-weight="bold">accessor 로만 접근 (직접 X)</text>
+  <text x="368" y="116" fill="rgb(138,133,128)" font-size="10">읽기조차 atomic_read() · 직접 v 읽기 금지</text>
+
+  <text x="368" y="138" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">ATOMIC_INIT / REFCOUNT_INIT</text>
+  <text x="368" y="156" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">atomic_read / refcount_read</text>
+  <text x="368" y="174" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">atomic_inc / refcount_inc</text>
+  <text x="368" y="192" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">atomic_dec / refcount_dec</text>
+  <text x="368" y="212" fill="rgb(138,133,128)" font-size="9">예: get_task_struct → refcount_inc(&amp;t-&gt;usage)</text>
+
+  <!-- RMW atomic 분류 -->
+  <rect x="20" y="248" width="642" height="96" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="270" fill="#66bb6a" font-size="13" font-weight="bold">RMW (Read-Modify-Write) atomic 연산자 — 분류</text>
+  <rect x="38" y="282" width="148" height="26" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="112" y="299" fill="#e8e4df" font-size="10" text-anchor="middle">Arithmetic (add/sub)</text>
+  <rect x="194" y="282" width="148" height="26" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="268" y="299" fill="#e8e4df" font-size="10" text-anchor="middle">Bitwise (and/or/xor)</text>
+  <rect x="350" y="282" width="148" height="26" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="424" y="299" fill="#e8e4df" font-size="10" text-anchor="middle">Swap (xchg/cmpxchg)</text>
+  <rect x="506" y="282" width="138" height="26" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="575" y="299" fill="#e8e4df" font-size="10" text-anchor="middle">Reference count</text>
+  <text x="38" y="328" fill="rgb(138,133,128)" font-size="10">non-RMW: atomic_read/set · RMW 는 결과 반환 변형(_return·_acquire·_release) 존재</text>
+
+  <!-- RMW 비트 연산자 -->
+  <rect x="20" y="362" width="642" height="120" fill="rgba(173,216,230,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="384" fill="#9cc3df" font-size="13" font-weight="bold">RMW 비트 연산자 — 디바이스 레지스터 조작</text>
+  <text x="38" y="404" fill="#e8e4df" font-size="11">레지스터는 공유 메모리 → RMW(read·modify·write) 는 임계 구역. 수동 spinlock 대신 원자 비트 연산</text>
+
+  <rect x="38" y="416" width="200" height="24" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/>
+  <text x="138" y="432" fill="#66bb6a" font-family="'JetBrains Mono',monospace" font-size="10" text-anchor="middle">set_bit(nr, p)</text>
+  <rect x="244" y="416" width="200" height="24" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="344" y="432" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10" text-anchor="middle">clear_bit / change_bit</text>
+  <rect x="450" y="416" width="194" height="24" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="547" y="432" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle">test_and_set_bit</text>
+
+  <text x="38" y="458" fill="#66bb6a" font-size="11">set_bit(7, CTRL_REG) 한 줄 = 수동 RMW+spinlock 보다 3~4배 빠름</text>
+  <text x="38" y="474" fill="rgb(138,133,128)" font-size="10">⚠ CPU 코어 단위 원자 · 여러 코어가 race 하면 추가로 spinlock 필요</text>
+
+  <!-- bitmask 검색 -->
+  <rect x="20" y="500" width="642" height="72" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="522" fill="#e8e4df" font-size="13" font-weight="bold">bitmask 효율 검색</text>
+  <text x="38" y="542" fill="#e8e4df" font-size="11">스케줄러 등 성능 민감 경로용. find_first_bit / find_first_zero_bit / find_next_bit</text>
+  <text x="38" y="560" fill="rgb(138,133,128)" font-size="10">for_each_{clear,set}_bit 매크로 · &lt;linux/find.h&gt;</text>
+</svg>

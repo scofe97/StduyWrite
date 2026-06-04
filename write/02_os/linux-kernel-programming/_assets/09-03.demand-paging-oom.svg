@@ -1,0 +1,80 @@
+<svg viewBox="0 0 680 580" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>demand paging와 OOM killer — overcommit 정책·페이지 폴트·OOM score</title>
+  <desc>유저 malloc은 가상 공간만 예약하고 물리 프레임은 페이지를 touch(read/write/execute)할 때 demand paging으로 할당된다. MMU가 변환 실패 시 페이지 폴트 핸들러가 __alloc_pages()로 프레임을 매핑한다. 메모리가 완전히 소진되면 __alloc_pages_slowpath가 실패하고 OOM killer가 호출되어 메모리 hogger를 SIGKILL한다. overcommit 3정책: 0=GUESS(기본·휴리스틱), 1=ALWAYS, 2=NEVER(strict accounting). OOM score 0~1000에 oom_score_adj를 더해 victim을 고른다. read-only 페이지 read는 단일 zero 프레임에 매핑(최적화).</desc>
+  <rect x="0" y="0" width="680" height="580" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">demand paging 과 OOM killer</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">물리 프레임은 페이지를 touch 할 때 할당되고, 다 소진되면 OOM killer 가 옵니다</text>
+
+  <!-- demand paging 흐름 -->
+  <rect x="20" y="74" width="642" height="168" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="96" fill="#66bb6a" font-size="13" font-weight="bold">demand paging — lazy allocation</text>
+
+  <rect x="38" y="108" width="130" height="44" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="103" y="127" fill="rgb(212,168,83)" font-size="11" text-anchor="middle">malloc()</text>
+  <text x="103" y="143" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">가상 공간만 예약</text>
+  <defs>
+    <marker id="ar93" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <line x1="168" y1="130" x2="196" y2="130" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar93)"/>
+  <rect x="200" y="108" width="130" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="265" y="127" fill="#e8e4df" font-size="11" text-anchor="middle">touch (r/w/x)</text>
+  <text x="265" y="143" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">MMU 변환 시도</text>
+  <line x1="330" y1="130" x2="358" y2="130" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar93)"/>
+  <rect x="362" y="108" width="130" height="44" fill="rgba(244,67,54,0.10)" stroke="#f44336"/>
+  <text x="427" y="127" fill="#f47f72" font-size="11" text-anchor="middle">페이지 폴트</text>
+  <text x="427" y="143" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">변환 실패(매핑 없음)</text>
+  <line x1="492" y1="130" x2="520" y2="130" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar93)"/>
+  <rect x="524" y="108" width="120" height="44" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/>
+  <text x="584" y="127" fill="#66bb6a" font-size="11" text-anchor="middle">프레임 매핑</text>
+  <text x="584" y="143" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">minor fault</text>
+
+  <text x="38" y="176" fill="#e8e4df" font-size="11">폴트 핸들러가 정당 접근이면 __alloc_pages() 로 물리 프레임 1개 할당·매핑</text>
+  <text x="38" y="196" fill="rgb(138,133,128)" font-size="11">⚠ 커널 할당(page/slab/vmalloc)은 demand 아님 — 즉시 물리 할당</text>
+  <text x="38" y="216" fill="rgb(138,133,128)" font-size="10">최적화: 미매핑 페이지 read 는 단일 zero 프레임에 공유 매핑(write/execute 만 실제 할당)</text>
+  <text x="38" y="234" fill="rgb(138,133,128)" font-size="10">calloc·memset 로 pre-fault → 실시간 코드 진입 전 프레임 확보</text>
+
+  <!-- overcommit -->
+  <rect x="20" y="254" width="320" height="150" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="276" fill="#e8e4df" font-size="13" font-weight="bold">overcommit 3 정책</text>
+  <text x="38" y="294" fill="rgb(138,133,128)" font-size="10">vm.overcommit_memory</text>
+
+  <rect x="38" y="304" width="284" height="28" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/>
+  <text x="52" y="322" fill="#66bb6a" font-size="10">0 = GUESS — 휴리스틱 (기본)</text>
+  <rect x="38" y="334" width="284" height="28" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="352" fill="#e8e4df" font-size="10">1 = ALWAYS — 항상 허용(sparse 앱)</text>
+  <rect x="38" y="364" width="284" height="28" fill="rgba(244,67,54,0.10)" stroke="#f44336"/>
+  <text x="52" y="382" fill="#f47f72" font-size="10">2 = NEVER — strict accounting</text>
+  <text x="38" y="400" fill="rgb(138,133,128)" font-size="9">2: CommitLimit = (RAM × ratio/100) + swap</text>
+
+  <!-- OOM killer -->
+  <rect x="350" y="254" width="312" height="150" fill="rgba(244,67,54,0.10)" stroke="#f44336" stroke-width="2"/>
+  <text x="368" y="276" fill="#f44336" font-size="13" font-weight="bold">OOM killer</text>
+  <text x="368" y="294" fill="rgb(138,133,128)" font-size="10">메모리 완전 소진 시 hogger 를 SIGKILL</text>
+
+  <text x="368" y="314" fill="#e8e4df" font-size="10">__alloc_pages → __alloc_pages_slowpath 실패</text>
+  <text x="368" y="330" fill="#e8e4df" font-size="10">→ out_of_memory() → oom_kill_process()</text>
+
+  <rect x="368" y="340" width="276" height="26" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="382" y="357" fill="#e8e4df" font-size="10">OOM score 0~1000 + oom_score_adj</text>
+  <text x="368" y="384" fill="rgb(138,133,128)" font-size="10">adj=-1000 → 절대 안 죽음 · +1000 → 우선 victim</text>
+  <text x="368" y="398" fill="rgb(138,133,128)" font-size="9">root·커널 스레드·HW 디바이스 보유는 보호</text>
+
+  <!-- systemd-oomd + cgroups -->
+  <rect x="20" y="416" width="642" height="154" fill="rgba(173,216,230,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="438" fill="#9cc3df" font-size="13" font-weight="bold">systemd-oomd 와 cgroups 메모리 제어</text>
+
+  <rect x="38" y="450" width="300" height="50" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="470" fill="#e8e4df" font-size="11">systemd-oomd — user-space OOM</text>
+  <text x="52" y="486" fill="rgb(138,133,128)" font-size="10">cgroups v2 + PSI 로 감시 · 커널 OOM 전 개입</text>
+
+  <rect x="346" y="450" width="298" height="50" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="360" y="470" fill="#e8e4df" font-size="11">cgroups 메모리 컨트롤러</text>
+  <text x="360" y="486" fill="rgb(138,133,128)" font-size="10">memory.min/low/high/max · oom.group</text>
+
+  <text x="38" y="522" fill="#e8e4df" font-size="11">CPU 시간은 무한하나 메모리는 유한 → min/low/high/max 여러 한계 설정</text>
+  <text x="38" y="540" fill="rgb(138,133,128)" font-size="10">memory.high: 초과 시 throttle + 강제 회수(권장). memory.max: 초과 시 OOM 호출</text>
+  <text x="38" y="558" fill="rgb(138,133,128)" font-size="10">systemd: MemoryHigh·MemoryMax 인터페이스로 unit 단위 제어</text>
+</svg>
