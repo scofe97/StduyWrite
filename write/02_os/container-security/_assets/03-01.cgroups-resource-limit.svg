@@ -1,0 +1,75 @@
+<svg viewBox="0 0 860 540" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>cgroups — 자원 제한과 격리</title>
+  <desc>왼쪽: /sys/fs/cgroup 파일시스템 계층. cgroup.controllers(cpu·memory·pids 등)에서 컨트롤러를 켜고, 하위 디렉토리를 만들면 cgroup 이 생기며, cgroup.procs 에 PID 를 써서 프로세스를 할당하고, memory.max·pids.max 로 한계를 정한다. 가운데: 컨테이너 런타임이 컨테이너마다 cgroup 을 자동 생성해 docker run --memory 100M 을 memory.max=104857600 으로 번역. 오른쪽: 보안 효과 — 자원 고갈 공격 방어(memory.max)와 fork bomb 방어(pids.max). 한계를 넘은 프로세스는 종료(Killed/OOMKilled)된다.</desc>
+
+  <rect x="0" y="0" width="860" height="540" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">cgroups — 한 무리의 프로세스가 쓸 자원을 제한</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">컨테이너의 세 기둥 중 ① 자원 제한 (namespace=시야 격리, cgroup=사용량 제한)</text>
+
+  <!-- ===== 왼쪽: cgroup 파일시스템 계층 ===== -->
+  <text x="32" y="92" fill="#e8e4df" font-size="15">/sys/fs/cgroup (v2 단일 통합 계층)</text>
+
+  <rect x="32" y="104" width="300" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="182" y="124" fill="#e8e4df" font-family="'JetBrains Mono', monospace" font-size="12" text-anchor="middle">cgroup.controllers</text>
+  <text x="182" y="140" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">cpu · memory · pids · io · cpuset ...</text>
+
+  <rect x="32" y="160" width="300" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="182" y="180" fill="#e8e4df" font-family="'JetBrains Mono', monospace" font-size="12" text-anchor="middle">cgroup.subtree_control</text>
+  <text x="182" y="195" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">컨트롤러 켜기 (부모가 켜져야 자식도)</text>
+
+  <!-- 하위 cgroup 박스 -->
+  <rect x="56" y="212" width="276" height="120" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="6"/>
+  <text x="194" y="234" fill="rgb(212,168,83)" font-family="'JetBrains Mono', monospace" font-size="13" text-anchor="middle">mkdir liz/  → cgroup 생성</text>
+  <text x="72" y="258" fill="#e8e4df" font-family="'JetBrains Mono', monospace" font-size="12">memory.max = 98304</text>
+  <text x="72" y="278" fill="#e8e4df" font-family="'JetBrains Mono', monospace" font-size="12">pids.max   = 20</text>
+  <text x="72" y="302" fill="#e8e4df" font-family="'JetBrains Mono', monospace" font-size="12">cgroup.procs ← echo PID</text>
+  <text x="194" y="324" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">모든 프로세스는 정확히 한 cgroup 에 속함</text>
+
+  <line x1="182" y1="148" x2="182" y2="160" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <line x1="182" y1="200" x2="182" y2="212" stroke="rgb(212,168,83)" stroke-width="2"/>
+
+  <!-- ===== 가운데→오른쪽: 컨테이너 런타임 자동화 ===== -->
+  <defs>
+    <marker id="cg" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <text x="368" y="92" fill="#e8e4df" font-size="15">컨테이너 런타임이 자동 생성</text>
+
+  <rect x="368" y="104" width="460" height="96" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="598" y="128" fill="#e8e4df" font-family="'JetBrains Mono', monospace" font-size="12" text-anchor="middle">docker run --memory 100M ...</text>
+  <text x="598" y="148" fill="rgb(212,168,83)" font-size="12" text-anchor="middle">↓ 런타임이 번역</text>
+  <text x="598" y="170" fill="#e8e4df" font-family="'JetBrains Mono', monospace" font-size="11" text-anchor="middle">system.slice/docker-&lt;id&gt;.scope/</text>
+  <text x="598" y="188" fill="#e8e4df" font-family="'JetBrains Mono', monospace" font-size="11" text-anchor="middle">memory.max = 104857600</text>
+
+  <text x="368" y="222" fill="rgb(138,133,128)" font-size="12">K8s: Pod 명세의 한계 → 호스트 cgroup 설정으로 번역 (systemd 드라이버 = system.slice)</text>
+
+  <!-- 보안 효과 두 박스 -->
+  <text x="368" y="258" fill="#e8e4df" font-size="15">보안 효과 — 자원 고갈 공격 방어</text>
+
+  <rect x="368" y="272" width="224" height="116" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="480" y="296" fill="rgb(212,168,83)" font-size="14" text-anchor="middle">memory.max</text>
+  <text x="480" y="320" fill="#e8e4df" font-size="12" text-anchor="middle">한 프로세스가 메모리를</text>
+  <text x="480" y="338" fill="#e8e4df" font-size="12" text-anchor="middle">독차지해 남을 굶김 방지</text>
+  <text x="480" y="362" fill="#f44336" font-family="'JetBrains Mono', monospace" font-size="12" text-anchor="middle">초과 → Killed</text>
+  <text x="480" y="380" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">운영선 OOMKilled 로 드러남</text>
+
+  <rect x="604" y="272" width="224" height="116" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="716" y="296" fill="rgb(212,168,83)" font-size="14" text-anchor="middle">pids.max</text>
+  <text x="716" y="320" fill="#e8e4df" font-size="12" text-anchor="middle">프로세스 개수 상한으로</text>
+  <text x="716" y="338" fill="#e8e4df" font-size="12" text-anchor="middle">fork bomb 을 그룹에 가둠</text>
+  <text x="716" y="362" fill="#66bb6a" font-family="'JetBrains Mono', monospace" font-size="11" text-anchor="middle">머신의 다른 프로세스는 멀쩡</text>
+  <text x="716" y="380" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="11" text-anchor="middle">:(){ :|:&amp; };:</text>
+
+  <line x1="332" y1="270" x2="368" y2="270" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#cg)"/>
+
+  <!-- 구분선 -->
+  <line x1="32" y1="412" x2="828" y2="412" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- 결론 -->
+  <text x="32" y="442" fill="rgb(138,133,128)" font-size="13">컨테이너는 평범한 리눅스 프로세스(Ch 4) → cgroup 으로 컨테이너별 자원을 제한한다</text>
+  <text x="32" y="468" fill="rgb(138,133,128)" font-size="13">직접 만지는 대신: docker run --memory / --pids-limit · K8s Pod 명세 limits</text>
+  <text x="32" y="494" fill="rgb(138,133,128)" font-size="12">권장: 컨테이너 실행 시 메모리·CPU 한계를 반드시 설정 (과도 소비 공격 class 방어)</text>
+</svg>

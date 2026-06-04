@@ -1,0 +1,82 @@
+<svg viewBox="0 0 860 510" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>공개/개인 키·CA 체인·TLS 핸드셰이크</title>
+  <desc>위: 공개/개인 키 쌍의 두 용도. 암호화는 공개 키로 암호화하고 대응하는 개인 키 소유자만 복호화한다. 서명은 개인 키로 서명하고 대응하는 공개 키 소유자가 검증해 보낸 사람을 확인한다. 가운데: CA 인증서 체인. Ann 의 인증서를 Bob 이, Bob 의 것을 Carol 이 서명하고, 체인은 Carol 의 self-signed 인증서로 끝난다 — 끝없이 이어지지 않고 신뢰의 뿌리(root CA)에서 멈춘다. 사설 시스템은 자체 CA 와 self-signed 로 충분하고, 공개 웹사이트는 브라우저가 신뢰하는 public root CA 가 서명해야 한다. 아래: TLS 핸드셰이크. 클라이언트가 서버 인증서를 받아 신뢰 CA 서명을 확인하고, 서버 공개 키로 암호화해 보낸 뒤 대칭 키에 합의해 이후 메시지를 빠르게 암복호화한다. mTLS 는 클라이언트도 인증서를 제시하는 양방향 인증이다.</desc>
+
+  <rect x="0" y="0" width="860" height="510" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">키·CA 체인·TLS 핸드셰이크</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">보안 연결 = 인증(신뢰 CA 서명 확인) + 암호화(키 쌍 → 대칭 키)</text>
+
+  <!-- 키 쌍 두 용도 -->
+  <text x="32" y="90" fill="#e8e4df" font-size="15">공개/개인 키 쌍의 두 용도</text>
+
+  <rect x="32" y="102" width="388" height="64" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="48" y="124" fill="rgb(212,168,83)" font-size="13">암호화</text>
+  <text x="48" y="146" fill="rgb(138,133,128)" font-size="11">공개 키로 암호화 → 대응 개인 키 소유자만 복호화</text>
+  <text x="48" y="162" fill="rgb(138,133,128)" font-size="10">(송신자가 수신자의 공개 키로 암호화)</text>
+
+  <rect x="440" y="102" width="388" height="64" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="6"/>
+  <text x="456" y="124" fill="rgb(212,168,83)" font-size="13">서명</text>
+  <text x="456" y="146" fill="rgb(138,133,128)" font-size="11">개인 키로 서명 → 대응 공개 키 소유자가 검증</text>
+  <text x="456" y="162" fill="rgb(138,133,128)" font-size="10">(개인 키 소유자가 보냈음을 확인)</text>
+
+  <!-- CA 체인 -->
+  <text x="32" y="196" fill="#e8e4df" font-size="15">CA 인증서 체인 — self-signed 로 종결</text>
+
+  <defs>
+    <marker id="kc" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="32" y="208" width="180" height="64" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="122" y="232" fill="#e8e4df" font-size="13" text-anchor="middle">Ann 인증서</text>
+  <text x="122" y="254" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">Bob 이 서명</text>
+
+  <rect x="276" y="208" width="180" height="64" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="366" y="232" fill="#e8e4df" font-size="13" text-anchor="middle">Bob 인증서</text>
+  <text x="366" y="254" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">Carol 이 서명</text>
+
+  <rect x="520" y="208" width="200" height="64" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="6"/>
+  <text x="620" y="232" fill="rgb(212,168,83)" font-size="13" text-anchor="middle">Carol (root CA)</text>
+  <text x="620" y="254" fill="#66bb6a" font-size="10" text-anchor="middle">self-signed → 신뢰의 뿌리</text>
+
+  <line x1="212" y1="240" x2="276" y2="240" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#kc)"/>
+  <line x1="456" y1="240" x2="520" y2="240" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#kc)"/>
+
+  <rect x="736" y="208" width="92" height="64" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-dasharray="4 3" rx="6"/>
+  <text x="782" y="234" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">사설: 자체</text>
+  <text x="782" y="250" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">CA 로 충분</text>
+  <text x="782" y="266" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">공개: Let's Encrypt</text>
+
+  <!-- TLS 핸드셰이크 -->
+  <line x1="32" y1="294" x2="828" y2="294" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="322" fill="#e8e4df" font-size="15">TLS 핸드셰이크</text>
+
+  <rect x="32" y="336" width="180" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="122" y="360" fill="rgb(212,168,83)" font-size="13" text-anchor="middle">클라이언트</text>
+  <text x="122" y="384" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">① 연결+인증서 요청</text>
+  <text x="122" y="404" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">③ 신뢰 CA 서명 확인</text>
+  <text x="122" y="424" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">④ 서버 공개 키로 암호화</text>
+  <text x="122" y="444" fill="#f44336" font-size="9" text-anchor="middle">skip-verify 금지(프로덕션)</text>
+
+  <rect x="648" y="336" width="180" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="738" y="360" fill="rgb(212,168,83)" font-size="13" text-anchor="middle">서버</text>
+  <text x="738" y="384" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">② 인증서 전송</text>
+  <text x="738" y="404" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">(신원 + 공개 키)</text>
+  <text x="738" y="428" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">mTLS: 클라이언트도</text>
+  <text x="738" y="444" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">인증서 제시(양방향)</text>
+
+  <rect x="248" y="356" width="352" height="44" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="6"/>
+  <text x="424" y="382" fill="#e8e4df" font-size="12" text-anchor="middle">② 인증서 ← / ④ 암호화 메시지 →</text>
+
+  <rect x="248" y="408" width="352" height="44" fill="#66bb6a" fill-opacity="0.10" stroke="#66bb6a" rx="6"/>
+  <text x="424" y="428" fill="#66bb6a" font-size="12" text-anchor="middle">⑤ 대칭 키 합의</text>
+  <text x="424" y="446" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">이후 메시지 암복호화 — 비대칭보다 빠름</text>
+
+  <line x1="212" y1="378" x2="248" y2="378" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#kc)"/>
+  <line x1="600" y1="378" x2="648" y2="378" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#kc)"/>
+
+  <text x="32" y="482" fill="rgb(138,133,128)" font-size="11">X.509 인증서: subject(주체·도메인) · 공개 키 · 발급 CA · 유효기간. CSR 로 CA 에 요청(공개키+도메인+신원)</text>
+  <text x="32" y="500" fill="rgb(138,133,128)" font-size="11">컴포넌트는 개인 키(복호화·서명)와 인증서(상대에게 배포)를 가짐 — 공개 키 자체는 직접 안 씀</text>
+</svg>

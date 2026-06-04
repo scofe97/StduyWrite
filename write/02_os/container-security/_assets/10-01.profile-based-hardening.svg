@@ -1,0 +1,60 @@
+<svg viewBox="0 0 860 490" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>프로파일 기반 컨테이너 격리 강화 — seccomp·AppArmor·SELinux</title>
+  <desc>위: 컨테이너 앱이 호스트 커널에 닿는 경로를 세 프로파일이 단속한다. seccomp 는 syscall 집합을 제한해(BPF 필터, Moby 기본 프로파일이 400여 개 중 40+ 차단) 호스트 시계 변경·커널 모듈·keyring 같은 호출을 막는다. AppArmor·SELinux 는 LSM 으로 capability·파일 접근을 제한하며, MAC(중앙 관리자가 설정, 사용자가 못 뒤집음)을 구현해 DAC(소유자 재량)와 함께 작동한다 — 동작이 허용되려면 둘 다 허용해야 한다. AppArmor 는 실행 파일에 프로파일을 결속하고 complain 모드로 다듬어 enforce 로 전환한다. SELinux 는 도메인/타입 라벨로 통제하며 podman·CRI-O 와 통합된다. 아래: 세 기법 모두 사용자 공간 행동만 제한하고 커널은 공유되므로, Dirty COW 같은 커널 자체 취약점은 막지 못한다 — 이것이 VM급 격리(10-02)로 가는 이유다.</desc>
+
+  <rect x="0" y="0" width="860" height="490" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">프로파일 기반 격리 강화 — sandboxing</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">앱이 탈취돼 평소 행동 밖 코드를 돌려도, 프로파일이 할 수 있는 일을 좁힌다</text>
+
+  <!-- 컨테이너 앱 -->
+  <rect x="32" y="84" width="796" height="52" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="430" y="114" fill="#e8e4df" font-size="14" text-anchor="middle">컨테이너 앱 (사용자 공간) — 시스템 작업을 커널에 요청</text>
+
+  <defs>
+    <marker id="hd" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <line x1="430" y1="136" x2="430" y2="160" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#hd)"/>
+
+  <!-- 세 프로파일 관문 -->
+  <rect x="32" y="164" width="256" height="120" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="8"/>
+  <text x="160" y="188" fill="rgb(212,168,83)" font-size="14" text-anchor="middle">seccomp</text>
+  <text x="160" y="210" fill="#e8e4df" font-size="11" text-anchor="middle">syscall 집합 제한 (BPF)</text>
+  <text x="160" y="230" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">Moby 기본: 400+ 중 40+ 차단</text>
+  <text x="160" y="250" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">clock_settime · init_module</text>
+  <text x="160" y="266" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">keyctl · request_key</text>
+
+  <rect x="304" y="164" width="256" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="432" y="188" fill="rgb(212,168,83)" font-size="14" text-anchor="middle">AppArmor (LSM)</text>
+  <text x="432" y="210" fill="#e8e4df" font-size="11" text-anchor="middle">capability·파일 접근 제한</text>
+  <text x="432" y="230" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">실행 파일에 프로파일 결속</text>
+  <text x="432" y="250" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">complain 모드 → enforce</text>
+  <text x="432" y="268" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">docker-default (ptrace 차단)</text>
+
+  <rect x="576" y="164" width="252" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="702" y="188" fill="rgb(212,168,83)" font-size="14" text-anchor="middle">SELinux (LSM)</text>
+  <text x="702" y="210" fill="#e8e4df" font-size="11" text-anchor="middle">도메인 / 타입 라벨 통제</text>
+  <text x="702" y="230" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">사용자 신원과 무관, 라벨로</text>
+  <text x="702" y="250" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">앱을 자기 파일에만 가둠</text>
+  <text x="702" y="268" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">podman · CRI-O 통합 (:z/:Z)</text>
+
+  <!-- MAC vs DAC -->
+  <rect x="304" y="296" width="524" height="44" fill="#66bb6a" fill-opacity="0.10" stroke="#66bb6a" rx="6"/>
+  <text x="320" y="316" fill="#e8e4df" font-size="12">MAC(중앙 관리자 설정, 사용자가 못 뒤집음) — LSM 이 구현</text>
+  <text x="320" y="334" fill="rgb(138,133,128)" font-size="11">DAC(소유자 재량, 02-01)와 함께 작동 → 동작 허용엔 둘 다 OK 필요</text>
+
+  <rect x="32" y="296" width="256" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="160" y="316" fill="#e8e4df" font-size="12" text-anchor="middle">맞춤 프로파일 생성</text>
+  <text x="160" y="334" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">strace · Security Profiles Operator</text>
+
+  <!-- 공유 커널 한계 -->
+  <line x1="32" y1="360" x2="828" y2="360" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <rect x="32" y="374" width="796" height="50" fill="#f44336" fill-opacity="0.10" stroke="#f44336" rx="8"/>
+  <text x="430" y="398" fill="#e8e4df" font-size="14" text-anchor="middle">공유 호스트 커널 (세 기법 모두 사용자 공간만 제한)</text>
+  <text x="430" y="416" fill="#f44336" font-size="11" text-anchor="middle">Dirty COW 같은 커널 자체 취약점은 막지 못함 → VM급 격리로(10-02)</text>
+
+  <text x="32" y="452" fill="rgb(138,133,128)" font-size="12">공통 부담: 완전한 프로파일 작성이 어렵고, 앱 변경이 프로파일 큰 변경을 요구 → 느슨하게 쓰거나 꺼 버리는 경향</text>
+  <text x="32" y="472" fill="#66bb6a" font-size="12">여력이 없으면 Docker 기본 seccomp·AppArmor 프로파일이 쓸 만한 가드레일</text>
+</svg>

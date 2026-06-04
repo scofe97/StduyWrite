@@ -1,0 +1,62 @@
+<svg viewBox="0 0 860 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>런타임 보안 기술 옵션과 eBPF 의 관측 지점</title>
+  <desc>위: 런타임 보안을 만드는 기술 옵션과 그 한계. LD_PRELOAD 는 동적 링크 앱만 가로채 정적 Go·Rust 바이너리는 통과시키고 악성 앱이 설정을 바꿔 우회한다. ptrace 는 breakpoint 마다 context switch 로 오버헤드가 크고 추적당함을 감지당하며 CAP_SYS_PTRACE 위험으로 기본 미부여다. seccomp·AppArmor·SELinux 는 정적 정책이라 컨테이너별 표현이 어렵고 보안 관측성이 없으며 정적 프로파일 안의 악성 행위를 못 잡는다. 가운데: 호스트의 모든 컨테이너는 단일 커널을 공유하고 파일·네트워크·메모리·프로세스가 모두 syscall 로 커널을 거치므로, 커널이 모든 컨테이너를 내려다보는 이상적 관측 지점이다. eBPF 프로그램은 검증을 거쳐 커널에 로드돼 크래시 없이 이벤트를 가로채 보고·차단한다 — 커널 모듈과 달리 안전하고, 컨테이너와 독립된 생애주기를 가진다. 아래: execsnoop 예제. 호스트에서 도는 eBPF 도구가 namespace·cgroup 으로 격리된 컨테이너 안 프로세스까지 본다.</desc>
+
+  <rect x="0" y="0" width="860" height="500" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">런타임 보안 기술 옵션과 eBPF</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">낡은 방식은 한계가 뚜렷 — 커널이 모든 컨테이너를 내려다보는 이상적 관측 지점</text>
+
+  <!-- 낡은 3옵션 -->
+  <rect x="32" y="84" width="256" height="96" fill="#f44336" fill-opacity="0.10" stroke="#f44336" rx="8"/>
+  <text x="160" y="108" fill="rgb(212,168,83)" font-family="'JetBrains Mono', monospace" font-size="12" text-anchor="middle">LD_PRELOAD</text>
+  <text x="160" y="130" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">동적 라이브러리 대체</text>
+  <text x="160" y="148" fill="#f44336" font-size="10" text-anchor="middle">정적(Go·Rust) 통과</text>
+  <text x="160" y="166" fill="#f44336" font-size="10" text-anchor="middle">설정 바꿔 우회</text>
+
+  <rect x="304" y="84" width="256" height="96" fill="#f44336" fill-opacity="0.10" stroke="#f44336" rx="8"/>
+  <text x="432" y="108" fill="rgb(212,168,83)" font-family="'JetBrains Mono', monospace" font-size="12" text-anchor="middle">ptrace</text>
+  <text x="432" y="130" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">프로세스 관찰·제어</text>
+  <text x="432" y="148" fill="#f44336" font-size="10" text-anchor="middle">context switch 오버헤드</text>
+  <text x="432" y="166" fill="#f44336" font-size="10" text-anchor="middle">추적 감지·CAP 위험</text>
+
+  <rect x="576" y="84" width="252" height="96" fill="#f44336" fill-opacity="0.10" stroke="#f44336" rx="8"/>
+  <text x="702" y="108" fill="rgb(212,168,83)" font-size="12" text-anchor="middle">seccomp·AppArmor·SELinux</text>
+  <text x="702" y="130" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">정적 정책(10장)</text>
+  <text x="702" y="148" fill="#f44336" font-size="10" text-anchor="middle">컨테이너별 표현·관측성 없음</text>
+  <text x="702" y="166" fill="#f44336" font-size="10" text-anchor="middle">정적 안의 악성 행위 못 잡음</text>
+
+  <!-- 커널 관측 지점 -->
+  <text x="32" y="208" fill="#e8e4df" font-size="15">커널 = 이상적 관측 지점 (모든 컨테이너 공유)</text>
+
+  <rect x="32" y="220" width="240" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="152" y="240" fill="#e8e4df" font-size="11" text-anchor="middle">컨테이너 A</text>
+  <text x="152" y="257" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">(namespace·cgroup 격리)</text>
+  <rect x="288" y="220" width="240" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="408" y="240" fill="#e8e4df" font-size="11" text-anchor="middle">컨테이너 B</text>
+  <text x="408" y="257" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">(비특권 사용자 공간)</text>
+  <rect x="544" y="220" width="284" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="686" y="240" fill="#e8e4df" font-size="11" text-anchor="middle">컨테이너 C …</text>
+  <text x="686" y="257" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">syscall 로 커널에 청함</text>
+
+  <defs>
+    <marker id="rt" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <line x1="152" y1="264" x2="152" y2="284" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#rt)"/>
+  <line x1="408" y1="264" x2="408" y2="284" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#rt)"/>
+  <line x1="686" y1="264" x2="686" y2="284" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#rt)"/>
+
+  <rect x="32" y="288" width="796" height="72" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="8"/>
+  <text x="430" y="312" fill="rgb(212,168,83)" font-size="14" text-anchor="middle">공유 커널 — 파일 · 네트워크 · 메모리 · 프로세스 조율·권한 검사</text>
+  <text x="430" y="334" fill="#66bb6a" font-size="12" text-anchor="middle">eBPF: 검증으로 크래시 없이 커널에 로드 → 이벤트 가로채 보고·차단</text>
+  <text x="430" y="352" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">커널 모듈(크래시 위험)과 달리 안전 · 컨테이너와 독립된 생애주기(사이드카 대비 이점)</text>
+
+  <!-- execsnoop -->
+  <line x1="32" y1="380" x2="828" y2="380" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <rect x="32" y="394" width="796" height="86" fill="#66bb6a" fill-opacity="0.10" stroke="#66bb6a" rx="8"/>
+  <text x="48" y="418" fill="#e8e4df" font-size="14">execsnoop 예제 — eBPF 로 프로세스 관측</text>
+  <text x="48" y="440" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="10">containerd-shim → runc create → iptables → runc start → docker-entrypoint.sh → find(16) → nginx</text>
+  <text x="48" y="462" fill="#66bb6a" font-size="11">① 호스트 eBPF 도구가 격리된 컨테이너 안 프로세스를 봄 · ② 초기화 후엔 nginx 만 — 나중의 find 는 신호</text>
+</svg>

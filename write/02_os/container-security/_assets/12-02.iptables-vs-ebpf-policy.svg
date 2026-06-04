@@ -1,0 +1,54 @@
+<svg viewBox="0 0 860 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>iptables vs eBPF — 네트워크 정책 강제</title>
+  <desc>왼쪽: 전통적 iptables/netfilter 방식. kube-proxy 가 service 트래픽을 pod 로 로드밸런싱하려 노드마다 iptables 규칙을 세우고, service 뒤 pod 가 바뀔 때마다 규칙을 다시 쓴다. pod 가 동적으로 생멸하는 환경에서 이 재작성이 규모에서 병목이 된다 — 서비스 2,000개에 pod 10개씩이면 노드마다 규칙 2만 개가 추가된다. 오른쪽: eBPF/Cilium 방식. eBPF 프로그램을 커널에 직접 심어 패킷을 가로채고, eBPF map 에 service IP·포트에서 backend pod 로의 매핑과 라벨 해시 기반 identity 별 allow/deny 정책을 해시 테이블로 담는다. 패킷 가로채기·조회·backend 선택·재작성·전달이 모두 커널 안에서 일어나 사용자 공간 전환을 피한다. 아래: 두 방식 모두 커널 안에서 작동하며, 커널은 모든 컨테이너가 공유하므로 정책은 컨테이너 안이 아니라 호스트 수준에서 강제된다.</desc>
+
+  <rect x="0" y="0" width="860" height="480" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">iptables vs eBPF — 네트워크 정책 강제</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">pod 가 동적으로 생멸하는 환경에서 규칙 재작성이 병목 → eBPF 로 이동</text>
+
+  <!-- iptables (왼쪽) -->
+  <rect x="32" y="84" width="388" height="300" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="226" y="110" fill="rgb(212,168,83)" font-size="15" text-anchor="middle">전통: iptables / netfilter</text>
+
+  <rect x="56" y="126" width="340" height="56" fill="rgb(42,37,32)" rx="6"/>
+  <text x="226" y="148" fill="#e8e4df" font-size="12" text-anchor="middle">kube-proxy</text>
+  <text x="226" y="168" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">service → pod 로드밸런싱(기본 iptables)</text>
+
+  <rect x="56" y="194" width="340" height="64" fill="rgb(42,37,32)" rx="6"/>
+  <text x="226" y="214" fill="#e8e4df" font-size="11" text-anchor="middle">filter(드롭·전달) · nat(주소 변환)</text>
+  <text x="226" y="234" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">KUBE-SVC → random 0.5 → DNAT</text>
+  <text x="226" y="250" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">to 10.32.0.3:80 / 10.32.0.4:80</text>
+
+  <rect x="56" y="270" width="340" height="56" fill="#f44336" fill-opacity="0.12" stroke="#f44336" rx="6"/>
+  <text x="226" y="292" fill="#f44336" font-size="12" text-anchor="middle">pod 바뀔 때마다 규칙 재작성 → 병목</text>
+  <text x="226" y="312" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">서비스 2,000 × pod 10 = 노드마다 규칙 2만 개</text>
+
+  <text x="226" y="352" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">IPVS·nftables 도 시도됐으나 한계로</text>
+  <text x="226" y="368" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">널리 퍼지지 못함</text>
+
+  <!-- eBPF (오른쪽) -->
+  <rect x="440" y="84" width="388" height="300" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="8"/>
+  <text x="634" y="110" fill="rgb(212,168,83)" font-size="15" text-anchor="middle">현대: eBPF / Cilium</text>
+
+  <rect x="464" y="126" width="340" height="56" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="634" y="148" fill="#e8e4df" font-size="12" text-anchor="middle">eBPF 프로그램을 커널에 직접 심음</text>
+  <text x="634" y="168" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">패킷 가로채기 (kube-proxy replacement)</text>
+
+  <rect x="464" y="194" width="340" height="64" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="634" y="214" fill="#e8e4df" font-size="11" text-anchor="middle">eBPF map (커널 자료구조, 해시 테이블)</text>
+  <text x="634" y="234" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">service IP·포트 → backend pod</text>
+  <text x="634" y="250" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">라벨 해시 = identity → allow/deny</text>
+
+  <rect x="464" y="270" width="340" height="56" fill="#66bb6a" fill-opacity="0.12" stroke="#66bb6a" rx="6"/>
+  <text x="634" y="290" fill="#66bb6a" font-size="11" text-anchor="middle">가로채기·조회·선택·재작성·전달</text>
+  <text x="634" y="310" fill="#66bb6a" font-size="11" text-anchor="middle">전부 커널 안 → 사용자 공간 전환 회피</text>
+
+  <text x="634" y="352" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">L3/4 + L7(Envoy) + 인증을 한 리소스로</text>
+  <text x="634" y="368" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle">cilium-dbg bpf lb list / policy get</text>
+
+  <!-- 공통: 커널 수준 강제 -->
+  <rect x="32" y="400" width="796" height="60" fill="#66bb6a" fill-opacity="0.10" stroke="#66bb6a" rx="8"/>
+  <text x="430" y="424" fill="#e8e4df" font-size="13" text-anchor="middle">공통: 모두 커널 안에서 작동 (iptables · IPVS · nftables · eBPF)</text>
+  <text x="430" y="446" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">커널은 모든 컨테이너가 공유 → 보안 정책은 컨테이너 안이 아니라 호스트 수준에서 강제</text>
+</svg>
