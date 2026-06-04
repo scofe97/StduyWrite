@@ -1,0 +1,67 @@
+<svg viewBox="0 0 860 510" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>암호화 층위와 SPIFFE/SPIRE 신원 발급</title>
+  <desc>위: 컨테이너 트래픽을 암호화하는 두 층위. 호스트 단위는 WireGuard 나 IPSec 으로 호스트 간 모든 L3 트래픽을 투명하게 암호화하며, zero-trust 네트워킹에서 호스트 신원으로 인증해 운영이 단순하다. 네트워크 전체를 소유하지 않거나 컨테이너를 다 신뢰하지 못하면 워크로드 단위로 내려가, Service Mesh 가 개별 pod 사이에 mTLS 를 맺는다. 사이드카 모델은 자원·지연·운영 복잡도 때문에 사이드카 없는 모델로 옮겨 갔다. 가운데: SPIFFE/SPIRE 가 워크로드에 신원(SVID, 보통 X.509)을 자동 발급하는 흐름. SPIRE 에이전트가 워크로드를 attestation 으로 식별하고 SPIRE 서버가 CA 로서 인증서를 발급해, 키·인증서를 수동 프로비저닝하지 않고 mTLS 를 맺는다. 아래: 외부 트래픽. ingress 는 TLS 를 종료·passthrough·재암호화하고, egress 는 기본 차단해 데이터 유출을 막으며 egress gateway 로 예측 가능한 IP 를 만든다.</desc>
+
+  <rect x="0" y="0" width="860" height="510" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">암호화 층위와 SPIFFE/SPIRE</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">호스트 단위로 충분하지 않으면 워크로드 단위로 내려간다</text>
+
+  <!-- 두 암호화 층위 -->
+  <rect x="32" y="84" width="388" height="120" fill="#66bb6a" fill-opacity="0.10" stroke="#66bb6a" rx="8"/>
+  <text x="226" y="108" fill="#e8e4df" font-size="14" text-anchor="middle">호스트 단위 — WireGuard · IPSec</text>
+  <text x="226" y="132" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">호스트 간 모든 L3 트래픽 투명 암호화</text>
+  <text x="226" y="152" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">zero-trust — 호스트 신원으로 인증</text>
+  <text x="226" y="172" fill="#66bb6a" font-size="11" text-anchor="middle">운영 단순 · 다수 규제 환경 충족</text>
+  <text x="226" y="192" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">WireGuard: 단순·고보안(단 FIPS 미준수) / IPSec: FIPS</text>
+
+  <rect x="440" y="84" width="388" height="120" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="8"/>
+  <text x="634" y="108" fill="#e8e4df" font-size="14" text-anchor="middle">워크로드 단위 — Service Mesh mTLS</text>
+  <text x="634" y="132" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">개별 pod 사이 mTLS</text>
+  <text x="634" y="152" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">네트워크 미소유·비신뢰 컨테이너일 때</text>
+  <text x="634" y="172" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">사이드카(자원·지연·강결합) → 사이드카 없는</text>
+  <text x="634" y="192" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">Cilium · Istio Ambient</text>
+
+  <!-- SPIFFE/SPIRE 흐름 -->
+  <line x1="32" y1="224" x2="828" y2="224" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="252" fill="#e8e4df" font-size="15">SPIFFE / SPIRE — 워크로드 신원(SVID) 자동 발급</text>
+  <text x="32" y="272" fill="rgb(138,133,128)" font-size="12">신원을 머신·IP 에서 분리 — 단명·재스케줄되는 워크로드에도. 키·인증서 수동 프로비저닝 불필요</text>
+
+  <defs>
+    <marker id="sf" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="32" y="288" width="180" height="80" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="122" y="312" fill="rgb(212,168,83)" font-size="13" text-anchor="middle">워크로드(pod)</text>
+  <text x="122" y="334" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">② Workload API 로 요청</text>
+  <text x="122" y="352" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">⑥ 인증서·개인 키 수령</text>
+
+  <rect x="276" y="288" width="252" height="80" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="6"/>
+  <text x="402" y="312" fill="rgb(212,168,83)" font-size="13" text-anchor="middle">SPIRE 에이전트 (노드마다)</text>
+  <text x="402" y="334" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">③ attestation 으로 SPIFFE ID 판별</text>
+  <text x="402" y="352" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">④ 키 쌍 생성 + CSR</text>
+
+  <rect x="592" y="288" width="236" height="80" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="710" y="312" fill="rgb(212,168,83)" font-size="13" text-anchor="middle">SPIRE 서버 (CA)</text>
+  <text x="710" y="334" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">⑤ SVID 발급</text>
+  <text x="710" y="352" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">(X.509 인증서, 자동 회전)</text>
+
+  <line x1="212" y1="328" x2="276" y2="328" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#sf)"/>
+  <line x1="528" y1="328" x2="592" y2="328" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#sf)"/>
+
+  <text x="32" y="388" fill="rgb(138,133,128)" font-size="10">attestation: /proc/&lt;pid&gt;/exe 또는 cgroup → pod namespace·service account·라벨 → SPIFFE ID 매핑</text>
+
+  <!-- 외부 트래픽 -->
+  <line x1="32" y1="404" x2="828" y2="404" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="430" fill="#e8e4df" font-size="15">외부 트래픽</text>
+
+  <rect x="32" y="442" width="388" height="56" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="226" y="462" fill="#e8e4df" font-size="12" text-anchor="middle">ingress — 진입점에서 TLS 처리</text>
+  <text x="226" y="484" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">종료 · TLS Passthrough · 종료 후 재암호화(mTLS)</text>
+
+  <rect x="440" y="442" width="388" height="56" fill="#f44336" fill-opacity="0.10" stroke="#f44336" rx="6"/>
+  <text x="634" y="462" fill="#e8e4df" font-size="12" text-anchor="middle">egress — 기본 차단 권장</text>
+  <text x="634" y="484" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">데이터 유출 방지 · egress gateway 로 예측 IP · 관측성(Hubble·Kiali)</text>
+</svg>

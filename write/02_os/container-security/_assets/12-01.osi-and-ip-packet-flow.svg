@@ -1,0 +1,79 @@
+<svg viewBox="0 0 860 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>OSI 계층과 IP 패킷 전송 흐름</title>
+  <desc>왼쪽: IP 기반 네트워크에서 중요한 OSI 계층과 각 계층의 주소·단위. L7 애플리케이션은 URL·DNS, L4 전송은 TCP/UDP 포트, L3 네트워크는 IP 주소·라우터, L2 데이터링크는 Ethernet·MAC 주소, L1 물리는 (가상) 네트워크 장치. 네트워크 보안 기능이 어느 계층에서 작동하는지 알면 그 성격을 이해할 수 있다. 오른쪽: 앱이 URL 로 요청을 보낼 때의 흐름. DNS 조회로 IP 를 찾고, L3 라우팅으로 다음 홉 IP 와 인터페이스를 정하고, ARP 로 next-hop IP 를 MAC 으로 매핑하고, bridge 가 MAC 으로 어느 인터페이스로 전달할지 정한다. 아래: Kubernetes 에서 각 pod 가 IP 를 받고 pod 끼리는 NAT 없이 직접 통신하지만, service 는 인터페이스 없는 IP 만 가진 NAT 의 한 형태로 패킷을 backend pod 로 전달한다.</desc>
+
+  <rect x="0" y="0" width="860" height="500" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">OSI 계층과 IP 패킷 전송 흐름</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">보안 기능이 어느 계층에서 작동하는지 알면 그 성격과 한계가 보인다</text>
+
+  <!-- OSI 계층 스택 (왼쪽) -->
+  <text x="32" y="92" fill="#e8e4df" font-size="15">IP 네트워크의 OSI 계층</text>
+
+  <rect x="32" y="104" width="360" height="40" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="4"/>
+  <text x="48" y="129" fill="rgb(212,168,83)" font-size="13">L7 애플리케이션</text>
+  <text x="376" y="129" fill="rgb(138,133,128)" font-size="11" text-anchor="end">URL · DNS · HTTP</text>
+
+  <rect x="32" y="150" width="360" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="48" y="175" fill="rgb(212,168,83)" font-size="13">L4 전송</text>
+  <text x="376" y="175" fill="rgb(138,133,128)" font-size="11" text-anchor="end">TCP · UDP · 포트 번호</text>
+
+  <rect x="32" y="196" width="360" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="48" y="221" fill="rgb(212,168,83)" font-size="13">L3 네트워크</text>
+  <text x="376" y="221" fill="rgb(138,133,128)" font-size="11" text-anchor="end">IP 주소 · 라우터</text>
+
+  <rect x="32" y="242" width="360" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="48" y="267" fill="rgb(212,168,83)" font-size="13">L2 데이터링크</text>
+  <text x="376" y="267" fill="rgb(138,133,128)" font-size="11" text-anchor="end">Ethernet · MAC 주소</text>
+
+  <rect x="32" y="288" width="360" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="48" y="313" fill="rgb(212,168,83)" font-size="13">L1 물리</text>
+  <text x="376" y="313" fill="rgb(138,133,128)" font-size="11" text-anchor="end">(가상) 네트워크 장치</text>
+
+  <!-- IP 패킷 흐름 (오른쪽) -->
+  <text x="424" y="92" fill="#e8e4df" font-size="15">URL 요청의 전송 흐름</text>
+
+  <defs>
+    <marker id="of" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="424" y="104" width="404" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="440" y="124" fill="rgb(212,168,83)" font-size="12">① DNS 조회 (L7→IP)</text>
+  <text x="440" y="140" fill="rgb(138,133,128)" font-size="10">URL 호스트명 → IP 주소 (/etc/hosts 또는 원격 DNS)</text>
+
+  <rect x="424" y="156" width="404" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="440" y="176" fill="rgb(212,168,83)" font-size="12">② L3 라우팅 결정</text>
+  <text x="440" y="192" fill="rgb(138,133,128)" font-size="10">다음 홉(next-hop) IP 는? 그 IP 의 인터페이스는?</text>
+
+  <rect x="424" y="208" width="404" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="440" y="228" fill="rgb(212,168,83)" font-size="12">③ ARP (L3→L2)</text>
+  <text x="440" y="244" fill="rgb(138,133,128)" font-size="10">next-hop IP → MAC 주소 매핑 (ARP 캐시 재사용)</text>
+
+  <rect x="424" y="260" width="404" height="44" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="6"/>
+  <text x="440" y="280" fill="rgb(212,168,83)" font-size="12">④ bridge 전송 (L2/L1)</text>
+  <text x="440" y="296" fill="rgb(138,133,128)" font-size="10">SW bridge 가 MAC 으로 어느 (가상) 인터페이스로 전달할지 결정</text>
+
+  <line x1="626" y1="148" x2="626" y2="156" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#of)"/>
+  <line x1="626" y1="200" x2="626" y2="208" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#of)"/>
+  <line x1="626" y1="252" x2="626" y2="260" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#of)"/>
+
+  <text x="424" y="324" fill="rgb(138,133,128)" font-size="10">캡슐화: L2 Ethernet → L3 IP → L4 TCP → L7 데이터 (계층마다 헤더)</text>
+
+  <!-- K8s IP / service NAT -->
+  <line x1="32" y1="344" x2="828" y2="344" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="372" fill="#e8e4df" font-size="15">Kubernetes 의 컨테이너 IP</text>
+
+  <rect x="32" y="386" width="388" height="92" fill="#66bb6a" fill-opacity="0.10" stroke="#66bb6a" rx="6"/>
+  <text x="226" y="410" fill="#e8e4df" font-size="13" text-anchor="middle">pod IP — NAT 없이 직접 통신</text>
+  <text x="226" y="432" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">각 pod 가 자기 IP (노드 CIDR 에서 할당)</text>
+  <text x="226" y="452" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">pod 안 컨테이너는 같은 network ns → 같은 IP</text>
+  <text x="226" y="470" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">통신 가능하면 서로 IP 투명하게 봄</text>
+
+  <rect x="440" y="386" width="388" height="92" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="6"/>
+  <text x="634" y="410" fill="#e8e4df" font-size="13" text-anchor="middle">service — NAT 의 한 형태</text>
+  <text x="634" y="432" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">자기 IP 만 있고 인터페이스 없음</text>
+  <text x="634" y="452" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">직접 listen·전송 안 함, 라우팅 용도</text>
+  <text x="634" y="470" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">service IP 패킷 → backend pod 로 전달(12-02)</text>
+</svg>

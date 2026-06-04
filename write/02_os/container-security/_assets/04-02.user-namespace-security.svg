@@ -1,0 +1,64 @@
+<svg viewBox="0 0 860 460" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>user namespace 의 보안 이점과 컨테이너의 호스트 관점</title>
+  <desc>왼쪽: user namespace 없이 컨테이너 root 로 돌면 탈출 시 곧 호스트 root 가 되어 공격 사슬이 완성된다. 오른쪽: user namespace 로 컨테이너 root(uid 0)를 호스트 비-root(uid 1001)로 매핑하면, 탈출해도 호스트에서는 비특권 신원이라 사슬이 끊긴다. 아래: 같은 sleep 프로세스가 컨테이너에선 PID 10, 호스트에선 30591 로 보이지만 둘은 같은 하나의 프로세스다 — 컨테이너는 호스트 커널을 공유하는 프로세스이고, 기본적으로 호스트 root 와 컨테이너 root 는 같다.</desc>
+
+  <rect x="0" y="0" width="860" height="460" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">user namespace — 컨테이너 탈출 사슬을 끊는다</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">컨테이너 root(0)를 호스트 비-root 로 매핑 → 탈출해도 호스트에선 비특권</text>
+
+  <!-- 왼쪽: user ns 없음 (위험) -->
+  <rect x="32" y="84" width="388" height="150" fill="#f44336" fill-opacity="0.12" stroke="#f44336" rx="8"/>
+  <text x="226" y="110" fill="#e8e4df" font-size="15" text-anchor="middle">user namespace 없음</text>
+  <rect x="56" y="124" width="150" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="131" y="146" fill="#e8e4df" font-size="12" text-anchor="middle">컨테이너 root</text>
+  <text x="131" y="162" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="10" text-anchor="middle">uid 0</text>
+  <rect x="246" y="124" width="150" height="44" fill="#f44336" fill-opacity="0.18" stroke="#f44336" rx="4"/>
+  <text x="321" y="146" fill="#e8e4df" font-size="12" text-anchor="middle">호스트 root</text>
+  <text x="321" y="162" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="10" text-anchor="middle">uid 0 — 전권</text>
+  <text x="226" y="200" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">탈출 = 곧 호스트 장악 (사슬 완성)</text>
+  <text x="226" y="220" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">한 번의 오설정이 치명적</text>
+
+  <!-- 오른쪽: user ns 있음 (안전) -->
+  <rect x="440" y="84" width="388" height="150" fill="#66bb6a" fill-opacity="0.10" stroke="#66bb6a" rx="8"/>
+  <text x="634" y="110" fill="#e8e4df" font-size="15" text-anchor="middle">user namespace 있음</text>
+  <rect x="464" y="124" width="150" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="539" y="146" fill="#e8e4df" font-size="12" text-anchor="middle">컨테이너 root</text>
+  <text x="539" y="162" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="10" text-anchor="middle">uid 0 (namespace root)</text>
+  <rect x="654" y="124" width="150" height="44" fill="#66bb6a" fill-opacity="0.18" stroke="#66bb6a" rx="4"/>
+  <text x="729" y="146" fill="#e8e4df" font-size="12" text-anchor="middle">호스트 비-root</text>
+  <text x="729" y="162" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="10" text-anchor="middle">uid 1001 (liz)</text>
+  <text x="634" y="200" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="11" text-anchor="middle">uid_map: 0 1001 1</text>
+  <text x="634" y="220" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">탈출해도 비특권 → 사슬 끊김 (kernel 5.8)</text>
+
+  <!-- 화살표 -->
+  <defs>
+    <marker id="un" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <line x1="206" y1="146" x2="246" y2="146" stroke="#f44336" stroke-width="2" marker-end="url(#un)"/>
+  <line x1="614" y1="146" x2="654" y2="146" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#un)"/>
+
+  <!-- 구분선 -->
+  <line x1="32" y1="258" x2="828" y2="258" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- 호스트 관점: 같은 프로세스, 다른 PID -->
+  <text x="32" y="286" fill="#e8e4df" font-size="16">호스트 관점 — 같은 프로세스, 다른 PID</text>
+
+  <rect x="32" y="300" width="360" height="64" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="212" y="324" fill="#e8e4df" font-size="13" text-anchor="middle">컨테이너 안에서 본 sleep</text>
+  <text x="212" y="346" fill="rgb(212,168,83)" font-family="'JetBrains Mono', monospace" font-size="13" text-anchor="middle">PID 10</text>
+
+  <rect x="468" y="300" width="360" height="64" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="648" y="324" fill="#e8e4df" font-size="13" text-anchor="middle">호스트에서 본 같은 sleep</text>
+  <text x="648" y="346" fill="rgb(212,168,83)" font-family="'JetBrains Mono', monospace" font-size="13" text-anchor="middle">PID 30591</text>
+
+  <line x1="392" y1="332" x2="468" y2="332" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="430" y="322" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">같은 하나의 프로세스</text>
+
+  <!-- 결론 -->
+  <text x="32" y="396" fill="rgb(138,133,128)" font-size="13">컨테이너 프로세스는 호스트에서 보인다 — VM 과의 근본적 차이 (호스트 침해 시 모든 컨테이너가 피해자)</text>
+  <text x="32" y="422" fill="rgb(138,133,128)" font-size="13">결론: 컨테이너는 호스트 커널을 공유하는 프로세스. 기본적으로 호스트 root 와 컨테이너 root 는 같다</text>
+  <text x="32" y="446" fill="rgb(138,133,128)" font-size="12">완화: user namespace · 전용 Thin OS 호스트 · 불변 인프라 (K8s 1.33+ user ns 기본 활성, 커널 6.3+)</text>
+</svg>

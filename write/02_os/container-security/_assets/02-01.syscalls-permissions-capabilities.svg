@@ -1,0 +1,88 @@
+<svg viewBox="0 0 860 540" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>리눅스 시스템 콜과 권한 3계층</title>
+  <desc>위: user space 의 애플리케이션이 syscall 인터페이스로 권한이 높은 커널에 일을 요청하는 구조. 한 호스트의 모든 컨테이너는 같은 커널에 syscall 을 건다. 아래: 권한 모델 3계층 — 파일 권한 DAC(rwx), root 전권을 빌려주는 setuid/setgid, 그 전권을 40여 개로 쪼갠 capabilities. 오른쪽: 비-root 컨테이너라도 setuid 실행 파일·추가 capability 로 권한 상승이 가능하고, 기본 root 컨테이너는 탈출 시 호스트 root 가 된다.</desc>
+
+  <rect x="0" y="0" width="860" height="540" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">리눅스 시스템 콜과 권한 3계층</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">컨테이너 보안 통제는 모두 이 기초 위에 얹힌다</text>
+
+  <!-- ===== syscall 경계 ===== -->
+  <!-- user space -->
+  <rect x="32" y="84" width="380" height="60" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="222" y="108" fill="#e8e4df" font-size="14" text-anchor="middle">user space — 애플리케이션 (낮은 권한)</text>
+  <text x="222" y="130" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="11" text-anchor="middle">glibc / musl / Go syscall 패키지로 감쌈</text>
+
+  <!-- syscall 경계선 -->
+  <rect x="32" y="156" width="380" height="34" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="6"/>
+  <text x="222" y="178" fill="rgb(212,168,83)" font-family="'JetBrains Mono', monospace" font-size="13" text-anchor="middle">syscall 인터페이스 (400+개)</text>
+
+  <!-- kernel -->
+  <rect x="32" y="202" width="380" height="60" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="222" y="226" fill="#e8e4df" font-size="14" text-anchor="middle">kernel — 높은 권한</text>
+  <text x="222" y="248" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="11" text-anchor="middle">read · write · open · execve · chown · clone</text>
+
+  <defs>
+    <marker id="sp" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <line x1="222" y1="144" x2="222" y2="156" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#sp)"/>
+  <line x1="222" y1="190" x2="222" y2="202" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#sp)"/>
+
+  <!-- 공유 커널 경고 -->
+  <text x="32" y="284" fill="rgb(138,133,128)" font-size="12">한 호스트의 모든 컨테이너 = 같은 커널에 syscall → 공유가 위협의 뿌리</text>
+
+  <!-- ===== 오른쪽: 권한 상승 ===== -->
+  <rect x="448" y="84" width="380" height="200" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="638" y="110" fill="#e8e4df" font-size="15" text-anchor="middle">권한 상승 경로</text>
+
+  <rect x="468" y="124" width="340" height="40" fill="#0d0d0d" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="638" y="149" fill="#e8e4df" font-size="12" text-anchor="middle">root 로 도는 SW 의 취약점 악용 (예: Struts RCE)</text>
+
+  <rect x="468" y="170" width="340" height="44" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="4"/>
+  <text x="638" y="190" fill="#e8e4df" font-size="12" text-anchor="middle">기본적으로 컨테이너는 root 로 돈다</text>
+  <text x="638" y="208" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">탈출하면 곧 호스트 root — 추가 상승 불필요</text>
+
+  <rect x="468" y="220" width="340" height="50" fill="#0d0d0d" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="638" y="240" fill="#e8e4df" font-size="12" text-anchor="middle">비-root 컨테이너라도 여지가 남는다</text>
+  <text x="638" y="258" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">setuid 실행 파일 · 추가 capability</text>
+
+  <!-- 구분선 -->
+  <line x1="32" y1="306" x2="828" y2="306" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- ===== 권한 3계층 ===== -->
+  <text x="32" y="334" fill="#e8e4df" font-size="16">권한 모델 3계층 — 굵게 → 세밀하게</text>
+
+  <!-- 계층 1 DAC -->
+  <rect x="32" y="352" width="252" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="158" y="378" fill="rgb(212,168,83)" font-size="14" text-anchor="middle">① 파일 권한 (DAC)</text>
+  <text x="158" y="402" fill="#e8e4df" font-family="'JetBrains Mono', monospace" font-size="13" text-anchor="middle">rwx · rwx · rwx</text>
+  <text x="158" y="422" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">user · group · others</text>
+  <text x="158" y="442" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">읽기·쓰기·실행 3비트</text>
+  <text x="158" y="460" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">"모든 것이 파일" 의 주춧돌</text>
+
+  <!-- 계층 2 setuid -->
+  <rect x="304" y="352" width="252" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="430" y="378" fill="rgb(212,168,83)" font-size="14" text-anchor="middle">② setuid / setgid</text>
+  <text x="430" y="402" fill="#e8e4df" font-family="'JetBrains Mono', monospace" font-size="13" text-anchor="middle">-rwsr-xr-x</text>
+  <text x="430" y="422" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">소유자 ID 로 실행 (root 전권)</text>
+  <text x="430" y="442" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">sudo · (구) ping</text>
+  <text x="430" y="460" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">bash 는 ID 를 되돌림(예외)</text>
+
+  <!-- 계층 3 capabilities -->
+  <rect x="576" y="352" width="252" height="120" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="6"/>
+  <text x="702" y="378" fill="rgb(212,168,83)" font-size="14" text-anchor="middle">③ capabilities</text>
+  <text x="702" y="402" fill="#e8e4df" font-family="'JetBrains Mono', monospace" font-size="12" text-anchor="middle">CAP_NET_RAW 등 40+</text>
+  <text x="702" y="422" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">root 전권을 잘게 쪼갬 (2.2+)</text>
+  <text x="702" y="442" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">ping: 소켓 연 뒤 즉시 버림</text>
+  <text x="702" y="460" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">최소 권한 원칙의 실천</text>
+
+  <!-- 화살표 굵게→세밀 -->
+  <line x1="284" y1="412" x2="304" y2="412" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#sp)"/>
+  <line x1="556" y1="412" x2="576" y2="412" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#sp)"/>
+
+  <!-- 결론 -->
+  <text x="32" y="500" fill="rgb(138,133,128)" font-size="12">컨테이너 적용: syscall 제한 Ch10 · capability 제어 Ch11 · setuid 차단 no-new-privileges Ch4</text>
+  <text x="32" y="522" fill="rgb(138,133,128)" font-size="12">결론(Ch4): 호스트의 root 와 컨테이너의 root 는 같은 것이다</text>
+</svg>

@@ -1,0 +1,73 @@
+<svg viewBox="0 0 860 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>GitOps 흐름과 권한 경계</title>
+  <desc>위: GitOps 의 핵심 권한 경계. 사람(개발자·운영자)은 Git 저장소에만 쓰기 권한을 갖고 PR·리뷰·서명으로 원하는 상태를 커밋한다. GitOps controller(ArgoCD·Flux)만 Git 을 읽고 클러스터에 쓴다 — controller 는 클러스터에 쓰기, Git 에 읽기 권한만 갖는 비대칭이 모델의 토대다. 사람의 kubectl 은 RBAC 로 read-only 로 제한된다. 가운데: GitOps 4원칙(선언·버전/불변·자동 pull·지속 조정)과 지속 조정이 drift 를 되돌리는 흐름. 아래: controller 가 Git 에 적힌 대로 충실히 실행한다는 강점이 뒤집혀, 악성 manifest 주입과 의존성 혼동 두 공격이 생긴다 — 그래서 방어는 Git 저장소를 단단히 하는 데 집중한다.</desc>
+
+  <rect x="0" y="0" width="860" height="500" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">GitOps 흐름과 권한 경계</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">사람은 Git 만, controller 만 클러스터를 수정한다 — 팔 길이 거리(arm's length)</text>
+
+  <defs>
+    <marker id="gf" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <!-- 사람 -->
+  <rect x="32" y="86" width="176" height="96" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="120" y="112" fill="rgb(212,168,83)" font-size="14" text-anchor="middle">사람</text>
+  <text x="120" y="134" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">개발자 · 운영자</text>
+  <text x="120" y="154" fill="#66bb6a" font-size="11" text-anchor="middle">Git 쓰기 (PR·리뷰·서명)</text>
+  <text x="120" y="172" fill="#f44336" font-size="11" text-anchor="middle">클러스터: read-only(RBAC)</text>
+
+  <!-- Git 저장소 -->
+  <rect x="312" y="86" width="176" height="96" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="8"/>
+  <text x="400" y="112" fill="rgb(212,168,83)" font-size="14" text-anchor="middle">Git 저장소</text>
+  <text x="400" y="134" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">원하는 상태(YAML)</text>
+  <text x="400" y="154" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">버전·불변·단일 진실</text>
+  <text x="400" y="172" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">감사 추적(누가·언제·왜)</text>
+
+  <!-- controller -->
+  <rect x="592" y="86" width="236" height="96" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="710" y="112" fill="rgb(212,168,83)" font-size="14" text-anchor="middle">GitOps controller</text>
+  <text x="710" y="132" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">ArgoCD · Flux</text>
+  <text x="710" y="152" fill="#66bb6a" font-size="11" text-anchor="middle">Git 읽기 + 클러스터 쓰기</text>
+  <text x="710" y="170" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">→ 권한 비대칭이 모델 토대</text>
+
+  <line x1="208" y1="124" x2="312" y2="124" stroke="#66bb6a" stroke-width="2" marker-end="url(#gf)"/>
+  <text x="260" y="116" fill="#66bb6a" font-size="10" text-anchor="middle">커밋</text>
+  <line x1="488" y1="134" x2="592" y2="134" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#gf)"/>
+  <text x="540" y="126" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">자동 pull</text>
+
+  <!-- 클러스터 + 지속 조정 -->
+  <rect x="592" y="200" width="236" height="64" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="710" y="226" fill="#e8e4df" font-size="13" text-anchor="middle">Kubernetes 클러스터</text>
+  <text x="710" y="248" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">실제 상태 = 원하는 상태</text>
+  <line x1="710" y1="182" x2="710" y2="200" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#gf)"/>
+  <text x="760" y="196" fill="rgb(138,133,128)" font-size="10">쓰기</text>
+
+  <!-- 지속 조정 루프 -->
+  <text x="32" y="216" fill="#e8e4df" font-size="14">GitOps 4원칙</text>
+  <rect x="32" y="228" width="528" height="40" fill="#66bb6a" fill-opacity="0.10" stroke="#66bb6a" rx="6"/>
+  <text x="48" y="252" fill="rgb(138,133,128)" font-size="11">선언적 · 버전/불변 · 자동 pull · 지속 조정 — 실제 상태가 어긋나면(drift) controller 가 되돌림</text>
+
+  <!-- 두 공격 -->
+  <line x1="32" y1="290" x2="828" y2="290" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="318" fill="#e8e4df" font-size="16">강점이 뒤집히는 두 공격 — "Git 에 적힌 대로 충실히 실행"</text>
+  <text x="32" y="338" fill="rgb(138,133,128)" font-size="12">controller 는 저장소 상태를 악성 변경까지 충실히 배포한다 → 방어는 Git 저장소 하드닝에 집중</text>
+
+  <rect x="32" y="352" width="388" height="76" fill="#f44336" fill-opacity="0.10" stroke="#f44336" rx="6"/>
+  <text x="226" y="376" fill="#e8e4df" font-size="13" text-anchor="middle">악성 manifest 주입</text>
+  <text x="226" y="398" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">Git 접근 탈취 → 워크로드·RBAC 변조</text>
+  <text x="226" y="418" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">데이터 유출 사이드카 주입</text>
+
+  <rect x="440" y="352" width="388" height="76" fill="#f44336" fill-opacity="0.10" stroke="#f44336" rx="6"/>
+  <text x="634" y="376" fill="#e8e4df" font-size="13" text-anchor="middle">의존성 혼동 (07장)</text>
+  <text x="634" y="398" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">배포 중 Terraform 모듈·Helm 차트 해석</text>
+  <text x="634" y="418" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">공개 레지스트리 악성 버전을 끌어옴</text>
+
+  <!-- 방어 -->
+  <text x="32" y="456" fill="rgb(138,133,128)" font-size="12">Git 하드닝: 커밋·태그 서명 · 브랜치 보호(PR 리뷰) · force push 금지 · MFA/FIDO · OIDC 단기 자격증명</text>
+  <text x="32" y="476" fill="rgb(138,133,128)" font-size="12">최소 권한 · IaC/앱 저장소 분리(폭발 반경↓) · 설정 스캔(checkov·trivy) · admission·런타임 탐지</text>
+  <text x="32" y="494" fill="#66bb6a" font-size="12">시크릿은 Git 에 두지 않음(Ch 14) → Vault·SealedSecrets·External Secrets Operator 로 외부 조회</text>
+</svg>

@@ -1,0 +1,55 @@
+<svg viewBox="0 0 860 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>컨테이너 격리 vs VM 격리 — 왜 VM 이 더 강한가</title>
+  <desc>왼쪽: 컨테이너는 호스트 커널 하나를 공유한다. 커널은 프로세스끼리 ps·/proc·IPC·공유 메모리로 합법적으로 정보를 나누게 허용하고, 코드가 2000만 줄 이상이라 공격 표면이 크다 — 기본 격리가 약하다. 오른쪽: VM 은 각자 커널을 갖고 하이퍼바이저가 분리한다. VM 끼리 프로세스를 못 보고 메모리를 공유하지 않아 하이퍼바이저는 그 상황을 처리할 코드가 필요 없고, Xen 은 약 5만 줄로 작다 — 격리가 강하다. 아래: 컨테이너의 약한 격리는 Ch10 샌드박싱·Ch15 보안 도구로 강화할 수 있다.</desc>
+
+  <rect x="0" y="0" width="860" height="470" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">컨테이너 격리 vs VM 격리</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">차이는 하이퍼바이저의 일이 훨씬 단순하다는 것 — 코드가 작으면 공격 표면도 작다</text>
+
+  <!-- ===== 왼쪽: 컨테이너 (약한 격리) ===== -->
+  <rect x="32" y="84" width="388" height="240" fill="#f44336" fill-opacity="0.08" stroke="#f44336" rx="8"/>
+  <text x="226" y="108" fill="#e8e4df" font-size="15" text-anchor="middle">컨테이너 — 약한 기본 격리</text>
+
+  <rect x="56" y="120" width="160" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="136" y="142" fill="#e8e4df" font-size="12" text-anchor="middle">컨테이너 A</text>
+  <rect x="236" y="120" width="160" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="316" y="142" fill="#e8e4df" font-size="12" text-anchor="middle">컨테이너 B</text>
+
+  <rect x="56" y="162" width="340" height="40" fill="#f44336" fill-opacity="0.18" stroke="#f44336" rx="4"/>
+  <text x="226" y="186" fill="#e8e4df" font-size="13" text-anchor="middle">공유 커널 하나 (2000만+ 줄)</text>
+
+  <text x="56" y="226" fill="rgb(138,133,128)" font-size="12">프로세스끼리 합법적으로 보임·공유:</text>
+  <text x="72" y="248" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="11">ps · /proc · IPC · 공유 메모리</text>
+  <text x="56" y="276" fill="rgb(138,133,128)" font-size="12">통로 하나하나가 결함 시 격리를 약화</text>
+  <text x="56" y="300" fill="#f44336" font-size="12">큰 코드 → 큰 공격 표면 → 결함 가능성 ↑</text>
+
+  <!-- ===== 오른쪽: VM (강한 격리) ===== -->
+  <rect x="440" y="84" width="388" height="240" fill="#66bb6a" fill-opacity="0.08" stroke="#66bb6a" rx="8"/>
+  <text x="634" y="108" fill="#e8e4df" font-size="15" text-anchor="middle">VM — 강한 격리</text>
+
+  <rect x="464" y="120" width="160" height="56" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="544" y="140" fill="#e8e4df" font-size="12" text-anchor="middle">VM A</text>
+  <text x="544" y="160" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">자체 커널</text>
+  <rect x="644" y="120" width="160" height="56" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="724" y="140" fill="#e8e4df" font-size="12" text-anchor="middle">VM B</text>
+  <text x="724" y="160" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">자체 커널</text>
+
+  <rect x="464" y="184" width="340" height="40" fill="#66bb6a" fill-opacity="0.18" stroke="#66bb6a" rx="4"/>
+  <text x="634" y="208" fill="#e8e4df" font-size="13" text-anchor="middle">하이퍼바이저 (Xen 약 5만 줄)</text>
+
+  <text x="464" y="248" fill="rgb(138,133,128)" font-size="12">VM 끼리 프로세스 못 봄·메모리 공유 안 함</text>
+  <text x="464" y="276" fill="rgb(138,133,128)" font-size="12">공유 처리 코드가 불필요 → 작고 단순</text>
+  <text x="464" y="300" fill="#66bb6a" font-size="12">작은 코드 → 작은 공격 표면 → 강한 경계</text>
+
+  <!-- 코드량 대비 막대 -->
+  <text x="32" y="350" fill="#e8e4df" font-size="13">코드 규모 대비 (공격 표면의 대리 지표)</text>
+  <rect x="32" y="360" width="600" height="22" fill="#f44336" fill-opacity="0.35" stroke="#f44336" rx="3"/>
+  <text x="44" y="376" fill="#e8e4df" font-family="'JetBrains Mono', monospace" font-size="12">Linux 커널 ≈ 20,000,000 줄</text>
+  <rect x="32" y="388" width="20" height="22" fill="#66bb6a" fill-opacity="0.35" stroke="#66bb6a" rx="3"/>
+  <text x="60" y="404" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="12">Xen ≈ 50,000 줄 (약 1/400)</text>
+
+  <!-- 결론 -->
+  <text x="32" y="440" fill="rgb(138,133,128)" font-size="12">컨테이너는 하드 멀티테넌시에 부적합. 단, 약한 격리는 Ch10 샌드박싱·Ch15 보안 도구로 강화 가능</text>
+  <text x="32" y="462" fill="rgb(138,133,128)" font-size="12">트레이드오프: 시작 시간·이식성·비용에서 컨테이너가 유리 (VM 은 부팅 전체를 거침)</text>
+</svg>

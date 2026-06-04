@@ -1,0 +1,44 @@
+<svg viewBox="0 0 760 320" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>가상 이더넷 쌍(veth pair) — 컨테이너 network namespace 와 호스트 연결</title>
+  <desc>새 network namespace 는 loopback 인터페이스만 갖고 시작해 통신할 수 없다. veth pair 의 두 끝(ve1·ve2)이 컨테이너 namespace 와 호스트 기본 namespace 를 잇는 케이블처럼 작동한다. ve1 은 컨테이너 쪽(192.168.1.100), ve2 는 호스트 쪽(192.168.1.200)에 IPv4 주소를 부여하면 양쪽이 ping 으로 통신한다. 라우팅 테이블은 호스트와 독립적이다.</desc>
+
+  <rect x="0" y="0" width="760" height="320" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="18">veth pair — namespace 를 잇는 가상 케이블</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="12">새 network namespace 는 loopback 만 가짐 → veth pair 로 바깥과 연결</text>
+
+  <!-- 컨테이너 namespace 박스 -->
+  <rect x="40" y="92" width="300" height="180" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="190" y="118" fill="#e8e4df" font-size="14" text-anchor="middle">컨테이너 network namespace</text>
+  <text x="190" y="138" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="11" text-anchor="middle">(PID 28586)</text>
+
+  <rect x="64" y="156" width="120" height="40" fill="#0d0d0d" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="124" y="181" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="12" text-anchor="middle">lo</text>
+
+  <rect x="200" y="156" width="116" height="60" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="4"/>
+  <text x="258" y="180" fill="#e8e4df" font-family="'JetBrains Mono', monospace" font-size="13" text-anchor="middle">ve1</text>
+  <text x="258" y="200" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">192.168.1.100</text>
+
+  <!-- 호스트 namespace 박스 -->
+  <rect x="420" y="92" width="300" height="180" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="570" y="118" fill="#e8e4df" font-size="14" text-anchor="middle">호스트 기본 namespace</text>
+  <text x="570" y="138" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="11" text-anchor="middle">(PID 1)</text>
+
+  <rect x="444" y="156" width="116" height="60" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="4"/>
+  <text x="502" y="180" fill="#e8e4df" font-family="'JetBrains Mono', monospace" font-size="13" text-anchor="middle">ve2</text>
+  <text x="502" y="200" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">192.168.1.200</text>
+
+  <rect x="576" y="156" width="120" height="40" fill="#0d0d0d" stroke="rgb(42,37,32)" rx="4"/>
+  <text x="636" y="181" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="11" text-anchor="middle">eth0 ...</text>
+
+  <!-- veth 케이블 (양방향) -->
+  <line x1="316" y1="186" x2="444" y2="186" stroke="rgb(212,168,83)" stroke-width="3"/>
+  <circle cx="316" cy="186" r="4" fill="rgb(212,168,83)"/>
+  <circle cx="444" cy="186" r="4" fill="rgb(212,168,83)"/>
+  <text x="380" y="176" fill="rgb(212,168,83)" font-size="11" text-anchor="middle">veth 쌍</text>
+  <text x="380" y="208" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">ping ↔</text>
+
+  <!-- 생성 명령 -->
+  <rect x="40" y="288" width="680" height="20" fill="none"/>
+  <text x="40" y="302" fill="rgb(138,133,128)" font-family="'JetBrains Mono', monospace" font-size="11">ip link add ve1 netns 28586 type veth peer name ve2 netns 1   ·   라우팅은 호스트와 독립</text>
+</svg>
