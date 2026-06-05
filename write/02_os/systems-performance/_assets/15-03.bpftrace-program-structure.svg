@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 440" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>bpftrace 프로그램 구조 — 프로브·필터·액션과 지연 측정 패턴</title>
+  <desc>bpftrace의 probe/filter/action 구조와, vfs_read 지연 측정의 시작/종료 프로브 패턴(kprobe에서 tid 키로 타임스탬프 저장, kretprobe에서 델타 계산, 필터로 진행 중 호출 제외).</desc>
+  <defs>
+    <marker id="p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <rect width="780" height="440" fill="#0d0d0d"/>
+  <text x="30" y="40" fill="#e8e4df" font-size="20" font-weight="700">bpftrace 프로그램 구조</text>
+  <text x="30" y="64" fill="rgb(138,133,128)" font-size="13">probe /filter/ { action } — awk의 /패턴/ { 액션 } 과 같다</text>
+
+  <!-- structure -->
+  <rect x="40" y="88" width="700" height="44" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="70" y="116" fill="#e8e4df" font-size="14" font-family="monospace">probe </text>
+  <text x="180" y="116" fill="rgb(212,168,83)" font-size="14" font-family="monospace">/filter/</text>
+  <text x="320" y="116" fill="#e8e4df" font-size="14" font-family="monospace">{ action }</text>
+  <text x="500" y="111" fill="rgb(138,133,128)" font-size="11">프로브 발동 →</text>
+  <text x="500" y="126" fill="rgb(138,133,128)" font-size="11">필터 참이면 액션 실행</text>
+
+  <!-- latency pattern -->
+  <text x="40" y="162" fill="rgb(212,168,83)" font-size="13" font-weight="700">지연 측정 패턴 — 시작/종료 프로브 + tid 키 맵</text>
+
+  <rect x="40" y="176" width="330" height="90" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+  <text x="205" y="198" fill="rgb(212,168,83)" font-size="12" font-weight="700" text-anchor="middle">① kprobe:vfs_read</text>
+  <text x="60" y="222" fill="#e8e4df" font-size="12" font-family="monospace">@start[tid] = nsecs;</text>
+  <text x="60" y="246" fill="rgb(138,133,128)" font-size="11">시작 시각을 tid 키로 저장</text>
+  <text x="60" y="262" fill="rgb(138,133,128)" font-size="10">(스레드별, 안 덮임)</text>
+
+  <rect x="410" y="176" width="330" height="90" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="575" y="198" fill="rgb(212,168,83)" font-size="12" font-weight="700" text-anchor="middle">② kretprobe:vfs_read /@start[tid]/</text>
+  <text x="430" y="222" fill="#e8e4df" font-size="12" font-family="monospace">@us = hist(nsecs - @start[tid]);</text>
+  <text x="430" y="246" fill="#e8e4df" font-size="12" font-family="monospace">delete(@start[tid]);</text>
+  <text x="430" y="262" fill="rgb(138,133,128)" font-size="11">델타 계산 → 히스토그램</text>
+
+  <line x1="370" y1="221" x2="408" y2="221" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#p1)"/>
+
+  <!-- filter note -->
+  <rect x="40" y="284" width="700" height="56" rx="8" fill="none" stroke="#f44336" stroke-width="1.2"/>
+  <text x="60" y="310" fill="#f44336" font-size="13" font-weight="600">필터 /@start[tid]/ 가 진행 중 호출의 오계산을 막는다</text>
+  <text x="60" y="332" fill="rgb(138,133,128)" font-size="12">추적 시작 시 이미 진행 중이던 호출은 끝만 보이고 시작은 못 봐, 필터 없으면 델타가 now - 0으로 오계산된다.</text>
+
+  <!-- conclusion -->
+  <rect x="40" y="354" width="700" height="68" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="60" y="380" fill="#e8e4df" font-size="13" font-weight="600">변수 세 종류 + 커널 집계</text>
+  <text x="60" y="402" fill="rgb(138,133,128)" font-size="12">빌트인(정보)·스크래치($, 임시)·맵(@, 액션 간 전달). hist·count가 커널에서 집계해 종료 시 자동 출력.</text>
+  <text x="60" y="418" fill="rgb(138,133,128)" font-size="12">프로브 유형은 4장 커널 기술(tracepoint·kprobe·uprobe·USDT·PMC)의 인터페이스 — 추적 도구 묶음(13~15)의 정점.</text>
+</svg>

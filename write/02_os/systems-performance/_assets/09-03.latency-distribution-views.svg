@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 430" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>디스크 지연 — 평균은 가리고 분포는 드러낸다</title>
+  <desc>같은 디스크 지연을 평균 하나로 볼 때(이봉 분포·이상치를 가림)와, 스캐터 플롯·히트맵으로 분포를 볼 때(다봉·꼬리·시간 패턴을 드러냄)의 대비. 이벤트가 많아지면 스캐터에서 히트맵으로 넘어간다.</desc>
+  <defs>
+    <marker id="v1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <rect width="780" height="430" fill="#0d0d0d"/>
+  <text x="30" y="40" fill="#e8e4df" font-size="20" font-weight="700">디스크 지연 — 평균 말고 분포를 보라</text>
+  <text x="30" y="64" fill="rgb(138,133,128)" font-size="13">디스크 지연은 본래 다봉(적중/미스)이라 평균 하나는 진실을 덮는다</text>
+
+  <!-- left: average -->
+  <rect x="40" y="90" width="210" height="200" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+  <text x="145" y="114" fill="rgb(138,133,128)" font-size="13" font-weight="700" text-anchor="middle">평균 하나 (iostat await)</text>
+  <line x1="70" y1="250" x2="220" y2="250" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <line x1="145" y1="130" x2="145" y2="250" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="5 3"/>
+  <text x="145" y="270" fill="rgb(212,168,83)" font-size="12" text-anchor="middle">avg = 0.44ms</text>
+  <text x="145" y="286" fill="#f44336" font-size="11" text-anchor="middle">→ 이봉·이상치 가림</text>
+
+  <!-- middle: histogram (biolatency) -->
+  <rect x="285" y="90" width="210" height="200" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="390" y="114" fill="rgb(212,168,83)" font-size="13" font-weight="700" text-anchor="middle">히스토그램 (biolatency)</text>
+  <line x1="310" y1="250" x2="470" y2="250" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <rect x="320" y="200" width="18" height="50" fill="rgba(212,168,83,0.4)"/>
+  <rect x="342" y="170" width="18" height="80" fill="rgba(212,168,83,0.6)"/>
+  <rect x="364" y="220" width="18" height="30" fill="rgba(212,168,83,0.3)"/>
+  <rect x="396" y="185" width="18" height="65" fill="rgba(212,168,83,0.6)"/>
+  <rect x="418" y="225" width="18" height="25" fill="rgba(212,168,83,0.3)"/>
+  <text x="390" y="270" fill="#66bb6a" font-size="11" text-anchor="middle">이봉 분포 드러남</text>
+  <text x="390" y="286" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">적중 봉우리 + 미스 봉우리</text>
+
+  <!-- right: heatmap -->
+  <rect x="530" y="90" width="210" height="200" rx="8" fill="none" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="635" y="114" fill="rgb(212,168,83)" font-size="13" font-weight="700" text-anchor="middle">히트맵 (시간×지연)</text>
+  <g>
+    <rect x="555" y="135" width="22" height="22" fill="rgba(212,168,83,0.15)"/>
+    <rect x="577" y="135" width="22" height="22" fill="rgba(212,168,83,0.3)"/>
+    <rect x="599" y="135" width="22" height="22" fill="rgba(212,168,83,0.5)"/>
+    <rect x="621" y="135" width="22" height="22" fill="rgba(212,168,83,0.7)"/>
+    <rect x="643" y="135" width="22" height="22" fill="rgba(212,168,83,0.4)"/>
+    <rect x="665" y="135" width="22" height="22" fill="rgba(212,168,83,0.2)"/>
+    <rect x="555" y="180" width="22" height="22" fill="rgba(212,168,83,0.6)"/>
+    <rect x="577" y="180" width="22" height="22" fill="rgba(212,168,83,0.8)"/>
+    <rect x="599" y="180" width="22" height="22" fill="rgba(212,168,83,0.5)"/>
+    <rect x="621" y="180" width="22" height="22" fill="rgba(212,168,83,0.3)"/>
+    <rect x="643" y="180" width="22" height="22" fill="rgba(212,168,83,0.6)"/>
+    <rect x="665" y="180" width="22" height="22" fill="rgba(212,168,83,0.9)"/>
+    <rect x="555" y="225" width="22" height="22" fill="rgba(212,168,83,0.2)"/>
+    <rect x="643" y="225" width="22" height="22" fill="rgba(212,168,83,0.3)"/>
+    <rect x="665" y="225" width="22" height="22" fill="rgba(212,168,83,0.5)"/>
+  </g>
+  <text x="635" y="270" fill="#66bb6a" font-size="11" text-anchor="middle">수백만 이벤트로 확장</text>
+  <text x="635" y="286" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">스캐터가 "페인트" 되면 여기로</text>
+
+  <!-- flow arrows -->
+  <line x1="252" y1="190" x2="283" y2="190" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#v1)"/>
+  <line x1="497" y1="190" x2="528" y2="190" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#v1)"/>
+
+  <rect x="40" y="320" width="700" height="86" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.2"/>
+  <text x="60" y="346" fill="#e8e4df" font-size="13" font-weight="600">스캐터 플롯 → 히트맵 전환</text>
+  <text x="60" y="368" fill="rgb(138,133,128)" font-size="12">스캐터는 건당 I/O(읽기 + / 쓰기 °)와 이상치를 보여 주지만, 이벤트가 많으면 점이 뭉쳐 "페인트"가 된다.</text>
+  <text x="60" y="388" fill="rgb(138,133,128)" font-size="12">그때 히트맵으로 넘어간다 — 시간 × 지연 × 개수(색)로 수백만 이벤트를 담아 시간 패턴까지 드러낸다.</text>
+</svg>

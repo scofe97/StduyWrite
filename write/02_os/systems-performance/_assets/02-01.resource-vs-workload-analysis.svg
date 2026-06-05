@@ -1,0 +1,61 @@
+<svg viewBox="0 0 860 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>두 분석 관점 — 자원 분석과 워크로드 분석</title>
+  <desc>OS 소프트웨어 스택을 두 관점이 반대 방향에서 접근한다. 워크로드 분석은 애플리케이션 개발자가 맡으며, 워크로드(요청) 쪽 위에서 아래로(top-down) 내려간다. 대상은 요청·지연·완료(에러)이고 잘 맞는 지표는 처리량(tps)과 지연이다. 출발점이 애플리케이션이라 라이브러리·시스템 콜·커널로 파고든다. 자원 분석은 시스템 관리자가 맡으며, 자원(CPU·메모리·디스크·네트워크·버스·인터커넥트) 쪽 아래에서 위로(bottom-up) 올라간다. 사용률을 중심으로 자원이 한계에 닿는지 보며, 잘 맞는 지표는 IOPS·처리량·사용률·포화다. 성능 이슈 조사와 용량 계획에 쓰인다. 까다로운 문제는 두 관점 모두에서 본다.</desc>
+
+  <rect x="0" y="0" width="860" height="480" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">두 분석 관점 — 자원 vs 워크로드</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">같은 OS 스택을 반대 방향에서 — 청중·지표·접근이 다름</text>
+
+  <!-- 가운데 스택 -->
+  <rect x="330" y="100" width="200" height="44" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="5"/>
+  <text x="430" y="127" fill="#e8e4df" font-size="12" text-anchor="middle">애플리케이션</text>
+
+  <rect x="330" y="150" width="200" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/>
+  <text x="430" y="175" fill="#e8e4df" font-size="11" text-anchor="middle">시스템 라이브러리</text>
+
+  <rect x="330" y="196" width="200" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/>
+  <text x="430" y="221" fill="#e8e4df" font-size="11" text-anchor="middle">시스템 콜 · 커널</text>
+
+  <rect x="330" y="242" width="200" height="44" fill="rgb(42,37,32)" rx="5"/>
+  <text x="430" y="269" fill="#e8e4df" font-size="12" text-anchor="middle">하드웨어 자원</text>
+
+  <defs>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="3" refY="7" orient="auto">
+      <path d="M0,0 L6,0 L3,7 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="ur" markerWidth="10" markerHeight="10" refX="3" refY="2" orient="auto">
+      <path d="M3,0 L6,7 L0,7 Z" fill="#66bb6a"/>
+    </marker>
+  </defs>
+
+  <!-- 워크로드 분석: 왼쪽, top-down -->
+  <rect x="32" y="100" width="270" height="186" fill="rgb(26,26,26)" stroke="rgb(212,168,83)" rx="8"/>
+  <text x="167" y="124" fill="rgb(212,168,83)" font-size="14" text-anchor="middle">워크로드 분석 (top-down)</text>
+  <text x="167" y="148" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">앱 개발자 — 워크로드 담당</text>
+  <text x="167" y="172" fill="#e8e4df" font-size="11" text-anchor="middle">대상: 요청 · 지연 · 완료(에러)</text>
+  <text x="167" y="194" fill="#e8e4df" font-size="11" text-anchor="middle">지표: 처리량(tps) · 지연</text>
+  <text x="167" y="222" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">앱에서 출발해 아래로 파고듦</text>
+  <line x1="167" y1="238" x2="167" y2="276" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="167" y="268" fill="rgb(212,168,83)" font-size="11" text-anchor="middle">↓</text>
+
+  <!-- 자원 분석: 오른쪽, bottom-up -->
+  <rect x="558" y="100" width="270" height="186" fill="rgb(26,26,26)" stroke="#66bb6a" rx="8"/>
+  <text x="693" y="124" fill="#66bb6a" font-size="14" text-anchor="middle">자원 분석 (bottom-up)</text>
+  <text x="693" y="148" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">시스템 관리자 — 자원 담당</text>
+  <text x="693" y="172" fill="#e8e4df" font-size="11" text-anchor="middle">대상: CPU·메모리·디스크·네트워크</text>
+  <text x="693" y="194" fill="#e8e4df" font-size="11" text-anchor="middle">지표: IOPS·처리량·사용률·포화</text>
+  <text x="693" y="222" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">자원에서 출발해 위로 올라감</text>
+  <line x1="693" y1="276" x2="693" y2="238" stroke="#66bb6a" stroke-width="2" marker-end="url(#ur)"/>
+
+  <!-- 화살표: 워크로드는 위에서 스택으로, 자원은 아래에서 스택으로 -->
+  <line x1="302" y1="122" x2="328" y2="122" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)" transform="rotate(0 315 122)"/>
+  <line x1="558" y1="264" x2="532" y2="264" stroke="#66bb6a" stroke-width="2" marker-end="url(#ur)" transform="rotate(0 545 264)"/>
+
+  <!-- 결론 -->
+  <rect x="230" y="320" width="400" height="48" fill="#66bb6a" fill-opacity="0.10" stroke="#66bb6a" rx="8"/>
+  <text x="430" y="349" fill="#e8e4df" font-size="13" text-anchor="middle">까다로운 문제는 두 관점 모두에서</text>
+
+  <text x="32" y="410" fill="rgb(138,133,128)" font-size="11">stat 도구(vmstat·iostat·mpstat) 문서는 자원 관점 — 유일한 관점이 아님을 알고 읽는다</text>
+  <text x="32" y="432" fill="rgb(138,133,128)" font-size="11">"가장 빠른 쿼리는 아예 안 하는 쿼리" — 워크로드 분석은 불필요한 일을 먼저 본다</text>
+</svg>

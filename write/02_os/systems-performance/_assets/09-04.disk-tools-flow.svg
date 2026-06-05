@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>디스크 관측 도구 — 통계에서 트레이싱·펌웨어까지</title>
+  <desc>전통 통계(iostat·sar·PSI·pidstat)에서 시작해 BPF 트레이싱(perf·biolatency·biosnoop·biotop·biostacks), 저수준 추적(blktrace·bpftrace), 컨트롤러·디스크 펌웨어 도구(MegaCli·smartctl)로 내려가는 도구 흐름.</desc>
+  <defs>
+    <marker id="d1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <rect width="760" height="470" fill="#0d0d0d"/>
+  <text x="30" y="40" fill="#e8e4df" font-size="20" font-weight="700">디스크 관측 도구 흐름</text>
+  <text x="30" y="64" fill="rgb(138,133,128)" font-size="13">전통 통계 → 시계열·압박·프로세스별 → BPF 트레이싱 → 저수준 추적 → 펌웨어</text>
+
+  <rect x="40" y="90" width="680" height="56" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="60" y="114" fill="rgb(212,168,83)" font-size="13" font-weight="700">① iostat — 디스크별 통계의 출발점</text>
+  <text x="60" y="135" fill="#e8e4df" font-size="12">tps·kB/s·await·aqu-sz·%util · 읽기/쓰기 분리(r_await) · (에러는 안 줌)</text>
+
+  <rect x="40" y="158" width="680" height="56" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+  <text x="60" y="182" fill="rgb(212,168,83)" font-size="13" font-weight="700">② sar · PSI · pidstat — 추세·압박·원인 프로세스</text>
+  <text x="60" y="203" fill="#e8e4df" font-size="12">sar -d (시계열) · /proc/pressure/io (압박 증가?) · pidstat -d (누가·iodelay)</text>
+
+  <rect x="40" y="226" width="680" height="56" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+  <text x="60" y="250" fill="rgb(212,168,83)" font-size="13" font-weight="700">③ perf · biolatency · biosnoop — 콜경로·분포·건당</text>
+  <text x="60" y="271" fill="#e8e4df" font-size="12">perf (block tracepoint+스택) · biolatency (이봉 히스토그램) · biosnoop (건당 이상치)</text>
+
+  <rect x="40" y="294" width="680" height="56" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+  <text x="60" y="318" fill="rgb(212,168,83)" font-size="13" font-weight="700">④ biotop · biostacks · blktrace — top·유발스택·단계분해</text>
+  <text x="60" y="339" fill="#e8e4df" font-size="12">biotop (누가) · biostacks (왜, 읽기/쓰기 아닌 I/O까지) · blktrace btt (D2C·I2D)</text>
+
+  <rect x="40" y="362" width="680" height="56" rx="8" fill="none" stroke="rgb(138,133,128)" stroke-width="1.3"/>
+  <text x="60" y="386" fill="rgb(212,168,83)" font-size="13" font-weight="700">⑤ bpftrace · MegaCli · smartctl — 커스텀·컨트롤러·디스크 펌웨어</text>
+  <text x="60" y="407" fill="#e8e4df" font-size="12">bpftrace (못 답하는 질문만) · MegaCli (컨트롤러) · smartctl (SMART: 에러추세·수명)</text>
+
+  <!-- arrows -->
+  <line x1="730" y1="146" x2="730" y2="156" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#d1)"/>
+  <line x1="730" y1="214" x2="730" y2="224" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#d1)"/>
+  <line x1="730" y1="282" x2="730" y2="292" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#d1)"/>
+  <line x1="730" y1="350" x2="730" y2="360" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#d1)"/>
+
+  <text x="40" y="446" fill="rgb(138,133,128)" font-size="11">전통 통계가 *무엇이* 느린지 거르면, BPF가 *왜·어떤* I/O인지 파고들고, 펌웨어 도구가 OS가 못 보는 컨트롤러·디스크 내부를 메운다.</text>
+</svg>

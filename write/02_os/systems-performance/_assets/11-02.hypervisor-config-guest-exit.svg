@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 460" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>하드웨어 가상화 — 하이퍼바이저 구성과 guest exit</title>
+  <desc>Config A(베어메탈 Xen)와 Config B(호스트 OS가 실행하는 KVM)의 구조 대비, 그리고 게스트가 특권 명령에서 하이퍼바이저로 빠져나가는 guest exit가 CPU 오버헤드가 되는 흐름.</desc>
+  <defs>
+    <marker id="h1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <rect width="780" height="460" fill="#0d0d0d"/>
+  <text x="30" y="40" fill="#e8e4df" font-size="20" font-weight="700">하이퍼바이저 구성과 guest exit</text>
+  <text x="30" y="64" fill="rgb(138,133,128)" font-size="13">exit 밖(하이퍼바이저)에서 보낸 시간이 곧 CPU 오버헤드다</text>
+
+  <!-- Config A -->
+  <text x="40" y="100" fill="rgb(212,168,83)" font-size="13" font-weight="700">Config A — 베어메탈 (Xen)</text>
+  <rect x="40" y="110" width="100" height="34" rx="5" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="90" y="132" fill="#e8e4df" font-size="11" text-anchor="middle">dom0(관리)</text>
+  <rect x="148" y="110" width="80" height="34" rx="5" fill="none" stroke="rgb(42,37,32)" stroke-width="1.1"/>
+  <text x="188" y="132" fill="#e8e4df" font-size="11" text-anchor="middle">게스트 VM</text>
+  <rect x="40" y="150" width="188" height="32" rx="5" fill="none" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="134" y="171" fill="#e8e4df" font-size="11" text-anchor="middle">하이퍼바이저 (프로세서 직접)</text>
+  <rect x="40" y="188" width="188" height="28" rx="5" fill="none" stroke="rgb(138,133,128)" stroke-width="1.1"/>
+  <text x="134" y="206" fill="#e8e4df" font-size="11" text-anchor="middle">하드웨어</text>
+
+  <!-- Config B -->
+  <text x="290" y="100" fill="rgb(212,168,83)" font-size="13" font-weight="700">Config B — 호스트 OS가 실행 (KVM)</text>
+  <rect x="290" y="110" width="90" height="34" rx="5" fill="none" stroke="rgb(42,37,32)" stroke-width="1.1"/>
+  <text x="335" y="132" fill="#e8e4df" font-size="11" text-anchor="middle">게스트 VM</text>
+  <rect x="388" y="110" width="100" height="34" rx="5" fill="none" stroke="rgb(42,37,32)" stroke-width="1.1"/>
+  <text x="438" y="127" fill="#e8e4df" font-size="11" text-anchor="middle">QEMU 프록시</text>
+  <text x="438" y="140" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">(Nitro엔 없음)</text>
+  <rect x="290" y="150" width="198" height="32" rx="5" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="389" y="171" fill="#e8e4df" font-size="11" text-anchor="middle">호스트 OS 커널 + KVM 모듈</text>
+  <rect x="290" y="188" width="198" height="28" rx="5" fill="none" stroke="rgb(138,133,128)" stroke-width="1.1"/>
+  <text x="389" y="206" fill="#e8e4df" font-size="11" text-anchor="middle">하드웨어</text>
+
+  <!-- guest exit flow -->
+  <text x="40" y="258" fill="rgb(212,168,83)" font-size="13" font-weight="700">guest exit — CPU 오버헤드의 핵심</text>
+
+  <rect x="40" y="272" width="200" height="60" rx="6" fill="none" stroke="rgb(42,37,32)" stroke-width="1.2"/>
+  <text x="140" y="296" fill="#e8e4df" font-size="12" text-anchor="middle">게스트 실행</text>
+  <text x="140" y="315" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">앱은 프로세서에서 직접 (오버헤드 없음)</text>
+
+  <rect x="290" y="272" width="200" height="60" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="390" y="290" fill="rgb(212,168,83)" font-size="12" font-weight="600" text-anchor="middle">호스트 커널에서 처리</text>
+  <text x="390" y="308" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">halt·일부 I/O</text>
+  <text x="390" y="324" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">작은 오버헤드</text>
+
+  <rect x="540" y="272" width="200" height="60" rx="6" fill="none" stroke="#f44336" stroke-width="1.3"/>
+  <text x="640" y="290" fill="#f44336" font-size="12" font-weight="600" text-anchor="middle">유저 프로세스까지</text>
+  <text x="640" y="308" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">커널에서 못 푸는 exit</text>
+  <text x="640" y="324" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">더 큰 오버헤드</text>
+
+  <line x1="240" y1="296" x2="288" y2="296" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#h1)"/>
+  <text x="264" y="288" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">exit</text>
+  <line x1="490" y1="302" x2="538" y2="302" stroke="#f44336" stroke-width="1.4" marker-end="url(#h1)"/>
+
+  <!-- note -->
+  <rect x="40" y="350" width="700" height="80" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.2"/>
+  <text x="60" y="376" fill="#e8e4df" font-size="13" font-weight="600">exit 유형으로 게스트 상태를 추론한다 (perf kvm stat)</text>
+  <text x="60" y="398" fill="rgb(138,133,128)" font-size="12">HLT 비율 높음 → 게스트 CPU가 idle. I/O 명령·인터럽트 주입 많음 → 가상 NIC·디스크 I/O 중.</text>
+  <text x="60" y="418" fill="rgb(138,133,128)" font-size="12">발전: 바이너리 변환 → AMD-V/VT-x → 패러버추얼 → SR-IOV (소프트웨어 단계를 하드웨어로).</text>
+</svg>

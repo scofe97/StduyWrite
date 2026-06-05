@@ -1,0 +1,47 @@
+<svg viewBox="0 0 860 460" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>CPU 플레임 그래프 읽기 — plateau·tower와 off-CPU 흔적</title>
+  <desc>위: CPU 플레임 그래프의 두 축. 가로(너비)는 프로파일 내 존재 비율로 곧 CPU 시간이며, 넓을수록 그 경로가 CPU를 많이 쓴다. 세로(y축)는 코드 흐름으로 위가 현재 함수이고 아래로 조상이다. 가로 순서는 의미 없는 알파벳 정렬이다. 큰 plateau나 tower를 찾으면 거기에 CPU 시간 대부분이 쓰인다. 아래 그림에서 가운데 넓은 plateau가 crc32_z이고 왼쪽 tower가 write 시스템 콜 경로이며, 모든 CPU 사용이 MYSQL_BIN_LOG commit에서 비롯된다. 아래: CPU 프로파일은 off-CPU 이슈의 흔적도 보여 준다. 곰을 못 봐도 발자국으로 존재를 알듯, 검색어로 활동의 존재를 찾는다 — ext4/xfs/zfs는 파일시스템, blk는 블록 I/O, tcp는 네트워크, utex는 락(mutex/futex), alloc은 메모리 할당이다. 단 존재만 식별하며 크기와 차단 시간은 off-CPU 분석이 직접 잰다.</desc>
+
+  <rect x="0" y="0" width="860" height="460" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">CPU 플레임 그래프 읽기</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">너비=CPU 시간 · 높이=스택(위 현재·아래 조상) · 큰 plateau/tower를 찾기</text>
+
+  <!-- 플레임 그래프 모형 -->
+  <text x="32" y="96" fill="rgb(212,168,83)" font-size="13">예: MySQL 커밋 경로</text>
+
+  <!-- 바닥 (공통 조상) -->
+  <rect x="60" y="250" width="600" height="22" fill="rgba(212,168,83,0.25)" stroke="rgb(42,37,32)"/>
+  <text x="360" y="266" fill="#e8e4df" font-size="10" text-anchor="middle">MYSQL_BIN_LOG::commit()</text>
+
+  <!-- write tower (왼쪽) -->
+  <rect x="60" y="228" width="180" height="22" fill="rgba(212,168,83,0.4)" stroke="rgb(42,37,32)"/>
+  <text x="150" y="244" fill="#0d0d0d" font-size="10" text-anchor="middle">write() syscall</text>
+  <rect x="60" y="206" width="180" height="22" fill="rgba(212,168,83,0.55)" stroke="rgb(42,37,32)"/>
+  <text x="150" y="222" fill="#0d0d0d" font-size="10" text-anchor="middle">ext4 (off-CPU 흔적)</text>
+  <rect x="60" y="184" width="120" height="22" fill="rgba(212,168,83,0.7)" stroke="rgb(42,37,32)"/>
+  <text x="120" y="200" fill="#0d0d0d" font-size="9" text-anchor="middle">blk_*</text>
+
+  <!-- crc32_z plateau (가운데) -->
+  <rect x="240" y="228" width="280" height="22" fill="rgba(212,168,83,0.6)" stroke="rgb(42,37,32)"/>
+  <text x="380" y="244" fill="#0d0d0d" font-size="11" text-anchor="middle">crc32_z()  ← 가장 넓은 plateau</text>
+
+  <!-- 오른쪽 작은 tower -->
+  <rect x="520" y="228" width="140" height="22" fill="rgba(212,168,83,0.4)" stroke="rgb(42,37,32)"/>
+  <text x="590" y="244" fill="#0d0d0d" font-size="9" text-anchor="middle">기타</text>
+
+  <text x="60" y="294" fill="rgb(138,133,128)" font-size="10">← 너비가 CPU 시간 비율 (가로 순서는 의미 없음)</text>
+
+  <!-- off-CPU 흔적 검색어 -->
+  <line x1="32" y1="312" x2="828" y2="312" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="338" fill="rgb(212,168,83)" font-size="13">off-CPU 흔적 검색어 — 발자국으로 존재를 안다</text>
+
+  <rect x="32" y="352" width="150" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/><text x="107" y="368" fill="#e8e4df" font-size="11" text-anchor="middle">ext4·xfs·zfs</text><text x="107" y="381" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">파일시스템</text>
+  <rect x="194" y="352" width="150" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/><text x="269" y="368" fill="#e8e4df" font-size="11" text-anchor="middle">blk</text><text x="269" y="381" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">블록 I/O</text>
+  <rect x="356" y="352" width="150" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/><text x="431" y="368" fill="#e8e4df" font-size="11" text-anchor="middle">tcp</text><text x="431" y="381" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">네트워크 I/O</text>
+  <rect x="518" y="352" width="150" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/><text x="593" y="368" fill="#e8e4df" font-size="11" text-anchor="middle">utex</text><text x="593" y="381" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">락(mutex/futex)</text>
+  <rect x="680" y="352" width="148" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/><text x="754" y="368" fill="#e8e4df" font-size="11" text-anchor="middle">alloc</text><text x="754" y="381" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">메모리 할당</text>
+
+  <rect x="32" y="402" width="796" height="40" fill="#66bb6a" fill-opacity="0.10" stroke="#66bb6a" rx="8"/>
+  <text x="430" y="427" fill="#e8e4df" font-size="12" text-anchor="middle">존재만 식별 — 크기·차단 시간은 off-CPU 분석(파란 배경 플레임 그래프)이 직접 잰다</text>
+</svg>
