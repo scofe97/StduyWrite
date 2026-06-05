@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 430" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>function_graph 추적 — 자식 호출 흐름과 지연 기호</title>
+  <desc>function_graph가 들여쓰기로 자식 호출 계층을, 지속시간으로 지연을 보여 주는 구조와, 높은 지연에 붙는 문자 기호(+ 10us부터 $ 1초까지) 임계 표.</desc>
+  <rect width="780" height="430" fill="#0d0d0d"/>
+  <text x="30" y="40" fill="#e8e4df" font-size="20" font-weight="700">function_graph — 자식 호출 흐름과 지연</text>
+  <text x="30" y="64" fill="rgb(138,133,128)" font-size="13">들여쓰기로 호출 계층, 지속시간·문자 기호로 높은 지연을 드러낸다</text>
+
+  <!-- call graph -->
+  <rect x="40" y="88" width="430" height="220" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+  <text x="60" y="112" fill="rgb(212,168,83)" font-size="13" font-weight="700">콜 그래프 (들여쓰기 = 호출 계층)</text>
+  <text x="60" y="142" fill="#e8e4df" font-size="12" font-family="monospace">do_nanosleep() {</text>
+  <text x="90" y="164" fill="#e8e4df" font-size="12" font-family="monospace">hrtimer_start_range_ns() {</text>
+  <text x="120" y="186" fill="rgb(138,133,128)" font-size="12" font-family="monospace">0.297 us  _raw_spin_lock_irqsave();</text>
+  <text x="90" y="208" fill="#e8e4df" font-size="12" font-family="monospace">}</text>
+  <text x="90" y="230" fill="#e8e4df" font-size="12" font-family="monospace">schedule() {</text>
+  <text x="120" y="252" fill="rgb(138,133,128)" font-size="12" font-family="monospace">rcu_note_context_switch() {...}</text>
+  <text x="90" y="274" fill="#e8e4df" font-size="12" font-family="monospace">}</text>
+  <text x="60" y="296" fill="#f44336" font-size="12" font-family="monospace">$ 1000383 us } /* do_nanosleep */</text>
+
+  <!-- latency markers -->
+  <rect x="490" y="88" width="250" height="220" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="615" y="112" fill="rgb(212,168,83)" font-size="13" font-weight="700" text-anchor="middle">지연 문자 기호</text>
+  <text x="510" y="142" fill="#f44336" font-size="13" font-family="monospace">$</text>
+  <text x="540" y="142" fill="#e8e4df" font-size="12">1초 초과</text>
+  <text x="510" y="166" fill="#f44336" font-size="13" font-family="monospace">@</text>
+  <text x="540" y="166" fill="#e8e4df" font-size="12">100ms 초과</text>
+  <text x="510" y="190" fill="rgb(212,168,83)" font-size="13" font-family="monospace">*</text>
+  <text x="540" y="190" fill="#e8e4df" font-size="12">10ms 초과</text>
+  <text x="510" y="214" fill="rgb(212,168,83)" font-size="13" font-family="monospace">#</text>
+  <text x="540" y="214" fill="#e8e4df" font-size="12">1ms 초과</text>
+  <text x="510" y="238" fill="rgb(138,133,128)" font-size="13" font-family="monospace">!</text>
+  <text x="540" y="238" fill="#e8e4df" font-size="12">100μs 초과</text>
+  <text x="510" y="262" fill="rgb(138,133,128)" font-size="13" font-family="monospace">+</text>
+  <text x="540" y="262" fill="#e8e4df" font-size="12">10μs 초과</text>
+  <text x="510" y="290" fill="rgb(138,133,128)" font-size="10">높은 지연에 자동으로 붙어 주의를 끔</text>
+
+  <!-- note -->
+  <rect x="40" y="324" width="700" height="92" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.2"/>
+  <text x="60" y="350" fill="#e8e4df" font-size="13" font-weight="600">필터 없으면 전체 흐름을 보되 오버헤드가 시간을 부풀린다</text>
+  <text x="60" y="372" fill="rgb(138,133,128)" font-size="12">필터(set_ftrace_filter) 없이는 모든 자식 호출을 보지만, 추적 오버헤드가 지속시간을 부풀린다.</text>
+  <text x="60" y="392" fill="rgb(138,133,128)" font-size="12">정확한 측정엔 함수를 좁힌다 — do_nanosleep만 추적 시 1000383μs → 1000130μs로 줄어든다.</text>
+  <text x="60" y="410" fill="#66bb6a" font-size="12">"어느 자식 함수가 부모를 느리게 했나"의 출발점.</text>
+</svg>

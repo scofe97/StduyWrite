@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>케이스 스터디 드릴다운 — 도구 유형별 단서가 맞물려 결론에 이르다</title>
+  <desc>Netflix 컨테이너가 3-4배 빠른 미스터리를 통계(60초·USE)→설정→PMC→소프트웨어 이벤트→트레이싱으로 파고들며, 각 도구 유형이 단서를 주고 세 요인(이웃 없음·LLC/IPC·CPU 부하)으로 수렴하는 흐름.</desc>
+  <defs>
+    <marker id="d1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <rect width="800" height="470" fill="#0d0d0d"/>
+  <text x="30" y="40" fill="#e8e4df" font-size="20" font-weight="700">케이스 스터디 드릴다운</text>
+  <text x="30" y="64" fill="rgb(138,133,128)" font-size="13">"컨테이너가 3-4배 빠르다" — 각 도구 유형의 단서가 맞물려 결론에 이른다</text>
+
+  <!-- problem -->
+  <rect x="40" y="86" width="720" height="40" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="400" y="111" fill="#e8e4df" font-size="13" font-weight="600" text-anchor="middle">문제 — Java 마이크로서비스가 VM 3-4초 → 컨테이너 1초 (너무 좋아서 의심)</text>
+
+  <!-- drilldown steps -->
+  <rect x="40" y="142" width="350" height="50" rx="6" fill="none" stroke="rgb(42,37,32)" stroke-width="1.2"/>
+  <text x="60" y="163" fill="rgb(212,168,83)" font-size="12" font-weight="700">① 통계 (60초·USE)</text>
+  <text x="60" y="182" fill="rgb(138,133,128)" font-size="11">VM CPU 포화(48 CPU에 load 85, idle 2%) → 약 4배 슬로다운 크기</text>
+
+  <rect x="40" y="200" width="350" height="50" rx="6" fill="none" stroke="rgb(42,37,32)" stroke-width="1.2"/>
+  <text x="60" y="221" fill="rgb(212,168,83)" font-size="12" font-weight="700">② 설정 (static)</text>
+  <text x="60" y="240" fill="rgb(138,133,128)" font-size="11">프로세서 다름 — 컨테이너 LLC 45MB vs VM 33MB</text>
+
+  <rect x="40" y="258" width="350" height="50" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="60" y="279" fill="rgb(212,168,83)" font-size="12" font-weight="700">③ PMC (pmcarch)</text>
+  <text x="60" y="298" fill="#e8e4df" font-size="11">IPC 0.57 vs 1.52 (2.6배) · LLC 적중률 30% vs 90%</text>
+
+  <rect x="40" y="316" width="350" height="50" rx="6" fill="none" stroke="rgb(42,37,32)" stroke-width="1.2"/>
+  <text x="60" y="337" fill="rgb(212,168,83)" font-size="12" font-weight="700">④ 소프트웨어 이벤트 (perf)</text>
+  <text x="60" y="356" fill="rgb(138,133,128)" font-size="11">컨텍스트 전환 200만/초 vs 1천/초</text>
+
+  <rect x="40" y="374" width="350" height="50" rx="6" fill="none" stroke="rgb(42,37,32)" stroke-width="1.2"/>
+  <text x="60" y="395" fill="rgb(212,168,83)" font-size="12" font-weight="700">⑤ 트레이싱 (BPF cpudist)</text>
+  <text x="60" y="414" fill="rgb(138,133,128)" font-size="11">on-CPU 시간 &lt;10μs vs 2-4ms (비자발적 전환 → 캐시 워밍업 방해)</text>
+
+  <!-- arrows down -->
+  <line x1="215" y1="192" x2="215" y2="199" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#d1)"/>
+  <line x1="215" y1="250" x2="215" y2="257" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#d1)"/>
+  <line x1="215" y1="308" x2="215" y2="315" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#d1)"/>
+  <line x1="215" y1="366" x2="215" y2="373" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#d1)"/>
+
+  <!-- conclusion -->
+  <rect x="420" y="142" width="340" height="282" rx="8" fill="none" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="590" y="166" fill="rgb(212,168,83)" font-size="14" font-weight="700" text-anchor="middle">결론 — 세 요인이 맞물림</text>
+
+  <rect x="438" y="184" width="304" height="62" rx="6" fill="#f44336" fill-opacity="0.12" stroke="#f44336" stroke-width="1.2"/>
+  <text x="452" y="206" fill="#f44336" font-size="12" font-weight="600">① 이웃 컨테이너 없음 (비영구!)</text>
+  <text x="452" y="225" fill="rgb(138,133,128)" font-size="11">캐시 독점·경합 없음 — 운영에서</text>
+  <text x="452" y="240" fill="rgb(138,133,128)" font-size="11">이웃 들어오면 3-4배 이득 사라짐</text>
+
+  <rect x="438" y="256" width="304" height="62" rx="6" fill="none" stroke="rgb(42,37,32)" stroke-width="1.2"/>
+  <text x="452" y="278" fill="#e8e4df" font-size="12" font-weight="600">② LLC 크기·워크로드 차이</text>
+  <text x="452" y="297" fill="rgb(138,133,128)" font-size="11">IPC 2.6배 — 하이퍼스레드 경합 +</text>
+  <text x="452" y="312" fill="rgb(138,133,128)" font-size="11">LLC 적중률 30% vs 90%</text>
+
+  <rect x="438" y="328" width="304" height="62" rx="6" fill="none" stroke="rgb(42,37,32)" stroke-width="1.2"/>
+  <text x="452" y="350" fill="#e8e4df" font-size="12" font-weight="600">③ CPU 부하 차이</text>
+  <text x="452" y="369" fill="rgb(138,133,128)" font-size="11">VM 포화 → 200만/초 전환 +</text>
+  <text x="452" y="384" fill="rgb(138,133,128)" font-size="11">런큐 지연 → 약 4배 슬로다운</text>
+
+  <text x="590" y="412" fill="#66bb6a" font-size="11" text-anchor="middle">"빠른가" 뿐 아니라 "지속되는가"까지 답한다</text>
+
+  <!-- arrow to conclusion -->
+  <line x1="390" y1="283" x2="436" y2="283" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#d1)"/>
+
+  <text x="40" y="448" fill="rgb(138,133,128)" font-size="11">단일 원인이 아니라 여러 기여 요인이 보통 — 각 도구 유형(카운터·정적·PMC·소프트웨어 이벤트·트레이싱)이 단서를 주고 맞물린다.</text>
+</svg>
