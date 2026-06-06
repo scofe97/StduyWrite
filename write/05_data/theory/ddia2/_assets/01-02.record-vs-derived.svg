@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 560" font-family="Pretendard, sans-serif">
+  <rect width="680" height="560" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">기록 시스템 vs 파생 데이터</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">데이터의 권위와 흐름 — 어느 쪽이 진실의 원천인가</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- 기록 시스템 (좌) -->
+  <rect x="32" y="104" width="252" height="150" rx="6" fill="#1a1410" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="48" y="130" fill="rgb(212,168,83)" font-size="15" font-weight="700">기록 시스템</text>
+  <text x="48" y="150" fill="rgb(138,133,128)" font-size="11.5">system of record · source of truth</text>
+  <text x="48" y="176" fill="#e8e4df" font-size="12.5">· 권위 있는 정본(canonical)</text>
+  <text x="48" y="200" fill="#e8e4df" font-size="12.5">· 새 데이터가 가장 먼저 쓰임</text>
+  <text x="48" y="224" fill="#e8e4df" font-size="12.5">· 각 사실은 정확히 한 번(정규화)</text>
+  <text x="48" y="244" fill="#66bb6a" font-size="11.5">불일치 시 이쪽이 정의상 옳음</text>
+
+  <!-- 파생 데이터 (우) -->
+  <rect x="396" y="104" width="252" height="150" rx="6" fill="#101620" stroke="#7fa8c9" stroke-width="1.5"/>
+  <text x="412" y="130" fill="#7fa8c9" font-size="15" font-weight="700">파생 데이터 시스템</text>
+  <text x="412" y="150" fill="rgb(138,133,128)" font-size="11.5">derived data system</text>
+  <text x="412" y="176" fill="#e8e4df" font-size="12.5">· 다른 데이터를 가공한 결과</text>
+  <text x="412" y="200" fill="#e8e4df" font-size="12.5">· 잃어도 원본에서 재생성 가능</text>
+  <text x="412" y="224" fill="#e8e4df" font-size="12.5">· 캐시·인덱스·MV·역정규화·모델</text>
+  <text x="412" y="244" fill="#f47f72" font-size="11.5">기술적으로는 중복(redundant)</text>
+
+  <!-- 화살표: 파생 -> 기록 (재생성) -->
+  <text x="340" y="170" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">원본</text>
+  <line x1="288" y1="180" x2="392" y2="180" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar)"/>
+  <text x="340" y="214" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">재생성</text>
+  <line x1="392" y1="224" x2="288" y2="224" stroke="#7fa8c9" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arb)"/>
+
+  <!-- 핵심: 도구는 중립 -->
+  <text x="32" y="294" fill="rgb(212,168,83)" font-size="14" font-weight="700">핵심 — 도구가 아니라 쓰임이 결정한다</text>
+  <rect x="32" y="308" width="616" height="86" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="334" fill="#e8e4df" font-size="12.5">같은 PostgreSQL이라도 처음 쓰는 주문 DB로 쓰면 기록 시스템,</text>
+  <text x="48" y="356" fill="#e8e4df" font-size="12.5">그 주문을 복제해 읽기 가속용 검색 인덱스로 쓰면 파생 데이터.</text>
+  <text x="48" y="380" fill="rgb(138,133,128)" font-size="11.5">→ DB는 그냥 도구. 무엇에서 무엇이 파생되는지를 명확히 하면 아키텍처가 정돈됨</text>
+
+  <!-- 갱신 흐름 -->
+  <text x="32" y="430" fill="rgb(212,168,83)" font-size="14" font-weight="700">파생 데이터 갱신</text>
+  <rect x="32" y="444" width="160" height="48" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="112" y="473" fill="#e8e4df" font-size="12" text-anchor="middle">기록 시스템 변경</text>
+  <line x1="196" y1="468" x2="240" y2="468" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar)"/>
+  <rect x="244" y="444" width="170" height="48" rx="6" fill="#141414" stroke="#9cc3df"/>
+  <text x="329" y="473" fill="#e8e4df" font-size="12" text-anchor="middle">데이터 파이프라인</text>
+  <line x1="418" y1="468" x2="462" y2="468" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar)"/>
+  <rect x="466" y="444" width="182" height="48" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="557" y="473" fill="#e8e4df" font-size="12" text-anchor="middle">파생 데이터 갱신</text>
+
+  <text x="32" y="524" fill="rgb(138,133,128)" font-size="12">분석 시스템은 대개 파생. 운영 서비스는 기록 시스템(주 DB) + 파생(인덱스·캐시)의 혼합</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+    <marker id="arb" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="#7fa8c9" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>

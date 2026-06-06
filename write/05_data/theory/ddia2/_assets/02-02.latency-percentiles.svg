@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 640" font-family="Pretendard, sans-serif">
+  <rect width="680" height="640" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">성능 — 응답 시간과 백분위</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">평균이 아니라 분포로 본다 · 꼬리 지연이 사용자 경험을 좌우</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- 처리량 vs 응답시간 곡선 -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">처리량이 한계에 가까워지면 — 큐잉으로 응답 급증</text>
+  <rect x="32" y="124" width="290" height="150" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <line x1="56" y1="252" x2="300" y2="252" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <line x1="56" y1="252" x2="56" y2="140" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <text x="178" y="268" fill="rgb(138,133,128)" font-size="10.5" text-anchor="middle">처리량 →</text>
+  <text x="46" y="148" fill="rgb(138,133,128)" font-size="10.5" text-anchor="end" transform="rotate(-90 46 196)">응답 시간 →</text>
+  <path d="M60,244 C150,240 230,228 270,180 C282,164 286,150 288,142" fill="none" stroke="#f47f72" stroke-width="2.5"/>
+  <line x1="288" y1="140" x2="288" y2="252" stroke="rgb(212,168,83)" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="288" y="138" fill="rgb(212,168,83)" font-size="10" text-anchor="middle">용량 한계</text>
+  <text x="120" y="232" fill="rgb(138,133,128)" font-size="10">저부하: 낮고 평평</text>
+
+  <!-- 메타스테이블 -->
+  <text x="348" y="112" fill="#f47f72" font-size="14" font-weight="700">메타스테이블 실패 (악순환)</text>
+  <rect x="348" y="124" width="300" height="150" rx="6" fill="#141414" stroke="#f47f72"/>
+  <text x="364" y="148" fill="#e8e4df" font-size="11.5">과부하 → 응답 느림 → 클라 타임아웃</text>
+  <text x="364" y="170" fill="#e8e4df" font-size="11.5">→ 재전송 → 요청 더 증가 (retry storm)</text>
+  <text x="364" y="192" fill="#e8e4df" font-size="11.5">→ 부하 줄어도 리부트 전엔 안 풀림</text>
+  <text x="364" y="220" fill="#66bb6a" font-size="11.5" font-weight="700">대응:</text>
+  <text x="364" y="240" fill="#e8e4df" font-size="11">· 지수 백오프+지터 · 서킷 브레이커</text>
+  <text x="364" y="260" fill="#e8e4df" font-size="11">· 로드 셰딩 · 백프레셔</text>
+
+  <!-- 응답시간 분해 -->
+  <text x="32" y="304" fill="rgb(212,168,83)" font-size="14" font-weight="700">응답 시간 분해 (클라이언트가 보는 전체)</text>
+  <rect x="32" y="318" width="616" height="44" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <rect x="40" y="326" width="180" height="28" rx="4" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="130" y="345" fill="#e8e4df" font-size="11" text-anchor="middle">네트워크 지연</text>
+  <rect x="228" y="326" width="180" height="28" rx="4" fill="#141414" stroke="#f47f72"/>
+  <text x="318" y="345" fill="#e8e4df" font-size="11" text-anchor="middle">큐잉 지연(CPU 대기)</text>
+  <rect x="416" y="326" width="224" height="28" rx="4" fill="#101620" stroke="#9cc3df"/>
+  <text x="528" y="345" fill="#e8e4df" font-size="11" text-anchor="middle">서비스 시간(실제 처리)</text>
+
+  <!-- 백분위 막대 -->
+  <text x="32" y="392" fill="rgb(212,168,83)" font-size="14" font-weight="700">평균·중앙값·백분위 — 분포로 측정</text>
+  <rect x="32" y="404" width="616" height="150" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <line x1="56" y1="528" x2="630" y2="528" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <!-- 막대들 (대부분 빠르고 가끔 outlier) -->
+  <rect x="70" y="500" width="10" height="28" fill="#7fa8c9"/>
+  <rect x="86" y="492" width="10" height="36" fill="#7fa8c9"/>
+  <rect x="102" y="505" width="10" height="23" fill="#7fa8c9"/>
+  <rect x="118" y="498" width="10" height="30" fill="#7fa8c9"/>
+  <rect x="134" y="508" width="10" height="20" fill="#7fa8c9"/>
+  <rect x="150" y="494" width="10" height="34" fill="#7fa8c9"/>
+  <rect x="166" y="502" width="10" height="26" fill="#7fa8c9"/>
+  <rect x="182" y="486" width="10" height="42" fill="#7fa8c9"/>
+  <rect x="198" y="505" width="10" height="23" fill="#7fa8c9"/>
+  <rect x="214" y="470" width="10" height="58" fill="#9cc3df"/>
+  <rect x="230" y="500" width="10" height="28" fill="#7fa8c9"/>
+  <rect x="246" y="448" width="10" height="80" fill="#e8b34a"/>
+  <rect x="262" y="503" width="10" height="25" fill="#7fa8c9"/>
+  <rect x="278" y="430" width="10" height="98" fill="#f47f72"/>
+  <!-- 백분위 선 -->
+  <line x1="300" y1="448" x2="630" y2="448" stroke="#66bb6a" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="636" y="452" fill="#66bb6a" font-size="11">p50 중앙값</text>
+  <line x1="300" y1="476" x2="630" y2="476" stroke="#e8b34a" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="636" y="480" fill="#e8b34a" font-size="11">p95</text>
+  <line x1="300" y1="500" x2="630" y2="500" stroke="#f47f72" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="636" y="504" fill="#f47f72" font-size="11">p99 · p999 꼬리</text>
+  <text x="320" y="430" fill="#e8e4df" font-size="11">평균은 "전형적" 응답을 안 알려줌 → 백분위 사용</text>
+  <text x="320" y="524" fill="rgb(138,133,128)" font-size="10.5">백분위 평균내기는 수학적으로 무의미 → 히스토그램을 더함</text>
+
+  <line x1="32" y1="574" x2="648" y2="574" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="598" fill="rgb(138,133,128)" font-size="12">꼬리 지연 증폭 — 한 요청에 백엔드 N개 호출 시, 하나만 느려도 전체가 느려짐</text>
+  <text x="32" y="622" fill="rgb(138,133,128)" font-size="12">SLO = 목표(p50&lt;200ms, p99&lt;1s, 99.9% 비에러) · SLA = 못 지키면 환불 등 계약</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>
