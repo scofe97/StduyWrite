@@ -8,10 +8,10 @@ related:
   - ./ch01_java-tech/01-03.컴파일과 최적화.md
   - ./ch03_gc/01-01.GC 운영 — 로그와 튜닝.md
   - ./ch03_gc/01-02.Java 성능 — JMH와 측정 방법론.md
-  - ./ch04_troubleshooting/02-01.기본 문제 해결 도구 — 명령줄 도구.md
-  - ./ch04_troubleshooting/02-02.시각화 문제 해결 도구.md
-  - ./ch05_optimization/02-01.최적화 사례 분석.md
-  - ./ch05_optimization/02-02.실전 — Eclipse IDE 튜닝.md
+  - ./ch04_diagnosis-optimization/01-01.기본 문제 해결 도구 — 명령줄 도구.md
+  - ./ch04_diagnosis-optimization/01-02.시각화 문제 해결 도구.md
+  - ./ch04_diagnosis-optimization/02-01.최적화 사례 분석.md
+  - ./ch04_diagnosis-optimization/02-02.실전 — Eclipse IDE 튜닝.md
   - ./ch06_class-file/02-01.클래스 파일 구조.md
   - ./ch06_class-file/02-02.바이트코드 명령어.md
   - ./_temp/01-04.효율적 동시성.md
@@ -122,8 +122,8 @@ updated: 2026-06-03
 |----|------------|------|------|------|
 | 2장 | 자바 메모리 영역과 메모리 오버플로 | [`ch02_memory-area/`](./ch02_memory-area/) | ✅ §2.1~§2.5 | [`_practice/ch02-memory-area/`](./_practice/ch02-memory-area/) |
 | 3장 | 가비지 컬렉터와 메모리 할당 전략 | [`ch03_gc/`](./ch03_gc/) | ✅ §3.1~§3.9 + 운영 흡수본 (01-01) | [`_practice/ch03-gc/`](./_practice/ch03-gc/) |
-| 4장 | 가상 머신 성능 모니터링과 문제 해결 도구 | [`ch04_troubleshooting/`](./ch04_troubleshooting/) | ✅ §4.1~§4.4.1 정독(p.197~245, 02-01 명령줄 + 02-02 시각화), §4.5 마치며 ⏳ 스크린샷 미확보. GC 로그·jstat·튜닝은 [`ch03_gc/01-01`](./ch03_gc/01-01.GC%20운영%20—%20로그와%20튜닝.md) 운영 갈래에 별도 흡수 유지 | [`_practice/ch04-troubleshooting/`](./_practice/ch04-troubleshooting/) |
-| 5장 | 최적화 사례 분석 및 실전 | [`ch05_optimization/`](./ch05_optimization/) | ✅ §5.1~§5.4 정독(p.253~283, 02-01 사례분석 + 02-02 실전). JMH·성능 측정 방법론은 [`ch03_gc/01-02`](./ch03_gc/01-02.Java%20성능%20—%20JMH와%20측정%20방법론.md) 흡수본에 별도 유지 | [`_practice/ch05-optimization/`](./_practice/ch05-optimization/) |
+| 4장 | 가상 머신 성능 모니터링과 문제 해결 도구 | [`ch04_diagnosis-optimization/`](./ch04_diagnosis-optimization/) | ✅ §4.1~§4.4.1 정독(p.197~245, 01-01 명령줄 + 01-02 시각화), §4.5 마치며 ⏳ 스크린샷 미확보. GC 로그·jstat·튜닝은 [`ch03_gc/01-01`](./ch03_gc/01-01.GC%20운영%20—%20로그와%20튜닝.md) 운영 갈래에 별도 흡수 유지 | [`_practice/ch04-troubleshooting/`](./_practice/ch04-troubleshooting/) |
+| 5장 | 최적화 사례 분석 및 실전 | [`ch04_diagnosis-optimization/`](./ch04_diagnosis-optimization/) (4장과 통합) | ✅ §5.1~§5.4 정독(p.253~283, 02-01 사례분석 + 02-02 실전). JMH·성능 측정 방법론은 [`ch03_gc/01-02`](./ch03_gc/01-02.Java%20성능%20—%20JMH와%20측정%20방법론.md) 흡수본에 별도 유지 | [`_practice/ch05-optimization/`](./_practice/ch05-optimization/) |
 
 ### 3부 가상 머신 실행 서브시스템
 
