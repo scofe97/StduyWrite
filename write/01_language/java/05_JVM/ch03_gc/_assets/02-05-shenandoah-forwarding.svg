@@ -1,0 +1,53 @@
+<svg viewBox="0 0 900 680" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>Shenandoah forwarding pointer와 Read Barrier 흐름</title>
+  <desc>Shenandoah는 객체마다 forwarding pointer를 두고, 객체를 읽을 때 Read Barrier가 이 포인터를 확인해 원본 또는 새 위치 중 완성된 객체만 읽게 한다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}.sub{font-size:11px;fill:rgb(138,133,128)}.head{font-size:13px;font-weight:800;fill:rgb(212,168,83)}.label{font-size:11px;font-weight:750;fill:#e8e4df}.body{font-size:10px;fill:rgb(180,175,170)}.note{font-size:9.5px;fill:rgb(138,133,128)}.code{font-size:10px;font-weight:700;fill:rgb(212,168,83);font-family:'JetBrains Mono',monospace}.bad{font-size:10px;font-weight:750;fill:#e57373}.ok{font-size:10px;font-weight:750;fill:#81c784}
+    </style>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgb(212,168,83)"/></marker>
+    <marker id="arrRed" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#e57373"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="680" fill="#0d0d0d"/>
+  <text x="26" y="36" class="title">Shenandoah — 객체가 자기 최신 위치를 알려준다</text>
+  <text x="26" y="56" class="sub">forwarding pointer는 평소 self를 가리키고, 이동 후에는 새 객체 위치를 가리킨다.</text>
+
+  <rect x="24" y="84" width="852" height="150" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="48" y="112" class="head">① 이동 전 — fwd가 자기 자신을 가리킴</text>
+  <rect x="80" y="142" width="210" height="56" rx="6" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="185" y="164" class="label" text-anchor="middle">Old Object A</text>
+  <text x="185" y="183" class="code" text-anchor="middle">fwd → A(self)</text>
+  <line x1="340" y1="170" x2="460" y2="170" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="462" y="142" width="250" height="56" rx="6" fill="#111" stroke="#333"/>
+  <text x="587" y="164" class="label" text-anchor="middle">Read Barrier</text>
+  <text x="587" y="183" class="body" text-anchor="middle">fwd가 self라면 원본 A를 읽음</text>
+
+  <rect x="24" y="262" width="852" height="176" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="48" y="290" class="head">② 동시 이동 — 새 위치 B에 먼저 완성본을 복사</text>
+  <rect x="70" y="322" width="190" height="58" rx="6" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="165" y="345" class="label" text-anchor="middle">Old A</text>
+  <text x="165" y="364" class="code" text-anchor="middle">fwd → A</text>
+  <line x1="260" y1="351" x2="370" y2="351" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="372" y="322" width="190" height="58" rx="6" fill="#1e2a1e" stroke="#4ab080"/>
+  <text x="467" y="345" class="ok" text-anchor="middle">New B</text>
+  <text x="467" y="364" class="body" text-anchor="middle">필드 복사 완료 후 공개</text>
+  <rect x="620" y="322" width="190" height="58" rx="6" fill="#111" stroke="#333"/>
+  <text x="715" y="345" class="label" text-anchor="middle">읽는 도중이면?</text>
+  <text x="715" y="364" class="body" text-anchor="middle">A 또는 완성된 B만 보게 함</text>
+  <text x="70" y="410" class="note">복사 중 반쯤 만들어진 B를 보지 않도록, 복사 완료 후 fwd를 바꾸는 순서와 동기화가 중요하다.</text>
+
+  <rect x="24" y="466" width="852" height="162" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="48" y="494" class="head">③ 이동 후 — fwd가 새 위치를 가리키고, 참조는 나중에 정리</text>
+  <rect x="70" y="528" width="190" height="58" rx="6" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="165" y="551" class="label" text-anchor="middle">Old A 자리</text>
+  <text x="165" y="570" class="code" text-anchor="middle">fwd → B</text>
+  <line x1="260" y1="557" x2="370" y2="557" stroke="#e57373" stroke-width="2" marker-end="url(#arrRed)"/>
+  <rect x="372" y="528" width="190" height="58" rx="6" fill="#1e2a1e" stroke="#4ab080"/>
+  <text x="467" y="551" class="ok" text-anchor="middle">New Object B</text>
+  <text x="467" y="570" class="body" text-anchor="middle">최신 데이터 위치</text>
+  <line x1="562" y1="557" x2="670" y2="557" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="672" y="528" width="160" height="58" rx="6" fill="#2a2a1a" stroke="rgb(212,168,83)"/>
+  <text x="752" y="551" class="label" text-anchor="middle">참조 갱신</text>
+  <text x="752" y="570" class="body" text-anchor="middle">A를 가리키던 곳을 B로</text>
+  <text x="70" y="610" class="note">대가: 객체마다 fwd 저장 공간이 필요하고, 객체 읽기 경로마다 Read Barrier 확인 비용이 붙는다.</text>
+</svg>

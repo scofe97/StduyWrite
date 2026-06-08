@@ -1,0 +1,29 @@
+<svg viewBox="0 0 900 660" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>CMS — 긴 마크·스윕을 애플리케이션과 동시에 돌려 STW를 줄이는 시도</title>
+  <desc>CMS는 초기 마크와 재마크만 짧게 STW로 수행하고, 긴 동시 마크와 동시 스윕을 애플리케이션과 함께 실행한다. 객체를 옮기지 않는 마크-스윕이라 동시 수행은 쉬웠지만 CPU 자원 소비, 부유 가비지, 단편화 문제가 생긴다.</desc>
+  <defs><style>.title{font-size:17px;font-weight:800;fill:#e8e4df}.sub{font-size:11px;fill:rgb(138,133,128)}.head{font-size:13px;font-weight:800;fill:rgb(212,168,83)}.label{font-size:11px;font-weight:750;fill:#e8e4df}.body{font-size:10px;fill:rgb(180,175,170)}.note{font-size:9.5px;fill:rgb(138,133,128)}.code{font-size:10px;font-weight:700;fill:rgb(212,168,83);font-family:'JetBrains Mono',monospace}.ok{font-size:10px;font-weight:750;fill:#81c784}.bad{font-size:10px;font-weight:750;fill:#e57373}</style><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgb(212,168,83)"/></marker></defs>
+  <rect x="0" y="0" width="900" height="660" fill="#0d0d0d"/>
+  <text x="26" y="36" class="title">CMS — Concurrent Mark Sweep</text>
+  <text x="26" y="55" class="sub">긴 마크·스윕 구간을 애플리케이션과 동시에 돌려 STW를 줄였지만, 객체를 옮기지 않아 단편화가 남는다</text>
+  <rect x="24" y="84" width="852" height="188" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="46" y="112" class="head">① 네 단계</text>
+  <rect x="54" y="144" width="170" height="70" rx="6" fill="#2a1414" stroke="#e57373"/><text x="139" y="169" class="bad" text-anchor="middle">초기 마크</text><text x="139" y="188" class="body" text-anchor="middle">STW · Root 직접 연결만</text>
+  <line x1="224" y1="179" x2="284" y2="179" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="286" y="144" width="170" height="70" rx="6" fill="#1e2a1e" stroke="#4ab080"/><text x="371" y="169" class="ok" text-anchor="middle">동시 마크</text><text x="371" y="188" class="body" text-anchor="middle">앱과 함께 그래프 탐색</text>
+  <line x1="456" y1="179" x2="516" y2="179" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="518" y="144" width="170" height="70" rx="6" fill="#2a1414" stroke="#e57373"/><text x="603" y="169" class="bad" text-anchor="middle">재마크</text><text x="603" y="188" class="body" text-anchor="middle">STW · 변한 참조 보정</text>
+  <line x1="688" y1="179" x2="748" y2="179" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="750" y="144" width="96" height="70" rx="6" fill="#1e2a1e" stroke="#4ab080"/><text x="798" y="169" class="ok" text-anchor="middle">동시 스윕</text><text x="798" y="188" class="body" text-anchor="middle">죽은 객체 회수</text>
+  <rect x="24" y="304" width="852" height="140" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="46" y="332" class="head">② 왜 마크-스윕인가</text>
+  <rect x="54" y="362" width="250" height="54" rx="6" fill="#111" stroke="#333"/><text x="179" y="384" class="label" text-anchor="middle">객체 이동 없음</text><text x="179" y="402" class="body" text-anchor="middle">참조 갱신 문제가 작아 동시 수행이 쉬움</text>
+  <line x1="304" y1="389" x2="374" y2="389" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="376" y="362" width="210" height="54" rx="6" fill="#1e2a1e" stroke="#4ab080"/><text x="481" y="384" class="ok" text-anchor="middle">STW 단축</text><text x="481" y="402" class="body" text-anchor="middle">긴 단계는 concurrent</text>
+  <line x1="586" y1="389" x2="656" y2="389" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="658" y="362" width="190" height="54" rx="6" fill="#2a1414" stroke="#e57373"/><text x="753" y="384" class="bad" text-anchor="middle">단편화 누적</text><text x="753" y="402" class="body" text-anchor="middle">압축하지 않음</text>
+  <rect x="24" y="472" width="852" height="126" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="46" y="500" class="head">③ 세 한계</text>
+  <text x="64" y="528" class="bad">1. CPU 자원 소비</text><text x="198" y="528" class="body">GC 스레드가 앱 스레드와 CPU를 나눠 쓴다.</text>
+  <text x="64" y="548" class="bad">2. 부유 가비지</text><text x="198" y="548" class="body">동시 회수 중 새로 죽은 객체는 다음 GC까지 남을 수 있다.</text>
+  <text x="64" y="568" class="bad">3. 단편화</text><text x="198" y="568" class="body">연속 공간 부족 시 Concurrent Mode Failure → 무거운 Full GC로 떨어진다.</text>
+</svg>
