@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 600" font-family="Pretendard, sans-serif">
+  <rect width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">분석용 스키마 — 별·눈송이·OBT</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">중앙 fact 테이블(이벤트) + 둘러싼 dimension(누가·무엇·어디·언제)</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- 별 스키마 다이어그램 -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">별(star) 스키마 — fact 중앙, dimension이 별빛</text>
+
+  <!-- dimension 노드들 -->
+  <rect x="60" y="150" width="96" height="40" rx="5" fill="#101620" stroke="#7fa8c9"/>
+  <text x="108" y="174" fill="#e8e4df" font-size="11" text-anchor="middle">dim_date</text>
+  <rect x="60" y="290" width="96" height="40" rx="5" fill="#101620" stroke="#7fa8c9"/>
+  <text x="108" y="314" fill="#e8e4df" font-size="11" text-anchor="middle">dim_product</text>
+  <rect x="280" y="130" width="96" height="40" rx="5" fill="#101620" stroke="#7fa8c9"/>
+  <text x="328" y="154" fill="#e8e4df" font-size="11" text-anchor="middle">dim_store</text>
+  <rect x="280" y="320" width="96" height="40" rx="5" fill="#101620" stroke="#7fa8c9"/>
+  <text x="328" y="344" fill="#e8e4df" font-size="11" text-anchor="middle">dim_customer</text>
+  <rect x="450" y="220" width="96" height="40" rx="5" fill="#101620" stroke="#7fa8c9"/>
+  <text x="498" y="244" fill="#e8e4df" font-size="11" text-anchor="middle">dim_promotion</text>
+
+  <!-- fact 중앙 -->
+  <rect x="210" y="215" width="130" height="56" rx="6" fill="#1a1410" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="275" y="240" fill="rgb(212,168,83)" font-size="13" text-anchor="middle" font-weight="700">fact_sales</text>
+  <text x="275" y="258" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">행 = 한 건의 구매</text>
+
+  <!-- 별빛(FK 선) -->
+  <line x1="156" y1="170" x2="210" y2="228" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+  <line x1="156" y1="310" x2="210" y2="258" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+  <line x1="328" y1="170" x2="290" y2="215" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+  <line x1="328" y1="320" x2="290" y2="271" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+  <line x1="450" y1="240" x2="340" y2="243" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+
+  <text x="380" y="200" fill="rgb(138,133,128)" font-size="10">FK로 N:1 참조</text>
+
+  <!-- 눈송이 -->
+  <text x="450" y="300" fill="#9cc3df" font-size="12" font-weight="700">눈송이(snowflake)</text>
+  <rect x="450" y="312" width="198" height="60" rx="5" fill="#141414" stroke="#9cc3df"/>
+  <text x="466" y="332" fill="#e8e4df" font-size="10.5">dimension을 subdimension으로 분해</text>
+  <text x="466" y="350" fill="#e8e4df" font-size="10.5">dim_product → brand·category 별도 테이블</text>
+  <text x="466" y="366" fill="rgb(138,133,128)" font-size="9.5">더 정규화 · 분석가는 별 스키마 선호(단순)</text>
+
+  <!-- fact/dimension 설명 -->
+  <text x="32" y="404" fill="rgb(212,168,83)" font-size="14" font-weight="700">구성</text>
+  <rect x="32" y="416" width="300" height="96" rx="6" fill="#141414" stroke="rgb(212,168,83)"/>
+  <text x="48" y="438" fill="rgb(212,168,83)" font-size="12" font-weight="700">fact 테이블</text>
+  <text x="48" y="458" fill="#e8e4df" font-size="10.5">개별 이벤트(구매·클릭) 한 행</text>
+  <text x="48" y="476" fill="#e8e4df" font-size="10.5">속성(가격·원가) + dimension FK</text>
+  <text x="48" y="496" fill="#f47f72" font-size="10.5">행이 매우 많음 — PB급, 수백 컬럼</text>
+
+  <rect x="348" y="416" width="300" height="96" rx="6" fill="#141414" stroke="#7fa8c9"/>
+  <text x="364" y="438" fill="#7fa8c9" font-size="12" font-weight="700">dimension 테이블</text>
+  <text x="364" y="458" fill="#e8e4df" font-size="10.5">이벤트의 누가·무엇·어디·언제·왜</text>
+  <text x="364" y="476" fill="#e8e4df" font-size="10.5">날짜도 dimension(공휴일 인코딩)</text>
+  <text x="364" y="496" fill="rgb(138,133,128)" font-size="10.5">넓음 — 분석 관련 메타데이터 전부</text>
+
+  <line x1="32" y1="532" x2="648" y2="532" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="554" fill="rgb(138,133,128)" font-size="12">OBT(one big table) — dimension 없이 fact에 모두 펼침(조인 미리 계산). 저장↑ 쿼리 때로↑</text>
+  <text x="32" y="576" fill="rgb(138,133,128)" font-size="12">분석은 변치 않는 이력 로그 → 비정규화의 일관성·쓰기 부담 문제가 덜함</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>

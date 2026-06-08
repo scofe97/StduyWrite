@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 600" font-family="Pretendard, sans-serif">
+  <rect width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">정규화 · 비정규화 · 조인</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">ID로 한 곳에 두면 정규화, 값을 복제하면 비정규화 — 읽기/쓰기 trade-off</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- 정규화 vs 비정규화 -->
+  <rect x="32" y="104" width="300" height="150" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="48" y="126" fill="#7fa8c9" font-size="14" font-weight="700">정규화 (ID 참조)</text>
+  <text x="48" y="148" fill="#e8e4df" font-size="11">사람에게 의미 있는 정보는 한 곳에만</text>
+  <text x="48" y="168" fill="#e8e4df" font-size="11">나머지는 ID로 참조(DB 내부만 의미)</text>
+  <text x="48" y="190" fill="#66bb6a" font-size="11">ID는 안 변함 → 변경 시 한 곳만 수정</text>
+  <text x="48" y="210" fill="#66bb6a" font-size="11">쓰기 빠름(사본 1개) · 일관성 안전</text>
+  <text x="48" y="232" fill="#f47f72" font-size="11">읽기 느림 → 조인으로 ID 해소</text>
+
+  <rect x="348" y="104" width="300" height="150" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="364" y="126" fill="rgb(212,168,83)" font-size="14" font-weight="700">비정규화 (값 복제)</text>
+  <text x="364" y="148" fill="#e8e4df" font-size="11">의미 있는 정보를 레코드마다 중복</text>
+  <text x="364" y="168" fill="#e8e4df" font-size="11">파생 데이터 — 갱신 프로세스 필요</text>
+  <text x="364" y="190" fill="#66bb6a" font-size="11">읽기 빠름(조인 적음)</text>
+  <text x="364" y="210" fill="#f47f72" font-size="11">쓰기 비쌈(사본 다수 갱신·디스크↑)</text>
+  <text x="364" y="232" fill="#f47f72" font-size="11">불일치 위험(일부만 갱신될 때)</text>
+
+  <text x="32" y="278" fill="rgb(138,133,128)" font-size="11.5" font-style="italic">정규화=OLTP(읽기·쓰기 다 빨라야) · 비정규화=분석(대량 적재·읽기 지배)</text>
+
+  <!-- 관계 유형 -->
+  <text x="32" y="312" fill="rgb(212,168,83)" font-size="14" font-weight="700">관계 유형 세 가지</text>
+  <rect x="32" y="324" width="200" height="92" rx="6" fill="#141414" stroke="#66bb6a"/>
+  <text x="48" y="346" fill="#66bb6a" font-size="12" font-weight="700">1:N (one-to-many)</text>
+  <text x="48" y="368" fill="#e8e4df" font-size="10.5">한 이력서에 여러 직위</text>
+  <text x="48" y="386" fill="#e8e4df" font-size="10.5">각 직위는 한 이력서 소속</text>
+  <text x="48" y="406" fill="rgb(138,133,128)" font-size="10">→ 문서 트리에 적합</text>
+
+  <rect x="240" y="324" width="200" height="92" rx="6" fill="#141414" stroke="#7fa8c9"/>
+  <text x="256" y="346" fill="#7fa8c9" font-size="12" font-weight="700">N:1 (many-to-one)</text>
+  <text x="256" y="368" fill="#e8e4df" font-size="10.5">많은 사람이 같은 지역</text>
+  <text x="256" y="386" fill="#e8e4df" font-size="10.5">region_id 참조</text>
+  <text x="256" y="406" fill="rgb(138,133,128)" font-size="10">→ 정규화 표현 선호</text>
+
+  <rect x="448" y="324" width="200" height="92" rx="6" fill="#141414" stroke="rgb(212,168,83)"/>
+  <text x="464" y="346" fill="rgb(212,168,83)" font-size="12" font-weight="700">N:M (many-to-many)</text>
+  <text x="464" y="368" fill="#e8e4df" font-size="10.5">사람↔조직(이력)</text>
+  <text x="464" y="386" fill="#e8e4df" font-size="10.5">연관 테이블(join table)</text>
+  <text x="464" y="406" fill="rgb(138,133,128)" font-size="10">양방향 = 보조 인덱스</text>
+
+  <!-- 소셜 hydration -->
+  <text x="32" y="448" fill="rgb(212,168,83)" font-size="14" font-weight="700">소셜 타임라인 — ID만 저장 후 읽을 때 hydrate</text>
+  <rect x="32" y="460" width="616" height="92" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <rect x="48" y="476" width="150" height="40" rx="4" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="123" y="500" fill="#e8e4df" font-size="11" text-anchor="middle">구체화 타임라인</text>
+  <text x="123" y="516" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">post_id·sender_id만</text>
+  <line x1="198" y1="496" x2="244" y2="496" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar)"/>
+  <text x="221" y="488" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">읽을 때</text>
+  <rect x="248" y="476" width="180" height="40" rx="4" fill="#101620" stroke="#7fa8c9"/>
+  <text x="338" y="500" fill="#e8e4df" font-size="11" text-anchor="middle">ID hydrate(앱 조인)</text>
+  <text x="338" y="516" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">본문·좋아요·프로필 조회</text>
+  <text x="446" y="492" fill="#e8e4df" font-size="10.5">좋아요·프로필은 빠르게 변함</text>
+  <text x="446" y="510" fill="#66bb6a" font-size="10.5">→ 복제 부적합, 병렬화 쉬움</text>
+  <text x="446" y="528" fill="rgb(138,133,128)" font-size="9.5">읽기 조인이 확장성의 장애는 아님</text>
+
+  <line x1="32" y1="568" x2="648" y2="568" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="588" fill="rgb(138,133,128)" font-size="12">정규화·비정규화는 선악이 아닌 trade-off — 가장 확장적인 길은 일부는 복제, 일부는 정규화</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>

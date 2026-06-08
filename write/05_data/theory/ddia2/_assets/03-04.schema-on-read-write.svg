@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 600" font-family="Pretendard, sans-serif">
+  <rect width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">모델 선택과 스키마 유연성</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">schema-on-read(읽을 때 해석) vs schema-on-write(쓸 때 강제)</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- schema-on-read vs write -->
+  <rect x="32" y="104" width="300" height="166" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="48" y="126" fill="rgb(212,168,83)" font-size="14" font-weight="700">schema-on-read (문서)</text>
+  <text x="48" y="146" fill="#e8e4df" font-size="11">구조는 암묵적, 읽을 때만 해석</text>
+  <text x="48" y="164" fill="#e8e4df" font-size="11">동적 타입 체크와 유사</text>
+  <text x="48" y="186" fill="#66bb6a" font-size="11">이질적 데이터에 유리</text>
+  <text x="48" y="204" fill="#e8e4df" font-size="10.5">· 객체 유형이 많아 테이블 불가</text>
+  <text x="48" y="222" fill="#e8e4df" font-size="10.5">· 외부 시스템이 구조 결정(변동)</text>
+  <text x="48" y="244" fill="rgb(138,133,128)" font-size="10">형식 변경: 새 필드로 쓰고 읽을 때 분기</text>
+  <text x="48" y="262" fill="rgb(138,133,128)" font-size="10">"schemaless"는 오해 — 암묵 스키마 있음</text>
+
+  <rect x="348" y="104" width="300" height="166" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="364" y="126" fill="#7fa8c9" font-size="14" font-weight="700">schema-on-write (관계형)</text>
+  <text x="364" y="146" fill="#e8e4df" font-size="11">구조는 명시적, 쓸 때 DB가 강제</text>
+  <text x="364" y="164" fill="#e8e4df" font-size="11">정적 타입 체크와 유사</text>
+  <text x="364" y="186" fill="#66bb6a" font-size="11">모두 같은 구조면 문서·강제에 유리</text>
+  <text x="364" y="208" fill="#e8e4df" font-size="10.5">형식 변경: ALTER + UPDATE 마이그레이션</text>
+  <text x="364" y="226" fill="#f47f72" font-size="10.5">큰 테이블 UPDATE는 느림(전 행 재작성)</text>
+  <text x="364" y="248" fill="rgb(138,133,128)" font-size="10">기본값 NULL 컬럼 추가는 빠름</text>
+  <text x="364" y="266" fill="rgb(138,133,128)" font-size="10">→ 읽을 때 채우면 문서처럼 회피</text>
+
+  <!-- locality -->
+  <text x="32" y="304" fill="rgb(212,168,83)" font-size="14" font-weight="700">locality(지역성) — 문서만의 것이 아님</text>
+  <rect x="32" y="316" width="616" height="80" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="338" fill="#e8e4df" font-size="11">문서는 연속 문자열(JSON·BSON) → 전체를 한꺼번에 쓰면 빠름</text>
+  <text x="48" y="358" fill="#f47f72" font-size="11">단, 일부만 필요해도 전체 로드 · 갱신 시 전체 재작성 → 작게 유지·잦은 소규모 갱신 회피</text>
+  <text x="48" y="380" fill="#66bb6a" font-size="11">관계형도 locality 가능 — Spanner interleave, Oracle cluster, Bigtable column family</text>
+
+  <!-- 수렴 -->
+  <text x="32" y="430" fill="rgb(212,168,83)" font-size="14" font-weight="700">문서·관계형의 수렴</text>
+  <rect x="32" y="442" width="300" height="86" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="48" y="464" fill="#7fa8c9" font-size="11.5" font-weight="700">관계형이 흡수</text>
+  <text x="48" y="484" fill="#e8e4df" font-size="10.5">JSON 타입·연산자·문서 내 인덱스</text>
+  <text x="48" y="504" fill="rgb(138,133,128)" font-size="10">코드의 nonsimple domains(1970)와 닮음</text>
+  <text x="48" y="520" fill="rgb(138,133,128)" font-size="10">→ 30년 뒤 JSON·XML로 실현</text>
+
+  <rect x="348" y="442" width="300" height="86" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="364" y="464" fill="rgb(212,168,83)" font-size="11.5" font-weight="700">문서가 흡수</text>
+  <text x="364" y="484" fill="#e8e4df" font-size="10.5">조인·보조 인덱스·선언형 쿼리</text>
+  <text x="364" y="504" fill="#e8e4df" font-size="10.5">MongoDB·Couchbase·RethinkDB</text>
+  <text x="364" y="520" fill="#66bb6a" font-size="10">→ 관계형-문서 하이브리드가 강력</text>
+
+  <line x1="32" y1="548" x2="648" y2="548" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="570" fill="rgb(138,133,128)" font-size="12">재정렬 가능 리스트(드래그&amp;드롭) → 문서가 JSON 배열로 자연스러움(관계형은 트릭 필요)</text>
+  <text x="32" y="590" fill="rgb(138,133,128)" font-size="12">문서 쿼리: 키 접근만 / 보조 인덱스 / 풍부한 쿼리(MongoDB 집계 파이프라인)까지 다양</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>
