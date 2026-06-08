@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 680" font-family="Pretendard, sans-serif">
+  <rect width="680" height="680" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">해시 샤딩과 일관 해싱</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">해시로 균등 분산 · mod N 문제 · 고정 샤드 수 · 해시 범위 · 일관 해싱</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- 해시 함수 -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">해시 함수로 균등 분산</text>
+  <rect x="32" y="124" width="616" height="56" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="48" y="146" fill="#e8e4df" font-size="11">입력이 비슷해도 해시값은 고르게 분포 · 같은 입력 → 항상 같은 출력 · 범위 쿼리 불가 대신 핫스팟 감소</text>
+  <text x="48" y="166" fill="rgb(138,133,128)" font-size="10">MongoDB=MD5 · Cassandra/ScyllaDB=Murmur3 · Java hashCode / Ruby hash는 프로세스마다 달라 샤딩에 부적합</text>
+
+  <!-- mod N 문제 -->
+  <rect x="32" y="198" width="296" height="100" rx="6" fill="#141414" stroke="#f47f72"/>
+  <text x="48" y="220" fill="#f47f72" font-size="12" font-weight="700">mod N 접근의 문제</text>
+  <text x="48" y="240" fill="#e8e4df" font-size="10.5">hash(key) % N → N이 바뀌면</text>
+  <text x="48" y="258" fill="#e8e4df" font-size="10.5">대부분 키가 다른 노드로 이동</text>
+  <text x="48" y="276" fill="#f47f72" font-size="10">N=3→4 시 키 대이동 발생</text>
+  <text x="48" y="292" fill="rgb(138,133,128)" font-size="9.5">비효율적 리밸런싱의 원인</text>
+
+  <!-- 고정 샤드 수 -->
+  <rect x="352" y="198" width="296" height="100" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="368" y="220" fill="#7fa8c9" font-size="12" font-weight="700">고정 샤드 수 (fixed shards)</text>
+  <text x="368" y="240" fill="#e8e4df" font-size="10.5">노드보다 훨씬 많은 샤드 미리 생성</text>
+  <text x="368" y="258" fill="#e8e4df" font-size="10.5">예: 노드 10개 → 샤드 1,000개</text>
+  <text x="368" y="276" fill="#66bb6a" font-size="10">노드 추가 시 샤드 일부만 이전</text>
+  <text x="368" y="292" fill="rgb(138,133,128)" font-size="9.5">Citus·Riak·Elasticsearch·Couchbase</text>
+
+  <!-- 해시 범위 -->
+  <text x="32" y="338" fill="rgb(212,168,83)" font-size="14" font-weight="700">해시 범위 샤딩 (hash-range sharding)</text>
+  <rect x="32" y="350" width="616" height="80" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="48" y="372" fill="#e8e4df" font-size="11">키를 해시해 해시값의 연속 범위를 각 샤드에 할당 → 핫스팟 방지 + 샤드 수 가변</text>
+  <text x="48" y="392" fill="#e8e4df" font-size="10.5">복합 키에서 첫 번째 열만 파티션 키로 씀 → 동일 파티션 키 내에서 두 번째 열로 범위 쿼리 가능</text>
+  <text x="48" y="412" fill="rgb(138,133,128)" font-size="10">DynamoDB·YugabyteDB 사용 · Cassandra/ScyllaDB는 노드당 여러 해시 범위(기본 16/256개) 할당해 불균형 상쇄</text>
+
+  <!-- 일관 해싱 -->
+  <text x="32" y="468" fill="rgb(212,168,83)" font-size="14" font-weight="700">일관 해싱 (consistent hashing)</text>
+  <rect x="32" y="480" width="616" height="80" rx="6" fill="#101620" stroke="#9cc3df"/>
+  <text x="48" y="502" fill="#9cc3df" font-size="11" font-weight="700">두 가지 성질: ① 각 샤드의 키 수가 대략 균등 · ② 샤드 수 변경 시 최소한의 키만 이동</text>
+  <text x="48" y="522" fill="#e8e4df" font-size="10.5">여기서 "일관"은 복제 일관성·ACID와 무관 — 가능하면 키가 같은 샤드에 머문다는 의미</text>
+  <text x="48" y="542" fill="rgb(138,133,128)" font-size="10">변형 알고리즘: rendezvous hashing(최고 랜덤 가중치) · jump consistent hashing · Cassandra/ScyllaDB 방식</text>
+
+  <!-- 핫 키 애플리케이션 우회 -->
+  <text x="32" y="594" fill="rgb(212,168,83)" font-size="14" font-weight="700">핫 키 — 애플리케이션 수준 우회</text>
+  <rect x="32" y="606" width="616" height="64" rx="6" fill="#141414" stroke="#f47f72"/>
+  <text x="48" y="628" fill="#e8e4df" font-size="10.5">핫 키에 2자리 랜덤 접두어 추가 → 100개 키로 분산 · 쓰기 부하 분산 효과</text>
+  <text x="48" y="646" fill="#f47f72" font-size="10">단점: 읽기 시 100개 키 전부 조회 후 합산 · 어떤 키가 핫 키인지 별도 추적 필요 · 부하 변화 추적도 복잡</text>
+  <text x="48" y="662" fill="rgb(138,133,128)" font-size="9.5">Amazon S3 heat management, DynamoDB adaptive capacity 같은 자동 대응 시스템도 존재</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 680" font-family="Pretendard, sans-serif">
+  <rect width="680" height="680" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">보조 인덱스 샤딩 + 7장 종합</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">로컬 vs 글로벌 보조 인덱스 · 7장 두 축(키 범위·해시) + 세 과제</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- 로컬 보조 인덱스 -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">로컬 보조 인덱스 (local secondary index)</text>
+  <rect x="32" y="124" width="616" height="80" rx="6" fill="#141414" stroke="#7fa8c9"/>
+  <text x="48" y="146" fill="#7fa8c9" font-size="12" font-weight="700">각 샤드가 자기 레코드만 인덱싱 · 쓰기는 단일 샤드만 건드림</text>
+  <text x="48" y="166" fill="#e8e4df" font-size="10.5">쓰기 시: 레코드가 속한 샤드의 로컬 인덱스만 갱신 → 단순·빠름</text>
+  <text x="48" y="184" fill="#f47f72" font-size="10.5">읽기 시: 파티션 키 모르면 모든 샤드에 fan-out → tail latency 증폭 · 샤드 추가해도 쿼리 처리량 불변</text>
+  <text x="48" y="198" fill="rgb(138,133,128)" font-size="9.5">MongoDB·Riak·Cassandra·Elasticsearch·SolrCloud·VoltDB 사용</text>
+
+  <!-- 글로벌 보조 인덱스 -->
+  <text x="32" y="242" fill="rgb(212,168,83)" font-size="14" font-weight="700">글로벌 보조 인덱스 (global secondary index)</text>
+  <rect x="32" y="254" width="616" height="92" rx="6" fill="#101620" stroke="rgb(212,168,83)"/>
+  <text x="48" y="276" fill="rgb(212,168,83)" font-size="12" font-weight="700">모든 샤드 데이터를 커버하는 인덱스를 별도 샤딩 · 인덱스값이 파티션 키</text>
+  <text x="48" y="296" fill="#e8e4df" font-size="10.5">읽기 시: 단일 조건이면 인덱스 샤드 하나만 조회 (→ 실제 레코드는 여전히 여러 샤드)</text>
+  <text x="48" y="314" fill="#f47f72" font-size="10.5">쓰기 시: 레코드의 모든 용어(term)가 서로 다른 인덱스 샤드에 분산 → 여러 샤드 갱신 필요</text>
+  <text x="48" y="332" fill="#66bb6a" font-size="10.5">+ 읽기 처리량이 쓰기보다 높고 포스팅 목록이 짧으면 유리</text>
+  <text x="48" y="346" fill="rgb(138,133,128)" font-size="9.5">CockroachDB·TiDB·YugabyteDB · DynamoDB는 로컬+글로벌 모두 지원 (글로벌은 비동기 반영 → stale 가능)</text>
+
+  <!-- 비교 표 -->
+  <text x="32" y="386" fill="rgb(212,168,83)" font-size="13" font-weight="700">로컬 vs 글로벌 비교</text>
+  <rect x="32" y="398" width="300" height="80" rx="6" fill="#1a1410" stroke="#7fa8c9"/>
+  <text x="48" y="418" fill="#7fa8c9" font-size="11" font-weight="700">로컬</text>
+  <text x="48" y="436" fill="#66bb6a" font-size="10">쓰기: 단일 샤드 · 단순</text>
+  <text x="48" y="452" fill="#f47f72" font-size="10">읽기: 전 샤드 fan-out · tail latency</text>
+  <text x="48" y="468" fill="rgb(138,133,128)" font-size="9.5">읽기&lt;쓰기 비율일 때 유리</text>
+
+  <rect x="348" y="398" width="300" height="80" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="364" y="418" fill="rgb(212,168,83)" font-size="11" font-weight="700">글로벌</text>
+  <text x="364" y="436" fill="#66bb6a" font-size="10">읽기: 단일 인덱스 샤드</text>
+  <text x="364" y="452" fill="#f47f72" font-size="10">쓰기: 여러 인덱스 샤드 갱신</text>
+  <text x="364" y="468" fill="rgb(138,133,128)" font-size="9.5">읽기&gt;쓰기 비율일 때 유리</text>
+
+  <!-- 7장 종합 -->
+  <text x="32" y="518" fill="rgb(212,168,83)" font-size="14" font-weight="700">7장 종합 — 두 샤딩 축 · 세 과제</text>
+
+  <rect x="32" y="530" width="296" height="80" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="48" y="552" fill="rgb(212,168,83)" font-size="11" font-weight="700">키 범위 샤딩</text>
+  <text x="48" y="570" fill="#e8e4df" font-size="10">정렬 유지 · 범위 쿼리 가능</text>
+  <text x="48" y="586" fill="#f47f72" font-size="10">인접 키 집중 쓰기 → 핫스팟</text>
+  <text x="48" y="602" fill="rgb(138,133,128)" font-size="9.5">샤드 분할로 리밸런싱</text>
+
+  <rect x="352" y="530" width="296" height="80" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="368" y="552" fill="#7fa8c9" font-size="11" font-weight="700">해시 샤딩</text>
+  <text x="368" y="570" fill="#e8e4df" font-size="10">균등 분산 · 핫스팟 감소</text>
+  <text x="368" y="586" fill="#f47f72" font-size="10">범위 쿼리 불가 (복합키 예외)</text>
+  <text x="368" y="602" fill="rgb(138,133,128)" font-size="9.5">고정 샤드 수·해시 범위·일관 해싱</text>
+
+  <rect x="32" y="624" width="616" height="46" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="644" fill="#e8e4df" font-size="10.5">세 과제: ① 라우팅 — 키→샤드→노드 매핑(ZooKeeper·Raft·Gossip) ② 리밸런싱 — 자동·수동·반자동</text>
+  <text x="48" y="660" fill="#e8e4df" font-size="10.5">③ 보조 인덱스 — 로컬(쓰기 단순·읽기 fan-out) vs 글로벌(읽기 단순·쓰기 복잡) · 다음 장(8장)은 분산 트랜잭션</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>
