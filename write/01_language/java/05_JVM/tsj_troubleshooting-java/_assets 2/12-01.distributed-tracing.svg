@@ -1,0 +1,56 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>분산 추적 — 누락된 주문 시나리오·trace ID/span·OpenTelemetry/Jaeger/Sentry 스택</title>
+  <desc>이 편의 요약입니다. 서비스가 여러 개인 시스템에서 장애는 한곳에 머물지 않고 API 큐 무관한 서비스로 메아리칩니다. 누락된 주문 시나리오에서 checkout 이 REST 로 order 를 부르고 order 가 Kafka 에 발행하고 fulfillment 가 소비해 저장하는데 fulfillment 에 주문이 없습니다. trace ID 는 시스템에 들어오는 요청에 부여된 고유 식별자로 서비스 경계를 넘을 때마다 찍히는 여권처럼 따라다니며 한 서비스라도 떨구면 사슬이 끊깁니다. span 은 추적의 기본 단위로 한 서비스 안의 한 작업 단위이며 중첩돼 트리를 이룹니다. 추적의 핵심은 텔레메트리를 생성하는 OpenTelemetry 이고 생성된 span 은 Jaeger 와 Zipkin 이 모아 시각화하며 추적이 못 잡는 실패의 세부는 예외와 스택 트레이스를 모으는 Sentry 가 보완합니다. 시나리오의 원인은 order 에 새 enum SHIPPING_METHOD_DRONE 이 추가됐는데 fulfillment 가 옛 스키마라 역직렬화에 조용히 실패한 것입니다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="38" fill="#e8e4df" font-size="18" font-weight="bold">분산 추적 — trace ID와 span</text>
+  <text x="20" y="60" fill="rgb(138,133,128)" font-size="11">Troubleshooting Java · 12장 도입~§12.1 (마무리 장)</text>
+
+  <!-- 장애는 메아리친다 -->
+  <rect x="20" y="78" width="640" height="56" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="34" y="100" fill="#f47f72" font-size="13" font-weight="bold">서비스 시스템에서 장애는 팀 스포츠</text>
+  <text x="34" y="120" fill="#e8e4df" font-size="11">한곳에 안 머물고 API·큐·무관한 서비스로 메아리침 → 로그만으론 부족</text>
+
+  <!-- 시나리오 -->
+  <rect x="20" y="148" width="640" height="84" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="170" fill="rgb(212,168,83)" font-size="13" font-weight="bold">시나리오 — 결제는 됐는데 주문이 사라짐</text>
+  <text x="34" y="194" fill="#e8e4df" font-size="10.5">checkout(REST) → order → Kafka(orders.created) → fulfillment(저장)</text>
+  <text x="34" y="216" fill="#f47f72" font-size="10.5">로그는 다 정상인데 fulfillment 에 주문 흔적 없음 → 분산 추적 필요</text>
+
+  <!-- trace ID -->
+  <rect x="20" y="246" width="312" height="92" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="34" y="268" fill="rgb(212,168,83)" font-size="12" font-weight="bold">trace ID = 요청의 여권</text>
+  <text x="34" y="290" fill="#e8e4df" font-size="10.5">경계 넘을 때마다 도장 찍힘</text>
+  <text x="34" y="310" fill="#e8e4df" font-size="10.5">각 서비스가 같은 ID로 태깅</text>
+  <text x="34" y="330" fill="rgb(138,133,128)" font-size="9.5">한 서비스라도 떨구면 사슬 끊김</text>
+
+  <!-- span -->
+  <rect x="348" y="246" width="312" height="92" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="1.5"/>
+  <text x="362" y="268" fill="#9cc3df" font-size="12" font-weight="bold">span = 작업 단위(한 장)</text>
+  <text x="362" y="290" fill="#e8e4df" font-size="10.5">HTTP·DB·서비스 호출·메시지</text>
+  <text x="362" y="310" fill="#e8e4df" font-size="10.5">이름·소요·서비스명·부모 참조</text>
+  <text x="362" y="330" fill="rgb(138,133,128)" font-size="9.5">중첩돼 트리 → 느린/실패 지점</text>
+
+  <!-- 스택 -->
+  <rect x="20" y="352" width="640" height="130" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="374" fill="#e8e4df" font-size="13" font-weight="bold">추적 스택</text>
+  <rect x="34" y="386" width="190" height="40" fill="rgba(212,168,83,0.1)" stroke="rgb(212,168,83)"/>
+  <text x="129" y="404" fill="rgb(212,168,83)" font-size="11" font-weight="bold" text-anchor="middle">OpenTelemetry</text>
+  <text x="129" y="420" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">span 생성(자동/수동)</text>
+  <text x="232" y="410" fill="rgb(138,133,128)" font-size="14">→</text>
+  <rect x="252" y="386" width="190" height="40" fill="rgba(127,168,201,0.1)" stroke="#7fa8c9"/>
+  <text x="347" y="404" fill="#9cc3df" font-size="11" font-weight="bold" text-anchor="middle">Jaeger · Zipkin</text>
+  <text x="347" y="420" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">수집·시각화 백엔드</text>
+  <text x="450" y="410" fill="rgb(138,133,128)" font-size="14">+</text>
+  <rect x="470" y="386" width="176" height="40" fill="rgba(244,127,114,0.08)" stroke="#f47f72"/>
+  <text x="558" y="404" fill="#f47f72" font-size="11" font-weight="bold" text-anchor="middle">Sentry</text>
+  <text x="558" y="420" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">예외·스택(무엇이 실패)</text>
+  <text x="34" y="448" fill="#e8e4df" font-size="10.5">추적=흐름·지연(어디서·얼마나) / Sentry=실패 전모(무엇이) → 보완 관계(trace ID로 연결)</text>
+  <text x="34" y="470" fill="rgb(138,133,128)" font-size="9.5">용도: 성능 최적화·의존성 맵·에러 격리·콜드스타트 감지·샘플링(1~5%)·로그/메트릭 결합</text>
+
+  <!-- 원인 -->
+  <rect x="20" y="498" width="640" height="84" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="34" y="520" fill="#f47f72" font-size="13" font-weight="bold">원인 — enum 스키마 불일치</text>
+  <text x="34" y="544" fill="#e8e4df" font-size="11">order 에 새 enum SHIPPING_METHOD_DRONE 추가·배포 / fulfillment 는 옛 스키마</text>
+  <text x="34" y="566" fill="#e8e4df" font-size="11">→ Kafka 메시지 역직렬화 실패(WARN)·크래시 없이 조용히 (12-02에서 심화)</text>
+</svg>

@@ -1,0 +1,54 @@
+<svg viewBox="0 0 680 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>reconciliation job과 blast radius — 기대 vs 실제 비교로 drift를 잡고, 해시로 문제가 얼마나 퍼졌는지 가늠 (원문 Figure 13.8 개념도)</title>
+  <desc>원문 Figure 13.8 의 개념을 도식으로 옮긴 것입니다. reconciliation job 은 있어야 할 것과 실제 있는 것을 비교하는 백그라운드 프로세스로 물류 서비스에서 shipped 로 표시된 모든 주문에 대해 청구 서비스의 paid 트랜잭션과 고객 서비스의 레코드가 있는지 야간 배치로 보장합니다. 하나라도 없으면 일시적 실패나 잃은 메시지나 워크플로 버그를 가리켜 플래그하거나 알리거나 자동 교정합니다. 수백만 레코드를 효율적으로 비교하려고 파티션 전체의 해시만 먼저 비교하고 해시가 다를 때만 per-invoice 수준으로 파고드는 divide-and-conquer 를 씁니다. blast radius 는 문제가 얼마나 나쁘고 얼마나 퍼졌는지를 보는 방법으로 작은 버그가 한 레코드를 손상시키면 작은 반경이고 같은 버그가 수천 레코드나 여러 시스템에 미치면 큰 반경입니다. 사건 중 다른 레코드도 같은 문제인지 해시로 spot-check 하면 일회성인지 도처에 있는지 빠르게 드러나 심각도와 대응 규모를 판단합니다.</desc>
+  <rect x="0" y="0" width="680" height="400" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">reconciliation job + blast radius</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 Figure 13.8 개념도 — 기대 vs 실제, 그리고 얼마나 퍼졌나</text>
+
+  <!-- reconciliation 비교 -->
+  <text x="34" y="86" fill="rgb(212,168,83)" font-size="12" font-weight="bold">① reconciliation — 기대 vs 실제 (야간 배치)</text>
+
+  <rect x="20" y="98" width="200" height="84" fill="rgba(102,187,106,0.08)" stroke="#66bb6a"/>
+  <text x="120" y="120" fill="#66bb6a" font-size="11" font-weight="bold" text-anchor="middle">물류: order = shipped</text>
+  <text x="120" y="142" fill="#e8e4df" font-size="9.5" text-anchor="middle">→ 청구에 paid 있나?</text>
+  <text x="120" y="160" fill="#e8e4df" font-size="9.5" text-anchor="middle">→ 고객 서비스 레코드 있나?</text>
+  <text x="120" y="176" fill="rgb(138,133,128)" font-size="8.5" text-anchor="middle">있어야 할 것</text>
+
+  <line x1="220" y1="140" x2="268" y2="140" stroke="rgb(138,133,128)" stroke-width="1.5"/>
+  <polygon points="268,140 260,136 260,144" fill="rgb(138,133,128)"/>
+  <text x="244" y="132" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">비교</text>
+
+  <rect x="270" y="98" width="180" height="84" fill="rgb(20,20,20)" stroke="rgb(60,55,50)"/>
+  <text x="360" y="120" fill="#e8e4df" font-size="11" font-weight="bold" text-anchor="middle">실제 있는 것</text>
+  <text x="360" y="142" fill="#66bb6a" font-size="9.5" text-anchor="middle">paid ✓ · 레코드 ✓ → OK</text>
+  <text x="360" y="162" fill="#f47f72" font-size="9.5" text-anchor="middle">하나라도 없음 → 불일치</text>
+
+  <rect x="466" y="98" width="194" height="84" fill="rgba(244,127,114,0.06)" stroke="#f47f72"/>
+  <text x="563" y="118" fill="#f47f72" font-size="10.5" font-weight="bold" text-anchor="middle">불일치 시</text>
+  <text x="476" y="138" fill="#e8e4df" font-size="9">· 수동 검토용 플래그</text>
+  <text x="476" y="155" fill="#e8e4df" font-size="9">· 팀 알림</text>
+  <text x="476" y="172" fill="#e8e4df" font-size="9">· 자동 교정(재전송·재생성)</text>
+
+  <!-- divide and conquer -->
+  <rect x="20" y="196" width="640" height="50" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="217" fill="#9cc3df" font-size="11" font-weight="bold">해시로 확장 — divide-and-conquer</text>
+  <text x="34" y="236" fill="#e8e4df" font-size="9.5">파티션 전체 해시만 먼저 비교 → 다를 때만 per-invoice로 파고듦 → 수백만·분산 DC에서도 성능 유지 (stateless 가능)</text>
+
+  <!-- blast radius -->
+  <text x="34" y="278" fill="rgb(212,168,83)" font-size="12" font-weight="bold">② blast radius — 얼마나 퍼졌나 (해시 spot-check)</text>
+
+  <circle cx="130" cy="338" r="18" fill="rgba(102,187,106,0.3)" stroke="#66bb6a"/>
+  <text x="130" y="342" fill="#66bb6a" font-size="9" text-anchor="middle">1개</text>
+  <text x="130" y="378" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">작은 반경 → 빠른 수정</text>
+
+  <circle cx="360" cy="338" r="40" fill="rgba(244,127,114,0.12)" stroke="#f47f72" stroke-dasharray="3 3"/>
+  <circle cx="360" cy="338" r="22" fill="rgba(244,127,114,0.3)" stroke="#f47f72"/>
+  <text x="360" y="342" fill="#f47f72" font-size="9" text-anchor="middle">수천·여러 시스템</text>
+  <text x="360" y="392" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">큰 반경 → 큰 복구</text>
+
+  <rect x="450" y="306" width="210" height="64" fill="rgb(20,20,20)" stroke="rgb(60,55,50)"/>
+  <text x="463" y="326" fill="#e8e4df" font-size="10" font-weight="bold">해시 spot-check</text>
+  <text x="463" y="344" fill="rgb(138,133,128)" font-size="9">다른 레코드도 같은 문제?</text>
+  <text x="463" y="360" fill="#9cc3df" font-size="9">일회성인지 도처인지 빠르게 판단</text>
+</svg>

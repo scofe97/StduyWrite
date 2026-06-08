@@ -1,0 +1,67 @@
+<svg viewBox="0 0 680 580" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>실행 스택 트레이스와 코드 네비게이션 (Ch.2 §2.2.1~§2.2.2)</title>
+  <desc>실행 스택 트레이스는 프로그램이 현재 위치까지 어떻게 왔는지 알려 주는 메서드 호출의 빵부스러기입니다. 맨 위 층이 디버거가 멈춘 지점이고 맨 아래 첫 층이 스레드 실행 시작점입니다. 실제 앱은 스레드마다 자기 스택을 가지므로 thread-per-request 웹 앱은 요청마다 시작점이 다릅니다. 스택 트레이스의 핵심 용도는 숨은 로직을 찾는 것입니다. Spring Aspect는 호출 체인에서 코드로 보이지 않게 실행을 가로채는데, main이 ProductController에 Beer를 넘기고 컨트롤러가 ProductService로 그대로 전달해 콘솔에 찍는 단순한 흐름인데도 실제로는 Chocolate이 찍힙니다. 다른 값을 찍는 줄에 breakpoint를 걸고 스택 트레이스를 보면 Around Aspect가 인자를 Chocolate으로 바꿔치기한 것이 드러납니다. 이 기법을 써야 한다는 건 그 앱이 유지보수하기 어렵다는 신호입니다. 코드 네비게이션은 세 조작입니다. step over는 같은 메서드의 다음 실행 줄로 평면을 유지하고, step into는 호출된 메서드 안으로 새 평면을 열며, step out은 호출한 곳으로 돌아가 평면을 닫습니다. 평면을 적게 열도록 step over를 우선합니다. 다음 줄은 줄 번호 더하기 1이지만 다음 실행 줄은 예외 발생으로 catch 블록으로 점프할 수 있고 step over는 다음 실행 줄을 따릅니다.</desc>
+  <rect x="0" y="0" width="680" height="580" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">실행 스택 트레이스와 코드 네비게이션</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">스택 트레이스 = 호출의 빵부스러기, 숨은 Aspect까지 드러낸다 (Ch.2 §2.2)</text>
+
+  <!-- 스택 트레이스 구조 -->
+  <rect x="20" y="74" width="315" height="142" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="96" fill="#9cc3df" font-size="13" font-weight="bold">실행 스택 트레이스 = 지도</text>
+  <rect x="38" y="106" width="279" height="22" fill="rgba(244,127,114,0.13)" stroke="#f47f72"/>
+  <text x="48" y="121" fill="#f47f72" font-family="'JetBrains Mono',monospace" font-size="10">맨 위 = 디버거가 멈춘 지점</text>
+  <rect x="38" y="132" width="279" height="22" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="48" y="147" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">↑ 위 층 메서드를 호출한 자리</text>
+  <rect x="38" y="158" width="279" height="22" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/>
+  <text x="48" y="173" fill="#66bb6a" font-family="'JetBrains Mono',monospace" font-size="10">맨 아래 = 스레드 실행 시작점</text>
+  <text x="38" y="196" fill="rgb(138,133,128)" font-size="10">스레드마다 자기 스택 — 웹 앱은</text>
+  <text x="38" y="210" fill="rgb(138,133,128)" font-size="10">요청마다 시작점이 다르다</text>
+
+  <!-- Aspect 숨은 로직 -->
+  <rect x="345" y="74" width="315" height="142" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="363" y="96" fill="rgb(212,168,83)" font-size="13" font-weight="bold">숨은 로직 — Beer → Chocolate</text>
+  <text x="363" y="116" fill="#e8e4df" font-size="11">main → Controller("Beer") → Service</text>
+  <text x="363" y="134" fill="rgb(138,133,128)" font-size="10">기대: "Saving product Beer"</text>
+  <text x="363" y="152" fill="#f47f72" font-size="10">실제: "Saving product Chocolate"</text>
+  <rect x="363" y="160" width="279" height="22" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="371" y="175" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="9">@Around Aspect가 인자 바꿔치기</text>
+  <text x="363" y="198" fill="rgb(138,133,128)" font-size="10">스택 트레이스가 가로챈 Aspect를</text>
+  <text x="363" y="212" fill="rgb(138,133,128)" font-size="10">드러낸다 (이 기법 필요 = 유지보수 신호)</text>
+
+  <!-- step 조작 -->
+  <text x="20" y="248" fill="#e8e4df" font-size="13" font-weight="bold">코드 네비게이션 — 세 조작 (평면 적게 열기)</text>
+  <rect x="20" y="260" width="210" height="92" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="282" fill="#66bb6a" font-size="12" font-weight="bold">step over (우선)</text>
+  <text x="38" y="302" fill="#e8e4df" font-size="11">같은 메서드 다음 실행 줄</text>
+  <text x="38" y="322" fill="rgb(138,133,128)" font-size="10">같은 평면 유지</text>
+  <text x="38" y="340" fill="rgb(138,133,128)" font-size="10">출력만으로 추론될 때</text>
+
+  <rect x="236" y="260" width="210" height="92" fill="rgba(244,127,114,0.07)" stroke="#f47f72" stroke-width="2"/>
+  <text x="254" y="282" fill="#f47f72" font-size="12" font-weight="bold">step into (최후)</text>
+  <text x="254" y="302" fill="#e8e4df" font-size="11">호출된 메서드 안으로</text>
+  <text x="254" y="322" fill="rgb(138,133,128)" font-size="10">새 평면 열림 (스택 ↑)</text>
+  <text x="254" y="340" fill="rgb(138,133,128)" font-size="10">들어가면 먼저 읽어라</text>
+
+  <rect x="452" y="260" width="208" height="92" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="470" y="282" fill="#9cc3df" font-size="12" font-weight="bold">step out</text>
+  <text x="470" y="302" fill="#e8e4df" font-size="11">호출한 곳으로 복귀</text>
+  <text x="470" y="322" fill="rgb(138,133,128)" font-size="10">평면 닫기 (스택 ↓)</text>
+  <text x="470" y="340" fill="rgb(138,133,128)" font-size="10">이전 평면 지름길</text>
+
+  <!-- Inception 비유 -->
+  <rect x="20" y="364" width="640" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="386" fill="#e8e4df" font-size="12" font-weight="bold">비유 — 《인셉션》의 꿈속의 꿈</text>
+  <text x="38" y="402" fill="rgb(138,133,128)" font-size="10">step into로 층을 깊이 들어갈수록 거기 머무는 시간이 길어진다 → 깊이 들어갈수록 조사 시간 ↑</text>
+
+  <!-- next line != next execution line -->
+  <rect x="20" y="420" width="640" height="74" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="442" fill="rgb(212,168,83)" font-size="13" font-weight="bold">next line ≠ next execution line</text>
+  <text x="38" y="462" fill="#e8e4df" font-size="11">다음 줄 = 줄 번호 +1 (항상) / 다음 실행 줄 = 실제로 다음에 실행되는 줄</text>
+  <text x="38" y="482" fill="rgb(138,133,128)" font-size="10">12번이 예외를 던지면 다음 실행 줄은 13이 아니라 catch(예: 18번). step over는 다음 실행 줄을 따른다</text>
+
+  <!-- AI -->
+  <rect x="20" y="506" width="640" height="58" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="528" fill="#e8e4df" font-size="12" font-weight="bold">AI 활용 — 스택 트레이스·변수도 LLM이 읽는다</text>
+  <text x="38" y="548" fill="rgb(138,133,128)" font-size="10">화면 캡처로 제공(IDE 통합 AI가 유리). 틀릴 수 있으니 검증·빠진 컨텍스트 채우기는 당신 몫 — 푸는 사람은 당신</text>
+</svg>

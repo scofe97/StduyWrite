@@ -1,0 +1,51 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>동기화 비용 — Amdahl·register flushing·CAS</title>
+  <desc>동기화는 두 가지로 성능에 영향을 준다. 첫째 동기화 블록에 머무는 시간이 확장성을 정하고, 둘째 락 획득이 CPU를 쓴다. 확장성은 Amdahl 법칙이 정한다. P가 병렬 비율, N이 스레드 수다. 직렬 블록이 20퍼센트면 8 CPU에서도 3.33배뿐이다. 직렬 코드가 늘수록 멀티스레드 이득이 준다. 락 비용은 두 가지다. 경쟁 없는 synchronized는 uninflated 락으로 수백 나노초, CAS는 더 적다. 경쟁이 생기면 락이 inflated되고 둘째 스레드가 대기한다. CAS는 optimistic 전략이라 값이 바뀌면 재시도하고, 스레드가 많을수록 재시도가 는다. 둘째 비용은 Java Memory Model이다. 레지스터 값은 다른 스레드에 안 보여, 동기화 블록을 떠날 때 main 메모리로 flush해야 한다. volatile은 변경 때마다 main에 일관되게 갱신된다. Vector의 size와 get은 synchronized라 register flushing이 SPARC 대형 머신에서 큰 병목이 됐다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">동기화 비용 — 확장성과 락 획득</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">동기화 블록 시간이 확장성을 정하고, 락 획득과 메모리 flush가 CPU를 씁니다</text>
+
+  <!-- Amdahl -->
+  <rect x="20" y="74" width="642" height="96" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="96" fill="#9cc3df" font-size="13" font-weight="bold">확장성 — Amdahl 법칙</text>
+  <text x="38" y="118" fill="rgb(138,133,128)" font-size="11">speedup = 1 / ((1-P) + P/N)   ·   P=병렬 비율, N=스레드 수</text>
+  <text x="38" y="140" fill="#f47f72" font-size="11">직렬 블록 20% (P=0.8) → 8 CPU에서도 3.33배뿐 (기대 8배의 절반 이하)</text>
+  <text x="38" y="160" fill="rgb(212,168,83)" font-size="10">직렬 블록이 늘수록 멀티스레드 이득이 준다 → 직렬 코드 최소화가 핵심</text>
+
+  <!-- synchronized vs CAS -->
+  <rect x="20" y="178" width="320" height="150" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="200" fill="#f47f72" font-size="12" font-weight="bold">synchronized (blocking)</text>
+  <text x="38" y="220" fill="rgb(138,133,128)" font-size="10">경쟁 없음 = uninflated 락</text>
+  <text x="38" y="238" fill="rgb(138,133,128)" font-size="10">획득 비용 수백 나노초</text>
+  <text x="38" y="258" fill="rgb(138,133,128)" font-size="10">경쟁 시 inflated → 둘째 스레드 대기</text>
+  <text x="38" y="278" fill="#f47f72" font-size="10">대기 시간은 애플리케이션 의존</text>
+  <text x="38" y="300" fill="rgb(138,133,128)" font-size="10">자원에 배타적 접근 필요</text>
+  <text x="38" y="320" fill="rgb(138,133,128)" font-size="9">heavy 경쟁·대형 머신에선 유리해질 수도</text>
+
+  <rect x="350" y="178" width="312" height="150" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="368" y="200" fill="#66bb6a" font-size="12" font-weight="bold">CAS (lockless·nonblocking)</text>
+  <text x="368" y="220" fill="rgb(138,133,128)" font-size="10">Compare and Swap CPU 명령</text>
+  <text x="368" y="238" fill="rgb(138,133,128)" font-size="10">경쟁 없음 = synchronized보다 약간 빠름</text>
+  <text x="368" y="258" fill="rgb(138,133,128)" font-size="10">optimistic: 값 설정→실행→변경 확인</text>
+  <text x="368" y="278" fill="#f47f72" font-size="10">바뀌었으면 재시도(스레드↑ = 재시도↑)</text>
+  <text x="368" y="298" fill="#66bb6a" font-size="10">경미~중간 경쟁에선 훨씬 빠름</text>
+  <text x="368" y="318" fill="#66bb6a" font-size="9">읽기만 하면 경쟁 없음</text>
+
+  <!-- Java Memory Model -->
+  <rect x="20" y="336" width="642" height="110" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="358" fill="rgb(212,168,83)" font-size="13" font-weight="bold">둘째 비용 — Java Memory Model (register flush)</text>
+  <text x="38" y="380" fill="rgb(138,133,128)" font-size="11">변수는 레지스터에 임시 저장됨(빠름) → 다른 스레드엔 안 보임</text>
+  <text x="38" y="400" fill="rgb(138,133,128)" font-size="11">동기화 블록을 떠날 때 변경된 변수를 main 메모리로 flush → 다른 스레드가 최신값 봄</text>
+  <text x="38" y="420" fill="#9cc3df" font-size="11">volatile: 변경 때마다 main에 일관 갱신 / CAS: 연산 중 변경분 flush 보장</text>
+  <text x="38" y="438" fill="rgb(138,133,128)" font-size="10">레지스터 많은 프로세서일수록 flush 부담↑ (synchronized·CAS·volatile 모두 적용)</text>
+
+  <!-- Vector 사례 -->
+  <rect x="20" y="454" width="642" height="128" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="476" fill="#f47f72" font-size="13" font-weight="bold">실전 사례 — Vector의 register flushing</text>
+  <text x="38" y="498" fill="rgb(138,133,128)" font-size="11">for (i; i &lt; v.size(); i++) process(v.get(i)) — size()·get()이 synchronized</text>
+  <text x="38" y="518" fill="#f47f72" font-size="11">매 호출의 register flushing이 거대한 병목 (SPARC 대형 머신, 레지스터 多에서 발현)</text>
+  <text x="38" y="538" fill="rgb(138,133,128)" font-size="11">volatile 아니면 컴파일러가 레지스터에 유지 → flush 없어 빠름</text>
+  <text x="38" y="558" fill="rgb(212,168,83)" font-size="10">+ 의미 결함: size()와 get() 사이 다른 스레드가 마지막 요소 제거 시 예외</text>
+  <text x="38" y="576" fill="rgb(138,133,128)" font-size="10">→ fine-grained 동기화는 나쁜 선택. synchronized(v) 블록으로 묶거나 복사·분할</text>
+</svg>

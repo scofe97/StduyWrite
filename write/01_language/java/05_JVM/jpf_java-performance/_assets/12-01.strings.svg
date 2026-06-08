@@ -1,0 +1,57 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>String — compact string·interning·concatenation</title>
+  <desc>String은 가장 흔한 Java 객체다. Java 8은 모든 string을 16비트 char 배열로 인코딩해 낭비가 크다. Java 11은 16비트가 꼭 필요하지 않으면 8비트 byte 배열로 인코딩하는 compact string을 쓴다. 그래서 Java 11 평균 string은 Java 8의 절반이고, heap의 50퍼센트가 string이라 평균 heap이 75퍼센트로 준다. CompactStrings 플래그가 기본 true다. 중복 string은 세 방법으로 제거한다. G1 dedup은 UseStringDeduplication으로 backing 배열만 공유한다. intern은 고정 크기 native hash table을 쓴다. Java 8은 60013, Java 11은 65536이라 StringTableSize로 튜닝한다. custom은 ConcurrentHashMap이나 CustomConcurrentHashMap을 쓴다. concatenation은 한 줄이면 JDK가 최적화한다. JDK 8은 StringBuilder로, JDK 11은 특수 메서드로 바꾼다. JDK 11은 double도 처리하지만 JDK 8은 못 한다. 루프 안 concat은 항상 StringBuilder를 명시한다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">String — compact·interning·concat</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">String은 가장 흔한 객체 — heap 절약 기법이 프로그램 heap을 크게 줄입니다</text>
+
+  <!-- compact string -->
+  <rect x="20" y="74" width="642" height="92" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="96" fill="#66bb6a" font-size="13" font-weight="bold">compact string (Java 11, 기본 on)</text>
+  <text x="38" y="118" fill="rgb(138,133,128)" font-size="11">Java 8: 모든 string을 16비트 char 배열로 (낭비). Java 11: 16비트 불필요하면 8비트 byte</text>
+  <text x="38" y="138" fill="rgb(138,133,128)" font-size="11">평균 string 크기 절반 → heap의 50%가 string → 평균 heap 75%로 감소</text>
+  <text x="38" y="158" fill="#9cc3df" font-size="10">-XX:+CompactStrings (기본 true). 모든 string이 16비트면 약간 느려질 수 있음(예외)</text>
+
+  <!-- 중복 제거 3방법 -->
+  <rect x="20" y="174" width="642" height="158" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="196" fill="#e8e4df" font-size="13" font-weight="bold">중복 string 제거 — 세 방법</text>
+  <rect x="38" y="206" width="200" height="116" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)"/>
+  <text x="50" y="226" fill="rgb(212,168,83)" font-size="11" font-weight="bold">① G1 dedup</text>
+  <text x="50" y="244" fill="rgb(138,133,128)" font-size="10">+UseStringDeduplication</text>
+  <text x="50" y="260" fill="rgb(138,133,128)" font-size="10">backing 배열만 공유</text>
+  <text x="50" y="276" fill="rgb(138,133,128)" font-size="10">기본 off(3이유)</text>
+  <text x="50" y="292" fill="#66bb6a" font-size="10">기대 이득 10%</text>
+  <text x="50" y="310" fill="rgb(138,133,128)" font-size="9">tenuring age 3 후 처리</text>
+  <rect x="246" y="206" width="200" height="116" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9"/>
+  <text x="258" y="226" fill="#9cc3df" font-size="11" font-weight="bold">② intern()</text>
+  <text x="258" y="244" fill="rgb(138,133,128)" font-size="10">고정 크기 native hash table</text>
+  <text x="258" y="260" fill="rgb(138,133,128)" font-size="10">Java 8: 60013</text>
+  <text x="258" y="276" fill="rgb(138,133,128)" font-size="10">Java 11: 65536</text>
+  <text x="258" y="292" fill="#f47f72" font-size="10">충돌 시 느림</text>
+  <text x="258" y="310" fill="#9cc3df" font-size="9">StringTableSize로 튜닝(소수)</text>
+  <rect x="454" y="206" width="200" height="116" fill="rgba(102,187,106,0.06)" stroke="#66bb6a"/>
+  <text x="466" y="226" fill="#66bb6a" font-size="11" font-weight="bold">③ custom</text>
+  <text x="466" y="244" fill="rgb(138,133,128)" font-size="10">ConcurrentHashMap</text>
+  <text x="466" y="260" fill="rgb(138,133,128)" font-size="10">또는 CustomConcurrentHashMap</text>
+  <text x="466" y="276" fill="rgb(138,133,128)" font-size="10">(weak key)</text>
+  <text x="466" y="292" fill="#66bb6a" font-size="10">크기 미리 설정 불필요</text>
+  <text x="466" y="310" fill="rgb(138,133,128)" font-size="9">자동 리사이즈 → 적응적</text>
+
+  <!-- == vs equals -->
+  <rect x="20" y="340" width="642" height="50" fill="rgba(244,127,114,0.06)" stroke="#f47f72"/>
+  <text x="38" y="362" fill="#f47f72" font-size="12" font-weight="bold">intern으로 == 비교는 보통 myth</text>
+  <text x="38" y="382" fill="rgb(138,133,128)" font-size="10">intern 비용(hash 계산=전체 스캔)이 equals와 비슷 — 같은 길이 반복 비교만 이득</text>
+
+  <!-- concatenation -->
+  <rect x="20" y="398" width="642" height="184" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="420" fill="rgb(212,168,83)" font-size="13" font-weight="bold">concatenation — 한 줄은 최적화됨</text>
+  <text x="38" y="442" fill="rgb(138,133,128)" font-size="11">JDK 8: javac가 StringBuilder.append로 변환(+OptimizeStringConcat)</text>
+  <text x="38" y="462" fill="rgb(138,133,128)" font-size="11">JDK 11: javac가 JVM 내부 특수 메서드 호출 (이 최적화는 bytecode 의존)</text>
+  <rect x="38" y="472" width="606" height="58" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="50" y="492" fill="#e8e4df" font-size="11" font-weight="bold">단일 concat (ns)</text>
+  <text x="50" y="510" fill="rgb(138,133,128)" font-size="10">JDK11 47.7 · JDK8 42.9 · 수동 StringBuilder 87.8 (둘 다 수동보다 빠름)</text>
+  <text x="50" y="526" fill="#f47f72" font-size="10">double 포함: JDK11 49.4 · JDK8 77.0 (JDK8은 double 최적화 못 함)</text>
+  <text x="38" y="552" fill="#f47f72" font-size="11">루프 안 concat은 항상 StringBuilder 명시 (10000 string: 38ms vs 2463μs)</text>
+  <text x="38" y="572" fill="#66bb6a" font-size="10">단 다음 반복에 안 쓰는 string이면 루프 concat 허용</text>
+</svg>

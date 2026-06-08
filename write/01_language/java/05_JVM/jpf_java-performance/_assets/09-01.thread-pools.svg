@@ -1,0 +1,54 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>스레드 풀 — 크기 결정과 ThreadPoolExecutor</title>
+  <desc>스레드 풀은 작업을 큐에 넣고 정해진 수의 스레드가 꺼내 실행한다. min과 max 스레드 수가 있다. 풀 크기 튜닝이 성능의 핵심이고, 과대 풀은 때로 해롭다. 최적 스레드 수는 워크로드와 하드웨어, 특히 각 작업이 얼마나 자주 block하는지에 달렸다. 4코어 CPU-bound 작업은 4 스레드에서 최대 throughput이고 그 이상은 약간의 페널티뿐이다. 그러나 병목이 외부 자원이면 스레드를 더하는 게 해롭다. client 역설처럼 서버가 병목인데 client 스레드를 늘리면 응답 시간이 급증한다. 그래서 병목 위치를 아는 게 중요하다. min은 거의 중요하지 않아 max와 같게 둔다. 큐 크기는 제한하고 초과 시 REST는 429나 503을 반환한다. ThreadPoolExecutor는 큐 종류로 동작이 갈린다. SynchronousQueue는 대기 못 하고, unbounded queue는 max를 무시하며, bounded queue는 큐가 다 차야 새 스레드를 만든다. KISS 원칙으로 같은 core/max와 ArrayBlockingQueue를 직접 구성하길 권한다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">스레드 풀 — 크기 결정이 핵심</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">최적 스레드 수는 워크로드·하드웨어, 특히 각 작업이 얼마나 자주 block하는지에 달렸습니다</text>
+
+  <!-- CPU-bound 표 -->
+  <rect x="20" y="74" width="320" height="128" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="96" fill="#66bb6a" font-size="12" font-weight="bold">CPU-bound (4코어)</text>
+  <text x="38" y="116" fill="rgb(138,133,128)" font-size="10">1 스레드 → 55.2초 (100%)</text>
+  <text x="38" y="134" fill="rgb(138,133,128)" font-size="10">2 스레드 → 28.3초 (51.2%)</text>
+  <text x="38" y="152" fill="#66bb6a" font-size="10">4 스레드 → 13.9초 (25.1%) ← 최적</text>
+  <text x="38" y="170" fill="rgb(138,133,128)" font-size="10">8 스레드 → 14.3초 (약간 페널티)</text>
+  <text x="38" y="190" fill="rgb(138,133,128)" font-size="9">하이퍼스레딩은 5~6배뿐(20~40% 추가)</text>
+
+  <!-- client 역설 -->
+  <rect x="350" y="74" width="312" height="128" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="368" y="96" fill="#f47f72" font-size="12" font-weight="bold">병목이 외부면 스레드 추가는 해롭다</text>
+  <text x="368" y="116" fill="rgb(138,133,128)" font-size="10">서버가 병목인데 client 스레드↑:</text>
+  <text x="368" y="134" fill="rgb(138,133,128)" font-size="10">4 스레드 → 0.024초 (109%)</text>
+  <text x="368" y="152" fill="#f47f72" font-size="10">8 스레드 → 0.046초 (209%)</text>
+  <text x="368" y="170" fill="#f47f72" font-size="10">32 스레드 → 0.187초 (885%)</text>
+  <text x="368" y="190" fill="rgb(212,168,83)" font-size="9">병목에 부하 더하면 성능 급감</text>
+
+  <!-- min -->
+  <rect x="20" y="210" width="642" height="48" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="232" fill="#e8e4df" font-size="12" font-weight="bold">min 스레드 수 — 거의 중요하지 않음</text>
+  <text x="38" y="250" fill="rgb(138,133,128)" font-size="10">max와 같게 둔다 · 시스템은 max 부하를 감당하게 사이징해야 하므로 작은 min은 도움 안 됨</text>
+
+  <!-- TPE 3큐 -->
+  <rect x="20" y="266" width="642" height="180" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="288" fill="#9cc3df" font-size="13" font-weight="bold">ThreadPoolExecutor — 큐 종류가 동작을 가른다</text>
+  <rect x="38" y="300" width="606" height="42" fill="rgba(102,187,106,0.06)" stroke="#66bb6a"/>
+  <text x="50" y="318" fill="#66bb6a" font-size="11" font-weight="bold">SynchronousQueue</text>
+  <text x="200" y="318" fill="rgb(138,133,128)" font-size="10">대기 불가 → max 다 차면 즉시 reject. newCachedThreadPool</text>
+  <text x="50" y="335" fill="rgb(138,133,128)" font-size="10">core=min, max=최대 스레드. 스레드 수 튜닝은 쉬움</text>
+  <rect x="38" y="346" width="606" height="42" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)"/>
+  <text x="50" y="364" fill="rgb(212,168,83)" font-size="11" font-weight="bold">Unbounded queue</text>
+  <text x="200" y="364" fill="rgb(138,133,128)" font-size="10">reject 없음, max 무시 → core만 사용. newFixedThreadPool</text>
+  <text x="50" y="381" fill="#f47f72" font-size="10">제출이 빠르면 메모리 과소비 위험</text>
+  <rect x="38" y="392" width="606" height="48" fill="rgba(244,127,114,0.06)" stroke="#f47f72"/>
+  <text x="50" y="410" fill="#f47f72" font-size="11" font-weight="bold">Bounded queue (ArrayBlockingQueue)</text>
+  <text x="50" y="428" fill="rgb(138,133,128)" font-size="10">큐가 다 차고 새 작업 와야 비로소 max까지 스레드 추가 → throttle 역할</text>
+
+  <!-- 권고 -->
+  <rect x="20" y="454" width="642" height="128" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="476" fill="rgb(212,168,83)" font-size="13" font-weight="bold">KISS 권고</text>
+  <text x="38" y="498" fill="#e8e4df" font-size="11">Executors의 기본 unbounded 풀은 메모리 제어가 안 돼 쓰지 말 것</text>
+  <text x="38" y="520" fill="#e8e4df" font-size="11">core=max 같은 수 + ArrayBlockingQueue로 직접 ThreadPoolExecutor 구성</text>
+  <text x="38" y="542" fill="rgb(138,133,128)" font-size="11">스레드 풀은 object pool이 좋은 사례 — 스레드는 초기화가 비싸고 throttle이 됨</text>
+  <text x="38" y="564" fill="#f47f72" font-size="10">자기 튜닝 풀의 "작업 밀리면 스레드 추가"는 외부 병목 시 정확히 틀린 선택</text>
+</svg>

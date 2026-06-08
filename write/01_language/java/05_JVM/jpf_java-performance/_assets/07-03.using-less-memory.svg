@@ -1,0 +1,54 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>메모리 적게 쓰기 — 객체 크기·lazy init·canonical</title>
+  <desc>메모리를 덜 쓰면 힙이 덜 차서 GC가 줄고 효과가 곱해진다. 세 방법이 있다. 첫째 객체 크기 줄이기다. 인스턴스 변수 수를 줄이고 작은 타입을 쓴다. 타입별 바이트는 byte 1, char short 2, int float 4, long double 8, reference 8(32비트는 4)이다. 객체 크기는 항상 8바이트 배수로 padding되고, null 변수도 공간을 차지한다. jol로 크기를 잴 수 있다. 시간 대 공간 트레이드오프로, String 해시는 자주 쓰여 캐시하고 toString은 드물게 쓰여 매번 계산한다. 둘째 lazy init은 드물게 쓰는 변수를 처음 쓸 때 초기화한다. thread-safe면 synchronized, thread-safe 객체면 double-checked locking으로 한다. eager deinit은 collection처럼 오래 사는 클래스의 stale reference만 null로 지운다. 셋째 immutable 객체는 canonical 버전 하나만 둔다. Boolean.TRUE처럼. WeakHashMap으로 custom canonical을 만든다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">메모리 적게 쓰기 — 세 방법</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">힙이 덜 차면 GC가 줄고, 승급도 줄어 full GC까지 줄어드는 곱셈 효과가 납니다</text>
+
+  <!-- 1. reduce object size -->
+  <rect x="20" y="74" width="642" height="148" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="96" fill="#66bb6a" font-size="13" font-weight="bold">① 객체 크기 줄이기</text>
+  <text x="38" y="116" fill="#e8e4df" font-size="11">변수 수↓ + 작은 타입 사용 (long→int, double→float)</text>
+  <rect x="38" y="126" width="290" height="88" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9"/>
+  <text x="50" y="145" fill="#9cc3df" font-size="11" font-weight="bold">타입별 바이트</text>
+  <text x="50" y="163" fill="rgb(138,133,128)" font-size="10">byte 1 · char/short 2 · int/float 4</text>
+  <text x="50" y="180" fill="rgb(138,133,128)" font-size="10">long/double 8 · reference 8 (32비트 4)</text>
+  <text x="50" y="200" fill="#f47f72" font-size="10">객체는 8바이트 배수로 padding</text>
+  <rect x="336" y="126" width="318" height="88" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)"/>
+  <text x="348" y="145" fill="rgb(212,168,83)" font-size="11" font-weight="bold">시간 vs 공간</text>
+  <text x="348" y="163" fill="rgb(138,133,128)" font-size="10">String 해시: 자주 쓰여 캐시</text>
+  <text x="348" y="180" fill="rgb(138,133,128)" font-size="10">toString: 드물게 쓰여 매번 계산</text>
+  <text x="348" y="200" fill="#66bb6a" font-size="10">null 변수도 공간 차지 · jol로 측정</text>
+
+  <!-- 2. lazy init -->
+  <rect x="20" y="230" width="642" height="148" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="252" fill="#9cc3df" font-size="13" font-weight="bold">② lazy initialization</text>
+  <text x="38" y="272" fill="#e8e4df" font-size="11">드물게 쓰는 변수만 — 흔히 쓰면 메모리 절약 없이 검사 비용만</text>
+  <rect x="38" y="282" width="200" height="86" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="50" y="301" fill="#e8e4df" font-size="11" font-weight="bold">단일 스레드</text>
+  <text x="50" y="320" fill="rgb(138,133,128)" font-size="10">if (x == null) x = ...</text>
+  <text x="50" y="338" fill="rgb(138,133,128)" font-size="10">작은 검사 비용</text>
+  <rect x="246" y="282" width="200" height="86" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="258" y="301" fill="#e8e4df" font-size="11" font-weight="bold">thread-safe (비안전 객체)</text>
+  <text x="258" y="320" fill="rgb(138,133,128)" font-size="10">synchronized 메서드</text>
+  <text x="258" y="338" fill="rgb(138,133,128)" font-size="10">기존 동기화에 편승</text>
+  <rect x="454" y="282" width="200" height="86" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="466" y="301" fill="#e8e4df" font-size="11" font-weight="bold">thread-safe 객체</text>
+  <text x="466" y="320" fill="rgb(138,133,128)" font-size="10">double-checked locking</text>
+  <text x="466" y="338" fill="#f47f72" font-size="10">volatile 필수 + 로컬 변수</text>
+
+  <!-- 3. canonical -->
+  <rect x="20" y="386" width="642" height="118" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="408" fill="rgb(212,168,83)" font-size="13" font-weight="bold">③ immutable + canonical 객체</text>
+  <text x="38" y="430" fill="#e8e4df" font-size="11">같은 immutable 객체 중복 생성 회피 — 정규 버전 하나만 둠</text>
+  <text x="38" y="450" fill="rgb(138,133,128)" font-size="11">Boolean: 필요한 건 TRUE·FALSE 둘뿐 (public 생성자는 설계 실수) → 직접 만들지 말 것</text>
+  <text x="38" y="470" fill="rgb(138,133,128)" font-size="11">String.intern() · custom은 WeakHashMap에 weak reference로 저장(누수 방지)</text>
+  <text x="38" y="490" fill="#66bb6a" font-size="10">중복 제거로 힙 사용을 크게 줄일 수 있음 — 단 스레드 환경은 동기화 병목 주의</text>
+
+  <!-- eager deinit caution -->
+  <rect x="20" y="512" width="642" height="70" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="534" fill="#f47f72" font-size="13" font-weight="bold">eager deinit은 stale reference만</text>
+  <text x="38" y="556" fill="rgb(138,133,128)" font-size="11">로컬 변수는 scope 벗어나면 자동 회수 → 굳이 null 대입 불필요</text>
+  <text x="38" y="574" fill="rgb(138,133,128)" font-size="11">collection처럼 오래 사는 클래스가 잡고 있던 stale reference만 명시적으로 null (예: ArrayList.remove)</text>
+</svg>

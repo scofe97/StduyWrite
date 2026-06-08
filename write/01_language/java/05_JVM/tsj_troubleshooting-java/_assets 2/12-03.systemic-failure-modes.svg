@@ -1,0 +1,43 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>시스템 장애 모드 — cascading·retry storm·timeout mismatch·P95/P99</title>
+  <desc>이 편의 요약입니다. 분산 시스템에서 작은 문제는 큰 문제가 됩니다. cascading failure 는 느린 서비스가 상류의 스레드를 막아 도미노로 무너지는 것으로 망가져서가 아니라 기다려서이며 스레드 덤프에서 RestTemplate HttpClient 호출에 WAITING 으로 몰린 동일 스택이 스레드 풀 고갈을 가리킵니다. retry storm 은 백오프 조율 없는 동시 재시도가 부하를 증폭하는 피드백 루프로 트래픽 증가 없는 부하 급증과 반복 로그와 짧고 촘촘한 재시도 span 이 신호입니다. timeout mismatch 는 클라이언트가 서버보다 먼저 포기하는 것으로 client span 은 타임아웃으로 끝나도 server span 은 성공으로 계속되며 평균이 아니라 P95 P99 로 가려야 합니다. 시스템 수준 문제엔 시스템 수준 사고가 필요해 분산 추적 구조화 로그 서비스 메트릭 스키마 검증을 여러 렌즈로 함께 씁니다. AI 가 그 렌즈를 보완합니다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="38" fill="#e8e4df" font-size="18" font-weight="bold">시스템 장애 모드</text>
+  <text x="20" y="60" fill="rgb(138,133,128)" font-size="11">Troubleshooting Java · §12.3 (책 마지막 본문)</text>
+
+  <!-- 도입 -->
+  <rect x="20" y="78" width="640" height="56" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="34" y="100" fill="#f47f72" font-size="13" font-weight="bold">작은 문제가 큰 문제가 된다</text>
+  <text x="34" y="120" fill="#e8e4df" font-size="11">로컬 예외와 달리 또렷이 안 드러남 → 높은 지연·CPU 스파이크·"다 도는데 느림"</text>
+
+  <!-- cascading -->
+  <rect x="20" y="148" width="640" height="84" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="170" fill="rgb(212,168,83)" font-size="13" font-weight="bold">① cascading failure (§12.3.1)</text>
+  <text x="34" y="192" fill="#e8e4df" font-size="10.5">느린 하류가 상류 스레드를 막음 → 풀 고갈 → 도미노 (망가져서가 아니라 기다려서)</text>
+  <text x="34" y="214" fill="rgb(138,133,128)" font-size="10">신호: 스레드 덤프에 RestTemplate/HttpClient 에 WAITING 몰린 동일 스택 · 에러 던지는 건 전령</text>
+
+  <!-- retry -->
+  <rect x="20" y="246" width="640" height="84" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="268" fill="#9cc3df" font-size="13" font-weight="bold">② retry storm (§12.3.2)</text>
+  <text x="34" y="290" fill="#e8e4df" font-size="10.5">백오프·조율 없는 동시 재시도 → 부하 증폭 피드백 루프 (cascading 과 결합)</text>
+  <text x="34" y="312" fill="rgb(138,133,128)" font-size="10">신호: 트래픽 증가 없는 부하 급증 · 반복 로그 · 짧고 촘촘한 재시도 span</text>
+
+  <!-- timeout -->
+  <rect x="20" y="344" width="640" height="84" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="366" fill="rgb(212,168,83)" font-size="13" font-weight="bold">③ timeout mismatch (§12.3.3)</text>
+  <text x="34" y="388" fill="#e8e4df" font-size="10.5">클라이언트가 서버보다 먼저 포기(2초 vs 3초) → 거짓 실패·낭비 재시도·중복 요청 ID</text>
+  <text x="34" y="410" fill="rgb(138,133,128)" font-size="10">신호: client span 타임아웃 종료·server span 성공 계속 · 평균 말고 P95/P99</text>
+
+  <!-- P95/P99 -->
+  <rect x="20" y="442" width="640" height="62" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="1.5"/>
+  <text x="34" y="464" fill="#9cc3df" font-size="13" font-weight="bold">P95 · P99 — 평균은 거짓말한다</text>
+  <text x="34" y="486" fill="#e8e4df" font-size="11">P95=95%가 이 이하 · P99=99%가 이 이하 → 타임아웃 2000ms에 P99 2400ms면 1% 확정 실패</text>
+  <text x="34" y="500" fill="rgb(138,133,128)" font-size="9.5">가장 느린·위험한 사용자(먼저 고통받는)를 드러냄</text>
+
+  <!-- 결론 -->
+  <rect x="20" y="518" width="640" height="64" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="34" y="540" fill="rgb(212,168,83)" font-size="13" font-weight="bold">시스템 수준 문제엔 시스템 수준 사고</text>
+  <text x="34" y="562" fill="#e8e4df" font-size="11">로그만으론 부족 → 분산 추적·구조화 로그·메트릭·Sentry·스키마 검증을 여러 렌즈로 함께</text>
+  <text x="34" y="578" fill="rgb(138,133,128)" font-size="9.5">한 완벽한 도구가 아니라 모든 각도에서 보는 렌즈 세트 · AI 가 보완(+ circuit breaker 오작동)</text>
+</svg>

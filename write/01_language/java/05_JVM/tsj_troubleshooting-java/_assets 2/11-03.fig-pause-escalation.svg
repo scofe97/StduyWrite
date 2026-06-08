@@ -1,0 +1,58 @@
+<svg viewBox="0 0 680 340" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>GC 멈춤 에스컬레이션 — 25ms 정상에서 250ms 악화를 거쳐 2.5초·5.3초 full GC로 (원문 로그 예시 개념도)</title>
+  <desc>원문 §11.4.1 로그 예시의 개념을 도식으로 옮긴 것입니다. 처음 몇 GC 이벤트는 25에서 27ms 로 정상 범위입니다. 그런데 한 시점에 멈춤이 110ms 로 뛰며 성능 저하의 초기 경고가 나타나고, 이어 250ms 로 악화되며 메모리 압박이 커집니다. 그 다음 2.5초짜리 full GC 라는 큰 적신호가 앱 응답성을 심각하게 해치고, 마지막에 또 5.3초 full GC 가 나타나 즉각적 주의가 필요한 심각한 메모리 관리 문제를 알립니다. 50ms 를 넘는 멈춤이 잦고 일관되게 높으면 메모리 압박을 뜻합니다.</desc>
+  <rect x="0" y="0" width="680" height="340" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">GC 멈춤 에스컬레이션 — 정상에서 심각으로</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 §11.4.1 로그 예시 개념도 — 50ms 기준선 넘어 악화</text>
+
+  <!-- 기준선 -->
+  <line x1="40" y1="200" x2="660" y2="200" stroke="rgb(60,55,50)" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="40" y="195" fill="rgb(138,133,128)" font-size="9">50ms 기준선 (이하 정상)</text>
+
+  <!-- 막대들 (높이로 멈춤 시간 표현) -->
+  <!-- 25ms 정상 -->
+  <rect x="60" y="194" width="40" height="6" fill="rgba(102,187,106,0.5)" stroke="#66bb6a"/>
+  <text x="80" y="218" fill="#66bb6a" font-size="9" text-anchor="middle">25ms</text>
+  <rect x="112" y="194" width="40" height="6" fill="rgba(102,187,106,0.5)" stroke="#66bb6a"/>
+  <text x="132" y="218" fill="#66bb6a" font-size="9" text-anchor="middle">27ms</text>
+  <rect x="164" y="194" width="40" height="6" fill="rgba(102,187,106,0.5)" stroke="#66bb6a"/>
+  <text x="184" y="218" fill="#66bb6a" font-size="9" text-anchor="middle">26ms</text>
+  <!-- 110ms 경고 -->
+  <rect x="216" y="178" width="40" height="22" fill="rgba(212,168,83,0.5)" stroke="rgb(212,168,83)"/>
+  <text x="236" y="172" fill="rgb(212,168,83)" font-size="9" text-anchor="middle">110ms</text>
+  <text x="236" y="230" fill="rgb(212,168,83)" font-size="8" text-anchor="middle">초기 경고</text>
+  <!-- 250ms 악화 -->
+  <rect x="268" y="150" width="40" height="50" fill="rgba(212,168,83,0.6)" stroke="rgb(212,168,83)"/>
+  <text x="288" y="144" fill="rgb(212,168,83)" font-size="9" text-anchor="middle">250ms</text>
+  <text x="288" y="230" fill="rgb(212,168,83)" font-size="8" text-anchor="middle">악화(압박↑)</text>
+  <!-- 2.5s full -->
+  <rect x="320" y="90" width="40" height="110" fill="rgba(244,127,114,0.6)" stroke="#f47f72"/>
+  <text x="340" y="84" fill="#f47f72" font-size="9" text-anchor="middle">2.5s</text>
+  <text x="340" y="230" fill="#f47f72" font-size="8" text-anchor="middle">Full GC</text>
+  <!-- 5.3s full -->
+  <rect x="372" y="76" width="40" height="124" fill="rgba(244,127,114,0.8)" stroke="#f47f72"/>
+  <text x="392" y="70" fill="#f47f72" font-size="9" text-anchor="middle">5.3s</text>
+  <text x="392" y="230" fill="#f47f72" font-size="8" text-anchor="middle">Full GC 심각</text>
+
+  <!-- 시간축 화살표 -->
+  <line x1="60" y1="244" x2="430" y2="244" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <polygon points="430,244 422,240 422,248" fill="rgb(138,133,128)"/>
+  <text x="245" y="258" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">시간 →</text>
+
+  <!-- 해석 -->
+  <rect x="450" y="76" width="210" height="180" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="464" y="98" fill="#e8e4df" font-size="11" font-weight="bold">읽는 법</text>
+  <text x="464" y="120" fill="#66bb6a" font-size="10">25~27ms = 정상</text>
+  <text x="464" y="142" fill="rgb(212,168,83)" font-size="10">110ms = 초기 경고</text>
+  <text x="464" y="164" fill="rgb(212,168,83)" font-size="10">250ms = 메모리 압박↑</text>
+  <text x="464" y="186" fill="#f47f72" font-size="10">2.5s full GC = 적신호</text>
+  <text x="464" y="208" fill="#f47f72" font-size="10">5.3s full GC = 심각</text>
+  <text x="464" y="234" fill="rgb(138,133,128)" font-size="9">50ms 초과가 잦고</text>
+  <text x="464" y="248" fill="rgb(138,133,128)" font-size="9">일관되면 = 메모리 압박</text>
+
+  <!-- 하단 -->
+  <rect x="20" y="276" width="640" height="50" fill="rgb(20,20,20)" stroke="rgb(60,55,50)"/>
+  <text x="34" y="298" fill="#e8e4df" font-size="11" font-weight="bold">조정안</text>
+  <text x="34" y="318" fill="rgb(138,133,128)" font-size="10">GC 알고리즘 실험(G1·ZGC·Shenandoah) · 힙 크기(-Xms/-Xmx) · Eden/Survivor/Old · 객체 재사용 · 저지연=ZGC/Shenandoah</text>
+</svg>

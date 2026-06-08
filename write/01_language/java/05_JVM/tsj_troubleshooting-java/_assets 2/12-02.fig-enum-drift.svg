@@ -1,0 +1,40 @@
+<svg viewBox="0 0 680 340" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>enum drift — order의 새 enum을 fulfillment가 모를 때 역직렬화 실패 (12-01 시나리오 개념도)</title>
+  <desc>12-01 시나리오의 직렬화 불일치를 도식으로 옮긴 것입니다. order 서비스에 새 enum 값 SHIPPING_METHOD_DRONE 이 추가돼 배포됐습니다. order 는 이 새 enum 을 담은 메시지를 Kafka 에 발행합니다. 그런데 fulfillment 서비스는 업데이트되지 않아 옛 스키마를 쓰고 있어 그 새 enum 값을 모릅니다. 그래서 fulfillment 가 메시지를 역직렬화할 때 Unknown enum value 경고와 함께 실패합니다. 서비스는 크래시하지 않고 조용히 메시지 처리를 못 합니다. 이것이 서비스가 독립적으로 진화할 때 한쪽 변경을 다른 쪽이 모르면 생기는 전형적 버전 불일치입니다.</desc>
+  <rect x="0" y="0" width="680" height="340" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">enum drift — 한쪽 변경을 다른 쪽이 모를 때</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">12-01 시나리오 개념도 — 독립 진화의 버전 불일치</text>
+
+  <!-- order (새 스키마) -->
+  <rect x="20" y="90" width="280" height="120" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="34" y="112" fill="#66bb6a" font-size="13" font-weight="bold">order (어제 배포·새 스키마)</text>
+  <rect x="34" y="124" width="252" height="56" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
+  <text x="44" y="144" fill="#e8e4df" font-size="10" font-family="monospace">enum ShippingMethod {</text>
+  <text x="44" y="160" fill="rgb(138,133,128)" font-size="10" font-family="monospace">  STANDARD, EXPRESS,</text>
+  <text x="44" y="176" fill="#66bb6a" font-size="10" font-family="monospace">  SHIPPING_METHOD_DRONE  ← 추가</text>
+  <text x="34" y="200" fill="rgb(138,133,128)" font-size="9.5">새 enum 담은 메시지 발행</text>
+
+  <!-- Kafka 화살표 -->
+  <line x1="300" y1="150" x2="378" y2="150" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <polygon points="378,150 370,146 370,154" fill="rgb(212,168,83)"/>
+  <text x="339" y="142" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">Kafka</text>
+  <text x="339" y="166" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">orders.created</text>
+
+  <!-- fulfillment (옛 스키마) -->
+  <rect x="380" y="90" width="280" height="120" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="394" y="112" fill="#f47f72" font-size="13" font-weight="bold">fulfillment (옛 스키마)</text>
+  <rect x="394" y="124" width="252" height="56" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
+  <text x="404" y="144" fill="#e8e4df" font-size="10" font-family="monospace">enum ShippingMethod {</text>
+  <text x="404" y="160" fill="rgb(138,133,128)" font-size="10" font-family="monospace">  STANDARD, EXPRESS</text>
+  <text x="404" y="176" fill="#f47f72" font-size="10" font-family="monospace">  // DRONE 모름</text>
+  <text x="394" y="200" fill="#f47f72" font-size="9.5">새 enum 값을 모름 → 역직렬화 실패</text>
+
+  <!-- 결과 -->
+  <rect x="20" y="226" width="640" height="100" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="248" fill="#f47f72" font-size="12" font-weight="bold">결과 — 크래시 없이 조용히 실패</text>
+  <rect x="34" y="258" width="612" height="24" fill="rgb(18,18,18)" stroke="#f47f72"/>
+  <text x="44" y="274" fill="#f47f72" font-size="10" font-family="monospace">[WARN] Failed to deserialize ... Unknown enum value: SHIPPING_METHOD_DRONE</text>
+  <text x="34" y="302" fill="#e8e4df" font-size="10.5">메시지가 토픽에 소비 안 된 채 앉아 있음 → 주문이 저장 안 됨 → 대시보드에 없음</text>
+  <text x="34" y="320" fill="rgb(138,133,128)" font-size="9.5">방지: CI 스키마 검증(optional 로 추가하면 옛 클라가 무시) · 런타임 레지스트리 검증</text>
+</svg>

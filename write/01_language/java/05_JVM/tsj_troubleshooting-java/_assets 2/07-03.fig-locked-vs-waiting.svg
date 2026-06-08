@@ -1,0 +1,45 @@
+<svg viewBox="0 0 680 380" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>락된 스레드 vs 대기 스레드 — 입구에서 막힘 vs 모니터가 안에서 명시적으로 멈춤 (원문 Figure 7.14 개념도)</title>
+  <desc>원문 Figure 7.14 의 개념을 도식으로 옮긴 것입니다. synchronized 블록을 경찰관이 통제하는 제한 구역, 스레드를 자동차로 비유합니다. 락된 스레드는 synchronized 블록 입구에서 막힌 것으로, 다른 스레드가 안에서 활발히 도는 동안 모니터가 입장을 시키지 않습니다. 대기 스레드는 모니터가 명시적으로 블록 상태로 set 한 것으로, 모니터는 자신이 관리하는 블록 안의 어떤 스레드든 기다리게 할 수 있고, 그 대기 스레드는 모니터가 명시적으로 진행하라 할 때만 실행을 이어갑니다.</desc>
+  <rect x="0" y="0" width="680" height="380" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">락된 스레드 vs 대기 스레드</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 Figure 7.14 개념도 — 경찰관(모니터)과 자동차(스레드), 제한 구역(synchronized)</text>
+
+  <!-- 왼쪽: 락됨 -->
+  <rect x="20" y="76" width="312" height="280" fill="rgba(127,168,201,0.05)" stroke="#7fa8c9" stroke-width="1.5"/>
+  <text x="34" y="98" fill="#9cc3df" font-size="13" font-weight="bold">락됨 (locked) — 입구에서 막힘</text>
+
+  <!-- 제한 구역 -->
+  <rect x="120" y="116" width="180" height="60" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="210" y="140" fill="rgb(212,168,83)" font-size="10" text-anchor="middle">제한 구역</text>
+  <text x="210" y="158" fill="#e8e4df" font-size="10" text-anchor="middle">실행 중 차 1대</text>
+  <rect x="150" y="146" width="40" height="20" fill="rgba(127,168,201,0.45)" stroke="#7fa8c9"/>
+
+  <!-- 입구에서 막힌 차들 -->
+  <rect x="34" y="200" width="40" height="22" fill="rgb(30,30,30)" stroke="rgb(60,55,50)" stroke-dasharray="3 3"/>
+  <rect x="80" y="200" width="40" height="22" fill="rgb(30,30,30)" stroke="rgb(60,55,50)" stroke-dasharray="3 3"/>
+  <text x="170" y="216" fill="rgb(138,133,128)" font-size="10">← 입구에서 대기</text>
+  <text x="34" y="248" fill="#e8e4df" font-size="10.5">모니터가 입장을 안 시킴</text>
+  <text x="34" y="270" fill="#e8e4df" font-size="10.5">안의 차가 나가면 자동 입장</text>
+  <text x="34" y="292" fill="#66bb6a" font-size="10.5">→ notify 불필요 (자연히 풀림)</text>
+  <text x="34" y="332" fill="rgb(138,133,128)" font-size="9.5">07-01·07-02 의 producer/consumer</text>
+  <text x="34" y="348" fill="rgb(138,133,128)" font-size="9.5">상호 차단이 이 경우</text>
+
+  <!-- 오른쪽: 대기 -->
+  <rect x="348" y="76" width="312" height="280" fill="rgba(212,168,83,0.05)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="362" y="98" fill="rgb(212,168,83)" font-size="13" font-weight="bold">대기 (waiting) — 안에서 명시적 멈춤</text>
+
+  <!-- 제한 구역 (안에 멈춘 차) -->
+  <rect x="448" y="116" width="180" height="60" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="538" y="138" fill="rgb(212,168,83)" font-size="10" text-anchor="middle">제한 구역</text>
+  <rect x="478" y="146" width="40" height="20" fill="rgb(30,30,30)" stroke="#f47f72" stroke-dasharray="3 3"/>
+  <text x="560" y="160" fill="#f47f72" font-size="9" text-anchor="middle">멈춤</text>
+
+  <text x="362" y="216" fill="#e8e4df" font-size="10.5">경찰관이 "기다리라" 명령</text>
+  <text x="362" y="238" fill="#e8e4df" font-size="10.5">→ 블록 안에 있어도 멈춤</text>
+  <text x="362" y="260" fill="#e8e4df" font-size="10.5">모니터가 관리하는 어떤 스레드든</text>
+  <text x="362" y="282" fill="#e8e4df" font-size="10.5">기다리게 할 수 있음</text>
+  <text x="362" y="312" fill="#f47f72" font-size="10.5" font-weight="bold">→ notify 받아야 진행 (wait/notify)</text>
+  <text x="362" y="340" fill="rgb(138,133,128)" font-size="9.5">da-ch7-ex2 가 이 경우</text>
+</svg>

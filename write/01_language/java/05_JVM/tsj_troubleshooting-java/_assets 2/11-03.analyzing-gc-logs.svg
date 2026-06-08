@@ -1,0 +1,42 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>GC 로그로 문제 진단 네 시나리오 — 멈춤(50ms 초과)·누수·메모리 부족·병렬 튜닝</title>
+  <desc>이 편의 요약입니다. GC 로그는 네 실전 문제를 짚어 줍니다. 첫째 성능 저하로 GC 멈춤이 0에서 50ms 면 정상이지만 50ms 를 넘고 잦으면 문제이며 멈춤 시간 빈도 GC 전후 힙 STW 넷을 함께 봅니다. 둘째 메모리 누수로 GC 가 매 사이클 메모리를 점점 덜 비우고 full GC 조차 거의 효과 없으면 누수이고 그래프는 계속 차오릅니다. 셋째 메모리 부족으로 full GC 가 효과적으로 비우되 빈도가 높으면 누수가 아니라 힙이 과소 할당된 것이고 그래프는 peaks valleys 입니다. 넷째 병렬 튜닝으로 8개 중 2개 워커만 쓰면 ParallelGCThreads 를 늘리고 16개로 CPU 경합이면 줄입니다. 각 패턴은 멈춤 시간 빈도 회수량 STW 를 함께 읽어야 진짜 문제인지 가립니다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="38" fill="#e8e4df" font-size="18" font-weight="bold">GC 로그로 문제 진단 네 시나리오</text>
+  <text x="20" y="60" fill="rgb(138,133,128)" font-size="11">Troubleshooting Java · §11.4</text>
+
+  <!-- 1 멈춤 -->
+  <rect x="20" y="78" width="640" height="118" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="34" y="100" fill="#f47f72" font-size="13" font-weight="bold">① 성능 저하 — GC 멈춤 시간 (§11.4.1)</text>
+  <text x="34" y="124" fill="#e8e4df" font-size="11">0~50ms 정상 · 50ms 초과 + 잦은 반복 = 문제 (한두 예외는 아님)</text>
+  <text x="34" y="146" fill="#e8e4df" font-size="11">볼 넷: 멈춤 시간 · 빈도 · GC 전후 힙 사용량 · STW 이벤트</text>
+  <text x="34" y="170" fill="rgb(138,133,128)" font-size="10">에스컬레이션: 25ms → 110ms → 250ms → full GC 2.5s → 5.3s</text>
+  <text x="34" y="188" fill="rgb(138,133,128)" font-size="9.5">조정: GC 알고리즘(G1·ZGC·Shenandoah)·힙 크기·Eden/Survivor/Old·객체 재사용</text>
+
+  <!-- 2 누수 -->
+  <rect x="20" y="208" width="640" height="92" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="230" fill="rgb(212,168,83)" font-size="13" font-weight="bold">② 메모리 누수 — 힙 사용 로그 (§11.4.2)</text>
+  <text x="34" y="254" fill="#e8e4df" font-size="11">매 사이클 메모리를 점점 덜 비움(900→980→1050 남김) · full GC 도 효과 미미</text>
+  <text x="34" y="276" fill="#f47f72" font-size="11" font-weight="bold">= 누수 · 그래프 계속 차오름 · 정확한 원인은 힙 덤프(10장)</text>
+  <text x="34" y="294" fill="rgb(138,133,128)" font-size="9.5">원인: 앱 로직 결함으로 참조가 무한정 머묾(제대로 해제 안 됨)</text>
+
+  <!-- 3 부족 -->
+  <rect x="20" y="312" width="640" height="92" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="334" fill="#9cc3df" font-size="13" font-weight="bold">③ 메모리 부족 — full GC 잦지만 비움 (§11.4.3)</text>
+  <text x="34" y="358" fill="#e8e4df" font-size="11">full GC 가 효과적으로 비움(8192M→6100→5800→5600) + 빈도 높음</text>
+  <text x="34" y="380" fill="#9cc3df" font-size="11" font-weight="bold">= 누수 아님, 힙 과소 할당 · 그래프 peaks/valleys</text>
+  <text x="34" y="398" fill="rgb(138,133,128)" font-size="9.5">단기 -Xmx/-Xms(수직) · 근본 할당 최적화·수평 확장</text>
+
+  <!-- 4 병렬 -->
+  <rect x="20" y="416" width="640" height="124" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="438" fill="rgb(212,168,83)" font-size="13" font-weight="bold">④ GC 병렬성 튜닝 (§11.4.4)</text>
+  <rect x="34" y="450" width="300" height="40" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9"/>
+  <text x="44" y="468" fill="#9cc3df" font-size="10.5" font-weight="bold">과소 — 8 중 2 워커 (115ms)</text>
+  <text x="44" y="484" fill="rgb(138,133,128)" font-size="9.5">→ ParallelGCThreads 늘림</text>
+  <rect x="346" y="450" width="300" height="40" fill="rgba(244,127,114,0.08)" stroke="#f47f72"/>
+  <text x="356" y="468" fill="#f47f72" font-size="10.5" font-weight="bold">과다 — 16 워커 (310ms)</text>
+  <text x="356" y="484" fill="rgb(138,133,128)" font-size="9.5">CPU 경합 → ParallelGCThreads 줄임</text>
+  <text x="34" y="512" fill="#e8e4df" font-size="10.5">ConcGCThreads = 백그라운드(non-STW) 단계용</text>
+  <text x="34" y="532" fill="rgb(138,133,128)" font-size="9.5">원칙: 작게 시작 → 관찰 → 조정 → 반복 (모니터링 없이 스레드 무작정 늘리지 않기)</text>
+</svg>
