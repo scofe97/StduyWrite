@@ -1,0 +1,60 @@
+<svg viewBox="0 0 900 680" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>객체 할당과 승격의 다섯 규칙</title>
+  <desc>새 객체가 Eden, Survivor, Old 중 어디로 가는지 결정하는 다섯 규칙을 크기, Minor GC 생존, age, 동적 age, 공간 보장 순서로 보여준다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}.sub{font-size:11px;fill:rgb(138,133,128)}.head{font-size:13px;font-weight:800;fill:rgb(212,168,83)}.label{font-size:11px;font-weight:750;fill:#e8e4df}.body{font-size:10px;fill:rgb(180,175,170)}.note{font-size:9.5px;fill:rgb(138,133,128)}.code{font-size:10px;font-weight:700;fill:rgb(212,168,83);font-family:'JetBrains Mono',monospace}.ok{font-size:10px;font-weight:750;fill:#81c784}.bad{font-size:10px;font-weight:750;fill:#e57373}
+    </style>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="680" fill="#0d0d0d"/>
+  <text x="26" y="36" class="title">객체의 일생 — Eden에서 Old까지</text>
+  <text x="26" y="56" class="sub">대부분은 Eden에서 시작하지만, 크기·생존 횟수·Survivor 압박·Old 여유 공간에 따라 경로가 갈린다.</text>
+
+  <rect x="54" y="96" width="150" height="58" rx="8" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="129" y="120" class="label" text-anchor="middle">new 객체</text>
+  <text x="129" y="138" class="body" text-anchor="middle">할당 요청</text>
+  <line x1="204" y1="125" x2="282" y2="125" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="284" y="86" width="210" height="78" rx="8" fill="#2a2a1a" stroke="rgb(212,168,83)"/>
+  <text x="389" y="112" class="head" text-anchor="middle">규칙 2: 큰 객체인가?</text>
+  <text x="389" y="132" class="body" text-anchor="middle">PretenureSizeThreshold</text>
+  <text x="389" y="150" class="note" text-anchor="middle">일부 컬렉터에서만 의미 있음</text>
+
+  <line x1="494" y1="106" x2="642" y2="106" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="644" y="76" width="190" height="60" rx="8" fill="#1e2a1e" stroke="#4ab080"/>
+  <text x="739" y="100" class="ok" text-anchor="middle">Old 직행</text>
+  <text x="739" y="119" class="body" text-anchor="middle">큰 객체 복사 비용 회피</text>
+
+  <line x1="389" y1="164" x2="389" y2="218" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="284" y="220" width="210" height="64" rx="8" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="389" y="244" class="label" text-anchor="middle">규칙 1: Eden 할당</text>
+  <text x="389" y="263" class="body" text-anchor="middle">TLAB이 있으면 Eden 안 스레드별 버퍼</text>
+
+  <line x1="389" y1="284" x2="389" y2="340" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="284" y="342" width="210" height="76" rx="8" fill="#2a2a1a" stroke="rgb(212,168,83)"/>
+  <text x="389" y="368" class="head" text-anchor="middle">Minor GC 생존?</text>
+  <text x="389" y="388" class="body" text-anchor="middle">살아남으면 비어 있는 Survivor로 복사</text>
+  <text x="389" y="406" class="code" text-anchor="middle">age++</text>
+
+  <line x1="494" y1="380" x2="642" y2="380" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="644" y="342" width="190" height="76" rx="8" fill="#1a1a1a" stroke="#333"/>
+  <text x="739" y="368" class="label" text-anchor="middle">죽은 객체</text>
+  <text x="739" y="388" class="body" text-anchor="middle">복사하지 않음</text>
+  <text x="739" y="406" class="note" text-anchor="middle">Young 공간 회수</text>
+
+  <line x1="389" y1="418" x2="389" y2="474" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="244" y="476" width="290" height="80" rx="8" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="389" y="502" class="label" text-anchor="middle">규칙 3·4: Survivor 잔류 또는 승격</text>
+  <text x="389" y="523" class="body" text-anchor="middle">age 임계값 도달 또는 동적 age 판정</text>
+  <text x="389" y="542" class="body" text-anchor="middle">Survivor 압박이 크면 Old로 조기 승격</text>
+
+  <line x1="534" y1="516" x2="642" y2="516" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="644" y="486" width="190" height="60" rx="8" fill="#1e2a1e" stroke="#4ab080"/>
+  <text x="739" y="510" class="ok" text-anchor="middle">Old 승격</text>
+  <text x="739" y="529" class="body" text-anchor="middle">장수 객체 보관</text>
+
+  <rect x="54" y="594" width="780" height="48" rx="8" fill="#111" stroke="#333"/>
+  <text x="76" y="623" class="code">공간 보장</text>
+  <text x="168" y="623" class="body">Minor GC 전 Old가 최악의 승격량을 받을 수 있는지 확인한다. 실패 위험이 있으면 Full GC가 먼저 올 수 있다.</text>
+</svg>

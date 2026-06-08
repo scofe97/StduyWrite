@@ -1,0 +1,46 @@
+<svg viewBox="0 0 900 640" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>ZGC colored pointer와 Load Barrier 흐름</title>
+  <desc>ZGC는 포인터 일부 비트에 객체 상태 메타데이터를 담고, 참조를 로드할 때 Load Barrier가 현재 GC 단계에 맞는 최신 포인터인지 검사한다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}.sub{font-size:11px;fill:rgb(138,133,128)}.head{font-size:13px;font-weight:800;fill:rgb(212,168,83)}.label{font-size:11px;font-weight:750;fill:#e8e4df}.body{font-size:10px;fill:rgb(180,175,170)}.note{font-size:9.5px;fill:rgb(138,133,128)}.code{font-size:10px;font-weight:700;fill:rgb(212,168,83);font-family:'JetBrains Mono',monospace}.bad{font-size:10px;font-weight:750;fill:#e57373}.ok{font-size:10px;font-weight:750;fill:#81c784}
+    </style>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgb(212,168,83)"/></marker>
+    <marker id="arrRed" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#e57373"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="640" fill="#0d0d0d"/>
+  <text x="26" y="36" class="title">ZGC — 포인터가 현재 상태를 들고 다닌다</text>
+  <text x="26" y="56" class="sub">colored pointer는 주소와 함께 marked/remapped 같은 메타데이터를 담고, Load Barrier가 stale 여부를 판단한다.</text>
+
+  <rect x="24" y="84" width="852" height="148" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="48" y="112" class="head">① colored pointer 구조</text>
+  <rect x="70" y="146" width="140" height="44" rx="5" fill="#2a2a1a" stroke="rgb(212,168,83)"/>
+  <text x="140" y="173" class="code" text-anchor="middle">metadata bits</text>
+  <rect x="210" y="146" width="560" height="44" rx="5" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="490" y="173" class="code" text-anchor="middle">object address</text>
+  <text x="70" y="212" class="note">64비트 포인터 중 실제 주소 표현에 쓰이지 않는 비트를 GC 상태 표시에 활용한다.</text>
+
+  <rect x="24" y="260" width="852" height="234" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="48" y="288" class="head">② Load Barrier — 참조를 읽는 순간 최신 여부 검사</text>
+  <rect x="60" y="326" width="150" height="60" rx="6" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="135" y="350" class="label" text-anchor="middle">참조 로드</text>
+  <text x="135" y="369" class="body" text-anchor="middle">field에서 pointer 읽기</text>
+  <line x1="210" y1="356" x2="282" y2="356" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="284" y="326" width="170" height="60" rx="6" fill="#2a2a1a" stroke="rgb(212,168,83)"/>
+  <text x="369" y="350" class="label" text-anchor="middle">Load Barrier</text>
+  <text x="369" y="369" class="body" text-anchor="middle">색이 현재 단계와 맞는가?</text>
+  <line x1="454" y1="340" x2="554" y2="318" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="556" y="290" width="250" height="58" rx="6" fill="#1e2a1e" stroke="#4ab080"/>
+  <text x="681" y="313" class="ok" text-anchor="middle">fast path</text>
+  <text x="681" y="332" class="body" text-anchor="middle">이미 최신이면 그대로 사용</text>
+  <line x1="454" y1="372" x2="554" y2="414" stroke="#e57373" stroke-width="2" marker-end="url(#arrRed)"/>
+  <rect x="556" y="394" width="250" height="58" rx="6" fill="#2a1414" stroke="#e57373"/>
+  <text x="681" y="417" class="bad" text-anchor="middle">stale path</text>
+  <text x="681" y="436" class="body" text-anchor="middle">remap해서 최신 주소 반환</text>
+  <text x="60" y="474" class="note">핵심 보장은 "현재 읽기 연산에 최신 주소를 돌려준다"이다. 저장 위치를 즉시 모두 고치는지는 구현 세부다.</text>
+
+  <rect x="24" y="522" width="852" height="78" rx="8" fill="#111" stroke="#333"/>
+  <text x="48" y="550" class="head">③ 왜 pause가 줄어드는가</text>
+  <text x="68" y="574" class="body">전체 힙의 모든 참조를 STW 안에서 한 번에 고치지 않고, 실제로 읽히는 참조부터 점진적으로 remap한다.</text>
+  <text x="68" y="592" class="body">대가로 참조 로드 경로마다 색 검사와 분기 비용이 붙는다.</text>
+</svg>

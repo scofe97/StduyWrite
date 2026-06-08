@@ -1,0 +1,85 @@
+<svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>OopMap — 스택·레지스터 참조 위치 지도와 도달성 분석의 연결</title>
+  <desc>컴파일/JIT 시점에 안전 지점별 OopMap을 만든다. OopMap은 스택 슬롯과 레지스터 중 어느 위치가 객체 참조인지 기록한다. GC 시점에는 스레드가 안전 지점에서 멈추고, GC가 OopMap으로 GC Root 후보를 찾은 뒤 힙 객체 필드를 따라 도달성 분석을 시작한다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub { font-size: 11px; fill: rgb(138,133,128); }
+      .head { font-size: 13px; font-weight: 800; fill: rgb(212,168,83); }
+      .label { font-size: 11px; font-weight: 750; fill: #e8e4df; }
+      .body { font-size: 10px; fill: rgb(180,175,170); }
+      .note { font-size: 9.5px; fill: rgb(138,133,128); }
+      .code { font-size: 10px; font-weight: 700; fill: rgb(212,168,83); font-family: 'JetBrains Mono', monospace; }
+      .ok { font-size: 10px; font-weight: 750; fill: #81c784; }
+      .bad { font-size: 10px; font-weight: 750; fill: #e57373; }
+    </style>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="560" fill="#0d0d0d"/>
+  <text x="26" y="36" class="title">OopMap — 참조 위치 지도와 도달성 분석의 연결</text>
+  <text x="26" y="55" class="sub">OopMap은 객체 그래프가 아니라, 안전 지점에서 스택·레지스터의 어떤 값이 객체 참조인지 알려 주는 지도다</text>
+
+  <rect x="22" y="80" width="856" height="178" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="42" y="106" class="head">① 컴파일/JIT 시점 — 안전 지점별 참조 위치표 생성</text>
+  <text x="42" y="124" class="body">타입 정보, operand stack, 지역 변수, 레지스터 배치를 바탕으로 “어디가 객체 참조인지”를 미리 기록한다</text>
+
+  <rect x="54" y="150" width="190" height="76" rx="6" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="149" y="177" class="label" text-anchor="middle">메서드 컴파일</text>
+  <text x="149" y="196" class="body" text-anchor="middle">지역 변수·스택 타입 분석</text>
+  <text x="149" y="212" class="body" text-anchor="middle">레지스터 배치 결정</text>
+
+  <line x1="244" y1="188" x2="308" y2="188" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="310" y="150" width="222" height="76" rx="6" fill="#2a2a1a" stroke="rgb(212,168,83)"/>
+  <text x="421" y="176" class="label" text-anchor="middle">Safepoint #12</text>
+  <text x="421" y="195" class="code" text-anchor="middle">slot 1, slot 3, R2 = oop</text>
+  <text x="421" y="212" class="body" text-anchor="middle">나머지는 primitive 또는 비참조</text>
+
+  <line x1="532" y1="188" x2="596" y2="188" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="598" y="150" width="226" height="76" rx="6" fill="#1e2a1e" stroke="#4ab080"/>
+  <text x="711" y="176" class="ok" text-anchor="middle">OopMap 저장</text>
+  <text x="711" y="195" class="body" text-anchor="middle">값을 보고 추측하지 않도록</text>
+  <text x="711" y="212" class="body" text-anchor="middle">참조 위치 목록을 보관</text>
+
+  <rect x="22" y="286" width="856" height="210" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="42" y="312" class="head">② GC 시점 — OopMap으로 출발점 찾기, 그 뒤 객체 그래프 탐색</text>
+  <text x="42" y="330" class="body">GC는 안전 지점에서 멈춘 스레드의 OopMap을 조회하고, 객체 참조인 슬롯·레지스터만 GC Root로 사용한다</text>
+
+  <rect x="50" y="358" width="154" height="104" rx="6" fill="#111" stroke="#333"/>
+  <text x="127" y="382" class="label" text-anchor="middle">스택·레지스터</text>
+  <text x="72" y="406" class="code">slot 0</text><text x="132" y="406" class="note">int</text>
+  <text x="72" y="426" class="code">slot 1</text><text x="132" y="426" class="ok">object ref</text>
+  <text x="72" y="446" class="code">R2</text><text x="132" y="446" class="ok">object ref</text>
+
+  <line x1="204" y1="410" x2="274" y2="410" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="276" y="358" width="170" height="104" rx="6" fill="#2a2a1a" stroke="rgb(212,168,83)"/>
+  <text x="361" y="384" class="label" text-anchor="middle">OopMap 조회</text>
+  <text x="361" y="406" class="body" text-anchor="middle">참조 슬롯만 선택</text>
+  <text x="361" y="424" class="body" text-anchor="middle">비참조 값은 따라가지 않음</text>
+  <text x="361" y="444" class="bad" text-anchor="middle">주소처럼 보여도 무시</text>
+
+  <line x1="446" y1="410" x2="516" y2="410" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="518" y="358" width="136" height="104" rx="6" fill="#1e2a1e" stroke="#4ab080"/>
+  <text x="586" y="384" class="ok" text-anchor="middle">GC Roots</text>
+  <text x="586" y="406" class="body" text-anchor="middle">slot 1 → A</text>
+  <text x="586" y="424" class="body" text-anchor="middle">R2 → X</text>
+  <text x="586" y="444" class="body" text-anchor="middle">탐색 출발점</text>
+
+  <line x1="654" y1="410" x2="724" y2="410" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="726" y="358" width="118" height="104" rx="6" fill="#1e1a2a" stroke="#8a70c0"/>
+  <text x="785" y="382" class="label" text-anchor="middle">도달성 분석</text>
+  <text x="785" y="405" class="body" text-anchor="middle">A → B → C</text>
+  <text x="785" y="424" class="body" text-anchor="middle">X → Y</text>
+  <text x="785" y="444" class="body" text-anchor="middle">힙 필드 추적</text>
+
+  <rect x="22" y="514" width="856" height="28" rx="5" fill="#111" stroke="#333"/>
+  <text x="42" y="532" class="code">구분</text>
+  <text x="88" y="532" class="body">OopMap은 출발점 찾기, 도달성 분석은 그 출발점에서 힙 객체 필드를 따라가는 그래프 탐색이다.</text>
+</svg>

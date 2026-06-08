@@ -1,0 +1,93 @@
+<svg viewBox="0 0 900 520" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>안전 지점과 안전 영역 — 실행 중 스레드와 대기 스레드의 GC 협력 흐름</title>
+  <desc>실행 중인 애플리케이션 스레드는 안전 지점 폴링에서 GC 요청을 확인하고 멈춘다. sleep, wait, I/O block 상태의 스레드는 안전 영역에 들어갔다고 표시하고, 깨어날 때 GC가 진행 중이면 대기한 뒤 재개한다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub { font-size: 11px; fill: rgb(138,133,128); }
+      .head { font-size: 13px; font-weight: 800; fill: rgb(212,168,83); }
+      .label { font-size: 11px; font-weight: 750; fill: #e8e4df; }
+      .body { font-size: 10px; fill: rgb(180,175,170); }
+      .code { font-size: 10px; font-weight: 700; fill: rgb(212,168,83); font-family: 'JetBrains Mono', monospace; }
+      .note { font-size: 9.5px; fill: rgb(138,133,128); }
+      .ok { font-size: 10px; font-weight: 750; fill: #81c784; }
+      .warn { font-size: 10px; font-weight: 750; fill: #e57373; }
+    </style>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="arr-red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 z" fill="#e57373"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="520" fill="#0d0d0d"/>
+  <text x="26" y="36" class="title">안전 지점과 안전 영역 — 스레드 상태별 GC 협력</text>
+  <text x="26" y="55" class="sub">실행 중인 스레드는 safepoint polling, 멈춰 있는 스레드는 safe region 표시로 GC에 협력한다</text>
+
+  <rect x="22" y="78" width="414" height="354" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="42" y="104" class="head">① 실행 중인 스레드 — 안전 지점</text>
+  <text x="42" y="122" class="body">자바 코드를 계속 실행하므로 정해진 위치에서만 멈춘다</text>
+
+  <rect x="48" y="152" width="150" height="58" rx="6" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="123" y="177" class="label" text-anchor="middle">자바 코드 실행</text>
+  <text x="123" y="195" class="body" text-anchor="middle">객체 참조 변경 가능</text>
+
+  <line x1="198" y1="181" x2="242" y2="181" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="244" y="152" width="150" height="58" rx="6" fill="#2a2a1a" stroke="rgb(212,168,83)"/>
+  <text x="319" y="176" class="label" text-anchor="middle">Safepoint Poll</text>
+  <text x="319" y="194" class="body" text-anchor="middle">GC 요청 확인</text>
+
+  <line x1="319" y1="210" x2="319" y2="252" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="244" y="254" width="150" height="64" rx="6" fill="#2a1414" stroke="#e57373"/>
+  <text x="319" y="280" class="warn" text-anchor="middle">GC 요청 있음</text>
+  <text x="319" y="299" class="body" text-anchor="middle">OopMap이 있는 위치에서 정지</text>
+
+  <line x1="244" y1="286" x2="198" y2="286" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="48" y="254" width="150" height="64" rx="6" fill="#1e2a1e" stroke="#4ab080"/>
+  <text x="123" y="280" class="ok" text-anchor="middle">GC 완료 후 재개</text>
+  <text x="123" y="299" class="body" text-anchor="middle">다음 명령 실행</text>
+
+  <rect x="48" y="350" width="346" height="52" rx="6" fill="#111" stroke="#333"/>
+  <text x="66" y="372" class="code">핵심</text>
+  <text x="110" y="372" class="body">안전 지점은 OopMap을 믿고 멈출 수 있는 특정 실행 위치다.</text>
+  <text x="66" y="390" class="note">메서드 호출, 루프 백 엣지, 예외 처리 분기 등이 후보가 된다.</text>
+
+  <rect x="464" y="78" width="414" height="354" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="484" y="104" class="head">② 대기 중인 스레드 — 안전 영역</text>
+  <text x="484" y="122" class="body">실행 중이 아니므로 다음 안전 지점까지 갈 수 없다</text>
+
+  <rect x="490" y="152" width="150" height="58" rx="6" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="565" y="176" class="label" text-anchor="middle">sleep / wait / I/O</text>
+  <text x="565" y="194" class="body" text-anchor="middle">명령 실행 중지</text>
+
+  <line x1="640" y1="181" x2="684" y2="181" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="686" y="152" width="150" height="58" rx="6" fill="#1e2a1e" stroke="#4ab080"/>
+  <text x="761" y="176" class="ok" text-anchor="middle">Safe Region 등록</text>
+  <text x="761" y="194" class="body" text-anchor="middle">이미 멈춘 것으로 취급</text>
+
+  <line x1="761" y1="210" x2="761" y2="252" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="686" y="254" width="150" height="64" rx="6" fill="#2a2a1a" stroke="rgb(212,168,83)"/>
+  <text x="761" y="280" class="label" text-anchor="middle">깨어나려는 시점</text>
+  <text x="761" y="299" class="body" text-anchor="middle">GC 진행 여부 확인</text>
+
+  <line x1="686" y1="286" x2="640" y2="286" stroke="#e57373" stroke-width="2" marker-end="url(#arr-red)"/>
+
+  <rect x="490" y="254" width="150" height="64" rx="6" fill="#2a1414" stroke="#e57373"/>
+  <text x="565" y="280" class="warn" text-anchor="middle">GC 진행 중이면 대기</text>
+  <text x="565" y="299" class="body" text-anchor="middle">끝난 뒤 안전 영역 탈출</text>
+
+  <rect x="490" y="350" width="346" height="52" rx="6" fill="#111" stroke="#333"/>
+  <text x="508" y="372" class="code">핵심</text>
+  <text x="552" y="372" class="body">안전 영역은 멈춰 있는 스레드가 GC에 안전하다고 표시하는 구간이다.</text>
+  <text x="508" y="390" class="note">GC가 끝나기 전에는 안전 영역 밖으로 바로 나갈 수 없다.</text>
+
+  <rect x="22" y="452" width="856" height="44" rx="6" fill="#111" stroke="#333"/>
+  <text x="42" y="478" class="code">구분</text>
+  <text x="88" y="478" class="body">안전 지점은 실행 중인 스레드의 정지 위치이고, 안전 영역은 대기 중인 스레드의 안전 상태 표시다.</text>
+</svg>
