@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 640" font-family="Pretendard, sans-serif">
+  <rect width="680" height="640" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">노드 장애 처리 · 복제 로그 구현</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">팔로워 복구는 쉽고 리더 failover는 까다롭다 · 로그는 statement/WAL/logical</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- 팔로워 vs 리더 장애 -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">두 종류의 장애</text>
+
+  <rect x="32" y="124" width="300" height="78" rx="6" fill="#141414" stroke="#66bb6a"/>
+  <text x="48" y="146" fill="#66bb6a" font-size="12" font-weight="700">팔로워 장애 — catch-up 복구(쉬움)</text>
+  <text x="48" y="166" fill="#e8e4df" font-size="10.5">로컬 로그로 마지막 처리 트랜잭션을 앎</text>
+  <text x="48" y="184" fill="#e8e4df" font-size="10.5">→ 끊긴 동안 변경을 리더에 요청·적용</text>
+  <text x="48" y="200" fill="rgb(138,133,128)" font-size="9.5">단, 오래 끊기면 따라잡기 부하 큼</text>
+
+  <rect x="348" y="124" width="300" height="78" rx="6" fill="#141414" stroke="#f47f72"/>
+  <text x="364" y="146" fill="#f47f72" font-size="12" font-weight="700">리더 장애 — failover(까다로움)</text>
+  <text x="364" y="166" fill="#e8e4df" font-size="10.5">① 장애 판정(보통 타임아웃)</text>
+  <text x="364" y="182" fill="#e8e4df" font-size="10.5">② 새 리더 선출(가장 최신 팔로워)</text>
+  <text x="364" y="198" fill="#e8e4df" font-size="10.5">③ 클라이언트·옛 리더 재구성</text>
+
+  <!-- failover 위험 -->
+  <text x="32" y="240" fill="rgb(212,168,83)" font-size="14" font-weight="700">failover가 어긋나는 4가지</text>
+  <rect x="32" y="252" width="616" height="118" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="48" y="274" fill="#f47f72" font-size="11" font-weight="700">1. 미복제 쓰기 폐기</text>
+  <text x="64" y="290" fill="#e8e4df" font-size="10">비동기 시 새 리더가 못 받은 쓰기 폐기 → 확정 통보된 쓰기가 내구성 잃음</text>
+  <text x="48" y="310" fill="#f47f72" font-size="11" font-weight="700">2. 외부 시스템 불일치</text>
+  <text x="64" y="326" fill="#e8e4df" font-size="10">GitHub 사고: 뒤처진 MySQL 승격 → autoincrement PK 재사용 → Redis와 불일치·정보 유출</text>
+  <text x="48" y="346" fill="#f47f72" font-size="11" font-weight="700">3. split brain(두 리더)</text>
+  <text x="335" y="346" fill="#f47f72" font-size="11" font-weight="700">4. 타임아웃 정하기</text>
+  <text x="64" y="362" fill="#e8e4df" font-size="10">둘 다 쓰기 수용 → 손상</text>
+  <text x="351" y="362" fill="#e8e4df" font-size="10">짧으면 불필요 failover, 길면 복구 지연</text>
+
+  <text x="32" y="392" fill="rgb(138,133,128)" font-size="10.5">fencing(옛 리더 차단)으로 split brain 방어 · 쉬운 해법 없어 수동 failover 선호하기도</text>
+
+  <!-- 복제 로그 3방식 -->
+  <text x="32" y="426" fill="rgb(212,168,83)" font-size="14" font-weight="700">복제 로그 구현 — 3방식</text>
+
+  <rect x="32" y="438" width="196" height="150" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="460" fill="#e8e4df" font-size="12" font-weight="700">statement 기반</text>
+  <text x="48" y="480" fill="#e8e4df" font-size="10">SQL 문 그대로 전달</text>
+  <text x="48" y="498" fill="#66bb6a" font-size="10">+ 간결</text>
+  <text x="48" y="516" fill="#f47f72" font-size="10">− NOW·RAND 비결정</text>
+  <text x="48" y="532" fill="#f47f72" font-size="10">− autoincrement 순서</text>
+  <text x="48" y="548" fill="#f47f72" font-size="10">− 트리거 부작용</text>
+  <text x="48" y="568" fill="rgb(138,133,128)" font-size="9">MySQL 5.1 이전</text>
+
+  <rect x="242" y="438" width="196" height="150" rx="6" fill="#141414" stroke="#f47f72"/>
+  <text x="258" y="460" fill="#e8e4df" font-size="12" font-weight="700">WAL shipping(물리)</text>
+  <text x="258" y="480" fill="#e8e4df" font-size="10">바이트 단위 디스크 블록</text>
+  <text x="258" y="498" fill="#66bb6a" font-size="10">+ 인덱스·힙 그대로 복원</text>
+  <text x="258" y="516" fill="#f47f72" font-size="10">− 저장 엔진과 강결합</text>
+  <text x="258" y="534" fill="#f47f72" font-size="10">− 버전 불일치 불가</text>
+  <text x="258" y="552" fill="#f47f72" font-size="10">→ 무중단 업그레이드 막힘</text>
+  <text x="258" y="572" fill="rgb(138,133,128)" font-size="9">PostgreSQL·Oracle</text>
+
+  <rect x="452" y="438" width="196" height="150" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="468" y="460" fill="rgb(212,168,83)" font-size="12" font-weight="700">logical(row 기반)</text>
+  <text x="468" y="480" fill="#e8e4df" font-size="10">행 단위 변경 레코드</text>
+  <text x="468" y="498" fill="#66bb6a" font-size="10">+ 저장 엔진과 분리</text>
+  <text x="468" y="516" fill="#66bb6a" font-size="10">+ 버전 다른 leader·follower</text>
+  <text x="468" y="534" fill="#66bb6a" font-size="10">+ 최소 다운타임 업그레이드</text>
+  <text x="468" y="552" fill="#66bb6a" font-size="10">+ 외부 파싱 쉬움 → CDC</text>
+  <text x="468" y="572" fill="rgb(138,133,128)" font-size="9">MySQL binlog·PG 논리복제</text>
+
+  <text x="32" y="612" fill="rgb(138,133,128)" font-size="10">CDC(change data capture) = logical 로그를 외부(데이터 웨어하우스·검색 인덱스)로 흘려보내는 기법(12장)</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>
