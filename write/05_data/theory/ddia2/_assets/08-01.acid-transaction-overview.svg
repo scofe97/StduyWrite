@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 660" font-family="Pretendard, sans-serif">
+  <rect width="680" height="660" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">ACID와 트랜잭션 개요</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">원자성·일관성·격리성·지속성 · 단일 vs 다중 객체 · abort 재시도 함정</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- ACID 4속성 -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">ACID — 네 안전 보장</text>
+
+  <rect x="32" y="124" width="144" height="106" rx="6" fill="#141414" stroke="rgb(212,168,83)"/>
+  <text x="48" y="146" fill="rgb(212,168,83)" font-size="12" font-weight="700">A — Atomicity</text>
+  <text x="48" y="164" fill="#e8e4df" font-size="10">장애 시 전부 롤백</text>
+  <text x="48" y="180" fill="#e8e4df" font-size="10">부분 완료 없음</text>
+  <text x="48" y="196" fill="#66bb6a" font-size="10">abort 후 재시도 안전</text>
+  <text x="48" y="214" fill="rgb(138,133,128)" font-size="9">≠ 멀티스레드 atomic</text>
+
+  <rect x="188" y="124" width="144" height="106" rx="6" fill="#141414" stroke="#7fa8c9"/>
+  <text x="204" y="146" fill="#7fa8c9" font-size="12" font-weight="700">C — Consistency</text>
+  <text x="204" y="164" fill="#e8e4df" font-size="10">불변 조건 유지</text>
+  <text x="204" y="180" fill="#f47f72" font-size="10">앱 책임 (DB 아님)</text>
+  <text x="204" y="196" fill="#e8e4df" font-size="10">스키마 제약으로 선언</text>
+  <text x="204" y="214" fill="rgb(138,133,128)" font-size="9">ACID에서 가장 약한 축</text>
+
+  <rect x="344" y="124" width="144" height="106" rx="6" fill="#141414" stroke="#66bb6a"/>
+  <text x="360" y="146" fill="#66bb6a" font-size="12" font-weight="700">I — Isolation</text>
+  <text x="360" y="164" fill="#e8e4df" font-size="10">동시 트랜잭션 간섭 없음</text>
+  <text x="360" y="180" fill="#e8e4df" font-size="10">이론=직렬화 가능성</text>
+  <text x="360" y="196" fill="#f47f72" font-size="10">실제=약한 수준 多</text>
+  <text x="360" y="214" fill="rgb(138,133,128)" font-size="9">08-02·08-03에서 상세</text>
+
+  <rect x="500" y="124" width="148" height="106" rx="6" fill="#141414" stroke="#f47f72"/>
+  <text x="516" y="146" fill="#f47f72" font-size="12" font-weight="700">D — Durability</text>
+  <text x="516" y="164" fill="#e8e4df" font-size="10">커밋 후 영구 저장</text>
+  <text x="516" y="180" fill="#e8e4df" font-size="10">fsync + WAL (단일 노드)</text>
+  <text x="516" y="196" fill="#e8e4df" font-size="10">N 노드 복제 (분산)</text>
+  <text x="516" y="214" fill="rgb(138,133,128)" font-size="9">완벽한 지속성은 없음</text>
+
+  <!-- 단일 vs 다중 객체 -->
+  <text x="32" y="272" fill="rgb(212,168,83)" font-size="14" font-weight="700">단일 객체 vs 다중 객체 트랜잭션</text>
+
+  <rect x="32" y="284" width="296" height="96" rx="6" fill="#1a1410" stroke="#7fa8c9"/>
+  <text x="48" y="306" fill="#7fa8c9" font-size="12" font-weight="700">단일 객체</text>
+  <text x="48" y="324" fill="#66bb6a" font-size="10.5">저장 엔진이 항상 보장</text>
+  <text x="48" y="342" fill="#e8e4df" font-size="10.5">20 KB JSON 쓰기 중 전원 차단</text>
+  <text x="48" y="360" fill="#e8e4df" font-size="10.5">→ 구 값 온전 | 신 값 온전 (뒤섞임 없음)</text>
+  <text x="48" y="374" fill="rgb(138,133,128)" font-size="9">increment·CAS 같은 원자 연산도 단일 객체</text>
+
+  <rect x="344" y="284" width="304" height="96" rx="6" fill="#101620" stroke="rgb(212,168,83)"/>
+  <text x="360" y="306" fill="rgb(212,168,83)" font-size="12" font-weight="700">다중 객체 (트랜잭션 필요)</text>
+  <text x="360" y="324" fill="#e8e4df" font-size="10.5">① 외래 키 — 참조 무결성 동시 유지</text>
+  <text x="360" y="342" fill="#e8e4df" font-size="10.5">② 비정규화 — 중복 필드 동시 갱신</text>
+  <text x="360" y="360" fill="#e8e4df" font-size="10.5">③ 보조 인덱스 — 레코드+인덱스 동시 갱신</text>
+  <text x="360" y="374" fill="rgb(138,133,128)" font-size="9">실패 시 불일치 잔존 → 트랜잭션 없으면 앱이 직접 수습</text>
+
+  <!-- abort 재시도 함정 -->
+  <text x="32" y="422" fill="rgb(212,168,83)" font-size="14" font-weight="700">abort 재시도의 함정</text>
+  <rect x="32" y="434" width="616" height="106" rx="6" fill="#141414" stroke="#f47f72"/>
+  <text x="48" y="456" fill="#f47f72" font-size="11" font-weight="700">재시도가 안전하지 않은 경우</text>
+  <text x="48" y="476" fill="#e8e4df" font-size="10.5">① 네트워크 타임아웃: 성공했지만 응답 유실 → 재시도하면 중복 실행 (멱등성 필요)</text>
+  <text x="48" y="494" fill="#e8e4df" font-size="10.5">② 과부하: 부하가 원인이면 재시도가 상황 악화 → 지수 백오프 + 재시도 상한 필요</text>
+  <text x="48" y="512" fill="#e8e4df" font-size="10.5">③ 외부 부작용: 이메일 발송은 abort 후에도 취소 불가 → 2PC 또는 멱등성 설계</text>
+  <text x="48" y="530" fill="#e8e4df" font-size="10.5">④ 영구 오류: 제약 위반은 재시도해도 실패 반복 → 에러 분류 후 영구 오류는 재시도 금지</text>
+
+  <!-- NewSQL 메모 -->
+  <text x="32" y="578" fill="rgb(212,168,83)" font-size="13" font-weight="700">트랜잭션과 확장성은 양립 가능</text>
+  <rect x="32" y="590" width="616" height="50" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="612" fill="#e8e4df" font-size="10.5">NoSQL 시대 "트랜잭션=확장 불가" 믿음은 틀렸음. CockroachDB·TiDB·Spanner·FoundationDB·YugabyteDB는</text>
+  <text x="48" y="630" fill="#e8e4df" font-size="10.5">샤딩+합의 프로토콜로 ACID 보장과 높은 처리량을 동시에 달성 → 트랜잭션 회피가 능사 아님</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>
