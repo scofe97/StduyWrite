@@ -1,0 +1,45 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>OQL로 힙 덤프 쿼리하기 — 쿼리 진행·JSON 프로젝션·referrers()로 누수 탐지·5가지 함수 용도</title>
+  <desc>이 편의 요약입니다. OQL 은 힙 덤프를 관계형 DB 처럼 SQL 비슷한 문법으로 쿼리하는 언어입니다. 인스턴스를 끝없이 스크롤하는 대신 정확히 필요한 것만 뽑고 여러 덤프를 비교할 때 특히 유용합니다. select p from model.Product p 로 인스턴스를 뽑고 점 연산자로 속성 p.name 을 고르며 중괄호 JSON 으로 이름과 이름 길이 같은 여러 값을 동시에 뽑고 where 절로 이름 길이 15 초과 같은 조건을 겁니다. 핵심은 referrers 함수로 unique referrers p 를 뽑아 모든 Product 를 참조하는 게 단 하나 리스트임이 드러나면 다수 인스턴스를 소수가 붙드는 전형적 누수입니다. 내장 함수의 다섯 용도는 referee referral 중복 하위상위클래스 긴생명경로 찾기로 누수 탐지와 최적화 여지와 소스 없는 클래스 설계 파악을 합니다. AI 가 복잡한 쿼리 생성과 다듬기를 돕습니다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="38" fill="#e8e4df" font-size="18" font-weight="bold">OQL로 힙 덤프 쿼리하기</text>
+  <text x="20" y="60" fill="rgb(138,133,128)" font-size="11">Troubleshooting Java · §10.3 · VisualVM OQL Console</text>
+
+  <!-- OQL이란 -->
+  <rect x="20" y="78" width="640" height="58" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="34" y="100" fill="rgb(212,168,83)" font-size="13" font-weight="bold">OQL (Object Query Language)</text>
+  <text x="34" y="124" fill="#e8e4df" font-size="11">힙 덤프를 관계형 DB 처럼 SQL 비슷하게 쿼리 · 여러 덤프 비교(버전 간)에 유용</text>
+
+  <!-- 쿼리 진행 -->
+  <rect x="20" y="150" width="640" height="160" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="172" fill="#e8e4df" font-size="13" font-weight="bold">쿼리 진행</text>
+  <text x="34" y="196" fill="#9cc3df" font-size="10.5" font-family="monospace">select p from model.Product p</text>
+  <text x="430" y="196" fill="rgb(138,133,128)" font-size="9.5">인스턴스 모두</text>
+  <text x="34" y="218" fill="#9cc3df" font-size="10.5" font-family="monospace">select p.name from model.Product p</text>
+  <text x="430" y="218" fill="rgb(138,133,128)" font-size="9.5">속성(점 연산자)</text>
+  <text x="34" y="240" fill="#9cc3df" font-size="10.5" font-family="monospace">select { name: p.name, name_length: ... }</text>
+  <text x="430" y="240" fill="rgb(138,133,128)" font-size="9.5">JSON 여러 값</text>
+  <text x="34" y="262" fill="#9cc3df" font-size="10.5" font-family="monospace">  where p.name.value.length &gt; 15</text>
+  <text x="430" y="262" fill="rgb(138,133,128)" font-size="9.5">조건(where)</text>
+  <text x="34" y="288" fill="rgb(138,133,128)" font-size="10">OQL Console: 하단 텍스트박스에 입력 → Run(초록 화살표) → 결과 위에 표시</text>
+
+  <!-- 누수 탐지 핵심 -->
+  <rect x="20" y="324" width="640" height="92" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="34" y="346" fill="#f47f72" font-size="13" font-weight="bold">핵심 — referrers()로 누수 탐지</text>
+  <text x="34" y="370" fill="#f47f72" font-size="11" font-family="monospace">select unique(referrers(p)) from model.Product p</text>
+  <text x="34" y="392" fill="#e8e4df" font-size="11">모든 Product 를 참조하는 게 단 하나(리스트)로 드러남</text>
+  <text x="34" y="410" fill="#f47f72" font-size="11" font-weight="bold">다수 인스턴스 ← 소수 referrer = 누수 신호 (count(referrers(p))로 셈)</text>
+
+  <!-- 5 용도 -->
+  <rect x="20" y="432" width="640" height="116" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="454" fill="#e8e4df" font-size="13" font-weight="bold">내장 함수의 다섯 용도</text>
+  <text x="34" y="478" fill="#e8e4df" font-size="10.5">• referee 찾기 → 누수 있는지     • referral 찾기 → 특정 인스턴스가 누수 원인인지</text>
+  <text x="34" y="500" fill="#e8e4df" font-size="10.5">• 중복 찾기 → 메모리 최적화 여지     • 하위/상위 클래스 → 소스 없이 클래스 설계 파악</text>
+  <text x="34" y="522" fill="#e8e4df" font-size="10.5">• 긴 생명 경로(long life path) → 누수 식별</text>
+  <text x="34" y="542" fill="rgb(138,133,128)" font-size="9.5">한 번 쓴 쿼리를 다른 덤프에도 반복 실행 · 복잡한 쿼리는 AI 가 생성·다듬기 보조</text>
+
+  <!-- 하단 -->
+  <rect x="20" y="564" width="640" height="20" fill="none"/>
+  <text x="20" y="579" fill="rgb(138,133,128)" font-size="10.5">OQL 문법은 이 예제보다 복잡 → 함수 레퍼런스(http://mng.bz/Pod2) 참고</text>
+</svg>

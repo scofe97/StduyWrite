@@ -1,0 +1,45 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>스레드 덤프 읽기와 데드락 추적 — 스레드 해부·3단계 추적·simple vs complex·cascading</title>
+  <desc>이 편의 요약입니다. 평문 스레드 덤프는 스레드마다 이름·스레드 ID·네이티브 ID·OS 우선순위·총과 CPU 시간·상태 설명·상태 이름·스택 트레이스·무엇이 막는지·잡은 락을 적어 줍니다. 데드락을 모른 채 찾으려면 안 막힌 스레드를 모두 걸러 노이즈를 없애고, 첫 후보 스레드부터 꺾쇠 안의 락 ID 로 그 스레드를 막는 락을 찾아 그 락을 일으킨 스레드로 옮겨 가다, 이미 살펴본 스레드로 되돌아오면 그 사슬 전체가 데드락입니다. 두 스레드만 서로 막으면 단순 데드락, 셋 이상이 고리로 막으면 복합 데드락입니다. 연쇄 차단은 사슬 끝 스레드가 외부 이벤트를 기다려 나머지가 줄줄이 대기하는 다른 문제로 보통 나쁜 설계의 신호입니다. 덤프는 한 시점의 사진이고 프로파일링은 전체 영화입니다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="38" fill="#e8e4df" font-size="18" font-weight="bold">스레드 덤프 읽기와 데드락 추적</text>
+  <text x="20" y="60" fill="rgb(138,133,128)" font-size="11">Troubleshooting Java · §8.2.1 · da-ch8-ex1</text>
+
+  <!-- 해부 -->
+  <rect x="20" y="78" width="640" height="120" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="100" fill="rgb(212,168,83)" font-size="13" font-weight="bold">한 스레드 항목에 적히는 것</text>
+  <text x="34" y="124" fill="#e8e4df" font-size="10.5">이름 · 스레드 ID(tid) · 네이티브 ID(nid) · OS 우선순위(prio)</text>
+  <text x="34" y="144" fill="#e8e4df" font-size="10.5">총/CPU 시간 · 상태 설명 · 상태 이름(BLOCKED 등) · 스택 트레이스</text>
+  <text x="34" y="164" fill="#f47f72" font-size="10.5">무엇이 막는가(waiting to lock) · 잡은 락(locked) ← 데드락 진단 핵심</text>
+  <text x="34" y="186" fill="rgb(138,133,128)" font-size="9.5">락 ID 는 꺾쇠 안의 값 (예: 0x000000052e0313f8)</text>
+
+  <!-- 3단계 추적 -->
+  <rect x="20" y="212" width="640" height="130" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="34" y="234" fill="rgb(212,168,83)" font-size="13" font-weight="bold">데드락을 모른 채 찾는 3단계</text>
+  <text x="34" y="260" fill="#e8e4df" font-size="11">① 안 막힌 스레드를 모두 걸러낸다 (노이즈 제거, blocked 만 남김)</text>
+  <text x="34" y="284" fill="#e8e4df" font-size="11">② 첫 후보의 락 ID 로 무엇이 막는지 찾는다 (꺾쇠 안 값)</text>
+  <text x="34" y="308" fill="#e8e4df" font-size="11">③ 그 락을 일으킨 스레드로 옮겨 간다 → 반복</text>
+  <text x="34" y="332" fill="#f47f72" font-size="11" font-weight="bold">출발한 스레드로 되돌아오면 → 그 사슬 전체가 데드락</text>
+
+  <!-- simple vs complex -->
+  <rect x="20" y="356" width="312" height="110" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="378" fill="#e8e4df" font-size="12" font-weight="bold">단순 vs 복합 데드락</text>
+  <text x="34" y="402" fill="#9cc3df" font-size="11">단순: 둘이 서로 막음 (A ⇄ B)</text>
+  <text x="34" y="424" fill="#f47f72" font-size="11">복합: 셋 이상 고리 (A→B→C→A)</text>
+  <text x="34" y="448" fill="rgb(138,133,128)" font-size="10">사슬이 길수록 찾고·이해하고·풀기 어려움</text>
+
+  <!-- cascading -->
+  <rect x="348" y="356" width="312" height="110" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="362" y="378" fill="#e8e4df" font-size="12" font-weight="bold">연쇄 차단 (cascading locks)</text>
+  <text x="362" y="402" fill="#e8e4df" font-size="11">사슬 끝이 외부 이벤트 대기</text>
+  <text x="362" y="424" fill="rgb(138,133,128)" font-size="10.5">(DB 읽기·엔드포인트 호출 등)</text>
+  <text x="362" y="446" fill="#f47f72" font-size="10.5">→ 나머지 줄줄이 대기 · 나쁜 설계 신호</text>
+
+  <!-- 사진 vs 영화 -->
+  <rect x="20" y="480" width="640" height="104" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="1.5"/>
+  <text x="34" y="502" fill="#9cc3df" font-size="13" font-weight="bold">덤프 = 사진, 프로파일링 = 영화</text>
+  <text x="34" y="526" fill="#e8e4df" font-size="11">덤프: 한 시점의 정지 화면 (실행 동역학 없음) · 얻기 쉬움</text>
+  <text x="34" y="548" fill="#e8e4df" font-size="11">프로파일링(7장): 사건 전개를 보여 주는 전체 영화</text>
+  <text x="34" y="570" fill="rgb(138,133,128)" font-size="10">어느 시점에 무슨 코드가 도는지만 알면 덤프로 충분 (raw 읽기는 콘솔만 있어도 가능)</text>
+</svg>

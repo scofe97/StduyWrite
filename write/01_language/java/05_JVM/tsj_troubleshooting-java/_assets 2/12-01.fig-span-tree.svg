@@ -1,0 +1,29 @@
+<svg viewBox="0 0 680 380" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>span 트리 — 중첩된 span이 요청 구조를 이루고 fulfillment span이 빠진 자리가 단서 (원문 listing 12.1·12.3 개념도)</title>
+  <desc>원문 listing 12.1 과 12.3 의 개념을 도식으로 옮긴 것입니다. span 은 중첩돼 트리를 이룹니다. 추적은 API 게이트웨이나 checkout 의 root span 에서 시작해 order 서비스 호출이나 데이터베이스 쿼리를 자식 span 으로 가집니다. 각 span 은 소요 시간과 작업 이름과 서비스명과 로그와 태그를 보여 줘 병목과 실패와 빠진 고리를 쉽게 짚게 합니다. 때로 한 span 의 시간이 자식들의 소요 합보다 큰데 그 span 자체의 로직 때문입니다. 우리 시나리오의 트리에는 order 와 order 서비스 내부 처리는 있는데 fulfillment 가 없습니다. fulfillment 가 메시지를 끝내 소비하지 않은 것이고 그 빠진 자리가 Kafka 파이프라인 문제를 가리킵니다.</desc>
+  <rect x="0" y="0" width="680" height="380" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">span 트리 — 빠진 span 이 단서다</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 listing 12.1·12.3 개념도 — 중첩 span 이 요청 구조를 이룸</text>
+
+  <!-- 트리 -->
+  <rect x="20" y="78" width="640" height="210" fill="rgb(18,18,18)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="100" fill="rgb(212,168,83)" font-size="11" font-weight="bold" font-family="monospace">[checkout-service] POST /checkout  [180ms]  ← root</text>
+  <line x1="40" y1="106" x2="40" y2="208" stroke="rgb(60,55,50)"/>
+  <text x="54" y="124" fill="#e8e4df" font-size="10.5" font-family="monospace">├─ [checkout] Validate cart  [15ms]</text>
+  <text x="54" y="146" fill="#9cc3df" font-size="10.5" font-family="monospace">├─ [checkout] REST: OrderService.CreateOrder  [90ms]</text>
+  <text x="74" y="166" fill="#e8e4df" font-size="10" font-family="monospace">│  ├─ [order] Validate payment method  [10ms]</text>
+  <text x="74" y="184" fill="#e8e4df" font-size="10" font-family="monospace">│  ├─ [order] Save order to database  [40ms]</text>
+  <text x="74" y="202" fill="#66bb6a" font-size="10" font-family="monospace">│  └─ [order] Publish to Kafka 'orders.created'  [20ms]</text>
+  <text x="54" y="224" fill="#e8e4df" font-size="10.5" font-family="monospace">├─ [checkout] Redis SET session  [10ms]</text>
+  <text x="54" y="246" fill="#e8e4df" font-size="10.5" font-family="monospace">└─ [checkout] Send confirmation email  [30ms]</text>
+  <!-- 빠진 fulfillment -->
+  <rect x="48" y="256" width="600" height="24" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-dasharray="4 3"/>
+  <text x="58" y="272" fill="#f47f72" font-size="10.5" font-family="monospace">✗ [fulfillment] (없음 — 메시지를 끝내 소비 안 함)</text>
+
+  <!-- 읽는 법 -->
+  <rect x="20" y="300" width="640" height="62" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="322" fill="#e8e4df" font-size="11" font-weight="bold">읽는 법</text>
+  <text x="34" y="342" fill="#e8e4df" font-size="10.5">root → 자식 span 중첩 = 요청 구조 · 각 span 의 소요·서비스명·태그로 병목·실패·빠진 고리 짚음</text>
+  <text x="34" y="358" fill="rgb(138,133,128)" font-size="9.5">한 span 시간이 자식 합보다 클 수 있음(자체 로직) · 빠진 fulfillment span = Kafka 파이프라인 문제 신호</text>
+</svg>

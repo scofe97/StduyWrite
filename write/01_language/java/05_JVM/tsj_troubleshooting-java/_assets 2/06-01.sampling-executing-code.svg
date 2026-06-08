@@ -1,0 +1,56 @@
+<svg viewBox="0 0 680 620" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>샘플링으로 실행 코드 관찰 — 2스텝 접근·CPU시간 vs 총실행시간·da-ch6-ex1 지연 추적</title>
+  <desc>이 편의 요약입니다. 6장은 프로파일러로 숨은 문제를 찾는 세 기법을 다루고, 첫 갈래가 샘플링입니다. 프로파일링은 늘 샘플링부터 시작하며, 샘플링은 가볍게 큰 그림만 그려 어디를 더 계측할지 좁힙니다. 샘플링은 실행 코드·메서드별 총 실행 시간·총 CPU 시간 세 정보를 줍니다. da-ch6-ex1 예제에서 getResponseCode 메서드는 5초를 쓰지만 CPU 시간이 0이라, 일하는 게 아니라 HTTP 응답을 기다리는 중이고, 따라서 문제는 앱이 아니라 응답 대기입니다. OpenFeign 동적 프록시 때문에 실제 구현은 코드만 읽어서는 안 보이지만 프로파일러가 실행 경로를 드러냅니다.</desc>
+  <rect x="0" y="0" width="680" height="620" fill="#0d0d0d"/>
+
+  <text x="20" y="38" fill="#e8e4df" font-size="18" font-weight="bold">샘플링으로 실행 코드 관찰</text>
+  <text x="20" y="60" fill="rgb(138,133,128)" font-size="11">Troubleshooting Java · 6장 도입~§6.1 · da-ch6-ex1</text>
+
+  <!-- 6장 세 기법 -->
+  <rect x="20" y="78" width="640" height="74" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="100" fill="rgb(212,168,83)" font-size="13" font-weight="bold">6장이 다루는 프로파일링 세 기법</text>
+  <rect x="34" y="110" width="200" height="32" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)"/>
+  <text x="44" y="131" fill="#e8e4df" font-size="11" font-weight="bold">① 샘플링 (이 편)</text>
+  <rect x="244" y="110" width="200" height="32" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9"/>
+  <text x="254" y="131" fill="#9cc3df" font-size="11">② 계측 (instrumentation)</text>
+  <rect x="454" y="110" width="206" height="32" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9"/>
+  <text x="464" y="131" fill="#9cc3df" font-size="11">③ SQL 쿼리 가로채기</text>
+
+  <!-- 2스텝 접근 -->
+  <rect x="20" y="166" width="640" height="92" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="188" fill="#e8e4df" font-size="13" font-weight="bold">프로파일링 2스텝 — 늘 샘플링부터</text>
+  <rect x="34" y="198" width="280" height="48" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)"/>
+  <text x="48" y="218" fill="rgb(212,168,83)" font-size="11" font-weight="bold">스텝 1 · 샘플링 (가벼움)</text>
+  <text x="48" y="237" fill="rgb(138,133,128)" font-size="10">무엇이 도는가 · 어디를 더 볼까</text>
+  <text x="326" y="227" fill="rgb(138,133,128)" font-size="20">→</text>
+  <rect x="354" y="198" width="306" height="48" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9"/>
+  <text x="368" y="218" fill="#9cc3df" font-size="11" font-weight="bold">스텝 2 · 계측 (무거움·자원 소비)</text>
+  <text x="368" y="237" fill="rgb(138,133,128)" font-size="10">좁힌 지점만 세부 측정 (필요할 때)</text>
+
+  <!-- 샘플링 세 정보 -->
+  <rect x="20" y="272" width="640" height="100" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="294" fill="#e8e4df" font-size="13" font-weight="bold">샘플링이 주는 세 정보</text>
+  <text x="34" y="320" fill="#e8e4df" font-size="11">• 실행되는 코드 — 무엇이 무대 뒤에서 도는지</text>
+  <text x="34" y="342" fill="#e8e4df" font-size="11">• 메서드별 총 실행 시간 — 어디가 느린가</text>
+  <text x="34" y="364" fill="#e8e4df" font-size="11">• 총 CPU 실행 시간 — 일하는가, 기다리는가</text>
+
+  <!-- 핵심: CPU 0 = 대기 -->
+  <rect x="20" y="386" width="640" height="100" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="34" y="408" fill="#f47f72" font-size="13" font-weight="bold">핵심 — getResponseCode() 가 5초인데 CPU 0%</text>
+  <text x="34" y="432" fill="#e8e4df" font-size="11">총 실행 5초 + CPU 시간 0 = 일하는 게 아니라 기다리는 중</text>
+  <text x="34" y="454" fill="#e8e4df" font-size="11">→ 문제는 앱이 아니라 HTTP 응답 대기 (I/O)</text>
+  <text x="34" y="476" fill="rgb(138,133,128)" font-size="10">CPU 쓰면 알고리즘 개선 대상, CPU 적고 느리면 무엇을 기다리는지 찾기</text>
+
+  <!-- 동적 프록시 + AI -->
+  <rect x="20" y="500" width="312" height="100" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="522" fill="rgb(212,168,83)" font-size="12" font-weight="bold">의존성도 보인다 — OpenFeign</text>
+  <text x="34" y="546" fill="#e8e4df" font-size="10.5">동적 프록시가 구현을 런타임에 분리</text>
+  <text x="34" y="566" fill="#e8e4df" font-size="10.5">→ 코드만 읽어선 실제 경로 안 보임</text>
+  <text x="34" y="586" fill="rgb(138,133,128)" font-size="10">프로파일러가 그 경로를 드러냄</text>
+
+  <rect x="348" y="500" width="312" height="100" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="362" y="522" fill="#9cc3df" font-size="12" font-weight="bold">데이터 내보내 AI 분석</text>
+  <text x="362" y="546" fill="#e8e4df" font-size="10.5">VisualVM·JProfiler → XML·CSV</text>
+  <text x="362" y="566" fill="#e8e4df" font-size="10.5">AI 비서가 호출 트리·병목 분석</text>
+  <text x="362" y="586" fill="rgb(138,133,128)" font-size="10">예: /demo·Feign 클라이언트 부각</text>
+</svg>

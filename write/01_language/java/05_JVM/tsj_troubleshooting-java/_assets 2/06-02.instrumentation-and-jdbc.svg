@@ -1,0 +1,53 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>instrumentation과 JDBC SQL 가로채기 — 호출 횟수·패키지 필터·da-ch6-ex2 N+1·JDBC 가로채기</title>
+  <desc>이 편의 요약입니다. 샘플링은 메서드 호출 횟수를 주지 않으므로 더 깊은 세부가 필요하면 계측합니다. 50밀리초짜리 메서드도 천 번 불리면 50초가 됩니다. 계측은 무거우므로 패키지를 좁혀야 하고, 별표 하나는 한 패키지, 별표 둘은 패키지와 서브패키지, 전체 클래스명은 그 클래스만 가리킵니다. da-ch6-ex2 의 /products 는 getProductNamesForPurchases 가 findProduct 를 10번 호출하는 N+1 문제를 가지며, 같은 쿼리를 10번 보냅니다. 프로파일러는 CPU 대신 JDBC 를 선택하면 앱이 JDBC 드라이버로 DBMS 에 보내는 쿼리를 드라이버가 보내기 직전에 가로채 보여 주고, 실행 횟수와 스택 트레이스도 함께 줍니다. JOIN 한 방으로 줄이는 게 해법입니다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="38" fill="#e8e4df" font-size="18" font-weight="bold">instrumentation과 JDBC SQL 가로채기</text>
+  <text x="20" y="60" fill="rgb(138,133,128)" font-size="11">Troubleshooting Java · §6.2~§6.3.1 · da-ch6-ex1 · da-ch6-ex2</text>
+
+  <!-- 호출 횟수 -->
+  <rect x="20" y="78" width="640" height="92" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="100" fill="rgb(212,168,83)" font-size="13" font-weight="bold">샘플링이 못 주는 것 — 메서드 호출 횟수</text>
+  <text x="34" y="124" fill="#e8e4df" font-size="11">샘플링: 무엇이 도는지 + 총 시간 (O)   /   호출 횟수 (X)</text>
+  <rect x="34" y="134" width="626" height="28" fill="rgba(244,127,114,0.06)" stroke="#f47f72"/>
+  <text x="44" y="153" fill="#f47f72" font-size="11">50ms 메서드 × 1000회 = 50초 → 느린 1회인지 빠른 1000회인지 구분 못 함 → 계측 필요</text>
+
+  <!-- 패키지 필터 -->
+  <rect x="20" y="184" width="640" height="116" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="206" fill="#e8e4df" font-size="13" font-weight="bold">계측은 무거우므로 좁힌다 — 패키지 필터 문법</text>
+  <rect x="34" y="216" width="200" height="32" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9"/>
+  <text x="44" y="237" fill="#9cc3df" font-size="11" font-family="monospace">com.example.*</text>
+  <text x="244" y="237" fill="rgb(138,133,128)" font-size="10">→ 그 패키지의 클래스만</text>
+  <rect x="34" y="254" width="200" height="32" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)"/>
+  <text x="44" y="275" fill="rgb(212,168,83)" font-size="11" font-family="monospace">com.example.**</text>
+  <text x="244" y="275" fill="rgb(138,133,128)" font-size="10">→ 패키지 + 모든 서브패키지</text>
+  <text x="450" y="237" fill="rgb(138,133,128)" font-size="10">전체 클래스명 → 그 클래스만</text>
+  <text x="450" y="275" fill="rgb(138,133,128)" font-size="10">무엇을 좁힐지는 샘플링이 알려줌</text>
+
+  <!-- N+1 -->
+  <rect x="20" y="314" width="640" height="120" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="34" y="336" fill="#f47f72" font-size="13" font-weight="bold">da-ch6-ex2 — N+1 문제 (/products)</text>
+  <text x="34" y="360" fill="#e8e4df" font-size="11">findPurchasedProductNames → getProductNamesForPurchases</text>
+  <text x="34" y="382" fill="#e8e4df" font-size="11">  → findAll() 1회  +  findProduct() <tspan fill="#f47f72" font-weight="bold">10회</tspan></text>
+  <text x="34" y="406" fill="#e8e4df" font-size="11">목록 1회 조회 후 각 레코드마다 별도 쿼리 → 같은 쿼리 10번 전송</text>
+  <text x="34" y="426" fill="rgb(212,168,83)" font-size="11" font-weight="bold">해법 → product·purchase 두 테이블 JOIN 한 방</text>
+
+  <!-- JDBC 가로채기 -->
+  <rect x="20" y="448" width="640" height="136" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="470" fill="rgb(212,168,83)" font-size="13" font-weight="bold">JDBC 탭 — SQL 쿼리 가로채기</text>
+  <rect x="34" y="484" width="150" height="40" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9"/>
+  <text x="109" y="508" fill="#9cc3df" font-size="11" text-anchor="middle">Java 앱</text>
+  <text x="196" y="500" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">SQL</text>
+  <line x1="184" y1="504" x2="246" y2="504" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <polygon points="246,504 238,500 238,508" fill="rgb(212,168,83)"/>
+  <rect x="248" y="484" width="150" height="40" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)"/>
+  <text x="323" y="502" fill="rgb(212,168,83)" font-size="11" text-anchor="middle">JDBC 드라이버</text>
+  <text x="323" y="518" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">← 프로파일러가 직전 복사</text>
+  <line x1="398" y1="504" x2="460" y2="504" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <polygon points="460,504 452,500 452,508" fill="rgb(212,168,83)"/>
+  <rect x="462" y="484" width="150" height="40" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9"/>
+  <text x="537" y="508" fill="#9cc3df" font-size="11" text-anchor="middle">DBMS</text>
+  <text x="34" y="546" fill="#e8e4df" font-size="11">→ 쿼리 그대로 복붙해 실행·실행 계획 확인 + 실행 횟수 + 스택 트레이스</text>
+  <text x="34" y="568" fill="rgb(138,133,128)" font-size="10">native(JdbcTemplate)든 프레임워크 생성이든 드라이버 직전에서 잡힘 (프레임워크는 06-03)</text>
+</svg>

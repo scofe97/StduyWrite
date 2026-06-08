@@ -1,0 +1,50 @@
+<svg viewBox="0 0 680 580" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>스레드 덤프 획득 — 데드락 기제·프로파일러 버튼·jps에서 jstack에서 Load 명령줄</title>
+  <desc>이 편의 요약입니다. 스레드 덤프는 특정 순간 JVM 안 모든 스레드의 상태를 찍은 스냅숏으로, 5~7장의 시간 기반 샘플링과 달리 앱이 완전히 얼어붙었을 때도 한 장면을 잡아냅니다. 예제 da-ch8-ex1 은 두 스레드가 listA 와 listB 두 모니터로 중첩 synchronized 블록을 쓰되 한 스레드는 listA 를 바깥 listB 를 안쪽으로, 다른 스레드는 순서를 뒤집어 써서 데드락이 납니다. VisualVM 은 데드락을 스스로 감지해 Threads 탭에 알리고 Thread Dump 버튼 하나로 평문 덤프를 줍니다. 명령줄로는 jps -l 로 PID 를 찾고 jstack PID 로 덤프를 떠 파일로 저장한 뒤 프로파일러에 File Load 로 엽니다. 원격 환경은 대개 명령줄로만 접근하므로 이 방법이 필요합니다.</desc>
+  <rect x="0" y="0" width="680" height="580" fill="#0d0d0d"/>
+
+  <text x="20" y="38" fill="#e8e4df" font-size="18" font-weight="bold">스레드 덤프 획득</text>
+  <text x="20" y="60" fill="rgb(138,133,128)" font-size="11">Troubleshooting Java · 8장 도입~§8.1 · da-ch8-ex1</text>
+
+  <!-- 덤프란 -->
+  <rect x="20" y="78" width="640" height="86" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="34" y="100" fill="rgb(212,168,83)" font-size="13" font-weight="bold">스레드 덤프 = 단일 시점의 스냅숏</text>
+  <text x="34" y="124" fill="#e8e4df" font-size="11">특정 순간 JVM 안 모든 스레드 상태를 포착 (실행·대기·차단)</text>
+  <text x="34" y="146" fill="#e8e4df" font-size="11">5~7장 = 시간에 걸친 샘플링 · 덤프 = 앱이 완전히 얼어붙어도 한 장면 잡음</text>
+
+  <!-- 데드락 -->
+  <rect x="20" y="178" width="640" height="94" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="34" y="200" fill="#f47f72" font-size="13" font-weight="bold">da-ch8-ex1 — 중첩 synchronized 순서가 데드락을 만든다</text>
+  <text x="34" y="224" fill="#9cc3df" font-size="11">_Consumer: synchronized(listA) → synchronized(listB)</text>
+  <text x="34" y="246" fill="#66bb6a" font-size="11">_Producer: synchronized(listB) → synchronized(listA)  ← 순서 반대!</text>
+  <text x="34" y="266" fill="#f47f72" font-size="10.5">둘 다 바깥 락은 잡고 안쪽 락을 서로 기다림 → 영원한 교착</text>
+
+  <!-- 두 획득 방법 -->
+  <text x="20" y="298" fill="#e8e4df" font-size="14" font-weight="bold">덤프 얻는 두 방법</text>
+
+  <!-- 프로파일러 -->
+  <rect x="20" y="312" width="312" height="120" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="334" fill="rgb(212,168,83)" font-size="12" font-weight="bold">① 프로파일러 — 버튼 한 번</text>
+  <text x="34" y="358" fill="#e8e4df" font-size="10.5">VisualVM 이 데드락을 스스로 감지</text>
+  <text x="34" y="378" fill="#e8e4df" font-size="10.5">→ Threads 탭에 메시지로 알림</text>
+  <text x="34" y="398" fill="#e8e4df" font-size="10.5">→ Thread Dump 버튼 클릭</text>
+  <text x="34" y="420" fill="rgb(138,133,128)" font-size="9.5">가장 쉬움. 단 프로세스에 못 붙으면 불가</text>
+
+  <!-- 명령줄 -->
+  <rect x="348" y="312" width="312" height="120" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="362" y="334" fill="#9cc3df" font-size="12" font-weight="bold">② 명령줄 — 원격 환경용</text>
+  <text x="362" y="358" fill="#e8e4df" font-size="10.5" font-family="monospace">jps -l         → PID 찾기</text>
+  <text x="362" y="378" fill="#e8e4df" font-size="10.5" font-family="monospace">jstack 14208   → 덤프 생성</text>
+  <text x="362" y="398" fill="#e8e4df" font-size="10.5" font-family="monospace">  &gt; dump.txt   → 파일 저장</text>
+  <text x="362" y="420" fill="rgb(138,133,128)" font-size="9.5">→ VisualVM File &gt; Load 로 읽기</text>
+
+  <!-- 왜 명령줄 -->
+  <rect x="20" y="446" width="640" height="58" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="468" fill="#e8e4df" font-size="11" font-weight="bold">왜 명령줄도 알아야 하나</text>
+  <text x="34" y="490" fill="rgb(138,133,128)" font-size="10.5">운영 환경 원격 프로파일링은 권장 안 됨(6장) · 원격은 대개 명령줄만 접근 가능 → CLI 필수</text>
+
+  <!-- 다음 -->
+  <rect x="20" y="518" width="640" height="44" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9"/>
+  <text x="34" y="540" fill="#9cc3df" font-size="11" font-weight="bold">다음 편(08-02)</text>
+  <text x="34" y="558" fill="rgb(138,133,128)" font-size="10.5">얻은 평문 덤프를 해부하고 데드락을 3단계로 추적 (필터 → 락 ID 따라가기 → 되돌아오면 데드락)</text>
+</svg>

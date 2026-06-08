@@ -1,0 +1,56 @@
+<svg viewBox="0 0 680 380" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>데드락 추적 3단계 — 안 막힌 스레드 제거, 락 ID 따라가기, 되돌아오면 데드락 (원문 Figure 8.8 개념도)</title>
+  <desc>원문 Figure 8.8 의 개념을 도식으로 옮긴 것입니다. 덤프로 데드락을 찾는 세 단계입니다. 첫째 막히지 않은 스레드를 모두 제거해 노이즈를 없애고 데드락 후보인 막힌 스레드에만 집중합니다. 둘째 막힌 스레드 하나에서 시작해 그것을 막는 락 ID 로 무엇이 막는지 찾습니다. 락 ID 는 꺾쇠 안의 값입니다. 셋째 그 락을 일으킨 스레드로 옮겨 가 같은 과정을 반복합니다. 이미 살펴본 스레드로 되돌아오면 데드락을 찾은 것입니다.</desc>
+  <rect x="0" y="0" width="680" height="380" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">데드락을 모른 채 찾는 3단계</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 Figure 8.8 개념도 — 락 ID 를 따라가다 출발점으로 돌아오면 데드락</text>
+
+  <!-- step 1 -->
+  <rect x="20" y="80" width="200" height="180" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <circle cx="44" cy="106" r="13" fill="rgba(212,168,83,0.2)" stroke="rgb(212,168,83)"/>
+  <text x="44" y="111" fill="rgb(212,168,83)" font-size="13" font-weight="bold" text-anchor="middle">1</text>
+  <text x="66" y="111" fill="#e8e4df" font-size="12" font-weight="bold">노이즈 제거</text>
+  <text x="34" y="138" fill="#e8e4df" font-size="10.5">안 막힌 스레드 전부 제거</text>
+  <rect x="34" y="150" width="172" height="20" fill="rgb(30,30,30)" stroke="rgb(60,55,50)" stroke-dasharray="3 3"/>
+  <text x="44" y="164" fill="rgb(138,133,128)" font-size="9">runnable, timed-waiting…</text>
+  <rect x="34" y="176" width="172" height="20" fill="rgba(244,127,114,0.18)" stroke="#f47f72"/>
+  <text x="44" y="190" fill="#f47f72" font-size="9">BLOCKED 만 남김</text>
+  <text x="34" y="220" fill="rgb(138,133,128)" font-size="10">덤프는 수십 스레드 묘사</text>
+  <text x="34" y="238" fill="rgb(138,133,128)" font-size="10">→ 후보에만 집중</text>
+
+  <line x1="220" y1="170" x2="244" y2="170" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <polygon points="244,170 236,166 236,174" fill="rgb(212,168,83)"/>
+
+  <!-- step 2 -->
+  <rect x="246" y="80" width="200" height="180" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <circle cx="270" cy="106" r="13" fill="rgba(212,168,83,0.2)" stroke="rgb(212,168,83)"/>
+  <text x="270" y="111" fill="rgb(212,168,83)" font-size="13" font-weight="bold" text-anchor="middle">2</text>
+  <text x="292" y="111" fill="#e8e4df" font-size="12" font-weight="bold">락 ID 로 추적</text>
+  <text x="260" y="138" fill="#e8e4df" font-size="10.5">첫 후보 스레드 선택</text>
+  <text x="260" y="160" fill="#e8e4df" font-size="10.5">그것을 막는 락 ID 검색</text>
+  <rect x="260" y="172" width="172" height="24" fill="rgb(30,30,30)" stroke="#f47f72"/>
+  <text x="270" y="188" fill="#f47f72" font-size="10" font-family="monospace">waiting to lock &lt;0x..3f8&gt;</text>
+  <text x="260" y="222" fill="rgb(138,133,128)" font-size="10">락 ID = 꺾쇠 안의 값</text>
+
+  <line x1="446" y1="170" x2="470" y2="170" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <polygon points="470,170 462,166 462,174" fill="rgb(212,168,83)"/>
+
+  <!-- step 3 -->
+  <rect x="472" y="80" width="188" height="180" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <circle cx="496" cy="106" r="13" fill="rgba(212,168,83,0.2)" stroke="rgb(212,168,83)"/>
+  <text x="496" y="111" fill="rgb(212,168,83)" font-size="13" font-weight="bold" text-anchor="middle">3</text>
+  <text x="518" y="111" fill="#e8e4df" font-size="12" font-weight="bold">반복</text>
+  <text x="486" y="138" fill="#e8e4df" font-size="10.5">락을 일으킨 스레드로</text>
+  <text x="486" y="156" fill="#e8e4df" font-size="10.5">옮겨 가 다시 추적</text>
+  <rect x="486" y="170" width="160" height="44" fill="rgba(244,127,114,0.1)" stroke="#f47f72"/>
+  <text x="496" y="190" fill="#f47f72" font-size="10" font-weight="bold">출발한 스레드로</text>
+  <text x="496" y="206" fill="#f47f72" font-size="10" font-weight="bold">되돌아오면 = 데드락</text>
+  <text x="486" y="238" fill="rgb(138,133,128)" font-size="10">사슬 전체가 교착</text>
+
+  <!-- 하단 -->
+  <rect x="20" y="288" width="640" height="74" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="310" fill="#e8e4df" font-size="11" font-weight="bold">da-ch8-ex1 적용</text>
+  <text x="34" y="332" fill="#e8e4df" font-size="10.5">_Producer 는 0x..3f8 대기·0x..d38 보유 / _Consumer 는 0x..d38 대기·0x..3f8 보유</text>
+  <text x="34" y="352" fill="rgb(138,133,128)" font-size="10">→ 락 ID 를 따라가면 서로를 막는 고리가 닫힘 (단순 데드락)</text>
+</svg>
