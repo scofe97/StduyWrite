@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 640" font-family="Pretendard, sans-serif">
+  <rect width="680" height="640" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">durable execution·이벤트 기반 + 5장 종합</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">워크플로우의 exactly-once · 메시지 브로커 · 5장 정리</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- durable execution -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">durable execution(지속 실행)과 워크플로우</text>
+  <rect x="32" y="124" width="616" height="92" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="146" fill="#e8e4df" font-size="11">워크플로우 = 태스크 그래프 · 결제 = 사기탐지 → 카드 차감 → 은행 입금(여러 서비스 호출)</text>
+  <text x="48" y="166" fill="#66bb6a" font-size="11">durable execution = exactly-once 의미론: 태스크 실패 시 재실행하되 성공한 RPC·상태변경은 건너뜀</text>
+  <text x="48" y="186" fill="#e8e4df" font-size="10.5">모든 RPC·상태변경을 WAL에 로깅 → 이전 결과 반환(Temporal·Restate)</text>
+  <text x="48" y="206" fill="#f47f72" font-size="10.5">⚠ 외부 서비스는 idempotent API 필요 · 코드 재정렬·비결정 코드 위험(replay)</text>
+
+  <!-- 이벤트 기반 -->
+  <text x="32" y="252" fill="rgb(212,168,83)" font-size="14" font-weight="700">이벤트 기반 아키텍처 — 메시지 브로커</text>
+  <rect x="32" y="264" width="160" height="44" rx="5" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="112" y="290" fill="#e8e4df" font-size="11" text-anchor="middle">송신자(publish)</text>
+  <line x1="192" y1="286" x2="236" y2="286" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar)"/>
+  <rect x="240" y="264" width="180" height="44" rx="5" fill="#101620" stroke="#7fa8c9"/>
+  <text x="330" y="286" fill="#e8e4df" font-size="11" text-anchor="middle">메시지 브로커(임시 저장)</text>
+  <line x1="420" y1="286" x2="464" y2="286" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar)"/>
+  <rect x="468" y="264" width="180" height="44" rx="5" fill="#141414" stroke="#9cc3df"/>
+  <text x="558" y="286" fill="#e8e4df" font-size="11" text-anchor="middle">수신자(consume)</text>
+
+  <rect x="32" y="320" width="616" height="72" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="342" fill="#66bb6a" font-size="10.5">장점: 버퍼(과부하 완충)·재전달(손실 방지)·디스커버리 불필요·다중 수신·송수신 분리</text>
+  <text x="48" y="362" fill="#e8e4df" font-size="10.5">비동기: 송신자는 전달을 안 기다림 · 패턴: 큐(1명 수신) vs 토픽(전 구독자 수신)</text>
+  <text x="48" y="380" fill="rgb(138,133,128)" font-size="10">RabbitMQ·NATS·Kafka·Kinesis · 스키마 레지스트리 · 미지 필드 보존 주의</text>
+
+  <!-- actor -->
+  <text x="32" y="424" fill="rgb(212,168,83)" font-size="14" font-weight="700">분산 actor 프레임워크</text>
+  <rect x="32" y="436" width="616" height="56" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="48" y="458" fill="#e8e4df" font-size="11">actor = 로컬 상태 + 비동기 메시지(스레드 직접 안 다룸) · 같은 머신·다른 머신 동일 메커니즘</text>
+  <text x="48" y="478" fill="rgb(138,133,128)" font-size="10.5">location transparency가 RPC보다 잘 맞음(메시지 손실을 이미 가정) · Akka·Orleans·Erlang/OTP</text>
+
+  <!-- 5장 종합 -->
+  <text x="32" y="524" fill="rgb(212,168,83)" font-size="14" font-weight="700">5장 종합</text>
+  <rect x="32" y="536" width="300" height="80" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="48" y="558" fill="#e8e4df" font-size="11" font-weight="700">인코딩 형식 호환성</text>
+  <text x="48" y="578" fill="#e8e4df" font-size="10.5">언어 내장(호환성 약함) · 텍스트(JSON·XML)</text>
+  <text x="48" y="596" fill="#e8e4df" font-size="10.5">스키마 기반(protobuf·Avro: 압축·명확한 호환)</text>
+  <text x="48" y="610" fill="rgb(138,133,128)" font-size="9.5">backward(새→옛 데이터)·forward(옛→새 데이터)</text>
+
+  <rect x="348" y="536" width="300" height="80" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="364" y="558" fill="#e8e4df" font-size="11" font-weight="700">데이터플로우 3가지</text>
+  <text x="364" y="578" fill="#e8e4df" font-size="10.5">· DB: 쓰는 쪽 인코딩, 읽는 쪽 디코딩</text>
+  <text x="364" y="596" fill="#e8e4df" font-size="10.5">· RPC/REST: 클라↔서버 요청·응답</text>
+  <text x="364" y="612" fill="#e8e4df" font-size="10.5">· 이벤트: 송신자 인코딩, 수신자 디코딩</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>
