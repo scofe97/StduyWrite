@@ -1,6 +1,6 @@
 # 5장 — 최적화 사례 분석 및 실전 실습
 
-책 §5.2의 장애 사례 중 *단일 JVM에서 재현 가능한 것만* 모듈로 박제한다. 대부분의 5장 사례는 분산 환경(클러스터 동기화 OOM)이나 외부 SW(Eclipse 튜닝)에 묶여 로컬 단일 JVM으로 재현되지 않으므로, 그쪽은 노트 본문(`../../ch05_optimization/`)으로만 다룬다.
+책 §5.2의 장애 사례 중 *단일 JVM에서 재현 가능한 것만* 모듈로 박제한다. 대부분의 5장 사례는 분산 환경(클러스터 동기화 OOM)이나 외부 SW(Eclipse 튜닝)에 묶여 로컬 단일 JVM으로 재현되지 않으므로, 그쪽은 노트 본문(`../../ch04_diagnosis-optimization/`)으로만 다룬다.
 
 ## 모듈 ↔ 책의 절 매핑
 
@@ -30,4 +30,4 @@
 
 ## 노트 연결
 
-- 본편: [`../../ch05_optimization/02-01.최적화 사례 분석.md`](../../ch05_optimization/02-01.최적화%20사례%20분석.md), [`../../ch05_optimization/02-02.실전 — Eclipse IDE 튜닝.md`](../../ch05_optimization/02-02.실전%20—%20Eclipse%20IDE%20튜닝.md)
+- 본편: [`../../ch04_diagnosis-optimization/02-01.최적화 사례 분석.md`](../../ch04_diagnosis-optimization/02-01.최적화%20사례%20분석.md), [`../../ch04_diagnosis-optimization/02-02.실전 — Eclipse IDE 튜닝.md`](../../ch04_diagnosis-optimization/02-02.실전%20—%20Eclipse%20IDE%20튜닝.md)
