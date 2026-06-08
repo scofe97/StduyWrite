@@ -1,0 +1,61 @@
+<svg viewBox="0 0 760 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>OpenFeign 실무 통합 — LoadBalancer · Circuit Breaker · fallback</title>
+  <desc>Feign 호출이 실무에서 거치는 세 장치. name 기반 LoadBalancer 가 인스턴스를 고르고, Circuit Breaker 가 연속 실패를 끊고, 실패 시 fallback 이 대체 응답을 낸다.</desc>
+
+  <rect x="0" y="0" width="760" height="420" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="rgb(212,168,83)" font-size="19" font-weight="bold">Feign 실무 통합 — 호출이 거치는 세 장치</text>
+
+  <!-- 파이프라인 좌→우 -->
+  <!-- 1. 호출처 -->
+  <rect x="32" y="92" width="150" height="70" rx="6" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="107" y="122" fill="#e8e4df" font-size="13" text-anchor="middle">호출처</text>
+  <text x="107" y="142" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="middle">@FeignClient</text>
+
+  <!-- 2. LoadBalancer -->
+  <rect x="222" y="92" width="170" height="70" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="307" y="118" fill="#e8e4df" font-size="13" text-anchor="middle" font-weight="bold">① LoadBalancer</text>
+  <text x="307" y="137" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">name 을 인스턴스로 해석</text>
+  <text x="307" y="153" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">discovery 라운드로빈</text>
+
+  <!-- 3. CircuitBreaker -->
+  <rect x="432" y="92" width="170" height="70" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="517" y="118" fill="#e8e4df" font-size="13" text-anchor="middle" font-weight="bold">② Circuit Breaker</text>
+  <text x="517" y="137" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">연속 실패 시 호출 차단</text>
+  <text x="517" y="153" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10" text-anchor="middle">circuitbreaker.enabled</text>
+
+  <!-- 4. 다운스트림 -->
+  <rect x="642" y="92" width="86" height="70" rx="6" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="685" y="124" fill="#e8e4df" font-size="13" text-anchor="middle">대상</text>
+  <text x="685" y="142" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">서비스</text>
+
+  <!-- 화살표 -->
+  <defs>
+    <marker id="a04" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <line x1="182" y1="127" x2="220" y2="127" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a04)"/>
+  <line x1="392" y1="127" x2="430" y2="127" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a04)"/>
+  <line x1="602" y1="127" x2="640" y2="127" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a04)"/>
+
+  <!-- 3. fallback 분기 -->
+  <rect x="432" y="220" width="296" height="74" rx="6" fill="rgba(244,67,54,0.12)" stroke="#f44336"/>
+  <text x="448" y="246" fill="#e8e4df" font-size="13" font-weight="bold">③ fallback / fallbackFactory</text>
+  <text x="448" y="266" fill="rgb(138,133,128)" font-size="12">서킷이 열렸거나 실패 시 대체 응답</text>
+  <text x="448" y="284" fill="rgb(138,133,128)" font-size="12">fallbackFactory 는 실패 원인까지 받는다</text>
+
+  <line x1="517" y1="162" x2="517" y2="218" stroke="#f44336" stroke-width="2" marker-end="url(#a04)"/>
+  <text x="540" y="196" fill="#f44336" font-size="11">실패 시</text>
+
+  <!-- 의존성 메모 박스 -->
+  <rect x="32" y="220" width="360" height="74" rx="6" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="48" y="246" fill="#e8e4df" font-size="13">필요한 starter</text>
+  <text x="48" y="266" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="11">spring-cloud-starter-openfeign</text>
+  <text x="48" y="284" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="11">...-circuitbreaker-resilience4j</text>
+
+  <!-- 하단 위임 메모 -->
+  <text x="32" y="346" fill="rgb(138,133,128)" font-size="12">서킷 상태 전이(CLOSED · OPEN · HALF_OPEN)·재시도 백오프 이론은 resilience/ 폴더가 SSOT.</text>
+  <text x="32" y="372" fill="rgb(138,133,128)" font-size="12">이 문서는 Feign 쪽 "배선" 만 다룬다 — 무엇을 켜고 무엇을 의존성에 넣는가.</text>
+</svg>
