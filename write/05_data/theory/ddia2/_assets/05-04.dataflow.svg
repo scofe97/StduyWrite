@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 620" font-family="Pretendard, sans-serif">
+  <rect width="680" height="620" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">데이터플로우 — DB·REST·RPC</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">데이터가 프로세스 사이를 흐르는 방식 · 누가 인코딩하고 누가 디코딩하나</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- DB dataflow -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">DB를 통한 데이터플로우</text>
+  <rect x="32" y="124" width="616" height="76" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="146" fill="#e8e4df" font-size="11">쓰는 프로세스가 인코딩, 읽는 프로세스가 디코딩 · 미래의 나에게 보내는 메시지</text>
+  <text x="48" y="166" fill="#66bb6a" font-size="11">data outlives code — 5년 전 데이터가 원래 인코딩으로 남음(롤링 업그레이드 → forward 호환 필요)</text>
+  <text x="48" y="186" fill="rgb(138,133,128)" font-size="10.5">마이그레이션은 비싸 지연 처리(LSM compaction 시 재작성·NULL 기본 컬럼 추가)</text>
+
+  <!-- 서비스 -->
+  <text x="32" y="232" fill="rgb(212,168,83)" font-size="14" font-weight="700">서비스 — REST vs RPC</text>
+  <rect x="32" y="244" width="300" height="110" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="48" y="266" fill="rgb(212,168,83)" font-size="12" font-weight="700">REST(web service)</text>
+  <text x="48" y="286" fill="#e8e4df" font-size="11">HTTP 원리 위에 구축 · URL로 리소스</text>
+  <text x="48" y="306" fill="#e8e4df" font-size="11">IDL: OpenAPI(JSON)·gRPC(protobuf)</text>
+  <text x="48" y="326" fill="#66bb6a" font-size="10.5">네트워크 상태 전송을 함수 호출과 구분</text>
+  <text x="48" y="344" fill="rgb(138,133,128)" font-size="10">프레임워크: Spring Boot·FastAPI·gRPC</text>
+
+  <rect x="348" y="244" width="300" height="110" rx="6" fill="#141414" stroke="#f47f72"/>
+  <text x="364" y="266" fill="#f47f72" font-size="12" font-weight="700">RPC의 문제(location transparency)</text>
+  <text x="364" y="286" fill="#e8e4df" font-size="10.5">네트워크 호출 ≠ 로컬 함수 호출</text>
+  <text x="364" y="304" fill="#e8e4df" font-size="10.5">· 예측 불가·타임아웃(결과 모름)</text>
+  <text x="364" y="322" fill="#e8e4df" font-size="10.5">· 재시도 → 중복(idempotence 필요)</text>
+  <text x="364" y="340" fill="#e8e4df" font-size="10.5">· 지연 가변·인자 인코딩·언어 간 타입</text>
+
+  <!-- 호환성 방향 -->
+  <text x="32" y="386" fill="rgb(212,168,83)" font-size="14" font-weight="700">RPC 호환성 — 서버 먼저, 클라 나중</text>
+  <rect x="32" y="398" width="616" height="56" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="48" y="420" fill="#e8e4df" font-size="11">서버를 먼저 업데이트한다고 가정 → 요청에 backward, 응답에 forward 호환만 필요</text>
+  <text x="48" y="440" fill="rgb(138,133,128)" font-size="10.5">조직 경계 넘는 RPC는 클라 강제 불가 → 호환성 오래(때로 무기한) 유지·다중 버전 병행</text>
+
+  <!-- 로드밸런싱·서비스 디스커버리 -->
+  <text x="32" y="486" fill="rgb(212,168,83)" font-size="14" font-weight="700">서비스 디스커버리 + 로드밸런싱</text>
+  <rect x="32" y="498" width="300" height="92" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="520" fill="#e8e4df" font-size="11">클라가 서비스 주소를 알아야 함</text>
+  <text x="48" y="540" fill="#e8e4df" font-size="10.5">· HW/SW 로드밸런서(NGINX·HAProxy)</text>
+  <text x="48" y="558" fill="#e8e4df" font-size="10.5">· DNS(전파 느림·캐시)</text>
+  <text x="48" y="576" fill="#e8e4df" font-size="10.5">· 디스커버리 시스템(etcd·ZooKeeper)</text>
+
+  <rect x="348" y="498" width="300" height="92" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="364" y="520" fill="#7fa8c9" font-size="12" font-weight="700">service mesh</text>
+  <text x="364" y="540" fill="#e8e4df" font-size="10.5">SW 로드밸런서 + 디스커버리 결합</text>
+  <text x="364" y="558" fill="#e8e4df" font-size="10.5">sidecar로 클라·서버에 배포 → 암호화·관측</text>
+  <text x="364" y="576" fill="rgb(138,133,128)" font-size="10">Istio·Linkerd(K8s 동적 환경)</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>
