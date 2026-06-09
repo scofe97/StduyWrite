@@ -1,0 +1,87 @@
+<svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>바이트코드 치환과 실행 — System을 HackSystem으로 갈아끼우는 전체 파이프라인</title>
+  <desc>JavaClassExecuter가 외부 클래스 바이트를 받아, ClassModifier가 상수 풀의 java/lang/System을 HackSystem으로 치환하고, ByteUtils가 길이 차이를 바이트 단위로 보정하며, HotSwapClassLoader가 새 로더로 적재한다. 실행되면 HackSystem의 출력 버퍼에 결과가 쌓이고, 그 문자열을 호출자에게 반환한다. JSP 페이지가 이 입구를 호출해 웹에서 코드를 실행한다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: rgb(138,133,128); }
+      .h     { font-size: 11.5px; font-weight: 800; fill: #0d0d0d; }
+      .note  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .mono  { font-size: 9px; font-family: 'JetBrains Mono', monospace; fill: rgb(212,168,83); }
+    </style>
+    <marker id="b1" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="560" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">바이트코드 치환과 실행 — 전체 파이프라인</text>
+  <text x="28" y="58" class="sub">byte[] 입력 → 상수 풀 치환 → 길이 보정 → 새 로더 적재 → 실행 → 버퍼 결과 반환</text>
+
+  <!-- 파이프라인 5단계 -->
+  <rect x="28" y="86" width="150" height="120" rx="9" fill="#5b9bd5"/>
+  <text x="103" y="110" class="h" text-anchor="middle">JavaClassExecuter</text>
+  <text x="44" y="134" class="note" fill="rgba(13,13,13,0.72)">입구 — execute(byte[])</text>
+  <text x="44" y="152" class="note" fill="rgba(13,13,13,0.72)">전체 흐름 오케스트레이션</text>
+  <text x="44" y="174" class="mono" fill="#0d0d0d">String execute(</text>
+  <text x="44" y="190" class="mono" fill="#0d0d0d">  byte[] cls)</text>
+
+  <rect x="198" y="86" width="150" height="120" rx="9" fill="rgb(212,168,83)"/>
+  <text x="273" y="110" class="h" text-anchor="middle">ClassModifier</text>
+  <text x="214" y="134" class="note" fill="rgba(13,13,13,0.72)">상수 풀 순회</text>
+  <text x="214" y="152" class="note" fill="rgba(13,13,13,0.72)">CONSTANT_Utf8_info</text>
+  <text x="214" y="170" class="note" fill="rgba(13,13,13,0.72)">중 System 문자열 탐색</text>
+  <text x="214" y="190" class="mono" fill="#0d0d0d">modifyUTF8Constant</text>
+
+  <rect x="368" y="86" width="150" height="120" rx="9" fill="rgb(212,168,83)"/>
+  <text x="443" y="110" class="h" text-anchor="middle">ByteUtils</text>
+  <text x="384" y="134" class="note" fill="rgba(13,13,13,0.72)">바이트 ↔ int 변환</text>
+  <text x="384" y="152" class="note" fill="rgba(13,13,13,0.72)">길이 차이 보정</text>
+  <text x="384" y="170" class="mono" fill="#0d0d0d">bytes2Int / int2Bytes</text>
+  <text x="384" y="188" class="mono" fill="#0d0d0d">bytesReplace</text>
+
+  <rect x="538" y="86" width="150" height="120" rx="9" fill="#66bb6a"/>
+  <text x="613" y="110" class="h" text-anchor="middle">HotSwapClassLoader</text>
+  <text x="554" y="134" class="note" fill="rgba(13,13,13,0.72)">새 인스턴스로</text>
+  <text x="554" y="152" class="note" fill="rgba(13,13,13,0.72)">치환된 byte[] 적재</text>
+  <text x="554" y="174" class="mono" fill="#0d0d0d">loadByte → Class</text>
+  <text x="554" y="192" class="note" fill="rgba(13,13,13,0.72)">→ 리플렉션으로 실행</text>
+
+  <rect x="708" y="86" width="164" height="120" rx="9" fill="rgba(102,187,106,0.12)" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="790" y="110" class="h" text-anchor="middle" fill="#66bb6a">HackSystem 버퍼</text>
+  <text x="724" y="134" class="note">실행 중 out.println →</text>
+  <text x="724" y="152" class="note">ByteArrayOutputStream</text>
+  <text x="724" y="170" class="note">에 누적</text>
+  <text x="724" y="190" class="note">→ getBufferString()</text>
+
+  <line x1="178" y1="146" x2="196" y2="146" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#b1)"/>
+  <line x1="348" y1="146" x2="366" y2="146" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#b1)"/>
+  <line x1="518" y1="146" x2="536" y2="146" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#b1)"/>
+  <line x1="688" y1="146" x2="706" y2="146" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#b1)"/>
+
+  <!-- 길이 보정 상세 -->
+  <rect x="28" y="232" width="500" height="150" rx="10" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="48" y="258" class="sub" fill="rgb(212,168,83)" font-weight="800">길이 보정 — 왜 ByteUtils 가 필요한가</text>
+  <rect x="44" y="272" width="468" height="40" rx="5" fill="#1a1a1a"/>
+  <text x="56" y="290" class="mono">"java/lang/System" (16바이트) → "HackSystem" (10바이트)</text>
+  <text x="56" y="305" class="note">상수 풀의 Utf8 항목은 *앞 2바이트가 길이* → 길이 필드도 16→10 으로 고쳐야 함</text>
+  <text x="48" y="334" class="note">단순 문자열 치환이 아니라, 상수 풀 항목의 *length 필드 + 실제 바이트* 를 함께 바꿔야 함.</text>
+  <text x="48" y="354" class="note">ByteUtils 가 2바이트 정수(길이)를 읽고 쓰며, 줄어든 만큼 뒤 바이트를 당겨 붙인다.</text>
+  <text x="48" y="374" class="note">→ 클래스 파일 구조(상수 풀 Utf8 포맷)를 정확히 알아야 깨지지 않는다.</text>
+
+  <!-- JSP 실행 -->
+  <rect x="548" y="232" width="324" height="150" rx="10" fill="rgba(91,155,213,0.08)" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="568" y="258" class="sub" fill="#5b9bd5" font-weight="800">웹에서 실행 — JSP 입구</text>
+  <text x="564" y="282" class="note">JSP 페이지가 업로드된 클래스 바이트를 받아</text>
+  <text x="564" y="302" class="mono">JavaClassExecuter.execute(bytes)</text>
+  <text x="564" y="322" class="note">를 호출하고, 반환된 결과 문자열을 화면에 출력.</text>
+  <text x="564" y="346" class="note">→ 브라우저에서 자바 코드를 보내 실행하고</text>
+  <text x="564" y="364" class="note">  결과를 받는 온라인 실행기가 완성됨.</text>
+
+  <!-- 결론 -->
+  <text x="28" y="416" class="sub" fill="#66bb6a" font-weight="800">종합</text>
+  <text x="28" y="440" class="note">3부(7·8·9장) 전체가 이 한 실습에 모인다: 클래스 파일 구조(상수 풀) + 클래스 로더(동일성·핫스왑)</text>
+  <text x="28" y="460" class="note">+ 바이트코드 조작(치환) + 동적 적재(defineClass). "바꿀 수 없는 것을 바이트 한 곳으로 우회"가 핵심.</text>
+  <text x="28" y="484" class="note">실무 연결: 이 발상이 Java Agent·APM·바이트코드 계측(instrumentation)·핫 리로드의 토대다.</text>
+  <text x="28" y="508" class="note">단, 운영에서 임의 바이트코드 실행은 *심각한 보안 위험* — 학습·격리 환경에서만.</text>
+</svg>

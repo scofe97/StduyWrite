@@ -1,0 +1,69 @@
+<svg viewBox="0 0 900 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>메서드 호출 — 해석 vs 디스패치, 정적 vs 동적</title>
+  <desc>메서드 호출은 호출 대상을 컴파일 때 확정하는 해석과, 실행 중에 고르는 디스패치로 나뉜다. 해석 대상은 static·private·생성자·super 호출처럼 변하지 않는 메서드로 invokestatic·invokespecial 이 처리한다. 디스패치는 컴파일 때 정적 타입으로 고르는 정적 디스패치(오버로딩)와, 실행 중 실제 타입으로 고르는 동적 디스패치(오버라이딩, invokevirtual)로 갈린다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: rgb(138,133,128); }
+      .h     { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .item  { font-size: 10.5px; fill: #e8e4df; }
+      .note  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .mono  { font-size: 9.5px; font-family: 'JetBrains Mono', monospace; fill: rgb(212,168,83); font-weight: 700; }
+    </style>
+    <marker id="d2" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="rgb(138,133,128)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="600" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">메서드 호출 — 해석 vs 디스패치</text>
+  <text x="28" y="58" class="sub">컴파일 때 확정 = 해석(static·private·생성자·super) · 실행 중 선택 = 디스패치(정적=오버로딩, 동적=오버라이딩)</text>
+
+  <!-- 분기 루트 -->
+  <rect x="350" y="78" width="200" height="48" rx="9" fill="rgb(212,168,83)"/>
+  <text x="450" y="100" class="h" text-anchor="middle">메서드 호출</text>
+  <text x="450" y="116" class="note" text-anchor="middle" fill="rgba(13,13,13,0.7)">바이트코드 5종 호출 명령</text>
+
+  <!-- 해석 -->
+  <rect x="40" y="160" width="380" height="190" rx="11" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="60" y="186" class="h" fill="#66bb6a">① 해석 (Resolution) — 컴파일 때 확정</text>
+  <text x="60" y="210" class="item">변하지 않는 "비가상 메서드"가 대상</text>
+  <rect x="56" y="222" width="348" height="46" rx="6" fill="#1a1a1a"/>
+  <text x="68" y="241" class="mono">invokestatic   — static 메서드</text>
+  <text x="68" y="259" class="mono">invokespecial  — 생성자·private·super</text>
+  <text x="60" y="290" class="note">이 메서드들은 컴파일 시점에 *버전이 하나*로 정해짐</text>
+  <text x="60" y="310" class="note">→ 상수 풀 심볼 참조가 곧장 직접 참조로 해석됨</text>
+  <text x="60" y="334" class="note">final 메서드도 invokevirtual 이지만 비가상으로 취급</text>
+
+  <!-- 디스패치 -->
+  <rect x="440" y="160" width="420" height="400" rx="11" fill="rgba(91,155,213,0.08)" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="460" y="186" class="h" fill="#5b9bd5">② 디스패치 (Dispatch) — 실행 중 선택</text>
+
+  <!-- 정적 디스패치 -->
+  <rect x="458" y="200" width="384" height="160" rx="9" fill="#5b9bd5"/>
+  <text x="476" y="224" class="h">정적 디스패치 = 오버로딩 (Overload)</text>
+  <text x="476" y="244" class="note" fill="rgba(13,13,13,0.72)">컴파일 때 *정적 타입(선언 타입)* 으로 버전 결정</text>
+  <rect x="474" y="254" width="352" height="58" rx="5" fill="rgba(13,13,13,0.18)"/>
+  <text x="486" y="273" class="mono" fill="#0d0d0d">Human man = new Man();</text>
+  <text x="486" y="291" class="mono" fill="#0d0d0d">sayHello(man) → sayHello(Human) 선택</text>
+  <text x="486" y="305" class="note" fill="rgba(13,13,13,0.72)">man 의 정적 타입이 Human 이므로</text>
+  <text x="476" y="334" class="note" fill="rgba(13,13,13,0.72)">컴파일러가 인자의 *선언 타입* 만 보고 고름</text>
+  <text x="476" y="352" class="note" fill="rgba(13,13,13,0.72)">→ 실행 전에 이미 결정 (정적)</text>
+
+  <!-- 동적 디스패치 -->
+  <rect x="458" y="372" width="384" height="170" rx="9" fill="rgb(212,168,83)"/>
+  <text x="476" y="396" class="h">동적 디스패치 = 오버라이딩 (Override)</text>
+  <text x="476" y="416" class="note" fill="rgba(13,13,13,0.72)">실행 중 *실제 타입* 으로 버전 결정 · invokevirtual</text>
+  <rect x="474" y="426" width="352" height="44" rx="5" fill="rgba(13,13,13,0.18)"/>
+  <text x="486" y="445" class="mono" fill="#0d0d0d">Human man = new Man();</text>
+  <text x="486" y="462" class="mono" fill="#0d0d0d">man.sayHello() → Man.sayHello() 실행</text>
+  <text x="476" y="490" class="note" fill="rgba(13,13,13,0.72)">invokevirtual 4단계: 수신자 실제 타입 C 부터</text>
+  <text x="476" y="507" class="note" fill="rgba(13,13,13,0.72)">→ 일치 메서드 탐색 → 없으면 부모로 → 못 찾으면 에러</text>
+  <text x="476" y="528" class="note" fill="rgba(13,13,13,0.72)">필드는 오버라이딩 안 됨 (정적 타입으로 접근)</text>
+
+  <!-- 연결선 -->
+  <line x1="350" y1="110" x2="230" y2="158" stroke="rgb(138,133,128)" stroke-width="2" marker-end="url(#d2)"/>
+  <line x1="550" y1="110" x2="650" y2="158" stroke="rgb(138,133,128)" stroke-width="2" marker-end="url(#d2)"/>
+
+  <text x="40" y="384" class="sub">핵심 대비: 오버로딩은 *정적 타입* 으로 컴파일 때, 오버라이딩은 *실제 타입* 으로 실행 중 — 자바 다형성의 뿌리</text>
+</svg>
