@@ -30,4 +30,4 @@
 
 ## 노트 연결
 
-- 본편: [`../../ch04_diagnosis-optimization/01-01.기본 문제 해결 도구 — 명령줄 도구.md`](../../ch04_diagnosis-optimization/01-01.기본%20문제%20해결%20도구%20—%20명령줄%20도구.md), [`../../ch04_diagnosis-optimization/01-02.시각화 문제 해결 도구.md`](../../ch04_diagnosis-optimization/01-02.시각화%20문제%20해결%20도구.md)
+- 본편: [`../../ch02_automatic-memory-management/03-01.기본 문제 해결 도구 — 명령줄 도구.md`](../../ch02_automatic-memory-management/03-01.기본%20문제%20해결%20도구%20—%20명령줄%20도구.md), [`../../ch02_automatic-memory-management/03-02.시각화 문제 해결 도구.md`](../../ch02_automatic-memory-management/03-02.시각화%20문제%20해결%20도구.md)

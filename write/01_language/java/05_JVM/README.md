@@ -6,12 +6,12 @@ related:
   - ./ch01_java-tech/01-01.JDK 구조와 바이트코드.md
   - ./ch01_java-tech/01-02.가상 머신 실행 서브시스템.md
   - ./ch01_java-tech/01-03.컴파일과 최적화.md
-  - ./ch03_gc/01-01.GC 운영 — 로그와 튜닝.md
-  - ./ch03_gc/01-02.Java 성능 — JMH와 측정 방법론.md
-  - ./ch04_diagnosis-optimization/01-01.기본 문제 해결 도구 — 명령줄 도구.md
-  - ./ch04_diagnosis-optimization/01-02.시각화 문제 해결 도구.md
-  - ./ch04_diagnosis-optimization/02-01.최적화 사례 분석.md
-  - ./ch04_diagnosis-optimization/02-02.실전 — Eclipse IDE 튜닝.md
+  - ./ch02_automatic-memory-management/02-01.GC 운영 — 로그와 튜닝.md
+  - ./ch02_automatic-memory-management/02-02.Java 성능 — JMH와 측정 방법론.md
+  - ./ch02_automatic-memory-management/03-01.기본 문제 해결 도구 — 명령줄 도구.md
+  - ./ch02_automatic-memory-management/03-02.시각화 문제 해결 도구.md
+  - ./ch02_automatic-memory-management/04-01.최적화 사례 분석.md
+  - ./ch02_automatic-memory-management/04-02.실전 — Eclipse IDE 튜닝.md
   - ./ch06_class-file/02-01.클래스 파일 구조.md
   - ./ch06_class-file/02-02.바이트코드 명령어.md
   - ./_temp/01-04.효율적 동시성.md
@@ -44,7 +44,7 @@ updated: 2026-06-03
 
 # JVM 학습 인덱스
 ---
-> 이 폴더는 단행본 《JVM 밑바닥까지 파헤치기》의 **절 단위 정독 노트** 갈래(`chNN_*/02-NN`)와 **루트 직속의 동시성 학습 노트** 갈래(`03-xx` ~ `05-xx`)로 구성된다. 과거의 "부 단위 루트 요약" 레이어는 정독 폴더로 흡수했다 — 책 1·3·4부 요약은 [`ch01_java-tech/`](./ch01_java-tech/) 의 `01-NN` 파일(개관 갈래)로, 2부 요약은 [`ch03_gc/`](./ch03_gc/) 의 `01-NN` 파일로 이동했고, 5부 요약은 정독 폴더 신설 전까지 [`_temp/`](./_temp/) 에 보류 중이다. 각 폴더 안에서 `01-NN`은 *개관/운영 갈래*, `02-NN`은 *책의 절 정독 갈래*로 구분된다. 실습 코드는 `_practice/` 서브폴더에서 챕터별 Gradle 모듈로 모인다.
+> 이 폴더는 단행본 《JVM 밑바닥까지 파헤치기》의 **절 단위 정독 노트** 갈래(`chNN_*` 폴더)와 **루트 직속의 동시성 학습 노트** 갈래(`03-xx` ~ `05-xx`)로 구성된다. 책의 *부(部)* 단위로 폴더를 묶는다 — 2부 "자동 메모리 관리"(원서 2~5장)는 [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) 한 폴더에 장번호로 통합돼 있어, `01-NN`이 메모리 영역(2장), `02-NN`이 가비지 컬렉션(3장, 운영·JMH는 `02-01~02-02` / GC 본문은 `02-03~02-10`), `03-NN`이 진단 도구(4장), `04-NN`이 최적화 실전(5장)이다. 과거의 "부 단위 루트 요약" 레이어는 정독 폴더로 흡수했다 — 책 1·3·4부 요약은 [`ch01_java-tech/`](./ch01_java-tech/) 의 `01-NN` 파일(개관 갈래)로 이동했고, 5부 요약은 정독 폴더 신설 전까지 [`_temp/`](./_temp/) 에 보류 중이다. 실습 코드는 `_practice/` 서브폴더에서 챕터별 Gradle 모듈로 모인다.
 >
 > 2026-06-02부터 두 번째 정독 대상 책 《JVM Performance Engineering》(Monica Beckwith) 갈래가 합류했다. 《밑바닥》이 `ch01`~`ch13` 번호대를 점유하므로, 새 책은 충돌을 피해 **`ch14`부터** 시작한다(예: [`ch14_jpe-evolution/`](./ch14_jpe-evolution/)). 새 책은 *한 폴더 = 책의 한 장*이고 파일 prefix는 장 안 소주제 순번을 뜻하는 `01-NN`이다 — 《밑바닥》의 `01-`(개관 흡수)/`02-`(절 정독) 의미와 다르니, 책마다 폴더가 갈려 출처가 섞이지 않는다. 책 구분은 각 노트의 `source` 필드가 1차 기준이다.
 
@@ -103,8 +103,8 @@ updated: 2026-06-03
 | 01-02.가상 머신 실행 서브시스템 | 3부 7~8장 | [`ch01_java-tech/01-02.가상 머신 실행 서브시스템.md`](./ch01_java-tech/01-02.가상%20머신%20실행%20서브시스템.md) |
 | 01-03.컴파일과 최적화 | 4부 10~11장 | [`ch01_java-tech/01-03.컴파일과 최적화.md`](./ch01_java-tech/01-03.컴파일과%20최적화.md) |
 | 01-04.효율적 동시성 | 5부 12~13장 | [`_temp/01-04.효율적 동시성.md`](./_temp/01-04.효율적%20동시성.md) (정독 폴더 신설 대기) |
-| 02-01.GC 알고리즘과 튜닝 | 2부 3장 | §6,§7만 [`ch03_gc/01-01.GC 운영 — 로그와 튜닝.md`](./ch03_gc/01-01.GC%20운영%20—%20로그와%20튜닝.md), §3 비교표는 [`ch03_gc/02-08.마치며.md`](./ch03_gc/02-08.마치며.md) 의 §3a로 흡수. §1,§2,§4,§5는 정독 노트와 중복으로 제거 |
-| 02-02.Java 성능 | 2부 4~5장 | [`ch03_gc/01-02.Java 성능 — JMH와 측정 방법론.md`](./ch03_gc/01-02.Java%20성능%20—%20JMH와%20측정%20방법론.md) |
+| 02-01.GC 알고리즘과 튜닝 | 2부 3장 | §6,§7만 [`ch02_automatic-memory-management/02-01.GC 운영 — 로그와 튜닝.md`](./ch02_automatic-memory-management/02-01.GC%20운영%20—%20로그와%20튜닝.md), §3 비교표는 [`ch02_automatic-memory-management/02-10.마치며.md`](./ch02_automatic-memory-management/02-10.마치며.md) 의 §3a로 흡수. §1,§2,§4,§5는 정독 노트와 중복으로 제거 |
+| 02-02.Java 성능 | 2부 4~5장 | [`ch02_automatic-memory-management/02-02.Java 성능 — JMH와 측정 방법론.md`](./ch02_automatic-memory-management/02-02.Java%20성능%20—%20JMH와%20측정%20방법론.md) |
 
 ## 책 목차 ↔ 정독 노트 매핑
 
@@ -120,10 +120,10 @@ updated: 2026-06-03
 
 | 장 | 한국어 제목 | 폴더 | 진척 | 실습 |
 |----|------------|------|------|------|
-| 2장 | 자바 메모리 영역과 메모리 오버플로 | [`ch02_memory-area/`](./ch02_memory-area/) | ✅ §2.1~§2.5 | [`_practice/ch02-memory-area/`](./_practice/ch02-memory-area/) |
-| 3장 | 가비지 컬렉터와 메모리 할당 전략 | [`ch03_gc/`](./ch03_gc/) | ✅ §3.1~§3.9 + 운영 흡수본 (01-01) | [`_practice/ch03-gc/`](./_practice/ch03-gc/) |
-| 4장 | 가상 머신 성능 모니터링과 문제 해결 도구 | [`ch04_diagnosis-optimization/`](./ch04_diagnosis-optimization/) | ✅ §4.1~§4.4.1 정독(p.197~245, 01-01 명령줄 + 01-02 시각화), §4.5 마치며 ⏳ 스크린샷 미확보. GC 로그·jstat·튜닝은 [`ch03_gc/01-01`](./ch03_gc/01-01.GC%20운영%20—%20로그와%20튜닝.md) 운영 갈래에 별도 흡수 유지 | [`_practice/ch04-troubleshooting/`](./_practice/ch04-troubleshooting/) |
-| 5장 | 최적화 사례 분석 및 실전 | [`ch04_diagnosis-optimization/`](./ch04_diagnosis-optimization/) (4장과 통합) | ✅ §5.1~§5.4 정독(p.253~283, 02-01 사례분석 + 02-02 실전). JMH·성능 측정 방법론은 [`ch03_gc/01-02`](./ch03_gc/01-02.Java%20성능%20—%20JMH와%20측정%20방법론.md) 흡수본에 별도 유지 | [`_practice/ch05-optimization/`](./_practice/ch05-optimization/) |
+| 2장 | 자바 메모리 영역과 메모리 오버플로 | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `01-NN` | ✅ §2.1~§2.5 | [`_practice/ch02-memory-area/`](./_practice/ch02-memory-area/) |
+| 3장 | 가비지 컬렉터와 메모리 할당 전략 | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `02-NN` | ✅ §3.1~§3.9 + 운영 흡수본 (02-01) | [`_practice/ch03-gc/`](./_practice/ch03-gc/) |
+| 4장 | 가상 머신 성능 모니터링과 문제 해결 도구 | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `03-NN` | ✅ §4.1~§4.4.1 정독(p.197~245, 03-01 명령줄 + 03-02 시각화), §4.5 마치며 ⏳ 스크린샷 미확보. GC 로그·jstat·튜닝은 [`02-01`](./ch02_automatic-memory-management/02-01.GC%20운영%20—%20로그와%20튜닝.md) 운영 갈래에 별도 흡수 유지 | [`_practice/ch04-troubleshooting/`](./_practice/ch04-troubleshooting/) |
+| 5장 | 최적화 사례 분석 및 실전 | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `04-NN` | ✅ §5.1~§5.4 정독(p.253~283, 04-01 사례분석 + 04-02 실전). JMH·성능 측정 방법론은 [`02-02`](./ch02_automatic-memory-management/02-02.Java%20성능%20—%20JMH와%20측정%20방법론.md) 흡수본에 별도 유지 | [`_practice/ch05-optimization/`](./_practice/ch05-optimization/) |
 
 ### 3부 가상 머신 실행 서브시스템
 
