@@ -12,8 +12,22 @@ related:
   - ./ch02_automatic-memory-management/03-02.시각화 문제 해결 도구.md
   - ./ch02_automatic-memory-management/04-01.최적화 사례 분석.md
   - ./ch02_automatic-memory-management/04-02.실전 — Eclipse IDE 튜닝.md
-  - ./ch06_class-file/02-01.클래스 파일 구조.md
-  - ./ch06_class-file/02-02.바이트코드 명령어.md
+  - ./ch06_class-file/01-01.클래스 파일 구조.md
+  - ./ch06_class-file/01-02.바이트코드 명령어.md
+  - ./ch03_class-loading-mechanism/02-01.클래스 로딩 시점과 생명주기.md
+  - ./ch03_class-loading-mechanism/02-02.로딩·검증·준비.md
+  - ./ch03_class-loading-mechanism/02-03.해석과 초기화.md
+  - ./ch03_class-loading-mechanism/02-04.클래스 로더와 부모 위임 모델.md
+  - ./ch03_class-loading-mechanism/02-05.자바 모듈 시스템과 클래스 로더 변화.md
+  - ./ch03_class-loading-mechanism/03-01.런타임 스택 프레임 구조.md
+  - ./ch03_class-loading-mechanism/03-02.메서드 호출 — 해석과 정적·동적 디스패치.md
+  - ./ch03_class-loading-mechanism/03-03.다중 디스패치와 가상 메서드 테이블.md
+  - ./ch03_class-loading-mechanism/03-04.동적 타입 언어 지원과 invokedynamic.md
+  - ./ch03_class-loading-mechanism/03-05.스택 기반 해석 실행 엔진.md
+  - ./ch03_class-loading-mechanism/04-01.톰캣의 클래스 로더 아키텍처.md
+  - ./ch03_class-loading-mechanism/04-02.OSGi의 유연한 클래스 로더와 바이트코드 생성.md
+  - ./ch03_class-loading-mechanism/04-03.실전 — 원격 실행 기능 설계.md
+  - ./ch03_class-loading-mechanism/04-04.실전 — 바이트코드 치환과 실행.md
   - ./_temp/01-04.효율적 동시성.md
   - ./03-01.스레드 생성과 생명주기.md
   - ./03-02.메모리 가시성과 동기화.md

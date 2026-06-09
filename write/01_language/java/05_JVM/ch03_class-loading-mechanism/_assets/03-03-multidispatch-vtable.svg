@@ -1,0 +1,85 @@
+<svg viewBox="0 0 900 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>단일/다중 디스패치 2축 분류와 가상 메서드 테이블(vtable)</title>
+  <desc>디스패치는 종량(정적/동적)과 종수(단일/다중)의 두 축으로 분류된다. 자바의 정적 디스패치는 수신자와 인자 타입 둘 다 보므로 다중 디스패치이고, 동적 디스패치는 수신자 실제 타입 하나만 보므로 단일 디스패치다. 따라서 자바는 정적 다중 + 동적 단일 디스패치 언어다. 동적 디스패치는 매번 메서드를 탐색하면 느리므로, 가상 머신이 메서드 영역에 클래스별 가상 메서드 테이블(vtable)을 두어 인덱스로 빠르게 찾는다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: rgb(138,133,128); }
+      .h     { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
+      .cell  { font-size: 10.5px; fill: #0d0d0d; }
+      .note  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .mono  { font-size: 9.5px; font-family: 'JetBrains Mono', monospace; fill: rgb(212,168,83); }
+      .vlab  { font-size: 11px; font-weight: 700; fill: #e8e4df; }
+    </style>
+    <marker id="v3" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="#5b9bd5"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="600" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">단일/다중 디스패치 + 가상 메서드 테이블</text>
+  <text x="28" y="58" class="sub">자바 = 정적 다중 디스패치 + 동적 단일 디스패치 · 동적 호출은 vtable 인덱스로 가속</text>
+
+  <!-- 2x2 매트릭스 -->
+  <text x="48" y="92" class="vlab" fill="rgb(212,168,83)">디스패치 2축 분류 (종량 × 종수)</text>
+  <!-- 헤더 -->
+  <rect x="170" y="104" width="160" height="40" rx="6" fill="#1a1a1a" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <text x="250" y="129" class="vlab" text-anchor="middle">단일 디스패치</text>
+  <rect x="340" y="104" width="160" height="40" rx="6" fill="#1a1a1a" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <text x="420" y="129" class="vlab" text-anchor="middle">다중 디스패치</text>
+  <!-- 행 헤더 -->
+  <rect x="40" y="152" width="120" height="70" rx="6" fill="#1a1a1a" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <text x="100" y="192" class="vlab" text-anchor="middle">정적</text>
+  <rect x="40" y="230" width="120" height="70" rx="6" fill="#1a1a1a" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <text x="100" y="270" class="vlab" text-anchor="middle">동적</text>
+  <!-- 셀 -->
+  <rect x="170" y="152" width="160" height="70" rx="6" fill="rgba(138,133,128,0.18)"/>
+  <text x="250" y="182" class="note" text-anchor="middle">—</text>
+  <rect x="340" y="152" width="160" height="70" rx="6" fill="#5b9bd5"/>
+  <text x="420" y="178" class="h" text-anchor="middle">정적 다중 ✔</text>
+  <text x="420" y="196" class="note" text-anchor="middle" fill="rgba(13,13,13,0.72)">오버로딩</text>
+  <text x="420" y="211" class="note" text-anchor="middle" fill="rgba(13,13,13,0.72)">수신자+인자 타입 둘 다</text>
+
+  <rect x="170" y="230" width="160" height="70" rx="6" fill="rgb(212,168,83)"/>
+  <text x="250" y="256" class="h" text-anchor="middle">동적 단일 ✔</text>
+  <text x="250" y="274" class="note" text-anchor="middle" fill="rgba(13,13,13,0.72)">오버라이딩</text>
+  <text x="250" y="289" class="note" text-anchor="middle" fill="rgba(13,13,13,0.72)">수신자 실제 타입 하나만</text>
+  <rect x="340" y="230" width="160" height="70" rx="6" fill="rgba(138,133,128,0.18)"/>
+  <text x="420" y="270" class="note" text-anchor="middle">(자바엔 없음)</text>
+
+  <text x="40" y="332" class="note">자바는 정적일 때 인자 타입까지(다중), 동적일 때 수신자 타입만(단일) 본다 → "정적 다중 + 동적 단일" 언어</text>
+
+  <!-- vtable -->
+  <rect x="40" y="356" width="820" height="222" rx="11" fill="rgba(91,155,213,0.08)" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="60" y="382" class="vlab" fill="#5b9bd5">가상 메서드 테이블 (vtable) — 동적 호출 가속</text>
+  <text x="60" y="404" class="note">매번 수신자 타입부터 부모로 탐색하면 느림 → 클래스마다 메서드 영역에 vtable 을 두고 인덱스로 직접 점프</text>
+
+  <!-- 부모 vtable -->
+  <rect x="60" y="420" width="240" height="140" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="180" y="442" class="vlab" text-anchor="middle">Human vtable</text>
+  <text x="76" y="466" class="mono">[0] sayHello → Human.sayHello</text>
+  <text x="76" y="486" class="mono">[1] toString → Object.toString</text>
+  <line x1="72" y1="498" x2="288" y2="498" stroke="rgb(138,133,128)" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <text x="76" y="520" class="note">자식이 오버라이드 안 한 항목은</text>
+  <text x="76" y="538" class="note">부모 구현을 그대로 가리킴</text>
+
+  <!-- 자식 vtable Man -->
+  <rect x="330" y="420" width="240" height="140" rx="8" fill="#1a1a1a" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="450" y="442" class="vlab" text-anchor="middle" fill="#66bb6a">Man vtable</text>
+  <text x="346" y="466" class="mono" fill="#66bb6a">[0] sayHello → Man.sayHello ★</text>
+  <text x="346" y="486" class="mono">[1] toString → Object.toString</text>
+  <line x1="342" y1="498" x2="558" y2="498" stroke="rgb(138,133,128)" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <text x="346" y="520" class="note">★ 오버라이드한 [0] 만 자기 구현으로</text>
+  <text x="346" y="538" class="note">같은 인덱스 [0] = sayHello 자리 유지</text>
+
+  <!-- 동작 -->
+  <rect x="600" y="420" width="240" height="140" rx="8" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="720" y="442" class="vlab" text-anchor="middle" fill="#66bb6a">호출 동작</text>
+  <text x="616" y="466" class="note">invokevirtual sayHello</text>
+  <text x="616" y="484" class="note">→ 수신자의 vtable 에서</text>
+  <text x="616" y="502" class="note">  *고정 인덱스 [0]* 으로 점프</text>
+  <text x="616" y="524" class="note">→ Man 이면 Man.sayHello,</text>
+  <text x="616" y="542" class="note">  Human 이면 Human.sayHello</text>
+
+  <line x1="180" y1="466" x2="332" y2="466" stroke="#5b9bd5" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#v3)"/>
+</svg>

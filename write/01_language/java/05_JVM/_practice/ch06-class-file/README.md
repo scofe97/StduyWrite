@@ -24,8 +24,8 @@ javap -v "$CLS"
 javap -c "$CLS"
 ```
 
-`javap -v` 출력에서 노트(`../../ch06_class-file/02-01.클래스 파일 구조.md`)의 ClassFile 구조 — magic `cafebabe`, Constant pool, `flags: ACC_PUBLIC`, 필드/메서드 — 가 그대로 보인다. `javap -c`는 02-02 노트의 옵코드(`getfield`·`getstatic`·`iadd`)를 실제로 확인하는 짝이다.
+`javap -v` 출력에서 노트(`../../ch06_class-file/01-01.클래스 파일 구조.md`)의 ClassFile 구조 — magic `cafebabe`, Constant pool, `flags: ACC_PUBLIC`, 필드/메서드 — 가 그대로 보인다. `javap -c`는 01-02 노트의 옵코드(`getfield`·`getstatic`·`iadd`)를 실제로 확인하는 짝이다.
 
 ## 노트 연결
 
-- 본편: [`../../ch06_class-file/02-01.클래스 파일 구조.md`](../../ch06_class-file/02-01.클래스%20파일%20구조.md), [`../../ch06_class-file/02-02.바이트코드 명령어.md`](../../ch06_class-file/02-02.바이트코드%20명령어.md)
+- 본편: [`../../ch06_class-file/01-01.클래스 파일 구조.md`](../../ch06_class-file/01-01.클래스%20파일%20구조.md), [`../../ch06_class-file/01-02.바이트코드 명령어.md`](../../ch06_class-file/01-02.바이트코드%20명령어.md)
