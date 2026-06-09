@@ -1,0 +1,72 @@
+<svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>안정 해시 — 재해싱 문제와 해시 링·가상 노드</title>
+  <desc>hash % N 방식이 서버 추가·제거 때 대부분의 키를 재배치해 캐시 미스 폭풍을 일으키는 문제와, 해시 링 위에서 키를 시계 방향으로 가장 가까운 서버에 할당하고 가상 노드로 분포를 고르게 만드는 안정 해시 기법을 한 장에 정리한 종합도.</desc>
+
+  <rect x="0" y="0" width="900" height="560" fill="#0d0d0d"/>
+
+  <text x="30" y="40" fill="rgb(212,168,83)" font-size="20" font-weight="bold">안정 해시 (Consistent Hashing)</text>
+  <text x="30" y="62" fill="rgb(138,133,128)" font-size="12">서버 추가·제거 시 재배치되는 키를 최소화한다. 평균 k/n 개만 옮긴다.</text>
+
+  <!-- 좌측: 재해싱 문제 -->
+  <text x="30" y="98" fill="#e8e4df" font-size="14" font-weight="bold">문제 — hash % N 의 한계</text>
+  <rect x="30" y="110" width="300" height="170" fill="rgba(244,67,54,0.06)" stroke="rgb(42,37,32)"/>
+  <text x="48" y="138" fill="#e8e4df" font-size="12">serverIndex = hash(key) % N</text>
+  <text x="48" y="162" fill="rgb(138,133,128)" font-size="11">서버 풀 크기가 고정이면 잘 동작.</text>
+  <text x="48" y="186" fill="#f44336" font-size="11.5" font-weight="bold">서버 1대 빠지면 N 이 바뀌어</text>
+  <text x="48" y="206" fill="#f44336" font-size="11.5" font-weight="bold">거의 모든 키가 재배치됨</text>
+  <text x="48" y="230" fill="rgb(138,133,128)" font-size="11">→ 클라이언트가 엉뚱한 서버로 조회</text>
+  <text x="48" y="250" fill="rgb(138,133,128)" font-size="11">→ 캐시 미스 폭풍 (storm)</text>
+  <text x="48" y="272" fill="rgb(212,168,83)" font-size="10.5">안정 해시가 이 문제를 완화한다.</text>
+
+  <!-- 좌측 하단: 적용 사례 -->
+  <text x="30" y="318" fill="#e8e4df" font-size="14" font-weight="bold">실무 적용</text>
+  <rect x="30" y="330" width="300" height="120" fill="rgba(212,168,83,0.06)" stroke="rgb(42,37,32)"/>
+  <text x="48" y="354" fill="#e8e4df" font-size="11">· Amazon Dynamo 파티셔닝</text>
+  <text x="48" y="376" fill="#e8e4df" font-size="11">· Apache Cassandra 데이터 분산</text>
+  <text x="48" y="398" fill="#e8e4df" font-size="11">· Discord 채팅</text>
+  <text x="48" y="420" fill="#e8e4df" font-size="11">· Akamai CDN</text>
+  <text x="48" y="440" fill="#e8e4df" font-size="11">· Maglev 네트워크 로드밸런서</text>
+
+  <!-- 우측: 해시 링 -->
+  <text x="370" y="98" fill="#e8e4df" font-size="14" font-weight="bold">해시 링과 시계 방향 탐색</text>
+
+  <!-- 링 원 -->
+  <circle cx="600" cy="280" r="150" fill="none" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="600" y="120" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">0 / 2^160-1</text>
+
+  <!-- 서버 노드 (s0 우상, s1 우하, s2 좌하, s3 좌상) -->
+  <circle cx="706" cy="174" r="16" fill="rgba(212,168,83,0.25)" stroke="rgb(212,168,83)"/>
+  <text x="706" y="178" fill="#e8e4df" font-size="11" text-anchor="middle">s0</text>
+  <circle cx="706" cy="386" r="16" fill="rgba(212,168,83,0.25)" stroke="rgb(212,168,83)"/>
+  <text x="706" y="390" fill="#e8e4df" font-size="11" text-anchor="middle">s1</text>
+  <circle cx="494" cy="386" r="16" fill="rgba(212,168,83,0.25)" stroke="rgb(212,168,83)"/>
+  <text x="494" y="390" fill="#e8e4df" font-size="11" text-anchor="middle">s2</text>
+  <circle cx="494" cy="174" r="16" fill="rgba(212,168,83,0.25)" stroke="rgb(212,168,83)"/>
+  <text x="494" y="178" fill="#e8e4df" font-size="11" text-anchor="middle">s3</text>
+
+  <!-- 키 노드 (작은 원) -->
+  <circle cx="600" cy="130" r="9" fill="#0d0d0d" stroke="#66bb6a" stroke-width="2"/>
+  <text x="600" y="134" fill="#66bb6a" font-size="9" text-anchor="middle">k0</text>
+  <circle cx="750" cy="280" r="9" fill="#0d0d0d" stroke="#66bb6a" stroke-width="2"/>
+  <text x="750" y="284" fill="#66bb6a" font-size="9" text-anchor="middle">k1</text>
+  <circle cx="600" cy="430" r="9" fill="#0d0d0d" stroke="#66bb6a" stroke-width="2"/>
+  <text x="600" y="434" fill="#66bb6a" font-size="9" text-anchor="middle">k2</text>
+  <circle cx="450" cy="280" r="9" fill="#0d0d0d" stroke="#66bb6a" stroke-width="2"/>
+  <text x="450" y="284" fill="#66bb6a" font-size="9" text-anchor="middle">k3</text>
+
+  <text x="600" y="290" fill="rgb(138,133,128)" font-size="10.5" text-anchor="middle">키에서 시계 방향으로</text>
+  <text x="600" y="306" fill="rgb(138,133,128)" font-size="10.5" text-anchor="middle">처음 만나는 서버에 저장</text>
+
+  <!-- 하단 설명 박스 2개 -->
+  <rect x="370" y="450" width="225" height="90" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="382" y="472" fill="#e8e4df" font-size="11.5" font-weight="bold">서버 추가·제거</text>
+  <text x="382" y="492" fill="rgb(138,133,128)" font-size="10.5">영향 범위는 인접 두 노드 사이</text>
+  <text x="382" y="508" fill="rgb(138,133,128)" font-size="10.5">구간뿐. 나머지 키는 그대로.</text>
+  <text x="382" y="528" fill="#66bb6a" font-size="10.5">→ 재배치 최소화</text>
+
+  <rect x="610" y="450" width="260" height="90" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)"/>
+  <text x="624" y="472" fill="rgb(212,168,83)" font-size="11.5" font-weight="bold">가상 노드 (virtual node)</text>
+  <text x="624" y="492" fill="rgb(138,133,128)" font-size="10.5">서버 1대를 링 위 여러 점으로 표현.</text>
+  <text x="624" y="508" fill="rgb(138,133,128)" font-size="10.5">노드 수↑ → 표준편차↓ → 분포 균등</text>
+  <text x="624" y="528" fill="rgb(138,133,128)" font-size="10.5">(200개면 평균의 약 5%)</text>
+</svg>
