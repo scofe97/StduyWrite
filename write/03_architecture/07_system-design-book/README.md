@@ -42,7 +42,7 @@ updated: 2026-06-10
 | 10 | Design a Notification System | [02-07](02-07.알림%20시스템%20설계.md) | 작성 완료 |
 | 11 | Design a News Feed System | [02-08](02-08.뉴스%20피드%20시스템%20설계.md) | 작성 완료 |
 | 12 | Design a Chat System | [02-09](02-09.채팅%20시스템%20설계.md) | 작성 완료 |
-| 13 | Design a Search Autocomplete System | — | 예정 |
+| 13 | Design a Search Autocomplete System | [02-10](02-10.검색어%20자동완성%20시스템%20설계.md) | 작성 완료 |
 | 14 | Design YouTube | — | 예정 |
 | 15 | Design Google Drive | — | 예정 |
 | 16 | The Learning Continues | — | 예정 |
@@ -73,3 +73,4 @@ CH4 부터는 개별 시스템 설계 사례라 `02-xx` 묶음으로 분리합�
 | CH10 | [`_assets/02-07.notification-system.svg`](_assets/02-07.notification-system.svg) — 채널별 큐 아키텍처 + 안정성 고려 |
 | CH11 | [`_assets/02-08.news-feed-system.svg`](_assets/02-08.news-feed-system.svg) — fanout push/pull + 하이브리드 + 5계층 캐시 |
 | CH12 | [`_assets/02-09.chat-system.svg`](_assets/02-09.chat-system.svg) — WebSocket·아키텍처·1:1 흐름·heartbeat |
+| CH13 | [`_assets/02-10.search-autocomplete.svg`](_assets/02-10.search-autocomplete.svg) — 트라이·top k 캐시·데이터 수집 |
