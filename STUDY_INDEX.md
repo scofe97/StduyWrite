@@ -14,7 +14,7 @@
 | 04 | [`write/04_messaging/`](write/04_messaging/) | Kafka, Redpanda, Avro, Schema Registry, EDA 구현 |
 | 05 | [`write/05_data/`](write/05_data/) | DDIA 이론·분산 시스템·데이터 처리·DB 운영·드라이버 관측 (DB, CDC, Transaction, Indexing, Replication, Sharding, Consensus) |
 | 06 | [`write/06_observability/`](write/06_observability/) | Logging, Tracing, Metrics, OpenTelemetry |
-| 07 | [`write/07_devops/`](write/07_devops/) | CI/CD, Jenkins, Nexus, Sonarqube |
+| 07 | [`write/07_devops/`](write/07_devops/) | CI/CD, Jenkins(`02_Jenkins/07_engine` 엔진 심화 포함), Nexus, Sonarqube |
 | 08 | [`write/08_cloud/`](write/08_cloud/) | Cloud Native, K8s, Service Mesh (미래) |
 | 09 | [`write/09_tools/`](write/09_tools/) | tmux, vim, Claude Code, Git |
 | 10 | [`write/10_security/`](write/10_security/) | OAuth/JWT, OWASP, 위협 모델링, Spring Security |
