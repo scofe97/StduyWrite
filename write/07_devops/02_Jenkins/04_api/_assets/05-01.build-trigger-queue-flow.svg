@@ -1,0 +1,73 @@
+<svg viewBox="0 0 820 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>빌드 트리거 두 단계 전환과 파라미터 전달 한도</title>
+  <desc>Jenkins 빌드 트리거는 두 번에 나눠 끝난다. POST build 응답은 본문 대신 Location 헤더에 queueId만 담고, 실제 buildNumber는 큐 아이템을 executable.number가 채워질 때까지 재조회해 얻는다. 파라미터 전달은 form 필드, json= 필드, 쿼리 세 방식이 있고 한도는 Jenkins 코어가 아니라 Winstone-Jetty 컨테이너가 건다. form 방식은 개수 10000개에 body 길이 사실상 무제한, 쿼리 방식만 URL 포함 8KB 한도를 받는다.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="820" height="500" fill="#0d0d0d"/>
+  <text x="20" y="34" fill="#e8e4df" font-size="16">빌드 트리거는 두 번에 나눠 끝난다 — queueId 대기표에서 buildNumber로</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="11">응답 본문이 아니라 Location 헤더가 답 — 빌드 번호는 큐 아이템 재조회로 확보</text>
+
+  <!-- ① 트리거 -->
+  <rect x="20" y="80" width="240" height="116" rx="6" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="106" fill="#e8e4df" font-size="13">① 트리거</text>
+  <rect x="38" y="118" width="204" height="26" rx="4" fill="#0d0d0d" stroke="rgb(42,37,32)"/>
+  <text x="50" y="136" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">POST {job}/buildWithParameters</text>
+  <text x="38" y="164" fill="rgb(138,133,128)" font-size="11">응답 본문은 거의 빈 값 — 헤더가 답</text>
+  <text x="38" y="184" fill="rgb(138,133,128)" font-size="11">성공 상태 코드는 201</text>
+
+  <line x1="264" y1="138" x2="286" y2="138" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ② 대기표 -->
+  <rect x="290" y="80" width="240" height="116" rx="6" fill="rgba(212,168,83,0.07)" stroke="rgb(212,168,83)"/>
+  <text x="308" y="106" fill="rgb(212,168,83)" font-size="13">② 대기표 수령</text>
+  <rect x="308" y="118" width="204" height="26" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="320" y="136" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">Location: /queue/item/151/</text>
+  <text x="308" y="164" fill="rgb(138,133,128)" font-size="11">받는 값은 buildNumber가 아니라</text>
+  <text x="308" y="184" fill="rgb(212,168,83)" font-size="11">queueId 151 — 번호는 아직 없음</text>
+
+  <line x1="534" y1="138" x2="556" y2="138" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ③ 폴링 -->
+  <rect x="560" y="80" width="240" height="116" rx="6" fill="rgba(102,187,106,0.06)" stroke="#66bb6a"/>
+  <text x="578" y="106" fill="#66bb6a" font-size="13">③ 큐 아이템 폴링</text>
+  <rect x="578" y="118" width="204" height="26" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="590" y="136" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">GET /queue/item/151/api/json</text>
+  <text x="578" y="164" fill="rgb(138,133,128)" font-size="11">executable이 null이면 재조회 반복</text>
+  <text x="578" y="184" fill="#66bb6a" font-size="11">executable.number → 빌드 번호 ✓</text>
+
+  <!-- 결론 스트립 -->
+  <rect x="20" y="216" width="780" height="44" rx="6" fill="rgba(102,187,106,0.08)" stroke="#66bb6a"/>
+  <text x="38" y="243" fill="#66bb6a" font-size="12">트리거 응답은 201 + Location(queueId)뿐 — buildNumber는 ③ 폴링의 executable.number에서 확보</text>
+
+  <!-- 파라미터 패널 -->
+  <text x="20" y="292" fill="#e8e4df" font-size="13">파라미터 전달 3방식과 한도 — 한도는 Jenkins 코어가 아니라 Winstone-Jetty 컨테이너 몫</text>
+
+  <rect x="20" y="308" width="240" height="116" rx="6" fill="rgba(102,187,106,0.06)" stroke="#66bb6a"/>
+  <text x="38" y="334" fill="#66bb6a" font-size="13">방식 1 · form 필드 (기본) ✓</text>
+  <rect x="38" y="346" width="204" height="26" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="50" y="364" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">--data-urlencode BRANCH=main</text>
+  <text x="38" y="392" fill="rgb(138,133,128)" font-size="11">개수 10,000개 (maxParamCount)</text>
+  <text x="38" y="412" fill="#66bb6a" font-size="11">form body 길이 사실상 무제한</text>
+
+  <rect x="290" y="308" width="240" height="116" rx="6" fill="rgba(212,168,83,0.07)" stroke="rgb(212,168,83)"/>
+  <text x="308" y="334" fill="rgb(212,168,83)" font-size="13">방식 2 · json= 필드 ✓</text>
+  <rect x="308" y="346" width="204" height="26" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="320" y="364" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">json={parameter:[...]}</text>
+  <text x="308" y="392" fill="rgb(138,133,128)" font-size="11">한도는 방식 1과 동일 (form body)</text>
+  <text x="308" y="412" fill="rgb(212,168,83)" font-size="11">동적 생성·UI 호환에 유리</text>
+
+  <rect x="560" y="308" width="240" height="116" rx="6" fill="rgba(244,67,54,0.05)" stroke="#f44336"/>
+  <text x="578" y="334" fill="#f44336" font-size="13">방식 3 · 쿼리 전달 ⚠</text>
+  <rect x="578" y="346" width="204" height="26" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="590" y="364" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">build?json=%7B...%7D</text>
+  <text x="578" y="392" fill="rgb(138,133,128)" font-size="11">URL 포함 요청 라인+헤더 8KB 한도</text>
+  <text x="578" y="412" fill="#f44336" font-size="11">값이 길면 방식 1·2로 우회</text>
+
+  <!-- 주석 -->
+  <text x="20" y="452" fill="rgb(138,133,128)" font-size="11">※ Job에 정의되지 않은 키는 400이 아니라 무시 — 201 성공인데 값이 비면 파라미터 정의부터 확인 (SECURITY-170)</text>
+  <text x="20" y="476" fill="rgb(138,133,128)" font-size="11">※ 출처: jenkinsci/winstone Option.java (maxParamCount·requestFormContentSize·requestHeaderSize 기본값)</text>
+</svg>
