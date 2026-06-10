@@ -1,0 +1,82 @@
+<svg viewBox="0 0 900 580" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>javac 컴파일 파이프라인 — 소스에서 바이트코드까지</title>
+  <desc>프론트엔드 컴파일러 javac는 자바 소스를 바이트코드로 바꾼다. 컴파일은 크게 세 과정이다. 첫째 파싱과 심볼 테이블 채우기로 소스를 추상 구문 트리(AST)로 만들고 심볼을 등록한다. 둘째 애너테이션 처리로 플러그인 처리기가 AST를 읽고 새 코드를 생성할 수 있다. 셋째 의미 분석과 바이트코드 생성으로 타입 검사·흐름 분석을 거쳐 클래스 파일을 만든다. 프론트엔드는 소스를 바이트코드로 바꾸고, 백엔드(JIT/AOT)는 바이트코드를 기계어로 바꾼다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: rgb(138,133,128); }
+      .ph    { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
+      .step  { font-size: 10px; fill: rgba(13,13,13,0.78); }
+      .note  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .mono  { font-size: 9px; font-family: 'JetBrains Mono', monospace; fill: rgb(212,168,83); }
+      .io    { font-size: 11px; font-weight: 700; fill: #e8e4df; }
+    </style>
+    <marker id="j1" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="580" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">javac 컴파일 파이프라인 — 소스 → 바이트코드</text>
+  <text x="28" y="58" class="sub">프론트엔드(javac): 소스→바이트코드 · 백엔드(JIT/AOT, 11장): 바이트코드→기계어 · 본 장은 프론트엔드</text>
+
+  <!-- 입력 -->
+  <rect x="28" y="92" width="120" height="64" rx="9" fill="#5b9bd5"/>
+  <text x="88" y="120" class="io" text-anchor="middle">.java 소스</text>
+  <text x="88" y="140" class="note" text-anchor="middle" fill="rgba(13,13,13,0.7)">텍스트</text>
+
+  <!-- 1 파싱+심볼 -->
+  <rect x="178" y="92" width="200" height="180" rx="10" fill="rgb(212,168,83)"/>
+  <text x="278" y="116" class="ph" text-anchor="middle">① 파싱 + 심볼 테이블</text>
+  <text x="194" y="140" class="step">· 어휘·구문 분석 → AST 생성</text>
+  <text x="194" y="160" class="step">· 추상 구문 트리(JCTree)</text>
+  <text x="194" y="180" class="step">· 심볼 테이블 채우기(Enter)</text>
+  <text x="194" y="200" class="step">  — 클래스·메서드·변수 등록</text>
+  <text x="194" y="224" class="mono">com.sun.tools.javac</text>
+  <text x="194" y="240" class="mono">  .comp.Enter</text>
+  <text x="194" y="262" class="note" fill="rgba(13,13,13,0.7)">아직 의미 검증 전</text>
+
+  <!-- 2 애너테이션 처리 -->
+  <rect x="408" y="92" width="200" height="180" rx="10" fill="#66bb6a"/>
+  <text x="508" y="116" class="ph" text-anchor="middle">② 애너테이션 처리</text>
+  <text x="424" y="140" class="step">· plug-in annotation API</text>
+  <text x="424" y="160" class="step">· 처리기가 AST 읽음</text>
+  <text x="424" y="180" class="step">· 새 소스/클래스 생성 가능</text>
+  <text x="424" y="200" class="step">· 변경 시 ①로 되돌아가</text>
+  <text x="424" y="216" class="step">  다시 파싱(라운드 반복)</text>
+  <text x="424" y="240" class="mono">JavacProcessing</text>
+  <text x="424" y="256" class="mono">  Environment</text>
+
+  <!-- 3 의미분석+생성 -->
+  <rect x="638" y="92" width="234" height="180" rx="10" fill="rgb(212,168,83)"/>
+  <text x="755" y="116" class="ph" text-anchor="middle">③ 의미 분석 + 바이트코드</text>
+  <text x="654" y="140" class="step">· 표준 검사(Attr): 타입·상수</text>
+  <text x="654" y="160" class="step">· 데이터/제어 흐름 분석(Flow)</text>
+  <text x="654" y="180" class="step">  — 변수 초기화·도달 가능성</text>
+  <text x="654" y="200" class="step">· 구문 설탕 제거(desugar)</text>
+  <text x="654" y="220" class="step">· 바이트코드 생성(Gen)</text>
+  <text x="654" y="236" class="step">  — &lt;init&gt;·&lt;clinit&gt; 삽입</text>
+  <text x="654" y="258" class="mono">Attr · Flow · Gen</text>
+
+  <!-- 출력 -->
+  <rect x="638" y="300" width="234" height="56" rx="9" fill="#5b9bd5"/>
+  <text x="755" y="326" class="io" text-anchor="middle">.class 바이트코드</text>
+  <text x="755" y="344" class="note" text-anchor="middle" fill="rgba(13,13,13,0.7)">JVM 이 읽는 형식 (6장)</text>
+
+  <line x1="148" y1="124" x2="176" y2="150" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#j1)"/>
+  <line x1="378" y1="182" x2="406" y2="182" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#j1)"/>
+  <line x1="608" y1="182" x2="636" y2="182" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#j1)"/>
+  <line x1="755" y1="272" x2="755" y2="298" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#j1)"/>
+  <!-- 라운드 반복 화살표 -->
+  <path d="M 460 272 Q 380 300 320 272" fill="none" stroke="#66bb6a" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#j1)"/>
+  <text x="360" y="300" class="note" text-anchor="middle" fill="#66bb6a">코드 생성 시 라운드 반복</text>
+
+  <!-- 하단 핵심 -->
+  <rect x="28" y="392" width="844" height="160" rx="10" fill="rgba(91,155,213,0.07)" stroke="#5b9bd5" stroke-width="1.2"/>
+  <text x="48" y="418" class="sub" fill="#5b9bd5" font-weight="800">핵심 — 프론트엔드 vs 백엔드</text>
+  <text x="48" y="442" class="note">· 프론트엔드 컴파일러 javac: *소스 → 바이트코드*. 코드를 더 빨리 돌게 만들지 않고, 코딩을 더 편하게 만든다(구문 설탕).</text>
+  <text x="48" y="464" class="note">· 백엔드 컴파일러 JIT(C1·C2)·AOT: *바이트코드 → 기계어*. 실제 실행 속도 최적화는 여기 몫(11장).</text>
+  <text x="48" y="486" class="note">· javac 자신이 자바로 작성됨 — com.sun.tools.javac.main.JavaCompiler 가 진입점. 소스로 디버깅 가능.</text>
+  <text x="48" y="508" class="note">· 자바 언어의 거의 모든 "최적화"는 javac 컴파일 기간의 *구문 설탕 펼치기*다 — 성능이 아니라 표현 편의.</text>
+  <text x="48" y="530" class="note">· 애너테이션 처리기(②)가 이 파이프라인에 끼어들 수 있는 유일한 사용자 확장 지점이다(10.4 실전).</text>
+</svg>

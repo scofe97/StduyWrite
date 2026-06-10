@@ -28,6 +28,10 @@ related:
   - ./ch03_class-loading-mechanism/04-02.OSGi의 유연한 클래스 로더와 바이트코드 생성.md
   - ./ch03_class-loading-mechanism/04-03.실전 — 원격 실행 기능 설계.md
   - ./ch03_class-loading-mechanism/04-04.실전 — 바이트코드 치환과 실행.md
+  - ./ch04_compilation-optimization/01-01.javac 컴파일러의 컴파일 과정.md
+  - ./ch04_compilation-optimization/01-02.자바 구문 설탕 — 제네릭과 타입 소거.md
+  - ./ch04_compilation-optimization/01-03.자바 구문 설탕 — 박싱·향상된 for·조건 컴파일.md
+  - ./ch04_compilation-optimization/01-04.실전 — 플러그인 애너테이션 처리기.md
   - ./_temp/01-04.효율적 동시성.md
   - ./03-01.스레드 생성과 생명주기.md
   - ./03-02.메모리 가시성과 동기화.md
