@@ -1,0 +1,95 @@
+<svg viewBox="0 0 820 520" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>같은 Dockerfile에서 갈라지는 Docker와 Kaniko의 실행 경로</title>
+  <desc>같은 Dockerfile이라도 Jenkins 안 실행 경로가 다르다. Docker(DooD) 경로는 docker build 명령을 호스트 daemon에 위임하고, daemon의 BuildKit이 RUN을 runc 컨테이너로 실행하며, 로컬 캐시를 재사용하고 docker push를 별도 단계로 둔다. socket 마운트는 호스트 root 등가 권한이다. Kaniko 경로는 Pod 안 executor 프로세스가 RUN을 직접 실행하고 userspace 스냅샷으로 레이어를 만들며, 캐시는 cache-repo로 레지스트리에 외부화하고 destination으로 빌드와 푸시가 일체다. 일반 권한으로 restricted 프로파일에서 동작한다.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="820" height="520" fill="#0d0d0d"/>
+  <text x="20" y="34" fill="#e8e4df" font-size="16">같은 Dockerfile, 다른 실행 경로 — Jenkins 안 Docker vs Kaniko</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="11">한쪽은 daemon에 위임해 컨테이너를 띄우고, 한쪽은 자기 프로세스로 직접 빌드</text>
+
+  <!-- Docker 레인 -->
+  <text x="20" y="92" fill="#e8e4df" font-size="13">Docker 경로 (DooD) — daemon에 위임</text>
+
+  <rect x="30" y="104" width="172" height="116" rx="6" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="46" y="130" fill="#e8e4df" font-size="13">① 명령</text>
+  <rect x="44" y="142" width="144" height="26" rx="4" fill="#0d0d0d" stroke="rgb(42,37,32)"/>
+  <text x="56" y="160" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">docker build/push</text>
+  <text x="46" y="188" fill="rgb(138,133,128)" font-size="11">Jenkinsfile sh 단계</text>
+  <text x="46" y="208" fill="rgb(138,133,128)" font-size="11">docker.* DSL 지원</text>
+
+  <line x1="204" y1="157" x2="217" y2="157" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="221" y="104" width="172" height="116" rx="6" fill="rgba(244,67,54,0.05)" stroke="#f44336"/>
+  <text x="237" y="130" fill="#e8e4df" font-size="13">② 위임</text>
+  <rect x="235" y="142" width="144" height="26" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="247" y="160" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">/var/run/docker.sock</text>
+  <text x="237" y="188" fill="rgb(138,133,128)" font-size="11">호스트 daemon에 위임</text>
+  <text x="237" y="208" fill="#f44336" font-size="11">⚠ 호스트 root 등가</text>
+
+  <line x1="395" y1="157" x2="408" y2="157" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="412" y="104" width="172" height="116" rx="6" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="428" y="130" fill="#e8e4df" font-size="13">③ 실행</text>
+  <rect x="426" y="142" width="144" height="26" rx="4" fill="#0d0d0d" stroke="rgb(42,37,32)"/>
+  <text x="438" y="160" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">BuildKit → runc</text>
+  <text x="428" y="188" fill="rgb(138,133,128)" font-size="11">RUN을 컨테이너로 실행</text>
+  <text x="428" y="208" fill="rgb(138,133,128)" font-size="11">단계마다 런타임 격리</text>
+
+  <line x1="586" y1="157" x2="599" y2="157" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="603" y="104" width="172" height="116" rx="6" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="619" y="130" fill="#e8e4df" font-size="13">④ 캐시·푸시</text>
+  <rect x="617" y="142" width="144" height="26" rx="4" fill="#0d0d0d" stroke="rgb(42,37,32)"/>
+  <text x="629" y="160" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">docker push</text>
+  <text x="619" y="188" fill="rgb(138,133,128)" font-size="11">로컬 캐시·별도 push</text>
+  <text x="619" y="208" fill="rgb(138,133,128)" font-size="11">빌드 간 캐시 자동 재사용</text>
+
+  <!-- Kaniko 레인 -->
+  <text x="20" y="256" fill="#e8e4df" font-size="13">Kaniko 경로 — Pod 안 executor가 직접</text>
+
+  <rect x="30" y="268" width="172" height="116" rx="6" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="46" y="294" fill="#e8e4df" font-size="13">① 명령</text>
+  <rect x="44" y="306" width="144" height="26" rx="4" fill="#0d0d0d" stroke="rgb(42,37,32)"/>
+  <text x="56" y="324" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">/kaniko/executor</text>
+  <text x="46" y="352" fill="rgb(138,133,128)" font-size="11">DSL 없음 — sh 한 줄</text>
+  <text x="46" y="372" fill="rgb(138,133,128)" font-size="11">debug 변종 + sleep</text>
+
+  <line x1="204" y1="321" x2="217" y2="321" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="221" y="268" width="172" height="116" rx="6" fill="rgba(102,187,106,0.06)" stroke="#66bb6a"/>
+  <text x="237" y="294" fill="#e8e4df" font-size="13">② 실행</text>
+  <rect x="235" y="306" width="144" height="26" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="247" y="324" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">userspace snapshot</text>
+  <text x="237" y="352" fill="rgb(138,133,128)" font-size="11">executor가 RUN 직접 실행</text>
+  <text x="237" y="372" fill="#66bb6a" font-size="11">✓ restricted에서 동작</text>
+
+  <line x1="395" y1="321" x2="408" y2="321" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="412" y="268" width="172" height="116" rx="6" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="428" y="294" fill="#e8e4df" font-size="13">③ 캐시</text>
+  <rect x="426" y="306" width="144" height="26" rx="4" fill="#0d0d0d" stroke="rgb(42,37,32)"/>
+  <text x="438" y="324" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">--cache-repo</text>
+  <text x="428" y="352" fill="rgb(138,133,128)" font-size="11">레지스트리로 캐시 외부화</text>
+  <text x="428" y="372" fill="rgb(138,133,128)" font-size="11">Pod 휘발 대비 설계</text>
+
+  <line x1="586" y1="321" x2="599" y2="321" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="603" y="268" width="172" height="116" rx="6" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="619" y="294" fill="#e8e4df" font-size="13">④ 푸시</text>
+  <rect x="617" y="306" width="144" height="26" rx="4" fill="#0d0d0d" stroke="rgb(42,37,32)"/>
+  <text x="629" y="324" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">--destination</text>
+  <text x="619" y="352" fill="rgb(138,133,128)" font-size="11">빌드=푸시 일체</text>
+  <text x="619" y="372" fill="rgb(138,133,128)" font-size="11">로컬 이미지 없음</text>
+
+  <!-- 결론 스트립 -->
+  <rect x="20" y="408" width="780" height="44" rx="6" fill="rgba(102,187,106,0.08)" stroke="#66bb6a"/>
+  <text x="38" y="435" fill="#66bb6a" font-size="12">같은 Dockerfile → 같은 OCI 이미지 — 갈리는 것은 실행 주체·권한·캐시 위치·푸시 동선</text>
+
+  <!-- 주석 -->
+  <text x="20" y="480" fill="rgb(138,133,128)" font-size="11">※ 인증: docker login은 daemon이 세션 보관, Kaniko는 /kaniko/.docker/config.json 마운트·클라우드 IAM (출처: kaniko README)</text>
+  <text x="20" y="502" fill="rgb(138,133,128)" font-size="11">※ OCI 표준 계층(이미지 포맷 vs 빌드 중 RUN 실행)의 근본 차이는 01-04 § OCI 관점의 근본 차이 참조</text>
+</svg>
