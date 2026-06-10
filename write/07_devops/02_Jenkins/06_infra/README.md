@@ -1,13 +1,13 @@
 ---
 title: Jenkins 인프라 계획·배포·통합·확장·AI활용·CI설계·CI구현·CD학습 MOC
-tags: [moc, jenkins, infra, planning, capacity, well-architected, iac, terraform, jcasc, helm, integration, github, sonarqube, artifactory, scaling, azure-vm-agents, ai, llm, chatgpt, ci-design, docker-registry, jenkinsfile, multibranch, blue-ocean, cd, gitops, argocd, k6, jfrog, xray, security]
+tags: [moc, jenkins, infra, planning, capacity, well-architected, iac, terraform, jcasc, helm, integration, github, sonarqube, artifactory, scaling, azure-vm-agents, ai, llm, chatgpt, ci-design, docker-registry, jenkinsfile, multibranch, blue-ocean, cd, gitops, argocd, k6, jfrog, xray, security, monitoring, metrics, prometheus]
 status: draft
 related:
   - ../README.md
   - ../01_core/README.md
   - ../03_agent/README.md
   - ../05_operations/README.md
-updated: 2026-05-31
+updated: 2026-06-10
 ---
 
 # Jenkins 인프라 계획·배포·통합·확장·AI활용·CI설계·CI구현·CD 학습 MOC
@@ -40,8 +40,9 @@ updated: 2026-05-31
 | 06 CD/GitOps | 06-13 | [Argo CD로 CD 설계 — Jenkins 역할분담·staging→prod](06-13.Argo%20CD로%20CD%20설계%20%E2%80%94%20Jenkins%20역할분담%C2%B7staging%E2%86%92prod.md) | Jenkins·Argo CD 역할분담, 앱 Helm chart 환경분리, Application·auto-sync, staging→k6→prod |
 | 06 CD 구현 | 06-14 | [첫 CD Jenkinsfile 구현 — values 갱신·Argo CD 헬스체크·k6 게이트](06-14.첫%20CD%20Jenkinsfile%20구현%20%E2%80%94%20values%20갱신%C2%B7Argo%20CD%20헬스체크%C2%B7k6%20게이트.md) | git·alpine 컨테이너 추가, yq values 갱신 push, Argo CD API 헬스체크(sync vs health), k6 성능 게이트, disableConcurrentBuilds |
 | 06 CI 보안 | 06-15 | [JFrog Xray로 CI 보안 게이트 — 취약점 스캔·xrayScan·SonarQube와 역할 구분](06-15.JFrog%20Xray로%20CI%20보안%20게이트%20%E2%80%94%20취약점%20스캔%C2%B7xrayScan%C2%B7SonarQube와%20역할%20구분.md) | 아티팩트 SCA(SonarQube와 대상 구분), Xray Helm 설치·join key·namespace 격리, xrayScan failBuild 게이트, Scans List·취약점 리포트 |
+| 06 운영 측정 | 06-16 | [Jenkins 성능 모니터링 — 지표·수집 토폴로지·부하 실측](06-16.Jenkins%20성능%20모니터링%20%E2%80%94%20지표%C2%B7수집%20토폴로지%C2%B7부하%20실측.md) | Metrics·Prometheus 플러그인 분업, 지표 4그룹(큐·executor·빌드·vm), VM/K8s/혼합 수집 설계, controller JVM 본체론, 200건 부하 실측 |
 
-용량부터 보려면 06-01, 배포 형태 결정이 먼저면 06-02, 코드화 구현이 급하면 06-03부터 진입합니다. 계획·배포 세 편은 06-01(얼마나) → 06-02(어디에) → 06-03(어떻게 코드로) 순으로 이어집니다. 외부 도구 연동은 06-04~06-06을 도구별로 보고, 06-07 비교표로 공통 4단계를 정리합니다. 06-08은 03_agent의 K8s 동적 Agent와 짝을 이루는 VM 기반 동적 Agent 편으로, 수평 확장의 두 갈래를 비교합니다. 06-09는 LLM으로 파이프라인 초안을 짜는 방법론과 그 검증 의무를 다루며, 06-05·06-06의 플러그인 step과 이어집니다. 06-10은 06-04~06-06과 03_agent Kaniko를 한 순서로 잇는 CI 파이프라인 전체 설계도이고, 06-11은 그 설계를 동작하는 Jenkinsfile로 구현해 Multibranch·Blue Ocean으로 실행·시각화합니다. 06-12·06-13·06-14는 CI가 끝난 지점(이미지 push)에서 이어집니다. CD와 GitOps 개념(06-12), Jenkins·Argo CD 역할분담으로 staging→production까지 자동 배포하는 설계(06-13)에 더해, 06-14는 그 설계를 실제 Jenkinsfile 스테이지 코드(values 갱신·Argo CD 헬스체크·k6 게이트)로 구현합니다. 06-15는 06-06 Artifactory에 JFrog Xray를 붙여 빌드 아티팩트의 취약점을 스캔하는 CI 보안 게이트를 다루며, 06-05 SonarQube(소스 코드 SCA)와 검사 대상을 구분하는 마무리 편입니다.
+용량부터 보려면 06-01, 배포 형태 결정이 먼저면 06-02, 코드화 구현이 급하면 06-03부터 진입합니다. 계획·배포 세 편은 06-01(얼마나) → 06-02(어디에) → 06-03(어떻게 코드로) 순으로 이어집니다. 외부 도구 연동은 06-04~06-06을 도구별로 보고, 06-07 비교표로 공통 4단계를 정리합니다. 06-08은 03_agent의 K8s 동적 Agent와 짝을 이루는 VM 기반 동적 Agent 편으로, 수평 확장의 두 갈래를 비교합니다. 06-09는 LLM으로 파이프라인 초안을 짜는 방법론과 그 검증 의무를 다루며, 06-05·06-06의 플러그인 step과 이어집니다. 06-10은 06-04~06-06과 03_agent Kaniko를 한 순서로 잇는 CI 파이프라인 전체 설계도이고, 06-11은 그 설계를 동작하는 Jenkinsfile로 구현해 Multibranch·Blue Ocean으로 실행·시각화합니다. 06-12·06-13·06-14는 CI가 끝난 지점(이미지 push)에서 이어집니다. CD와 GitOps 개념(06-12), Jenkins·Argo CD 역할분담으로 staging→production까지 자동 배포하는 설계(06-13)에 더해, 06-14는 그 설계를 실제 Jenkinsfile 스테이지 코드(values 갱신·Argo CD 헬스체크·k6 게이트)로 구현합니다. 06-15는 06-06 Artifactory에 JFrog Xray를 붙여 빌드 아티팩트의 취약점을 스캔하는 CI 보안 게이트를 다루며, 06-05 SonarQube(소스 코드 SCA)와 검사 대상을 구분하는 마무리 편입니다. 06-16은 06-01 용량 산정의 후속 *측정* 편으로, 추정식을 실측 지표로 보정하는 모니터링 설계와 VM·K8s 혼합 토폴로지의 수집 지점, 200건 부하 실측 기록을 다룹니다.
 
 ## 환경과 버전
 
