@@ -32,6 +32,10 @@ related:
   - ./ch04_compilation-optimization/01-02.자바 구문 설탕 — 제네릭과 타입 소거.md
   - ./ch04_compilation-optimization/01-03.자바 구문 설탕 — 박싱·향상된 for·조건 컴파일.md
   - ./ch04_compilation-optimization/01-04.실전 — 플러그인 애너테이션 처리기.md
+  - ./ch04_compilation-optimization/02-01.JIT 컴파일러 — 인터프리터와 계층형 컴파일.md
+  - ./ch04_compilation-optimization/02-02.컴파일 대상과 핫스폿 탐지.md
+  - ./ch04_compilation-optimization/02-03.컴파일러 최적화 — 메서드 인라인과 탈출 분석.md
+  - ./ch04_compilation-optimization/02-04.컴파일러 최적화 — 공통식 제거·경계 검사 제거와 Graal.md
   - ./_temp/01-04.효율적 동시성.md
   - ./03-01.스레드 생성과 생명주기.md
   - ./03-02.메모리 가시성과 동기화.md

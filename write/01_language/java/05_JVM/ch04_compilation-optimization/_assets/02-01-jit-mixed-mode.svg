@@ -1,0 +1,77 @@
+<svg viewBox="0 0 900 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>인터프리터와 JIT의 혼합 모드, 계층형 컴파일 0~4단계</title>
+  <desc>인터프리터는 바이트코드를 즉시 해석해 시작이 빠르지만 실행이 느리고, JIT 컴파일러는 자주 도는 코드를 기계어로 번역해 실행이 빠르지만 시작이 느리다. HotSpot은 둘을 혼합 모드로 함께 써 시작 속도와 최고 성능을 모두 얻는다. 계층형 컴파일은 0단계 인터프리터에서 1~3단계 C1 클라이언트 컴파일러를 거쳐 4단계 C2 서버 컴파일러로 올라가며, 자주 도는 코드일수록 더 깊이 최적화한다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: rgb(138,133,128); }
+      .h     { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .note  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .mono  { font-size: 9.5px; font-family: 'JetBrains Mono', monospace; fill: rgb(212,168,83); }
+    </style>
+    <marker id="a1" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="600" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">혼합 모드 · 계층형 컴파일 (0~4단계)</text>
+  <text x="28" y="58" class="sub">인터프리터(시작 빠름·실행 느림) + JIT(시작 느림·실행 빠름) 를 함께 → 시작 속도와 최고 성능 둘 다</text>
+
+  <!-- 트레이드오프 비교 -->
+  <rect x="28" y="84" width="412" height="150" rx="11" fill="rgba(91,155,213,0.08)" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="48" y="110" class="sub" fill="#5b9bd5" font-weight="800">인터프리터 — 한 줄씩 해석</text>
+  <text x="48" y="136" class="note" fill="#66bb6a">＋ 시작이 빠르다 (즉시 실행)</text>
+  <text x="48" y="158" class="note" fill="#f44336">－ 실행이 느리다 (매번 해석 반복)</text>
+  <text x="48" y="186" class="note">바이트코드를 읽어 그때그때 해석.</text>
+  <text x="48" y="206" class="note">같은 코드를 백만 번 돌아도 매번 해석.</text>
+
+  <rect x="460" y="84" width="412" height="150" rx="11" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="480" y="110" class="sub" fill="rgb(212,168,83)" font-weight="800">JIT 컴파일러 — 기계어로 번역</text>
+  <text x="480" y="136" class="note" fill="#f44336">－ 시작이 느리다 (번역 비용)</text>
+  <text x="480" y="158" class="note" fill="#66bb6a">＋ 실행이 빠르다 (해석 없이 직접 실행)</text>
+  <text x="480" y="186" class="note">자주 도는 코드를 통째로 기계어로 번역,</text>
+  <text x="480" y="206" class="note">메모리에 저장해 다음부터 직접 실행.</text>
+
+  <text x="450" y="163" class="sub" text-anchor="middle" fill="rgb(212,168,83)">혼합</text>
+
+  <!-- 계층형 컴파일 단계 -->
+  <rect x="28" y="262" width="844" height="306" rx="11" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="48" y="288" class="sub" fill="#66bb6a" font-weight="800">계층형 컴파일 — 자주 돌수록 깊이 최적화 (단계 ↑ = 컴파일 비용·실행 성능 ↑)</text>
+
+  <!-- 단계 박스들 -->
+  <rect x="48" y="306" width="150" height="92" rx="8" fill="#5b9bd5"/>
+  <text x="123" y="330" class="h" text-anchor="middle">0단계</text>
+  <text x="64" y="354" class="note" fill="rgba(13,13,13,0.78)">순수 인터프리터</text>
+  <text x="64" y="374" class="note" fill="rgba(13,13,13,0.78)">즉시 실행 +</text>
+  <text x="64" y="390" class="note" fill="rgba(13,13,13,0.78)">프로파일 수집</text>
+
+  <rect x="228" y="306" width="320" height="92" rx="8" fill="#66bb6a"/>
+  <text x="388" y="330" class="h" text-anchor="middle">1~3단계 — C1 (클라이언트 컴파일러)</text>
+  <text x="244" y="354" class="note" fill="rgba(13,13,13,0.78)">1: 프로파일 없음 (최적화만)</text>
+  <text x="244" y="372" class="note" fill="rgba(13,13,13,0.78)">2: 가벼운 프로파일 (호출 횟수)</text>
+  <text x="244" y="390" class="note" fill="rgba(13,13,13,0.78)">3: 완전한 프로파일 수집</text>
+
+  <rect x="578" y="306" width="270" height="92" rx="8" fill="rgb(212,168,83)"/>
+  <text x="713" y="330" class="h" text-anchor="middle">4단계 — C2 (서버 컴파일러)</text>
+  <text x="594" y="354" class="note" fill="rgba(13,13,13,0.78)">3단계가 모은 프로파일을</text>
+  <text x="594" y="372" class="note" fill="rgba(13,13,13,0.78)">밑천 삼아 깊이 최적화</text>
+  <text x="594" y="390" class="note" fill="rgba(13,13,13,0.78)">→ 최고 실행 성능</text>
+
+  <line x1="198" y1="352" x2="226" y2="352" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a1)"/>
+  <line x1="548" y1="352" x2="576" y2="352" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a1)"/>
+
+  <text x="48" y="430" class="note" fill="#e8e4df">흐름: 인터프리터가 즉시 실행하며 프로파일을 모으고 → 자주 도는 코드는 C1으로 → 더 자주 도는 핵심 코드만 C2로.</text>
+
+  <rect x="48" y="446" width="388" height="104" rx="8" fill="#1a1a1a"/>
+  <text x="64" y="470" class="note" fill="#e8e4df">C1 (클라이언트)</text>
+  <text x="64" y="492" class="mono">빠른 컴파일 · 얕은 최적화</text>
+  <text x="64" y="514" class="note">시작 속도 중요한 짧은 프로그램</text>
+  <text x="64" y="536" class="note" fill="rgb(212,168,83)">→ 잠깐 도는 코드는 여기서 멈춤 (비용 절약)</text>
+
+  <rect x="460" y="446" width="388" height="104" rx="8" fill="#1a1a1a"/>
+  <text x="476" y="470" class="note" fill="#e8e4df">C2 (서버)</text>
+  <text x="476" y="492" class="mono">느린 컴파일 · 깊은 최적화</text>
+  <text x="476" y="514" class="note">오래 도는 서버 애플리케이션</text>
+  <text x="476" y="536" class="note" fill="rgb(212,168,83)">→ 진짜 오래 도는 핵심 코드만 여기까지</text>
+</svg>
