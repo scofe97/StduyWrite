@@ -5,7 +5,7 @@
 > 사내 DevSecOps 플랫폼에서 티켓·결재·워크플로우와 Jenkins 기반 파이프라인 실행 엔진을 직접 설계·구축하는 백엔드 중심 엔지니어입니다. 분산 트랜잭션 격리·동시성 직렬화·이벤트드리븐 설계를 주력으로 삼고, K8s·GitOps 기반 인프라 운영을 함께 담당합니다.
 
 - Backend/K8s Engineer · DevSecOps 플랫폼
-- Email: devtrb001@gmail.com
+- Email: tscofet@gmail.com
 - GitHub: github.com/scofe97
 
 
