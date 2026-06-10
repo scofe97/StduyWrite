@@ -1,0 +1,66 @@
+<svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>제네릭과 타입 소거 — 컴파일 후 타입 파라미터가 사라진다</title>
+  <desc>자바 제네릭은 구문 설탕이라 컴파일 시점에 타입 파라미터가 지워진다. ArrayList&lt;Integer&gt;와 ArrayList&lt;String&gt;은 소스에서는 다른 타입이지만, 컴파일 후 둘 다 raw 타입 ArrayList가 되어 런타임에 같은 클래스다. 그래서 List&lt;String&gt;과 List&lt;Integer&gt;를 받는 두 메서드는 시그니처가 같아 오버로드할 수 없다. 제네릭 정보는 Signature 속성에 따로 보존되어 리플렉션으로만 읽을 수 있다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: rgb(138,133,128); }
+      .h     { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
+      .note  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .mono  { font-size: 10px; font-family: 'JetBrains Mono', monospace; fill: rgb(212,168,83); font-weight: 700; }
+      .monod { font-size: 10px; font-family: 'JetBrains Mono', monospace; fill: rgba(13,13,13,0.82); font-weight: 700; }
+    </style>
+    <marker id="e1" markerWidth="11" markerHeight="11" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="560" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">제네릭과 타입 소거 — 컴파일 후 타입이 지워진다</text>
+  <text x="28" y="58" class="sub">소스에선 다른 타입, 런타임엔 같은 클래스 · 제네릭 정보는 Signature 속성에만 남음</text>
+
+  <!-- 컴파일 전 -->
+  <rect x="28" y="86" width="360" height="190" rx="10" fill="#5b9bd5"/>
+  <text x="208" y="110" class="h" text-anchor="middle">컴파일 전 (소스) — 다른 타입</text>
+  <rect x="44" y="124" width="328" height="40" rx="6" fill="rgba(13,13,13,0.18)"/>
+  <text x="56" y="149" class="monod">ArrayList&lt;Integer&gt; li = new ArrayList&lt;&gt;();</text>
+  <rect x="44" y="172" width="328" height="40" rx="6" fill="rgba(13,13,13,0.18)"/>
+  <text x="56" y="197" class="monod">ArrayList&lt;String&gt;  ls = new ArrayList&lt;&gt;();</text>
+  <text x="44" y="238" class="note" fill="rgba(13,13,13,0.72)">컴파일러가 타입 검사 — li 에 String 넣으면 에러</text>
+  <text x="44" y="258" class="note" fill="rgba(13,13,13,0.72)">개발자에겐 두 리스트가 *다른 타입* 으로 보임</text>
+
+  <!-- 소거 화살표 -->
+  <line x1="208" y1="276" x2="208" y2="320" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#e1)"/>
+  <text x="208" y="302" class="sub" text-anchor="middle" fill="rgb(212,168,83)" font-weight="800">타입 소거 (type erasure)</text>
+
+  <!-- 컴파일 후 -->
+  <rect x="28" y="332" width="360" height="170" rx="10" fill="rgb(212,168,83)"/>
+  <text x="208" y="356" class="h" text-anchor="middle">컴파일 후 (바이트코드) — 같은 클래스</text>
+  <rect x="44" y="370" width="328" height="40" rx="6" fill="rgba(13,13,13,0.18)"/>
+  <text x="56" y="395" class="monod">ArrayList li = new ArrayList();</text>
+  <rect x="44" y="418" width="328" height="40" rx="6" fill="rgba(13,13,13,0.18)"/>
+  <text x="56" y="443" class="monod">ArrayList ls = new ArrayList();</text>
+  <text x="44" y="484" class="note" fill="rgba(13,13,13,0.72)">타입 파라미터 제거 → raw ArrayList · 꺼낼 때 형변환 삽입</text>
+
+  <!-- 우측: 결과 -->
+  <rect x="412" y="86" width="460" height="200" rx="10" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="432" y="112" class="sub" fill="#66bb6a" font-weight="800">결과 — getClass() 비교</text>
+  <rect x="428" y="126" width="428" height="58" rx="6" fill="#1a1a1a"/>
+  <text x="440" y="146" class="mono">li.getClass() == ls.getClass()</text>
+  <text x="440" y="172" class="mono" fill="#66bb6a">  → true  (둘 다 class java.util.ArrayList)</text>
+  <text x="432" y="206" class="note">런타임엔 타입 파라미터가 없으니 같은 ArrayList 클래스 하나.</text>
+  <text x="432" y="226" class="note">제네릭은 *컴파일 시점에만* 존재하는 검사 장치 — 구문 설탕.</text>
+  <text x="432" y="250" class="note">"불완전한 제네릭": C# 처럼 런타임 타입을 보존하지 않음</text>
+  <text x="432" y="270" class="note">(C# 제네릭은 런타임에도 타입 유지 — 자바와 다름).</text>
+
+  <!-- 우측 하단: 시그니처 충돌 -->
+  <rect x="412" y="302" width="460" height="200" rx="10" fill="rgba(244,67,54,0.07)" stroke="#f44336" stroke-width="1.5"/>
+  <text x="432" y="328" class="sub" fill="#f44336" font-weight="800">함정 — 시그니처 충돌</text>
+  <rect x="428" y="342" width="428" height="60" rx="6" fill="#1a1a1a"/>
+  <text x="440" y="362" class="mono">void m(List&lt;String&gt;  s) { }</text>
+  <text x="440" y="382" class="mono">void m(List&lt;Integer&gt; i) { }  // 컴파일 에러</text>
+  <text x="432" y="424" class="note">소거 후 둘 다 m(List) 가 되어 *시그니처가 같음* → 오버로드 불가.</text>
+  <text x="432" y="446" class="note">다른 타입처럼 보여도 컴파일 후 구분이 사라지기 때문.</text>
+  <text x="432" y="472" class="note">제네릭 정보 자체는 Signature 속성에 보존 → 리플렉션</text>
+  <text x="432" y="490" class="note">(getGenericType 등)으로만 읽을 수 있음.</text>
+</svg>
