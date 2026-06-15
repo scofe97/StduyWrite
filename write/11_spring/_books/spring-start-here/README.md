@@ -35,6 +35,9 @@ updated: 2026-06-12
 | 04 | [추상화와 의존성 주입 — 인터페이스 계약·다중 구현체·@Service·@Repository](04.추상화와%20의존성%20주입.md) | draft |
 | 05 | [Bean 스코프와 생애주기 — singleton·prototype·eager·lazy](05.Bean%20스코프와%20생애주기.md) | draft |
 | 06 | [Spring AOP와 Aspect — 프록시·weaving·advice·실행 체인](06.Spring%20AOP와%20Aspect.md) | draft |
+| 07 | [Spring Boot와 Spring MVC — 서블릿 컨테이너·DispatcherServlet 흐름](07.Spring%20Boot와%20Spring%20MVC.md) | draft |
+| 08 | [동적 뷰와 HTTP 데이터 — Thymeleaf·요청 파라미터·경로 변수·HTTP 메서드](08.동적%20뷰와%20HTTP%20데이터.md) | draft |
+| 09 | [웹 스코프와 로그인 — request·session·application 스코프와 리다이렉트](09.웹%20스코프와%20로그인.md) | draft |
 
 
 ## 작성 규약
