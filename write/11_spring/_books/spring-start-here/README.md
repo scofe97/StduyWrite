@@ -40,6 +40,7 @@ updated: 2026-06-15
 | 09 | [웹 스코프와 로그인 — request·session·application 스코프와 리다이렉트](09.웹%20스코프와%20로그인.md) | draft |
 | 10 | [REST 서비스 — @RestController·ResponseEntity·예외 처리·@RequestBody](10.REST%20서비스.md) | draft |
 | 11 | [REST 엔드포인트 소비 — OpenFeign·RestTemplate·WebClient](11.REST%20엔드포인트%20소비.md) | draft |
+| 12 | [데이터 소스와 JdbcTemplate — data source·JDBC 드라이버·update·query·RowMapper](12.데이터%20소스와%20JdbcTemplate.md) | draft |
 
 
 ## 작성 규약
