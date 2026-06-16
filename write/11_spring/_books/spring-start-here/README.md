@@ -7,7 +7,7 @@ source:
 related:
   - ../../README.md
   - ../../01_core/01-01.객체지향 원리 적용 — DI와 IoC.md
-updated: 2026-06-15
+updated: 2026-06-16
 ---
 
 
@@ -25,7 +25,7 @@ updated: 2026-06-15
 
 ## 챕터 목록
 
-받은 순서대로 채웁니다. 파일명은 책의 실제 챕터 번호를 그대로 씁니다.
+책 전체(1~15장) 정리를 마쳤습니다. 파일명은 책의 실제 챕터 번호를 그대로 씁니다.
 
 | # | 파일 | 상태 |
 |---|------|------|
@@ -43,6 +43,7 @@ updated: 2026-06-15
 | 12 | [데이터 소스와 JdbcTemplate — data source·JDBC 드라이버·update·query·RowMapper](12.데이터%20소스와%20JdbcTemplate.md) | draft |
 | 13 | [트랜잭션 — @Transactional·commit·rollback·AOP aspect](13.트랜잭션.md) | draft |
 | 14 | [Spring Data — 계약 인터페이스·CrudRepository·@Query·Spring Data JDBC](14.Spring%20Data.md) | draft |
+| 15 | [Spring 앱 테스트 — 단위·통합 테스트·Mockito·@SpringBootTest](15.Spring%20앱%20테스트.md) | draft |
 
 
 ## 작성 규약
