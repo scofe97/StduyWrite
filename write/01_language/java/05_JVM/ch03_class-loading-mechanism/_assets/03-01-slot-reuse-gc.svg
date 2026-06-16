@@ -1,0 +1,75 @@
+<svg viewBox="0 0 900 540" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>slot 재사용과 GC root 함정 — scope가 끝나도 slot이 참조를 들면 회수 안 됨</title>
+  <desc>지역 변수 테이블의 slot은 GC root다. placeholder의 scope가 끝나도 slot이 그 64MB 참조를 그대로 들고 있으면 root에서 도달 가능이라 GC가 회수하지 못한다(keep: 66M->65M). 이후 변수가 그 slot을 재사용해 덮으면 참조가 끊겨 회수된다(reuse: 66M->0M). 명시적 null 대입은 slot 재사용이 일어나지 않는 특수 상황에서만 의미가 있다. 본질은 slot 재사용이다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11.5px;fill:rgb(150,145,140)}
+      .head{font-size:12.5px;font-weight:800;fill:rgb(212,168,83)}
+      .body{font-size:10.5px;fill:rgb(200,195,190)}
+      .note{font-size:9.5px;fill:rgb(150,145,140)}
+      .lab{font-size:10px;font-weight:700;fill:#10243a;font-family:'JetBrains Mono',monospace}
+      .code{font-size:10.5px;font-weight:700;fill:#e6c878;font-family:'JetBrains Mono',monospace}
+      .big{font-size:13px;font-weight:800}
+    </style>
+  </defs>
+  <rect x="0" y="0" width="900" height="540" fill="#0d0d0d"/>
+  <text x="28" y="40" class="title">slot 재사용과 GC root 함정</text>
+  <text x="28" y="64" class="sub">지역 변수 테이블의 slot은 GC root — scope가 끝나도 slot이 참조를 들면 회수 안 됨</text>
+
+  <!-- 좌: keep (회수 안 됨) -->
+  <text x="28" y="100" class="head">① keep — slot이 재사용 안 됨 → 회수 안 됨</text>
+  <rect x="28" y="112" width="410" height="58" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="44" y="133" class="code">{ byte[] placeholder = new byte[64MB]; }</text>
+  <text x="44" y="153" class="code">System.gc();  // scope 끝남, 그러나…</text>
+
+  <!-- keep: slot 박스가 참조 유지 -->
+  <rect x="28" y="184" width="195" height="60" rx="6" fill="#dceaf7"/>
+  <text x="125" y="206" class="lab" text-anchor="middle">slot N (placeholder)</text>
+  <text x="125" y="224" class="lab" text-anchor="middle" font-size="9">참조 그대로 보유</text>
+  <text x="125" y="238" class="lab" text-anchor="middle" font-size="9">(재사용 안 됨)</text>
+  <!-- 화살표 -->
+  <line x1="223" y1="214" x2="263" y2="214" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <polygon points="263,214 255,210 255,218" fill="rgb(212,168,83)"/>
+  <!-- 64MB 객체 살아있음 -->
+  <rect x="265" y="184" width="173" height="60" rx="6" fill="#f3d9a0"/>
+  <text x="351" y="210" class="lab" text-anchor="middle">64MB 객체</text>
+  <text x="351" y="228" class="lab" text-anchor="middle" font-size="9">root 도달 가능 → 생존</text>
+
+  <rect x="28" y="258" width="410" height="34" rx="6" fill="#5b9bd5"/>
+  <text x="44" y="280" class="lab">GC: 66M -&gt; 65M  (회수 안 됨)</text>
+
+  <!-- 우: reuse (회수됨) -->
+  <text x="468" y="100" class="head">② reuse — 다른 변수가 slot을 덮음 → 회수됨</text>
+  <rect x="468" y="112" width="404" height="58" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="484" y="133" class="code">{ byte[] placeholder = new byte[64MB]; }</text>
+  <text x="484" y="153" class="code">int a = 0;  // 같은 slot 재사용</text>
+
+  <!-- reuse: slot이 a로 덮임 -->
+  <rect x="468" y="184" width="195" height="60" rx="6" fill="#f5edda"/>
+  <text x="565" y="206" class="lab" text-anchor="middle">slot N (int a = 0)</text>
+  <text x="565" y="224" class="lab" text-anchor="middle" font-size="9">참조 덮어써짐</text>
+  <text x="565" y="238" class="lab" text-anchor="middle" font-size="9">(slot 재사용)</text>
+  <!-- 끊긴 화살표 (X) -->
+  <line x1="663" y1="214" x2="703" y2="214" stroke="rgb(150,145,140)" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="683" y="208" class="note" text-anchor="middle" fill="#cf6b5a" font-weight="800">✕</text>
+  <!-- 64MB 객체 회수 대상 -->
+  <rect x="705" y="184" width="167" height="60" rx="6" fill="#0d0d0d" stroke="rgb(150,145,140)" stroke-dasharray="4 3"/>
+  <text x="788" y="210" class="body" text-anchor="middle">64MB 객체</text>
+  <text x="788" y="228" class="note" text-anchor="middle">참조 끊김 → 회수</text>
+
+  <rect x="468" y="258" width="404" height="34" rx="6" fill="#5b9bd5"/>
+  <text x="484" y="280" class="lab">GC: 66M -&gt; 0M  (회수됨)</text>
+
+  <!-- 하단: 왜 / 본질 -->
+  <text x="28" y="332" class="head">왜 — slot 자체가 GC root이기 때문</text>
+  <rect x="28" y="344" width="844" height="78" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="48" y="368" class="body">GC는 root에서 도달 가능한 객체를 살아 있다고 봅니다. 지역 변수 테이블의 slot이 root라,</text>
+  <text x="48" y="388" class="body">slot이 든 참조가 가리키는 객체는 "root에서 도달 가능"이라 살아남습니다.</text>
+  <text x="48" y="408" class="body">회수되려면 slot과 객체의 연결이 끊겨야 하고, 끊는 길은 ① null 대입 ② slot 재사용 둘입니다.</text>
+
+  <!-- 본질 칩 -->
+  <rect x="28" y="438" width="844" height="64" rx="8" fill="#f5edda"/>
+  <text x="48" y="462" class="lab big">본질은 slot 재사용 — null 대입은 보조 수단</text>
+  <text x="48" y="484" class="lab">일반 코드는 이후 변수가 자연히 slot을 덮어 회수됩니다. 명시적 null은 *재사용이 안 일어나는 특수 상황*에서만 의미가 있습니다.</text>
+</svg>
