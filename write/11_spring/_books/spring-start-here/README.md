@@ -42,6 +42,7 @@ updated: 2026-06-15
 | 11 | [REST 엔드포인트 소비 — OpenFeign·RestTemplate·WebClient](11.REST%20엔드포인트%20소비.md) | draft |
 | 12 | [데이터 소스와 JdbcTemplate — data source·JDBC 드라이버·update·query·RowMapper](12.데이터%20소스와%20JdbcTemplate.md) | draft |
 | 13 | [트랜잭션 — @Transactional·commit·rollback·AOP aspect](13.트랜잭션.md) | draft |
+| 14 | [Spring Data — 계약 인터페이스·CrudRepository·@Query·Spring Data JDBC](14.Spring%20Data.md) | draft |
 
 
 ## 작성 규약
