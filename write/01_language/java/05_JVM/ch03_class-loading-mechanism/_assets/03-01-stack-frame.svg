@@ -1,84 +1,83 @@
 <svg viewBox="0 0 900 620" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
   <title>런타임 스택 프레임 구조 — 한 메서드 호출의 메모리 한 칸</title>
-  <desc>각 메서드 호출은 스택 프레임 하나에 대응하며, 가상 머신 스택에 쌓인다. 프레임은 지역 변수 테이블·피연산자 스택·동적 링크·반환 주소로 구성된다. 컴파일 시점에 프레임 크기가 확정되고, 현재 실행 중인 메서드의 프레임만 활성(현재 프레임)이다. 지역 변수 테이블은 slot 단위이며 64비트 자료형은 slot 2칸을 쓰고, 더 이상 안 쓰는 slot 은 재사용되어 GC 에 영향을 준다.</desc>
+  <desc>각 메서드 호출은 스택 프레임 하나에 대응하며 가상 머신 스택에 쌓인다. 프레임은 지역 변수 테이블·피연산자 스택·동적 링크·반환 주소로 구성된다. 컴파일 시점에 프레임 크기가 확정되고 현재 실행 중인 메서드의 프레임만 활성(현재 프레임)이다. 지역 변수 테이블은 slot 단위이며 64비트 자료형은 slot 2칸을 쓰고 더 이상 안 쓰는 slot은 재사용되어 GC에 영향을 준다.</desc>
   <defs>
     <style>
-      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
-      .sub   { font-size: 11.5px; fill: rgb(138,133,128); }
-      .frmlab{ font-size: 12px; font-weight: 800; fill: rgb(212,168,83); }
-      .part  { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
-      .partsub{ font-size: 9.5px; fill: rgba(13,13,13,0.72); }
-      .note  { font-size: 10px; fill: rgb(138,133,128); }
-      .mono  { font-size: 9.5px; font-family: 'JetBrains Mono', monospace; fill: rgb(212,168,83); }
-      .active{ font-size: 10px; font-weight: 700; fill: #66bb6a; }
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11.5px;fill:rgb(150,145,140)}
+      .frmlab{font-size:12px;font-weight:800;fill:rgb(212,168,83)}
+      .part{font-size:12px;font-weight:800;fill:#0d0d0d}
+      .partsub{font-size:9.5px;fill:#241c08}
+      .partsubb{font-size:9.5px;fill:#0c1f30}
+      .note{font-size:10px;fill:rgb(196,191,186)}
+      .notedim{font-size:9.5px;fill:rgb(140,135,130)}
+      .active{font-size:10px;font-weight:700;fill:#81c784}
     </style>
-    <marker id="s1" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/>
-    </marker>
+    <marker id="s1" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/></marker>
   </defs>
 
   <rect x="0" y="0" width="900" height="620" fill="#0d0d0d"/>
   <text x="28" y="38" class="title">런타임 스택 프레임 — 메서드 호출 한 번 = 프레임 한 칸</text>
   <text x="28" y="58" class="sub">컴파일 때 크기 확정 · 현재 실행 메서드의 프레임만 활성(현재 프레임) · 가상 머신 스택에 push/pop</text>
 
-  <!-- 왼쪽: 가상 머신 스택 (프레임 쌓임) -->
-  <rect x="28" y="84" width="250" height="500" rx="11" fill="rgba(91,155,213,0.07)" stroke="#5b9bd5" stroke-width="1.5"/>
-  <text x="48" y="110" class="frmlab" fill="#5b9bd5">가상 머신 스택 (스레드당 1개)</text>
+  <!-- 왼쪽: 가상 머신 스택 -->
+  <rect x="28" y="84" width="250" height="500" rx="11" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="48" y="110" class="frmlab" fill="#7fb6e0">가상 머신 스택 (스레드당 1개)</text>
 
-  <rect x="48" y="124" width="210" height="50" rx="7" fill="#1a1a1a" stroke="#5b9bd5" stroke-width="1"/>
+  <rect x="48" y="124" width="210" height="50" rx="7" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1"/>
   <text x="153" y="146" class="note" text-anchor="middle">프레임 1 — main()</text>
-  <text x="153" y="163" class="note" text-anchor="middle" fill="rgba(138,133,128,0.6)">호출 대기 중</text>
+  <text x="153" y="163" class="notedim" text-anchor="middle">호출 대기 중</text>
 
-  <rect x="48" y="182" width="210" height="50" rx="7" fill="#1a1a1a" stroke="#5b9bd5" stroke-width="1"/>
+  <rect x="48" y="182" width="210" height="50" rx="7" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1"/>
   <text x="153" y="204" class="note" text-anchor="middle">프레임 2 — methodA()</text>
-  <text x="153" y="221" class="note" text-anchor="middle" fill="rgba(138,133,128,0.6)">호출 대기 중</text>
+  <text x="153" y="221" class="notedim" text-anchor="middle">호출 대기 중</text>
 
-  <rect x="48" y="240" width="210" height="60" rx="7" fill="rgba(102,187,106,0.18)" stroke="#66bb6a" stroke-width="2"/>
+  <rect x="48" y="240" width="210" height="60" rx="7" fill="#0d0d0d" stroke="#66bb6a" stroke-width="2"/>
   <text x="153" y="264" class="active" text-anchor="middle">▶ 프레임 3 — methodB()</text>
   <text x="153" y="284" class="active" text-anchor="middle">현재 프레임 (실행 중)</text>
 
   <text x="153" y="330" class="note" text-anchor="middle">↑ push (호출) / pop (반환) ↓</text>
-  <text x="48" y="370" class="note">· 스택 깊이 초과 → StackOverflowError</text>
-  <text x="48" y="392" class="note">· 확장 실패 → OutOfMemoryError</text>
+  <text x="48" y="370" class="notedim">· 스택 깊이 초과 → StackOverflowError</text>
+  <text x="48" y="392" class="notedim">· 확장 실패 → OutOfMemoryError</text>
   <text x="48" y="426" class="note">현재 프레임의 4요소를</text>
   <text x="48" y="446" class="note">오른쪽에서 펼쳐 봅니다 →</text>
 
-  <!-- 오른쪽: 현재 프레임 내부 4요소 -->
-  <rect x="300" y="84" width="572" height="500" rx="11" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <!-- 오른쪽: 현재 프레임 4요소 -->
+  <rect x="300" y="84" width="572" height="500" rx="11" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
   <text x="320" y="110" class="frmlab">현재 프레임의 내부 — 4 구성요소</text>
 
   <!-- 1 지역 변수 테이블 -->
   <rect x="320" y="124" width="532" height="120" rx="8" fill="#5b9bd5"/>
   <text x="338" y="148" class="part">① 지역 변수 테이블 (Local Variable Table)</text>
-  <text x="338" y="167" class="partsub">slot 단위 배열 · 컴파일 때 max_locals 확정 · 메서드 파라미터·지역 변수 저장</text>
-  <text x="338" y="186" class="partsub">인스턴스 메서드는 slot 0 = this · 64비트(long/double)는 slot 2칸 사용</text>
-  <rect x="338" y="196" width="496" height="36" rx="5" fill="rgba(13,13,13,0.2)"/>
-  <text x="350" y="219" class="mono" fill="#e8e4df">slot0=this  slot1=a(int)  slot2-3=d(double)  slot4=b ...  ← 안 쓰면 재사용(GC 영향)</text>
+  <text x="338" y="167" class="partsubb">slot 단위 배열 · 컴파일 때 max_locals 확정 · 메서드 파라미터·지역 변수 저장</text>
+  <text x="338" y="186" class="partsubb">인스턴스 메서드는 slot 0 = this · 64비트(long/double)는 slot 2칸 사용</text>
+  <rect x="338" y="196" width="496" height="36" rx="5" fill="#dceaf7"/>
+  <text x="350" y="219" font-size="9.5" font-family="'JetBrains Mono',monospace" fill="#10243a">slot0=this  slot1=a(int)  slot2-3=d(double)  slot4=b ...  ← 안 쓰면 재사용(GC 영향)</text>
 
   <!-- 2 피연산자 스택 -->
   <rect x="320" y="254" width="532" height="110" rx="8" fill="rgb(212,168,83)"/>
   <text x="338" y="278" class="part">② 피연산자 스택 (Operand Stack)</text>
   <text x="338" y="297" class="partsub">LIFO · 컴파일 때 max_stack 확정 · 바이트코드가 여기서 값을 밀고(push) 당겨(pop) 계산</text>
   <text x="338" y="316" class="partsub">예: iadd 는 스택 위 두 int 를 꺼내 더한 결과를 다시 push</text>
-  <rect x="338" y="326" width="496" height="28" rx="5" fill="rgba(13,13,13,0.16)"/>
-  <text x="350" y="345" class="mono" fill="#0d0d0d">iload_1 → iload_2 → iadd → istore_3   (지역변수 ↔ 피연산자 스택 왕복)</text>
+  <rect x="338" y="326" width="496" height="28" rx="5" fill="#f5edda"/>
+  <text x="350" y="345" font-size="9.5" font-family="'JetBrains Mono',monospace" fill="#3a2f10">iload_1 → iload_2 → iadd → istore_3   (지역변수 ↔ 피연산자 스택 왕복)</text>
 
   <!-- 3 동적 링크 -->
-  <rect x="320" y="374" width="258" height="92" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
-  <text x="338" y="398" class="part" fill="#e8e4df">③ 동적 링크 (Dynamic Linking)</text>
-  <text x="338" y="418" class="note">프레임 → 런타임 상수 풀의</text>
-  <text x="338" y="436" class="note">현재 메서드 참조로의 포인터</text>
-  <text x="338" y="456" class="note">정적 해석 + 동적 해석 지원</text>
+  <rect x="320" y="374" width="258" height="92" rx="8" fill="#ddd4f0" stroke="#9575cd" stroke-width="1.2"/>
+  <text x="338" y="398" class="part" fill="#3a2466">③ 동적 링크 (Dynamic Linking)</text>
+  <text x="338" y="418" font-size="10" fill="#2c2050">프레임 → 런타임 상수 풀의</text>
+  <text x="338" y="436" font-size="10" fill="#2c2050">현재 메서드 참조로의 포인터</text>
+  <text x="338" y="456" font-size="10" fill="#2c2050">정적 해석 + 동적 해석 지원</text>
 
   <!-- 4 반환 주소 -->
-  <rect x="594" y="374" width="258" height="92" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
-  <text x="612" y="398" class="part" fill="#e8e4df">④ 반환 주소 (Return Address)</text>
-  <text x="612" y="418" class="note">정상 반환: 호출자 PC 값</text>
-  <text x="612" y="436" class="note">예외 반환: 예외 핸들러 테이블</text>
-  <text x="612" y="456" class="note">→ 프레임 pop + 호출 지점 복귀</text>
+  <rect x="594" y="374" width="258" height="92" rx="8" fill="#d2eeea" stroke="#4db6ac" stroke-width="1.2"/>
+  <text x="612" y="398" class="part" fill="#0e3b35">④ 반환 주소 (Return Address)</text>
+  <text x="612" y="418" font-size="10" fill="#103832">정상 반환: 호출자 PC 값</text>
+  <text x="612" y="436" font-size="10" fill="#103832">예외 반환: 예외 핸들러 테이블</text>
+  <text x="612" y="456" font-size="10" fill="#103832">→ 프레임 pop + 호출 지점 복귀</text>
 
   <!-- 결론 -->
-  <rect x="320" y="476" width="532" height="92" rx="8" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="1.2"/>
+  <rect x="320" y="476" width="532" height="92" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.2"/>
   <text x="338" y="500" class="active">핵심</text>
   <text x="338" y="522" class="note">프레임 크기는 컴파일 때 .class 의 Code 속성(max_locals·max_stack)에 박혀 확정됩니다.</text>
   <text x="338" y="542" class="note">런타임 데이터(사용자 입력 등)에 따라 변하지 않습니다 — 그래서 스택 메모리 계산이 정적으로 가능합니다.</text>
