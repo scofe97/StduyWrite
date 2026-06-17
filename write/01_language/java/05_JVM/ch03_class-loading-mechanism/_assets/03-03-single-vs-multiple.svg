@@ -1,0 +1,91 @@
+<svg viewBox="0 0 900 520" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>단일 디스패치 vs 다중 디스패치 — 고를 때 무엇을 보나</title>
+  <desc>같은 호출에 인자가 있어도 어느 구현을 고를 때 무엇을 보느냐가 다르다. 동적 디스패치(오버라이딩)는 수신자의 실제 타입 하나만 보고 고른다. 인자는 전달만 되고 선택 기준이 아니라 단일 디스패치다. 정적 디스패치(오버로딩)는 수신자 타입과 인자 타입 둘 다 보고 고른다. 그래서 다중 디스패치다. 자바는 동적일 때 첫 인자(수신자)만 동적으로 풀고 나머지 인자는 정적 타입으로 고정한다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11px;fill:#b4b0ab}
+      .hdr{font-size:12.5px;font-weight:800;fill:#0d0d0d}
+      .node{font-size:10px;font-weight:700;fill:#10243a;font-family:'JetBrains Mono',monospace}
+      .nd2{font-size:8.5px;font-weight:700;fill:#10243a;font-family:'JetBrains Mono',monospace}
+      .pick{font-size:9px;font-weight:800;fill:#0d0d0d;font-family:'JetBrains Mono',monospace}
+      .skip{font-size:8.5px;font-weight:700;fill:#9aa0a6;font-family:'JetBrains Mono',monospace}
+      .foot{font-size:10.5px;font-weight:800;fill:#0d0d0d}
+    </style>
+    <marker id="ab" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#5b9bd5"/></marker>
+    <marker id="aa" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#d4a853"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="520" fill="#0d0d0d"/>
+  <text x="28" y="34" class="title">단일 vs 다중 — "고를 때" 무엇을 보나</text>
+  <text x="28" y="56" class="sub">인자가 있어도, 어느 구현을 고르는 기준이 수신자 하나냐(단일) 수신자+인자냐(다중)</text>
+
+  <!-- ===== 동적 단일 (오버라이딩) ===== -->
+  <rect x="28" y="78" width="406" height="190" rx="10" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <rect x="28" y="78" width="406" height="34" rx="10" fill="rgb(212,168,83)"/>
+  <text x="231" y="101" class="hdr" text-anchor="middle">동적 단일 — 오버라이딩</text>
+
+  <rect x="44" y="124" width="374" height="30" rx="5" fill="#dceaf7"/>
+  <text x="231" y="144" class="node" text-anchor="middle">a.attack(weapon)   // a=Dog</text>
+
+  <!-- 흐름: 수신자만 본다 -->
+  <rect x="44" y="168" width="170" height="44" rx="6" fill="#f3d9a0"/>
+  <text x="129" y="188" class="nd2" text-anchor="middle">고르는 기준</text>
+  <text x="129" y="204" class="pick" text-anchor="middle">수신자 a = Dog 만</text>
+  <line x1="214" y1="190" x2="250" y2="190" stroke="#d4a853" stroke-width="2.5" marker-end="url(#aa)"/>
+  <rect x="252" y="168" width="166" height="44" rx="6" fill="rgb(212,168,83)"/>
+  <rect x="262" y="176" width="146" height="20" rx="3" fill="#fdf3df"/>
+  <text x="335" y="191" class="pick" text-anchor="middle">Dog.attack 선택</text>
+
+  <!-- weapon은 전달만 -->
+  <rect x="44" y="222" width="374" height="34" rx="6" fill="#0d0d0d" stroke="#5a6066" stroke-dasharray="4 3"/>
+  <text x="231" y="243" class="skip" text-anchor="middle">weapon → 전달만 됨 (선택 기준 아님) · sword든 bow든 결과 같음</text>
+
+  <!-- ===== 정적 다중 (오버로딩) ===== -->
+  <rect x="466" y="78" width="406" height="190" rx="10" fill="#0d0d0d" stroke="rgb(91,155,213)" stroke-width="1.5"/>
+  <rect x="466" y="78" width="406" height="34" rx="10" fill="#5b9bd5"/>
+  <text x="669" y="101" class="hdr" text-anchor="middle">정적 다중 — 오버로딩</text>
+
+  <rect x="482" y="124" width="374" height="30" rx="5" fill="#dceaf7"/>
+  <text x="669" y="144" class="node" text-anchor="middle">p.f(arg)   // f(Dog) vs f(Cat)</text>
+
+  <rect x="482" y="168" width="200" height="44" rx="6" fill="#f3d9a0"/>
+  <text x="582" y="188" class="nd2" text-anchor="middle">고르는 기준</text>
+  <text x="582" y="204" class="pick" text-anchor="middle">수신자 p + arg 타입 둘 다</text>
+  <line x1="682" y1="190" x2="718" y2="190" stroke="#5b9bd5" stroke-width="2.5" marker-end="url(#ab)"/>
+  <rect x="720" y="168" width="136" height="44" rx="6" fill="#5b9bd5"/>
+  <rect x="730" y="176" width="116" height="20" rx="3" fill="#dff0ff"/>
+  <text x="788" y="191" class="pick" text-anchor="middle">f(?) 선택</text>
+
+  <rect x="482" y="222" width="374" height="34" rx="6" fill="#0d0d0d" stroke="#5b9bd5" stroke-dasharray="4 3"/>
+  <text x="669" y="243" class="node" text-anchor="middle" fill="#9cc4e8">arg 타입을 봐야 f(Dog)/f(Cat) 구별 가능 → 다중</text>
+
+  <!-- ===== 첫 인자만 동적 (자바 단일의 한계) ===== -->
+  <text x="28" y="300" class="hdr" fill="rgb(212,168,83)">자바 단일의 한계 — 첫 인자(수신자)만 동적, 나머지는 정적</text>
+  <rect x="28" y="312" width="290" height="30" rx="5" fill="#dceaf7"/>
+  <text x="173" y="332" class="node" text-anchor="middle">fight(Animal a, Animal b) { a.attack(b) }</text>
+  <line x1="318" y1="327" x2="354" y2="327" stroke="#d4a853" stroke-width="2.5" marker-end="url(#aa)"/>
+  <rect x="356" y="312" width="240" height="30" rx="5" fill="#f3d9a0"/>
+  <text x="476" y="332" class="pick" text-anchor="middle">a 의 실제 타입만 동적으로 풀림</text>
+  <line x1="596" y1="327" x2="632" y2="327" stroke="#5a6066" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <rect x="634" y="312" width="238" height="30" rx="5" fill="#0d0d0d" stroke="#5a6066" stroke-dasharray="4 3"/>
+  <text x="753" y="332" class="skip" text-anchor="middle">b 는 정적 타입 Animal 로 고정</text>
+
+  <!-- Visitor 이중 디스패치 -->
+  <text x="28" y="376" class="hdr" fill="rgb(212,168,83)">두 타입 조합이 필요하면 — Visitor (이중 디스패치)</text>
+  <rect x="28" y="388" width="190" height="40" rx="6" fill="#f5edda"/>
+  <text x="123" y="406" class="node" text-anchor="middle">a.accept(b)</text>
+  <text x="123" y="421" class="nd2" text-anchor="middle">① a 의 실제 타입 동적</text>
+  <line x1="218" y1="408" x2="262" y2="408" stroke="#d4a853" stroke-width="2.5" marker-end="url(#aa)"/>
+  <rect x="264" y="388" width="210" height="40" rx="6" fill="#f5edda"/>
+  <text x="369" y="406" class="node" text-anchor="middle">그 안에서 b.visit(this)</text>
+  <text x="369" y="421" class="nd2" text-anchor="middle">② b 의 실제 타입 동적</text>
+  <line x1="474" y1="408" x2="518" y2="408" stroke="#d4a853" stroke-width="2.5" marker-end="url(#aa)"/>
+  <rect x="520" y="388" width="352" height="40" rx="6" fill="rgb(212,168,83)"/>
+  <rect x="532" y="396" width="328" height="24" rx="3" fill="#fdf3df"/>
+  <text x="696" y="412" class="pick" text-anchor="middle">단일 디스패치 2번 = 두 타입 조합 분기</text>
+
+  <!-- 하단 -->
+  <rect x="28" y="448" width="844" height="44" rx="8" fill="#f5edda"/>
+  <text x="450" y="468" class="foot" text-anchor="middle">선택(dispatch) ≠ 전달(passing) — 단일은 수신자만 보고 고른다. 인자는 넘어가도 기준이 아니다.</text>
+  <text x="450" y="485" class="nd2" text-anchor="middle">자바는 첫 인자(this)만 동적. 두 타입 조합은 Visitor 로 단일 디스패치를 두 번 겹쳐 흉내낸다.</text>
+</svg>

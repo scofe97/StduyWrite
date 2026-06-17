@@ -1,0 +1,65 @@
+<svg viewBox="0 0 900 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>오버라이딩 메서드의 실제 구현은 언제 정해지나 — 컴파일/로딩/실행 시간축</title>
+  <desc>showMeyMoney() 같은 오버라이딩 메서드의 실제 구현은 컴파일이나 클래스 로딩의 해석 단계가 아니라 실행 중 디스패치에서 정해진다. 컴파일 때 javac는 invokevirtual showMeyMoney 시그니처(심볼 참조)까지만 박는다. 클래스 로딩의 해석 단계는 그 심볼을 후보 메서드로 연결할 뿐이다. 어느 구현(Son이냐 Father냐)인지는 실행 순간 invokevirtual이 this의 실제 타입을 보고 매번 정한다. 그래서 같은 코드라도 객체가 다르면 다른 구현이 불린다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11px;fill:#b4b0ab}
+      .stage{font-size:11px;font-weight:800;fill:#0d0d0d}
+      .node{font-size:9.5px;font-weight:700;fill:#10243a;font-family:'JetBrains Mono',monospace}
+      .nd2{font-size:8.5px;font-weight:700;fill:#10243a;font-family:'JetBrains Mono',monospace}
+      .key{font-size:9px;font-weight:800;fill:#0d0d0d;font-family:'JetBrains Mono',monospace}
+      .when{font-size:9px;fill:#c8ccd0}
+      .foot{font-size:10.5px;font-weight:800;fill:#0d0d0d}
+    </style>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#d4a853"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="440" fill="#0d0d0d"/>
+  <text x="28" y="34" class="title">오버라이딩 구현은 "언제" 정해지나 — 해석 아닌 실행 중</text>
+  <text x="28" y="56" class="sub">showMeyMoney() 의 실제 구현(Son? Father?)이 확정되는 시점을 시간축으로</text>
+
+  <!-- 시간축 라인 -->
+  <line x1="60" y1="110" x2="840" y2="110" stroke="#5a554f" stroke-width="1.5"/>
+  <text x="60" y="98" class="when">시간 →</text>
+
+  <!-- [1] 컴파일 -->
+  <rect x="60" y="124" width="230" height="96" rx="8" fill="#dceaf7"/>
+  <text x="175" y="146" class="stage" text-anchor="middle">[1] 컴파일 (javac)</text>
+  <rect x="74" y="156" width="202" height="22" rx="3" fill="#fdf3df"/>
+  <text x="175" y="171" class="key" text-anchor="middle">invokevirtual showMeyMoney</text>
+  <text x="175" y="194" class="nd2" text-anchor="middle">시그니처(심볼 참조)만 박음</text>
+  <text x="175" y="210" class="nd2" text-anchor="middle">어느 구현인지는 미정</text>
+
+  <line x1="290" y1="172" x2="326" y2="172" stroke="#d4a853" stroke-width="2.5" marker-end="url(#a)"/>
+
+  <!-- [2] 로딩 해석 -->
+  <rect x="328" y="124" width="230" height="96" rx="8" fill="#dceaf7"/>
+  <text x="443" y="146" class="stage" text-anchor="middle">[2] 클래스 로딩 — 해석</text>
+  <text x="443" y="170" class="nd2" text-anchor="middle">심볼 → 직접 참조(후보) 연결</text>
+  <text x="443" y="190" class="nd2" text-anchor="middle">"부를 수 있는 메서드"를 풀 뿐</text>
+  <text x="443" y="208" class="nd2" text-anchor="middle">아직 Son 으로 못 박지 않음</text>
+
+  <line x1="558" y1="172" x2="594" y2="172" stroke="#d4a853" stroke-width="2.5" marker-end="url(#a)"/>
+
+  <!-- [3] 실행 디스패치 -->
+  <rect x="596" y="124" width="244" height="96" rx="8" fill="rgb(212,168,83)"/>
+  <text x="718" y="146" class="stage" text-anchor="middle">[3] 실행 중 — 디스패치 ★</text>
+  <text x="718" y="170" class="nd2" text-anchor="middle">invokevirtual 이 this 실제 타입 봄</text>
+  <rect x="612" y="180" width="212" height="22" rx="3" fill="#fdf3df"/>
+  <text x="718" y="195" class="key" text-anchor="middle">this=Son → Son.showMeyMoney</text>
+  <text x="718" y="216" class="nd2" text-anchor="middle">여기서 비로소 확정 (매 호출마다)</text>
+
+  <!-- 강조: 왜 실행 중인가 -->
+  <rect x="60" y="248" width="780" height="68" rx="8" fill="#f5edda"/>
+  <text x="80" y="272" class="node" font-size="10.5" font-weight="800">왜 [2] 해석이 아니라 [3] 실행인가</text>
+  <text x="80" y="293" class="node" font-size="10">invokevirtual 은 *매 호출마다* this 의 실제 타입을 본다. 로딩 때 Son 으로 못 박으면,</text>
+  <text x="80" y="309" class="node" font-size="10">같은 코드가 다른 객체(Woman 등)엔 못 쓴다 — 다형성이 깨진다. 그래서 실행 순간으로 미룬다.</text>
+
+  <!-- 대조: 생성자는 정적 -->
+  <rect x="60" y="332" width="780" height="58" rx="8" fill="#dceaf7"/>
+  <text x="80" y="354" class="node" fill="#10243a" font-weight="800">대조 — 생성자(invokespecial)는 [1] 컴파일 때 고정</text>
+  <text x="80" y="375" class="node" fill="#10243a" font-size="9.5">Son() / super() 는 "어느 생성자냐"가 컴파일 때 확정(정적). 단, 그 생성자 *안의* 일반 메서드 호출은 위처럼 동적.</text>
+
+  <!-- 하단 -->
+  <text x="450" y="418" class="when" text-anchor="middle" font-size="10">심볼은 컴파일·로딩 때 / 실제 구현은 실행 중 — "해석(로딩)"과 "디스패치(실행)"는 다른 단계다</text>
+</svg>
