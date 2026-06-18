@@ -17,56 +17,56 @@
 
   <rect x="0" y="0" width="900" height="600" fill="#0d0d0d"/>
   <text x="28" y="38" class="title">메서드 인라인 · 탈출 분석이 여는 세 최적화</text>
-  <text x="28" y="58" class="sub">인라인 = 호출을 본문으로 펼침(다른 최적화의 발판) · 탈출 분석 = 객체가 새는지 추적(안 새면 3최적화)</text>
+  <text x="28" y="58" class="sub" style="fill:#e8e4df">인라인 = 호출을 본문으로 펼침(다른 최적화의 발판) · 탈출 분석 = 객체가 새는지 추적(안 새면 3최적화)</text>
 
   <!-- 메서드 인라인 -->
   <rect x="28" y="84" width="844" height="158" rx="11" fill="rgba(91,155,213,0.08)" stroke="#5b9bd5" stroke-width="1.5"/>
-  <text x="48" y="110" class="sub" fill="#5b9bd5" font-weight="800">메서드 인라인 — 호출을 본문으로 펼친다 (가장 중요한 최적화)</text>
+  <text x="48" y="110" class="sub" font-weight="800" style="fill:#e8e4df">메서드 인라인 — 호출을 본문으로 펼친다 (가장 중요한 최적화)</text>
 
   <rect x="44" y="124" width="360" height="100" rx="6" fill="#5b9bd5"/>
-  <text x="56" y="146" class="h">인라인 전</text>
-  <text x="56" y="168" class="mono">int add(x,y){ return x+y; }</text>
-  <text x="56" y="186" class="mono">int a = add(1,2);  // 호출</text>
-  <text x="56" y="204" class="mono">int b = add(3,4);  // 호출</text>
+  <text x="56" y="146" class="h" style="fill:#e8e4df">인라인 전</text>
+  <text x="56" y="168" class="mono" style="fill:#e8e4df">int add(x,y){ return x+y; }</text>
+  <text x="56" y="186" class="mono" style="fill:#e8e4df">int a = add(1,2);  // 호출</text>
+  <text x="56" y="204" class="mono" style="fill:#e8e4df">int b = add(3,4);  // 호출</text>
 
   <rect x="460" y="124" width="396" height="100" rx="6" fill="rgb(212,168,83)"/>
   <text x="472" y="146" class="h">인라인 후 — 본문이 자리에 펼쳐짐</text>
-  <text x="472" y="168" class="mono">int a = 1 + 2;   // → 상수 3 으로 계산</text>
-  <text x="472" y="186" class="mono">int b = 3 + 4;   // → 상수 7 로 계산</text>
-  <text x="472" y="210" class="note" fill="rgba(13,13,13,0.78)">호출 비용 제거 + 경계 넘는 상수 전파의 발판</text>
+  <text x="472" y="168" class="mono" style="fill:#0d0d0d">int a = 1 + 2;   // → 상수 3 으로 계산</text>
+  <text x="472" y="186" class="mono" style="fill:#0d0d0d">int b = 3 + 4;   // → 상수 7 로 계산</text>
+  <text x="472" y="210" class="note" style="fill:#0d0d0d">호출 비용 제거 + 경계 넘는 상수 전파의 발판</text>
 
   <line x1="406" y1="174" x2="458" y2="174" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a1)"/>
 
   <!-- 탈출 분석 -->
   <rect x="28" y="266" width="844" height="68" rx="9" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="1.3"/>
-  <text x="48" y="292" class="sub" fill="#66bb6a" font-weight="800">탈출 분석 — 객체가 메서드·스레드 밖으로 새는가? (분석일 뿐, 코드는 안 바꿈)</text>
-  <text x="48" y="318" class="note">메서드 탈출: 반환되거나 인자로 넘겨짐 · 스레드 탈출: 다른 스레드에서도 보임(예: static 필드). “안 샌다” 증명 → 아래 3최적화</text>
+  <text x="48" y="292" class="sub" font-weight="800" style="fill:#e8e4df">탈출 분석 — 객체가 메서드·스레드 밖으로 새는가? (분석일 뿐, 코드는 안 바꿈)</text>
+  <text x="48" y="318" class="note" style="fill:#e8e4df">메서드 탈출: 반환되거나 인자로 넘겨짐 · 스레드 탈출: 다른 스레드에서도 보임(예: static 필드). “안 샌다” 증명 → 아래 3최적화</text>
 
   <!-- 세 최적화 -->
   <rect x="28" y="358" width="270" height="222" rx="11" fill="rgba(212,168,83,0.07)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
-  <text x="48" y="384" class="sub" fill="rgb(212,168,83)" font-weight="800">① 스택 할당</text>
-  <text x="44" y="412" class="note">힙 대신 *스택*에 할당.</text>
-  <text x="44" y="432" class="note">메서드 끝나면 프레임과</text>
-  <text x="44" y="452" class="note">함께 자동 소멸.</text>
-  <text x="44" y="478" class="note" fill="#66bb6a">→ GC 회수 불필요,</text>
-  <text x="44" y="496" class="note" fill="#66bb6a">  힙 압박·GC 부담 ↓</text>
+  <text x="48" y="384" class="sub" font-weight="800" style="fill:#e8e4df">① 스택 할당</text>
+  <text x="44" y="412" class="note" style="fill:#e8e4df">힙 대신 *스택*에 할당.</text>
+  <text x="44" y="432" class="note" style="fill:#e8e4df">메서드 끝나면 프레임과</text>
+  <text x="44" y="452" class="note" style="fill:#e8e4df">함께 자동 소멸.</text>
+  <text x="44" y="478" class="note" style="fill:#e8e4df">→ GC 회수 불필요,</text>
+  <text x="44" y="496" class="note" style="fill:#e8e4df">  힙 압박·GC 부담 ↓</text>
 
   <rect x="315" y="358" width="270" height="222" rx="11" fill="rgba(212,168,83,0.07)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
-  <text x="335" y="384" class="sub" fill="rgb(212,168,83)" font-weight="800">② 동기화 제거</text>
-  <text x="331" y="412" class="note">한 스레드에서만 쓰이면</text>
-  <text x="331" y="432" class="note">synchronized 가 무의미.</text>
-  <text x="331" y="452" class="note">경쟁할 스레드 없음.</text>
-  <text x="331" y="478" class="note" fill="#66bb6a">→ 불필요한 락 제거,</text>
-  <text x="331" y="496" class="note" fill="#66bb6a">  락 획득·해제 비용 ↓</text>
+  <text x="335" y="384" class="sub" font-weight="800" style="fill:#e8e4df">② 동기화 제거</text>
+  <text x="331" y="412" class="note" style="fill:#e8e4df">한 스레드에서만 쓰이면</text>
+  <text x="331" y="432" class="note" style="fill:#e8e4df">synchronized 가 무의미.</text>
+  <text x="331" y="452" class="note" style="fill:#e8e4df">경쟁할 스레드 없음.</text>
+  <text x="331" y="478" class="note" style="fill:#e8e4df">→ 불필요한 락 제거,</text>
+  <text x="331" y="496" class="note" style="fill:#e8e4df">  락 획득·해제 비용 ↓</text>
 
   <rect x="602" y="358" width="270" height="222" rx="11" fill="rgba(212,168,83,0.07)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
-  <text x="622" y="384" class="sub" fill="rgb(212,168,83)" font-weight="800">③ 스칼라 치환</text>
-  <text x="618" y="412" class="note">객체를 아예 만들지 않고</text>
-  <text x="618" y="432" class="note">필드를 지역 변수로 분해.</text>
+  <text x="622" y="384" class="sub" font-weight="800" style="fill:#e8e4df">③ 스칼라 치환</text>
+  <text x="618" y="412" class="note" style="fill:#e8e4df">객체를 아예 만들지 않고</text>
+  <text x="618" y="432" class="note" style="fill:#e8e4df">필드를 지역 변수로 분해.</text>
   <text x="618" y="454" class="monoy">new Point(x,y) →</text>
   <text x="618" y="470" class="monoy">  지역변수 x, y 둘만</text>
-  <text x="618" y="496" class="note" fill="#66bb6a">→ 객체 생성 자체 소멸</text>
-  <text x="618" y="514" class="note" fill="#66bb6a">  (가장 적극적)</text>
+  <text x="618" y="496" class="note" style="fill:#e8e4df">→ 객체 생성 자체 소멸</text>
+  <text x="618" y="514" class="note" style="fill:#e8e4df">  (가장 적극적)</text>
 
-  <text x="450" y="562" class="note" text-anchor="middle">세 최적화 모두 “탈출하지 않는다”는 전제 위에서만 안전 — 탈출 분석이 셋의 공통 전제.</text>
+  <text x="450" y="562" class="note" text-anchor="middle" style="fill:#e8e4df">세 최적화 모두 “탈출하지 않는다”는 전제 위에서만 안전 — 탈출 분석이 셋의 공통 전제.</text>
 </svg>
