@@ -1,0 +1,73 @@
+<svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>SPI와 스레드 컨텍스트 로더 — 상위가 하위를 로딩하는 역전</title>
+  <desc>JDK는 규격(java.sql.Driver 인터페이스)만 정하고 실제 구현(MySQL 드라이버)은 외부에 맡긴다. 규격을 가진 상위 코드 DriverManager는 부트스트랩·플랫폼 로더가 로딩하지만 구현체는 애플리케이션 로더가 로딩한다. DriverManager가 드라이버를 찾아 인스턴스를 만들려면 상위가 하위의 클래스를 로딩해야 하는데 부모 위임은 위로만 가서 부모가 자식 영역을 모른다. 그래서 스레드 컨텍스트 클래스 로더에 애플리케이션 로더를 심어 부모 코드가 그것을 꺼내 자식 클래스를 로딩하는 역방향 우회로를 둔다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11.5px;fill:rgb(150,145,140)}
+      .head{font-size:12.5px;font-weight:800;fill:rgb(212,168,83)}
+      .nm{font-size:12px;font-weight:800;fill:#0d0d0d}
+      .body{font-size:10.5px;fill:rgb(200,195,190)}
+      .labsub{font-size:10px;fill:#241c08}
+      .note{font-size:9.5px;fill:rgb(150,145,140)}
+      .bad{font-size:10.5px;font-weight:700;fill:#e57373}
+      .ok{font-size:10.5px;font-weight:700;fill:#81c784}
+    </style>
+    <marker id="aup" markerWidth="10" markerHeight="10" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 z" fill="#e57373"/></marker>
+    <marker id="adn" markerWidth="10" markerHeight="10" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 z" fill="#81c784"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="560" fill="#0d0d0d"/>
+  <text x="28" y="40" class="title">SPI — 규격은 위, 구현은 아래 · 상위가 하위를 로딩하는 역전</text>
+  <text x="28" y="64" class="sub">JDK는 인터페이스만 정하고 구현은 외부에 맡김 → DriverManager가 외부 드라이버를 로딩해야 함</text>
+
+  <!-- 상위: 플랫폼/부트스트랩 -->
+  <rect x="60" y="96" width="500" height="140" rx="11" fill="rgb(212,168,83)"/>
+  <text x="84" y="126" class="nm">상위 — 부트스트랩 / 플랫폼 로더 (JDK 규격)</text>
+  <rect x="84" y="142" width="252" height="34" rx="6" fill="#f5edda"/>
+  <text x="98" y="165" font-size="10.5" font-family="'JetBrains Mono',monospace" font-weight="700" fill="#0d0d0d">java.sql.Driver (인터페이스)</text>
+  <rect x="84" y="186" width="252" height="34" rx="6" fill="#f5edda"/>
+  <text x="98" y="209" font-size="10.5" font-family="'JetBrains Mono',monospace" font-weight="700" fill="#0d0d0d">java.sql.DriverManager</text>
+  <text x="352" y="166" class="labsub">규격만 정의 —</text>
+  <text x="352" y="186" class="labsub">실제 동작은 모름</text>
+  <text x="352" y="208" class="labsub">getConnection() 시 드라이버 필요</text>
+
+  <!-- 하위: 애플리케이션 -->
+  <rect x="60" y="356" width="500" height="120" rx="11" fill="#66bb6a"/>
+  <text x="84" y="386" class="nm">하위 — 애플리케이션 로더 (클래스패스)</text>
+  <rect x="84" y="402" width="320" height="34" rx="6" fill="#e3f6e5"/>
+  <text x="98" y="425" font-size="10.5" font-family="'JetBrains Mono',monospace" font-weight="700" fill="#0d0d0d">com.mysql.cj.jdbc.Driver (구현체)</text>
+  <text x="84" y="458" class="labsub" fill="#13350f">내가 클래스패스에 넣은 jar — JDK 밖의 코드</text>
+
+  <!-- 막힌 위임 (위로) -->
+  <line x1="150" y1="356" x2="150" y2="240" stroke="#e57373" stroke-width="2.4" stroke-dasharray="5 4" marker-end="url(#aup)"/>
+  <text x="166" y="296" class="bad">부모 위임 = 위로만</text>
+  <text x="166" y="316" class="note">부모는 자식 클래스패스를</text>
+  <text x="166" y="332" class="note">모름 → 드라이버 못 찾음</text>
+
+  <!-- TCCL 역방향 (아래로) -->
+  <line x1="450" y1="236" x2="450" y2="354" stroke="#81c784" stroke-width="2.6" marker-end="url(#adn)"/>
+  <text x="466" y="286" class="ok">TCCL 로 역방향</text>
+  <text x="466" y="306" class="note">스레드에 심은 앱 로더로</text>
+  <text x="466" y="322" class="note">상위가 하위 클래스 로딩</text>
+
+  <!-- TCCL 설명 -->
+  <rect x="600" y="96" width="272" height="380" rx="11" fill="#1f1a2e" stroke="#9575cd" stroke-width="1.5"/>
+  <text x="622" y="126" class="head" fill="#c4b0e0">스레드 컨텍스트 로더</text>
+  <rect x="620" y="142" width="232" height="46" rx="6" fill="#2a2440"/>
+  <text x="632" y="162" font-size="9.5" font-family="'JetBrains Mono',monospace" fill="#d5c8ef">Thread.setContext</text>
+  <text x="632" y="178" font-size="9.5" font-family="'JetBrains Mono',monospace" fill="#d5c8ef">  ClassLoader(appLoader)</text>
+  <text x="622" y="214" class="body">스레드에 애플리케이션 로더를</text>
+  <text x="622" y="234" class="body">심어 둔다.</text>
+  <text x="622" y="266" class="body">DriverManager(부모 코드)가</text>
+  <text x="622" y="286" class="body">그 로더를 꺼내 드라이버를</text>
+  <text x="622" y="306" class="body">로딩한다 → 부모 위임을</text>
+  <text x="622" y="326" class="body">역으로 위반.</text>
+  <text x="622" y="362" class="head" font-size="11">왜 필연인가</text>
+  <text x="622" y="388" class="body">JDK가 규격만, 구현은 외부에</text>
+  <text x="622" y="408" class="body">맡기는 SPI 구조 자체가</text>
+  <text x="622" y="428" class="body">상위→하위 로딩을 부른다.</text>
+  <text x="622" y="456" class="note">JDK가 모든 드라이버를 내장 못함</text>
+
+  <text x="28" y="510" class="sub">SPI(Service Provider Interface): 규격(인터페이스)과 구현(provider)을 분리 — JDBC·JNDI가 대표</text>
+  <text x="28" y="534" class="sub">정리: "규격은 JDK, 구현은 외부에" → 상위가 하위를 로딩 → 그 다리가 스레드 컨텍스트 로더</text>
+</svg>

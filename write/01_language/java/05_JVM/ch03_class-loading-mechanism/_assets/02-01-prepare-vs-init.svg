@@ -1,0 +1,94 @@
+<svg viewBox="0 0 900 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>준비 vs 초기화, 그리고 clinit·init·메서드가 도는 시점</title>
+  <desc>static int count = 5 한 줄은 준비 단계에서 기본값 0으로, 초기화 단계에서 실제 값 5로 두 번 손이 간다. 초기화는 static 영역만 모은 clinit 메서드가 클래스당 1번 실행되는 일이고, 인스턴스 필드·생성자는 init로 객체 생성 때마다, 일반 메서드는 호출 때마다 돈다. 부수효과가 있는 초기화만 시점이 미묘해 6가지 능동 참조로 못박는다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11.5px;fill:rgb(138,133,128)}
+      .head{font-size:12.5px;font-weight:800;fill:rgb(212,168,83)}
+      .box{font-size:13px;font-weight:800;fill:#0d0d0d}
+      .boxsub{font-size:9.5px;fill:#1a1a1a}
+      .body{font-size:10.5px;fill:rgb(190,185,180)}
+      .codeg{font-size:11px;font-weight:700;fill:rgb(212,168,83);font-family:'JetBrains Mono',monospace}
+      .mono{font-size:10px;font-family:'JetBrains Mono',monospace;fill:rgb(190,185,180)}
+      .nm{font-size:12px;font-weight:800;fill:#e8e4df}
+      .note{font-size:9.5px;fill:rgb(138,133,128)}
+    </style>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="600" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">준비 vs 초기화 — 같은 static 한 줄을 두 번 만진다</text>
+  <text x="28" y="58" class="sub">준비는 기본값(0)으로 채우는 기계적 작업 · 초기화는 내 코드(= 5)가 실제로 도는 첫 순간 · 부수효과는 초기화에서</text>
+
+  <!-- 윗단: 한 줄이 두 단계로 -->
+  <rect x="28" y="80" width="240" height="40" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)"/>
+  <text x="148" y="105" class="codeg" text-anchor="middle">static int count = 5;</text>
+
+  <!-- 준비 박스 -->
+  <rect x="330" y="78" width="250" height="92" rx="10" fill="rgb(212,168,83)"/>
+  <text x="455" y="104" class="box" text-anchor="middle">준비 (Preparation)</text>
+  <text x="455" y="125" class="boxsub" text-anchor="middle">메서드 영역에 기본값만 할당</text>
+  <rect x="352" y="134" width="206" height="18" rx="4" fill="#fdf3df"/>
+  <text x="455" y="147" class="mono" text-anchor="middle" fill="#0d0d0d" font-weight="700">count = 0   (아직 5 아님)</text>
+  <text x="455" y="164" class="boxsub" text-anchor="middle">내 코드 실행 안 함 — 기계적</text>
+
+  <!-- 초기화 박스 -->
+  <rect x="620" y="78" width="252" height="92" rx="10" fill="#66bb6a"/>
+  <text x="746" y="104" class="box" text-anchor="middle">초기화 (Initialization)</text>
+  <text x="746" y="125" class="boxsub" text-anchor="middle">내 대입문 = 5 가 실제로 실행</text>
+  <rect x="640" y="134" width="212" height="18" rx="4" fill="#e6f7e7"/>
+  <text x="746" y="147" class="mono" text-anchor="middle" fill="#0d0d0d" font-weight="700">count = 5   (부수효과 가능)</text>
+  <text x="746" y="164" class="boxsub" text-anchor="middle">loadFromDB() 였다면 여기서 DB 읽음</text>
+
+  <line x1="268" y1="100" x2="328" y2="118" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="580" y1="124" x2="618" y2="124" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- 가운데: clinit이 무엇을 모으나 -->
+  <text x="28" y="212" class="head">초기화 = &lt;clinit&gt;() 실행 — static 영역만 모은 메서드 (클래스당 1번)</text>
+  <rect x="28" y="226" width="844" height="120" rx="10" fill="#111" stroke="#333"/>
+
+  <text x="48" y="250" class="nm" fill="#66bb6a">&lt;clinit&gt;() 안에 들어가는 것</text>
+  <text x="48" y="272" class="mono" fill="#81c784">static { ... }        ← static 블록</text>
+  <text x="48" y="290" class="mono" fill="#81c784">static int x = 5;     ← static 필드 대입</text>
+  <text x="48" y="308" class="body">컴파일러가 클래스 안 모든 static 대입·static 블록을</text>
+  <text x="48" y="324" class="body">위에서 아래 순서로 모아 하나로 합친다.</text>
+
+  <line x1="450" y1="240" x2="450" y2="332" stroke="#333" stroke-width="1"/>
+
+  <text x="470" y="250" class="nm" fill="#e57373">&lt;clinit&gt;()에 안 들어가는 것</text>
+  <text x="470" y="272" class="mono" fill="#e57373">int b = 2;            ← 인스턴스 필드</text>
+  <text x="470" y="290" class="mono" fill="#e57373">Example() { ... }     ← 생성자 (&lt;init&gt;)</text>
+  <text x="470" y="308" class="mono" fill="#e57373">void run() { ... }    ← 일반 메서드</text>
+  <text x="470" y="326" class="body">이 셋은 static이 아니라 초기화 대상이 아니다.</text>
+
+  <!-- 아랫단: 셋이 도는 시점·횟수 -->
+  <text x="28" y="388" class="head">무엇이 / 언제 / 몇 번 도는가</text>
+
+  <rect x="28" y="402" width="274" height="150" rx="10" fill="rgba(102,187,106,0.10)" stroke="#66bb6a"/>
+  <text x="48" y="428" class="nm" fill="#66bb6a">&lt;clinit&gt;()</text>
+  <text x="48" y="450" class="body">static 블록 · static 필드</text>
+  <text x="48" y="472" class="body">언제: 클래스 초기화 시</text>
+  <text x="48" y="490" class="body">(6가지 능동 참조 트리거)</text>
+  <text x="48" y="516" class="codeg" fill="#66bb6a">클래스당 1번</text>
+  <text x="48" y="538" class="note">시점이 미묘 → 규칙 필요</text>
+
+  <rect x="314" y="402" width="274" height="150" rx="10" fill="rgba(91,155,213,0.10)" stroke="#5b9bd5"/>
+  <text x="334" y="428" class="nm" fill="#5b9bd5">&lt;init&gt;()</text>
+  <text x="334" y="450" class="body">인스턴스 필드 · 생성자</text>
+  <text x="334" y="472" class="body">언제: 객체 생성 시</text>
+  <text x="334" y="490" class="mono" fill="#5b9bd5">new Example()</text>
+  <text x="334" y="516" class="codeg" fill="#5b9bd5">new 할 때마다</text>
+  <text x="334" y="538" class="note">시점 명백 → 규칙 불필요</text>
+
+  <rect x="600" y="402" width="272" height="150" rx="10" fill="rgba(138,133,128,0.10)" stroke="rgb(138,133,128)"/>
+  <text x="620" y="428" class="nm">일반 메서드</text>
+  <text x="620" y="450" class="body">메서드 본문</text>
+  <text x="620" y="472" class="body">언제: 그 메서드 호출 시</text>
+  <text x="620" y="490" class="mono">obj.run()</text>
+  <text x="620" y="516" class="codeg">호출할 때마다</text>
+  <text x="620" y="538" class="note">시점 명백 → 규칙 불필요</text>
+
+  <text x="28" y="582" class="note">핵심: 6가지 능동 참조가 못박는 "초기화"는 오직 &lt;clinit&gt;(클래스당 1번 도는 static 영역)의 트리거 시점이다. 함수 내부는 내가 호출하는 순간이라 규칙이 없다.</text>
+</svg>

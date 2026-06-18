@@ -1,0 +1,64 @@
+<svg viewBox="0 0 900 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>준비 상세 — 일반 static은 0, ConstantValue 상수만 즉시 실제 값</title>
+  <desc>준비 단계는 static 변수에 메서드 영역 메모리를 잡고 자료형 기본값을 넣는다. 일반 static int value = 123 은 준비 직후 0이고, 대입 putstatic은 컴파일러가 clinit에 모아 초기화 단계에 가서야 123이 된다. 반면 static final int value = 123 은 컴파일러가 ConstantValue 속성을 붙여, JVM이 준비 단계에서 그 값을 즉시 넣어 준비 직후 이미 123이다. 인스턴스 변수는 준비 대상이 아니며 객체 생성 때 힙에 할당된다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11.5px;fill:rgb(138,133,128)}
+      .head{font-size:12.5px;font-weight:800;fill:rgb(212,168,83)}
+      .nm{font-size:12px;font-weight:800;fill:#e8e4df}
+      .body{font-size:10px;fill:rgb(190,185,180)}
+      .stage{font-size:10.5px;font-weight:700;fill:rgb(138,133,128)}
+      .codeg{font-size:11px;font-weight:700;fill:rgb(212,168,83);font-family:'JetBrains Mono',monospace}
+      .val0{font-size:13px;font-weight:800;fill:#e57373;font-family:'JetBrains Mono',monospace}
+      .val123{font-size:13px;font-weight:800;fill:#81c784;font-family:'JetBrains Mono',monospace}
+      .note{font-size:9.5px;fill:rgb(138,133,128)}
+      .chipd{font-size:10px;font-weight:700;fill:#0d0d0d;font-family:'JetBrains Mono',monospace}
+    </style>
+    <marker id="ap" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="rgb(138,133,128)"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="480" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">준비 상세 — 같은 = 123 인데 값이 들어가는 시점이 다르다</text>
+  <text x="28" y="58" class="sub">일반 static은 준비 때 0, 초기화 때 123 · ConstantValue 상수는 준비 때 즉시 123</text>
+
+  <!-- 단계 타임라인 헤더 -->
+  <text x="250" y="92" class="stage" text-anchor="middle">준비 (Preparation)</text>
+  <text x="640" y="92" class="stage" text-anchor="middle">초기화 (Initialization, &lt;clinit&gt;)</text>
+  <line x1="445" y1="78" x2="445" y2="430" stroke="#333" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- 케이스 A: 일반 static -->
+  <rect x="28" y="106" width="844" height="130" rx="11" fill="#1a1a1a" stroke="#5b9bd5"/>
+  <text x="48" y="132" class="head" fill="#5b9bd5">일반 static 변수</text>
+  <text x="48" y="154" class="codeg">public static int value = 123;</text>
+
+  <!-- 준비측 값 -->
+  <rect x="150" y="168" width="200" height="48" rx="8" fill="rgba(229,115,115,0.12)" stroke="#e57373"/>
+  <text x="250" y="190" class="val0" text-anchor="middle">value == 0</text>
+  <text x="250" y="208" class="note" text-anchor="middle">메모리만 잡고 기본값</text>
+  <!-- 화살표 -->
+  <line x1="354" y1="192" x2="534" y2="192" stroke="rgb(138,133,128)" stroke-width="2" marker-end="url(#ap)"/>
+  <text x="444" y="184" class="note" text-anchor="middle">putstatic 은 &lt;clinit&gt;에 모임</text>
+  <!-- 초기화측 값 -->
+  <rect x="538" y="168" width="200" height="48" rx="8" fill="rgba(129,199,132,0.12)" stroke="#81c784"/>
+  <text x="638" y="190" class="val123" text-anchor="middle">value == 123</text>
+  <text x="638" y="208" class="note" text-anchor="middle">이때 비로소 대입 실행</text>
+
+  <!-- 케이스 B: ConstantValue 상수 -->
+  <rect x="28" y="252" width="844" height="150" rx="11" fill="#1a1a1a" stroke="#66bb6a"/>
+  <text x="48" y="278" class="head" fill="#66bb6a">static final 상수 — ConstantValue 속성</text>
+  <text x="48" y="300" class="codeg">public static final int value = 123;</text>
+
+  <!-- 준비측 값 (즉시 123) -->
+  <rect x="150" y="314" width="240" height="62" rx="8" fill="rgba(129,199,132,0.14)" stroke="#81c784"/>
+  <text x="270" y="338" class="val123" text-anchor="middle">value == 123</text>
+  <rect x="166" y="348" width="208" height="20" rx="4" fill="#e6f7e7"/>
+  <text x="270" y="362" class="chipd" text-anchor="middle">ConstantValue → 즉시 대입</text>
+  <!-- 설명 -->
+  <text x="470" y="332" class="body">컴파일러가 final 상수 필드에 ConstantValue 속성을 붙인다.</text>
+  <text x="470" y="352" class="body">JVM은 준비 단계에서 이 속성을 발견하면 값을 즉시 넣는다.</text>
+  <text x="470" y="372" class="body">→ 초기화를 기다리지 않으므로 준비 직후 이미 123 (0 거친 적 없음)</text>
+  <text x="470" y="392" class="note">이것이 상수 참조가 원본 클래스를 초기화하지 않는 이유와 같은 뿌리 (02-01 예제3)</text>
+
+  <text x="28" y="432" class="sub">준비 대상은 static 변수뿐 — 인스턴스 변수는 객체 생성 때 힙에 할당(준비와 무관)</text>
+  <text x="28" y="456" class="sub">함정: "static int v = 123 은 준비 직후 0" — 갈림점은 ConstantValue 속성의 유무다</text>
+</svg>

@@ -17,7 +17,7 @@
 
   <rect x="0" y="0" width="900" height="600" fill="#0d0d0d"/>
   <text x="28" y="38" class="title">메서드 호출 — 해석 vs 디스패치</text>
-  <text x="28" y="58" class="sub">컴파일 때 확정 = 해석(static·private·생성자·super) · 실행 중 선택 = 디스패치(정적=오버로딩, 동적=오버라이딩)</text>
+  <text x="28" y="58" class="sub">실행 중 안 갈라짐 = 해석(static·private·생성자·super, JVM resolution) · 실행 중 선택 = 디스패치(정적=오버로딩, 동적=오버라이딩)</text>
 
   <!-- 분기 루트 -->
   <rect x="350" y="78" width="200" height="48" rx="9" fill="rgb(212,168,83)"/>
@@ -26,14 +26,14 @@
 
   <!-- 해석 -->
   <rect x="40" y="160" width="380" height="190" rx="11" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="1.5"/>
-  <text x="60" y="186" class="h" style="fill:#66bb6a">① 해석 (Resolution) — 컴파일 때 확정</text>
+  <text x="60" y="186" class="h" style="fill:#66bb6a">① 해석 (Resolution) — JVM이 직접 참조로</text>
   <text x="60" y="210" class="item">변하지 않는 "비가상 메서드"가 대상</text>
   <rect x="56" y="222" width="348" height="46" rx="6" fill="#dceaf7"/>
   <text x="68" y="241" class="mono" style="fill:#0d0d0d">invokestatic   — static 메서드</text>
   <text x="68" y="259" class="mono" style="fill:#0d0d0d">invokespecial  — 생성자·private·super</text>
-  <text x="60" y="290" class="note">이 메서드들은 컴파일 시점에 *버전이 하나*로 정해짐</text>
-  <text x="60" y="310" class="note">→ 상수 풀 심볼 참조가 곧장 직접 참조로 해석됨</text>
-  <text x="60" y="334" class="note">final 메서드도 invokevirtual 이지만 비가상으로 취급</text>
+  <text x="60" y="290" class="note">컴파일러(javac)는 상수 풀에 *심볼 참조* 만 남김</text>
+  <text x="60" y="310" class="note">→ JVM resolution 이 그 심볼 참조를 직접 참조로 바꿈</text>
+  <text x="60" y="334" class="note">final 도 비가상 — 바이트코드는 invokevirtual 일 수 있음</text>
 
   <!-- 디스패치 -->
   <rect x="440" y="160" width="420" height="400" rx="11" fill="rgba(91,155,213,0.08)" stroke="#5b9bd5" stroke-width="1.5"/>
