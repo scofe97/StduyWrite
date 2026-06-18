@@ -1,6 +1,6 @@
 <svg viewBox="0 0 900 620" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
   <title>런타임 스택 프레임 구조 — 한 메서드 호출의 메모리 한 칸</title>
-  <desc>각 메서드 호출은 스택 프레임 하나에 대응하며 가상 머신 스택에 쌓인다. 프레임은 지역 변수 테이블·피연산자 스택·동적 링크·반환 주소로 구성된다. 컴파일 시점에 프레임 크기가 확정되고 현재 실행 중인 메서드의 프레임만 활성(현재 프레임)이다. 지역 변수 테이블은 slot 단위이며 64비트 자료형은 slot 2칸을 쓰고 더 이상 안 쓰는 slot은 재사용되어 GC에 영향을 준다.</desc>
+  <desc>각 메서드 호출은 스택 프레임 하나에 대응하며 가상 머신 스택에 쌓인다. 프레임은 지역 변수 테이블·피연산자 스택·동적 링크·반환 주소로 구성된다. 프레임의 논리 실행 용량(max_locals·max_stack)이 컴파일 시점에 정해지고 현재 실행 중인 메서드의 프레임만 활성(현재 프레임)이다. 지역 변수 테이블은 slot 단위이며 64비트 자료형은 slot 2칸을 쓰고 더 이상 안 쓰는 slot은 재사용되어 GC에 영향을 준다.</desc>
   <defs>
     <style>
       .title{font-size:18px;font-weight:800;fill:#e8e4df}
@@ -18,7 +18,7 @@
 
   <rect x="0" y="0" width="900" height="620" fill="#0d0d0d"/>
   <text x="28" y="38" class="title">런타임 스택 프레임 — 메서드 호출 한 번 = 프레임 한 칸</text>
-  <text x="28" y="58" class="sub">컴파일 때 크기 확정 · 현재 실행 메서드의 프레임만 활성(현재 프레임) · 가상 머신 스택에 push/pop</text>
+  <text x="28" y="58" class="sub">논리 용량(max_locals·max_stack) 컴파일 때 확정 · 현재 메서드 프레임만 활성 · 가상 머신 스택에 push/pop</text>
 
   <!-- 왼쪽: 가상 머신 스택 -->
   <rect x="28" y="84" width="250" height="500" rx="11" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
@@ -79,8 +79,8 @@
   <!-- 결론 -->
   <rect x="320" y="476" width="532" height="92" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.2"/>
   <text x="338" y="500" class="active">핵심</text>
-  <text x="338" y="522" class="note">프레임 크기는 컴파일 때 .class 의 Code 속성(max_locals·max_stack)에 박혀 확정됩니다.</text>
-  <text x="338" y="542" class="note">런타임 데이터(사용자 입력 등)에 따라 변하지 않습니다 — 그래서 스택 메모리 계산이 정적으로 가능합니다.</text>
+  <text x="338" y="522" class="note">프레임의 논리 용량(max_locals·max_stack)은 컴파일 때 .class 의 Code 속성에 박혀 정해집니다.</text>
+  <text x="338" y="542" class="note">메모리 배치·JIT 부가정보는 구현 의존이지만, 이 논리 용량은 정적으로 계산할 수 있습니다.</text>
   <text x="338" y="562" class="note">지역 변수 테이블의 slot 재사용은 이미 끝난 객체 참조를 살려 두어 GC 를 늦출 수 있습니다.</text>
 
   <line x1="278" y1="270" x2="298" y2="180" stroke="rgb(212,168,83)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#s1)"/>

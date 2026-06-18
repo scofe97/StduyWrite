@@ -1,6 +1,6 @@
 <svg viewBox="0 0 900 540" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
   <title>slot 재사용과 GC root 함정 — scope가 끝나도 slot이 참조를 들면 회수 안 됨</title>
-  <desc>지역 변수 테이블의 slot은 GC root다. placeholder의 scope가 끝나도 slot이 그 64MB 참조를 그대로 들고 있으면 root에서 도달 가능이라 GC가 회수하지 못한다(keep: 66M->65M). 이후 변수가 그 slot을 재사용해 덮으면 참조가 끊겨 회수된다(reuse: 66M->0M). 명시적 null 대입은 slot 재사용이 일어나지 않는 특수 상황에서만 의미가 있다. 본질은 slot 재사용이다.</desc>
+  <desc>활성 스택 프레임에 남은 참조는 GC root 집합의 일부로 취급된다. placeholder의 scope가 끝나도 slot이 그 64MB 참조를 그대로 들고 있으면 root에서 도달 가능이라 GC가 회수하지 못한다(keep: 66M->65M). 이후 변수가 그 slot을 재사용해 덮으면 참조가 끊겨 회수된다(reuse: 66M->0M). 명시적 null 대입은 slot 재사용이 일어나지 않는 특수 상황에서만 의미가 있다. 본질은 slot 재사용이다.</desc>
   <defs>
     <style>
       .title{font-size:18px;font-weight:800;fill:#e8e4df}
@@ -15,7 +15,7 @@
   </defs>
   <rect x="0" y="0" width="900" height="540" fill="#0d0d0d"/>
   <text x="28" y="40" class="title">slot 재사용과 GC root 함정</text>
-  <text x="28" y="64" class="sub">지역 변수 테이블의 slot은 GC root — scope가 끝나도 slot이 참조를 들면 회수 안 됨</text>
+  <text x="28" y="64" class="sub">활성 프레임의 살아있는 참조는 GC root — scope가 끝나도 slot이 참조를 들면 회수 안 됨</text>
 
   <!-- 좌: keep (회수 안 됨) -->
   <text x="28" y="100" class="head">① keep — slot이 재사용 안 됨 → 회수 안 됨</text>
@@ -62,10 +62,10 @@
   <text x="484" y="280" class="lab">GC: 66M -&gt; 0M  (회수됨)</text>
 
   <!-- 하단: 왜 / 본질 -->
-  <text x="28" y="332" class="head">왜 — slot 자체가 GC root이기 때문</text>
+  <text x="28" y="332" class="head">왜 — 활성 프레임의 참조가 GC root 집합의 일부이기 때문</text>
   <rect x="28" y="344" width="844" height="78" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
-  <text x="48" y="368" class="body">GC는 root에서 도달 가능한 객체를 살아 있다고 봅니다. 지역 변수 테이블의 slot이 root라,</text>
-  <text x="48" y="388" class="body">slot이 든 참조가 가리키는 객체는 "root에서 도달 가능"이라 살아남습니다.</text>
+  <text x="48" y="368" class="body">GC는 root에서 도달 가능한 객체를 살아 있다고 봅니다. 활성 프레임에 남은 참조가 root 집합에 들어,</text>
+  <text x="48" y="388" class="body">그 slot이 든 참조가 가리키는 객체는 "root에서 도달 가능"이라 살아남습니다.</text>
   <text x="48" y="408" class="body">회수되려면 slot과 객체의 연결이 끊겨야 하고, 끊는 길은 ① null 대입 ② slot 재사용 둘입니다.</text>
 
   <!-- 본질 칩 -->

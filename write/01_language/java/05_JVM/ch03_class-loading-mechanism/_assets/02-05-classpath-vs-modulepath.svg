@@ -1,0 +1,61 @@
+<svg viewBox="0 0 900 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>클래스패스 vs 모듈 경로 — 평면적 나열 vs 경계 있는 모듈</title>
+  <desc>클래스패스는 JVM이 클래스를 어디서 찾을지 알려주는 경로 목록으로 -cp로 디렉터리·JAR를 이어 지정한다. 모든 JAR의 모든 패키지가 한 평면에 펼쳐져 경계가 없고 public이면 전부 노출되며 같은 클래스가 둘이면 앞쪽이 이긴다. 모듈 경로는 --module-path로 띄우며 각 모듈의 exports·requires가 강제되어 exports 안 한 패키지는 public이어도 다른 모듈에서 import조차 안 된다. module-info가 있어도 클래스패스에 두면 unnamed module로 취급돼 캡슐화가 무시된다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11.5px;fill:rgb(150,145,140)}
+      .h{font-size:13px;font-weight:800;fill:#0d0d0d}
+      .body{font-size:10.5px;fill:rgb(200,195,190)}
+      .mono{font-size:10px;font-family:'JetBrains Mono',monospace;fill:#0d0d0d;font-weight:700}
+      .note{font-size:9.5px;fill:rgb(196,191,186)}
+      .bad{font-size:10px;font-weight:700;fill:#e57373}
+      .ok{font-size:10px;font-weight:700;fill:#81c784}
+    </style>
+  </defs>
+  <rect x="0" y="0" width="900" height="500" fill="#0d0d0d"/>
+  <text x="28" y="40" class="title">클래스패스 vs 모듈 경로 — 같은 .class, 캡슐화가 갈린다</text>
+  <text x="28" y="64" class="sub">-cp 로 띄우면 평면적·캡슐화 없음 · --module-path 로 띄우면 exports/requires 강제</text>
+
+  <!-- 클래스패스 (왼쪽) -->
+  <rect x="40" y="92" width="400" height="48" rx="8" fill="#5b9bd5"/>
+  <text x="240" y="115" class="h" text-anchor="middle">클래스패스 (-cp)</text>
+  <text x="240" y="132" class="mono" text-anchor="middle" fill="#0c1f30">java -cp a.jar:b.jar:classes MyApp</text>
+
+  <!-- 평면 나열 -->
+  <rect x="40" y="156" width="400" height="180" rx="10" fill="#141414" stroke="#5b9bd5" stroke-width="1.2"/>
+  <text x="60" y="182" class="note" fill="#9ecbf0">모든 JAR·패키지가 한 평면에 펼쳐짐</text>
+  <rect x="60" y="196" width="172" height="28" rx="5" fill="#dceaf7"/>
+  <text x="72" y="215" class="mono" fill="#10243a">a.jar : com.foo.*</text>
+  <rect x="248" y="196" width="172" height="28" rx="5" fill="#dceaf7"/>
+  <text x="260" y="215" class="mono" fill="#10243a">b.jar : com.bar.*</text>
+  <rect x="60" y="232" width="360" height="28" rx="5" fill="#dceaf7"/>
+  <text x="72" y="251" class="mono" fill="#10243a">classes : com.app.* · internal 도 다 보임</text>
+  <text x="60" y="284" class="bad">경계 없음 — public 이면 전부 노출</text>
+  <text x="60" y="304" class="bad">같은 클래스 둘이면 앞쪽이 조용히 이김 (JAR 지옥)</text>
+  <text x="60" y="326" class="note">module-info 있어도 -cp 에 두면 unnamed module → 캡슐화 무시</text>
+
+  <!-- 모듈 경로 (오른쪽) -->
+  <rect x="460" y="92" width="400" height="48" rx="8" fill="rgb(212,168,83)"/>
+  <text x="660" y="115" class="h" text-anchor="middle">모듈 경로 (--module-path)</text>
+  <text x="660" y="132" class="mono" text-anchor="middle">java --module-path out -m com.app/...Main</text>
+
+  <!-- 모듈 경계 -->
+  <rect x="460" y="156" width="400" height="180" rx="10" fill="#141414" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="480" y="182" class="note" fill="#e6c878">모듈마다 경계 — exports·requires 강제</text>
+  <rect x="480" y="196" width="360" height="64" rx="6" fill="#f5edda"/>
+  <text x="492" y="216" class="mono" fill="#5a4a12">module com.lib {</text>
+  <text x="512" y="234" class="mono" fill="#13501c">exports com.lib.api;     ← 공개</text>
+  <text x="512" y="252" class="mono" fill="#8a2020">// internal 은 숨김</text>
+  <text x="480" y="286" class="ok">exports 한 api 만 보임</text>
+  <text x="480" y="306" class="bad">internal 은 public 이어도 import 조차 막힘</text>
+  <text x="480" y="326" class="note">error: package com.lib.internal is not visible</text>
+
+  <!-- 결론 -->
+  <rect x="40" y="352" width="820" height="64" rx="10" fill="#1c1810" stroke="rgb(212,168,83)" stroke-dasharray="6 5"/>
+  <text x="60" y="378" class="body">같은 코드라도 -cp 로 띄우면 캡슐화 0(unnamed module), --module-path 로 띄우면 exports/requires 적용.</text>
+  <text x="60" y="402" class="body">대부분의 Spring 앱이 여전히 클래스패스 모드로 도는 이유 — 모듈 경로의 강제 캡슐화가 리플렉션 범벅 Spring과 안 맞아서.</text>
+
+  <text x="28" y="446" class="sub">클래스패스 = JVM이 클래스를 찾는 경로 목록(앞에서부터 훑어 처음 발견한 것 사용) · 콜론(윈도우 ;)으로 이어 지정</text>
+  <text x="28" y="470" class="sub">모듈 경로 = 그 위에 얹힌 경계 있는 모듈 단위 — public 이 곧 공개가 아니라 public + exports 라야 공개</text>
+</svg>

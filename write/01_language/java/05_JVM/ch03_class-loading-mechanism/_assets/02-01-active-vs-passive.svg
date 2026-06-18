@@ -1,0 +1,90 @@
+<svg viewBox="0 0 900 620" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>능동 참조와 수동 참조 — 초기화를 일으키는 것과 일으키지 않는 것</title>
+  <desc>능동 참조 6가지는 클래스 초기화를 즉시 일으킨다. 그 외 사용은 수동 참조로 초기화를 일으키지 않는다. 수동 참조의 세 함정: 자식을 통한 부모 static 접근은 부모만 깨우고, 배열 선언은 원소 클래스를 깨우지 않으며, 컴파일 타임 상수 참조는 값이 상수 풀로 복사돼 원본을 볼 일이 없다. 갈림점은 값을 복사했는가, 원본을 깨워야 하는가다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11.5px;fill:rgb(138,133,128)}
+      .head{font-size:12.5px;font-weight:800;fill:rgb(212,168,83)}
+      .nm{font-size:12px;font-weight:800;fill:#e8e4df}
+      .body{font-size:10.5px;fill:rgb(190,185,180)}
+      .mono{font-size:10px;font-family:'JetBrains Mono',monospace;fill:rgb(190,185,180)}
+      .okm{font-size:10px;font-family:'JetBrains Mono',monospace;fill:#81c784}
+      .badm{font-size:10px;font-family:'JetBrains Mono',monospace;fill:#e57373}
+      .ok{font-size:10px;fill:#81c784}
+      .bad{font-size:10px;fill:#e57373}
+      .note{font-size:9.5px;fill:rgb(138,133,128)}
+      .tag{font-size:11px;font-weight:800;fill:#0d0d0d}
+    </style>
+    <marker id="arg" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#66bb6a"/></marker>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#e57373"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="620" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">능동 참조 vs 수동 참조 — 초기화를 일으키는가</text>
+  <text x="28" y="58" class="sub">능동 참조 6가지만 &lt;clinit&gt; 을 즉시 트리거 · 나머지는 수동 참조라 초기화 안 함 · 함정은 "복사했나 vs 원본을 깨워야 하나"</text>
+
+  <!-- 능동 참조: 초기화 O -->
+  <rect x="28" y="80" width="410" height="190" rx="11" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="1.5"/>
+  <rect x="44" y="96" width="120" height="26" rx="6" fill="#66bb6a"/>
+  <text x="104" y="114" class="tag" text-anchor="middle">초기화 O</text>
+  <text x="180" y="115" class="nm" fill="#66bb6a">능동 참조 (active)</text>
+  <text x="48" y="146" class="body">① new · getstatic · putstatic · invokestatic</text>
+  <text x="48" y="166" class="body">② 리플렉션 (java.lang.reflect 첫 접근)</text>
+  <text x="48" y="186" class="body">③ 부모 클래스가 초기화 전이면 부모 먼저</text>
+  <text x="48" y="206" class="body">④ main() 담은 시작 클래스 (VM 기동)</text>
+  <text x="48" y="226" class="body">⑤ MethodHandle 의 REF_*Static 해석이 닿을 때</text>
+  <text x="48" y="246" class="body">⑥ 디폴트 메서드 가진 인터페이스를 구현 클래스가</text>
+
+  <!-- 수동 참조: 초기화 X -->
+  <rect x="462" y="80" width="410" height="190" rx="11" fill="rgba(229,115,115,0.07)" stroke="#e57373" stroke-width="1.5"/>
+  <rect x="478" y="96" width="120" height="26" rx="6" fill="#e57373"/>
+  <text x="538" y="114" class="tag" text-anchor="middle">초기화 X</text>
+  <text x="614" y="115" class="nm" fill="#e57373">수동 참조 (passive)</text>
+  <text x="482" y="148" class="body">능동 참조처럼 보이지만 초기화를 안 일으키는 사용.</text>
+  <text x="482" y="168" class="body">아래 세 함정이 면접 단골이다 — 직관이 깨지는 자리.</text>
+  <text x="482" y="200" class="badm">예제1  SubClass.value     (자식 통한 부모 static)</text>
+  <text x="482" y="222" class="badm">예제2  new SuperClass[10]  (배열 선언)</text>
+  <text x="482" y="244" class="badm">예제3  ConstClass.HELLO    (컴파일 타임 상수)</text>
+
+  <!-- 세 함정 상세 -->
+  <text x="28" y="306" class="head">수동 참조 3함정 — 왜 안 깨우나</text>
+
+  <!-- 예제1 -->
+  <rect x="28" y="320" width="270" height="170" rx="10" fill="#111" stroke="#333"/>
+  <text x="44" y="344" class="nm">예제1 · 자식 통한 부모 static</text>
+  <text x="44" y="366" class="mono">SubClass.value</text>
+  <text x="44" y="390" class="okm">SuperClass init!   ← 부모만</text>
+  <text x="44" y="408" class="badm">SubClass init!     ← 안 찍힘</text>
+  <text x="44" y="432" class="body">value 는 SuperClass 소유.</text>
+  <text x="44" y="450" class="body">static 필드는 그 필드를 선언한</text>
+  <text x="44" y="468" class="body">클래스만 초기화한다. 자식은</text>
+  <text x="44" y="486" class="body">제 static 멤버 안 쓰면 안 깨움.</text>
+
+  <!-- 예제2 -->
+  <rect x="314" y="320" width="270" height="170" rx="10" fill="#111" stroke="#333"/>
+  <text x="330" y="344" class="nm">예제2 · 배열 선언</text>
+  <text x="330" y="366" class="mono">new SuperClass[10]</text>
+  <text x="330" y="390" class="badm">SuperClass init!   ← 안 찍힘</text>
+  <text x="330" y="416" class="body">원소 클래스 초기화가 아니라</text>
+  <text x="330" y="434" class="body">JVM이 배열 클래스 [LSuperClass</text>
+  <text x="330" y="452" class="body">를 만드는 동작(anewarray).</text>
+  <text x="330" y="470" class="body">원소 타입 초기화와는 별개다.</text>
+
+  <!-- 예제3 -->
+  <rect x="600" y="320" width="272" height="170" rx="10" fill="#111" stroke="#333"/>
+  <text x="616" y="344" class="nm">예제3 · 컴파일 타임 상수</text>
+  <text x="616" y="366" class="mono">ConstClass.HELLO_WORLD</text>
+  <text x="616" y="390" class="badm">ConstClass init!   ← 안 찍힘</text>
+  <text x="616" y="416" class="body">static final 상수는 컴파일 때</text>
+  <text x="616" y="434" class="body">값이 참조하는 쪽 상수 풀로</text>
+  <text x="616" y="452" class="body">복사된다. 런타임에 원본</text>
+  <text x="616" y="470" class="body">ConstClass 를 볼 일이 없다.</text>
+
+  <!-- 갈림점 요약 -->
+  <rect x="28" y="510" width="844" height="74" rx="10" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-dasharray="6 5"/>
+  <text x="48" y="534" class="head">한 축으로: 값을 복사했나 vs 원본을 깨워야 하나</text>
+  <text x="48" y="556" class="ok">복사함 → 원본 안 봄 → 초기화 X :  컴파일 타임 상수(static final + 컴파일 때 값 박힘)</text>
+  <text x="48" y="574" class="bad">복사 못 함 → 원본 메서드 영역 읽어야 → 초기화 O :  단순 static(value=123), new Object() 같은 런타임 상수</text>
+
+  <text x="28" y="606" class="note">갈림점은 final 여부가 아니라 "컴파일 시점에 값이 박히는가"다. static final Object X = new Object() 는 런타임 상수라 초기화를 일으킨다.</text>
+</svg>

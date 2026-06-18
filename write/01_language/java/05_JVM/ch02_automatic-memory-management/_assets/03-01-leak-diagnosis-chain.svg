@@ -1,0 +1,74 @@
+<svg viewBox="0 0 900 690" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>메모리 누수 진단 체인 — jps → jstat → jmap</title>
+  <desc>운영 JVM의 메모리 누수를 jps로 프로세스를 찾고, jstat로 Old 영역 추세를 관찰해 의심한 뒤, jmap으로 범인 객체를 확정하는 3단계 흐름. LeakDemo 실습의 실측 숫자(Survivor 100%·Old 78~79% 고착, FGC 1회 후에도 회수 안 됨, 256MB 회차 gc.log의 Full GC 255M-&gt;255M 회수 0, byte[]가 histogram 1위, dump의 File exists 거부)를 담았다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}.sub{font-size:11px;fill:rgb(138,133,128)}.head{font-size:12.5px;font-weight:800;fill:rgb(212,168,83)}.label{font-size:12px;font-weight:800;fill:#e8e4df}.body{font-size:10px;fill:rgb(180,175,170)}.note{font-size:9.5px;fill:rgb(138,133,128)}.code{font-size:10px;font-weight:700;fill:rgb(212,168,83);font-family:'JetBrains Mono',monospace}.mono{font-size:9.5px;font-family:'JetBrains Mono',monospace;fill:rgb(180,175,170)}.okm{font-size:9.5px;font-family:'JetBrains Mono',monospace;fill:#81c784}.badm{font-size:9.5px;font-family:'JetBrains Mono',monospace;fill:#e57373}.ok{font-size:9.5px;fill:#81c784}.bad{font-size:9.5px;fill:#e57373}.step{font-size:11px;font-weight:800;fill:#0d0d0d}
+    </style>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="690" fill="#0d0d0d"/>
+  <text x="26" y="36" class="title">메모리 누수 진단 체인 — jps → jstat → jmap</text>
+  <text x="26" y="56" class="sub">가벼운 추세 관찰로 의심하고, 무거운 스냅숏은 의심이 굳은 뒤에만 뜬다. 숫자는 LeakDemo 실습 실측.</text>
+
+  <!-- 상단 3단계 파이프라인 -->
+  <circle cx="86" cy="108" r="13" fill="rgb(212,168,83)"/><text x="86" y="112" class="step" text-anchor="middle">1</text>
+  <rect x="110" y="86" width="190" height="44" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)"/>
+  <text x="205" y="106" class="label" text-anchor="middle">jps — 프로세스 식별</text>
+  <text x="205" y="122" class="code" text-anchor="middle">jps -l → LVMID</text>
+  <line x1="300" y1="108" x2="338" y2="108" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <circle cx="362" cy="108" r="13" fill="rgb(212,168,83)"/><text x="362" y="112" class="step" text-anchor="middle">2</text>
+  <rect x="386" y="86" width="190" height="44" rx="8" fill="#1a1a1a" stroke="#4a8ab0"/>
+  <text x="481" y="106" class="label" text-anchor="middle">jstat — 추세 관찰</text>
+  <text x="481" y="122" class="code" text-anchor="middle">-gcutil 250ms 반복</text>
+  <line x1="576" y1="108" x2="614" y2="108" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <circle cx="638" cy="108" r="13" fill="#e57373"/><text x="638" y="112" class="step" text-anchor="middle">3</text>
+  <rect x="662" y="86" width="200" height="44" rx="8" fill="#2a1414" stroke="#e57373"/>
+  <text x="762" y="106" class="label" text-anchor="middle">jmap — 범인 확정</text>
+  <text x="762" y="122" class="code" text-anchor="middle">-histo / -dump</text>
+
+  <!-- 단계 1 상세 -->
+  <rect x="48" y="160" width="804" height="92" rx="8" fill="#1a1a1a" stroke="#333"/>
+  <text x="72" y="186" class="head">① 왜 jps가 출발점인가</text>
+  <text x="72" y="210" class="body">다른 모든 도구(jstat·jmap·jstack)가 vmid를 인자로 받는다. 그래서 진단은 항상 jps로 PID를 찾는 데서 시작한다.</text>
+  <text x="72" y="232" class="body">여러 JVM이 떠 있을 때 -l 의 풀 클래스명이 어느 프로세스인지 결정짓는다 — 실습에선 Gradle·IDEA 사이에서</text>
+  <text x="72" y="246" class="body">LeakDemo 를 정확히 골랐다.</text>
+
+  <!-- 단계 2 상세 -->
+  <rect x="48" y="266" width="804" height="150" rx="8" fill="#1a1a1a" stroke="#4a8ab0" stroke-width="1.2"/>
+  <text x="72" y="292" class="head">② jstat -gcutil — FGC 후에도 Old 안 빠짐 + Survivor 100% = 누수</text>
+  <rect x="72" y="306" width="370" height="96" rx="6" fill="#111" stroke="#333"/>
+  <text x="88" y="326" class="code">  S1     O     YGC  FGC</text>
+  <text x="88" y="344" class="mono">100.00  78.91   17   1  ← FGC 1회 돌았음</text>
+  <text x="88" y="362" class="mono">100.00  79.43   18   1  ← 그래도 O 안 빠짐</text>
+  <text x="88" y="382" class="badm">Survivor 100% · O 78→79% 고착</text>
+  <text x="88" y="396" class="ok">정상이면 FGC 후 O가 떨어진다</text>
+  <rect x="462" y="306" width="366" height="96" rx="6" fill="#111" stroke="#333"/>
+  <text x="478" y="326" class="head" font-size="11">gc.log (256MB 힙 회차)</text>
+  <text x="478" y="346" class="badm">Pause Full ... 255M-&gt;255M(256M)</text>
+  <text x="478" y="364" class="badm">Pause Full ... 255M-&gt;255M(256M)</text>
+  <text x="478" y="384" class="bad">Full GC인데 회수 0 (안 줄어듦)</text>
+  <text x="478" y="398" class="ok">정상이면 255M-&gt;50M처럼 떨어진다</text>
+
+  <!-- 단계 3 상세 -->
+  <rect x="48" y="430" width="804" height="158" rx="8" fill="#1a1a1a" stroke="#e57373" stroke-width="1.2"/>
+  <text x="72" y="456" class="head">③ jmap — 범인 객체 확정 (덤프는 STW 정지를 일으키는 무거운 작업)</text>
+  <rect x="72" y="470" width="370" height="100" rx="6" fill="#111" stroke="#333"/>
+  <text x="88" y="490" class="head" font-size="11">jmap -histo:live</text>
+  <text x="88" y="510" class="mono">#instances    #bytes   class</text>
+  <text x="88" y="528" class="badm">  24705   23521104   [B  ← 범인</text>
+  <text x="88" y="548" class="body">byte[] 가 압도적 1위</text>
+  <text x="88" y="562" class="body">(수치는 관측 시점 따라 변동)</text>
+  <rect x="462" y="470" width="366" height="100" rx="6" fill="#111" stroke="#333"/>
+  <text x="478" y="490" class="head" font-size="11">jmap -dump:live,format=b</text>
+  <text x="478" y="510" class="badm">Unable to create leak.hprof:</text>
+  <text x="478" y="524" class="badm">File exists</text>
+  <text x="478" y="544" class="body">덤프는 기존 파일을 덮어쓰지 않는다.</text>
+  <text x="478" y="558" class="body">회차마다 이름 바꾸거나 지운 뒤 뜬다.</text>
+  <text x="478" y="578" class="body" font-size="9">분석은 별도 장비의 MAT/VisualVM으로 — 운영 장비 부담 회피.</text>
+
+  <text x="26" y="628" class="note">핵심: ②(가벼운 폴링)로 의심 → ③(무거운 스냅숏)로 확정. 순서를 지켜 운영 부담을 최소화한다.</text>
+  <text x="26" y="646" class="note">'부하 증가'였다면 GC 후 Old가 함께 떨어진다. FGC를 돌려도 O가 안 떨어지는 것이 '누수'의 판별점이다.</text>
+</svg>

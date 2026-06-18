@@ -1,0 +1,66 @@
+<svg viewBox="0 0 900 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>락 상태 팽창 — 편향 락에서 중량 락까지</title>
+  <desc>자바의 락은 경합 정도에 따라 단계적으로 팽창한다. 경합이 전혀 없으면 편향 락으로 한 스레드에 거의 공짜로 머물고, 다른 스레드가 끼어들면 편향이 해제되어 경량 락으로 풀려 CAS로 다툰다. 경량 락의 CAS마저 실패할 만큼 경합이 심해지면 운영체제 뮤텍스를 쓰는 중량 락으로 부풀어 오른다. 한번 팽창한 락은 보통 다시 줄어들지 않는다. 편향 락은 Java 15에서 폐기되고 21에서 제거되어, 현재는 경량 락에서 시작해 중량 락으로 팽창하는 두 단계로 단순해졌다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: #c9c4be; }
+      .st    { font-size: 14px; font-weight: 800; fill: #0d0d0d; }
+      .stk   { font-size: 10px; fill: rgba(13,13,13,0.8); }
+      .cost  { font-size: 10px; font-weight: 700; fill: #e8e4df; }
+      .trig  { font-size: 10px; font-weight: 700; fill: rgb(212,168,83); }
+      .note  { font-size: 10px; fill: #c9c4be; }
+    </style>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="440" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">락 상태 팽창 — 편향 → 경량 → 중량</text>
+  <text x="28" y="58" class="sub">경합이 없으면 가장 싸게, 경합이 드러난 만큼만 비싸게 — 한번 팽창하면 보통 되돌아오지 않는다</text>
+
+  <!-- 편향 락 -->
+  <rect x="40" y="120" width="200" height="120" rx="12" fill="#66bb6a"/>
+  <text x="140" y="152" class="st" text-anchor="middle" fill="#14521d">편향 락</text>
+  <text x="140" y="178" class="stk" text-anchor="middle" fill="#14521d">Mark Word에</text>
+  <text x="140" y="194" class="stk" text-anchor="middle" fill="#14521d">스레드 ID 기록</text>
+  <text x="140" y="216" class="stk" text-anchor="middle" fill="#14521d">같은 스레드 재진입은</text>
+  <text x="140" y="230" class="stk" text-anchor="middle" fill="#14521d">CAS조차 생략</text>
+
+  <!-- 경량 락 -->
+  <rect x="350" y="120" width="200" height="120" rx="12" fill="rgb(212,168,83)"/>
+  <text x="450" y="152" class="st" text-anchor="middle">경량 락</text>
+  <text x="450" y="178" class="stk" text-anchor="middle">Mark Word를</text>
+  <text x="450" y="194" class="stk" text-anchor="middle">락 레코드로 CAS 교체</text>
+  <text x="450" y="216" class="stk" text-anchor="middle">경합 없으면</text>
+  <text x="450" y="230" class="stk" text-anchor="middle">CAS 한 번으로 락</text>
+
+  <!-- 중량 락 -->
+  <rect x="660" y="120" width="200" height="120" rx="12" fill="#ef9a9a"/>
+  <text x="760" y="152" class="st" text-anchor="middle" fill="#7a1f1f">중량 락</text>
+  <text x="760" y="178" class="stk" text-anchor="middle" fill="#7a1f1f">OS 뮤텍스 사용</text>
+  <text x="760" y="194" class="stk" text-anchor="middle" fill="#7a1f1f">블로킹 + 커널 전환</text>
+  <text x="760" y="216" class="stk" text-anchor="middle" fill="#7a1f1f">정확하지만</text>
+  <text x="760" y="230" class="stk" text-anchor="middle" fill="#7a1f1f">가장 비쌈</text>
+
+  <!-- 화살표: 편향 -> 경량 -->
+  <line x1="240" y1="180" x2="350" y2="180" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#ar)"/>
+  <text x="295" y="170" class="trig" text-anchor="middle">다른 스레드</text>
+  <text x="295" y="202" class="note" text-anchor="middle">편향 해제</text>
+
+  <!-- 화살표: 경량 -> 중량 -->
+  <line x1="550" y1="180" x2="660" y2="180" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#ar)"/>
+  <text x="605" y="170" class="trig" text-anchor="middle">CAS 실패</text>
+  <text x="605" y="202" class="note" text-anchor="middle">경합 심화</text>
+
+  <!-- 비용 축 -->
+  <line x1="40" y1="290" x2="860" y2="290" stroke="#5b9bd5" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="40" y="312" class="cost" text-anchor="start">비용 낮음 (경합 없음)</text>
+  <text x="860" y="312" class="cost" text-anchor="end">비용 높음 (경합 심함)</text>
+
+  <!-- 현재 상태 안내 박스 -->
+  <rect x="40" y="346" width="820" height="64" rx="10" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="60" y="372" class="cost" text-anchor="start" fill="#dceaf7">Java 21+ 현재</text>
+  <text x="60" y="394" class="note" text-anchor="start">편향 락은 Java 15에서 폐기(JEP 374), 21에서 제거 — 스레드 풀 환경에서 편향 해제 비용이 이득을 넘어섰기 때문. 현재는 경량 락 → 중량 락 두 단계.</text>
+</svg>

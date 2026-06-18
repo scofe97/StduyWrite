@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 820" font-family="-apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <defs>
+    <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#C0392B"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#2E7D32"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1240" height="820" fill="#FFFFFF"/>
+
+  <!-- ===== Outer boundary frame (3개 영역을 감싸는 외곽 경계) ===== -->
+  <rect x="12" y="12" width="1216" height="796" rx="14" fill="#FCFCFC" stroke="#37474F" stroke-width="2.5"/>
+  <text x="620" y="48" text-anchor="middle" font-size="18" font-weight="bold" fill="#000">_schemas 가 delete 정책으로 태어난 이유 — Redpanda 부팅 시 auto-create 레이스</text>
+
+  <!-- ===== Left lane: incident (docker local) ===== -->
+  <rect x="40" y="72" width="572" height="505" rx="10" fill="#FDECEA" stroke="#C0392B" stroke-width="1.5"/>
+  <text x="326" y="100" text-anchor="middle" font-size="15" font-weight="bold" fill="#000">로컬 도커 (사고) — message-lib/docker</text>
+
+  <rect x="70" y="116" width="512" height="52" rx="6" fill="#FFFFFF" stroke="#888" stroke-width="1"/>
+  <text x="326" y="137" text-anchor="middle" font-size="13" fill="#000">--mode=dev-container (compose:13)</text>
+  <text x="326" y="158" text-anchor="middle" font-size="13" fill="#000">→ auto_create_topics_enabled=true</text>
+  <line x1="326" y1="168" x2="326" y2="180" stroke="#C0392B" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+
+  <rect x="70" y="182" width="512" height="52" rx="6" fill="#FFF8E1" stroke="#B8860B" stroke-width="1"/>
+  <text x="326" y="203" text-anchor="middle" font-size="13" fill="#000">부팅 t+0ms — 클라이언트가 _schemas 참조</text>
+  <text x="326" y="224" text-anchor="middle" font-size="13" fill="#000">브로커가 auto-create (정책 미지정)</text>
+  <line x1="326" y1="234" x2="326" y2="246" stroke="#C0392B" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+
+  <rect x="70" y="248" width="512" height="52" rx="6" fill="#FFF8E1" stroke="#B8860B" stroke-width="1"/>
+  <text x="326" y="269" text-anchor="middle" font-size="13" fill="#000">클러스터 기본 정책 상속 (DEFAULT_CONFIG)</text>
+  <text x="326" y="290" text-anchor="middle" font-size="13" fill="#000">cleanup.policy=delete · retention 7일</text>
+  <line x1="326" y1="300" x2="326" y2="312" stroke="#C0392B" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+
+  <rect x="70" y="314" width="512" height="52" rx="6" fill="#FFFFFF" stroke="#888" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="326" y="335" text-anchor="middle" font-size="13" fill="#000">부팅 t+200ms — SR 정식 create (compact)</text>
+  <text x="326" y="356" text-anchor="middle" font-size="13" fill="#000">이미 존재 → 무효 (레이스 패배)</text>
+  <line x1="326" y1="366" x2="326" y2="378" stroke="#C0392B" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+
+  <rect x="70" y="380" width="512" height="40" rx="6" fill="#FFF8E1" stroke="#B8860B" stroke-width="1"/>
+  <text x="326" y="405" text-anchor="middle" font-size="13" fill="#000">7일 경과 — retention 이 스키마 전부 삭제</text>
+  <line x1="326" y1="420" x2="326" y2="432" stroke="#C0392B" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+
+  <rect x="70" y="434" width="512" height="52" rx="6" fill="#FFCDD2" stroke="#B71C1C" stroke-width="1.5"/>
+  <text x="326" y="455" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">스키마 등록·역직렬화 실패 — error 40002</text>
+  <text x="326" y="476" text-anchor="middle" font-size="13" fill="#000">(05-26 · 06-02 사고의 발현 지점)</text>
+
+  <text x="326" y="508" text-anchor="middle" font-size="12" fill="#000">Console 관측: 117 B · 0 msg · Delete · ~7 days</text>
+  <text x="326" y="530" text-anchor="middle" font-size="12" fill="#000">SR 는 런타임에 토픽 생성 안 함 (50002 실측)</text>
+  <text x="326" y="552" text-anchor="middle" font-size="12" fill="#000">→ 부팅 한 번뿐인 생성 기회를 빼앗김</text>
+
+  <!-- ===== Right lane: normal (k8s manifest) ===== -->
+  <rect x="628" y="72" width="572" height="505" rx="10" fill="#E8F5E9" stroke="#2E7D32" stroke-width="1.5"/>
+  <text x="914" y="100" text-anchor="middle" font-size="15" font-weight="bold" fill="#000">K8s 매니페스트 (정상) — helm-charts/redpanda</text>
+
+  <rect x="658" y="116" width="512" height="52" rx="6" fill="#FFFFFF" stroke="#888" stroke-width="1"/>
+  <text x="914" y="137" text-anchor="middle" font-size="13" fill="#000">auto_create_topics_enabled=false (기본값)</text>
+  <text x="914" y="158" text-anchor="middle" font-size="13" fill="#000">helm values 3종에 auto-create 설정 없음</text>
+  <line x1="914" y1="168" x2="914" y2="180" stroke="#2E7D32" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+
+  <rect x="658" y="182" width="512" height="52" rx="6" fill="#FFFFFF" stroke="#888" stroke-width="1"/>
+  <text x="914" y="203" text-anchor="middle" font-size="13" fill="#000">부팅 — 선점 자동생성 경로 차단</text>
+  <text x="914" y="224" text-anchor="middle" font-size="13" fill="#000">_schemas 를 만들 수 있는 건 SR 뿐</text>
+  <line x1="914" y1="234" x2="914" y2="246" stroke="#2E7D32" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+
+  <rect x="658" y="248" width="512" height="52" rx="6" fill="#FFFFFF" stroke="#888" stroke-width="1"/>
+  <text x="914" y="269" text-anchor="middle" font-size="13" fill="#000">SR 정식 create 성공 (compact)</text>
+  <text x="914" y="290" text-anchor="middle" font-size="13" fill="#000">retention 무기한 — SR 가 박은 명시 설정</text>
+  <line x1="914" y1="300" x2="914" y2="312" stroke="#2E7D32" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+
+  <rect x="658" y="314" width="512" height="52" rx="6" fill="#C8E6C9" stroke="#1B5E20" stroke-width="1.5"/>
+  <text x="914" y="335" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">스키마 영구 보관</text>
+  <text x="914" y="356" text-anchor="middle" font-size="13" fill="#000">segment 롤오버(64 MiB · ~14d)만 동작</text>
+
+  <text x="914" y="392" text-anchor="middle" font-size="12" fill="#000">Console 관측: 86.8 KiB · 36 msg · Compact</text>
+  <text x="914" y="414" text-anchor="middle" font-size="12" fill="#000">64 MiB = 차트 compacted_log_segment_size</text>
+
+  <rect x="658" y="436" width="512" height="116" rx="6" fill="#FFFFFF" stroke="#2E7D32" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="914" y="459" text-anchor="middle" font-size="12" font-weight="bold" fill="#000">로컬 복구 (2026-06-11 적용 완료)</text>
+  <text x="914" y="481" text-anchor="middle" font-size="12" fill="#000">auto-create off → _schemas 삭제 → 재부팅</text>
+  <text x="914" y="503" text-anchor="middle" font-size="12" fill="#000">→ compact / retention -1 (DYNAMIC_TOPIC_CONFIG)</text>
+  <text x="914" y="525" text-anchor="middle" font-size="12" fill="#000">단, down -v 시 재발 — compose 수정 필요</text>
+
+  <!-- ===== Evidence strip ===== -->
+  <rect x="40" y="594" width="1160" height="196" rx="10" fill="#ECEFF1" stroke="#607D8B" stroke-width="1.5"/>
+  <text x="64" y="620" font-size="14" font-weight="bold" fill="#000">실측 근거 — 2026-06-11, redpanda v26.1.5 부팅 로그 (페어 2회 재현)</text>
+  <text x="64" y="646" font-size="12" font-family="monospace" fill="#000">07:08:20,508  Create _schemas  policy={nullopt}  ← auto-create 선점</text>
+  <text x="64" y="668" font-size="12" font-family="monospace" fill="#000">07:08:20,716  Create _schemas  policy={compact}  ← SR 정식 create, 무효</text>
+  <text x="64" y="690" font-size="12" font-family="monospace" fill="#000">08:21:25,5xx  재시작 실험에서 동일 페어 재현 — 외부 앱 미가동</text>
+  <text x="64" y="712" font-size="12" font-family="monospace" fill="#000">08:23:18,965  auto-create off 재부팅: {compact} 단독 — 레이스 소멸</text>
+  <text x="64" y="734" font-size="12" font-family="monospace" fill="#000">재생성 결과: compact · retention.ms=-1 (DYNAMIC_TOPIC_CONFIG)</text>
+  <text x="64" y="764" font-size="12" fill="#000">선행: 05-26 retention 손상 진단 → 06-02 7일 재발(40002) → 본 문서로 계보 종결</text>
+</svg>

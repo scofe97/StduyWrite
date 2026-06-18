@@ -8,11 +8,11 @@
 //       This guy has $2           (필드는 정적: guy 의 선언 타입 Father 의 money)
 //
 //   javap -c FieldHasNoPolymorphic
-//     - showMeyMoney 호출은 invokevirtual (동적 디스패치)
+//     - showMeMoney 호출은 invokevirtual (동적 디스패치)
 //     - guy.money 접근은 getfield ... Father.money:I  (정적 타입 Father 로 박힘!)
 //
 //   포인트:
-//   1) 메서드: Father 생성자의 showMeyMoney() 가 실제 타입 Son 의 것을 부른다(동적).
+//   1) 메서드: Father 생성자의 showMeMoney() 가 실제 타입 Son 의 것을 부른다(동적).
 //      첫 호출 때는 Son 의 money 가 아직 초기화 전이라 0 이 보인다(초기화 순서 함정).
 //   2) 필드: guy.money 는 guy 의 *선언 타입* Father 를 따라 Father.money(=2) 가 보인다.
 //      같은 객체인데 변수 선언 타입에 따라 다른 필드가 보이는 것이 "필드 가려짐(hiding)".
@@ -23,9 +23,9 @@ public class FieldHasNoPolymorphic {
         public int money = 1;
         public Father() {
             money = 2;
-            showMeyMoney();        // 생성자에서 오버라이드된 메서드 호출
+            showMeMoney();        // 생성자에서 오버라이드된 메서드 호출
         }
-        public void showMeyMoney() {
+        public void showMeMoney() {
             System.out.println("I am Father, I have $" + money);
         }
     }
@@ -34,10 +34,10 @@ public class FieldHasNoPolymorphic {
         public int money = 3;
         public Son() {
             money = 4;
-            showMeyMoney();
+            showMeMoney();
         }
         @Override
-        public void showMeyMoney() {
+        public void showMeMoney() {
             System.out.println("I am Son, I have $" + money);
         }
     }

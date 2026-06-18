@@ -1,0 +1,56 @@
+<svg viewBox="0 0 900 540" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>JPMS vs Gradle 멀티모듈 — 층위가 다르다, Spring은 보통 JPMS를 안 쓴다</title>
+  <desc>Gradle 멀티모듈은 빌드 도구가 프로젝트를 폴더로 나눠 빌드·의존성을 관리하는 것으로 런타임에는 합쳐져 캡슐화가 없다. JPMS는 JVM이 런타임에 exports하지 않은 패키지 접근을 실제로 차단하는 강제 캡슐화다. Gradle로 모듈을 나눠도 module-info.java가 없으면 JPMS 관점에선 unnamed module이라 런타임 격리는 없다. 대부분의 Spring Boot 프로젝트는 module-info를 만들지 않는다. Spring이 리플렉션 범벅이라 opens가 폭증하고 라이브러리 호환이 깨지며 실익이 적기 때문이다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11.5px;fill:rgb(150,145,140)}
+      .h{font-size:13px;font-weight:800;fill:#0d0d0d}
+      .row{font-size:10.5px;fill:rgb(200,195,190)}
+      .rowk{font-size:10.5px;font-weight:700;fill:rgb(212,168,83)}
+      .head{font-size:12px;font-weight:800;fill:rgb(212,168,83)}
+      .note{font-size:9.5px;fill:rgb(196,191,186)}
+    </style>
+  </defs>
+  <rect x="0" y="0" width="900" height="540" fill="#0d0d0d"/>
+  <text x="28" y="40" class="title">JPMS vs Gradle 멀티모듈 — 층위가 다르다</text>
+  <text x="28" y="64" class="sub">Gradle = 빌드 단위 분리(런타임 캡슐화 없음) · JPMS = JVM 런타임 강제 캡슐화</text>
+
+  <!-- 두 헤더 -->
+  <rect x="220" y="88" width="320" height="34" rx="7" fill="#5b9bd5"/>
+  <text x="380" y="111" class="h" text-anchor="middle">Gradle 멀티모듈</text>
+  <rect x="556" y="88" width="316" height="34" rx="7" fill="rgb(212,168,83)"/>
+  <text x="714" y="111" class="h" text-anchor="middle">JPMS (module-info.java)</text>
+
+  <!-- 비교 행 -->
+  <text x="40" y="150" class="rowk">무엇</text>
+  <text x="232" y="150" class="row">빌드 도구가 프로젝트를 폴더로 분리</text>
+  <text x="568" y="150" class="row">JVM이 런타임에 캡슐화하는 단위</text>
+
+  <text x="40" y="182" class="rowk">경계 정의</text>
+  <text x="232" y="182" class="row">settings.gradle / build.gradle</text>
+  <text x="568" y="182" class="row">requires / exports 선언</text>
+
+  <text x="40" y="214" class="rowk">강제력</text>
+  <text x="232" y="214" class="row">컴파일 의존성만 (런타임 합쳐짐)</text>
+  <text x="568" y="214" class="row">런타임에 접근을 실제로 차단</text>
+
+  <text x="40" y="246" class="rowk">캡슐화</text>
+  <text x="232" y="246" class="row" fill="#e57373">없음 — 런타임엔 다 보임</text>
+  <text x="568" y="246" class="row" fill="#81c784">있음 — exports 안 하면 접근 불가</text>
+
+  <line x1="40" y1="266" x2="860" y2="266" stroke="#333" stroke-width="1"/>
+  <text x="40" y="292" class="row">→ Gradle로 module-a·module-b 를 나눠도 module-info.java 가 없으면</text>
+  <text x="40" y="312" class="row" fill="#e6c878">   JPMS 관점에선 둘 다 unnamed module → 런타임 격리 0</text>
+
+  <!-- Spring 실무 -->
+  <rect x="40" y="336" width="820" height="160" rx="10" fill="#141414" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="60" y="362" class="head">Spring 실무 — 대부분 JPMS를 안 쓴다 (classpath 모드)</text>
+  <text x="60" y="388" class="note">대부분의 Spring Boot 프로젝트는 module-info.java 를 만들지 않는다. 이유 셋:</text>
+  <text x="60" y="414" class="row">① Spring이 리플렉션 범벅(@Autowired·AOP·JPA) → module-info 쓰면 opens 폭증 + InaccessibleObjectException</text>
+  <text x="60" y="438" class="row">② 아직 JPMS 모듈 아닌 라이브러리 많음 → 도입 시 sun.* 차단처럼 깨지기 쉬움</text>
+  <text x="60" y="462" class="row">③ 멀티모듈 격리는 이미 Gradle로 충분 → 런타임 강제 캡슐화의 실익이 웹앱엔 적음</text>
+  <text x="60" y="486" class="note">JPMS가 빛나는 자리 — JDK 자체의 모듈화, 강한 격리가 필요한 라이브러리·플랫폼 제작</text>
+
+  <text x="28" y="522" class="sub">이 글의 requires·exports 는 개념·JDK 내부 이해용 — 일반 Spring 프로젝트에 직접 선언할 일은 드물다</text>
+</svg>

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 540" width="100%" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Spring Boot 컨테이너화 핵심 요약</title>
+  <desc>컨테이너 이미지는 읽기 전용 레이어의 합이다. Spring Boot 앱은 Dockerfile이나 Buildpacks로 패키징하며, 레이어드 JAR로 효율화하고 비-root 사용자로 보안을 강화한다. Docker Compose로 여러 컨테이너를 묶고, GitHub Actions로 빌드·게시를 자동화한다.</desc>
+  <rect width="840" height="540" fill="#0d0d0d"/>
+  <text x="30" y="40" fill="#e8e4df" font-size="19" font-weight="700">Spring Boot 컨테이너화</text>
+  <text x="30" y="62" fill="rgb(138,133,128)" font-size="12">읽기 전용 레이어 · 두 패키징 방식 · 효율과 보안 · 여러 컨테이너 · 자동 게시</text>
+
+  <!-- layer principle -->
+  <rect x="40" y="86" width="760" height="56" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="56" y="110" fill="rgb(212,168,83)" font-size="13" font-weight="700">이미지 = 순서 있는 읽기 전용 레이어의 합 + 실행 시 쓰기 가능한 휘발성 컨테이너 레이어</text>
+  <text x="56" y="131" fill="rgb(138,133,128)" font-size="11.5">⚠️ 시크릿을 레이어에 두지 말 것 — 상위에서 지워도 하위 읽기 전용 레이어에 남아 노출</text>
+
+  <!-- two packaging ways -->
+  <rect x="40" y="166" width="370" height="92" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.4"/>
+  <text x="225" y="192" fill="#e8e4df" font-size="13.5" font-weight="700" text-anchor="middle">Dockerfile</text>
+  <text x="225" y="214" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">명령 레시피 · 세밀한 통제권</text>
+  <text x="225" y="232" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">성능·보안을 직접 챙김</text>
+  <text x="225" y="250" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">FROM·RUN·COPY·ENTRYPOINT</text>
+
+  <rect x="430" y="166" width="370" height="92" rx="8" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="615" y="192" fill="#66bb6a" font-size="13.5" font-weight="700" text-anchor="middle">Cloud Native Buildpacks</text>
+  <text x="615" y="214" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">Dockerfile 없이 소스→이미지</text>
+  <text x="615" y="232" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">보안·성능·재현성 자동 처리</text>
+  <text x="615" y="250" fill="#66bb6a" font-size="11" text-anchor="middle">권고: 특별한 이유 없으면 이쪽</text>
+
+  <!-- efficiency + security -->
+  <rect x="40" y="282" width="370" height="74" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+  <text x="56" y="306" fill="rgb(212,168,83)" font-size="12.5" font-weight="600">성능 — 레이어드 JAR</text>
+  <text x="56" y="328" fill="rgb(138,133,128)" font-size="11">의존성·로더·스냅샷·애플리케이션 4레이어</text>
+  <text x="56" y="346" fill="rgb(138,133,128)" font-size="11">자주 바뀌는 내 코드만 별도 레이어로</text>
+
+  <rect x="430" y="282" width="370" height="74" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+  <text x="446" y="306" fill="rgb(212,168,83)" font-size="12.5" font-weight="600">보안</text>
+  <text x="446" y="328" fill="rgb(138,133,128)" font-size="11">비-root 사용자 실행 (최소 권한)</text>
+  <text x="446" y="346" fill="rgb(138,133,128)" font-size="11">grype로 코드+이미지 취약점 스캔</text>
+
+  <!-- docker compose -->
+  <rect x="40" y="380" width="760" height="56" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+  <text x="56" y="404" fill="#e8e4df" font-size="13" font-weight="600">Docker Compose — 여러 컨테이너를 YAML 한 파일로</text>
+  <text x="56" y="425" fill="rgb(138,133,128)" font-size="11.5">같은 네트워크 자동 생성 → 컨테이너 이름으로 통신 (내장 DNS). docker-compose up -d / down</text>
+
+  <!-- commit stage -->
+  <rect x="40" y="460" width="760" height="60" rx="8" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="1.4"/>
+  <text x="56" y="484" fill="#66bb6a" font-size="13" font-weight="700">커밋 스테이지 (GitHub Actions) — 산출물은 한 번만 빌드</text>
+  <text x="56" y="505" fill="rgb(138,133,128)" font-size="11.5">빌드 → 패키징(Buildpacks) → 이미지 스캔(grype) → 게시 → 릴리스 후보를 레지스트리에</text>
+</svg>
