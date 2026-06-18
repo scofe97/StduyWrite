@@ -1,68 +1,91 @@
-<svg viewBox="0 0 900 620" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
-  <title>톰캣의 클래스 로더 아키텍처 — 격리와 공유를 동시에</title>
-  <desc>톰캣은 여러 웹 애플리케이션을 한 JVM에서 돌리며 서로 격리해야 하고, 공통 라이브러리는 공유해야 한다. 부트스트랩·시스템·공통(Common) 로더 아래에 Catalina 로더와 Shared 로더를 두고, 각 웹앱마다 WebApp 로더를 둔다. WebApp 로더는 격리를 위해 부모 위임을 일부 깨고 자기 WEB-INF를 먼저 뒤진다. 같은 클래스도 웹앱마다 다른 WebApp 로더가 로딩해 서로 다른 타입으로 격리된다.</desc>
+<svg viewBox="0 0 900 640" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>톰캣의 클래스 로더 아키텍처 — 위임 사슬과 곁가지</title>
+  <desc>톰캣 클래스 로더는 위에서 아래로 내려가는 부모 위임 사슬을 이룬다. 부트스트랩·시스템 로더 아래에 Common 로더가 있고, Server·Shared 로더를 활성화한 고급 구성에서는 Common 아래에 Shared 로더가 끼어 그 아래에 각 웹앱의 WebApp 로더가 놓인다. 이 세로 사슬이 주 위임 흐름이며, 위 계층일수록 더 많은 자식이 공유한다. Catalina(server) 로더는 이 위임 사슬 바깥의 곁가지로, 톰캣 자신만 쓰고 웹앱에는 보이지 않는다. 같은 클래스도 웹앱마다 다른 WebApp 로더가 로딩해 서로 다른 타입으로 격리된다.</desc>
   <defs>
     <style>
       .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
       .sub   { font-size: 11.5px; fill: rgb(138,133,128); }
-      .ldr   { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
-      .ldrsub{ font-size: 9px; fill: rgba(13,13,13,0.72); }
+      .ldr   { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
+      .ldrsub{ font-size: 9px; fill: rgba(13,13,13,0.74); }
       .note  { font-size: 9.5px; fill: rgb(138,133,128); }
       .lab   { font-size: 10.5px; font-weight: 700; fill: rgb(212,168,83); }
+      .spine { font-size: 10px; font-weight: 700; fill: rgb(212,168,83); }
+      .side  { font-size: 10px; font-weight: 700; fill: rgb(150,145,140); }
     </style>
-    <marker id="t1" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L7,3 L0,6 z" fill="#66bb6a"/>
+    <marker id="t1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#66bb6a"/>
+    </marker>
+    <marker id="t2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(120,116,112)"/>
     </marker>
   </defs>
 
-  <rect x="0" y="0" width="900" height="620" fill="#0d0d0d"/>
-  <text x="28" y="38" class="title">톰캣의 클래스 로더 — 웹앱 격리 + 공통 공유</text>
-  <text x="28" y="58" class="sub">공통 라이브러리는 위에서 공유 · 웹앱끼리는 WebApp 로더로 격리 · 같은 클래스도 웹앱 다르면 다른 타입</text>
+  <rect x="0" y="0" width="900" height="640" fill="#0d0d0d"/>
+  <text x="28" y="36" class="title">톰캣 클래스 로더 — 위임 사슬(세로)과 곁가지</text>
+  <text x="28" y="56" class="sub">위→아래가 부모 위임 흐름 · 위 계층일수록 더 많은 웹앱이 공유 · Catalina는 사슬 밖 곁가지(웹앱 안 보임)</text>
+  <text x="28" y="73" class="sub">※ Shared 가 끼는 것은 고급 구성 — 기본은 Common 바로 아래에 WebApp</text>
 
-  <!-- 상위 공유 계층 -->
-  <rect x="290" y="84" width="320" height="50" rx="9" fill="#f44336"/>
-  <text x="450" y="106" class="ldr" text-anchor="middle">부트스트랩 + 시스템 클래스 로더</text>
-  <text x="450" y="124" class="ldrsub" text-anchor="middle">JVM 기본 — java.* · CLASSPATH</text>
+  <!-- ===== 세로 척추: 주 위임 흐름 (왼쪽 정렬, x중심 330) ===== -->
+  <!-- Bootstrap -->
+  <rect x="190" y="92" width="280" height="42" rx="9" fill="#f44336"/>
+  <text x="330" y="112" class="ldr" text-anchor="middle">Bootstrap 로더</text>
+  <text x="330" y="127" class="ldrsub" text-anchor="middle">java.* 핵심 클래스</text>
 
-  <rect x="290" y="158" width="320" height="56" rx="9" fill="rgb(212,168,83)"/>
-  <text x="450" y="182" class="ldr" text-anchor="middle">Common 클래스 로더</text>
-  <text x="450" y="200" class="ldrsub" text-anchor="middle">lib/ — 톰캣·웹앱 모두가 공유하는 공통 클래스</text>
+  <!-- System -->
+  <rect x="190" y="158" width="280" height="42" rx="9" fill="#ef7d57"/>
+  <text x="330" y="178" class="ldr" text-anchor="middle">System(앱) 로더</text>
+  <text x="330" y="193" class="ldrsub" text-anchor="middle">CLASSPATH</text>
 
-  <!-- 중간 2갈래: Catalina, Shared -->
-  <rect x="150" y="244" width="280" height="56" rx="9" fill="#5b9bd5"/>
-  <text x="290" y="268" class="ldr" text-anchor="middle">Catalina 로더 (server)</text>
-  <text x="290" y="286" class="ldrsub" text-anchor="middle">톰캣 자신만 — 웹앱에 안 보임</text>
+  <!-- Common -->
+  <rect x="190" y="224" width="280" height="46" rx="9" fill="rgb(212,168,83)"/>
+  <text x="330" y="245" class="ldr" text-anchor="middle">Common 로더</text>
+  <text x="330" y="261" class="ldrsub" text-anchor="middle">lib/ — 톰캣·모든 웹앱 공유</text>
 
-  <rect x="470" y="244" width="280" height="56" rx="9" fill="#5b9bd5"/>
-  <text x="610" y="268" class="ldr" text-anchor="middle">Shared 로더</text>
-  <text x="610" y="286" class="ldrsub" text-anchor="middle">모든 웹앱이 공유 — 톰캣엔 안 보임</text>
+  <!-- Shared -->
+  <rect x="190" y="300" width="280" height="46" rx="9" fill="rgb(212,168,83)"/>
+  <text x="330" y="321" class="ldr" text-anchor="middle">Shared 로더 <tspan class="ldrsub">(고급)</tspan></text>
+  <text x="330" y="337" class="ldrsub" text-anchor="middle">모든 웹앱 공유 · 톰캣엔 안 보임</text>
 
-  <!-- 하위 WebApp 로더 2개 -->
-  <rect x="120" y="340" width="300" height="160" rx="10" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="1.5"/>
-  <text x="270" y="364" class="lab" text-anchor="middle" style="fill:#66bb6a">WebApp 로더 A</text>
-  <rect x="140" y="376" width="260" height="44" rx="6" fill="#66bb6a"/>
-  <text x="270" y="396" class="ldr" text-anchor="middle">webappA / WEB-INF</text>
-  <text x="270" y="412" class="ldrsub" text-anchor="middle">classes + lib — A 전용</text>
-  <text x="136" y="444" class="note">JSP 로더(JasperLoader)가 JSP별로 또 분리</text>
-  <text x="136" y="464" class="note">→ JSP 핫스왑: 로더 통째 교체</text>
-  <text x="136" y="486" class="note">부모 위임 일부 깸: 자기 WEB-INF 먼저</text>
+  <!-- WebApp A · B (Shared 아래 나란히) -->
+  <rect x="120" y="400" width="200" height="150" rx="10" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="220" y="422" class="lab" text-anchor="middle" style="fill:#66bb6a">WebApp 로더 A</text>
+  <rect x="138" y="432" width="164" height="40" rx="6" fill="#66bb6a"/>
+  <text x="220" y="450" class="ldr" text-anchor="middle">webappA</text>
+  <text x="220" y="464" class="ldrsub" text-anchor="middle">WEB-INF/classes·lib</text>
+  <text x="134" y="492" class="note">WEB-INF 먼저 뒤짐 (위임 일부 깸)</text>
+  <text x="134" y="508" class="note">없으면 부모(Shared)에 위임</text>
+  <text x="134" y="528" class="note">JSP는 JasperLoader로 또 분리</text>
 
-  <rect x="480" y="340" width="300" height="160" rx="10" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="1.5"/>
-  <text x="630" y="364" class="lab" text-anchor="middle" style="fill:#66bb6a">WebApp 로더 B</text>
-  <rect x="500" y="376" width="260" height="44" rx="6" fill="#66bb6a"/>
-  <text x="630" y="396" class="ldr" text-anchor="middle">webappB / WEB-INF</text>
-  <text x="630" y="412" class="ldrsub" text-anchor="middle">classes + lib — B 전용</text>
-  <text x="496" y="444" class="note">A 와 B 가 같은 Foo.class 를 써도</text>
-  <text x="496" y="464" class="note">서로 다른 로더라 다른 타입</text>
-  <text x="496" y="486" class="note">→ 웹앱 간 클래스 충돌·간섭 차단</text>
+  <rect x="340" y="400" width="200" height="150" rx="10" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="440" y="422" class="lab" text-anchor="middle" style="fill:#66bb6a">WebApp 로더 B</text>
+  <rect x="358" y="432" width="164" height="40" rx="6" fill="#66bb6a"/>
+  <text x="440" y="450" class="ldr" text-anchor="middle">webappB</text>
+  <text x="440" y="464" class="ldrsub" text-anchor="middle">WEB-INF/classes·lib</text>
+  <text x="354" y="492" class="note">A 와 같은 Foo.class 써도</text>
+  <text x="354" y="508" class="note">로더 달라 다른 타입</text>
+  <text x="354" y="528" class="note">→ 버전 충돌·간섭 없음</text>
 
-  <!-- 위임 화살표 -->
-  <line x1="270" y1="340" x2="270" y2="302" stroke="#66bb6a" stroke-width="2" marker-end="url(#t1)"/>
-  <line x1="630" y1="340" x2="630" y2="302" stroke="#66bb6a" stroke-width="2" marker-end="url(#t1)"/>
-  <line x1="290" y1="244" x2="380" y2="216" stroke="#66bb6a" stroke-width="2" marker-end="url(#t1)"/>
-  <line x1="610" y1="244" x2="520" y2="216" stroke="#66bb6a" stroke-width="2" marker-end="url(#t1)"/>
-  <line x1="450" y1="158" x2="450" y2="136" stroke="#66bb6a" stroke-width="2" marker-end="url(#t1)"/>
+  <!-- ===== 척추 화살표 (자식→부모, 위로) ===== -->
+  <line x1="330" y1="158" x2="330" y2="138" stroke="#66bb6a" stroke-width="2.4" marker-end="url(#t1)"/>
+  <line x1="330" y1="224" x2="330" y2="204" stroke="#66bb6a" stroke-width="2.4" marker-end="url(#t1)"/>
+  <line x1="330" y1="300" x2="330" y2="274" stroke="#66bb6a" stroke-width="2.4" marker-end="url(#t1)"/>
+  <!-- WebApp A·B → Shared (둘 다) -->
+  <line x1="220" y1="400" x2="300" y2="350" stroke="#66bb6a" stroke-width="2.4" marker-end="url(#t1)"/>
+  <line x1="440" y1="400" x2="360" y2="350" stroke="#66bb6a" stroke-width="2.4" marker-end="url(#t1)"/>
+  <text x="486" y="290" class="spine" text-anchor="middle">↑ 부모 위임</text>
+  <text x="486" y="304" class="spine" text-anchor="middle">(자식이 부모로)</text>
 
-  <text x="28" y="528" class="sub">설계 원리: 공유할 것은 위 계층(Common/Shared)에, 격리할 것은 아래 계층(WebApp)에 — 부모 위임의 응용</text>
-  <text x="28" y="550" class="sub">격리 핵심: "클래스 동일성 = 이름 + 로더"(02-04) 를 그대로 활용 — 웹앱마다 로더가 다르니 타입이 갈림</text>
+  <!-- ===== Catalina 곁가지 (Common 오른쪽으로 삐져나옴) ===== -->
+  <rect x="600" y="224" width="250" height="60" rx="9" fill="#5b9bd5"/>
+  <text x="725" y="247" class="ldr" text-anchor="middle">Catalina(server) 로더</text>
+  <text x="725" y="263" class="ldrsub" text-anchor="middle">톰캣 자신만 — 웹앱에 안 보임</text>
+  <text x="725" y="276" class="ldrsub" text-anchor="middle">위임 사슬 밖의 곁가지 (고급)</text>
+  <!-- Common → Catalina 곁가지 화살표 (점선, 회색: 사슬 아님 강조) -->
+  <line x1="470" y1="247" x2="596" y2="251" stroke="rgb(120,116,112)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#t2)"/>
+  <text x="533" y="240" class="side" text-anchor="middle">곁가지</text>
+
+  <!-- 하단 요약 -->
+  <rect x="120" y="572" width="730" height="50" rx="10" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="136" y="592" class="lab">한 줄</text>
+  <text x="136" y="610" class="note">세로 사슬(Common→Shared→WebApp)이 <tspan fill="rgb(212,168,83)" font-weight="800">위임 흐름</tspan>이고, <tspan fill="#5b9bd5" font-weight="800">Catalina</tspan>는 그 밖의 곁가지다 — 위 계층=공유, 아래(WebApp)=격리("이름+로더").</text>
 </svg>
