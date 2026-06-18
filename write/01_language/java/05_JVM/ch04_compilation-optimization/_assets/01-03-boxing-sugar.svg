@@ -14,49 +14,49 @@
 
   <rect x="0" y="0" width="900" height="580" fill="#0d0d0d"/>
   <text x="28" y="38" class="title">자동 박싱의 Integer 캐시 함정 · 구문 설탕 펼치기</text>
-  <text x="28" y="58" class="sub">valueOf 는 -128~127 캐시 → == 비교가 100은 true, 200은 false · for·조건 컴파일도 설탕</text>
+  <text x="28" y="58" class="sub" style="fill:#e8e4df">valueOf 는 -128~127 캐시 → == 비교가 100은 true, 200은 false · for·조건 컴파일도 설탕</text>
 
   <!-- Integer 캐시 함정 -->
   <rect x="28" y="84" width="844" height="232" rx="11" fill="rgba(244,67,54,0.07)" stroke="#f44336" stroke-width="1.5"/>
-  <text x="48" y="110" class="sub" fill="#f44336" font-weight="800">함정 — Integer 캐시와 == 비교</text>
+  <text x="48" y="110" class="sub" font-weight="800" style="fill:#e8e4df">함정 — Integer 캐시와 == 비교</text>
 
-  <rect x="44" y="124" width="400" height="100" rx="7" fill="#1a1a1a"/>
+  <rect x="44" y="124" width="400" height="100" rx="7" fill="#0d0d0d"/>
   <text x="56" y="146" class="monoy">Integer a = 100, b = 100;</text>
   <text x="56" y="166" class="monoy">Integer c = 200, d = 200;</text>
-  <text x="56" y="190" class="mono" fill="#66bb6a">a == b  →  true   (100: 캐시 범위 안)</text>
-  <text x="56" y="210" class="mono" fill="#f44336">c == d  →  false  (200: 캐시 범위 밖)</text>
+  <text x="56" y="190" class="mono" style="fill:#66bb6a">a == b  →  true   (100: 캐시 범위 안)</text>
+  <text x="56" y="210" class="mono" style="fill:#f44336">c == d  →  false  (200: 캐시 범위 밖)</text>
 
-  <rect x="460" y="124" width="396" height="100" rx="7" fill="#1a1a1a"/>
-  <text x="472" y="146" class="note" fill="#e8e4df">자동 박싱은 Integer.valueOf(int) 로 펼쳐짐</text>
+  <rect x="460" y="124" width="396" height="100" rx="7" fill="#0d0d0d"/>
+  <text x="472" y="146" class="note" style="fill:#e8e4df">자동 박싱은 Integer.valueOf(int) 로 펼쳐짐</text>
   <text x="472" y="168" class="monoy">valueOf(-128..127) → 캐시 객체 재사용</text>
   <text x="472" y="188" class="monoy">valueOf(그 밖)      → new Integer 생성</text>
-  <text x="472" y="210" class="note" fill="#e8e4df">== 는 참조 비교라 캐시 여부가 결과를 가름</text>
+  <text x="472" y="210" class="note" style="fill:#e8e4df">== 는 참조 비교라 캐시 여부가 결과를 가름</text>
 
-  <text x="44" y="250" class="note">100 은 -128~127 안 → a·b 가 *같은 캐시 객체* → == 가 true.</text>
-  <text x="44" y="270" class="note">200 은 범위 밖 → c·d 가 *각각 새 객체* → == 가 false. 값 비교는 항상 .equals() 또는 언박싱으로.</text>
-  <text x="44" y="296" class="note" fill="rgb(212,168,83)">교훈: 래퍼 타입은 == 로 비교하지 않는다. 캐시 범위에 따라 결과가 달라지는 미묘한 버그가 된다.</text>
+  <text x="44" y="250" class="note" style="fill:#e8e4df">100 은 -128~127 안 → a·b 가 *같은 캐시 객체* → == 가 true.</text>
+  <text x="44" y="270" class="note" style="fill:#e8e4df">200 은 범위 밖 → c·d 가 *각각 새 객체* → == 가 false. 값 비교는 항상 .equals() 또는 언박싱으로.</text>
+  <text x="44" y="296" class="note" style="fill:#e8e4df">교훈: 래퍼 타입은 == 로 비교하지 않는다. 캐시 범위에 따라 결과가 달라지는 미묘한 버그가 된다.</text>
 
   <!-- 향상된 for -->
   <rect x="28" y="332" width="412" height="220" rx="11" fill="rgba(91,155,213,0.08)" stroke="#5b9bd5" stroke-width="1.5"/>
-  <text x="48" y="358" class="sub" fill="#5b9bd5" font-weight="800">향상된 for — Iterator 로 펼침</text>
+  <text x="48" y="358" class="sub" font-weight="800" style="fill:#e8e4df">향상된 for — Iterator 로 펼침</text>
   <rect x="44" y="372" width="380" height="58" rx="6" fill="#5b9bd5"/>
-  <text x="56" y="392" class="h">설탕 (소스)</text>
-  <text x="56" y="414" class="mono">for (Integer i : list) { sum += i; }</text>
-  <text x="220" y="452" class="sub" text-anchor="middle" fill="rgb(212,168,83)">↓ 펼침</text>
+  <text x="56" y="392" class="h" style="fill:#e8e4df">설탕 (소스)</text>
+  <text x="56" y="414" class="mono" style="fill:#e8e4df">for (Integer i : list) { sum += i; }</text>
+  <text x="220" y="452" class="sub" text-anchor="middle" style="fill:#e8e4df">↓ 펼침</text>
   <rect x="44" y="464" width="380" height="74" rx="6" fill="rgb(212,168,83)"/>
   <text x="56" y="484" class="h">펼친 결과 (바이트코드)</text>
-  <text x="56" y="504" class="mono">Iterator it = list.iterator();</text>
-  <text x="56" y="522" class="mono">while (it.hasNext()) { sum += it.next(); }</text>
+  <text x="56" y="504" class="mono" style="fill:#0d0d0d">Iterator it = list.iterator();</text>
+  <text x="56" y="522" class="mono" style="fill:#0d0d0d">while (it.hasNext()) { sum += it.next(); }</text>
 
   <!-- 조건 컴파일 -->
   <rect x="460" y="332" width="412" height="220" rx="11" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="1.5"/>
-  <text x="480" y="358" class="sub" fill="#66bb6a" font-weight="800">조건 컴파일 — 상수 분기 제거</text>
+  <text x="480" y="358" class="sub" font-weight="800" style="fill:#e8e4df">조건 컴파일 — 상수 분기 제거</text>
   <rect x="476" y="372" width="380" height="58" rx="6" fill="#66bb6a"/>
   <text x="488" y="392" class="h">설탕 (소스)</text>
-  <text x="488" y="414" class="mono">if (true) { A(); } else { B(); }</text>
-  <text x="652" y="452" class="sub" text-anchor="middle" fill="rgb(212,168,83)">↓ 펼침</text>
+  <text x="488" y="414" class="mono" style="fill:#0d0d0d">if (true) { A(); } else { B(); }</text>
+  <text x="652" y="452" class="sub" text-anchor="middle" style="fill:#e8e4df">↓ 펼침</text>
   <rect x="476" y="464" width="380" height="74" rx="6" fill="rgb(212,168,83)"/>
   <text x="488" y="484" class="h">펼친 결과 (바이트코드)</text>
-  <text x="488" y="504" class="mono">A();   // else 가지 통째로 제거됨</text>
-  <text x="488" y="524" class="note" fill="rgba(13,13,13,0.72)">상수 조건이면 분기 자체를 컴파일 때 삭제 (C #ifdef 대체)</text>
+  <text x="488" y="504" class="mono" style="fill:#0d0d0d">A();   // else 가지 통째로 제거됨</text>
+  <text x="488" y="524" class="note" style="fill:#0d0d0d">상수 조건이면 분기 자체를 컴파일 때 삭제 (C #ifdef 대체)</text>
 </svg>
