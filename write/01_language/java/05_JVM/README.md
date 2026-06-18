@@ -3,9 +3,9 @@ title: JVM 학습 인덱스
 tags: [jvm, hotspot, study-index, moc]
 status: draft
 related:
-  - ./ch01_java-tech/01-01.JDK 구조와 바이트코드.md
-  - ./ch01_java-tech/01-02.가상 머신 실행 서브시스템.md
-  - ./ch01_java-tech/01-03.컴파일과 최적화.md
+  - ./ch03_class-loading-mechanism/00-개관.JDK 구조와 바이트코드.md
+  - ./ch03_class-loading-mechanism/00-개관.가상 머신 실행 서브시스템.md
+  - ./ch04_compilation-optimization/02-04.컴파일러 최적화 — 공통식 제거·경계 검사 제거와 Graal.md
   - ./ch02_automatic-memory-management/02-01.GC 운영 — 로그와 튜닝.md
   - ./ch02_automatic-memory-management/02-02.Java 성능 — JMH와 측정 방법론.md
   - ./ch02_automatic-memory-management/03-01.기본 문제 해결 도구 — 명령줄 도구.md
@@ -71,7 +71,11 @@ updated: 2026-06-03
 
 # JVM 학습 인덱스
 ---
-> 이 폴더는 단행본 《JVM 밑바닥까지 파헤치기》의 **절 단위 정독 노트** 갈래(`chNN_*` 폴더)로 구성된다. 책의 *부(部)* 단위로 폴더를 묶는다 — 2부 "자동 메모리 관리"(원서 2~5장)는 [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) 한 폴더에 장번호로 통합돼 있어, `01-NN`이 메모리 영역(2장), `02-NN`이 가비지 컬렉션(3장, 운영·JMH는 `02-01~02-02` / GC 본문은 `02-03~02-10`), `03-NN`이 진단 도구(4장), `04-NN`이 최적화 실전(5장)이다. 과거의 "부 단위 루트 요약" 레이어는 정독 폴더로 흡수했다 — 책 1·3·4부 요약은 [`ch01_java-tech/`](./ch01_java-tech/) 의 `01-NN` 파일(개관 갈래)로 이동했고, 5부는 [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 정독 폴더로 풀어 썼다(12장=`01-NN` 4편, 13장=`02-NN` 3편). 옛 5부 부 요약 [`_temp/01-04`](./_temp/01-04.효율적%20동시성.md) 는 정독본으로 대체됐으나 요약 갈래로 보존한다. 실습 코드는 `_practice/` 서브폴더에서 챕터별 Gradle 모듈로 모인다.
+> 이 폴더는 단행본 《JVM 밑바닥까지 파헤치기》의 **절 단위 정독 노트** 갈래(`chNN_*` 폴더)로 구성된다. 책의 *부(部)* 단위로 폴더를 묶는다.
+>
+> - 2부 "자동 메모리 관리"(원서 2~5장)는 [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) 한 폴더에 장번호로 통합돼 있어, `01-NN`이 메모리 영역(2장), `02-NN`이 가비지 컬렉션(3장, 운영·JMH는 `02-01~02-02` / GC 본문은 `02-03~02-10`), `03-NN`이 진단 도구(4장), `04-NN`이 최적화 실전(5장)이다. 과거의 "부 단위 루트 요약" 레이어는 정독 폴더로 흡수했다.
+> - 책 1·3부 요약(개관 흡수본)은 3부 정독 폴더 [`ch03_class-loading-mechanism/00-개관.*`](./ch03_class-loading-mechanism/) 2편(JDK 구조·실행 서브시스템)으로 이관됐다. `00-` prefix는 그 부의 절 정독(`01-NN`·`02-NN`) 앞에 놓이는 개관이라는 뜻이다. 4부 요약은 별도 개관으로 두지 않고, 고유했던 내용(LCM/GCM·implicit null check)을 정독본 [`ch04_compilation-optimization/02-04`](./ch04_compilation-optimization/02-04.컴파일러%20최적화%20—%20공통식%20제거·경계%20검사%20제거와%20Graal.md)에 흡수했다(나머지는 정독본과 중복이라 제거). 5부는 [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 정독 폴더로 풀어 썼다(12장=`01-NN` 4편, 13장=`02-NN` 3편). 옛 5부 부 요약 [`_temp/01-04`](./_temp/01-04.효율적%20동시성.md) 는 정독본으로 대체됐으나 요약 갈래로 보존한다. [`ch01_java-tech/`](./ch01_java-tech/) 에는 1장 §1.5~§1.7 절 정독 노트(`02-NN` 4편)만 남는다. 
+> - 실습 코드는 `_practice/` 서브폴더에서 챕터별 Gradle 모듈로 모인다.
 >
 > **동시성 갈래의 예외 — 출처 혼합 허용**: 책별로 폴더를 가르는 게 원칙이지만, [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 만은 *주제(동시성)* 를 우선해 두 책을 한 폴더에 둔다. `01-NN`·`02-NN`(《밑바닥》 12·13장 정독)에 더해, 출처가 《자바 동시성 프로그래밍》(또는 동등 도서)인 실무 학습 노트 10편을 `03-NN`~`05-NN`으로 합류시켰다(2026-06-17 루트 직속에서 이관). 폴더 안에서 책 구분은 각 노트의 `source` 필드가 1차 기준이다.
 >
@@ -120,7 +124,7 @@ updated: 2026-06-03
         └── src/main/java/org/runners/jvm/chNN/...
 ```
 
-폴더 안 노트 번호의 첫 숫자는 *그 폴더가 담은 책의 장(章) 순번*이다. 한 폴더에 여러 장이 들어가면(예: `ch04`는 10·11장) `01-NN`=앞 장, `02-NN`=뒤 장으로 갈린다. `ch02`·`ch03`처럼 `01-NN`이 개관/운영 흡수본(옛 루트 부 요약), `02-NN`이 절 정독인 곳도 있는데, 이는 그 폴더의 첫 묶음이 흡수본이었던 사정 때문이다. `ch05`는 12·13장을 담아 `01-NN`이 12장(메모리 모델·스레드), `02-NN`이 13장(스레드 안전성·락 최적화) 절 정독이다.
+폴더 안 노트 번호의 첫 숫자는 *그 폴더가 담은 책의 장(章) 순번*이다. 한 폴더에 여러 장이 들어가면(예: `ch04`는 10·11장) `01-NN`=앞 장, `02-NN`=뒤 장으로 갈린다. `00-개관.*`은 그 부의 절 정독(`01-NN`·`02-NN`) 앞에 놓이는 *부 단위 개관 흡수본*으로, `ch03`(JDK 구조·실행 서브시스템)에 있다. 4부(`ch04`)는 개관을 따로 두지 않고 정독본에 흡수했다. `ch02`처럼 `01-NN`이 운영 흡수본, `02-NN`이 절 정독인 곳도 있는데, 이는 그 폴더의 첫 묶음이 흡수본이었던 사정 때문이다. `ch05`는 12·13장을 담아 `01-NN`이 12장(메모리 모델·스레드), `02-NN`이 13장(스레드 안전성·락 최적화) 절 정독이다.
 
 ## 부 요약 흡수 이력
 
@@ -128,9 +132,9 @@ updated: 2026-06-03
 
 | 옛 위치 | 다루는 부 | 새 위치 |
 |--------|----------|---------|
-| 01-01.JDK 구조와 바이트코드 | 3부 6장 + 1부 일부 | [`ch01_java-tech/01-01.JDK 구조와 바이트코드.md`](./ch01_java-tech/01-01.JDK%20구조와%20바이트코드.md) |
-| 01-02.가상 머신 실행 서브시스템 | 3부 7~8장 | [`ch01_java-tech/01-02.가상 머신 실행 서브시스템.md`](./ch01_java-tech/01-02.가상%20머신%20실행%20서브시스템.md) |
-| 01-03.컴파일과 최적화 | 4부 10~11장 | [`ch01_java-tech/01-03.컴파일과 최적화.md`](./ch01_java-tech/01-03.컴파일과%20최적화.md) |
+| 01-01.JDK 구조와 바이트코드 | 3부 6장 + 1부 일부 | [`ch03_class-loading-mechanism/00-개관.JDK 구조와 바이트코드.md`](./ch03_class-loading-mechanism/00-개관.JDK%20구조와%20바이트코드.md) |
+| 01-02.가상 머신 실행 서브시스템 | 3부 7~8장 | [`ch03_class-loading-mechanism/00-개관.가상 머신 실행 서브시스템.md`](./ch03_class-loading-mechanism/00-개관.가상%20머신%20실행%20서브시스템.md) |
+| 01-03.컴파일과 최적화 | 4부 10~11장 | 정독본 [`ch04_compilation-optimization/`](./ch04_compilation-optimization/) `01-NN`·`02-NN`에 흡수. 고유 내용(LCM/GCM·implicit null check)은 [`02-04`](./ch04_compilation-optimization/02-04.컴파일러%20최적화%20—%20공통식%20제거·경계%20검사%20제거와%20Graal.md)에 합침, 나머지는 중복 제거 |
 | 01-04.효율적 동시성 | 5부 12장 | [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 정독 4편으로 풀어 씀 (01-01~01-04) |
 | 01-04.효율적 동시성 | 5부 13장 | [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 정독 3편으로 풀어 씀 (02-01~02-03) |
 | 02-01.GC 알고리즘과 튜닝 | 2부 3장 | §6,§7만 [`ch02_automatic-memory-management/02-01.GC 운영 — 로그와 튜닝.md`](./ch02_automatic-memory-management/02-01.GC%20운영%20—%20로그와%20튜닝.md), §3 비교표는 [`ch02_automatic-memory-management/02-10.마치며.md`](./ch02_automatic-memory-management/02-10.마치며.md) 의 §3a로 흡수. §1,§2,§4,§5는 정독 노트와 중복으로 제거 |
@@ -144,7 +148,7 @@ updated: 2026-06-03
 
 | 장 | 한국어 제목 | 폴더 | 진척 | 실습 |
 |----|------------|------|------|------|
-| 1장 | 자바 기술 시스템 소개 | [`ch01_java-tech/`](./ch01_java-tech/) | ⏳ §1.5~§1.7 정독 완료, 개관 흡수본 3편(01-01~01-03) 추가, §1.1~§1.4 보류 | [`_practice/ch01/`](./_practice/ch01/) |
+| 1장 | 자바 기술 시스템 소개 | [`ch01_java-tech/`](./ch01_java-tech/) | ⏳ §1.5~§1.7 정독 완료(`02-NN` 4편), 1·3·4부 개관 흡수본 3편은 각 정독 폴더 `00-개관.*`(ch03 2편·ch04 1편)으로 이관, §1.1~§1.4 보류 | [`_practice/ch01/`](./_practice/ch01/) |
 
 ### 2부 자동 메모리 관리
 
@@ -159,17 +163,17 @@ updated: 2026-06-03
 
 | 장 | 한국어 제목 | 폴더 | 진척 | 실습 |
 |----|------------|------|------|------|
-| 6장 | 클래스 파일 구조 | [`ch06_class-file/`](./ch06_class-file/) | ✅ §6.1~§6.5 정독(p.287~352, 02-01 클래스 파일 구조 + 02-02 바이트코드 명령어). 1장 부 요약 흡수본([`ch01_java-tech/01-01`](./ch01_java-tech/01-01.JDK%20구조와%20바이트코드.md))은 별도 유지 | [`_practice/ch06-class-file/`](./_practice/ch06-class-file/) |
-| 7장 | 클래스 로딩 메커니즘 | [`ch01_java-tech/01-02`](./ch01_java-tech/01-02.가상%20머신%20실행%20서브시스템.md) (부 요약 흡수) | ⏳ 흡수만 | — |
-| 8장 | 바이트코드 실행 엔진 | [`ch01_java-tech/01-02`](./ch01_java-tech/01-02.가상%20머신%20실행%20서브시스템.md) (부 요약 흡수) | ⏳ 스택 프레임·디스패치·invokedynamic 흡수, 본격 정독 미착수 | — |
+| 6장 | 클래스 파일 구조 | [`ch06_class-file/`](./ch06_class-file/) | ✅ §6.1~§6.5 정독(p.287~352, 02-01 클래스 파일 구조 + 02-02 바이트코드 명령어). 1장 부 요약 흡수본([`00-개관.JDK 구조와 바이트코드`](./ch03_class-loading-mechanism/00-개관.JDK%20구조와%20바이트코드.md))은 별도 유지 | [`_practice/ch06-class-file/`](./_practice/ch06-class-file/) |
+| 7장 | 클래스 로딩 메커니즘 | [`ch03_class-loading-mechanism/00-개관.가상 머신 실행 서브시스템`](./ch03_class-loading-mechanism/00-개관.가상%20머신%20실행%20서브시스템.md) (부 요약 흡수) | ⏳ 흡수만 | — |
+| 8장 | 바이트코드 실행 엔진 | [`ch03_class-loading-mechanism/00-개관.가상 머신 실행 서브시스템`](./ch03_class-loading-mechanism/00-개관.가상%20머신%20실행%20서브시스템.md) (부 요약 흡수) | ⏳ 스택 프레임·디스패치·invokedynamic 흡수, 본격 정독 미착수 | — |
 | 9장 | 클래스 로딩과 실행 서브시스템, 사례와 실전 | _(미작성)_ | ◻ | — |
 
 ### 4부 컴파일과 최적화
 
 | 장 | 한국어 제목 | 폴더 | 진척 | 실습 |
 |----|------------|------|------|------|
-| 10장 | 프런트엔드 컴파일과 최적화 | [`ch01_java-tech/01-03`](./ch01_java-tech/01-03.컴파일과%20최적화.md) (부 요약 흡수) | ⏳ javac·컴파일 단계 흡수 | — |
-| 11장 | 백엔드 컴파일과 최적화 | [`ch01_java-tech/01-03`](./ch01_java-tech/01-03.컴파일과%20최적화.md) (부 요약 흡수) | ⏳ JIT·Graal·AOT 흡수, 본격 정독 미착수 | — |
+| 10장 | 프런트엔드 컴파일과 최적화 | [`ch04_compilation-optimization/`](./ch04_compilation-optimization/) `01-NN` | ✅ §10.1~§10.5 정독(01-01 javac~01-04 애너테이션 처리기) | — |
+| 11장 | 백엔드 컴파일과 최적화 | [`ch04_compilation-optimization/`](./ch04_compilation-optimization/) `02-NN` | ✅ §11.1~§11.5 정독(02-01 JIT~02-04 CSE·Graal). 옛 개관 고유분(LCM/GCM·implicit null check)은 02-04에 흡수 | — |
 
 ### 5부 효율적인 동시성
 
