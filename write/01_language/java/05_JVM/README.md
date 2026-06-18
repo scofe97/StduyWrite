@@ -26,7 +26,6 @@ related:
   - ./ch03_class-loading-mechanism/04-01.톰캣의 클래스 로더 아키텍처.md
   - ./ch03_class-loading-mechanism/04-02.OSGi의 유연한 클래스 로더와 바이트코드 생성.md
   - ./ch03_class-loading-mechanism/04-03.실전 — 원격 실행 기능 설계.md
-  - ./ch03_class-loading-mechanism/04-04.실전 — 바이트코드 치환과 실행.md
   - ./ch04_compilation-optimization/01-01.javac 컴파일러의 컴파일 과정.md
   - ./ch04_compilation-optimization/01-02.자바 구문 설탕 — 제네릭과 타입 소거.md
   - ./ch04_compilation-optimization/01-03.자바 구문 설탕 — 박싱·향상된 for·조건 컴파일.md
