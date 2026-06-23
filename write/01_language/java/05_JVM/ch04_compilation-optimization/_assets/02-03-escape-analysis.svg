@@ -1,0 +1,64 @@
+<svg viewBox="0 0 900 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>탈출 분석이 여는 세 최적화 — 탈출 판정 분기</title>
+  <desc>탈출 분석은 메서드 안에서 만든 객체가 메서드 밖으로 새어나가는지 판정한다. 객체가 탈출하면(리턴되거나 필드에 저장되거나 다른 메서드로 넘겨지면) 평소대로 힙에 할당한다. 탈출하지 않으면 세 최적화가 열린다. 힙 대신 스택에 할당하는 스택 할당, 객체를 안 만들고 필드를 지역 변수로 분해하는 스칼라 치환, 한 스레드만 보는 객체의 락을 제거하는 동기화 제거다. 탈출 분석 자체는 코드를 바꾸지 않고 판정만 하며, 그 판정이 세 최적화의 공통 전제가 된다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: rgb(138,133,128); }
+      .box   { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
+      .desc  { font-size: 10px; fill: #0d0d0d; }
+      .note  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .elbl  { font-size: 10.5px; font-weight: 700; fill: #e8e4df; }
+    </style>
+    <marker id="e1" markerWidth="11" markerHeight="11" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="470" fill="#0d0d0d"/>
+  <text x="28" y="36" class="title">탈출 분석이 여는 세 최적화</text>
+  <text x="28" y="56" class="sub" style="fill:#e8e4df">탈출 분석은 판정만 한다 — "새지 않는다"가 증명되면 그 위에서 세 최적화가 열린다</text>
+
+  <!-- 객체 생성 -->
+  <rect x="28" y="96" width="180" height="60" rx="9" fill="#5b9bd5"/>
+  <text x="118" y="122" class="elbl" text-anchor="middle" style="fill:#e8e4df">메서드 안에서</text>
+  <text x="118" y="142" class="elbl" text-anchor="middle" style="fill:#e8e4df">객체 생성</text>
+
+  <!-- 판정 -->
+  <rect x="258" y="96" width="190" height="60" rx="9" fill="#dceaf7"/>
+  <text x="353" y="122" class="box" text-anchor="middle">탈출하나?</text>
+  <text x="353" y="142" class="note" text-anchor="middle" style="fill:#10243a">리턴·필드 저장·인자 전달?</text>
+
+  <!-- 탈출 O -->
+  <rect x="498" y="40" width="180" height="50" rx="9" fill="#5b9bd5"/>
+  <text x="588" y="62" class="elbl" text-anchor="middle" style="fill:#e8e4df">탈출함 → 힙 할당</text>
+  <text x="588" y="80" class="note" text-anchor="middle" style="fill:#e8e4df">평소대로 (최적화 없음)</text>
+
+  <!-- 탈출 X: 세 최적화 -->
+  <rect x="498" y="110" width="374" height="50" rx="9" fill="rgb(212,168,83)"/>
+  <text x="514" y="132" class="box">① 스택 할당</text>
+  <text x="514" y="150" class="desc">힙 대신 스택에 — 메서드 끝나면 자동 소멸, GC 부담 ↓</text>
+
+  <rect x="498" y="172" width="374" height="50" rx="9" fill="rgb(212,168,83)"/>
+  <text x="514" y="194" class="box">② 스칼라 치환</text>
+  <text x="514" y="212" class="desc">객체 안 만들고 필드를 지역 변수로 분해 — 생성 자체가 사라짐</text>
+
+  <rect x="498" y="234" width="374" height="50" rx="9" fill="rgb(212,168,83)"/>
+  <text x="514" y="256" class="box">③ 동기화 제거</text>
+  <text x="514" y="274" class="desc">한 스레드만 보는 객체의 락 제거 — 경쟁할 스레드가 없으니</text>
+
+  <!-- 화살표 -->
+  <line x1="208" y1="126" x2="256" y2="126" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#e1)"/>
+  <line x1="448" y1="112" x2="496" y2="74" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#e1)"/>
+  <text x="470" y="96" class="note" text-anchor="middle" style="fill:#e8e4df">O</text>
+  <line x1="448" y1="138" x2="496" y2="150" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#e1)"/>
+  <text x="470" y="158" class="note" text-anchor="middle" style="fill:#e8e4df">X</text>
+
+  <!-- 하단 핵심 -->
+  <rect x="28" y="304" width="844" height="142" rx="10" fill="rgba(91,155,213,0.07)" stroke="#5b9bd5" stroke-width="1.2"/>
+  <text x="48" y="330" class="sub" font-weight="800" style="fill:#e8e4df">핵심 — 분석이 열쇠, 최적화는 그 뒤</text>
+  <text x="48" y="356" class="note" style="fill:#e8e4df">· 탈출 분석은 "이 객체가 새나 안 새나"를 판정할 뿐, 그 자체로는 코드를 바꾸지 않는다.</text>
+  <text x="48" y="380" class="note" style="fill:#e8e4df">· "새지 않는다"가 증명되어야 세 최적화가 안전하다 — 그래서 탈출 분석이 셋의 공통 전제다.</text>
+  <text x="48" y="404" class="note" style="fill:#e8e4df">· 스칼라 치환이 가장 적극적이다. 객체 생성 자체를 없애 스택 할당보다 한 걸음 더 나아간다.</text>
+  <text x="48" y="428" class="note" style="fill:#e8e4df">· 인라인으로 메서드 경계가 허물어지면 탈출 분석이 더 잘 작동한다 — 인라인이 발판이 되는 또 한 예.</text>
+</svg>
