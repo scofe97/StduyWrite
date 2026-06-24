@@ -3,7 +3,7 @@ title: Jenkins Core 학습 MOC
 tags: [moc, jenkins, ci-cd, pipeline, declarative]
 status: draft
 related:
-  - ../README.md
+  - ../../README.md
   - ../02_security/README.md
   - ../03_agent/README.md
   - ../04_api/README.md
@@ -57,7 +57,7 @@ Jenkins 입문에서 가장 자주 막히는 두 지점은 "이게 도대체 어
 2. CI/CD 라는 용어를 한 줄로 설명할 수 있습니다 — "코드 변경을 자동으로 빌드·검증·배포한다".
 3. 셸 명령(`./gradlew build`, `npm run build` 등) 으로 빌드를 돌려 본 적이 있습니다.
 
-위 셋 중 막히는 항목이 있으면 [`../README.md`](../README.md) 의 Jenkins 입문 자료를 먼저 훑고 돌아오는 편이 빠릅니다.
+위 셋 중 막히는 항목이 있으면 [`../../README.md`](../../README.md) 의 07_devops 입문 자료를 먼저 훑고 돌아오는 편이 빠릅니다.
 
 ## 면접 대비 체크리스트
 
