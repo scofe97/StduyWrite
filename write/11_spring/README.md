@@ -3,6 +3,7 @@ title: Spring 학습 통합 MOC
 tags: [moc, spring, spring-boot]
 status: final
 related:
+  - roadmap.md
   - ../README.md
   - ../03_architecture/README.md
   - ../04_messaging/README.md
@@ -82,99 +83,21 @@ grep -rl "^  - spring$\|tags:.*spring" write/ --include="*.md" | sort
 
 ## Spring 딥다이브 전체 지도
 
-위의 "카테고리별 배치"가 *어떤 폴더에 무엇이 있나*를, "학습 경로 추천"이 *어떤 순서로 읽나*를 답한다면, 이 절은 *Spring 본질을 어디까지 깊게 파야 하는가*를 답한다. Spring을 깊게 판다는 것은 어노테이션을 더 많이 외우는 일이 아니라, `@Autowired`가 왜 주입되는지·`@Transactional`이 왜 실패하는지·`@RequestBody`가 어디서 변환되는지·AutoConfiguration이 왜 켜지는지·테스트가 왜 느려지는지·운영에서 health가 왜 내려가는지를 설명할 수 있게 되는 일이다. 아래는 그 전체 범위를 24개 대주제로 펼친 뒤 7개 학습 단계로 묶고, 각 대주제의 핵심 키워드를 이미 쓴 문서·아직 안 쓴 갭과 연결한 지도다.
+위의 "카테고리별 배치"가 *어떤 폴더에 무엇이 있나*를, "학습 경로 추천"이 *어떤 순서로 읽나*를 답한다면, 이 절은 *Spring 본질을 어디까지 깊게 파야 하는가*를 답한다. 딥다이브 로드맵의 **섹션별 키워드 전체**(Core·AOP/Weaving·@Transactional·MVC·Validation·Boot·운영·테스트 24주제)는 [roadmap.md](roadmap.md)에 원문 그대로 옮겨 두었다. 아래는 그 24개 대주제를 7개 학습 단계로 묶어, 우리 보유 문서·미작성 갭과 연결한 네비게이션이다.
 
-한 문장으로 줄이면 이렇다.
+한 문장으로 줄이면, Spring Container가 Bean을 만들고, Proxy가 부가기능을 감싸고, DispatcherServlet이 요청을 흘려보내고, TransactionManager가 DB 경계를 관리하고, Boot AutoConfiguration이 설정을 조립하며, Actuator와 Test가 운영성과 검증 가능성을 열어준다.
 
-> Spring Container가 Bean을 만들고, Proxy가 부가기능을 감싸고, DispatcherServlet이 요청을 흘려보내고, TransactionManager가 DB 경계를 관리하고, Boot AutoConfiguration이 설정을 조립하며, Actuator와 Test가 운영성과 검증 가능성을 열어준다.
+| 단계 | 대주제 | 진입 문서 | 갭(미작성) |
+|------|--------|----------|-----------|
+| 1 | Core / IoC / Bean 생명주기 (대주제 1~5) | [01_core/01-01](01_core/01-01.객체지향%20원리%20적용%20—%20DI와%20IoC.md) · [01-02](01_core/01-02.Spring과%20디자인%20패턴.md) | BeanPostProcessor 내부 흐름, 순환 참조 전용편 |
+| 2 | AOP / Proxy / Weaving (대주제 6) | [05_aop/01-01](05_aop/01-01.횡단%20관심사와%20AOP%20—%20프록시로%20풀어내기.md) · [01-03](05_aop/01-03.템플릿·콜백과%20ThreadLocal%20—%20AOP%20등장%20직전의%20두%20시도.md) · [01-04](05_aop/01-04.어노테이션%20기반%20AOP%20응용%20—%20@Async·@Cacheable·@Retryable.md) | Weaving 4종 + Spring AOP vs AspectJ + `@EnableLoadTimeWeaving` 실험 전용편 |
+| 3 | @Transactional (대주제 7) | 본체 [../05_data/jpa/04-01](../05_data/jpa/04-01.스프링%20트랜잭션.md) · [04-01b](../05_data/jpa/04-01b.트랜잭션%20전파%20활용.md), [08_transaction/01-01](08_transaction/01-01.트랜잭션%20격리%20수준%20—%20Spring%20관점.md) · [01-02](08_transaction/01-02.@Transactional%20테스트%20가드.md), [06_events/01-02](06_events/01-02.트랜잭션%20전파%20조합%20—%20죽은%20트랜잭션과%20REQUIRES_NEW.md) | MyBatis ↔ Spring 트랜잭션 Connection 바인딩 전용편 |
+| 4 | Spring MVC / 요청 처리 (대주제 8~10) | [01_core/03-01](01_core/03-01.Spring%20MVC%20—%20FrontController에서%20DispatcherServlet까지.md) · [03-02](01_core/03-02.예외%20처리%20—%20서블릿에서%20@ControllerAdvice까지.md), [02_data-binding/01-01](02_data-binding/01-01.HTTP%20요청·응답과%20메시지%20컨버터.md), [01_core/04-01](01_core/04-01.WebFlux%20서버%20—%20리액티브%20스택과%20어노테이션%20모델.md) · [04-02](01_core/04-02.WebFlux%20함수형%20엔드포인트%20—%20RouterFunction과%20HandlerFunction.md) | Custom ArgumentResolver / ReturnValueHandler 실습편 |
+| 5 | Validation / Binding / Conversion (대주제 11) | [02_data-binding/](02_data-binding/), [09_validation/](09_validation/) | Converter / Formatter / ConversionService 전용편 |
+| 6 | Spring Boot 자동구성·외부설정 (대주제 12~14) | [07_autoconfig/](07_autoconfig/) | 7편으로 충분 — 신규 후보 없음 |
+| 7 | 운영·연동·테스트 (대주제 15~24) | Event [06_events/](06_events/), Async/Scheduling [05_aop/01-02](05_aop/01-02.스프링%20스케줄링%20—%20@Scheduled에서%20Quartz까지.md)·01-04, Test [04_testing/](04_testing/), Data [../05_data/](../05_data/), Security [../10_security/](../10_security/), Actuator [../06_observability/05_SpringActuator/](../06_observability/05_SpringActuator/) | Cache Abstraction 전용편, MyBatis 연동 전용편, 성능 튜닝·장애 분석편 |
 
-아래 표는 7단계의 진입점만 빠르게 짚는 네비게이션이다. 각 단계의 키워드 전체·핵심 흐름·미작성 갭은 표 다음 단계별 절에서 이어 다룬다.
-
-| 단계 | 대주제 | 진입 문서 |
-|------|--------|----------|
-| 1 | Core / IoC / Bean 생명주기 (대주제 1~5) | [01_core/01-01](01_core/01-01.객체지향%20원리%20적용%20—%20DI와%20IoC.md) · [01-02](01_core/01-02.Spring과%20디자인%20패턴.md) |
-| 2 | AOP / Proxy / Weaving (대주제 6) | [05_aop/01-01](05_aop/01-01.횡단%20관심사와%20AOP%20—%20프록시로%20풀어내기.md) · [01-03](05_aop/01-03.템플릿·콜백과%20ThreadLocal%20—%20AOP%20등장%20직전의%20두%20시도.md) · [01-04](05_aop/01-04.어노테이션%20기반%20AOP%20응용%20—%20@Async·@Cacheable·@Retryable.md) |
-| 3 | @Transactional (대주제 7) | 본체 [../05_data/jpa/04-01](../05_data/jpa/04-01.스프링%20트랜잭션.md) · [04-01b](../05_data/jpa/04-01b.트랜잭션%20전파%20활용.md), [08_transaction/01-01](08_transaction/01-01.트랜잭션%20격리%20수준%20—%20Spring%20관점.md) · [01-02](08_transaction/01-02.@Transactional%20테스트%20가드.md), [06_events/01-02](06_events/01-02.트랜잭션%20전파%20조합%20—%20죽은%20트랜잭션과%20REQUIRES_NEW.md) |
-| 4 | Spring MVC / 요청 처리 (대주제 8~10) | [01_core/03-01](01_core/03-01.Spring%20MVC%20—%20FrontController에서%20DispatcherServlet까지.md) · [03-02](01_core/03-02.예외%20처리%20—%20서블릿에서%20@ControllerAdvice까지.md), [02_data-binding/01-01](02_data-binding/01-01.HTTP%20요청·응답과%20메시지%20컨버터.md), [01_core/04-01](01_core/04-01.WebFlux%20서버%20—%20리액티브%20스택과%20어노테이션%20모델.md) · [04-02](01_core/04-02.WebFlux%20함수형%20엔드포인트%20—%20RouterFunction과%20HandlerFunction.md) |
-| 5 | Validation / Binding / Conversion (대주제 11) | [02_data-binding/](02_data-binding/), [09_validation/](09_validation/) |
-| 6 | Spring Boot 자동구성·외부설정 (대주제 12~14) | [07_autoconfig/](07_autoconfig/) |
-| 7 | 운영·연동·테스트 (대주제 15~24) | Event [06_events/](06_events/), Async/Scheduling [05_aop/01-02](05_aop/01-02.스프링%20스케줄링%20—%20@Scheduled에서%20Quartz까지.md)·01-04, Test [04_testing/](04_testing/), Data [../05_data/](../05_data/), Security [../10_security/](../10_security/), Actuator [../06_observability/05_SpringActuator/](../06_observability/05_SpringActuator/) |
-
-각 단계의 핵심 키워드는 다음과 같다. 학습 노트나 프롬프트에 그대로 넣어 진도 체크용으로 쓸 수 있고, 각 단계 끝의 *갭* 한 줄이 아직 안 쓴 문서 후보다.
-
-### 1단계 — Spring Core / IoC Container
-
-- **1. Spring Core / IoC Container** — IoC · DI · Bean · BeanDefinition · BeanFactory · ApplicationContext · DefaultListableBeanFactory · Component Scan · @Configuration · @Bean · @Component · @Service · @Repository · @Controller · @Autowired · Constructor Injection · Qualifier · Primary · Lazy · Scope · Singleton · Prototype
-- **2. Bean 등록과 생명주기** — Bean Lifecycle · Instantiation · Dependency Injection · Aware Interface · BeanNameAware · ApplicationContextAware · InitializingBean · DisposableBean · @PostConstruct · @PreDestroy · initMethod · destroyMethod · SmartInitializingSingleton · SmartLifecycle · ApplicationReadyEvent
-- **3. 의존성 주입과 순환 참조** — 생성자 주입 · 필드 주입 · 순환 참조(circular reference) · @Lazy 우회
-- **4. ApplicationContext와 BeanFactory** — ApplicationContext · BeanFactory · BeanDefinition 설계도 · 싱글톤 캐싱
-- **5. BeanPostProcessor / BeanFactoryPostProcessor** — BeanPostProcessor · BeanFactoryPostProcessor · before/after initialization · FactoryBean
-
-핵심 흐름: ClassPath Scan → BeanDefinition 생성 → BeanFactory 등록 → BeanFactoryPostProcessor 실행 → Bean 인스턴스 생성 → 의존성 주입 → BeanPostProcessor before → @PostConstruct·InitializingBean → BeanPostProcessor after → Singleton 캐싱. Spring은 객체를 곧바로 만들지 않고 먼저 **BeanDefinition이라는 설계도**를 만든 뒤 그 설계도로 조립한다.
-
-> 갭: BeanPostProcessor / BeanFactoryPostProcessor 내부 흐름 전용편, 순환 참조 전용편.
-
-### 2단계 — AOP / Proxy / Weaving
-
-- **6. AOP와 Proxy** — AOP · Aspect · Advice · Pointcut · JoinPoint · Advisor · Proxy · JDK Dynamic Proxy · CGLIB Proxy · Target Object · Self Invocation · Proxy Chain · MethodInterceptor · ProxyFactory · TargetSource
-- **Weaving (위빙)** — Weaving · Compile-time Weaving · Post-compile Weaving · Load-time Weaving(LTW) · Runtime Proxy-based AOP · AspectJ · Spring AOP vs AspectJ · @EnableLoadTimeWeaving · aspectjWeaving · spring-aspects.jar
-
-가장 중요한 문턱은 **Self Invocation**이다. 같은 객체 내부에서 `this.inner()`로 호출하면 프록시를 거치지 않아 `inner()`의 `@Transactional`이 동작하지 않는다. Spring AOP는 기본적으로 런타임 프록시이므로 클래스 파일 자체를 바꾸지 않고, private/final 메서드와 Bean이 아닌 객체에는 적용이 어렵다. 반면 AspectJ는 컴파일 타임·로드 타임에 클래스 자체를 엮는 위빙으로 더 넓은 지점에 개입한다.
-
-> 갭: **Weaving 4종(CTW·Post-compile·LTW·Runtime) + Spring AOP vs AspectJ + `@EnableLoadTimeWeaving` 실험** 전용편.
-
-### 3단계 — @Transactional
-
-- **7. @Transactional 내부 구조** — PlatformTransactionManager · DataSourceTransactionManager · JpaTransactionManager · TransactionInterceptor · TransactionAttribute · TransactionSynchronizationManager · Propagation(REQUIRED · REQUIRES_NEW · NESTED · SUPPORTS · NOT_SUPPORTED · MANDATORY · NEVER) · Isolation(DEFAULT · READ_UNCOMMITTED · READ_COMMITTED · REPEATABLE_READ · SERIALIZABLE) · Rollback Rule · rollbackFor · readOnly · timeout · Checked/Unchecked Exception
-
-트랜잭션은 문서로만 배우지 않는다. DB에 데이터를 넣고, 실패시키고, 로그를 보며 REQUIRES_NEW가 정말 독립 트랜잭션인지·catch한 예외가 rollback을 막는지·checked exception에서 기본 rollback이 왜 안 되는지를 손으로 확인해야 한다.
-
-> 갭: MyBatis ↔ Spring 트랜잭션 Connection 바인딩 전용편.
-
-### 4단계 — Spring MVC / 요청 처리
-
-- **8. Spring MVC 요청 처리 흐름** — DispatcherServlet · HandlerMapping · HandlerAdapter · ModelAndView · ViewResolver · Filter · Interceptor
-- **9. ArgumentResolver / MessageConverter** — HandlerMethodArgumentResolver · HandlerMethodReturnValueHandler · HttpMessageConverter · @RequestBody · @ResponseBody
-- **10. Exception Handling** — HandlerExceptionResolver · @ControllerAdvice · @RestControllerAdvice · ProblemDetail
-
-요청 흐름: Client → Servlet Filter → DispatcherServlet → HandlerMapping → HandlerAdapter → ArgumentResolver → Controller → ReturnValueHandler → HttpMessageConverter → Response. Custom ArgumentResolver로 로그인 사용자를 주입해보면 MVC가 더 이상 검은 상자가 아니다.
-
-> 갭: Custom ArgumentResolver / ReturnValueHandler 실습편.
-
-### 5단계 — Validation / Binding / Conversion
-
-- **11. Validation / Data Binding / Type Conversion** — Bean Validation · @Valid · @Validated · BindingResult · MethodArgumentNotValidException · ConstraintViolationException · Validator · DataBinder · WebDataBinder · Converter · Formatter · PropertyEditor · ConversionService
-
-`@Valid`(RequestBody)와 `@Validated`(RequestParam·그룹) 검증 실패는 올라오는 예외가 다르다. 형식 검증은 Controller, 유스케이스 검증은 Application Service, 도메인 규칙은 Domain Component로 나눈다.
-
-> 갭: Converter / Formatter / ConversionService 전용편.
-
-### 6단계 — Spring Boot 자동구성·외부설정
-
-- **12. Configuration / Profile / Externalized Config** — Environment · PropertySource · application.yml · application-{profile}.yml · @Value · Relaxed Binding · ConfigData · Command Line Argument
-- **13. Spring Boot Auto Configuration** — SpringApplication · @EnableAutoConfiguration · @SpringBootApplication · @ConditionalOnClass · @ConditionalOnMissingBean · @ConditionalOnProperty · AutoConfiguration.imports · spring.factories · Binder
-- **14. Spring Boot Starter 구조** — Starter · BOM · autoconfigure 모듈 · @ConfigurationProperties · @EnableConfigurationProperties
-
-의존성만 추가했는데 Bean이 자동 등록되는 이유, 내가 만든 Bean이 있으면 Boot 기본 Bean이 `@ConditionalOnMissingBean`으로 비켜서는 이유를 직접 만든 Starter로 확인한다. 설정이 많아지면 `@Value`보다 `@ConfigurationProperties`가 구조화·테스트·문서화에 유리하다.
-
-> 갭: 7편으로 대주제 12~14를 충분히 덮어 현재 신규 후보 없음.
-
-### 7단계 — 운영·연동·테스트
-
-- **15. Data Access / Transaction / MyBatis** — DataSource · HikariCP · SqlSessionFactory · SqlSessionTemplate · Mapper Proxy · Connection Binding · MyBatis Executor · Batch Executor · Mapper XML · Dynamic SQL
-- **16. Event / TransactionalEventListener** — ApplicationEventPublisher · @EventListener · @TransactionalEventListener · TransactionPhase(BEFORE_COMMIT · AFTER_COMMIT · AFTER_ROLLBACK · AFTER_COMPLETION) · Synchronous/Asynchronous Event · Outbox
-- **17. Async / Scheduling / ThreadPool** — @Async · @EnableAsync · TaskExecutor · ThreadPoolTaskExecutor · @Scheduled · @EnableScheduling · TaskScheduler · fixedRate · fixedDelay · cron · MDC Propagation · 분산락
-- **18. Cache Abstraction** — CacheManager · @Cacheable · @CachePut · @CacheEvict · Cache Key · TTL · Local/Distributed Cache · Caffeine · Redis · Cache Stampede · Cache Penetration · Cache Invalidation
-- **19. Spring Security** — SecurityFilterChain · FilterChainProxy · SecurityContext · SecurityContextHolder · Authentication · Principal · GrantedAuthority · AuthenticationManager · AuthenticationProvider · UserDetailsService · PasswordEncoder · AuthorizationManager · Method Security · CSRF · CORS · JWT · OAuth2 Resource Server
-- **20. Actuator / Observability** — spring-boot-starter-actuator · HealthIndicator · Readiness · Liveness · Metrics · Micrometer · Prometheus Endpoint · Loggers Endpoint · Custom HealthIndicator · Custom Meter
-- **21. Spring Test** — JUnit 5 · Mockito · AssertJ · @SpringBootTest · @WebMvcTest · @DataJdbcTest · @MybatisTest · @MockBean · TestContext Framework · ApplicationContext Caching · @Transactional Test · MockMvc · WebTestClient · TestRestTemplate · Testcontainers
-- **22~24. 성능 튜닝 / 아키텍처 설계 패턴 / 운영 장애 분석** — 부팅 비용 · 스레드풀 고갈 · health down 원인 · Layered Architecture · Graceful Shutdown · Structured Logging · TraceId
-
-`@Transactional` → TransactionInterceptor → DataSourceTransactionManager → Connection 획득 → TransactionSynchronizationManager에 바인딩 → MyBatis SqlSessionTemplate이 같은 Connection 사용 → commit/rollback. 이 흐름을 이해하면 "왜 트랜잭션이 안 먹지?"의 절반이 풀린다.
-
-> 갭: **Cache Abstraction 전용편**(현재 @Cacheable 일부만), MyBatis 연동 전용편, 성능 튜닝·장애 분석편.
-
-> **심화 실습 후보** — ① Mini Spring Container(BeanDefinition·생성자 주입·싱글톤 캐시 흉내) ② Transaction Lab(REQUIRED·REQUIRES_NEW·NESTED·self-invocation·rollbackFor를 표로 정리) ③ Spring MVC Internal Lab(Custom Filter·Interceptor·ArgumentResolver·ProblemDetail) ④ Custom Spring Boot Starter(AutoConfiguration·Conditional·ConfigurationProperties) ⑤ Production-ready Spring Template(Layered·Global Exception·Actuator·TraceId·Testcontainers). 다섯 개를 만들면 Spring은 더 이상 마법의 숲이 아니다.
+각 단계의 핵심 키워드 전체·핵심 흐름·단계별 요약·심화 실습 후보 5종은 [roadmap.md](roadmap.md)에 정리돼 있다. 우리 자료의 미작성 갭은 위 표의 "갭" 열에 모았다 — BeanPostProcessor·순환 참조 전용편, Weaving 4종+AspectJ 실험편, MyBatis Connection 바인딩편, Custom ArgumentResolver 실습편, Converter/ConversionService편, Cache Abstraction·성능 튜닝·장애 분석편.
 
 
 
