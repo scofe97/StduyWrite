@@ -3,7 +3,7 @@ title: Jenkins Agent·컨테이너·K8s 학습 MOC
 tags: [moc, jenkins, agent, docker, kubernetes, kaniko]
 status: draft
 related:
-  - ../../README.md
+  - ../README.md
   - ../01_core/README.md
   - ../02_security/README.md
   - ../05_operations/README.md

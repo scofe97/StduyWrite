@@ -3,7 +3,7 @@ title: Jenkins 엔진 심화 학습 MOC
 tags: [moc, jenkins, internals, stapler, queue, executor, plugin, groovy, sdk, engine]
 status: draft
 related:
-  - ../../README.md
+  - ../README.md
   - ../04_api/README.md
   - ../05_operations/README.md
 updated: 2026-06-10

@@ -3,7 +3,7 @@ title: Jenkins Core 학습 MOC
 tags: [moc, jenkins, ci-cd, pipeline, declarative]
 status: draft
 related:
-  - ../../README.md
+  - ../README.md
   - ../02_security/README.md
   - ../03_agent/README.md
   - ../04_api/README.md
