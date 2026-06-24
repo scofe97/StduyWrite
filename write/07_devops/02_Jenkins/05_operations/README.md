@@ -3,7 +3,7 @@ title: Jenkins 운영·커스텀 학습 MOC
 tags: [moc, jenkins, durability, shared-library, groovy, hook, webhook]
 status: draft
 related:
-  - ../README.md
+  - ../../README.md
   - ../01_core/README.md
   - ../03_agent/README.md
   - ../04_api/README.md
@@ -32,7 +32,7 @@ updated: 2026-05-28
 | 02 커스텀·Hook | 02-00 | [점검 — 핵심 질문과 답 (커스텀·Hook)](02-00.점검.핵심%20질문과%20답%20%28커스텀·Hook%29.md) | 02장 진입 전 자가 점검 |
 | 02 커스텀·Hook | 02-01 | [공유 라이브러리](02-01.공유%20라이브러리.md) | Shared Library 구조, vars/src/resources, @Library |
 | 02 커스텀·Hook | 02-01a | [공유 라이브러리 실전 패턴](02-01a.공유%20라이브러리%20실전%20패턴.md) | 버전 고정, 테스트, 권한 모델 |
-| 02 커스텀·Hook | 02-02 | [Jenkins 커스텀이란?](02-02.Jenkins%20커스텀이란.md) | 플러그인 vs 공유 라이브러리 vs Groovy 스크립트 — 경계 결정 |
+| 02 커스텀·Hook | 02-02 | [Groovy 커스터마이징이란?](02-02.Jenkins%20%EC%BB%A4%EC%8A%A4%ED%85%80%EC%9D%B4%EB%9E%80%3F.md) | Groovy 세 실행 영역(Pipeline DSL·Script Console·init.groovy.d)과 보안 경계 |
 | 02 커스텀·Hook | 02-03 | [groovy 커스텀터마이징 한계](02-03.groovy%20커스텀터마이징%20한계.md) | CPS 변환의 제약, 직렬화 불가 객체, sandbox |
 | 02 커스텀·Hook | 02-04 | [Groovy 기본 문법](02-04.Groovy%20기본%20문법.md) | Closure, MetaClass, Builder — Pipeline 에서 자주 쓰는 부분 |
 | 02 커스텀·Hook | 02-04a | [Groovy로 Jenkins 내부 조회하기](02-04a.Groovy로%20Jenkins%20내부%20조회하기.md) | Jenkins.getInstance(), Item·Run 트리 탐색, Script Console |
