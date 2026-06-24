@@ -2,13 +2,16 @@
 title: 12_AI MOC
 tags: [moc, ai, llm]
 status: final
-related: []
-updated: 2026-06-24
+related:
+  - roadmap.md
+updated: 2026-06-25
 ---
 
 # 12_AI
 ---
 > AI 모델과 도구를 다루는 카테고리입니다. LLM 모델 릴리스 정리, 에이전트 도구, 프롬프트 설계 같은 주제를 모읍니다.
+
+> AI Engineering 딥다이브 로드맵의 **섹션별 키워드 전체**(모델 특성·Prompt·Context·Token·RAG·Tool Calling·MCP·Harness·Agent·Evaluation·Guardrail·Observability 18주제)는 [roadmap.md](roadmap.md)에 원문 그대로 정리해 두었습니다. 아래 "등록된 절"이 *이미 작성된 문서*(Claude/Anthropic 관점)라면, roadmap.md는 *다뤄야 할 전체 범위*(벤더 중립·OpenAI 관점 보완)의 SSOT입니다.
 
 ## 등록된 절
 
