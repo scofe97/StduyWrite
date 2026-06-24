@@ -59,10 +59,10 @@ related:
   - ./ch05_efficient-concurrency/06-01.성능 엔지니어링과 하드웨어·메모리 모델.md
   - ./ch05_efficient-concurrency/06-02.동기화와 NUMA, JMH 벤치마킹.md
   - ./ch05_efficient-concurrency/06-03.락과 동시성 — 동기화부터 Virtual Threads까지.md
-  - ./ch14_jpe-evolution/01-01.Java와 JVM의 성능 진화사.md
-  - ./ch15_jpe-type-system/01-01.타입 시스템의 진화와 성능.md
-  - ./ch16_jpe-modular/01-01.모놀리식에서 모듈러로 — JPMS와 모듈 시스템.md
-  - ./ch17_jpe-logging/01-01.통합 JVM 로깅 — Xlog와 비동기 로깅.md
+  - ./ch01_java-tech/03-01.Java와 JVM의 성능 진화사.md
+  - ./ch01_java-tech/03-02.타입 시스템의 진화와 성능.md
+  - ./ch03_class-loading-mechanism/02-07.모놀리식에서 모듈러로 — JPMS와 모듈 시스템.md
+  - ./ch02_automatic-memory-management/03-03.통합 JVM 로깅 — Xlog와 비동기 로깅.md
   - ./ch04_compilation-optimization/03-01.시동 가속 — CDS·AOT·Leyden·GraalVM·CRaC.md
   - ./ch04_compilation-optimization/03-02.HotSpot warm-up 최적화와 Metaspace.md
   - ./ch06_exotic-hardware/01-01.Exotic Hardware와 JVM — 클라우드·툴체인.md
@@ -82,9 +82,11 @@ updated: 2026-06-19
 >
 > **GC·문자열·메모리모델·동시성 갈래의 예외 — JPE 흡수 (2026-06-23)**: 위 동시성 예외와 같은 *주제 우선* 원칙으로, 《JVM Performance Engineering》의 GC·문자열·메모리모델·동시성 주제 6편을 JPE 폴더(옛 `ch18`·`ch19`·`ch20`)에서 떼어 주제 폴더로 합류시켰다. GC 심화(TLAB/PLAB·G1·ZGC)·문자열 최적화는 [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `05-NN`으로, 성능 엔지니어링·메모리 모델·락/동시성은 [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) `06-NN`으로 이관. 폴더 안 책 구분은 각 노트의 `source: JVM Performance Engineering (Monica Beckwith)` 필드가 1차 기준이다.
 >
-> **시동 가속·exotic hardware 추가 이관 (2026-06-24)**: 같은 *주제 우선* 원칙으로, 8장 시동 가속(CDS·AOT·Leyden·GraalVM·warm-up·Metaspace) 2편은 *컴파일 최적화* 주제라 옛 `ch21_jpe-startup`에서 [`ch04_compilation-optimization/`](./ch04_compilation-optimization/) `03-NN`으로 이관했다. 9장 exotic hardware(GPU·FPGA·SIMD·Project Panama) 2편은 ch01~05에 대응 주제가 없어 새 폴더 [`ch06_exotic-hardware/`](./ch06_exotic-hardware/) `01-NN`을 신설해 옮겼다. 이로써 옛 `ch21`·`ch22` 폴더는 사라졌다. JPE 책의 나머지 장(`ch14`~`ch17`)은 대응 주제가 없어 JPE 폴더에 그대로 둔다.
+> **시동 가속·exotic hardware 추가 이관 (2026-06-24)**: 같은 *주제 우선* 원칙으로, 8장 시동 가속(CDS·AOT·Leyden·GraalVM·warm-up·Metaspace) 2편은 *컴파일 최적화* 주제라 옛 `ch21_jpe-startup`에서 [`ch04_compilation-optimization/`](./ch04_compilation-optimization/) `03-NN`으로 이관했다. 9장 exotic hardware(GPU·FPGA·SIMD·Project Panama) 2편은 ch01~05에 대응 주제가 없어 새 폴더 [`ch06_exotic-hardware/`](./ch06_exotic-hardware/) `01-NN`을 신설해 옮겼다. 이로써 옛 `ch21`·`ch22` 폴더는 사라졌다.
 >
-> 2026-06-02부터 두 번째 정독 대상 책 《JVM Performance Engineering》(Monica Beckwith) 갈래가 합류했다. 《밑바닥》이 `ch01`~`ch13` 번호대를 점유하므로, 새 책은 충돌을 피해 **`ch14`부터** 시작한다(예: [`ch14_jpe-evolution/`](./ch14_jpe-evolution/)). 새 책은 *한 폴더 = 책의 한 장*이고 파일 prefix는 장 안 소주제 순번을 뜻하는 `01-NN`이다 — 《밑바닥》의 `01-`(개관 흡수)/`02-`(절 정독) 의미와 다르니, 책마다 폴더가 갈려 출처가 섞이지 않는다. 책 구분은 각 노트의 `source` 필드가 1차 기준이다.
+> **JPE 잔여 4장 이관 + 합니다체 변환 (2026-06-24)**: 같은 원칙으로 JPE 나머지 4장도 주제 폴더에 합류시키고, 인접 정독본에 맞춰 한다체를 합니다체로 변환했다. 1장 성능 진화사·2장 타입 시스템은 *자바 기술* 결로 [`ch01_java-tech/`](./ch01_java-tech/) `03-01`·`03-02`로, 3장 모듈러는 [`ch03_class-loading-mechanism/`](./ch03_class-loading-mechanism/)의 기존 `02-05.자바 모듈 시스템` 옆 `02-07`로, 4장 통합 로깅은 *진단·관측* 결로 [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `03-NN`(진단도구) 다음 `03-03`으로 옮겼다. 이로써 `ch14`~`ch22` JPE 전용 폴더가 모두 사라지고, 두 책의 노트가 주제 축 하나로 합쳐졌다. 폴더 안 책 구분은 각 노트의 `source` 필드가 1차 기준이다.
+>
+> 2026-06-02부터 두 번째 정독 대상 책 《JVM Performance Engineering》(Monica Beckwith) 갈래가 합류했다. 처음에는 《밑바닥》이 `ch01`~`ch13` 번호대를 점유하므로 새 책을 충돌 없이 `ch14`~`ch22`의 *한 폴더 = 책의 한 장* 구조(prefix `01-NN`)로 두었으나, 이후 *주제 우선* 원칙에 따라 14편 전부를 대응 주제 폴더(`ch01`~`ch06`)로 이관했다(위 2026-06-23·06-24 항목). 그래서 지금은 JPE 전용 `chNN_jpe-*` 폴더가 없고, 두 책의 노트가 주제 축으로 한데 모여 있다. 폴더 안에서 책 구분은 각 노트의 `source` 필드가 1차 기준이다.
 
 ## 정독 대상 책
 
@@ -107,8 +109,8 @@ updated: 2026-06-19
 | 제목 | JVM Performance Engineering: Inside OpenJDK and the HotSpot VM |
 | 저자 | Monica Beckwith (전 AMD Server Perf/Java Labs, Microsoft JDK 팀 리드) |
 | 출판사 | Addison-Wesley (Pearson) |
-| 폴더 갈래 | `ch14_*/` 이후 (《밑바닥》 ch01~13 번호대와 충돌 회피) |
-| 파일 prefix | `01-NN` = 장 안 소주제 순번 (《밑바닥》 prefix 의미와 별개) |
+| 폴더 갈래 | (이관 완료) 처음엔 `ch14_*/`~`ch22_*/`로 두었으나 주제 우선 원칙으로 14편 전부 `ch01`~`ch06` 주제 폴더로 합류 |
+| 파일 prefix | 이관 후 각 주제 폴더의 다음 빈 prefix를 받음 (예: ch01 `03-NN`, ch02 `05-NN`, ch05 `06-NN`) |
 
 정확한 ISBN·판차 정보는 책 판권면 확보 시점에 보강한다.
 
@@ -196,14 +198,14 @@ updated: 2026-06-19
 
 ## 두 번째 책 ↔ 정독 노트 매핑 (JVM Performance Engineering)
 
-《JVM Performance Engineering》(Monica Beckwith) 갈래는 `ch14`부터 번호를 잇는다. 한 폴더가 책의 한 장에 대응하고, `01-NN`은 그 장 안 소주제 순번이다.
+《JVM Performance Engineering》(Monica Beckwith) 갈래는 처음 `ch14`~`ch22`로 두었다가 주제 우선 원칙으로 14편 전부를 `ch01`~`ch06` 주제 폴더로 이관했다(아래 표의 폴더 열은 이관 후 위치다). 폴더 안 책 구분은 각 노트의 `source` 필드가 1차 기준이다.
 
 | 장 | 영어 제목 | 폴더 | 진척 | 실습 |
 |----|----------|------|------|------|
-| 1장 | The Performance Evolution of Java | [`ch14_jpe-evolution/`](./ch14_jpe-evolution/) | ✅ Java/JVM 성능 진화사 1편(01-01): HotSpot 실행엔진·tiered compilation·deopt·generational GC·Java 1.1~17 연대기. §4 GC 알고리즘 상세는 ch02(02-04/06/07)로 위임 압축, GC 스레드 운영은 ch02 02-11로 흡수(2026-06-16) | — |
-| 2장 | Performance and Type System | [`ch15_jpe-type-system/`](./ch15_jpe-type-system/) | ✅ 타입 시스템 진화와 성능 1편(01-01): 강한 정적 타입·generics·VarHandle·sealed/record·JOL object layout·Project Valhalla value class | — |
-| 3장 | From Monolithic to Modular Java | [`ch16_jpe-modular/`](./ch16_jpe-modular/) | ✅ 모놀리식에서 모듈러로 1편(01-01): JPMS·module-info·ServiceLoader·ModuleLayer로 JAR hell versioning 우회·OSGi 비교·jdeps/jlink/jmod/jdeprscan | — |
-| 4장 | Unified Logging System | [`ch17_jpe-logging/`](./ch17_jpe-logging/) | ✅ 통합 JVM 로깅 1편(01-01): JEP 158 -Xlog 네 축(tag·level·decorator·output)·계층적 레벨·jcmd 런타임 동적 조정·비동기 로깅(-Xlog:async) | — |
+| 1장 | The Performance Evolution of Java | [`ch01_java-tech/`](./ch01_java-tech/) `03-01` | ✅ Java/JVM 성능 진화사(주제 우선 이관): HotSpot 실행엔진·tiered compilation·deopt·generational GC·Java 1.1~17 연대기. §4 GC 알고리즘 상세는 ch02(02-04/06/07)로 위임 압축, GC 스레드 운영은 ch02 02-11로 흡수(2026-06-16) | — |
+| 2장 | Performance and Type System | [`ch01_java-tech/`](./ch01_java-tech/) `03-02` | ✅ 타입 시스템 진화와 성능(주제 우선 이관): 강한 정적 타입·generics·VarHandle·sealed/record·JOL object layout·Project Valhalla value class | — |
+| 3장 | From Monolithic to Modular Java | [`ch03_class-loading-mechanism/`](./ch03_class-loading-mechanism/) `02-07` | ✅ 모놀리식에서 모듈러로(02-05 모듈 문서 옆으로 이관): JPMS·module-info·ServiceLoader·ModuleLayer로 JAR hell versioning 우회·OSGi 비교·jdeps/jlink/jmod/jdeprscan | — |
+| 4장 | Unified Logging System | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `03-03` | ✅ 통합 JVM 로깅(진단도구 03-NN 결로 이관): JEP 158 -Xlog 네 축(tag·level·decorator·output)·계층적 레벨·jcmd 런타임 동적 조정·비동기 로깅(-Xlog:async) | — |
 | 5장 | End-to-End Performance Optimization | [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) `06-01·06-02` | ✅ 2편(주제 우선 이관): 06-01 성능 엔지니어링과 하드웨어·메모리 모델(footprint/responsiveness/throughput/availability·STW·SMT·store buffering), 06-02 동기화와 NUMA·JMH 벤치마킹(barrier/fence/volatile·happens-before·CAS/LSE·perfasm) | — |
 | 6장 | Advanced Memory Management and GC | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `05-01·05-02` | ✅ 2편(주제 우선 이관): 05-01 TLAB·PLAB·NUMA-aware GC와 G1 심화(region·IHOP·humongous·mixed collection 튜닝), 05-02 ZGC 심화와 워크로드별 GC 선택(colored pointer·load barrier·ZPage·6트리거·OLAP/OLTP/HTAP·LDS) | — |
 | 7장 | Runtime Performance Optimizations | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `05-03` + [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) `06-03` | ✅ 2편(주제 우선 이관): 05-03 문자열 런타임 최적화(string pool·intern·G1 dedup·indy-fication·compact string), 06-03 락과 동시성(monitor lock·contended locking JEP 143·spin-wait·Executor/ForkJoinPool/CompletableFuture·virtual thread/continuation) | — |
@@ -215,7 +217,7 @@ updated: 2026-06-19
 ## 작성 규칙
 
 - 파일명 (《밑바닥》): `{장 폴더}/01-{NN}.{개관·운영 흡수본 제목}.md` 또는 `{장 폴더}/02-{절}.{책의 절 제목}.md`
-- 파일명 (《JVM Performance Engineering》): `ch14_*/01-{NN}.{소주제 제목}.md` — 폴더가 장, `01-NN`은 장 안 소주제 순번
+- 파일명 (《JVM Performance Engineering》): 주제 폴더로 이관 완료 — 각 주제 폴더의 다음 빈 prefix를 받는다(예: `ch01_java-tech/03-{NN}.{소주제 제목}.md`). 책 구분은 `source` 필드로.
 - 프론트매터 필수 필드: `title`, `tags`, `status`, `related`, `updated` (정독 노트는 `source`로 책 §범위+공식 스펙 URL 명시)
 - 본문 톤: 한다체 통일, 문단형 우선, "왜?" 포함, AI 강조어("매우/굉장히/획기적/혁신적") 금지
 - Mermaid 도식: pastel `fill` + `color:#000` 명시, sequenceDiagram에 `rect` 금지
