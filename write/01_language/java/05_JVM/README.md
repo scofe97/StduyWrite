@@ -62,10 +62,10 @@ related:
   - ./ch15_jpe-type-system/01-01.타입 시스템의 진화와 성능.md
   - ./ch16_jpe-modular/01-01.모놀리식에서 모듈러로 — JPMS와 모듈 시스템.md
   - ./ch17_jpe-logging/01-01.통합 JVM 로깅 — Xlog와 비동기 로깅.md
-  - ./ch21_jpe-startup/01-01.시동 가속 — CDS·AOT·Leyden·GraalVM·CRaC.md
-  - ./ch21_jpe-startup/01-02.HotSpot warm-up 최적화와 Metaspace.md
-  - ./ch22_jpe-exotic-hw/01-01.Exotic Hardware와 JVM — 클라우드·툴체인.md
-  - ./ch22_jpe-exotic-hw/01-02.케이스 스터디와 Project Panama.md
+  - ./ch04_compilation-optimization/03-01.시동 가속 — CDS·AOT·Leyden·GraalVM·CRaC.md
+  - ./ch04_compilation-optimization/03-02.HotSpot warm-up 최적화와 Metaspace.md
+  - ./ch06_exotic-hardware/01-01.Exotic Hardware와 JVM — 클라우드·툴체인.md
+  - ./ch06_exotic-hardware/01-02.케이스 스터디와 Project Panama.md
 updated: 2026-06-19
 ---
 
@@ -79,7 +79,9 @@ updated: 2026-06-19
 >
 > **동시성 갈래의 예외 — 출처 혼합 허용**: 책별로 폴더를 가르는 게 원칙이지만, [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 만은 *주제(동시성)* 를 우선해 두 책을 한 폴더에 둔다. `01-NN`·`02-NN`(《밑바닥》 12·13장 정독)에 더해, 출처가 《자바 동시성 프로그래밍》(또는 동등 도서)인 실무 학습 노트 9편을 `03-NN`~`05-NN`으로 합류시켰다(2026-06-17 루트 직속에서 이관). 폴더 안에서 책 구분은 각 노트의 `source` 필드가 1차 기준이다.
 >
-> **GC·문자열·메모리모델·동시성 갈래의 예외 — JPE 흡수 (2026-06-23)**: 위 동시성 예외와 같은 *주제 우선* 원칙으로, 《JVM Performance Engineering》의 GC·문자열·메모리모델·동시성 주제 6편을 JPE 폴더(옛 `ch18`·`ch19`·`ch20`)에서 떼어 주제 폴더로 합류시켰다. GC 심화(TLAB/PLAB·G1·ZGC)·문자열 최적화는 [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `05-NN`으로, 성능 엔지니어링·메모리 모델·락/동시성은 [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) `06-NN`으로 이관. 폴더 안 책 구분은 각 노트의 `source: JVM Performance Engineering (Monica Beckwith)` 필드가 1차 기준이다. JPE 책의 나머지 장(`ch14`~`ch17`·`ch21`·`ch22`)은 대응 주제가 없어 JPE 폴더에 그대로 둔다.
+> **GC·문자열·메모리모델·동시성 갈래의 예외 — JPE 흡수 (2026-06-23)**: 위 동시성 예외와 같은 *주제 우선* 원칙으로, 《JVM Performance Engineering》의 GC·문자열·메모리모델·동시성 주제 6편을 JPE 폴더(옛 `ch18`·`ch19`·`ch20`)에서 떼어 주제 폴더로 합류시켰다. GC 심화(TLAB/PLAB·G1·ZGC)·문자열 최적화는 [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `05-NN`으로, 성능 엔지니어링·메모리 모델·락/동시성은 [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) `06-NN`으로 이관. 폴더 안 책 구분은 각 노트의 `source: JVM Performance Engineering (Monica Beckwith)` 필드가 1차 기준이다.
+>
+> **시동 가속·exotic hardware 추가 이관 (2026-06-24)**: 같은 *주제 우선* 원칙으로, 8장 시동 가속(CDS·AOT·Leyden·GraalVM·warm-up·Metaspace) 2편은 *컴파일 최적화* 주제라 옛 `ch21_jpe-startup`에서 [`ch04_compilation-optimization/`](./ch04_compilation-optimization/) `03-NN`으로 이관했다. 9장 exotic hardware(GPU·FPGA·SIMD·Project Panama) 2편은 ch01~05에 대응 주제가 없어 새 폴더 [`ch06_exotic-hardware/`](./ch06_exotic-hardware/) `01-NN`을 신설해 옮겼다. 이로써 옛 `ch21`·`ch22` 폴더는 사라졌다. JPE 책의 나머지 장(`ch14`~`ch17`)은 대응 주제가 없어 JPE 폴더에 그대로 둔다.
 >
 > 2026-06-02부터 두 번째 정독 대상 책 《JVM Performance Engineering》(Monica Beckwith) 갈래가 합류했다. 《밑바닥》이 `ch01`~`ch13` 번호대를 점유하므로, 새 책은 충돌을 피해 **`ch14`부터** 시작한다(예: [`ch14_jpe-evolution/`](./ch14_jpe-evolution/)). 새 책은 *한 폴더 = 책의 한 장*이고 파일 prefix는 장 안 소주제 순번을 뜻하는 `01-NN`이다 — 《밑바닥》의 `01-`(개관 흡수)/`02-`(절 정독) 의미와 다르니, 책마다 폴더가 갈려 출처가 섞이지 않는다. 책 구분은 각 노트의 `source` 필드가 1차 기준이다.
 
@@ -204,10 +206,10 @@ updated: 2026-06-19
 | 5장 | End-to-End Performance Optimization | [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) `06-01·06-02` | ✅ 2편(주제 우선 이관): 06-01 성능 엔지니어링과 하드웨어·메모리 모델(footprint/responsiveness/throughput/availability·STW·SMT·store buffering), 06-02 동기화와 NUMA·JMH 벤치마킹(barrier/fence/volatile·happens-before·CAS/LSE·perfasm) | — |
 | 6장 | Advanced Memory Management and GC | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `05-01·05-02` | ✅ 2편(주제 우선 이관): 05-01 TLAB·PLAB·NUMA-aware GC와 G1 심화(region·IHOP·humongous·mixed collection 튜닝), 05-02 ZGC 심화와 워크로드별 GC 선택(colored pointer·load barrier·ZPage·6트리거·OLAP/OLTP/HTAP·LDS) | — |
 | 7장 | Runtime Performance Optimizations | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `05-03` + [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) `06-03` | ✅ 2편(주제 우선 이관): 05-03 문자열 런타임 최적화(string pool·intern·G1 dedup·indy-fication·compact string), 06-03 락과 동시성(monitor lock·contended locking JEP 143·spin-wait·Executor/ForkJoinPool/CompletableFuture·virtual thread/continuation) | — |
-| 8장 | Accelerating Time to Steady State | [`ch21_jpe-startup/`](./ch21_jpe-startup/) | ✅ 2편: 01-01 시동 가속(time-to-steady-state·CDS·AOT·Project Leyden training run·GraalVM native image·CRIU/CRaC), 01-02 HotSpot warm-up 최적화와 Metaspace(tiered C1/C2·Segmented CodeCache·speculative·PermGen→Metaspace·JEP 387) | — |
-| 9장 | Harnessing Exotic Hardware | [`ch22_jpe-exotic-hw/`](./ch22_jpe-exotic-hw/) | ✅ 2편: 01-01 Exotic Hardware와 JVM(GPU/FPGA·OpenCL·AVX-512/SVE·클라우드 4도전·언어/툴체인), 01-02 케이스 스터디와 Project Panama(LWJGL/JNI·Aparapi·Sumatra/HSAIL·TornadoVM·Vector API·FFM API·Babylon/HAT) | — |
+| 8장 | Accelerating Time to Steady State | [`ch04_compilation-optimization/`](./ch04_compilation-optimization/) `03-NN` | ✅ 2편(*컴파일 최적화* 주제로 이관): 03-01 시동 가속(time-to-steady-state·CDS·AOT·Project Leyden training run·GraalVM native image·CRIU/CRaC), 03-02 HotSpot warm-up 최적화와 Metaspace(tiered C1/C2·Segmented CodeCache·speculative·PermGen→Metaspace·JEP 387) | — |
+| 9장 | Harnessing Exotic Hardware | [`ch06_exotic-hardware/`](./ch06_exotic-hardware/) | ✅ 2편(신설 폴더로 이관): 01-01 Exotic Hardware와 JVM(GPU/FPGA·OpenCL·AVX-512/SVE·클라우드 4도전·언어/툴체인), 01-02 케이스 스터디와 Project Panama(LWJGL/JNI·Aparapi·Sumatra/HSAIL·TornadoVM·Vector API·FFM API·Babylon/HAT) | — |
 
-> **《JVM Performance Engineering》(Monica Beckwith) 전권 9장 완간** (2026-06-03). ch14~ch22, 총 14편. 9장이 책의 마지막 장이다.
+> **《JVM Performance Engineering》(Monica Beckwith) 전권 9장 완간** (2026-06-03). 총 14편. 9장이 책의 마지막 장이다. 이후 주제 우선 재배치로 8장은 `ch04_compilation-optimization/03-NN`, 9장은 `ch06_exotic-hardware/`로 이관됐고, JPE 전용 폴더로는 `ch14`~`ch17`이 남는다.
 
 ## 작성 규칙
 
