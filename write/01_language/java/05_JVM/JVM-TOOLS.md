@@ -87,7 +87,7 @@ updated: 2026-06-24
 
 > 명령줄 진단 도구의 깊은 설명 → [ch02 03-01 기본 문제 해결 도구 — 명령줄 도구](./ch02_automatic-memory-management/03-01.기본%20문제%20해결%20도구%20—%20명령줄%20도구.md)
 > 시각화 도구(JConsole·VisualVM) → [ch02 03-02 시각화 문제 해결 도구](./ch02_automatic-memory-management/03-02.시각화%20문제%20해결%20도구.md)
-> JVM 통합 로깅(`-Xlog`) → [ch17 01-01 통합 JVM 로깅](./ch17_jpe-logging/01-01.통합%20JVM%20로깅%20—%20Xlog와%20비동기%20로깅.md)
+> JVM 통합 로깅(`-Xlog`) → [ch02 03-03 통합 JVM 로깅](./ch02_automatic-memory-management/03-03.통합%20JVM%20로깅%20—%20Xlog와%20비동기%20로깅.md)
 
 
 
