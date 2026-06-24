@@ -49,6 +49,8 @@ updated: 2026-06-24
 > JIT의 C1/C2·계층형 컴파일·핫스폿 탐지의 깊은 설명 → [ch04 02-01 JIT 컴파일러](./ch04_compilation-optimization/02-01.JIT%20컴파일러%20—%20인터프리터와%20계층형%20컴파일.md), [ch04 02-02 컴파일 대상과 핫스폿 탐지](./ch04_compilation-optimization/02-02.컴파일%20대상과%20핫스폿%20탐지.md)
 > GC·메모리 플래그의 맥락 → [ch02 자동 메모리 관리](./ch02_automatic-memory-management/), 튜닝 플래그 전반 → [jpf 03-02 VM 정보·튜닝 플래그](./jpf_java-performance/03-02.JDK%20기본%20도구와%20VM%20정보·튜닝%20플래그.md)
 
+
+
 ### javac — 소스를 바이트코드로 (프론트엔드 컴파일)
 
 | 플래그 | 무엇을 하나 | 예 |
@@ -59,6 +61,8 @@ updated: 2026-06-24
 | `-Xlint` | 의심스러운 코드 경고 | `javac -Xlint:all App.java` |
 
 > javac의 세 단계(파싱·애너테이션 처리·의미 분석)와 구문 설탕의 깊은 설명 → [ch04 01-01 javac 컴파일 과정](./ch04_compilation-optimization/01-01.javac%20컴파일러의%20컴파일%20과정.md), 애너테이션 처리기 실습 → [ch04 01-03](./ch04_compilation-optimization/01-03.실전%20—%20플러그인%20애너테이션%20처리기.md)
+
+
 
 ### javap — 클래스 파일 역어셈블
 

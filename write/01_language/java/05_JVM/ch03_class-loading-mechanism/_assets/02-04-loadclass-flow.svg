@@ -1,0 +1,85 @@
+<svg viewBox="0 0 920 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>loadClass() 위임 흐름 — 자식이 부모에게 위임하고 실패 시 직접 로딩</title>
+  <desc>자식 클래스 로더에 로딩 요청이 오면 loadClass()는 먼저 findLoadedClass()로 이미 로딩됐는지 확인한다. 없으면 부모의 loadClass()로 위임이 위로 올라간다. 부모도 findLoadedClass·부모 위임을 거쳐 결국 부트스트랩까지 올라가고, 어느 부모도 처리하지 못하면 요청이 다시 아래로 내려와 자식의 findClass()가 직접 로딩(defineClass)한다. 녹색 화살표가 이 위임-복귀 흐름을 나타낸다. 요청은 위로, 로딩은 아래로 흐른다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11.5px;fill:rgb(150,145,140)}
+      .ldrhead{font-size:12.5px;font-weight:800;fill:rgb(212,168,83)}
+      .mono{font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:700}
+      .lab{font-size:11px;font-weight:800;fill:#66bb6a}
+      .note{font-size:10px;fill:rgb(150,145,140)}
+    </style>
+    <marker id="g" markerWidth="11" markerHeight="11" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,3 L0,6 z" fill="#66bb6a"/></marker>
+    <marker id="d" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 z" fill="rgb(150,145,140)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="920" height="560" fill="#0d0d0d"/>
+  <text x="28" y="40" class="title">loadClass() 위임 — 요청은 위로(녹색), 로딩은 자식이 직접</text>
+  <text x="28" y="64" class="sub">findLoadedClass 로 캐시 확인 → 부모에게 위임 → 부모 실패 시 자식의 findClass 가 직접 로딩</text>
+
+  <!-- ===== Child ClassLoader column ===== -->
+  <rect x="40" y="92" width="250" height="440" rx="10" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.4"/>
+  <text x="165" y="116" class="ldrhead" text-anchor="middle">자식 ClassLoader</text>
+
+  <!-- method boxes: light fill, dark text -->
+  <rect x="70" y="132" width="190" height="40" rx="6" fill="#dceaf7"/>
+  <text x="165" y="157" class="mono" fill="#10243a" text-anchor="middle">loadClass()</text>
+  <rect x="70" y="200" width="190" height="40" rx="6" fill="#dceaf7"/>
+  <text x="165" y="225" class="mono" fill="#10243a" text-anchor="middle">findLoadedClass()</text>
+  <rect x="70" y="300" width="190" height="40" rx="6" fill="#f5edda"/>
+  <text x="165" y="325" class="mono" fill="#3a2e0c" text-anchor="middle">findClass()</text>
+  <rect x="70" y="368" width="190" height="40" rx="6" fill="#f5edda"/>
+  <text x="165" y="393" class="mono" fill="#3a2e0c" text-anchor="middle">defineClass()</text>
+  <rect x="70" y="436" width="190" height="40" rx="6" fill="#f5edda"/>
+  <text x="165" y="461" class="mono" fill="#3a2e0c" text-anchor="middle">resolveClass()</text>
+
+  <!-- inner vertical drop arrows (grey) -->
+  <line x1="165" y1="172" x2="165" y2="198" stroke="rgb(150,145,140)" stroke-width="1.5" marker-end="url(#d)"/>
+  <line x1="165" y1="340" x2="165" y2="366" stroke="rgb(150,145,140)" stroke-width="1.5" marker-end="url(#d)"/>
+  <line x1="165" y1="408" x2="165" y2="434" stroke="rgb(150,145,140)" stroke-width="1.5" marker-end="url(#d)"/>
+
+  <!-- ===== Parent ClassLoader column ===== -->
+  <rect x="335" y="92" width="250" height="440" rx="10" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.4"/>
+  <text x="460" y="116" class="ldrhead" text-anchor="middle">부모 ClassLoader</text>
+
+  <rect x="365" y="132" width="190" height="40" rx="6" fill="#dceaf7"/>
+  <text x="460" y="157" class="mono" fill="#10243a" text-anchor="middle">loadClass()</text>
+  <rect x="365" y="200" width="190" height="40" rx="6" fill="#dceaf7"/>
+  <text x="460" y="225" class="mono" fill="#10243a" text-anchor="middle">findLoadedClass()</text>
+  <rect x="365" y="300" width="190" height="40" rx="6" fill="#f5edda"/>
+  <text x="460" y="325" class="mono" fill="#3a2e0c" text-anchor="middle">findClass()</text>
+  <rect x="365" y="368" width="190" height="40" rx="6" fill="#f5edda"/>
+  <text x="460" y="393" class="mono" fill="#3a2e0c" text-anchor="middle">defineClass()</text>
+  <rect x="365" y="436" width="190" height="40" rx="6" fill="#f5edda"/>
+  <text x="460" y="461" class="mono" fill="#3a2e0c" text-anchor="middle">resolveClass()</text>
+
+  <line x1="460" y1="172" x2="460" y2="198" stroke="rgb(150,145,140)" stroke-width="1.5" marker-end="url(#d)"/>
+  <line x1="460" y1="340" x2="460" y2="366" stroke="rgb(150,145,140)" stroke-width="1.5" marker-end="url(#d)"/>
+  <line x1="460" y1="408" x2="460" y2="434" stroke="rgb(150,145,140)" stroke-width="1.5" marker-end="url(#d)"/>
+
+  <!-- ===== Bootstrap ClassLoader column ===== -->
+  <rect x="650" y="92" width="230" height="200" rx="10" fill="#0d0d0d" stroke="#f44336" stroke-width="1.4"/>
+  <text x="765" y="116" class="ldrhead" text-anchor="middle" fill="#ef9a9a">Bootstrap ClassLoader</text>
+  <rect x="678" y="140" width="174" height="44" rx="6" fill="#f2d4d4"/>
+  <text x="765" y="167" font-size="10.5" font-family="'JetBrains Mono',monospace" font-weight="700" fill="#7a1f1f" text-anchor="middle">findBootstrapClass()</text>
+  <rect x="678" y="216" width="174" height="44" rx="6" fill="#f2d4d4"/>
+  <text x="765" y="243" class="mono" fill="#7a1f1f" text-anchor="middle">Native Method</text>
+  <line x1="765" y1="184" x2="765" y2="214" stroke="rgb(150,145,140)" stroke-width="1.5" marker-end="url(#d)"/>
+
+  <!-- ===== green delegation arrows (up) ===== -->
+  <!-- Child findLoadedClass -> Parent loadClass (위로 위임) -->
+  <path d="M260,216 C300,210 320,165 363,156" fill="none" stroke="#66bb6a" stroke-width="2.6" marker-end="url(#g)"/>
+  <!-- Parent findLoadedClass(또는 그 위 위임) -> Bootstrap findBootstrapClass -->
+  <path d="M555,216 C600,206 628,170 676,162" fill="none" stroke="#66bb6a" stroke-width="2.6" marker-end="url(#g)"/>
+  <text x="610" y="210" class="lab">⋯ 위로 계속</text>
+
+  <!-- ===== green return arrows (back down to findClass) ===== -->
+  <!-- Parent findClass 실패 -> Child findClass (요청 복귀, 자식이 직접 로딩) -->
+  <path d="M363,320 C320,330 300,322 263,320" fill="none" stroke="#66bb6a" stroke-width="2.6" marker-end="url(#g)"/>
+  <!-- Bootstrap/상위 못 찾음 -> Parent findClass -->
+  <path d="M678,250 C620,290 590,316 558,320" fill="none" stroke="#66bb6a" stroke-width="2.6" marker-end="url(#g)"/>
+
+  <!-- legend -->
+  <text x="28" y="544" class="note">녹색 = loadClass 의 위임 경로(위로) 와 부모 실패 시 복귀(아래 findClass). 회색 = 한 로더 안 메서드 진행 순서.</text>
+</svg>

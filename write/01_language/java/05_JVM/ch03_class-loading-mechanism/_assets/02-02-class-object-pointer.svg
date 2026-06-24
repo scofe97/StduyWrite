@@ -1,0 +1,78 @@
+<svg viewBox="0 0 900 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>Class 객체·인스턴스·메서드 영역의 가리킴 관계 — 종착지는 메서드 영역</title>
+  <desc>힙에는 Class 객체(Foo.class)와 인스턴스(new Foo())가 산다. ① Class 객체는 메서드 영역의 클래스 데이터를 가리키는 입구다(리플렉션 통로). ② 인스턴스는 헤더의 클래스 워드로 같은 클래스 데이터를 직접 가리킨다(HotSpot 다이렉트 포인터). 상수 풀은 메서드 영역 안에 있으며 가리켜지는 쪽이다. Class 객체는 메서드 영역 데이터의 사본이 아니라 포인터이고, Class 객체와 인스턴스는 서로 직접 가리키지 않고 각자 메서드 영역을 가리킨다. static 변수는 준비 단계에 0, 초기화 단계에 실제값이 된다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11.5px;fill:rgb(138,133,128)}
+      .ph{font-size:14px;font-weight:800;fill:#0d0d0d}
+      .head{font-size:12px;font-weight:800;fill:rgb(212,168,83)}
+      .nm{font-size:11.5px;font-weight:700;fill:#e8e4df}
+      .body{font-size:10px;fill:rgb(190,185,180)}
+      .note{font-size:9.5px;fill:rgb(138,133,128)}
+      .ondark{font-size:11px;fill:#0d0d0d;font-weight:700}
+      .ondarksub{font-size:9px;fill:#1a1a1a}
+      .arrlbl{font-size:10px;font-weight:800;fill:rgb(212,168,83)}
+    </style>
+    <marker id="al" markerWidth="11" markerHeight="11" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="480" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">가리킴 관계 — 종착지는 항상 메서드 영역</text>
+  <text x="28" y="58" class="sub">힙(주체) → 메서드 영역(대상). 상수 풀은 메서드 영역 *안*에 있는 "가리켜지는 쪽"</text>
+
+  <!-- 힙 영역 -->
+  <text x="28" y="92" class="head">힙 (Heap) — 자바 코드가 다루는 객체</text>
+
+  <!-- ① Class 객체 -->
+  <rect x="28" y="104" width="340" height="74" rx="10" fill="#5b9bd5"/>
+  <text x="46" y="129" class="ondark" fill="#e8e4df" font-size="12">① Foo.class (Class 객체) = 입구·검색 단말기</text>
+  <rect x="44" y="140" width="308" height="28" rx="6" fill="#dceaf7"/>
+  <text x="58" y="158" font-size="9.5" fill="#10243a" font-weight="700">리플렉션·getClass()·Foo.class 가 여기에 닿는다</text>
+
+  <!-- ② 인스턴스 -->
+  <rect x="28" y="196" width="340" height="86" rx="10" fill="#66bb6a"/>
+  <text x="46" y="221" class="ondark" font-size="12">② new Foo() 인스턴스</text>
+  <rect x="44" y="232" width="308" height="38" rx="6" fill="#e6f7e7"/>
+  <text x="58" y="250" font-size="9.5" fill="#14521d" font-weight="700">[ 마크워드 | 클래스워드 ]</text>
+  <text x="58" y="263" font-size="9" fill="#14521d">클래스워드가 메서드 영역 클래스 데이터를 직접 가리킴(다이렉트 포인터)</text>
+
+  <!-- 메서드 영역 -->
+  <text x="500" y="92" class="head">메서드 영역 (Method Area / Metaspace)</text>
+  <rect x="500" y="104" width="372" height="232" rx="11" fill="rgb(212,168,83)"/>
+  <text x="520" y="131" class="ph">Foo 클래스 데이터</text>
+  <rect x="518" y="144" width="336" height="30" rx="6" fill="rgba(13,13,13,0.16)"/>
+  <text x="532" y="163" class="ondark">필드 정의 · 메서드 바이트코드</text>
+  <rect x="518" y="180" width="336" height="44" rx="6" fill="#fdf3df"/>
+  <text x="532" y="199" font-size="11" fill="#0d0d0d" font-weight="700">런타임 상수 풀  ◄── 상수 풀은 여기!</text>
+  <text x="532" y="215" font-size="9" fill="#1a1a1a">힙도 Class 객체도 아닌, 메서드 영역 *내부* 구성요소</text>
+  <rect x="518" y="230" width="336" height="58" rx="6" fill="rgba(13,13,13,0.16)"/>
+  <text x="532" y="249" class="ondark">static 변수 값</text>
+  <text x="532" y="265" class="ondarksub">· 준비 단계  → 0 (기본값)</text>
+  <text x="532" y="279" class="ondarksub">· 초기화 단계 → 123 (실제값)</text>
+  <rect x="518" y="294" width="336" height="28" rx="6" fill="rgba(13,13,13,0.16)"/>
+  <text x="532" y="312" class="ondarksub">◄─ 검증을 통과해야 여기 적재됨</text>
+
+  <!-- ① 화살표: Class 객체 → 메서드 영역 -->
+  <line x1="368" y1="141" x2="500" y2="155" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#al)"/>
+  <text x="434" y="128" class="arrlbl" text-anchor="middle">① 입구</text>
+
+  <!-- ② 화살표: 인스턴스 → 메서드 영역 -->
+  <line x1="368" y1="251" x2="500" y2="250" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#al)"/>
+  <text x="434" y="243" class="arrlbl" text-anchor="middle">② 클래스워드</text>
+
+  <!-- 핵심 규칙 박스 -->
+  <text x="28" y="318" class="head">핵심 규칙</text>
+  <rect x="28" y="330" width="444" height="130" rx="9" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-dasharray="5 4"/>
+  <text x="44" y="354" class="body">• 가리킴의 종착지 = 거의 항상 메서드 영역 (힙=주체, 메서드영역=대상)</text>
+  <text x="44" y="374" class="body">• 상수 풀 = 메서드 영역 *안*에 있음 (힙도, Class 객체도 아님)</text>
+  <text x="44" y="394" class="body">• 복사 아님 = Class 객체는 메서드 영역 데이터의 *포인터*이지 사본 아님</text>
+  <text x="44" y="414" class="body">• Class 객체 ↔ 인스턴스 = 서로 직접 안 가리킴. 각자 메서드 영역을 가리킴</text>
+  <text x="44" y="434" class="note">출처: ① 02-02 §1 / ② 00-개관 §5(마크·클래스워드, HotSpot 다이렉트 포인터)</text>
+  <text x="44" y="450" class="note">— ①②를 한 그림으로 합친 것은 학습 보조용 구성 (본문엔 ①만 그림 있음)</text>
+
+  <text x="500" y="358" class="sub">왜 Class 객체를 따로 두나 — 메서드 영역은</text>
+  <text x="500" y="374" class="sub">JVM 네이티브 구조라 자바 코드가 직접 못 만진다.</text>
+  <text x="500" y="390" class="sub">그래서 힙에 입구(Class 객체)를 두고 그것을 통해 본다.</text>
+  <text x="500" y="414" class="sub">도서관 비유 — 메서드 영역 = 서고의 실제 책,</text>
+  <text x="500" y="430" class="sub">Class 객체 = 로비의 검색 단말기(책을 가리킬 뿐 복사 아님).</text>
+</svg>

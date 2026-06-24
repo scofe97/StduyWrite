@@ -1,0 +1,56 @@
+<svg viewBox="0 0 920 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>JarLauncher 기동 흐름 — 사용자 정의 로더로 중첩 JAR를 읽어 Start-Class 실행</title>
+  <desc>java -jar 는 MANIFEST의 Main-Class인 JarLauncher를 실행한다. JarLauncher는 BOOT-INF/classes와 lib를 식별하고 classpath.idx 순서로 클래스패스를 구성한다. 그 URL들로 중첩 JAR를 읽는 사용자 정의 클래스 로더를 만들고, 스레드 컨텍스트 로더로 설정한 뒤, Start-Class를 로딩해 리플렉션으로 main을 호출한다. java.* 핵심 클래스는 여전히 부모 위임으로 부트스트랩이 로딩하고, 로더는 내 앱과 의존성만 중첩 JAR에서 읽는다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11.5px;fill:rgb(150,145,140)}
+      .box{font-size:11px;font-weight:800;fill:#0d0d0d}
+      .boxsub{font-size:9.5px}
+      .note{font-size:10px;fill:rgb(150,145,140)}
+    </style>
+    <marker id="a" markerWidth="11" markerHeight="11" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,3 L0,6 z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+  <rect x="0" y="0" width="920" height="360" fill="#0d0d0d"/>
+  <text x="28" y="40" class="title">JarLauncher 기동 흐름 — 런처가 로더를 세팅하고 내 앱을 실행</text>
+  <text x="28" y="64" class="sub">java -jar → JarLauncher → 사용자 정의 로더 → Start-Class.main (리플렉션)</text>
+
+  <!-- 5 step boxes -->
+  <rect x="28" y="96" width="158" height="90" rx="9" fill="#dceaf7"/>
+  <text x="107" y="128" class="box" text-anchor="middle">① java -jar</text>
+  <text x="107" y="150" class="boxsub" fill="#10243a" text-anchor="middle">MANIFEST 의</text>
+  <text x="107" y="166" class="boxsub" fill="#10243a" text-anchor="middle">Main-Class 실행</text>
+
+  <rect x="214" y="96" width="158" height="90" rx="9" fill="#66bb6a"/>
+  <text x="293" y="124" class="box" text-anchor="middle" fill="#14521d">② JarLauncher</text>
+  <text x="293" y="146" class="boxsub" fill="#14260f" text-anchor="middle">classes·lib 식별</text>
+  <text x="293" y="162" class="boxsub" fill="#14260f" text-anchor="middle">classpath.idx 순서</text>
+
+  <rect x="400" y="96" width="158" height="90" rx="9" fill="#5b9bd5"/>
+  <text x="479" y="124" text-anchor="middle" style="font-size:11px;font-weight:800;fill:#ffffff">③ 사용자 정의 로더</text>
+  <text x="479" y="146" class="boxsub" fill="#f2f7fc" text-anchor="middle">중첩 JAR URL 로</text>
+  <text x="479" y="162" class="boxsub" fill="#f2f7fc" text-anchor="middle">URLClassLoader 생성</text>
+
+  <rect x="586" y="96" width="158" height="90" rx="9" fill="rgb(212,168,83)"/>
+  <text x="665" y="124" class="box" text-anchor="middle">④ Start-Class 로딩</text>
+  <text x="665" y="146" class="boxsub" fill="#241c08" text-anchor="middle">이 로더로 로딩 +</text>
+  <text x="665" y="162" class="boxsub" fill="#241c08" text-anchor="middle">TCCL 설정</text>
+
+  <rect x="772" y="96" width="120" height="90" rx="9" fill="#dceaf7"/>
+  <text x="832" y="124" class="box" text-anchor="middle">⑤ main</text>
+  <text x="832" y="146" class="boxsub" fill="#10243a" text-anchor="middle">리플렉션으로</text>
+  <text x="832" y="162" class="boxsub" fill="#10243a" text-anchor="middle">내 앱 실행</text>
+
+  <!-- arrows -->
+  <line x1="186" y1="141" x2="212" y2="141" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#a)"/>
+  <line x1="372" y1="141" x2="398" y2="141" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#a)"/>
+  <line x1="558" y1="141" x2="584" y2="141" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#a)"/>
+  <line x1="744" y1="141" x2="770" y2="141" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#a)"/>
+
+  <!-- 부모 위임 유지 박스 -->
+  <rect x="28" y="226" width="864" height="74" rx="10" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-dasharray="6 5"/>
+  <text x="48" y="252" font-size="12.5" font-weight="800" fill="rgb(212,168,83)">부모 위임은 그대로 — 로더는 내 앱·의존성만 읽는다</text>
+  <text x="48" y="276" font-size="10.5" fill="rgb(200,195,190)">java.* 핵심 클래스는 여전히 위임으로 부트스트랩이 로딩하고, Spring Boot 로더는 BOOT-INF 안의 클래스만 중첩 JAR 에서 읽습니다.</text>
+
+  <text x="28" y="334" class="note">이 한 줄(java -jar) 안에 사용자 정의 로더·부모 위임·중첩 JAR 읽기·리플렉션 실행이 모두 들어 있습니다.</text>
+</svg>
