@@ -12,13 +12,17 @@ related:
   - ./ch02_automatic-memory-management/03-02.시각화 문제 해결 도구.md
   - ./ch02_automatic-memory-management/04-01.최적화 사례 분석.md
   - ./ch02_automatic-memory-management/04-02.실전 — Eclipse IDE 튜닝.md
-  - ./ch06_class-file/01-01.클래스 파일 구조.md
-  - ./ch06_class-file/01-02.바이트코드 명령어.md
+  - ./ch02_automatic-memory-management/05-01.TLAB·PLAB·NUMA-aware GC와 G1 심화.md
+  - ./ch02_automatic-memory-management/05-02.ZGC 심화와 워크로드별 GC 선택.md
+  - ./ch02_automatic-memory-management/05-03.문자열 런타임 최적화.md
+  - ./ch03_class-loading-mechanism/01-01.클래스 파일 구조.md
+  - ./ch03_class-loading-mechanism/01-02.바이트코드 명령어.md
   - ./ch03_class-loading-mechanism/02-01.클래스 로딩 시점과 생명주기.md
   - ./ch03_class-loading-mechanism/02-02.로딩·검증·준비.md
   - ./ch03_class-loading-mechanism/02-03.해석과 초기화.md
   - ./ch03_class-loading-mechanism/02-04.클래스 로더와 부모 위임 모델.md
   - ./ch03_class-loading-mechanism/02-05.자바 모듈 시스템과 클래스 로더 변화.md
+  - ./ch03_class-loading-mechanism/02-06.리플렉션과 동적 클래스 처리.md
   - ./ch03_class-loading-mechanism/03-01.런타임 스택 프레임 구조.md
   - ./ch03_class-loading-mechanism/03-02.메서드 호출 — 디스패치 완전 정복.md
   - ./ch03_class-loading-mechanism/03-04.동적 타입 언어 지원과 invokedynamic.md
@@ -26,10 +30,11 @@ related:
   - ./ch03_class-loading-mechanism/04-01.톰캣의 클래스 로더 아키텍처.md
   - ./ch03_class-loading-mechanism/04-02.OSGi의 유연한 클래스 로더와 바이트코드 생성.md
   - ./ch03_class-loading-mechanism/04-03.실전 — 원격 실행 기능 설계.md
+  - ./ch03_class-loading-mechanism/04-04.동적 로딩과 핫스왑 도구.md
+  - ./ch03_class-loading-mechanism/04-05.Spring Boot 실행 JAR와 클래스 로딩.md
   - ./ch04_compilation-optimization/01-01.javac 컴파일러의 컴파일 과정.md
-  - ./ch04_compilation-optimization/01-02.자바 구문 설탕 — 제네릭과 타입 소거.md
-  - ./ch04_compilation-optimization/01-03.자바 구문 설탕 — 박싱·향상된 for·조건 컴파일.md
-  - ./ch04_compilation-optimization/01-04.실전 — 플러그인 애너테이션 처리기.md
+  - ./ch04_compilation-optimization/01-02.자바 구문 설탕 — 제네릭·박싱·조건 컴파일.md
+  - ./ch04_compilation-optimization/01-03.실전 — 플러그인 애너테이션 처리기.md
   - ./ch04_compilation-optimization/02-01.JIT 컴파일러 — 인터프리터와 계층형 컴파일.md
   - ./ch04_compilation-optimization/02-02.컴파일 대상과 핫스폿 탐지.md
   - ./ch04_compilation-optimization/02-03.컴파일러 최적화 — 메서드 인라인과 탈출 분석.md
@@ -49,23 +54,19 @@ related:
   - ./ch05_efficient-concurrency/04-03.ThreadLocal과 동시성 라이브러리.md
   - ./ch05_efficient-concurrency/05-01.Java Memory Model 심화.md
   - ./ch05_efficient-concurrency/05-02.Virtual Threads 기초.md
-  - ./ch05_efficient-concurrency/05-03.Virtual Threads Pinning.md
   - ./ch05_efficient-concurrency/05-04.Structured Concurrency.md
+  - ./ch05_efficient-concurrency/06-01.성능 엔지니어링과 하드웨어·메모리 모델.md
+  - ./ch05_efficient-concurrency/06-02.동기화와 NUMA, JMH 벤치마킹.md
+  - ./ch05_efficient-concurrency/06-03.락과 동시성 — 동기화부터 Virtual Threads까지.md
   - ./ch14_jpe-evolution/01-01.Java와 JVM의 성능 진화사.md
   - ./ch15_jpe-type-system/01-01.타입 시스템의 진화와 성능.md
   - ./ch16_jpe-modular/01-01.모놀리식에서 모듈러로 — JPMS와 모듈 시스템.md
   - ./ch17_jpe-logging/01-01.통합 JVM 로깅 — Xlog와 비동기 로깅.md
-  - ./ch18_jpe-perf-eng/01-01.성능 엔지니어링과 하드웨어·메모리 모델.md
-  - ./ch18_jpe-perf-eng/01-02.동기화와 NUMA, JMH 벤치마킹.md
-  - ./ch19_jpe-gc/01-01.TLAB·PLAB·NUMA-aware GC와 G1 심화.md
-  - ./ch19_jpe-gc/01-02.ZGC 심화와 워크로드별 GC 선택.md
-  - ./ch20_jpe-runtime/01-01.문자열 런타임 최적화.md
-  - ./ch20_jpe-runtime/01-02.락과 동시성 — 동기화부터 Virtual Threads까지.md
   - ./ch21_jpe-startup/01-01.시동 가속 — CDS·AOT·Leyden·GraalVM·CRaC.md
   - ./ch21_jpe-startup/01-02.HotSpot warm-up 최적화와 Metaspace.md
   - ./ch22_jpe-exotic-hw/01-01.Exotic Hardware와 JVM — 클라우드·툴체인.md
   - ./ch22_jpe-exotic-hw/01-02.케이스 스터디와 Project Panama.md
-updated: 2026-06-03
+updated: 2026-06-19
 ---
 
 # JVM 학습 인덱스
@@ -76,7 +77,9 @@ updated: 2026-06-03
 > - 책 1·3부 요약(개관 흡수본)은 3부 정독 폴더 [`ch03_class-loading-mechanism/00-개관.*`](./ch03_class-loading-mechanism/) 2편(JDK 구조·실행 서브시스템)으로 이관됐다. `00-` prefix는 그 부의 절 정독(`01-NN`·`02-NN`) 앞에 놓이는 개관이라는 뜻이다. 4부 요약은 별도 개관으로 두지 않고, 고유했던 내용(LCM/GCM·implicit null check)을 정독본 [`ch04_compilation-optimization/02-04`](./ch04_compilation-optimization/02-04.컴파일러%20최적화%20—%20공통식%20제거·경계%20검사%20제거와%20Graal.md)에 흡수했다(나머지는 정독본과 중복이라 제거). 5부는 [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 정독 폴더로 풀어 썼다(12장=`01-NN` 4편, 13장=`02-NN` 3편). 옛 5부 부 요약 [`_temp/01-04`](./_temp/01-04.효율적%20동시성.md) 는 정독본으로 대체됐으나 요약 갈래로 보존한다. [`ch01_java-tech/`](./ch01_java-tech/) 에는 1장 §1.5~§1.7 절 정독 노트(`02-NN` 4편)만 남는다. 
 > - 실습 코드는 `_practice/` 서브폴더에서 챕터별 Gradle 모듈로 모인다.
 >
-> **동시성 갈래의 예외 — 출처 혼합 허용**: 책별로 폴더를 가르는 게 원칙이지만, [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 만은 *주제(동시성)* 를 우선해 두 책을 한 폴더에 둔다. `01-NN`·`02-NN`(《밑바닥》 12·13장 정독)에 더해, 출처가 《자바 동시성 프로그래밍》(또는 동등 도서)인 실무 학습 노트 10편을 `03-NN`~`05-NN`으로 합류시켰다(2026-06-17 루트 직속에서 이관). 폴더 안에서 책 구분은 각 노트의 `source` 필드가 1차 기준이다.
+> **동시성 갈래의 예외 — 출처 혼합 허용**: 책별로 폴더를 가르는 게 원칙이지만, [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 만은 *주제(동시성)* 를 우선해 두 책을 한 폴더에 둔다. `01-NN`·`02-NN`(《밑바닥》 12·13장 정독)에 더해, 출처가 《자바 동시성 프로그래밍》(또는 동등 도서)인 실무 학습 노트 9편을 `03-NN`~`05-NN`으로 합류시켰다(2026-06-17 루트 직속에서 이관). 폴더 안에서 책 구분은 각 노트의 `source` 필드가 1차 기준이다.
+>
+> **GC·문자열·메모리모델·동시성 갈래의 예외 — JPE 흡수 (2026-06-23)**: 위 동시성 예외와 같은 *주제 우선* 원칙으로, 《JVM Performance Engineering》의 GC·문자열·메모리모델·동시성 주제 6편을 JPE 폴더(옛 `ch18`·`ch19`·`ch20`)에서 떼어 주제 폴더로 합류시켰다. GC 심화(TLAB/PLAB·G1·ZGC)·문자열 최적화는 [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `05-NN`으로, 성능 엔지니어링·메모리 모델·락/동시성은 [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) `06-NN`으로 이관. 폴더 안 책 구분은 각 노트의 `source: JVM Performance Engineering (Monica Beckwith)` 필드가 1차 기준이다. JPE 책의 나머지 장(`ch14`~`ch17`·`ch21`·`ch22`)은 대응 주제가 없어 JPE 폴더에 그대로 둔다.
 >
 > 2026-06-02부터 두 번째 정독 대상 책 《JVM Performance Engineering》(Monica Beckwith) 갈래가 합류했다. 《밑바닥》이 `ch01`~`ch13` 번호대를 점유하므로, 새 책은 충돌을 피해 **`ch14`부터** 시작한다(예: [`ch14_jpe-evolution/`](./ch14_jpe-evolution/)). 새 책은 *한 폴더 = 책의 한 장*이고 파일 prefix는 장 안 소주제 순번을 뜻하는 `01-NN`이다 — 《밑바닥》의 `01-`(개관 흡수)/`02-`(절 정독) 의미와 다르니, 책마다 폴더가 갈려 출처가 섞이지 않는다. 책 구분은 각 노트의 `source` 필드가 1차 기준이다.
 
@@ -114,7 +117,7 @@ updated: 2026-06-03
 ├── chNN_{topic}/                      # 단행본 절 단위 정독 노트
 │   ├── 01-NN.{개관·운영 흡수본}.md       # 옛 루트 부 요약의 정독 폴더 이주본
 │   └── 02-{절}.{제목}.md                  # 책의 절 정독 노트
-│   └── (ch05만) 03~05-NN              # 《자바 동시성》 실무 노트 10편 (이관)
+│   └── (ch05만) 03~05-NN              # 《자바 동시성》 실무 노트 9편 (이관)
 ├── _temp/                             # 옛 5부 부 요약 보존 (정독본 ch05로 대체됨)
 └── _practice/                             # 챕터별 Gradle 실습 코드
     ├── settings.gradle.kts
@@ -162,16 +165,16 @@ updated: 2026-06-03
 
 | 장 | 한국어 제목 | 폴더 | 진척 | 실습 |
 |----|------------|------|------|------|
-| 6장 | 클래스 파일 구조 | [`ch06_class-file/`](./ch06_class-file/) | ✅ §6.1~§6.5 정독(p.287~352, 02-01 클래스 파일 구조 + 02-02 바이트코드 명령어). 1장 부 요약 흡수본([`00-개관.JDK 구조와 바이트코드`](./ch03_class-loading-mechanism/00-개관.JDK%20구조와%20바이트코드.md))은 별도 유지 | [`_practice/ch06-class-file/`](./_practice/ch06-class-file/) |
+| 6장 | 클래스 파일 구조 | [`ch03_class-loading-mechanism/`](./ch03_class-loading-mechanism/) `01-NN` | ✅ §6.1~§6.5 정독(p.287~352, 01-01 클래스 파일 구조 + 01-02 바이트코드 명령어). 1장 부 요약 흡수본([`00-개관.JDK 구조와 바이트코드`](./ch03_class-loading-mechanism/00-개관.JDK%20구조와%20바이트코드.md))은 별도 유지 | [`_practice/ch06-class-file/`](./_practice/ch06-class-file/) |
 | 7장 | 클래스 로딩 메커니즘 | [`ch03_class-loading-mechanism/00-개관.가상 머신 실행 서브시스템`](./ch03_class-loading-mechanism/00-개관.가상%20머신%20실행%20서브시스템.md) (부 요약 흡수) | ⏳ 흡수만 | — |
 | 8장 | 바이트코드 실행 엔진 | [`ch03_class-loading-mechanism/00-개관.가상 머신 실행 서브시스템`](./ch03_class-loading-mechanism/00-개관.가상%20머신%20실행%20서브시스템.md) (부 요약 흡수) | ⏳ 스택 프레임·디스패치·invokedynamic 흡수, 본격 정독 미착수 | — |
-| 9장 | 클래스 로딩과 실행 서브시스템, 사례와 실전 | _(미작성)_ | ◻ | — |
+| 9장 | 클래스 로딩과 실행 서브시스템, 사례와 실전 | [`ch03_class-loading-mechanism/`](./ch03_class-loading-mechanism/) `04-NN` | ⏳ 톰캣(04-01)·OSGi(04-02)·원격 실행 실습(04-03) 정독 + 핫스왑 도구(04-04, DCEVM·HotswapAgent·JRebel·Java Agent)·Spring Boot 실행 JAR(04-05) 외부 자료 보강 | [`_practice/ch07-class-loading/`](./_practice/ch07-class-loading/) |
 
 ### 4부 컴파일과 최적화
 
 | 장 | 한국어 제목 | 폴더 | 진척 | 실습 |
 |----|------------|------|------|------|
-| 10장 | 프런트엔드 컴파일과 최적화 | [`ch04_compilation-optimization/`](./ch04_compilation-optimization/) `01-NN` | ✅ §10.1~§10.5 정독(01-01 javac~01-04 애너테이션 처리기) | — |
+| 10장 | 프런트엔드 컴파일과 최적화 | [`ch04_compilation-optimization/`](./ch04_compilation-optimization/) `01-NN` | ✅ §10.1~§10.5 정독(01-01 javac~01-03 애너테이션 처리기, 구 01-02·01-03 구문 설탕 2편은 01-02로 통합) | — |
 | 11장 | 백엔드 컴파일과 최적화 | [`ch04_compilation-optimization/`](./ch04_compilation-optimization/) `02-NN` | ✅ §11.1~§11.5 정독(02-01 JIT~02-04 CSE·Graal). 옛 개관 고유분(LCM/GCM·implicit null check)은 02-04에 흡수 | — |
 
 ### 5부 효율적인 동시성
@@ -181,7 +184,7 @@ updated: 2026-06-03
 | 12장 | 자바 메모리 모델과 스레드 | [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) | ✅ §12.1~§12.5 정독 4편(01-01 하드웨어·JMM + 01-02 volatile·happens-before + 01-03 스레드 구현·상태 + 01-04 Virtual Threads) | — |
 | 13장 | 스레드 안전성과 락 최적화 | [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) | ✅ §13.1~§13.3 정독 3편(02-01 안전성 다섯 등급 + 02-02 동기화·락 구현 + 02-03 락 최적화 5기법) | — |
 
-> 5부 정독 폴더 [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 는 12·13장 모두 신설 완료(2026-06-17). 12장 4편(`01-NN`) + 13장 3편(`02-NN`). 여기에 더해 《자바 동시성 프로그래밍》 출처 실무 노트 10편을 같은 폴더 `03-NN`~`05-NN`으로 이관 완료(2026-06-17, 옛 루트 직속). 《밑바닥》 정독(01·02)과 실무 노트(03~05)는 겹치는 주제를 각 노트의 §관련 문서에서 서로 교차참조한다.
+> 5부 정독 폴더 [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 는 12·13장 모두 신설 완료(2026-06-17). 12장 4편(`01-NN`) + 13장 3편(`02-NN`). 여기에 더해 《자바 동시성 프로그래밍》 출처 실무 노트 9편을 같은 폴더 `03-NN`~`05-NN`으로 이관 완료(2026-06-17, 옛 루트 직속; 05-03 Pinning은 2026-06-24 05-02 §11로 흡수). 《밑바닥》 정독(01·02)과 실무 노트(03~05)는 겹치는 주제를 각 노트의 §관련 문서에서 서로 교차참조한다.
 
 미작성 폴더는 해당 장 스크린샷이 들어올 때 비로소 생성한다. 빈 폴더 사전 생성은 하지 않는다.
 
@@ -195,9 +198,9 @@ updated: 2026-06-03
 | 2장 | Performance and Type System | [`ch15_jpe-type-system/`](./ch15_jpe-type-system/) | ✅ 타입 시스템 진화와 성능 1편(01-01): 강한 정적 타입·generics·VarHandle·sealed/record·JOL object layout·Project Valhalla value class | — |
 | 3장 | From Monolithic to Modular Java | [`ch16_jpe-modular/`](./ch16_jpe-modular/) | ✅ 모놀리식에서 모듈러로 1편(01-01): JPMS·module-info·ServiceLoader·ModuleLayer로 JAR hell versioning 우회·OSGi 비교·jdeps/jlink/jmod/jdeprscan | — |
 | 4장 | Unified Logging System | [`ch17_jpe-logging/`](./ch17_jpe-logging/) | ✅ 통합 JVM 로깅 1편(01-01): JEP 158 -Xlog 네 축(tag·level·decorator·output)·계층적 레벨·jcmd 런타임 동적 조정·비동기 로깅(-Xlog:async) | — |
-| 5장 | End-to-End Performance Optimization | [`ch18_jpe-perf-eng/`](./ch18_jpe-perf-eng/) | ✅ 2편: 01-01 성능 엔지니어링과 하드웨어·메모리 모델(footprint/responsiveness/throughput/availability·STW·SMT·store buffering), 01-02 동기화와 NUMA·JMH 벤치마킹(barrier/fence/volatile·happens-before·CAS/LSE·perfasm) | — |
-| 6장 | Advanced Memory Management and GC | [`ch19_jpe-gc/`](./ch19_jpe-gc/) | ✅ 2편: 01-01 TLAB·PLAB·NUMA-aware GC와 G1 심화(region·IHOP·humongous·mixed collection 튜닝), 01-02 ZGC 심화와 워크로드별 GC 선택(colored pointer·load barrier·ZPage·6트리거·OLAP/OLTP/HTAP·LDS) | — |
-| 7장 | Runtime Performance Optimizations | [`ch20_jpe-runtime/`](./ch20_jpe-runtime/) | ✅ 2편: 01-01 문자열 런타임 최적화(string pool·intern·G1 dedup·indy-fication·compact string), 01-02 락과 동시성(monitor lock·contended locking JEP 143·spin-wait·Executor/ForkJoinPool/CompletableFuture·virtual thread/continuation) | — |
+| 5장 | End-to-End Performance Optimization | [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) `06-01·06-02` | ✅ 2편(주제 우선 이관): 06-01 성능 엔지니어링과 하드웨어·메모리 모델(footprint/responsiveness/throughput/availability·STW·SMT·store buffering), 06-02 동기화와 NUMA·JMH 벤치마킹(barrier/fence/volatile·happens-before·CAS/LSE·perfasm) | — |
+| 6장 | Advanced Memory Management and GC | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `05-01·05-02` | ✅ 2편(주제 우선 이관): 05-01 TLAB·PLAB·NUMA-aware GC와 G1 심화(region·IHOP·humongous·mixed collection 튜닝), 05-02 ZGC 심화와 워크로드별 GC 선택(colored pointer·load barrier·ZPage·6트리거·OLAP/OLTP/HTAP·LDS) | — |
+| 7장 | Runtime Performance Optimizations | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `05-03` + [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) `06-03` | ✅ 2편(주제 우선 이관): 05-03 문자열 런타임 최적화(string pool·intern·G1 dedup·indy-fication·compact string), 06-03 락과 동시성(monitor lock·contended locking JEP 143·spin-wait·Executor/ForkJoinPool/CompletableFuture·virtual thread/continuation) | — |
 | 8장 | Accelerating Time to Steady State | [`ch21_jpe-startup/`](./ch21_jpe-startup/) | ✅ 2편: 01-01 시동 가속(time-to-steady-state·CDS·AOT·Project Leyden training run·GraalVM native image·CRIU/CRaC), 01-02 HotSpot warm-up 최적화와 Metaspace(tiered C1/C2·Segmented CodeCache·speculative·PermGen→Metaspace·JEP 387) | — |
 | 9장 | Harnessing Exotic Hardware | [`ch22_jpe-exotic-hw/`](./ch22_jpe-exotic-hw/) | ✅ 2편: 01-01 Exotic Hardware와 JVM(GPU/FPGA·OpenCL·AVX-512/SVE·클라우드 4도전·언어/툴체인), 01-02 케이스 스터디와 Project Panama(LWJGL/JNI·Aparapi·Sumatra/HSAIL·TornadoVM·Vector API·FFM API·Babylon/HAT) | — |
 
