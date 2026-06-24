@@ -1,0 +1,62 @@
+<svg viewBox="0 0 1100 620" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>Java 소스 구조와 컴파일 출력 위치</title>
+  <desc>패키지 선언이 src 아래 소스 경로와 build 아래 class 출력 경로로 대응되는 모습을 보여 준다. javac의 -d 옵션이 출력 루트를 정하며, 그 아래에는 패키지 이름과 같은 디렉터리 계층이 생긴다.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <style>
+      .title{font-size:20px;font-weight:800;fill:#e8e4df}
+      .subtitle{font-size:12px;fill:rgb(138,133,128)}
+      .section{font-size:15px;font-weight:800;fill:rgb(212,168,83)}
+      .label{font-size:12px;fill:#e8e4df}
+      .muted{font-size:11px;fill:rgb(138,133,128)}
+      .code{font-size:12px;fill:#e8e4df;font-family:'JetBrains Mono',monospace}
+      .codeSmall{font-size:10.5px;fill:rgb(180,176,171);font-family:'JetBrains Mono',monospace}
+    </style>
+  </defs>
+  <rect x="0" y="0" width="1100" height="620" fill="#0d0d0d"/>
+  <text x="30" y="42" class="title">package 선언은 class 파일의 저장 경로가 됩니다</text>
+  <text x="30" y="66" class="subtitle">왼쪽은 작성 위치, 오른쪽은 javac -d가 만든 결과입니다. 두 컴파일 명령의 -d 뒤가 각각 클래스패스 루트가 됩니다.</text>
+
+  <rect x="30" y="92" width="1040" height="60" rx="8" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)"/>
+  <text x="52" y="117" class="label">FQCN</text>
+  <text x="132" y="117" class="code">com.example.math.Calculator</text>
+  <text x="470" y="117" class="label">→ class 엔트리</text>
+  <text x="630" y="117" class="code">com/example/math/Calculator.class</text>
+  <text x="52" y="139" class="muted">점(.)을 디렉터리 구분자(/)로 바꾸고 .class를 붙이면 탐색할 상대 경로가 나옵니다.</text>
+
+  <rect x="30" y="178" width="420" height="400" rx="10" fill="rgb(20,20,20)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="207" class="section">1. 작성한 소스</text>
+  <text x="52" y="232" class="muted">source roots = src/application/ · src/library/</text>
+  <text x="58" y="270" class="code">src/</text>
+  <text x="82" y="304" class="code">├── application/</text>
+  <text x="106" y="338" class="codeSmall">│   └── com/example/app/Main.java</text>
+  <text x="82" y="378" class="code">└── library/</text>
+  <text x="106" y="412" class="codeSmall">    └── com/example/math/Calculator.java</text>
+  <rect x="52" y="474" width="376" height="76" rx="7" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="70" y="500" class="codeSmall">package com.example.math;</text>
+  <text x="70" y="526" class="muted">소스 경로도 패키지와 맞추면 IDE·빌드 도구가 찾기 쉽습니다.</text>
+
+  <rect x="470" y="270" width="160" height="146" rx="10" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)"/>
+  <text x="550" y="298" class="section" text-anchor="middle">javac 2회</text>
+  <text x="550" y="330" class="codeSmall" text-anchor="middle">-d build/app-classes</text>
+  <text x="550" y="354" class="codeSmall" text-anchor="middle">-d build/lib-classes</text>
+  <text x="550" y="384" class="muted" text-anchor="middle">-d = 각 출력 루트</text>
+  <line x1="450" y1="343" x2="468" y2="343" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="630" y1="343" x2="648" y2="343" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="650" y="178" width="420" height="400" rx="10" fill="rgb(20,20,20)" stroke="rgb(42,37,32)"/>
+  <text x="672" y="207" class="section">2. 컴파일된 클래스</text>
+  <text x="672" y="232" class="muted">classpath root = build/lib-classes/ 또는 build/app-classes/</text>
+  <text x="678" y="270" class="code">build/</text>
+  <text x="702" y="298" class="code">├── app-classes/</text>
+  <text x="726" y="326" class="codeSmall">│   └── com/example/app/Main.class</text>
+  <text x="702" y="366" class="code">└── lib-classes/</text>
+  <text x="726" y="394" class="codeSmall">    └── com/example/math/Calculator.class</text>
+  <rect x="672" y="430" width="376" height="120" rx="7" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="690" y="458" class="label">찾을 때는 루트를 먼저 잡습니다.</text>
+  <text x="690" y="486" class="codeSmall">root: build/lib-classes/</text>
+  <text x="690" y="510" class="codeSmall">path: com/example/math/Calculator.class</text>
+  <text x="690" y="534" class="muted">둘을 이어 붙이면 실제 파일 위치가 됩니다.</text>
+</svg>

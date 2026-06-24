@@ -1,0 +1,62 @@
+<svg viewBox="0 0 1100 660" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>java -cp 실행과 java -jar 실행 비교</title>
+  <desc>java -cp는 명령행에서 클래스패스 루트와 시작 클래스 FQCN을 받는다. java -jar는 실행 JAR를 받고 그 안의 MANIFEST.MF Main-Class에서 시작 클래스를 찾는다. 두 실행 방식의 입력과 탐색 범위를 위아래로 비교한다.</desc>
+  <defs>
+    <marker id="arrowLaunch" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <style>
+      .title{font-size:20px;font-weight:800;fill:#e8e4df}
+      .subtitle{font-size:12px;fill:rgb(138,133,128)}
+      .lane{font-size:16px;font-weight:800;fill:rgb(212,168,83)}
+      .label{font-size:12px;fill:#e8e4df}
+      .muted{font-size:10.5px;fill:rgb(138,133,128)}
+      .code{font-size:10.5px;fill:#e8e4df;font-family:'JetBrains Mono',monospace}
+      .small{font-size:9.5px;fill:rgb(180,176,171);font-family:'JetBrains Mono',monospace}
+    </style>
+  </defs>
+  <rect x="0" y="0" width="1100" height="660" fill="#0d0d0d"/>
+  <text x="30" y="42" class="title">시작 정보를 어디에 적느냐가 두 실행 방식을 가릅니다</text>
+  <text x="30" y="66" class="subtitle">-cp는 명령행에 루트와 FQCN을 적고, -jar는 JAR 안의 MANIFEST.MF에 시작 FQCN을 적습니다.</text>
+
+  <rect x="30" y="98" width="1040" height="240" rx="12" fill="rgb(20,20,20)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="130" class="lane">A. java -cp</text>
+  <rect x="52" y="152" width="330" height="72" rx="8" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)"/>
+  <text x="70" y="180" class="code">java -cp "build/app-classes:</text>
+  <text x="70" y="202" class="code">lib/calculator.jar" com.example.app.Main</text>
+  <line x1="382" y1="188" x2="426" y2="188" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrowLaunch)"/>
+  <rect x="428" y="140" width="270" height="174" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="448" y="168" class="label">명령행에서 받은 두 입력</text>
+  <text x="448" y="198" class="muted">classpath root 1</text>
+  <text x="448" y="220" class="small">build/app-classes/</text>
+  <text x="448" y="246" class="muted">classpath root 2</text>
+  <text x="448" y="268" class="small">lib/calculator.jar</text>
+  <text x="448" y="294" class="small">main = com.example.app.Main</text>
+  <line x1="698" y1="226" x2="742" y2="226" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrowLaunch)"/>
+  <rect x="744" y="152" width="304" height="126" rx="8" fill="rgba(102,187,106,0.12)" stroke="#66bb6a"/>
+  <text x="764" y="182" class="label">JVM 시작</text>
+  <text x="764" y="210" class="small">build/app-classes/.../Main.class</text>
+  <text x="764" y="236" class="small">calculator.jar/.../Calculator.class</text>
+  <text x="764" y="260" class="muted">두 루트에서 필요한 클래스를 찾습니다.</text>
+
+  <rect x="30" y="366" width="1040" height="260" rx="12" fill="rgb(20,20,20)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="398" class="lane">B. java -jar</text>
+  <rect x="52" y="430" width="330" height="72" rx="8" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)"/>
+  <text x="70" y="472" class="code">java -jar build/calculator-app.jar</text>
+  <text x="70" y="528" class="muted">명령행에는 시작 FQCN을 적지 않습니다.</text>
+  <line x1="382" y1="466" x2="426" y2="466" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrowLaunch)"/>
+  <rect x="428" y="414" width="270" height="188" rx="8" fill="rgb(26,26,26)" stroke="rgb(212,168,83)"/>
+  <text x="448" y="444" class="label">calculator-app.jar</text>
+  <text x="448" y="472" class="small">META-INF/MANIFEST.MF</text>
+  <rect x="448" y="488" width="230" height="48" rx="5" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)"/>
+  <text x="462" y="518" class="small">Main-Class: com.example.app.Main</text>
+  <text x="448" y="562" class="small">com/example/app/Main.class</text>
+  <text x="448" y="584" class="small">com/example/math/Calculator.class</text>
+  <line x1="698" y1="506" x2="742" y2="506" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrowLaunch)"/>
+  <rect x="744" y="430" width="304" height="150" rx="8" fill="rgba(102,187,106,0.12)" stroke="#66bb6a"/>
+  <text x="764" y="460" class="label">JVM 시작</text>
+  <text x="764" y="488" class="muted">1. MANIFEST.MF를 읽습니다.</text>
+  <text x="764" y="514" class="muted">2. Main-Class를 시작합니다.</text>
+  <text x="764" y="540" class="muted">3. JAR 루트에서 클래스를 찾습니다.</text>
+  <text x="764" y="566" class="muted">명령행의 다른 -cp 설정은 무시합니다.</text>
+</svg>
