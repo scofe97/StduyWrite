@@ -3,7 +3,7 @@ title: Jenkins 운영·커스텀 학습 MOC
 tags: [moc, jenkins, durability, shared-library, groovy, hook, webhook]
 status: draft
 related:
-  - ../../README.md
+  - ../README.md
   - ../01_core/README.md
   - ../03_agent/README.md
   - ../04_api/README.md
