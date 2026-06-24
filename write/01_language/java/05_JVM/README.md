@@ -3,6 +3,7 @@ title: JVM 학습 인덱스
 tags: [jvm, hotspot, study-index, moc]
 status: draft
 related:
+  - ./roadmap.md
   - ./ch03_class-loading-mechanism/00-개관.JDK 구조와 바이트코드.md
   - ./ch03_class-loading-mechanism/00-개관.가상 머신 실행 서브시스템.md
   - ./ch04_compilation-optimization/02-04.컴파일러 최적화 — 공통식 제거·경계 검사 제거와 Graal.md
@@ -72,6 +73,8 @@ updated: 2026-06-19
 
 # JVM 학습 인덱스
 ---
+
+> 이 인덱스는 정독 대상 책 ↔ 노트 매핑이 중심입니다. JVM 딥다이브 로드맵의 **섹션별 키워드 전체**(Architecture·ClassLoading·GC·JIT·동시성·진단·컨테이너 24주제)는 [roadmap.md](roadmap.md)에 원문 그대로 정리해 두었습니다.
 > 이 폴더는 단행본 《JVM 밑바닥까지 파헤치기》의 **절 단위 정독 노트** 갈래(`chNN_*` 폴더)로 구성된다. 책의 *부(部)* 단위로 폴더를 묶는다.
 >
 > - 2부 "자동 메모리 관리"(원서 2~5장)는 [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) 한 폴더에 장번호로 통합돼 있어, `01-NN`이 메모리 영역(2장), `02-NN`이 가비지 컬렉션(3장, 운영·JMH는 `02-01~02-02` / GC 본문은 `02-03~02-10`), `03-NN`이 진단 도구(4장), `04-NN`이 최적화 실전(5장)이다. 과거의 "부 단위 루트 요약" 레이어는 정독 폴더로 흡수했다.
