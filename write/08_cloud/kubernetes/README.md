@@ -9,11 +9,11 @@ related:
   - ../argocd/README.md
   - ../service-mesh/README.md
   - ../../07_devops/README.md
-updated: 2026-05-30
+updated: 2026-06-25
 ---
 
 # 08_cloud/kubernetes
----
+
 > Kubernetes 핵심 개념을 로컬에서 체득하고, Helm·Operator 패턴으로 MySQL·PostgreSQL·Kafka 같은 Stateful 워크로드를 운영하며, ArgoCD로 GitOps를 구현하는 경로까지 한 흐름으로 정리한다.
 
 이 카테고리는 "클러스터 안에서 어떻게 연결되고 노출되는가"까지를 기본 범위로 둔다. Service Mesh처럼 서비스 간 L7 정책, mTLS, 세밀한 트래픽 제어가 본격적으로 필요해지는 지점부터는 별도 `service-mesh` 카테고리로 넘긴다.
@@ -120,6 +120,174 @@ Jenkins·SonarQube·ArgoCD를 하나의 흐름으로 묶어 개발 생산성과 
 | 05-10 | [자원 관리](05_operations/05-10.%EC%9E%90%EC%9B%90%20%EA%B4%80%EB%A6%AC.md) | Requests/Limits와 QoS로 안정성을 어떻게 확보하는가? |
 | 05-11 | [오토스케일링](05_operations/05-11.%EC%98%A4%ED%86%A0%EC%8A%A4%EC%BC%80%EC%9D%BC%EB%A7%81.md) | HPA·VPA·KEDA는 어떻게 역할을 나누는가? |
 | 05-12 | [OOMKilled 사례 분석](05_operations/05-12.OOMKilled%20%EC%82%AC%EB%A1%80%20%EB%B6%84%EC%84%9D.md) | 6GB Pod가 반복 OOMKilled — JVM heap과 cgroup이 보는 메모리는 왜 어긋나는가? (Endowus 사례) |
+
+
+
+## 대주제·소주제·챕터 소개
+
+> 위의 폴더 표가 *어디에 무엇이 있나*를 짚는다면, 이 절은 각 폴더(대주제)와 그 안의 그룹(소주제)이 *무엇을 왜 다루는가*를 한 단계 더 풀어 소개한다. 챕터 한 줄 소개는 본문을 읽기 전 "이 문서에서 무엇을 얻는가"를 미리 잡아 준다.
+
+### 01_foundation — 기반 (대주제)
+
+클러스터를 직접 띄우고, 워크로드와 스토리지라는 두 기둥을 손으로 만져 본다. 이후 모든 폴더가 이 위에 쌓이므로, 여기서 Pod·Deployment·Service·PV의 기본 감각을 먼저 잡는다.
+
+- **01-01 로컬 클러스터 구성** — 프로덕션 유사 환경을 로컬에서 빠르게 재현해, 뒤 챕터의 실습 토대를 만든다.
+- **01-02 핵심 워크로드** — Pod·Deployment·Service가 각각 무엇을 책임지는지, 셋의 역할 분담으로 애플리케이션이 어떻게 굴러가는지 본다.
+- **01-03 스토리지와 상태** — Stateless와 Stateful이 스토리지를 다루는 방식이 어떻게 갈리는지, Volume·PV·PVC로 상태를 어디에 두는지 본다.
+
+### 02_networking — 네트워킹 (대주제)
+
+Pod IP는 바뀐다는 전제에서 출발해, 트래픽이 Linux netns부터 외부 진입까지 어떤 계층을 거쳐 흐르는지 한 단씩 위로 올라간다. 파일 번호 순서가 곧 추상화 상승 순서다.
+
+- **02-01 네트워킹** — 트래픽이 거치는 계층 전체를 조망해 이후 챕터의 지도를 그린다.
+- **02-02 Pod 네트워크와 Linux 기반** — pause·netns·veth·Pod CIDR·CNI·kube-proxy dataplane이 실제로 어떻게 동작하는지 Linux 수준까지 내려가 본다.
+- **02-03 오버레이와 노드 간 트래픽** — VXLAN·네이티브 라우팅·BGP·ECMP·MetalLB가 노드 간 Pod 트래픽과 외부 LoadBalancer를 어떻게 만드는지 본다.
+- **02-04 Service와 EndpointSlice** — 변하는 Pod 집합을 안정적인 진입점으로 노출하는 추상화를 EndpointSlice 단위로 본다.
+- **02-05 DNS와 CoreDNS** — Service 이름이 어떻게 IP로 해석되는지, CoreDNS가 이름 해석을 어떻게 책임지는지 본다.
+- **02-06 Ingress와 Gateway API** — 외부 HTTP 트래픽 라우팅이 Ingress에서 Gateway API로 어떻게 진화하고, cert-manager가 인증서를 어떻게 자동화하는지 본다.
+
+### 03_platform — 패키징과 Operator (대주제)
+
+"선언적으로 워크로드를 다룬다"는 한 축으로 두 소주제를 묶었다. 반복되는 매니페스트를 패키지로 묶는 일과, CRD+Controller로 운영 자체를 자동화하는 일이다.
+
+**소주제 ① 패키지 관리 (03-01~03-04)** — 매니페스트 중복을 Helm·Kustomize로 걷어내고, 설정 주입을 Spring 앱과 잇는다.
+
+- **03-01 Helm 기초** — 왜 생짜 매니페스트 대신 Helm을 쓰는지, 템플릿·values의 기본을 잡는다.
+- **03-02 Helm 고급** — 재사용 가능한 차트를 어떻게 설계하는지 본다.
+- **03-03 Kustomize** — Helm 없이 환경별 차이를 patch로 선언적으로 관리하는 길을 본다.
+- **03-04 K8s 환경변수와 Spring 설정 주입** — ConfigMap 환경변수가 Spring `application.yml`에 어떻게 적용되는지, 설정 주입의 두 세계를 잇는다.
+
+**소주제 ② Operator 패턴과 DB·미들웨어 (03-05~03-10)** — 개념부터 MySQL·PostgreSQL·Redis·Kafka·Redpanda까지, Stateful 워크로드의 Day-2 운영을 Operator로 자동화한다.
+
+- **03-05 Operator 패턴** — CRD와 컨트롤러가 어떻게 연동돼 "원하는 상태"를 코드로 표현하는지 본다.
+- **03-06 MySQL Operator** — MySQL HA를 어떻게 선언적으로 자동화하는지 본다.
+- **03-07 PostgreSQL Operator** — CloudNativePG의 복제·백업 전략을 본다.
+- **03-08 Redis Operator** — Cluster와 Sentinel이 언제 갈라지는지 본다.
+- **03-09 Kafka Operator** — Strimzi로 Kafka를 선언적으로 관리하는 법을 본다.
+- **03-10 Redpanda Operator** — Strimzi와 Redpanda Operator의 차이를 본다.
+
+### 04_devtools — DevTools와 GitOps (대주제)
+
+Jenkins·SonarQube·ArgoCD·Harbor를 한 흐름으로 묶어 개발 생산성과 배포 자동화를 K8s 위에서 얻는다. ArgoCD 상세 운영은 별도 `argocd` 카테고리로 넘긴다.
+
+- **04-01 Jenkins on K8s** — K8s 네이티브 Jenkins가 무엇이 달라지는지(동적 Agent 등) 본다.
+- **04-02 SonarQube on K8s** — SonarQube의 영속성 전략을 본다.
+- **04-03 ArgoCD와 GitOps** — Git을 단일 진실 공급원으로 삼는 배포 모델을 입문 수준으로 본다.
+- **04-04 Harbor** — 이미지와 OCI Helm chart를 어디서 통합 관리하는지 본다.
+
+### 05_operations — Day-2 운영 (대주제)
+
+클러스터를 안정적으로 굴리기 위한 운영 주제를 세 소주제로 모았다. 유지보수·인증, 워크로드 배치, 관측·보안·자원·스케일링 순으로 이어진다.
+
+**소주제 ① 유지보수·인증·조회·시험 (05-01~05-04)**
+
+- **05-01 클러스터 업그레이드와 ETCD 백업·복구** — kubeadm 업그레이드와 etcd 재해 복구를 어떤 절차로 다루는지 본다.
+- **05-02 TLS와 API 접근 보안** — 컨트롤 플레인 PKI(API 서버·etcd·kubelet)가 어떻게 연결되는지 본다.
+- **05-03 JSONPath와 kubectl 고급 조회** — 반복 조회·스크립팅에 필요한 출력 제어를 익힌다.
+- **05-04 CKA 대비와 문제 풀이 전략** — 시험 범위를 실무 문서와 어떻게 잇는지 본다.
+
+**소주제 ② 스케줄링과 배치 (05-05~05-07)** — 어디에 둘지, 동시 중단을 얼마나 허용할지, 일회성·주기성·노드별 워크로드를 한 묶음으로 본다.
+
+- **05-05 스케줄링과 노드 선택** — kube-scheduler의 Filter·Score와 nodeAffinity·Taint가 어떻게 보완되는지 본다.
+- **05-06 토폴로지 분산과 중단 정책** — Topology Spread·PodDisruptionBudget·PriorityClass·Eviction이 가용성을 어떻게 만드는지 본다.
+- **05-07 배치 워크로드** — Job·CronJob·DaemonSet·InitContainer·Sidecar가 각각 어떤 의도를 표현하는지 본다.
+
+**소주제 ③ 관측·보안·자원·스케일링 (05-08~05-12)** — 자원 관리가 오토스케일링의 입력이 되는 인과 순서로 정렬했다.
+
+- **05-08 모니터링과 트러블슈팅** — 클러스터 장애를 어떻게 체계적으로 진단하는지 본다.
+- **05-09 RBAC과 보안** — RBAC·ServiceAccount 토큰·Admission(Webhook/VAP)·NetworkPolicy를 어떻게 묶는지 본다.
+- **05-10 자원 관리** — Requests/Limits와 QoS로 안정성을 어떻게 확보하는지 본다.
+- **05-11 오토스케일링** — HPA·VPA·KEDA가 어떻게 역할을 나누는지 본다.
+- **05-12 OOMKilled 사례 분석** — 6GB Pod가 반복 OOMKilled되는 실제 사례에서 JVM heap과 cgroup이 보는 메모리가 왜 어긋나는지 추적한다.
+
+
+
+## Kubernetes 딥다이브 전체 지도
+
+> 위 두 절이 *무엇이 어디 있고 무엇을 다루나*를 답한다면, 이 절은 *Kubernetes 본질을 어디까지 깊게 파야 하는가*를 답한다. Kubernetes를 깊게 판다는 것은 YAML 속성을 많이 외우는 일이 아니라, Pod가 왜 Pending인지·Service가 왜 연결되지 않는지·Deployment가 왜 멈췄는지·Probe가 왜 앱을 죽이는지·Resource limit이 왜 장애를 만드는지·Controller가 어떻게 상태를 복구하는지 설명할 수 있게 되는 일이다. 아래는 그 전체 범위를 24개 대주제로 펼쳐 6개 학습 단계로 묶고, 핵심 키워드를 보유 챕터·미작성 갭과 연결한 지도다.
+
+한 문장으로 줄이면 이렇다.
+
+> 사용자는 원하는 상태를 API Server에 선언하고, Control Plane은 현재 상태와 원하는 상태를 비교하며, Scheduler는 Pod를 Node에 배치하고, kubelet은 컨테이너 런타임을 통해 Pod를 실행하며, Service와 CNI는 네트워크를 이어주고, Controller는 계속 상태를 맞춘다.
+
+아래 표는 6단계의 진입점만 빠르게 짚는 네비게이션이다. 각 단계의 키워드 전체는 표 다음 단계별 절에서 이어 다룬다.
+
+| 단계 | 대주제 묶음 | 진입 챕터 | 갭(미작성) |
+|------|-----------|----------|-----------|
+| 1 기본 리소스 | Pod·Deployment·Service·ConfigMap·Secret·Namespace | [01-01](01_foundation/01-01.%EB%A1%9C%EC%BB%AC%20%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EA%B5%AC%EC%84%B1.md)·[01-02](01_foundation/01-02.%ED%95%B5%EC%8B%AC%20%EC%9B%8C%ED%81%AC%EB%A1%9C%EB%93%9C.md)·[01-03](01_foundation/01-03.%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80%EC%99%80%20%EC%83%81%ED%83%9C.md), [03-04](03_platform/03-04.K8s%20%ED%99%98%EA%B2%BD%EB%B3%80%EC%88%98%EC%99%80%20Spring%20%EC%84%A4%EC%A0%95%20%EC%A3%BC%EC%9E%85.md) | — |
+| 2 운영 배포 | Probe·Requests/Limits·RollingUpdate·HPA·PDB·SecurityContext | [05-10](05_operations/05-10.%EC%9E%90%EC%9B%90%20%EA%B4%80%EB%A6%AC.md)·[05-11](05_operations/05-11.%EC%98%A4%ED%86%A0%EC%8A%A4%EC%BC%80%EC%9D%BC%EB%A7%81.md)·[05-06](05_operations/05-06.%ED%86%A0%ED%8F%B4%EB%A1%9C%EC%A7%80%20%EB%B6%84%EC%82%B0%EA%B3%BC%20%EC%A4%91%EB%8B%A8%20%EC%A0%95%EC%B1%85.md), [05-12](05_operations/05-12.OOMKilled%20%EC%82%AC%EB%A1%80%20%EB%B6%84%EC%84%9D.md) | Probe/Health 전용편, RollingUpdate/Rollback 전용편 |
+| 3 네트워크 | Service·EndpointSlice·CoreDNS·Ingress·Gateway·NetworkPolicy·CNI | [02-01](02_networking/02-01.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9.md)~[02-06](02_networking/02-06.Ingress%EC%99%80%20Gateway%20API.md), [05-09](05_operations/05-09.RBAC%EA%B3%BC%20%EB%B3%B4%EC%95%88.md) | — |
+| 4 내부 구조 | API Server·etcd·Scheduler·Controller Manager·kubelet·runtime·kube-proxy | [02-02](02_networking/02-02.Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%99%80%20Linux%20%EA%B8%B0%EB%B0%98.md)·[02-03](02_networking/02-03.%EC%98%A4%EB%B2%84%EB%A0%88%EC%9D%B4%EC%99%80%20%EB%85%B8%EB%93%9C%20%EA%B0%84%20%ED%8A%B8%EB%9E%98%ED%94%BD.md), [05-01](05_operations/05-01.%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C%EC%99%80%20ETCD%20%EB%B0%B1%EC%97%85%C2%B7%EB%B3%B5%EA%B5%AC.md)·[05-02](05_operations/05-02.TLS%EC%99%80%20API%20%EC%A0%91%EA%B7%BC%20%EB%B3%B4%EC%95%88.md), [05-05](05_operations/05-05.%EC%8A%A4%EC%BC%80%EC%A4%84%EB%A7%81%EA%B3%BC%20%EB%85%B8%EB%93%9C%20%EC%84%A0%ED%83%9D.md) | Control Plane(API Server·etcd·Scheduler·CM) 흐름 전용편 |
+| 5 확장 | Admission Webhook·CRD·Controller·Operator·Finalizer·OwnerReference | [03-05](03_platform/03-05.Operator%20%ED%8C%A8%ED%84%B4.md)~[03-10](03_platform/03-10.Redpanda%20Operator.md), [05-09](05_operations/05-09.RBAC%EA%B3%BC%20%EB%B3%B4%EC%95%88.md) | Custom Controller/Operator 직접 작성(Mini Operator) 실습편 |
+| 6 운영·장애 | Observability·Events·Logs·Metrics·Tracing·Troubleshooting·Backup·Upgrade·Security | [05-08](05_operations/05-08.%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%EA%B3%BC%20%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85.md), [05-12](05_operations/05-12.OOMKilled%20%EC%82%AC%EB%A1%80%20%EB%B6%84%EC%84%9D.md), [05-01](05_operations/05-01.%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C%EC%99%80%20ETCD%20%EB%B0%B1%EC%97%85%C2%B7%EB%B3%B5%EA%B5%AC.md) | 분산 트레이싱(Tempo/OTel) 전용편 |
+
+각 단계의 핵심 키워드는 다음과 같다. 학습 노트나 프롬프트에 그대로 넣어 진도 체크용으로 쓸 수 있다.
+
+### 1단계 — 기본 리소스 / 클러스터 구조
+
+- **Architecture** — Cluster · Control Plane · Worker Node · API Server · etcd · Scheduler · Controller Manager · Cloud Controller Manager · kubelet · kube-proxy · Container Runtime · CRI · CNI · CSI
+- **Control Plane** — API Server(인증/인가·Admission·검증·watch API) · etcd(상태 저장소·백업/복구) · Scheduler(후보 계산·점수화) · Controller Manager(reconciliation)
+- **Node** — Node · kubelet · container runtime · containerd · CRI-O · kube-proxy · Pod sandbox · pause container · cgroup · namespace · image pull · container log
+- **기본 워크로드/설정** — Pod · Deployment · ReplicaSet · Service · ConfigMap · Secret · Namespace
+
+핵심은 Kubernetes가 명령형 실행기가 아니라 **선언형 상태 조정 시스템**이라는 점이다. `kubectl apply` → API Server → Admission → etcd 저장 → Controller 감지 → Pod 생성 요청 → Scheduler가 Node 결정 → kubelet이 실행 → 상태 보고. 사용자는 명령이 아니라 원하는 상태를 선언하고, 시스템이 그 상태로 수렴한다.
+
+### 2단계 — 운영 배포 (Probe·자원·롤링·스케일)
+
+- **Pod Lifecycle** — Pod · Container · Init Container · Sidecar Container · Pod Phase(Pending · Running · Succeeded · Failed · Unknown) · Container State(Waiting · Running · Terminated) · Restart Policy · PreStop Hook · PostStart Hook · Termination Grace Period · Readiness Gate · ImagePullBackOff · CrashLoopBackOff · OOMKilled · SIGTERM · graceful shutdown · terminationGracePeriodSeconds
+- **Workload Resources** — Pod · ReplicaSet · Deployment · StatefulSet · DaemonSet · Job · CronJob
+- **Deployment / ReplicaSet** — Pod Template · Selector · Revision · RollingUpdate · Recreate · maxSurge · maxUnavailable · rollout status/history/undo · ProgressDeadlineExceeded
+- **Probe / Health Check** — livenessProbe · readinessProbe · startupProbe · httpGet · tcpSocket · exec · initialDelaySeconds · periodSeconds · timeoutSeconds · failureThreshold · successThreshold · (Spring: `/actuator/health/readiness`·`liveness`)
+- **Resource Requests / Limits** — requests.cpu · requests.memory · limits.cpu · limits.memory · QoS Class(Guaranteed · Burstable · BestEffort) · OOMKilled · CPU throttling · cgroup
+- **Autoscaling** — HPA · VPA · KEDA · Cluster Autoscaler · PodDisruptionBudget
+
+가장 흔한 실수는 liveness를 너무 엄격하게 잡아, 잠깐 느려진 앱을 계속 재시작시키는 것이다. Java 앱은 container memory limit이 JVM heap + metaspace + thread stack + direct memory + native memory + margin을 모두 덮어야 한다 — `-Xmx`만 보면 안 된다.
+
+> 갭: Probe/Health 전용편, RollingUpdate/Rollback 전용편.
+
+### 3단계 — 네트워크
+
+- **Service Discovery** — Service · ClusterIP · NodePort · LoadBalancer · ExternalName · EndpointSlice · label selector · kube-proxy · iptables · IPVS · CoreDNS
+- **Networking** — Pod-to-Pod · Pod-to-Service · Node-to-Pod · Cluster DNS · CNI · Overlay/Underlay Network · NAT · SNAT · DNAT · NetworkPolicy · Ingress · Gateway API · (원칙: Pod 고유 IP · NAT 없는 통신 · Service 가상 IP)
+- **Ingress / Gateway** — Ingress · IngressClass · Ingress Controller · Host/Path-based Routing · TLS Termination · Rewrite · Rate Limit · Gateway · GatewayClass · HTTPRoute · TCPRoute · GRPCRoute · ReferenceGrant
+- **NetworkPolicy** — NetworkPolicy · podSelector · namespaceSelector · ipBlock · ingress · egress · default deny · CNI 지원 여부
+
+`http://payment-service:8080` 같은 이름이 단순 문자열이 아니라 CoreDNS·Service·EndpointSlice·kube-proxy 규칙 위에 서 있다는 것을 알아야 한다. NetworkPolicy는 CNI가 지원해야 실제로 동작한다 — YAML만 있다고 벽이 생기지 않는다.
+
+### 4단계 — 내부 구조 (Control Plane → Node)
+
+- **Control Plane** — API Server · etcd · Scheduler · Controller Manager · watch API · reconciliation
+- **Node 구성** — kubelet · container runtime · kube-proxy · CRI · Pod sandbox · pause container
+- **Scheduling** — nodeSelector · nodeAffinity · podAffinity · podAntiAffinity · taints · tolerations · topologySpreadConstraints · resource requests · PriorityClass · preemption · FailedScheduling · volume node affinity conflict
+
+API Server가 죽어도 기존 Pod는 Node에서 계속 돌 수 있지만, **새로운 결정과 상태 조정**은 멈춘다. Pod가 Pending이면 스케줄링 실패(자원 부족·taint 미허용·node affinity 과강·PVC zone 고정)를 `kubectl describe pod`의 Events에서 좁힌다.
+
+> 갭: Control Plane(API Server·etcd·Scheduler·Controller Manager) 흐름 전용편.
+
+### 5단계 — 확장 (Admission·CRD·Operator)
+
+- **Admission Controller / Webhook** — Admission Controller · MutatingAdmissionWebhook · ValidatingAdmissionWebhook · AdmissionReview · Policy · OPA Gatekeeper · Kyverno · Sidecar Injection · Image Policy · Resource Policy
+- **CRD / Custom Controller / Operator** — CRD · Custom Resource · Controller · Operator · Reconciliation Loop · Informer · Watch · Work Queue · Finalizer · OwnerReference · Garbage Collection · Status Subresource
+
+YAML이 API Server에 들어가기 전, Mutating Webhook이 PodSpec을 조용히 고쳐 쓰거나(sidecar 주입·securityContext 주입) Validating Webhook이 정책 위반을 거절한다 — Spring의 `BeanPostProcessor`·위빙과 닮은 구간이다. CRD+Controller까지 가면 Kubernetes를 *쓰는* 사람에서 그 위에 *플랫폼을 만드는* 사람으로 넘어간다.
+
+> 갭: Custom Controller/Operator를 직접 작성하는 Mini Operator 실습편.
+
+### 6단계 — 운영·장애 (관측·트러블슈팅·보안)
+
+- **Storage** — Volume · emptyDir · hostPath · PersistentVolume · PersistentVolumeClaim · StorageClass · Dynamic Provisioning · AccessMode(ReadWriteOnce · ReadWriteMany) · ReclaimPolicy · CSI · StatefulSet VolumeClaimTemplate
+- **ConfigMap / Secret** — ConfigMap · Secret · env · envFrom · volume mount · projected volume · immutable config · rollout restart · External Secrets · Sealed Secrets
+- **RBAC / ServiceAccount** — Authentication · Authorization · RBAC · Role · RoleBinding · ClusterRole · ClusterRoleBinding · ServiceAccount · Token
+- **Security Context / Pod Security** — SecurityContext · Pod Security · runAsNonRoot · readOnlyRootFilesystem · allowPrivilegeEscalation · capabilities · privileged · hostNetwork · hostPath
+- **Observability** — kubectl logs/describe/events · metrics-server · Prometheus · Grafana · Loki · Tempo · OpenTelemetry · kube-state-metrics · node-exporter · cAdvisor · Alertmanager · (지표: restart count · ready · CPU throttling · OOMKilled · Network RX/TX · PVC usage · HPA event · API Server/etcd latency)
+- **Troubleshooting** — Pending · ContainerCreating · ImagePullBackOff · ErrImagePull · CrashLoopBackOff · RunContainerError · CreateContainerConfigError · OOMKilled · Evicted · Terminating · NodeNotReady · (루틴: `get pod -o wide` · `describe` · `logs --previous` · `get events` · `top`)
+- **Production 패턴 / 도구** — Helm · Kustomize · kubectl · k9s · PodDisruptionBudget · Trace ID · Structured Logging · Backup · Upgrade
+
+운영 실력은 장애 때 보인다. 증상별로 의심 지점이 다르다 — Pending은 스케줄링·자원·taint·PVC, ImagePullBackOff는 이미지 이름·태그·registry 인증, CrashLoopBackOff는 부팅 실패·설정 오류·의존 서비스, Running but NotReady는 readiness probe, OOMKilled는 memory limit·JVM 설정, Service 연결 실패는 selector·endpoint·DNS·NetworkPolicy. 감이 아니라 증거(`describe`·`logs --previous`·`events`)로 좁힌다.
+
+> 갭: 분산 트레이싱(Tempo/OpenTelemetry) 전용편.
+
+> **심화 실습 후보** — ① Spring Boot on Kubernetes Production Template(Deployment·Probe·Requests/Limits·SecurityContext·HPA·PDB·Prometheus scraping) ② Troubleshooting Lab(ImagePullBackOff·CrashLoopBackOff·OOMKilled·selector mismatch·NetworkPolicy block을 일부러 만들고 추적) ③ Networking Lab(Pod·Service·DNS·Ingress·NetworkPolicy 손으로 추적) ④ ConfigMap/Secret Reload Lab(주입·mount·rollout restart 반영 전략) ⑤ Mini Operator(SpringApp CRD → Deployment·Service 자동 생성, Reconciliation·OwnerReference·Finalizer). 다섯 개를 만들면 Pod가 선언되고 admission을 지나 scheduler에 배치되고 kubelet에 실행되며 controller에 의해 되살아나는 전체 흐름이 손에 잡힌다.
 
 
 
