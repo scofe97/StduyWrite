@@ -39,6 +39,7 @@ related:
   - ./ch04_compilation-optimization/02-02.컴파일 대상과 핫스폿 탐지.md
   - ./ch04_compilation-optimization/02-03.컴파일러 최적화 — 메서드 인라인과 탈출 분석.md
   - ./ch04_compilation-optimization/02-04.컴파일러 최적화 — 공통식 제거·경계 검사 제거와 Graal.md
+  - ./ch04_compilation-optimization/02-05.GraalVM과 OpenJDK — Graal·Truffle·통합사.md
   - ./ch05_efficient-concurrency/01-01.하드웨어 효율과 자바 메모리 모델.md
   - ./ch05_efficient-concurrency/01-02.volatile·happens-before·원자성.md
   - ./ch05_efficient-concurrency/01-03.자바와 스레드 — 구현·스케줄링·상태.md
@@ -144,7 +145,7 @@ updated: 2026-06-19
 | 01-03.컴파일과 최적화 | 4부 10~11장 | 정독본 [`ch04_compilation-optimization/`](./ch04_compilation-optimization/) `01-NN`·`02-NN`에 흡수. 고유 내용(LCM/GCM·implicit null check)은 [`02-04`](./ch04_compilation-optimization/02-04.컴파일러%20최적화%20—%20공통식%20제거·경계%20검사%20제거와%20Graal.md)에 합침, 나머지는 중복 제거 |
 | 01-04.효율적 동시성 | 5부 12장 | [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 정독 4편으로 풀어 씀 (01-01~01-04) |
 | 01-04.효율적 동시성 | 5부 13장 | [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 정독 3편으로 풀어 씀 (02-01~02-03) |
-| 02-01.GC 알고리즘과 튜닝 | 2부 3장 | §6,§7만 [`ch02_automatic-memory-management/02-01.GC 운영 — 로그와 튜닝.md`](./ch02_automatic-memory-management/02-01.GC%20운영%20—%20로그와%20튜닝.md), §3 비교표는 [`ch02_automatic-memory-management/02-10.마치며.md`](./ch02_automatic-memory-management/02-10.마치며.md) 의 §3a로 흡수. §1,§2,§4,§5는 정독 노트와 중복으로 제거 |
+| 02-01.GC 알고리즘과 튜닝 | 2부 3장 | §6,§7만 [`ch02_automatic-memory-management/02-01.GC 운영 — 로그와 튜닝.md`](./ch02_automatic-memory-management/02-01.GC%20운영%20—%20로그와%20튜닝.md), §3 비교표는 [`ch02_automatic-memory-management/02-11.마치며.md`](./ch02_automatic-memory-management/02-11.마치며.md) 의 §3a로 흡수. §1,§2,§4,§5는 정독 노트와 중복으로 제거 |
 | 02-02.Java 성능 | 2부 4~5장 | [`ch02_automatic-memory-management/02-02.Java 성능 — JMH와 측정 방법론.md`](./ch02_automatic-memory-management/02-02.Java%20성능%20—%20JMH와%20측정%20방법론.md) |
 
 ## 책 목차 ↔ 정독 노트 매핑
@@ -180,7 +181,7 @@ updated: 2026-06-19
 | 장 | 한국어 제목 | 폴더 | 진척 | 실습 |
 |----|------------|------|------|------|
 | 10장 | 프런트엔드 컴파일과 최적화 | [`ch04_compilation-optimization/`](./ch04_compilation-optimization/) `01-NN` | ✅ §10.1~§10.5 정독(01-01 javac~01-03 애너테이션 처리기, 구 01-02·01-03 구문 설탕 2편은 01-02로 통합) | — |
-| 11장 | 백엔드 컴파일과 최적화 | [`ch04_compilation-optimization/`](./ch04_compilation-optimization/) `02-NN` | ✅ §11.1~§11.5 정독(02-01 JIT~02-04 CSE·Graal). 옛 개관 고유분(LCM/GCM·implicit null check)은 02-04에 흡수 | — |
+| 11장 | 백엔드 컴파일과 최적화 | [`ch04_compilation-optimization/`](./ch04_compilation-optimization/) `02-NN` | ✅ §11.1~§11.5 정독(02-01 JIT~02-04 CSE·Graal). 옛 개관 고유분(LCM/GCM·implicit null check)은 02-04에 흡수. 02-05는 §5 Graal에서 이어지는 GraalVM 생태계·OpenJDK 통합사(JVMCI·JEP 410) 보강편(책 외 출처) | — |
 
 ### 5부 효율적인 동시성
 
