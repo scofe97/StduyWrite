@@ -1,0 +1,72 @@
+<svg viewBox="0 0 920 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>표준 HotSwap의 한계와 도구별 우회</title>
+  <desc>JVM 표준 HotSwap은 메서드 바디 교체만 허용하고 필드 추가·메서드 시그니처 변경·상속 구조 변경 같은 형상 변화는 막는다. 이 한계를 도구마다 다르게 넓힌다. DCEVM은 JVM 자체를 패치해 범위를 넓히고, HotswapAgent는 그 위에서 프레임워크 메타데이터를 리로드하며, JRebel은 클래스별 버전 관리로 일반 JVM에서 무재시작 리로드를 제공한다. Java Agent는 로딩 직전 ClassFileTransformer로 바이트코드를 변형해 부모 위임과 무관하게 적용한다. 어느 도구도 만능은 아니며 상속 구조 변경 같은 깊은 형상 변화는 대부분 재시작을 요구한다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11.5px;fill:rgb(150,145,140)}
+      .head{font-size:12.5px;font-weight:800;fill:rgb(212,168,83)}
+      .lab{font-size:11.5px;font-weight:800;fill:#0d0d0d}
+      .body{font-size:10px;fill:rgb(200,195,190)}
+      .ok{font-size:10px;font-weight:700;fill:#1a3a14}
+      .bad{font-size:10px;font-weight:700;fill:#7a1f1f}
+      .note{font-size:9.5px;fill:rgb(150,145,140)}
+    </style>
+  </defs>
+  <rect x="0" y="0" width="920" height="560" fill="#0d0d0d"/>
+  <text x="28" y="40" class="title">표준 HotSwap의 한계와 도구별 우회</text>
+  <text x="28" y="64" class="sub">기본 HotSwap은 메서드 바디만 — 형상 변화는 막힘. 도구마다 다른 방식으로 범위를 넓힘</text>
+
+  <!-- 표준 HotSwap: 허용/금지 -->
+  <rect x="28" y="92" width="400" height="150" rx="10" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="48" y="118" class="head">JVM 표준 HotSwap (JPDA 디버거)</text>
+  <rect x="48" y="132" width="172" height="92" rx="7" fill="#cdeccf"/>
+  <text x="134" y="154" class="lab" text-anchor="middle">허용 ✓</text>
+  <text x="134" y="178" class="ok" text-anchor="middle">메서드 바디 교체</text>
+  <text x="134" y="198" class="ok" text-anchor="middle">(형상 안 바뀜)</text>
+  <rect x="236" y="132" width="172" height="92" rx="7" fill="#f2d4d4"/>
+  <text x="322" y="154" class="lab" text-anchor="middle">막힘 ✗</text>
+  <text x="322" y="174" class="bad" text-anchor="middle">필드 추가·삭제</text>
+  <text x="322" y="190" class="bad" text-anchor="middle">시그니처·메서드 변경</text>
+  <text x="322" y="206" class="bad" text-anchor="middle">상속 구조 변경</text>
+
+  <!-- 화살표: 막힌 것을 도구가 넓힘 -->
+  <text x="455" y="172" class="sub">→ 막힌 부분을</text>
+  <text x="455" y="190" class="sub">도구가 넓힘</text>
+
+  <!-- 도구 4개 -->
+  <rect x="28" y="270" width="210" height="120" rx="9" fill="#5b9bd5"/>
+  <text x="44" y="294" style="font-size:11.5px;font-weight:800;fill:#ffffff">DCEVM</text>
+  <text x="44" y="316" font-size="10" fill="#f2f7fc">JVM 자체를 패치해</text>
+  <text x="44" y="332" font-size="10" fill="#f2f7fc">핫스왑 범위 확장</text>
+  <text x="44" y="360" font-size="9.5" fill="#e8eef5">한계: JDK 버전별</text>
+  <text x="44" y="375" font-size="9.5" fill="#e8eef5">패치 빌드 필요</text>
+
+  <rect x="252" y="270" width="210" height="120" rx="9" fill="rgb(212,168,83)"/>
+  <text x="268" y="294" class="lab">HotswapAgent</text>
+  <text x="268" y="316" font-size="10" fill="#241c08">DCEVM 위에서 프레임워크</text>
+  <text x="268" y="332" font-size="10" fill="#241c08">메타데이터 리로드</text>
+  <text x="268" y="360" font-size="9.5" fill="#241c08">한계: DCEVM 의존,</text>
+  <text x="268" y="375" font-size="9.5" fill="#241c08">플러그인 있는 곳만</text>
+
+  <rect x="476" y="270" width="210" height="120" rx="9" fill="#66bb6a"/>
+  <text x="492" y="294" class="lab" fill="#14521d">JRebel</text>
+  <text x="492" y="316" font-size="10" fill="#14260f">클래스별 버전 관리,</text>
+  <text x="492" y="332" font-size="10" fill="#14260f">일반 JVM에서 동작</text>
+  <text x="492" y="360" font-size="9.5" fill="#14521d">한계: 상용 라이선스</text>
+
+  <rect x="700" y="270" width="192" height="120" rx="9" fill="#dceaf7"/>
+  <text x="716" y="294" class="lab" fill="#10243a">Java Agent</text>
+  <text x="716" y="316" font-size="10" fill="#10243a">로딩 직전 바이트코드</text>
+  <text x="716" y="332" font-size="10" fill="#10243a">ClassFileTransformer</text>
+  <text x="716" y="360" font-size="9.5" fill="#10243a">위임과 무관하게 적용</text>
+  <text x="716" y="375" font-size="9.5" fill="#10243a">APM·핫리로드 토대</text>
+
+  <!-- 공통 한계 박스 -->
+  <rect x="28" y="418" width="864" height="74" rx="10" fill="#2a1414" stroke="#e57373" stroke-width="1.2"/>
+  <text x="48" y="444" class="head" fill="#ef9a9a">어느 도구도 만능은 아니다</text>
+  <text x="48" y="468" class="body">상속 구조 변경 같은 깊은 형상 변화는 대부분 도구가 여전히 막거나 재시작을 요구합니다.</text>
+  <text x="48" y="485" class="body">핫 리로드는 개발 생산성을 위한 것이지 운영 배포를 대체하는 기술이 아닙니다.</text>
+
+  <text x="28" y="528" class="note">바꿔치우기(DCEVM·JRebel: 로더/클래스 교체) vs 가로채 변형하기(Java Agent: 로딩 훅) — 04-03 두 발상의 도구화</text>
+</svg>

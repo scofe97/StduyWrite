@@ -1,0 +1,57 @@
+<svg viewBox="0 0 900 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>Spring Boot 실행 JAR 구조 — BOOT-INF·META-INF·org</title>
+  <desc>Spring Boot 실행 JAR는 세 영역으로 나뉜다. META-INF/MANIFEST.MF는 Main-Class(JarLauncher)와 Start-Class(내 앱)를 적는다. org/springframework/boot/loader는 Spring Boot 로더 클래스다. BOOT-INF는 classes(내 코드)와 lib(중첩 JAR 의존성), 적재 순서를 적은 classpath.idx, 도커 레이어 정보 layers.idx로 이뤄진다. 의존성은 풀리지 않고 JAR 그대로 lib에 품긴다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11.5px;fill:rgb(150,145,140)}
+      .area{font-size:12.5px;font-weight:800;fill:#0d0d0d}
+      .item{font-size:10.5px;font-family:'JetBrains Mono',monospace;font-weight:700}
+      .desc{font-size:9.5px;fill:rgb(150,145,140)}
+    </style>
+  </defs>
+  <rect x="0" y="0" width="900" height="480" fill="#0d0d0d"/>
+  <text x="28" y="40" class="title">Spring Boot 실행 JAR 구조 — 의존성을 JAR 그대로 품는다</text>
+  <text x="28" y="64" class="sub">세 영역: 메타데이터(META-INF) · 로더(org) · 내 코드와 의존성(BOOT-INF)</text>
+
+  <!-- app.jar 바깥 테두리 -->
+  <rect x="28" y="86" width="844" height="372" rx="12" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.6"/>
+  <text x="48" y="110" class="item" fill="rgb(212,168,83)">app.jar</text>
+
+  <!-- META-INF -->
+  <rect x="48" y="124" width="260" height="120" rx="9" fill="#dceaf7"/>
+  <text x="64" y="148" class="area" fill="#10243a">META-INF / MANIFEST.MF</text>
+  <rect x="64" y="160" width="228" height="32" rx="5" fill="#aacdf0"/>
+  <text x="76" y="181" class="item" fill="#0c1a28">Main-Class: …JarLauncher</text>
+  <rect x="64" y="198" width="228" height="32" rx="5" fill="#aacdf0"/>
+  <text x="76" y="219" class="item" fill="#0c1a28">Start-Class: MyApplication</text>
+
+  <!-- org loader -->
+  <rect x="324" y="124" width="260" height="120" rx="9" fill="#66bb6a"/>
+  <text x="340" y="148" class="area" fill="#14521d">org/…/boot/loader</text>
+  <text x="340" y="176" font-size="10" fill="#14260f">Spring Boot 로더 클래스</text>
+  <text x="340" y="196" font-size="10" fill="#14260f">JarLauncher · 사용자 정의 로더</text>
+  <text x="340" y="222" font-size="9.5" fill="#14521d">JVM 이 가장 먼저 실행하는 코드</text>
+
+  <!-- BOOT-INF -->
+  <rect x="600" y="124" width="252" height="314" rx="9" fill="rgb(212,168,83)"/>
+  <text x="616" y="148" class="area">BOOT-INF</text>
+  <rect x="616" y="160" width="220" height="58" rx="6" fill="#fdf3df"/>
+  <text x="628" y="181" class="item" fill="#3a2e0c">classes/</text>
+  <text x="628" y="202" class="desc" fill="#5c4a18">내가 짠 클래스</text>
+  <rect x="616" y="228" width="220" height="86" rx="6" fill="#fdf3df"/>
+  <text x="628" y="249" class="item" fill="#3a2e0c">lib/</text>
+  <text x="628" y="269" class="desc" fill="#5c4a18">의존성 JAR — 풀리지 않고</text>
+  <text x="628" y="283" class="desc" fill="#5c4a18">JAR 그대로 (중첩 JAR)</text>
+  <text x="628" y="303" class="item" fill="#7a1f1f" font-size="9">dependency1.jar · dependency2.jar</text>
+  <rect x="616" y="324" width="220" height="44" rx="6" fill="#fdf3df"/>
+  <text x="628" y="345" class="item" fill="#3a2e0c">classpath.idx</text>
+  <text x="628" y="361" class="desc" fill="#5c4a18">의존성 적재 순서 색인</text>
+  <rect x="616" y="378" width="220" height="44" rx="6" fill="#fdf3df"/>
+  <text x="628" y="399" class="item" fill="#3a2e0c">layers.idx</text>
+  <text x="628" y="415" class="desc" fill="#5c4a18">도커 레이어 캐시 정보</text>
+
+  <text x="48" y="280" class="sub">표준 JAR 는 JAR 안의 JAR 를 못 읽음 →</text>
+  <text x="48" y="300" class="sub">Spring Boot 가 자기 로더로 중첩 JAR 를</text>
+  <text x="48" y="320" class="sub">읽어 Start-Class 를 실행 (다음 그림)</text>
+</svg>

@@ -1,0 +1,71 @@
+<svg viewBox="0 0 900 520" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>핫스왑 — 같은 로더는 캐시된 구버전, 새 로더는 수정본을 실행한다</title>
+  <desc>클래스 핫스왑의 원리를 두 경로로 대조한다. 클라이언트가 수정한 같은 이름의 클래스를 다시 보냈을 때, 같은 클래스 로더로 적재하면 "클래스 동일성 = 이름 + 로더" 성질 때문에 이전에 로딩된 클래스가 캐시되어 그대로 쓰여 수정이 반영되지 않는다. 반대로 실행 요청마다 새 HotSwapClassLoader 인스턴스를 만들어 적재하면, 로더가 달라 같은 이름이라도 다른 클래스가 되므로 수정된 버전이 매번 새로 실행된다. 이것이 핫스왑이며 Spring Boot DevTools의 restart 클래스로더 교체와 같은 발상이다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: #c8c4bf; }
+      .h     { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
+      .lbl   { font-size: 10px; fill: #0d0d0d; }
+      .lblw  { font-size: 11px; fill: #e8e4df; font-weight: 700; }
+      .bad   { font-size: 11.5px; font-weight: 800; fill: #0d0d0d; }
+      .good  { font-size: 11.5px; font-weight: 800; fill: #0d0d0d; }
+      .note  { font-size: 10px; fill: #c8c4bf; }
+      .way   { font-size: 12px; font-weight: 800; fill: rgb(212,168,83); }
+    </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="arR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#e57373"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="520" fill="#0d0d0d"/>
+  <text x="28" y="36" class="title">핫스왑 — 같은 로더 vs 새 로더</text>
+  <text x="28" y="56" class="sub">클라이언트가 같은 이름의 클래스를 *수정해 다시* 보냄 · 어느 로더로 적재하느냐가 갈림길</text>
+
+  <!-- 공통 출발: 수정된 클래스 재전송 -->
+  <rect x="330" y="78" width="240" height="48" rx="9" fill="#dceaf7"/>
+  <text x="450" y="98" class="h" text-anchor="middle">수정한 Foo.class 재전송</text>
+  <text x="450" y="115" class="lbl" text-anchor="middle">이름은 그대로 "Foo", 내용만 바뀜</text>
+
+  <!-- 갈림 화살표 -->
+  <line x1="380" y1="126" x2="250" y2="168" stroke="#e57373" stroke-width="2" marker-end="url(#arR)"/>
+  <line x1="520" y1="126" x2="650" y2="168" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- ===== 왼쪽: 같은 로더 (실패) ===== -->
+  <text x="225" y="158" class="way" text-anchor="middle" style="fill:#e57373">✖ 같은 로더 재사용</text>
+  <rect x="60" y="170" width="330" height="60" rx="9" fill="#e57373"/>
+  <text x="225" y="194" class="bad" text-anchor="middle">같은 ClassLoader 로 loadClass("Foo")</text>
+  <text x="225" y="214" class="lbl" text-anchor="middle">동일성 = 이름 + 로더 → (Foo, 로더X) 이미 있음</text>
+
+  <line x1="225" y1="230" x2="225" y2="262" stroke="#e57373" stroke-width="2" marker-end="url(#arR)"/>
+
+  <rect x="60" y="264" width="330" height="64" rx="9" fill="#f2d4d4" stroke="#c0392b" stroke-width="1.4"/>
+  <text x="225" y="288" class="bad" text-anchor="middle" style="fill:#7a1f1f">캐시된 "구버전" Foo 반환</text>
+  <text x="225" y="308" class="lbl" text-anchor="middle" style="fill:#7a1f1f">같은 로더는 같은 이름을 한 번만 로딩 —</text>
+  <text x="225" y="322" class="lbl" text-anchor="middle" style="fill:#7a1f1f">수정이 반영 안 됨 (변경 무시)</text>
+
+  <!-- ===== 오른쪽: 새 로더 (성공) ===== -->
+  <text x="675" y="158" class="way" text-anchor="middle">✔ 매번 새 로더</text>
+  <rect x="510" y="170" width="330" height="60" rx="9" fill="rgb(212,168,83)"/>
+  <text x="675" y="194" class="h" text-anchor="middle">new HotSwapClassLoader().loadByte(..)</text>
+  <text x="675" y="214" class="lbl" text-anchor="middle">로더가 새것 → (Foo, 로더Y) = 다른 클래스</text>
+
+  <line x1="675" y1="230" x2="675" y2="262" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+
+  <rect x="510" y="264" width="330" height="64" rx="9" fill="#cdeccf" stroke="#2e7d32" stroke-width="1.4"/>
+  <text x="675" y="288" class="good" text-anchor="middle" style="fill:#14521d">수정된 "새 버전" Foo 실행</text>
+  <text x="675" y="308" class="lbl" text-anchor="middle" style="fill:#14521d">로더가 다르면 같은 이름도 다른 타입 —</text>
+  <text x="675" y="322" class="lbl" text-anchor="middle" style="fill:#14521d">매 요청마다 새 로더 = 핫스왑</text>
+
+  <!-- 하단: 같은 발상 -->
+  <rect x="60" y="366" width="780" height="60" rx="10" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="76" y="390" class="way">같은 발상</text>
+  <text x="76" y="410" class="note">톰캣 JSP 로더 교체(04-01) · Spring Boot DevTools 의 restart 클래스로더(고치면 그 로더를 버리고 새로 생성) — 전부 "로더를 새로 만들어 통째 교체"로 핫스왑한다.</text>
+
+  <!-- 핵심 한 줄 -->
+  <text x="450" y="462" class="sub" text-anchor="middle">핵심: 클래스는 개별 교체가 어렵지만, *로더 단위로 버리고 새로 만들면* 그 로더가 들고 있던 클래스가 한꺼번에 갈린다.</text>
+  <text x="450" y="484" class="note" text-anchor="middle">그래서 "핫스왑 = 클래스를 고치는 게 아니라, 로더를 바꾸는 것"</text>
+</svg>
