@@ -76,7 +76,7 @@ updated: 2026-06-19
 > 이 폴더는 단행본 《JVM 밑바닥까지 파헤치기》의 **절 단위 정독 노트** 갈래(`chNN_*` 폴더)로 구성된다. 책의 *부(部)* 단위로 폴더를 묶는다.
 >
 > - 2부 "자동 메모리 관리"(원서 2~5장)는 [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) 한 폴더에 장번호로 통합돼 있어, `01-NN`이 메모리 영역(2장), `02-NN`이 가비지 컬렉션(3장, 운영·JMH는 `02-01~02-02` / GC 본문은 `02-03~02-10`), `03-NN`이 진단 도구(4장), `04-NN`이 최적화 실전(5장)이다. 과거의 "부 단위 루트 요약" 레이어는 정독 폴더로 흡수했다.
-> - 책 1·3부 요약(개관 흡수본)은 3부 정독 폴더 [`ch03_class-loading-mechanism/00-개관.*`](./ch03_class-loading-mechanism/) 2편(JDK 구조·실행 서브시스템)으로 이관됐다. `00-` prefix는 그 부의 절 정독(`01-NN`·`02-NN`) 앞에 놓이는 개관이라는 뜻이다. 4부 요약은 별도 개관으로 두지 않고, 고유했던 내용(LCM/GCM·implicit null check)을 정독본 [`ch04_compilation-optimization/02-04`](./ch04_compilation-optimization/02-04.컴파일러%20최적화%20—%20공통식%20제거·경계%20검사%20제거와%20Graal.md)에 흡수했다(나머지는 정독본과 중복이라 제거). 5부는 [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 정독 폴더로 풀어 썼다(12장=`01-NN` 4편, 13장=`02-NN` 3편). 옛 5부 부 요약 [`_temp/01-04`](./_temp/01-04.효율적%20동시성.md) 는 정독본으로 대체됐으나 요약 갈래로 보존한다. [`ch01_java-tech/`](./ch01_java-tech/) 에는 1장 §1.5~§1.7 절 정독 노트(`02-NN` 4편)만 남는다. 
+> - 책 1·3부 요약(개관 흡수본)은 3부 정독 폴더 [`ch03_class-loading-mechanism/00-개관.*`](./ch03_class-loading-mechanism/) 2편(JDK 구조·실행 서브시스템)으로 이관됐다. `00-` prefix는 그 부의 절 정독(`01-NN`·`02-NN`) 앞에 놓이는 개관이라는 뜻이다. 4부 요약은 별도 개관으로 두지 않고, 고유했던 내용(LCM/GCM·implicit null check)을 정독본 [`ch04_compilation-optimization/02-04`](./ch04_compilation-optimization/02-04.컴파일러%20최적화%20—%20공통식%20제거·경계%20검사%20제거와%20Graal.md)에 흡수했다(나머지는 정독본과 중복이라 제거). 5부는 [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 정독 폴더로 풀어 썼다(12장=`01-NN` 4편, 13장=`02-NN` 3편). 옛 5부 부 요약은 정독본 ch05가 모두 흡수해 제거했다. [`ch01_java-tech/`](./ch01_java-tech/) 에는 1장 §1.5~§1.7 절 정독 노트(`02-NN` 4편)만 남는다. 
 > - 실습 코드는 `_practice/` 서브폴더에서 챕터별 Gradle 모듈로 모인다.
 >
 > **동시성 갈래의 예외 — 출처 혼합 허용**: 책별로 폴더를 가르는 게 원칙이지만, [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 만은 *주제(동시성)* 를 우선해 두 책을 한 폴더에 둔다. `01-NN`·`02-NN`(《밑바닥》 12·13장 정독)에 더해, 출처가 《자바 동시성 프로그래밍》(또는 동등 도서)인 실무 학습 노트 9편을 `03-NN`~`05-NN`으로 합류시켰다(2026-06-17 루트 직속에서 이관). 폴더 안에서 책 구분은 각 노트의 `source` 필드가 1차 기준이다.
@@ -125,7 +125,6 @@ updated: 2026-06-19
 │   ├── 01-NN.{개관·운영 흡수본}.md       # 옛 루트 부 요약의 정독 폴더 이주본
 │   └── 02-{절}.{제목}.md                  # 책의 절 정독 노트
 │   └── (ch05만) 03~05-NN              # 《자바 동시성》 실무 노트 9편 (이관)
-├── _temp/                             # 옛 5부 부 요약 보존 (정독본 ch05로 대체됨)
 └── _practice/                             # 챕터별 Gradle 실습 코드
     ├── settings.gradle.kts
     ├── build.gradle.kts
