@@ -49,8 +49,7 @@ related:
   - ./ch05_efficient-concurrency/02-02.스레드 안전성 구현 — 동기화와 락.md
   - ./ch05_efficient-concurrency/02-03.락 최적화 — 스핀·제거·굵게·경량·편향.md
   - ./ch05_efficient-concurrency/03-01.스레드 생성과 생명주기.md
-  - ./ch05_efficient-concurrency/03-02.동기화와 데드락.md
-  - ./ch05_efficient-concurrency/03-03.생산자-소비자 패턴.md
+  - ./ch05_efficient-concurrency/03-02.생산자-소비자 패턴.md
   - ./ch05_efficient-concurrency/04-01.원자 연산과 동시성 컬렉션.md
   - ./ch05_efficient-concurrency/04-02.Executor 프레임워크.md
   - ./ch05_efficient-concurrency/04-03.동시성 유틸리티.md
