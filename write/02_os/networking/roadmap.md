@@ -488,7 +488,23 @@ Kernel Network Parameters
 - **4. NAT & conntrack Lab** — namespace 에서 외부 통신 · MASQUERADE 설정 · DNAT port forwarding · conntrack table 확인 · NAT 전후 tcpdump 비교.
 - **5. Backend Timeout Lab** — connection timeout · read timeout · connection reset · DNS 실패 · SYN drop · RST 응답 · server accept 지연 이 백엔드 timeout 으로 어떻게 보이는지 확인.
 
-## 22. 결론
+## 22. TLS truststore — OS CA bundle 관점
+
+> TLS truststore 의 *전체 계층 이동*(JVM/Envoy/cert-manager/VM)은 [05_JVM roadmap §26](../../01_language/java/05_JVM/roadmap.md) 에 메인으로 정리돼 있다. 여기서는 OS 계층 관점만 — TLS 클라이언트가 **OS 도구(curl 등)이거나 Nginx/HAProxy** 일 때의 신뢰 저장소다.
+
+원칙: truststore 는 "TLS 클라이언트 쪽" 에 필요하고, 클라이언트가 누구냐에 따라 위치가 바뀐다. OS 레벨 도구가 HTTPS 상대를 검증하는 경우의 신뢰 저장소가 **OS CA bundle** 이다.
+
+```text
+OS 도구/curl 가 TLS 클라이언트
+  → /etc/ssl/certs (배포판별 CA bundle 경로)
+  → update-ca-certificates 로 사내 CA 추가
+Nginx / HAProxy 가 TLS 클라이언트
+  → proxy_ssl_trusted_certificate / ca-file 로 CA 지정
+```
+
+VM 미들웨어가 K8s Ingress 를 HTTPS 로 호출할 때(VM→Pod 방향) VM 이 Java 면 JVM truststore, Nginx 면 ca-file, OS 도구면 `/etc/ssl/certs` 가 검증 저장소가 된다. 사내 CA·Self-signed 인증서면 OS CA bundle 에 추가해야 한다 — 공인 CA 면 OS 기본 bundle 로 통과할 수 있다. JVM 측 변환·적용은 [05_JVM roadmap §26.5](../../01_language/java/05_JVM/roadmap.md) 참조.
+
+## 23. 결론
 
 ```text
 Kubernetes 자체를 공부하는 것:

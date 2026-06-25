@@ -656,6 +656,23 @@ kube-state-metrics
 Troubleshooting
 ```
 
+## TLS 인증서 관리 — cert-manager / trust-manager (K8s 관점)
+
+> TLS truststore 의 *전체 계층 이동*(JVM/Envoy/OS/VM)은 [05_JVM roadmap §26](../../01_language/java/05_JVM/roadmap.md) 에 메인으로 정리돼 있다. 여기서는 K8s 측 관점 — *인증서 발급·배포* 만 다룬다.
+
+K8s 에서 인증서 관리는 목적이 둘로 나뉜다.
+
+| 목적 | 주로 쓰는 것 | 예시 |
+|---|---|---|
+| 내 서비스가 인증서를 *제공* | TLS Secret · cert-manager | Ingress/Gateway HTTPS |
+| 내 앱이 상대 인증서를 *신뢰* | JVM truststore · OS CA bundle | Pod → VM HTTPS 호출 |
+
+- K8s 는 TLS 용 Secret 타입(`kubernetes.io/tls`)을 제공하고, cert-manager 는 클러스터 워크로드용 인증서를 발급·갱신한다.
+- 하지만 **그 인증서를 Java 애플리케이션이 신뢰하게 만드는 문제는 별도다.** cert-manager 문서도 클라이언트가 신뢰할 CA 인증서는 서버 인증서 Secret 과 분리해 관리하고, 필요하면 **trust-manager** 로 여러 namespace 에 배포할 수 있다고 설명한다. trust-manager 는 K8s/OpenShift 에서 X.509 신뢰 번들을 관리·배포하는 도구다.
+- ⚠️ **핵심: Secret 에 CA 인증서가 있다 ≠ JVM 이 그 CA 를 신뢰한다.** trust-manager → ConfigMap 에 CA bundle 배포 → Pod mount → JVM truststore 로 변환 또는 JVM 옵션 연결, 까지 이어져야 실제 통신이 성공한다. JVM 측 변환(keytool·JAVA_TOOL_OPTIONS·initContainer)은 [05_JVM roadmap §26.5](../../01_language/java/05_JVM/roadmap.md) 참조.
+
+> 출처: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) · [cert-manager Trusting certificates](https://cert-manager.io/docs/trust/) · [trust-manager](https://cert-manager.io/docs/trust/trust-manager/)
+
 ## 출처
 
 - [Overview](https://kubernetes.io/docs/concepts/overview/)
