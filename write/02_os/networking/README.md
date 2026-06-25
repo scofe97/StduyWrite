@@ -23,6 +23,8 @@ updated: 2026-04-26
 | Ch | 제목 | 핵심 질문 |
 |----|------|----------|
 | 01-01 | [네트워킹 기초](./01-01.네트워킹%20기초.md) | netns·veth·bridge·라우팅·netfilter·conntrack·TC·eBPF는 K8s 추상 아래에서 어떻게 협력하는가? |
+| 01-02 | [K8s 패킷 여정 — netfilter·conntrack·라우팅](./01-02.K8s%20패킷%20여정%20—%20netfilter·conntrack·라우팅.md) | Pod에서 나간 패킷이 Service·NAT·conntrack을 거쳐 목적지에 닿기까지 커널을 어떻게 통과하는가? |
+| 01-03 | [DNS 필터링 차단 — NXDOMAIN·DoH·우회 마찰](./01-03.DNS%20필터링%20차단%20—%20NXDOMAIN·DoH·우회%20마찰.md) | DNS 차단은 어느 계층에서 일어나고 NXDOMAIN·DoH는 그 차단과 우회에 어떻게 작용하는가? |
 
 
 
