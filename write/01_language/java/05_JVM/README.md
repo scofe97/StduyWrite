@@ -49,14 +49,14 @@ related:
   - ./ch05_efficient-concurrency/02-02.스레드 안전성 구현 — 동기화와 락.md
   - ./ch05_efficient-concurrency/02-03.락 최적화 — 스핀·제거·굵게·경량·편향.md
   - ./ch05_efficient-concurrency/03-01.스레드 생성과 생명주기.md
-  - ./ch05_efficient-concurrency/03-02.메모리 가시성과 동기화.md
+  - ./ch05_efficient-concurrency/03-02.동기화와 데드락.md
   - ./ch05_efficient-concurrency/03-03.생산자-소비자 패턴.md
   - ./ch05_efficient-concurrency/04-01.원자 연산과 동시성 컬렉션.md
   - ./ch05_efficient-concurrency/04-02.Executor 프레임워크.md
-  - ./ch05_efficient-concurrency/04-03.ThreadLocal과 동시성 라이브러리.md
+  - ./ch05_efficient-concurrency/04-03.동시성 유틸리티.md
   - ./ch05_efficient-concurrency/05-01.Java Memory Model 심화.md
   - ./ch05_efficient-concurrency/05-02.Virtual Threads 기초.md
-  - ./ch05_efficient-concurrency/05-04.Structured Concurrency.md
+  - ./ch05_efficient-concurrency/05-03.Structured Concurrency.md
   - ./ch05_efficient-concurrency/06-01.성능 엔지니어링과 하드웨어·메모리 모델.md
   - ./ch05_efficient-concurrency/06-02.동기화와 NUMA, JMH 벤치마킹.md
   - ./ch05_efficient-concurrency/06-03.락과 동시성 — 동기화부터 Virtual Threads까지.md
