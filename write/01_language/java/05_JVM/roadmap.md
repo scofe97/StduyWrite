@@ -650,6 +650,133 @@ OOMKilled
 CPU Throttling
 ```
 
+## 26. TLS truststore / 인증서 검증 — 계층 이동 (JVM 관점)
+
+> 이 절은 별도 주제(TLS 인증서 검증)지만 JVM 이 JSSE/cacerts 로 직접 다루므로 여기에 둔다. 핵심 원칙: **truststore 는 "TLS 클라이언트 쪽" 에 필요하다.** 상대 서버 인증서를 검증하는 쪽이 누구냐에 따라 `JVM truststore` · `OS CA bundle` · `Envoy trust bundle` · `Nginx CA file` 등으로 위치가 바뀐다. 즉 사라지는 게 아니라 검증 책임이 다른 계층으로 이동한다.
+
+### 26.0 전체 판단 흐름
+
+```mermaid
+flowchart TD
+    A[Pod 또는 VM이 통신 시작] --> B{HTTPS/TLS 통신인가?}
+    B -- 아니오 --> C[truststore 불필요<br/>단 평문 통신]
+    B -- 예 --> D{TLS 클라이언트가 누구인가?}
+    D -- Spring Boot JVM --> E[JVM truststore 필요]
+    D -- Envoy Sidecar 또는 Egress Gateway --> F[Proxy trust bundle 필요<br/>JVM truststore는 불필요할 수 있음]
+    D -- Nginx 또는 HAProxy --> G[Proxy 설정의 CA 파일 필요]
+    D -- OS 도구 또는 curl --> H[OS CA bundle 필요]
+    E --> I{상대 인증서가 공인 CA인가?}
+    I -- 예 --> J[기본 JDK cacerts로 가능할 수 있음]
+    I -- 아니오 사내 CA 또는 Self-signed --> K[사내 CA를 JVM truststore에 추가 필요]
+```
+
+가장 중요한 문장: **누가 HTTPS 상대방을 검증하는가 → 그 주체에게 truststore 가 필요하다.**
+
+### 26.1 시나리오별 검증 주체
+
+- **Pod Spring Boot → VM HTTPS 직접 호출**: TLS 클라이언트 = Pod 안 JVM. WebClient/RestTemplate/Feign/JDBC Driver/Kafka Client 가 직접 HTTPS 연결을 맺으므로 **JVM truststore 필요**. 예: `https://kafka-vm.internal.company.local:9093` 의 인증서가 사내 CA 발급이면 Pod JVM truststore 에 그 CA 가 있어야 TLS handshake 성공.
+- **Pod → Egress Gateway/Envoy → VM HTTPS**: TLS 클라이언트 = Egress Gateway/Envoy. 검증 책임이 JVM 에서 Proxy 로 이동 → **JVM truststore 불필요할 수 있고 Proxy trust bundle 필요**. 앱은 `http://middleware.internal` 로 보이지만 실제 구간은 Pod → Egress Gateway → HTTPS → VM.
+- **VM → K8s Ingress/Gateway HTTPS**: TLS 클라이언트 = VM 미들웨어. 검증 저장소는 VM 쪽(VM 이 Java 면 JVM truststore, Nginx 면 `proxy_ssl_trusted_certificate`/`ca-file`, OS 도구면 `/etc/ssl/certs`·update-ca-certificates). 이때 Pod JVM truststore 는 불필요(Pod 는 서버 인증서를 검증하는 쪽이 아님).
+- **VM → Ingress, Ingress 에서 TLS 종료**: Ingress/Gateway 가 서버 인증서+private key 보유, VM 은 Ingress 인증서를 신뢰할 truststore 필요, Spring Boot Pod 는 별도 truststore 불필요(평소처럼 HTTP 서버로 떠도 됨).
+- **Pod ↔ Pod Service Mesh mTLS**: TLS 클라이언트 = Sidecar Proxy. 검증 저장소 = Mesh trust bundle. 앱은 `http://service-b` 로 호출해도 Sidecar A → mTLS → Sidecar B 로 암호화. JVM truststore 가 직접 관여하지 않고 Mesh 신뢰 저장소로 책임 이동.
+- **Spring Boot 가 HTTPS 서버**: truststore 보다 **keystore**(자기 서버 인증서+private key)가 중요. VM 쪽은 Spring Boot 인증서를 검증할 truststore 필요.
+
+### 26.2 mTLS 양방향 흐름
+
+```mermaid
+sequenceDiagram
+    participant P as Spring Boot Pod JVM
+    participant V as VM Middleware
+    P->>V: TLS 연결 요청
+    V->>P: 서버 인증서 제시
+    P->>P: JVM truststore로 서버 인증서 검증
+    V->>P: 클라이언트 인증서 요청
+    P->>V: 클라이언트 인증서 제시
+    V->>V: VM truststore로 클라이언트 인증서 검증
+    P->>V: 암호화 통신 시작
+```
+
+mTLS 면 Pod JVM 에 **truststore(서버 검증)+keystore(자기 증명) 모두 필요**, VM 도 keystore(서버 인증서)+truststore(Pod 클라이언트 검증) 모두 필요.
+
+### 26.3 시나리오별 정리표
+
+| 시나리오 | TLS 검증 주체 | JVM truststore 필요 | 대체/이동 |
+|---|---|:--:|---|
+| Pod Spring Boot → VM HTTPS 직접 | Pod 안 JVM | 필요 | 어려움(JVM 이 직접 TLS) |
+| Pod → Egress Gateway → VM HTTPS | Egress Gateway/Envoy | 불필요할 수 있음 | Proxy trust bundle 로 이동 |
+| VM → K8s Ingress HTTPS | VM 미들웨어 | Pod 엔 불필요 | VM 쪽 truststore 필요 |
+| VM → Spring Boot Pod 직접 HTTPS | VM 미들웨어 | Pod 는 keystore 필요 | Gateway 로 대체 가능 |
+| Pod ↔ Pod Service Mesh mTLS | Sidecar Proxy | 불필요할 수 있음 | Mesh trust bundle 로 이동 |
+| Spring Boot 가 외부 HTTPS 호출 | Pod 안 JVM | 필요 | Proxy 사용 시 이동 |
+| mTLS 직접 구현 | 양쪽 애플리케이션 | truststore+keystore | Mesh 로 상당 부분 대체 |
+
+### 26.4 실무 판단 흐름도
+
+```mermaid
+flowchart TD
+    A[VM과 Pod 사이 HTTPS 적용 요구] --> B{TLS를 앱이 직접 처리해야 하는가?}
+    B -- 아니오 구간 암호화가 목적 --> C[Gateway 또는 Service Mesh 또는 Egress Gateway 사용]
+    C --> D[인증서 검증은 Proxy가 담당]
+    D --> E[JVM truststore 부담 감소]
+    B -- 예 앱 자체 HTTPS 또는 mTLS 필요 --> F{Spring Boot가 클라이언트인가?}
+    F -- 예 --> G[JVM truststore 필요]
+    F -- 아니오 --> H{Spring Boot가 서버인가?}
+    H -- 예 --> I[JVM keystore 필요]
+    H -- mTLS 서버 --> J[keystore와 truststore 모두 필요]
+    G --> K[사내 CA를 truststore에 포함]
+    I --> L[서버 인증서와 private key를 keystore에 포함]
+```
+
+### 26.5 K8s 에서 JVM truststore 적용 4방식
+
+K8s Secret 에 CA 인증서가 있다고 JVM 이 그 CA 를 신뢰하는 것은 아니다 — `Secret/ConfigMap mount + truststore 생성 + JAVA_TOOL_OPTIONS 설정 + Pod restart/rollout` 까지 이어져야 실제 HTTPS 호출이 성공한다.
+
+1. **공통 Java Base Image 에 사내 CA 넣기** — 운영 친화적. 모든 Spring Boot 앱이 같은 신뢰 기준. CA 변경 시 이미지 재빌드 필요.
+
+```dockerfile
+FROM eclipse-temurin:17-jre
+COPY company-root-ca.crt /tmp/company-root-ca.crt
+RUN keytool -importcert -noprompt -trustcacerts \
+  -alias company-root-ca -file /tmp/company-root-ca.crt \
+  -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit
+```
+
+2. **Secret/ConfigMap 으로 truststore 마운트** — `JAVA_TOOL_OPTIONS` 에 `-Djavax.net.ssl.trustStore`·`-Djavax.net.ssl.trustStorePassword` 지정 + volume mount. CA 교체는 쉽지만 JVM 이 자동 재읽기를 안 하므로 Pod 재시작 전략 필요.
+
+```yaml
+env:
+  - name: JAVA_TOOL_OPTIONS
+    value: >
+      -Djavax.net.ssl.trustStore=/etc/ssl/internal/truststore.jks
+      -Djavax.net.ssl.trustStorePassword=$(TRUSTSTORE_PASSWORD)
+volumeMounts:
+  - name: internal-truststore
+    mountPath: /etc/ssl/internal
+    readOnly: true
+```
+
+3. **PEM CA bundle 배포 + initContainer 에서 truststore 생성** — ConfigMap/Secret 의 `company-root-ca.crt` 를 initContainer 가 `keytool` 로 `truststore.jks` 로 변환, main container 가 `JAVA_TOOL_OPTIONS` 로 지정. CA 를 표준 PEM 으로 관리.
+
+4. **cert-manager trust-manager** — 여러 namespace 에 X.509 신뢰 번들 배포. 최종적으로 ConfigMap CA bundle → Pod mount → JVM truststore 변환/연결까지 이어야 함. (K8s 측 상세는 [kubernetes roadmap](../../../08_cloud/kubernetes/roadmap.md) 참조)
+
+### 26.6 흔한 오류와 책임 분리
+
+truststore 에 CA 가 없으면 `javax.net.ssl.SSLHandshakeException: PKIX path building failed` — 이것은 K8s 문제가 아니라 JVM 이 상대 인증서를 못 믿는 문제다.
+
+인프라가 개발자 개입 없이 할 수 있는 것(앱이 URL 을 설정값으로 받는 전제): 사내 CA 배포 · truststore Secret 생성 · volume mount · `JAVA_TOOL_OPTIONS` 주입 · 공통 Base Image 관리 · cert-manager/trust-manager 구성 · Pod rollout. 개발자 개입이 필요한 것: `http://` 주소 하드코딩 · 코드에서 TLS 검증 커스텀 · 라이브러리별 SSLContext 직접 생성 · mTLS client certificate 을 앱 로직에서 직접 처리.
+
+핵심 압축:
+
+```text
+1. Spring Boot JVM이 직접 HTTPS 호출 → JVM truststore 필요
+2. Gateway/Sidecar/Proxy가 대신 HTTPS 호출 → Proxy trust bundle 필요
+3. Spring Boot가 HTTPS 서버 → truststore보다 keystore 필요
+4. mTLS 직접 처리 → truststore + keystore 모두 필요
+5. Service Mesh 사용 → 앱의 truststore 부담을 Mesh trust bundle로 이동
+```
+
+> 출처: [Java Secure Socket Extension (JSSE) Reference Guide](https://docs.oracle.com/en/java/javase/11/security/java-secure-socket-extension-jsse-reference-guide.html) · [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) · [cert-manager Trusting certificates](https://cert-manager.io/docs/trust/) · [trust-manager](https://cert-manager.io/docs/trust/trust-manager/)
+
 ## 결론
 
 JVM 을 깊게 판다는 것은 옵션 몇 개를 외우는 일이 아니라, 왜 ClassNotFoundException 이 나는지 · 왜 @Transactional 프록시가 Metaspace 와 연결될 수 있는지 · 왜 API 가 느린데 CPU 는 낮은지 · 왜 Xmx 보다 프로세스 메모리가 더 큰지 · 왜 GC 가 자주 도는지 · 왜 Thread 는 많은데 처리량은 낮은지 · 왜 컨테이너에서는 Java OOM 없이 죽는지 에 답할 수 있게 되는 일입니다.
