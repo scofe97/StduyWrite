@@ -53,9 +53,8 @@ related:
   - ./ch05_efficient-concurrency/04-01.원자 연산과 동시성 컬렉션.md
   - ./ch05_efficient-concurrency/04-02.Executor 프레임워크.md
   - ./ch05_efficient-concurrency/04-03.동시성 유틸리티.md
-  - ./ch05_efficient-concurrency/05-01.Java Memory Model 심화.md
-  - ./ch05_efficient-concurrency/05-02.Virtual Threads 기초.md
-  - ./ch05_efficient-concurrency/05-03.Structured Concurrency.md
+  - ./ch05_efficient-concurrency/05-01.Virtual Threads 기초.md
+  - ./ch05_efficient-concurrency/05-02.Structured Concurrency.md
   - ./ch05_efficient-concurrency/06-01.성능 엔지니어링과 하드웨어·메모리 모델.md
   - ./ch05_efficient-concurrency/06-02.동기화와 NUMA, JMH 벤치마킹.md
   - ./ch05_efficient-concurrency/06-03.락과 동시성 — 동기화부터 Virtual Threads까지.md
