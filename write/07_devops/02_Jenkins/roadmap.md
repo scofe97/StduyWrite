@@ -638,6 +638,118 @@ Jenkins 설정 관리: JCasC
 
 가장 2026년다운 최종 후보는 **"Jenkins 기반 CI/CD Control Plane"** — Jenkinsfile 을 쓰는 프로젝트가 아니라 Jenkins 를 운영 플랫폼으로 감싸고 실행 이력·권한·관측·복구 가능성을 설계하는 프로젝트다.
 
+## 18-B. Jenkins External Secrets Lab (Credential 외부화)
+
+§18-A 12번(보안 하드닝)을 심화하는 토이프로젝트. 핵심 질문: **"Jenkins 에 비밀번호를 저장하지 않고도 안전하게 빌드·배포할 수 있는가?"** Jenkins Credential 은 반드시 Jenkins 내부 저장소에만 둘 필요가 없고, 2026년 기준으로 외부 Secret Manager 연동이 일반적이다. 구조는 세 갈래다.
+
+### 갈래 1 — Jenkins 내부 Credential Store (기본)
+
+`Secret text`·`Username/Password`·`SSH private key`·`Secret file`·`Certificate` 를 Jenkins 에 등록하고 Pipeline 에서 credential ID 로 참조. Credential 은 Controller 에 암호화 저장되고 Pipeline 에서는 ID 로 사용 (출처: [Using credentials](https://www.jenkins.io/doc/book/using/using-credentials/)).
+
+```groovy
+withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+    sh '''
+      set +x
+      curl -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/user
+    '''
+}
+```
+
+규모가 커지면 한계: Controller 마다 Credential 중복 등록 · 회전/폐기 자동화 어려움 · 누가 어떤 secret path 를 쓰는지 외부 정책 통제 어려움 · 백업/복구 시 secret 관리 민감.
+
+### 갈래 2 — 외부 Secret Manager 를 Jenkins Credential 처럼 노출
+
+Credentials API 의 provider 확장점으로 외부 저장소 Secret 을 Jenkins Credential 처럼 노출 (출처: [Credentials plugin](https://plugins.jenkins.io/credentials/)).
+
+| 외부 저장소 | Jenkins 연동 | 특징 |
+|-----------|-------------|------|
+| HashiCorp Vault | Vault Plugin | Pipeline 에서 Vault secret 을 환경변수로 주입 |
+| AWS Secrets Manager | AWS Secrets Manager Credentials Provider | AWS Secrets Manager 값을 Job 에서 credential 로 |
+| Azure Key Vault | Azure Key Vault Plugin | Key Vault secret 을 build job 에 주입 |
+| GCP Secret Manager | GCP Secrets Manager Credentials Provider | GCP secret 을 Jenkins credential 로 노출 |
+| Kubernetes Secret | Kubernetes Credentials Provider | K8s Secret 을 Jenkins credential 로 노출 |
+| Bitwarden / Conjur / Keeper | 각 Provider 플러그인 | 기업용 password vault 연동 |
+
+출처: [Vault Plugin](https://plugins.jenkins.io/hashicorp-vault-plugin) · [AWS Secrets Manager Provider](https://github.com/jenkinsci/aws-secrets-manager-credentials-provider-plugin) · [Azure Key Vault](https://plugins.jenkins.io/azure-keyvault/) · [Kubernetes Credentials Provider](https://plugins.jenkins.io/kubernetes-credentials-provider/).
+
+### 갈래 3 — Pipeline 실행 시점에 외부 Secret 직접 fetch
+
+Jenkins Credential Store 에 값을 거의 저장하지 않고 실행 시점에 Vault/Cloud Secret Manager 에서 가져온다.
+
+```groovy
+withVault([
+    vaultSecrets: [[
+        path: 'secret/data/dev/order-api',
+        secretValues: [[envVar: 'DB_PASSWORD', vaultKey: 'dbPassword']]
+    ]]
+]) {
+    sh '''
+      set +x
+      ./gradlew deploy
+    '''
+}
+```
+
+핵심: Jenkins 에 DB_PASSWORD 자체를 저장하지 않는다 · Jenkins 는 Vault 접근 권한만 가진다 · 실제 비밀번호는 Pipeline 실행 시점에 Vault 에서 읽는다. (출처: [Secure Jenkins CI/CD secrets with Vault](https://developer.hashicorp.com/well-architected-framework/secure-systems/secure-applications/ci-cd-secrets/jenkins))
+
+### Kubernetes 환경 권장 구조
+
+```text
+Vault / AWS Secrets Manager / Azure Key Vault
+  → External Secrets Operator
+  → Kubernetes Secret
+  → Kubernetes Credentials Provider
+  → Jenkins Credentials API
+  → Pipeline withCredentials()
+```
+
+Webhook Secret Credentials Provider 는 외부 시스템이 HTTP POST 로 global credential 을 갱신하는 push 모델도 지원(pull 이 어려울 때 동적 갱신용) (출처: [Webhook Secret Credentials Provider](https://plugins.jenkins.io/webhook-secret-credentials-provider/)).
+
+### ⚠️ secret-free Jenkins 는 불가능
+
+외부 연동을 해도 Jenkins 가 외부 Secret Manager 에 접근하려면 최소 bootstrap credential 또는 workload identity 가 필요하다: Vault AppRole(role_id/secret_id) · AWS IAM Role/IRSA · Azure Managed Identity · GCP Workload Identity · K8s ServiceAccount Token. Jenkins 는 단일 native workload identity 모델이 없어 Controller·Agent 실행 위치에 따라 인증 방식을 골라야 한다.
+
+```text
+나쁨: Jenkins에 장기 access key 저장
+좋음: K8s ServiceAccount / Cloud IAM Role / Vault AppRole 최소 권한
+더 좋음: 짧은 수명 동적 secret · path별 정책 분리 · job/folder별 접근 제어 · rotation 자동화
+```
+
+### Vault 도입 현실 — 무료지만 운영은 무료가 아니다
+
+**Vault 자체는 무료로 시작 가능**(Community Edition, self-managed). 단 HashiCorp 제품은 현재 BSL(Business Source License) 계열 — 제품화·SaaS화·재배포 성격이면 라이선스 검토 필요. BSL 부담 시 **OpenBao**(무료 오픈소스 대안) 검토.
+
+| 구분 | 비용 | 적합 상황 |
+|------|------|----------|
+| Vault Community | 무료 자체 운영 | 학습·PoC·소규모 내부 |
+| Vault Enterprise | 유료 | 대기업·멀티팀·DR·고급 정책·지원 (DR replication·namespace 포함) |
+| HCP Vault | 유료 관리형 | 운영 부담을 HashiCorp/IBM 으로 |
+| OpenBao | 무료 OSS | BSL 부담 시 |
+
+**자원** — 학습용은 가볍다(1 container·0.5~1 CPU·512MB~1GB). 프로덕션은 가볍지 않다: Integrated Storage 레퍼런스 아키텍처 small 기준 노드당 2~4 core·8~16GB RAM·100GB+ 디스크·3000+ IOPS, large 는 4~8 core·32~64GB RAM. HA 위해 5노드 3 AZ 분산 권장(노드 2개 또는 AZ 1개 손실 견딤). 핵심은 CPU 보다 **디스크 I/O·운영 안정성** — Raft 복제·secret 회전·audit log 가 디스크 flush 를 자주 일으키므로 audit log 는 별도 디스크 권장 (출처: [Raft reference architecture](https://developer.hashicorp.com/vault/tutorials/day-one-raft/raft-reference-architecture)).
+
+**도입 판단**: 개인 학습/secret 외부화 실험 → 좋음 / 소규모 CI/CD → 신중 / 단일 클라우드만 사용 → Cloud Secret Manager 가 더 단순 / 멀티클라우드·온프렘·K8s 혼합 → Vault 가치 큼 / 동적 DB 계정·TTL·audit 중요 → Vault 가치 가장 큼 / 운영 인력 부족 → 관리형 또는 더 단순한 대안.
+
+### Vault 운영 시 핵심 고려사항
+
+1. **쓰는 이유가 분명해야 함** — 단순 "Jenkins credential 외부화" 면 Vault 는 과할 수 있다. Vault 가 빛나는 경우: secret 중앙 관리 · 서비스별 세밀한 접근 권한 · DB 계정 동적 발급+TTL 폐기 · audit log · rotation 자동화 · Jenkins/K8s/Spring 이 같은 secret 체계. database secrets engine 은 서비스별 고유 DB 사용자를 발급해 감사 추적이 쉽다 (출처: [Database secrets engine](https://developer.hashicorp.com/vault/docs/secrets/databases)).
+2. **TTL/lease 를 앱이 감당해야 함** — dynamic secret 은 영구 비밀번호가 아니다. TTL 만료 시 자동 revoke 되니 소비자가 갱신/재발급해야 한다 (출처: [Lease/Renew/Revoke](https://developer.hashicorp.com/vault/docs/concepts/lease)). Jenkins 는 쉽다(Pipeline 시작 시 발급 → 사용 → 종료 후 폐기). Spring 런타임 DB password 는 난도가 높다(커넥션 풀이 만료된 credential 을 들고 있으면 DB 장애) → Vault Agent·sidecar·Spring Cloud Vault·rotation 전략 필요.
+3. **Jenkins 에 무엇을 남길 것인가** — 이상적: Jenkins 엔 Vault 접근 권한만, secret 은 실행 시점 fetch, Agent 의 K8s ServiceAccount/Cloud IAM Role 로 인증해 장기 토큰 미저장. credential masking 과신 금지 — masking 은 우회 가능하고, credential scope 안 실행 권한자는 신뢰된 사용자로 봐야 한다 (출처: [Credentials Binding](https://www.jenkins.io/doc/pipeline/steps/credentials-binding/)).
+4. **HA·백업·복구를 처음부터** — Raft snapshot 백업 · restore 리허설 · unseal key 보관 · auto-unseal 여부 · root token 정책 · audit log 보존 · Vault 장애 시 Jenkins 배포/앱 런타임 영향도. HA 지원이 곧 운영 안전은 아니다(quorum 손실·snapshot 복구 실패·unseal key 분실은 별개).
+5. **권한 모델을 path 기준으로 작게** — `secret/data/jenkins/{dev,stg,prod}/*` · `secret/data/apps/order-api/{dev,prod}/*` · `database/creds/order-api-{readonly,migration}`. Job 별 정책 분리(order-api-dev-deploy → dev secret만, db-migration-job → migration credential만). Vault 의 가치는 "비밀을 모으는 것" 이 아니라 **접근면을 작게 자르는 것**.
+
+### 학습 루트 (단계별)
+
+```text
+1단계: Jenkins 내부 Credential Store — withCredentials · secret masking · folder/job scope · 로그 노출 실험
+2단계: Vault dev server — KV secret 저장 · Jenkins에서 읽기 · token/policy/path 개념
+3단계: Vault + Jenkins 실제형 — Jenkins엔 Vault 접근용 최소 credential만 · 실행 시 fetch · 종료 후 revoke
+4단계: Vault + Kubernetes 인증 — Agent Pod ServiceAccount로 Vault 인증(AppRole보다 K8s auth 중심)
+5단계: Dynamic DB Credential — MariaDB/MySQL 계정 동적 발급 · TTL 만료 · revoke · audit log 확인
+```
+
+토이프로젝트 이름: **Jenkins External Secrets Lab**. 가장 좋은 학습 주제는 "Jenkins 에 비밀값을 저장하지 않고, 실행 시점에 Vault 에서 짧은 수명의 secret 을 받아 빌드·배포하는 구조" — 단순 도구 사용이 아니라 보안과 운영의 결을 함께 잡는다.
+
 ## 19. 핵심 키워드만 압축
 
 ```text
