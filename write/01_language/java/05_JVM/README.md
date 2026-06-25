@@ -45,6 +45,8 @@ related:
   - ./ch05_efficient-concurrency/01-02.volatile·happens-before·원자성.md
   - ./ch05_efficient-concurrency/01-03.자바와 스레드 — 구현·스케줄링·상태.md
   - ./ch05_efficient-concurrency/01-04.자바와 가상 스레드 — Virtual Threads.md
+  - ./ch05_efficient-concurrency/01-05.Virtual Threads 기초.md
+  - ./ch05_efficient-concurrency/01-06.Structured Concurrency.md
   - ./ch05_efficient-concurrency/02-01.스레드 안전성 — 다섯 등급.md
   - ./ch05_efficient-concurrency/02-02.스레드 안전성 구현 — 동기화와 락.md
   - ./ch05_efficient-concurrency/02-03.락 최적화 — 스핀·제거·굵게·경량·편향.md
@@ -53,8 +55,6 @@ related:
   - ./ch05_efficient-concurrency/04-01.원자 연산과 동시성 컬렉션.md
   - ./ch05_efficient-concurrency/04-02.Executor 프레임워크.md
   - ./ch05_efficient-concurrency/04-03.동시성 유틸리티.md
-  - ./ch05_efficient-concurrency/05-01.Virtual Threads 기초.md
-  - ./ch05_efficient-concurrency/05-02.Structured Concurrency.md
   - ./ch05_efficient-concurrency/06-01.성능 엔지니어링과 하드웨어·메모리 모델.md
   - ./ch05_efficient-concurrency/06-02.동기화와 NUMA, JMH 벤치마킹.md
   - ./ch05_efficient-concurrency/06-03.락과 동시성 — 동기화부터 Virtual Threads까지.md
@@ -79,7 +79,7 @@ updated: 2026-06-19
 > - 책 1·3부 요약(개관 흡수본)은 3부 정독 폴더 [`ch03_class-loading-mechanism/00-개관.*`](./ch03_class-loading-mechanism/) 2편(JDK 구조·실행 서브시스템)으로 이관됐다. `00-` prefix는 그 부의 절 정독(`01-NN`·`02-NN`) 앞에 놓이는 개관이라는 뜻이다. 4부 요약은 별도 개관으로 두지 않고, 고유했던 내용(LCM/GCM·implicit null check)을 정독본 [`ch04_compilation-optimization/02-04`](./ch04_compilation-optimization/02-04.컴파일러%20최적화%20—%20공통식%20제거·경계%20검사%20제거와%20Graal.md)에 흡수했다(나머지는 정독본과 중복이라 제거). 5부는 [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 정독 폴더로 풀어 썼다(12장=`01-NN` 4편, 13장=`02-NN` 3편). 옛 5부 부 요약은 정독본 ch05가 모두 흡수해 제거했다. [`ch01_java-tech/`](./ch01_java-tech/) 에는 1장 §1.5~§1.7 절 정독 노트(`02-NN` 4편)만 남는다. 
 > - 실습 코드는 `_practice/` 서브폴더에서 챕터별 Gradle 모듈로 모인다.
 >
-> **동시성 갈래의 예외 — 출처 혼합 허용**: 책별로 폴더를 가르는 게 원칙이지만, [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 만은 *주제(동시성)* 를 우선해 두 책을 한 폴더에 둔다. `01-NN`·`02-NN`(《밑바닥》 12·13장 정독)에 더해, 출처가 《자바 동시성 프로그래밍》(또는 동등 도서)인 실무 학습 노트 9편을 `03-NN`~`05-NN`으로 합류시켰다(2026-06-17 루트 직속에서 이관). 폴더 안에서 책 구분은 각 노트의 `source` 필드가 1차 기준이다.
+> **동시성 갈래의 예외 — 출처 혼합 허용**: 책별로 폴더를 가르는 게 원칙이지만, [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 만은 *주제(동시성)* 를 우선해 두 책을 한 폴더에 둔다. 여기에 《자바 동시성 프로그래밍》 출처 실무 노트가 합류했는데, *번호는 출처가 아니라 주제로 매긴다* — 가상 스레드 계열(원리 `01-04` → 실무 `01-05` → 구조화 `01-06`)은 12장 가상 스레드와 한 묶음이라 `01-NN`에, 스레드 생성·동기화 도구·컬렉션 등 나머지 실무는 `03-NN`·`04-NN`에 둔다. 책 구분은 번호대가 아니라 각 노트의 `source` 필드가 1차 기준이다.
 >
 > **GC·문자열·메모리모델·동시성 갈래의 예외 — JPE 흡수 (2026-06-23)**: 위 동시성 예외와 같은 *주제 우선* 원칙으로, 《JVM Performance Engineering》의 GC·문자열·메모리모델·동시성 주제 6편을 JPE 폴더(옛 `ch18`·`ch19`·`ch20`)에서 떼어 주제 폴더로 합류시켰다. GC 심화(TLAB/PLAB·G1·ZGC)·문자열 최적화는 [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `05-NN`으로, 성능 엔지니어링·메모리 모델·락/동시성은 [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) `06-NN`으로 이관. 폴더 안 책 구분은 각 노트의 `source: JVM Performance Engineering (Monica Beckwith)` 필드가 1차 기준이다.
 >
@@ -124,7 +124,7 @@ updated: 2026-06-19
 ├── chNN_{topic}/                      # 단행본 절 단위 정독 노트
 │   ├── 01-NN.{개관·운영 흡수본}.md       # 옛 루트 부 요약의 정독 폴더 이주본
 │   └── 02-{절}.{제목}.md                  # 책의 절 정독 노트
-│   └── (ch05만) 03~05-NN              # 《자바 동시성》 실무 노트 9편 (이관)
+│   └── (ch05만) 주제축 혼합           # 《자바 동시성》 실무를 주제별로 01·03·04-NN에 배치
 └── _practice/                             # 챕터별 Gradle 실습 코드
     ├── settings.gradle.kts
     ├── build.gradle.kts
@@ -134,7 +134,7 @@ updated: 2026-06-19
 
 [`JVM-TOOLS.md`](./JVM-TOOLS.md)는 챕터에 종속되지 않는 횡단 레퍼런스다. `java`·`javac`·`javap`·`jcmd` 같은 도구와 플래그가 여러 챕터에 흩어져 있어, "어디서 무엇을 찾는지"를 한 곳에 모으고 깊은 설명은 각 챕터 SSOT로 링크한다.
 
-폴더 안 노트 번호의 첫 숫자는 *그 폴더가 담은 책의 장(章) 순번*이다. 한 폴더에 여러 장이 들어가면(예: `ch04`는 10·11장) `01-NN`=앞 장, `02-NN`=뒤 장으로 갈린다. `00-개관.*`은 그 부의 절 정독(`01-NN`·`02-NN`) 앞에 놓이는 *부 단위 개관 흡수본*으로, `ch03`(JDK 구조·실행 서브시스템)에 있다. 4부(`ch04`)는 개관을 따로 두지 않고 정독본에 흡수했다. `ch02`처럼 `01-NN`이 운영 흡수본, `02-NN`이 절 정독인 곳도 있는데, 이는 그 폴더의 첫 묶음이 흡수본이었던 사정 때문이다. `ch05`는 12·13장을 담아 `01-NN`이 12장(메모리 모델·스레드), `02-NN`이 13장(스레드 안전성·락 최적화) 절 정독이다.
+폴더 안 노트 번호의 첫 숫자는 *그 폴더가 담은 책의 장(章) 순번*이다. 한 폴더에 여러 장이 들어가면(예: `ch04`는 10·11장) `01-NN`=앞 장, `02-NN`=뒤 장으로 갈린다. `00-개관.*`은 그 부의 절 정독(`01-NN`·`02-NN`) 앞에 놓이는 *부 단위 개관 흡수본*으로, `ch03`(JDK 구조·실행 서브시스템)에 있다. 4부(`ch04`)는 개관을 따로 두지 않고 정독본에 흡수했다. `ch02`처럼 `01-NN`이 운영 흡수본, `02-NN`이 절 정독인 곳도 있는데, 이는 그 폴더의 첫 묶음이 흡수본이었던 사정 때문이다. `ch05`는 12·13장을 담아 `01-NN`이 12장(메모리 모델·스레드·가상 스레드), `02-NN`이 13장(스레드 안전성·락 최적화) 절 정독이다. 단 ch05는 *주제 우선* 이라 《자바 동시성》 실무 노트도 주제가 맞으면 같은 번호대에 섞인다(예: 가상 스레드 실무·구조화는 `01-05`·`01-06`).
 
 ## 부 요약 흡수 이력
 
