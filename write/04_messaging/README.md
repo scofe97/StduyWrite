@@ -2,13 +2,16 @@
 title: 04_messaging MOC
 tags: [moc, messaging, kafka]
 status: final
-related: []
-updated: 2026-05-23
+related:
+  - roadmap.md
+updated: 2026-06-25
 ---
 
 # 04_messaging — 이벤트 기반 메시징
 
 > Kafka·Redpanda·Avro·Schema Registry 같은 메시징 구현 기술과 EDA 적용 문서를 모은 영역입니다. 분산 시스템의 일반 이론(CAP, Saga 보상 트랜잭션의 구조 일반론)은 `05_data/`로, EDA 원칙·결정 기준 같은 이론은 [`../03_architecture/05_edd/`](../03_architecture/05_edd/)로 분리돼 있습니다. 여기서는 도구 레벨의 구체적 선택(예: Producer idempotent 옵션 튜닝, Confluent wire format, Spring Kafka concurrency 운영)을 다룹니다.
+
+> Kafka/Redpanda 딥다이브 로드맵의 **토이프로젝트 카탈로그(DevOps 관점 14종 + 실무형 10종)와 섹션별 키워드 전체**는 [roadmap.md](roadmap.md)에 원문 그대로 정리해 두었습니다. 아래 "폴더 구조와 인덱스"가 *이미 작성된 본문*이라면, roadmap.md는 *미니 프로젝트 착수 시 다룰 전체 범위*(2026 기준 Kafka 4.x KRaft·Redpanda 호환·Java 21)의 SSOT입니다.
 
 ## 학습 흐름
 
