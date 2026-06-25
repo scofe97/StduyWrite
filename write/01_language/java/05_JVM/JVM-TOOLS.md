@@ -47,7 +47,7 @@ updated: 2026-06-24
 | `-Xlog:gc*` | GC 통합 로깅 (JDK 9+) | GC 동작 관찰 |
 
 > JIT의 C1/C2·계층형 컴파일·핫스폿 탐지의 깊은 설명 → [ch04 02-01 JIT 컴파일러](./ch04_compilation-optimization/02-01.JIT%20컴파일러%20—%20인터프리터와%20계층형%20컴파일.md), [ch04 02-02 컴파일 대상과 핫스폿 탐지](./ch04_compilation-optimization/02-02.컴파일%20대상과%20핫스폿%20탐지.md)
-> GC·메모리 플래그의 맥락 → [ch02 자동 메모리 관리](./ch02_automatic-memory-management/), 튜닝 플래그 전반 → [jpf 03-02 VM 정보·튜닝 플래그](./jpf_java-performance/03-02.JDK%20기본%20도구와%20VM%20정보·튜닝%20플래그.md)
+> GC·메모리 플래그의 맥락 → [ch02 자동 메모리 관리](./ch02_automatic-memory-management/), 튜닝 플래그 전반 → [jpf 03-02 VM 정보·튜닝 플래그](./book/jpf_java-performance/03-02.JDK%20기본%20도구와%20VM%20정보·튜닝%20플래그.md)
 
 
 
