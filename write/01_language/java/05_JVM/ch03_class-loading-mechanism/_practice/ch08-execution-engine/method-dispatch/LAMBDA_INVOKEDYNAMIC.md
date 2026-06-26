@@ -5,7 +5,7 @@
 > `javac` → `javap -c -v` 로 바이트코드·상수풀·BootstrapMethods를 직접 확인한다.
 
 ## 관련 이론
-- [03-03. 동적 타입 언어 지원과 invokedynamic](../../../ch03_class-loading-mechanism/03-03.동적 타입 언어 지원과 invokedynamic.md)
+- [03-03. 동적 타입 언어 지원과 invokedynamic](../../../03-03.동적 타입 언어 지원과 invokedynamic.md)
 
 ## 실습 대상
 - `LambdaTest.java` — `Runnable r = () -> System.out.println("hello");` 한 줄.
