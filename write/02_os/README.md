@@ -6,8 +6,8 @@ related:
   - ../README.md
   - ./networking/README.md
   - ./kernel/README.md
-  - ./linux-kernel-programming/README.md
-  - ./container-security/README.md
+  - ./book/linux-kernel-programming/README.md
+  - ./book/container-security/README.md
 updated: 2026-06-03
 ---
 
@@ -25,9 +25,9 @@ updated: 2026-06-03
 |------|------|
 | [networking/](./networking/README.md) | Linux 네트워크 네임스페이스·veth·bridge·netfilter·conntrack·TC·eBPF |
 | [kernel/](./kernel/README.md) | 유저/커널 스페이스, 시스템 콜, 커널 코어 영역, namespace·cgroup, /proc, K8s 노드 필수 커널 파라미터 |
-| [linux-kernel-programming/](./linux-kernel-programming/README.md) | 커널 개발자 관점의 리눅스 내부 — LKM 모듈 개발, 커널 빌드, 메모리 관리, CPU 스케줄러, 동기화 (책 기반) |
-| [container-security/](./container-security/README.md) | 보안 관점의 컨테이너 — 커널 기초(namespace·cgroup·root 변경) 위의 이미지·공급망·런타임·통신 보안 (책 기반) |
-| [systems-performance/](./systems-performance/README.md) | 성능 분석가 관점의 시스템 성능 — 방법론·CPU·메모리·디스크·네트워크·클라우드·고급 추적(perf·Ftrace·BPF) (책 기반) |
+| [linux-kernel-programming/](./book/linux-kernel-programming/README.md) | 커널 개발자 관점의 리눅스 내부 — LKM 모듈 개발, 커널 빌드, 메모리 관리, CPU 스케줄러, 동기화 (책 기반) |
+| [container-security/](./book/container-security/README.md) | 보안 관점의 컨테이너 — 커널 기초(namespace·cgroup·root 변경) 위의 이미지·공급망·런타임·통신 보안 (책 기반) |
+| [systems-performance/](./book/systems-performance/README.md) | 성능 분석가 관점의 시스템 성능 — 방법론·CPU·메모리·디스크·네트워크·클라우드·고급 추적(perf·Ftrace·BPF) (책 기반) |
 
 
 
