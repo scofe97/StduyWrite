@@ -6,7 +6,7 @@ source:
   - 《Java Performance, 2nd Edition》(Scott Oaks, O'Reilly, 2020)
 related:
   - ./00-00.서문 — 책 소개와 2판 변경점.md
-  - ../README.md
+  - ../../README.md
 updated: 2026-06-05
 ---
 
@@ -14,7 +14,7 @@ updated: 2026-06-05
 # Java Performance (Scott Oaks) 정독 인덱스
 > 『Java Performance, 2판』의 장 단위 정독 노트 인덱스입니다 — 05_JVM 폴더의 세 번째 정독 대상 책
 
-이 폴더는 단행본 『Java Performance, Second Edition』(Scott Oaks, O'Reilly)의 정독 노트를 모읍니다. 상위 [`05_JVM/`](../README.md) 폴더가 책별로 정독 노트를 모으는 컨벤션을 따르되, 책 구분을 ch 누적 번호가 아니라 **책 전용 폴더**(`jpf_java-performance/`)로 합니다. 폴더명 `jpf`는 **J**ava **P**er**f**ormance에서 왔고, 《밑바닥까지 파헤치기》(접두 없음·ch01~13)·《JVM Performance Engineering》(`jpe`·ch14~22)와 출처가 섞이지 않게 구분합니다.
+이 폴더는 단행본 『Java Performance, Second Edition』(Scott Oaks, O'Reilly)의 정독 노트를 모읍니다. 상위 [`05_JVM/`](../../README.md) 폴더가 책별로 정독 노트를 모으는 컨벤션을 따르되, 책 구분을 ch 누적 번호가 아니라 **책 전용 폴더**(`jpf_java-performance/`)로 합니다. 폴더명 `jpf`는 **J**ava **P**er**f**ormance에서 왔고, 《밑바닥까지 파헤치기》(접두 없음·ch01~13)·《JVM Performance Engineering》(`jpe`·ch14~22)와 출처가 섞이지 않게 구분합니다.
 
 파일명은 `{장 번호}-{편 순번}.{제목}.md` 형식입니다. 앞 번호는 책의 실제 장 번호(00=서문, 01~12=본문 장)이고, 뒤 번호는 그 장을 여러 편으로 쪼갠 순번입니다. 책 구분의 1차 기준은 각 노트의 `source` 필드입니다.
 
