@@ -8,7 +8,7 @@ related:
   - ../03_architecture/README.md
   - ../04_messaging/README.md
   - ../05_data/README.md
-updated: 2026-06-25
+updated: 2026-06-28
 ---
 
 # Spring 학습 통합 MOC
@@ -96,8 +96,9 @@ grep -rl "^  - spring$\|tags:.*spring" write/ --include="*.md" | sort
 | 5 | Validation / Binding / Conversion (대주제 11) | [02_data-binding/](02_data-binding/), [09_validation/](09_validation/) | Converter / Formatter / ConversionService 전용편 |
 | 6 | Spring Boot 자동구성·외부설정 (대주제 12~14) | [07_autoconfig/](07_autoconfig/) | 7편으로 충분 — 신규 후보 없음 |
 | 7 | 운영·연동·테스트 (대주제 15~24) | Event [06_events/](06_events/), Async/Scheduling [05_aop/01-02](05_aop/01-02.스프링%20스케줄링%20—%20@Scheduled에서%20Quartz까지.md)·01-04, Test [04_testing/](04_testing/), Data [../05_data/](../05_data/), Security [../10_security/](../10_security/), Actuator [../06_observability/05_SpringActuator/](../06_observability/05_SpringActuator/) | Cache Abstraction 전용편, MyBatis 연동 전용편, 성능 튜닝·장애 분석편 |
+| 8 | 빌드·패키징·Tomcat 배포 ([roadmap 16단계](roadmap.md)) | [01_core/02-02](01_core/02-02.내장%20톰캣과%20SpringApplication%20—%20JAR로%20WAS를%20품다.md) | bootJar vs plain jar·Boot Loader(JarLauncher/WarLauncher)·외부 WAR(SpringBootServletInitializer·providedRuntime)·Layered JAR·Docker layer cache·CI/CD 산출물 관리 전용편 |
 
-각 단계의 핵심 키워드 전체·핵심 흐름·단계별 요약·심화 실습 후보 5종은 [roadmap.md](roadmap.md)에 정리돼 있다. 우리 자료의 미작성 갭은 위 표의 "갭" 열에 모았다 — BeanPostProcessor·순환 참조 전용편, Weaving 4종+AspectJ 실험편, MyBatis Connection 바인딩편, Custom ArgumentResolver 실습편, Converter/ConversionService편, Cache Abstraction·성능 튜닝·장애 분석편.
+각 단계의 핵심 키워드 전체·핵심 흐름·단계별 요약·심화 실습 후보 5종은 [roadmap.md](roadmap.md)에 정리돼 있다. 우리 자료의 미작성 갭은 위 표의 "갭" 열에 모았다 — BeanPostProcessor·순환 참조 전용편, Weaving 4종+AspectJ 실험편, MyBatis Connection 바인딩편, Custom ArgumentResolver 실습편, Converter/ConversionService편, Cache Abstraction·성능 튜닝·장애 분석편, 빌드·패키징·Tomcat 배포 전용편(bootJar vs plain jar·Boot Loader·외부 WAR·Layered/Docker).
 
 
 
