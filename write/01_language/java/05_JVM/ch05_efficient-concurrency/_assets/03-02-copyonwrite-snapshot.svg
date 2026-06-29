@@ -1,0 +1,64 @@
+<svg viewBox="0 0 900 430" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>CopyOnWriteArrayList — 쓰기 시 배열 전체 복사 후 참조 교체, 읽기는 기존 스냅샷</title>
+  <desc>CopyOnWriteArrayList는 add 같은 쓰기가 일어나면 기존 배열을 통째로 복사해 새 배열에 변경을 적용하고 참조를 새 배열로 교체한다. 이미 순회 중인 iterator는 교체 전 배열(스냅샷)을 그대로 참조하므로 락 없이 안전하게 읽지만, 쓰기마다 전체 복사가 일어나 쓰기가 잦으면 복사·GC 비용이 커진다.</desc>
+  <rect x="0" y="0" width="900" height="430" fill="#0d0d0d"/>
+
+  <text x="450" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#e8e4df">CopyOnWriteArrayList — 쓰면 복사, 읽기는 옛 스냅샷</text>
+
+  <!-- ===== 좌: 기존(old) 배열 ===== -->
+  <rect x="30" y="60" width="320" height="250" rx="12" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="2"/>
+  <text x="190" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#5b9bd5">old 배열 (변경 전)</text>
+
+  <!-- old 배열 셀 [A,B,C] -->
+  <rect x="60"  y="108" width="64" height="44" rx="7" fill="#dceaf7"/><text x="92"  y="136" text-anchor="middle" font-size="14" font-weight="700" fill="#10243a">A</text>
+  <rect x="128" y="108" width="64" height="44" rx="7" fill="#dceaf7"/><text x="160" y="136" text-anchor="middle" font-size="14" font-weight="700" fill="#10243a">B</text>
+  <rect x="196" y="108" width="64" height="44" rx="7" fill="#dceaf7"/><text x="228" y="136" text-anchor="middle" font-size="14" font-weight="700" fill="#10243a">C</text>
+
+  <!-- iterator 참조 -->
+  <rect x="60" y="196" width="200" height="44" rx="9" fill="#f5edda"/>
+  <text x="160" y="217" text-anchor="middle" font-size="12.5" font-weight="700" fill="#5a3d0a">iterator (읽기 스레드)</text>
+  <text x="160" y="234" text-anchor="middle" font-size="11" fill="#5a3d0a">이 배열 스냅샷을 잡고 있음</text>
+  <line x1="160" y1="196" x2="160" y2="156" stroke="#d4a853" stroke-width="2.2"/>
+  <polygon points="160,150 155,160 165,160" fill="#d4a853"/>
+
+  <text x="190" y="268" text-anchor="middle" font-size="11.5" fill="#c9c4be">순회 중엔 A·B·C만 본다 — 락 없이.</text>
+  <text x="190" y="288" text-anchor="middle" font-size="11.5" fill="#c9c4be">교체가 일어나도 이 참조는 안 바뀐다.</text>
+
+  <!-- ===== 중앙: add("D") 복사 ===== -->
+  <text x="450" y="160" text-anchor="middle" font-size="13" font-weight="700" fill="#66bb6a">add("D")</text>
+  <text x="450" y="180" text-anchor="middle" font-size="11.5" fill="#c9c4be">① 전체 복사</text>
+  <line x1="358" y1="200" x2="538" y2="200" stroke="#66bb6a" stroke-width="2.8"/>
+  <polygon points="546,200 534,194 534,206" fill="#66bb6a"/>
+  <text x="450" y="222" text-anchor="middle" font-size="11.5" fill="#c9c4be">② D 추가 → ③ 참조 교체</text>
+
+  <!-- ===== 우: 새(new) 배열 ===== -->
+  <rect x="550" y="60" width="320" height="250" rx="12" fill="#0d0d0d" stroke="#66bb6a" stroke-width="2"/>
+  <text x="710" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#66bb6a">new 배열 (변경 후)</text>
+
+  <!-- new 배열 셀 [A,B,C,D] -->
+  <rect x="566" y="108" width="58" height="44" rx="7" fill="#cdeccf"/><text x="595" y="136" text-anchor="middle" font-size="14" font-weight="700" fill="#14521d">A</text>
+  <rect x="628" y="108" width="58" height="44" rx="7" fill="#cdeccf"/><text x="657" y="136" text-anchor="middle" font-size="14" font-weight="700" fill="#14521d">B</text>
+  <rect x="690" y="108" width="58" height="44" rx="7" fill="#cdeccf"/><text x="719" y="136" text-anchor="middle" font-size="14" font-weight="700" fill="#14521d">C</text>
+  <rect x="752" y="108" width="58" height="44" rx="7" fill="#66bb6a"/><text x="781" y="136" text-anchor="middle" font-size="14" font-weight="700" fill="#0d0d0d">D</text>
+
+  <!-- 새 참조(필드)가 가리킴 -->
+  <rect x="566" y="196" width="244" height="44" rx="9" fill="#dceaf7"/>
+  <text x="688" y="217" text-anchor="middle" font-size="12.5" font-weight="700" fill="#10243a">필드 참조 = new 배열</text>
+  <text x="688" y="234" text-anchor="middle" font-size="11" fill="#10243a">이후 새 읽기는 A·B·C·D를 본다</text>
+  <line x1="688" y1="196" x2="688" y2="156" stroke="#5b9bd5" stroke-width="2.2"/>
+  <polygon points="688,150 683,160 693,160" fill="#5b9bd5"/>
+
+  <text x="710" y="278" text-anchor="middle" font-size="11.5" fill="#c9c4be">쓰기끼리는 락으로 직렬화되지만,</text>
+  <text x="710" y="296" text-anchor="middle" font-size="11.5" fill="#c9c4be">읽기는 그 락을 전혀 기다리지 않는다.</text>
+
+  <!-- ===== 하단: 장점 / 대가 ===== -->
+  <rect x="30" y="330" width="410" height="76" rx="10" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.6"/>
+  <text x="48" y="356" font-size="12.5" font-weight="700" fill="#66bb6a">장점 — 읽기에 락이 없다</text>
+  <text x="48" y="377" font-size="11.5" fill="#c9c4be">읽기는 불변 스냅샷이라 쓰기와 충돌 0.</text>
+  <text x="48" y="396" font-size="11.5" fill="#c9c4be">ConcurrentModificationException도 없다.</text>
+
+  <rect x="460" y="330" width="410" height="76" rx="10" fill="#0d0d0d" stroke="#c0504d" stroke-width="1.6"/>
+  <text x="478" y="356" font-size="12.5" font-weight="700" fill="#e08a87">대가 — 쓰기마다 전체 복사</text>
+  <text x="478" y="377" font-size="11.5" fill="#c9c4be">쓰기 1번 = 배열 통째 복사 → GC 압박.</text>
+  <text x="478" y="396" font-size="11.5" fill="#c9c4be">읽기 압도·쓰기 드문 데(리스너 목록)에만.</text>
+</svg>
