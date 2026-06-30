@@ -1,0 +1,77 @@
+<svg viewBox="0 0 920 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>Mixed GC — 신세대 전부에 가치 큰 Old Region 일부를 끼워 같이 비운다</title>
+  <desc>G1의 Mixed GC는 신세대 전부(Eden과 Survivor)에 더해 구세대 Old Region 가운데 쓰레기가 많은 가치 큰 일부만 골라 한 번의 STW에 함께 evacuate한다. 신세대는 전부 비우지만 Old는 일부만 골라 넣는 비대칭이 핵심이다. 동시 마킹이 Old Region의 비어 있는 정도를 계산해 순위를 매기면, 여러 번의 Mixed GC가 가치 큰 Old Region부터 조금씩 나눠 비운다. CMS처럼 Old 전용 회수 단계를 따로 두지 않고 Young GC의 evacuation 인프라를 그대로 재사용하기 때문에, 신세대를 비우는 김에 Old Region 몇 개를 끼워 넣어 같이 처리한다. 그래서 매 정지가 짧게 유지된다.</desc>
+  <defs>
+    <style>
+      .title{font-size:16px;font-weight:800;fill:#e8e4df;}
+      .sub{font-size:11px;fill:#a09b96;}
+      .head{font-size:12px;font-weight:800;fill:#e8e4df;}
+      .note{font-size:10px;fill:#a09b96;}
+      .reglbl{font-size:10px;font-weight:700;fill:#1a1a1a;}
+      .pick{font-size:10px;font-weight:700;fill:#e8e4df;}
+    </style>
+    <marker id="arrM" markerWidth="11" markerHeight="11" refX="8" refY="3.5" orient="auto">
+      <path d="M0,0 L9,3.5 L0,7 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="920" height="470" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">Mixed GC — "신세대 전부 + Old 가치 큰 일부"를 한 정지에 같이 비운다</text>
+  <text x="24" y="52" class="sub">비대칭이 핵심: 신세대는 *전부*, Old는 동시 마킹이 매긴 순위에서 *상위 몇 개만* 골라 끼운다.</text>
+
+  <!-- 상단: 힙의 Region들 -->
+  <text x="24" y="84" class="head">① 힙의 Region 현황 (동시 마킹이 Old의 "빈 정도"를 이미 계산해 둠)</text>
+
+  <!-- 신세대 묶음 -->
+  <text x="40" y="106" class="note">신세대 (Eden·Survivor) — 전부 회수 대상</text>
+  <rect x="40" y="114" width="60" height="44" rx="5" fill="#5b9bd5"/>
+  <text x="70" y="140" class="pick" text-anchor="middle">Eden</text>
+  <rect x="106" y="114" width="60" height="44" rx="5" fill="#5b9bd5"/>
+  <text x="136" y="140" class="pick" text-anchor="middle">Eden</text>
+  <rect x="172" y="114" width="60" height="44" rx="5" fill="#5b9bd5"/>
+  <text x="202" y="135" class="pick" text-anchor="middle">Surv</text>
+
+  <!-- Old 묶음 -->
+  <text x="270" y="106" class="note">구세대 (Old) — 쓰레기 많은 일부만 선별 (숫자=빈 정도 %)</text>
+  <rect x="270" y="114" width="56" height="44" rx="5" fill="rgb(212,168,83)"/>
+  <text x="298" y="134" class="reglbl" text-anchor="middle">Old</text>
+  <text x="298" y="150" class="reglbl" text-anchor="middle">90%</text>
+  <rect x="332" y="114" width="56" height="44" rx="5" fill="rgb(212,168,83)"/>
+  <text x="360" y="134" class="reglbl" text-anchor="middle">Old</text>
+  <text x="360" y="150" class="reglbl" text-anchor="middle">75%</text>
+  <rect x="394" y="114" width="56" height="44" rx="5" fill="#4a4540"/>
+  <text x="422" y="134" class="pick" text-anchor="middle">Old</text>
+  <text x="422" y="150" class="pick" text-anchor="middle">20%</text>
+  <rect x="456" y="114" width="56" height="44" rx="5" fill="#4a4540"/>
+  <text x="484" y="134" class="pick" text-anchor="middle">Old</text>
+  <text x="484" y="150" class="pick" text-anchor="middle">10%</text>
+
+  <!-- 선택 표시 -->
+  <text x="40" y="184" class="note">→ 신세대 3칸 전부 + Old 중 빈 정도 높은 2칸(90%·75%)만 골라 CSet(회수 집합)에 넣는다. 빈 정도 낮은 Old는 *이번엔 건너뜀*.</text>
+  <rect x="38" y="110" width="198" height="52" rx="7" fill="none" stroke="#9fdca0" stroke-width="2"/>
+  <rect x="268" y="110" width="124" height="52" rx="7" fill="none" stroke="#9fdca0" stroke-width="2"/>
+
+  <!-- 화살표 아래로 -->
+  <line x1="300" y1="200" x2="300" y2="232" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#arrM)"/>
+  <text x="312" y="220" class="note" fill="rgb(212,168,83)">한 번의 STW에 evacuation(이주)</text>
+
+  <!-- 중단: 한 정지에 같이 비움 -->
+  <rect x="24" y="244" width="872" height="74" rx="10" fill="#0d0d0d" stroke="#3a5a3a" stroke-width="1.5"/>
+  <text x="44" y="270" class="head">② 한 번의 Mixed GC (STW)</text>
+  <text x="44" y="294" class="sub" fill="#e8e4df">선택된 Region들의 *살아 있는 객체만* 빈 Region으로 복사(evacuation) → 원래 Region은 통째로 Free.</text>
+  <text x="44" y="310" class="note">Young GC가 신세대를 이주시키는 그 동작을 그대로 써서 Old 2칸을 *끼워* 같이 처리한다. 새 인프라 없음 = "Mixed".</text>
+
+  <!-- 하단: 여러 번에 걸쳐 -->
+  <text x="24" y="350" class="head">③ Old는 여러 번의 Mixed GC에 걸쳐 조금씩 — 한 번에 다 비우지 않아 정지가 짧다</text>
+  <rect x="40" y="362" width="150" height="34" rx="5" fill="#cdeccf"/>
+  <text x="115" y="383" class="reglbl" text-anchor="middle">Mixed #1: Old 90·75% 회수</text>
+  <line x1="194" y1="379" x2="222" y2="379" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrM)"/>
+  <rect x="228" y="362" width="150" height="34" rx="5" fill="#cdeccf"/>
+  <text x="303" y="383" class="reglbl" text-anchor="middle">Mixed #2: 다음 Old 일부</text>
+  <line x1="382" y1="379" x2="410" y2="379" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrM)"/>
+  <rect x="416" y="362" width="150" height="34" rx="5" fill="#cdeccf"/>
+  <text x="491" y="383" class="reglbl" text-anchor="middle">Mixed #3: …</text>
+  <text x="582" y="383" class="note">→ Old 정리가 끝나면 다시 일상 Young GC로 복귀</text>
+
+  <text x="24" y="430" class="sub">CMS(Old 전용 동시 스윕 → 안 옮김 → 단편화)와 달리, G1은 *옮기는 동작(evacuation)을 신·구세대에 공유*해 Old 전용 단계를 없앴다.</text>
+  <text x="24" y="450" class="note">그래서 "Mixed"는 단순히 둘을 같이 본다는 뜻을 넘어, *Old 회수 인프라를 따로 만들지 않았다*는 설계 선택을 가리킨다.</text>
+</svg>
