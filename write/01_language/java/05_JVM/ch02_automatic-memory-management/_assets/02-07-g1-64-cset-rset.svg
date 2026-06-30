@@ -1,0 +1,89 @@
+<svg viewBox="0 0 920 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>CSet과 RSet — RSet이 있어야 CSet의 Region을 독립 evacuate할 수 있다</title>
+  <desc>CSet(Collection Set)은 이번 한 번의 GC에서 비울 Region 목록이다. Mixed GC의 CSet은 신세대 전부와 동시 마킹이 고른 가치 큰 Old Region 일부로 이루어진다. RSet(Remembered Set)은 Region마다 붙는 역참조 장부로, 나를 바깥에서 가리키는 참조가 어디 있는지를 적는다. CSet의 Old Region을 다른 Region으로 복사(evacuation)하려면 그 Region을 가리키는 바깥 참조를 모두 찾아 새 주소로 고쳐야 하는데, 그 위치를 알려 주는 것이 그 Region의 RSet이다. RSet이 없으면 힙 전체를 스캔해야 하므로 짧은 정지가 불가능하다. RSet은 독립 회수를 가능하게 하는 능력이고, CSet은 그 위에서 이번에 회수할 Region을 고른 선택이다.</desc>
+  <defs>
+    <style>
+      .title{font-size:16px;font-weight:800;fill:#e8e4df;}
+      .sub{font-size:11px;fill:#a09b96;}
+      .head{font-size:12.5px;font-weight:800;fill:#e8e4df;}
+      .note{font-size:10px;fill:#a09b96;}
+      .reg{font-size:10px;font-weight:700;fill:#1a1a1a;}
+      .regw{font-size:10px;font-weight:700;fill:#e8e4df;}
+      .pin{font-size:9.5px;fill:#a09b96;}
+    </style>
+    <marker id="aRed" markerWidth="11" markerHeight="11" refX="8" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#f5b0b0"/></marker>
+    <marker id="aAmb" markerWidth="11" markerHeight="11" refX="8" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+  <rect x="0" y="0" width="920" height="500" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">CSet과 RSet — 역할이 정반대인 두 자료구조</text>
+  <text x="24" y="52" class="sub">CSet = *무엇을 비울지* 목록 (선택)  ·  RSet = *나를 가리키는 참조가 어디 있나* 장부 (능력)</text>
+
+  <!-- 좌: CSet -->
+  <text x="24" y="84" class="head" fill="#9fdca0">CSet (Collection Set) — 이번 GC에 비울 Region 목록</text>
+  <rect x="24" y="96" width="412" height="150" rx="10" fill="#0d0d0d" stroke="#3a5a3a" stroke-width="1.5"/>
+  <text x="40" y="118" class="note">Mixed GC의 CSet = 신세대 전부 + 가치 큰 Old 일부</text>
+  <!-- 신세대 -->
+  <rect x="40" y="130" width="54" height="36" rx="4" fill="#5b9bd5"/>
+  <text x="67" y="153" class="regw" text-anchor="middle">Eden</text>
+  <rect x="100" y="130" width="54" height="36" rx="4" fill="#5b9bd5"/>
+  <text x="127" y="153" class="regw" text-anchor="middle">Eden</text>
+  <rect x="160" y="130" width="54" height="36" rx="4" fill="#5b9bd5"/>
+  <text x="187" y="148" class="regw" text-anchor="middle">Surv</text>
+  <!-- Old 선택 -->
+  <rect x="240" y="130" width="54" height="36" rx="4" fill="rgb(212,168,83)"/>
+  <text x="267" y="148" class="reg" text-anchor="middle">Old</text>
+  <text x="267" y="161" class="reg" text-anchor="middle">90%</text>
+  <rect x="300" y="130" width="54" height="36" rx="4" fill="rgb(212,168,83)"/>
+  <text x="327" y="148" class="reg" text-anchor="middle">Old</text>
+  <text x="327" y="161" class="reg" text-anchor="middle">75%</text>
+  <text x="40" y="190" class="note">파랑=신세대(전부)   골든=동시 마킹이 고른 빈 정도 높은 Old</text>
+  <text x="40" y="212" class="note">CSet 크기 = 정지 시간 → MaxGCPauseMillis 안에 들 만큼만</text>
+  <text x="40" y="232" class="note">담는다 (2절 예측 모델이 개수를 역산).</text>
+
+  <!-- 우: RSet -->
+  <text x="476" y="84" class="head" fill="#f5b0b0">RSet (Remembered Set) — "누가 나를 가리키나" 장부</text>
+  <rect x="476" y="96" width="420" height="150" rx="10" fill="#0d0d0d" stroke="#5a3a3a" stroke-width="1.5"/>
+  <text x="492" y="118" class="note">Region마다 1개. *들어오는*(in-coming) 참조의 위치를 적는다.</text>
+  <!-- 대상 Old Region -->
+  <rect x="700" y="150" width="80" height="56" rx="6" fill="rgb(212,168,83)"/>
+  <text x="740" y="174" class="reg" text-anchor="middle">Old (90%)</text>
+  <text x="740" y="190" class="reg" text-anchor="middle">회수 대상</text>
+  <!-- 바깥 참조원들 -->
+  <rect x="500" y="138" width="92" height="26" rx="4" fill="#dceaf7"/>
+  <text x="546" y="155" class="reg" text-anchor="middle">다른 Old Region</text>
+  <rect x="500" y="176" width="92" height="26" rx="4" fill="#dceaf7"/>
+  <text x="546" y="193" class="reg" text-anchor="middle">Survivor</text>
+  <!-- 화살표: 바깥 → 대상 -->
+  <line x1="592" y1="151" x2="700" y2="166" stroke="#f5b0b0" stroke-width="1.6" marker-end="url(#aRed)"/>
+  <line x1="592" y1="189" x2="700" y2="184" stroke="#f5b0b0" stroke-width="1.6" marker-end="url(#aRed)"/>
+  <text x="600" y="226" class="note">RSet = 위 두 화살표(나를 가리키는 참조)의 *출처 목록*</text>
+
+  <!-- 하단: 맞물림 -->
+  <text x="24" y="288" class="head">두 구조가 맞물리는 곳 — Old Region을 evacuate하는 순간</text>
+  <rect x="24" y="300" width="872" height="120" rx="10" fill="#0d0d0d" stroke="#4a4540" stroke-width="1.5"/>
+
+  <rect x="44" y="320" width="150" height="40" rx="6" fill="#cdeccf"/>
+  <text x="119" y="338" class="reg" text-anchor="middle">① CSet에서 Old Region</text>
+  <text x="119" y="352" class="reg" text-anchor="middle">하나를 evacuate 시작</text>
+  <line x1="198" y1="340" x2="234" y2="340" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#aAmb)"/>
+
+  <rect x="240" y="320" width="170" height="40" rx="6" fill="#f5edda"/>
+  <text x="325" y="338" class="reg" text-anchor="middle">② 그 Region의 RSet을 펴서</text>
+  <text x="325" y="352" class="reg" text-anchor="middle">"나를 가리키는 참조" 전부 확인</text>
+  <line x1="414" y1="340" x2="450" y2="340" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#aAmb)"/>
+
+  <rect x="456" y="320" width="180" height="40" rx="6" fill="#cdeccf"/>
+  <text x="546" y="338" class="reg" text-anchor="middle">③ 생존 객체를 새 Region에 복사</text>
+  <text x="546" y="352" class="reg" text-anchor="middle">+ 그 참조들을 새 주소로 고침</text>
+  <line x1="640" y1="340" x2="676" y2="340" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#aAmb)"/>
+
+  <rect x="682" y="320" width="194" height="40" rx="6" fill="#f5edda"/>
+  <text x="779" y="338" class="reg" text-anchor="middle">④ 원래 Region 통째로 Free</text>
+  <text x="779" y="352" class="reg" text-anchor="middle">— 힙 전체 스캔 없이 끝</text>
+
+  <text x="44" y="392" class="sub" fill="#e8e4df">RSet이 없다면 ②에서 "누가 이 Region을 가리키나"를 찾으려 *힙 전체(거대한 Old 포함)*를 스캔해야 한다.</text>
+  <text x="44" y="410" class="note">→ 그러면 "Region 몇 개만 골라 짧게 회수"라는 G1의 전제가 무너진다. RSet은 그 독립 회수를 가능하게 하는 *능력*이다.</text>
+
+  <text x="24" y="452" class="sub">한 줄 — **RSet은 "독립 회수해도 되는가"의 *전제 조건***, **CSet은 그 위에서 "이번엔 이걸 회수한다"는 *선택***.</text>
+  <text x="24" y="474" class="note">RSet 유지 비용(쓰기 장벽·메모리 ~10%)은 5절에서, 이 능력의 청구서로 다룬다.</text>
+</svg>
