@@ -1,0 +1,66 @@
+<svg viewBox="0 0 920 520" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>G1 회수 — 동작은 복사(evacuation), 분류는 마크-컴팩트: 세 알고리즘의 절충</title>
+  <desc>마크-카피는 살아 있는 객체를 별도로 예약한 빈 절반(To 영역)으로 복사하므로 항상 50퍼센트를 비워 둬야 한다. 마크-컴팩트는 살아 있는 객체를 한쪽으로 모아 단편화를 없애되 전체 영역을 한 번에 압축해 정지가 길다. G1은 Region 단위로 살아 있는 객체를 다른 Region으로 복사하면 원래 Region이 통째로 비고 생존 객체는 새 Region에 빽빽이 모인다. 복사라는 동작으로 압축이라는 효과를 낸다. 50퍼센트 예약도 전체 압축도 아닌, Region 단위로 단편화를 조금씩 해소하는 절충이라 이것이 증분 컴팩션이다.</desc>
+  <defs>
+    <style>
+      .title{font-size:16px;font-weight:800;fill:#e8e4df;}
+      .sub{font-size:11px;fill:rgb(138,133,128);}
+      .shead{font-size:12.5px;font-weight:800;}
+      .note{font-size:9.5px;fill:rgb(160,155,150);}
+      .lbl{font-size:10.5px;fill:rgb(180,175,170);}
+      .ob{font-size:9px;font-weight:700;}
+    </style>
+    <marker id="ac" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#66bb6a"/></marker>
+  </defs>
+  <rect x="0" y="0" width="920" height="520" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">G1 회수 — 동작은 *복사(evacuation)*, 분류는 *마크-컴팩트*</text>
+  <text x="24" y="52" class="sub">셋을 나란히 — 마크-카피(50% 예약) · 마크-컴팩트(전체 압축) · G1(Region 복사 = 둘의 절충).</text>
+
+  <!-- 마크-카피 -->
+  <text x="24" y="86" class="shead" fill="#9cc4dc">① 마크-카피 — 별도 예약한 빈 절반(To)으로 복사 → *항상 50% 비워둠*</text>
+  <rect x="24" y="98" width="872" height="68" rx="6" fill="#0d0d0d" stroke="#3a4a5a"/>
+  <!-- From 영역 (객체 섞임) -->
+  <rect x="36" y="110" width="410" height="44" rx="4" fill="#16242e" stroke="#4a8ab0"/><text x="46" y="124" class="ob" fill="#9cc4dc">From (사용 중)</text>
+  <circle cx="56" cy="140" r="7" fill="#5b9bd5"/><circle cx="80" cy="140" r="7" fill="#7a2828"/><circle cx="104" cy="140" r="7" fill="#5b9bd5"/><circle cx="128" cy="140" r="7" fill="#7a2828"/><circle cx="152" cy="140" r="7" fill="#5b9bd5"/>
+  <!-- To 영역 (예약된 빈공간) -->
+  <rect x="460" y="110" width="410" height="44" rx="4" fill="#141414" stroke="#555" stroke-dasharray="4,3"/><text x="470" y="124" class="ob" fill="#888">To (예약된 빈 절반 — 평소 놀고 있음)</text>
+  <path d="M160,140 C320,170 360,170 480,140" fill="none" stroke="#66bb6a" stroke-width="1.8" marker-end="url(#ac)"/>
+  <text x="660" y="146" class="note" fill="#e57373">← 힙의 절반을 항상 비워둬야 함 (낭비)</text>
+
+  <!-- 마크-컴팩트 -->
+  <text x="24" y="196" class="shead" fill="#b8a0e0">② 마크-컴팩트 — 같은 영역에서 한쪽으로 *모음* → 예약 불필요, 그러나 전체 압축이라 정지 김</text>
+  <rect x="24" y="208" width="872" height="68" rx="6" fill="#0d0d0d" stroke="#5a4a6a"/>
+  <text x="40" y="232" class="note">압축 전 — 살아있음(파랑)과 빈자리가 섞임</text>
+  <g>
+    <rect x="40" y="240" width="24" height="24" fill="#5b9bd5"/><rect x="68" y="240" width="24" height="24" fill="#161616" stroke="#444"/><rect x="96" y="240" width="24" height="24" fill="#5b9bd5"/><rect x="124" y="240" width="24" height="24" fill="#161616" stroke="#444"/><rect x="152" y="240" width="24" height="24" fill="#5b9bd5"/><rect x="180" y="240" width="24" height="24" fill="#161616" stroke="#444"/>
+  </g>
+  <text x="240" y="256" font-size="13" fill="#b8a0e0">⇒ 한쪽으로 밀어 모음 ⇒</text>
+  <g>
+    <rect x="420" y="240" width="24" height="24" fill="#5b9bd5"/><rect x="448" y="240" width="24" height="24" fill="#5b9bd5"/><rect x="476" y="240" width="24" height="24" fill="#5b9bd5"/><rect x="504" y="240" width="120" height="24" fill="#141414" stroke="#555" stroke-dasharray="4,3"/>
+  </g>
+  <text x="630" y="256" class="note" fill="#f5a0a0">전체 영역을 *한 번에* 압축 → 옮길 객체 많으면 정지 김 (Parallel Old)</text>
+
+  <!-- G1 -->
+  <text x="24" y="306" class="shead" fill="#81c784">③ G1 — Region 단위로 *다른 Region에 복사* → 동작은 복사, 효과는 압축 (절충)</text>
+  <rect x="24" y="318" width="872" height="120" rx="6" fill="#101a10" stroke="#3a5a3a"/>
+  <!-- 회수 대상 Region들 -->
+  <rect x="40" y="334" width="120" height="50" rx="4" fill="#241e30" stroke="#8a70c0"/><text x="50" y="348" class="ob" fill="#b8a0e0">Old (생존 적음)</text><circle cx="56" cy="368" r="7" fill="#5b9bd5"/><circle cx="76" cy="368" r="7" fill="#7a2828"/><circle cx="96" cy="368" r="7" fill="#7a2828"/>
+  <rect x="40" y="392" width="120" height="38" rx="4" fill="#241e30" stroke="#8a70c0"/><text x="50" y="406" class="ob" fill="#b8a0e0">Old (생존 적음)</text><circle cx="56" cy="420" r="6" fill="#7a2828"/><circle cx="74" cy="420" r="6" fill="#5b9bd5"/><circle cx="92" cy="420" r="6" fill="#7a2828"/>
+  <!-- 복사 화살표 -->
+  <path d="M162,366 C260,360 320,372 410,372" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#ac)"/>
+  <text x="290" y="356" class="note" text-anchor="middle" fill="#81c784">생존만 복사(evacuate)</text>
+  <!-- 채워진 새 Region -->
+  <rect x="416" y="346" width="150" height="52" rx="4" fill="#15300f" stroke="#66bb6a" stroke-width="1.8"/><text x="426" y="362" class="ob" fill="#81c784">빈 Region → 빽빽이 채움</text><circle cx="436" cy="382" r="7" fill="#5b9bd5"/><circle cx="458" cy="382" r="7" fill="#5b9bd5"/><circle cx="480" cy="382" r="7" fill="#5b9bd5"/>
+  <!-- 원래 Region들 Free -->
+  <rect x="600" y="346" width="130" height="24" rx="4" fill="#141414" stroke="#555" stroke-dasharray="4,3"/><text x="665" y="362" class="ob" text-anchor="middle" fill="#888">원래 Region → Free</text>
+  <rect x="600" y="376" width="130" height="24" rx="4" fill="#141414" stroke="#555" stroke-dasharray="4,3"/><text x="665" y="392" class="ob" text-anchor="middle" fill="#888">통째로 비움 (압축됨)</text>
+  <text x="746" y="362" class="note" fill="#81c784">50% 예약 없음 —</text>
+  <text x="746" y="378" class="note" fill="#81c784">빈 Region 몇 개면 충분.</text>
+  <text x="746" y="394" class="note" fill="#81c784">고른 Region만 → 정지 짧음.</text>
+  <text x="40" y="424" class="note" fill="#9a958f">※ 생존 0인 Region은 복사 없이 *즉시 Free* (재마크 단계). 일부 생존만 복사 후 Free.</text>
+
+  <!-- 핵심 -->
+  <rect x="24" y="452" width="872" height="56" rx="8" fill="#10243a" stroke="#5b9bd5" stroke-width="1.2"/>
+  <text x="42" y="476" class="shead" fill="#dceaf7" font-size="12">한 줄 — G1은 "전체가 마크-카피"가 아니다. *동작*은 복사, *분류*는 마크-컴팩트.</text>
+  <text x="42" y="497" class="lbl" fill="#c5dcef">Region 단위 복사가 모여 단편화를 조금씩 해소 = 증분 컴팩션(6.2 ③). 마크-카피의 50% 예약도, 마크-컴팩트의 전체 압축도 아닌 절충.</text>
+</svg>

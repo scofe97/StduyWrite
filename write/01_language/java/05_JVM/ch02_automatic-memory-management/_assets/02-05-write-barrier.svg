@@ -1,0 +1,65 @@
+<svg viewBox="0 0 920 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>쓰기 장벽 — 참조 대입마다 JIT가 카드를 dirty로 표시</title>
+  <desc>자바 소스의 참조 대입 한 줄에, JIT가 컴파일하며 카드 테이블을 dirty로 표시하는 한 줄을 자동으로 덧붙인다. 그래서 구세대→신세대 참조가 생길 때마다 그 카드가 실시간으로 dirty가 되고, Minor GC는 dirty 카드만 스캔하면 된다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 16px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .shead  { font-size: 12.5px; font-weight: 800; fill: rgb(212,168,83); }
+      .mono   { font-size: 12px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+      .step   { font-size: 11.5px; font-weight: 700; }
+      .note   { font-size: 10px; fill: rgb(160,155,150); }
+      .lbl    { font-size: 10.5px; fill: rgb(180,175,170); }
+    </style>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="6" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/></marker>
+    <marker id="ag" markerWidth="10" markerHeight="10" refX="6" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L10,5 L0,10 z" fill="#81c784"/></marker>
+  </defs>
+  <rect x="0" y="0" width="920" height="420" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">쓰기 장벽(Write Barrier) — 참조 대입마다 카드를 dirty로</text>
+  <text x="24" y="52" class="sub">카드 테이블이 정확하려면, 참조가 바뀔 때마다 카드가 dirty로 갱신돼야 한다. 그 갱신을 JIT가 자동으로 끼워 넣는다.</text>
+
+  <!-- ① 자바 소스 -->
+  <text x="24" y="88" class="shead">① 자바 소스 — 평범한 참조 대입 한 줄</text>
+  <rect x="24" y="98" width="300" height="56" rx="6" fill="#141414" stroke="#3a3a3a"/>
+  <text x="40" y="132" class="mono" font-size="13" fill="#e8e4df">oldObj.field = youngObj;</text>
+  <text x="40" y="148" class="note">구세대 객체가 신세대 객체를 가리키게 됨</text>
+
+  <!-- 화살표: JIT 컴파일 -->
+  <line x1="324" y1="126" x2="372" y2="126" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="348" y="116" class="note" text-anchor="middle">JIT</text>
+
+  <!-- ② JIT가 컴파일한 기계어 (대입 + 쓰기장벽) -->
+  <text x="380" y="88" class="shead">② JIT가 컴파일하며 한 줄을 더 붙인다 (소스엔 안 보임)</text>
+  <rect x="380" y="98" width="516" height="86" rx="6" fill="#15300f" stroke="#66bb6a" stroke-width="1.4"/>
+  <text x="398" y="124" class="mono" font-size="12.5" fill="#cdeccf">store oldObj.field = youngObj    <tspan class="note" fill="#8a8580" font-family="sans-serif">← 원래 대입</tspan></text>
+  <text x="398" y="150" class="mono" font-size="12.5" fill="#f5d76e">CARD_TABLE[ &amp;oldObj &gt;&gt; 9 ] = DIRTY    <tspan class="note" fill="#d4a853" font-family="sans-serif">← 쓰기 장벽 (자동 삽입)</tspan></text>
+  <text x="398" y="172" class="note">대입 한 번에 메모리 쓰기 하나. 조건 분기 없는 무조건 쓰기라 CPU 파이프라인이 안 깨진다.</text>
+
+  <!-- ③ 결과: 카드 테이블 dirty -->
+  <text x="24" y="220" class="shead">③ 결과 — 그 객체가 속한 카드가 dirty가 된다 (실시간)</text>
+  <!-- 주소 시프트 설명 -->
+  <rect x="24" y="232" width="300" height="56" rx="6" fill="#141414" stroke="#3a3a3a"/>
+  <text x="40" y="258" class="mono" font-size="12" fill="#e8e4df">카드 인덱스 = &amp;oldObj &gt;&gt; 9</text>
+  <text x="40" y="278" class="note">주소를 9비트 시프트(2⁹=512) → 512B 카드 번호</text>
+  <line x1="324" y1="260" x2="372" y2="260" stroke="#81c784" stroke-width="2" marker-end="url(#ag)"/>
+
+  <!-- 카드 테이블 -->
+  <text x="392" y="226" class="lbl">카드 테이블 (1 = dirty, 0 = clean)</text>
+  <g font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700">
+    <rect x="392" y="236" width="44" height="40" rx="3" fill="#1e1a2a" stroke="#555"/><text x="414" y="261" text-anchor="middle" fill="#8a8580">0</text>
+    <rect x="440" y="236" width="44" height="40" rx="3" fill="#2a1a1a" stroke="#e57373" stroke-width="1.8"/><text x="462" y="261" text-anchor="middle" fill="#f5d76e">1</text>
+    <rect x="488" y="236" width="44" height="40" rx="3" fill="#1e1a2a" stroke="#555"/><text x="510" y="261" text-anchor="middle" fill="#8a8580">0</text>
+    <rect x="536" y="236" width="44" height="40" rx="3" fill="#1e1a2a" stroke="#555"/><text x="558" y="261" text-anchor="middle" fill="#8a8580">0</text>
+    <rect x="584" y="236" width="44" height="40" rx="3" fill="#2a1a1a" stroke="#e57373" stroke-width="1.8"/><text x="606" y="261" text-anchor="middle" fill="#f5d76e">1</text>
+    <rect x="632" y="236" width="44" height="40" rx="3" fill="#1e1a2a" stroke="#555"/><text x="654" y="261" text-anchor="middle" fill="#8a8580">0</text>
+  </g>
+  <text x="462" y="294" class="note" text-anchor="middle" fill="#e57373">↑ 이 카드가 dirty로</text>
+  <text x="760" y="262" class="lbl">→ Minor GC는 이 dirty 카드만</text>
+  <text x="760" y="278" class="lbl">스캔하면 된다 (구세대 전수 X)</text>
+
+  <!-- 하단 핵심 -->
+  <rect x="24" y="320" width="872" height="80" rx="8" fill="#141414" stroke="#3a3a3a"/>
+  <text x="42" y="344" class="shead" font-size="12.5">핵심 — 쓰기 장벽은 "참조 대입 후"에 자동으로 끼워지는 한 줄 (AOP의 after 어드바이스처럼)</text>
+  <text x="42" y="366" class="lbl">• 개발자는 안 보이지만 *모든 참조 대입*에 카드 dirty 표시가 한 줄씩 붙는다 → 카드 테이블이 항상 최신.</text>
+  <text x="42" y="386" class="lbl">• 비용은 대입당 메모리 쓰기 하나. 너무 자주 쓰면 false sharing → <tspan font-weight="700" fill="#f5d76e">-XX:+UseCondCardMark</tspan>(이미 dirty면 안 씀)로 완화.</text>
+</svg>

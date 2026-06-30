@@ -1,0 +1,69 @@
+<svg viewBox="0 0 920 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>증분 갱신(Incremental Update, CMS) — 조건 ①을 깬다</title>
+  <desc>증분 갱신은 검은 객체가 흰 객체를 새로 가리키는 순간(조건1)을 쓰기 장벽으로 감시한다. 그 일이 생기면 검은 X를 다시 회색으로 되돌려, GC가 X를 재방문해 새 자식 Y를 발견하게 만든다. 검은에서 흰으로의 참조 자체를 무효화하므로 조건1을 깬다. CMS가 이 방식이다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 16px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .shead { font-size: 12.5px; font-weight: 800; }
+      .gen   { font-size: 11.5px; font-weight: 800; fill: #9a958f; }
+      .step  { font-size: 11.5px; font-weight: 700; }
+      .note  { font-size: 10px; fill: rgb(160,155,150); }
+      .lbl   { font-size: 10.5px; fill: rgb(180,175,170); }
+      .code  { font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+    </style>
+    <marker id="ag" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L9,4.5 L0,9 z" fill="#8a8580"/></marker>
+    <marker id="aok" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L9,4.5 L0,9 z" fill="#81c784"/></marker>
+    <marker id="aw" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L9,4.5 L0,9 z" fill="#d4a853"/></marker>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L9,4.5 L0,9 z" fill="#e57373"/></marker>
+  </defs>
+  <rect x="0" y="0" width="920" height="470" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">증분 갱신 (Incremental Update · CMS) — 조건 ①을 깬다</text>
+  <text x="24" y="52" class="sub">"검은 X가 흰 Y를 새로 가리키면(①), 그 X를 다시 회색으로 되돌려 재방문하게 만든다"</text>
+
+  <!-- step 1: 검은 X가 흰 Y 가리킴 -->
+  <text x="24" y="86" class="shead" fill="#e57373">① 검은 X가 흰 Y를 새로 가리킴 — 쓰기 장벽이 이 사건을 감시</text>
+  <rect x="36" y="98" width="848" height="92" rx="8" fill="none" stroke="#5a5a5a" stroke-width="1.3"/>
+  <text x="52" y="118" class="note" fill="#8a8580">Heap</text>
+  <rect x="52" y="126" width="380" height="54" rx="6" fill="#161616" stroke="#4a4a4a"/>
+  <text x="66" y="142" class="gen">Old Gen</text>
+  <circle cx="150" cy="155" r="20" fill="#1a1a1a" stroke="#e8e4df" stroke-width="1.5"/>
+  <text x="150" y="160" class="step" text-anchor="middle" fill="#e8e4df">X</text>
+  <rect x="448" y="126" width="420" height="54" rx="6" fill="#161616" stroke="#4a4a4a"/>
+  <text x="600" y="142" class="gen" text-anchor="middle">Young Gen</text>
+  <circle cx="800" cy="160" r="18" fill="#f0f0f0" stroke="#e8e4df" stroke-width="1.4"/>
+  <text x="800" y="165" class="step" text-anchor="middle" fill="#0d0d0d">Y</text>
+  <line x1="172" y1="167" x2="778" y2="162" stroke="#e57373" stroke-width="2.2" marker-end="url(#arr)"/>
+  <text x="400" y="163" class="code" text-anchor="middle" fill="#f5d76e">X.field = Y  (검은→흰)</text>
+
+  <!-- step 2: 쓰기 장벽이 X를 회색으로 -->
+  <text x="24" y="222" class="shead" fill="#f5d76e">② 쓰기 장벽: "검은 X가 새 참조를 만들었다" → X를 회색으로 강등</text>
+  <rect x="36" y="234" width="848" height="78" rx="8" fill="#2a1f0a" stroke="#d4a853" stroke-width="1.2"/>
+  <circle cx="150" cy="276" r="22" fill="#1a1a1a" stroke="#e8e4df" stroke-width="1.5"/>
+  <text x="150" y="281" class="step" text-anchor="middle" fill="#e8e4df">X</text>
+  <text x="150" y="305" class="note" text-anchor="middle">검은색</text>
+  <line x1="186" y1="276" x2="288" y2="276" stroke="#d4a853" stroke-width="2.4" marker-end="url(#aw)"/>
+  <text x="237" y="266" class="note" text-anchor="middle" fill="#f5d76e">회색으로 되돌림</text>
+  <circle cx="328" cy="276" r="22" fill="#8a8580" stroke="#e8e4df" stroke-width="1.4"/>
+  <text x="328" y="281" class="step" text-anchor="middle" fill="#0d0d0d">X</text>
+  <text x="328" y="305" class="note" text-anchor="middle">회색(재방문 대상)</text>
+  <text x="420" y="272" class="lbl">회색 = "봤지만 자식 아직" → GC가 X를 *다시 본다*.</text>
+  <text x="420" y="290" class="lbl">증분(새로 생긴 참조)을 갱신(update)해 다시 보게 만든다 = 이름의 뜻.</text>
+
+  <!-- step 3: GC가 X 재방문 → Y 발견 -->
+  <text x="24" y="344" class="shead" fill="#81c784">③ GC가 회색 X를 재방문 → 새 자식 Y를 발견 → Y 살아남음</text>
+  <rect x="36" y="356" width="848" height="62" rx="8" fill="#101a10" stroke="#4ab080" stroke-width="1.2"/>
+  <circle cx="150" cy="387" r="20" fill="#8a8580" stroke="#e8e4df" stroke-width="1.4"/>
+  <text x="150" y="392" class="step" text-anchor="middle" fill="#0d0d0d">X</text>
+  <line x1="172" y1="387" x2="296" y2="387" stroke="#81c784" stroke-width="2.2" marker-end="url(#aok)"/>
+  <text x="234" y="378" class="note" text-anchor="middle" fill="#81c784">자식 스캔</text>
+  <circle cx="332" cy="387" r="20" fill="#8a8580" stroke="#e8e4df" stroke-width="1.4"/>
+  <text x="332" y="392" class="step" text-anchor="middle" fill="#0d0d0d">Y</text>
+  <text x="332" y="416" class="note" text-anchor="middle" fill="#81c784">회색→검은 (살아남음)</text>
+  <text x="420" y="383" class="lbl">검은 X에서 흰 Y로 가던 "놓친 참조"를 GC가 다시 따라가</text>
+  <text x="420" y="401" class="lbl">Y를 발견한다. 조건 ①(검은→흰 참조가 방치됨)이 깨졌다.</text>
+
+  <!-- 핵심 -->
+  <rect x="24" y="432" width="872" height="30" rx="6" fill="#10243a" stroke="#5b9bd5" stroke-width="1.2"/>
+  <text x="42" y="452" class="lbl" fill="#c5dcef"><tspan class="step" fill="#dceaf7">핵심</tspan> — 증분 갱신은 *새로 생긴 검은→흰 참조*를 잡아 검은 객체를 재방문시킨다. "놓칠 뻔한 참조를 다시 따라가게" 하는 방식. CMS의 remark 단계가 이 일을 한다.</text>
+</svg>
