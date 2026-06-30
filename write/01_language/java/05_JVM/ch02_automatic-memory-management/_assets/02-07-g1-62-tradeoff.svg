@@ -1,0 +1,62 @@
+<svg viewBox="0 0 920 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>G1의 트레이드오프 방향 — 처리량을 내주고 지연시간 예측 가능성을 얻는다</title>
+  <desc>G1은 처리량과 지연시간을 둘 다 잡은 컬렉터가 아니다. 우선순위가 분명하다. G1은 RSet 유지, 더 복잡한 쓰기 장벽, 동시 마킹 스레드의 CPU 점유라는 비용을 지불해 처리량을 약간 내준다. 그 대가로 정지 시간을 힙 크기의 함수에서 회수할 Region 수의 함수로 바꿔, MaxGCPauseMillis 목표로 지연시간을 사용자가 묶을 수 있게 한다. 즉 지연시간의 예측 가능성을 얻는다. 설계 목표는 일시 정지 시간 목표를 높은 확률로 충족하면서 처리량을 크게는 희생하지 않는 것이다. 둘 다 잘함이 아니라 지연을 1차로 두되 처리량을 크게 희생하지 않음이 정확한 표현이다.</desc>
+  <defs>
+    <style>
+      .title{font-size:16px;font-weight:800;fill:#e8e4df;}
+      .sub{font-size:11px;fill:#a09b96;}
+      .colhead{font-size:13px;font-weight:800;}
+      .body{font-size:11px;fill:#e8e4df;}
+      .chiptext{font-size:11px;font-weight:700;fill:#1a1a1a;}
+      .note{font-size:10px;fill:#a09b96;}
+    </style>
+    <marker id="arrowAmber" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="920" height="420" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">G1의 트레이드오프 방향 — "둘 다 잡음"이 아니다</text>
+  <text x="24" y="52" class="sub">G1은 처리량을 *약간 내주고* 지연시간의 예측 가능성을 *얻는* 컬렉터다. 우선순위가 거꾸로 답하기 쉬운 함정.</text>
+
+  <!-- 왼쪽: 내준 것 (처리량) -->
+  <rect x="24" y="78" width="396" height="300" rx="10" fill="#0d0d0d" stroke="#5a3a3a" stroke-width="1.5"/>
+  <text x="44" y="108" class="colhead" fill="#f5b0b0">─ 내준 것 (처리량 ↓)</text>
+  <text x="44" y="130" class="note">동시 실행·Region 관리에 드는 부대 비용</text>
+
+  <!-- 칩들: 연빨강 칩 위 어두운 글자 -->
+  <rect x="44" y="146" width="356" height="40" rx="6" fill="#f2d4d4"/>
+  <text x="60" y="171" class="chiptext">RSet 유지 — Region 간 참조를 따로 기록·갱신</text>
+
+  <rect x="44" y="196" width="356" height="40" rx="6" fill="#f2d4d4"/>
+  <text x="60" y="221" class="chiptext">더 복잡한 쓰기 장벽 (SATB + RSet 갱신)</text>
+
+  <rect x="44" y="246" width="356" height="40" rx="6" fill="#f2d4d4"/>
+  <text x="60" y="271" class="chiptext">동시 마킹 스레드의 CPU 점유</text>
+
+  <rect x="44" y="300" width="356" height="58" rx="6" fill="#0d0d0d" stroke="#7a1f1f"/>
+  <text x="60" y="324" class="body" fill="#f5b0b0">CMS 시절보다 평균 처리량이 살짝 떨어질 수 있다.</text>
+  <text x="60" y="344" class="body" fill="#f5b0b0">→ 이것은 결함이 아니라 *설계상 예상된 대가*.</text>
+
+  <!-- 가운데 화살표 -->
+  <line x1="432" y1="228" x2="488" y2="228" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#arrowAmber)"/>
+  <text x="436" y="218" class="note" fill="rgb(212,168,83)">교환</text>
+
+  <!-- 오른쪽: 얻은 것 (지연 예측가능성) -->
+  <rect x="500" y="78" width="396" height="300" rx="10" fill="#0d0d0d" stroke="#3a5a3a" stroke-width="1.5"/>
+  <text x="520" y="108" class="colhead" fill="#9fdca0">+ 얻은 것 (지연시간 예측 가능성 ↑)</text>
+  <text x="520" y="130" class="note">평균이 아니라 *최악*이 목표 안에 묶인다</text>
+
+  <!-- 칩들: 연초록 칩 위 어두운 글자 -->
+  <rect x="520" y="146" width="356" height="40" rx="6" fill="#cdeccf"/>
+  <text x="536" y="171" class="chiptext">정지 = "힙 크기의 함수" → "회수할 Region 수의 함수"</text>
+
+  <rect x="520" y="196" width="356" height="40" rx="6" fill="#cdeccf"/>
+  <text x="536" y="221" class="chiptext">MaxGCPauseMillis 목표로 지연을 사용자가 묶는다</text>
+
+  <rect x="520" y="246" width="356" height="40" rx="6" fill="#cdeccf"/>
+  <text x="536" y="271" class="chiptext">CSet 크기 조절 → 한 정지에 회수할 Region 수 제어</text>
+
+  <rect x="520" y="300" width="356" height="58" rx="6" fill="#0d0d0d" stroke="#2f6f32"/>
+  <text x="536" y="324" class="body" fill="#9fdca0">설계 목표: "정지 목표를 높은 확률로 충족하면서</text>
+  <text x="536" y="344" class="body" fill="#9fdca0">처리량을 *크게는* 희생하지 않는다" (지연 1차).</text>
+</svg>
