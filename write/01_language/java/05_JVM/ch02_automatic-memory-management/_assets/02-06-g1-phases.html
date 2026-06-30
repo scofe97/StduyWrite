@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G1 — Root(힙 밖) → Region 격자 통합 흐름: 마크·복사 / SATB</title>
+<style>
+  :root{--bg:#0d0d0d;--fg:#e8e4df;--border:rgb(42,37,32);--amber:rgb(212,168,83);--amber-bg:rgba(212,168,83,0.2);--muted:rgb(138,133,128);--panel:rgb(26,26,26);--stw:#e57373;--stw-bg:rgba(229,115,115,0.18);--conc:#66bb6a;--conc-bg:rgba(102,187,106,0.16);}
+  *{box-sizing:border-box;}
+  body{background:var(--bg);color:var(--fg);margin:0;padding:24px;font-family:'Pretendard',-apple-system,system-ui,sans-serif;}
+  h1{font-size:19px;margin:0 0 4px;}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 16px;}
+  .panel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:16px;}
+  .tabs{display:flex;gap:8px;margin-bottom:16px;}
+  .tab{flex:1;padding:12px 14px;border:1px solid var(--border);border-radius:9px;background:#141414;cursor:pointer;transition:.25s;}
+  .tab .tt{font-size:14px;font-weight:800;} .tab .td{font-size:11px;color:var(--muted);margin-top:3px;}
+  .tab.sel{border-color:var(--amber);background:var(--amber-bg);} .tab.sel .tt{color:var(--amber);}
+  .controls{display:flex;align-items:center;gap:14px;margin:8px 0 18px;flex-wrap:wrap;}
+  button{background:var(--panel);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+  button:hover{border-color:var(--amber);}
+  .speed{display:flex;gap:4px;} .speed button.sel{border-color:var(--amber);color:var(--amber);}
+  .now{font-size:13px;color:var(--muted);} .now b{color:var(--amber);}
+  .legend{font-size:11px;color:var(--muted);margin-top:12px;line-height:1.9;}
+  .legend .chip{display:inline-block;width:13px;height:13px;border-radius:50%;vertical-align:middle;margin:0 4px 0 12px;border:1.5px solid #888;}
+  .narr{font-size:12.5px;color:var(--fg);background:#141414;border-left:3px solid var(--amber);padding:10px 14px;border-radius:0 6px 6px 0;margin-top:14px;line-height:1.5;min-height:58px;}
+  .narr.evt{border-left-color:#e57373;background:#1a1010;}
+  .phasebar{display:grid;gap:6px;margin-top:14px;}
+  .pchip{border:1px solid var(--border);border-radius:7px;padding:7px 4px;text-align:center;background:#141414;transition:.3s;}
+  .pchip.on{border-color:var(--amber);background:var(--amber-bg);} .pchip.evt.on{border-color:#e57373;background:var(--stw-bg);}
+  .pchip .t{font-size:10.5px;font-weight:800;} .pchip .b{font-size:8.5px;font-weight:800;padding:1px 5px;border-radius:9px;display:inline-block;margin-top:3px;}
+  .b-stw{background:var(--stw-bg);color:var(--stw);} .b-conc{background:var(--conc-bg);color:var(--conc);} .b-evt{background:var(--stw-bg);color:#e57373;}
+  .cap{font-size:12px;font-weight:700;color:var(--muted);margin:0 0 10px;}
+</style>
+</head>
+<body>
+  <h1>G1 — Root(힙 밖)가 Region 안 객체를 가리키는 전체 메모리 흐름</h1>
+  <p class="sub">GC Root는 힙 *바깥*(스택·static·JNI)에 있고, 여러 Region에 흩어진 객체를 가리킨다. 탭으로 <b>정상</b>과 <b>SATB 케이스</b>를 본다.</p>
+
+  <div class="tabs" id="tabs">
+    <div class="tab sel" data-mode="normal"><div class="tt">정상 — 마크·복사 회수</div><div class="td">Root→Region 마킹 후 생존 객체를 복사 (4단계)</div></div>
+    <div class="tab" data-mode="satb"><div class="tt">SATB 케이스</div><div class="td">동시 마크 중 회색 경로가 끊기면 (6단계)</div></div>
+  </div>
+
+  <div class="controls">
+    <button id="play">▶ 재생</button>
+    <button id="reset">↻ 처음으로</button>
+    <div class="speed"><button data-sp="2400">0.5×</button><button data-sp="1300" class="sel">1×</button><button data-sp="650">2×</button></div>
+    <div class="now">단계 <b id="stepno">0</b>/<b id="stepmax">4</b> — <b id="stepname">대기</b></div>
+  </div>
+
+  <div class="panel"><div class="phasebar" id="phasebar"></div></div>
+
+  <div class="panel">
+    <div class="cap" id="cap">전체 메모리 구조 — 위: GC Root(힙 밖) · 아래: 힙의 Region 격자</div>
+    <svg id="canvas" viewBox="0 0 860 360" width="100%"></svg>
+  </div>
+
+  <div class="narr" id="narr"></div>
+
+  <div class="legend">
+    객체: <span class="chip" style="background:#f0f0f0;border-color:#e8e4df"></span>흰=안 봄
+    <span class="chip" style="background:#8a8580"></span>회=자식 아직
+    <span class="chip" style="background:#1a1a1a;border-color:#e8e4df"></span>검=생존
+    <span class="chip" style="background:#7a2828;border-color:#e57373"></span>죽음
+    &nbsp;|&nbsp; Region: <b style="color:#9cc4dc">Eden</b>·<b style="color:#f5d76e">Surv</b>·<b style="color:#b8a0e0">Old</b>·<span style="color:#888">□Free</span> · <b style="color:#5b9bd5">파란선</b>=Root 참조 · <b style="color:#e57373">빨강</b>=회수대상/끊김 · <b style="color:#66bb6a">초록</b>=복사/보존
+  </div>
+
+<script>
+(function(){
+  // ── 레이아웃 상수 ──
+  const ROOT_X=20, ROOT_Y=24, ROOT_W=150, ROOT_H=150;          // Root 패널 (힙 밖)
+  const HEAP_X=200, HEAP_Y=24, HEAP_W=640, HEAP_H=300;          // 힙 경계
+  // Region 격자: 4 x 2
+  const RW=146, RH=120, RGAP_X=12, RGAP_Y=14, RGX=HEAP_X+16, RGY=HEAP_Y+34;
+  function regionXY(i){const col=i%4,row=Math.floor(i/4);return{x:RGX+col*(RW+RGAP_X),y:RGY+row*(RH+RGAP_Y)};}
+  // 객체는 Region 안에 작은 원. region별 객체 배열은 시나리오가 정의.
+
+  const FILL={white:'#f0f0f0',gray:'#8a8580',black:'#1a1a1a',dead:'#7a2828'};
+  const OTXT={white:'#0d0d0d',gray:'#0d0d0d',black:'#e8e4df',dead:'#f5b0b0'};
+  const RC={E:'#1e3a4a',S:'#2a2410',O:'#241e30',F:'#141414'};
+  const RSC={E:'#4a8ab0',S:'#d4a853',O:'#8a70c0',F:'#555'};
+  const RTC={E:'#9cc4dc',S:'#f5d76e',O:'#b8a0e0',F:'#888'};
+  const RNAME={E:'Eden',S:'Survivor',O:'Old',F:'Free'};
+
+  // ───────── 공통 그리기 ─────────
+  function drawCanvas(S,p){
+    const st=S.state(p);  // {regions:[{role,objs:[{id,color,dead}],target,evac,freed,note}], rootRefs:[{toRegion,toObj}], satbQueue, cut:{...} }
+    let s='';
+    // 힙 경계
+    s+=`<rect x="${HEAP_X}" y="${HEAP_Y}" width="${HEAP_W}" height="${HEAP_H}" rx="8" fill="none" stroke="#5a5a5a" stroke-width="1.4"/>`;
+    s+=`<text x="${HEAP_X+14}" y="${HEAP_Y+20}" font-size="10" fill="#8a8580">힙 (Region 격자)</text>`;
+    // Root 패널
+    s+=`<rect x="${ROOT_X}" y="${ROOT_Y}" width="${ROOT_W}" height="${ROOT_H}" rx="8" fill="#10243a" stroke="#5b9bd5" stroke-width="1.5"/>`;
+    s+=`<text x="${ROOT_X+ROOT_W/2}" y="${ROOT_Y+22}" text-anchor="middle" font-size="11" font-weight="800" fill="#9cc4dc">GC Root (힙 밖)</text>`;
+    const rootItems=['스택 지역변수','static 필드','JNI 참조'];
+    const rootAnchors=[];
+    rootItems.forEach((t,i)=>{
+      const ry=ROOT_Y+38+i*36;
+      s+=`<rect x="${ROOT_X+12}" y="${ry}" width="${ROOT_W-24}" height="28" rx="4" fill="#1a2e3e" stroke="#3a6a90"/>`;
+      s+=`<text x="${ROOT_X+20}" y="${ry+18}" font-size="10" font-weight="700" fill="#dceaf7">${t} ●</text>`;
+      rootAnchors.push({x:ROOT_X+ROOT_W-12, y:ry+14});
+    });
+    s+=`<text x="${ROOT_X+ROOT_W/2}" y="${ROOT_Y+ROOT_H+16}" text-anchor="middle" font-size="9" fill="#6a8aa0">Region 소속 아님</text>`;
+
+    // Region 그리기
+    const objCenter={};
+    st.regions.forEach((r,i)=>{
+      const {x,y}=regionXY(i);
+      let stroke=RSC[r.role], sw=1.4, dash=r.role==='F'?' stroke-dasharray="4,3"':'';
+      if(r.target){stroke='#e57373';sw=2.4;}
+      if(r.evac){stroke='#66bb6a';sw=2.6;}
+      s+=`<rect x="${x}" y="${y}" width="${RW}" height="${RH}" rx="6" fill="${RC[r.role]}" stroke="${stroke}" stroke-width="${sw}"${dash}/>`;
+      s+=`<text x="${x+12}" y="${y+20}" font-size="12" font-weight="800" fill="${RTC[r.role]}">${r.role==='F'?'□':r.role}</text>`;
+      s+=`<text x="${x+30}" y="${y+20}" font-size="9.5" fill="${RTC[r.role]}">${RNAME[r.role]}</text>`;
+      if(r.note) s+=`<text x="${x+RW-10}" y="${y+20}" text-anchor="end" font-size="9" font-weight="700" fill="${r.noteColor||'#e57373'}">${r.note}</text>`;
+      // 객체 원 배치 (한 줄)
+      (r.objs||[]).forEach((o,j)=>{
+        const ox=x+26+j*34, oy=y+RH-34;
+        objCenter[o.id]={x:ox,y:oy};
+        const col=o.dead?'dead':o.color;
+        const oc=FILL[col], otx=OTXT[col];
+        const ostroke=col==='white'?'#bbb':col==='black'?'#e8e4df':col==='dead'?'#e57373':'#0d0d0d';
+        const glow=o.glow?' style="filter:drop-shadow(0 0 6px rgba(102,187,106,.9))"':'';
+        s+=`<circle cx="${ox}" cy="${oy}" r="13" fill="${oc}" stroke="${ostroke}" stroke-width="1.6"${glow}/>`;
+        s+=`<text x="${ox}" y="${oy+4}" text-anchor="middle" font-size="10" font-weight="700" fill="${otx}">${o.dead?'×':o.id}</text>`;
+        if(o.satb) s+=`<text x="${ox}" y="${oy+24}" text-anchor="middle" font-size="8" font-weight="700" fill="#81c784">SATB</text>`;
+      });
+      if(r.bottomNote) s+=`<text x="${x+RW/2}" y="${y+RH-8}" text-anchor="middle" font-size="9" fill="${r.bottomColor||'#888'}">${r.bottomNote}</text>`;
+    });
+
+    // Root 참조선 (Root 패널 → Region 속 객체)
+    (st.rootRefs||[]).forEach((ref,i)=>{
+      const a=rootAnchors[ref.anchor!==undefined?ref.anchor:i%3];
+      const o=objCenter[ref.toObj];
+      if(o) s+=`<line x1="${a.x}" y1="${a.y}" x2="${o.x-13}" y2="${o.y}" stroke="#5b9bd5" stroke-width="1.5" marker-end="url(#aR)" opacity="0.8"/>`;
+    });
+    // intra-heap edges (객체간, evacuation 복사 화살표 등)
+    (st.edges||[]).forEach(e=>{
+      const A=objCenter[e.from], B=objCenter[e.to];
+      if(!A||!B)return;
+      if(e.cut){
+        s+=`<line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="#e57373" stroke-width="2.2" stroke-dasharray="5,4"/>`;
+        s+=`<text x="${(A.x+B.x)/2}" y="${(A.y+B.y)/2-6}" text-anchor="middle" font-size="9" font-weight="700" fill="#e57373">끊김✂</text>`;
+      } else if(e.copy){
+        s+=`<line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="#66bb6a" stroke-width="2.4" marker-end="url(#aG)"/>`;
+        s+=`<text x="${(A.x+B.x)/2}" y="${(A.y+B.y)/2-6}" text-anchor="middle" font-size="9" font-weight="700" fill="#81c784">복사</text>`;
+      } else {
+        // 객체 간 참조 — 아래로 휘는 곡선(Root 파란선과 안 겹치게). 원 가장자리에서 시작/끝.
+        const dx=B.x-A.x, dy=B.y-A.y, len=Math.hypot(dx,dy)||1, ux=dx/len, uy=dy/len, r=14;
+        const sx=A.x+ux*r, sy=A.y+uy*r, ex=B.x-ux*r, ey=B.y-uy*r;
+        const dip=Math.min(50, 18+Math.abs(dx)*0.06);  // 멀수록 더 깊게 휨
+        s+=`<path d="M${sx},${sy} Q${(sx+ex)/2},${Math.max(sy,ey)+dip} ${ex},${ey}" fill="none" stroke="#9a8f7a" stroke-width="1.6" marker-end="url(#aE)" opacity="0.9"/>`;
+      }
+    });
+    // SATB 큐 박스
+    if(st.satbQueue!==undefined){
+      const qx=HEAP_X+HEAP_W-186, qy=HEAP_Y+HEAP_H-46;
+      s+=`<rect x="${qx}" y="${qy}" width="170" height="34" rx="5" fill="#10243a" stroke="#5b9bd5"/>`;
+      s+=`<text x="${qx+10}" y="${qy+14}" font-size="9.5" font-weight="800" fill="#9cc4dc">SATB 큐</text>`;
+      s+=`<text x="${qx+10}" y="${qy+28}" font-size="11" font-weight="800" fill="${st.satbQueue?'#81c784':'#666'}" font-family="monospace">${st.satbQueue||'[ 비어있음 ]'}</text>`;
+    }
+    document.getElementById('canvas').innerHTML=`<defs><marker id="aR" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#5b9bd5"/></marker><marker id="aG" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#66bb6a"/></marker><marker id="aE" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#7a7a7a"/></marker></defs>${s}`;
+  }
+
+  // ═════════ NORMAL 시나리오 ═════════
+  // Region: 0 Eden, 1 Old#1(A생존,×), 2 Survivor, 3 Old#2(B,C생존), 4 Old#3(×,×), 5 Free, 6 Old#4(D생존), 7 Free
+  const normal={
+    max:4,
+    names:{0:'대기',1:'초기 마크',2:'동시 마크',3:'재마크',4:'선별 회수(복사)'},
+    phases:[{t:'1 초기 마크',b:'STW',c:'b-stw'},{t:'2 동시 마크',b:'동시',c:'b-conc'},{t:'3 재마크',b:'STW',c:'b-stw'},{t:'4 선별 회수',b:'복사',c:'b-stw'}],
+    cap:'전체 흐름 — Root가 Old#1·#2 속 객체(A·B)를 가리키고, 마킹→복사 회수',
+    state:(p)=>{
+      // 객체 색: p1 회색(직접연결 A,B), p2+ 검정(생존) / 죽음
+      const aliveCol = p===0?'white':(p===1?'gray':'black');
+      let regions=[
+        {role:'E',objs:[]},
+        {role:'O',objs:[{id:'A',color:p===0?'white':(p>=2?'black':'gray')},{id:'x1',dead:1}],live:'20%'},
+        {role:'S',objs:[]},
+        {role:'O',objs:[{id:'B',color:p===0?'white':(p>=2?'black':(p===1?'gray':'white'))},{id:'C',color:p>=2?'black':'white'}],live:'90%'},
+        {role:'O',objs:[{id:'x2',dead:1},{id:'x3',dead:1}],live:'15%'},
+        {role:'F',objs:[]},
+        {role:'O',objs:[{id:'D',color:p===0?'white':(p===1?'gray':'black')}],live:'80%'},
+        {role:'F',objs:[]}
+      ];
+      // p2~3: 회수 후보 표시 (Old#1=20%, Old#4=15%)
+      if(p===2||p===3){ regions[1].target=1; regions[1].note='후보20%'; regions[4].target=1; regions[4].note='후보15%'; }
+      // p4: evacuation — Old#1의 A를 Free(#5)로 복사, Old#1·#4 통째 Free
+      if(p===4){
+        regions[5]={role:'O',objs:[{id:'A',color:'black'}],evac:1,note:'복사받음',noteColor:'#81c784'};
+        regions[1]={role:'F',objs:[],freed:1,bottomNote:'회수→Free',bottomColor:'#888'};
+        regions[4]={role:'F',objs:[],freed:1,bottomNote:'회수→Free',bottomColor:'#888'};
+      }
+      // Root는 A·B·D를 직접 가리키고, C는 A·B를 통해 도달(마킹이 참조 따라 전파)
+      const st={regions, rootRefs:[{anchor:0,toObj:'A'},{anchor:1,toObj:'B'},{anchor:2,toObj:'D'}]};
+      // 객체 간 참조: A→C, B→C (C는 Root 직접 아님 → 마킹이 A·B에서 C로 전파). p4(복사)에선 위치 이동이라 생략
+      if(p<4) st.edges=[{from:'A',to:'C'},{from:'B',to:'C'}];
+      else st.edges=[];
+      return st;
+    },
+    narr:{
+      0:{t:'▶ 재생 — Root(힙 밖)가 Old Region 속 A·B를 가리킨다. 마킹 후 생존 낮은 Region을 복사로 비운다.'},
+      1:{t:'<b style="color:#e57373">초기 마크 (STW)</b> — Root가 직접 가리키는 A·B·D를 회색으로. <b>Root는 Region이 아니라 Region *속 객체*를 가리킨다</b>(파란 선).'},
+      2:{t:'<b style="color:#66bb6a">동시 마크 (동시)</b> — 도달 가능한 A·B·C·D 검정 확정. 각 Region의 생존 비율 집계 — Old#1(20%)·Old#3(15%)이 낮아 회수 후보(빨강).'},
+      3:{t:'<b style="color:#e57373">재마크 (STW)</b> — SATB로 마킹 완결. 회수 대상 Region(CSet) 확정.'},
+      4:{t:'<b style="color:#66bb6a">선별 회수 (복사)</b> — 회수 대상 Old#1의 생존 A만 빈 Region으로 복사(초록 테두리) → Old#1·#3은 <b>통째 Free(□)</b>. 회수=압축이라 빈칸이 흩어지지 않는다(CMS와 차이).'}
+    }
+  };
+
+  // ═════════ SATB 시나리오 ═════════
+  // Root→A(Old#1), Root→G(Old#2). G→W(Old#3, 흰). 사건: G→W 끊김. SATB가 W 보존.
+  const satb={
+    max:6,
+    names:{0:'대기',1:'초기 마크',2:'동시 마크',3:'회색 경로 끊김(사건)',4:'SATB 큐 기록',5:'재마크',6:'선별 회수'},
+    phases:[{t:'1 초기 마크',b:'STW',c:'b-stw'},{t:'2 동시 마크',b:'동시',c:'b-conc'},{t:'3 경로 끊김',b:'사건',c:'b-evt',evt:1},{t:'4 SATB 큐',b:'배리어',c:'b-evt',evt:1},{t:'5 재마크',b:'STW',c:'b-stw'},{t:'6 선별 회수',b:'복사',c:'b-stw'}],
+    cap:'전체 흐름 — Root→A, Root→G. G가 가리키던 W로의 경로가 끊길 때 SATB가 W를 살린다',
+    state:(p)=>{
+      const Acol = p===0?'white':'black';
+      const Gcol = p===0?'white':(p>=5?'black':'gray');         // G: 회색→(재마크)검정
+      const Wcol = p<=4?'white':'black';                         // W: 미방문 흰색→(SATB처리)검정
+      let regions=[
+        {role:'O',objs:[{id:'A',color:p===0?'white':(p>=2?'black':'gray')}],live:''},       // Old#1
+        {role:'O',objs:[{id:'G',color:p===0?'white':Gcol}],live:''},                         // Old#2
+        {role:'O',objs:[{id:'W',color:Wcol,glow:(p===4||p===5),satb:(p===4||p===5)}],live:''}, // Old#3
+        {role:'E',objs:[]},
+        {role:'O',objs:[{id:'D',dead:1}],live:''},
+        {role:'F',objs:[]},{role:'S',objs:[]},{role:'F',objs:[]}
+      ];
+      const st={
+        regions,
+        rootRefs:[{anchor:0,toObj:'A'},{anchor:1,toObj:'G'}],
+        edges:[{from:'G',to:'W',cut:(p>=3)}],
+        satbQueue:(p>=4?'[ W ]':'')
+      };
+      if(p===6){ // 회수: D 있던 Old#4 회수, W는 살아남음
+        regions[4]={role:'F',objs:[],freed:1,bottomNote:'D 회수→Free',bottomColor:'#888'};
+      }
+      return st;
+    },
+    narr:{
+      0:{t:'▶ 재생 — Root(힙 밖)가 Old#1의 A, Old#2의 G를 가리킨다. G는 Old#3의 W를 가리킨다(기존 참조).'},
+      1:{t:'<b style="color:#e57373">초기 마크 (STW)</b> — Root 직접 연결 A·G를 회색으로. W는 G가 *원래부터* 가리키고 있어 곧 보일 예정.'},
+      2:{t:'<b style="color:#66bb6a">동시 마크 (동시)</b> — A 검정. <b>G는 회색</b>(자식 W를 아직 안 봄), <b>W는 흰색</b>(미방문). GC가 곧 G→W를 따라가 W를 표시할 차례.'},
+      3:{evt:1,t:'<b style="color:#e57373">⚠ 사건</b> — GC가 W를 보기 *전에* 앱이 <b>G→W를 끊는다</b>(✂). W로 가는 유일한 경로가 사라져, 두면 흰색인 채 회수된다 — 마크 시작엔 살아있던 객체인데. (소실 조건 ②)'},
+      4:{evt:1,t:'<b style="color:#f5d76e">SATB 쓰기 배리어</b> — 끊기 직전 옛 대상 <b>W를 SATB 큐에 기록</b>(우하단). W에 초록 SATB 표시. "마크 시작에 살아있었으니 이번엔 살림".'},
+      5:{t:'<b style="color:#e57373">재마크 (STW)</b> — 큐의 <b>흰색 W를 검정 확정</b>. 자식까지 끝난 <b>G도 검정</b>이 된다. 경로가 끊겼어도 W가 살아남았다.'},
+      6:{t:'<b style="color:#66bb6a">선별 회수</b> — 죽은 D의 Region만 회수. W는 살아남되 실제론 죽었을 수도 있는 <b>floating garbage</b>(다음 GC 정리) — SATB가 안전을 얻는 대가.'}
+    }
+  };
+
+  // ───────── 컨트롤 ─────────
+  let S=normal, phase=0, timer=null, speed=1300;
+  function renderPhasebar(){const pb=document.getElementById('phasebar');pb.style.gridTemplateColumns=`repeat(${S.max},1fr)`;pb.innerHTML=S.phases.map((p,i)=>`<div class="pchip${p.evt?' evt':''}" data-p="${i+1}"><div class="t">${p.t}</div><div class="b ${p.c}">${p.b}</div></div>`).join('');}
+  function paint(){
+    document.querySelectorAll('.pchip').forEach(c=>c.classList.toggle('on',+c.dataset.p===phase));
+    document.getElementById('stepno').textContent=phase;
+    document.getElementById('stepmax').textContent=S.max;
+    document.getElementById('stepname').textContent=S.names[phase];
+    document.getElementById('cap').textContent=S.cap;
+    const nv=S.narr[phase],ne=document.getElementById('narr');
+    ne.innerHTML=nv.t;ne.classList.toggle('evt',!!nv.evt);
+    drawCanvas(S,phase);
+  }
+  function step(){phase++;if(phase>S.max){phase=S.max;stop();return;}paint();}
+  function play(){if(timer)return;if(phase>=S.max)phase=0;document.getElementById('play').textContent='⏸ 일시정지';timer=setInterval(step,speed);if(phase===0)step();}
+  function stop(){clearInterval(timer);timer=null;document.getElementById('play').textContent='▶ 재생';}
+  function switchMode(m){stop();S=m==='satb'?satb:normal;phase=0;renderPhasebar();paint();}
+  document.getElementById('play').onclick=()=>timer?stop():play();
+  document.getElementById('reset').onclick=()=>{stop();phase=0;paint();};
+  document.querySelectorAll('#tabs .tab').forEach(t=>{t.onclick=()=>{document.querySelectorAll('#tabs .tab').forEach(x=>x.classList.remove('sel'));t.classList.add('sel');switchMode(t.dataset.mode);};});
+  document.querySelectorAll('.speed button').forEach(b=>{b.onclick=()=>{speed=+b.dataset.sp;document.querySelectorAll('.speed button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');if(timer){stop();play();}};});
+  renderPhasebar();paint();
+})();
+</script>
+</body>
+</html>

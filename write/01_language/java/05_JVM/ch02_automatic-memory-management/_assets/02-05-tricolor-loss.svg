@@ -1,0 +1,103 @@
+<svg viewBox="0 0 920 712" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>3색 마킹의 객체 소실 — GC의 시선으로 본 두 조건</title>
+  <desc>색은 마킹 진행 상태다. 검은=GC가 자식까지 다 봐서 다시 안 봄, 회색=봤지만 자식 아직, 흰색=아직 안 봄. 동시 마킹 도중 검은 X가 흰 Y를 새로 가리키고(조건1) 동시에 Y를 가리키던 회색 G의 경로가 끊기면(조건2), GC는 검은 X를 다시 안 보니 X→Y를 놓치고 회색 경로도 사라져 Y를 못 본다. 마킹이 끝나면 Y는 흰색 그대로라 살아있는데도 회수된다. 두 조건 중 하나만 있으면 안전하다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 16px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .shead { font-size: 13px; font-weight: 800; }
+      .gen   { font-size: 11px; font-weight: 700; fill: #9a958f; }
+      .step  { font-size: 12px; font-weight: 700; }
+      .objl  { font-size: 11px; font-weight: 700; }
+      .note  { font-size: 10px; fill: rgb(160,155,150); }
+      .lbl   { font-size: 10.5px; fill: rgb(180,175,170); }
+      .code  { font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+      .eye   { font-size: 13px; font-weight: 800; }
+    </style>
+    <marker id="ag" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L9,4.5 L0,9 z" fill="#8a8580"/></marker>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L9,4.5 L0,9 z" fill="#e57373"/></marker>
+  </defs>
+  <rect x="0" y="0" width="920" height="712" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">3색 마킹 객체 소실 — "GC의 시선"으로 본 두 조건</text>
+
+  <!-- ===== 색 범례 ===== -->
+  <rect x="24" y="46" width="872" height="44" rx="8" fill="#141414" stroke="#3a3a3a"/>
+  <text x="40" y="73" class="note" fill="#9a958f">색 = 마킹 진행도</text>
+  <circle cx="170" cy="68" r="13" fill="#1a1a1a" stroke="#e8e4df" stroke-width="1.5"/>
+  <text x="170" y="72" class="objl" text-anchor="middle" fill="#e8e4df">●</text>
+  <text x="192" y="72" class="lbl">검은 = 다 봄 → <tspan fill="#e57373" font-weight="700">다시 안 봄</tspan></text>
+  <circle cx="420" cy="68" r="13" fill="#8a8580" stroke="#e8e4df" stroke-width="1.4"/>
+  <text x="442" y="72" class="lbl">회색 = 봤지만 자식 아직 → 곧 볼 예정</text>
+  <circle cx="700" cy="68" r="13" fill="#f0f0f0" stroke="#e8e4df" stroke-width="1.4"/>
+  <text x="722" y="72" class="lbl">흰색 = 아직 안 봄 → <tspan fill="#e57373" font-weight="700">회수 후보</tspan></text>
+
+  <!-- ===== 1. 사고 전 ===== -->
+  <text x="24" y="120" class="shead" fill="#81c784">1. 사고 전 — GC는 회색 G를 통해 Y를 발견할 예정 (안전)</text>
+  <rect x="36" y="132" width="848" height="118" rx="8" fill="#101a10" stroke="#3a5a3a" stroke-width="1.3"/>
+  <!-- X 검은 -->
+  <circle cx="150" cy="178" r="24" fill="#1a1a1a" stroke="#e8e4df" stroke-width="1.6"/>
+  <text x="150" y="183" class="step" text-anchor="middle" fill="#e8e4df">X</text>
+  <text x="150" y="214" class="note" text-anchor="middle">검은(다 봄)</text>
+  <!-- G 회색 -->
+  <circle cx="470" cy="178" r="24" fill="#8a8580" stroke="#e8e4df" stroke-width="1.5"/>
+  <text x="470" y="183" class="step" text-anchor="middle" fill="#0d0d0d">G</text>
+  <text x="470" y="214" class="note" text-anchor="middle">회색(곧 자식 봄)</text>
+  <!-- Y 흰 -->
+  <circle cx="720" cy="178" r="24" fill="#f0f0f0" stroke="#e8e4df" stroke-width="1.5"/>
+  <text x="720" y="183" class="step" text-anchor="middle" fill="#0d0d0d">Y</text>
+  <text x="720" y="214" class="note" text-anchor="middle">흰(아직 안 봄)</text>
+  <!-- G→Y 참조 -->
+  <line x1="496" y1="178" x2="694" y2="178" stroke="#8a8580" stroke-width="2.4" marker-end="url(#ag)"/>
+  <text x="596" y="170" class="note" text-anchor="middle" fill="#9a958f">G가 Y를 붙잡음</text>
+  <!-- GC 시선: 박스 하단에 한 줄 -->
+  <text x="460" y="240" class="eye" text-anchor="middle" fill="#81c784">👁 GC: "G의 자식 Y를 곧 본다" → Y 살아남음 ✓</text>
+
+  <!-- ===== 2. 사고 후 (3단계) ===== -->
+  <text x="24" y="282" class="shead" fill="#e57373">2. 사고 후 — 두 조건이 겹치면 GC가 Y를 못 본다</text>
+
+  <!-- 2a. 두 조건 발생 -->
+  <rect x="36" y="294" width="848" height="120" rx="8" fill="#1a1010" stroke="#5a3a3a" stroke-width="1.3"/>
+  <text x="52" y="316" class="objl" fill="#f5d76e">단계 ⓐ — 앱이 동시에 두 가지를 한다</text>
+  <!-- 조건1 라벨: 객체 위쪽으로 분리 -->
+  <text x="400" y="340" class="code" text-anchor="middle" fill="#f5d76e">① X.field = Y  (검은→흰 새 참조)</text>
+  <!-- X 검은 -->
+  <circle cx="150" cy="372" r="24" fill="#1a1a1a" stroke="#e8e4df" stroke-width="1.6"/>
+  <text x="150" y="377" class="step" text-anchor="middle" fill="#e8e4df">X</text>
+  <!-- G 회색 -->
+  <circle cx="470" cy="372" r="24" fill="#8a8580" stroke="#e8e4df" stroke-width="1.5"/>
+  <text x="470" y="377" class="step" text-anchor="middle" fill="#0d0d0d">G</text>
+  <!-- Y 흰 -->
+  <circle cx="720" cy="372" r="24" fill="#f0f0f0" stroke="#e8e4df" stroke-width="1.5"/>
+  <text x="720" y="377" class="step" text-anchor="middle" fill="#0d0d0d">Y</text>
+  <!-- 조건1: X→Y 새 참조 -->
+  <line x1="174" y1="366" x2="694" y2="366" stroke="#e57373" stroke-width="2.4" marker-end="url(#arr)"/>
+  <!-- 조건2: G→Y 끊김 -->
+  <line x1="496" y1="378" x2="694" y2="378" stroke="#e57373" stroke-width="2" stroke-dasharray="5,4"/>
+  <text x="596" y="404" class="code" text-anchor="middle" fill="#e57373">② G.ref = null  (회색 경로 끊김)</text>
+
+  <!-- 2b. GC 판단 -->
+  <rect x="36" y="422" width="848" height="64" rx="8" fill="#1a1010" stroke="#5a3a3a" stroke-width="1.3"/>
+  <text x="52" y="444" class="objl" fill="#f5d76e">단계 ⓑ — GC가 마킹을 이어가지만…</text>
+  <text x="70" y="466" class="lbl"><tspan class="eye" fill="#e57373">✗ X</tspan>  검은 X는 "이미 다 봤다"고 도장 → <tspan fill="#e57373" font-weight="700">다시 안 봄</tspan> → X→Y 새 참조를 못 봄</text>
+  <text x="70" y="480" class="lbl"><tspan class="eye" fill="#e57373">✗ G→Y</tspan>  회색 경로는 끊겨서 사라짐 → 이쪽으로도 Y에 못 닿음</text>
+
+  <!-- 2c. 결과 -->
+  <rect x="36" y="498" width="848" height="52" rx="8" fill="#2a1414" stroke="#e57373" stroke-width="1.5"/>
+  <text x="52" y="520" class="objl" fill="#e57373">단계 ⓒ — 마킹 끝: Y는 아무도 안 본 흰색 그대로</text>
+  <text x="70" y="540" class="lbl" fill="#f5b0b0">→ GC: "흰색 = 도달 못 함 = 쓰레기" → <tspan font-weight="800">Y 회수</tspan>. 하지만 Y는 X가 가리키는 *살아있는* 객체였다 = 사고!</text>
+
+  <!-- ===== 3. 두 조건 + 안전 + 핵심 ===== -->
+  <rect x="24" y="566" width="430" height="58" rx="8" fill="#2a1f0a" stroke="#d4a853" stroke-width="1.3"/>
+  <text x="44" y="588" class="objl" fill="#f5d76e">① 검은→흰 새 참조</text>
+  <text x="44" y="608" class="note">검은 X가 흰 Y를 새로 가리킴.</text>
+  <text x="44" y="621" class="note">검은 X는 재방문 안 되니 이 참조를 놓침.</text>
+  <rect x="466" y="566" width="430" height="58" rx="8" fill="#2a1f0a" stroke="#d4a853" stroke-width="1.3"/>
+  <text x="486" y="588" class="objl" fill="#f5d76e">② 회색 경로 끊김</text>
+  <text x="486" y="608" class="note">Y로 가던 유일한 회색 경로(G→Y)가 끊김.</text>
+  <text x="486" y="621" class="note">이제 Y로 가는 길은 검은 X뿐 → GC 못 봄.</text>
+
+  <rect x="24" y="636" width="872" height="28" rx="6" fill="#101a10" stroke="#4ab080" stroke-width="1.2"/>
+  <text x="42" y="655" class="lbl"><tspan class="step" fill="#81c784">하나만이면 안전</tspan> — ①만: G→Y 살아있어 GC가 Y 발견 ✓ · ②만: Y 가리키는 검은 참조 없음 → 진짜 쓰레기 ✓</text>
+  <rect x="24" y="672" width="872" height="28" rx="6" fill="#10243a" stroke="#5b9bd5" stroke-width="1.2"/>
+  <text x="42" y="691" class="lbl" fill="#c5dcef"><tspan class="step" fill="#dceaf7">핵심</tspan> — 두 조건이 겹칠 때만 객체 소실. 방어는 둘 중 *하나만 깨면* 됨 → 증분 갱신은 ①을, SATB는 ②를 깬다.</text>
+</svg>

@@ -1,0 +1,62 @@
+<svg viewBox="0 0 920 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>G1 Remembered Set — Region 하나만 독립 회수하려면 "누가 나를 가리키나"를 알아야 한다</title>
+  <desc>G1은 한 번에 선택한 Region만 회수한다. 그런데 회수할 Region X를 비우려면, X 안 객체를 X 밖에서 가리키는 참조가 있는지 알아야 한다. 힙 전체를 스캔하지 않고 그걸 알려면, Region마다 자기를 가리키는 외부 참조 목록(Remembered Set)을 유지해야 한다. RSet이 Region 모델의 열쇠이자 청구서다. 이 목록은 쓰기 장벽이 참조 대입마다 갱신하며, 메모리 약 10퍼센트와 더 복잡한 쓰기 장벽 비용을 부른다.</desc>
+  <defs>
+    <style>
+      .title{font-size:16px;font-weight:800;fill:#e8e4df;}
+      .sub{font-size:11px;fill:rgb(138,133,128);}
+      .shead{font-size:12.5px;font-weight:800;fill:rgb(212,168,83);}
+      .rl{font-size:12px;font-weight:800;}
+      .note{font-size:10px;fill:rgb(160,155,150);}
+      .lbl{font-size:10.5px;fill:rgb(180,175,170);}
+      .obj{font-size:10px;font-weight:700;}
+    </style>
+    <marker id="aRef" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#e57373"/></marker>
+    <marker id="aRs" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#d4a853"/></marker>
+  </defs>
+  <rect x="0" y="0" width="920" height="420" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">G1 Remembered Set — Region 하나만 독립 회수하기 위한 청구서</text>
+  <text x="24" y="52" class="sub">한 번에 고른 Region만 회수하려면, 그 Region 밖에서 안을 가리키는 참조를 *힙 전체 스캔 없이* 알아야 한다.</text>
+
+  <!-- 문제 상황: Region X를 회수하려는데 밖에서 참조 -->
+  <text x="24" y="86" class="shead">① 문제 — Region X를 비우려는데, B·C가 X 안 객체를 가리킨다</text>
+
+  <!-- Region B (Old) -->
+  <rect x="40" y="104" width="150" height="86" rx="6" fill="#241e30" stroke="#8a70c0"/><text x="56" y="124" class="note" fill="#b8a0e0">Region B (Old)</text>
+  <circle cx="80" cy="158" r="14" fill="#5b9bd5"/><text x="80" y="162" class="obj" text-anchor="middle" fill="#0d1a26">b</text>
+  <!-- Region C (Old) -->
+  <rect x="40" y="206" width="150" height="86" rx="6" fill="#241e30" stroke="#8a70c0"/><text x="56" y="226" class="note" fill="#b8a0e0">Region C (Old)</text>
+  <circle cx="80" cy="260" r="14" fill="#5b9bd5"/><text x="80" y="264" class="obj" text-anchor="middle" fill="#0d1a26">c</text>
+
+  <!-- Region X (회수 대상) -->
+  <rect x="470" y="150" width="170" height="100" rx="6" fill="#2a1414" stroke="#e57373" stroke-width="2"/><text x="486" y="172" class="note" fill="#f5b0b0">Region X (회수 대상)</text>
+  <circle cx="540" cy="210" r="15" fill="#1a1a1a" stroke="#e8e4df"/><text x="540" y="214" class="obj" text-anchor="middle" fill="#e8e4df">x</text>
+  <text x="555" y="240" class="note" fill="#f5a0a0">살아있나?</text>
+
+  <!-- 참조선 B→x, C→x -->
+  <line x1="94" y1="158" x2="524" y2="206" stroke="#e57373" stroke-width="2" marker-end="url(#aRef)"/>
+  <line x1="94" y1="260" x2="524" y2="216" stroke="#e57373" stroke-width="2" marker-end="url(#aRef)"/>
+  <text x="300" y="178" class="note" text-anchor="middle" fill="#f5a0a0">B → x (외부 참조)</text>
+  <text x="300" y="248" class="note" text-anchor="middle" fill="#f5a0a0">C → x (외부 참조)</text>
+
+  <text x="690" y="190" class="lbl" fill="#f5b0b0">X만 회수하려면 *X를 가리키는</text>
+  <text x="690" y="208" class="lbl" fill="#f5b0b0">밖의 참조를 다 알아야* x가</text>
+  <text x="690" y="226" class="lbl" fill="#f5b0b0">살아있는지 판정할 수 있다.</text>
+
+  <!-- 해결: RSet -->
+  <text x="24" y="320" class="shead">② 해결 — Region마다 "나를 가리키는 외부 참조 목록"(RSet)을 유지</text>
+  <rect x="470" y="270" width="170" height="60" rx="6" fill="#2a2410" stroke="#d4a853" stroke-width="1.6"/>
+  <text x="486" y="290" class="note" fill="#f5d76e">X의 Remembered Set</text>
+  <text x="486" y="310" class="obj" fill="#e8e4df" font-family="monospace">[ B→x, C→x ]</text>
+  <line x1="555" y1="270" x2="555" y2="252" stroke="#d4a853" stroke-width="1.6" marker-end="url(#aRs)"/>
+
+  <rect x="24" y="332" width="430" height="72" rx="8" fill="#101a10" stroke="#3a5a3a"/>
+  <text x="44" y="354" class="lbl"><tspan font-weight="700" fill="#81c784">이득</tspan> — RSet만 보면 X로 들어오는 참조를 *즉시* 안다.</text>
+  <text x="44" y="374" class="note">힙 전체를 스캔하지 않고 Region 하나를 독립적으로 회수할 수 있다.</text>
+  <text x="44" y="392" class="note">이게 "한 번에 고른 Region만 회수"(Garbage First)를 가능하게 한 열쇠다.</text>
+
+  <rect x="466" y="346" width="430" height="58" rx="8" fill="#1a1010" stroke="#5a3a3a"/>
+  <text x="486" y="368" class="lbl"><tspan font-weight="700" fill="#f5b0b0">청구서</tspan> — RSet은 공짜가 아니다.</text>
+  <text x="486" y="386" class="note">Region마다 목록 유지 → 메모리 약 10%. 참조 대입마다 쓰기 장벽이</text>
+  <text x="486" y="400" class="note">RSet을 갱신 → 다른 컬렉터보다 쓰기 장벽이 복잡하다.</text>
+</svg>

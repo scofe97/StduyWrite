@@ -1,0 +1,80 @@
+<svg viewBox="0 0 920 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>G1 Young GC — 객체 이동은 둘 다 하지만, 세대 크기 변경이 비연속 Region이라 싸다</title>
+  <desc>핵심은 두 가지를 구분하는 것이다. 객체 evacuate(생존 객체를 새 위치로 복사)는 G1이든 기존 마크-카피든 둘 다 한다 — 이건 안 싸진다. 싸진 것은 세대 크기 변경이다. 연속 영역(기존)에서는 Eden을 줄이려면 경계를 옮겨야 하고 그건 객체를 물리적으로 재배치하는 일이라 비싸서 자주 못 한다. 비연속 Region(G1)에서는 Eden을 줄이는 게 Region의 역할 꼬리표를 Eden에서 Free로 바꾸는 일뿐이라 객체 이동도 메모리 복사도 없다. 그래서 G1은 매 Young GC마다 일시 정지 목표에 맞춰 다음 Eden 크기를 다시 계산할 수 있다. -Xmn으로 고정하면 이 재계산이 막혀 일시 정지 목표가 무력화된다.</desc>
+  <defs>
+    <style>
+      .title{font-size:16px;font-weight:800;fill:#e8e4df;}
+      .sub{font-size:11px;fill:rgb(138,133,128);}
+      .shead{font-size:12.5px;font-weight:800;}
+      .rt{font-size:9px;font-weight:700;}
+      .note{font-size:10px;fill:rgb(160,155,150);}
+      .lbl{font-size:10.5px;fill:rgb(180,175,170);}
+      .big{font-size:12px;font-weight:800;}
+    </style>
+    <marker id="aG" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#66bb6a"/></marker>
+    <marker id="aR" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#e57373"/></marker>
+    <marker id="aD" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#d4a853"/></marker>
+  </defs>
+  <rect x="0" y="0" width="920" height="560" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">G1 Young GC — 무엇이 싸진 게 아닌가, 무엇이 싸진 건가</text>
+  <text x="24" y="52" class="sub">두 작업을 구분해야 한다: ⓐ 객체 이동(evacuate)은 둘 다 함 → 안 싸짐. ⓑ 세대 크기 변경 → 여기가 갈린다.</text>
+
+  <!-- ⓐ 이동은 둘 다 함 -->
+  <rect x="24" y="68" width="872" height="92" rx="8" fill="#141414" stroke="#2a2520"/>
+  <text x="40" y="92" class="shead" fill="#9cc4dc">ⓐ 객체 evacuate(생존 객체 복사) — G1이든 기존 마크-카피든 *둘 다 한다* (안 싸짐)</text>
+  <!-- Eden objects -->
+  <g font-weight="700">
+    <rect x="40"  y="104" width="150" height="44" rx="4" fill="#1e3a4a" stroke="#4a8ab0"/><text x="50" y="118" class="rt" fill="#9cc4dc">Eden</text><circle cx="64" cy="134" r="8" fill="#5b9bd5"/><text x="64" y="137" font-size="8" text-anchor="middle" fill="#0d1a26">a</text><circle cx="86" cy="134" r="8" fill="#7a2828"/><text x="86" y="137" font-size="8" text-anchor="middle" fill="#f5b0b0">×</text><circle cx="108" cy="134" r="8" fill="#5b9bd5"/><text x="108" y="137" font-size="8" text-anchor="middle" fill="#0d1a26">b</text>
+  </g>
+  <path d="M120,134 C260,150 360,140 466,134" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#aG)"/>
+  <text x="300" y="128" class="note" text-anchor="middle" fill="#81c784">생존 a·b 복사</text>
+  <rect x="470" y="104" width="150" height="44" rx="4" fill="#2a2410" stroke="#d4a853"/><text x="480" y="118" class="rt" fill="#f5d76e">Survivor</text><circle cx="496" cy="134" r="8" fill="#5b9bd5"/><text x="496" y="137" font-size="8" text-anchor="middle" fill="#0d1a26">a</text><circle cx="518" cy="134" r="8" fill="#5b9bd5"/><text x="518" y="137" font-size="8" text-anchor="middle" fill="#0d1a26">b</text>
+  <text x="650" y="124" class="lbl" fill="#9a958f">이 복사 비용은 *생존 객체 수에 비례*하고,</text>
+  <text x="650" y="140" class="lbl" fill="#9a958f">G1·기존 컬렉터가 똑같이 치른다. → 차이 없음.</text>
+
+  <!-- ⓑ 크기 변경: 연속 vs 비연속 -->
+  <text x="24" y="190" class="shead" fill="rgb(212,168,83)">ⓑ "Eden을 줄이자" — 같은 목표인데, 메모리 구조에 따라 비용이 천지차</text>
+
+  <!-- 연속 (기존) -->
+  <rect x="24" y="204" width="430" height="160" rx="8" fill="#1a1010" stroke="#5a3a3a"/>
+  <text x="44" y="228" class="big" fill="#f5b0b0">연속 영역 (Serial·Parallel·CMS)</text>
+  <text x="44" y="248" class="note">Eden·Old가 주소상 *붙어 있음*</text>
+  <g font-weight="700">
+    <rect x="44"  y="258" width="60" height="34" rx="3" fill="#1e3a4a" stroke="#4a8ab0"/><text x="74" y="280" class="rt" text-anchor="middle" fill="#9cc4dc">Eden</text>
+    <rect x="106" y="258" width="60" height="34" rx="3" fill="#1e3a4a" stroke="#4a8ab0"/><text x="136" y="280" class="rt" text-anchor="middle" fill="#9cc4dc">Eden</text>
+    <rect x="168" y="258" width="60" height="34" rx="3" fill="#1e3a4a" stroke="#4a8ab0"/><text x="198" y="280" class="rt" text-anchor="middle" fill="#9cc4dc">Eden</text>
+    <rect x="230" y="258" width="200" height="34" rx="3" fill="#241e30" stroke="#8a70c0"/><text x="330" y="280" class="rt" text-anchor="middle" fill="#b8a0e0">Old (바로 옆에 붙음)</text>
+  </g>
+  <!-- 경계 이동 -->
+  <line x1="228" y1="300" x2="170" y2="300" stroke="#e57373" stroke-width="2" marker-end="url(#aR)"/>
+  <text x="200" y="316" class="note" text-anchor="middle" fill="#f5a0a0">경계를 옮기려면</text>
+  <text x="44" y="338" class="note" fill="#f5b0b0">→ 그 자리 Old 객체와 *겹침* → 객체를 *물리적으로 재배치* 필요</text>
+  <text x="44" y="356" class="note" fill="#e57373">→ 비싸다 → 자주 못 바꾼다 (그래서 크기를 고정/가끔만)</text>
+
+  <!-- 비연속 (G1) -->
+  <rect x="466" y="204" width="430" height="160" rx="8" fill="#101a10" stroke="#3a5a3a"/>
+  <text x="486" y="228" class="big" fill="#81c784">비연속 Region (G1)</text>
+  <text x="486" y="248" class="note">각 칸은 흩어져 있고 *역할 꼬리표*만 달림</text>
+  <g font-weight="700">
+    <rect x="486" y="258" width="56" height="34" rx="3" fill="#1e3a4a" stroke="#4a8ab0"/><text x="514" y="280" class="rt" text-anchor="middle" fill="#9cc4dc">Eden</text>
+    <rect x="546" y="258" width="56" height="34" rx="3" fill="#1e3a4a" stroke="#4a8ab0"/><text x="574" y="280" class="rt" text-anchor="middle" fill="#9cc4dc">Eden</text>
+    <rect x="606" y="258" width="56" height="34" rx="3" fill="#1e3a4a" stroke="#4a8ab0"/><text x="634" y="280" class="rt" text-anchor="middle" fill="#9cc4dc">Eden</text>
+    <rect x="666" y="258" width="56" height="34" rx="3" fill="#141414" stroke="#66bb6a" stroke-width="1.8" stroke-dasharray="4,3"/><text x="694" y="276" class="rt" text-anchor="middle" fill="#81c784">Eden</text><text x="694" y="288" font-size="7" text-anchor="middle" fill="#66bb6a">→Free</text>
+    <rect x="726" y="258" width="56" height="34" rx="3" fill="#241e30" stroke="#8a70c0"/><text x="754" y="280" class="rt" text-anchor="middle" fill="#b8a0e0">Old</text>
+  </g>
+  <text x="486" y="316" class="note" fill="#81c784">Eden 줄이기 = 꼬리표 한 칸을 *Eden→Free*로 바꾸기</text>
+  <text x="486" y="338" class="note" fill="#81c784">→ 객체 이동 0, 메모리 복사 0 (그냥 변수 하나 변경)</text>
+  <text x="486" y="356" class="note" fill="#66bb6a">→ 거의 공짜 → *매 GC마다* 다시 계산 가능</text>
+
+  <!-- 결론: 그래서 매번 재계산 -->
+  <text x="24" y="396" class="shead" fill="#d4a853">그래서 — G1은 매 Young GC 끝에 "다음 Eden을 몇 칸?"을 정지 목표에 맞춰 재계산</text>
+  <rect x="24" y="408" width="872" height="56" rx="8" fill="#2a1f0a" stroke="#d4a853"/>
+  <text x="42" y="430" class="lbl">직전 정지가 목표(200ms)보다 *길었다* → 다음 Eden을 한 칸 줄인다(꼬리표만 변경). 짧았다면 한 칸 늘린다.</text>
+  <text x="42" y="450" class="lbl">크기 변경이 공짜라 *이 미세 조정을 매번* 할 수 있다 — 연속 영역이면 재배치 비용 때문에 엄두를 못 낸다.</text>
+
+  <!-- 핵심 + 경고 -->
+  <rect x="24" y="476" width="872" height="68" rx="8" fill="#10243a" stroke="#5b9bd5" stroke-width="1.2"/>
+  <text x="42" y="500" class="big" fill="#dceaf7">한 줄 — 이동(evacuate)이 싸진 게 아니다. *크기 변경*이 싸진 것이다.</text>
+  <text x="42" y="522" class="lbl" fill="#c5dcef">연속: 크기 변경 = 객체 재배치(비쌈). 비연속 Region: 크기 변경 = 꼬리표만(공짜) → 매번 자동 조절 가능.</text>
+  <text x="42" y="538" class="lbl" fill="#c5dcef">⚠ <tspan font-family="monospace" fill="#f5d76e">-Xmn</tspan>으로 신세대를 고정하면 이 자동 조절이 막혀 일시 정지 목표가 무력화된다.</text>
+</svg>
