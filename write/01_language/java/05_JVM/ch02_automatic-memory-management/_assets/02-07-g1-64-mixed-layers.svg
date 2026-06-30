@@ -1,0 +1,54 @@
+<svg viewBox="0 0 920 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>Mixed GC의 층위 — 동시 마킹(조사)이 Young GC(실행)에 Old를 얹은 합작품</title>
+  <desc>G1의 청소 두 종류는 같은 층위가 아니다. 첫째 Young GC는 신세대만 비우는 실제 청소다. 둘째 동시 마킹 사이클은 청소가 아니라 조사로, 어느 Old Region에 쓰레기가 많은지를 계산해 적어두기만 한다. Mixed GC는 이 둘과 나란한 세 번째 청소가 아니라, 동시 마킹의 조사 결과를 받아 Young GC의 evacuation 동작에 가치 큰 Old Region 몇 개를 얹어 함께 비우는 합작품이다. 즉 Mixed GC는 Young GC 인프라와 동시 마킹의 조사 결과를 합친 실행이며, Young GC가 신세대만 비우면 일반 Young GC, 거기에 Old를 끼우면 Mixed GC가 된다. 동작은 같고 회수 집합 CSet에 무엇을 담느냐만 다르다.</desc>
+  <defs>
+    <style>
+      .title{font-size:16px;font-weight:800;fill:#e8e4df;}
+      .sub{font-size:11px;fill:#a09b96;}
+      .head{font-size:12.5px;font-weight:800;}
+      .body{font-size:11px;fill:#1a1a1a;}
+      .bodyw{font-size:11px;fill:#e8e4df;}
+      .note{font-size:10px;fill:#a09b96;}
+      .tag{font-size:10px;font-weight:700;fill:#1a1a1a;}
+    </style>
+    <marker id="amb" markerWidth="12" markerHeight="12" refX="8" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 Z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+  <rect x="0" y="0" width="920" height="440" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">Mixed GC는 "세 번째 청소"가 아니다 — ②조사 + ①실행의 합작</text>
+  <text x="24" y="52" class="sub">"청소 2종류"의 ②는 사실 *청소가 아니라 조사*. Mixed GC는 그 조사 결과를 ①의 청소 동작에 얹은 것.</text>
+
+  <!-- ① Young GC : 실행 -->
+  <rect x="24" y="78" width="400" height="104" rx="10" fill="#0d0d0d" stroke="#3a5a3a" stroke-width="1.6"/>
+  <text x="44" y="102" class="head" fill="#9fdca0">① Young GC — 청소 (실행)</text>
+  <text x="44" y="124" class="note">신세대(Eden·Survivor)만 evacuation으로 비운다. 자주, 짧은 STW.</text>
+  <rect x="44" y="136" width="60" height="32" rx="4" fill="#5b9bd5"/><text x="74" y="157" class="bodyw" text-anchor="middle">Eden</text>
+  <rect x="110" y="136" width="60" height="32" rx="4" fill="#5b9bd5"/><text x="140" y="157" class="bodyw" text-anchor="middle">Eden</text>
+  <rect x="176" y="136" width="60" height="32" rx="4" fill="#5b9bd5"/><text x="206" y="155" class="bodyw" text-anchor="middle">Surv</text>
+  <text x="252" y="157" class="note">→ 실제로 *치운다*</text>
+
+  <!-- ② 동시 마킹 : 조사 -->
+  <rect x="496" y="78" width="400" height="104" rx="10" fill="#0d0d0d" stroke="#5a5030" stroke-width="1.6"/>
+  <text x="516" y="102" class="head" fill="rgb(212,168,83)">② 동시 마킹 사이클 — 조사 (준비)</text>
+  <text x="516" y="124" class="note">힙 전체를 훑어 "어느 Old가 쓰레기 많나"만 계산·기록. *안 치움*.</text>
+  <rect x="516" y="136" width="56" height="32" rx="4" fill="rgb(212,168,83)"/><text x="544" y="156" class="tag" text-anchor="middle">Old 90%</text>
+  <rect x="578" y="136" width="56" height="32" rx="4" fill="rgb(212,168,83)"/><text x="606" y="156" class="tag" text-anchor="middle">Old 75%</text>
+  <rect x="640" y="136" width="56" height="32" rx="4" fill="#4a4540"/><text x="668" y="156" class="bodyw" text-anchor="middle">Old 20%</text>
+  <text x="712" y="157" class="note">→ 순위만 *적어둠*</text>
+
+  <!-- 화살표 둘이 아래 Mixed 로 -->
+  <line x1="220" y1="186" x2="380" y2="248" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#amb)"/>
+  <text x="232" y="214" class="note" fill="rgb(212,168,83)">청소 동작(evacuation) 제공</text>
+  <line x1="690" y1="186" x2="540" y2="248" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#amb)"/>
+  <text x="560" y="214" class="note" fill="rgb(212,168,83)">"치울 Old 목록" 제공</text>
+
+  <!-- Mixed GC : 합작 -->
+  <rect x="180" y="258" width="560" height="96" rx="12" fill="#cdeccf" stroke="#2f6f32" stroke-width="2"/>
+  <text x="460" y="284" class="head" fill="#14521d" text-anchor="middle">Mixed GC = ②의 조사 결과 + ①의 청소 동작</text>
+  <text x="460" y="308" class="body" text-anchor="middle">① Young GC가 신세대를 비우는 *그 동작에*, ②가 고른 가치 큰 Old를 *끼워* 함께 비운다.</text>
+  <text x="460" y="328" class="body" text-anchor="middle">신세대 전부 + Old 90%·75% → 한 번의 STW에 같이 evacuate.</text>
+  <text x="460" y="346" class="tag" text-anchor="middle">즉 "세 번째 종류"가 아니라, 위 둘을 합쳐 실행하는 합작품 (다른 층위)</text>
+
+  <!-- 하단 한 줄 -->
+  <text x="24" y="392" class="sub">한 줄 — Young GC가 *신세대만* 비우면 일반 Young GC, 거기에 *Old를 끼우면* Mixed GC.</text>
+  <text x="24" y="412" class="note">동작(evacuation)은 똑같고, *CSet(회수 집합)에 Old Region을 넣느냐 마느냐*만 다르다. → CSet은 다음 절에서.</text>
+</svg>
