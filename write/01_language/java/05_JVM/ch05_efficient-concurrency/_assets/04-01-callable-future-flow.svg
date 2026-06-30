@@ -1,0 +1,68 @@
+<svg viewBox="0 0 900 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>Callable submit Future 연계 — 제출 스레드와 워커 스레드의 분리, Future라는 영수증</title>
+  <desc>Callable은 결과를 낳는 작업이고, submit은 그 작업을 워커 스레드에 넘기면서 제출 스레드에게 Future를 즉시 돌려준다. 제출 스레드는 블로킹 없이 자기 일을 계속하고, 워커 스레드는 백그라운드에서 call을 실행해 결과를 Future에 채운다. 제출 스레드가 get을 부르면 워커가 끝났으면 즉시, 아니면 완료까지 대기해 결과를 받는다. submit을 경계로 두 스레드가 갈라졌다가 get에서 합류하는 구조다.</desc>
+  <rect x="0" y="0" width="900" height="440" fill="#0d0d0d"/>
+
+  <text x="450" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#e8e4df">Callable · submit · Future — 맡기고, 영수증 받고, 나중에 찾기</text>
+  <text x="450" y="54" text-anchor="middle" font-size="12.5" fill="#c9c4be">submit을 경계로 제출 스레드와 워커 스레드가 갈라졌다가, get()에서 합류한다</text>
+
+  <!-- Callable: 할 일 -->
+  <rect x="40" y="86" width="190" height="56" rx="10" fill="#f5edda"/>
+  <text x="135" y="110" text-anchor="middle" font-size="12.5" font-weight="700" fill="#5a3d0a">Callable — 할 일</text>
+  <text x="135" y="129" text-anchor="middle" font-size="11" fill="#5a3d0a">() -&gt; compute()  (결과 42)</text>
+
+  <!-- submit 경계 (세로 점선) -->
+  <line x1="270" y1="80" x2="270" y2="400" stroke="#d4a853" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="270" y="74" text-anchor="middle" font-size="12" font-weight="700" fill="#d4a853">submit(task)</text>
+
+  <!-- submit 화살표 (Callable → 경계) -->
+  <line x1="230" y1="114" x2="262" y2="114" stroke="#8a857f" stroke-width="2"/>
+  <polygon points="268,114 258,109 258,119" fill="#8a857f"/>
+
+  <!-- ===== 제출 스레드 레인 (위) ===== -->
+  <text x="285" y="120" font-size="12.5" font-weight="700" fill="#dceaf7">제출 스레드</text>
+  <!-- Future 영수증 즉시 받음 -->
+  <rect x="285" y="134" width="150" height="50" rx="9" fill="#dceaf7"/>
+  <text x="360" y="156" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10243a">Future 즉시 받음</text>
+  <text x="360" y="173" text-anchor="middle" font-size="10.5" fill="#10243a">= 결과 찾을 영수증</text>
+  <!-- 블로킹 없이 다른 일 -->
+  <line x1="435" y1="159" x2="495" y2="159" stroke="#5b9bd5" stroke-width="2"/>
+  <polygon points="501,159 491,154 491,164" fill="#5b9bd5"/>
+  <rect x="503" y="134" width="150" height="50" rx="9" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="578" y="156" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5b9bd5">다른 일 계속</text>
+  <text x="578" y="173" text-anchor="middle" font-size="10.5" fill="#c9c4be">블로킹 안 함</text>
+  <!-- get() 호출 -->
+  <line x1="653" y1="159" x2="713" y2="159" stroke="#5b9bd5" stroke-width="2"/>
+  <polygon points="719,159 709,154 709,164" fill="#5b9bd5"/>
+  <rect x="721" y="134" width="140" height="50" rx="9" fill="#cdeccf"/>
+  <text x="791" y="156" text-anchor="middle" font-size="11.5" font-weight="700" fill="#14521d">future.get()</text>
+  <text x="791" y="173" text-anchor="middle" font-size="10.5" fill="#14521d">결과 42 수령</text>
+
+  <!-- ===== 워커 스레드 레인 (아래) ===== -->
+  <text x="285" y="250" font-size="12.5" font-weight="700" fill="#f5edda">워커 스레드 (풀)</text>
+  <!-- submit이 task를 워커로 -->
+  <line x1="270" y1="114" x2="340" y2="262" stroke="#d4a853" stroke-width="1.8"/>
+  <polygon points="342,266 333,258 332,268" fill="#d4a853"/>
+  <text x="300" y="200" font-size="10" fill="#d4a853">task 넘김</text>
+
+  <rect x="300" y="264" width="250" height="56" rx="10" fill="#fdf3df"/>
+  <text x="425" y="288" text-anchor="middle" font-size="12" font-weight="700" fill="#5a3d0a">call() 실행 (백그라운드)</text>
+  <text x="425" y="306" text-anchor="middle" font-size="10.5" fill="#5a3d0a">제출 스레드와 *동시에* 진행</text>
+
+  <!-- 결과를 Future에 채움 -->
+  <line x1="550" y1="292" x2="620" y2="292" stroke="#66bb6a" stroke-width="2"/>
+  <polygon points="626,292 616,287 616,297" fill="#66bb6a"/>
+  <rect x="628" y="264" width="180" height="56" rx="10" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.6"/>
+  <text x="718" y="288" text-anchor="middle" font-size="11.5" font-weight="700" fill="#66bb6a">결과를 Future에 채움</text>
+  <text x="718" y="306" text-anchor="middle" font-size="10.5" fill="#c9c4be">완료 = 42 저장됨</text>
+
+  <!-- 워커 완료 → get 합류 (점선 위로) -->
+  <line x1="791" y1="264" x2="791" y2="186" stroke="#66bb6a" stroke-width="1.8" stroke-dasharray="4 3"/>
+  <polygon points="791,184 786,194 796,194" fill="#66bb6a"/>
+  <text x="800" y="230" font-size="10" fill="#66bb6a">완료되면 get()이 받음</text>
+
+  <!-- 하단: 핵심 -->
+  <rect x="40" y="350" width="820" height="66" rx="10" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.6"/>
+  <text x="58" y="375" font-size="12.5" font-weight="700" fill="#66bb6a">핵심 — submit은 결과가 아니라 "영수증(Future)"을 즉시 돌려준다</text>
+  <text x="58" y="397" font-size="11.5" fill="#c9c4be">그래서 제출 스레드는 블로킹 없이 여러 작업을 먼저 다 submit해 동시에 돌리고, 결과가 필요한 순간에만 get()으로 모은다.</text>
+</svg>
