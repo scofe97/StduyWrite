@@ -1,40 +1,102 @@
-<svg viewBox="0 0 900 640" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
-  <title>Shenandoah와 ZGC 비교 — 최신 위치 정보를 어디에 두는가</title>
-  <desc>Shenandoah는 객체 쪽 forwarding pointer로 최신 위치를 찾고, ZGC는 포인터 쪽 colored bits로 최신 여부를 판단한다. 둘 다 pause를 줄이는 대신 barrier 비용을 만든다.</desc>
+<svg viewBox="0 0 920 640" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>Shenandoah vs ZGC — 최신 위치 정보를 어디에 두느냐가 비용을 가른다</title>
+  <desc>Shenandoah는 최신 위치 정보를 객체 헤더의 forwarding pointer에 두고, 앱이 읽을 때마다 무조건 그 포인터를 한 번 따라간다. 그래서 객체당 1워드 메모리 오버헤드와 throughput 약 5에서 15퍼센트 비용이 든다. ZGC는 같은 정보를 객체가 아니라 포인터의 상위 비트에 두고, 읽을 때 비트만 검사해 대부분 그대로 통과한다. 그래서 객체 헤더를 안 건드려 메모리 오버헤드가 거의 없고 throughput 비용도 약 5퍼센트로 작다. 저장 위치라는 한 가지 선택이 barrier 동작과 두 비용을 모두 가른다.</desc>
   <defs>
     <style>
-      .title{font-size:18px;font-weight:800;fill:#e8e4df}.sub{font-size:11px;fill:rgb(138,133,128)}.head{font-size:13px;font-weight:800;fill:rgb(212,168,83)}.label{font-size:11px;font-weight:750;fill:#e8e4df}.body{font-size:10px;fill:rgb(180,175,170)}.note{font-size:9.5px;fill:rgb(138,133,128)}.code{font-size:10px;font-weight:700;fill:rgb(212,168,83);font-family:'JetBrains Mono',monospace}.bad{font-size:10px;font-weight:750;fill:#e57373}.ok{font-size:10px;font-weight:750;fill:#81c784}
+      .title { font-size: 16px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .shead { font-size: 13px; font-weight: 800; fill: rgb(212,168,83); }
+      .lbl   { font-size: 11px; font-weight: 700; fill: #e8e4df; }
+      .note  { font-size: 10px; fill: rgb(160,155,150); }
+      .cell  { font-size: 10.5px; font-weight: 700; }
+      .mono  { font-size: 9.5px; font-family: 'SFMono-Regular', ui-monospace, monospace; }
+      .th    { font-size: 10.5px; font-weight: 800; }
+      .td    { font-size: 10px; }
     </style>
+    <marker id="arB" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#5b9bd5"/></marker>
+    <marker id="arG" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#66bb6a"/></marker>
   </defs>
-  <rect x="0" y="0" width="900" height="640" fill="#0d0d0d"/>
-  <text x="26" y="36" class="title">Shenandoah vs ZGC — 같은 목표, 다른 저장 위치</text>
-  <text x="26" y="56" class="sub">둘 다 객체 이동 중 접근을 허용하지만, 최신 위치 판단 정보를 어디에 두는지가 다르다.</text>
+  <rect x="0" y="0" width="920" height="640" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">Shenandoah vs ZGC — "최신 위치 정보를 어디에 두는가"가 비용을 가른다</text>
+  <text x="24" y="52" class="sub">둘 다 같은 목표(동시 이동). 갈리는 단 하나 — 그 정보를 *객체 헤더*에 두느냐, *포인터 비트*에 두느냐.</text>
 
-  <rect x="24" y="84" width="414" height="362" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
-  <text x="48" y="114" class="head">① Shenandoah</text>
-  <rect x="58" y="144" width="328" height="70" rx="6" fill="#1e3a4a" stroke="#4a8ab0"/>
-  <text x="222" y="170" class="label" text-anchor="middle">객체 쪽에 정보 저장</text>
-  <text x="222" y="190" class="code" text-anchor="middle">object.fwd → self/new</text>
-  <rect x="58" y="238" width="328" height="156" rx="6" fill="#111" stroke="#333"/>
-  <text x="82" y="266" class="code">확인 대상</text><text x="178" y="266" class="body">forwarding pointer</text>
-  <text x="82" y="294" class="code">읽기 흐름</text><text x="178" y="294" class="body">객체 도착 후 fwd를 따라감</text>
-  <text x="82" y="322" class="code">비용</text><text x="178" y="322" class="body">객체당 추가 워드 + Read Barrier</text>
-  <text x="82" y="350" class="code">의미</text><text x="178" y="350" class="body">어떤 참조로 와도 객체가 최신 위치를 안내</text>
+  <!-- ① 저장 위치 실제 구조 대비 -->
+  <text x="24" y="86" class="shead">① 저장 위치 — 같은 정보를 다른 곳에 둔다 (메모리 구조로 보기)</text>
 
-  <rect x="462" y="84" width="414" height="362" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
-  <text x="486" y="114" class="head">② ZGC</text>
-  <rect x="496" y="144" width="328" height="70" rx="6" fill="#2a2a1a" stroke="rgb(212,168,83)"/>
-  <text x="660" y="170" class="label" text-anchor="middle">포인터 쪽에 정보 저장</text>
-  <text x="660" y="190" class="code" text-anchor="middle">colored pointer = bits + address</text>
-  <rect x="496" y="238" width="328" height="156" rx="6" fill="#111" stroke="#333"/>
-  <text x="520" y="266" class="code">확인 대상</text><text x="616" y="266" class="body">포인터의 상태 비트</text>
-  <text x="520" y="294" class="code">읽기 흐름</text><text x="616" y="294" class="body">참조 로드 순간 stale 여부 검사</text>
-  <text x="520" y="322" class="code">비용</text><text x="616" y="322" class="body">주소 비트 전제 + Load Barrier</text>
-  <text x="520" y="350" class="code">의미</text><text x="616" y="350" class="body">포인터 자체가 현재 단계 기준 최신성 표현</text>
+  <!-- Shenandoah 쪽 -->
+  <g transform="translate(24,100)">
+    <rect x="0" y="0" width="420" height="130" rx="8" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+    <text x="16" y="24" class="lbl" fill="#9ec9e8">Shenandoah — 객체 헤더에</text>
+    <text x="16" y="42" class="note">forwarding pointer 워드를 추가</text>
+    <!-- object -->
+    <rect x="16" y="54" width="70" height="40" fill="#3a3f4a" stroke="#7a8290"/><text x="51" y="78" class="cell" text-anchor="middle" fill="#dfe4ea">헤더</text>
+    <rect x="88" y="54" width="86" height="40" fill="#2a3550" stroke="#5b9bd5"/><text x="131" y="72" class="cell" text-anchor="middle" fill="#9ec9e8">fwd</text><text x="131" y="87" class="mono" text-anchor="middle" fill="#9ec9e8">→ self/new</text>
+    <rect x="176" y="54" width="228" height="40" fill="#5b9bd5" stroke="#3a6a90"/><text x="290" y="79" class="cell" text-anchor="middle" fill="#0d1a26">객체 필드들</text>
+    <text x="16" y="114" class="note">↑ <tspan fill="#9ec9e8" font-weight="700">객체가 커진다</tspan> (워드 1개). 읽을 때 이 fwd를 *항상* 따라감.</text>
+  </g>
 
-  <rect x="24" y="476" width="852" height="108" rx="8" fill="#111" stroke="#333"/>
-  <text x="48" y="506" class="head">③ 선택 기준</text>
-  <text x="68" y="532" class="body">저지연 GC는 "최악 pause를 낮추는 것"이 목표다. 웹 API·거래성 서비스처럼 p99/p999 응답 시간이 중요한 곳에 맞다.</text>
-  <text x="68" y="552" class="body">배치·대량 처리처럼 전체 완료 시간이 더 중요하고 pause 요구가 느슨하면, barrier 비용 때문에 Parallel이나 G1이 더 나을 수 있다.</text>
-  <text x="68" y="572" class="note">결론: 항상 좋은 GC가 아니라, pause 목표가 강한 워크로드를 위한 선택지다.</text>
+  <!-- ZGC 쪽 -->
+  <g transform="translate(476,100)">
+    <rect x="0" y="0" width="420" height="130" rx="8" fill="#0d0d0d" stroke="#d4a853" stroke-width="1.5"/>
+    <text x="16" y="24" class="lbl" fill="#f5d76e">ZGC — 포인터 비트에</text>
+    <text x="16" y="42" class="note">객체는 그대로, 참조(포인터)에 상태 인코딩</text>
+    <!-- pointer -->
+    <rect x="16" y="54" width="60" height="40" fill="#3a2f10" stroke="#d4a853"/><text x="46" y="72" class="mono" text-anchor="middle" fill="#f5d76e">marked</text><text x="46" y="87" class="mono" text-anchor="middle" fill="#f5d76e">remap</text>
+    <rect x="78" y="54" width="270" height="40" fill="#2a3550" stroke="#5b9bd5"/><text x="213" y="79" class="cell" text-anchor="middle" fill="#9ec9e8">address (객체 주소)</text>
+    <text x="360" y="78" class="note">= 1 워드</text>
+    <text x="16" y="114" class="note">↑ <tspan fill="#81c784" font-weight="700">객체는 그대로</tspan>. 읽을 때 비트만 보고 *대부분 통과*.</text>
+  </g>
+
+  <!-- ② barrier 동작 대비 -->
+  <text x="24" y="264" class="shead">② barrier 동작 — 저장 위치가 "항상 우회 vs 대부분 통과"를 정한다</text>
+  <g transform="translate(24,278)">
+    <!-- Shenandoah barrier -->
+    <rect x="0" y="0" width="420" height="56" rx="6" fill="#101820" stroke="#5b9bd5"/>
+    <text x="12" y="22" class="lbl" fill="#9ec9e8">Read Barrier</text>
+    <line x1="96" y1="18" x2="132" y2="18" stroke="#5b9bd5" stroke-width="1.6" marker-end="url(#arB)"/>
+    <text x="140" y="22" class="note" fill="#9ec9e8">fwd 따라감 (self든 new든 *항상* 1회)</text>
+    <text x="12" y="44" class="note">→ 이동 안 한 객체를 읽어도 우회가 붙는다 = 상시 비용</text>
+  </g>
+  <g transform="translate(476,278)">
+    <rect x="0" y="0" width="420" height="56" rx="6" fill="#141005" stroke="#d4a853"/>
+    <text x="12" y="22" class="lbl" fill="#f5d76e">Load Barrier</text>
+    <line x1="96" y1="18" x2="132" y2="18" stroke="#66bb6a" stroke-width="1.6" marker-end="url(#arG)"/>
+    <text x="140" y="22" class="note" fill="#f5d76e">비트 검사 → 맞으면 통과(fast), 낡을 때만 remap</text>
+    <text x="12" y="44" class="note">→ 대부분 fast path = 우회 없음. 드물게만 고침</text>
+  </g>
+
+  <!-- ③ 비교표 -->
+  <text x="24" y="372" class="shead">③ 그래서 비용이 이렇게 갈린다</text>
+  <g transform="translate(24,384)">
+    <rect x="0" y="0" width="848" height="150" rx="6" fill="#0d0d0d" stroke="#3a3530"/>
+    <!-- header row -->
+    <line x1="0" y1="30" x2="848" y2="30" stroke="#3a3530"/>
+    <line x1="300" y1="0" x2="300" y2="150" stroke="#3a3530"/>
+    <line x1="574" y1="0" x2="574" y2="150" stroke="#3a3530"/>
+    <text x="16" y="20" class="th" fill="rgb(212,168,83)">항목</text>
+    <text x="316" y="20" class="th" fill="#9ec9e8">Shenandoah</text>
+    <text x="590" y="20" class="th" fill="#f5d76e">ZGC</text>
+    <!-- rows -->
+    <text x="16" y="50" class="td" fill="#c8c3be">메타데이터 위치</text>
+    <text x="316" y="50" class="td" fill="#dfe4ea">객체 헤더 (fwd 워드)</text>
+    <text x="590" y="50" class="td" fill="#dfe4ea">포인터 상위 비트</text>
+    <line x1="0" y1="60" x2="848" y2="60" stroke="#241f1a"/>
+    <text x="16" y="80" class="td" fill="#c8c3be">barrier 동작</text>
+    <text x="316" y="80" class="td" fill="#dfe4ea">읽을 때 *항상* fwd 우회</text>
+    <text x="590" y="80" class="td" fill="#dfe4ea">비트 검사 후 *대부분 통과*</text>
+    <line x1="0" y1="90" x2="848" y2="90" stroke="#241f1a"/>
+    <text x="16" y="110" class="td" fill="#c8c3be">메모리 오버헤드</text>
+    <text x="316" y="110" class="td" fill="#f5b0b0">객체당 1워드 추가</text>
+    <text x="590" y="110" class="td" fill="#81c784">거의 없음 (헤더 안 건드림)</text>
+    <line x1="0" y1="120" x2="848" y2="120" stroke="#241f1a"/>
+    <text x="16" y="140" class="td" fill="#c8c3be">throughput · 정지 목표</text>
+    <text x="316" y="140" class="td" fill="#dfe4ea">~5-15% ↓ · 10ms 이하</text>
+    <text x="590" y="140" class="td" fill="#dfe4ea">~5% ↓ · 1ms 이하 · 16TB</text>
+  </g>
+
+  <!-- 핵심 -->
+  <rect x="24" y="548" width="872" height="76" rx="8" fill="#141414" stroke="#2a2520"/>
+  <text x="42" y="574" class="lbl" fill="rgb(212,168,83)">핵심 — 저장 위치 하나가 나머지를 다 정한다</text>
+  <text x="42" y="596" class="note">• 정보를 *객체(헤더)*에 두면 → 객체가 커지고(메모리↑) 매 읽기에 우회(속도↓). *포인터*에 두면 → 헤더 그대로(메모리≈0) + 대부분 통과.</text>
+  <text x="42" y="616" class="note">• 공통 한계: 둘 다 throughput은 Parallel·G1보다 낮다. p99 지연이 최우선인 서비스엔 저지연 GC, 배치엔 Parallel이 여전히 우세.</text>
 </svg>
