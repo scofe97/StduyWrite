@@ -1,0 +1,76 @@
+<svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>힙(JVM이 봄) vs RSS(cgroup이 봄) — NMT 사각지대</title>
+  <desc>도구마다 재는 범위가 다르다. 힙 모니터링은 힙만, NMT는 JVM 내부 네이티브까지, cgroup은 RSS 전체를 본다. NMT committed 9GB와 RSS 14GB의 차이 5GB가 shared library malloc, 즉 NMT가 못 보는 사각지대다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: rgb(138,133,128); }
+      .zlabel{ font-size: 13px; font-weight: 700; fill: #e8e4df; }
+      .nm    { font-size: 12px; font-weight: 700; fill: #e8e4df; }
+      .mt    { font-size: 10.5px; fill: rgb(138,133,128); }
+      .num   { font-size: 12px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', monospace; }
+      .oom   { font-size: 10.5px; font-weight: 700; fill: #f44336; font-family: 'JetBrains Mono', monospace; }
+      .tick  { font-size: 10.5px; fill: rgb(212,168,83); font-weight: 700; }
+      .scope { font-size: 11px; font-weight: 700; }
+    </style>
+    <marker id="arrow5" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="560" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">힙은 멀쩡한데 컨테이너가 죽는 이유 — 도구마다 보는 범위가 다르다</text>
+  <text x="28" y="58" class="sub">힙 모니터링 ⊂ NMT ⊂ RSS · cgroup은 RSS로 죽인다 · RSS − NMT = 사각지대</text>
+
+  <!-- ===== 왼쪽: 메모리 스택 (아래에서 위로 쌓임) ===== -->
+  <!-- 힙 -->
+  <rect x="60" y="360" width="300" height="120" rx="8" fill="rgba(96,165,224,0.12)" stroke="#5b9bd5" stroke-width="2"/>
+  <text x="80" y="388" class="nm">자바 힙</text>
+  <text x="80" y="410" class="mt">-Xmx 안 · GC 관리 · 힙 덤프에 잡힘</text>
+  <text x="80" y="432" class="num">9 GB 중 대부분</text>
+  <text x="80" y="456" class="mt">개발자가 보는 메모리</text>
+
+  <!-- JVM 추적 네이티브 -->
+  <rect x="60" y="270" width="300" height="80" rx="8" fill="rgba(102,187,106,0.12)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="80" y="298" class="nm">JVM 추적 네이티브</text>
+  <text x="80" y="320" class="mt">Metaspace · 스레드 스택 · code cache</text>
+  <text x="80" y="340" class="mt">NMT가 영역별로 보여 줌</text>
+
+  <!-- 사각지대 -->
+  <rect x="60" y="150" width="300" height="110" rx="8" fill="rgba(244,67,54,0.14)" stroke="#f44336" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="80" y="178" class="nm">🕳️ 사각지대 — shared library malloc</text>
+  <text x="80" y="200" class="mt">System.loadLibrary() 네이티브 lib의 malloc</text>
+  <text x="80" y="220" class="mt">예: java.util.zip.Inflater의 네이티브 zlib</text>
+  <text x="80" y="242" class="oom">NMT가 못 봄 · RSS에는 잡힘</text>
+
+  <!-- 스택 총합 라벨 -->
+  <text x="210" y="132" class="tick" text-anchor="middle">↑ OS가 실제로 점유한 물리 메모리 = RSS 14GB</text>
+
+  <!-- ===== 오른쪽: 도구별 시야 범위 ===== -->
+  <text x="470" y="132" class="zlabel">도구가 보는 범위</text>
+
+  <!-- 힙 모니터링 시야 -->
+  <rect x="470" y="360" width="360" height="120" rx="8" fill="none" stroke="#5b9bd5" stroke-width="2"/>
+  <text x="490" y="388" class="scope" style="fill:#5b9bd5">① 힙 모니터링 (jstat·VisualVM)</text>
+  <text x="490" y="412" class="mt">힙만 본다 → "안전해 보인다"</text>
+  <text x="490" y="434" class="num">보이는 값: 힙 9GB 이하</text>
+  <text x="490" y="458" class="mt">함정: 힙만 보면 사고를 놓친다</text>
+
+  <!-- NMT 시야 -->
+  <rect x="470" y="270" width="360" height="210" rx="8" fill="none" stroke="#66bb6a" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="490" y="298" class="scope" style="fill:#66bb6a">② NMT (jcmd VM.native_memory)</text>
+  <text x="490" y="320" class="num">보이는 값: committed 9GB</text>
+
+  <!-- RSS 시야 -->
+  <rect x="470" y="150" width="360" height="330" rx="8" fill="none" stroke="rgb(212,168,83)" stroke-width="2.5"/>
+  <text x="490" y="178" class="scope" style="fill:rgb(212,168,83)">③ cgroup RSS (memory.max가 감시)</text>
+  <text x="490" y="200" class="num">보이는 값: RSS 14GB</text>
+  <text x="490" y="224" class="oom">RSS &gt; memory.max → SIGKILL (exit 137)</text>
+
+  <!-- 갭 강조 화살표 -->
+  <line x1="365" y1="205" x2="465" y2="205" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrow5)"/>
+
+  <!-- 하단 핵심 문장 -->
+  <rect x="28" y="502" width="844" height="40" rx="8" fill="rgb(26,26,26)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="48" y="527" class="nm">🔑 <tspan class="num" fill="rgb(212,168,83)">RSS 14GB − NMT 9GB = 5GB</tspan> 가 사각지대다. 이 갭이 곧 "범인은 라이브러리 네이티브 malloc"이라는 결정적 단서.</text>
+</svg>

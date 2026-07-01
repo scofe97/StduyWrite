@@ -166,7 +166,7 @@ updated: 2026-06-26
 
 권장 읽기 순서는 다음과 같다:
 
-1. `01-01~01-04`에서 런타임 데이터 영역, 객체 레이아웃, OOM 재현으로 메모리 지도를 잡는다.
+1. `01-01~01-04`에서 런타임 데이터 영역, 객체 레이아웃, OOM 재현으로 메모리 지도를 잡는다. `01-05`는 그 실전 확장으로, 힙 밖 네이티브가 컨테이너를 OOMKilled로 죽이는 사고(RSS vs 힙·NMT·jemalloc 프로파일링)를 다룬다.
 2. `02-03~02-11`에서 객체 생존 판정, GC 알고리즘, HotSpot 구현, 클래식 컬렉터(`02-06`)·G1(`02-07`)·저지연 GC(`02-08`), 할당·회수 전략을 순서대로 읽는다.
 3. `02-12`에서 3장 GC 전체를 한 번 묶고, 어떤 측정 질문을 4장으로 가져갈지 정리한다.
 4. `02-01`, `02-02`로 돌아와 GC 로그·튜닝과 JMH 측정 방법론을 운영 관점에서 붙인다.
@@ -176,7 +176,7 @@ updated: 2026-06-26
 
 | 장 | 한국어 제목 | 폴더 | 진척 | 실습 |
 |----|------------|------|------|------|
-| 2장 | 자바 메모리 영역과 메모리 오버플로 | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `01-NN` | ✅ §2.1~§2.5 | [`_practice/ch02-memory-area/`](./_practice/ch02-memory-area/) |
+| 2장 | 자바 메모리 영역과 메모리 오버플로 | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `01-NN` | ✅ §2.1~§2.5 + 실전 확장 01-05(Docker 컨테이너 네이티브 메모리·OOMKilled, Medium 사례 흡수) | [`_practice/ch02-memory-area/`](./_practice/ch02-memory-area/) |
 | 3장 | 가비지 컬렉터와 메모리 할당 전략 | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `02-NN` | ✅ §3.1~§3.9 + 운영 흡수본 (02-01) + 성능 측정 흡수본 (02-02) + GC 스레드 흡수본 (02-08, Beckwith Ch1에서) | [`_practice/ch03-gc/`](./_practice/ch03-gc/) |
 | 4장 | 가상 머신 성능 모니터링과 문제 해결 도구 | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `03-NN` | ✅ §4.1~§4.4.1 정독(p.197~245, 03-01 명령줄 + 03-02 시각화), §4.5 마치며 ⏳ 스크린샷 미확보. GC 로그·jstat·튜닝은 [`02-01`](./ch02_automatic-memory-management/02-01.GC%20운영%20—%20로그와%20튜닝.md) 운영 갈래에 별도 흡수 유지 | [`_practice/ch04-troubleshooting/`](./_practice/ch04-troubleshooting/) |
 | 5장 | 최적화 사례 분석 및 실전 | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `04-NN` | ✅ §5.1~§5.4 정독(p.253~283, 04-01 사례분석 + 04-02 실전). JMH·성능 측정 방법론은 [`02-02`](./ch02_automatic-memory-management/02-02.Java%20성능%20—%20JMH와%20측정%20방법론.md) 흡수본에 별도 유지 | [`_practice/ch05-optimization/`](./_practice/ch05-optimization/) |
