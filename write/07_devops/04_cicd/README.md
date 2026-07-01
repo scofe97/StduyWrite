@@ -7,7 +7,8 @@ related:
   - ./roadmap.md
   - ./book/fdsd_fundamentals-devops/README.md
   - ./book/cicd_cicd-patterns/README.md
-updated: 2026-06-28
+  - ./book/aic_ai-infra-claude/README.md
+updated: 2026-06-29
 ---
 
 # 04_cicd
@@ -26,6 +27,7 @@ updated: 2026-06-28
 - `book/` — 단행본 정독 노트. 상위 `05_JVM/book/`과 같이 책 전용 폴더로 출처를 구분한다.
   - `fdsd_fundamentals-devops/` — 《Fundamentals of DevOps and Software Delivery》 (11장). 배포·IaC·오케스트레이션·CI/CD·네트워킹·보안·데이터·모니터링까지 소프트웨어 딜리버리 전체 라이프사이클.
   - `cicd_cicd-patterns/` — 《CI/CD Design Patterns》 (14장). GoF 디자인 패턴 렌즈로 본 CI/CD — 구조·행위·생성 패턴, 배포 전략, 안티패턴.
+  - `aic_ai-infra-claude/` — 《AI 인프라 — Claude로》 (sysnet4admin, 9장). Claude Code로 GKE 위에 배포 인프라를 직접 쌓는 실습서. 핵심 개념은 GitOps+AI=**GitAIOps**. GitOps(ArgoCD)·관측 가능성·무중단 배포(Blue/Green→Canary)·규모 확장(멀티 노드풀·멀티테넌시)·위험 작업 통제(command-guardrails). 1~2장 정독 노트 5편 완료, 3장부터 진행 중.
 
 ## 톤·시각화
 
