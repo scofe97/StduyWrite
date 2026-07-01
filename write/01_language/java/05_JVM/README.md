@@ -55,9 +55,9 @@ related:
   - ./ch05_efficient-concurrency/03-02.원자 연산과 동시성 컬렉션.md
   - ./ch05_efficient-concurrency/04-01.Executor 프레임워크.md
   - ./ch05_efficient-concurrency/04-02.동시성 유틸리티.md
-  - ./ch05_efficient-concurrency/06-01.성능 엔지니어링과 하드웨어·메모리 모델.md
-  - ./ch05_efficient-concurrency/06-02.동기화와 NUMA, JMH 벤치마킹.md
-  - ./ch05_efficient-concurrency/06-03.락과 동시성 — 동기화부터 Virtual Threads까지.md
+  - ./ch05_efficient-concurrency/05-01.성능 엔지니어링과 하드웨어·메모리 모델.md
+  - ./ch05_efficient-concurrency/05-02.동기화와 NUMA, JMH 벤치마킹.md
+  - ./ch05_efficient-concurrency/05-03.락과 동시성 — 동기화부터 Virtual Threads까지.md
   - ./ch01_java-tech/03-01.Java와 JVM의 성능 진화사.md
   - ./ch01_java-tech/03-02.타입 시스템의 진화와 성능.md
   - ./ch03_class-loading-mechanism/02-07.모놀리식에서 모듈러로 — JPMS와 모듈 시스템.md
@@ -205,6 +205,8 @@ updated: 2026-06-26
 | 13장 | 스레드 안전성과 락 최적화 | [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) | ✅ §13.1~§13.3 정독 3편(02-01 안전성 다섯 등급 + 02-02 동기화·락 구현 + 02-03 락 최적화 5기법) | — |
 
 > 5부 정독 폴더 [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) 는 12·13장 모두 신설 완료(2026-06-17). 12장 4편(`01-NN`) + 13장 3편(`02-NN`). 여기에 더해 《자바 동시성 프로그래밍》 출처 실무 노트 9편을 같은 폴더 `03-NN`~`05-NN`으로 이관 완료(2026-06-17, 옛 루트 직속; 05-03 Pinning은 2026-06-24 05-02 §11로 흡수). 《밑바닥》 정독(01·02)과 실무 노트(03~05)는 겹치는 주제를 각 노트의 §관련 문서에서 서로 교차참조한다.
+>
+> **재번호 (2026-07-01)**: JPE(《JVM Performance Engineering》) 성능 3편이 위 표(5·7장) 이관 때 `06-NN`을 받았으나, ch05에 실제로 쓰인 최상위 prefix가 `05`(자바 동시성 실무의 05-03 Pinning 흡수 이후 `05-NN` 슬롯이 비어 있음)여서 `06-01·06-02·06-03`을 `05-01·05-02·05-03`으로 당겼다. 그 결과 현재 배치는 — 자바 동시성 실무 노트가 `03-NN`·`04-NN`(+ 가상 스레드 계열 `01-05`·`01-06`)에, JPE 성능 3편이 `05-NN`에 놓인다. 폴더 안 책 구분은 여전히 각 노트의 `source` 필드가 1차 기준이다.
 
 미작성 폴더는 해당 장 스크린샷이 들어올 때 비로소 생성한다. 빈 폴더 사전 생성은 하지 않는다.
 
@@ -218,9 +220,9 @@ updated: 2026-06-26
 | 2장 | Performance and Type System | [`ch01_java-tech/`](./ch01_java-tech/) `03-02` | ✅ 타입 시스템 진화와 성능(주제 우선 이관): 강한 정적 타입·generics·VarHandle·sealed/record·JOL object layout·Project Valhalla value class | — |
 | 3장 | From Monolithic to Modular Java | [`ch03_class-loading-mechanism/`](./ch03_class-loading-mechanism/) `02-07` | ✅ 모놀리식에서 모듈러로(02-05 모듈 문서 옆으로 이관): JPMS·module-info·ServiceLoader·ModuleLayer로 JAR hell versioning 우회·OSGi 비교·jdeps/jlink/jmod/jdeprscan | — |
 | 4장 | Unified Logging System | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `03-03` | ✅ 통합 JVM 로깅(진단도구 03-NN 결로 이관): JEP 158 -Xlog 네 축(tag·level·decorator·output)·계층적 레벨·jcmd 런타임 동적 조정·비동기 로깅(-Xlog:async) | — |
-| 5장 | End-to-End Performance Optimization | [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) `06-01·06-02` | ✅ 2편(주제 우선 이관): 06-01 성능 엔지니어링과 하드웨어·메모리 모델(footprint/responsiveness/throughput/availability·STW·SMT·store buffering), 06-02 동기화와 NUMA·JMH 벤치마킹(barrier/fence/volatile·happens-before·CAS/LSE·perfasm) | — |
+| 5장 | End-to-End Performance Optimization | [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) `05-01·05-02` | ✅ 2편(주제 우선 이관): 05-01 성능 엔지니어링과 하드웨어·메모리 모델(footprint/responsiveness/throughput/availability·STW·SMT·store buffering), 05-02 동기화와 NUMA·JMH 벤치마킹(barrier/fence/volatile·happens-before·CAS/LSE·perfasm) | — |
 | 6장 | Advanced Memory Management and GC | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `05-01·05-02` | ✅ 2편(주제 우선 이관): 05-01 TLAB·PLAB·NUMA-aware GC와 G1 심화(region·IHOP·humongous·mixed collection 튜닝), 05-02 ZGC 심화와 워크로드별 GC 선택(colored pointer·load barrier·ZPage·6트리거·OLAP/OLTP/HTAP·LDS) | — |
-| 7장 | Runtime Performance Optimizations | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `05-03` + [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) `06-03` | ✅ 2편(주제 우선 이관): 05-03 문자열 런타임 최적화(string pool·intern·G1 dedup·indy-fication·compact string), 06-03 락과 동시성(monitor lock·contended locking JEP 143·spin-wait·Executor/ForkJoinPool/CompletableFuture·virtual thread/continuation) | — |
+| 7장 | Runtime Performance Optimizations | [`ch02_automatic-memory-management/`](./ch02_automatic-memory-management/) `05-03` + [`ch05_efficient-concurrency/`](./ch05_efficient-concurrency/) `05-03` | ✅ 2편(주제 우선 이관): 05-03 문자열 런타임 최적화(string pool·intern·G1 dedup·indy-fication·compact string), 05-03 락과 동시성(monitor lock·contended locking JEP 143·spin-wait·Executor/ForkJoinPool/CompletableFuture·virtual thread/continuation) | — |
 | 8장 | Accelerating Time to Steady State | [`ch04_compilation-optimization/`](./ch04_compilation-optimization/) `03-NN` | ✅ 2편(*컴파일 최적화* 주제로 이관): 03-01 시동 가속(time-to-steady-state·CDS·AOT·Project Leyden training run·GraalVM native image·CRIU/CRaC), 03-02 HotSpot warm-up 최적화와 Metaspace(tiered C1/C2·Segmented CodeCache·speculative·PermGen→Metaspace·JEP 387) | — |
 | 9장 | Harnessing Exotic Hardware | [`ch06_exotic-hardware/`](./ch06_exotic-hardware/) | ✅ 2편(신설 폴더로 이관): 01-01 Exotic Hardware와 JVM(GPU/FPGA·OpenCL·AVX-512/SVE·클라우드 4도전·언어/툴체인), 01-02 케이스 스터디와 Project Panama(LWJGL/JNI·Aparapi·Sumatra/HSAIL·TornadoVM·Vector API·FFM API·Babylon/HAT) | — |
 
