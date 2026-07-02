@@ -1,0 +1,107 @@
+<svg viewBox="0 0 920 680" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>GC 스레드 흐름 — parallel은 STW 구간에서만, concurrent는 앱과 동시에 돈다</title>
+  <desc>시간축 위에서 세 종류의 스레드 레인이 각각 언제 도는지 본다. 애플리케이션 스레드는 STW 구간에만 멈추고 나머지는 계속 돈다. parallel GC 스레드는 STW 구간에서만 여럿이 한꺼번에 깨어나 짧게 일하고 사라진다. concurrent GC 스레드는 앱이 도는 동안 백그라운드로 함께 돌며, 기본은 parallel 수의 1/4만큼만 띄워 앱의 CPU를 덜 빼앗는다. UseDynamicNumberOfGCThreads가 켜지면 이 1/4은 고정값이 아니라 상한이 되고, JVM이 힙 부하를 보고 매 주기마다 실제 쓸 스레드 수를 늘렸다 줄였다 한다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 16px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .shead { font-size: 13px; font-weight: 800; fill: rgb(212,168,83); }
+      .lbl   { font-size: 11px; font-weight: 700; fill: #e8e4df; }
+      .lane  { font-size: 11px; font-weight: 800; fill: #e8e4df; }
+      .note  { font-size: 10px; fill: rgb(160,155,150); }
+      .stw   { font-size: 9.5px; font-weight: 800; }
+      .tick  { font-size: 9px; fill: rgb(138,133,128); }
+    </style>
+    <marker id="ard" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+  <rect x="0" y="0" width="920" height="680" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">GC 스레드 흐름 — 누가 언제 도는가 (시간 →)</text>
+  <text x="24" y="52" class="sub">parallel 스레드는 *STW 구간에서만* 여럿이 깨어나 짧게 일하고, concurrent 스레드는 *앱과 동시에* 백그라운드로 돈다.</text>
+
+  <!-- 시간축 눈금 -->
+  <g transform="translate(150,72)">
+    <line x1="0" y1="8" x2="720" y2="8" stroke="#5a5a5a"/>
+    <text x="0" y="4" class="tick">t0</text>
+    <text x="720" y="4" class="tick" text-anchor="end">시간 →</text>
+  </g>
+
+  <!-- STW 세로 밴드 (두 번의 짧은 STW) -->
+  <g transform="translate(150,88)">
+    <rect x="60" y="0" width="70" height="360" fill="#2a1414" opacity="0.55"/>
+    <rect x="470" y="0" width="70" height="360" fill="#2a1414" opacity="0.55"/>
+    <text x="95" y="-4" class="stw" text-anchor="middle" fill="#e57373">STW</text>
+    <text x="505" y="-4" class="stw" text-anchor="middle" fill="#e57373">STW</text>
+  </g>
+
+  <!-- 레인 1: 애플리케이션 스레드 -->
+  <text x="24" y="112" class="lane">앱 스레드</text>
+  <g transform="translate(150,96)">
+    <rect x="0" y="0" width="60" height="26" rx="3" fill="#15300f" stroke="#66bb6a"/><text x="30" y="17" class="note" text-anchor="middle" fill="#81c784">실행</text>
+    <rect x="60" y="0" width="70" height="26" rx="3" fill="#2a1414" stroke="#e57373" stroke-dasharray="3,2"/><text x="95" y="17" class="stw" text-anchor="middle" fill="#f5b0b0">멈춤</text>
+    <rect x="130" y="0" width="340" height="26" rx="3" fill="#15300f" stroke="#66bb6a"/><text x="300" y="17" class="note" text-anchor="middle" fill="#81c784">실행 (concurrent GC와 CPU를 나눠 씀)</text>
+    <rect x="470" y="0" width="70" height="26" rx="3" fill="#2a1414" stroke="#e57373" stroke-dasharray="3,2"/><text x="505" y="17" class="stw" text-anchor="middle" fill="#f5b0b0">멈춤</text>
+    <rect x="540" y="0" width="180" height="26" rx="3" fill="#15300f" stroke="#66bb6a"/><text x="630" y="17" class="note" text-anchor="middle" fill="#81c784">실행</text>
+  </g>
+
+  <!-- 레인 2: parallel GC 스레드 (STW에서만, 여럿) -->
+  <text x="24" y="180" class="lane">parallel</text>
+  <text x="24" y="194" class="note">GC 스레드</text>
+  <text x="24" y="208" class="note">(코어 수 기반)</text>
+  <g transform="translate(150,160)">
+    <!-- STW 1 구간: 4개 스레드가 동시에 -->
+    <rect x="60" y="0"  width="70" height="14" rx="2" fill="#5b9bd5" stroke="#3a6a90"/><text x="95" y="11" class="note" text-anchor="middle" fill="#e8e4df">P1</text>
+    <rect x="60" y="17" width="70" height="14" rx="2" fill="#5b9bd5" stroke="#3a6a90"/><text x="95" y="28" class="note" text-anchor="middle" fill="#e8e4df">P2</text>
+    <rect x="60" y="34" width="70" height="14" rx="2" fill="#5b9bd5" stroke="#3a6a90"/><text x="95" y="45" class="note" text-anchor="middle" fill="#e8e4df">P3</text>
+    <rect x="60" y="51" width="70" height="14" rx="2" fill="#5b9bd5" stroke="#3a6a90"/><text x="95" y="62" class="note" text-anchor="middle" fill="#e8e4df">P4</text>
+    <!-- 나머지 구간: 잠듦 -->
+    <line x1="0" y1="33" x2="60" y2="33" stroke="#3a3a3a" stroke-dasharray="4,3"/>
+    <line x1="130" y1="33" x2="470" y2="33" stroke="#3a3a3a" stroke-dasharray="4,3"/>
+    <text x="300" y="30" class="note" text-anchor="middle">잠듦 (STW 아닐 땐 안 돎)</text>
+    <!-- STW 2 구간 -->
+    <rect x="470" y="0"  width="70" height="14" rx="2" fill="#5b9bd5" stroke="#3a6a90"/><text x="505" y="11" class="note" text-anchor="middle" fill="#e8e4df">P1</text>
+    <rect x="470" y="17" width="70" height="14" rx="2" fill="#5b9bd5" stroke="#3a6a90"/><text x="505" y="28" class="note" text-anchor="middle" fill="#e8e4df">P2</text>
+    <rect x="470" y="34" width="70" height="14" rx="2" fill="#5b9bd5" stroke="#3a6a90"/><text x="505" y="45" class="note" text-anchor="middle" fill="#e8e4df">P3</text>
+    <rect x="470" y="51" width="70" height="14" rx="2" fill="#5b9bd5" stroke="#3a6a90"/><text x="505" y="62" class="note" text-anchor="middle" fill="#e8e4df">P4</text>
+    <line x1="540" y1="33" x2="720" y2="33" stroke="#3a3a3a" stroke-dasharray="4,3"/>
+  </g>
+  <text x="150" y="238" class="note">↑ STW 구간에서만 여럿(예: 4개)이 동시에 깨어나 <tspan fill="#9ec9e8" font-weight="700">짧게</tspan> 일한다 — 많을수록 STW가 짧아진다 (`-XX:ParallelGCThreads`)</text>
+
+  <!-- 레인 3: concurrent GC 스레드 (앱과 동시, 적은 수) -->
+  <text x="24" y="290" class="lane">concurrent</text>
+  <text x="24" y="304" class="note">GC 스레드</text>
+  <text x="24" y="318" class="note">(기본 ≈ 1/4)</text>
+  <g transform="translate(150,272)">
+    <line x1="0" y1="16" x2="130" y2="16" stroke="#3a3a3a" stroke-dasharray="4,3"/>
+    <!-- 앱 실행 구간과 겹쳐 도는 1개 스레드 -->
+    <rect x="130" y="9" width="340" height="14" rx="2" fill="#66bb6a" stroke="#2f7d34"/><text x="300" y="20" class="note" text-anchor="middle" fill="#0d1a0d">C1 — 앱과 동시에 마킹·정리</text>
+    <line x1="470" y1="16" x2="720" y2="16" stroke="#3a3a3a" stroke-dasharray="4,3"/>
+  </g>
+  <text x="150" y="326" class="note">↑ 앱이 도는 *바로 그 시간에* 함께 돈다 → 앱과 CPU 경쟁. 그래서 기본을 적게(≈ parallel의 1/4) 잡는다 (`-XX:ConcGCThreads`)</text>
+
+  <!-- 동적 조절 박스 -->
+  <text x="24" y="376" class="shead">동적 조절 — 1/4은 "고정값"이 아니라 "상한". JVM이 매 주기 스스로 늘렸다 줄인다</text>
+  <g transform="translate(24,388)">
+    <rect x="0" y="0" width="872" height="118" rx="8" fill="#141414" stroke="#2a2520"/>
+    <text x="18" y="26" class="lbl" fill="rgb(212,168,83)">-XX:+UseDynamicNumberOfGCThreads  (HotSpot 기본 ON · G1 · ZGC는 JDK 17+)</text>
+    <!-- 부하 낮을 때 -->
+    <text x="18" y="52" class="note">부하 낮음 → concurrent 1개만</text>
+    <rect x="250" y="42" width="40" height="12" rx="2" fill="#66bb6a" stroke="#2f7d34"/>
+    <text x="310" y="52" class="note">(앱 CPU 최대 보존)</text>
+    <!-- 부하 높을 때 -->
+    <text x="18" y="76" class="note">할당 폭주 → 순간적으로 늘림</text>
+    <rect x="250" y="66" width="40" height="12" rx="2" fill="#66bb6a" stroke="#2f7d34"/>
+    <rect x="296" y="66" width="40" height="12" rx="2" fill="#66bb6a" stroke="#2f7d34"/>
+    <rect x="342" y="66" width="40" height="12" rx="2" fill="#66bb6a" stroke="#2f7d34"/>
+    <line x1="392" y1="72" x2="430" y2="72" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#ard)"/>
+    <text x="445" y="76" class="note">ConcGCThreads(상한)까지</text>
+    <text x="18" y="102" class="note">→ 그래서 "ZGC도 1/4을 쓰나?" 의 답: <tspan fill="#81c784" font-weight="700">고정 1/4이 아니라, 이 동적 조절로 필요할 때만 늘린다.</tspan> 유휴엔 적게, 폭주엔 순간 확대.</text>
+  </g>
+
+  <!-- 핵심 -->
+  <rect x="24" y="520" width="872" height="140" rx="8" fill="#141414" stroke="#2a2520"/>
+  <text x="42" y="546" class="lbl" fill="rgb(212,168,83)">핵심 — 두 레인은 도는 시간대가 다르다</text>
+  <text x="42" y="572" class="note">• <tspan fill="#9ec9e8" font-weight="700">parallel</tspan>: STW 구간에서만, 여럿이 한꺼번에. 많을수록 STW가 짧아짐 → *응답성*. 코어 수 기반 자동 계산.</text>
+  <text x="42" y="596" class="note">• <tspan fill="#81c784" font-weight="700">concurrent</tspan>: 앱이 도는 내내 백그라운드로. 앱과 CPU 경쟁하므로 기본은 적게(≈ 1/4). 늘리면 GC cycle↑ 되나 앱 처리량↓.</text>
+  <text x="42" y="620" class="note">• 손수 고정하면 워크로드마다 다른 최적점을 못 맞춘다 → <tspan fill="rgb(212,168,83)" font-weight="700">UseDynamicNumberOfGCThreads</tspan>가 매 주기 힙 부하를 보고 스스로 조절.</text>
+  <text x="42" y="644" class="note">• concurrent를 너무 적게 주면 GC가 할당을 못 따라가 <tspan fill="#f5b0b0" font-weight="700">losing the race</tspan>에 빠진다 → 다음 그림(graceful degradation).</text>
+</svg>
