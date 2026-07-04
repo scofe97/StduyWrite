@@ -1,0 +1,78 @@
+<svg viewBox="0 0 960 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Docker Desktop · Minikube · kind 아키텍처 비교</title>
+  <desc>세 로컬 옵션의 핵심 차이는 쿠버네티스 컴포넌트가 어디서 도는가다. Docker Desktop과 Minikube는 Linux VM 안에서 컨트롤 플레인과 Kubelet을 돌리고, kind는 VM 없이 각 노드를 컨테이너 하나로 표현해 멀티 노드 구성을 컨테이너 여러 개로 흉내 낸다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .zlabel { font-size: 13px; font-weight: 700; fill: #e8e4df; }
+      .nm     { font-size: 11.5px; font-weight: 700; fill: #000; font-family: 'JetBrains Mono', monospace; }
+      .nm-lt  { font-size: 11.5px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', monospace; }
+      .mt     { font-size: 9.5px; fill: rgb(138,133,128); }
+      .note   { font-size: 10px; fill: #e8e4df; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="400" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">Docker Desktop · Minikube · kind 아키텍처 비교</text>
+  <text x="24" y="48" class="sub">핵심 차이는 "쿠버네티스 컴포넌트가 어디서 도는가" — VM 안, VM 없이 호스트, 또는 컨테이너 안</text>
+
+  <!-- Docker Desktop -->
+  <text x="40" y="80" class="zlabel">Docker Desktop</text>
+  <rect x="30" y="92" width="270" height="270" rx="10" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="46" y="114" class="mt">Linux VM</text>
+  <rect x="46" y="124" width="238" height="34" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="165" y="146" class="nm-lt" text-anchor="middle">Control Plane (컨테이너)</text>
+  <rect x="46" y="166" width="238" height="34" rx="6" fill="rgb(102,187,106)"/>
+  <text x="165" y="188" class="nm" text-anchor="middle">Kubelet</text>
+  <text x="165" y="208" class="mt" text-anchor="middle">VM에 직접 (컨테이너 아님)</text>
+  <rect x="46" y="222" width="238" height="34" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="165" y="244" class="nm-lt" text-anchor="middle">Deployed Apps (컨테이너)</text>
+  <text x="46" y="290" class="note">docker CLI(호스트)로 컨테이너 조회 가능</text>
+  <text x="46" y="310" class="mt">VM 내부 접근은 --net=host 등</text>
+  <text x="46" y="326" class="mt">특수 alpine 컨테이너로 우회</text>
+  <text x="46" y="346" class="mt">쿠버네티스 버전이 다소 구버전</text>
+
+  <!-- Minikube -->
+  <text x="345" y="80" class="zlabel">Minikube</text>
+  <rect x="335" y="92" width="270" height="270" rx="10" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="351" y="114" class="mt">Linux VM (또는 --vm-driver none)</text>
+  <rect x="351" y="124" width="238" height="34" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="470" y="146" class="nm-lt" text-anchor="middle">Control Plane (컨테이너)</text>
+  <rect x="351" y="166" width="238" height="34" rx="6" fill="rgb(102,187,106)"/>
+  <text x="470" y="188" class="nm" text-anchor="middle">Kubelet</text>
+  <text x="470" y="208" class="mt" text-anchor="middle">VM 또는 호스트에 직접</text>
+  <rect x="351" y="222" width="238" height="34" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="470" y="244" class="nm-lt" text-anchor="middle">Deployed Apps (컨테이너)</text>
+  <text x="351" y="290" class="note">minikube ssh로 VM 내부 진입</text>
+  <text x="351" y="310" class="mt">단일 노드 — 테스트·로컬 개발용</text>
+  <text x="351" y="326" class="mt">--vm-driver none이면 VM 없이</text>
+  <text x="351" y="342" class="mt">호스트에 직접 배포 (Linux 한정)</text>
+
+  <!-- kind -->
+  <text x="650" y="80" class="zlabel">kind (Kubernetes in Docker)</text>
+  <rect x="640" y="92" width="290" height="270" rx="10" fill="rgb(26,26,26)" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="656" y="114" class="mt">노드마다 컨테이너 하나 (VM 없음)</text>
+
+  <rect x="656" y="124" width="258" height="40" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="785" y="142" class="nm-lt" text-anchor="middle">control-plane 컨테이너</text>
+  <text x="785" y="158" class="mt" text-anchor="middle">CRI-O 런타임</text>
+
+  <rect x="656" y="172" width="123" height="40" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="717" y="190" class="nm-lt" text-anchor="middle" font-size="10.5">worker 컨테이너</text>
+  <text x="717" y="206" class="mt" text-anchor="middle">CRI-O</text>
+
+  <rect x="791" y="172" width="123" height="40" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="852" y="190" class="nm-lt" text-anchor="middle" font-size="10.5">worker 컨테이너</text>
+  <text x="852" y="206" class="mt" text-anchor="middle">CRI-O</text>
+
+  <rect x="656" y="222" width="258" height="34" rx="6" fill="rgb(102,187,106)"/>
+  <text x="785" y="244" class="nm" text-anchor="middle">호스트 OS (실제 배포 앱도 여기서 실행)</text>
+
+  <text x="656" y="290" class="note">2장 원리: 컨테이너 안 프로세스 = 호스트 OS 프로세스</text>
+  <text x="656" y="310" class="mt">docker exec로 각 노드 컨테이너 로그인</text>
+  <text x="656" y="326" class="mt">crictl ps로 노드 안 컨테이너 조회 (Docker 대신 CRI-O)</text>
+  <text x="656" y="342" class="mt">멀티 노드를 컨테이너 여러 개로 쉽게 구성</text>
+
+  <text x="480" y="386" class="sub" text-anchor="middle">Docker Desktop·Minikube는 VM 한 겹을 더 거치고, kind는 그 VM 층을 컨테이너로 대체해 호스트에 더 가깝다</text>
+</svg>

@@ -1,0 +1,87 @@
+<svg viewBox="0 0 960 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Pod conditions의 생애주기 전이</title>
+  <desc>PodScheduled와 Initialized는 각각 스케줄링 완료·init 컨테이너 완료 시점에 True가 된 뒤 Pod의 남은 생애 동안 유지된다. ContainersReady와 Ready는 컨테이너 준비 상태에 따라 True와 False 사이를 여러 번 오갈 수 있다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .cond   { font-size: 12px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', monospace; }
+      .seg    { font-size: 11px; font-weight: 800; fill: #0d0d0d; }
+      .note   { font-size: 10px; fill: #e8e4df; }
+    </style>
+    <marker id="a62" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="420" fill="#0d0d0d"/>
+  <text x="24" y="28" class="title">Pod conditions의 생애주기 전이</text>
+  <text x="24" y="46" class="sub">PodScheduled·Initialized는 한 번 True가 되면 유지 · ContainersReady·Ready는 여러 번 바뀔 수 있음</text>
+
+  <!-- event dashed lines -->
+  <line x1="230" y1="150" x2="230" y2="386" stroke="rgb(138,133,128)" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="330" y1="150" x2="330" y2="386" stroke="rgb(138,133,128)" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="450" y1="150" x2="450" y2="386" stroke="rgb(138,133,128)" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="570" y1="150" x2="570" y2="386" stroke="rgb(138,133,128)" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="660" y1="150" x2="660" y2="386" stroke="rgb(138,133,128)" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="810" y1="150" x2="810" y2="386" stroke="rgb(138,133,128)" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- event labels (staggered) -->
+  <text x="230" y="76" class="note" text-anchor="middle">Pod 오브젝트</text>
+  <text x="230" y="90" class="note" text-anchor="middle">생성</text>
+  <line x1="230" y1="96" x2="230" y2="148" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#a62)"/>
+
+  <text x="330" y="106" class="note" text-anchor="middle">워커 노드에</text>
+  <text x="330" y="120" class="note" text-anchor="middle">스케줄링됨</text>
+  <line x1="330" y1="126" x2="330" y2="148" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#a62)"/>
+
+  <text x="450" y="76" class="note" text-anchor="middle">init 컨테이너</text>
+  <text x="450" y="90" class="note" text-anchor="middle">전부 완료</text>
+  <line x1="450" y1="96" x2="450" y2="148" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#a62)"/>
+
+  <text x="570" y="106" class="note" text-anchor="middle">컨테이너 전부 준비,</text>
+  <text x="570" y="120" class="note" text-anchor="middle">readiness gate는 아직</text>
+  <line x1="570" y1="126" x2="570" y2="148" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#a62)"/>
+
+  <text x="660" y="76" class="note" text-anchor="middle">클라이언트에 서비스</text>
+  <text x="660" y="90" class="note" text-anchor="middle">제공 준비 완료</text>
+  <line x1="660" y1="96" x2="660" y2="148" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#a62)"/>
+
+  <text x="810" y="106" class="note" text-anchor="middle">컨테이너 하나 이상이</text>
+  <text x="810" y="120" class="note" text-anchor="middle">준비 안 됨을 보고</text>
+  <line x1="810" y1="126" x2="810" y2="148" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#a62)"/>
+
+  <!-- Row 1: PodScheduled -->
+  <text x="196" y="176" class="cond" text-anchor="end">PodScheduled</text>
+  <rect x="230" y="158" width="100" height="28" fill="rgb(240,150,190)"/>
+  <text x="280" y="177" class="seg" text-anchor="middle">False</text>
+  <rect x="330" y="158" width="590" height="28" fill="rgb(102,187,106)"/>
+  <text x="360" y="177" class="seg">True</text>
+
+  <!-- Row 2: Initialized -->
+  <text x="196" y="234" class="cond" text-anchor="end">Initialized</text>
+  <rect x="230" y="216" width="220" height="28" fill="rgb(240,150,190)"/>
+  <text x="280" y="235" class="seg" text-anchor="middle">False</text>
+  <rect x="450" y="216" width="470" height="28" fill="rgb(102,187,106)"/>
+  <text x="480" y="235" class="seg">True</text>
+
+  <!-- Row 3: ContainersReady -->
+  <text x="196" y="292" class="cond" text-anchor="end">ContainersReady</text>
+  <rect x="230" y="274" width="340" height="28" fill="rgb(240,150,190)"/>
+  <text x="280" y="293" class="seg" text-anchor="middle">False</text>
+  <rect x="570" y="274" width="240" height="28" fill="rgb(102,187,106)"/>
+  <text x="600" y="293" class="seg">True</text>
+  <rect x="810" y="274" width="110" height="28" fill="rgb(240,150,190)"/>
+  <text x="850" y="293" class="seg" text-anchor="middle">False</text>
+
+  <!-- Row 4: Ready -->
+  <text x="196" y="350" class="cond" text-anchor="end">Ready</text>
+  <rect x="230" y="332" width="430" height="28" fill="rgb(240,150,190)"/>
+  <text x="280" y="351" class="seg" text-anchor="middle">False</text>
+  <rect x="660" y="332" width="150" height="28" fill="rgb(102,187,106)"/>
+  <text x="690" y="351" class="seg">True</text>
+  <rect x="810" y="332" width="110" height="28" fill="rgb(240,150,190)"/>
+  <text x="850" y="351" class="seg" text-anchor="middle">False</text>
+
+  <text x="480" y="410" class="sub" text-anchor="middle">시간 → · 초록=True, 분홍=False · ContainersReady는 Ready의 필요조건이지만 충분조건은 아니다(readiness gate는 11장)</text>
+</svg>

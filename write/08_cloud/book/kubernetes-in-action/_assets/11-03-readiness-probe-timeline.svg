@@ -1,0 +1,82 @@
+<svg viewBox="0 0 980 380" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>readiness probe 타임라인 — 다섯 파라미터가 준비 상태를 좌우한다</title>
+  <desc>컨테이너 시작 후 initialDelaySeconds가 지나 첫 probe가 실행되고, 이후 periodSeconds마다 실행된다. failureThreshold만큼 연속 실패하면 준비되지 않음으로, successThreshold만큼 연속 성공하면 준비됨으로 바뀐다. 각 probe는 timeoutSeconds 안에 응답해야 한다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .param { font-size: 11px; font-weight: 800; fill: rgb(212,168,83); }
+      .desc  { font-size: 10px; fill: #e8e4df; }
+      .state { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .lbl   { font-size: 10px; fill: rgb(138,133,128); }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="980" height="380" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">readiness probe — 다섯 파라미터가 준비 상태를 바꿉니다</text>
+  <text x="24" y="50" class="sub">initialDelay 후 period마다 실행 · failureThreshold 연속 실패면 제거 · successThreshold 연속 성공이면 편입</text>
+
+  <!-- timeline axis -->
+  <line x1="60" y1="200" x2="920" y2="200" stroke="rgb(138,133,128)" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <text x="60" y="225" class="lbl" text-anchor="middle">컨테이너 시작</text>
+
+  <!-- initialDelay bracket -->
+  <path d="M62,175 L62,165 L150,165 L150,175" fill="none" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="106" y="120" class="param" text-anchor="middle">initialDelaySeconds=10</text>
+  <text x="106" y="105" class="desc" text-anchor="middle">시작 후 10초 뒤 첫 probe</text>
+
+  <!-- success probes (green) -->
+  <g>
+    <rect x="163" y="180" width="12" height="40" fill="rgb(102,187,106)"/>
+    <text x="169" y="240" text-anchor="middle" fill="rgb(102,187,106)" font-size="14">✓</text>
+    <rect x="225" y="180" width="12" height="40" fill="rgb(102,187,106)"/>
+    <text x="231" y="240" text-anchor="middle" fill="rgb(102,187,106)" font-size="14">✓</text>
+    <rect x="287" y="180" width="12" height="40" fill="rgb(102,187,106)"/>
+    <text x="293" y="240" text-anchor="middle" fill="rgb(102,187,106)" font-size="14">✓</text>
+  </g>
+  <!-- period bracket -->
+  <path d="M175,175 L175,165 L237,165 L237,175" fill="none" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="206" y="155" class="param" text-anchor="middle">periodSeconds=5</text>
+
+  <!-- fail probes (pink) -->
+  <g>
+    <rect x="360" y="180" width="12" height="40" fill="rgb(240,150,190)"/>
+    <text x="366" y="240" text-anchor="middle" fill="rgb(240,150,190)" font-size="14">✗</text>
+    <rect x="422" y="180" width="12" height="40" fill="rgb(240,150,190)"/>
+    <text x="428" y="240" text-anchor="middle" fill="rgb(240,150,190)" font-size="14">✗</text>
+    <rect x="484" y="180" width="12" height="40" fill="rgb(240,150,190)"/>
+    <text x="490" y="240" text-anchor="middle" fill="rgb(240,150,190)" font-size="14">✗</text>
+  </g>
+  <path d="M360,175 L360,165 L496,165 L496,175" fill="none" stroke="rgb(240,150,190)" stroke-width="1.3"/>
+  <text x="428" y="155" class="param" text-anchor="middle" fill="rgb(240,150,190)">failureThreshold=3</text>
+  <text x="428" y="140" class="desc" text-anchor="middle">3회 연속 실패 → 준비 안 됨</text>
+
+  <!-- success again (green) -->
+  <g>
+    <rect x="600" y="180" width="12" height="40" fill="rgb(102,187,106)"/>
+    <text x="606" y="240" text-anchor="middle" fill="rgb(102,187,106)" font-size="14">✓</text>
+    <rect x="662" y="180" width="12" height="40" fill="rgb(102,187,106)"/>
+    <text x="668" y="240" text-anchor="middle" fill="rgb(102,187,106)" font-size="14">✓</text>
+  </g>
+  <path d="M600,175 L600,165 L674,165 L674,175" fill="none" stroke="rgb(102,187,106)" stroke-width="1.3"/>
+  <text x="637" y="155" class="param" text-anchor="middle" fill="rgb(102,187,106)">successThreshold=2</text>
+  <text x="637" y="140" class="desc" text-anchor="middle">2회 연속 성공 → 준비됨</text>
+
+  <!-- timeout probe -->
+  <rect x="770" y="180" width="12" height="40" fill="rgb(102,187,106)"/>
+  <rect x="786" y="176" width="12" height="48" fill="none" stroke="rgb(212,168,83)" stroke-width="1.3" stroke-dasharray="3 2"/>
+  <text x="820" y="155" class="param" text-anchor="middle">timeoutSeconds=2</text>
+  <text x="820" y="140" class="desc" text-anchor="middle">2초 안에 응답 못 하면 실패</text>
+
+  <!-- state band -->
+  <rect x="60" y="290" width="128" height="40" rx="6" fill="rgb(240,150,190)"/>
+  <text x="124" y="315" class="state" text-anchor="middle">준비 안 됨</text>
+  <rect x="188" y="290" width="146" height="40" rx="6" fill="rgb(102,187,106)"/>
+  <text x="261" y="315" class="state" text-anchor="middle">준비됨 (엔드포인트)</text>
+  <rect x="334" y="290" width="266" height="40" rx="6" fill="rgb(240,150,190)"/>
+  <text x="467" y="315" class="state" text-anchor="middle">준비 안 됨 (엔드포인트에서 제거)</text>
+  <rect x="600" y="290" width="320" height="40" rx="6" fill="rgb(102,187,106)"/>
+  <text x="760" y="315" class="state" text-anchor="middle">준비됨 (다시 편입, 컨테이너는 재시작 안 함)</text>
+
+  <text x="490" y="360" class="sub" text-anchor="middle">liveness와 달리 실패해도 컨테이너를 재시작하지 않고, Service 엔드포인트에서만 뺐다 넣습니다</text>
+</svg>

@@ -1,0 +1,61 @@
+<svg viewBox="0 0 960 380" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>동적 프로비저닝된 PV·PVC·파드의 생애주기</title>
+  <desc>PVC를 만들면 PV와 밑바탕 스토리지가 즉시 프로비저닝·바인딩된다. 여러 파드가 같은 PVC를 쓰고, PVC를 지우면 PV와 밑바탕 스토리지가 함께 삭제된다(Delete policy).</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .row   { font-size: 12px; font-weight: 700; fill: #e8e4df; }
+      .band  { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+      .tick  { font-size: 10px; fill: rgb(138,133,128); }
+      .note  { font-size: 11px; font-weight: 700; fill: rgb(212,168,83); }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="380" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">동적 프로비저닝 — PV·PVC·파드 생애주기</text>
+  <text x="24" y="50" class="sub">PVC 생성과 거의 동시에 PV·스토리지 프로비저닝 → 여러 파드 사용 → PVC 삭제 시 PV·스토리지 자동 삭제(Delete)</text>
+
+  <!-- row labels -->
+  <text x="24" y="112" class="row">Underlying:</text>
+  <text x="24" y="152" class="row">PV:</text>
+  <text x="24" y="192" class="row">PVC:</text>
+  <text x="24" y="232" class="row">Pod(s):</text>
+
+  <!-- underlying volume band -->
+  <rect x="150" y="96" width="640" height="24" rx="4" fill="rgb(210,225,240)"/>
+  <text x="470" y="113" class="band" text-anchor="middle" font-size="10">Underlying storage</text>
+
+  <!-- PV band: Pending -> Bound -> (deleted) -->
+  <rect x="150" y="136" width="90" height="24" rx="4" fill="rgb(245,225,110)"/>
+  <text x="195" y="153" class="band" text-anchor="middle">Pending</text>
+  <rect x="242" y="136" width="500" height="24" rx="4" fill="rgb(150,210,155)"/>
+  <text x="490" y="153" class="band" text-anchor="middle">Bound</text>
+
+  <!-- PVC band -->
+  <rect x="150" y="176" width="90" height="24" rx="4" fill="rgb(245,225,110)"/>
+  <text x="195" y="193" class="band" text-anchor="middle">Pending</text>
+  <rect x="242" y="176" width="500" height="24" rx="4" fill="rgb(150,210,155)"/>
+  <text x="490" y="193" class="band" text-anchor="middle">Bound</text>
+
+  <!-- pods -->
+  <rect x="330" y="216" width="80" height="24" rx="4" fill="rgb(245,180,110)"/>
+  <text x="370" y="233" class="band" text-anchor="middle" font-size="10">Pod 1</text>
+  <rect x="430" y="240" width="80" height="24" rx="4" fill="rgb(245,180,110)"/>
+  <text x="470" y="257" class="band" text-anchor="middle" font-size="10">Pod 2</text>
+  <rect x="530" y="216" width="80" height="24" rx="4" fill="rgb(245,180,110)"/>
+  <text x="570" y="233" class="band" text-anchor="middle" font-size="10">Pod 3</text>
+
+  <!-- time axis -->
+  <line x1="150" y1="290" x2="820" y2="290" stroke="rgb(90,86,80)" stroke-width="1.5"/>
+  <line x1="200" y1="285" x2="200" y2="295" stroke="rgb(90,86,80)"/>
+  <text x="200" y="312" class="tick" text-anchor="middle">PVC 생성</text>
+  <text x="200" y="326" class="tick" text-anchor="middle">= PV·스토리지 생성</text>
+  <line x1="480" y1="285" x2="480" y2="295" stroke="rgb(90,86,80)"/>
+  <text x="480" y="312" class="tick" text-anchor="middle">여러 파드 생성·소멸</text>
+  <line x1="742" y1="285" x2="742" y2="295" stroke="rgb(90,86,80)"/>
+  <text x="742" y="312" class="tick" text-anchor="middle">PVC 삭제</text>
+  <text x="742" y="326" class="tick" text-anchor="middle">= PV·스토리지 삭제</text>
+
+  <text x="150" y="360" class="note">PVC·PV 생애주기는 파드와 무관 — 참조 파드가 없어도 남는다. 동적 PV 기본 reclaim = Delete</text>
+</svg>

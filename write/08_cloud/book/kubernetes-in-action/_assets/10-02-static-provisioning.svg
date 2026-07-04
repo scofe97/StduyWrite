@@ -1,0 +1,72 @@
+<svg viewBox="0 0 960 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>정적 프로비저닝의 흐름</title>
+  <desc>운영자가 스토리지를 먼저 만들고 PV 오브젝트를 만든다. 사용자가 PVC를 만들면 쿠버네티스가 요구사항에 맞는 기존 PV를 찾아 바인딩하고, 파드가 그 볼륨을 마운트한다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .lbl   { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+      .actor { font-size: 11px; font-weight: 700; fill: #e8e4df; }
+      .cyl   { font-size: 10px; font-weight: 700; fill: #0d0d0d; }
+      .step  { font-size: 11px; font-weight: 700; fill: rgb(212,168,83); }
+    </style>
+    <marker id="s10" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(91,155,213)"/>
+    </marker>
+    <marker id="s10b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="rgb(138,133,128)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="360" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">정적 프로비저닝 — 운영자가 PV 를 먼저 만든다</text>
+  <text x="24" y="50" class="sub">① 운영자가 스토리지·PV 생성 → ② 사용자가 PVC 생성 → ③ 쿠버네티스가 맞는 PV 찾아 바인딩 → ④ 파드 마운트</text>
+
+  <!-- Cluster admin -->
+  <circle cx="90" cy="150" r="22" fill="rgb(250,225,200)"/>
+  <text x="90" y="192" class="actor" text-anchor="middle">Cluster admin</text>
+
+  <!-- User -->
+  <circle cx="870" cy="150" r="22" fill="rgb(250,225,200)"/>
+  <text x="870" y="192" class="actor" text-anchor="middle">User</text>
+
+  <!-- PV -->
+  <rect x="280" y="90" width="130" height="60" rx="6" fill="rgb(245,180,140)"/>
+  <text x="345" y="118" class="lbl" text-anchor="middle" font-size="11">Persistent</text>
+  <text x="345" y="134" class="lbl" text-anchor="middle" font-size="11">volume</text>
+
+  <!-- PVC -->
+  <path d="M560,90 h110 v40 l-14,14 h-96 z" fill="rgb(245,225,110)"/>
+  <text x="608" y="112" class="lbl" text-anchor="middle" font-size="10">Persistent</text>
+  <text x="608" y="126" class="lbl" text-anchor="middle" font-size="10">volume claim</text>
+
+  <!-- Network storage -->
+  <g transform="translate(280,220)"><ellipse cx="65" cy="0" rx="65" ry="14" fill="rgb(146,196,235)"/><rect x="0" y="0" width="130" height="48" fill="rgb(146,196,235)"/><ellipse cx="65" cy="48" rx="65" ry="14" fill="rgb(90,140,200)"/><text x="65" y="30" class="cyl" text-anchor="middle">Network storage</text></g>
+
+  <!-- Pod -->
+  <rect x="560" y="210" width="120" height="80" rx="8" fill="rgb(232,240,248)"/>
+  <text x="620" y="230" class="lbl" text-anchor="middle" font-size="10">Pod</text>
+  <g transform="translate(585,242)"><ellipse cx="35" cy="0" rx="35" ry="8" fill="rgb(146,196,235)"/><rect x="0" y="0" width="70" height="30" fill="rgb(146,196,235)"/><ellipse cx="35" cy="30" rx="35" ry="8" fill="rgb(120,175,220)"/><text x="35" y="20" class="cyl" text-anchor="middle" font-size="9">Volume</text></g>
+
+  <!-- admin -> PV (create) -->
+  <path d="M112,142 C170,120 220,115 276,115" fill="none" stroke="rgb(138,133,128)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#s10b)"/>
+  <text x="150" y="100" class="step">① PV 생성</text>
+  <!-- admin -> storage -->
+  <path d="M108,165 C160,195 210,215 274,225" fill="none" stroke="rgb(138,133,128)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#s10b)"/>
+  <!-- PV -> storage -->
+  <path d="M345,150 L345,204" fill="none" stroke="rgb(91,155,213)" stroke-width="2.5" marker-end="url(#s10)"/>
+
+  <!-- user -> PVC -->
+  <path d="M848,142 C780,120 720,115 674,114" fill="none" stroke="rgb(138,133,128)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#s10b)"/>
+  <text x="700" y="100" class="step">② PVC 생성</text>
+  <!-- PVC -> PV (bind) -->
+  <path d="M556,116 L414,116" fill="none" stroke="rgb(91,155,213)" stroke-width="2.5" marker-end="url(#s10)"/>
+  <text x="440" y="80" class="step">③ 맞는 PV 찾아 바인딩</text>
+  <!-- user -> Pod -->
+  <path d="M848,165 C790,200 720,220 684,235" fill="none" stroke="rgb(138,133,128)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#s10b)"/>
+  <!-- Pod -> PVC -->
+  <path d="M620,210 L610,148" fill="none" stroke="rgb(91,155,213)" stroke-width="2.5" marker-end="url(#s10)"/>
+  <!-- Pod volume -> storage (mount) -->
+  <path d="M556,260 L416,242" fill="none" stroke="rgb(146,196,235)" stroke-width="3" marker-end="url(#s10)"/>
+  <text x="430" y="300" class="step">④ 파드 실행 시 스토리지가 컨테이너에 마운트</text>
+</svg>

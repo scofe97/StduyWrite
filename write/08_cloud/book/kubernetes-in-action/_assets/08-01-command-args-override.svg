@@ -1,0 +1,91 @@
+<svg viewBox="0 0 960 520" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Dockerfile 기본값과 Pod 매니페스트의 command·args 덮어쓰기</title>
+  <desc>왼쪽: 매니페스트에 command·args가 없으면 Dockerfile의 ENTRYPOINT와 CMD가 그대로 쓰여 node app.js --listen-port 8080이 실행된다. 가운데: args만 지정하면 CMD만 덮어써 node app.js --listen-port 9090이 실행된다. 오른쪽: command와 args를 모두 지정하면 전부 덮어써 node test.js --listen-port 9090이 실행된다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .code   { font-size: 10.5px; fill: #e8e4df; font-family: 'JetBrains Mono', monospace; }
+      .codeb  { font-size: 10.5px; font-weight: 800; fill: rgb(212,168,83); font-family: 'JetBrains Mono', monospace; }
+      .cmd    { font-size: 11px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .zone   { font-size: 10.5px; fill: rgb(138,133,128); }
+      .note   { font-size: 10.5px; fill: #e8e4df; }
+    </style>
+    <marker id="a81" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="520" fill="#0d0d0d"/>
+  <text x="24" y="28" class="title">command·args 덮어쓰기 — 세 가지 조합</text>
+  <text x="24" y="46" class="sub">실행되는 전체 명령 = command(없으면 ENTRYPOINT) + args(없으면 CMD)</text>
+
+  <!-- ===== Column 1: no override ===== -->
+  <rect x="30" y="66" width="280" height="120" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+  <text x="46" y="88" class="code">kind: Pod</text>
+  <text x="46" y="104" class="code">spec:</text>
+  <text x="46" y="120" class="code">  containers:</text>
+  <text x="46" y="136" class="code">  - name: kiada</text>
+  <text x="46" y="152" class="code">    image: luksa/kiada:0.4</text>
+  <text x="46" y="176" class="zone">pod.yaml (command·args 없음)</text>
+
+  <line x1="170" y1="186" x2="170" y2="216" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#a81)"/>
+
+  <rect x="30" y="220" width="280" height="86" rx="10" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="46" y="242" class="zone">Pod — kiada 컨테이너</text>
+  <rect x="46" y="252" width="248" height="38" rx="6" fill="rgb(174,214,241)"/>
+  <text x="170" y="276" class="cmd" text-anchor="middle">node app.js --listen-port 8080</text>
+
+  <text x="30" y="330" class="note">명령·인자 모두 Dockerfile에서 옴</text>
+
+  <!-- ===== Column 2: args only ===== -->
+  <rect x="340" y="66" width="290" height="120" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+  <text x="356" y="88" class="code">kind: Pod</text>
+  <text x="356" y="104" class="code">spec:</text>
+  <text x="356" y="120" class="code">  containers:</text>
+  <text x="356" y="136" class="code">  - name: kiada</text>
+  <text x="356" y="152" class="code">    image: luksa/kiada:0.4</text>
+  <text x="356" y="168" class="codeb">    args: ["--listen-port","9090"]</text>
+  <text x="356" y="182" class="zone" font-size="10">pod.yaml</text>
+
+  <line x1="485" y1="186" x2="485" y2="216" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#a81)"/>
+
+  <rect x="340" y="220" width="290" height="86" rx="10" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="356" y="242" class="zone">Pod — kiada 컨테이너</text>
+  <rect x="356" y="252" width="258" height="38" rx="6" fill="rgb(174,214,241)"/>
+  <text x="485" y="276" class="cmd" text-anchor="middle">node app.js --listen-port 9090</text>
+
+  <text x="340" y="330" class="note">인자만 매니페스트에서 덮어씀</text>
+  <text x="340" y="346" class="note">(명령은 여전히 ENTRYPOINT)</text>
+
+  <!-- ===== Column 3: command + args ===== -->
+  <rect x="660" y="66" width="280" height="120" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+  <text x="676" y="88" class="code">kind: Pod</text>
+  <text x="676" y="104" class="code">spec:</text>
+  <text x="676" y="120" class="code">  containers:</text>
+  <text x="676" y="136" class="code">  - name: kiada</text>
+  <text x="676" y="152" class="codeb">    command: ["node","test.js"]</text>
+  <text x="676" y="168" class="codeb">    args: ["--listen-port","9090"]</text>
+  <text x="676" y="182" class="zone" font-size="10">pod.yaml</text>
+
+  <line x1="800" y1="186" x2="800" y2="216" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#a81)"/>
+
+  <rect x="660" y="220" width="280" height="86" rx="10" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="676" y="242" class="zone">Pod — kiada 컨테이너</text>
+  <rect x="676" y="252" width="248" height="38" rx="6" fill="rgb(174,214,241)"/>
+  <text x="800" y="276" class="cmd" text-anchor="middle">node test.js --listen-port 9090</text>
+
+  <text x="660" y="330" class="note">명령·인자 모두 매니페스트에서 덮어씀</text>
+
+  <!-- ===== Dockerfile box ===== -->
+  <rect x="290" y="380" width="380" height="104" rx="8" fill="rgb(245,215,110)"/>
+  <text x="310" y="404" class="cmd">FROM node:12</text>
+  <text x="310" y="422" class="cmd">...</text>
+  <text x="310" y="440" class="cmd">ENTRYPOINT ["node", "app.js"]</text>
+  <text x="310" y="458" class="cmd">CMD ["--listen-port", "8080"]</text>
+  <text x="480" y="478" class="zone" text-anchor="middle" fill="#0d0d0d">Dockerfile — 이미지의 기본값</text>
+
+  <!-- arrows from Dockerfile to columns 1,2 -->
+  <path d="M290,420 C220,410 180,380 170,310" fill="none" stroke="rgb(212,168,83)" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#a81)"/>
+  <path d="M480,378 C480,360 485,340 485,310" fill="none" stroke="rgb(212,168,83)" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#a81)"/>
+</svg>

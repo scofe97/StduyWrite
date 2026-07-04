@@ -1,0 +1,64 @@
+<svg viewBox="0 0 960 320" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>port-forward의 긴 통신 경로</title>
+  <desc>curl이 로컬 프록시에 연결하고, 프록시가 API 서버로, API 서버가 Pod를 호스팅하는 노드의 Kubelet으로, Kubelet이 Pod의 loopback을 통해 컨테이너로 연결을 전달한다. 통신 경로가 매우 길다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .bname  { font-size: 11.5px; font-weight: 700; fill: #e8e4df; }
+      .bnamed { font-size: 11.5px; font-weight: 700; fill: #0d0d0d; }
+      .zone   { font-size: 10.5px; fill: rgb(138,133,128); }
+      .step   { font-size: 10px; fill: #e8e4df; }
+    </style>
+    <marker id="a5d" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="320" fill="#0d0d0d"/>
+  <text x="24" y="28" class="title">port-forward의 긴 통신 경로</text>
+  <text x="24" y="46" class="sub">curl → 프록시 → API 서버 → Kubelet → 컨테이너 (loopback 경유)</text>
+
+  <!-- Your computer -->
+  <rect x="24" y="110" width="200" height="160" rx="10" fill="rgb(20,20,20)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+  <text x="40" y="258" class="zone">Your computer</text>
+  <rect x="48" y="128" width="150" height="42" rx="6" fill="rgb(91,155,213)"/>
+  <text x="123" y="154" class="bname" text-anchor="middle">curl</text>
+  <rect x="48" y="184" width="150" height="52" rx="6" fill="rgb(91,155,213)"/>
+  <text x="123" y="206" class="bname" text-anchor="middle">kubectl</text>
+  <text x="123" y="222" class="bname" text-anchor="middle">port-forward proxy</text>
+  <path d="M160,170 L160,184" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+
+  <!-- cluster (dashed) -->
+  <rect x="248" y="96" width="688" height="200" rx="10" fill="none" stroke="rgb(42,37,32)" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="264" y="284" class="zone">Kubernetes cluster</text>
+
+  <!-- Master node -->
+  <rect x="270" y="128" width="180" height="120" rx="10" fill="rgb(20,20,20)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+  <text x="360" y="238" class="zone" text-anchor="middle">Master node</text>
+  <rect x="290" y="150" width="140" height="52" rx="6" fill="rgb(91,155,213)"/>
+  <text x="360" y="172" class="bname" text-anchor="middle">Kubernetes</text>
+  <text x="360" y="188" class="bname" text-anchor="middle">API Server</text>
+
+  <!-- Worker node -->
+  <rect x="500" y="128" width="410" height="140" rx="10" fill="rgb(20,20,20)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+  <text x="520" y="256" class="zone">Worker node</text>
+  <rect x="520" y="150" width="140" height="46" rx="6" fill="rgb(91,155,213)"/>
+  <text x="590" y="178" class="bname" text-anchor="middle">Kubelet</text>
+
+  <rect x="700" y="150" width="190" height="80" rx="10" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="875" y="222" class="zone" text-anchor="end">Pod</text>
+  <rect x="720" y="164" width="150" height="42" rx="6" fill="rgb(230,126,34)"/>
+  <text x="795" y="190" class="bnamed" text-anchor="middle">Container</text>
+
+  <!-- arrows -->
+  <line x1="198" y1="210" x2="288" y2="176" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a5d)"/>
+  <line x1="430" y1="176" x2="518" y2="173" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a5d)"/>
+  <path d="M660,182 L690,182 L690,185 L718,185" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a5d)"/>
+
+  <!-- steps -->
+  <text x="150" y="104" class="step">① 로컬 프록시에 연결</text>
+  <text x="340" y="120" class="step">② API 서버로 전달</text>
+  <text x="560" y="120" class="step">③ Kubelet으로 전달</text>
+  <text x="700" y="104" class="step">④ loopback으로 컨테이너 전달</text>
+</svg>

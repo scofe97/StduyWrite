@@ -1,0 +1,48 @@
+<svg viewBox="0 0 900 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>subPath로 볼륨의 단일 파일만 마운트하기</title>
+  <desc>ConfigMap 볼륨의 두 엔트리 중 subPath로 my-app.conf 하나만 컨테이너의 /etc/my-app.conf 에 마운트한다. 그 결과 /etc 의 기존 파일 existing.conf, third.conf 는 가려지지 않고 보존된다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .zone  { font-size: 11px; fill: rgb(138,133,128); }
+      .kv    { font-size: 11px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .dir   { font-size: 11px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', monospace; }
+      .file  { font-size: 11px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .keep  { font-size: 11px; font-weight: 700; fill: rgb(102,187,106); }
+      .lbl   { font-size: 11px; font-weight: 700; fill: rgb(212,168,83); }
+    </style>
+    <marker id="ms1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="360" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">subPath — 볼륨의 파일 하나만 마운트</text>
+  <text x="24" y="50" class="sub">볼륨 전체를 마운트하면 /etc 기존 파일이 가려진다. subPath 로 my-app.conf 하나만 끼우면 기존 파일이 살아남는다</text>
+
+  <!-- ConfigMap volume -->
+  <rect x="40" y="90" width="230" height="180" rx="10" fill="rgb(205,236,207)"/>
+  <text x="155" y="114" class="zone" text-anchor="middle" fill="#0d0d0d">configMap volume</text>
+  <rect x="65" y="132" width="180" height="40" rx="5" fill="#fdfdf8"/>
+  <text x="155" y="157" class="kv" text-anchor="middle">📄 my-app.conf</text>
+  <rect x="65" y="184" width="180" height="40" rx="5" fill="rgb(232,228,223)"/>
+  <text x="155" y="209" class="kv" text-anchor="middle">📄 another.conf</text>
+  <text x="155" y="252" class="zone" text-anchor="middle" fill="#0d0d0d" font-size="10">두 엔트리 중</text>
+
+  <!-- Container /etc -->
+  <rect x="520" y="76" width="350" height="260" rx="12" fill="rgb(26,26,26)" stroke="rgb(91,155,213)" stroke-width="2"/>
+  <text x="695" y="98" class="zone" text-anchor="middle">Container — /etc</text>
+  <rect x="560" y="118" width="270" height="40" rx="5" fill="rgb(245,225,110)"/>
+  <text x="695" y="143" class="file" text-anchor="middle">/etc/my-app.conf  ← 마운트됨</text>
+  <rect x="560" y="170" width="270" height="40" rx="5" fill="rgb(210,238,212)"/>
+  <text x="695" y="195" class="file" text-anchor="middle">/etc/existing.conf</text>
+  <rect x="560" y="222" width="270" height="40" rx="5" fill="rgb(210,238,212)"/>
+  <text x="695" y="247" class="file" text-anchor="middle">/etc/third.conf</text>
+  <text x="695" y="296" class="keep" text-anchor="middle">이미지의 기존 파일이 가려지지 않고 보존된다</text>
+  <text x="695" y="320" class="sub" text-anchor="middle">볼륨 전체 마운트였다면 existing·third 가 사라졌을 것</text>
+
+  <!-- arrow subPath -->
+  <path d="M270,150 C380,150 440,138 556,138" fill="none" stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#ms1)"/>
+  <text x="330" y="128" class="lbl">subPath: my-app.conf</text>
+</svg>

@@ -1,0 +1,66 @@
+<svg viewBox="0 0 960 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>TLS termination과 passthrough 비교</title>
+  <desc>termination은 게이트웨이가 TLS를 복호화해 백엔드로 평문 HTTP를 보내므로 내용을 이해하고 HTTPRoute로 경로·헤더까지 라우팅한다. passthrough는 게이트웨이가 복호화하지 않고 SNI의 호스트명만 보므로 TLSRoute로 호스트명 라우팅만 하고, 암호화가 백엔드까지 이어진다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .hdr   { font-size: 13px; font-weight: 800; fill: rgb(212,168,83); }
+      .box   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
+      .proto { font-size: 11px; font-weight: 800; fill: rgb(212,168,83); }
+      .plain { font-size: 11px; font-weight: 800; fill: rgb(138,133,128); }
+      .route { font-size: 11px; font-weight: 700; fill: #e8e4df; }
+      .note  { font-size: 10.5px; fill: #e8e4df; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="400" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">TLS — termination vs passthrough</text>
+  <text x="24" y="50" class="sub">게이트웨이가 복호화하느냐가 라우팅 정보와 Route 종류를 가릅니다</text>
+
+  <line x1="480" y1="70" x2="480" y2="390" stroke="rgb(60,60,60)" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+  <!-- ===== LEFT: Terminate ===== -->
+  <text x="240" y="90" class="hdr" text-anchor="middle">Terminate (HTTPS listener)</text>
+  <rect x="30" y="130" width="90" height="48" rx="8" fill="rgb(102,187,106)"/>
+  <text x="75" y="159" class="box" text-anchor="middle">Client</text>
+  <rect x="185" y="130" width="100" height="48" rx="8" fill="rgb(180,165,230)"/>
+  <text x="235" y="153" class="box" text-anchor="middle">Gateway</text>
+  <text x="235" y="170" class="box" text-anchor="middle" font-size="9">TLS 종료</text>
+  <rect x="350" y="130" width="90" height="48" rx="8" fill="rgb(91,155,213)"/>
+  <text x="395" y="159" class="box" text-anchor="middle">Pod</text>
+  <!-- encrypted segment -->
+  <line x1="120" y1="154" x2="183" y2="154" stroke="rgb(212,168,83)" stroke-width="3.5"/>
+  <text x="150" y="120" class="proto" text-anchor="middle">TLS 🔒</text>
+  <!-- plain segment -->
+  <line x1="285" y1="154" x2="348" y2="154" stroke="rgb(138,133,128)" stroke-width="2"/>
+  <text x="316" y="120" class="plain" text-anchor="middle">HTTP</text>
+
+  <rect x="60" y="220" width="360" height="120" rx="8" fill="rgb(30,26,20)" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="240" y="248" class="route" text-anchor="middle" font-weight="800">게이트웨이가 내용을 이해</text>
+  <text x="240" y="272" class="route" text-anchor="middle">→ HTTPRoute로 경로·헤더까지 라우팅</text>
+  <text x="240" y="296" class="note" text-anchor="middle">인증서 Secret을 certificateRefs로 참조</text>
+  <text x="240" y="318" class="note" text-anchor="middle">백엔드가 TLS를 못 해도 됨</text>
+
+  <!-- ===== RIGHT: Passthrough ===== -->
+  <text x="720" y="90" class="hdr" text-anchor="middle">Passthrough (TLS listener)</text>
+  <rect x="510" y="130" width="90" height="48" rx="8" fill="rgb(102,187,106)"/>
+  <text x="555" y="159" class="box" text-anchor="middle">Client</text>
+  <rect x="665" y="130" width="100" height="48" rx="8" fill="rgb(180,165,230)"/>
+  <text x="715" y="153" class="box" text-anchor="middle">Gateway</text>
+  <text x="715" y="170" class="box" text-anchor="middle" font-size="9">통과(SNI만)</text>
+  <rect x="830" y="130" width="100" height="48" rx="8" fill="rgb(91,155,213)"/>
+  <text x="880" y="150" class="box" text-anchor="middle">Pod</text>
+  <text x="880" y="166" class="box" text-anchor="middle" font-size="9">sidecar 종료</text>
+  <!-- encrypted all the way -->
+  <line x1="600" y1="154" x2="663" y2="154" stroke="rgb(212,168,83)" stroke-width="3.5"/>
+  <line x1="765" y1="154" x2="828" y2="154" stroke="rgb(212,168,83)" stroke-width="3.5"/>
+  <text x="632" y="120" class="proto" text-anchor="middle">TLS 🔒</text>
+  <text x="797" y="120" class="proto" text-anchor="middle">TLS 🔒</text>
+
+  <rect x="540" y="220" width="360" height="120" rx="8" fill="rgb(30,26,20)" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="720" y="248" class="route" text-anchor="middle" font-weight="800">게이트웨이가 SNI 호스트명만 앎</text>
+  <text x="720" y="272" class="route" text-anchor="middle">→ TLSRoute로 호스트명만 라우팅</text>
+  <text x="720" y="296" class="note" text-anchor="middle">암호화가 백엔드(sidecar)까지 이어짐 = 더 안전</text>
+  <text x="720" y="318" class="note" text-anchor="middle">경로·헤더 라우팅 불가(weight 분할만 가능)</text>
+</svg>

@@ -1,0 +1,62 @@
+<svg viewBox="0 0 960 380" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>여러 파드가 같은 PVC를 공유하는 멀티노드 어태치</title>
+  <desc>여러 파드가 같은 PVC를 참조해 같은 PV·네트워크 스토리지를 공유한다. 첫 노드의 파드는 모두 볼륨을 쓰지만, 다른 노드의 파드는 스토리지 기술이 동시 어태치를 지원할 때만 쓸 수 있다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .node  { font-size: 12px; font-weight: 700; fill: #e8e4df; }
+      .lbl   { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+      .cyl   { font-size: 10px; font-weight: 700; fill: #0d0d0d; }
+      .note  { font-size: 11px; font-weight: 700; fill: rgb(212,168,83); }
+      .warn  { font-size: 11px; font-weight: 700; fill: rgb(240,150,190); }
+    </style>
+    <marker id="ma1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(91,155,213)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="380" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">여러 파드가 같은 PVC 를 공유</text>
+  <text x="24" y="50" class="sub">같은 PVC → 같은 PV → 같은 스토리지. 첫 노드 파드는 모두 사용, 다른 노드는 동시 어태치 지원 시에만</text>
+
+  <!-- Node A -->
+  <rect x="30" y="80" width="290" height="150" rx="10" fill="rgb(24,24,24)" stroke="rgb(102,187,106)" stroke-width="1.5"/>
+  <text x="45" y="102" class="node">Worker node A</text>
+  <g>
+    <rect x="55" y="118" width="110" height="95" rx="8" fill="rgb(232,240,248)"/>
+    <text x="110" y="138" class="lbl" text-anchor="middle" font-size="10">Pod A</text>
+    <g transform="translate(78,150)"><ellipse cx="32" cy="0" rx="32" ry="8" fill="rgb(146,196,235)"/><rect x="0" y="0" width="64" height="34" fill="rgb(146,196,235)"/><ellipse cx="32" cy="34" rx="32" ry="8" fill="rgb(120,175,220)"/><text x="32" y="22" class="cyl" text-anchor="middle" font-size="9">Volume</text></g>
+    <rect x="180" y="118" width="110" height="95" rx="8" fill="rgb(232,240,248)"/>
+    <text x="235" y="138" class="lbl" text-anchor="middle" font-size="10">Pod B</text>
+    <g transform="translate(203,150)"><ellipse cx="32" cy="0" rx="32" ry="8" fill="rgb(146,196,235)"/><rect x="0" y="0" width="64" height="34" fill="rgb(146,196,235)"/><ellipse cx="32" cy="34" rx="32" ry="8" fill="rgb(120,175,220)"/><text x="32" y="22" class="cyl" text-anchor="middle" font-size="9">Volume</text></g>
+  </g>
+
+  <!-- Node B -->
+  <rect x="350" y="80" width="170" height="150" rx="10" fill="rgb(20,20,20)" stroke="rgb(138,133,128)" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="365" y="102" class="node">Worker node B</text>
+  <rect x="375" y="118" width="120" height="95" rx="8" fill="rgb(232,240,248)"/>
+  <text x="435" y="138" class="lbl" text-anchor="middle" font-size="10">Pod C</text>
+  <g transform="translate(403,150)"><ellipse cx="32" cy="0" rx="32" ry="8" fill="rgb(146,196,235)"/><rect x="0" y="0" width="64" height="34" fill="rgb(146,196,235)"/><ellipse cx="32" cy="34" rx="32" ry="8" fill="rgb(120,175,220)"/><text x="32" y="22" class="cyl" text-anchor="middle" font-size="9">Volume</text></g>
+  <text x="435" y="228" class="warn" text-anchor="middle" font-size="14">?</text>
+
+  <!-- PVC -->
+  <path d="M640,90 h110 v50 l-14,14 h-96 z" fill="rgb(245,225,110)"/>
+  <text x="688" y="118" class="lbl" text-anchor="middle" font-size="10">PVC</text>
+  <!-- PV -->
+  <rect x="640" y="180" width="110" height="50" rx="6" fill="rgb(245,180,140)"/>
+  <text x="695" y="210" class="lbl" text-anchor="middle" font-size="10">PV</text>
+  <!-- storage -->
+  <g transform="translate(800,260)"><ellipse cx="70" cy="0" rx="70" ry="14" fill="rgb(146,196,235)"/><rect x="0" y="0" width="140" height="50" fill="rgb(146,196,235)"/><ellipse cx="70" cy="50" rx="70" ry="14" fill="rgb(90,140,200)"/><text x="70" y="30" class="cyl" text-anchor="middle">Network storage</text></g>
+
+  <!-- arrows: pods -> PVC -->
+  <path d="M165,150 C400,120 500,120 636,118" fill="none" stroke="rgb(91,155,213)" stroke-width="2" marker-end="url(#ma1)"/>
+  <path d="M290,150 C450,130 520,124 636,124" fill="none" stroke="rgb(91,155,213)" stroke-width="2" marker-end="url(#ma1)"/>
+  <path d="M495,160 C560,150 590,138 636,132" fill="none" stroke="rgb(91,155,213)" stroke-width="2" marker-end="url(#ma1)"/>
+  <!-- PVC -> PV -> storage -->
+  <path d="M695,154 L695,176" fill="none" stroke="rgb(91,155,213)" stroke-width="2.5" marker-end="url(#ma1)"/>
+  <path d="M750,205 C790,215 810,230 830,258" fill="none" stroke="rgb(91,155,213)" stroke-width="2.5" marker-end="url(#ma1)"/>
+
+  <text x="30" y="290" class="note">첫 노드(A)에서 붙인 모든 파드는 볼륨을 쓸 수 있다</text>
+  <text x="30" y="315" class="warn">Node B 의 Pod C 는 스토리지가 동시 어태치(RWX 등)를 지원할 때만 쓸 수 있다</text>
+</svg>

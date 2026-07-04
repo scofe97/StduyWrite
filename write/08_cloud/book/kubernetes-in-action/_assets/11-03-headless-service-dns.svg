@@ -1,0 +1,57 @@
+<svg viewBox="0 0 960 340" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>headless Service — 클라이언트가 파드에 직접 연결한다</title>
+  <desc>clusterIP를 None으로 두면 cluster DNS가 cluster IP 하나가 아니라 파드마다 A 레코드를 돌려준다. 클라이언트는 DNS로 파드 IP 전부를 받아, Service를 거치지 않고 파드에 직접 붙는다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .box   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
+      .pod   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
+      .note  { font-size: 11px; fill: #e8e4df; }
+      .step  { font-size: 11px; font-weight: 700; fill: rgb(212,168,83); }
+    </style>
+    <marker id="hd-dns" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(91,155,213)"/></marker>
+    <marker id="hd-pod" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(102,187,106)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="340" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">headless Service — 파드에 직접 연결합니다</text>
+  <text x="24" y="50" class="sub">clusterIP: None → DNS가 cluster IP 대신 파드 IP 전부를 돌려주고, 클라이언트가 파드에 직접 붙습니다</text>
+
+  <!-- Client -->
+  <rect x="40" y="150" width="120" height="52" rx="8" fill="rgb(138,133,128)"/>
+  <text x="100" y="181" class="box" text-anchor="middle">Client</text>
+
+  <!-- Cluster DNS -->
+  <rect x="250" y="80" width="150" height="52" rx="8" fill="rgb(91,155,213)"/>
+  <text x="325" y="111" class="box" text-anchor="middle" fill="#e8e4df">Cluster DNS</text>
+
+  <!-- Headless service (label only) -->
+  <rect x="250" y="230" width="200" height="52" rx="8" fill="none" stroke="rgb(102,187,106)" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="350" y="254" class="note" text-anchor="middle" fill="rgb(102,187,106)">Headless service</text>
+  <text x="350" y="272" class="note" text-anchor="middle">Cluster IP: None</text>
+
+  <!-- step 1: client -> DNS -->
+  <line x1="160" y1="165" x2="248" y2="115" stroke="rgb(91,155,213)" stroke-width="2" marker-end="url(#hd-dns)"/>
+  <text x="175" y="120" class="step">① 이름 조회</text>
+  <text x="175" y="136" class="note">→ 파드 IP 전부 반환</text>
+
+  <!-- Pods -->
+  <rect x="640" y="70" width="120" height="50" rx="8" fill="rgb(102,187,106)"/>
+  <text x="700" y="100" class="pod" text-anchor="middle">Pod</text>
+  <rect x="640" y="145" width="120" height="50" rx="8" fill="rgb(102,187,106)"/>
+  <text x="700" y="175" class="pod" text-anchor="middle">Pod</text>
+  <rect x="640" y="220" width="120" height="50" rx="8" fill="rgb(102,187,106)"/>
+  <text x="700" y="250" class="pod" text-anchor="middle">Pod</text>
+
+  <!-- service selects pods (dashed) -->
+  <line x1="450" y1="250" x2="638" y2="105" stroke="rgb(102,187,106)" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <line x1="450" y1="255" x2="638" y2="170" stroke="rgb(102,187,106)" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <line x1="450" y1="258" x2="638" y2="245" stroke="rgb(102,187,106)" stroke-width="1.2" stroke-dasharray="4 3"/>
+
+  <!-- step 2: client -> pod directly -->
+  <line x1="160" y1="180" x2="638" y2="180" stroke="rgb(102,187,106)" stroke-width="2.2" marker-end="url(#hd-pod)"/>
+  <text x="400" y="172" class="step">② 파드에 직접 연결 (Service 우회)</text>
+
+  <text x="480" y="315" class="sub" text-anchor="middle">일반 Service는 cluster IP로 붙어 파드로 포워딩되지만, headless는 반환된 파드 IP에 클라이언트가 직접 붙습니다</text>
+</svg>

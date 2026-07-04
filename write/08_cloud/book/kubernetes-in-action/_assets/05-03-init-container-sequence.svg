@@ -1,0 +1,56 @@
+<svg viewBox="0 0 960 300" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>init 컨테이너와 주 컨테이너의 시작 순서</title>
+  <desc>init 컨테이너는 하나씩 순차적으로 실행되며, 앞 컨테이너가 성공적으로 완료돼야 다음 컨테이너가 시작된다. 마지막 init 컨테이너가 끝나면 Pod의 일반 컨테이너들이 모두 병렬로 시작된다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .iname  { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .cname  { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .note   { font-size: 10.5px; fill: #e8e4df; }
+    </style>
+    <marker id="a5f" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="300" fill="#0d0d0d"/>
+  <text x="24" y="28" class="title">init 컨테이너와 주 컨테이너의 시작 순서</text>
+  <text x="24" y="46" class="sub">init은 순차 실행(하나씩), 마지막 init 완료 후 주 컨테이너는 병렬 시작</text>
+
+  <!-- init containers (yellow) -->
+  <rect x="40" y="120" width="130" height="60" rx="8" fill="rgb(245,215,110)"/>
+  <text x="105" y="148" class="iname" text-anchor="middle">1st Init</text>
+  <text x="105" y="165" class="iname" text-anchor="middle">container</text>
+
+  <rect x="230" y="120" width="130" height="60" rx="8" fill="rgb(245,215,110)"/>
+  <text x="295" y="148" class="iname" text-anchor="middle">2nd Init</text>
+  <text x="295" y="165" class="iname" text-anchor="middle">container</text>
+
+  <text x="400" y="155" class="sub" text-anchor="middle">···</text>
+
+  <rect x="440" y="120" width="130" height="60" rx="8" fill="rgb(245,215,110)"/>
+  <text x="505" y="148" class="iname" text-anchor="middle">Last Init</text>
+  <text x="505" y="165" class="iname" text-anchor="middle">container</text>
+
+  <!-- sequential arrows -->
+  <line x1="170" y1="150" x2="228" y2="150" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a5f)"/>
+  <line x1="360" y1="150" x2="392" y2="150" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <line x1="408" y1="150" x2="438" y2="150" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a5f)"/>
+
+  <!-- fork to regular containers (orange) -->
+  <rect x="720" y="90" width="180" height="48" rx="8" fill="rgb(230,126,34)"/>
+  <text x="810" y="120" class="cname" text-anchor="middle">Container A</text>
+  <rect x="720" y="152" width="180" height="48" rx="8" fill="rgb(230,126,34)"/>
+  <text x="810" y="182" class="cname" text-anchor="middle">Container B</text>
+  <text x="810" y="228" class="sub" text-anchor="middle">⋮</text>
+
+  <path d="M570,150 L650,150 L650,114 L718,114" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a5f)"/>
+  <path d="M650,150 L650,176 L718,176" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a5f)"/>
+
+  <!-- annotations -->
+  <text x="105" y="100" class="note" text-anchor="middle">init 컨테이너는 순차 실행</text>
+  <text x="295" y="205" class="note" text-anchor="middle">앞 컨테이너가 성공해야</text>
+  <text x="295" y="221" class="note" text-anchor="middle">다음이 시작됨</text>
+  <text x="810" y="258" class="note" text-anchor="middle">마지막 init 완료 후 일반 컨테이너 병렬 시작</text>
+</svg>

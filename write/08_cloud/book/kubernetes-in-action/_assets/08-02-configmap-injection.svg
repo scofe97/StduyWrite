@@ -1,0 +1,76 @@
+<svg viewBox="0 0 960 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>ConfigMap의 두 가지 주입 경로 — 환경변수와 configMap 볼륨</title>
+  <desc>ConfigMap의 key-value 쌍은 두 경로로 컨테이너에 전달된다. 첫째, 환경변수로 주입되어 컨테이너 안에서 KEY1=value1 형태로 보인다. 둘째, configMap 볼륨으로 마운트되어 키가 파일명이 되고 값이 파일 내용이 되는 파일로 나타난다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .kv     { font-size: 11px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .env    { font-size: 11px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', monospace; }
+      .zone   { font-size: 10.5px; fill: rgb(138,133,128); }
+      .note   { font-size: 10.5px; fill: #e8e4df; }
+      .lbl    { font-size: 11px; font-weight: 700; fill: rgb(212,168,83); }
+    </style>
+    <marker id="a82" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="400" fill="#0d0d0d"/>
+  <text x="24" y="28" class="title">ConfigMap의 두 가지 주입 경로</text>
+  <text x="24" y="46" class="sub">환경변수(이 장) 또는 configMap 볼륨의 파일(다음 장) — 애플리케이션은 쿠버네티스를 모른 채 값을 받는다</text>
+
+  <!-- ConfigMap -->
+  <rect x="40" y="90" width="240" height="200" rx="10" fill="rgb(205,236,207)"/>
+  <text x="160" y="116" class="zone" text-anchor="middle" fill="#0d0d0d">ConfigMap — key-value 쌍</text>
+  <rect x="60" y="130" width="95" height="34" rx="4" fill="rgb(232,228,223)"/>
+  <text x="107" y="152" class="kv" text-anchor="middle">KEY1</text>
+  <rect x="163" y="130" width="98" height="34" rx="4" fill="#fdfdf8"/>
+  <text x="212" y="152" class="kv" text-anchor="middle">value1</text>
+  <rect x="60" y="174" width="95" height="34" rx="4" fill="rgb(232,228,223)"/>
+  <text x="107" y="196" class="kv" text-anchor="middle">KEY2</text>
+  <rect x="163" y="174" width="98" height="34" rx="4" fill="#fdfdf8"/>
+  <text x="212" y="196" class="kv" text-anchor="middle">value2</text>
+  <rect x="60" y="218" width="95" height="34" rx="4" fill="rgb(232,228,223)"/>
+  <text x="107" y="240" class="kv" text-anchor="middle">...</text>
+  <rect x="163" y="218" width="98" height="34" rx="4" fill="#fdfdf8"/>
+  <text x="212" y="240" class="kv" text-anchor="middle">...</text>
+
+  <!-- Pod -->
+  <rect x="420" y="70" width="510" height="300" rx="12" fill="rgb(20,20,20)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="900" y="356" class="zone" text-anchor="end">Pod</text>
+
+  <!-- Container -->
+  <rect x="560" y="90" width="350" height="240" rx="10" fill="rgb(26,26,26)" stroke="rgb(91,155,213)" stroke-width="2"/>
+  <text x="735" y="112" class="zone" text-anchor="middle">Container</text>
+
+  <!-- env vars inside container -->
+  <rect x="586" y="126" width="300" height="64" rx="8" fill="rgb(26,26,26)" stroke="rgb(138,133,128)" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="736" y="152" class="env" text-anchor="middle">KEY1=value1</text>
+  <text x="736" y="172" class="env" text-anchor="middle">KEY2=value2</text>
+  <text x="600" y="122" class="zone" font-size="9.5">환경변수</text>
+
+  <!-- files inside container -->
+  <rect x="586" y="216" width="140" height="86" rx="6" fill="rgb(245,215,110)"/>
+  <text x="656" y="252" class="kv" text-anchor="middle">value1</text>
+  <text x="656" y="286" class="kv" text-anchor="middle">📄 KEY1</text>
+  <rect x="746" y="216" width="140" height="86" rx="6" fill="rgb(245,215,110)"/>
+  <text x="816" y="252" class="kv" text-anchor="middle">value2</text>
+  <text x="816" y="286" class="kv" text-anchor="middle">📄 KEY2</text>
+
+  <!-- configMap volume -->
+  <rect x="440" y="230" width="100" height="60" rx="18" fill="rgb(102,187,106)"/>
+  <text x="490" y="256" class="kv" text-anchor="middle" font-size="10">configMap</text>
+  <text x="490" y="272" class="kv" text-anchor="middle" font-size="10">volume</text>
+
+  <!-- arrows: ConfigMap → env -->
+  <path d="M282,150 C360,145 440,150 582,155" fill="none" stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#a82)"/>
+  <text x="330" y="132" class="lbl">① 환경변수로 주입</text>
+
+  <!-- arrows: ConfigMap → volume → files -->
+  <path d="M282,240 C340,250 380,258 436,258" fill="none" stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#a82)"/>
+  <line x1="542" y1="258" x2="582" y2="258" stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#a82)"/>
+  <text x="300" y="292" class="lbl">② 볼륨으로 마운트(다음 장)</text>
+
+  <text x="480" y="392" class="sub" text-anchor="middle">파일 주입 시 키가 파일명, 값이 파일 내용이 된다 — 환경변수와 달리 ConfigMap 갱신이 실행 중 컨테이너에 반영된다</text>
+</svg>

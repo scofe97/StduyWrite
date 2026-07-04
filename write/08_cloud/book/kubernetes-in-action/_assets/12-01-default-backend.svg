@@ -1,0 +1,56 @@
+<svg viewBox="0 0 960 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>default backend는 어떤 규칙에도 안 맞는 요청을 받는 catch-all이다</title>
+  <desc>Host kiada.example.com은 kiada 서비스로, api.example.com의 /quote는 quote로, /questions는 quiz로 간다. 어떤 규칙에도 맞지 않는 요청(unknown-path, unknown-host)은 default backend로 지정된 fun404 서비스로 라우팅된다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .cli   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
+      .ing   { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .svc   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
+      .rule  { font-size: 10.5px; fill: rgb(212,168,83); }
+      .req   { font-size: 10.5px; fill: #e8e4df; }
+      .db    { font-size: 11px; font-weight: 700; fill: rgb(240,150,190); }
+    </style>
+    <marker id="db-a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="360" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">default backend — 규칙에 안 맞는 요청의 catch-all</text>
+  <text x="24" y="50" class="sub">어떤 host/path 규칙에도 매칭되지 않는 요청은 default backend(fun404)로 갑니다</text>
+
+  <!-- Client -->
+  <rect x="40" y="140" width="120" height="52" rx="8" fill="rgb(102,187,106)"/>
+  <text x="100" y="171" class="cli" text-anchor="middle">Client</text>
+  <text x="40" y="120" class="req">GET /unknown-path</text>
+  <text x="40" y="215" class="req">Host: unknown-host...</text>
+
+  <!-- Ingress -->
+  <rect x="340" y="135" width="120" height="60" rx="8" fill="rgb(150,130,220)"/>
+  <text x="400" y="170" class="ing" text-anchor="middle">Ingress</text>
+  <line x1="160" y1="166" x2="338" y2="166" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#db-a)"/>
+
+  <!-- rules to services -->
+  <rect x="720" y="80" width="180" height="42" rx="8" fill="rgb(91,155,213)"/>
+  <text x="810" y="106" class="svc" text-anchor="middle">kiada service</text>
+  <text x="560" y="90" class="rule" text-anchor="middle">Host: kiada... · All paths</text>
+  <line x1="460" y1="155" x2="718" y2="101" stroke="rgb(138,133,128)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#db-a)"/>
+
+  <rect x="720" y="135" width="180" height="42" rx="8" fill="rgb(102,187,106)"/>
+  <text x="810" y="161" class="svc" text-anchor="middle">Quote service</text>
+  <text x="560" y="135" class="rule" text-anchor="middle">Exact: /quote</text>
+  <line x1="460" y1="162" x2="718" y2="156" stroke="rgb(138,133,128)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#db-a)"/>
+
+  <rect x="720" y="190" width="180" height="42" rx="8" fill="rgb(230,150,90)"/>
+  <text x="810" y="216" class="svc" text-anchor="middle">Quiz service</text>
+  <text x="560" y="200" class="rule" text-anchor="middle">Prefix: /questions</text>
+  <line x1="460" y1="170" x2="718" y2="211" stroke="rgb(138,133,128)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#db-a)"/>
+
+  <!-- default backend -->
+  <rect x="720" y="270" width="180" height="42" rx="8" fill="rgb(240,150,190)"/>
+  <text x="810" y="296" class="svc" text-anchor="middle">fun404 service</text>
+  <text x="490" y="290" class="db">Default backend</text>
+  <line x1="400" y1="195" x2="718" y2="291" stroke="rgb(240,150,190)" stroke-width="1.8" marker-end="url(#db-a)"/>
+
+  <text x="480" y="345" class="sub" text-anchor="middle">두 요청 모두 규칙에 안 맞아 default backend로 라우팅됩니다 — 없으면 404 반환</text>
+</svg>

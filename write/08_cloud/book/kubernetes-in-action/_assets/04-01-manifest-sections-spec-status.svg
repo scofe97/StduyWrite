@@ -1,0 +1,85 @@
+<svg viewBox="0 0 960 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>오브젝트 매니페스트의 네 섹션과 spec·status 흐름</title>
+  <desc>오브젝트 매니페스트는 type metadata, object metadata, spec, status 네 섹션으로 이뤄진다. 사용자는 원하는 상태(desired state)를 spec에 쓰고 실제 상태(actual state)를 status에서 읽는다. 반대로 컨트롤러는 spec을 읽어 클러스터에 작업을 수행하고, 그 결과인 실제 상태를 status에 써서 보고한다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .seclbl { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .secdesc{ font-size: 10.5px; fill: #e8e4df; }
+      .note   { font-size: 11px; fill: #e8e4df; }
+      .mt     { font-size: 10px; fill: rgb(138,133,128); }
+      .arrl   { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+      .actor  { font-size: 12px; font-weight: 700; fill: #e8e4df; }
+    </style>
+    <marker id="ah2" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="440" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">오브젝트 매니페스트의 네 섹션과 spec·status 흐름</text>
+  <text x="24" y="48" class="sub">사용자는 spec에 쓰고 status를 읽는다 · 컨트롤러는 spec을 읽고 status를 쓴다</text>
+
+  <!-- User -->
+  <circle cx="70" cy="200" r="22" fill="rgb(220,234,247)"/>
+  <text x="70" y="240" class="actor" text-anchor="middle">사용자</text>
+
+  <!-- Object with 4 sections -->
+  <rect x="360" y="72" width="250" height="300" rx="10" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="485" y="392" class="mt" text-anchor="middle">Object (매니페스트)</text>
+
+  <rect x="376" y="88" width="218" height="52" rx="6" fill="rgb(245,215,110)"/>
+  <text x="485" y="110" class="seclbl" text-anchor="middle">Type metadata</text>
+  <text x="485" y="128" class="secdesc" text-anchor="middle" fill="#0d0d0d">apiVersion · kind</text>
+
+  <rect x="376" y="146" width="218" height="52" rx="6" fill="rgb(245,215,110)"/>
+  <text x="485" y="168" class="seclbl" text-anchor="middle">Object metadata</text>
+  <text x="485" y="186" class="secdesc" text-anchor="middle" fill="#0d0d0d">name · labels · uid …</text>
+
+  <rect x="376" y="204" width="218" height="76" rx="6" fill="rgb(102,187,106)"/>
+  <text x="485" y="228" class="seclbl" text-anchor="middle">Spec</text>
+  <text x="485" y="246" class="secdesc" text-anchor="middle" fill="#0d0d0d">원하는 상태(desired state)</text>
+  <text x="485" y="262" class="secdesc" text-anchor="middle" fill="#0d0d0d">타입마다 필드가 다름</text>
+
+  <rect x="376" y="286" width="218" height="76" rx="6" fill="rgb(91,155,213)"/>
+  <text x="485" y="310" class="seclbl" text-anchor="middle" fill="#e8e4df">Status</text>
+  <text x="485" y="328" class="secdesc" text-anchor="middle">실제 현재 상태(actual state)</text>
+  <text x="485" y="344" class="secdesc" text-anchor="middle">conditions 등</text>
+
+  <!-- user -> spec (write desired) -->
+  <path d="M92,190 C200,150 280,190 372,225" fill="none" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#ah2)"/>
+  <rect x="150" y="150" width="150" height="22" rx="4" fill="rgb(102,187,106)"/>
+  <text x="225" y="166" class="arrl" text-anchor="middle">Desired state 쓰기</text>
+
+  <!-- status -> user (read actual) -->
+  <path d="M372,320 C280,350 200,300 92,215" fill="none" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#ah2)"/>
+  <rect x="150" y="300" width="150" height="22" rx="4" fill="rgb(91,155,213)"/>
+  <text x="225" y="316" class="arrl" text-anchor="middle" fill="#e8e4df">Actual state 읽기</text>
+
+  <!-- Controller -->
+  <rect x="700" y="176" width="150" height="88" rx="10" fill="rgb(232,228,223)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="775" y="214" class="seclbl" text-anchor="middle">Controller</text>
+  <text x="775" y="234" class="secdesc" text-anchor="middle" fill="#0d0d0d">타입마다 전담 1개</text>
+
+  <!-- spec -> controller (read) -->
+  <path d="M596,232 C650,220 660,210 698,205" fill="none" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#ah2)"/>
+  <text x="648" y="200" class="mt" text-anchor="middle" fill="rgb(212,168,83)">spec 읽음</text>
+
+  <!-- controller -> status (write) -->
+  <path d="M698,240 C660,270 650,300 596,318" fill="none" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#ah2)"/>
+  <text x="650" y="300" class="mt" text-anchor="middle" fill="rgb(212,168,83)">status 씀</text>
+
+  <!-- controller <-> cluster -->
+  <ellipse cx="890" cy="220" rx="52" ry="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="890" y="216" class="mt" text-anchor="middle" fill="#e8e4df">Cluster</text>
+  <text x="890" y="230" class="mt" text-anchor="middle" fill="#e8e4df">state</text>
+  <line x1="852" y1="220" x2="836" y2="220" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ah2)"/>
+  <line x1="850" y1="205" x2="852" y2="205" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <path d="M852,232 L840,232" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ah2)"/>
+
+  <text x="775" y="286" class="mt" text-anchor="middle">원하는 상태를 이루려</text>
+  <text x="775" y="300" class="mt" text-anchor="middle">클러스터에 작업 수행</text>
+
+  <text x="480" y="424" class="sub" text-anchor="middle">GET은 항상 오브젝트 전체를 반환하고 PUT도 전체를 보낸다 — spec만 쓰거나 status만 읽는 부분 API는 없다</text>
+</svg>

@@ -1,0 +1,53 @@
+<svg viewBox="0 0 960 380" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>HTTPRoute 필터 파이프라인</title>
+  <desc>요청은 필터를 거쳐 백엔드로 간다. RequestHeaderModifier·URLRewrite는 요청을 변형하고, RequestMirror는 복사본을 다른 백엔드에 보내며(응답은 버림), RequestRedirect는 백엔드 없이 클라이언트를 리다이렉트한다. 응답은 ResponseHeaderModifier로 변형된다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .cli   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
+      .filt  { font-size: 10.5px; font-weight: 700; fill: #0d0d0d; }
+      .svc   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
+      .note  { font-size: 10.5px; fill: #e8e4df; }
+      .disc  { font-size: 10.5px; fill: rgb(138,133,128); }
+    </style>
+    <marker id="ft-a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(102,187,106)"/></marker>
+    <marker id="ft-m" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+    <marker id="ft-r" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(240,150,190)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="380" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">HTTPRoute 필터 — 변형·복제·리다이렉트</text>
+  <text x="24" y="50" class="sub">요청을 고치거나, 복사본을 다른 백엔드에 보내거나, 백엔드 없이 리다이렉트합니다</text>
+
+  <!-- Client -->
+  <rect x="40" y="150" width="110" height="52" rx="8" fill="rgb(102,187,106)"/>
+  <text x="95" y="181" class="cli" text-anchor="middle">Client</text>
+
+  <!-- filter box (request modifiers) -->
+  <rect x="230" y="130" width="230" height="92" rx="8" fill="rgb(212,168,83)"/>
+  <text x="345" y="152" class="filt" text-anchor="middle" font-weight="800">rules.filters</text>
+  <text x="345" y="172" class="filt" text-anchor="middle">RequestHeaderModifier</text>
+  <text x="345" y="190" class="filt" text-anchor="middle">URLRewrite (경로·Host 재작성)</text>
+  <text x="345" y="208" class="filt" text-anchor="middle">RequestMirror / RequestRedirect</text>
+  <line x1="150" y1="176" x2="228" y2="176" stroke="rgb(102,187,106)" stroke-width="2" marker-end="url(#ft-a)"/>
+
+  <!-- backend -->
+  <rect x="560" y="150" width="150" height="52" rx="8" fill="rgb(91,155,213)"/>
+  <text x="635" y="181" class="svc" text-anchor="middle">kiada-stable</text>
+  <line x1="460" y1="176" x2="558" y2="176" stroke="rgb(102,187,106)" stroke-width="2" marker-end="url(#ft-a)"/>
+  <text x="510" y="166" class="note" text-anchor="middle">원본</text>
+
+  <!-- mirror branch -->
+  <rect x="560" y="255" width="150" height="46" rx="8" fill="rgb(91,155,213)" opacity="0.55"/>
+  <text x="635" y="283" class="svc" text-anchor="middle">kiada-new</text>
+  <line x1="420" y1="222" x2="558" y2="280" stroke="rgb(138,133,128)" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ft-m)"/>
+  <text x="530" y="262" class="disc" text-anchor="middle">RequestMirror 복사본</text>
+  <text x="635" y="322" class="disc" text-anchor="middle">응답은 버려짐(discard)</text>
+
+  <!-- response back (response modifier) -->
+  <path d="M560,196 Q345,240 150,196" fill="none" stroke="rgb(240,150,190)" stroke-width="1.8" marker-end="url(#ft-r)"/>
+  <text x="300" y="238" class="note" text-anchor="middle" fill="rgb(240,150,190)">응답 ← ResponseHeaderModifier로 변형</text>
+
+  <text x="345" y="360" class="note" text-anchor="middle">RequestRedirect는 백엔드로 안 보내고 클라이언트에 301/302 응답을 직접 돌려줍니다(backendRefs 불필요)</text>
+</svg>

@@ -1,0 +1,71 @@
+<svg viewBox="0 0 900 380" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Pod 안 컨테이너의 네임스페이스 공유</title>
+  <desc>한 Pod 안의 컨테이너들은 같은 Network 네임스페이스를 공유해 같은 네트워크 인터페이스(eth0)와 포트 공간을 쓴다. 그래서 두 컨테이너가 같은 포트에 바인딩할 수 없고, loopback 장치(127.0.0.1)를 통해 서로 통신할 수 있다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .cname  { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .port   { font-size: 12px; font-weight: 800; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .iface  { font-size: 12px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .note   { font-size: 11px; fill: #e8e4df; }
+    </style>
+    <marker id="a5" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="380" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">Pod 안 컨테이너의 네임스페이스 공유</text>
+  <text x="24" y="48" class="sub">Network·UTS·IPC 네임스페이스를 공유하고, Mount 네임스페이스는 각자 가진다</text>
+
+  <!-- Pod 경계 -->
+  <rect x="30" y="72" width="560" height="280" rx="14" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="540" y="336" class="sub" text-anchor="end">Pod</text>
+
+  <!-- Container 1 -->
+  <rect x="60" y="100" width="180" height="70" rx="8" fill="rgb(230,126,34)"/>
+  <text x="150" y="140" class="cname" text-anchor="middle">Container 1</text>
+
+  <!-- Container 2 -->
+  <rect x="60" y="188" width="180" height="70" rx="8" fill="rgb(230,126,34)"/>
+  <text x="150" y="228" class="cname" text-anchor="middle">Container 2</text>
+
+  <!-- eth0 vertical bar -->
+  <rect x="380" y="100" width="70" height="158" rx="8" fill="rgb(174,214,241)"/>
+  <text x="415" y="248" class="iface" text-anchor="middle">eth0</text>
+
+  <!-- ports -->
+  <rect x="360" y="112" width="60" height="30" rx="5" fill="rgb(91,155,213)"/>
+  <text x="390" y="132" class="port" text-anchor="middle" fill="#e8e4df">:80</text>
+  <rect x="360" y="150" width="60" height="30" rx="5" fill="rgb(91,155,213)"/>
+  <text x="390" y="170" class="port" text-anchor="middle" fill="#e8e4df">:95</text>
+
+  <!-- loopback -->
+  <rect x="60" y="276" width="180" height="56" rx="8" fill="rgb(174,214,241)"/>
+  <text x="150" y="300" class="iface" text-anchor="middle">lo</text>
+  <text x="150" y="320" class="port" text-anchor="middle">127.0.0.1</text>
+
+  <!-- connections c1/c2 -> eth0 ports -->
+  <line x1="240" y1="127" x2="358" y2="127" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <line x1="240" y1="215" x2="340" y2="215" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <path d="M340,215 L340,165 L358,165" fill="none" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <!-- c1/c2 -> lo -->
+  <path d="M150,170 L150,188" fill="none" stroke="rgb(212,168,83)" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <line x1="150" y1="258" x2="150" y2="276" stroke="rgb(212,168,83)" stroke-width="2"/>
+
+  <!-- annotations -->
+  <line x1="452" y1="130" x2="610" y2="110" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#a5)"/>
+  <text x="618" y="104" class="note">Pod 안 컨테이너는 같은 네트워크</text>
+  <text x="618" y="120" class="note">인터페이스·포트 공간을 공유한다</text>
+
+  <line x1="422" y1="165" x2="610" y2="185" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#a5)"/>
+  <text x="618" y="182" class="note">두 컨테이너는 같은 포트에</text>
+  <text x="618" y="198" class="note">바인딩할 수 없다</text>
+
+  <line x1="242" y1="304" x2="610" y2="290" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#a5)"/>
+  <text x="618" y="286" class="note">loopback 장치(127.0.0.1)를</text>
+  <text x="618" y="302" class="note">통해 서로 통신할 수 있다</text>
+
+  <text x="618" y="336" class="sub">Mount는 각자 → 파일 공유는 볼륨으로</text>
+</svg>

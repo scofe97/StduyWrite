@@ -1,0 +1,60 @@
+<svg viewBox="0 0 960 340" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Envoy 사이드카를 붙인 Pod의 컨테이너와 네트워크 인터페이스</title>
+  <desc>Pod에는 Node.js 컨테이너와 Envoy 컨테이너가 있다. Node.js는 eth0의 8080 포트에서 HTTP를 직접 받고, Envoy는 8443에서 HTTPS를, 9901에서 관리 인터페이스를 받는다. Envoy는 받은 HTTPS 요청을 loopback 장치(lo)를 통해 Node.js의 8080으로 HTTP 요청으로 보낸다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .cname  { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .iface  { font-size: 12px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .port   { font-size: 11px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', monospace; }
+      .note   { font-size: 10.5px; fill: #e8e4df; }
+    </style>
+    <marker id="a5e" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="340" fill="#0d0d0d"/>
+  <text x="24" y="28" class="title">Envoy 사이드카를 붙인 Pod의 네트워크</text>
+  <text x="24" y="46" class="sub">Node.js는 HTTP를 직접 받고, Envoy가 HTTPS를 받아 loopback으로 Node.js에 HTTP로 전달</text>
+
+  <!-- Pod -->
+  <rect x="330" y="72" width="380" height="240" rx="14" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="690" y="298" class="sub" text-anchor="end">Pod</text>
+
+  <!-- eth0 -->
+  <rect x="345" y="95" width="46" height="195" rx="6" fill="rgb(174,214,241)"/>
+  <text x="368" y="190" class="iface" text-anchor="middle" transform="rotate(-90 368 190)">eth0</text>
+
+  <!-- lo -->
+  <rect x="650" y="95" width="46" height="195" rx="6" fill="rgb(174,214,241)"/>
+  <text x="673" y="190" class="iface" text-anchor="middle" transform="rotate(-90 673 190)">lo</text>
+
+  <!-- Node.js -->
+  <rect x="430" y="105" width="180" height="70" rx="8" fill="rgb(230,126,34)"/>
+  <text x="520" y="135" class="cname" text-anchor="middle">Node.js</text>
+  <text x="520" y="153" class="cname" text-anchor="middle">container</text>
+
+  <!-- Envoy -->
+  <rect x="430" y="200" width="180" height="70" rx="8" fill="rgb(250,211,180)"/>
+  <text x="520" y="230" class="cname" text-anchor="middle">Envoy</text>
+  <text x="520" y="248" class="cname" text-anchor="middle">container</text>
+
+  <!-- incoming ports -->
+  <text x="250" y="128" class="port" fill="rgb(138,133,128)">HTTP :8080</text>
+  <line x1="315" y1="123" x2="428" y2="123" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a5e)"/>
+  <text x="250" y="223" class="port" fill="rgb(138,133,128)">HTTPS :8443</text>
+  <line x1="315" y1="218" x2="428" y2="218" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a5e)"/>
+  <text x="235" y="255" class="port" fill="rgb(138,133,128)">Admin HTTP :9901</text>
+  <line x1="315" y1="250" x2="428" y2="250" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a5e)"/>
+
+  <!-- envoy -> lo -> node.js loopback -->
+  <path d="M610,235 L673,235 L673,150 L612,150" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a5e)"/>
+
+  <!-- annotations -->
+  <text x="480" y="90" class="note" text-anchor="middle">Node.js는 두 인터페이스의 8080에 바인딩</text>
+  <text x="800" y="150" class="note">Envoy가 loopback 장치를</text>
+  <text x="800" y="166" class="note">통해 Node.js로 HTTP 전달</text>
+  <text x="150" y="290" class="note">Envoy가 HTTPS(8443)·admin(9901) 처리</text>
+</svg>

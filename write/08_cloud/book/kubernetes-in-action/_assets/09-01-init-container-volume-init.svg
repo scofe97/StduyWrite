@@ -1,0 +1,76 @@
+<svg viewBox="0 0 920 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>init 컨테이너로 emptyDir 볼륨을 초기화하는 흐름</title>
+  <desc>init 컨테이너가 insert-questions.js 파일을 initdb 볼륨에 복사한다. 그 볼륨이 mongo 컨테이너의 초기화 스크립트 위치에 마운트되어, MongoDB가 시작 시 스크립트를 실행해 질문을 quiz-data 볼륨의 DB 파일에 저장한다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .zone  { font-size: 11px; fill: rgb(138,133,128); }
+      .init  { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
+      .mongo { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
+      .path  { font-size: 10.5px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .cyl   { font-size: 10.5px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .step  { font-size: 11px; font-weight: 700; fill: rgb(212,168,83); }
+    </style>
+    <marker id="mi1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="mi2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(146,196,235)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="920" height="360" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">init 컨테이너로 emptyDir 볼륨 초기화</text>
+  <text x="24" y="50" class="sub">볼륨이 먼저 생성 → init 컨테이너가 파일 복사 후 종료 → mongo 가 그 파일을 실행해 DB 를 채운다</text>
+
+  <!-- Quiz pod -->
+  <rect x="40" y="76" width="840" height="256" rx="12" fill="rgb(20,20,20)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="60" y="98" class="zone">Quiz pod</text>
+
+  <!-- installer init container -->
+  <rect x="70" y="116" width="200" height="120" rx="8" fill="rgb(245,230,200)"/>
+  <text x="170" y="138" class="init" text-anchor="middle" font-style="italic">installer (init)</text>
+  <rect x="95" y="152" width="150" height="30" rx="4" fill="#fdfdf8"/>
+  <text x="170" y="172" class="path" text-anchor="middle">insert-questions.js</text>
+  <rect x="95" y="192" width="150" height="30" rx="4" fill="rgb(232,228,223)"/>
+  <text x="170" y="212" class="path" text-anchor="middle">/initdb.d</text>
+
+  <!-- quiz-api container -->
+  <rect x="640" y="116" width="210" height="46" rx="8" fill="rgb(245,180,110)"/>
+  <text x="745" y="144" class="mongo" text-anchor="middle" font-style="italic">quiz-api container</text>
+
+  <!-- mongo container -->
+  <rect x="640" y="176" width="210" height="140" rx="8" fill="rgb(245,180,110)"/>
+  <text x="745" y="198" class="mongo" text-anchor="middle" font-style="italic">mongo container</text>
+  <rect x="662" y="212" width="166" height="30" rx="4" fill="rgb(255,240,215)"/>
+  <text x="745" y="232" class="path" text-anchor="middle">/docker-entrypoint-initdb.d</text>
+  <rect x="662" y="256" width="166" height="30" rx="4" fill="rgb(255,240,215)"/>
+  <text x="745" y="276" class="path" text-anchor="middle">/data/db</text>
+
+  <!-- volumes (center) -->
+  <g transform="translate(370,150)">
+    <ellipse cx="45" cy="0" rx="45" ry="12" fill="rgb(146,196,235)"/>
+    <rect x="0" y="0" width="90" height="44" fill="rgb(146,196,235)"/>
+    <ellipse cx="45" cy="44" rx="45" ry="12" fill="rgb(120,175,220)"/>
+    <text x="45" y="28" class="cyl" text-anchor="middle">initdb</text>
+  </g>
+  <g transform="translate(370,240)">
+    <ellipse cx="45" cy="0" rx="45" ry="12" fill="rgb(146,196,235)"/>
+    <rect x="0" y="0" width="90" height="44" fill="rgb(146,196,235)"/>
+    <ellipse cx="45" cy="44" rx="45" ry="12" fill="rgb(120,175,220)"/>
+    <text x="45" y="28" class="cyl" text-anchor="middle">quiz-data</text>
+  </g>
+
+  <!-- step 1: init copies -->
+  <path d="M248,207 L368,180" fill="none" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#mi1)"/>
+  <text x="150" y="252" class="step">① 파일을 볼륨에 복사</text>
+
+  <!-- step 2: initdb -> mongo -->
+  <path d="M462,172 L658,225" fill="none" stroke="rgb(146,196,235)" stroke-width="2.5" marker-end="url(#mi2)"/>
+  <text x="470" y="150" class="step">② 초기화 스크립트 위치에 마운트</text>
+
+  <!-- step 3: quiz-data -> mongo -->
+  <path d="M462,262 L658,270" fill="none" stroke="rgb(146,196,235)" stroke-width="2.5" marker-end="url(#mi2)"/>
+  <text x="460" y="305" class="step">③ MongoDB 실행 → 질문을 DB 파일에</text>
+</svg>

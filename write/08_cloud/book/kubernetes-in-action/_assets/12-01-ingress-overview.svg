@@ -1,0 +1,70 @@
+<svg viewBox="0 0 960 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Ingress는 외부 트래픽을 여러 서비스로 포워딩한다</title>
+  <desc>서비스마다 노출하는 대신 하나의 Ingress로 노출한다. 모든 서비스의 공인 DNS 레코드가 같은 Ingress IP를 가리키고, Ingress가 HTTP 요청의 Host·경로로 어느 서비스로 보낼지 정한다. kiada.example.com은 kiada 서비스로, api.example.com/quote는 quote로, /questions는 quiz로 간다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .ing   { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .svc   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
+      .pod   { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+      .host  { font-size: 11px; font-weight: 700; fill: rgb(212,168,83); }
+      .note  { font-size: 11px; fill: #e8e4df; }
+      .dns   { font-size: 10.5px; fill: #0d0d0d; }
+    </style>
+    <marker id="ov-a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="400" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">하나의 Ingress로 여러 서비스를 노출합니다</text>
+  <text x="24" y="50" class="sub">모든 서비스의 DNS 레코드가 같은 Ingress IP를 가리키고, Host·경로로 어느 서비스로 보낼지 정합니다</text>
+
+  <!-- DNS box -->
+  <ellipse cx="90" cy="150" rx="55" ry="34" fill="rgb(221,212,240)"/>
+  <text x="90" y="155" class="svc" text-anchor="middle">DNS</text>
+  <rect x="35" y="330" width="230" height="46" rx="6" fill="rgb(245,237,218)"/>
+  <text x="45" y="350" class="dns">kiada.example.com  A  1.2.3.4</text>
+  <text x="45" y="368" class="dns">api.example.com    A  1.2.3.4</text>
+
+  <!-- Ingress -->
+  <rect x="200" y="120" width="120" height="60" rx="8" fill="rgb(150,130,220)"/>
+  <text x="260" y="146" class="ing" text-anchor="middle">Ingress</text>
+  <text x="260" y="166" class="pod" text-anchor="middle" fill="#e8e4df">IP: 1.2.3.4</text>
+  <line x1="145" y1="150" x2="198" y2="150" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#ov-a)"/>
+  <line x1="200" y1="175" x2="120" y2="328" stroke="rgb(138,133,128)" stroke-width="1.2" stroke-dasharray="4 3"/>
+
+  <!-- cluster box -->
+  <rect x="360" y="90" width="580" height="290" rx="10" fill="none" stroke="rgb(138,133,128)" stroke-width="1.3" stroke-dasharray="6 4"/>
+  <text x="850" y="110" class="sub" text-anchor="end">Kubernetes cluster</text>
+
+  <!-- kiada svc + pods -->
+  <text x="380" y="150" class="host">kiada.example.com</text>
+  <rect x="380" y="158" width="120" height="46" rx="8" fill="rgb(91,155,213)"/>
+  <text x="440" y="186" class="svc" text-anchor="middle">kiada svc</text>
+  <g fill="rgb(91,155,213)">
+    <rect x="540" y="158" width="120" height="46" rx="8"/><rect x="670" y="158" width="120" height="46" rx="8"/><rect x="800" y="158" width="120" height="46" rx="8"/>
+  </g>
+  <text x="600" y="186" class="pod" text-anchor="middle">Pod</text><text x="730" y="186" class="pod" text-anchor="middle">Pod</text><text x="860" y="186" class="pod" text-anchor="middle">Pod</text>
+  <line x1="320" y1="150" x2="378" y2="180" stroke="rgb(138,133,128)" stroke-width="1.4" marker-end="url(#ov-a)"/>
+  <line x1="500" y1="181" x2="538" y2="181" stroke="rgb(138,133,128)" stroke-width="1.2" marker-end="url(#ov-a)"/>
+
+  <!-- quote svc + pods -->
+  <text x="380" y="242" class="host">api.example.com/quote</text>
+  <rect x="380" y="250" width="120" height="46" rx="8" fill="rgb(102,187,106)"/>
+  <text x="440" y="278" class="svc" text-anchor="middle">Quote svc</text>
+  <g fill="rgb(102,187,106)">
+    <rect x="540" y="250" width="120" height="46" rx="8"/><rect x="670" y="250" width="120" height="46" rx="8"/><rect x="800" y="250" width="120" height="46" rx="8"/>
+  </g>
+  <text x="600" y="278" class="pod" text-anchor="middle">Pod</text><text x="730" y="278" class="pod" text-anchor="middle">Pod</text><text x="860" y="278" class="pod" text-anchor="middle">Pod</text>
+  <line x1="320" y1="160" x2="378" y2="270" stroke="rgb(138,133,128)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#ov-a)"/>
+  <line x1="500" y1="273" x2="538" y2="273" stroke="rgb(138,133,128)" stroke-width="1.2" marker-end="url(#ov-a)"/>
+
+  <!-- quiz svc + pod -->
+  <text x="380" y="330" class="host">api.example.com/questions</text>
+  <rect x="380" y="338" width="120" height="46" rx="8" fill="rgb(230,150,90)"/>
+  <text x="440" y="366" class="svc" text-anchor="middle">Quiz svc</text>
+  <rect x="540" y="338" width="120" height="46" rx="8" fill="rgb(230,150,90)"/>
+  <text x="600" y="366" class="pod" text-anchor="middle">Pod</text>
+  <line x1="320" y1="168" x2="378" y2="358" stroke="rgb(138,133,128)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#ov-a)"/>
+  <line x1="500" y1="361" x2="538" y2="361" stroke="rgb(138,133,128)" stroke-width="1.2" marker-end="url(#ov-a)"/>
+</svg>

@@ -1,0 +1,79 @@
+<svg viewBox="0 0 960 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>리소스와 오브젝트는 같은 말이 아니다</title>
+  <desc>왼쪽의 리소스 URI 다섯 개 중 subjectaccessreviews 리소스는 어떤 저장된 오브젝트와도 연결되지 않는다. 나머지 네 리소스(apps/v1 컬렉션·개별, extensions/v1beta1 개별·컬렉션)는 스키마만 다른 표현으로 같은 오브젝트 집합을 가리킨다. 즉 하나의 오브젝트가 여러 리소스로 노출된다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .colh   { font-size: 12px; font-weight: 800; fill: #e8e4df; }
+      .uri    { font-size: 11px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .obj    { font-size: 13px; font-weight: 800; fill: #e8e4df; }
+      .objsub { font-size: 11px; font-weight: 700; fill: #dbe9f7; font-family: 'JetBrains Mono', monospace; }
+      .note   { font-size: 10.5px; fill: #e8e4df; }
+      .mt     { font-size: 10px; fill: rgb(138,133,128); }
+    </style>
+    <marker id="ah4" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="440" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">리소스와 오브젝트는 같은 말이 아니다</text>
+  <text x="24" y="48" class="sub">하나의 오브젝트가 여러 리소스(URI)로 노출되고, 어떤 리소스는 아무 오브젝트도 가리키지 않는다</text>
+
+  <!-- Kubernetes API 경계 -->
+  <rect x="20" y="70" width="920" height="330" rx="10" fill="rgb(20,20,20)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+  <text x="36" y="92" class="mt">Kubernetes API</text>
+
+  <text x="36" y="116" class="colh">리소스 (창구 · URI)</text>
+  <text x="720" y="116" class="colh">오브젝트</text>
+
+  <!-- subjectaccessreviews (보라, 오브젝트 없음) -->
+  <rect x="36" y="128" width="470" height="40" rx="6" fill="rgb(197,179,224)"/>
+  <text x="48" y="153" class="uri">/apis/authorization.k8s.io/v1/subjectaccessreviews</text>
+  <line x1="506" y1="148" x2="556" y2="148" stroke="rgb(240,150,190)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ah4)"/>
+  <text x="620" y="145" class="mt" text-anchor="middle" fill="rgb(240,150,190)">가리키는 오브젝트 없음</text>
+  <text x="620" y="159" class="mt" text-anchor="middle" fill="rgb(240,150,190)">(권한 여부만 응답)</text>
+
+  <!-- apps/v1 컬렉션 (노랑) -->
+  <rect x="36" y="180" width="470" height="36" rx="6" fill="rgb(245,215,110)"/>
+  <text x="48" y="203" class="uri">/apis/apps/v1/.../deployments</text>
+
+  <!-- apps/v1 개별 (노랑) -->
+  <rect x="36" y="224" width="470" height="36" rx="6" fill="rgb(245,215,110)"/>
+  <text x="48" y="247" class="uri">/apis/apps/v1/.../deployments/mydeploy</text>
+
+  <!-- extensions/v1beta1 개별 (초록) -->
+  <rect x="36" y="268" width="470" height="36" rx="6" fill="rgb(102,187,106)"/>
+  <text x="48" y="291" class="uri">/apis/extensions/v1beta1/.../deployments/mydeploy</text>
+
+  <!-- extensions/v1beta1 컬렉션 (초록) -->
+  <rect x="36" y="312" width="470" height="36" rx="6" fill="rgb(102,187,106)"/>
+  <text x="48" y="335" class="uri">/apis/extensions/v1beta1/.../deployments</text>
+
+  <!-- 오브젝트 박스 (점선 묶음) -->
+  <rect x="640" y="176" width="280" height="120" rx="10" fill="rgb(26,26,26)" stroke="rgb(220,234,247)" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <rect x="656" y="196" width="120" height="80" rx="6" fill="rgb(91,155,213)"/>
+  <text x="716" y="230" class="obj" text-anchor="middle">Deployment</text>
+  <text x="716" y="250" class="objsub" text-anchor="middle">mydeploy</text>
+  <rect x="784" y="196" width="120" height="80" rx="6" fill="rgb(91,155,213)"/>
+  <text x="844" y="230" class="obj" text-anchor="middle" font-size="12">Another</text>
+  <text x="844" y="248" class="obj" text-anchor="middle" font-size="12">Deployment</text>
+
+  <!-- 화살표: 컬렉션 apps/v1 -> 두 오브젝트 모두 -->
+  <path d="M506,198 C560,198 590,210 654,220" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ah4)"/>
+  <path d="M506,198 C580,190 700,175 800,194" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ah4)"/>
+  <!-- 화살표: 개별 apps/v1 -> mydeploy -->
+  <path d="M506,242 C560,242 600,240 654,238" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ah4)"/>
+  <!-- 화살표: 개별 extensions -> mydeploy -->
+  <path d="M506,286 C560,286 600,260 654,252" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ah4)"/>
+  <!-- 화살표: 컬렉션 extensions -> 두 오브젝트 -->
+  <path d="M506,330 C580,330 600,270 654,262" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ah4)"/>
+  <path d="M506,330 C620,330 720,300 800,280" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ah4)"/>
+
+  <text x="780" y="316" class="note" text-anchor="middle">같은 오브젝트(집합)가</text>
+  <text x="780" y="332" class="note" text-anchor="middle">여러 리소스로 노출된다</text>
+
+  <text x="270" y="376" class="mt" text-anchor="middle">노랑 = apps/v1 스키마 · 초록 = extensions/v1beta1 스키마 (같은 객체, 다른 표현)</text>
+  <text x="480" y="392" class="sub" text-anchor="middle">리소스는 오브젝트와 상호작용하는 창구(뷰)이고, 오브젝트는 실제 저장 대상(테이블)이다 — 둘은 1:1이 아니다</text>
+</svg>

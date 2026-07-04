@@ -1,0 +1,65 @@
+<svg viewBox="0 0 900 340" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>hostPath 볼륨은 노드에 종속된다</title>
+  <desc>노드 A의 파드는 노드 A 파일시스템의 디렉터리를 마운트하고, 다른 노드 B로 재스케줄된 파드는 노드 B의 디렉터리를 마운트한다. 두 디렉터리의 내용은 서로 다르므로 hostPath는 노드에 종속된다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .node  { font-size: 12px; font-weight: 700; fill: #e8e4df; }
+      .ctnr  { font-size: 11px; font-weight: 700; fill: #e8e4df; }
+      .path  { font-size: 11px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .dir   { font-size: 11px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .warn  { font-size: 12px; font-weight: 700; fill: rgb(240,150,190); }
+      .cyl   { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+    </style>
+    <marker id="mh1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(102,187,106)"/>
+    </marker>
+    <marker id="mh2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(146,196,235)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="340" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">hostPath 볼륨은 노드에 종속된다</text>
+  <text x="24" y="50" class="sub">파드가 다른 노드로 재스케줄되면 hostPath 볼륨은 완전히 다른 파일 집합을 가리킨다</text>
+
+  <!-- Node A -->
+  <rect x="40" y="76" width="380" height="180" rx="10" fill="rgb(24,30,24)" stroke="rgb(102,187,106)" stroke-width="2"/>
+  <text x="60" y="98" class="node">Worker node A</text>
+  <g transform="translate(70,116)">
+    <ellipse cx="45" cy="0" rx="45" ry="12" fill="rgb(160,220,165)"/>
+    <rect x="0" y="0" width="90" height="70" fill="rgb(160,220,165)"/>
+    <ellipse cx="45" cy="70" rx="45" ry="12" fill="rgb(120,190,125)"/>
+    <text x="45" y="42" class="cyl" text-anchor="middle">Node A fs</text>
+  </g>
+  <rect x="180" y="130" width="120" height="30" rx="4" fill="rgb(160,220,165)"/>
+  <text x="240" y="150" class="dir" text-anchor="middle">some-directory</text>
+  <!-- pod A -->
+  <rect x="320" y="120" width="80" height="90" rx="8" fill="rgb(26,26,26)" stroke="rgb(146,196,235)" stroke-width="1.5"/>
+  <text x="360" y="140" class="ctnr" text-anchor="middle" font-size="10">Pod A</text>
+  <rect x="330" y="152" width="60" height="44" rx="4" fill="rgb(146,196,235)"/>
+  <text x="360" y="178" class="path" text-anchor="middle" font-size="9.5">/mnt/host</text>
+  <line x1="302" y1="145" x2="326" y2="168" stroke="rgb(102,187,106)" stroke-width="2" marker-end="url(#mh1)"/>
+
+  <!-- Node B -->
+  <rect x="480" y="76" width="380" height="180" rx="10" fill="rgb(20,26,32)" stroke="rgb(91,155,213)" stroke-width="2"/>
+  <text x="500" y="98" class="node">Worker node B</text>
+  <g transform="translate(510,116)">
+    <ellipse cx="45" cy="0" rx="45" ry="12" fill="rgb(146,196,235)"/>
+    <rect x="0" y="0" width="90" height="70" fill="rgb(146,196,235)"/>
+    <ellipse cx="45" cy="70" rx="45" ry="12" fill="rgb(120,175,220)"/>
+    <text x="45" y="42" class="cyl" text-anchor="middle">Node B fs</text>
+  </g>
+  <rect x="620" y="130" width="120" height="30" rx="4" fill="rgb(146,196,235)"/>
+  <text x="680" y="150" class="dir" text-anchor="middle">some-directory</text>
+  <!-- pod A' -->
+  <rect x="760" y="120" width="80" height="90" rx="8" fill="rgb(26,26,26)" stroke="rgb(146,196,235)" stroke-width="1.5"/>
+  <text x="800" y="140" class="ctnr" text-anchor="middle" font-size="10">Pod A′</text>
+  <rect x="770" y="152" width="60" height="44" rx="4" fill="rgb(146,196,235)"/>
+  <text x="800" y="178" class="path" text-anchor="middle" font-size="9.5">/mnt/host</text>
+  <line x1="742" y1="145" x2="766" y2="168" stroke="rgb(146,196,235)" stroke-width="2" marker-end="url(#mh2)"/>
+
+  <text x="450" y="290" class="warn" text-anchor="middle">두 some-directory 의 내용은 서로 다르다 — 재스케줄되면 다른 파일 집합을 본다</text>
+  <text x="450" y="316" class="sub" text-anchor="middle">그래서 hostPath 에 DB 데이터를 두면 안 된다. 시스템 로그처럼 노드에 묶인 파일용이다</text>
+</svg>
