@@ -22,7 +22,7 @@ updated: 2026-06-30
 
 ## 장 구성
 
-원본은 단행본을 주차별로 캡처한 스크린샷이며 총 **9개 장**입니다(§1.4.1 전체 흐름표로 확정). 1~7장은 전체 섹션을 판독해 확인했고, 8장 일부 절과 9장은 아직 미판독입니다(아래 표와 [roadmap.md](roadmap.md)에 표기). 모든 장은 끝에서 두 절이 "마무리(그 장의 Claude 협업 산출물)" + "N장 가드레일 살펴보기"로 닫힙니다.
+원본은 단행본을 주차별로 캡처한 스크린샷이며 총 **9개 장**입니다(§1.4.1 전체 흐름표로 확정). 1~9장 전체 섹션을 판독해 확인했습니다(week1~4, 총 ~233장). 모든 장은 끝에서 두 절이 "마무리(그 장의 Claude 협업 산출물)" + "N장 가드레일 살펴보기"로 닫힙니다(9장은 회고 장이라 마무리 대신 §9.5 다음 단계로 닫힘).
 
 | 장 | 제목 | 핵심 | 섹션 확인 |
 |----|------|------|:---:|
@@ -33,8 +33,8 @@ updated: 2026-06-30
 | 5 | 무중단 배포 | Rolling Update의 한계, Gateway API 트래픽, Blue/Green(Argo Rollouts) | 전체 |
 | 6 | 엔터프라이즈를 위한 기반 정비 | Valkey 상태 공유, Google Secret Manager, 점진적 배포 Canary | 전체 |
 | 7 | 규모 확장 | SMB 구조의 한계, 멀티 노드풀, App of Apps+Sync Wave, 멀티테넌시 네임스페이스 | 전체 |
-| 8 | 위험 작업의 안전한 실행 | `command-guardrails/`로 위험 작업 절차 통제 (§8.4 마무리 확인) | 일부 |
-| 9 | GitAIOps: 살아있는 운영 표준 | 그동안 쌓인 코드·설정·문서를 AI로 분석해 운영 표준으로 정리(회고) | 미판독 |
+| 8 | 고도화 | Kafka(Strimzi KRaft) 이벤트 드리븐, Tempo 분산 트레이싱, CronJob 배치, `command-guardrails/` | 전체 |
+| 9 | GitAIOps: 살아있는 운영 표준 | 저장소 분석(코드:매니페스트 4.7배)·의사결정 종합·살아있는 문서·GitAIOps 루프(회고) | 전체 |
 
 > 배포 전략이 장을 거치며 발전합니다 — 3장 Rolling Update → 5장 Blue/Green → 6장 Canary. 동시에 Claude 협업 산출물도 발전합니다 — 2장 `/update-docs` → 3장 `CLAUDE.md` → 4장 메모리 컨텍스트 → 5장 아키텍처 결정 기록 → 6장 `claude-context/` → 7장 `settings.local.json` → 8장 `command-guardrails/`. 9장이 이 모두를 "살아있는 운영 표준"으로 회고합니다.
 
@@ -55,6 +55,11 @@ updated: 2026-06-30
 | [05-02 Blue/Green 무중단 전환과 아키텍처 결정 기록](./05-02.Blue-Green%20무중단%20전환과%20아키텍처%20결정%20기록.md) | §5.3~§5.5 Blue/Green·Argo Rollouts·activeService/previewService·ADR 마무리·가드레일 |
 | [06-01 Valkey 캐시와 Google Secret Manager](./06-01.Valkey%20캐시와%20Google%20Secret%20Manager.md) | §6.1~§6.2 Pod 간 상태 공유·Valkey INCR·Secret Manager CSI·Workload Identity |
 | [06-02 점진적 배포 Canary와 claude-context](./06-02.점진적%20배포%20Canary와%20claude-context.md) | §6.3~§6.5 Canary setWeight/pause·claude-context 3층 지식 구조·가드레일 |
+| [07-01 SMB 구조의 한계와 멀티 노드풀](./07-01.SMB%20구조의%20한계와%20멀티%20노드풀.md) | §7.1~§7.2 리소스 경합·격리 불가·nodeSelector 4방식·Spot VM·노드풀 생성 |
+| [07-02 App of Apps와 멀티테넌시](./07-02.App%20of%20Apps와%20멀티테넌시.md) | §7.3~§7.6 App of Apps·Sync Wave·네임스페이스 격리·cross-namespace DNS·settings.local.json |
+| [08-01 Kafka 이벤트 드리븐과 Tempo 분산 트레이싱](./08-01.Kafka%20이벤트%20드리븐과%20Tempo%20분산%20트레이싱.md) | §8.1~§8.2 Kafka Strimzi KRaft·Consumer offset·관측 3요소·Tempo·OpenTelemetry |
+| [08-02 CronJob 배치 자동화와 command-guardrails](./08-02.CronJob%20배치%20자동화와%20command-guardrails.md) | §8.3~§8.5 CronJob concurrencyPolicy·command-guardrails 3단 절차·가드레일 |
+| [09-01 GitAIOps — 살아있는 운영 표준의 탄생](./09-01.GitAIOps%20—%20살아있는%20운영%20표준의%20탄생.md) | §9.1~§9.6 저장소 분석·의사결정 종합·살아있는 문서·GitAIOps 루프·다음 단계 |
 
 ## 출처·캡처 메모
 
@@ -66,4 +71,4 @@ updated: 2026-06-30
 
 상위 [`04_cicd/README.md`](../../README.md)의 톤 규약을 상속합니다. 정독 노트는 합니다체로 쓰고, 형제 폴더와 동일하게 07-04 책 요약 템플릿 구조(핵심 요약 → 학습 목표 → 본문 정리 → 심화 학습 → 실무 적용 → 체크리스트 → 면접 관점 정리 → 참고 자료)를 따릅니다. 각 편에 Mermaid 1장 이상을 두고, 심화 학습(책 밖 조사분)은 본문 정리와 섹션으로 분리해 출처 링크를 남깁니다. roadmap은 원문 키워드 기록이므로 `status: reference`로 두고 사실·섹션 제목을 보존합니다.
 
-> 1장·2장 정독 노트 5편 완료(2026-06-30), 07-04 구조로 재구성 + 심화·예제 코드 보강(2026-07-04). 3장·4장(week2) 정독 노트 4편 완료(2026-07-04). 5장·6장(week3) 정독 노트 4편 완료(2026-07-04) — 총 13편. 7장·8장(week4)부터 이어서 작성하며, 도입부 요약 SVG(`_assets/`)는 추후 보강합니다.
+> 1장·2장 정독 노트 5편 완료(2026-06-30), 07-04 구조로 재구성 + 심화·예제 코드 보강(2026-07-04). 3장·4장(week2) 4편, 5장·6장(week3) 4편, 7·8·9장(week4) 5편 완료(2026-07-04) — **9개 장 전편 정독 노트 18편 완성**. 도입부 요약 SVG(`_assets/`)는 추후 보강합니다.
