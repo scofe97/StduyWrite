@@ -1,30 +1,13 @@
-# Runners High Project
+# project — 실습 프로젝트
 
-멀티 모듈 프로젝트 저장소
+`write/`의 학습 문서를 뒷받침하는 실습 코드를 모아 둔다. 개념을 글로 정리하는 데 그치지 않고, 직접 돌려 보며 확인한 코드가 여기 남는다.
 
-## 구조
+## 구성
 
-```
-project/
-├── docs/           # 프로젝트 기획 및 기술 문서
-│   └── TPS/        # TPS 프로젝트 문서
-│
-├── docker/         # Docker 관련 패키지
-├── git-api/        # Git API 패키지
-├── git-provider/   # Git Provider 패키지
-└── tps-api/        # TPS API 패키지
-```
+| 디렉토리 | 설명 |
+|----------|------|
+| [`frontend/`](frontend/) | 프론트엔드 실습 (React·TypeScript) |
+| [`my-assistant/`](my-assistant/) | 개인 도구·자동화 실습 |
+| [`querydsl-practice/`](querydsl-practice/) | Spring Data JPA·QueryDSL 쿼리 실습 |
 
-## 패키지
-
-| 패키지 | 설명 |
-|--------|------|
-| docker | Docker 설정 및 컨테이너 관리 |
-| git-api | Git 작업 API |
-| git-provider | Git 제공자 통합 (GitHub, GitLab 등) |
-| tps-api | TPS 백엔드 API |
-
-## 문서
-
-- [TPS 프로젝트 개요](Devops%20Tps/docs/TPS/overview.md)
-- [TPS 전체 문서](Devops%20Tps/docs/TPS/index.md)
+각 프로젝트는 자체 빌드 설정과 README를 갖는 독립 모듈이다. 세부 실행 방법은 해당 폴더의 README를 참고한다.
