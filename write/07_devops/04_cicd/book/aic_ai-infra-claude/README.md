@@ -47,6 +47,14 @@ updated: 2026-06-30
 | [01-03 이 책의 지도](./01-03.이%20책의%20지도%20—%20구성·Notiflex%20시나리오·가드레일.md) | §1.4 구성·저장소 + §1.5 Notiflex 시나리오 + §1.6 가드레일 |
 | [02-01 환경 구성](./02-01.환경%20구성%20—%20GCP·클로드%20코드·GKE%20클러스터.md) | §2.1~§2.5 GCP·클로드 코드·gcloud·깃허브·GKE |
 | [02-02 첫 배포와 마무리](./02-02.첫%20배포와%20마무리%20—%20빌드·매니페스트·커밋·스킬.md) | §2.6~§2.9 빌드·매니페스트·커밋·/update-docs |
+| [03-01 푸시 배포의 한계와 ArgoCD GitOps](./03-01.푸시%20배포의%20한계와%20ArgoCD%20GitOps%20—%20설치·연결·롤링·롤백.md) | §3.1~§3.3 드리프트 사례·ArgoCD 설치·Application 연결·롤링 업데이트·git revert 롤백 |
+| [03-02 깃허브 액션 CI와 ArgoCD 연결](./03-02.깃허브%20액션%20CI와%20ArgoCD%20연결%20—%20빌드부터%20배포까지.md) | §3.4~§3.7 CI 구축·CI-ArgoCD 연결·무한 루프 방어·CLAUDE.md 행동 규칙·가드레일 |
+| [04-01 관측 가능성과 메트릭](./04-01.관측%20가능성과%20메트릭%20—%20프로메테우스·그라파나.md) | §4.1~§4.2 3요소 개념·Prometheus Pull·kube-prometheus-stack 설치·PromQL |
+| [04-02 로그와 알림](./04-02.로그와%20알림%20—%20Loki·Fluent%20Bit·PrometheusRule.md) | §4.3~§4.6 Loki 라벨 인덱싱·Fluent Bit·PrometheusRule·메모리 마무리·가드레일 |
+| [05-01 Rolling Update의 한계와 Gateway API](./05-01.Rolling%20Update의%20한계와%20Gateway%20API.md) | §5.1~§5.2 Rolling Update 두 빈틈·Gateway API 역할 분리·HealthCheckPolicy |
+| [05-02 Blue/Green 무중단 전환과 아키텍처 결정 기록](./05-02.Blue-Green%20무중단%20전환과%20아키텍처%20결정%20기록.md) | §5.3~§5.5 Blue/Green·Argo Rollouts·activeService/previewService·ADR 마무리·가드레일 |
+| [06-01 Valkey 캐시와 Google Secret Manager](./06-01.Valkey%20캐시와%20Google%20Secret%20Manager.md) | §6.1~§6.2 Pod 간 상태 공유·Valkey INCR·Secret Manager CSI·Workload Identity |
+| [06-02 점진적 배포 Canary와 claude-context](./06-02.점진적%20배포%20Canary와%20claude-context.md) | §6.3~§6.5 Canary setWeight/pause·claude-context 3층 지식 구조·가드레일 |
 
 ## 출처·캡처 메모
 
@@ -56,6 +64,6 @@ updated: 2026-06-30
 
 ## 톤·시각화 (정독 노트 작성 시)
 
-상위 [`04_cicd/README.md`](../../README.md)의 톤 규약을 상속합니다. 정독 노트는 합니다체로 쓰고, 각 편 도입부에 요약 SVG 1장(`_assets/`)을 임베드하며 배포 흐름·상태 전이에 Mermaid를 더합니다. roadmap은 원문 키워드 기록이므로 `status: reference`로 두고 사실·섹션 제목을 보존합니다.
+상위 [`04_cicd/README.md`](../../README.md)의 톤 규약을 상속합니다. 정독 노트는 합니다체로 쓰고, 형제 폴더와 동일하게 07-04 책 요약 템플릿 구조(핵심 요약 → 학습 목표 → 본문 정리 → 심화 학습 → 실무 적용 → 체크리스트 → 면접 관점 정리 → 참고 자료)를 따릅니다. 각 편에 Mermaid 1장 이상을 두고, 심화 학습(책 밖 조사분)은 본문 정리와 섹션으로 분리해 출처 링크를 남깁니다. roadmap은 원문 키워드 기록이므로 `status: reference`로 두고 사실·섹션 제목을 보존합니다.
 
-> 1장·2장 정독 노트 5편 완료(2026-06-30). 3장(week2)부터 이어서 작성하며, 도입부 요약 SVG(`_assets/`)는 추후 보강합니다.
+> 1장·2장 정독 노트 5편 완료(2026-06-30), 07-04 구조로 재구성 + 심화·예제 코드 보강(2026-07-04). 3장·4장(week2) 정독 노트 4편 완료(2026-07-04). 5장·6장(week3) 정독 노트 4편 완료(2026-07-04) — 총 13편. 7장·8장(week4)부터 이어서 작성하며, 도입부 요약 SVG(`_assets/`)는 추후 보강합니다.
