@@ -1,0 +1,68 @@
+<svg viewBox="0 0 960 380" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Recreate vs RollingUpdate 타임라인</title>
+  <desc>Recreate는 모든 v1 파드를 동시에 삭제한 뒤 v2 파드를 동시에 생성해 그 사이 짧은 서비스 중단이 있다. RollingUpdate는 v1 파드를 하나씩 삭제하며 v2로 교체해 서비스가 끊기지 않는다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .hdr   { font-size: 13px; font-weight: 800; fill: rgb(212,168,83); }
+      .v1    { fill: rgb(140,190,235); }
+      .v2    { fill: rgb(212,168,83); }
+      .lbl   { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+      .note  { font-size: 10.5px; fill: #e8e4df; }
+      .down  { font-size: 11px; font-weight: 700; fill: rgb(240,150,190); }
+      .ax    { font-size: 10px; fill: rgb(138,133,128); }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="380" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">Recreate vs RollingUpdate — 시간에 따른 파드 교체</text>
+  <text x="24" y="50" class="sub">Recreate는 짧은 다운타임, RollingUpdate는 무중단</text>
+
+  <line x1="480" y1="70" x2="480" y2="360" stroke="rgb(60,60,60)" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+  <!-- ===== LEFT: Recreate ===== -->
+  <text x="230" y="92" class="hdr" text-anchor="middle">Recreate</text>
+  <!-- 3 rows x 5 cols. cols: v1 v1 (gap) v2 v2 -->
+  <g>
+    <!-- t1: all v1 -->
+    <rect class="v1" x="40" y="110" width="34" height="30" rx="3"/><rect class="v1" x="40" y="145" width="34" height="30" rx="3"/><rect class="v1" x="40" y="180" width="34" height="30" rx="3"/>
+    <!-- t2: all v1 -->
+    <rect class="v1" x="80" y="110" width="34" height="30" rx="3"/><rect class="v1" x="80" y="145" width="34" height="30" rx="3"/><rect class="v1" x="80" y="180" width="34" height="30" rx="3"/>
+    <!-- t3: deleting (X) -->
+    <rect x="120" y="110" width="34" height="30" rx="3" fill="rgb(90,90,90)"/><rect x="120" y="145" width="34" height="30" rx="3" fill="rgb(90,90,90)"/><rect x="120" y="180" width="34" height="30" rx="3" fill="rgb(90,90,90)"/>
+    <text x="137" y="132" class="down" text-anchor="middle">✕</text><text x="137" y="167" class="down" text-anchor="middle">✕</text><text x="137" y="202" class="down" text-anchor="middle">✕</text>
+    <!-- t4: new v2 -->
+    <rect class="v2" x="290" y="110" width="34" height="30" rx="3"/><rect class="v2" x="290" y="145" width="34" height="30" rx="3"/><rect class="v2" x="290" y="180" width="34" height="30" rx="3"/>
+    <rect class="v2" x="330" y="110" width="34" height="30" rx="3"/><rect class="v2" x="330" y="145" width="34" height="30" rx="3"/><rect class="v2" x="330" y="180" width="34" height="30" rx="3"/>
+  </g>
+  <!-- downtime band -->
+  <rect x="158" y="105" width="128" height="110" fill="rgba(240,150,190,0.12)"/>
+  <text x="222" y="240" class="down" text-anchor="middle">서비스 중단(503)</text>
+  <text x="222" y="256" class="note" text-anchor="middle">전부 동시 삭제 → 전부 동시 생성</text>
+  <line x1="40" y1="220" x2="380" y2="220" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <text x="380" y="234" class="ax" text-anchor="end">시간 →</text>
+
+  <!-- ===== RIGHT: RollingUpdate ===== -->
+  <text x="720" y="92" class="hdr" text-anchor="middle">RollingUpdate</text>
+  <g>
+    <!-- t1 all v1 -->
+    <rect class="v1" x="540" y="110" width="30" height="30" rx="3"/><rect class="v1" x="540" y="145" width="30" height="30" rx="3"/><rect class="v1" x="540" y="180" width="30" height="30" rx="3"/>
+    <!-- t2 one deleting -->
+    <rect x="576" y="110" width="30" height="30" rx="3" fill="rgb(90,90,90)"/><text x="591" y="132" class="down" text-anchor="middle">✕</text><rect class="v1" x="576" y="145" width="30" height="30" rx="3"/><rect class="v1" x="576" y="180" width="30" height="30" rx="3"/>
+    <!-- t3 -->
+    <rect class="v2" x="612" y="110" width="30" height="30" rx="3"/><rect x="612" y="145" width="30" height="30" rx="3" fill="rgb(90,90,90)"/><text x="627" y="167" class="down" text-anchor="middle">✕</text><rect class="v1" x="612" y="180" width="30" height="30" rx="3"/>
+    <!-- t4 -->
+    <rect class="v2" x="648" y="110" width="30" height="30" rx="3"/><rect class="v2" x="648" y="145" width="30" height="30" rx="3"/><rect x="648" y="180" width="30" height="30" rx="3" fill="rgb(90,90,90)"/><text x="663" y="202" class="down" text-anchor="middle">✕</text>
+    <!-- t5 all v2 -->
+    <rect class="v2" x="684" y="110" width="30" height="30" rx="3"/><rect class="v2" x="684" y="145" width="30" height="30" rx="3"/><rect class="v2" x="684" y="180" width="30" height="30" rx="3"/>
+  </g>
+  <text x="640" y="248" class="note" text-anchor="middle">하나씩 삭제하며 교체 — 항상 트래픽 처리</text>
+  <text x="640" y="266" class="hdr" text-anchor="middle" font-size="11">서비스 유지 (기본 전략)</text>
+  <line x1="540" y1="220" x2="880" y2="220" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <text x="880" y="234" class="ax" text-anchor="end">시간 →</text>
+
+  <!-- legend -->
+  <rect class="v1" x="360" y="330" width="18" height="14" rx="2"/><text x="384" y="342" class="note">v1(옛 버전)</text>
+  <rect class="v2" x="490" y="330" width="18" height="14" rx="2"/><text x="514" y="342" class="note">v2(새 버전)</text>
+</svg>

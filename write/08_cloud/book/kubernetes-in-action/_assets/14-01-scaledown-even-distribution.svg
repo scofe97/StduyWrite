@@ -1,0 +1,54 @@
+<svg viewBox="0 0 960 320" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>스케일다운 시 균등 분산</title>
+  <desc>ReplicaSet을 5에서 3으로 스케일다운할 때, 복제본이 3벌 몰린 노드 C의 파드가 먼저 삭제된다. 그래야 스케일다운 후에도 파드가 노드에 고르게 분산된다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .rs    { font-size: 12px; font-weight: 700; fill: #e8e4df; }
+      .cnt   { font-size: 13px; font-weight: 800; }
+      .node  { font-size: 12px; font-weight: 700; fill: #e8e4df; }
+      .pod   { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+      .note  { font-size: 11px; fill: rgb(240,150,190); }
+    </style>
+    <marker id="sde-a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="320" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">스케일다운 — 몰린 노드부터 삭제해 고르게 분산</text>
+  <text x="24" y="50" class="sub">5 → 3으로 줄일 때, 복제본이 몰린 노드 C의 파드가 먼저 삭제됩니다</text>
+
+  <!-- RS -->
+  <rect x="30" y="130" width="130" height="70" rx="8" fill="rgb(91,155,213)"/>
+  <text x="95" y="158" class="rs" text-anchor="middle" fill="#0d0d0d">kiada ReplicaSet</text>
+  <text x="95" y="182" text-anchor="middle" class="cnt"><tspan fill="rgb(240,150,190)" text-decoration="line-through">5</tspan> <tspan fill="rgb(102,187,106)">3</tspan></text>
+
+  <!-- Node A -->
+  <rect x="220" y="90" width="180" height="150" rx="8" fill="none" stroke="rgb(138,133,128)" stroke-width="1.3"/>
+  <text x="310" y="228" class="node" text-anchor="middle">Node A</text>
+  <rect x="255" y="120" width="110" height="42" rx="6" fill="rgb(91,155,213)"/>
+  <text x="310" y="146" class="pod" text-anchor="middle">kiada pod</text>
+
+  <!-- Node B -->
+  <rect x="420" y="90" width="180" height="150" rx="8" fill="none" stroke="rgb(138,133,128)" stroke-width="1.3"/>
+  <text x="510" y="228" class="node" text-anchor="middle">Node B</text>
+  <rect x="455" y="120" width="110" height="42" rx="6" fill="rgb(91,155,213)"/>
+  <text x="510" y="146" class="pod" text-anchor="middle">kiada pod</text>
+
+  <!-- Node C (3 pods, 2 deleted) -->
+  <rect x="620" y="90" width="180" height="150" rx="8" fill="none" stroke="rgb(138,133,128)" stroke-width="1.3"/>
+  <text x="710" y="228" class="node" text-anchor="middle">Node C</text>
+  <rect x="655" y="104" width="110" height="36" rx="6" fill="rgb(91,155,213)"/>
+  <text x="710" y="127" class="pod" text-anchor="middle">kiada pod</text>
+  <rect x="655" y="146" width="110" height="36" rx="6" fill="rgb(240,150,190)"/>
+  <text x="710" y="169" class="pod" text-anchor="middle">kiada pod ✕</text>
+  <rect x="655" y="188" width="110" height="36" rx="6" fill="rgb(240,150,190)"/>
+  <text x="710" y="211" class="pod" text-anchor="middle">kiada pod ✕</text>
+
+  <!-- RS to nodes dashed -->
+  <line x1="160" y1="165" x2="218" y2="141" stroke="rgb(138,133,128)" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#sde-a)"/>
+  <line x1="160" y1="165" x2="418" y2="141" stroke="rgb(138,133,128)" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#sde-a)"/>
+  <line x1="160" y1="165" x2="653" y2="160" stroke="rgb(138,133,128)" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#sde-a)"/>
+
+  <text x="710" y="270" class="note" text-anchor="middle">3벌이 몰린 노드 C의 파드가 먼저 삭제 대상</text>
+</svg>

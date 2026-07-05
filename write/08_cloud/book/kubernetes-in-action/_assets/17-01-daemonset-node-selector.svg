@@ -1,0 +1,51 @@
+<svg viewBox="0 0 960 300" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>node selector로 노드 서브셋에 배포</title>
+  <desc>DaemonSet의 node selector가 gpu:cuda label을 가진 노드에만 파드를 배포한다. gpu:openCL 노드는 label이 안 맞아 파드가 없다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .ctrl  { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+      .pod   { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+      .node  { font-size: 11px; font-weight: 700; fill: rgb(138,133,128); }
+      .lbl   { font-size: 10px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .note  { font-size: 10px; fill: #e8e4df; }
+      .no    { font-size: 10px; fill: rgb(240,150,190); }
+    </style>
+    <marker id="dns2-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="300" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">node selector — gpu: cuda 노드에만 배포</text>
+  <text x="24" y="50" class="sub">label이 selector와 맞는 노드에만 파드 생성</text>
+
+  <!-- DaemonSet -->
+  <rect x="30" y="115" width="160" height="66" rx="8" fill="rgb(150,220,160)"/>
+  <text x="110" y="140" class="ctrl" text-anchor="middle">DaemonSet</text>
+  <rect x="46" y="150" width="128" height="24" rx="4" fill="rgb(200,240,205)"/>
+  <text x="110" y="166" class="lbl" text-anchor="middle">nodeSelector: gpu=cuda</text>
+
+  <!-- Node A: gpu openCL (no pod) -->
+  <rect x="260" y="80" width="200" height="180" rx="8" fill="none" stroke="rgb(70,70,70)" stroke-width="1.5"/>
+  <rect x="280" y="95" width="120" height="24" rx="4" fill="rgb(120,120,120)"/><text x="340" y="111" class="lbl" text-anchor="middle" style="fill:#e8e4df">gpu: openCL</text>
+  <text x="360" y="250" class="node" text-anchor="middle">Node A</text>
+  <text x="340" y="185" class="no" text-anchor="middle">label 안 맞음</text>
+  <text x="340" y="200" class="no" text-anchor="middle">파드 없음</text>
+
+  <!-- Node B: gpu cuda (pod) -->
+  <rect x="490" y="80" width="200" height="180" rx="8" fill="none" stroke="rgb(70,70,70)" stroke-width="1.5"/>
+  <rect x="510" y="95" width="110" height="24" rx="4" fill="rgb(212,168,83)"/><text x="565" y="111" class="lbl" text-anchor="middle">gpu: cuda</text>
+  <rect x="530" y="150" width="120" height="40" rx="6" fill="rgb(102,187,106)"/><text x="590" y="175" class="pod" text-anchor="middle">DS Pod</text>
+  <text x="590" y="250" class="node" text-anchor="middle">Node B</text>
+
+  <!-- Node C: gpu cuda (pod) -->
+  <rect x="720" y="80" width="200" height="180" rx="8" fill="none" stroke="rgb(70,70,70)" stroke-width="1.5"/>
+  <rect x="740" y="95" width="110" height="24" rx="4" fill="rgb(212,168,83)"/><text x="795" y="111" class="lbl" text-anchor="middle">gpu: cuda</text>
+  <rect x="760" y="150" width="120" height="40" rx="6" fill="rgb(102,187,106)"/><text x="820" y="175" class="pod" text-anchor="middle">DS Pod</text>
+  <text x="820" y="250" class="node" text-anchor="middle">Node C</text>
+
+  <!-- arrows -->
+  <line x1="190" y1="148" x2="528" y2="165" stroke="rgb(138,133,128)" stroke-width="1.4" stroke-dasharray="5 3" marker-end="url(#dns2-a)"/>
+  <line x1="190" y1="148" x2="758" y2="165" stroke="rgb(138,133,128)" stroke-width="1.4" stroke-dasharray="5 3" marker-end="url(#dns2-a)"/>
+  <text x="110" y="278" class="note" text-anchor="middle">노드 label 변경 시 컨트롤러가 파드 생성/삭제(Node도 감시)</text>
+</svg>

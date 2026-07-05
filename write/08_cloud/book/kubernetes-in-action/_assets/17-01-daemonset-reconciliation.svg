@@ -1,0 +1,53 @@
+<svg viewBox="0 0 960 300" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>DaemonSet 컨트롤러의 reconciliation 루프</title>
+  <desc>컨트롤러가 DaemonSet·파드·노드 변화를 감시하고, 모든 노드에 파드가 하나씩 있는지 비교해, 없으면 만들고 남으면 지운다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .box   { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+      .lbl   { font-size: 10px; fill: #e8e4df; }
+      .cond  { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+    </style>
+    <marker id="dr-a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="300" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">DaemonSet 컨트롤러 — reconciliation 루프</text>
+  <text x="24" y="50" class="sub">DaemonSet·파드·노드 감시 → 노드마다 파드 하나 보장</text>
+
+  <!-- Start -->
+  <circle cx="70" cy="150" r="26" fill="rgb(140,190,235)"/><text x="70" y="154" class="box" text-anchor="middle">Start</text>
+
+  <!-- Wait -->
+  <rect x="140" y="122" width="150" height="56" rx="8" fill="rgb(91,155,213)"/>
+  <text x="215" y="147" class="box" text-anchor="middle" style="fill:#e8e4df">DaemonSet·파드·</text>
+  <text x="215" y="164" class="box" text-anchor="middle" style="fill:#e8e4df">노드 변화 대기</text>
+
+  <!-- Decision -->
+  <path d="M 420 150 L 490 115 L 560 150 L 490 185 Z" fill="rgb(102,187,106)"/>
+  <text x="490" y="147" class="cond" text-anchor="middle">모든 노드에</text>
+  <text x="490" y="162" class="cond" text-anchor="middle">파드 있나?</text>
+
+  <!-- Create -->
+  <rect x="650" y="70" width="180" height="46" rx="8" fill="rgb(212,168,83)"/>
+  <text x="740" y="90" class="box" text-anchor="middle">파드 생성</text>
+  <text x="740" y="105" class="box" text-anchor="middle" font-size="9">(그 노드 전용)</text>
+  <!-- Delete -->
+  <rect x="650" y="184" width="180" height="46" rx="8" fill="rgb(212,168,83)"/>
+  <text x="740" y="204" class="box" text-anchor="middle">초과 파드 삭제</text>
+
+  <!-- arrows -->
+  <line x1="96" y1="150" x2="138" y2="150" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#dr-a)"/>
+  <line x1="290" y1="150" x2="418" y2="150" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#dr-a)"/>
+  <line x1="530" y1="127" x2="648" y2="95" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#dr-a)"/>
+  <text x="585" y="100" class="lbl" text-anchor="middle">노드에 파드 없음</text>
+  <line x1="530" y1="173" x2="648" y2="205" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#dr-a)"/>
+  <text x="585" y="225" class="lbl" text-anchor="middle">초과 파드 있음</text>
+  <text x="490" y="205" class="lbl" text-anchor="middle">노드당 정확히 하나 → 무동작</text>
+
+  <!-- loop back -->
+  <path d="M 740 116 L 740 150 L 570 150" fill="none" stroke="rgb(70,70,70)" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <path d="M 215 178 L 215 260 L 490 260 L 490 187" fill="none" stroke="rgb(70,70,70)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#dr-a)"/>
+  <text x="350" y="278" class="lbl" text-anchor="middle">다음 루프로 반복</text>
+</svg>

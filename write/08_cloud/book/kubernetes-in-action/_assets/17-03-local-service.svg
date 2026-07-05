@@ -1,0 +1,48 @@
+<svg viewBox="0 0 960 290" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>internalTrafficPolicy Local Service로 로컬 daemon 노출</title>
+  <desc>internalTrafficPolicy가 Local인 Service는 다른 노드 파드로 절대 포워딩하지 않는다. 클라이언트는 같은 노드의 에이전트로만 간다. 에이전트가 없는 노드면 접속이 실패한다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .agent { font-size: 10.5px; font-weight: 700; fill: #0d0d0d; }
+      .svc   { font-size: 10px; font-weight: 700; fill: #0d0d0d; }
+      .node  { font-size: 11px; font-weight: 700; fill: rgb(138,133,128); }
+      .note  { font-size: 9.5px; fill: #e8e4df; }
+      .no    { font-size: 10px; fill: rgb(240,150,190); }
+    </style>
+    <marker id="ls-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgb(102,187,106)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="290" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">internalTrafficPolicy: Local — 같은 노드로만</text>
+  <text x="24" y="50" class="sub">Service 이름으로 접근(노드 IP 불필요). 다른 노드 파드로 절대 안 감</text>
+
+  <!-- 3 nodes -->
+  <rect x="30" y="80" width="290" height="165" rx="8" fill="none" stroke="rgb(70,70,70)" stroke-width="1.5"/><text x="175" y="235" class="node" text-anchor="middle">Node A</text>
+  <rect x="345" y="80" width="270" height="165" rx="8" fill="none" stroke="rgb(70,70,70)" stroke-width="1.5"/><text x="480" y="235" class="node" text-anchor="middle">Node B</text>
+  <rect x="640" y="80" width="290" height="165" rx="8" fill="none" stroke="rgb(70,70,70)" stroke-width="1.5"/><text x="785" y="235" class="node" text-anchor="middle">Node C (에이전트 없음)</text>
+
+  <!-- Node A -->
+  <rect x="50" y="100" width="120" height="32" rx="5" fill="rgb(102,187,106)"/><text x="110" y="121" class="agent" text-anchor="middle">node-agent</text>
+  <rect x="50" y="145" width="120" height="30" rx="5" fill="rgb(240,215,120)"/><text x="110" y="164" class="svc" text-anchor="middle">Service(Local)</text>
+  <rect x="50" y="188" width="120" height="30" rx="5" fill="rgb(91,155,213)"/><text x="110" y="207" class="agent" text-anchor="middle" style="fill:#e8e4df">kiada</text>
+  <line x1="110" y1="188" x2="110" y2="177" stroke="rgb(102,187,106)" stroke-width="1.8" marker-end="url(#ls-a)"/>
+  <line x1="110" y1="145" x2="110" y2="134" stroke="rgb(102,187,106)" stroke-width="1.8" marker-end="url(#ls-a)"/>
+
+  <!-- Node B -->
+  <rect x="365" y="100" width="120" height="32" rx="5" fill="rgb(102,187,106)"/><text x="425" y="121" class="agent" text-anchor="middle">node-agent</text>
+  <rect x="365" y="145" width="120" height="30" rx="5" fill="rgb(240,215,120)"/><text x="425" y="164" class="svc" text-anchor="middle">Service(Local)</text>
+  <rect x="365" y="188" width="120" height="30" rx="5" fill="rgb(91,155,213)"/><text x="425" y="207" class="agent" text-anchor="middle" style="fill:#e8e4df">kiada</text>
+  <line x1="425" y1="188" x2="425" y2="177" stroke="rgb(102,187,106)" stroke-width="1.8" marker-end="url(#ls-a)"/>
+  <line x1="425" y1="145" x2="425" y2="134" stroke="rgb(102,187,106)" stroke-width="1.8" marker-end="url(#ls-a)"/>
+
+  <!-- Node C (no agent, fails) -->
+  <rect x="660" y="145" width="120" height="30" rx="5" fill="rgb(240,215,120)"/><text x="720" y="164" class="svc" text-anchor="middle">Service(Local)</text>
+  <rect x="660" y="188" width="120" height="30" rx="5" fill="rgb(91,155,213)"/><text x="720" y="207" class="agent" text-anchor="middle" style="fill:#e8e4df">kiada</text>
+  <line x1="720" y1="188" x2="720" y2="177" stroke="rgb(102,187,106)" stroke-width="1.8" marker-end="url(#ls-a)"/>
+  <line x1="705" y1="118" x2="717" y2="130" stroke="rgb(240,150,190)" stroke-width="2.5"/><line x1="717" y1="118" x2="705" y2="130" stroke="rgb(240,150,190)" stroke-width="2.5"/>
+  <text x="820" y="128" class="no" text-anchor="middle">로컬 파드 없어 실패</text>
+
+  <text x="480" y="268" class="note" text-anchor="middle" fill="rgb(240,150,190)">node selector로 일부 노드에 에이전트 없으면, 그 노드 클라이언트는 Local Service 접속 실패</text>
+</svg>

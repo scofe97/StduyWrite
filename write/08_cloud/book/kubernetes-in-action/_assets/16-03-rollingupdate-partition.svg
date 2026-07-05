@@ -1,0 +1,48 @@
+<svg viewBox="0 0 960 320" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>RollingUpdate partition으로 canary·staging</title>
+  <desc>partition 값보다 ordinal이 낮은 파드는 업데이트되지 않는다. partition=3(replicas와 같음)이면 staging(아무도 업데이트 안 함), partition=2면 canary(quiz-2만), partition=0이면 전체 완료.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .hdr   { font-size: 12px; font-weight: 800; fill: rgb(212,168,83); }
+      .old   { fill: rgb(140,190,235); }
+      .new   { fill: rgb(212,168,83); }
+      .lbl   { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+      .note  { font-size: 10px; fill: #e8e4df; }
+      .line  { stroke: rgb(240,150,190); stroke-width: 2; stroke-dasharray: 5 3; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="320" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">RollingUpdate partition — canary·staging</text>
+  <text x="24" y="50" class="sub">partition보다 낮은 ordinal 파드는 업데이트 안 됨</text>
+
+  <!-- 3 columns, each 3 stacked pods (quiz-2 top, quiz-0 bottom) -->
+  <!-- Col 1: partition=3 (staging) -->
+  <text x="160" y="82" class="hdr" text-anchor="middle">partition: 3 (staging)</text>
+  <rect class="old" x="90" y="95"  width="140" height="38" rx="5"/><text x="160" y="119" class="lbl" text-anchor="middle">quiz-2  v0.1</text>
+  <rect class="old" x="90" y="138" width="140" height="38" rx="5"/><text x="160" y="162" class="lbl" text-anchor="middle">quiz-1  v0.1</text>
+  <rect class="old" x="90" y="181" width="140" height="38" rx="5"/><text x="160" y="205" class="lbl" text-anchor="middle">quiz-0  v0.1</text>
+  <line class="line" x1="80" y1="93" x2="240" y2="93"/>
+  <text x="160" y="240" class="note" text-anchor="middle">아무도 업데이트 안 됨</text>
+
+  <!-- Col 2: partition=2 (canary) -->
+  <text x="480" y="82" class="hdr" text-anchor="middle">partition: 2 (canary)</text>
+  <rect class="new" x="410" y="95"  width="140" height="38" rx="5"/><text x="480" y="119" class="lbl" text-anchor="middle">quiz-2  v0.2</text>
+  <rect class="old" x="410" y="138" width="140" height="38" rx="5"/><text x="480" y="162" class="lbl" text-anchor="middle">quiz-1  v0.1</text>
+  <rect class="old" x="410" y="181" width="140" height="38" rx="5"/><text x="480" y="205" class="lbl" text-anchor="middle">quiz-0  v0.1</text>
+  <line class="line" x1="400" y1="136" x2="560" y2="136"/>
+  <text x="480" y="240" class="note" text-anchor="middle">ordinal ≥ 2인 quiz-2만 (canary)</text>
+
+  <!-- Col 3: partition=0 (complete) -->
+  <text x="800" y="82" class="hdr" text-anchor="middle">partition: 0 (완료)</text>
+  <rect class="new" x="730" y="95"  width="140" height="38" rx="5"/><text x="800" y="119" class="lbl" text-anchor="middle">quiz-2  v0.2</text>
+  <rect class="new" x="730" y="138" width="140" height="38" rx="5"/><text x="800" y="162" class="lbl" text-anchor="middle">quiz-1  v0.2</text>
+  <rect class="new" x="730" y="181" width="140" height="38" rx="5"/><text x="800" y="205" class="lbl" text-anchor="middle">quiz-0  v0.2</text>
+  <text x="800" y="240" class="note" text-anchor="middle">전체 업데이트</text>
+
+  <text x="480" y="285" class="note" text-anchor="middle" style="fill:rgb(212,168,83)">staging = replicas 이상 · canary = replicas − 1 · 완료 = 0 · pause 없이 partition으로 제어</text>
+  <rect class="old" x="360" y="300" width="16" height="12" rx="2"/><text x="384" y="311" class="note">v0.1(옛)</text>
+  <rect class="new" x="470" y="300" width="16" height="12" rx="2"/><text x="494" y="311" class="note">v0.2(새)</text>
+</svg>

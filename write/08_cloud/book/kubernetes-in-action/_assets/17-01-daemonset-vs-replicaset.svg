@@ -1,0 +1,51 @@
+<svg viewBox="0 0 960 340" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>DaemonSet vs ReplicaSet 파드 배치</title>
+  <desc>DaemonSet은 각 노드에 파드를 하나씩 만든다. ReplicaSet은 replica 수만큼 파드를 클러스터에 흩뿌려, 어떤 노드는 파드가 없고 어떤 노드는 여러 개일 수 있다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .ctrl  { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+      .pod   { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+      .node  { font-size: 11px; font-weight: 700; fill: rgb(138,133,128); }
+      .note  { font-size: 10.5px; fill: #e8e4df; }
+    </style>
+    <marker id="dvr-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="340" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">DaemonSet vs ReplicaSet — 파드 배치</text>
+  <text x="24" y="50" class="sub">DaemonSet=노드마다 하나 / ReplicaSet=흩뿌림(노드당 0~여러 개)</text>
+
+  <!-- controllers -->
+  <rect x="30" y="90" width="150" height="50" rx="8" fill="rgb(140,190,235)"/>
+  <text x="105" y="112" class="ctrl" text-anchor="middle">ReplicaSet</text>
+  <text x="105" y="129" class="ctrl" text-anchor="middle" font-size="10">replicas: 3</text>
+  <rect x="30" y="220" width="150" height="50" rx="8" fill="rgb(150,220,160)"/>
+  <text x="105" y="242" class="ctrl" text-anchor="middle">DaemonSet</text>
+  <text x="105" y="259" class="ctrl" text-anchor="middle" font-size="10">(replicas 없음)</text>
+
+  <!-- 3 nodes -->
+  <g>
+    <rect x="280" y="80" width="200" height="210" rx="8" fill="none" stroke="rgb(70,70,70)" stroke-width="1.5"/><text x="380" y="280" class="node" text-anchor="middle">Node A</text>
+    <rect x="500" y="80" width="200" height="210" rx="8" fill="none" stroke="rgb(70,70,70)" stroke-width="1.5"/><text x="600" y="280" class="node" text-anchor="middle">Node B</text>
+    <rect x="720" y="80" width="200" height="210" rx="8" fill="none" stroke="rgb(70,70,70)" stroke-width="1.5"/><text x="820" y="280" class="node" text-anchor="middle">Node C</text>
+  </g>
+
+  <!-- ReplicaSet pods (blue): A=1, B=0, C=2 -->
+  <rect x="315" y="100" width="130" height="36" rx="5" fill="rgb(91,155,213)"/><text x="380" y="123" class="pod" text-anchor="middle" style="fill:#e8e4df">RS Pod</text>
+  <rect x="755" y="100" width="130" height="36" rx="5" fill="rgb(91,155,213)"/><text x="820" y="123" class="pod" text-anchor="middle" style="fill:#e8e4df">RS Pod</text>
+  <rect x="755" y="142" width="130" height="36" rx="5" fill="rgb(91,155,213)"/><text x="820" y="165" class="pod" text-anchor="middle" style="fill:#e8e4df">RS Pod</text>
+  <!-- (Node B has no RS pod) -->
+
+  <!-- DaemonSet pods (green): one per node -->
+  <rect x="315" y="230" width="130" height="36" rx="5" fill="rgb(102,187,106)"/><text x="380" y="253" class="pod" text-anchor="middle">DS Pod</text>
+  <rect x="535" y="230" width="130" height="36" rx="5" fill="rgb(102,187,106)"/><text x="600" y="253" class="pod" text-anchor="middle">DS Pod</text>
+  <rect x="755" y="230" width="130" height="36" rx="5" fill="rgb(102,187,106)"/><text x="820" y="253" class="pod" text-anchor="middle">DS Pod</text>
+
+  <!-- arrows -->
+  <line x1="180" y1="115" x2="278" y2="115" stroke="rgb(138,133,128)" stroke-width="1.4" stroke-dasharray="5 3"/>
+  <line x1="180" y1="245" x2="278" y2="245" stroke="rgb(138,133,128)" stroke-width="1.4" stroke-dasharray="5 3"/>
+
+  <text x="600" y="160" class="note" text-anchor="middle" fill="rgb(91,155,213)">B는 파드 없음, C는 2개</text>
+</svg>

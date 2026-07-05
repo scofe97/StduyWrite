@@ -1,0 +1,66 @@
+<svg viewBox="0 0 960 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>StatefulSet 스케일 시 PVC 보존과 재부착</title>
+  <desc>StatefulSet을 스케일다운하면 파드는 삭제되지만 PVC·PV는 보존된다. 스케일업하면 새 파드가 ordinal 번호 기준으로 이전과 같은 PVC에 재부착된다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .sts   { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+      .pod   { font-size: 10.5px; font-weight: 700; fill: #e8e4df; }
+      .pvc   { font-size: 10.5px; font-weight: 700; fill: #0d0d0d; }
+      .note  { font-size: 10px; fill: #e8e4df; }
+      .arrow { font-size: 13px; font-weight: 800; fill: rgb(212,168,83); }
+    </style>
+    <marker id="spp-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="360" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">스케일다운 시 PVC 보존 → 스케일업 시 재부착</text>
+  <text x="24" y="50" class="sub">파드는 삭제·재생성되지만 PVC·PV는 ordinal 기준으로 그대로 유지</text>
+
+  <!-- Stage 1: replicas 3 -->
+  <text x="140" y="78" class="arrow" text-anchor="middle">replicas: 3</text>
+  <g>
+    <rect x="60" y="95" width="80" height="34" rx="5" fill="rgb(91,155,213)"/><text x="100" y="117" class="pod" text-anchor="middle">quiz-0</text>
+    <rect x="150" y="95" width="80" height="34" rx="5" fill="rgb(150,220,160)"/><text x="190" y="117" class="pvc" text-anchor="middle">PVC-0</text>
+    <rect x="60" y="140" width="80" height="34" rx="5" fill="rgb(91,155,213)"/><text x="100" y="162" class="pod" text-anchor="middle">quiz-1</text>
+    <rect x="150" y="140" width="80" height="34" rx="5" fill="rgb(150,220,160)"/><text x="190" y="162" class="pvc" text-anchor="middle">PVC-1</text>
+    <rect x="60" y="185" width="80" height="34" rx="5" fill="rgb(91,155,213)"/><text x="100" y="207" class="pod" text-anchor="middle">quiz-2</text>
+    <rect x="150" y="185" width="80" height="34" rx="5" fill="rgb(150,220,160)"/><text x="190" y="207" class="pvc" text-anchor="middle">PVC-2</text>
+  </g>
+
+  <text x="290" y="155" class="arrow" text-anchor="middle">scale ↓</text>
+
+  <!-- Stage 2: replicas 1 -->
+  <text x="480" y="78" class="arrow" text-anchor="middle">replicas: 1</text>
+  <g>
+    <rect x="400" y="95" width="80" height="34" rx="5" fill="rgb(91,155,213)"/><text x="440" y="117" class="pod" text-anchor="middle">quiz-0</text>
+    <rect x="490" y="95" width="80" height="34" rx="5" fill="rgb(150,220,160)"/><text x="530" y="117" class="pvc" text-anchor="middle">PVC-0</text>
+    <!-- deleted pods (dashed empty) -->
+    <rect x="400" y="140" width="80" height="34" rx="5" fill="none" stroke="rgb(90,90,90)" stroke-width="1.4" stroke-dasharray="4 3"/>
+    <rect x="490" y="140" width="80" height="34" rx="5" fill="rgb(150,220,160)"/><text x="530" y="162" class="pvc" text-anchor="middle">PVC-1</text>
+    <rect x="400" y="185" width="80" height="34" rx="5" fill="none" stroke="rgb(90,90,90)" stroke-width="1.4" stroke-dasharray="4 3"/>
+    <rect x="490" y="185" width="80" height="34" rx="5" fill="rgb(150,220,160)"/><text x="530" y="207" class="pvc" text-anchor="middle">PVC-2</text>
+  </g>
+  <text x="485" y="245" class="note" text-anchor="middle">① 파드 삭제, PVC·PV 보존</text>
+
+  <text x="640" y="155" class="arrow" text-anchor="middle">scale ↑</text>
+
+  <!-- Stage 3: replicas 3 again -->
+  <text x="810" y="78" class="arrow" text-anchor="middle">replicas: 3</text>
+  <g>
+    <rect x="730" y="95" width="80" height="34" rx="5" fill="rgb(91,155,213)"/><text x="770" y="117" class="pod" text-anchor="middle">quiz-0</text>
+    <rect x="820" y="95" width="80" height="34" rx="5" fill="rgb(150,220,160)"/><text x="860" y="117" class="pvc" text-anchor="middle">PVC-0</text>
+    <rect x="730" y="140" width="80" height="34" rx="5" fill="rgb(91,155,213)"/><text x="770" y="162" class="pod" text-anchor="middle">quiz-1</text>
+    <rect x="820" y="140" width="80" height="34" rx="5" fill="rgb(150,220,160)"/><text x="860" y="162" class="pvc" text-anchor="middle">PVC-1</text>
+    <rect x="730" y="185" width="80" height="34" rx="5" fill="rgb(91,155,213)"/><text x="770" y="207" class="pod" text-anchor="middle">quiz-2</text>
+    <rect x="820" y="185" width="80" height="34" rx="5" fill="rgb(150,220,160)"/><text x="860" y="207" class="pvc" text-anchor="middle">PVC-2</text>
+  </g>
+  <text x="815" y="245" class="note" text-anchor="middle">② 새 파드가 같은 PVC에 재부착</text>
+
+  <!-- arrows connecting stages -->
+  <line x1="235" y1="155" x2="345" y2="155" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#spp-a)"/>
+  <line x1="575" y1="155" x2="695" y2="155" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#spp-a)"/>
+
+  <text x="480" y="310" class="note" text-anchor="middle" style="fill:rgb(212,168,83)">PVC를 지우면 PV가 recycle/삭제되어 데이터 유실 → 그래서 기본 보존(persistentVolumeClaimRetentionPolicy로 변경)</text>
+</svg>

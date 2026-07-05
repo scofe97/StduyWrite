@@ -1,0 +1,72 @@
+<svg viewBox="0 0 960 340" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>maxSurge 1, maxUnavailable 1일 때의 파드 교체</title>
+  <desc>원하는 복제본 3, maxSurge 1이면 총 파드는 최대 4까지, maxUnavailable 1이면 가용 파드는 항상 2 이상을 유지한다. 두 경계선(총 4, 가용 2) 사이에서 v1 파드가 v2로 점진 교체된다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .v1    { fill: rgb(140,190,235); }
+      .v2    { fill: rgb(212,168,83); }
+      .cap   { font-size: 11px; font-weight: 700; fill: rgb(240,150,190); }
+      .lbl   { font-size: 10px; font-weight: 700; fill: #0d0d0d; }
+      .note  { font-size: 10.5px; fill: #e8e4df; }
+      .ax    { font-size: 10px; fill: rgb(138,133,128); }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="340" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">maxSurge=1, maxUnavailable=1 (replicas=3)</text>
+  <text x="24" y="50" class="sub">총 파드 최대 4, 가용은 항상 2 이상을 유지하며 교체됩니다</text>
+
+  <!-- y grid lines -->
+  <!-- level 4 (max total) -->
+  <line x1="120" y1="90" x2="880" y2="90" stroke="rgb(240,150,190)" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="112" y="94" class="cap" text-anchor="end">4</text>
+  <text x="730" y="84" class="cap" text-anchor="middle">maxSurge=1 → 총 최대 4</text>
+  <!-- level 3 desired -->
+  <line x1="120" y1="140" x2="880" y2="140" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+  <text x="112" y="144" class="ax" text-anchor="end">3 (desired)</text>
+  <!-- level 2 (min available) -->
+  <line x1="120" y1="190" x2="880" y2="190" stroke="rgb(240,150,190)" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="112" y="194" class="cap" text-anchor="end">2</text>
+  <text x="730" y="184" class="cap" text-anchor="middle">maxUnavailable=1 → 가용 최소 2</text>
+
+  <!-- columns of pods over time (stack from baseline y=240 up) -->
+  <!-- col x positions -->
+  <!-- t1: 3 v1 -->
+  <g>
+    <rect class="v1" x="140" y="190" width="60" height="45" rx="3"/>
+    <rect class="v1" x="140" y="143" width="60" height="45" rx="3"/>
+    <rect class="v1" x="140" y="96" width="60" height="45" rx="3"/>
+  </g>
+  <!-- t2: 2 v1 + 2 v2 (surge to 4) -->
+  <g>
+    <rect class="v1" x="285" y="190" width="60" height="45" rx="3"/>
+    <rect class="v1" x="285" y="143" width="60" height="45" rx="3"/>
+    <rect class="v2" x="285" y="96" width="60" height="45" rx="3"/>
+    <rect class="v2" x="285" y="49" width="60" height="45" rx="3" opacity="0.55"/>
+  </g>
+  <!-- t3: 1 v1 + 2 v2 -->
+  <g>
+    <rect class="v1" x="430" y="190" width="60" height="45" rx="3"/>
+    <rect class="v2" x="430" y="143" width="60" height="45" rx="3"/>
+    <rect class="v2" x="430" y="96" width="60" height="45" rx="3"/>
+  </g>
+  <!-- t4: 3 v2 -->
+  <g>
+    <rect class="v2" x="575" y="190" width="60" height="45" rx="3"/>
+    <rect class="v2" x="575" y="143" width="60" height="45" rx="3"/>
+    <rect class="v2" x="575" y="96" width="60" height="45" rx="3"/>
+  </g>
+
+  <line x1="120" y1="240" x2="880" y2="240" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+  <text x="880" y="256" class="ax" text-anchor="end">시간 →</text>
+  <text x="170" y="258" class="ax" text-anchor="middle">3×v1</text>
+  <text x="315" y="258" class="ax" text-anchor="middle">surge=4</text>
+  <text x="460" y="258" class="ax" text-anchor="middle">교체 중</text>
+  <text x="605" y="258" class="ax" text-anchor="middle">3×v2</text>
+
+  <text x="480" y="295" class="note" text-anchor="middle">새 RS +1·옛 RS −1 동시 → 옛 파드 삭제 마킹되면 새 RS를 또 +1 → 반복</text>
+  <rect class="v1" x="330" y="312" width="18" height="14" rx="2"/><text x="354" y="324" class="note">v1</text>
+  <rect class="v2" x="460" y="312" width="18" height="14" rx="2"/><text x="484" y="324" class="note">v2</text>
+</svg>

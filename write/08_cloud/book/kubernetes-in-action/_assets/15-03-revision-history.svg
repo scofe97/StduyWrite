@@ -1,0 +1,55 @@
+<svg viewBox="0 0 960 300" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Deployment revision 히스토리는 ReplicaSet으로 저장된다</title>
+  <desc>Deployment의 revision 히스토리는 연관된 ReplicaSet들로 표현된다. 각 ReplicaSet이 하나의 revision이고, 파드 0인 옛 ReplicaSet들이 revision 1·2·3을, 활성 ReplicaSet(revision N)이 현재 파드를 관리한다. 옛 ReplicaSet을 지우지 않는 이유다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .dep   { font-size: 13px; font-weight: 700; fill: #0d0d0d; }
+      .rs    { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+      .rev   { font-size: 10px; fill: rgb(138,133,128); }
+      .pod   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
+      .note  { font-size: 10.5px; fill: #e8e4df; }
+    </style>
+    <marker id="rev-a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="300" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">revision 히스토리 = ReplicaSet들</text>
+  <text x="24" y="50" class="sub">각 ReplicaSet이 한 revision — 그래서 옛 ReplicaSet을 지우지 않습니다</text>
+
+  <!-- Deployment -->
+  <rect x="400" y="75" width="150" height="44" rx="8" fill="rgb(91,155,213)"/>
+  <text x="475" y="102" class="dep" text-anchor="middle">Deployment</text>
+
+  <!-- history dashed box -->
+  <rect x="40" y="150" width="740" height="110" rx="10" fill="none" stroke="rgb(138,133,128)" stroke-width="1.3" stroke-dasharray="6 4"/>
+  <text x="230" y="145" class="note" text-anchor="middle">옛 ReplicaSet = revision 히스토리 (파드 0)</text>
+
+  <!-- old RSs (revision 1,2,3) -->
+  <g fill="rgb(150,150,150)">
+    <rect x="70" y="180" width="120" height="50" rx="6"/>
+    <rect x="210" y="180" width="120" height="50" rx="6"/>
+    <rect x="350" y="180" width="120" height="50" rx="6"/>
+  </g>
+  <text x="130" y="210" class="rs" text-anchor="middle">ReplicaSet</text><text x="130" y="248" class="rev" text-anchor="middle">Revision 1</text>
+  <text x="270" y="210" class="rs" text-anchor="middle">ReplicaSet</text><text x="270" y="248" class="rev" text-anchor="middle">Revision 2</text>
+  <text x="410" y="210" class="rs" text-anchor="middle">ReplicaSet</text><text x="410" y="248" class="rev" text-anchor="middle">Revision 3</text>
+  <text x="510" y="210" class="rs" text-anchor="middle">···</text>
+
+  <!-- active RS (revision N) -->
+  <rect x="560" y="180" width="140" height="50" rx="6" fill="rgb(140,190,235)"/>
+  <text x="630" y="205" class="rs" text-anchor="middle">ReplicaSet</text><text x="630" y="222" class="rev" text-anchor="middle" style="fill:#0d0d0d">Revision N (활성)</text>
+
+  <!-- pods -->
+  <rect x="820" y="185" width="110" height="46" rx="8" fill="rgb(180,210,245)"/>
+  <rect x="810" y="177" width="110" height="46" rx="8" fill="rgb(180,210,245)"/>
+  <text x="865" y="204" class="pod" text-anchor="middle">Pods</text>
+
+  <!-- arrows -->
+  <line x1="475" y1="119" x2="630" y2="178" stroke="rgb(138,133,128)" stroke-width="1.8" marker-end="url(#rev-a)"/>
+  <text x="580" y="145" class="note" text-anchor="middle">현재 revision</text>
+  <line x1="700" y1="203" x2="808" y2="200" stroke="rgb(138,133,128)" stroke-width="1.8" marker-end="url(#rev-a)"/>
+
+  <text x="480" y="285" class="note" text-anchor="middle">rollout undo --to-revision=N 으로 특정 revision(ReplicaSet)으로 되돌립니다 · 유지 수는 revisionHistoryLimit(기본 10)</text>
+</svg>

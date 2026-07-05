@@ -1,0 +1,57 @@
+<svg viewBox="0 0 960 380" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>reconciliation control loop</title>
+  <desc>컨트롤러는 소유(ReplicaSet)와 의존(Pod) 오브젝트를 관찰하고, 원하는 상태와 실제 상태를 비교해 다르면 조정한다. 실제가 적으면 파드를 만들고, 많으면 지운다. 이 순환이 끊임없이 돈다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .step  { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .desc  { font-size: 10.5px; fill: #0d0d0d; }
+      .obj   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
+      .note  { font-size: 11px; fill: #e8e4df; }
+      .lp    { font-size: 11px; font-weight: 700; fill: rgb(212,168,83); }
+    </style>
+    <marker id="rl-a" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="rl-g" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="380" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">reconciliation control loop — 관찰 · 비교 · 조정</text>
+  <text x="24" y="50" class="sub">모든 쿠버네티스 컨트롤러가 원하는 상태와 실제 상태를 끊임없이 맞춥니다</text>
+
+  <!-- observed objects -->
+  <rect x="60" y="90" width="180" height="52" rx="8" fill="rgb(200,220,245)" stroke="rgb(91,155,213)" stroke-width="1.3"/>
+  <text x="150" y="112" class="obj" text-anchor="middle">ReplicaSet (owner)</text>
+  <text x="150" y="130" class="desc" text-anchor="middle">원하는 상태: replicas=3</text>
+  <rect x="60" y="290" width="180" height="52" rx="8" fill="rgb(200,220,245)" stroke="rgb(91,155,213)" stroke-width="1.3"/>
+  <text x="150" y="312" class="obj" text-anchor="middle">Pods (dependent)</text>
+  <text x="150" y="330" class="desc" text-anchor="middle">실제 상태: 현재 파드 수</text>
+
+  <!-- loop: 3 steps -->
+  <!-- observe -->
+  <rect x="360" y="100" width="180" height="60" rx="10" fill="rgb(91,155,213)"/>
+  <text x="450" y="126" class="step" text-anchor="middle">① 관찰(observe)</text>
+  <text x="450" y="146" class="desc" text-anchor="middle">owner·dependent 상태</text>
+  <!-- compare -->
+  <rect x="640" y="190" width="180" height="60" rx="10" fill="rgb(212,168,83)"/>
+  <text x="730" y="216" class="step" text-anchor="middle">② 비교(diff)</text>
+  <text x="730" y="236" class="desc" text-anchor="middle">원하는 수 vs 실제 수</text>
+  <!-- reconcile -->
+  <rect x="360" y="280" width="180" height="60" rx="10" fill="rgb(102,187,106)"/>
+  <text x="450" y="306" class="step" text-anchor="middle">③ 조정(reconcile)</text>
+  <text x="450" y="326" class="desc" text-anchor="middle">부족→생성 / 초과→삭제</text>
+
+  <!-- loop arrows -->
+  <path d="M540,130 Q640,150 700,188" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#rl-a)"/>
+  <path d="M700,252 Q600,290 542,310" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#rl-a)"/>
+  <path d="M360,300 Q250,270 250,220 Q250,150 358,132" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#rl-a)"/>
+  <text x="300" y="215" class="lp" text-anchor="middle">순환</text>
+
+  <!-- observe reads objects -->
+  <line x1="240" y1="116" x2="358" y2="122" stroke="rgb(138,133,128)" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#rl-g)"/>
+  <line x1="240" y1="316" x2="358" y2="322" stroke="rgb(138,133,128)" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#rl-g)"/>
+  <!-- reconcile writes pods -->
+  <line x1="358" y1="326" x2="242" y2="330" stroke="rgb(102,187,106)" stroke-width="1.6" marker-end="url(#rl-g)"/>
+
+  <text x="480" y="372" class="note" text-anchor="middle">파드를 지우거나 노드가 죽어 실제 수가 줄면, 다음 순환에서 즉시 재생성해 원하는 수를 맞춥니다</text>
+</svg>

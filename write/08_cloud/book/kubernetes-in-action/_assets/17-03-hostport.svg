@@ -1,0 +1,43 @@
+<svg viewBox="0 0 960 280" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>hostPort로 daemon 파드 노출</title>
+  <desc>노드의 11559 포트가 그 노드의 로컬 에이전트 파드 컨테이너 80으로 포워딩된다. 각 노드는 자기 로컬 파드로만 보낸다. 에이전트가 없는 노드면 접속이 실패한다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .agent { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+      .port  { font-size: 10px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .node  { font-size: 11px; font-weight: 700; fill: rgb(138,133,128); }
+      .note  { font-size: 10px; fill: #e8e4df; }
+    </style>
+    <marker id="hp-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="280" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">hostPort — 노드 포트를 로컬 파드로 포워딩</text>
+  <text x="24" y="50" class="sub">노드 11559 → 로컬 에이전트 컨테이너 80. NodePort와 달리 로컬 파드로만</text>
+
+  <!-- 2 nodes -->
+  <rect x="120" y="80" width="320" height="160" rx="8" fill="none" stroke="rgb(70,70,70)" stroke-width="1.5"/><text x="280" y="228" class="node" text-anchor="middle">Node (172.18.0.2)</text>
+  <rect x="540" y="80" width="320" height="160" rx="8" fill="none" stroke="rgb(70,70,70)" stroke-width="1.5"/><text x="700" y="228" class="node" text-anchor="middle">Node (172.18.0.3)</text>
+
+  <!-- node port -->
+  <rect x="145" y="130" width="90" height="40" rx="5" fill="rgb(240,215,120)"/><text x="190" y="147" class="port" text-anchor="middle">노드</text><text x="190" y="161" class="port" text-anchor="middle">:11559</text>
+  <rect x="565" y="130" width="90" height="40" rx="5" fill="rgb(240,215,120)"/><text x="610" y="147" class="port" text-anchor="middle">노드</text><text x="610" y="161" class="port" text-anchor="middle">:11559</text>
+
+  <!-- agent pods (container port 80) -->
+  <rect x="290" y="115" width="130" height="70" rx="6" fill="rgb(102,187,106)"/><text x="355" y="143" class="agent" text-anchor="middle">node-agent</text>
+  <rect x="315" y="152" width="80" height="22" rx="3" fill="rgb(200,240,205)"/><text x="355" y="168" class="port" text-anchor="middle">:80</text>
+  <rect x="710" y="115" width="130" height="70" rx="6" fill="rgb(102,187,106)"/><text x="775" y="143" class="agent" text-anchor="middle">node-agent</text>
+  <rect x="735" y="152" width="80" height="22" rx="3" fill="rgb(200,240,205)"/><text x="775" y="168" class="port" text-anchor="middle">:80</text>
+
+  <!-- forwarding arrows -->
+  <line x1="235" y1="150" x2="288" y2="150" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#hp-a)"/>
+  <line x1="655" y1="150" x2="708" y2="150" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#hp-a)"/>
+
+  <!-- external client -->
+  <text x="190" y="108" class="note" text-anchor="middle">curl 172.18.0.2:11559</text>
+  <text x="610" y="108" class="note" text-anchor="middle">curl 172.18.0.3:11559</text>
+
+  <text x="480" y="262" class="note" text-anchor="middle" fill="rgb(212,168,83)">각 노드는 자기 로컬 파드로만 포워딩 — 에이전트 없는 노드면 접속 실패</text>
+</svg>
