@@ -1,5 +1,5 @@
 ---
-title: 07_system-design-book — 『가상 면접 사례로 배우는 대규모 시스템 설계 기초』 학습 시리즈
+title: 시스템 설계 — 『가상 면접 사례로 배우는 대규모 시스템 설계 기초』 학습 시리즈
 tags: [moc, system-design, scalability, interview, book-study]
 status: final
 book:
@@ -7,9 +7,9 @@ book:
   author: Alex Xu
   edition: Second Edition (Volume 1)
 related:
-  - ../03_distributed/01-01.분산 아키텍처 기초.md
-  - ../../05_data/theory/02-03.복제.md
-  - ../../05_data/theory/02-04.샤딩.md
+  - ../../03_distributed/01-01.분산 아키텍처 기초.md
+  - ../../../05_data/theory/02-03.복제.md
+  - ../../../05_data/theory/02-04.샤딩.md
 updated: 2026-06-10
 ---
 
@@ -30,21 +30,21 @@ updated: 2026-06-10
 
 | # | 챕터 | 문서 | 상태 |
 |---|------|------|------|
-| 1 | Scale from Zero to Millions of Users | [01-01](01-01.0부터%20수백만%20사용자까지%20확장.md) | 작성 완료 |
-| 2 | Back-of-the-Envelope Estimation | [01-02](01-02.개략적%20규모%20추정.md) | 작성 완료 |
-| 3 | A Framework for System Design Interviews | [01-03](01-03.시스템%20설계%20면접%204단계%20프레임워크.md) | 작성 완료 |
-| 4 | Design a Rate Limiter | [02-01](02-01.처리율%20제한기%20설계.md) | 작성 완료 |
-| 5 | Design Consistent Hashing | [02-02](02-02.안정%20해시%20설계.md) | 작성 완료 |
-| 6 | Design a Key-Value Store | [02-03](02-03.키-값%20저장소%20설계.md) | 작성 완료 |
-| 7 | Design a Unique ID Generator | [02-04](02-04.분산%20유일%20ID%20생성기%20설계.md) | 작성 완료 |
-| 8 | Design a URL Shortener | [02-05](02-05.URL%20단축기%20설계.md) | 작성 완료 |
-| 9 | Design a Web Crawler | [02-06](02-06.웹%20크롤러%20설계.md) | 작성 완료 |
-| 10 | Design a Notification System | [02-07](02-07.알림%20시스템%20설계.md) | 작성 완료 |
-| 11 | Design a News Feed System | [02-08](02-08.뉴스%20피드%20시스템%20설계.md) | 작성 완료 |
-| 12 | Design a Chat System | [02-09](02-09.채팅%20시스템%20설계.md) | 작성 완료 |
-| 13 | Design a Search Autocomplete System | [02-10](02-10.검색어%20자동완성%20시스템%20설계.md) | 작성 완료 |
-| 14 | Design YouTube | [02-11](02-11.YouTube%20설계.md) | 작성 완료 |
-| 15 | Design Google Drive | [02-12](02-12.Google%20Drive%20설계.md) | 작성 완료 |
+| 1 | Scale from Zero to Millions of Users | [01-01](0부터%20수백만%20사용자까지%20확장.md) | 작성 완료 |
+| 2 | Back-of-the-Envelope Estimation | [01-02](개략적%20규모%20추정.md) | 작성 완료 |
+| 3 | A Framework for System Design Interviews | [01-03](시스템%20설계%20면접%204단계%20프레임워크.md) | 작성 완료 |
+| 4 | Design a Rate Limiter | [02-01](처리율%20제한기%20설계.md) | 작성 완료 |
+| 5 | Design Consistent Hashing | [02-02](안정%20해시%20설계.md) | 작성 완료 |
+| 6 | Design a Key-Value Store | [02-03](키-값%20저장소%20설계.md) | 작성 완료 |
+| 7 | Design a Unique ID Generator | [02-04](분산%20유일%20ID%20생성기%20설계.md) | 작성 완료 |
+| 8 | Design a URL Shortener | [02-05](URL%20단축기%20설계.md) | 작성 완료 |
+| 9 | Design a Web Crawler | [02-06](웹%20크롤러%20설계.md) | 작성 완료 |
+| 10 | Design a Notification System | [02-07](알림%20시스템%20설계.md) | 작성 완료 |
+| 11 | Design a News Feed System | [02-08](뉴스%20피드%20시스템%20설계.md) | 작성 완료 |
+| 12 | Design a Chat System | [02-09](채팅%20시스템%20설계.md) | 작성 완료 |
+| 13 | Design a Search Autocomplete System | [02-10](검색어%20자동완성%20시스템%20설계.md) | 작성 완료 |
+| 14 | Design YouTube | [02-11](YouTube%20설계.md) | 작성 완료 |
+| 15 | Design Google Drive | [02-12](Google%20Drive%20설계.md) | 작성 완료 |
 | 16 | The Learning Continues | — | 본편 아님(실무 시스템 참고자료 링크 모음) |
 
 

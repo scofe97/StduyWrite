@@ -126,4 +126,4 @@ A: 먼저 처리된 버전이 이기고(first-win), 나중 버전은 충돌을 �
 ## 참고 자료
 
 - 연관 서적: Alex Xu, 『System Design Interview — An Insider's Guide』(Vol 1) CH15
-- 연관 문서: [YouTube 설계](02-11.YouTube 설계.md) · [키-값 저장소 설계](02-03.키-값 저장소 설계.md)
+- 연관 문서: [YouTube 설계](YouTube 설계.md) · [키-값 저장소 설계](키-값 저장소 설계.md)
