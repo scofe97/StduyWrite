@@ -1,0 +1,46 @@
+<svg viewBox="0 0 960 340" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>restartPolicy에 따른 실패 처리</title>
+  <desc>restartPolicy가 OnFailure이면 Kubelet이 같은 파드 안에서 실패한 컨테이너를 재시작한다. restartPolicy가 Never이면 파드 전체가 실패로 표시되고 Job 컨트롤러가 새 파드를 만든다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .lbl   { font-size: 12px; font-weight: 700; fill: #e8e4df; }
+      .box   { font-size: 10.5px; font-weight: 700; fill: #0d0d0d; }
+      .note  { font-size: 10px; fill: rgb(138,133,128); }
+      .who   { font-size: 10px; font-weight: 700; fill: rgb(212,168,83); }
+    </style>
+    <marker id="rp-a" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L6.5,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="340" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">restartPolicy에 따른 실패 처리</text>
+  <text x="24" y="50" class="sub">컨테이너 실패를 파드 레벨(Kubelet)에서 다룰지 Job 레벨(컨트롤러)에서 다룰지 결정</text>
+
+  <!-- Row 1: OnFailure (pod level) -->
+  <text x="24" y="105" class="lbl">restartPolicy: OnFailure</text>
+  <text x="24" y="122" class="who">파드 레벨 · Kubelet</text>
+  <rect x="250" y="82" width="200" height="52" rx="8" fill="none" stroke="rgb(70,70,70)" stroke-width="1.5"/>
+  <text x="350" y="76" class="note" text-anchor="middle">같은 Pod 유지</text>
+  <rect x="264" y="94" width="80" height="28" rx="5" fill="rgb(240,150,190)"/><text x="304" y="113" class="box" text-anchor="middle">실패 ✗</text>
+  <rect x="356" y="94" width="80" height="28" rx="5" fill="rgb(102,187,106)"/><text x="396" y="113" class="box" text-anchor="middle">재시작 ✓</text>
+  <line x1="450" y1="108" x2="560" y2="108" stroke="rgb(138,133,128)" stroke-width="1.4" marker-end="url(#rp-a)"/>
+  <text x="600" y="105" class="note">같은 노드·빠른 재시도</text>
+  <text x="600" y="120" class="note">지수 백오프</text>
+
+  <!-- divider -->
+  <line x1="24" y1="175" x2="936" y2="175" stroke="rgb(50,50,50)" stroke-width="1"/>
+
+  <!-- Row 2: Never (job level) -->
+  <text x="24" y="230" class="lbl">restartPolicy: Never</text>
+  <text x="24" y="247" class="who">Job 레벨 · Job 컨트롤러</text>
+  <rect x="250" y="205" width="94" height="52" rx="8" fill="none" stroke="rgb(70,70,70)" stroke-width="1.5"/>
+  <text x="297" y="199" class="note" text-anchor="middle">Pod A</text>
+  <rect x="262" y="217" width="70" height="28" rx="5" fill="rgb(240,150,190)"/><text x="297" y="236" class="box" text-anchor="middle">실패 ✗</text>
+  <line x1="344" y1="231" x2="420" y2="231" stroke="rgb(138,133,128)" stroke-width="1.4" marker-end="url(#rp-a)"/>
+  <rect x="430" y="205" width="94" height="52" rx="8" fill="none" stroke="rgb(70,70,70)" stroke-width="1.5"/>
+  <text x="477" y="199" class="note" text-anchor="middle">Pod B (신규)</text>
+  <rect x="442" y="217" width="70" height="28" rx="5" fill="rgb(102,187,106)"/><text x="477" y="236" class="box" text-anchor="middle">성공 ✓</text>
+  <text x="600" y="228" class="note">파드 전체 실패 표시</text>
+  <text x="600" y="243" class="note">새 파드는 다른 노드 가능</text>
+</svg>

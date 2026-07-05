@@ -21,6 +21,7 @@ related:
   - ./13-01.Gateway%20API%20%EA%B0%9C%EB%85%90%EA%B3%BC%20Gateway%20%EB%B0%B0%ED%8F%AC.md
   - ./14-01.ReplicaSet%20%EA%B8%B0%EC%B4%88%20%E2%80%94%20%EC%83%9D%EC%84%B1%C2%B7%EC%86%8C%EC%9C%A0%C2%B7%EC%8A%A4%EC%BC%80%EC%9D%BC%EB%A7%81.md
   - ./15-01.Deployment%20%EA%B8%B0%EC%B4%88%20%E2%80%94%20%EC%83%9D%EC%84%B1%C2%B7pod-template-hash%C2%B7%EC%8A%A4%EC%BC%80%EC%9D%BC%EB%A7%81.md
+  - ./18-01.Job%20%EA%B8%B0%EC%B4%88%20%E2%80%94%20%EC%8B%A4%ED%96%89%C2%B7%EC%83%81%ED%83%9C%C2%B7suspend%C2%B7%EC%9E%90%EB%8F%99%EC%82%AD%EC%A0%9C.md
   - ../ai-infra-gitaiops/README.md
   - ../../kubernetes/README.md
   - ../../README.md
@@ -57,7 +58,7 @@ updated: 2026-07-05
 
 > 아래 표는 원문을 정독해 편을 작성하는 대로 채웁니다. 아직 작성하지 않은 장은 상태를 "작성 예정"으로만 표시하고, 본문 내용은 원문 도착 전까지 채우지 않습니다.
 
-진행 현황은 **17장까지 정독 완료(46편)**, 18장이 남았습니다. 표는 원서의 주제 흐름을 따라 다섯 묶음으로 나눠 두었습니다. 각 묶음은 쿠버네티스를 배우는 자연스러운 순서 — 무엇인지 이해하고(기초), 컨테이너를 감싸 배포하고(파드), 설정·저장소를 붙이고(데이터), 밖으로 노출하고(네트워킹), 여러 벌을 자동으로 굴리는(컨트롤러) — 를 그대로 따릅니다.
+진행 현황은 **전체 18장 정독 완료(49편)** 입니다. 표는 원서의 주제 흐름을 따라 다섯 묶음으로 나눠 두었습니다. 각 묶음은 쿠버네티스를 배우는 자연스러운 순서 — 무엇인지 이해하고(기초), 컨테이너를 감싸 배포하고(파드), 설정·저장소를 붙이고(데이터), 밖으로 노출하고(네트워킹), 여러 벌을 자동으로 굴리는(컨트롤러) — 를 그대로 따릅니다.
 
 ### 기초 — 쿠버네티스란 무엇이고 어떻게 굴러가는가 (Ch1~4)
 
@@ -129,7 +130,9 @@ updated: 2026-07-05
 | [17-01](./17-01.DaemonSet%20%EA%B8%B0%EC%B4%88%20%E2%80%94%20%EB%85%B8%EB%93%9C%EB%A7%88%EB%8B%A4%20%ED%95%98%EB%82%98%C2%B7node%20selector%C2%B7%EC%97%85%EB%8D%B0%EC%9D%B4%ED%8A%B8.md) | DaemonSet 기초 — 노드마다 하나·node selector·업데이트 (Ch17 §17.1) | 완료 |
 | [17-02](./17-02.%EB%85%B8%EB%93%9C%20%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8%20%ED%8A%B9%EC%88%98%20%EA%B8%B0%EB%8A%A5%20%E2%80%94%20privileged%C2%B7hostPath%C2%B7hostNetwork%C2%B7PriorityClass.md) | 노드 에이전트 특수 기능 — privileged·hostPath·hostNetwork·PriorityClass (Ch17 §17.2) | 완료 |
 | [17-03](./17-03.%EB%A1%9C%EC%BB%AC%20daemon%20%ED%8C%8C%EB%93%9C%20%ED%86%B5%EC%8B%A0%20%E2%80%94%20hostPort%C2%B7hostNetwork%C2%B7internalTrafficPolicy.md) | 로컬 daemon 파드 통신 — hostPort·hostNetwork·internalTrafficPolicy (Ch17 §17.3) | 완료 |
-| 18 | Job·CronJob으로 배치 처리 (Batch processing with Jobs and CronJobs) | 작성 예정 |
+| [18-01](./18-01.Job%20%EA%B8%B0%EC%B4%88%20%E2%80%94%20%EC%8B%A4%ED%96%89%C2%B7%EC%83%81%ED%83%9C%C2%B7suspend%C2%B7%EC%9E%90%EB%8F%99%EC%82%AD%EC%A0%9C.md) | Job 기초 — 실행·상태·suspend·자동삭제 (Ch18 §18.1.1) | 완료 |
+| [18-02](./18-02.Job%20%EB%B3%91%EB%A0%AC%C2%B7%EC%8B%A4%ED%8C%A8%C2%B7%EC%99%84%EB%A3%8C%20%EB%AA%A8%EB%93%9C.md) | Job 병렬·실패·완료 모드 (Ch18 §18.1.2~18.1.4) | 완료 |
+| [18-03](./18-03.work%20queue%C2%B7pod%20%ED%86%B5%EC%8B%A0%C2%B7sidecar%C2%B7CronJob.md) | work queue·pod 통신·sidecar·CronJob (Ch18 §18.1.5~18.2) | 완료 |
 
 
 

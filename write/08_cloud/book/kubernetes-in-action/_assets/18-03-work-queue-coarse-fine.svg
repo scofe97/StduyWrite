@@ -1,0 +1,57 @@
+<svg viewBox="0 0 960 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>work queue의 coarse와 fine 병렬 처리</title>
+  <desc>coarse 병렬 처리에서 각 파드는 큐에서 아이템 하나를 꺼내 처리하고 종료하므로 아이템당 파드 하나가 나온다. fine 병렬 처리에서 각 파드는 큐가 빌 때까지 여러 아이템을 반복 처리한다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .lbl   { font-size: 12px; font-weight: 800; fill: #e8e4df; }
+      .cfg   { font-size: 10px; fill: rgb(212,168,83); font-weight: 700; }
+      .q     { font-size: 10px; font-weight: 700; fill: #0d0d0d; }
+      .pod   { font-size: 10.5px; font-weight: 700; fill: #e8e4df; }
+      .note  { font-size: 10px; fill: rgb(138,133,128); }
+    </style>
+    <marker id="wq-a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="360" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">work queue — coarse vs fine 병렬 처리</text>
+  <text x="24" y="50" class="sub">큐와 인출은 컨테이너가 구현. Job은 파드 수만 관리</text>
+
+  <!-- COARSE -->
+  <text x="24" y="90" class="lbl">coarse</text>
+  <text x="24" y="106" class="cfg">completions N · parallelism 3</text>
+  <text x="24" y="120" class="note">파드당 아이템 1개</text>
+  <!-- queue -->
+  <rect x="180" y="78" width="330" height="30" rx="5" fill="rgb(150,220,160)"/>
+  <text x="345" y="98" class="q" text-anchor="middle">Work queue: 1 2 3 4 5 … N</text>
+  <!-- pods -->
+  <rect x="560" y="74" width="90" height="26" rx="5" fill="rgb(91,155,213)"/><text x="605" y="92" class="pod" text-anchor="middle">Pod → 1</text>
+  <rect x="660" y="74" width="90" height="26" rx="5" fill="rgb(91,155,213)"/><text x="705" y="92" class="pod" text-anchor="middle">Pod → 2</text>
+  <rect x="760" y="74" width="90" height="26" rx="5" fill="rgb(91,155,213)"/><text x="805" y="92" class="pod" text-anchor="middle">Pod → 3</text>
+  <rect x="860" y="74" width="76" height="26" rx="5" fill="none" stroke="rgb(70,70,70)" stroke-width="1.3" stroke-dasharray="4 3"/><text x="898" y="92" class="note" text-anchor="middle">…</text>
+  <line x1="510" y1="93" x2="558" y2="93" stroke="rgb(138,133,128)" stroke-width="1.3" marker-end="url(#wq-a)"/>
+  <text x="705" y="125" class="note" text-anchor="middle">아이템 하나 처리 후 종료 → 아이템 수만큼 파드</text>
+
+  <!-- divider -->
+  <line x1="24" y1="175" x2="936" y2="175" stroke="rgb(50,50,50)" stroke-width="1"/>
+
+  <!-- FINE -->
+  <text x="24" y="215" class="lbl">fine</text>
+  <text x="24" y="231" class="cfg">parallelism 3 (completions 없음)</text>
+  <text x="24" y="245" class="note">파드당 여러 아이템</text>
+  <!-- queue -->
+  <rect x="180" y="203" width="330" height="30" rx="5" fill="rgb(150,220,160)"/>
+  <text x="345" y="223" class="q" text-anchor="middle">Work queue: 1 2 3 4 5 …</text>
+  <!-- pods -->
+  <rect x="560" y="199" width="120" height="26" rx="5" fill="rgb(91,155,213)"/><text x="620" y="217" class="pod" text-anchor="middle">Pod ↻ 1,4,…</text>
+  <rect x="690" y="199" width="120" height="26" rx="5" fill="rgb(91,155,213)"/><text x="750" y="217" class="pod" text-anchor="middle">Pod ↻ 2,5,…</text>
+  <rect x="820" y="199" width="116" height="26" rx="5" fill="rgb(91,155,213)"/><text x="878" y="217" class="pod" text-anchor="middle">Pod ↻ 3,6,…</text>
+  <line x1="510" y1="218" x2="558" y2="218" stroke="rgb(138,133,128)" stroke-width="1.3" marker-end="url(#wq-a)"/>
+  <text x="748" y="250" class="note" text-anchor="middle">큐가 빌 때까지 반복 → 한 파드 성공 = 큐 비었음</text>
+
+  <!-- bottom key difference -->
+  <rect x="180" y="285" width="756" height="52" rx="8" fill="none" stroke="rgb(70,70,70)" stroke-width="1.3"/>
+  <text x="200" y="308" class="note">coarse: completions = 아이템 수 (파드 하나 = 아이템 하나)</text>
+  <text x="200" y="326" class="note">fine: completions 미설정 (마지막 아이템 처리한 파드가 성공으로 종료하면 전체 완료)</text>
+</svg>
