@@ -21,7 +21,7 @@ updated: 2026-05-20
 | 폴더 | 범위 |
 |------|------|
 | [01_concepts/](01_concepts/) | 프레임워크 독립 이론 — OAuth2, OIDC, JWT, 세션 vs 토큰, 암호학 기초 |
-| [02_spring-security/](02_spring-security/) | Spring Security 6.x Filter Chain·OAuth2 Login·JWT 인증 — 8편 (2026-05-20 Notion 자료 이관) |
+| [→ 11_spring/10_security/](../11_spring/10_security/) | Spring Security 6.x Filter Chain·OAuth2 Login·JWT 인증 — 8편. Spring 프레임워크 구현이라 Spring 카테고리로 이관(구 `02_spring-security/`). 이론은 여기 `01_concepts/`, 구현은 Spring 쪽. |
 | [03_vulnerabilities/](03_vulnerabilities/) | OWASP Top 10 — SQL Injection, XSS, CSRF 등 |
 | [04_threat-modeling/](04_threat-modeling/) | STRIDE, Attack Tree, 공격자 관점 설계 분석 |
 

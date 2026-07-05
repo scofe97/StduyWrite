@@ -1,15 +1,15 @@
 ---
-title: 10_security/02_spring-security — Spring Security 구현
+title: 11_spring/10_security — Spring Security 구현
 tags: [moc, spring, spring-security, security, oauth2, jwt]
 status: final
 related:
   - ../README.md
-  - ../01_concepts/README.md
+  - ../../10_security/01_concepts/README.md
   - ../../11_spring/README.md
 updated: 2026-05-20
 ---
 
-# 10_security/02_spring-security
+# 11_spring/10_security
 
 ---
 
@@ -65,6 +65,6 @@ updated: 2026-05-20
 
 ## 관련 문서
 
-- [10_security 상위 MOC](../README.md) — 보안 카테고리 전체 진입
-- [10_security/01_concepts](../01_concepts/README.md) — OAuth2·JWT·암호학 이론 (프레임워크 독립)
-- [11_spring 통합 MOC](../../11_spring/README.md) — Spring 본질 이론 진입점
+- [10_security 상위 MOC](../../10_security/README.md) — 보안 카테고리 전체 진입
+- [10_security/01_concepts](../../10_security/01_concepts/README.md) — OAuth2·JWT·암호학 이론 (프레임워크 독립)
+- [11_spring 통합 MOC](../../10_security/README.md) — Spring 본질 이론 진입점
