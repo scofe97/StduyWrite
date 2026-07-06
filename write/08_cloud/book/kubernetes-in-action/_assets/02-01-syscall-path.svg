@@ -1,0 +1,78 @@
+<svg viewBox="0 0 900 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>시스템 콜 경로 — VM은 층을 거치고 컨테이너는 직행한다</title>
+  <desc>VM 안의 앱은 syscall을 게스트 커널에 보내고, 그 명령이 하이퍼바이저를 거쳐 호스트 물리 CPU로 전달된다. 컨테이너 안의 앱은 호스트 커널에 직접 syscall을 보내고 그 커널이 물리 CPU에서 바로 실행한다. 층이 적을수록 오버헤드가 적다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .zlabel{ font-size: 13px; font-weight: 800; fill: rgb(212,168,83); }
+      .box   { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
+      .boxd  { font-size: 12.5px; font-weight: 800; fill: #e8e4df; }
+      .step  { font-size: 10px; fill: #1a1a1a; }
+      .cnt   { font-size: 11px; font-weight: 800; fill: rgb(212,168,83); }
+    </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="440" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">시스템 콜(syscall)이 물리 CPU까지 닿는 경로</text>
+  <text x="24" y="50" class="sub">앱이 하드웨어를 쓰려면 syscall을 보냅니다. VM은 이 요청이 여러 층을 거치고, 컨테이너는 커널 한 번만 거쳐 직행합니다 — 이 층수 차이가 오버헤드입니다.</text>
+
+  <!-- ===== 왼쪽: VM (4층) ===== -->
+  <text x="40" y="86" class="zlabel">VM — 4단계를 거침</text>
+
+  <rect x="40" y="98" width="360" height="46" rx="8" fill="rgb(230,230,230)"/>
+  <text x="220" y="120" class="box" text-anchor="middle">App (VM 안)</text>
+  <text x="220" y="136" class="step" text-anchor="middle">하드웨어가 필요해 syscall 발생</text>
+
+  <line x1="220" y1="144" x2="220" y2="168" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="235" y="162" class="cnt">① syscall</text>
+
+  <rect x="40" y="170" width="360" height="46" rx="8" fill="rgb(102,187,106)"/>
+  <text x="220" y="192" class="box" text-anchor="middle">Guest Kernel (게스트 커널)</text>
+  <text x="220" y="208" class="step" text-anchor="middle">가상 CPU용 머신 명령으로 변환</text>
+
+  <line x1="220" y1="216" x2="220" y2="240" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="235" y="234" class="cnt">② 가상 CPU 명령</text>
+
+  <rect x="40" y="242" width="360" height="46" rx="8" fill="rgb(150,130,220)"/>
+  <text x="220" y="264" class="box" text-anchor="middle">Hypervisor (하이퍼바이저)</text>
+  <text x="220" y="280" class="step" text-anchor="middle">가상 → 물리 자원으로 중개</text>
+
+  <line x1="220" y1="288" x2="220" y2="312" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="235" y="306" class="cnt">③ 물리 CPU로 전달</text>
+
+  <rect x="40" y="314" width="360" height="46" rx="8" fill="#e8e4df"/>
+  <text x="220" y="342" class="box" text-anchor="middle">Physical CPU (물리 하드웨어)</text>
+
+  <text x="220" y="392" class="boxd" text-anchor="middle" font-size="11">앱 → 게스트커널 → 하이퍼바이저 → 물리 CPU</text>
+  <text x="220" y="410" class="cnt" text-anchor="middle">층 3개를 거침 = 오버헤드 큼, 격리 강함</text>
+
+  <!-- 구분선 -->
+  <line x1="450" y1="80" x2="450" y2="410" stroke="rgb(42,37,32)" stroke-width="1" stroke-dasharray="6 4"/>
+
+  <!-- ===== 오른쪽: 컨테이너 (2층) ===== -->
+  <text x="500" y="86" class="zlabel">컨테이너 — 커널 한 번, 직행</text>
+
+  <rect x="500" y="98" width="360" height="46" rx="8" fill="rgb(230,230,230)" stroke="rgb(212,168,83)" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <text x="680" y="120" class="box" text-anchor="middle">App (컨테이너 안)</text>
+  <text x="680" y="136" class="step" text-anchor="middle">격리돼 있지만 그냥 프로세스일 뿐</text>
+
+  <line x1="680" y1="144" x2="680" y2="242" stroke="rgb(212,168,83)" stroke-width="2.4" marker-end="url(#ar)"/>
+  <text x="695" y="196" class="cnt">① syscall (직접)</text>
+
+  <rect x="500" y="244" width="360" height="46" rx="8" fill="rgb(102,187,106)"/>
+  <text x="680" y="266" class="box" text-anchor="middle">Host Kernel (호스트 커널, 공유)</text>
+  <text x="680" y="282" class="step" text-anchor="middle">이 커널이 물리 CPU에서 바로 실행</text>
+
+  <line x1="680" y1="290" x2="680" y2="314" stroke="rgb(212,168,83)" stroke-width="2.4" marker-end="url(#ar)"/>
+  <text x="695" y="308" class="cnt">② 바로 실행</text>
+
+  <rect x="500" y="314" width="360" height="46" rx="8" fill="#e8e4df"/>
+  <text x="680" y="342" class="box" text-anchor="middle">Physical CPU (물리 하드웨어)</text>
+
+  <text x="680" y="392" class="boxd" text-anchor="middle" font-size="11">앱 → 호스트커널 → 물리 CPU</text>
+  <text x="680" y="410" class="cnt" text-anchor="middle">CPU 가상화 없음 = 오버헤드 적음, 격리 약함</text>
+</svg>

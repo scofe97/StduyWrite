@@ -1,0 +1,79 @@
+<svg viewBox="0 0 960 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>레이어 공유와 해시 — 같은 해시는 한 번만 저장된다</title>
+  <desc>nginx:alpine과 redis:alpine은 베이스 레이어 해시(91d5cf66)가 같아 Docker가 그 레이어를 한 번만 저장하고 두 이미지가 함께 가리킨다. httpd:alpine은 베이스 해시(b2848c02)가 달라 별도로 저장된다. 해시는 레이어 내용의 지문이라, 같은 해시면 같은 내용으로 보고 중복 저장하지 않는다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .zlabel{ font-size: 12px; font-weight: 800; fill: rgb(212,168,83); }
+      .img   { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
+      .layer { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+      .hash  { font-size: 10px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .hashd { font-size: 10px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', monospace; }
+      .note  { font-size: 10.5px; fill: #e8e4df; }
+      .cnt   { font-size: 11px; font-weight: 800; fill: rgb(212,168,83); }
+    </style>
+    <marker id="s" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="sg" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(138,133,128)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="470" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">레이어 공유 — 같은 해시는 디스크에 한 번만 저장됩니다</text>
+  <text x="24" y="50" class="sub">해시는 레이어 내용의 "지문"입니다. 여러 이미지가 같은 해시 레이어를 가리키면 Docker는 그것을 한 벌만 저장합니다.</text>
+
+  <!-- ===== 위: 이미지 3개 (각자 자기 레이어) ===== -->
+  <text x="24" y="84" class="zlabel">이미지 3개 (각자의 상위 레이어)</text>
+
+  <!-- nginx -->
+  <rect x="60" y="98" width="200" height="70" rx="8" fill="rgb(230,230,230)"/>
+  <text x="160" y="122" class="img" text-anchor="middle">nginx:alpine</text>
+  <text x="160" y="142" class="layer" text-anchor="middle" font-size="10">nginx 설치·설정 레이어</text>
+  <text x="160" y="157" class="layer" text-anchor="middle" font-size="9">(이 이미지 고유)</text>
+
+  <!-- redis -->
+  <rect x="380" y="98" width="200" height="70" rx="8" fill="rgb(230,230,230)"/>
+  <text x="480" y="122" class="img" text-anchor="middle">redis:alpine</text>
+  <text x="480" y="142" class="layer" text-anchor="middle" font-size="10">redis 설치·설정 레이어</text>
+  <text x="480" y="157" class="layer" text-anchor="middle" font-size="9">(이 이미지 고유)</text>
+
+  <!-- httpd -->
+  <rect x="700" y="98" width="200" height="70" rx="8" fill="rgb(230,230,230)"/>
+  <text x="800" y="122" class="img" text-anchor="middle">httpd:alpine</text>
+  <text x="800" y="142" class="layer" text-anchor="middle" font-size="10">httpd 설치·설정 레이어</text>
+  <text x="800" y="157" class="layer" text-anchor="middle" font-size="9">(이 이미지 고유)</text>
+
+  <!-- ===== 아래: 베이스 레이어 저장소 ===== -->
+  <text x="24" y="230" class="zlabel">디스크에 실제 저장된 베이스 레이어 (해시로 식별)</text>
+
+  <!-- 공유 베이스 (91d5cf66) — nginx·redis 가리킴 -->
+  <rect x="200" y="250" width="260" height="72" rx="10" fill="rgb(102,187,106)"/>
+  <text x="330" y="276" class="layer" text-anchor="middle">alpine 베이스 레이어</text>
+  <rect x="222" y="286" width="216" height="24" rx="4" fill="#e6f7e7"/>
+  <text x="330" y="303" class="hash" text-anchor="middle">sha256:91d5cf66...</text>
+
+  <!-- httpd 별도 베이스 (b2848c02) -->
+  <rect x="640" y="250" width="240" height="72" rx="10" fill="rgb(150,130,220)"/>
+  <text x="760" y="276" class="layer" text-anchor="middle">다른 alpine 스냅샷</text>
+  <rect x="662" y="286" width="196" height="24" rx="4" fill="#ddd4f0"/>
+  <text x="760" y="303" class="hash" text-anchor="middle">sha256:b2848c02...</text>
+
+  <!-- 화살표: nginx → 공유 베이스 (앰버, 공유) -->
+  <line x1="160" y1="168" x2="290" y2="248" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#s)"/>
+  <!-- 화살표: redis → 공유 베이스 (앰버, 공유) -->
+  <line x1="480" y1="168" x2="370" y2="248" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#s)"/>
+  <!-- 화살표: httpd → 별도 베이스 (회색) -->
+  <line x1="800" y1="168" x2="770" y2="248" stroke="rgb(138,133,128)" stroke-width="1.8" marker-end="url(#sg)"/>
+
+  <text x="330" y="352" class="cnt" text-anchor="middle">nginx·redis 가 같은 해시 → 이 레이어는 한 벌만 저장</text>
+  <text x="760" y="352" class="note" text-anchor="middle">httpd 는 해시가 달라 별도 저장</text>
+
+  <!-- 하단 설명 -->
+  <rect x="60" y="378" width="840" height="72" rx="8" fill="rgb(24,28,32)" stroke="rgb(42,37,32)" stroke-width="1.2"/>
+  <text x="80" y="402" class="note">해시가 같다 = 레이어 내용이 바이트 단위로 동일하다 → Docker 는 하나만 저장하고 여러 이미지가 그것을 가리킵니다(포인터).</text>
+  <text x="80" y="424" class="note">해시가 다르다 = 내용이 다르다(1바이트라도) → 별도 레이어로 저장됩니다. httpd 는 nginx·redis 와 다른 alpine 스냅샷을 써서 공유되지 않았습니다.</text>
+  <text x="80" y="443" class="cnt">→ 그래서 팀이 베이스 이미지를 통일하면(같은 해시가 되면) 저장·전송이 크게 절약됩니다.</text>
+</svg>

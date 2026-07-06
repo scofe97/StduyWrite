@@ -1,0 +1,68 @@
+<svg viewBox="0 0 940 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Copy-on-Write — 읽기 전용 레이어는 공유하고, 수정은 자기 레이어로 복사한다</title>
+  <desc>컨테이너 A와 B는 같은 읽기 전용 이미지 레이어를 공유한다. 파일을 읽기만 하면 공유 레이어를 그대로 본다. 컨테이너 A가 공유 파일을 수정하면 그 파일이 A의 읽기/쓰기 레이어로 복사되고 사본만 바뀐다. B는 원본을 그대로 보므로 서로 격리된다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .zlabel{ font-size: 12.5px; font-weight: 800; fill: rgb(212,168,83); }
+      .lbl   { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .lbl2  { font-size: 10px; font-weight: 600; fill: #1a1a1a; }
+      .ro    { font-size: 10.5px; font-weight: 800; fill: #0d0d0d; }
+      .note  { font-size: 10.5px; fill: #e8e4df; }
+      .cnt   { font-size: 11px; font-weight: 800; fill: rgb(212,168,83); }
+      .file  { font-size: 10px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+    </style>
+    <marker id="cw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="940" height="470" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">Copy-on-Write — 공유하되 수정은 격리한다</text>
+  <text x="24" y="50" class="sub">컨테이너 A·B는 같은 읽기 전용 레이어를 공유합니다. 읽기만 하면 그대로 보고, 수정하는 순간 그 파일만 자기 쓰기 레이어로 복사됩니다.</text>
+
+  <!-- ===== 컨테이너 A (왼쪽) ===== -->
+  <rect x="24" y="72" width="410" height="270" rx="12" fill="rgb(24,28,32)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="42" y="96" class="zlabel">컨테이너 A</text>
+
+  <!-- A 쓰기 레이어 -->
+  <rect x="42" y="110" width="374" height="66" rx="8" fill="rgb(212,168,83)"/>
+  <text x="54" y="130" class="ro">읽기/쓰기 레이어 (A 전용)</text>
+  <rect x="250" y="138" width="150" height="30" rx="5" fill="#fdf3df"/>
+  <text x="325" y="158" class="file" text-anchor="middle">config.txt (사본, 수정됨)</text>
+  <text x="54" y="162" class="lbl2">A가 수정한 파일만 여기 복사됨</text>
+
+  <!-- A 읽기전용 레이어들 -->
+  <rect x="42" y="188" width="374" height="30" rx="5" fill="rgb(230,230,230)"/>
+  <text x="54" y="208" class="ro" font-size="10">읽기 전용 · 앱 A 레이어</text>
+
+  <!-- ===== 컨테이너 B (오른쪽) ===== -->
+  <rect x="506" y="72" width="410" height="270" rx="12" fill="rgb(24,28,32)" stroke="rgb(138,133,128)" stroke-width="1.3"/>
+  <text x="524" y="96" class="zlabel">컨테이너 B</text>
+
+  <rect x="524" y="110" width="374" height="66" rx="8" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <text x="536" y="130" class="note">읽기/쓰기 레이어 (B 전용)</text>
+  <text x="536" y="150" class="sub">B는 수정 안 함 → 비어 있음</text>
+
+  <rect x="524" y="188" width="374" height="30" rx="5" fill="rgb(230,230,230)"/>
+  <text x="536" y="208" class="ro" font-size="10">읽기 전용 · 앱 B 레이어</text>
+
+  <!-- ===== 공유 베이스 레이어 (하단, 양쪽이 함께 가리킴) ===== -->
+  <rect x="180" y="356" width="580" height="60" rx="10" fill="rgb(102,187,106)"/>
+  <text x="470" y="380" class="lbl" text-anchor="middle">공유 읽기 전용 베이스 레이어 (Docker는 한 번만 저장)</text>
+  <rect x="380" y="388" width="180" height="22" rx="4" fill="#e6f7e7"/>
+  <text x="470" y="404" class="file" text-anchor="middle">config.txt (원본, 그대로)</text>
+
+  <!-- 화살표: A·B 읽기전용 레이어 → 공유 베이스 -->
+  <line x1="230" y1="218" x2="300" y2="354" stroke="rgb(138,133,128)" stroke-width="1.4" marker-end="url(#cw)"/>
+  <line x1="710" y1="218" x2="640" y2="354" stroke="rgb(138,133,128)" stroke-width="1.4" marker-end="url(#cw)"/>
+
+  <!-- CoW 복사 화살표: 공유 원본 → A 쓰기 레이어 사본 -->
+  <path d="M 380 388 Q 200 300 300 172" fill="none" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#cw)"/>
+  <text x="150" y="300" class="cnt">✎ A가 수정 →</text>
+  <text x="150" y="316" class="cnt">파일만 복사(CoW)</text>
+
+  <text x="470" y="446" class="note" text-anchor="middle">B는 원본을 그대로 봅니다 — A의 수정이 B에 보이지 않으므로 서로 격리됩니다</text>
+  <text x="470" y="462" class="sub" text-anchor="middle">삭제도 마찬가지: 쓰기 레이어에 "삭제됨" 표시만 남고 원본은 아래에 남아 이미지 크기는 줄지 않습니다</text>
+</svg>
