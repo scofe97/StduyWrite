@@ -1,0 +1,77 @@
+<svg viewBox="0 0 980 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Service와 kube-proxy — 파드로 가는 트래픽 라우팅</title>
+  <desc>Service는 여러 파드를 하나의 가상 IP로 묶어 네트워크에 노출하는 가상 컴포넌트다. kube-proxy는 각 워커 노드에서 Service의 가상 IP로 온 트래픽을 실제 파드로 라우팅하고 로드밸런싱한다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: #e8e4df; }
+      .dim   { font-size: 11px; fill: rgb(138,133,128); }
+      .zone  { font-size: 12px; font-weight: 800; fill: rgb(212,168,83); }
+      .lbl   { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
+      .lbl2  { font-size: 10.5px; font-weight: 600; fill: #0d0d0d; }
+      .svc   { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .mono  { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; fill: #0d0d0d; }
+      .monod { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; fill: #e8e4df; }
+      .step  { font-size: 11px; fill: #e8e4df; }
+      .stepn { font-size: 11px; font-weight: 800; fill: rgb(212,168,83); }
+    </style>
+    <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="a2g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(138,133,128)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="980" height="470" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">Service와 kube-proxy — 파드로 가는 트래픽 라우팅</text>
+  <text x="24" y="52" class="sub">Service는 파드들을 하나의 가상 IP로 묶어 노출하고, kube-proxy가 그 가상 IP로 온 요청을 실제 파드로 나눠 보냅니다.</text>
+
+  <!-- Service (virtual, top center) -->
+  <rect x="360" y="80" width="260" height="66" rx="10" fill="rgb(212,168,83)"/>
+  <text x="490" y="106" class="svc" text-anchor="middle">Service: my-app  (가상 컴포넌트)</text>
+  <text x="490" y="128" class="mono" text-anchor="middle">ClusterIP  10.96.0.12 : 80</text>
+
+  <text x="632" y="118" class="sub">클라이언트는 이 가상 IP 하나만 압니다</text>
+
+  <!-- two worker nodes -->
+  <!-- Node 1 -->
+  <rect x="60" y="200" width="380" height="230" rx="12" fill="rgb(24,28,32)" stroke="rgb(138,133,128)" stroke-width="1.3"/>
+  <text x="80" y="226" class="zone">Worker Node 1</text>
+  <!-- kube-proxy 1 -->
+  <rect x="90" y="242" width="150" height="54" rx="8" fill="rgb(102,187,106)"/>
+  <text x="165" y="266" class="lbl" text-anchor="middle">kube-proxy</text>
+  <text x="165" y="283" class="lbl2" text-anchor="middle">iptables 규칙 관리</text>
+  <!-- pods on node1 -->
+  <rect x="110" y="330" width="120" height="66" rx="8" fill="rgb(230,230,230)"/>
+  <text x="170" y="356" class="lbl" text-anchor="middle">Pod A</text>
+  <text x="170" y="374" class="mono" text-anchor="middle">10.32.0.14</text>
+  <rect x="270" y="330" width="120" height="66" rx="8" fill="rgb(230,230,230)"/>
+  <text x="330" y="356" class="lbl" text-anchor="middle">Pod B</text>
+  <text x="330" y="374" class="mono" text-anchor="middle">10.32.0.15</text>
+  <line x1="165" y1="296" x2="170" y2="328" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#a2g)"/>
+  <line x1="200" y1="296" x2="325" y2="328" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#a2g)"/>
+
+  <!-- Node 2 -->
+  <rect x="540" y="200" width="380" height="230" rx="12" fill="rgb(24,28,32)" stroke="rgb(138,133,128)" stroke-width="1.3"/>
+  <text x="560" y="226" class="zone">Worker Node 2</text>
+  <rect x="570" y="242" width="150" height="54" rx="8" fill="rgb(102,187,106)"/>
+  <text x="645" y="266" class="lbl" text-anchor="middle">kube-proxy</text>
+  <text x="645" y="283" class="lbl2" text-anchor="middle">iptables 규칙 관리</text>
+  <rect x="590" y="330" width="120" height="66" rx="8" fill="rgb(230,230,230)"/>
+  <text x="650" y="356" class="lbl" text-anchor="middle">Pod C</text>
+  <text x="650" y="374" class="mono" text-anchor="middle">10.32.1.21</text>
+  <rect x="750" y="330" width="120" height="66" rx="8" fill="rgb(230,230,230)"/>
+  <text x="810" y="356" class="lbl" text-anchor="middle">Pod D</text>
+  <text x="810" y="374" class="mono" text-anchor="middle">10.32.1.22</text>
+  <line x1="645" y1="296" x2="650" y2="328" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#a2g)"/>
+  <line x1="680" y1="296" x2="805" y2="328" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#a2g)"/>
+
+  <!-- Service -> kube-proxies (amber, the routing) -->
+  <line x1="430" y1="146" x2="180" y2="240" stroke="rgb(212,168,83)" stroke-width="1.8" marker-end="url(#a2)"/>
+  <line x1="550" y1="146" x2="660" y2="240" stroke="rgb(212,168,83)" stroke-width="1.8" marker-end="url(#a2)"/>
+  <text x="300" y="180" class="stepn">가상 IP 요청 → 각 노드 kube-proxy 가 실제 파드로 분산(로드밸런싱)</text>
+
+  <!-- modes note (bottom) -->
+  <text x="24" y="452" class="step"><tspan class="stepn">kube-proxy 모드</tspan>  User Space (구식) · <tspan class="stepn">iptables</tspan> (기본) · IPVS (대규모·해시 기반) — 트래픽 규칙을 노드 커널에 심는 방식이 다릅니다</text>
+</svg>
