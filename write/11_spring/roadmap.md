@@ -4,7 +4,7 @@ tags: [moc, spring, roadmap, keywords]
 status: reference
 related:
   - README.md
-updated: 2026-06-28
+updated: 2026-07-07
 ---
 
 # Spring 딥다이브 로드맵 — 섹션별 키워드 원문
@@ -223,7 +223,39 @@ RestControllerAdvice
 
 깊게 실험할 것: Custom ArgumentResolver · Custom Annotation 으로 로그인 사용자 주입 · Custom HandlerInterceptor · Global Exception Handler · HttpMessageConverter 동작 확인 · Filter 에서 request body 를 읽었을 때 문제 확인. `@CurrentUser` 같은 커스텀 애너테이션 + ArgumentResolver 를 직접 만들면 MVC 가 더 이상 검은 상자가 아닙니다.
 
-## 8. 6단계: Validation / Binding / Conversion
+## 8. 5단계 보강: Servlet Container 와 WAS (Tomcat · Jetty · Undertow)
+
+바로 앞 절의 요청 흐름은 `Client Request → Servlet Filter → DispatcherServlet` 으로 시작했는데, 그 Filter 와 DispatcherServlet 이 *올라타 있는 바닥*이 바로 Servlet Container(=WAS)입니다. DispatcherServlet 은 이름 그대로 `jakarta.servlet.Servlet` 을 구현한 Servlet 하나일 뿐이고, 그 Servlet 을 초기화하고 요청마다 스레드를 붙여 `service()` 를 호출해 주는 주체가 컨테이너입니다. 이 층을 건너뛰면 "요청이 Controller 까지 어떻게 도달하는가" 의 앞 절반이 빈 채로 남습니다.
+
+이 주제가 애매하게 느껴지는 이유는 한 권으로 닫히지 않기 때문입니다. Servlet 은 Jakarta EE **스펙**이고, Tomcat·Jetty·Undertow 는 그 스펙의 서로 다른 **구현체**이며, Spring MVC 는 그 위에 얹힌 **프레임워크**이고, thread·connection 튜닝은 **운영**의 영역이라 층이 넷으로 갈라져 있습니다. 그래서 스펙에서 구현체로, 다시 프레임워크로 내려오는 순서로 잡는 편이 좋습니다. 입문용 큰 그림은 Baeldung 의 Servlet/Servlet Container 소개글이 무난하고, 표준 이름(`jakarta.servlet.*`)은 Jakarta 공식 튜토리얼로 확인하면 됩니다.
+
+Tomcat 내부의 `Connector · Engine · Host · Context` 배치와 Acceptor/Poller/Worker 스레드 모델은 배포·운영 맥락이라 뒤의 "빌드·패키징·Tomcat 배포" 절에서 다시 다룹니다. 이 절은 그 앞단, 곧 "Servlet Container 가 대체 무엇을 하는 물건이고 구현체 셋이 어떻게 다른가" 에 초점을 둡니다.
+
+반드시 알아야 할 것:
+
+```text
+Servlet 원형: jakarta.servlet.Servlet · init/service/destroy · Filter · Listener · ServletContext
+Servlet Container 역할: request/response 객체 생성 · Thread per Request · Session · 멀티스레드 안전성
+DispatcherServlet = Servlet 하나 (Front Controller)
+Filter(컨테이너 문지기) vs HandlerInterceptor(Spring 문지기)
+Tomcat 구조: Server · Service · Connector · Engine · Host · Context
+Connector 내부: Acceptor · Poller · Worker Thread (상세는 배포 절)
+구현체 3종: Tomcat · Jetty · Undertow
+Jetty: 임베디드 서버 라이브러리 감각 · 경량
+Undertow: XNIO · IO Thread vs Worker Thread · blocking/non-blocking handler
+Embedded WAS vs Standalone WAS
+```
+
+실무 질문: DispatcherServlet 이 결국 Servlet 이라면 컨테이너는 이걸 언제 어떻게 등록·초기화하는가 / Filter 와 HandlerInterceptor 는 각각 어느 계층에 살고 무엇을 볼 수 있는가(앞 절 Spring MVC 요청 처리 흐름 참조) / Spring Boot 에서 Tomcat 을 Jetty·Undertow 로 바꾸려면 무엇을 건드리면 되는가 / Undertow 에서 IO Thread 를 블로킹하면 왜 여러 커넥션이 함께 멈추는가 / 요청이 느릴 때 컨테이너 Worker Thread 고갈인지 앱 로직·DB 대기인지 어디를 먼저 보는가.
+
+깊게 실험할 것 — 스프링 부트에서 컨테이너를 교체하고 관찰하는 축으로 네 가지 Lab 을 권합니다.
+
+1. **Raw Servlet Lab** — 스프링 없이 `jakarta.servlet.Servlet` 을 직접 구현하고 `init`·`service`·`destroy` 에 로그를 심어, 컨테이너가 언제 각 메서드를 부르는지 눈으로 확인합니다. (Servlet 생명주기·컨테이너가 주는 것)
+2. **Filter vs Interceptor Lab** — 같은 요청 경로에 Servlet Filter 와 HandlerInterceptor 를 동시에 걸고 실행 순서·각자 볼 수 있는 정보(요청 raw vs 핸들러 메타)를 비교합니다. (두 문지기가 사는 계층의 차이)
+3. **WAS 교체 Lab** — `spring-boot-starter-web` 에서 `spring-boot-starter-tomcat` 을 exclude 하고 Jetty·Undertow starter 로 바꿔 기동한 뒤, 기동 로그·기본 스레드 모델·기본 포트 동작을 비교합니다. (구현체 교체가 무엇을 바꾸고 무엇은 그대로인가)
+4. **Undertow Thread Lab** — Undertow 에서 IO Thread 위에 블로킹 작업을 올려 여러 커넥션이 함께 멈추는지 재현하고, worker(blocking) 로 넘겼을 때와 비교합니다. (non-blocking 서버의 스레드 규율)
+
+## 9. 6단계: Validation / Binding / Conversion
 
 반드시 알아야 할 것:
 
@@ -247,7 +279,7 @@ ConversionService
 
 추천 구조: Controller(형식·필수값·타입 검증) → Application Service(유스케이스·상태·권한 검증) → Domain Component(도메인 규칙 검증). 검증은 문지기입니다 — 모든 것을 판단하면 병목, 아무것도 판단하지 않으면 성이 무너집니다.
 
-## 9. 7단계: Spring Boot Auto Configuration
+## 10. 7단계: Spring Boot Auto Configuration
 
 반드시 알아야 할 것:
 
@@ -274,7 +306,7 @@ Profile
 
 꼭 해볼 프로젝트 — 나만의 Spring Boot Starter: autoconfigure 모듈(AutoConfiguration·Properties·Client) + starter 모듈(의존성 모음). 자동 설정은 따뜻한 난로지만 내부를 모르면 불씨가 어디서 시작됐는지 모릅니다.
 
-## 10. 8단계: Configuration / Properties
+## 11. 8단계: Configuration / Properties
 
 반드시 알아야 할 것:
 
@@ -294,7 +326,7 @@ Relaxed Binding
 
 추천: `@ConfigurationProperties(prefix = "app.order")` record + `@EnableConfigurationProperties`. `@Value` 가 나쁜 건 아니지만 설정이 많아질수록 `@ConfigurationProperties` 가 구조화·테스트·문서화에 유리합니다.
 
-## 11. 9단계: Data Access / MyBatis / Transaction
+## 12. 9단계: Data Access / MyBatis / Transaction
 
 반드시 알아야 할 것:
 
@@ -317,7 +349,7 @@ Dynamic SQL
 
 핵심 연결: Spring @Transactional → TransactionInterceptor → DataSourceTransactionManager → Connection 획득 → TransactionSynchronizationManager 에 Connection 바인딩 → MyBatis SqlSessionTemplate 이 같은 Connection 사용 → commit/rollback → Connection 반환. 이 흐름을 이해하면 "왜 트랜잭션이 안 먹지?" 의 절반이 해결됩니다.
 
-## 12. 10단계: Event / TransactionalEventListener
+## 13. 10단계: Event / TransactionalEventListener
 
 반드시 알아야 할 것:
 
@@ -339,7 +371,7 @@ Asynchronous Event
 
 추천 기준: 같은 트랜잭션에서 반드시 성공 → 직접 메서드 호출 / 트랜잭션 성공 이후 부가 작업 → `@TransactionalEventListener(AFTER_COMMIT)` / 실패해도 원 요청을 막지 않아야 함 → Outbox 또는 비동기 이벤트 / 서비스 간 전달 → Kafka 같은 메시징.
 
-## 13. 11단계: Async / Scheduling / ThreadPool
+## 14. 11단계: Async / Scheduling / ThreadPool
 
 반드시 알아야 할 것:
 
@@ -360,7 +392,7 @@ Exception Handling
 
 실무 질문: 기본 executor 를 그대로 쓰고 있지는 않은가 / 스레드 풀이 고갈되면 어떻게 되는가 / @Async 메서드 예외는 어디로 가는가 / @Scheduled 작업이 여러 인스턴스에서 동시에 실행되어도 되는가 / 스케줄러에 분산락이 필요한가. 운영에서 스레드는 작은 강입니다 — 흐름을 만들 수 있지만 둑이 없으면 범람합니다.
 
-## 14. 12단계: Cache Abstraction
+## 15. 12단계: Cache Abstraction
 
 반드시 알아야 할 것:
 
@@ -382,7 +414,7 @@ Cache Invalidation
 
 실무 질문: 캐시 키는 안정적인가 / 캐시 무효화 시점은 명확한가 / 트랜잭션 rollback 시 캐시가 먼저 갱신되지는 않는가 / 여러 인스턴스에서 local cache 를 써도 되는가 / TTL 은 왜 그 값인가. 캐시는 성능의 단비이지만 정합성의 그림자를 만듭니다.
 
-## 15. 13단계: Spring Security
+## 16. 13단계: Spring Security
 
 반드시 알아야 할 것:
 
@@ -409,7 +441,7 @@ OAuth2 Resource Server
 
 실무 질문: 인증과 인가는 어디서 나뉘는가 / JWT 검증은 어느 필터에서 수행되는가 / SecurityContext 는 ThreadLocal 기반인가 / 비동기 실행 시 SecurityContext 는 유지되는가 / URL 권한과 Method 권한 중 어디에 정책을 둘 것인가.
 
-## 16. 14단계: Actuator / 운영 기능
+## 17. 14단계: Actuator / 운영 기능
 
 반드시 알아야 할 것:
 
@@ -431,7 +463,7 @@ Custom Meter
 
 실무 질문: DB 장애가 readiness 에 반영되는가 / 외부 API 장애를 health down 으로 볼 것인가 / 운영에서 actuator endpoint 가 과도하게 노출되어 있지는 않은가 / 커스텀 비즈니스 metric 을 만들 수 있는가 / 장애 시 log level 을 동적으로 바꿀 수 있는가.
 
-## 17. 15단계: Spring Test
+## 18. 15단계: Spring Test
 
 반드시 알아야 할 것:
 
@@ -457,7 +489,7 @@ Testcontainers
 
 추천 테스트 피라미드: Domain/Component 단위 테스트 → Application Service 통합 테스트 → Mapper/Repository 테스트 → Controller Slice 테스트 → 전체 SpringBootTest → E2E/Smoke Test.
 
-## 18. 16단계: 빌드 · 패키징 · Tomcat 배포
+## 19. 16단계: 빌드 · 패키징 · Tomcat 배포
 
 여기까지가 "Spring 이 어떻게 동작하는가" 였다면, 이 단계는 "그 Spring 애플리케이션이 어떻게 빌드되어 어떤 산출물이 되고, Tomcat 위에서 어떻게 실행되는가" 입니다. `./gradlew build` 하면 `jar` 가 나온다는 수준이 아니라, 소스가 class 로 컴파일되고 의존성이 classpath 에 놓이고 Gradle/Maven 이 산출물을 만들고 Spring Boot 플러그인이 실행 가능한 구조로 재패키징하고 Boot Loader 가 중첩 jar 를 읽어 Tomcat 이 요청을 DispatcherServlet 까지 흘려보내는 흐름을 설명할 수 있는 것이 목표입니다.
 
@@ -526,7 +558,7 @@ JAR 실행 흐름: `java -jar app.jar` → Spring Boot Loader(`JarLauncher`) →
 4. **Gradle Build Lifecycle Lab** — `./gradlew tasks`·`clean build --dry-run`·`bootJar`·`jar`·`dependencies`·`dependencyInsight` 를 돌리고 멀티모듈에서 `bootJar` on/off 를 비교합니다. (산출물이 언제·어떻게 만들어지는지, 실행 모듈과 라이브러리 모듈 분리)
 5. **Docker Layered JAR Lab** — 단순 `COPY app.jar` 와 layered jar extract 를 비교하고 Docker build cache·이미지 크기·빌드 시간을 측정합니다. 의존성 변경과 코드 변경이 각각 어느 layer 를 무효화하는지 확인합니다. (빌드 산출물과 컨테이너 이미지 레이어의 관계·CI/CD 최적화)
 
-## 19. 추천 프로젝트
+## 20. 추천 프로젝트
 
 - **프로젝트 1 — Mini Spring Container**: @Component 스캔 흉내 · BeanDefinition 등록 · 생성자 주입 · 싱글톤 캐시 · BeanPostProcessor 흉내 · @PostConstruct 흉내. (Spring 이 객체를 어떻게 만들고 보관하는지, DI 가 왜 중심인지)
 - **프로젝트 2 — Transaction Lab**: REQUIRED · REQUIRES_NEW · NESTED · self-invocation · checked/unchecked exception · catch 후 rollback · rollbackFor · readOnly · timeout · MyBatis Mapper 호출 을 (상황→예상→실제→이유→관련 컴포넌트) 로 정리.
@@ -534,7 +566,7 @@ JAR 실행 흐름: `java -jar app.jar` → Spring Boot Loader(`JarLauncher`) →
 - **프로젝트 4 — Custom Spring Boot Starter**: 공통 로깅 · 요청 traceId · 표준 에러 응답 · 감사 로그 · 공통 ObjectMapper · 공통 WebMvcConfigurer · 공통 Actuator HealthIndicator. (AutoConfiguration · Conditional · ConfigurationProperties · Starter 구조)
 - **프로젝트 5 — Production-ready Spring Template**: Layered Architecture · Global Exception Handling · Validation · Actuator · Health Check · Structured Logging · TraceId · Spring Security 기본 · MyBatis · Transaction · Testcontainers · Dockerfile · Jenkinsfile.
 
-## 20. 딥다이브 학습 순서 (7단계)
+## 21. 딥다이브 학습 순서 (7단계)
 
 1단계 Core: IoC · DI · BeanDefinition · ApplicationContext · Bean Lifecycle · Component Scan · @Configuration → "Spring 이 객체를 어떻게 만들고 주입하는지 설명할 수 있다".
 
@@ -550,7 +582,7 @@ JAR 실행 흐름: `java -jar app.jar` → Spring Boot Loader(`JarLauncher`) →
 
 7단계 Test: MockMvc · @SpringBootTest · Slice Test · TestContext Cache · Transactional Test · Testcontainers → "빠르고 신뢰할 수 있는 Spring 테스트 전략을 설계할 수 있다".
 
-## 21. 최종 압축 키워드
+## 22. 최종 압축 키워드
 
 ```text
 Spring Core
@@ -661,3 +693,9 @@ Spring 을 깊게 판다는 것은 어노테이션을 더 많이 외우는 일�
 - [Traditional Deployment (WAR · SpringBootServletInitializer)](https://docs.spring.io/spring-boot/how-to/deployment/traditional-deployment.html)
 - [Efficient Container Images (Layered JAR)](https://docs.spring.io/spring-boot/reference/packaging/efficient.html)
 - [Apache Tomcat — Application Developer's Guide (Deployment · WEB-INF)](https://tomcat.apache.org/tomcat-8.5-doc/appdev/deployment.html)
+- [Jakarta Servlet — 공식 튜토리얼 (Servlet · Filter · Listener · lifecycle)](https://jakarta.ee/learn/docs/jakartaee-tutorial/current/web/servlets/servlets.html)
+- [Spring Web MVC — DispatcherServlet](https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-servlet.html)
+- [Apache Tomcat 10.1 Configuration Reference (Engine · Host · Context)](https://tomcat.apache.org/tomcat-10.1-doc/config/index.html)
+- [Apache Tomcat 10.1 — HTTP Connector](https://tomcat.apache.org/tomcat-10.1-doc/config/http.html)
+- [Eclipse Jetty 12.1 Programming Guide (임베디드 서버 라이브러리)](https://jetty.org/docs/jetty/12.1/programming-guide/index.html)
+- [Undertow (XNIO · IO Thread / Worker Thread)](https://undertow.io/)
