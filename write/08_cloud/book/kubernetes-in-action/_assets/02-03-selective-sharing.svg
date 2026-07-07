@@ -1,0 +1,94 @@
+<svg viewBox="0 0 980 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>네임스페이스를 골라서 공유 — 두 프로세스가 net·uts는 공유, mnt는 각자</title>
+  <desc>같은 리눅스 커널 위에서 두 프로세스가 네임스페이스를 선택적으로 공유한다. 두 프로세스는 하나의 Network 네임스페이스와 하나의 UTS 네임스페이스를 공유해 같은 eth0·lo 장치와 같은 호스트명을 쓰지만, Mount 네임스페이스는 각자 따로 가져 서로 다른 파일시스템을 본다. 그 결과 두 프로세스는 같은 IP로 루프백 통신하면서도 파일시스템은 격리된다. 쿠버네티스 Pod가 바로 이 방식으로 여러 컨테이너를 묶는다. 모든 네임스페이스와 cgroup은 맨 아래 단 하나의 호스트 커널이 제공한다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .zlabel{ font-size: 12px; font-weight: 800; fill: rgb(212,168,83); }
+      .plbl  { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .nslbl { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .dev   { font-size: 11px; font-weight: 800; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .small { font-size: 10px; font-weight: 700; fill: #1a1a1a; }
+      .kern  { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .note  { font-size: 10.5px; fill: #e8e4df; }
+      .cnt   { font-size: 11px; font-weight: 800; fill: rgb(212,168,83); }
+      .shr   { font-size: 10px; font-weight: 800; fill: #14521d; }
+      .iso   { font-size: 10px; font-weight: 800; fill: #7a1f1f; }
+    </style>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(90,155,213)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="980" height="600" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">네임스페이스를 골라서 공유 — 경계는 종류마다 다르게 그어진다</text>
+  <text x="24" y="52" class="sub">두 프로세스가 Network·UTS 네임스페이스는 공유하고 Mount만 각자 씁니다. 그래서 같은 IP로 통신하되 파일시스템은 격리됩니다.</text>
+
+  <!-- ===== 공유 영역: Network ns (초록 큰 박스, 두 프로세스+장치 포함) ===== -->
+  <rect x="40" y="76" width="620" height="210" rx="12" fill="#cdeccf" stroke="#14521d" stroke-width="2"/>
+  <text x="60" y="100" class="nslbl">Network 네임스페이스 AB (공유)</text>
+  <text x="60" y="118" class="shr">두 프로세스가 같은 네트워크 장치를 봄</text>
+
+  <!-- 두 프로세스 (공유 net 안에) -->
+  <rect x="70" y="132" width="150" height="54" rx="8" fill="rgb(230,230,230)"/>
+  <text x="145" y="164" class="plbl" text-anchor="middle">Process 1</text>
+  <rect x="480" y="132" width="150" height="54" rx="8" fill="rgb(230,230,230)"/>
+  <text x="555" y="164" class="plbl" text-anchor="middle">Process 2</text>
+
+  <!-- 공유 네트워크 장치 (가운데) -->
+  <rect x="270" y="128" width="160" height="30" rx="6" fill="#5b9bd5"/>
+  <text x="350" y="148" class="dev" fill="#e8e4df" text-anchor="middle">eth0 (공유 IP)</text>
+  <rect x="270" y="164" width="160" height="30" rx="6" fill="#5b9bd5"/>
+  <text x="350" y="184" class="dev" fill="#e8e4df" text-anchor="middle">lo (루프백)</text>
+
+  <!-- P1·P2 → 장치 화살표 -->
+  <line x1="220" y1="150" x2="268" y2="145" stroke="rgb(90,155,213)" stroke-width="1.8" marker-end="url(#a)"/>
+  <line x1="220" y1="165" x2="268" y2="176" stroke="rgb(90,155,213)" stroke-width="1.8" marker-end="url(#a)"/>
+  <line x1="480" y1="150" x2="432" y2="145" stroke="rgb(90,155,213)" stroke-width="1.8" marker-end="url(#a)"/>
+  <line x1="480" y1="165" x2="432" y2="176" stroke="rgb(90,155,213)" stroke-width="1.8" marker-end="url(#a)"/>
+
+  <text x="350" y="222" class="shr" text-anchor="middle">→ 같은 IP에 바인딩, lo로 서로 통신 (컨테이너 없는 한 머신처럼)</text>
+
+  <!-- UTS 공유 (net 박스 안 하단) -->
+  <rect x="70" y="236" width="560" height="36" rx="6" fill="#cdeccf" stroke="#14521d" stroke-width="1.2"/>
+  <text x="350" y="259" class="shr" text-anchor="middle">UTS 네임스페이스도 공유 → 두 프로세스가 같은 호스트명을 봄</text>
+
+  <!-- ===== 격리 영역: Mount ns 2개 (오른쪽/개별) ===== -->
+  <rect x="690" y="76" width="266" height="98" rx="10" fill="#f2d4d4" stroke="#7a1f1f" stroke-width="1.6"/>
+  <text x="710" y="100" class="nslbl">Mount 네임스페이스 A</text>
+  <rect x="710" y="112" width="226" height="46" rx="6" fill="#dceaf7"/>
+  <text x="823" y="140" class="dev" text-anchor="middle">filesystem A</text>
+
+  <rect x="690" y="188" width="266" height="98" rx="10" fill="#f2d4d4" stroke="#7a1f1f" stroke-width="1.6"/>
+  <text x="710" y="212" class="nslbl">Mount 네임스페이스 B</text>
+  <rect x="710" y="224" width="226" height="46" rx="6" fill="#dceaf7"/>
+  <text x="823" y="252" class="dev" text-anchor="middle">filesystem B</text>
+
+  <!-- P1 → fsA, P2 → fsB (파일시스템은 각자) -->
+  <line x1="220" y1="150" x2="688" y2="130" stroke="#c96a6a" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="450" y="120" class="iso" style="fill:#e88b8b" text-anchor="middle">P1 → 자기 파일시스템 A</text>
+  <line x1="555" y1="186" x2="688" y2="235" stroke="#c96a6a" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="600" y="215" class="iso" style="fill:#e88b8b" text-anchor="middle">P2 → 자기 B</text>
+
+  <text x="823" y="182" class="iso" style="fill:#e88b8b" text-anchor="middle" font-size="9">Mount는 각자 → 파일시스템 격리</text>
+
+  <!-- ===== 공유 커널 (아래) ===== -->
+  <text x="24" y="318" class="zlabel">이 모든 네임스페이스·cgroup을 제공하는 것은 — 단 하나의 호스트 커널</text>
+  <rect x="40" y="330" width="916" height="76" rx="10" fill="rgb(230,230,230)"/>
+  <text x="498" y="358" class="kern" text-anchor="middle">호스트 리눅스 커널 (하나)</text>
+  <text x="498" y="382" class="small" text-anchor="middle">네임스페이스(무엇을 볼 수 있나)와 cgroup(얼마나 쓸 수 있나)을 만들어 각 프로세스에 배정 · 모든 syscall을 직접 처리</text>
+
+  <!-- 커널 → 위 영역 연결 -->
+  <line x1="350" y1="286" x2="400" y2="328" stroke="rgb(138,133,128)" stroke-width="1.4"/>
+  <line x1="823" y1="286" x2="700" y2="328" stroke="rgb(138,133,128)" stroke-width="1.4"/>
+
+  <!-- ===== 하단 요약 ===== -->
+  <rect x="40" y="422" width="916" height="158" rx="10" fill="rgb(24,28,32)" stroke="rgb(42,37,32)" stroke-width="1.2"/>
+  <text x="60" y="448" class="cnt">핵심 — 경계는 "종류마다" 다르게 그어진다</text>
+  <text x="60" y="472" class="note">• 두 프로세스가 <tspan style="fill:#7bc47f;font-weight:800">Network·UTS는 공유</tspan>(같은 IP·호스트명) 하면서 <tspan style="fill:#e88b8b;font-weight:800">Mount는 각자</tspan>(다른 파일시스템) 씁니다.</text>
+  <text x="60" y="494" class="note">• 그래서 "컨테이너 경계"가 프로세스마다 딱 겹치지 않습니다. 공유하는 네임스페이스는 겹치고, 격리하는 것은 갈라집니다.</text>
+  <text x="60" y="516" class="note">• <tspan class="cnt">쿠버네티스 Pod가 바로 이 방식</tspan>입니다. 한 Pod 안 여러 컨테이너가 net·uts를 공유(localhost로 통신)하되 파일시스템은 각자 씁니다.</text>
+  <text x="60" y="538" class="note">• 그래서 "컨테이너란 무엇인가"의 답은 — VM처럼 감싸인 것이 아니라, <tspan class="cnt">여러 네임스페이스가 배정된 프로세스</tspan>입니다.</text>
+  <text x="60" y="566" class="note">• 자원량 제한(cgroup)은 이와 별개 축입니다. 네임스페이스가 "무엇을 볼 수 있나", cgroup이 "얼마나 쓸 수 있나"를 정합니다.</text>
+</svg>

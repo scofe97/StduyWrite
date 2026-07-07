@@ -1,0 +1,108 @@
+<svg viewBox="0 0 980 640" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>네트워크 네임스페이스로 컨테이너 전용 인터페이스 만들기 — 5단계</title>
+  <desc>컨테이너용 네트워크 네임스페이스를 만드는 다섯 단계를 보여준다. ① 기본 네임스페이스에 새 인터페이스 ethAA·loAA 두 개를 만든다. ② 새 네트워크 네임스페이스를 만든다. ③ 새 인터페이스들을 기본에서 새 네임스페이스로 옮긴다. ④ 옮긴 인터페이스를 표준 이름 eth0·lo로 바꾼다(이름은 네임스페이스마다 고유하면 되므로 가능). ⑤ 새 네임스페이스에서 프로세스를 실행하면 그 네임스페이스의 인터페이스만 보인다. 각 네트워크 인터페이스는 정확히 하나의 네임스페이스에만 속하며, 네임스페이스 사이를 옮길 수 있다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .snum  { font-size: 13px; font-weight: 800; fill: rgb(212,168,83); }
+      .slbl  { font-size: 12px; font-weight: 800; fill: #e8e4df; }
+      .nsname{ font-size: 11px; font-weight: 800; fill: #0d0d0d; }
+      .iface { font-size: 10.5px; font-weight: 800; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .ifnew { font-size: 10.5px; font-weight: 800; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .note  { font-size: 10px; fill: #1a1a1a; }
+      .cnt   { font-size: 11px; font-weight: 800; fill: rgb(212,168,83); }
+      .exist { font-size: 9.5px; fill: #333; }
+    </style>
+    <marker id="mv" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="mvd" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(90,155,213)"/>
+    </marker>
+    <marker id="mvg" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(102,187,106)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="980" height="640" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">네트워크 네임스페이스로 컨테이너 전용 인터페이스 만들기</text>
+  <text x="24" y="50" class="sub">각 네트워크 인터페이스는 정확히 한 네임스페이스에만 속합니다. 만들어서 → 옮기고 → 이름 바꾸고 → 그 안에서 프로세스를 실행합니다.</text>
+
+  <!-- ===== ① 기본 네임스페이스에 새 인터페이스 2개 생성 ===== -->
+  <text x="24" y="84" class="snum">①</text>
+  <text x="46" y="84" class="slbl">기본 네트워크 네임스페이스에 새 인터페이스 두 개 생성</text>
+  <rect x="40" y="94" width="420" height="96" rx="10" fill="rgb(24,28,32)" stroke="rgb(138,133,128)" stroke-width="1.4"/>
+  <text x="56" y="114" class="nsname" style="fill:#e8e4df">기본 네임스페이스 (호스트)</text>
+  <!-- 기존 인터페이스 -->
+  <rect x="56" y="124" width="120" height="24" rx="4" fill="rgb(45,42,38)"/>
+  <text x="116" y="140" class="exist" style="fill:rgb(160,155,150)" text-anchor="middle">eth0 (기존)</text>
+  <rect x="184" y="124" width="120" height="24" rx="4" fill="rgb(45,42,38)"/>
+  <text x="244" y="140" class="exist" style="fill:rgb(160,155,150)" text-anchor="middle">lo (기존)</text>
+  <!-- 신규 인터페이스 -->
+  <rect x="56" y="154" width="120" height="26" rx="4" fill="#5b9bd5"/>
+  <text x="116" y="172" class="ifnew" fill="#e8e4df" text-anchor="middle">ethAA (신규)</text>
+  <rect x="184" y="154" width="120" height="26" rx="4" fill="#5b9bd5"/>
+  <text x="244" y="172" class="ifnew" fill="#e8e4df" text-anchor="middle">loAA (신규)</text>
+  <text x="320" y="172" class="note" style="fill:#e8e4df">← 새로 만든 두 개</text>
+
+  <!-- ===== ② 새 네트워크 네임스페이스 생성 ===== -->
+  <text x="520" y="84" class="snum">②</text>
+  <text x="542" y="84" class="slbl">새 네트워크 네임스페이스 생성 (빈 상태)</text>
+  <rect x="520" y="94" width="420" height="96" rx="10" fill="rgb(24,28,32)" stroke="rgb(212,168,83)" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="536" y="114" class="cnt">새 네임스페이스 (컨테이너용)</text>
+  <text x="730" y="150" class="sub" text-anchor="middle">아직 인터페이스 없음 — 비어 있음</text>
+
+  <!-- ① → ② 화살표 -->
+  <line x1="462" y1="142" x2="516" y2="142" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#mv)"/>
+
+  <!-- ===== ③ 새 인터페이스를 새 네임스페이스로 이동 ===== -->
+  <text x="24" y="228" class="snum">③</text>
+  <text x="46" y="228" class="slbl">ethAA·loAA를 기본 → 새 네임스페이스로 이동</text>
+  <rect x="40" y="238" width="420" height="90" rx="10" fill="rgb(24,28,32)" stroke="rgb(138,133,128)" stroke-width="1.4"/>
+  <text x="56" y="258" class="nsname" style="fill:#e8e4df">기본 네임스페이스</text>
+  <rect x="56" y="266" width="120" height="24" rx="4" fill="rgb(45,42,38)"/>
+  <text x="116" y="282" class="exist" style="fill:rgb(160,155,150)" text-anchor="middle">eth0 (기존만 남음)</text>
+  <rect x="184" y="266" width="120" height="24" rx="4" fill="rgb(45,42,38)"/>
+  <text x="244" y="282" class="exist" style="fill:rgb(160,155,150)" text-anchor="middle">lo (기존만 남음)</text>
+  <text x="56" y="312" class="note" style="fill:#e8e4df">신규 두 개는 빠져나감 →</text>
+
+  <rect x="520" y="238" width="420" height="90" rx="10" fill="rgb(24,28,32)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="536" y="258" class="cnt">새 네임스페이스</text>
+  <rect x="536" y="266" width="130" height="26" rx="4" fill="#5b9bd5"/>
+  <text x="601" y="284" class="ifnew" fill="#e8e4df" text-anchor="middle">ethAA (이동됨)</text>
+  <rect x="676" y="266" width="130" height="26" rx="4" fill="#5b9bd5"/>
+  <text x="741" y="284" class="ifnew" fill="#e8e4df" text-anchor="middle">loAA (이동됨)</text>
+
+  <!-- ③ 이동 화살표 (기본 → 새) -->
+  <path d="M 310 300 Q 460 340 534 285" fill="none" stroke="rgb(90,155,213)" stroke-width="2.2" marker-end="url(#mvd)"/>
+  <text x="420" y="335" class="cnt" text-anchor="middle" font-size="10">이동 (인터페이스는 옮길 수 있음)</text>
+
+  <!-- ===== ④ 이름 변경 ===== -->
+  <text x="24" y="366" class="snum">④</text>
+  <text x="46" y="366" class="slbl">새 네임스페이스 안에서 eth0·lo로 이름 변경</text>
+  <rect x="40" y="376" width="900" height="80" rx="10" fill="rgb(24,28,32)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="56" y="396" class="cnt">새 네임스페이스</text>
+  <rect x="56" y="404" width="160" height="30" rx="5" fill="#5b9bd5"/>
+  <text x="136" y="424" class="ifnew" fill="#e8e4df" text-anchor="middle">ethAA → eth0</text>
+  <rect x="230" y="404" width="160" height="30" rx="5" fill="#5b9bd5"/>
+  <text x="310" y="424" class="ifnew" fill="#e8e4df" text-anchor="middle">loAA → lo</text>
+  <text x="410" y="424" class="note" style="fill:#e8e4df">← 이름은 네임스페이스마다 고유하면 되므로, 표준 이름 eth0·lo로 바꿀 수 있습니다</text>
+
+  <!-- ===== ⑤ 프로세스 실행 ===== -->
+  <text x="24" y="494" class="snum">⑤</text>
+  <text x="46" y="494" class="slbl">새 네임스페이스에서 프로세스 실행 → 그 안의 인터페이스만 보임</text>
+  <rect x="40" y="504" width="900" height="74" rx="10" fill="rgb(24,28,32)" stroke="rgb(102,187,106)" stroke-width="1.6"/>
+  <rect x="56" y="516" width="180" height="48" rx="6" fill="rgb(45,42,38)"/>
+  <text x="146" y="545" class="nsname" style="fill:#e8e4df" text-anchor="middle">컨테이너 프로세스</text>
+  <rect x="260" y="516" width="150" height="48" rx="6" fill="#5b9bd5"/>
+  <text x="335" y="536" class="ifnew" fill="#e8e4df" text-anchor="middle">eth0</text>
+  <text x="335" y="555" class="ifnew" fill="#e8e4df" text-anchor="middle">lo</text>
+  <text x="430" y="536" class="note" style="fill:#e8e4df">프로세스는 이 네임스페이스의 인터페이스(eth0·lo) 두 개만 봅니다.</text>
+  <text x="430" y="556" class="note" style="fill:#e8e4df">기본 네임스페이스의 호스트 인터페이스는 보이지 않습니다.</text>
+  <line x1="236" y1="540" x2="258" y2="540" stroke="rgb(102,187,106)" stroke-width="1.8" marker-end="url(#mvg)"/>
+
+  <!-- 하단 요약 -->
+  <text x="490" y="608" class="note" style="fill:#e8e4df" text-anchor="middle" font-size="10.5">네트워크 인터페이스만 봐서는 그 프로세스가 컨테이너·VM·베어메탈 중 어디서 도는지 구별할 수 없습니다.</text>
+  <text x="490" y="628" class="cnt" text-anchor="middle">→ 이것이 컨테이너가 "자기만의 네트워크를 가진 것처럼" 보이는 방식입니다.</text>
+</svg>

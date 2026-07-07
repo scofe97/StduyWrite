@@ -1,0 +1,79 @@
+<svg viewBox="0 0 960 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>하나의 프로세스, 두 개의 뷰 — PID·UTS 네임스페이스</title>
+  <desc>같은 node 프로세스가 컨테이너 안에서는 PID 1, 호스트명 fe6daee29272로 보이고, 호스트 밖에서는 PID 32687, 수많은 프로세스 중 하나로 보인다. PID 네임스페이스가 프로세스 번호를, UTS 네임스페이스가 호스트명을 각각 격리하기 때문이다. 하나의 프로세스가 어느 네임스페이스에서 보느냐에 따라 다른 값을 갖는다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .zlabel{ font-size: 12.5px; font-weight: 800; fill: rgb(212,168,83); }
+      .big   { font-size: 15px; font-weight: 800; fill: #0d0d0d; }
+      .lbl   { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+      .mono  { font-size: 11px; font-weight: 800; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .monod { font-size: 10.5px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', monospace; }
+      .note  { font-size: 10.5px; fill: #e8e4df; }
+      .cnt   { font-size: 11px; font-weight: 800; fill: rgb(212,168,83); }
+    </style>
+    <marker id="v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="480" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">하나의 프로세스, 두 개의 뷰 — PID·UTS 네임스페이스</text>
+  <text x="24" y="50" class="sub">같은 node 프로세스인데, 어느 네임스페이스에서 보느냐에 따라 PID와 호스트명이 다르게 보입니다.</text>
+
+  <!-- 가운데: 실제 프로세스 하나 -->
+  <rect x="380" y="210" width="200" height="60" rx="10" fill="rgb(212,168,83)"/>
+  <text x="480" y="235" class="big" text-anchor="middle">node app.js</text>
+  <text x="480" y="256" class="lbl" text-anchor="middle">실제로는 프로세스 하나</text>
+
+  <!-- 왼쪽: 컨테이너 안에서 본 뷰 -->
+  <rect x="40" y="90" width="300" height="300" rx="12" fill="rgb(24,28,32)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="60" y="116" class="zlabel">컨테이너 "안"에서 본 뷰</text>
+  <text x="60" y="134" class="sub">자기만의 uts·pid 네임스페이스 안</text>
+
+  <rect x="60" y="150" width="260" height="70" rx="8" fill="rgb(230,230,230)"/>
+  <text x="72" y="172" class="lbl">$ ps -o pid,comm</text>
+  <rect x="72" y="182" width="236" height="28" rx="4" fill="#dceaf7"/>
+  <text x="80" y="201" class="mono">PID 1  node  ← 내가 첫 프로세스!</text>
+
+  <rect x="60" y="230" width="260" height="60" rx="8" fill="rgb(230,230,230)"/>
+  <text x="72" y="252" class="lbl">$ hostname</text>
+  <rect x="72" y="260" width="236" height="24" rx="4" fill="#dceaf7"/>
+  <text x="80" y="277" class="mono">fe6daee29272</text>
+
+  <text x="60" y="318" class="note">PID 네임스페이스가 1번부터 새로 셈</text>
+  <text x="60" y="338" class="note">UTS 네임스페이스가 호스트명을 격리</text>
+  <text x="60" y="360" class="cnt">→ "내가 이 시스템의 유일한 주인"</text>
+
+  <!-- 오른쪽: 호스트에서 본 뷰 -->
+  <rect x="620" y="90" width="300" height="300" rx="12" fill="rgb(24,28,32)" stroke="rgb(138,133,128)" stroke-width="1.4"/>
+  <text x="640" y="116" class="zlabel">호스트 "밖"에서 본 뷰</text>
+  <text x="640" y="134" class="sub">호스트의 기본 네임스페이스</text>
+
+  <rect x="640" y="150" width="260" height="90" rx="8" fill="rgb(230,230,230)"/>
+  <text x="652" y="172" class="lbl">호스트 프로세스 목록</text>
+  <rect x="652" y="180" width="236" height="20" rx="3" fill="#e6e6e6"/>
+  <text x="660" y="195" class="mono" font-size="10">PID 1     systemd</text>
+  <rect x="652" y="202" width="236" height="16" rx="3" fill="#e6e6e6"/>
+  <text x="660" y="214" class="mono" font-size="9">... 수천 개 프로세스 ...</text>
+  <rect x="652" y="220" width="236" height="16" rx="3" fill="#dceaf7"/>
+  <text x="660" y="232" class="mono" font-size="10">PID 32687 node ← 그중 하나</text>
+
+  <rect x="640" y="250" width="260" height="46" rx="8" fill="rgb(230,230,230)"/>
+  <text x="652" y="270" class="lbl">$ docker inspect .State.Pid</text>
+  <rect x="652" y="276" width="236" height="16" rx="3" fill="#dceaf7"/>
+  <text x="660" y="288" class="mono" font-size="10">32687</text>
+
+  <text x="640" y="322" class="note">호스트 전체에서 유일한 실제 번호</text>
+  <text x="640" y="344" class="note">systemd 등 수많은 형제 프로세스와 나란히</text>
+  <text x="640" y="366" class="cnt">→ "수천 프로세스 중 32687번"</text>
+
+  <!-- 화살표: 프로세스 → 두 뷰 -->
+  <path d="M 380 235 Q 350 235 340 235" fill="none" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#v)"/>
+  <path d="M 580 235 Q 610 235 620 235" fill="none" stroke="rgb(138,133,128)" stroke-width="2" marker-end="url(#v)"/>
+
+  <!-- 하단 -->
+  <text x="480" y="425" class="note" text-anchor="middle">같은 프로세스 하나(가운데)를, 격리된 네임스페이스(왼쪽) vs 호스트 네임스페이스(오른쪽)에서 보면 값이 다릅니다.</text>
+  <text x="480" y="450" class="cnt" text-anchor="middle">이것이 02-02의 "Request processed by fe6daee29272"(UTS)와 "앱이 PID 1"(PID 함정)의 커널 레벨 정답입니다.</text>
+</svg>
