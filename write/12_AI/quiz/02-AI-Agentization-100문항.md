@@ -6,236 +6,236 @@
 
 ### **섹션 1: 주요 LLM 모델의 특성과 활용 방식 (문제 1-20)**
 
-1. GPT 시리즈(예: GPT-5.x)의 가장 큰 강점으로 볼 수 있는 것은?  
-   a) 오픈소스 가중치 공개  
-   b) 강력한 tool calling과 reasoning 능력  
-   c) 가장 저렴한 비용  
-   d) 이미지 생성 전용  
-   **정답: b** — GPT 계열은 함수/도구 호출과 추론에 강하다. 가중치는 비공개(a 오답)이고, 최저가도 아니며(c), 텍스트·추론 범용 모델이라 이미지 생성 전용(d)도 아니다.
+1. GPT 시리즈(예: GPT-5.x)의 가장 큰 강점으로 볼 수 있는 것은?
+   a) 오픈소스 가중치 공개
+   b) 강력한 tool calling과 reasoning 능력
+   c) 가장 저렴한 비용
+   d) 이미지 생성 전용
+   **정답: b** — GPT 계열은 함수/도구 호출과 추론에 강하다. 가중치는 비공개이고, 최저가도 아니며, 텍스트·추론 범용 모델이라 이미지 생성 전용도 아니다.
 
-2. Claude 모델(Anthropic)의 특징 중 맞는 것은?  
-   a) Constitutional AI로 안전성과 긴 컨텍스트 처리 우수  
-   b) 가장 빠른 inference 속도  
-   c) 오픈소스 모델  
-   d) 멀티모달에 weakest  
-   **정답: a** — Claude는 Constitutional AI 기반 안전성과 긴 컨텍스트가 강점이다. 속도가 항상 최고인 것은 아니고(b), 가중치 비공개(c)이며, 멀티모달도 지원하므로 "가장 약함"(d)은 틀리다.
+2. Claude 모델(Anthropic)의 특징 중 맞는 것은?
+   a) 가장 빠른 inference 속도
+   b) Constitutional AI로 안전성과 긴 컨텍스트 처리 우수
+   c) 오픈소스 모델
+   d) 멀티모달에 weakest
+   **정답: b** — Claude는 Constitutional AI 기반 안전성과 긴 컨텍스트가 강점이다. 속도가 항상 최고인 것은 아니고, 가중치 비공개이며, 멀티모달도 지원하므로 "가장 약함"은 틀리다.
 
-3. Llama 3/4 시리즈의 활용 시 주의점은?  
-   a) 상용화 제한 없음  
-   b) fine-tuning이 용이하나, inference 비용이 proprietary 모델보다 높음  
-   c) context window가 8k로 제한적  
-   d) Anthropic에서만 사용 가능  
-   **정답: b** — 오픈웨이트라 파인튜닝은 자유롭지만, 직접 GPU를 운영하면 관리형 API보다 오히려 총비용이 높아질 수 있다. 라이선스에 상용 제약이 있고(a), 컨텍스트는 8k보다 크며(c), Meta 모델이라 d도 틀리다.
+3. Llama 3/4 시리즈의 활용 시 주의점은?
+   a) fine-tuning이 용이하나, inference 비용이 proprietary 모델보다 높음
+   b) 상용화 제한 없음
+   c) context window가 8k로 제한적
+   d) Anthropic에서만 사용 가능
+   **정답: a** — 오픈웨이트라 파인튜닝은 자유롭지만, 직접 GPU를 운영하면 관리형 API보다 오히려 총비용이 높아질 수 있다. 라이선스에 상용 제약이 있고, 컨텍스트는 8k보다 크며, Meta 모델이라 d도 틀리다.
 
-4. Gemini 모델의 강점은?  
-   a) Google 생태계 통합과 멀티모달(비디오/오디오) 처리  
-   b) 코드 생성에 최적화  
-   c) 가장 긴 context window 독점  
-   d) 완전 오픈소스  
-   **정답: a** — Gemini는 Google 생태계 통합과 비디오·오디오 포함 멀티모달이 강점이다. 코드 전용(b)·컨텍스트 독점(c)·오픈소스(d)는 모두 사실이 아니다.
+4. Gemini 모델의 강점은?
+   a) 코드 생성에 최적화
+   b) Google 생태계 통합과 멀티모달(비디오/오디오) 처리
+   c) 가장 긴 context window 독점
+   d) 완전 오픈소스
+   **정답: b** — Gemini는 Google 생태계 통합과 비디오·오디오 포함 멀티모달이 강점이다. 코드 전용·컨텍스트 독점·오픈소스는 모두 사실이 아니다.
 
-5. Grok 모델(xAI)의 차별점은?  
-   a) 실시간 정보 접근과 유머러스한 응답 스타일  
-   b) 가장 엄격한 safety filter  
-   c) 오직 이미지 생성만 지원  
-   d) enterprise 전용  
-   **정답: a** — Grok은 X(트위터) 실시간 데이터 접근과 특유의 응답 톤이 차별점이다. 오히려 필터가 느슨한 편이고(b), 텍스트 모델이며(c), 일반 사용자도 쓸 수 있다(d).
+5. Grok 모델(xAI)의 차별점은?
+   a) 가장 엄격한 safety filter
+   b) 실시간 정보 접근과 유머러스한 응답 스타일
+   c) 오직 이미지 생성만 지원
+   d) enterprise 전용
+   **정답: b** — Grok은 X(트위터) 실시간 데이터 접근과 특유의 응답 톤이 차별점이다. 오히려 필터가 느슨한 편이고, 텍스트 모델이며, 일반 사용자도 쓸 수 있다.
 
-6. LLM 선택 시 context window 크기가 중요한 이유는?  
-   a) 긴 문서 요약이나 RAG에서 필수  
-   b) inference 속도 향상  
-   c) token 비용 절감  
-   d) fine-tuning 용이성  
-   **정답: a** — 컨텍스트가 클수록 긴 문서·다중 청크를 한 번에 넣어 요약/RAG가 유리하다. 컨텍스트가 크면 오히려 속도·비용은 늘고(b·c), 파인튜닝(d)과는 무관하다.
+6. LLM 선택 시 context window 크기가 중요한 이유는?
+   a) token 비용 절감
+   b) inference 속도 향상
+   c) 긴 문서 요약이나 RAG에서 필수
+   d) fine-tuning 용이성
+   **정답: c** — 컨텍스트가 클수록 긴 문서·다중 청크를 한 번에 넣어 요약/RAG가 유리하다. 컨텍스트가 크면 오히려 속도·비용은 늘고, 파인튜닝과는 무관하다.
 
-7. Proprietary LLM vs Open-source LLM 비교에서 proprietary의 장점은?  
-   a) 최신 성능과 managed service  
-   b) 완전 커스터마이징 자유  
-   c) 비용 무료  
-   d) 데이터 프라이버시 완벽 보장  
-   **정답: a** — 상용 모델은 최신 성능과 운영을 대신 해주는 관리형 서비스가 강점이다. 자유로운 커스터마이징(b)은 오픈모델 쪽 장점이고, 무료(c)·프라이버시 완벽(d)은 성립하지 않는다.
+7. Proprietary LLM vs Open-source LLM 비교에서 proprietary의 장점은?
+   a) 최신 성능과 managed service
+   b) 완전 커스터마이징 자유
+   c) 비용 무료
+   d) 데이터 프라이버시 완벽 보장
+   **정답: a** — 상용 모델은 최신 성능과 운영을 대신 해주는 관리형 서비스가 강점이다. 자유로운 커스터마이징은 오픈모델 쪽 장점이고, 무료·프라이버시 완벽은 성립하지 않는다.
 
-8. 2026년 기준 최고 reasoning 벤치마크(GPQA, AIME 등)에서 강세를 보이는 모델군은?  
-   a) Claude Opus 시리즈  
-   b) Llama 소형 모델  
-   c) 모든 Gemini 모델  
-   d) Grok-1  
-   **정답: a** — 최상위 추론 벤치마크는 대형 프런티어 모델(Claude Opus 등)이 주도한다. 소형 Llama(b)·구형 Grok-1(d)은 상위권이 아니고, "모든" Gemini(c)로 뭉뚱그리는 것도 부정확하다.
+8. 2026년 기준 최고 reasoning 벤치마크(GPQA, AIME 등)에서 강세를 보이는 모델군은?
+   a) Grok-1
+   b) Llama 소형 모델
+   c) 모든 Gemini 모델
+   d) Claude Opus 시리즈
+   **정답: d** — 최상위 추론 벤치마크는 대형 프런티어 모델(Claude Opus 등)이 주도한다. 소형 Llama·구형 Grok-1은 상위권이 아니고, "모든" Gemini로 뭉뚱그리는 것도 부정확하다.
 
-9. LLM 활용 시 temperature parameter의 역할은?  
-   a) 창의성 vs 결정성 조절  
-   b) token 수 제한  
-   c) context window 확장  
-   d) safety filter 강화  
-   **정답: a** — temperature는 샘플링 무작위성을 조절해 창의성(높음)과 일관성/결정성(낮음)의 균형을 잡는다. 토큰 수 제한(b)·컨텍스트 확장(c)·안전 필터(d)와는 무관하다.
+9. LLM 활용 시 temperature parameter의 역할은?
+   a) 창의성 vs 결정성 조절
+   b) token 수 제한
+   c) context window 확장
+   d) safety filter 강화
+   **정답: a** — temperature는 샘플링 무작위성을 조절해 창의성(높음)과 일관성/결정성(낮음)의 균형을 잡는다. 토큰 수 제한·컨텍스트 확장·안전 필터와는 무관하다.
 
-10. Multi-modal LLM의 실무 활용 예시로 적합하지 않은 것은?  
-    a) 이미지 기반 코드 생성  
-    b) 텍스트-only RAG  
-    c) 비디오 분석 에이전트  
-    d) 오디오 트랜스크립션 후 요약  
-    **정답: b** — 텍스트만 다루는 RAG는 굳이 멀티모달 모델이 필요 없다. 나머지 a·c·d는 이미지·비디오·오디오가 개입하므로 멀티모달의 대표 활용처다.
+10. Multi-modal LLM의 실무 활용 예시로 적합하지 않은 것은?
+    a) 이미지 기반 코드 생성
+    b) 텍스트-only RAG
+    c) 비디오 분석 에이전트
+    d) 오디오 트랜스크립션 후 요약
+    **정답: b** — 텍스트만 다루는 RAG는 굳이 멀티모달 모델이 필요 없다. 나머지 이미지·비디오·오디오가 개입하므로 멀티모달의 대표 활용처다.
 
 (문제 11-20: 비슷한 패턴으로 모델 비교, 벤치마크(MMLU, SWE-bench, Agentic), 비용/속도 trade-off, cutoff date 영향, fine-tuning vs prompting 등 다룸)
 
 ### **섹션 2: Token Optimization (문제 21-35)**
 
-21. Token Optimization의 주요 목적은?  
-    a) 비용 절감, latency 감소, context window 효율화  
-    b) 모델 accuracy 향상만  
-    c) safety 강화  
-    d) UI 디자인 개선  
-    **정답: a** — 토큰 최적화는 비용·지연·컨텍스트 효율을 함께 노린다. 정확도(b)는 부수 효과일 뿐 "향상만"이 목적은 아니고, 안전(c)·UI(d)는 다른 관심사다.
+21. Token Optimization의 주요 목적은?
+    a) 비용 절감, latency 감소, context window 효율화
+    b) 모델 accuracy 향상만
+    c) safety 강화
+    d) UI 디자인 개선
+    **정답: a** — 토큰 최적화는 비용·지연·컨텍스트 효율을 함께 노린다. 정확도는 부수 효과일 뿐 "향상만"이 목적은 아니고, 안전·UI는 다른 관심사다.
 
-22. Prompt에서 token 수를 줄이는 효과적인 방법은?  
-    a) 불필요한 설명 제거, abbreviation 사용, structured format  
-    b) 더 긴 문장 추가  
-    c) 모든 예시 포함  
-    d) temperature 높임  
-    **정답: a** — 군더더기 제거·구조화로 같은 의미를 더 적은 토큰에 담는다. 문장 늘리기(b)·예시 전부 넣기(c)는 토큰을 늘리고, temperature(d)는 토큰 수와 무관하다.
+22. Prompt에서 token 수를 줄이는 효과적인 방법은?
+    a) 모든 예시 포함
+    b) 더 긴 문장 추가
+    c) 불필요한 설명 제거, abbreviation 사용, structured format
+    d) temperature 높임
+    **정답: c** — 군더더기 제거·구조화로 같은 의미를 더 적은 토큰에 담는다. 문장 늘리기·예시 전부 넣기는 토큰을 늘리고, temperature는 토큰 수와 무관하다.
 
-23. Prefix Caching(또는 Prompt Caching)의 이점은?  
-    a) 반복되는 system prompt에 대한 token 비용 절감  
-    b) output token만 감소  
-    c) context window 확장  
-    d) hallucination 방지  
-    **정답: a** — 매 요청 반복되는 긴 프리픽스(시스템 프롬프트·도구 정의)를 캐싱해 입력 토큰 비용·지연을 줄인다. 출력 토큰(b)·컨텍스트 크기(c)·환각(d)에는 영향이 없다.
+23. Prefix Caching(또는 Prompt Caching)의 이점은?
+    a) 반복되는 system prompt에 대한 token 비용 절감
+    b) output token만 감소
+    c) context window 확장
+    d) hallucination 방지
+    **정답: a** — 매 요청 반복되는 긴 프리픽스(시스템 프롬프트·도구 정의)를 캐싱해 입력 토큰 비용·지연을 줄인다. 출력 토큰·컨텍스트 크기·환각에는 영향이 없다.
 
-24. RAG 파이프라인에서 token optimization 기법으로 적합한 것은?  
-    a) Chunking + Reranking + Summarization  
-    b) 모든 문서 full context 입력  
-    c) embedding dimension 증가  
-    d) vector DB 없이 검색  
-    **정답: a** — 청킹·재순위·요약으로 관련 부분만 골라 넣어야 토큰이 절약된다. 전체 문서 투입(b)은 정반대이고, 임베딩 차원 증가(c)나 벡터DB 미사용(d)은 최적화가 아니다.
+24. RAG 파이프라인에서 token optimization 기법으로 적합한 것은?
+    a) Chunking + Reranking + Summarization
+    b) 모든 문서 full context 입력
+    c) embedding dimension 증가
+    d) vector DB 없이 검색
+    **정답: a** — 청킹·재순위·요약으로 관련 부분만 골라 넣어야 토큰이 절약된다. 전체 문서 투입은 정반대이고, 임베딩 차원 증가나 벡터DB 미사용은 최적화가 아니다.
 
-25. LLM Agent에서 chat history 압축 방법으로 효과적인 것은?  
-    a) Summarizer agent 또는 key event extraction  
-    b) 전체 history 항상 유지  
-    c) temperature 0 고정  
-    d) tool calling 비활성화  
-    **정답: a** — 대화가 길어지면 요약·핵심 이벤트 추출로 압축해 컨텍스트를 관리한다. 전체 유지(b)는 곧 한도 초과·context rot로 이어지고, temperature(c)·tool calling(d)은 압축과 무관하다.
+25. LLM Agent에서 chat history 압축 방법으로 효과적인 것은?
+    a) temperature 0 고정
+    b) 전체 history 항상 유지
+    c) Summarizer agent 또는 key event extraction
+    d) tool calling 비활성화
+    **정답: c** — 대화가 길어지면 요약·핵심 이벤트 추출로 압축해 컨텍스트를 관리한다. 전체 유지는 곧 한도 초과·context rot로 이어지고, temperature·tool calling은 압축과 무관하다.
 
 (문제 26-35: Context compression, LoRA fine-tuning 영향, cost per successful task metric, embedding optimization, hybrid search 등)
 
 ### **섹션 3: Harness Engineering (문제 36-55)**
 
-36. Harness Engineering의 핵심 정의는?  
-    a) LLM 주변의 scaffolding(tools, verification, memory, observability) 설계  
-    b) 모델 fine-tuning만  
-    c) prompt 작성 기술  
-    d) UI/UX 디자인  
-    **정답: a** — 하네스는 모델을 감싸는 실행·검증·메모리·관측 등의 스캐폴딩 전체를 설계하는 일이다. 파인튜닝(b)은 모델 내부, 프롬프트 작성(c)은 하네스의 한 조각일 뿐이며 UI(d)는 별개다.
+36. Harness Engineering의 핵심 정의는?
+    a) UI/UX 디자인
+    b) 모델 fine-tuning만
+    c) prompt 작성 기술
+    d) LLM 주변의 scaffolding(tools, verification, memory, observability) 설계
+    **정답: d** — 하네스는 모델을 감싸는 실행·검증·메모리·관측 등의 스캐폴딩 전체를 설계하는 일이다. 파인튜닝은 모델 내부, 프롬프트 작성은 하네스의 한 조각일 뿐이며 UI는 별개다.
 
-37. Coding Agent를 위한 Outer Harness의 목적은?  
-    a) Agent output 검증, self-correction loop 구축  
-    b) input token만 최적화  
-    c) 모델 교체  
-    d) 비용 청구  
-    **정답: a** — 아우터 하네스는 에이전트 산출물(예: 코드)을 빌드·테스트로 검증하고 실패를 되먹여 자가 수정 루프를 만든다. 토큰 최적화(b)·모델 교체(c)·과금(d)은 목적이 아니다.
+37. Coding Agent를 위한 Outer Harness의 목적은?
+    a) 모델 교체
+    b) input token만 최적화
+    c) Agent output 검증, self-correction loop 구축
+    d) 비용 청구
+    **정답: c** — 아우터 하네스는 에이전트 산출물(예: 코드)을 빌드·테스트로 검증하고 실패를 되먹여 자가 수정 루프를 만든다. 토큰 최적화·모델 교체·과금은 목적이 아니다.
 
-38. Effective Harness의 구성 요소로 필수적인 것은?  
-    a) Planning artifacts, verification loops, sandbox  
-    b) 오직 system prompt  
-    c) 단일 tool  
-    d) human oversight 제거  
-    **정답: a** — 계획 산출물·검증 루프·격리 실행 환경(sandbox)이 신뢰성 있는 하네스의 뼈대다. 시스템 프롬프트만(b)·도구 하나만(c)으로는 부족하고, 사람 감독 제거(d)는 오히려 위험하다.
+38. Effective Harness의 구성 요소로 필수적인 것은?
+    a) 단일 tool
+    b) 오직 system prompt
+    c) Planning artifacts, verification loops, sandbox
+    d) human oversight 제거
+    **정답: c** — 계획 산출물·검증 루프·격리 실행 환경(sandbox)이 신뢰성 있는 하네스의 뼈대다. 시스템 프롬프트만·도구 하나만으로는 부족하고, 사람 감독 제거는 오히려 위험하다.
 
-39. Harness Engineering이 Context Engineering의 subset인 이유는?  
-    a) Context delivery와 configuration points 관리  
-    b) 모델 내부만 변경  
-    c) token counting만  
-    d) 벤치마크 점수 향상  
-    **정답: a** — 하네스는 결국 모델에 무엇을 어떻게 전달할지(컨텍스트 전달·설정 지점)를 다루므로 컨텍스트 엔지니어링의 한 갈래다. 모델 내부(b)·토큰 카운팅(c)·벤치마크(d)는 초점이 아니다.
+39. Harness Engineering이 Context Engineering의 subset인 이유는?
+    a) token counting만
+    b) 모델 내부만 변경
+    c) Context delivery와 configuration points 관리
+    d) 벤치마크 점수 향상
+    **정답: c** — 하네스는 결국 모델에 무엇을 어떻게 전달할지(컨텍스트 전달·설정 지점)를 다루므로 컨텍스트 엔지니어링의 한 갈래다. 모델 내부·토큰 카운팅·벤치마크는 초점이 아니다.
 
-40. AI Agent Harness에서 Observability의 중요성은?  
-    a) Trace every LLM call, tool call, retrieval for debugging  
-    b) output만 logging  
-    c) input 무시  
-    d) latency 측정 불필요  
-    **정답: a** — 모든 LLM 호출·도구 호출·검색을 추적해야 비결정적 에이전트를 디버깅·개선할 수 있다. 출력만 기록(b)·입력 무시(c)·지연 측정 생략(d)은 관측성을 반쪽으로 만든다.
+40. AI Agent Harness에서 Observability의 중요성은?
+    a) latency 측정 불필요
+    b) output만 logging
+    c) input 무시
+    d) Trace every LLM call, tool call, retrieval for debugging
+    **정답: d** — 모든 LLM 호출·도구 호출·검색을 추적해야 비결정적 에이전트를 디버깅·개선할 수 있다. 출력만 기록·입력 무시·지연 측정 생략은 관측성을 반쪽으로 만든다.
 
 (문제 41-55: Feedback loops, permission boundaries, guardrails, retries/state machines, human-in-the-loop 등)
 
 ### **섹션 4: MCP (Model Context Protocol) 설계 (문제 56-70)**
 
-56. MCP(Model Context Protocol)의 주요 목적은?  
-    a) LLM이 외부 tools, DB, API와 표준화된 방식으로 상호작용  
-    b) 모델 내부 training  
-    c) token 생성만  
-    d) UI 렌더링  
-    **정답: a** — MCP는 LLM 애플리케이션과 외부 도구·데이터·워크플로우 연결을 표준화하는 개방형 프로토콜이다. 학습(b)·토큰 생성(c)·UI(d)와는 무관하다.
+56. MCP(Model Context Protocol)의 주요 목적은?
+    a) LLM이 외부 tools, DB, API와 표준화된 방식으로 상호작용
+    b) 모델 내부 training
+    c) token 생성만
+    d) UI 렌더링
+    **정답: a** — MCP는 LLM 애플리케이션과 외부 도구·데이터·워크플로우 연결을 표준화하는 개방형 프로토콜이다. 학습·토큰 생성·UI와는 무관하다.
 
-57. MCP의 클라이언트-서버 아키텍처에서 LLM 역할은?  
-    a) MCP Client (요청 측)  
-    b) MCP Server (tool 제공)  
-    c) Database만  
-    d) Human operator  
-    **정답: a** — LLM을 품은 호스트 애플리케이션이 클라이언트가 되어 서버에 도구·리소스를 요청한다. 도구를 노출하는 쪽이 서버(b)이고, DB(c)·사람(d)은 이 역할 구분에 해당하지 않는다.
+57. MCP의 클라이언트-서버 아키텍처에서 LLM 역할은?
+    a) Database만
+    b) MCP Server (tool 제공)
+    c) MCP Client (요청 측)
+    d) Human operator
+    **정답: c** — LLM을 품은 호스트 애플리케이션이 클라이언트가 되어 서버에 도구·리소스를 요청한다. 도구를 노출하는 쪽이 서버이고, DB·사람은 이 역할 구분에 해당하지 않는다.
 
-58. MCP 도입의 장점은?  
-    a) Agent Framework와 Tool 간 vendor lock-in 감소, interoperability 향상  
-    b) context window 감소  
-    c) 비용 증가  
-    d) safety 저하  
-    **정답: a** — 표준 프로토콜이라 특정 프레임워크·벤더에 묶이지 않고 도구를 재사용·상호운용할 수 있다. 컨텍스트 축소(b)·비용 증가(c)·안전 저하(d)는 장점이 아니다.
+58. MCP 도입의 장점은?
+    a) Agent Framework와 Tool 간 vendor lock-in 감소, interoperability 향상
+    b) context window 감소
+    c) 비용 증가
+    d) safety 저하
+    **정답: a** — 표준 프로토콜이라 특정 프레임워크·벤더에 묶이지 않고 도구를 재사용·상호운용할 수 있다. 컨텍스트 축소·비용 증가·안전 저하는 장점이 아니다.
 
-59. MCP를 활용한 Agentic RAG 설계 시 핵심은?  
-    a) 모든 search/retrieval을 MCP Tool로 통일  
-    b) direct DB query  
-    c) prompt-only  
-    d) static data  
-    **정답: a** — 검색/조회를 MCP 도구로 표준화하면 에이전트가 일관된 인터페이스로 여러 소스를 다룰 수 있다. 직접 DB 쿼리(b)·프롬프트만(c)·정적 데이터(d)는 agentic RAG의 취지와 어긋난다.
+59. MCP를 활용한 Agentic RAG 설계 시 핵심은?
+    a) static data
+    b) direct DB query
+    c) prompt-only
+    d) 모든 search/retrieval을 MCP Tool로 통일
+    **정답: d** — 검색/조회를 MCP 도구로 표준화하면 에이전트가 일관된 인터페이스로 여러 소스를 다룰 수 있다. 직접 DB 쿼리·프롬프트만·정적 데이터는 agentic RAG의 취지와 어긋난다.
 
-60. MCP와 A2A(Agent-to-Agent) 프로토콜의 관계는?  
-    a) MCP는 tool integration, A2A는 multi-agent 협업  
-    b) 동일한 프로토콜  
-    c) MCP가 multi-agent 전용  
-    d) 둘 다 불필요  
-    **정답: a** — MCP는 에이전트↔도구/데이터 연결, A2A는 에이전트↔에이전트 협업으로 계층이 다르다. 같은 프로토콜(b)도, MCP가 멀티에이전트 전용(c)도 아니며 둘 다 실무에서 쓰인다(d).
+60. MCP와 A2A(Agent-to-Agent) 프로토콜의 관계는?
+    a) MCP는 tool integration, A2A는 multi-agent 협업
+    b) 동일한 프로토콜
+    c) MCP가 multi-agent 전용
+    d) 둘 다 불필요
+    **정답: a** — MCP는 에이전트↔도구/데이터 연결, A2A는 에이전트↔에이전트 협업으로 계층이 다르다. 같은 프로토콜도, MCP가 멀티에이전트 전용도 아니며 둘 다 실무에서 쓰인다.
 
 (문제 61-70: MCP 구현 예시, security, local LLM 연동, workflow design 등)
 
 ### **섹션 5: AI Agentization 및 종합 실무 (문제 71-100)**
 
-71. LLM Agent의 핵심 구성 요소는?  
-    a) Planning, Memory, Tools, LLM Core  
-    b) Prompt만  
-    c) Vector DB  
-    d) Frontend  
-    **정답: a** — 에이전트는 계획·메모리·도구·LLM 코어가 맞물려 동작한다. 프롬프트만(b)·벡터DB(c)·프런트엔드(d)는 그중 일부이거나 별개 요소다.
+71. LLM Agent의 핵심 구성 요소는?
+    a) Prompt만
+    b) Planning, Memory, Tools, LLM Core
+    c) Vector DB
+    d) Frontend
+    **정답: b** — 에이전트는 계획·메모리·도구·LLM 코어가 맞물려 동작한다. 프롬프트만·벡터DB·프런트엔드는 그중 일부이거나 별개 요소다.
 
-72. ReAct 패러다임의 흐름은?  
-    a) Thought → Action → Observation 반복  
-    b) Single shot answer  
-    c) Tree of Thoughts만  
-    d) No tool use  
-    **정답: a** — ReAct는 추론(Thought)→행동(Action)→관찰(Observation)을 반복하며 도구를 쓰는 패턴이다. 단발 응답(b)·ToT 전용(c)·도구 미사용(d)은 ReAct가 아니다.
+72. ReAct 패러다임의 흐름은?
+    a) Thought → Action → Observation 반복
+    b) Single shot answer
+    c) Tree of Thoughts만
+    d) No tool use
+    **정답: a** — ReAct는 추론(Thought)→행동(Action)→관찰(Observation)을 반복하며 도구를 쓰는 패턴이다. 단발 응답·ToT 전용·도구 미사용은 ReAct가 아니다.
 
-73. AI Agentization에서 Memory 유형으로 장기 기억 관리는?  
-    a) Vector store + summarization  
-    b) Session memory만  
-    c) Prompt에 모두 포함  
-    d) 무시  
-    **정답: a** — 장기 기억은 벡터 스토어에 저장하고 요약으로 압축해 필요할 때 검색한다. 세션 메모리만(b)은 단기 한정이고, 전부 프롬프트에 넣기(c)는 한도 초과, 무시(d)는 기억 관리가 아니다.
+73. AI Agentization에서 Memory 유형으로 장기 기억 관리는?
+    a) 무시
+    b) Session memory만
+    c) Prompt에 모두 포함
+    d) Vector store + summarization
+    **정답: d** — 장기 기억은 벡터 스토어에 저장하고 요약으로 압축해 필요할 때 검색한다. 세션 메모리만은 단기 한정이고, 전부 프롬프트에 넣기는 한도 초과, 무시는 기억 관리가 아니다.
 
-74. Multi-Agent System의 활용 시 이점은?  
-    a) Role specialization과 collaboration  
-    b) 단일 모델 비용 절감  
-    c) complexity 감소  
-    d) latency 무관  
-    **정답: a** — 여러 에이전트에 역할을 나눠 협업시키면 전문화된 처리가 가능하다. 다만 비용(b)·복잡도(c)·지연(d)은 오히려 늘어날 수 있어 이점이 아니다.
+74. Multi-Agent System의 활용 시 이점은?
+    a) complexity 감소
+    b) 단일 모델 비용 절감
+    c) Role specialization과 collaboration
+    d) latency 무관
+    **정답: c** — 여러 에이전트에 역할을 나눠 협업시키면 전문화된 처리가 가능하다. 다만 비용·복잡도·지연은 오히려 늘어날 수 있어 이점이 아니다.
 
-75. Production AI Agent에서 Guardrails와 Human Approval의 역할은?  
-    a) Safety와 reliability 확보  
-    b) 속도 향상  
-    c) token 증가  
-    d) autonomy 완전 제거  
-    **정답: a** — 가드레일과 사람 승인은 위험한 행동을 막아 안전성·신뢰성을 확보한다. 속도(b)·토큰(c)과는 무관하고, 자율성을 "완전 제거"(d)하는 게 아니라 위험 구간에만 개입한다.
+75. Production AI Agent에서 Guardrails와 Human Approval의 역할은?
+    a) token 증가
+    b) 속도 향상
+    c) Safety와 reliability 확보
+    d) autonomy 완전 제거
+    **정답: c** — 가드레일과 사람 승인은 위험한 행동을 막아 안전성·신뢰성을 확보한다. 속도·토큰과는 무관하고, 자율성을 "완전 제거"하는 게 아니라 위험 구간에만 개입한다.
 
-**활용 팁**:  
-- 25문제 시험용으로는 각 섹션에서 5문제씩 균형 있게 추출 추천.  
-- 난이도 조절: 기본 개념(1-50), 실무 적용/시나리오(51-100).  
-- 필요 시 정답 키, 설명, 또는 추가 문제(변형) 생성 가능.  
+**활용 팁**:
+- 25문제 시험용으로는 각 섹션에서 5문제씩 균형 있게 추출 추천.
+- 난이도 조절: 기본 개념(1-50), 실무 적용/시나리오(51-100).
+- 필요 시 정답 키, 설명, 또는 추가 문제(변형) 생성 가능.
 
 이 문제들은 2026년 기준 최신 트렌드(Claude MCP, Harness, Token Opt 등)를 반영했습니다. 실제 시험에 맞게 수정해 사용하세요! 추가 조정이 필요하면 말씀해주세요.
 
