@@ -1,0 +1,76 @@
+<svg viewBox="0 0 960 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Pod phase는 단방향이다 — 재시작은 컨테이너 사건, 복구는 새 Pod</title>
+  <desc>Pod phase는 Pending에서 Running으로, 다시 Succeeded 또는 Failed로 한 방향으로만 전이한다. Running에서 Pending으로 되돌아가지 않는다. 컨테이너가 죽어 재시작해도 그것은 컨테이너 수준의 사건이라 Pod phase는 Running에 머문다. 죽은 Pod를 복구하는 것은 phase를 되돌리는 게 아니라 Deployment가 새 Pod를 Pending부터 새로 만드는 것이다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 16px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 10.5px; fill: rgb(138,133,128); }
+      .ph    { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .lbl   { font-size: 10px; font-weight: 800; fill: rgb(212,168,83); }
+      .note  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .x     { font-size: 15px; font-weight: 800; fill: rgb(224,110,100); }
+      .body  { font-size: 10px; fill: #1a1a1a; }
+      .mono  { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    </style>
+    <marker id="af" markerWidth="12" markerHeight="12" refX="7" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="ab" markerWidth="12" markerHeight="12" refX="7" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 Z" fill="#66bb6a"/></marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="480" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">Pod phase는 한 방향으로만 흐른다 — 되돌아오지 않는다</text>
+  <text x="24" y="54" class="sub">"Running에서 Pending으로 돌아가나?" → 아니다. phase는 단방향이고, 복구는 새 Pod를 만드는 것이다.</text>
+
+  <!-- 단방향 전이 체인 -->
+  <!-- Pending -->
+  <rect x="40" y="96" width="150" height="60" rx="10" fill="rgb(120,116,112)" stroke="rgb(90,88,84)" stroke-width="1.3"/>
+  <text x="115" y="124" class="ph" text-anchor="middle" style="fill:#0d0d0d">Pending</text>
+  <text x="115" y="144" class="note" text-anchor="middle" style="fill:#1a1a1a">아직 준비 중</text>
+  <!-- Running -->
+  <rect x="270" y="96" width="150" height="60" rx="10" fill="#5b9bd5" stroke="#2f6ba3" stroke-width="1.3"/>
+  <text x="345" y="124" class="ph" text-anchor="middle" style="fill:#0d0d0d">Running</text>
+  <text x="345" y="144" class="note" text-anchor="middle" style="fill:#0d1a2a">최소 하나 실행 중</text>
+  <!-- Succeeded -->
+  <rect x="510" y="60" width="150" height="52" rx="10" fill="#66bb6a" stroke="#3d8b40" stroke-width="1.3"/>
+  <text x="585" y="84" class="ph" text-anchor="middle" style="fill:#0d0d0d">Succeeded</text>
+  <text x="585" y="102" class="note" text-anchor="middle" style="fill:#14330f">전부 성공 종료</text>
+  <!-- Failed -->
+  <rect x="510" y="140" width="150" height="52" rx="10" fill="rgb(224,140,120)" stroke="rgb(180,90,70)" stroke-width="1.3"/>
+  <text x="585" y="164" class="ph" text-anchor="middle" style="fill:#0d0d0d">Failed</text>
+  <text x="585" y="182" class="note" text-anchor="middle" style="fill:#3a1410">하나 이상 실패 종료</text>
+
+  <!-- 정방향 화살표 -->
+  <path d="M190,126 L266,126" fill="none" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#af)"/>
+  <path d="M420,120 L506,92" fill="none" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#af)"/>
+  <path d="M420,132 L506,160" fill="none" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#af)"/>
+  <text x="228" y="116" class="note" text-anchor="middle">시작</text>
+  <text x="470" y="150" class="note" text-anchor="middle">종료 시</text>
+
+  <!-- 역방향 금지 표시 (Running → Pending X) -->
+  <path d="M266,150 L194,150" fill="none" stroke="rgb(224,110,100)" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="230" y="172" class="x" text-anchor="middle">✕</text>
+  <text x="230" y="190" class="note" text-anchor="middle" style="fill:rgb(224,110,100)">되돌아가지 않음</text>
+
+  <!-- 규칙 1: 컨테이너 재시작 -->
+  <rect x="40" y="240" width="430" height="200" rx="11" fill="rgb(22,24,28)" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="60" y="266" class="lbl">규칙 ① 컨테이너 재시작 ≠ phase 변화</text>
+  <text x="60" y="292" class="note" style="fill:#e8e4df">컨테이너가 죽어 재시작해도(restartCount↑)</text>
+  <text x="60" y="310" class="note" style="fill:#e8e4df">그것은 <tspan style="fill:rgb(212,168,83)">컨테이너 수준</tspan>의 사건이다.</text>
+  <text x="60" y="328" class="note" style="fill:#e8e4df">Pod phase는 <tspan class="mono" style="fill:#5b9bd5">Running</tspan>에 그대로 머문다.</text>
+  <!-- 실측 예시 칩 -->
+  <rect x="60" y="344" width="390" height="76" rx="8" fill="rgb(28,30,34)" stroke="rgb(80,78,74)" stroke-width="1"/>
+  <text x="74" y="366" class="note mono" style="fill:#e8e4df">실측:</text>
+  <text x="120" y="366" class="note mono" style="fill:#dbe8f5">kiada  phase=Running  restarts=4</text>
+  <text x="74" y="388" class="note" style="fill:rgb(138,133,128)">컨테이너가 4번 죽었다 살아나도</text>
+  <text x="74" y="406" class="note" style="fill:rgb(138,133,128)">phase는 Running 유지 → phase는 컨테이너 재시작에 흔들리지 않는다.</text>
+
+  <!-- 규칙 2: 복구 = 새 Pod -->
+  <rect x="490" y="240" width="430" height="200" rx="11" fill="rgb(22,24,28)" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="510" y="266" class="lbl" style="fill:#66bb6a">규칙 ② 복구 = phase 되돌림이 아니라 새 Pod</text>
+  <text x="510" y="292" class="note" style="fill:#e8e4df">Pod가 죽으면 그 Pod를 되살리는 게 아니라,</text>
+  <text x="510" y="310" class="note" style="fill:#e8e4df">Deployment가 <tspan style="fill:#66bb6a">새 Pod</tspan>를 만든다.</text>
+  <text x="510" y="328" class="note" style="fill:#e8e4df">새 Pod는 <tspan class="mono">Pending</tspan>부터 다시 시작한다.</text>
+  <!-- 흐름 칩 -->
+  <rect x="510" y="344" width="390" height="76" rx="8" fill="rgb(24,32,24)" stroke="#3d8b40" stroke-width="1"/>
+  <text x="524" y="372" class="note" style="fill:#cdeccf">죽은 Pod (Failed)  ──✕ 되살림 없음</text>
+  <path d="M700,382 L740,382" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#ab)"/>
+  <text x="524" y="404" class="note" style="fill:#cdeccf">새 Pod  <tspan class="mono">Pending → Running</tspan>  (05-03 §5 Deployment 교체)</text>
+</svg>
