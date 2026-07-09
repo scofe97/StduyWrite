@@ -1,0 +1,75 @@
+<svg viewBox="0 0 960 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>방법 ③ kubectl port-forward — 실제 아키텍처 흐름</title>
+  <desc>내 노트북의 kubectl 프록시에서 시작해 API 서버, 그 다음 Pod를 호스팅하는 노드의 kubelet을 거쳐, kubelet이 Pod의 loopback 장치를 통해 kiada에 연결한다. 네 방법 중 가장 많은 홉을 거치며 모든 컴포넌트가 관여한다. 마지막으로 kiada에 붙는 것이 자기 자신의 loopback이라 Client IP는 127.0.0.1이다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 16px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 10.5px; fill: rgb(138,133,128); }
+      .zone   { font-size: 11px; font-weight: 800; fill: rgb(212,168,83); }
+      .comp   { font-size: 11.5px; font-weight: 800; fill: #e8e4df; }
+      .note   { font-size: 9px; fill: rgb(138,133,128); }
+      .step   { font-size: 9.5px; font-weight: 800; fill: rgb(212,168,83); }
+      .ip     { font-size: 11px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; fill: rgb(212,168,83); }
+      .last   { font-size: 10.5px; font-weight: 800; fill: rgb(212,168,83); }
+    </style>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="6.5" refY="3.2" orient="auto"><path d="M0,0 L8,3.2 L0,6.4 Z" fill="rgb(180,150,90)"/></marker>
+    <marker id="arL" markerWidth="11" markerHeight="11" refX="7" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="500" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">③ kubectl port-forward — 네 홉을 거쳐 loopback으로</text>
+  <text x="24" y="54" class="sub">네 방법 중 유일하게 모든 컴포넌트가 관여한다. kubelet이 Pod의 loopback으로 붙어 Client IP가 127.0.0.1이 된다.</text>
+
+  <!-- 내 노트북 -->
+  <rect x="24" y="94" width="150" height="80" rx="9" fill="rgb(28,30,34)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="99" y="122" class="comp" text-anchor="middle">내 노트북</text>
+  <text x="99" y="142" class="note" text-anchor="middle">kubectl 프록시</text>
+  <text x="99" y="158" class="note" text-anchor="middle">원래 요청자</text>
+
+  <!-- Control Plane -->
+  <rect x="24" y="230" width="230" height="150" rx="12" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="40" y="254" class="zone">Control Plane</text>
+  <rect x="46" y="268" width="186" height="52" rx="7" fill="rgb(28,30,34)" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="139" y="292" class="comp" text-anchor="middle">API 서버</text>
+  <text x="139" y="308" class="note" text-anchor="middle">인증·프록시 중계</text>
+  <rect x="46" y="330" width="186" height="36" rx="7" fill="rgb(22,24,28)" stroke="rgb(60,58,54)" stroke-width="1"/>
+  <text x="139" y="353" class="note" text-anchor="middle">etcd · 스케줄러 (무관)</text>
+
+  <!-- Worker 노드 -->
+  <rect x="330" y="94" width="600" height="300" rx="12" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="350" y="118" class="zone">Worker 노드 (kiada를 호스팅)</text>
+
+  <!-- kubelet -->
+  <rect x="356" y="230" width="180" height="80" rx="9" fill="rgb(28,30,34)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="446" y="260" class="comp" text-anchor="middle">kubelet</text>
+  <text x="446" y="280" class="note" text-anchor="middle">노드 에이전트</text>
+  <text x="446" y="296" class="note" text-anchor="middle">Pod에 실제로 붙음</text>
+
+  <!-- kiada Pod + loopback -->
+  <rect x="640" y="150" width="260" height="200" rx="11" fill="#5b9bd5" stroke="#2f6ba3" stroke-width="1.5"/>
+  <text x="770" y="178" class="comp" text-anchor="middle" style="fill:#e8e4df">kiada Pod</text>
+  <text x="770" y="198" class="note" text-anchor="middle" style="fill:#dbe8f5">10.244.2.5:8080</text>
+  <!-- loopback 장치 표시 -->
+  <rect x="664" y="216" width="212" height="70" rx="8" fill="rgb(20,30,42)" stroke="#dbe8f5" stroke-width="1.1"/>
+  <text x="770" y="240" class="note" text-anchor="middle" style="fill:#dbe8f5">loopback 장치 (lo)</text>
+  <text x="770" y="258" class="ip" text-anchor="middle">127.0.0.1</text>
+  <text x="770" y="276" class="note" text-anchor="middle" style="fill:#dbe8f5">kubelet이 여기로 붙음</text>
+  <text x="770" y="316" class="note" text-anchor="middle" style="fill:#dbe8f5">응답에 Client IP 찍음</text>
+
+  <!-- 경로 (앰버 단계) -->
+  <!-- ① 노트북 → API 서버 -->
+  <path d="M99,174 L99,266" fill="none" stroke="rgb(180,150,90)" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="112" y="212" class="step">① 프록시→API</text>
+  <!-- ② API 서버 → kubelet -->
+  <path d="M232,294 L352,270" fill="none" stroke="rgb(180,150,90)" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="250" y="258" class="step">② API→kubelet</text>
+  <!-- ③ kubelet → loopback (마지막, 굵은 앰버) -->
+  <path d="M536,262 C600,255 620,251 660,251" fill="none" stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#arL)"/>
+  <text x="595" y="238" class="step">③ loopback으로</text>
+
+  <!-- 결과 바 -->
+  <rect x="330" y="410" width="600" height="66" rx="8" fill="rgb(26,26,26)" stroke="rgb(212,168,83)" stroke-width="1.1"/>
+  <text x="350" y="436" class="last">마지막 연결자 = Pod 자신의 loopback (kubelet이 lo로 붙음)</text>
+  <text x="350" y="460" class="last">→ Client IP =</text>
+  <text x="460" y="460" class="ip">127.0.0.1</text>
+  <text x="570" y="460" class="note" style="fill:#e8e4df">(원래 요청자인 내 노트북은 세 홉 뒤라 안 보임)</text>
+</svg>

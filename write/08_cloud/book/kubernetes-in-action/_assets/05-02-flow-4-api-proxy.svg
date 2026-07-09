@@ -1,0 +1,67 @@
+<svg viewBox="0 0 960 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>방법 ④ API 서버 프록시 — 실제 아키텍처 흐름</title>
+  <desc>내 노트북에서 kubectl get --raw로 API 서버에 요청하면, API 서버가 그 요청을 kiada Pod로 프록시한다. Control Plane의 API 서버가 마지막으로 kiada에 연결하므로 Client IP는 API 서버 IP다. kubelet은 관여하지 않는다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 16px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 10.5px; fill: rgb(138,133,128); }
+      .zone   { font-size: 11px; font-weight: 800; fill: rgb(212,168,83); }
+      .comp   { font-size: 11.5px; font-weight: 800; fill: #e8e4df; }
+      .note   { font-size: 9px; fill: rgb(138,133,128); }
+      .step   { font-size: 9.5px; font-weight: 800; fill: rgb(212,168,83); }
+      .ip     { font-size: 11px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; fill: rgb(212,168,83); }
+      .last   { font-size: 10.5px; font-weight: 800; fill: rgb(212,168,83); }
+      .dim    { font-size: 10px; fill: rgb(90,88,84); }
+    </style>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="6.5" refY="3.2" orient="auto"><path d="M0,0 L8,3.2 L0,6.4 Z" fill="rgb(180,150,90)"/></marker>
+    <marker id="arL" markerWidth="11" markerHeight="11" refX="7" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="480" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">④ API 서버 프록시 — API 서버가 kiada에 연결</text>
+  <text x="24" y="54" class="sub">kubectl get --raw .../proxy/ 로 API 서버에 요청하면 API 서버가 kiada로 프록시. kubelet은 거치지 않는다.</text>
+
+  <!-- 내 노트북 -->
+  <rect x="24" y="94" width="150" height="80" rx="9" fill="rgb(28,30,34)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="99" y="122" class="comp" text-anchor="middle">내 노트북</text>
+  <text x="99" y="142" class="note" text-anchor="middle">kubectl get --raw</text>
+  <text x="99" y="158" class="note" text-anchor="middle">원래 요청자</text>
+
+  <!-- Control Plane -->
+  <rect x="24" y="230" width="230" height="150" rx="12" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="40" y="254" class="zone">Control Plane</text>
+  <rect x="46" y="268" width="186" height="56" rx="7" fill="rgb(28,30,34)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="139" y="292" class="comp" text-anchor="middle">API 서버</text>
+  <text x="139" y="310" class="note" text-anchor="middle">IP 172.18.0.5 · Pod로 프록시</text>
+  <rect x="46" y="334" width="186" height="34" rx="7" fill="rgb(22,24,28)" stroke="rgb(60,58,54)" stroke-width="1"/>
+  <text x="139" y="356" class="note" text-anchor="middle">etcd · 스케줄러 (무관)</text>
+
+  <!-- Worker 노드 -->
+  <rect x="330" y="94" width="600" height="286" rx="12" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="350" y="118" class="zone">Worker 노드 (kiada를 호스팅)</text>
+
+  <!-- kubelet (dim, 안 거침) -->
+  <rect x="356" y="240" width="180" height="66" rx="9" fill="rgb(22,24,28)" stroke="rgb(60,58,54)" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="446" y="278" class="dim" text-anchor="middle">kubelet (관여 안 함)</text>
+
+  <!-- kiada Pod -->
+  <rect x="640" y="170" width="260" height="120" rx="11" fill="#5b9bd5" stroke="#2f6ba3" stroke-width="1.5"/>
+  <text x="770" y="204" class="comp" text-anchor="middle" style="fill:#e8e4df">kiada Pod</text>
+  <text x="770" y="228" class="note" text-anchor="middle" style="fill:#dbe8f5">10.244.2.5:8080</text>
+  <text x="770" y="250" class="note" text-anchor="middle" style="fill:#dbe8f5">응답에 Client IP 찍음</text>
+
+  <!-- 경로 -->
+  <!-- ① 노트북 → API 서버 -->
+  <path d="M99,174 L99,266" fill="none" stroke="rgb(180,150,90)" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="112" y="212" class="step">① 요청</text>
+  <!-- ② API 서버 → kiada (마지막, 굵은 앰버, kubelet 건너뜀) -->
+  <path d="M232,282 C440,270 520,220 636,214" fill="none" stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#arL)"/>
+  <text x="500" y="182" class="step" text-anchor="middle">② API 서버가 Pod로 직접 프록시</text>
+  <text x="500" y="198" class="note" text-anchor="middle" style="fill:rgb(138,133,128)">(kubelet 건너뜀)</text>
+
+  <!-- 결과 바 -->
+  <rect x="330" y="396" width="600" height="66" rx="8" fill="rgb(26,26,26)" stroke="rgb(212,168,83)" stroke-width="1.1"/>
+  <text x="350" y="422" class="last">마지막 연결자 = API 서버</text>
+  <text x="350" y="446" class="last">→ Client IP =</text>
+  <text x="460" y="446" class="ip">172.18.0.5</text>
+  <text x="570" y="446" class="note" style="fill:#e8e4df">(API 서버 IP — 내 노트북은 한 홉 뒤라 안 보임)</text>
+</svg>

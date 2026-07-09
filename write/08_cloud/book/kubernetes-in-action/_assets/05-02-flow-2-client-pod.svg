@@ -1,0 +1,64 @@
+<svg viewBox="0 0 960 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>방법 ② 임시 클라이언트 Pod에서 접근 — 실제 아키텍처 흐름</title>
+  <desc>클러스터 안에 임시 클라이언트 Pod를 띄워 그 Pod에서 curl로 kiada Pod에 직접 연결한다. Control Plane을 거치지 않고 Pod에서 Pod로 직접 가므로, 마지막 연결자는 그 임시 Pod이고 Client IP는 임시 Pod의 IP다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 16px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 10.5px; fill: rgb(138,133,128); }
+      .zone   { font-size: 11px; font-weight: 800; fill: rgb(138,133,128); }
+      .comp   { font-size: 11.5px; font-weight: 800; fill: #e8e4df; }
+      .note   { font-size: 9px; fill: rgb(138,133,128); }
+      .ip     { font-size: 11px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; fill: rgb(212,168,83); }
+      .last   { font-size: 10.5px; font-weight: 800; fill: rgb(212,168,83); }
+      .dim    { font-size: 10px; fill: rgb(90,88,84); }
+    </style>
+    <marker id="arL" markerWidth="11" markerHeight="11" refX="7" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="480" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">② 임시 클라이언트 Pod — Pod가 kiada에 직접 연결</text>
+  <text x="24" y="54" class="sub">클러스터 안에 curl Pod를 띄워 거기서 kiada IP로 연결. Control Plane을 거치지 않고 Pod→Pod로 직접 간다(CNI 네트워크).</text>
+
+  <!-- 내 노트북 (dim) -->
+  <rect x="30" y="90" width="150" height="70" rx="9" fill="rgb(18,20,24)" stroke="rgb(60,58,54)" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <text x="105" y="120" class="dim" text-anchor="middle">내 노트북</text>
+  <text x="105" y="140" class="dim" text-anchor="middle">(이 방법 미사용)</text>
+
+  <!-- Control Plane (dim) -->
+  <rect x="30" y="200" width="230" height="240" rx="12" fill="rgb(16,18,22)" stroke="rgb(60,58,54)" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <text x="46" y="224" class="dim">Control Plane (안 거침)</text>
+  <rect x="52" y="238" width="186" height="42" rx="7" fill="rgb(22,24,28)" stroke="rgb(60,58,54)" stroke-width="1"/>
+  <text x="145" y="264" class="dim" text-anchor="middle">API 서버</text>
+  <rect x="52" y="292" width="88" height="40" rx="7" fill="rgb(22,24,28)" stroke="rgb(60,58,54)" stroke-width="1"/>
+  <text x="96" y="317" class="dim" text-anchor="middle">etcd</text>
+  <rect x="150" y="292" width="88" height="40" rx="7" fill="rgb(22,24,28)" stroke="rgb(60,58,54)" stroke-width="1"/>
+  <text x="194" y="317" class="dim" text-anchor="middle">스케줄러</text>
+
+  <!-- Worker 노드 A (임시 Pod) -->
+  <rect x="300" y="90" width="220" height="180" rx="12" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="316" y="114" class="zone" style="fill:rgb(212,168,83)">Worker 노드 A</text>
+  <rect x="322" y="132" width="176" height="110" rx="9" fill="rgb(28,30,34)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="410" y="162" class="comp" text-anchor="middle">임시 Pod (curl)</text>
+  <text x="410" y="184" class="note" text-anchor="middle">kubectl run --rm</text>
+  <text x="410" y="204" class="note" text-anchor="middle">IP 10.244.1.13</text>
+  <text x="410" y="224" class="note" text-anchor="middle">조사 끝나면 삭제</text>
+
+  <!-- Worker 노드 B (kiada) -->
+  <rect x="560" y="90" width="370" height="180" rx="12" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="576" y="114" class="zone" style="fill:rgb(212,168,83)">Worker 노드 B</text>
+  <rect x="656" y="140" width="240" height="90" rx="10" fill="#5b9bd5" stroke="#2f6ba3" stroke-width="1.4"/>
+  <text x="776" y="170" class="comp" text-anchor="middle" style="fill:#e8e4df">kiada Pod</text>
+  <text x="776" y="192" class="note" text-anchor="middle" style="fill:#dbe8f5">10.244.2.5:8080</text>
+  <text x="776" y="210" class="note" text-anchor="middle" style="fill:#dbe8f5">응답에 Client IP 찍음</text>
+
+  <!-- 경로: 임시 Pod → kiada (앰버, 노드 경계 넘음, CNI) -->
+  <path d="M498,185 L652,185" fill="none" stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#arL)"/>
+  <text x="575" y="172" class="last" text-anchor="middle">직접 연결</text>
+  <text x="575" y="205" class="note" text-anchor="middle">(CNI가 노드 경계 넘어 라우팅)</text>
+
+  <!-- 결과 바 -->
+  <rect x="300" y="366" width="630" height="60" rx="8" fill="rgb(26,26,26)" stroke="rgb(212,168,83)" stroke-width="1.1"/>
+  <text x="320" y="392" class="last">마지막 연결자 = 임시 Pod (중계 없음)</text>
+  <text x="320" y="414" class="last">→ Client IP =</text>
+  <text x="430" y="414" class="ip">10.244.1.13</text>
+  <text x="545" y="414" class="note" style="fill:#e8e4df">(요청한 임시 Pod의 IP)</text>
+</svg>
