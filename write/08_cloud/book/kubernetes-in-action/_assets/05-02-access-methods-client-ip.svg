@@ -1,0 +1,76 @@
+<svg viewBox="0 0 1080 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Pod 접근 네 방법과 kiada가 보는 Client IP</title>
+  <desc>클러스터 밖에서는 Pod IP에 직접 못 닿고, 네 가지 우회 방법이 있다. 워커 노드에서·임시 Pod에서·port-forward·API 서버 프록시 각각이 서로 다른 경로를 거치므로, kiada가 응답에 찍는 Client IP가 방법마다 달라진다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .zone   { font-size: 12px; font-weight: 800; fill: rgb(212,168,83); }
+      .box    { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
+      .boxd   { font-size: 12.5px; font-weight: 800; fill: #e8e4df; }
+      .desc   { font-size: 10px; font-weight: 600; fill: #e8e4df; }
+      .muted  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .ip     { font-size: 10.5px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    </style>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="arg" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/></marker>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#e06666"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1080" height="560" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">Pod 접근 네 방법과 kiada가 보는 Client IP</text>
+  <text x="24" y="50" class="sub">같은 kiada Pod(10.244.2.5)에 닿는 경로가 달라, kiada가 "누가 요청했나"로 보는 IP가 방법마다 바뀐다.</text>
+
+  <!-- 내 노트북 -->
+  <text x="40" y="90" class="zone">클러스터 밖 (내 노트북)</text>
+  <rect x="36" y="102" width="184" height="86" rx="10" fill="rgb(20,22,26)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+  <text x="56" y="130" class="boxd">💻 curl</text>
+  <text x="56" y="152" class="muted">클러스터 밖에서는</text>
+  <text x="56" y="168" class="muted">Pod IP에 직접 못 닿음</text>
+
+  <!-- 직접 실패 화살표 -->
+  <path d="M220,145 L300,145" fill="none" stroke="#e06666" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+  <text x="228" y="136" class="ip" fill="#e06666">✕ 직접</text>
+
+  <!-- 클러스터 경계 박스 -->
+  <rect x="312" y="70" width="740" height="470" rx="14" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="332" y="94" class="zone">클러스터 내부</text>
+
+  <!-- kiada Pod (우측 중앙) -->
+  <rect x="880" y="230" width="150" height="96" rx="10" fill="#5b9bd5" stroke="#2f6ba3" stroke-width="1.5"/>
+  <text x="955" y="262" class="boxd" text-anchor="middle" style="fill:#e8e4df">kiada Pod</text>
+  <text x="955" y="284" class="ip" text-anchor="middle" style="fill:#e8e4df">10.244.2.5</text>
+  <text x="955" y="308" class="muted" text-anchor="middle" style="fill:#dbe8f5">응답에 Client IP 찍음</text>
+
+  <!-- 방법 1 -->
+  <rect x="332" y="112" width="210" height="60" rx="8" fill="rgb(212,168,83)"/>
+  <text x="344" y="134" class="box">① 워커 노드에서 curl</text>
+  <text x="344" y="154" class="ip" style="fill:#1a1a1a">→ Client IP: 10.244.2.1</text>
+  <path d="M542,142 C700,150 760,240 878,262" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- 방법 2 -->
+  <rect x="332" y="186" width="210" height="60" rx="8" fill="#66bb6a"/>
+  <text x="344" y="208" class="box">② 임시 클라이언트 Pod</text>
+  <text x="344" y="228" class="ip" style="fill:#14521d">→ Client IP: 10.244.1.13</text>
+  <path d="M542,216 C700,225 770,255 878,272" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#arg)"/>
+
+  <!-- 방법 3 (port-forward, 밖에서 터널) -->
+  <rect x="332" y="300" width="230" height="86" rx="8" fill="rgb(245,215,110)"/>
+  <text x="344" y="324" class="box">③ port-forward</text>
+  <text x="344" y="344" class="muted" style="fill:#3a3320">로컬→프록시→API→kubelet→loopback</text>
+  <text x="344" y="366" class="ip" style="fill:#1a1a1a">→ Client IP: 127.0.0.1</text>
+  <path d="M120,188 C120,420 300,420 330,360" fill="none" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+  <text x="150" y="410" class="muted">밖에서 터널로 진입</text>
+  <path d="M562,343 C700,330 770,300 878,290" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- 방법 4 -->
+  <rect x="332" y="400" width="230" height="70" rx="8" fill="#5b9bd5"/>
+  <text x="344" y="424" class="boxd" style="fill:#e8e4df">④ API 서버 프록시</text>
+  <text x="344" y="444" class="muted" style="fill:#dbe8f5">kubectl get --raw .../proxy/</text>
+  <text x="344" y="462" class="ip" style="fill:#e8e4df">→ Client IP: 172.18.0.5</text>
+  <path d="M562,435 C700,400 780,320 878,300" fill="none" stroke="#5b9bd5" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- 하단 핵심 -->
+  <rect x="36" y="500" width="1008" height="40" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="540" y="524" class="desc" text-anchor="middle">핵심: 경로가 곧 정체다. port-forward는 loopback 직접 터널이라 kiada가 127.0.0.1로 보고, 특정 Pod로 정확히 연결된다(무작위 분배 없음).</text>
+</svg>

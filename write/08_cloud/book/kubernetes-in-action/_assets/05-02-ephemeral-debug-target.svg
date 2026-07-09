@@ -1,0 +1,75 @@
+<svg viewBox="0 0 1060 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>ephemeral 디버그 컨테이너와 --target 프로세스 공유</title>
+  <desc>운영 컨테이너는 셸·도구가 없어 kubectl exec로 들여다볼 수 없다. kubectl debug로 도구가 든 임시 디버그 컨테이너를 같은 Pod에 붙이고, --target으로 대상과 PID 네임스페이스를 공유하면, 디버거의 ps에 대상 컨테이너의 프로세스가 그대로 보인다. 대상은 재시작하지 않는다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .zone   { font-size: 12px; font-weight: 800; fill: rgb(212,168,83); }
+      .box    { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .boxd   { font-size: 13px; font-weight: 800; fill: #e8e4df; }
+      .desc   { font-size: 10px; font-weight: 600; fill: #e8e4df; }
+      .muted  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .mono   { font-size: 10px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .chip   { font-size: 10px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; fill: #0d0d0d; }
+    </style>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="arg" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1060" height="500" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">ephemeral 디버그 컨테이너 — --target으로 대상 프로세스 보기</text>
+  <text x="24" y="50" class="sub">도구 없는 운영 컨테이너를 재시작하지 않고, 도구가 든 임시 컨테이너를 붙여 PID 네임스페이스를 공유해 들여다본다.</text>
+
+  <!-- 명령 -->
+  <rect x="36" y="72" width="988" height="34" rx="7" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="52" y="94" class="mono" style="fill:rgb(212,168,83)">kubectl debug -it kiada-…-2vm7s --image=busybox --profile=general --target=kiada -- sh -c 'ps -eo pid,comm'</text>
+
+  <!-- Pod 박스 -->
+  <rect x="120" y="132" width="600" height="330" rx="14" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="142" y="158" class="zone">kiada Pod (재생성 없음)</text>
+
+  <!-- 대상 컨테이너 kiada -->
+  <rect x="150" y="180" width="250" height="240" rx="10" fill="#5b9bd5" stroke="#2f6ba3" stroke-width="1.5"/>
+  <text x="275" y="206" class="boxd" text-anchor="middle" style="fill:#e8e4df">대상: kiada 컨테이너</text>
+  <rect x="170" y="222" width="210" height="26" rx="5" fill="#dceaf7"/>
+  <text x="275" y="240" class="chip" text-anchor="middle">PID 1: MainThread (node)</text>
+  <rect x="170" y="258" width="210" height="52" rx="6" fill="rgb(20,22,26)" stroke="#e06666" stroke-width="1.2"/>
+  <text x="275" y="279" class="muted" text-anchor="middle" style="fill:#f0b0b0">✕ sh / ps / curl 없음</text>
+  <text x="275" y="296" class="muted" text-anchor="middle" style="fill:#f0b0b0">경량 이미지 → exec 불가</text>
+  <text x="275" y="340" class="desc" text-anchor="middle" style="fill:#e8e4df">재빌드·재시작 안 함</text>
+  <text x="275" y="360" class="muted" text-anchor="middle" style="fill:#dbe8f5">문제 난 그 상태 그대로 유지</text>
+
+  <!-- 디버그 컨테이너 busybox -->
+  <rect x="440" y="180" width="250" height="240" rx="10" fill="#66bb6a" stroke="#3a8c40" stroke-width="1.5"/>
+  <text x="565" y="206" class="box" text-anchor="middle">디버거: busybox (임시)</text>
+  <rect x="460" y="222" width="210" height="26" rx="5" fill="#e6f7e7"/>
+  <text x="565" y="240" class="chip" text-anchor="middle">ps / sh / netcat 있음</text>
+  <rect x="460" y="262" width="210" height="118" rx="6" fill="rgb(20,22,26)" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="565" y="284" class="muted" text-anchor="middle" style="fill:#bfe6c2">디버거에서 ps -eo pid,comm →</text>
+  <text x="478" y="308" class="mono" style="fill:#e8e4df">  1  MainThread</text>
+  <text x="478" y="326" class="muted" style="fill:rgb(138,133,128)">        ↑ kiada 프로세스가 보인다</text>
+  <text x="478" y="350" class="mono" style="fill:#e8e4df"> 17  ps</text>
+  <text x="478" y="368" class="muted" style="fill:rgb(138,133,128)">        ↑ 디버거 자신</text>
+
+  <!-- 공유 화살표 -->
+  <path d="M440,300 L400,300" fill="none" stroke="#66bb6a" stroke-width="3" marker-end="url(#arg)"/>
+  <rect x="392" y="428" width="356" height="24" rx="5" fill="rgb(20,22,26)" stroke="#66bb6a" stroke-width="1"/>
+  <text x="570" y="444" class="mono" text-anchor="middle" style="fill:#66bb6a">--target=kiada → 같은 PID 네임스페이스 공유</text>
+
+  <!-- 우측 설명: 05-01 연결 -->
+  <rect x="748" y="132" width="276" height="330" rx="12" fill="rgb(20,22,26)" stroke="rgb(138,133,128)" stroke-width="1.3"/>
+  <text x="768" y="158" class="boxd">05-01과의 연결</text>
+  <text x="768" y="186" class="desc">share-demo(05-01):</text>
+  <text x="768" y="204" class="muted">두 컨테이너 PID 격리</text>
+  <text x="768" y="220" class="muted">→ 서로 프로세스 안 보임</text>
+  <text x="768" y="252" class="desc" style="fill:rgb(212,168,83)">여기(05-02 §7):</text>
+  <text x="768" y="270" class="muted">--target으로 일부러 공유</text>
+  <text x="768" y="286" class="muted">→ 대상 프로세스 관찰</text>
+  <rect x="768" y="308" width="236" height="132" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="784" y="330" class="desc">같은 커널 기능(PID 네임</text>
+  <text x="784" y="348" class="desc">스페이스)을 두 방향으로:</text>
+  <text x="784" y="372" class="muted">• 기본 = 격리(안전)</text>
+  <text x="784" y="392" class="muted">• 디버깅 = 공유(관찰)</text>
+  <text x="784" y="420" class="muted" style="fill:rgb(212,168,83)">exec가 막혀도 debug로 진입</text>
+</svg>
