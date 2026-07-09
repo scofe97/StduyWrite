@@ -1,0 +1,67 @@
+<svg viewBox="0 0 960 520" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Pod 컨테이너 생명주기 타임라인 — 시작과 종료 순서</title>
+  <desc>네이티브 사이드카·일반 init·주 컨테이너의 시작부터 종료까지를 시간축 위에 그린다. 시작은 사이드카가 먼저(init보다 앞), init은 순차, 주 컨테이너는 병렬. 종료는 주 컨테이너가 먼저, 네이티브 사이드카가 맨 마지막. 실측(lifecycle-demo·shutdown-order-demo) 시각을 반영했다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 16px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 10.5px; fill: rgb(138,133,128); }
+      .lane  { font-size: 11.5px; font-weight: 800; fill: #e8e4df; }
+      .note  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .phase { font-size: 11px; font-weight: 800; fill: rgb(212,168,83); }
+      .tick  { font-size: 9px; fill: rgb(120,116,112); font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .barlbl{ font-size: 10px; font-weight: 700; fill: #0d0d0d; }
+    </style>
+  </defs>
+  <rect x="0" y="0" width="960" height="520" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">Pod 컨테이너 생명주기 — 시작은 사이드카부터, 종료는 사이드카가 마지막</text>
+  <text x="24" y="54" class="sub">가로축 = 시간. 실측(lifecycle-demo 시작 / shutdown-order-demo 종료)을 단순화해 배치.</text>
+
+  <!-- 두 페이즈 구분 배경 -->
+  <rect x="150" y="78" width="470" height="330" fill="rgb(16,20,16)" stroke="none"/>
+  <rect x="620" y="78" width="230" height="330" fill="rgb(22,16,16)" stroke="none"/>
+  <text x="300" y="98" class="phase" text-anchor="middle">시작 단계 (Startup)</text>
+  <text x="720" y="98" class="phase" text-anchor="middle" style="fill:rgb(224,130,110)">종료 단계 (Shutdown)</text>
+
+  <!-- 세로 구분선 (시작/종료 경계) -->
+  <line x1="620" y1="78" x2="620" y2="408" stroke="rgb(80,78,74)" stroke-width="1" stroke-dasharray="4 3"/>
+
+  <!-- ===== Lane 1: 네이티브 사이드카 ===== -->
+  <text x="24" y="140" class="lane">네이티브</text>
+  <text x="24" y="154" class="lane">사이드카</text>
+  <text x="24" y="170" class="note">(Always)</text>
+  <!-- 막대: t17(사이드카 먼저 시작) ~ 종료끝(맨 마지막) -->
+  <rect x="180" y="128" width="600" height="30" rx="5" fill="rgb(212,168,83)" stroke="#a67c1a" stroke-width="1"/>
+  <text x="480" y="148" class="barlbl" text-anchor="middle" style="fill:#0d0d0d">계속 살아있음 — 먼저 뜨고, 맨 마지막에 죽는다</text>
+
+  <!-- ===== Lane 2: init (일반) ===== -->
+  <text x="24" y="222" class="lane">init</text>
+  <text x="24" y="238" class="note">(일회성)</text>
+  <!-- 막대: t18~23 만 (짧게, 끝나면 죽음) -->
+  <rect x="210" y="210" width="70" height="30" rx="5" fill="#66bb6a" stroke="#3d8b40" stroke-width="1"/>
+  <text x="245" y="230" class="barlbl" text-anchor="middle" style="fill:#0d0d0d">돌고 죽음</text>
+  <text x="290" y="230" class="note">← 끝나면 사라짐 (Completed)</text>
+
+  <!-- ===== Lane 3: 주 컨테이너 main/helper ===== -->
+  <text x="24" y="308" class="lane">주 컨테이너</text>
+  <text x="24" y="324" class="note">main·helper</text>
+  <!-- 막대: t25~종료(main이 먼저 종료 t3 지점) -->
+  <rect x="330" y="296" width="360" height="30" rx="5" fill="#5b9bd5" stroke="#2f6ba3" stroke-width="1"/>
+  <text x="510" y="316" class="barlbl" text-anchor="middle" style="fill:#e8e4df">병렬 실행 — 종료 신호를 먼저 받는다</text>
+
+  <!-- 시작 순서 화살표 (사이드카→init→main) -->
+  <text x="185" y="118" class="tick">①사이드카 먼저</text>
+  <text x="215" y="200" class="tick">②init</text>
+  <text x="335" y="286" class="tick">③주 컨테이너(init 끝난 뒤)</text>
+
+  <!-- 종료 순서 표시 (두 선의 y 시작을 각 막대에 맞춰 관통 최소화) -->
+  <line x1="690" y1="296" x2="690" y2="418" stroke="rgb(224,130,110)" stroke-width="1.5" stroke-dasharray="3 2"/>
+  <circle cx="690" cy="311" r="4" fill="rgb(224,130,110)"/>
+  <text x="672" y="436" class="tick" text-anchor="end" style="fill:rgb(224,130,110)">① main 종료(먼저)</text>
+  <line x1="780" y1="128" x2="780" y2="418" stroke="rgb(224,130,110)" stroke-width="1.5" stroke-dasharray="3 2"/>
+  <circle cx="780" cy="143" r="4" fill="rgb(224,130,110)"/>
+  <text x="798" y="436" class="tick" text-anchor="start" style="fill:rgb(224,130,110)">② 사이드카 종료(마지막)</text>
+
+  <!-- 실측 주석 바 -->
+  <rect x="24" y="470" width="912" height="36" rx="7" fill="rgb(26,26,26)" stroke="rgb(212,168,83)" stroke-width="1"/>
+  <text x="40" y="493" class="note" style="fill:#e8e4df">실측: 시작 sidecar(:17)→init-work(:18)→main·helper(:25~26) · 종료 main SIGTERM(t3)→sidecar SIGTERM(t6), 3초 차 = 사이드카가 마지막에 죽음</text>
+</svg>
