@@ -1,0 +1,115 @@
+<svg viewBox="0 0 1120 720" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>네 방법의 연결 흐름 — 마지막 연결자가 곧 Client IP</title>
+  <desc>네 접근 방법 각각의 홉 경로를 단계별로 보여준다. kiada는 원래 요청자가 아니라 자기에게 마지막으로 직접 연결한 주체만 보고, 그 IP를 Client IP로 찍는다. ① 노드가 ② 임시 Pod가 ③ kubelet이 Pod의 loopback을 통해 ④ API 서버가 각각 마지막 연결자다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .mlabel { font-size: 12.5px; font-weight: 800; fill: #e8e4df; }
+      .hop    { font-size: 10.5px; font-weight: 800; fill: #0d0d0d; }
+      .hopd   { font-size: 10.5px; font-weight: 800; fill: #e8e4df; }
+      .note   { font-size: 9px; fill: rgb(138,133,128); }
+      .ip     { font-size: 11px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .last   { font-size: 10px; font-weight: 800; fill: rgb(212,168,83); }
+      .kiada  { font-size: 11px; font-weight: 800; fill: #e8e4df; }
+    </style>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+    <marker id="arL" markerWidth="10" markerHeight="10" refX="6.5" refY="3.2" orient="auto"><path d="M0,0 L8,3.2 L0,6.4 Z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="720" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">네 방법의 연결 흐름 — "마지막 연결자"가 곧 Client IP</text>
+  <text x="24" y="50" class="sub">kiada는 원래 요청자를 못 본다. 자기에게 마지막으로 직접 연결한 것(굵은 앰버 화살표)만 보고 그 IP를 Client IP로 찍는다.</text>
+
+  <!-- 공통 범례 -->
+  <rect x="24" y="66" width="16" height="10" rx="2" fill="rgb(138,133,128)"/>
+  <text x="46" y="75" class="note">중간 홉 (kiada가 못 봄)</text>
+  <rect x="200" y="66" width="16" height="10" rx="2" fill="rgb(212,168,83)"/>
+  <text x="222" y="75" class="last" style="fill:rgb(212,168,83)">마지막 연결 = 이 IP가 Client IP</text>
+
+  <!-- ===== 레인 ① ===== -->
+  <text x="24" y="118" class="mlabel">① 워커 노드에서 curl</text>
+  <!-- 노드 -->
+  <rect x="140" y="98" width="130" height="40" rx="7" fill="rgb(28,30,34)" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+  <text x="205" y="123" class="hopd" text-anchor="middle">워커 노드 (curl)</text>
+  <!-- kiada -->
+  <rect x="880" y="98" width="150" height="40" rx="7" fill="#5b9bd5" stroke="#2f6ba3" stroke-width="1.3"/>
+  <text x="955" y="117" class="kiada" text-anchor="middle">kiada</text>
+  <text x="955" y="132" class="note" text-anchor="middle" style="fill:#dbe8f5">10.244.2.5</text>
+  <!-- 마지막 연결 (앰버) -->
+  <path d="M270,118 L876,118" fill="none" stroke="rgb(212,168,83)" stroke-width="2.6" marker-end="url(#arL)"/>
+  <text x="560" y="110" class="last" text-anchor="middle">노드가 로컬로 직접 연결 → Client IP =</text>
+  <text x="770" y="110" class="ip" style="fill:rgb(212,168,83)">10.244.2.1</text>
+
+  <!-- ===== 레인 ② ===== -->
+  <text x="24" y="196" class="mlabel">② 임시 클라이언트 Pod</text>
+  <rect x="140" y="176" width="130" height="40" rx="7" fill="rgb(28,30,34)" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+  <text x="205" y="201" class="hopd" text-anchor="middle">임시 Pod (curl)</text>
+  <rect x="880" y="176" width="150" height="40" rx="7" fill="#5b9bd5" stroke="#2f6ba3" stroke-width="1.3"/>
+  <text x="955" y="195" class="kiada" text-anchor="middle">kiada</text>
+  <text x="955" y="210" class="note" text-anchor="middle" style="fill:#dbe8f5">10.244.2.5</text>
+  <path d="M270,196 L876,196" fill="none" stroke="rgb(212,168,83)" stroke-width="2.6" marker-end="url(#arL)"/>
+  <text x="560" y="188" class="last" text-anchor="middle">임시 Pod가 직접 연결 (중계 없음) → Client IP =</text>
+  <text x="800" y="188" class="ip" style="fill:rgb(212,168,83)">10.244.1.13</text>
+
+  <!-- ===== 레인 ③ ===== -->
+  <text x="24" y="292" class="mlabel">③ port-forward</text>
+  <text x="24" y="308" class="note">(중계 4단계)</text>
+  <!-- 내 노트북 -->
+  <rect x="140" y="264" width="96" height="38" rx="7" fill="rgb(20,22,26)" stroke="#e06666" stroke-width="1.2"/>
+  <text x="188" y="282" class="hopd" text-anchor="middle" style="fill:#e0a0a0">내 노트북</text>
+  <text x="188" y="296" class="note" text-anchor="middle" style="fill:#c88">원래 요청자</text>
+  <!-- 프록시 -->
+  <rect x="262" y="264" width="86" height="38" rx="7" fill="rgb(28,30,34)" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+  <text x="305" y="287" class="hopd" text-anchor="middle">프록시</text>
+  <!-- API -->
+  <rect x="374" y="264" width="86" height="38" rx="7" fill="rgb(28,30,34)" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+  <text x="417" y="287" class="hopd" text-anchor="middle">API 서버</text>
+  <!-- kubelet -->
+  <rect x="486" y="264" width="86" height="38" rx="7" fill="rgb(28,30,34)" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+  <text x="529" y="287" class="hopd" text-anchor="middle">kubelet</text>
+  <!-- 중간 홉 화살표 (회색) -->
+  <path d="M236,283 L260,283" fill="none" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#ar)"/>
+  <path d="M348,283 L372,283" fill="none" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#ar)"/>
+  <path d="M460,283 L484,283" fill="none" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#ar)"/>
+  <!-- kiada + loopback -->
+  <rect x="880" y="256" width="150" height="54" rx="7" fill="#5b9bd5" stroke="#2f6ba3" stroke-width="1.3"/>
+  <text x="955" y="276" class="kiada" text-anchor="middle">kiada</text>
+  <text x="955" y="292" class="note" text-anchor="middle" style="fill:#dbe8f5">Pod의 loopback(lo)로</text>
+  <text x="955" y="304" class="note" text-anchor="middle" style="fill:#dbe8f5">연결받음</text>
+  <!-- 마지막 연결 (앰버): kubelet이 loopback 통해 -->
+  <path d="M572,283 L876,283" fill="none" stroke="rgb(212,168,83)" stroke-width="2.6" marker-end="url(#arL)"/>
+  <text x="724" y="275" class="last" text-anchor="middle">kubelet이 Pod의 loopback으로 연결</text>
+  <text x="724" y="330" class="last" text-anchor="middle">kiada가 보는 마지막 연결 = 자기 자신(localhost) → Client IP =</text>
+  <text x="1010" y="330" class="ip" style="fill:rgb(212,168,83)" text-anchor="end">127.0.0.1</text>
+
+  <!-- ===== 레인 ④ ===== -->
+  <text x="24" y="392" class="mlabel">④ API 서버 프록시</text>
+  <rect x="140" y="368" width="96" height="38" rx="7" fill="rgb(20,22,26)" stroke="#e06666" stroke-width="1.2"/>
+  <text x="188" y="386" class="hopd" text-anchor="middle" style="fill:#e0a0a0">내 노트북</text>
+  <text x="188" y="400" class="note" text-anchor="middle" style="fill:#c88">원래 요청자</text>
+  <rect x="374" y="368" width="96" height="38" rx="7" fill="rgb(28,30,34)" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+  <text x="422" y="391" class="hopd" text-anchor="middle">API 서버</text>
+  <path d="M236,387 L372,387" fill="none" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="880" y="368" width="150" height="40" rx="7" fill="#5b9bd5" stroke="#2f6ba3" stroke-width="1.3"/>
+  <text x="955" y="387" class="kiada" text-anchor="middle">kiada</text>
+  <text x="955" y="402" class="note" text-anchor="middle" style="fill:#dbe8f5">10.244.2.5</text>
+  <path d="M470,387 L876,387" fill="none" stroke="rgb(212,168,83)" stroke-width="2.6" marker-end="url(#arL)"/>
+  <text x="620" y="379" class="last" text-anchor="middle">API 서버가 kiada에 연결 → Client IP =</text>
+  <text x="790" y="379" class="ip" style="fill:rgb(212,168,83)">172.18.0.5</text>
+
+  <!-- ===== 택배 비유 ===== -->
+  <rect x="24" y="430" width="1072" height="128" rx="12" fill="rgb(20,22,26)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="44" y="458" class="mlabel" style="fill:rgb(212,168,83)">택배 비유 — 친구가 보는 건 "마지막 배달원"</text>
+  <text x="44" y="484" class="hopd">나(부산) → 대전센터 → 안양센터 → 서울센터 → 친구</text>
+  <text x="44" y="508" class="note" style="fill:#e8e4df">친구 문 앞에 마지막으로 놓고 간 사람 = 서울센터 배달원. 친구는 "부산 사람"이 아니라 "서울센터에서 왔다"고 안다.</text>
+  <text x="44" y="530" class="note" style="fill:#e8e4df">kiada도 똑같다 — 원래 요청자(부산=내 노트북)를 못 보고, 자기 문 앞의 마지막 배달원(마지막 연결자)만 본다.</text>
+  <text x="44" y="550" class="last">그래서 중계가 많은 ③ port-forward일수록 원래 요청자와 멀어져, 엉뚱해 보이는 127.0.0.1이 찍힌다.</text>
+
+  <!-- ===== 핵심 원리 ===== -->
+  <rect x="24" y="574" width="1072" height="126" rx="12" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="44" y="602" class="mlabel">왜 "한 다리 건너"를 못 보나</text>
+  <text x="44" y="628" class="note" style="fill:#e8e4df">TCP 연결은 두 끝점(바로 붙은 둘) 사이의 것이다. 각 중계점은 다음 상대에게 "내가 클라이언트다"라고 자기를 소개하며 새 연결을 연다.</text>
+  <text x="44" y="650" class="note" style="fill:#e8e4df">그래서 kiada가 아는 상대는 "바로 앞에서 자기에게 TCP를 연 그것" 하나뿐 — 그 앞의 앞(원래 요청자)은 연결 정보에 남지 않는다.</text>
+  <text x="44" y="674" class="last">한 줄 요약: Client IP = kiada에게 마지막으로 직접 TCP를 연 주체의 IP. 경로(마지막 연결자)가 곧 Client IP를 정한다.</text>
+</svg>
