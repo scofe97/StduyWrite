@@ -1,91 +1,102 @@
 <svg viewBox="0 0 960 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>컨테이너 state 4개와 각 state의 대표 reason 지도</title>
-  <desc>컨테이너 state는 Waiting·Running·Terminated·Unknown 네 가지뿐이고, CrashLoopBackOff·PodInitializing·OOMKilled 같은 익숙한 이름들은 state가 아니라 Waiting이나 Terminated state의 reason이다. Waiting의 reason에는 ContainerCreating·PodInitializing(05-03)·CrashLoopBackOff(06-02)·ImagePullBackOff가, Terminated의 reason에는 Completed·Error·OOMKilled가 있다. kubectl get의 STATUS 칸에 뜨는 이름은 대부분 이 reason이다.</desc>
+  <title>컨테이너 state 3개의 전이와 각 state의 대표 reason</title>
+  <desc>컨테이너 state는 Waiting·Running·Terminated 세 가지뿐이다(Unknown은 Pod phase이지 컨테이너 state가 아니다). 시작 시 Waiting에서 출발해 프로세스가 뜨면 Running, 끝나면 Terminated로 전이하고, restartPolicy가 허용하면 Terminated에서 다시 Waiting으로 되돌아가 재시작을 반복한다. 각 state 아래로 그 state인 이유(reason)가 붙는다 — Waiting에는 ContainerCreating·PodInitializing(05-03)·CrashLoopBackOff(06-02)·ImagePullBackOff가, Terminated에는 Completed·Error·OOMKilled가 있다. kubectl get의 STATUS 칸에 뜨는 익숙한 이름은 대부분 이 reason이다. 재시작이 일어나도 Pod phase는 Running으로 유지되고 바뀌는 것은 컨테이너 state뿐이다.</desc>
   <defs>
     <style>
       .title { font-size: 16px; font-weight: 800; fill: #e8e4df; }
       .sub   { font-size: 10.5px; fill: rgb(138,133,128); }
-      .stateName { font-size: 13.5px; font-weight: 800; }
-      .reason { font-size: 11px; font-weight: 700; }
-      .rdesc  { font-size: 9.5px; }
+      .stateName { font-size: 14px; font-weight: 800; }
+      .reason { font-size: 10.5px; font-weight: 700; }
+      .rdesc  { font-size: 9px; }
       .note  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .edge  { font-size: 9.5px; font-weight: 700; fill: rgb(200,196,190); }
       .mono  { font-family: 'JetBrains Mono', ui-monospace, monospace; }
     </style>
-    <marker id="ar" markerWidth="10" markerHeight="10" refX="6.5" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 Z" fill="rgb(138,133,128)"/></marker>
+    <marker id="fwd" markerWidth="11" markerHeight="11" refX="7" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="back" markerWidth="11" markerHeight="11" refX="7" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#5b9bd5"/></marker>
+    <marker id="drop" markerWidth="10" markerHeight="10" refX="6" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 Z" fill="rgb(120,116,110)"/></marker>
   </defs>
   <rect x="0" y="0" width="960" height="470" fill="#0d0d0d"/>
-  <text x="24" y="32" class="title">컨테이너 state는 4개뿐 — CrashLoopBackOff·OOMKilled는 state가 아니라 reason</text>
-  <text x="24" y="54" class="sub">kubectl get의 STATUS 칸에 뜨는 익숙한 이름들은 대부분 Waiting/Terminated state가 가진 reason이다.</text>
+  <text x="24" y="32" class="title">컨테이너 state는 3개 — 전이(위)와 각 state의 reason(아래)</text>
+  <text x="24" y="54" class="sub">state는 Waiting·Running·Terminated 셋뿐. Unknown은 Pod phase이지 컨테이너 state가 아니다.</text>
 
-  <!-- ===== Waiting (파랑, 대기) ===== -->
-  <rect x="30" y="78" width="290" height="176" rx="12" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.6"/>
-  <rect x="30" y="78" width="290" height="34" rx="12" fill="#5b9bd5"/>
-  <rect x="30" y="98" width="290" height="14" fill="#5b9bd5"/>
-  <text x="48" y="101" class="stateName" style="fill:#e8e4df">Waiting</text>
-  <text x="308" y="101" class="rdesc" text-anchor="end" style="fill:#e8e4df">시작을 기다리는 중 (컨테이너 안 돎)</text>
-  <!-- reason chips -->
-  <rect x="46" y="122" width="258" height="28" rx="6" fill="#dceaf7"/>
-  <text x="58" y="140" class="reason mono" style="fill:#10243a">ContainerCreating</text>
-  <text x="300" y="140" class="rdesc" text-anchor="end" style="fill:#10243a">이미지 pull·볼륨 마운트</text>
-  <rect x="46" y="154" width="258" height="28" rx="6" fill="#dceaf7"/>
-  <text x="58" y="172" class="reason mono" style="fill:#10243a">PodInitializing</text>
-  <text x="300" y="172" class="rdesc" text-anchor="end" style="fill:#10243a">init 컨테이너 대기 → 05-03</text>
-  <rect x="46" y="186" width="258" height="28" rx="6" fill="#f5edda" stroke="rgb(212,168,83)" stroke-width="1.2"/>
-  <text x="58" y="204" class="reason mono" style="fill:#4a3410">CrashLoopBackOff</text>
-  <text x="300" y="204" class="rdesc" text-anchor="end" style="fill:#4a3410">재시작 반복·백오프 → 06-02</text>
-  <rect x="46" y="218" width="258" height="28" rx="6" fill="#dceaf7"/>
-  <text x="58" y="236" class="reason mono" style="fill:#10243a">ImagePullBackOff</text>
-  <text x="300" y="236" class="rdesc" text-anchor="end" style="fill:#10243a">이미지 못 받음·재시도 대기</text>
+  <!-- 재시작 곡선 (부제 아래, 박스 위 빈 띠에 단독 배치) -->
+  <text x="480" y="82" class="edge" text-anchor="middle" style="fill:#5b9bd5">↺ 재시작 (restartPolicy 허용 시) — Pod phase는 Running 유지</text>
+  <path d="M760,116 C760,94 200,94 200,114" fill="none" stroke="#5b9bd5" stroke-width="2.3" stroke-dasharray="7 4" marker-end="url(#back)"/>
 
-  <!-- ===== Running (초록, 실행) ===== -->
-  <rect x="345" y="78" width="270" height="90" rx="12" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.6"/>
-  <rect x="345" y="78" width="270" height="34" rx="12" fill="#66bb6a"/>
-  <rect x="345" y="98" width="270" height="14" fill="#66bb6a"/>
-  <text x="363" y="101" class="stateName" style="fill:#0d0d0d">Running</text>
-  <text x="603" y="101" class="rdesc" text-anchor="end" style="fill:#0d0d0d">프로세스가 정상 실행 중</text>
-  <text x="363" y="134" class="rdesc" style="fill:#e8e4df">reason 없음 — 그냥 돌고 있으면 Running.</text>
-  <text x="363" y="152" class="rdesc" style="fill:#e8e4df"><tspan class="mono" style="fill:#66bb6a">startedAt</tspan> 에 시작 시각만 담긴다.</text>
+  <!-- ===== 상단: state 전이 흐름 (y 118 기준) ===== -->
+  <circle cx="60" cy="146" r="7" fill="#e8e4df"/>
+  <text x="60" y="176" class="note" text-anchor="middle">시작</text>
 
-  <!-- ===== Terminated (빨강, 종료) ===== -->
-  <rect x="345" y="182" width="270" height="184" rx="12" fill="#0d0d0d" stroke="rgb(224,110,100)" stroke-width="1.6"/>
-  <rect x="345" y="182" width="270" height="34" rx="12" fill="rgb(224,110,100)"/>
-  <rect x="345" y="202" width="270" height="14" fill="rgb(224,110,100)"/>
-  <text x="363" y="205" class="stateName" style="fill:#0d0d0d">Terminated</text>
-  <text x="603" y="205" class="rdesc" text-anchor="end" style="fill:#0d0d0d">프로세스가 끝남 (중립)</text>
-  <rect x="361" y="226" width="238" height="28" rx="6" fill="#e6f7e7"/>
-  <text x="373" y="244" class="reason mono" style="fill:#14330f">Completed</text>
-  <text x="595" y="244" class="rdesc" text-anchor="end" style="fill:#14330f">exitCode 0 (정상 종료)</text>
-  <rect x="361" y="258" width="238" height="28" rx="6" fill="#f2d4d4"/>
-  <text x="373" y="276" class="reason mono" style="fill:#3a1410">Error</text>
-  <text x="595" y="276" class="rdesc" text-anchor="end" style="fill:#3a1410">exitCode ≠ 0 (실패)</text>
-  <rect x="361" y="290" width="238" height="28" rx="6" fill="#f2d4d4"/>
-  <text x="373" y="308" class="reason mono" style="fill:#3a1410">OOMKilled</text>
-  <text x="595" y="308" class="rdesc" text-anchor="end" style="fill:#3a1410">메모리 초과 → 137(SIGKILL)</text>
-  <text x="363" y="340" class="note">이름이 아니라 <tspan class="mono" style="fill:#e8e4df">exitCode·reason</tspan>이 성공/실패를 정한다.</text>
-  <text x="363" y="356" class="note"><tspan class="mono" style="fill:#e8e4df">exitCode = 128 + 시그널번호</tspan> (§Spring 관점)</text>
+  <!-- Waiting -->
+  <rect x="110" y="118" width="180" height="56" rx="11" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="2"/>
+  <text x="200" y="143" class="stateName" text-anchor="middle" style="fill:#5b9bd5">Waiting</text>
+  <text x="200" y="162" class="rdesc" text-anchor="middle" style="fill:#e8e4df">시작 대기 — 컨테이너 안 돎</text>
 
-  <!-- ===== Unknown (회색) ===== -->
-  <rect x="640" y="78" width="290" height="90" rx="12" fill="#0d0d0d" stroke="rgb(120,116,110)" stroke-width="1.6"/>
-  <rect x="640" y="78" width="290" height="34" rx="12" fill="rgb(90,86,82)"/>
-  <rect x="640" y="98" width="290" height="14" fill="rgb(90,86,82)"/>
-  <text x="658" y="101" class="stateName" style="fill:#e8e4df">Unknown</text>
-  <text x="918" y="101" class="rdesc" text-anchor="end" style="fill:#e8e4df">상태를 확인 못 함</text>
-  <text x="658" y="134" class="rdesc" style="fill:#e8e4df">kubelet·노드와 통신이 끊겨</text>
-  <text x="658" y="152" class="rdesc" style="fill:#e8e4df">state 조차 못 읽는 경우.</text>
+  <!-- Running -->
+  <rect x="390" y="118" width="180" height="56" rx="11" fill="#0d0d0d" stroke="#66bb6a" stroke-width="2"/>
+  <text x="480" y="143" class="stateName" text-anchor="middle" style="fill:#66bb6a">Running</text>
+  <text x="480" y="162" class="rdesc" text-anchor="middle" style="fill:#e8e4df">프로세스 실행 중</text>
 
-  <!-- STATUS 칸 설명 박스 -->
-  <rect x="640" y="182" width="290" height="184" rx="12" fill="rgb(22,24,28)" stroke="rgb(212,168,83)" stroke-width="1.2"/>
-  <text x="658" y="208" class="reason" style="fill:rgb(212,168,83)">kubectl get 의 STATUS 칸</text>
-  <text x="658" y="230" class="rdesc" style="fill:#e8e4df">STATUS 칸은 state 이름이 아니라</text>
-  <text x="658" y="247" class="rdesc" style="fill:#e8e4df">그 state의 <tspan class="mono" style="fill:rgb(212,168,83)">reason</tspan>을 보여준다.</text>
-  <text x="658" y="269" class="rdesc" style="fill:#e8e4df">그래서 <tspan class="mono" style="fill:#5b9bd5">CrashLoopBackOff</tspan>가</text>
-  <text x="658" y="286" class="rdesc" style="fill:#e8e4df">state처럼 보이지만, 실제로는</text>
-  <text x="658" y="303" class="rdesc" style="fill:#e8e4df"><tspan class="mono" style="fill:#5b9bd5">Waiting</tspan> state의 reason이다.</text>
-  <text x="658" y="332" class="note">Running·정상일 땐 STATUS =</text>
-  <text x="658" y="348" class="note"><tspan class="mono" style="fill:#66bb6a">Running</tspan> (이건 state 이름 그대로).</text>
+  <!-- Terminated -->
+  <rect x="670" y="118" width="180" height="56" rx="11" fill="#0d0d0d" stroke="rgb(224,110,100)" stroke-width="2"/>
+  <text x="760" y="143" class="stateName" text-anchor="middle" style="fill:rgb(224,110,100)">Terminated</text>
+  <text x="760" y="162" class="rdesc" text-anchor="middle" style="fill:#e8e4df">프로세스 종료 (중립)</text>
+
+  <!-- 전이 화살표 -->
+  <path d="M67,146 L108,146" fill="none" stroke="rgb(212,168,83)" stroke-width="2.3" marker-end="url(#fwd)"/>
+  <path d="M290,146 L388,146" fill="none" stroke="rgb(212,168,83)" stroke-width="2.3" marker-end="url(#fwd)"/>
+  <text x="339" y="136" class="edge" text-anchor="middle">프로세스 실행</text>
+  <path d="M570,146 L668,146" fill="none" stroke="rgb(212,168,83)" stroke-width="2.3" marker-end="url(#fwd)"/>
+  <text x="619" y="136" class="edge" text-anchor="middle">프로세스 종료</text>
+
+  <!-- Terminated → 끝 -->
+  <circle cx="900" cy="146" r="7" fill="none" stroke="rgb(120,116,110)" stroke-width="2"/>
+  <circle cx="900" cy="146" r="3" fill="rgb(120,116,110)"/>
+  <path d="M852,146 L888,146" fill="none" stroke="rgb(120,116,110)" stroke-width="2" marker-end="url(#drop)"/>
+  <text x="900" y="176" class="note" text-anchor="middle">끝</text>
+
+  <!-- ===== 하단: 각 state 아래 reason ===== -->
+  <text x="24" y="220" class="sub" style="fill:rgb(160,156,150)">각 state인 <tspan class="mono" style="fill:rgb(212,168,83)">이유</tspan>(reason) — kubectl get의 STATUS 칸에 뜨는 이름이 대부분 이것이다.</text>
+
+  <!-- Waiting의 reason들 -->
+  <line x1="200" y1="176" x2="200" y2="238" stroke="#5b9bd5" stroke-width="1.4" stroke-dasharray="3 3"/>
+  <rect x="70" y="238" width="260" height="120" rx="10" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.2"/>
+  <rect x="84" y="250" width="232" height="22" rx="5" fill="#dceaf7"/>
+  <text x="94" y="266" class="reason mono" style="fill:#10243a">ContainerCreating</text>
+  <text x="312" y="266" class="rdesc" text-anchor="end" style="fill:#10243a">이미지 pull·볼륨</text>
+  <rect x="84" y="276" width="232" height="22" rx="5" fill="#dceaf7"/>
+  <text x="94" y="292" class="reason mono" style="fill:#10243a">PodInitializing</text>
+  <text x="312" y="292" class="rdesc" text-anchor="end" style="fill:#10243a">주 컨테이너 미시작 → 05-03</text>
+  <rect x="84" y="302" width="232" height="22" rx="5" fill="#f5edda" stroke="rgb(212,168,83)" stroke-width="1.1"/>
+  <text x="94" y="318" class="reason mono" style="fill:#4a3410">CrashLoopBackOff</text>
+  <text x="312" y="318" class="rdesc" text-anchor="end" style="fill:#4a3410">재시작 반복 → 06-02</text>
+  <rect x="84" y="328" width="232" height="22" rx="5" fill="#dceaf7"/>
+  <text x="94" y="344" class="reason mono" style="fill:#10243a">ImagePullBackOff</text>
+  <text x="312" y="344" class="rdesc" text-anchor="end" style="fill:#10243a">이미지 못 받음</text>
+
+  <!-- Running은 reason 없음 -->
+  <line x1="480" y1="176" x2="480" y2="238" stroke="#66bb6a" stroke-width="1.4" stroke-dasharray="3 3"/>
+  <rect x="390" y="238" width="180" height="58" rx="10" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="480" y="264" class="rdesc" text-anchor="middle" style="fill:#e8e4df">reason 없음.</text>
+  <text x="480" y="282" class="rdesc" text-anchor="middle" style="fill:#e8e4df">돌고 있으면 그냥 Running.</text>
+
+  <!-- Terminated의 reason들 -->
+  <line x1="760" y1="176" x2="760" y2="238" stroke="rgb(224,110,100)" stroke-width="1.4" stroke-dasharray="3 3"/>
+  <rect x="630" y="238" width="260" height="94" rx="10" fill="#0d0d0d" stroke="rgb(224,110,100)" stroke-width="1.2"/>
+  <rect x="644" y="250" width="232" height="22" rx="5" fill="#e6f7e7"/>
+  <text x="654" y="266" class="reason mono" style="fill:#14330f">Completed</text>
+  <text x="872" y="266" class="rdesc" text-anchor="end" style="fill:#14330f">exitCode 0 (성공)</text>
+  <rect x="644" y="276" width="232" height="22" rx="5" fill="#f2d4d4"/>
+  <text x="654" y="292" class="reason mono" style="fill:#3a1410">Error</text>
+  <text x="872" y="292" class="rdesc" text-anchor="end" style="fill:#3a1410">exitCode ≠ 0 (실패)</text>
+  <rect x="644" y="302" width="232" height="22" rx="5" fill="#f2d4d4"/>
+  <text x="654" y="318" class="reason mono" style="fill:#3a1410">OOMKilled</text>
+  <text x="872" y="318" class="rdesc" text-anchor="end" style="fill:#3a1410">메모리 초과 → 137</text>
 
   <!-- 하단 규칙 바 -->
-  <rect x="30" y="390" width="900" height="62" rx="10" fill="rgb(24,26,30)" stroke="rgb(80,78,74)" stroke-width="1"/>
-  <text x="50" y="414" class="rdesc" style="fill:#e8e4df">규칙: <tspan class="mono" style="fill:rgb(212,168,83)">state</tspan>는 Waiting·Running·Terminated·Unknown <tspan style="fill:rgb(212,168,83)">4개로 고정</tspan>. 그 아래 <tspan class="mono" style="fill:rgb(212,168,83)">reason</tspan>은 왜 그 state인지를 설명하며 여러 개다.</text>
-  <text x="50" y="436" class="rdesc" style="fill:#e8e4df">각 reason의 상세(지수 백오프 수치·init 순서 등)는 화살표가 가리키는 SSOT 문서가 다룬다 — 이 지도는 <tspan style="fill:rgb(212,168,83)">뼈대</tspan>만.</text>
+  <rect x="70" y="380" width="820" height="70" rx="10" fill="rgb(24,26,30)" stroke="rgb(80,78,74)" stroke-width="1"/>
+  <text x="90" y="404" class="rdesc" style="fill:#e8e4df; font-size:10px">재시작(<tspan class="mono" style="fill:#5b9bd5">↺</tspan>)이 일어나도 <tspan style="fill:#5b9bd5">Pod phase</tspan>는 <tspan class="mono" style="fill:#66bb6a">Running</tspan> 그대로 — 바뀌는 건 <tspan style="fill:rgb(212,168,83)">컨테이너 state</tspan>(Terminated → Waiting)뿐이다.</text>
+  <text x="90" y="426" class="rdesc" style="fill:#e8e4df; font-size:10px">Terminated는 이름일 뿐 성공/실패가 아니다 — <tspan class="mono" style="fill:rgb(212,168,83)">exitCode·reason</tspan>이 성공(Completed)/실패(Error·OOMKilled)를 정한다.</text>
+  <text x="90" y="443" class="note" style="font-size:9px">각 reason의 상세(지수 백오프 수치·init 순서)는 화살표가 가리키는 SSOT 문서가 다룬다 — 이 지도는 뼈대만.</text>
 </svg>
