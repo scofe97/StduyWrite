@@ -93,7 +93,7 @@ CSI
 ## 4. 2단계: Control Plane
 
 - **API Server**: 모든 요청의 관문 · 인증/인가 · Admission 처리 · 리소스 검증 · etcd 와 통신 · watch API 제공
-- **etcd**: 클러스터 상태 저장소 · 모든 리소스의 원천 데이터 · 백업/복구에서 가장 중요 · Raft 합의로 강한 일관성(Leader 선출·Log Replication·Quorum·Split-brain 방지, 홀수 대 구성) → [05-01 §2](05_operations/05-01.%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C%EC%99%80%20ETCD%20%EB%B0%B1%EC%97%85%C2%B7%EB%B3%B5%EA%B5%AC.md)
+- **etcd**: 클러스터 상태 저장소 · 모든 리소스의 원천 데이터 · 백업/복구에서 가장 중요 · Raft 합의로 강한 일관성(Leader 선출·Log Replication·Quorum·Split-brain 방지, 홀수 대 구성) → [05-01 §2](06_architecture/06-01.%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C%EC%99%80%20ETCD%20%EB%B0%B1%EC%97%85%C2%B7%EB%B3%B5%EA%B5%AC.md)
 - **Scheduler**: Node 미정 Pod 감지 · 조건에 맞는 Node 후보 계산 · 점수화 후 Node 선택
 - **Controller Manager**: 원하는 상태와 현재 상태 비교 · Deployment·ReplicaSet·Node·Job 관리 · reconciliation 수행
 
@@ -702,4 +702,4 @@ K8s 에서 인증서 관리는 목적이 둘로 나뉜다.
 
 **사내 세미나** (공식 문서와 구분)
 
-- 사업수행2본부 7차 세미나 "쿠버네티스에 대한 이해" (사업수행PM팀, 2026-03) — 전반적으로 기존 노트와 중복되나, etcd Raft 합의(Leader/Follower/Candidate·Quorum·Split-brain·Log Replication) 관점만 [05-01](05_operations/05-01.%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C%EC%99%80%20ETCD%20%EB%B0%B1%EC%97%85%C2%B7%EB%B3%B5%EA%B5%AC.md) 에 반영
+- 사업수행2본부 7차 세미나 "쿠버네티스에 대한 이해" (사업수행PM팀, 2026-03) — 전반적으로 기존 노트와 중복되나, etcd Raft 합의(Leader/Follower/Candidate·Quorum·Split-brain·Log Replication) 관점만 [05-01](06_architecture/06-01.%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C%EC%99%80%20ETCD%20%EB%B0%B1%EC%97%85%C2%B7%EB%B3%B5%EA%B5%AC.md) 에 반영
