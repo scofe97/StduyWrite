@@ -14,7 +14,7 @@ updated: 2026-07-10
 
 
 ## 문서 목록
-> 공식 concepts의 Services, Load Balancing, and Networking에 대응합니다. 파일 번호(`04-MM`)가 읽기 순서입니다. 각 본문에는 같은 번호의 `점검.md`가 짝을 이룹니다(일부 입문 편 제외).
+> 공식 concepts의 Services, Load Balancing, and Networking에 대응합니다. 파일 번호(`04-MM`)가 읽기 순서입니다. 각 본문 끝에는 `## N. 점검 질문` 절이 있어, 개념 설명과 심화 Q&A를 한 문서에서 이어 읽습니다(일부 입문 편 제외).
 
 | 번호 | 제목 | 한 줄 소개 |
 |------|------|-----------|
