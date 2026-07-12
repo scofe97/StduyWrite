@@ -1,0 +1,74 @@
+<svg viewBox="0 0 900 620" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>스케줄링 과정과 배치 제어 수단 — filter·score·bind와 affinity·taint</title>
+  <desc>Kubernetes Patterns 6장. 스케줄러는 새 Pod를 받아 세 단계로 노드에 배치합니다. 먼저 필터링으로 자격 없는 노드를 걸러 feasible node를 남기고, 스코어링으로 남은 노드에 점수를 매겨 가중치로 정렬하고, 마지막으로 API 서버에 배치 결정을 알립니다(binding). 배치를 밖에서 유도하는 수단은 강도 순으로 nodeName, nodeSelector, node affinity, taints·tolerations가 있고, Pod 간 관계는 Pod affinity·anti-affinity와 topology spread constraints로 표현합니다.</desc>
+
+  <rect x="0" y="0" width="900" height="620" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="16">스케줄러는 어떻게 Pod를 노드에 배치하는가</text>
+  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">새 Pod마다 <tspan fill="rgb(212,168,83)">필터 → 스코어 → 바인딩</tspan> 세 단계. 대부분은 스케줄러에 맡기고, 필요할 때만 밖에서 유도합니다.</text>
+
+  <!-- 3-stage pipeline -->
+  <rect x="24" y="76" width="250" height="70" fill="rgb(26,26,26)" stroke="rgb(212,168,83)"/>
+  <text x="149" y="100" fill="rgb(212,168,83)" font-size="12" text-anchor="middle" font-weight="700">① 필터링 (predicates)</text>
+  <text x="149" y="122" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">자격 없는 노드 제거.</text>
+  <text x="149" y="137" fill="#e8e4df" font-size="9" text-anchor="middle">남은 게 feasible node.</text>
+
+  <line x1="278" y1="111" x2="308" y2="111" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <path d="M304,107 L312,111 L304,115 Z" fill="rgb(212,168,83)"/>
+
+  <rect x="316" y="76" width="250" height="70" fill="rgb(26,26,26)" stroke="rgb(212,168,83)"/>
+  <text x="441" y="100" fill="rgb(212,168,83)" font-size="12" text-anchor="middle" font-weight="700">② 스코어링 (priorities)</text>
+  <text x="441" y="122" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">feasible 노드에 점수 매김.</text>
+  <text x="441" y="137" fill="#e8e4df" font-size="9" text-anchor="middle">가중치로 정렬.</text>
+
+  <line x1="570" y1="111" x2="600" y2="111" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <path d="M596,107 L604,111 L596,115 Z" fill="rgb(212,168,83)"/>
+
+  <rect x="608" y="76" width="268" height="70" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="742" y="100" fill="rgb(212,168,83)" font-size="12" text-anchor="middle" font-weight="700">③ 바인딩 (binding)</text>
+  <text x="742" y="122" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">API 서버에 배치 결정 통보.</text>
+  <text x="742" y="137" fill="#e8e4df" font-size="9" text-anchor="middle">스케줄링의 최종 산출.</text>
+
+  <text x="24" y="170" fill="rgb(138,133,128)" font-size="9">전제 — 노드에 가용 용량(= Node Capacity − Kube/System-Reserved − Eviction Threshold)과, 컨테이너에 선언된 자원 프로파일이 있어야.</text>
+
+  <!-- Pod → Node ladder -->
+  <line x1="24" y1="186" x2="876" y2="186" stroke="rgb(42,37,32)"/>
+  <text x="24" y="210" fill="#e8e4df" font-size="12">Pod → 노드 유도 — 강도·유연성 순 (밑으로 갈수록 유연)</text>
+
+  <rect x="24" y="222" width="852" height="30" fill="#f2d4d4"/>
+  <text x="40" y="242" fill="#7a1f1f" font-size="10.5" font-weight="700">nodeName</text>
+  <text x="150" y="242" fill="#7a1f1f" font-size="9.5">노드 이름 하드와이어. best practice 아님 — 예외로만. 용량 없으면 Pod 영원히 안 뜸.</text>
+
+  <rect x="24" y="256" width="852" height="30" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="40" y="276" fill="rgb(212,168,83)" font-size="10.5" font-weight="700">nodeSelector</text>
+  <text x="150" y="276" fill="#e8e4df" font-size="9.5">노드 라벨 key-value 매칭. 가장 단순한 권장 수단 (예: disktype=ssd).</text>
+
+  <rect x="24" y="290" width="852" height="30" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="40" y="310" fill="rgb(212,168,83)" font-size="10.5" font-weight="700">node affinity</text>
+  <text x="150" y="310" fill="#e8e4df" font-size="9.5">In·NotIn·Exists·Gt·Lt 연산자. required(하드) / preferred(소프트) 규칙.</text>
+
+  <rect x="24" y="324" width="852" height="30" fill="#cdeccf"/>
+  <text x="40" y="344" fill="#14521d" font-size="10.5" font-weight="700">taints · tolerations</text>
+  <text x="200" y="344" fill="#14521d" font-size="9.5">반대 방향 — 노드가 Pod를 거른다. NoSchedule·PreferNoSchedule·NoExecute.</text>
+
+  <!-- Pod → Pod -->
+  <text x="24" y="380" fill="#e8e4df" font-size="12">Pod ↔ Pod 관계 — 다른 Pod를 기준으로</text>
+  <rect x="24" y="392" width="420" height="72" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="40" y="414" fill="rgb(212,168,83)" font-size="10.5" font-weight="700">Pod affinity / anti-affinity</text>
+  <text x="40" y="434" fill="rgb(138,133,128)" font-size="9">affinity=밀집(저지연·데이터 지역성)</text>
+  <text x="40" y="450" fill="rgb(138,133,128)" font-size="9">anti-affinity=분산(SPOF 회피). topologyKey로 도메인 지정.</text>
+
+  <rect x="456" y="392" width="420" height="72" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="472" y="414" fill="#66bb6a" font-size="10.5" font-weight="700">topology spread constraints</text>
+  <text x="472" y="434" fill="rgb(138,133,128)" font-size="9">maxSkew로 불균형 허용치 지정 → 고른 분산.</text>
+  <text x="472" y="450" fill="rgb(138,133,128)" font-size="9">anti-affinity가 막는 rolling update를 풀어줌.</text>
+
+  <!-- descheduler + takeaway -->
+  <line x1="24" y1="478" x2="876" y2="478" stroke="rgb(42,37,32)"/>
+  <text x="24" y="500" fill="#e8e4df" font-size="11">배치는 한 번뿐 — 이후 조각화는 descheduler로</text>
+  <text x="24" y="520" fill="rgb(138,133,128)" font-size="9.5">스케줄러는 배치 시점의 클러스터 뷰로 한 번 결정하고, 이후 노드가 바뀌어도 과거 배치를 고치지 않습니다.</text>
+  <text x="24" y="536" fill="rgb(138,133,128)" font-size="9.5">descheduler(옵션·Job)가 재배치로 조각 모음. 축출은 QoS 순서 존중 (Best-Effort → Burstable → Guaranteed).</text>
+
+  <rect x="24" y="552" width="852" height="48" fill="#f5edda"/>
+  <text x="36" y="572" fill="#0d0d0d" font-size="10.5" font-weight="700">Takeaway: 자원 프로파일을 선언하고 Pod·노드에 라벨을 달아 자원 기반 스케줄링에 맡긴다.</text>
+  <text x="36" y="590" fill="#0d0d0d" font-size="10.5" font-weight="700">부족하면 작고 점진적으로 — 노드 의존(affinity) 먼저, 그다음 Pod 간 의존. 스케줄러를 과하게 묶지 않는다.</text>
+</svg>

@@ -40,6 +40,14 @@ updated: 2026-05-20
 | OWASP Top 10 | `10_security/03_vulnerabilities/` | 취약점 카탈로그 |
 | API Gateway 설계 (rate limit) | `03_architecture/` 또는 `08_cloud/` | 아키텍처 패턴 |
 
+## 예정 주제 — 시크릿 관리 (TBD)
+
+> OAuth2·JWT가 *사용자를 인증하는* 이론이라면, 시크릿 관리는 *애플리케이션이 쥔 비밀(DB 비번·API 키·인증서)을 어떻게 안전하게 보관·주입하는가*의 문제다. `01_concepts/`의 프로토콜 이론과 같은 계열로 둔다.
+
+- **Vault** — 시크릿(키·비밀번호·인증서)의 중앙 저장·접근 통제·동적 시크릿(요청 시 발급 후 리스 만료)·감사 로그를 담당하는 인프라. `.env` 파일·K8s ConfigMap 같은 *정적 평문 시크릿*의 한계(유출·회전 부재)를 무엇으로 메우는지가 핵심. (실환경 예시: CMP 3.0.4 dataplatform이 Vault로 토큰 기반 시크릿을 관리.) 본문은 `01_concepts/` 소속으로 예고.
+
+경계: 인증·인가 프로토콜 이론(OAuth2·OIDC·JWT)은 기존 [`01_concepts/`](01_concepts/). Vault는 *시크릿 저장·주입 인프라* 관점이라 같은 폴더에 두되 주제가 다르다. K8s Secret 리소스 자체의 매니페스트는 [`../08_cloud/kubernetes/`](../08_cloud/kubernetes/README.md).
+
 ## 관련 문서
 
 - [Spring 통합 MOC](../11_spring/README.md)

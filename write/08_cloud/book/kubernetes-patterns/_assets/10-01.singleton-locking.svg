@@ -1,0 +1,52 @@
+<svg viewBox="0 0 900 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>싱글턴 서비스 — out-of-application vs in-application 잠금</title>
+  <desc>Kubernetes Patterns 10장. 한 번에 한 인스턴스만 활성이면서 고가용성을 유지하려면 active-passive 토폴로지가 필요합니다. 방법은 둘입니다. out-of-application 잠금은 replica 1개 컨트롤러에 맡기는데, ReplicaSet은 가용성을 일관성보다 우선해 at-least-once(가끔 둘)이고, StatefulSet은 일관성을 우선해 at-most-one(가끔 없음)을 보장합니다. in-application 잠금은 앱이 ZooKeeper·etcd·Kubernetes Lease·Camel·Dapr 같은 분산 락으로 리더 선출을 해, 여러 Pod 중 하나만 활성이 됩니다. PodDisruptionBudget은 반대로 자발적 축출로 동시에 내려가는 수를 제한합니다.</desc>
+
+  <rect x="0" y="0" width="900" height="500" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="16">싱글턴 서비스 — 한 번에 하나만 활성, 그러나 고가용</text>
+  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">필요한 건 <tspan fill="#e8e4df">active-passive</tspan> 토폴로지 (하나만 활성). 방법은 앱 <tspan fill="rgb(212,168,83)">밖 잠금</tspan>과 앱 <tspan fill="#66bb6a">안 잠금</tspan> 둘.</text>
+
+  <!-- out-of-application -->
+  <rect x="24" y="80" width="415" height="200" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="40" y="104" fill="rgb(212,168,83)" font-size="13" font-weight="700">out-of-application 잠금</text>
+  <text x="40" y="124" fill="rgb(138,133,128)" font-size="9.5">앱은 자기가 싱글턴인 줄 모름. 컨트롤러가 replica 1로 보장.</text>
+  <text x="40" y="140" fill="rgb(138,133,128)" font-size="9">(Spring이 빈을 한 번만 인스턴스화하는 것과 비슷)</text>
+
+  <rect x="40" y="152" width="383" height="54" fill="rgb(26,26,26)" stroke="#e57373"/>
+  <text x="52" y="172" fill="#e57373" font-size="10.5" font-weight="700">ReplicaSet (replicas: 1)</text>
+  <text x="52" y="190" fill="rgb(138,133,128)" font-size="9">가용성 &gt; 일관성. <tspan fill="#e8e4df">at-least-once</tspan> — 노드 분단 등에서</text>
+  <text x="52" y="202" fill="rgb(138,133,128)" font-size="9">가끔 2개가 동시에 돌 수 있음. 엄격 싱글턴 아님.</text>
+
+  <rect x="40" y="212" width="383" height="54" fill="rgb(26,26,26)" stroke="#66bb6a"/>
+  <text x="52" y="232" fill="#66bb6a" font-size="10.5" font-weight="700">StatefulSet (replicas: 1)</text>
+  <text x="52" y="250" fill="rgb(138,133,128)" font-size="9">일관성 &gt; 가용성. <tspan fill="#e8e4df">at-most-one</tspan> — 엄격 싱글턴 보장</text>
+  <text x="52" y="262" fill="rgb(138,133,128)" font-size="9">(가끔 0개). headless Service로 안정 네트워크 ID. (12장)</text>
+
+  <!-- in-application -->
+  <rect x="461" y="80" width="415" height="200" fill="rgb(26,26,26)" stroke="#66bb6a"/>
+  <text x="477" y="104" fill="#66bb6a" font-size="13" font-weight="700">in-application 잠금</text>
+  <text x="477" y="124" fill="rgb(138,133,128)" font-size="9.5">앱이 분산 락으로 리더 선출. Pod 여럿이 떠도</text>
+  <text x="477" y="140" fill="rgb(138,133,128)" font-size="9.5">락을 잡은 하나만 활성, 나머지는 passive 대기.</text>
+
+  <rect x="477" y="152" width="383" height="114" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="489" y="172" fill="#e8e4df" font-size="9.5">· <tspan fill="rgb(212,168,83)">ZooKeeper</tspan> — ephemeral node (세션 끝나면 삭제)</text>
+  <text x="489" y="190" fill="#e8e4df" font-size="9.5">· <tspan fill="rgb(212,168,83)">etcd / K8s Lease</tspan> — Raft 기반. node heartbeat·</text>
+  <text x="501" y="204" fill="rgb(138,133,128)" font-size="9">  컴포넌트 리더 선출(kube-scheduler 등)에 이미 사용</text>
+  <text x="489" y="222" fill="#e8e4df" font-size="9.5">· <tspan fill="rgb(212,168,83)">Apache Camel</tspan> — ConfigMap을 락으로(낙관적 잠금)</text>
+  <text x="489" y="240" fill="#e8e4df" font-size="9.5">· <tspan fill="rgb(212,168,83)">Dapr</tspan> — Distributed Lock (HTTP·gRPC, lease 기반</text>
+  <text x="501" y="254" fill="rgb(138,133,128)" font-size="9">  자동 해제로 데드락 방지)</text>
+
+  <!-- when to use -->
+  <line x1="24" y1="298" x2="876" y2="298" stroke="rgb(42,37,32)"/>
+  <text x="24" y="320" fill="#e8e4df" font-size="11">언제 무엇을</text>
+  <text x="40" y="340" fill="rgb(138,133,128)" font-size="9.5">· 비엄격 싱글턴(at-least-one이면 충분) → ReplicaSet replicas:1. 가용성 우선.</text>
+  <text x="40" y="358" fill="rgb(138,133,128)" font-size="9.5">· 엄격 싱글턴(at-most-one) + 나은 디스커버리 → StatefulSet + headless Service. 일관성 우선.</text>
+  <text x="40" y="376" fill="rgb(138,133,128)" font-size="9.5">· 앱 일부만 싱글턴(예: HTTP는 스케일, 폴링만 싱글턴) → in-application 잠금으로 그 컴포넌트만 잠금.</text>
+
+  <!-- PDB -->
+  <rect x="24" y="392" width="852" height="94" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="40" y="414" fill="rgb(212,168,83)" font-size="12" font-weight="700">PodDisruptionBudget — 반대 방향의 보완</text>
+  <text x="40" y="434" fill="rgb(138,133,128)" font-size="9.5">싱글턴이 <tspan fill="#e8e4df">최대</tspan> 인스턴스 수를 제한한다면, PDB는 <tspan fill="#e8e4df">자발적 축출</tspan>로 동시에 <tspan fill="#e8e4df">내려가는</tspan> 수를 제한합니다.</text>
+  <text x="40" y="452" fill="rgb(138,133,128)" font-size="9.5">자발적 = 노드 드레인(kubectl drain)·스케일다운처럼 지연 가능한 축출. 노드 비정상 같은 비자발적은 제외.</text>
+  <text x="40" y="472" fill="rgb(138,133,128)" font-size="9.5">minAvailable(최소 유지) 또는 maxUnavailable(최대 축출) 중 하나. 싱글턴엔 maxUnavailable:0으로 자발적 축출 차단 → 드레인 전 소유자에 연락.</text>
+</svg>

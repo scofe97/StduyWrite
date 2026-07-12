@@ -1,6 +1,6 @@
 <svg viewBox="0 0 960 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>Pod phase는 단방향이다 — 재시작은 컨테이너 사건, 복구는 새 Pod</title>
-  <desc>Pod phase는 Pending에서 Running으로, 다시 Succeeded 또는 Failed로 한 방향으로만 전이한다. Running에서 Pending으로 되돌아가지 않는다. 컨테이너가 죽어 재시작해도 그것은 컨테이너 수준의 사건이라 Pod phase는 Running에 머문다. 죽은 Pod를 복구하는 것은 phase를 되돌리는 게 아니라 Deployment가 새 Pod를 Pending부터 새로 만드는 것이다.</desc>
+  <title>Pod phase의 일반적 흐름 — 재시작은 컨테이너 사건, 복구는 새 Pod</title>
+  <desc>Pod phase는 보통 Pending에서 Running으로, 다시 Succeeded 또는 Failed로 흐르며, 실무에서 Running에서 Pending으로 되돌아가지 않는다. 컨테이너가 죽어 재시작해도 그것은 컨테이너 수준의 사건이라 Pod phase는 Running에 머문다. 죽은 Pod를 복구하는 것은 phase를 되돌리는 게 아니라 Deployment가 새 Pod를 Pending부터 새로 만드는 것이다. 다만 공식 문서는 phase를 완전한 상태 머신으로 해석하지 말라고 명시한다.</desc>
   <defs>
     <style>
       .title { font-size: 16px; font-weight: 800; fill: #e8e4df; }
@@ -16,10 +16,10 @@
     <marker id="ab" markerWidth="12" markerHeight="12" refX="7" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 Z" fill="#66bb6a"/></marker>
   </defs>
   <rect x="0" y="0" width="960" height="480" fill="#0d0d0d"/>
-  <text x="24" y="32" class="title">Pod phase는 한 방향으로만 흐른다 — 되돌아오지 않는다</text>
-  <text x="24" y="54" class="sub">"Running에서 Pending으로 돌아가나?" → 아니다. phase는 단방향이고, 복구는 새 Pod를 만드는 것이다.</text>
+  <text x="24" y="32" class="title">Pod phase의 일반적 흐름 — 실무에서 되돌아오지 않는다</text>
+  <text x="24" y="54" class="sub">"Running에서 Pending으로 돌아가나?" → 실무에선 아니다. 복구는 phase를 되돌리는 게 아니라 새 Pod를 만드는 것이다.</text>
 
-  <!-- 단방향 전이 체인 -->
+  <!-- 일반적 전이 흐름 (완전한 상태 머신 아님) -->
   <!-- Pending -->
   <rect x="40" y="96" width="150" height="60" rx="10" fill="rgb(120,116,112)" stroke="rgb(90,88,84)" stroke-width="1.3"/>
   <text x="115" y="124" class="ph" text-anchor="middle" style="fill:#0d0d0d">Pending</text>
@@ -44,7 +44,7 @@
   <text x="228" y="116" class="note" text-anchor="middle">시작</text>
   <text x="470" y="150" class="note" text-anchor="middle">종료 시</text>
 
-  <!-- 역방향 금지 표시 (Running → Pending X) -->
+  <!-- 실무상 역방향 관찰 안 됨 (Running → Pending) -->
   <path d="M266,150 L194,150" fill="none" stroke="rgb(224,110,100)" stroke-width="2" stroke-dasharray="5 4"/>
   <text x="230" y="172" class="x" text-anchor="middle">✕</text>
   <text x="230" y="190" class="note" text-anchor="middle" style="fill:rgb(224,110,100)">되돌아가지 않음</text>

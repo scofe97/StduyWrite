@@ -1,0 +1,67 @@
+<svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>세 가지 프로브 — liveness·readiness·startup의 실패 시 대응이 다르다</title>
+  <desc>Kubernetes Patterns 4장. 프로세스 헬스 체크는 컨테이너 프로세스가 살아 있는지만 봅니다. 그 위에 세 프로브가 있습니다. liveness 프로브가 실패하면 컨테이너를 재시작하고, readiness 프로브가 실패하면 재시작 대신 Service 엔드포인트에서 빼 트래픽을 끊습니다. startup 프로브는 기동이 오래 걸리는 앱을 위해 먼저 돌아, 성공할 때까지 liveness·readiness를 막아 조기 재시작을 방지합니다. 세 프로브 모두 HTTP·TCP·Exec·gRPC 네 방식과 같은 타이밍 파라미터를 씁니다.</desc>
+
+  <rect x="0" y="0" width="900" height="560" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="16">세 가지 프로브 — 실패했을 때 무엇을 하는가가 다르다</text>
+  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">프로세스가 살아 있어도 앱은 멈출 수 있습니다 (예: <tspan fill="#e8e4df">JVM은 도는데 OutOfMemoryError</tspan>). 그래서 밖에서 건강을 확인합니다.</text>
+
+  <!-- process health baseline -->
+  <rect x="24" y="74" width="852" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="40" y="96" fill="rgb(138,133,128)" font-size="10">바탕 — <tspan fill="#e8e4df">프로세스 헬스 체크</tspan>: kubelet이 컨테이너 프로세스 생존만 확인. 죽으면 재시작. 데드락·행은 못 잡음.</text>
+
+  <!-- liveness -->
+  <rect x="24" y="122" width="275" height="180" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="40" y="146" fill="rgb(212,168,83)" font-size="14" font-weight="700">liveness</text>
+  <text x="40" y="166" fill="#e8e4df" font-size="9.5">아직 건강한가?</text>
+  <rect x="40" y="178" width="243" height="24" fill="#f2d4d4"/>
+  <text x="161" y="194" fill="#7a1f1f" font-size="9.5" text-anchor="middle" font-weight="700">실패 → 컨테이너 재시작</text>
+  <text x="40" y="224" fill="rgb(138,133,128)" font-size="9">데드락·무한루프·스래싱 감지.</text>
+  <text x="40" y="242" fill="rgb(138,133,128)" font-size="9">밖에서 확인 — 앱 워치독은</text>
+  <text x="40" y="257" fill="rgb(138,133,128)" font-size="9">자기 장애를 못 알릴 수 있어서.</text>
+  <text x="40" y="281" fill="rgb(138,133,128)" font-size="8.5">⚠ 재시작이 안 고치는 문제엔</text>
+  <text x="40" y="294" fill="rgb(138,133,128)" font-size="8.5">   프로브가 무의미(재시작 반복만).</text>
+
+  <!-- readiness -->
+  <rect x="313" y="122" width="275" height="180" fill="rgb(26,26,26)" stroke="#66bb6a"/>
+  <text x="329" y="146" fill="#66bb6a" font-size="14" font-weight="700">readiness</text>
+  <text x="329" y="166" fill="#e8e4df" font-size="9.5">요청 받을 준비 됐나?</text>
+  <rect x="329" y="178" width="243" height="24" fill="#cdeccf"/>
+  <text x="450" y="194" fill="#14521d" font-size="9.5" text-anchor="middle" font-weight="700">실패 → 엔드포인트에서 제외</text>
+  <text x="329" y="224" fill="rgb(138,133,128)" font-size="9">재시작 안 함 — 트래픽만 끊음.</text>
+  <text x="329" y="242" fill="rgb(138,133,128)" font-size="9">기동 워밍업·의존성(DB) 대기·</text>
+  <text x="329" y="257" fill="rgb(138,133,128)" font-size="9">과부하 시 자기 보호.</text>
+  <text x="329" y="281" fill="rgb(138,133,128)" font-size="8.5">rolling update 성공 판정 기준.</text>
+  <text x="329" y="294" fill="rgb(138,133,128)" font-size="8.5">스스로 회복하길 기다림.</text>
+
+  <!-- startup -->
+  <rect x="602" y="122" width="274" height="180" fill="rgb(26,26,26)" stroke="#dceaf7"/>
+  <text x="618" y="146" fill="#dceaf7" font-size="14" font-weight="700">startup</text>
+  <text x="618" y="166" fill="#e8e4df" font-size="9.5">기동이 끝났나?</text>
+  <rect x="618" y="178" width="242" height="24" fill="#dceaf7"/>
+  <text x="739" y="194" fill="#10243a" font-size="9.5" text-anchor="middle" font-weight="700">성공까지 다른 둘을 막음</text>
+  <text x="618" y="224" fill="rgb(138,133,128)" font-size="9">기동이 분 단위인 앱용</text>
+  <text x="618" y="239" fill="rgb(138,133,128)" font-size="9">(예: Jakarta EE·WildFly).</text>
+  <text x="618" y="259" fill="rgb(138,133,128)" font-size="9">period·failureThreshold를 크게.</text>
+  <text x="618" y="281" fill="rgb(138,133,128)" font-size="8.5">성공 후에야 liveness·readiness 시작</text>
+  <text x="618" y="294" fill="rgb(138,133,128)" font-size="8.5">→ 느린 기동이 조기 재시작 안 당함.</text>
+
+  <!-- common methods + timing -->
+  <line x1="24" y1="322" x2="876" y2="322" stroke="rgb(42,37,32)"/>
+  <text x="24" y="346" fill="#e8e4df" font-size="12">셋이 공유하는 것 — 확인 방식 4종 + 타이밍 파라미터</text>
+  <rect x="24" y="358" width="424" height="72" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="40" y="380" fill="rgb(212,168,83)" font-size="10.5" font-weight="700">확인 방식 (probe action)</text>
+  <text x="40" y="400" fill="rgb(138,133,128)" font-size="9">HTTP GET(200~399 성공) · TCP(연결 성공)</text>
+  <text x="40" y="416" fill="rgb(138,133,128)" font-size="9">Exec(종료코드 0) · gRPC(내장 헬스체크)</text>
+  <rect x="452" y="358" width="424" height="72" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="468" y="380" fill="rgb(212,168,83)" font-size="10.5" font-weight="700">타이밍 파라미터</text>
+  <text x="468" y="400" fill="rgb(138,133,128)" font-size="9">initialDelaySeconds · periodSeconds</text>
+  <text x="468" y="416" fill="rgb(138,133,128)" font-size="9">timeoutSeconds · failureThreshold</text>
+
+  <!-- bottom -->
+  <rect x="24" y="444" width="852" height="26" fill="#f5edda"/>
+  <text x="36" y="462" fill="#0d0d0d" font-size="10" font-weight="700">핵심 대비: liveness=재시작 / readiness=트래픽 차단 / startup=느린 기동 보호. 자바는 Spring Boot Actuator 등이 구현 제공.</text>
+
+  <text x="24" y="496" fill="rgb(138,133,128)" font-size="10">Pod readiness gate — 컨테이너 프로브 외에 외부 조건(예: 외부 LB 준비)까지 True여야 Pod가 ready. add-on용 고급 기능.</text>
+  <text x="24" y="516" fill="rgb(138,133,128)" font-size="10">그 밖의 관측 — 로그(stdout·stderr, 사후분석용) · /dev/termination-log(마지막 종료 사유) · 트레이싱·메트릭(Prometheus).</text>
+</svg>

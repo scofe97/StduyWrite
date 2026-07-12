@@ -4,7 +4,7 @@ tags: [moc, jvm, roadmap, keywords]
 status: reference
 related:
   - README.md
-updated: 2026-06-25
+updated: 2026-07-09
 ---
 
 # JVM 딥다이브 로드맵 — 섹션별 키워드 원문
@@ -776,6 +776,215 @@ truststore 에 CA 가 없으면 `javax.net.ssl.SSLHandshakeException: PKIX path 
 ```
 
 > 출처: [Java Secure Socket Extension (JSSE) Reference Guide](https://docs.oracle.com/en/java/javase/11/security/java-secure-socket-extension-jsse-reference-guide.html) · [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) · [cert-manager Trusting certificates](https://cert-manager.io/docs/trust/) · [trust-manager](https://cert-manager.io/docs/trust/trust-manager/)
+
+## 27. JVM_OPTS 운영 튜닝 10주제 — 무엇을 왜 넣는가
+
+> `JVM_OPTS`(또는 `JAVA_TOOL_OPTIONS`) 에 들어가는 튜닝 항목은 대체로 아래 10주제로 반복된다. 이 절은 §26 과 같은 성격의 예외다 — roadmap 은 원래 키워드 원문 SSOT 지만, "어떤 옵션을 왜 넣는가" 는 운영에서 자주 묻는 실무 지도라 여기에 둔다. 10주제 중 9개(§27.1~§27.9)는 이미 정독 노트가 깊게 다루므로 여기서는 **대표 옵션 + 증상만 요약하고 깊은 설명은 그 노트로 링크**한다. 유일하게 05_JVM 어디에도 없던 **DNS/네트워크 캐시 TTL**(§27.10) 만 본문으로 풀어 쓴다 — 처음 물었던 `-Dsun.net.inetaddr.negative.ttl=5` 가 바로 여기 속한다.
+
+### 27.0 10주제 한눈에 — 우선순위와 깊은 노트
+
+옵션을 많이 넣는 것보다 중요한 건 "어떤 현상을 보려고 어떤 기록을 남기는가" 다. 아래 순서는 운영에서 먼저 보게 되는 순이다.
+
+| 우선 | 주제 | 먼저 보는 이유 | 깊은 노트 |
+|---:|------|--------------|----------|
+| 1 | Heap / Container memory | OOMKilled·GC·비용과 직결 | §27.1 · §11 · §17 · §19 |
+| 2 | GC 로그 / -Xlog | 성능 문제의 사실 기록 | §27.4 |
+| 3 | Heap dump / JFR | 장애 증거 확보 | §27.5 · §27.9 |
+| 4 | Thread / Xss | Tomcat·Jenkins·scheduler | §27.8 |
+| 5 | Direct memory / NMT | Heap 밖 메모리 추적 | §27.7 |
+| 6 | DNS TTL | K8s·내부망·CoreDNS 환경 | §27.10 (신규 본문) |
+| 7 | Metaspace | 플러그인·동적 classloader | §27.6 |
+| 8 | GC 선택·지연 | latency vs throughput | §27.3 |
+| 9 | JIT / Code cache | 일반 서비스에선 후순위 | §9 · §27.9 |
+| 10 | 세부 GC 파라미터 | 로그 분석 전엔 건드리지 않는 게 안전 | §27.3 |
+
+### 27.1 Heap 메모리 크기
+
+```bash
+-Xms512m -Xmx2g
+-XX:InitialRAMPercentage=50 -XX:MaxRAMPercentage=70
+```
+
+컨테이너에서는 `-Xmx` 고정보다 `MaxRAMPercentage`(기본 25%) 를 쓰는 경우가 많다. 핵심은 JVM 이 힙만 쓰는 게 아니라는 점 — Metaspace·thread stack·direct memory·code cache 가 힙 밖에서 함께 물리 메모리를 먹는다. 그래서 `-Xmx2g` 를 Pod limit 2Gi 에 맞추면 힙 밖 메모리 때문에 OOMKilled 된다.
+
+| 증상 | 의심 |
+|------|------|
+| `OutOfMemoryError: Java heap space` | Heap 부족 |
+| GC 가 너무 자주 돈다 | Heap 이 작거나 객체 생성량 과다 |
+| Pod 가 OOMKilled | Heap 밖 native memory 포함 컨테이너 초과 |
+
+> 깊은 설명 → [`01-05.실전 — Docker 컨테이너 네이티브 메모리와 OOMKilled`](./ch02_automatic-memory-management/01-05.실전%20—%20Docker%20컨테이너%20네이티브%20메모리와%20OOMKilled.md), 로드맵 §11·§17·§19.
+
+### 27.2 컨테이너 / Kubernetes 리소스 인식
+
+```bash
+-XX:+UseContainerSupport   # Java 21 기본 활성화
+-XX:MaxRAMPercentage=70
+-XX:ActiveProcessorCount=2
+-Xlog:os+container=info
+```
+
+`UseContainerSupport` 는 JVM 이 컨테이너의 메모리·CPU 한도를 감지해 리소스 계산에 반영한다. `ActiveProcessorCount` 는 GC·ForkJoinPool 같은 내부 스레드 풀 크기를 계산할 CPU 수를 강제한다 — 여러 Java 프로세스를 한 컨테이너에 나눠 돌릴 때 의미가 있다. 컨테이너 감지 진단은 `-Xlog:os+container=trace` 로 본다.
+
+> Java OOM vs Kubernetes OOMKilled 의 구분과 컨테이너 메모리 계산은 로드맵 §19 가 SSOT.
+
+### 27.3 GC 선택과 지연 시간
+
+```bash
+-XX:+UseG1GC   # Java 21 기본
+-XX:MaxGCPauseMillis=200
+-XX:InitiatingHeapOccupancyPercent=45
+-Xlog:gc*
+```
+
+Java 21 HotSpot 의 기본 GC 는 G1 이다. 짧은 pause 를 얻는 대신 처리량 일부를 GC 에 쓴다. 중요한 건 옵션을 외워 넣는 게 아니라 **GC 로그를 보고 조정**하는 것이다.
+
+| 증상 | 의심 |
+|------|------|
+| p99 latency 가 튄다 | Stop-the-world pause |
+| CPU 는 높은데 처리량이 안 오른다 | GC 가 CPU 를 많이 씀 |
+| Full GC 발생 | heap 압박·humongous object·old 회수 지연 |
+| young GC 가 너무 잦다 | allocation rate 높음 |
+
+> 깊은 설명 → [`02-01.GC 운영 — 로그와 튜닝`](./ch02_automatic-memory-management/02-01.GC%20운영%20—%20로그와%20튜닝.md). GC 알고리즘 본문은 로드맵 §10.
+
+### 27.4 GC 로그 / JVM Unified Logging
+
+```bash
+-Xlog:gc*:stdout:time,uptime,level,tags
+-Xlog:gc*,safepoint:file=/logs/gc.log:time,uptime,level,tags:filecount=5,filesize=20M
+-Xlog:class+load=info
+```
+
+JDK 9 이후 JVM 로그는 대부분 `-Xlog` 체계로 통합됐다. `gc`·`safepoint`·`os+container`·`class+load`·`jit` 태그 조합으로 내부 사건을 관찰한다. 자주 보는 태그는 `gc*`(GC 원인·pause·heap 변화), `safepoint`(전체 정지 지점), `os+container`(컨테이너 감지), `class+load`(클래스 로딩 과다).
+
+> 깊은 설명 → [`03-03.통합 JVM 로깅 — Xlog와 비동기 로깅`](./ch02_automatic-memory-management/03-03.통합%20JVM%20로깅%20—%20Xlog와%20비동기%20로깅.md).
+
+### 27.5 OOM 발생 시 증거 수집
+
+```bash
+-XX:+HeapDumpOnOutOfMemoryError
+-XX:HeapDumpPath=/dumps
+-XX:ErrorFile=/logs/hs_err_pid%p.log
+```
+
+`HeapDumpOnOutOfMemoryError` 는 기본 비활성화라 명시해야 `OutOfMemoryError` 시 heap dump 를 남긴다. 죽었다는 사실만 남기지 말고 사인을 남기게 하는 옵션이다. 주의할 점 — dump 는 `Xmx` 에 가까운 큰 파일이라 디스크가 필요하고, K8s 에서 `/tmp` 에 남기면 재시작 시 사라지므로 PVC/별도 볼륨을 고려한다. heap dump 에는 토큰·비밀번호·요청 데이터가 들어갈 수 있어 취급에 주의한다.
+
+> 깊은 설명 → [`07-02.OutOfMemoryError 진단 — 네 가지 원인과 자동 덤프`](./book/jpf_java-performance/07-02.OutOfMemoryError%20진단%20—%20네%20가지%20원인과%20자동%20덤프.md).
+
+### 27.6 Metaspace / ClassLoader
+
+```bash
+-XX:MetaspaceSize=256m
+-XX:MaxMetaspaceSize=512m
+-Xlog:gc+metaspace=info
+-Xlog:class+load=info,class+unload=info
+```
+
+Metaspace 는 클래스 메타데이터가 저장되는 native memory 영역이다. `MaxMetaspaceSize` 는 기본 무제한이다. Jenkins(플러그인·Groovy·Shared Library), Spring Boot DevTools(재시작 classloader), Tomcat(배포 반복 후 classloader leak), 동적 프록시(CGLIB·ByteBuddy 다량 생성) 에서 자주 문제가 된다. 너무 작게 잡으면 장애가 빨리 드러나고, 무작정 크게 잡으면 누수를 늦게 발견한다.
+
+> 깊은 설명 → [`05-04.기본 튜닝 (2) — metaspace·병렬·GC 도구`](./book/jpf_java-performance/05-04.기본%20튜닝%20(2)%20—%20metaspace·병렬·GC%20도구.md).
+
+### 27.7 Direct Memory / Native Memory
+
+```bash
+-XX:MaxDirectMemorySize=512m
+-XX:NativeMemoryTracking=summary
+```
+
+`MaxDirectMemorySize` 는 `java.nio` direct buffer 총량을 제한한다. Netty·WebFlux·Kafka client·NIO·대용량 파일 처리에서 자주 등장한다. 핵심은 **heap dump 만으로는 native memory 문제를 못 잡는다** 는 점 — NMT·OS RSS 를 함께 봐야 한다.
+
+| 증상 | 의심 |
+|------|------|
+| Heap 은 여유 있는데 Pod OOMKilled | native/direct memory |
+| `OutOfMemoryError: Direct buffer memory` | DirectByteBuffer 한도 초과 |
+| Kafka/Netty 사용 중 메모리 증가 | direct buffer pool |
+| heap dump 엔 안 보이는 메모리 증가 | NMT·OS RSS 확인 |
+
+> 깊은 설명 → [`08-02.Native Memory Tracking — NMT와 shared library 한계`](./book/jpf_java-performance/08-02.Native%20Memory%20Tracking%20—%20NMT와%20shared%20library%20한계.md), [`01-05.실전 — Docker 컨테이너 네이티브 메모리와 OOMKilled`](./ch02_automatic-memory-management/01-05.실전%20—%20Docker%20컨테이너%20네이티브%20메모리와%20OOMKilled.md).
+
+### 27.8 Thread Stack / 스레드 수
+
+```bash
+-Xss1m
+-XX:ThreadStackSize=1024
+```
+
+`-Xss` 는 Java thread stack 크기를 정한다(Linux/x64 기본 예시 1024KB). Spring MVC/Tomcat 구조에선 요청 스레드 수가 곧 native stack 메모리와 연결된다 — `Xss1m` 에 platform thread 1000개면 stack 예약량만 이론상 1GB 수준이다.
+
+| 증상 | 의심 |
+|------|------|
+| `unable to create native thread` | thread 수 과다 또는 native memory 부족 |
+| 재귀에서 `StackOverflowError` | stack 부족 또는 코드 문제 |
+| thread dump 가 수천 개 | thread pool 설정 문제 |
+| context switching 증가 | thread 과다 |
+
+> 깊은 설명 → [`09-05.JVM 스레드 튜닝과 모니터링`](./book/jpf_java-performance/09-05.JVM%20스레드%20튜닝과%20모니터링.md). Thread state·lock 진단은 로드맵 §14.
+
+### 27.9 JFR / jcmd / 운영 진단
+
+```bash
+-XX:StartFlightRecording=filename=/logs/app.jfr,dumponexit=true,settings=profile
+```
+
+```bash
+jcmd <pid> Thread.print
+jcmd <pid> GC.heap_dump filename=/dumps/heap.hprof
+jcmd <pid> VM.native_memory summary
+jcmd <pid> JFR.start ; jcmd <pid> JFR.dump
+```
+
+예전의 `jstack`·`jmap` 중심에서 `jcmd`·JFR 중심으로 이동했다. JFR 은 장애 난 뒤 로그를 뒤지는 도구라기보다 블랙박스처럼 JVM 내부 사건(allocation·GC pause·thread blocking·IO·CPU hot method·exception rate) 을 시간축으로 남기는 도구다.
+
+> 깊은 설명 → [`03-04.Java Flight Recorder와 JMC`](./book/jpf_java-performance/03-04.Java%20Flight%20Recorder와%20JMC.md). 진단 도구 카탈로그는 로드맵 §20, 플래그 허브는 [`JVM-TOOLS.md`](./JVM-TOOLS.md).
+
+### 27.10 DNS / 네트워크 캐시 TTL — 신규 본문
+
+처음 물었던 `-Dsun.net.inetaddr.negative.ttl=5` 가 여기 속한다. 이 주제는 05_JVM 어디에도 없어 본문으로 풀어 쓴다.
+
+```bash
+-Dsun.net.inetaddr.ttl=30
+-Dsun.net.inetaddr.negative.ttl=5
+-Djava.net.preferIPv4Stack=true
+```
+
+Java 의 `InetAddress` 는 **성공한 DNS 조회와 실패한 DNS 조회를 각각 캐시**한다. `networkaddress.cache.ttl` 은 성공 조회(positive) 캐시 시간이고, `networkaddress.cache.negative.ttl` 은 실패 조회(negative) 캐시 시간이다. Java 21 기준 negative TTL 기본값은 10초이며, `0` 은 캐시 안 함, `-1` 은 영구 캐시를 뜻한다. 명령줄에서는 `-Dsun.net.inetaddr.negative.ttl` 로도 지정한다.
+
+이 옵션이 왜 K8s 에서 중요한가는 실패 캐시가 만드는 함정에 있다.
+
+| 상황 | 의미 |
+|------|------|
+| CoreDNS 순간 장애 | 실패 결과를 오래 캐시하면 CoreDNS 복구 후에도 계속 `UnknownHostException` |
+| Service 생성 직후 접근 | DNS 전파·조회 타이밍 문제 |
+| 내부 도메인 IP 변경 | positive TTL 이 너무 길면 오래된 IP 사용 |
+| IPv6 우선 시도 | 환경에 따라 연결 지연 — `preferIPv4Stack=true` 로 회피 가능 |
+
+핵심을 한 문장으로 줄이면, `negative.ttl=5` 는 **"DNS 실패를 5초만 믿고 다시 조회하라"** 는 안전핀이다. 실패를 오래 캐시하면 정작 DNS 가 복구돼도 JVM 은 낡은 실패 기억 때문에 계속 연결을 못 맺는다.
+
+> 근거 → [InetAddress (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/net/InetAddress.html).
+
+### 27.11 실무 JVM_OPTS 묶음 예시 — 정답이 아니라 출발점
+
+Spring Boot + Kubernetes 기준의 흔한 조합이다. 서비스가 Tomcat 기반인지 Netty 기반인지, Kafka client·thread 수가 많은지에 따라 달라지므로 이건 정답이 아니라 출발점이다.
+
+```bash
+JAVA_TOOL_OPTIONS="
+-XX:MaxRAMPercentage=70
+-XX:InitialRAMPercentage=50
+-XX:+UseG1GC
+-XX:MaxGCPauseMillis=200
+-Xlog:gc*,safepoint:file=/logs/gc.log:time,uptime,level,tags:filecount=5,filesize=20M
+-XX:+HeapDumpOnOutOfMemoryError
+-XX:HeapDumpPath=/dumps
+-XX:NativeMemoryTracking=summary
+-Dsun.net.inetaddr.ttl=30
+-Dsun.net.inetaddr.negative.ttl=5
+"
+```
+
+튜닝은 보통 다음 질문에서 시작한다: 이 서비스는 latency 가 중요한가 throughput 이 중요한가 / 컨테이너 memory limit 대비 heap 비율은 얼마인가 / OOM 이 JVM OOM 인가 Kubernetes OOMKilled 인가 / heap dump 와 GC log 가 남는가 / heap 은 안정적인데 RSS 만 증가하는가 / thread 수는 정상인가 / DNS 실패가 일시적인데 오래 지속되는가.
+
+> 출처: [The java Command (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/specs/man/java.html) · [Garbage-First (G1) Garbage Collector](https://docs.oracle.com/en/java/javase/21/gctuning/garbage-first-g1-garbage-collector1.html) · [Introduction to Garbage Collection Tuning](https://docs.oracle.com/en/java/javase/21/gctuning/introduction-garbage-collection-tuning.html) · [Diagnostic Tools](https://docs.oracle.com/en/java/javase/21/troubleshoot/diagnostic-tools.html) · [InetAddress (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/net/InetAddress.html)
 
 ## 결론
 

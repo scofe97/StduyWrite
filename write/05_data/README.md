@@ -77,6 +77,14 @@ ORM 레벨의 락 (JPA `@Lock`, QueryDSL `setLockMode`) 은 [jpa/04-02.낙관적
 | MySQL | 8.0+ | `sql/` 본문 가정 |
 | Redis | 7.x | `redis/` 본문 가정 |
 
+## 예정 주제 — 오브젝트 스토리지 (TBD)
+
+> `theory/`의 DDIA가 분산 파일시스템·오브젝트 스토어를 *이론*으로 다뤘다면, 그 실물 하나를 손으로 만져보는 자리다. 관계형 DB·Redis가 *구조화된 데이터*라면 오브젝트 스토리지는 *대용량 비정형 객체(파일·백업·아티팩트)*를 다룬다.
+
+- **MinIO** — S3 API 호환 오브젝트 스토리지. 블록/파일 스토리지와의 차이(플랫 네임스페이스·버킷·객체 키·HTTP API), 왜 백업·로그·아티팩트·메트릭 장기저장의 기본 백엔드가 됐는지가 핵심. DDIA 분산파일시스템([theory 11-02](theory/README.md))의 실물이자, 다른 카테고리에서 **저장 백엔드로 재등장**한다 — 관측성 Thanos(`../06_observability/`)의 메트릭 저장소, Jenkins 아티팩트([`../07_devops/02_Jenkins/06_infra/06-03`](../07_devops/README.md)). (실환경 예시: CMP 3.0.4 dataplatform의 MinIO.)
+
+경계: 관계형·트랜잭션·MVCC는 [`theory/`](theory/)·[`sql/`](sql/). 캐시·세션 저장은 [`redis/`](redis/). 여기 예정 범위는 **오브젝트 스토리지 모델과 MinIO 운영**만. 향후 분량이 커지면 `object-storage/` 서브폴더 신설.
+
 ## 관련 문서
 
 - [`../04_messaging/README.md`](../04_messaging/README.md) — Kafka·Redpanda 같은 메시지 도구

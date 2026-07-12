@@ -1,0 +1,53 @@
+<svg viewBox="0 0 880 350" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Alertmanager 라우트 트리 탐색</title>
+  <desc>최상위 route 아래 slack-devops 서브라우트가 있고 그 아래 pagerduty-devops 서브라우트가 있다. 알림은 가장 구체적으로 일치하는 노드의 리시버로 가고, 어느 서브라우트에도 걸리지 않으면 부모 라우트의 리시버로 폴백한다.</desc>
+
+  <defs>
+    <marker id="a5" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="880" height="350" fill="#0d0d0d"/>
+  <text x="20" y="32" fill="#e8e4df" font-size="15">라우트 트리 탐색 — 가장 구체적인 노드에서 멈춥니다</text>
+
+  <!-- 트리 -->
+  <rect x="40" y="70" width="230" height="54" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="56" y="93" fill="#e8e4df" font-size="12">route (최상위)</text>
+  <text x="56" y="112" fill="rgb(138,133,128)" font-size="9.5" font-family="'JetBrains Mono', monospace">receiver: fallthrough</text>
+
+  <rect x="70" y="160" width="230" height="54" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="86" y="183" fill="#e8e4df" font-size="12">slack-devops</text>
+  <text x="86" y="202" fill="rgb(138,133,128)" font-size="9.5" font-family="'JetBrains Mono', monospace">team = devops</text>
+
+  <rect x="100" y="250" width="230" height="54" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="116" y="273" fill="#e8e4df" font-size="12">pagerduty-devops</text>
+  <text x="116" y="292" fill="rgb(138,133,128)" font-size="9.5" font-family="'JetBrains Mono', monospace">environment = production</text>
+
+  <path d="M60,124 L60,187 L64,187" fill="none" stroke="rgb(212,168,83)" stroke-width="1.6" marker-end="url(#a5)"/>
+  <path d="M90,214 L90,277 L94,277" fill="none" stroke="rgb(212,168,83)" stroke-width="1.6" marker-end="url(#a5)"/>
+
+  <text x="284" y="93" fill="rgb(138,133,128)" font-size="9.5">matchers 를 둘 수 없습니다</text>
+  <text x="316" y="183" fill="rgb(138,133,128)" font-size="9.5">서브라우트</text>
+
+  <!-- 결과 -->
+  <text x="430" y="93" fill="#e8e4df" font-size="12">알림 라벨 집합</text>
+  <text x="742" y="93" fill="#e8e4df" font-size="12">매칭된 리시버</text>
+  <line x1="430" y1="104" x2="860" y2="104" stroke="rgb(42,37,32)"/>
+
+  <text x="430" y="138" fill="rgb(138,133,128)" font-size="9.5" font-family="'JetBrains Mono', monospace">{environment="production", team="devops"}</text>
+  <line x1="694" y1="134" x2="716" y2="134" stroke="rgb(212,168,83)" stroke-width="1.6" marker-end="url(#a5)"/>
+  <text x="726" y="138" fill="rgb(212,168,83)" font-size="10.5" font-family="'JetBrains Mono', monospace">pagerduty-devops</text>
+
+  <text x="430" y="186" fill="rgb(138,133,128)" font-size="9.5" font-family="'JetBrains Mono', monospace">{environment="testing", team="devops"}</text>
+  <line x1="694" y1="182" x2="716" y2="182" stroke="rgb(212,168,83)" stroke-width="1.6" marker-end="url(#a5)"/>
+  <text x="726" y="186" fill="rgb(212,168,83)" font-size="10.5" font-family="'JetBrains Mono', monospace">slack-devops</text>
+
+  <text x="430" y="234" fill="rgb(138,133,128)" font-size="9.5" font-family="'JetBrains Mono', monospace">{environment="production", team="sre"}</text>
+  <line x1="694" y1="230" x2="716" y2="230" stroke="rgb(212,168,83)" stroke-width="1.6" marker-end="url(#a5)"/>
+  <text x="726" y="234" fill="rgb(212,168,83)" font-size="10.5" font-family="'JetBrains Mono', monospace">fallthrough</text>
+  <text x="430" y="256" fill="rgb(138,133,128)" font-size="9.5">부모 라우트에 걸리고 서브라우트엔 안 걸리면 부모의 리시버로 폴백합니다</text>
+
+  <text x="430" y="304" fill="rgb(138,133,128)" font-size="10.5"><tspan font-family="'JetBrains Mono', monospace" fill="rgb(212,168,83)">continue: true</tspan> 를 켜면 매칭된 노드에서 멈추지 않고</text>
+  <text x="430" y="322" fill="rgb(138,133,128)" font-size="10.5">같은 레벨의 형제 라우트를 계속 탐색합니다.</text>
+</svg>

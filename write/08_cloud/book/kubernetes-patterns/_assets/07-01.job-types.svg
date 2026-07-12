@@ -1,0 +1,49 @@
+<svg viewBox="0 0 900 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>네 가지 Job 타입 — completions와 parallelism 조합</title>
+  <desc>Kubernetes Patterns 7장. Job은 completions(성공 완료해야 할 Pod 수)와 parallelism(동시 실행 Pod 수) 두 필드 조합으로 네 타입이 됩니다. 둘 다 비우면 single Pod Job, completions만 정하면 fixed completion count, completions를 비우고 parallelism만 1보다 크게 하면 work queue, completionMode를 Indexed로 하면 indexed Job입니다. restartPolicy는 Always가 금지되고 OnFailure나 Never만 허용됩니다.</desc>
+
+  <rect x="0" y="0" width="900" height="480" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="16">네 가지 Job 타입 — 유한한 작업을 완료까지 안정적으로</text>
+  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">Job은 <tspan fill="#e8e4df">completions</tspan>(완료해야 할 Pod 수)와 <tspan fill="#e8e4df">parallelism</tspan>(동시 실행 수) 조합으로 갈립니다. ReplicaSet과 달리 <tspan fill="rgb(212,168,83)">완료되면 멈춥니다</tspan>.</text>
+
+  <!-- 4 quadrant cards -->
+  <rect x="24" y="80" width="415" height="130" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="40" y="104" fill="#e8e4df" font-size="12.5" font-weight="700">Single Pod</text>
+  <text x="40" y="126" fill="rgb(138,133,128)" font-size="9.5">completions·parallelism 둘 다 생략(=1).</text>
+  <text x="40" y="144" fill="rgb(138,133,128)" font-size="9.5">Pod 하나가 exit 0으로 끝나면 완료.</text>
+  <rect x="40" y="158" width="383" height="20" fill="#f5edda"/>
+  <text x="48" y="172" fill="#0d0d0d" font-size="8.5" font-weight="700">가장 단순 — 일회성 단일 작업</text>
+  <text x="40" y="198" fill="rgb(138,133,128)" font-size="8.5">completions=1, parallelism=1</text>
+
+  <rect x="461" y="80" width="415" height="130" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="477" y="104" fill="rgb(212,168,83)" font-size="12.5" font-weight="700">Fixed completion count</text>
+  <text x="477" y="126" fill="rgb(138,133,128)" font-size="9.5">completions=N 지정, parallelism은 옵션(기본 1).</text>
+  <text x="477" y="144" fill="rgb(138,133,128)" font-size="9.5">N개 Pod가 성공하면 완료.</text>
+  <rect x="477" y="158" width="383" height="20" fill="#f5edda"/>
+  <text x="485" y="172" fill="#0d0d0d" font-size="8.5" font-weight="700">작업 수를 미리 알 때 — Pod당 한 작업이 정당할 때</text>
+  <text x="477" y="198" fill="rgb(138,133,128)" font-size="8.5">completions=5, parallelism=2</text>
+
+  <rect x="24" y="222" width="415" height="130" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="40" y="246" fill="#e8e4df" font-size="12.5" font-weight="700">Work queue</text>
+  <text x="40" y="268" fill="rgb(138,133,128)" font-size="9.5">completions 생략, parallelism &gt; 1.</text>
+  <text x="40" y="286" fill="rgb(138,133,128)" font-size="9.5">한 Pod가 성공 종료하고 나머지도 끝나면 완료.</text>
+  <rect x="40" y="300" width="383" height="20" fill="#dceaf7"/>
+  <text x="48" y="314" fill="#10243a" font-size="8.5" font-weight="700">외부 큐 필요 — Pod들이 스스로 조율</text>
+  <text x="40" y="340" fill="rgb(138,133,128)" font-size="8.5">한 Pod가 여러 작업 처리 — 세밀한 작업에 적합</text>
+
+  <rect x="461" y="222" width="415" height="130" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="477" y="246" fill="#e8e4df" font-size="12.5" font-weight="700">Indexed</text>
+  <text x="477" y="268" fill="rgb(138,133,128)" font-size="9.5">completionMode=Indexed, 고정 completions.</text>
+  <text x="477" y="286" fill="rgb(138,133,128)" font-size="9.5">각 Pod가 0 ~ completions-1 인덱스를 받음.</text>
+  <rect x="477" y="300" width="383" height="20" fill="#cdeccf"/>
+  <text x="485" y="314" fill="#14521d" font-size="8.5" font-weight="700">외부 큐 불필요 — 인덱스로 작업 분할</text>
+  <text x="477" y="340" fill="rgb(138,133,128)" font-size="8.5">JOB_COMPLETION_INDEX 환경변수로 자기 몫 선택</text>
+
+  <!-- bottom rules -->
+  <rect x="24" y="366" width="852" height="26" fill="#f2d4d4"/>
+  <text x="36" y="384" fill="#7a1f1f" font-size="10" font-weight="700">restartPolicy는 필수 — Always 금지, OnFailure 또는 Never만. (ReplicaSet 기본 Always와 다름)</text>
+
+  <text x="24" y="412" fill="rgb(138,133,128)" font-size="9.5">bare Pod와 다른 이점: 클러스터 재시작 넘어 영속 · 완료 후 추적 보존 · 노드 장애 시 다른 노드로 재실행 · ttlSecondsAfterFinished로 정리.</text>
+  <text x="24" y="430" fill="rgb(138,133,128)" font-size="9.5">한계: JOB_COMPLETION_TOTAL 환경변수 미제공(1.26 기준) — 총 worker 수를 코드가 자동 발견 못 함. 무한 스트림은 ReplicaSet이 나음.</text>
+  <text x="24" y="454" fill="rgb(138,133,128)" font-size="9.5">복잡한 구현은 배치 프레임워크와 결합 — 자바는 Spring Batch·JBeret. Job은 스케줄링의 최소 기본만 제공.</text>
+</svg>

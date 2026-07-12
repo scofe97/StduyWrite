@@ -11,11 +11,11 @@ related:
   - ../argocd/README.md
   - ../service-mesh/README.md
   - ../book/kubernetes-in-action/README.md
-updated: 2026-07-10
+updated: 2026-07-12
 ---
 
 # 08_cloud/kubernetes
-
+---
 > Kubernetes를 개념 축으로 정리한 딥다이브 노트입니다. 공식 문서(kubernetes.io/docs/concepts)의 대분류를 뼈대로 삼되, 폴더 번호는 "무엇을 먼저 배우는가"라는 학습 흐름을 따릅니다. 워크로드에서 시작해 설정·저장소·네트워크로 넓히고, 스케줄링·내부 구조·보안·확장을 거쳐 Day-2 운영까지 한 지도로 잇습니다.
 
 이 카테고리는 "클러스터 안에서 어떻게 선언되고, 배치되고, 연결되고, 운영되는가"를 기본 범위로 둡니다. Service Mesh처럼 서비스 간 L7 정책·mTLS·세밀한 트래픽 제어가 본격적으로 필요해지는 지점부터는 별도 [`service-mesh`](../service-mesh/README.md) 카테고리로 넘깁니다. ArgoCD는 여기서 입문 수준으로만 소개하고, App of Apps·ApplicationSet·Image Updater 같은 상세 운영은 별도 [`argocd`](../argocd/README.md) 카테고리가 맡습니다.
@@ -36,7 +36,7 @@ updated: 2026-07-10
 | [`01_workloads/`](01_workloads/README.md) | Workloads | Pod·Deployment·컨트롤러·Job/CronJob/DaemonSet |
 | [`02_configuration/`](02_configuration/README.md) | Configuration | ConfigMap·Secret·자원 요청/제한·설정 주입 |
 | [`03_storage/`](03_storage/README.md) | Storage | Volume·PV·PVC·StorageClass·상태 관리 |
-| [`04_networking/`](04_networking/README.md) | Services·Networking | Pod 통신 → Service → DNS → Ingress/Gateway |
+| [`04_networking/`](04_networking/README.md) | Services·Networking | Pod 통신 → Service·DNS → 외부 진입 → 정책·운영 제약 |
 | [`05_scheduling/`](05_scheduling/README.md) | Scheduling·Eviction | 노드 배치·토폴로지 분산·오토스케일링 |
 | [`06_architecture/`](06_architecture/README.md) | Cluster Architecture | Control Plane·etcd·API 보안·업그레이드 |
 | [`07_security/`](07_security/README.md) | Security | RBAC·ServiceAccount·인증·Admission |
@@ -91,6 +91,10 @@ Pod IP는 바뀐다는 전제에서 출발해, 트래픽이 Linux netns부터 �
 - **04-04 Service와 EndpointSlice** — 변하는 Pod 집합을 안정적인 진입점으로 노출하는 추상화를 EndpointSlice 단위로 봅니다.
 - **04-05 DNS와 CoreDNS** — Service 이름이 어떻게 IP로 해석되는지, CoreDNS가 이름 해석을 어떻게 책임지는지 봅니다.
 - **04-06 Ingress와 Gateway API** — 외부 HTTP 트래픽 라우팅이 Ingress에서 Gateway API로 어떻게 진화하고, cert-manager가 인증서를 어떻게 자동화하는지 봅니다.
+- **04-07 NetworkPolicy** — Pod의 ingress·egress 격리를 따로 평가하고, 여러 정책의 허용을 합집합해 최종 결정하는지 봅니다.
+- **04-08 IPv4와 IPv6 이중 스택** — Pod·Service의 IP family를 선택하고 `ipFamilyPolicy`·`ipFamilies`로 전환할 때의 제약을 봅니다.
+- **04-09 토폴로지 인지 라우팅** — EndpointSlice hint가 zone 내부 트래픽을 선호하고, 조건이 맞지 않을 때 fallback이 어떻게 동작하는지 봅니다.
+- **04-10 Windows 네트워킹** — HNS·HCS·Windows CNI를 Linux 네트워킹과 비교해 혼합 OS 클러스터의 제약을 정리합니다.
 
 ### 05_scheduling — 스케줄링
 
@@ -177,6 +181,8 @@ Jenkins·SonarQube·ArgoCD·Harbor를 K8s 위에 올려 개발 생산성과 배�
 
 각 본문은 마지막 콘텐츠 절 뒤에 `## N. 점검 질문` 절을 두어, 그 장에서 짚어야 할 심화 Q&A를 개념 설명과 같은 문서에서 이어 읽게 합니다(예: `01_workloads/01-02.배치 워크로드.md`의 `## 8. 점검 질문`). 예전에는 `{제목} 점검.md`를 짝 파일로 분리했지만, 복습할 때 파일을 오가는 비용이 커서 본문 안으로 흡수했습니다. hands-on 실습이 필요하면 각 본문의 `실습 환경` 서술을 GCP K8s 클러스터 위에서 수행합니다. 다만 `00_overview`의 로컬 클러스터 구성, `01_workloads/01-01.핵심 워크로드`, `03_storage/03-01.스토리지와 상태`처럼 원래 점검 질문이 없던 일부 입문 편은 점검 절 없이 본문만 있습니다.
 
+`04_networking`은 이 전역 규약의 의도적 예외로 점검 문서를 별도 짝으로 두는 폴더입니다. 04-04~04-10은 이 예외에 따라 본문과 `점검.md`를 두고, 04-01도 기존 별도 점검 짝을 유지하며, 04-02·04-03은 기존 본문 내 점검 절을 유지합니다. 이 분리는 본문을 이해한 뒤 정답을 가린 채 스스로 설명하는 인출 구조를 위한 의도적 선택입니다.
+
 
 
 ## 실습 환경
@@ -201,7 +207,7 @@ Jenkins·SonarQube·ArgoCD·Harbor를 K8s 위에 올려 개발 생산성과 배�
 
 > service-mesh·argocd·devops 카테고리로 이어지는 선후 관계와, 같은 책을 정독한 노트를 함께 봅니다.
 
-- [service-mesh MOC](../service-mesh/README.md) — 본 카테고리의 다음 단계. Pod 간 트래픽 제어·mTLS·관측성을 메시 계층에서 해결한다
+- [service-mesh MOC](../service-mesh/README.md) — 본 카테고리의 다음 단계. Pod 간 트래픽 제어·mTLS·관측성을 메시 계층에서 해결합니다
 - [argocd MOC](../argocd/README.md) — ArgoCD 상세 시리즈. AppProject·App of Apps·ApplicationSet·Image Updater 운영을 별도로 다룬다
 - [Kubernetes in Action 정독본](../book/kubernetes-in-action/README.md) — 같은 개념을 저자 순서대로 쌓아 올린 책-종속 노트. 개념이 겹치면 이 개념 노트로 링크를 건다
 - [devops MOC](../../07_devops/README.md) — CI/CD 파이프라인 자체 설계는 이곳

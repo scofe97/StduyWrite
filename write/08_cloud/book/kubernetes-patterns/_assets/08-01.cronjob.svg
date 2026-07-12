@@ -1,0 +1,53 @@
+<svg viewBox="0 0 900 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>CronJob — Job에 시간 축을 더하다, concurrencyPolicy 3종</title>
+  <desc>Kubernetes Patterns 8장. CronJob은 Batch Job 위에 시간 차원을 더해, Unix crontab의 한 줄처럼 Job을 주기적으로 실행합니다. 단일 서버 cron의 단점(단일 장애점·유지보수 어려움)을 클러스터가 풀어, 개발자는 스케줄링이 아니라 수행할 작업만 구현합니다. concurrencyPolicy는 이전 Job이 안 끝났을 때의 동작을 정합니다 — Allow는 겹쳐 새 Job 생성(기본), Forbid는 다음 실행 스킵, Replace는 현재 Job을 취소하고 새로 시작합니다.</desc>
+
+  <rect x="0" y="0" width="900" height="440" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="16">CronJob — Job에 시간 축을 더하다</text>
+  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">단일 서버 cron은 <tspan fill="#e57373">단일 장애점</tspan>이고 HA로 만들려면 리더 선출이 필요합니다. CronJob은 <tspan fill="rgb(212,168,83)">클러스터가 그걸 대신</tspan>합니다.</text>
+
+  <!-- Job + time = CronJob -->
+  <rect x="24" y="78" width="200" height="52" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="124" y="102" fill="#e8e4df" font-size="12" text-anchor="middle">Job (7장)</text>
+  <text x="124" y="120" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">완료까지 실행</text>
+  <text x="245" y="110" fill="rgb(212,168,83)" font-size="18" text-anchor="middle">+</text>
+  <rect x="266" y="78" width="200" height="52" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="366" y="102" fill="#e8e4df" font-size="12" text-anchor="middle">시간 (crontab)</text>
+  <text x="366" y="120" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">*/3 * * * *</text>
+  <text x="487" y="110" fill="rgb(212,168,83)" font-size="18" text-anchor="middle">=</text>
+  <rect x="508" y="78" width="200" height="52" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="608" y="102" fill="rgb(212,168,83)" font-size="12" text-anchor="middle" font-weight="700">CronJob</text>
+  <text x="608" y="120" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">주기적 Job 실행</text>
+
+  <!-- concurrencyPolicy -->
+  <line x1="24" y1="150" x2="876" y2="150" stroke="rgb(42,37,32)"/>
+  <text x="24" y="174" fill="#e8e4df" font-size="12">concurrencyPolicy — 이전 Job이 안 끝났을 때</text>
+
+  <rect x="24" y="186" width="277" height="88" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="40" y="208" fill="rgb(212,168,83)" font-size="12" font-weight="700">Allow (기본)</text>
+  <text x="40" y="230" fill="rgb(138,133,128)" font-size="9.5">이전 Job이 안 끝나도</text>
+  <text x="40" y="246" fill="rgb(138,133,128)" font-size="9.5">새 Job을 겹쳐 만듦.</text>
+  <text x="40" y="266" fill="#e8e4df" font-size="9">동시 실행 허용</text>
+
+  <rect x="311" y="186" width="277" height="88" fill="rgb(26,26,26)" stroke="#e57373"/>
+  <text x="327" y="208" fill="#e57373" font-size="12" font-weight="700">Forbid</text>
+  <text x="327" y="230" fill="rgb(138,133,128)" font-size="9.5">현재 실행이 안 끝났으면</text>
+  <text x="327" y="246" fill="rgb(138,133,128)" font-size="9.5">다음 실행을 스킵.</text>
+  <text x="327" y="266" fill="#e8e4df" font-size="9">겹침 금지</text>
+
+  <rect x="598" y="186" width="278" height="88" fill="rgb(26,26,26)" stroke="#dceaf7"/>
+  <text x="614" y="208" fill="#dceaf7" font-size="12" font-weight="700">Replace</text>
+  <text x="614" y="230" fill="rgb(138,133,128)" font-size="9.5">현재 도는 Job을 취소하고</text>
+  <text x="614" y="246" fill="rgb(138,133,128)" font-size="9.5">새 Job을 시작.</text>
+  <text x="614" y="266" fill="#e8e4df" font-size="9">최신으로 교체</text>
+
+  <!-- other fields -->
+  <text x="24" y="304" fill="#e8e4df" font-size="12">그 밖의 시간 필드</text>
+  <text x="40" y="326" fill="rgb(138,133,128)" font-size="9.5">· <tspan fill="#e8e4df">startingDeadlineSeconds</tspan> — 예정 시각을 놓쳤을 때 시작 허용 마감. 늦은 실행이 무의미하면 스킵. (10초 미만 금지 — 상태 확인이 10초 주기)</text>
+  <text x="40" y="346" fill="rgb(138,133,128)" font-size="9.5">· <tspan fill="#e8e4df">suspend</tspan> — 이후 실행 일시중지 (Job의 suspend와 다름: 새 Job 시작을 막지, 실행 중 Job을 멈추지 않음).</text>
+  <text x="40" y="366" fill="rgb(138,133,128)" font-size="9.5">· <tspan fill="#e8e4df">successfulJobsHistoryLimit · failedJobsHistoryLimit</tspan> — 감사용으로 보존할 완료·실패 Job 수.</text>
+
+  <rect x="24" y="384" width="852" height="44" fill="#f5edda"/>
+  <text x="36" y="404" fill="#0d0d0d" font-size="10" font-weight="700">개발자는 비즈니스 로직만 구현하고, 스케줄링은 플랫폼이 HA·회복성·정책 배치와 함께 담당.</text>
+  <text x="36" y="421" fill="#0d0d0d" font-size="10" font-weight="700">단 Job처럼 중복 실행·미실행·병렬 실행·취소 같은 코너 케이스는 컨테이너 코드가 대비해야 함.</text>
+</svg>

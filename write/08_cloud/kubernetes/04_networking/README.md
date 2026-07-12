@@ -1,33 +1,62 @@
 ---
 title: 04_networking — 네트워킹
-tags: [moc, kubernetes, service, dns, ingress, gateway-api, cni]
+tags: [moc, kubernetes, service, dns, ingress, gateway-api, networkpolicy, dual-stack]
 status: final
+source:
+  - https://kubernetes.io/docs/concepts/services-networking/
 related:
   - ../README.md
-updated: 2026-07-10
+updated: 2026-07-12
 ---
 
 # 04_networking — 네트워킹
+---
+> Pod IP가 바뀐다는 전제에서 출발해 Linux 네트워크, Service discovery, 트래픽 정책, 외부 진입, 혼합 OS 운영 순서로 학습합니다. 04-01에서 전체 지도를 잡고 04-02부터 04-10까지 구현과 정책을 확장합니다.
 
-> Pod IP는 바뀐다는 전제에서 출발해, 트래픽이 Linux netns부터 외부 진입까지 어떤 계층을 거쳐 흐르는지 한 단씩 올라갑니다. 파일 번호 순서가 곧 추상화 상승 순서입니다.
+
+
+## 권장 학습 순서
+> 04-01~04-03은 패킷 경로의 기반을, 04-04~04-10은 Kubernetes 공식 Services, Load Balancing, and Networking 개념을 다룹니다.
+
+| 번호 | 본문 | 점검 | 학습 초점 |
+|------|------|------|-----------|
+| 04-01 | [네트워킹](04-01.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9.md) | [네트워킹 점검](04-01.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9%20%EC%A0%90%EA%B2%80.md) | 전체 책임 경계와 장애 진입 순서를 고정합니다. |
+| 04-02 | [Pod 네트워크와 Linux 기반](04-02.Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%99%80%20Linux%20%EA%B8%B0%EB%B0%98.md) | 본문 내 점검 | netns·veth·Pod CIDR·CNI·Service dataplane을 연결합니다. ([시각화](04-02-pod-network.html)) |
+| 04-03 | [오버레이와 노드 간 트래픽](04-03.%EC%98%A4%EB%B2%84%EB%A0%88%EC%9D%B4%EC%99%80%20%EB%85%B8%EB%93%9C%20%EA%B0%84%20%ED%8A%B8%EB%9E%98%ED%94%BD.md) | 본문 내 점검 | VXLAN·네이티브 라우팅·BGP·MetalLB를 비교합니다. ([시각화](04-03-overlay-bgp.html)) |
+| 04-04 | [Service와 EndpointSlice](04-04.Service%EC%99%80%20EndpointSlice.md) | [Service와 EndpointSlice 점검](04-04.Service%EC%99%80%20EndpointSlice%20%EC%A0%90%EA%B2%80.md) | Service 타입, backend 추적, ClusterIP 할당, 내부 트래픽 정책을 다룹니다. |
+| 04-05 | [DNS와 CoreDNS](04-05.DNS%EC%99%80%20CoreDNS.md) | [DNS와 CoreDNS 점검](04-05.DNS%EC%99%80%20CoreDNS%20%EC%A0%90%EA%B2%80.md) | Service·Pod DNS 레코드와 이름 해석 정책을 다룹니다. |
+| 04-06 | [Ingress와 Gateway API](04-06.Ingress%EC%99%80%20Gateway%20API.md) | [Ingress와 Gateway API 점검](04-06.Ingress%EC%99%80%20Gateway%20API%20%EC%A0%90%EA%B2%80.md) | Ingress, Controller, Gateway API의 선언과 구현 경계를 다룹니다. |
+| 04-07 | [NetworkPolicy](04-07.NetworkPolicy.md) | [NetworkPolicy 점검](04-07.NetworkPolicy%20%EC%A0%90%EA%B2%80.md) | ingress·egress 격리와 additive 허용 모델을 다룹니다. |
+| 04-08 | [IPv4와 IPv6 이중 스택](04-08.IPv4%EC%99%80%20IPv6%20%EC%9D%B4%EC%A4%91%20%EC%8A%A4%ED%83%9D.md) | [IPv4와 IPv6 이중 스택 점검](04-08.IPv4%EC%99%80%20IPv6%20%EC%9D%B4%EC%A4%91%20%EC%8A%A4%ED%83%9D%20%EC%A0%90%EA%B2%80.md) | Pod·Service IP family 정책과 전환 제약을 다룹니다. |
+| 04-09 | [토폴로지 인지 라우팅](04-09.%ED%86%A0%ED%8F%B4%EB%A1%9C%EC%A7%80%20%EC%9D%B8%EC%A7%80%20%EB%9D%BC%EC%9A%B0%ED%8C%85.md) | [토폴로지 인지 라우팅 점검](04-09.%ED%86%A0%ED%8F%B4%EB%A1%9C%EC%A7%80%20%EC%9D%B8%EC%A7%80%20%EB%9D%BC%EC%9A%B0%ED%8C%85%20%EC%A0%90%EA%B2%80.md) | EndpointSlice hint와 zone 선호·fallback을 다룹니다. |
+| 04-10 | [Windows 네트워킹](04-10.Windows%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9.md) | [Windows 네트워킹 점검](04-10.Windows%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9%20%EC%A0%90%EA%B2%80.md) | HNS·HCS·Windows CNI와 Linux 대비 제약을 다룹니다. |
+
+04-02와 04-03은 기존 본문 내 점검 절을 유지합니다. 나머지 주제는 본문을 먼저 읽고 별도 점검 문서에서 정답을 가린 채 설명하면, 익숙함과 실제 기억 인출을 분리할 수 있습니다.
 
 
 
-## 문서 목록
-> 공식 concepts의 Services, Load Balancing, and Networking에 대응합니다. 파일 번호(`04-MM`)가 읽기 순서입니다. 각 본문 끝에는 `## N. 점검 질문` 절이 있어, 개념 설명과 심화 Q&A를 한 문서에서 이어 읽습니다(일부 입문 편 제외).
+## Kubernetes v1.36 공식 문서 커버리지
+> Services, Load Balancing, and Networking의 직접 하위 페이지 12개를 하나의 로컬 정본에 대응시켜 누락과 중복을 방지합니다.
 
-| 번호 | 제목 | 한 줄 소개 |
-|------|------|-----------|
-| 04-01 | [네트워킹](04-01.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9.md) | 트래픽이 거치는 계층 전체를 조망해 이후 문서의 지도를 그립니다. |
-| 04-02 | [Pod 네트워크와 Linux 기반](04-02.Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%99%80%20Linux%20%EA%B8%B0%EB%B0%98.md) | pause·netns·veth·Pod CIDR·CNI·kube-proxy dataplane이 실제로 어떻게 동작하는지 Linux 수준까지 내려가 봅니다. ([인터랙티브 시각화](04-02-pod-network.html)) |
-| 04-03 | [오버레이와 노드 간 트래픽](04-03.%EC%98%A4%EB%B2%84%EB%A0%88%EC%9D%B4%EC%99%80%20%EB%85%B8%EB%93%9C%20%EA%B0%84%20%ED%8A%B8%EB%9E%98%ED%94%BD.md) | VXLAN·네이티브 라우팅·BGP·ECMP·MetalLB가 노드 간 Pod 트래픽과 외부 LoadBalancer를 어떻게 만드는지 봅니다. ([인터랙티브 시각화](04-03-overlay-bgp.html)) |
-| 04-04 | [Service와 EndpointSlice](04-04.Service%EC%99%80%20EndpointSlice.md) | 변하는 Pod 집합을 안정적인 진입점으로 노출하는 추상화를 EndpointSlice 단위로 봅니다. |
-| 04-05 | [DNS와 CoreDNS](04-05.DNS%EC%99%80%20CoreDNS.md) | Service 이름이 어떻게 IP로 해석되는지, CoreDNS가 이름 해석을 어떻게 책임지는지 봅니다. |
-| 04-06 | [Ingress와 Gateway API](04-06.Ingress%EC%99%80%20Gateway%20API.md) | 외부 HTTP 트래픽 라우팅이 Ingress에서 Gateway API로 어떻게 진화하고, cert-manager가 인증서를 어떻게 자동화하는지 봅니다. |
+| 공식 페이지 | 주요 개념 | 로컬 정본 |
+|---------------|-----------|-------------|
+| [Service](https://kubernetes.io/docs/concepts/services-networking/service/) | Service 타입·port·VIP·headless Service | [04-04 Service와 EndpointSlice](04-04.Service%EC%99%80%20EndpointSlice.md) |
+| [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) | HTTP(S) host·path 라우팅 | [04-06 Ingress와 Gateway API](04-06.Ingress%EC%99%80%20Gateway%20API.md) |
+| [Ingress Controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/) | Ingress 규칙을 구현하는 controller | [04-06 Ingress와 Gateway API](04-06.Ingress%EC%99%80%20Gateway%20API.md) |
+| [Gateway API](https://kubernetes.io/docs/concepts/services-networking/gateway/) | GatewayClass·Gateway·Route 책임 분리 | [04-06 Ingress와 Gateway API](04-06.Ingress%EC%99%80%20Gateway%20API.md) |
+| [EndpointSlices](https://kubernetes.io/docs/concepts/services-networking/endpoint-slices/) | backend endpoint·condition·slice 분할 | [04-04 Service와 EndpointSlice](04-04.Service%EC%99%80%20EndpointSlice.md) |
+| [Network Policies](https://kubernetes.io/docs/concepts/services-networking/network-policies/) | Pod ingress·egress 격리와 허용 합집합 | [04-07 NetworkPolicy](04-07.NetworkPolicy.md) |
+| [DNS for Services and Pods](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/) | Service·Pod DNS 레코드와 정책 | [04-05 DNS와 CoreDNS](04-05.DNS%EC%99%80%20CoreDNS.md) |
+| [IPv4/IPv6 dual-stack](https://kubernetes.io/docs/concepts/services-networking/dual-stack/) | `ipFamilyPolicy`·`ipFamilies`·ClusterIP 순서 | [04-08 IPv4와 IPv6 이중 스택](04-08.IPv4%EC%99%80%20IPv6%20%EC%9D%B4%EC%A4%91%20%EC%8A%A4%ED%83%9D.md) |
+| [Topology Aware Routing](https://kubernetes.io/docs/concepts/services-networking/topology-aware-routing/) | EndpointSlice zone hint·휴리스틱·fallback | [04-09 토폴로지 인지 라우팅](04-09.%ED%86%A0%ED%8F%B4%EB%A1%9C%EC%A7%80%20%EC%9D%B8%EC%A7%80%20%EB%9D%BC%EC%9A%B0%ED%8C%85.md) |
+| [Networking on Windows](https://kubernetes.io/docs/concepts/services-networking/windows-networking/) | HNS·HCS·Windows CNI·Service 제약 | [04-10 Windows 네트워킹](04-10.Windows%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9.md) |
+| [Service ClusterIP allocation](https://kubernetes.io/docs/concepts/services-networking/cluster-ip-allocation/) | 동적·정적 ClusterIP 할당과 충돌 | [04-04 Service와 EndpointSlice](04-04.Service%EC%99%80%20EndpointSlice.md) |
+| [Service Internal Traffic Policy](https://kubernetes.io/docs/concepts/services-networking/service-traffic-policy/) | `internalTrafficPolicy: Local`과 로컬 endpoint 부재 | [04-04 Service와 EndpointSlice](04-04.Service%EC%99%80%20EndpointSlice.md) |
 
 
 
 ## 관련 문서
-> 이 폴더가 딛고 서거나 이어지는 이웃 대주제입니다.
+> 이 폴더는 Kubernetes 전체 지도와 Service Mesh의 L7 정책 학습으로 이어집니다.
 
-- [kubernetes MOC](../README.md) — 전체 대주제 지도와 딥다이브 로드맵 연결
+- [Kubernetes MOC](../README.md) — 스토리지·스케줄링·보안을 포함한 전체 대주제 지도입니다.
+- [서비스 메시 기초](../../service-mesh/01_foundation/01-01.%EC%84%9C%EB%B9%84%EC%8A%A4%20%EB%A9%94%EC%8B%9C%20%EA%B8%B0%EC%B4%88.md) — 기본 연결성 위에 L7 트래픽 정책·mTLS·관측성을 추가합니다.
