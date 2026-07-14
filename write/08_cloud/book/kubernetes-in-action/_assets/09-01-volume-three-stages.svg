@@ -1,0 +1,53 @@
+<svg viewBox="0 0 860 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>볼륨 유무에 따른 데이터 생존 — 세 단계 실습</title>
+  <desc>같은 quiz 파드를 세 형태로 돌린 실측 대비. ① 볼륨 없음은 mongo 재시작 후 질문 수가 0으로 증발하고, ② emptyDir는 매니페스트 두 줄을 더해 재시작 후에도 1로 보존되며, ③ init 컨테이너를 붙이면 파드가 뜰 때 질문 6개가 자동으로 채워진다.</desc>
+
+  <rect x="0" y="0" width="860" height="400" fill="#0d0d0d"/>
+  <text x="30" y="38" fill="rgb(212,168,83)" font-size="16" font-weight="700">quiz 파드를 세 형태로 — 두 줄이 데이터 생존을 가른다 (kind v1.35 실측)</text>
+
+  <!-- ① 볼륨 없음 (실패=빨강 계열 밝은 fill → 어두운 글자) -->
+  <rect x="30" y="70" width="250" height="270" rx="8" fill="#0d0d0d" stroke="#f44336" stroke-width="1.5"/>
+  <text x="45" y="98" fill="#f44336" font-size="14" font-weight="700">① 볼륨 없음</text>
+  <rect x="45" y="112" width="220" height="46" rx="4" fill="#f2d4d4" stroke="rgb(42,37,32)"/>
+  <text x="55" y="131" style="fill:#7a1f1f" font-size="11" font-weight="700">매니페스트</text>
+  <text x="55" y="149" style="fill:#7a1f1f" font-family="'JetBrains Mono',monospace" font-size="10.5">volumes 없음</text>
+  <text x="45" y="185" fill="#e8e4df" font-size="11.5">mongo 재시작(RESTARTS 1)</text>
+  <text x="45" y="205" fill="#e8e4df" font-size="11.5">→ 새 컨테이너는 빈 파일시스템</text>
+  <rect x="45" y="225" width="220" height="70" rx="6" fill="#f2d4d4" stroke="rgb(42,37,32)"/>
+  <text x="155" y="255" style="fill:#7a1f1f" font-size="13" font-weight="700" text-anchor="middle">countDocuments()</text>
+  <text x="155" y="283" style="fill:#7a1f1f" font-size="26" font-weight="700" text-anchor="middle">0</text>
+  <text x="155" y="318" fill="#e8e4df" font-size="11" text-anchor="middle">데이터 증발</text>
+
+  <!-- ② emptyDir (성공=초록 밝은 fill → 어두운 글자) -->
+  <rect x="305" y="70" width="250" height="270" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="320" y="98" fill="#66bb6a" font-size="14" font-weight="700">② emptyDir</text>
+  <rect x="320" y="112" width="220" height="46" rx="4" fill="#cdeccf" stroke="rgb(42,37,32)"/>
+  <text x="330" y="131" style="fill:#14521d" font-size="11" font-weight="700">매니페스트 (+2줄)</text>
+  <text x="330" y="149" style="fill:#14521d" font-family="'JetBrains Mono',monospace" font-size="10">volumes + volumeMounts</text>
+  <text x="320" y="185" fill="#e8e4df" font-size="11.5">mongo 재시작(RESTARTS 1)</text>
+  <text x="320" y="205" fill="#e8e4df" font-size="11.5">→ 파일이 볼륨에 남음</text>
+  <rect x="320" y="225" width="220" height="70" rx="6" fill="#cdeccf" stroke="rgb(42,37,32)"/>
+  <text x="430" y="255" style="fill:#14521d" font-size="13" font-weight="700" text-anchor="middle">countDocuments()</text>
+  <text x="430" y="283" style="fill:#14521d" font-size="26" font-weight="700" text-anchor="middle">1</text>
+  <text x="430" y="318" fill="#e8e4df" font-size="11" text-anchor="middle">보존</text>
+
+  <!-- ③ init (자동=파랑 밝은 fill → 흰 글자[중간밝기]) -->
+  <rect x="580" y="70" width="250" height="270" rx="8" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="595" y="98" fill="#5b9bd5" font-size="14" font-weight="700">③ init 초기화</text>
+  <rect x="595" y="112" width="220" height="46" rx="4" fill="#dceaf7" stroke="rgb(42,37,32)"/>
+  <text x="605" y="131" style="fill:#10243a" font-size="11" font-weight="700">볼륨 2개 + init 컨테이너</text>
+  <text x="605" y="149" style="fill:#10243a" font-family="'JetBrains Mono',monospace" font-size="10">installer → initdb·quiz-data</text>
+  <text x="595" y="185" fill="#e8e4df" font-size="11.5">손 안 대도 파드가 뜰 때</text>
+  <text x="595" y="205" fill="#e8e4df" font-size="11.5">→ init가 질문을 미리 채움</text>
+  <rect x="595" y="225" width="220" height="70" rx="6" fill="#dceaf7" stroke="rgb(42,37,32)"/>
+  <text x="705" y="255" style="fill:#10243a" font-size="13" font-weight="700" text-anchor="middle">countDocuments()</text>
+  <text x="705" y="283" style="fill:#10243a" font-size="26" font-weight="700" text-anchor="middle">6</text>
+  <text x="705" y="318" fill="#e8e4df" font-size="11" text-anchor="middle">자동 채움</text>
+
+  <!-- 화살표 -->
+  <line x1="280" y1="205" x2="303" y2="205" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a9)"/>
+  <line x1="555" y1="205" x2="578" y2="205" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a9)"/>
+  <defs><marker id="a9" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker></defs>
+
+  <text x="30" y="378" fill="#e8e4df" font-size="11.5">①→② 차이는 매니페스트 딱 두 줄(spec.volumes + volumeMounts). 그 두 줄이 재시작 후 0과 1을 가른다.</text>
+</svg>
