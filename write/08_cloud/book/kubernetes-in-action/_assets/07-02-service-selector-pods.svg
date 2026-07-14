@@ -1,0 +1,74 @@
+<svg viewBox="0 0 960 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Service가 label selector로 대상 Pod 집합을 동적으로 참조</title>
+  <desc>Service는 Pod 이름을 적지 않고 app=payment 라는 label selector를 갖는다. 그 selector와 label이 일치하는 Pod들에게만 트래픽을 보낸다. app=order 라벨을 가진 Pod는 selector에 걸리지 않아 제외된다. Pod 하나가 죽고 ReplicaSet이 같은 label을 단 새 Pod를 띄우면, Service는 이름을 몰라도 그 Pod를 자동으로 대상에 포함한다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .zone   { font-size: 11px; fill: rgb(138,133,128); }
+      .chip   { font-size: 11.5px; font-weight: 700; fill: #0d0d0d; }
+      .code   { font-family: 'JetBrains Mono', monospace; }
+      .actor  { font-size: 12px; font-weight: 700; fill: #e8e4df; }
+      .note   { font-size: 10.5px; fill: #e8e4df; }
+    </style>
+    <marker id="a72" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="a72g" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="420" fill="#0d0d0d"/>
+  <text x="24" y="28" class="title">Service는 이름이 아니라 label selector로 Pod를 고른다</text>
+  <text x="24" y="46" class="sub">selector와 label이 맞는 Pod에게만 트래픽이 가고, 멤버가 바뀌어도 selector가 자동으로 따라간다</text>
+
+  <!-- Service box (left) -->
+  <rect x="40" y="150" width="200" height="96" rx="10" fill="rgb(220,234,247)"/>
+  <text x="140" y="182" class="chip" text-anchor="middle" font-size="13">Service</text>
+  <rect x="60" y="196" width="160" height="34" rx="6" fill="#fdf3df"/>
+  <text x="140" y="218" class="chip code" text-anchor="middle" font-size="11">selector: app=payment</text>
+
+  <!-- Pod pool box (right) -->
+  <rect x="440" y="66" width="480" height="300" rx="10" fill="rgb(20,20,20)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="680" y="90" class="zone" text-anchor="middle">한 namespace 안의 Pod들 (label이 제각각)</text>
+
+  <!-- Pod 1: match -->
+  <rect x="470" y="108" width="180" height="46" rx="8" fill="rgb(91,155,213)" stroke="rgb(212,168,83)" stroke-width="2.5"/>
+  <text x="484" y="128" class="chip" font-size="11">payment-1</text>
+  <text x="484" y="145" class="chip code" font-size="10">app=payment</text>
+
+  <!-- Pod 2: match -->
+  <rect x="470" y="166" width="180" height="46" rx="8" fill="rgb(91,155,213)" stroke="rgb(212,168,83)" stroke-width="2.5"/>
+  <text x="484" y="186" class="chip" font-size="11">payment-2</text>
+  <text x="484" y="203" class="chip code" font-size="10">app=payment</text>
+
+  <!-- Pod 3: order, excluded -->
+  <rect x="470" y="224" width="180" height="46" rx="8" fill="rgb(60,60,60)" stroke="rgb(80,80,80)" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="484" y="244" class="note" font-size="11" fill="rgb(138,133,128)">order-1</text>
+  <text x="484" y="261" class="code" font-size="10" fill="rgb(138,133,128)">app=order</text>
+  <text x="662" y="251" class="note" font-size="10" fill="rgb(138,133,128)">✕ selector 불일치 → 제외</text>
+
+  <!-- Pod 4: new, auto-joined -->
+  <rect x="470" y="300" width="180" height="46" rx="8" fill="rgb(205,236,207)" stroke="rgb(212,168,83)" stroke-width="2.5"/>
+  <text x="484" y="320" class="chip" font-size="11">payment-3 (새로 뜸)</text>
+  <text x="484" y="337" class="chip code" font-size="10">app=payment</text>
+
+  <!-- arrows: service -> matching pods -->
+  <line x1="240" y1="182" x2="462" y2="131" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a72)"/>
+  <line x1="240" y1="196" x2="462" y2="189" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a72)"/>
+  <line x1="240" y1="214" x2="462" y2="323" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a72)"/>
+
+  <!-- notes -->
+  <text x="662" y="128" class="note" font-size="10">● 트래픽 대상</text>
+  <text x="662" y="186" class="note" font-size="10">● 트래픽 대상</text>
+  <text x="662" y="315" class="note" font-size="10">● label만 맞으면</text>
+  <text x="662" y="329" class="note" font-size="10">  이름 몰라도 자동 편입</text>
+
+  <text x="140" y="300" class="note" font-size="10.5">Service는 Pod 이름을</text>
+  <text x="140" y="316" class="note" font-size="10.5">하나도 모른다 —</text>
+  <text x="140" y="332" class="note" font-size="10.5">"이 label 가진 놈들"</text>
+  <text x="140" y="348" class="note" font-size="10.5">이라고만 걸어둔다</text>
+
+  <text x="480" y="406" class="sub" text-anchor="middle">같은 selector 메커니즘을 Deployment(자기 소유 Pod)·nodeSelector(대상 노드)도 그대로 쓴다</text>
+</svg>
