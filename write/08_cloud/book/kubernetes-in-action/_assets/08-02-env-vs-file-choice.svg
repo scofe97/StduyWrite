@@ -1,0 +1,76 @@
+<svg viewBox="0 0 960 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>ConfigMap 환경변수 주입과 설정 파일 마운트 선택</title>
+  <desc>하나의 ConfigMap 값을 환경변수로 주입하면 프로세스 환경과 설정 바인딩을 거쳐 애플리케이션 설정이 된다. 파일로 마운트하면 컨테이너 파일시스템에 설정 파일이 생기고 애플리케이션 파서가 이를 읽는다. 단순한 값은 환경변수, 구조화된 기존 설정은 파일에 적합하다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub { font-size: 11px; fill: rgb(138,133,128); }
+      .section { font-size: 14px; font-weight: 800; fill: #e8e4df; }
+      .body { font-size: 11px; fill: #e8e4df; }
+      .muted { font-size: 10.5px; fill: rgb(138,133,128); }
+      .mono-dark { font-size: 11px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .mono-light { font-size: 11px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', monospace; }
+      .choice { font-size: 11px; font-weight: 800; fill: rgb(212,168,83); }
+      .green { font-size: 10.5px; font-weight: 700; fill: rgb(102,187,106); }
+    </style>
+    <marker id="choice-yellow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="choice-blue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(91,155,213)"/>
+    </marker>
+    <marker id="choice-green" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(102,187,106)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="480" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">같은 ConfigMap, 다른 애플리케이션 입력 인터페이스</text>
+  <text x="24" y="50" class="sub">Kubernetes는 값을 전달한다. 환경변수를 바인딩하거나 파일을 해석하는 주체는 애플리케이션이다</text>
+
+  <!-- ConfigMap source -->
+  <rect x="300" y="76" width="360" height="96" rx="10" fill="rgb(205,236,207)"/>
+  <text x="480" y="100" class="mono-dark" text-anchor="middle">ConfigMap — app-config</text>
+  <rect x="320" y="114" width="145" height="38" rx="5" fill="#fdfdf8"/>
+  <text x="392" y="138" class="mono-dark" text-anchor="middle">SERVER_PORT=8080</text>
+  <rect x="483" y="114" width="157" height="38" rx="5" fill="rgb(245,225,110)"/>
+  <text x="561" y="138" class="mono-dark" text-anchor="middle">application.yml</text>
+
+  <!-- split arrows -->
+  <path d="M392,174 C360,194 300,207 244,224" fill="none" stroke="rgb(91,155,213)" stroke-width="3" marker-end="url(#choice-blue)"/>
+  <text x="282" y="197" class="muted" text-anchor="middle">configMapKeyRef · envFrom</text>
+  <path d="M561,174 C590,194 650,207 716,224" fill="none" stroke="rgb(102,187,106)" stroke-width="3" marker-end="url(#choice-green)"/>
+  <text x="676" y="197" class="muted" text-anchor="middle">configMap volume</text>
+
+  <!-- Environment route -->
+  <rect x="34" y="222" width="424" height="218" rx="10" fill="rgb(26,26,26)" stroke="rgb(91,155,213)" stroke-width="2"/>
+  <text x="56" y="250" class="section">① 환경변수로 주입</text>
+  <text x="56" y="270" class="muted">컨테이너 시작 시 프로세스 환경에 문자열로 복사</text>
+  <rect x="58" y="296" width="154" height="62" rx="6" fill="rgb(42,37,32)" stroke="rgb(138,133,128)"/>
+  <text x="135" y="320" class="mono-light" text-anchor="middle">프로세스 환경</text>
+  <text x="135" y="343" class="mono-light" text-anchor="middle">SERVER_PORT=8080</text>
+  <line x1="216" y1="327" x2="266" y2="327" stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#choice-yellow)"/>
+  <text x="244" y="315" class="muted" text-anchor="middle">바인딩</text>
+  <rect x="274" y="296" width="160" height="62" rx="6" fill="rgb(42,37,32)" stroke="rgb(212,168,83)"/>
+  <text x="354" y="320" class="body" text-anchor="middle">애플리케이션 설정</text>
+  <text x="354" y="343" class="mono-light" text-anchor="middle">server.port=8080</text>
+  <text x="56" y="390" class="choice">선택: 포트 · URL · 로그 레벨처럼 값이 몇 개일 때</text>
+  <text x="56" y="414" class="muted">ConfigMap 수정 후 새 값을 쓰려면 Pod 교체가 필요</text>
+
+  <!-- File route -->
+  <rect x="502" y="222" width="424" height="218" rx="10" fill="rgb(26,26,26)" stroke="rgb(102,187,106)" stroke-width="2"/>
+  <text x="524" y="250" class="section">② 설정 파일로 마운트</text>
+  <text x="524" y="270" class="muted">키를 파일로 만들고 기존 YAML 구조를 유지</text>
+  <rect x="526" y="296" width="160" height="62" rx="6" fill="rgb(245,225,110)"/>
+  <text x="606" y="320" class="mono-dark" text-anchor="middle">/config/</text>
+  <text x="606" y="343" class="mono-dark" text-anchor="middle">application.yml</text>
+  <line x1="690" y1="327" x2="740" y2="327" stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#choice-yellow)"/>
+  <text x="718" y="315" class="muted" text-anchor="middle">파싱</text>
+  <rect x="748" y="296" width="154" height="62" rx="6" fill="rgb(42,37,32)" stroke="rgb(212,168,83)"/>
+  <text x="825" y="320" class="body" text-anchor="middle">애플리케이션 설정</text>
+  <text x="825" y="343" class="mono-light" text-anchor="middle">server.port=8080</text>
+  <text x="524" y="390" class="choice">선택: 계층 · 목록 · 멀티라인 설정을 유지할 때</text>
+  <text x="524" y="414" class="green">파일이 바뀌어도 애플리케이션의 재로딩 지원이 필요</text>
+
+  <text x="480" y="466" class="sub" text-anchor="middle">결정 기준: 설정의 저장 위치가 아니라 애플리케이션이 어떤 입력 인터페이스를 제공하는가</text>
+</svg>

@@ -1,0 +1,84 @@
+<svg viewBox="0 0 960 520" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>ConfigMap 수정이 환경변수와 볼륨에 반영되는 경로</title>
+  <desc>ConfigMap을 수정했을 때 환경변수는 기존 Pod에서 바뀌지 않고 새 Pod만 새 값을 받는다. 일반 ConfigMap 볼륨은 kubelet 동기화 후 파일이 갱신되지만 애플리케이션이 다시 읽어야 한다. subPath 파일 마운트는 갱신되지 않아 Pod를 새로 만들어야 한다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub { font-size: 11px; fill: rgb(138,133,128); }
+      .lane-title { font-size: 13px; font-weight: 800; fill: #e8e4df; }
+      .body { font-size: 11px; fill: #e8e4df; }
+      .muted { font-size: 10.5px; fill: rgb(138,133,128); }
+      .mono-dark { font-size: 11px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .mono-light { font-size: 11px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', monospace; }
+      .ok { font-size: 10.5px; font-weight: 700; fill: rgb(102,187,106); }
+      .warn { font-size: 10.5px; font-weight: 700; fill: rgb(229,115,115); }
+      .action { font-size: 10.5px; font-weight: 700; fill: rgb(212,168,83); }
+    </style>
+    <marker id="update-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="sync-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(91,155,213)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="520" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">ConfigMap 수정 — 소비 방식마다 반영 경로가 다르다</text>
+  <text x="24" y="50" class="sub">같은 ConfigMap 변경이라도 환경변수·일반 볼륨·subPath는 실행 중인 Pod에서 서로 다르게 보인다</text>
+
+  <!-- Changed ConfigMap -->
+  <rect x="34" y="142" width="220" height="238" rx="10" fill="rgb(205,236,207)"/>
+  <text x="144" y="170" class="mono-dark" text-anchor="middle">ConfigMap 수정</text>
+  <rect x="54" y="192" width="180" height="64" rx="6" fill="#fdfdf8"/>
+  <text x="144" y="216" class="mono-dark" text-anchor="middle">LOG_LEVEL</text>
+  <text x="144" y="239" class="mono-dark" text-anchor="middle">info → debug</text>
+  <rect x="54" y="272" width="180" height="70" rx="6" fill="rgb(245,225,110)"/>
+  <text x="144" y="296" class="mono-dark" text-anchor="middle">application.conf</text>
+  <text x="144" y="320" class="mono-dark" text-anchor="middle">before → after</text>
+  <text x="144" y="363" class="muted" text-anchor="middle" fill="#0d0d0d">API 오브젝트의 data는 변경됨</text>
+
+  <!-- Environment lane -->
+  <rect x="314" y="78" width="612" height="126" rx="10" fill="rgb(26,26,26)" stroke="rgb(91,155,213)" stroke-width="1.5"/>
+  <text x="334" y="104" class="lane-title">① 환경변수 — 시작 시 복사된 값</text>
+  <rect x="500" y="116" width="170" height="58" rx="6" fill="rgb(42,37,32)" stroke="rgb(229,115,115)"/>
+  <text x="585" y="138" class="mono-light" text-anchor="middle">기존 Pod</text>
+  <text x="585" y="159" class="warn" text-anchor="middle">LOG_LEVEL=info 유지</text>
+  <rect x="716" y="116" width="180" height="58" rx="6" fill="rgb(42,37,32)" stroke="rgb(102,187,106)"/>
+  <text x="806" y="138" class="mono-light" text-anchor="middle">새 Pod</text>
+  <text x="806" y="159" class="ok" text-anchor="middle">LOG_LEVEL=debug</text>
+  <path d="M254,205 C290,160 330,144 492,144" fill="none" stroke="rgb(229,115,115)" stroke-width="2.5" stroke-dasharray="5 4"/>
+  <line x1="470" y1="132" x2="486" y2="156" stroke="rgb(229,115,115)" stroke-width="3"/>
+  <line x1="486" y1="132" x2="470" y2="156" stroke="rgb(229,115,115)" stroke-width="3"/>
+  <text x="334" y="184" class="action">Pod 롤링 교체 → 모든 인스턴스를 새 값으로 통일</text>
+
+  <!-- Normal volume lane -->
+  <rect x="314" y="220" width="612" height="126" rx="10" fill="rgb(26,26,26)" stroke="rgb(102,187,106)" stroke-width="1.5"/>
+  <text x="334" y="246" class="lane-title">② 일반 ConfigMap 볼륨 — kubelet이 파일 갱신</text>
+  <rect x="500" y="258" width="170" height="58" rx="6" fill="rgb(245,225,110)"/>
+  <text x="585" y="280" class="mono-dark" text-anchor="middle">/config/live/</text>
+  <text x="585" y="301" class="mono-dark" text-anchor="middle">message=after</text>
+  <rect x="716" y="258" width="180" height="58" rx="6" fill="rgb(42,37,32)" stroke="rgb(212,168,83)"/>
+  <text x="806" y="280" class="mono-light" text-anchor="middle">애플리케이션</text>
+  <text x="806" y="301" class="action" text-anchor="middle">파일 다시 읽기 필요</text>
+  <path d="M254,284 C330,284 390,287 492,287" fill="none" stroke="rgb(91,155,213)" stroke-width="3" stroke-dasharray="6 4" marker-end="url(#sync-arrow)"/>
+  <text x="330" y="278" class="muted">kubelet 동기화</text>
+  <line x1="672" y1="287" x2="708" y2="287" stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#update-arrow)"/>
+  <text x="334" y="330" class="ok">파일 갱신과 애플리케이션 설정 반영은 별도 단계</text>
+
+  <!-- subPath lane -->
+  <rect x="314" y="362" width="612" height="126" rx="10" fill="rgb(26,26,26)" stroke="rgb(229,115,115)" stroke-width="1.5"/>
+  <text x="334" y="388" class="lane-title">③ subPath 파일 — 시작 시 선택한 파일에 고정</text>
+  <rect x="500" y="400" width="210" height="58" rx="6" fill="rgb(232,228,223)"/>
+  <text x="605" y="422" class="mono-dark" text-anchor="middle">/config/frozen/</text>
+  <text x="605" y="443" class="mono-dark" text-anchor="middle">message=before 유지</text>
+  <rect x="760" y="400" width="136" height="58" rx="6" fill="rgb(42,37,32)" stroke="rgb(212,168,83)"/>
+  <text x="828" y="422" class="mono-light" text-anchor="middle">적용 방법</text>
+  <text x="828" y="443" class="action" text-anchor="middle">Pod 재생성</text>
+  <path d="M254,330 C300,370 360,429 492,429" fill="none" stroke="rgb(229,115,115)" stroke-width="2.5" stroke-dasharray="5 4"/>
+  <line x1="468" y1="417" x2="484" y2="441" stroke="rgb(229,115,115)" stroke-width="3"/>
+  <line x1="484" y1="417" x2="468" y2="441" stroke="rgb(229,115,115)" stroke-width="3"/>
+  <line x1="712" y1="429" x2="752" y2="429" stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#update-arrow)"/>
+  <text x="334" y="472" class="warn">ConfigMap의 이후 갱신이 고정된 단일 파일 마운트에는 전달되지 않음</text>
+
+  <text x="480" y="510" class="sub" text-anchor="middle">핵심: 원본 ConfigMap의 변경 여부와 실행 중 애플리케이션의 반영 여부를 분리해서 판단한다</text>
+</svg>

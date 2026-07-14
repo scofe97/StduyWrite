@@ -7,6 +7,22 @@ updated: 2026-07-14
 
 # Kubernetes in Action 오답 노트
 
+## 2026-07-14 — field selector와 fieldRef의 혼동: 같은 "field"인데 다른 메커니즘
+
+- **자기 답**: Downward API의 `valueFrom.fieldRef.fieldPath`를 보고 "이게 07-03의 field selector 검색과 같은 것이냐"고 물었습니다 — 이름이 둘 다 field라 같은 개념으로 묶어 생각했습니다.
+- **정답**: 완전히 다른 메커니즘입니다. **field selector**(07-03)는 클러스터 *바깥*에서 여러 오브젝트를 *필터링·조회*하는 검색(`kubectl get pods --field-selector spec.nodeName=X` → 조건 맞는 Pod 리스트)이고, **fieldRef**(08-03 Downward API)는 클러스터 *안*에서 한 Pod가 *자기 값 하나를 컨테이너에 주입*하는 참조(`valueFrom.fieldRef.fieldPath: spec.nodeName` → 그 값을 env/파일로)입니다. 방향이 정반대입니다 — 하나는 밖에서 안으로 걸러 보고, 하나는 안에서 자기 값을 꺼내 넣습니다.
+- **원인 추정**: `spec.nodeName` 같은 필드 경로 문자열을 양쪽이 공유하는 것을 보고, "재료가 같으니 도구도 같다"고 묶었습니다. 재료(필드 경로)는 공유하지만 도구(검색 필터 vs 주입 참조)는 다릅니다.
+- **참고 챕터**: 07-03 §1(field selector)·08-03 §5(fieldRef). "field selector = 밖에서 오브젝트 골라내는 검색, fieldRef = 안에서 자기 값 꺼내 넣는 주입" 한 줄로 정리함.
+- **재방문 트리거**: 2026-07-16 복습에서 `spec.nodeName`을 field selector와 fieldRef 각각의 문법으로 쓰고, 두 결과(Pod 리스트 vs env 값 하나)가 어떻게 다른지 말로 설명.
+
+## 2026-07-14 — Secret 주입: env vs 볼륨 트레이드오프를 스스로 못 떠올림
+
+- **자기 답**: Phase 4 Q5(볼륨이 더 안전한데 env를 왜 안 없애나)에서 "모르겠다"로 막혔고, 힌트를 받은 뒤에야 "env가 코드상 편하고 Spring relaxed binding으로 자동 처리된다"에 도달했습니다.
+- **정답**: env의 장점은 (1) 앱 코드가 단순(`getenv` 한 줄 vs 파일 열기·읽기·파싱), (2) 12-factor 관례로 프레임워크가 env를 기본 기대(Spring은 `SPRING_DATASOURCE_PASSWORD` env를 relaxed binding으로 자동 매핑)입니다. 판단 기준은 "비밀값이면 볼륨(유출 표면 회피), 비밀 아니면 env(편의)". 이는 Q3에서 본 "Downward API(POD_IP 등 공개 정보)는 env여도 되지만 Secret은 볼륨이 낫다"와 같은 판단 축입니다.
+- **원인 추정**: env의 *위험*(Q3에서 답한 로그·자식 상속)은 알았지만, 그 반대편인 *편의*를 장점으로 뒤집어 세우지 못했습니다. 한 축(위험)만 보고 트레이드오프의 다른 축(편의)을 못 떠올린 것.
+- **참고 챕터**: 08-03 §3(env 주입 경고)·Spring 관점(configtree). "편의는 env, 안전은 볼륨" 한 줄.
+- **재방문 트리거**: 2026-07-16 복습에서 "DB 비밀번호"와 "로그 레벨"을 각각 어느 경로로 주입할지와 그 이유를 답. 두 값의 성격(비밀/공개)으로 갈리는 것을 설명.
+
 ## 2026-07-14 — ConfigMap 생성 방식: --from-file과 --from-env-file
 
 - **자기 답**: 두 방식의 차이를 파일 원문과 값 치환의 차이라고 설명했습니다.
