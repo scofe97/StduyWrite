@@ -1,0 +1,59 @@
+<svg viewBox="0 0 900 540" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Configuration Resource — ConfigMap과 Secret으로 설정을 분리</title>
+  <desc>Kubernetes Patterns 20장. Configuration Resource는 ConfigMap(일반 데이터)과 Secret(민감 데이터) 네이티브 리소스로 설정 생애주기를 앱 생애주기에서 분리합니다. 둘은 key-value 저장이라 사용법이 같고, 유일한 기술적 차이는 Secret이 Base64 인코딩이라는 점입니다. 소비 방법은 두 가지 — 환경변수 참조(configMapKeyRef/secretKeyRef, envFrom으로 일괄, prefix 지정 가능)와 볼륨 마운트(키가 파일명, 값이 내용). 볼륨은 ConfigMap 갱신 시 파일이 자동 업데이트되어 hot reload가 가능하지만(앱이 감시해야 함), 환경변수는 프로세스 시작 후 못 바꿉니다. Secret 보안 — Base64는 암호화가 아니라 평문과 같으나, Secret은 접근 노드에만 배포되고 tmpfs 메모리에 저장되며 etcd에서 암호화 저장될 수 있습니다. 다만 Pod 생성 권한이 있으면 서비스 계정을 사칭해 읽을 수 있어 앱 레벨 추가 암호화가 흔합니다. 1.21+는 immutable 필드를 지원해 갱신 방지와 API 서버 성능 향상을 줍니다. 한계 — Secret 1MB 제한, namespace당 ConfigMap 쿼터.</desc>
+
+  <rect x="0" y="0" width="900" height="540" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="16">Configuration Resource — ConfigMap · Secret</text>
+  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">설정 생애주기를 앱 생애주기에서 <tspan fill="#e8e4df">분리(decouple)</tspan>. 플랫폼 내장 기능이라 커스텀 구조 불필요.</text>
+
+  <!-- configmap vs secret -->
+  <rect x="24" y="76" width="418" height="52" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="36" y="97" fill="rgb(212,168,83)" font-size="11" font-weight="700">ConfigMap — 일반 데이터</text>
+  <text x="36" y="114" fill="#e8e4df" font-size="8.5">data: key-value. 전체 설정 파일(application.properties)도 담음.</text>
+  <text x="36" y="126" fill="rgb(138,133,128)" font-size="8">권장: EnvVar용 키는 대문자, 파일용은 적절한 파일명.</text>
+
+  <rect x="458" y="76" width="418" height="52" fill="#f2d4d4"/>
+  <text x="470" y="97" fill="#7a1f1f" font-size="11" font-weight="700">Secret — 민감 데이터</text>
+  <text x="470" y="114" fill="#7a1f1f" font-size="8.5">사용법 동일. 유일한 차이: 값이 Base64 인코딩.</text>
+  <text x="470" y="126" fill="#7a1f1f" font-size="8">configMapKeyRef → secretKeyRef 로 바꾸면 됨.</text>
+
+  <!-- two consumption ways -->
+  <text x="24" y="154" fill="#e8e4df" font-size="12">소비 방법 두 가지</text>
+  <rect x="24" y="164" width="418" height="98" fill="#dceaf7"/>
+  <text x="36" y="184" fill="#10243a" font-size="10" font-weight="700">① 환경변수 참조</text>
+  <text x="36" y="202" fill="#10243a" font-size="8.5">valueFrom.configMapKeyRef.{name, key}</text>
+  <text x="36" y="217" fill="#10243a" font-size="8.5">envFrom: 전체 키 일괄 노출(prefix 지정 가능).</text>
+  <text x="36" y="231" fill="#10243a" font-size="8.5">중복 키는 뒤 항목·직접 env가 우선.</text>
+  <text x="36" y="248" fill="#7a1f1f" font-size="8.5">⚠ 프로세스 시작 후 못 바꿈(env는 불변).</text>
+
+  <rect x="458" y="164" width="418" height="98" fill="#cdeccf"/>
+  <text x="470" y="184" fill="#14521d" font-size="10" font-weight="700">② 볼륨 마운트</text>
+  <text x="470" y="202" fill="#14521d" font-size="8.5">키=파일명, 값=파일 내용. 전체 투영.</text>
+  <text x="470" y="217" fill="#14521d" font-size="8.5">items로 선택·경로·mode(0400) 세밀 지정.</text>
+  <text x="470" y="234" fill="#14521d" font-size="8.5">✓ ConfigMap 갱신 시 파일 자동 업데이트 → hot reload.</text>
+  <text x="470" y="251" fill="#7a1f1f" font-size="8.5">⚠ 라이브 변경은 추적 안 됨 → 설정 드리프트 위험.</text>
+
+  <!-- secret security -->
+  <text x="24" y="286" fill="#e8e4df" font-size="12">Secret은 얼마나 안전한가</text>
+  <rect x="24" y="296" width="852" height="90" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="36" y="316" fill="#e57373" font-size="9.5" font-weight="700">Base64는 암호화가 아님 — 보안상 평문과 같음(바이너리 저장용일 뿐).</text>
+  <text x="36" y="335" fill="#e8e4df" font-size="8.5">그런데도 Secret이 더 안전한 구현 세부 — ① Secret이 필요한 Pod가 도는 노드에만 배포됨.</text>
+  <text x="36" y="349" fill="#e8e4df" font-size="8.5">② 노드에서 tmpfs 메모리에만 저장(물리 스토리지에 안 씀), Pod 삭제 시 제거. ③ etcd에서 암호화 저장 가능.</text>
+  <text x="36" y="368" fill="#7a1f1f" font-size="8.5">⚠ 그래도 Pod 생성 권한자는 서비스 계정을 사칭해 namespace의 모든 Secret을 읽을 수 있음(RBAC 26장).</text>
+  <text x="36" y="381" fill="#7a1f1f" font-size="8.5">→ 앱 레벨 추가 암호화가 흔함(GitOps 맥락은 25장 Secure Configuration).</text>
+
+  <!-- immutable + limits -->
+  <rect x="24" y="398" width="418" height="62" fill="#f5edda"/>
+  <text x="36" y="418" fill="#0d0d0d" font-size="10" font-weight="700">immutable 필드 (1.21+)</text>
+  <text x="36" y="436" fill="#0d0d0d" font-size="8.5">immutable: true → 생성 후 갱신 방지.</text>
+  <text x="36" y="450" fill="#0d0d0d" font-size="8.5">API 서버가 변경 감시 불필요 → 클러스터 성능 향상. 바꾸려면 삭제·재생성+Pod 재시작.</text>
+
+  <rect x="458" y="398" width="418" height="62" fill="#f2d4d4"/>
+  <text x="470" y="418" fill="#7a1f1f" font-size="10" font-weight="700">한계</text>
+  <text x="470" y="436" fill="#7a1f1f" font-size="8.5">Secret 1MB 크기 제한(Base64라 실효 ~700KB).</text>
+  <text x="470" y="450" fill="#7a1f1f" font-size="8.5">namespace당 ConfigMap 개수 쿼터. golden hammer 아님.</text>
+
+  <!-- bottom -->
+  <rect x="24" y="472" width="852" height="30" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="36" y="491" fill="#e8e4df" font-size="9.5">가장 큰 이점: <tspan fill="rgb(212,168,83)" font-weight="700">설정 정의와 사용을 분리.</tspan> 큰 설정·불변 요구는 Immutable Configuration(21장)·Configuration Template(22장)으로.</text>
+</svg>

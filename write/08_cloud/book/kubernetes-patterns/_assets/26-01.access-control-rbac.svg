@@ -1,0 +1,91 @@
+<svg viewBox="0 0 900 620" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Access Control — RBAC으로 누가 무엇을 할 수 있는지 통제</title>
+  <desc>Kubernetes Patterns 26장. Access Control은 API 서버 요청이 "누가 무엇을 할 수 있는가"를 통제하는 패턴이며, Kubernetes는 이를 RBAC(Role-Based Access Control)으로 구현합니다. 모든 API 요청은 세 단계 파이프라인을 거칩니다. 인증(Authentication) — 요청자가 누구인지 확인(인증서·토큰·ServiceAccount 등). 인가(Authorization) — 그 신원이 이 동작을 할 수 있는지 판단(RBAC이 여기). 어드미션(Admission) — 통과한 요청을 검증·변형(정책 강제, 24·25장의 admission도 여기). RBAC의 두 축은 권한 정의와 권한 부여입니다. 권한 정의 — Role(namespace 범위, 특정 리소스에 대한 verb 집합: get/list/watch/create/update/delete 등)과 ClusterRole(클러스터 범위 또는 여러 namespace에 재사용, 노드·PV 같은 클러스터 리소스 포함). 권한 부여 — RoleBinding(Role 또는 ClusterRole을 특정 namespace의 subject에 연결)과 ClusterRoleBinding(ClusterRole을 클러스터 전역으로 subject에 연결). subject는 User·Group·ServiceAccount입니다. RBAC은 additive(허용만, deny 없음)라 부여된 권한들의 합집합으로 결정되고, 아무것도 부여 안 되면 기본 거부입니다. ClusterRole aggregation은 라벨 셀렉터로 여러 ClusterRole을 하나로 합쳐 확장 가능하게 합니다. ServiceAccount는 Pod가 API 서버에 접근할 때 쓰는 앱의 신원이며, 토큰이 자동 마운트됩니다. 원칙 — 최소 권한(필요한 verb·리소스만), 전용 ServiceAccount(default 공유 금지), 와일드카드 지양.</desc>
+
+  <rect x="0" y="0" width="900" height="620" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="16">Access Control — RBAC으로 "누가 무엇을 할 수 있는지" 통제</text>
+  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">모든 API 요청은 <tspan fill="#e8e4df">3단계 파이프라인</tspan>을 거친다. RBAC은 그중 인가 단계를 담당한다.</text>
+
+  <!-- 3-stage pipeline -->
+  <rect x="24" y="72" width="272" height="70" fill="#dceaf7"/>
+  <text x="36" y="92" fill="#10243a" font-size="10.5" font-weight="700">① 인증 (Authentication)</text>
+  <text x="36" y="110" fill="#10243a" font-size="8.5">요청자가 누구인지 확인.</text>
+  <text x="36" y="124" fill="#10243a" font-size="8.5">인증서·토큰·ServiceAccount 등.</text>
+  <text x="36" y="137" fill="#10243a" font-size="8.5">"신원 확립" 단계.</text>
+
+  <text x="300" y="112" fill="rgb(212,168,83)" font-size="18">→</text>
+
+  <rect x="316" y="72" width="272" height="70" fill="#cdeccf"/>
+  <text x="328" y="92" fill="#14521d" font-size="10.5" font-weight="700">② 인가 (Authorization)</text>
+  <text x="328" y="110" fill="#14521d" font-size="8.5">이 신원이 이 동작을 할 수 있나?</text>
+  <text x="328" y="124" fill="#14521d" font-size="8.5" font-weight="700">RBAC이 여기서 판단.</text>
+  <text x="328" y="137" fill="#14521d" font-size="8.5">허용 안 되면 거부.</text>
+
+  <text x="592" y="112" fill="rgb(212,168,83)" font-size="18">→</text>
+
+  <rect x="608" y="72" width="268" height="70" fill="#f5edda"/>
+  <text x="620" y="92" fill="#0d0d0d" font-size="10.5" font-weight="700">③ 어드미션 (Admission)</text>
+  <text x="620" y="110" fill="#0d0d0d" font-size="8.5">통과 요청을 검증·변형.</text>
+  <text x="620" y="124" fill="#0d0d0d" font-size="8.5">정책 강제(24·25장 admission).</text>
+  <text x="620" y="137" fill="#0d0d0d" font-size="8.5">"게이트 + 자동 보정" 단계.</text>
+
+  <!-- RBAC two axes -->
+  <text x="24" y="172" fill="#e8e4df" font-size="12">RBAC의 두 축 — 권한을 <tspan fill="rgb(212,168,83)">정의</tspan>하고 subject에 <tspan fill="rgb(212,168,83)">부여</tspan>한다</text>
+
+  <!-- define column -->
+  <rect x="24" y="184" width="418" height="180" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="40" y="206" fill="rgb(212,168,83)" font-size="11.5" font-weight="700">권한 정의 (무엇을 할 수 있나)</text>
+
+  <rect x="40" y="218" width="386" height="66" fill="#dceaf7"/>
+  <text x="52" y="237" fill="#10243a" font-size="9.5" font-weight="700">Role — namespace 범위</text>
+  <text x="52" y="254" fill="#10243a" font-size="8.5">특정 리소스(pods, configmaps…)에 대한 verb 집합.</text>
+  <text x="52" y="268" fill="#10243a" font-size="8.5">verb: get·list·watch·create·update·patch·delete.</text>
+  <text x="52" y="280" fill="#10243a" font-size="8">그 namespace 안에서만 유효.</text>
+
+  <rect x="40" y="290" width="386" height="66" fill="#f5edda"/>
+  <text x="52" y="309" fill="#0d0d0d" font-size="9.5" font-weight="700">ClusterRole — 클러스터 범위</text>
+  <text x="52" y="326" fill="#0d0d0d" font-size="8.5">여러 namespace에 재사용, 또는 클러스터 전역 권한.</text>
+  <text x="52" y="340" fill="#0d0d0d" font-size="8.5">노드·PV·namespace 같은 non-namespaced 리소스 포함.</text>
+  <text x="52" y="352" fill="#0d0d0d" font-size="8">aggregation — 라벨 셀렉터로 여러 ClusterRole을 하나로 합침(확장).</text>
+
+  <!-- bind column -->
+  <rect x="458" y="184" width="418" height="180" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="474" y="206" fill="rgb(212,168,83)" font-size="11.5" font-weight="700">권한 부여 (누구에게)</text>
+
+  <rect x="474" y="218" width="386" height="66" fill="#cdeccf"/>
+  <text x="486" y="237" fill="#14521d" font-size="9.5" font-weight="700">RoleBinding — namespace 범위</text>
+  <text x="486" y="254" fill="#14521d" font-size="8.5">Role(또는 ClusterRole)을 특정 namespace의 subject에 연결.</text>
+  <text x="486" y="268" fill="#14521d" font-size="8.5">ClusterRole을 참조해도 부여 범위는 그 namespace로 한정.</text>
+  <text x="486" y="280" fill="#14521d" font-size="8">공용 ClusterRole 하나 + namespace별 RoleBinding = 재사용 관용구.</text>
+
+  <rect x="474" y="290" width="386" height="66" fill="#f2d4d4"/>
+  <text x="486" y="309" fill="#7a1f1f" font-size="9.5" font-weight="700">ClusterRoleBinding — 클러스터 전역</text>
+  <text x="486" y="326" fill="#7a1f1f" font-size="8.5">ClusterRole을 클러스터 전체에 걸쳐 subject에 부여.</text>
+  <text x="486" y="340" fill="#7a1f1f" font-size="8.5">강력 — 전 namespace에 적용되니 신중히(과도 부여 주의).</text>
+  <text x="486" y="352" fill="#7a1f1f" font-size="8">subject = User · Group · ServiceAccount.</text>
+
+  <!-- ServiceAccount -->
+  <text x="24" y="394" fill="#e8e4df" font-size="12">subject 중 앱의 신원 — ServiceAccount</text>
+  <rect x="24" y="404" width="852" height="58" fill="#dceaf7"/>
+  <text x="36" y="424" fill="#10243a" font-size="9.5" font-weight="700">ServiceAccount = Pod가 API 서버에 접근할 때 쓰는 앱의 신원</text>
+  <text x="36" y="441" fill="#10243a" font-size="9">Pod에 지정하면 토큰이 자동 마운트 → 앱이 그 토큰으로 API 호출. 사람(User)이 아니라 <tspan font-weight="700">워크로드</tspan>의 계정.</text>
+  <text x="36" y="456" fill="#10243a" font-size="8.5">지정 안 하면 namespace의 default SA 사용 — 그래서 전용 SA를 만들어 권한을 좁히는 게 정석.</text>
+
+  <!-- additive nature -->
+  <rect x="24" y="472" width="418" height="52" fill="#cdeccf"/>
+  <text x="36" y="491" fill="#14521d" font-size="9.5" font-weight="700">additive — 허용만, deny 없음</text>
+  <text x="36" y="508" fill="#14521d" font-size="8.5">부여된 권한들의 합집합으로 결정. 아무것도 부여 안 되면 기본 거부.</text>
+  <text x="36" y="520" fill="#14521d" font-size="8">"막는" 규칙이 아니라 "여는" 규칙만 쌓는다.</text>
+
+  <rect x="458" y="472" width="418" height="52" fill="#f2d4d4"/>
+  <text x="470" y="491" fill="#7a1f1f" font-size="9.5" font-weight="700">피해야 할 것</text>
+  <text x="470" y="508" fill="#7a1f1f" font-size="8.5">와일드카드(verbs: ["*"], resources: ["*"]) 남발 · cluster-admin 남발.</text>
+  <text x="470" y="520" fill="#7a1f1f" font-size="8">default SA에 강한 권한 붙이기 — 전 Pod가 상속받는다.</text>
+
+  <!-- principles -->
+  <rect x="24" y="534" width="852" height="74" fill="#f5edda"/>
+  <text x="36" y="554" fill="#0d0d0d" font-size="10.5" font-weight="700">원칙 — 최소 권한 (least privilege)</text>
+  <text x="36" y="573" fill="#0d0d0d" font-size="9">필요한 <tspan font-weight="700">verb·리소스만</tspan> 부여 — "일단 넓게 주고 나중에 좁히자"는 거의 안 좁혀진다.</text>
+  <text x="36" y="589" fill="#0d0d0d" font-size="9">워크로드마다 <tspan font-weight="700">전용 ServiceAccount</tspan> — default 공유 금지, 권한을 워크로드 단위로 격리.</text>
+  <text x="36" y="603" fill="#0d0d0d" font-size="8.5">RBAC은 23~25장(프로세스·네트워크·설정)과 함께 심층 방어를 이룬다 — "누가 API를 통해 무엇을 할 수 있나"의 마지막 겹.</text>
+</svg>

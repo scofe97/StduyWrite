@@ -59,7 +59,7 @@ updated: 2026-07-12
 
 > 아래 표는 원문을 정독해 편을 작성하는 대로 채웁니다. 아직 작성하지 않은 장은 상태를 "작성 예정"으로만 표시하고, 본문 내용은 원문 도착 전까지 채우지 않습니다.
 
-진행 현황은 **16장 정독 완료(16편)** 입니다.
+진행 현황은 **30장 정독 완료(30편) — 전 챕터 완주** 입니다.
 
 ### 기초 — 컨테이너를 잘 굴리기 위한 전제 (Ch1~6)
 
@@ -91,35 +91,35 @@ updated: 2026-07-12
 |----|------|------|
 | [15-01](./15-01.Init%20Container%20%E2%80%94%20%EC%B4%88%EA%B8%B0%ED%99%94%EB%A5%BC%20%EC%95%B1%EA%B3%BC%20%EB%B6%84%EB%A6%AC%ED%95%B4%20%EB%B3%84%EB%8F%84%20%EC%83%9D%EC%95%A0%EC%A3%BC%EA%B8%B0%EB%A1%9C.md) | Init Container — 초기화를 앱과 분리해 별도 생애주기로 (Ch15) | 완료 |
 | [16-01](./16-01.Sidecar%20%E2%80%94%20%EA%B8%B0%EC%A1%B4%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%EB%A5%BC%20%EB%B0%94%EA%BE%B8%EC%A7%80%20%EC%95%8A%EA%B3%A0%20%ED%99%95%EC%9E%A5.md) | Sidecar — 기존 컨테이너를 바꾸지 않고 확장 (Ch16) | 완료 |
-| — | Adapter — 어댑터 (Ch17) | 작성 예정 |
-| — | Ambassador — 앰배서더 (Ch18) | 작성 예정 |
+| [17-01](./17-01.Adapter%20%E2%80%94%20%EC%9D%B4%EC%A7%88%EC%A0%81%20%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%9D%84%20%ED%86%B5%EC%9D%BC%20%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%EB%A1%9C.md) | Adapter — 이질적 시스템을 통일 인터페이스로 (Ch17) | 완료 |
+| [18-01](./18-01.Ambassador%20%E2%80%94%20%EB%B0%94%EA%B9%A5%EC%84%B8%EC%83%81%EC%9C%BC%EB%A1%9C%EC%9D%98%20smart%20proxy.md) | Ambassador — 바깥세상으로의 smart proxy (Ch18) | 완료 |
 
 ### 설정 — 앱과 설정 분리 (Ch19~22)
 
 | 편 | 제목 | 상태 |
 |----|------|------|
-| — | EnvVar Configuration — 환경변수 설정 (Ch19) | 작성 예정 |
-| — | Configuration Resource — ConfigMap·Secret (Ch20) | 작성 예정 |
-| — | Immutable Configuration — 불변 설정 (Ch21) | 작성 예정 |
-| — | Configuration Template — 설정 템플릿 (Ch22) | 작성 예정 |
+| [19-01](./19-01.EnvVar%20Configuration%20%E2%80%94%20%ED%99%98%EA%B2%BD%EB%B3%80%EC%88%98%EB%A1%9C%20%EC%84%A4%EC%A0%95%EC%9D%84%20%EC%99%B8%EB%B6%80%ED%99%94%ED%95%98%EA%B8%B0.md) | EnvVar Configuration — 환경변수로 설정을 외부화하기 (Ch19) | 완료 |
+| [20-01](./20-01.Configuration%20Resource%20%E2%80%94%20ConfigMap%EA%B3%BC%20Secret%EC%9C%BC%EB%A1%9C%20%EC%84%A4%EC%A0%95%20%EB%B6%84%EB%A6%AC.md) | Configuration Resource — ConfigMap과 Secret으로 설정 분리 (Ch20) | 완료 |
+| [21-01](./21-01.Immutable%20Configuration%20%E2%80%94%20%EC%84%A4%EC%A0%95%EC%9D%84%20%EB%B6%88%EB%B3%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%A1%9C.md) | Immutable Configuration — 설정을 불변 데이터 이미지로 (Ch21) | 완료 |
+| [22-01](./22-01.Configuration%20Template%20%E2%80%94%20%ED%81%B0%20%EC%84%A4%EC%A0%95%EC%9D%84%20%EC%8B%9C%EC%9E%91%20%EC%8B%9C%20%ED%85%9C%ED%94%8C%EB%A6%BF%EC%9C%BC%EB%A1%9C%20%EC%83%9D%EC%84%B1.md) | Configuration Template — 큰 설정을 시작 시 템플릿으로 생성 (Ch22) | 완료 |
 
 ### 보안 — 컨테이너를 안전하게 (Ch23~26)
 
 | 편 | 제목 | 상태 |
 |----|------|------|
-| — | Process Containment — 프로세스 격리 (Ch23) | 작성 예정 |
-| — | Network Segmentation — 네트워크 분할 (Ch24) | 작성 예정 |
-| — | Secure Configuration — 시크릿 안전 관리 (Ch25) | 작성 예정 |
-| — | Access Control — 접근 제어(RBAC) (Ch26) | 작성 예정 |
+| [23-01](./23-01.Process%20Containment%20%E2%80%94%20%EC%B5%9C%EC%86%8C%20%EA%B6%8C%ED%95%9C%EC%9C%BC%EB%A1%9C%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%EB%A5%BC%20%EA%B0%80%EB%91%90%EA%B8%B0.md) | Process Containment — 최소 권한으로 컨테이너를 가두기 (Ch23) | 완료 |
+| [24-01](./24-01.Network%20Segmentation%20%E2%80%94%20%ED%86%B5%EC%8B%A0%EC%9D%84%20%ED%95%84%EC%9A%94%ED%95%9C%20%EA%B2%BD%EB%A1%9C%EB%A7%8C%20%EB%82%A8%EA%B8%B0%EA%B8%B0.md) | Network Segmentation — 통신을 필요한 경로만 남기기 (Ch24) | 완료 |
+| [25-01](./25-01.Secure%20Configuration%20%E2%80%94%20%EB%AF%BC%EA%B0%90%ED%95%9C%20%EC%84%A4%EC%A0%95%EC%9D%84%20%EC%95%88%EC%A0%84%ED%95%98%EA%B2%8C%20%EB%8B%A4%EB%A3%A8%EA%B8%B0.md) | Secure Configuration — 민감한 설정을 안전하게 다루기 (Ch25) | 완료 |
+| [26-01](./26-01.Access%20Control%20%E2%80%94%20RBAC%EC%9C%BC%EB%A1%9C%20%EB%88%84%EA%B0%80%20%EB%AC%B4%EC%97%87%EC%9D%84%20%ED%95%A0%20%EC%88%98%20%EC%9E%88%EB%8A%94%EC%A7%80.md) | Access Control — RBAC으로 누가 무엇을 할 수 있는지 (Ch26) | 완료 |
 
 ### 고급 — 플랫폼 확장 (Ch27~30)
 
 | 편 | 제목 | 상태 |
 |----|------|------|
-| — | Controller — 컨트롤러 (Ch27) | 작성 예정 |
-| — | Operator — 오퍼레이터·CRD (Ch28) | 작성 예정 |
-| — | Elastic Scale — 오토스케일(HPA·VPA·CA) (Ch29) | 작성 예정 |
-| — | Image Builder — 클러스터 내 이미지 빌드 (Ch30) | 작성 예정 |
+| [27-01](./27-01.Controller%20%E2%80%94%20Observe-Analyze-Act%EB%A1%9C%20%EC%83%81%ED%83%9C%EB%A5%BC%20%EC%A1%B0%EC%A0%95%ED%95%98%EA%B8%B0.md) | Controller — Observe-Analyze-Act로 상태를 조정하기 (Ch27) | 완료 |
+| [28-01](./28-01.Operator%20%E2%80%94%20CRD%EB%A1%9C%20%EB%8F%84%EB%A9%94%EC%9D%B8%20%EC%A7%80%EC%8B%9D%EC%9D%84%20%EC%9E%90%EB%8F%99%ED%99%94%ED%95%98%EA%B8%B0.md) | Operator — CRD로 도메인 지식을 자동화하기 (Ch28) | 완료 |
+| [29-01](./29-01.Elastic%20Scale%20%E2%80%94%20%EB%B6%80%ED%95%98%EC%97%90%20%EB%A7%9E%EC%B6%B0%20%EC%84%B8%20%EC%B0%A8%EC%9B%90%EC%9C%BC%EB%A1%9C%20%EC%9E%90%EB%8F%99%20%ED%99%95%EC%9E%A5.md) | Elastic Scale — 부하에 맞춰 세 차원으로 자동 확장 (Ch29) | 완료 |
+| [30-01](./30-01.Image%20Builder%20%E2%80%94%20%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%95%88%EC%97%90%EC%84%9C%20%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%A5%BC%20%EB%B9%8C%EB%93%9C%ED%95%98%EA%B8%B0.md) | Image Builder — 클러스터 안에서 이미지를 빌드하기 (Ch30) | 완료 |
 
 
 
@@ -131,7 +131,7 @@ updated: 2026-07-12
 |------|---------|
 | 현재 난이도 레벨 (ZPD) | 기본 — 원서 흐름 그대로 진행 |
 | 막힌 지점 | 기록 전 |
-| 다음 레슨 후보 | Ch17 Adapter |
+| 다음 레슨 후보 | (전 30장 완주 — 복습·심화 또는 신규 도서) |
 | 최근 검증 결과 | 기록 전 (Phase 4 자답·퀴즈·복습 결과를 여기에 갱신) |
 | 복습 회차 (_review) | 미개시 — 첫 복습 때 `_review/` 폴더 생성 |
 
