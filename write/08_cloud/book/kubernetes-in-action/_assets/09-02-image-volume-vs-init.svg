@@ -1,0 +1,55 @@
+<svg viewBox="0 0 860 430" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>image 볼륨 vs init 컨테이너 복사 — 같은 결과, 더 짧은 경로</title>
+  <desc>이전에는 데이터 이미지를 init 컨테이너가 emptyDir로 복사한 뒤 그 볼륨을 컨테이너에 마운트했다. image 볼륨은 OCI 이미지를 볼륨으로 직접 마운트해 init 컨테이너 단계를 없앤다. 두 방식 모두 mongo 컨테이너가 같은 파일을 읽는다.</desc>
+
+  <rect x="0" y="0" width="860" height="430" fill="#0d0d0d"/>
+  <text x="30" y="38" fill="rgb(212,168,83)" font-size="16" font-weight="700">image 볼륨은 init 복사 단계를 없앤다 — 같은 결과, 더 짧은 경로</text>
+
+  <!-- BEFORE: init 컨테이너 방식 (회색 계열 = 예전) -->
+  <rect x="30" y="66" width="790" height="150" rx="8" fill="#0d0d0d" stroke="rgb(90,85,78)" stroke-width="1.5"/>
+  <text x="46" y="90" fill="#e8e4df" font-size="13" font-weight="700">이전 (09-01) — init 컨테이너가 복사</text>
+
+  <!-- 데이터 이미지 -->
+  <rect x="46" y="108" width="150" height="70" rx="6" fill="#dceaf7" stroke="rgb(42,37,32)"/>
+  <text x="121" y="134" style="fill:#10243a" font-size="11.5" font-weight="700" text-anchor="middle">데이터 이미지</text>
+  <text x="121" y="156" style="fill:#10243a" font-family="'JetBrains Mono',monospace" font-size="9.5" text-anchor="middle">quiz-questions</text>
+  <!-- init 컨테이너 -->
+  <rect x="256" y="108" width="150" height="70" rx="6" fill="#f5edda" stroke="rgb(42,37,32)"/>
+  <text x="331" y="134" style="fill:#3a2f10" font-size="11.5" font-weight="700" text-anchor="middle">init 컨테이너</text>
+  <text x="331" y="156" style="fill:#3a2f10" font-size="9.5" text-anchor="middle">파일을 복사</text>
+  <!-- emptyDir -->
+  <rect x="466" y="108" width="150" height="70" rx="6" fill="#f5edda" stroke="rgb(42,37,32)"/>
+  <text x="541" y="134" style="fill:#3a2f10" font-size="11.5" font-weight="700" text-anchor="middle">emptyDir 볼륨</text>
+  <text x="541" y="156" style="fill:#3a2f10" font-size="9.5" text-anchor="middle">복사본이 담김</text>
+  <!-- mongo -->
+  <rect x="676" y="108" width="130" height="70" rx="6" fill="#cdeccf" stroke="rgb(42,37,32)"/>
+  <text x="741" y="134" style="fill:#14521d" font-size="11.5" font-weight="700" text-anchor="middle">mongo</text>
+  <text x="741" y="156" style="fill:#14521d" font-size="9.5" text-anchor="middle">마운트해 읽음</text>
+
+  <line x1="196" y1="143" x2="254" y2="143" stroke="rgb(90,85,78)" stroke-width="2" marker-end="url(#ag)"/>
+  <line x1="406" y1="143" x2="464" y2="143" stroke="rgb(90,85,78)" stroke-width="2" marker-end="url(#ag)"/>
+  <line x1="616" y1="143" x2="674" y2="143" stroke="rgb(90,85,78)" stroke-width="2" marker-end="url(#ag)"/>
+  <defs>
+    <marker id="ag" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(90,85,78)"/></marker>
+    <marker id="aa" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+
+  <!-- AFTER: image 볼륨 (앰버 강조 = 지금) -->
+  <rect x="30" y="240" width="790" height="150" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="46" y="264" fill="rgb(212,168,83)" font-size="13" font-weight="700">지금 (09-02) — image 볼륨으로 직접 마운트</text>
+
+  <!-- OCI 이미지 -->
+  <rect x="46" y="282" width="180" height="70" rx="6" fill="#dceaf7" stroke="rgb(42,37,32)"/>
+  <text x="136" y="308" style="fill:#10243a" font-size="11.5" font-weight="700" text-anchor="middle">OCI 이미지</text>
+  <text x="136" y="330" style="fill:#10243a" font-family="'JetBrains Mono',monospace" font-size="9.5" text-anchor="middle">image 볼륨 (read-only)</text>
+  <!-- mongo -->
+  <rect x="470" y="282" width="180" height="70" rx="6" fill="#cdeccf" stroke="rgb(42,37,32)"/>
+  <text x="560" y="308" style="fill:#14521d" font-size="11.5" font-weight="700" text-anchor="middle">mongo</text>
+  <text x="560" y="330" style="fill:#14521d" font-size="9.5" text-anchor="middle">그 볼륨을 바로 마운트해 읽음</text>
+
+  <line x1="226" y1="317" x2="468" y2="317" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#aa)"/>
+  <text x="347" y="308" fill="rgb(212,168,83)" font-size="11" font-weight="700" text-anchor="middle">init 컨테이너 없음</text>
+  <text x="347" y="345" fill="#e8e4df" font-size="10" text-anchor="middle">볼륨이 먼저 준비되어 이미지가 가장 먼저 pull됨</text>
+
+  <text x="30" y="414" fill="#e8e4df" font-size="11.5">복사 단계·중간 emptyDir가 사라져 매니페스트가 짧아진다 — 대신 볼륨은 read-only다.</text>
+</svg>

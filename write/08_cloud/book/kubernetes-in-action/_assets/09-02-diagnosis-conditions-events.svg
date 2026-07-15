@@ -1,0 +1,36 @@
+<svg viewBox="0 0 820 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>hostPath type 실패 진단 — 조건은 증상, 이벤트가 원인</title>
+  <desc>파드가 ContainerCreating에 멈췄을 때, STATUS로 문제를 감지하고 conditions로 어느 단계에서 멈췄는지(증상)를 좁힌 뒤, events에서 hostPath type 검사 실패라는 근본 원인을 확인하는 3단 진단 흐름.</desc>
+
+  <rect x="0" y="0" width="820" height="400" fill="#0d0d0d"/>
+  <text x="30" y="38" fill="rgb(212,168,83)" font-size="16" font-weight="700">멈춘 파드 진단 — 조건은 증상까지, 이벤트가 원인까지</text>
+
+  <!-- 1단계: STATUS 감지 -->
+  <rect x="30" y="66" width="760" height="72" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="46" y="90" fill="rgb(212,168,83)" font-size="13" font-weight="700">1. get po — 문제 감지</text>
+  <rect x="46" y="100" width="360" height="28" rx="4" fill="#f5edda" stroke="rgb(42,37,32)"/>
+  <text x="56" y="119" style="fill:#3a2f10" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">0/1  ContainerCreating</text>
+  <text x="430" y="119" fill="#e8e4df" font-size="11.5">Running이 안 된다 — 뭔가 막혔다</text>
+
+  <!-- 화살표 -->
+  <line x1="410" y1="150" x2="410" y2="168" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ad)"/>
+  <defs><marker id="ad" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker></defs>
+
+  <!-- 2단계: conditions (증상) — 파랑 -->
+  <rect x="30" y="176" width="760" height="94" rx="8" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="46" y="200" fill="#5b9bd5" font-size="13" font-weight="700">2. conditions — 증상 (어느 단계에서 멈췄나)</text>
+  <rect x="46" y="210" width="340" height="48" rx="4" fill="#dceaf7" stroke="rgb(42,37,32)"/>
+  <text x="56" y="228" style="fill:#10243a" font-family="'JetBrains Mono',monospace" font-size="10">PodScheduled=True  Initialized=True</text>
+  <text x="56" y="246" style="fill:#7a1f1f" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="700">Ready=False (ContainersNotReady)</text>
+  <text x="410" y="232" fill="#e8e4df" font-size="11.5">스케줄·init은 통과, 컨테이너가</text>
+  <text x="410" y="250" fill="#e8e4df" font-size="11.5">준비 안 됨 — 여기까지가 "증상"</text>
+
+  <line x1="410" y1="282" x2="410" y2="300" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ad)"/>
+
+  <!-- 3단계: events (원인) — 초록(찾았다) -->
+  <rect x="30" y="308" width="760" height="76" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="46" y="332" fill="#66bb6a" font-size="13" font-weight="700">3. events — 근본 원인 (왜 멈췄나)</text>
+  <rect x="46" y="342" width="480" height="30" rx="4" fill="#cdeccf" stroke="rgb(42,37,32)"/>
+  <text x="56" y="362" style="fill:#14521d" font-family="'JetBrains Mono',monospace" font-size="9.5" font-weight="700">FailedMount: hostPath type check failed: … is not a directory</text>
+  <text x="548" y="362" fill="#e8e4df" font-size="11.5">원인 확정 — 경로가 없다</text>
+</svg>
