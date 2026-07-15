@@ -1,0 +1,54 @@
+<svg viewBox="0 0 900 430" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>일반 ConfigMap 볼륨의 갱신은 무중단이되 즉시가 아니다 — kubelet 동기화 지연</title>
+  <desc>ConfigMap을 수정하면 API 오브젝트는 즉시 바뀌지만, 마운트된 파일은 kubelet 동기화 주기와 캐시 전파 지연만큼 늦게 갱신된다. 파드 교체나 컨테이너 재시작 없이 파일이 바뀌므로 무중단이지만, 앱이 그 파일을 다시 읽어야 동작이 바뀐다. kind v1.35 실측에서 약 56초 뒤 반영됐고 파드 UID와 restartCount는 그대로였다.</desc>
+
+  <rect x="0" y="0" width="900" height="430" fill="#0d0d0d"/>
+  <text x="30" y="36" fill="rgb(212,168,83)" font-size="16" font-weight="700">일반 볼륨의 파일 갱신은 무중단 — 단, 즉시가 아니라 kubelet 동기화 주기만큼 늦다</text>
+
+  <!-- 타임라인 축 -->
+  <line x1="70" y1="150" x2="830" y2="150" stroke="rgb(90,85,78)" stroke-width="2"/>
+  <text x="70" y="180" fill="#e8e4df" font-size="10.5">시간 →</text>
+
+  <!-- t0: ConfigMap 수정 (API 즉시) -->
+  <circle cx="150" cy="150" r="6" fill="rgb(212,168,83)"/>
+  <rect x="72" y="72" width="156" height="58" rx="6" fill="#dceaf7" stroke="rgb(42,37,32)"/>
+  <text x="150" y="94" style="fill:#10243a" font-size="11.5" font-weight="700" text-anchor="middle">t0 · ConfigMap 수정</text>
+  <text x="150" y="114" style="fill:#10243a" font-size="10" text-anchor="middle">API 오브젝트 data 즉시 변경</text>
+  <line x1="150" y1="130" x2="150" y2="144" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+
+  <!-- 지연 구간 표시 -->
+  <line x1="150" y1="150" x2="600" y2="150" stroke="rgb(91,155,213)" stroke-width="6" stroke-dasharray="7 5"/>
+  <rect x="250" y="196" width="250" height="72" rx="6" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="375" y="218" fill="#5b9bd5" font-size="11.5" font-weight="700" text-anchor="middle">kubelet 동기화 지연</text>
+  <text x="375" y="238" fill="#e8e4df" font-size="10" text-anchor="middle">동기화 주기 + 캐시 전파 지연</text>
+  <text x="375" y="255" fill="#e8e4df" font-size="10" text-anchor="middle">(watch·ttl·직접조회 중 설정에 따라 다름)</text>
+  <line x1="375" y1="196" x2="375" y2="156" stroke="#5b9bd5" stroke-width="1.5"/>
+
+  <!-- t1: 파일 갱신 -->
+  <circle cx="600" cy="150" r="6" fill="rgb(102,187,106)"/>
+  <rect x="512" y="72" width="176" height="58" rx="6" fill="#cdeccf" stroke="rgb(42,37,32)"/>
+  <text x="600" y="94" style="fill:#14521d" font-size="11.5" font-weight="700" text-anchor="middle">t1 · 마운트 파일 갱신</text>
+  <text x="600" y="114" style="fill:#14521d" font-size="10" text-anchor="middle">/config/message = after</text>
+  <line x1="600" y1="130" x2="600" y2="144" stroke="rgb(102,187,106)" stroke-width="1.5"/>
+
+  <!-- t2: 앱 반영 (조건부) -->
+  <circle cx="770" cy="150" r="6" fill="rgb(212,168,83)"/>
+  <rect x="686" y="72" width="184" height="58" rx="6" fill="#f5edda" stroke="rgb(42,37,32)"/>
+  <text x="778" y="94" style="fill:#3a2f10" font-size="11.5" font-weight="700" text-anchor="middle">t2 · 앱 동작 반영</text>
+  <text x="778" y="114" style="fill:#3a2f10" font-size="10" text-anchor="middle">앱이 파일을 다시 읽어야 함</text>
+  <line x1="770" y1="130" x2="770" y2="144" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+
+  <!-- 실측 박스 -->
+  <rect x="70" y="300" width="360" height="96" rx="8" fill="#0d0d0d" stroke="rgb(102,187,106)" stroke-width="1.5"/>
+  <text x="86" y="324" fill="rgb(102,187,106)" font-size="12.5" font-weight="700">kind v1.35 실측 — 무중단 확인</text>
+  <text x="86" y="347" fill="#e8e4df" font-size="11">· 수정 → 파일 반영까지 <tspan font-weight="700" fill="rgb(212,168,83)">약 56초</tspan></text>
+  <text x="86" y="368" fill="#e8e4df" font-size="11">· 파드 UID <tspan font-weight="700">그대로</tspan> (교체 안 함)</text>
+  <text x="86" y="388" fill="#e8e4df" font-size="11">· restartCount <tspan font-weight="700">0 유지</tspan> (재시작 안 함)</text>
+
+  <!-- 경계 박스 -->
+  <rect x="450" y="300" width="380" height="96" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="466" y="324" fill="rgb(212,168,83)" font-size="12.5" font-weight="700">"무중단"의 경계</text>
+  <text x="466" y="347" fill="#e8e4df" font-size="11">파일 <tspan font-weight="700" fill="rgb(102,187,106)">내용 갱신</tspan>은 무중단 (t0→t1)</text>
+  <text x="466" y="368" fill="#e8e4df" font-size="11">앱 <tspan font-weight="700" fill="rgb(212,168,83)">동작 반영</tspan>은 reload 지원에 달림 (t1→t2)</text>
+  <text x="466" y="388" fill="#e8e4df" font-size="11">환경변수·subPath는 t1조차 없어 파드 교체 필수</text>
+</svg>
