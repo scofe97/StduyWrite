@@ -1,0 +1,94 @@
+<svg viewBox="0 0 980 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>configMap 볼륨의 실제 폴더 구조와 ..data 심링크로 원자적 갱신하기</title>
+  <desc>/etc/config 안에는 app.conf·db.conf 심링크, ..data 심링크, 타임스탬프 디렉터리가 모두 실제 파일시스템 엔트리로 존재한다. 실제 파일은 타임스탬프 디렉터리 안에 있다. ConfigMap을 고치면 새 타임스탬프 디렉터리가 생기고 ..data 심링크만 새 디렉터리로 바뀐다. 개별 파일 심링크는 그대로여서 mtime이 변하지 않고, 모든 파일이 한 번에 교체된다. kind v1.35 실측: 갱신 후 ..data는 05:30, app.conf·db.conf 심링크는 05:29 그대로.</desc>
+
+  <rect x="0" y="0" width="980" height="500" fill="#0d0d0d"/>
+  <text x="30" y="34" fill="rgb(212,168,83)" font-size="16" font-weight="700">/etc/config 실제 구조 — 바깥은 전부 심링크, 진짜 파일은 타임스탬프 폴더 안</text>
+
+  <!-- 컷 1: 갱신 전 실제 트리 -->
+  <rect x="24" y="54" width="452" height="330" rx="8" fill="#0d0d0d" stroke="rgb(90,85,78)" stroke-width="1.5"/>
+  <text x="40" y="80" fill="#e8e4df" font-size="13" font-weight="700">① 갱신 전  —  ls -lA /etc/config</text>
+
+  <!-- 트리: /etc/config -->
+  <text x="44" y="108" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="12" font-weight="700">📁 /etc/config/</text>
+  <!-- 세로 연결선 -->
+  <line x1="58" y1="116" x2="58" y2="290" stroke="rgb(90,85,78)" stroke-width="1.5"/>
+
+  <!-- app.conf 심링크 -->
+  <line x1="58" y1="132" x2="72" y2="132" stroke="rgb(90,85,78)" stroke-width="1.5"/>
+  <text x="78" y="137" fill="#5b9bd5" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">🔗 app.conf</text>
+  <text x="196" y="137" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">→ ..data/app.conf</text>
+  <!-- db.conf 심링크 -->
+  <line x1="58" y1="158" x2="72" y2="158" stroke="rgb(90,85,78)" stroke-width="1.5"/>
+  <text x="78" y="163" fill="#5b9bd5" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">🔗 db.conf</text>
+  <text x="196" y="163" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">→ ..data/db.conf</text>
+  <!-- ..data 심링크 -->
+  <line x1="58" y1="188" x2="72" y2="188" stroke="rgb(90,85,78)" stroke-width="1.5"/>
+  <rect x="76" y="176" width="176" height="22" rx="4" fill="#f5edda"/>
+  <text x="82" y="192" style="fill:#3a2f10" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">🔗 ..data</text>
+  <text x="258" y="192" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="700">→ ..05_29_12/</text>
+  <!-- 타임스탬프 디렉터리 (실제 파일 있음) -->
+  <line x1="58" y1="222" x2="72" y2="222" stroke="rgb(90,85,78)" stroke-width="1.5"/>
+  <text x="78" y="227" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">📁 ..05_29_12/</text>
+  <!-- 실제 파일 (초록 = 진짜 데이터) -->
+  <line x1="92" y1="235" x2="92" y2="278" stroke="rgb(90,85,78)" stroke-width="1.5"/>
+  <line x1="92" y1="248" x2="106" y2="248" stroke="rgb(90,85,78)" stroke-width="1.5"/>
+  <rect x="110" y="238" width="130" height="20" rx="4" fill="#cdeccf"/>
+  <text x="116" y="253" style="fill:#14521d" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="700">📄 app.conf</text>
+  <text x="248" y="253" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="9.5">= before (실파일)</text>
+  <line x1="92" y1="274" x2="106" y2="274" stroke="rgb(90,85,78)" stroke-width="1.5"/>
+  <rect x="110" y="264" width="130" height="20" rx="4" fill="#cdeccf"/>
+  <text x="116" y="279" style="fill:#14521d" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="700">📄 db.conf</text>
+  <text x="248" y="279" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="9.5">= before (실파일)</text>
+
+  <text x="44" y="312" fill="#e8e4df" font-size="10.5">🔗 는 심링크, 📄 는 실제 파일.</text>
+  <text x="44" y="330" fill="#e8e4df" font-size="10.5">바깥 세 심링크는 모두 ..data 를 거쳐</text>
+  <text x="44" y="348" fill="#e8e4df" font-size="10.5">타임스탬프 폴더 안 실파일에 닿습니다.</text>
+  <text x="44" y="370" fill="rgb(212,168,83)" font-size="10.5" font-weight="700">app.conf → ..data → 폴더 = 심링크 2단</text>
+
+  <!-- 화살표 -->
+  <text x="486" y="220" fill="rgb(212,168,83)" font-size="22" font-weight="700">→</text>
+
+  <!-- 컷 2: 갱신 후 실제 트리 -->
+  <rect x="516" y="54" width="440" height="330" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="532" y="80" fill="#66bb6a" font-size="13" font-weight="700">② 갱신 후  —  ..data 만 새 폴더로</text>
+
+  <text x="536" y="108" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="12" font-weight="700">📁 /etc/config/</text>
+  <line x1="550" y1="116" x2="550" y2="316" stroke="rgb(90,85,78)" stroke-width="1.5"/>
+
+  <!-- app.conf 심링크 (mtime 그대로) -->
+  <line x1="550" y1="132" x2="564" y2="132" stroke="rgb(90,85,78)" stroke-width="1.5"/>
+  <text x="570" y="137" fill="#5b9bd5" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">🔗 app.conf</text>
+  <text x="688" y="137" fill="#66bb6a" font-family="'JetBrains Mono',monospace" font-size="9.5" font-weight="700">05:29 그대로</text>
+  <line x1="550" y1="158" x2="564" y2="158" stroke="rgb(90,85,78)" stroke-width="1.5"/>
+  <text x="570" y="163" fill="#5b9bd5" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">🔗 db.conf</text>
+  <text x="688" y="163" fill="#66bb6a" font-family="'JetBrains Mono',monospace" font-size="9.5" font-weight="700">05:29 그대로</text>
+  <!-- ..data (새 폴더로 틀림) -->
+  <line x1="550" y1="188" x2="564" y2="188" stroke="rgb(90,85,78)" stroke-width="1.5"/>
+  <rect x="568" y="176" width="168" height="22" rx="4" fill="#cdeccf" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="574" y="192" style="fill:#14521d" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">🔗 ..data</text>
+  <text x="742" y="192" fill="#66bb6a" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="700">→ ..05_30_25/ ★</text>
+  <!-- 옛 폴더 (흐림) -->
+  <line x1="550" y1="222" x2="564" y2="222" stroke="rgb(90,85,78)" stroke-width="1.5"/>
+  <text x="570" y="227" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10.5">📁 ..05_29_12/ (옛, 곧 GC)</text>
+  <!-- 새 폴더 (실제 파일 after) -->
+  <line x1="550" y1="252" x2="564" y2="252" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="570" y="257" fill="#66bb6a" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">📁 ..05_30_25/  (신규)</text>
+  <line x1="584" y1="265" x2="584" y2="308" stroke="rgb(90,85,78)" stroke-width="1.5"/>
+  <line x1="584" y1="278" x2="598" y2="278" stroke="rgb(90,85,78)" stroke-width="1.5"/>
+  <rect x="602" y="268" width="130" height="20" rx="4" fill="#cdeccf"/>
+  <text x="608" y="283" style="fill:#14521d" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="700">📄 app.conf</text>
+  <text x="740" y="283" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="9.5">= after</text>
+  <line x1="584" y1="304" x2="598" y2="304" stroke="rgb(90,85,78)" stroke-width="1.5"/>
+  <rect x="602" y="294" width="130" height="20" rx="4" fill="#cdeccf"/>
+  <text x="608" y="309" style="fill:#14521d" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="700">📄 db.conf</text>
+  <text x="740" y="309" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="9.5">= after</text>
+
+  <text x="536" y="340" fill="rgb(212,168,83)" font-size="10.5" font-weight="700">★ ..data 하나만 새 폴더로 틀린다 —</text>
+  <text x="536" y="358" fill="rgb(212,168,83)" font-size="10.5" font-weight="700">   두 파일이 그 순간 함께 after 가 됨</text>
+  <text x="536" y="376" fill="#e8e4df" font-size="10.5">개별 심링크는 안 건드려 mtime 불변</text>
+
+  <text x="30" y="418" fill="#e8e4df" font-size="11.5">kind v1.35 실측: 갱신 후 <tspan font-weight="700" fill="rgb(102,187,106)">..data 는 05:30 으로 새 폴더</tspan> 를 가리키고, app.conf·db.conf 심링크는 <tspan font-weight="700">05:29 그대로</tspan>였다.</text>
+  <text x="30" y="442" fill="#e8e4df" font-size="11.5">교체점이 ..data 하나뿐이라 파일 여러 개가 <tspan font-weight="700" fill="rgb(212,168,83)">한 순간에 함께 바뀐다</tspan> — 이것이 원자적 갱신이다.</text>
+  <text x="30" y="466" fill="#e8e4df" font-size="11.5"><tspan font-weight="700" fill="rgb(212,168,83)">subPath = 0단</tspan>: 심링크 없이 실파일이 대상 경로에 직접 쓰여, ..data 교체가 안 닿아 ConfigMap 을 고쳐도 갱신되지 않는다.</text>
+</svg>

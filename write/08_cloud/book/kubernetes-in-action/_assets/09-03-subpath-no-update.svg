@@ -1,0 +1,73 @@
+<svg viewBox="0 0 960 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>subPath 마운트가 ConfigMap 갱신을 받지 못하는 이유 — 심링크 체인이 끊긴다</title>
+  <desc>일반 마운트는 파일이 ..data를 거쳐 타임스탬프 디렉터리에 닿는 심링크 체인이라, ..data를 새 디렉터리로 틀면 갱신이 반영된다. subPath는 마운트 시점에 실제 파일 하나를 대상 경로에 직접 연결하므로 심링크 체인이 없다. 그래서 쿠버네티스가 ..data를 새 디렉터리로 틀어도 subPath 파일에는 그 변화가 닿지 않아 옛 값에 머문다. kind v1.35 실측: ConfigMap을 after로 고치자 일반 마운트는 after, subPath는 before 그대로.</desc>
+
+  <rect x="0" y="0" width="960" height="470" fill="#0d0d0d"/>
+  <text x="30" y="34" fill="rgb(212,168,83)" font-size="16" font-weight="700">subPath 는 심링크 체인이 끊겨 ..data 교체가 닿지 않는다</text>
+
+  <!-- 공통: ConfigMap 수정 → ..data 새 폴더로 -->
+  <rect x="330" y="52" width="300" height="52" rx="6" fill="#dceaf7" stroke="rgb(42,37,32)"/>
+  <text x="480" y="74" style="fill:#10243a" font-size="11.5" font-weight="700" text-anchor="middle">ConfigMap 을 after 로 수정</text>
+  <text x="480" y="93" style="fill:#10243a" font-size="10" text-anchor="middle">→ 새 타임스탬프 디렉터리 생성 + ..data 가 그리로 틀림</text>
+
+  <!-- 왼쪽: 일반 마운트 (성공) -->
+  <rect x="24" y="122" width="440" height="292" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="40" y="148" fill="#66bb6a" font-size="14" font-weight="700">일반 마운트 — 체인이 살아 있어 반영</text>
+
+  <text x="40" y="176" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">📁 /etc/live/</text>
+  <!-- 심링크 체인 -->
+  <rect x="48" y="188" width="150" height="26" rx="4" fill="#dceaf7"/>
+  <text x="56" y="205" style="fill:#10243a" font-family="'JetBrains Mono',monospace" font-size="10.5" font-weight="700">🔗 app.conf</text>
+  <text x="206" y="205" fill="#e8e4df" font-size="14">→</text>
+  <rect x="226" y="188" width="90" height="26" rx="4" fill="#f5edda"/>
+  <text x="234" y="205" style="fill:#3a2f10" font-family="'JetBrains Mono',monospace" font-size="10.5" font-weight="700">🔗 ..data</text>
+  <text x="322" y="205" fill="#e8e4df" font-size="14">→</text>
+  <rect x="340" y="188" width="110" height="26" rx="4" fill="#cdeccf"/>
+  <text x="348" y="205" style="fill:#14521d" font-family="'JetBrains Mono',monospace" font-size="9.5" font-weight="700">📁 타임스탬프/</text>
+
+  <text x="40" y="242" fill="#e8e4df" font-size="11">파일 → ..data → 폴더 로 이어지는</text>
+  <text x="40" y="260" fill="#e8e4df" font-size="11">심링크 체인이 살아 있습니다.</text>
+
+  <!-- ..data 틀기 화살표 -->
+  <path d="M271,214 C271,290 380,300 395,318" fill="none" stroke="#66bb6a" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#g1)"/>
+  <defs>
+    <marker id="g1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#66bb6a"/></marker>
+    <marker id="r1" markerWidth="11" markerHeight="11" refX="5" refY="5" orient="auto"><circle cx="5" cy="5" r="4" fill="none" stroke="#f44336" stroke-width="1.5"/></marker>
+  </defs>
+  <text x="250" y="288" fill="#66bb6a" font-size="10.5" font-weight="700">..data 가 새 폴더로 틀리면</text>
+
+  <rect x="40" y="304" width="410" height="94" rx="6" fill="#cdeccf" stroke="rgb(42,37,32)"/>
+  <text x="56" y="326" style="fill:#14521d" font-size="11.5" font-weight="700">app.conf 는 ..data 를 거치므로</text>
+  <text x="56" y="348" style="fill:#14521d" font-size="11.5" font-weight="700">새 폴더의 파일을 그대로 따라갑니다.</text>
+  <text x="56" y="374" style="fill:#14521d" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">cat app.conf → message=after ✓</text>
+  <text x="56" y="392" style="fill:#14521d" font-size="10">갱신 반영됨</text>
+
+  <!-- 오른쪽: subPath (실패) -->
+  <rect x="496" y="122" width="440" height="292" rx="8" fill="#0d0d0d" stroke="#f44336" stroke-width="1.5"/>
+  <text x="512" y="148" fill="#f44336" font-size="14" font-weight="700">subPath — 체인이 없어 안 닿음</text>
+
+  <text x="512" y="176" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">📁 /etc/frozen/</text>
+  <!-- 실파일 (심링크 아님) -->
+  <rect x="520" y="188" width="200" height="42" rx="4" fill="#f2d4d4" stroke="#f44336"/>
+  <text x="530" y="206" style="fill:#7a1f1f" font-family="'JetBrains Mono',monospace" font-size="10.5" font-weight="700">📄 app.conf (-rw-r--r--)</text>
+  <text x="530" y="223" style="fill:#7a1f1f" font-size="9.5">실제 파일 — 심링크 아님</text>
+
+  <text x="512" y="256" fill="#e8e4df" font-size="11">마운트 시점에 그때의 실파일을</text>
+  <text x="512" y="274" fill="#e8e4df" font-size="11">대상 경로에 직접 연결합니다.</text>
+  <text x="512" y="292" fill="#f44336" font-size="11" font-weight="700">→ ..data 를 거치지 않습니다.</text>
+
+  <!-- ..data 틀기 화살표가 끊김 -->
+  <path d="M620,104 C620,150 700,180 730,196" fill="none" stroke="#f44336" stroke-width="2" stroke-dasharray="5 4"/>
+  <line x1="716" y1="188" x2="740" y2="210" stroke="#f44336" stroke-width="3"/>
+  <line x1="740" y1="188" x2="716" y2="210" stroke="#f44336" stroke-width="3"/>
+  <text x="742" y="200" fill="#f44336" font-size="10.5" font-weight="700">체인 없음 — 안 닿음</text>
+
+  <rect x="512" y="304" width="410" height="94" rx="6" fill="#f2d4d4" stroke="rgb(42,37,32)"/>
+  <text x="528" y="326" style="fill:#7a1f1f" font-size="11.5" font-weight="700">..data 가 새 폴더로 틀려도 subPath</text>
+  <text x="528" y="348" style="fill:#7a1f1f" font-size="11.5" font-weight="700">실파일은 그 변화를 못 받습니다.</text>
+  <text x="528" y="374" style="fill:#7a1f1f" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">cat app.conf → message=before ✗</text>
+  <text x="528" y="392" style="fill:#7a1f1f" font-size="10">옛 값에 머묾 (갱신 안 됨)</text>
+
+  <text x="30" y="436" fill="#e8e4df" font-size="11.5">kind v1.35 실측: ConfigMap 을 after 로 고치자 <tspan font-weight="700" fill="rgb(102,187,106)">/etc/live 는 after</tspan>, <tspan font-weight="700" fill="#f44336">/etc/frozen(subPath)은 before</tspan> 그대로였다.</text>
+  <text x="30" y="458" fill="#e8e4df" font-size="11.5">읽기는 되지만(파일은 존재) 갱신이 안 오는 것 — subPath 는 심링크 체인을 우회하기 때문이다.</text>
+</svg>
