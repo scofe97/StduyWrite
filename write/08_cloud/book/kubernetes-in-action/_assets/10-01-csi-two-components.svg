@@ -1,0 +1,80 @@
+<svg viewBox="0 0 960 460" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>CSI 드라이버의 두 컴포넌트 협업 구조</title>
+  <desc>클러스터에 하나뿐인 CSI 컨트롤러가 PVC를 감지해 PV와 밑바탕 스토리지를 만들고, 노드마다 도는 노드 에이전트가 파드가 스케줄된 노드에 볼륨을 attach·mount한다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .lbl   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
+      .lbls  { font-size: 10px; fill: #0d0d0d; }
+      .node  { font-size: 11px; font-weight: 700; fill: #e8e4df; }
+      .pod   { font-size: 10px; font-weight: 700; fill: #0d0d0d; }
+      .note  { font-size: 11px; font-weight: 700; fill: rgb(212,168,83); }
+      .flow  { font-size: 10px; font-weight: 700; fill: rgb(212,168,83); }
+    </style>
+    <marker id="csi10" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(91,155,213)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="460" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">CSI 드라이버의 두 컴포넌트 — 컨트롤러와 노드 에이전트</text>
+  <text x="24" y="50" class="sub">컨트롤러는 클러스터에 하나로 PV 를 만들고, 에이전트는 노드마다 하나로 볼륨을 붙인다</text>
+
+  <!-- controller flow -->
+  <rect x="40" y="105" width="110" height="50" rx="8" fill="rgb(245,225,110)"/>
+  <text x="95" y="127" class="lbl" text-anchor="middle">PVC</text>
+  <text x="95" y="144" class="lbls" text-anchor="middle">(사용자 생성)</text>
+
+  <path d="M150,130 L246,130" fill="none" stroke="rgb(91,155,213)" stroke-width="2.5" marker-end="url(#csi10)"/>
+  <text x="198" y="120" class="flow" text-anchor="middle">① 감지</text>
+
+  <rect x="250" y="95" width="210" height="70" rx="8" fill="rgb(200,180,235)"/>
+  <text x="355" y="125" class="lbl" text-anchor="middle">CSI 컨트롤러</text>
+  <text x="355" y="143" class="lbls" text-anchor="middle">(클러스터에 1개)</text>
+
+  <path d="M460,130 L556,130" fill="none" stroke="rgb(91,155,213)" stroke-width="2.5" marker-end="url(#csi10)"/>
+  <text x="508" y="120" class="flow" text-anchor="middle">② PV 생성</text>
+
+  <rect x="560" y="105" width="110" height="50" rx="8" fill="rgb(245,180,140)"/>
+  <text x="615" y="135" class="lbl" text-anchor="middle">PV</text>
+
+  <path d="M670,130 L726,130" fill="none" stroke="rgb(91,155,213)" stroke-width="2.5" marker-end="url(#csi10)"/>
+
+  <g transform="translate(730,102)">
+    <ellipse cx="80" cy="0" rx="80" ry="14" fill="rgb(146,196,235)"/>
+    <rect x="0" y="0" width="160" height="55" fill="rgb(146,196,235)"/>
+    <ellipse cx="80" cy="55" rx="80" ry="14" fill="rgb(90,140,200)"/>
+    <text x="80" y="33" class="lbl" text-anchor="middle">밑바탕 스토리지</text>
+  </g>
+
+  <path d="M810,175 C810,235 200,215 200,278" fill="none" stroke="rgb(91,155,213)" stroke-width="2.5" marker-end="url(#csi10)"/>
+  <text x="470" y="230" class="flow" text-anchor="middle">③ 파드가 스케줄된 노드의 에이전트가 볼륨을 attach·mount</text>
+
+  <!-- nodes -->
+  <rect x="40" y="250" width="280" height="150" rx="10" fill="#0d0d0d" stroke="rgb(91,155,213)" stroke-width="1.5"/>
+  <text x="54" y="272" class="node">Node 1</text>
+  <rect x="54" y="284" width="180" height="30" rx="6" fill="rgb(146,196,235)"/>
+  <text x="144" y="303" class="pod" text-anchor="middle">노드 에이전트 (DaemonSet)</text>
+  <rect x="54" y="332" width="56" height="26" rx="6" fill="rgb(232,240,248)"/>
+  <text x="82" y="349" class="pod" text-anchor="middle">Pod</text>
+  <g transform="translate(130,332)">
+    <ellipse cx="35" cy="0" rx="35" ry="7" fill="rgb(146,196,235)"/>
+    <rect x="0" y="0" width="70" height="26" fill="rgb(146,196,235)"/>
+    <ellipse cx="35" cy="26" rx="35" ry="7" fill="rgb(120,175,220)"/>
+    <text x="35" y="18" class="pod" text-anchor="middle">Volume</text>
+  </g>
+  <text x="54" y="386" class="flow">④ 컨테이너에 마운트</text>
+
+  <rect x="340" y="250" width="280" height="150" rx="10" fill="#0d0d0d" stroke="rgb(138,133,128)"/>
+  <text x="354" y="272" class="node">Node 2</text>
+  <rect x="354" y="284" width="180" height="30" rx="6" fill="rgb(146,196,235)"/>
+  <text x="444" y="303" class="pod" text-anchor="middle">노드 에이전트 (DaemonSet)</text>
+
+  <rect x="640" y="250" width="280" height="150" rx="10" fill="rgb(138,133,128)" fill-opacity="0" stroke="rgb(138,133,128)"/>
+  <text x="654" y="272" class="node">Node 3</text>
+  <rect x="654" y="284" width="180" height="30" rx="6" fill="rgb(146,196,235)"/>
+  <text x="744" y="303" class="pod" text-anchor="middle">노드 에이전트 (DaemonSet)</text>
+
+  <text x="24" y="440" class="note">kubectl get csidrivers 로 확인 — 이름이 StorageClass 의 provisioner 값과 일치. GKE 는 노드마다 pdcsi-node-xyz 파드</text>
+</svg>

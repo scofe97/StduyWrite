@@ -1,0 +1,87 @@
+<svg viewBox="0 0 960 520" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>access mode 4종 통합 비교 — 제한 단위와 동시 사용</title>
+  <desc>RWOP는 파드 하나, RWO는 노드 하나, RWX는 여러 노드 read-write, ROX는 여러 노드 read-only. 파드 기준 다중 모드는 존재하지 않는다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: rgb(138,133,128); }
+      .axis  { font-size: 13px; font-weight: 800; fill: #e8e4df; }
+      .name  { font-size: 12px; font-weight: 700; fill: #e8e4df; }
+      .desc  { font-size: 11px; fill: #e8e4df; }
+      .chip  { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .pod   { font-size: 10px; font-weight: 700; fill: #0d0d0d; }
+      .node  { font-size: 10px; fill: #e8e4df; }
+      .ok    { font-size: 11px; font-weight: 800; fill: #66bb6a; }
+      .no    { font-size: 11px; font-weight: 800; fill: #f44336; }
+      .note  { font-size: 11px; font-weight: 700; fill: rgb(212,168,83); }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="520" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">access mode 4종 — 제한 단위(파드/노드) × 동시 사용(단일/다중)</text>
+  <text x="24" y="50" class="sub">Once 계열은 "하나만"의 하나가 무엇인지(파드냐 노드냐), Many 계열은 read-write 허용 여부로 갈린다</text>
+
+  <!-- axis labels -->
+  <text x="340" y="95" class="axis" text-anchor="middle">단일 (Once)</text>
+  <text x="740" y="95" class="axis" text-anchor="middle">다중 (Many)</text>
+  <text x="80" y="205" class="axis" text-anchor="middle">파드 기준</text>
+  <text x="80" y="405" class="axis" text-anchor="middle">노드 기준</text>
+
+  <!-- cell 1: RWOP (파드 × 단일) -->
+  <rect x="150" y="110" width="380" height="180" rx="10" fill="#0d0d0d" stroke="rgb(91,155,213)" stroke-width="1.5"/>
+  <rect x="170" y="128" width="66" height="26" rx="6" fill="rgb(245,225,110)"/>
+  <text x="203" y="146" class="chip" text-anchor="middle">RWOP</text>
+  <text x="248" y="146" class="name">ReadWriteOncePod</text>
+  <text x="170" y="178" class="desc">클러스터 전체에서 파드 하나만 read-write</text>
+  <g>
+    <rect x="170" y="192" width="210" height="72" rx="8" fill="#0d0d0d" stroke="rgb(138,133,128)"/>
+    <text x="182" y="208" class="node">Node</text>
+    <rect x="185" y="218" width="56" height="26" rx="6" fill="rgb(146,196,235)"/>
+    <text x="213" y="235" class="pod" text-anchor="middle">Pod 1</text>
+    <text x="213" y="258" class="ok" text-anchor="middle">rw OK</text>
+    <rect x="285" y="218" width="56" height="26" rx="6" fill="rgb(232,240,248)"/>
+    <text x="313" y="235" class="pod" text-anchor="middle">Pod 2</text>
+    <text x="313" y="258" class="no" text-anchor="middle">FAIL</text>
+  </g>
+  <text x="170" y="284" class="note">둘째 파드는 같은 노드여도 못 씀 — quiz Pod 가 쓰는 모드</text>
+
+  <!-- cell 2: 파드 × 다중 = 없음 -->
+  <rect x="550" y="110" width="380" height="180" rx="10" fill="#0d0d0d" stroke="rgb(138,133,128)" stroke-dasharray="6 4"/>
+  <text x="740" y="185" class="name" text-anchor="middle">이런 모드는 없습니다</text>
+  <text x="740" y="210" class="desc" text-anchor="middle">다중 사용을 허용할지는 노드 축(RWX·ROX)에서 갈립니다</text>
+  <text x="740" y="232" class="desc" text-anchor="middle">ReadOnlyOnce 도 없음 — RWO 를 read-only 로 마운트하면 됨</text>
+
+  <!-- cell 3: RWO (노드 × 단일) -->
+  <rect x="150" y="310" width="380" height="180" rx="10" fill="#0d0d0d" stroke="rgb(91,155,213)" stroke-width="1.5"/>
+  <rect x="170" y="328" width="56" height="26" rx="6" fill="rgb(245,180,140)"/>
+  <text x="198" y="346" class="chip" text-anchor="middle">RWO</text>
+  <text x="238" y="346" class="name">ReadWriteOnce</text>
+  <text x="170" y="378" class="desc">노드 하나만 마운트 — 그 노드의 여러 파드는 모두 read-write</text>
+  <g>
+    <rect x="170" y="392" width="165" height="72" rx="8" fill="#0d0d0d" stroke="rgb(138,133,128)"/>
+    <text x="182" y="408" class="node">Node A</text>
+    <rect x="183" y="418" width="56" height="26" rx="6" fill="rgb(146,196,235)"/>
+    <text x="211" y="435" class="pod" text-anchor="middle">Pod 1</text>
+    <rect x="248" y="418" width="56" height="26" rx="6" fill="rgb(146,196,235)"/>
+    <text x="276" y="435" class="pod" text-anchor="middle">Pod 2</text>
+    <text x="252" y="458" class="ok" text-anchor="middle">둘 다 rw OK</text>
+    <rect x="352" y="392" width="160" height="72" rx="8" fill="#0d0d0d" stroke="rgb(138,133,128)"/>
+    <text x="364" y="408" class="node">Node B</text>
+    <rect x="365" y="418" width="56" height="26" rx="6" fill="rgb(232,240,248)"/>
+    <text x="393" y="435" class="pod" text-anchor="middle">Pod 3</text>
+    <text x="432" y="458" class="no" text-anchor="middle">Multi-Attach 에러</text>
+  </g>
+  <text x="170" y="484" class="note">"Once = 파드 하나"로 오해하기 쉬움 — 제한 단위는 노드</text>
+
+  <!-- cell 4: RWX / ROX (노드 × 다중) -->
+  <rect x="550" y="310" width="380" height="180" rx="10" fill="#0d0d0d" stroke="rgb(91,155,213)" stroke-width="1.5"/>
+  <rect x="570" y="332" width="56" height="26" rx="6" fill="rgb(180,225,180)"/>
+  <text x="598" y="350" class="chip" text-anchor="middle">RWX</text>
+  <text x="638" y="343" class="name">ReadWriteMany — 여러 노드가 동시에 read-write</text>
+  <text x="638" y="361" class="note">파일 스토리지(NFS 등) 필요 — 블록 스토리지 대부분 불가</text>
+  <rect x="570" y="402" width="56" height="26" rx="6" fill="rgb(200,180,235)"/>
+  <text x="598" y="420" class="chip" text-anchor="middle">ROX</text>
+  <text x="638" y="413" class="name">ReadOnlyMany — 여러 노드가 동시에 read-only</text>
+  <text x="638" y="431" class="note">빈 PV 는 못 씀 — dataSourceRef 로 채운 뒤 마운트</text>
+  <text x="570" y="472" class="desc">두 모드의 동작 상세는 아래 RWX·ROX 도식 참조</text>
+</svg>
