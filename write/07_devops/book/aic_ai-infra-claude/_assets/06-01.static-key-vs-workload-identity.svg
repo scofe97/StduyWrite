@@ -1,0 +1,62 @@
+<svg viewBox="0 0 900 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>정적 SA 키 방식 vs Workload Identity — 시크릿 순환 탈출</title>
+  <desc>왼쪽은 SA 키 JSON을 클러스터에 두어 그 키 자체가 또 다른 시크릿이 되는 순환, 오른쪽은 KSA를 IAM에 바인딩해 정적 키 없이 단기 OIDC 토큰으로 인증하는 구조</desc>
+  <defs>
+    <marker id="wiRed" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#f44336"/></marker>
+    <marker id="wiGreen" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#66bb6a"/></marker>
+    <marker id="wiBlue" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#5b9bd5"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="400" fill="#0d0d0d"/>
+
+  <!-- 좌: 정적 키 방식 -->
+  <text x="225" y="34" text-anchor="middle" fill="#e8e4df" font-size="16" font-weight="700">정적 SA 키 — 시크릿의 순환</text>
+  <text x="225" y="55" text-anchor="middle" fill="#8a8580" font-size="12">키를 지키려고 또 다른 키를 둔다</text>
+
+  <!-- Pod -->
+  <rect x="40" y="150" width="100" height="46" rx="6" fill="#dceaf7"/>
+  <text x="90" y="178" text-anchor="middle" font-size="13" style="fill:#0d0d0d">Pod</text>
+  <!-- SA 키 JSON (문제) -->
+  <rect x="180" y="144" width="130" height="58" rx="6" fill="#0d0d0d" stroke="#f44336" stroke-width="1.5"/>
+  <text x="245" y="167" text-anchor="middle" font-size="12" font-weight="700" style="fill:#f44336">SA 키 (JSON)</text>
+  <text x="245" y="185" text-anchor="middle" font-size="10" style="fill:#f44336">클러스터에 저장된 정적 파일</text>
+  <!-- GCP -->
+  <rect x="350" y="150" width="90" height="46" rx="6" fill="#f5edda"/>
+  <text x="395" y="172" text-anchor="middle" font-size="12" style="fill:#0d0d0d">Secret</text>
+  <text x="395" y="187" text-anchor="middle" font-size="12" style="fill:#0d0d0d">Manager</text>
+
+  <line x1="140" y1="173" x2="178" y2="173" stroke="#f44336" stroke-width="2" marker-end="url(#wiRed)"/>
+  <line x1="310" y1="173" x2="348" y2="173" stroke="#f44336" stroke-width="2" marker-end="url(#wiRed)"/>
+  <text x="225" y="255" text-anchor="middle" fill="#f44336" font-size="12" font-weight="700">이 키가 유출되면 무기한 유효 · 로테이션 수동</text>
+  <text x="225" y="275" text-anchor="middle" fill="#8a8580" font-size="11">키 관리 자체가 새로운 위험 표면</text>
+
+  <!-- 구분선 -->
+  <line x1="450" y1="70" x2="450" y2="330" stroke="#3a3a3a" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+  <!-- 우: Workload Identity -->
+  <text x="675" y="34" text-anchor="middle" fill="#e8e4df" font-size="16" font-weight="700">Workload Identity — 키 없음</text>
+  <text x="675" y="55" text-anchor="middle" fill="#8a8580" font-size="12">KSA를 IAM에 묶어 단기 토큰으로 인증</text>
+
+  <!-- Pod + KSA -->
+  <rect x="490" y="150" width="110" height="46" rx="6" fill="#dceaf7"/>
+  <text x="545" y="172" text-anchor="middle" font-size="12" style="fill:#0d0d0d">Pod</text>
+  <text x="545" y="187" text-anchor="middle" font-size="10" style="fill:#0d0d0d">KSA: notiflex-ksa</text>
+  <!-- OIDC 토큰 (자동) -->
+  <rect x="640" y="144" width="120" height="58" rx="6" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="700" y="167" text-anchor="middle" font-size="12" font-weight="700" style="fill:#66bb6a">OIDC 토큰</text>
+  <text x="700" y="185" text-anchor="middle" font-size="10" style="fill:#66bb6a">GKE가 자동 발급·교체</text>
+  <!-- GCP -->
+  <rect x="800" y="150" width="80" height="46" rx="6" fill="#f5edda"/>
+  <text x="840" y="172" text-anchor="middle" font-size="12" style="fill:#0d0d0d">Secret</text>
+  <text x="840" y="187" text-anchor="middle" font-size="12" style="fill:#0d0d0d">Manager</text>
+
+  <line x1="600" y1="173" x2="638" y2="173" stroke="#66bb6a" stroke-width="2" marker-end="url(#wiGreen)"/>
+  <line x1="760" y1="173" x2="798" y2="173" stroke="#66bb6a" stroke-width="2" marker-end="url(#wiGreen)"/>
+  <text x="685" y="255" text-anchor="middle" fill="#66bb6a" font-size="12" font-weight="700">유출될 정적 키가 처음부터 없음</text>
+  <text x="685" y="275" text-anchor="middle" fill="#8a8580" font-size="11">roles/secretmanager.secretAccessor 바인딩</text>
+
+  <!-- 하단 결론 -->
+  <line x1="60" y1="330" x2="840" y2="330" stroke="#2a2520" stroke-width="1"/>
+  <text x="450" y="360" text-anchor="middle" fill="rgb(212,168,83)" font-size="13" font-weight="700">Workload Identity는 "키 관리"라는 위험 표면 자체를 없앤다</text>
+  <text x="450" y="384" text-anchor="middle" fill="#8a8580" font-size="11">CSI Driver가 Secret Manager의 값을 /mnt/secrets/valkey-password 파일로 마운트</text>
+</svg>
