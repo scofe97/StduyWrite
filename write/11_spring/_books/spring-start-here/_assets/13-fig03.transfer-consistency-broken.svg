@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 380" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif" role="img" aria-label="송금 중 한 단계 실패로 데이터 정합성이 깨지는 도식">
+  <title>출금만 되고 입금이 실패하면 100달러가 사라집니다</title>
+  <desc>송금은 두 단계다. John이 Jane에게 100달러를 보낼 때, 처음 John은 1000, Jane은 500을 가진다. 1단계로 John 계좌에서 100을 빼면 John은 900이 된다. 2단계로 Jane 계좌에 100을 더해야 하는데 이 단계가 실패하면 Jane은 그대로 500이다. 결과적으로 John은 900, Jane은 500이 되어 100달러가 어디로도 가지 않고 사라진다. 트랜잭션은 두 단계를 한 묶음으로 묶어 이 불일치를 막는다</desc>
+  <rect x="0" y="0" width="760" height="380" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="16" font-weight="bold">한 단계만 실패해도 돈이 사라집니다</text>
+  <text x="24" y="56" fill="rgb(138,133,128)" font-size="12">송금은 두 변경 연산의 묶음 · 하나만 되고 하나가 실패하면 데이터가 어긋납니다</text>
+
+  <!-- 처음 상태 -->
+  <text x="40" y="92" fill="rgb(138,133,128)" font-size="12" font-weight="bold">처음</text>
+  <rect x="40" y="104" width="130" height="50" rx="6" fill="#0d0d0d" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+  <text x="105" y="125" fill="#e8e4df" font-size="12" text-anchor="middle">John</text>
+  <text x="105" y="143" fill="rgb(212,168,83)" font-size="12" text-anchor="middle" font-family="monospace">$1,000</text>
+  <rect x="600" y="104" width="130" height="50" rx="6" fill="#0d0d0d" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+  <text x="665" y="125" fill="#e8e4df" font-size="12" text-anchor="middle">Jane</text>
+  <text x="665" y="143" fill="rgb(212,168,83)" font-size="12" text-anchor="middle" font-family="monospace">$500</text>
+
+  <!-- 1단계 출금 성공 -->
+  <text x="40" y="196" fill="#66bb6a" font-size="12" font-weight="bold">1단계 · John에서 $100 출금 (성공)</text>
+  <rect x="40" y="208" width="130" height="50" rx="6" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="105" y="229" fill="#e8e4df" font-size="12" text-anchor="middle">John</text>
+  <text x="105" y="247" fill="#66bb6a" font-size="12" text-anchor="middle" font-family="monospace">$900 ✓</text>
+  <line x1="180" y1="233" x2="300" y2="233" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#a13)"/>
+  <rect x="300" y="213" width="80" height="40" rx="6" fill="rgba(102,187,106,0.15)" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="340" y="238" fill="#e8e4df" font-size="12" text-anchor="middle" font-family="monospace">$100</text>
+
+  <!-- 2단계 입금 실패 -->
+  <text x="40" y="298" fill="#f44336" font-size="12" font-weight="bold">2단계 · Jane에 $100 입금 (실패)</text>
+  <line x1="390" y1="233" x2="500" y2="233" stroke="#f44336" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="445" y="225" fill="#f44336" font-size="16" font-weight="bold" text-anchor="middle">✗</text>
+  <rect x="600" y="308" width="130" height="50" rx="6" fill="rgba(244,67,54,0.10)" stroke="#f44336" stroke-width="1.5"/>
+  <text x="665" y="329" fill="#e8e4df" font-size="12" text-anchor="middle">Jane</text>
+  <text x="665" y="347" fill="#f44336" font-size="12" text-anchor="middle" font-family="monospace">$500 (그대로)</text>
+
+  <rect x="40" y="308" width="500" height="50" rx="8" fill="rgba(244,67,54,0.08)" stroke="#f44336" stroke-width="1.2"/>
+  <text x="60" y="330" fill="#f44336" font-size="13" font-weight="bold">→ John 900 · Jane 500 · 어디에도 없는 $100</text>
+  <text x="60" y="350" fill="rgb(138,133,128)" font-size="11">트랜잭션으로 묶으면 2단계 실패 시 1단계도 되돌려(rollback) 둘 다 원상복구됩니다</text>
+
+  <defs>
+    <marker id="a13" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#66bb6a"/></marker>
+  </defs>
+</svg>
