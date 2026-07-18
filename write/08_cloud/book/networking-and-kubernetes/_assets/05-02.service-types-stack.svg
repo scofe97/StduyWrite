@@ -1,0 +1,67 @@
+<svg viewBox="0 0 960 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Service 유형의 계층 구조</title>
+  <desc>LoadBalancer가 NodePort를 포함하고 NodePort가 ClusterIP를 포함하는 스택 구조. 각 층의 호출자가 다르며, 옆길로 headless(DNS 명단 반환)와 ExternalName(CNAME 별칭)이 있다</desc>
+  <defs>
+    <marker id="arrA" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <rect width="960" height="560" fill="#0d0d0d"/>
+
+  <text x="480" y="38" text-anchor="middle" fill="#e8e4df" font-size="20" font-weight="700">Service 유형 — 층층이 쌓이는 구조</text>
+
+  <!-- 외부 클라이언트 -->
+  <text x="480" y="76" text-anchor="middle" fill="rgb(138,133,128)" font-size="13">외부 클라이언트</text>
+  <line x1="480" y1="84" x2="480" y2="106" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrA)"/>
+
+  <!-- 스택 -->
+  <rect x="330" y="110" width="300" height="62" rx="8" fill="#66bb6a"/>
+  <text x="480" y="136" text-anchor="middle" fill="#0d0d0d" font-size="16" font-weight="700">LoadBalancer</text>
+  <text x="480" y="156" text-anchor="middle" fill="#1a1a1a" font-size="11">외부 통합 — 클라우드 LB · MetalLB (L4)</text>
+
+  <line x1="480" y1="172" x2="480" y2="194" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrA)"/>
+
+  <rect x="330" y="198" width="300" height="62" rx="8" fill="#5b9bd5"/>
+  <text x="480" y="224" text-anchor="middle" fill="#e8e4df" font-size="16" font-weight="700">NodePort</text>
+  <text x="480" y="244" text-anchor="middle" fill="#e8e4df" font-size="11">모든 노드에 고정 포트 (30000~32767)</text>
+
+  <line x1="480" y1="260" x2="480" y2="282" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrA)"/>
+
+  <rect x="330" y="286" width="300" height="62" rx="8" fill="rgb(212,168,83)"/>
+  <text x="480" y="312" text-anchor="middle" fill="#0d0d0d" font-size="16" font-weight="700">ClusterIP</text>
+  <text x="480" y="332" text-anchor="middle" fill="#1a1a1a" font-size="11">클러스터 내부 가상 IP — kube-proxy DNAT</text>
+
+  <line x1="480" y1="348" x2="480" y2="382" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrA)"/>
+  <text x="510" y="370" fill="rgb(138,133,128)" font-size="11">Endpoints (ready Pod 목록)</text>
+
+  <!-- Pod 칩 -->
+  <rect x="330" y="386" width="88" height="40" rx="6" fill="#cdeccf"/>
+  <text x="374" y="410" text-anchor="middle" fill="#14521d" font-size="12">Pod A</text>
+  <rect x="436" y="386" width="88" height="40" rx="6" fill="#cdeccf"/>
+  <text x="480" y="410" text-anchor="middle" fill="#14521d" font-size="12">Pod B</text>
+  <rect x="542" y="386" width="88" height="40" rx="6" fill="#cdeccf"/>
+  <text x="586" y="410" text-anchor="middle" fill="#14521d" font-size="12">Pod C</text>
+
+  <!-- 왼쪽 호출자 주석 -->
+  <text x="300" y="136" text-anchor="end" fill="rgb(138,133,128)" font-size="12">일반 외부 클라이언트</text>
+  <text x="300" y="224" text-anchor="end" fill="rgb(138,133,128)" font-size="12">노드 IP를 아는 외부 LB</text>
+  <text x="300" y="312" text-anchor="end" fill="rgb(138,133,128)" font-size="12">클러스터 안 워크로드</text>
+
+  <!-- 옆길: Headless -->
+  <rect x="680" y="198" width="250" height="76" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="805" y="224" text-anchor="middle" fill="rgb(212,168,83)" font-size="14" font-weight="700">Headless</text>
+  <text x="805" y="244" text-anchor="middle" fill="#e8e4df" font-size="11">clusterIP: None — LB 없음</text>
+  <text x="805" y="261" text-anchor="middle" fill="#e8e4df" font-size="11">DNS가 ready Pod 전체 반환</text>
+
+  <!-- 옆길: ExternalName -->
+  <rect x="680" y="298" width="250" height="64" rx="8" fill="#0d0d0d" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+  <text x="805" y="322" text-anchor="middle" fill="#e8e4df" font-size="14">ExternalName</text>
+  <text x="805" y="342" text-anchor="middle" fill="rgb(138,133,128)" font-size="11">외부 도메인 CNAME 별칭</text>
+
+  <!-- 옆길 라벨 -->
+  <text x="805" y="180" text-anchor="middle" fill="rgb(138,133,128)" font-size="12">스택 밖의 두 갈래</text>
+
+  <text x="480" y="480" text-anchor="middle" fill="rgb(138,133,128)" font-size="13">위 유형은 아래 유형을 포함한다 — LoadBalancer는 NodePort를, NodePort는 ClusterIP를 만든다</text>
+  <text x="480" y="504" text-anchor="middle" fill="rgb(138,133,128)" font-size="13">Headless는 명단만 주고 선택은 클라이언트 몫, ExternalName은 트래픽을 받지 않는 이름표다</text>
+</svg>

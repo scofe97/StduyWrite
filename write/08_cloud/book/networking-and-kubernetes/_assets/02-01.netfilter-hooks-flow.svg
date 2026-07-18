@@ -1,0 +1,86 @@
+<svg viewBox="0 0 960 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Netfilter 훅 5개를 지나는 패킷의 세 가지 경로</title>
+  <desc>외부에서 온 패킷은 PREROUTING 후 라우팅 판단에 따라 INPUT(내게 온 것) 또는 FORWARD(남의 것)로 갈리고, 로컬 프로세스가 만든 패킷은 OUTPUT을 거쳐 POSTROUTING으로 나간다</desc>
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="arrDim" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/>
+    </marker>
+  </defs>
+  <rect width="960" height="560" fill="#0d0d0d"/>
+
+  <text x="480" y="38" text-anchor="middle" fill="#e8e4df" font-size="20" font-weight="700">Netfilter 훅 — 패킷의 세 가지 경로</text>
+
+  <!-- 외부 유입 -->
+  <text x="30" y="170" fill="rgb(138,133,128)" font-size="13">외부에서</text>
+  <text x="30" y="188" fill="rgb(138,133,128)" font-size="13">도착</text>
+  <line x1="86" y1="176" x2="118" y2="176" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- PREROUTING -->
+  <rect x="122" y="150" width="164" height="56" rx="8" fill="rgb(212,168,83)"/>
+  <text x="204" y="174" text-anchor="middle" fill="#0d0d0d" font-size="15" font-weight="700">PREROUTING</text>
+  <text x="204" y="194" text-anchor="middle" fill="#1a1a1a" font-size="10">NF_IP_PRE_ROUTING</text>
+
+  <line x1="286" y1="178" x2="326" y2="178" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- 라우팅 판단 -->
+  <rect x="330" y="150" width="140" height="56" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="400" y="174" text-anchor="middle" fill="#e8e4df" font-size="14">라우팅 판단</text>
+  <text x="400" y="193" text-anchor="middle" fill="rgb(138,133,128)" font-size="11">목적지가 나인가?</text>
+
+  <!-- 판단 → FORWARD -->
+  <line x1="470" y1="178" x2="536" y2="178" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="503" y="168" text-anchor="middle" fill="rgb(138,133,128)" font-size="11">아니오</text>
+
+  <!-- FORWARD -->
+  <rect x="540" y="150" width="140" height="56" rx="8" fill="rgb(212,168,83)"/>
+  <text x="610" y="174" text-anchor="middle" fill="#0d0d0d" font-size="15" font-weight="700">FORWARD</text>
+  <text x="610" y="194" text-anchor="middle" fill="#1a1a1a" font-size="10">NF_IP_FORWARD</text>
+
+  <line x1="680" y1="178" x2="716" y2="178" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- POSTROUTING -->
+  <rect x="720" y="150" width="170" height="56" rx="8" fill="rgb(212,168,83)"/>
+  <text x="805" y="174" text-anchor="middle" fill="#0d0d0d" font-size="15" font-weight="700">POSTROUTING</text>
+  <text x="805" y="194" text-anchor="middle" fill="#1a1a1a" font-size="10">NF_IP_POST_ROUTING</text>
+
+  <line x1="890" y1="178" x2="926" y2="178" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="908" y="160" text-anchor="middle" fill="rgb(138,133,128)" font-size="12">나감</text>
+
+  <!-- 판단 → INPUT -->
+  <line x1="400" y1="206" x2="400" y2="276" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="416" y="245" fill="rgb(138,133,128)" font-size="11">예</text>
+
+  <!-- INPUT -->
+  <rect x="330" y="280" width="140" height="56" rx="8" fill="rgb(212,168,83)"/>
+  <text x="400" y="304" text-anchor="middle" fill="#0d0d0d" font-size="15" font-weight="700">INPUT</text>
+  <text x="400" y="324" text-anchor="middle" fill="#1a1a1a" font-size="10">NF_IP_LOCAL_IN</text>
+
+  <line x1="400" y1="336" x2="400" y2="396" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- 로컬 프로세스 -->
+  <rect x="330" y="400" width="140" height="56" rx="8" fill="#66bb6a"/>
+  <text x="400" y="424" text-anchor="middle" fill="#0d0d0d" font-size="15" font-weight="700">로컬 프로세스</text>
+  <text x="400" y="444" text-anchor="middle" fill="#1a1a1a" font-size="10">소켓으로 수신·응답 생성</text>
+
+  <line x1="470" y1="428" x2="546" y2="428" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="508" y="418" text-anchor="middle" fill="rgb(138,133,128)" font-size="11">패킷 생성</text>
+
+  <!-- OUTPUT -->
+  <rect x="550" y="400" width="140" height="56" rx="8" fill="rgb(212,168,83)"/>
+  <text x="620" y="424" text-anchor="middle" fill="#0d0d0d" font-size="15" font-weight="700">OUTPUT</text>
+  <text x="620" y="444" text-anchor="middle" fill="#1a1a1a" font-size="10">NF_IP_LOCAL_OUT</text>
+
+  <!-- OUTPUT → POSTROUTING -->
+  <line x1="690" y1="418" x2="800" y2="210" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- 재진입 점선: POSTROUTING 하단 → PREROUTING 하단 -->
+  <path d="M 805 206 L 805 510 L 204 510 L 204 210" fill="none" stroke="rgb(138,133,128)"
+        stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrDim)"/>
+  <text x="505" y="500" text-anchor="middle" fill="rgb(138,133,128)" font-size="12">로컬 → 로컬 패킷은 나갔다가 재진입해 PREROUTING부터 다시 지난다</text>
+
+  <text x="480" y="545" text-anchor="middle" fill="rgb(138,133,128)" font-size="13">경로는 두 질문으로 결정 — 출발지가 이 호스트인가, 목적지가 이 호스트인가</text>
+</svg>

@@ -1,0 +1,67 @@
+<svg viewBox="0 0 820 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>패킷 하나의 전 계층 여정 — 송신은 캡슐화, 수신은 역캡슐화</title>
+  <desc>클라이언트에서 계층을 내려가며 헤더가 붙고(캡슐화), 네트워크를 건넌 뒤 서버에서 계층을 올라가며 헤더가 벗겨지는(역캡슐화) 전 계층 여정</desc>
+  <defs>
+    <marker id="pjDown" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#5b9bd5"/></marker>
+    <marker id="pjUp" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#66bb6a"/></marker>
+    <marker id="pjNet" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+  <rect x="0" y="0" width="820" height="420" fill="#0d0d0d"/>
+
+  <text x="410" y="30" text-anchor="middle" fill="#e8e4df" font-size="17" font-weight="700">패킷 하나의 전 계층 여정 — 내려가며 감싸고, 올라가며 벗긴다</text>
+
+  <!-- 좌: 송신(캡슐화) -->
+  <text x="150" y="60" text-anchor="middle" fill="#5b9bd5" font-size="14" font-weight="700">Client — 캡슐화 ↓</text>
+  <!-- 우: 수신(역캡슐화) -->
+  <text x="670" y="60" text-anchor="middle" fill="#66bb6a" font-size="14" font-weight="700">Server — 역캡슐화 ↑</text>
+
+  <!-- 4 계층 박스 (좌: 위→아래, 우: 아래→위) -->
+  <!-- L: Application -->
+  <rect x="60" y="76" width="180" height="40" rx="5" fill="#dceaf7"/>
+  <text x="150" y="101" text-anchor="middle" font-size="12" style="fill:#0d0d0d">Application — HTTP GET /</text>
+  <!-- L: Transport -->
+  <rect x="60" y="130" width="180" height="40" rx="5" fill="#f5edda"/>
+  <text x="150" y="149" text-anchor="middle" font-size="11" style="fill:#0d0d0d">Transport — TCP 헤더</text>
+  <text x="150" y="163" text-anchor="middle" font-size="10" style="fill:#0d0d0d">출발·목적 포트</text>
+  <!-- L: Network -->
+  <rect x="60" y="184" width="180" height="40" rx="5" fill="#ddd4f0"/>
+  <text x="150" y="203" text-anchor="middle" font-size="11" style="fill:#0d0d0d">Network — IP 헤더</text>
+  <text x="150" y="217" text-anchor="middle" font-size="10" style="fill:#0d0d0d">출발·목적 IP</text>
+  <!-- L: Link -->
+  <rect x="60" y="238" width="180" height="40" rx="5" fill="#f5edda"/>
+  <text x="150" y="257" text-anchor="middle" font-size="11" style="fill:#0d0d0d">Link — Ethernet 프레임</text>
+  <text x="150" y="271" text-anchor="middle" font-size="10" style="fill:#0d0d0d">MAC (ARP로 해석)</text>
+
+  <line x1="150" y1="116" x2="150" y2="128" stroke="#5b9bd5" stroke-width="2" marker-end="url(#pjDown)"/>
+  <line x1="150" y1="170" x2="150" y2="182" stroke="#5b9bd5" stroke-width="2" marker-end="url(#pjDown)"/>
+  <line x1="150" y1="224" x2="150" y2="236" stroke="#5b9bd5" stroke-width="2" marker-end="url(#pjDown)"/>
+
+  <!-- R: Link (아래) -->
+  <rect x="580" y="238" width="180" height="40" rx="5" fill="#f5edda"/>
+  <text x="670" y="257" text-anchor="middle" font-size="11" style="fill:#0d0d0d">Link — MAC 제거</text>
+  <text x="670" y="271" text-anchor="middle" font-size="10" style="fill:#0d0d0d">프레임 도착</text>
+  <rect x="580" y="184" width="180" height="40" rx="5" fill="#ddd4f0"/>
+  <text x="670" y="203" text-anchor="middle" font-size="11" style="fill:#0d0d0d">Network — IP 확인·제거</text>
+  <text x="670" y="217" text-anchor="middle" font-size="10" style="fill:#0d0d0d">목적 IP = 나</text>
+  <rect x="580" y="130" width="180" height="40" rx="5" fill="#f5edda"/>
+  <text x="670" y="149" text-anchor="middle" font-size="11" style="fill:#0d0d0d">Transport — 소켓 판별</text>
+  <text x="670" y="163" text-anchor="middle" font-size="10" style="fill:#0d0d0d">포트로 프로세스 찾기</text>
+  <rect x="580" y="76" width="180" height="40" rx="5" fill="#dceaf7"/>
+  <text x="670" y="101" text-anchor="middle" font-size="12" style="fill:#0d0d0d">Application — 앱에 전달</text>
+
+  <line x1="670" y1="236" x2="670" y2="224" stroke="#66bb6a" stroke-width="2" marker-end="url(#pjUp)"/>
+  <line x1="670" y1="182" x2="670" y2="170" stroke="#66bb6a" stroke-width="2" marker-end="url(#pjUp)"/>
+  <line x1="670" y1="128" x2="670" y2="116" stroke="#66bb6a" stroke-width="2" marker-end="url(#pjUp)"/>
+
+  <!-- 네트워크 건넘 (하단 amber) -->
+  <line x1="150" y1="290" x2="150" y2="330" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <line x1="670" y1="330" x2="670" y2="290" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#pjUp)"/>
+  <line x1="150" y1="330" x2="668" y2="330" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#pjNet)"/>
+  <text x="410" y="322" text-anchor="middle" fill="rgb(212,168,83)" font-size="12" font-weight="700">네트워크 — IP로 목적지 네트워크, MAC으로 다음 홉</text>
+
+  <!-- 결론 -->
+  <line x1="60" y1="360" x2="760" y2="360" stroke="#2a2520" stroke-width="1"/>
+  <text x="410" y="386" text-anchor="middle" fill="#e8e4df" font-size="12" font-weight="700">각 계층은 자기 헤더만 보고 일한다 — 캡슐화가 계층 독립성을 만든다</text>
+  <text x="410" y="408" text-anchor="middle" fill="#8a8580" font-size="11">IP는 L3에서 제거되므로 클라이언트 IP가 필요하면 X-Forwarded-For로 L7에 보존</text>
+</svg>

@@ -1,0 +1,55 @@
+<svg viewBox="0 0 900 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>컨테이너를 이루는 두 커널 프리미티브 — cgroup과 namespace</title>
+  <desc>cgroup은 컨테이너가 자원을 얼마나 쓸 수 있는지를 제한·계량하고, namespace는 컨테이너 안 프로세스가 무엇을 볼 수 있는지를 격리한다. 둘을 묶으면 게스트 OS 없이 앱별 독립 환경이 된다</desc>
+  <rect x="0" y="0" width="900" height="420" fill="#0d0d0d"/>
+
+  <text x="450" y="34" text-anchor="middle" fill="#e8e4df" font-size="17" font-weight="700">컨테이너 = 커널의 두 프리미티브를 묶은 포장</text>
+  <text x="450" y="56" text-anchor="middle" fill="#8a8580" font-size="12">cgroup(얼마나 쓰는가) + namespace(무엇을 보는가)</text>
+
+  <!-- cgroup 박스 -->
+  <rect x="40" y="80" width="380" height="270" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="230" y="108" text-anchor="middle" fill="rgb(212,168,83)" font-size="15" font-weight="700">cgroup · 얼마나 쓸 수 있는가</text>
+  <rect x="60" y="124" width="340" height="24" rx="3" fill="#f5edda"/>
+  <text x="230" y="141" text-anchor="middle" font-size="11" style="fill:#0d0d0d">자원 사용을 제한·계량·격리 (커널 2.6.24~)</text>
+
+  <rect x="60" y="164" width="160" height="30" rx="4" fill="#fdf3df"/>
+  <text x="140" y="184" text-anchor="middle" font-size="12" style="fill:#0d0d0d" font-weight="700">CPU · 최소 지분</text>
+  <rect x="240" y="164" width="160" height="30" rx="4" fill="#fdf3df"/>
+  <text x="320" y="184" text-anchor="middle" font-size="12" style="fill:#0d0d0d" font-weight="700">Memory · 상한</text>
+  <rect x="60" y="202" width="160" height="30" rx="4" fill="#fdf3df"/>
+  <text x="140" y="222" text-anchor="middle" font-size="12" style="fill:#0d0d0d" font-weight="700">Disk I/O</text>
+  <rect x="240" y="202" width="160" height="30" rx="4" fill="#fdf3df"/>
+  <text x="320" y="222" text-anchor="middle" font-size="12" style="fill:#0d0d0d" font-weight="700">Network · net_cls</text>
+
+  <text x="230" y="262" text-anchor="middle" fill="#e8e4df" font-size="12">질문: "이 방은 전기·수도를 얼마나 쓸 수 있나?"</text>
+  <text x="230" y="286" text-anchor="middle" fill="#8a8580" font-size="11">= 배급 규칙. 자원 상한을 넘지 못하게 막는다</text>
+  <text x="230" y="322" text-anchor="middle" fill="rgb(212,168,83)" font-size="11" font-weight="700">생성 주체: runC (컨테이너 만들 때 cgroup 생성)</text>
+
+  <!-- namespace 박스 -->
+  <rect x="480" y="80" width="380" height="270" rx="8" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="670" y="108" text-anchor="middle" fill="#5b9bd5" font-size="15" font-weight="700">namespace · 무엇을 볼 수 있는가</text>
+  <rect x="500" y="124" width="340" height="24" rx="3" fill="#dceaf7"/>
+  <text x="670" y="141" text-anchor="middle" font-size="11" style="fill:#0d0d0d">프로세스가 보는 시스템 자원을 격리·가상화 (6종)</text>
+
+  <rect x="500" y="164" width="108" height="30" rx="4" fill="#dceaf7"/>
+  <text x="554" y="184" text-anchor="middle" font-size="11" style="fill:#10243a" font-weight="700">PID</text>
+  <rect x="616" y="164" width="108" height="30" rx="4" fill="#dceaf7"/>
+  <text x="670" y="184" text-anchor="middle" font-size="11" style="fill:#10243a" font-weight="700">Network</text>
+  <rect x="732" y="164" width="108" height="30" rx="4" fill="#dceaf7"/>
+  <text x="786" y="184" text-anchor="middle" font-size="11" style="fill:#10243a" font-weight="700">IPC</text>
+  <rect x="500" y="202" width="108" height="30" rx="4" fill="#dceaf7"/>
+  <text x="554" y="222" text-anchor="middle" font-size="11" style="fill:#10243a" font-weight="700">Mount</text>
+  <rect x="616" y="202" width="108" height="30" rx="4" fill="#dceaf7"/>
+  <text x="670" y="222" text-anchor="middle" font-size="11" style="fill:#10243a" font-weight="700">UTS</text>
+  <rect x="732" y="202" width="108" height="30" rx="4" fill="#dceaf7"/>
+  <text x="786" y="222" text-anchor="middle" font-size="11" style="fill:#10243a" font-weight="700">User(UID)</text>
+
+  <text x="670" y="262" text-anchor="middle" fill="#e8e4df" font-size="12">질문: "이 방에서는 무엇이 보이나?"</text>
+  <text x="670" y="286" text-anchor="middle" fill="#8a8580" font-size="11">= 시야 규칙. 자기 방만 보게 벽을 세운다</text>
+  <text x="670" y="322" text-anchor="middle" fill="#5b9bd5" font-size="11" font-weight="700">User NS: 안에선 root, 밖에선 비특권 (보안 핵심)</text>
+
+  <!-- 합성 결론 -->
+  <line x1="40" y1="372" x2="860" y2="372" stroke="#2a2520" stroke-width="1"/>
+  <text x="450" y="398" text-anchor="middle" fill="#66bb6a" font-size="13" font-weight="700">두 규칙을 묶어 방을 찍어내는 관리사무소 = 컨테이너 런타임 · 그 네트워크 생성 표준 = CNI</text>
+</svg>
