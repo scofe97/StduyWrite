@@ -8,8 +8,8 @@ book:
   edition: Second Edition (Volume 1)
 related:
   - ../../03_distributed/01-01.분산 아키텍처 기초.md
-  - ../../../05_data/theory/02-03.복제.md
-  - ../../../05_data/theory/02-04.샤딩.md
+  - ../../../05_data/01_foundation/02-03.복제.md
+  - ../../../05_data/01_foundation/02-04.샤딩.md
 updated: 2026-06-10
 ---
 

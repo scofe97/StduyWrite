@@ -6,7 +6,7 @@ related:
   - ./_template/review-template.md
   - ./_template/review-routine.md
   - ../README.md
-updated: 2026-05-22
+updated: 2026-07-13
 ---
 
 # write 학습 문서 복습 시스템
@@ -61,6 +61,8 @@ write/_review/
 | 회차 | 날짜 | 대상 편수 | 평균 quality | 3축 평균 | 졸업 수 |
 |------|------|---------|------------|---------|--------|
 | 1 | 2026-05-26 (예정) | 18 (querydsl 16 + JDBC 2) | _ | _ | _ |
+| 1 | 2026-07-13 | 1 (Kubernetes in Action 08-01) | 3 | 미측정 | 0 |
+| 1 | 2026-07-14 | 1 (Kubernetes in Action 08-02) | 3 | 미측정 | 0 |
 
 회차 5 에서 *졸업 수 / 대상 편수 ≥ 80%* 면 본 시스템이 잘 작동하는 것.
 
@@ -74,8 +76,9 @@ write/_review/
 
 | 카테고리 | _mistakes.md 경로 | 누적 패턴 수 |
 |---------|------------------|------------|
-| querydsl | `../05_data/querydsl/_mistakes.md` | 0 |
+| querydsl | `../05_data/03_persistence/querydsl/_mistakes.md` | 0 |
 | JDBC wrap | `../05_data/_mistakes.md` | 0 |
+| Kubernetes in Action | `../08_cloud/book/kubernetes-in-action/_mistakes.md` | 6 |
 
 복습 회차에서 *quality ≤ 3 인 질문* 이 발생할 때마다 해당 카테고리 `_mistakes.md` 에 append. 같은 패턴 *3회 이상* 반복 시 원본 챕터 본문 보강 트리거.
 

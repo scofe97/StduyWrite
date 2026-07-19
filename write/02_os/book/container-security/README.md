@@ -3,10 +3,11 @@ title: 02_os/container-security — 컨테이너 보안의 리눅스 토대
 tags: [moc, container, security, linux, namespace, cgroup, docker, kubernetes, runtime]
 status: draft
 related:
+  - ../../roadmap.md
   - ../../README.md
   - ../../kernel/README.md
   - ../../../10_security/README.md
-updated: 2026-06-03
+updated: 2026-07-15
 ---
 
 
@@ -66,6 +67,7 @@ updated: 2026-06-03
 
 ## 상위·이웃
 
+- 통합 경로: [02_os 통합 학습 로드맵](../../roadmap.md) — 격리·권한 토대 뒤 보안 심화 경로
 - 상위: [02_os/ MOC](../../README.md)
 - 이웃: [02_os/kernel/ MOC](../../kernel/README.md) — K8s 운영 관점의 커널 메커니즘(namespace·cgroup·user namespace·OverlayFS). 본서 Chapter 3·4와 주제가 겹칩니다
 - 이웃: [10_security/ MOC](../../../10_security/README.md) — 인증·암호·OWASP·위협 모델링. 본서 Chapter 13·14(키·인증서)·16(OWASP)과 시선을 나눠 가집니다

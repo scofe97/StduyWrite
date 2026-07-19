@@ -3,11 +3,12 @@ title: 02_os/systems-performance — 성능 분석가 관점의 시스템 성능
 tags: [moc, performance, linux, kernel, observability, bpf, perf, ftrace, cloud]
 status: draft
 related:
+  - ../../roadmap.md
   - ../../README.md
   - ../linux-kernel-programming/README.md
   - ../../kernel/README.md
   - ../../networking/README.md
-updated: 2026-06-04
+updated: 2026-07-15
 ---
 
 
@@ -109,6 +110,7 @@ updated: 2026-06-04
 
 ## 상위·이웃
 
+- 통합 경로: [02_os 통합 학습 로드맵](../../roadmap.md) — 성능 진단 단계의 진입점
 - 상위: [02_os/ MOC](../../README.md)
 - 이웃: [02_os/linux-kernel-programming/](../linux-kernel-programming/README.md) — 커널 개발자 관점의 리눅스 내부. 본서 3·6·7장(커널·CPU·메모리)과 메커니즘이 겹칩니다
 - 이웃: [02_os/kernel/](../../kernel/README.md) — K8s 운영 관점의 커널 메커니즘(namespace·cgroup). 본서 11장(컨테이너)과 맞닿습니다

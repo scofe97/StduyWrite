@@ -34,7 +34,7 @@ updated: 2026-06-28
 | [05_aop/](05_aop/) | 4편 | 횡단 관심사·필터/인터셉터·JDK 동적 프록시·프록시 팩토리·빈 후처리기·@Aspect · 템플릿·콜백·ThreadLocal — AOP 등장 직전 · 스프링 스케줄링/Quartz · @Async·@Cacheable·@Retryable |
 | [06_events/](06_events/) | 4편 | 스프링 이벤트 — @EventListener vs @TransactionalEventListener·트랜잭션 Phase·전파 조합·내부 동작·동기/비동기(@Async) |
 | [07_autoconfig/](07_autoconfig/) | 7편 | 스프링 부트 자동 구성·외부 설정 — 스타터/BOM·@AutoConfiguration·@Conditional·커스텀 스타터·외부 설정·@ConfigurationProperties·프로필 |
-| [08_transaction/](08_transaction/) | 2편 | 트랜잭션 집계 MOC — 본체는 [`05_data/jpa/04-01`](../05_data/jpa/04-01.스프링%20트랜잭션.md)에 두고, Spring 관점에서 비어 있던 격리 수준·@Transactional 테스트 2편만 보강 |
+| [08_transaction/](08_transaction/) | 2편 | 트랜잭션 집계 MOC — 본체는 [`05_data/03_persistence/jpa/04-01`](../05_data/03_persistence/jpa/04-01.%EC%8A%A4%ED%94%84%EB%A7%81%20%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98.md)에 두고, Spring 관점에서 비어 있던 격리 수준·@Transactional 테스트 2편만 보강 |
 | [09_validation/](09_validation/) | 3편 | 입력 검증 — 수동 검증·BindingResult / Bean Validation·그룹 / 커스텀 ConstraintValidator. 옛 02_data-binding 의 단일 편을 분할·확장 |
 
 > 편수는 2026-06-25 실측. 폴더별 신설·재편 이력(통합·분할·이관 날짜)은 `STUDY_INDEX.md` 이관 표와 각 폴더 README 에서 관리한다.
@@ -45,7 +45,7 @@ updated: 2026-06-28
 
 도메인 결합도가 큰 주제(메시징·영속성)는 기존 위치 그대로 두고, Spring 본질 영역에 신설할 후보만 여기에 둔다. 현재 검토 중인 후보는 없다. 신설 시점은 second-brain-harness §4.4 — 최소 5편 확보 시 신설, 미만이면 기존 카테고리 하위에서 시작 — 을 따른다.
 
-> 2026-05-29 — 검토하던 `08_transaction` 과 `09_validation` 을 신설 완료했다. 두 건 모두 당초 명분이 실제 자산과 어긋나 방향을 정정했다. ① `08_transaction`: 트랜잭션 본체(추상화·동기화·AOP·전파·락)는 이미 [`05_data/jpa/04-01`](../05_data/jpa/04-01.스프링%20트랜잭션.md)·`04-01b`·`04-02` 에 final 로 있어, 본체를 새로 쓰지 않고 집계 MOC + 격리 수준·테스트 2편만 보강했다. ② `09_validation`: "6~8편 분량" 이라 적었지만 실제로는 `02_data-binding/02-01` 단일 편(583줄)이 거의 전 범위를 다루고 있었다. 그래서 그 단일 편을 수동 검증·Bean Validation 두 편으로 분할해 옮기고, 목차에 없던 커스텀 `ConstraintValidator` 1편만 신규로 보강했다(분할 2 + 신규 1).
+> 2026-05-29 — 검토하던 `08_transaction` 과 `09_validation` 을 신설 완료했다. 두 건 모두 당초 명분이 실제 자산과 어긋나 방향을 정정했다. ① `08_transaction`: 트랜잭션 본체(추상화·동기화·AOP·전파·락)는 이미 [`05_data/03_persistence/jpa/04-01`](../05_data/03_persistence/jpa/04-01.%EC%8A%A4%ED%94%84%EB%A7%81%20%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98.md)·`04-01b`·`04-02` 에 final 로 있어, 본체를 새로 쓰지 않고 집계 MOC + 격리 수준·테스트 2편만 보강했다. ② `09_validation`: "6~8편 분량" 이라 적었지만 실제로는 `02_data-binding/02-01` 단일 편(583줄)이 거의 전 범위를 다루고 있었다. 그래서 그 단일 편을 수동 검증·Bean Validation 두 편으로 분할해 옮기고, 목차에 없던 커스텀 `ConstraintValidator` 1편만 신규로 보강했다(분할 2 + 신규 1).
 
 ### 도메인별 통합 (다른 카테고리)
 
@@ -53,7 +53,7 @@ updated: 2026-06-28
 |------|------|------------|
 | 설계 철학 | [`03_architecture/`](../03_architecture/README.md) "10. 후속 주제" | IoC를 설계 패턴 관점으로, AOP의 Decorator 해석 (예정) |
 | 메시징 | [`04_messaging/`](../04_messaging/) | `@KafkaListener`, Producer Config, Error Handler (스프링 부분은 04_BrokerArchitecture·05_ConsistencyPattern 등 주제별로 흡수) |
-| 영속성 | [`05_data/`](../05_data/) | [QueryDSL 6.12 학습 묶음](../05_data/querydsl/README.md) (Spring Data JPA, R2DBC, `@Transactional` 예정) |
+| 영속성 | [`05_data/`](../05_data/) | [QueryDSL 6.12 학습 묶음](../05_data/03_persistence/querydsl/README.md) (Spring Data JPA, R2DBC, `@Transactional` 예정) |
 
 ## 전체 Spring 문서 목록 집계
 
@@ -77,7 +77,7 @@ grep -rl "^  - spring$\|tags:.*spring" write/ --include="*.md" | sort
 6. **`03_network/`** — 외부·실시간 통신. 클라이언트 두 갈래(`webflux/` WebClient, `feign/` OpenFeign)에 더해 전송 엔진(`reactive-net/`), 실시간(`realtime/` SSE·WebSocket·STOMP), 회복탄력성(`resilience/`)까지. RestTemplate 경험자는 `webflux/01-01` 부터, 신규 MSA 설계자는 `feign/01-01` 부터 진입.
 7. **`04_testing/`** — 단위·통합·E2E 전 범위. Spring Boot 3.x 기준.
 8. **운영·모니터링** — [`06_observability/05_SpringActuator/`](../06_observability/05_SpringActuator/) 액츄에이터·마이크로미터·프로메테우스로 스프링 앱 메트릭을 노출·시각화.
-9. **도메인별** — 본인 관심 영역. 메시징이면 [`04_messaging/`](../04_messaging/), 데이터·ORM 이면 [`05_data/querydsl/`](../05_data/querydsl/), 보안이면 [`10_security/`](../10_security/).
+9. **도메인별** — 본인 관심 영역. 메시징이면 [`04_messaging/`](../04_messaging/), 데이터·ORM 이면 [`05_data/03_persistence/querydsl/`](../05_data/03_persistence/querydsl/), 보안이면 [`10_security/`](../10_security/).
 
 
 
@@ -91,7 +91,7 @@ grep -rl "^  - spring$\|tags:.*spring" write/ --include="*.md" | sort
 |------|--------|----------|-----------|
 | 1 | Core / IoC / Bean 생명주기 (대주제 1~5) | [01_core/01-01](01_core/01-01.객체지향%20원리%20적용%20—%20DI와%20IoC.md) · [01-02](01_core/01-02.Spring과%20디자인%20패턴.md) | BeanPostProcessor 내부 흐름, 순환 참조 전용편 |
 | 2 | AOP / Proxy / Weaving (대주제 6) | [05_aop/01-01](05_aop/01-01.횡단%20관심사와%20AOP%20—%20프록시로%20풀어내기.md) · [01-03](05_aop/01-03.템플릿·콜백과%20ThreadLocal%20—%20AOP%20등장%20직전의%20두%20시도.md) · [01-04](05_aop/01-04.어노테이션%20기반%20AOP%20응용%20—%20@Async·@Cacheable·@Retryable.md) | Weaving 4종 + Spring AOP vs AspectJ + `@EnableLoadTimeWeaving` 실험 전용편 |
-| 3 | @Transactional (대주제 7) | 본체 [../05_data/jpa/04-01](../05_data/jpa/04-01.스프링%20트랜잭션.md) · [04-01b](../05_data/jpa/04-01b.트랜잭션%20전파%20활용.md), [08_transaction/01-01](08_transaction/01-01.트랜잭션%20격리%20수준%20—%20Spring%20관점.md) · [01-02](08_transaction/01-02.@Transactional%20테스트%20가드.md), [06_events/01-02](06_events/01-02.트랜잭션%20전파%20조합%20—%20죽은%20트랜잭션과%20REQUIRES_NEW.md) | MyBatis ↔ Spring 트랜잭션 Connection 바인딩 전용편 |
+| 3 | @Transactional (대주제 7) | 본체 [../05_data/03_persistence/jpa/04-01](../05_data/03_persistence/jpa/04-01.%EC%8A%A4%ED%94%84%EB%A7%81%20%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98.md) · [04-01b](../05_data/03_persistence/jpa/04-01b.%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%20%EC%A0%84%ED%8C%8C%20%ED%99%9C%EC%9A%A9.md), [08_transaction/01-01](08_transaction/01-01.트랜잭션%20격리%20수준%20—%20Spring%20관점.md) · [01-02](08_transaction/01-02.@Transactional%20테스트%20가드.md), [06_events/01-02](06_events/01-02.트랜잭션%20전파%20조합%20—%20죽은%20트랜잭션과%20REQUIRES_NEW.md) | MyBatis ↔ Spring 트랜잭션 Connection 바인딩 전용편 |
 | 4 | Spring MVC / 요청 처리 (대주제 8~10) | [01_core/03-01](01_core/03-01.Spring%20MVC%20—%20FrontController에서%20DispatcherServlet까지.md) · [03-02](01_core/03-02.예외%20처리%20—%20서블릿에서%20@ControllerAdvice까지.md), [02_data-binding/01-01](02_data-binding/01-01.HTTP%20요청·응답과%20메시지%20컨버터.md), [01_core/04-01](01_core/04-01.WebFlux%20서버%20—%20리액티브%20스택과%20어노테이션%20모델.md) · [04-02](01_core/04-02.WebFlux%20함수형%20엔드포인트%20—%20RouterFunction과%20HandlerFunction.md) | Custom ArgumentResolver / ReturnValueHandler 실습편 |
 | 5 | Validation / Binding / Conversion (대주제 11) | [02_data-binding/](02_data-binding/), [09_validation/](09_validation/) | Converter / Formatter / ConversionService 전용편 |
 | 6 | Spring Boot 자동구성·외부설정 (대주제 12~14) | [07_autoconfig/](07_autoconfig/) | 7편으로 충분 — 신규 후보 없음 |

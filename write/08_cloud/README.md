@@ -6,7 +6,8 @@ related:
   - ./kubernetes/README.md
   - ./argocd/README.md
   - ./service-mesh/README.md
-updated: 2026-05-23
+  - ./book/networking-and-kubernetes/README.md
+updated: 2026-07-17
 ---
 
 # 08_cloud
@@ -21,6 +22,7 @@ updated: 2026-05-23
 | [argocd/](./argocd/README.md) | GitOps, Application, AppProject, App of Apps, ApplicationSet, Image Updater, 운영 심화 | 14개 장 |
 | [service-mesh/](./service-mesh/README.md) | Linkerd·Istio·Cilium, 사이드카/앰비언트, mTLS, 멀티클러스터 | 26개 장 |
 | [openstack/](./openstack/README.md) | IaaS 개요, AWS 서비스 대응, 오픈스택↔Kubernetes 층 관계(CMP 바닥 인프라) | 1개 장 |
+| [book/networking-and-kubernetes/](./book/networking-and-kubernetes/README.md) | 《Networking and Kubernetes》 정독 — OSI/TCP-IP, Linux 네트워킹, 컨테이너·K8s 네트워킹, Service 추상화, AWS/GCP/Azure | 정독 노트 17편 + 용어집·결정 치트시트 |
 
 ## 예정 주제 — Spring Cloud 스택 (TBD)
 

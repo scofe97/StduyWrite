@@ -3,11 +3,12 @@ title: 02_os/networking — Linux 네트워킹
 tags: [moc, linux, networking, namespace, netfilter, ebpf, conntrack]
 status: final
 related:
+  - ../roadmap.md
   - roadmap.md
   - ../README.md
   - ../kernel/README.md
   - ../../08_cloud/kubernetes/README.md
-updated: 2026-04-26
+updated: 2026-07-15
 ---
 
 # 02_os/networking
@@ -30,6 +31,7 @@ updated: 2026-04-26
 
 ## 상위·이웃·활용처
 
+- 통합 경로: [02_os 통합 학습 로드맵](../roadmap.md) — 네트워크 경로 단계의 진입점
 - 상위: [02_os/ MOC](../README.md)
 - 이웃: [02_os/kernel/](../kernel/README.md) — 커널 일반 메커니즘(시스템 콜·namespace·cgroup·/proc)
 - 활용처: [08_cloud/kubernetes/](../../08_cloud/kubernetes/README.md), [08_cloud/service-mesh/](../../08_cloud/service-mesh/README.md)

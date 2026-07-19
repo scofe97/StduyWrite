@@ -5,7 +5,7 @@ status: final
 related:
   - ../README.md
   - ../03_network/webflux/02-03.테스트 (MockWebServer와 WebTestClient).md
-  - ../../05_data/querydsl/03-01.테스트와 멀티모듈.md
+  - ../../05_data/03_persistence/querydsl/03-01.테스트와 멀티모듈.md
 updated: 2026-05-09
 ---
 
@@ -17,7 +17,7 @@ Spring Boot 3.x 기준으로 단위 테스트에서 외부 시스템 E2E까지�
 
 ## 이 묶음의 위치
 
-`03_network/webflux/02-03.테스트` 가 WebClient 한 어댑터의 단위 테스트에 집중한다면, 이 묶음은 **단위 테스트의 모범 작성법부터 시작해 슬라이스·통합·E2E·아키텍처 가드까지 전 계층의 사용법과 함정을 다룹니다**. WebClient 챕터를 먼저 읽었다면 이 묶음의 1장(기초)을 빠르게 건너뛸 수 있고, JPA 위주로 들어가는 사람은 `05_data/querydsl/02-02.테스트와 멀티모듈` 과 본 묶음의 02-01을 함께 봅니다.
+`03_network/webflux/02-03.테스트` 가 WebClient 한 어댑터의 단위 테스트에 집중한다면, 이 묶음은 **단위 테스트의 모범 작성법부터 시작해 슬라이스·통합·E2E·아키텍처 가드까지 전 계층의 사용법과 함정을 다룹니다**. WebClient 챕터를 먼저 읽었다면 이 묶음의 1장(기초)을 빠르게 건너뛸 수 있고, JPA 위주로 들어가는 사람은 `05_data/03_persistence/querydsl/02-02.테스트와 멀티모듈` 과 본 묶음의 02-01을 함께 봅니다.
 
 
 
@@ -64,5 +64,5 @@ Spring Boot 3.x 기준으로 단위 테스트에서 외부 시스템 E2E까지�
 ## 관련 문서
 
 - [03_network/webflux/02-03.테스트 (MockWebServer와 WebTestClient)](../03_network/webflux/02-03.테스트%20(MockWebServer와%20WebTestClient).md) — WebClient 어댑터 단위 테스트, 본 묶음 1장과 보완 관계
-- [05_data/querydsl/03-01.테스트와 멀티모듈](../../05_data/querydsl/03-01.테스트와%20멀티모듈.md) — JPA·QueryDSL 멀티모듈 빌드의 테스트 분리, 본 묶음 02-01과 보완 관계
+- [05_data/03_persistence/querydsl/03-01.테스트와 멀티모듈](../../05_data/03_persistence/querydsl/03-01.%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%99%80%20%EB%A9%80%ED%8B%B0%EB%AA%A8%EB%93%88.md) — JPA·QueryDSL 멀티모듈 빌드의 테스트 분리, 본 묶음 02-01과 보완 관계
 - [Spring 학습 통합 MOC](../README.md) — 전 카테고리 Spring 문서 진입점

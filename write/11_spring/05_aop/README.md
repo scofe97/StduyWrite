@@ -85,4 +85,4 @@ Spring Boot 의 기본값 `spring.aop.proxy-target-class=true` 가 적용되어 
 
 > 응용 패턴 편은 [`01-04.어노테이션 기반 AOP 응용`](01-04.어노테이션%20기반%20AOP%20응용%20—%20@Async·@Cacheable·@Retryable.md) 으로 작성 완료했습니다. `@Async`·`@Cacheable`·`@Retryable` 이 같은 프록시 토대 위에 선 응용이라는 비교를 다룹니다.
 
-트랜잭션 AOP 는 별도 편으로 두지 않습니다. `@Transactional` 이 `Advisor` 로 등록돼 프록시 안에서 해석되는 *메커니즘* 은 [`01-01 §4·§5`](01-01.횡단%20관심사와%20AOP%20—%20프록시로%20풀어내기.md) 가 일반론으로 다루고, 트랜잭션 *본체* (전파·격리·롤백)는 [`08_transaction/`](../08_transaction/README.md) 와 [`05_data/jpa/04-01`](../../05_data/jpa/04-01.스프링%20트랜잭션.md) 에 정리돼 있어, 둘을 합치면 별도 편 없이 트랜잭션 AOP 가 설명됩니다.
+트랜잭션 AOP 는 별도 편으로 두지 않습니다. `@Transactional` 이 `Advisor` 로 등록돼 프록시 안에서 해석되는 *메커니즘* 은 [`01-01 §4·§5`](01-01.횡단%20관심사와%20AOP%20—%20프록시로%20풀어내기.md) 가 일반론으로 다루고, 트랜잭션 *본체* (전파·격리·롤백)는 [`08_transaction/`](../08_transaction/README.md) 와 [`05_data/03_persistence/jpa/04-01`](../../05_data/03_persistence/jpa/04-01.%EC%8A%A4%ED%94%84%EB%A7%81%20%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98.md) 에 정리돼 있어, 둘을 합치면 별도 편 없이 트랜잭션 AOP 가 설명됩니다.

@@ -2,7 +2,7 @@
 title: "테스트와 멀티모듈 — 복습 회차 1"
 tags: [review, querydsl, test, datajpatest, multi-module]
 status: in_progress
-source: "../../05_data/querydsl/03-01.테스트와 멀티모듈.md"
+source: "../../05_data/03_persistence/querydsl/03-01.테스트와 멀티모듈.md"
 round: 1
 round_date: 2026-05-28
 prev_round_date: 2026-05-27
@@ -17,7 +17,7 @@ updated: 2026-05-28
 
 # 테스트와 멀티모듈 — 복습 회차 1
 
-> 원본: [테스트와 멀티모듈](../../05_data/querydsl/03-01.테스트와%20멀티모듈.md)
+> 원본: [테스트와 멀티모듈](../../05_data/03_persistence/querydsl/03-01.%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%99%80%20%EB%A9%80%ED%8B%B0%EB%AA%A8%EB%93%88.md)
 > 회차 1 · 2026-05-28 · 이전 학습: 2026-05-27 (첫 학습 세션 — Q&A 4문제 진행, 평균 ~2.9/5)
 >
 > **본 복습 규약 (Karpicke & Roediger 2006, testing effect):**
@@ -182,9 +182,9 @@ Q1~Q5 평균을 반올림, 또는 *가장 막힌 질문 기준* 으로 보수적
 - [ ] 3축 메타인지 평균 ≥ 3.6
 - [ ] _mistakes.md 에서 본 문서 관련 미해결 패턴 0개
 
-### 5. 오답 박제 → `../05_data/querydsl/_mistakes.md`
+### 5. 오답 박제 → `../05_data/03_persistence/querydsl/_mistakes.md`
 
-본 회차에서 *quality ≤ 3 인 질문* 을 한 줄씩 정리해 `write/05_data/querydsl/_mistakes.md` 에 append (없으면 신규 생성).
+본 회차에서 *quality ≤ 3 인 질문* 을 한 줄씩 정리해 `write/05_data/03_persistence/querydsl/_mistakes.md` 에 append (없으면 신규 생성).
 
 ```markdown
 ## 2026-05-28 — 테스트와 멀티모듈 Q{N}: {질문 요약}
@@ -200,7 +200,7 @@ Q1~Q5 평균을 반올림, 또는 *가장 막힌 질문 기준* 으로 보수적
 
 ## 관련 자료
 
-- 원본 챕터: [05_data/querydsl/03-01.테스트와 멀티모듈](../../05_data/querydsl/03-01.테스트와%20멀티모듈.md)
+- 원본 챕터: [05_data/03_persistence/querydsl/03-01.테스트와 멀티모듈](../../05_data/03_persistence/querydsl/03-01.%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%99%80%20%EB%A9%80%ED%8B%B0%EB%AA%A8%EB%93%88.md)
 - 실습 코드: `~/Library/CloudStorage/GoogleDrive-tscofet@gmail.com/내 드라이브/study/runners-high/project/querydsl-practice/src/test/java/com/runnershigh/querydsl/repository/Ch08_TestSetupTest.java` (6 tests GREEN)
 - 관련 챕터: [01_language/java/06_Build/02-01.Gradle 의존성 키워드](../../01_language/java/06_Build/02-01.Gradle%20의존성%20키워드.md) §6~7 (annotationProcessor·api·implementation 카탈로그)
 - 1차 학습 세션 plan: `~/.claude-work/plans/dynamic-snacking-neumann.md`
