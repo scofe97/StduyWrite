@@ -1,0 +1,63 @@
+<svg viewBox="0 0 1128 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>ephemeral 볼륨의 2단 삭제 — ownerReference GC와 reclaim policy</title>
+  <desc>파드를 삭제하면 두 단계로 정리가 일어난다. 1단은 자동 생성된 PVC가 파드를 ownerReference로 두므로, 가비지 컬렉터가 주인 파드를 따라 PVC를 삭제한다. 2단은 그 PVC에 바인딩된 PV의 reclaim policy가 결정한다. Delete면 PV와 밑바탕 볼륨까지 삭제되고, Retain이면 PV가 Released 상태로 남아 운영자가 수동으로 정리한다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .stage  { font-size: 12px; font-weight: 800; fill: rgb(212,168,83); }
+      .boxd   { font-size: 13px; font-weight: 800; fill: #e8e4df; }
+      .dark   { font-size: 13px; font-weight: 800; fill: #1a1a1a; }
+      .desc   { font-size: 10.5px; font-weight: 600; fill: #e8e4df; }
+      .muted  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .mono   { font-size: 10px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    </style>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#f44336"/></marker>
+    <marker id="arg" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1128" height="420" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">파드를 지우면 2단으로 정리된다 — GC가 PVC, reclaim policy가 PV</text>
+  <text x="24" y="50" class="sub">1단은 ownerReference를 따라가는 가비지 컬렉션, 2단은 PV의 reclaim policy 분기다.</text>
+
+  <!-- 파드 삭제 트리거 -->
+  <rect x="36" y="150" width="150" height="90" rx="10" fill="rgb(20,22,26)" stroke="#f44336" stroke-width="1.5"/>
+  <text x="111" y="188" class="boxd" text-anchor="middle">파드 삭제</text>
+  <text x="111" y="208" class="mono" text-anchor="middle" style="fill:#f0b0b0">kubectl delete pod</text>
+
+  <!-- 1단: PVC -->
+  <text x="240" y="118" class="stage">1단 · ownerReference GC</text>
+  <rect x="240" y="132" width="250" height="126" rx="12" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <rect x="262" y="152" width="206" height="86" rx="8" fill="#d4a853"/>
+  <text x="365" y="180" class="dark" text-anchor="middle">자동 PVC 삭제</text>
+  <text x="365" y="202" class="mono" text-anchor="middle" style="fill:#1a1a1a">ownerRef = 파드</text>
+  <text x="365" y="222" class="mono" text-anchor="middle" style="fill:#1a1a1a">주인 사라지면 GC가 수거</text>
+  <line x1="186" y1="195" x2="236" y2="195" stroke="#f44336" stroke-width="2.5" marker-end="url(#arr)"/>
+
+  <!-- 2단: PV 분기 -->
+  <text x="546" y="118" class="stage">2단 · PV reclaim policy 분기</text>
+  <line x1="490" y1="195" x2="540" y2="195" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#ar)"/>
+  <rect x="544" y="132" width="140" height="126" rx="12" fill="rgb(20,22,26)" stroke="rgb(42,37,32)" stroke-width="1.2"/>
+  <text x="614" y="180" class="desc" text-anchor="middle">바인딩된 PV의</text>
+  <text x="614" y="200" class="desc" text-anchor="middle">reclaim policy?</text>
+
+  <!-- Delete 분기 -->
+  <rect x="792" y="82" width="316" height="96" rx="10" fill="rgb(20,22,26)" stroke="#f44336" stroke-width="1.3"/>
+  <text x="812" y="110" class="desc" style="fill:#f0b0b0">Delete (ephemeral 기본)</text>
+  <text x="812" y="134" class="mono" style="fill:#f0b0b0">PV + 밑바탕 볼륨까지 삭제</text>
+  <text x="812" y="156" class="muted">흔적 없이 사라짐 — 임시 저장의 기본값</text>
+  <line x1="686" y1="168" x2="788" y2="140" stroke="#f44336" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="712" y="150" class="mono" style="fill:#f0b0b0">Delete</text>
+
+  <!-- Retain 분기 -->
+  <rect x="792" y="212" width="316" height="96" rx="10" fill="rgb(20,22,26)" stroke="#66bb6a" stroke-width="1.3"/>
+  <text x="812" y="240" class="desc" style="fill:#66bb6a">Retain</text>
+  <text x="812" y="264" class="mono" style="fill:#66bb6a">PV는 Released 로 남음</text>
+  <text x="812" y="286" class="muted">볼륨 데이터 보존 · 운영자가 수동 정리</text>
+  <line x1="686" y1="222" x2="788" y2="250" stroke="#66bb6a" stroke-width="2" marker-end="url(#arg)"/>
+  <text x="712" y="244" class="mono" style="fill:#66bb6a">Retain</text>
+
+  <text x="24" y="360" class="muted">1단과 2단은 순차다 — PVC가 먼저 사라지고, 그 뒤에 PV의 정책이 볼륨의 운명을 정한다.</text>
+  <text x="24" y="382" class="muted">ephemeral 볼륨은 Delete가 기본이라 파드와 함께 데이터가 버려지지만, 정책을 Retain으로 두면 임시 볼륨의 데이터도 남길 수 있다.</text>
+</svg>

@@ -1,0 +1,77 @@
+<svg viewBox="0 0 1040 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>emptyDir와 ephemeral 볼륨의 차이 — 노드 디렉터리 대 정상 PV</title>
+  <desc>emptyDir는 파드 옆 노드의 빈 디렉터리라 파드와 함께 사라질 뿐 아무 기능이 없다. ephemeral 볼륨은 volumeClaimTemplate으로 정상 PVC·PV를 자동 생성하며, 만들어진 것이 진짜 PV이기 때문에 스냅샷·data source 초기화·고정 크기 제한·리사이즈 같은 PV의 모든 기능을 그대로 물려받는다. 생애주기가 파드에 묶인다는 점만 emptyDir와 같다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .zone   { font-size: 13px; font-weight: 800; fill: rgb(212,168,83); }
+      .boxd   { font-size: 13px; font-weight: 800; fill: #e8e4df; }
+      .desc   { font-size: 10.5px; font-weight: 600; fill: #e8e4df; }
+      .muted  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .mono   { font-size: 10px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .inh    { font-size: 11px; font-weight: 800; fill: #1a1a1a; }
+      .fail   { font-size: 10px; font-weight: 700; fill: #f0b0b0; }
+    </style>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="arg" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1040" height="500" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">emptyDir 대 ephemeral — 둘 다 파드 전용이지만 하나만 "정상 PV"</text>
+  <text x="24" y="50" class="sub">생애주기가 파드에 묶이는 건 같다. 차이는 ephemeral이 만드는 게 진짜 PV라 PV의 기능을 전부 상속한다는 것.</text>
+
+  <!-- 왼쪽: emptyDir -->
+  <rect x="36" y="76" width="440" height="384" rx="14" fill="rgb(16,18,22)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+  <text x="58" y="104" class="zone" style="fill:rgb(138,133,128)">emptyDir</text>
+  <text x="58" y="122" class="muted">노드 로컬 디렉터리 (또는 메모리)</text>
+
+  <rect x="58" y="140" width="180" height="70" rx="9" fill="#5b9bd5"/>
+  <text x="148" y="170" class="boxd" text-anchor="middle" style="fill:#e8e4df">파드</text>
+  <text x="148" y="190" class="muted" text-anchor="middle" style="fill:#e8e4df">container</text>
+
+  <rect x="270" y="140" width="180" height="70" rx="9" fill="rgb(20,22,26)" stroke="rgb(42,37,32)" stroke-width="1.2"/>
+  <text x="360" y="168" class="desc" text-anchor="middle">노드의 빈 디렉터리</text>
+  <text x="360" y="188" class="mono" text-anchor="middle" style="fill:rgb(138,133,128)">/var/lib/kubelet/…</text>
+  <line x1="238" y1="175" x2="266" y2="175" stroke="rgb(138,133,128)" stroke-width="2" marker-end="url(#ar)"/>
+
+  <text x="58" y="248" class="desc" style="fill:rgb(138,133,128)">PV 오브젝트 없음 → 기능 없음</text>
+  <rect x="58" y="262" width="392" height="176" rx="9" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="78" y="292" class="fail">✕ 스냅샷 불가</text>
+  <text x="78" y="322" class="fail">✕ data source 초기화 불가</text>
+  <text x="78" y="352" class="fail">✕ 고정 크기 제한 없음 (파드가 초과 가능)</text>
+  <text x="78" y="382" class="fail">✕ 리사이즈 불가</text>
+  <text x="78" y="418" class="muted">파드 삭제 → 디렉터리째 사라짐. 그게 전부.</text>
+
+  <!-- 오른쪽: ephemeral -->
+  <rect x="524" y="76" width="484" height="384" rx="14" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="546" y="104" class="zone">ephemeral 볼륨</text>
+  <text x="546" y="122" class="muted">volumeClaimTemplate → 자동 생성된 정상 PVC · PV</text>
+
+  <rect x="546" y="140" width="150" height="70" rx="9" fill="#5b9bd5"/>
+  <text x="621" y="170" class="boxd" text-anchor="middle" style="fill:#e8e4df">파드</text>
+  <text x="621" y="190" class="muted" text-anchor="middle" style="fill:#e8e4df">volumeClaimTemplate</text>
+
+  <rect x="726" y="140" width="120" height="70" rx="9" fill="#dceaf7"/>
+  <text x="786" y="170" class="inh" text-anchor="middle">자동 PVC</text>
+  <text x="786" y="190" class="mono" text-anchor="middle" style="fill:#14243a">pod+vol 이름</text>
+
+  <rect x="876" y="140" width="112" height="70" rx="9" fill="#d4a853"/>
+  <text x="932" y="170" class="inh" text-anchor="middle">정상 PV</text>
+  <text x="932" y="190" class="mono" text-anchor="middle" style="fill:#1a1a1a">로컬·네트워크</text>
+
+  <line x1="696" y1="175" x2="722" y2="175" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="846" y1="175" x2="872" y2="175" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+
+  <text x="546" y="248" class="desc" style="fill:rgb(212,168,83)">진짜 PV라서 PV의 기능을 전부 상속</text>
+  <rect x="546" y="262" width="442" height="176" rx="9" fill="rgb(20,22,26)" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="566" y="292" class="desc" style="fill:#66bb6a">✓ 볼륨에서 스냅샷 생성</text>
+  <text x="566" y="322" class="desc" style="fill:#66bb6a">✓ 다른 data source로 초기화</text>
+  <text x="566" y="352" class="desc" style="fill:#66bb6a">✓ 고정 크기 제한 (파드가 초과 불가)</text>
+  <text x="566" y="382" class="desc" style="fill:#66bb6a">✓ 나중에 리사이즈</text>
+  <text x="566" y="418" class="muted">생애주기만 파드에 묶임 — PVC 자동 생성·삭제.</text>
+
+  <!-- 상속 화살표 -->
+  <line x1="932" y1="210" x2="932" y2="256" stroke="#66bb6a" stroke-width="2.5" marker-end="url(#arg)"/>
+  <text x="945" y="236" class="muted" style="fill:#66bb6a">기능 상속</text>
+</svg>
