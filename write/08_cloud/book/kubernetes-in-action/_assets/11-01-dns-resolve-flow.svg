@@ -1,0 +1,77 @@
+<svg viewBox="0 0 1180 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Service 이름이 ClusterIP로 풀리는 DNS resolve 흐름</title>
+  <desc>파드가 quiz라는 짧은 이름을 조회하면, 파드 안 resolv.conf의 ndots 옵션이 점 개수를 보고 상대 이름인지 판단한다. 점이 5개 미만이면 search 줄의 접미사를 차례로 붙여 완전한 이름으로 만들고, CoreDNS에 질의한다. CoreDNS는 클러스터 도메인 이름이면 A 레코드로 Service의 ClusterIP를 돌려주고, www.kubernetes.io 같은 외부 이름이면 업스트림 DNS로 넘긴다. 돌아오는 값은 파드 IP가 아니라 Service의 ClusterIP이며, 이후 그 ClusterIP가 DNAT 경로를 탄다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .zone   { font-size: 13px; font-weight: 800; fill: rgb(212,168,83); }
+      .comp   { font-size: 12px; font-weight: 800; fill: #e8e4df; }
+      .dark   { font-size: 12px; font-weight: 800; fill: #1a1a1a; }
+      .desc   { font-size: 10px; font-weight: 600; fill: #e8e4df; }
+      .darkdesc { font-size: 10px; font-weight: 600; fill: #1a1a1a; }
+      .muted  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .mono   { font-size: 9.5px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .darkmono { font-size: 9.5px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; fill: #1a1a1a; }
+    </style>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="arg" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="560" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">quiz 한 단어가 ClusterIP로 풀리기까지 — DNS resolve 흐름</text>
+  <text x="24" y="50" class="sub">파드 안 resolv.conf가 ndots·search로 완전한 이름을 만들고, CoreDNS가 A 레코드로 Service의 ClusterIP를 돌려준다.</text>
+
+  <!-- 파드 (resolv.conf 포함) -->
+  <rect x="40" y="80" width="330" height="330" rx="14" fill="rgb(14,16,20)" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="60" y="106" class="zone" style="fill:#8fc0ec">클라이언트 파드</text>
+
+  <rect x="64" y="120" width="282" height="40" rx="7" fill="#5b9bd5"/>
+  <text x="205" y="145" class="comp" text-anchor="middle" style="fill:#e8e4df">앱: curl http://quiz</text>
+
+  <text x="64" y="186" class="desc" style="fill:#8fc0ec">/etc/resolv.conf (kubelet이 자동 생성)</text>
+  <rect x="64" y="196" width="282" height="96" rx="7" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="76" y="216" class="mono" style="fill:rgb(212,168,83)">search default.svc.cluster.local</text>
+  <text x="76" y="232" class="mono" style="fill:rgb(212,168,83)">       svc.cluster.local cluster.local</text>
+  <text x="76" y="250" class="mono" style="fill:rgb(212,168,83)">nameserver 10.96.0.10   (CoreDNS)</text>
+  <text x="76" y="268" class="mono" style="fill:rgb(212,168,83)">options ndots:5</text>
+  <text x="76" y="285" class="muted">점 5개 미만 = 상대 이름 → search 붙임</text>
+
+  <!-- ndots 판정 -->
+  <rect x="64" y="308" width="282" height="86" rx="7" fill="#d4a853"/>
+  <text x="205" y="330" class="dark" text-anchor="middle">ndots 판정: quiz 는 점 0개 (&lt;5)</text>
+  <text x="205" y="352" class="darkdesc" text-anchor="middle">→ search 첫 접미사 붙여 완전한 이름으로</text>
+  <text x="205" y="374" class="darkmono" text-anchor="middle">quiz.default.svc.cluster.local</text>
+
+  <!-- CoreDNS -->
+  <rect x="460" y="120" width="300" height="200" rx="12" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="480" y="146" class="zone">CoreDNS (클러스터 DNS)</text>
+  <text x="480" y="168" class="muted">dnsPolicy: ClusterFirst 기본</text>
+
+  <rect x="480" y="182" width="260" height="54" rx="7" fill="rgb(20,30,22)" stroke="#66bb6a" stroke-width="1.1"/>
+  <text x="490" y="202" class="desc" style="fill:#66bb6a">클러스터 도메인 매칭</text>
+  <text x="490" y="220" class="mono" style="fill:#66bb6a">A 레코드 조회 → Service ClusterIP</text>
+
+  <rect x="480" y="248" width="260" height="54" rx="7" fill="rgb(30,24,20)" stroke="rgb(138,133,128)" stroke-width="1.1"/>
+  <text x="490" y="268" class="desc" style="fill:rgb(138,133,128)">외부 이름 (www.kubernetes.io)</text>
+  <text x="490" y="286" class="mono" style="fill:rgb(138,133,128)">→ 업스트림 DNS로 전달</text>
+
+  <line x1="346" y1="351" x2="430" y2="240" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="360" y="300" class="muted" style="fill:rgb(212,168,83)">질의</text>
+
+  <!-- 응답: ClusterIP -->
+  <rect x="850" y="150" width="290" height="140" rx="12" fill="#66bb6a"/>
+  <text x="995" y="180" class="dark" text-anchor="middle">응답 = Service의 ClusterIP</text>
+  <text x="995" y="208" class="darkmono" text-anchor="middle">quiz → 10.96.136.190</text>
+  <text x="995" y="234" class="darkdesc" text-anchor="middle">파드 IP가 아니라 ClusterIP!</text>
+  <text x="995" y="258" class="darkdesc" text-anchor="middle">이 가상 IP가 이제</text>
+  <text x="995" y="276" class="darkdesc" text-anchor="middle">DNAT 경로를 탄다 (§위 그림)</text>
+  <line x1="760" y1="210" x2="846" y2="210" stroke="#66bb6a" stroke-width="2.5" marker-end="url(#arg)"/>
+
+  <!-- ndots 근거 -->
+  <rect x="40" y="432" width="1100" height="52" rx="10" fill="rgb(16,18,22)" stroke="rgb(42,37,32)" stroke-width="1.2"/>
+  <text x="60" y="456" class="desc" style="fill:rgb(212,168,83)">ndots:5 인 이유 — 쿠버네티스의 가장 긴 표준 이름(_port._proto.svc.ns.svc.cluster.local 꼴)이 점 5개라, 그보다 적으면 상대 이름으로 본다.</text>
+  <text x="60" y="474" class="muted">그래서 quiz·quiz.default 처럼 짧게 써도 search가 자동으로 완성해 준다. FQDN(끝에 점)을 쓰면 search를 건너뛴다.</text>
+
+  <text x="24" y="516" class="muted">DNS 레코드 유형(A·SRV·CNAME)·headless·CoreDNS 내부 동작은 11-03·02-05 통합 개념본이 정본이다.</text>
+</svg>
