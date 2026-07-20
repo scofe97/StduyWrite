@@ -1,0 +1,88 @@
+<svg viewBox="0 0 1180 620" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>NAT 삼형제 — DNAT·SNAT·masquerade가 각각 헤더의 어느 필드를 바꾸는가</title>
+  <desc>NAT는 패킷 헤더의 주소를 바꿔 쓰는 일이고, 무엇을 바꾸느냐로 셋으로 갈린다. DNAT는 PREROUTING 훅에서 목적지 주소만 바꾼다. 쿠버네티스에서 ClusterIP라는 가상 주소를 실제 파드 IP로 바꾸는 일이 여기 해당한다. SNAT는 POSTROUTING 훅에서 출발지 주소만 바꾼다. 응답이 돌아올 주소를 확보하기 위해서다. masquerade는 SNAT의 특수형으로, 바꿔 넣을 주소를 규칙에 고정하지 않고 패킷이 나가는 인터페이스에 붙은 주소를 그때그때 가져다 쓴다. 그래서 노드 IP가 바뀌어도 규칙을 고칠 필요가 없다. 세 변환 모두 응답 패킷에서 되돌려야 하므로 conntrack 장부가 반드시 함께 간다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .kind   { font-size: 14px; font-weight: 800; }
+      .comp   { font-size: 11px; font-weight: 700; fill: #e8e4df; }
+      .desc   { font-size: 10.5px; font-weight: 600; fill: #e8e4df; }
+      .muted  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .mono   { font-size: 10px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .darkmono { font-size: 10px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; fill: #0d0d0d; }
+      .darkdesc { font-size: 10.5px; font-weight: 700; fill: #0d0d0d; }
+    </style>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="arg" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/></marker>
+    <marker id="arb" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#5b9bd5"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="620" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">NAT 삼형제 — 헤더의 어느 칸을 고쳐 쓰는가</text>
+  <text x="24" y="50" class="sub">NAT는 주소를 바꿔 쓰는 일이다. 목적지를 바꾸면 DNAT, 출발지를 바꾸면 SNAT, 출발지를 인터페이스에서 그때그때 가져오면 masquerade.</text>
+
+  <!-- DNAT -->
+  <rect x="40" y="76" width="1100" height="146" rx="12" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="62" y="104" class="kind" style="fill:rgb(212,168,83)">DNAT — 목적지를 바꾼다</text>
+  <text x="62" y="124" class="muted">PREROUTING 훅 · 라우팅 결정 전에 끝내야 다음 hop을 옳게 고른다</text>
+
+  <rect x="62" y="140" width="250" height="60" rx="7" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="76" y="162" class="mono" style="fill:rgb(138,133,128)">src 10.0.0.1</text>
+  <text x="76" y="182" class="mono" style="fill:rgb(212,168,83)">dst 10.96.0.10  (ClusterIP)</text>
+
+  <line x1="322" y1="170" x2="392" y2="170" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#ar)"/>
+  <text x="357" y="160" class="muted" text-anchor="middle" style="fill:rgb(212,168,83)">dst만 교체</text>
+
+  <rect x="400" y="140" width="250" height="60" rx="7" fill="#d4a853"/>
+  <text x="414" y="162" class="darkmono">src 10.0.0.1  (그대로)</text>
+  <text x="414" y="182" class="darkmono">dst 10.244.0.5  (파드 IP)</text>
+
+  <rect x="700" y="140" width="418" height="60" rx="7" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="716" y="162" class="desc">쿠버네티스 ClusterIP가 실제 파드로 바뀌는 자리</text>
+  <text x="716" y="182" class="muted">KUBE-SERVICES → KUBE-SVC → KUBE-SEP 체인 끝에서 일어난다</text>
+
+  <!-- SNAT -->
+  <rect x="40" y="238" width="1100" height="146" rx="12" fill="rgb(16,18,22)" stroke="#5b9bd5" stroke-width="1.4"/>
+  <text x="62" y="266" class="kind" style="fill:#8fc0ec">SNAT — 출발지를 바꾼다</text>
+  <text x="62" y="286" class="muted">POSTROUTING 훅 · 송출 직전에 바꿔야 응답이 돌아올 길이 생긴다</text>
+
+  <rect x="62" y="302" width="250" height="60" rx="7" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="76" y="324" class="mono" style="fill:#8fc0ec">src 10.244.0.5  (파드 IP)</text>
+  <text x="76" y="344" class="mono" style="fill:rgb(138,133,128)">dst 8.8.8.8</text>
+
+  <line x1="322" y1="332" x2="392" y2="332" stroke="#5b9bd5" stroke-width="2.2" marker-end="url(#arb)"/>
+  <text x="357" y="322" class="muted" text-anchor="middle" style="fill:#8fc0ec">src만 교체</text>
+
+  <rect x="400" y="302" width="250" height="60" rx="7" fill="#5b9bd5"/>
+  <text x="414" y="324" class="comp" style="fill:#e8e4df">src 192.168.1.7 (노드 IP)</text>
+  <text x="414" y="344" class="comp" style="fill:#e8e4df">dst 8.8.8.8 (그대로)</text>
+
+  <rect x="700" y="302" width="418" height="60" rx="7" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="716" y="324" class="desc">외부망은 사설 파드 IP로 답을 보낼 수 없다</text>
+  <text x="716" y="344" class="muted">노드의 공인 경로 주소로 바꿔야 응답이 되돌아온다</text>
+
+  <!-- masquerade -->
+  <rect x="40" y="400" width="1100" height="146" rx="12" fill="rgb(16,18,22)" stroke="#66bb6a" stroke-width="1.4"/>
+  <text x="62" y="428" class="kind" style="fill:#66bb6a">masquerade — SNAT인데 주소를 안 적는다</text>
+  <text x="62" y="448" class="muted">POSTROUTING 훅 · 나가는 인터페이스에 붙은 주소를 그때그때 가져다 쓴다</text>
+
+  <rect x="62" y="464" width="250" height="60" rx="7" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="76" y="486" class="mono" style="fill:#66bb6a">src 10.244.0.5</text>
+  <text x="76" y="506" class="muted">규칙에 바꿀 주소가 안 적혀 있다</text>
+
+  <line x1="322" y1="494" x2="392" y2="494" stroke="#66bb6a" stroke-width="2.2" marker-end="url(#arg)"/>
+  <text x="357" y="484" class="muted" text-anchor="middle" style="fill:#66bb6a">NIC에 물어봄</text>
+
+  <rect x="400" y="464" width="250" height="60" rx="7" fill="#66bb6a"/>
+  <text x="414" y="486" class="darkmono">src = ens5의 현재 IP</text>
+  <text x="414" y="506" class="darkdesc">주소가 바뀌어도 자동 추종</text>
+
+  <rect x="700" y="464" width="418" height="60" rx="7" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="716" y="486" class="desc">노드 IP가 DHCP로 갈려도 규칙을 고칠 일이 없다</text>
+  <text x="716" y="506" class="muted">대신 매 패킷 인터페이스 주소를 조회하는 비용이 붙는다</text>
+
+  <!-- conntrack 공통 -->
+  <rect x="40" y="560" width="1100" height="44" rx="10" fill="rgb(16,20,17)" stroke="#66bb6a" stroke-width="1.3"/>
+  <text x="62" y="588" class="desc" style="fill:#66bb6a">셋의 공통점 — 바꿨으면 되돌려야 한다. 그 되돌릴 근거를 적어 두는 장부가 conntrack이다. 장부가 비면 응답은 길을 잃는다.</text>
+</svg>
