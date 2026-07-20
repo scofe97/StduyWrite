@@ -1,0 +1,75 @@
+<svg viewBox="0 0 1180 340" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>PVC 리사이즈의 시간 흐름 — apply부터 CAPACITY 갱신까지</title>
+  <desc>PVC 크기를 10Gi로 apply하면, 먼저 아래 층 블록 디바이스를 CSI 컨트롤러가 파드와 무관하게 즉시 확장한다. 그러나 그 위 파일시스템은 아직 옛 크기를 알고 있어 CAPACITY가 1Gi로 남고 FileSystemResizePending 조건이 뜬다. 파드를 지우고 다시 만들면 kubelet이 볼륨을 재마운트하는데, 바로 그 경계에서 resize2fs 또는 xfs_growfs가 파일시스템을 확장하고, 그제서야 CAPACITY가 10Gi로 갱신된다. 두 층은 겹쳐 쓰이는 스택이며, 확장 시점만 다르다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .step   { font-size: 12.5px; font-weight: 800; fill: #e8e4df; }
+      .dark   { font-size: 12.5px; font-weight: 800; fill: #1a1a1a; }
+      .lane   { font-size: 11px; font-weight: 800; fill: rgb(212,168,83); }
+      .desc   { font-size: 10px; font-weight: 600; fill: #e8e4df; }
+      .darkdesc { font-size: 10px; font-weight: 600; fill: #1a1a1a; }
+      .muted  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .mono   { font-size: 9.5px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    </style>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="arg" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="340" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">리사이즈 흐름 — 블록 디바이스는 바로, 파일시스템은 재마운트 때</text>
+  <text x="24" y="50" class="sub">apply → A층 즉시 확장 → (CAPACITY 아직 1Gi) → 파드 재시작=재마운트 → B층 확장 → CAPACITY 10Gi</text>
+
+  <!-- 레인 라벨 -->
+  <text x="30" y="132" class="lane">A층</text>
+  <text x="18" y="146" class="muted">블록 디바이스</text>
+  <text x="30" y="232" class="lane" style="fill:#8fc0ec">B층</text>
+  <text x="24" y="246" class="muted">파일시스템</text>
+
+  <!-- 1. apply -->
+  <rect x="80" y="92" width="150" height="70" rx="9" fill="rgb(20,22,26)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="155" y="120" class="step" text-anchor="middle">① apply 10Gi</text>
+  <text x="155" y="140" class="mono" text-anchor="middle" style="fill:rgb(212,168,83)">requests.storage</text>
+  <text x="155" y="154" class="muted" text-anchor="middle">크기 요청 갱신</text>
+
+  <!-- 2. A층 확장 -->
+  <rect x="290" y="92" width="180" height="70" rx="9" fill="#5b9bd5"/>
+  <text x="380" y="118" class="step" text-anchor="middle" style="fill:#e8e4df">② A층 즉시 확장</text>
+  <text x="380" y="137" class="desc" text-anchor="middle" style="fill:#e8e4df">CSI 컨트롤러 · 파드 무관</text>
+  <text x="380" y="152" class="mono" text-anchor="middle" style="fill:#e8e4df">클라우드 디스크 / LVM</text>
+  <line x1="230" y1="127" x2="286" y2="127" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- 3. 대기 상태 (CAPACITY 아직 1Gi) -->
+  <rect x="530" y="92" width="180" height="150" rx="9" fill="rgb(20,22,26)" stroke="#f44336" stroke-width="1.3"/>
+  <text x="620" y="118" class="step" text-anchor="middle">③ 아직 못 씀</text>
+  <text x="620" y="140" class="mono" text-anchor="middle" style="fill:#f0b0b0">CAPACITY = 1Gi</text>
+  <text x="620" y="160" class="mono" text-anchor="middle" style="fill:#f0b0b0">FileSystemResize</text>
+  <text x="620" y="173" class="mono" text-anchor="middle" style="fill:#f0b0b0">Pending = True</text>
+  <text x="620" y="198" class="muted" text-anchor="middle">땅은 넓어졌지만</text>
+  <text x="620" y="212" class="muted" text-anchor="middle">지도가 옛 크기 기록 중</text>
+  <line x1="470" y1="127" x2="526" y2="150" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- 4. 파드 재시작 = 재마운트 -->
+  <rect x="770" y="92" width="150" height="150" rx="9" fill="#d4a853"/>
+  <text x="845" y="122" class="dark" text-anchor="middle">④ 파드 재시작</text>
+  <text x="845" y="146" class="darkdesc" text-anchor="middle">= 언마운트 →</text>
+  <text x="845" y="162" class="darkdesc" text-anchor="middle">재마운트 경계</text>
+  <text x="845" y="190" class="darkdesc" text-anchor="middle" style="fill:#1a1a1a">여기서 B층 실행:</text>
+  <text x="845" y="208" class="mono" text-anchor="middle" style="fill:#1a1a1a">resize2fs (ext4)</text>
+  <text x="845" y="222" class="mono" text-anchor="middle" style="fill:#1a1a1a">xfs_growfs (xfs)</text>
+  <line x1="710" y1="167" x2="766" y2="167" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- 5. CAPACITY 갱신 -->
+  <rect x="980" y="92" width="176" height="150" rx="9" fill="rgb(20,22,26)" stroke="#66bb6a" stroke-width="1.4"/>
+  <text x="1068" y="122" class="step" text-anchor="middle" style="fill:#66bb6a">⑤ 완료</text>
+  <text x="1068" y="146" class="mono" text-anchor="middle" style="fill:#66bb6a">CAPACITY = 10Gi ✓</text>
+  <text x="1068" y="168" class="desc" text-anchor="middle" style="fill:#66bb6a">지도도 10Gi로 갱신</text>
+  <text x="1068" y="196" class="muted" text-anchor="middle">Pending 조건 해제</text>
+  <text x="1068" y="212" class="muted" text-anchor="middle">넓어진 공간 사용 가능</text>
+  <line x1="920" y1="167" x2="976" y2="167" stroke="#66bb6a" stroke-width="2.5" marker-end="url(#arg)"/>
+
+  <!-- 하단 프레임 문장 -->
+  <text x="24" y="288" class="desc" style="fill:rgb(212,168,83)">두 층은 택일이 아니라 겹쳐 쓰는 스택이다 — A층(땅)을 무엇으로 만들었나 = 디스크·LVM, B층(지도)을 무엇으로 포맷했나 = ext4·xfs.</text>
+  <text x="24" y="312" class="muted">온라인 확장 지원 CSI는 ②~⑤를 재시작 없이 끝내기도 하지만, local-path 등 기본 경로는 위 오프라인 흐름을 따른다.</text>
+</svg>
