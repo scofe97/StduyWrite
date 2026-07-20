@@ -1,0 +1,70 @@
+<svg viewBox="0 0 1120 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>파드 IP 직접 통신과 ClusterIP 경유 통신 — NAT가 끼는 곳</title>
+  <desc>파드가 다른 파드의 IP로 직접 패킷을 보내면 flat 네트워크라 출발지·목적지 주소가 그대로 유지된다. 반면 ClusterIP로 보내면 kube-proxy가 각 노드에 심어 둔 iptables nat 규칙이 목적지를 실제 파드 IP로 바꾸는 DNAT가 일어난다. ClusterIP는 실제 인터페이스에 없는 가상 IP라, 포트와 짝지어진 규칙에만 걸리고 포트 없는 ping은 어디로도 가지 못한다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .lane   { font-size: 13px; font-weight: 800; fill: rgb(212,168,83); }
+      .laneb  { font-size: 13px; font-weight: 800; fill: #8fc0ec; }
+      .boxd   { font-size: 12.5px; font-weight: 800; fill: #e8e4df; }
+      .dark   { font-size: 12.5px; font-weight: 800; fill: #1a1a1a; }
+      .desc   { font-size: 10px; font-weight: 600; fill: #e8e4df; }
+      .muted  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .mono   { font-size: 9.5px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .darkmono { font-size: 9.5px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; fill: #1a1a1a; }
+    </style>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="arg" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="470" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">파드 IP 직접 = NAT 없음 · ClusterIP 경유 = DNAT</text>
+  <text x="24" y="50" class="sub">같은 출발 파드라도, 목적지가 파드 IP냐 ClusterIP냐에 따라 주소 변환이 끼는지가 갈린다.</text>
+
+  <!-- 출발 파드 (공통) -->
+  <rect x="40" y="180" width="150" height="90" rx="10" fill="#5b9bd5"/>
+  <text x="115" y="212" class="boxd" text-anchor="middle" style="fill:#e8e4df">파드 A</text>
+  <text x="115" y="234" class="mono" text-anchor="middle" style="fill:#e8e4df">10.244.1.5</text>
+  <text x="115" y="252" class="muted" text-anchor="middle" style="fill:#e8e4df">출발지</text>
+
+  <!-- 경로 1: 파드 IP 직접 (위, 초록) -->
+  <text x="230" y="86" class="lane" style="fill:#66bb6a">경로 ① 파드 IP 직접 — NAT 없음</text>
+  <rect x="230" y="100" width="850" height="70" rx="10" fill="rgb(16,18,22)" stroke="#66bb6a" stroke-width="1.4"/>
+  <text x="250" y="126" class="desc" style="fill:#66bb6a">출발지·목적지 IP가 끝까지 그대로 (flat 네트워크)</text>
+  <rect x="250" y="134" width="300" height="26" rx="5" fill="rgb(20,22,26)" stroke="#66bb6a" stroke-width="1"/>
+  <text x="260" y="152" class="mono" style="fill:#8fe0a0">src 10.244.1.5 → dst 10.244.2.9</text>
+  <text x="580" y="152" class="muted">받는 파드는 A의 진짜 IP를 출발지로 봄</text>
+  <rect x="930" y="110" width="130" height="50" rx="8" fill="#66bb6a"/>
+  <text x="995" y="132" class="dark" text-anchor="middle">파드 B</text>
+  <text x="995" y="150" class="darkmono" text-anchor="middle">10.244.2.9</text>
+  <line x1="190" y1="200" x2="228" y2="140" stroke="#66bb6a" stroke-width="2" marker-end="url(#arg)"/>
+
+  <!-- 경로 2: ClusterIP 경유 (아래, 앰버 - DNAT) -->
+  <text x="230" y="300" class="lane">경로 ② ClusterIP 경유 — kube-proxy가 DNAT</text>
+  <rect x="230" y="314" width="850" height="120" rx="10" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+
+  <rect x="248" y="330" width="150" height="42" rx="6" fill="rgb(20,22,26)" stroke="rgb(212,168,83)" stroke-width="1"/>
+  <text x="323" y="348" class="mono" text-anchor="middle" style="fill:rgb(212,168,83)">dst 10.96.74.151:80</text>
+  <text x="323" y="364" class="muted" text-anchor="middle">ClusterIP (가상)</text>
+
+  <rect x="440" y="322" width="230" height="58" rx="7" fill="#d4a853"/>
+  <text x="555" y="344" class="dark" text-anchor="middle">iptables nat 규칙 (kube-proxy)</text>
+  <text x="555" y="362" class="darkmono" text-anchor="middle">DNAT: dst → 파드 IP로 교체</text>
+
+  <rect x="712" y="330" width="160" height="42" rx="6" fill="rgb(20,22,26)" stroke="rgb(212,168,83)" stroke-width="1"/>
+  <text x="792" y="348" class="mono" text-anchor="middle" style="fill:rgb(212,168,83)">dst 10.244.2.9:80</text>
+  <text x="792" y="364" class="muted" text-anchor="middle">Endpoints 중 확률 선택</text>
+
+  <rect x="912" y="326" width="148" height="50" rx="8" fill="#d4a853"/>
+  <text x="986" y="348" class="dark" text-anchor="middle">파드 B</text>
+  <text x="986" y="366" class="darkmono" text-anchor="middle">10.244.2.9</text>
+
+  <line x1="398" y1="351" x2="436" y2="351" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="670" y1="351" x2="708" y2="351" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="872" y1="351" x2="908" y2="351" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="190" y1="250" x2="244" y2="345" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+
+  <text x="248" y="404" class="muted" style="fill:#f0b0b0">ping이 안 되는 이유: ClusterIP는 포트와 짝지은 규칙에만 걸림 → 포트 없는 ICMP(ping)는 매칭되는 규칙이 없어 버려짐.</text>
+  <text x="248" y="424" class="muted">완벽 균등 분산이 아닌 이유: iptables random(netfilter nat)이라 30요청이 13/10/7처럼 확률적으로 나뉨.</text>
+</svg>
