@@ -1,0 +1,95 @@
+<svg viewBox="0 0 1180 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>kube-proxy가 심은 규칙 위로 패킷이 왕복하는 커널 데이터패스 — 요청 DNAT와 응답 conntrack 역변환</title>
+  <desc>kube-proxy는 위쪽 컨트롤 플레인에서 EndpointSlice 명단을 보고 커널에 규칙만 심는다. 아래 데이터패스에서 실제 패킷이 왕복한다. 요청은 PREROUTING 훅에서 KUBE-SERVICES, KUBE-SVC, KUBE-SEP 체인을 거치며 목적지가 ClusterIP에서 파드 IP로 바뀌는 DNAT를 받고 파드로 간다. 응답은 파드에서 출발지가 파드 IP인 채 돌아오는데, 가운데의 conntrack이 요청 때 저장해 둔 매핑으로 출발지를 원래 ClusterIP로 되돌린다. 그래서 클라이언트는 자기가 보낸 ClusterIP에서 응답이 온 것으로 본다. conntrack이 왕복을 잇는 기억 역할을 한다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .zone   { font-size: 12.5px; font-weight: 800; fill: rgb(212,168,83); }
+      .comp   { font-size: 12px; font-weight: 800; fill: #e8e4df; }
+      .dark   { font-size: 12px; font-weight: 800; fill: #1a1a1a; }
+      .desc   { font-size: 10px; font-weight: 600; fill: #e8e4df; }
+      .darkdesc { font-size: 10px; font-weight: 600; fill: #1a1a1a; }
+      .muted  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .mono   { font-size: 9px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .darkmono { font-size: 9px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; fill: #1a1a1a; }
+    </style>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="arg" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="560" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">kube-proxy는 규칙만 심고, 패킷은 커널에서 왕복한다</text>
+  <text x="24" y="50" class="sub">위: 컨트롤 플레인이 규칙을 심는다. 아래: 요청은 DNAT를 받고, 응답은 conntrack이 역변환한다. conntrack이 왕복을 잇는 기억이다.</text>
+
+  <!-- 컨트롤 플레인 (위) -->
+  <rect x="40" y="72" width="1100" height="64" rx="10" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="60" y="96" class="zone">컨트롤 플레인 — kube-proxy (패킷을 나르지 않음)</text>
+  <text x="60" y="116" class="muted">EndpointSlice 명단을 감시 → 각 노드 커널의 netfilter에 아래 규칙을 심고 갱신할 뿐.</text>
+  <rect x="720" y="86" width="400" height="36" rx="7" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="740" y="109" class="mono" style="fill:rgb(212,168,83)">iptables-restore / ipvsadm 으로 규칙 주입 ↓</text>
+  <line x1="590" y1="136" x2="590" y2="168" stroke="rgb(212,168,83)" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+
+  <!-- 데이터패스 컨테이너 -->
+  <rect x="40" y="160" width="1100" height="330" rx="12" fill="rgb(12,14,17)" stroke="#5b9bd5" stroke-width="1.4"/>
+  <text x="60" y="184" class="comp" style="fill:#8fc0ec">커널 데이터패스 (실제 패킷 왕복)</text>
+
+  <!-- 클라이언트 -->
+  <rect x="60" y="250" width="130" height="150" rx="9" fill="#5b9bd5"/>
+  <text x="125" y="316" class="comp" text-anchor="middle" style="fill:#e8e4df">클라이언트</text>
+  <text x="125" y="338" class="comp" text-anchor="middle" style="fill:#e8e4df">파드</text>
+  <text x="125" y="362" class="mono" text-anchor="middle" style="fill:#e8e4df">10.244.1.5</text>
+
+  <!-- 요청 경로 (위 라인, 앰버) -->
+  <text x="220" y="212" class="zone">요청 → (DNAT)</text>
+  <rect x="220" y="222" width="150" height="56" rx="7" fill="rgb(20,22,26)" stroke="rgb(212,168,83)" stroke-width="1.1"/>
+  <text x="295" y="244" class="mono" text-anchor="middle" style="fill:rgb(212,168,83)">PREROUTING</text>
+  <text x="295" y="262" class="muted" text-anchor="middle">nat 진입점</text>
+
+  <rect x="392" y="222" width="150" height="56" rx="7" fill="rgb(20,22,26)" stroke="rgb(212,168,83)" stroke-width="1.1"/>
+  <text x="467" y="240" class="mono" text-anchor="middle" style="fill:rgb(212,168,83)">KUBE-SERVICES</text>
+  <text x="467" y="256" class="muted" text-anchor="middle">ClusterIP 매칭</text>
+  <text x="467" y="270" class="muted" text-anchor="middle">진입 체인</text>
+
+  <rect x="564" y="222" width="150" height="56" rx="7" fill="#d4a853"/>
+  <text x="639" y="240" class="darkmono" text-anchor="middle">KUBE-SVC</text>
+  <text x="639" y="258" class="darkdesc" text-anchor="middle">엔드포인트</text>
+  <text x="639" y="271" class="darkdesc" text-anchor="middle">확률 선택</text>
+
+  <rect x="736" y="222" width="176" height="56" rx="7" fill="#d4a853"/>
+  <text x="824" y="240" class="darkmono" text-anchor="middle">KUBE-SEP → DNAT</text>
+  <text x="824" y="258" class="darkmono" text-anchor="middle">dst 10.96.74.151</text>
+  <text x="824" y="271" class="darkmono" text-anchor="middle">→ 10.244.2.9</text>
+
+  <line x1="190" y1="250" x2="216" y2="250" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="370" y1="250" x2="388" y2="250" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="542" y1="250" x2="560" y2="250" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="714" y1="250" x2="732" y2="250" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="912" y1="250" x2="978" y2="285" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- 대상 파드 -->
+  <rect x="985" y="250" width="130" height="150" rx="9" fill="#66bb6a"/>
+  <text x="1050" y="316" class="dark" text-anchor="middle">대상 파드</text>
+  <text x="1050" y="340" class="darkmono" text-anchor="middle">10.244.2.9</text>
+  <text x="1050" y="360" class="darkdesc" text-anchor="middle">:80 수신</text>
+
+  <!-- conntrack (가운데 기억) -->
+  <rect x="392" y="300" width="320" height="60" rx="9" fill="rgb(16,20,17)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="552" y="324" class="desc" text-anchor="middle" style="fill:#66bb6a">conntrack — 왕복을 잇는 기억</text>
+  <text x="552" y="344" class="mono" text-anchor="middle" style="fill:#66bb6a">10.96.74.151 ⇄ 10.244.2.9 매핑 저장</text>
+  <line x1="824" y1="278" x2="700" y2="302" stroke="#66bb6a" stroke-width="1.4" stroke-dasharray="3 2" marker-end="url(#arg)"/>
+  <text x="770" y="296" class="muted" style="fill:#66bb6a">DNAT 기록</text>
+
+  <!-- 응답 경로 (아래 라인, 초록) -->
+  <text x="220" y="452" class="zone" style="fill:#66bb6a">← 응답 (conntrack 역변환)</text>
+  <rect x="392" y="384" width="320" height="52" rx="7" fill="rgb(20,22,26)" stroke="#66bb6a" stroke-width="1.1"/>
+  <text x="552" y="405" class="desc" text-anchor="middle" style="fill:#66bb6a">응답 출발지 10.244.2.9 → conntrack이 역변환</text>
+  <text x="552" y="423" class="mono" text-anchor="middle" style="fill:#66bb6a">src 을 원래 10.96.74.151 로 되돌림</text>
+
+  <line x1="985" y1="380" x2="716" y2="405" stroke="#66bb6a" stroke-width="2" marker-end="url(#arg)"/>
+  <line x1="388" y1="410" x2="192" y2="392" stroke="#66bb6a" stroke-width="2" marker-end="url(#arg)"/>
+  <line x1="552" y1="360" x2="552" y2="380" stroke="#66bb6a" stroke-width="1.4" stroke-dasharray="3 2" marker-end="url(#arg)"/>
+
+  <text x="24" y="522" class="muted">역변환이 없으면 클라이언트는 자기가 보낸 적 없는 낯선 파드 IP(10.244.2.9)에서 온 응답이라 여겨 버린다. conntrack이 그 간극을 메운다.</text>
+  <text x="24" y="544" class="muted">한계: 표준 iptables/IPVS 모드 기준. eBPF(Cilium)는 conntrack을 자체 맵으로 대체하는 다른 경로를 쓴다.</text>
+</svg>

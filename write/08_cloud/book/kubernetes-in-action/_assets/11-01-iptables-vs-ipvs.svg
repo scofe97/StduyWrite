@@ -1,0 +1,84 @@
+<svg viewBox="0 0 1180 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>kube-proxy 규칙 조회 방식 — iptables 선형 스캔과 IPVS 해시 조회</title>
+  <desc>kube-proxy가 어느 파드로 보낼지 규칙을 조회하는 방식은 모드마다 다르다. iptables 모드는 KUBE-SVC 체인을 위에서 아래로 하나씩 비교하는 선형 스캔이라, 서비스가 수만 개면 규칙도 수만 개가 되어 조회와 규칙 갱신이 서비스 수에 비례해 느려진다. IPVS 모드는 리눅스 커널의 LVS 모듈을 써서 ClusterIP와 포트를 해시 키로 한 번에 엔드포인트를 찾으므로, 서비스 수와 무관하게 조회 시간이 일정하다. 그래서 소규모나 중규모 클러스터에는 iptables로 충분하지만, 대규모 클러스터에는 IPVS가 유리하다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .head   { font-size: 14px; font-weight: 800; }
+      .comp   { font-size: 11px; font-weight: 700; fill: #e8e4df; }
+      .desc   { font-size: 10.5px; font-weight: 600; fill: #e8e4df; }
+      .muted  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .mono   { font-size: 10px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .big    { font-size: 13px; font-weight: 800; }
+    </style>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="arb" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#5b9bd5"/></marker>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#f44336"/></marker>
+    <marker id="arg" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="500" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">규칙을 어떻게 찾나 — iptables는 한 줄씩, IPVS는 해시로 한 번에</text>
+  <text x="24" y="50" class="sub">"이 ClusterIP는 어느 파드로?"를 조회하는 방식의 차이. 서비스가 수만 개로 늘 때 둘의 성능이 갈린다.</text>
+
+  <!-- iptables -->
+  <rect x="40" y="76" width="540" height="380" rx="12" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="60" y="104" class="head" style="fill:rgb(212,168,83)">iptables 모드 (기본)</text>
+  <text x="60" y="124" class="muted">KUBE-SVC 체인을 위에서 아래로 선형 스캔 — O(n)</text>
+
+  <rect x="60" y="140" width="180" height="42" rx="6" fill="#5b9bd5"/>
+  <text x="150" y="166" class="comp" text-anchor="middle" style="fill:#e8e4df">조회: 10.96.74.151:80</text>
+
+  <!-- 선형 체인 -->
+  <rect x="90" y="200" width="300" height="30" rx="5" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="104" y="220" class="mono" style="fill:rgb(138,133,128)">svc-A 매칭? ─ 아니오</text>
+  <rect x="90" y="238" width="300" height="30" rx="5" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="104" y="258" class="mono" style="fill:rgb(138,133,128)">svc-B 매칭? ─ 아니오</text>
+  <rect x="90" y="276" width="300" height="30" rx="5" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="104" y="296" class="mono" style="fill:rgb(138,133,128)">svc-C 매칭? ─ 아니오</text>
+  <rect x="90" y="314" width="300" height="30" rx="5" fill="rgb(20,30,22)" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="104" y="334" class="mono" style="fill:#66bb6a">svc-D 매칭! ─ 여기서 멈춤</text>
+  <line x1="240" y1="182" x2="240" y2="198" stroke="rgb(212,168,83)" stroke-width="1.8" marker-end="url(#ar)"/>
+  <line x1="240" y1="230" x2="240" y2="236" stroke="rgb(212,168,83)" stroke-width="1.8" marker-end="url(#ar)"/>
+  <line x1="240" y1="268" x2="240" y2="274" stroke="rgb(212,168,83)" stroke-width="1.8" marker-end="url(#ar)"/>
+  <line x1="240" y1="306" x2="240" y2="312" stroke="rgb(212,168,83)" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="410" y="200" width="150" height="144" rx="8" fill="rgb(30,20,20)" stroke="#f0b0b0" stroke-width="1.1"/>
+  <text x="485" y="238" class="desc" text-anchor="middle" style="fill:#f0b0b0">서비스가 늘수록</text>
+  <text x="485" y="260" class="desc" text-anchor="middle" style="fill:#f0b0b0">비교 횟수도</text>
+  <text x="485" y="282" class="desc" text-anchor="middle" style="fill:#f0b0b0">선형으로 증가</text>
+  <text x="485" y="312" class="mono" text-anchor="middle" style="fill:#f0b0b0">규칙 수만 개 →</text>
+  <text x="485" y="328" class="mono" text-anchor="middle" style="fill:#f0b0b0">갱신도 느려짐</text>
+  <line x1="392" y1="329" x2="406" y2="290" stroke="#f44336" stroke-width="1.6" marker-end="url(#arr)"/>
+
+  <rect x="60" y="404" width="500" height="36" rx="6" fill="rgb(20,30,22)" stroke="#66bb6a" stroke-width="1"/>
+  <text x="80" y="427" class="desc" style="fill:#66bb6a">소~중규모 클러스터에는 이것으로 충분하다.</text>
+
+  <!-- IPVS -->
+  <rect x="620" y="76" width="520" height="380" rx="12" fill="rgb(16,18,22)" stroke="#5b9bd5" stroke-width="1.4"/>
+  <text x="640" y="104" class="head" style="fill:#8fc0ec">IPVS 모드</text>
+  <text x="640" y="124" class="muted">커널 LVS 모듈 · 해시 테이블로 한 번에 조회 — O(1)</text>
+
+  <rect x="640" y="140" width="200" height="42" rx="6" fill="#5b9bd5"/>
+  <text x="740" y="166" class="comp" text-anchor="middle" style="fill:#e8e4df">조회: 10.96.74.151:80</text>
+
+  <rect x="640" y="212" width="290" height="70" rx="8" fill="#5b9bd5"/>
+  <text x="785" y="240" class="big" text-anchor="middle" style="fill:#e8e4df">hash(ClusterIP:포트)</text>
+  <text x="785" y="264" class="mono" text-anchor="middle" style="fill:#e8e4df">→ 엔드포인트 셋 한 번에</text>
+  <line x1="740" y1="182" x2="740" y2="208" stroke="#5b9bd5" stroke-width="2" marker-end="url(#arb)"/>
+
+  <rect x="960" y="212" width="160" height="70" rx="8" fill="rgb(20,30,22)" stroke="#66bb6a" stroke-width="1.1"/>
+  <text x="1040" y="244" class="desc" text-anchor="middle" style="fill:#66bb6a">단 한 번 조회</text>
+  <text x="1040" y="266" class="mono" text-anchor="middle" style="fill:#66bb6a">즉시 도착</text>
+  <line x1="930" y1="247" x2="956" y2="247" stroke="#66bb6a" stroke-width="2" marker-end="url(#arg)"/>
+
+  <rect x="640" y="312" width="480" height="70" rx="8" fill="rgb(20,22,26)" stroke="#5b9bd5" stroke-width="1"/>
+  <text x="880" y="340" class="desc" text-anchor="middle" style="fill:#8fc0ec">서비스가 10개든 5만 개든 조회 시간이 일정</text>
+  <text x="880" y="362" class="muted" text-anchor="middle">해시 키로 바로 찾으니 서비스 수와 무관</text>
+
+  <rect x="640" y="404" width="480" height="36" rx="6" fill="rgb(20,30,22)" stroke="#66bb6a" stroke-width="1"/>
+  <text x="660" y="427" class="desc" style="fill:#66bb6a">대규모 클러스터에는 IPVS가 유리하다.</text>
+
+  <text x="24" y="484" class="muted">한계: 이 비교는 조회·갱신 성능 축이다. IPVS는 커널 모듈 요구·설정 복잡도 등 운영 부담이 iptables보다 크다는 트레이드오프가 있다.</text>
+</svg>
