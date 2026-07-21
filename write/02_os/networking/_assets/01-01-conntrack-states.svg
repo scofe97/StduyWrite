@@ -1,0 +1,79 @@
+<svg viewBox="0 0 1000 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>conntrack 상태 머신 — NEW에서 ESTABLISHED로, 양방향 기록과 ASSURED 플래그</title>
+  <desc>conntrack 엔트리는 한 흐름의 상태를 추적한다. 첫 패킷이 도착하면 NEW 상태로 들어가고, 응답 패킷이 돌아오면 ESTABLISHED로 바뀐다. FTP 데이터 연결이나 ICMP 오류처럼 기존 흐름에 딸린 연결은 RELATED로 잡히고, 형식이 깨졌거나 추적할 수 없는 패킷은 INVALID가 된다. 상태와 별개로 ASSURED는 플래그다. 양방향 트래픽이 모두 확인되면 켜지며, 테이블이 가득 찰 때 ASSURED가 없는 엔트리부터 먼저 정리된다. 엔트리는 항상 정방향과 역방향 두 방향으로 기록되어, 응답이 돌아올 때 커널이 이 장부만 보고 NAT를 거꾸로 풀 수 있다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 10.5px; fill: rgb(138,133,128); }
+      .st     { font-size: 13px; font-weight: 800; }
+      .lbl    { font-size: 9.5px; fill: rgb(138,133,128); }
+      .desc   { font-size: 10.5px; font-weight: 600; fill: #e8e4df; }
+      .muted  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .mono   { font-size: 9.5px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .dark   { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .darkmono { font-size: 9.5px; font-weight: 700; font-family: 'JetBrains Mono', ui-monospace, monospace; fill: #0d0d0d; }
+    </style>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="arg" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/></marker>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#f44336"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="560" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">conntrack 상태 머신 — 첫 패킷부터 양방향 확인까지</text>
+  <text x="24" y="52" class="sub">상태는 흐름이 어디까지 왔는지. ASSURED는 상태가 아니라 양방향이 확인됐다는 별도 플래그다.</text>
+
+  <!-- 첫 패킷 -->
+  <rect x="40" y="96" width="150" height="60" rx="8" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="115" y="122" class="desc" text-anchor="middle">첫 패킷 도착</text>
+  <text x="115" y="142" class="muted" text-anchor="middle">새 5-tuple</text>
+
+  <!-- NEW -->
+  <rect x="250" y="90" width="170" height="72" rx="9" fill="#d4a853"/>
+  <text x="335" y="120" class="dark" text-anchor="middle">NEW</text>
+  <text x="335" y="142" class="darkmono" text-anchor="middle">응답 아직 못 봄</text>
+  <line x1="190" y1="126" x2="246" y2="126" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- ESTABLISHED -->
+  <rect x="500" y="90" width="180" height="72" rx="9" fill="#66bb6a"/>
+  <text x="590" y="120" class="dark" text-anchor="middle">ESTABLISHED</text>
+  <text x="590" y="142" class="darkmono" text-anchor="middle">응답 확인됨 (양방향)</text>
+  <line x1="420" y1="126" x2="496" y2="126" stroke="#66bb6a" stroke-width="2.2" marker-end="url(#arg)"/>
+  <text x="458" y="116" class="muted" text-anchor="middle" style="fill:#66bb6a">응답 도착</text>
+
+  <!-- ASSURED 플래그 -->
+  <rect x="500" y="200" width="180" height="66" rx="9" fill="rgb(16,20,17)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="590" y="226" class="desc" text-anchor="middle" style="fill:#66bb6a">+ ASSURED 플래그</text>
+  <text x="590" y="248" class="muted" text-anchor="middle">상태 아님 · 양방향 확인 시 켜짐</text>
+  <line x1="590" y1="162" x2="590" y2="198" stroke="#66bb6a" stroke-width="1.6" stroke-dasharray="3 2" marker-end="url(#arg)"/>
+
+  <!-- RELATED -->
+  <rect x="250" y="220" width="170" height="66" rx="9" fill="rgb(20,22,26)" stroke="#5b9bd5" stroke-width="1.3"/>
+  <text x="335" y="246" class="st" text-anchor="middle" style="fill:#8fc0ec">RELATED</text>
+  <text x="335" y="268" class="muted" text-anchor="middle">기존 흐름에 딸린 연결</text>
+
+  <!-- INVALID -->
+  <rect x="40" y="220" width="170" height="66" rx="9" fill="rgb(30,20,20)" stroke="#f0b0b0" stroke-width="1.3"/>
+  <text x="125" y="246" class="st" text-anchor="middle" style="fill:#f0b0b0">INVALID</text>
+  <text x="125" y="268" class="muted" text-anchor="middle" style="fill:#f0b0b0">형식 깨짐·추적 불가</text>
+
+  <!-- 부연 박스들 -->
+  <rect x="40" y="316" width="380" height="72" rx="8" fill="rgb(20,22,26)" stroke="#5b9bd5" stroke-width="1"/>
+  <text x="60" y="340" class="desc" style="fill:#8fc0ec">RELATED 예 — FTP 데이터 연결, ICMP 오류</text>
+  <text x="60" y="360" class="muted">제어 흐름에 논리적으로 딸린 별도 연결을 같은 맥락으로 묶는다</text>
+  <text x="60" y="378" class="muted">그래서 방화벽에서 ESTABLISHED,RELATED를 함께 허용한다</text>
+
+  <rect x="440" y="316" width="520" height="72" rx="8" fill="rgb(30,20,20)" stroke="#f0b0b0" stroke-width="1"/>
+  <text x="460" y="340" class="desc" style="fill:#f0b0b0">ASSURED가 왜 중요한가 — 테이블 포화 시 정리 우선순위</text>
+  <text x="460" y="360" class="muted">nf_conntrack_max에 닿으면 ASSURED 없는(한쪽만 본) 엔트리부터 먼저 버려진다</text>
+  <text x="460" y="378" class="muted">양방향이 확인된 실제 통신은 살아남게 하려는 설계</text>
+
+  <!-- 양방향 기록 -->
+  <rect x="40" y="410" width="920" height="80" rx="9" fill="rgb(16,20,28)" stroke="#5b9bd5" stroke-width="1.2"/>
+  <text x="60" y="434" class="desc" style="fill:#8fc0ec">엔트리는 항상 두 방향으로 기록된다</text>
+  <rect x="60" y="446" width="410" height="30" rx="5" fill="rgb(20,30,22)" stroke="#66bb6a" stroke-width="1"/>
+  <text x="74" y="466" class="mono" style="fill:#66bb6a">정방향  10.0.0.1 → 10.244.0.5 (DNAT 후)</text>
+  <rect x="490" y="446" width="450" height="30" rx="5" fill="rgb(20,30,22)" stroke="#66bb6a" stroke-width="1"/>
+  <text x="504" y="466" class="mono" style="fill:#66bb6a">역방향  10.244.0.5 → 10.0.0.1 (응답 시 자동 역변환)</text>
+
+  <text x="24" y="524" class="muted">양쪽이 같이 적혀 있어야 응답 패킷이 돌아왔을 때 커널이 이 장부만 보고 NAT를 거꾸로 풀 수 있다.</text>
+</svg>
