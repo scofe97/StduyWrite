@@ -1,0 +1,79 @@
+<svg viewBox="0 0 900 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>kube-proxy iptables 모드 — 리눅스 구조 위에서 규칙을 목록으로 담아 선형 스캔한다</title>
+  <desc>리눅스 구조로 보면 위쪽 사용자 공간에는 kube-proxy가 iptables 명령을 호출하는 자리가 있고, 이 규칙은 netlink 채널을 통해 아래 커널 공간으로 내려간다. 커널 공간의 netfilter 훅 안에서 규칙이 filter와 nat 같은 테이블에 목록 형태로 담긴다. 패킷이 조회될 때 이 목록을 위에서 아래로 하나씩 비교하는 선형 스캔이라, 서비스가 늘면 비교 횟수도 그만큼 늘고 규칙 갱신도 서비스 수에 비례해 느려진다. 그럼에도 호환성 때문에 현재까지 kube-proxy의 기본값이다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .role   { font-size: 11px; font-weight: 700; fill: rgb(212,168,83); }
+      .zone   { font-size: 11px; font-weight: 800; }
+      .desc   { font-size: 10.5px; font-weight: 600; fill: #e8e4df; }
+      .muted  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .mono   { font-size: 9.5px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .badge  { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .darkmono { font-size: 9px; font-weight: 700; font-family: 'JetBrains Mono', ui-monospace, monospace; fill: #0d0d0d; }
+    </style>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#f44336"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="600" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">iptables 모드 — 커널 목록을 위에서 아래로 훑는다</text>
+  <text x="24" y="52" class="role">정체 — 가장 오래된 표준 규칙 도구 · 현재 기본값</text>
+
+  <!-- USER SPACE -->
+  <rect x="24" y="70" width="852" height="96" rx="10" fill="rgb(24,20,14)" stroke="rgb(212,168,83)" stroke-width="1.3" stroke-dasharray="6 4"/>
+  <text x="40" y="92" class="zone" style="fill:rgb(212,168,83)">USER SPACE (사용자 공간)</text>
+  <rect x="40" y="102" width="240" height="50" rx="7" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="160" y="123" class="mono" text-anchor="middle" style="fill:rgb(212,168,83)">kube-proxy</text>
+  <text x="160" y="141" class="muted" text-anchor="middle">평범한 프로세스</text>
+  <rect x="300" y="102" width="240" height="50" rx="7" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="420" y="123" class="mono" text-anchor="middle" style="fill:rgb(212,168,83)">iptables 명령</text>
+  <text x="420" y="141" class="muted" text-anchor="middle">규칙 등록 인터페이스</text>
+  <line x1="280" y1="127" x2="296" y2="127" stroke="rgb(212,168,83)" stroke-width="1.6" marker-end="url(#ar)"/>
+  <text x="640" y="123" class="muted" style="fill:rgb(138,133,128)">패킷을 직접 만지지 않는다.</text>
+  <text x="640" y="141" class="muted" style="fill:rgb(138,133,128)">규칙만 커널로 내려보낸다.</text>
+
+  <!-- netlink 경계 -->
+  <line x1="450" y1="166" x2="450" y2="192" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="462" y="184" class="mono" style="fill:rgb(212,168,83)">netlink 채널로 주입 ↓</text>
+
+  <!-- KERNEL SPACE -->
+  <rect x="24" y="196" width="852" height="300" rx="10" fill="rgb(12,16,22)" stroke="#5b9bd5" stroke-width="1.3"/>
+  <text x="40" y="218" class="zone" style="fill:#8fc0ec">KERNEL SPACE (커널 공간) — netfilter 훅</text>
+
+  <!-- 목록 저장 표시 -->
+  <text x="40" y="244" class="muted">규칙 저장 구조 — filter · nat 테이블에 목록으로</text>
+
+  <rect x="40" y="256" width="500" height="30" rx="5" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="60" y="276" class="mono" style="fill:rgb(138,133,128)">svc-A 매칭? ───────────── 아니오</text>
+  <rect x="40" y="292" width="500" height="30" rx="5" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="60" y="312" class="mono" style="fill:rgb(138,133,128)">svc-B 매칭? ───────────── 아니오</text>
+  <rect x="40" y="328" width="500" height="30" rx="5" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="60" y="348" class="mono" style="fill:rgb(138,133,128)">svc-C 매칭? ───────────── 아니오</text>
+  <rect x="40" y="364" width="500" height="30" rx="5" fill="rgb(20,30,22)" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="60" y="384" class="mono" style="fill:#66bb6a">svc-D 매칭! ───────────── 여기서 멈춤 → DNAT</text>
+
+  <line x1="290" y1="286" x2="290" y2="290" stroke="rgb(212,168,83)" stroke-width="1.8" marker-end="url(#ar)"/>
+  <line x1="290" y1="322" x2="290" y2="326" stroke="rgb(212,168,83)" stroke-width="1.8" marker-end="url(#ar)"/>
+  <line x1="290" y1="358" x2="290" y2="362" stroke="rgb(212,168,83)" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <!-- 비용 경고 -->
+  <rect x="560" y="256" width="296" height="138" rx="8" fill="rgb(30,20,20)" stroke="#f0b0b0" stroke-width="1.2"/>
+  <text x="708" y="292" class="desc" text-anchor="middle" style="fill:#f0b0b0">서비스가 늘수록</text>
+  <text x="708" y="314" class="desc" text-anchor="middle" style="fill:#f0b0b0">비교 횟수도 선형 증가</text>
+  <text x="708" y="344" class="mono" text-anchor="middle" style="fill:#f0b0b0">규칙 수만 개 →</text>
+  <text x="708" y="366" class="mono" text-anchor="middle" style="fill:#f0b0b0">갱신도 느려짐</text>
+  <line x1="544" y1="379" x2="556" y2="350" stroke="#f44336" stroke-width="1.6" marker-end="url(#arr)"/>
+
+  <!-- 커널 안 패킷 처리 -->
+  <rect x="40" y="410" width="816" height="66" rx="8" fill="rgb(20,22,26)" stroke="#5b9bd5" stroke-width="1"/>
+  <text x="448" y="436" class="desc" text-anchor="middle" style="fill:#8fc0ec">실제 패킷은 이 커널 공간 안에서 처리된다 — 사용자 공간으로 올라오지 않는다</text>
+  <text x="448" y="458" class="muted" text-anchor="middle">모든 노드의 커널 netfilter가 각자 자기 목록을 평가한다</text>
+
+  <!-- 상태 -->
+  <rect x="24" y="506" width="852" height="46" rx="8" fill="#d4a853"/>
+  <text x="450" y="527" class="badge" text-anchor="middle">현재 기본값 (default)</text>
+  <text x="450" y="545" class="darkmono" text-anchor="middle">성능보다 호환성이 앞서서 아직 자리를 지킨다</text>
+
+  <text x="24" y="578" class="muted">규칙 표현 문법(테이블·체인 우선순위)은 01-01 네트워킹 기초의 iptables 절이 SSOT.</text>
+</svg>
