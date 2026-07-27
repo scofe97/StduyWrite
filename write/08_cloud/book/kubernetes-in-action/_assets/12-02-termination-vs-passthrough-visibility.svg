@@ -1,0 +1,103 @@
+<svg viewBox="0 0 1120 720" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>termination과 passthrough — 암호가 풀리는 지점과 프록시가 볼 수 있는 것</title>
+  <desc>두 방식을 암호가 풀리는 지점 기준으로 비교한다. termination은 클라이언트와 프록시 사이만 TLS로 암호화되고 프록시가 인증서를 쥐고 암호를 풀며, 그 뒤 파드로는 평문 HTTP가 간다. 그래서 프록시는 GET 슬래시 quote와 Host 헤더를 읽을 수 있고 경로 분기와 헤더 조작과 쿠키 어피니티가 모두 가능하다. passthrough는 클라이언트부터 파드까지 TLS가 끊기지 않고 인증서를 파드가 쥐므로 프록시는 암호를 풀지 못한다. 프록시가 보는 것은 17 03 03으로 시작하는 암호문 바이트뿐이라 경로를 알 수 없고, 따라서 pathType 매칭이 작동할 수 없다. 다만 호스트 분기는 양쪽 다 가능한데, TLS 핸드셰이크의 SNI 필드는 암호화가 시작되기 전에 오가므로 평문으로 읽히기 때문이다. 정리하면 passthrough는 L7 중간자의 눈을 가리는 선택이고, 그래서 Ingress를 쓰는 이유와 상충해 표준이 되지 못했다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 24px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 15px; fill: rgb(168,163,158); }
+      .col  { font-size: 16px; font-weight: 800; }
+      .lyr  { font-size: 12.5px; font-weight: 800; fill: rgb(168,163,158); }
+      .tag  { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
+      .mono { font-size: 11.5px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .monod{ font-size: 12px; font-weight: 700; fill: rgb(240,150,190); font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .who  { font-size: 12.5px; fill: rgb(168,163,158); }
+      .body { font-size: 14px; fill: #e8e4df; }
+      .bad  { font-size: 13px; fill: rgb(240,150,190); }
+      .good { font-size: 13px; fill: rgb(102,187,106); }
+      .rowl { font-size: 13px; fill: rgb(168,163,158); }
+      .cell { font-size: 13px; fill: #e8e4df; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="720" fill="#0d0d0d"/>
+
+  <text x="30" y="40" class="h1">암호를 어디서 푸느냐가, 프록시가 무엇을 볼 수 있는지를 정합니다</text>
+  <text x="30" y="66" class="sub">TLS가 감추는 것이 하필 프록시가 읽어야 할 바로 그 부분입니다.</text>
+
+  <!-- ================= 왼쪽: termination ================= -->
+  <rect x="30" y="92" width="520" height="384" rx="13" fill="rgb(22,22,22)" stroke="rgb(102,187,106)" stroke-width="1.8"/>
+  <text x="52" y="122" class="col" style="fill:rgb(102,187,106)">termination — 프록시가 풉니다</text>
+  <text x="52" y="144" class="who">인증서를 쥔 쪽: 프록시</text>
+
+  <!-- 경로 -->
+  <rect x="52" y="168" width="128" height="42" rx="7" fill="rgb(91,155,213)"/>
+  <text x="116" y="194" class="tag" text-anchor="middle">클라이언트</text>
+  <rect x="234" y="168" width="112" height="42" rx="7" fill="rgb(212,168,83)"/>
+  <text x="290" y="194" class="tag" text-anchor="middle">프록시</text>
+  <rect x="400" y="168" width="128" height="42" rx="7" fill="rgb(91,155,213)"/>
+  <text x="464" y="194" class="tag" text-anchor="middle">파드</text>
+
+  <text x="207" y="162" class="good" text-anchor="middle" font-weight="700">TLS</text>
+  <line x1="184" y1="189" x2="230" y2="189" stroke="rgb(102,187,106)" stroke-width="2.4"/>
+  <text x="373" y="162" class="cell" text-anchor="middle" font-weight="700">평문</text>
+  <line x1="350" y1="189" x2="396" y2="189" stroke="rgb(168,163,158)" stroke-width="2.4" stroke-dasharray="5 3"/>
+
+  <rect x="52" y="222" width="476" height="30" rx="6" fill="rgba(102,187,106,0.14)" stroke="rgb(102,187,106)" stroke-width="1.3"/>
+  <text x="290" y="242" class="good" text-anchor="middle" font-weight="700">↑ 프록시가 여기서 풉니다 — 이 뒤로는 평문 HTTP</text>
+
+  <!-- 프록시가 보는 것 -->
+  <text x="52" y="272" class="lyr">프록시가 보는 것</text>
+  <rect x="52" y="282" width="476" height="60" rx="8" fill="rgb(212,168,83)"/>
+  <text x="68" y="305" class="mono">GET /quote HTTP/1.1</text>
+  <text x="68" y="327" class="mono">Host: api.example.com</text>
+
+  <rect x="52" y="356" width="476" height="102" rx="9" fill="rgba(102,187,106,0.12)" stroke="rgb(102,187,106)" stroke-width="1.4"/>
+  <text x="68" y="380" class="body" font-weight="700">읽을 수 있으니 손댈 수 있습니다</text>
+  <text x="68" y="402" class="good">✓ 경로 분기 — pathType 매칭이 작동합니다</text>
+  <text x="68" y="424" class="good">✓ 헤더 조작 · URL 재작성</text>
+  <text x="68" y="446" class="good">✓ 쿠키 기반 세션 어피니티</text>
+
+  <!-- ================= 오른쪽: passthrough ================= -->
+  <rect x="570" y="92" width="520" height="384" rx="13" fill="rgb(22,22,22)" stroke="rgb(240,150,190)" stroke-width="1.8"/>
+  <text x="592" y="122" class="col" style="fill:rgb(240,150,190)">passthrough — 파드가 풉니다</text>
+  <text x="592" y="144" class="who">인증서를 쥔 쪽: 파드</text>
+
+  <rect x="592" y="168" width="128" height="42" rx="7" fill="rgb(91,155,213)"/>
+  <text x="656" y="194" class="tag" text-anchor="middle">클라이언트</text>
+  <rect x="774" y="168" width="136" height="42" rx="7" fill="rgb(58,58,58)"/>
+  <text x="842" y="194" class="tag" style="fill:rgb(200,196,192)" text-anchor="middle">프록시 (못 봄)</text>
+  <rect x="964" y="168" width="106" height="42" rx="7" fill="rgb(91,155,213)"/>
+  <text x="1017" y="194" class="tag" text-anchor="middle">파드</text>
+
+  <text x="747" y="162" class="bad" text-anchor="middle" font-weight="700">TLS</text>
+  <line x1="724" y1="189" x2="770" y2="189" stroke="rgb(240,150,190)" stroke-width="2.4"/>
+  <text x="937" y="162" class="bad" text-anchor="middle" font-weight="700">TLS</text>
+  <line x1="914" y1="189" x2="960" y2="189" stroke="rgb(240,150,190)" stroke-width="2.4"/>
+
+  <rect x="592" y="222" width="478" height="30" rx="6" fill="rgba(240,150,190,0.14)" stroke="rgb(240,150,190)" stroke-width="1.3"/>
+  <text x="831" y="242" class="bad" text-anchor="middle" font-weight="700">암호가 끊기지 않고 파드까지 그대로 갑니다</text>
+
+  <text x="592" y="272" class="lyr">프록시가 보는 것</text>
+  <rect x="592" y="282" width="478" height="60" rx="8" fill="rgb(28,24,26)" stroke="rgb(240,150,190)" stroke-width="1.3"/>
+  <text x="608" y="305" class="monod">17 03 03 04 a1 9f 2c 8e b3 ...</text>
+  <text x="608" y="327" class="who">경로가 어디에 있는지조차 알 수 없습니다</text>
+
+  <rect x="592" y="356" width="478" height="102" rx="9" fill="rgba(240,150,190,0.12)" stroke="rgb(240,150,190)" stroke-width="1.4"/>
+  <text x="608" y="380" class="body" font-weight="700">못 읽으니 손댈 수도 없습니다</text>
+  <text x="608" y="402" class="bad">✗ 경로 분기 — pathType이 작동할 수 없습니다</text>
+  <text x="608" y="424" class="bad">✗ 헤더 조작 · URL 재작성</text>
+  <text x="608" y="446" class="bad">✗ 쿠키 기반 세션 어피니티</text>
+
+  <!-- ================= 예외: SNI ================= -->
+  <rect x="30" y="496" width="1060" height="76" rx="11" fill="rgb(20,20,20)" stroke="rgb(120,116,112)" stroke-width="1.3"/>
+  <text x="54" y="522" class="body" font-weight="700">예외가 하나 — 호스트 분기는 passthrough에서도 됩니다</text>
+  <text x="54" y="546" class="who">TLS 핸드셰이크의 SNI 필드는 암호화가 시작되기 <tspan font-weight="700" fill="#e8e4df">전에</tspan> 오가므로 평문으로 읽힙니다. 그래서 "어느 호스트로 가는가"는 알 수 있습니다.</text>
+  <text x="54" y="566" class="who">알 수 없는 것은 그 뒤의 경로·헤더·쿠키입니다 — 그것들은 암호화된 본문 안에 있습니다.</text>
+
+  <!-- ================= 하단 못박기 ================= -->
+  <rect x="30" y="588" width="1060" height="106" rx="12" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="54" y="616" class="body" font-weight="700">"L7 라우팅을 포기한다"는 말은 이 뜻입니다 — passthrough는 L7 중간자의 눈을 가리는 선택입니다.</text>
+  <text x="54" y="640" class="who">12-01에서 커널이 경로로 못 가른 이유가 "페이로드를 안 읽어서"였다면, 여기서는 "읽으려 해도 암호문이어서"입니다. 막히는 지점만 다르고 결과는 같습니다.</text>
+  <text x="54" y="664" class="who">Ingress를 쓰는 이유가 HTTP를 이해하는 중간자를 두는 것이었는데 그 눈을 가리므로, 둘은 상충합니다.</text>
+  <text x="54" y="686" class="who">종단 간 암호화가 꼭 필요한 경우에만 그 대가를 치릅니다 — 그래서 표준이 되지 못했습니다.</text>
+</svg>
