@@ -1,0 +1,104 @@
+<svg viewBox="0 0 1120 680" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>LoadBalancer로 노출할 때와 규칙 없는 Ingress로 노출할 때 — HTTP를 이해하는 중간자의 유무</title>
+  <desc>같은 서비스 하나를 외부에 노출하는 두 방법을 비교한다. 양쪽 모두 오가는 트래픽은 똑같은 HTTP다. 왼쪽 LoadBalancer는 L4라 봉투의 주소만 보고 그대로 지나 보낸다. HTTP를 나르기는 하지만 이해하지는 않으므로, TLS 종료나 인증이나 재작성 같은 일은 전부 뒤쪽 앱이 직접 떠안는다. 오른쪽은 규칙을 하나도 쓰지 않고 defaultBackend만 둔 Ingress로, 목적지는 왼쪽과 똑같이 서비스 하나뿐이지만 그 앞에 L7 프록시가 선다. 프록시가 봉투를 열어 요청을 이해하므로 TLS 종료와 HTTP 인증과 쿠키 기반 세션 어피니티와 헤더 조작과 URL 재작성과 재시도와 rate limit이 인프라 계층에서 가능해진다. 그래서 규칙 없는 Ingress를 LoadBalancer 대신 쓰는 이유는 HTTP를 쓰기 때문이 아니라 HTTP를 이해하는 중간자가 생기기 때문이다. 라우팅은 그 중간자가 할 수 있는 일 가운데 하나일 뿐이며, 규칙이 없어도 중간자 자체가 이득이다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 25px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 15px; fill: rgb(168,163,158); }
+      .col  { font-size: 16px; font-weight: 800; }
+      .lyr  { font-size: 12.5px; font-weight: 800; fill: rgb(168,163,158); }
+      .tag  { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .who  { font-size: 12.5px; fill: rgb(168,163,158); }
+      .body { font-size: 14px; fill: #e8e4df; }
+      .bad  { font-size: 13px; fill: rgb(240,150,190); }
+      .good { font-size: 13px; fill: rgb(102,187,106); }
+      .mono { font-size: 11.5px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .monod{ font-size: 11.5px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .feat { font-size: 12.5px; font-weight: 700; fill: #0d0d0d; }
+    </style>
+    <marker id="mm-p" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(240,150,190)"/>
+    </marker>
+    <marker id="mm-g" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(102,187,106)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="680" fill="#0d0d0d"/>
+
+  <text x="30" y="42" class="h1">둘 다 HTTP를 나르지만, 이해하는 쪽은 하나뿐입니다</text>
+  <text x="30" y="68" class="sub">서비스 하나를 외부에 노출합니다. 규칙은 오른쪽에도 없습니다 — defaultBackend만 둔 Ingress입니다.</text>
+
+  <!-- ================= 왼쪽: LoadBalancer ================= -->
+  <rect x="30" y="92" width="520" height="424" rx="13" fill="rgb(22,22,22)" stroke="rgb(240,150,190)" stroke-width="1.8"/>
+  <text x="52" y="122" class="col" style="fill:rgb(240,150,190)">LoadBalancer로 노출</text>
+  <text x="52" y="144" class="who">L4 — 봉투의 주소만 보고 지나 보냅니다</text>
+
+  <rect x="52" y="160" width="476" height="46" rx="8" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.3"/>
+  <text x="68" y="180" class="lyr">클라이언트 요청</text>
+  <text x="68" y="198" class="monod">GET /orders  ·  Cookie: session=abc  ·  TLS</text>
+
+  <line x1="290" y1="210" x2="290" y2="234" stroke="rgb(240,150,190)" stroke-width="2.2" marker-end="url(#mm-p)"/>
+
+  <rect x="52" y="240" width="476" height="58" rx="8" fill="rgb(240,150,190)"/>
+  <text x="290" y="264" class="tag" text-anchor="middle">L4 로드밸런서</text>
+  <text x="290" y="284" class="mono" text-anchor="middle">봉투를 열지 않습니다 — 안에 무엇이 있는지 모릅니다</text>
+
+  <line x1="290" y1="302" x2="290" y2="326" stroke="rgb(240,150,190)" stroke-width="2.2" marker-end="url(#mm-p)"/>
+
+  <rect x="52" y="332" width="476" height="46" rx="8" fill="rgb(91,155,213)"/>
+  <text x="290" y="360" class="tag" text-anchor="middle">앱 (Spring Boot 등)</text>
+
+  <rect x="52" y="394" width="476" height="104" rx="9" fill="rgba(240,150,190,0.12)" stroke="rgb(240,150,190)" stroke-width="1.4"/>
+  <text x="68" y="418" class="body" font-weight="700">HTTP 관련 일은 전부 앱이 떠안습니다</text>
+  <text x="68" y="440" class="who">TLS 종료 · 인증 · 재작성 · 재시도 · rate limit —</text>
+  <text x="68" y="460" class="who">모두 앱 코드나 라이브러리로 직접 해야 합니다.</text>
+  <text x="68" y="484" class="bad" font-weight="700">HTTP를 나르지만, 이해하지는 않습니다</text>
+
+  <!-- ================= 오른쪽: 규칙 없는 Ingress ================= -->
+  <rect x="570" y="92" width="520" height="424" rx="13" fill="rgb(22,22,22)" stroke="rgb(102,187,106)" stroke-width="1.8"/>
+  <text x="592" y="122" class="col" style="fill:rgb(102,187,106)">규칙 없는 Ingress로 노출</text>
+  <text x="592" y="144" class="who">L7 — 봉투를 열어 요청을 이해합니다</text>
+
+  <rect x="592" y="160" width="478" height="46" rx="8" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.3"/>
+  <text x="608" y="180" class="lyr">클라이언트 요청 — 왼쪽과 똑같습니다</text>
+  <text x="608" y="198" class="monod">GET /orders  ·  Cookie: session=abc  ·  TLS</text>
+
+  <line x1="830" y1="210" x2="830" y2="234" stroke="rgb(102,187,106)" stroke-width="2.2" marker-end="url(#mm-g)"/>
+
+  <rect x="592" y="240" width="478" height="58" rx="8" fill="rgb(212,168,83)"/>
+  <text x="831" y="264" class="tag" text-anchor="middle">L7 프록시 — 규칙이 없어도 여기 서 있습니다</text>
+  <text x="831" y="284" class="mono" text-anchor="middle">봉투를 열어 읽습니다 — 그래서 손댈 수 있습니다</text>
+
+  <line x1="830" y1="302" x2="830" y2="326" stroke="rgb(102,187,106)" stroke-width="2.2" marker-end="url(#mm-g)"/>
+
+  <rect x="592" y="332" width="478" height="46" rx="8" fill="rgb(91,155,213)"/>
+  <text x="831" y="360" class="tag" text-anchor="middle">앱 (Spring Boot 등) — 목적지는 왼쪽과 같습니다</text>
+
+  <rect x="592" y="394" width="478" height="104" rx="9" fill="rgba(102,187,106,0.12)" stroke="rgb(102,187,106)" stroke-width="1.4"/>
+  <text x="608" y="418" class="body" font-weight="700">프록시가 서는 순간 딸려 오는 것들</text>
+  <text x="1054" y="418" class="good" font-weight="700" text-anchor="end">라우팅은 이 중 하나일 뿐입니다</text>
+
+  <rect x="608" y="428" width="104" height="26" rx="5" fill="rgb(102,187,106)"/>
+  <text x="660" y="446" class="feat" text-anchor="middle">TLS 종료</text>
+  <rect x="720" y="428" width="104" height="26" rx="5" fill="rgb(102,187,106)"/>
+  <text x="772" y="446" class="feat" text-anchor="middle">HTTP 인증</text>
+  <rect x="832" y="428" width="120" height="26" rx="5" fill="rgb(102,187,106)"/>
+  <text x="892" y="446" class="feat" text-anchor="middle">쿠키 어피니티</text>
+  <rect x="960" y="428" width="94" height="26" rx="5" fill="rgb(102,187,106)"/>
+  <text x="1007" y="446" class="feat" text-anchor="middle">헤더 조작</text>
+
+  <rect x="608" y="460" width="104" height="26" rx="5" fill="rgb(102,187,106)"/>
+  <text x="660" y="478" class="feat" text-anchor="middle">URL 재작성</text>
+  <rect x="720" y="460" width="104" height="26" rx="5" fill="rgb(102,187,106)"/>
+  <text x="772" y="478" class="feat" text-anchor="middle">재시도</text>
+  <rect x="832" y="460" width="104" height="26" rx="5" fill="rgb(102,187,106)"/>
+  <text x="884" y="478" class="feat" text-anchor="middle">rate limit</text>
+
+  <!-- ================= 하단 못박기 ================= -->
+  <rect x="30" y="536" width="1060" height="120" rx="12" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="54" y="564" class="body" font-weight="700">규칙 없는 Ingress를 LoadBalancer 대신 쓰는 이유는 "HTTP를 쓰니까"가 아닙니다 — LB로 노출한 앱도 HTTP를 씁니다.</text>
+  <text x="54" y="588" class="who">차이는 누가 HTTP를 이해하느냐입니다. LB는 봉투만 보고 지나가고, Ingress는 봉투를 여는 중간자를 세웁니다.</text>
+  <text x="54" y="612" class="body" font-weight="700">즉 규칙이 하나도 없어도, HTTP를 이해하는 중간자가 생긴다는 것 자체가 이득입니다.</text>
+  <text x="54" y="636" class="who">경로로 가르는 일은 그 중간자가 할 수 있는 여러 일 가운데 하나일 뿐입니다. 나머지 기능은 12-02에서 다룹니다.</text>
+</svg>
