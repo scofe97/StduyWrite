@@ -1,0 +1,116 @@
+<svg viewBox="0 0 1120 660" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>IP 기준 어피니티와 쿠키 기준 어피니티 — IP는 신원이 아니라 경로의 속성입니다</title>
+  <desc>IP를 어피니티 키로 쓸 때 생기는 실패를 양방향으로 보여 준다. 첫째는 여럿을 한 명으로 보는 경우다. 사무실에서 100명이 NAT을 거쳐 나오면 출발지 주소가 모두 같은 하나가 되므로, IP 기준 어피니티는 100명 전부를 같은 파드 하나에 고정한다. 그 파드만 과부하가 걸리고 나머지 파드는 놀게 되어, 어피니티를 켠 대가로 분산을 잃는다. 둘째는 한 명을 여럿으로 보는 경우다. 모바일 사용자가 와이파이에서 LTE로 전환하면 출발지 주소가 바뀌므로 같은 사람인데도 다른 파드로 넘어가고 세션이 끊긴다. 쿠키 기준은 두 경우 모두 올바르게 동작한다. 사무실 100명은 각자 다른 쿠키를 받아 여러 파드에 고르게 퍼지면서도 개인별로는 같은 파드를 유지하고, 모바일 사용자는 네트워크가 바뀌어도 쿠키가 그대로라 세션이 이어진다. 요컨대 IP는 사용자의 신원이 아니라 그 요청이 지나온 경로의 속성이라 어피니티 키로 부적합하다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 24px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 15px; fill: rgb(168,163,158); }
+      .col  { font-size: 16px; font-weight: 800; }
+      .lyr  { font-size: 12.5px; font-weight: 800; fill: rgb(168,163,158); }
+      .tag  { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .mono { font-size: 11px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .who  { font-size: 12.5px; fill: rgb(168,163,158); }
+      .body { font-size: 14px; fill: #e8e4df; }
+      .bad  { font-size: 13px; fill: rgb(240,150,190); }
+      .good { font-size: 13px; fill: rgb(102,187,106); }
+    </style>
+    <marker id="af-p" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(240,150,190)"/>
+    </marker>
+    <marker id="af-g" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(102,187,106)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="660" fill="#0d0d0d"/>
+
+  <text x="30" y="40" class="h1">IP는 사용자의 신원이 아니라, 요청이 지나온 경로의 속성입니다</text>
+  <text x="30" y="66" class="sub">그래서 어피니티 키로 쓰면 양쪽으로 어긋납니다 — 여럿을 하나로 보거나, 하나를 여럿으로 보거나.</text>
+
+  <!-- ===== 실패 1: 여럿 → 하나 ===== -->
+  <rect x="30" y="92" width="520" height="238" rx="13" fill="rgb(22,22,22)" stroke="rgb(240,150,190)" stroke-width="1.8"/>
+  <text x="52" y="120" class="col" style="fill:rgb(240,150,190)">실패 1 — 여럿을 한 명으로 봅니다</text>
+  <text x="52" y="142" class="who">사무실 100명이 NAT을 거쳐 나옵니다</text>
+
+  <rect x="52" y="158" width="120" height="46" rx="7" fill="rgb(91,155,213)"/>
+  <text x="112" y="179" class="tag" text-anchor="middle">사무실</text>
+  <text x="112" y="196" class="mono" text-anchor="middle">100명</text>
+
+  <line x1="178" y1="181" x2="208" y2="181" stroke="rgb(240,150,190)" stroke-width="2.2" marker-end="url(#af-p)"/>
+
+  <rect x="216" y="158" width="150" height="46" rx="7" fill="rgb(240,150,190)"/>
+  <text x="291" y="179" class="tag" text-anchor="middle">NAT 출발지</text>
+  <text x="291" y="196" class="mono" text-anchor="middle">203.0.113.7 하나</text>
+
+  <line x1="372" y1="181" x2="402" y2="181" stroke="rgb(240,150,190)" stroke-width="2.2" marker-end="url(#af-p)"/>
+
+  <rect x="410" y="158" width="118" height="46" rx="7" fill="rgb(240,150,190)"/>
+  <text x="469" y="179" class="tag" text-anchor="middle">파드 A</text>
+  <text x="469" y="196" class="mono" text-anchor="middle">100명 전부</text>
+
+  <rect x="52" y="220" width="476" height="42" rx="8" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.2"/>
+  <rect x="66" y="230" width="130" height="22" rx="4" fill="rgb(240,150,190)"/>
+  <text x="131" y="246" class="mono" text-anchor="middle">A · 과부하</text>
+  <rect x="206" y="230" width="130" height="22" rx="4" fill="rgb(58,58,58)"/>
+  <text x="271" y="246" class="mono" style="fill:rgb(200,196,192)" text-anchor="middle">B · 놀고 있음</text>
+  <rect x="346" y="230" width="130" height="22" rx="4" fill="rgb(58,58,58)"/>
+  <text x="411" y="246" class="mono" style="fill:rgb(200,196,192)" text-anchor="middle">C · 놀고 있음</text>
+
+  <rect x="52" y="274" width="476" height="42" rx="8" fill="rgba(240,150,190,0.12)" stroke="rgb(240,150,190)" stroke-width="1.3"/>
+  <text x="68" y="300" class="bad" font-weight="700">어피니티를 켠 대가로 분산을 잃었습니다</text>
+
+  <!-- ===== 실패 2: 하나 → 여럿 ===== -->
+  <rect x="570" y="92" width="520" height="238" rx="13" fill="rgb(22,22,22)" stroke="rgb(240,150,190)" stroke-width="1.8"/>
+  <text x="592" y="120" class="col" style="fill:rgb(240,150,190)">실패 2 — 한 명을 여럿으로 봅니다</text>
+  <text x="592" y="142" class="who">모바일 사용자가 Wi-Fi에서 LTE로 바뀝니다</text>
+
+  <rect x="592" y="158" width="150" height="46" rx="7" fill="rgb(91,155,213)"/>
+  <text x="667" y="179" class="tag" text-anchor="middle">같은 사용자</text>
+  <text x="667" y="196" class="mono" text-anchor="middle">Wi-Fi · 1.2.3.4</text>
+
+  <line x1="748" y1="181" x2="778" y2="181" stroke="rgb(240,150,190)" stroke-width="2.2" marker-end="url(#af-p)"/>
+
+  <rect x="786" y="158" width="150" height="46" rx="7" fill="rgb(240,150,190)"/>
+  <text x="861" y="179" class="tag" text-anchor="middle">LTE로 전환</text>
+  <text x="861" y="196" class="mono" text-anchor="middle">5.6.7.8 로 바뀜</text>
+
+  <line x1="942" y1="181" x2="972" y2="181" stroke="rgb(240,150,190)" stroke-width="2.2" marker-end="url(#af-p)"/>
+
+  <rect x="980" y="158" width="90" height="46" rx="7" fill="rgb(240,150,190)"/>
+  <text x="1025" y="179" class="tag" text-anchor="middle">다른 파드</text>
+  <text x="1025" y="196" class="mono" text-anchor="middle">B 로</text>
+
+  <rect x="592" y="220" width="478" height="42" rx="8" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.2"/>
+  <text x="608" y="247" class="who">장바구니·로그인 상태가 파드 A에 남아 있는데 B로 넘어갑니다</text>
+
+  <rect x="592" y="274" width="478" height="42" rx="8" fill="rgba(240,150,190,0.12)" stroke="rgb(240,150,190)" stroke-width="1.3"/>
+  <text x="608" y="300" class="bad" font-weight="700">세션이 끊깁니다 — 사용자는 아무것도 안 했는데</text>
+
+  <!-- ===== 쿠키 기준 ===== -->
+  <rect x="30" y="350" width="1060" height="196" rx="13" fill="rgb(22,22,22)" stroke="rgb(102,187,106)" stroke-width="1.8"/>
+  <text x="52" y="378" class="col" style="fill:rgb(102,187,106)">쿠키 기준 — 두 경우 모두 맞습니다</text>
+  <text x="52" y="400" class="who">서버가 발급한 쿠키는 그 사용자에게만 붙어 다닙니다. 경로가 아니라 사람에 묶인 표식입니다.</text>
+
+  <rect x="52" y="416" width="500" height="110" rx="9" fill="rgba(102,187,106,0.10)" stroke="rgb(102,187,106)" stroke-width="1.3"/>
+  <text x="68" y="440" class="body" font-weight="700">사무실 100명</text>
+  <text x="68" y="462" class="who">각자 다른 쿠키를 받습니다</text>
+  <rect x="68" y="472" width="150" height="24" rx="4" fill="rgb(102,187,106)"/>
+  <text x="143" y="489" class="mono" text-anchor="middle">A · 33명</text>
+  <rect x="228" y="472" width="150" height="24" rx="4" fill="rgb(102,187,106)"/>
+  <text x="303" y="489" class="mono" text-anchor="middle">B · 33명</text>
+  <rect x="388" y="472" width="150" height="24" rx="4" fill="rgb(102,187,106)"/>
+  <text x="463" y="489" class="mono" text-anchor="middle">C · 34명</text>
+  <text x="68" y="516" class="good">고르게 퍼지면서도, 개인별로는 같은 파드를 유지합니다</text>
+
+  <rect x="568" y="416" width="502" height="110" rx="9" fill="rgba(102,187,106,0.10)" stroke="rgb(102,187,106)" stroke-width="1.3"/>
+  <text x="584" y="440" class="body" font-weight="700">모바일 사용자</text>
+  <text x="584" y="462" class="who">네트워크가 바뀌어도 쿠키는 그대로입니다</text>
+  <rect x="584" y="472" width="230" height="24" rx="4" fill="rgb(102,187,106)"/>
+  <text x="699" y="489" class="mono" text-anchor="middle">Wi-Fi · LTE → 같은 파드 A</text>
+  <text x="584" y="516" class="good">IP가 바뀌어도 세션이 이어집니다</text>
+
+  <!-- 하단 못박기 -->
+  <rect x="30" y="562" width="1060" height="76" rx="12" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="54" y="590" class="body" font-weight="700">IP는 "누가 보냈나"가 아니라 "어느 길로 왔나"를 말해 줍니다. 그래서 어피니티 키로 부적합합니다.</text>
+  <text x="54" y="614" class="who">Service는 L4라 쿠키를 볼 수 없어 IP밖에 쓸 게 없었습니다. Ingress는 L7이라 쿠키를 읽으므로 이 한계를 넘습니다.</text>
+</svg>
