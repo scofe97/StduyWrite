@@ -1,0 +1,119 @@
+<svg viewBox="0 0 1120 700" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>readiness probe가 외부 의존을 검사할 때 — 파드 전원이 동시에 빠지는 경로</title>
+  <desc>Quote 서비스에 1초 지연이 생겼을 때 Kiada 파드 10개의 운명을 두 설정으로 비교한다. readiness probe가 Quote를 검사하면 파드 10개가 같은 대상을 보므로 전원이 같은 시각에 실패 판정을 받고, 열 개 모두 엔드포인트 명단에서 빠져 명단이 비고 Kiada Service로 오는 요청이 전부 실패한다. Quote가 1초 만에 회복돼도 periodSeconds 5와 successThreshold 2 때문에 재편입에 10초 넘게 걸린다. probe가 자기 상태만 검사하면 Quote 지연은 Kiada의 readiness에 영향을 주지 않아 파드 10개가 명단에 그대로 남고, 인용구 자리만 비운 부분 응답을 계속 돌려준다. 핵심은 공유 의존을 검사하면 개별 파드의 문제가 아니라 전원이 같은 답을 내므로 동시 실패가 예외가 아니라 필연이 된다는 것이다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 25px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 15px; fill: rgb(168,163,158); }
+      .col  { font-size: 16px; font-weight: 800; }
+      .nd   { font-size: 12.5px; font-weight: 800; fill: rgb(168,163,158); }
+      .pod  { font-size: 11px; font-weight: 800; fill: #0d0d0d; }
+      .good { font-size: 13px; fill: rgb(102,187,106); }
+      .bad  { font-size: 13px; fill: rgb(240,150,190); }
+      .who  { font-size: 12.5px; fill: rgb(168,163,158); }
+      .body { font-size: 14px; fill: #e8e4df; }
+      .step { font-size: 13.5px; fill: #e8e4df; }
+    </style>
+    <marker id="dn-bad" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(240,150,190)"/>
+    </marker>
+    <marker id="dn-ok" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(102,187,106)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="700" fill="#0d0d0d"/>
+
+  <text x="30" y="42" class="h1">공유 의존을 검사하면 전원이 같은 답을 냅니다</text>
+  <text x="30" y="68" class="sub">Quote 서비스에 1초 지연이 생깁니다. Kiada 파드는 10개이고, 열 개 모두 같은 Quote를 봅니다.</text>
+
+  <!-- 공통 발단 -->
+  <rect x="30" y="90" width="1060" height="46" rx="9" fill="rgb(212,168,83)"/>
+  <text x="560" y="119" class="pod" style="font-size:14px" text-anchor="middle">발단 — Quote 서비스 1초 지연</text>
+
+  <!-- ================= 왼쪽: 외부 의존 검사 ================= -->
+  <rect x="30" y="152" width="520" height="452" rx="13" fill="rgb(22,22,22)" stroke="rgb(240,150,190)" stroke-width="1.8"/>
+  <text x="52" y="182" class="col" style="fill:rgb(240,150,190)">✗ probe가 Quote를 검사</text>
+  <text x="52" y="204" class="who">readiness가 남의 상태를 자기 판정에 넣습니다</text>
+
+  <line x1="290" y1="212" x2="290" y2="234" stroke="rgb(240,150,190)" stroke-width="2.2" marker-end="url(#dn-bad)"/>
+
+  <rect x="52" y="240" width="476" height="76" rx="8" fill="rgba(240,150,190,0.14)" stroke="rgb(240,150,190)" stroke-width="1.5"/>
+  <text x="68" y="262" class="step" font-weight="700">파드 10개가 동시에 readiness 실패</text>
+  <text x="68" y="284" class="who">한둘이 운 나쁘게 걸리는 게 아닙니다. 열 개가 같은 대상을</text>
+  <text x="68" y="302" class="who">보므로 같은 시각에 같은 답을 냅니다 — 필연입니다.</text>
+
+  <!-- 파드 10개 전부 회색-핑크 -->
+  <g>
+    <rect x="52" y="328" width="88" height="34" rx="6" fill="rgb(240,150,190)"/>
+    <text x="96" y="350" class="pod" text-anchor="middle">Kiada 1 ✗</text>
+    <rect x="148" y="328" width="88" height="34" rx="6" fill="rgb(240,150,190)"/>
+    <text x="192" y="350" class="pod" text-anchor="middle">Kiada 2 ✗</text>
+    <rect x="244" y="328" width="88" height="34" rx="6" fill="rgb(240,150,190)"/>
+    <text x="288" y="350" class="pod" text-anchor="middle">Kiada 3 ✗</text>
+    <rect x="340" y="328" width="88" height="34" rx="6" fill="rgb(240,150,190)"/>
+    <text x="384" y="350" class="pod" text-anchor="middle">Kiada 4 ✗</text>
+    <rect x="436" y="328" width="92" height="34" rx="6" fill="rgb(240,150,190)"/>
+    <text x="482" y="350" class="pod" text-anchor="middle">…10 ✗</text>
+  </g>
+
+  <line x1="290" y1="368" x2="290" y2="388" stroke="rgb(240,150,190)" stroke-width="2.2" marker-end="url(#dn-bad)"/>
+
+  <rect x="52" y="394" width="476" height="58" rx="8" fill="rgba(240,150,190,0.14)" stroke="rgb(240,150,190)" stroke-width="1.5"/>
+  <text x="68" y="416" class="step" font-weight="700">엔드포인트 명단이 빕니다</text>
+  <text x="68" y="438" class="who">Kiada Service로 오는 요청이 전부 실패 — 전면 장애</text>
+
+  <line x1="290" y1="458" x2="290" y2="478" stroke="rgb(240,150,190)" stroke-width="2.2" marker-end="url(#dn-bad)"/>
+
+  <rect x="52" y="484" width="476" height="62" rx="8" fill="rgba(240,150,190,0.10)" stroke="rgb(240,150,190)" stroke-width="1.4"/>
+  <text x="68" y="506" class="step" font-weight="700">Quote가 즉시 회복돼도 10초+ 더 걸립니다</text>
+  <text x="68" y="528" class="who">periodSeconds 5 × successThreshold 2 — 두 번 연속 성공까지 기다립니다</text>
+
+  <text x="52" y="572" class="bad">✗ 1초짜리 남의 지연이 10초 넘는 내 전면 장애가 됐습니다</text>
+  <text x="52" y="592" class="bad">✗ 부분 응답이 가능했는데 스스로 그 기회를 없앴습니다</text>
+
+  <!-- ================= 오른쪽: 자기 상태만 ================= -->
+  <rect x="570" y="152" width="520" height="452" rx="13" fill="rgb(22,22,22)" stroke="rgb(102,187,106)" stroke-width="1.8"/>
+  <text x="592" y="182" class="col" style="fill:rgb(102,187,106)">✓ probe가 자기 상태만 검사</text>
+  <text x="592" y="204" class="who">Quote 지연은 Kiada의 readiness와 무관합니다</text>
+
+  <line x1="830" y1="212" x2="830" y2="234" stroke="rgb(102,187,106)" stroke-width="2.2" marker-end="url(#dn-ok)"/>
+
+  <rect x="592" y="240" width="478" height="76" rx="8" fill="rgba(102,187,106,0.12)" stroke="rgb(102,187,106)" stroke-width="1.5"/>
+  <text x="608" y="262" class="step" font-weight="700">파드 10개 모두 readiness 통과</text>
+  <text x="608" y="284" class="who">probe가 묻는 것은 "내가 요청을 받을 수 있는가" 하나뿐이고,</text>
+  <text x="608" y="302" class="who">그 답은 Quote가 느려져도 달라지지 않습니다.</text>
+
+  <g>
+    <rect x="592" y="328" width="88" height="34" rx="6" fill="rgb(102,187,106)"/>
+    <text x="636" y="350" class="pod" text-anchor="middle">Kiada 1 ✓</text>
+    <rect x="688" y="328" width="88" height="34" rx="6" fill="rgb(102,187,106)"/>
+    <text x="732" y="350" class="pod" text-anchor="middle">Kiada 2 ✓</text>
+    <rect x="784" y="328" width="88" height="34" rx="6" fill="rgb(102,187,106)"/>
+    <text x="828" y="350" class="pod" text-anchor="middle">Kiada 3 ✓</text>
+    <rect x="880" y="328" width="88" height="34" rx="6" fill="rgb(102,187,106)"/>
+    <text x="924" y="350" class="pod" text-anchor="middle">Kiada 4 ✓</text>
+    <rect x="976" y="328" width="94" height="34" rx="6" fill="rgb(102,187,106)"/>
+    <text x="1023" y="350" class="pod" text-anchor="middle">…10 ✓</text>
+  </g>
+
+  <line x1="830" y1="368" x2="830" y2="388" stroke="rgb(102,187,106)" stroke-width="2.2" marker-end="url(#dn-ok)"/>
+
+  <rect x="592" y="394" width="478" height="58" rx="8" fill="rgba(102,187,106,0.12)" stroke="rgb(102,187,106)" stroke-width="1.5"/>
+  <text x="608" y="416" class="step" font-weight="700">명단이 그대로 열 개입니다</text>
+  <text x="608" y="438" class="who">요청은 계속 처리됩니다 — 인용구 자리만 비웁니다</text>
+
+  <line x1="830" y1="458" x2="830" y2="478" stroke="rgb(102,187,106)" stroke-width="2.2" marker-end="url(#dn-ok)"/>
+
+  <rect x="592" y="484" width="478" height="62" rx="8" fill="rgba(102,187,106,0.10)" stroke="rgb(102,187,106)" stroke-width="1.4"/>
+  <text x="608" y="506" class="step" font-weight="700">Quote가 회복되면 그 자리도 곧바로 채워집니다</text>
+  <text x="608" y="528" class="who">기다릴 임계값이 없습니다 — 빠진 적이 없으니까요</text>
+
+  <text x="592" y="572" class="good">✓ 남의 장애가 내 장애로 승격되지 않습니다</text>
+  <text x="592" y="592" class="good">✓ Quote 지연은 모니터링·알림이 따로 봅니다</text>
+
+  <!-- ================= 하단 못박기 ================= -->
+  <rect x="30" y="622" width="1060" height="62" rx="12" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="54" y="650" class="body" font-weight="700">readiness는 "이 파드가 요청을 받을 수 있는가"만 묻습니다. "좋은 응답을 만들 수 있는가"는 묻지 않습니다.</text>
+  <text x="54" y="672" class="who">뒤엣것을 probe에 넣는 순간, 공유 의존 하나가 흔들릴 때마다 파드 전원이 함께 명단에서 빠집니다. 그 판단은 모니터링·알림의 몫입니다.</text>
+</svg>

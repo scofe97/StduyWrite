@@ -1,0 +1,122 @@
+<svg viewBox="0 0 1120 700" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>externalTrafficPolicy Local과 internalTrafficPolicy Local — 대가가 비대칭인 이유</title>
+  <desc>이름이 닮은 두 정책을 대가의 차이로 비교한다. externalTrafficPolicy는 클러스터 밖에서 nodePort나 로드밸런서로 들어오는 트래픽을 다루며, 앞단의 로드밸런서가 노드를 균등하게 고르는데 노드마다 파드 수가 달라 파드당 부하가 어긋난다. 요청 유실은 healthCheckNodePort로 막을 수 있지만 불균등은 막지 못한다. internalTrafficPolicy는 클러스터 안 파드가 cluster IP로 보내는 트래픽을 다루며, 앞단에서 노드를 골라 주는 장치가 아예 없다. 요청을 보낸 파드가 어느 노드에 있는지는 선택된 것이 아니라 주어진 것이므로 노드 균등 분배라는 전제 자체가 없고, 따라서 어긋날 자리도 없어 불균등이 생기지 않는다. 대신 구제 장치도 없어 파드 없는 노드의 요청은 그대로 연결 실패가 되므로 모든 노드에 파드가 하나씩 있다는 전제, 즉 DaemonSet에서만 쓴다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 25px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 15px; fill: rgb(168,163,158); }
+      .col  { font-size: 16px; font-weight: 800; }
+      .nd   { font-size: 12.5px; font-weight: 800; fill: rgb(168,163,158); }
+      .pod  { font-size: 11.5px; font-weight: 800; fill: #0d0d0d; }
+      .good { font-size: 13px; fill: rgb(102,187,106); }
+      .bad  { font-size: 13px; fill: rgb(240,150,190); }
+      .who  { font-size: 12.5px; fill: rgb(168,163,158); }
+      .body { font-size: 14px; fill: #e8e4df; }
+      .rowl { font-size: 13px; fill: rgb(168,163,158); }
+      .cell { font-size: 13px; fill: #e8e4df; }
+    </style>
+    <marker id="tp-b" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(91,155,213)"/>
+    </marker>
+    <marker id="tp-g" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(102,187,106)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="700" fill="#0d0d0d"/>
+
+  <text x="30" y="42" class="h1">이름은 닮았지만 대가가 다릅니다</text>
+  <text x="30" y="68" class="sub">차이는 한 곳에서 갈립니다 — 앞단에 노드를 골라 주는 장치가 있는가.</text>
+
+  <!-- ================= 왼쪽: externalTrafficPolicy ================= -->
+  <rect x="30" y="92" width="520" height="330" rx="13" fill="rgb(22,22,22)" stroke="rgb(240,150,190)" stroke-width="1.8"/>
+  <text x="52" y="122" class="col" style="fill:rgb(240,150,190)">externalTrafficPolicy: Local</text>
+  <text x="52" y="144" class="who">클러스터 밖 → nodePort · 로드밸런서</text>
+
+  <rect x="52" y="158" width="476" height="40" rx="8" fill="rgb(240,150,190)"/>
+  <text x="290" y="184" class="pod" text-anchor="middle">로드밸런서 — 노드를 균등하게 고릅니다</text>
+
+  <line x1="180" y1="202" x2="180" y2="226" stroke="rgb(240,150,190)" stroke-width="2" marker-end="url(#tp-b)"/>
+  <line x1="400" y1="202" x2="400" y2="226" stroke="rgb(240,150,190)" stroke-width="2" marker-end="url(#tp-b)"/>
+  <text x="196" y="219" class="who">50개</text>
+  <text x="416" y="219" class="who">50개</text>
+
+  <rect x="52" y="232" width="230" height="76" rx="8" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.2"/>
+  <text x="66" y="252" class="nd">Node A · 파드 3개</text>
+  <rect x="66" y="260" width="60" height="34" rx="5" fill="rgb(91,155,213)"/>
+  <text x="96" y="282" class="pod" text-anchor="middle">16.7</text>
+  <rect x="132" y="260" width="60" height="34" rx="5" fill="rgb(91,155,213)"/>
+  <text x="162" y="282" class="pod" text-anchor="middle">16.7</text>
+  <rect x="198" y="260" width="60" height="34" rx="5" fill="rgb(91,155,213)"/>
+  <text x="228" y="282" class="pod" text-anchor="middle">16.7</text>
+
+  <rect x="298" y="232" width="230" height="76" rx="8" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.2"/>
+  <text x="312" y="252" class="nd">Node B · 파드 1개</text>
+  <rect x="312" y="260" width="60" height="34" rx="5" fill="rgb(212,168,83)"/>
+  <text x="342" y="282" class="pod" text-anchor="middle">50</text>
+  <text x="382" y="282" class="bad">← 3배 부하</text>
+
+  <rect x="52" y="322" width="476" height="76" rx="9" fill="rgba(240,150,190,0.12)" stroke="rgb(240,150,190)" stroke-width="1.4"/>
+  <text x="68" y="346" class="body" font-weight="700">노드는 고르게 나눴는데 파드는 어긋납니다</text>
+  <text x="68" y="368" class="who">노드마다 파드 수가 다른데 분배는 노드 단위로 이뤄지기 때문입니다.</text>
+  <text x="68" y="388" class="who">유실은 healthCheckNodePort로 막지만, 이 어긋남은 남습니다.</text>
+
+  <!-- ================= 오른쪽: internalTrafficPolicy ================= -->
+  <rect x="570" y="92" width="520" height="330" rx="13" fill="rgb(22,22,22)" stroke="rgb(102,187,106)" stroke-width="1.8"/>
+  <text x="592" y="122" class="col" style="fill:rgb(102,187,106)">internalTrafficPolicy: Local</text>
+  <text x="592" y="144" class="who">클러스터 안 파드 → cluster IP</text>
+
+  <rect x="592" y="158" width="478" height="40" rx="8" fill="rgb(24,28,32)" stroke="rgb(102,187,106)" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="831" y="184" class="cell" style="fill:rgb(102,187,106)" font-weight="700" text-anchor="middle">노드를 고르는 장치가 없습니다</text>
+
+  <line x1="700" y1="202" x2="700" y2="226" stroke="rgb(102,187,106)" stroke-width="2" marker-end="url(#tp-g)"/>
+  <line x1="950" y1="202" x2="950" y2="226" stroke="rgb(102,187,106)" stroke-width="2" marker-end="url(#tp-g)"/>
+  <text x="714" y="219" class="who">자기 노드로</text>
+  <text x="964" y="219" class="who">자기 노드로</text>
+
+  <rect x="592" y="232" width="230" height="76" rx="8" fill="rgb(24,28,32)" stroke="rgb(102,187,106)" stroke-width="1.2"/>
+  <text x="606" y="252" class="nd">Node A · 클라이언트 · 파드 1개</text>
+  <rect x="606" y="260" width="200" height="34" rx="5" fill="rgb(102,187,106)"/>
+  <text x="706" y="282" class="pod" text-anchor="middle">같은 노드 파드로만</text>
+
+  <rect x="838" y="232" width="232" height="76" rx="8" fill="rgb(24,28,32)" stroke="rgb(102,187,106)" stroke-width="1.2"/>
+  <text x="852" y="252" class="nd">Node B · 클라이언트 · 파드 1개</text>
+  <rect x="852" y="260" width="200" height="34" rx="5" fill="rgb(102,187,106)"/>
+  <text x="952" y="282" class="pod" text-anchor="middle">같은 노드 파드로만</text>
+
+  <rect x="592" y="322" width="478" height="76" rx="9" fill="rgba(102,187,106,0.12)" stroke="rgb(102,187,106)" stroke-width="1.4"/>
+  <text x="608" y="346" class="body" font-weight="700">어긋날 자리가 아예 없습니다</text>
+  <text x="608" y="368" class="who">요청을 보낸 파드의 노드는 고른 게 아니라 주어진 것입니다.</text>
+  <text x="608" y="388" class="who">노드 균등 분배라는 전제가 없으니 그것과 어긋날 일도 없습니다.</text>
+
+  <!-- ================= 비교표 ================= -->
+  <rect x="30" y="440" width="1060" height="168" rx="12" fill="rgb(20,20,20)" stroke="rgb(42,37,32)"/>
+  <line x1="30" y1="474" x2="1090" y2="474" stroke="rgb(42,37,32)" stroke-width="1.4"/>
+  <line x1="360" y1="440" x2="360" y2="608" stroke="rgb(42,37,32)" stroke-width="1.4"/>
+  <line x1="725" y1="440" x2="725" y2="608" stroke="rgb(42,37,32)" stroke-width="1.4"/>
+
+  <text x="54" y="464" class="rowl" font-weight="700">비교 축</text>
+  <text x="384" y="464" class="cell" style="fill:rgb(240,150,190)" font-weight="700">externalTrafficPolicy</text>
+  <text x="749" y="464" class="cell" style="fill:rgb(102,187,106)" font-weight="700">internalTrafficPolicy</text>
+
+  <text x="54" y="500" class="rowl">앞단에 노드 고르는 장치</text>
+  <text x="384" y="500" class="cell">로드밸런서가 있습니다</text>
+  <text x="749" y="500" class="cell" font-weight="700">없습니다</text>
+
+  <text x="54" y="530" class="rowl">요청 유실</text>
+  <text x="384" y="530" class="cell">생기지만 healthCheckNodePort로 막습니다</text>
+  <text x="749" y="530" class="bad">생기고, 막을 장치가 없습니다</text>
+
+  <text x="54" y="560" class="rowl">파드당 부하 불균등</text>
+  <text x="384" y="560" class="bad">생기고, 못 막습니다</text>
+  <text x="749" y="560" class="good">생기지 않습니다</text>
+
+  <text x="54" y="590" class="rowl">주 용도</text>
+  <text x="384" y="590" class="cell">소스 IP 보존</text>
+  <text x="749" y="590" class="cell">노드-로컬 데몬 호출</text>
+
+  <!-- ================= 하단 못박기 ================= -->
+  <rect x="30" y="622" width="1060" height="62" rx="12" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="54" y="650" class="body" font-weight="700">internal 쪽이 나은 게 아니라, 풀 문제가 애초에 없고 대신 안전망도 없습니다.</text>
+  <text x="54" y="672" class="who">파드 없는 노드의 클라이언트는 그대로 연결 실패입니다. 그래서 모든 노드에 파드가 하나씩 있다는 전제 — DaemonSet에서만 씁니다.</text>
+</svg>
