@@ -1,83 +1,124 @@
-<svg viewBox="0 0 960 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>externalTrafficPolicy Cluster와 Local의 트레이드오프</title>
-  <desc>Cluster 정책은 각 노드가 모든 파드로 넘겨 트래픽이 파드마다 고르게 33%씩 나뉘지만 노드 간 홉과 소스 IP 은닉이 생긴다. Local 정책은 노드가 자기 위 파드로만 넘겨 홉이 없고 소스 IP가 보존되지만, 노드 A의 단일 파드가 50%, 노드 B의 두 파드가 각 25%로 불균등하게 받는다.</desc>
+<svg viewBox="0 0 1120 620" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>externalTrafficPolicy — Cluster·Local·Local과 healthCheckNodePort의 파드당 부하</title>
+  <desc>노드 A에 파드 3개, 노드 B에 파드 1개, 노드 C에 파드가 없는 클러스터에 요청 100개가 들어온 경우를 세 설정으로 비교한다. Cluster 정책은 파드 4개가 각 25개를 고르게 받지만 출발지 주소가 노드 주소로 바뀐다. Local 정책은 노드 셋에 33개씩 균등 분배된 뒤 노드 A의 파드 3개가 각 11개, 노드 B의 파드 1개가 33개를 받아 파드당 부하가 3배 어긋나고, 노드 C로 간 33개는 넘길 파드가 없어 버려진다. healthCheckNodePort를 켜면 노드 C가 분배에서 빠져 요청이 버려지지 않지만, 노드 A의 파드 3개가 각 16.7개, 노드 B의 파드 1개가 50개를 받아 불균등은 그대로 남는다. 즉 이 장치는 Local의 두 대가 중 요청 유실만 풀고 불균등은 풀지 못한다.</desc>
   <defs>
     <style>
-      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
-      .sub   { font-size: 11px; fill: rgb(138,133,128); }
-      .hdr   { font-size: 13px; font-weight: 800; fill: rgb(212,168,83); }
-      .node  { font-size: 11px; font-weight: 700; fill: rgb(138,133,128); }
-      .pod   { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
-      .pct   { font-size: 13px; font-weight: 800; fill: #e8e4df; }
-      .lb    { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
-      .note  { font-size: 10.5px; fill: #e8e4df; }
-      .good  { font-size: 10.5px; fill: rgb(102,187,106); }
-      .bad   { font-size: 10.5px; fill: rgb(240,150,190); }
+      .h1   { font-size: 25px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 15px; fill: rgb(168,163,158); }
+      .col  { font-size: 16px; font-weight: 800; }
+      .nd   { font-size: 12.5px; font-weight: 800; fill: rgb(168,163,158); }
+      .pod  { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .num  { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .good { font-size: 13px; fill: rgb(102,187,106); }
+      .bad  { font-size: 13px; fill: rgb(240,150,190); }
+      .who  { font-size: 12.5px; fill: rgb(168,163,158); }
+      .body { font-size: 14px; fill: #e8e4df; }
     </style>
-    <marker id="etp-c" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
-    <marker id="etp-l" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(102,187,106)"/></marker>
   </defs>
 
-  <rect x="0" y="0" width="960" height="420" fill="#0d0d0d"/>
-  <text x="24" y="30" class="title">externalTrafficPolicy — Cluster vs Local</text>
-  <text x="24" y="50" class="sub">고른 분산이냐(홉·IP 은닉 감수), 홉 없음·소스 IP 보존이냐(불균등 감수) 사이의 선택입니다</text>
+  <rect x="0" y="0" width="1120" height="620" fill="#0d0d0d"/>
 
-  <line x1="480" y1="70" x2="480" y2="410" stroke="rgb(60,60,60)" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <text x="30" y="42" class="h1">장치는 유실을 막고, 불균등은 남깁니다</text>
+  <text x="30" y="68" class="sub">노드 A에 파드 3개, 노드 B에 1개, 노드 C에 0개. 요청 100개가 들어옵니다. 로드밸런서는 분배 대상 노드에 균등하게 나눕니다.</text>
 
-  <!-- ===== LEFT: Cluster ===== -->
-  <text x="230" y="90" class="hdr" text-anchor="middle">Cluster (기본)</text>
-  <rect x="30" y="130" width="60" height="34" rx="6" fill="rgb(212,168,83)"/>
-  <text x="60" y="152" class="lb" text-anchor="middle">LB</text>
-  <!-- node A -->
-  <rect x="130" y="105" width="140" height="90" rx="8" fill="rgb(24,28,32)" stroke="rgb(138,133,128)" stroke-width="1.3"/>
-  <text x="140" y="122" class="node">Node A</text>
-  <rect x="150" y="132" width="100" height="46" rx="6" fill="rgb(91,155,213)"/>
-  <text x="200" y="152" class="pod" text-anchor="middle">Pod</text>
-  <text x="200" y="170" class="pct" text-anchor="middle" font-size="11">33%</text>
-  <!-- node B -->
-  <rect x="130" y="215" width="230" height="90" rx="8" fill="rgb(24,28,32)" stroke="rgb(138,133,128)" stroke-width="1.3"/>
-  <text x="140" y="232" class="node">Node B</text>
-  <rect x="150" y="242" width="90" height="46" rx="6" fill="rgb(91,155,213)"/>
-  <text x="195" y="262" class="pod" text-anchor="middle">Pod</text>
-  <text x="195" y="279" class="pct" text-anchor="middle" font-size="11">33%</text>
-  <rect x="255" y="242" width="90" height="46" rx="6" fill="rgb(91,155,213)"/>
-  <text x="300" y="262" class="pod" text-anchor="middle">Pod</text>
-  <text x="300" y="279" class="pct" text-anchor="middle" font-size="11">33%</text>
-  <!-- cross arrows -->
-  <line x1="90" y1="145" x2="148" y2="150" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#etp-c)"/>
-  <line x1="90" y1="150" x2="148" y2="255" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#etp-c)"/>
-  <line x1="250" y1="165" x2="252" y2="245" stroke="rgb(138,133,128)" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#etp-c)"/>
-  <line x1="200" y1="248" x2="200" y2="180" stroke="rgb(138,133,128)" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#etp-c)"/>
-  <text x="230" y="340" class="bad" text-anchor="middle">✗ 노드 간 홉 추가 · 소스 IP를 노드 IP로 은닉</text>
-  <text x="230" y="358" class="good" text-anchor="middle">✓ 파드마다 고른 분산(각 33%)</text>
+  <!-- ================= 1열: Cluster ================= -->
+  <rect x="30" y="92" width="340" height="404" rx="13" fill="rgb(22,22,22)" stroke="rgb(91,155,213)" stroke-width="1.8"/>
+  <text x="50" y="122" class="col" style="fill:rgb(91,155,213)">Cluster (기본)</text>
+  <text x="50" y="144" class="who">노드 셋 모두에 33개씩 → 파드 4개를 한 풀로</text>
 
-  <!-- ===== RIGHT: Local ===== -->
-  <text x="730" y="90" class="hdr" text-anchor="middle">Local</text>
-  <rect x="530" y="130" width="60" height="34" rx="6" fill="rgb(212,168,83)"/>
-  <text x="560" y="152" class="lb" text-anchor="middle">LB</text>
-  <!-- node A -->
-  <rect x="630" y="105" width="140" height="90" rx="8" fill="rgb(24,28,32)" stroke="rgb(102,187,106)" stroke-width="1.3"/>
-  <text x="640" y="122" class="node">Node A</text>
-  <rect x="650" y="132" width="100" height="46" rx="6" fill="rgb(91,155,213)"/>
-  <text x="700" y="152" class="pod" text-anchor="middle">Pod</text>
-  <text x="700" y="170" class="pct" text-anchor="middle" font-size="11">50%</text>
-  <!-- node B -->
-  <rect x="630" y="215" width="230" height="90" rx="8" fill="rgb(24,28,32)" stroke="rgb(102,187,106)" stroke-width="1.3"/>
-  <text x="640" y="232" class="node">Node B</text>
-  <rect x="650" y="242" width="90" height="46" rx="6" fill="rgb(91,155,213)"/>
-  <text x="695" y="262" class="pod" text-anchor="middle">Pod</text>
-  <text x="695" y="279" class="pct" text-anchor="middle" font-size="11">25%</text>
-  <rect x="755" y="242" width="90" height="46" rx="6" fill="rgb(91,155,213)"/>
-  <text x="800" y="262" class="pod" text-anchor="middle">Pod</text>
-  <text x="800" y="279" class="pct" text-anchor="middle" font-size="11">25%</text>
-  <!-- local-only arrows (no cross) -->
-  <line x1="590" y1="140" x2="648" y2="150" stroke="rgb(102,187,106)" stroke-width="1.6" marker-end="url(#etp-l)"/>
-  <text x="620" y="135" class="note" text-anchor="middle">½</text>
-  <line x1="590" y1="155" x2="648" y2="255" stroke="rgb(102,187,106)" stroke-width="1.6" marker-end="url(#etp-l)"/>
-  <text x="615" y="215" class="note" text-anchor="middle">½</text>
-  <line x1="740" y1="255" x2="753" y2="255" stroke="rgb(102,187,106)" stroke-width="1.3" marker-end="url(#etp-l)"/>
-  <text x="730" y="340" class="good" text-anchor="middle">✓ 홉 없음 · 소스 IP 보존(파드가 진짜 클라 IP 관측)</text>
-  <text x="730" y="358" class="bad" text-anchor="middle">✗ 불균등 분산(50% · 25% · 25%)</text>
+  <rect x="50" y="160" width="300" height="86" rx="8" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.2"/>
+  <text x="62" y="178" class="nd">Node A · 33개 수신</text>
+  <rect x="62" y="188" width="86" height="44" rx="6" fill="rgb(91,155,213)"/>
+  <text x="105" y="206" class="pod" text-anchor="middle">Pod</text>
+  <text x="105" y="223" class="num" text-anchor="middle">25</text>
+  <rect x="156" y="188" width="86" height="44" rx="6" fill="rgb(91,155,213)"/>
+  <text x="199" y="206" class="pod" text-anchor="middle">Pod</text>
+  <text x="199" y="223" class="num" text-anchor="middle">25</text>
+  <rect x="250" y="188" width="86" height="44" rx="6" fill="rgb(91,155,213)"/>
+  <text x="293" y="206" class="pod" text-anchor="middle">Pod</text>
+  <text x="293" y="223" class="num" text-anchor="middle">25</text>
 
-  <text x="480" y="395" class="sub" text-anchor="middle">Local은 로컬 파드 없는 노드로 연결이 멈추므로 healthCheckNodePort로 엔드포인트 있는 노드만 대상으로 삼습니다</text>
+  <rect x="50" y="258" width="300" height="86" rx="8" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.2"/>
+  <text x="62" y="276" class="nd">Node B · 33개 수신</text>
+  <rect x="62" y="286" width="86" height="44" rx="6" fill="rgb(91,155,213)"/>
+  <text x="105" y="304" class="pod" text-anchor="middle">Pod</text>
+  <text x="105" y="321" class="num" text-anchor="middle">25</text>
+
+  <rect x="50" y="356" width="300" height="60" rx="8" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.2"/>
+  <text x="62" y="374" class="nd">Node C · 33개 수신 · 파드 없음</text>
+  <text x="62" y="400" class="who" style="fill:rgb(91,155,213)">남의 노드 파드로 넘깁니다</text>
+
+  <text x="50" y="444" class="good">✓ 파드마다 25개씩 고른 부하</text>
+  <text x="50" y="466" class="bad">✗ 출발지가 노드 주소로 바뀝니다</text>
+  <text x="50" y="486" class="bad">✗ 노드 사이 홉이 하나 늘어납니다</text>
+
+  <!-- ================= 2열: Local ================= -->
+  <rect x="390" y="92" width="340" height="404" rx="13" fill="rgb(22,22,22)" stroke="rgb(240,150,190)" stroke-width="1.8"/>
+  <text x="410" y="122" class="col" style="fill:rgb(240,150,190)">Local</text>
+  <text x="410" y="144" class="who">노드 셋 모두에 33개씩 → 자기 노드 파드만</text>
+
+  <rect x="410" y="160" width="300" height="86" rx="8" fill="rgb(24,28,32)" stroke="rgb(102,187,106)" stroke-width="1.2"/>
+  <text x="422" y="178" class="nd">Node A · 33개 수신</text>
+  <rect x="422" y="188" width="86" height="44" rx="6" fill="rgb(91,155,213)"/>
+  <text x="465" y="206" class="pod" text-anchor="middle">Pod</text>
+  <text x="465" y="223" class="num" text-anchor="middle">11</text>
+  <rect x="516" y="188" width="86" height="44" rx="6" fill="rgb(91,155,213)"/>
+  <text x="559" y="206" class="pod" text-anchor="middle">Pod</text>
+  <text x="559" y="223" class="num" text-anchor="middle">11</text>
+  <rect x="610" y="188" width="86" height="44" rx="6" fill="rgb(91,155,213)"/>
+  <text x="653" y="206" class="pod" text-anchor="middle">Pod</text>
+  <text x="653" y="223" class="num" text-anchor="middle">11</text>
+
+  <rect x="410" y="258" width="300" height="86" rx="8" fill="rgb(24,28,32)" stroke="rgb(102,187,106)" stroke-width="1.2"/>
+  <text x="422" y="276" class="nd">Node B · 33개 수신</text>
+  <rect x="422" y="286" width="86" height="44" rx="6" fill="rgb(212,168,83)"/>
+  <text x="465" y="304" class="pod" text-anchor="middle">Pod</text>
+  <text x="465" y="321" class="num" text-anchor="middle">33</text>
+  <text x="520" y="313" class="bad">← 3배 부하</text>
+
+  <rect x="410" y="356" width="300" height="60" rx="8" fill="rgba(240,150,190,0.14)" stroke="rgb(240,150,190)" stroke-width="1.6"/>
+  <text x="422" y="374" class="nd" style="fill:rgb(240,150,190)">Node C · 33개 수신 · 파드 없음</text>
+  <text x="422" y="400" class="body" style="fill:rgb(240,150,190)" font-weight="700">33개가 버려집니다</text>
+
+  <text x="410" y="444" class="good">✓ 출발지 주소를 그대로 보존합니다</text>
+  <text x="410" y="466" class="bad">✗ 파드당 11개와 33개로 3배 어긋남</text>
+  <text x="410" y="486" class="bad">✗ 파드 없는 노드의 요청이 유실됩니다</text>
+
+  <!-- ================= 3열: Local + healthCheckNodePort ================= -->
+  <rect x="750" y="92" width="340" height="404" rx="13" fill="rgb(22,22,22)" stroke="#66bb6a" stroke-width="1.8"/>
+  <text x="770" y="122" class="col" style="fill:rgb(102,187,106)">Local + healthCheckNodePort</text>
+  <text x="770" y="144" class="who">노드 C가 빠져 A·B에 50개씩</text>
+
+  <rect x="770" y="160" width="300" height="86" rx="8" fill="rgb(24,28,32)" stroke="rgb(102,187,106)" stroke-width="1.2"/>
+  <text x="782" y="178" class="nd">Node A · 50개 수신</text>
+  <rect x="782" y="188" width="86" height="44" rx="6" fill="rgb(91,155,213)"/>
+  <text x="825" y="206" class="pod" text-anchor="middle">Pod</text>
+  <text x="825" y="223" class="num" text-anchor="middle">16.7</text>
+  <rect x="876" y="188" width="86" height="44" rx="6" fill="rgb(91,155,213)"/>
+  <text x="919" y="206" class="pod" text-anchor="middle">Pod</text>
+  <text x="919" y="223" class="num" text-anchor="middle">16.7</text>
+  <rect x="970" y="188" width="86" height="44" rx="6" fill="rgb(91,155,213)"/>
+  <text x="1013" y="206" class="pod" text-anchor="middle">Pod</text>
+  <text x="1013" y="223" class="num" text-anchor="middle">16.7</text>
+
+  <rect x="770" y="258" width="300" height="86" rx="8" fill="rgb(24,28,32)" stroke="rgb(102,187,106)" stroke-width="1.2"/>
+  <text x="782" y="276" class="nd">Node B · 50개 수신</text>
+  <rect x="782" y="286" width="86" height="44" rx="6" fill="rgb(212,168,83)"/>
+  <text x="825" y="304" class="pod" text-anchor="middle">Pod</text>
+  <text x="825" y="321" class="num" text-anchor="middle">50</text>
+  <text x="880" y="313" class="bad">← 여전히 3배</text>
+
+  <rect x="770" y="356" width="300" height="60" rx="8" fill="rgb(24,28,32)" stroke="rgb(102,187,106)" stroke-width="1.2" stroke-dasharray="5 4"/>
+  <text x="782" y="374" class="nd">Node C · 분배에서 제외</text>
+  <text x="782" y="400" class="body" style="fill:rgb(102,187,106)" font-weight="700">503을 응답해 대상에서 빠집니다</text>
+
+  <text x="770" y="444" class="good">✓ 출발지 주소를 그대로 보존합니다</text>
+  <text x="770" y="466" class="good">✓ 유실이 사라집니다</text>
+  <text x="770" y="486" class="bad">✗ 불균등은 그대로 남습니다</text>
+
+  <!-- ================= 하단 못박기 ================= -->
+  <rect x="30" y="514" width="1060" height="82" rx="12" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="54" y="540" class="body" font-weight="700">Local의 대가는 둘이고, 장치가 푸는 것은 하나입니다.</text>
+  <text x="54" y="562" class="who">healthCheckNodePort는 파드 없는 노드를 분배에서 빼 요청 유실만 없앱니다. 불균등은 로드밸런서가 노드 단위로 나누는데 노드마다 파드 수가 다른 데서 나오므로, 장치를 켜도 남습니다.</text>
+  <text x="54" y="582" class="who">이쪽을 줄이려면 노드별 파드 수를 고르게 맞춰야 합니다 — DaemonSet이나 topologySpreadConstraints가 그 수단입니다.</text>
 </svg>
