@@ -1,61 +1,107 @@
-<svg viewBox="0 0 1080 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>세션 어피니티가 ClientIP만 되는 이유 — Service는 L4에서 동작</title>
-  <desc>OSI 계층으로 보면 HTTP 쿠키는 애플리케이션 계층 L7의 편지 내용이고, TCP·UDP는 전송 계층 L4의 봉투이며, IP 주소는 네트워크 계층 L3에 있다. 쿠버네티스 Service는 L4에서 동작해 봉투에 적힌 IP와 포트만 보고, 봉투 안에 든 L7 편지 내용인 쿠키는 열어 보지 못한다. 그래서 어피니티를 걸 수 있는 유일한 기준이 패킷에서 바로 읽히는 클라이언트 IP다. 쿠키 기반 어피니티가 필요하면 L7을 이해하는 Ingress나 서비스 메시를 써야 한다.</desc>
+<svg viewBox="0 0 1200 620" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>ClientIP 세션 어피니티의 첫 연결과 다음 연결 처리 흐름</title>
+  <desc>같은 출발지 IP의 첫 연결은 어피니티 조회에 실패해 ready endpoint 중 파드 B를 선택하고 매핑을 저장한다. 같은 IP의 다음 새 연결은 저장된 매핑을 찾아 같은 파드 B로 간다. HTTP 쿠키는 L7 정보라 Service 데이터패스가 읽지 않는다.</desc>
   <defs>
     <style>
-      .title  { font-size: 18px; font-weight: 800; fill: #e8e4df; }
-      .sub    { font-size: 11px; fill: rgb(138,133,128); }
-      .layer  { font-size: 14px; font-weight: 800; }
-      .desc   { font-size: 10.5px; font-weight: 600; fill: #e8e4df; }
-      .dark   { font-size: 10.5px; font-weight: 600; fill: #1a1a1a; }
-      .muted  { font-size: 9.5px; fill: rgb(138,133,128); }
-      .mono   { font-size: 10px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
-      .tag    { font-size: 11px; font-weight: 800; fill: #0d0d0d; }
+      .title { font-size: 28px; font-weight: 800; fill: #e8e4df; }
+      .subtitle { font-size: 16px; fill: rgb(138,133,128); }
+      .section { font-size: 18px; font-weight: 800; fill: rgb(212,168,83); }
+      .boxTitle { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .body { font-size: 14px; fill: #e8e4df; }
+      .muted { font-size: 13px; fill: rgb(138,133,128); }
+      .mono { font-size: 14px; font-family: 'JetBrains Mono', ui-monospace, monospace; fill: #e8e4df; }
+      .pod { font-size: 16px; font-weight: 800; fill: #0d0d0d; }
     </style>
-    <marker id="ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="gold-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto">
+      <path d="M0,0 L9,3.5 L0,7 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="green-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto">
+      <path d="M0,0 L9,3.5 L0,7 Z" fill="#66bb6a"/>
+    </marker>
   </defs>
 
-  <rect x="0" y="0" width="1080" height="440" fill="#0d0d0d"/>
-  <text x="24" y="30" class="title">Service는 L4에서 봉투만 본다 — 그래서 쿠키(L7)가 아니라 ClientIP(L3)</text>
-  <text x="24" y="50" class="sub">패킷은 편지(L7)를 봉투(L4)에 넣어 주소(L3)로 보내는 구조. Service는 봉투와 주소만 읽고, 편지 속 쿠키는 못 연다.</text>
+  <rect width="1200" height="620" fill="#0d0d0d"/>
+  <text x="48" y="52" class="title">ClientIP 어피니티는 출발지 IP와 파드를 기억합니다</text>
+  <text x="48" y="82" class="subtitle">첫 연결은 파드를 고르고 매핑을 저장하며, 같은 IP의 다음 새 연결은 그 매핑을 재사용합니다.</text>
 
-  <!-- L7 -->
-  <rect x="60" y="80" width="560" height="86" rx="10" fill="rgb(20,22,26)" stroke="rgb(42,37,32)" stroke-width="1.3"/>
-  <text x="80" y="108" class="layer" style="fill:rgb(138,133,128)">L7 · 애플리케이션 (HTTP)</text>
-  <text x="80" y="132" class="desc" style="fill:rgb(138,133,128)">편지 내용 — 쿠키·경로·헤더가 여기 있음</text>
-  <rect x="80" y="140" width="180" height="18" rx="4" fill="rgb(30,32,36)"/>
-  <text x="90" y="153" class="mono" style="fill:rgb(138,133,128)">Cookie: session=abc</text>
-  <text x="640" y="120" class="desc" style="fill:#f0b0b0">✕ Service는 여기를 못 읽음</text>
-  <text x="640" y="138" class="muted">→ 쿠키 기반 어피니티 불가</text>
+  <!-- 첫 연결 -->
+  <rect x="48" y="118" width="1104" height="190" rx="14"
+        fill="rgb(22,22,22)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="72" y="150" class="section">① 첫 연결 · affinity miss</text>
 
-  <!-- L4 (Service가 여기) -->
-  <rect x="60" y="180" width="560" height="86" rx="10" fill="#d4a853"/>
-  <text x="80" y="208" class="layer" style="fill:#1a1a1a">L4 · 전송 (TCP · UDP)  ← Service가 여기서 동작</text>
-  <text x="80" y="232" class="dark">봉투 — 출발/목적 포트가 여기 있음</text>
-  <rect x="80" y="240" width="180" height="18" rx="4" fill="#fdf3df"/>
-  <text x="90" y="253" class="mono" style="fill:#1a1a1a">dst port : 80</text>
-  <text x="640" y="222" class="desc" style="fill:rgb(212,168,83)">Service가 보는 계층 (봉투)</text>
+  <rect x="72" y="172" width="240" height="102" rx="10"
+        fill="rgb(34,37,42)" stroke="rgb(42,37,32)"/>
+  <text x="92" y="201" class="boxTitle">Client A</text>
+  <text x="92" y="227" class="mono">src IP 203.0.113.7</text>
+  <text x="92" y="252" class="muted">Cookie: session=abc · L7</text>
 
-  <!-- L3 (ClientIP가 여기) -->
-  <rect x="60" y="280" width="560" height="86" rx="10" fill="#5b9bd5"/>
-  <text x="80" y="308" class="layer" style="fill:#e8e4df">L3 · 네트워크 (IP)</text>
-  <text x="80" y="332" class="desc" style="fill:#e8e4df">주소 — 클라이언트 IP가 여기 있음</text>
-  <rect x="80" y="340" width="180" height="18" rx="4" fill="#dceaf7"/>
-  <text x="90" y="353" class="mono" style="fill:#14243a">src IP : 203.0.113.7</text>
-  <text x="640" y="322" class="desc" style="fill:#8fc0ec">✓ ClientIP 어피니티는 여기서 읽음</text>
+  <line x1="312" y1="223" x2="390" y2="223"
+        stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#gold-arrow)"/>
+  <text x="351" y="207" class="muted" text-anchor="middle">새 연결</text>
 
-  <!-- Service가 보는 범위 화살표 -->
-  <line x1="628" y1="330" x2="628" y2="210" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#ar)"/>
+  <rect x="390" y="172" width="326" height="102" rx="10"
+        fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="410" y="201" class="boxTitle">노드의 Service 데이터패스</text>
+  <text x="410" y="227" class="body">key = 출발지 IP로 어피니티 조회</text>
+  <text x="410" y="252" class="muted">MISS → ready endpoint 중 하나 선택</text>
 
-  <!-- 오른쪽: 대안 -->
-  <rect x="770" y="180" width="286" height="186" rx="10" fill="rgb(16,18,22)" stroke="#66bb6a" stroke-width="1.3"/>
-  <text x="790" y="208" class="desc" style="fill:#66bb6a">쿠키 어피니티가 꼭 필요하면</text>
-  <text x="790" y="232" class="mono" style="fill:#66bb6a">Ingress (12장) · 서비스 메시</text>
-  <text x="790" y="252" class="muted">L7을 이해해 쿠키·경로·헤더로 라우팅</text>
-  <text x="790" y="288" class="desc" style="fill:#f0b0b0">ClientIP의 한계</text>
-  <text x="790" y="308" class="muted">회사 NAT 뒤 여러 사용자가</text>
-  <text x="790" y="324" class="muted">같은 출발 IP로 보이면</text>
-  <text x="790" y="340" class="muted">한 파드로 몰려 분산이 깨짐</text>
+  <line x1="716" y1="223" x2="794" y2="223"
+        stroke="#66bb6a" stroke-width="3" marker-end="url(#green-arrow)"/>
+  <text x="755" y="207" class="muted" text-anchor="middle">Pod B 선택</text>
 
-  <text x="24" y="410" class="muted">한계: 이 계층 비유는 "무엇이 어느 계층에서 보이는가"까지 유효하다. 실제 TLS 종단·프록시가 계층을 다시 여는 경우는 이 그림 밖이다.</text>
+  <rect x="794" y="172" width="164" height="102" rx="10"
+        fill="#66bb6a" stroke="#66bb6a"/>
+  <text x="876" y="211" class="pod" text-anchor="middle">Pod B</text>
+  <text x="876" y="238" class="mono" text-anchor="middle" style="fill:#0d0d0d">10.244.2.9</text>
+
+  <rect x="982" y="172" width="146" height="102" rx="10"
+        fill="rgb(34,37,42)" stroke="rgb(212,168,83)" stroke-dasharray="6 5"/>
+  <text x="1055" y="199" class="boxTitle" text-anchor="middle">어피니티 상태</text>
+  <text x="1055" y="225" class="mono" text-anchor="middle">203.0.113.7</text>
+  <text x="1055" y="247" class="body" text-anchor="middle">→ Pod B</text>
+  <text x="1055" y="266" class="muted" text-anchor="middle">기본 10,800초</text>
+
+  <line x1="958" y1="223" x2="976" y2="223"
+        stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="5 4"
+        marker-end="url(#gold-arrow)"/>
+
+  <!-- 다음 연결 -->
+  <rect x="48" y="330" width="1104" height="154" rx="14"
+        fill="rgb(22,22,22)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="72" y="362" class="section">② 같은 IP의 다음 새 연결 · affinity hit</text>
+
+  <rect x="72" y="386" width="240" height="70" rx="10"
+        fill="rgb(34,37,42)" stroke="rgb(42,37,32)"/>
+  <text x="92" y="414" class="boxTitle">Client A</text>
+  <text x="92" y="440" class="mono">src IP 203.0.113.7</text>
+
+  <line x1="312" y1="421" x2="390" y2="421"
+        stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#gold-arrow)"/>
+
+  <rect x="390" y="386" width="326" height="70" rx="10"
+        fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="410" y="414" class="boxTitle">저장된 매핑 조회</text>
+  <text x="410" y="440" class="body">HIT: 203.0.113.7 → Pod B</text>
+
+  <line x1="716" y1="421" x2="794" y2="421"
+        stroke="#66bb6a" stroke-width="3" marker-end="url(#green-arrow)"/>
+  <text x="755" y="405" class="muted" text-anchor="middle">같은 파드</text>
+
+  <rect x="794" y="386" width="164" height="70" rx="10"
+        fill="#66bb6a" stroke="#66bb6a"/>
+  <text x="876" y="429" class="pod" text-anchor="middle">Pod B 재사용</text>
+
+  <!-- 후보와 가시성 경계 -->
+  <rect x="48" y="510" width="716" height="76" rx="12"
+        fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="72" y="540" class="boxTitle">ready endpoint 후보</text>
+  <text x="72" y="566" class="body">Pod A · Pod B · Pod C 중 하나를 선택합니다. 한 요청을 세 파드에 복제하지 않습니다.</text>
+
+  <rect x="788" y="510" width="364" height="76" rx="12"
+        fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="812" y="540" class="boxTitle">Service가 읽지 않는 정보</text>
+  <text x="812" y="566" class="muted">Cookie·경로·헤더는 L7이므로 어피니티 키가 아닙니다.</text>
 </svg>

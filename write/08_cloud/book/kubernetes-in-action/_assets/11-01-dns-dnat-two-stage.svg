@@ -1,0 +1,84 @@
+<svg viewBox="0 0 1200 600" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Service 이름이 파드 IP까지 이어지는 DNS와 DNAT 두 단계</title>
+  <desc>클라이언트 파드의 quiz 이름을 CoreDNS가 ClusterIP로 해석한 뒤, 노드 커널이 ClusterIP를 실제 파드 IP로 DNAT하는 서로 다른 두 변환을 보여준다.</desc>
+  <defs>
+    <marker id="arrow-gold" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto">
+      <path d="M0,0 L9,3.5 L0,7 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto">
+      <path d="M0,0 L9,3.5 L0,7 Z" fill="rgb(138,133,128)"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="600" fill="#0d0d0d"/>
+
+  <text x="60" y="62" fill="#e8e4df" font-size="30" font-weight="700">Service 이름은 두 번의 서로 다른 변환을 거칩니다</text>
+  <text x="60" y="96" fill="rgb(138,133,128)" font-size="18">DNS는 이름을 가상 IP로, DNAT는 가상 IP를 실제 파드 IP로 바꿉니다.</text>
+
+  <rect x="60" y="142" width="1080" height="126" rx="16"
+        fill="rgb(22,22,22)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="86" y="177" fill="rgb(212,168,83)" font-size="18" font-weight="700">① 이름 해석 · DNS</text>
+
+  <rect x="86" y="194" width="230" height="50" rx="9"
+        fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="201" y="225" text-anchor="middle" fill="#e8e4df" font-size="19"
+        font-family="'JetBrains Mono', monospace">http://quiz</text>
+
+  <line x1="316" y1="219" x2="470" y2="219"
+        stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#arrow-gold)"/>
+  <text x="393" y="202" text-anchor="middle" fill="rgb(138,133,128)" font-size="15">질의</text>
+
+  <rect x="470" y="184" width="270" height="70" rx="9"
+        fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="605" y="214" text-anchor="middle" fill="#e8e4df" font-size="19" font-weight="700">CoreDNS 애드온</text>
+  <text x="605" y="238" text-anchor="middle" fill="rgb(138,133,128)" font-size="15">앞단: kube-dns Service</text>
+
+  <line x1="740" y1="219" x2="884" y2="219"
+        stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#arrow-gold)"/>
+  <text x="812" y="202" text-anchor="middle" fill="rgb(138,133,128)" font-size="15">A 레코드</text>
+
+  <rect x="884" y="194" width="230" height="50" rx="9"
+        fill="rgb(26,26,26)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="999" y="225" text-anchor="middle" fill="#e8e4df" font-size="19"
+        font-family="'JetBrains Mono', monospace">10.96.136.190:80</text>
+
+  <rect x="60" y="304" width="1080" height="126" rx="16"
+        fill="rgb(22,22,22)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="86" y="339" fill="rgb(212,168,83)" font-size="18" font-weight="700">② 주소 변환 · DNAT</text>
+
+  <rect x="86" y="356" width="300" height="50" rx="9"
+        fill="rgb(26,26,26)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="236" y="387" text-anchor="middle" fill="#e8e4df" font-size="19"
+        font-family="'JetBrains Mono', monospace">dst 10.96.136.190:80</text>
+
+  <line x1="386" y1="381" x2="520" y2="381"
+        stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#arrow-gold)"/>
+
+  <rect x="520" y="346" width="280" height="70" rx="9"
+        fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="660" y="376" text-anchor="middle" fill="#e8e4df" font-size="19" font-weight="700">출발 노드의 커널</text>
+  <text x="660" y="400" text-anchor="middle" fill="rgb(138,133,128)" font-size="15">kube-proxy가 준비한 규칙 사용</text>
+
+  <line x1="800" y1="381" x2="890" y2="381"
+        stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#arrow-gold)"/>
+
+  <rect x="890" y="356" width="224" height="50" rx="9"
+        fill="rgb(26,26,26)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="1002" y="387" text-anchor="middle" fill="#e8e4df" font-size="19"
+        font-family="'JetBrains Mono', monospace">10.244.2.9:8080</text>
+
+  <line x1="999" y1="244" x2="999" y2="332"
+        stroke="rgb(138,133,128)" stroke-width="2" stroke-dasharray="7 7"
+        marker-end="url(#arrow-muted)"/>
+  <text x="1018" y="294" fill="rgb(138,133,128)" font-size="15">다음 단계의 목적지</text>
+
+  <rect x="60" y="468" width="1080" height="82" rx="12"
+        fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="86" y="501" fill="#e8e4df" font-size="18" font-weight="700">경계를 섞지 않습니다</text>
+  <text x="86" y="529" fill="rgb(138,133,128)" font-size="16">
+    CoreDNS는 백엔드 파드를 고르거나 DNAT하지 않습니다. DNS 응답이 끝난 뒤, 노드의 데이터패스가 EndpointSlice 명단을 바탕으로 실제 파드를 선택합니다.
+  </text>
+</svg>

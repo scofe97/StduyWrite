@@ -1,0 +1,86 @@
+<svg viewBox="0 0 1000 620" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Cluster 정책은 NAT를 두 번, Local 정책은 한 번 합니다</title>
+  <desc>외부 클라이언트가 노드 A의 nodePort로 접속해 노드 B의 파드로 넘어갈 때, 목적지 IP는 노드 주소에서 파드 주소로 바뀌고 출발지 IP는 클라이언트 주소에서 노드 주소로 바뀐다. 목적지 변환인 DNAT은 두 정책 모두 수행하지만, 출발지 변환인 SNAT은 Cluster 정책만 수행하므로 파드가 보는 클라이언트 IP가 노드 IP로 가려진다. Local 정책은 자기 노드 위 파드로만 넘겨 응답 경로가 어긋나지 않으므로 SNAT을 생략하고 원본 클라이언트 IP를 보존한다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 25px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 15px; fill: rgb(168,163,158); }
+      .lane { font-size: 15px; font-weight: 800; fill: rgb(212,168,83); }
+      .fld  { font-size: 13px; font-weight: 800; fill: rgb(168,163,158); }
+      .mono { font-size: 14px; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .who  { font-size: 12.5px; fill: rgb(168,163,158); }
+      .tag  { font-size: 12.5px; font-weight: 800; }
+      .body { font-size: 14px; fill: #e8e4df; }
+    </style>
+    <marker id="ar-gold" markerWidth="10" markerHeight="10" refX="8" refY="3.2" orient="auto"><path d="M0,0 L8,3.2 L0,6.4 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="ar-pink" markerWidth="10" markerHeight="10" refX="8" refY="3.2" orient="auto"><path d="M0,0 L8,3.2 L0,6.4 Z" fill="rgb(240,150,190)"/></marker>
+    <marker id="ar-grey" markerWidth="10" markerHeight="10" refX="8" refY="3.2" orient="auto"><path d="M0,0 L8,3.2 L0,6.4 Z" fill="rgb(120,116,112)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="620" fill="#0d0d0d"/>
+
+  <text x="34" y="44" class="h1">한 패킷에서 바뀌는 필드는 둘, 방향이 다릅니다</text>
+  <text x="34" y="70" class="sub">외부 클라이언트 → 노드 A의 nodePort → 노드 B의 파드로 넘어가는 경우입니다.</text>
+
+  <!-- ============ 목적지 레인 (DNAT) ============ -->
+  <rect x="34" y="94" width="932" height="132" rx="14" fill="rgb(22,22,22)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="58" y="124" class="lane">목적지 IP · DNAT</text>
+  <rect x="196" y="108" width="196" height="22" rx="6" fill="rgb(102,187,106)"/>
+  <text x="294" y="124" class="tag" text-anchor="middle" style="fill:#0d0d0d">두 정책 모두 수행</text>
+
+  <rect x="58" y="146" width="250" height="54" rx="9" fill="rgb(26,26,26)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="183" y="170" class="mono" text-anchor="middle" style="fill:#e8e4df">172.18.0.4:30080</text>
+  <text x="183" y="190" class="who" text-anchor="middle">패킷이 도착한 노드 A</text>
+
+  <line x1="308" y1="173" x2="452" y2="173" stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#ar-gold)"/>
+
+  <rect x="452" y="140" width="234" height="66" rx="9" fill="rgba(212,168,83,0.14)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="569" y="166" class="body" text-anchor="middle" font-weight="700">노드 A의 커널</text>
+  <text x="569" y="190" class="who" text-anchor="middle">kube-proxy가 심어 둔 규칙</text>
+
+  <line x1="686" y1="173" x2="820" y2="173" stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#ar-gold)"/>
+
+  <rect x="820" y="146" width="126" height="54" rx="9" fill="rgb(26,26,26)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="883" y="170" class="mono" text-anchor="middle" style="fill:#e8e4df">10.244.2.9</text>
+  <text x="883" y="190" class="who" text-anchor="middle">:8080 파드</text>
+
+  <!-- ============ 출발지 레인 (SNAT) ============ -->
+  <rect x="34" y="242" width="932" height="132" rx="14" fill="rgb(22,22,22)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="58" y="272" class="lane">출발지 IP · SNAT</text>
+  <rect x="196" y="256" width="212" height="22" rx="6" fill="rgb(240,150,190)"/>
+  <text x="302" y="272" class="tag" text-anchor="middle" style="fill:#0d0d0d">Cluster 정책만 수행</text>
+
+  <rect x="58" y="294" width="250" height="54" rx="9" fill="rgb(26,26,26)" stroke="rgb(240,150,190)" stroke-width="2"/>
+  <text x="183" y="318" class="mono" text-anchor="middle" style="fill:#e8e4df">203.0.113.7</text>
+  <text x="183" y="338" class="who" text-anchor="middle">진짜 클라이언트</text>
+
+  <line x1="308" y1="321" x2="452" y2="321" stroke="rgb(240,150,190)" stroke-width="3" marker-end="url(#ar-pink)"/>
+
+  <rect x="452" y="288" width="234" height="66" rx="9" fill="rgba(240,150,190,0.14)" stroke="rgb(240,150,190)" stroke-width="2"/>
+  <text x="569" y="314" class="body" text-anchor="middle" font-weight="700">노드 A의 커널</text>
+  <text x="569" y="338" class="who" text-anchor="middle">응답이 자기로 돌아오게 위조</text>
+
+  <line x1="686" y1="321" x2="820" y2="321" stroke="rgb(240,150,190)" stroke-width="3" marker-end="url(#ar-pink)"/>
+
+  <rect x="820" y="294" width="126" height="54" rx="9" fill="rgb(26,26,26)" stroke="rgb(240,150,190)" stroke-width="2"/>
+  <text x="883" y="318" class="mono" text-anchor="middle" style="fill:#e8e4df">172.18.0.4</text>
+  <text x="883" y="338" class="who" text-anchor="middle">파드가 보는 IP</text>
+
+  <!-- ============ 두 정책 대비 ============ -->
+  <rect x="34" y="396" width="454" height="128" rx="12" fill="rgb(22,22,22)" stroke="rgb(240,150,190)" stroke-width="1.6"/>
+  <text x="58" y="424" class="lane" style="fill:rgb(240,150,190)">Cluster — NAT 두 번</text>
+  <text x="58" y="450" class="body">목적지를 파드 IP로, 출발지를 노드 IP로 바꿉니다.</text>
+  <text x="58" y="474" class="body">남의 노드 파드로 넘길 수 있는 대신,</text>
+  <text x="58" y="498" class="body" style="fill:rgb(240,150,190)">파드는 진짜 클라이언트 IP를 볼 수 없습니다.</text>
+
+  <rect x="512" y="396" width="454" height="128" rx="12" fill="rgb(22,22,22)" stroke="#66bb6a" stroke-width="1.6"/>
+  <text x="536" y="424" class="lane" style="fill:rgb(102,187,106)">Local — NAT 한 번</text>
+  <text x="536" y="450" class="body">목적지만 바꾸고 출발지는 그대로 둡니다.</text>
+  <text x="536" y="474" class="body">자기 노드 위 파드로만 넘기니 응답 경로가</text>
+  <text x="536" y="498" class="body" style="fill:rgb(102,187,106)">어긋나지 않아, 위조할 이유가 없습니다.</text>
+
+  <!-- ============ 하단 못박기 ============ -->
+  <rect x="34" y="542" width="932" height="54" rx="12" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="58" y="566" class="body" font-weight="700">ClusterIP는 이 경로에 등장하지 않습니다.</text>
+  <text x="58" y="586" class="who">목적지는 노드 주소에서 곧바로 파드 주소로 바뀝니다. ClusterIP와 nodePort는 같은 파드 목록을 가리키는 두 입구일 뿐, 하나가 다른 하나로 변환되는 관계가 아닙니다.</text>
+</svg>
