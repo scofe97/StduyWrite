@@ -1,51 +1,88 @@
-<svg viewBox="0 0 960 320" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>Ingress 컨트롤러의 역할</title>
-  <desc>Ingress 컨트롤러는 쿠버네티스 API의 Ingress·Service·EndpointSlice 오브젝트를 감시(monitors)하고, 변경을 감지하면 리버스 프록시를 설정(configures)한다. API 오브젝트가 외부 클라이언트에게 서비스 접근을 제공하는 정보를 담는다.</desc>
+<svg viewBox="0 0 1120 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Ingress 컨트롤러의 역할 — 감시하고, 설정을 만들어, 프록시에 반영합니다</title>
+  <desc>Ingress 컨트롤러가 하는 일을 왼쪽에서 오른쪽으로 세 단계로 그린다. 왼쪽은 쿠버네티스 API로, Ingress 오브젝트에는 호스트와 경로 규칙이, Services에는 이름과 포트가, EndpointSlices에는 파드 IP 명단이 들어 있다. 가운데 Ingress 컨트롤러는 이 세 오브젝트를 watch로 감시하다가 변경이 생기면 통지받고, 그 정보를 합쳐 프록시가 읽을 설정으로 변환한다. 오른쪽 L7 리버스 프록시는 그 설정을 받아 reload하고 실제 HTTP 트래픽을 처리한다. 컨트롤러는 트래픽을 나르지 않고 설정만 만들며, 트래픽을 실제로 처리하는 것은 프록시다. 이 둘을 묶어 흔히 Ingress 컨트롤러라고 부르지만 별개 컴포넌트다. 규칙은 Ingress에서, 파드 IP는 EndpointSlices에서 오므로 파드가 뜨고 지는 것만으로도 설정이 다시 만들어진다.</desc>
   <defs>
     <style>
-      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
-      .sub   { font-size: 11px; fill: rgb(138,133,128); }
-      .api   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
-      .ctl   { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
-      .act   { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
-      .note  { font-size: 11px; fill: #e8e4df; }
+      .h1   { font-size: 22px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 14px; fill: rgb(168,163,158); }
+      .lyr  { font-size: 12.5px; font-weight: 800; fill: rgb(168,163,158); }
+      .tag  { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .mono { font-size: 11px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .who  { font-size: 12px; fill: rgb(168,163,158); }
+      .body { font-size: 13.5px; fill: #e8e4df; }
+      .act  { font-size: 13px; font-weight: 800; fill: rgb(212,168,83); }
+      .actw { font-size: 11.5px; fill: rgb(168,163,158); }
     </style>
+    <marker id="cr-a" markerWidth="10" markerHeight="10" refX="9" refY="3.5" orient="auto">
+      <path d="M0,0 L9,3.5 L0,7 Z" fill="rgb(212,168,83)"/>
+    </marker>
   </defs>
 
-  <rect x="0" y="0" width="960" height="320" fill="#0d0d0d"/>
-  <text x="24" y="30" class="title">Ingress 컨트롤러 — 감시하고 설정합니다</text>
-  <text x="24" y="50" class="sub">API의 Ingress·Service·EndpointSlice 변경을 감지할 때마다 리버스 프록시를 재설정합니다</text>
+  <rect x="0" y="0" width="1120" height="470" fill="#0d0d0d"/>
 
-  <!-- Kubernetes API box -->
-  <rect x="40" y="110" width="470" height="140" rx="10" fill="rgb(24,28,32)" stroke="rgb(138,133,128)" stroke-width="1.3"/>
-  <text x="60" y="132" class="note" fill="rgb(138,133,128)">Kubernetes API</text>
-  <rect x="60" y="150" width="110" height="70" rx="8" fill="rgb(150,130,220)"/>
-  <text x="115" y="190" class="api" text-anchor="middle">Ingress</text>
-  <rect x="190" y="150" width="140" height="70" rx="8" fill="rgb(230,230,230)"/>
-  <text x="260" y="190" class="api" text-anchor="middle">Services</text>
-  <rect x="350" y="150" width="140" height="70" rx="8" fill="rgb(230,230,230)"/>
-  <text x="420" y="185" class="api" text-anchor="middle">Endpoint-</text>
-  <text x="420" y="202" class="api" text-anchor="middle">Slices</text>
-  <line x1="170" y1="185" x2="188" y2="185" stroke="rgb(60,60,60)" stroke-width="2"/>
+  <text x="30" y="40" class="h1">감시하고, 설정을 만들어, 프록시에 넘깁니다</text>
+  <text x="30" y="64" class="sub">컨트롤러는 트래픽을 나르지 않습니다. 설정을 만들 뿐이고, 실제로 나르는 것은 프록시입니다.</text>
 
-  <!-- monitors arrow (API <- controller) -->
-  <polygon points="620,165 540,165 540,150 510,180 540,210 540,195 620,195" fill="rgb(212,168,83)"/>
-  <text x="560" y="185" class="act" text-anchor="middle">monitors</text>
+  <!-- ============ 1. Kubernetes API ============ -->
+  <rect x="30" y="96" width="360" height="248" rx="12" fill="rgb(22,22,22)" stroke="rgb(120,116,112)" stroke-width="1.5"/>
+  <text x="50" y="124" class="lyr">1. Kubernetes API — 재료가 여기 있습니다</text>
 
-  <!-- controller -->
-  <rect x="620" y="140" width="140" height="80" rx="8" fill="rgb(150,130,220)"/>
-  <text x="690" y="176" class="ctl" text-anchor="middle" fill="#0d0d0d">Ingress</text>
-  <text x="690" y="194" class="ctl" text-anchor="middle" fill="#0d0d0d">controller</text>
+  <rect x="50" y="138" width="320" height="58" rx="8" fill="rgb(212,168,83)"/>
+  <text x="66" y="160" class="tag">Ingress</text>
+  <text x="66" y="181" class="mono">host + path → service (규칙)</text>
 
-  <!-- configures arrow (controller -> proxy) -->
-  <polygon points="770,165 850,165 850,150 880,180 850,210 850,195 770,195" fill="rgb(212,168,83)"/>
-  <text x="810" y="185" class="act" text-anchor="middle">configures</text>
+  <rect x="50" y="206" width="320" height="58" rx="8" fill="rgb(91,155,213)"/>
+  <text x="66" y="228" class="tag">Services</text>
+  <text x="66" y="249" class="mono">서비스 이름 · 포트</text>
 
-  <!-- reverse proxy -->
-  <rect x="800" y="240" width="140" height="60" rx="8" fill="rgb(150,130,220)" opacity="0"/>
-  <rect x="800" y="235" width="150" height="60" rx="8" fill="rgb(180,165,230)"/>
-  <text x="875" y="270" class="ctl" text-anchor="middle">Reverse proxy</text>
+  <rect x="50" y="274" width="320" height="58" rx="8" fill="rgb(91,155,213)"/>
+  <text x="66" y="296" class="tag">EndpointSlices</text>
+  <text x="66" y="317" class="mono">파드 IP 명단</text>
 
-  <text x="120" y="288" class="note" text-anchor="middle">외부 클라이언트에게 서비스 접근을</text>
-  <text x="120" y="304" class="note" text-anchor="middle">제공하는 정보가 여기에 담깁니다</text>
+  <!-- ============ 화살표: watch ============ -->
+  <line x1="398" y1="220" x2="448" y2="220" stroke="rgb(212,168,83)" stroke-width="2.4" marker-end="url(#cr-a)"/>
+  <text x="423" y="204" class="act" text-anchor="middle">watch</text>
+  <text x="423" y="244" class="actw" text-anchor="middle">변경되면</text>
+  <text x="423" y="260" class="actw" text-anchor="middle">통지받습니다</text>
+
+  <!-- ============ 2. 컨트롤러 ============ -->
+  <rect x="460" y="96" width="270" height="248" rx="12" fill="rgb(22,22,22)" stroke="rgb(212,168,83)" stroke-width="1.8"/>
+  <text x="480" y="124" class="lyr">2. Ingress 컨트롤러</text>
+
+  <rect x="480" y="138" width="230" height="70" rx="8" fill="rgb(212,168,83)"/>
+  <text x="595" y="164" class="tag" text-anchor="middle">셋을 합쳐</text>
+  <text x="595" y="186" class="tag" text-anchor="middle">설정으로 변환</text>
+
+  <rect x="480" y="222" width="230" height="110" rx="8" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.2"/>
+  <text x="494" y="244" class="who">규칙은 Ingress에서,</text>
+  <text x="494" y="264" class="who">파드 IP는 EndpointSlices에서</text>
+  <text x="494" y="288" class="who">가져옵니다. 그래서 파드가</text>
+  <text x="494" y="308" class="who">뜨고 지는 것만으로도</text>
+  <text x="494" y="324" class="who">설정이 다시 만들어집니다.</text>
+
+  <!-- ============ 화살표: configure ============ -->
+  <line x1="738" y1="220" x2="788" y2="220" stroke="rgb(212,168,83)" stroke-width="2.4" marker-end="url(#cr-a)"/>
+  <text x="763" y="204" class="act" text-anchor="middle">설정 반영</text>
+  <text x="763" y="244" class="actw" text-anchor="middle">파일 쓰고</text>
+  <text x="763" y="260" class="actw" text-anchor="middle">reload</text>
+
+  <!-- ============ 3. 프록시 ============ -->
+  <rect x="800" y="96" width="290" height="248" rx="12" fill="rgb(22,22,22)" stroke="rgb(102,187,106)" stroke-width="1.8"/>
+  <text x="820" y="124" class="lyr">3. L7 리버스 프록시 (파드)</text>
+
+  <rect x="820" y="138" width="250" height="70" rx="8" fill="rgb(102,187,106)"/>
+  <text x="945" y="164" class="tag" text-anchor="middle">받은 설정대로</text>
+  <text x="945" y="186" class="tag" text-anchor="middle">HTTP를 처리</text>
+
+  <rect x="820" y="222" width="250" height="110" rx="8" fill="rgba(102,187,106,0.12)" stroke="rgb(102,187,106)" stroke-width="1.2"/>
+  <text x="834" y="244" class="body" font-weight="700">트래픽이 실제로 지나는 곳</text>
+  <text x="834" y="268" class="who">클라이언트 요청을 받아</text>
+  <text x="834" y="288" class="who">파싱하고 파드로 넘깁니다.</text>
+  <text x="834" y="312" class="who">컨트롤러는 여기 관여하지</text>
+  <text x="834" y="328" class="who">않습니다.</text>
+
+  <!-- ============ 하단 못박기 ============ -->
+  <rect x="30" y="366" width="1060" height="76" rx="12" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="54" y="394" class="body" font-weight="700">"Ingress 컨트롤러"라는 한마디로 2와 3을 함께 부르지만, 둘은 별개 컴포넌트입니다.</text>
+  <text x="54" y="418" class="who">2는 감시하고 설정을 쓰는 주체이고, 3은 그 설정을 읽어 트래픽을 처리하는 주체입니다. 설정을 만드는 일과 트래픽을 나르는 일이 갈려 있습니다.</text>
 </svg>
