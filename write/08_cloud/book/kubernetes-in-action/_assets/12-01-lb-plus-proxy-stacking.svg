@@ -1,0 +1,113 @@
+<svg viewBox="0 0 1120 720" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>LoadBalancer 셋과 LB 하나 더하기 프록시 — Ingress는 대체가 아니라 쌓임</title>
+  <desc>왼쪽은 서비스 셋을 각각 LoadBalancer로 노출한 모습으로, 공인 IP가 셋 필요하고 비용도 셋이다. 오른쪽은 Ingress 구조로, 공인 IP 하나를 가진 LoadBalancer 서비스가 L7 프록시를 외부에 노출하고 그 프록시가 호스트와 경로 규칙에 따라 세 서비스로 갈라 보낸다. 여기서 핵심은 Ingress가 LoadBalancer를 없앤 것이 아니라 그 위에 얹혔다는 점이다. 프록시 자신도 클러스터 안 파드로 돌기 때문에 외부에 노출되려면 LoadBalancer 서비스가 필요하고, 그래서 구조가 LoadBalancer 하나 더하기 프록시 하나 더하기 규칙 여럿이 된다. 따라서 NodePort와 LoadBalancer와 Ingress는 아래가 위로 대체되는 진화 단계가 아니라 계층별 도구이며 위가 아래를 사용한다. L7은 트래픽이 HTTP라는 가정을 받아들인 대가로 경로 라우팅을 얻은 것이라, 데이터베이스 연결이나 gRPC 스트림이나 게임 UDP처럼 그 가정이 틀린 트래픽에는 쓸 수 없고 그때는 LoadBalancer가 정답이다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 25px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 15px; fill: rgb(168,163,158); }
+      .col  { font-size: 16px; font-weight: 800; }
+      .lyr  { font-size: 12.5px; font-weight: 800; fill: rgb(168,163,158); }
+      .tag  { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .tagw { font-size: 12px; font-weight: 800; fill: #e8e4df; }
+      .who  { font-size: 12.5px; fill: rgb(168,163,158); }
+      .body { font-size: 14px; fill: #e8e4df; }
+      .bad  { font-size: 13px; fill: rgb(240,150,190); }
+      .good { font-size: 13px; fill: rgb(102,187,106); }
+      .mono { font-size: 11.5px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    </style>
+    <marker id="sk-p" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(240,150,190)"/>
+    </marker>
+    <marker id="sk-g" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(102,187,106)"/>
+    </marker>
+    <marker id="sk-a" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="720" fill="#0d0d0d"/>
+
+  <text x="30" y="42" class="h1">Ingress는 LoadBalancer를 없앤 게 아니라 그 위에 얹힙니다</text>
+  <text x="30" y="68" class="sub">서비스 셋을 외부에 내보내는 같은 일을, 공인 IP 셋으로 하느냐 하나로 하느냐의 차이입니다.</text>
+
+  <!-- ================= 왼쪽: LB 셋 ================= -->
+  <rect x="30" y="92" width="520" height="418" rx="13" fill="rgb(22,22,22)" stroke="rgb(240,150,190)" stroke-width="1.8"/>
+  <text x="52" y="122" class="col" style="fill:rgb(240,150,190)">LoadBalancer 셋 (11-02)</text>
+  <text x="52" y="144" class="who">서비스마다 공인 IP가 하나씩 붙습니다</text>
+
+  <rect x="52" y="160" width="150" height="44" rx="7" fill="rgb(240,150,190)"/>
+  <text x="127" y="179" class="mono" text-anchor="middle">11.22.33.44</text>
+  <text x="127" y="196" class="tag" text-anchor="middle">LB 1</text>
+  <rect x="216" y="160" width="150" height="44" rx="7" fill="rgb(240,150,190)"/>
+  <text x="291" y="179" class="mono" text-anchor="middle">11.22.33.45</text>
+  <text x="291" y="196" class="tag" text-anchor="middle">LB 2</text>
+  <rect x="380" y="160" width="148" height="44" rx="7" fill="rgb(240,150,190)"/>
+  <text x="454" y="179" class="mono" text-anchor="middle">11.22.33.46</text>
+  <text x="454" y="196" class="tag" text-anchor="middle">LB 3</text>
+
+  <line x1="127" y1="208" x2="127" y2="234" stroke="rgb(240,150,190)" stroke-width="2" marker-end="url(#sk-p)"/>
+  <line x1="291" y1="208" x2="291" y2="234" stroke="rgb(240,150,190)" stroke-width="2" marker-end="url(#sk-p)"/>
+  <line x1="454" y1="208" x2="454" y2="234" stroke="rgb(240,150,190)" stroke-width="2" marker-end="url(#sk-p)"/>
+
+  <rect x="52" y="240" width="150" height="42" rx="6" fill="rgb(91,155,213)"/>
+  <text x="127" y="266" class="tag" text-anchor="middle">kiada</text>
+  <rect x="216" y="240" width="150" height="42" rx="6" fill="rgb(91,155,213)"/>
+  <text x="291" y="266" class="tag" text-anchor="middle">quote</text>
+  <rect x="380" y="240" width="148" height="42" rx="6" fill="rgb(91,155,213)"/>
+  <text x="454" y="266" class="tag" text-anchor="middle">quiz</text>
+
+  <rect x="52" y="306" width="476" height="72" rx="9" fill="rgba(240,150,190,0.12)" stroke="rgb(240,150,190)" stroke-width="1.4"/>
+  <text x="68" y="330" class="body" font-weight="700">공인 IP 3개 · 클라우드 LB 요금 3인분</text>
+  <text x="68" y="352" class="who">서비스를 하나 더 내보낼 때마다 IP도 요금도 하나씩 늡니다.</text>
+  <text x="68" y="370" class="who">HTTP를 안 읽으므로 경로로 나누는 일은 애초에 불가능합니다.</text>
+
+  <text x="52" y="404" class="good">✓ HTTP가 아니어도 됩니다 — TCP·UDP 무엇이든</text>
+  <text x="52" y="426" class="bad">✗ 서비스 수만큼 IP와 비용이 붙습니다</text>
+  <text x="52" y="448" class="bad">✗ 경로·호스트로 나눌 수 없습니다</text>
+  <text x="52" y="482" class="who">DB 연결·gRPC 스트림·게임 UDP는 여전히 이쪽입니다.</text>
+
+  <!-- ================= 오른쪽: LB 1 + 프록시 + 규칙 N ================= -->
+  <rect x="570" y="92" width="520" height="418" rx="13" fill="rgb(22,22,22)" stroke="rgb(102,187,106)" stroke-width="1.8"/>
+  <text x="592" y="122" class="col" style="fill:rgb(102,187,106)">LB 1개 + 프록시 + 규칙 3개</text>
+  <text x="592" y="144" class="who">프록시도 파드라, 외부에 나가려면 LB가 필요합니다</text>
+
+  <rect x="704" y="160" width="252" height="44" rx="7" fill="rgb(240,150,190)"/>
+  <text x="830" y="179" class="mono" text-anchor="middle">11.22.33.44</text>
+  <text x="830" y="196" class="tag" text-anchor="middle">LoadBalancer 서비스 — 여전히 씁니다</text>
+
+  <line x1="830" y1="208" x2="830" y2="230" stroke="rgb(240,150,190)" stroke-width="2.2" marker-end="url(#sk-p)"/>
+
+  <rect x="656" y="236" width="348" height="52" rx="8" fill="rgb(212,168,83)"/>
+  <text x="830" y="258" class="tag" text-anchor="middle">L7 프록시 (파드) — HTTP를 읽고 규칙으로 가릅니다</text>
+  <text x="830" y="277" class="mono" text-anchor="middle">host + path → service</text>
+
+  <line x1="700" y1="292" x2="660" y2="318" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#sk-a)"/>
+  <line x1="830" y1="292" x2="830" y2="318" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#sk-a)"/>
+  <line x1="960" y1="292" x2="1000" y2="318" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#sk-a)"/>
+
+  <rect x="592" y="324" width="150" height="42" rx="6" fill="rgb(91,155,213)"/>
+  <text x="667" y="350" class="tag" text-anchor="middle">kiada</text>
+  <rect x="756" y="324" width="148" height="42" rx="6" fill="rgb(91,155,213)"/>
+  <text x="830" y="350" class="tag" text-anchor="middle">quote</text>
+  <rect x="918" y="324" width="152" height="42" rx="6" fill="rgb(91,155,213)"/>
+  <text x="994" y="350" class="tag" text-anchor="middle">quiz</text>
+
+  <rect x="592" y="386" width="478" height="52" rx="9" fill="rgba(102,187,106,0.12)" stroke="rgb(102,187,106)" stroke-width="1.4"/>
+  <text x="608" y="410" class="body" font-weight="700">공인 IP 1개 · 서비스를 늘려도 규칙만 늡니다</text>
+  <text x="608" y="430" class="who">IP도 요금도 그대로입니다 — 늘어나는 건 규칙 줄 수뿐입니다.</text>
+
+  <text x="592" y="464" class="good">✓ 경로·호스트·쿠키로 나눌 수 있습니다</text>
+  <text x="592" y="486" class="bad">✗ HTTP가 아니면 못 씁니다 — 가정을 산 대가입니다</text>
+
+  <!-- ================= 하단 못박기 ================= -->
+  <rect x="30" y="530" width="1060" height="166" rx="12" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="54" y="558" class="body" font-weight="700">그래서 NodePort → LoadBalancer → Ingress는 진화 단계가 아니라 계층별 도구입니다.</text>
+  <text x="54" y="582" class="who">위가 아래를 대체하지 않고 쌓입니다. 오른쪽 그림에서 LoadBalancer가 사라지지 않고 프록시 앞에 그대로 남아 있는 것이 그 증거입니다.</text>
+
+  <rect x="54" y="598" width="1012" height="38" rx="8" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.2"/>
+  <text x="70" y="623" class="who">NodePort는 노드 포트를 열고 · LoadBalancer는 그 앞에 LB를 세우고 · Ingress는 그 LB 뒤에 프록시를 두어 L7으로 가릅니다</text>
+
+  <text x="54" y="662" class="body" font-weight="700">L7은 "이 트래픽은 HTTP다"라는 가정을 산 대가로 경로 라우팅을 얻은 것입니다.</text>
+  <text x="54" y="684" class="who">가정이 틀린 트래픽 — DB 연결·gRPC 스트림·게임 UDP — 에는 쓸 수 없고, 그때는 LoadBalancer가 정답입니다. 위층이 늘 낫지는 않습니다.</text>
+</svg>

@@ -1,0 +1,94 @@
+<svg viewBox="0 0 1120 700" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>L4가 보는 것과 L7이 보는 것 — 같은 패킷, 다른 재료</title>
+  <desc>왼쪽은 한 패킷을 겹으로 그려 어느 계층이 무엇을 보는지 나타낸다. IP 헤더에 출발지와 목적지 주소가 있고 그 안에 TCP 헤더의 포트가 있으며, 커널은 여기까지만 본다. 그 안쪽 페이로드에 GET /quote HTTP/1.1과 Host 헤더가 들어 있고, 이 부분은 사용자 공간의 프록시가 읽는다. 오른쪽은 L4가 쥔 재료만으로 두 요청을 갈라 보려는 시도가 실패하는 장면이다. /quote 요청과 /questions 요청은 목적지 주소와 포트가 11.22.33.44 대 80으로 완전히 같아서, 커널이 가진 재료로는 두 요청이 구별되지 않는다. 그래서 문제는 하나를 여럿으로 나누지 못한다는 것이 아니라, 나누기는 하는데 어느 쪽으로 보낼지 정할 기준이 없다는 것이다. 커널이 파드를 고른 근거는 확률뿐이었다. DNAT은 고정 위치의 숫자를 덮어쓰는 나노초 단위 작업인 반면 L7 파싱은 TCP 스트림 재조립과 문자열 구문 분석이라, 커널이 아니라 사용자 공간 프로그램이 맡는다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 25px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 15px; fill: rgb(168,163,158); }
+      .col  { font-size: 16px; font-weight: 800; }
+      .lyr  { font-size: 12.5px; font-weight: 800; fill: rgb(168,163,158); }
+      .mono { font-size: 12.5px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .monod{ font-size: 12.5px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .who  { font-size: 12.5px; fill: rgb(168,163,158); }
+      .body { font-size: 14px; fill: #e8e4df; }
+      .bad  { font-size: 13px; fill: rgb(240,150,190); }
+      .good { font-size: 13px; fill: rgb(102,187,106); }
+      .tag  { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="700" fill="#0d0d0d"/>
+
+  <text x="30" y="42" class="h1">같은 패킷인데, 계층마다 쥐는 재료가 다릅니다</text>
+  <text x="30" y="68" class="sub">커널은 봉투의 주소까지만 읽고, 프록시는 봉투를 열어 안의 글을 읽습니다.</text>
+
+  <!-- ================= 왼쪽: 패킷 겹 ================= -->
+  <rect x="30" y="92" width="520" height="470" rx="13" fill="rgb(22,22,22)" stroke="rgb(91,155,213)" stroke-width="1.8"/>
+  <text x="52" y="122" class="col" style="fill:rgb(91,155,213)">패킷 한 장을 겹으로 보면</text>
+
+  <!-- L3 -->
+  <rect x="52" y="140" width="476" height="230" rx="9" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.3"/>
+  <text x="68" y="162" class="lyr">IP 헤더 · L3</text>
+  <rect x="68" y="172" width="444" height="30" rx="5" fill="rgb(91,155,213)"/>
+  <text x="80" y="192" class="mono">출발지 203.0.113.7 → 목적지 11.22.33.44</text>
+
+  <!-- L4 -->
+  <rect x="68" y="212" width="444" height="146" rx="8" fill="rgb(20,24,28)" stroke="rgb(120,116,112)" stroke-width="1.2"/>
+  <text x="82" y="234" class="lyr">TCP 헤더 · L4</text>
+  <rect x="82" y="244" width="416" height="30" rx="5" fill="rgb(91,155,213)"/>
+  <text x="94" y="264" class="mono">출발지 52341 → 목적지 80</text>
+
+  <!-- L7 payload -->
+  <rect x="82" y="284" width="416" height="62" rx="8" fill="rgb(212,168,83)"/>
+  <text x="96" y="306" class="mono">GET /quote HTTP/1.1</text>
+  <text x="96" y="330" class="mono">Host: api.example.com</text>
+
+  <!-- 경계선 -->
+  <line x1="52" y1="386" x2="528" y2="386" stroke="rgb(240,150,190)" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="52" y="406" class="bad" font-weight="700">↑ 커널은 여기까지만 봅니다 (파란 부분)</text>
+  <text x="52" y="430" class="good" font-weight="700">↓ 프록시가 봉투를 열어 읽는 곳 (노란 부분)</text>
+
+  <rect x="52" y="446" width="476" height="96" rx="9" fill="rgba(212,168,83,0.10)" stroke="rgb(42,37,32)"/>
+  <text x="68" y="470" class="body" font-weight="700">일이 다른 만큼 맡는 주체도 다릅니다</text>
+  <text x="68" y="492" class="who">DNAT은 고정 위치의 숫자 4바이트를 덮어쓰는 일입니다 — 나노초 단위입니다.</text>
+  <text x="68" y="512" class="who">L7 파싱은 TCP 스트림을 재조립해 문자열을 구문 분석하는 일입니다.</text>
+  <text x="68" y="532" class="who">그래서 커널이 아니라 사용자 공간 프로그램(Nginx·Envoy)이 맡습니다.</text>
+
+  <!-- ================= 오른쪽: L4로 갈라 보려는 시도 ================= -->
+  <rect x="570" y="92" width="520" height="470" rx="13" fill="rgb(22,22,22)" stroke="rgb(240,150,190)" stroke-width="1.8"/>
+  <text x="592" y="122" class="col" style="fill:rgb(240,150,190)">L4 재료만으로 갈라 보면</text>
+
+  <text x="592" y="150" class="who">서로 다른 서비스로 보내야 할 두 요청입니다.</text>
+
+  <!-- 요청 1 -->
+  <rect x="592" y="164" width="478" height="82" rx="9" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.3"/>
+  <text x="608" y="186" class="lyr">요청 1 — quote 서비스로 가야 합니다</text>
+  <rect x="608" y="196" width="446" height="28" rx="5" fill="rgb(91,155,213)"/>
+  <text x="620" y="215" class="mono">목적지 11.22.33.44 : 80</text>
+  <text x="620" y="240" class="monod" style="fill:rgb(212,168,83)">GET /quote</text>
+
+  <!-- 요청 2 -->
+  <rect x="592" y="258" width="478" height="82" rx="9" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.3"/>
+  <text x="608" y="280" class="lyr">요청 2 — quiz 서비스로 가야 합니다</text>
+  <rect x="608" y="290" width="446" height="28" rx="5" fill="rgb(91,155,213)"/>
+  <text x="620" y="309" class="mono">목적지 11.22.33.44 : 80</text>
+  <text x="620" y="334" class="monod" style="fill:rgb(212,168,83)">GET /questions</text>
+
+  <!-- 판정 -->
+  <rect x="592" y="354" width="478" height="76" rx="9" fill="rgba(240,150,190,0.14)" stroke="rgb(240,150,190)" stroke-width="1.5"/>
+  <text x="608" y="378" class="body" font-weight="700">파란 줄 두 개가 글자 하나까지 같습니다</text>
+  <text x="608" y="400" class="who">커널이 쥔 재료로는 이 둘이 같은 요청입니다. 다른 곳으로</text>
+  <text x="608" y="420" class="who">보내고 싶어도 무엇을 근거로 나눌지가 없습니다.</text>
+
+  <rect x="592" y="446" width="478" height="96" rx="9" fill="rgba(240,150,190,0.10)" stroke="rgb(240,150,190)" stroke-width="1.4"/>
+  <text x="608" y="470" class="body" font-weight="700">문제는 "1대다가 안 된다"가 아닙니다</text>
+  <text x="608" y="492" class="who">cluster IP 하나로 파드 여럿에 나누는 일은 L4에서도 됩니다(11-01).</text>
+  <text x="608" y="512" class="who">갈라지긴 하는데 기준을 정할 재료가 없을 뿐입니다 — 그래서</text>
+  <text x="608" y="532" class="who">커널이 파드를 고른 근거는 확률뿐이었습니다.</text>
+
+  <!-- ================= 하단 못박기 ================= -->
+  <rect x="30" y="582" width="1060" height="94" rx="12" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="54" y="610" class="body" font-weight="700">경로로 나누려면 경로를 읽을 수 있는 자리에서 나눠야 합니다. 그 자리가 L7이고, 거기 서 있는 것이 Ingress 프록시입니다.</text>
+  <text x="54" y="634" class="who">11-02에서 Service의 세션 어피니티가 쿠키가 아니라 클라이언트 IP 기준이었던 것도 같은 이유입니다 — Service는 L4라 쿠키를 볼 수 없습니다.</text>
+  <text x="54" y="656" class="who">Ingress는 L7이라 쿠키를 읽을 수 있고, 그래서 쿠키 기반 어피니티가 됩니다. 볼 수 있는 것이 할 수 있는 것을 정합니다.</text>
+</svg>

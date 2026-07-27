@@ -1,0 +1,115 @@
+<svg viewBox="0 0 1120 700" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>프록시가 cluster IP를 거칠 때와 파드로 직접 보낼 때 — 판단이 살아남는가</title>
+  <desc>왼쪽은 L7 프록시가 요청을 파싱해 카나리 파드로 보내기로 정하고도 cluster IP로 넘기는 경우다. 커널은 L4라 프록시의 판단을 읽을 수 없고 확률로 파드를 다시 고르므로, 애써 파싱해 내린 결정이 그 지점에서 버려진다. 목적지를 정하는 주체와 판단하는 주체가 갈리면 판단이 버려진다는 것이 요지다. 오른쪽은 프록시가 파드 IP로 직접 보내는 경우로, 컨트롤러가 EndpointSlice를 감시해 프록시가 이미 파드 IP 명단을 알고 있어 cluster IP에 물어볼 이유가 없다. 이렇게 하면 DNAT 홉과 주소 변환이 사라지고, 부하 분산의 주인이 커널의 확률에서 프록시의 L7 판단으로 옮겨 간다. 아래 표는 그 차이를 넷으로 정리한다. 선택 방식은 확률 대 라운드로빈이나 최소 연결이나 가중치, 세션 어피니티는 클라이언트 IP만 대 쿠키 기반, 재시도는 불가능 대 실패 시 다른 파드로, 카나리는 파드 개수 비율의 근사 대 트래픽 퍼센트 정밀 지정이다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 25px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 15px; fill: rgb(168,163,158); }
+      .col  { font-size: 16px; font-weight: 800; }
+      .lyr  { font-size: 12.5px; font-weight: 800; fill: rgb(168,163,158); }
+      .tag  { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .who  { font-size: 12.5px; fill: rgb(168,163,158); }
+      .body { font-size: 14px; fill: #e8e4df; }
+      .bad  { font-size: 13px; fill: rgb(240,150,190); }
+      .good { font-size: 13px; fill: rgb(102,187,106); }
+      .rowl { font-size: 13px; fill: rgb(168,163,158); }
+      .cell { font-size: 13px; fill: #e8e4df; }
+      .mono { font-size: 11.5px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    </style>
+    <marker id="pd-p" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(240,150,190)"/>
+    </marker>
+    <marker id="pd-g" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(102,187,106)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="700" fill="#0d0d0d"/>
+
+  <text x="30" y="42" class="h1">판단한 쪽이 목적지를 정해야 판단이 남습니다</text>
+  <text x="30" y="68" class="sub">프록시가 "이 요청은 카나리로"라고 정했습니다. 그 결정이 끝까지 가는지 봅니다.</text>
+
+  <!-- ================= 왼쪽: cluster IP 경유 ================= -->
+  <rect x="30" y="92" width="520" height="356" rx="13" fill="rgb(22,22,22)" stroke="rgb(240,150,190)" stroke-width="1.8"/>
+  <text x="52" y="122" class="col" style="fill:rgb(240,150,190)">cluster IP를 거치면</text>
+
+  <rect x="52" y="138" width="476" height="48" rx="8" fill="rgb(212,168,83)"/>
+  <text x="68" y="158" class="tag">L7 프록시 — HTTP를 파싱해 판단합니다</text>
+  <text x="68" y="177" class="mono">"이 요청은 canary 파드로 보낸다"</text>
+
+  <line x1="290" y1="190" x2="290" y2="212" stroke="rgb(240,150,190)" stroke-width="2.2" marker-end="url(#pd-p)"/>
+
+  <rect x="52" y="218" width="476" height="46" rx="8" fill="rgb(91,155,213)"/>
+  <text x="290" y="240" class="tag" text-anchor="middle">cluster IP 10.96.0.12</text>
+  <text x="290" y="257" class="mono" text-anchor="middle">커널은 L4 — 프록시의 판단을 읽지 못합니다</text>
+
+  <line x1="290" y1="268" x2="290" y2="290" stroke="rgb(240,150,190)" stroke-width="2.2" marker-end="url(#pd-p)"/>
+  <text x="304" y="284" class="bad">확률로 다시 고릅니다</text>
+
+  <rect x="52" y="296" width="150" height="40" rx="6" fill="rgb(58,58,58)"/>
+  <text x="127" y="321" class="tag" style="fill:rgb(200,196,192)" text-anchor="middle">stable</text>
+  <rect x="216" y="296" width="150" height="40" rx="6" fill="rgb(58,58,58)"/>
+  <text x="291" y="321" class="tag" style="fill:rgb(200,196,192)" text-anchor="middle">stable</text>
+  <rect x="380" y="296" width="148" height="40" rx="6" fill="rgb(240,150,190)"/>
+  <text x="454" y="321" class="tag" text-anchor="middle">canary</text>
+
+  <rect x="52" y="352" width="476" height="76" rx="9" fill="rgba(240,150,190,0.14)" stroke="rgb(240,150,190)" stroke-width="1.5"/>
+  <text x="68" y="376" class="body" font-weight="700">애써 파싱한 판단이 여기서 버려집니다</text>
+  <text x="68" y="398" class="who">카나리로 보내려 했지만 커널은 그 뜻을 모르고 셋 중 하나를</text>
+  <text x="68" y="418" class="who">확률로 집습니다 — 홉도 하나 더 생깁니다.</text>
+
+  <!-- ================= 오른쪽: 파드 직접 ================= -->
+  <rect x="570" y="92" width="520" height="356" rx="13" fill="rgb(22,22,22)" stroke="rgb(102,187,106)" stroke-width="1.8"/>
+  <text x="592" y="122" class="col" style="fill:rgb(102,187,106)">파드로 직접 보내면</text>
+
+  <rect x="592" y="138" width="478" height="48" rx="8" fill="rgb(212,168,83)"/>
+  <text x="608" y="158" class="tag">L7 프록시 — 판단하고, 목적지도 직접 정합니다</text>
+  <text x="608" y="177" class="mono">EndpointSlice를 구독해 파드 IP를 이미 압니다</text>
+
+  <line x1="830" y1="190" x2="830" y2="288" stroke="rgb(102,187,106)" stroke-width="2.4" marker-end="url(#pd-g)"/>
+  <text x="846" y="228" class="good" font-weight="700">10.244.2.8 로 바로</text>
+  <text x="846" y="250" class="who">cluster IP에 물어볼 이유가</text>
+  <text x="846" y="268" class="who">없습니다 — 명단이 손에 있으니까요</text>
+
+  <rect x="592" y="296" width="150" height="40" rx="6" fill="rgb(58,58,58)"/>
+  <text x="667" y="321" class="tag" style="fill:rgb(200,196,192)" text-anchor="middle">stable</text>
+  <rect x="756" y="296" width="148" height="40" rx="6" fill="rgb(58,58,58)"/>
+  <text x="830" y="321" class="tag" style="fill:rgb(200,196,192)" text-anchor="middle">stable</text>
+  <rect x="918" y="296" width="152" height="40" rx="6" fill="rgb(102,187,106)"/>
+  <text x="994" y="321" class="tag" text-anchor="middle">canary ← 정확히 도착</text>
+
+  <rect x="592" y="352" width="478" height="76" rx="9" fill="rgba(102,187,106,0.12)" stroke="rgb(102,187,106)" stroke-width="1.5"/>
+  <text x="608" y="376" class="body" font-weight="700">부하 분산의 주인이 커널에서 프록시로 옮겨 옵니다</text>
+  <text x="608" y="398" class="who">DNAT 홉과 주소 변환이 사라집니다. flat 네트워크라 파드 IP는</text>
+  <text x="608" y="418" class="who">NAT 없이 그대로 닿습니다.</text>
+
+  <!-- ================= 비교표 ================= -->
+  <rect x="30" y="470" width="1060" height="168" rx="12" fill="rgb(20,20,20)" stroke="rgb(42,37,32)"/>
+  <line x1="30" y1="504" x2="1090" y2="504" stroke="rgb(42,37,32)" stroke-width="1.4"/>
+  <line x1="330" y1="470" x2="330" y2="638" stroke="rgb(42,37,32)" stroke-width="1.4"/>
+  <line x1="710" y1="470" x2="710" y2="638" stroke="rgb(42,37,32)" stroke-width="1.4"/>
+
+  <text x="54" y="494" class="rowl" font-weight="700">무엇이 달라지나</text>
+  <text x="354" y="494" class="cell" style="fill:rgb(240,150,190)" font-weight="700">커널 (cluster IP 경유)</text>
+  <text x="734" y="494" class="cell" style="fill:rgb(102,187,106)" font-weight="700">L7 프록시 (파드 직접)</text>
+
+  <text x="54" y="530" class="rowl">선택 방식</text>
+  <text x="354" y="530" class="cell">확률 (iptables random)</text>
+  <text x="734" y="530" class="cell">라운드로빈 · least-conn · 가중치</text>
+
+  <text x="54" y="560" class="rowl">세션 어피니티</text>
+  <text x="354" y="560" class="cell">클라이언트 IP만</text>
+  <text x="734" y="560" class="cell">쿠키 기반</text>
+
+  <text x="54" y="590" class="rowl">재시도</text>
+  <text x="354" y="590" class="bad">못 합니다</text>
+  <text x="734" y="590" class="good">실패하면 다른 파드로</text>
+
+  <text x="54" y="620" class="rowl">카나리</text>
+  <text x="354" y="620" class="cell">파드 개수 비율로 대략</text>
+  <text x="734" y="620" class="good">트래픽 % 정밀 지정</text>
+
+  <!-- ================= 하단 못박기 ================= -->
+  <rect x="30" y="652" width="1060" height="34" rx="10" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="54" y="675" class="body" font-weight="700">판단 주체와 목적지 결정 주체가 갈리면, 판단은 버려집니다 — 11-01의 "정밀 % 카나리는 L7이 필요하다"가 여기서 채워집니다.</text>
+</svg>
