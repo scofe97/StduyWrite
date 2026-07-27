@@ -1,0 +1,83 @@
+<svg viewBox="0 0 1120 680" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>PROGRAMMED True인데 404 — 위층 조건이 아래층 문제를 가립니다</title>
+  <desc>Gateway status가 세 층으로 되어 있고, 흔히 보는 명령이 위 두 층만 보여 주어 아래층 문제를 놓치는 구조를 그린다. 첫째 층 addresses에는 주소가 배정돼 있고, 둘째 층 conditions에는 Accepted와 Programmed가 둘 다 True로 찍혀 있다. kubectl get gtw가 보여 주는 것이 여기까지다. 그런데 셋째 층 listeners의 attachedRoutes가 0이라 실제로는 404가 난다. 문제는 아래층에 있는데 위층만 보면 정상으로 보인다. PROGRAMMED True의 뜻은 설정이 생성돼 게이트웨이에 접근할 수 있게 됐다는 것이지 라우팅이 완성됐다는 뜻이 아니다. 입구는 열렸고 안내판이 없는 상태라고 보면 맞는다. 그래서 진단할 때는 jsonpath로 listeners의 attachedRoutes를 따로 조회해야 한다. listener 조건에는 Accepted와 Conflicted와 ResolvedRefs가 있고, 특히 ResolvedRefs가 False면 TLS Secret 이름을 잘못 적은 경우를 여기서 잡아 준다. 12-02 Ingress에서는 같은 실수가 오브젝트상으로는 정상으로 보이고 접속 시점 브라우저 오류로만 드러났는데, Gateway API는 그것을 status에 미리 남긴다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 24px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 15px; fill: rgb(168,163,158); }
+      .lyr  { font-size: 12.5px; font-weight: 800; fill: rgb(168,163,158); }
+      .tag  { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .mono { font-size: 11.5px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .monod{ font-size: 11.5px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .who  { font-size: 12.5px; fill: rgb(168,163,158); }
+      .body { font-size: 14px; fill: #e8e4df; }
+      .bad  { font-size: 13px; fill: rgb(240,150,190); }
+      .good { font-size: 13px; fill: rgb(102,187,106); }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="680" fill="#0d0d0d"/>
+
+  <text x="30" y="40" class="h1">PROGRAMMED: True 인데 404 — 위층이 아래층을 가립니다</text>
+  <text x="30" y="66" class="sub">Gateway status는 세 층인데, 흔히 쓰는 명령은 위 두 층만 보여 줍니다.</text>
+
+  <!-- 3층 -->
+  <rect x="30" y="94" width="700" height="300" rx="13" fill="rgb(22,22,22)" stroke="rgb(120,116,112)" stroke-width="1.5"/>
+  <text x="52" y="122" class="lyr">Gateway status</text>
+
+  <rect x="52" y="136" width="656" height="62" rx="8" fill="rgb(91,155,213)"/>
+  <text x="68" y="158" class="tag">1층 · addresses</text>
+  <text x="68" y="182" class="mono">172.18.255.200 — 주소는 배정됐습니다</text>
+
+  <rect x="52" y="208" width="656" height="76" rx="8" fill="rgb(102,187,106)"/>
+  <text x="68" y="230" class="tag">2층 · conditions</text>
+  <text x="68" y="254" class="mono">Accepted: True   ·   Programmed: True</text>
+  <text x="68" y="274" class="mono">여기까지만 보면 아무 문제가 없습니다</text>
+
+  <rect x="52" y="294" width="656" height="82" rx="8" fill="rgb(240,150,190)"/>
+  <text x="68" y="316" class="tag">3층 · listeners[]</text>
+  <text x="68" y="340" class="mono">attachedRoutes: 0  ← 문제는 여기 있습니다</text>
+  <text x="68" y="362" class="mono">Route가 하나도 안 붙어 404가 납니다</text>
+
+  <!-- kubectl 대비 -->
+  <rect x="750" y="94" width="340" height="140" rx="11" fill="rgb(20,20,20)" stroke="rgb(102,187,106)" stroke-width="1.4"/>
+  <text x="772" y="120" class="body" font-weight="700">kubectl get gtw</text>
+  <text x="772" y="142" class="who">1·2층만 보여 줍니다</text>
+  <rect x="772" y="154" width="296" height="26" rx="5" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.1"/>
+  <text x="784" y="172" class="monod">PROGRAMMED: True</text>
+  <text x="772" y="204" class="good">초록불로 보입니다</text>
+  <text x="772" y="224" class="who">그래서 3층을 안 보게 됩니다</text>
+
+  <rect x="750" y="250" width="340" height="144" rx="11" fill="rgb(20,20,20)" stroke="rgb(240,150,190)" stroke-width="1.4"/>
+  <text x="772" y="276" class="body" font-weight="700">3층은 따로 조회해야 합니다</text>
+  <rect x="772" y="288" width="296" height="46" rx="5" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.1"/>
+  <text x="784" y="306" class="monod" style="font-size:10px">kubectl get gtw kiada -o jsonpath=</text>
+  <text x="784" y="324" class="monod" style="font-size:10px">'{.status.listeners[*].attachedRoutes}'</text>
+  <text x="772" y="356" class="bad">0이면 Route가 없다는 뜻입니다</text>
+  <text x="772" y="376" class="who">"빈지·0인지 보라"가 진단의 첫 수입니다</text>
+
+  <!-- PROGRAMMED 의미 -->
+  <rect x="30" y="412" width="1060" height="70" rx="11" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="54" y="440" class="body" font-weight="700">PROGRAMMED: True 의 뜻은 "설정이 생성돼 게이트웨이에 닿을 수 있다"입니다 — "라우팅이 완성됐다"가 아닙니다.</text>
+  <text x="54" y="466" class="who">입구는 열렸고 안내판이 없는 상태입니다. 문이 열린 것과 어디로 가야 할지 적혀 있는 것은 다른 층의 일입니다.</text>
+
+  <!-- listener 조건 3 -->
+  <text x="30" y="516" class="body" font-weight="700">listener 층의 조건 셋</text>
+
+  <rect x="30" y="530" width="340" height="62" rx="9" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.2"/>
+  <text x="48" y="552" class="monod" font-weight="700">Accepted</text>
+  <text x="48" y="574" class="who">이 listener 설정을 받아들였는가</text>
+
+  <rect x="390" y="530" width="340" height="62" rx="9" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.2"/>
+  <text x="408" y="552" class="monod" font-weight="700">Conflicted</text>
+  <text x="408" y="574" class="who">다른 listener와 포트·호스트가 겹치는가</text>
+
+  <rect x="750" y="530" width="340" height="62" rx="9" fill="rgba(212,168,83,0.14)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="768" y="552" class="monod" font-weight="700" style="fill:rgb(212,168,83)">ResolvedRefs</text>
+  <text x="768" y="574" class="who">참조한 것들이 실제로 있는가 (TLS Secret 등)</text>
+
+  <!-- 하단 못박기 -->
+  <rect x="30" y="606" width="1060" height="58" rx="11" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="54" y="632" class="body" font-weight="700">ResolvedRefs가 12-02의 아픈 곳을 덮어 줍니다 — TLS Secret 이름을 잘못 적으면 여기서 False로 잡힙니다.</text>
+  <text x="54" y="654" class="who">Ingress에서는 같은 실수가 오브젝트상 정상으로 보이고 접속 시점 브라우저 오류로만 드러났습니다. 배포 때 알 수 있게 된 것이 이 API의 개선점입니다.</text>
+</svg>

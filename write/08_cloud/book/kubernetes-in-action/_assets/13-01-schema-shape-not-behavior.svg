@@ -1,0 +1,110 @@
+<svg viewBox="0 0 1120 730" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>스키마는 모양을 강제하지만 행동은 강제하지 못합니다 — release channel과 support level이 갈라 보는 것</title>
+  <desc>지원하지 않는 필터를 HTTPRoute에 적었을 때 무슨 일이 일어나는지를 단계로 보여 준다. CRD 스키마에 있는 필드이므로 apply는 성공하고, 오브젝트도 정상으로 조회된다. 그런데 이 구현이 그 필터를 구현하지 않았으면 컨트롤러가 조용히 무시하고, 필터가 걸리지 않은 채로 트래픽이 흐른다. 예외는 어디에서도 발생하지 않는다. 스키마가 검사하는 것은 필드가 있는지와 타입이 맞는지, 즉 모양뿐이고 그 필드대로 컨트롤러가 행동하는지는 검사 범위 밖이기 때문이다. 자바 인터페이스에 비유하면 메서드를 구현했다는 것은 컴파일러가 확인해 주지만 몸통이 비어 있어도 컴파일은 통과하는 것과 같다. 그래서 두 축이 필요하다. release channel은 API가 앞으로 바뀌는지를 보장하고, support level은 이 구현이 실제로 지원하는지를 보장한다. 둘을 조합하면 네 경우가 나오는데, standard 채널이면서 extended 수준인 조합이 가장 헷갈리는 함정이다. API는 안 바뀌지만 이 구현이 지원할지는 별개이기 때문이다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 24px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 15px; fill: rgb(168,163,158); }
+      .lyr  { font-size: 12.5px; font-weight: 800; fill: rgb(168,163,158); }
+      .tag  { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
+      .mono { font-size: 11.5px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .who  { font-size: 12.5px; fill: rgb(168,163,158); }
+      .body { font-size: 14px; fill: #e8e4df; }
+      .bad  { font-size: 13px; fill: rgb(240,150,190); }
+      .good { font-size: 13px; fill: rgb(102,187,106); }
+      .cell { font-size: 12.5px; fill: #e8e4df; }
+    </style>
+    <marker id="sb-g" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(102,187,106)"/>
+    </marker>
+    <marker id="sb-p" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(240,150,190)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="730" fill="#0d0d0d"/>
+
+  <text x="30" y="40" class="h1">스키마는 모양을 강제하지만, 행동은 강제하지 못합니다</text>
+  <text x="30" y="66" class="sub">지원하지 않는 필터를 적으면 예외가 터질 것 같지만, 아무 일도 일어나지 않습니다.</text>
+
+  <!-- 흐름 4단 -->
+  <rect x="30" y="94" width="252" height="82" rx="9" fill="rgb(102,187,106)"/>
+  <text x="156" y="122" class="tag" text-anchor="middle">HTTPRoute에 필터 지정</text>
+  <text x="156" y="146" class="mono" text-anchor="middle">CRD 스키마에 있는 필드</text>
+  <text x="156" y="166" class="mono" text-anchor="middle">타입도 맞음</text>
+
+  <line x1="288" y1="135" x2="312" y2="135" stroke="rgb(102,187,106)" stroke-width="2.4" marker-end="url(#sb-g)"/>
+
+  <rect x="320" y="94" width="252" height="82" rx="9" fill="rgb(102,187,106)"/>
+  <text x="446" y="122" class="tag" text-anchor="middle">apply 성공</text>
+  <text x="446" y="146" class="mono" text-anchor="middle">get으로 조회해도</text>
+  <text x="446" y="166" class="mono" text-anchor="middle">정상으로 보임</text>
+
+  <line x1="578" y1="135" x2="602" y2="135" stroke="rgb(240,150,190)" stroke-width="2.4" marker-end="url(#sb-p)"/>
+
+  <rect x="610" y="94" width="252" height="82" rx="9" fill="rgb(240,150,190)"/>
+  <text x="736" y="122" class="tag" text-anchor="middle">이 구현은 그 필터가 없음</text>
+  <text x="736" y="146" class="mono" text-anchor="middle">컨트롤러가 조용히</text>
+  <text x="736" y="166" class="mono" text-anchor="middle">무시합니다</text>
+
+  <line x1="868" y1="135" x2="892" y2="135" stroke="rgb(240,150,190)" stroke-width="2.4" marker-end="url(#sb-p)"/>
+
+  <rect x="900" y="94" width="190" height="82" rx="9" fill="rgb(240,150,190)"/>
+  <text x="995" y="122" class="tag" text-anchor="middle">필터 없이 흐름</text>
+  <text x="995" y="146" class="mono" text-anchor="middle">예외 없음</text>
+  <text x="995" y="166" class="mono" text-anchor="middle">에러 로그도 없음</text>
+
+  <!-- 왜 -->
+  <rect x="30" y="196" width="520" height="150" rx="11" fill="rgb(22,22,22)" stroke="rgb(212,168,83)" stroke-width="1.6"/>
+  <text x="52" y="224" class="body" font-weight="700">스키마가 검사하는 것 = 모양</text>
+  <text x="52" y="250" class="good">✓ 그 필드가 있는가</text>
+  <text x="52" y="272" class="good">✓ 타입이 맞는가 (문자열·숫자·배열)</text>
+  <text x="52" y="298" class="bad">✗ 그 필드대로 컨트롤러가 행동하는가 — 검사 범위 밖</text>
+  <text x="52" y="326" class="who">행동은 컨트롤러가 하는 일이고, 스키마는 컨트롤러를 모릅니다.</text>
+
+  <rect x="570" y="196" width="520" height="150" rx="11" fill="rgb(22,22,22)" stroke="rgb(91,155,213)" stroke-width="1.6"/>
+  <text x="592" y="224" class="body" font-weight="700">자바 인터페이스에 견주면</text>
+  <text x="592" y="250" class="who">메서드를 구현했다는 사실은 컴파일러가 확인해 줍니다.</text>
+  <rect x="592" y="262" width="476" height="30" rx="6" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.2"/>
+  <text x="606" y="282" class="mono" style="fill:#e8e4df">void applyFilter() { }   // 몸통이 비어도 컴파일 통과</text>
+  <text x="592" y="316" class="who">"있다"와 "동작한다"가 다른 것이 여기서도 같습니다.</text>
+  <text x="592" y="336" class="who">그래서 규격만으로는 이식성이 보장되지 않습니다.</text>
+
+  <!-- 두 축 -->
+  <text x="30" y="382" class="body" font-weight="700">그래서 축을 둘로 나눠 각각 다른 것을 보장합니다</text>
+
+  <rect x="30" y="396" width="520" height="76" rx="10" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="52" y="422" class="body" font-weight="700" style="fill:rgb(212,168,83)">release channel — API가 바뀌는가</text>
+  <text x="52" y="446" class="who">standard = 앞으로 안 바뀝니다 · experimental = 바뀔 수 있습니다</text>
+  <text x="52" y="464" class="who">보장 대상: 내가 쓴 YAML이 다음 버전에서도 유효한가</text>
+
+  <rect x="570" y="396" width="520" height="76" rx="10" fill="rgba(91,155,213,0.10)" stroke="rgb(91,155,213)" stroke-width="1.4"/>
+  <text x="592" y="422" class="body" font-weight="700" style="fill:rgb(91,155,213)">support level — 이 구현이 지원하는가</text>
+  <text x="592" y="446" class="who">core = 전부 지원 · extended = 지원하면 동작이 같음 · impl-specific = 종속</text>
+  <text x="592" y="464" class="who">보장 대상: 구현을 바꿔도 같게 동작하는가</text>
+
+  <!-- 2x3 매트릭스 -->
+  <rect x="30" y="492" width="1060" height="158" rx="11" fill="rgb(20,20,20)" stroke="rgb(42,37,32)"/>
+  <line x1="30" y1="522" x2="1090" y2="522" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+  <text x="54" y="514" class="lyr">조합해 보면 — 함정은 두 번째 줄입니다</text>
+
+  <rect x="54" y="532" width="270" height="24" rx="4" fill="rgb(102,187,106)"/>
+  <text x="189" y="549" class="mono" text-anchor="middle">standard + core</text>
+  <text x="344" y="549" class="good">가장 안전합니다 — API도 고정, 모든 구현이 지원</text>
+
+  <rect x="54" y="562" width="270" height="24" rx="4" fill="rgb(212,168,83)"/>
+  <text x="189" y="579" class="mono" text-anchor="middle">standard + extended</text>
+  <text x="344" y="579" class="body" font-weight="700" style="fill:rgb(212,168,83)">함정 — API는 안 바뀌지만, 이 구현이 지원할지는 별개입니다</text>
+
+  <rect x="54" y="592" width="270" height="24" rx="4" fill="rgb(91,155,213)"/>
+  <text x="189" y="609" class="mono" text-anchor="middle">experimental + core</text>
+  <text x="344" y="609" class="cell">다 지원하지만 API가 바뀔 수 있습니다</text>
+
+  <rect x="54" y="622" width="270" height="24" rx="4" fill="rgb(240,150,190)"/>
+  <text x="189" y="639" class="mono" text-anchor="middle">experimental + impl-specific</text>
+  <text x="344" y="639" class="bad">가장 위험합니다 — API도 바뀌고 동작도 구현에 종속</text>
+
+  <!-- 하단 못박기 -->
+  <rect x="30" y="666" width="1060" height="46" rx="11" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="54" y="694" class="who">12-02의 annotation 함정과 <tspan font-weight="700" fill="#e8e4df">같은 구조</tspan>입니다. 정식 스키마로 올려도 "이 구현이 처리하는가"는 여전히 별개라, 규격은 그 답을 support level로 따로 적어 둡니다.</text>
+</svg>
