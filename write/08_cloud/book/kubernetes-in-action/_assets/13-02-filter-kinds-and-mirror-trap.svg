@@ -1,0 +1,127 @@
+<svg viewBox="0 0 1120 700" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>필터 여섯을 세 갈래로 — 흐름을 바꾸는 것과 바꾸지 않는 것, 그리고 미러링의 부수효과 함정</title>
+  <desc>HTTPRoute 필터 여섯 가지를 트래픽 흐름 구조를 기준으로 세 갈래로 나눈다. 첫째 갈래는 요청 하나가 목적지 하나로 가는 경우로 RequestHeaderModifier와 ResponseHeaderModifier와 URLRewrite와 ExtensionRef가 여기 속하며, 요청을 고치거나 설정을 밖으로 위임하되 흐름 자체는 하나다. 둘째 갈래는 흐름을 복제하는 RequestMirror로 백엔드 둘이 동시에 처리하고 복사본 응답은 버려진다. 셋째 갈래는 백엔드가 아예 없는 RequestRedirect로 게이트웨이가 직접 응답하므로 backendRefs가 필요 없다. ExtensionRef가 결이 다른 이유는 설정을 HTTPRoute 밖 별도 오브젝트에 두기 때문이고, RequestMirror가 결이 다른 이유는 트래픽 흐름 구조 자체를 바꾸기 때문이다. 아래쪽은 weight 카나리와 미러링을 비교한다. weight 카나리는 클라이언트가 신버전 응답을 실제로 받으므로 신버전이 죽으면 그 비율만큼 실패하지만 응답 품질까지 검증할 수 있다. 미러링은 클라이언트가 신버전 응답을 받지 않으므로 신버전이 죽어도 영향이 없지만 처리 가능 여부와 성능과 에러율까지만 검증한다. 그래서 실무 순서는 미러링을 먼저 하고 그다음 weight 카나리로 간다. 마지막으로 미러링의 함정은 복사본도 실제로 처리된다는 것이라, 신버전이 데이터베이스에 쓰거나 결제를 호출하면 부수효과가 두 번 일어난다. 미러링은 읽기 요청이나 부수효과가 격리된 환경에만 써야 한다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 24px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 15px; fill: rgb(168,163,158); }
+      .lyr  { font-size: 12.5px; font-weight: 800; fill: rgb(168,163,158); }
+      .tag  { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
+      .mono { font-size: 11px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .who  { font-size: 12.5px; fill: rgb(168,163,158); }
+      .body { font-size: 14px; fill: #e8e4df; }
+      .bad  { font-size: 13px; fill: rgb(240,150,190); }
+      .good { font-size: 13px; fill: rgb(102,187,106); }
+      .cell { font-size: 12.5px; fill: #e8e4df; }
+      .rowl { font-size: 12.5px; fill: rgb(168,163,158); }
+    </style>
+    <marker id="fk-b" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(91,155,213)"/>
+    </marker>
+    <marker id="fk-a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="fk-g" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(102,187,106)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="700" fill="#0d0d0d"/>
+
+  <text x="30" y="40" class="h1">필터 여섯을 나누는 기준은 트래픽 흐름 구조입니다</text>
+  <text x="30" y="66" class="sub">평면으로 나열하면 성격 차이가 안 보입니다. 흐름이 하나인가, 둘인가, 없는가로 갈립니다.</text>
+
+  <!-- 갈래 1 -->
+  <rect x="30" y="94" width="345" height="200" rx="12" fill="rgb(22,22,22)" stroke="rgb(91,155,213)" stroke-width="1.7"/>
+  <text x="50" y="120" class="body" font-weight="700" style="fill:rgb(91,155,213)">흐름 하나 · 목적지 하나</text>
+
+  <rect x="50" y="134" width="70" height="30" rx="5" fill="rgb(91,155,213)"/>
+  <text x="85" y="154" class="mono" text-anchor="middle">요청</text>
+  <line x1="124" y1="149" x2="152" y2="149" stroke="rgb(91,155,213)" stroke-width="2" marker-end="url(#fk-b)"/>
+  <rect x="158" y="134" width="90" height="30" rx="5" fill="rgb(212,168,83)"/>
+  <text x="203" y="154" class="mono" text-anchor="middle">필터</text>
+  <line x1="252" y1="149" x2="280" y2="149" stroke="rgb(91,155,213)" stroke-width="2" marker-end="url(#fk-b)"/>
+  <rect x="286" y="134" width="70" height="30" rx="5" fill="rgb(91,155,213)"/>
+  <text x="321" y="154" class="mono" text-anchor="middle">백엔드</text>
+
+  <text x="50" y="192" class="who">RequestHeaderModifier</text>
+  <text x="50" y="212" class="who">ResponseHeaderModifier</text>
+  <text x="50" y="232" class="who">URLRewrite</text>
+  <text x="50" y="252" class="who">ExtensionRef</text>
+  <text x="50" y="278" class="cell">고치거나 위임하되, 흐름은 하나입니다</text>
+
+  <!-- 갈래 2 -->
+  <rect x="391" y="94" width="345" height="200" rx="12" fill="rgb(22,22,22)" stroke="rgb(212,168,83)" stroke-width="1.7"/>
+  <text x="411" y="120" class="body" font-weight="700" style="fill:rgb(212,168,83)">흐름 복제</text>
+
+  <rect x="411" y="134" width="66" height="30" rx="5" fill="rgb(91,155,213)"/>
+  <text x="444" y="154" class="mono" text-anchor="middle">요청</text>
+  <line x1="481" y1="149" x2="505" y2="149" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#fk-a)"/>
+  <rect x="511" y="126" width="94" height="22" rx="4" fill="rgb(102,187,106)"/>
+  <text x="558" y="142" class="mono" text-anchor="middle">원본 백엔드</text>
+  <rect x="511" y="154" width="94" height="22" rx="4" fill="rgb(240,150,190)"/>
+  <text x="558" y="170" class="mono" text-anchor="middle">복사본 대상</text>
+  <line x1="609" y1="137" x2="629" y2="137" stroke="rgb(102,187,106)" stroke-width="2" marker-end="url(#fk-g)"/>
+  <text x="636" y="141" class="good" style="font-size:11px">응답</text>
+  <text x="636" y="169" class="bad" style="font-size:11px">버림</text>
+
+  <rect x="411" y="192" width="305" height="30" rx="5" fill="rgb(212,168,83)"/>
+  <text x="563" y="212" class="mono" text-anchor="middle">RequestMirror</text>
+  <text x="411" y="244" class="cell">백엔드 둘이 동시에 처리합니다</text>
+  <text x="411" y="266" class="who">흐름 구조 자체가 달라집니다</text>
+
+  <!-- 갈래 3 -->
+  <rect x="752" y="94" width="338" height="200" rx="12" fill="rgb(22,22,22)" stroke="rgb(102,187,106)" stroke-width="1.7"/>
+  <text x="772" y="120" class="body" font-weight="700" style="fill:rgb(102,187,106)">백엔드 없음</text>
+
+  <rect x="772" y="134" width="70" height="30" rx="5" fill="rgb(91,155,213)"/>
+  <text x="807" y="154" class="mono" text-anchor="middle">요청</text>
+  <line x1="846" y1="149" x2="872" y2="149" stroke="rgb(102,187,106)" stroke-width="2" marker-end="url(#fk-g)"/>
+  <rect x="878" y="134" width="106" height="30" rx="5" fill="rgb(102,187,106)"/>
+  <text x="931" y="154" class="mono" text-anchor="middle">게이트웨이</text>
+  <text x="996" y="153" class="good" style="font-size:11px">301/302</text>
+
+  <rect x="772" y="192" width="298" height="30" rx="5" fill="rgb(102,187,106)"/>
+  <text x="921" y="212" class="mono" text-anchor="middle">RequestRedirect</text>
+  <text x="772" y="244" class="cell">게이트웨이가 직접 응답합니다</text>
+  <text x="772" y="266" class="who">backendRefs가 필요 없습니다</text>
+
+  <!-- 결이 다른 둘 -->
+  <rect x="30" y="308" width="1060" height="52" rx="10" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="54" y="330" class="who"><tspan font-weight="700" fill="#e8e4df">ExtensionRef</tspan>가 결이 다른 것은 <tspan font-weight="700" fill="#e8e4df">설정을 어디 두는가</tspan>(HTTPRoute 밖 별도 오브젝트)이고,</text>
+  <text x="54" y="350" class="who"><tspan font-weight="700" fill="#e8e4df">RequestMirror</tspan>가 결이 다른 것은 <tspan font-weight="700" fill="#e8e4df">트래픽 흐름 구조</tspan>를 바꾼다는 점입니다 — 축이 서로 다릅니다.</text>
+
+  <!-- weight vs mirror -->
+  <rect x="30" y="376" width="1060" height="168" rx="11" fill="rgb(20,20,20)" stroke="rgb(42,37,32)"/>
+  <line x1="30" y1="408" x2="1090" y2="408" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+  <line x1="430" y1="376" x2="430" y2="544" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+  <line x1="760" y1="376" x2="760" y2="544" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+
+  <text x="54" y="399" class="lyr">신버전을 검증하는 두 방법</text>
+  <text x="454" y="399" class="cell" font-weight="700" style="fill:rgb(212,168,83)">weight 카나리</text>
+  <text x="784" y="399" class="cell" font-weight="700" style="fill:rgb(102,187,106)">RequestMirror</text>
+
+  <text x="54" y="434" class="rowl">클라이언트가 신버전 응답을 받나</text>
+  <text x="454" y="434" class="cell">받습니다 (1%라도)</text>
+  <text x="784" y="434" class="cell">안 받습니다</text>
+
+  <text x="54" y="464" class="rowl">신버전이 죽으면</text>
+  <text x="454" y="464" class="bad">그 1%가 실패합니다</text>
+  <text x="784" y="464" class="good">클라이언트 영향 없습니다</text>
+
+  <text x="54" y="494" class="rowl">무엇을 검증하나</text>
+  <text x="454" y="494" class="cell">실제 응답 품질까지</text>
+  <text x="784" y="494" class="cell">처리 가능 여부·성능·에러율</text>
+
+  <text x="54" y="526" class="rowl">실무 순서</text>
+  <text x="454" y="526" class="cell">그다음 단계</text>
+  <text x="784" y="526" class="good" font-weight="700">먼저 이쪽으로</text>
+
+  <!-- 함정 -->
+  <rect x="30" y="560" width="1060" height="120" rx="12" fill="rgba(240,150,190,0.12)" stroke="rgb(240,150,190)" stroke-width="1.8"/>
+  <text x="54" y="588" class="body" font-weight="700" style="fill:rgb(240,150,190)">함정 — 복사본도 실제로 처리됩니다</text>
+  <text x="54" y="614" class="who">미러링은 "그림자 트래픽"이라 안전해 보이지만, 복사본을 받은 백엔드는 그것이 복사본인 줄 모릅니다.</text>
+  <rect x="54" y="626" width="1012" height="28" rx="6" fill="rgb(24,28,32)" stroke="rgb(240,150,190)" stroke-width="1.2"/>
+  <text x="68" y="645" class="who">신버전이 DB에 쓰거나 결제를 호출하면 <tspan font-weight="700" fill="rgb(240,150,190)">부수효과가 두 번</tspan> 일어납니다 — 주문이 두 건 생기고 결제가 두 번 나갑니다.</text>
+  <text x="54" y="672" class="bad" font-weight="700">읽기 요청이거나, 부수효과가 격리된 환경(별도 DB)일 때만 씁니다.</text>
+</svg>

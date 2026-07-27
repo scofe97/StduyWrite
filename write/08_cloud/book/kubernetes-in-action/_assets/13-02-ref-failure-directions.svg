@@ -1,0 +1,94 @@
+<svg viewBox="0 0 1120 700" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>참조 실패는 apply를 막지 않는다 — Accepted는 위쪽, ResolvedRefs는 아래쪽</title>
+  <desc>HTTPRoute가 위아래 두 방향으로 참조한다는 것과 각 방향이 자기 조건을 갖는다는 것을 그린다. 위쪽으로는 parentRefs로 Gateway를 가리키고 그 결과가 Accepted 조건에 남으며, 실패하면 NoMatchingParent나 NoMatchingListenerHostname이나 NotAllowedByListeners 같은 reason이 찍힌다. 아래쪽으로는 backendRefs로 Service를 가리키고 그 결과가 ResolvedRefs 조건에 남으며, 실패하면 BackendNotFound나 RefNotPermitted나 InvalidKind가 찍힌다. 그래서 backendRefs에 오타를 내면 Accepted는 True인데 ResolvedRefs만 False가 된다. 부모에는 붙었고 보낼 곳이 없는 상태다. 중요한 것은 이름을 틀려도 apply가 성공한다는 점이다. 스키마 검증은 parentRefs 필드가 있는지와 name이 문자열인지만 보고, 그 이름의 Gateway가 실제로 존재하는지는 다른 오브젝트를 조회해야 알 수 있어 스키마가 알지 못한다. 필수값 검사도 모양에 속해서 값의 존재만 보고 대상의 존재는 보지 않는다. 또한 같은 사건이 양쪽에 다르게 기록되는데, Gateway status에서는 attachedRoutes가 0으로 붙은 게 없다고 나오고 Route status에서는 Accepted가 False로 붙을 곳을 못 찾았다고 나온다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 24px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 15px; fill: rgb(168,163,158); }
+      .lyr  { font-size: 12.5px; font-weight: 800; fill: rgb(168,163,158); }
+      .tag  { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .mono { font-size: 11.5px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .monod{ font-size: 11.5px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .who  { font-size: 12.5px; fill: rgb(168,163,158); }
+      .body { font-size: 14px; fill: #e8e4df; }
+      .bad  { font-size: 13px; fill: rgb(240,150,190); }
+      .good { font-size: 13px; fill: rgb(102,187,106); }
+    </style>
+    <marker id="rd-u" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="rd-d" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(91,155,213)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="700" fill="#0d0d0d"/>
+
+  <text x="30" y="40" class="h1">이름을 틀려도 apply는 성공합니다 — 실패는 status에 남습니다</text>
+  <text x="30" y="66" class="sub">HTTPRoute는 위아래 두 방향으로 참조하고, 각 방향이 자기 조건을 가집니다.</text>
+
+  <!-- 위: Gateway -->
+  <rect x="330" y="96" width="460" height="58" rx="9" fill="rgb(212,168,83)"/>
+  <text x="560" y="120" class="tag" text-anchor="middle">Gateway (부모)</text>
+  <text x="560" y="141" class="mono" text-anchor="middle">위쪽 참조 대상</text>
+
+  <line x1="560" y1="212" x2="560" y2="162" stroke="rgb(212,168,83)" stroke-width="2.6" marker-end="url(#rd-u)"/>
+  <text x="576" y="186" class="monod" style="fill:rgb(212,168,83)">parentRefs</text>
+
+  <!-- 가운데: HTTPRoute -->
+  <rect x="330" y="218" width="460" height="66" rx="9" fill="rgb(24,28,32)" stroke="rgb(168,163,158)" stroke-width="1.6"/>
+  <text x="560" y="244" class="body" font-weight="700" text-anchor="middle">HTTPRoute</text>
+  <text x="560" y="268" class="who" text-anchor="middle">양쪽을 잇습니다</text>
+
+  <line x1="560" y1="290" x2="560" y2="340" stroke="rgb(91,155,213)" stroke-width="2.6" marker-end="url(#rd-d)"/>
+  <text x="576" y="316" class="monod" style="fill:rgb(91,155,213)">backendRefs</text>
+
+  <!-- 아래: Service -->
+  <rect x="330" y="346" width="460" height="58" rx="9" fill="rgb(91,155,213)"/>
+  <text x="560" y="370" class="tag" text-anchor="middle">Service (백엔드)</text>
+  <text x="560" y="391" class="mono" text-anchor="middle">아래쪽 참조 대상</text>
+
+  <!-- 좌: Accepted -->
+  <rect x="30" y="150" width="280" height="180" rx="11" fill="rgb(22,22,22)" stroke="rgb(212,168,83)" stroke-width="1.6"/>
+  <text x="50" y="176" class="body" font-weight="700" style="fill:rgb(212,168,83)">Accepted</text>
+  <text x="50" y="198" class="who">위쪽을 봅니다 — 부모에 붙었나</text>
+  <text x="50" y="226" class="lyr">False일 때 reason</text>
+  <text x="50" y="250" class="monod" style="font-size:10.5px">NoMatchingParent</text>
+  <text x="50" y="272" class="monod" style="font-size:10.5px">NoMatchingListenerHostname</text>
+  <text x="50" y="294" class="monod" style="font-size:10.5px">NotAllowedByListeners</text>
+  <text x="50" y="318" class="who">붙을 곳을 못 찾은 상태입니다</text>
+
+  <!-- 우: ResolvedRefs -->
+  <rect x="810" y="170" width="280" height="180" rx="11" fill="rgb(22,22,22)" stroke="rgb(91,155,213)" stroke-width="1.6"/>
+  <text x="830" y="196" class="body" font-weight="700" style="fill:rgb(91,155,213)">ResolvedRefs</text>
+  <text x="830" y="218" class="who">아래쪽을 봅니다 — 보낼 곳이 있나</text>
+  <text x="830" y="246" class="lyr">False일 때 reason</text>
+  <text x="830" y="270" class="monod" style="font-size:10.5px">BackendNotFound</text>
+  <text x="830" y="292" class="monod" style="font-size:10.5px">RefNotPermitted</text>
+  <text x="830" y="314" class="monod" style="font-size:10.5px">InvalidKind</text>
+  <text x="830" y="338" class="who">보낼 곳이 없는 상태입니다</text>
+
+  <!-- 조합 -->
+  <rect x="30" y="424" width="1060" height="52" rx="10" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="54" y="454" class="body"><tspan font-weight="700">backendRefs만 오타</tspan>를 내면 <tspan font-weight="700" fill="rgb(102,187,106)">Accepted: True</tspan> 인데 <tspan font-weight="700" fill="rgb(240,150,190)">ResolvedRefs: False</tspan> 가 됩니다 — 부모에는 붙었고, 보낼 곳이 없습니다.</text>
+
+  <!-- 왜 apply가 통과하나 -->
+  <rect x="30" y="494" width="520" height="120" rx="11" fill="rgb(22,22,22)" stroke="rgb(240,150,190)" stroke-width="1.5"/>
+  <text x="52" y="520" class="body" font-weight="700">왜 오타인데 apply가 성공하나</text>
+  <text x="52" y="544" class="who">스키마가 보는 것: parentRefs가 있는가 · name이 문자열인가</text>
+  <text x="52" y="566" class="who">못 보는 것: 그 이름의 Gateway가 실제로 있는가</text>
+  <rect x="52" y="578" width="476" height="26" rx="5" fill="rgba(240,150,190,0.14)" stroke="rgb(240,150,190)" stroke-width="1.2"/>
+  <text x="66" y="596" class="bad" font-weight="700">필수값 검사도 "모양"입니다 — 값의 존재만 보고 대상의 존재는 안 봅니다</text>
+
+  <!-- 양쪽 기록 -->
+  <rect x="570" y="494" width="520" height="120" rx="11" fill="rgb(22,22,22)" stroke="rgb(120,116,112)" stroke-width="1.4"/>
+  <text x="592" y="520" class="body" font-weight="700">같은 사건이 양쪽에 다르게 기록됩니다</text>
+  <rect x="592" y="532" width="476" height="30" rx="5" fill="rgb(24,28,32)" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="606" y="552" class="monod" style="font-size:10.5px">Gateway  → listeners[].attachedRoutes: 0   "붙은 게 없다"</text>
+  <rect x="592" y="568" width="476" height="30" rx="5" fill="rgb(24,28,32)" stroke="rgb(91,155,213)" stroke-width="1.2"/>
+  <text x="606" y="588" class="monod" style="font-size:10.5px">Route    → parents[].Accepted: False       "붙을 곳을 못 찾았다"</text>
+
+  <!-- 하단 못박기 -->
+  <rect x="30" y="632" width="1060" height="48" rx="11" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="54" y="662" class="who">그래서 한쪽만 보면 전체 그림이 안 잡힙니다. Route status가 "못 찾았다"고 말하고, Gateway status가 "안 붙었다"고 말합니다 — 같은 사건의 두 얼굴입니다.</text>
+</svg>
