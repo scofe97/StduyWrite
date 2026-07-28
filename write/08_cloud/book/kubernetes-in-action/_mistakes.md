@@ -2,10 +2,26 @@
 title: Kubernetes in Action 오답 노트
 tags: [kubernetes, mistakes, review]
 status: in_progress
-updated: 2026-07-27
+updated: 2026-07-28
 ---
 
 # Kubernetes in Action 오답 노트
+
+## 2026-07-28 — 13장 세 편 보강 완료 (문서 작업 기록)
+
+- **무엇**: `_todo-13-01/02/03-보강.md` 13항목을 전부 반영하고 TODO 세 개를 삭제했습니다. 착수 전 게이트로 세 편 모두 미착수임을 확인했습니다(13-01 0/16/244줄 · 13-02 0/34/242줄 · 13-03 0/21/285줄).
+- **커밋**:
+
+| 편 | 커밋 | 줄수 | 신규 SVG |
+|---|---|---|---|
+| 13-01 | `affc5824` | 244 → 333 | `13-01-schema-shape-not-behavior` · `13-01-status-layers-hide-problem` |
+| 13-02 | `76666728` | 242 → 352 | `13-02-ref-failure-directions` · `13-02-filter-kinds-and-mirror-trap` |
+| 13-03 | `c0936bde` | 285 → 384 | `13-03-network-vs-reference-layers` · `13-03-three-failure-modes` |
+
+- **교차 참조 셋을 한 번에 설계**: ① `ResolvedRefs` 3연결(13-01 listener 조건 → 13-02 위/아래 방향 대응 → 13-03 `RefNotPermitted`) ② **"조용히 실패 → status에 드러남"** 축은 13-03 §2의 세 양상 대비표를 허브로 삼고 13-01 `attachedRoutes: 0`·12-02 기본 IngressClass 부재를 그 표에 묶었습니다 ③ 크로스 네임스페이스 정본은 13-03 §3이고 나머지 두 편은 링크만.
+- **미학습 축 대비**: 13-03 §4에 `parentRefs` 재해석("부모 Gateway"가 아니라 **트래픽 진입점**이고 Gateway는 그 한 형태)을 명시하고, 왜 Service가 진입점이 되는지를 11-01과 이었습니다. 13-02 기능(weight·mirror)의 east/west 적용표도 붙였습니다 — 다음 복습 첫 문항의 답이 문서에 있습니다.
+- **내 실수 하나**: 착수 게이트를 돌릴 때 13-01 TODO의 게이트 블록을 읽지 않고 패턴을 임의로 지어내 "9건 잡힘 = 이미 완료"로 오판했습니다. TODO에 적힌 정확한 패턴으로 다시 돌리니 0건이었습니다. **게이트는 TODO에 적힌 것을 그대로 실행해야 합니다** — 지어낸 패턴은 기존 본문의 일반 용어를 잡아 위양성을 냅니다.
+- **검증**: SVG 6장 rsvg 렌더 + 눈 확인(매트릭스 행 겹침·이모지 글리프·값 붙음 등 5건 수정), 편별 §16 grep 전 항목 통과, 벽 단락은 세 편 모두 baseline 유지(신규 4곳 전부 해소), 링크·각주 0 broken.
 
 ## 2026-07-27 — 네트워크 통신과 오브젝트 참조를 한 층으로 봄 (13-03 Phase 1 · 조용히 실패 5·6회차 · ⛔ 게이트 미통과)
 
@@ -31,7 +47,7 @@ updated: 2026-07-27
 - **정답**: (1) `parentRefs`(위=Gateway) / `backendRefs`(아래=Service)입니다. `parent` 라 부르는 것은 Route 가 Gateway 에 **매달리는** 관계라서이고(13-01 `attachedRoutes` 와 같은 비유), 클래스가 아니라 **인스턴스**를 지목하는 이유는 **Gateway 하나 = 프록시 하나**여서 "istio 클래스"라고만 하면 셋 다 해당돼 어느 입구인지 특정할 수 없기 때문입니다. 층이 나뉜 것 — `gatewayClassName`=누가 처리하나(Ingress `ingressClassName` 과 같은 층) / `parentRefs`=어느 입구에 붙나. (2) **`apply` 가 성공합니다.** 스키마 검증은 `name` 이 문자열인지만 보고 **그 이름의 Gateway 가 있는지는 다른 오브젝트 조회가 필요해 모릅니다 — 필수값 검사도 "모양"에 속합니다.** 결과는 Route status 의 `parents[].conditions` 에 `Accepted: False / NoMatchingParent` 로 남고, **`Accepted` 는 위쪽(부모)·`ResolvedRefs` 는 아래쪽(백엔드)** 을 봅니다(두 방향 참조가 각자 조건을 가짐). 같은 사건이 양쪽에 다르게 기록됩니다 — Gateway 는 `attachedRoutes: 0`("붙은 게 없다"), Route 는 `Accepted: False`("붙을 곳을 못 찾았다"). (3) 자력 통과. 파드 개수 방식의 문제는 **① 해상도가 파드 수에 묶임(0.1%면 1000개) ② 비율과 용량이 한 손잡이에 묶임**(용량 증설이 트래픽 비율을 바꿔 버림)이고, weight 는 둘을 분리합니다. (4) `rules`·`matches`·`backendRefs` 모두 **배열**이라 여럿이 정상입니다. **3층 결합** — matches 항목 **안**은 AND, matches **항목끼리는 OR**, rules 끼리는 **명세가 정한 구체성 우선**(path 길이 → method 유무 → header 수 → queryParam 수, 동률이면 생성 시각 → 이름)이고 **YAML 순서는 무관**합니다. `matches` 생략은 기본값이 채워져 catch-all 이 됩니다. (5) **`RequestMirror`** — 나머지 다섯은 요청 하나를 목적지 하나로 다루는데 이것만 **흐름을 복제**해 백엔드 둘이 동시에 처리하고 복사본 응답은 버립니다. `ExtensionRef` 가 결이 다른 건 *설정을 어디 두는가*이고 동작은 여전히 하나의 흐름입니다. `RequestRedirect` 는 게이트웨이가 **직접 응답**해 백엔드로 안 보내니 `backendRefs` 가 불필요합니다.
 - **원인 추정**: (2)가 **"조용히 실패한다" 4회차**입니다 — 12-02 인증서 host 불일치("에러 예상"), 12-02 annotation("ConfigMap"), 13-01 미지원 필드("예외가 터진다")에 이어. 이번에는 근거가 **"필수값이니 검증될 것"** 으로 한 겹 더 구체화됐는데, 여기에 빠진 구분이 **필수값 검사도 "모양"에 속한다**는 것입니다 — 값의 존재만 보고 그 값이 가리키는 대상의 존재는 보지 않습니다. 뿌리는 여전히 명령형 API 감각. (4)는 다른 결 — **배열 중첩 구조를 못 봄**(복수형 이름이 단서인데 단일 값으로 읽음)이고, 12-01에서 `paths` 배열을 다뤘음에도 `rules` 층에서 다시 걸렸습니다. 반면 (3)의 자력 통과는 11-01 canary 서술과 이어진 좋은 인출이고, (5)에서 후보를 둘로 좁힌 것도 이름만으로 성격을 추론한 유효한 시도입니다.
 - **참고 챕터**: 13-02 §1(parentRefs·status)·§2(weight)·§3(matches)·§4(필터). 보강 TODO 는 `_todo-13-02-보강.md`(4항목 + 🚩 사실 확인 1건). "**필수값 검사도 모양만 본다 → 참조 오타는 apply 를 통과하고 status 에 남는다(Accepted=위/ResolvedRefs=아래) / matches 안 AND · 항목끼리 OR · rules 는 구체성 우선 / RequestMirror 만 흐름을 복제**" 한 줄.
-- **🚩 문서 사실 확인 대기**: 13-02 221행이 rules 를 "**순차 평가**"라고 서술하는데, 명세는 구체성 기반 우선순위(YAML 순서 무관)로 알고 있습니다. 12-01 §4에서 이미 "선언 순서"로 오답한 축이라 이 서술이 오해를 **재생산**할 수 있습니다. 공식 문서 확인 → 보고 → 승인 후 수정 예정(TODO 🚩 섹션).
+- **🚩 문서 사실 확인 완료 (2026-07-28)**: 13-02 221행의 "순차 평가"가 부정확함을 공식 타입 정의([httproute_types.go](https://github.com/kubernetes-sigs/gateway-api/blob/main/apis/v1/httproute_types.go))로 확인하고 승인 후 수정했습니다. 명세는 **구체성 우선**(Exact → 긴 PathPrefix → method → header·queryParam 수)이고, Route 간 동률이면 생성시각·이름, **그래도 동률일 때만 리스트 순서**입니다. 즉 선언 순서는 무관한 게 아니라 **맨 마지막 순위**입니다 — TODO에 적힌 "YAML 순서 무관"도 과한 서술이었습니다. 판정 범위가 한 Route 안이 아니라 그 Gateway에 붙은 **모든 Route를 통틀어**("Across all rules specified on applicable Routes")라는 점도 새로 확인했습니다.
 - **재방문 트리거**: 다음 복습에서 (1) **"참조에 오타를 내면 apply 가 성공하나"에 예·아니오와 이유로 답하기** — 4회차 축이므로 최우선, (2) `Accepted` 와 `ResolvedRefs` 가 각각 **어느 방향**을 보는지, (3) 1% 카나리를 파드 개수로 하면 파드가 몇 개 필요한지와 weight 가 분리해 주는 두 가지, (4) matches 안·matches 항목끼리·rules 끼리의 **결합 방식 셋**을 각각 답하기, (5) 필터 여섯 중 흐름을 복제하는 것과 백엔드가 필요 없는 것을 고르고 이유 대기, (6) **미러링 시 부수효과가 두 번 일어나는 문제**(문서에 없던 내용).
 
 ## 2026-07-27 — ★ "조용히 실패한다"를 세 편에 걸쳐 놓침 (13-01 Phase 1 · 공통 축)
