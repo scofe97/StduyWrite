@@ -1,54 +1,102 @@
-<svg viewBox="0 0 960 340" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>Ingress·IngressClass·컨트롤러의 관계</title>
-  <desc>각 Ingress는 이름으로 IngressClass를 지정하고, IngressClass는 어느 컨트롤러가 처리할지 지정한다. 여러 Ingress가 같은 IngressClass를, 여러 IngressClass가 같은 컨트롤러를 서로 다른 파라미터로 쓸 수 있다.</desc>
+<svg viewBox="0 0 1120 596" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Ingress → IngressClass → 컨트롤러 — 이름으로 이어지고, 일감이 갈립니다</title>
+  <desc>Ingress 가 IngressClass 를 거쳐 컨트롤러로 이어지는 사슬을 실제 필드 이름과 함께 보여 준다. 왼쪽 열에는 Ingress 세 개가 있고 각각 spec.ingressClassName 에 nginx, nginx, alb-public 을 적었다. 가운데 열의 IngressClass 는 metadata.name 으로 그 이름을 받고 spec.controller 로 어느 컨트롤러가 처리할지 지정한다. nginx 클래스는 k8s.io/ingress-nginx 를, alb-public 과 alb-internal 두 클래스는 모두 ingress.k8s.aws/alb 를 가리키되 parameters 로 서로 다른 설정을 참조한다. 오른쪽 열에는 컨트롤러 두 개가 서 있고 각자 자기 몫의 Ingress 만 처리한다. 화살표를 따라가면 사내 관리자 페이지는 Nginx 컨트롤러가, 외부 공개 API 는 AWS 컨트롤러가 맡는 식으로 트래픽이 아니라 일감이 나뉜다는 것이 드러난다. 한 Ingress 에서 나가는 화살표는 언제나 하나뿐이어서 그 Ingress 를 처리하는 컨트롤러도 항상 하나다. 아래쪽에는 ingressClassName 을 생략했을 때의 분기를 세 칸으로 나눠 둔다. 기본 클래스가 하나 있으면 초록 칸으로 그 클래스가 적용되고, 기본 클래스가 없으면 분홍 칸으로 아무도 집어가지 않아 ADDRESS 가 영원히 비며, 기본 클래스가 둘 이상이면 역시 분홍 칸으로 여럿이 같은 Ingress 를 각자 처리해 프록시와 로드밸런서가 중복 생성된다.</desc>
   <defs>
     <style>
-      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
-      .sub   { font-size: 11px; fill: rgb(138,133,128); }
-      .ing   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
-      .cls   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
-      .ctl   { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
-      .note  { font-size: 10.5px; fill: #e8e4df; }
+      .h1   { font-size: 22px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 13.5px; fill: rgb(168,163,158); }
+      .colh { font-size: 12px; font-weight: 800; fill: rgb(168,163,158); }
+      .box  { font-size: 13px; font-weight: 700; fill: #e8e4df; }
+      .fld  { font-size: 11px; font-weight: 700; fill: rgb(168,163,158); font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .val  { font-size: 11.5px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .who  { font-size: 12px; fill: rgb(168,163,158); }
+      .note { font-size: 12px; font-weight: 700; fill: rgb(212,168,83); }
+      .bad  { font-size: 12px; font-weight: 700; fill: rgb(240,150,190); }
+      .ok   { font-size: 12px; font-weight: 700; fill: rgb(102,187,106); }
+      .mono { font-size: 11.5px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
     </style>
-    <marker id="ic-a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+    <marker id="icB" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="rgb(91,155,213)"/></marker>
+    <marker id="icO" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="icP" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="rgb(240,150,190)"/></marker>
   </defs>
 
-  <rect x="0" y="0" width="960" height="340" fill="#0d0d0d"/>
-  <text x="24" y="30" class="title">Ingress → IngressClass → 컨트롤러</text>
-  <text x="24" y="50" class="sub">Ingress는 이름으로 클래스를 지정하고, 클래스는 어느 컨트롤러가 처리할지 지정합니다</text>
+  <rect x="0" y="0" width="1120" height="596" fill="#0d0d0d"/>
 
-  <!-- ===== Nginx row ===== -->
-  <rect x="40" y="90" width="130" height="42" rx="6" fill="rgb(91,155,213)"/>
-  <text x="105" y="116" class="ing" text-anchor="middle">Ingress</text>
-  <rect x="40" y="145" width="130" height="42" rx="6" fill="rgb(91,155,213)"/>
-  <text x="105" y="171" class="ing" text-anchor="middle">Ingress</text>
-  <rect x="250" y="118" width="160" height="46" rx="6" fill="rgb(91,155,213)"/>
-  <text x="330" y="146" class="cls" text-anchor="middle">nginx IngressClass</text>
-  <rect x="490" y="118" width="180" height="46" rx="6" fill="rgb(91,155,213)"/>
-  <text x="580" y="146" class="ctl" text-anchor="middle">Nginx 컨트롤러</text>
-  <line x1="170" y1="111" x2="248" y2="138" stroke="rgb(138,133,128)" stroke-width="1.4" marker-end="url(#ic-a)"/>
-  <line x1="170" y1="166" x2="248" y2="145" stroke="rgb(138,133,128)" stroke-width="1.4" marker-end="url(#ic-a)"/>
-  <line x1="410" y1="141" x2="488" y2="141" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#ic-a)"/>
-  <text x="105" y="82" class="note" text-anchor="middle">클래스를 이름으로 지정</text>
+  <text x="30" y="38" class="h1">이름으로 이어지고, 일감이 갈립니다</text>
+  <text x="30" y="62" class="sub">Ingress 가 클래스 이름을 적으면 그 클래스가 지목한 컨트롤러 하나가 그 Ingress 를 집어갑니다.</text>
 
-  <!-- ===== Ambassador row ===== -->
-  <rect x="40" y="230" width="130" height="42" rx="6" fill="rgb(230,150,90)"/>
-  <text x="105" y="256" class="ing" text-anchor="middle">Ingress</text>
-  <rect x="40" y="285" width="130" height="42" rx="6" fill="rgb(230,180,140)"/>
-  <text x="105" y="311" class="ing" text-anchor="middle">Ingress</text>
-  <rect x="250" y="228" width="180" height="42" rx="6" fill="rgb(230,150,90)"/>
-  <text x="340" y="254" class="cls" text-anchor="middle">ambassador class</text>
-  <rect x="250" y="285" width="180" height="42" rx="6" fill="rgb(230,180,140)"/>
-  <text x="340" y="311" class="cls" text-anchor="middle">my-custom class</text>
-  <rect x="490" y="256" width="180" height="46" rx="6" fill="rgb(230,150,90)"/>
-  <text x="580" y="284" class="ctl" text-anchor="middle">Ambassador 컨트롤러</text>
-  <line x1="170" y1="251" x2="248" y2="249" stroke="rgb(138,133,128)" stroke-width="1.4" marker-end="url(#ic-a)"/>
-  <line x1="170" y1="306" x2="248" y2="306" stroke="rgb(138,133,128)" stroke-width="1.4" marker-end="url(#ic-a)"/>
-  <line x1="430" y1="249" x2="488" y2="272" stroke="rgb(138,133,128)" stroke-width="1.4" marker-end="url(#ic-a)"/>
-  <line x1="430" y1="306" x2="488" y2="288" stroke="rgb(138,133,128)" stroke-width="1.4" marker-end="url(#ic-a)"/>
+  <!-- 열 머리 -->
+  <text x="46" y="96" class="colh">Ingress — 무엇을 노출할지</text>
+  <text x="410" y="96" class="colh">IngressClass — 누가 처리할지</text>
+  <text x="810" y="96" class="colh">컨트롤러 — 실제로 일하는 쪽</text>
 
-  <text x="740" y="200" class="note" text-anchor="middle">여러 IngressClass가 같은 컨트롤러를</text>
-  <text x="740" y="216" class="note" text-anchor="middle">서로 다른 파라미터로 쓸 수 있습니다</text>
-  <text x="740" y="90" class="note" text-anchor="middle">컨트롤러를 여럿 설치할 수 있고,</text>
-  <text x="740" y="106" class="note" text-anchor="middle">IngressClass가 어느 것이 처리할지 정합니다</text>
+  <!-- ══ Ingress 3개 ══ -->
+  <rect x="30" y="110" width="300" height="56" rx="8" fill="rgb(22,22,22)" stroke="rgb(91,155,213)" stroke-width="1.5"/>
+  <text x="46" y="132" class="box">사내 관리자 페이지</text>
+  <text x="46" y="152" class="fld">ingressClassName: <tspan class="val" fill="rgb(91,155,213)">nginx</tspan></text>
+
+  <rect x="30" y="178" width="300" height="56" rx="8" fill="rgb(22,22,22)" stroke="rgb(91,155,213)" stroke-width="1.5"/>
+  <text x="46" y="200" class="box">사내 대시보드</text>
+  <text x="46" y="220" class="fld">ingressClassName: <tspan class="val" fill="rgb(91,155,213)">nginx</tspan></text>
+
+  <rect x="30" y="246" width="300" height="56" rx="8" fill="rgb(22,22,22)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="46" y="268" class="box">외부 공개 API</text>
+  <text x="46" y="288" class="fld">ingressClassName: <tspan class="val" fill="rgb(212,168,83)">alb-public</tspan></text>
+
+  <!-- ══ IngressClass 3개 ══ -->
+  <rect x="410" y="144" width="330" height="60" rx="8" fill="rgb(22,22,22)" stroke="rgb(91,155,213)" stroke-width="1.5"/>
+  <text x="426" y="166" class="fld">name: <tspan class="val" fill="rgb(91,155,213)">nginx</tspan></text>
+  <text x="426" y="188" class="fld">controller: k8s.io/ingress-nginx</text>
+
+  <rect x="410" y="240" width="330" height="60" rx="8" fill="rgb(22,22,22)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="426" y="262" class="fld">name: <tspan class="val" fill="rgb(212,168,83)">alb-public</tspan></text>
+  <text x="426" y="284" class="fld">controller: ingress.k8s.aws/alb</text>
+
+  <rect x="410" y="312" width="330" height="60" rx="8" fill="rgb(22,22,22)" stroke="rgb(212,168,83)" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="426" y="334" class="fld">name: <tspan class="val" fill="rgb(212,168,83)">alb-internal</tspan></text>
+  <text x="426" y="356" class="fld">controller: ingress.k8s.aws/alb</text>
+
+  <text x="410" y="394" class="note">같은 컨트롤러, 다른 클래스 — parameters 로 갈립니다</text>
+
+  <!-- ══ 컨트롤러 2개 ══ -->
+  <rect x="810" y="144" width="280" height="60" rx="8" fill="rgb(91,155,213)"/>
+  <text x="950" y="170" class="mono" text-anchor="middle" style="font-size:12.5px">Nginx 컨트롤러</text>
+  <text x="950" y="190" class="mono" text-anchor="middle" style="font-size:11px">Ingress 2개를 맡습니다</text>
+
+  <rect x="810" y="272" width="280" height="60" rx="8" fill="rgb(212,168,83)"/>
+  <text x="950" y="298" class="mono" text-anchor="middle" style="font-size:12.5px">AWS LB 컨트롤러</text>
+  <text x="950" y="318" class="mono" text-anchor="middle" style="font-size:11px">Ingress 1개를 맡습니다</text>
+
+  <!-- 화살표: Ingress → Class -->
+  <line x1="334" y1="138" x2="404" y2="164" stroke="rgb(91,155,213)" stroke-width="1.8" marker-end="url(#icB)"/>
+  <line x1="334" y1="206" x2="404" y2="184" stroke="rgb(91,155,213)" stroke-width="1.8" marker-end="url(#icB)"/>
+  <line x1="334" y1="274" x2="404" y2="270" stroke="rgb(212,168,83)" stroke-width="1.8" marker-end="url(#icO)"/>
+
+  <!-- 화살표: Class → 컨트롤러 -->
+  <line x1="744" y1="174" x2="804" y2="174" stroke="rgb(91,155,213)" stroke-width="1.8" marker-end="url(#icB)"/>
+  <line x1="744" y1="270" x2="804" y2="295" stroke="rgb(212,168,83)" stroke-width="1.8" marker-end="url(#icO)"/>
+  <line x1="744" y1="342" x2="804" y2="318" stroke="rgb(212,168,83)" stroke-width="1.8" stroke-dasharray="5 3" marker-end="url(#icO)"/>
+
+  <!-- 못박기 -->
+  <rect x="30" y="416" width="1060" height="30" rx="6" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="46" y="436" class="who">한 Ingress 에서 나가는 화살표는 <tspan font-weight="800" fill="#e8e4df">언제나 하나</tspan> 입니다 — 나뉘는 것은 트래픽이 아니라 <tspan font-weight="800" fill="#e8e4df">일감</tspan> 입니다.</text>
+
+  <!-- ══ 생략했을 때 ══ -->
+  <text x="30" y="480" class="colh">ingressClassName 을 생략하면</text>
+
+  <rect x="30" y="494" width="340" height="76" rx="8" fill="rgb(22,22,22)" stroke="rgb(102,187,106)" stroke-width="1.4"/>
+  <text x="46" y="516" class="ok">기본 클래스가 하나 있음</text>
+  <text x="46" y="538" class="who">is-default-class: "true" 가 붙은</text>
+  <text x="46" y="556" class="who">그 클래스가 적용됩니다</text>
+
+  <rect x="390" y="494" width="340" height="76" rx="8" fill="rgb(28,24,26)" stroke="rgb(240,150,190)" stroke-width="1.4"/>
+  <text x="406" y="516" class="bad">기본 클래스가 없음</text>
+  <text x="406" y="538" class="who">아무도 집어가지 않습니다</text>
+  <text x="406" y="556" class="who">ADDRESS 가 영원히 비어 있습니다</text>
+
+  <rect x="750" y="494" width="340" height="76" rx="8" fill="rgb(28,24,26)" stroke="rgb(240,150,190)" stroke-width="1.4"/>
+  <text x="766" y="516" class="bad">기본 클래스가 둘 이상</text>
+  <text x="766" y="538" class="who">여럿이 같은 Ingress 를 각자 처리해</text>
+  <text x="766" y="556" class="who">프록시·LB 가 중복 생성됩니다</text>
+
 </svg>
