@@ -1,89 +1,100 @@
-<svg viewBox="0 0 1120 620" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>인증서와 host가 어긋났을 때 — 배포는 초록불인데 사용자만 막힙니다</title>
-  <desc>인증서에 담긴 이름과 Ingress의 tls.hosts가 어긋난 경우 어디서 걸리는지를 단계로 보여 준다. kubectl apply는 성공하고, kubectl get ingress도 정상으로 표시되며, 컨트롤러 로그에도 에러가 없고, 프록시 설정 반영까지 문제없이 지나간다. 쿠버네티스가 인증서 내용과 host 규칙이 맞는지 검증하지 않기 때문이다. 실패는 마지막 단계에서 클라이언트가 접속할 때 처음 드러나며, 브라우저가 ERR_CERT_COMMON_NAME_INVALID로 연결을 끊는다. 검증 주체가 서버가 아니라 클라이언트라는 것이 요점이다. 서버는 잘못된 인증서라도 그냥 내밀고, 브라우저가 인증서의 CN과 SAN을 접속한 도메인과 비교해 판단한다. 그래서 배포 파이프라인은 전부 초록불인데 사용자만 막히는 상황이 된다. 또한 와일드카드 인증서에도 경로와 호스트에 적용되던 요소 단위 규칙이 그대로 적용되어, 별표 점 example.com 인증서는 api.example.com은 덮지만 foo.api.example.com은 덮지 못한다.</desc>
+<svg viewBox="0 0 1120 540" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>인증서와 host가 어긋났을 때 — 클러스터 안에는 대조하는 주체가 없습니다</title>
+  <desc>인증서에 담긴 이름과 Ingress의 tls.hosts가 어긋난 요청이 어느 컴포넌트를 지나는지 따라간다. 위쪽 줄은 클러스터 안의 경로로, 내 노트북의 kubectl 이 API 서버로 apply 하고 컨트롤러가 프록시 설정을 만들어 프록시 파드에 인증서를 실어 보내기까지 네 컴포넌트가 이어지며 네 단계 모두 초록으로 통과 표시가 붙는다. API 서버는 저장만 하고 검증하지 않으며 컨트롤러도 에러를 내지 않고 프록시도 받은 인증서를 그대로 내밀기 때문이다. 클러스터 경계 아래에는 브라우저가 따로 서 있고 HTTPS 로 프록시에 접속하는 순간 처음으로 분홍색 거부가 나타나며 ERR_CERT_COMMON_NAME_INVALID 가 뜬다. 두 줄을 가르는 것은 검증 주체의 위치이며, 대조하는 쪽이 클러스터 밖 브라우저에 있어서 안쪽 어디에서도 걸리지 않는다. 오른쪽 아래에는 와일드카드 인증서의 요소 단위 규칙을 따로 두어, 별표 점 example.com 이 api.example.com 은 덮지만 foo.api.example.com 은 덮지 못함을 초록과 분홍으로 대비한다.</desc>
   <defs>
     <style>
-      .h1   { font-size: 24px; font-weight: 800; fill: #e8e4df; }
-      .sub  { font-size: 15px; fill: rgb(168,163,158); }
+      .h1   { font-size: 23px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 14px; fill: rgb(168,163,158); }
       .lyr  { font-size: 12.5px; font-weight: 800; fill: rgb(168,163,158); }
-      .tag  { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
-      .mono { font-size: 11.5px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
-      .monod{ font-size: 12px; font-weight: 700; fill: rgb(240,150,190); font-family: 'JetBrains Mono', ui-monospace, monospace; }
-      .who  { font-size: 12.5px; fill: rgb(168,163,158); }
-      .body { font-size: 14px; fill: #e8e4df; }
-      .bad  { font-size: 13px; fill: rgb(240,150,190); }
-      .good { font-size: 13px; fill: rgb(102,187,106); }
-      .step { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
+      .comp { font-size: 14.5px; font-weight: 700; fill: #e8e4df; }
+      .note { font-size: 12px; fill: rgb(168,163,158); }
+      .okl  { font-size: 13px; font-weight: 700; fill: rgb(102,187,106); }
+      .badl { font-size: 13px; font-weight: 700; fill: rgb(240,150,190); }
+      .mono { font-size: 12px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .monod{ font-size: 12.5px; font-weight: 800; fill: rgb(240,150,190); font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .step { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
     </style>
-    <marker id="mz-g" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <marker id="cmOk" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
       <path d="M0,0 L8,3 L0,6 Z" fill="rgb(102,187,106)"/>
     </marker>
-    <marker id="mz-p" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+    <marker id="cmBad" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
       <path d="M0,0 L8,3 L0,6 Z" fill="rgb(240,150,190)"/>
     </marker>
   </defs>
 
-  <rect x="0" y="0" width="1120" height="620" fill="#0d0d0d"/>
+  <rect x="0" y="0" width="1120" height="540" fill="#0d0d0d"/>
 
   <text x="30" y="40" class="h1">조용히 지나가고, 접속할 때 터집니다</text>
-  <text x="30" y="66" class="sub">인증서에 담긴 이름과 tls.hosts가 어긋난 경우, 어디서 걸리는지 따라가 봅니다.</text>
+  <text x="30" y="64" class="monod">인증서 CN/SAN = *.example.com  ·  tls.hosts = kiada.other.com  ← 서로 다릅니다</text>
 
-  <!-- 어긋난 상태 -->
-  <rect x="30" y="90" width="1060" height="58" rx="10" fill="rgb(20,20,20)" stroke="rgb(240,150,190)" stroke-width="1.5"/>
-  <text x="52" y="114" class="lyr">어긋난 상태</text>
-  <text x="52" y="136" class="monod">인증서 CN/SAN = *.example.com     ·     tls.hosts = kiada.other.com   ← 서로 다릅니다</text>
+  <!-- ══ 클러스터 안 ══ -->
+  <rect x="30" y="86" width="1060" height="180" rx="10" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)" stroke-dasharray="6 4"/>
+  <text x="52" y="112" class="lyr">클러스터 안 — 아무도 인증서와 host 를 대조하지 않습니다</text>
 
-  <!-- 파이프라인 4단계 -->
-  <rect x="30" y="172" width="248" height="96" rx="9" fill="rgb(102,187,106)"/>
-  <text x="154" y="200" class="step" text-anchor="middle">1. kubectl apply</text>
-  <text x="154" y="224" class="mono" text-anchor="middle">성공</text>
-  <text x="154" y="248" class="mono" text-anchor="middle">검증하지 않습니다</text>
+  <rect x="52" y="128" width="216" height="60" rx="8" fill="rgb(22,22,22)" stroke="rgb(102,187,106)" stroke-width="1.5"/>
+  <text x="160" y="152" class="comp" text-anchor="middle">내 노트북</text>
+  <text x="160" y="174" class="note" text-anchor="middle">kubectl</text>
 
-  <line x1="284" y1="220" x2="308" y2="220" stroke="rgb(102,187,106)" stroke-width="2.4" marker-end="url(#mz-g)"/>
+  <rect x="316" y="128" width="216" height="60" rx="8" fill="rgb(22,22,22)" stroke="rgb(102,187,106)" stroke-width="1.5"/>
+  <text x="424" y="152" class="comp" text-anchor="middle">API 서버</text>
+  <text x="424" y="174" class="note" text-anchor="middle">저장만 합니다</text>
 
-  <rect x="316" y="172" width="248" height="96" rx="9" fill="rgb(102,187,106)"/>
-  <text x="440" y="200" class="step" text-anchor="middle">2. kubectl get ingress</text>
-  <text x="440" y="224" class="mono" text-anchor="middle">정상 표시</text>
-  <text x="440" y="248" class="mono" text-anchor="middle">로그에도 에러 없음</text>
+  <rect x="580" y="128" width="216" height="60" rx="8" fill="rgb(22,22,22)" stroke="rgb(102,187,106)" stroke-width="1.5"/>
+  <text x="688" y="152" class="comp" text-anchor="middle">컨트롤러</text>
+  <text x="688" y="174" class="note" text-anchor="middle">설정을 만듭니다</text>
 
-  <line x1="570" y1="220" x2="594" y2="220" stroke="rgb(102,187,106)" stroke-width="2.4" marker-end="url(#mz-g)"/>
+  <rect x="844" y="128" width="216" height="60" rx="8" fill="rgb(22,22,22)" stroke="rgb(102,187,106)" stroke-width="1.5"/>
+  <text x="952" y="152" class="comp" text-anchor="middle">프록시 파드</text>
+  <text x="952" y="174" class="note" text-anchor="middle">인증서가 실립니다</text>
 
-  <rect x="602" y="172" width="248" height="96" rx="9" fill="rgb(102,187,106)"/>
-  <text x="726" y="200" class="step" text-anchor="middle">3. 프록시 설정 반영</text>
-  <text x="726" y="224" class="mono" text-anchor="middle">정상</text>
-  <text x="726" y="248" class="mono" text-anchor="middle">인증서가 실려 나갑니다</text>
+  <line x1="274" y1="158" x2="308" y2="158" stroke="rgb(102,187,106)" stroke-width="2.4" marker-end="url(#cmOk)"/>
+  <line x1="538" y1="158" x2="572" y2="158" stroke="rgb(102,187,106)" stroke-width="2.4" marker-end="url(#cmOk)"/>
+  <line x1="802" y1="158" x2="836" y2="158" stroke="rgb(102,187,106)" stroke-width="2.4" marker-end="url(#cmOk)"/>
 
-  <line x1="856" y1="220" x2="880" y2="220" stroke="rgb(240,150,190)" stroke-width="2.4" marker-end="url(#mz-p)"/>
+  <rect x="52" y="200" width="216" height="24" rx="5" fill="rgb(102,187,106)"/>
+  <text x="160" y="217" class="step" text-anchor="middle">① apply — 성공</text>
+  <rect x="316" y="200" width="216" height="24" rx="5" fill="rgb(102,187,106)"/>
+  <text x="424" y="217" class="step" text-anchor="middle">② get ingress — 정상 표시</text>
+  <rect x="580" y="200" width="216" height="24" rx="5" fill="rgb(102,187,106)"/>
+  <text x="688" y="217" class="step" text-anchor="middle">③ 로그 — 에러 없음</text>
+  <rect x="844" y="200" width="216" height="24" rx="5" fill="rgb(102,187,106)"/>
+  <text x="952" y="217" class="step" text-anchor="middle">④ 설정 반영 — 정상</text>
 
-  <rect x="888" y="172" width="202" height="96" rx="9" fill="rgb(240,150,190)"/>
-  <text x="989" y="200" class="step" text-anchor="middle">4. 클라이언트 접속</text>
-  <text x="989" y="226" class="mono" text-anchor="middle">여기서 처음</text>
-  <text x="989" y="248" class="mono" text-anchor="middle">터집니다</text>
+  <text x="52" y="250" class="okl">배포 파이프라인은 전부 초록불입니다</text>
 
-  <!-- 초록/빨강 경계 -->
-  <text x="30" y="294" class="good" font-weight="700">← 배포 파이프라인은 전부 초록불</text>
-  <text x="1090" y="294" class="bad" font-weight="700" text-anchor="end">사용자만 막힙니다 →</text>
+  <!-- ══ 경계 ══ -->
+  <line x1="30" y1="288" x2="1090" y2="288" stroke="rgb(91,155,213)" stroke-width="1.5" stroke-dasharray="8 5"/>
+  <text x="1090" y="282" class="lyr" text-anchor="end">클러스터 경계</text>
 
-  <rect x="888" y="306" width="202" height="44" rx="8" fill="rgb(28,24,26)" stroke="rgb(240,150,190)" stroke-width="1.4"/>
-  <text x="989" y="333" class="monod" text-anchor="middle" style="font-size:10.5px">ERR_CERT_COMMON_NAME_INVALID</text>
+  <!-- ══ 클러스터 밖 ══ -->
+  <text x="52" y="322" class="lyr">클러스터 밖 — 대조하는 주체는 여기 있습니다</text>
 
-  <!-- 왜 이렇게 되나 -->
-  <rect x="30" y="372" width="520" height="140" rx="11" fill="rgb(22,22,22)" stroke="rgb(212,168,83)" stroke-width="1.6"/>
-  <text x="52" y="400" class="body" font-weight="700">검증하는 쪽이 서버가 아니라 클라이언트입니다</text>
-  <text x="52" y="426" class="who">쿠버네티스는 인증서 내용과 host 규칙이 맞는지 보지 않습니다.</text>
-  <text x="52" y="448" class="who">서버는 잘못된 인증서라도 그냥 내밉니다.</text>
-  <text x="52" y="470" class="who">브라우저가 인증서의 CN·SAN을 접속한 도메인과 비교해</text>
-  <text x="52" y="492" class="who">스스로 끊는 것입니다.</text>
+  <rect x="52" y="336" width="216" height="60" rx="8" fill="rgb(28,24,26)" stroke="rgb(240,150,190)" stroke-width="1.5"/>
+  <text x="160" y="360" class="comp" text-anchor="middle">브라우저</text>
+  <text x="160" y="382" class="note" text-anchor="middle">CN·SAN 을 대조합니다</text>
 
-  <rect x="570" y="372" width="520" height="140" rx="11" fill="rgb(22,22,22)" stroke="rgb(91,155,213)" stroke-width="1.6"/>
-  <text x="592" y="400" class="body" font-weight="700">와일드카드에도 같은 요소 단위 규칙이 적용됩니다</text>
-  <text x="592" y="426" class="who">인증서 <tspan font-weight="700" fill="#e8e4df">*.example.com</tspan> 이 덮는 범위</text>
-  <text x="592" y="450" class="good">✓ api.example.com — 한 요소를 덮습니다</text>
-  <text x="592" y="472" class="bad">✗ foo.api.example.com — 두 요소는 못 덮습니다</text>
-  <text x="592" y="496" class="who">12-01에서 본 경로·호스트 매칭과 같은 원리입니다.</text>
+  <line x1="274" y1="366" x2="836" y2="366" stroke="rgb(240,150,190)" stroke-width="2.4" marker-end="url(#cmBad)"/>
+  <text x="555" y="356" class="badl" text-anchor="middle">⑤ HTTPS 접속</text>
 
-  <!-- 하단 못박기 -->
-  <rect x="30" y="530" width="1060" height="64" rx="12" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
-  <text x="54" y="558" class="body" font-weight="700">한 원리가 세 곳에 공통으로 적용됩니다 — DNS 매칭 · Ingress host 매칭 · 인증서 SAN 검증.</text>
-  <text x="54" y="580" class="who">셋을 따로 외울 필요가 없습니다. 이름을 점으로 쪼개 요소 단위로 맞춰 보는 규칙 하나면 세 곳이 전부 설명됩니다.</text>
+  <rect x="844" y="336" width="216" height="60" rx="8" fill="rgb(28,24,26)" stroke="rgb(240,150,190)" stroke-width="1.5"/>
+  <text x="952" y="360" class="comp" text-anchor="middle">프록시 파드</text>
+  <text x="952" y="382" class="note" text-anchor="middle">그냥 내밉니다</text>
+
+  <rect x="52" y="416" width="470" height="28" rx="6" fill="rgb(240,150,190)"/>
+  <text x="66" y="436" class="mono">ERR_CERT_COMMON_NAME_INVALID</text>
+  <text x="330" y="436" class="step">← 여기서 처음 터집니다</text>
+
+  <text x="52" y="472" class="badl">사용자만 막힙니다</text>
+
+  <!-- ══ 요소 단위 규칙 ══ -->
+  <rect x="580" y="416" width="480" height="100" rx="9" fill="rgb(20,20,20)" stroke="rgb(91,155,213)" stroke-width="1.5"/>
+  <text x="600" y="440" class="lyr">인증서 *.example.com 이 덮는 범위</text>
+
+  <rect x="600" y="452" width="440" height="26" rx="5" fill="rgb(102,187,106)"/>
+  <text x="612" y="471" class="mono">✓ api.example.com</text>
+  <text x="866" y="471" class="step">한 요소를 덮습니다</text>
+
+  <rect x="600" y="484" width="440" height="26" rx="5" fill="rgb(240,150,190)"/>
+  <text x="612" y="503" class="mono">✗ foo.api.example.com</text>
+  <text x="858" y="503" class="step">두 요소는 못 덮습니다</text>
 </svg>
