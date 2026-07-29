@@ -1,0 +1,82 @@
+<svg viewBox="0 0 1120 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>SNI 가 따로 있는 이유 — 인증서를 고르려면 목적지를 알아야 하는데, 그 정보가 암호 뒤에 있습니다</title>
+  <desc>SNI 필드가 왜 따로 만들어졌는지를 순환 구조로 보여 준다. 위쪽은 막히는 순서다. 클라이언트가 접속하면 서버는 암호화를 시작하기 위해 인증서를 먼저 내밀어야 하는데, 한 IP 에 도메인이 여럿이면 어느 도메인의 인증서를 내밀지부터 정해야 한다. 그 답이 적힌 Host 헤더는 암호화된 본문 안에 있어 이 시점에는 읽을 수 없다. 읽으려면 암호화가 끝나 있어야 하고 암호화를 시작하려면 인증서를 골라야 하므로 서로가 서로를 기다리는 순환이 생긴다. 화살표가 되돌아오는 모양이 그 순환이다. 아래쪽은 해법이다. 핸드셰이크의 맨 앞, 아직 아무것도 암호화되지 않은 자리에 목적지 이름을 평문으로 실어 보내는 필드를 따로 두었고 그것이 SNI 다. 그래서 서버는 암호화를 시작하기 전에 어느 인증서를 내밀지 알 수 있고 순환이 풀린다. 오른쪽에는 12-01 의 봉투 비유를 붙였다. SNI 는 봉투 겉면의 수취인 이름이라 봉투를 열지 않아도 읽히는 유일한 정보이고, 그래서 passthrough 에서도 호스트만은 가를 수 있다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 22px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 13.5px; fill: rgb(168,163,158); }
+      .lyr  { font-size: 12px; font-weight: 800; fill: rgb(168,163,158); }
+      .box  { font-size: 13px; fill: #e8e4df; }
+      .step { font-size: 11.5px; font-weight: 800; fill: rgb(212,168,83); }
+      .who  { font-size: 12px; fill: rgb(168,163,158); }
+      .bad  { font-size: 12.5px; font-weight: 700; fill: rgb(240,150,190); }
+      .ok   { font-size: 12.5px; font-weight: 700; fill: rgb(102,187,106); }
+      .mono { font-size: 11.5px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    </style>
+    <marker id="snA" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="snP" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="rgb(240,150,190)"/></marker>
+    <marker id="snG" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="rgb(102,187,106)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="470" fill="#0d0d0d"/>
+
+  <text x="30" y="38" class="h1">서로가 서로를 기다립니다 — 그래서 평문 필드를 따로 두었습니다</text>
+  <text x="30" y="62" class="sub">인증서를 고르려면 목적지를 알아야 하는데, 목적지가 적힌 곳이 하필 암호 뒤입니다.</text>
+
+  <!-- ══ 막히는 순서 ══ -->
+  <rect x="30" y="86" width="1060" height="176" rx="10" fill="rgb(22,22,22)" stroke="rgb(240,150,190)" stroke-width="1.6"/>
+  <text x="52" y="112" class="bad">SNI 가 없다면 — 순환에 걸립니다</text>
+
+  <rect x="52" y="128" width="220" height="52" rx="8" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="66" y="148" class="step">①</text>
+  <text x="88" y="148" class="box">클라이언트 접속</text>
+  <text x="66" y="168" class="who">TLS 를 시작합니다</text>
+
+  <line x1="278" y1="154" x2="318" y2="154" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#snA)"/>
+
+  <rect x="324" y="128" width="250" height="52" rx="8" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="338" y="148" class="step">②</text>
+  <text x="360" y="148" class="box">서버가 인증서를 내밉니다</text>
+  <text x="338" y="168" class="who">암호화를 시작하려면 먼저</text>
+
+  <line x1="580" y1="154" x2="620" y2="154" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#snA)"/>
+
+  <rect x="626" y="128" width="330" height="52" rx="8" fill="rgb(28,24,26)" stroke="rgb(240,150,190)" stroke-width="1.5"/>
+  <text x="640" y="148" class="step">③</text>
+  <text x="662" y="148" class="box">그런데 어느 도메인?</text>
+  <text x="640" y="168" class="who">한 IP 에 도메인이 여럿입니다</text>
+
+  <!-- 되돌아오는 화살표 = 순환 -->
+  <path d="M 751 186 L 751 210 L 400 210 L 400 194" fill="none" stroke="rgb(240,150,190)" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#snP)"/>
+  <text x="575" y="226" class="bad" text-anchor="middle">④ 답은 Host 헤더에 있는데 — 그건 암호화된 본문 안입니다</text>
+  <text x="575" y="246" class="who" text-anchor="middle">읽으려면 암호화가 끝나 있어야 하고, 암호화를 시작하려면 ②에서 인증서를 골라야 합니다</text>
+
+  <rect x="898" y="214" width="176" height="40" rx="8" fill="#f2d4d4"/>
+  <text x="986" y="230" class="mono" text-anchor="middle">순환</text>
+  <text x="986" y="246" class="mono" text-anchor="middle" style="font-size:10.5px">둘 다 먼저일 수 없습니다</text>
+
+  <!-- ══ 해법 ══ -->
+  <rect x="30" y="282" width="1060" height="106" rx="10" fill="rgb(22,22,22)" stroke="rgb(102,187,106)" stroke-width="1.6"/>
+  <text x="52" y="308" class="ok">SNI — 암호화가 시작되기 전에 목적지를 알려 줍니다</text>
+
+  <rect x="52" y="322" width="300" height="48" rx="8" fill="rgb(102,187,106)"/>
+  <text x="202" y="343" class="mono" text-anchor="middle">ClientHello (평문)</text>
+  <text x="202" y="361" class="mono" text-anchor="middle" style="font-size:10.5px">server_name: api.example.com</text>
+
+  <line x1="358" y1="346" x2="398" y2="346" stroke="rgb(102,187,106)" stroke-width="2" marker-end="url(#snG)"/>
+
+  <rect x="404" y="322" width="290" height="48" rx="8" fill="#0d0d0d" stroke="rgb(102,187,106)"/>
+  <text x="418" y="343" class="box">서버가 인증서를 고릅니다</text>
+  <text x="418" y="362" class="who">이제 ②에서 막히지 않습니다</text>
+
+  <line x1="700" y1="346" x2="740" y2="346" stroke="rgb(102,187,106)" stroke-width="2" marker-end="url(#snG)"/>
+
+  <rect x="746" y="322" width="328" height="48" rx="8" fill="#0d0d0d" stroke="rgb(102,187,106)"/>
+  <text x="760" y="343" class="box">암호화 시작 — 그 뒤가 본문입니다</text>
+  <text x="760" y="362" class="who">Host · 경로 · 헤더 · 쿠키는 여기 들어갑니다</text>
+
+  <!-- ══ 못박기 ══ -->
+  <rect x="30" y="404" width="1060" height="44" rx="10" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="424" class="box">12-01 의 봉투 비유로 옮기면 — <tspan font-weight="700">SNI 는 봉투 겉면의 수취인 이름</tspan> 입니다.</text>
+  <text x="52" y="442" class="who">봉투를 열지 않아도 읽히는 유일한 정보라, passthrough 에서도 호스트만은 가를 수 있습니다.</text>
+</svg>
