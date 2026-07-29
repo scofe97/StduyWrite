@@ -1,0 +1,86 @@
+<svg viewBox="0 0 1120 610" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>SNI 는 ClientHello 안에 있습니다 — 평문 구간은 핸드셰이크 맨 앞 두 메시지뿐입니다</title>
+  <desc>TLS 1.3 핸드셰이크를 시간 순으로 세로로 그려 SNI 가 어느 자리에 있는지 보여 준다. 왼쪽이 클라이언트, 오른쪽이 서버이고 메시지가 위에서 아래로 오간다. 맨 위 ClientHello 는 평문이며 그 안에 지원하는 암호 목록과 랜덤값과 key share 와 extensions 가 들어 있고, extensions 안의 server_name 이 바로 SNI 다. 다음 ServerHello 도 평문이며 여기까지가 평문 구간이다. 서버는 ClientHello 의 SNI 를 읽어 어느 인증서를 내밀지 고른 뒤 ServerHello 를 보낸다. ServerHello 직후 키 교환이 끝나 암호화가 시작되므로 그 아래 메시지는 모두 암호문이다. EncryptedExtensions 와 Certificate 와 CertificateVerify 와 Finished 가 여기 속하며, 서버 인증서조차 암호화되어 전송된다는 것이 TLS 1.3 의 특징이다. 핸드셰이크가 끝난 뒤 오가는 애플리케이션 데이터도 암호문이고, HTTP 의 Host 헤더와 경로와 쿠키는 전부 이 구간에 들어간다. 오른쪽 아래에는 프록시가 passthrough 에서 볼 수 있는 것을 표시한다. 평문 구간의 SNI 는 읽히지만 그 아래는 전부 암호문이라 읽을 수 없다. 그래서 호스트 분기만 되고 경로 분기는 되지 않는다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 22px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 13.5px; fill: rgb(168,163,158); }
+      .side { font-size: 13.5px; font-weight: 800; fill: #e8e4df; }
+      .lyr  { font-size: 12px; font-weight: 800; fill: rgb(168,163,158); }
+      .msg  { font-size: 12.5px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .msgd { font-size: 12.5px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .who  { font-size: 11.5px; fill: rgb(168,163,158); }
+      .fld  { font-size: 11px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .ok   { font-size: 12.5px; font-weight: 700; fill: rgb(102,187,106); }
+      .bad  { font-size: 12.5px; font-weight: 700; fill: rgb(240,150,190); }
+      .amb  { font-size: 12.5px; font-weight: 800; fill: rgb(212,168,83); }
+    </style>
+    <marker id="chR" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="rgb(168,163,158)"/></marker>
+    <marker id="chL" markerWidth="9" markerHeight="9" refX="1" refY="3" orient="auto"><path d="M8,0 L1,3 L8,6 Z" fill="rgb(168,163,158)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="610" fill="#0d0d0d"/>
+
+  <text x="30" y="38" class="h1">SNI 는 맨 첫 메시지 안에 있습니다 — 그래서 평문입니다</text>
+  <text x="30" y="62" class="sub">TLS 1.3 기준. 평문으로 오가는 것은 핸드셰이크 앞의 두 메시지뿐이고, 그 뒤는 전부 암호문입니다.</text>
+
+  <!-- 양쪽 기둥 -->
+  <rect x="60" y="86" width="150" height="34" rx="7" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="135" y="108" class="side" text-anchor="middle">클라이언트</text>
+  <line x1="135" y1="120" x2="135" y2="530" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+
+  <rect x="700" y="86" width="150" height="34" rx="7" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="775" y="108" class="side" text-anchor="middle">서버</text>
+  <line x1="775" y1="120" x2="775" y2="530" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+
+  <!-- ══ 평문 구간 ══ -->
+  <rect x="30" y="134" width="1060" height="188" rx="10" fill="rgba(102,187,106,0.10)" stroke="rgb(102,187,106)" stroke-width="1.6"/>
+  <text x="906" y="158" class="ok">평문 구간 — 여기만 읽힙니다</text>
+
+  <!-- ClientHello -->
+  <rect x="150" y="150" width="470" height="96" rx="8" fill="rgb(102,187,106)"/>
+  <text x="164" y="172" class="msg">ClientHello</text>
+  <text x="164" y="194" class="fld">├─ 지원하는 암호 목록 · 랜덤값 · key_share</text>
+  <text x="164" y="214" class="fld">└─ extensions</text>
+  <rect x="190" y="222" width="290" height="18" rx="4" fill="#0d0d0d"/>
+  <text x="200" y="235" class="fld" style="fill:rgb(212,168,83)">server_name: api.example.com</text>
+  <text x="492" y="235" class="amb" style="font-size:11.5px">← SNI</text>
+
+  <line x1="624" y1="198" x2="770" y2="198" stroke="rgb(168,163,158)" stroke-width="1.8" marker-end="url(#chR)"/>
+
+  <text x="792" y="186" class="who">SNI 를 읽고</text>
+  <text x="792" y="204" class="who">인증서를 고릅니다</text>
+
+  <!-- ServerHello -->
+  <rect x="330" y="258" width="290" height="46" rx="8" fill="rgb(102,187,106)"/>
+  <text x="344" y="280" class="msg">ServerHello</text>
+  <text x="344" y="298" class="fld">고른 암호 · key_share</text>
+
+  <line x1="326" y1="281" x2="180" y2="281" stroke="rgb(168,163,158)" stroke-width="1.8" marker-end="url(#chL)"/>
+
+  <!-- 경계 -->
+  <text x="30" y="336" class="amb">여기서 키 교환이 끝나 암호화가 시작됩니다</text>
+  <line x1="330" y1="331" x2="1060" y2="331" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="7 4"/>
+
+  <!-- ══ 암호 구간 ══ -->
+  <rect x="30" y="348" width="1060" height="172" rx="10" fill="rgb(28,24,26)" stroke="rgb(240,150,190)" stroke-width="1.6"/>
+  <text x="906" y="372" class="bad">암호 구간 — 못 읽습니다</text>
+
+  <rect x="330" y="384" width="290" height="76" rx="8" fill="#0d0d0d" stroke="rgb(240,150,190)"/>
+  <text x="344" y="406" class="msgd">EncryptedExtensions</text>
+  <text x="344" y="426" class="msgd">Certificate</text>
+  <text x="344" y="446" class="msgd">CertificateVerify · Finished</text>
+
+  <line x1="326" y1="420" x2="180" y2="420" stroke="rgb(240,150,190)" stroke-width="1.8" marker-end="url(#chL)"/>
+  <text x="640" y="416" class="who">서버 <tspan fill="#e8e4df" font-weight="700">인증서조차 암호화</tspan> 되어</text>
+  <text x="640" y="434" class="who">전송됩니다 (TLS 1.3)</text>
+
+  <rect x="150" y="472" width="470" height="34" rx="8" fill="#0d0d0d" stroke="rgb(240,150,190)"/>
+  <text x="164" y="494" class="msgd">애플리케이션 데이터 — <tspan class="who">Host 헤더 · 경로 · 쿠키가 여기</tspan></text>
+  <line x1="624" y1="489" x2="770" y2="489" stroke="rgb(240,150,190)" stroke-width="1.8" marker-end="url(#chR)"/>
+
+  <!-- 못박기 -->
+  <rect x="30" y="540" width="1060" height="52" rx="10" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="562" class="who">같은 도메인 이름이 <tspan fill="#e8e4df" font-weight="700">두 층에 한 번씩</tspan> 적힙니다 — 위의 <tspan style="font-family:'JetBrains Mono',monospace" fill="rgb(212,168,83)">server_name</tspan>(TLS)과 아래의 <tspan style="font-family:'JetBrains Mono',monospace" fill="#e8e4df">Host</tspan>(HTTP).</text>
+  <text x="52" y="582" class="who">passthrough 에서 프록시가 읽을 수 있는 것은 <tspan fill="#e8e4df" font-weight="700">위의 것뿐</tspan> 이라, 호스트 분기만 되고 경로 분기는 안 됩니다.</text>
+</svg>
