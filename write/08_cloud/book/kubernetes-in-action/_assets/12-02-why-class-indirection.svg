@@ -1,0 +1,89 @@
+<svg viewBox="0 0 1120 522" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>클래스를 한 단계 거치는 이유 — 직접 적었다면 두 설정을 구별할 수 없습니다</title>
+  <desc>Ingress 가 컨트롤러를 직접 지목하는 가상의 구조와 IngressClass 를 한 단계 거치는 실제 구조를 나란히 놓아 그 한 단계의 값을 드러낸다. 위쪽 가상 구조에서는 외부 공개 API 와 사내 전용 API 두 Ingress 가 모두 컨트롤러 이름 ingress.k8s.aws/alb 를 직접 적는다. 둘 다 같은 문자열이므로 어느 것이 인터넷을 향하고 어느 것이 내부용인지 구별할 방법이 없고, scheme 같은 파라미터를 실을 자리도 없다. 아래쪽 실제 구조에서는 같은 두 Ingress 가 각각 alb-public 과 alb-internal 이라는 클래스 이름을 적는다. 두 IngressClass 는 controller 필드에 같은 컨트롤러를 지목하지만 parameters 로 서로 다른 IngressClassParams 를 참조해 하나는 internet-facing 을 다른 하나는 internal 을 갖는다. 그래서 같은 컨트롤러 하나로 성격이 다른 두 설정을 만들 수 있다. 오른쪽에는 관심사 분리를 표시한다. 앱 개발자는 클래스 이름 하나만 알면 되고 그 뒤의 scheme 과 태그와 IP 유형은 인프라팀이 IngressClass 에서 관리한다. 이름이 경계가 되어 양쪽이 서로의 내부를 몰라도 된다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 22px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 13.5px; fill: rgb(168,163,158); }
+      .lyr  { font-size: 12px; font-weight: 800; fill: rgb(168,163,158); }
+      .box  { font-size: 13px; font-weight: 700; fill: #e8e4df; }
+      .fld  { font-size: 11px; font-weight: 700; fill: rgb(168,163,158); font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .val  { font-size: 11.5px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .who  { font-size: 12px; fill: rgb(168,163,158); }
+      .bad  { font-size: 12.5px; font-weight: 700; fill: rgb(240,150,190); }
+      .ok   { font-size: 12.5px; font-weight: 700; fill: rgb(102,187,106); }
+      .mono { font-size: 11px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    </style>
+    <marker id="wcP" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="rgb(240,150,190)"/></marker>
+    <marker id="wcB" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="rgb(91,155,213)"/></marker>
+    <marker id="wcO" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="522" fill="#0d0d0d"/>
+
+  <text x="30" y="38" class="h1">한 단계를 거치는 값 — 같은 컨트롤러를 다르게 쓰기 위해서입니다</text>
+  <text x="30" y="62" class="sub">컨트롤러 이름을 직접 적는 구조와 나란히 놓으면, 그 한 단계가 무엇을 가능하게 하는지 드러납니다.</text>
+
+  <!-- ══ 가상: 직접 적는다면 ══ -->
+  <rect x="30" y="86" width="1060" height="146" rx="10" fill="rgb(22,22,22)" stroke="rgb(240,150,190)" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="52" y="112" class="bad">만약 컨트롤러를 직접 적는 구조였다면</text>
+
+  <rect x="52" y="128" width="300" height="52" rx="8" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="68" y="149" class="box">외부 공개 API</text>
+  <text x="68" y="169" class="fld">controller: <tspan class="val" fill="rgb(240,150,190)">ingress.k8s.aws/alb</tspan></text>
+
+  <rect x="52" y="190" width="300" height="30" rx="6" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="68" y="210" class="fld">사내 전용 API — <tspan class="val" fill="rgb(240,150,190)">ingress.k8s.aws/alb</tspan></text>
+
+  <line x1="360" y1="176" x2="404" y2="176" stroke="rgb(240,150,190)" stroke-width="1.8" marker-end="url(#wcP)"/>
+
+  <rect x="412" y="140" width="300" height="66" rx="8" fill="rgb(28,24,26)" stroke="rgb(240,150,190)"/>
+  <text x="428" y="164" class="bad">둘이 같은 문자열입니다</text>
+  <text x="428" y="186" class="who">어느 쪽이 인터넷을 향하는지</text>
+  <text x="428" y="202" class="who">구별할 방법이 없습니다</text>
+
+  <rect x="736" y="140" width="354" height="66" rx="8" fill="rgb(28,24,26)" stroke="rgb(240,150,190)"/>
+  <text x="752" y="164" class="bad">파라미터를 실을 자리도 없습니다</text>
+  <text x="752" y="186" class="who">scheme · 태그 · IP 유형을</text>
+  <text x="752" y="202" class="who">어디에 적을지가 없습니다</text>
+
+  <!-- ══ 실제: 클래스를 거친다 ══ -->
+  <rect x="30" y="252" width="1060" height="192" rx="10" fill="rgb(22,22,22)" stroke="rgb(102,187,106)" stroke-width="1.6"/>
+  <text x="52" y="278" class="ok">실제 — 이름 하나를 사이에 둡니다</text>
+
+  <rect x="52" y="294" width="230" height="52" rx="8" fill="#0d0d0d" stroke="rgb(91,155,213)" stroke-width="1.5"/>
+  <text x="68" y="315" class="box">외부 공개 API</text>
+  <text x="68" y="335" class="fld">className: <tspan class="val" fill="rgb(91,155,213)">alb-public</tspan></text>
+
+  <rect x="52" y="356" width="230" height="52" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="68" y="377" class="box">사내 전용 API</text>
+  <text x="68" y="397" class="fld">className: <tspan class="val" fill="rgb(212,168,83)">alb-internal</tspan></text>
+
+  <line x1="290" y1="320" x2="330" y2="320" stroke="rgb(91,155,213)" stroke-width="1.8" marker-end="url(#wcB)"/>
+  <line x1="290" y1="382" x2="330" y2="382" stroke="rgb(212,168,83)" stroke-width="1.8" marker-end="url(#wcO)"/>
+
+  <rect x="338" y="294" width="330" height="52" rx="8" fill="#0d0d0d" stroke="rgb(91,155,213)" stroke-width="1.5"/>
+  <text x="354" y="314" class="fld">IngressClass <tspan class="val" fill="rgb(91,155,213)">alb-public</tspan></text>
+  <text x="354" y="334" class="fld">parameters → scheme: internet-facing</text>
+
+  <rect x="338" y="356" width="330" height="52" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="354" y="376" class="fld">IngressClass <tspan class="val" fill="rgb(212,168,83)">alb-internal</tspan></text>
+  <text x="354" y="396" class="fld">parameters → scheme: internal</text>
+
+  <line x1="676" y1="320" x2="716" y2="336" stroke="rgb(91,155,213)" stroke-width="1.8" marker-end="url(#wcB)"/>
+  <line x1="676" y1="382" x2="716" y2="366" stroke="rgb(212,168,83)" stroke-width="1.8" marker-end="url(#wcO)"/>
+
+  <rect x="724" y="326" width="366" height="50" rx="8" fill="rgb(102,187,106)"/>
+  <text x="907" y="348" class="mono" text-anchor="middle" style="font-size:12px">controller: ingress.k8s.aws/alb</text>
+  <text x="907" y="366" class="mono" text-anchor="middle" style="font-size:11px">컨트롤러는 하나 — 둘 다 여기로 모입니다</text>
+
+  <!-- 관심사 경계 -->
+  <line x1="320" y1="270" x2="320" y2="428" stroke="rgb(91,155,213)" stroke-width="1.2" stroke-dasharray="5 4"/>
+  <text x="180" y="432" class="who" text-anchor="middle">앱 개발자 — 이름 하나만</text>
+  <text x="700" y="432" class="who" text-anchor="middle">인프라팀 — scheme · 태그 · IP 유형을 관리합니다</text>
+
+  <!-- 못박기 -->
+  <rect x="30" y="462" width="1060" height="34" rx="8" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="484" class="box">이름이 경계가 됩니다 — 양쪽이 서로의 내부를 몰라도 됩니다.</text>
+
+</svg>
