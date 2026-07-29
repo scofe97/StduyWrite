@@ -1,0 +1,115 @@
+<svg viewBox="0 0 1120 640" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Ingress 컨트롤러 설치가 실제로 만드는 것</title>
+  <desc>deploy.yaml 한 장을 apply 하면 여섯 종류의 오브젝트가 생기는데, 그중 파드를 낳는 것은 Deployment 하나뿐이다. IngressClass는 이 설치 과정에서 함께 생기며, 그 뒤에야 Ingress가 그 이름을 지목할 수 있다. 컨트롤러가 만든 프록시 설정은 구현에 따라 클러스터 안 파드로 가기도 하고 클라우드 API 호출로 클러스터 밖에 실물 로드밸런서를 만들기도 한다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 22px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 13.5px; fill: rgb(168,163,158); }
+      .lyr  { font-size: 12.5px; font-weight: 800; fill: rgb(212,168,83); }
+      .tag  { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .tagl { font-size: 13px; font-weight: 800; fill: #e8e4df; }
+      .mono { font-size: 11px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .monod{ font-size: 11px; font-weight: 700; fill: rgb(212,168,83); font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .who  { font-size: 11.5px; fill: rgb(168,163,158); }
+      .whod { font-size: 11.5px; fill: #1a1a1a; }
+      .act  { font-size: 12px; font-weight: 800; fill: rgb(212,168,83); }
+      .note { font-size: 11px; fill: rgb(150,145,140); }
+      .step { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+    </style>
+    <marker id="ia" markerWidth="10" markerHeight="10" refX="6.5" refY="3.2" orient="auto"><path d="M0,0 L8,3.2 L0,6.4 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="ig" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L7.5,3 L0,6 Z" fill="rgb(140,135,130)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="640" fill="#0d0d0d"/>
+  <text x="28" y="40" class="h1">설치는 특별한 절차가 아니라 평범한 apply 입니다</text>
+  <text x="28" y="64" class="sub">YAML 한 장에 여섯 종류가 들어 있고, 그중 파드를 낳는 것은 Deployment 하나뿐입니다.</text>
+
+  <!-- 좌: apply -->
+  <rect x="28" y="92" width="196" height="60" rx="9" fill="#0d0d0d" stroke="rgb(120,115,108)" stroke-width="1.3"/>
+  <text x="126" y="117" class="tagl" text-anchor="middle">kubectl apply -f</text>
+  <text x="126" y="137" class="monod" text-anchor="middle">deploy.yaml</text>
+  <line x1="224" y1="122" x2="268" y2="122" stroke="rgb(212,168,83)" stroke-width="2.4" marker-end="url(#ia)"/>
+
+  <!-- 생성물 6종 -->
+  <text x="278" y="86" class="lyr">이 한 장이 만드는 것</text>
+  <rect x="278" y="96" width="814" height="128" rx="10" fill="#0d0d0d" stroke="rgb(90,86,82)" stroke-width="1.2"/>
+
+  <!-- Deployment (강조) -->
+  <rect x="296" y="114" width="176" height="44" rx="7" fill="rgb(212,168,83)"/>
+  <text x="384" y="132" class="tag" text-anchor="middle">Deployment</text>
+  <text x="384" y="149" class="whod" text-anchor="middle">유일하게 파드를 낳습니다</text>
+
+  <rect x="486" y="114" width="140" height="44" rx="7" fill="rgb(212,168,83)"/>
+  <text x="556" y="132" class="tag" text-anchor="middle">IngressClass</text>
+  <text x="556" y="149" class="whod" text-anchor="middle">"나는 nginx다" 명패</text>
+
+  <rect x="640" y="114" width="140" height="44" rx="7" fill="#0d0d0d" stroke="rgb(120,115,108)" stroke-width="1.2"/>
+  <text x="710" y="132" class="tagl" text-anchor="middle">Service (LB)</text>
+  <text x="710" y="149" class="who" text-anchor="middle">컨트롤러를 노출</text>
+
+  <rect x="794" y="114" width="140" height="44" rx="7" fill="#0d0d0d" stroke="rgb(120,115,108)" stroke-width="1.2"/>
+  <text x="864" y="132" class="tagl" text-anchor="middle">Namespace</text>
+  <text x="864" y="149" class="who" text-anchor="middle">ingress-nginx</text>
+
+  <rect x="948" y="114" width="126" height="44" rx="7" fill="#0d0d0d" stroke="rgb(120,115,108)" stroke-width="1.2"/>
+  <text x="1011" y="132" class="tagl" text-anchor="middle">Role · SA</text>
+  <text x="1011" y="149" class="who" text-anchor="middle">API 읽을 권한</text>
+
+  <rect x="296" y="170" width="140" height="38" rx="7" fill="#0d0d0d" stroke="rgb(120,115,108)" stroke-width="1.2"/>
+  <text x="366" y="194" class="tagl" text-anchor="middle">ConfigMap</text>
+  <text x="452" y="188" class="note">← 컨트롤러 전역 설정 (워커 수·기본 타임아웃)</text>
+  <text x="800" y="188" class="note">앰버 둘만 뒤에서 일합니다 · 나머지는 선언물입니다</text>
+
+  <!-- Deployment → 파드 -->
+  <line x1="384" y1="224" x2="384" y2="262" stroke="rgb(212,168,83)" stroke-width="2.4" marker-end="url(#ia)"/>
+  <text x="396" y="248" class="act">파드로 뜹니다</text>
+
+  <rect x="278" y="270" width="212" height="52" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="384" y="292" class="tagl" text-anchor="middle">컨트롤러 파드</text>
+  <text x="384" y="310" class="who" text-anchor="middle">API 감시 → 설정 생성</text>
+
+  <!-- 순서 고정 -->
+  <text x="28" y="368" class="lyr">그래서 순서가 고정됩니다</text>
+  <rect x="28" y="380" width="1064" height="62" rx="10" fill="#0d0d0d" stroke="rgb(90,86,82)" stroke-width="1.2"/>
+
+  <rect x="48" y="396" width="196" height="32" rx="7" fill="rgb(212,168,83)"/>
+  <text x="146" y="418" class="step" text-anchor="middle">① 컨트롤러 설치</text>
+  <line x1="244" y1="412" x2="286" y2="412" stroke="rgb(212,168,83)" stroke-width="2.4" marker-end="url(#ia)"/>
+  <rect x="290" y="396" width="222" height="32" rx="7" fill="rgb(212,168,83)"/>
+  <text x="401" y="418" class="step" text-anchor="middle">② IngressClass 생성</text>
+  <line x1="512" y1="412" x2="554" y2="412" stroke="rgb(212,168,83)" stroke-width="2.4" marker-end="url(#ia)"/>
+  <rect x="558" y="396" width="252" height="32" rx="7" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="684" y="418" class="tagl" text-anchor="middle">③ Ingress 가 이름을 지목</text>
+  <text x="828" y="410" class="note">①② 가 먼저 서 있어야 ③ 이 의미를 갖습니다.</text>
+  <text x="828" y="426" class="note">없는 이름을 부르면 ADDRESS 가 빈칸으로 남습니다.</text>
+
+  <!-- 프록시가 서는 자리 -->
+  <text x="28" y="484" class="lyr">컨트롤러가 만든 설정은 어디로 가나 — 구현마다 다릅니다</text>
+
+  <rect x="28" y="496" width="524" height="124" rx="10" fill="#0d0d0d" stroke="rgb(90,86,82)" stroke-width="1.2"/>
+  <text x="48" y="522" class="tagl">클러스터 안 프록시형 — Nginx · Contour</text>
+  <rect x="48" y="536" width="150" height="34" rx="7" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="123" y="558" class="tagl" text-anchor="middle">컨트롤러 파드</text>
+  <line x1="198" y1="553" x2="240" y2="553" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#ia)"/>
+  <text x="219" y="545" class="monod" text-anchor="middle">write</text>
+  <rect x="244" y="536" width="164" height="34" rx="7" fill="rgb(212,168,83)"/>
+  <text x="326" y="558" class="mono" text-anchor="middle">nginx.conf → reload</text>
+  <line x1="408" y1="553" x2="446" y2="553" stroke="rgb(140,135,130)" stroke-width="1.6" marker-end="url(#ig)"/>
+  <rect x="450" y="536" width="84" height="34" rx="7" fill="#0d0d0d" stroke="rgb(120,115,108)" stroke-width="1.2"/>
+  <text x="492" y="558" class="tagl" text-anchor="middle">프록시</text>
+  <text x="48" y="596" class="note">프록시가 이미 파드로 돌고 있고, 그 설정 파일만 갈아 끼웁니다.</text>
+  <text x="48" y="612" class="note">그 앞의 LB 도 하나라 여러 Ingress 가 나눠 씁니다.</text>
+
+  <rect x="568" y="496" width="524" height="124" rx="10" fill="#0d0d0d" stroke="rgb(90,86,82)" stroke-width="1.2"/>
+  <text x="588" y="522" class="tagl">클라우드 관리형 — AWS ALB · GKE GLBC</text>
+  <rect x="588" y="536" width="150" height="34" rx="7" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="663" y="558" class="tagl" text-anchor="middle">컨트롤러 파드</text>
+  <line x1="738" y1="553" x2="792" y2="553" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#ia)"/>
+  <text x="765" y="545" class="monod" text-anchor="middle">API 호출</text>
+  <line x1="800" y1="530" x2="800" y2="616" stroke="rgb(120,115,108)" stroke-width="1" stroke-dasharray="4 4"/>
+  <rect x="812" y="536" width="260" height="34" rx="7" fill="rgb(212,168,83)"/>
+  <text x="942" y="558" class="tag" text-anchor="middle">실물 로드밸런서 (ALB)</text>
+  <text x="588" y="596" class="note">클러스터 안에 프록시를 두지 않고 클라우드에 실물을 만듭니다.</text>
+  <text x="588" y="612" class="note">그래서 Ingress 마다 LB 가 하나씩 생깁니다.</text>
+  <text x="1072" y="584" class="note" text-anchor="end">점선 오른쪽 = 클러스터 밖</text>
+</svg>
