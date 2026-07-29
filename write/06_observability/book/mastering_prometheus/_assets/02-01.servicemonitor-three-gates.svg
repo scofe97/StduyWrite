@@ -1,0 +1,93 @@
+<svg viewBox="0 0 880 430" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>ServiceMonitor 가 스크레이프 대상이 되기까지 거치는 관문 셋</title>
+  <desc>ServiceMonitor 를 배포해도 스크레이프 대상이 되려면 관문 셋을 통과해야 한다는 것을 흐름으로 보여 준다. 관문은 적히는 자리가 서로 다르다. 첫째와 둘째는 Prometheus 커스텀 리소스 즉 차트 값 쪽에 있고, 셋째는 ServiceMonitor 자신에게 있다. 관문 일-에이 는 serviceMonitorSelector 로 ServiceMonitor 의 라벨을 거르며, 차트 기본값이 릴리스 이름 라벨 필터로 렌더되므로 실무에서 가장 자주 막히는 자리다. 관문 일-비 는 serviceMonitorNamespaceSelector 로 ServiceMonitor 가 놓인 네임스페이스를 거르는데, 기본값이 빈 중괄호라 전체 네임스페이스가 이미 열려 있어 여기서 막히는 일은 드물다. 관문 이 는 ServiceMonitor 자신의 spec 네임스페이스셀렉터로, 그 ServiceMonitor 가 잡을 Service 가 어느 네임스페이스에 있는지를 거르며 기본값은 자기 네임스페이스다. 셋 중 하나라도 막히면 대상 목록에 나타나지 않는다. 이름이 비슷해 한 덩어리로 보이지만 거르는 대상이 각각 라벨과 ServiceMonitor 의 네임스페이스와 Service 의 네임스페이스로 다르다는 것이 요점이다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 15px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 11px; fill: rgb(138,133,128); }
+      .lyr  { font-size: 10.5px; font-weight: 800; fill: rgb(138,133,128); }
+      .box  { font-size: 11.5px; fill: #e8e4df; }
+      .note { font-size: 10px; fill: rgb(138,133,128); }
+      .amb  { font-size: 11px; font-weight: 700; fill: rgb(212,168,83); }
+      .pink { font-size: 10.5px; font-weight: 700; fill: rgb(240,150,190); }
+      .grn  { font-size: 10.5px; font-weight: 700; fill: rgb(102,187,106); }
+      .mono { font-size: 10px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .gate { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+    </style>
+    <marker id="sgA" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="880" height="430" fill="#0d0d0d"/>
+
+  <text x="30" y="34" class="h1">이름이 비슷한 관문 셋 — 거르는 대상이 각각 다릅니다</text>
+  <text x="30" y="54" class="sub">배포했는데 대상 목록에 안 뜬다면 셋 중 하나가 막힌 것입니다. 적히는 자리도 둘로 갈립니다.</text>
+
+  <line x1="30" y1="68" x2="850" y2="68" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- 출발 -->
+  <rect x="30" y="92" width="120" height="52" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="90" y="114" class="box" text-anchor="middle">ServiceMonitor</text>
+  <text x="90" y="132" class="note" text-anchor="middle">배포했습니다</text>
+
+  <line x1="154" y1="118" x2="186" y2="118" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#sgA)"/>
+
+  <!-- 관문 ①-a -->
+  <rect x="192" y="86" width="196" height="64" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <rect x="192" y="86" width="196" height="20" fill="rgb(212,168,83)"/>
+  <text x="290" y="101" class="gate" text-anchor="middle">관문 ①-a</text>
+  <text x="204" y="122" class="note">serviceMonitorSelector</text>
+  <text x="204" y="140" class="box" style="font-size:10.5px">라벨을 거릅니다</text>
+
+  <line x1="392" y1="118" x2="424" y2="118" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#sgA)"/>
+
+  <!-- 관문 ①-b -->
+  <rect x="430" y="86" width="196" height="64" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <rect x="430" y="86" width="196" height="20" fill="rgb(92,84,74)"/>
+  <text x="528" y="101" class="gate" text-anchor="middle" style="fill:#e8e4df">관문 ①-b</text>
+  <text x="442" y="122" class="note">serviceMonitorNamespaceSelector</text>
+  <text x="442" y="140" class="box" style="font-size:10.5px">이 오브젝트가 놓인 네임스페이스</text>
+
+  <line x1="630" y1="118" x2="662" y2="118" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#sgA)"/>
+
+  <!-- 관문 ② -->
+  <rect x="668" y="86" width="182" height="64" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <rect x="668" y="86" width="182" height="20" fill="rgb(92,84,74)"/>
+  <text x="759" y="101" class="gate" text-anchor="middle" style="fill:#e8e4df">관문 ②</text>
+  <text x="680" y="122" class="note">spec.namespaceSelector</text>
+  <text x="680" y="140" class="box" style="font-size:10.5px">잡을 Service 의 네임스페이스</text>
+
+  <!-- 적히는 자리 -->
+  <rect x="192" y="162" width="434" height="24" fill="#0d0d0d" stroke="rgb(91,155,213)" stroke-dasharray="4 3"/>
+  <text x="204" y="179" class="note">여기 둘은 <tspan fill="#e8e4df" font-weight="700">Prometheus CR (차트 값)</tspan> 에 적습니다 — 앱 개발자가 아니라 클러스터 운영자 쪽</text>
+
+  <rect x="668" y="162" width="182" height="24" fill="#0d0d0d" stroke="rgb(91,155,213)" stroke-dasharray="4 3"/>
+  <text x="680" y="179" class="note"><tspan fill="#e8e4df" font-weight="700">ServiceMonitor 자신</tspan> 에</text>
+
+  <!-- 기본값 -->
+  <text x="30" y="218" class="lyr">차트 기본값이 어떻게 되어 있나</text>
+
+  <rect x="30" y="230" width="270" height="72" fill="#0d0d0d" stroke="rgb(240,150,190)"/>
+  <text x="44" y="250" class="pink">①-a — 걸려 있습니다</text>
+  <rect x="44" y="258" width="242" height="20" fill="#f2d4d4"/>
+  <text x="52" y="273" class="mono">release: &lt;릴리스명&gt; 필터</text>
+  <text x="44" y="294" class="note">라벨이 없으면 다른 게 다 맞아도 안 잡힙니다</text>
+
+  <rect x="310" y="230" width="270" height="72" fill="#0d0d0d" stroke="rgb(102,187,106)"/>
+  <text x="324" y="250" class="grn">①-b — 이미 열려 있습니다</text>
+  <rect x="324" y="258" width="242" height="20" fill="#e6f7e7"/>
+  <text x="332" y="273" class="mono">{} = 전 네임스페이스</text>
+  <text x="324" y="294" class="note">다른 네임스페이스라는 이유로는 안 막힙니다</text>
+
+  <rect x="590" y="230" width="260" height="72" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="604" y="250" class="box" style="font-size:11px">② — 자기 네임스페이스</text>
+  <rect x="604" y="258" width="232" height="20" fill="#f5edda"/>
+  <text x="612" y="273" class="mono">matchNames 비고 any=false</text>
+  <text x="604" y="294" class="note">다른 곳의 Service 를 잡으려면 적어야 합니다</text>
+
+  <!-- 하단 못박기 -->
+  <rect x="30" y="322" width="820" height="76" fill="#0d0d0d" stroke="rgb(138,133,128)" stroke-dasharray="4 3"/>
+  <text x="46" y="342" class="amb">핵심</text>
+  <text x="90" y="342" class="box">셋 중 하나라도 막히면 대상 목록에 나타나지 않고, <tspan fill="rgb(240,150,190)" font-weight="700">에러도 나지 않습니다.</tspan></text>
+  <text x="46" y="364" class="note">실무에서 가장 자주 밟는 것은 ①-a 입니다 — 앱 쪽 YAML 은 멀쩡한데 라벨 한 줄이 없어 발견되지 않습니다.</text>
+  <text x="46" y="384" class="note">이름이 비슷해 한 덩어리로 보이지만, 거르는 것은 각각 <tspan fill="#e8e4df">라벨</tspan> · <tspan fill="#e8e4df">ServiceMonitor 의 네임스페이스</tspan> · <tspan fill="#e8e4df">Service 의 네임스페이스</tspan> 로 다릅니다.</text>
+</svg>
