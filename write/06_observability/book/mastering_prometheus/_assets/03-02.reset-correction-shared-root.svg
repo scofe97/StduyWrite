@@ -1,0 +1,73 @@
+<svg viewBox="0 0 900 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>rate 와 increase 는 한 뿌리라 리셋 보정을 함께 물려받습니다</title>
+  <desc>왼쪽 위에는 rate 와 increase 가 같은 뼈대에서 갈라지는 모습을 보인다. 마지막에서 처음을 뺀 값이 공통 뼈대이고, 거기에 경과 시간으로 나누는 단계가 붙으면 rate 가 되고 붙지 않으면 increase 가 된다. 나눗셈 하나만 다르므로 값이 줄어든 지점을 카운터 리셋으로 보고 보정하는 동작은 둘 다 똑같이 물려받는다. 오른쪽에는 게이지에 썼을 때 무슨 일이 벌어지는지를 파드 개수로 보인다. 값이 사십에서 오십오로 올랐다가 삼십팔로 떨어지고 다시 십이로 떨어져 실제로는 스물여덟 개가 줄었는데, increase 는 하강 두 곳을 리셋으로 오해해 없던 증가분을 더하므로 양수를 돌려준다. 급락을 잡으려던 알림이 도리어 증가를 보고하는 셈이다. 아래에는 게이지에는 delta 를 쓰라는 결론이 붙는다.</desc>
+  <defs>
+    <marker id="rc-a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <style>
+      .t   { fill: #e8e4df; }
+      .dim { fill: rgb(168,163,158); }
+      .mono{ font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="420" fill="#0d0d0d"/>
+  <text x="24" y="34" class="t" font-size="15">한 뿌리 — 그래서 금지도 함께 갑니다</text>
+
+  <!-- 왼쪽: 공통 뼈대 -->
+  <rect x="30" y="60" width="380" height="44" rx="6" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)"/>
+  <text x="220" y="80" class="t" font-size="11" text-anchor="middle" font-weight="700">공통 뼈대</text>
+  <text x="220" y="97" class="mono" font-size="11" fill="rgb(212,168,83)" text-anchor="middle">마지막 − 처음</text>
+
+  <line x1="140" y1="104" x2="110" y2="140" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#rc-a)"/>
+  <line x1="300" y1="104" x2="330" y2="140" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#rc-a)"/>
+
+  <rect x="30" y="146" width="170" height="52" rx="6" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="115" y="166" class="mono t" font-size="11.5" text-anchor="middle">increase</text>
+  <text x="115" y="185" class="dim" font-size="9.5" text-anchor="middle">그대로 씁니다</text>
+
+  <rect x="240" y="146" width="170" height="52" rx="6" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="325" y="166" class="mono t" font-size="11.5" text-anchor="middle">rate</text>
+  <text x="325" y="185" class="dim" font-size="9.5" text-anchor="middle">÷ 경과 시간 하나만 더</text>
+
+  <rect x="30" y="212" width="380" height="40" rx="6" fill="rgba(240,150,190,0.13)" stroke="rgb(240,150,190)"/>
+  <text x="220" y="237" font-size="11" fill="rgb(240,150,190)" text-anchor="middle" font-weight="700">뼈대가 같으니 리셋 보정도 둘 다 물려받습니다</text>
+
+  <!-- 오른쪽: 게이지에 쓰면 -->
+  <text x="470" y="76" class="t" font-size="12" font-weight="700">게이지에 쓰면 — 파드 개수</text>
+
+  <line x1="470" y1="196" x2="870" y2="196" stroke="rgb(92,84,74)"/>
+  <line x1="470" y1="196" x2="470" y2="96" stroke="rgb(92,84,74)"/>
+
+  <!-- 값 꺾은선: 40 → 55 → 38 → 12 -->
+  <polyline points="500,156 600,120 700,162 800,188" fill="none" stroke="rgb(91,155,213)" stroke-width="2.4"/>
+  <g fill="rgb(91,155,213)">
+    <circle cx="500" cy="156" r="4"/><circle cx="600" cy="120" r="4"/>
+    <circle cx="700" cy="162" r="4"/><circle cx="800" cy="188" r="4"/>
+  </g>
+  <text x="500" y="147" class="t" font-size="10" text-anchor="middle">40</text>
+  <text x="600" y="111" class="t" font-size="10" text-anchor="middle">55</text>
+  <text x="712" y="158" class="t" font-size="10" text-anchor="start">38</text>
+  <text x="800" y="179" class="t" font-size="10" text-anchor="middle">12</text>
+
+  <!-- 하강 구간 표시 — 꺾은선의 내려가는 두 구간 위에 직접 얹습니다 -->
+  <path d="M 604 126 L 696 158" stroke="rgb(240,150,190)" stroke-width="5" opacity="0.30" stroke-linecap="round"/>
+  <path d="M 704 166 L 796 184" stroke="rgb(240,150,190)" stroke-width="5" opacity="0.30" stroke-linecap="round"/>
+  <text x="612" y="152" font-size="9.5" fill="rgb(240,150,190)">리셋으로 오해 ↘</text>
+  <text x="716" y="196" font-size="9.5" fill="rgb(240,150,190)">또 오해 ↘</text>
+
+  <rect x="470" y="222" width="400" height="30" rx="5" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="670" y="242" class="t" font-size="11" text-anchor="middle">실제로는 <tspan font-weight="700">28개 줄었습니다</tspan> (40 → 12)</text>
+
+  <rect x="470" y="258" width="400" height="30" rx="5" fill="rgba(240,150,190,0.14)" stroke="rgb(240,150,190)"/>
+  <text x="670" y="278" font-size="11" fill="rgb(240,150,190)" text-anchor="middle" font-weight="700">그런데 increase 는 양수를 돌려줍니다</text>
+
+  <!-- 결론 -->
+  <rect x="30" y="306" width="840" height="46" rx="6" fill="rgba(102,187,106,0.10)" stroke="rgb(102,187,106)"/>
+  <text x="48" y="326" class="t" font-size="11.5" font-weight="700">급락을 잡으려던 알림이 도리어 "증가"를 보고합니다</text>
+  <text x="48" y="344" class="t" font-size="10.5">게이지에는 <tspan class="mono" fill="rgb(102,187,106)">delta</tspan> 를 씁니다 — 값이 줄면 <tspan fill="rgb(102,187,106)">음수를 그대로</tspan> 돌려주므로 급락이 급락으로 보입니다.</text>
+
+  <text x="24" y="382" class="dim" font-size="10">리셋 보정은 카운터에겐 <tspan fill="#e8e4df">필요한 기능</tspan>입니다 — 재시작으로 0 이 된 카운터를 이어 붙여 주니까요. 게이지에서만 해가 됩니다.</text>
+  <text x="24" y="402" class="dim" font-size="10">그래서 두 금지(<tspan class="mono" fill="#e8e4df">rate</tspan>·<tspan class="mono" fill="#e8e4df">increase</tspan> 를 게이지에 쓰지 말 것)는 별개 규칙이 아니라 <tspan fill="#e8e4df">한 뿌리</tspan>입니다.</text>
+</svg>
