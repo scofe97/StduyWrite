@@ -1,0 +1,129 @@
+<svg viewBox="0 0 1120 640" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>요청 하나가 지나는 전 구간 — 12장에서 배운 것이 각각 어디서 작동하는가</title>
+  <desc>브라우저가 보낸 요청 하나가 파드에 닿기까지의 전 구간을 왼쪽에서 오른쪽으로 그리고, 12-01 과 12-02 에서 배운 개념이 그 길 위 어디에서 작동하는지 얹었다. 경로는 브라우저에서 DNS 를 거쳐 로드밸런서, 프록시 파드, 백엔드 파드로 이어진다. 위쪽 띠는 암호화 구간으로, termination 을 쓰면 브라우저에서 프록시까지만 TLS 이고 그 뒤는 평문이다. 각 지점 아래에 그 자리에서 벌어지는 일을 붙였다. DNS 자리에서는 도메인이 로드밸런서의 공인 IP 로 풀리고 요소 단위 매칭 규칙이 적용된다. 로드밸런서 자리는 Service 소관이며 externalTrafficPolicy 가 여기 걸리고 Cluster 면 SNAT 로 클라이언트 IP 가 가려진다. 프록시 파드 자리가 12장의 핵심으로, 여기서 TLS 가 풀리고 SNI 와 Host 헤더로 호스트를 가르며 pathType 으로 경로를 가르고 헤더 조작과 쿠키 어피니티가 일어난다. 규칙에 맞지 않으면 default backend 로 간다. 마지막 구간에서 프록시는 cluster IP 를 건너뛰고 파드 IP 로 직접 보낸다. 아래쪽에는 이 길을 만드는 제어 평면을 따로 두었다. 관리자가 Ingress 를 apply 하면 API 서버에 저장되고, IngressClass 가 지목한 컨트롤러가 그것을 집어가 프록시 설정을 만들어 반영한다. 트래픽은 이 제어 평면을 지나지 않으며 컨트롤러는 설정을 만들 뿐 요청을 처리하지 않는다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 21px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 13px; fill: rgb(168,163,158); }
+      .lyr  { font-size: 11.5px; font-weight: 800; fill: rgb(168,163,158); }
+      .node { font-size: 13px; font-weight: 700; fill: #e8e4df; }
+      .nodk { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .cap  { font-size: 10.5px; fill: rgb(168,163,158); }
+      .item { font-size: 11px; fill: #e8e4df; }
+      .amb  { font-size: 11px; font-weight: 800; fill: rgb(212,168,83); }
+      .grn  { font-size: 11px; font-weight: 800; fill: rgb(102,187,106); }
+      .pnk  { font-size: 11px; font-weight: 800; fill: rgb(240,150,190); }
+      .mono { font-size: 10.5px; font-weight: 700; fill: rgb(168,163,158); font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    </style>
+    <marker id="jA" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="rgb(168,163,158)"/></marker>
+    <marker id="jB" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="rgb(91,155,213)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="640" fill="#0d0d0d"/>
+
+  <text x="30" y="34" class="h1">요청 하나가 지나는 길 — 12장이 다룬 것들이 각각 여기서 작동합니다</text>
+  <text x="30" y="56" class="sub">위는 트래픽이 흐르는 길(데이터 평면), 아래는 그 길을 만드는 쪽(제어 평면). 둘은 만나지 않습니다.</text>
+
+  <!-- ══ 암호 구간 띠 ══ -->
+  <rect x="30" y="76" width="700" height="20" rx="4" fill="rgba(102,187,106,0.22)"/>
+  <text x="380" y="91" class="grn" text-anchor="middle">TLS — 브라우저에서 프록시까지 (termination)</text>
+  <rect x="736" y="76" width="354" height="20" rx="4" fill="rgba(168,163,158,0.14)"/>
+  <text x="913" y="91" class="cap" text-anchor="middle">평문 HTTP — 파드는 HTTPS 를 몰라도 됩니다</text>
+
+  <!-- ══ 경로 ══ -->
+  <rect x="30" y="108" width="130" height="42" rx="7" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="95" y="134" class="node" text-anchor="middle">브라우저</text>
+
+  <line x1="164" y1="129" x2="196" y2="129" stroke="rgb(168,163,158)" stroke-width="1.8" marker-end="url(#jA)"/>
+
+  <rect x="202" y="108" width="120" height="42" rx="7" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="262" y="134" class="node" text-anchor="middle">DNS</text>
+
+  <line x1="326" y1="129" x2="358" y2="129" stroke="rgb(168,163,158)" stroke-width="1.8" marker-end="url(#jA)"/>
+
+  <rect x="364" y="108" width="150" height="42" rx="7" fill="#0d0d0d" stroke="rgb(91,155,213)" stroke-width="1.5"/>
+  <text x="439" y="134" class="node" text-anchor="middle">로드밸런서</text>
+
+  <line x1="518" y1="129" x2="550" y2="129" stroke="rgb(168,163,158)" stroke-width="1.8" marker-end="url(#jA)"/>
+
+  <rect x="556" y="104" width="174" height="50" rx="7" fill="rgb(212,168,83)"/>
+  <text x="643" y="126" class="nodk" text-anchor="middle">프록시 파드</text>
+  <text x="643" y="144" class="nodk" text-anchor="middle" style="font-size:10px;font-weight:700">여기가 12장의 무대</text>
+
+  <line x1="734" y1="129" x2="790" y2="129" stroke="rgb(168,163,158)" stroke-width="1.8" marker-end="url(#jA)"/>
+  <text x="762" y="120" class="mono" text-anchor="middle" style="font-size:9.5px">파드 IP 직접</text>
+
+  <rect x="796" y="108" width="150" height="42" rx="7" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="871" y="134" class="node" text-anchor="middle">백엔드 파드</text>
+
+  <!-- ══ 각 자리에서 벌어지는 일 ══ -->
+  <line x1="262" y1="156" x2="262" y2="176" stroke="rgb(92,84,74)" stroke-width="1" stroke-dasharray="3 3"/>
+  <rect x="182" y="180" width="160" height="72" rx="7" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="196" y="199" class="lyr">도메인 → 공인 IP</text>
+  <text x="196" y="219" class="item">한 IP 에 도메인 여럿</text>
+  <text x="196" y="238" class="cap">요소 단위 매칭이 여기서도</text>
+
+  <line x1="439" y1="156" x2="439" y2="176" stroke="rgb(91,155,213)" stroke-width="1" stroke-dasharray="3 3"/>
+  <rect x="360" y="180" width="160" height="72" rx="7" fill="#0d0d0d" stroke="rgb(91,155,213)"/>
+  <text x="374" y="199" class="lyr" style="fill:rgb(91,155,213)">Service 소관</text>
+  <text x="374" y="219" class="mono">externalTrafficPolicy</text>
+  <text x="374" y="238" class="pnk">Cluster 면 SNAT 로 IP 가림</text>
+
+  <line x1="643" y1="158" x2="643" y2="176" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <rect x="538" y="180" width="264" height="152" rx="7" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="1.6"/>
+  <text x="552" y="199" class="amb">프록시가 하는 일 — 순서대로</text>
+  <text x="552" y="220" class="item">① TLS 를 풉니다 <tspan class="cap">(인증서를 쥔 쪽)</tspan></text>
+  <text x="552" y="240" class="item">② 호스트를 가릅니다 <tspan class="mono">SNI · Host</tspan></text>
+  <text x="552" y="260" class="item">③ 경로를 가릅니다 <tspan class="mono">pathType</tspan></text>
+  <text x="552" y="280" class="item">④ 헤더 조작 · 쿠키 어피니티</text>
+  <rect x="552" y="290" width="236" height="30" rx="5" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="564" y="309" class="cap">어디에도 안 맞으면 → default backend</text>
+
+  <line x1="871" y1="156" x2="871" y2="176" stroke="rgb(92,84,74)" stroke-width="1" stroke-dasharray="3 3"/>
+  <rect x="820" y="180" width="270" height="72" rx="7" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="834" y="199" class="lyr">cluster IP 를 건너뜁니다</text>
+  <text x="834" y="219" class="item">Service 는 대상 목록으로만 쓰고</text>
+  <text x="834" y="238" class="cap">프록시가 파드 IP 로 직접 — 판단이 살아남습니다</text>
+
+  <!-- ══ 경계 ══ -->
+  <line x1="30" y1="360" x2="1090" y2="360" stroke="rgb(42,37,32)" stroke-width="1.5" stroke-dasharray="8 5"/>
+  <text x="30" y="354" class="cap">트래픽은 여기까지 — 아래는 이 길을 만드는 쪽입니다</text>
+
+  <!-- ══ 제어 평면 ══ -->
+  <text x="30" y="392" class="lyr" style="fill:rgb(91,155,213)">제어 평면 — 요청은 지나지 않습니다</text>
+
+  <rect x="30" y="404" width="180" height="52" rx="7" fill="#0d0d0d" stroke="rgb(91,155,213)"/>
+  <text x="44" y="424" class="node" style="font-size:12px">관리자</text>
+  <text x="44" y="444" class="mono">kubectl apply -f ingress</text>
+
+  <line x1="214" y1="430" x2="252" y2="430" stroke="rgb(91,155,213)" stroke-width="1.8" marker-end="url(#jB)"/>
+
+  <rect x="258" y="404" width="200" height="52" rx="7" fill="#0d0d0d" stroke="rgb(91,155,213)"/>
+  <text x="272" y="424" class="node" style="font-size:12px">API 서버</text>
+  <text x="272" y="444" class="cap">저장만 — 인증서·host 대조 안 함</text>
+
+  <line x1="462" y1="430" x2="500" y2="430" stroke="rgb(91,155,213)" stroke-width="1.8" marker-end="url(#jB)"/>
+
+  <rect x="506" y="404" width="230" height="52" rx="7" fill="#0d0d0d" stroke="rgb(91,155,213)"/>
+  <text x="520" y="424" class="node" style="font-size:12px">컨트롤러</text>
+  <text x="520" y="444" class="cap">IngressClass 가 지목한 하나만 집어감</text>
+
+  <line x1="740" y1="430" x2="778" y2="430" stroke="rgb(91,155,213)" stroke-width="1.8" marker-end="url(#jB)"/>
+
+  <rect x="784" y="404" width="220" height="52" rx="7" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="798" y="424" class="node" style="font-size:12px">프록시 설정 반영</text>
+  <text x="798" y="444" class="cap">nginx.conf 를 만들어 reload</text>
+
+  <path d="M 894 400 L 894 386 L 643 386 L 643 340" fill="none" stroke="rgb(212,168,83)" stroke-width="1.4" stroke-dasharray="5 3"/>
+  <rect x="676" y="376" width="188" height="18" rx="4" fill="#0d0d0d"/>
+  <text x="770" y="390" class="amb" text-anchor="middle">이 설정으로 위 프록시가 움직입니다</text>
+
+  <!-- ══ 못박기 ══ -->
+  <rect x="30" y="480" width="1060" height="132" rx="10" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="504" class="lyr">이 그림 하나로 정리되는 것 넷</text>
+
+  <text x="52" y="528" class="item">· <tspan class="amb">컨트롤러 ≠ 프록시</tspan> — 컨트롤러는 설정을 만들 뿐, 요청은 프록시가 처리합니다. 아래 줄과 위 줄이 만나지 않는 이유입니다.</text>
+  <text x="52" y="552" class="item">· <tspan class="amb">암호가 풀리는 자리가 기능을 정합니다</tspan> — 프록시에서 풀리니 ②③④ 가 가능하고, passthrough 면 ① 이 없어 ②(SNI)만 남습니다.</text>
+  <text x="52" y="576" class="item">· <tspan class="amb">Service 소관은 앞 구간까지</tspan> — 마지막 구간은 프록시가 파드 IP 로 직접 보내므로 sessionAffinity 가 닿지 않습니다.</text>
+  <text x="52" y="600" class="item">· <tspan class="amb">검증하는 주체가 이 길 위에 없습니다</tspan> — API 서버는 저장만 하고, 인증서·host 불일치는 맨 왼쪽 브라우저가 처음 잡아냅니다.</text>
+</svg>
