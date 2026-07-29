@@ -1,0 +1,65 @@
+<svg viewBox="0 0 1120 456" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>어피니티와 트래픽 정책은 다른 구간의 일 — 한 곳에서만 만납니다</title>
+  <desc>요청이 지나는 경로를 한 줄로 놓고 구간별 소관을 갈라 보여 준다. 클라이언트에서 로드밸런서를 거쳐 프록시 파드까지가 Service 소관이고, 프록시 파드에서 백엔드 파드까지는 프록시 소관이다. 프록시는 cluster IP 를 건너뛰고 파드 IP 로 직접 보내므로 뒤 구간에는 Service 가 개입할 자리가 없다. 그래서 externalTrafficPolicy 와 sessionAffinity 는 앞 구간에만 걸리고 L7 쿠키 어피니티는 뒤 구간에만 걸려, 둘은 애초에 만나지 않는다. 다만 한 곳에서 만난다. 앞 구간에 Cluster 정책이 걸려 있으면 SNAT 때문에 프록시가 보는 클라이언트 IP 가 노드 IP 로 오염되고, 그러면 IP 기반 어피니티가 무의미해지며 접근 로그의 출발지도 전부 노드 주소가 된다. 그래서 실무에서는 컨트롤러의 로드밸런서 Service 에 externalTrafficPolicy 를 Local 로 거는 것이 관행이다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 22px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 13.5px; fill: rgb(168,163,158); }
+      .box  { font-size: 13px; font-weight: 700; fill: #e8e4df; }
+      .who  { font-size: 12px; fill: rgb(168,163,158); }
+      .bad  { font-size: 12.5px; font-weight: 700; fill: rgb(240,150,190); }
+      .blu  { font-size: 12.5px; font-weight: 800; fill: rgb(91,155,213); }
+      .amb  { font-size: 12.5px; font-weight: 800; fill: rgb(212,168,83); }
+      .mono { font-size: 11px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .monol{ font-size: 11.5px; font-weight: 700; fill: rgb(168,163,158); font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    </style>
+    <marker id="abG" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+    <marker id="abP" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="rgb(240,150,190)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="456" fill="#0d0d0d"/>
+
+  <text x="30" y="38" class="h1">둘은 애초에 다른 구간의 일입니다 — 딱 한 곳에서만 만납니다</text>
+  <text x="30" y="62" class="sub">경로를 구간별로 갈라 보면 externalTrafficPolicy 와 L7 어피니티가 왜 부딪히지 않는지 드러납니다.</text>
+
+  <!-- 경로 -->
+  <rect x="30" y="128" width="164" height="48" rx="8" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="112" y="157" class="box" text-anchor="middle">클라이언트</text>
+
+  <line x1="200" y1="152" x2="236" y2="152" stroke="rgb(138,133,128)" stroke-width="2" marker-end="url(#abG)"/>
+
+  <rect x="242" y="128" width="164" height="48" rx="8" fill="#0d0d0d" stroke="rgb(91,155,213)" stroke-width="1.5"/>
+  <text x="324" y="157" class="box" text-anchor="middle">로드밸런서</text>
+
+  <line x1="412" y1="152" x2="448" y2="152" stroke="rgb(138,133,128)" stroke-width="2" marker-end="url(#abG)"/>
+
+  <rect x="454" y="128" width="200" height="48" rx="8" fill="rgb(212,168,83)"/>
+  <text x="554" y="157" class="mono" text-anchor="middle" style="font-size:12.5px">프록시 파드</text>
+
+  <line x1="660" y1="152" x2="740" y2="152" stroke="rgb(138,133,128)" stroke-width="2" marker-end="url(#abG)"/>
+  <text x="700" y="142" class="monol" text-anchor="middle" style="font-size:10.5px">파드 IP 직접</text>
+
+  <rect x="746" y="128" width="164" height="48" rx="8" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="828" y="157" class="box" text-anchor="middle">백엔드 파드</text>
+
+  <!-- 소관 구간 -->
+  <path d="M 36 190 L 36 202 L 648 202 L 648 190" fill="none" stroke="rgb(91,155,213)" stroke-width="1.6"/>
+  <rect x="200" y="208" width="284" height="24" rx="5" fill="rgb(91,155,213)"/>
+  <text x="342" y="226" class="mono" text-anchor="middle" style="fill:#e8e4df">Service 소관</text>
+
+  <path d="M 460 272 L 460 284 L 904 284 L 904 272" fill="none" stroke="rgb(212,168,83)" stroke-width="1.6"/>
+  <rect x="530" y="290" width="304" height="24" rx="5" fill="rgb(212,168,83)"/>
+  <text x="682" y="308" class="mono" text-anchor="middle">프록시 소관 — Service 를 거치지 않습니다</text>
+
+  <text x="342" y="252" class="blu" text-anchor="middle">externalTrafficPolicy · sessionAffinity — 앞 구간에만</text>
+  <text x="682" y="334" class="amb" text-anchor="middle">쿠키 기반 L7 어피니티 — 뒤 구간에만</text>
+
+  
+
+  <!-- 만나는 한 곳 -->
+  <rect x="30" y="352" width="1060" height="82" rx="10" fill="rgb(28,24,26)" stroke="rgb(240,150,190)" stroke-width="1.6"/>
+    <text x="52" y="376" class="bad">⚠ 그런데 한 곳에서 만납니다 — 앞 구간의 정책이 뒤 구간을 망칠 수 있습니다</text>
+  <line x1="324" y1="176" x2="324" y2="352" stroke="rgb(240,150,190)" stroke-width="1.4" stroke-dasharray="4 4"/>
+    <text x="52" y="400" class="who">LB → 프록시 구간에 <tspan class="monol" fill="#e8e4df">Cluster</tspan> 정책이 걸리면 SNAT 때문에 <tspan fill="#e8e4df" font-weight="700">프록시가 보는 클라이언트 IP 가 노드 IP 로 오염</tspan> 됩니다.</text>
+    <text x="52" y="422" class="who">그러면 IP 기반 어피니티가 무의미해지고 접근 로그의 출발지도 전부 노드 주소가 됩니다 — 그래서 <tspan class="monol" fill="#e8e4df">externalTrafficPolicy: Local</tspan> 이 관행입니다.</text>
+</svg>
