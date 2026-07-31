@@ -1,0 +1,64 @@
+<svg viewBox="0 0 900 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>WAL 자르기와 체크포인트 — 왜 그냥 못 지우는가</title>
+  <desc>영속 블록이 쓰이면 그 구간의 WAL 은 필요 없어진다. 그런데 WAL 세그먼트 파일은 시간 범위를 알기 어려워 시간으로 잘라 낼 수 없고, 대신 앞 3분의 2 를 통째로 지운다. 문제는 지울 구간 안에 아직 살아 있는 정보가 섞여 있다는 것이다. 그래서 지우기 전에 그 구간을 훑어 아직 필요한 것만 골라 체크포인트라는 작은 파일로 옮겨 둔다. 더 이상 head 에 없는 시계열의 레코드, 잘림 시각보다 이전의 샘플, 그 시각보다 이전의 툼스톤은 버리고 나머지는 순서까지 그대로 남긴다. 그 뒤에 앞 3분의 2 를 지운다.</desc>
+
+  <defs>
+    <marker id="w" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="420" fill="#0d0d0d"/>
+  <text x="24" y="30" fill="#e8e4df" font-size="15">WAL 은 왜 그냥 못 지웁니까</text>
+
+  <!-- 1) 문제 -->
+  <text x="24" y="62" fill="#e8e4df" font-size="11.5" font-weight="700">① 시간으로 자를 수가 없습니다</text>
+
+  <rect x="24" y="74" width="410" height="76" fill="#0d0d0d" stroke="#66bb6a"/>
+  <text x="40" y="94" fill="#66bb6a" font-size="10" font-weight="700">head 블록</text>
+  <text x="40" y="114" fill="#e8e4df" font-size="9">chunk 마다 최소·최대 시각을 들고 있습니다</text>
+  <rect x="40" y="122" width="378" height="18" fill="#66bb6a" stroke="#66bb6a"/>
+  <text x="229" y="135" style="fill:#0d0d0d" font-size="8.5" text-anchor="middle" font-weight="700">→ &quot;2 시간 이전&quot; 을 정확히 골라 지울 수 있음</text>
+
+  <rect x="466" y="74" width="410" height="76" fill="#0d0d0d" stroke="#f44336"/>
+  <text x="482" y="94" fill="#f44336" font-size="10" font-weight="700">WAL 세그먼트</text>
+  <text x="482" y="114" fill="#e8e4df" font-size="9">레코드가 도착 순서대로 섞여 있을 뿐입니다</text>
+  <rect x="482" y="122" width="378" height="18" fill="#f2d4d4" stroke="#f2d4d4"/>
+  <text x="671" y="135" style="fill:#7a1f1f" font-size="8.5" text-anchor="middle" font-weight="700">→ 이 파일이 몇 시부터 몇 시까지인지 알기 어려움</text>
+
+  <!-- 2) 그래서 앞 2/3 -->
+  <text x="24" y="184" fill="#e8e4df" font-size="11.5" font-weight="700">② 그래서 앞 3분의 2 를 통째로 지웁니다</text>
+
+  <rect x="24" y="196" width="560" height="46" fill="#f2d4d4" stroke="#f2d4d4"/>
+  <text x="304" y="215" style="fill:#7a1f1f" font-size="10" text-anchor="middle" font-weight="700">지울 구간 — 세그먼트 앞 3분의 2</text>
+  <text x="304" y="232" style="fill:#7a1f1f" font-size="8.5" text-anchor="middle">그런데 여기 아직 필요한 게 섞여 있습니다</text>
+
+  <rect x="592" y="196" width="284" height="46" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="734" y="221" fill="rgb(138,133,128)" font-size="9.5" text-anchor="middle">남길 구간 — 뒤 3분의 1</text>
+
+  <!-- 3) 체크포인트 -->
+  <text x="24" y="276" fill="#e8e4df" font-size="11.5" font-weight="700">③ 지우기 전에 &quot;아직 필요한 것&quot; 만 건져 냅니다 = 체크포인트</text>
+
+  <rect x="24" y="288" width="560" height="86" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="40" y="308" fill="rgb(138,133,128)" font-size="9">지울 구간을 훑으며 거릅니다</text>
+
+  <rect x="40" y="316" width="256" height="18" fill="#f2d4d4" stroke="#f2d4d4"/>
+  <text x="50" y="329" style="fill:#7a1f1f" font-size="8">✕ head 에 없는 시계열의 레코드</text>
+  <rect x="40" y="338" width="256" height="18" fill="#f2d4d4" stroke="#f2d4d4"/>
+  <text x="50" y="351" style="fill:#7a1f1f" font-size="8">✕ 잘림 시각 이전의 샘플 · 툼스톤</text>
+
+  <rect x="308" y="316" width="260" height="40" fill="#66bb6a" stroke="#66bb6a"/>
+  <text x="438" y="332" style="fill:#0d0d0d" font-size="9" text-anchor="middle" font-weight="700">○ 나머지는 순서까지 그대로</text>
+  <text x="438" y="348" style="fill:#0d0d0d" font-size="8.5" text-anchor="middle">= 걸러진 WAL</text>
+
+  <line x1="592" y1="330" x2="628" y2="330" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#w)"/>
+
+  <rect x="636" y="300" width="240" height="60" fill="rgb(212,168,83)" stroke="rgb(212,168,83)"/>
+  <text x="756" y="322" style="fill:#0d0d0d" font-size="10.5" text-anchor="middle" font-weight="700">체크포인트 파일</text>
+  <text x="756" y="340" style="fill:#0d0d0d" font-size="8.5" text-anchor="middle">작지만 없으면 안 되는 것만</text>
+  <text x="756" y="353" style="fill:#0d0d0d" font-size="8.5" text-anchor="middle">담긴 요약본</text>
+
+  <!-- 결론 -->
+  <line x1="24" y1="386" x2="876" y2="386" stroke="rgb(92,84,74)"/>
+  <text x="24" y="408" fill="#e8e4df" font-size="11">체크포인트를 만든 <tspan fill="rgb(212,168,83)" font-weight="700">뒤에야</tspan> 앞 3분의 2 를 지웁니다. 재시작 때는 이 요약본부터 읽으니 <tspan fill="#66bb6a" font-weight="700">복구도 빨라집니다.</tspan></text>
+</svg>

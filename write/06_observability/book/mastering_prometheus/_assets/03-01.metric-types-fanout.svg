@@ -1,6 +1,6 @@
-<svg viewBox="0 0 820 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+<svg viewBox="0 0 900 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
   <title>메트릭 타입 네 가지 — 관측 하나가 시계열 몇 개가 되는가</title>
-  <desc>카운터와 게이지는 관측 하나가 시계열 하나로 그대로 남고 값의 움직임만 다르다. 카운터는 오르기만 하고 게이지는 오르내린다. 히스토그램은 관측 하나가 시계열 여러 개를 동시에 올린다. 임계값 이하인 모든 le 버킷과 sum, count 가 함께 오르므로 버킷 다섯 개짜리면 시계열이 여덟 개가 된다. 서머리는 le 대신 미리 정한 quantile 라벨마다 시계열을 내고 값은 관측이 있을 때마다 다시 계산된다. 네 타입 모두 TSDB 에는 같은 방식으로 저장되며 타입이 정하는 것은 저장 방식이 아니라 쓸 수 있는 PromQL 함수다.</desc>
+  <desc>관측 하나를 넣었을 때 만들어지는 시계열 개수로 네 타입을 가른다. 카운터와 게이지는 각각 시계열 1 개로, 값의 움직임만 다르다. 히스토그램은 버킷 5 개짜리면 le 버킷 6 개에 sum 과 count 를 더해 시계열 8 개가 된다. 서머리는 미리 정한 분위수 4 개마다 시계열이 생겨 4 개가 된다. 버킷이나 분위수를 늘리면 시계열이 그만큼 늘어나 카디널리티가 커진다. 네 타입 모두 TSDB 에는 같은 방식으로 저장되며 타입이 정하는 것은 쓸 수 있는 PromQL 함수다.</desc>
 
   <defs>
     <marker id="mt" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
@@ -8,78 +8,81 @@
     </marker>
   </defs>
 
-  <rect x="0" y="0" width="820" height="470" fill="#0d0d0d"/>
-  <text x="24" y="34" fill="#e8e4df" font-size="15">메트릭 타입 네 가지 — 관측 하나가 시계열 몇 개가 됩니까</text>
+  <rect x="0" y="0" width="900" height="440" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="15">관측 1 개를 넣으면 시계열이 몇 개 생기는가</text>
 
-  <text x="24" y="60" fill="rgb(168,163,158)" font-size="10.5">타입이 갈리는 자리는 저장 방식이 아니라 <tspan fill="#e8e4df">관측 하나가 시계열 몇 개로 흩어지는가</tspan> 입니다.</text>
-
-  <!-- 왼쪽: 1 대 1 -->
-  <rect x="24" y="80" width="368" height="284" fill="none" stroke="rgb(92,84,74)"/>
-  <text x="40" y="102" fill="#e8e4df" font-size="12" font-weight="700">관측 1 개 → 시계열 1 개</text>
+  <!-- 열 머리글 -->
+  <text x="24" y="66" fill="rgb(138,133,128)" font-size="10">타입</text>
+  <text x="250" y="66" fill="rgb(138,133,128)" font-size="10">관측 1 개가 만드는 시계열</text>
+  <text x="760" y="66" fill="rgb(138,133,128)" font-size="10">개수</text>
+  <line x1="24" y1="74" x2="876" y2="74" stroke="rgb(92,84,74)"/>
 
   <!-- 카운터 -->
-  <rect x="40" y="116" width="336" height="58" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
-  <text x="54" y="136" fill="#e8e4df" font-size="11">카운터 <tspan fill="rgb(168,163,158)" font-size="9.5">— 오르기만 · 관례 </tspan><tspan font-family="'JetBrains Mono', monospace" font-size="9.5" fill="rgb(168,163,158)">_total</tspan></text>
-  <polyline points="60,166 100,163 140,163 180,158 220,158 260,153 300,149 356,145" fill="none" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="24" y="106" fill="#e8e4df" font-size="12">카운터</text>
+  <text x="24" y="124" fill="rgb(138,133,128)" font-size="9">오르기만 · _total</text>
+  <rect x="250" y="88" width="200" height="30" fill="rgb(212,168,83)" stroke="rgb(212,168,83)"/>
+  <text x="262" y="108" style="fill:#0d0d0d" font-size="9.5" font-family="'JetBrains Mono', monospace">requests_total</text>
+  <text x="760" y="112" fill="rgb(212,168,83)" font-size="22" font-weight="700">1</text>
+  <line x1="24" y1="136" x2="876" y2="136" stroke="rgb(42,37,32)"/>
 
   <!-- 게이지 -->
-  <rect x="40" y="184" width="336" height="58" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
-  <text x="54" y="204" fill="#e8e4df" font-size="11">게이지 <tspan fill="rgb(168,163,158)" font-size="9.5">— 오르내림 · </tspan><tspan font-family="'JetBrains Mono', monospace" font-size="9.5" fill="rgb(168,163,158)">up</tspan><tspan fill="rgb(168,163,158)" font-size="9.5"> 도 게이지</tspan></text>
-  <polyline points="60,228 100,214 140,232 180,218 220,234 260,216 300,228 356,220" fill="none" stroke="rgb(212,168,83)" stroke-width="2"/>
-
-  <!-- _info 관용 -->
-  <text x="40" y="272" fill="#e8e4df" font-size="11">정보성 메트릭 <tspan font-family="'JetBrains Mono', monospace" font-size="9.5" fill="rgb(168,163,158)">_info</tspan> <tspan fill="rgb(168,163,158)" font-size="9.5">— 게이지의 관용</tspan></text>
-
-  <rect x="40" y="282" width="336" height="66" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
-  <text x="54" y="302" fill="#e8e4df" font-size="9" font-family="'JetBrains Mono', monospace">prometheus_build_info{version="2.55.1"} 1</text>
-  <text x="54" y="322" fill="rgb(102,187,106)" font-size="9.5">값은 언제나 <tspan font-weight="700">1</tspan> 로 고정하고</text>
-  <text x="54" y="338" fill="rgb(102,187,106)" font-size="9.5">정보는 <tspan font-weight="700">라벨에</tspan> 싣습니다</text>
-
-  <!-- 오른쪽: 1 대 N -->
-  <rect x="416" y="80" width="380" height="284" fill="none" stroke="rgb(102,187,106)"/>
-  <text x="432" y="102" fill="rgb(102,187,106)" font-size="12" font-weight="700">관측 1 개 → 시계열 여러 개</text>
+  <text x="24" y="168" fill="#e8e4df" font-size="12">게이지</text>
+  <text x="24" y="186" fill="rgb(138,133,128)" font-size="9">오르내림 · up</text>
+  <rect x="250" y="150" width="200" height="30" fill="rgb(212,168,83)" stroke="rgb(212,168,83)"/>
+  <text x="262" y="170" style="fill:#0d0d0d" font-size="9.5" font-family="'JetBrains Mono', monospace">memory_bytes</text>
+  <text x="760" y="174" fill="rgb(212,168,83)" font-size="22" font-weight="700">1</text>
+  <line x1="24" y1="198" x2="876" y2="198" stroke="rgb(42,37,32)"/>
 
   <!-- 히스토그램 -->
-  <text x="432" y="126" fill="#e8e4df" font-size="11">히스토그램 <tspan fill="rgb(168,163,158)" font-size="9.5">— 카운터 여러 개의 묶음</tspan></text>
+  <text x="24" y="230" fill="#e8e4df" font-size="12">히스토그램</text>
+  <text x="24" y="248" fill="rgb(138,133,128)" font-size="9">버킷 5 개 기준</text>
+  <text x="24" y="264" fill="rgb(138,133,128)" font-size="9">le = 임계값</text>
 
-  <rect x="432" y="136" width="120" height="26" fill="rgba(212,168,83,0.20)" stroke="rgb(212,168,83)"/>
-  <text x="492" y="154" fill="#e8e4df" font-size="10" text-anchor="middle">관측 0.6 초</text>
-
-  <line x1="556" y1="149" x2="586" y2="149" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#mt)"/>
-
-  <rect x="592" y="132" width="188" height="106" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
-  <text x="604" y="150" fill="rgb(168,163,158)" font-size="9" font-family="'JetBrains Mono', monospace">le="0.1"  le="0.2"  le="0.5"</text>
-  <text x="604" y="166" fill="rgb(102,187,106)" font-size="9" font-family="'JetBrains Mono', monospace">le="1"  le="5"  le="+Inf"  ← +1</text>
-  <text x="604" y="186" fill="rgb(102,187,106)" font-size="9" font-family="'JetBrains Mono', monospace">_sum  _count            ← +1</text>
-  <line x1="604" y1="196" x2="768" y2="196" stroke="rgb(92,84,74)"/>
-  <text x="604" y="212" fill="#e8e4df" font-size="9.5">임계값 이하 버킷만 오릅니다</text>
-  <text x="604" y="228" fill="#e8e4df" font-size="9.5">버킷 5 개 → 시계열 <tspan font-weight="700">8 개</tspan></text>
-
-  <text x="432" y="182" fill="rgb(168,163,158)" font-size="9.5">0.6 은</text>
-  <text x="432" y="197" fill="rgb(168,163,158)" font-size="9.5">1·5·+Inf</text>
-  <text x="432" y="212" fill="rgb(168,163,158)" font-size="9.5">이하라서</text>
-  <text x="432" y="227" fill="rgb(168,163,158)" font-size="9.5">셋만 +1</text>
+  <rect x="250" y="212" width="52" height="26" fill="rgb(212,168,83)" stroke="rgb(212,168,83)"/>
+  <text x="276" y="230" style="fill:#0d0d0d" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="middle">0.1</text>
+  <rect x="306" y="212" width="52" height="26" fill="rgb(212,168,83)" stroke="rgb(212,168,83)"/>
+  <text x="332" y="230" style="fill:#0d0d0d" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="middle">0.2</text>
+  <rect x="362" y="212" width="52" height="26" fill="rgb(212,168,83)" stroke="rgb(212,168,83)"/>
+  <text x="388" y="230" style="fill:#0d0d0d" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="middle">0.5</text>
+  <rect x="418" y="212" width="52" height="26" fill="rgb(212,168,83)" stroke="rgb(212,168,83)"/>
+  <text x="444" y="230" style="fill:#0d0d0d" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="middle">1</text>
+  <rect x="474" y="212" width="52" height="26" fill="rgb(212,168,83)" stroke="rgb(212,168,83)"/>
+  <text x="500" y="230" style="fill:#0d0d0d" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="middle">5</text>
+  <rect x="530" y="212" width="52" height="26" fill="rgb(212,168,83)" stroke="rgb(212,168,83)"/>
+  <text x="556" y="230" style="fill:#0d0d0d" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="middle">+Inf</text>
+  <rect x="592" y="212" width="46" height="26" fill="#dceaf7" stroke="#dceaf7"/>
+  <text x="615" y="230" style="fill:#10243a" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="middle">_sum</text>
+  <rect x="642" y="212" width="52" height="26" fill="#dceaf7" stroke="#dceaf7"/>
+  <text x="668" y="230" style="fill:#10243a" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="middle">_count</text>
+  <text x="250" y="258" fill="rgb(138,133,128)" font-size="9">le 버킷 6 개</text>
+  <text x="592" y="258" fill="rgb(138,133,128)" font-size="9">+ 2</text>
+  <text x="760" y="234" fill="rgb(102,187,106)" font-size="22" font-weight="700">8</text>
+  <line x1="24" y1="278" x2="876" y2="278" stroke="rgb(42,37,32)"/>
 
   <!-- 서머리 -->
-  <text x="432" y="266" fill="#e8e4df" font-size="11">서머리 <tspan fill="rgb(168,163,158)" font-size="9.5">— 분위수를 미리 정합니다</tspan></text>
+  <text x="24" y="310" fill="#e8e4df" font-size="12">서머리</text>
+  <text x="24" y="328" fill="rgb(138,133,128)" font-size="9">분위수 4 개 기준</text>
+  <text x="24" y="344" fill="rgb(138,133,128)" font-size="9">quantile = 분위수</text>
 
-  <rect x="432" y="276" width="120" height="26" fill="rgba(212,168,83,0.20)" stroke="rgb(212,168,83)"/>
-  <text x="492" y="294" fill="#e8e4df" font-size="10" text-anchor="middle">관측</text>
+  <rect x="250" y="292" width="70" height="26" fill="rgb(212,168,83)" stroke="rgb(212,168,83)"/>
+  <text x="285" y="310" style="fill:#0d0d0d" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="middle">0.5</text>
+  <rect x="324" y="292" width="70" height="26" fill="rgb(212,168,83)" stroke="rgb(212,168,83)"/>
+  <text x="359" y="310" style="fill:#0d0d0d" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="middle">0.95</text>
+  <rect x="398" y="292" width="70" height="26" fill="rgb(212,168,83)" stroke="rgb(212,168,83)"/>
+  <text x="433" y="310" style="fill:#0d0d0d" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="middle">0.99</text>
+  <rect x="472" y="292" width="70" height="26" fill="rgb(212,168,83)" stroke="rgb(212,168,83)"/>
+  <text x="507" y="310" style="fill:#0d0d0d" font-size="9" font-family="'JetBrains Mono', monospace" text-anchor="middle">0.999</text>
+  <text x="250" y="338" fill="rgb(138,133,128)" font-size="9">분위수마다 하나씩</text>
+  <text x="760" y="314" fill="rgb(102,187,106)" font-size="22" font-weight="700">4</text>
+  <line x1="24" y1="358" x2="876" y2="358" stroke="rgb(92,84,74)"/>
 
-  <line x1="556" y1="289" x2="586" y2="289" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#mt)"/>
+  <!-- 하단 결론 -->
+  <text x="24" y="384" fill="#e8e4df" font-size="11">버킷·분위수를 늘리면</text>
+  <line x1="176" y1="380" x2="216" y2="380" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#mt)"/>
+  <text x="228" y="384" fill="rgb(212,168,83)" font-size="11" font-weight="700">시계열이 그만큼 늘어납니다</text>
+  <text x="430" y="384" fill="rgb(138,133,128)" font-size="10">= 카디널리티 비용</text>
 
-  <rect x="592" y="272" width="188" height="76" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
-  <text x="604" y="290" fill="rgb(168,163,158)" font-size="9" font-family="'JetBrains Mono', monospace">quantile="0.5"  "0.95"</text>
-  <text x="604" y="306" fill="rgb(168,163,158)" font-size="9" font-family="'JetBrains Mono', monospace">quantile="0.99"  "0.999"</text>
-  <line x1="604" y1="316" x2="768" y2="316" stroke="rgb(92,84,74)"/>
-  <text x="604" y="332" fill="#e8e4df" font-size="9.5">값은 관측마다 <tspan font-weight="700">다시 계산</tspan>됩니다</text>
-
-  <text x="432" y="322" fill="rgb(168,163,158)" font-size="9.5">버킷이 아니라</text>
-  <text x="432" y="337" fill="rgb(168,163,158)" font-size="9.5">분위수마다</text>
-
-  <!-- 하단: 저장은 넷 다 같다 -->
-  <line x1="24" y1="386" x2="796" y2="386" stroke="rgb(92,84,74)"/>
-  <text x="24" y="410" fill="#e8e4df" font-size="12">넷 다 TSDB 에는 <tspan fill="rgb(212,168,83)" font-weight="700">똑같이 저장됩니다</tspan> — 타입이 정하는 것은 저장이 아니라 쓸 수 있는 함수입니다.</text>
-  <text x="24" y="436" fill="rgb(168,163,158)" font-size="10">히스토그램·서머리가 만드는 것도 결국 <tspan fill="#e8e4df">평범한 시계열 여럿</tspan>이고, 갈리는 것은 라벨 이름(<tspan font-family="'JetBrains Mono', monospace">le</tspan> 냐 <tspan font-family="'JetBrains Mono', monospace">quantile</tspan> 이냐)뿐입니다.</text>
-  <text x="24" y="456" fill="rgb(168,163,158)" font-size="10">그래서 카디널리티도 여기서 갈립니다 — 버킷·분위수를 늘리면 시계열이 그만큼 늘어납니다.</text>
+  <text x="24" y="414" fill="#e8e4df" font-size="11">넷 다 TSDB 저장 방식은</text>
+  <text x="176" y="414" fill="rgb(212,168,83)" font-size="11" font-weight="700">동일</text>
+  <text x="228" y="414" fill="rgb(138,133,128)" font-size="10">타입이 정하는 것은 쓸 수 있는 PromQL 함수입니다</text>
 </svg>
