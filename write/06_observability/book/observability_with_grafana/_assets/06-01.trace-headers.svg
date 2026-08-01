@@ -1,33 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="900" height="560" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="900" height="560" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif" role="img">
+  <title>트레이스 컨텍스트 전파 헤더</title>
+  <desc>W3C Trace Context·B3·Jaeger·baggage 등 트레이스 전파 헤더가 서비스 경계를 넘을 때 어떤 형식으로 trace ID 와 span ID 를 실어 나르는지 비교합니다.</desc>
   <style>
     .bg { fill: #0d0d0d; }
     .title { fill: #e8e4df; font-size: 17px; font-weight: 700; }
-    .sub { fill: #8a8580; font-size: 12px; }
+    .sub { fill: #b8b3ad; font-size: 12px; }
     .hd { font-size: 14px; font-weight: 700; }
     .note { font-size: 11.5px; }
-    .mono { font-family: 'SF Mono', Menlo, monospace; font-size: 11px; }
+    .mono { font-size: 11px; }
+    .code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11px; }
     .tag { font-size: 10.5px; font-weight: 700; }
   </style>
   <rect class="bg" x="0" y="0" width="900" height="560"/>
 
-  <text class="title" x="30" y="34">맥락 전파 헤더 — 같은 정보를 네 가지 방식으로 싣는다</text>
-  <text class="sub" x="30" y="55">서비스 경계를 넘을 때 trace ID·span ID·샘플링 여부를 HTTP·gRPC 헤더로 넘긴다. 이게 끊기면 트레이스가 조각난다.</text>
+  <text class="title" x="30" y="34">맥락 전파 헤더 네 가지</text>
+  <text class="sub" x="30" y="55">끊기면 트레이스가 조각난다</text>
 
   <!-- Jaeger -->
-  <rect x="30" y="76" width="840" height="106" rx="8" fill="#0d0d0d" stroke="#8a8580" stroke-width="1.4"/>
-  <rect x="30" y="76" width="150" height="106" rx="8" fill="#5b5550"/>
-  <rect x="172" y="76" width="8" height="106" fill="#5b5550"/>
+  <rect x="30" y="76" width="840" height="106" rx="8" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1.4"/>
+  <rect x="30" y="76" width="150" height="106" rx="8" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1"/>
+  <rect x="172" y="76" width="8" height="106" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1"/>
   <text class="hd" x="46" y="102" fill="#e8e4df">Jaeger / Uber</text>
   <rect x="46" y="112" width="118" height="20" rx="4" fill="#0d0d0d"/>
   <text class="tag" x="56" y="126" fill="#e39b9b">DEPRECATED</text>
   <text class="note" x="46" y="150" fill="#e8e4df">한 헤더에</text>
   <text class="note" x="46" y="166" fill="#e8e4df">콜론으로 묶음</text>
 
-  <rect x="196" y="92" width="658" height="26" rx="4" fill="#141414"/>
-  <text class="mono" x="208" y="109" fill="rgb(212,168,83)">uber-trace-id: {trace-id}:{span-id}:{parent-span-id}:{flags}</text>
-  <text class="mono" x="208" y="136" fill="#8a8580">269daf90c4589ce1 : 5c44cd976d8f8cd9 : 39e8e549de678267 : 0x01</text>
-  <text class="note" x="208" y="158" fill="#8a8580">trace-id 는 64 또는 128비트 · span-id 는 64비트 · 모두 hex 인코딩</text>
-  <text class="note" x="208" y="174" fill="#8a8580">baggage 는 uberctx-{key}: {value} 로 따로</text>
+  <rect x="196" y="92" width="658" height="26" rx="4" fill="#0d0d0d" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text class="code" x="208" y="109" fill="rgb(212,168,83)">uber-trace-id: {trace-id}:{span-id}:{parent-span-id}:{flags}</text>
+  <text class="code" x="208" y="136" fill="#b8b3ad">269daf90c4589ce1 : 5c44cd976d8f8cd9 : 39e8e549de678267 : 0x01</text>
+  <text class="code" x="208" y="158" fill="#b8b3ad">trace-id 64/128b, span 64b</text>
+  <text class="note" x="208" y="174" fill="#b8b3ad">baggage 는 uberctx-</text>
 
   <!-- B3 -->
   <rect x="30" y="194" width="840" height="140" rx="8" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.4"/>
@@ -40,16 +43,16 @@
   <text class="note" x="56" y="290" fill="#10243a" font-weight="700">b3 단일 헤더도</text>
   <text class="note" x="56" y="306" fill="#10243a" font-weight="700">나중에 추가됨</text>
 
-  <text class="mono" x="196" y="216" fill="#5b9bd5">X-B3-TraceId</text>
-  <text class="mono" x="360" y="216" fill="#8a8580">64 또는 128비트 hex</text>
-  <text class="mono" x="196" y="236" fill="#5b9bd5">X-B3-SpanId · X-B3-ParentSpanId</text>
-  <text class="mono" x="440" y="236" fill="#8a8580">각 64비트 hex</text>
-  <text class="mono" x="196" y="256" fill="#5b9bd5">X-B3-Sampled</text>
-  <text class="mono" x="360" y="256" fill="#8a8580">1 또는 0 (초기 구현은 true/false)</text>
-  <text class="mono" x="196" y="276" fill="#5b9bd5">X-B3-Flags</text>
-  <text class="mono" x="360" y="276" fill="#8a8580">디버그 결정을 전파</text>
-  <rect x="196" y="290" width="658" height="30" rx="4" fill="#141414"/>
-  <text class="mono" x="208" y="309" fill="rgb(212,168,83)">b3: {TraceId}-{SpanId}-{SamplingState}-{ParentSpanId}</text>
+  <text class="code" x="196" y="216" fill="#5b9bd5">X-B3-TraceId</text>
+  <text class="mono" x="360" y="216" fill="#b8b3ad">64 또는 128비트 hex</text>
+  <text class="code" x="196" y="236" fill="#5b9bd5">X-B3-SpanId · X-B3-ParentSpanId</text>
+  <text class="mono" x="440" y="236" fill="#b8b3ad">각 64비트 hex</text>
+  <text class="code" x="196" y="256" fill="#5b9bd5">X-B3-Sampled</text>
+  <text class="mono" x="360" y="256" fill="#b8b3ad">1 또는 0</text>
+  <text class="code" x="196" y="276" fill="#5b9bd5">X-B3-Flags</text>
+  <text class="mono" x="360" y="276" fill="#b8b3ad">디버그 결정을 전파</text>
+  <rect x="196" y="290" width="658" height="30" rx="4" fill="#0d0d0d" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text class="code" x="208" y="309" fill="rgb(212,168,83)">b3: {TraceId}-{SpanId}-{SamplingState}-{ParentSpanId}</text>
 
   <!-- W3C Trace Context -->
   <rect x="30" y="346" width="840" height="122" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.8"/>
@@ -61,12 +64,12 @@
   <text class="note" x="46" y="422" fill="#1a1a1a">표준 쌍</text>
   <text class="note" x="46" y="440" fill="#1a1a1a">두 개</text>
 
-  <rect x="196" y="362" width="658" height="26" rx="4" fill="#141414"/>
-  <text class="mono" x="208" y="379" fill="#66bb6a">traceparent: {version}-{trace-id}-{parent-id}-{trace-flags}</text>
-  <text class="note" x="208" y="400" fill="#8a8580">trace-id 16바이트(128비트) · parent-id 8바이트(64비트) · version·trace-flags 는 각 8비트</text>
-  <text class="note" x="208" y="418" fill="#8a8580">현재 version 은 00 뿐이고, 그 버전의 유일한 플래그는 샘플링 여부</text>
-  <rect x="196" y="428" width="658" height="26" rx="4" fill="#141414"/>
-  <text class="mono" x="208" y="445" fill="#66bb6a">tracestate: 벤더별 정보 — 쉼표로 구분한 키-값 목록</text>
+  <rect x="196" y="362" width="658" height="26" rx="4" fill="#0d0d0d" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text class="code" x="208" y="379" fill="#66bb6a">traceparent: {version}-{trace-id}-{parent-id}-{trace-flags}</text>
+  <text class="code" x="208" y="400" fill="#b8b3ad">trace-id 16B, parent 8B</text>
+  <text class="note" x="208" y="418" fill="#b8b3ad">version 00 · 샘플링 플래그</text>
+  <rect x="196" y="428" width="658" height="26" rx="4" fill="#0d0d0d" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text class="mono" x="208" y="445" fill="#66bb6a">tracestate — 벤더별 키-값</text>
 
   <!-- Baggage -->
   <rect x="30" y="480" width="840" height="66" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.4"/>
@@ -75,7 +78,7 @@
   <text class="hd" x="46" y="506" fill="#0d0d0d">W3C baggage</text>
   <text class="note" x="46" y="528" fill="#1a1a1a">트레이스와 별개</text>
 
-  <rect x="196" y="492" width="658" height="24" rx="4" fill="#141414"/>
-  <text class="mono" x="208" y="508" fill="rgb(212,168,83)">baggage: key1=value1,key2=value2;property1;propertyKey=propertyValue,…</text>
-  <text class="note" x="208" y="534" fill="#e39b9b" font-weight="700">전부 percent-encoding · 최대 64개 멤버 · 최대 8,192바이트 · 네트워크에서 보이므로 민감정보 금지</text>
+  <rect x="196" y="492" width="658" height="24" rx="4" fill="#0d0d0d" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text class="code" x="208" y="508" fill="rgb(212,168,83)">baggage: key1=value1,key2=value2;property1;propertyKey=propertyValue,…</text>
+  <text class="note" x="208" y="534" fill="#e39b9b" font-weight="700">최대 64개 · 8,192바이트</text>
 </svg>
