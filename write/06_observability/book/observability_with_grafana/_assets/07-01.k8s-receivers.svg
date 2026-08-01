@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="900" height="560" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+  <style>
+    .bg { fill: #0d0d0d; }
+    .title { fill: #e8e4df; font-size: 17px; font-weight: 700; }
+    .sub { fill: #8a8580; font-size: 12px; }
+    .zone { fill: #8a8580; font-size: 12px; font-weight: 700; }
+    .hd { font-size: 13.5px; font-weight: 700; }
+    .note { font-size: 11px; }
+    .mono { font-family: 'SF Mono', Menlo, monospace; font-size: 10.5px; }
+  </style>
+  <rect class="bg" x="0" y="0" width="900" height="560"/>
+
+  <text class="title" x="30" y="34">쿠버네티스 수집 — 배포 형태가 컴포넌트를 정한다</text>
+  <text class="sub" x="30" y="55">노드마다 있어야 하는 것과 클러스터에 하나만 있어야 하는 것이 갈린다. 이 구분을 틀리면 데이터가 비거나 중복된다.</text>
+
+  <!-- DaemonSet zone -->
+  <rect x="30" y="78" width="410" height="304" rx="10" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.8"/>
+  <rect x="30" y="78" width="410" height="34" rx="10" fill="#5b9bd5"/>
+  <rect x="30" y="102" width="410" height="10" fill="#5b9bd5"/>
+  <text class="zone" x="48" y="101" style="fill:#e8e4df">DaemonSet — 노드마다 하나</text>
+
+  <rect x="48" y="126" width="374" height="70" rx="6" fill="#dceaf7"/>
+  <text class="hd" x="62" y="147" fill="#10243a">Kubeletstats Receiver</text>
+  <text class="note" x="62" y="165" fill="#1a1a1a">kubelet API 에서 pull 로 노드·워크로드 메트릭 수집</text>
+  <rect x="62" y="172" width="346" height="18" rx="3" fill="#0d0d0d"/>
+  <text class="mono" x="70" y="185" fill="#5b9bd5">endpoint: ${env:K8S_NODE_NAME}:10250</text>
+
+  <rect x="48" y="204" width="374" height="76" rx="6" fill="#dceaf7"/>
+  <text class="hd" x="62" y="225" fill="#10243a">Filelog Receiver</text>
+  <text class="note" x="62" y="243" fill="#1a1a1a">stdout·stderr 로 나간 로그를 파일에서 tail·파싱</text>
+  <rect x="62" y="250" width="346" height="18" rx="3" fill="#0d0d0d"/>
+  <text class="mono" x="70" y="263" fill="#5b9bd5">include: /var/log/pods/*/*/*.log</text>
+
+  <rect x="48" y="288" width="374" height="78" rx="6" fill="#dceaf7"/>
+  <text class="hd" x="62" y="309" fill="#10243a">Host Metrics Receiver</text>
+  <text class="note" x="62" y="327" fill="#1a1a1a">노드 호스트 메트릭. 호스트 파일시스템 볼륨 접근 필요</text>
+  <rect x="62" y="334" width="346" height="24" rx="3" fill="#f2d4d4"/>
+  <text class="note" x="70" y="350" fill="#7a1f1f" font-weight="700">프리셋 기본 10초 — 60초로 낮추는 것을 고려</text>
+
+  <!-- Single instance zone -->
+  <rect x="460" y="78" width="410" height="304" rx="10" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.8"/>
+  <rect x="460" y="78" width="410" height="34" rx="10" fill="rgb(212,168,83)"/>
+  <rect x="460" y="102" width="410" height="10" fill="rgb(212,168,83)"/>
+  <text class="zone" x="478" y="101" style="fill:#0d0d0d">단일 인스턴스 — 클러스터에 하나</text>
+
+  <rect x="478" y="126" width="374" height="76" rx="6" fill="#fdf3df"/>
+  <text class="hd" x="492" y="147" fill="#0d0d0d">Kubernetes Cluster Receiver</text>
+  <text class="note" x="492" y="165" fill="#1a1a1a">API 서버에서 클러스터 수준 메트릭·엔티티 이벤트</text>
+  <rect x="492" y="172" width="346" height="22" rx="3" fill="#f2d4d4"/>
+  <text class="note" x="500" y="187" fill="#7a1f1f" font-weight="700">여러 개 띄우면 데이터가 중복된다</text>
+
+  <rect x="478" y="210" width="374" height="76" rx="6" fill="#fdf3df"/>
+  <text class="hd" x="492" y="231" fill="#0d0d0d">Kubernetes Object Receiver</text>
+  <text class="note" x="492" y="249" fill="#1a1a1a">API 서버에서 오브젝트 수집. pull 또는 watch</text>
+  <rect x="492" y="256" width="346" height="22" rx="3" fill="#f2d4d4"/>
+  <text class="note" x="500" y="271" fill="#7a1f1f" font-weight="700">여기도 단일 인스턴스여야 중복이 없다</text>
+
+  <rect x="478" y="294" width="374" height="72" rx="6" fill="#fdf3df"/>
+  <text class="hd" x="492" y="315" fill="#0d0d0d">Prometheus Receiver</text>
+  <text class="note" x="492" y="333" fill="#1a1a1a">scrape_config 전 범위 지원. 그러나 <tspan font-weight="700">stateful</tspan></text>
+  <rect x="492" y="340" width="346" height="20" rx="3" fill="#f2d4d4"/>
+  <text class="note" x="500" y="354" fill="#7a1f1f" font-weight="700">복제본을 늘리면 같은 대상을 여러 번 긁는다</text>
+
+  <!-- Attributes processor spans both -->
+  <rect x="30" y="396" width="840" height="72" rx="8" fill="#66bb6a"/>
+  <text class="hd" x="48" y="419" fill="#0d0d0d">Kubernetes Attributes Processor — 배포 형태와 무관하게 모든 파이프라인에 붙는다</text>
+  <text class="note" x="48" y="438" fill="#1a1a1a">Pod 를 자동 발견해 메타데이터를 뽑고, 스팬·메트릭·로그에 리소스 속성으로 더한다. 이것이 앱 텔레메트리와 K8s 텔레메트리를 잇는 고리다.</text>
+  <rect x="48" y="444" width="804" height="18" rx="3" fill="#e6f7e7"/>
+  <text class="mono" x="58" y="457" fill="#14521d">k8s.namespace.name · k8s.pod.name · k8s.pod.uid · k8s.pod.start_time · k8s.deployment.name · k8s.node.name</text>
+
+  <!-- bottom -->
+  <rect x="30" y="482" width="840" height="60" rx="8" fill="#141414"/>
+  <text class="note" x="50" y="504" fill="rgb(212,168,83)" font-weight="700">Helm 프리셋이 RBAC 까지 함께 붙여 준다</text>
+  <text class="note" x="50" y="524" fill="#e8e4df">kubernetesAttributes · logsCollection · hostMetrics 프리셋을 켜면 ClusterRole 에 필요한 권한이 추가되고 각 파이프라인에 컴포넌트가 들어간다.</text>
+  <text class="note" x="50" y="538" fill="#8a8580">프리셋을 안 쓰면 Pod·namespace·ReplicaSet 접근 권한을 직접 줘야 한다.</text>
+</svg>
