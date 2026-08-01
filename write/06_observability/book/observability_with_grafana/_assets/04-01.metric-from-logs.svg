@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 430" width="100%" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>로그에서 메트릭을 만드는 두 갈래</title>
+  <desc>로그 범위 집계는 로그 라인의 개수나 바이트 양을 세어 rate 나 count_over_time 같은 함수로 계산합니다. unwrap 범위 집계는 로그 라인 안에 있는 값을 꺼내 평균이나 분위수처럼 값 자체를 다루는 함수에 넘깁니다. 두 갈래 모두 기간을 붙여야 하며, sum_over_time 과 absent_over_time 과 rate 와 rate_counter 는 그룹화에서 제외됩니다.</desc>
+
+  <style>
+    .code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 10.5px; }
+  </style>
+
+  <rect width="880" height="430" fill="#0d0d0d"/>
+
+  <text x="30" y="34" fill="#e8e4df" font-size="17" font-weight="700">로그에서 메트릭 만들기 — 두 갈래</text>
+  <text x="30" y="55" fill="#b8b3ad" font-size="12">줄을 세는가, 값을 꺼내는가</text>
+
+  <!-- source -->
+  <rect x="290" y="76" width="300" height="46" rx="8" fill="#0d0d0d" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+  <text x="310" y="104" fill="#e8e4df" font-size="12.5">파이프라인을 통과한 로그</text>
+
+  <path d="M360 122 L250 122 L250 152" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#g)"/>
+  <path d="M520 122 L630 122 L630 152" fill="none" stroke="#5b9bd5" stroke-width="2" marker-end="url(#b)"/>
+  <defs>
+    <marker id="g" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#66bb6a"/>
+    </marker>
+    <marker id="b" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#5b9bd5"/>
+    </marker>
+  </defs>
+
+  <!-- branch 1 -->
+  <rect x="30" y="156" width="400" height="196" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.8"/>
+  <rect x="30" y="156" width="400" height="30" rx="8" fill="#66bb6a"/>
+  <rect x="30" y="178" width="400" height="8" fill="#66bb6a"/>
+  <text x="48" y="177" fill="#0d0d0d" font-size="13" font-weight="700">갈래 1 — 로그 범위 집계</text>
+
+  <text x="48" y="206" fill="#e8e4df" font-size="12.5">로그 라인을 센다</text>
+  <rect x="48" y="216" width="364" height="24" rx="4" fill="#e6f7e7"/>
+  <text class="code" x="58" y="232" fill="#14521d">count_over_time({component="x"}[10m])</text>
+
+  <text x="48" y="264" fill="#b8b3ad" font-size="11.5">쓸 수 있는 함수</text>
+  <rect x="48" y="274" width="176" height="22" rx="3" fill="#e6f7e7"/>
+  <text class="code" x="58" y="289" fill="#14521d">rate · count_over_time</text>
+  <rect x="236" y="274" width="176" height="22" rx="3" fill="#e6f7e7"/>
+  <text class="code" x="246" y="289" fill="#14521d">bytes_rate · bytes_over</text>
+
+  <rect x="48" y="306" width="364" height="32" rx="4" fill="#e6f7e7"/>
+  <text class="code" x="58" y="326" fill="#14521d" font-weight="700">absent_over_time</text>
+  <text x="180" y="326" fill="#14521d" font-size="11.5" font-weight="700">— 로그가 없음을 알린다</text>
+
+  <!-- branch 2 -->
+  <rect x="450" y="156" width="400" height="196" rx="8" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.8"/>
+  <rect x="450" y="156" width="400" height="30" rx="8" fill="#5b9bd5"/>
+  <rect x="450" y="178" width="400" height="8" fill="#5b9bd5"/>
+  <text x="468" y="177" fill="#e8e4df" font-size="13" font-weight="700">갈래 2 — unwrap 범위 집계</text>
+
+  <text x="468" y="206" fill="#e8e4df" font-size="12.5">라인 안의 값을 꺼낸다</text>
+  <rect x="468" y="216" width="364" height="24" rx="4" fill="#dceaf7"/>
+  <text class="code" x="478" y="232" fill="#10243a">| unwrap duration [5m]</text>
+
+  <text x="468" y="264" fill="#b8b3ad" font-size="11.5">값을 다루는 함수</text>
+  <rect x="468" y="274" width="176" height="22" rx="3" fill="#dceaf7"/>
+  <text class="code" x="478" y="289" fill="#10243a">avg · max · min · sum</text>
+  <rect x="656" y="274" width="176" height="22" rx="3" fill="#dceaf7"/>
+  <text class="code" x="666" y="289" fill="#10243a">quantile_over_time</text>
+
+  <rect x="468" y="306" width="364" height="32" rx="4" fill="#dceaf7"/>
+  <text x="478" y="326" fill="#10243a" font-size="11.5" font-weight="700">by · without 로 그룹화한다</text>
+
+  <!-- caveat -->
+  <rect x="30" y="366" width="820" height="46" rx="8" fill="#0d0d0d" stroke="#f44336" stroke-width="1.5"/>
+  <text x="50" y="384" fill="#f44336" font-size="12" font-weight="700">그룹화에서 빠지는 넷</text>
+  <text class="code" x="200" y="384" fill="#e8e4df">sum_over_time · absent_over_time · rate · rate_counter</text>
+  <text x="50" y="403" fill="#b8b3ad" font-size="11">두 갈래 모두 기간을 반드시 붙인다</text>
+</svg>

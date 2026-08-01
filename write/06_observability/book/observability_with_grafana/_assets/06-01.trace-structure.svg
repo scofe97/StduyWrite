@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 400" width="100%" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>스팬 넷이 trace_id 와 parent_id 로 하나의 트레이스가 되는 구조</title>
+  <desc>네 스팬이 모두 같은 trace_id 를 가지고, 각자 고유한 span_id 를 가지며, parent_id 로 자기가 어디서 왔는지 가리킵니다. 루트 스팬은 parent_id 가 비어 있습니다. 이 그림은 단순화된 것이며 OTLP 와 Zipkin 과 Jaeger 가 맥락 정보를 담는 데 쓰는 여러 필드는 제외했습니다.</desc>
+
+  <style>
+    .code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 10.5px; }
+  </style>
+
+  <rect width="880" height="400" fill="#0d0d0d"/>
+
+  <text x="30" y="34" fill="#e8e4df" font-size="17" font-weight="700">스팬 넷이 트레이스 하나가 된다</text>
+  <text x="30" y="55" fill="#b8b3ad" font-size="12">같은 trace_id 를 공유한다</text>
+
+  <!-- shared trace_id band -->
+  <rect x="30" y="76" width="820" height="44" rx="8" fill="rgb(212,168,83)"/>
+  <text x="50" y="104" fill="#0d0d0d" font-size="13" font-weight="700">네 스팬이 모두 같은 값을 가진다</text>
+  <rect x="600" y="86" width="232" height="24" rx="4" fill="#fdf3df"/>
+  <text class="code" x="612" y="103" fill="#5c4410">trace_id = a3f2...</text>
+
+  <!-- span A (root) -->
+  <rect x="30" y="140" width="300" height="58" rx="6" fill="#dceaf7"/>
+  <text x="46" y="163" fill="#10243a" font-size="12.5" font-weight="700">frontend</text>
+  <rect x="46" y="170" width="268" height="20" rx="3" fill="#a9cbe8"/>
+  <text class="code" x="54" y="184" fill="#10243a">span_id=01  parent_id=none</text>
+  <text x="344" y="166" fill="#66bb6a" font-size="11.5" font-weight="700">루트 — 부모가 없다</text>
+
+  <!-- arrows -->
+  <path d="M70 198 L70 222" stroke="#5b9bd5" stroke-width="2" marker-end="url(#b)"/>
+  <path d="M70 198 L70 292 L86 292" fill="none" stroke="#5b9bd5" stroke-width="2" marker-end="url(#b)"/>
+  <defs>
+    <marker id="b" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#5b9bd5"/>
+    </marker>
+  </defs>
+
+  <!-- span B -->
+  <rect x="90" y="226" width="300" height="58" rx="6" fill="#dceaf7"/>
+  <text x="106" y="249" fill="#10243a" font-size="12.5" font-weight="700">checkout</text>
+  <rect x="106" y="256" width="268" height="20" rx="3" fill="#a9cbe8"/>
+  <text class="code" x="114" y="270" fill="#10243a">span_id=02  parent_id=01</text>
+
+  <!-- span C -->
+  <rect x="90" y="298" width="300" height="58" rx="6" fill="#dceaf7"/>
+  <text x="106" y="321" fill="#10243a" font-size="12.5" font-weight="700">productcatalog</text>
+  <rect x="106" y="328" width="268" height="20" rx="3" fill="#a9cbe8"/>
+  <text class="code" x="114" y="342" fill="#10243a">span_id=03  parent_id=01</text>
+
+  <!-- span D -->
+  <rect x="450" y="226" width="300" height="58" rx="6" fill="#dceaf7"/>
+  <text x="466" y="249" fill="#10243a" font-size="12.5" font-weight="700">cartservice</text>
+  <rect x="466" y="256" width="268" height="20" rx="3" fill="#a9cbe8"/>
+  <text class="code" x="474" y="270" fill="#10243a">span_id=04  parent_id=02</text>
+  <path d="M394 255 L446 255" stroke="#5b9bd5" stroke-width="2" marker-end="url(#b)"/>
+
+  <!-- fields -->
+  <rect x="450" y="298" width="400" height="58" rx="6" fill="#0d0d0d" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+  <text x="466" y="320" fill="#e8e4df" font-size="11.5">각 스팬은 시작·종료 시각도</text>
+  <text x="466" y="341" fill="#b8b3ad" font-size="11">프로토콜별 필드는 뺀 그림</text>
+</svg>

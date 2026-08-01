@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 500" width="100%" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Graphite 에서 Prometheus 를 거쳐 Mimir 로 이어지는 저장 구조의 계보</title>
+  <desc>Graphite 의 Whisper 는 시계열 하나를 고정 크기 파일 하나로 저장해 디스크 입출력 비용이 커지고 중복성 관리 장치가 없었습니다. Prometheus 는 기본 2시간 범위의 불변 블록과 쓰기 가능한 head 블록으로 이를 개선했지만 단일 노드가 읽기와 쓰기를 모두 맡는 제약이 남았습니다. Mimir 는 같은 TSDB 구조를 유지하면서 블록을 오브젝트 스토리지에 두고 ingester 와 querier 인스턴스를 늘려 확장합니다.</desc>
+
+  <style>
+    .code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 10px; }
+  </style>
+
+  <rect width="880" height="500" fill="#0d0d0d"/>
+
+  <text x="30" y="34" fill="#e8e4df" font-size="17" font-weight="700">한계가 다음 것을 낳았다</text>
+  <text x="30" y="55" fill="#b8b3ad" font-size="12">같은 TSDB 구조가 계속 이어진다</text>
+
+  <!-- Graphite -->
+  <rect x="30" y="76" width="820" height="112" rx="8" fill="#0d0d0d" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+  <rect x="30" y="76" width="180" height="112" rx="8" fill="#d8d3cd"/>
+  <text x="48" y="106" fill="#0d0d0d" font-size="14" font-weight="700">Graphite</text>
+  <text x="48" y="127" fill="#1a1a1a" font-size="11.5">Whisper · 2008</text>
+  <rect x="48" y="140" width="144" height="24" rx="4" fill="#f2efeb"/>
+  <text x="58" y="156" fill="#3d3833" font-size="11" font-weight="700">평면 파일 구조</text>
+
+  <text x="232" y="106" fill="#e8e4df" font-size="12.5">시계열 하나 = 고정 크기 파일 하나</text>
+  <rect x="232" y="118" width="290" height="26" rx="4" fill="#f2d4d4"/>
+  <text x="242" y="136" fill="#7a1f1f" font-size="11.5" font-weight="700">모으려면 파일을 각각 읽는다</text>
+  <rect x="232" y="150" width="290" height="26" rx="4" fill="#f2d4d4"/>
+  <text x="242" y="168" fill="#7a1f1f" font-size="11.5" font-weight="700">중복성 관리 장치가 없다</text>
+
+  <text x="548" y="140" fill="#b8b3ad" font-size="11.5">쓰기 프로토콜은 지금도 쓰인다</text>
+
+  <path d="M440 188 L440 210" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a)"/>
+  <text x="452" y="205" fill="rgb(212,168,83)" font-size="11" font-weight="700">속도·무결성 한계</text>
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <!-- Prometheus -->
+  <rect x="30" y="214" width="820" height="130" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.8"/>
+  <rect x="30" y="214" width="180" height="130" rx="8" fill="rgb(212,168,83)"/>
+  <text x="48" y="244" fill="#0d0d0d" font-size="14" font-weight="700">Prometheus</text>
+  <text x="48" y="265" fill="#1a1a1a" font-size="11.5">불변 블록 · 2012</text>
+  <rect x="48" y="278" width="144" height="24" rx="4" fill="#fdf3df"/>
+  <text x="58" y="294" fill="#5c4410" font-size="11" font-weight="700">블록 = 기본 2시간</text>
+
+  <text x="232" y="244" fill="#e8e4df" font-size="12.5">블록 안에 들어가는 것</text>
+  <rect x="232" y="256" width="180" height="22" rx="3" fill="#fdf3df"/>
+  <text class="code" x="240" y="271" fill="#5c4410">chunk</text>
+  <text x="288" y="271" fill="#5c4410" font-size="10.5">512 MB 상한</text>
+  <rect x="420" y="256" width="180" height="22" rx="3" fill="#fdf3df"/>
+  <text class="code" x="428" y="271" fill="#5c4410">index</text>
+  <text x="474" y="271" fill="#5c4410" font-size="10.5">라벨 → 위치</text>
+
+  <text x="232" y="300" fill="#e8e4df" font-size="12.5">head 블록 — 쓰기 가능</text>
+  <text x="232" y="322" fill="#b8b3ad" font-size="11.5">2시간이 차면 표준 블록으로 바뀐다</text>
+
+  <rect x="620" y="290" width="212" height="40" rx="4" fill="#f2d4d4"/>
+  <text x="630" y="306" fill="#7a1f1f" font-size="11" font-weight="700">단일 노드가 읽기·쓰기를</text>
+  <text x="630" y="322" fill="#7a1f1f" font-size="11" font-weight="700">모두 맡는다 — 근본 제약</text>
+
+  <path d="M440 344 L440 366" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a)"/>
+  <text x="452" y="361" fill="rgb(212,168,83)" font-size="11" font-weight="700">확장 한계</text>
+
+  <!-- Mimir -->
+  <rect x="30" y="370" width="820" height="112" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.8"/>
+  <rect x="30" y="370" width="180" height="112" rx="8" fill="#66bb6a"/>
+  <text x="48" y="400" fill="#0d0d0d" font-size="14" font-weight="700">Mimir</text>
+  <text x="48" y="421" fill="#1a1a1a" font-size="11.5">같은 TSDB 구조</text>
+  <rect x="48" y="434" width="144" height="24" rx="4" fill="#e6f7e7"/>
+  <text x="58" y="450" fill="#14521d" font-size="11" font-weight="700">오브젝트 스토리지</text>
+
+  <text x="232" y="398" fill="#e8e4df" font-size="12.5">쓰기 — 테넌트별 TSDB</text>
+  <text x="232" y="420" fill="#b8b3ad" font-size="11.5">여러 ingester 에 써서 복원력</text>
+  <text x="232" y="442" fill="#b8b3ad" font-size="11.5">compactor 가 병합한다</text>
+
+  <rect x="620" y="392" width="212" height="60" rx="4" fill="#e6f7e7"/>
+  <text x="630" y="412" fill="#14521d" font-size="11.5" font-weight="700">읽기 — 쿼리를 쪼갠다</text>
+  <text x="630" y="432" fill="#14521d" font-size="11">짧은 시간 범위로 나눠</text>
+  <text x="630" y="446" fill="#14521d" font-size="11">여러 querier 에 분산</text>
+</svg>
