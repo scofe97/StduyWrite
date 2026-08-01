@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" width="900" height="500" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+  <style>
+    .bg { fill: #0d0d0d; }
+    .title { fill: #e8e4df; font-size: 17px; font-weight: 700; }
+    .sub { fill: #8a8580; font-size: 12px; }
+    .zone { font-size: 13px; font-weight: 700; }
+    .name { font-size: 14.5px; font-weight: 700; }
+    .note { font-size: 11.5px; }
+    .mono { font-family: 'SF Mono', Menlo, monospace; font-size: 11px; }
+  </style>
+  <rect class="bg" x="0" y="0" width="900" height="500"/>
+
+  <text class="title" x="30" y="34">메트릭 수집 — 미느냐 당기느냐가 나머지를 정한다</text>
+  <text class="sub" x="30" y="55">push 는 앱이 목적지를 알아야 하고, pull 은 앱이 열어 두기만 한다. 이 차이가 설정·인증·확장 방식을 모두 가른다.</text>
+
+  <!-- PUSH side -->
+  <rect x="30" y="76" width="410" height="330" rx="10" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.8"/>
+  <rect x="30" y="76" width="410" height="34" rx="10" fill="#5b9bd5"/>
+  <rect x="30" y="100" width="410" height="10" fill="#5b9bd5"/>
+  <text class="zone" x="48" y="99" fill="#e8e4df">PUSH — 앱이 목적지를 알아야 한다</text>
+
+  <rect x="48" y="124" width="374" height="122" rx="7" fill="#dceaf7"/>
+  <text class="name" x="64" y="147" fill="#10243a">StatsD · DogStatsD</text>
+  <rect x="64" y="157" width="342" height="24" rx="4" fill="#0d0d0d"/>
+  <text class="mono" x="76" y="174" fill="#5b9bd5">UDP · 기본 포트 8125</text>
+  <text class="note" x="64" y="199" fill="#1a1a1a">UDP 라 전달 보장보다 속도를 택했다.</text>
+  <text class="note" x="64" y="217" fill="#7a1f1f" font-weight="700">인증을 지원하지 않는다 — 환경에 따라 보안 문제</text>
+  <text class="note" x="64" y="236" fill="#1a1a1a">관행: localhost:8125 로 노출해 범위를 제한</text>
+
+  <rect x="48" y="258" width="374" height="132" rx="7" fill="#dceaf7"/>
+  <text class="name" x="64" y="281" fill="#10243a">OTLP</text>
+  <rect x="64" y="291" width="342" height="24" rx="4" fill="#0d0d0d"/>
+  <text class="mono" x="76" y="308" fill="#5b9bd5">gRPC 4317 · HTTP 4318</text>
+  <text class="note" x="64" y="333" fill="#14521d" font-weight="700">인증과 수신 확인(acknowledgment)을 지원한다</text>
+  <text class="note" x="64" y="352" fill="#1a1a1a">서버 제어 스로틀링 · GZIP 압축</text>
+  <text class="note" x="64" y="371" fill="#1a1a1a">OTel Collector 는 여러 소스를 받아</text>
+  <text class="note" x="64" y="386" fill="#1a1a1a">혼재 환경(mixed estate)에 적합</text>
+
+  <!-- PULL side -->
+  <rect x="460" y="76" width="410" height="330" rx="10" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.8"/>
+  <rect x="460" y="76" width="410" height="34" rx="10" fill="rgb(212,168,83)"/>
+  <rect x="460" y="100" width="410" height="10" fill="rgb(212,168,83)"/>
+  <text class="zone" x="478" y="99" fill="#0d0d0d">PULL — 앱은 열어 두기만 한다</text>
+
+  <rect x="478" y="124" width="374" height="146" rx="7" fill="#fdf3df"/>
+  <text class="name" x="494" y="147" fill="#0d0d0d">Prometheus</text>
+  <rect x="494" y="157" width="342" height="40" rx="4" fill="#0d0d0d"/>
+  <text class="mono" x="506" y="173" fill="rgb(212,168,83)">/metrics</text>
+  <text class="mono" x="506" y="189" fill="rgb(212,168,83)">Spring Boot 은 /actuator/prometheus</text>
+  <text class="note" x="494" y="215" fill="#14521d" font-weight="700">앱이 실행 환경을 알 필요가 줄어든다</text>
+  <text class="note" x="494" y="233" fill="#1a1a1a">읽는 쪽이 0개든 10개든 앱 설정은 그대로</text>
+  <text class="note" x="494" y="252" fill="#1a1a1a">쿠버네티스 liveness·readiness 와 같은 패턴</text>
+
+  <rect x="478" y="282" width="374" height="108" rx="7" fill="#fdf3df"/>
+  <text class="name" x="494" y="305" fill="#0d0d0d">SNMP</text>
+  <text class="note" x="494" y="326" fill="#1a1a1a">manager 가 장비의 agent 에 접속해 당겨 온다.</text>
+  <text class="note" x="494" y="345" fill="#1a1a1a">SNMP trap 은 반대로 장비가 밀어 보낸다.</text>
+  <text class="note" x="494" y="366" fill="#7a1f1f" font-weight="700">잘못 설정하면 공격 표면이 상당히 커진다</text>
+  <text class="note" x="494" y="384" fill="#1a1a1a">1988년부터 쓰여 하드웨어 지원이 넓다</text>
+
+  <!-- bottom -->
+  <rect x="30" y="422" width="840" height="56" rx="8" fill="#141414"/>
+  <text class="note" x="50" y="445" fill="rgb(212,168,83)" font-weight="700">서비스 디스커버리가 pull 의 설정 부담을 덜어 준다</text>
+  <text class="note" x="50" y="466" fill="#e8e4df">Prometheus 는 Kubernetes·DNS·Consul 등 여러 플랫폼의 디스커버리를 제공한다. 이름으로 찾거나 특정 라벨이 있을 때만 수집하는 식이다.</text>
+</svg>

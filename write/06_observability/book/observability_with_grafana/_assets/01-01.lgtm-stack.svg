@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" width="900" height="500" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+  <style>
+    .bg { fill: #0d0d0d; }
+    .title { fill: #e8e4df; font-size: 17px; font-weight: 700; }
+    .sub { fill: #8a8580; font-size: 12px; }
+    .lane { fill: #8a8580; font-size: 12.5px; font-weight: 700; }
+    .prod { font-size: 15px; font-weight: 700; }
+    .desc { font-size: 11.5px; }
+    .mono { font-family: 'SF Mono', Menlo, monospace; font-size: 11px; }
+  </style>
+  <rect class="bg" x="0" y="0" width="900" height="500"/>
+
+  <text class="title" x="30" y="34">LGTM — 신호마다 저장소를 따로 두되, 설계는 하나로 맞춘다</text>
+  <text class="sub" x="30" y="55">세 저장소가 모두 값싼 오브젝트 스토리지(S3·GCS·Azure Blob)에 얹히고, Grafana 한 곳에서 함께 읽힌다.</text>
+
+  <!-- Collection lane -->
+  <text class="lane" x="30" y="94">수집</text>
+  <rect x="30" y="104" width="840" height="52" rx="8" fill="#dceaf7"/>
+  <text class="prod" x="50" y="127" fill="#10243a">Grafana Agent</text>
+  <text class="desc" x="50" y="146" fill="#1a1a1a">로그·메트릭·트레이스를 한 도구로 모아 보낸다. OpenTelemetry Collector·FluentBit·Vector 등으로 대체 가능하다.</text>
+
+  <!-- arrows down -->
+  <path d="M 170 156 L 170 186" stroke="#8a8580" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+  <path d="M 450 156 L 450 186" stroke="#8a8580" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+  <path d="M 730 156 L 730 186" stroke="#8a8580" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#8a8580"/>
+    </marker>
+  </defs>
+
+  <!-- Storage lane -->
+  <text class="lane" x="30" y="200">저장 — 신호별로 하나씩</text>
+
+  <rect x="30" y="212" width="272" height="126" rx="8" fill="#66bb6a"/>
+  <text class="prod" x="48" y="238" fill="#0d0d0d">Loki</text>
+  <text class="desc" x="48" y="258" fill="#1a1a1a">로그</text>
+  <rect x="48" y="268" width="236" height="54" rx="5" fill="#e6f7e7"/>
+  <text class="mono" x="60" y="286" fill="#14521d">라벨 메타데이터만 색인</text>
+  <text class="mono" x="60" y="303" fill="#14521d">원본은 압축 보관, 쿼리는</text>
+  <text class="mono" x="60" y="317" fill="#14521d">수평 확장으로 감당 · GA 2019-11</text>
+
+  <rect x="314" y="212" width="272" height="126" rx="8" fill="rgb(212,168,83)"/>
+  <text class="prod" x="332" y="238" fill="#0d0d0d">Mimir</text>
+  <text class="desc" x="332" y="258" fill="#1a1a1a">메트릭</text>
+  <rect x="332" y="268" width="236" height="54" rx="5" fill="#fdf3df"/>
+  <text class="mono" x="344" y="286" fill="#0d0d0d">Prometheus 완전 호환 TSDB</text>
+  <text class="mono" x="344" y="303" fill="#0d0d0d">10억 활성 시계열 부하 시험</text>
+  <text class="mono" x="344" y="317" fill="#0d0d0d">Cortex 에서 분기 · GA 2022-03</text>
+
+  <rect x="598" y="212" width="272" height="126" rx="8" fill="#5b9bd5"/>
+  <text class="prod" x="616" y="238" fill="#e8e4df">Tempo</text>
+  <text class="desc" x="616" y="258" fill="#e8e4df">트레이스</text>
+  <rect x="616" y="268" width="236" height="54" rx="5" fill="#dceaf7"/>
+  <text class="mono" x="628" y="286" fill="#10243a">읽기 경로 100% 샘플링 지향</text>
+  <text class="mono" x="628" y="303" fill="#10243a">초당 200만+ 스팬 시험</text>
+  <text class="mono" x="628" y="317" fill="#10243a">스팬에서 메트릭 생성 · GA 2021-06</text>
+
+  <!-- shared substrate -->
+  <rect x="30" y="352" width="840" height="44" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.6" stroke-dasharray="5 4"/>
+  <text class="desc" x="50" y="379" fill="rgb(212,168,83)" font-weight="700">공통 기반 — 값싼 오브젝트 스토리지 (S3 · GCS · Azure Blob). 셋이 같은 선택을 했기에 비용 구조가 같다.</text>
+
+  <path d="M 450 396 L 450 424" stroke="#8a8580" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+
+  <!-- Grafana lane -->
+  <rect x="30" y="428" width="840" height="52" rx="8" fill="#ddd4f0"/>
+  <text class="prod" x="50" y="451" fill="#2a1f4a">Grafana</text>
+  <text class="desc" x="50" y="470" fill="#1a1a1a">세 저장소를 한 화면에서 읽는 시각화 계층. 데이터 소스 플러그인 150종 이상, 커뮤니티 대시보드 6,000종 이상.</text>
+</svg>
