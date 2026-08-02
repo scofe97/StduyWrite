@@ -8,7 +8,7 @@ related:
   - ../../README.md
   - ../mastering_prometheus/README.md
   - ../dgos_opensearch/README.md
-updated: 2026-08-01
+updated: 2026-08-02
 ---
 
 # Observability with Grafana
@@ -75,6 +75,7 @@ updated: 2026-08-01
 | [05-01 메트릭 — 수집 프로토콜·저장 아키텍처·exemplar](./05-01.메트릭%20—%20수집%20프로토콜·저장%20아키텍처·exemplar.md) | 5장 전체 — **PromQL·TSDB·Mimir 는 형제 폴더가 정본이라 위임하고 차이분만**. 메트릭·시계열·샘플 3층 · 범위 벡터는 Instant 로 실행(Range 는 오류) · `$__rate_interval` 은 Grafana 기능 · **수집 프로토콜을 push·pull 축으로 비교**(StatsD UDP 8125·인증 없음, OTLP 4317/4318·인증 있음, Prometheus pull 이 앱 설정을 줄임, SNMP 는 감시 pull + trap push) · **저장 계보**(Whisper 파일당 시계열 → Prometheus 불변 블록 2시간·chunk 512MB → Mimir 오브젝트 스토리지) · exemplar 를 Grafana 에서 켜고 Tempo 로 건너가기 |
 | [06-01 Tempo 와 TraceQL — 구조 연산자·전파 헤더·아키텍처](./06-01.Tempo%20와%20TraceQL%20—%20구조%20연산자·전파%20헤더·아키텍처.md) | 6장 전체 — TraceQL 은 **선택만 되고 분석은 없음**(집필 시점 v2.3.x) · intrinsic 필드 8종과 span/resource 속성 접두사 · **구조 연산자**(`>` 직계자식 · `>>` 자손 · `~` 형제) — TraceQL 만의 관계 검색 · **전파 헤더 4형식 규격**(Jaeger `uber-trace-id` 콜론 묶음 · B3 필드별 헤더 + `b3` 단일 · W3C `traceparent` 16/8바이트 · baggage 64멤버·8,192바이트·민감정보 금지) · Jaeger 는 채택 비권장 · Tempo 는 **trace ID 로 라우팅**(Loki 는 라벨) · Metrics generator 는 선택적 |
 | [07-01 인프라 관측 — 쿠버네티스 수집기와 클라우드 3사 연결](./07-01.인프라%20관측%20—%20쿠버네티스%20수집기와%20클라우드%203사%20연결.md) | 7장 전체(**Part 2 마지막**) — 앞은 K8s 수집기 7종으로 실질, 뒤는 클라우드 UI 안내라 판단 축만 남김. **배포 형태가 컴포넌트를 정함** — Kubeletstats·Filelog·HostMetrics 는 DaemonSet, **Cluster·Object Receiver 는 단일 인스턴스**(여러 개면 데이터 중복) · Prometheus Receiver 는 **stateful** 이라 복제본마다 다른 설정 필요 · Attributes Processor 가 붙이는 K8s 속성 6종이 상관관계의 전제 · hostMetrics 프리셋 **기본 10초 → 60초 권고** · Object Receiver 의 pull vs watch · **클라우드는 원격 조회(데이터 소스) vs 가져오기(통합)** — AWS 만 양쪽, GCP·Azure 는 데이터 소스만. MQL·KQL·ARG · CloudWatch 는 태그 있는 리소스만 발견 · 모범 사례 4축(성능·비용·제약·보안) |
+| [08-01 대시보드 — 목적 정의·시각화 선택·인지 부하 줄이기](./08-01.대시보드%20—%20목적%20정의·시각화%20선택·인지%20부하%20줄이기.md) | 8장 전체(**Part 3 시작**) — 데이터를 *모으는* 이야기가 끝나고 *보여주는* 이야기로. 기술 난도는 낮고 **판단**이 어려운 장. **세 질문**(청중·요구·어디서 보는가)에 답하지 않으면 대시보드가 이야기를 못 함 · Explore 쿼리 → Add to dashboard 경로와 저자들이 스스로 지적한 **첫 화면 문제 셋** · **카운트를 비율로**(`$__rate_interval`) + 범례를 `{{method}}` 로 · **패널 설정 7종**(title·description / legend / standard options / 패널별 / thresholds / overrides / value mappings) · 1장 페르소나 5인의 요구가 **설계 결정으로 내려옴**(Ophelia=색·임계값, Pelé=내보내기, Masha=PDF 배치) · **행 접기의 성능 이점**(펼치기 전까지 쿼리 미실행) · 하드코딩 금지·상대 시간 기본값 · 폴더는 **권한 경계**, 태그는 발견성 · 사례 연구 — **행 하나 = 팀 하나, 첫 패널은 연락처 텍스트 패널**로 인지 부하 감축. Golden Signals 는 정의만(정본은 `01_Foundations/01-03`) |
 
 
 
