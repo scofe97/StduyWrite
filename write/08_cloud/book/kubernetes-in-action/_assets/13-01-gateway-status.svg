@@ -1,37 +1,79 @@
-<svg viewBox="0 0 960 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>Gateway status의 세 층</title>
-  <desc>Gateway status는 세 부분으로 나뉜다. addresses는 게이트웨이에 배정된 주소, conditions는 Gateway 전체의 Accepted·Programmed 조건, listeners는 각 listener의 attachedRoutes 수와 supportedKinds, conditions다. attachedRoutes가 0이면 연결된 Route가 없어 404가 난다.</desc>
+<svg viewBox="0 0 1040 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Gateway를 만든 뒤 컨트롤러가 status를 채워 가는 순서</title>
+  <desc>Gateway 오브젝트를 apply한 시점에는 spec만 있고 status는 비어 있다. 컨트롤러가 이를 감지한 뒤 status를 세 부분에 걸쳐 채워 나간다. 먼저 로드밸런서를 만들어 배정된 주소를 addresses에 적는다. 다음으로 Gateway 전체 조건인 conditions에 Accepted를 True로 적어 설정을 받아들였음을 알리고, 프록시 설정이 실제로 생성되면 Programmed도 True가 된다. 마지막으로 spec의 listener마다 대응하는 listeners 항목을 채우는데, 여기에는 받을 수 있는 Route 종류인 supportedKinds와 실제로 연결된 Route 수인 attachedRoutes가 들어간다. 이 세 부분이 채워지는 주체는 모두 컨트롤러이지만 attachedRoutes만은 예외다. 이 값은 Route 오브젝트가 만들어져 이 Gateway를 참조할 때 비로소 올라가므로, Route를 만들기 전에는 0에 머문다. 앞의 두 부분이 정상이어도 이 값이 0이면 게이트웨이에 붙는 트래픽이 갈 곳을 찾지 못해 404가 난다.</desc>
   <defs>
     <style>
-      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
-      .sub   { font-size: 11px; fill: rgb(138,133,128); }
-      .layer { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
-      .k     { font-size: 11px; font-weight: 700; fill: rgb(212,168,83); }
-      .v     { font-size: 11px; fill: #e8e4df; }
-      .ok    { font-size: 11px; font-weight: 700; fill: rgb(102,187,106); }
-      .warn  { font-size: 11px; font-weight: 700; fill: rgb(240,150,190); }
+      .h1   { font-size: 22px; font-weight: 800; fill: #e8e4df; }
+      .k    { font-size: 12.5px; font-weight: 700; fill: #0d0d0d; }
+      .tag  { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .mono { font-size: 11.5px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .monod{ font-size: 11.5px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .who  { font-size: 12.5px; fill: #b8b3ad; }
+      .actor{ font-size: 12.5px; font-weight: 800; fill: #b8b3ad; }
+      .num  { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
     </style>
+    <marker id="gs-w" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#b8b3ad"/>
+    </marker>
+    <marker id="gs-p" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(240,150,190)"/>
+    </marker>
   </defs>
 
-  <rect x="0" y="0" width="960" height="400" fill="#0d0d0d"/>
-  <text x="24" y="30" class="title">Gateway status — 세 층으로 준비를 진단합니다</text>
-  <text x="24" y="50" class="sub">배정 주소 → Gateway 전체 조건 → listener별 상태. attachedRoutes가 0이면 404</text>
+  <rect x="0" y="0" width="1040" height="560" fill="#0d0d0d"/>
 
-  <!-- Layer 1: addresses -->
-  <rect x="40" y="80" width="880" height="70" rx="8" fill="rgb(91,155,213)"/>
-  <text x="60" y="104" class="layer" style="fill:#e8e4df">① status.addresses</text>
-  <text x="60" y="128" class="v" style="fill:#e8e4df">type: IPAddress · value: 172.18.255.200 — 게이트웨이에 배정된 주소(spec과 다를 수 있음, 자동 배정)</text>
+  <text x="30" y="38" class="h1">컨트롤러가 status를 채우는 순서</text>
+  <text x="30" y="64" class="who">위에서 아래로, 나중에 채워집니다</text>
 
-  <!-- Layer 2: conditions -->
-  <rect x="40" y="165" width="880" height="90" rx="8" fill="rgb(212,168,83)"/>
-  <text x="60" y="189" class="layer">② status.conditions (Gateway 전체)</text>
-  <text x="60" y="214" class="v" fill="#0d0d0d">Accepted: True (게이트웨이가 받아들임) · Programmed: True (설정 생성돼 접근 가능해짐)</text>
-  <text x="60" y="236" class="v" fill="#0d0d0d">type을 먼저 보고 status 확인 → False면 reason·message로 이유. Ready는 예약, Scheduled는 deprecated</text>
+  <!-- 좌측 액터 레인 -->
+  <text x="30" y="104" class="actor">내가 함</text>
+  <text x="30" y="210" class="actor">컨트롤러가 함</text>
+  <line x1="30" y1="222" x2="30" y2="430" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="30" y="486" class="actor">Route가 채움</text>
 
-  <!-- Layer 3: listeners -->
-  <rect x="40" y="270" width="880" height="105" rx="8" fill="rgb(102,187,106)"/>
-  <text x="60" y="294" class="layer">③ status.listeners (listener별)</text>
-  <text x="60" y="318" class="v" fill="#0d0d0d">name: http · supportedKinds: [HTTPRoute] · conditions: Accepted·Conflicted·Programmed·Ready·ResolvedRefs</text>
-  <text x="60" y="342" class="warn" fill="#7a1f3a">attachedRoutes: 0 → 연결된 Route 없음 → 접속 시 404 Not Found</text>
-  <text x="60" y="364" class="v" fill="#0d0d0d">Route를 만들어 붙이면 attachedRoutes가 오르고 트래픽이 흐릅니다</text>
+  <!-- apply -->
+  <rect x="150" y="82" width="300" height="62" rx="9" fill="rgb(212,168,83)"/>
+  <text x="300" y="106" class="mono" text-anchor="middle">apply -f gtw.kiada.yaml</text>
+  <text x="300" y="128" class="k" text-anchor="middle">status는 빈 상태</text>
+
+  <line x1="300" y1="150" x2="300" y2="186" stroke="#b8b3ad" stroke-width="2.4" marker-end="url(#gs-w)"/>
+
+  <!-- 1 addresses -->
+  <rect x="150" y="192" width="720" height="66" rx="9" fill="rgb(91,155,213)"/>
+  <circle cx="176" cy="216" r="11" fill="#0d0d0d"/>
+  <text x="176" y="221" class="num" text-anchor="middle" style="fill:#e8e4df">1</text>
+  <text x="196" y="221" class="tag" style="fill:#e8e4df">status.addresses</text>
+  <text x="196" y="244" class="monod">value: 172.18.255.200</text>
+  <text x="560" y="244" class="who" style="fill:#e8e4df">LB를 만들고 배정된 주소를 적습니다</text>
+
+  <line x1="300" y1="264" x2="300" y2="292" stroke="#b8b3ad" stroke-width="2.4" marker-end="url(#gs-w)"/>
+
+  <!-- 2 conditions -->
+  <rect x="150" y="298" width="720" height="86" rx="9" fill="rgb(102,187,106)"/>
+  <circle cx="176" cy="322" r="11" fill="#0d0d0d"/>
+  <text x="176" y="327" class="num" text-anchor="middle" style="fill:#e8e4df">2</text>
+  <text x="196" y="327" class="tag">status.conditions</text>
+  <text x="196" y="350" class="mono">Accepted: True</text>
+  <text x="560" y="350" class="who" style="fill:#0d0d0d">설정을 받아들였습니다</text>
+  <text x="196" y="372" class="mono">Programmed: True</text>
+  <text x="560" y="372" class="who" style="fill:#0d0d0d">프록시 설정이 생겼습니다</text>
+
+  <line x1="300" y1="390" x2="300" y2="418" stroke="#b8b3ad" stroke-width="2.4" marker-end="url(#gs-w)"/>
+
+  <!-- 3 listeners -->
+  <rect x="150" y="424" width="720" height="88" rx="9" fill="rgb(20,20,20)" stroke="rgb(240,150,190)" stroke-width="1.8"/>
+  <circle cx="176" cy="448" r="11" fill="rgb(240,150,190)"/>
+  <text x="176" y="453" class="num" text-anchor="middle">3</text>
+  <text x="196" y="453" class="tag" style="fill:#e8e4df">status.listeners[]</text>
+  <text x="196" y="476" class="monod">supportedKinds: [HTTPRoute]</text>
+  <rect x="196" y="486" width="270" height="24" rx="5" fill="rgb(240,150,190)"/>
+  <text x="331" y="503" class="mono" text-anchor="middle">attachedRoutes: 0</text>
+  <text x="486" y="503" class="who">여기만 컨트롤러가 못 채웁니다</text>
+
+  <!-- 우측 주석 -->
+  <rect x="898" y="424" width="118" height="88" rx="9" fill="rgba(240,150,190,0.10)" stroke="rgb(240,150,190)" stroke-width="1.4"/>
+  <text x="957" y="458" class="who" text-anchor="middle" style="fill:rgb(240,150,190)">0이면</text>
+  <text x="957" y="480" class="who" text-anchor="middle" style="fill:rgb(240,150,190)">접속 시</text>
+  <text x="957" y="502" class="who" text-anchor="middle" style="fill:rgb(240,150,190)">404</text>
+  <line x1="892" y1="468" x2="874" y2="468" stroke="rgb(240,150,190)" stroke-width="2.2" marker-end="url(#gs-p)"/>
 </svg>
