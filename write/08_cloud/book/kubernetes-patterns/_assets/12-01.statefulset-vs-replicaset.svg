@@ -1,76 +1,100 @@
-<svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>StatefulSet의 네 가지 보장과 ReplicaSet과의 대비</title>
-  <desc>Kubernetes Patterns 12장. StatefulSet은 분산 상태 애플리케이션을 위해 저장소·네트워킹·정체성·순서라는 네 가지 보장을 제공합니다. ReplicaSet이 동일·교체 가능한 cattle을 다룬다면 StatefulSet은 고유·비교체 pet을 다룹니다. StatefulSet은 volumeClaimTemplates로 Pod마다 전용 PVC를 즉석 생성하고(ReplicaSet은 persistentVolumeClaim으로 모든 Pod가 하나의 PV 공유), 이름을 StatefulSet명+순서 인덱스(rg-0, rg-1)로 예측 가능하게 짓고, headless Service(clusterIP None)로 각 Pod에 안정 DNS(rg-0.random-generator.default.svc.cluster.local)를 줍니다. 스케일 업다운은 순차적으로(0부터 위로, n-1부터 아래로) 진행되며, ReplicaSet의 At-Least-X와 달리 StatefulSet은 중복 Pod를 절대 만들지 않는 At-Most-One을 보장합니다.</desc>
+<svg viewBox="0 0 900 430" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>ReplicaSet의 cattle 모델과 StatefulSet의 pet 모델 대비</title>
+  <desc>같은 replicas=2 선언에서 ReplicaSet과 StatefulSet이 만들어내는 구조를 나란히 비교합니다. ReplicaSet은 랜덤 접미사 이름을 가진 교체 가능한 Pod 둘을 만들고 두 Pod가 persistentVolumeClaim이 가리키는 하나의 PersistentVolume을 공유하며 Service가 로드밸런싱합니다. StatefulSet은 rg-0과 rg-1이라는 순서 인덱스 이름을 가진 Pod를 만들고 volumeClaimTemplates가 Pod마다 전용 PVC와 PV를 즉석 생성하며 clusterIP가 None인 headless Service가 Pod마다 개별 A 레코드 DNS를 부여합니다. 아래쪽에는 ReplicaSet의 At-Least-X 보장과 StatefulSet의 At-Most-One 보장이 서로 반대 방향임을 표시합니다.</desc>
 
-  <rect x="0" y="0" width="900" height="560" fill="#0d0d0d"/>
-  <text x="24" y="34" fill="#e8e4df" font-size="16">StatefulSet — pet을 다루는 프리미티브 (ReplicaSet = cattle)</text>
-  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">모든 확장성 있는 무상태 서비스 뒤에는 상태를 가진 데이터 스토어가 있습니다. StatefulSet은 그 상태의 여러 측면을 보장합니다.</text>
+  <rect width="900" height="430" fill="#0d0d0d"/>
 
-  <!-- cattle vs pet -->
-  <rect x="24" y="76" width="410" height="46" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
-  <text x="40" y="97" fill="rgb(138,133,128)" font-size="10" font-weight="700">ReplicaSet = cattle</text>
-  <text x="40" y="114" fill="rgb(138,133,128)" font-size="9">동일·교체 가능·임의 이름(랜덤 접미사)·같은 PV 공유</text>
-  <rect x="452" y="76" width="424" height="46" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
-  <text x="468" y="97" fill="rgb(212,168,83)" font-size="10" font-weight="700">StatefulSet = pet</text>
-  <text x="468" y="114" fill="#e8e4df" font-size="9">고유·비교체·예측 가능 이름(rg-0, rg-1)·Pod마다 전용 PVC</text>
+  <text x="24" y="30" fill="#e8e4df" font-size="15" font-weight="700">replicas: 2 의 두 결과</text>
 
-  <!-- 4 guarantees -->
-  <text x="24" y="150" fill="#e8e4df" font-size="12">네 가지 보장 (정체성이 나머지 셋의 토대)</text>
+  <!-- ================= LEFT: ReplicaSet ================= -->
+  <rect x="24" y="46" width="410" height="252" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1"/>
+  <text x="40" y="70" fill="#b8b3ad" font-size="13" font-weight="700">ReplicaSet = cattle</text>
+  <text x="40" y="88" fill="#b8b3ad" font-size="10">교체 가능 · 랜덤 이름</text>
 
-  <rect x="24" y="160" width="205" height="86" fill="#dceaf7"/>
-  <text x="36" y="180" fill="#10243a" font-size="11" font-weight="700">① 저장소 Storage</text>
-  <text x="36" y="197" fill="#10243a" font-size="8.5">volumeClaimTemplates로 Pod마다</text>
-  <text x="36" y="209" fill="#10243a" font-size="8.5">전용 PVC를 즉석 생성.</text>
-  <text x="36" y="224" fill="#7a1f1f" font-size="8.5">scale-down은 PVC/PV를 지우지</text>
-  <text x="36" y="236" fill="#7a1f1f" font-size="8.5">않음(설계상 — 데이터 손실 방지).</text>
+  <!-- Service -->
+  <rect x="40" y="100" width="378" height="30" fill="#dceaf7"/>
+  <text x="229" y="120" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">Service</text>
+  <text x="229" y="146" text-anchor="middle" fill="#b8b3ad" font-size="10">로드밸런싱 · 어느 Pod든 무관</text>
 
-  <rect x="242" y="160" width="205" height="86" fill="#cdeccf"/>
-  <text x="254" y="180" fill="#14521d" font-size="11" font-weight="700">② 네트워킹 Networking</text>
-  <text x="254" y="197" fill="#14521d" font-size="8.5">headless Service(clusterIP None)가</text>
-  <text x="254" y="209" fill="#14521d" font-size="8.5">Pod마다 안정 DNS A 레코드 부여.</text>
-  <text x="254" y="224" fill="#14521d" font-size="8">rg-0.random-generator</text>
-  <text x="254" y="235" fill="#14521d" font-size="8">.default.svc.cluster.local</text>
+  <!-- arrows to pods -->
+  <path d="M 140 152 L 140 172" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#gray)"/>
+  <path d="M 318 152 L 318 172" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#gray)"/>
 
-  <rect x="460" y="160" width="205" height="86" fill="#f5edda"/>
-  <text x="472" y="180" fill="#0d0d0d" font-size="11" font-weight="700">③ 정체성 Identity</text>
-  <text x="472" y="197" fill="#0d0d0d" font-size="8.5">StatefulSet명 + 순서 인덱스로</text>
-  <text x="472" y="209" fill="#0d0d0d" font-size="8.5">이름 생성. 만들기 전에 이름을</text>
-  <text x="472" y="224" fill="#0d0d0d" font-size="8.5">예측 가능. PVC명·DNS·락 모두</text>
-  <text x="472" y="236" fill="#0d0d0d" font-size="8.5">이 정체성 위에 세워짐.</text>
+  <!-- pods -->
+  <rect x="60" y="176" width="160" height="38" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="140" y="200" text-anchor="middle" fill="#e8e4df" font-size="11" font-family="'JetBrains Mono', monospace">rg-x9k2</text>
+  <rect x="238" y="176" width="160" height="38" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="318" y="200" text-anchor="middle" fill="#e8e4df" font-size="11" font-family="'JetBrains Mono', monospace">rg-mq7f</text>
 
-  <rect x="678" y="160" width="198" height="86" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
-  <text x="690" y="180" fill="rgb(212,168,83)" font-size="11" font-weight="700">④ 순서 Ordinality</text>
-  <text x="690" y="197" fill="#e8e4df" font-size="8.5">스케일 업: 0 → 위로 순차</text>
-  <text x="690" y="209" fill="#e8e4df" font-size="8.5">(앞 Pod ready 후 다음).</text>
-  <text x="690" y="224" fill="#e8e4df" font-size="8.5">스케일 다운: n-1 → 0 역순.</text>
-  <text x="690" y="236" fill="#e8e4df" font-size="8.5">데이터 동기화에 유리.</text>
+  <!-- shared PVC arrows -->
+  <path d="M 140 218 L 200 244" stroke="#f44336" stroke-width="1.5" marker-end="url(#red)"/>
+  <path d="M 318 218 L 258 244" stroke="#f44336" stroke-width="1.5" marker-end="url(#red)"/>
 
-  <!-- storage detail -->
-  <rect x="24" y="262" width="852" height="30" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
-  <text x="36" y="281" fill="#e8e4df" font-size="9.5">핵심 차이: StatefulSet은 <tspan fill="rgb(212,168,83)" font-weight="700">volumeClaimTemplates</tspan>(Pod마다 PVC 즉석 생성) · ReplicaSet은 <tspan fill="rgb(138,133,128)" font-weight="700">persistentVolumeClaim</tspan>(모든 Pod가 하나의 PV 공유). StatefulSet은 PV 자체는 관리 안 함(사전 프로비저닝 필요).</text>
+  <rect x="128" y="248" width="202" height="38" fill="#f2d4d4"/>
+  <text x="229" y="264" text-anchor="middle" fill="#7a1f1f" font-size="10" font-weight="700">PVC 1개 → PV 1개</text>
+  <text x="229" y="279" text-anchor="middle" fill="#7a1f1f" font-size="10">공유 — 동시 쓰기 위험</text>
 
-  <!-- At-Most-One vs At-Least-X -->
-  <text x="24" y="322" fill="#e8e4df" font-size="12">보장의 방향이 반대</text>
-  <rect x="24" y="332" width="410" height="96" fill="#f2d4d4"/>
-  <text x="40" y="352" fill="#7a1f1f" font-size="11" font-weight="700">ReplicaSet — At-Least-X</text>
-  <text x="40" y="371" fill="#7a1f1f" font-size="9">"최소 X개는 늘 떠 있게." 노드 NotReady나 롤링</text>
-  <text x="40" y="384" fill="#7a1f1f" font-size="9">교체 중에는 <tspan font-weight="700">일시적으로 더 많아질 수 있음</tspan>.</text>
-  <text x="40" y="401" fill="#7a1f1f" font-size="9">중복 Pod 허용 → 분산 상태 앱엔 데이터 손실 위험.</text>
-  <text x="40" y="418" fill="#7a1f1f" font-size="9">우선순위: 수가 지정값 아래로 내려가지 않게.</text>
+  <!-- ================= RIGHT: StatefulSet ================= -->
+  <rect x="466" y="46" width="410" height="252" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1"/>
+  <text x="482" y="70" fill="rgb(212,168,83)" font-size="13" font-weight="700">StatefulSet = pet</text>
+  <text x="482" y="88" fill="#e8e4df" font-size="10">고유 · 순서 인덱스 이름</text>
 
-  <rect x="452" y="332" width="424" height="96" fill="#cdeccf"/>
-  <text x="468" y="352" fill="#14521d" font-size="11" font-weight="700">StatefulSet — At-Most-One</text>
-  <text x="468" y="371" fill="#14521d" font-size="9">"같은 정체성/PV를 가진 Pod는 절대 둘이 아니게."</text>
-  <text x="468" y="384" fill="#14521d" font-size="9">옛 인스턴스가 완전히 종료 확인되기 전엔 재시작 안 함.</text>
-  <text x="468" y="401" fill="#14521d" font-size="9">노드 장애 시에도 Pod 종료 확인 전 다른 노드 스케줄 안 함.</text>
-  <text x="468" y="418" fill="#7a1f1f" font-size="9">⚠ 강제 삭제(--force --grace-period=0)·노드 오브젝트 삭제로 깨질 수 있음.</text>
+  <!-- headless Service -->
+  <rect x="482" y="100" width="378" height="30" fill="rgb(212,168,83)"/>
+  <text x="560" y="120" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700">headless Service</text>
+  <rect x="648" y="105" width="126" height="20" fill="#fdf3df"/>
+  <text x="711" y="119" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700" font-family="'JetBrains Mono', monospace">clusterIP: None</text>
+  <text x="671" y="146" text-anchor="middle" fill="#b8b3ad" font-size="10">Pod마다 A 레코드</text>
 
-  <!-- other features -->
-  <text x="24" y="456" fill="#e8e4df" font-size="11">그 밖의 기능</text>
-  <text x="24" y="476" fill="rgb(138,133,128)" font-size="9.5"><tspan fill="#e8e4df" font-weight="700">Partitioned updates</tspan> — .spec.updateStrategy.rollingUpdate.partition(기본 0). 인덱스 ≥ partition만 갱신 → 카나리·쿼럼 보존 후 partition을 0으로 되돌려 전체 롤아웃.</text>
-  <text x="24" y="496" fill="rgb(138,133,128)" font-size="9.5"><tspan fill="#e8e4df" font-weight="700">Parallel deployments</tspan> — .spec.podManagementPolicy: Parallel. 순차 보장이 필요 없으면 모든 Pod를 병렬로 생성·종료해 운영 속도 향상.</text>
+  <path d="M 562 152 L 562 172" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#amber)"/>
+  <path d="M 780 152 L 780 172" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#amber)"/>
 
-  <!-- bottom -->
-  <rect x="24" y="512" width="852" height="30" fill="#f5edda"/>
-  <text x="36" y="531" fill="#0d0d0d" font-size="9.5">단일 인스턴스 상태 앱은 Deployment(replicas=1)로도 되지만, 분산 상태 앱은 At-Most-One이 필요해 StatefulSet이 답. 그래도 복잡하면 CRD·Operator(28장)로.</text>
+  <!-- pods -->
+  <rect x="482" y="176" width="160" height="38" fill="#f5edda"/>
+  <text x="562" y="200" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700" font-family="'JetBrains Mono', monospace">rg-0</text>
+  <rect x="700" y="176" width="160" height="38" fill="#f5edda"/>
+  <text x="780" y="200" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700" font-family="'JetBrains Mono', monospace">rg-1</text>
+
+  <path d="M 562 218 L 562 244" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#green)"/>
+  <path d="M 780 218 L 780 244" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#green)"/>
+
+  <rect x="482" y="248" width="160" height="38" fill="#cdeccf"/>
+  <text x="562" y="264" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">logs-rg-0</text>
+  <text x="562" y="279" text-anchor="middle" fill="#14521d" font-size="10">전용 PVC → PV</text>
+
+  <rect x="700" y="248" width="160" height="38" fill="#cdeccf"/>
+  <text x="780" y="264" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">logs-rg-1</text>
+  <text x="780" y="279" text-anchor="middle" fill="#14521d" font-size="10">전용 PVC → PV</text>
+
+  <text x="671" y="309" text-anchor="middle" fill="#b8b3ad" font-size="10" font-family="'JetBrains Mono', monospace">volumeClaimTemplates</text>
+
+  <!-- ================= BOTTOM: guarantees ================= -->
+  <line x1="24" y1="330" x2="876" y2="330" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="24" y="352" fill="#e8e4df" font-size="12" font-weight="700">보장의 방향이 반대</text>
+
+  <rect x="24" y="364" width="410" height="46" fill="#f2d4d4"/>
+  <text x="40" y="383" fill="#7a1f1f" font-size="11" font-weight="700">At-Least-X — 최소 X개</text>
+  <text x="40" y="400" fill="#7a1f1f" font-size="10">가용성 우선 · 일시적 초과 허용</text>
+
+  <rect x="466" y="364" width="410" height="46" fill="#cdeccf"/>
+  <text x="482" y="383" fill="#14521d" font-size="11" font-weight="700">At-Most-One — 최대 1개</text>
+  <text x="482" y="400" fill="#14521d" font-size="10">일관성 우선 · 중복 절대 금지</text>
+
+  <defs>
+    <marker id="gray" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#b8b3ad"/>
+    </marker>
+    <marker id="amber" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="red" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#f44336"/>
+    </marker>
+    <marker id="green" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#66bb6a"/>
+    </marker>
+  </defs>
 </svg>
