@@ -1,90 +1,84 @@
-<svg viewBox="0 0 880 660" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>Service 이름을 부른 요청이 실제 Pod에 닿기까지 — 이름 해석과 주소 변환</title>
-  <desc>소비자 Pod가 Service 이름으로 호출한 요청이 실제 제공자 Pod에 닿기까지를 이름 해석 단계와 주소 변환 단계로 나눠 본 것입니다. 이름 해석 단계에서는 소비자가 짧은 이름 random-generator 를 부르면, Pod 안의 etc resolv.conf 에 적힌 nameserver 주소를 보고 CoreDNS 에 질의합니다. 이 파일에는 Service 이름 목록이 아니라 DNS 서버의 위치와 search 접미사 목록만 들어 있으므로 Service 를 아무리 만들어도 파일 내용은 바뀌지 않습니다. ndots 가 5 이므로 점이 다섯 개 미만인 짧은 이름은 search 접미사를 차례로 붙여 시도하며, default.svc.cluster.local 을 붙인 첫 시도에서 응답을 받습니다. CoreDNS 는 A 레코드로 clusterIP 10.109.72.32 를 돌려줍니다. 주소 변환 단계에서는 소비자 Pod 가 그 clusterIP 를 목적지로 패킷을 만들어 보내고, 같은 노드의 커널에서 netfilter 의 nat 테이블 OUTPUT 체인에 kube-proxy 가 넣어둔 KUBE-SERVICES 규칙이 걸립니다. 규칙 체인은 KUBE-SERVICES 에서 KUBE-SVC 로, 다시 백엔드마다 하나씩 있는 KUBE-SEP 로 이어지며 확률 기반으로 백엔드 Pod 하나를 고릅니다. 백엔드가 세 개면 첫 규칙이 삼분의 일, 다음이 이분의 일, 마지막이 무조건 매칭되는 방식으로 균등 분포를 만듭니다. 여기서 중요한 것은 목적지 주소만 바뀌고 소스 주소는 그대로라는 점입니다. 소스는 소비자 Pod 의 IP 인 10.244.1.5 를 유지하며 목적지만 clusterIP 에서 제공자 Pod 의 실제 IP 인 10.244.2.7 로 바뀝니다. 이것이 DNAT 이며 SNAT 는 일어나지 않습니다. 변환 내역은 conntrack 테이블에 기록됩니다. 목적지가 이미 실제 Pod IP 이므로 패킷은 CNI 오버레이 네트워크를 타고 그 Pod 가 있는 노드로 전달되며, 가상 IP 를 목적지로 가진 패킷은 노드 밖으로 나가지 않습니다. 제공자 Pod 가 받는 패킷의 소스는 진짜 소비자 Pod 의 IP 이므로 애플리케이션 로그에 실제 호출자가 남습니다. 이는 NodePort 로 외부에서 들어온 트래픽이 소스 NAT 되어 클라이언트 IP 가 노드 주소로 가려지는 것과 대비되는 지점입니다. 응답 패킷은 소스가 제공자 Pod IP 이고 목적지가 소비자 Pod IP 인 상태로 출발하는데, 소비자 노드의 conntrack 이 기록을 보고 소스 주소를 clusterIP 로 되돌립니다. 이 역변환이 없으면 소비자는 자기가 부른 적 없는 주소에서 응답이 왔다고 보고 패킷을 버립니다. ping 이 실패하는 까닭도 이 구조에서 나옵니다. kube-proxy 는 Service 정의에 명시된 TCP 나 UDP 규칙만 만들고 ICMP 규칙은 만들지 않으므로 ICMP 패킷에는 걸릴 규칙이 없어 무응답이 됩니다.</desc>
+<svg viewBox="0 0 860 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Service 이름이 clusterIP 로 해석되는 경로</title>
+  <desc>소비자 Pod 가 Service 를 짧은 이름으로 호출했을 때 그 이름이 clusterIP 로 바뀌는 경로입니다. 소비자 Pod 안의 애플리케이션이 random-generator 라는 짧은 이름으로 요청을 보내면, Pod 의 etc resolv.conf 에 적힌 설정을 참조합니다. 이 파일에는 Service 이름 목록이 아니라 질의할 DNS 서버 주소인 nameserver 와 짧은 이름에 붙여 볼 접미사 목록인 search, 그리고 접미사를 붙일지 판단하는 기준인 options ndots 세 줄만 들어 있습니다. ndots 값이 5 이므로 점이 다섯 개 미만인 짧은 이름은 search 접미사를 앞에서부터 차례로 붙여 시도하며, 같은 네임스페이스의 Service 라면 첫 접미사인 default.svc.cluster.local 을 붙인 시도에서 바로 응답을 받습니다. 질의를 받는 쪽은 CoreDNS 이고 Service 이름과 주소의 대응 관계는 CoreDNS 가 들고 있습니다. CoreDNS 는 A 레코드로 clusterIP 를 돌려줍니다. 다만 headless Service 인 경우에는 여기서 경로가 갈려, 가상 IP 가 없으므로 clusterIP 대신 백킹 Pod 들의 실제 IP 가 그대로 응답됩니다. 이름 해석이 끝나면 애플리케이션은 목적지 IP 를 얻은 상태가 되고, 소스는 자기 Pod IP 이고 목적지는 clusterIP 인 패킷이 만들어져 커널로 넘어갑니다. 그 뒤 커널에서 일어나는 주소 변환은 별도 문서인 K8s 패킷 여정에서 다룹니다.</desc>
 
   <defs>
     <marker id="qa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
     </marker>
+    <marker id="qg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#66bb6a"/>
+    </marker>
   </defs>
 
-  <rect width="880" height="660" fill="#0d0d0d"/>
-  <text x="24" y="30" fill="#e8e4df" font-size="15">① 이름 해석 — 짧은 이름이 clusterIP 가 되기까지</text>
-  <text x="24" y="50" fill="#e8e4df" font-size="10">resolv.conf 에는 Service 목록이 아니라 "물어볼 곳"과 "붙여 볼 접미사"만 있습니다.</text>
+  <rect width="860" height="400" fill="#0d0d0d"/>
+  <text x="24" y="32" fill="#e8e4df" font-size="14">이름 해석</text>
 
-  <!-- consumer pod box -->
-  <rect x="30" y="72" width="392" height="252" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
-  <text x="46" y="94" fill="#5b9bd5" font-size="11" font-weight="700">소비자 Pod  ·  10.244.1.5</text>
+  <!-- consumer pod -->
+  <rect x="30" y="60" width="360" height="248" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="46" y="82" fill="#5b9bd5" font-size="11" font-weight="700">소비자 Pod</text>
+  <text x="374" y="82" text-anchor="end" fill="#b8b3ad" font-size="10">10.244.1.5</text>
 
-  <rect x="50" y="108" width="352" height="42" fill="#cdeccf"/>
-  <text x="226" y="125" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">앱이 짧은 이름으로 호출합니다</text>
-  <rect x="64" y="130" width="324" height="16" fill="#e6f7e7"/>
-  <text x="226" y="142" text-anchor="middle" fill="#14521d" font-size="9" font-weight="700">curl http://random-generator/numbers</text>
+  <rect x="50" y="96" width="320" height="40" fill="#cdeccf"/>
+  <text x="62" y="112" fill="#14521d" font-size="10" font-weight="700">1. 짧은 이름으로 호출</text>
+  <rect x="62" y="117" width="296" height="15" fill="#e6f7e7"/>
+  <text x="70" y="129" fill="#14521d" font-size="8" font-weight="700">http://random-generator/</text>
 
-  <rect x="50" y="166" width="352" height="88" fill="#f5edda"/>
-  <text x="64" y="184" fill="#0d0d0d" font-size="10" font-weight="700">/etc/resolv.conf  — kubelet 이 Pod 생성 시 써 둡니다</text>
-  <rect x="64" y="192" width="324" height="15" fill="#fdf3df"/>
-  <text x="72" y="204" fill="#0d0d0d" font-size="8" font-weight="700">nameserver 10.96.0.10</text>
-  <rect x="64" y="210" width="324" height="15" fill="#fdf3df"/>
-  <text x="72" y="222" fill="#0d0d0d" font-size="8" font-weight="700">search default.svc.cluster.local svc.cluster.local cluster.local</text>
-  <rect x="64" y="228" width="324" height="15" fill="#fdf3df"/>
-  <text x="72" y="240" fill="#0d0d0d" font-size="8" font-weight="700">options ndots:5</text>
+  <path d="M210 142 L210 156" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#qg)"/>
 
-  <rect x="50" y="266" width="352" height="42" fill="#dceaf7"/>
-  <text x="64" y="283" fill="#10243a" font-size="9" font-weight="700">점이 5 개 미만이면 search 접미사를 차례로 붙여 시도합니다</text>
-  <text x="64" y="299" fill="#10243a" font-size="9">random-generator  →  random-generator.default.svc.cluster.local  (첫 시도에서 성공)</text>
+  <rect x="50" y="162" width="320" height="82" fill="#f5edda"/>
+  <text x="62" y="178" fill="#0d0d0d" font-size="10" font-weight="700">2. /etc/resolv.conf</text>
+  <rect x="62" y="184" width="296" height="15" fill="#fdf3df"/>
+  <text x="70" y="196" fill="#0d0d0d" font-size="8" font-weight="700">nameserver 10.96.0.10</text>
+  <rect x="62" y="202" width="296" height="15" fill="#fdf3df"/>
+  <text x="70" y="214" fill="#0d0d0d" font-size="7.5" font-weight="700">search default.svc.cluster.local svc.cluster.local</text>
+  <rect x="62" y="220" width="296" height="15" fill="#fdf3df"/>
+  <text x="70" y="232" fill="#0d0d0d" font-size="8" font-weight="700">options ndots:5</text>
+
+  <path d="M210 250 L210 264" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#qg)"/>
+
+  <rect x="50" y="270" width="320" height="24" fill="#dceaf7"/>
+  <rect x="62" y="274" width="296" height="15" fill="#eef6fc"/>
+  <text x="70" y="286" fill="#10243a" font-size="7.5" font-weight="700">random-generator.default.svc.cluster.local</text>
 
   <!-- coredns -->
-  <rect x="470" y="108" width="380" height="146" fill="#dceaf7"/>
-  <text x="660" y="130" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">CoreDNS  ·  10.96.0.10</text>
-  <text x="660" y="149" text-anchor="middle" fill="#10243a" font-size="9">Service 이름 목록은 여기가 들고 있습니다</text>
+  <rect x="470" y="60" width="360" height="140" fill="#dceaf7"/>
+  <text x="486" y="84" fill="#10243a" font-size="11" font-weight="700">3. CoreDNS</text>
+  <text x="814" y="84" text-anchor="end" fill="#10243a" font-size="10">10.96.0.10</text>
 
-  <rect x="488" y="162" width="344" height="18" fill="#eef6fc"/>
-  <text x="660" y="175" text-anchor="middle" fill="#10243a" font-size="8" font-weight="700">질의  random-generator.default.svc.cluster.local</text>
+  <rect x="486" y="100" width="328" height="18" fill="#eef6fc"/>
+  <text x="496" y="113" fill="#10243a" font-size="8" font-weight="700">random-generator.default.svc.cluster.local</text>
 
-  <rect x="488" y="188" width="344" height="18" fill="#eef6fc"/>
-  <text x="660" y="201" text-anchor="middle" fill="#10243a" font-size="8" font-weight="700">응답  A  10.109.72.32   ← clusterIP</text>
+  <rect x="486" y="126" width="328" height="18" fill="#eef6fc"/>
+  <text x="496" y="139" fill="#10243a" font-size="8" font-weight="700">응답  A  10.109.72.32</text>
 
-  <text x="660" y="228" text-anchor="middle" fill="#10243a" font-size="9">Service 가 만들어지는 즉시 등록되므로</text>
-  <text x="660" y="243" text-anchor="middle" fill="#10243a" font-size="9">Pod 시작 시점과 무관합니다 (환경변수와의 차이)</text>
+  <rect x="486" y="156" width="328" height="30" fill="#f5edda"/>
+  <text x="496" y="169" fill="#0d0d0d" font-size="9" font-weight="700">headless 이면</text>
+  <rect x="582" y="160" width="222" height="15" fill="#fdf3df"/>
+  <text x="590" y="172" fill="#0d0d0d" font-size="8" font-weight="700">Pod IP 목록</text>
+  <text x="496" y="182" fill="#0d0d0d" font-size="8">12 장</text>
 
-  <path d="M408 195 L464 195" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#qa)"/>
-  <path d="M464 216 L408 216" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#qa)"/>
+  <path d="M376 200 L464 130" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#qa)"/>
+  <text x="420" y="152" text-anchor="middle" fill="rgb(212,168,83)" font-size="9">질의</text>
 
-  <!-- headless contrast -->
-  <rect x="470" y="266" width="380" height="42" fill="#f5edda"/>
-  <text x="484" y="283" fill="#0d0d0d" font-size="9" font-weight="700">headless Service 라면 여기서 갈립니다</text>
-  <text x="484" y="299" fill="#0d0d0d" font-size="9">clusterIP 대신 백킹 Pod IP 들이 그대로 응답됩니다 (12 장)</text>
+  <path d="M464 155 L376 225" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#qa)"/>
+  <text x="424" y="206" text-anchor="middle" fill="rgb(212,168,83)" font-size="9">clusterIP</text>
 
-  <!-- result -->
-  <rect x="30" y="340" width="820" height="46" fill="#cdeccf"/>
-  <text x="46" y="359" fill="#14521d" font-size="10" font-weight="700">여기까지가 이름 해석입니다 — 앱은 이제 목적지 IP 를 손에 쥐었습니다</text>
-  <text x="46" y="376" fill="#14521d" font-size="9">소스 10.244.1.5  →  목적지 10.109.72.32:80  패킷이 만들어져 커널로 넘어갑니다. 다음 그림이 그 뒤를 다룹니다.</text>
+  <!-- outcome -->
+  <rect x="470" y="220" width="360" height="88" fill="#cdeccf"/>
+  <text x="486" y="242" fill="#14521d" font-size="10" font-weight="700">4. 패킷 생성</text>
+  <rect x="486" y="250" width="328" height="16" fill="#e6f7e7"/>
+  <text x="496" y="262" fill="#14521d" font-size="8" font-weight="700">src  10.244.1.5</text>
+  <rect x="486" y="270" width="328" height="16" fill="#e6f7e7"/>
+  <text x="496" y="282" fill="#14521d" font-size="8" font-weight="700">dst  10.109.72.32:80</text>
+  <text x="486" y="300" fill="#14521d" font-size="9">여기까지가 이름 해석</text>
 
-  <!-- comparison table: env var vs dns -->
-  <text x="24" y="424" fill="#e8e4df" font-size="12" font-weight="700">이름을 아는 두 경로의 대비</text>
+  <!-- boundary -->
+  <path d="M30 330 L830 330" fill="none" stroke="#b8b3ad" stroke-width="1" stroke-dasharray="5,4"/>
 
-  <rect x="30" y="440" width="410" height="120" fill="#f2d4d4"/>
-  <text x="46" y="460" fill="#7a1f1f" font-size="10" font-weight="700">환경변수</text>
-  <text x="46" y="479" fill="#7a1f1f" font-size="9">Pod 시작 시점에 값을 복사해 넣습니다</text>
-  <text x="46" y="495" fill="#7a1f1f" font-size="9">그 뒤 생긴 Service 는 알 수 없습니다</text>
-  <text x="46" y="511" fill="#7a1f1f" font-size="9">해결은 Pod 재시작뿐입니다</text>
-  <rect x="46" y="520" width="378" height="16" fill="#fbe9e9"/>
-  <text x="54" y="532" fill="#7a1f1f" font-size="8" font-weight="700">{SERVICE_NAME}_SERVICE_HOST=10.109.72.32</text>
-  <text x="46" y="552" fill="#7a1f1f" font-size="9">시작 시점에 고정 — execve 가 경계입니다</text>
-
-  <rect x="470" y="440" width="380" height="120" fill="#cdeccf"/>
-  <text x="486" y="460" fill="#14521d" font-size="10" font-weight="700">DNS  (권장)</text>
-  <text x="486" y="479" fill="#14521d" font-size="9">부를 때마다 CoreDNS 에 물어봅니다</text>
-  <text x="486" y="495" fill="#14521d" font-size="9">값을 복사해 두지 않습니다</text>
-  <text x="486" y="511" fill="#14521d" font-size="9">Service 가 언제 생겼든 상관없습니다</text>
-  <rect x="486" y="520" width="348" height="16" fill="#e6f7e7"/>
-  <text x="494" y="532" fill="#14521d" font-size="8" font-weight="700">http://random-generator/</text>
-  <text x="486" y="552" fill="#14521d" font-size="9">호출 시점에 해석 — 시간 의존이 없습니다</text>
-
-  <rect x="30" y="576" width="820" height="34" fill="#f5edda"/>
-  <text x="46" y="597" fill="#0d0d0d" font-size="9" font-weight="700">다만 포트가 비표준이고 소비자가 그 값을 모른다면, 포트를 얻기 위해 환경변수를 여전히 써야 할 수 있습니다.</text>
-
-  <rect x="30" y="622" width="820" height="26" fill="#0d0d0d" stroke="rgb(138,133,128)" stroke-width="1"/>
-  <text x="46" y="639" fill="#e8e4df" font-size="9">Service 에 이름을 짓는 행위가 곧 DNS 항목을 만드는 행위입니다 — 별도 등록 절차가 없습니다.</text>
+  <rect x="30" y="344" width="800" height="40" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1"/>
+  <text x="46" y="362" fill="#b8b3ad" font-size="10" font-weight="700">이 아래는 커널의 주소 변환 영역</text>
+  <rect x="290" y="350" width="240" height="16" fill="#f5edda"/>
+  <text x="300" y="362" fill="#0d0d0d" font-size="8" font-weight="700">netfilter · conntrack</text>
+  <text x="46" y="378" fill="#b8b3ad" font-size="9">02_os/networking/01-02</text>
 </svg>
