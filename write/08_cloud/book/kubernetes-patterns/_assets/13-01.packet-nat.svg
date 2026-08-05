@@ -1,0 +1,114 @@
+<svg viewBox="0 0 880 700" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>clusterIP 로 향한 패킷의 주소가 바뀌는 곳과 바뀌지 않는 곳</title>
+  <desc>이름 해석으로 clusterIP 를 얻은 뒤 패킷이 실제 제공자 Pod 에 닿기까지 주소가 어떻게 변하는지 추적한 것입니다. 소비자 Pod 가 소스는 자기 IP 이고 목적지는 clusterIP 인 패킷을 보내면, 같은 노드의 커널에서 netfilter 의 nat 테이블 OUTPUT 체인에 kube-proxy 가 넣어둔 KUBE-SERVICES 규칙이 걸립니다. 규칙 체인은 KUBE-SERVICES 에서 서비스마다 하나씩 있는 KUBE-SVC 로, 다시 백엔드 Pod 마다 하나씩 있는 KUBE-SEP 로 이어집니다. 백엔드가 세 개일 때 첫 규칙은 삼분의 일 확률로, 남은 것 중 다음 규칙은 이분의 일 확률로, 마지막 규칙은 무조건 매칭되어 결과적으로 균등 분포가 만들어집니다. 여기서 결정적인 것은 목적지 주소만 바뀌고 소스 주소는 그대로라는 점입니다. 소스는 소비자 Pod 의 IP 를 유지하고 목적지만 clusterIP 에서 선택된 제공자 Pod 의 실제 IP 와 targetPort 로 바뀝니다. 이것이 DNAT 이며 SNAT 는 일어나지 않습니다. 변환 내역은 conntrack 테이블에 기록되어 응답 처리에 쓰입니다. 목적지가 이미 실제 Pod IP 이므로 패킷은 CNI 네트워크를 타고 그 Pod 가 있는 노드로 전달되며, 가상 IP 를 목적지로 가진 패킷은 노드 밖으로 나가지 않습니다. 제공자 Pod 가 받는 패킷의 소스는 진짜 소비자 Pod 의 IP 이므로 애플리케이션 로그에 실제 호출자가 남고, 이는 NodePort 로 외부에서 들어온 트래픽이 소스 NAT 되어 클라이언트 IP 가 노드 주소로 가려지는 것과 대비되는 지점입니다. 응답 패킷은 소스가 제공자 Pod IP 이고 목적지가 소비자 Pod IP 인 상태로 출발하는데, 소비자 노드의 conntrack 이 기록을 보고 소스 주소를 clusterIP 로 되돌립니다. 이 역변환이 없으면 소비자는 자기가 부른 적 없는 주소에서 응답이 왔다고 보고 패킷을 버립니다. ping 이 실패하는 까닭도 이 구조에서 나옵니다. kube-proxy 는 Service 정의에 명시된 TCP 나 UDP 규칙만 만들고 ICMP 규칙은 만들지 않으므로 ICMP 패킷에는 걸릴 규칙이 없어 무응답이 됩니다.</desc>
+
+  <defs>
+    <marker id="na" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="ng" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#66bb6a"/>
+    </marker>
+    <marker id="nb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5b9bd5"/>
+    </marker>
+  </defs>
+
+  <rect width="880" height="700" fill="#0d0d0d"/>
+  <text x="24" y="30" fill="#e8e4df" font-size="15">② 주소 변환 — 목적지만 바뀌고 소스는 그대로입니다</text>
+  <text x="24" y="50" fill="#e8e4df" font-size="10">clusterIP 통신에서는 DNAT 만 일어나고 SNAT 는 일어나지 않습니다. NodePort 와 갈리는 지점입니다.</text>
+
+  <!-- Node A -->
+  <rect x="30" y="72" width="480" height="404" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="46" y="94" fill="#5b9bd5" font-size="11" font-weight="700">노드 A</text>
+
+  <rect x="50" y="108" width="440" height="44" fill="#cdeccf"/>
+  <text x="270" y="126" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">소비자 Pod  ·  10.244.1.5</text>
+  <rect x="64" y="131" width="412" height="16" fill="#e6f7e7"/>
+  <text x="270" y="143" text-anchor="middle" fill="#14521d" font-size="8" font-weight="700">src 10.244.1.5  →  dst 10.109.72.32:80   (clusterIP)</text>
+
+  <path d="M270 158 L270 174" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#ng)"/>
+
+  <!-- netfilter -->
+  <rect x="50" y="180" width="440" height="212" fill="#f5edda"/>
+  <text x="64" y="199" fill="#0d0d0d" font-size="10" font-weight="700">노드 A 커널 — netfilter  nat 테이블 · OUTPUT 체인</text>
+  <text x="64" y="215" fill="#0d0d0d" font-size="9">kube-proxy 가 Service 를 감시하며 미리 넣어둔 규칙입니다.</text>
+
+  <rect x="64" y="224" width="412" height="16" fill="#fdf3df"/>
+  <text x="72" y="236" fill="#0d0d0d" font-size="8" font-weight="700">KUBE-SERVICES  →  KUBE-SVC-{hash}  →  KUBE-SEP-{hash}</text>
+
+  <text x="64" y="256" fill="#0d0d0d" font-size="9" font-weight="700">백엔드 선택 — 확률로 균등 분포를 만듭니다 (Pod 3 개 기준)</text>
+  <rect x="64" y="263" width="412" height="15" fill="#fdf3df"/>
+  <text x="72" y="275" fill="#0d0d0d" font-size="8" font-weight="700">SEP-1  probability 0.333  →  안 걸리면 다음으로</text>
+  <rect x="64" y="281" width="412" height="15" fill="#fdf3df"/>
+  <text x="72" y="293" fill="#0d0d0d" font-size="8" font-weight="700">SEP-2  probability 0.500  →  남은 둘 중 하나</text>
+  <rect x="64" y="299" width="412" height="15" fill="#fdf3df"/>
+  <text x="72" y="311" fill="#0d0d0d" font-size="8" font-weight="700">SEP-3  무조건 매칭        →  결과적으로 각 1/3</text>
+
+  <text x="64" y="333" fill="#0d0d0d" font-size="9" font-weight="700">DNAT — 목적지만 바꿉니다</text>
+  <rect x="64" y="340" width="412" height="16" fill="#fdf3df"/>
+  <text x="72" y="352" fill="#0d0d0d" font-size="8" font-weight="700">dst  10.109.72.32:80  →  10.244.2.7:8080   (port 80 → targetPort 8080)</text>
+  <rect x="64" y="359" width="412" height="16" fill="#e6f7e7"/>
+  <text x="72" y="371" fill="#14521d" font-size="8" font-weight="700">src  10.244.1.5  →  10.244.1.5   변경 없음 · SNAT 하지 않습니다</text>
+
+  <path d="M270 398 L270 414" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#ng)"/>
+
+  <rect x="50" y="420" width="440" height="42" fill="#cdeccf"/>
+  <text x="64" y="437" fill="#14521d" font-size="9" font-weight="700">노드를 떠나는 패킷 — 이미 실제 Pod IP 입니다</text>
+  <rect x="64" y="442" width="412" height="15" fill="#e6f7e7"/>
+  <text x="72" y="454" fill="#14521d" font-size="8" font-weight="700">src 10.244.1.5  →  dst 10.244.2.7:8080</text>
+
+  <!-- conntrack -->
+  <rect x="546" y="180" width="304" height="102" fill="#dceaf7"/>
+  <text x="698" y="200" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">conntrack 테이블</text>
+  <text x="562" y="219" fill="#10243a" font-size="9">변환 내역을 기록해 둡니다.</text>
+  <rect x="562" y="227" width="272" height="15" fill="#eef6fc"/>
+  <text x="570" y="239" fill="#10243a" font-size="7.5" font-weight="700">10.244.1.5 → 10.109.72.32  =  10.244.2.7</text>
+  <text x="562" y="259" fill="#10243a" font-size="9">응답이 돌아올 때 이 기록으로</text>
+  <text x="562" y="273" fill="#10243a" font-size="9">소스 주소를 되돌립니다.</text>
+
+  <path d="M482 262 L540 232" fill="none" stroke="#5b9bd5" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#nb)"/>
+
+  <!-- Node B -->
+  <rect x="546" y="300" width="304" height="176" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="562" y="322" fill="#5b9bd5" font-size="11" font-weight="700">노드 B</text>
+
+  <rect x="566" y="336" width="264" height="60" fill="#dceaf7"/>
+  <text x="698" y="355" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">제공자 Pod  ·  10.244.2.7</text>
+  <rect x="578" y="362" width="240" height="16" fill="#eef6fc"/>
+  <text x="698" y="374" text-anchor="middle" fill="#10243a" font-size="8" font-weight="700">8080 에서 listen</text>
+  <text x="698" y="390" text-anchor="middle" fill="#10243a" font-size="8">clusterIP 를 본 적이 없습니다</text>
+
+  <rect x="566" y="406" width="264" height="56" fill="#cdeccf"/>
+  <text x="698" y="424" text-anchor="middle" fill="#14521d" font-size="9" font-weight="700">앱이 보는 소스 = 진짜 소비자</text>
+  <rect x="578" y="430" width="240" height="15" fill="#e6f7e7"/>
+  <text x="698" y="442" text-anchor="middle" fill="#14521d" font-size="8" font-weight="700">remoteAddr = 10.244.1.5</text>
+  <text x="698" y="456" text-anchor="middle" fill="#14521d" font-size="8">로그에 실제 호출자가 남습니다</text>
+
+  <path d="M496 441 L560 441" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#ng)"/>
+  <text x="528" y="434" text-anchor="middle" fill="#66bb6a" font-size="8">CNI</text>
+
+  <!-- return -->
+  <text x="24" y="510" fill="#e8e4df" font-size="12" font-weight="700">돌아오는 길 — 역변환이 없으면 소비자가 패킷을 버립니다</text>
+
+  <rect x="30" y="522" width="820" height="66" fill="#dceaf7"/>
+  <rect x="46" y="534" width="384" height="16" fill="#eef6fc"/>
+  <text x="54" y="546" fill="#10243a" font-size="8" font-weight="700">Pod 가 보낸 응답   src 10.244.2.7:8080  →  dst 10.244.1.5</text>
+  <rect x="446" y="534" width="388" height="16" fill="#eef6fc"/>
+  <text x="454" y="546" fill="#10243a" font-size="8" font-weight="700">conntrack 역변환 후   src 10.109.72.32:80  →  dst 10.244.1.5</text>
+  <text x="46" y="566" fill="#10243a" font-size="9">소비자는 10.109.72.32 로 요청했으므로 응답도 그 주소에서 와야 합니다. 커널은 자기가 보낸 적 없는 곳에서 온 응답을</text>
+  <text x="46" y="581" fill="#10243a" font-size="9">연결에 매칭하지 못해 버립니다. conntrack 이 이 역변환을 맡습니다.</text>
+
+  <!-- contrast with NodePort -->
+  <text x="24" y="618" fill="#e8e4df" font-size="12" font-weight="700">NodePort 와의 대비</text>
+
+  <rect x="30" y="630" width="410" height="54" fill="#cdeccf"/>
+  <text x="46" y="649" fill="#14521d" font-size="9" font-weight="700">clusterIP 내부 통신 — DNAT 만</text>
+  <text x="46" y="665" fill="#14521d" font-size="9">소스가 보존되므로 제공자 앱이 실제 호출자를 봅니다.</text>
+  <text x="46" y="679" fill="#14521d" font-size="9">추가 홉이 없어 소스를 가릴 이유가 없습니다.</text>
+
+  <rect x="470" y="630" width="380" height="54" fill="#f2d4d4"/>
+  <text x="486" y="649" fill="#7a1f1f" font-size="9" font-weight="700">NodePort 외부 유입 — DNAT + SNAT</text>
+  <text x="486" y="665" fill="#7a1f1f" font-size="9">다른 노드로 한 번 더 넘길 때 소스를 노드 주소로 바꿉니다.</text>
+  <text x="486" y="679" fill="#7a1f1f" font-size="9">externalTrafficPolicy: Local 로 그 홉을 없애면 보존됩니다.</text>
+</svg>
