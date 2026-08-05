@@ -1,0 +1,101 @@
+<svg viewBox="0 0 880 596" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Service 이름을 부른 패킷이 실제 Pod에 닿기까지</title>
+  <desc>소비자 Pod에서 Service 이름으로 호출한 요청이 실제 제공자 Pod에 닿기까지의 경로를 다섯 단계로 나눈 것입니다. 첫째 소비자 Pod가 random-generator라는 짧은 이름을 부르면, etc resolv.conf에 적힌 nameserver 주소를 보고 CoreDNS에 질의합니다. resolv.conf에는 Service 이름 목록이 아니라 DNS 서버의 위치와 search 접미사만 들어 있습니다. 둘째 CoreDNS가 clusterIP 10.109.72.32를 응답합니다. 셋째 소비자 Pod가 그 clusterIP를 목적지로 패킷을 만들어 내보내면, 같은 노드의 커널에서 netfilter의 PREROUTING과 OUTPUT 체인에 kube-proxy가 넣어둔 KUBE-SERVICES 규칙이 걸립니다. 이 규칙은 확률 기반으로 백엔드 Pod 하나를 고르고 목적지 주소를 그 Pod의 실제 IP와 targetPort로 바꾸는 DNAT를 수행하며, 동시에 conntrack 테이블에 변환 내역을 기록합니다. 넷째 목적지가 이미 실제 Pod IP로 바뀌었으므로 패킷은 CNI 네트워크를 타고 그 Pod가 있는 노드로 전달됩니다. 가상 IP를 목적지로 가진 패킷은 노드 밖으로 나가지 않는다는 뜻입니다. 다섯째 응답 패킷이 돌아올 때는 conntrack에 기록된 내역을 보고 소스 주소를 다시 clusterIP로 되돌립니다. 소비자는 자기가 부른 주소에서 응답이 온 것으로 보게 됩니다. ping이 실패하는 까닭도 여기서 드러납니다. kube-proxy는 Service 정의에 명시된 TCP나 UDP 규칙만 만들고 ICMP 규칙은 만들지 않으므로, ICMP 패킷에는 걸릴 규칙이 없어 무응답이 됩니다.</desc>
+
+  <defs>
+    <marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="pg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#66bb6a"/>
+    </marker>
+    <marker id="pb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5b9bd5"/>
+    </marker>
+  </defs>
+
+  <rect width="880" height="596" fill="#0d0d0d"/>
+  <text x="24" y="30" fill="#e8e4df" font-size="15">이름 하나가 실제 Pod에 닿기까지</text>
+  <text x="24" y="50" fill="#e8e4df" font-size="10">주소가 바뀌는 곳은 목적지 노드가 아니라 보내는 쪽 노드입니다.</text>
+
+  <!-- ===== Node A (sender) ===== -->
+  <rect x="30" y="72" width="500" height="392" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="46" y="94" fill="#5b9bd5" font-size="11" font-weight="700">노드 A — 소비자 Pod 가 있는 노드</text>
+
+  <!-- consumer pod -->
+  <rect x="52" y="110" width="200" height="58" fill="#cdeccf"/>
+  <text x="152" y="131" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">소비자 Pod</text>
+  <rect x="64" y="139" width="176" height="18" fill="#e6f7e7"/>
+  <text x="152" y="152" text-anchor="middle" fill="#14521d" font-size="9" font-weight="700">curl http://random-generator</text>
+
+  <!-- resolv.conf -->
+  <rect x="312" y="110" width="196" height="58" fill="#f5edda"/>
+  <text x="410" y="128" text-anchor="middle" fill="#0d0d0d" font-size="9" font-weight="700">/etc/resolv.conf</text>
+  <rect x="322" y="134" width="176" height="16" fill="#fdf3df"/>
+  <text x="410" y="146" text-anchor="middle" fill="#0d0d0d" font-size="8" font-weight="700">nameserver 10.96.0.10</text>
+  <text x="410" y="162" text-anchor="middle" fill="#0d0d0d" font-size="8">Service 목록이 아니라 DNS 위치만</text>
+
+  <path d="M258 139 L306 139" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#pa)"/>
+  <text x="282" y="132" text-anchor="middle" fill="rgb(212,168,83)" font-size="8">①</text>
+
+  <!-- kernel netfilter -->
+  <rect x="52" y="196" width="456" height="150" fill="#f5edda"/>
+  <text x="68" y="216" fill="#0d0d0d" font-size="10" font-weight="700">③ 노드 A 커널 — netfilter</text>
+  <text x="68" y="233" fill="#0d0d0d" font-size="9">kube-proxy 가 Service 를 보고 미리 넣어둔 규칙 체인입니다.</text>
+
+  <rect x="68" y="243" width="424" height="17" fill="#fdf3df"/>
+  <text x="78" y="256" fill="#0d0d0d" font-size="8" font-weight="700">KUBE-SERVICES → KUBE-SVC-xxx → KUBE-SEP-xxx (백엔드마다 하나씩)</text>
+
+  <text x="68" y="278" fill="#0d0d0d" font-size="9">규칙이 하는 일은 둘입니다.</text>
+  <text x="78" y="295" fill="#0d0d0d" font-size="9">· 확률 기반으로 백엔드 Pod 하나를 고릅니다 (Pod 3 개면 1/3 · 1/2 · 1)</text>
+  <text x="78" y="311" fill="#0d0d0d" font-size="9">· 목적지 주소를 고른 Pod 의 실제 IP·targetPort 로 바꿉니다 (DNAT)</text>
+
+  <rect x="68" y="320" width="424" height="17" fill="#fdf3df"/>
+  <text x="78" y="333" fill="#0d0d0d" font-size="8" font-weight="700">10.109.72.32:80  →  10.244.2.7:8080   · 변환 내역은 conntrack 에 기록</text>
+
+  <path d="M152 174 L152 190" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#pg)"/>
+
+  <!-- leaving note -->
+  <rect x="52" y="368" width="456" height="40" fill="#cdeccf"/>
+  <text x="68" y="385" fill="#14521d" font-size="9" font-weight="700">여기서 이미 실제 Pod IP 입니다</text>
+  <text x="68" y="400" fill="#14521d" font-size="9">가상 IP 를 목적지로 가진 패킷은 노드 밖으로 나가지 않습니다</text>
+
+  <path d="M280 350 L280 362" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#pg)"/>
+
+  <!-- ping note -->
+  <rect x="52" y="420" width="456" height="32" fill="#f2d4d4"/>
+  <text x="68" y="440" fill="#7a1f1f" font-size="9" font-weight="700">ping 이 실패하는 곳도 여기 — TCP·UDP 규칙만 있고 ICMP 규칙은 없습니다</text>
+
+  <!-- ===== CoreDNS ===== -->
+  <rect x="580" y="110" width="270" height="58" fill="#dceaf7"/>
+  <text x="715" y="131" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">② CoreDNS</text>
+  <rect x="596" y="139" width="238" height="18" fill="#eef6fc"/>
+  <text x="715" y="152" text-anchor="middle" fill="#10243a" font-size="8" font-weight="700">random-generator → 10.109.72.32</text>
+
+  <path d="M514 139 L574 139" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#pa)"/>
+
+  <!-- ===== Node B ===== -->
+  <rect x="580" y="196" width="270" height="150" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="596" y="218" fill="#5b9bd5" font-size="11" font-weight="700">노드 B</text>
+
+  <rect x="600" y="234" width="230" height="58" fill="#dceaf7"/>
+  <text x="715" y="255" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">④ 제공자 Pod</text>
+  <rect x="612" y="263" width="206" height="18" fill="#eef6fc"/>
+  <text x="715" y="276" text-anchor="middle" fill="#10243a" font-size="8" font-weight="700">10.244.2.7:8080</text>
+
+  <text x="715" y="316" text-anchor="middle" fill="#e8e4df" font-size="9">이 Pod 는 clusterIP 를 본 적이 없습니다</text>
+  <text x="715" y="332" text-anchor="middle" fill="#e8e4df" font-size="9">자기 IP 로 온 평범한 요청으로 봅니다</text>
+
+  <path d="M514 268 L574 268" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#pg)"/>
+  <text x="544" y="261" text-anchor="middle" fill="#66bb6a" font-size="8">CNI</text>
+
+  <!-- return path -->
+  <path d="M596 300 L560 300 L560 480 L300 480" fill="none" stroke="#5b9bd5" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#pb)"/>
+
+  <rect x="52" y="490" width="798" height="46" fill="#dceaf7"/>
+  <text x="68" y="509" fill="#10243a" font-size="10" font-weight="700">⑤ 돌아오는 길 — conntrack 이 역변환합니다</text>
+  <text x="68" y="527" fill="#10243a" font-size="9">응답의 소스 주소를 10.244.2.7 에서 10.109.72.32 로 되돌립니다. 소비자는 자기가 부른 주소에서 응답이 온 것으로 봅니다.</text>
+
+  <rect x="52" y="548" width="798" height="34" fill="#f5edda"/>
+  <text x="68" y="569" fill="#0d0d0d" font-size="9" font-weight="700">한 줄 요약 — clusterIP 는 노드 커널의 규칙 테이블 안에서만 존재하고, 패킷이 노드를 떠나는 순간 이미 실제 Pod IP 입니다.</text>
+</svg>
