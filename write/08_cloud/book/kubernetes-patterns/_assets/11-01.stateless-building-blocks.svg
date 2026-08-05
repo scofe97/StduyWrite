@@ -1,0 +1,71 @@
+<svg viewBox="0 0 900 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>무상태 서비스를 떠받치는 Kubernetes 계층 프리미티브</title>
+  <desc>책의 Figure 11-1이 보이는 계층 구조입니다. 가장 아래 Pod가 liveness probe로 컨테이너를 살아 있게 유지하고, 그 위 ReplicaSet이 지정된 수의 동일한 Pod를 건강한 노드에 유지하며, 다시 그 위 Deployment가 업그레이드와 롤백을 자동화합니다. 오른쪽에서는 Service가 readiness probe를 통과한 Pod에만 트래픽을 분배하고, 아래쪽에서는 PVC가 영속 스토리지를 요청해 마운트합니다. Kubernetes는 이 블록들 사이에 직접적인 관계를 강제하지 않으므로 애플리케이션 성격에 맞게 조합하는 것은 사용자 책임이라는 점을 아래 띠에 표시합니다.</desc>
+
+  <rect width="900" height="400" fill="#0d0d0d"/>
+
+  <text x="24" y="30" fill="#e8e4df" font-size="15" font-weight="700">계층으로 쌓이는 프리미티브</text>
+
+  <!-- Deployment layer -->
+  <rect x="24" y="48" width="520" height="52" fill="rgb(212,168,83)"/>
+  <text x="44" y="70" fill="#0d0d0d" font-size="13" font-weight="700">Deployment</text>
+  <text x="44" y="90" fill="#0d0d0d" font-size="10">업그레이드 · 롤백 자동화</text>
+  <rect x="392" y="58" width="136" height="32" fill="#fdf3df"/>
+  <text x="460" y="79" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">권장 진입점</text>
+
+  <path d="M 284 104 L 284 122" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="294" y="118" fill="#b8b3ad" font-size="9">만들고 관리</text>
+
+  <!-- ReplicaSet layer -->
+  <rect x="24" y="126" width="520" height="52" fill="#dceaf7"/>
+  <text x="44" y="148" fill="#10243a" font-size="13" font-weight="700">ReplicaSet</text>
+  <text x="44" y="168" fill="#10243a" font-size="10">동일 Pod 수 유지 · 스케일</text>
+
+  <path d="M 284 182 L 284 200" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- Pod layer -->
+  <rect x="24" y="204" width="160" height="56" fill="#cdeccf"/>
+  <text x="104" y="228" text-anchor="middle" fill="#14521d" font-size="12" font-weight="700">Pod</text>
+  <text x="104" y="247" text-anchor="middle" fill="#14521d" font-size="10" font-family="'JetBrains Mono', monospace">rg-x9k2</text>
+
+  <rect x="204" y="204" width="160" height="56" fill="#cdeccf"/>
+  <text x="284" y="228" text-anchor="middle" fill="#14521d" font-size="12" font-weight="700">Pod</text>
+  <text x="284" y="247" text-anchor="middle" fill="#14521d" font-size="10" font-family="'JetBrains Mono', monospace">rg-mq7f</text>
+
+  <rect x="384" y="204" width="160" height="56" fill="#cdeccf"/>
+  <text x="464" y="228" text-anchor="middle" fill="#14521d" font-size="12" font-weight="700">Pod</text>
+  <text x="464" y="247" text-anchor="middle" fill="#14521d" font-size="10" font-family="'JetBrains Mono', monospace">rg-p2vt</text>
+
+  <text x="24" y="280" fill="#b8b3ad" font-size="10">liveness가 생존 감시</text>
+
+  <!-- Service on the right -->
+  <rect x="580" y="126" width="296" height="86" fill="#f5edda"/>
+  <text x="600" y="150" fill="#0d0d0d" font-size="13" font-weight="700">Service</text>
+  <text x="600" y="170" fill="#0d0d0d" font-size="10">고정 clusterIP · 로드밸런싱</text>
+  <text x="600" y="188" fill="#0d0d0d" font-size="10">readiness 통과분만</text>
+  <text x="600" y="205" fill="#0d0d0d" font-size="10">라벨 셀렉터로 Pod를 고릅니다</text>
+
+  <path d="M 700 216 L 560 232" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#am)"/>
+
+  <!-- PVC -->
+  <rect x="580" y="240" width="296" height="60" fill="#dceaf7"/>
+  <text x="600" y="263" fill="#10243a" font-size="12" font-weight="700">PVC → PV</text>
+  <text x="600" y="283" fill="#10243a" font-size="10">모든 Pod가 같은 PV를 공유합니다</text>
+
+  <!-- caution strip -->
+  <rect x="24" y="316" width="852" height="60" fill="#f2d4d4"/>
+  <text x="44" y="340" fill="#7a1f1f" font-size="12" font-weight="700">관계는 강제되지 않습니다</text>
+  <text x="44" y="362" fill="#7a1f1f" font-size="10">조합은 사용자 책임</text>
+
+  <defs>
+    <marker id="a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#b8b3ad"/>
+    </marker>
+    <marker id="am" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+</svg>
