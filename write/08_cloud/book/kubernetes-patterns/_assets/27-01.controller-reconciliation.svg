@@ -1,70 +1,61 @@
-<svg viewBox="0 0 900 540" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>Controller — Observe-Analyze-Act로 상태를 조정하기</title>
-  <desc>Kubernetes Patterns 27장. Controller는 Kubernetes 리소스를 원하는 상태(desired state)로 능동적으로 감시·유지하는 조정(reconciliation) 프로세스입니다. Kubernetes의 심장 자체가 컨트롤러 무리로, 현재 상태를 선언된 목표 상태와 끊임없이 맞춥니다. Kubernetes는 선언적(declarative)·리소스 중심 API라서, 우리는 "어떻게"가 아니라 "목표 상태가 어때야 하는가"만 기술합니다. 리소스 상태가 바뀌면 이벤트가 생기고 관심 있는 컨트롤러가 반응합니다. 조정 루프는 세 단계입니다 — Observe(감시로 실제 상태 발견), Analyze(목표 상태와의 차이 판단), Act(실제 상태를 목표로 밀어붙임). 예로 ReplicaSet 컨트롤러는 ReplicaSet 변화를 감시하고 필요한 Pod 수를 계산해 Pod 정의를 API 서버에 제출합니다. 내장 컨트롤러 외에 커스텀 컨트롤러를 이벤트 기반으로 native하게 끼워 넣어 플랫폼을 확장할 수 있습니다. 컨트롤러는 표준 리소스에 작동하는 단순 조정이고, CRD를 다루는 정교한 조정은 Operator(28장)입니다. 동시 실행 방지를 위해 Singleton Service 패턴(단일 replica)을 쓰고, 낙관적 잠금으로 동시성을 막습니다. metadata(라벨·어노테이션)·ConfigMap이 컨트롤러 데이터 저장에 적합하며, CRD가 더 낫습니다. 예시로 셸 스크립트 컨트롤러가 hanging GET으로 ConfigMap 이벤트를 감시하고 어노테이션에 맞는 Pod를 삭제해 재시작시킵니다. Ambassador 컨테이너(18장)로 localhost:8001을 Kubernetes API에 프록시합니다. 비동기 이벤트 흐름이라 디버깅이 어렵습니다.</desc>
+<svg viewBox="0 0 880 430" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Observe-Analyze-Act 조정 루프</title>
+  <desc>Kubernetes Patterns 그림 27-1의 재현입니다. 컨트롤러는 API 서버가 발행하는 리소스 변경 이벤트를 관찰합니다. 관찰한 실제 상태와 선언된 목표 상태의 차이를 판단한 뒤, API 서버를 호출해 그 차이를 줄이는 조작을 수행합니다. API 서버의 변경은 kubelet과 kube-proxy 같은 노드 컴포넌트에 전달되고, 노드 컴포넌트가 애플리케이션 런타임을 실제로 관리합니다. 애플리케이션 런타임의 상태 변화는 다시 API 서버를 통해 이벤트가 되어 컨트롤러의 관찰로 돌아옵니다. 이 순환이 끊이지 않고 도는 것이 조정 루프이며, 목표 상태와 현재 상태가 어긋날 때마다 컨트롤러가 둘을 다시 맞춥니다.</desc>
 
-  <rect x="0" y="0" width="900" height="540" fill="#0d0d0d"/>
-  <text x="24" y="34" fill="#e8e4df" font-size="16">Controller — Observe-Analyze-Act로 상태를 조정하기</text>
-  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">Kubernetes = <tspan fill="#e8e4df">분산 상태 관리자</tspan>. 선언적 API에 목표 상태를 주면, 컨트롤러 무리가 현재 상태를 거기에 맞춘다.</text>
+  <defs>
+    <marker id="ra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="rg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#66bb6a"/>
+    </marker>
+  </defs>
 
-  <!-- reconciliation loop 3 stages -->
-  <text x="24" y="88" fill="#e8e4df" font-size="12">조정 루프 (reconciliation loop) — 끝없이 도는 3단계</text>
-  <rect x="24" y="98" width="256" height="88" fill="#dceaf7"/>
-  <text x="36" y="120" fill="#10243a" font-size="11" font-weight="700">① Observe (감시)</text>
-  <text x="36" y="140" fill="#10243a" font-size="9">감시 대상 리소스가 바뀌면 Kubernetes가</text>
-  <text x="36" y="153" fill="#10243a" font-size="9">쏘는 이벤트를 지켜봐 실제 상태를 발견.</text>
-  <text x="36" y="171" fill="#10243a" font-size="8.5">watch=true — hanging GET으로 이벤트 스트림.</text>
+  <rect width="880" height="430" fill="#0d0d0d"/>
+  <text x="24" y="32" fill="#e8e4df" font-size="15">조정 루프 3단계</text>
 
-  <text x="288" y="146" fill="rgb(212,168,83)" font-size="18">→</text>
+  <!-- API server -->
+  <rect x="60" y="80" width="220" height="72" fill="#dceaf7"/>
+  <text x="170" y="108" text-anchor="middle" fill="#10243a" font-size="12" font-weight="700">API 서버</text>
+  <text x="170" y="128" text-anchor="middle" fill="#10243a" font-size="9">리소스 변경 이벤트 발행</text>
+  <text x="170" y="143" text-anchor="middle" fill="#10243a" font-size="9">watch=true</text>
 
-  <rect x="312" y="98" width="256" height="88" fill="#cdeccf"/>
-  <text x="324" y="120" fill="#14521d" font-size="11" font-weight="700">② Analyze (판단)</text>
-  <text x="324" y="140" fill="#14521d" font-size="9">현재 상태와 목표 상태의 차이를 계산.</text>
-  <text x="324" y="153" fill="#14521d" font-size="9">"Pod가 몇 개 부족한가?"</text>
-  <text x="324" y="171" fill="#14521d" font-size="8.5">선언된 replicas vs 실제 running.</text>
+  <!-- Controller -->
+  <rect x="520" y="72" width="290" height="88" fill="#cdeccf"/>
+  <text x="665" y="98" text-anchor="middle" fill="#14521d" font-size="12" font-weight="700">Controller</text>
+  <text x="665" y="120" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">2. Analyze</text>
+  <text x="665" y="138" text-anchor="middle" fill="#14521d" font-size="9">목표 상태와 차이 계산</text>
+  <text x="665" y="152" text-anchor="middle" fill="#14521d" font-size="9">단일 replica로 배포</text>
 
-  <text x="576" y="146" fill="rgb(212,168,83)" font-size="18">→</text>
+  <!-- observe arrow -->
+  <path d="M280 100 L510 100" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ra)"/>
+  <text x="395" y="92" text-anchor="middle" fill="rgb(212,168,83)" font-size="10" font-weight="700">1. Observe</text>
 
-  <rect x="600" y="98" width="276" height="88" fill="#f5edda"/>
-  <text x="612" y="120" fill="#0d0d0d" font-size="11" font-weight="700">③ Act (행동)</text>
-  <text x="612" y="140" fill="#0d0d0d" font-size="9">실제 상태를 목표로 밀어붙이는 조작 수행.</text>
-  <text x="612" y="153" fill="#0d0d0d" font-size="9">API 서버에 Pod 정의 제출 / 삭제.</text>
-  <text x="612" y="171" fill="#0d0d0d" font-size="8.5">그 결과가 또 이벤트 → 다른 컨트롤러 반응.</text>
+  <!-- act arrow -->
+  <path d="M510 134 L286 134" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#rg)"/>
+  <text x="395" y="150" text-anchor="middle" fill="#66bb6a" font-size="10" font-weight="700">3. Act</text>
 
-  <!-- loop back arrow -->
-  <text x="24" y="205" fill="rgb(138,133,128)" font-size="9">└─ Act가 만든 변화가 다시 이벤트가 되어 Observe로 — 상태 조정(state reconciliation)은 이 순환의 반복. ReplicaSet 컨트롤러가 대표 예.</text>
+  <!-- node components -->
+  <rect x="60" y="230" width="220" height="72" fill="#dceaf7"/>
+  <text x="170" y="258" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">노드 컴포넌트</text>
+  <text x="170" y="278" text-anchor="middle" fill="#10243a" font-size="9">kubelet</text>
+  <text x="170" y="292" text-anchor="middle" fill="#10243a" font-size="9">kube-proxy</text>
 
-  <!-- controller vs operator -->
-  <text x="24" y="236" fill="#e8e4df" font-size="12">진화 — 조정 컴포넌트 두 부류</text>
-  <rect x="24" y="246" width="418" height="66" fill="#dceaf7"/>
-  <text x="36" y="266" fill="#10243a" font-size="10" font-weight="700">Controller (이 장)</text>
-  <text x="36" y="284" fill="#10243a" font-size="8.5">표준 Kubernetes 리소스에 작동하는 단순 조정.</text>
-  <text x="36" y="298" fill="#10243a" font-size="8.5">플랫폼 동작을 강화·새 기능 추가. 사용자에겐 대개 보이지 않음.</text>
+  <!-- bidirectional api <-> node -->
+  <path d="M170 158 L170 224" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ra)" marker-start="url(#ra)"/>
 
-  <rect x="458" y="246" width="418" height="66" fill="#f5edda"/>
-  <text x="470" y="266" fill="#0d0d0d" font-size="10" font-weight="700">Operator (28장) — is-a Controller + CRD</text>
-  <text x="470" y="284" fill="#0d0d0d" font-size="8.5">CRD를 다루는 정교한 조정. 복잡한 앱 도메인 로직 캡슐화.</text>
-  <text x="470" y="298" fill="#0d0d0d" font-size="8.5">전체 애플리케이션 생애주기 관리. 경계는 "커스텀 리소스를 쓰는가".</text>
+  <!-- application runtime (stacked) -->
+  <rect x="546" y="248" width="240" height="66" fill="#f2d4d4"/>
+  <rect x="538" y="240" width="240" height="66" fill="#f2d4d4"/>
+  <rect x="530" y="232" width="240" height="66" fill="#f2d4d4"/>
+  <text x="650" y="260" text-anchor="middle" fill="#7a1f1f" font-size="11" font-weight="700">애플리케이션 런타임</text>
+  <text x="650" y="280" text-anchor="middle" fill="#7a1f1f" font-size="9">Pod · 컨테이너</text>
+  <text x="650" y="294" text-anchor="middle" fill="#7a1f1f" font-size="9">실제 상태가 여기 있음</text>
 
-  <!-- design considerations -->
-  <text x="24" y="336" fill="#e8e4df" font-size="12">설계 고려</text>
-  <rect x="24" y="346" width="418" height="70" fill="#cdeccf"/>
-  <text x="36" y="366" fill="#14521d" font-size="9.5" font-weight="700">동시성 — Singleton Service (10장)</text>
-  <text x="36" y="384" fill="#14521d" font-size="8.5">여러 컨트롤러가 같은 리소스를 동시에 건드리지 않게</text>
-  <text x="36" y="398" fill="#14521d" font-size="8.5">단일 replica Deployment로 배포.</text>
-  <text x="36" y="410" fill="#14521d" font-size="8">리소스 수준 낙관적 잠금으로 동시성 충돌 방지.</text>
+  <path d="M280 266 L524 266" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#rg)"/>
+  <text x="400" y="258" text-anchor="middle" fill="#66bb6a" font-size="10" font-weight="700">4. Manage</text>
 
-  <rect x="458" y="346" width="418" height="70" fill="#f5edda"/>
-  <text x="470" y="366" fill="#0d0d0d" font-size="9.5" font-weight="700">데이터 저장 위치 — metadata &gt; ConfigMap</text>
-  <text x="470" y="384" fill="#0d0d0d" font-size="8.5">Label(인덱싱·셀렉터용) · Annotation(비식별 임의 메타데이터).</text>
-  <text x="470" y="398" fill="#0d0d0d" font-size="8.5">더 큰 목표 상태는 ConfigMap, 그보다 CRD가 낫다(28장).</text>
-  <text x="470" y="410" fill="#0d0d0d" font-size="8">CRD 등록엔 cluster-level 권한 필요 → 없으면 ConfigMap이 차선.</text>
-
-  <!-- example + caveat -->
-  <rect x="24" y="426" width="852" height="44" fill="#dceaf7"/>
-  <text x="36" y="445" fill="#10243a" font-size="9.5" font-weight="700">예시 — 셸 스크립트 컨트롤러</text>
-  <text x="36" y="462" fill="#10243a" font-size="8.5">ConfigMap을 hanging GET으로 감시 → 어노테이션 podDeleteSelector에 맞는 Pod 삭제(Deployment가 재시작). localhost:8001은 Ambassador(18장)로 API 프록시.</text>
-
-  <rect x="24" y="480" width="852" height="42" fill="#f2d4d4"/>
-  <text x="36" y="499" fill="#7a1f1f" font-size="9.5" font-weight="700">주의 — 비동기의 대가</text>
-  <text x="36" y="515" fill="#7a1f1f" font-size="8.5">이벤트 흐름이 직선적이지 않아 디버깅이 어렵다(브레이크포인트로 멈춰 보기 곤란). 연결이 끊길 수 있어 프로덕션은 주기적 전체 조회로 base 갱신 필요.</text>
+  <!-- feedback: runtime state -> api server -> observe again -->
+  <path d="M650 314 L650 370 L40 370 L40 116 L54 116" fill="none" stroke="#66bb6a" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#rg)"/>
+  <text x="360" y="388" text-anchor="middle" fill="#66bb6a" font-size="9">5. 변화가 다시 이벤트로</text>
 </svg>

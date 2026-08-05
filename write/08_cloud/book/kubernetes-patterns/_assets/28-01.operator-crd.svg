@@ -1,86 +1,71 @@
-<svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>Operator — CRD로 도메인 지식을 자동화하기</title>
-  <desc>Kubernetes Patterns 28장. Operator는 CRD를 써서 특정 애플리케이션의 운영 지식을 알고리즘적·자동화된 형태로 캡슐화하는 컨트롤러입니다. Operator = Controller + CRD. Jimmy Zelinskie의 정의처럼, Operator는 Kubernetes와 또 다른 도메인(예: Prometheus, Kafka) 둘 다를 이해하는 컨트롤러로, 두 지식을 결합해 보통 인간 운영자가 해야 할 작업을 자동화합니다. CustomResourceDefinition(CRD)은 Kubernetes API를 확장해 커스텀 리소스를 native 리소스처럼 쓰게 합니다. CRD는 group·names(kind/plural)·scope(Namespaced/Cluster)·versions·OpenAPI V3 schema(검증)로 정의하고, subresources로 scale(HPA 연동용)과 status(상태 전용 API)를 둘 수 있습니다. 커스텀 리소스만으로는 의미가 없고, 그 생애주기를 감시하며 선언대로 작동하는 컨트롤러가 있어야 Operator가 됩니다. CRD 분류 — Installation CRD(앱 설치·운영, 예 Prometheus)와 Application CRD(앱 도메인 개념, 예 ServiceMonitor). CRD 대신 ConfigMap을 쓰면 cluster-admin 권한이 없어도 되지만 kubectl 지원·API 검증·버전 관리·세밀한 RBAC(26장)을 잃습니다. 더 고급 확장은 API aggregation layer(APIService)로 커스텀 API 서버를 붙이는 것입니다. 개발 프레임워크 셋 — Kubebuilder(SIG API Machinery, Go 기반, 스캐폴딩), Operator Framework(Operator SDK + OLM + OperatorHub, SDK는 Kubebuilder를 의존성으로 사용), Metacontroller(웹훅으로 위임, Go 외 언어 가능). OLM은 CSV로 비특권 사용자도 Operator를 설치하게 돕고, OperatorHub는 채널(stable/alpha)로 배포합니다.</desc>
+<svg viewBox="0 0 900 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Operator = CRD + 컨트롤러 조정 루프</title>
+  <desc>사용자가 커스텀 리소스를 apply 하면 API 서버가 CRD 스키마로 검증한 뒤 etcd에 저장합니다. Operator는 그 리소스를 watch 하다가 변경 이벤트를 받고, 목표 상태와 실제 상태의 차이를 판단해 Deployment나 Pod 같은 실제 리소스를 조작합니다. 조작 결과로 파악한 실제 상태는 status 서브리소스를 통해 커스텀 리소스에 다시 기록되며, 이 되먹임이 27장의 Observe-Analyze-Act 루프를 완성합니다.</desc>
 
-  <rect x="0" y="0" width="900" height="560" fill="#0d0d0d"/>
-  <text x="24" y="34" fill="#e8e4df" font-size="16">Operator — CRD로 도메인 지식을 자동화하기</text>
-  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11"><tspan fill="#e8e4df" font-weight="700">Operator = Controller(27장) + CRD.</tspan> Kubernetes와 또 다른 도메인(Prometheus·Kafka…) 둘 다를 아는 컨트롤러.</text>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#66bb6a"/>
+    </marker>
+  </defs>
 
-  <!-- equation -->
-  <rect x="24" y="72" width="256" height="52" fill="#dceaf7"/>
-  <text x="36" y="93" fill="#10243a" font-size="10" font-weight="700">커스텀 리소스 (CRD)</text>
-  <text x="36" y="112" fill="#10243a" font-size="8.5">도메인 개념을 native 리소스로 표현</text>
-  <text x="288" y="103" fill="rgb(212,168,83)" font-size="20">+</text>
-  <rect x="312" y="72" width="256" height="52" fill="#cdeccf"/>
-  <text x="324" y="93" fill="#14521d" font-size="10" font-weight="700">컨트롤러</text>
-  <text x="324" y="112" fill="#14521d" font-size="8.5">그 리소스 생애주기를 감시·조정</text>
-  <text x="576" y="103" fill="rgb(212,168,83)" font-size="20">=</text>
-  <rect x="600" y="72" width="276" height="52" fill="#f5edda"/>
-  <text x="612" y="93" fill="#0d0d0d" font-size="10" font-weight="700">Operator</text>
-  <text x="612" y="112" fill="#0d0d0d" font-size="8.5">운영 지식을 알고리즘으로 캡슐화</text>
+  <rect width="900" height="400" fill="#0d0d0d"/>
+  <text x="24" y="32" fill="#e8e4df" font-size="15">Operator 조정 루프</text>
 
-  <!-- CRD anatomy -->
-  <text x="24" y="150" fill="#e8e4df" font-size="12">CustomResourceDefinition — API를 확장하는 뼈대</text>
-  <rect x="24" y="160" width="418" height="96" fill="#f5edda"/>
-  <text x="36" y="180" fill="#0d0d0d" font-size="9.5" font-weight="700">정의 필드</text>
-  <text x="36" y="198" fill="#0d0d0d" font-size="8.5">group · names(kind/plural) · scope(Namespaced|Cluster)</text>
-  <text x="36" y="212" fill="#0d0d0d" font-size="8.5">versions(storage/served) · OpenAPI V3 schema(검증)</text>
-  <text x="36" y="230" fill="#0d0d0d" font-size="8.5" font-weight="700">subresources 둘:</text>
-  <text x="36" y="245" fill="#0d0d0d" font-size="8.5">scale(replicas 경로 — HPA 연동 29장) · status(상태 전용 API)</text>
+  <!-- user -->
+  <rect x="24" y="64" width="130" height="46" fill="#dceaf7"/>
+  <text x="89" y="84" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">사용자</text>
+  <text x="89" y="100" text-anchor="middle" fill="#10243a" font-size="9">kubectl apply</text>
 
-  <rect x="458" y="160" width="418" height="96" fill="#dceaf7"/>
-  <text x="470" y="180" fill="#10243a" font-size="9.5" font-weight="700">CRD 분류 (경계는 흐릿)</text>
-  <text x="470" y="199" fill="#10243a" font-size="8.5" font-weight="700">Installation CRD</text>
-  <text x="470" y="213" fill="#10243a" font-size="8.5">앱 설치·운영. 예: Prometheus CRD로 Prometheus 관리.</text>
-  <text x="470" y="231" fill="#10243a" font-size="8.5" font-weight="700">Application CRD</text>
-  <text x="470" y="245" fill="#10243a" font-size="8.5">앱 도메인 개념. 예: ServiceMonitor로 스크랩 대상 등록.</text>
+  <!-- api server -->
+  <rect x="234" y="56" width="180" height="62" fill="#f5edda"/>
+  <text x="324" y="79" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700">API 서버</text>
+  <text x="324" y="97" text-anchor="middle" fill="#0d0d0d" font-size="9">CRD 스키마로 검증</text>
+  <text x="324" y="111" text-anchor="middle" fill="#0d0d0d" font-size="9">1. apply</text>
 
-  <!-- CRD vs ConfigMap vs API aggregation -->
-  <text x="24" y="280" fill="#e8e4df" font-size="12">확장 스펙트럼 — 단순 → 고급</text>
-  <rect x="24" y="290" width="276" height="72" fill="#cdeccf"/>
-  <text x="36" y="310" fill="#14521d" font-size="9.5" font-weight="700">ConfigMap 대체</text>
-  <text x="36" y="328" fill="#14521d" font-size="8.5">cluster-admin 권한 불필요(공용 클러스터에 유용).</text>
-  <text x="36" y="342" fill="#7a1f1f" font-size="8.5">단, kubectl get·API 검증·버전관리 없음.</text>
-  <text x="36" y="355" fill="#7a1f1f" font-size="8.5">RBAC도 namespace 내 공유(세밀 제어 X).</text>
+  <!-- etcd -->
+  <rect x="494" y="56" width="130" height="62" fill="#f5edda"/>
+  <text x="559" y="83" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700">etcd</text>
+  <text x="559" y="101" text-anchor="middle" fill="#0d0d0d" font-size="9">2. 저장</text>
 
-  <rect x="312" y="290" width="276" height="72" fill="#dceaf7"/>
-  <text x="324" y="310" fill="#10243a" font-size="9.5" font-weight="700">CRD (권장 기본)</text>
-  <text x="324" y="328" fill="#10243a" font-size="8.5">native 리소스처럼 kubectl·검증·버전·selector 지원.</text>
-  <text x="324" y="342" fill="#10243a" font-size="8.5">kind별 세밀한 RBAC(26장) 가능.</text>
-  <text x="324" y="355" fill="#7a1f1f" font-size="8.5">등록엔 cluster-admin 권한 필요.</text>
+  <line x1="154" y1="87" x2="228" y2="87" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="414" y1="87" x2="488" y2="87" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a)"/>
 
-  <rect x="600" y="290" width="276" height="72" fill="#f5edda"/>
-  <text x="612" y="310" fill="#0d0d0d" font-size="9.5" font-weight="700">API Aggregation</text>
-  <text x="612" y="328" fill="#0d0d0d" font-size="8.5">APIService로 커스텀 API 서버를 URL 경로로 추가.</text>
-  <text x="612" y="342" fill="#0d0d0d" font-size="8.5">자유도 최대(생애주기 이벤트 너머). 로직 부담 큼.</text>
-  <text x="612" y="355" fill="#0d0d0d" font-size="8.5">보통은 CRD Operator로 충분.</text>
+  <!-- CRD registration note -->
+  <rect x="664" y="56" width="212" height="62" fill="#dceaf7"/>
+  <text x="770" y="79" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">CRD 등록 (사전 1회)</text>
+  <text x="770" y="97" text-anchor="middle" fill="#10243a" font-size="9">cluster-admin 필요</text>
+  <text x="770" y="111" text-anchor="middle" fill="#10243a" font-size="9">kind·group·scope 정의</text>
 
-  <!-- dev frameworks -->
-  <text x="24" y="386" fill="#e8e4df" font-size="12">개발 프레임워크 셋</text>
-  <rect x="24" y="396" width="276" height="88" fill="#dceaf7"/>
-  <text x="36" y="416" fill="#10243a" font-size="9.5" font-weight="700">Kubebuilder</text>
-  <text x="36" y="434" fill="#10243a" font-size="8.5">SIG API Machinery. Go 기반 Operator를</text>
-  <text x="36" y="448" fill="#10243a" font-size="8.5">고수준 추상화·스캐폴딩으로.</text>
-  <text x="36" y="463" fill="#10243a" font-size="8.5">뛰어난 문서. 다른 프로젝트가</text>
-  <text x="36" y="476" fill="#10243a" font-size="8.5">라이브러리로 소비. Go의 출발점.</text>
+  <!-- operator -->
+  <rect x="234" y="196" width="180" height="76" fill="#cdeccf"/>
+  <text x="324" y="220" text-anchor="middle" fill="#14521d" font-size="11" font-weight="700">Operator</text>
+  <text x="324" y="238" text-anchor="middle" fill="#14521d" font-size="9">4. 차이 판단</text>
+  <text x="324" y="254" text-anchor="middle" fill="#14521d" font-size="9">도메인 운영 지식</text>
+  <text x="324" y="267" text-anchor="middle" fill="#14521d" font-size="9">Analyze</text>
 
-  <rect x="312" y="396" width="276" height="88" fill="#f5edda"/>
-  <text x="324" y="416" fill="#0d0d0d" font-size="9.5" font-weight="700">Operator Framework (CNCF)</text>
-  <text x="324" y="434" fill="#0d0d0d" font-size="8.5">Operator SDK(Kubebuilder를 의존성으로).</text>
-  <text x="324" y="448" fill="#0d0d0d" font-size="8.5">OLM — CSV로 비특권 사용자도 설치.</text>
-  <text x="324" y="463" fill="#0d0d0d" font-size="8.5">OperatorHub — 채널(stable/alpha) 배포.</text>
-  <text x="324" y="476" fill="#0d0d0d" font-size="8.5">Ansible·Helm·Java(Quarkus) 플러그인.</text>
+  <!-- watch arrow: api server -> operator -->
+  <line x1="300" y1="118" x2="300" y2="190" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a)"/>
+  <text x="292" y="158" text-anchor="end" fill="rgb(212,168,83)" font-size="9">3. watch</text>
+  <text x="292" y="172" text-anchor="end" fill="#b8b3ad" font-size="9">Observe</text>
 
-  <rect x="600" y="396" width="276" height="88" fill="#cdeccf"/>
-  <text x="612" y="416" fill="#14521d" font-size="9.5" font-weight="700">Metacontroller (Google)</text>
-  <text x="612" y="434" fill="#14521d" font-size="8.5">웹훅으로 컨트롤러 로직 위임 —</text>
-  <text x="612" y="448" fill="#14521d" font-size="8.5">비즈니스 로직 함수만 제공하면</text>
-  <text x="612" y="463" fill="#14521d" font-size="8.5">API 상호작용·조정 루프는 대신 처리.</text>
-  <text x="612" y="476" fill="#14521d" font-size="8.5">HTTP·JSON 되면 어떤 언어든(Go 아니어도).</text>
+  <!-- managed resources -->
+  <rect x="554" y="196" width="200" height="76" fill="#dceaf7"/>
+  <text x="654" y="220" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">실제 리소스</text>
+  <text x="654" y="238" text-anchor="middle" fill="#10243a" font-size="9">Deployment · Pod</text>
+  <text x="654" y="254" text-anchor="middle" fill="#10243a" font-size="9">Service · Secret</text>
+  <text x="654" y="267" text-anchor="middle" fill="#10243a" font-size="9">Act</text>
 
-  <!-- when to use -->
-  <rect x="24" y="494" width="852" height="52" fill="#f5edda"/>
-  <text x="36" y="513" fill="#0d0d0d" font-size="9.5" font-weight="700">언제 Operator를 쓰나 — 은탄환 아님</text>
-  <text x="36" y="530" fill="#0d0d0d" font-size="8.5">선언적 Kubernetes 방식에 맞는 커스텀 도메인 로직 + kubectl 긴밀 통합 + greenfield + 네임스페이스·API 버전 이점이 필요할 때.</text>
-  <text x="36" y="542" fill="#0d0d0d" font-size="8">비선언적이거나 리소스 모델에 안 맞거나 긴밀 통합이 불필요하면 → 독립 API를 Service/Ingress로 노출하는 편이 낫다.</text>
+  <line x1="414" y1="234" x2="548" y2="234" stroke="#66bb6a" stroke-width="2" marker-end="url(#g)"/>
+  <text x="481" y="226" text-anchor="middle" fill="#66bb6a" font-size="9">5. 조작</text>
+
+  <!-- status feedback loop -->
+  <path d="M654 272 L654 330 L160 330 L160 190 L228 190" fill="none" stroke="#66bb6a" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#g)"/>
+  <text x="420" y="345" text-anchor="middle" fill="#66bb6a" font-size="9">6. 실제 상태 관측</text>
+
+  <!-- status subresource write-back: Operator 상단에서 API 서버 하단으로 -->
+  <path d="M380 196 L380 160 L400 160 L400 118" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#g)"/>
+  <text x="410" y="150" fill="#66bb6a" font-size="9">7. status 기록</text>
 </svg>
