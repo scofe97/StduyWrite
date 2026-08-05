@@ -49,11 +49,6 @@ Alert 룰 설계와 SLO는 본 디렉토리에 속한다. 같은 룰을 CI/CD �
 - [03-11.305P OpenTelemetry 도입 고려사항.md](03_Project/03-11.305P%20OpenTelemetry%20도입%20고려사항.md) — 15장 교육 문서, Tail Sampling/Reactor/Retry-Trace 포함. OTel 규격 자체·Prometheus OTLP 수신구는 정독 노트 [14-01](book/mastering_prometheus/14-01.Prometheus%20와%20OpenTelemetry%20통합%20—%20규격·Collector·OTLP%20수신구.md)
 - [03-12.로그 대시보드 설계 — 레벨 구성·분리·레이아웃.md](03_Project/03-12.로그%20대시보드%20설계%20—%20레벨%20구성·분리·레이아웃.md) — 로그 패널 LogQL 구성·파생 라벨(regexp)·전용 vs 통합·레이아웃·transformation (일반 개념은 02-01 참조)
 
-## 04. 트러블슈팅 (`04_Troubleshooting/`)
-
-- [04-01.관측 트러블슈팅.md](04_Troubleshooting/04-01.관측%20트러블슈팅.md)
-- [04-02.트러블 슈팅.md](04_Troubleshooting/04-02.트러블%20슈팅.md)
-
 ## 05. Spring 관측성 — 앱이 내보내는 쪽 (`05_SpringActuator/`)
 
 > 앞 네 묶음이 *수집·저장·시각화 인프라*(LGTM) 관점이라면, 본 묶음은 *스프링 앱이 자기 운영 정보를 내보내는* 관점이다. 액츄에이터가 노출하고 LGTM이 긁어 간다.
@@ -76,7 +71,7 @@ Alert 룰 설계와 SLO는 본 디렉토리에 속한다. 같은 룰을 CI/CD �
 
 ## 서브 디렉토리
 
-- `01_Foundations/` · `02_LGTMStack/` · `03_Project/` · `04_Troubleshooting/` · `05_SpringActuator/` — 주제 폴더 (2026-05-24 평면 → 폴더 재구성, 2026-05-25 05 추가)
+- `01_Foundations/` · `02_LGTMStack/` · `03_Project/` · `05_SpringActuator/` — 주제 폴더 (2026-05-24 평면 → 폴더 재구성, 2026-05-25 05 추가, 2026-08-05 04_Troubleshooting 정리)
 - `book/mastering_prometheus/` — *Mastering Prometheus*(Packt) 단행본 정독 노트 20편(15개 장). Prometheus를 *운영·확장·확장(extend)* 관점에서 훑는다. LGTM과 대비되는 저장 계층(Thanos·VictoriaMetrics), CI 검증(promtool·Pint), SLO 도구(Sloth·Pyrra), OTel 통합까지 다룬다. 각 편은 책 사실 대조 + 실측(도구 빌드·실행) + 정오표 검증을 거쳤다. MOC는 [book/mastering_prometheus/README.md](book/mastering_prometheus/README.md).
 - `LGTM/` — LGTM 스택 추가 자료 (TBD)
 - `_practice/` — 코드 실습 자산 (LGTM lab PoC)
