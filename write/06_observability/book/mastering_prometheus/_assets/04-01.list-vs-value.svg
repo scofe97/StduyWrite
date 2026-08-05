@@ -1,10 +1,10 @@
-<svg viewBox="0 0 900 480" width="100%"
+<svg viewBox="0 0 900 632" width="100%"
      xmlns="http://www.w3.org/2000/svg"
      role="img"
      font-family="'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif">
   <title>서비스 디스커버리는 목록을, exporter 는 값을 준다</title>
-  <desc>Prometheus 가 메트릭을 모으려면 두 가지를 알아야 한다. 어디로 갈지는 서비스 디스커버리가 주소 목록으로 알려 주고, 거기서 무엇을 받을지는 각 앱의 exporter 가 메트릭 값으로 응답한다. 둘은 다른 단계이며 서로를 대신할 수 없다. SD 는 남의 앱 힙 사용량을 알 수 없고, exporter 는 다른 서버가 몇 대인지 알 수 없다.</desc>
-  <rect width="900" height="480" fill="#0d0d0d"/>
+  <desc>Prometheus 가 메트릭을 모으려면 두 가지를 알아야 한다. 어디로 갈지는 서비스 디스커버리가 주소 목록으로 알려 주고, 거기서 무엇을 받을지는 각 앱의 exporter 가 메트릭 값으로 응답한다. 둘은 다른 단계이며 서로를 대신할 수 없다. SD 는 남의 앱 힙 사용량을 알 수 없고, exporter 는 다른 서버가 몇 대인지 알 수 없다. SD 가 알아낸 주소는 __address__ 라벨에 담긴다. 이 라벨은 Prometheus 가 실제로 접속할 곳이며 두 개의 밑줄로 시작하므로 최종 시계열에는 남지 않는다. 사람이 대시보드와 알림에서 보게 되는 이름은 instance 라벨이고 이쪽은 시계열에 남는다. relabeling 에서 instance 를 따로 정하지 않으면 __address__ 값이 그대로 instance 에 들어가므로 둘이 같아 보이지만, 원하면 접속은 IP 로 하고 instance 에는 사람이 읽는 이름을 넣어 갈라 둘 수 있다.</desc>
+  <rect width="900" height="632" fill="#0d0d0d"/>
 
   <defs>
     <marker id="g1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
@@ -29,7 +29,7 @@
   <line x1="248" y1="138" x2="292" y2="138" stroke="rgb(212,168,83)" stroke-width="1.6" marker-end="url(#g1)"/>
 
   <rect x="300" y="100" width="300" height="76" rx="9" fill="#fdf3df"/>
-  <text x="318" y="122" font-size="11" font-weight="700" fill="#3a2f10">돌려주는 것 — 주소 목록</text>
+  <text x="318" y="122" font-size="11" font-weight="700" fill="#3a2f10">__address__ 에 담깁니다</text>
   <rect x="318" y="132" width="264" height="22" rx="4" fill="#fff9ec"/>
   <text x="450" y="148" text-anchor="middle" font-size="10.5" fill="#3a2f10">10.0.1.5:8080 · 10.0.1.6:8080</text>
   <text x="318" y="168" font-size="10" fill="#7a1f1f">값은 하나도 없습니다</text>
@@ -75,4 +75,22 @@
   <rect x="452" y="400" width="380" height="22" rx="4" fill="#f2d4d4"/>
   <text x="642" y="416" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7a1f1f">앱이 목록을 못 냅니다</text>
   <text x="452" y="440" font-size="10.5" fill="#b8b3ad">옆 서버가 몇 대인지 모릅니다</text>
+
+  <!-- __address__ 와 instance 는 다른 일을 한다 -->
+  <rect x="40" y="476" width="820" height="118" rx="9" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="58" y="499" font-size="12" font-weight="700" fill="rgb(212,168,83)">주소를 담는 라벨은 둘입니다</text>
+
+  <rect x="58" y="510" width="380" height="22" rx="4" fill="#fdf3df"/>
+  <text x="248" y="526" text-anchor="middle" font-size="10.5" font-weight="700" fill="#3a2f10">__address__ — 긁으러 갈 곳</text>
+  <text x="58" y="550" font-size="10.5" fill="#b8b3ad">10.0.1.5:8080 으로 접속합니다</text>
+  <rect x="58" y="558" width="380" height="22" rx="4" fill="#f2d4d4"/>
+  <text x="248" y="574" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7a1f1f">시계열에 남지 않습니다</text>
+
+  <rect x="452" y="510" width="380" height="22" rx="4" fill="#dceaf7"/>
+  <text x="642" y="526" text-anchor="middle" font-size="10.5" font-weight="700" fill="#10243a">instance — 사람이 볼 이름</text>
+  <text x="452" y="550" font-size="10.5" fill="#b8b3ad">order-api-prod-3 으로 보입니다</text>
+  <rect x="452" y="558" width="380" height="22" rx="4" fill="#e6f7e7"/>
+  <text x="642" y="574" text-anchor="middle" font-size="10.5" font-weight="700" fill="#14521d">시계열에 남습니다</text>
+
+  <text x="58" y="618" font-size="10.5" fill="#b8b3ad">안 정하면 instance 에 __address__ 값이 그대로 들어갑니다</text>
 </svg>
