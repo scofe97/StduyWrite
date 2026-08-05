@@ -1,74 +1,70 @@
-<svg viewBox="0 0 900 580" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>Service Discovery 메커니즘 스펙트럼 — 내부에서 외부로</title>
-  <desc>Kubernetes Patterns 13장. 서비스 디스커버리는 소비자·제공자가 클러스터 안이냐 밖이냐에 따라 여러 메커니즘을 씁니다. 클러스터 이전에는 소비자에 discovery agent를 둔 client-side discovery였지만, Kubernetes에서는 소비자가 고정 가상 Service 엔드포인트를 부르면 플랫폼이 뒤에서 등록·조회를 처리하는 server-side discovery입니다. 내부 디스커버리는 ClusterIP Service를 환경변수(Service 생성 전 시작한 Pod엔 주입 안 됨)나 DNS(random-generator.default.svc.cluster.local)로 찾습니다. 수동 디스커버리는 selector 없는 Service+Endpoints로 외부 IP를, ExternalName으로 DNS CNAME 별칭을 줍니다. 외부 노출은 NodePort(모든 노드에 포트), LoadBalancer(클라우드 LB), Ingress(L7 스마트 라우팅)로 갈수록 강력하고 복잡해집니다.</desc>
+<svg viewBox="0 0 880 460" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>client-side 디스커버리와 server-side 디스커버리의 차이</title>
+  <desc>Kubernetes Patterns 그림 13-1과 13-2를 나란히 놓은 것입니다. 위쪽 client-side 방식에서는 서비스 제공자가 스스로 서비스 레지스트리에 자기를 등록하고, 소비자 안에 내장된 discovery agent가 레지스트리를 조회해 인스턴스 하나를 고른 뒤 직접 호출합니다. ZooKeeper 클라이언트나 Consul 클라이언트, Ribbon이 그런 agent였습니다. 아래쪽 Kubernetes의 server-side 방식에서는 Pod가 레지스트리에 등록되고 프록시가 레지스트리에서 Pod를 선택합니다. 소비자는 고정된 가상 Service 엔드포인트인 프록시만 부르면 되고, 등록과 조회와 로드밸런싱은 모두 플랫폼이 뒤에서 처리합니다. 소비자 쪽에 discovery agent가 사라진 것이 핵심 차이입니다.</desc>
 
-  <rect x="0" y="0" width="900" height="580" fill="#0d0d0d"/>
-  <text x="24" y="34" fill="#e8e4df" font-size="16">Service Discovery — 고정 엔드포인트로 동적 Pod를 찾기</text>
-  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">스케줄러가 Pod를 동적 배치·탄력 스케일하므로, 소비자는 바뀌는 Pod IP 대신 <tspan fill="#e8e4df">고정 가상 Service 엔드포인트</tspan>를 부릅니다.</text>
+  <defs>
+    <marker id="sa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="sg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#66bb6a"/>
+    </marker>
+  </defs>
 
-  <!-- client vs server side -->
-  <rect x="24" y="74" width="410" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
-  <text x="40" y="94" fill="rgb(138,133,128)" font-size="10" font-weight="700">클러스터 이전 — client-side</text>
-  <text x="40" y="110" fill="rgb(138,133,128)" font-size="9">소비자에 discovery agent(ZooKeeper·Consul·Ribbon)가 레지스트리 조회.</text>
-  <rect x="452" y="74" width="424" height="44" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
-  <text x="468" y="94" fill="rgb(212,168,83)" font-size="10" font-weight="700">Kubernetes — server-side</text>
-  <text x="468" y="110" fill="#e8e4df" font-size="9">소비자는 고정 Service만 부르고, 등록·조회는 플랫폼이 뒤에서 처리.</text>
+  <rect width="880" height="460" fill="#0d0d0d"/>
 
-  <!-- internal -->
-  <text x="24" y="146" fill="#e8e4df" font-size="12">① 내부 디스커버리 (소비자·제공자 모두 클러스터 안) — type: ClusterIP</text>
-  <rect x="24" y="156" width="418" height="72" fill="#dceaf7"/>
-  <text x="36" y="176" fill="#10243a" font-size="10" font-weight="700">환경변수 주입</text>
-  <text x="36" y="192" fill="#10243a" font-size="8.5">Pod 시작 시 그때까지 존재한 Service들이 env로 주입.</text>
-  <text x="36" y="204" fill="#10243a" font-size="8.5">RANDOM_GENERATOR_SERVICE_HOST / _PORT</text>
-  <text x="36" y="220" fill="#7a1f1f" font-size="8.5">⚠ 시간 의존 — Service보다 먼저 뜬 Pod엔 주입 안 됨(재시작 필요).</text>
-  <rect x="458" y="156" width="418" height="72" fill="#cdeccf"/>
-  <text x="470" y="176" fill="#14521d" font-size="10" font-weight="700">DNS 조회 (권장)</text>
-  <text x="470" y="192" fill="#14521d" font-size="8.5">클러스터 DNS 서버에 Service마다 항목 자동 등록.</text>
-  <text x="470" y="205" fill="#14521d" font-size="8">random-generator.default.svc.cluster.local</text>
-  <text x="470" y="220" fill="#14521d" font-size="8.5">시간 의존 없음. 같은 ns면 이름만으로 접근.</text>
+  <!-- upper: client-side -->
+  <text x="24" y="30" fill="#e8e4df" font-size="13">client-side 방식</text>
 
-  <text x="24" y="246" fill="rgb(138,133,128)" font-size="8.5">ClusterIP 특성: 다중 포트 · sessionAffinity: ClientIP(L4 로드밸런싱, HTTP 쿠키 기반은 불가) · readiness 실패 Pod는 엔드포인트에서 제외 · 가상 IP라 ping 불가(ICMP 없음, kube-proxy가 iptables 갱신).</text>
+  <rect x="340" y="48" width="200" height="48" fill="#dceaf7"/>
+  <text x="440" y="78" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">서비스 레지스트리</text>
 
-  <!-- manual -->
-  <text x="24" y="274" fill="#e8e4df" font-size="12">② 수동 디스커버리 (외부 목적지를 클러스터 추상으로) — selector 없음</text>
-  <rect x="24" y="284" width="418" height="52" fill="#f5edda"/>
-  <text x="36" y="304" fill="#0d0d0d" font-size="10" font-weight="700">Manual IP — Service + Endpoints</text>
-  <text x="36" y="320" fill="#0d0d0d" font-size="8.5">selector 없는 Service에 Endpoints로 외부 IP:포트 수동 지정.</text>
-  <text x="36" y="332" fill="#0d0d0d" font-size="8.5">온프렘→K8s 이관 시 Service IP 유지한 채 제공자만 교체 가능.</text>
-  <rect x="458" y="284" width="418" height="52" fill="#f5edda"/>
-  <text x="470" y="304" fill="#0d0d0d" font-size="10" font-weight="700">Manual FQDN — type: ExternalName</text>
-  <text x="470" y="320" fill="#0d0d0d" font-size="8.5">프록시·IP 없이 DNS CNAME 별칭.</text>
-  <text x="470" y="332" fill="#0d0d0d" font-size="8.5">db-service.ns.svc... → my.database.example.com</text>
+  <rect x="40" y="140" width="220" height="60" fill="#dceaf7"/>
+  <text x="150" y="164" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">서비스 제공자</text>
+  <text x="150" y="184" text-anchor="middle" fill="#10243a" font-size="9">agent 내장</text>
 
-  <!-- external -->
-  <text x="24" y="360" fill="#e8e4df" font-size="12">③ 외부에서의 디스커버리 (소비자가 클러스터 밖) — 강력·복잡 순</text>
-  <rect x="24" y="370" width="272" height="88" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
-  <text x="36" y="390" fill="rgb(212,168,83)" font-size="11" font-weight="700">NodePort</text>
-  <text x="36" y="407" fill="#e8e4df" font-size="8.5">모든 노드에 포트(예 30036) 개방.</text>
-  <text x="36" y="420" fill="#e8e4df" font-size="8.5">방화벽 규칙 필요·소스 NAT로 클라이언트</text>
-  <text x="36" y="432" fill="#e8e4df" font-size="8.5">IP 가려짐. externalTrafficPolicy: Local로</text>
-  <text x="36" y="444" fill="#e8e4df" font-size="8.5">홉·IP 마스킹 회피. 비-HTTP에 선호.</text>
+  <rect x="620" y="140" width="220" height="60" fill="#f2d4d4"/>
+  <text x="730" y="164" text-anchor="middle" fill="#7a1f1f" font-size="11" font-weight="700">서비스 소비자</text>
+  <text x="730" y="184" text-anchor="middle" fill="#7a1f1f" font-size="9">agent 내장</text>
 
-  <rect x="312" y="370" width="272" height="88" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
-  <text x="324" y="390" fill="rgb(212,168,83)" font-size="11" font-weight="700">LoadBalancer</text>
-  <text x="324" y="407" fill="#e8e4df" font-size="8.5">NodePort 위에 클라우드 제공자</text>
-  <text x="324" y="420" fill="#e8e4df" font-size="8.5">LB를 얹어 외부 노출.</text>
-  <text x="324" y="432" fill="#e8e4df" font-size="8.5">클라우드 K8s 지원 필요.</text>
-  <text x="324" y="444" fill="#e8e4df" font-size="8.5">Service마다 외부 IP 하나 소비.</text>
+  <path d="M180 140 L370 96" fill="none" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#sa)"/>
+  <text x="254" y="104" text-anchor="middle" fill="rgb(212,168,83)" font-size="9">1. 인스턴스 등록</text>
 
-  <rect x="600" y="370" width="276" height="88" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
-  <text x="612" y="390" fill="rgb(212,168,83)" font-size="11" font-weight="700">Ingress</text>
-  <text x="612" y="407" fill="#e8e4df" font-size="8.5">Service 앞의 별도 리소스(타입 아님).</text>
-  <text x="612" y="420" fill="#e8e4df" font-size="8.5">L7 스마트 라우터 — URI 경로 fan-out,</text>
-  <text x="612" y="432" fill="#e8e4df" font-size="8.5">TLS 종료, 이름 기반 가상 호스팅.</text>
-  <text x="612" y="444" fill="#e8e4df" font-size="8.5">IP·LB 하나로 여러 Service. 컨트롤러 필요.</text>
+  <path d="M700 140 L510 96" fill="none" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#sa)"/>
+  <text x="626" y="104" text-anchor="middle" fill="rgb(212,168,83)" font-size="9">2. 서비스 조회</text>
 
-  <!-- headless note -->
-  <rect x="24" y="470" width="852" height="26" fill="#f2d4d4"/>
-  <text x="36" y="487" fill="#7a1f1f" font-size="9">Headless Service(clusterIP: None) — 가상 IP 없이 백킹 Pod를 DNS에 직접 등록. StatefulSet(12장)에 가장 유용.</text>
+  <path d="M614 176 L266 176" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#sg)"/>
+  <text x="440" y="168" text-anchor="middle" fill="#66bb6a" font-size="9">3. 직접 호출</text>
 
-  <!-- bottom summary -->
-  <rect x="24" y="504" width="852" height="52" fill="#f5edda"/>
-  <text x="36" y="523" fill="#0d0d0d" font-size="9.5" font-weight="700">Table 13-1 요약: 내부는 언제나 Service 리소스 — ClusterIP(가장 흔함) / Manual IP / Manual FQDN / Headless.</text>
-  <text x="36" y="540" fill="#0d0d0d" font-size="9.5">외부 노출은 그 위에 쌓임 — NodePort(비-HTTP) → LoadBalancer(클라우드 필요) → Ingress(L7 HTTP 스마트 라우팅). Knative는 이 위에 서빙·이벤팅을 더함.</text>
+  <line x1="24" y1="226" x2="856" y2="226" stroke="#b8b3ad" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- lower: server-side -->
+  <text x="24" y="254" fill="#e8e4df" font-size="13">server-side 방식</text>
+
+  <rect x="340" y="272" width="200" height="48" fill="#dceaf7"/>
+  <text x="440" y="302" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">서비스 레지스트리</text>
+
+  <rect x="40" y="364" width="200" height="66" fill="#dceaf7"/>
+  <text x="140" y="388" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">제공자 Pod</text>
+  <text x="140" y="408" text-anchor="middle" fill="#10243a" font-size="9">agent 없음</text>
+
+  <rect x="330" y="364" width="180" height="66" fill="#f5edda"/>
+  <text x="420" y="388" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700">프록시</text>
+  <text x="420" y="408" text-anchor="middle" fill="#0d0d0d" font-size="9">고정 가상 엔드포인트</text>
+
+  <rect x="620" y="364" width="220" height="66" fill="#cdeccf"/>
+  <text x="730" y="388" text-anchor="middle" fill="#14521d" font-size="11" font-weight="700">소비자</text>
+  <text x="730" y="408" text-anchor="middle" fill="#14521d" font-size="9">agent 없음</text>
+
+  <path d="M170 364 L370 320" fill="none" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#sa)"/>
+  <text x="186" y="344" fill="rgb(212,168,83)" font-size="9">1. Pod 등록</text>
+
+  <path d="M470 320 L470 358" fill="none" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#sa)"/>
+  <text x="480" y="344" fill="rgb(212,168,83)" font-size="9">2. Pod 선택</text>
+
+  <path d="M614 397 L516 397" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#sg)"/>
+  <text x="565" y="389" text-anchor="middle" fill="#66bb6a" font-size="9">3. 프록시 호출</text>
+
+  <path d="M324 397 L246 397" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#sg)"/>
+  <text x="285" y="389" text-anchor="middle" fill="#66bb6a" font-size="9">4. 전달</text>
 </svg>
