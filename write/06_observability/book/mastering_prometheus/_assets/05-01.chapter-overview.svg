@@ -1,0 +1,109 @@
+<svg viewBox="0 0 900 620" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif">
+  <title>Alertmanager 전체 지도 — 알림 하나가 사람에게 닿기까지</title>
+  <desc>이 절 전체를 알림 하나의 여정으로 이은 지도다. Prometheus 가 넘긴 알림은 다섯 관문을 차례로 지난다. 첫째 관문은 라우팅으로, 알림이 라우트 트리를 걸어 내려가며 어느 리시버로 갈지 정하고 continue 를 켜면 뒤에 오는 형제 라우트까지 훑어 여러 곳으로 보낸다. 둘째 관문은 그룹핑으로, group_wait 기본 30초 동안 같은 그룹의 알림을 모아 한 통으로 묶고 이후 변화가 있으면 group_interval 기본 5분마다 갱신을 보내며 변화가 없으면 repeat_interval 기본 4시간마다 다시 알린다. 셋째 관문은 억제로, source 에 걸린 기존 알림이 살아 있으면 target 에 걸린 새 알림을 죽이되 equal 에 적은 라벨의 값이 같은 범위 안에서만 적용한다. 넷째 관문은 시간 구간으로, 지정한 시간대 밖이면 발송을 멈추지만 라우팅 탐색 자체는 계속되고 해소 알림도 함께 막히며 최상위 라우트에는 걸 수 없다. 다섯째 관문은 템플릿과 발송으로, Go 템플릿이 메시지 본문을 그리고 리시버가 Slack 이나 PagerDuty 로 실어 나른다. 아래쪽에는 고가용성 원칙을 따로 뒀다. Alertmanager 클러스터는 침묵과 이미 보냈는지 여부만 가십하고 어떤 알림을 받았는지는 가십하지 않으므로, Prometheus 는 모든 인스턴스로 알림을 보내야 하고 앞에 로드밸런서를 두면 안 된다. 합의 알고리듬을 쓰지 않아 정족수가 없으므로 두세 대를 서로 다른 가용 영역에 두면 충분하다.</desc>
+  <rect width="900" height="620" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="oa1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text x="450" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#e8e4df">알림 하나가 사람에게 닿기까지</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#b8b3ad">다섯 관문 · 앞의 넷은 전부 소음을 줄이는 장치입니다</text>
+
+  <!-- 입구 -->
+  <rect x="30" y="72" width="180" height="52" rx="8" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="120" y="94" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8ab6e0">Prometheus</text>
+  <text x="120" y="112" text-anchor="middle" font-size="10" fill="#b8b3ad">for 를 채운 알림</text>
+  <line x1="218" y1="98" x2="256" y2="98" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#oa1)"/>
+
+  <!-- 관문 1 라우팅 -->
+  <rect x="264" y="72" width="606" height="52" rx="8" fill="rgb(212,168,83)"/>
+  <text x="288" y="94" font-size="12" font-weight="700" fill="#0d0d0d">① 라우팅 §2·§3</text>
+  <text x="288" y="112" font-size="10" font-weight="700" fill="#1a1a1a">트리를 걸어 내려가 가장 구체적인 라우트에서 멈춥니다</text>
+  <rect x="628" y="82" width="106" height="32" rx="4" fill="#fdf3df"/>
+  <text x="681" y="95" text-anchor="middle" font-size="9.5" font-weight="700" fill="#3a2f10">continue: true</text>
+  <text x="681" y="108" text-anchor="middle" font-size="9" font-weight="700" fill="#3a2f10">뒤 형제까지</text>
+  <rect x="744" y="82" width="110" height="32" rx="4" fill="#fdf3df"/>
+  <text x="799" y="95" text-anchor="middle" font-size="9.5" font-weight="700" fill="#3a2f10">자식에 안 걸리면</text>
+  <text x="799" y="108" text-anchor="middle" font-size="9" font-weight="700" fill="#3a2f10">부모로 되돌아감</text>
+
+  <line x1="450" y1="130" x2="450" y2="150" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#oa1)"/>
+
+  <!-- 관문 2 그룹핑 -->
+  <rect x="30" y="158" width="840" height="76" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="54" y="180" font-size="12" font-weight="700" fill="rgb(212,168,83)">② 그룹핑 §4</text>
+  <text x="152" y="180" font-size="10" fill="#b8b3ad">group_by 라벨로 묶습니다 · 타이머 셋이 언제 보낼지를 나눠 통제합니다</text>
+
+  <rect x="54" y="192" width="256" height="30" rx="4" fill="#fdf3df"/>
+  <text x="182" y="205" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">group_wait · 기본 30초</text>
+  <text x="182" y="217" text-anchor="middle" font-size="9" font-weight="700" fill="#3a2f10">첫 알림에서 시작 · 초기화 안 됨</text>
+
+  <rect x="322" y="192" width="256" height="30" rx="4" fill="#fdf3df"/>
+  <text x="450" y="205" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">group_interval · 기본 5분</text>
+  <text x="450" y="217" text-anchor="middle" font-size="9" font-weight="700" fill="#3a2f10">변화가 있을 때 갱신</text>
+
+  <rect x="590" y="192" width="256" height="30" rx="4" fill="#fdf3df"/>
+  <text x="718" y="205" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">repeat_interval · 기본 4시간</text>
+  <text x="718" y="217" text-anchor="middle" font-size="9" font-weight="700" fill="#3a2f10">변화가 없어도 다시</text>
+
+  <line x1="450" y1="240" x2="450" y2="260" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#oa1)"/>
+
+  <!-- 관문 3 억제 -->
+  <rect x="30" y="268" width="840" height="76" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="54" y="290" font-size="12" font-weight="700" fill="rgb(212,168,83)">③ 억제 §6</text>
+  <text x="132" y="290" font-size="10" fill="#b8b3ad">상위 장애가 살아 있으면 하위 알림을 죽입니다 · notify 단계라 도착 순서는 무관합니다</text>
+
+  <rect x="54" y="302" width="256" height="30" rx="4" fill="#f2d4d4"/>
+  <text x="182" y="315" text-anchor="middle" font-size="10" font-weight="700" fill="#7a1f1f">source · 이미 있는 알림</text>
+  <text x="182" y="327" text-anchor="middle" font-size="9" font-weight="700" fill="#7a1f1f">죽이는 쪽</text>
+
+  <rect x="322" y="302" width="256" height="30" rx="4" fill="#f2d4d4"/>
+  <text x="450" y="315" text-anchor="middle" font-size="10" font-weight="700" fill="#7a1f1f">target · 새로 들어온 알림</text>
+  <text x="450" y="327" text-anchor="middle" font-size="9" font-weight="700" fill="#7a1f1f">죽는 쪽</text>
+
+  <rect x="590" y="302" width="256" height="30" rx="4" fill="#dceaf7"/>
+  <text x="718" y="315" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">equal · 짝을 맞추는 라벨</text>
+  <text x="718" y="327" text-anchor="middle" font-size="9" font-weight="700" fill="#10243a">이 값이 같은 범위 안에서만</text>
+
+  <line x1="450" y1="350" x2="450" y2="370" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#oa1)"/>
+
+  <!-- 관문 4 시간 구간 -->
+  <rect x="30" y="378" width="840" height="62" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="54" y="400" font-size="12" font-weight="700" fill="rgb(212,168,83)">④ 시간 구간 §5</text>
+  <text x="176" y="400" font-size="10" fill="#b8b3ad">warning 으로 새벽에 깨우지 않으려는 장치입니다</text>
+  <rect x="54" y="410" width="256" height="22" rx="4" fill="#dceaf7"/>
+  <text x="182" y="426" text-anchor="middle" font-size="9.5" font-weight="700" fill="#10243a">최상위 라우트에는 못 겁니다</text>
+  <rect x="322" y="410" width="256" height="22" rx="4" fill="#f2d4d4"/>
+  <text x="450" y="426" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">구간 밖이어도 탐색은 계속됩니다</text>
+  <rect x="590" y="410" width="256" height="22" rx="4" fill="#f2d4d4"/>
+  <text x="718" y="426" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">해소 알림도 함께 막힙니다</text>
+
+  <line x1="450" y1="446" x2="450" y2="466" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#oa1)"/>
+
+  <!-- 관문 5 템플릿과 발송 -->
+  <rect x="30" y="474" width="840" height="56" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="54" y="496" font-size="12" font-weight="700" fill="#8fd694">⑤ 템플릿과 발송 §8</text>
+  <text x="212" y="496" font-size="10" fill="#b8b3ad">Go 템플릿이 메시지를 그리고 리시버가 실어 나릅니다</text>
+  <rect x="54" y="504" width="180" height="20" rx="4" fill="#e6f7e7"/>
+  <text x="144" y="519" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">내장 __subject</text>
+  <rect x="246" y="504" width="180" height="20" rx="4" fill="#e6f7e7"/>
+  <text x="336" y="519" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">define 으로 커스텀</text>
+  <rect x="438" y="504" width="408" height="20" rx="4" fill="#e6f7e7"/>
+  <text x="642" y="519" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">amtool 로 라우팅과 렌더를 미리 시험합니다 §7</text>
+
+  <!-- HA 별도 -->
+  <rect x="30" y="546" width="840" height="56" rx="8" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.6"/>
+  <text x="54" y="568" font-size="12" font-weight="700" fill="#8ab6e0">고가용성 §9</text>
+  <text x="152" y="568" font-size="10" fill="#b8b3ad">가십하는 것과 하지 않는 것의 구분이 배치 규칙을 정합니다</text>
+  <rect x="54" y="576" width="256" height="20" rx="4" fill="#dceaf7"/>
+  <text x="182" y="591" text-anchor="middle" font-size="9.5" font-weight="700" fill="#10243a">침묵과 발송 여부는 가십합니다</text>
+  <rect x="322" y="576" width="256" height="20" rx="4" fill="#f2d4d4"/>
+  <text x="450" y="591" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">받은 알림은 가십하지 않습니다</text>
+  <rect x="590" y="576" width="256" height="20" rx="4" fill="#f2d4d4"/>
+  <text x="718" y="591" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">로드밸런서 금지 · AZ 분산</text>
+</svg>
