@@ -1,0 +1,90 @@
+<svg viewBox="0 0 880 450" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>셸 컨트롤러 Pod의 구성과 ConfigMap 감시 경로</title>
+  <desc>컨트롤러 Pod에는 컨테이너가 둘 들어갑니다. 하나는 kubeapi-proxy 이미지로 만든 Ambassador 컨테이너로, localhost 8001 포트를 실제 Kubernetes API 서버로 프록시합니다. 다른 하나는 curl-jq 이미지의 메인 컨테이너로, ConfigMap에서 마운트한 컨트롤러 셸 스크립트를 실행합니다. 스크립트는 localhost 8001로 hanging GET 요청을 보내 ConfigMap 변경 이벤트 스트림을 받습니다. MODIFIED 이벤트가 오면 그 ConfigMap의 podDeleteSelector 어노테이션을 jq로 추출해 Pod selector로 변환하고, 그 selector에 맞는 Pod를 삭제합니다. 삭제된 Pod는 상위 Deployment가 다시 만들면서 바뀐 설정을 읽어 갑니다. 컨트롤러 Pod에는 ConfigMap 감시와 Pod 재시작 권한을 가진 config-watcher-controller ServiceAccount가 붙습니다.</desc>
+
+  <defs>
+    <marker id="sa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="sg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#66bb6a"/>
+    </marker>
+  </defs>
+
+  <rect width="880" height="450" fill="#0d0d0d"/>
+  <text x="24" y="30" fill="#e8e4df" font-size="15">셸 컨트롤러 Pod 구조</text>
+
+  <!-- controller pod boundary -->
+  <rect x="24" y="52" width="380" height="200" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="36" y="72" fill="#b8b3ad" font-size="10" font-weight="700">컨트롤러 Pod</text>
+
+  <!-- main container -->
+  <rect x="40" y="84" width="348" height="72" fill="#cdeccf"/>
+  <text x="214" y="106" text-anchor="middle" fill="#14521d" font-size="11" font-weight="700">config-watcher</text>
+  <text x="214" y="124" text-anchor="middle" fill="#14521d" font-size="9">k8spatterns/curl-jq</text>
+  <text x="214" y="140" text-anchor="middle" fill="#14521d" font-size="9">스크립트 실행</text>
+
+  <!-- ambassador container -->
+  <rect x="40" y="168" width="348" height="70" fill="#dceaf7"/>
+  <text x="214" y="190" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">kubeapi-proxy</text>
+  <text x="214" y="208" text-anchor="middle" fill="#10243a" font-size="9">Ambassador · 18장</text>
+  <text x="214" y="224" text-anchor="middle" fill="#10243a" font-size="9">localhost:8001 노출</text>
+
+  <path d="M214 156 L214 162" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#sa)"/>
+
+  <!-- script configmap mount -->
+  <rect x="24" y="290" width="180" height="66" fill="#f5edda"/>
+  <text x="114" y="312" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">ConfigMap</text>
+  <text x="114" y="330" text-anchor="middle" fill="#0d0d0d" font-size="9">config-watcher</text>
+  <text x="114" y="344" text-anchor="middle" fill="#0d0d0d" font-size="9">스크립트 볼륨 마운트</text>
+
+  <path d="M114 284 L114 162" fill="none" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#sa)"/>
+
+  <!-- service account -->
+  <rect x="224" y="290" width="180" height="66" fill="#f5edda"/>
+  <text x="314" y="312" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">ServiceAccount</text>
+  <text x="314" y="330" text-anchor="middle" fill="#0d0d0d" font-size="9">ConfigMap 감시 권한</text>
+  <text x="314" y="344" text-anchor="middle" fill="#0d0d0d" font-size="9">Pod 재시작 권한</text>
+
+  <path d="M314 284 L314 244" fill="none" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#sa)"/>
+
+  <!-- API server -->
+  <rect x="500" y="152" width="180" height="86" fill="#dceaf7"/>
+  <text x="590" y="176" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">API 서버</text>
+  <text x="590" y="196" text-anchor="middle" fill="#10243a" font-size="9">watch=true</text>
+  <text x="590" y="212" text-anchor="middle" fill="#10243a" font-size="9">hanging GET</text>
+  <text x="590" y="228" text-anchor="middle" fill="#10243a" font-size="9">이벤트 스트림</text>
+
+  <path d="M388 200 L494 195" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#sa)"/>
+  <text x="440" y="188" text-anchor="middle" fill="rgb(212,168,83)" font-size="9">프록시</text>
+
+  <!-- watched configmap -->
+  <rect x="500" y="52" width="180" height="72" fill="#f5edda"/>
+  <text x="590" y="74" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">webapp-config</text>
+  <text x="590" y="92" text-anchor="middle" fill="#0d0d0d" font-size="9">podDeleteSelector</text>
+  <text x="590" y="108" text-anchor="middle" fill="#0d0d0d" font-size="9">app=webapp</text>
+
+  <path d="M590 124 L590 146" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#sa)"/>
+  <text x="600" y="140" fill="rgb(212,168,83)" font-size="9">MODIFIED</text>
+
+  <!-- target pods -->
+  <rect x="740" y="152" width="116" height="86" fill="#f2d4d4"/>
+  <text x="798" y="180" text-anchor="middle" fill="#7a1f1f" font-size="10" font-weight="700">대상 Pod</text>
+  <text x="798" y="200" text-anchor="middle" fill="#7a1f1f" font-size="9">app: webapp</text>
+  <text x="798" y="218" text-anchor="middle" fill="#7a1f1f" font-size="9">삭제됨</text>
+
+  <path d="M680 195 L734 195" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#sg)"/>
+  <text x="707" y="187" text-anchor="middle" fill="#66bb6a" font-size="9">DELETE</text>
+
+  <!-- deployment recreate -->
+  <rect x="700" y="290" width="156" height="66" fill="#f5edda"/>
+  <text x="778" y="312" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">Deployment</text>
+  <text x="778" y="330" text-anchor="middle" fill="#0d0d0d" font-size="9">Pod 재생성</text>
+  <text x="778" y="344" text-anchor="middle" fill="#0d0d0d" font-size="9">새 설정 반영</text>
+
+  <path d="M798 244 L798 284" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#sg)"/>
+
+  <!-- feedback: 재생성된 Pod 가 감시 대상 ConfigMap 의 값을 읽어 감 -->
+  <path d="M856 320 L872 320 L872 88 L686 88" fill="none" stroke="#66bb6a" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#sg)"/>
+  <text x="756" y="78" text-anchor="middle" fill="#66bb6a" font-size="9">새 값을 읽음</text>
+</svg>

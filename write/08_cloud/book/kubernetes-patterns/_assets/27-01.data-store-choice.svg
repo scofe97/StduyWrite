@@ -1,0 +1,75 @@
+<svg viewBox="0 0 820 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>컨트롤러 데이터를 어디에 저장할지 고르는 흐름</title>
+  <desc>컨트롤러가 목표 상태 데이터를 저장할 위치는 네 갈래로 갈립니다. selector처럼 쿼리로 검색해야 하는 값이면 label을 씁니다. label은 백엔드에 인덱싱되어 효율적으로 검색되지만 영숫자 위주의 문법 제약이 있습니다. 쿼리 키로 쓰지 않는 임의 메타데이터이고 label의 문법 제약에 맞지 않으면 annotation을 씁니다. annotation은 인덱싱되지 않아 내부 성능에 영향을 주지 않습니다. label이나 annotation에 담기 어려운 큰 목표 상태 정의라면 ConfigMap이나 CRD로 갑니다. 둘 중에서는 CRD가 커스텀 목표 상태 명세에 더 적합하지만 등록에 클러스터 수준 권한이 필요합니다. 그 권한이 없으면 ConfigMap이 차선입니다.</desc>
+
+  <defs>
+    <marker id="da" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect width="820" height="420" fill="#0d0d0d"/>
+  <text x="24" y="30" fill="#e8e4df" font-size="15">데이터 저장 위치 선택</text>
+
+  <!-- start -->
+  <rect x="24" y="60" width="170" height="56" fill="#f5edda"/>
+  <text x="109" y="84" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">저장할 데이터</text>
+  <text x="109" y="102" text-anchor="middle" fill="#0d0d0d" font-size="9">목표 상태 정의</text>
+
+  <!-- q1 -->
+  <rect x="254" y="60" width="200" height="56" fill="#dceaf7"/>
+  <text x="354" y="84" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">쿼리로 검색하나</text>
+  <text x="354" y="102" text-anchor="middle" fill="#10243a" font-size="9">selector 기능 필요</text>
+
+  <path d="M194 88 L248 88" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#da)"/>
+
+  <!-- label -->
+  <rect x="530" y="52" width="260" height="72" fill="#cdeccf"/>
+  <text x="660" y="76" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">Label</text>
+  <text x="660" y="94" text-anchor="middle" fill="#14521d" font-size="9">백엔드 인덱싱으로 빠른 검색</text>
+  <text x="660" y="110" text-anchor="middle" fill="#14521d" font-size="9">영숫자 문법 제약 있음</text>
+
+  <path d="M454 88 L524 88" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#da)"/>
+  <text x="489" y="80" text-anchor="middle" fill="rgb(212,168,83)" font-size="9">예</text>
+
+  <!-- q2 -->
+  <rect x="254" y="164" width="200" height="56" fill="#dceaf7"/>
+  <text x="354" y="188" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">작은 메타데이터인가</text>
+  <text x="354" y="206" text-anchor="middle" fill="#10243a" font-size="9">비식별 임의 값</text>
+
+  <path d="M354 116 L354 158" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#da)"/>
+  <text x="364" y="142" fill="rgb(212,168,83)" font-size="9">아니오</text>
+
+  <!-- annotation -->
+  <rect x="530" y="156" width="260" height="72" fill="#cdeccf"/>
+  <text x="660" y="180" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">Annotation</text>
+  <text x="660" y="198" text-anchor="middle" fill="#14521d" font-size="9">인덱싱 안 됨</text>
+  <text x="660" y="214" text-anchor="middle" fill="#14521d" font-size="9">내부 성능 영향 없음</text>
+
+  <path d="M454 192 L524 192" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#da)"/>
+  <text x="489" y="184" text-anchor="middle" fill="rgb(212,168,83)" font-size="9">예</text>
+
+  <!-- q3 -->
+  <rect x="254" y="268" width="200" height="56" fill="#dceaf7"/>
+  <text x="354" y="292" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">CRD 등록 권한 있나</text>
+  <text x="354" y="310" text-anchor="middle" fill="#10243a" font-size="9">cluster-level 권한</text>
+
+  <path d="M354 220 L354 262" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#da)"/>
+  <text x="364" y="246" fill="rgb(212,168,83)" font-size="9">아니오</text>
+
+  <!-- CRD -->
+  <rect x="530" y="252" width="260" height="60" fill="#f5edda"/>
+  <text x="660" y="276" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">CRD · 28장</text>
+  <text x="660" y="296" text-anchor="middle" fill="#0d0d0d" font-size="9">커스텀 명세에 가장 적합</text>
+
+  <path d="M454 288 L524 283" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#da)"/>
+  <text x="489" y="278" text-anchor="middle" fill="rgb(212,168,83)" font-size="9">예</text>
+
+  <!-- ConfigMap -->
+  <rect x="530" y="330" width="260" height="60" fill="#f2d4d4"/>
+  <text x="660" y="354" text-anchor="middle" fill="#7a1f1f" font-size="10" font-weight="700">ConfigMap</text>
+  <text x="660" y="374" text-anchor="middle" fill="#7a1f1f" font-size="9">권한 없을 때의 차선</text>
+
+  <path d="M354 324 L354 360 L524 360" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#da)"/>
+  <text x="400" y="352" fill="rgb(212,168,83)" font-size="9">아니오</text>
+</svg>
