@@ -1,0 +1,81 @@
+<svg viewBox="0 0 900 566" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif">
+  <title>샤딩·페더레이션·고가용성 전체 지도 — Prometheus 가 버거워질 때</title>
+  <desc>이 절 전체를 단일 Prometheus 가 한계에 부딪힌 뒤의 선택 흐름으로 이은 지도다. 출발점은 두 가지 한계다. 카디널리티가 훨씬 자주 범인이고, 메모리와 디스크는 돈으로 넓힐 수 있어도 PromQL 엔진이 아직 단일 스레드라 쿼리 속도는 넓히지 못한다. 다른 하나는 장기 보존으로, 컴팩션을 거쳐도 블록의 최대 크기가 31일이라 몇 해치를 두면 거대한 블록이 쌓인다. 첫 갈래는 샤딩이다. 다만 Prometheus TSDB 끼리는 대화하지 않으므로 데이터를 나누는 것이 아니라 스크레이프 잡을 나누는 일이고, 무엇이 어디에 놓일지는 설정으로 미리 정해진다. 서비스 단위로 나누면 예측 가능하되 손으로 나눠야 하고, hashmod 로 나누면 동적이되 사람이 어느 인스턴스를 봐야 할지 알 수 없어지며 고르게 갈린다는 보장도 없다. 그렇게 잃은 단일 창을 되찾으려는 시도가 페더레이션인데, 저자는 열 번 중 아홉 번은 답이 아니라고 못 박는다. 샤딩한 이유가 하나의 Prometheus 가 너무 커져서였다면 중앙 Prometheus 는 같은 문제를 되풀이하기 때문이다. 쓰더라도 집계된 부분집합만 넘기고 honor_labels 로 라벨 충돌을 푼다. 마지막은 고가용성이다. Prometheus 에는 Alertmanager 와 달리 내장 HA 가 없어 답은 복제이고, 복제본은 prometheus_replica 외부 라벨 하나로만 구분한다. 그 라벨 때문에 라벨 집합이 달라져 알림이 두 번 나가므로, 알림을 보내기 전 alert_relabel_configs 로 그 라벨을 떨어뜨려야 Alertmanager 가 중복을 제거한다. 단일 창을 되찾는 최종 답으로 저자가 가장 선호하는 것은 Thanos 의 Sidecar 와 Query 두 컴포넌트다.</desc>
+  <rect width="900" height="566" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="sa1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text x="450" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#e8e4df">Prometheus 가 버거워질 때</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#b8b3ad">한계 · 샤딩 · 페더레이션 · HA</text>
+
+  <!-- 출발: 두 한계 -->
+  <rect x="30" y="72" width="840" height="76" rx="8" fill="#0d0d0d" stroke="#f44336" stroke-width="1.5"/>
+  <text x="54" y="94" font-size="12" font-weight="700" fill="#f4736a">1. 두 가지 한계 §1</text>
+  <text x="196" y="94" font-size="10" fill="#b8b3ad">카디널리티가 더 흔한 범인입니다</text>
+  <rect x="54" y="106" width="392" height="30" rx="4" fill="#f2d4d4"/>
+  <text x="250" y="119" text-anchor="middle" font-size="10" font-weight="700" fill="#7a1f1f">카디널리티 — 라벨 값 100 미만</text>
+  <text x="250" y="131" text-anchor="middle" font-size="9" font-weight="700" fill="#7a1f1f">쿼리는 단일 스레드라 못 넓힙니다</text>
+  <rect x="458" y="106" width="388" height="30" rx="4" fill="#f2d4d4"/>
+  <text x="652" y="119" text-anchor="middle" font-size="10" font-weight="700" fill="#7a1f1f">장기 보존 — 블록 최대 31일</text>
+  <text x="652" y="131" text-anchor="middle" font-size="9" font-weight="700" fill="#7a1f1f">독립 DB 를 수십 개 열게 됩니다</text>
+
+  <line x1="450" y1="154" x2="450" y2="174" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#sa1)"/>
+
+  <!-- 2 샤딩 -->
+  <rect x="30" y="182" width="840" height="90" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="54" y="204" font-size="12" font-weight="700" fill="rgb(212,168,83)">2. 샤딩 §2</text>
+  <text x="144" y="204" font-size="10" fill="#b8b3ad">데이터 아닌 스크레이프 잡</text>
+  <rect x="54" y="216" width="792" height="20" rx="4" fill="#f5edda"/>
+  <text x="450" y="231" text-anchor="middle" font-size="9.5" font-weight="700" fill="#3a2f10">TSDB 끼리 대화하지 않습니다</text>
+  <rect x="54" y="242" width="392" height="22" rx="4" fill="#fdf3df"/>
+  <text x="250" y="258" text-anchor="middle" font-size="9.5" font-weight="700" fill="#3a2f10">서비스 단위 — 예측 가능 · 수동</text>
+  <rect x="458" y="242" width="388" height="22" rx="4" fill="#fdf3df"/>
+  <text x="652" y="258" text-anchor="middle" font-size="9.5" font-weight="700" fill="#3a2f10">hashmod — 동적 · 불투명</text>
+
+  <line x1="450" y1="278" x2="450" y2="298" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#sa1)"/>
+  <text x="466" y="293" font-size="9.5" fill="#b8b3ad">단일 창을 잃습니다</text>
+
+  <!-- 3 페더레이션 -->
+  <rect x="30" y="306" width="840" height="76" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="54" y="328" font-size="12" font-weight="700" fill="rgb(212,168,83)">3. 페더레이션 §3</text>
+  <text x="176" y="328" font-size="10" fill="#b8b3ad">중앙으로 모아 단일 창을</text>
+  <rect x="54" y="340" width="256" height="30" rx="4" fill="#f2d4d4"/>
+  <text x="182" y="353" text-anchor="middle" font-size="10" font-weight="700" fill="#7a1f1f">열에 아홉은 답이 아닙니다</text>
+  <text x="182" y="365" text-anchor="middle" font-size="9" font-weight="700" fill="#7a1f1f">같은 문제를 되풀이합니다</text>
+  <rect x="322" y="340" width="256" height="30" rx="4" fill="#fdf3df"/>
+  <text x="450" y="353" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">match[] 필수 · 합집합</text>
+  <text x="450" y="365" text-anchor="middle" font-size="9" font-weight="700" fill="#3a2f10">집계된 부분집합만</text>
+  <rect x="590" y="340" width="256" height="30" rx="4" fill="#dceaf7"/>
+  <text x="718" y="353" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">honor_labels: true</text>
+  <text x="718" y="365" text-anchor="middle" font-size="9" font-weight="700" fill="#10243a">충돌만 풉니다</text>
+
+  <line x1="450" y1="388" x2="450" y2="408" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#sa1)"/>
+
+  <!-- 4 HA -->
+  <rect x="30" y="416" width="840" height="76" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="54" y="438" font-size="12" font-weight="700" fill="#8fd694">4. 고가용성 §4</text>
+  <text x="168" y="438" font-size="10" fill="#b8b3ad">내장 HA 가 없어 복제로 풉니다</text>
+  <rect x="54" y="450" width="256" height="30" rx="4" fill="#e6f7e7"/>
+  <text x="182" y="463" text-anchor="middle" font-size="10" font-weight="700" fill="#14521d">복제본 2개 · 서로 감시</text>
+  <text x="182" y="475" text-anchor="middle" font-size="9" font-weight="700" fill="#14521d">외부 라벨 하나만 다릅니다</text>
+  <rect x="322" y="450" width="256" height="30" rx="4" fill="#f2d4d4"/>
+  <text x="450" y="463" text-anchor="middle" font-size="10" font-weight="700" fill="#7a1f1f">알림이 두 번 나갑니다</text>
+  <text x="450" y="475" text-anchor="middle" font-size="9" font-weight="700" fill="#7a1f1f">라벨 집합이 달라서</text>
+  <rect x="590" y="450" width="256" height="30" rx="4" fill="#e6f7e7"/>
+  <text x="718" y="463" text-anchor="middle" font-size="10" font-weight="700" fill="#14521d">labeldrop 으로 떨굽니다</text>
+  <text x="718" y="475" text-anchor="middle" font-size="9" font-weight="700" fill="#14521d">알림 발송 직전에</text>
+
+  <line x1="450" y1="498" x2="450" y2="514" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#sa1)"/>
+
+  <!-- 종착 Thanos -->
+  <rect x="30" y="522" width="840" height="32" rx="8" fill="#5b9bd5"/>
+  <text x="54" y="542" font-size="12" font-weight="700" fill="#e8e4df">종착 — Thanos §4</text>
+  <text x="212" y="542" font-size="10" font-weight="700" fill="#e8e4df">Sidecar + Query 둘이면</text>
+</svg>
