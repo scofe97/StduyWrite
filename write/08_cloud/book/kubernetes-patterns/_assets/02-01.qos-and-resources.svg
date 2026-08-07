@@ -1,62 +1,87 @@
-<svg viewBox="0 0 900 620" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>requests·limits 조합이 QoS 등급과 축출 순서를 정한다 — Predictable Demands</title>
-  <desc>Kubernetes Patterns 2장. 컨테이너에 requests와 limits를 어떻게 설정하느냐가 Pod의 QoS 등급을 정합니다. 둘 다 없으면 Best-Effort(가장 먼저 죽음), requests와 limits가 다르면 Burstable, 둘이 같으면 Guaranteed(가장 나중에 죽음)입니다. 압축 가능 자원(CPU)은 초과 시 스로틀되지만 압축 불가 자원(메모리)은 초과 시 컨테이너가 죽습니다. 그래서 메모리는 requests=limits로 고정하고 CPU는 requests만 걸고 limits를 비우는 것이 권장됩니다.</desc>
+<svg viewBox="0 0 900 410" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>노드 메모리가 부족해질 때 Pod가 죽는 순서</title>
+  <desc>노드에 압축 불가 자원인 메모리 압박이 생겼을 때 kubelet이 Pod를 죽이는 순서를 보입니다. 위쪽은 선언에서 등급이 정해지는 경로입니다. 컨테이너에 requests와 limits를 어떻게 적었느냐에 따라 플랫폼이 QoS 등급을 자동으로 매깁니다. 둘 다 없으면 Best-Effort, 서로 다르면 Burstable, 같으면 Guaranteed입니다. 아래쪽은 그 등급이 생사 순서로 이어지는 경로입니다. 메모리 압박이 오면 Best-Effort가 가장 먼저 죽고, 남은 것이 없으면 Burstable이 그다음으로 죽으며, Guaranteed는 앞의 둘보다 먼저 죽지 않습니다. 그래서 메모리에는 requests와 limits를 같게 두어 Guaranteed 등급을 받는 것이 최선입니다.</desc>
 
-  <rect x="0" y="0" width="900" height="620" fill="#0d0d0d"/>
-  <text x="24" y="34" fill="#e8e4df" font-size="16">requests·limits 조합이 QoS 등급과 축출 순서를 정한다</text>
-  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">컨테이너에 <tspan fill="#e8e4df">얼마를 요청(requests)하고 얼마까지 허용(limits)</tspan>하느냐가 자원 부족 때 <tspan fill="rgb(212,168,83)">누가 먼저 죽는가</tspan>를 결정합니다.</text>
+  <rect width="900" height="410" fill="#0d0d0d"/>
 
-  <!-- compressible vs incompressible -->
-  <rect x="24" y="76" width="410" height="92" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
-  <text x="40" y="98" fill="rgb(212,168,83)" font-size="12" font-weight="700">압축 가능 (compressible) — CPU·대역폭</text>
-  <text x="40" y="120" fill="#e8e4df" font-size="10.5">초과하면 <tspan fill="#66bb6a">스로틀</tspan>됩니다 (느려질 뿐 죽지 않음).</text>
-  <text x="40" y="140" fill="rgb(138,133,128)" font-size="10">그래서 CPU는 requests만 걸고 limits는 비웁니다 —</text>
-  <text x="40" y="157" fill="rgb(138,133,128)" font-size="10">남는 CPU를 낭비 없이 쓰게.</text>
+  <text x="24" y="30" fill="#e8e4df" font-size="15" font-weight="700">선언이 생사 순서를 정합니다</text>
 
-  <rect x="466" y="76" width="410" height="92" fill="rgb(26,26,26)" stroke="#e57373"/>
-  <text x="482" y="98" fill="#e57373" font-size="12" font-weight="700">압축 불가 (incompressible) — 메모리</text>
-  <text x="482" y="120" fill="#e8e4df" font-size="10.5">초과하면 <tspan fill="#e57373">죽습니다</tspan> (OOM 축출 → 재생성).</text>
-  <text x="482" y="140" fill="rgb(138,133,128)" font-size="10">메모리 회수를 강제할 방법이 없어서입니다.</text>
-  <text x="482" y="157" fill="rgb(138,133,128)" font-size="10">그래서 메모리는 requests = limits 로 고정.</text>
+  <!-- ===== declaration -> QoS ===== -->
+  <text x="24" y="60" fill="#b8b3ad" font-size="11" font-weight="700">무엇을 적었는가</text>
 
-  <!-- QoS ladder -->
-  <text x="24" y="200" fill="#e8e4df" font-size="13">QoS 3등급 — requests·limits 조합으로 자동 결정</text>
+  <rect x="24" y="72" width="240" height="44" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="144" y="90" text-anchor="middle" fill="#b8b3ad" font-size="10" font-weight="700">아무것도 없음</text>
+  <text x="144" y="107" text-anchor="middle" fill="#b8b3ad" font-size="9">requests · limits 없음</text>
 
-  <!-- Guaranteed (top = killed last) -->
-  <rect x="24" y="214" width="852" height="66" fill="#cdeccf"/>
-  <text x="40" y="238" fill="#14521d" font-size="13" font-weight="700">Guaranteed</text>
-  <text x="40" y="260" fill="#14521d" font-size="10.5">requests = limits (CPU·메모리 모두). 최고 우선순위 — Best-Effort·Burstable보다 먼저 죽지 않음.</text>
-  <text x="40" y="274" fill="#14521d" font-size="10">메모리엔 이 등급이 최선: OOM 축출을 피하고 예측 가능.</text>
-  <rect x="700" y="228" width="160" height="38" fill="#f5edda"/>
-  <text x="780" y="252" fill="#0d0d0d" font-size="10.5" text-anchor="middle" font-weight="700">가장 나중에 죽음</text>
+  <rect x="24" y="124" width="240" height="44" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="144" y="142" text-anchor="middle" fill="#b8b3ad" font-size="10" font-weight="700">서로 다름</text>
+  <text x="144" y="159" text-anchor="middle" fill="#b8b3ad" font-size="9" font-family="'JetBrains Mono', monospace">limits &gt; requests</text>
 
-  <!-- Burstable (middle) -->
-  <rect x="24" y="290" width="852" height="66" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
-  <text x="40" y="314" fill="rgb(212,168,83)" font-size="13" font-weight="700">Burstable</text>
-  <text x="40" y="336" fill="#e8e4df" font-size="10.5">requests ≠ limits (limits &gt; requests). 최소 보장은 있고, 여유가 있으면 limits까지 더 씀.</text>
-  <text x="40" y="350" fill="rgb(138,133,128)" font-size="10">압축 불가 자원 압박 때, Best-Effort가 다 죽고 나면 그다음으로 죽음.</text>
+  <rect x="24" y="176" width="240" height="44" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="144" y="194" text-anchor="middle" fill="#b8b3ad" font-size="10" font-weight="700">같음</text>
+  <text x="144" y="211" text-anchor="middle" fill="#b8b3ad" font-size="9" font-family="'JetBrains Mono', monospace">requests == limits</text>
 
-  <!-- Best-Effort (bottom = killed first) -->
-  <rect x="24" y="366" width="852" height="66" fill="rgb(26,26,26)" stroke="#e57373"/>
-  <text x="40" y="390" fill="#e57373" font-size="13" font-weight="700">Best-Effort</text>
-  <text x="40" y="412" fill="#e8e4df" font-size="10.5">requests·limits 아무것도 없음. 최저 우선순위.</text>
-  <text x="40" y="426" fill="rgb(138,133,128)" font-size="10">노드가 압축 불가 자원이 바닥나면 가장 먼저 죽음.</text>
-  <rect x="700" y="380" width="160" height="38" fill="#f2d4d4"/>
-  <text x="780" y="404" fill="#7a1f1f" font-size="10.5" text-anchor="middle" font-weight="700">가장 먼저 죽음</text>
+  <path d="M 268 94 L 306 94" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#am)"/>
+  <path d="M 268 146 L 306 146" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#am)"/>
+  <path d="M 268 198 L 306 198" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#am)"/>
+  <text x="287" y="62" text-anchor="middle" fill="rgb(212,168,83)" font-size="9" font-weight="700">자동 판정</text>
 
-  <!-- QoS vs Priority note -->
-  <line x1="24" y1="452" x2="876" y2="452" stroke="rgb(42,37,32)"/>
-  <text x="24" y="476" fill="#e8e4df" font-size="12">QoS ≠ Pod 우선순위 — 서로 다른 두 축</text>
-  <rect x="24" y="488" width="410" height="72" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
-  <text x="40" y="510" fill="rgb(212,168,83)" font-size="11" font-weight="700">QoS (Kubelet이 씀)</text>
-  <text x="40" y="530" fill="rgb(138,133,128)" font-size="10">노드 자원이 낮을 때 노드 안정성을 지키려</text>
-  <text x="40" y="546" fill="rgb(138,133,128)" font-size="10">컨테이너를 죽이는(eviction) 순서. requests·limits로 결정.</text>
-  <rect x="466" y="488" width="410" height="72" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
-  <text x="482" y="510" fill="rgb(212,168,83)" font-size="11" font-weight="700">Pod Priority (스케줄러가 씀)</text>
-  <text x="482" y="530" fill="rgb(138,133,128)" font-size="10">배치할 자리가 없을 때 낮은 우선순위 Pod를</text>
-  <text x="482" y="546" fill="rgb(138,133,128)" font-size="10">밀어내는(preemption) 순서. PriorityClass로 결정. QoS 무시.</text>
+  <!-- QoS tiers -->
+  <rect x="310" y="72" width="200" height="44" fill="#f2d4d4"/>
+  <text x="410" y="98" text-anchor="middle" fill="#7a1f1f" font-size="11" font-weight="700">Best-Effort</text>
 
-  <!-- bottom rule -->
-  <rect x="24" y="578" width="852" height="28" fill="#f5edda"/>
-  <text x="36" y="596" fill="#0d0d0d" font-size="10.5" font-weight="700">권장: 메모리는 requests = limits (Guaranteed), CPU는 requests만 걸고 limits는 비운다.</text>
+  <rect x="310" y="124" width="200" height="44" fill="#f5edda"/>
+  <text x="410" y="150" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700">Burstable</text>
+
+  <rect x="310" y="176" width="200" height="44" fill="#cdeccf"/>
+  <text x="410" y="202" text-anchor="middle" fill="#14521d" font-size="11" font-weight="700">Guaranteed</text>
+
+  <!-- eviction order -->
+  <text x="556" y="60" fill="#f44336" font-size="11" font-weight="700">메모리 압박이 오면</text>
+
+  <path d="M 514 94 L 552 94" stroke="#f44336" stroke-width="2" marker-end="url(#r)"/>
+  <rect x="556" y="72" width="320" height="44" fill="#f2d4d4"/>
+  <text x="576" y="98" fill="#7a1f1f" font-size="11" font-weight="700">1순위 · 가장 먼저 죽습니다</text>
+
+  <path d="M 514 146 L 552 146" stroke="#f44336" stroke-width="2" marker-end="url(#r)"/>
+  <rect x="556" y="124" width="320" height="44" fill="#f5edda"/>
+  <text x="576" y="143" fill="#0d0d0d" font-size="11" font-weight="700">2순위 · 그다음입니다</text>
+  <text x="576" y="160" fill="#0d0d0d" font-size="9">Best-Effort 소진 후</text>
+
+  <path d="M 514 198 L 552 198" stroke="#66bb6a" stroke-width="2" marker-end="url(#g)"/>
+  <rect x="556" y="176" width="320" height="44" fill="#cdeccf"/>
+  <text x="576" y="195" fill="#14521d" font-size="11" font-weight="700">앞의 둘보다 먼저 죽지 않습니다</text>
+  <text x="576" y="212" fill="#14521d" font-size="9">메모리에는 이 등급이 최선입니다</text>
+
+  <line x1="24" y1="244" x2="876" y2="244" stroke="#4a4640"/>
+
+  <!-- compressible vs not -->
+  <text x="24" y="270" fill="#e8e4df" font-size="12" font-weight="700">한도를 넘기면</text>
+
+  <rect x="24" y="282" width="410" height="60" fill="#dceaf7"/>
+  <text x="44" y="304" fill="#10243a" font-size="11" font-weight="700">CPU · 압축 가능</text>
+  <text x="44" y="324" fill="#10243a" font-size="10">스로틀 · 죽지 않습니다</text>
+
+  <rect x="466" y="282" width="410" height="60" fill="#f2d4d4"/>
+  <text x="486" y="304" fill="#7a1f1f" font-size="11" font-weight="700">메모리 · 압축 불가</text>
+  <text x="486" y="324" fill="#7a1f1f" font-size="10">죽습니다 · 회수 불가</text>
+
+  <!-- recommendation -->
+  <rect x="24" y="352" width="852" height="34" fill="rgb(212,168,83)"/>
+  <text x="44" y="374" fill="#0d0d0d" font-size="10" font-weight="700">메모리는 같게 · CPU 는 하한만</text>
+
+  <defs>
+    <marker id="am" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="r" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#f44336"/>
+    </marker>
+    <marker id="g" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#66bb6a"/>
+    </marker>
+  </defs>
 </svg>

@@ -69,7 +69,7 @@ kubectl port-forward -n istio-system svc/prometheus 9090:9090 &
 
 브라우저에서 `http://localhost:9090` 접속 후 아래 쿼리를 실행한다.
 
-```promql
+```pseudocode
 # bookinfo 네임스페이스 전체 요청 수 (1분 단위)
 sum(rate(istio_requests_total{namespace="bookinfo"}[1m])) by (destination_service_name)
 

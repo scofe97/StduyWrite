@@ -6,7 +6,7 @@ source:
   - https://kubernetes.io/docs/concepts/services-networking/
 related:
   - ../README.md
-updated: 2026-07-12
+updated: 2026-08-06
 ---
 
 # 04_networking — 네트워킹
@@ -20,18 +20,18 @@ updated: 2026-07-12
 
 | 번호 | 본문 | 점검 | 학습 초점 |
 |------|------|------|-----------|
-| 04-01 | [네트워킹](04-01.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9.md) | [네트워킹 점검](04-01.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9%20%EC%A0%90%EA%B2%80.md) | 전체 책임 경계와 장애 진입 순서를 고정합니다. |
+| 04-01 | [네트워킹](04-01.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9.md) | 본문 내 점검 | 전체 책임 경계와 장애 진입 순서를 고정합니다. |
 | 04-02 | [Pod 네트워크와 Linux 기반](04-02.Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%99%80%20Linux%20%EA%B8%B0%EB%B0%98.md) | 본문 내 점검 | netns·veth·Pod CIDR·CNI·Service dataplane을 연결합니다. ([시각화](04-02-pod-network.html)) |
 | 04-03 | [오버레이와 노드 간 트래픽](04-03.%EC%98%A4%EB%B2%84%EB%A0%88%EC%9D%B4%EC%99%80%20%EB%85%B8%EB%93%9C%20%EA%B0%84%20%ED%8A%B8%EB%9E%98%ED%94%BD.md) | 본문 내 점검 | VXLAN·네이티브 라우팅·BGP·MetalLB를 비교합니다. ([시각화](04-03-overlay-bgp.html)) |
-| 04-04 | [Service와 EndpointSlice](04-04.Service%EC%99%80%20EndpointSlice.md) | [Service와 EndpointSlice 점검](04-04.Service%EC%99%80%20EndpointSlice%20%EC%A0%90%EA%B2%80.md) | Service 타입, backend 추적, ClusterIP 할당, 내부 트래픽 정책을 다룹니다. |
-| 04-05 | [DNS와 CoreDNS](04-05.DNS%EC%99%80%20CoreDNS.md) | [DNS와 CoreDNS 점검](04-05.DNS%EC%99%80%20CoreDNS%20%EC%A0%90%EA%B2%80.md) | Service·Pod DNS 레코드와 이름 해석 정책을 다룹니다. |
-| 04-06 | [Ingress와 Gateway API](04-06.Ingress%EC%99%80%20Gateway%20API.md) | [Ingress와 Gateway API 점검](04-06.Ingress%EC%99%80%20Gateway%20API%20%EC%A0%90%EA%B2%80.md) | Ingress, Controller, Gateway API의 선언과 구현 경계를 다룹니다. |
-| 04-07 | [NetworkPolicy](04-07.NetworkPolicy.md) | [NetworkPolicy 점검](04-07.NetworkPolicy%20%EC%A0%90%EA%B2%80.md) | ingress·egress 격리와 additive 허용 모델을 다룹니다. |
-| 04-08 | [IPv4와 IPv6 이중 스택](04-08.IPv4%EC%99%80%20IPv6%20%EC%9D%B4%EC%A4%91%20%EC%8A%A4%ED%83%9D.md) | [IPv4와 IPv6 이중 스택 점검](04-08.IPv4%EC%99%80%20IPv6%20%EC%9D%B4%EC%A4%91%20%EC%8A%A4%ED%83%9D%20%EC%A0%90%EA%B2%80.md) | Pod·Service IP family 정책과 전환 제약을 다룹니다. |
-| 04-09 | [토폴로지 인지 라우팅](04-09.%ED%86%A0%ED%8F%B4%EB%A1%9C%EC%A7%80%20%EC%9D%B8%EC%A7%80%20%EB%9D%BC%EC%9A%B0%ED%8C%85.md) | [토폴로지 인지 라우팅 점검](04-09.%ED%86%A0%ED%8F%B4%EB%A1%9C%EC%A7%80%20%EC%9D%B8%EC%A7%80%20%EB%9D%BC%EC%9A%B0%ED%8C%85%20%EC%A0%90%EA%B2%80.md) | EndpointSlice hint와 zone 선호·fallback을 다룹니다. |
-| 04-10 | [Windows 네트워킹](04-10.Windows%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9.md) | [Windows 네트워킹 점검](04-10.Windows%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9%20%EC%A0%90%EA%B2%80.md) | HNS·HCS·Windows CNI와 Linux 대비 제약을 다룹니다. |
+| 04-04 | [Service와 EndpointSlice](04-04.Service%EC%99%80%20EndpointSlice.md) | 본문 내 점검 | Service 타입, backend 추적, ClusterIP 할당, 내부 트래픽 정책을 다룹니다. |
+| 04-05 | [DNS와 CoreDNS](04-05.DNS%EC%99%80%20CoreDNS.md) | 본문 내 점검 | Service·Pod DNS 레코드와 이름 해석 정책을 다룹니다. |
+| 04-06 | [Ingress와 Gateway API](04-06.Ingress%EC%99%80%20Gateway%20API.md) | 본문 내 점검 | Ingress, Controller, Gateway API의 선언과 구현 경계를 다룹니다. |
+| 04-07 | [NetworkPolicy](04-07.NetworkPolicy.md) | 본문 내 점검 | ingress·egress 격리와 additive 허용 모델을 다룹니다. |
+| 04-08 | [IPv4와 IPv6 이중 스택](04-08.IPv4%EC%99%80%20IPv6%20%EC%9D%B4%EC%A4%91%20%EC%8A%A4%ED%83%9D.md) | 본문 내 점검 | Pod·Service IP family 정책과 전환 제약을 다룹니다. |
+| 04-09 | [토폴로지 인지 라우팅](04-09.%ED%86%A0%ED%8F%B4%EB%A1%9C%EC%A7%80%20%EC%9D%B8%EC%A7%80%20%EB%9D%BC%EC%9A%B0%ED%8C%85.md) | 본문 내 점검 | EndpointSlice hint와 zone 선호·fallback을 다룹니다. |
+| 04-10 | [Windows 네트워킹](04-10.Windows%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9.md) | 본문 내 점검 | HNS·HCS·Windows CNI와 Linux 대비 제약을 다룹니다. |
 
-04-02와 04-03은 기존 본문 내 점검 절을 유지합니다. 나머지 주제는 본문을 먼저 읽고 별도 점검 문서에서 정답을 가린 채 설명하면, 익숙함과 실제 기억 인출을 분리할 수 있습니다.
+각 본문의 점검 절에서는 정답을 바로 확인하기 전에 질문에 먼저 답합니다. 이렇게 하면 익숙함과 실제 기억 인출을 분리할 수 있습니다.
 
 
 

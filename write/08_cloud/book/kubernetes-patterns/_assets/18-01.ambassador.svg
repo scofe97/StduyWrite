@@ -1,75 +1,83 @@
-<svg viewBox="0 0 900 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>Ambassador — 외부 접근 복잡성을 프록시로 숨기는 특화 사이드카</title>
-  <desc>Kubernetes Patterns 18장. Ambassador는 외부 복잡성을 숨기고 Pod 밖 서비스에 접근하는 통일된 인터페이스를 제공하는 특화 사이드카입니다. 메인 컨테이너가 외부 의존에 직접 접근하는 것을 분리(decouple)합니다. 외부 서비스 접근이 어려운 이유는 동적으로 바뀌는 주소, 클러스터 인스턴스 로드밸런싱, 불안정한 프로토콜, 까다로운 데이터 형식 등입니다. ambassador 컨테이너가 이 복잡성을 숨기고 메인 앱에는 localhost로 단순한 뷰를 제공합니다. 세 예 — 개발에선 로컬 memcached, 운영에선 여러 캐시 샤드에 연결하는 클라이언트(캐시), 레지스트리 조회로 client-side 디스커버리(서비스 발견), HTTP 같은 불안정 프로토콜에 서킷브레이커·타임아웃·재시도(복원력). Sidecar와의 차이는 ambassador가 메인 앱에 능력을 더하지 않고 단지 바깥세상으로의 smart proxy로만 동작한다는 점입니다(Proxy 패턴이라고도). 앱은 비즈니스 로직에 집중하고 외부 소비 책임을 특화 컨테이너에 위임합니다. 개발용으로 ambassador를 로컬 인메모리 저장소로 쉽게 교체할 수 있습니다.</desc>
+<svg viewBox="0 0 900 380" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>앱은 그대로 두고 앰배서더만 갈아 끼웁니다</title>
+  <desc>책의 Figure 18-1과 18-2를 나란히 놓고 비교합니다. 위쪽은 운영 환경입니다. 메인 앱이 localhost의 고정 포트로 요청을 보내면 앰배서더가 그것을 받아 etcd 같은 완전 분산 원격 저장소로 중계합니다. 여러 샤드에 연결하는 복잡한 클라이언트 설정은 전부 앰배서더 안에 들어 있습니다. 아래쪽은 개발 환경입니다. 메인 앱은 위와 완전히 똑같은 컨테이너이고 보내는 주소도 똑같은 localhost 고정 포트입니다. 그런데 앰배서더만 memcached 같은 로컬 인메모리 저장소로 바뀌어 있습니다. 가운데 강조된 부분이 이 그림의 핵심으로 메인 앱 컨테이너와 그것이 부르는 주소는 두 환경에서 한 글자도 다르지 않습니다. 달라지는 것은 앰배서더 컨테이너 하나뿐이며 Pod 정의에서 그것만 교체하면 됩니다. 그래서 환경별 차이가 앱 코드나 앱 이미지에 전혀 스며들지 않습니다.</desc>
 
-  <rect x="0" y="0" width="900" height="500" fill="#0d0d0d"/>
-  <text x="24" y="34" fill="#e8e4df" font-size="16">Ambassador — 바깥세상으로의 smart proxy (Sidecar의 특화)</text>
-  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">외부 접근이 어려운 이유: <tspan fill="#e8e4df">바뀌는 주소·클러스터 로드밸런싱·불안정 프로토콜·까다로운 형식.</tspan> 이 복잡성을 프록시로 숨김.</text>
+  <rect width="900" height="380" fill="#0d0d0d"/>
 
-  <!-- core diagram: main -> ambassador -> outside -->
-  <text x="24" y="86" fill="#e8e4df" font-size="12">구조 — 메인은 localhost만, ambassador가 외부를 처리</text>
-  <rect x="24" y="96" width="470" height="130" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
-  <text x="40" y="117" fill="rgb(138,133,128)" font-size="10">Pod (random-generator)</text>
+  <text x="24" y="30" fill="#e8e4df" font-size="15" font-weight="700">앱은 같고 뒤만 바뀝니다</text>
 
-  <rect x="44" y="128" width="200" height="82" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
-  <text x="56" y="148" fill="rgb(212,168,83)" font-size="10" font-weight="700">main</text>
-  <text x="56" y="166" fill="#e8e4df" font-size="8.5">비즈니스 로직만.</text>
-  <text x="56" y="182" fill="#e8e4df" font-size="8.5">LOG_URL=</text>
-  <text x="56" y="195" fill="#e8e4df" font-size="8.5">http://localhost:9009</text>
+  <!-- ===== production ===== -->
+  <text x="24" y="66" fill="rgb(212,168,83)" font-size="11" font-weight="700">운영</text>
 
-  <text x="250" y="172" fill="rgb(212,168,83)" font-size="14">→</text>
+  <rect x="96" y="76" width="490" height="66" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-dasharray="5 4"/>
+  <text x="110" y="94" fill="rgb(212,168,83)" font-size="9" font-weight="700">Pod</text>
 
-  <rect x="268" y="128" width="210" height="82" fill="#dceaf7"/>
-  <text x="280" y="148" fill="#10243a" font-size="10" font-weight="700">ambassador</text>
-  <text x="280" y="166" fill="#10243a" font-size="8.5">9009 수신(Pod 밖 미노출).</text>
-  <text x="280" y="182" fill="#10243a" font-size="8.5">외부 접근 복잡성 처리 후</text>
-  <text x="280" y="195" fill="#10243a" font-size="8.5">단순 뷰를 localhost로 제공.</text>
+  <rect x="118" y="94" width="176" height="40" fill="#cdeccf"/>
+  <text x="206" y="119" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">main · 그대로</text>
 
-  <text x="512" y="150" fill="rgb(212,168,83)" font-size="14">→</text>
-  <rect x="530" y="128" width="346" height="82" fill="#cdeccf"/>
-  <text x="542" y="148" fill="#14521d" font-size="10" font-weight="700">바깥세상 (외부 의존)</text>
-  <text x="542" y="166" fill="#14521d" font-size="8.5">원격 분산 저장소(etcd)·로그 인프라·레지스트리 등.</text>
-  <text x="542" y="182" fill="#14521d" font-size="8.5">개발용으론 로컬 memcached로 ambassador를</text>
-  <text x="542" y="195" fill="#14521d" font-size="8.5">쉽게 교체 — 메인은 안 건드림.</text>
+  <path d="M 298 114 L 332 114" stroke="#66bb6a" stroke-width="2" marker-end="url(#gm)"/>
+  <text x="315" y="106" text-anchor="middle" fill="#66bb6a" font-size="8" font-weight="700">localhost</text>
 
-  <!-- three examples -->
-  <text x="24" y="252" fill="#e8e4df" font-size="12">전형적 세 활용</text>
-  <rect x="24" y="262" width="277" height="86" fill="#f5edda"/>
-  <text x="36" y="282" fill="#0d0d0d" font-size="10" font-weight="700">① 캐시</text>
-  <text x="36" y="300" fill="#0d0d0d" font-size="8.5">개발: 단순 로컬 캐시 설정.</text>
-  <text x="36" y="315" fill="#0d0d0d" font-size="8.5">운영: 여러 캐시 샤드에 연결하는</text>
-  <text x="36" y="329" fill="#0d0d0d" font-size="8.5">클라이언트 설정.</text>
-  <text x="36" y="343" fill="#7a1f1f" font-size="8.5">환경별 차이를 ambassador가 흡수.</text>
+  <rect x="336" y="94" width="230" height="40" fill="#dceaf7"/>
+  <text x="451" y="119" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">ambassador · 샤드 연결</text>
 
-  <rect x="311" y="262" width="277" height="86" fill="#f5edda"/>
-  <text x="323" y="282" fill="#0d0d0d" font-size="10" font-weight="700">② 서비스 발견</text>
-  <text x="323" y="300" fill="#0d0d0d" font-size="8.5">레지스트리를 조회해</text>
-  <text x="323" y="315" fill="#0d0d0d" font-size="8.5">client-side 디스커버리 수행.</text>
-  <text x="323" y="329" fill="#0d0d0d" font-size="8.5">디스커버리 라이브러리를</text>
-  <text x="323" y="343" fill="#0d0d0d" font-size="8.5">메인 이미지에 안 넣어도 됨.</text>
+  <path d="M 590 114 L 624 114" stroke="#5b9bd5" stroke-width="2" marker-end="url(#bm)"/>
 
-  <rect x="598" y="262" width="278" height="86" fill="#f5edda"/>
-  <text x="610" y="282" fill="#0d0d0d" font-size="10" font-weight="700">③ 복원력 (resiliency)</text>
-  <text x="610" y="300" fill="#0d0d0d" font-size="8.5">HTTP 같은 불안정 프로토콜에</text>
-  <text x="610" y="315" fill="#0d0d0d" font-size="8.5">서킷브레이커·타임아웃·재시도.</text>
-  <text x="610" y="329" fill="#0d0d0d" font-size="8.5">앱을 보호하는 로직을</text>
-  <text x="610" y="343" fill="#0d0d0d" font-size="8.5">ambassador로 분리.</text>
+  <rect x="628" y="94" width="248" height="40" fill="#0d0d0d" stroke="#dceaf7"/>
+  <text x="752" y="112" text-anchor="middle" fill="#dceaf7" font-size="10" font-weight="700">etcd</text>
+  <text x="752" y="127" text-anchor="middle" fill="#dceaf7" font-size="9">분산 원격 저장소</text>
 
-  <!-- vs sidecar / adapter -->
-  <rect x="24" y="362" width="418" height="122" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
-  <text x="36" y="383" fill="rgb(212,168,83)" font-size="11" font-weight="700">Sidecar와의 차이</text>
-  <text x="36" y="402" fill="#e8e4df" font-size="8.5">Sidecar는 메인에 능력을 <tspan font-weight="700">더함</tspan>.</text>
-  <text x="36" y="418" fill="#e8e4df" font-size="8.5">Ambassador는 능력을 더하지 않고</text>
-  <text x="36" y="432" fill="#e8e4df" font-size="8.5">단지 바깥세상으로의 <tspan font-weight="700">smart proxy</tspan>로만 동작.</text>
-  <text x="36" y="446" fill="#e8e4df" font-size="8.5">(Proxy 패턴이라고도 불림)</text>
-  <text x="36" y="464" fill="#66bb6a" font-size="8.5">✓ 현대 네트워킹(모니터링·로깅·라우팅·복원력)을</text>
-  <text x="36" y="477" fill="#66bb6a" font-size="8.5">넣기 힘든 레거시 앱에 유용.</text>
+  <!-- ===== development ===== -->
+  <text x="24" y="196" fill="rgb(212,168,83)" font-size="11" font-weight="700">개발</text>
 
-  <rect x="458" y="362" width="418" height="122" fill="#dceaf7"/>
-  <text x="470" y="383" fill="#10243a" font-size="11" font-weight="700">Adapter(17장)와 방향이 반대</text>
-  <text x="470" y="404" fill="#10243a" font-size="9">Adapter — 안 → 밖 (inbound):</text>
-  <text x="470" y="419" fill="#10243a" font-size="8.5">앱의 출력을 외부 소비자에게 통일해 보임.</text>
-  <text x="470" y="440" fill="#10243a" font-size="9">Ambassador — 밖 → 안 (outbound):</text>
-  <text x="470" y="455" fill="#10243a" font-size="8.5">외부 접근을 앱 대신 프록시.</text>
-  <text x="470" y="476" fill="#7a1f1f" font-size="8.5">둘 다 컨테이너를 단일 목적·재사용 가능하게 유지.</text>
+  <rect x="96" y="206" width="490" height="66" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-dasharray="5 4"/>
+  <text x="110" y="224" fill="rgb(212,168,83)" font-size="9" font-weight="700">Pod</text>
+
+  <rect x="118" y="224" width="176" height="40" fill="#cdeccf"/>
+  <text x="206" y="249" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">main · 그대로</text>
+
+  <path d="M 298 244 L 332 244" stroke="#66bb6a" stroke-width="2" marker-end="url(#gm)"/>
+  <text x="315" y="236" text-anchor="middle" fill="#66bb6a" font-size="8" font-weight="700">localhost</text>
+
+  <rect x="336" y="224" width="230" height="40" fill="#f5edda"/>
+  <text x="451" y="249" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">ambassador · 인메모리</text>
+
+  <path d="M 590 244 L 624 244" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#am)"/>
+
+  <rect x="628" y="224" width="248" height="40" fill="#0d0d0d" stroke="#f5edda"/>
+  <text x="752" y="242" text-anchor="middle" fill="#f5edda" font-size="10" font-weight="700">memcached</text>
+  <text x="752" y="257" text-anchor="middle" fill="#f5edda" font-size="9">로컬 캐시</text>
+
+  <!-- what changes -->
+  <line x1="206" y1="142" x2="206" y2="218" stroke="#66bb6a" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="118" y="186" fill="#66bb6a" font-size="9" font-weight="700">같습니다</text>
+
+  <line x1="451" y1="142" x2="451" y2="218" stroke="#f44336" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="466" y="186" fill="#f44336" font-size="9" font-weight="700">여기만 바뀝니다</text>
+
+  <line x1="24" y1="292" x2="876" y2="292" stroke="#4a4640"/>
+
+  <rect x="24" y="304" width="418" height="30" fill="#cdeccf"/>
+  <text x="44" y="324" fill="#14521d" font-size="10" font-weight="700">앱 이미지도 주소도 그대로</text>
+
+  <rect x="458" y="304" width="418" height="30" fill="#f2d4d4"/>
+  <text x="478" y="324" fill="#7a1f1f" font-size="10" font-weight="700">Pod 정의에서 한 줄만 교체</text>
+
+  <rect x="24" y="342" width="852" height="26" fill="rgb(212,168,83)"/>
+  <text x="450" y="360" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">환경 차이가 앱에 안 스밉니다</text>
+
+  <defs>
+    <marker id="am" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="bm" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#5b9bd5"/>
+    </marker>
+    <marker id="gm" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#66bb6a"/>
+    </marker>
+  </defs>
 </svg>

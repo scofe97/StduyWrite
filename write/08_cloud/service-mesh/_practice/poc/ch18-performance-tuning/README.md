@@ -209,7 +209,7 @@ kubectl port-forward -n istio-system svc/prometheus 9090:9090 &
 
 `http://localhost:9090` 에서 아래 쿼리 실행:
 
-```promql
+```pseudocode
 # 수렴 시간 P50/P90/P99
 histogram_quantile(0.50, sum(rate(pilot_proxy_convergence_time_bucket[5m])) by (le))
 histogram_quantile(0.90, sum(rate(pilot_proxy_convergence_time_bucket[5m])) by (le))
@@ -238,7 +238,7 @@ kubectl label namespace bookinfo test-label-
 # http://localhost:9090
 ```
 
-```promql
+```pseudocode
 # 초당 xDS 푸시 횟수 (타입별)
 sum(rate(pilot_xds_pushes[1m])) by (type)
 

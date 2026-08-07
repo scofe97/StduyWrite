@@ -1,80 +1,128 @@
-<svg viewBox="0 0 900 386" width="100%"
+<svg viewBox="0 0 1020 660" width="100%"
      xmlns="http://www.w3.org/2000/svg"
      role="img"
      font-family="'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif">
-  <title>exporter 의 세 부품과 두 시점 — 등록은 한 번, Collect 는 스크레이프마다</title>
-  <desc>exporter 를 이루는 세 부품이 두 개의 서로 다른 시점에 어떻게 관여하는지를 위아래 두 줄기로 나눠 그린 도식이다. 위 줄기는 프로세스가 뜰 때 한 번만 일어나는 등록 시점이다. 코드에 NewDesc 로 정의한 메트릭을 MustRegister 로 레지스트리에 넣으면, 레지스트리가 그 collector 의 Describe 메서드를 불러 어떤 메트릭이 추가되는지 형상만 확인한다. 이 시점에 메트릭의 값은 아직 존재하지 않으며 나중에 값을 넣겠다는 예고만 등록된 상태다. 아래 줄기는 Prometheus 가 스크레이프할 때마다 반복되는 시점이다. Prometheus 가 슬래시 metrics 경로를 두드리면 promhttp 핸들러가 레지스트리에 등록된 모든 collector 의 Collect 메서드를 부르고, 각 collector 가 그때 비로소 자기 데이터 소스를 읽어 최신 값을 채널로 보낸다. 레지스트리는 그 값들을 모아 텍스트 노출 형식으로 직렬화해 응답한다. 두 줄기를 가르는 핵심은 값이 미리 저장돼 있다가 조회되는 것이 아니라 스크레이프 자체가 수집의 방아쇠라는 점이다. Node Exporter 는 이 collector 를 하나가 아니라 수십 개 거느리며 각각을 별도 고루틴에서 돌린다.</desc>
-  <rect width="900" height="386" fill="#0d0d0d"/>
+  <title>node_exporter 프로세스의 실제 구조 — 레지스트리 하나가 collector 45개를 고루틴으로 거느린다</title>
+  <desc>node_exporter 프로세스 하나의 내부 구조를 그린 도식이다. 프로세스 밖에 Prometheus 가 있고, 스크레이프 주기마다 9100 번 포트의 슬래시 metrics 경로를 두드린다. 이 요청이 프로세스 경계를 넘어 들어오면 promhttp 핸들러가 받아 레지스트리에 넘긴다. 레지스트리는 프로세스 안에 하나만 존재하며, 등록된 collector 를 전부 들고 있다. 레지스트리는 각 collector 의 Collect 메서드를 부르는데 이때 collector 마다 별도의 고루틴을 띄워 동시에 돌린다. 그림에는 cpu, meminfo, filesystem, pressure, textfile 다섯 개를 대표로 그렸고 기본 활성 collector 는 모두 마흔다섯 개다. 각 collector 는 자기 데이터 소스를 그 순간 읽는다. cpu 는 슬래시 proc 슬래시 stat 을, meminfo 는 슬래시 proc 슬래시 meminfo 를, filesystem 은 슬래시 proc 슬래시 mounts 를, pressure 는 슬래시 proc 슬래시 pressure 아래 파일들을, textfile 은 지정된 디렉토리의 확장자 prom 파일들을 읽는다. 읽어 온 값은 채널을 통해 레지스트리로 모이고, 레지스트리가 텍스트 노출 형식으로 직렬화해 응답한다. 오른쪽에는 collector 가 관여하는 두 시점을 구분해 두었다. 등록 시점에는 Describe 가 불려 메트릭의 형상만 알리고 값은 없으며, 스크레이프 시점에는 Collect 가 불려 그때 비로소 값을 채운다. 아래 띠는 고루틴 병렬의 결과를 적었다. 마흔다섯 개가 동시에 도는 덕분에 응답 시간은 각 collector 소요 시간의 합이 아니라 가장 느린 하나의 시간, 즉 최댓값이 된다. 그래서 느린 collector 하나가 스크레이프 전체를 볼모로 잡으며, 범인은 collector 별 duration 메트릭으로 찾는다.</desc>
+  <rect width="1020" height="660" fill="#0d0d0d"/>
 
   <defs>
-    <marker id="ea" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+    <marker id="aa" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
       <path d="M0,0 L7,3 L0,6 Z" fill="#b8b3ad"/>
     </marker>
-    <marker id="eg" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+    <marker id="ag" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
       <path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/>
     </marker>
   </defs>
 
-  <text x="450" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#e8e4df">세 부품과 두 시점</text>
+  <text x="510" y="36" text-anchor="middle" font-size="18" font-weight="700" fill="#e8e4df">node_exporter 프로세스 하나의 안쪽</text>
 
-  <!-- 등록 시점 줄기 -->
-  <rect x="24" y="52" width="852" height="112" rx="8" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
-  <text x="44" y="76" font-size="13" font-weight="700" fill="#8ab6e0">등록 시점 · 뜰 때 한 번</text>
+  <!-- Prometheus (프로세스 밖) -->
+  <rect x="24" y="94" width="140" height="58" rx="7" fill="#dceaf7"/>
+  <text x="94" y="117" text-anchor="middle" font-size="12" font-weight="700" fill="#10243a">Prometheus</text>
+  <text x="94" y="137" text-anchor="middle" font-size="10.5" font-weight="700" fill="#10243a">스크레이프 주기마다</text>
 
-  <rect x="44" y="92" width="180" height="52" rx="6" fill="#dceaf7"/>
-  <text x="134" y="113" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10243a">1. 메트릭 정의</text>
-  <text x="134" y="131" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">NewDesc(...)</text>
+  <line x1="170" y1="123" x2="216" y2="123" stroke="#66bb6a" stroke-width="2" marker-end="url(#ag)"/>
+  <text x="193" y="112" text-anchor="middle" font-size="10.5" font-weight="700" fill="#8fd694">GET</text>
 
-  <line x1="230" y1="118" x2="266" y2="118" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#ea)"/>
+  <!-- 프로세스 경계 -->
+  <rect x="222" y="70" width="774" height="404" rx="12" fill="#0d0d0d" stroke="#66bb6a" stroke-width="2"/>
+  <text x="246" y="96" font-size="13" font-weight="700" fill="#8fd694">node_exporter 프로세스 · :9100</text>
 
-  <rect x="272" y="92" width="180" height="52" rx="6" fill="#dceaf7"/>
-  <text x="362" y="113" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10243a">3. 레지스트리</text>
-  <text x="362" y="131" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">MustRegister(c)</text>
+  <!-- promhttp -->
+  <rect x="246" y="112" width="168" height="50" rx="7" fill="#dceaf7"/>
+  <text x="330" y="133" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10243a">promhttp 핸들러</text>
+  <text x="330" y="152" text-anchor="middle" font-size="10.5" font-weight="700" fill="#10243a">/metrics</text>
 
-  <line x1="458" y1="118" x2="494" y2="118" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#ea)"/>
+  <line x1="420" y1="137" x2="462" y2="137" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#aa)"/>
 
-  <rect x="500" y="92" width="180" height="52" rx="6" fill="#f5edda"/>
-  <text x="590" y="113" text-anchor="middle" font-size="11.5" font-weight="700" fill="#3a2f10">2. collector</text>
-  <text x="590" y="131" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">Describe(ch)</text>
+  <!-- 레지스트리 -->
+  <rect x="468" y="112" width="214" height="50" rx="7" fill="rgb(212,168,83)"/>
+  <text x="575" y="133" text-anchor="middle" font-size="12" font-weight="700" fill="#0d0d0d">레지스트리 · 프로세스에 하나</text>
+  <text x="575" y="152" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0d0d0d">collector 를 전부 들고 있다</text>
 
-  <line x1="686" y1="118" x2="722" y2="118" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#ea)"/>
+  <!-- 두 시점 칩 -->
+  <rect x="706" y="106" width="266" height="27" rx="6" fill="#dceaf7"/>
+  <text x="839" y="124" text-anchor="middle" font-size="10.5" font-weight="700" fill="#10243a">등록 시점 · Describe() · 형상만, 값 없음</text>
+  <rect x="706" y="141" width="266" height="27" rx="6" fill="#e6f7e7"/>
+  <text x="839" y="159" text-anchor="middle" font-size="10.5" font-weight="700" fill="#14521d">스크레이프 시점 · Collect() · 값을 채움</text>
 
-  <rect x="728" y="92" width="128" height="52" rx="6" fill="#f2d4d4"/>
-  <text x="792" y="113" text-anchor="middle" font-size="11" font-weight="700" fill="#7a1f1f">형상만 등록</text>
-  <text x="792" y="131" text-anchor="middle" font-size="10" font-weight="700" fill="#7a1f1f">값은 없음</text>
+  <!-- 부채꼴: 레지스트리 → collector 5개 -->
+  <line x1="575" y1="168" x2="575" y2="196" stroke="#b8b3ad" stroke-width="1.5"/>
+  <line x1="318" y1="196" x2="832" y2="196" stroke="#b8b3ad" stroke-width="1.5"/>
+  <line x1="318" y1="196" x2="318" y2="228" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#aa)"/>
+  <line x1="446" y1="196" x2="446" y2="228" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#aa)"/>
+  <line x1="575" y1="196" x2="575" y2="228" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#aa)"/>
+  <line x1="703" y1="196" x2="703" y2="228" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#aa)"/>
+  <line x1="832" y1="196" x2="832" y2="228" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#aa)"/>
 
+  <text x="246" y="215" font-size="10.5" font-weight="700" fill="#8fd694">동시에 호출</text>
 
-  <!-- 시점 경계 -->
-  <line x1="450" y1="172" x2="450" y2="196" stroke="#66bb6a" stroke-width="2" marker-end="url(#eg)"/>
-  <text x="466" y="190" font-size="11" font-weight="700" fill="#8fd694">스크레이프가 방아쇠</text>
+  <!-- collector 5개 -->
+  <rect x="256" y="234" width="124" height="52" rx="7" fill="#f5edda"/>
+  <text x="318" y="255" text-anchor="middle" font-size="11.5" font-weight="700" fill="#3a2f10">cpu</text>
+  <text x="318" y="275" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">go Collect()</text>
 
-  <!-- 스크레이프 시점 줄기 -->
-  <rect x="24" y="204" width="852" height="112" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5"/>
-  <text x="44" y="228" font-size="13" font-weight="700" fill="#8fd694">스크레이프 시점 · 매번</text>
+  <rect x="384" y="234" width="124" height="52" rx="7" fill="#f5edda"/>
+  <text x="446" y="255" text-anchor="middle" font-size="11.5" font-weight="700" fill="#3a2f10">meminfo</text>
+  <text x="446" y="275" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">go Collect()</text>
 
-  <rect x="44" y="244" width="180" height="52" rx="6" fill="#dceaf7"/>
-  <text x="134" y="265" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10243a">Prometheus</text>
-  <text x="134" y="283" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">GET /metrics</text>
+  <rect x="513" y="234" width="124" height="52" rx="7" fill="#f5edda"/>
+  <text x="575" y="255" text-anchor="middle" font-size="11.5" font-weight="700" fill="#3a2f10">filesystem</text>
+  <text x="575" y="275" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">go Collect()</text>
 
-  <line x1="230" y1="270" x2="266" y2="270" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#ea)"/>
+  <rect x="641" y="234" width="124" height="52" rx="7" fill="#f5edda"/>
+  <text x="703" y="255" text-anchor="middle" font-size="11.5" font-weight="700" fill="#3a2f10">pressure</text>
+  <text x="703" y="275" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">go Collect()</text>
 
-  <rect x="272" y="244" width="180" height="52" rx="6" fill="#dceaf7"/>
-  <text x="362" y="265" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10243a">promhttp 핸들러</text>
-  <text x="362" y="283" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">레지스트리로 전달</text>
+  <rect x="770" y="234" width="124" height="52" rx="7" fill="#f5edda"/>
+  <text x="832" y="255" text-anchor="middle" font-size="11.5" font-weight="700" fill="#3a2f10">textfile</text>
+  <text x="832" y="275" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">go Collect()</text>
 
-  <line x1="458" y1="270" x2="494" y2="270" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#ea)"/>
+  <rect x="908" y="244" width="58" height="32" rx="6" fill="#f5edda"/>
+  <text x="937" y="266" text-anchor="middle" font-size="10.5" font-weight="700" fill="#3a2f10">… 45개</text>
 
-  <rect x="500" y="244" width="180" height="52" rx="6" fill="#f5edda"/>
-  <text x="590" y="265" text-anchor="middle" font-size="11.5" font-weight="700" fill="#3a2f10">2. collector</text>
-  <text x="590" y="283" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">Collect(ch)</text>
+  <!-- collector → 데이터 소스 -->
+  <line x1="318" y1="292" x2="318" y2="320" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#aa)"/>
+  <line x1="446" y1="292" x2="446" y2="320" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#aa)"/>
+  <line x1="575" y1="292" x2="575" y2="320" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#aa)"/>
+  <line x1="703" y1="292" x2="703" y2="320" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#aa)"/>
+  <line x1="832" y1="292" x2="832" y2="320" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#aa)"/>
 
-  <line x1="686" y1="270" x2="722" y2="270" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#ea)"/>
+  <rect x="256" y="326" width="124" height="34" rx="6" fill="#dceaf7"/>
+  <text x="318" y="348" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">/proc/stat</text>
 
-  <rect x="728" y="244" width="128" height="52" rx="6" fill="#e6f7e7"/>
-  <text x="792" y="265" text-anchor="middle" font-size="11" font-weight="700" fill="#14521d">최신 값을 채움</text>
-  <text x="792" y="283" text-anchor="middle" font-size="10" font-weight="700" fill="#14521d">텍스트로 응답</text>
+  <rect x="384" y="326" width="124" height="34" rx="6" fill="#dceaf7"/>
+  <text x="446" y="348" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">/proc/meminfo</text>
 
+  <rect x="513" y="326" width="124" height="34" rx="6" fill="#dceaf7"/>
+  <text x="575" y="348" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">/proc/mounts</text>
 
-  <rect x="24" y="332" width="852" height="32" rx="6" fill="rgb(212,168,83)"/>
-  <text x="44" y="353" font-size="11.5" font-weight="700" fill="#0d0d0d">값은 미리 있지 않습니다</text>
+  <rect x="641" y="326" width="124" height="34" rx="6" fill="#dceaf7"/>
+  <text x="703" y="348" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">/proc/pressure/*</text>
+
+  <rect x="770" y="326" width="124" height="34" rx="6" fill="#dceaf7"/>
+  <text x="832" y="348" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">디렉토리/*.prom</text>
+
+  <text x="256" y="382" font-size="10.5" font-weight="700" fill="#b8b3ad">각 collector 가 자기 데이터 소스를 그 순간 읽는다</text>
+
+  <!-- 값 회수 → 응답 -->
+  <rect x="256" y="398" width="710" height="40" rx="7" fill="#e6f7e7"/>
+  <text x="611" y="423" text-anchor="middle" font-size="11" font-weight="700" fill="#14521d">채널로 모인 값을 레지스트리가 텍스트 노출 형식으로 직렬화해 응답</text>
+
+  <line x1="250" y1="418" x2="180" y2="418" stroke="#66bb6a" stroke-width="2" marker-end="url(#ag)"/>
+  <text x="94" y="412" text-anchor="middle" font-size="10.5" font-weight="700" fill="#8fd694">200 OK</text>
+  <text x="94" y="429" text-anchor="middle" font-size="10.5" font-weight="700" fill="#8fd694">Prometheus 로</text>
+
+  <!-- 결론 띠 -->
+  <rect x="24" y="512" width="972" height="40" rx="7" fill="rgb(212,168,83)"/>
+  <text x="48" y="537" font-size="12" font-weight="700" fill="#0d0d0d">고루틴 병렬이므로 응답 시간 = 45개의 합이 아니라 가장 느린 하나 (최댓값)</text>
+
+  <rect x="24" y="564" width="478" height="36" rx="6" fill="#f2d4d4"/>
+  <text x="263" y="587" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7a1f1f">느린 collector 하나가 스크레이프 전체를 볼모로 잡는다</text>
+
+  <rect x="518" y="564" width="478" height="36" rx="6" fill="#e6f7e7"/>
+  <text x="757" y="587" text-anchor="middle" font-size="10.5" font-weight="700" fill="#14521d">범인은 collector 별 duration 으로 찾아 그것만 끈다</text>
+
+  <text x="510" y="632" text-anchor="middle" font-size="11" font-weight="700" fill="#b8b3ad">값은 미리 저장돼 있지 않습니다 — 스크레이프 자체가 수집의 방아쇠입니다</text>
 </svg>

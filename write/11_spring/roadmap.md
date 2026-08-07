@@ -17,7 +17,7 @@ updated: 2026-07-07
 
 깊게 판다면 아래 순서가 좋습니다.
 
-```text
+```pseudocode
 1. Spring Core / IoC Container
 2. Bean 등록과 생명주기
 3. 의존성 주입과 순환 참조
@@ -50,7 +50,7 @@ updated: 2026-07-07
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 IoC
 DI
 Bean
@@ -83,7 +83,7 @@ Prototype
 
 학습 키워드:
 
-```text
+```pseudocode
 Bean Lifecycle
 Instantiation
 Dependency Injection
@@ -110,7 +110,7 @@ SmartLifecycle
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 AOP
 Aspect
 Advice
@@ -136,7 +136,7 @@ Spring AOP 는 보통 "진짜 바이트코드 위빙" 이 아니라 "런타임 �
 
 추가 키워드:
 
-```text
+```pseudocode
 Weaving
 Compile-time Weaving
 Post-compile Weaving
@@ -176,7 +176,7 @@ Runtime Proxy 방식의 제약: self-invocation 문제 · private 메서드 AOP 
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 PlatformTransactionManager
 DataSourceTransactionManager
 JpaTransactionManager
@@ -202,7 +202,7 @@ Propagation: REQUIRED · REQUIRES_NEW · NESTED · SUPPORTS · NOT_SUPPORTED · 
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 DispatcherServlet
 HandlerMapping
 HandlerAdapter
@@ -233,7 +233,7 @@ Tomcat 내부의 `Connector · Engine · Host · Context` 배치와 Acceptor/Pol
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Servlet 원형: jakarta.servlet.Servlet · init/service/destroy · Filter · Listener · ServletContext
 Servlet Container 역할: request/response 객체 생성 · Thread per Request · Session · 멀티스레드 안전성
 DispatcherServlet = Servlet 하나 (Front Controller)
@@ -259,7 +259,7 @@ Embedded WAS vs Standalone WAS
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Bean Validation
 @Valid
 @Validated
@@ -283,7 +283,7 @@ ConversionService
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 SpringApplication
 AutoConfiguration
 @EnableAutoConfiguration
@@ -310,7 +310,7 @@ Profile
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Environment
 PropertySource
 application.yml
@@ -330,7 +330,7 @@ Relaxed Binding
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 DataSource
 HikariCP
 SqlSessionFactory
@@ -353,7 +353,7 @@ Dynamic SQL
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 ApplicationEventPublisher
 ApplicationEvent
 @EventListener
@@ -375,7 +375,7 @@ Asynchronous Event
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 @Async
 @EnableAsync
 TaskExecutor
@@ -396,7 +396,7 @@ Exception Handling
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 CacheManager
 @Cacheable
 @CachePut
@@ -418,7 +418,7 @@ Cache Invalidation
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 SecurityFilterChain
 FilterChainProxy
 SecurityContext
@@ -445,7 +445,7 @@ OAuth2 Resource Server
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 spring-boot-starter-actuator
 HealthIndicator
 Readiness
@@ -467,7 +467,7 @@ Custom Meter
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 JUnit 5
 Mockito
 AssertJ
@@ -497,7 +497,7 @@ JAR 와 WAR 의 진짜 차이는 확장자가 아니라 **실행 주도권** 입
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Java Build
 Gradle Lifecycle
 Maven Lifecycle
@@ -584,7 +584,7 @@ JAR 실행 흐름: `java -jar app.jar` → Spring Boot Loader(`JarLauncher`) →
 
 ## 22. 최종 압축 키워드
 
-```text
+```pseudocode
 Spring Core
 IoC Container
 Dependency Injection

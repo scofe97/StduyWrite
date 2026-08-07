@@ -1,66 +1,78 @@
-<svg viewBox="0 0 900 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>Adapter — 이질적 시스템을 통일된 인터페이스로 정규화</title>
-  <desc>Kubernetes Patterns 17장. Adapter는 이질적인 컨테이너 시스템을 외부가 소비할 수 있는 일관되고 표준화·정규화된 형식으로 맞추는 패턴입니다. Sidecar의 특화로 모든 성질을 물려받되, 앱에 대한 adapted access를 제공하는 단일 목적을 갖습니다. 대표 예는 모니터링입니다 — 언어마다 다른 형식으로 메트릭을 노출하는 여러 서비스를, adapter 컨테이너가 하나의 표준 형식·프로토콜로 변환해 단일 모니터링 도구가 통일된 뷰를 얻게 합니다. 구체적으로 random-generator가 커스텀 로그 파일을 쓰면, adapter(Prometheus exporter)가 emptyDir 볼륨으로 그 로그를 읽어 HTTP 엔드포인트(포트 9889)로 Prometheus 형식으로 노출합니다. 메인 앱은 Prometheus를 전혀 몰라도 됩니다. 로깅 정규화에도 쓰이며(Self Awareness로 컨텍스트 보강), Sidecar와 달리 이질적 시스템의 복잡성을 통일 인터페이스 뒤로 숨기는 reverse proxy로 동작합니다.</desc>
+<svg viewBox="0 0 900 380" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>스크레이프 한 번에 어댑터 안에서 벌어지는 일</title>
+  <desc>Example 17-1의 구성에서 Prometheus가 값을 한 번 긁어갈 때 어떤 순서로 일이 벌어지는지를 보입니다. 왼쪽 아래 메인 앱 컨테이너는 자기 리듬대로 난수를 만들고 걸린 시간을 커스텀 형식으로 로그 파일에 계속 씁니다. 이 동작은 스크레이프와 무관하게 늘 일어납니다. 가운데 emptyDir 볼륨이 그 파일을 담고 있고 두 컨테이너가 같은 경로로 이 볼륨을 마운트합니다. 오른쪽에서 Prometheus 서버가 9889 포트로 요청을 보내면 어댑터 컨테이너가 그 순간 로그 파일을 읽어 Prometheus 형식으로 변환해 응답합니다. 즉 변환은 미리 해 두는 것이 아니라 요청이 올 때마다 일어납니다. 아래쪽은 이 구조에서 각 컨테이너가 무엇을 아는지 정리한 것입니다. 메인 앱은 자기 로그 형식만 알고 Prometheus라는 존재를 모릅니다. 어댑터는 로그 형식과 Prometheus 형식을 둘 다 알고 그 사이를 번역합니다. 포트도 각각 8080과 9889로 나뉘어 있어 서비스 트래픽과 메트릭 수집이 섞이지 않습니다.</desc>
 
-  <rect x="0" y="0" width="900" height="500" fill="#0d0d0d"/>
-  <text x="24" y="34" fill="#e8e4df" font-size="16">Adapter — 이질적 시스템을 통일 인터페이스로 (Sidecar의 특화)</text>
-  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">여러 팀·언어의 이질적 컴포넌트를 외부가 <tspan fill="#e8e4df">통일된 방식</tspan>으로 다룰 때. 복잡성을 숨기고 정규화된 형식으로 노출.</text>
+  <rect width="900" height="380" fill="#0d0d0d"/>
 
-  <!-- problem: heterogeneous -->
-  <text x="24" y="86" fill="#e8e4df" font-size="12">문제 — 언어마다 다른 메트릭 형식</text>
-  <rect x="24" y="96" width="180" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
-  <text x="36" y="114" fill="#e8e4df" font-size="9.5" font-weight="700">Java 서비스</text>
-  <text x="36" y="128" fill="rgb(138,133,128)" font-size="8.5">고유 형식 메트릭</text>
-  <rect x="216" y="96" width="180" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
-  <text x="228" y="114" fill="#e8e4df" font-size="9.5" font-weight="700">Python 서비스</text>
-  <text x="228" y="128" fill="rgb(138,133,128)" font-size="8.5">또 다른 형식</text>
-  <text x="410" y="120" fill="#e57373" font-size="11">✗ 단일 모니터링 도구가 통일 뷰를 못 얻음</text>
+  <text x="24" y="30" fill="#e8e4df" font-size="15" font-weight="700">요청이 올 때마다 번역합니다</text>
 
-  <!-- solution: adapter per pod -->
-  <text x="24" y="164" fill="#e8e4df" font-size="12">해법 — Pod마다 adapter가 표준 형식으로 변환 (Prometheus 예)</text>
-  <rect x="24" y="176" width="560" height="150" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
-  <text x="40" y="197" fill="rgb(138,133,128)" font-size="10">Pod (random-generator Deployment, replicas 1)</text>
+  <!-- Pod boundary -->
+  <rect x="24" y="56" width="600" height="144" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-dasharray="5 4"/>
+  <text x="40" y="76" fill="rgb(212,168,83)" font-size="10" font-weight="700">Pod</text>
 
-  <rect x="44" y="208" width="250" height="100" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
-  <text x="56" y="228" fill="rgb(212,168,83)" font-size="10" font-weight="700">main: random-generator</text>
-  <text x="56" y="246" fill="#e8e4df" font-size="8.5">서비스는 8080 노출.</text>
-  <text x="56" y="262" fill="#e8e4df" font-size="8.5">난수 생성 시간을</text>
-  <text x="56" y="276" fill="#e8e4df" font-size="8.5">/logs/random.log에 기록.</text>
-  <text x="56" y="296" fill="#66bb6a" font-size="8.5">✓ Prometheus를 전혀 모름</text>
+  <!-- main app -->
+  <rect x="44" y="90" width="200" height="56" fill="#dceaf7"/>
+  <text x="144" y="112" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">random-generator</text>
+  <text x="144" y="130" text-anchor="middle" fill="#10243a" font-size="9" font-family="'JetBrains Mono', monospace">:8080</text>
 
-  <rect x="314" y="208" width="250" height="100" fill="#dceaf7"/>
-  <text x="326" y="228" fill="#10243a" font-size="10" font-weight="700">adapter: prometheus-adapter</text>
-  <text x="326" y="246" fill="#10243a" font-size="8.5">요청마다 커스텀 로그를 읽어</text>
-  <text x="326" y="262" fill="#10243a" font-size="8.5">Prometheus 형식으로 변환.</text>
-  <text x="326" y="278" fill="#10243a" font-size="8.5">작은 HTTP 서버로 9889 노출.</text>
-  <text x="326" y="296" fill="#7a1f1f" font-size="8.5">exporter 이미지, scrape 대상.</text>
+  <path d="M 248 118 L 282 118" stroke="#5b9bd5" stroke-width="2" marker-end="url(#bm)"/>
+  <text x="265" y="110" text-anchor="middle" fill="#5b9bd5" font-size="8" font-weight="700">계속 씁니다</text>
 
-  <text x="300" y="323" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">emptyDir 볼륨(log-volume)을 양쪽이 /logs에 마운트해 로그 파일 공유</text>
+  <!-- volume -->
+  <rect x="286" y="90" width="140" height="56" fill="rgb(212,168,83)"/>
+  <text x="356" y="112" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">emptyDir</text>
+  <text x="356" y="130" text-anchor="middle" fill="#0d0d0d" font-size="9" font-family="'JetBrains Mono', monospace">random.log</text>
 
-  <!-- prometheus scrape arrow -->
-  <rect x="612" y="230" width="264" height="60" fill="#cdeccf"/>
-  <text x="624" y="252" fill="#14521d" font-size="10" font-weight="700">Prometheus 서버</text>
-  <text x="624" y="270" fill="#14521d" font-size="8.5">9889를 HTTP scrape.</text>
-  <text x="624" y="283" fill="#14521d" font-size="8.5">모든 서비스가 공통 정규 형식으로 보임.</text>
-  <text x="590" y="262" fill="rgb(212,168,83)" font-size="16">→</text>
+  <path d="M 466 118 L 432 118" stroke="#66bb6a" stroke-width="2" marker-end="url(#gm)"/>
+  <text x="449" y="110" text-anchor="middle" fill="#66bb6a" font-size="8" font-weight="700">그때 읽습니다</text>
 
-  <!-- another use: logging -->
-  <rect x="24" y="340" width="852" height="42" fill="#f5edda"/>
-  <text x="36" y="359" fill="#0d0d0d" font-size="9.5" font-weight="700">또 다른 활용 — 로깅 정규화.</text>
-  <text x="36" y="375" fill="#0d0d0d" font-size="9.5">컨테이너마다 다른 로그 형식·상세도를 adapter가 정규화·정제하고, Self Awareness(14장)로 컨텍스트를 보강해 중앙 로그 수집기에 넘김.</text>
+  <!-- adapter -->
+  <rect x="470" y="90" width="134" height="56" fill="#cdeccf"/>
+  <text x="537" y="112" text-anchor="middle" fill="#14521d" font-size="11" font-weight="700">adapter</text>
+  <text x="537" y="130" text-anchor="middle" fill="#14521d" font-size="9" font-family="'JetBrains Mono', monospace">:9889</text>
 
-  <!-- discussion: relation -->
-  <rect x="24" y="394" width="418" height="90" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
-  <text x="36" y="414" fill="rgb(212,168,83)" font-size="11" font-weight="700">Sidecar와의 관계</text>
-  <text x="36" y="433" fill="#e8e4df" font-size="8.5">Adapter = Sidecar의 특화. 모든 성질을 물려받되</text>
-  <text x="36" y="447" fill="#e8e4df" font-size="8.5">"adapted access 제공"이라는 단일 목적.</text>
-  <text x="36" y="463" fill="#e8e4df" font-size="8.5">이질적 시스템의 복잡성을 통일 인터페이스 뒤로 숨기는</text>
-  <text x="36" y="477" fill="#e8e4df" font-size="8.5">reverse proxy로 동작.</text>
+  <text x="144" y="172" text-anchor="middle" fill="#b8b3ad" font-size="9">스크레이프와 무관하게</text>
+  <text x="144" y="188" text-anchor="middle" fill="#b8b3ad" font-size="9">자기 리듬대로 씁니다</text>
 
-  <rect x="458" y="394" width="418" height="90" fill="#dceaf7"/>
-  <text x="470" y="414" fill="#10243a" font-size="11" font-weight="700">방향 — 안쪽을 밖으로 (inbound)</text>
-  <text x="470" y="433" fill="#10243a" font-size="8.5">Adapter는 <tspan font-weight="700">앱의 출력을 외부 소비자에게</tspan> 통일해 보임.</text>
-  <text x="470" y="447" fill="#10243a" font-size="8.5">Ambassador(18장)는 반대 방향 — 앱이 외부에</text>
-  <text x="470" y="461" fill="#10243a" font-size="8.5">접근하는 것을 프록시.</text>
-  <text x="470" y="477" fill="#7a1f1f" font-size="8.5">이름을 나눠 목적을 더 정확히 전달.</text>
+  <text x="537" y="172" text-anchor="middle" fill="#b8b3ad" font-size="9">요청이 와야</text>
+  <text x="537" y="188" text-anchor="middle" fill="#b8b3ad" font-size="9">변환이 일어납니다</text>
+
+  <!-- prometheus -->
+  <path d="M 660 118 L 626 118" stroke="#f44336" stroke-width="2" marker-end="url(#rm)"/>
+  <text x="643" y="82" text-anchor="middle" fill="#f44336" font-size="9" font-weight="700">scrape</text>
+
+  <rect x="664" y="90" width="212" height="56" fill="#0d0d0d" stroke="#f2d4d4"/>
+  <text x="770" y="112" text-anchor="middle" fill="#f2d4d4" font-size="11" font-weight="700">Prometheus</text>
+  <text x="770" y="130" text-anchor="middle" fill="#f2d4d4" font-size="9">주기적으로 긁어갑니다</text>
+
+  <line x1="24" y1="252" x2="876" y2="252" stroke="#4a4640"/>
+
+  <!-- who knows what -->
+  <text x="24" y="278" fill="#e8e4df" font-size="12" font-weight="700">누가 무엇을 아는가</text>
+
+  <rect x="24" y="290" width="418" height="48" fill="#dceaf7"/>
+  <text x="44" y="310" fill="#10243a" font-size="10" font-weight="700">메인 앱 · 자기 로그 형식만</text>
+  <text x="44" y="328" fill="#10243a" font-size="9">Prometheus 를 모릅니다</text>
+
+  <rect x="458" y="290" width="418" height="48" fill="#cdeccf"/>
+  <text x="478" y="310" fill="#14521d" font-size="10" font-weight="700">adapter · 양쪽 형식 모두</text>
+  <text x="478" y="328" fill="#14521d" font-size="9">그 사이를 번역합니다</text>
+
+  <rect x="24" y="346" width="852" height="26" fill="rgb(212,168,83)"/>
+  <text x="450" y="364" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">포트가 갈려 트래픽이 안 섞입니다</text>
+
+  <defs>
+    <marker id="bm" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#5b9bd5"/>
+    </marker>
+    <marker id="gm" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#66bb6a"/>
+    </marker>
+    <marker id="rm" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#f44336"/>
+    </marker>
+  </defs>
 </svg>

@@ -4,7 +4,7 @@ This chart installs an Istio gateway deployment.
 
 ## Setup Repo Info
 
-```console
+```bash
 helm repo add istio https://istio-release.storage.googleapis.com/charts
 helm repo update
 ```
@@ -15,7 +15,7 @@ _See [helm repo](https://helm.sh/docs/helm/helm_repo/) for command documentation
 
 To install the chart with the release name `istio-ingressgateway`:
 
-```console
+```bash
 helm install istio-ingressgateway istio/gateway
 ```
 
@@ -23,7 +23,7 @@ helm install istio-ingressgateway istio/gateway
 
 To uninstall/delete the `istio-ingressgateway` deployment:
 
-```console
+```bash
 helm delete istio-ingressgateway
 ```
 
@@ -31,7 +31,7 @@ helm delete istio-ingressgateway
 
 To view supported configuration options and documentation, run:
 
-```console
+```bash
 helm show values istio/gateway
 ```
 
@@ -53,7 +53,7 @@ That is, `--set some.field=true` should be passed, not `--set defaults.some.fiel
 
 When deploying the gateway in an OpenShift cluster, use the `openshift` profile to override the default values, for example:
 
-```console
+```bash
 helm install istio-ingressgateway istio/gateway --set profile=openshift
 ```
 
@@ -133,13 +133,13 @@ labels:
 An existing helm release can be `helm upgrade`d to this chart by using the same release name. For example, if a previous
 installation was done like:
 
-```console
+```bash
 helm install istio-ingress manifests/charts/gateways/istio-ingress -n istio-system
 ```
 
 It could be upgraded with
 
-```console
+```bash
 helm upgrade istio-ingress manifests/charts/gateway -n istio-system --set name=istio-ingressgateway --set labels.app=istio-ingressgateway --set labels.istio=ingressgateway
 ```
 
@@ -156,7 +156,7 @@ If you see errors like `rendered manifests contain a resource that already exist
 
 The script below can handle this for you. Replace `RELEASE` and `NAMESPACE` with the name and namespace of the release:
 
-```console
+```bash
 KINDS=(service deployment)
 RELEASE=istio-ingressgateway
 NAMESPACE=istio-system

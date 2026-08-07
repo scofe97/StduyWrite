@@ -1,0 +1,87 @@
+<svg viewBox="0 0 900 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>메인 컨테이너와 사이드카가 볼륨 하나로 협업합니다</title>
+  <desc>책의 Figure 16-1이 보이는 구도를 한 장으로 요약합니다. 가운데 큰 상자가 Pod이고 그 안에 두 컨테이너가 나란히 놓입니다. 왼쪽 아래 sidecar 컨테이너는 바깥의 Git 서버에서 데이터를 주기적으로 당겨와 공유 볼륨에 씁니다. 오른쪽 위 main 컨테이너는 같은 볼륨을 다른 경로로 마운트해 그 파일을 HTTP로 서빙합니다. 둘 사이에 직접적인 호출은 없고 오직 emptyDir 볼륨 하나만이 통로입니다. 그래서 서버는 파일이 어디서 오는지 모르고 동기화기는 그 파일이 어떻게 쓰이는지 모릅니다. Pod가 이 협업을 가능하게 하는 이유는 네 가지 성질 때문입니다. 두 컨테이너가 같은 노드에 배치되고 같은 생애주기를 공유하며 볼륨을 공유하고 로컬 네트워크와 호스트 IPC로 통신할 수 있습니다. 맨 아래는 이 구조가 상속이 아니라 컴포지션이라는 점입니다. 빌드타임에 이미지를 합치지 않았으므로 나중에 Pod 정의에서 어느 쪽이든 갈아 끼울 수 있습니다.</desc>
+
+  <rect width="900" height="400" fill="#0d0d0d"/>
+
+  <text x="24" y="30" fill="#e8e4df" font-size="15" font-weight="700">볼륨 하나로만 이어집니다</text>
+
+  <!-- external git server -->
+  <rect x="24" y="120" width="130" height="52" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="89" y="142" text-anchor="middle" fill="#b8b3ad" font-size="10" font-weight="700">Git 서버</text>
+  <text x="89" y="160" text-anchor="middle" fill="#b8b3ad" font-size="9">Pod 바깥</text>
+
+  <path d="M 158 146 L 194 146" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#am)"/>
+  <text x="176" y="138" text-anchor="middle" fill="rgb(212,168,83)" font-size="8" font-weight="700">주기적 pull</text>
+
+  <!-- Pod boundary -->
+  <rect x="200" y="96" width="530" height="152" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-dasharray="5 4"/>
+  <text x="216" y="114" fill="rgb(212,168,83)" font-size="10" font-weight="700">Pod</text>
+
+  <!-- sidecar container -->
+  <rect x="222" y="122" width="180" height="52" fill="#dceaf7"/>
+  <text x="312" y="144" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">sidecar · poll</text>
+  <text x="312" y="162" text-anchor="middle" fill="#10243a" font-size="9">git 을 계속 당겨옵니다</text>
+
+  <!-- shared volume -->
+  <rect x="424" y="122" width="120" height="52" fill="rgb(212,168,83)"/>
+  <text x="484" y="144" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">emptyDir</text>
+  <text x="484" y="162" text-anchor="middle" fill="#0d0d0d" font-size="9">공유 볼륨</text>
+
+  <path d="M 406 148 L 420 148" stroke="#5b9bd5" stroke-width="2" marker-end="url(#bm)"/>
+  <text x="413" y="192" text-anchor="middle" fill="#5b9bd5" font-size="8" font-weight="700">씁니다</text>
+
+  <!-- main container -->
+  <rect x="566" y="122" width="142" height="52" fill="#cdeccf"/>
+  <text x="637" y="144" text-anchor="middle" fill="#14521d" font-size="11" font-weight="700">main · app</text>
+  <text x="637" y="162" text-anchor="middle" fill="#14521d" font-size="9">HTTP 로 서빙합니다</text>
+
+  <path d="M 548 148 L 562 148" stroke="#66bb6a" stroke-width="2" marker-end="url(#gm)"/>
+  <text x="555" y="192" text-anchor="middle" fill="#66bb6a" font-size="8" font-weight="700">읽습니다</text>
+
+  <!-- no direct call -->
+  <path d="M 312 200 L 630 200" stroke="#f44336" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="471" y="218" text-anchor="middle" fill="#f44336" font-size="9" font-weight="700">직접 호출은 없습니다</text>
+  <text x="471" y="236" text-anchor="middle" fill="#b8b3ad" font-size="9">서로의 존재를 모릅니다</text>
+
+  <!-- traffic in -->
+  <path d="M 736 148 L 770 148" stroke="#66bb6a" stroke-width="2" marker-end="url(#gm)"/>
+  <rect x="776" y="122" width="100" height="52" fill="#0d0d0d" stroke="#cdeccf"/>
+  <text x="826" y="144" text-anchor="middle" fill="#cdeccf" font-size="10" font-weight="700">사용자</text>
+  <text x="826" y="162" text-anchor="middle" fill="#cdeccf" font-size="9">HTTP</text>
+
+  <line x1="24" y1="300" x2="876" y2="300" stroke="#4a4640"/>
+
+  <!-- pod properties -->
+  <text x="24" y="326" fill="#b8b3ad" font-size="10" font-weight="700">Pod 가 주는 것</text>
+
+  <rect x="150" y="310" width="160" height="22" fill="#dceaf7"/>
+  <text x="230" y="325" text-anchor="middle" fill="#10243a" font-size="9" font-weight="700">같은 노드</text>
+
+  <rect x="320" y="310" width="160" height="22" fill="#dceaf7"/>
+  <text x="400" y="325" text-anchor="middle" fill="#10243a" font-size="9" font-weight="700">같은 생애주기</text>
+
+  <rect x="490" y="310" width="160" height="22" fill="#dceaf7"/>
+  <text x="570" y="325" text-anchor="middle" fill="#10243a" font-size="9" font-weight="700">볼륨 공유</text>
+
+  <rect x="660" y="310" width="160" height="22" fill="#dceaf7"/>
+  <text x="740" y="325" text-anchor="middle" fill="#10243a" font-size="9" font-weight="700">로컬 네트워크</text>
+
+  <rect x="24" y="340" width="852" height="30" fill="rgb(212,168,83)"/>
+  <text x="450" y="359" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">상속이 아니라 컴포지션입니다</text>
+
+  <defs>
+    <marker id="am" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="bm" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#5b9bd5"/>
+    </marker>
+    <marker id="gm" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#66bb6a"/>
+    </marker>
+  </defs>
+</svg>
