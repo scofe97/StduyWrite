@@ -1,13 +1,11 @@
-<svg viewBox="0 0 1120 720" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>네트워크 통신과 오브젝트 참조는 다른 층 — 흐르지 않는 이유는 막혀서가 아니라 허가가 없어서</title>
-  <desc>네임스페이스를 넘는 두 가지 일을 층으로 갈라 보여 준다. 파드 간 네트워크 통신은 네임스페이스가 달라도 그냥 된다. flat 네트워크라 FQDN으로 호출하면 흐른다. 반면 오브젝트 간 참조는 기본적으로 안 된다. 허가가 필요하다. 그래서 HTTPRoute가 다른 네임스페이스의 서비스를 backendRefs로 가리켰을 때 흐르지 않는 이유는 네트워크가 막혀서가 아니라 참조 권한이 없어서다. 왜 막아 두는지는 위협 모델로 설명된다. 안 막으면 아무 네임스페이스에서 HTTPRoute를 만들어 남의 팀 내부 전용 서비스를 backendRefs에 적고 자기 Gateway로 외부에 노출할 수 있다. 서비스 소유자는 자기 서비스가 노출된 것을 모른다. 참조하는 쪽만으로 결정되면 소유자 의사가 빠지기 때문이다. 그래서 허가 주체가 소유자여야 하고, ReferenceGrant를 참조 대상인 서비스의 네임스페이스에 만든다. 위치를 외울 필요 없이 허가하는 사람이 있는 곳이라고 이해하면 된다. 마지막으로 이 실패가 가장 교활한 이유는 오타도 없고 서비스도 실제로 존재해서 YAML만 봐서는 찾을 수 없다는 점이다. status를 봐야만 Accepted는 True인데 ResolvedRefs가 False이고 reason이 RefNotPermitted인 것을 알 수 있다.</desc>
+<svg viewBox="0 0 1120 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>네트워크 통신과 오브젝트 참조는 다른 층</title>
+  <desc>네임스페이스를 넘는 두 가지 일을 층으로 갈라 보여 준다. 층 1인 파드 간 네트워크 통신은 네임스페이스가 달라도 그냥 된다. flat 네트워크라 FQDN으로 호출하면 흐른다. 층 2인 오브젝트 간 참조는 기본적으로 안 된다. HTTPRoute가 다른 네임스페이스의 서비스를 backendRefs로 가리키면 허가가 없는 한 거부된다. 그래서 트래픽이 흐르지 않는 이유는 네트워크가 막혀서가 아니라 참조 권한이 없어서다.</desc>
   <defs>
     <style>
       .h1   { font-size: 24px; font-weight: 800; fill: #e8e4df; }
       .sub  { font-size: 15px; fill: #b8b3ad; }
-      .lyr  { font-size: 12.5px; font-weight: 800; fill: #b8b3ad; }
       .tag  { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
-      .mono { font-size: 11.5px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
       .monod{ font-size: 11.5px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', ui-monospace, monospace; }
       .who  { font-size: 12.5px; fill: #e8e4df; }
       .body { font-size: 14px; fill: #e8e4df; }
@@ -22,7 +20,7 @@
     </marker>
   </defs>
 
-  <rect x="0" y="0" width="1120" height="720" fill="#0d0d0d"/>
+  <rect x="0" y="0" width="1120" height="360" fill="#0d0d0d"/>
 
   <text x="30" y="40" class="h1">막혀서 안 흐르는 게 아니라, 허가가 없어서 안 흐릅니다</text>
   <text x="30" y="66" class="sub">"네임스페이스가 달라도 통신은 되잖아"는 맞는 말입니다 — 다만 다른 층 이야기입니다.</text>
@@ -59,32 +57,5 @@
   <text x="606" y="236" class="monod" style="font-size:10.5px">backendRefs: [{name: some-service, namespace: team-b}]</text>
   <text x="606" y="256" class="who">허가(ReferenceGrant)가 있어야 해석됩니다</text>
 
-  <!-- 위협 모델 -->
-  <rect x="30" y="300" width="1060" height="132" rx="12" fill="rgb(20,20,20)" stroke="rgb(212,168,83)" stroke-width="1.6"/>
-  <text x="54" y="328" class="body" font-weight="700" style="fill:rgb(212,168,83)">왜 막아 두나 — 안 막으면 이렇게 됩니다</text>
-  <text x="54" y="354" class="who">아무 네임스페이스에서 HTTPRoute를 만들어 <tspan font-weight="700" fill="#e8e4df">남의 팀 내부 전용 서비스</tspan>를 backendRefs에 적고, 자기 Gateway로 외부에 노출할 수 있습니다.</text>
-  <rect x="54" y="368" width="1012" height="28" rx="6" fill="rgba(240,150,190,0.14)" stroke="rgb(240,150,190)" stroke-width="1.2"/>
-  <text x="68" y="387" class="bad" font-weight="700">그런데 서비스 소유자는 자기 서비스가 노출된 것을 모릅니다 — 참조하는 쪽만으로 결정되면 소유자 의사가 빠집니다.</text>
-  <text x="54" y="420" class="who">그래서 허가 주체는 <tspan font-weight="700" fill="#e8e4df">소유자</tspan>여야 하고, ReferenceGrant를 <tspan font-weight="700" fill="#e8e4df">참조 대상(서비스)의 네임스페이스</tspan>에 만듭니다 — 위치를 외울 게 아니라 "허가하는 사람이 있는 곳"입니다.</text>
-
-  <!-- 가장 교활한 실패 -->
-  <rect x="30" y="450" width="1060" height="150" rx="12" fill="rgba(240,150,190,0.10)" stroke="rgb(240,150,190)" stroke-width="1.8"/>
-  <text x="54" y="478" class="body" font-weight="700" style="fill:rgb(240,150,190)">가장 교활한 "조용히 실패" — YAML만으로는 못 찾습니다</text>
-  <text x="54" y="502" class="who">오타도 없습니다. 서비스도 실제로 존재합니다. 이름도 정확합니다. 그런데 트래픽이 안 갑니다.</text>
-
-  <rect x="54" y="516" width="500" height="66" rx="8" fill="rgb(24,28,32)" stroke="rgb(120,116,112)" stroke-width="1.2"/>
-  <text x="70" y="538" class="lyr">YAML을 아무리 봐도</text>
-  <text x="70" y="560" class="who">틀린 곳이 없습니다 — 그래서 여기서 시간을 씁니다</text>
-  <text x="70" y="576" class="who">"오타를 찾는 눈"으로는 영원히 못 찾습니다</text>
-
-  <rect x="570" y="516" width="500" height="66" rx="8" fill="rgb(24,28,32)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
-  <text x="586" y="538" class="lyr">status를 봐야 보입니다</text>
-  <text x="586" y="560" class="monod" style="font-size:10.5px">Accepted: True   ·   ResolvedRefs: False</text>
-  <text x="586" y="578" class="monod" style="font-size:10.5px; fill:rgb(240,150,190)">reason: RefNotPermitted</text>
-
-  <!-- 하단 못박기 -->
-  <rect x="30" y="618" width="1060" height="82" rx="12" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
-  <text x="54" y="646" class="body" font-weight="700">13-02의 방향 대응이 그대로 적용됩니다 — Accepted는 위쪽(부모), ResolvedRefs는 아래쪽(백엔드).</text>
-  <text x="54" y="670" class="who">부모 Gateway에는 정상적으로 붙었으니 Accepted는 True이고, 백엔드를 해석하지 못했으니 ResolvedRefs만 False입니다.</text>
-  <text x="54" y="690" class="who">13-01의 역할 분리와도 이어집니다 — RBAC으로 "각 팀은 자기 네임스페이스만"을 강제해도, 참조는 경계를 넘어 뻗으므로 별도 허가 장치가 필요했습니다.</text>
+  <text x="30" y="320" class="sub">막힌 것은 네트워크가 아니라 참조 권한입니다. 허가를 누가 내주는지는 다음 그림에서 봅니다.</text>
 </svg>
