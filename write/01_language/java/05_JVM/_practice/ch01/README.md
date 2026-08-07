@@ -26,7 +26,7 @@ cd write/01_language/java/05_JVM/_practice
 
 출력은 다음과 유사하다. 값은 로컬 toolchain 설치본에 따라 달라진다.
 
-```console
+```pseudocode
 java.version       = 21.0.3
 java.vendor        = Eclipse Adoptium
 java.vm.name       = OpenJDK 64-Bit Server VM

@@ -17,7 +17,7 @@ updated: 2026-07-09
 
 깊게 판다면 아래 순서가 좋습니다.
 
-```text
+```pseudocode
 1. JVM Architecture
 2. Class File Format
 3. Bytecode
@@ -60,7 +60,7 @@ Spring 이 객체 조립의 숲이고 Kubernetes 가 워크로드 생명의 들�
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 JVM
 JRE
 JDK
@@ -85,7 +85,7 @@ JVM 이 읽는 것은 **class file** 입니다.
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 .class file
 magic number
 minor_version / major_version
@@ -111,7 +111,7 @@ opcode
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 ClassLoader
 Bootstrap ClassLoader
 Platform ClassLoader
@@ -134,7 +134,7 @@ Class Loading 흐름: Loading → Linking(Verification → Preparation → Resol
 
 반드시 알아야 할 영역:
 
-```text
+```pseudocode
 PC Register
 JVM Stack
 Native Method Stack
@@ -163,7 +163,7 @@ Code Cache
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Stack Frame
 Local Variables
 Operand Stack
@@ -180,7 +180,7 @@ Method Invocation
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Interpreter
 JIT Compiler
 C1 Compiler
@@ -201,7 +201,7 @@ On-Stack Replacement
 
 반드시 알아야 할 최적화:
 
-```text
+```pseudocode
 Method Inlining
 Escape Analysis
 Scalar Replacement
@@ -223,7 +223,7 @@ Escape Analysis 예: 메서드 안에서만 쓰는 `Point p = new Point(1,2)` �
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Garbage Collection
 Reachability
 GC Root
@@ -253,7 +253,7 @@ ZGC 핵심: Low Latency · Concurrent Marking · Concurrent Relocation · Colore
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Heap Memory
 Young / Old
 Metaspace
@@ -274,7 +274,7 @@ Java 프로세스 메모리 구조: Java Process RSS = Java Heap + Metaspace + C
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Object Header
 Mark Word
 Klass Pointer
@@ -294,7 +294,7 @@ Array Header
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Java Memory Model
 Visibility
 Atomicity
@@ -316,7 +316,7 @@ VarHandle
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Thread
 Platform Thread
 Virtual Thread
@@ -345,7 +345,7 @@ Thread State: NEW · RUNNABLE · BLOCKED · WAITING · TIMED_WAITING · TERMINAT
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Virtual Thread
 Platform Thread
 Carrier Thread
@@ -365,7 +365,7 @@ Blocking I/O
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Reflection
 Class
 Method
@@ -390,7 +390,7 @@ StringConcatFactory
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Exception Table
 Checked Exception
 Unchecked Exception
@@ -408,7 +408,7 @@ Throwable.fillInStackTrace
 
 기본 옵션:
 
-```text
+```pseudocode
 -Xms
 -Xmx
 -Xss
@@ -428,7 +428,7 @@ Throwable.fillInStackTrace
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 cgroup
 container memory limit
 container cpu limit
@@ -450,7 +450,7 @@ Java 컨테이너 메모리: container memory > heap + metaspace + code cache + 
 
 반드시 알아야 할 도구:
 
-```text
+```pseudocode
 jps
 jcmd
 jstack
@@ -486,7 +486,7 @@ JDK Mission Control 은 Java Flight Recorder 가 수집한 데이터를 분석�
 
 자주 보는 장애:
 
-```text
+```pseudocode
 OutOfMemoryError: Java heap space
 OutOfMemoryError: Metaspace
 OutOfMemoryError: Direct buffer memory
@@ -518,7 +518,7 @@ CodeCache full
 
 ## 22. Spring 개발자 기준 JVM 체크리스트
 
-```text
+```pseudocode
 Spring Bean 생성 → Reflection · ClassLoader · Proxy class · Metaspace
 @Transactional → JDK Proxy / CGLIB · Method invocation · Stack frame · Exception rollback rule
 Spring MVC 요청 → Tomcat thread · JVM stack · Heap allocation · GC pressure
@@ -554,7 +554,7 @@ Actuator / Micrometer → JVM memory metric · GC metric · thread metric · cla
 
 ## 25. 최종 압축 키워드
 
-```text
+```pseudocode
 JVM Architecture
 JDK / JRE / JVM
 Class File Format
@@ -767,7 +767,7 @@ truststore 에 CA 가 없으면 `javax.net.ssl.SSLHandshakeException: PKIX path 
 
 핵심 압축:
 
-```text
+```pseudocode
 1. Spring Boot JVM이 직접 HTTPS 호출 → JVM truststore 필요
 2. Gateway/Sidecar/Proxy가 대신 HTTPS 호출 → Proxy trust bundle 필요
 3. Spring Boot가 HTTPS 서버 → truststore보다 keystore 필요

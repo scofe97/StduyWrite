@@ -1,0 +1,134 @@
+<svg viewBox="0 0 900 650" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif">
+  <title>서비스 디스커버리와 relabeling 전체 지도</title>
+  <desc>서비스 디스커버리 프로바이더가 주소와 메타데이터를 후보 라벨 집합으로 만들면, 타깃 relabeling 이 스크레이프 전에 keep, drop, replace 규칙으로 대상을 고르고 내부 라벨은 일반 라벨로 복사한 것만 남긴다. Prometheus 는 exporter 를 스크레이프한 뒤 대상 라벨과 메트릭 라벨을 합치고 honor_labels 설정으로 이름 충돌을 해결한다. 이어서 메트릭 relabeling 이 메트릭 이름을 뜻하는 __name__ 라벨까지 읽어 시계열을 버리거나 고친 뒤 TSDB 에 저장한다. 아래 보조 영역은 Operator 가 ServiceMonitor 계열을 자동 번역하는 경로와 additionalScrapeConfigs 로 직접 잡을 추가하는 경로, HTTP SD 의 응답 경계, service-discovery 와 targets 진단 화면의 책임을 보여 준다.</desc>
+  <rect width="900" height="650" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="p1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text x="450" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#e8e4df">후보에서 시계열까지</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#b8b3ad">전에는 타깃 · 후에는 시계열</text>
+
+  <!-- 전체 파이프라인 -->
+  <rect x="20" y="72" width="860" height="330" rx="10" fill="#0d0d0d" stroke="#3f3f3f" stroke-width="1.2"/>
+  <text x="38" y="92" font-size="10" font-weight="700" fill="#b8b3ad">전체 수집 파이프라인</text>
+
+  <!-- 윗줄: 발견부터 스크레이프 -->
+  <rect x="38" y="110" width="142" height="94" rx="8" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="109" y="132" text-anchor="middle" font-size="12" font-weight="700" fill="#8ab6e0">SD 프로바이더</text>
+  <text x="109" y="153" text-anchor="middle" font-size="10" fill="#e8e4df">Kubernetes · EC2</text>
+  <text x="109" y="170" text-anchor="middle" font-size="10" fill="#e8e4df">Eureka · HTTP SD</text>
+  <text x="109" y="191" text-anchor="middle" font-size="9.5" fill="#b8b3ad">후보를 발견합니다</text>
+
+  <line x1="188" y1="157" x2="224" y2="157" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#p1)"/>
+
+  <rect x="232" y="110" width="158" height="94" rx="8" fill="rgb(212,168,83)"/>
+  <text x="311" y="132" text-anchor="middle" font-size="12" font-weight="700" fill="#0d0d0d">후보 라벨 집합</text>
+  <rect x="248" y="143" width="126" height="21" rx="4" fill="#fdf3df"/>
+  <text x="311" y="158" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">__address__</text>
+  <rect x="248" y="171" width="126" height="21" rx="4" fill="#fdf3df"/>
+  <text x="311" y="186" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">__meta_*</text>
+
+  <line x1="398" y1="157" x2="434" y2="157" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#p1)"/>
+
+  <rect x="442" y="100" width="188" height="114" rx="8" fill="#66bb6a"/>
+  <text x="536" y="122" text-anchor="middle" font-size="12" font-weight="700" fill="#0d0d0d">타깃 relabeling</text>
+  <text x="536" y="140" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">스크레이프 전</text>
+  <rect x="458" y="150" width="47" height="21" rx="4" fill="#e6f7e7"/>
+  <text x="481.5" y="165" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">keep</text>
+  <rect x="512" y="150" width="47" height="21" rx="4" fill="#e6f7e7"/>
+  <text x="535.5" y="165" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">drop</text>
+  <rect x="566" y="150" width="48" height="21" rx="4" fill="#e6f7e7"/>
+  <text x="590" y="165" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">replace</text>
+  <text x="536" y="187" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">일반 라벨로 복사</text>
+  <text x="536" y="202" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">내부 라벨 제거</text>
+
+  <line x1="638" y1="157" x2="674" y2="157" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#p1)"/>
+
+  <rect x="682" y="110" width="180" height="94" rx="8" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="772" y="132" text-anchor="middle" font-size="12" font-weight="700" fill="#8ab6e0">exporter 스크레이프</text>
+  <rect x="706" y="145" width="132" height="25" rx="4" fill="#dceaf7"/>
+  <text x="772" y="162" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">GET /metrics</text>
+  <text x="772" y="190" text-anchor="middle" font-size="9.5" fill="#b8b3ad">메트릭 본문 수신</text>
+
+  <path d="M772 212 L772 244" fill="none" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#p1)"/>
+
+  <!-- 아랫줄: 병합부터 저장 -->
+  <rect x="662" y="252" width="200" height="118" rx="8" fill="#ddd4f0"/>
+  <text x="762" y="274" text-anchor="middle" font-size="12" font-weight="700" fill="#231a36">라벨 병합</text>
+  <text x="762" y="294" text-anchor="middle" font-size="10" font-weight="700" fill="#231a36">대상 + 메트릭 라벨</text>
+  <rect x="678" y="305" width="168" height="22" rx="4" fill="#f0ebf8"/>
+  <text x="762" y="320" text-anchor="middle" font-size="9.5" font-weight="700" fill="#231a36">honor_labels</text>
+  <text x="762" y="345" text-anchor="middle" font-size="9.5" font-weight="700" fill="#231a36">이름 충돌을 해결</text>
+  <text x="762" y="360" text-anchor="middle" font-size="9" font-weight="700" fill="#4b3c63">기본은 대상 라벨 우선</text>
+
+  <line x1="654" y1="311" x2="610" y2="311" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#p1)"/>
+
+  <rect x="402" y="252" width="200" height="118" rx="8" fill="#f2d4d4"/>
+  <text x="502" y="274" text-anchor="middle" font-size="12" font-weight="700" fill="#7a1f1f">메트릭 relabeling</text>
+  <text x="502" y="294" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">스크레이프 후</text>
+  <rect x="418" y="305" width="76" height="22" rx="4" fill="#fae9e9"/>
+  <text x="456" y="320" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">__name__</text>
+  <rect x="502" y="305" width="84" height="22" rx="4" fill="#fae9e9"/>
+  <text x="544" y="320" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">series drop</text>
+  <text x="502" y="345" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">저장할 시계열 선택</text>
+  <text x="502" y="360" text-anchor="middle" font-size="9" font-weight="700" fill="#7a1f1f">up 계열은 적용 제외</text>
+
+  <line x1="394" y1="311" x2="350" y2="311" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#p1)"/>
+
+  <rect x="130" y="263" width="212" height="96" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.6"/>
+  <text x="236" y="287" text-anchor="middle" font-size="12" font-weight="700" fill="#8fd694">TSDB</text>
+  <rect x="150" y="299" width="172" height="25" rx="4" fill="#e6f7e7"/>
+  <text x="236" y="316" text-anchor="middle" font-size="10" font-weight="700" fill="#14521d">최종 라벨 집합</text>
+  <text x="236" y="344" text-anchor="middle" font-size="9.5" fill="#b8b3ad">샘플 저장</text>
+
+  <!-- Operator 설정 경로 -->
+  <rect x="20" y="420" width="420" height="210" rx="10" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.4"/>
+  <text x="40" y="444" font-size="12" font-weight="700" fill="#8ab6e0">Operator 설정 경로</text>
+  <text x="40" y="462" font-size="9.5" fill="#b8b3ad">최종 설정에서 합류</text>
+
+  <rect x="40" y="480" width="158" height="48" rx="6" fill="#dceaf7"/>
+  <text x="119" y="499" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">ServiceMonitor 계열</text>
+  <text x="119" y="516" text-anchor="middle" font-size="9" font-weight="700" fill="#10243a">Kubernetes 대상</text>
+  <line x1="206" y1="504" x2="244" y2="504" stroke="#b8b3ad" stroke-width="1.4" marker-end="url(#p1)"/>
+  <rect x="252" y="480" width="166" height="48" rx="6" fill="#66bb6a"/>
+  <text x="335" y="499" text-anchor="middle" font-size="10" font-weight="700" fill="#0d0d0d">Operator 자동 번역</text>
+  <text x="335" y="516" text-anchor="middle" font-size="9" font-weight="700" fill="#14521d">SD + relabel 규칙</text>
+
+  <rect x="40" y="548" width="158" height="48" rx="6" fill="#f5edda"/>
+  <text x="119" y="564" text-anchor="middle" font-size="9.5" font-weight="700" fill="#3a2f10">additionalScrape</text>
+  <text x="119" y="578" text-anchor="middle" font-size="9.5" font-weight="700" fill="#3a2f10">Configs</text>
+  <text x="119" y="592" text-anchor="middle" font-size="8.5" font-weight="700" fill="#3a2f10">비-Kubernetes 대상</text>
+  <line x1="206" y1="572" x2="244" y2="572" stroke="#b8b3ad" stroke-width="1.4" marker-end="url(#p1)"/>
+  <rect x="252" y="548" width="166" height="48" rx="6" fill="rgb(212,168,83)"/>
+  <text x="335" y="567" text-anchor="middle" font-size="10" font-weight="700" fill="#0d0d0d">scrape job 직접 추가</text>
+  <text x="335" y="584" text-anchor="middle" font-size="9" font-weight="700" fill="#3a2f10">Secret 의 키를 참조</text>
+
+  <!-- HTTP SD와 진단 경계 -->
+  <rect x="460" y="420" width="420" height="210" rx="10" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="480" y="444" font-size="12" font-weight="700" fill="rgb(212,168,83)">HTTP SD · 진단 경계</text>
+  <text x="480" y="462" font-size="9.5" fill="#b8b3ad">목록 경계 · 수집 경계</text>
+
+  <rect x="480" y="480" width="112" height="48" rx="6" fill="#f5edda"/>
+  <text x="536" y="499" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">HTTP SD 응답</text>
+  <text x="536" y="516" text-anchor="middle" font-size="9" font-weight="700" fill="#3a2f10">200 · JSON · UTF-8</text>
+  <rect x="604" y="480" width="112" height="48" rx="6" fill="#e6f7e7"/>
+  <text x="660" y="499" text-anchor="middle" font-size="10" font-weight="700" fill="#14521d">빈 배열 []</text>
+  <text x="660" y="516" text-anchor="middle" font-size="9" font-weight="700" fill="#14521d">타깃 제거</text>
+  <rect x="728" y="480" width="132" height="48" rx="6" fill="#f2d4d4"/>
+  <text x="794" y="499" text-anchor="middle" font-size="10" font-weight="700" fill="#7a1f1f">갱신 오류</text>
+  <text x="794" y="516" text-anchor="middle" font-size="9" font-weight="700" fill="#7a1f1f">기존 목록 유지</text>
+
+  <rect x="480" y="548" width="180" height="48" rx="6" fill="#dceaf7"/>
+  <text x="570" y="567" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">/service-discovery</text>
+  <text x="570" y="584" text-anchor="middle" font-size="9" font-weight="700" fill="#10243a">발견 · relabel 전후</text>
+  <rect x="680" y="548" width="180" height="48" rx="6" fill="#dceaf7"/>
+  <text x="770" y="567" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">/targets</text>
+  <text x="770" y="584" text-anchor="middle" font-size="9" font-weight="700" fill="#10243a">스크레이프 오류</text>
+</svg>

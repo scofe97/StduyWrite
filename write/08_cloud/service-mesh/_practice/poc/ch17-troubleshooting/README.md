@@ -288,7 +288,7 @@ kubectl port-forward -n istio-system svc/prometheus 9090:9090 &
 
 `http://localhost:9090` 에서 아래 쿼리 실행:
 
-```promql
+```pseudocode
 # NC 플래그 (No Cluster - subset 참조 실패) 확인
 sum(rate(istio_requests_total{namespace="bookinfo", response_flags="NC"}[1m])) by (destination_service_name, source_app)
 

@@ -14,7 +14,7 @@
 
 ## 디렉토리 구조
 
-```text
+```pseudocode
 01-minimal-lgtm-lab/
 ├── README.md
 ├── docker-compose.yml

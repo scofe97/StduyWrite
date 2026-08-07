@@ -143,7 +143,7 @@ producer 가 필드 바꾸면 consumer 가 터짐(amount 타입 변경·status e
 
 전체 흐름:
 
-```text
+```pseudocode
 1. 사용자가 배포/작업 실행 요청
 2. 결재 승인 완료
 3. approval.completed 발행
@@ -158,7 +158,7 @@ producer 가 필드 바꾸면 consumer 가 터짐(amount 타입 변경·status e
 
 아키텍처:
 
-```text
+```pseudocode
 Spring Boot API (approval-api · deployment-api · admin-api)
 MariaDB (approval · deployment_history · outbox_event · inbox_event · dlt_reprocess_history)
 Kafka/Redpanda (approval.completed · deployment.{requested,started,succeeded,failed} · notification.requested · *.dlt)
@@ -169,7 +169,7 @@ Consumers (jenkins-trigger · deployment-history · notification · metrics · d
 
 MVP 단계:
 
-```text
+```pseudocode
 1단계: order/approval 생성 → DB 저장 → order.created/approval.completed 발행 → consumer 처리 → DB 저장
 2단계: Outbox 적용 (트랜잭션 안 orders+outbox_event, poller가 발행·published 처리)
 3단계: Inbox 적용 (consumer_group+event_id unique key, 중복 skip, 처리 후 offset commit)
@@ -180,7 +180,7 @@ MVP 단계:
 
 ## 5. 포트폴리오 문서에 넣을 핵심 질문 10
 
-```text
+```pseudocode
 1. 왜 REST 동기 호출이 아니라 Kafka 이벤트로 분리했는가?
 2. DB 저장 성공 후 Kafka 발행 실패는 어떻게 처리했는가?
 3. Consumer 중복 수신은 어떻게 막았는가?
@@ -195,7 +195,7 @@ MVP 단계:
 
 ## 6. 깊게 팔 키워드 (압축)
 
-```text
+```bash
 Kafka Core
 Topic / Partition / Offset / Consumer Group / Rebalance / Retention / Log Compaction / Replication / ISR / KRaft
 

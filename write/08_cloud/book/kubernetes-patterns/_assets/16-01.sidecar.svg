@@ -1,58 +1,82 @@
-<svg viewBox="0 0 900 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>Sidecar — 기존 컨테이너를 바꾸지 않고 확장하는 협업 패턴</title>
-  <desc>Kubernetes Patterns 16장. sidecar 컨테이너는 기존 컨테이너를 변경하지 않고 그 기능을 확장·강화합니다. Pod가 여러 단일 목적 컨테이너를 한 단위로 묶어 같은 노드 배치·같은 생애주기·볼륨 공유·로컬 네트워크 통신을 가능케 하기에 성립합니다. 전형적 예는 HTTP 서버(main)와 Git 동기화(sidecar)가 볼륨을 공유하는 것입니다. OOP 비유로 컨테이너 이미지는 클래스, 컨테이너는 객체이며, 상속(inheritance, is-a, 빌드타임 강결합)이 아니라 컴포지션(composition, has-a, 런타임 교체 가능)에 해당합니다. 두 방식이 있습니다 — 앱에 보이지 않는 transparent 사이드카(Envoy가 모든 트래픽을 가로채 TLS·로드밸런싱·재시도·서킷브레이킹·관측성을 투명 제공, AOP 유사)와 앱이 잘 정의된 API로 상호작용하는 explicit 사이드카(Dapr가 HTTP·gRPC로 서비스 호출·pub-sub·상태 추상을 노출).</desc>
+<svg viewBox="0 0 900 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>트래픽이 사이드카를 거치느냐 앱이 사이드카를 부르느냐</title>
+  <desc>사이드카를 쓰는 두 방식이 트래픽 경로에서 어떻게 갈리는지 비교합니다. 위쪽은 transparent 방식으로 Envoy 프록시가 대표적입니다. 바깥에서 들어오는 트래픽과 앱이 바깥으로 내보내는 트래픽이 모두 사이드카를 통과하도록 가로채집니다. 앱은 사이드카가 거기 있다는 사실조차 모르는 채로 TLS와 로드밸런싱과 자동 재시도와 서킷 브레이킹과 관측성을 얻습니다. 앱 코드를 건드리지 않고 직교하는 능력을 더한다는 점에서 관점 지향 프로그래밍과 닮았습니다. 아래쪽은 explicit 방식으로 Dapr가 대표적입니다. 트래픽을 가로채지 않고 사이드카가 HTTP와 gRPC API를 노출하면 앱이 그것을 명시적으로 호출하거나 구독합니다. 서비스 호출과 발행 구독과 상태 추상과 외부 시스템 바인딩 같은 기능을 이 방식으로 제공합니다. 두 방식의 결정적 차이는 앱이 사이드카의 존재를 아느냐입니다. transparent는 모르고 explicit은 알고 부릅니다.</desc>
 
-  <rect x="0" y="0" width="900" height="500" fill="#0d0d0d"/>
-  <text x="24" y="34" fill="#e8e4df" font-size="16">Sidecar — 기존 컨테이너를 바꾸지 않고 확장</text>
-  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">Pod가 단일 목적 컨테이너들을 한 단위로 묶어 <tspan fill="#e8e4df">같은 노드·생애주기·볼륨·로컬 네트워크</tspan>를 공유하기에 협업이 성립합니다.</text>
+  <rect width="900" height="400" fill="#0d0d0d"/>
 
-  <!-- example -->
-  <text x="24" y="86" fill="#e8e4df" font-size="12">전형적 예 — Pod 안에서 볼륨 공유</text>
-  <rect x="24" y="96" width="500" height="88" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
-  <rect x="40" y="112" width="220" height="56" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
-  <text x="52" y="132" fill="rgb(212,168,83)" font-size="10" font-weight="700">main: app (httpd)</text>
-  <text x="52" y="149" fill="#e8e4df" font-size="8.5">HTTP로 파일 서빙.</text>
-  <text x="52" y="162" fill="#e8e4df" font-size="8.5">파일 출처는 모름.</text>
-  <rect x="288" y="112" width="220" height="56" fill="#dceaf7"/>
-  <text x="300" y="132" fill="#10243a" font-size="10" font-weight="700">sidecar: poll (git)</text>
-  <text x="300" y="149" fill="#10243a" font-size="8.5">Git 저장소를 로컬로 동기화.</text>
-  <text x="300" y="162" fill="#10243a" font-size="8.5">서빙 방식은 관심 없음.</text>
-  <text x="540" y="128" fill="rgb(138,133,128)" font-size="9">emptyDir 볼륨(git)을</text>
-  <text x="540" y="143" fill="rgb(138,133,128)" font-size="9">양쪽이 마운트해</text>
-  <text x="540" y="158" fill="rgb(138,133,128)" font-size="9">데이터 교환.</text>
-  <text x="24" y="203" fill="rgb(138,133,128)" font-size="8.5">main은 목록 첫 컨테이너 = 기본 컨테이너(kubectl exec 대상). 팀·언어·릴리스 주기가 달라도 협업·재사용·교체 가능.</text>
+  <text x="24" y="30" fill="#e8e4df" font-size="15" font-weight="700">앱이 아느냐 모르느냐</text>
 
-  <!-- OOP analogy -->
-  <text x="24" y="230" fill="#e8e4df" font-size="12">OOP 비유 — 이미지=클래스, 컨테이너=객체</text>
-  <rect x="24" y="240" width="418" height="76" fill="#f2d4d4"/>
-  <text x="36" y="260" fill="#7a1f1f" font-size="11" font-weight="700">상속 (inheritance) — is-a</text>
-  <text x="36" y="279" fill="#7a1f1f" font-size="8.5">컨테이너를 확장해 기능 강화하는 것에 비유되지만,</text>
-  <text x="36" y="294" fill="#7a1f1f" font-size="8.5">빌드타임에 강하게 결합됩니다.</text>
-  <text x="36" y="309" fill="#7a1f1f" font-size="8.5">교체가 어렵습니다.</text>
+  <!-- ============ transparent ============ -->
+  <text x="24" y="64" fill="#5b9bd5" font-size="11" font-weight="700">transparent</text>
+  <text x="24" y="80" fill="#b8b3ad" font-size="9">Envoy</text>
 
-  <rect x="458" y="240" width="418" height="76" fill="#cdeccf"/>
-  <text x="470" y="260" fill="#14521d" font-size="11" font-weight="700">컴포지션 (composition) — has-a ★</text>
-  <text x="470" y="279" fill="#14521d" font-size="8.5">Pod 안 여러 컨테이너 협업 = 컴포지션.</text>
-  <text x="470" y="294" fill="#14521d" font-size="8.5">빌드타임 결합 없이 나중에 컨테이너를 교체 가능.</text>
-  <text x="470" y="309" fill="#14521d" font-size="8.5">단, 별도 프로세스라 헬스체크·재시작·리소스 소비 각각.</text>
+  <rect x="140" y="50" width="90" height="44" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="185" y="77" text-anchor="middle" fill="#b8b3ad" font-size="10" font-weight="700">바깥</text>
 
-  <!-- two approaches -->
-  <text x="24" y="340" fill="#e8e4df" font-size="12">두 가지 사이드카 방식</text>
-  <rect x="24" y="350" width="418" height="96" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
-  <text x="36" y="371" fill="rgb(212,168,83)" font-size="11" font-weight="700">Transparent — 앱에 보이지 않음</text>
-  <text x="36" y="390" fill="#e8e4df" font-size="8.5">예: Envoy 프록시. 모든 인·아웃 트래픽을 가로채</text>
-  <text x="36" y="404" fill="#e8e4df" font-size="8.5">TLS·로드밸런싱·재시도·서킷브레이킹·L7 관측성·</text>
-  <text x="36" y="418" fill="#e8e4df" font-size="8.5">분산 추적을 앱 수정 없이 제공.</text>
-  <text x="36" y="435" fill="#66bb6a" font-size="8.5">AOP 유사 — 직교 관심사를 Pod에 주입.</text>
+  <path d="M 234 72 L 268 72" stroke="#5b9bd5" stroke-width="2" marker-end="url(#bm)"/>
 
-  <rect x="458" y="350" width="418" height="96" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
-  <text x="470" y="371" fill="rgb(212,168,83)" font-size="11" font-weight="700">Explicit — 앱이 API로 상호작용</text>
-  <text x="470" y="390" fill="#e8e4df" font-size="8.5">예: Dapr. 트래픽을 가로채지 않고 기능을</text>
-  <text x="470" y="404" fill="#e8e4df" font-size="8.5">HTTP·gRPC API로 노출.</text>
-  <text x="470" y="418" fill="#e8e4df" font-size="8.5">앱이 명시적으로 호출·구독:</text>
-  <text x="470" y="435" fill="#e8e4df" font-size="8.5">서비스 호출·pub-sub·상태 추상·바인딩·관측성.</text>
+  <rect x="272" y="50" width="160" height="44" fill="#dceaf7"/>
+  <text x="352" y="70" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">sidecar 가 가로챕니다</text>
+  <text x="352" y="86" text-anchor="middle" fill="#10243a" font-size="9">TLS · 재시도 · 관측성</text>
 
-  <!-- bottom -->
-  <rect x="24" y="458" width="852" height="30" fill="#f5edda"/>
-  <text x="36" y="477" fill="#0d0d0d" font-size="9.5">판단 기준: 별도 프로세스를 돌릴 가치가 있는가, 아니면 main에 합칠까. 현대 사이드카는 작고 리소스를 적게 씁니다. Adapter(17장)·Ambassador(18장)는 사이드카의 특화 후속.</text>
+  <path d="M 436 72 L 470 72" stroke="#5b9bd5" stroke-width="2" marker-end="url(#bm)"/>
+
+  <rect x="474" y="50" width="150" height="44" fill="#cdeccf"/>
+  <text x="549" y="77" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">app</text>
+
+  <rect x="648" y="50" width="228" height="44" fill="#0d0d0d" stroke="#5b9bd5"/>
+  <text x="762" y="70" text-anchor="middle" fill="#dceaf7" font-size="10" font-weight="700">앱은 모릅니다</text>
+  <text x="762" y="86" text-anchor="middle" fill="#dceaf7" font-size="9">코드를 건드리지 않습니다</text>
+
+  <text x="352" y="118" text-anchor="middle" fill="#b8b3ad" font-size="9">나가는 트래픽도 같은 길로 지납니다</text>
+
+  <line x1="24" y1="146" x2="876" y2="146" stroke="#4a4640"/>
+
+  <!-- ============ explicit ============ -->
+  <text x="24" y="188" fill="#66bb6a" font-size="11" font-weight="700">explicit</text>
+  <text x="24" y="204" fill="#b8b3ad" font-size="9">Dapr</text>
+
+  <rect x="140" y="174" width="90" height="44" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="185" y="201" text-anchor="middle" fill="#b8b3ad" font-size="10" font-weight="700">바깥</text>
+
+  <path d="M 234 196 L 470 196" stroke="#b8b3ad" stroke-width="2" marker-end="url(#nm)"/>
+  <text x="352" y="188" text-anchor="middle" fill="#b8b3ad" font-size="9">가로채지 않습니다</text>
+
+  <rect x="474" y="174" width="150" height="44" fill="#cdeccf"/>
+  <text x="549" y="201" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">app</text>
+
+  <path d="M 549 222 L 549 250" stroke="#66bb6a" stroke-width="2" marker-end="url(#gm)"/>
+  <text x="566" y="240" fill="#66bb6a" font-size="9" font-weight="700">앱이 부릅니다</text>
+
+  <rect x="474" y="256" width="150" height="44" fill="#f5edda"/>
+  <text x="549" y="276" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">sidecar API</text>
+  <text x="549" y="292" text-anchor="middle" fill="#0d0d0d" font-size="9" font-family="'JetBrains Mono', monospace">HTTP gRPC</text>
+
+  <rect x="648" y="256" width="228" height="44" fill="#0d0d0d" stroke="#f5edda"/>
+  <text x="762" y="276" text-anchor="middle" fill="#f5edda" font-size="10" font-weight="700">앱이 알고 씁니다</text>
+  <text x="762" y="292" text-anchor="middle" fill="#f5edda" font-size="9">pub-sub · 상태 추상</text>
+
+  <rect x="24" y="322" width="418" height="30" fill="#dceaf7"/>
+  <text x="44" y="342" fill="#10243a" font-size="10" font-weight="700">횡단 관심사는 transparent</text>
+
+  <rect x="458" y="322" width="418" height="30" fill="#f5edda"/>
+  <text x="478" y="342" fill="#0d0d0d" font-size="10" font-weight="700">앱이 쓸 기능은 explicit 으로</text>
+
+  <rect x="24" y="360" width="852" height="28" fill="rgb(212,168,83)"/>
+  <text x="450" y="379" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">둘 다 앱 이미지는 그대로입니다</text>
+
+  <defs>
+    <marker id="bm" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#5b9bd5"/>
+    </marker>
+    <marker id="gm" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#66bb6a"/>
+    </marker>
+    <marker id="nm" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
 </svg>

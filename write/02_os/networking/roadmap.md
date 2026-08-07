@@ -15,7 +15,7 @@ updated: 2026-06-25
 
 ## 1. OS 네트워크 딥다이브 전체 지도
 
-```text
+```pseudocode
 1. Process와 Socket
 2. File Descriptor
 3. TCP / UDP
@@ -48,7 +48,7 @@ Spring Boot · Tomcat · Netty · Kafka Client · JDBC Driver 모두 결국 OS s
 
 알아야 할 것:
 
-```text
+```pseudocode
 socket()
 bind()
 listen()
@@ -76,7 +76,7 @@ Pod 안 Spring Boot 앱 = Linux network namespace 안에서 떠 있는 Java proc
 
 알아야 할 것:
 
-```text
+```pseudocode
 TCP
 UDP
 3-way handshake
@@ -105,7 +105,7 @@ Kubernetes 와의 연결 — "Pod 연결이 안 된다" 는 OS 관점에서 보�
 
 알아야 할 것:
 
-```text
+```pseudocode
 SYN backlog
 accept queue
 somaxconn
@@ -125,7 +125,7 @@ application accept 속도
 
 알아야 할 것:
 
-```text
+```pseudocode
 ephemeral port
 ip_local_port_range
 TIME_WAIT
@@ -144,7 +144,7 @@ OS 와 애플리케이션의 DNS 해석 흐름을 봅니다.
 
 알아야 할 것:
 
-```text
+```pseudocode
 /etc/resolv.conf
 nameserver
 search domain
@@ -167,7 +167,7 @@ OS 관점 흐름: application 이 hostname 요청 → resolver 설정 확인 →
 
 알아야 할 것:
 
-```text
+```pseudocode
 lo
 eth0
 ens*
@@ -189,7 +189,7 @@ Pod 안에서는 보통 `eth0` 만 보이지만 Node 에서는 eth0 · cni0 · f
 
 알아야 할 것:
 
-```text
+```bash
 default route
 gateway
 CIDR
@@ -209,7 +209,7 @@ ip rule
 
 알아야 할 것:
 
-```text
+```pseudocode
 ARP
 Neighbor Table
 MAC address
@@ -226,7 +226,7 @@ IP route 는 맞는데 L2 에서 상대를 못 찾는 경우: route 있음 → n
 
 컨테이너 네트워크의 핵심입니다.
 
-```text
+```pseudocode
 network namespace는 독립된 네트워크 세계다.
 각 namespace는 별도의 interface · IP address · routing table
 · iptables rule · port space · socket table 을 가질 수 있다.
@@ -268,7 +268,7 @@ veth 가 케이블이라면 bridge 는 스위치에 가깝습니다.
 
 알아야 할 것:
 
-```text
+```pseudocode
 linux bridge
 L2 switching
 bridge port
@@ -288,7 +288,7 @@ OS 네트워크 디버깅에서 중요한 계층입니다.
 
 알아야 할 것:
 
-```text
+```bash
 netfilter
 hook
 table
@@ -312,7 +312,7 @@ K8s 의 Service 구현·NAT·NetworkPolicy 일부는 이 계층을 쓰지만, OS
 
 알아야 할 것:
 
-```text
+```bash
 NAT
 SNAT
 DNAT
@@ -344,7 +344,7 @@ NAT 는 첫 패킷만 보고 끝나지 않습니다. 응답 패킷을 원래 연
 
 알아야 할 것:
 
-```text
+```pseudocode
 MTU
 MSS
 fragmentation
@@ -365,7 +365,7 @@ OS 네트워크의 진실은 결국 packet 에 있습니다.
 
 알아야 할 것:
 
-```text
+```bash
 tcpdump
 wireshark
 pcap
@@ -413,7 +413,7 @@ cat /proc/sys/net/ipv4/tcp_keepalive_probes
 
 OS 네트워크 문서 안에서는 Kubernetes 를 깊게 설명하지 말고 적용 위치로만 둡니다.
 
-```text
+```pseudocode
 Network Namespace: Pod가 독립된 네트워크 세계를 갖는 원리
 veth: Pod namespace와 Node namespace가 연결되는 원리
 Routing: Pod IP 대역으로 패킷이 이동하는 원리
@@ -426,7 +426,7 @@ TCP State: connection timeout·reset·close_wait·time_wait를 해석하는 원�
 
 ## 20. 최종 학습 키워드
 
-```text
+```bash
 Linux Network Stack
 Socket
 File Descriptor
@@ -494,7 +494,7 @@ Kernel Network Parameters
 
 원칙: truststore 는 "TLS 클라이언트 쪽" 에 필요하고, 클라이언트가 누구냐에 따라 위치가 바뀐다. OS 레벨 도구가 HTTPS 상대를 검증하는 경우의 신뢰 저장소가 **OS CA bundle** 이다.
 
-```text
+```pseudocode
 OS 도구/curl 가 TLS 클라이언트
   → /etc/ssl/certs (배포판별 CA bundle 경로)
   → update-ca-certificates 로 사내 CA 추가
@@ -506,7 +506,7 @@ VM 미들웨어가 K8s Ingress 를 HTTPS 로 호출할 때(VM→Pod 방향) VM �
 
 ## 23. 결론
 
-```text
+```pseudocode
 Kubernetes 자체를 공부하는 것:
   Pod, Service, Ingress, NetworkPolicy, CNI 리소스 중심
 

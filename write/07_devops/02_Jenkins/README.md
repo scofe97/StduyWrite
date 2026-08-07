@@ -233,7 +233,7 @@ Jenkins 전문가는 세 능력을 함께 갖춰야 합니다. 이 세 축이 7�
 
 위 "학습 지도 크로스워크" 가 주제별 키워드의 SSOT 이고, 여기는 *영문 복습·검색용* 묶음입니다(커버 판정·미흡 여부는 크로스워크 표를 따릅니다).
 
-```text
+```pseudocode
 Controller/Agent Architecture · Executor · Node · Label · Workspace · Queue Scheduling
 Declarative / Scripted Pipeline · Jenkinsfile · step·stage·post·when·parallel
 Credential Binding · withCredentials · Secret Masking Limitations

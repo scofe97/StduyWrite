@@ -15,7 +15,7 @@ updated: 2026-06-28
 
 핵심은 하나입니다.
 
-```text
+```pseudocode
 CI/CD 도구는 결국
 “무엇을, 언제, 어디서, 어떤 권한으로, 어떤 순서로 실행하고,
 그 결과를 어떻게 기록하고 다음 단계로 넘길 것인가”
@@ -28,7 +28,7 @@ CI/CD 도구는 결국
 
 먼저 전체 구조를 이렇게 잡으면 좋습니다.
 
-```text
+```pseudocode
 CI/CD 시스템 공통 구조
 
 사용자 / Git / Webhook / API
@@ -70,7 +70,7 @@ Log / Status / Audit / Notification
 
 CI/CD 시스템은 보통 두 부분으로 나뉩니다.
 
-```text
+```pseudocode
 Control Plane
   - 작업을 받는다
   - 큐에 넣는다
@@ -86,21 +86,21 @@ Data Plane
 
 Jenkins로 보면:
 
-```text
+```pseudocode
 Jenkins Controller = Control Plane
 Jenkins Agent      = Data Plane
 ```
 
 Woodpecker로 보면:
 
-```text
+```pseudocode
 Woodpecker Server = Control Plane
 Woodpecker Agent  = Data Plane
 ```
 
 Kubernetes 계열로 보면:
 
-```text
+```pseudocode
 Controller = Control Plane
 Pod        = Data Plane
 ```
@@ -125,7 +125,7 @@ Pod        = Data Plane
 
 처음에는 이렇게 만들면 됩니다.
 
-```text
+```pseudocode
 ci-server
   ├─ POST /jobs/{jobId}/run
   ├─ job_run 테이블에 PENDING 저장
@@ -183,13 +183,13 @@ Jenkins는 Jenkinsfile, Woodpecker/Concourse/Tekton은 YAML, Dagger는 코드, R
 
 ## 순차 Pipeline
 
-```text
+```pseudocode
 build → test → docker-build → deploy
 ```
 
 ## DAG Pipeline
 
-```text
+```pseudocode
           ┌─ unit-test
 build ────┤
           └─ integration-test
@@ -252,7 +252,7 @@ steps:
 
 Trigger는 Pipeline을 시작시키는 사건입니다.
 
-```text
+```pseudocode
 Git push
 PR 생성
 Tag 생성
@@ -280,7 +280,7 @@ API 호출
 
 ## Jenkins의 Build with Parameters와 대응되는 개념
 
-```text
+```pseudocode
 Manual Trigger
 + Input Parameters
 + Default Value
@@ -308,7 +308,7 @@ Manual Trigger
 
 처음에는 세 가지 trigger만 구현해도 충분합니다.
 
-```text
+```pseudocode
 1. 수동 실행
 2. Webhook 실행
 3. Cron 실행
@@ -338,7 +338,7 @@ Content-Type: application/json
 Parameter는 실행 시 외부에서 넣는 값입니다.
 Variable은 pipeline 내부에서 쓰이는 값입니다.
 
-```text
+```pseudocode
 Parameter:
   사용자가 입력한다.
 
@@ -348,7 +348,7 @@ Variable:
 
 예:
 
-```text
+```pseudocode
 SERVICE_NAME=order-api
 TARGET_ENV=prod
 VERSION=1.2.3
@@ -418,7 +418,7 @@ Parameter Schema를 먼저 만듭니다.
 
 CI/CD는 거의 항상 외부 시스템의 열쇠를 다룹니다.
 
-```text
+```pseudocode
 Git token
 Docker registry password
 SSH private key
@@ -448,7 +448,7 @@ Vault token
 
 가장 흔한 사고는 이것입니다.
 
-```text
+```bash
 echo $TOKEN
 kubectl config view
 docker login 명령 로그 노출
@@ -460,7 +460,7 @@ prod kubeconfig를 dev job에서도 사용
 
 Secret은 처음부터 암호화까지 완벽히 하려 하지 말고, 개념을 분리합니다.
 
-```text
+```pseudocode
 secret metadata
   - name
   - scope
@@ -472,7 +472,7 @@ secret value
 
 실행 시에는 이렇게 주입합니다.
 
-```text
+```pseudocode
 step.environment:
   REGISTRY_PASSWORD = fromSecret("harbor-password")
 ```
@@ -485,14 +485,14 @@ step.environment:
 
 Runner는 실제 명령을 실행하는 실행자입니다.
 
-```text
+```pseudocode
 서버는 명령하지,
 직접 땀 흘려 빌드하지 않는다.
 ```
 
 좋은 CI/CD 구조는 서버와 실행자를 분리합니다.
 
-```text
+```pseudocode
 Server
   ↓
 Queue
@@ -531,7 +531,7 @@ Shell / Docker / Kubernetes Pod
 
 runner가 server를 polling하는 구조부터 시작합니다.
 
-```text
+```pseudocode
 runner → GET /runs/next?label=linux
 server → job_run 반환
 runner → 실행
@@ -548,7 +548,7 @@ runner → PATCH /runs/{id}/status
 
 Executor는 runner가 실제로 작업을 실행하는 방식입니다.
 
-```text
+```pseudocode
 Runner는 사람이고,
 Executor는 손에 든 도구다.
 ```
@@ -578,7 +578,7 @@ Executor는 손에 든 도구다.
 
 ## 토이프로젝트 구현 순서
 
-```text
+```pseudocode
 1. Shell Executor
 2. Docker Executor
 3. SSH Executor
@@ -596,7 +596,7 @@ Executor는 손에 든 도구다.
 
 Workspace는 pipeline이 작업하는 디렉터리입니다.
 
-```text
+```pseudocode
 checkout된 source
 build 결과물
 test report
@@ -622,7 +622,7 @@ Jenkins에서 `workspace`, Tekton에서 `workspace`, GitHub Actions에서 workin
 
 ## 주의할 점
 
-```text
+```pseudocode
 이전 빌드 산출물이 남아서 테스트가 통과하는 경우
 secret 파일이 workspace에 남는 경우
 Docker build context에 불필요한 파일이 들어가는 경우
@@ -633,7 +633,7 @@ step 간 workspace 공유가 안 되는 경우
 
 각 job run마다 workspace를 분리합니다.
 
-```text
+```pseudocode
 /workspaces/{pipelineRunId}/
   ├─ source/
   ├─ artifacts/
@@ -643,7 +643,7 @@ step 간 workspace 공유가 안 되는 경우
 
 실행 후 정책을 둡니다.
 
-```text
+```pseudocode
 성공 후 삭제
 실패 시 7일 보존
 artifact는 별도 저장소로 이동
@@ -657,7 +657,7 @@ artifact는 별도 저장소로 이동
 
 Artifact는 pipeline이 만든 결과물입니다.
 
-```text
+```pseudocode
 JAR
 WAR
 Docker image metadata
@@ -698,14 +698,14 @@ log bundle
 
 ## 중요한 원칙
 
-```text
+```pseudocode
 운영 배포 시 다시 빌드하지 않는다.
 이미 검증된 artifact를 승격한다.
 ```
 
 나쁜 흐름:
 
-```text
+```pseudocode
 dev build
 stg에서 다시 build
 prod에서 다시 build
@@ -713,7 +713,7 @@ prod에서 다시 build
 
 좋은 흐름:
 
-```text
+```pseudocode
 build once
 test once
 promote same artifact
@@ -727,7 +727,7 @@ promote same artifact
 
 Cache는 반복 빌드 시간을 줄이는 장치입니다.
 
-```text
+```bash
 Gradle cache
 Maven repository
 npm cache
@@ -753,7 +753,7 @@ pip cache
 
 Spring Boot 기준:
 
-```text
+```pseudocode
 1. Gradle cache 없는 빌드 시간 측정
 2. Gradle cache 추가
 3. Docker layer cache 추가
@@ -768,7 +768,7 @@ Spring Boot 기준:
 
 컨테이너 시대의 CI/CD는 대부분 image를 중심으로 움직입니다.
 
-```text
+```bash
 source code
   ↓
 build artifact
@@ -799,7 +799,7 @@ VM/K8s deploy
 
 ## 태그 전략
 
-```text
+```pseudocode
 나쁜 예:
 latest
 
@@ -812,7 +812,7 @@ order-api:1.2.3-git-a1b2c3d
 
 운영에서는 digest를 같이 기록하는 것이 좋습니다.
 
-```text
+```pseudocode
 image: harbor.local/order-api:1.2.3
 digest: sha256:...
 ```
@@ -825,7 +825,7 @@ digest: sha256:...
 
 CI/CD에서 배포 대상은 크게 세 가지입니다.
 
-```text
+```pseudocode
 1. VM
 2. Container Runtime
 3. Kubernetes
@@ -850,7 +850,7 @@ CI/CD에서 배포 대상은 크게 세 가지입니다.
 
 흐름:
 
-```text
+```bash
 build jar
   ↓
 scp app.jar
@@ -881,7 +881,7 @@ health check
 
 흐름:
 
-```text
+```bash
 docker pull
 docker compose up -d
 docker compose ps
@@ -911,7 +911,7 @@ health check
 
 흐름:
 
-```text
+```bash
 image push
   ↓
 manifest image tag 변경
@@ -931,7 +931,7 @@ health check
 
 CI/CD는 환경을 다룹니다.
 
-```text
+```pseudocode
 local
 dev
 qa
@@ -958,7 +958,7 @@ prod
 
 ## 좋은 흐름
 
-```text
+```pseudocode
 build once
   ↓
 dev deploy
@@ -992,7 +992,7 @@ environment
 
 Gate는 다음 단계로 넘어가기 전 멈추는 지점입니다.
 
-```text
+```pseudocode
 build
   ↓
 test
@@ -1029,7 +1029,7 @@ prod deploy
 
 ## 토이프로젝트 구현 아이디어
 
-```text
+```pseudocode
 deploy-prod step 전에 WAITING_APPROVAL 상태로 멈춤
 승인 API 호출 시 다음 step 실행
 반려 시 pipeline FAILED 또는 REJECTED
@@ -1037,7 +1037,7 @@ deploy-prod step 전에 WAITING_APPROVAL 상태로 멈춤
 
 상태:
 
-```text
+```pseudocode
 PENDING
 RUNNING
 WAITING_APPROVAL
@@ -1091,7 +1091,7 @@ FAILED
 
 CI/CD 시스템은 상태 기계입니다.
 
-```text
+```pseudocode
 PENDING
   ↓
 QUEUED
@@ -1103,7 +1103,7 @@ SUCCESS / FAILED / CANCELED
 
 배포와 승인을 포함하면 더 복잡해집니다.
 
-```text
+```pseudocode
 CREATED
   ↓
 VALIDATING
@@ -1142,7 +1142,7 @@ SUCCESS
 
 상태 전이를 막아야 합니다.
 
-```text
+```pseudocode
 SUCCESS → RUNNING 불가
 FAILED → RUNNING 불가, 단 retry는 새 run 생성
 WAITING_APPROVAL → SUCCESS 불가
@@ -1180,13 +1180,13 @@ CI/CD는 반드시 실패를 다뤄야 합니다.
 
 빌드는 재시도해도 비교적 안전합니다.
 
-```text
+```bash
 ./gradlew build
 ```
 
 하지만 배포는 재시도 시 위험합니다.
 
-```text
+```pseudocode
 DB migration
 서비스 재시작
 트래픽 전환
@@ -1195,7 +1195,7 @@ DB migration
 
 그래서 배포 step은 멱등성을 고민해야 합니다.
 
-```text
+```pseudocode
 같은 version을 다시 배포해도 안전한가?
 이미 실행된 migration을 다시 실행하지 않는가?
 이미 생성된 Kubernetes resource를 다시 apply해도 괜찮은가?
@@ -1209,7 +1209,7 @@ DB migration
 
 동시에 실행되면 안 되는 작업이 있습니다.
 
-```text
+```pseudocode
 prod 배포 2개 동시 실행
 같은 VM에 두 서비스 동시 restart
 DB migration 동시 실행
@@ -1241,7 +1241,7 @@ deployment_lock
 
 예:
 
-```text
+```pseudocode
 lock_key = prod:order-api
 ```
 
@@ -1282,7 +1282,7 @@ CI/CD도 운영 시스템입니다.
 
 ## 좋은 지표
 
-```text
+```pseudocode
 pipeline_success_rate
 pipeline_duration_seconds
 queue_wait_time_seconds
@@ -1378,7 +1378,7 @@ CI/CD는 권한 있는 행동을 자동화합니다.
 
 ## 운영에서 중요한 질문
 
-```text
+```pseudocode
 개발자가 prod 배포 버튼을 누를 수 있는가?
 승인자와 실행자가 같아도 되는가?
 runner가 prod secret을 읽을 수 있는가?
@@ -1393,7 +1393,7 @@ dev pipeline에서 prod kubeconfig를 볼 수 있는가?
 
 CI/CD 도구는 혼자 일하지 않습니다.
 
-```text
+```pseudocode
 Git
 Issue Tracker
 Registry
@@ -1422,7 +1422,7 @@ Approval System
 
 ## 좋은 확장 모델의 조건
 
-```text
+```pseudocode
 도구 내부 API에 너무 강하게 묶이지 않는다.
 실행 환경이 재현 가능하다.
 버전 고정이 가능하다.
@@ -1438,7 +1438,7 @@ Approval System
 
 GitOps는 배포 상태의 원천을 Git으로 두는 방식입니다.
 
-```text
+```pseudocode
 Git repository = Desired State
 Cluster        = Live State
 Controller     = Reconcile
@@ -1461,7 +1461,7 @@ Controller     = Reconcile
 
 ## CI/CD와의 분리
 
-```text
+```pseudocode
 CI:
   build
   test
@@ -1505,7 +1505,7 @@ CD:
 
 ## 좋은 흐름
 
-```text
+```bash
 source
   ↓
 test
@@ -1548,7 +1548,7 @@ deploy only signed image
 
 ## CI/CD에서 중요한 질문
 
-```text
+```pseudocode
 DB migration은 어느 단계에서 실행할까?
 실패하면 앱 배포도 중단할까?
 운영 DB migration은 승인자를 둘까?
@@ -1575,7 +1575,7 @@ rollback 가능한 변경인가?
 
 ## pipeline 배치
 
-```text
+```pseudocode
 commit
   ↓
 unit test
@@ -1647,7 +1647,7 @@ Pipeline 결과는 사람과 시스템에게 알려야 합니다.
 
 CI/CD 설정도 코드로 관리해야 합니다.
 
-```text
+```pseudocode
 UI에서 클릭해 만든 설정은
 처음엔 빠르지만 나중엔 기억나지 않는다.
 ```
@@ -1668,7 +1668,7 @@ UI에서 클릭해 만든 설정은
 
 ## 좋은 구조
 
-```text
+```pseudocode
 app-repo
   ├─ src/
   ├─ build.gradle
@@ -1687,7 +1687,7 @@ deploy-repo
 
 ## Jenkins
 
-```text
+```pseudocode
 Controller
 Agent
 Executor
@@ -1711,7 +1711,7 @@ Post Action
 
 ## Woodpecker
 
-```text
+```pseudocode
 Server
 Agent
 Pipeline
@@ -1731,7 +1731,7 @@ Workspace
 
 ## Concourse
 
-```text
+```pseudocode
 Web
 Worker
 Team
@@ -1752,7 +1752,7 @@ Containerized Task
 
 ## Rundeck
 
-```text
+```pseudocode
 Project
 Job
 Option
@@ -1772,7 +1772,7 @@ Execution History
 
 ## Tekton
 
-```text
+```pseudocode
 Task
 TaskRun
 Pipeline
@@ -1791,7 +1791,7 @@ Catalog
 
 ## Argo Workflows
 
-```text
+```pseudocode
 Workflow
 WorkflowTemplate
 CronWorkflow
@@ -1808,7 +1808,7 @@ Synchronization
 
 ## Argo CD
 
-```text
+```pseudocode
 Application
 AppProject
 Repository
@@ -1827,7 +1827,7 @@ Hook
 
 ## Dagger
 
-```text
+```pseudocode
 Engine
 Module
 Function
@@ -1843,7 +1843,7 @@ Portable CI Logic
 
 ## Forgejo/Gitea Actions
 
-```text
+```pseudocode
 Workflow
 Job
 Step
@@ -1866,7 +1866,7 @@ Artifact
 
 학습 개념:
 
-```text
+```pseudocode
 Pipeline
 Stage
 Job
@@ -1881,7 +1881,7 @@ Parameter
 
 토이프로젝트:
 
-```text
+```pseudocode
 웹에서 버튼 클릭
   ↓
 파라미터 입력
@@ -1899,7 +1899,7 @@ shell command 실행
 
 학습 개념:
 
-```text
+```pseudocode
 Gradle Lifecycle
 Test Report
 Artifact
@@ -1910,7 +1910,7 @@ Secret Masking
 
 토이프로젝트:
 
-```text
+```bash
 Git repo URL 입력
   ↓
 clone
@@ -1928,7 +1928,7 @@ JAR artifact 저장
 
 학습 개념:
 
-```text
+```pseudocode
 SSH
 SCP
 systemd
@@ -1941,7 +1941,7 @@ Deployment Lock
 
 토이프로젝트:
 
-```text
+```bash
 JAR artifact 선택
   ↓
 target VM 선택
@@ -1961,7 +1961,7 @@ systemctl restart
 
 학습 개념:
 
-```text
+```pseudocode
 Dockerfile
 BuildKit
 Image Tag
@@ -1974,7 +1974,7 @@ Container Health
 
 토이프로젝트:
 
-```text
+```bash
 Docker image build
   ↓
 Harbor push
@@ -1992,7 +1992,7 @@ health check
 
 학습 개념:
 
-```text
+```bash
 kubectl
 Helm
 Kustomize
@@ -2008,7 +2008,7 @@ Ingress
 
 토이프로젝트:
 
-```text
+```bash
 image push
   ↓
 helm values image tag 변경
@@ -2026,7 +2026,7 @@ pod log 조회
 
 학습 개념:
 
-```text
+```pseudocode
 Desired State
 Live State
 Reconciliation
@@ -2039,7 +2039,7 @@ Rollback by Git Revert
 
 토이프로젝트:
 
-```text
+```pseudocode
 CI에서 image push
   ↓
 manifest repo의 image tag 변경 commit
@@ -2055,7 +2055,7 @@ Argo CD가 자동 sync
 
 학습 개념:
 
-```text
+```pseudocode
 Approval
 RBAC
 Audit
@@ -2069,7 +2069,7 @@ Event
 
 토이프로젝트:
 
-```text
+```pseudocode
 prod 배포 요청
   ↓
 WAITING_APPROVAL
@@ -2089,7 +2089,7 @@ Slack/Kafka 이벤트 발행
 
 학습 개념:
 
-```text
+```pseudocode
 DAG Scheduler
 Ephemeral Runner
 Kubernetes Executor
@@ -2104,7 +2104,7 @@ DORA Metrics
 
 토이프로젝트:
 
-```text
+```pseudocode
 Pipeline DAG 실행기
   ↓
 병렬 테스트
@@ -2124,7 +2124,7 @@ pipeline trace 생성
 
 당신이 만든다면 이런 프로젝트가 좋습니다.
 
-```text
+```pseudocode
 Mini Jenkins-Light
 
 기능:
@@ -2146,7 +2146,7 @@ Mini Jenkins-Light
 
 기본 구조:
 
-```text
+```pseudocode
 frontend
   └─ pipeline 실행/로그/승인 UI
 
@@ -2167,7 +2167,7 @@ runner
 
 DB 핵심 테이블:
 
-```text
+```pseudocode
 pipeline
 pipeline_version
 pipeline_parameter
@@ -2186,7 +2186,7 @@ webhook_event
 
 상태 흐름:
 
-```text
+```pseudocode
 CREATED
   ↓
 QUEUED
@@ -2208,7 +2208,7 @@ SUCCESS / FAILED / CANCELED / TIMEOUT
 
 로드맵을 만들 때 아래 질문을 계속 붙잡으면 좋습니다.
 
-```text
+```pseudocode
 1. 이 작업은 누가 실행하는가?
 2. 어디서 실행되는가?
 3. 어떤 권한으로 실행되는가?
@@ -2232,7 +2232,7 @@ SUCCESS / FAILED / CANCELED / TIMEOUT
 
 > **GitLab CI/CD는 강력하지만 GitLab이라는 큰 성 안으로 들어가는 선택**입니다. "독립적인 Jenkins-light"를 원한다면 GitLab은 1순위에서 내려옵니다. 다만 "독립적"이라는 말은 세 층으로 나눠야 합니다.
 
-```text
+```pseudocode
 1. SCM 독립성
    - GitHub/GitLab/Gitea/Forgejo 등에 덜 묶이는가?
 
@@ -2262,7 +2262,7 @@ SUCCESS / FAILED / CANCELED / TIMEOUT
 
 정확히 말하면 **runner는 독립적이지만, CI control plane은 Gitea/Forgejo에 종속**됩니다. Gitea Actions는 Gitea 자체의 내장 CI/CD 기능이고, job 실행은 Gitea가 직접 하지 않고 `act runner`라는 독립 프로그램에 위임합니다. Forgejo도 구조가 비슷합니다 — `.forgejo/workflows` 파일을 기반으로 CI를 구동하고, 실제 실행은 별도 설치·구성되는 Forgejo Runner가 담당합니다.
 
-```text
+```pseudocode
 Forgejo / Gitea
   ├─ Git repository
   ├─ Actions UI
@@ -2317,7 +2317,7 @@ on:
 
 자체 server/agent 구조를 가지고 GitHub·Gitea·Forgejo·GitLab·Bitbucket 등 여러 forge와 연동됩니다. GitLab CI처럼 GitLab에 박혀 있는 구조가 아닙니다. Kubernetes backend는 pipeline step을 독립 Pod로 실행하고, step 간 파일 전달을 위해 임시 PVC를 생성하며, step 단위로 CPU/memory requests/limits를 지정할 수 있습니다.
 
-```text
+```pseudocode
 GitHub / Gitea / Forgejo / GitLab / Bitbucket
   ↓ webhook
 Woodpecker Server
@@ -2358,7 +2358,7 @@ steps:
 
 SCM에 덜 묶입니다. Git도 하나의 resource일 뿐이고, Docker image·S3·time·registry 같은 외부 상태도 resource로 다룹니다.
 
-```text
+```pseudocode
 Resource
   ↓
 Job
@@ -2376,7 +2376,7 @@ Output Resource
 
 CI 도구라기보다 **운영 자동화 / Runbook Automation 도구**입니다. "파라미터 넣고 VM/컨테이너/K8s 배포 실행"에는 매우 잘 맞습니다. Job은 실행 시 required/optional·선택값 목록을 가진 named option을 정의할 수 있고, Kubernetes 플러그인도 제공합니다.
 
-```text
+```pseudocode
 Woodpecker / Concourse
   → build / test / image push
 
@@ -2388,7 +2388,7 @@ Rundeck
 
 CI 서버가 아니라 **pipeline engine**입니다. build·test·ship 자동화를 위한 플랫폼이고, 로컬·CI 서버·클라우드에서 실행될 수 있습니다. 특정 CI 서버 문법에 덜 묶이는 게 장점입니다.
 
-```text
+```pseudocode
 Dagger pipeline
   ├─ local에서 실행
   ├─ Jenkins에서 실행
@@ -2413,7 +2413,7 @@ UI·Job·parameter form·schedule·log browser·credential store를 다 제공�
 
 Kubernetes 구성 방식은 보통 셋입니다.
 
-```text
+```pseudocode
 1. Runner/Agent에 kubeconfig를 주고 kubectl/helm 실행
 
 2. Runner/Agent를 Kubernetes 내부에 두고 ServiceAccount 권한으로 실행
@@ -2424,7 +2424,7 @@ Kubernetes 구성 방식은 보통 셋입니다.
 
 가장 권장하는 구조는 3번입니다 — CI 도구가 cluster-admin 열쇠를 쥐고 직접 클러스터를 흔드는 일을 줄입니다.
 
-```text
+```pseudocode
 CI 도구
   ├─ build
   ├─ test
@@ -2439,7 +2439,7 @@ Argo CD
 
 ### A안: Jenkins-light 단일 도구에 가깝게
 
-```text
+```pseudocode
 Woodpecker
   ├─ build
   ├─ test
@@ -2453,7 +2453,7 @@ Woodpecker
 
 ### B안: Jenkins 역할을 둘로 나누기 (더 실무적)
 
-```text
+```pseudocode
 Woodpecker
   ├─ build
   ├─ test
@@ -2481,7 +2481,7 @@ Rundeck
 
 단일 제품으로 고르면:
 
-```text
+```pseudocode
 1순위: Woodpecker
 2순위: Concourse
 3순위: Forgejo Actions, 단 Forgejo 종속 허용 시

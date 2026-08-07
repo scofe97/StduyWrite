@@ -19,7 +19,7 @@ updated: 2026-06-25
 
 핵심 키워드:
 
-```text
+```pseudocode
 Process
 Thread
 Task
@@ -48,7 +48,7 @@ User Mode / Kernel Mode
 
 핵심 키워드:
 
-```text
+```pseudocode
 System Call
 User Mode
 Kernel Mode
@@ -82,7 +82,7 @@ futex
 
 핵심 키워드:
 
-```text
+```pseudocode
 Scheduler
 CFS
 Run Queue
@@ -109,7 +109,7 @@ K8s 에서 가장 자주 마주치는 커널 주제입니다. OOMKilled · RSS �
 
 핵심 키워드:
 
-```text
+```pseudocode
 Virtual Memory
 Physical Memory
 Page
@@ -137,7 +137,7 @@ Java 백엔드 중요: -Xmx · -Xms · Metaspace · Thread Stack · Direct Memor
 
 JVM 메모리 구조:
 
-```text
+```pseudocode
 Container Memory
 ├── Java Heap
 ├── Metaspace
@@ -157,7 +157,7 @@ K8s 의 `OOMKilled` 는 자주 보이지만 원인은 커널 메모리 관리에
 
 핵심 키워드:
 
-```text
+```pseudocode
 OOM Killer
 oom_score
 oom_score_adj
@@ -176,7 +176,7 @@ Exit Code 137
 
 구분:
 
-```text
+```pseudocode
 Java Heap OOM
 - java.lang.OutOfMemoryError: Java heap space
 - JVM 내부에서 발생
@@ -196,7 +196,7 @@ Container OOMKilled
 
 핵심 키워드:
 
-```text
+```pseudocode
 cgroup
 cgroup v1
 cgroup v2
@@ -222,7 +222,7 @@ pids.max
 
 핵심 키워드:
 
-```text
+```pseudocode
 PID Namespace
 Network Namespace
 Mount Namespace
@@ -242,7 +242,7 @@ Cgroup Namespace
 
 핵심 키워드:
 
-```text
+```pseudocode
 File Descriptor
 ulimit
 open file limit
@@ -266,7 +266,7 @@ Too many open files
 
 핵심 키워드:
 
-```text
+```pseudocode
 VFS
 inode
 dentry
@@ -295,7 +295,7 @@ DB·로그·파일 업로드·Kafka 를 다룬다면 커널 I/O 를 피할 수 �
 
 핵심 키워드:
 
-```text
+```pseudocode
 Block Device
 I/O Scheduler
 IOPS
@@ -320,7 +320,7 @@ Buffered I/O
 
 핵심 키워드:
 
-```text
+```pseudocode
 Socket
 File Descriptor
 listen
@@ -346,7 +346,7 @@ Java 연결: Tomcat Worker Thread · NIO Connector · Netty EventLoop · Selecto
 
 핵심 키워드:
 
-```text
+```pseudocode
 Mutex
 Semaphore
 Spinlock
@@ -368,7 +368,7 @@ Java 연결: BLOCKED · WAITING · TIMED_WAITING · park · unpark · futex · t
 
 핵심 키워드:
 
-```text
+```pseudocode
 Linux Capability
 seccomp
 AppArmor
@@ -390,7 +390,7 @@ readOnlyRootFilesystem
 
 핵심 키워드:
 
-```text
+```pseudocode
 /proc
 /sys
 procfs
@@ -415,7 +415,7 @@ PSI
 
 1순위 (반드시):
 
-```text
+```pseudocode
 Process / Thread
 Signal
 Exit Code
@@ -431,7 +431,7 @@ File Descriptor
 
 2순위 (장애 분석에 유용):
 
-```text
+```pseudocode
 Page Cache
 RSS / VSS / PSS
 Context Switch
@@ -446,7 +446,7 @@ ulimit
 
 3순위 (고급 운영/플랫폼):
 
-```text
+```pseudocode
 eBPF
 perf
 ftrace
@@ -479,7 +479,7 @@ I/O Scheduler
 
 ## 17. 최종 학습 문구
 
-```text
+```pseudocode
 OS Kernel:
 Linux Kernel의 프로세스, 스케줄링, 메모리 관리, 시스템 콜, 파일시스템,
 cgroup, namespace, signal, file descriptor, socket I/O 등의 핵심 개념을 이해하고,
@@ -490,7 +490,7 @@ graceful shutdown 실패, file descriptor 고갈, disk I/O 병목, JVM 메모리
 
 ## 18. 최종 압축 키워드
 
-```text
+```pseudocode
 Process / Thread / task_struct
 PID / TID / PID Namespace / PID 1
 Signal / SIGTERM / SIGKILL / Exit Code 137 / Exit Code 143

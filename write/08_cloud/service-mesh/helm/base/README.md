@@ -4,7 +4,7 @@ This chart installs resources shared by all Istio revisions. This includes Istio
 
 ## Setup Repo Info
 
-```console
+```bash
 helm repo add istio https://istio-release.storage.googleapis.com/charts
 helm repo update
 ```
@@ -15,7 +15,7 @@ _See [helm repo](https://helm.sh/docs/helm/helm_repo/) for command documentation
 
 To install the chart with the release name `istio-base`:
 
-```console
+```bash
 kubectl create namespace istio-system
 helm install istio-base istio/base -n istio-system
 ```

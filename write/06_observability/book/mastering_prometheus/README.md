@@ -83,6 +83,15 @@ updated: 2026-07-10
 | [14-01 Prometheus 와 OpenTelemetry 통합 — 규격·Collector·OTLP 수신구](./14-01.Prometheus%20와%20OpenTelemetry%20통합%20—%20규격·Collector·OTLP%20수신구.md) | 14장 전체 — OTel 은 실행 기술이 아니라 규격(API·SDK·시맨틱 컨벤션+OTLP) · OpenCensus+OpenTracing→2019 CNCF · Collector = receiver·processor·exporter 파이프라인 · prometheus receiver 로 긁고 otlphttp 로 밀기 · push 경로의 `up` 은 전송 성공 아님. 책의 `otlp-write-receiver`(2.47.0 실험)는 3.0 에서 `--web.enable-otlp-receiver` 로 승격(버전 드리프트) |
 | [15-01 Prometheus 너머 — 세 신호를 잇는 관측 가능성과 exemplar](./15-01.Prometheus%20너머%20—%20세%20신호를%20잇는%20관측%20가능성과%20exemplar.md) | 15장 전체(마지막 장) — Prometheus 는 관측의 3분의 1 · unknown unknown · 로그(신호대잡음 최악·최후의 보루)·트레이스(최상·샘플링) · 로그에서 메트릭 추출 금지 · "잇되 의존시키지 않는다" · 라벨 일관성·exemplar(메트릭→트레이스 다리) · Loki/Tempo/LGTM. exemplar 는 아직 실험(승격 안 됨). Loki·Tempo 내부는 02-03·02-04 참조 |
 
+## 학습 프레젠테이션
+
+> 3·4·5·8장의 데이터 모델, 수집·저장, 알림, Node Exporter 흐름을 기초 용어에서 운영 판단까지 한 흐름으로 연결한 발표·복습 자료입니다. 역색인·mmap·staleness·벡터 매칭, promtool 룰 단위 테스트와 Alertmanager HA 까지 다룹니다. `~/notification-lab/observability/experiments/`와 내부 Kind 실습 결과를 핵심 장표에 대조했으며, 모든 HTML은 외부 네트워크 없이 열립니다.
+
+- [2주차 발표자료 PDF (41장)](./_study/2%EC%A3%BC%EC%B0%A8%20%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C.pdf)
+- [02-01 스크레이프와 저장 흐름 (인터랙티브)](./_study/02-01.%EC%8A%A4%ED%81%AC%EB%A0%88%EC%9D%B4%ED%94%84%EC%99%80%20%EC%A0%80%EC%9E%A5%20%ED%9D%90%EB%A6%84.html)
+- [02-02 알림 흐름 (인터랙티브)](./_study/02-02.%EC%95%8C%EB%A6%BC%20%ED%9D%90%EB%A6%84.html)
+- [2주차 발표 흐름 (발표자 노트)](./_study/2%EC%A3%BC%EC%B0%A8%20%EB%B0%9C%ED%91%9C%20%ED%9D%90%EB%A6%84.md) — 각 장이 무엇을 전달하는지, 시연 지점, 시간이 부족할 때 줄일 순서
+
 ## 출처·톤 메모
 
 - 원본: Packt — *Mastering Prometheus* (ISBN 9781805125662). O'Reilly 학습 플랫폼 경로는 각 장 PDF 하단 URL 에서 확인했습니다(`learning.oreilly.com/library/view/mastering-prometheus/9781805125662`). 예제 코드 저장소는 본문이 반복해 안내하는 `github.com/PacktPublishing/Mastering-Prometheus` 입니다.

@@ -82,7 +82,7 @@ Jenkinsfile 을 잘 쓰려면 단순 문법보다 운영 중 깨지지 않는 �
 
 공부할 키워드:
 
-```text
+```pseudocode
 @Library
 vars directory
 src directory
@@ -141,7 +141,7 @@ Credential 을 "그냥 등록해서 쓰는 것" 으로 보면 안 됩니다.
 
 알아야 할 것:
 
-```text
+```pseudocode
 Secret Text
 Username with Password
 SSH Username with Private Key
@@ -163,7 +163,7 @@ Jenkins 는 플러그인으로 숨 쉬지만 플러그인으로 병들기도 합
 
 공부할 것:
 
-```text
+```pseudocode
 Plugin dependency
 Plugin compatibility
 Plugin security advisory
@@ -204,7 +204,7 @@ Jenkins 는 Java 애플리케이션입니다. 결국 JVM 위에서 숨을 쉽니
 
 알아야 할 JVM 키워드:
 
-```text
+```pseudocode
 -Xms
 -Xmx
 G1GC
@@ -226,7 +226,7 @@ Jenkins 는 다른 도구를 조율하는 지휘자입니다.
 
 Java/Spring 기준 필수:
 
-```text
+```pseudocode
 Gradle Lifecycle
 Maven Lifecycle
 JUnit Report
@@ -250,7 +250,7 @@ Spring Boot Pipeline 예시 흐름: Checkout → Compile → Unit Test → Integ
 
 알아야 할 것:
 
-```text
+```pseudocode
 Docker in Docker
 Docker socket mount
 Kaniko
@@ -276,7 +276,7 @@ Jenkins 가 배포까지 담당한다면 배포 전략도 알아야 합니다.
 
 필수 개념:
 
-```text
+```pseudocode
 Rolling Deployment
 Blue-Green Deployment
 Canary Deployment
@@ -330,7 +330,7 @@ Jenkins 를 운영 플랫폼으로 쓰려면 API 도 알아야 합니다.
 
 학습 키워드:
 
-```text
+```pseudocode
 Remote Access API
 Crumb Issuer
 API Token
@@ -353,7 +353,7 @@ Jenkins 가 커지면 가장 먼저 봐야 할 것은 Controller 부하입니다
 
 체크리스트:
 
-```text
+```pseudocode
 Controller에서 빌드하지 않는다.
 Agent를 동적으로 확장한다.
 Job 수와 View를 정리한다.
@@ -369,7 +369,7 @@ Shared Library도 과도하게 복잡하게 만들지 않는다.
 
 1단계 사용자 수준:
 
-```text
+```pseudocode
 Jenkins UI 사용
 Job 생성
 빌드 실행
@@ -380,7 +380,7 @@ Job 생성
 
 2단계 Pipeline 작성자:
 
-```text
+```pseudocode
 Declarative Pipeline
 stage/post/when/parallel
 credentials 사용
@@ -391,7 +391,7 @@ Docker build/push
 
 3단계 팀 표준화 담당자:
 
-```text
+```pseudocode
 Shared Library
 공통 Jenkinsfile 템플릿
 빌드/배포 표준화
@@ -402,7 +402,7 @@ Notification 표준화
 
 4단계 Jenkins 운영자:
 
-```text
+```pseudocode
 Controller/Agent 구조 설계
 Plugin 관리
 Backup/Restore
@@ -415,7 +415,7 @@ Kubernetes Agent 운영
 
 5단계 CI/CD 플랫폼 엔지니어:
 
-```text
+```pseudocode
 GitOps 연동
 멀티 테넌시
 동적 Agent
@@ -432,7 +432,7 @@ OpenTelemetry/Prometheus 연동
 
 프로젝트 1 — Spring Boot CI Pipeline:
 
-```text
+```pseudocode
 Git checkout
 Gradle build
 JUnit report
@@ -443,7 +443,7 @@ JAR archive
 
 프로젝트 2 — Docker Image Pipeline:
 
-```text
+```pseudocode
 Dockerfile 작성
 이미지 빌드
 태그 전략
@@ -454,7 +454,7 @@ build cache 최적화
 
 프로젝트 3 — Kubernetes 배포 Pipeline:
 
-```text
+```pseudocode
 K8s Agent Pod
 Kaniko build
 Helm deploy
@@ -464,7 +464,7 @@ Rollback
 
 프로젝트 4 — Shared Library:
 
-```text
+```pseudocode
 buildJavaApp()
 buildDockerImage()
 deployHelm()
@@ -474,7 +474,7 @@ withQualityGate()
 
 프로젝트 5 — Jenkins 운영 자동화:
 
-```text
+```pseudocode
 Job DSL
 Configuration as Code
 Backup/Restore 스크립트
@@ -505,7 +505,7 @@ springBootPipeline {
 
 여러 팀이 공통으로 쓰는 Shared Library 를 직접 설계 — "사용" 에서 "운영 플랫폼화" 로 넘어가는 단계. 기능: 공통 빌드/테스트/Docker/K8s 배포/Slack 함수 · 실패 시 로그 요약 · 릴리즈 노트 자동 생성.
 
-```text
+```pseudocode
 jenkins-shared-library/
 ├── vars/ (springBootPipeline·dockerBuild·k8sDeploy·notifySlack·qualityGate)
 ├── src/com/company/pipeline/ (DockerHelper·K8sHelper·NotificationHelper)
@@ -585,7 +585,7 @@ Jenkins 자체 설정을 코드로 관리. 기능: Controller Docker 구성 · J
 
 MVP 단계:
 
-```text
+```pseudocode
 1단계: Spring Boot API에서 Job 실행 · queueId 저장 · buildNumber 매핑 · 상태 polling · 실행 이력 DB
 2단계: Jenkinsfile · Gradle build · Docker image build · Registry push
 3단계: K8s dev 배포 · 배포 이력 저장 · Slack 알림
@@ -625,7 +625,7 @@ MVP 단계:
 
 **2026년 권장 스택 한눈에:**
 
-```text
+```pseudocode
 Jenkins Controller: Java 21 기준
 빌드 실행 환경: Kubernetes Ephemeral Agent
 Pipeline 표준화: Shared Library
@@ -694,7 +694,7 @@ withVault([
 
 ### Kubernetes 환경 권장 구조
 
-```text
+```pseudocode
 Vault / AWS Secrets Manager / Azure Key Vault
   → External Secrets Operator
   → Kubernetes Secret
@@ -709,7 +709,7 @@ Webhook Secret Credentials Provider 는 외부 시스템이 HTTP POST 로 global
 
 외부 연동을 해도 Jenkins 가 외부 Secret Manager 에 접근하려면 최소 bootstrap credential 또는 workload identity 가 필요하다: Vault AppRole(role_id/secret_id) · AWS IAM Role/IRSA · Azure Managed Identity · GCP Workload Identity · K8s ServiceAccount Token. Jenkins 는 단일 native workload identity 모델이 없어 Controller·Agent 실행 위치에 따라 인증 방식을 골라야 한다.
 
-```text
+```pseudocode
 나쁨: Jenkins에 장기 access key 저장
 좋음: K8s ServiceAccount / Cloud IAM Role / Vault AppRole 최소 권한
 더 좋음: 짧은 수명 동적 secret · path별 정책 분리 · job/folder별 접근 제어 · rotation 자동화
@@ -740,7 +740,7 @@ Webhook Secret Credentials Provider 는 외부 시스템이 HTTP POST 로 global
 
 ### 학습 루트 (단계별)
 
-```text
+```pseudocode
 1단계: Jenkins 내부 Credential Store — withCredentials · secret masking · folder/job scope · 로그 노출 실험
 2단계: Vault dev server — KV secret 저장 · Jenkins에서 읽기 · token/policy/path 개념
 3단계: Vault + Jenkins 실제형 — Jenkins엔 Vault 접근용 최소 credential만 · 실행 시 fetch · 종료 후 revoke
@@ -752,7 +752,7 @@ Webhook Secret Credentials Provider 는 외부 시스템이 HTTP POST 로 global
 
 ## 19. 핵심 키워드만 압축
 
-```text
+```pseudocode
 Jenkins Controller/Agent Architecture
 Executor, Node, Label, Workspace
 Queue Scheduling

@@ -17,7 +17,7 @@ updated: 2026-06-25
 
 AI Engineering 의 핵심 축은 네 가지입니다.
 
-```text
+```pseudocode
 1. 주요 LLM 모델의 특성과 활용 방식
 2. AI 기반 개발 환경
 3. Harness Engineering / Token Optimization / MCP 설계
@@ -28,7 +28,7 @@ AI Engineering 의 핵심 축은 네 가지입니다.
 
 ## 1. AI Engineering 딥다이브 전체 지도
 
-```text
+```pseudocode
 1. LLM 기본 구조와 모델 유형
 2. 주요 LLM 모델 특성 비교
 3. Prompt Engineering
@@ -57,7 +57,7 @@ AI Engineering 의 핵심 축은 네 가지입니다.
 
 알아야 할 모델 축:
 
-```text
+```pseudocode
 Reasoning Model
 General Chat Model
 Coding Model
@@ -85,7 +85,7 @@ reasoning model 은 내부 reasoning token 을 사용해 복잡한 문제 해결
 
 알아야 할 것:
 
-```text
+```pseudocode
 Instruction
 Role
 Task
@@ -111,7 +111,7 @@ User Prompt
 
 알아야 할 것:
 
-```text
+```pseudocode
 Context Window
 System Context
 User Context
@@ -134,7 +134,7 @@ Context Eviction
 
 알아야 할 것:
 
-```text
+```pseudocode
 Input Token
 Output Token
 Reasoning Token
@@ -163,7 +163,7 @@ Agent 가 사내 문서·코드·이슈·로그를 보려면 retrieval 이 필�
 
 알아야 할 것:
 
-```text
+```pseudocode
 Embedding
 Vector Database
 Chunking
@@ -191,7 +191,7 @@ AI Agent 는 말만 잘해서는 부족하고 실제 시스템을 조회·변경
 
 알아야 할 것:
 
-```text
+```pseudocode
 Tool Calling
 Function Calling
 Tool Schema
@@ -215,7 +215,7 @@ MCP 는 AI 애플리케이션을 외부 시스템에 연결하기 위한 오픈�
 
 알아야 할 것:
 
-```text
+```pseudocode
 MCP Host
 MCP Client
 MCP Server
@@ -246,7 +246,7 @@ Harness Engineering 은 "AI agent 에서 모델 자체를 제외한 모든 것" 
 
 Harness 가 포함하는 것:
 
-```text
+```pseudocode
 Prompt
 Context Manager
 Tool Registry
@@ -293,7 +293,7 @@ Agentization 은 "LLM API 붙이기" 가 아니라 작업을 스스로 분해하
 
 Agent 패턴:
 
-```text
+```pseudocode
 Single-shot Agent
 ReAct Agent
 Plan-and-Execute
@@ -312,7 +312,7 @@ Human Approval Agent
 
 알아야 할 것:
 
-```text
+```pseudocode
 Golden Dataset
 Regression Test
 Prompt Test
@@ -339,7 +339,7 @@ Agent 가 도구를 갖는 순간 보안은 중심이 됩니다.
 
 알아야 할 것:
 
-```text
+```pseudocode
 Prompt Injection
 Tool Injection
 Data Exfiltration
@@ -366,7 +366,7 @@ AI Agent 도 운영 시스템이라 로그·메트릭·트레이스가 필요합
 
 봐야 할 지표:
 
-```text
+```pseudocode
 Request Count
 Success Rate
 Task Completion Rate
@@ -394,7 +394,7 @@ Human Approval Count
 
 알아야 할 것:
 
-```text
+```pseudocode
 AI IDE
 Coding Agent
 Codebase Indexing
@@ -432,7 +432,7 @@ Documentation Agent
 
 ## 17. 최종 압축 키워드
 
-```text
+```pseudocode
 LLM Model Characteristics
 Reasoning Model
 Coding Model

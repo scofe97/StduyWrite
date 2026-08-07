@@ -17,7 +17,7 @@ updated: 2026-06-25
 
 깊게 판다면 아래 순서가 좋습니다.
 
-```text
+```pseudocode
 1. Kubernetes Architecture
 2. Control Plane
 3. Node Components
@@ -69,7 +69,7 @@ Spring 이 객체의 생명주기를 관리한다면 Kubernetes 는 워크로드
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Cluster
 Control Plane
 Worker Node
@@ -103,7 +103,7 @@ CSI
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Node
 kubelet
 container runtime
@@ -126,7 +126,7 @@ kubelet 역할: PodSpec 수신 · 컨테이너 런타임에 실행 요청 · Pro
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Pod
 Container
 Init Container
@@ -164,7 +164,7 @@ Spring Boot 연결: SIGTERM 수신 → graceful shutdown 시작 → 새 요청 �
 
 알아야 할 것:
 
-```text
+```pseudocode
 Deployment
 ReplicaSet
 Pod Template
@@ -189,7 +189,7 @@ rollout undo
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 nodeSelector
 nodeAffinity
 podAffinity
@@ -212,7 +212,7 @@ Pod IP 는 바뀔 수 있어 Service 가 필요합니다.
 
 반드시 알아야 할 것:
 
-```text
+```bash
 Service
 ClusterIP
 NodePort
@@ -239,7 +239,7 @@ Headless Service(`clusterIP: None`)는 이 흐름의 예외입니다. ClusterIP 
 
 반드시 알아야 할 것:
 
-```text
+```bash
 Pod-to-Pod Network
 Pod-to-Service Network
 Node-to-Pod Network
@@ -276,7 +276,7 @@ Gateway API: Gateway · GatewayClass · HTTPRoute · TCPRoute · GRPCRoute · Re
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 ConfigMap
 Secret
 env
@@ -295,7 +295,7 @@ Sealed Secrets
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Volume
 emptyDir
 hostPath
@@ -317,7 +317,7 @@ StatefulSet VolumeClaimTemplate
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 requests.cpu
 requests.memory
 limits.cpu
@@ -339,7 +339,7 @@ Java 앱: container memory limit > JVM heap + metaspace + thread stack + direct 
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 livenessProbe
 readinessProbe
 startupProbe
@@ -367,7 +367,7 @@ Spring Boot 연결: readiness 는 `/actuator/health/readiness`, liveness 는 `/a
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Authentication
 Authorization
 RBAC
@@ -391,7 +391,7 @@ capabilities
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 NetworkPolicy
 podSelector
 namespaceSelector
@@ -410,7 +410,7 @@ CNI 지원 여부
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 Admission Controller
 MutatingAdmissionWebhook
 ValidatingAdmissionWebhook
@@ -439,7 +439,7 @@ Validating Webhook: Pod 생성 요청 → 정책 검사 → 조건 위반 시 �
 
 반드시 알아야 할 것:
 
-```text
+```pseudocode
 CRD
 Custom Resource
 Controller
@@ -462,7 +462,7 @@ Status Subresource
 
 반드시 알아야 할 것:
 
-```text
+```bash
 kubectl logs
 kubectl describe
 kubectl events
@@ -488,7 +488,7 @@ Spring Boot 기준: HTTP request latency · JVM memory · GC pause · Thread cou
 
 자주 보는 상태:
 
-```text
+```pseudocode
 Pending
 ContainerCreating
 ImagePullBackOff
@@ -517,7 +517,7 @@ NodeNotReady
 
 ## 23. Spring Boot 개발자 기준 Kubernetes 체크리스트
 
-```text
+```pseudocode
 Deployment
 Service
 ConfigMap
@@ -566,7 +566,7 @@ Trace ID
 
 ## 26. 최종 압축 키워드
 
-```text
+```bash
 Kubernetes Architecture
 Control Plane
 API Server
