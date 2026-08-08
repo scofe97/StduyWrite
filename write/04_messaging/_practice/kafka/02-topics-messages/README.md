@@ -11,7 +11,7 @@ Kafka 토픽과 메시지 구조 심화 학습
 
 ## 관련 이론
 
-- [Chapter 3: Exploring Kafka Topics and Messages](../../../docs/08_MessageQueue/Kafka/03_Exploring_Kafka_Topics_and_Messages.md)
+- `Chapter 3: Exploring Kafka Topics and Messages` <!-- 링크 끊김(2026-08): ../../../docs/08_MessageQueue/Kafka/03_Exploring_Kafka_Topics_and_Messages.md -->
 
 ## 실습 환경
 

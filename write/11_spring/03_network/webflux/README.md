@@ -120,6 +120,6 @@ RestTemplate은 6.0 이후 maintenance mode에 들어갔다. 새 기능이 추�
 ## 관련 문서
 
 - [Spring 통합 MOC](../README.md) — 분산 배치된 Spring 문서 전체 진입점
-- [QueryDSL 학습 MOC](../../05_data/03_persistence/querydsl/README.md) — 같은 묶음 형태(12편)의 톤·구조 모델
+- `QueryDSL 학습 MOC` <!-- 링크 끊김(2026-08): ../../05_data/03_persistence/querydsl/README.md --> — 같은 묶음 형태(12편)의 톤·구조 모델
 - [Spring Framework Reference — WebClient](https://docs.spring.io/spring-framework/reference/web-reactive/webclient.html) — 본 묶음이 따라가는 공식 문서 진입점
 - [Reactor Netty Reference](https://projectreactor.io/docs/netty/release/reference/) — `HttpClient`/`ConnectionProvider` 튜닝 근거

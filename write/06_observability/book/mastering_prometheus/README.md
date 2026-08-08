@@ -87,7 +87,7 @@ updated: 2026-07-10
 
 > 3·4·5·8장의 데이터 모델, 수집·저장, 알림, Node Exporter 흐름을 기초 용어에서 운영 판단까지 한 흐름으로 연결한 발표·복습 자료입니다. 역색인·mmap·staleness·벡터 매칭, promtool 룰 단위 테스트와 Alertmanager HA 까지 다룹니다. `~/notification-lab/observability/experiments/`와 내부 Kind 실습 결과를 핵심 장표에 대조했으며, 모든 HTML은 외부 네트워크 없이 열립니다.
 
-- [2주차 발표자료 PDF (41장)](./_study/2%EC%A3%BC%EC%B0%A8%20%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C.pdf)
+- [2주차 발표자료 PDF (40장)](./_study/2%EC%A3%BC%EC%B0%A8%20%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C.pdf)
 - [02-01 스크레이프와 저장 흐름 (인터랙티브)](./_study/02-01.%EC%8A%A4%ED%81%AC%EB%A0%88%EC%9D%B4%ED%94%84%EC%99%80%20%EC%A0%80%EC%9E%A5%20%ED%9D%90%EB%A6%84.html)
 - [02-02 알림 흐름 (인터랙티브)](./_study/02-02.%EC%95%8C%EB%A6%BC%20%ED%9D%90%EB%A6%84.html)
 - [2주차 발표 흐름 (발표자 노트)](./_study/2%EC%A3%BC%EC%B0%A8%20%EB%B0%9C%ED%91%9C%20%ED%9D%90%EB%A6%84.md) — 각 장이 무엇을 전달하는지, 시연 지점, 시간이 부족할 때 줄일 순서

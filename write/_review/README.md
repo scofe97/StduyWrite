@@ -46,7 +46,7 @@ write/_review/
     └── {카테고리}_{번호}.review.md   ← 문서별 1파일
 ```
 
-`_review/` 와 `_template/` 의 언더스코어 prefix 는 [second-brain-harness.md §4.1](../../../claude/.claude/skills/content/writing/references/second-brain-harness.md) 의 "일반 최종본이 아님" 규약.
+`_review/` 와 `_template/` 의 언더스코어 prefix 는 `second-brain-harness.md §4.1` <!-- 링크 끊김(2026-08): ../../../claude/.claude/skills/content/writing/references/second-brain-harness.md --> 의 "일반 최종본이 아님" 규약.
 
 ## 핵심 원칙 3가지
 
@@ -98,4 +98,4 @@ write/_review/
 
 - [_template/review-template.md](_template/review-template.md) — 복습 파일 표준 템플릿
 - [_template/review-routine.md](_template/review-routine.md) — 운영 가이드 + 코워크 프롬프트 §7
-- [`../../../claude/.claude/skills/content/writing/references/02-learned-docs.md`](../../../claude/.claude/skills/content/writing/references/02-learned-docs.md) §12~§15 — 학습 문서 하네스의 Stage 2 워크플로우 규약
+- `../../../claude/.claude/skills/content/writing/references/02-learned-docs.md` <!-- 링크 끊김(2026-08): ../../../claude/.claude/skills/content/writing/references/02-learned-docs.md --> §12~§15 — 학습 문서 하네스의 Stage 2 워크플로우 규약

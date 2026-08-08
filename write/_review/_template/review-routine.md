@@ -204,7 +204,7 @@ updated: 2026-05-22
 
 - [review-template.md](review-template.md) — 복습 파일 5문제 표준 템플릿
 - [../README.md](../README.md) — 복습 시스템 진입점 + 회차 통계
-- [`../../../claude/.claude/skills/content/writing/references/02-learned-docs.md`](../../../claude/.claude/skills/content/writing/references/02-learned-docs.md) §12~§15 — 학습 문서 하네스의 Stage 2 워크플로우 규약
+- `../../../claude/.claude/skills/content/writing/references/02-learned-docs.md` <!-- 링크 끊김(2026-08): ../../../claude/.claude/skills/content/writing/references/02-learned-docs.md --> §12~§15 — 학습 문서 하네스의 Stage 2 워크플로우 규약
 - 학술 근거:
   - [Forgetting curve (Ebbinghaus)](https://en.wikipedia.org/wiki/Forgetting_curve)
   - [SuperMemo SM-2 algorithm](https://en.wikipedia.org/wiki/SuperMemo)

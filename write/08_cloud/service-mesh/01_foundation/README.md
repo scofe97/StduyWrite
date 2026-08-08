@@ -44,7 +44,7 @@ Linkerd든 Istio든 Cilium이든, 모든 서비스 메시는 같은 네 가지 �
 |------|-----|------|
 | Kubernetes | 1.28 이상 | Gateway API CRD 설치 가능 |
 | Gateway API | v1.x (Standard Channel) | GAMMA는 v1.1+ GA |
-| 실습 클러스터 | 개인 GCP K8s (dev-server 1~3) | 상세는 [`gcp` 스킬](../../../../.claude/skills/gcp/SKILL.md) |
+| 실습 클러스터 | 개인 GCP K8s (dev-server 1~3) | 상세는 `gcp` 스킬` | <!-- 2026-07 GCP 서버·스킬 삭제됨 — 링크 없음 -->
 
 ## 사전 지식
 

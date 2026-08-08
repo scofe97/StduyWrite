@@ -4,7 +4,7 @@ Kafka를 분산 로그로 이해하기 위한 실습입니다.
 
 ## 관련 이론
 
-- [Chapter 4: Kafka as a Distributed Log](../../../docs/08_MessageQueue/Kafka/04_Kafka_as_a_Distributed_Log.md)
+- `Chapter 4: Kafka as a Distributed Log` <!-- 링크 끊김(2026-08): ../../../docs/08_MessageQueue/Kafka/04_Kafka_as_a_Distributed_Log.md -->
 
 ## 실습 환경
 

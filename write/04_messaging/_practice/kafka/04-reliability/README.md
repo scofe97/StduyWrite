@@ -2,7 +2,7 @@
 
 ## 관련 이론
 
-- [Chapter 5: Reliability](../../../docs/08_MessageQueue/Kafka/05_Reliability.md)
+- `Chapter 5: Reliability` <!-- 링크 끊김(2026-08): ../../../docs/08_MessageQueue/Kafka/05_Reliability.md -->
 
 ## 시작
 
