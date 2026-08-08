@@ -1,0 +1,82 @@
+<svg viewBox="0 0 640 470" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>커널이 패킷을 다루는 법 전체 지도</title>
+  <desc>애플리케이션이 소켓만 보고 기다리는 데서 출발해 인터페이스와 veth 배선을 지나, 커널 안의 Netfilter 훅과 Conntrack 연결 추적, 마지막 라우팅 판단까지 내려가는 흐름입니다. 위로 갈수록 애플리케이션에 가깝고 아래로 갈수록 커널 안쪽입니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10.5px; }
+    .sec { fill: #3a3632; font-size: 10px; font-weight: 700; }
+    .zone { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .num { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .caution-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .caution-detail { fill: #0d0d0d; font-size: 10.5px; }
+  </style>
+
+  <rect width="640" height="470" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <!-- 1. 소켓 -->
+  <text class="num" x="34" y="45">1.</text>
+  <rect class="box" x="54" y="24" width="470" height="52" rx="4"/>
+  <text class="box-title" x="72" y="46">소켓 — 앱이 보는 전부</text>
+  <text class="box-detail" x="72" y="64">bind 후 epoll 대기</text>
+  <text class="sec" x="504" y="46" text-anchor="end">§1</text>
+  <text class="zone" x="548" y="50">유저스페이스</text>
+
+  <path class="arrow" d="M289,76 L289,96" marker-end="url(#ah)"/>
+
+  <!-- 2. 인터페이스 — 주의 -->
+  <text class="num" x="34" y="123">2.</text>
+  <rect x="54" y="102" width="470" height="52" rx="4" fill="rgb(212,168,83)"/>
+  <text class="caution-title" x="72" y="124">주의 · loopback ≠ 경계</text>
+  <text class="caution-detail" x="72" y="142">CVE-2020-8558 이 그 대가</text>
+  <text class="sec" x="504" y="124" text-anchor="end">§2</text>
+
+  <path class="arrow" d="M289,154 L289,174" marker-end="url(#ah)"/>
+
+  <!-- 3. veth -->
+  <text class="num" x="34" y="201">3.</text>
+  <rect class="box" x="54" y="180" width="470" height="52" rx="4"/>
+  <text class="box-title" x="72" y="202">브리지와 veth — 배선</text>
+  <text class="box-detail" x="72" y="220">네임스페이스에 네트워크 공급</text>
+  <text class="sec" x="504" y="202" text-anchor="end">§3</text>
+
+  <path class="arrow" d="M289,232 L289,252" marker-end="url(#ah)"/>
+
+  <!-- 4. Netfilter -->
+  <text class="num" x="34" y="279">4.</text>
+  <rect class="box" x="54" y="258" width="470" height="52" rx="4"/>
+  <text class="box-title" x="72" y="280">Netfilter — 훅 5개</text>
+  <text class="box-detail" x="72" y="298">출발지 · 목적지가 조합을 정함</text>
+  <text class="sec" x="504" y="280" text-anchor="end">§4</text>
+  <text class="zone" x="548" y="284">커널</text>
+
+  <path class="arrow" d="M289,310 L289,330" marker-end="url(#ah)"/>
+
+  <!-- 5. Conntrack -->
+  <text class="num" x="34" y="357">5.</text>
+  <rect class="box" x="54" y="336" width="470" height="52" rx="4"/>
+  <text class="box-title" x="72" y="358">Conntrack — 연결로 묶기</text>
+  <text class="box-detail" x="72" y="376">5-tuple flow · 상태 4종</text>
+  <text class="sec" x="504" y="358" text-anchor="end">§5</text>
+
+  <path class="arrow" d="M289,388 L289,408" marker-end="url(#ah)"/>
+
+  <!-- 6. 라우팅 -->
+  <text class="num" x="34" y="435">6.</text>
+  <rect class="box" x="54" y="414" width="470" height="46" rx="4"/>
+  <text class="box-title" x="72" y="436">라우팅 — 구체성 다음 metric</text>
+  <text class="box-detail" x="72" y="452">좁은 경로가 기본 경로를 이김</text>
+  <text class="sec" x="504" y="436" text-anchor="end">§6</text>
+</svg>

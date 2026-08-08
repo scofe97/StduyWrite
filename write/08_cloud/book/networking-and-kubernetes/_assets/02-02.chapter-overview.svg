@@ -1,0 +1,79 @@
+<svg viewBox="0 0 640 430" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>kube-proxy를 이해하는 세 기술 전체 지도</title>
+  <desc>iptables 의 테이블과 체인 구조에서 출발해 규칙의 매치와 타깃을 지나, kube-proxy 가 확률 DNAT 로 서비스를 구현하는 실물을 봅니다. 거기서 드러난 리스트 순회의 규모 한계에 대한 두 가지 답이 IPVS 와 eBPF 로 갈라집니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10.5px; }
+    .sec { fill: #3a3632; font-size: 10px; font-weight: 700; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .num { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10.5px; }
+    .caution-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .caution-detail { fill: #0d0d0d; font-size: 10.5px; }
+  </style>
+
+  <rect width="640" height="430" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <!-- 1 -->
+  <text class="num" x="34" y="45">1.</text>
+  <rect class="box" x="54" y="24" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="46">iptables 3계층</text>
+  <text class="box-detail" x="72" y="64">테이블은 무엇을, 체인은 언제</text>
+  <text class="sec" x="566" y="46" text-anchor="end">§1</text>
+
+  <path class="arrow" d="M320,74 L320,92" marker-end="url(#ah)"/>
+
+  <!-- 2 -->
+  <text class="num" x="34" y="119">2.</text>
+  <rect class="box" x="54" y="98" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="120">규칙 — 매치와 타깃</text>
+  <text class="box-detail" x="72" y="138">ACCEPT 는 자기 체인만 종결</text>
+  <text class="sec" x="566" y="120" text-anchor="end">§2</text>
+
+  <path class="arrow" d="M320,148 L320,166" marker-end="url(#ah)"/>
+
+  <!-- 3 -->
+  <text class="num" x="34" y="193">3.</text>
+  <rect class="box" x="54" y="172" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="194">확률 fan-out 실물</text>
+  <text class="box-detail" x="72" y="212">DNAT 나열 · 부하 피드백 없음</text>
+  <text class="sec" x="566" y="194" text-anchor="end">§3</text>
+
+  <path class="arrow" d="M320,222 L320,240" marker-end="url(#ah)"/>
+
+  <!-- 한계 — 주의 -->
+  <rect x="120" y="246" width="400" height="50" rx="4" fill="rgb(212,168,83)"/>
+  <text class="caution-title" x="140" y="268">주의 · 리스트 순회의 한계</text>
+  <text class="caution-detail" x="140" y="286">규칙 16만 개 갱신에 5시간</text>
+
+  <!-- 분기 -->
+  <text class="hint" x="320" y="316" text-anchor="middle">한계에 대한 두 가지 답</text>
+  <path class="arrow" d="M320,322 L320,338 L180,338 L180,356" marker-end="url(#ah)"/>
+  <path class="arrow" d="M320,322 L320,338 L460,338 L460,356" marker-end="url(#ah)"/>
+
+  <!-- 4. IPVS -->
+  <text class="num" x="34" y="385">4.</text>
+  <rect class="box" x="54" y="362" width="252" height="52" rx="4"/>
+  <text class="box-title" x="72" y="384">IPVS — 해시 조회</text>
+  <text class="box-detail" x="72" y="402">밸런싱 모드 6종 · 내장</text>
+  <text class="sec" x="288" y="384" text-anchor="end">§4</text>
+
+  <!-- 5. eBPF -->
+  <text class="num" x="345" y="385">5.</text>
+  <rect class="box" x="364" y="362" width="222" height="52" rx="4"/>
+  <text class="box-title" x="382" y="384">eBPF — 커널 안 실행</text>
+  <text class="box-detail" x="382" y="402">Cilium 이 대체</text>
+  <text class="sec" x="566" y="384" text-anchor="end">§5</text>
+</svg>

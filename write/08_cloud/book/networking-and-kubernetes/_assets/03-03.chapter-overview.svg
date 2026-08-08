@@ -1,0 +1,64 @@
+<svg viewBox="0 0 640 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>컨테이너 연결 실습 전체 지도</title>
+  <desc>Go 웹 서버를 multistage Dockerfile 로 이미지화한 뒤 포트 매핑과 함께 띄우고, 같은 호스트에서 여섯 방향으로 접근해 규칙을 찾아냅니다. 마지막에 다른 호스트에서 시도하면 경로 자체가 없다는 결론이 나오고, 그것이 오버레이와 CNI 가 필요한 이유가 됩니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10.5px; }
+    .sec { fill: #3a3632; font-size: 10px; font-weight: 700; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .num { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10.5px; }
+    .caution-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .caution-detail { fill: #0d0d0d; font-size: 10.5px; }
+  </style>
+
+  <rect width="640" height="400" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <!-- 1 -->
+  <text class="num" x="34" y="49">1.</text>
+  <rect class="box" x="54" y="26" width="532" height="54" rx="4"/>
+  <text class="box-title" x="72" y="50">이미지 만들기</text>
+  <text class="box-detail" x="72" y="68">multistage · 레이어 캐시</text>
+  <text class="sec" x="566" y="50" text-anchor="end">§1</text>
+
+  <path class="arrow" d="M320,80 L320,102" marker-end="url(#ah)"/>
+
+  <!-- 2 -->
+  <text class="num" x="34" y="151">2.</text>
+  <rect class="box" x="54" y="108" width="532" height="86" rx="4"/>
+  <text class="box-title" x="72" y="132">같은 호스트 — 여섯 방향</text>
+  <text class="box-detail" x="72" y="152">안에서는 컨테이너 포트만 통함</text>
+  <text class="box-detail" x="72" y="170">밖에서는 호스트 포트만 통함</text>
+  <text class="box-detail" x="72" y="188">컨테이너끼리 lo 는 불통</text>
+  <text class="sec" x="566" y="132" text-anchor="end">§2</text>
+
+  <path class="arrow" d="M320,194 L320,216" marker-end="url(#ah)"/>
+
+  <!-- 3 -->
+  <text class="num" x="34" y="245">3.</text>
+  <rect class="box" x="54" y="222" width="532" height="54" rx="4"/>
+  <text class="box-title" x="72" y="246">다른 호스트 — 거부와 경로 없음</text>
+  <text class="box-detail" x="72" y="264">refused 와 No route</text>
+  <text class="sec" x="566" y="246" text-anchor="end">§3</text>
+
+  <path class="arrow" d="M320,276 L320,298" marker-end="url(#ah)"/>
+
+  <!-- 결론 — 주의 -->
+  <rect x="90" y="304" width="460" height="58" rx="4" fill="rgb(212,168,83)"/>
+  <text class="caution-title" x="110" y="328">주의 · 밖에선 경로 없음</text>
+  <text class="caution-detail" x="110" y="348">그래서 오버레이와 CNI 가 있다</text>
+
+  <text class="hint" x="320" y="382" text-anchor="middle">다음 장 K8s 모델로</text>
+</svg>

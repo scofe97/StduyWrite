@@ -1,0 +1,73 @@
+<svg viewBox="0 0 640 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Kubernetes 네트워킹 모델 전체 지도</title>
+  <desc>NAT 없이 모든 Pod 가 고유 IP 를 갖는다는 모델의 세 요구사항에서 출발해, 그 주소를 어떻게 배치할지 정하는 세 레이아웃과 대역을 정하는 컨트롤러를 지나, Pod 가 실제로 만들어지는 흐름과 트래픽 받을 자격을 판정하는 프로브까지 내려가는 순서입니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10.5px; }
+    .sec { fill: #3a3632; font-size: 10px; font-weight: 700; }
+    .zone { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .num { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .caution-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .caution-detail { fill: #0d0d0d; font-size: 10.5px; }
+  </style>
+
+  <rect width="640" height="400" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <!-- 1 -->
+  <text class="num" x="34" y="45">1.</text>
+  <rect class="box" x="54" y="24" width="470" height="52" rx="4"/>
+  <text class="box-title" x="72" y="46">모델 — NAT 없는 세 약속</text>
+  <text class="box-detail" x="72" y="64">Pod 마다 고유 IP</text>
+  <text class="sec" x="504" y="46" text-anchor="end">§1</text>
+  <text class="zone" x="548" y="50">모델</text>
+
+  <path class="arrow" d="M289,76 L289,96" marker-end="url(#ah)"/>
+
+  <!-- 2 -->
+  <text class="num" x="34" y="123">2.</text>
+  <rect class="box" x="54" y="102" width="470" height="52" rx="4"/>
+  <text class="box-title" x="72" y="124">레이아웃 3유형</text>
+  <text class="box-detail" x="72" y="142">격리 · 평면 · 섬</text>
+  <text class="sec" x="504" y="124" text-anchor="end">§2</text>
+
+  <path class="arrow" d="M289,154 L289,174" marker-end="url(#ah)"/>
+
+  <!-- 3 -->
+  <text class="num" x="34" y="201">3.</text>
+  <rect class="box" x="54" y="180" width="470" height="52" rx="4"/>
+  <text class="box-title" x="72" y="202">controller-manager</text>
+  <text class="box-detail" x="72" y="220">클러스터 CIDR 을 정함</text>
+  <text class="sec" x="504" y="202" text-anchor="end">§3</text>
+  <text class="zone" x="548" y="206">컴포넌트</text>
+
+  <path class="arrow" d="M289,232 L289,252" marker-end="url(#ah)"/>
+
+  <!-- 4 -->
+  <text class="num" x="34" y="279">4.</text>
+  <rect class="box" x="54" y="258" width="470" height="52" rx="4"/>
+  <text class="box-title" x="72" y="280">Kubelet — Pod 생성</text>
+  <text class="box-detail" x="72" y="298">CRI 와 CNI 를 부린다</text>
+  <text class="sec" x="504" y="280" text-anchor="end">§4</text>
+
+  <path class="arrow" d="M289,310 L289,330" marker-end="url(#ah)"/>
+
+  <!-- 5 — 주의 -->
+  <text class="num" x="34" y="359">5.</text>
+  <rect x="54" y="336" width="470" height="52" rx="4" fill="rgb(212,168,83)"/>
+  <text class="caution-title" x="72" y="358">주의 · liveness 오용</text>
+  <text class="caution-detail" x="72" y="376">외부 의존을 넣으면 재시작 폭풍</text>
+  <text class="sec" x="504" y="358" text-anchor="end">§5</text>
+</svg>

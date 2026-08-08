@@ -1,0 +1,92 @@
+<svg viewBox="0 0 640 420" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>CNI와 kube-proxy 전체 지도</title>
+  <desc>Pod 네트워크를 만드는 두 직군을 나눠 봅니다. 왼쪽은 주소와 길을 주는 CNI 로 명세와 구현체와 실습으로 이어지고, 오른쪽은 서비스 IP 를 실제 Pod 로 번역하는 kube-proxy 입니다. 둘은 Pod 가 만들어지는 시점과 트래픽이 들어오는 시점으로 역할이 갈립니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10.5px; }
+    .sec { fill: #3a3632; font-size: 10px; font-weight: 700; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .num { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10.5px; }
+    .head { fill: #e8e4df; font-size: 12px; font-weight: 700; }
+    .caution-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .caution-detail { fill: #0d0d0d; font-size: 10.5px; }
+  </style>
+
+  <rect width="640" height="420" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="hint" x="320" y="26" text-anchor="middle">Pod 네트워크를 맡는 두 직군</text>
+
+  <path class="arrow" d="M320,34 L320,48 L170,48 L170,64" marker-end="url(#ah)"/>
+  <path class="arrow" d="M320,34 L320,48 L470,48 L470,64" marker-end="url(#ah)"/>
+
+  <!-- 왼쪽 줄기 제목 -->
+  <text class="head" x="170" y="84" text-anchor="middle">CNI — 주소와 길</text>
+  <text class="head" x="470" y="84" text-anchor="middle">kube-proxy — 번역</text>
+
+  <!-- 1 -->
+  <text class="num" x="24" y="121">1.</text>
+  <rect class="box" x="44" y="98" width="252" height="52" rx="4"/>
+  <text class="box-title" x="62" y="120">명세 — 네 연산</text>
+  <text class="box-detail" x="62" y="138">JSON stdin · stdout</text>
+  <text class="sec" x="278" y="120" text-anchor="end">§1</text>
+
+  <path class="arrow" d="M170,150 L170,168" marker-end="url(#ah)"/>
+
+  <!-- 2 -->
+  <text class="num" x="24" y="195">2.</text>
+  <rect class="box" x="44" y="172" width="252" height="52" rx="4"/>
+  <text class="box-title" x="62" y="194">4대 구현체</text>
+  <text class="box-detail" x="62" y="212">정책 지원이 관문</text>
+  <text class="sec" x="278" y="194" text-anchor="end">§2</text>
+
+  <path class="arrow" d="M170,224 L170,242" marker-end="url(#ah)"/>
+
+  <!-- 3 -->
+  <text class="num" x="24" y="269">3.</text>
+  <rect class="box" x="44" y="246" width="252" height="52" rx="4"/>
+  <text class="box-title" x="62" y="268">실습 — KIND · Cilium</text>
+  <text class="box-detail" x="62" y="286">기본 CNI 를 끄고 시작</text>
+  <text class="sec" x="278" y="268" text-anchor="end">§3</text>
+
+  <!-- 오른쪽 -->
+  <text class="num" x="324" y="121">4.</text>
+  <rect class="box" x="344" y="98" width="252" height="52" rx="4"/>
+  <text class="box-title" x="362" y="120">ClusterIP 는 가상 IP</text>
+  <text class="box-detail" x="362" y="138">어디에도 붙어 있지 않음</text>
+  <text class="sec" x="578" y="120" text-anchor="end">§4</text>
+
+  <path class="arrow" d="M470,150 L470,168" marker-end="url(#ah)"/>
+
+  <rect class="box" x="344" y="172" width="252" height="52" rx="4"/>
+  <text class="box-title" x="362" y="194">네 가지 모드</text>
+  <text class="box-detail" x="362" y="212">iptables 가 기본값</text>
+  <text class="sec" x="578" y="194" text-anchor="end">§4</text>
+
+  <path class="arrow" d="M470,224 L470,242" marker-end="url(#ah)"/>
+
+  <rect x="344" y="246" width="252" height="52" rx="4" fill="rgb(212,168,83)"/>
+  <text class="caution-title" x="362" y="268">주의 · 연결 단위 fan-out</text>
+  <text class="caution-detail" x="362" y="286">장수 연결은 쏠린다</text>
+  <text class="sec" x="578" y="268" text-anchor="end">§4</text>
+
+  <!-- 합류 -->
+  <path class="arrow" d="M170,298 L170,326 L320,326 L320,344" marker-end="url(#ah)"/>
+  <path class="arrow" d="M470,298 L470,326 L320,326" />
+
+  <rect class="box" x="140" y="350" width="360" height="46" rx="4"/>
+  <text class="box-title" x="160" y="368">둘이 만나 서비스가 된다</text>
+  <text class="box-detail" x="160" y="386">주소를 주고 트래픽을 잇는다</text>
+</svg>

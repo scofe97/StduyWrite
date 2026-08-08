@@ -1,0 +1,84 @@
+<svg viewBox="0 0 640 470" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Transport 계층 해부 전체 지도</title>
+  <desc>cURL 요청의 Application 계층 관찰에서 출발해 TCP 세그먼트 헤더, 3-way 핸드셰이크와 연결 상태, tcpdump로 센 12개 패킷의 신뢰성 비용을 지나, 그 비용을 더 내는 TLS와 내지 않는 UDP로 갈라지는 흐름입니다. 각 단계에 해당 절 번호가 붙어 있습니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10.5px; }
+    .sec { fill: #3a3632; font-size: 10px; font-weight: 700; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .num { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .caution-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .caution-detail { fill: #0d0d0d; font-size: 10.5px; }
+  </style>
+
+  <rect width="640" height="470" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <!-- 1. L7 -->
+  <text class="num" x="34" y="47">1.</text>
+  <rect class="box" x="54" y="26" width="532" height="52" rx="4"/>
+  <text class="box-title" x="72" y="48">cURL 로 본 L7</text>
+  <text class="box-detail" x="72" y="66">헤더 · 상태 코드는 평문</text>
+  <text class="sec" x="566" y="48" text-anchor="end">§1</text>
+
+  <path class="arrow" d="M320,78 L320,98" marker-end="url(#ah)"/>
+
+  <!-- 2. TCP 헤더 -->
+  <text class="num" x="34" y="125">2.</text>
+  <rect class="box" x="54" y="104" width="532" height="52" rx="4"/>
+  <text class="box-title" x="72" y="126">TCP 세그먼트 헤더</text>
+  <text class="box-detail" x="72" y="144">seq · ack · 9비트 플래그</text>
+  <text class="sec" x="566" y="126" text-anchor="end">§2</text>
+
+  <path class="arrow" d="M320,156 L320,176" marker-end="url(#ah)"/>
+
+  <!-- 3. 핸드셰이크 -->
+  <text class="num" x="34" y="203">3.</text>
+  <rect class="box" x="54" y="182" width="532" height="52" rx="4"/>
+  <text class="box-title" x="72" y="204">3-way 핸드셰이크 · 11상태</text>
+  <text class="box-detail" x="72" y="222">SYN · SYN-ACK · ACK</text>
+  <text class="sec" x="566" y="204" text-anchor="end">§3</text>
+
+  <path class="arrow" d="M320,234 L320,254" marker-end="url(#ah)"/>
+
+  <!-- 4. 12패킷 — 주의 -->
+  <text class="num" x="34" y="281">4.</text>
+  <rect x="54" y="260" width="532" height="52" rx="4" fill="rgb(212,168,83)"/>
+  <text class="caution-title" x="72" y="282">주의 · 12패킷 중 데이터 2개</text>
+  <text class="caution-detail" x="72" y="300">나머지 10개가 신뢰성 비용</text>
+  <text class="sec" x="566" y="282" text-anchor="end">§4</text>
+
+  <path class="arrow" d="M320,312 L320,332" marker-end="url(#ah)"/>
+
+  <!-- 분기 라벨 -->
+  <text class="box-detail" x="320" y="350" text-anchor="middle" fill="#b8b3ad">비용을 더 낼까, 안 낼까</text>
+
+  <!-- 좌우 분기 -->
+  <path class="arrow" d="M320,356 L320,372 L180,372 L180,392" marker-end="url(#ah)"/>
+  <path class="arrow" d="M320,356 L320,372 L460,372 L460,392" marker-end="url(#ah)"/>
+
+  <!-- 5. TLS -->
+  <text class="num" x="34" y="421">5.</text>
+  <rect class="box" x="54" y="398" width="252" height="52" rx="4"/>
+  <text class="box-title" x="72" y="420">TLS — 더 낸다</text>
+  <text class="box-detail" x="72" y="438">TCP 위 암호화 핸드셰이크</text>
+  <text class="sec" x="288" y="420" text-anchor="end">§5</text>
+
+  <!-- 6. UDP -->
+  <text class="num" x="345" y="421">6.</text>
+  <rect class="box" x="364" y="398" width="222" height="52" rx="4"/>
+  <text class="box-title" x="382" y="420">UDP — 안 낸다</text>
+  <text class="box-detail" x="382" y="438">헤더 4필드 · 확인 없음</text>
+  <text class="sec" x="566" y="420" text-anchor="end">§6</text>
+</svg>

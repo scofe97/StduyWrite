@@ -1,0 +1,72 @@
+<svg viewBox="0 0 640 430" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>컨테이너 네트워킹 모드와 CNI 전체 지도</title>
+  <desc>격리를 얼마나 포기하는가로 줄 세운 일곱 모드에서 출발해 Docker 의 실제 배선을 확인하고, 그 배선을 추상화한 CNM 을 봅니다. 호스트를 넘는 통신은 VXLAN 이 잇고, 마지막에 Kubernetes 가 CNM 대신 CNI 를 고른 갈림길이 나옵니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10.5px; }
+    .sec { fill: #3a3632; font-size: 10px; font-weight: 700; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .num { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10.5px; }
+    .caution-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .caution-detail { fill: #0d0d0d; font-size: 10.5px; }
+  </style>
+
+  <rect width="640" height="430" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <!-- 1 -->
+  <text class="num" x="34" y="45">1.</text>
+  <rect class="box" x="54" y="24" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="46">일곱 모드 — 격리의 눈금</text>
+  <text class="box-detail" x="72" y="64">None 부터 Host 까지</text>
+  <text class="sec" x="566" y="46" text-anchor="end">§1</text>
+
+  <path class="arrow" d="M320,74 L320,92" marker-end="url(#ah)"/>
+
+  <!-- 2 -->
+  <text class="num" x="34" y="119">2.</text>
+  <rect class="box" x="54" y="98" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="120">Docker 실측</text>
+  <text class="box-detail" x="72" y="138">docker0 · veth · 라우팅</text>
+  <text class="sec" x="566" y="120" text-anchor="end">§2</text>
+
+  <path class="arrow" d="M320,148 L320,166" marker-end="url(#ah)"/>
+
+  <!-- 3 -->
+  <text class="num" x="34" y="193">3.</text>
+  <rect class="box" x="54" y="172" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="194">CNM — Docker 의 추상화</text>
+  <text class="box-detail" x="72" y="212">sandbox · endpoint</text>
+  <text class="sec" x="566" y="194" text-anchor="end">§3</text>
+
+  <path class="arrow" d="M320,222 L320,240" marker-end="url(#ah)"/>
+
+  <!-- 4 -->
+  <text class="num" x="34" y="267">4.</text>
+  <rect class="box" x="54" y="246" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="268">VXLAN — 호스트를 넘는 다리</text>
+  <text class="box-detail" x="72" y="286">MAC-in-UDP · VTEP</text>
+  <text class="sec" x="566" y="268" text-anchor="end">§4</text>
+
+  <path class="arrow" d="M320,296 L320,314" marker-end="url(#ah)"/>
+
+  <!-- 갈림길 — 주의 -->
+  <text class="hint" x="320" y="330" text-anchor="middle">Kubernetes 의 선택</text>
+  <text class="num" x="34" y="371">5.</text>
+  <rect x="54" y="340" width="532" height="60" rx="4" fill="rgb(212,168,83)"/>
+  <text class="caution-title" x="72" y="364">주의 · CNM 이 아니라 CNI</text>
+  <text class="caution-detail" x="72" y="384">단순 · 데몬 불필요 · 크로스플랫폼</text>
+  <text class="sec" x="566" y="364" text-anchor="end">§5</text>
+</svg>
