@@ -1,10 +1,10 @@
-<svg viewBox="0 0 900 596" width="100%"
+<svg viewBox="0 0 900 560" width="100%"
      xmlns="http://www.w3.org/2000/svg"
      role="img"
      font-family="'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif">
   <title>최적화와 디버깅 전체 지도 — 증상에서 도구로</title>
-  <desc>이 절 전체를 증상에서 도구로 가는 진단 흐름으로 이은 지도다. 증상을 크게 넷으로 가른다. 첫째는 카디널리티다. 특정 메트릭의 쿼리만 느려지는 증상이며, 웹 UI 의 슬래시 tsdb-status 페이지에서 네 표 중 라벨 이름별 값 개수만 믿고 시작한다. 범인을 찾으면 metric_relabel_configs 의 drop 으로 떨구고, 다시 벌어지지 않게 네 가지 스크레이프 리밋으로 막는다. 다만 리밋은 메트릭 relabeling 이 끝난 뒤 평가되며 하나라도 어기면 스크레이프 전체가 실패하므로 실패 알림을 반드시 함께 건다. 둘째는 느린 쿼리다. 대시보드가 느리면 레코딩 룰로 비싼 계산을 미리 해 두되, 룰이 늘수록 rule manager 가 백그라운드에서 TSDB 를 계속 두드려 RAM 을 먹는다. 이름은 level 콜론 metric 콜론 operations 규약을 따른다. 셋째는 디스크가 이유 없이 부푸는 증상이다. 스크레이프 지터를 의심하며, 간격이 몇 밀리초씩 흔들리면 델타의 델타가 0 이 아니게 되어 샘플마다 타임스탬프를 저장해야 한다. oy-scrape-jitter 로 재고 허용치를 조정하되 그 값은 스크레이프 주기의 1 퍼센트까지만 적용된다. 넷째는 원인을 모르는 경우다. pprof 로 Go 런타임 안을 들여다보고, 쿼리 로그와 쿼리 리밋으로 비싼 쿼리를 잡고, GOGC 와 GOMEMLIMIT 으로 메모리를 조인다.</desc>
-  <rect width="900" height="596" fill="#0d0d0d"/>
+  <desc>이 절 전체를 증상에서 도구로 가는 진단 흐름으로 이은 지도다. 증상을 크게 넷으로 가른다. 첫째는 카디널리티다. 특정 메트릭의 쿼리만 느려지는 증상이며, 웹 UI 의 슬래시 tsdb-status 페이지에서 네 표 중 라벨 이름별 값 개수만 믿고 시작한다. 범인을 찾으면 metric_relabel_configs 의 drop 으로 떨구고, 다시 벌어지지 않게 네 가지 스크레이프 리밋으로 막는다. 다만 리밋은 메트릭 relabeling 이 끝난 뒤 평가되며 하나라도 어기면 스크레이프 전체가 실패하므로 실패 알림을 반드시 함께 건다. 둘째는 느린 쿼리다. 대시보드가 느리면 레코딩 룰로 비싼 계산을 미리 해 두되, 룰이 늘수록 rule manager 가 백그라운드에서 TSDB 를 계속 두드려 RAM 을 먹는다. 이름은 level 콜론 metric 콜론 operations 규약을 따른다. 셋째는 디스크가 이유 없이 부푸는 증상이다. 스크레이프 지터를 의심하며, 간격이 몇 밀리초씩 흔들리면 델타의 델타가 0 이 아니게 되어 샘플마다 타임스탬프를 저장해야 한다. oy-scrape-jitter 로 재고 허용치를 조정하되 그 값은 스크레이프 주기의 1 퍼센트까지만 적용된다. 넷째는 원인을 모르는 경우다. pprof 로 Go 런타임 안을 들여다보고, 쿼리 로그와 쿼리 리밋으로 비싼 쿼리를 잡고, GOGC 와 GOMEMLIMIT 으로 메모리를 조인다. 도식에서 색은 오직 경고 띠에만 쓴다. 나머지 상자는 모두 같은 회색이므로 색이 아니라 배치와 화살표가 뜻을 만든다.</desc>
+  <rect width="900" height="560" fill="#0d0d0d"/>
 
   <defs>
     <marker id="oa7" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
@@ -12,80 +12,78 @@
     </marker>
   </defs>
 
-  <text x="450" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#e8e4df">증상에서 도구로</text>
-  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#b8b3ad">증상 넷 · 각각 다른 손잡이</text>
+  <text x="450" y="32" text-anchor="middle" font-size="17" font-weight="700" fill="#e8e4df">증상에서 도구로</text>
+  <text x="450" y="53" text-anchor="middle" font-size="11.5" fill="#b8b3ad">색은 경고 띠에만 씁니다</text>
 
   <!-- 증상 1 카디널리티 -->
-  <rect x="24" y="72" width="852" height="122" rx="8" fill="#0d0d0d" stroke="#f44336" stroke-width="1.5"/>
-  <text x="44" y="96" font-size="12" font-weight="700" fill="#f4736a">증상 1 · 메트릭이 느림 §1~3</text>
-  <text x="300" y="96" font-size="10" fill="#b8b3ad">카디널리티가 범인입니다</text>
+  <line x1="24" y1="76" x2="24" y2="192" stroke="#b8b3ad" stroke-width="2"/>
+  <text x="40" y="90" font-size="12" font-weight="700" fill="#e8e4df">증상 1 · 메트릭이 느림</text>
+  <text x="212" y="90" font-size="11" fill="#b8b3ad">§1~3 · 카디널리티가 범인</text>
 
-  <rect x="44" y="108" width="252" height="34" rx="4" fill="#f2d4d4"/>
-  <text x="170" y="123" text-anchor="middle" font-size="10" font-weight="700" fill="#7a1f1f">찾기 · /tsdb-status</text>
-  <text x="170" y="136" text-anchor="middle" font-size="9" font-weight="700" fill="#7a1f1f">첫째 표만 믿습니다</text>
+  <rect x="40" y="102" width="248" height="38" rx="4" fill="#e8e4df"/>
+  <text x="164" y="118" text-anchor="middle" font-size="11" font-weight="700" fill="#0d0d0d">1. 찾기 · /tsdb-status</text>
+  <text x="164" y="133" text-anchor="middle" font-size="9.5" fill="#3a3632">첫째 표만 믿습니다</text>
 
-  <line x1="302" y1="125" x2="330" y2="125" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#oa7)"/>
+  <line x1="294" y1="121" x2="322" y2="121" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#oa7)"/>
 
-  <rect x="338" y="108" width="252" height="34" rx="4" fill="#fdf3df"/>
-  <text x="464" y="123" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">떨구기 · drop</text>
-  <text x="464" y="136" text-anchor="middle" font-size="9" font-weight="700" fill="#3a2f10">labeldrop 은 고유성 주의</text>
+  <rect x="330" y="102" width="248" height="38" rx="4" fill="#e8e4df"/>
+  <text x="454" y="118" text-anchor="middle" font-size="11" font-weight="700" fill="#0d0d0d">2. 떨구기 · drop</text>
+  <text x="454" y="133" text-anchor="middle" font-size="9.5" fill="#3a3632">labeldrop 은 고유성 주의</text>
 
-  <line x1="596" y1="125" x2="624" y2="125" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#oa7)"/>
+  <line x1="584" y1="121" x2="612" y2="121" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#oa7)"/>
 
-  <rect x="632" y="108" width="224" height="34" rx="4" fill="#e6f7e7"/>
-  <text x="744" y="123" text-anchor="middle" font-size="10" font-weight="700" fill="#14521d">막기 · 리밋 넷</text>
-  <text x="744" y="136" text-anchor="middle" font-size="9" font-weight="700" fill="#14521d">relabeling 이 끝난 뒤 평가</text>
+  <rect x="620" y="102" width="248" height="38" rx="4" fill="#e8e4df"/>
+  <text x="744" y="118" text-anchor="middle" font-size="11" font-weight="700" fill="#0d0d0d">3. 막기 · 리밋 넷</text>
+  <text x="744" y="133" text-anchor="middle" font-size="9.5" fill="#3a3632">relabeling 이 끝난 뒤 평가</text>
 
-  <rect x="44" y="152" width="812" height="30" rx="4" fill="rgb(212,168,83)"/>
-  <text x="450" y="171" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0d0d0d">위반 시 스크레이프 전체 실패</text>
+  <rect x="40" y="150" width="828" height="30" rx="4" fill="rgb(212,168,83)"/>
+  <text x="454" y="170" text-anchor="middle" font-size="11" font-weight="700" fill="#0d0d0d">주의 · 스크레이프 전체 실패</text>
 
   <!-- 증상 2 느린 쿼리 -->
-  <rect x="24" y="206" width="852" height="88" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
-  <text x="44" y="230" font-size="12" font-weight="700" fill="rgb(212,168,83)">증상 2 · 대시보드가 느림 §4</text>
-  <text x="264" y="230" font-size="10" fill="#b8b3ad">미리 계산해 둡니다</text>
+  <line x1="24" y1="212" x2="24" y2="290" stroke="#b8b3ad" stroke-width="2"/>
+  <text x="40" y="226" font-size="12" font-weight="700" fill="#e8e4df">증상 2 · 대시보드가 느림</text>
+  <text x="228" y="226" font-size="11" fill="#b8b3ad">§4 · 미리 계산해 둡니다</text>
 
-  <rect x="44" y="242" width="404" height="38" rx="4" fill="#fdf3df"/>
-  <text x="246" y="257" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">레코딩 룰 · 새 시계열을 만듭니다</text>
-  <text x="246" y="271" text-anchor="middle" font-size="9" font-weight="700" fill="#3a2f10">level:metric:ops 규약</text>
+  <rect x="40" y="238" width="410" height="40" rx="4" fill="#e8e4df"/>
+  <text x="245" y="255" text-anchor="middle" font-size="11" font-weight="700" fill="#0d0d0d">레코딩 룰 · 새 시계열을 만듭니다</text>
+  <text x="245" y="270" text-anchor="middle" font-size="9.5" fill="#3a3632">level:metric:ops 규약</text>
 
-  <rect x="456" y="242" width="400" height="38" rx="4" fill="#f2d4d4"/>
-  <text x="656" y="257" text-anchor="middle" font-size="10" font-weight="700" fill="#7a1f1f">대가 · rule manager</text>
-  <text x="656" y="271" text-anchor="middle" font-size="9" font-weight="700" fill="#7a1f1f">체이닝은 순차 평가라 위험</text>
+  <rect x="458" y="238" width="410" height="40" rx="4" fill="#e8e4df"/>
+  <text x="663" y="255" text-anchor="middle" font-size="11" font-weight="700" fill="#0d0d0d">대가 · rule manager</text>
+  <text x="663" y="270" text-anchor="middle" font-size="9.5" fill="#3a3632">체이닝은 순차 평가라 위험</text>
 
   <!-- 증상 3 디스크 -->
-  <rect x="24" y="306" width="852" height="88" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
-  <text x="44" y="330" font-size="12" font-weight="700" fill="rgb(212,168,83)">증상 3 · 디스크가 참 §5</text>
-  <text x="290" y="330" font-size="10" fill="#b8b3ad">스크레이프 지터를 의심합니다</text>
+  <line x1="24" y1="310" x2="24" y2="388" stroke="#b8b3ad" stroke-width="2"/>
+  <text x="40" y="324" font-size="12" font-weight="700" fill="#e8e4df">증상 3 · 디스크가 참</text>
+  <text x="196" y="324" font-size="11" fill="#b8b3ad">§5 · 스크레이프 지터를 의심합니다</text>
 
-  <rect x="44" y="342" width="404" height="38" rx="4" fill="#dceaf7"/>
-  <text x="246" y="357" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">간격이 흔들리면 델타의 델타가</text>
-  <text x="246" y="371" text-anchor="middle" font-size="9" font-weight="700" fill="#10243a">0 이 아니게 됩니다</text>
+  <rect x="40" y="336" width="410" height="40" rx="4" fill="#e8e4df"/>
+  <text x="245" y="353" text-anchor="middle" font-size="11" font-weight="700" fill="#0d0d0d">간격이 흔들리면 델타의 델타가</text>
+  <text x="245" y="368" text-anchor="middle" font-size="9.5" fill="#3a3632">0 이 아니게 됩니다</text>
 
-  <rect x="456" y="342" width="400" height="38" rx="4" fill="#e6f7e7"/>
-  <text x="656" y="357" text-anchor="middle" font-size="10" font-weight="700" fill="#14521d">oy-scrape-jitter</text>
-  <text x="656" y="371" text-anchor="middle" font-size="9" font-weight="700" fill="#14521d">허용치는 주기의 1% 까지</text>
+  <line x1="456" y1="356" x2="484" y2="356" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#oa7)"/>
+
+  <rect x="492" y="336" width="376" height="40" rx="4" fill="#e8e4df"/>
+  <text x="680" y="353" text-anchor="middle" font-size="11" font-weight="700" fill="#0d0d0d">oy-scrape-jitter</text>
+  <text x="680" y="368" text-anchor="middle" font-size="9.5" fill="#3a3632">허용치는 주기의 1% 까지</text>
 
   <!-- 증상 4 모르겠음 -->
-  <rect x="24" y="406" width="852" height="122" rx="8" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.6"/>
-  <text x="44" y="430" font-size="12" font-weight="700" fill="#8ab6e0">증상 4 · 원인 불명 §6~8</text>
-  <text x="298" y="430" font-size="10" fill="#b8b3ad">런타임 안을 들여다봅니다</text>
+  <line x1="24" y1="408" x2="24" y2="524" stroke="#b8b3ad" stroke-width="2"/>
+  <text x="40" y="422" font-size="12" font-weight="700" fill="#e8e4df">증상 4 · 원인 불명</text>
+  <text x="186" y="422" font-size="11" fill="#b8b3ad">§6~8 · 런타임 안을 들여다봅니다</text>
 
-  <rect x="44" y="442" width="264" height="38" rx="4" fill="#dceaf7"/>
-  <text x="176" y="457" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">pprof · promtool</text>
-  <text x="176" y="471" text-anchor="middle" font-size="9" font-weight="700" fill="#10243a">heap 은 힙만 셉니다</text>
+  <rect x="40" y="434" width="268" height="40" rx="4" fill="#e8e4df"/>
+  <text x="174" y="451" text-anchor="middle" font-size="11" font-weight="700" fill="#0d0d0d">pprof · promtool</text>
+  <text x="174" y="466" text-anchor="middle" font-size="9.5" fill="#3a3632">heap 은 힙만 셉니다</text>
 
-  <rect x="316" y="442" width="264" height="38" rx="4" fill="#dceaf7"/>
-  <text x="448" y="457" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">쿼리 로그 · 쿼리 리밋</text>
-  <text x="448" y="471" text-anchor="middle" font-size="9" font-weight="700" fill="#10243a">로그엔 끝난 쿼리만</text>
+  <rect x="316" y="434" width="268" height="40" rx="4" fill="#e8e4df"/>
+  <text x="450" y="451" text-anchor="middle" font-size="11" font-weight="700" fill="#0d0d0d">쿼리 로그 · 쿼리 리밋</text>
+  <text x="450" y="466" text-anchor="middle" font-size="9.5" fill="#3a3632">로그엔 끝난 쿼리만</text>
 
-  <rect x="588" y="442" width="268" height="38" rx="4" fill="#dceaf7"/>
-  <text x="722" y="457" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">GOGC · GOMEMLIMIT</text>
-  <text x="722" y="471" text-anchor="middle" font-size="9" font-weight="700" fill="#10243a">상대값과 소프트 리밋</text>
+  <rect x="592" y="434" width="276" height="40" rx="4" fill="#e8e4df"/>
+  <text x="730" y="451" text-anchor="middle" font-size="11" font-weight="700" fill="#0d0d0d">GOGC · GOMEMLIMIT</text>
+  <text x="730" y="466" text-anchor="middle" font-size="9.5" fill="#3a3632">상대값과 소프트 리밋</text>
 
-  <rect x="44" y="488" width="812" height="30" rx="4" fill="#f2d4d4"/>
-  <text x="450" y="507" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7a1f1f">소프트 리밋 없이는 OOM 킬러</text>
-
-  <!-- 하단 원칙 -->
-  <rect x="24" y="540" width="852" height="32" rx="8" fill="#5b9bd5"/>
-  <text x="44" y="560" font-size="11.5" font-weight="700" fill="#e8e4df">6장이 미룬 식별·완화가 여기</text>
+  <rect x="40" y="484" width="828" height="30" rx="4" fill="#f2d4d4"/>
+  <text x="454" y="504" text-anchor="middle" font-size="11" font-weight="700" fill="#7a1f1f">위험 · OOM 킬러가 옵니다</text>
 </svg>
