@@ -26,7 +26,7 @@
   <!-- Shenandoah 쪽 -->
   <g transform="translate(24,100)">
     <rect x="0" y="0" width="420" height="130" rx="8" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
-    <text x="16" y="24" class="lbl" fill="#9ec9e8">Shenandoah — 객체 헤더에</text>
+    <text x="16" y="24" class="lbl" style="fill:#9ec9e8">Shenandoah — 객체 헤더에</text>
     <text x="16" y="42" class="note">forwarding pointer 워드를 추가</text>
     <!-- object -->
     <rect x="16" y="54" width="70" height="40" fill="#3a3f4a" stroke="#7a8290"/><text x="51" y="78" class="cell" text-anchor="middle" fill="#dfe4ea">헤더</text>
@@ -38,7 +38,7 @@
   <!-- ZGC 쪽 -->
   <g transform="translate(476,100)">
     <rect x="0" y="0" width="420" height="130" rx="8" fill="#0d0d0d" stroke="#d4a853" stroke-width="1.5"/>
-    <text x="16" y="24" class="lbl" fill="#f5d76e">ZGC — 포인터 비트에</text>
+    <text x="16" y="24" class="lbl" style="fill:#f5d76e">ZGC — 포인터 비트에</text>
     <text x="16" y="42" class="note">객체는 그대로, 참조(포인터)에 상태 인코딩</text>
     <!-- pointer -->
     <rect x="16" y="54" width="60" height="40" fill="#3a2f10" stroke="#d4a853"/><text x="46" y="72" class="mono" text-anchor="middle" fill="#f5d76e">marked</text><text x="46" y="87" class="mono" text-anchor="middle" fill="#f5d76e">remap</text>
@@ -52,16 +52,16 @@
   <g transform="translate(24,278)">
     <!-- Shenandoah barrier -->
     <rect x="0" y="0" width="420" height="56" rx="6" fill="#101820" stroke="#5b9bd5"/>
-    <text x="12" y="22" class="lbl" fill="#9ec9e8">Read Barrier</text>
+    <text x="12" y="22" class="lbl" style="fill:#9ec9e8">Read Barrier</text>
     <line x1="96" y1="18" x2="132" y2="18" stroke="#5b9bd5" stroke-width="1.6" marker-end="url(#arB)"/>
-    <text x="140" y="22" class="note" fill="#9ec9e8">fwd 따라감 (self든 new든 *항상* 1회)</text>
+    <text x="140" y="22" class="note" style="fill:#9ec9e8">fwd 따라감 (self든 new든 *항상* 1회)</text>
     <text x="12" y="44" class="note">→ 이동 안 한 객체를 읽어도 우회가 붙는다 = 상시 비용</text>
   </g>
   <g transform="translate(476,278)">
     <rect x="0" y="0" width="420" height="56" rx="6" fill="#141005" stroke="#d4a853"/>
-    <text x="12" y="22" class="lbl" fill="#f5d76e">Load Barrier</text>
+    <text x="12" y="22" class="lbl" style="fill:#f5d76e">Load Barrier</text>
     <line x1="96" y1="18" x2="132" y2="18" stroke="#66bb6a" stroke-width="1.6" marker-end="url(#arG)"/>
-    <text x="140" y="22" class="note" fill="#f5d76e">비트 검사 → 맞으면 통과(fast), 낡을 때만 remap</text>
+    <text x="140" y="22" class="note" style="fill:#f5d76e">비트 검사 → 맞으면 통과(fast), 낡을 때만 remap</text>
     <text x="12" y="44" class="note">→ 대부분 fast path = 우회 없음. 드물게만 고침</text>
   </g>
 
@@ -96,7 +96,7 @@
 
   <!-- 핵심 -->
   <rect x="24" y="548" width="872" height="76" rx="8" fill="#141414" stroke="#2a2520"/>
-  <text x="42" y="574" class="lbl" fill="rgb(212,168,83)">핵심 — 저장 위치 하나가 나머지를 다 정한다</text>
+  <text x="42" y="574" class="lbl" style="fill:rgb(212,168,83)">핵심 — 저장 위치 하나가 나머지를 다 정한다</text>
   <text x="42" y="596" class="note">• 정보를 *객체(헤더)*에 두면 → 객체가 커지고(메모리↑) 매 읽기에 우회(속도↓). *포인터*에 두면 → 헤더 그대로(메모리≈0) + 대부분 통과.</text>
   <text x="42" y="616" class="note">• 공통 한계: 둘 다 throughput은 Parallel·G1보다 낮다. p99 지연이 최우선인 서비스엔 저지연 GC, 배치엔 Parallel이 여전히 우세.</text>
 </svg>
