@@ -1,0 +1,77 @@
+<svg viewBox="0 0 700 380" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>인증서 체인이 자체 서명 인증서에서 끝나는 이유</title>
+  <desc>인증 기관은 인증서에 서명해 그 안에 담긴 신원이 올바름을 검증하는 신뢰받는 주체입니다. 신뢰하는 기관이 서명한 인증서만 신뢰해야 합니다. 그런데 다른 구성 요소가 인증 기관을 안전하게 식별할 수 있어야 하므로 인증 기관도 인증서로 표현됩니다. 그 인증서 역시 어떤 기관이 서명해야 하고 서명자의 신원을 검증하려면 또 다른 인증서가 필요해서 끝없는 사슬이 만들어질 것처럼 보입니다. 실제로는 자체 서명 인증서에서 사슬이 끝납니다. 인증 기관이 자기 자신에게 서명한 인증서로, 인증서가 나타내는 신원과 서명에 쓰인 개인키의 신원이 같습니다. 그 신원을 신뢰할 수 있다면 그 인증서를 신뢰할 수 있습니다. 웹 브라우저에는 루트 인증 기관이라 불리는 잘 알려진 기관들의 인증서가 미리 설치돼 있습니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .lbl { fill: #b8b3ad; font-size: 9.5px; font-weight: 700; }
+    .self { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .root-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .root-detail { fill: #0d0d0d; font-size: 9.5px; }
+  </style>
+
+  <rect width="700" height="380" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="uh11b" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="30">누가 서명했는가를 거슬러 올라갑니다</text>
+
+  <rect class="box" x="40" y="46" width="180" height="80" rx="4"/>
+  <text class="box-title" x="56" y="67">Ann 의 인증서</text>
+  <text class="box-detail" x="56" y="86">Ann 의 신원</text>
+  <text class="box-detail" x="56" y="103">Ann 의 공개키</text>
+  <text class="box-detail" x="56" y="120">Bob 이 서명함</text>
+
+  <path class="arrow" d="M220,86 L262,86" marker-end="url(#uh11b)"/>
+  <text class="lbl" x="224" y="78">서명자</text>
+
+  <rect class="box" x="266" y="46" width="180" height="80" rx="4"/>
+  <text class="box-title" x="282" y="67">Bob 의 인증서</text>
+  <text class="box-detail" x="282" y="86">Bob 의 신원</text>
+  <text class="box-detail" x="282" y="103">Bob 의 공개키</text>
+  <text class="box-detail" x="282" y="120">Carol 이 서명함</text>
+
+  <path class="arrow" d="M446,86 L488,86" marker-end="url(#uh11b)"/>
+  <text class="lbl" x="450" y="78">서명자</text>
+
+  <rect x="492" y="46" width="168" height="80" rx="4" fill="rgb(212,168,83)"/>
+  <text class="root-title" x="508" y="67">Carol 의 인증서</text>
+  <text class="root-detail" x="508" y="86">Carol 의 신원</text>
+  <text class="root-detail" x="508" y="103">Carol 의 공개키</text>
+  <text class="root-detail" x="508" y="120">자기가 서명함</text>
+
+  <!-- 자기 서명 고리 -->
+  <path class="self" d="M576,126 L576,142 L620,142 L620,126" marker-end="url(#uh11b)"/>
+  <text class="lbl" x="500" y="160">여기서 사슬이 끝납니다 — 자체 서명</text>
+
+  <!-- 왜 끝나야 하는가 -->
+  <text class="head" x="40" y="200">왜 끝이 필요한가</text>
+
+  <rect class="box" x="40" y="212" width="300" height="86" rx="4"/>
+  <text class="box-title" x="56" y="233">끝이 없다면</text>
+  <text class="box-detail" x="56" y="252">서명자 검증에 인증서가 필요하고</text>
+  <text class="box-detail" x="56" y="270">그 서명자에도 또 인증서가 필요하다</text>
+  <text class="box-detail" x="56" y="288">사슬이 끝없이 이어집니다</text>
+
+  <rect class="box" x="360" y="212" width="300" height="86" rx="4"/>
+  <text class="box-title" x="376" y="233">자체 서명이 매듭입니다</text>
+  <text class="box-detail" x="376" y="252">인증서 신원 = 서명한 키의 신원</text>
+  <text class="box-detail" x="376" y="270">그 신원을 신뢰하면 인증서를 신뢰한다</text>
+  <text class="box-detail" x="376" y="288">신뢰는 검증이 아니라 선택입니다</text>
+
+  <text class="hint" x="40" y="332">브라우저엔 루트 CA 가 내장됩니다</text>
+  <text class="hint" x="40" y="352">사설이면 자기 CA 를 세웁니다</text>
+</svg>
