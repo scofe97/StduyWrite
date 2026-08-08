@@ -1,0 +1,68 @@
+<svg viewBox="0 0 640 430" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>컨테이너 이미지 해부 전체 흐름</title>
+  <desc>이미지는 루트 파일시스템과 설정 정보라는 두 부분으로 이뤄집니다. 이 구조를 표준으로 못 박은 것이 OCI 명세이며, 런타임은 이미지를 번들로 풀어 컨테이너를 만듭니다. 이미지를 만드는 과정에서는 Docker 데몬이 root로 도는 문제가 있어 데몬 없는 빌드 도구들이 나왔습니다. 이미지 내부는 층으로 쌓이는데, 위층에서 파일을 지워도 아래층에 그대로 남는다는 점이 보안상 중요합니다. 마지막으로 이미지를 레지스트리에 저장하고 태그나 다이제스트로 식별하는 방식을 봅니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10.5px; }
+    .sec { fill: #3a3632; font-size: 10px; font-weight: 700; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .num { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10.5px; }
+    .danger-title { fill: #7a1f1f; font-size: 13px; font-weight: 700; }
+    .danger-detail { fill: #7a1f1f; font-size: 10.5px; }
+  </style>
+
+  <rect width="640" height="430" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="qh" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="num" x="34" y="45">1.</text>
+  <rect class="box" x="54" y="24" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="46">이미지는 두 부분이다</text>
+  <text class="box-detail" x="72" y="64">루트 파일시스템 + 설정</text>
+  <text class="sec" x="566" y="46" text-anchor="end">§1</text>
+
+  <path class="arrow" d="M320,74 L320,92" marker-end="url(#qh)"/>
+
+  <text class="num" x="34" y="119">2.</text>
+  <rect class="box" x="54" y="98" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="120">OCI 표준</text>
+  <text class="box-detail" x="72" y="138">런타임이 번들로 풀어 쓴다</text>
+  <text class="sec" x="566" y="120" text-anchor="end">§2</text>
+
+  <path class="arrow" d="M320,148 L320,166" marker-end="url(#qh)"/>
+
+  <text class="num" x="34" y="193">3.</text>
+  <rect class="box" x="54" y="172" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="194">빌드와 데몬 문제</text>
+  <text class="box-detail" x="72" y="212">데몬이 root라 위험하다</text>
+  <text class="sec" x="566" y="194" text-anchor="end">§3</text>
+
+  <path class="arrow" d="M320,222 L320,240" marker-end="url(#qh)"/>
+
+  <text class="num" x="34" y="267">4.</text>
+  <rect x="54" y="246" width="532" height="54" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="72" y="268">위험 · 지워도 층에 남는다</text>
+  <text class="danger-detail" x="72" y="288">아래층은 그대로 보존된다</text>
+  <text class="sec" x="566" y="268" text-anchor="end">§4</text>
+
+  <path class="arrow" d="M320,300 L320,318" marker-end="url(#qh)"/>
+
+  <text class="num" x="34" y="345">5.</text>
+  <rect class="box" x="54" y="324" width="532" height="52" rx="4"/>
+  <text class="box-title" x="72" y="348">저장과 식별</text>
+  <text class="box-detail" x="72" y="366">태그는 움직이고 다이제스트는 고정</text>
+  <text class="sec" x="566" y="348" text-anchor="end">§5</text>
+
+  <text class="hint" x="72" y="404">보안 관점은 06-02 로</text>
+</svg>

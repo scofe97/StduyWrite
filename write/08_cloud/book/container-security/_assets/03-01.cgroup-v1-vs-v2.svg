@@ -1,0 +1,74 @@
+<svg viewBox="0 0 680 380" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>cgroup v1과 v2의 가장 큰 차이</title>
+  <desc>버전 1에서는 한 프로세스가 컨트롤러마다 서로 다른 그룹에 속할 수 있습니다. 메모리는 mygroup에 두고 프로세스 수 제한은 yourgroup에 두는 식이라 조합이 복잡해집니다. 버전 2에서는 프로세스가 하나의 그룹에 들어가고 그 그룹에 걸린 모든 컨트롤러의 통제를 함께 받습니다. 구조가 단순해지는 대신 컨트롤러별로 다른 그룹을 고르는 자유는 사라집니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 12.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10px; }
+    .path { fill: #0d0d0d; font-size: 10px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .chip { fill: #f5edda; }
+    .head { fill: #b8b3ad; font-size: 11.5px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .divider { stroke: #b8b3ad; stroke-width: 1.2; stroke-dasharray: 5 4; fill: none; }
+  </style>
+
+  <rect width="680" height="380" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="ih" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="32">v1 — 컨트롤러마다 따로</text>
+  <text class="head" x="380" y="32">v2 — 하나의 그룹으로</text>
+
+  <path class="divider" d="M345,20 L345,320"/>
+
+  <!-- v1 프로세스 -->
+  <rect class="box" x="40" y="48" width="270" height="42" rx="4"/>
+  <text class="box-title" x="56" y="74">프로세스 하나</text>
+
+  <path class="arrow" d="M110,90 L110,124" marker-end="url(#ih)"/>
+  <path class="arrow" d="M240,90 L240,124" marker-end="url(#ih)"/>
+
+  <rect class="box" x="40" y="130" width="130" height="66" rx="4"/>
+  <text class="box-detail" x="56" y="150">memory 컨트롤러</text>
+  <rect class="chip" x="56" y="158" width="98" height="18" rx="3"/>
+  <text class="path" x="60" y="171">mygroup</text>
+
+  <rect class="box" x="180" y="130" width="130" height="66" rx="4"/>
+  <text class="box-detail" x="196" y="150">pids 컨트롤러</text>
+  <rect class="chip" x="196" y="158" width="98" height="18" rx="3"/>
+  <text class="path" x="200" y="171">yourgroup</text>
+
+  <text class="hint" x="40" y="222">서로 다른 그룹에 동시에 속한다</text>
+  <text class="hint" x="40" y="240">조합이 늘수록 파악이 어렵다</text>
+
+  <!-- v2 프로세스 -->
+  <rect class="box" x="380" y="48" width="260" height="42" rx="4"/>
+  <text class="box-title" x="396" y="74">프로세스 하나</text>
+
+  <path class="arrow" d="M510,90 L510,124" marker-end="url(#ih)"/>
+
+  <rect class="box" x="380" y="130" width="260" height="66" rx="4"/>
+  <text class="box-detail" x="396" y="150">그룹 하나에 들어간다</text>
+  <rect class="chip" x="396" y="158" width="98" height="18" rx="3"/>
+  <text class="path" x="400" y="171">ourgroup</text>
+
+  <text class="hint" x="380" y="222">모든 컨트롤러를 함께</text>
+  <text class="hint" x="380" y="240">구조가 단순해진다</text>
+
+  <!-- 하단 요약 -->
+  <rect class="box" x="40" y="266" width="600" height="54" rx="4"/>
+  <text class="box-title" x="56" y="288">v2가 더 주는 것</text>
+  <text class="box-detail" x="56" y="308">rootless에도 한도를 건다</text>
+
+  <text class="hint" x="40" y="352">책은 2020년 시점 기준</text>
+</svg>

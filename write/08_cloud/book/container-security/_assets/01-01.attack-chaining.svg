@@ -1,0 +1,66 @@
+<svg viewBox="0 0 660 430" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>보안 경계를 연달아 넘는 공격 체이닝 4단계</title>
+  <desc>공격자는 의존성 취약점으로 컨테이너 안에서 원격 코드 실행을 얻고, 그 컨테이너에 값진 데이터가 없으면 이스케이프 취약점이나 잘못된 설정을 통해 호스트로 나갑니다. 이어서 호스트의 root 권한을 노리는데, 컨테이너 안에서 이미 root로 돌고 있었다면 이 단계는 사소해집니다. root를 얻으면 그 호스트와 호스트 위 모든 컨테이너가 닿는 모든 것에 접근할 수 있습니다. 각 단계 사이의 점선이 공격자가 넘어야 하는 보안 경계입니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 12.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .boundary { stroke: #b8b3ad; stroke-width: 1.2; stroke-dasharray: 5 4; fill: none; }
+    .blabel { fill: #b8b3ad; font-size: 10px; font-style: italic; }
+    .num { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .caution-title { fill: #0d0d0d; font-size: 12.5px; font-weight: 700; }
+    .caution-detail { fill: #0d0d0d; font-size: 10px; }
+    .danger-title { fill: #7a1f1f; font-size: 12.5px; font-weight: 700; }
+    .danger-detail { fill: #7a1f1f; font-size: 10px; }
+  </style>
+
+  <rect width="660" height="430" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="ah3" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <!-- 1 -->
+  <text class="num" x="34" y="48">1.</text>
+  <rect class="box" x="54" y="26" width="480" height="52" rx="4"/>
+  <text class="box-title" x="70" y="48">컨테이너 안 원격 코드 실행</text>
+  <text class="box-detail" x="70" y="66">앱 의존성의 취약점을 이용</text>
+
+  <path class="arrow" d="M294,78 L294,100" marker-end="url(#ah3)"/>
+  <path class="boundary" d="M40,110 L620,110"/>
+  <text class="blabel" x="620" y="106" text-anchor="end">경계 1 · 컨테이너</text>
+
+  <!-- 2 -->
+  <text class="num" x="34" y="144">2.</text>
+  <rect class="box" x="54" y="122" width="480" height="52" rx="4"/>
+  <text class="box-title" x="70" y="144">컨테이너 밖으로 이동</text>
+  <text class="box-detail" x="70" y="162">이스케이프 취약점 또는 잘못된 설정</text>
+
+  <path class="arrow" d="M294,174 L294,196" marker-end="url(#ah3)"/>
+  <path class="boundary" d="M40,206 L620,206"/>
+  <text class="blabel" x="620" y="202" text-anchor="end">경계 2 · 호스트</text>
+
+  <!-- 3 — 주의 -->
+  <text class="num" x="34" y="240">3.</text>
+  <rect x="54" y="218" width="480" height="56" rx="4" fill="rgb(212,168,83)"/>
+  <text class="caution-title" x="70" y="240">주의 · 호스트 root 권한 획득</text>
+  <text class="caution-detail" x="70" y="258">컨테이너가 root였다면 사소</text>
+
+  <path class="arrow" d="M294,274 L294,296" marker-end="url(#ah3)"/>
+
+  <!-- 4 — 위험 -->
+  <text class="num" x="34" y="340">4.</text>
+  <rect x="54" y="318" width="480" height="56" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="70" y="340">위험 · 호스트가 닿는 전부</text>
+  <text class="danger-detail" x="70" y="358">그 호스트 위 모든 컨테이너까지</text>
+
+  <text class="blabel" x="54" y="404">경계가 많을수록 길이 길다</text>
+</svg>

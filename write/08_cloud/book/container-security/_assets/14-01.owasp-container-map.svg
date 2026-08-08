@@ -1,0 +1,78 @@
+<svg viewBox="0 0 700 420" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>OWASP 10대 리스크와 컨테이너 고유 대응의 대응 관계</title>
+  <desc>OWASP 는 주기적으로 웹 애플리케이션 보안 리스크 상위 열 가지 목록을 발표합니다. 컨테이너화됐든 아니든 모든 애플리케이션이 웹 애플리케이션은 아니지만, 어떤 공격을 가장 걱정해야 하는지 판단하는 데 훌륭한 자료입니다. 열 가지 중 일부는 컨테이너에 고유한 것이 전혀 없어 애플리케이션 코드 수준에서 대응해야 하고, 나머지는 컨테이너 고유의 접근법이 있습니다. 인젝션과 XML 외부 엔티티와 크로스 사이트 스크립팅은 애플리케이션 계층에서 일어나므로 컨테이너 고유의 대응이 없고 이미지 스캐너로 의존성의 알려진 취약점을 찾는 정도입니다. 반면 인증 취약과 민감정보 노출은 시크릿 전달과 인증서 관리로, 접근 통제 취약은 비root 실행과 capability 제한으로, 보안 설정 오류는 CIS 벤치마크로 대응합니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .app-title { fill: #7a1f1f; font-size: 11px; font-weight: 700; }
+    .app-detail { fill: #7a1f1f; font-size: 9.5px; }
+    .ok-tag { fill: #14521d; font-size: 9.5px; font-weight: 700; }
+    .ch { fill: #3a3632; font-size: 9px; font-weight: 700; }
+  </style>
+
+  <rect width="700" height="420" fill="#0d0d0d"/>
+
+  <text class="head" x="40" y="28">컨테이너 고유 대응이 있는 것</text>
+
+  <rect class="box" x="40" y="40" width="200" height="88" rx="4"/>
+  <text class="box-title" x="56" y="61">인증 취약</text>
+  <text class="box-detail" x="56" y="80">자격증명을 시크릿으로</text>
+  <text class="box-detail" x="56" y="98">인증서로 서로를 식별</text>
+  <text class="box-detail" x="56" y="116">서비스 메시에 넘길 수도</text>
+  <text class="ch" x="196" y="61">11·12장</text>
+
+  <rect class="box" x="252" y="40" width="200" height="88" rx="4"/>
+  <text class="box-title" x="268" y="61">민감정보 노출</text>
+  <text class="box-detail" x="268" y="80">저장·전송 모두 암호화</text>
+  <text class="box-detail" x="268" y="98">필요한 컨테이너에만 준다</text>
+  <text class="box-detail" x="268" y="116">이미지에 키가 없는지 스캔</text>
+  <text class="ch" x="416" y="61">12장</text>
+
+  <rect class="box" x="464" y="40" width="196" height="88" rx="4"/>
+  <text class="box-title" x="480" y="61">접근 통제 취약</text>
+  <text class="box-detail" x="480" y="80">root 로 돌리지 않는다</text>
+  <text class="box-detail" x="480" y="98">capability 를 줄인다</text>
+  <text class="box-detail" x="480" y="116">seccomp · rootless</text>
+  <text class="ch" x="624" y="61">9장</text>
+
+  <rect class="box" x="40" y="140" width="200" height="88" rx="4"/>
+  <text class="box-title" x="56" y="161">보안 설정 오류</text>
+  <text class="box-detail" x="56" y="180">CIS 벤치마크로 점검</text>
+  <text class="box-detail" x="56" y="198">CSPM 으로 클라우드 설정</text>
+  <text class="box-detail" x="56" y="216">환경 변수에 시크릿 금지</text>
+  <text class="ch" x="196" y="161">6·12장</text>
+
+  <rect class="box" x="252" y="140" width="200" height="88" rx="4"/>
+  <text class="box-title" x="268" y="161">안전하지 않은 역직렬화</text>
+  <text class="box-detail" x="268" y="180">역직렬화를 전용 컨테이너로</text>
+  <text class="box-detail" x="268" y="198">gVisor 등으로 격리</text>
+  <text class="box-detail" x="268" y="216">그 컨테이너의 통신 제한</text>
+  <text class="ch" x="416" y="161">8·10장</text>
+
+  <rect class="box" x="464" y="140" width="196" height="88" rx="4"/>
+  <text class="box-title" x="480" y="161">로깅·모니터링 부족</text>
+  <text class="box-detail" x="480" y="180">컨테이너 이벤트를 남긴다</text>
+  <text class="box-detail" x="480" y="198">SIEM 과 통합한다</text>
+  <text class="box-detail" x="480" y="216">막는 편이 더 낫다</text>
+  <text class="ch" x="624" y="161">13장</text>
+
+  <!-- 앱 계층 -->
+  <text class="head" x="40" y="264">컨테이너 고유 대응이 없는 것</text>
+
+  <rect x="40" y="276" width="620" height="76" rx="4" fill="#f2d4d4"/>
+  <text class="app-title" x="56" y="297">인젝션 · XXE · XSS</text>
+  <text class="app-detail" x="56" y="316">컨테이너 여부와 무관합니다</text>
+  <text class="app-detail" x="56" y="334">코드는 직접, 의존성은 스캐너로</text>
+
+  <!-- 취약 컴포넌트 -->
+  <rect class="box" x="40" y="364" width="620" height="42" rx="4"/>
+  <text class="box-title" x="56" y="385">이 장에서 가장 자주 나온 답</text>
+  <text class="ok-tag" x="56" y="400">스캔 · 재빌드 · 교체</text>
+</svg>

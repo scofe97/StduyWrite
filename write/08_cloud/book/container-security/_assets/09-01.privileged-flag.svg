@@ -1,0 +1,66 @@
+<svg viewBox="0 0 700 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>privileged 플래그가 실제로 주는 것과 흔한 오해</title>
+  <desc>privileged 플래그가 컨테이너를 root 로 돌리는 것과 같다고 흔히 생각하지만 컨테이너는 이미 기본적으로 root 로 돕니다. Docker 에서 프로세스가 root 사용자 ID 로 도는 것은 맞지만 root 의 일반적인 Linux capability 중 상당수는 당연히 주어지지 않습니다. capsh 로 확인하면 플래그 없이는 열네 개 남짓이 붙고 플래그를 붙이면 전체 목록이 붙습니다. 여기에는 namespace 조작과 파일시스템 마운트를 포함한 방대한 특권 활동을 여는 CAP_SYS_ADMIN 이 들어 있습니다. 더 미묘한 위험은 사람들이 이 플래그가 root 권한을 준다고 믿기 때문에 그 역도 참이라고 믿는다는 것입니다. 즉 이 플래그 없이 도는 컨테이너는 root 프로세스가 아니라고 오해합니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .code { fill: #0d0d0d; font-size: 9.5px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .chip { fill: #f5edda; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .danger-title { fill: #7a1f1f; font-size: 11.5px; font-weight: 700; }
+    .danger-detail { fill: #7a1f1f; font-size: 9.5px; }
+    .warn-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .warn-detail { fill: #0d0d0d; font-size: 9.5px; }
+    .ok-title { fill: #14521d; font-size: 11.5px; font-weight: 700; }
+    .ok-detail { fill: #14521d; font-size: 9.5px; }
+  </style>
+
+  <rect width="700" height="400" fill="#0d0d0d"/>
+
+  <text class="head" x="40" y="30">무엇이 늘어나는가</text>
+
+  <rect class="box" x="40" y="42" width="300" height="104" rx="4"/>
+  <text class="box-title" x="56" y="63">플래그 없이</text>
+  <rect class="chip" x="56" y="72" width="220" height="15" rx="3"/>
+  <text class="code" x="60" y="83">docker run alpine</text>
+  <text class="box-detail" x="56" y="102">사용자는 이미 root 다</text>
+  <text class="box-detail" x="56" y="118">capability 는 열네 개 남짓</text>
+  <text class="box-detail" x="56" y="136">chown · setuid 등</text>
+
+  <rect x="360" y="42" width="300" height="104" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="376" y="63">플래그를 붙이면</text>
+  <rect class="chip" x="376" y="72" width="220" height="15" rx="3"/>
+  <text class="code" x="380" y="83">docker run --privileged</text>
+  <text class="danger-detail" x="376" y="102">사용자는 똑같이 root</text>
+  <text class="danger-detail" x="376" y="118">capability 가 전부 붙는다</text>
+  <text class="danger-detail" x="376" y="136">sys_admin 등 전부</text>
+
+  <!-- CAP_SYS_ADMIN 강조 -->
+  <rect x="40" y="160" width="620" height="70" rx="4" fill="rgb(212,168,83)"/>
+  <text class="warn-title" x="56" y="181">기본 집합에도 이미 들어 있는 것</text>
+  <rect class="chip" x="56" y="189" width="120" height="16" rx="3"/>
+  <text class="code" x="60" y="201">CAP_SYS_ADMIN</text>
+  <text class="warn-detail" x="188" y="201">이 하나가 방대한 특권 활동을 엽니다</text>
+  <text class="warn-detail" x="56" y="220">namespace 조작·마운트가 포함</text>
+
+  <!-- 오해 -->
+  <text class="head" x="40" y="264">더 미묘한 위험 — 역의 오해</text>
+
+  <rect x="40" y="276" width="300" height="66" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="56" y="297">흔한 오해</text>
+  <text class="danger-detail" x="56" y="316">이 플래그가 root 를 준다</text>
+  <text class="danger-detail" x="56" y="334">그러니 안 붙이면 root 가 아니다</text>
+
+  <rect x="360" y="276" width="300" height="66" rx="4" fill="#cdeccf"/>
+  <text class="ok-title" x="376" y="297">사실</text>
+  <text class="ok-detail" x="376" y="316">안 붙여도 이미 root 다</text>
+  <text class="ok-detail" x="376" y="334">늘어나는 건 capability 쪽</text>
+
+  <text class="hint" x="40" y="372">전부 버리고 필요한 것만 되돌립니다</text>
+</svg>

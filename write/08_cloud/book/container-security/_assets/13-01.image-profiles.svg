@@ -1,0 +1,88 @@
+<svg viewBox="0 0 700 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>이미지 단위 런타임 프로파일의 다섯 축</title>
+  <desc>어떤 컨테이너 이미지가 애플리케이션 마이크로서비스의 코드를 담고 그 마이크로서비스가 작은 기능 하나를 한다면, 그것이 무엇을 해야 하는지 추론하기가 비교적 쉽습니다. 마이크로서비스 코드는 컨테이너 이미지에 빌드되므로 그 이미지에 대응하는 런타임 프로파일을 만들어 무엇을 할 수 있어야 하는지 정의할 수 있습니다. 주어진 이미지에서 뜬 모든 컨테이너는 같은 방식으로 동작해야 하므로, 기대 동작의 프로파일을 이미지에 대해 정의하고 그 이미지 기반의 모든 컨테이너를 단속하는 데 쓰는 것이 이치에 맞습니다. 프로파일로 만들 수 있는 축은 네트워크 트래픽, 실행 파일, 파일 접근, 사용자 ID, 그리고 더 낮은 수준의 시스템 콜과 capability 입니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .code { fill: #0d0d0d; font-size: 9.5px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .chip { fill: #f5edda; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+  </style>
+
+  <rect width="700" height="400" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="uh13" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="30">작을수록 정상을 정의하기 쉽다</text>
+
+  <rect class="box" x="40" y="42" width="200" height="62" rx="4"/>
+  <text class="box-title" x="56" y="63">이미지 하나</text>
+  <text class="box-detail" x="56" y="82">기능 하나를 하는 코드</text>
+  <text class="box-detail" x="56" y="98">무엇을 할지 추론 가능</text>
+
+  <path class="arrow" d="M240,73 L280,73" marker-end="url(#uh13)"/>
+
+  <rect class="box" x="284" y="42" width="200" height="62" rx="4"/>
+  <text class="box-title" x="300" y="63">런타임 프로파일</text>
+  <text class="box-detail" x="300" y="82">기대 동작을 정의한다</text>
+  <text class="box-detail" x="300" y="98">이미지 단위로 만든다</text>
+
+  <path class="arrow" d="M484,73 L524,73" marker-end="url(#uh13)"/>
+
+  <rect class="box" x="528" y="42" width="132" height="62" rx="4"/>
+  <text class="box-title" x="544" y="63">모든 컨테이너</text>
+  <text class="box-detail" x="544" y="82">같은 이미지에서 뜬</text>
+  <text class="box-detail" x="544" y="98">전부를 단속한다</text>
+
+  <!-- 다섯 축 -->
+  <text class="head" x="40" y="142">프로파일로 만들 수 있는 축</text>
+
+  <rect class="box" x="40" y="154" width="200" height="96" rx="4"/>
+  <text class="box-title" x="56" y="175">네트워크 트래픽</text>
+  <text class="box-detail" x="56" y="194">인그레스에서 요청을 받고</text>
+  <text class="box-detail" x="56" y="212">상품 DB 에 연결한다</text>
+  <text class="box-detail" x="56" y="230">그 밖엔 이유가 없다</text>
+  <text class="box-detail" x="56" y="248">10장의 정책으로 변환</text>
+
+  <rect class="box" x="252" y="154" width="200" height="96" rx="4"/>
+  <text class="box-title" x="268" y="175">실행 파일</text>
+  <text class="box-detail" x="268" y="194">Go 바이너리 하나뿐이면</text>
+  <rect class="chip" x="268" y="202" width="110" height="15" rx="3"/>
+  <text class="code" x="272" y="213">productsearch</text>
+  <text class="box-detail" x="268" y="230">그 밖의 것은 이상 징후</text>
+  <text class="box-detail" x="268" y="248">셸이 보이면 경보</text>
+
+  <rect class="box" x="464" y="154" width="196" height="96" rx="4"/>
+  <text class="box-title" x="480" y="175">파일 접근</text>
+  <text class="box-detail" x="480" y="194">여는 파일 집합도 제한적</text>
+  <rect class="chip" x="480" y="202" width="80" height="15" rx="3"/>
+  <text class="code" x="484" y="213">openat</text>
+  <text class="box-detail" x="480" y="230">손으로 적으면 빠뜨린다</text>
+  <text class="box-detail" x="480" y="248">도구로 뽑아냅니다</text>
+
+  <rect class="box" x="40" y="262" width="308" height="86" rx="4"/>
+  <text class="box-title" x="56" y="283">사용자 ID</text>
+  <text class="box-detail" x="56" y="302">일 하나면 신원도 하나면 충분하다</text>
+  <text class="box-detail" x="56" y="320">다른 신원이 보이면 적신호</text>
+  <text class="box-detail" x="56" y="338">root 로 뜨면 권한 상승 신호</text>
+
+  <rect class="box" x="360" y="262" width="300" height="86" rx="4"/>
+  <text class="box-title" x="376" y="283">시스템 콜과 capability</text>
+  <text class="box-detail" x="376" y="302">더 낮은 수준까지 좁힌다</text>
+  <text class="box-detail" x="376" y="320">맞춤 seccomp 프로파일</text>
+  <text class="box-detail" x="376" y="338">8장에서 본 그 수단</text>
+
+  <text class="hint" x="40" y="384">경로가 적어 마이크로서비스가 쉽다</text>
+</svg>

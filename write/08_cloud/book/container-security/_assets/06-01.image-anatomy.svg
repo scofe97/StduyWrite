@@ -1,0 +1,66 @@
+<svg viewBox="0 0 680 380" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>이미지의 두 부분과 런타임이 그것을 푸는 과정</title>
+  <desc>컨테이너 이미지는 루트 파일시스템과 설정 정보 두 부분으로 이뤄집니다. Dockerfile의 명령 중 FROM과 ADD와 COPY와 RUN은 루트 파일시스템의 내용을 바꾸고, USER와 PORT와 ENV는 함께 저장되는 설정 정보에 영향을 줍니다. OCI 규격을 따르는 런타임은 이미지를 그대로 쓰지 못하고 먼저 런타임 파일시스템 번들로 풀어야 합니다. 풀린 번들에는 배포판 내용이 담긴 rootfs 디렉토리와 런타임 설정을 정의하는 config.json 파일이 들어 있습니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 12.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10px; }
+    .code { fill: #0d0d0d; font-size: 10px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .chip { fill: #f5edda; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .divider { stroke: #b8b3ad; stroke-width: 1.2; stroke-dasharray: 5 4; fill: none; }
+  </style>
+
+  <rect width="680" height="380" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="sh" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="30">컨테이너 이미지</text>
+
+  <!-- 두 부분 -->
+  <rect class="box" x="40" y="42" width="290" height="90" rx="4"/>
+  <text class="box-title" x="56" y="64">루트 파일시스템</text>
+  <text class="box-detail" x="56" y="84">배포판의 디렉토리와 파일 전부</text>
+  <rect class="chip" x="56" y="94" width="230" height="18" rx="3"/>
+  <text class="code" x="62" y="107">FROM · ADD · COPY · RUN</text>
+  <text class="box-detail" x="56" y="126">이 명령들이 내용을 바꾼다</text>
+
+  <rect class="box" x="350" y="42" width="290" height="90" rx="4"/>
+  <text class="box-title" x="366" y="64">설정 정보</text>
+  <text class="box-detail" x="366" y="84">실행 시 기본 파라미터</text>
+  <rect class="chip" x="366" y="94" width="180" height="18" rx="3"/>
+  <text class="code" x="372" y="107">USER · PORT · ENV</text>
+  <text class="box-detail" x="366" y="126">docker inspect 로 본다</text>
+
+  <path class="arrow" d="M340,160 L340,182" marker-end="url(#sh)"/>
+  <text class="hint" x="356" y="176">런타임이 번들로 푼다</text>
+
+  <path class="divider" d="M40,150 L640,150"/>
+
+  <text class="head" x="40" y="208">풀린 런타임 번들</text>
+
+  <rect class="box" x="40" y="220" width="290" height="66" rx="4"/>
+  <text class="box-title" x="56" y="242">rootfs 디렉토리</text>
+  <text class="box-detail" x="56" y="262">Alpine 등 배포판 내용</text>
+  <text class="box-detail" x="56" y="278">컨테이너가 볼 파일시스템</text>
+
+  <rect class="box" x="350" y="220" width="290" height="66" rx="4"/>
+  <text class="box-title" x="366" y="242">config.json</text>
+  <text class="box-detail" x="366" y="262">cgroup·namespace 설정</text>
+  <text class="box-detail" x="366" y="278">3·4장에서 본 것들이 여기 있다</text>
+
+  <text class="hint" x="40" y="316">실행 시점에 덮어쓸 수 있다</text>
+  <text class="hint" x="40" y="336">docker run -e 등으로</text>
+  <text class="hint" x="40" y="356">config.json 에 반영된다</text>
+</svg>
