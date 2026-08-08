@@ -40,7 +40,7 @@ updated: 2026-05-30
 
 ## 실습 환경
 
-기초(`01_foundation`)와 Linkerd·Istio 설치·트래픽 실험은 개인 GCP K8s 클러스터(dev-server 1~3)에서 수행합니다. 멀티클러스터·VM 통합은 추가 GCE VM을 스핀업해 진행합니다. 클러스터 상세는 [`gcp` 스킬 문서](../../../../.claude/skills/gcp/SKILL.md)를 참조합니다.
+기초(`01_foundation`)와 Linkerd·Istio 설치·트래픽 실험은 개인 GCP K8s 클러스터(dev-server 1~3)에서 수행합니다. 멀티클러스터·VM 통합은 추가 GCE VM을 스핀업해 진행합니다. 클러스터 상세는 `gcp` 스킬 문서`를 참조합니다. <!-- 2026-07 GCP 서버·스킬 삭제됨 — 링크 없음 -->
 
 ## 관련 문서
 

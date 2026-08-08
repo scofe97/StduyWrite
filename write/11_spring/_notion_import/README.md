@@ -89,7 +89,7 @@ boot 신규 작성 시 `msa/ 02-*·03-*·xx 모니터링` 노션 노트가 동�
 
 ## 작업 규약
 
-- 본 영역의 `.md` 본문은 **수정 금지**. 노션 마크업(`<aside>`, `![...](폴더/...)`) 을 그대로 둔다. 재작성은 정식 폴더의 신규 파일에서만 진행한다. (`feedback_learning_doc_body_immutable`)
+- 본 영역의 `.md` 본문은 **수정 금지**. 노션 마크업(`<aside>`, `!`...` <!-- 링크 끊김(2026-08): 폴더/... -->`) 을 그대로 둔다. 재작성은 정식 폴더의 신규 파일에서만 진행한다. (`feedback_learning_doc_body_immutable`)
 - 이관 시 파일명에서 32자 hex hash 접미사만 제거. 동명 자산 폴더도 같은 규칙으로 rename 하여 마크다운 상대경로가 깨지지 않도록 한다.
 - 재작성 산출물은 `_meta/conventions.md` 의 프론트매터 5필드(title, tags, status, related, updated) 와 파일명 컨벤션 `NN-MM.제목.md` 를 지킨다.
 - 재작성 시 노션 원본의 코드 스니펫·URL·인용은 사실 변경 금지(`feedback_learning_doc_body_immutable`). 단, 노션 위젯(`<aside>`) 은 산문으로 풀고 어미는 한 톤으로 통일한다.

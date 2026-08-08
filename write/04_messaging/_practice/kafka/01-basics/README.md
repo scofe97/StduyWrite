@@ -11,8 +11,8 @@ Kafka 기본 CLI 명령어와 핵심 개념 학습
 
 ## 관련 이론
 
-- [Chapter 1: Introduction to Apache Kafka](../../../docs/08_MessageQueue/Kafka/01_Introduction_to_Apache_Kafka.md)
-- [Chapter 2: First Steps with Kafka](../../../docs/08_MessageQueue/Kafka/02_First_Steps_with_Kafka.md)
+- `Chapter 1: Introduction to Apache Kafka` <!-- 링크 끊김(2026-08): ../../../docs/08_MessageQueue/Kafka/01_Introduction_to_Apache_Kafka.md -->
+- `Chapter 2: First Steps with Kafka` <!-- 링크 끊김(2026-08): ../../../docs/08_MessageQueue/Kafka/02_First_Steps_with_Kafka.md -->
 
 ## 실습 환경
 

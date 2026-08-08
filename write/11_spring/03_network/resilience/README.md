@@ -47,7 +47,7 @@ Resilience4j 가 그 자리의 *de facto 표준* 입니다. Spring Cloud Circuit
 | Kafka Consumer Backoff | Spring Kafka `BackOff` 정책 (FixedBackOff·ExponentialBackOff) | [`../../../04_messaging/05_ConsistencyPattern/05-05.Backoff 전략 비교와 선택.md`](../../../04_messaging/05_ConsistencyPattern/05-05.Backoff%20전략%20비교와%20선택.md) |
 | 메시징 측 Poison Message | DLT 흡수의 한계, 격리 큐 패턴 | [`06-01.Poison Message 처리`](../../../04_messaging/05_ConsistencyPattern/06-01.Poison%20Message%20처리%20—%20DLT%20흡수의%20한계와%20격리%20큐.md) |
 | 메시징 측 Retry Storm | 백오프 jitter, 동시성 제한, 컨슈머 측 서킷 | [`06-02.Retry Storm 방지`](../../../04_messaging/05_ConsistencyPattern/06-02.Retry%20Storm%20방지%20—%20백오프%20jitter·동시성%20제한·서킷.md) |
-| Istio 측 회복탄력성 | 인프라 레벨 retry·timeout·circuit-breaking | [`../../../08_cloud/service-mesh/11-03.Istio 레질리언스.md`](../../../08_cloud/service-mesh/11-03.Istio%20레질리언스.md) |
+| Istio 측 회복탄력성 | 인프라 레벨 retry·timeout·circuit-breaking | `../../../08_cloud/service-mesh/11-03.Istio 레질리언스.md` <!-- 링크 끊김(2026-08): ../../../08_cloud/service-mesh/11-03.Istio 레질리언스.md --> |
 
 > Istio 와 Resilience4j 는 *같은 패턴을 다른 레이어* 에서 적용합니다. Istio 가 *인프라 계층* 에서, Resilience4j 가 *애플리케이션 계층* 에서. 둘은 보완 관계입니다.
 

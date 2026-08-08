@@ -203,7 +203,7 @@ Disk → Kernel Buffer(Page Cache) → NIC
 
 ## 🔗 관련 문서
 
-- [06_Performance_면접정리.md](../../../docs/카프카/06_Performance_면접정리.md)
+- `06_Performance_면접정리.md` <!-- 링크 끊김(2026-08): ../../../docs/카프카/06_Performance_면접정리.md -->
 - [Kafka Documentation - Design](https://kafka.apache.org/documentation/#design)
 - [IBM Developer - Zero-Copy](https://developer.ibm.com/articles/j-zerocopy/)
 

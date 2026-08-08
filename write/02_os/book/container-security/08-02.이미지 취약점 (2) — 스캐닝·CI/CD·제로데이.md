@@ -102,7 +102,7 @@ Heartbleed 만큼 심각한 사례는 드물지만, 서드파티 의존성을 �
 
 스캐너 동작과 한계, 결과 차이의 원인을 한 장으로 정리하면 다음과 같습니다.
 
-![이미지 스캐닝 동작과 결과가 다른 이유](_assets/08-02.scanning-and-pipeline.svg)
+![이미지 스캐닝 동작과 결과가 다른 이유](../_assets/08-02.scanning-and-pipeline.svg)
 
 
 

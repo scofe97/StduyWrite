@@ -48,8 +48,8 @@ GC 비교가 목적인 3장 모듈은 별도 래퍼로 돌리면 GC 로그 위�
 | 책 챕터 | 노트 폴더 | 코드 모듈 | 빌드 명령 예 |
 |--------|----------|----------|------------|
 | 1장 자바 기술 체계 | [`../ch01_java-tech/`](../ch01_java-tech/) | [`:ch01`](./ch01/) | `./gradlew :ch01:run` |
-| 2장 메모리 영역 | [`../ch02_memory-area/`](../ch02_memory-area/) | [`:ch02-memory-area:*`](./ch02-memory-area/) | `./gradlew :ch02-memory-area:heap:run` |
-| 3장 GC | [`../ch03_gc/`](../ch03_gc/) | [`:ch03-gc:*`](./ch03-gc/) | `./gradlew :ch03-gc:serial:run` |
+| 2장 메모리 영역 | `../ch02_memory-area/` <!-- 링크 끊김(2026-08): ../ch02_memory-area/ --> | [`:ch02-memory-area:*`](./ch02-memory-area/) | `./gradlew :ch02-memory-area:heap:run` |
+| 3장 GC | `../ch03_gc/` <!-- 링크 끊김(2026-08): ../ch03_gc/ --> | [`:ch03-gc:*`](./ch03-gc/) | `./gradlew :ch03-gc:serial:run` |
 
 노트 폴더는 `chNN_topic` 형식(언더스코어), 코드 모듈은 `chNN` 또는 `chNN-topic` 형식(하이픈)을 쓴다. 두 표기가 다른 이유는 노트는 사람이 읽는 카테고리 라벨이고, 코드 모듈은 Gradle `:project` 좌표라서 하이픈이 더 자연스럽기 때문이다.
 

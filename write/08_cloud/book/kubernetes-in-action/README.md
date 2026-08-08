@@ -142,7 +142,7 @@ updated: 2026-07-05
 
 한 장이 짧으면 `03-01.서비스와 디스커버리.md` 한 편으로 끝냅니다. 한 장이 길어 800줄을 넘길 것 같으면 개념 단위로 나눠 `02-01.파드와 첫 배포.md`, `02-02.레플리카셋과 셀프힐링.md`처럼 같은 장 번호 아래 편 번호를 늘립니다. 이렇게 하면 Typora 파일 탐색기에서 책 순서대로 정렬되고, 다른 노트에서 `§02-02`처럼 특정 편을 정확히 가리킬 수 있습니다.
 
-정밀 도식이 필요하면 이 폴더의 `_assets/`에 SVG를 두고 본문에서 `![](_assets/파일명.svg)`로 참조합니다. 흐름·관계·상태 전이는 Mermaid로 본문에 직접 그립니다.
+정밀 도식이 필요하면 이 폴더의 `_assets/`에 SVG를 두고 본문에서 `!`` <!-- 링크 끊김(2026-08): _assets/파일명.svg -->`로 참조합니다. 흐름·관계·상태 전이는 Mermaid로 본문에 직접 그립니다.
 
 
 
@@ -158,6 +158,6 @@ updated: 2026-07-05
 
 > 같은 `book/` 영역의 다른 정독본과, 이 책이 링크로 위임하는 개념 노트 묶음입니다.
 
-- [notiflex-platform 분석 — GitAIOps 실습 저장소 해부](../ai-infra-gitaiops/README.md) — 같은 `08_cloud/book/` 영역의 다른 책-종속 노트
+- `notiflex-platform 분석 — GitAIOps 실습 저장소 해부` <!-- 링크 끊김(2026-08): ../ai-infra-gitaiops/README.md --> — 같은 `08_cloud/book/` 영역의 다른 책-종속 노트
 - [08_cloud/kubernetes — Kubernetes 실전 운영](../../kubernetes/README.md) — 이 책이 개념 중복을 링크로 위임하는 개념 노트 27편의 인덱스
 - [Kubernetes in Action 2판 예제 코드 (luksa/kubernetes-in-action-2nd-edition)](https://github.com/luksa/kubernetes-in-action-2nd-edition) — 저자가 공개한 장별 예제 매니페스트·앱 소스

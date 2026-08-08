@@ -60,7 +60,7 @@ helm install istio-ingressgateway istio/gateway --set profile=openshift
 ### `image: auto` Information
 
 The image used by the chart, `auto`, may be unintuitive.
-This exists because the pod spec will be automatically populated at runtime, using the same mechanism as [Sidecar Injection](istio.io/latest/docs/setup/additional-setup/sidecar-injection).
+This exists because the pod spec will be automatically populated at runtime, using the same mechanism as `Sidecar Injection` <!-- 링크 끊김(2026-08): istio.io/latest/docs/setup/additional-setup/sidecar-injection -->.
 This allows the same configurations and lifecycle to apply to gateways as sidecars.
 
 Note: this does mean that the namespace the gateway is deployed in must not have the `istio-injection=disabled` label.
