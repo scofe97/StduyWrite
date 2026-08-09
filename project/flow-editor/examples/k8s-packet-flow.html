@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flow Editor</title>
+<style>
+:root {
+  --bg: #0e1116;
+  --panel: #161b24;
+  --panel-border: #262e3d;
+  --node-bg: #1b2230;
+  --node-border: #2c3547;
+  --node-title: #232c3d;
+  --group-bg: rgba(255,255,255,0.02);
+  --group-border: #3a465c;
+  --text: #dfe4ec;
+  --text-muted: #8b94a7;
+  --accent: #d4a853;
+  --kind-packet: #5b9bd5;
+  --kind-signal: #d4a853;
+  --kind-data: #66bb6a;
+  --kind-error: #e05555;
+  --bottleneck: #e05555;
+  --active-glow: #7ab8f5;
+  --sel-bg: rgba(212,168,83,0.16);
+  --sel-border: rgba(212,168,83,0.55);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: "SF Pro", "Pretendard", "Apple SD Gothic Neo", system-ui, sans-serif;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+header {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--panel-border);
+}
+header h1 { font-size: 15px; font-weight: 600; }
+header .subtitle { font-size: 12px; color: var(--text-muted); }
+header .legend { margin-left: auto; display: flex; gap: 12px; font-size: 11px; color: var(--text-muted); align-items: center; }
+header .legend svg { vertical-align: -2px; margin-right: 3px; }
+
+#canvas-wrap { flex: 1; position: relative; overflow: hidden; }
+#canvas { width: 100%; height: 100%; display: block; cursor: grab; }
+#canvas.panning { cursor: grabbing; }
+#hint {
+  position: absolute; top: 8px; right: 10px; font-size: 11px; color: var(--text-muted);
+  background: rgba(14,17,22,0.7); padding: 4px 8px; border-radius: 4px; pointer-events: none;
+}
+#float-controls {
+  position: absolute; right: 12px; bottom: 12px; z-index: 4;
+  display: flex; gap: 6px; align-items: center;
+  background: rgba(22,27,36,0.85); border: 1px solid var(--panel-border);
+  border-radius: 8px; padding: 6px 8px;
+}
+#float-controls button {
+  background: var(--node-bg); color: var(--text); border: 1px solid var(--node-border);
+  border-radius: 5px; padding: 4px 10px; font-size: 12px; cursor: pointer;
+}
+#float-controls button:hover { border-color: var(--accent); }
+#float-controls button:focus-visible { outline: 2px solid var(--active-glow); outline-offset: 1px; }
+#float-controls button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+#speed-label { font-size: 11px; color: var(--text-muted); min-width: 40px; text-align: center; }
+
+/* ---- SVG 노드 ---- */
+.node-box { fill: var(--node-bg); stroke: var(--node-border); stroke-width: 1; rx: 6; }
+.node { cursor: pointer; }
+.node-title-bg { fill: var(--node-title); }
+.node-label { fill: var(--text); font-size: 12px; font-weight: 600; }
+.node-sublabel { fill: var(--text-muted); font-size: 10px; }
+.node-info { fill: #c3cddd; font-size: 10px; }
+.mech-badge-bg { fill: rgba(91,155,213,0.14); stroke: rgba(91,155,213,0.4); stroke-width: 0.7; }
+.mech-badge-text { fill: #9dc4e8; font-size: 9px; font-weight: 600; }
+.node-divider { stroke: var(--node-border); stroke-width: 1; }
+
+/* 패킷 계층 스택 — 이 노드를 지난 뒤의 상태 */
+.layer-name {
+  fill: #7f8ca3; font-size: 9px; font-weight: 700;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+.layer-name.chg { fill: var(--accent); }
+.layer-fields {
+  fill: #b9c4d4; font-size: 9px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+.layer-fields.chg { fill: var(--accent); font-weight: 700; }
+.layer-fields.locked { fill: #6d7789; font-style: italic; }
+.layer-dropped {
+  fill: #6d7789; font-size: 8.5px; font-style: italic;
+}
+.node.role-external .node-box { stroke-dasharray: 5 3; }
+.node.role-store .store-line { stroke: var(--node-border); stroke-width: 1; }
+.node.active .node-box {
+  stroke: var(--active-glow); stroke-width: 1.6;
+  filter: drop-shadow(0 0 6px rgba(122,184,245,0.55));
+}
+.node.panel-open .node-box { stroke: var(--accent); stroke-width: 1.6; }
+
+.group-box { fill: var(--group-bg); stroke: var(--group-border); stroke-width: 1; rx: 8; }
+.group-title-bg { fill: rgba(58,70,92,0.25); cursor: pointer; }
+.group-label { fill: var(--text-muted); font-size: 11px; font-weight: 600; cursor: pointer; }
+.group.collapsed .group-box { fill: var(--node-bg); cursor: pointer; }
+
+.edge-path { fill: none; stroke-width: 1.4; opacity: 0.75; }
+.edge-path.panel-open { stroke-width: 2.6; opacity: 1; }
+.edge-hit { fill: none; stroke: transparent; stroke-width: 14; cursor: pointer; pointer-events: stroke; }
+.edge-deco { fill: none; stroke-width: 1.2; }
+
+.port { stroke: var(--bg); stroke-width: 1; }
+.particle { pointer-events: none; opacity: 0.8; }
+
+/* ---- 상세 패널 (우측 슬라이드) ---- */
+#detail-panel {
+  position: absolute; top: 0; right: 0; bottom: 0; width: 520px; max-width: 92vw;
+  background: var(--panel); border-left: 1px solid var(--panel-border);
+  transform: translateX(102%); transition: transform 0.22s ease;
+  display: flex; flex-direction: column; z-index: 5;
+}
+#detail-panel.open { transform: none; box-shadow: -8px 0 24px rgba(0,0,0,0.35); }
+#panel-head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 12px; border-bottom: 1px solid var(--panel-border);
+}
+#panel-title { font-size: 13px; font-weight: 700; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#panel-head button {
+  background: var(--node-bg); color: var(--text); border: 1px solid var(--node-border);
+  border-radius: 5px; padding: 3px 8px; font-size: 11px; cursor: pointer; flex: 0 0 auto;
+}
+#panel-head button:focus-visible { outline: 2px solid var(--active-glow); outline-offset: 1px; }
+#panel-body { padding: 16px 18px; overflow-y: auto; font-size: 13px; line-height: 1.75; }
+#panel-body .meta-line { color: var(--text-muted); font-size: 11.5px; margin-bottom: 10px; }
+#panel-body .detail-text { margin-bottom: 12px; color: var(--text); }
+#panel-body .detail-text + .detail-text { margin-top: -4px; }
+.sec-head {
+  margin: 18px 0 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+  color: var(--text-muted); border-bottom: 1px solid var(--panel-border); padding-bottom: 4px;
+}
+.step-block { margin-bottom: 9px; }
+.conn-row {
+  display: flex; gap: 6px; align-items: center; flex-wrap: wrap;
+  padding: 4px 0; font-size: 11px; border-bottom: 1px dashed rgba(38,46,61,0.6);
+}
+.conn-kind { font-size: 10px; font-weight: 700; }
+.conn-label { color: var(--text-muted); font-size: 10.5px; }
+.conn-ratio { color: var(--accent); font-size: 10px; }
+button.jump {
+  background: var(--node-bg); color: var(--text); border: 1px solid var(--node-border);
+  border-radius: 4px; padding: 1px 7px; font-size: 11px; cursor: pointer;
+}
+button.jump:hover { border-color: var(--accent); color: var(--accent); }
+
+.mech-section { margin-bottom: 12px; border: 1px solid var(--panel-border); border-radius: 6px; overflow: hidden; }
+.mech-head {
+  padding: 6px 9px; background: var(--node-title); font-size: 11px; font-weight: 700;
+  display: flex; gap: 6px; align-items: center;
+}
+.mech-type-tag { font-size: 9px; color: var(--text-muted); font-weight: 400; border: 1px solid var(--node-border); border-radius: 8px; padding: 1px 6px; }
+.mech-body { padding: 8px 9px; }
+.mech-table { width: 100%; border-collapse: collapse; font-size: 11px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+.mech-table th { text-align: left; color: var(--text-muted); font-weight: 500; padding: 2px 6px; border-bottom: 1px solid var(--panel-border); }
+.mech-table td { padding: 3px 6px; vertical-align: top; }
+.mech-table tr.sel td { background: var(--sel-bg); }
+.mech-table tr.sel td:first-child { border-left: 2px solid var(--sel-border); }
+.mech-note { color: var(--text-muted); font-size: 10px; }
+.mech-cand { display: flex; align-items: center; gap: 8px; padding: 3px 2px; font-size: 11px; }
+.mech-cand.sel { background: var(--sel-bg); border-radius: 4px; }
+.mech-cand .bar-wrap { flex: 1; height: 7px; background: #0c0f14; border-radius: 3px; overflow: hidden; }
+.mech-cand .bar { height: 100%; background: var(--kind-packet); }
+.mech-cand.sel .bar { background: var(--accent); }
+.mech-cand .pct { font-size: 10px; color: var(--text-muted); min-width: 34px; text-align: right; }
+.mech-cand .check { color: var(--accent); font-size: 10px; font-weight: 700; }
+.mech-rewrite { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11px; margin-bottom: 3px; }
+.mech-rewrite .arrow { color: var(--accent); }
+.mech-rewrite .from { color: var(--text-muted); text-decoration: line-through; }
+.mech-rewrite .to { color: var(--kind-data); }
+.mech-describe {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 10.5px;
+  background: #0c0f14; border-radius: 4px; padding: 8px; white-space: pre; overflow-x: auto;
+}
+.mech-describe .line.sel { background: var(--sel-bg); display: inline-block; width: 100%; border-left: 2px solid var(--sel-border); }
+.mech-crypt { display: flex; flex-direction: column; gap: 4px; font-size: 11px; }
+.mech-crypt .mode { font-weight: 700; }
+.mech-kv { font-size: 11px; font-family: ui-monospace, Menlo, monospace; color: var(--text-muted); white-space: pre-wrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title"></h1>
+  <span class="subtitle" id="subtitle"></span>
+  <div class="legend" id="legend" aria-label="포트 종류 범례"></div>
+</header>
+
+<div id="canvas-wrap">
+  <svg id="canvas" role="img" aria-label="흐름도 캔버스"></svg>
+  <div id="hint">노드·엣지 클릭 상세 · 드래그 이동 · 휠 확대/축소 · 그룹 제목 클릭 접기 · Esc 패널 닫기</div>
+  <div id="float-controls">
+    <button id="btn-motion" aria-pressed="true" aria-label="애니메이션 켜짐">✦ 흐름</button>
+    <button id="btn-slower" aria-label="느리게">−</button>
+    <span id="speed-label">1.0×</span>
+    <button id="btn-faster" aria-label="빠르게">＋</button>
+  </div>
+  <aside id="detail-panel" aria-label="상세 패널">
+    <div id="panel-head">
+      <span id="panel-title"></span>
+      <button id="btn-panel-close" aria-label="패널 닫기">✕</button>
+    </div>
+    <div id="panel-body"></div>
+  </aside>
+</div>
+
+<script>
+const FLOW = {
+  "meta": {
+    "title": "K8s NodePort 패킷 흐름",
+    "subtitle": "외부 요청이 노드에 도착해 iptables 규칙을 거쳐 Pod 안 nginx에 닿기까지",
+    "mode": "trace",
+    "direction": "LR"
+  },
+  "nodes": [
+    {
+      "id": "client",
+      "type": "external-client",
+      "role": "external",
+      "icon": "◇",
+      "label": "Client",
+      "sublabel": "클러스터 밖 브라우저",
+      "info": [
+        "클러스터 밖에서 요청을 보냅니다. Pod이 어느 노드에 있는지는 모릅니다."
+      ],
+      "detail": "클러스터 바깥의 사용자입니다. NodePort 방식은 모든 워커 노드가 같은 포트(여기서는 30080)를 열어두기 때문에, 클라이언트는 아무 노드의 IP로나 접속해도 서비스에 닿습니다. 어느 Pod이 실제로 응답할지는 클라이언트가 알 필요도, 알 방법도 없습니다.",
+      "ports": {
+        "out": [
+          {
+            "id": "o0",
+            "kind": "packet"
+          }
+        ]
+      }
+    },
+    {
+      "id": "worker-1",
+      "type": "group",
+      "icon": "⎈",
+      "label": "Worker Node (worker-1)",
+      "detail": "쿠버네티스 워커 노드입니다. 노드 안에는 호스트가 쓰는 네트워크 공간과 Pod마다 따로 만들어진 네트워크 공간이 나뉘어 있고, 둘은 가상 케이블(veth pair)로 이어져 있습니다."
+    },
+    {
+      "id": "netns-host",
+      "parentId": "worker-1",
+      "type": "group",
+      "icon": "▦",
+      "label": "netns: host",
+      "detail": "노드의 기본 네트워크 네임스페이스(netns)입니다. 네트워크 네임스페이스는 리눅스가 제공하는 격리 단위로, 각자 독립된 네트워크 카드·라우팅 테이블·방화벽 규칙을 가집니다. 호스트 공간에는 실제 물리 랜카드와 kube-proxy가 심어둔 iptables 규칙이 들어 있습니다."
+    },
+    {
+      "id": "eth0",
+      "parentId": "netns-host",
+      "type": "interface",
+      "role": "process",
+      "icon": "▤",
+      "label": "eth0",
+      "sublabel": "물리 랜카드",
+      "info": [
+        "랜선으로 들어온 신호를 받아 커널이 다룰 수 있는 형태로 바꿉니다."
+      ],
+      "detail": "노드의 물리 네트워크 카드입니다. 도착한 데이터를 링 버퍼라는 대기 공간에 넣고 커널에 알립니다. 커널은 이 데이터를 skb(socket buffer)라는 구조체로 감싸는데, 이후 모든 처리 단계는 원본 데이터를 복사하지 않고 이 구조체만 넘겨가며 진행합니다. 복사를 피하는 것이 네트워크 성능의 핵심이기 때문입니다.",
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "packet"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "packet"
+          }
+        ]
+      }
+    },
+    {
+      "id": "prerouting",
+      "parentId": "netns-host",
+      "type": "netfilter-hook",
+      "role": "process",
+      "icon": "⊣",
+      "label": "PREROUTING",
+      "sublabel": "방화벽 첫 검문소",
+      "info": [
+        "경로를 정하기 전에 패킷을 먼저 붙잡는 지점입니다.",
+        "목적지를 바꿔야 한다면 반드시 여기서 끝내야 합니다."
+      ],
+      "detail": "netfilter는 리눅스 커널에 내장된 패킷 처리 장치이고, PREROUTING은 그 중 가장 먼저 걸리는 지점입니다. 왜 하필 라우팅 이전일까요. 목적지 주소를 바꾸는 작업(DNAT)을 라우팅 이후에 하면, 커널은 이미 바뀌기 전 주소로 경로를 계산해버린 뒤입니다. 그래서 주소를 바꾸는 일은 경로를 정하기 전에 끝나야 하고, DNAT 규칙이 이 지점에 자리합니다.",
+      "mechanisms": [
+        {
+          "type": "table-lookup",
+          "title": "nat 테이블 · PREROUTING 체인",
+          "columns": [
+            "조건",
+            "동작"
+          ],
+          "rows": [
+            {
+              "id": "r-kube",
+              "cells": [
+                "모든 패킷",
+                "-j KUBE-SERVICES"
+              ],
+              "note": "kube-proxy가 심어둔 규칙입니다. 들어오는 모든 패킷을 쿠버네티스 서비스 체인으로 보내 확인하게 합니다."
+            }
+          ]
+        }
+      ],
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "packet"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "packet"
+          }
+        ]
+      }
+    },
+    {
+      "id": "kube-svc",
+      "parentId": "netns-host",
+      "type": "iptables-chain",
+      "role": "decision",
+      "icon": "⎈",
+      "label": "KUBE-SERVICES",
+      "sublabel": "서비스 → Pod 변환",
+      "info": [
+        "어느 Pod이 응답할지 확률로 고르고, 목적지 주소를 그 Pod의 것으로 바꿉니다.",
+        "이 한 단계가 로드 밸런싱과 서비스 추상화를 동시에 해냅니다."
+      ],
+      "detail": "쿠버네티스에서 Service는 실체가 있는 서버가 아니라 규칙의 이름입니다. kube-proxy라는 구성요소가 Service 정의를 읽어 iptables 규칙으로 번역해 두고, 실제 분배는 커널이 이 규칙에 따라 수행합니다. 그래서 Service에 프록시 서버가 따로 뜨지 않아도 부하 분산이 됩니다. 여기서 일어나는 일은 세 단계입니다. 먼저 목적지가 어느 Service인지 찾고, 그 Service에 연결된 Pod 중 하나를 확률로 고르고, 마지막으로 패킷의 목적지를 고른 Pod의 주소로 바꿉니다.",
+      "mechanisms": [
+        {
+          "type": "k8s-resolve",
+          "title": "Service가 가리키는 실제 Pod 찾기",
+          "lines": [
+            {
+              "text": "Service: web-svc (외부 30080 → 컨테이너 8080)"
+            },
+            {
+              "text": "selector: app=web    ← 이 라벨을 가진 Pod을 모읍니다",
+              "indent": 1
+            },
+            {
+              "text": "EndpointSlice: web-svc-abc12    ← 모인 결과 목록",
+              "indent": 1
+            },
+            {
+              "id": "sep-a",
+              "text": "→ 10.244.1.5:8080  (pod-a, 이 노드에 있음)",
+              "indent": 2
+            },
+            {
+              "id": "sep-b",
+              "text": "→ 10.244.2.7:8080  (pod-b, 다른 노드에 있음)",
+              "indent": 2
+            }
+          ]
+        },
+        {
+          "type": "weighted-select",
+          "title": "둘 중 하나를 확률로 고르기",
+          "candidates": [
+            {
+              "id": "sep-a",
+              "label": "pod-a → 10.244.1.5",
+              "weight": 0.5
+            },
+            {
+              "id": "sep-b",
+              "label": "pod-b → 10.244.2.7",
+              "weight": 0.5
+            }
+          ]
+        },
+        {
+          "type": "rewrite",
+          "title": "목적지 주소 바꾸기 (DNAT)",
+          "changes": [
+            {
+              "layer": "IP",
+              "field": "dst",
+              "from": "192.168.10.11",
+              "to": "10.244.1.5"
+            },
+            {
+              "layer": "TCP",
+              "field": "dport",
+              "from": "30080",
+              "to": "8080"
+            }
+          ]
+        }
+      ],
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "packet"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "packet",
+            "label": "backend-a"
+          },
+          {
+            "id": "o1",
+            "kind": "packet",
+            "label": "backend-b"
+          }
+        ]
+      }
+    },
+    {
+      "id": "routing",
+      "parentId": "netns-host",
+      "type": "route",
+      "role": "process",
+      "icon": "⊹",
+      "label": "라우팅 결정",
+      "sublabel": "어디로 보낼지 계산",
+      "info": [
+        "바뀐 목적지 주소를 보고 어느 통로로 내보낼지 고릅니다."
+      ],
+      "detail": "커널이 라우팅 테이블을 뒤져 목적지로 가는 길을 찾는 단계입니다. 앞에서 목적지가 Pod 주소로 바뀌었기 때문에 여기서 계산되는 경로도 달라집니다. 10.244.1.0/24는 이 노드 안의 Pod들이 쓰는 주소 대역이라 CNI 브리지로 바로 내려보내면 되고, 다른 노드의 Pod 대역이었다면 노드 사이를 잇는 터널로 나갔을 것입니다.",
+      "mechanisms": [
+        {
+          "type": "table-lookup",
+          "title": "라우팅 테이블",
+          "columns": [
+            "목적지 대역",
+            "내보낼 통로"
+          ],
+          "rows": [
+            {
+              "id": "rt-pod",
+              "cells": [
+                "10.244.1.0/24",
+                "dev cni0"
+              ],
+              "note": "이 노드 안의 Pod들입니다. 브리지에 바로 내려보내면 닿습니다."
+            },
+            {
+              "id": "rt-tun",
+              "cells": [
+                "10.244.2.0/24",
+                "via 192.168.10.12"
+              ],
+              "note": "다른 노드의 Pod들입니다. 노드 사이 터널을 통해 건너갑니다."
+            },
+            {
+              "id": "rt-def",
+              "cells": [
+                "나머지 전부",
+                "via 192.168.10.1"
+              ],
+              "note": "위 어디에도 안 맞으면 기본 게이트웨이로 보냅니다."
+            }
+          ]
+        }
+      ],
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "packet"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "packet"
+          }
+        ]
+      }
+    },
+    {
+      "id": "veth-host",
+      "parentId": "netns-host",
+      "type": "interface",
+      "role": "process",
+      "icon": "⇌",
+      "label": "veth-a (호스트 쪽)",
+      "sublabel": "가상 케이블 한쪽 끝",
+      "info": [
+        "두 네트워크 공간을 잇는 가상 케이블입니다. 이쪽으로 넣으면 반대쪽으로 나옵니다."
+      ],
+      "detail": "veth pair는 항상 둘이 한 쌍으로 만들어지는 가상 랜카드입니다. 한쪽은 호스트 네트워크 공간에, 다른 한쪽은 Pod 네트워크 공간에 꽂아두면 두 공간이 케이블로 연결된 것처럼 동작합니다. 한쪽으로 넣은 패킷은 반드시 반대쪽으로 나오기 때문에, 격리된 두 공간 사이를 오가는 유일한 통로가 됩니다.",
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "packet"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "packet"
+          }
+        ]
+      }
+    },
+    {
+      "id": "netns-pod-a",
+      "parentId": "worker-1",
+      "type": "group",
+      "icon": "▦",
+      "label": "netns: pod-a (nginx)",
+      "detail": "pod-a만의 네트워크 네임스페이스입니다. 이 안에서 Pod은 자기 전용 eth0과 자기 전용 라우팅 테이블을 가지며, 마치 독립된 컴퓨터인 것처럼 동작합니다. 컨테이너 격리가 네트워크에서 구현되는 방식이 바로 이것입니다."
+    },
+    {
+      "id": "eth0-pod",
+      "parentId": "netns-pod-a",
+      "type": "interface",
+      "role": "process",
+      "icon": "▤",
+      "label": "eth0 (Pod 안)",
+      "sublabel": "가상 케이블 반대쪽 끝",
+      "info": [
+        "Pod이 보는 랜카드입니다. 실체는 앞 노드의 케이블 반대쪽입니다."
+      ],
+      "detail": "Pod 안에서 보면 평범한 eth0이지만, 실체는 호스트 쪽 veth-a의 반대쪽 끝입니다. Pod은 자신이 독립된 머신이라고 믿고 이 카드로 통신합니다. 여기서 이더넷 헤더는 역할을 다했으므로 벗겨지고, 남은 IP 패킷이 상위 계층으로 올라갑니다.",
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "packet"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "packet"
+          }
+        ]
+      }
+    },
+    {
+      "id": "socket",
+      "parentId": "netns-pod-a",
+      "type": "socket",
+      "role": "store",
+      "icon": "▤",
+      "label": "수신 소켓 큐",
+      "sublabel": "앱이 가져가기 전 대기실",
+      "info": [
+        "커널이 처리를 마친 데이터를 앱이 가져갈 때까지 쌓아둡니다.",
+        "앱이 느리면 여기가 가득 차고, 그때부터 전송 속도가 떨어집니다."
+      ],
+      "detail": "커널이 IP와 TCP 처리를 끝낸 데이터를 담아두는 대기 공간입니다. 앱이 recv()를 호출해 꺼내갈 때까지 여기 머뭅니다. 이 큐가 성능을 보는 창이 되는 이유가 있습니다. 앱이 처리보다 빨리 데이터가 들어오면 큐가 차오르고, 가득 차면 커널이 상대방에게 \"잠시 멈추라\"는 신호(TCP 윈도 축소)를 보냅니다. 즉 앱의 처리 지연이 네트워크 전송 속도까지 끌어내립니다.",
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "packet"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "data"
+          }
+        ]
+      }
+    },
+    {
+      "id": "app",
+      "parentId": "netns-pod-a",
+      "type": "process",
+      "role": "process",
+      "icon": "▣",
+      "label": "nginx",
+      "sublabel": "요청을 처리하는 앱",
+      "info": [
+        "recv()로 큐에서 데이터를 꺼내 HTTP 요청으로 읽습니다."
+      ],
+      "detail": "사용자 공간에서 도는 웹 서버 프로세스입니다. recv() 시스템 콜로 소켓 큐에서 데이터를 꺼냅니다. 이 시점에는 이더넷·IP·TCP 헤더가 모두 커널 단계에서 벗겨졌기 때문에, 앱에게는 순수한 HTTP 요청만 보입니다. 앱이 Pod IP나 NodePort 같은 것을 전혀 몰라도 되는 이유입니다.",
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "data"
+          }
+        ]
+      }
+    },
+    {
+      "id": "netns-pod-b",
+      "parentId": "worker-1",
+      "type": "group",
+      "icon": "▦",
+      "label": "netns: pod-b (nginx)",
+      "collapsed": true,
+      "detail": "같은 Service에 속한 또 다른 Pod입니다. 이번 추적에서는 확률 선택에서 뽑히지 않아 지나가지 않은 경로입니다. 요청이 여러 번 들어오면 절반 정도는 이쪽으로 갑니다."
+    },
+    {
+      "id": "eth0-pod-b",
+      "parentId": "netns-pod-b",
+      "type": "interface",
+      "role": "process",
+      "icon": "▤",
+      "label": "eth0 (Pod 안)",
+      "info": [
+        "pod-b가 선택됐을 때 패킷이 들어오는 입구입니다."
+      ],
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "packet"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "packet"
+          }
+        ]
+      }
+    },
+    {
+      "id": "app-b",
+      "parentId": "netns-pod-b",
+      "type": "process",
+      "role": "process",
+      "icon": "▣",
+      "label": "nginx",
+      "info": [
+        "pod-a와 똑같은 앱이 돌고 있습니다."
+      ],
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "packet"
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-client",
+      "source": "client",
+      "sourcePort": "o0",
+      "target": "eth0",
+      "targetPort": "i0",
+      "kind": "packet",
+      "label": "노드의 물리 IP와 30080 포트를 향해 출발한 요청입니다.",
+      "decoration": "one-to-one"
+    },
+    {
+      "id": "e-pre",
+      "source": "eth0",
+      "sourcePort": "o0",
+      "target": "prerouting",
+      "targetPort": "i0",
+      "kind": "packet",
+      "label": "커널이 감싼 skb가 첫 검문소로 올라갑니다."
+    },
+    {
+      "id": "e-svc",
+      "source": "prerouting",
+      "sourcePort": "o0",
+      "target": "kube-svc",
+      "targetPort": "i0",
+      "kind": "packet",
+      "label": "nat 테이블의 점프 규칙에 따라 쿠버네티스 서비스 체인으로 들어갑니다."
+    },
+    {
+      "id": "e-route",
+      "source": "kube-svc",
+      "sourcePort": "o0",
+      "target": "routing",
+      "targetPort": "i0",
+      "kind": "packet",
+      "label": "pod-a가 뽑혔습니다. 목적지가 바뀐 패킷이 경로 계산으로 넘어갑니다.",
+      "ratio": "1:1"
+    },
+    {
+      "id": "e-alt",
+      "source": "kube-svc",
+      "sourcePort": "o1",
+      "target": "eth0-pod-b",
+      "targetPort": "i0",
+      "kind": "packet",
+      "label": "pod-b가 뽑혔다면 갔을 경로입니다. 이번에는 선택되지 않았습니다.",
+      "decoration": "optional",
+      "ratio": "1:1"
+    },
+    {
+      "id": "e-veth",
+      "source": "routing",
+      "sourcePort": "o0",
+      "target": "veth-host",
+      "targetPort": "i0",
+      "kind": "packet",
+      "label": "브리지 방향으로 결정돼 가상 케이블 입구로 향합니다."
+    },
+    {
+      "id": "e-cross",
+      "source": "veth-host",
+      "sourcePort": "o0",
+      "target": "eth0-pod",
+      "targetPort": "i0",
+      "kind": "packet",
+      "label": "여기가 호스트 공간과 Pod 공간의 경계입니다."
+    },
+    {
+      "id": "e-sock",
+      "source": "eth0-pod",
+      "sourcePort": "o0",
+      "target": "socket",
+      "targetPort": "i0",
+      "kind": "packet",
+      "label": "IP와 TCP 처리를 마친 데이터가 소켓 큐로 들어갑니다."
+    },
+    {
+      "id": "e-b-app",
+      "source": "eth0-pod-b",
+      "sourcePort": "o0",
+      "target": "app-b",
+      "targetPort": "i0",
+      "kind": "packet",
+      "label": "pod-b 안에서도 같은 과정이 일어납니다."
+    },
+    {
+      "id": "e-app",
+      "source": "socket",
+      "sourcePort": "o0",
+      "target": "app",
+      "targetPort": "i0",
+      "kind": "data",
+      "label": "앱이 recv()로 꺼내가는 순간입니다.",
+      "decoration": "one-to-one"
+    }
+  ],
+  "trace": {
+    "entity": {
+      "kind": "packet",
+      "label": "HTTP GET 요청",
+      "layers": [
+        {
+          "id": "eth",
+          "name": "Ethernet",
+          "fields": {
+            "src": "ca:fe:00:01",
+            "dst": "d0:0d:00:0b"
+          }
+        },
+        {
+          "id": "ip",
+          "name": "IP",
+          "fields": {
+            "src": "203.0.113.7",
+            "dst": "192.168.10.11",
+            "ttl": "64"
+          }
+        },
+        {
+          "id": "tcp",
+          "name": "TCP",
+          "fields": {
+            "sport": "51344",
+            "dport": "30080"
+          }
+        },
+        {
+          "id": "http",
+          "name": "HTTP",
+          "fields": {
+            "req": "GET /",
+            "host": "web.example.com"
+          }
+        }
+      ]
+    },
+    "steps": [
+      {
+        "at": "client",
+        "narration": "클라이언트가 노드의 물리 IP와 30080 포트로 HTTP GET 요청을 보냅니다. 이 시점의 목적지는 노드 주소일 뿐, 실제로 응답할 Pod의 주소가 아닙니다."
+      },
+      {
+        "at": "eth0",
+        "via": "e-client",
+        "narration": "노드의 랜카드가 데이터를 받아 링 버퍼에 넣습니다. 커널은 이것을 skb라는 구조체로 감싸는데, 이후 단계들은 데이터를 복사하지 않고 이 구조체만 주고받습니다."
+      },
+      {
+        "at": "prerouting",
+        "via": "e-pre",
+        "narration": "경로를 정하기 전 첫 검문소에 걸립니다. 목적지를 바꾸는 일은 경로 계산 이전에 끝나야 하므로, 쿠버네티스의 주소 변환 규칙이 바로 이 지점에서 기다리고 있습니다.",
+        "mechanismEvent": {
+          "select": [
+            "r-kube"
+          ]
+        }
+      },
+      {
+        "at": "kube-svc",
+        "via": "e-svc",
+        "narration": "요청을 받을 Pod을 확률로 고르고, 패킷의 목적지를 그 Pod의 주소로 바꿉니다. 이번에는 pod-a가 뽑혔습니다. 카드에서 IP의 dst와 TCP의 dport가 바뀌는 것을 확인해 보세요. 이 한 번의 주소 변경이 로드 밸런싱의 전부입니다.",
+        "layerOps": [
+          {
+            "op": "set",
+            "layer": "ip",
+            "field": "dst",
+            "value": "10.244.1.5"
+          },
+          {
+            "op": "set",
+            "layer": "tcp",
+            "field": "dport",
+            "value": "8080"
+          }
+        ],
+        "mechanismEvent": {
+          "select": [
+            "sep-a"
+          ]
+        }
+      },
+      {
+        "at": "routing",
+        "via": "e-route",
+        "narration": "바뀐 목적지 10.244.1.5는 이 노드 안의 Pod 대역입니다. 다른 노드였다면 터널로 나갔겠지만, 같은 노드이므로 브리지에 바로 내려보내면 됩니다.",
+        "mechanismEvent": {
+          "select": [
+            "rt-pod"
+          ]
+        }
+      },
+      {
+        "at": "veth-host",
+        "via": "e-veth",
+        "narration": "가상 케이블의 호스트 쪽 끝에 도착했습니다. 여기로 들어간 패킷은 반드시 반대편 Pod 공간에서 나옵니다."
+      },
+      {
+        "at": "eth0-pod",
+        "via": "e-cross",
+        "narration": "네트워크 공간의 경계를 넘었습니다. Pod 입장에서는 그저 자기 랜카드로 패킷이 도착한 것으로 보입니다."
+      },
+      {
+        "at": "socket",
+        "via": "e-sock",
+        "narration": "IP와 TCP 처리를 마친 데이터가 소켓 큐에 쌓입니다. 이더넷 헤더는 이미 벗겨졌습니다. 앱이 바쁘면 이 큐가 차오르고, 그때부터 전송 속도가 떨어지기 시작합니다.",
+        "layerOps": [
+          {
+            "op": "pop",
+            "layer": "eth"
+          }
+        ]
+      },
+      {
+        "at": "app",
+        "via": "e-app",
+        "narration": "nginx가 recv()로 데이터를 꺼냅니다. IP와 TCP 헤더도 커널이 처리해 없앴으므로 앱에게는 순수한 HTTP 요청만 보입니다. 큐가 비워집니다.",
+        "layerOps": [
+          {
+            "op": "pop",
+            "layer": "ip"
+          },
+          {
+            "op": "pop",
+            "layer": "tcp"
+          }
+        ]
+      }
+    ]
+  },
+  "stream": {
+    "rates": {
+      "e-client": 2.0
+    },
+    "capacities": {
+      "socket": 6
+    }
+  }
+}
+;
+</script>
+<script>
+"use strict";
+/* flow-renderer.js — Flow DSL v0.3 렌더러 (클릭 탐색 모델).
+   재생 개념 없음: 캔버스는 항상 돌아가고(ambient + 주인공 패킷 루프),
+   사용자는 노드/엣지를 클릭해 구간 상세를 본다. */
+
+/* ================= 상수 ================= */
+const KIND_COLOR_RAW = { packet: "#5b9bd5", signal: "#d4a853", data: "#66bb6a", error: "#e05555" };
+/* 아이콘은 기술 문서 톤에 맞춰 절제된 기하 기호를 쓴다.
+   컬러 이모지는 문서 안에서 튀고 플랫폼마다 모양이 달라 피한다. */
+const ROLE_ICON = { process: "▣", store: "▤", external: "◇", decision: "◈" };
+const MECH_LABEL = {
+  "table-lookup": "테이블 매칭", "weighted-select": "가중치 선택", "rewrite": "헤더 재작성",
+  "crypt": "암복호화", "k8s-resolve": "K8s 리소스 매핑", "encap": "캡슐화", "decap": "디캡슐화",
+  "filter": "필터", "queue": "큐",
+};
+/* 노드 창 안에 다는 메커니즘 배지 — 기호 + 짧은 이름.
+   패널의 MECH_LABEL 과 같은 어휘를 쓴다 (노드와 패널의 라벨 통일) */
+const MECH_BADGE = {
+  "table-lookup": { icon: "≡", short: "테이블 매칭" }, "weighted-select": { icon: "%", short: "가중치 선택" },
+  "rewrite": { icon: "⇄", short: "헤더 재작성" }, "crypt": { icon: "🔐", short: "암복호화" },
+  "k8s-resolve": { icon: "⎈", short: "K8s 매핑" }, "encap": { icon: "⊞", short: "캡슐화" },
+  "decap": { icon: "⊟", short: "디캡슐화" }, "filter": { icon: "⊘", short: "필터" },
+  "queue": { icon: "▤", short: "큐" },
+};
+const DECO_LABEL = {
+  "one-to-one": "1:1 — 양끝이 정확히 하나씩 대응",
+  "one-to-many": "1:N — 한 출발점이 여러 목적지로 갈라짐",
+  "optional": "선택 경로 — 조건에 따라 흐르지 않을 수 있음",
+};
+const NS = "http://www.w3.org/2000/svg";
+const TITLE_H = 24, GROUP_TITLE_H = 22, PAD = 18, GAP_RANK = 90, GAP_NODE = 26;
+const PORT_R = 4.5;
+const AMBIENT_SPEED = 46;    // px/s
+
+/* ================= 상태 ================= */
+const nodesById = {}, edgesById = {};
+let collapsed = new Set();
+let layout = {};
+let portPos = {};
+let edgePaths = {};
+let ambient = [];
+let viewBox = { x: 0, y: 0, w: 100, h: 100 };
+let contentBox = { x: 0, y: 0, w: 100, h: 100 };
+
+const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let motionOn = !reducedMotion;
+let speed = 1.0;
+let lastTs = null;
+
+let resolvedChanges = [];         // stepIdx -> [{kind,layer,layerName,field,from,to,note}]
+let nodeSnapshot = new Map();     // nodeId -> 그 노드를 떠날 때의 패킷 계층 상태
+let panelNodeId = null, panelEdgeId = null;
+
+const svg = document.getElementById("canvas");
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+/* ================= 데이터 준비 ================= */
+function init() {
+  if (!FLOW) { $("hint").textContent = "FLOW 데이터가 주입되지 않았습니다. tools/build.go 로 생성하세요."; return; }
+  for (const n of FLOW.nodes) {
+    nodesById[n.id] = n;
+    if (n.type !== "group" && !n.ports) {
+      n.ports = { in: [{ id: "_in", kind: "data" }], out: [{ id: "_out", kind: "data" }] };
+    }
+    if (n.type === "group" && n.collapsed) collapsed.add(n.id);
+  }
+  for (const e of FLOW.edges) edgesById[e.id] = e;
+
+  $("title").textContent = FLOW.meta.title;
+  $("subtitle").textContent = FLOW.meta.subtitle || "";
+  document.title = FLOW.meta.title + " — Flow Editor";
+  buildLegend();
+  precomputeTrace();
+
+  relayout(true);
+  bindControls();
+  requestAnimationFrame(tick);
+}
+
+function iconOf(n) {
+  return n.icon || (n.type === "group" ? "" : (ROLE_ICON[n.role || "process"] || "⚙️"));
+}
+
+function buildLegend() {
+  const leg = $("legend");
+  const shapes = { packet: rectShape, signal: triShape, data: circShape, error: diamShape };
+  for (const k of ["packet", "signal", "data", "error"]) {
+    const span = document.createElement("span");
+    const s = document.createElementNS(NS, "svg");
+    s.setAttribute("width", 12); s.setAttribute("height", 12);
+    s.appendChild(shapes[k](6, 6, 4.5, KIND_COLOR_RAW[k]));
+    span.appendChild(s);
+    span.appendChild(document.createTextNode(k));
+    leg.appendChild(span);
+  }
+}
+
+/* trace 사전 계산 — 스텝별 변형(이전값 포함)과 각 노드 시점의 패킷 상태를 함께 구한다.
+   패킷 필드를 손으로 적지 않고 layerOps 를 순서대로 적용해 자동으로 얻는다. */
+function precomputeTrace() {
+  resolvedChanges = [];
+  nodeSnapshot = new Map();
+  if (!FLOW.trace) return;
+  const steps = FLOW.trace.steps;
+  const sim = (FLOW.trace.entity.layers || []).map(l => ({ id: l.id, name: l.name, fields: { ...(l.fields || {}) }, locked: !!l.locked }));
+  steps.forEach((s) => {
+    const changes = [];
+    for (const op of s.layerOps || []) {
+      if (op.op === "set") {
+        const layer = sim.find(l => l.id === op.layer);
+        if (!layer) continue;
+        changes.push({ kind: "set", layer: op.layer, layerName: layer.name, field: op.field, from: layer.fields[op.field], to: op.value });
+        layer.fields[op.field] = op.value;
+      } else if (op.op === "push") {
+        sim.unshift({ id: op.layer.id, name: op.layer.name, fields: { ...(op.layer.fields || {}) }, locked: false });
+        changes.push({ kind: "push", layer: op.layer.id, layerName: op.layer.name });
+      } else if (op.op === "pop") {
+        const idx = sim.findIndex(l => l.id === op.layer);
+        if (idx >= 0) { changes.push({ kind: "pop", layer: op.layer, layerName: sim[idx].name }); sim.splice(idx, 1); }
+      } else if (op.op === "lock" || op.op === "unlock") {
+        const layer = sim.find(l => l.id === op.layer);
+        if (layer) { layer.locked = op.op === "lock"; changes.push({ kind: op.op, layer: op.layer, layerName: layer.name, note: op.note }); }
+      }
+    }
+    resolvedChanges.push(changes);
+    // 이 스텝을 마친 시점의 패킷 상태를 노드에 박제한다 (바뀐 필드 표시 포함)
+    const changedFields = new Set(changes.filter(c => c.kind === "set").map(c => `${c.layer}.${c.field}`));
+    const changedLayers = new Set(changes.filter(c => c.kind !== "set").map(c => c.layer));
+    nodeSnapshot.set(s.at, {
+      layers: sim.map(l => ({ id: l.id, name: l.name, fields: { ...l.fields }, locked: l.locked })),
+      changedFields, changedLayers,
+      dropped: changes.filter(c => c.kind === "pop").map(c => c.layerName),
+    });
+  });
+}
+
+/* ================= 가시성 계산 ================= */
+function ancestorChain(id) {
+  const chain = [];
+  let cur = nodesById[id];
+  while (cur) { chain.push(cur.id); cur = cur.parentId ? nodesById[cur.parentId] : null; }
+  return chain;
+}
+function visibleOf(id) {
+  const chain = ancestorChain(id);
+  for (let i = chain.length - 1; i >= 1; i--) {
+    if (collapsed.has(chain[i])) return chain[i];
+  }
+  return id;
+}
+function childAtLevel(containerId, nodeId) {
+  let cur = nodesById[nodeId];
+  while (cur) {
+    const p = cur.parentId || null;
+    if (p === containerId) return cur.id;
+    cur = p ? nodesById[p] : null;
+  }
+  return null;
+}
+function directChildren(containerId) {
+  return FLOW.nodes.filter(n => (n.parentId || null) === containerId);
+}
+
+/* ================= 크기·레이아웃 ================= */
+/* 폭 근사. 모노스페이스(계층 필드)는 라틴 글자가 0.6em 로 더 넓어 따로 잰다 */
+function textWidth(s, size, mono) {
+  let w = 0;
+  const latin = mono ? 0.605 : 0.55;
+  for (const ch of s || "") w += /[ᄀ-퟿　-ヿ]/.test(ch) ? size : size * latin;
+  return w;
+}
+/* 완전한 문장과 패킷 계층이 들어가므로 노드 폭을 정해두고 줄바꿈한다 */
+const NODE_W = 268, INFO_FONT = 10, INFO_LH = 13;
+const LAYER_LH = 12, LAYER_NAME_W = 62;
+function wrapText(s, fontSize, maxW, mono) {
+  const words = String(s || "").split(/\s+/).filter(Boolean);
+  const lines = [];
+  let cur = "";
+  for (const w of words) {
+    const cand = cur ? cur + " " + w : w;
+    if (textWidth(cand, fontSize, mono) <= maxW || !cur) cur = cand;
+    else { lines.push(cur); cur = w; }
+  }
+  if (cur) lines.push(cur);
+  return lines;
+}
+function nodeBody(n) {
+  /* 창 3단: info 설명 → 메커니즘 배지 → 패킷 계층 스택.
+     렌더와 크기 계산이 어긋나지 않도록 한 곳에서 만든다 */
+  const inner = NODE_W - 18;
+  const infoLines = (n.info || []).flatMap(line => wrapText(line, INFO_FONT, inner));
+  const badges = (n.mechanisms || []).map(m => MECH_BADGE[m.type]).filter(Boolean);
+
+  /* 이 노드를 지난 뒤의 패킷 상태 — layerOps 로 자동 계산된 스냅샷.
+     계층마다 필드를 나열하고, 이 노드에서 바뀐 필드만 강조한다 */
+  const snap = nodeSnapshot.get(n.id);
+  const layerRows = [];
+  if (snap) {
+    for (const l of snap.layers) {
+      const fieldText = l.locked
+        ? "암호화되어 볼 수 없음"
+        : Object.entries(l.fields).map(([k, v]) => `${k}=${v}`).join("  ");
+      // 계층 이름 칸(LAYER_NAME_W)만큼 밀려 시작하므로 그만큼 빼고 줄바꿈한다 (모노스페이스 기준)
+      const wrapped = wrapText(fieldText, 9, inner - LAYER_NAME_W, true);
+      wrapped.forEach((text, i) => layerRows.push({
+        name: i === 0 ? l.name : "",
+        text,
+        locked: l.locked,
+        changed: !l.locked && Object.keys(l.fields).some(k => snap.changedFields.has(`${l.id}.${k}`)),
+        layerChanged: snap.changedLayers.has(l.id),
+      }));
+    }
+    for (const name of snap.dropped) {
+      layerRows.push({ name: "", text: `${name} 헤더는 여기서 벗겨졌습니다`, dropped: true });
+    }
+  }
+  return { infoLines, badges, layerRows };
+}
+function leafSize(n) {
+  if (n.type === "group") {  // 접힌 그룹
+    const label = n.label + "  ▸";
+    const w = Math.max(textWidth(label, 12) + 40 + (iconOf(n) ? 18 : 0), 150);
+    return { w: Math.ceil(w), h: 52 };
+  }
+  const { infoLines, badges, layerRows } = nodeBody(n);
+  let h = TITLE_H + 6;
+  if (n.sublabel) h += 14;
+  if (infoLines.length) h += infoLines.length * INFO_LH + 3;
+  if (badges.length) h += 17;
+  if (layerRows.length) h += 6 + layerRows.length * LAYER_LH + 4;
+  h += 8;
+  return { w: NODE_W, h: Math.max(h, 46) };
+}
+function countDescendants(gid) {
+  let c = 0;
+  for (const n of FLOW.nodes) {
+    if (n.id === gid) continue;
+    if (ancestorChain(n.id).includes(gid)) c++;
+  }
+  return c;
+}
+
+function layoutContainer(containerId) {
+  const kids = directChildren(containerId);
+  const sizes = {}, inner = {};
+  for (const k of kids) {
+    if (k.type === "group" && !collapsed.has(k.id)) {
+      const sub = layoutContainer(k.id);
+      sizes[k.id] = { w: sub.w, h: sub.h };
+      inner[k.id] = sub;
+    } else {
+      sizes[k.id] = leafSize(k);
+    }
+  }
+  const kidIds = kids.map(k => k.id);
+  const succ = {}; kidIds.forEach(id => succ[id] = new Set());
+  const hasPred = new Set();
+  for (const e of FLOW.edges) {
+    const s = childAtLevel(containerId, e.source);
+    const t = childAtLevel(containerId, e.target);
+    if (s && t && s !== t) { succ[s].add(t); hasPred.add(t); }
+  }
+  const rank = {};
+  function setRank(id, r, seen) {
+    if (seen.has(id)) return;
+    seen.add(id);
+    if (rank[id] === undefined || r > rank[id]) {
+      rank[id] = r;
+      for (const nx of succ[id]) setRank(nx, r + 1, seen);
+    }
+    seen.delete(id);
+  }
+  for (const id of kidIds) if (!hasPred.has(id)) setRank(id, 0, new Set());
+  for (const id of kidIds) if (rank[id] === undefined) rank[id] = 0;
+
+  const isTB = (FLOW.meta.direction || "LR") === "TB";
+  const byRank = {};
+  for (const id of kidIds) (byRank[rank[id]] = byRank[rank[id]] || []).push(id);
+  const rankKeys = Object.keys(byRank).map(Number).sort((a, b) => a - b);
+
+  const children = {};
+  let main = 0, crossMax = 0;
+  for (const r of rankKeys) {
+    const ids = byRank[r];
+    let cross = 0, mainSize = 0;
+    for (const id of ids) {
+      const sz = sizes[id];
+      const mw = isTB ? sz.h : sz.w, cw = isTB ? sz.w : sz.h;
+      children[id] = { main, cross, w: sz.w, h: sz.h };
+      cross += cw + GAP_NODE;
+      mainSize = Math.max(mainSize, mw);
+    }
+    cross -= GAP_NODE;
+    for (const id of ids) children[id]._rankCross = cross;
+    crossMax = Math.max(crossMax, cross);
+    main += mainSize + GAP_RANK;
+  }
+  main -= GAP_RANK;
+
+  const titleH = containerId ? GROUP_TITLE_H : 0;
+  for (const id of Object.keys(children)) {
+    const c = children[id];
+    const centered = c.cross + (crossMax - c._rankCross) / 2;
+    const x = isTB ? centered : c.main;
+    const y = isTB ? c.main : centered;
+    children[id] = { x: x + PAD, y: y + PAD + titleH, w: c.w, h: c.h, inner: inner[id] };
+  }
+  const w = (isTB ? crossMax : main) + PAD * 2;
+  const h = (isTB ? main : crossMax) + PAD * 2 + titleH;
+  return { w: Math.max(w, 140), h: Math.max(h, 60), children };
+}
+
+function computeLayout() {
+  layout = {};
+  const root = layoutContainer(null);
+  (function absolutize(frame, ox, oy) {
+    for (const [id, c] of Object.entries(frame.children)) {
+      layout[id] = { x: ox + c.x, y: oy + c.y, w: c.w, h: c.h };
+      if (c.inner) absolutize(c.inner, ox + c.x, oy + c.y);
+    }
+  })(root, 0, 0);
+  contentBox = { x: -20, y: -20, w: root.w + 40, h: root.h + 40 };
+}
+
+/* ================= 포트 위치 ================= */
+function computePorts() {
+  portPos = {};
+  const isTB = (FLOW.meta.direction || "LR") === "TB";
+  for (const n of FLOW.nodes) {
+    if (visibleOf(n.id) !== n.id) continue;
+    if (n.type === "group") continue;
+    const rect = layout[n.id]; if (!rect) continue;
+    placeDeclaredPorts(n, rect, isTB);
+  }
+  for (const n of FLOW.nodes) {
+    if (n.type !== "group") continue;
+    if (visibleOf(n.id) !== n.id) continue;
+    const rect = layout[n.id]; if (!rect) continue;
+    if (!collapsed.has(n.id)) continue;
+    placeBoundaryPorts(n, rect, isTB);
+  }
+}
+function placeDeclaredPorts(n, rect, isTB) {
+  for (const side of ["in", "out"]) {
+    const list = (n.ports?.[side] || []);
+    list.forEach((p, i) => {
+      const frac = (i + 1) / (list.length + 1);
+      let x, y;
+      if (!isTB) { x = side === "in" ? rect.x : rect.x + rect.w; y = rect.y + rect.h * frac; }
+      else       { y = side === "in" ? rect.y : rect.y + rect.h; x = rect.x + rect.w * frac; }
+      portPos[`${n.id}/${p.id}`] = { x, y, kind: p.kind };
+    });
+  }
+}
+function placeBoundaryPorts(g, rect, isTB) {
+  const ins = [], outs = [];
+  for (const e of FLOW.edges) {
+    const vs = visibleOf(e.source), vt = visibleOf(e.target);
+    if (vs === g.id && vt !== g.id) outs.push(e);
+    if (vt === g.id && vs !== g.id) ins.push(e);
+  }
+  ins.forEach((e, i) => {
+    const frac = (i + 1) / (ins.length + 1);
+    portPos[`boundary/${e.id}/in`] = !isTB
+      ? { x: rect.x, y: rect.y + rect.h * frac, kind: e.kind }
+      : { x: rect.x + rect.w * frac, y: rect.y, kind: e.kind };
+  });
+  outs.forEach((e, i) => {
+    const frac = (i + 1) / (outs.length + 1);
+    portPos[`boundary/${e.id}/out`] = !isTB
+      ? { x: rect.x + rect.w, y: rect.y + rect.h * frac, kind: e.kind }
+      : { x: rect.x + rect.w * frac, y: rect.y + rect.h, kind: e.kind };
+  });
+}
+function endpointPos(e, side) {
+  const nodeId = e[side], v = visibleOf(nodeId);
+  const dirKey = side === "source" ? "out" : "in";
+  if (v !== nodeId || (nodesById[v].type === "group" && collapsed.has(v))) {
+    return portPos[`boundary/${e.id}/${dirKey}`];
+  }
+  const n = nodesById[nodeId];
+  const portId = e[side + "Port"];
+  if (portId && portPos[`${nodeId}/${portId}`]) return portPos[`${nodeId}/${portId}`];
+  const list = (n.ports?.[dirKey] || []);
+  const match = list.find(p => p.kind === e.kind) || list[0];
+  return match ? portPos[`${nodeId}/${match.id}`] : centerOf(layout[nodeId]);
+}
+function centerOf(r) { return r ? { x: r.x + r.w / 2, y: r.y + r.h / 2 } : { x: 0, y: 0 }; }
+
+/* ================= SVG 렌더 ================= */
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs || {})) e.setAttribute(k, v);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function rectShape(cx, cy, r, color) { return el("rect", { x: cx - r, y: cy - r, width: r * 2, height: r * 2, fill: color, class: "port" }); }
+function triShape(cx, cy, r, color) { return el("path", { d: `M ${cx} ${cy - r} L ${cx + r} ${cy + r} L ${cx - r} ${cy + r} Z`, fill: color, class: "port" }); }
+function circShape(cx, cy, r, color) { return el("circle", { cx, cy, r, fill: color, class: "port" }); }
+function diamShape(cx, cy, r, color) { return el("path", { d: `M ${cx} ${cy - r} L ${cx + r} ${cy} L ${cx} ${cy + r} L ${cx - r} ${cy} Z`, fill: color, class: "port" }); }
+const SHAPE_FN = { packet: rectShape, signal: triShape, data: circShape, error: diamShape };
+
+let gEdges, gNodes, gEdgeHits, gParticles;
+
+function render() {
+  svg.innerHTML = "";
+  const gRoot = el("g", { id: "g-root" }, svg);
+  gEdges = el("g", {}, gRoot);
+  gNodes = el("g", {}, gRoot);
+  gEdgeHits = el("g", {}, gRoot);   // 히트 영역은 노드/그룹 위 — 그룹 박스가 엣지 클릭을 가로채지 않게
+  gParticles = el("g", {}, gRoot);
+
+  renderContainers(null);
+  renderEdges();
+  renderAmbientInit();
+  applyViewBox();
+  markPanelTarget();
+}
+
+function renderContainers(containerId) {
+  for (const n of directChildren(containerId)) {
+    if (n.type === "group") renderGroup(n);
+    else renderLeaf(n);
+  }
+}
+function renderGroup(g) {
+  const rect = layout[g.id]; if (!rect) return;
+  const isCol = collapsed.has(g.id);
+  const grp = el("g", { class: "group" + (isCol ? " collapsed" : ""), "data-id": g.id }, gNodes);
+  const box = el("rect", { x: rect.x, y: rect.y, width: rect.w, height: rect.h, rx: 8, class: "group-box" }, grp);
+  const th = el("rect", { x: rect.x, y: rect.y, width: rect.w, height: GROUP_TITLE_H, rx: 8, class: "group-title-bg" }, grp);
+  const tl = el("text", { x: rect.x + 10, y: rect.y + 15, class: "group-label" }, grp);
+  const gi = iconOf(g);
+  tl.textContent = `${isCol ? "▸" : "▾"} ${gi ? gi + " " : ""}${g.label}`;
+  if (isCol) {
+    const sub = el("text", { x: rect.x + 10, y: rect.y + 34, class: "node-sublabel" }, grp);
+    sub.textContent = `${countDescendants(g.id)}개 노드 (클릭해 펼치기)`;
+  }
+  const toggle = (ev) => { ev.stopPropagation(); collapsed.has(g.id) ? collapsed.delete(g.id) : collapsed.add(g.id); relayout(false); };
+  th.addEventListener("click", toggle);
+  tl.addEventListener("click", toggle);
+  box.addEventListener("click", (ev) => { ev.stopPropagation(); openNodePanel(g.id); });
+  th.setAttribute("role", "button");
+  th.setAttribute("aria-label", `${g.label} ${isCol ? "펼치기" : "접기"}`);
+
+  if (!isCol) renderContainers(g.id);
+  else renderBoundaryPorts(g);
+}
+function renderBoundaryPorts(g) {
+  for (const [key, p] of Object.entries(portPos)) {
+    if (!key.startsWith("boundary/")) continue;
+    const eid = key.split("/")[1];
+    const e = edgesById[eid];
+    if (visibleOf(e.source) !== g.id && visibleOf(e.target) !== g.id) continue;
+    const kind = p.kind || "data";
+    gNodes.appendChild(SHAPE_FN[kind](p.x, p.y, PORT_R, KIND_COLOR_RAW[kind]));
+  }
+}
+function renderLeaf(n) {
+  const rect = layout[n.id]; if (!rect) return;
+  const role = n.role || "process";
+  const grp = el("g", { class: `node role-${role}`, "data-id": n.id }, gNodes);
+  grp.addEventListener("click", (ev) => { ev.stopPropagation(); openNodePanel(n.id); });
+
+  el("rect", { x: rect.x, y: rect.y, width: rect.w, height: rect.h, rx: 6, class: "node-box" }, grp);
+  el("rect", { x: rect.x, y: rect.y, width: rect.w, height: TITLE_H, rx: 6, class: "node-title-bg" }, grp);
+  const ic = iconOf(n);
+  let lx = rect.x + 9;
+  if (ic) {
+    const it = el("text", { x: lx, y: rect.y + 16, "font-size": "11" }, grp);
+    it.textContent = ic;
+    lx += 18;
+  }
+  const lbl = el("text", { x: lx, y: rect.y + 16, class: "node-label" }, grp);
+  lbl.textContent = (role === "decision" ? "◇ " : "") + n.label;
+
+  if (role === "store") {
+    el("line", { x1: rect.x, y1: rect.y + TITLE_H + 2, x2: rect.x + rect.w, y2: rect.y + TITLE_H + 2, class: "store-line" }, grp);
+    el("line", { x1: rect.x, y1: rect.y + rect.h - 3, x2: rect.x + rect.w, y2: rect.y + rect.h - 3, class: "store-line" }, grp);
+  }
+  const { infoLines, badges, layerRows } = nodeBody(n);
+  let cy = rect.y + TITLE_H + 12;
+  if (n.sublabel) {
+    const sub = el("text", { x: rect.x + 9, y: cy, class: "node-sublabel" }, grp);
+    sub.textContent = n.sublabel;
+    cy += 14;
+  }
+  // 1단 — 설명 문장
+  for (const line of infoLines) {
+    const it = el("text", { x: rect.x + 9, y: cy, class: "node-info" }, grp);
+    it.textContent = line;
+    cy += INFO_LH;
+  }
+  if (infoLines.length) cy += 3;
+  // 2단 — 메커니즘 배지
+  if (badges.length) {
+    let bx = rect.x + 9;
+    for (const b of badges) {
+      const label = `${b.icon} ${b.short}`;
+      const bw = textWidth(label, 9) + 12;
+      el("rect", { x: bx, y: cy - 9, width: bw, height: 13, rx: 6.5, class: "mech-badge-bg" }, grp);
+      const bt = el("text", { x: bx + 6, y: cy, class: "mech-badge-text" }, grp);
+      bt.textContent = label;
+      bx += bw + 4;
+    }
+    cy += 17;
+  }
+  // 3단 — 이 노드를 지난 뒤의 패킷 계층 상태 (layerOps 로 자동 계산)
+  if (layerRows.length) {
+    cy += 2;
+    el("line", { x1: rect.x + 9, y1: cy, x2: rect.x + rect.w - 9, y2: cy, class: "node-divider" }, grp);
+    cy += 11;
+    for (const row of layerRows) {
+      if (row.name) {
+        const nm = el("text", { x: rect.x + 9, y: cy, class: "layer-name" + (row.layerChanged ? " chg" : "") }, grp);
+        nm.textContent = row.name;
+      }
+      const cls = row.dropped ? "layer-dropped" : ("layer-fields" + (row.changed ? " chg" : "") + (row.locked ? " locked" : ""));
+      const ft = el("text", { x: rect.x + 9 + LAYER_NAME_W, y: cy, class: cls }, grp);
+      ft.textContent = row.text;
+      cy += LAYER_LH;
+    }
+    cy += 4;
+  }
+  for (const side of ["in", "out"]) {
+    for (const p of (n.ports?.[side] || [])) {
+      const pos = portPos[`${n.id}/${p.id}`];
+      if (pos) grp.appendChild(SHAPE_FN[p.kind](pos.x, pos.y, PORT_R, KIND_COLOR_RAW[p.kind]));
+    }
+  }
+}
+
+function renderEdges() {
+  edgePaths = {};
+  const isTB = (FLOW.meta.direction || "LR") === "TB";
+  for (const e of FLOW.edges) {
+    const vs = visibleOf(e.source), vt = visibleOf(e.target);
+    if (vs === vt) { edgePaths[e.id] = { hidden: true }; continue; }
+    const a = endpointPos(e, "source"), b = endpointPos(e, "target");
+    if (!a || !b) { edgePaths[e.id] = { hidden: true }; continue; }
+    const off = Math.max(42, (isTB ? Math.abs(b.y - a.y) : Math.abs(b.x - a.x)) / 2);
+    const d = !isTB
+      ? `M ${a.x} ${a.y} C ${a.x + off} ${a.y}, ${b.x - off} ${b.y}, ${b.x} ${b.y}`
+      : `M ${a.x} ${a.y} C ${a.x} ${a.y + off}, ${b.x} ${b.y - off}, ${b.x} ${b.y}`;
+    const color = KIND_COLOR_RAW[e.kind];
+    const path = el("path", { d, class: "edge-path", stroke: color, "data-edge": e.id }, gEdges);
+    const len = path.getTotalLength();
+    // 넓은 투명 히트 영역 — 엣지 클릭용 (노드 위 레이어)
+    const hit = el("path", { d, class: "edge-hit", "data-edge": e.id }, gEdgeHits);
+    hit.addEventListener("click", (ev) => { ev.stopPropagation(); openEdgePanel(e.id); });
+    edgePaths[e.id] = { el: path, len, hidden: false };
+    drawDecoration(e, path, len, color);
+  }
+}
+function drawDecoration(e, path, len, color) {
+  if (!e.decoration) return;
+  const tangentAt = (l) => {
+    const p1 = path.getPointAtLength(Math.max(0, l - 2)), p2 = path.getPointAtLength(Math.min(len, l + 2));
+    const dx = p2.x - p1.x, dy = p2.y - p1.y, m = Math.hypot(dx, dy) || 1;
+    return { x: dx / m, y: dy / m };
+  };
+  const perp = (t) => ({ x: -t.y, y: t.x });
+  if (e.decoration === "one-to-one") {
+    for (const l of [10, len - 10]) {
+      const p = path.getPointAtLength(l), t = tangentAt(l), pp = perp(t);
+      el("line", { x1: p.x - pp.x * 5, y1: p.y - pp.y * 5, x2: p.x + pp.x * 5, y2: p.y + pp.y * 5,
+                   class: "edge-deco", stroke: color }, gEdges);
+    }
+  } else if (e.decoration === "one-to-many") {
+    const l = len - 4, base = len - 14;
+    const p = path.getPointAtLength(l), b = path.getPointAtLength(base), t = tangentAt(base), pp = perp(t);
+    for (const s of [-1, 0, 1]) {
+      el("line", { x1: b.x, y1: b.y, x2: p.x + pp.x * 6 * s, y2: p.y + pp.y * 6 * s,
+                   class: "edge-deco", stroke: color }, gEdges);
+    }
+  } else if (e.decoration === "optional") {
+    const p = path.getPointAtLength(12);
+    el("circle", { cx: p.x, cy: p.y, r: 4, fill: "none", class: "edge-deco", stroke: color }, gEdges);
+  }
+}
+
+/* ================= 상시 입자 ================= */
+function renderAmbientInit() {
+  ambient = [];
+  for (const [eid, ep] of Object.entries(edgePaths)) {
+    if (ep.hidden) continue;
+    const rate = FLOW.stream?.rates?.[eid] || 1;
+    const count = Math.max(1, Math.round(ep.len / 150 * Math.min(rate, 3)));
+    for (let i = 0; i < count; i++) ambient.push({ eid, off: (ep.len / count) * i });
+  }
+  drawAmbient(true);
+}
+function drawAmbient(rebuild) {
+  if (rebuild) gParticles.innerHTML = "";
+  if (!motionOn) { gParticles.innerHTML = ""; return; }
+  ambient.forEach((p, i) => {
+    const ep = edgePaths[p.eid]; if (!ep || ep.hidden) return;
+    const pos = ep.el.getPointAtLength(p.off % ep.len);
+    const kind = edgesById[p.eid].kind;
+    let node = gParticles.childNodes[i];
+    if (rebuild || !node) {
+      node = SHAPE_FN[kind](0, 0, 2.6, KIND_COLOR_RAW[kind]);
+      node.classList.add("particle");
+      gParticles.appendChild(node);
+    }
+    node.setAttribute("transform", `translate(${pos.x} ${pos.y})`);
+  });
+}
+
+/* trace 스텝이 탄 엣지를 찾는다 — 엣지 패널이 "이 구간을 지나는 흐름"을 뽑을 때 쓴다 */
+function stepEdgeOf(idx) {
+  if (!FLOW.trace || idx <= 0) return null;
+  const s = FLOW.trace.steps[idx];
+  if (s.via && edgesById[s.via]) return edgesById[s.via];
+  const prev = FLOW.trace.steps[idx - 1].at;
+  return FLOW.edges.find(e => e.source === prev && e.target === s.at) || null;
+}
+
+/* ================= 상세 패널 ================= */
+function markPanelTarget() {
+  document.querySelectorAll(".node.panel-open").forEach(g => g.classList.remove("panel-open"));
+  document.querySelectorAll(".edge-path.panel-open").forEach(g => g.classList.remove("panel-open"));
+  if (panelNodeId) {
+    const g = document.querySelector(`.node[data-id="${panelNodeId}"]`);
+    if (g) g.classList.add("panel-open");
+  }
+  if (panelEdgeId && edgePaths[panelEdgeId] && !edgePaths[panelEdgeId].hidden) {
+    edgePaths[panelEdgeId].el.classList.add("panel-open");
+  }
+}
+function closePanel() {
+  panelNodeId = null; panelEdgeId = null;
+  $("detail-panel").classList.remove("open");
+  markPanelTarget();
+}
+function nodeSteps(nodeId) {
+  if (!FLOW.trace) return [];
+  return FLOW.trace.steps.map((s, i) => ({ ...s, _idx: i })).filter(s => s.at === nodeId);
+}
+function jumpButton(id, label) {
+  return `<button class="jump" data-jump="${esc(id)}">${esc(label)}</button>`;
+}
+function bindJumps() {
+  document.querySelectorAll("#panel-body .jump").forEach(b => {
+    b.addEventListener("click", () => {
+      const id = b.getAttribute("data-jump");
+      if (nodesById[id]) openNodePanel(id);
+      else if (edgesById[id]) openEdgePanel(id);
+    });
+  });
+}
+function openNodePanel(nodeId) {
+  const n = nodesById[nodeId]; if (!n) return;
+  panelNodeId = nodeId; panelEdgeId = null;
+  const ic = iconOf(n);
+  $("panel-title").textContent = `${ic ? ic + " " : ""}${n.label}`;
+  let html = `<div class="meta-line">${esc(n.type)}${n.role ? " · " + esc(n.role) : ""}${n.sublabel ? " · " + esc(n.sublabel) : ""}</div>`;
+
+  // 개요
+  if (n.detail) html += `<p class="detail-text">${esc(n.detail)}</p>`;
+  if (n.type === "group") {
+    html += `<div class="meta-line">내부 노드 ${countDescendants(n.id)}개 · ${collapsed.has(n.id) ? "접힘 (제목 클릭으로 펼침)" : "펼침"}</div>`;
+  }
+  // 여기서 일어나는 일
+  const steps = nodeSteps(nodeId);
+  if (steps.length) {
+    html += `<div class="sec-head">여기서 일어나는 일</div>`;
+    for (const s of steps) {
+      html += `<div class="step-block">${esc(s.narration)}</div>`;
+    }
+  }
+  // 패킷 변형
+  const allChanges = steps.flatMap(s => resolvedChanges[s._idx] || []);
+  if (allChanges.length) {
+    html += `<div class="sec-head">패킷 변형</div>`;
+    for (const c of allChanges) {
+      if (c.kind === "set") {
+        html += `<div class="mech-rewrite">${esc(c.layerName)}.${esc(c.field)}: <span class="from">${esc(c.from)}</span> <span class="arrow">→</span> <span class="to">${esc(c.to)}</span></div>`;
+      } else if (c.kind === "pop") {
+        html += `<div class="mech-rewrite"><span class="from">[${esc(c.layerName)}]</span> 계층 벗겨짐</div>`;
+      } else if (c.kind === "push") {
+        html += `<div class="mech-rewrite"><span class="to">[${esc(c.layerName)}]</span> 계층 씌워짐</div>`;
+      } else if (c.kind === "lock") {
+        html += `<div class="mech-rewrite">🔒 [${esc(c.layerName)}] 암호화${c.note ? " — " + esc(c.note) : ""}</div>`;
+      } else if (c.kind === "unlock") {
+        html += `<div class="mech-rewrite">🔓 [${esc(c.layerName)}] 복호화</div>`;
+      }
+    }
+  }
+  // 내부 동작
+  if ((n.mechanisms || []).length) {
+    html += `<div class="sec-head">내부 동작</div>`;
+    const sel = new Set(steps.flatMap(s => s.mechanismEvent?.select || []));
+    for (const m of n.mechanisms) html += renderMechanism(m, sel);
+  }
+  // 연결
+  const ins = FLOW.edges.filter(e => e.target === nodeId);
+  const outs = FLOW.edges.filter(e => e.source === nodeId);
+  if (ins.length || outs.length) {
+    html += `<div class="sec-head">연결</div>`;
+    for (const e of ins) {
+      const from = nodesById[e.source];
+      html += `<div class="conn-row">⬅ ${jumpButton(e.source, (iconOf(from) ? iconOf(from) + " " : "") + from.label)}
+        <span class="conn-kind" style="color:${KIND_COLOR_RAW[e.kind]}">${esc(e.kind)}</span>
+        ${e.label ? `<span class="conn-label">${esc(e.label)}</span>` : ""}
+        ${e.ratio ? `<span class="conn-ratio">비율 ${esc(e.ratio)}</span>` : ""}
+        ${jumpButton(e.id, "엣지")}</div>`;
+    }
+    for (const e of outs) {
+      const to = nodesById[e.target];
+      html += `<div class="conn-row">➡ ${jumpButton(e.target, (iconOf(to) ? iconOf(to) + " " : "") + to.label)}
+        <span class="conn-kind" style="color:${KIND_COLOR_RAW[e.kind]}">${esc(e.kind)}</span>
+        ${e.label ? `<span class="conn-label">${esc(e.label)}</span>` : ""}
+        ${e.ratio ? `<span class="conn-ratio">비율 ${esc(e.ratio)}</span>` : ""}
+        ${jumpButton(e.id, "엣지")}</div>`;
+    }
+  }
+  if (!n.detail && !steps.length && !(n.mechanisms || []).length && !ins.length && !outs.length) {
+    html += `<div class="meta-line">상세 정보 없음</div>`;
+  }
+  $("panel-body").innerHTML = html;
+  bindJumps();
+  $("detail-panel").classList.add("open");
+  markPanelTarget();
+}
+function openEdgePanel(edgeId) {
+  const e = edgesById[edgeId]; if (!e) return;
+  panelEdgeId = edgeId; panelNodeId = null;
+  const from = nodesById[e.source], to = nodesById[e.target];
+  $("panel-title").textContent = `${from.label} → ${to.label}`;
+  let html = `<div class="meta-line">엣지 · <span style="color:${KIND_COLOR_RAW[e.kind]}">${esc(e.kind)}</span>${e.ratio ? " · 비율 " + esc(e.ratio) : ""}</div>`;
+  if (e.label) html += `<p class="detail-text">${esc(e.label)}</p>`;
+  if (e.decoration) html += `<div class="meta-line">${esc(DECO_LABEL[e.decoration] || e.decoration)}</div>`;
+  html += `<div class="sec-head">양끝</div>`;
+  html += `<div class="conn-row">출발 ${jumpButton(e.source, (iconOf(from) ? iconOf(from) + " " : "") + from.label)}</div>`;
+  html += `<div class="conn-row">도착 ${jumpButton(e.target, (iconOf(to) ? iconOf(to) + " " : "") + to.label)}</div>`;
+  // 이 엣지를 타는 스텝
+  if (FLOW.trace) {
+    const rides = FLOW.trace.steps.map((s, i) => ({ s, i })).filter(({ i }) => {
+      const edge = stepEdgeOf(i);
+      return edge && edge.id === edgeId;
+    });
+    if (rides.length) {
+      html += `<div class="sec-head">이 구간을 지나는 흐름</div>`;
+      for (const { s } of rides) {
+        html += `<div class="step-block">${esc(s.narration)}</div>`;
+      }
+    }
+  }
+  $("panel-body").innerHTML = html;
+  bindJumps();
+  $("detail-panel").classList.add("open");
+  markPanelTarget();
+}
+function renderMechanism(m, sel) {
+  const title = esc(m.title || MECH_LABEL[m.type] || m.type);
+  let body = "";
+  if (m.type === "table-lookup") {
+    body = `<table class="mech-table">`;
+    if (m.columns) body += `<tr>${m.columns.map(c => `<th>${esc(c)}</th>`).join("")}</tr>`;
+    for (const r of m.rows || []) {
+      body += `<tr class="${sel.has(r.id) ? "sel" : ""}">${(r.cells || []).map(c => `<td>${esc(c)}</td>`).join("")}</tr>`;
+      if (r.note) body += `<tr class="${sel.has(r.id) ? "sel" : ""}"><td colspan="${(r.cells || []).length}" class="mech-note">${esc(r.note)}</td></tr>`;
+    }
+    body += `</table>`;
+  } else if (m.type === "weighted-select") {
+    const total = (m.candidates || []).reduce((s, c) => s + c.weight, 0) || 1;
+    body = (m.candidates || []).map(c => {
+      const pct = Math.round(c.weight / total * 100);
+      const isSel = sel.has(c.id);
+      return `<div class="mech-cand ${isSel ? "sel" : ""}">
+        <span>${esc(c.label)}</span>
+        <span class="bar-wrap"><span class="bar" style="width:${pct}%"></span></span>
+        <span class="pct">${pct}%</span>${isSel ? `<span class="check">✓ 선택</span>` : ""}</div>`;
+    }).join("");
+  } else if (m.type === "rewrite") {
+    body = (m.changes || []).map(c =>
+      `<div class="mech-rewrite">${esc(c.layer)}.${esc(c.field)}: <span class="from">${esc(c.from)}</span> <span class="arrow">→</span> <span class="to">${esc(c.to)}</span></div>`
+    ).join("");
+  } else if (m.type === "crypt") {
+    body = `<div class="mech-crypt">
+      <span class="mode">${m.mode === "decrypt" ? "🔓 복호화" : "🔒 암호화"}</span>
+      ${m.cipher ? `<span>암호군: ${esc(m.cipher)}</span>` : ""}
+      ${m.layers?.length ? `<span>대상 계층: ${m.layers.map(esc).join(", ")}</span>` : ""}
+      ${m.note ? `<span class="mech-note">${esc(m.note)}</span>` : ""}</div>`;
+  } else if (m.type === "k8s-resolve") {
+    body = `<div class="mech-describe">` + (m.lines || []).map(l => {
+      const pad = "  ".repeat(l.indent || 0);
+      return `<span class="line ${l.id && sel.has(l.id) ? "sel" : ""}">${pad}${esc(l.text)}</span>`;
+    }).join("\n") + `</div>`;
+  } else {
+    const dump = Object.entries(m).filter(([k]) => k !== "type" && k !== "title")
+      .map(([k, v]) => `${k}: ${typeof v === "object" ? JSON.stringify(v) : v}`).join("\n");
+    body = `<div class="mech-kv">${esc(dump) || "(데이터 없음)"}</div>`;
+  }
+  return `<div class="mech-section">
+    <div class="mech-head">${title}<span class="mech-type-tag">${esc(m.type)}</span></div>
+    <div class="mech-body">${body}</div></div>`;
+}
+
+/* ================= 애니메이션 루프 ================= */
+function tick(ts) {
+  if (lastTs === null) lastTs = ts;
+  const dt = Math.max(0, Math.min(64, ts - lastTs)); lastTs = ts;  // 음수 dt 방어
+
+  if (motionOn) {
+    for (const p of ambient) {
+      const ep = edgePaths[p.eid];
+      if (ep && !ep.hidden) p.off = (p.off + AMBIENT_SPEED * dt / 1000) % ep.len;
+    }
+    drawAmbient(false);
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ================= 레이아웃 갱신 ================= */
+function relayout(fitView) {
+  computeLayout();
+  computePorts();
+  render();
+  if (fitView) fitViewBox();
+}
+
+/* ================= viewBox 팬/줌 ================= */
+/* 전체가 화면에 들어가도 글씨가 안 읽히면 소용없다.
+   최소 가독 배율(1.0×)을 바닥으로 두고, 그보다 더 줄여야 하는 경우엔
+   왼쪽 위(흐름 시작점)를 기준으로 맞춘다 — 나머지는 팬으로 본다. */
+const MIN_READABLE_SCALE = 1.0;
+function fitViewBox() {
+  const wrap = document.getElementById("canvas-wrap");
+  const cw = wrap.clientWidth, ch = Math.max(1, wrap.clientHeight);
+  const ar = cw / ch;
+  let { x, y, w, h } = contentBox;
+  if (w / h < ar) { const nw = h * ar; x -= (nw - w) / 2; w = nw; }
+  else { const nh = w / ar; y -= (nh - h) / 2; h = nh; }
+  if (cw / w < MIN_READABLE_SCALE) {
+    const nw = cw / MIN_READABLE_SCALE, nh = nw / ar;
+    x = contentBox.x; y = contentBox.y + (contentBox.h - nh) / 2;
+    w = nw; h = nh;
+  }
+  viewBox = { x, y, w, h };
+  applyViewBox();
+}
+function applyViewBox() {
+  svg.setAttribute("viewBox", `${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`);
+}
+function bindPanZoom() {
+  /* 클릭과 팬 구분: 누른 자리에서 5px 이상 움직여야 팬 시작.
+     pointerdown 즉시 캡처하면 click 이 svg 로 리타게팅되어 노드 클릭이 죽는다 (v0.2 버그) */
+  let pending = null, panning = false;
+  svg.addEventListener("pointerdown", (ev) => {
+    if (ev.target.closest?.("button")) return;
+    pending = { x: ev.clientX, y: ev.clientY, id: ev.pointerId };
+  });
+  svg.addEventListener("pointermove", (ev) => {
+    if (!pending) return;
+    if (!panning) {
+      if (Math.hypot(ev.clientX - pending.x, ev.clientY - pending.y) < 5) return;
+      panning = true;
+      svg.classList.add("panning");
+      svg.setPointerCapture(pending.id);
+    }
+    const sc = viewBox.w / svg.clientWidth;
+    viewBox.x -= (ev.clientX - pending.x) * sc;
+    viewBox.y -= (ev.clientY - pending.y) * sc;
+    pending.x = ev.clientX; pending.y = ev.clientY;
+    applyViewBox();
+  });
+  const end = () => { pending = null; panning = false; svg.classList.remove("panning"); };
+  svg.addEventListener("pointerup", end);
+  svg.addEventListener("pointercancel", end);
+  svg.addEventListener("wheel", (ev) => {
+    ev.preventDefault();
+    const factor = ev.deltaY > 0 ? 1.1 : 1 / 1.1;
+    const rect = svg.getBoundingClientRect();
+    const mx = viewBox.x + (ev.clientX - rect.left) / rect.width * viewBox.w;
+    const my = viewBox.y + (ev.clientY - rect.top) / rect.height * viewBox.h;
+    viewBox = {
+      x: mx - (mx - viewBox.x) * factor,
+      y: my - (my - viewBox.y) * factor,
+      w: viewBox.w * factor, h: viewBox.h * factor,
+    };
+    applyViewBox();
+  }, { passive: false });
+  svg.addEventListener("dblclick", fitViewBox);
+  // 빈 캔버스 클릭 → 패널 닫기
+  svg.addEventListener("click", (ev) => {
+    if (ev.target === svg || ev.target.id === "g-root") closePanel();
+  });
+}
+
+/* ================= 컨트롤 ================= */
+function setSpeed(s) {
+  speed = Math.min(4, Math.max(0.25, s));
+  $("speed-label").textContent = speed.toFixed(2).replace(/0$/, "") + "×";
+}
+function setMotion(on) {
+  motionOn = on;
+  const b = $("btn-motion");
+  b.setAttribute("aria-pressed", String(on));
+  b.setAttribute("aria-label", "애니메이션 " + (on ? "켜짐" : "꺼짐"));
+  drawAmbient(true);
+}
+function bindControls() {
+  $("btn-faster").addEventListener("click", () => setSpeed(speed * 1.25));
+  $("btn-slower").addEventListener("click", () => setSpeed(speed / 1.25));
+  $("btn-motion").addEventListener("click", () => setMotion(!motionOn));
+  $("btn-panel-close").addEventListener("click", closePanel);
+  if (reducedMotion) setMotion(false);
+
+  document.addEventListener("keydown", (ev) => {
+    if (ev.target.closest?.("input, textarea")) return;
+    if (ev.key === "+" || ev.key === "=") $("btn-faster").click();
+    else if (ev.key === "-") $("btn-slower").click();
+    else if (ev.key === "0") fitViewBox();
+    else if (ev.key === "Escape") closePanel();
+  });
+  bindPanZoom();
+  addEventListener("resize", fitViewBox);
+}
+
+init();
+
+</script>
+</body>
+</html>

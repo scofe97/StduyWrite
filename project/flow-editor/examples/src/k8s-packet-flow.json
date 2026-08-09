@@ -1,0 +1,681 @@
+{
+  "meta": {
+    "title": "K8s NodePort 패킷 흐름",
+    "subtitle": "외부 요청이 노드에 도착해 iptables 규칙을 거쳐 Pod 안 nginx에 닿기까지",
+    "mode": "trace",
+    "direction": "LR"
+  },
+  "nodes": [
+    {
+      "id": "client",
+      "type": "external-client",
+      "role": "external",
+      "icon": "◇",
+      "label": "Client",
+      "sublabel": "클러스터 밖 브라우저",
+      "info": [
+        "클러스터 밖에서 요청을 보냅니다. Pod이 어느 노드에 있는지는 모릅니다."
+      ],
+      "detail": "클러스터 바깥의 사용자입니다. NodePort 방식은 모든 워커 노드가 같은 포트(여기서는 30080)를 열어두기 때문에, 클라이언트는 아무 노드의 IP로나 접속해도 서비스에 닿습니다. 어느 Pod이 실제로 응답할지는 클라이언트가 알 필요도, 알 방법도 없습니다.",
+      "ports": {
+        "out": [
+          {
+            "id": "o0",
+            "kind": "packet"
+          }
+        ]
+      }
+    },
+    {
+      "id": "worker-1",
+      "type": "group",
+      "icon": "⎈",
+      "label": "Worker Node (worker-1)",
+      "detail": "쿠버네티스 워커 노드입니다. 노드 안에는 호스트가 쓰는 네트워크 공간과 Pod마다 따로 만들어진 네트워크 공간이 나뉘어 있고, 둘은 가상 케이블(veth pair)로 이어져 있습니다."
+    },
+    {
+      "id": "netns-host",
+      "parentId": "worker-1",
+      "type": "group",
+      "icon": "▦",
+      "label": "netns: host",
+      "detail": "노드의 기본 네트워크 네임스페이스(netns)입니다. 네트워크 네임스페이스는 리눅스가 제공하는 격리 단위로, 각자 독립된 네트워크 카드·라우팅 테이블·방화벽 규칙을 가집니다. 호스트 공간에는 실제 물리 랜카드와 kube-proxy가 심어둔 iptables 규칙이 들어 있습니다."
+    },
+    {
+      "id": "eth0",
+      "parentId": "netns-host",
+      "type": "interface",
+      "role": "process",
+      "icon": "▤",
+      "label": "eth0",
+      "sublabel": "물리 랜카드",
+      "info": [
+        "랜선으로 들어온 신호를 받아 커널이 다룰 수 있는 형태로 바꿉니다."
+      ],
+      "detail": "노드의 물리 네트워크 카드입니다. 도착한 데이터를 링 버퍼라는 대기 공간에 넣고 커널에 알립니다. 커널은 이 데이터를 skb(socket buffer)라는 구조체로 감싸는데, 이후 모든 처리 단계는 원본 데이터를 복사하지 않고 이 구조체만 넘겨가며 진행합니다. 복사를 피하는 것이 네트워크 성능의 핵심이기 때문입니다.",
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "packet"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "packet"
+          }
+        ]
+      }
+    },
+    {
+      "id": "prerouting",
+      "parentId": "netns-host",
+      "type": "netfilter-hook",
+      "role": "process",
+      "icon": "⊣",
+      "label": "PREROUTING",
+      "sublabel": "방화벽 첫 검문소",
+      "info": [
+        "경로를 정하기 전에 패킷을 먼저 붙잡는 지점입니다.",
+        "목적지를 바꿔야 한다면 반드시 여기서 끝내야 합니다."
+      ],
+      "detail": "netfilter는 리눅스 커널에 내장된 패킷 처리 장치이고, PREROUTING은 그 중 가장 먼저 걸리는 지점입니다. 왜 하필 라우팅 이전일까요. 목적지 주소를 바꾸는 작업(DNAT)을 라우팅 이후에 하면, 커널은 이미 바뀌기 전 주소로 경로를 계산해버린 뒤입니다. 그래서 주소를 바꾸는 일은 경로를 정하기 전에 끝나야 하고, DNAT 규칙이 이 지점에 자리합니다.",
+      "mechanisms": [
+        {
+          "type": "table-lookup",
+          "title": "nat 테이블 · PREROUTING 체인",
+          "columns": [
+            "조건",
+            "동작"
+          ],
+          "rows": [
+            {
+              "id": "r-kube",
+              "cells": [
+                "모든 패킷",
+                "-j KUBE-SERVICES"
+              ],
+              "note": "kube-proxy가 심어둔 규칙입니다. 들어오는 모든 패킷을 쿠버네티스 서비스 체인으로 보내 확인하게 합니다."
+            }
+          ]
+        }
+      ],
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "packet"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "packet"
+          }
+        ]
+      }
+    },
+    {
+      "id": "kube-svc",
+      "parentId": "netns-host",
+      "type": "iptables-chain",
+      "role": "decision",
+      "icon": "⎈",
+      "label": "KUBE-SERVICES",
+      "sublabel": "서비스 → Pod 변환",
+      "info": [
+        "어느 Pod이 응답할지 확률로 고르고, 목적지 주소를 그 Pod의 것으로 바꿉니다.",
+        "이 한 단계가 로드 밸런싱과 서비스 추상화를 동시에 해냅니다."
+      ],
+      "detail": "쿠버네티스에서 Service는 실체가 있는 서버가 아니라 규칙의 이름입니다. kube-proxy라는 구성요소가 Service 정의를 읽어 iptables 규칙으로 번역해 두고, 실제 분배는 커널이 이 규칙에 따라 수행합니다. 그래서 Service에 프록시 서버가 따로 뜨지 않아도 부하 분산이 됩니다. 여기서 일어나는 일은 세 단계입니다. 먼저 목적지가 어느 Service인지 찾고, 그 Service에 연결된 Pod 중 하나를 확률로 고르고, 마지막으로 패킷의 목적지를 고른 Pod의 주소로 바꿉니다.",
+      "mechanisms": [
+        {
+          "type": "k8s-resolve",
+          "title": "Service가 가리키는 실제 Pod 찾기",
+          "lines": [
+            {
+              "text": "Service: web-svc (외부 30080 → 컨테이너 8080)"
+            },
+            {
+              "text": "selector: app=web    ← 이 라벨을 가진 Pod을 모읍니다",
+              "indent": 1
+            },
+            {
+              "text": "EndpointSlice: web-svc-abc12    ← 모인 결과 목록",
+              "indent": 1
+            },
+            {
+              "id": "sep-a",
+              "text": "→ 10.244.1.5:8080  (pod-a, 이 노드에 있음)",
+              "indent": 2
+            },
+            {
+              "id": "sep-b",
+              "text": "→ 10.244.2.7:8080  (pod-b, 다른 노드에 있음)",
+              "indent": 2
+            }
+          ]
+        },
+        {
+          "type": "weighted-select",
+          "title": "둘 중 하나를 확률로 고르기",
+          "candidates": [
+            {
+              "id": "sep-a",
+              "label": "pod-a → 10.244.1.5",
+              "weight": 0.5
+            },
+            {
+              "id": "sep-b",
+              "label": "pod-b → 10.244.2.7",
+              "weight": 0.5
+            }
+          ]
+        },
+        {
+          "type": "rewrite",
+          "title": "목적지 주소 바꾸기 (DNAT)",
+          "changes": [
+            {
+              "layer": "IP",
+              "field": "dst",
+              "from": "192.168.10.11",
+              "to": "10.244.1.5"
+            },
+            {
+              "layer": "TCP",
+              "field": "dport",
+              "from": "30080",
+              "to": "8080"
+            }
+          ]
+        }
+      ],
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "packet"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "packet",
+            "label": "backend-a"
+          },
+          {
+            "id": "o1",
+            "kind": "packet",
+            "label": "backend-b"
+          }
+        ]
+      }
+    },
+    {
+      "id": "routing",
+      "parentId": "netns-host",
+      "type": "route",
+      "role": "process",
+      "icon": "⊹",
+      "label": "라우팅 결정",
+      "sublabel": "어디로 보낼지 계산",
+      "info": [
+        "바뀐 목적지 주소를 보고 어느 통로로 내보낼지 고릅니다."
+      ],
+      "detail": "커널이 라우팅 테이블을 뒤져 목적지로 가는 길을 찾는 단계입니다. 앞에서 목적지가 Pod 주소로 바뀌었기 때문에 여기서 계산되는 경로도 달라집니다. 10.244.1.0/24는 이 노드 안의 Pod들이 쓰는 주소 대역이라 CNI 브리지로 바로 내려보내면 되고, 다른 노드의 Pod 대역이었다면 노드 사이를 잇는 터널로 나갔을 것입니다.",
+      "mechanisms": [
+        {
+          "type": "table-lookup",
+          "title": "라우팅 테이블",
+          "columns": [
+            "목적지 대역",
+            "내보낼 통로"
+          ],
+          "rows": [
+            {
+              "id": "rt-pod",
+              "cells": [
+                "10.244.1.0/24",
+                "dev cni0"
+              ],
+              "note": "이 노드 안의 Pod들입니다. 브리지에 바로 내려보내면 닿습니다."
+            },
+            {
+              "id": "rt-tun",
+              "cells": [
+                "10.244.2.0/24",
+                "via 192.168.10.12"
+              ],
+              "note": "다른 노드의 Pod들입니다. 노드 사이 터널을 통해 건너갑니다."
+            },
+            {
+              "id": "rt-def",
+              "cells": [
+                "나머지 전부",
+                "via 192.168.10.1"
+              ],
+              "note": "위 어디에도 안 맞으면 기본 게이트웨이로 보냅니다."
+            }
+          ]
+        }
+      ],
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "packet"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "packet"
+          }
+        ]
+      }
+    },
+    {
+      "id": "veth-host",
+      "parentId": "netns-host",
+      "type": "interface",
+      "role": "process",
+      "icon": "⇌",
+      "label": "veth-a (호스트 쪽)",
+      "sublabel": "가상 케이블 한쪽 끝",
+      "info": [
+        "두 네트워크 공간을 잇는 가상 케이블입니다. 이쪽으로 넣으면 반대쪽으로 나옵니다."
+      ],
+      "detail": "veth pair는 항상 둘이 한 쌍으로 만들어지는 가상 랜카드입니다. 한쪽은 호스트 네트워크 공간에, 다른 한쪽은 Pod 네트워크 공간에 꽂아두면 두 공간이 케이블로 연결된 것처럼 동작합니다. 한쪽으로 넣은 패킷은 반드시 반대쪽으로 나오기 때문에, 격리된 두 공간 사이를 오가는 유일한 통로가 됩니다.",
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "packet"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "packet"
+          }
+        ]
+      }
+    },
+    {
+      "id": "netns-pod-a",
+      "parentId": "worker-1",
+      "type": "group",
+      "icon": "▦",
+      "label": "netns: pod-a (nginx)",
+      "detail": "pod-a만의 네트워크 네임스페이스입니다. 이 안에서 Pod은 자기 전용 eth0과 자기 전용 라우팅 테이블을 가지며, 마치 독립된 컴퓨터인 것처럼 동작합니다. 컨테이너 격리가 네트워크에서 구현되는 방식이 바로 이것입니다."
+    },
+    {
+      "id": "eth0-pod",
+      "parentId": "netns-pod-a",
+      "type": "interface",
+      "role": "process",
+      "icon": "▤",
+      "label": "eth0 (Pod 안)",
+      "sublabel": "가상 케이블 반대쪽 끝",
+      "info": [
+        "Pod이 보는 랜카드입니다. 실체는 앞 노드의 케이블 반대쪽입니다."
+      ],
+      "detail": "Pod 안에서 보면 평범한 eth0이지만, 실체는 호스트 쪽 veth-a의 반대쪽 끝입니다. Pod은 자신이 독립된 머신이라고 믿고 이 카드로 통신합니다. 여기서 이더넷 헤더는 역할을 다했으므로 벗겨지고, 남은 IP 패킷이 상위 계층으로 올라갑니다.",
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "packet"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "packet"
+          }
+        ]
+      }
+    },
+    {
+      "id": "socket",
+      "parentId": "netns-pod-a",
+      "type": "socket",
+      "role": "store",
+      "icon": "▤",
+      "label": "수신 소켓 큐",
+      "sublabel": "앱이 가져가기 전 대기실",
+      "info": [
+        "커널이 처리를 마친 데이터를 앱이 가져갈 때까지 쌓아둡니다.",
+        "앱이 느리면 여기가 가득 차고, 그때부터 전송 속도가 떨어집니다."
+      ],
+      "detail": "커널이 IP와 TCP 처리를 끝낸 데이터를 담아두는 대기 공간입니다. 앱이 recv()를 호출해 꺼내갈 때까지 여기 머뭅니다. 이 큐가 성능을 보는 창이 되는 이유가 있습니다. 앱이 처리보다 빨리 데이터가 들어오면 큐가 차오르고, 가득 차면 커널이 상대방에게 \"잠시 멈추라\"는 신호(TCP 윈도 축소)를 보냅니다. 즉 앱의 처리 지연이 네트워크 전송 속도까지 끌어내립니다.",
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "packet"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "data"
+          }
+        ]
+      }
+    },
+    {
+      "id": "app",
+      "parentId": "netns-pod-a",
+      "type": "process",
+      "role": "process",
+      "icon": "▣",
+      "label": "nginx",
+      "sublabel": "요청을 처리하는 앱",
+      "info": [
+        "recv()로 큐에서 데이터를 꺼내 HTTP 요청으로 읽습니다."
+      ],
+      "detail": "사용자 공간에서 도는 웹 서버 프로세스입니다. recv() 시스템 콜로 소켓 큐에서 데이터를 꺼냅니다. 이 시점에는 이더넷·IP·TCP 헤더가 모두 커널 단계에서 벗겨졌기 때문에, 앱에게는 순수한 HTTP 요청만 보입니다. 앱이 Pod IP나 NodePort 같은 것을 전혀 몰라도 되는 이유입니다.",
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "data"
+          }
+        ]
+      }
+    },
+    {
+      "id": "netns-pod-b",
+      "parentId": "worker-1",
+      "type": "group",
+      "icon": "▦",
+      "label": "netns: pod-b (nginx)",
+      "collapsed": true,
+      "detail": "같은 Service에 속한 또 다른 Pod입니다. 이번 추적에서는 확률 선택에서 뽑히지 않아 지나가지 않은 경로입니다. 요청이 여러 번 들어오면 절반 정도는 이쪽으로 갑니다."
+    },
+    {
+      "id": "eth0-pod-b",
+      "parentId": "netns-pod-b",
+      "type": "interface",
+      "role": "process",
+      "icon": "▤",
+      "label": "eth0 (Pod 안)",
+      "info": [
+        "pod-b가 선택됐을 때 패킷이 들어오는 입구입니다."
+      ],
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "packet"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "packet"
+          }
+        ]
+      }
+    },
+    {
+      "id": "app-b",
+      "parentId": "netns-pod-b",
+      "type": "process",
+      "role": "process",
+      "icon": "▣",
+      "label": "nginx",
+      "info": [
+        "pod-a와 똑같은 앱이 돌고 있습니다."
+      ],
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "packet"
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-client",
+      "source": "client",
+      "sourcePort": "o0",
+      "target": "eth0",
+      "targetPort": "i0",
+      "kind": "packet",
+      "label": "노드의 물리 IP와 30080 포트를 향해 출발한 요청입니다.",
+      "decoration": "one-to-one"
+    },
+    {
+      "id": "e-pre",
+      "source": "eth0",
+      "sourcePort": "o0",
+      "target": "prerouting",
+      "targetPort": "i0",
+      "kind": "packet",
+      "label": "커널이 감싼 skb가 첫 검문소로 올라갑니다."
+    },
+    {
+      "id": "e-svc",
+      "source": "prerouting",
+      "sourcePort": "o0",
+      "target": "kube-svc",
+      "targetPort": "i0",
+      "kind": "packet",
+      "label": "nat 테이블의 점프 규칙에 따라 쿠버네티스 서비스 체인으로 들어갑니다."
+    },
+    {
+      "id": "e-route",
+      "source": "kube-svc",
+      "sourcePort": "o0",
+      "target": "routing",
+      "targetPort": "i0",
+      "kind": "packet",
+      "label": "pod-a가 뽑혔습니다. 목적지가 바뀐 패킷이 경로 계산으로 넘어갑니다.",
+      "ratio": "1:1"
+    },
+    {
+      "id": "e-alt",
+      "source": "kube-svc",
+      "sourcePort": "o1",
+      "target": "eth0-pod-b",
+      "targetPort": "i0",
+      "kind": "packet",
+      "label": "pod-b가 뽑혔다면 갔을 경로입니다. 이번에는 선택되지 않았습니다.",
+      "decoration": "optional",
+      "ratio": "1:1"
+    },
+    {
+      "id": "e-veth",
+      "source": "routing",
+      "sourcePort": "o0",
+      "target": "veth-host",
+      "targetPort": "i0",
+      "kind": "packet",
+      "label": "브리지 방향으로 결정돼 가상 케이블 입구로 향합니다."
+    },
+    {
+      "id": "e-cross",
+      "source": "veth-host",
+      "sourcePort": "o0",
+      "target": "eth0-pod",
+      "targetPort": "i0",
+      "kind": "packet",
+      "label": "여기가 호스트 공간과 Pod 공간의 경계입니다."
+    },
+    {
+      "id": "e-sock",
+      "source": "eth0-pod",
+      "sourcePort": "o0",
+      "target": "socket",
+      "targetPort": "i0",
+      "kind": "packet",
+      "label": "IP와 TCP 처리를 마친 데이터가 소켓 큐로 들어갑니다."
+    },
+    {
+      "id": "e-b-app",
+      "source": "eth0-pod-b",
+      "sourcePort": "o0",
+      "target": "app-b",
+      "targetPort": "i0",
+      "kind": "packet",
+      "label": "pod-b 안에서도 같은 과정이 일어납니다."
+    },
+    {
+      "id": "e-app",
+      "source": "socket",
+      "sourcePort": "o0",
+      "target": "app",
+      "targetPort": "i0",
+      "kind": "data",
+      "label": "앱이 recv()로 꺼내가는 순간입니다.",
+      "decoration": "one-to-one"
+    }
+  ],
+  "trace": {
+    "entity": {
+      "kind": "packet",
+      "label": "HTTP GET 요청",
+      "layers": [
+        {
+          "id": "eth",
+          "name": "Ethernet",
+          "fields": {
+            "src": "ca:fe:00:01",
+            "dst": "d0:0d:00:0b"
+          }
+        },
+        {
+          "id": "ip",
+          "name": "IP",
+          "fields": {
+            "src": "203.0.113.7",
+            "dst": "192.168.10.11",
+            "ttl": "64"
+          }
+        },
+        {
+          "id": "tcp",
+          "name": "TCP",
+          "fields": {
+            "sport": "51344",
+            "dport": "30080"
+          }
+        },
+        {
+          "id": "http",
+          "name": "HTTP",
+          "fields": {
+            "req": "GET /",
+            "host": "web.example.com"
+          }
+        }
+      ]
+    },
+    "steps": [
+      {
+        "at": "client",
+        "narration": "클라이언트가 노드의 물리 IP와 30080 포트로 HTTP GET 요청을 보냅니다. 이 시점의 목적지는 노드 주소일 뿐, 실제로 응답할 Pod의 주소가 아닙니다."
+      },
+      {
+        "at": "eth0",
+        "via": "e-client",
+        "narration": "노드의 랜카드가 데이터를 받아 링 버퍼에 넣습니다. 커널은 이것을 skb라는 구조체로 감싸는데, 이후 단계들은 데이터를 복사하지 않고 이 구조체만 주고받습니다."
+      },
+      {
+        "at": "prerouting",
+        "via": "e-pre",
+        "narration": "경로를 정하기 전 첫 검문소에 걸립니다. 목적지를 바꾸는 일은 경로 계산 이전에 끝나야 하므로, 쿠버네티스의 주소 변환 규칙이 바로 이 지점에서 기다리고 있습니다.",
+        "mechanismEvent": {
+          "select": [
+            "r-kube"
+          ]
+        }
+      },
+      {
+        "at": "kube-svc",
+        "via": "e-svc",
+        "narration": "요청을 받을 Pod을 확률로 고르고, 패킷의 목적지를 그 Pod의 주소로 바꿉니다. 이번에는 pod-a가 뽑혔습니다. 카드에서 IP의 dst와 TCP의 dport가 바뀌는 것을 확인해 보세요. 이 한 번의 주소 변경이 로드 밸런싱의 전부입니다.",
+        "layerOps": [
+          {
+            "op": "set",
+            "layer": "ip",
+            "field": "dst",
+            "value": "10.244.1.5"
+          },
+          {
+            "op": "set",
+            "layer": "tcp",
+            "field": "dport",
+            "value": "8080"
+          }
+        ],
+        "mechanismEvent": {
+          "select": [
+            "sep-a"
+          ]
+        }
+      },
+      {
+        "at": "routing",
+        "via": "e-route",
+        "narration": "바뀐 목적지 10.244.1.5는 이 노드 안의 Pod 대역입니다. 다른 노드였다면 터널로 나갔겠지만, 같은 노드이므로 브리지에 바로 내려보내면 됩니다.",
+        "mechanismEvent": {
+          "select": [
+            "rt-pod"
+          ]
+        }
+      },
+      {
+        "at": "veth-host",
+        "via": "e-veth",
+        "narration": "가상 케이블의 호스트 쪽 끝에 도착했습니다. 여기로 들어간 패킷은 반드시 반대편 Pod 공간에서 나옵니다."
+      },
+      {
+        "at": "eth0-pod",
+        "via": "e-cross",
+        "narration": "네트워크 공간의 경계를 넘었습니다. Pod 입장에서는 그저 자기 랜카드로 패킷이 도착한 것으로 보입니다."
+      },
+      {
+        "at": "socket",
+        "via": "e-sock",
+        "narration": "IP와 TCP 처리를 마친 데이터가 소켓 큐에 쌓입니다. 이더넷 헤더는 이미 벗겨졌습니다. 앱이 바쁘면 이 큐가 차오르고, 그때부터 전송 속도가 떨어지기 시작합니다.",
+        "layerOps": [
+          {
+            "op": "pop",
+            "layer": "eth"
+          }
+        ]
+      },
+      {
+        "at": "app",
+        "via": "e-app",
+        "narration": "nginx가 recv()로 데이터를 꺼냅니다. IP와 TCP 헤더도 커널이 처리해 없앴으므로 앱에게는 순수한 HTTP 요청만 보입니다. 큐가 비워집니다.",
+        "layerOps": [
+          {
+            "op": "pop",
+            "layer": "ip"
+          },
+          {
+            "op": "pop",
+            "layer": "tcp"
+          }
+        ]
+      }
+    ]
+  },
+  "stream": {
+    "rates": {
+      "e-client": 2.0
+    },
+    "capacities": {
+      "socket": 6
+    }
+  }
+}
