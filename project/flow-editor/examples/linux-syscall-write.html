@@ -75,6 +75,15 @@ header .legend svg { vertical-align: -2px; margin-right: 3px; }
 .mech-badge-text { fill: #9dc4e8; font-size: 9px; font-weight: 600; }
 .node-divider { stroke: var(--node-border); stroke-width: 1; }
 
+/* 레인 — 행위 주체 띠. 노드보다 뒤에 깔리므로 아주 옅게 */
+.lane-band { pointer-events: none; }
+.lane-band.lane-even { fill: rgba(255,255,255,0.022); }
+.lane-band.lane-odd  { fill: rgba(255,255,255,0.005); }
+.lane-label {
+  fill: var(--text-muted); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.08em; pointer-events: none;
+}
+
 /* 패킷 계층 스택 — 이 노드를 지난 뒤의 상태 */
 .layer-name {
   fill: #7f8ca3; font-size: 9px; font-weight: 700;
@@ -133,10 +142,26 @@ header .legend svg { vertical-align: -2px; margin-right: 3px; }
 #panel-body .meta-line { color: var(--text-muted); font-size: 11.5px; margin-bottom: 10px; }
 #panel-body .detail-text { margin-bottom: 12px; color: var(--text); }
 #panel-body .detail-text + .detail-text { margin-top: -4px; }
+/* 접힘 섹션 — 첫 화면을 짧게, 정보는 접어서 보존 */
+.panel-lead { color: var(--text); margin-bottom: 12px; }
+details.sec { margin-bottom: 2px; }
 .sec-head {
-  margin: 18px 0 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
-  color: var(--text-muted); border-bottom: 1px solid var(--panel-border); padding-bottom: 4px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+  color: var(--text-muted); border-bottom: 1px solid var(--panel-border);
+  padding: 7px 0 5px; cursor: pointer; list-style: none;
+  display: flex; align-items: center; gap: 6px;
 }
+.sec-head::-webkit-details-marker { display: none; }
+.sec-head::before { content: "▸"; font-size: 9px; transition: transform 0.15s; }
+details.sec[open] > .sec-head::before { transform: rotate(90deg); }
+.sec-head:hover { color: var(--text); }
+.sec-head:focus-visible { outline: 2px solid var(--active-glow); outline-offset: 1px; }
+.sec-count {
+  font-size: 9.5px; font-weight: 600; color: var(--text-muted);
+  background: var(--node-bg); border: 1px solid var(--node-border);
+  border-radius: 8px; padding: 0 6px; letter-spacing: 0;
+}
+.sec-body { padding: 9px 0 12px; }
 .step-block { margin-bottom: 9px; }
 .conn-row {
   display: flex; gap: 6px; align-items: center; flex-wrap: wrap;
@@ -246,53 +271,122 @@ button.jump:hover { border-color: var(--accent); color: var(--accent); }
 const FLOW = {
   "meta": {
     "title": "리눅스 write() 시스템 콜",
-    "subtitle": "앱이 파일에 한 줄 쓸 때 유저 공간에서 디스크까지 내려가는 길",
+    "subtitle": "write() 한 줄이 커널로 내려갔다가 성공을 돌려주고, 디스크 기록은 뒤늦게 이어집니다",
     "mode": "trace",
-    "direction": "TB"
+    "direction": "LR",
+    "lanes": [
+      {
+        "id": "user",
+        "label": "USER SPACE"
+      },
+      {
+        "id": "kernel",
+        "label": "KERNEL SPACE"
+      }
+    ]
   },
   "nodes": [
     {
-      "id": "userspace", "type": "group", "icon": "▦", "label": "유저 공간 (User Space)",
-      "detail": "일반 프로그램이 도는 영역입니다. 여기서는 하드웨어에 직접 손댈 수 없고, 메모리도 자기 몫만 볼 수 있습니다. 이 제한이 불편해 보이지만, 프로그램 하나가 잘못돼도 시스템 전체가 무너지지 않는 이유가 바로 이것입니다."
-    },
-    {
-      "id": "app", "parentId": "userspace", "type": "process", "role": "process", "icon": "▣",
-      "label": "애플리케이션", "sublabel": "write(fd, buf, len) 호출",
+      "id": "app",
+      "type": "process",
+      "role": "process",
+      "icon": "▣",
+      "label": "애플리케이션",
+      "sublabel": "write(fd, buf, len) 호출",
       "info": [
         "파일에 쓰겠다고 요청하지만 직접 쓰지는 못합니다.",
         "디스크를 만질 권한이 없어 커널에 대신 해달라고 부탁합니다."
       ],
-      "detail": "프로그램이 write()를 호출합니다. 이름만 보면 이 함수가 디스크에 직접 쓸 것 같지만 그렇지 않습니다. 유저 공간 프로그램에는 디스크 컨트롤러를 건드릴 권한이 없습니다. write()가 하는 일은 \"이 데이터를 이 파일에 써달라\"는 요청을 커널에 전달하는 것뿐이고, 실제 작업은 전부 커널이 대신합니다.",
-      "ports": { "out": [{ "id": "o0", "kind": "signal" }] }
+      "detail": "이름만 보면 이 함수가 디스크에 직접 쓸 것 같지만 그렇지 않습니다. 유저 공간 프로그램에는 디스크 컨트롤러를 건드릴 권한이 없습니다. write()가 하는 일은 \"이 데이터를 이 파일에 써달라\"는 요청을 커널에 전달하는 것뿐이고, 실제 작업은 전부 커널이 대신합니다.",
+      "ports": {
+        "out": [
+          {
+            "id": "o0",
+            "kind": "signal"
+          }
+        ]
+      },
+      "lane": "user"
     },
     {
-      "id": "libc", "parentId": "userspace", "type": "library", "role": "process", "icon": "▣",
-      "label": "glibc 래퍼", "sublabel": "syscall 명령 준비",
+      "id": "libc",
+      "type": "library",
+      "role": "process",
+      "icon": "▣",
+      "label": "glibc 래퍼",
+      "sublabel": "syscall 명령 준비",
       "info": [
         "요청을 CPU가 알아듣는 형태로 바꿔 담습니다.",
         "어떤 요청인지를 번호로, 인자를 정해진 레지스터에 넣습니다."
       ],
-      "detail": "표준 라이브러리가 시스템 콜 규약에 맞게 준비하는 단계입니다. 커널은 함수 이름을 모르므로 요청을 번호로 구분합니다. x86-64에서 write는 1번이고, 이 번호를 rax 레지스터에, 인자들을 rdi·rsi·rdx에 순서대로 담습니다. 이 규약(ABI)이 정해져 있어야 유저 공간과 커널이 서로를 이해할 수 있습니다.",
+      "detail": "커널은 함수 이름을 모르므로 요청을 번호로 구분합니다. x86-64에서 write는 1번이고, 이 번호를 rax 레지스터에, 인자들을 rdi·rsi·rdx에 순서대로 담습니다. 이 규약(ABI)이 정해져 있어야 유저 공간과 커널이 서로를 이해할 수 있습니다.",
       "mechanisms": [
         {
-          "type": "table-lookup", "title": "x86-64 시스템 콜 규약",
-          "columns": ["레지스터", "담기는 값"],
+          "type": "table-lookup",
+          "title": "x86-64 시스템 콜 규약",
+          "columns": [
+            "레지스터",
+            "담기는 값"
+          ],
           "rows": [
-            { "id": "reg-rax", "cells": ["rax", "1 (write의 번호)"], "note": "어떤 시스템 콜인지를 번호로 알립니다. 커널은 이 번호로 처리 함수를 찾습니다." },
-            { "id": "reg-rdi", "cells": ["rdi", "fd (파일 디스크립터)"], "note": "어느 파일인지를 가리키는 번호입니다." },
-            { "id": "reg-rsi", "cells": ["rsi", "buf 주소"], "note": "쓸 데이터가 있는 유저 공간 메모리 주소입니다." },
-            { "id": "reg-rdx", "cells": ["rdx", "len (길이)"], "note": "몇 바이트를 쓸지입니다." }
+            {
+              "id": "reg-rax",
+              "cells": [
+                "rax",
+                "1 (write의 번호)"
+              ],
+              "note": "어떤 시스템 콜인지를 번호로 알립니다. 커널은 이 번호로 처리 함수를 찾습니다."
+            },
+            {
+              "id": "reg-rdi",
+              "cells": [
+                "rdi",
+                "fd (파일 디스크립터)"
+              ],
+              "note": "어느 파일인지를 가리키는 번호입니다."
+            },
+            {
+              "id": "reg-rsi",
+              "cells": [
+                "rsi",
+                "buf 주소"
+              ],
+              "note": "쓸 데이터가 있는 유저 공간 메모리 주소입니다."
+            },
+            {
+              "id": "reg-rdx",
+              "cells": [
+                "rdx",
+                "len (길이)"
+              ],
+              "note": "몇 바이트를 쓸지입니다."
+            }
           ]
         }
       ],
       "ports": {
-        "in": [{ "id": "i0", "kind": "signal" }],
-        "out": [{ "id": "o0", "kind": "signal" }]
-      }
+        "in": [
+          {
+            "id": "i0",
+            "kind": "signal"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "signal"
+          }
+        ]
+      },
+      "lane": "user"
     },
     {
-      "id": "boundary", "type": "cpu-transition", "role": "decision", "icon": "⊣",
-      "label": "syscall 명령 — 경계 통과", "sublabel": "링 3 → 링 0",
+      "id": "boundary",
+      "type": "cpu-transition",
+      "role": "decision",
+      "icon": "⊣",
+      "label": "syscall 명령 — 경계 통과",
+      "sublabel": "링 3 → 링 0",
       "info": [
         "CPU의 권한 수준이 바뀌는 유일한 합법적 통로입니다.",
         "정해진 입구로만 들어갈 수 있어 아무 커널 코드나 실행할 수 없습니다."
@@ -300,75 +394,172 @@ const FLOW = {
       "detail": "여기가 유저 공간과 커널 공간의 실제 경계입니다. CPU에는 권한 등급이 있고 일반 프로그램은 가장 낮은 링 3에서, 커널은 가장 높은 링 0에서 돕니다. syscall 명령은 이 등급을 올리면서 미리 등록된 커널 진입점으로 점프합니다. 중요한 것은 점프 주소를 프로그램이 정할 수 없다는 점입니다. 커널이 부팅 때 등록해둔 한 곳으로만 들어가므로, 권한만 올리고 원하는 코드를 실행하는 일이 불가능합니다. 이 통제가 없으면 사용자 격리 자체가 성립하지 않습니다.",
       "mechanisms": [
         {
-          "type": "filter", "title": "경계에서 강제되는 것",
+          "type": "filter",
+          "title": "경계에서 강제되는 것",
           "rules": [
-            { "id": "f-entry", "text": "진입 주소는 커널이 정한 한 곳으로 고정", "verdict": "강제" },
-            { "id": "f-ring", "text": "권한 등급 링 3 → 링 0 승격", "verdict": "허용" },
-            { "id": "f-stack", "text": "유저 스택에서 커널 스택으로 전환", "verdict": "강제" }
+            {
+              "id": "f-entry",
+              "text": "진입 주소는 커널이 정한 한 곳으로 고정",
+              "verdict": "강제"
+            },
+            {
+              "id": "f-ring",
+              "text": "권한 등급 링 3 → 링 0 승격",
+              "verdict": "허용"
+            },
+            {
+              "id": "f-stack",
+              "text": "유저 스택에서 커널 스택으로 전환",
+              "verdict": "강제"
+            }
           ]
         }
       ],
       "ports": {
-        "in": [{ "id": "i0", "kind": "signal" }],
-        "out": [{ "id": "o0", "kind": "signal" }]
-      }
+        "in": [
+          {
+            "id": "i0",
+            "kind": "signal"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "signal"
+          }
+        ]
+      },
+      "lane": "kernel"
     },
     {
-      "id": "kernelspace", "type": "group", "icon": "▦", "label": "커널 공간 (Kernel Space)",
-      "detail": "운영체제의 핵심이 도는 영역입니다. 모든 메모리와 하드웨어에 접근할 수 있는 대신, 여기서 잘못되면 시스템 전체가 멈춥니다. 커널이 유저 입력을 항상 의심하며 검사하는 이유입니다."
-    },
-    {
-      "id": "dispatch", "parentId": "kernelspace", "type": "kernel-fn", "role": "decision", "icon": "⊹",
-      "label": "시스템 콜 디스패치", "sublabel": "번호로 처리 함수 찾기",
+      "id": "dispatch",
+      "type": "kernel-fn",
+      "role": "decision",
+      "icon": "⊹",
+      "label": "시스템 콜 디스패치",
+      "sublabel": "번호로 처리 함수 찾기",
       "info": [
         "받은 번호를 표에서 찾아 해당 처리 함수로 보냅니다.",
         "번호가 범위를 벗어나면 여기서 바로 거절합니다."
       ],
-      "detail": "커널이 rax에 담긴 번호를 시스템 콜 테이블에서 찾아 해당 함수로 넘기는 단계입니다. 테이블은 배열이라 번호로 바로 찾을 수 있고, 범위를 벗어난 번호는 즉시 오류로 처리합니다. 유저가 넘긴 값을 그대로 믿고 배열을 참조하면 엉뚱한 메모리를 실행하게 되므로, 범위 검사가 반드시 먼저입니다.",
+      "detail": "테이블은 배열이라 번호로 바로 찾을 수 있고, 범위를 벗어난 번호는 즉시 오류로 처리합니다. 유저가 넘긴 값을 그대로 믿고 배열을 참조하면 엉뚱한 메모리를 실행하게 되므로, 범위 검사가 반드시 먼저입니다.",
       "mechanisms": [
         {
-          "type": "table-lookup", "title": "시스템 콜 테이블 (일부)",
-          "columns": ["번호", "함수"],
+          "type": "table-lookup",
+          "title": "시스템 콜 테이블 (일부)",
+          "columns": [
+            "번호",
+            "함수"
+          ],
           "rows": [
-            { "id": "sys-0", "cells": ["0", "sys_read"] },
-            { "id": "sys-1", "cells": ["1", "sys_write"], "note": "이번 요청이 찾아갈 곳입니다." },
-            { "id": "sys-2", "cells": ["2", "sys_open"] },
-            { "id": "sys-57", "cells": ["57", "sys_fork"] }
+            {
+              "id": "sys-0",
+              "cells": [
+                "0",
+                "sys_read"
+              ]
+            },
+            {
+              "id": "sys-1",
+              "cells": [
+                "1",
+                "sys_write"
+              ],
+              "note": "이번 요청이 찾아갈 곳입니다."
+            },
+            {
+              "id": "sys-2",
+              "cells": [
+                "2",
+                "sys_open"
+              ]
+            },
+            {
+              "id": "sys-57",
+              "cells": [
+                "57",
+                "sys_fork"
+              ]
+            }
           ]
         }
       ],
       "ports": {
-        "in": [{ "id": "i0", "kind": "signal" }],
-        "out": [{ "id": "o0", "kind": "signal" }]
-      }
+        "in": [
+          {
+            "id": "i0",
+            "kind": "signal"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "signal"
+          }
+        ]
+      },
+      "lane": "kernel"
     },
     {
-      "id": "vfs", "parentId": "kernelspace", "type": "kernel-fn", "role": "process", "icon": "⊹",
-      "label": "VFS 계층", "sublabel": "파일 종류를 가리지 않는 공통 창구",
+      "id": "vfs",
+      "type": "kernel-fn",
+      "role": "process",
+      "icon": "⊹",
+      "label": "VFS 계층",
+      "sublabel": "파일 종류를 가리지 않는 공통 창구",
       "info": [
         "fd 번호로 실제 파일 객체를 찾고, 어느 파일시스템인지 판별합니다.",
         "덕분에 앱은 ext4인지 소켓인지 신경 쓰지 않아도 됩니다."
       ],
-      "detail": "가상 파일시스템(VFS)은 서로 다른 파일시스템을 하나의 인터페이스로 감싸는 계층입니다. 앱이 넘긴 fd는 그저 번호일 뿐이고, VFS가 프로세스별 파일 테이블에서 이 번호에 해당하는 실제 파일 객체를 찾습니다. 그 객체에는 어떤 파일시스템이 이 파일을 담당하는지가 함수 포인터로 붙어 있습니다. 이 구조 덕분에 write() 하나로 ext4 파일에도, 파이프에도, 소켓에도 쓸 수 있습니다. 리눅스에서 \"모든 것은 파일\"이라는 말이 실제로 동작하는 지점이 여기입니다.",
+      "detail": "앱이 넘긴 fd는 그저 번호일 뿐이고, VFS가 프로세스별 파일 테이블에서 이 번호에 해당하는 실제 파일 객체를 찾습니다. 그 객체에는 어떤 파일시스템이 이 파일을 담당하는지가 함수 포인터로 붙어 있습니다. 이 구조 덕분에 write() 하나로 ext4 파일에도, 파이프에도, 소켓에도 쓸 수 있습니다. 리눅스에서 \"모든 것은 파일\"이라는 말이 실제로 동작하는 지점이 여기입니다.",
       "mechanisms": [
         {
-          "type": "k8s-resolve", "title": "fd 번호에서 실제 파일 찾아가기",
+          "type": "k8s-resolve",
+          "title": "fd 번호에서 실제 파일 찾아가기",
           "lines": [
-            { "text": "프로세스 파일 테이블" },
-            { "id": "fd-3", "text": "fd 3 → struct file (/var/log/app.log)", "indent": 1 },
-            { "text": "f_op → ext4_file_operations", "indent": 2 },
-            { "id": "op-write", "text": ".write_iter = ext4_file_write_iter", "indent": 3 }
+            {
+              "text": "프로세스 파일 테이블"
+            },
+            {
+              "id": "fd-3",
+              "text": "fd 3 → struct file (/var/log/app.log)",
+              "indent": 1
+            },
+            {
+              "text": "f_op → ext4_file_operations",
+              "indent": 2
+            },
+            {
+              "id": "op-write",
+              "text": ".write_iter = ext4_file_write_iter",
+              "indent": 3
+            }
           ]
         }
       ],
       "ports": {
-        "in": [{ "id": "i0", "kind": "signal" }],
-        "out": [{ "id": "o0", "kind": "data" }]
-      }
+        "in": [
+          {
+            "id": "i0",
+            "kind": "signal"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "data"
+          }
+        ]
+      },
+      "lane": "kernel"
     },
     {
-      "id": "pagecache", "parentId": "kernelspace", "type": "cache", "role": "store", "icon": "▤",
-      "label": "페이지 캐시", "sublabel": "메모리에 먼저 쌓아둠",
+      "id": "pagecache",
+      "type": "cache",
+      "role": "store",
+      "icon": "▤",
+      "label": "페이지 캐시",
+      "sublabel": "메모리에 먼저 쌓아둠",
       "info": [
         "데이터를 메모리에 써두고 앱에는 곧바로 성공을 알립니다.",
         "디스크 기록은 나중에 몰아서 처리합니다."
@@ -376,101 +567,322 @@ const FLOW = {
       "detail": "커널은 데이터를 디스크에 바로 쓰지 않고 메모리의 페이지 캐시에 먼저 올립니다. 그리고 앱에는 즉시 성공을 돌려줍니다. 디스크는 메모리보다 수천 배 느리므로, 매번 기다리면 프로그램이 계속 멈춰 있게 되기 때문입니다. 대신 위험이 하나 생깁니다. write()가 성공했어도 데이터는 아직 메모리에만 있어서, 이 순간 전원이 나가면 사라집니다. 데이터베이스처럼 유실이 치명적인 프로그램이 fsync()를 따로 호출하는 이유가 이것입니다. fsync()는 캐시 내용이 디스크에 실제로 닿을 때까지 기다립니다.",
       "mechanisms": [
         {
-          "type": "queue", "title": "더티 페이지 관리",
+          "type": "queue",
+          "title": "더티 페이지 관리",
           "note": "변경됐지만 아직 디스크에 반영되지 않은 페이지를 더티 페이지라 부릅니다. 커널 스레드가 주기적으로, 또는 더티 페이지가 일정 비율을 넘으면 디스크로 내려보냅니다."
         }
       ],
       "ports": {
-        "in": [{ "id": "i0", "kind": "data" }],
-        "out": [{ "id": "o0", "kind": "data" }]
+        "in": [
+          {
+            "id": "i0",
+            "kind": "data"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "data"
+          }
+        ]
+      },
+      "lane": "kernel"
+    },
+    {
+      "id": "ret",
+      "lane": "user",
+      "type": "process",
+      "role": "process",
+      "icon": "▣",
+      "label": "write() 반환",
+      "sublabel": "앱은 여기서 이어서 실행",
+      "info": [
+        "디스크에 닿기 전인데도 성공을 돌려받습니다.",
+        "앱은 기다리지 않고 다음 줄로 넘어갑니다."
+      ],
+      "detail": "이 그림에서 가장 중요한 지점입니다. write() 가 성공을 반환했는데 데이터는 아직 메모리에만 있습니다. 지금 전원이 나가면 사라집니다. 데이터베이스처럼 유실이 치명적인 프로그램이 fsync() 를 따로 호출하는 이유가 이것입니다. fsync() 는 캐시 내용이 디스크에 실제로 닿을 때까지 기다립니다.",
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "signal"
+          }
+        ]
       }
     },
     {
-      "id": "writeback", "parentId": "kernelspace", "type": "kernel-thread", "role": "process", "icon": "⊹",
-      "label": "지연 기록 (writeback)", "sublabel": "나중에 몰아서 디스크로",
+      "id": "writeback",
+      "type": "kernel-thread",
+      "role": "process",
+      "icon": "⊹",
+      "label": "지연 기록 (writeback)",
+      "sublabel": "나중에 몰아서 디스크로",
       "info": [
         "앱과 별개로 도는 커널 스레드가 쌓인 데이터를 디스크에 내려보냅니다.",
         "여러 요청을 모아 순서를 정리하면 디스크가 훨씬 효율적으로 움직입니다."
       ],
       "detail": "앱의 write() 호출과 무관하게 도는 커널 스레드가 더티 페이지를 디스크로 내려보냅니다. 굳이 미뤘다 몰아서 하는 데는 이유가 있습니다. 흩어진 작은 쓰기를 하나씩 처리하면 디스크 헤드가 이리저리 움직이거나 SSD 블록을 비효율적으로 쓰게 됩니다. 모아두면 인접한 것끼리 묶고 순서를 정리해 훨씬 적은 동작으로 끝낼 수 있습니다. 이 최적화가 리눅스 파일 입출력 성능의 큰 부분을 차지합니다.",
       "ports": {
-        "in": [{ "id": "i0", "kind": "data" }],
-        "out": [{ "id": "o0", "kind": "data" }]
-      }
+        "in": [
+          {
+            "id": "i0",
+            "kind": "data"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "data"
+          }
+        ]
+      },
+      "lane": "kernel"
     },
     {
-      "id": "disk", "type": "device", "role": "external", "icon": "◇",
-      "label": "블록 장치", "sublabel": "실제 저장 매체",
+      "id": "disk",
+      "type": "device",
+      "role": "external",
+      "icon": "◇",
+      "label": "블록 장치",
+      "sublabel": "실제 저장 매체",
       "info": [
         "데이터가 마침내 전원이 꺼져도 남는 곳에 도착합니다."
       ],
       "detail": "SSD나 HDD 같은 실제 저장 장치입니다. 여기에 기록이 끝나야 데이터가 영구적으로 남습니다. 앱 입장에서 write()는 한참 전에 이미 성공으로 끝났고, 실제 도착은 이렇게 뒤늦게 일어납니다. 이 시차를 이해하는 것이 파일 입출력에서 가장 중요한 지점입니다.",
-      "ports": { "in": [{ "id": "i0", "kind": "data" }] }
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "data"
+          }
+        ]
+      },
+      "lane": "kernel"
     }
   ],
   "edges": [
-    { "id": "e-libc", "source": "app", "sourcePort": "o0", "target": "libc", "targetPort": "i0",
-      "kind": "signal", "label": "표준 라이브러리 함수를 부릅니다.", "decoration": "one-to-one" },
-    { "id": "e-boundary", "source": "libc", "sourcePort": "o0", "target": "boundary", "targetPort": "i0",
-      "kind": "signal", "label": "레지스터에 값을 담고 syscall 명령을 실행합니다." },
-    { "id": "e-dispatch", "source": "boundary", "sourcePort": "o0", "target": "dispatch", "targetPort": "i0",
-      "kind": "signal", "label": "권한이 올라간 상태로 커널 진입점에 도착합니다." },
-    { "id": "e-vfs", "source": "dispatch", "sourcePort": "o0", "target": "vfs", "targetPort": "i0",
-      "kind": "signal", "label": "1번 = sys_write 로 판명되어 넘어갑니다." },
-    { "id": "e-cache", "source": "vfs", "sourcePort": "o0", "target": "pagecache", "targetPort": "i0",
-      "kind": "data", "label": "유저 버퍼의 내용이 커널 메모리로 복사됩니다." },
-    { "id": "e-wb", "source": "pagecache", "sourcePort": "o0", "target": "writeback", "targetPort": "i0",
-      "kind": "data", "label": "앱은 이미 돌아갔고, 여기서부터는 커널이 알아서 합니다.", "decoration": "optional" },
-    { "id": "e-disk", "source": "writeback", "sourcePort": "o0", "target": "disk", "targetPort": "i0",
-      "kind": "data", "label": "모아둔 요청이 정리되어 장치로 내려갑니다." }
+    {
+      "id": "e-libc",
+      "source": "app",
+      "sourcePort": "o0",
+      "target": "libc",
+      "targetPort": "i0",
+      "kind": "signal",
+      "label": "표준 라이브러리 함수를 부릅니다.",
+      "decoration": "one-to-one"
+    },
+    {
+      "id": "e-boundary",
+      "source": "libc",
+      "sourcePort": "o0",
+      "target": "boundary",
+      "targetPort": "i0",
+      "kind": "signal",
+      "label": "레지스터에 값을 담고 syscall 명령을 실행합니다."
+    },
+    {
+      "id": "e-dispatch",
+      "source": "boundary",
+      "sourcePort": "o0",
+      "target": "dispatch",
+      "targetPort": "i0",
+      "kind": "signal",
+      "label": "권한이 올라간 상태로 커널 진입점에 도착합니다."
+    },
+    {
+      "id": "e-vfs",
+      "source": "dispatch",
+      "sourcePort": "o0",
+      "target": "vfs",
+      "targetPort": "i0",
+      "kind": "signal",
+      "label": "1번 = sys_write 로 판명되어 넘어갑니다."
+    },
+    {
+      "id": "e-cache",
+      "source": "vfs",
+      "sourcePort": "o0",
+      "target": "pagecache",
+      "targetPort": "i0",
+      "kind": "data",
+      "label": "유저 버퍼의 내용이 커널 메모리로 복사됩니다."
+    },
+    {
+      "id": "e-wb",
+      "source": "pagecache",
+      "sourcePort": "o0",
+      "target": "writeback",
+      "targetPort": "i0",
+      "kind": "data",
+      "label": "앱은 이미 돌아갔고, 여기서부터는 커널이 알아서 합니다.",
+      "decoration": "optional"
+    },
+    {
+      "id": "e-disk",
+      "source": "writeback",
+      "sourcePort": "o0",
+      "target": "disk",
+      "targetPort": "i0",
+      "kind": "data",
+      "label": "모아둔 요청이 정리되어 장치로 내려갑니다."
+    },
+    {
+      "id": "e-ret",
+      "source": "pagecache",
+      "sourcePort": "o0",
+      "target": "ret",
+      "targetPort": "i0",
+      "kind": "signal",
+      "label": "커널이 앱에 성공을 돌려줍니다. 디스크 기록은 아직입니다.",
+      "decoration": "one-to-one"
+    }
   ],
   "trace": {
     "entity": {
-      "kind": "signal", "label": "write() 요청",
+      "kind": "signal",
+      "label": "write() 요청",
       "layers": [
-        { "id": "ctx", "name": "실행 컨텍스트", "fields": { "ring": "3 (유저)", "stack": "유저 스택" } },
-        { "id": "req", "name": "요청", "fields": { "call": "write", "fd": "3", "len": "64" } },
-        { "id": "buf", "name": "데이터", "fields": { "위치": "유저 메모리" } }
+        {
+          "id": "ctx",
+          "name": "실행 컨텍스트",
+          "fields": {
+            "ring": "3 (유저)",
+            "stack": "유저 스택"
+          }
+        },
+        {
+          "id": "req",
+          "name": "요청",
+          "fields": {
+            "call": "write",
+            "fd": "3",
+            "len": "64"
+          }
+        },
+        {
+          "id": "buf",
+          "name": "데이터",
+          "fields": {
+            "위치": "유저 메모리"
+          }
+        }
       ]
     },
     "steps": [
-      { "at": "app",
-        "narration": "프로그램이 로그 한 줄을 파일에 쓰려고 write()를 호출합니다. 이름과 달리 이 함수는 디스크에 직접 쓰지 못합니다. 유저 공간에는 그럴 권한이 없기 때문입니다." },
-      { "at": "libc", "via": "e-libc",
+      {
+        "at": "app",
+        "narration": "프로그램이 로그 한 줄을 파일에 쓰려고 write()를 호출합니다. 이름과 달리 이 함수는 디스크에 직접 쓰지 못합니다. 유저 공간에는 그럴 권한이 없기 때문입니다."
+      },
+      {
+        "at": "libc",
+        "via": "e-libc",
         "narration": "표준 라이브러리가 요청을 CPU 규약에 맞게 담습니다. write는 1번이라는 번호로, 인자들은 정해진 레지스터에 들어갑니다. 커널은 함수 이름을 모르고 번호만 알아듣습니다.",
-        "mechanismEvent": { "select": ["reg-rax", "reg-rdi", "reg-rsi", "reg-rdx"] } },
-      { "at": "boundary", "via": "e-boundary",
+        "mechanismEvent": {
+          "select": [
+            "reg-rax",
+            "reg-rdi",
+            "reg-rsi",
+            "reg-rdx"
+          ]
+        }
+      },
+      {
+        "at": "boundary",
+        "via": "e-boundary",
         "narration": "syscall 명령이 실행되며 CPU 권한이 링 3에서 링 0으로 올라갑니다. 점프할 주소는 커널이 미리 정해둔 한 곳뿐이라, 권한만 올리고 아무 코드나 실행하는 일은 불가능합니다.",
         "layerOps": [
-          { "op": "set", "layer": "ctx", "field": "ring", "value": "0 (커널)" },
-          { "op": "set", "layer": "ctx", "field": "stack", "value": "커널 스택" }
+          {
+            "op": "set",
+            "layer": "ctx",
+            "field": "ring",
+            "value": "0 (커널)"
+          },
+          {
+            "op": "set",
+            "layer": "ctx",
+            "field": "stack",
+            "value": "커널 스택"
+          }
         ],
-        "mechanismEvent": { "select": ["f-entry", "f-ring", "f-stack"] } },
-      { "at": "dispatch", "via": "e-dispatch",
+        "mechanismEvent": {
+          "select": [
+            "f-entry",
+            "f-ring",
+            "f-stack"
+          ]
+        }
+      },
+      {
+        "at": "dispatch",
+        "via": "e-dispatch",
         "narration": "커널이 번호 1을 시스템 콜 테이블에서 찾아 sys_write로 넘깁니다. 유저가 준 번호를 그대로 믿으면 위험하므로 범위 검사가 먼저 이뤄집니다.",
-        "mechanismEvent": { "select": ["sys-1"] } },
-      { "at": "vfs", "via": "e-vfs",
+        "mechanismEvent": {
+          "select": [
+            "sys-1"
+          ]
+        }
+      },
+      {
+        "at": "vfs",
+        "via": "e-vfs",
         "narration": "fd 3이 실제로 어떤 파일인지 찾습니다. VFS가 파일시스템별 함수를 대신 골라주기 때문에, 앱은 상대가 ext4인지 파이프인지 몰라도 됩니다.",
-        "mechanismEvent": { "select": ["fd-3", "op-write"] } },
-      { "at": "pagecache", "via": "e-cache",
+        "mechanismEvent": {
+          "select": [
+            "fd-3",
+            "op-write"
+          ]
+        }
+      },
+      {
+        "at": "pagecache",
+        "via": "e-cache",
         "narration": "데이터가 유저 메모리에서 커널의 페이지 캐시로 복사됩니다. 여기까지 오면 커널은 앱에 성공을 돌려주고, 앱은 계속 진행합니다. 하지만 데이터는 아직 메모리에만 있습니다.",
         "layerOps": [
-          { "op": "set", "layer": "buf", "field": "위치", "value": "페이지 캐시 (메모리)" }
-        ] },
-      { "at": "writeback", "via": "e-wb",
+          {
+            "op": "set",
+            "layer": "buf",
+            "field": "위치",
+            "value": "페이지 캐시 (메모리)"
+          }
+        ]
+      },
+      {
+        "at": "ret",
+        "via": "e-ret",
+        "narration": "커널이 앱에 성공을 돌려줍니다. 앱은 기다리지 않고 다음 줄로 넘어가지만, 데이터는 아직 메모리에만 있습니다. 여기서부터 아래 커널 레인의 일은 앱과 무관하게 진행됩니다."
+      },
+      {
+        "at": "writeback",
+        "via": "e-wb",
         "narration": "앱과 무관하게 도는 커널 스레드가 쌓인 페이지를 디스크로 내려보냅니다. 여러 요청을 모아 순서를 정리하면 장치가 훨씬 적은 동작으로 끝낼 수 있습니다.",
         "layerOps": [
-          { "op": "set", "layer": "ctx", "field": "stack", "value": "커널 스레드" }
-        ] },
-      { "at": "disk", "via": "e-disk",
+          {
+            "op": "set",
+            "layer": "ctx",
+            "field": "stack",
+            "value": "커널 스레드"
+          }
+        ]
+      },
+      {
+        "at": "disk",
+        "via": "e-disk",
         "narration": "데이터가 마침내 전원이 꺼져도 남는 곳에 도착합니다. 앱 입장에서 write()는 한참 전에 끝났고, 실제 기록은 이렇게 뒤늦게 일어납니다. 이 시차 때문에 유실이 치명적인 프로그램은 fsync()로 완료를 기다립니다.",
         "layerOps": [
-          { "op": "set", "layer": "buf", "field": "위치", "value": "디스크 (영구 저장)" }
-        ] }
+          {
+            "op": "set",
+            "layer": "buf",
+            "field": "위치",
+            "value": "디스크 (영구 저장)"
+          }
+        ]
+      }
     ]
   },
   "stream": {
-    "rates": { "e-cache": 2.0 }
+    "rates": {
+      "e-cache": 2.0
+    }
   }
 }
 ;
@@ -654,6 +1066,16 @@ function textWidth(s, size, mono) {
   for (const ch of s || "") w += /[ᄀ-퟿　-ヿ]/.test(ch) ? size : size * latin;
   return w;
 }
+/* 레인 — 행위 주체를 교차축에 고정해 왕복을 드러낸다 (UML 시퀀스 다이어그램).
+   meta.lanes 가 없으면 laneIndex 는 항상 -1 이고 배치는 종전과 완전히 같다. */
+const LANE_PAD = 26;
+function lanes() { return (FLOW.meta && FLOW.meta.lanes) || []; }
+function laneIndexOf(n) {
+  const ls = lanes();
+  if (!ls.length || !n || !n.lane) return -1;
+  return ls.findIndex(l => l.id === n.lane);
+}
+
 /* 완전한 문장과 패킷 계층이 들어가므로 노드 폭을 정해두고 줄바꿈한다 */
 const NODE_W = 268, INFO_FONT = 10, INFO_LH = 13;
 const LAYER_LH = 12, LAYER_NAME_W = 62;
@@ -764,6 +1186,26 @@ function layoutContainer(containerId) {
   const rankKeys = Object.keys(byRank).map(Number).sort((a, b) => a - b);
 
   const children = {};
+  // 레인이 선언돼 있으면 교차축 좌표를 형제 순서가 아니라 레인이 정한다.
+  // 레인마다 폭(교차축 크기)을 미리 재서 띠 위치를 고정해야 노드가 같은 줄에 놓인다.
+  const laneList = lanes();
+  const laneSpan = [], laneAt = [];
+  if (laneList.length) {
+    for (let i = 0; i < laneList.length; i++) laneSpan[i] = 0;
+    for (const id of kidIds) {
+      const li = laneIndexOf(nodesById[id]);
+      if (li < 0) continue;
+      const sz = sizes[id];
+      laneSpan[li] = Math.max(laneSpan[li], isTB ? sz.w : sz.h);
+    }
+    let at = 0;
+    for (let i = 0; i < laneList.length; i++) {
+      if (!laneSpan[i]) laneSpan[i] = 60; // 빈 레인도 자리를 지킨다
+      laneAt[i] = at;
+      at += laneSpan[i] + LANE_PAD;
+    }
+  }
+
   let main = 0, crossMax = 0;
   for (const r of rankKeys) {
     const ids = byRank[r];
@@ -771,24 +1213,37 @@ function layoutContainer(containerId) {
     for (const id of ids) {
       const sz = sizes[id];
       const mw = isTB ? sz.h : sz.w, cw = isTB ? sz.w : sz.h;
-      children[id] = { main, cross, w: sz.w, h: sz.h };
-      cross += cw + GAP_NODE;
+      const li = laneIndexOf(nodesById[id]);
+      if (li >= 0) {
+        // 레인 안에서 가운데 정렬
+        children[id] = { main, cross: laneAt[li] + (laneSpan[li] - cw) / 2, w: sz.w, h: sz.h, _lane: li };
+      } else {
+        children[id] = { main, cross, w: sz.w, h: sz.h };
+        cross += cw + GAP_NODE;
+      }
       mainSize = Math.max(mainSize, mw);
     }
     cross -= GAP_NODE;
-    for (const id of ids) children[id]._rankCross = cross;
+    for (const id of ids) {
+      // 레인 배치는 이미 절대 좌표라 rank 중앙 정렬에서 제외한다
+      children[id]._rankCross = children[id]._lane === undefined ? cross : null;
+    }
     crossMax = Math.max(crossMax, cross);
     main += mainSize + (isTB ? GAP_RANK_TB : GAP_RANK);
   }
   main -= (isTB ? GAP_RANK_TB : GAP_RANK);
+  if (laneList.length) {
+    crossMax = Math.max(crossMax, laneAt[laneList.length - 1] + laneSpan[laneList.length - 1]);
+  }
 
   const titleH = containerId ? GROUP_TITLE_H : 0;
   for (const id of Object.keys(children)) {
     const c = children[id];
-    const centered = c.cross + (crossMax - c._rankCross) / 2;
+    // 레인 배치 노드는 이미 절대 교차좌표를 가지므로 rank 중앙 정렬을 적용하지 않는다
+    const centered = c._rankCross === null ? c.cross : c.cross + (crossMax - c._rankCross) / 2;
     const x = isTB ? centered : c.main;
     const y = isTB ? c.main : centered;
-    children[id] = { x: x + PAD, y: y + PAD + titleH, w: c.w, h: c.h, inner: inner[id] };
+    children[id] = { x: x + PAD, y: y + PAD + titleH, w: c.w, h: c.h, inner: inner[id], _lane: c._lane };
   }
   const w = (isTB ? crossMax : main) + PAD * 2;
   const h = (isTB ? main : crossMax) + PAD * 2 + titleH;
@@ -885,21 +1340,71 @@ function circShape(cx, cy, r, color) { return el("circle", { cx, cy, r, fill: co
 function diamShape(cx, cy, r, color) { return el("path", { d: `M ${cx} ${cy - r} L ${cx + r} ${cy} L ${cx} ${cy + r} L ${cx - r} ${cy} Z`, fill: color, class: "port" }); }
 const SHAPE_FN = { packet: rectShape, signal: triShape, data: circShape, error: diamShape };
 
-let gEdges, gNodes, gEdgeHits, gParticles;
+let gLanes, gEdges, gNodes, gEdgeHits, gParticles;
+
+/* 엣지 끝 화살표 — kind 색을 따르도록 종류마다 하나씩 정의한다.
+   방향을 입자 흐름으로만 짐작하게 두면 레인을 오가는 왕복에서 특히 헷갈린다. */
+function renderDefs(parent) {
+  const defs = el("defs", {}, parent);
+  for (const [kind, color] of Object.entries(KIND_COLOR_RAW)) {
+    const m = el("marker", {
+      id: `arrow-${kind}`, viewBox: "0 0 10 10",
+      refX: 9, refY: 5, markerWidth: 6, markerHeight: 6,
+      orient: "auto-start-reverse", markerUnits: "strokeWidth",
+    }, defs);
+    el("path", { d: "M 0 1 L 10 5 L 0 9 z", fill: color }, m);
+  }
+}
 
 function render() {
   svg.innerHTML = "";
   const gRoot = el("g", { id: "g-root" }, svg);
+  renderDefs(gRoot);
+  gLanes = el("g", {}, gRoot);      // 레인 띠는 가장 뒤 — 그룹·노드에 가리지 않게
   gEdges = el("g", {}, gRoot);
   gNodes = el("g", {}, gRoot);
   gEdgeHits = el("g", {}, gRoot);   // 히트 영역은 노드/그룹 위 — 그룹 박스가 엣지 클릭을 가로채지 않게
   gParticles = el("g", {}, gRoot);
 
+  renderLanes();
   renderContainers(null);
   renderEdges();
   renderAmbientInit();
   applyViewBox();
   markPanelTarget();
+}
+
+/* 레인 띠와 라벨 — 배치된 노드들의 실제 좌표에서 각 레인의 범위를 역산한다 */
+function renderLanes() {
+  const ls = lanes();
+  if (!ls.length) return;
+  const isTB = (FLOW.meta.direction || "LR") === "TB";
+
+  const ext = ls.map(() => null);
+  for (const n of FLOW.nodes) {
+    const li = laneIndexOf(n);
+    const r = layout[n.id];
+    if (li < 0 || !r) continue;
+    const lo = isTB ? r.x : r.y, hi = isTB ? r.x + r.w : r.y + r.h;
+    const e = ext[li];
+    ext[li] = e ? { lo: Math.min(e.lo, lo), hi: Math.max(e.hi, hi) } : { lo, hi };
+  }
+
+  ls.forEach((lane, i) => {
+    const e = ext[i];
+    if (!e) return;
+    const pad = LANE_PAD / 2;
+    const box = isTB
+      ? { x: e.lo - pad, y: contentBox.y, width: (e.hi - e.lo) + pad * 2, height: contentBox.h }
+      : { x: contentBox.x, y: e.lo - pad, width: contentBox.w, height: (e.hi - e.lo) + pad * 2 };
+    el("rect", { ...box, class: `lane-band lane-${i % 2 ? "odd" : "even"}` }, gLanes);
+    const t = el("text", {
+      x: isTB ? box.x + 8 : contentBox.x + 10,
+      y: isTB ? contentBox.y + 14 : box.y + 14,
+      class: "lane-label",
+    }, gLanes);
+    t.textContent = lane.label || lane.id;
+  });
 }
 
 function renderContainers(containerId) {
@@ -1028,7 +1533,10 @@ function renderEdges() {
       ? `M ${a.x} ${a.y} C ${a.x + off} ${a.y}, ${b.x - off} ${b.y}, ${b.x} ${b.y}`
       : `M ${a.x} ${a.y} C ${a.x} ${a.y + off}, ${b.x} ${b.y - off}, ${b.x} ${b.y}`;
     const color = KIND_COLOR_RAW[e.kind];
-    const path = el("path", { d, class: "edge-path", stroke: color, "data-edge": e.id }, gEdges);
+    const path = el("path", {
+      d, class: "edge-path", stroke: color, "data-edge": e.id,
+      "marker-end": `url(#arrow-${e.kind})`,
+    }, gEdges);
     const len = path.getTotalLength();
     // 넓은 투명 히트 영역 — 엣지 클릭용 (노드 위 레이어)
     const hit = el("path", { d, class: "edge-hit", "data-edge": e.id }, gEdgeHits);
@@ -1134,6 +1642,26 @@ function bindJumps() {
     });
   });
 }
+/* 접힘 섹션 — 첫 화면을 짧게 유지하되 정보는 버리지 않는다 (ArgoCD·n8n 방식).
+   어떤 섹션을 열어뒀는지는 세션 동안 기억해, 같은 섹션을 매번 다시 열지 않게 한다. */
+const openSections = new Set();
+function section(key, title, count, body) {
+  if (!body) return "";
+  const isOpen = openSections.has(key);
+  const hint = count ? ` <span class="sec-count">${count}</span>` : "";
+  return `<details class="sec" data-sec="${esc(key)}"${isOpen ? " open" : ""}>
+    <summary class="sec-head">${esc(title)}${hint}</summary>
+    <div class="sec-body">${body}</div></details>`;
+}
+function bindSections() {
+  document.querySelectorAll("#panel-body details.sec").forEach(d => {
+    d.addEventListener("toggle", () => {
+      const k = d.getAttribute("data-sec");
+      d.open ? openSections.add(k) : openSections.delete(k);
+    });
+  });
+}
+
 function openNodePanel(nodeId) {
   const n = nodesById[nodeId]; if (!n) return;
   panelNodeId = nodeId; panelEdgeId = null;
@@ -1141,56 +1669,60 @@ function openNodePanel(nodeId) {
   $("panel-title").textContent = `${ic ? ic + " " : ""}${n.label}`;
   let html = `<div class="meta-line">${esc(n.type)}${n.role ? " · " + esc(n.role) : ""}${n.sublabel ? " · " + esc(n.sublabel) : ""}</div>`;
 
-  // 개요
-  if (n.detail) html += `<p class="detail-text">${esc(n.detail)}</p>`;
+  // 첫 화면 — 이 노드가 무엇을 하는가 한 줄 (노드 창의 info 와 같은 문장)
+  if ((n.info || []).length) {
+    html += `<p class="panel-lead">${esc(n.info.join(" "))}</p>`;
+  }
   if (n.type === "group") {
     html += `<div class="meta-line">내부 노드 ${countDescendants(n.id)}개 · ${collapsed.has(n.id) ? "접힘 (제목 클릭으로 펼침)" : "펼침"}</div>`;
+  }
+  // 왜 그런가 — 배경 설명은 접어둔다
+  if (n.detail) {
+    html += section(`${nodeId}:detail`, "왜 그런가", 0, `<p class="detail-text">${esc(n.detail)}</p>`);
   }
   // 여기서 일어나는 일
   const steps = nodeSteps(nodeId);
   if (steps.length) {
-    html += `<div class="sec-head">여기서 일어나는 일</div>`;
-    for (const s of steps) {
-      html += `<div class="step-block">${esc(s.narration)}</div>`;
-    }
+    html += section(`${nodeId}:steps`, "여기서 일어나는 일", steps.length,
+      steps.map(s => `<div class="step-block">${esc(s.narration)}</div>`).join(""));
   }
   // 패킷 변형 — 들어올 때/나갈 때를 나란히 놓고 바뀐 줄만 강조 (n8n 의 IN/OUT 대조 차용)
   const allChanges = steps.flatMap(s => resolvedChanges[s._idx] || []);
   const snap = nodeSnapshot.get(nodeId);
   if (allChanges.length && snap?.before) {
-    html += `<div class="sec-head">패킷 변형</div>`;
-    html += renderIoCompare(snap);
+    html += section(`${nodeId}:io`, "패킷 변형", allChanges.length, renderIoCompare(snap));
   }
   if (allChanges.length) {
-    html += `<div class="sec-head">무엇이 바뀌었나</div>`;
+    let changeBody = "";
     for (const c of allChanges) {
       if (c.kind === "set") {
-        html += `<div class="mech-rewrite">${esc(c.layerName)}.${esc(c.field)}: <span class="from">${esc(c.from)}</span> <span class="arrow">→</span> <span class="to">${esc(c.to)}</span></div>`;
+        changeBody += `<div class="mech-rewrite">${esc(c.layerName)}.${esc(c.field)}: <span class="from">${esc(c.from)}</span> <span class="arrow">→</span> <span class="to">${esc(c.to)}</span></div>`;
       } else if (c.kind === "pop") {
-        html += `<div class="mech-rewrite"><span class="from">[${esc(c.layerName)}]</span> 계층 벗겨짐</div>`;
+        changeBody += `<div class="mech-rewrite"><span class="from">[${esc(c.layerName)}]</span> 계층 벗겨짐</div>`;
       } else if (c.kind === "push") {
-        html += `<div class="mech-rewrite"><span class="to">[${esc(c.layerName)}]</span> 계층 씌워짐</div>`;
+        changeBody += `<div class="mech-rewrite"><span class="to">[${esc(c.layerName)}]</span> 계층 씌워짐</div>`;
       } else if (c.kind === "lock") {
-        html += `<div class="mech-rewrite">🔒 [${esc(c.layerName)}] 암호화${c.note ? " — " + esc(c.note) : ""}</div>`;
+        changeBody += `<div class="mech-rewrite">🔒 [${esc(c.layerName)}] 암호화${c.note ? " — " + esc(c.note) : ""}</div>`;
       } else if (c.kind === "unlock") {
-        html += `<div class="mech-rewrite">🔓 [${esc(c.layerName)}] 복호화</div>`;
+        changeBody += `<div class="mech-rewrite">🔓 [${esc(c.layerName)}] 복호화</div>`;
       }
     }
+    html += section(`${nodeId}:changes`, "무엇이 바뀌었나", allChanges.length, changeBody);
   }
   // 내부 동작
   if ((n.mechanisms || []).length) {
-    html += `<div class="sec-head">내부 동작</div>`;
     const sel = new Set(steps.flatMap(s => s.mechanismEvent?.select || []));
-    for (const m of n.mechanisms) html += renderMechanism(m, sel);
+    html += section(`${nodeId}:mech`, "내부 동작", n.mechanisms.length,
+      n.mechanisms.map(m => renderMechanism(m, sel)).join(""));
   }
   // 연결
   const ins = FLOW.edges.filter(e => e.target === nodeId);
   const outs = FLOW.edges.filter(e => e.source === nodeId);
   if (ins.length || outs.length) {
-    html += `<div class="sec-head">연결</div>`;
+    let connBody = "";
     for (const e of ins) {
       const from = nodesById[e.source];
-      html += `<div class="conn-row">⬅ ${jumpButton(e.source, (iconOf(from) ? iconOf(from) + " " : "") + from.label)}
+      connBody += `<div class="conn-row">⬅ ${jumpButton(e.source, (iconOf(from) ? iconOf(from) + " " : "") + from.label)}
         <span class="conn-kind" style="color:${KIND_COLOR_RAW[e.kind]}">${esc(e.kind)}</span>
         ${e.label ? `<span class="conn-label">${esc(e.label)}</span>` : ""}
         ${e.ratio ? `<span class="conn-ratio">비율 ${esc(e.ratio)}</span>` : ""}
@@ -1198,18 +1730,20 @@ function openNodePanel(nodeId) {
     }
     for (const e of outs) {
       const to = nodesById[e.target];
-      html += `<div class="conn-row">➡ ${jumpButton(e.target, (iconOf(to) ? iconOf(to) + " " : "") + to.label)}
+      connBody += `<div class="conn-row">➡ ${jumpButton(e.target, (iconOf(to) ? iconOf(to) + " " : "") + to.label)}
         <span class="conn-kind" style="color:${KIND_COLOR_RAW[e.kind]}">${esc(e.kind)}</span>
         ${e.label ? `<span class="conn-label">${esc(e.label)}</span>` : ""}
         ${e.ratio ? `<span class="conn-ratio">비율 ${esc(e.ratio)}</span>` : ""}
         ${jumpButton(e.id, "엣지")}</div>`;
     }
+    html += section(`${nodeId}:conn`, "연결", ins.length + outs.length, connBody);
   }
   if (!n.detail && !steps.length && !(n.mechanisms || []).length && !ins.length && !outs.length) {
     html += `<div class="meta-line">상세 정보 없음</div>`;
   }
   $("panel-body").innerHTML = html;
   bindJumps();
+  bindSections();
   $("detail-panel").classList.add("open");
   markPanelTarget();
 }
@@ -1221,7 +1755,6 @@ function openEdgePanel(edgeId) {
   let html = `<div class="meta-line">엣지 · <span style="color:${KIND_COLOR_RAW[e.kind]}">${esc(e.kind)}</span>${e.ratio ? " · 비율 " + esc(e.ratio) : ""}</div>`;
   if (e.label) html += `<p class="detail-text">${esc(e.label)}</p>`;
   if (e.decoration) html += `<div class="meta-line">${esc(DECO_LABEL[e.decoration] || e.decoration)}</div>`;
-  html += `<div class="sec-head">양끝</div>`;
   html += `<div class="conn-row">출발 ${jumpButton(e.source, (iconOf(from) ? iconOf(from) + " " : "") + from.label)}</div>`;
   html += `<div class="conn-row">도착 ${jumpButton(e.target, (iconOf(to) ? iconOf(to) + " " : "") + to.label)}</div>`;
   // 이 엣지를 타는 스텝
@@ -1231,14 +1764,13 @@ function openEdgePanel(edgeId) {
       return edge && edge.id === edgeId;
     });
     if (rides.length) {
-      html += `<div class="sec-head">이 구간을 지나는 흐름</div>`;
-      for (const { s } of rides) {
-        html += `<div class="step-block">${esc(s.narration)}</div>`;
-      }
+      html += section(`${edgeId}:rides`, "이 구간을 지나는 흐름", rides.length,
+        rides.map(({ s }) => `<div class="step-block">${esc(s.narration)}</div>`).join(""));
     }
   }
   $("panel-body").innerHTML = html;
   bindJumps();
+  bindSections();
   $("detail-panel").classList.add("open");
   markPanelTarget();
 }
