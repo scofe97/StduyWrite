@@ -99,6 +99,19 @@ func set(ss ...string) map[string]bool {
 	return m
 }
 
+// sentenceCount 는 한국어 종결형("…다.")을 세어 문장 수를 구한다.
+// 마침표만 세면 10.244.1.5 같은 IP 나 recv() 뒤 마침표에 걸린다.
+func sentenceCount(s string) int {
+	n := strings.Count(s, "다. ") // 문장 사이
+	if strings.HasSuffix(strings.TrimSpace(s), "다.") {
+		n++ // 마지막 문장
+	}
+	if n == 0 {
+		return 1 // 종결형이 아니어도 한 문장으로 본다
+	}
+	return n
+}
+
 func fail(format string, a ...any) {
 	fmt.Fprintf(os.Stderr, "검증 실패: "+format+"\n", a...)
 	os.Exit(1)
@@ -211,6 +224,16 @@ func validate(data map[string]any) {
 			if len(lines) > 1 {
 				fail("노드 %s: info 는 한 줄까지입니다 (현재 %d줄)\n"+
 					"  노드 창은 '무엇을 하는가' 한 문장만 싣고, 왜·부연은 detail 로 옮기세요.", nid, len(lines))
+			}
+			// 배열이 한 칸이어도 그 안에 문장이 여럿이면 창에서 두 줄로 접힌다.
+			// 줄 수가 아니라 문장 수로 재야 실제 화면과 맞는다.
+			if len(lines) == 1 {
+				if s, _ := lines[0].(string); sentenceCount(s) > 1 {
+					fail("노드 %s: info 는 한 문장까지입니다 (현재 %d문장)\n"+
+						"  \"%s\"\n"+
+						"  둘째 문장부터는 detail 로 옮기세요. 창은 '무엇을 하는가'만 담습니다.",
+						nid, sentenceCount(s), s)
+				}
 			}
 		}
 		// 폐기된 필드를 조용히 무시하지 않고 알린다 (패킷 상태는 layerOps 로 자동 계산됨)
