@@ -1,0 +1,117 @@
+{
+  "_": "flow-editor 어휘·제약의 단일 정본(SSOT). tools/build.go 가 이 파일을 읽어 검증하고, VOCABULARY.md 가 해설한다. 값은 여기서만 정의하고 다른 곳에 복사하지 않는다.",
+
+  "roles": {
+    "process": { "label": "처리", "icon": "▣", "desc": "데이터를 받아 무언가 하고 내보내는 보통의 단계입니다." },
+    "store":   { "label": "저장", "icon": "▤", "desc": "데이터를 담아두는 곳입니다. 큐·캐시·버퍼처럼 머무는 성격이면 이쪽입니다." },
+    "external":{ "label": "외부", "icon": "◇", "desc": "우리가 그리는 경계 바깥의 개체입니다. 점선 테두리로 그려집니다." },
+    "decision":{ "label": "분기", "icon": "◈", "desc": "조건이나 확률로 여러 갈래 중 하나를 고르는 지점입니다." }
+  },
+
+  "kinds": {
+    "packet": { "label": "패킷", "shape": "네모", "color": "#5b9bd5", "desc": "헤더가 붙어 있는 네트워크 패킷입니다." },
+    "signal": { "label": "신호", "shape": "세모", "color": "#d4a853", "desc": "제어 신호·시스템 콜·메시지처럼 데이터 본문이 아닌 것입니다." },
+    "data":   { "label": "데이터", "shape": "원", "color": "#66bb6a", "desc": "헤더가 벗겨진 payload 또는 일반 데이터입니다." },
+    "error":  { "label": "오류", "shape": "마름모", "color": "#e05555", "desc": "실패·드롭 경로입니다." }
+  },
+
+  "mechanismTypes": [
+    "table-lookup", "weighted-select", "rewrite", "crypt",
+    "k8s-resolve", "encap", "decap", "filter", "queue"
+  ],
+
+  "reservedTypes": {
+    "_": "메커니즘 이름과 겹치면 '노드가 하는 일'과 '노드가 무엇인가'가 헷갈립니다. 노드 type 으로는 쓸 수 없습니다.",
+    "values": [
+      "table-lookup", "weighted-select", "rewrite", "crypt",
+      "k8s-resolve", "encap", "decap", "filter", "queue"
+    ]
+  },
+
+  "domains": {
+    "_": "노드 type 의 권장 어휘입니다. 강제가 아니라 표준 제시이며, 새 도메인은 여기에 항목 하나를 더하면 됩니다. 목록에 없는 값을 써도 빌드는 통과합니다.",
+
+    "net": {
+      "label": "네트워크 공통",
+      "nodeTypes": {
+        "interface":   "패킷이 드나드는 지점입니다. 물리 랜카드, veth, 터널 인터페이스가 여기 해당합니다.",
+        "socket":      "커널과 앱 사이에서 데이터가 대기하는 곳입니다.",
+        "endpoint":    "통신의 양 끝단입니다. 클라이언트나 서버처럼 대화의 주체를 가리킵니다.",
+        "route":       "목적지를 보고 어느 통로로 보낼지 정하는 단계입니다.",
+        "device":      "실제 하드웨어 장치입니다."
+      }
+    },
+
+    "k8s": {
+      "label": "쿠버네티스",
+      "nodeTypes": {
+        "iptables-chain": "kube-proxy 가 Service 정의를 번역해 심어둔 규칙 묶음입니다.",
+        "netns":          "Pod 마다 따로 만들어지는 네트워크 네임스페이스입니다. 그룹 노드로 쓰는 경우가 많습니다.",
+        "external-client":"클러스터 바깥에서 요청을 보내는 쪽입니다."
+      }
+    },
+
+    "linux": {
+      "label": "리눅스 커널",
+      "nodeTypes": {
+        "netfilter-hook":  "패킷 처리 경로에 걸리는 훅 지점입니다. PREROUTING·FORWARD 등이 여기 해당합니다.",
+        "kernel-fn":       "커널 내부 함수가 처리하는 단계입니다.",
+        "kernel-thread":   "앱과 무관하게 도는 커널 스레드입니다. writeback 처럼 미뤄서 하는 일에 씁니다.",
+        "cpu-transition":  "권한 수준이 바뀌는 경계입니다. syscall 명령이 대표적입니다.",
+        "library":         "유저 공간 라이브러리 계층입니다.",
+        "cache":           "메모리에 먼저 담아두는 계층입니다. 페이지 캐시가 대표적입니다.",
+        "process":         "사용자 공간에서 도는 프로세스입니다."
+      }
+    },
+
+    "tls": {
+      "label": "TLS · 암호 통신",
+      "nodeTypes": {
+        "tls-message":    "핸드셰이크 중 오가는 메시지 하나입니다. ClientHello·ServerHello 등입니다.",
+        "key-derivation": "열쇠를 계산해내는 단계입니다.",
+        "cert-verify":    "인증서와 서명을 검증하는 단계입니다."
+      }
+    }
+  },
+
+  "connectionRules": [
+    {
+      "_": "분기는 두 모습으로 나타납니다. 출구가 여럿으로 갈라지거나(눈에 보이는 분기), 출구는 하나지만 노드 안에서 고르거나(메커니즘으로 드러나는 분기)입니다. TLS 의 ServerHello 는 암호 방식을 고르지만 나가는 길은 하나이고, syscall 경계는 통과 여부를 판정하지만 통과하면 길은 하나입니다. 그래서 출구 개수만으로 막지 않고, 무엇을 골랐는지 보여줄 방법이 아예 없을 때만 막습니다.",
+      "id": "decision-must-show-choice",
+      "severity": "error",
+      "applies": { "role": "decision" },
+      "requireEither": { "minOut": 2, "mechanisms": ["weighted-select", "table-lookup", "filter", "k8s-resolve"] },
+      "why": "분기 노드인데 갈래도 없고 무엇을 골랐는지 보여줄 메커니즘도 없습니다. 갈래를 늘리거나, 선택 과정을 mechanisms 에 적거나, role 을 process 로 바꾸세요."
+    },
+    {
+      "id": "orphan-node",
+      "severity": "error",
+      "applies": { "any": true },
+      "minDegree": 1,
+      "why": "어디에도 연결되지 않은 노드는 흐름에 참여하지 않습니다. 연결하거나 지우세요."
+    },
+    {
+      "id": "external-is-endpoint",
+      "severity": "warn",
+      "applies": { "role": "external" },
+      "maxIn": 1,
+      "maxOut": 1,
+      "why": "외부 개체는 보통 흐름의 시작이거나 끝입니다. 양방향 통신을 그리는 중이라면 의도된 것일 수 있습니다."
+    },
+    {
+      "id": "store-has-both-sides",
+      "severity": "warn",
+      "applies": { "role": "store" },
+      "minIn": 1,
+      "minOut": 1,
+      "why": "저장소는 대개 받아서 내보냅니다. 한쪽만 있으면 흐름이 여기서 끊기는지 확인하세요."
+    },
+    {
+      "id": "kind-direction",
+      "severity": "warn",
+      "applies": { "edgeKind": "packet" },
+      "notAfter": ["data"],
+      "why": "헤더가 벗겨져 payload 가 된 뒤에 다시 패킷이 되는 것은 캡슐화일 때만 자연스럽습니다. 터널링을 그리는 중이라면 의도된 것입니다."
+    }
+  ]
+}

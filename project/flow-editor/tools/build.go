@@ -20,13 +20,76 @@ import (
 	"strings"
 )
 
+// 어휘·제약의 정본은 schema/vocabulary.json 이다. 여기서는 그 파일이 정의하지 않는
+// 구조적 어휘(DSL 문법 자체에 속하는 것)만 상수로 둔다.
 var (
-	kinds       = set("packet", "signal", "data", "error")
-	roles       = set("process", "store", "external", "decision")
 	decorations = set("one-to-one", "one-to-many", "optional")
-	mechTypes   = set("table-lookup", "weighted-select", "rewrite", "crypt", "k8s-resolve", "encap", "decap", "filter", "queue")
 	layerOpKind = set("set", "push", "pop", "lock", "unlock")
 )
+
+// vocabulary.json 에서 읽어 채운다
+var (
+	kinds     map[string]bool
+	roles     map[string]bool
+	mechTypes map[string]bool
+	reserved  map[string]bool
+	connRules []map[string]any
+)
+
+var warnings []string
+
+func warn(format string, a ...any) {
+	warnings = append(warnings, fmt.Sprintf(format, a...))
+}
+
+// loadVocabulary 는 어휘집을 읽어 전역 집합을 채운다.
+// 값을 코드에 복사해두지 않으므로 어휘를 늘릴 때 Go 를 건드릴 필요가 없다.
+func loadVocabulary(base string) {
+	path := filepath.Join(base, "schema", "vocabulary.json")
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		fail("어휘집을 읽을 수 없습니다: %s\n  이 파일은 role·kind·연결 제약의 정본입니다 (%v)", path, err)
+	}
+	var v map[string]any
+	if err := json.Unmarshal(raw, &v); err != nil {
+		fail("어휘집 JSON 파싱 실패: %s (%v)", path, err)
+	}
+
+	keysOf := func(key string) map[string]bool {
+		m := map[string]bool{}
+		for k := range obj(v[key]) {
+			if k == "_" {
+				continue // 설명용 키
+			}
+			m[k] = true
+		}
+		return m
+	}
+	kinds = keysOf("kinds")
+	roles = keysOf("roles")
+
+	mechTypes = map[string]bool{}
+	for _, t := range arr(v["mechanismTypes"]) {
+		if s, ok := t.(string); ok {
+			mechTypes[s] = true
+		}
+	}
+	reserved = map[string]bool{}
+	for _, t := range arr(obj(v["reservedTypes"])["values"]) {
+		if s, ok := t.(string); ok {
+			reserved[s] = true
+		}
+	}
+	for _, r := range arr(v["connectionRules"]) {
+		if m := obj(r); m != nil {
+			connRules = append(connRules, m)
+		}
+	}
+
+	if len(kinds) == 0 || len(roles) == 0 {
+		fail("어휘집에 kinds 또는 roles 가 비어 있습니다: %s", path)
+	}
+}
 
 func set(ss ...string) map[string]bool {
 	m := map[string]bool{}
@@ -91,6 +154,11 @@ func validate(data map[string]any) {
 		ids[nid] = n
 		if str(n, "type") == "" {
 			fail("노드 type 누락: %s", nid)
+		}
+		if reserved[str(n, "type")] {
+			fail("노드 %s: type %q 는 메커니즘 이름이라 노드 type 으로 쓸 수 없습니다.\n"+
+				"  '노드가 무엇인가'와 '노드가 하는 일'이 헷갈립니다. 도메인 어휘(schema/vocabulary.json)를 쓰고,\n"+
+				"  하는 일은 mechanisms 에 적으세요.", nid, str(n, "type"))
 		}
 		if str(n, "label") == "" {
 			fail("노드 label 누락: %s", nid)
@@ -315,6 +383,139 @@ func validate(data map[string]any) {
 			fail("stream.capacities 노드 불명: %s", nid)
 		}
 	}
+
+	validateConnections(ids, edges)
+}
+
+// validateConnections 는 어휘집의 connectionRules 를 적용한다.
+// severity=error 는 빌드를 멈추고, warn 은 메시지만 남기고 통과시킨다.
+// 도메인 관습(캡슐화·양방향 통신 등)에는 정당한 예외가 있어 전부 막으면 도구가 목적을 방해하기 때문이다.
+func validateConnections(ids map[string]map[string]any, edges []any) {
+	inDeg, outDeg := map[string]int{}, map[string]int{}
+	inKinds := map[string][]string{} // 노드로 들어온 엣지들의 kind
+	for _, ev := range edges {
+		e := obj(ev)
+		s, t := str(e, "source"), str(e, "target")
+		outDeg[s]++
+		inDeg[t]++
+		inKinds[t] = append(inKinds[t], str(e, "kind"))
+	}
+
+	report := func(sev, ruleID, msg, why string) {
+		if sev == "error" {
+			fail("%s\n  규칙: %s\n  %s", msg, ruleID, why)
+		}
+		warn("%s\n  규칙: %s (경고)\n  %s", msg, ruleID, why)
+	}
+
+	num := func(m map[string]any, key string) (int, bool) {
+		f, ok := m[key].(float64)
+		return int(f), ok
+	}
+
+	for _, rule := range connRules {
+		sev := str(rule, "severity")
+		if sev == "" {
+			sev = "warn"
+		}
+		ruleID, why := str(rule, "id"), str(rule, "why")
+		applies := obj(rule["applies"])
+		wantRole := str(applies, "role")
+		wantEdgeKind := str(applies, "edgeKind")
+		_, anyNode := applies["any"]
+
+		for nid, n := range ids {
+			if str(n, "type") == "group" {
+				continue // 그룹은 컨테이너라 연결 차수를 따지지 않는다
+			}
+			role := str(n, "role")
+			if role == "" {
+				role = "process"
+			}
+			// 이 규칙이 이 노드에 적용되는지
+			switch {
+			case wantRole != "":
+				if role != wantRole {
+					continue
+				}
+			case wantEdgeKind != "":
+				// 엣지 kind 기준 규칙은 아래 notAfter 에서 따로 처리
+			case anyNode:
+				// 모든 노드에 적용
+			default:
+				continue
+			}
+
+			in, out := inDeg[nid], outDeg[nid]
+
+			if wantEdgeKind != "" {
+				// 이 kind 로 들어온 엣지가, 금지된 kind 다음에 오지는 않는지
+				notAfter := map[string]bool{}
+				for _, v := range arr(rule["notAfter"]) {
+					if s, ok := v.(string); ok {
+						notAfter[s] = true
+					}
+				}
+				hasWanted, hasBanned := false, ""
+				for _, k := range inKinds[nid] {
+					if k == wantEdgeKind {
+						hasWanted = true
+					}
+					if notAfter[k] {
+						hasBanned = k
+					}
+				}
+				if hasWanted && hasBanned != "" {
+					report(sev, ruleID,
+						fmt.Sprintf("노드 %s: %s 와 %s 입력이 같이 들어옵니다", nid, hasBanned, wantEdgeKind), why)
+				}
+				continue
+			}
+
+			// requireEither: 여러 방법 중 하나만 만족하면 통과 (분기를 갈래로 보이거나, 메커니즘으로 보이거나)
+			if req := obj(rule["requireEither"]); req != nil {
+				satisfied := false
+				if v, ok := num(req, "minOut"); ok && out >= v {
+					satisfied = true
+				}
+				if !satisfied {
+					want := map[string]bool{}
+					for _, m := range arr(req["mechanisms"]) {
+						if s, ok := m.(string); ok {
+							want[s] = true
+						}
+					}
+					for _, mv := range arr(n["mechanisms"]) {
+						if want[str(obj(mv), "type")] {
+							satisfied = true
+							break
+						}
+					}
+				}
+				if !satisfied {
+					report(sev, ruleID,
+						fmt.Sprintf("노드 %s(%s): 출력이 %d개이고 선택을 보여주는 메커니즘도 없습니다", nid, role, out), why)
+				}
+				continue
+			}
+
+			if v, ok := num(rule, "minOut"); ok && out < v {
+				report(sev, ruleID, fmt.Sprintf("노드 %s(%s): 출력 연결이 %d개입니다 (최소 %d)", nid, role, out, v), why)
+			}
+			if v, ok := num(rule, "maxOut"); ok && out > v {
+				report(sev, ruleID, fmt.Sprintf("노드 %s(%s): 출력 연결이 %d개입니다 (최대 %d)", nid, role, out, v), why)
+			}
+			if v, ok := num(rule, "minIn"); ok && in < v {
+				report(sev, ruleID, fmt.Sprintf("노드 %s(%s): 입력 연결이 %d개입니다 (최소 %d)", nid, role, in, v), why)
+			}
+			if v, ok := num(rule, "maxIn"); ok && in > v {
+				report(sev, ruleID, fmt.Sprintf("노드 %s(%s): 입력 연결이 %d개입니다 (최대 %d)", nid, role, in, v), why)
+			}
+			if v, ok := num(rule, "minDegree"); ok && in+out < v {
+				report(sev, ruleID, fmt.Sprintf("노드 %s: 연결이 하나도 없습니다", nid), why)
+			}
+		}
+	}
 }
 
 func mustRead(path string) string {
@@ -354,6 +555,7 @@ func main() {
 	if err := json.Unmarshal([]byte(raw), &data); err != nil {
 		fail("JSON 파싱 실패: %v", err)
 	}
+	loadVocabulary(base)
 	validate(data)
 
 	tpl := mustRead(tplPath)
@@ -376,6 +578,12 @@ func main() {
 	outPath := filepath.Join(base, "examples", stem+".html")
 	if err := os.WriteFile(outPath, []byte(out), 0o644); err != nil {
 		fail("출력 쓰기 실패: %v", err)
+	}
+	if len(warnings) > 0 {
+		fmt.Printf("경고 %d건 — 의도한 것이면 그대로 두어도 됩니다\n", len(warnings))
+		for _, w := range warnings {
+			fmt.Println("  · " + w)
+		}
 	}
 	fmt.Println("내장 검증: passed")
 	fmt.Println("생성:", outPath)
