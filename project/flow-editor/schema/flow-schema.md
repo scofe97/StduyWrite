@@ -57,8 +57,8 @@
 |---|---|---|---|
 | `id` | string | ✅ | 고유 식별자. 엣지·trace가 참조 |
 | `parentId` | string \| null | | 부모 그룹의 id. 없거나 null이면 최상위 |
-| `type` | string | ✅ | `"group"`이면 컨테이너, 그 외는 자유 문자열(`interface`, `hook`, `chain`, `process` …). 그룹이 아닌 타입은 렌더링에 영향 없는 의미 태그 |
-| `role` | `"process"` \| `"store"` \| `"external"` \| `"decision"` | | DFD·플로차트식 역할. 시각 변형 규칙은 아래 §역할별 시각 |
+| `type` | string | ✅ | `"group"`이면 컨테이너, 그 외는 **자유 문자열**입니다. 렌더링에 관여하지 않는 의미 라벨이며, 도메인별 권장 어휘는 [`vocabulary.json`](vocabulary.json)의 `domains`에 있습니다. 메커니즘 이름(예약어)은 쓸 수 없습니다 — 자세한 이유는 [VOCABULARY.md](../VOCABULARY.md) |
+| `role` | 닫힌 enum | | DFD·플로차트식 역할. **정본은 [`vocabulary.json`](vocabulary.json)의 `roles`** 입니다. 시각 변형은 아래 §역할별 시각 |
 | `label` | string | ✅ | 표시 이름 |
 | `sublabel` | string | | 창 내부에 표시하는 보조 설명 한 줄 |
 | `collapsed` | boolean | | `type: "group"` 전용. true면 접힌 상태로 시작 |
@@ -73,14 +73,9 @@
 
 ### 포트 kind → 모양·색 매핑
 
-Upload Labs의 "모양으로 타입 구분"을 계승한다. 연결(엣지)의 `kind`는 양끝 포트와 일치해야 한다.
+타입을 모양으로 구분하는 방식은 Upload Labs에서 가져왔습니다. 연결(엣지)의 `kind`는 양끝 포트와 일치해야 합니다.
 
-| kind | 모양 | 색 | 용도 |
-|---|---|---|---|
-| `packet` | ■ 네모 | 파랑 `#5b9bd5` | 네트워크 패킷·프레임 |
-| `signal` | ▲ 세모 | 앰버 `#d4a853` | 제어 신호·시스템콜·인터럽트 |
-| `data` | ● 원 | 초록 `#66bb6a` | 일반 데이터·페이로드 |
-| `error` | ◆ 마름모 | 빨강 `#e05555` | 에러·드롭 경로 |
+**정본은 [`vocabulary.json`](vocabulary.json)의 `kinds`** 입니다. 현재 4종(`packet` ■파랑 · `signal` ▲앰버 · `data` ●초록 · `error` ◆빨강)이며, 값·모양·색은 그 파일에서 확인하세요.
 
 ### 역할별 시각 (DFD·플로차트 차용)
 
@@ -109,6 +104,15 @@ Upload Labs의 "모양으로 타입 구분"을 계승한다. 연결(엣지)의 `
 | `queue` | 버퍼링 | (state.queue 재사용) | 큐 게이지 | 소켓 큐, qdisc |
 
 전용 렌더 구현은 v0.2 기준 5종(`table-lookup`·`weighted-select`·`rewrite`·`crypt`·`k8s-resolve`)이고, 나머지는 키-값 일반 렌더로 표시된다. 한 노드에 여러 메커니즘을 배열로 나열할 수 있다 (예: KUBE-SERVICES = k8s-resolve + weighted-select + rewrite).
+
+### 연결 제약
+
+노드가 몇 개까지 연결될 수 있는지, 어떤 조합이 자연스러운지는 [`vocabulary.json`](vocabulary.json)의 `connectionRules`가 정의합니다. 규칙은 두 등급입니다.
+
+- **`error`** — 어기면 흐름도가 성립하지 않습니다. 빌드가 실패하고, Phase B 에디터에서는 드롭 자체가 거부됩니다.
+- **`warn`** — 대개 맞지만 예외가 있는 도메인 관습입니다. 메시지만 남기고 빌드는 통과하며, 에디터에서는 경고 배지가 됩니다.
+
+전부 막지 않는 이유는 캡슐화·양방향 통신처럼 정당한 예외가 있기 때문입니다. 배경과 사례는 [VOCABULARY.md](../VOCABULARY.md)에 있습니다.
 
 ### 그룹과 접기
 

@@ -1,12 +1,14 @@
 # 참고 프로젝트와 차용 요소
 
+> **정정 이력.** 이전 판에서 Upload Labs의 포트 모양 매핑을 "네모=File, 세모=Money, 원=Steam"으로 적었으나, [공식 위키 노드 페이지](https://www.upload-labs.com/en/wiki/nodes)를 직접 확인한 결과 **그런 매핑은 명시돼 있지 않습니다**. 검색 요약에서 온 미검증 정보였습니다. 위키가 확인해 주는 것은 "색 있는 점을 드래그해 연결한다"와 "출력→입력, 좌→우 흐름"까지입니다. 우리의 모양별 kind 구분(■packet ▲signal ●data ◆error)은 그 아이디어에서 출발한 **우리 설계**이지 원작 규격의 복제가 아닙니다.
+
 flow-editor가 무엇을 어디서 가져왔고(Phase A), 무엇을 가져올 예정인지(Phase B~) 기록한다. 새 참고 자료가 생기면 여기에 추가한다.
 
 ## 게임 계열 — "살아있는 흐름"의 감각
 
 | 프로젝트 | 차용 요소 | 반영 상태 |
 |---|---|---|
-| **Upload Labs** (EnigmaDev) | 창형 노드(제목바+아이콘+내부 상태) · 모양+색 포트(네모=File, 세모=Money, 원=Steam) · 좌→우 자원 흐름 · 비율 분기(Allocator) · Node Group · **클릭 → 우측 상세 패널** | ✅ v0.1~0.2 핵심 문법 전부 |
+| **Upload Labs** (EnigmaDev) | 창형 노드(제목바+아이콘+내부 상태) · 색 있는 점을 드래그해 연결 · 좌→우 자원 흐름 · 비율 분기(Allocator: 1입력 2출력) · Node Group · **클릭 → 우측 상세 패널** | ✅ 핵심 문법 전부 |
 | **Node Factory** | 데이터가 흐르며 변형되는 노드 명명(Harvester→Tokenizer→…) | ✅ 메커니즘 타입 어휘에 영향 |
 | **Factorio / Shapez 2** | 벨트 위 아이템 정체 = 병목이 즉시 보임 | ✅ 큐 게이지 + 병목 색전환 |
 | **Opus Magnum / Exapunks** (Zachtronics) | 사이클 카운터 · 실행 주체가 물리적으로 이동 | ✅ trace 개체 이동 + 스텝 카운터 |
@@ -24,7 +26,8 @@ flow-editor가 무엇을 어디서 가져왔고(Phase A), 무엇을 가져올 �
 
 | 프로젝트 | 차용 요소 | 반영 상태 |
 |---|---|---|
-| **React Flow** | `parentId` 평면 구조의 서브그래프/중첩/그룹 · Drag/Resize/Connect · 연결 검증 | ✅ 저장 포맷을 이미 호환으로 설계. Phase B 기반 라이브러리 1순위 후보 |
+| **React Flow** | `parentId` 평면 구조의 서브그래프/중첩/그룹 · Drag/Resize/Connect | ✅ 저장 포맷을 이미 호환으로 설계. Phase B 기반 라이브러리 1순위 후보 |
+| **React Flow** — 연결 검증 | `IsValidConnection = (edge: Edge \| Connection) => boolean` 이 드래그 중 호출돼 `false`면 연결 거부. `isConnectable`로 연결 수 제한. [예제 모음](https://medium.com/react-digital-garden/react-flow-examples-2cbb0bab4404)에서 타입 그룹별 연결 필터링(Electricity/Fire/Water끼리만), 동적 그룹핑, `getIntersectingNodes` 교차 판정, 노드 툴바 확인 | ✅ 이 API를 전제로 `vocabulary.json`에 `severity` 2단을 설계. Phase B에서 `error`→드롭 거부, `warn`→경고 배지 |
 | **n8n** | **INPUT / 파라미터 / OUTPUT 3분할 패널** — 들어온 데이터와 나간 데이터를 나란히 놓고 비교 | ✅ 패널 [패킷 변형]을 2열 대조로 구현. 양쪽 전체를 싣고 달라진 줄만 강조 |
 | **n8n** (미채택) | Table·JSON·Schema **뷰 전환 탭** · **paired item** 계보 추적(출력 항목이 어느 입력에서 왔는지 메타데이터로 연결, 재정렬·필터 후에도 원본까지 역추적) | 🔜 Phase B 후보. 우리 대응물은 "이 필드가 어느 노드에서 마지막으로 바뀌었나" 역추적 |
 | **n8n** | **좌측 팔레트 → 캔버스 드래그 배치** UX · 노드 타입 4분류(trigger⚡/action/core/cluster) · 엣지 위 + 버튼으로 노드 삽입 | 🔜 Phase B 편집 UX의 원형 — 팔레트 항목 = 우리 메커니즘 타입 × role 조합 |

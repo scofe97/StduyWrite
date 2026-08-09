@@ -8,7 +8,7 @@ Upload Labs 스타일의 "살아있는 흐름도" 에디터. 네트워크 통신
 
 ## 새 흐름도 만드는 절차 (Claude용)
 
-1. `schema/flow-schema.md`를 읽는다 — **제1원칙과 문장 작성 규칙**, 필드 의미, 렌더링 규칙의 정본.
+1. `schema/flow-schema.md`를 읽는다 — **제1원칙과 문장 작성 규칙**, 필드 의미, 렌더링 규칙의 정본. 노드 `type` 어휘와 연결 제약은 `schema/vocabulary.json`(값) + `VOCABULARY.md`(해설)을 함께 본다.
 2. `examples/src/<이름>.json` 작성. 네트워크 흐름이면 `examples/src/k8s-packet-flow.json`이 참고 원형이다 — 계층 스택(`entity.layers`), DNAT 변형(`layerOps`), 메커니즘(`mechanisms` + `mechanismEvent`), 큐 병목(`stateChanges`), 접힌 그룹, 아이콘을 모두 사용한다.
 3. 빌드: `go run tools/build.go examples/src/<이름>.json` → `examples/<이름>.html` 생성. 검증 실패 시 메시지의 필드를 고친다.
 4. 브라우저로 열어 확인 (file:// 직접 열기 가능, 서버 불필요).
@@ -18,6 +18,8 @@ Upload Labs 스타일의 "살아있는 흐름도" 에디터. 네트워크 통신
 | 경로 | 역할 |
 |---|---|
 | `schema/flow-schema.md` | **DSL 명세 정본** — 제1원칙·문장 규칙 6개·필드 의미·렌더러 UX 계약 |
+| `schema/vocabulary.json` | **어휘·연결 제약의 값 정본(SSOT)** — role·kind·도메인별 type·연결 규칙. `build.go`가 읽어 검증 |
+| `VOCABULARY.md` | 어휘집 해설 — 왜 그렇게 정했나, 새 도메인 추가법, severity 2단의 의미 |
 | `schema/flow.schema.json` | JSON Schema (외부 도구용 — 빌더는 자체 검증 내장) |
 | `renderer/template.html` | HTML 골격. 마커 3곳에 빌드 시 인라인됨 |
 | `renderer/flow-style.css` | 스타일 (팔레트·패널·계층 스택·메커니즘 UI) |
