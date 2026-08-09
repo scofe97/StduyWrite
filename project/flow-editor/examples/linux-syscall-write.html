@@ -245,683 +245,232 @@ button.jump:hover { border-color: var(--accent); color: var(--accent); }
 <script>
 const FLOW = {
   "meta": {
-    "title": "K8s NodePort 패킷 흐름",
-    "subtitle": "외부 요청이 노드에 도착해 iptables 규칙을 거쳐 Pod 안 nginx에 닿기까지",
+    "title": "리눅스 write() 시스템 콜",
+    "subtitle": "앱이 파일에 한 줄 쓸 때 유저 공간에서 디스크까지 내려가는 길",
     "mode": "trace",
-    "direction": "LR"
+    "direction": "TB"
   },
   "nodes": [
     {
-      "id": "client",
-      "type": "external-client",
-      "role": "external",
-      "icon": "◇",
-      "label": "Client",
-      "sublabel": "클러스터 밖 브라우저",
+      "id": "userspace", "type": "group", "icon": "▦", "label": "유저 공간 (User Space)",
+      "detail": "일반 프로그램이 도는 영역입니다. 여기서는 하드웨어에 직접 손댈 수 없고, 메모리도 자기 몫만 볼 수 있습니다. 이 제한이 불편해 보이지만, 프로그램 하나가 잘못돼도 시스템 전체가 무너지지 않는 이유가 바로 이것입니다."
+    },
+    {
+      "id": "app", "parentId": "userspace", "type": "process", "role": "process", "icon": "▣",
+      "label": "애플리케이션", "sublabel": "write(fd, buf, len) 호출",
       "info": [
-        "클러스터 밖에서 요청을 보냅니다. Pod이 어느 노드에 있는지는 모릅니다."
+        "파일에 쓰겠다고 요청하지만 직접 쓰지는 못합니다.",
+        "디스크를 만질 권한이 없어 커널에 대신 해달라고 부탁합니다."
       ],
-      "detail": "클러스터 바깥의 사용자입니다. NodePort 방식은 모든 워커 노드가 같은 포트(여기서는 30080)를 열어두기 때문에, 클라이언트는 아무 노드의 IP로나 접속해도 서비스에 닿습니다. 어느 Pod이 실제로 응답할지는 클라이언트가 알 필요도, 알 방법도 없습니다.",
-      "ports": {
-        "out": [
-          {
-            "id": "o0",
-            "kind": "packet"
-          }
-        ]
-      }
+      "detail": "프로그램이 write()를 호출합니다. 이름만 보면 이 함수가 디스크에 직접 쓸 것 같지만 그렇지 않습니다. 유저 공간 프로그램에는 디스크 컨트롤러를 건드릴 권한이 없습니다. write()가 하는 일은 \"이 데이터를 이 파일에 써달라\"는 요청을 커널에 전달하는 것뿐이고, 실제 작업은 전부 커널이 대신합니다.",
+      "ports": { "out": [{ "id": "o0", "kind": "signal" }] }
     },
     {
-      "id": "worker-1",
-      "type": "group",
-      "icon": "⎈",
-      "label": "Worker Node (worker-1)",
-      "detail": "쿠버네티스 워커 노드입니다. 노드 안에는 호스트가 쓰는 네트워크 공간과 Pod마다 따로 만들어진 네트워크 공간이 나뉘어 있고, 둘은 가상 케이블(veth pair)로 이어져 있습니다."
-    },
-    {
-      "id": "netns-host",
-      "parentId": "worker-1",
-      "type": "group",
-      "icon": "▦",
-      "label": "netns: host",
-      "detail": "노드의 기본 네트워크 네임스페이스(netns)입니다. 네트워크 네임스페이스는 리눅스가 제공하는 격리 단위로, 각자 독립된 네트워크 카드·라우팅 테이블·방화벽 규칙을 가집니다. 호스트 공간에는 실제 물리 랜카드와 kube-proxy가 심어둔 iptables 규칙이 들어 있습니다."
-    },
-    {
-      "id": "eth0",
-      "parentId": "netns-host",
-      "type": "interface",
-      "role": "process",
-      "icon": "▤",
-      "label": "eth0",
-      "sublabel": "물리 랜카드",
+      "id": "libc", "parentId": "userspace", "type": "library", "role": "process", "icon": "▣",
+      "label": "glibc 래퍼", "sublabel": "syscall 명령 준비",
       "info": [
-        "랜선으로 들어온 신호를 받아 커널이 다룰 수 있는 형태로 바꿉니다."
+        "요청을 CPU가 알아듣는 형태로 바꿔 담습니다.",
+        "어떤 요청인지를 번호로, 인자를 정해진 레지스터에 넣습니다."
       ],
-      "detail": "노드의 물리 네트워크 카드입니다. 도착한 데이터를 링 버퍼라는 대기 공간에 넣고 커널에 알립니다. 커널은 이 데이터를 skb(socket buffer)라는 구조체로 감싸는데, 이후 모든 처리 단계는 원본 데이터를 복사하지 않고 이 구조체만 넘겨가며 진행합니다. 복사를 피하는 것이 네트워크 성능의 핵심이기 때문입니다.",
-      "ports": {
-        "in": [
-          {
-            "id": "i0",
-            "kind": "packet"
-          }
-        ],
-        "out": [
-          {
-            "id": "o0",
-            "kind": "packet"
-          }
-        ]
-      }
-    },
-    {
-      "id": "prerouting",
-      "parentId": "netns-host",
-      "type": "netfilter-hook",
-      "role": "process",
-      "icon": "⊣",
-      "label": "PREROUTING",
-      "sublabel": "방화벽 첫 검문소",
-      "info": [
-        "경로를 정하기 전에 패킷을 먼저 붙잡는 지점입니다.",
-        "목적지를 바꿔야 한다면 반드시 여기서 끝내야 합니다."
-      ],
-      "detail": "netfilter는 리눅스 커널에 내장된 패킷 처리 장치이고, PREROUTING은 그 중 가장 먼저 걸리는 지점입니다. 왜 하필 라우팅 이전일까요. 목적지 주소를 바꾸는 작업(DNAT)을 라우팅 이후에 하면, 커널은 이미 바뀌기 전 주소로 경로를 계산해버린 뒤입니다. 그래서 주소를 바꾸는 일은 경로를 정하기 전에 끝나야 하고, DNAT 규칙이 이 지점에 자리합니다.",
+      "detail": "표준 라이브러리가 시스템 콜 규약에 맞게 준비하는 단계입니다. 커널은 함수 이름을 모르므로 요청을 번호로 구분합니다. x86-64에서 write는 1번이고, 이 번호를 rax 레지스터에, 인자들을 rdi·rsi·rdx에 순서대로 담습니다. 이 규약(ABI)이 정해져 있어야 유저 공간과 커널이 서로를 이해할 수 있습니다.",
       "mechanisms": [
         {
-          "type": "table-lookup",
-          "title": "nat 테이블 · PREROUTING 체인",
-          "columns": [
-            "조건",
-            "동작"
-          ],
+          "type": "table-lookup", "title": "x86-64 시스템 콜 규약",
+          "columns": ["레지스터", "담기는 값"],
           "rows": [
-            {
-              "id": "r-kube",
-              "cells": [
-                "모든 패킷",
-                "-j KUBE-SERVICES"
-              ],
-              "note": "kube-proxy가 심어둔 규칙입니다. 들어오는 모든 패킷을 쿠버네티스 서비스 체인으로 보내 확인하게 합니다."
-            }
+            { "id": "reg-rax", "cells": ["rax", "1 (write의 번호)"], "note": "어떤 시스템 콜인지를 번호로 알립니다. 커널은 이 번호로 처리 함수를 찾습니다." },
+            { "id": "reg-rdi", "cells": ["rdi", "fd (파일 디스크립터)"], "note": "어느 파일인지를 가리키는 번호입니다." },
+            { "id": "reg-rsi", "cells": ["rsi", "buf 주소"], "note": "쓸 데이터가 있는 유저 공간 메모리 주소입니다." },
+            { "id": "reg-rdx", "cells": ["rdx", "len (길이)"], "note": "몇 바이트를 쓸지입니다." }
           ]
         }
       ],
       "ports": {
-        "in": [
-          {
-            "id": "i0",
-            "kind": "packet"
-          }
-        ],
-        "out": [
-          {
-            "id": "o0",
-            "kind": "packet"
-          }
-        ]
+        "in": [{ "id": "i0", "kind": "signal" }],
+        "out": [{ "id": "o0", "kind": "signal" }]
       }
     },
     {
-      "id": "kube-svc",
-      "parentId": "netns-host",
-      "type": "iptables-chain",
-      "role": "decision",
-      "icon": "⎈",
-      "label": "KUBE-SERVICES",
-      "sublabel": "서비스 → Pod 변환",
+      "id": "boundary", "type": "cpu-transition", "role": "decision", "icon": "⊣",
+      "label": "syscall 명령 — 경계 통과", "sublabel": "링 3 → 링 0",
       "info": [
-        "어느 Pod이 응답할지 확률로 고르고, 목적지 주소를 그 Pod의 것으로 바꿉니다.",
-        "이 한 단계가 로드 밸런싱과 서비스 추상화를 동시에 해냅니다."
+        "CPU의 권한 수준이 바뀌는 유일한 합법적 통로입니다.",
+        "정해진 입구로만 들어갈 수 있어 아무 커널 코드나 실행할 수 없습니다."
       ],
-      "detail": "쿠버네티스에서 Service는 실체가 있는 서버가 아니라 규칙의 이름입니다. kube-proxy라는 구성요소가 Service 정의를 읽어 iptables 규칙으로 번역해 두고, 실제 분배는 커널이 이 규칙에 따라 수행합니다. 그래서 Service에 프록시 서버가 따로 뜨지 않아도 부하 분산이 됩니다. 여기서 일어나는 일은 세 단계입니다. 먼저 목적지가 어느 Service인지 찾고, 그 Service에 연결된 Pod 중 하나를 확률로 고르고, 마지막으로 패킷의 목적지를 고른 Pod의 주소로 바꿉니다.",
+      "detail": "여기가 유저 공간과 커널 공간의 실제 경계입니다. CPU에는 권한 등급이 있고 일반 프로그램은 가장 낮은 링 3에서, 커널은 가장 높은 링 0에서 돕니다. syscall 명령은 이 등급을 올리면서 미리 등록된 커널 진입점으로 점프합니다. 중요한 것은 점프 주소를 프로그램이 정할 수 없다는 점입니다. 커널이 부팅 때 등록해둔 한 곳으로만 들어가므로, 권한만 올리고 원하는 코드를 실행하는 일이 불가능합니다. 이 통제가 없으면 사용자 격리 자체가 성립하지 않습니다.",
       "mechanisms": [
         {
-          "type": "k8s-resolve",
-          "title": "Service가 가리키는 실제 Pod 찾기",
+          "type": "filter", "title": "경계에서 강제되는 것",
+          "rules": [
+            { "id": "f-entry", "text": "진입 주소는 커널이 정한 한 곳으로 고정", "verdict": "강제" },
+            { "id": "f-ring", "text": "권한 등급 링 3 → 링 0 승격", "verdict": "허용" },
+            { "id": "f-stack", "text": "유저 스택에서 커널 스택으로 전환", "verdict": "강제" }
+          ]
+        }
+      ],
+      "ports": {
+        "in": [{ "id": "i0", "kind": "signal" }],
+        "out": [{ "id": "o0", "kind": "signal" }]
+      }
+    },
+    {
+      "id": "kernelspace", "type": "group", "icon": "▦", "label": "커널 공간 (Kernel Space)",
+      "detail": "운영체제의 핵심이 도는 영역입니다. 모든 메모리와 하드웨어에 접근할 수 있는 대신, 여기서 잘못되면 시스템 전체가 멈춥니다. 커널이 유저 입력을 항상 의심하며 검사하는 이유입니다."
+    },
+    {
+      "id": "dispatch", "parentId": "kernelspace", "type": "kernel-fn", "role": "decision", "icon": "⊹",
+      "label": "시스템 콜 디스패치", "sublabel": "번호로 처리 함수 찾기",
+      "info": [
+        "받은 번호를 표에서 찾아 해당 처리 함수로 보냅니다.",
+        "번호가 범위를 벗어나면 여기서 바로 거절합니다."
+      ],
+      "detail": "커널이 rax에 담긴 번호를 시스템 콜 테이블에서 찾아 해당 함수로 넘기는 단계입니다. 테이블은 배열이라 번호로 바로 찾을 수 있고, 범위를 벗어난 번호는 즉시 오류로 처리합니다. 유저가 넘긴 값을 그대로 믿고 배열을 참조하면 엉뚱한 메모리를 실행하게 되므로, 범위 검사가 반드시 먼저입니다.",
+      "mechanisms": [
+        {
+          "type": "table-lookup", "title": "시스템 콜 테이블 (일부)",
+          "columns": ["번호", "함수"],
+          "rows": [
+            { "id": "sys-0", "cells": ["0", "sys_read"] },
+            { "id": "sys-1", "cells": ["1", "sys_write"], "note": "이번 요청이 찾아갈 곳입니다." },
+            { "id": "sys-2", "cells": ["2", "sys_open"] },
+            { "id": "sys-57", "cells": ["57", "sys_fork"] }
+          ]
+        }
+      ],
+      "ports": {
+        "in": [{ "id": "i0", "kind": "signal" }],
+        "out": [{ "id": "o0", "kind": "signal" }]
+      }
+    },
+    {
+      "id": "vfs", "parentId": "kernelspace", "type": "kernel-fn", "role": "process", "icon": "⊹",
+      "label": "VFS 계층", "sublabel": "파일 종류를 가리지 않는 공통 창구",
+      "info": [
+        "fd 번호로 실제 파일 객체를 찾고, 어느 파일시스템인지 판별합니다.",
+        "덕분에 앱은 ext4인지 소켓인지 신경 쓰지 않아도 됩니다."
+      ],
+      "detail": "가상 파일시스템(VFS)은 서로 다른 파일시스템을 하나의 인터페이스로 감싸는 계층입니다. 앱이 넘긴 fd는 그저 번호일 뿐이고, VFS가 프로세스별 파일 테이블에서 이 번호에 해당하는 실제 파일 객체를 찾습니다. 그 객체에는 어떤 파일시스템이 이 파일을 담당하는지가 함수 포인터로 붙어 있습니다. 이 구조 덕분에 write() 하나로 ext4 파일에도, 파이프에도, 소켓에도 쓸 수 있습니다. 리눅스에서 \"모든 것은 파일\"이라는 말이 실제로 동작하는 지점이 여기입니다.",
+      "mechanisms": [
+        {
+          "type": "k8s-resolve", "title": "fd 번호에서 실제 파일 찾아가기",
           "lines": [
-            {
-              "text": "Service: web-svc (외부 30080 → 컨테이너 8080)"
-            },
-            {
-              "text": "selector: app=web    ← 이 라벨을 가진 Pod을 모읍니다",
-              "indent": 1
-            },
-            {
-              "text": "EndpointSlice: web-svc-abc12    ← 모인 결과 목록",
-              "indent": 1
-            },
-            {
-              "id": "sep-a",
-              "text": "→ 10.244.1.5:8080  (pod-a, 이 노드에 있음)",
-              "indent": 2
-            },
-            {
-              "id": "sep-b",
-              "text": "→ 10.244.2.7:8080  (pod-b, 다른 노드에 있음)",
-              "indent": 2
-            }
-          ]
-        },
-        {
-          "type": "weighted-select",
-          "title": "둘 중 하나를 확률로 고르기",
-          "candidates": [
-            {
-              "id": "sep-a",
-              "label": "pod-a → 10.244.1.5",
-              "weight": 0.5
-            },
-            {
-              "id": "sep-b",
-              "label": "pod-b → 10.244.2.7",
-              "weight": 0.5
-            }
-          ]
-        },
-        {
-          "type": "rewrite",
-          "title": "목적지 주소 바꾸기 (DNAT)",
-          "changes": [
-            {
-              "layer": "IP",
-              "field": "dst",
-              "from": "192.168.10.11",
-              "to": "10.244.1.5"
-            },
-            {
-              "layer": "TCP",
-              "field": "dport",
-              "from": "30080",
-              "to": "8080"
-            }
+            { "text": "프로세스 파일 테이블" },
+            { "id": "fd-3", "text": "fd 3 → struct file (/var/log/app.log)", "indent": 1 },
+            { "text": "f_op → ext4_file_operations", "indent": 2 },
+            { "id": "op-write", "text": ".write_iter = ext4_file_write_iter", "indent": 3 }
           ]
         }
       ],
       "ports": {
-        "in": [
-          {
-            "id": "i0",
-            "kind": "packet"
-          }
-        ],
-        "out": [
-          {
-            "id": "o0",
-            "kind": "packet",
-            "label": "backend-a"
-          },
-          {
-            "id": "o1",
-            "kind": "packet",
-            "label": "backend-b"
-          }
-        ]
+        "in": [{ "id": "i0", "kind": "signal" }],
+        "out": [{ "id": "o0", "kind": "data" }]
       }
     },
     {
-      "id": "routing",
-      "parentId": "netns-host",
-      "type": "route",
-      "role": "process",
-      "icon": "⊹",
-      "label": "라우팅 결정",
-      "sublabel": "어디로 보낼지 계산",
+      "id": "pagecache", "parentId": "kernelspace", "type": "cache", "role": "store", "icon": "▤",
+      "label": "페이지 캐시", "sublabel": "메모리에 먼저 쌓아둠",
       "info": [
-        "바뀐 목적지 주소를 보고 어느 통로로 내보낼지 고릅니다."
+        "데이터를 메모리에 써두고 앱에는 곧바로 성공을 알립니다.",
+        "디스크 기록은 나중에 몰아서 처리합니다."
       ],
-      "detail": "커널이 라우팅 테이블을 뒤져 목적지로 가는 길을 찾는 단계입니다. 앞에서 목적지가 Pod 주소로 바뀌었기 때문에 여기서 계산되는 경로도 달라집니다. 10.244.1.0/24는 이 노드 안의 Pod들이 쓰는 주소 대역이라 CNI 브리지로 바로 내려보내면 되고, 다른 노드의 Pod 대역이었다면 노드 사이를 잇는 터널로 나갔을 것입니다.",
+      "detail": "커널은 데이터를 디스크에 바로 쓰지 않고 메모리의 페이지 캐시에 먼저 올립니다. 그리고 앱에는 즉시 성공을 돌려줍니다. 디스크는 메모리보다 수천 배 느리므로, 매번 기다리면 프로그램이 계속 멈춰 있게 되기 때문입니다. 대신 위험이 하나 생깁니다. write()가 성공했어도 데이터는 아직 메모리에만 있어서, 이 순간 전원이 나가면 사라집니다. 데이터베이스처럼 유실이 치명적인 프로그램이 fsync()를 따로 호출하는 이유가 이것입니다. fsync()는 캐시 내용이 디스크에 실제로 닿을 때까지 기다립니다.",
       "mechanisms": [
         {
-          "type": "table-lookup",
-          "title": "라우팅 테이블",
-          "columns": [
-            "목적지 대역",
-            "내보낼 통로"
-          ],
-          "rows": [
-            {
-              "id": "rt-pod",
-              "cells": [
-                "10.244.1.0/24",
-                "dev cni0"
-              ],
-              "note": "이 노드 안의 Pod들입니다. 브리지에 바로 내려보내면 닿습니다."
-            },
-            {
-              "id": "rt-tun",
-              "cells": [
-                "10.244.2.0/24",
-                "via 192.168.10.12"
-              ],
-              "note": "다른 노드의 Pod들입니다. 노드 사이 터널을 통해 건너갑니다."
-            },
-            {
-              "id": "rt-def",
-              "cells": [
-                "나머지 전부",
-                "via 192.168.10.1"
-              ],
-              "note": "위 어디에도 안 맞으면 기본 게이트웨이로 보냅니다."
-            }
-          ]
+          "type": "queue", "title": "더티 페이지 관리",
+          "note": "변경됐지만 아직 디스크에 반영되지 않은 페이지를 더티 페이지라 부릅니다. 커널 스레드가 주기적으로, 또는 더티 페이지가 일정 비율을 넘으면 디스크로 내려보냅니다."
         }
       ],
       "ports": {
-        "in": [
-          {
-            "id": "i0",
-            "kind": "packet"
-          }
-        ],
-        "out": [
-          {
-            "id": "o0",
-            "kind": "packet"
-          }
-        ]
+        "in": [{ "id": "i0", "kind": "data" }],
+        "out": [{ "id": "o0", "kind": "data" }]
       }
     },
     {
-      "id": "veth-host",
-      "parentId": "netns-host",
-      "type": "interface",
-      "role": "process",
-      "icon": "⇌",
-      "label": "veth-a (호스트 쪽)",
-      "sublabel": "가상 케이블 한쪽 끝",
+      "id": "writeback", "parentId": "kernelspace", "type": "kernel-thread", "role": "process", "icon": "⊹",
+      "label": "지연 기록 (writeback)", "sublabel": "나중에 몰아서 디스크로",
       "info": [
-        "두 네트워크 공간을 잇는 가상 케이블입니다. 이쪽으로 넣으면 반대쪽으로 나옵니다."
+        "앱과 별개로 도는 커널 스레드가 쌓인 데이터를 디스크에 내려보냅니다.",
+        "여러 요청을 모아 순서를 정리하면 디스크가 훨씬 효율적으로 움직입니다."
       ],
-      "detail": "veth pair는 항상 둘이 한 쌍으로 만들어지는 가상 랜카드입니다. 한쪽은 호스트 네트워크 공간에, 다른 한쪽은 Pod 네트워크 공간에 꽂아두면 두 공간이 케이블로 연결된 것처럼 동작합니다. 한쪽으로 넣은 패킷은 반드시 반대쪽으로 나오기 때문에, 격리된 두 공간 사이를 오가는 유일한 통로가 됩니다.",
+      "detail": "앱의 write() 호출과 무관하게 도는 커널 스레드가 더티 페이지를 디스크로 내려보냅니다. 굳이 미뤘다 몰아서 하는 데는 이유가 있습니다. 흩어진 작은 쓰기를 하나씩 처리하면 디스크 헤드가 이리저리 움직이거나 SSD 블록을 비효율적으로 쓰게 됩니다. 모아두면 인접한 것끼리 묶고 순서를 정리해 훨씬 적은 동작으로 끝낼 수 있습니다. 이 최적화가 리눅스 파일 입출력 성능의 큰 부분을 차지합니다.",
       "ports": {
-        "in": [
-          {
-            "id": "i0",
-            "kind": "packet"
-          }
-        ],
-        "out": [
-          {
-            "id": "o0",
-            "kind": "packet"
-          }
-        ]
+        "in": [{ "id": "i0", "kind": "data" }],
+        "out": [{ "id": "o0", "kind": "data" }]
       }
     },
     {
-      "id": "netns-pod-a",
-      "parentId": "worker-1",
-      "type": "group",
-      "icon": "▦",
-      "label": "netns: pod-a (nginx)",
-      "detail": "pod-a만의 네트워크 네임스페이스입니다. 이 안에서 Pod은 자기 전용 eth0과 자기 전용 라우팅 테이블을 가지며, 마치 독립된 컴퓨터인 것처럼 동작합니다. 컨테이너 격리가 네트워크에서 구현되는 방식이 바로 이것입니다."
-    },
-    {
-      "id": "eth0-pod",
-      "parentId": "netns-pod-a",
-      "type": "interface",
-      "role": "process",
-      "icon": "▤",
-      "label": "eth0 (Pod 안)",
-      "sublabel": "가상 케이블 반대쪽 끝",
+      "id": "disk", "type": "device", "role": "external", "icon": "◇",
+      "label": "블록 장치", "sublabel": "실제 저장 매체",
       "info": [
-        "Pod이 보는 랜카드입니다. 실체는 앞 노드의 케이블 반대쪽입니다."
+        "데이터가 마침내 전원이 꺼져도 남는 곳에 도착합니다."
       ],
-      "detail": "Pod 안에서 보면 평범한 eth0이지만, 실체는 호스트 쪽 veth-a의 반대쪽 끝입니다. Pod은 자신이 독립된 머신이라고 믿고 이 카드로 통신합니다. 여기서 이더넷 헤더는 역할을 다했으므로 벗겨지고, 남은 IP 패킷이 상위 계층으로 올라갑니다.",
-      "ports": {
-        "in": [
-          {
-            "id": "i0",
-            "kind": "packet"
-          }
-        ],
-        "out": [
-          {
-            "id": "o0",
-            "kind": "packet"
-          }
-        ]
-      }
-    },
-    {
-      "id": "socket",
-      "parentId": "netns-pod-a",
-      "type": "socket",
-      "role": "store",
-      "icon": "▤",
-      "label": "수신 소켓 큐",
-      "sublabel": "앱이 가져가기 전 대기실",
-      "info": [
-        "커널이 처리를 마친 데이터를 앱이 가져갈 때까지 쌓아둡니다.",
-        "앱이 느리면 여기가 가득 차고, 그때부터 전송 속도가 떨어집니다."
-      ],
-      "detail": "커널이 IP와 TCP 처리를 끝낸 데이터를 담아두는 대기 공간입니다. 앱이 recv()를 호출해 꺼내갈 때까지 여기 머뭅니다. 이 큐가 성능을 보는 창이 되는 이유가 있습니다. 앱이 처리보다 빨리 데이터가 들어오면 큐가 차오르고, 가득 차면 커널이 상대방에게 \"잠시 멈추라\"는 신호(TCP 윈도 축소)를 보냅니다. 즉 앱의 처리 지연이 네트워크 전송 속도까지 끌어내립니다.",
-      "ports": {
-        "in": [
-          {
-            "id": "i0",
-            "kind": "packet"
-          }
-        ],
-        "out": [
-          {
-            "id": "o0",
-            "kind": "data"
-          }
-        ]
-      }
-    },
-    {
-      "id": "app",
-      "parentId": "netns-pod-a",
-      "type": "process",
-      "role": "process",
-      "icon": "▣",
-      "label": "nginx",
-      "sublabel": "요청을 처리하는 앱",
-      "info": [
-        "recv()로 큐에서 데이터를 꺼내 HTTP 요청으로 읽습니다."
-      ],
-      "detail": "사용자 공간에서 도는 웹 서버 프로세스입니다. recv() 시스템 콜로 소켓 큐에서 데이터를 꺼냅니다. 이 시점에는 이더넷·IP·TCP 헤더가 모두 커널 단계에서 벗겨졌기 때문에, 앱에게는 순수한 HTTP 요청만 보입니다. 앱이 Pod IP나 NodePort 같은 것을 전혀 몰라도 되는 이유입니다.",
-      "ports": {
-        "in": [
-          {
-            "id": "i0",
-            "kind": "data"
-          }
-        ]
-      }
-    },
-    {
-      "id": "netns-pod-b",
-      "parentId": "worker-1",
-      "type": "group",
-      "icon": "▦",
-      "label": "netns: pod-b (nginx)",
-      "collapsed": true,
-      "detail": "같은 Service에 속한 또 다른 Pod입니다. 이번 추적에서는 확률 선택에서 뽑히지 않아 지나가지 않은 경로입니다. 요청이 여러 번 들어오면 절반 정도는 이쪽으로 갑니다."
-    },
-    {
-      "id": "eth0-pod-b",
-      "parentId": "netns-pod-b",
-      "type": "interface",
-      "role": "process",
-      "icon": "▤",
-      "label": "eth0 (Pod 안)",
-      "info": [
-        "pod-b가 선택됐을 때 패킷이 들어오는 입구입니다."
-      ],
-      "ports": {
-        "in": [
-          {
-            "id": "i0",
-            "kind": "packet"
-          }
-        ],
-        "out": [
-          {
-            "id": "o0",
-            "kind": "packet"
-          }
-        ]
-      }
-    },
-    {
-      "id": "app-b",
-      "parentId": "netns-pod-b",
-      "type": "process",
-      "role": "process",
-      "icon": "▣",
-      "label": "nginx",
-      "info": [
-        "pod-a와 똑같은 앱이 돌고 있습니다."
-      ],
-      "ports": {
-        "in": [
-          {
-            "id": "i0",
-            "kind": "packet"
-          }
-        ]
-      }
+      "detail": "SSD나 HDD 같은 실제 저장 장치입니다. 여기에 기록이 끝나야 데이터가 영구적으로 남습니다. 앱 입장에서 write()는 한참 전에 이미 성공으로 끝났고, 실제 도착은 이렇게 뒤늦게 일어납니다. 이 시차를 이해하는 것이 파일 입출력에서 가장 중요한 지점입니다.",
+      "ports": { "in": [{ "id": "i0", "kind": "data" }] }
     }
   ],
   "edges": [
-    {
-      "id": "e-client",
-      "source": "client",
-      "sourcePort": "o0",
-      "target": "eth0",
-      "targetPort": "i0",
-      "kind": "packet",
-      "label": "노드의 물리 IP와 30080 포트를 향해 출발한 요청입니다.",
-      "decoration": "one-to-one"
-    },
-    {
-      "id": "e-pre",
-      "source": "eth0",
-      "sourcePort": "o0",
-      "target": "prerouting",
-      "targetPort": "i0",
-      "kind": "packet",
-      "label": "커널이 감싼 skb가 첫 검문소로 올라갑니다."
-    },
-    {
-      "id": "e-svc",
-      "source": "prerouting",
-      "sourcePort": "o0",
-      "target": "kube-svc",
-      "targetPort": "i0",
-      "kind": "packet",
-      "label": "nat 테이블의 점프 규칙에 따라 쿠버네티스 서비스 체인으로 들어갑니다."
-    },
-    {
-      "id": "e-route",
-      "source": "kube-svc",
-      "sourcePort": "o0",
-      "target": "routing",
-      "targetPort": "i0",
-      "kind": "packet",
-      "label": "pod-a가 뽑혔습니다. 목적지가 바뀐 패킷이 경로 계산으로 넘어갑니다.",
-      "ratio": "1:1"
-    },
-    {
-      "id": "e-alt",
-      "source": "kube-svc",
-      "sourcePort": "o1",
-      "target": "eth0-pod-b",
-      "targetPort": "i0",
-      "kind": "packet",
-      "label": "pod-b가 뽑혔다면 갔을 경로입니다. 이번에는 선택되지 않았습니다.",
-      "decoration": "optional",
-      "ratio": "1:1"
-    },
-    {
-      "id": "e-veth",
-      "source": "routing",
-      "sourcePort": "o0",
-      "target": "veth-host",
-      "targetPort": "i0",
-      "kind": "packet",
-      "label": "브리지 방향으로 결정돼 가상 케이블 입구로 향합니다."
-    },
-    {
-      "id": "e-cross",
-      "source": "veth-host",
-      "sourcePort": "o0",
-      "target": "eth0-pod",
-      "targetPort": "i0",
-      "kind": "packet",
-      "label": "여기가 호스트 공간과 Pod 공간의 경계입니다."
-    },
-    {
-      "id": "e-sock",
-      "source": "eth0-pod",
-      "sourcePort": "o0",
-      "target": "socket",
-      "targetPort": "i0",
-      "kind": "packet",
-      "label": "IP와 TCP 처리를 마친 데이터가 소켓 큐로 들어갑니다."
-    },
-    {
-      "id": "e-b-app",
-      "source": "eth0-pod-b",
-      "sourcePort": "o0",
-      "target": "app-b",
-      "targetPort": "i0",
-      "kind": "packet",
-      "label": "pod-b 안에서도 같은 과정이 일어납니다."
-    },
-    {
-      "id": "e-app",
-      "source": "socket",
-      "sourcePort": "o0",
-      "target": "app",
-      "targetPort": "i0",
-      "kind": "data",
-      "label": "앱이 recv()로 꺼내가는 순간입니다.",
-      "decoration": "one-to-one"
-    }
+    { "id": "e-libc", "source": "app", "sourcePort": "o0", "target": "libc", "targetPort": "i0",
+      "kind": "signal", "label": "표준 라이브러리 함수를 부릅니다.", "decoration": "one-to-one" },
+    { "id": "e-boundary", "source": "libc", "sourcePort": "o0", "target": "boundary", "targetPort": "i0",
+      "kind": "signal", "label": "레지스터에 값을 담고 syscall 명령을 실행합니다." },
+    { "id": "e-dispatch", "source": "boundary", "sourcePort": "o0", "target": "dispatch", "targetPort": "i0",
+      "kind": "signal", "label": "권한이 올라간 상태로 커널 진입점에 도착합니다." },
+    { "id": "e-vfs", "source": "dispatch", "sourcePort": "o0", "target": "vfs", "targetPort": "i0",
+      "kind": "signal", "label": "1번 = sys_write 로 판명되어 넘어갑니다." },
+    { "id": "e-cache", "source": "vfs", "sourcePort": "o0", "target": "pagecache", "targetPort": "i0",
+      "kind": "data", "label": "유저 버퍼의 내용이 커널 메모리로 복사됩니다." },
+    { "id": "e-wb", "source": "pagecache", "sourcePort": "o0", "target": "writeback", "targetPort": "i0",
+      "kind": "data", "label": "앱은 이미 돌아갔고, 여기서부터는 커널이 알아서 합니다.", "decoration": "optional" },
+    { "id": "e-disk", "source": "writeback", "sourcePort": "o0", "target": "disk", "targetPort": "i0",
+      "kind": "data", "label": "모아둔 요청이 정리되어 장치로 내려갑니다." }
   ],
   "trace": {
     "entity": {
-      "kind": "packet",
-      "label": "HTTP GET 요청",
+      "kind": "signal", "label": "write() 요청",
       "layers": [
-        {
-          "id": "eth",
-          "name": "Ethernet",
-          "fields": {
-            "src": "ca:fe:00:01",
-            "dst": "d0:0d:00:0b"
-          }
-        },
-        {
-          "id": "ip",
-          "name": "IP",
-          "fields": {
-            "src": "203.0.113.7",
-            "dst": "192.168.10.11",
-            "ttl": "64"
-          }
-        },
-        {
-          "id": "tcp",
-          "name": "TCP",
-          "fields": {
-            "sport": "51344",
-            "dport": "30080"
-          }
-        },
-        {
-          "id": "http",
-          "name": "HTTP",
-          "fields": {
-            "req": "GET /",
-            "host": "web.example.com"
-          }
-        }
+        { "id": "ctx", "name": "실행 컨텍스트", "fields": { "ring": "3 (유저)", "stack": "유저 스택" } },
+        { "id": "req", "name": "요청", "fields": { "call": "write", "fd": "3", "len": "64" } },
+        { "id": "buf", "name": "데이터", "fields": { "위치": "유저 메모리" } }
       ]
     },
     "steps": [
-      {
-        "at": "client",
-        "narration": "클라이언트가 노드의 물리 IP와 30080 포트로 HTTP GET 요청을 보냅니다. 이 시점의 목적지는 노드 주소일 뿐, 실제로 응답할 Pod의 주소가 아닙니다."
-      },
-      {
-        "at": "eth0",
-        "via": "e-client",
-        "narration": "노드의 랜카드가 데이터를 받아 링 버퍼에 넣습니다. 커널은 이것을 skb라는 구조체로 감싸는데, 이후 단계들은 데이터를 복사하지 않고 이 구조체만 주고받습니다."
-      },
-      {
-        "at": "prerouting",
-        "via": "e-pre",
-        "narration": "경로를 정하기 전 첫 검문소에 걸립니다. 목적지를 바꾸는 일은 경로 계산 이전에 끝나야 하므로, 쿠버네티스의 주소 변환 규칙이 바로 이 지점에서 기다리고 있습니다.",
-        "mechanismEvent": {
-          "select": [
-            "r-kube"
-          ]
-        }
-      },
-      {
-        "at": "kube-svc",
-        "via": "e-svc",
-        "narration": "요청을 받을 Pod을 확률로 고르고, 패킷의 목적지를 그 Pod의 주소로 바꿉니다. 이번에는 pod-a가 뽑혔습니다. 카드에서 IP의 dst와 TCP의 dport가 바뀌는 것을 확인해 보세요. 이 한 번의 주소 변경이 로드 밸런싱의 전부입니다.",
+      { "at": "app",
+        "narration": "프로그램이 로그 한 줄을 파일에 쓰려고 write()를 호출합니다. 이름과 달리 이 함수는 디스크에 직접 쓰지 못합니다. 유저 공간에는 그럴 권한이 없기 때문입니다." },
+      { "at": "libc", "via": "e-libc",
+        "narration": "표준 라이브러리가 요청을 CPU 규약에 맞게 담습니다. write는 1번이라는 번호로, 인자들은 정해진 레지스터에 들어갑니다. 커널은 함수 이름을 모르고 번호만 알아듣습니다.",
+        "mechanismEvent": { "select": ["reg-rax", "reg-rdi", "reg-rsi", "reg-rdx"] } },
+      { "at": "boundary", "via": "e-boundary",
+        "narration": "syscall 명령이 실행되며 CPU 권한이 링 3에서 링 0으로 올라갑니다. 점프할 주소는 커널이 미리 정해둔 한 곳뿐이라, 권한만 올리고 아무 코드나 실행하는 일은 불가능합니다.",
         "layerOps": [
-          {
-            "op": "set",
-            "layer": "ip",
-            "field": "dst",
-            "value": "10.244.1.5"
-          },
-          {
-            "op": "set",
-            "layer": "tcp",
-            "field": "dport",
-            "value": "8080"
-          }
+          { "op": "set", "layer": "ctx", "field": "ring", "value": "0 (커널)" },
+          { "op": "set", "layer": "ctx", "field": "stack", "value": "커널 스택" }
         ],
-        "mechanismEvent": {
-          "select": [
-            "sep-a"
-          ]
-        }
-      },
-      {
-        "at": "routing",
-        "via": "e-route",
-        "narration": "바뀐 목적지 10.244.1.5는 이 노드 안의 Pod 대역입니다. 다른 노드였다면 터널로 나갔겠지만, 같은 노드이므로 브리지에 바로 내려보내면 됩니다.",
-        "mechanismEvent": {
-          "select": [
-            "rt-pod"
-          ]
-        }
-      },
-      {
-        "at": "veth-host",
-        "via": "e-veth",
-        "narration": "가상 케이블의 호스트 쪽 끝에 도착했습니다. 여기로 들어간 패킷은 반드시 반대편 Pod 공간에서 나옵니다."
-      },
-      {
-        "at": "eth0-pod",
-        "via": "e-cross",
-        "narration": "네트워크 공간의 경계를 넘었습니다. Pod 입장에서는 그저 자기 랜카드로 패킷이 도착한 것으로 보입니다."
-      },
-      {
-        "at": "socket",
-        "via": "e-sock",
-        "narration": "IP와 TCP 처리를 마친 데이터가 소켓 큐에 쌓입니다. 이더넷 헤더는 이미 벗겨졌습니다. 앱이 바쁘면 이 큐가 차오르고, 그때부터 전송 속도가 떨어지기 시작합니다.",
+        "mechanismEvent": { "select": ["f-entry", "f-ring", "f-stack"] } },
+      { "at": "dispatch", "via": "e-dispatch",
+        "narration": "커널이 번호 1을 시스템 콜 테이블에서 찾아 sys_write로 넘깁니다. 유저가 준 번호를 그대로 믿으면 위험하므로 범위 검사가 먼저 이뤄집니다.",
+        "mechanismEvent": { "select": ["sys-1"] } },
+      { "at": "vfs", "via": "e-vfs",
+        "narration": "fd 3이 실제로 어떤 파일인지 찾습니다. VFS가 파일시스템별 함수를 대신 골라주기 때문에, 앱은 상대가 ext4인지 파이프인지 몰라도 됩니다.",
+        "mechanismEvent": { "select": ["fd-3", "op-write"] } },
+      { "at": "pagecache", "via": "e-cache",
+        "narration": "데이터가 유저 메모리에서 커널의 페이지 캐시로 복사됩니다. 여기까지 오면 커널은 앱에 성공을 돌려주고, 앱은 계속 진행합니다. 하지만 데이터는 아직 메모리에만 있습니다.",
         "layerOps": [
-          {
-            "op": "pop",
-            "layer": "eth"
-          }
-        ]
-      },
-      {
-        "at": "app",
-        "via": "e-app",
-        "narration": "nginx가 recv()로 데이터를 꺼냅니다. IP와 TCP 헤더도 커널이 처리해 없앴으므로 앱에게는 순수한 HTTP 요청만 보입니다. 큐가 비워집니다.",
+          { "op": "set", "layer": "buf", "field": "위치", "value": "페이지 캐시 (메모리)" }
+        ] },
+      { "at": "writeback", "via": "e-wb",
+        "narration": "앱과 무관하게 도는 커널 스레드가 쌓인 페이지를 디스크로 내려보냅니다. 여러 요청을 모아 순서를 정리하면 장치가 훨씬 적은 동작으로 끝낼 수 있습니다.",
         "layerOps": [
-          {
-            "op": "pop",
-            "layer": "ip"
-          },
-          {
-            "op": "pop",
-            "layer": "tcp"
-          }
-        ]
-      }
+          { "op": "set", "layer": "ctx", "field": "stack", "value": "커널 스레드" }
+        ] },
+      { "at": "disk", "via": "e-disk",
+        "narration": "데이터가 마침내 전원이 꺼져도 남는 곳에 도착합니다. 앱 입장에서 write()는 한참 전에 끝났고, 실제 기록은 이렇게 뒤늦게 일어납니다. 이 시차 때문에 유실이 치명적인 프로그램은 fsync()로 완료를 기다립니다.",
+        "layerOps": [
+          { "op": "set", "layer": "buf", "field": "위치", "value": "디스크 (영구 저장)" }
+        ] }
     ]
   },
   "stream": {
-    "rates": {
-      "e-client": 2.0
-    },
-    "capacities": {
-      "socket": 6
-    }
+    "rates": { "e-cache": 2.0 }
   }
 }
 ;
