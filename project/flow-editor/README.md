@@ -36,6 +36,7 @@ Upload Labs 스타일의 "살아있는 흐름도" 에디터. 네트워크 통신
 | 흐름도 | 무엇을 보여주나 | 처음 쓰인 기능 |
 |---|---|---|
 | `k8s-packet-flow` | 외부 요청이 NodePort로 들어와 iptables DNAT를 거쳐 Pod 소켓에 닿기까지 | 접기/펼치기 그룹, 확률 분기, 계층 pop |
+| `k8s-ingress-flow` | Ingress 리소스가 nginx 설정이 되기까지(api-server·etcd·watch)와 그 설정을 타고 요청이 Pod에 닿기까지 | **레인으로 컨트롤/데이터 플레인 대비**, 3중 로드밸런싱 |
 | `tls-handshake` | 두 당사자가 메시지를 주고받으며 열쇠를 나눠 갖기까지 | **레인**(CLIENT/SERVER 왕복), `crypt`, `layerOps`의 `lock` |
 | `linux-syscall-write` | write() 가 커널로 내려갔다가 성공을 돌려주고, 디스크 기록은 뒤늦게 | **레인**(USER/KERNEL 비동기 반환), `filter` 메커니즘 |
 
