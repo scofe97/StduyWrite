@@ -176,6 +176,16 @@ function textWidth(s, size, mono) {
   for (const ch of s || "") w += /[ᄀ-퟿　-ヿ]/.test(ch) ? size : size * latin;
   return w;
 }
+/* 레인 — 행위 주체를 교차축에 고정해 왕복을 드러낸다 (UML 시퀀스 다이어그램).
+   meta.lanes 가 없으면 laneIndex 는 항상 -1 이고 배치는 종전과 완전히 같다. */
+const LANE_PAD = 26;
+function lanes() { return (FLOW.meta && FLOW.meta.lanes) || []; }
+function laneIndexOf(n) {
+  const ls = lanes();
+  if (!ls.length || !n || !n.lane) return -1;
+  return ls.findIndex(l => l.id === n.lane);
+}
+
 /* 완전한 문장과 패킷 계층이 들어가므로 노드 폭을 정해두고 줄바꿈한다 */
 const NODE_W = 268, INFO_FONT = 10, INFO_LH = 13;
 const LAYER_LH = 12, LAYER_NAME_W = 62;
@@ -286,6 +296,26 @@ function layoutContainer(containerId) {
   const rankKeys = Object.keys(byRank).map(Number).sort((a, b) => a - b);
 
   const children = {};
+  // 레인이 선언돼 있으면 교차축 좌표를 형제 순서가 아니라 레인이 정한다.
+  // 레인마다 폭(교차축 크기)을 미리 재서 띠 위치를 고정해야 노드가 같은 줄에 놓인다.
+  const laneList = lanes();
+  const laneSpan = [], laneAt = [];
+  if (laneList.length) {
+    for (let i = 0; i < laneList.length; i++) laneSpan[i] = 0;
+    for (const id of kidIds) {
+      const li = laneIndexOf(nodesById[id]);
+      if (li < 0) continue;
+      const sz = sizes[id];
+      laneSpan[li] = Math.max(laneSpan[li], isTB ? sz.w : sz.h);
+    }
+    let at = 0;
+    for (let i = 0; i < laneList.length; i++) {
+      if (!laneSpan[i]) laneSpan[i] = 60; // 빈 레인도 자리를 지킨다
+      laneAt[i] = at;
+      at += laneSpan[i] + LANE_PAD;
+    }
+  }
+
   let main = 0, crossMax = 0;
   for (const r of rankKeys) {
     const ids = byRank[r];
@@ -293,24 +323,37 @@ function layoutContainer(containerId) {
     for (const id of ids) {
       const sz = sizes[id];
       const mw = isTB ? sz.h : sz.w, cw = isTB ? sz.w : sz.h;
-      children[id] = { main, cross, w: sz.w, h: sz.h };
-      cross += cw + GAP_NODE;
+      const li = laneIndexOf(nodesById[id]);
+      if (li >= 0) {
+        // 레인 안에서 가운데 정렬
+        children[id] = { main, cross: laneAt[li] + (laneSpan[li] - cw) / 2, w: sz.w, h: sz.h, _lane: li };
+      } else {
+        children[id] = { main, cross, w: sz.w, h: sz.h };
+        cross += cw + GAP_NODE;
+      }
       mainSize = Math.max(mainSize, mw);
     }
     cross -= GAP_NODE;
-    for (const id of ids) children[id]._rankCross = cross;
+    for (const id of ids) {
+      // 레인 배치는 이미 절대 좌표라 rank 중앙 정렬에서 제외한다
+      children[id]._rankCross = children[id]._lane === undefined ? cross : null;
+    }
     crossMax = Math.max(crossMax, cross);
     main += mainSize + (isTB ? GAP_RANK_TB : GAP_RANK);
   }
   main -= (isTB ? GAP_RANK_TB : GAP_RANK);
+  if (laneList.length) {
+    crossMax = Math.max(crossMax, laneAt[laneList.length - 1] + laneSpan[laneList.length - 1]);
+  }
 
   const titleH = containerId ? GROUP_TITLE_H : 0;
   for (const id of Object.keys(children)) {
     const c = children[id];
-    const centered = c.cross + (crossMax - c._rankCross) / 2;
+    // 레인 배치 노드는 이미 절대 교차좌표를 가지므로 rank 중앙 정렬을 적용하지 않는다
+    const centered = c._rankCross === null ? c.cross : c.cross + (crossMax - c._rankCross) / 2;
     const x = isTB ? centered : c.main;
     const y = isTB ? c.main : centered;
-    children[id] = { x: x + PAD, y: y + PAD + titleH, w: c.w, h: c.h, inner: inner[id] };
+    children[id] = { x: x + PAD, y: y + PAD + titleH, w: c.w, h: c.h, inner: inner[id], _lane: c._lane };
   }
   const w = (isTB ? crossMax : main) + PAD * 2;
   const h = (isTB ? main : crossMax) + PAD * 2 + titleH;
@@ -407,21 +450,71 @@ function circShape(cx, cy, r, color) { return el("circle", { cx, cy, r, fill: co
 function diamShape(cx, cy, r, color) { return el("path", { d: `M ${cx} ${cy - r} L ${cx + r} ${cy} L ${cx} ${cy + r} L ${cx - r} ${cy} Z`, fill: color, class: "port" }); }
 const SHAPE_FN = { packet: rectShape, signal: triShape, data: circShape, error: diamShape };
 
-let gEdges, gNodes, gEdgeHits, gParticles;
+let gLanes, gEdges, gNodes, gEdgeHits, gParticles;
+
+/* 엣지 끝 화살표 — kind 색을 따르도록 종류마다 하나씩 정의한다.
+   방향을 입자 흐름으로만 짐작하게 두면 레인을 오가는 왕복에서 특히 헷갈린다. */
+function renderDefs(parent) {
+  const defs = el("defs", {}, parent);
+  for (const [kind, color] of Object.entries(KIND_COLOR_RAW)) {
+    const m = el("marker", {
+      id: `arrow-${kind}`, viewBox: "0 0 10 10",
+      refX: 9, refY: 5, markerWidth: 6, markerHeight: 6,
+      orient: "auto-start-reverse", markerUnits: "strokeWidth",
+    }, defs);
+    el("path", { d: "M 0 1 L 10 5 L 0 9 z", fill: color }, m);
+  }
+}
 
 function render() {
   svg.innerHTML = "";
   const gRoot = el("g", { id: "g-root" }, svg);
+  renderDefs(gRoot);
+  gLanes = el("g", {}, gRoot);      // 레인 띠는 가장 뒤 — 그룹·노드에 가리지 않게
   gEdges = el("g", {}, gRoot);
   gNodes = el("g", {}, gRoot);
   gEdgeHits = el("g", {}, gRoot);   // 히트 영역은 노드/그룹 위 — 그룹 박스가 엣지 클릭을 가로채지 않게
   gParticles = el("g", {}, gRoot);
 
+  renderLanes();
   renderContainers(null);
   renderEdges();
   renderAmbientInit();
   applyViewBox();
   markPanelTarget();
+}
+
+/* 레인 띠와 라벨 — 배치된 노드들의 실제 좌표에서 각 레인의 범위를 역산한다 */
+function renderLanes() {
+  const ls = lanes();
+  if (!ls.length) return;
+  const isTB = (FLOW.meta.direction || "LR") === "TB";
+
+  const ext = ls.map(() => null);
+  for (const n of FLOW.nodes) {
+    const li = laneIndexOf(n);
+    const r = layout[n.id];
+    if (li < 0 || !r) continue;
+    const lo = isTB ? r.x : r.y, hi = isTB ? r.x + r.w : r.y + r.h;
+    const e = ext[li];
+    ext[li] = e ? { lo: Math.min(e.lo, lo), hi: Math.max(e.hi, hi) } : { lo, hi };
+  }
+
+  ls.forEach((lane, i) => {
+    const e = ext[i];
+    if (!e) return;
+    const pad = LANE_PAD / 2;
+    const box = isTB
+      ? { x: e.lo - pad, y: contentBox.y, width: (e.hi - e.lo) + pad * 2, height: contentBox.h }
+      : { x: contentBox.x, y: e.lo - pad, width: contentBox.w, height: (e.hi - e.lo) + pad * 2 };
+    el("rect", { ...box, class: `lane-band lane-${i % 2 ? "odd" : "even"}` }, gLanes);
+    const t = el("text", {
+      x: isTB ? box.x + 8 : contentBox.x + 10,
+      y: isTB ? contentBox.y + 14 : box.y + 14,
+      class: "lane-label",
+    }, gLanes);
+    t.textContent = lane.label || lane.id;
+  });
 }
 
 function renderContainers(containerId) {
@@ -550,7 +643,10 @@ function renderEdges() {
       ? `M ${a.x} ${a.y} C ${a.x + off} ${a.y}, ${b.x - off} ${b.y}, ${b.x} ${b.y}`
       : `M ${a.x} ${a.y} C ${a.x} ${a.y + off}, ${b.x} ${b.y - off}, ${b.x} ${b.y}`;
     const color = KIND_COLOR_RAW[e.kind];
-    const path = el("path", { d, class: "edge-path", stroke: color, "data-edge": e.id }, gEdges);
+    const path = el("path", {
+      d, class: "edge-path", stroke: color, "data-edge": e.id,
+      "marker-end": `url(#arrow-${e.kind})`,
+    }, gEdges);
     const len = path.getTotalLength();
     // 넓은 투명 히트 영역 — 엣지 클릭용 (노드 위 레이어)
     const hit = el("path", { d, class: "edge-hit", "data-edge": e.id }, gEdgeHits);
@@ -656,6 +752,26 @@ function bindJumps() {
     });
   });
 }
+/* 접힘 섹션 — 첫 화면을 짧게 유지하되 정보는 버리지 않는다 (ArgoCD·n8n 방식).
+   어떤 섹션을 열어뒀는지는 세션 동안 기억해, 같은 섹션을 매번 다시 열지 않게 한다. */
+const openSections = new Set();
+function section(key, title, count, body) {
+  if (!body) return "";
+  const isOpen = openSections.has(key);
+  const hint = count ? ` <span class="sec-count">${count}</span>` : "";
+  return `<details class="sec" data-sec="${esc(key)}"${isOpen ? " open" : ""}>
+    <summary class="sec-head">${esc(title)}${hint}</summary>
+    <div class="sec-body">${body}</div></details>`;
+}
+function bindSections() {
+  document.querySelectorAll("#panel-body details.sec").forEach(d => {
+    d.addEventListener("toggle", () => {
+      const k = d.getAttribute("data-sec");
+      d.open ? openSections.add(k) : openSections.delete(k);
+    });
+  });
+}
+
 function openNodePanel(nodeId) {
   const n = nodesById[nodeId]; if (!n) return;
   panelNodeId = nodeId; panelEdgeId = null;
@@ -663,56 +779,60 @@ function openNodePanel(nodeId) {
   $("panel-title").textContent = `${ic ? ic + " " : ""}${n.label}`;
   let html = `<div class="meta-line">${esc(n.type)}${n.role ? " · " + esc(n.role) : ""}${n.sublabel ? " · " + esc(n.sublabel) : ""}</div>`;
 
-  // 개요
-  if (n.detail) html += `<p class="detail-text">${esc(n.detail)}</p>`;
+  // 첫 화면 — 이 노드가 무엇을 하는가 한 줄 (노드 창의 info 와 같은 문장)
+  if ((n.info || []).length) {
+    html += `<p class="panel-lead">${esc(n.info.join(" "))}</p>`;
+  }
   if (n.type === "group") {
     html += `<div class="meta-line">내부 노드 ${countDescendants(n.id)}개 · ${collapsed.has(n.id) ? "접힘 (제목 클릭으로 펼침)" : "펼침"}</div>`;
+  }
+  // 왜 그런가 — 배경 설명은 접어둔다
+  if (n.detail) {
+    html += section(`${nodeId}:detail`, "왜 그런가", 0, `<p class="detail-text">${esc(n.detail)}</p>`);
   }
   // 여기서 일어나는 일
   const steps = nodeSteps(nodeId);
   if (steps.length) {
-    html += `<div class="sec-head">여기서 일어나는 일</div>`;
-    for (const s of steps) {
-      html += `<div class="step-block">${esc(s.narration)}</div>`;
-    }
+    html += section(`${nodeId}:steps`, "여기서 일어나는 일", steps.length,
+      steps.map(s => `<div class="step-block">${esc(s.narration)}</div>`).join(""));
   }
   // 패킷 변형 — 들어올 때/나갈 때를 나란히 놓고 바뀐 줄만 강조 (n8n 의 IN/OUT 대조 차용)
   const allChanges = steps.flatMap(s => resolvedChanges[s._idx] || []);
   const snap = nodeSnapshot.get(nodeId);
   if (allChanges.length && snap?.before) {
-    html += `<div class="sec-head">패킷 변형</div>`;
-    html += renderIoCompare(snap);
+    html += section(`${nodeId}:io`, "패킷 변형", allChanges.length, renderIoCompare(snap));
   }
   if (allChanges.length) {
-    html += `<div class="sec-head">무엇이 바뀌었나</div>`;
+    let changeBody = "";
     for (const c of allChanges) {
       if (c.kind === "set") {
-        html += `<div class="mech-rewrite">${esc(c.layerName)}.${esc(c.field)}: <span class="from">${esc(c.from)}</span> <span class="arrow">→</span> <span class="to">${esc(c.to)}</span></div>`;
+        changeBody += `<div class="mech-rewrite">${esc(c.layerName)}.${esc(c.field)}: <span class="from">${esc(c.from)}</span> <span class="arrow">→</span> <span class="to">${esc(c.to)}</span></div>`;
       } else if (c.kind === "pop") {
-        html += `<div class="mech-rewrite"><span class="from">[${esc(c.layerName)}]</span> 계층 벗겨짐</div>`;
+        changeBody += `<div class="mech-rewrite"><span class="from">[${esc(c.layerName)}]</span> 계층 벗겨짐</div>`;
       } else if (c.kind === "push") {
-        html += `<div class="mech-rewrite"><span class="to">[${esc(c.layerName)}]</span> 계층 씌워짐</div>`;
+        changeBody += `<div class="mech-rewrite"><span class="to">[${esc(c.layerName)}]</span> 계층 씌워짐</div>`;
       } else if (c.kind === "lock") {
-        html += `<div class="mech-rewrite">🔒 [${esc(c.layerName)}] 암호화${c.note ? " — " + esc(c.note) : ""}</div>`;
+        changeBody += `<div class="mech-rewrite">🔒 [${esc(c.layerName)}] 암호화${c.note ? " — " + esc(c.note) : ""}</div>`;
       } else if (c.kind === "unlock") {
-        html += `<div class="mech-rewrite">🔓 [${esc(c.layerName)}] 복호화</div>`;
+        changeBody += `<div class="mech-rewrite">🔓 [${esc(c.layerName)}] 복호화</div>`;
       }
     }
+    html += section(`${nodeId}:changes`, "무엇이 바뀌었나", allChanges.length, changeBody);
   }
   // 내부 동작
   if ((n.mechanisms || []).length) {
-    html += `<div class="sec-head">내부 동작</div>`;
     const sel = new Set(steps.flatMap(s => s.mechanismEvent?.select || []));
-    for (const m of n.mechanisms) html += renderMechanism(m, sel);
+    html += section(`${nodeId}:mech`, "내부 동작", n.mechanisms.length,
+      n.mechanisms.map(m => renderMechanism(m, sel)).join(""));
   }
   // 연결
   const ins = FLOW.edges.filter(e => e.target === nodeId);
   const outs = FLOW.edges.filter(e => e.source === nodeId);
   if (ins.length || outs.length) {
-    html += `<div class="sec-head">연결</div>`;
+    let connBody = "";
     for (const e of ins) {
       const from = nodesById[e.source];
-      html += `<div class="conn-row">⬅ ${jumpButton(e.source, (iconOf(from) ? iconOf(from) + " " : "") + from.label)}
+      connBody += `<div class="conn-row">⬅ ${jumpButton(e.source, (iconOf(from) ? iconOf(from) + " " : "") + from.label)}
         <span class="conn-kind" style="color:${KIND_COLOR_RAW[e.kind]}">${esc(e.kind)}</span>
         ${e.label ? `<span class="conn-label">${esc(e.label)}</span>` : ""}
         ${e.ratio ? `<span class="conn-ratio">비율 ${esc(e.ratio)}</span>` : ""}
@@ -720,18 +840,20 @@ function openNodePanel(nodeId) {
     }
     for (const e of outs) {
       const to = nodesById[e.target];
-      html += `<div class="conn-row">➡ ${jumpButton(e.target, (iconOf(to) ? iconOf(to) + " " : "") + to.label)}
+      connBody += `<div class="conn-row">➡ ${jumpButton(e.target, (iconOf(to) ? iconOf(to) + " " : "") + to.label)}
         <span class="conn-kind" style="color:${KIND_COLOR_RAW[e.kind]}">${esc(e.kind)}</span>
         ${e.label ? `<span class="conn-label">${esc(e.label)}</span>` : ""}
         ${e.ratio ? `<span class="conn-ratio">비율 ${esc(e.ratio)}</span>` : ""}
         ${jumpButton(e.id, "엣지")}</div>`;
     }
+    html += section(`${nodeId}:conn`, "연결", ins.length + outs.length, connBody);
   }
   if (!n.detail && !steps.length && !(n.mechanisms || []).length && !ins.length && !outs.length) {
     html += `<div class="meta-line">상세 정보 없음</div>`;
   }
   $("panel-body").innerHTML = html;
   bindJumps();
+  bindSections();
   $("detail-panel").classList.add("open");
   markPanelTarget();
 }
@@ -743,7 +865,6 @@ function openEdgePanel(edgeId) {
   let html = `<div class="meta-line">엣지 · <span style="color:${KIND_COLOR_RAW[e.kind]}">${esc(e.kind)}</span>${e.ratio ? " · 비율 " + esc(e.ratio) : ""}</div>`;
   if (e.label) html += `<p class="detail-text">${esc(e.label)}</p>`;
   if (e.decoration) html += `<div class="meta-line">${esc(DECO_LABEL[e.decoration] || e.decoration)}</div>`;
-  html += `<div class="sec-head">양끝</div>`;
   html += `<div class="conn-row">출발 ${jumpButton(e.source, (iconOf(from) ? iconOf(from) + " " : "") + from.label)}</div>`;
   html += `<div class="conn-row">도착 ${jumpButton(e.target, (iconOf(to) ? iconOf(to) + " " : "") + to.label)}</div>`;
   // 이 엣지를 타는 스텝
@@ -753,14 +874,13 @@ function openEdgePanel(edgeId) {
       return edge && edge.id === edgeId;
     });
     if (rides.length) {
-      html += `<div class="sec-head">이 구간을 지나는 흐름</div>`;
-      for (const { s } of rides) {
-        html += `<div class="step-block">${esc(s.narration)}</div>`;
-      }
+      html += section(`${edgeId}:rides`, "이 구간을 지나는 흐름", rides.length,
+        rides.map(({ s }) => `<div class="step-block">${esc(s.narration)}</div>`).join(""));
     }
   }
   $("panel-body").innerHTML = html;
   bindJumps();
+  bindSections();
   $("detail-panel").classList.add("open");
   markPanelTarget();
 }

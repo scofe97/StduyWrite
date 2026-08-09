@@ -135,6 +135,19 @@ func validate(data map[string]any) {
 			fail("meta.direction 은 LR|TB: %v", d)
 		}
 	}
+	// 레인 — 선언 순서가 곧 화면 순서다
+	laneIDs := map[string]bool{}
+	for i, lv := range arr(meta["lanes"]) {
+		l := obj(lv)
+		id := str(l, "id")
+		if id == "" {
+			fail("meta.lanes[%d].id 필수", i)
+		}
+		if laneIDs[id] {
+			fail("meta.lanes id 중복: %s", id)
+		}
+		laneIDs[id] = true
+	}
 
 	// --- nodes ---
 	nodes := arr(data["nodes"])
@@ -154,6 +167,9 @@ func validate(data map[string]any) {
 		ids[nid] = n
 		if str(n, "type") == "" {
 			fail("노드 type 누락: %s", nid)
+		}
+		if ln := str(n, "lane"); ln != "" && !laneIDs[ln] {
+			fail("노드 %s: lane %q 이 meta.lanes 에 없습니다", nid, ln)
 		}
 		if reserved[str(n, "type")] {
 			fail("노드 %s: type %q 는 메커니즘 이름이라 노드 type 으로 쓸 수 없습니다.\n"+

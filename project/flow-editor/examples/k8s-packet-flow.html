@@ -75,6 +75,15 @@ header .legend svg { vertical-align: -2px; margin-right: 3px; }
 .mech-badge-text { fill: #9dc4e8; font-size: 9px; font-weight: 600; }
 .node-divider { stroke: var(--node-border); stroke-width: 1; }
 
+/* 레인 — 행위 주체 띠. 노드보다 뒤에 깔리므로 아주 옅게 */
+.lane-band { pointer-events: none; }
+.lane-band.lane-even { fill: rgba(255,255,255,0.022); }
+.lane-band.lane-odd  { fill: rgba(255,255,255,0.005); }
+.lane-label {
+  fill: var(--text-muted); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.08em; pointer-events: none;
+}
+
 /* 패킷 계층 스택 — 이 노드를 지난 뒤의 상태 */
 .layer-name {
   fill: #7f8ca3; font-size: 9px; font-weight: 700;
@@ -133,10 +142,26 @@ header .legend svg { vertical-align: -2px; margin-right: 3px; }
 #panel-body .meta-line { color: var(--text-muted); font-size: 11.5px; margin-bottom: 10px; }
 #panel-body .detail-text { margin-bottom: 12px; color: var(--text); }
 #panel-body .detail-text + .detail-text { margin-top: -4px; }
+/* 접힘 섹션 — 첫 화면을 짧게, 정보는 접어서 보존 */
+.panel-lead { color: var(--text); margin-bottom: 12px; }
+details.sec { margin-bottom: 2px; }
 .sec-head {
-  margin: 18px 0 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
-  color: var(--text-muted); border-bottom: 1px solid var(--panel-border); padding-bottom: 4px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+  color: var(--text-muted); border-bottom: 1px solid var(--panel-border);
+  padding: 7px 0 5px; cursor: pointer; list-style: none;
+  display: flex; align-items: center; gap: 6px;
 }
+.sec-head::-webkit-details-marker { display: none; }
+.sec-head::before { content: "▸"; font-size: 9px; transition: transform 0.15s; }
+details.sec[open] > .sec-head::before { transform: rotate(90deg); }
+.sec-head:hover { color: var(--text); }
+.sec-head:focus-visible { outline: 2px solid var(--active-glow); outline-offset: 1px; }
+.sec-count {
+  font-size: 9.5px; font-weight: 600; color: var(--text-muted);
+  background: var(--node-bg); border: 1px solid var(--node-border);
+  border-radius: 8px; padding: 0 6px; letter-spacing: 0;
+}
+.sec-body { padding: 9px 0 12px; }
 .step-block { margin-bottom: 9px; }
 .conn-row {
   display: flex; gap: 6px; align-items: center; flex-wrap: wrap;
@@ -261,7 +286,7 @@ const FLOW = {
       "info": [
         "클러스터 밖에서 요청을 보냅니다. Pod이 어느 노드에 있는지는 모릅니다."
       ],
-      "detail": "클러스터 바깥의 사용자입니다. NodePort 방식은 모든 워커 노드가 같은 포트(여기서는 30080)를 열어두기 때문에, 클라이언트는 아무 노드의 IP로나 접속해도 서비스에 닿습니다. 어느 Pod이 실제로 응답할지는 클라이언트가 알 필요도, 알 방법도 없습니다.",
+      "detail": "NodePort 방식은 모든 워커 노드가 같은 포트(여기서는 30080)를 열어두기 때문에, 클라이언트는 아무 노드의 IP로나 접속해도 서비스에 닿습니다. 어느 Pod이 실제로 응답할지는 클라이언트가 알 필요도, 알 방법도 없습니다.",
       "ports": {
         "out": [
           {
@@ -297,7 +322,7 @@ const FLOW = {
       "info": [
         "랜선으로 들어온 신호를 받아 커널이 다룰 수 있는 형태로 바꿉니다."
       ],
-      "detail": "노드의 물리 네트워크 카드입니다. 도착한 데이터를 링 버퍼라는 대기 공간에 넣고 커널에 알립니다. 커널은 이 데이터를 skb(socket buffer)라는 구조체로 감싸는데, 이후 모든 처리 단계는 원본 데이터를 복사하지 않고 이 구조체만 넘겨가며 진행합니다. 복사를 피하는 것이 네트워크 성능의 핵심이기 때문입니다.",
+      "detail": "도착한 데이터를 링 버퍼라는 대기 공간에 넣고 커널에 알립니다. 커널은 이 데이터를 skb(socket buffer)라는 구조체로 감싸는데, 이후 모든 처리 단계는 원본 데이터를 복사하지 않고 이 구조체만 넘겨가며 진행합니다. 복사를 피하는 것이 네트워크 성능의 핵심이기 때문입니다.",
       "ports": {
         "in": [
           {
@@ -373,7 +398,7 @@ const FLOW = {
         "어느 Pod이 응답할지 확률로 고르고, 목적지 주소를 그 Pod의 것으로 바꿉니다.",
         "이 한 단계가 로드 밸런싱과 서비스 추상화를 동시에 해냅니다."
       ],
-      "detail": "쿠버네티스에서 Service는 실체가 있는 서버가 아니라 규칙의 이름입니다. kube-proxy라는 구성요소가 Service 정의를 읽어 iptables 규칙으로 번역해 두고, 실제 분배는 커널이 이 규칙에 따라 수행합니다. 그래서 Service에 프록시 서버가 따로 뜨지 않아도 부하 분산이 됩니다. 여기서 일어나는 일은 세 단계입니다. 먼저 목적지가 어느 Service인지 찾고, 그 Service에 연결된 Pod 중 하나를 확률로 고르고, 마지막으로 패킷의 목적지를 고른 Pod의 주소로 바꿉니다.",
+      "detail": "kube-proxy라는 구성요소가 Service 정의를 읽어 iptables 규칙으로 번역해 두고, 실제 분배는 커널이 이 규칙에 따라 수행합니다. 그래서 Service에 프록시 서버가 따로 뜨지 않아도 부하 분산이 됩니다. 여기서 일어나는 일은 세 단계입니다. 먼저 목적지가 어느 Service인지 찾고, 그 Service에 연결된 Pod 중 하나를 확률로 고르고, 마지막으로 패킷의 목적지를 고른 Pod의 주소로 바꿉니다.",
       "mechanisms": [
         {
           "type": "k8s-resolve",
@@ -469,7 +494,7 @@ const FLOW = {
       "info": [
         "바뀐 목적지 주소를 보고 어느 통로로 내보낼지 고릅니다."
       ],
-      "detail": "커널이 라우팅 테이블을 뒤져 목적지로 가는 길을 찾는 단계입니다. 앞에서 목적지가 Pod 주소로 바뀌었기 때문에 여기서 계산되는 경로도 달라집니다. 10.244.1.0/24는 이 노드 안의 Pod들이 쓰는 주소 대역이라 CNI 브리지로 바로 내려보내면 되고, 다른 노드의 Pod 대역이었다면 노드 사이를 잇는 터널로 나갔을 것입니다.",
+      "detail": "앞에서 목적지가 Pod 주소로 바뀌었기 때문에 여기서 계산되는 경로도 달라집니다. 10.244.1.0/24는 이 노드 안의 Pod들이 쓰는 주소 대역이라 CNI 브리지로 바로 내려보내면 되고, 다른 노드의 Pod 대역이었다면 노드 사이를 잇는 터널로 나갔을 것입니다.",
       "mechanisms": [
         {
           "type": "table-lookup",
@@ -532,7 +557,7 @@ const FLOW = {
       "info": [
         "두 네트워크 공간을 잇는 가상 케이블입니다. 이쪽으로 넣으면 반대쪽으로 나옵니다."
       ],
-      "detail": "veth pair는 항상 둘이 한 쌍으로 만들어지는 가상 랜카드입니다. 한쪽은 호스트 네트워크 공간에, 다른 한쪽은 Pod 네트워크 공간에 꽂아두면 두 공간이 케이블로 연결된 것처럼 동작합니다. 한쪽으로 넣은 패킷은 반드시 반대쪽으로 나오기 때문에, 격리된 두 공간 사이를 오가는 유일한 통로가 됩니다.",
+      "detail": "한쪽은 호스트 네트워크 공간에, 다른 한쪽은 Pod 네트워크 공간에 꽂아두면 두 공간이 케이블로 연결된 것처럼 동작합니다. 한쪽으로 넣은 패킷은 반드시 반대쪽으로 나오기 때문에, 격리된 두 공간 사이를 오가는 유일한 통로가 됩니다.",
       "ports": {
         "in": [
           {
@@ -567,7 +592,7 @@ const FLOW = {
       "info": [
         "Pod이 보는 랜카드입니다. 실체는 앞 노드의 케이블 반대쪽입니다."
       ],
-      "detail": "Pod 안에서 보면 평범한 eth0이지만, 실체는 호스트 쪽 veth-a의 반대쪽 끝입니다. Pod은 자신이 독립된 머신이라고 믿고 이 카드로 통신합니다. 여기서 이더넷 헤더는 역할을 다했으므로 벗겨지고, 남은 IP 패킷이 상위 계층으로 올라갑니다.",
+      "detail": "Pod은 자신이 독립된 머신이라고 믿고 이 카드로 통신합니다. 여기서 이더넷 헤더는 역할을 다했으므로 벗겨지고, 남은 IP 패킷이 상위 계층으로 올라갑니다.",
       "ports": {
         "in": [
           {
@@ -595,7 +620,7 @@ const FLOW = {
         "커널이 처리를 마친 데이터를 앱이 가져갈 때까지 쌓아둡니다.",
         "앱이 느리면 여기가 가득 차고, 그때부터 전송 속도가 떨어집니다."
       ],
-      "detail": "커널이 IP와 TCP 처리를 끝낸 데이터를 담아두는 대기 공간입니다. 앱이 recv()를 호출해 꺼내갈 때까지 여기 머뭅니다. 이 큐가 성능을 보는 창이 되는 이유가 있습니다. 앱이 처리보다 빨리 데이터가 들어오면 큐가 차오르고, 가득 차면 커널이 상대방에게 \"잠시 멈추라\"는 신호(TCP 윈도 축소)를 보냅니다. 즉 앱의 처리 지연이 네트워크 전송 속도까지 끌어내립니다.",
+      "detail": "앱이 recv()를 호출해 꺼내갈 때까지 여기 머뭅니다. 이 큐가 성능을 보는 창이 되는 이유가 있습니다. 앱이 처리보다 빨리 데이터가 들어오면 큐가 차오르고, 가득 차면 커널이 상대방에게 \"잠시 멈추라\"는 신호(TCP 윈도 축소)를 보냅니다. 즉 앱의 처리 지연이 네트워크 전송 속도까지 끌어내립니다.",
       "ports": {
         "in": [
           {
@@ -622,7 +647,7 @@ const FLOW = {
       "info": [
         "recv()로 큐에서 데이터를 꺼내 HTTP 요청으로 읽습니다."
       ],
-      "detail": "사용자 공간에서 도는 웹 서버 프로세스입니다. recv() 시스템 콜로 소켓 큐에서 데이터를 꺼냅니다. 이 시점에는 이더넷·IP·TCP 헤더가 모두 커널 단계에서 벗겨졌기 때문에, 앱에게는 순수한 HTTP 요청만 보입니다. 앱이 Pod IP나 NodePort 같은 것을 전혀 몰라도 되는 이유입니다.",
+      "detail": "recv() 시스템 콜로 소켓 큐에서 데이터를 꺼냅니다. 이 시점에는 이더넷·IP·TCP 헤더가 모두 커널 단계에서 벗겨졌기 때문에, 앱에게는 순수한 HTTP 요청만 보입니다. 앱이 Pod IP나 NodePort 같은 것을 전혀 몰라도 되는 이유입니다.",
       "ports": {
         "in": [
           {
@@ -1105,6 +1130,16 @@ function textWidth(s, size, mono) {
   for (const ch of s || "") w += /[ᄀ-퟿　-ヿ]/.test(ch) ? size : size * latin;
   return w;
 }
+/* 레인 — 행위 주체를 교차축에 고정해 왕복을 드러낸다 (UML 시퀀스 다이어그램).
+   meta.lanes 가 없으면 laneIndex 는 항상 -1 이고 배치는 종전과 완전히 같다. */
+const LANE_PAD = 26;
+function lanes() { return (FLOW.meta && FLOW.meta.lanes) || []; }
+function laneIndexOf(n) {
+  const ls = lanes();
+  if (!ls.length || !n || !n.lane) return -1;
+  return ls.findIndex(l => l.id === n.lane);
+}
+
 /* 완전한 문장과 패킷 계층이 들어가므로 노드 폭을 정해두고 줄바꿈한다 */
 const NODE_W = 268, INFO_FONT = 10, INFO_LH = 13;
 const LAYER_LH = 12, LAYER_NAME_W = 62;
@@ -1215,6 +1250,26 @@ function layoutContainer(containerId) {
   const rankKeys = Object.keys(byRank).map(Number).sort((a, b) => a - b);
 
   const children = {};
+  // 레인이 선언돼 있으면 교차축 좌표를 형제 순서가 아니라 레인이 정한다.
+  // 레인마다 폭(교차축 크기)을 미리 재서 띠 위치를 고정해야 노드가 같은 줄에 놓인다.
+  const laneList = lanes();
+  const laneSpan = [], laneAt = [];
+  if (laneList.length) {
+    for (let i = 0; i < laneList.length; i++) laneSpan[i] = 0;
+    for (const id of kidIds) {
+      const li = laneIndexOf(nodesById[id]);
+      if (li < 0) continue;
+      const sz = sizes[id];
+      laneSpan[li] = Math.max(laneSpan[li], isTB ? sz.w : sz.h);
+    }
+    let at = 0;
+    for (let i = 0; i < laneList.length; i++) {
+      if (!laneSpan[i]) laneSpan[i] = 60; // 빈 레인도 자리를 지킨다
+      laneAt[i] = at;
+      at += laneSpan[i] + LANE_PAD;
+    }
+  }
+
   let main = 0, crossMax = 0;
   for (const r of rankKeys) {
     const ids = byRank[r];
@@ -1222,24 +1277,37 @@ function layoutContainer(containerId) {
     for (const id of ids) {
       const sz = sizes[id];
       const mw = isTB ? sz.h : sz.w, cw = isTB ? sz.w : sz.h;
-      children[id] = { main, cross, w: sz.w, h: sz.h };
-      cross += cw + GAP_NODE;
+      const li = laneIndexOf(nodesById[id]);
+      if (li >= 0) {
+        // 레인 안에서 가운데 정렬
+        children[id] = { main, cross: laneAt[li] + (laneSpan[li] - cw) / 2, w: sz.w, h: sz.h, _lane: li };
+      } else {
+        children[id] = { main, cross, w: sz.w, h: sz.h };
+        cross += cw + GAP_NODE;
+      }
       mainSize = Math.max(mainSize, mw);
     }
     cross -= GAP_NODE;
-    for (const id of ids) children[id]._rankCross = cross;
+    for (const id of ids) {
+      // 레인 배치는 이미 절대 좌표라 rank 중앙 정렬에서 제외한다
+      children[id]._rankCross = children[id]._lane === undefined ? cross : null;
+    }
     crossMax = Math.max(crossMax, cross);
     main += mainSize + (isTB ? GAP_RANK_TB : GAP_RANK);
   }
   main -= (isTB ? GAP_RANK_TB : GAP_RANK);
+  if (laneList.length) {
+    crossMax = Math.max(crossMax, laneAt[laneList.length - 1] + laneSpan[laneList.length - 1]);
+  }
 
   const titleH = containerId ? GROUP_TITLE_H : 0;
   for (const id of Object.keys(children)) {
     const c = children[id];
-    const centered = c.cross + (crossMax - c._rankCross) / 2;
+    // 레인 배치 노드는 이미 절대 교차좌표를 가지므로 rank 중앙 정렬을 적용하지 않는다
+    const centered = c._rankCross === null ? c.cross : c.cross + (crossMax - c._rankCross) / 2;
     const x = isTB ? centered : c.main;
     const y = isTB ? c.main : centered;
-    children[id] = { x: x + PAD, y: y + PAD + titleH, w: c.w, h: c.h, inner: inner[id] };
+    children[id] = { x: x + PAD, y: y + PAD + titleH, w: c.w, h: c.h, inner: inner[id], _lane: c._lane };
   }
   const w = (isTB ? crossMax : main) + PAD * 2;
   const h = (isTB ? main : crossMax) + PAD * 2 + titleH;
@@ -1336,21 +1404,71 @@ function circShape(cx, cy, r, color) { return el("circle", { cx, cy, r, fill: co
 function diamShape(cx, cy, r, color) { return el("path", { d: `M ${cx} ${cy - r} L ${cx + r} ${cy} L ${cx} ${cy + r} L ${cx - r} ${cy} Z`, fill: color, class: "port" }); }
 const SHAPE_FN = { packet: rectShape, signal: triShape, data: circShape, error: diamShape };
 
-let gEdges, gNodes, gEdgeHits, gParticles;
+let gLanes, gEdges, gNodes, gEdgeHits, gParticles;
+
+/* 엣지 끝 화살표 — kind 색을 따르도록 종류마다 하나씩 정의한다.
+   방향을 입자 흐름으로만 짐작하게 두면 레인을 오가는 왕복에서 특히 헷갈린다. */
+function renderDefs(parent) {
+  const defs = el("defs", {}, parent);
+  for (const [kind, color] of Object.entries(KIND_COLOR_RAW)) {
+    const m = el("marker", {
+      id: `arrow-${kind}`, viewBox: "0 0 10 10",
+      refX: 9, refY: 5, markerWidth: 6, markerHeight: 6,
+      orient: "auto-start-reverse", markerUnits: "strokeWidth",
+    }, defs);
+    el("path", { d: "M 0 1 L 10 5 L 0 9 z", fill: color }, m);
+  }
+}
 
 function render() {
   svg.innerHTML = "";
   const gRoot = el("g", { id: "g-root" }, svg);
+  renderDefs(gRoot);
+  gLanes = el("g", {}, gRoot);      // 레인 띠는 가장 뒤 — 그룹·노드에 가리지 않게
   gEdges = el("g", {}, gRoot);
   gNodes = el("g", {}, gRoot);
   gEdgeHits = el("g", {}, gRoot);   // 히트 영역은 노드/그룹 위 — 그룹 박스가 엣지 클릭을 가로채지 않게
   gParticles = el("g", {}, gRoot);
 
+  renderLanes();
   renderContainers(null);
   renderEdges();
   renderAmbientInit();
   applyViewBox();
   markPanelTarget();
+}
+
+/* 레인 띠와 라벨 — 배치된 노드들의 실제 좌표에서 각 레인의 범위를 역산한다 */
+function renderLanes() {
+  const ls = lanes();
+  if (!ls.length) return;
+  const isTB = (FLOW.meta.direction || "LR") === "TB";
+
+  const ext = ls.map(() => null);
+  for (const n of FLOW.nodes) {
+    const li = laneIndexOf(n);
+    const r = layout[n.id];
+    if (li < 0 || !r) continue;
+    const lo = isTB ? r.x : r.y, hi = isTB ? r.x + r.w : r.y + r.h;
+    const e = ext[li];
+    ext[li] = e ? { lo: Math.min(e.lo, lo), hi: Math.max(e.hi, hi) } : { lo, hi };
+  }
+
+  ls.forEach((lane, i) => {
+    const e = ext[i];
+    if (!e) return;
+    const pad = LANE_PAD / 2;
+    const box = isTB
+      ? { x: e.lo - pad, y: contentBox.y, width: (e.hi - e.lo) + pad * 2, height: contentBox.h }
+      : { x: contentBox.x, y: e.lo - pad, width: contentBox.w, height: (e.hi - e.lo) + pad * 2 };
+    el("rect", { ...box, class: `lane-band lane-${i % 2 ? "odd" : "even"}` }, gLanes);
+    const t = el("text", {
+      x: isTB ? box.x + 8 : contentBox.x + 10,
+      y: isTB ? contentBox.y + 14 : box.y + 14,
+      class: "lane-label",
+    }, gLanes);
+    t.textContent = lane.label || lane.id;
+  });
 }
 
 function renderContainers(containerId) {
@@ -1479,7 +1597,10 @@ function renderEdges() {
       ? `M ${a.x} ${a.y} C ${a.x + off} ${a.y}, ${b.x - off} ${b.y}, ${b.x} ${b.y}`
       : `M ${a.x} ${a.y} C ${a.x} ${a.y + off}, ${b.x} ${b.y - off}, ${b.x} ${b.y}`;
     const color = KIND_COLOR_RAW[e.kind];
-    const path = el("path", { d, class: "edge-path", stroke: color, "data-edge": e.id }, gEdges);
+    const path = el("path", {
+      d, class: "edge-path", stroke: color, "data-edge": e.id,
+      "marker-end": `url(#arrow-${e.kind})`,
+    }, gEdges);
     const len = path.getTotalLength();
     // 넓은 투명 히트 영역 — 엣지 클릭용 (노드 위 레이어)
     const hit = el("path", { d, class: "edge-hit", "data-edge": e.id }, gEdgeHits);
@@ -1585,6 +1706,26 @@ function bindJumps() {
     });
   });
 }
+/* 접힘 섹션 — 첫 화면을 짧게 유지하되 정보는 버리지 않는다 (ArgoCD·n8n 방식).
+   어떤 섹션을 열어뒀는지는 세션 동안 기억해, 같은 섹션을 매번 다시 열지 않게 한다. */
+const openSections = new Set();
+function section(key, title, count, body) {
+  if (!body) return "";
+  const isOpen = openSections.has(key);
+  const hint = count ? ` <span class="sec-count">${count}</span>` : "";
+  return `<details class="sec" data-sec="${esc(key)}"${isOpen ? " open" : ""}>
+    <summary class="sec-head">${esc(title)}${hint}</summary>
+    <div class="sec-body">${body}</div></details>`;
+}
+function bindSections() {
+  document.querySelectorAll("#panel-body details.sec").forEach(d => {
+    d.addEventListener("toggle", () => {
+      const k = d.getAttribute("data-sec");
+      d.open ? openSections.add(k) : openSections.delete(k);
+    });
+  });
+}
+
 function openNodePanel(nodeId) {
   const n = nodesById[nodeId]; if (!n) return;
   panelNodeId = nodeId; panelEdgeId = null;
@@ -1592,56 +1733,60 @@ function openNodePanel(nodeId) {
   $("panel-title").textContent = `${ic ? ic + " " : ""}${n.label}`;
   let html = `<div class="meta-line">${esc(n.type)}${n.role ? " · " + esc(n.role) : ""}${n.sublabel ? " · " + esc(n.sublabel) : ""}</div>`;
 
-  // 개요
-  if (n.detail) html += `<p class="detail-text">${esc(n.detail)}</p>`;
+  // 첫 화면 — 이 노드가 무엇을 하는가 한 줄 (노드 창의 info 와 같은 문장)
+  if ((n.info || []).length) {
+    html += `<p class="panel-lead">${esc(n.info.join(" "))}</p>`;
+  }
   if (n.type === "group") {
     html += `<div class="meta-line">내부 노드 ${countDescendants(n.id)}개 · ${collapsed.has(n.id) ? "접힘 (제목 클릭으로 펼침)" : "펼침"}</div>`;
+  }
+  // 왜 그런가 — 배경 설명은 접어둔다
+  if (n.detail) {
+    html += section(`${nodeId}:detail`, "왜 그런가", 0, `<p class="detail-text">${esc(n.detail)}</p>`);
   }
   // 여기서 일어나는 일
   const steps = nodeSteps(nodeId);
   if (steps.length) {
-    html += `<div class="sec-head">여기서 일어나는 일</div>`;
-    for (const s of steps) {
-      html += `<div class="step-block">${esc(s.narration)}</div>`;
-    }
+    html += section(`${nodeId}:steps`, "여기서 일어나는 일", steps.length,
+      steps.map(s => `<div class="step-block">${esc(s.narration)}</div>`).join(""));
   }
   // 패킷 변형 — 들어올 때/나갈 때를 나란히 놓고 바뀐 줄만 강조 (n8n 의 IN/OUT 대조 차용)
   const allChanges = steps.flatMap(s => resolvedChanges[s._idx] || []);
   const snap = nodeSnapshot.get(nodeId);
   if (allChanges.length && snap?.before) {
-    html += `<div class="sec-head">패킷 변형</div>`;
-    html += renderIoCompare(snap);
+    html += section(`${nodeId}:io`, "패킷 변형", allChanges.length, renderIoCompare(snap));
   }
   if (allChanges.length) {
-    html += `<div class="sec-head">무엇이 바뀌었나</div>`;
+    let changeBody = "";
     for (const c of allChanges) {
       if (c.kind === "set") {
-        html += `<div class="mech-rewrite">${esc(c.layerName)}.${esc(c.field)}: <span class="from">${esc(c.from)}</span> <span class="arrow">→</span> <span class="to">${esc(c.to)}</span></div>`;
+        changeBody += `<div class="mech-rewrite">${esc(c.layerName)}.${esc(c.field)}: <span class="from">${esc(c.from)}</span> <span class="arrow">→</span> <span class="to">${esc(c.to)}</span></div>`;
       } else if (c.kind === "pop") {
-        html += `<div class="mech-rewrite"><span class="from">[${esc(c.layerName)}]</span> 계층 벗겨짐</div>`;
+        changeBody += `<div class="mech-rewrite"><span class="from">[${esc(c.layerName)}]</span> 계층 벗겨짐</div>`;
       } else if (c.kind === "push") {
-        html += `<div class="mech-rewrite"><span class="to">[${esc(c.layerName)}]</span> 계층 씌워짐</div>`;
+        changeBody += `<div class="mech-rewrite"><span class="to">[${esc(c.layerName)}]</span> 계층 씌워짐</div>`;
       } else if (c.kind === "lock") {
-        html += `<div class="mech-rewrite">🔒 [${esc(c.layerName)}] 암호화${c.note ? " — " + esc(c.note) : ""}</div>`;
+        changeBody += `<div class="mech-rewrite">🔒 [${esc(c.layerName)}] 암호화${c.note ? " — " + esc(c.note) : ""}</div>`;
       } else if (c.kind === "unlock") {
-        html += `<div class="mech-rewrite">🔓 [${esc(c.layerName)}] 복호화</div>`;
+        changeBody += `<div class="mech-rewrite">🔓 [${esc(c.layerName)}] 복호화</div>`;
       }
     }
+    html += section(`${nodeId}:changes`, "무엇이 바뀌었나", allChanges.length, changeBody);
   }
   // 내부 동작
   if ((n.mechanisms || []).length) {
-    html += `<div class="sec-head">내부 동작</div>`;
     const sel = new Set(steps.flatMap(s => s.mechanismEvent?.select || []));
-    for (const m of n.mechanisms) html += renderMechanism(m, sel);
+    html += section(`${nodeId}:mech`, "내부 동작", n.mechanisms.length,
+      n.mechanisms.map(m => renderMechanism(m, sel)).join(""));
   }
   // 연결
   const ins = FLOW.edges.filter(e => e.target === nodeId);
   const outs = FLOW.edges.filter(e => e.source === nodeId);
   if (ins.length || outs.length) {
-    html += `<div class="sec-head">연결</div>`;
+    let connBody = "";
     for (const e of ins) {
       const from = nodesById[e.source];
-      html += `<div class="conn-row">⬅ ${jumpButton(e.source, (iconOf(from) ? iconOf(from) + " " : "") + from.label)}
+      connBody += `<div class="conn-row">⬅ ${jumpButton(e.source, (iconOf(from) ? iconOf(from) + " " : "") + from.label)}
         <span class="conn-kind" style="color:${KIND_COLOR_RAW[e.kind]}">${esc(e.kind)}</span>
         ${e.label ? `<span class="conn-label">${esc(e.label)}</span>` : ""}
         ${e.ratio ? `<span class="conn-ratio">비율 ${esc(e.ratio)}</span>` : ""}
@@ -1649,18 +1794,20 @@ function openNodePanel(nodeId) {
     }
     for (const e of outs) {
       const to = nodesById[e.target];
-      html += `<div class="conn-row">➡ ${jumpButton(e.target, (iconOf(to) ? iconOf(to) + " " : "") + to.label)}
+      connBody += `<div class="conn-row">➡ ${jumpButton(e.target, (iconOf(to) ? iconOf(to) + " " : "") + to.label)}
         <span class="conn-kind" style="color:${KIND_COLOR_RAW[e.kind]}">${esc(e.kind)}</span>
         ${e.label ? `<span class="conn-label">${esc(e.label)}</span>` : ""}
         ${e.ratio ? `<span class="conn-ratio">비율 ${esc(e.ratio)}</span>` : ""}
         ${jumpButton(e.id, "엣지")}</div>`;
     }
+    html += section(`${nodeId}:conn`, "연결", ins.length + outs.length, connBody);
   }
   if (!n.detail && !steps.length && !(n.mechanisms || []).length && !ins.length && !outs.length) {
     html += `<div class="meta-line">상세 정보 없음</div>`;
   }
   $("panel-body").innerHTML = html;
   bindJumps();
+  bindSections();
   $("detail-panel").classList.add("open");
   markPanelTarget();
 }
@@ -1672,7 +1819,6 @@ function openEdgePanel(edgeId) {
   let html = `<div class="meta-line">엣지 · <span style="color:${KIND_COLOR_RAW[e.kind]}">${esc(e.kind)}</span>${e.ratio ? " · 비율 " + esc(e.ratio) : ""}</div>`;
   if (e.label) html += `<p class="detail-text">${esc(e.label)}</p>`;
   if (e.decoration) html += `<div class="meta-line">${esc(DECO_LABEL[e.decoration] || e.decoration)}</div>`;
-  html += `<div class="sec-head">양끝</div>`;
   html += `<div class="conn-row">출발 ${jumpButton(e.source, (iconOf(from) ? iconOf(from) + " " : "") + from.label)}</div>`;
   html += `<div class="conn-row">도착 ${jumpButton(e.target, (iconOf(to) ? iconOf(to) + " " : "") + to.label)}</div>`;
   // 이 엣지를 타는 스텝
@@ -1682,14 +1828,13 @@ function openEdgePanel(edgeId) {
       return edge && edge.id === edgeId;
     });
     if (rides.length) {
-      html += `<div class="sec-head">이 구간을 지나는 흐름</div>`;
-      for (const { s } of rides) {
-        html += `<div class="step-block">${esc(s.narration)}</div>`;
-      }
+      html += section(`${edgeId}:rides`, "이 구간을 지나는 흐름", rides.length,
+        rides.map(({ s }) => `<div class="step-block">${esc(s.narration)}</div>`).join(""));
     }
   }
   $("panel-body").innerHTML = html;
   bindJumps();
+  bindSections();
   $("detail-panel").classList.add("open");
   markPanelTarget();
 }

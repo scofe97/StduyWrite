@@ -59,6 +59,7 @@
 | `parentId` | string \| null | | 부모 그룹의 id. 없거나 null이면 최상위 |
 | `type` | string | ✅ | `"group"`이면 컨테이너, 그 외는 **자유 문자열**입니다. 렌더링에 관여하지 않는 의미 라벨이며, 도메인별 권장 어휘는 [`vocabulary.json`](vocabulary.json)의 `domains`에 있습니다. 메커니즘 이름(예약어)은 쓸 수 없습니다 — 자세한 이유는 [VOCABULARY.md](../VOCABULARY.md) |
 | `role` | 닫힌 enum | | DFD·플로차트식 역할. **정본은 [`vocabulary.json`](vocabulary.json)의 `roles`** 입니다. 시각 변형은 아래 §역할별 시각 |
+| `lane` | string | | 이 노드가 **누구의 행위인가**. `meta.lanes`에 선언한 id 를 씁니다. 왕복이 있는 흐름(§레인)에서만 쓰고, 없으면 생략합니다 |
 | `label` | string | ✅ | 표시 이름 |
 | `sublabel` | string | | 창 내부에 표시하는 보조 설명 한 줄 |
 | `collapsed` | boolean | | `type: "group"` 전용. true면 접힌 상태로 시작 |
@@ -104,6 +105,24 @@
 | `queue` | 버퍼링 | (state.queue 재사용) | 큐 게이지 | 소켓 큐, qdisc |
 
 전용 렌더 구현은 v0.2 기준 5종(`table-lookup`·`weighted-select`·`rewrite`·`crypt`·`k8s-resolve`)이고, 나머지는 키-값 일반 렌더로 표시된다. 한 노드에 여러 메커니즘을 배열로 나열할 수 있다 (예: KUBE-SERVICES = k8s-resolve + weighted-select + rewrite).
+
+### 레인 — 왕복과 행위 주체
+
+한 방향으로만 흐르지 않는 흐름이 있습니다. TLS 핸드셰이크는 두 당사자가 메시지를 주고받고, `write()` 시스템 콜은 커널로 내려갔다가 **성공을 먼저 돌려주고** 디스크 기록은 뒤늦게 이어집니다. 이런 흐름을 한 줄로 그리면 "여러 단계를 순서대로 거친다"로 잘못 읽히고, 무엇보다 **누가 하는 일인지가 사라집니다**.
+
+`meta.lanes`로 행위 주체를 선언하고 노드마다 `lane`을 달면 교차축이 주체별로 고정됩니다. UML 시퀀스 다이어그램과 같은 읽기 방식입니다.
+
+```json
+"meta": {
+  "direction": "LR",
+  "lanes": [ { "id": "client", "label": "CLIENT" }, { "id": "server", "label": "SERVER" } ]
+},
+"nodes": [ { "id": "server-hello", "lane": "server", ... } ]
+```
+
+- 흐름축(`rank`)은 그대로 **시간**을 나타내고, 교차축이 **주체**가 됩니다
+- 레인을 가로지르는 엣지가 곧 왕복입니다. 화살표로 방향이 드러납니다
+- `meta.lanes`가 없으면 배치는 종전과 완전히 같습니다. 한 방향 흐름(K8s 패킷 등)에는 쓰지 않습니다
 
 ### 연결 제약
 
