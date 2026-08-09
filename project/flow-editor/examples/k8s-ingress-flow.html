@@ -1243,12 +1243,13 @@ function bindJumps() {
     });
   });
 }
-/* 접힘 섹션 — 첫 화면을 짧게 유지하되 정보는 버리지 않는다 (ArgoCD·n8n 방식).
-   어떤 섹션을 열어뒀는지는 세션 동안 기억해, 같은 섹션을 매번 다시 열지 않게 한다. */
-const openSections = new Set();
+/* 섹션 — 기본은 모두 펼친 상태다. 이 도구의 목적이 이해시키는 것이라, 읽을 내용을
+   한 번 더 클릭해야 보이게 두면 그냥 안 읽는다. 접기는 긴 섹션을 치워두고 싶을 때의 선택지로 남긴다.
+   그래서 기억하는 것도 반대다 — 사용자가 *접은* 섹션만 기억해, 노드를 옮겨 다녀도 그 선택이 유지된다. */
+const closedSections = new Set();
 function section(key, title, count, body) {
   if (!body) return "";
-  const isOpen = openSections.has(key);
+  const isOpen = !closedSections.has(key);
   const hint = count ? ` <span class="sec-count">${count}</span>` : "";
   return `<details class="sec" data-sec="${esc(key)}"${isOpen ? " open" : ""}>
     <summary class="sec-head">${esc(title)}${hint}</summary>
@@ -1258,7 +1259,7 @@ function bindSections() {
   document.querySelectorAll("#panel-body details.sec").forEach(d => {
     d.addEventListener("toggle", () => {
       const k = d.getAttribute("data-sec");
-      d.open ? openSections.add(k) : openSections.delete(k);
+      d.open ? closedSections.delete(k) : closedSections.add(k);
     });
   });
 }
