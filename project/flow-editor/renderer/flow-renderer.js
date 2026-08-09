@@ -29,6 +29,9 @@ const DECO_LABEL = {
 };
 const NS = "http://www.w3.org/2000/svg";
 const TITLE_H = 24, GROUP_TITLE_H = 22, PAD = 18, GAP_RANK = 90, GAP_NODE = 26;
+/* 세로 흐름은 노드 자체가 이미 높아 단계 간 간격이 덜 필요하다.
+   LR 과 같은 90 을 쓰면 높이가 급격히 누적돼 화면 밖으로 나간다 */
+const GAP_RANK_TB = 44;
 const PORT_R = 4.5;
 const AMBIENT_SPEED = 46;    // px/s
 
@@ -105,6 +108,8 @@ function precomputeTrace() {
   const steps = FLOW.trace.steps;
   const sim = (FLOW.trace.entity.layers || []).map(l => ({ id: l.id, name: l.name, fields: { ...(l.fields || {}) }, locked: !!l.locked }));
   steps.forEach((s) => {
+    // 이 스텝을 적용하기 *전*의 상태 — 패널의 IN/OUT 비교에서 왼쪽 열이 된다
+    const before = sim.map(l => ({ id: l.id, name: l.name, fields: { ...l.fields }, locked: l.locked }));
     const changes = [];
     for (const op of s.layerOps || []) {
       if (op.op === "set") {
@@ -128,6 +133,7 @@ function precomputeTrace() {
     const changedFields = new Set(changes.filter(c => c.kind === "set").map(c => `${c.layer}.${c.field}`));
     const changedLayers = new Set(changes.filter(c => c.kind !== "set").map(c => c.layer));
     nodeSnapshot.set(s.at, {
+      before,
       layers: sim.map(l => ({ id: l.id, name: l.name, fields: { ...l.fields }, locked: l.locked })),
       changedFields, changedLayers,
       dropped: changes.filter(c => c.kind === "pop").map(c => c.layerName),
@@ -199,7 +205,7 @@ function nodeBody(n) {
   if (snap) {
     for (const l of snap.layers) {
       const fieldText = l.locked
-        ? "암호화되어 볼 수 없음"
+        ? "🔒 암호화되어 볼 수 없음"
         : Object.entries(l.fields).map(([k, v]) => `${k}=${v}`).join("  ");
       // 계층 이름 칸(LAYER_NAME_W)만큼 밀려 시작하므로 그만큼 빼고 줄바꿈한다 (모노스페이스 기준)
       const wrapped = wrapText(fieldText, 9, inner - LAYER_NAME_W, true);
@@ -294,9 +300,9 @@ function layoutContainer(containerId) {
     cross -= GAP_NODE;
     for (const id of ids) children[id]._rankCross = cross;
     crossMax = Math.max(crossMax, cross);
-    main += mainSize + GAP_RANK;
+    main += mainSize + (isTB ? GAP_RANK_TB : GAP_RANK);
   }
-  main -= GAP_RANK;
+  main -= (isTB ? GAP_RANK_TB : GAP_RANK);
 
   const titleH = containerId ? GROUP_TITLE_H : 0;
   for (const id of Object.keys(children)) {
@@ -670,10 +676,15 @@ function openNodePanel(nodeId) {
       html += `<div class="step-block">${esc(s.narration)}</div>`;
     }
   }
-  // 패킷 변형
+  // 패킷 변형 — 들어올 때/나갈 때를 나란히 놓고 바뀐 줄만 강조 (n8n 의 IN/OUT 대조 차용)
   const allChanges = steps.flatMap(s => resolvedChanges[s._idx] || []);
-  if (allChanges.length) {
+  const snap = nodeSnapshot.get(nodeId);
+  if (allChanges.length && snap?.before) {
     html += `<div class="sec-head">패킷 변형</div>`;
+    html += renderIoCompare(snap);
+  }
+  if (allChanges.length) {
+    html += `<div class="sec-head">무엇이 바뀌었나</div>`;
     for (const c of allChanges) {
       if (c.kind === "set") {
         html += `<div class="mech-rewrite">${esc(c.layerName)}.${esc(c.field)}: <span class="from">${esc(c.from)}</span> <span class="arrow">→</span> <span class="to">${esc(c.to)}</span></div>`;
@@ -753,6 +764,32 @@ function openEdgePanel(edgeId) {
   $("detail-panel").classList.add("open");
   markPanelTarget();
 }
+/* 들어올 때 / 나갈 때 패킷 상태를 2열로 대조한다.
+   바뀐 것만 보여주면 "안 바뀐 건 뭐였지"를 알 수 없어 비교가 성립하지 않으므로,
+   양쪽 전체를 놓고 달라진 줄에만 표시를 준다. */
+function renderIoCompare(snap) {
+  const fieldsOf = (l) => l.locked
+    ? "🔒 암호화되어 볼 수 없음"
+    : Object.entries(l.fields).map(([k, v]) => `${k}=${v}`).join("  ");
+
+  const col = (layers, side) => {
+    const other = side === "in" ? snap.layers : snap.before;
+    const rows = layers.map(l => {
+      const twin = other.find(o => o.id === l.id);
+      // 짝이 없으면 이 노드에서 씌워졌거나(out 쪽) 벗겨진(in 쪽) 계층이다
+      const soloCls = twin ? "" : (side === "in" ? " gone" : " added");
+      const changed = twin && (fieldsOf(twin) !== fieldsOf(l));
+      return `<div class="io-row${soloCls}${changed ? " chg" : ""}">
+        <span class="io-layer">${esc(l.name)}</span>
+        <span class="io-fields">${esc(fieldsOf(l))}</span></div>`;
+    }).join("");
+    return `<div class="io-col">
+      <div class="io-col-head">${side === "in" ? "들어올 때" : "나갈 때"}</div>${rows}</div>`;
+  };
+
+  return `<div class="io-compare">${col(snap.before, "in")}${col(snap.layers, "out")}</div>`;
+}
+
 function renderMechanism(m, sel) {
   const title = esc(m.title || MECH_LABEL[m.type] || m.type);
   let body = "";
