@@ -200,10 +200,17 @@ func validate(data map[string]any) {
 			}
 		}
 		if iv, ok := n["info"]; ok {
-			for _, line := range arr(iv) {
+			lines := arr(iv)
+			for _, line := range lines {
 				if _, isStr := line.(string); !isStr {
 					fail("노드 %s info 는 문자열 배열", nid)
 				}
+			}
+			// 노드 창은 한 줄만 — 부연은 detail 로 보낸다.
+			// 창에 문장이 쌓이면 캔버스가 무거워지고 패널과 같은 말을 두 번 하게 된다.
+			if len(lines) > 1 {
+				fail("노드 %s: info 는 한 줄까지입니다 (현재 %d줄)\n"+
+					"  노드 창은 '무엇을 하는가' 한 문장만 싣고, 왜·부연은 detail 로 옮기세요.", nid, len(lines))
 			}
 		}
 		// 폐기된 필드를 조용히 무시하지 않고 알린다 (패킷 상태는 layerOps 로 자동 계산됨)
