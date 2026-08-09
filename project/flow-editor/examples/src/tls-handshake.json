@@ -1,180 +1,567 @@
 {
   "meta": {
-    "title": "TLS 1.3 핸드셰이크",
-    "subtitle": "두 당사자가 메시지를 주고받으며 열쇠를 나눠 갖기까지",
+    "title": "TCP + TLS 1.3 핸드셰이크",
+    "subtitle": "연결을 먼저 맺고(TCP 1왕복), 그 위에서 열쇠를 나눠 갖기까지(TLS 1왕복)",
     "mode": "trace",
     "direction": "LR",
     "lanes": [
-      { "id": "client", "label": "CLIENT" },
-      { "id": "server", "label": "SERVER" }
+      {
+        "id": "client",
+        "label": "CLIENT"
+      },
+      {
+        "id": "server",
+        "label": "SERVER"
+      }
     ]
   },
   "nodes": [
     {
-      "id": "client-hello", "lane": "client", "type": "tls-message", "role": "process", "icon": "⊳",
-      "label": "ClientHello", "sublabel": "클라이언트 → 서버",
+      "id": "tcp-syn",
+      "lane": "client",
+      "type": "tcp-segment",
+      "role": "process",
+      "icon": "⊳",
+      "label": "SYN",
+      "sublabel": "클라이언트 → 서버",
+      "info": [
+        "연결을 열자고 먼저 신호를 보냅니다."
+      ],
+      "detail": "TCP는 데이터를 보내기 전에 양쪽이 서로 준비됐음을 확인합니다. SYN 은 자기 시작 순서번호(seq)를 알리며 대화를 시작하자는 뜻입니다. 이 시점에는 아직 TLS 도, 암호도 없습니다.",
+      "ports": {
+        "out": [
+          {
+            "id": "o0",
+            "kind": "signal"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tcp-synack",
+      "lane": "server",
+      "type": "tcp-segment",
+      "role": "process",
+      "icon": "⊲",
+      "label": "SYN-ACK",
+      "sublabel": "서버 → 클라이언트",
+      "info": [
+        "받았다는 확인과 자기 순서번호를 함께 돌려보냅니다."
+      ],
+      "detail": "서버가 두 가지를 한 번에 합니다. 클라이언트의 SYN 을 받았다는 확인(ACK)과, 자기 쪽 시작 순서번호를 알리는 SYN 입니다. 두 방향의 준비를 한 번의 왕복으로 끝내려는 설계입니다.",
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "signal"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "signal"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tcp-ack",
+      "lane": "client",
+      "type": "tcp-segment",
+      "role": "process",
+      "icon": "⊳",
+      "label": "ACK",
+      "sublabel": "클라이언트 → 서버",
+      "info": [
+        "서버의 순서번호도 받았다고 확인하면 연결이 섭니다."
+      ],
+      "detail": "세 번째 메시지로 양방향 확인이 끝나고 연결이 ESTABLISHED 상태가 됩니다. 여기까지가 TCP 3-way handshake 이고, 왕복 1회를 썼습니다. TLS 1.3 을 1-RTT 라 부르는 것은 이 TCP 왕복을 뺀 수치라서, 실제로 브라우저가 첫 바이트를 받기까지는 2왕복이 걸립니다.",
+      "ports": {
+        "in": [
+          {
+            "id": "i0",
+            "kind": "signal"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "signal"
+          }
+        ]
+      }
+    },
+    {
+      "id": "client-hello",
+      "lane": "client",
+      "type": "tls-message",
+      "role": "process",
+      "icon": "⊳",
+      "label": "ClientHello",
+      "sublabel": "클라이언트 → 서버",
       "info": [
         "쓸 수 있는 암호 방식 목록과 자기 키 재료를 함께 보냅니다."
       ],
       "detail": "TLS 1.2까지는 암호 방식을 먼저 합의한 뒤에야 키 재료를 보냈기 때문에 왕복이 한 번 더 필요했습니다. TLS 1.3은 \"어차피 쓸 만한 방식은 몇 개뿐이니 재료를 미리 보내자\"는 판단으로 왕복을 1회로 줄였습니다. 이것이 TLS 1.3이 빨라진 가장 큰 이유입니다.",
       "mechanisms": [
         {
-          "type": "table-lookup", "title": "제안하는 암호 방식 목록",
-          "columns": ["cipher suite", "설명"],
+          "type": "table-lookup",
+          "title": "제안하는 암호 방식 목록",
+          "columns": [
+            "cipher suite",
+            "설명"
+          ],
           "rows": [
-            { "id": "cs-aes", "cells": ["TLS_AES_128_GCM_SHA256", "가장 널리 쓰이는 기본값"], "note": "AES 128비트로 암호화하고 GCM 방식으로 위변조까지 함께 검사합니다." },
-            { "id": "cs-chacha", "cells": ["TLS_CHACHA20_POLY1305_SHA256", "AES 가속기가 없는 기기에서 유리"], "note": "모바일처럼 하드웨어 가속이 약한 환경에서 더 빠릅니다." }
+            {
+              "id": "cs-aes",
+              "cells": [
+                "TLS_AES_128_GCM_SHA256",
+                "가장 널리 쓰이는 기본값"
+              ],
+              "note": "AES 128비트로 암호화하고 GCM 방식으로 위변조까지 함께 검사합니다."
+            },
+            {
+              "id": "cs-chacha",
+              "cells": [
+                "TLS_CHACHA20_POLY1305_SHA256",
+                "AES 가속기가 없는 기기에서 유리"
+              ],
+              "note": "모바일처럼 하드웨어 가속이 약한 환경에서 더 빠릅니다."
+            }
           ]
         }
       ],
       "ports": {
-        "in": [{ "id": "i0", "kind": "signal" }],
-        "out": [{ "id": "o0", "kind": "signal" }]
+        "in": [
+          {
+            "id": "i0",
+            "kind": "signal"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "signal"
+          }
+        ]
       }
     },
     {
-      "id": "server-hello", "lane": "server", "type": "tls-message", "role": "decision", "icon": "⊲",
-      "label": "ServerHello", "sublabel": "서버 → 클라이언트",
+      "id": "server-hello",
+      "lane": "server",
+      "type": "tls-message",
+      "role": "decision",
+      "icon": "⊲",
+      "label": "ServerHello",
+      "sublabel": "서버 → 클라이언트",
       "info": [
         "제안받은 목록에서 하나를 고르고, 자기 키 재료를 돌려보냅니다."
       ],
       "detail": "서버가 고른 결과와 자기 키 재료가 클라이언트에게 돌아갑니다. 여기까지 오간 메시지는 전부 평문이지만 안전합니다. 도청자는 양쪽 공개 재료를 모두 볼 수 있어도, 각자가 감춘 비밀값을 모르면 같은 열쇠를 계산할 수 없기 때문입니다.",
       "mechanisms": [
         {
-          "type": "weighted-select", "title": "암호 방식 선택",
+          "type": "weighted-select",
+          "title": "암호 방식 선택",
           "candidates": [
-            { "id": "cs-aes", "label": "TLS_AES_128_GCM_SHA256", "weight": 1 },
-            { "id": "cs-chacha", "label": "TLS_CHACHA20_POLY1305_SHA256", "weight": 0 }
+            {
+              "id": "cs-aes",
+              "label": "TLS_AES_128_GCM_SHA256",
+              "weight": 1
+            },
+            {
+              "id": "cs-chacha",
+              "label": "TLS_CHACHA20_POLY1305_SHA256",
+              "weight": 0
+            }
           ]
         }
       ],
       "ports": {
-        "in": [{ "id": "i0", "kind": "signal" }],
-        "out": [{ "id": "o0", "kind": "signal" }]
+        "in": [
+          {
+            "id": "i0",
+            "kind": "signal"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "signal"
+          }
+        ]
       }
     },
     {
-      "id": "server-cert", "lane": "server", "type": "tls-message", "role": "process", "icon": "⊙",
-      "label": "인증서 전송", "sublabel": "서버 → 클라이언트",
+      "id": "server-cert",
+      "lane": "server",
+      "type": "tls-message",
+      "role": "process",
+      "icon": "⊙",
+      "label": "인증서 전송",
+      "sublabel": "서버 → 클라이언트",
       "info": [
         "자기 인증서와 개인키로 만든 서명을 함께 보냅니다."
       ],
       "detail": "서버가 자기 신원을 증명하는 단계입니다. 인증서만 보내면 누구나 복사해 쓸 수 있으므로, 개인키로만 만들 수 있는 서명을 함께 보냅니다. TLS 1.3에서는 이 메시지부터 이미 암호화되어 나가기 때문에 어떤 사이트에 접속하는지도 도청자에게 감춰집니다.",
       "ports": {
-        "in": [{ "id": "i0", "kind": "signal" }],
-        "out": [{ "id": "o0", "kind": "signal" }]
+        "in": [
+          {
+            "id": "i0",
+            "kind": "signal"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "signal"
+          }
+        ]
       }
     },
     {
-      "id": "key-calc", "lane": "client", "type": "key-derivation", "role": "process", "icon": "⚿",
-      "label": "공유 비밀 계산", "sublabel": "양쪽이 각자, 같은 값을",
+      "id": "key-calc",
+      "lane": "client",
+      "type": "key-derivation",
+      "role": "process",
+      "icon": "⚿",
+      "label": "공유 비밀 계산",
+      "sublabel": "양쪽이 각자, 같은 값을",
       "info": [
         "자기 비밀과 상대 공개값을 섞어 열쇠를 만듭니다. 열쇠 자체는 네트워크에 흐르지 않습니다."
       ],
       "detail": "디피-헬만 키 교환은 각자 자기만 아는 비밀값과 상대가 보내준 공개값을 섞으면, 순서가 달라도 같은 결과가 나오는 수학적 성질을 이용합니다. 서버도 같은 시점에 같은 계산을 하므로 두 곳에 동시에 같은 열쇠가 생깁니다. 매 접속마다 새 비밀을 쓰기 때문에 서버의 장기 개인키가 나중에 유출되어도 지난 대화는 풀리지 않습니다. 이 성질을 순방향 비밀성이라 합니다.",
       "mechanisms": [
         {
-          "type": "crypt", "mode": "encrypt", "title": "세션 키 유도",
+          "type": "crypt",
+          "mode": "encrypt",
+          "title": "세션 키 유도",
           "cipher": "ECDHE + HKDF-SHA256",
           "note": "타원곡선 디피-헬만으로 공유 비밀을 만들고, HKDF로 실제 사용할 세션 키를 뽑아냅니다.",
-          "layers": ["app"]
+          "layers": [
+            "app"
+          ]
         }
       ],
       "ports": {
-        "in": [{ "id": "i0", "kind": "signal" }],
-        "out": [{ "id": "o0", "kind": "signal" }]
+        "in": [
+          {
+            "id": "i0",
+            "kind": "signal"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "signal"
+          }
+        ]
       }
     },
     {
-      "id": "cert-verify", "lane": "client", "type": "cert-verify", "role": "decision", "icon": "⊙",
-      "label": "인증서 검증", "sublabel": "상대가 진짜인가",
+      "id": "cert-verify",
+      "lane": "client",
+      "type": "cert-verify",
+      "role": "decision",
+      "icon": "⊙",
+      "label": "인증서 검증",
+      "sublabel": "상대가 진짜인가",
       "info": [
         "받은 인증서를 신뢰 사슬을 따라 확인합니다."
       ],
       "detail": "열쇠를 만들었다고 끝이 아닙니다. 그 열쇠를 나눠 가진 상대가 진짜 목적지인지 확인해야 합니다. 확인을 건너뛰면 중간자가 양쪽과 각각 핸드셰이크를 맺고 모든 대화를 읽을 수 있습니다. 브라우저에 미리 심어진 루트 인증서까지 사슬을 거슬러 올라가 확인합니다.",
       "mechanisms": [
         {
-          "type": "k8s-resolve", "title": "신뢰 사슬 따라가기",
+          "type": "k8s-resolve",
+          "title": "신뢰 사슬 따라가기",
           "lines": [
-            { "text": "서버 인증서: CN=web.example.com" },
-            { "id": "chain-1", "text": "서명한 곳 → 중간 인증기관 (Intermediate CA)", "indent": 1 },
-            { "id": "chain-2", "text": "서명한 곳 → 루트 인증기관 (Root CA)", "indent": 2 },
-            { "id": "chain-3", "text": "브라우저 신뢰 목록에 있음 → 검증 성공", "indent": 3 }
+            {
+              "text": "서버 인증서: CN=web.example.com"
+            },
+            {
+              "id": "chain-1",
+              "text": "서명한 곳 → 중간 인증기관 (Intermediate CA)",
+              "indent": 1
+            },
+            {
+              "id": "chain-2",
+              "text": "서명한 곳 → 루트 인증기관 (Root CA)",
+              "indent": 2
+            },
+            {
+              "id": "chain-3",
+              "text": "브라우저 신뢰 목록에 있음 → 검증 성공",
+              "indent": 3
+            }
           ]
         }
       ],
       "ports": {
-        "in": [{ "id": "i0", "kind": "signal" }],
-        "out": [{ "id": "o0", "kind": "signal" }]
+        "in": [
+          {
+            "id": "i0",
+            "kind": "signal"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "signal"
+          }
+        ]
       }
     },
     {
-      "id": "app-data", "lane": "client", "type": "endpoint", "role": "store", "icon": "▤",
-      "label": "암호화 통신 시작", "sublabel": "Application Data",
+      "id": "app-data",
+      "lane": "client",
+      "type": "endpoint",
+      "role": "store",
+      "icon": "▤",
+      "label": "암호화 통신 시작",
+      "sublabel": "Application Data",
       "info": [
         "이 지점부터 주고받는 모든 내용이 세션 키로 잠깁니다."
       ],
       "detail": "HTTP 요청과 응답이 이제 세션 키로 암호화되어 Application Data 레코드에 담깁니다. 중간에서 관찰하면 목적지 IP와 포트, 대략의 데이터 크기와 시점은 보이지만 내용은 알 수 없습니다. 암호화는 내용을 감출 뿐 통신 사실 자체를 감추지는 않는다는 점도 함께 기억할 만합니다.",
       "mechanisms": [
         {
-          "type": "crypt", "mode": "encrypt", "title": "레코드 암호화",
+          "type": "crypt",
+          "mode": "encrypt",
+          "title": "레코드 암호화",
           "cipher": "AES-128-GCM",
           "note": "GCM은 암호화와 위변조 검사를 한 번에 처리합니다. 누군가 중간에서 바이트를 바꾸면 복호화 단계에서 즉시 탐지됩니다.",
-          "layers": ["app"]
+          "layers": [
+            "app"
+          ]
         }
       ],
       "ports": {
-        "in": [{ "id": "i0", "kind": "signal" }],
-        "out": [{ "id": "o0", "kind": "data" }]
+        "in": [
+          {
+            "id": "i0",
+            "kind": "signal"
+          }
+        ],
+        "out": [
+          {
+            "id": "o0",
+            "kind": "data"
+          }
+        ]
       }
     }
   ],
   "edges": [
-    { "id": "e-ch", "source": "client-hello", "sourcePort": "o0", "target": "server-hello", "targetPort": "i0",
-      "kind": "signal", "label": "제안 목록과 키 재료가 서버로 갑니다. 아직 평문입니다.", "decoration": "one-to-one" },
-    { "id": "e-sh", "source": "server-hello", "sourcePort": "o0", "target": "server-cert", "targetPort": "i0",
-      "kind": "signal", "label": "서버가 같은 왕복에 인증서까지 이어서 보냅니다." },
-    { "id": "e-cert-back", "source": "server-cert", "sourcePort": "o0", "target": "key-calc", "targetPort": "i0",
-      "kind": "signal", "label": "서버의 응답이 클라이언트로 돌아옵니다. 이제 계산할 재료가 다 모였습니다.", "decoration": "one-to-one" },
-    { "id": "e-verify", "source": "key-calc", "sourcePort": "o0", "target": "cert-verify", "targetPort": "i0",
-      "kind": "signal", "label": "열쇠가 생겼으니 이제부터의 메시지는 암호화됩니다." },
-    { "id": "e-app", "source": "cert-verify", "sourcePort": "o0", "target": "app-data", "targetPort": "i0",
-      "kind": "signal", "label": "상대가 진짜임을 확인했습니다. 안심하고 대화할 수 있습니다." }
+    {
+      "id": "e-syn",
+      "source": "tcp-syn",
+      "sourcePort": "o0",
+      "target": "tcp-synack",
+      "targetPort": "i0",
+      "kind": "signal",
+      "label": "연결을 열자는 첫 신호입니다.",
+      "decoration": "one-to-one"
+    },
+    {
+      "id": "e-synack",
+      "source": "tcp-synack",
+      "sourcePort": "o0",
+      "target": "tcp-ack",
+      "targetPort": "i0",
+      "kind": "signal",
+      "label": "확인과 자기 순서번호가 함께 돌아옵니다.",
+      "decoration": "one-to-one"
+    },
+    {
+      "id": "e-ack",
+      "source": "tcp-ack",
+      "sourcePort": "o0",
+      "target": "client-hello",
+      "targetPort": "i0",
+      "kind": "signal",
+      "label": "연결이 섰습니다. 이제 그 위에서 TLS 를 시작합니다."
+    },
+    {
+      "id": "e-ch",
+      "source": "client-hello",
+      "sourcePort": "o0",
+      "target": "server-hello",
+      "targetPort": "i0",
+      "kind": "signal",
+      "label": "제안 목록과 키 재료가 서버로 갑니다. 아직 평문입니다.",
+      "decoration": "one-to-one"
+    },
+    {
+      "id": "e-sh",
+      "source": "server-hello",
+      "sourcePort": "o0",
+      "target": "server-cert",
+      "targetPort": "i0",
+      "kind": "signal",
+      "label": "서버가 같은 왕복에 인증서까지 이어서 보냅니다."
+    },
+    {
+      "id": "e-cert-back",
+      "source": "server-cert",
+      "sourcePort": "o0",
+      "target": "key-calc",
+      "targetPort": "i0",
+      "kind": "signal",
+      "label": "서버의 응답이 클라이언트로 돌아옵니다. 이제 계산할 재료가 다 모였습니다.",
+      "decoration": "one-to-one"
+    },
+    {
+      "id": "e-verify",
+      "source": "key-calc",
+      "sourcePort": "o0",
+      "target": "cert-verify",
+      "targetPort": "i0",
+      "kind": "signal",
+      "label": "열쇠가 생겼으니 이제부터의 메시지는 암호화됩니다."
+    },
+    {
+      "id": "e-app",
+      "source": "cert-verify",
+      "sourcePort": "o0",
+      "target": "app-data",
+      "targetPort": "i0",
+      "kind": "signal",
+      "label": "상대가 진짜임을 확인했습니다. 안심하고 대화할 수 있습니다."
+    }
   ],
   "trace": {
     "entity": {
-      "kind": "signal", "label": "TLS 대화",
+      "kind": "signal",
+      "label": "TLS 대화",
       "layers": [
-        { "id": "tcp", "name": "TCP", "fields": { "sport": "51344", "dport": "443" } },
-        { "id": "rec", "name": "TLS Record", "fields": { "type": "handshake", "ver": "1.3" } },
-        { "id": "app", "name": "내용", "fields": { "data": "아직 평문 — 누구나 읽을 수 있음" } }
+        {
+          "id": "tcp",
+          "name": "TCP",
+          "fields": {
+            "sport": "51344",
+            "dport": "443",
+            "flags": "SYN"
+          }
+        }
       ]
     },
     "steps": [
-      { "at": "client-hello",
+      {
+        "at": "tcp-syn",
+        "narration": "브라우저가 서버의 443 포트로 연결을 열자는 SYN 을 보냅니다. 아직 TLS 도 암호도 없는 평범한 TCP 세그먼트입니다."
+      },
+      {
+        "at": "tcp-synack",
+        "via": "e-syn",
+        "narration": "서버가 확인(ACK)과 자기 순서번호(SYN)를 한 번에 돌려보냅니다. 두 방향의 준비를 한 왕복으로 끝내려는 설계입니다.",
+        "layerOps": [
+          {
+            "op": "set",
+            "layer": "tcp",
+            "field": "flags",
+            "value": "SYN,ACK"
+          }
+        ]
+      },
+      {
+        "at": "tcp-ack",
+        "via": "e-synack",
+        "narration": "클라이언트가 마지막 확인을 보내면 연결이 ESTABLISHED 가 됩니다. 여기까지 왕복 1회를 썼고, TLS 는 이제부터 시작합니다.",
+        "layerOps": [
+          {
+            "op": "set",
+            "layer": "tcp",
+            "field": "flags",
+            "value": "ACK (연결 수립)"
+          },
+          {
+            "op": "push",
+            "layer": {
+              "id": "rec",
+              "name": "TLS Record",
+              "fields": {
+                "type": "handshake",
+                "ver": "1.3"
+              }
+            }
+          },
+          {
+            "op": "push",
+            "layer": {
+              "id": "app",
+              "name": "내용",
+              "fields": {
+                "data": "아직 평문 — 누구나 읽을 수 있음"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "at": "client-hello",
         "narration": "클라이언트가 대화를 엽니다. 쓸 수 있는 암호 방식 목록과 키 교환 재료를 한 번에 담아 보냅니다. 재료를 미리 보내는 것이 TLS 1.3이 이전 버전보다 빨라진 핵심입니다.",
-        "mechanismEvent": { "select": ["cs-aes", "cs-chacha"] } },
-      { "at": "server-hello", "via": "e-ch",
+        "mechanismEvent": {
+          "select": [
+            "cs-aes",
+            "cs-chacha"
+          ]
+        },
+        "via": "e-ack"
+      },
+      {
+        "at": "server-hello",
+        "via": "e-ch",
         "narration": "서버 차례입니다. 제안받은 목록에서 AES-128-GCM을 고르고 자기 키 재료를 실어 보냅니다.",
-        "mechanismEvent": { "select": ["cs-aes"] } },
-      { "at": "server-cert", "via": "e-sh",
-        "narration": "서버가 같은 응답에 인증서와 서명을 이어 붙입니다. 왕복을 늘리지 않으려고 한 번에 보내는 것입니다." },
-      { "at": "key-calc", "via": "e-cert-back",
+        "mechanismEvent": {
+          "select": [
+            "cs-aes"
+          ]
+        }
+      },
+      {
+        "at": "server-cert",
+        "via": "e-sh",
+        "narration": "서버가 같은 응답에 인증서와 서명을 이어 붙입니다. 왕복을 늘리지 않으려고 한 번에 보내는 것입니다."
+      },
+      {
+        "at": "key-calc",
+        "via": "e-cert-back",
         "narration": "응답이 클라이언트로 돌아왔습니다. 양쪽이 각자 계산해 같은 세션 키를 얻습니다. 열쇠는 네트워크를 한 번도 지나가지 않았습니다. 이 순간부터 내용 계층이 잠깁니다.",
         "layerOps": [
-          { "op": "lock", "layer": "app", "note": "세션 키로 잠김 (AES-128-GCM)" }
-        ] },
-      { "at": "cert-verify", "via": "e-verify",
+          {
+            "op": "lock",
+            "layer": "app",
+            "note": "세션 키로 잠김 (AES-128-GCM)"
+          }
+        ]
+      },
+      {
+        "at": "cert-verify",
+        "via": "e-verify",
         "narration": "받아둔 인증서를 신뢰 사슬을 따라 검증합니다. 열쇠를 나눠 가진 상대가 진짜인지 확인하는 단계이고, 이것을 건너뛰면 중간자가 양쪽을 속일 수 있습니다.",
-        "mechanismEvent": { "select": ["chain-3"] } },
-      { "at": "app-data", "via": "e-app",
+        "mechanismEvent": {
+          "select": [
+            "chain-3"
+          ]
+        }
+      },
+      {
+        "at": "app-data",
+        "via": "e-app",
         "narration": "핸드셰이크가 끝나고 HTTP 요청이 오가기 시작합니다. 레코드 타입이 handshake에서 application으로 바뀌고, 내용은 잠긴 채 전달됩니다.",
         "layerOps": [
-          { "op": "set", "layer": "rec", "field": "type", "value": "application" }
-        ] }
+          {
+            "op": "set",
+            "layer": "rec",
+            "field": "type",
+            "value": "application"
+          }
+        ]
+      }
     ]
   },
   "stream": {
-    "rates": { "e-ch": 1.0 }
+    "rates": {
+      "e-ch": 1.0
+    }
   }
 }
