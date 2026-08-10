@@ -1,0 +1,85 @@
+<svg viewBox="0 0 960 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>노드 장애 시 파드 교체 타임라인</title>
+  <desc>노드 네트워크가 끊기면 Node가 NotReady로 바뀌고, tolerationSeconds 기본 300초를 버틴 뒤 파드에 삭제 표시가 찍힌다. 컨트롤러는 표시된 파드를 세지 않으므로 곧바로 대체 파드를 만들지만, 옛 파드 오브젝트는 kubelet이 응답을 재개할 때까지 Terminating으로 남는다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: #b8b3ad; }
+      .tlab  { font-size: 12px; font-weight: 800; fill: rgb(212,168,83); }
+      .step  { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
+      .desc  { font-size: 10.5px; fill: #0d0d0d; }
+      .note  { font-size: 11px; fill: #e8e4df; }
+      .warn  { font-size: 10.5px; fill: #0d0d0d; font-weight: 700; }
+      .axis  { font-size: 10.5px; fill: #e8e4df; }
+    </style>
+    <marker id="nf-a" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="nf-g" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="420" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">노드 장애 — NotReady 부터 실제 삭제까지</text>
+  <text x="24" y="50" class="sub">교체는 빠르지만 옛 파드 오브젝트는 노드가 돌아올 때까지 남습니다</text>
+
+  <!-- timeline axis -->
+  <line x1="60" y1="112" x2="900" y2="112" stroke="rgb(138,133,128)" stroke-width="1.4" marker-end="url(#nf-g)"/>
+  <text x="884" y="132" class="axis" text-anchor="end">시간</text>
+
+  <!-- t0 -->
+  <circle cx="110" cy="112" r="6" fill="rgb(212,168,83)"/>
+  <text x="110" y="92" class="tlab" text-anchor="middle">t = 0</text>
+  <rect x="34" y="146" width="152" height="66" rx="8" fill="rgb(245,237,218)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="110" y="168" class="step" text-anchor="middle">네트워크 차단</text>
+  <text x="110" y="186" class="desc" text-anchor="middle">kubelet 이 API 서버와</text>
+  <text x="110" y="201" class="desc" text-anchor="middle">연락 두절</text>
+
+  <!-- t1 -->
+  <circle cx="300" cy="112" r="6" fill="rgb(212,168,83)"/>
+  <text x="300" y="92" class="tlab" text-anchor="middle">수십 초</text>
+  <rect x="224" y="146" width="152" height="66" rx="8" fill="rgb(245,237,218)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="300" y="168" class="step" text-anchor="middle">Node NotReady</text>
+  <text x="300" y="186" class="desc" text-anchor="middle">unreachable taint 부착</text>
+  <text x="300" y="201" class="desc" text-anchor="middle">파드는 아직 Running</text>
+
+  <!-- waiting span -->
+  <line x1="300" y1="112" x2="530" y2="112" stroke="rgb(212,168,83)" stroke-width="4"/>
+  <rect x="336" y="60" width="158" height="26" rx="6" fill="rgb(212,168,83)"/>
+  <text x="415" y="78" class="step" text-anchor="middle">tolerationSeconds 300</text>
+
+  <!-- t2 -->
+  <circle cx="530" cy="112" r="6" fill="rgb(212,168,83)"/>
+  <text x="530" y="92" class="tlab" text-anchor="middle">+5 분</text>
+  <rect x="454" y="146" width="152" height="66" rx="8" fill="rgb(245,237,218)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="530" y="168" class="step" text-anchor="middle">삭제 표시</text>
+  <text x="530" y="186" class="desc" text-anchor="middle">deletionTimestamp 기록</text>
+  <text x="530" y="201" class="desc" text-anchor="middle">= Terminating 표시</text>
+
+  <!-- t3 -->
+  <circle cx="700" cy="112" r="6" fill="rgb(102,187,106)"/>
+  <text x="700" y="92" class="tlab" text-anchor="middle">즉시</text>
+  <rect x="624" y="146" width="152" height="66" rx="8" fill="rgb(205,236,207)" stroke="rgb(102,187,106)" stroke-width="1.3"/>
+  <text x="700" y="168" class="step" text-anchor="middle">대체 파드 생성</text>
+  <text x="700" y="186" class="desc" text-anchor="middle">표시된 파드는 세지 않아</text>
+  <text x="700" y="201" class="desc" text-anchor="middle">개수가 부족해 보임</text>
+
+  <!-- t4 -->
+  <circle cx="866" cy="112" r="6" fill="rgb(138,133,128)"/>
+  <text x="866" y="92" class="tlab" text-anchor="middle">노드 복구 후</text>
+  <rect x="790" y="146" width="152" height="66" rx="8" fill="rgb(220,234,247)" stroke="rgb(91,155,213)" stroke-width="1.3"/>
+  <text x="866" y="168" class="step" text-anchor="middle">실제 삭제</text>
+  <text x="866" y="186" class="desc" text-anchor="middle">kubelet 이 컨테이너 종료</text>
+  <text x="866" y="201" class="desc" text-anchor="middle">후 오브젝트 제거</text>
+
+  <!-- gap band -->
+  <rect x="454" y="250" width="488" height="70" rx="8" fill="rgb(242,212,212)" stroke="rgb(200,90,90)" stroke-width="1.3"/>
+  <text x="698" y="273" class="warn" text-anchor="middle">삭제 표시부터 실제 삭제까지 — 장부에는 "삭제 중", 컨테이너는 그 노드에서 계속 실행 중일 수 있음</text>
+  <text x="698" y="292" class="desc" text-anchor="middle">대체 파드가 이미 떠 있으므로 복제본이 일시적으로 초과합니다.</text>
+  <text x="698" y="309" class="desc" text-anchor="middle">stateless 워크로드라 감수하는 절충이며, StatefulSet 은 이 방식을 쓰지 않습니다.</text>
+
+  <line x1="530" y1="212" x2="530" y2="250" stroke="rgb(200,90,90)" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <line x1="866" y1="212" x2="866" y2="250" stroke="rgb(200,90,90)" stroke-width="1.2" stroke-dasharray="4 3"/>
+
+  <!-- footnote -->
+  <text x="34" y="360" class="note">삭제는 두 단계입니다 — API 서버가 표시를 찍고(t=+5분), 그 노드의 kubelet 이 실제로 종료합니다(노드 복구 후).</text>
+  <text x="34" y="381" class="note">연락이 끊긴 동안에는 1 단계만 일어나므로, Terminating 은 실행 상태가 아니라 삭제 표시로 읽어야 합니다.</text>
+  <text x="34" y="402" class="axis">축의 간격은 실제 시간 비율이 아닙니다. NotReady 판정까지의 수십 초는 클러스터 설정에 따라 달라집니다.</text>
+</svg>
