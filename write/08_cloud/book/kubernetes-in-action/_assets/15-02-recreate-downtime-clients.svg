@@ -1,76 +1,114 @@
-<svg viewBox="0 0 960 430" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>Recreate 다운타임에 경로별로 다른 클라이언트 응답</title>
-  <desc>Recreate 는 옛 파드를 모두 내린 뒤 새 파드를 올려 가용 파드가 0인 구간이 생긴다. 그 구간에 Ingress 를 거친 요청은 프록시가 살아 있으므로 503 을 돌려받고, ClusterIP 로 직접 보낸 요청은 EndpointSlice 가 비어 보낼 백엔드가 없으므로 연결 거부로 즉시 끊긴다.</desc>
+<svg viewBox="0 0 960 660" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Recreate 다운타임에 두 접근 경로가 다른 응답을 내는 구조</title>
+  <desc>가용 파드가 0인 구간에서 두 경로를 나란히 그렸다. 위쪽은 클라이언트에서 Ingress 컨트롤러를 거쳐 Service 로 가는 경로로, 프록시가 살아 있어 백엔드가 없다는 사실을 503 으로 만들어 돌려준다. 아래쪽은 클러스터 안에서 ClusterIP 로 직접 보내는 경로로, 노드의 kube-proxy 규칙에 전달 대상이 없어 iptables·nftables 모드에서는 그 자리에서 거부되고 IPVS 모드에서는 응답 없이 매달린다. 두 경로 모두 같은 원인, 즉 EndpointSlice 가 비었다는 사실에서 출발한다.</desc>
   <defs>
     <style>
       .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
       .sub   { font-size: 11px; fill: #b8b3ad; }
-      .step  { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
-      .desc  { font-size: 10.5px; fill: #0d0d0d; }
+      .hd    { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .box   { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .desc  { font-size: 10px; fill: #0d0d0d; }
       .note  { font-size: 11px; fill: #e8e4df; }
-      .lab   { font-size: 11.5px; font-weight: 800; fill: rgb(212,168,83); }
+      .elab  { font-size: 10px; font-weight: 700; fill: rgb(212,168,83); }
       .axis  { font-size: 10.5px; fill: #e8e4df; }
-      .cnt   { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .zone  { font-size: 11px; font-weight: 800; fill: #e8e4df; }
     </style>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="ax" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(200,90,90)"/></marker>
   </defs>
 
-  <rect x="0" y="0" width="960" height="430" fill="#0d0d0d"/>
-  <text x="24" y="30" class="title">Recreate 의 공백 — 같은 순간, 경로에 따라 다른 응답</text>
-  <text x="24" y="50" class="sub">가용 파드가 0인 구간에서 Ingress 는 503 을, ClusterIP 직접 접근은 연결 거부를 돌려줍니다</text>
+  <rect x="0" y="0" width="960" height="660" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">가용 파드 0 — 같은 원인, 경로에 따라 다른 응답</text>
+  <text x="24" y="50" class="sub">Recreate 가 옛 파드를 모두 내린 순간. 두 경로가 어디서 막히는지가 응답을 가릅니다</text>
 
-  <!-- phase columns -->
-  <rect x="34" y="74" width="270" height="30" rx="6" fill="rgb(220,234,247)" stroke="rgb(91,155,213)" stroke-width="1.2"/>
-  <text x="169" y="94" class="step" text-anchor="middle">1. 옛 파드 3개 실행 중</text>
+  <!-- shared cause -->
+  <rect x="300" y="68" width="360" height="52" rx="8" fill="rgb(242,212,212)" stroke="rgb(200,90,90)" stroke-width="1.4"/>
+  <text x="480" y="90" class="box" text-anchor="middle">공통 원인 — EndpointSlice 가 비었습니다</text>
+  <text x="480" y="108" class="desc" text-anchor="middle">파드가 사라져 Service 가 가리킬 주소가 하나도 없습니다</text>
 
-  <rect x="330" y="74" width="270" height="30" rx="6" fill="rgb(242,212,212)" stroke="rgb(200,90,90)" stroke-width="1.4"/>
-  <text x="465" y="94" class="step" text-anchor="middle">2. 전부 종료 — 가용 0</text>
+  <path d="M420 120 L420 136 L749 136 L749 206" fill="none" stroke="rgb(200,90,90)" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <path d="M540 120 L540 136 L936 136 L936 330 L860 330 L860 404 L816 404" fill="none" stroke="rgb(200,90,90)" stroke-width="1.2" stroke-dasharray="4 3"/>
 
-  <rect x="626" y="74" width="270" height="30" rx="6" fill="rgb(205,236,207)" stroke="rgb(102,187,106)" stroke-width="1.2"/>
-  <text x="761" y="94" class="step" text-anchor="middle">3. 새 파드 3개 준비 완료</text>
+  <!-- ============ PATH A : Ingress ============ -->
+  <rect x="24" y="146" width="912" height="176" rx="10" fill="none" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <rect x="44" y="136" width="150" height="22" rx="5" fill="rgb(212,168,83)"/>
+  <text x="119" y="152" class="hd" text-anchor="middle">경로 A — Ingress</text>
 
-  <!-- pod rows -->
-  <text x="34" y="132" class="lab">파드</text>
-  <g>
-    <rect x="88" y="118" width="52" height="26" rx="5" fill="rgb(140,190,235)"/><text x="114" y="136" class="cnt" text-anchor="middle">0.5</text>
-    <rect x="148" y="118" width="52" height="26" rx="5" fill="rgb(140,190,235)"/><text x="174" y="136" class="cnt" text-anchor="middle">0.5</text>
-    <rect x="208" y="118" width="52" height="26" rx="5" fill="rgb(140,190,235)"/><text x="234" y="136" class="cnt" text-anchor="middle">0.5</text>
-  </g>
-  <rect x="384" y="118" width="162" height="26" rx="5" fill="#0d0d0d" stroke="rgb(200,90,90)" stroke-width="1.3" stroke-dasharray="5 3"/>
-  <text x="465" y="136" class="axis" text-anchor="middle">없음</text>
-  <g>
-    <rect x="680" y="118" width="52" height="26" rx="5" fill="rgb(212,168,83)"/><text x="706" y="136" class="cnt" text-anchor="middle">0.6</text>
-    <rect x="740" y="118" width="52" height="26" rx="5" fill="rgb(212,168,83)"/><text x="766" y="136" class="cnt" text-anchor="middle">0.6</text>
-    <rect x="800" y="118" width="52" height="26" rx="5" fill="rgb(212,168,83)"/><text x="826" y="136" class="cnt" text-anchor="middle">0.6</text>
-  </g>
+  <!-- cluster boundary A -->
+  <rect x="232" y="172" width="684" height="132" rx="8" fill="none" stroke="rgb(138,133,128)" stroke-width="1" stroke-dasharray="6 4"/>
+  <text x="900" y="190" class="zone" text-anchor="end">클러스터 안</text>
 
-  <!-- EndpointSlice row -->
-  <text x="34" y="180" class="lab">엔드포인트</text>
-  <rect x="120" y="164" width="140" height="26" rx="5" fill="rgb(245,237,218)"/>
-  <text x="190" y="182" class="desc" text-anchor="middle">주소 3개 등록됨</text>
-  <rect x="384" y="164" width="162" height="26" rx="5" fill="rgb(242,212,212)"/>
-  <text x="465" y="182" class="desc" text-anchor="middle">비어 있음 — 보낼 곳 없음</text>
-  <rect x="712" y="164" width="140" height="26" rx="5" fill="rgb(245,237,218)"/>
-  <text x="782" y="182" class="desc" text-anchor="middle">주소 3개 등록됨</text>
+  <!-- A nodes -->
+  <rect x="44" y="212" width="120" height="52" rx="7" fill="rgb(220,234,247)" stroke="rgb(91,155,213)" stroke-width="1.2"/>
+  <text x="104" y="236" class="box" text-anchor="middle">클라이언트</text>
+  <text x="104" y="253" class="desc" text-anchor="middle">브라우저</text>
 
-  <line x1="34" y1="208" x2="926" y2="208" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <rect x="256" y="212" width="150" height="52" rx="7" fill="rgb(245,237,218)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="331" y="234" class="box" text-anchor="middle">Ingress 컨트롤러</text>
+  <text x="331" y="251" class="desc" text-anchor="middle">nginx 등 — 파드로 떠 있음</text>
 
-  <!-- two client paths -->
-  <rect x="34" y="228" width="430" height="112" rx="8" fill="rgb(245,237,218)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
-  <text x="249" y="252" class="step" text-anchor="middle">Ingress 를 거친 요청</text>
-  <text x="249" y="274" class="desc" text-anchor="middle">클라이언트 → Ingress 프록시 → (백엔드 없음)</text>
-  <rect x="150" y="286" width="198" height="26" rx="5" fill="rgb(200,90,90)"/>
-  <text x="249" y="304" class="cnt" text-anchor="middle" fill="#f2d4d4">503 Service Unavailable</text>
-  <text x="249" y="330" class="desc" text-anchor="middle">프록시는 살아 있어 HTTP 로 답할 수 있습니다</text>
+  <rect x="480" y="212" width="130" height="52" rx="7" fill="rgb(245,237,218)" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="545" y="234" class="box" text-anchor="middle">Service</text>
+  <text x="545" y="251" class="desc" text-anchor="middle">kiada</text>
 
-  <rect x="496" y="228" width="430" height="112" rx="8" fill="rgb(220,234,247)" stroke="rgb(91,155,213)" stroke-width="1.3"/>
-  <text x="711" y="252" class="step" text-anchor="middle">ClusterIP 로 직접 보낸 요청</text>
-  <text x="711" y="274" class="desc" text-anchor="middle">클라이언트 → ClusterIP → (전달 대상 없음)</text>
-  <rect x="612" y="286" width="198" height="26" rx="5" fill="rgb(200,90,90)"/>
-  <text x="711" y="304" class="cnt" text-anchor="middle" fill="#f2d4d4">connection refused</text>
-  <text x="711" y="330" class="desc" text-anchor="middle">답할 주체가 없어 그 자리에서 거부됩니다</text>
+  <rect x="684" y="212" width="130" height="52" rx="7" fill="#0d0d0d" stroke="rgb(200,90,90)" stroke-width="1.3" stroke-dasharray="5 3"/>
+  <text x="749" y="242" class="axis" text-anchor="middle">파드 없음</text>
+
+  <line x1="170" y1="238" x2="248" y2="238" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="412" y1="238" x2="472" y2="238" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="616" y1="238" x2="676" y2="238" stroke="rgb(200,90,90)" stroke-width="1.5" marker-end="url(#ax)"/>
+  <text x="646" y="230" class="elab" text-anchor="middle">막힘</text>
+
+  <!-- A response : proxy sends 503 back to the client -->
+  <path d="M331 270 L331 286 L104 286 L104 270" fill="none" stroke="rgb(200,90,90)" stroke-width="1.6" marker-end="url(#ax)"/>
+  <rect x="352" y="274" width="184" height="24" rx="5" fill="rgb(200,90,90)"/>
+  <text x="444" y="291" class="box" text-anchor="middle" fill="#f2d4d4">503 Service Unavailable</text>
+  <text x="552" y="291" class="axis">프록시가 살아 있어 스스로 상태 코드를 만들어 되돌려 줍니다</text>
+
+  <!-- ============ PATH B : ClusterIP ============ -->
+  <rect x="24" y="346" width="912" height="212" rx="10" fill="none" stroke="rgb(91,155,213)" stroke-width="1.2"/>
+  <rect x="44" y="336" width="196" height="22" rx="5" fill="rgb(91,155,213)"/>
+  <text x="142" y="352" class="hd" text-anchor="middle">경로 B — ClusterIP 직접</text>
+
+  <rect x="44" y="372" width="872" height="168" rx="8" fill="none" stroke="rgb(138,133,128)" stroke-width="1" stroke-dasharray="6 4"/>
+  <text x="900" y="390" class="zone" text-anchor="end">클러스터 안</text>
+
+  <rect x="66" y="410" width="130" height="52" rx="7" fill="rgb(220,234,247)" stroke="rgb(91,155,213)" stroke-width="1.2"/>
+  <text x="131" y="434" class="box" text-anchor="middle">다른 파드</text>
+  <text x="131" y="451" class="desc" text-anchor="middle">curl http://kiada</text>
+
+  <rect x="256" y="398" width="180" height="76" rx="7" fill="rgb(245,237,218)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="346" y="420" class="box" text-anchor="middle">노드의 전달 규칙</text>
+  <text x="346" y="437" class="desc" text-anchor="middle">kube-proxy 가 심어 둔</text>
+  <text x="346" y="452" class="desc" text-anchor="middle">iptables · nftables · IPVS</text>
+  <text x="346" y="467" class="desc" text-anchor="middle">전달 대상 목록이 비어 있음</text>
+
+  <rect x="684" y="410" width="130" height="52" rx="7" fill="#0d0d0d" stroke="rgb(200,90,90)" stroke-width="1.3" stroke-dasharray="5 3"/>
+  <text x="749" y="440" class="axis" text-anchor="middle">파드 없음</text>
+
+  <line x1="202" y1="436" x2="248" y2="436" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="442" y1="436" x2="676" y2="436" stroke="rgb(200,90,90)" stroke-width="1.5" marker-end="url(#ax)"/>
+  <text x="559" y="428" class="elab" text-anchor="middle">전달 대상 없음</text>
+
+  <!-- B: two outcomes by mode -->
+  <rect x="256" y="486" width="300" height="42" rx="6" fill="rgb(205,236,207)" stroke="rgb(102,187,106)" stroke-width="1.2"/>
+  <text x="406" y="503" class="box" text-anchor="middle">iptables · nftables 모드</text>
+  <text x="406" y="520" class="desc" text-anchor="middle">거부 규칙이 있어 → connection refused</text>
+
+  <rect x="580" y="486" width="300" height="42" rx="6" fill="rgb(245,237,218)" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="730" y="503" class="box" text-anchor="middle">IPVS 모드</text>
+  <text x="730" y="520" class="desc" text-anchor="middle">거부 경로가 없어 → 응답 없이 타임아웃</text>
+
+  <path d="M346 474 L346 486" fill="none" stroke="rgb(138,133,128)" stroke-width="1.1"/>
+  <path d="M400 474 L680 474 L680 486" fill="none" stroke="rgb(138,133,128)" stroke-width="1.1"/>
+
+  <!-- B response : whichever outcome, it goes back to the calling pod -->
+  <path d="M256 507 L131 507 L131 468" fill="none" stroke="rgb(200,90,90)" stroke-width="1.6" marker-end="url(#ax)"/>
+  <text x="193" y="500" class="elab" text-anchor="middle">둘 중 하나로 반환</text>
 
   <!-- footnote -->
-  <text x="34" y="372" class="note">둘의 차이는 요청을 받아 주는 주체가 있느냐입니다. 프록시는 자기가 살아 있으니 상태 코드를 만들어 돌려줍니다.</text>
-  <text x="34" y="393" class="note">ClusterIP 는 규칙에 전달 대상이 없어 패킷이 어디론가 가서 기다리지 않습니다 — 타임아웃이 아니라 즉시 거부입니다.</text>
-  <text x="34" y="414" class="axis">RollingUpdate 에는 가운데 칸이 없습니다. 엔드포인트가 비는 순간이 없어 두 응답 모두 나타나지 않습니다.</text>
+  <text x="24" y="586" class="note">두 경로의 차이는 요청을 받아 주는 주체가 중간에 있느냐입니다. Ingress 에는 프록시라는 응답 주체가 있습니다.</text>
+  <text x="24" y="607" class="note">ClusterIP 에는 그런 주체가 없어, 노드의 전달 규칙이 어떻게 설정됐느냐가 그대로 증상이 됩니다.</text>
+  <text x="24" y="628" class="axis">그래서 증상만으로 원인을 단정하지 말고 `kubectl -n kube-system get configmap kube-proxy -o yaml` 로 모드를 먼저 확인합니다.</text>
+  <text x="24" y="649" class="axis">RollingUpdate 에는 이 그림 자체가 없습니다. EndpointSlice 가 비는 순간이 없어 두 경로 모두 정상 응답합니다.</text>
 </svg>
