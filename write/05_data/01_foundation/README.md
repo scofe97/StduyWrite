@@ -50,3 +50,9 @@ updated: 2026-07-15
 | 03-02 | [스트림 처리](03-02.%EC%8A%A4%ED%8A%B8%EB%A6%BC%20%EC%B2%98%EB%A6%AC.md) |
 | 03-03 | [스트리밍 시스템 철학](03-03.%EC%8A%A4%ED%8A%B8%EB%A6%AC%EB%B0%8D%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%B2%A0%ED%95%99.md) |
 | 03-04 | [WAL 패턴](03-04.WAL%20%ED%8C%A8%ED%84%B4.md) |
+
+## 2판 정독은 별도 폴더
+
+> 위 18편은 1판 기준 요약입니다. 2판은 장 번호와 구성이 달라 책 단위 정독 폴더로 분리했습니다.
+
+같은 책의 2판을 장별로 정독한 노트는 [`book/designing-data-intensive-applications/`](../book/designing-data-intensive-applications/README.md)에 있습니다. 판본이 다르면 장 번호가 어긋나 한 폴더에서 섞으면 어느 판의 몇 장인지 추적이 끊기므로, 1판 요약(이 폴더)과 2판 정독(책 폴더)을 나눠 둡니다.

@@ -50,7 +50,7 @@ PostgreSQL을 사용한다면 [postgres/](./02_relational/postgres/README.md)의
 
 ## 6. 분산 데이터와 데이터 통합 심화
 
-복제·샤딩·일관성·합의는 [01_foundation/](./01_foundation/README.md)의 02번대를, 배치·스트림·데이터 통합은 03번대와 [DDIA 2판 정독](./01_foundation/ddia2/README.md)에서 확장합니다. Kafka·Redpanda·Outbox·CDC의 구체 구현은 [04_messaging](../04_messaging/README.md)에서 이어서 봅니다.
+복제·샤딩·일관성·합의는 [01_foundation/](./01_foundation/README.md)의 02번대를, 배치·스트림·데이터 통합은 03번대와 [DDIA 2판 정독](./book/designing-data-intensive-applications/README.md)에서 확장합니다. Kafka·Redpanda·Outbox·CDC의 구체 구현은 [04_messaging](../04_messaging/README.md)에서 이어서 봅니다.
 
 완료 기준은 단일 DB의 트랜잭션 문제와 분산 시스템의 복제·일관성 문제를 구분하고, 메시지 브로커가 필요한 이유를 데이터 흐름 관점에서 설명하는 것입니다.
 
