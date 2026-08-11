@@ -1,0 +1,61 @@
+<svg viewBox="0 0 820 560" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>17-01 전체 지도 — 노드마다 하나를 보장하는 순서</title>
+  <desc>DaemonSet이 replica 수 대신 노드 수를 기준으로 삼는다는 이해에서 출발해, 배포한 뒤 왜 노드 수보다 파드가 적은지 taint로 설명하고, node selector로 대상 노드를 좁히고, 업데이트 기본값이 Deployment와 다른 이유를 보고, 삭제로 끝내는 다섯 단계를 세로로 이은 그림입니다. 2단계에는 컨트롤러가 toleration을 자동으로 붙인다는 주의 표시가, 4단계에는 maxSurge를 올리면 업데이트가 실패한다는 위험 표시가 붙어 있습니다.</desc>
+  <rect width="820" height="560" fill="#0d0d0d"/>
+
+  <text x="40" y="40" fill="#e8e4df" font-size="15" font-weight="700">노드 수가 기준이 된다</text>
+
+  <rect x="40" y="62" width="740" height="66" rx="4" fill="#e8e4df"/>
+  <text x="60" y="88" fill="#0d0d0d" font-size="14" font-weight="700">1. replicas가 없다</text>
+  <text x="740" y="88" text-anchor="end" fill="#3a3632" font-size="11">§1</text>
+  <text x="60" y="112" fill="#3a3632" font-size="12">노드 하나당 파드 하나</text>
+  <text x="300" y="112" fill="#3a3632" font-size="12">ReplicaSet은 흩뿌린다</text>
+
+  <path d="M410 128 L410 150" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="40" y="154" width="740" height="80" rx="4" fill="#e8e4df"/>
+  <text x="60" y="180" fill="#0d0d0d" font-size="14" font-weight="700">2. 배포하면 수가 안 맞는다</text>
+  <text x="740" y="180" text-anchor="end" fill="#3a3632" font-size="11">§2</text>
+  <text x="60" y="204" fill="#3a3632" font-size="12">status는 전부 노드 수</text>
+  <text x="300" y="204" fill="#3a3632" font-size="12">control plane은 taint</text>
+  <rect x="500" y="190" width="220" height="22" rx="3" fill="rgb(212,168,83)"/>
+  <text x="512" y="205" fill="#0d0d0d" font-size="11.5" font-weight="700">주의 · toleration 자동</text>
+  <text x="60" y="223" fill="#3a3632" font-size="12">Scheduler가 최종 배치</text>
+
+  <path d="M410 234 L410 256" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="40" y="260" width="740" height="66" rx="4" fill="#e8e4df"/>
+  <text x="60" y="286" fill="#0d0d0d" font-size="14" font-weight="700">3. 대상 노드를 좁힌다</text>
+  <text x="740" y="286" text-anchor="end" fill="#3a3632" font-size="11">§3</text>
+  <text x="60" y="310" fill="#3a3632" font-size="12">nodeSelector — 가변</text>
+  <text x="300" y="310" fill="#3a3632" font-size="12">label 붙이면 즉시 반응</text>
+
+  <path d="M410 326 L410 348" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="40" y="352" width="740" height="80" rx="4" fill="#e8e4df"/>
+  <text x="60" y="378" fill="#0d0d0d" font-size="14" font-weight="700">4. 기본값이 다르다</text>
+  <text x="740" y="378" text-anchor="end" fill="#3a3632" font-size="11">§4</text>
+  <text x="60" y="402" fill="#3a3632" font-size="12">maxSurge 0</text>
+  <text x="200" y="402" fill="#3a3632" font-size="12">maxUnavailable 1</text>
+  <rect x="480" y="388" width="230" height="22" rx="3" fill="#f2d4d4"/>
+  <text x="492" y="403" fill="#7a1f1f" font-size="11.5" font-weight="700">위험 · surge는 lock 충돌</text>
+  <text x="60" y="421" fill="#3a3632" font-size="12">OnDelete는 수동 속도</text>
+
+  <path d="M410 432 L410 454" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="40" y="458" width="740" height="66" rx="4" fill="#e8e4df"/>
+  <text x="60" y="484" fill="#0d0d0d" font-size="14" font-weight="700">5. 지우면 함께 사라진다</text>
+  <text x="740" y="484" text-anchor="end" fill="#3a3632" font-size="11">§5</text>
+  <text x="60" y="508" fill="#3a3632" font-size="12">orphan이면 파드 잔존</text>
+  <text x="300" y="508" fill="#3a3632" font-size="12">같은 selector가 입양</text>
+
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+</svg>
