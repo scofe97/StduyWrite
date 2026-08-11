@@ -1,0 +1,76 @@
+<svg viewBox="0 0 960 430" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Recreate 다운타임에 경로별로 다른 클라이언트 응답</title>
+  <desc>Recreate 는 옛 파드를 모두 내린 뒤 새 파드를 올려 가용 파드가 0인 구간이 생긴다. 그 구간에 Ingress 를 거친 요청은 프록시가 살아 있으므로 503 을 돌려받고, ClusterIP 로 직접 보낸 요청은 EndpointSlice 가 비어 보낼 백엔드가 없으므로 연결 거부로 즉시 끊긴다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: #b8b3ad; }
+      .step  { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
+      .desc  { font-size: 10.5px; fill: #0d0d0d; }
+      .note  { font-size: 11px; fill: #e8e4df; }
+      .lab   { font-size: 11.5px; font-weight: 800; fill: rgb(212,168,83); }
+      .axis  { font-size: 10.5px; fill: #e8e4df; }
+      .cnt   { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="430" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">Recreate 의 공백 — 같은 순간, 경로에 따라 다른 응답</text>
+  <text x="24" y="50" class="sub">가용 파드가 0인 구간에서 Ingress 는 503 을, ClusterIP 직접 접근은 연결 거부를 돌려줍니다</text>
+
+  <!-- phase columns -->
+  <rect x="34" y="74" width="270" height="30" rx="6" fill="rgb(220,234,247)" stroke="rgb(91,155,213)" stroke-width="1.2"/>
+  <text x="169" y="94" class="step" text-anchor="middle">1. 옛 파드 3개 실행 중</text>
+
+  <rect x="330" y="74" width="270" height="30" rx="6" fill="rgb(242,212,212)" stroke="rgb(200,90,90)" stroke-width="1.4"/>
+  <text x="465" y="94" class="step" text-anchor="middle">2. 전부 종료 — 가용 0</text>
+
+  <rect x="626" y="74" width="270" height="30" rx="6" fill="rgb(205,236,207)" stroke="rgb(102,187,106)" stroke-width="1.2"/>
+  <text x="761" y="94" class="step" text-anchor="middle">3. 새 파드 3개 준비 완료</text>
+
+  <!-- pod rows -->
+  <text x="34" y="132" class="lab">파드</text>
+  <g>
+    <rect x="88" y="118" width="52" height="26" rx="5" fill="rgb(140,190,235)"/><text x="114" y="136" class="cnt" text-anchor="middle">0.5</text>
+    <rect x="148" y="118" width="52" height="26" rx="5" fill="rgb(140,190,235)"/><text x="174" y="136" class="cnt" text-anchor="middle">0.5</text>
+    <rect x="208" y="118" width="52" height="26" rx="5" fill="rgb(140,190,235)"/><text x="234" y="136" class="cnt" text-anchor="middle">0.5</text>
+  </g>
+  <rect x="384" y="118" width="162" height="26" rx="5" fill="#0d0d0d" stroke="rgb(200,90,90)" stroke-width="1.3" stroke-dasharray="5 3"/>
+  <text x="465" y="136" class="axis" text-anchor="middle">없음</text>
+  <g>
+    <rect x="680" y="118" width="52" height="26" rx="5" fill="rgb(212,168,83)"/><text x="706" y="136" class="cnt" text-anchor="middle">0.6</text>
+    <rect x="740" y="118" width="52" height="26" rx="5" fill="rgb(212,168,83)"/><text x="766" y="136" class="cnt" text-anchor="middle">0.6</text>
+    <rect x="800" y="118" width="52" height="26" rx="5" fill="rgb(212,168,83)"/><text x="826" y="136" class="cnt" text-anchor="middle">0.6</text>
+  </g>
+
+  <!-- EndpointSlice row -->
+  <text x="34" y="180" class="lab">엔드포인트</text>
+  <rect x="120" y="164" width="140" height="26" rx="5" fill="rgb(245,237,218)"/>
+  <text x="190" y="182" class="desc" text-anchor="middle">주소 3개 등록됨</text>
+  <rect x="384" y="164" width="162" height="26" rx="5" fill="rgb(242,212,212)"/>
+  <text x="465" y="182" class="desc" text-anchor="middle">비어 있음 — 보낼 곳 없음</text>
+  <rect x="712" y="164" width="140" height="26" rx="5" fill="rgb(245,237,218)"/>
+  <text x="782" y="182" class="desc" text-anchor="middle">주소 3개 등록됨</text>
+
+  <line x1="34" y1="208" x2="926" y2="208" stroke="rgb(138,133,128)" stroke-width="1"/>
+
+  <!-- two client paths -->
+  <rect x="34" y="228" width="430" height="112" rx="8" fill="rgb(245,237,218)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="249" y="252" class="step" text-anchor="middle">Ingress 를 거친 요청</text>
+  <text x="249" y="274" class="desc" text-anchor="middle">클라이언트 → Ingress 프록시 → (백엔드 없음)</text>
+  <rect x="150" y="286" width="198" height="26" rx="5" fill="rgb(200,90,90)"/>
+  <text x="249" y="304" class="cnt" text-anchor="middle" fill="#f2d4d4">503 Service Unavailable</text>
+  <text x="249" y="330" class="desc" text-anchor="middle">프록시는 살아 있어 HTTP 로 답할 수 있습니다</text>
+
+  <rect x="496" y="228" width="430" height="112" rx="8" fill="rgb(220,234,247)" stroke="rgb(91,155,213)" stroke-width="1.3"/>
+  <text x="711" y="252" class="step" text-anchor="middle">ClusterIP 로 직접 보낸 요청</text>
+  <text x="711" y="274" class="desc" text-anchor="middle">클라이언트 → ClusterIP → (전달 대상 없음)</text>
+  <rect x="612" y="286" width="198" height="26" rx="5" fill="rgb(200,90,90)"/>
+  <text x="711" y="304" class="cnt" text-anchor="middle" fill="#f2d4d4">connection refused</text>
+  <text x="711" y="330" class="desc" text-anchor="middle">답할 주체가 없어 그 자리에서 거부됩니다</text>
+
+  <!-- footnote -->
+  <text x="34" y="372" class="note">둘의 차이는 요청을 받아 주는 주체가 있느냐입니다. 프록시는 자기가 살아 있으니 상태 코드를 만들어 돌려줍니다.</text>
+  <text x="34" y="393" class="note">ClusterIP 는 규칙에 전달 대상이 없어 패킷이 어디론가 가서 기다리지 않습니다 — 타임아웃이 아니라 즉시 거부입니다.</text>
+  <text x="34" y="414" class="axis">RollingUpdate 에는 가운데 칸이 없습니다. 엔드포인트가 비는 순간이 없어 두 응답 모두 나타나지 않습니다.</text>
+</svg>
