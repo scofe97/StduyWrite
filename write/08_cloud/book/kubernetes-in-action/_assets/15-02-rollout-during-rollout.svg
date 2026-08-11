@@ -1,0 +1,74 @@
+<svg viewBox="0 0 960 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>롤아웃 도중 다시 롤아웃할 때의 ReplicaSet 3개</title>
+  <desc>0.6 에서 0.7 로 가던 도중 0.8 을 적용하면 ReplicaSet 이 셋이 된다. 컨트롤러는 진행 중이던 0.7 을 끝까지 밀지 않고, 현재 템플릿 해시와 맞는 0.8 만 새 ReplicaSet 으로 지목한 뒤 0.6 과 0.7 을 함께 줄인다. 총 파드 수는 상한 4 를 그대로 지킨다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: #b8b3ad; }
+      .step  { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .desc  { font-size: 10.5px; fill: #0d0d0d; }
+      .note  { font-size: 11px; fill: #e8e4df; }
+      .lab   { font-size: 11.5px; font-weight: 800; fill: rgb(212,168,83); }
+      .axis  { font-size: 10.5px; fill: #e8e4df; }
+      .cnt   { font-size: 15px; font-weight: 800; fill: #0d0d0d; }
+      .hd    { font-size: 11.5px; font-weight: 800; fill: #e8e4df; }
+    </style>
+    <marker id="rr-a" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="440" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">롤아웃 도중 다시 롤아웃하면 — ReplicaSet 이 셋</text>
+  <text x="24" y="50" class="sub">replicas 3 · maxSurge 1 · maxUnavailable 0. 컨트롤러는 진행 중이던 0.7 을 끝내지 않고 즉시 방향을 틉니다</text>
+
+  <!-- column headers -->
+  <text x="150" y="88" class="hd" text-anchor="middle">0.7 롤아웃 중</text>
+  <text x="390" y="88" class="hd" text-anchor="middle">0.8 적용 직후</text>
+  <text x="630" y="88" class="hd" text-anchor="middle">진행</text>
+  <text x="858" y="88" class="hd" text-anchor="middle">완료</text>
+
+  <!-- row labels -->
+  <text x="24" y="128" class="lab">RS 0.6</text>
+  <text x="24" y="180" class="lab">RS 0.7</text>
+  <text x="24" y="232" class="lab">RS 0.8</text>
+  <text x="24" y="286" class="lab">합계</text>
+
+  <!-- col 1 : during 0.7 -->
+  <rect x="100" y="110" width="100" height="30" rx="5" fill="rgb(140,190,235)"/><text x="150" y="132" class="cnt" text-anchor="middle">2</text>
+  <rect x="100" y="162" width="100" height="30" rx="5" fill="rgb(212,168,83)"/><text x="150" y="184" class="cnt" text-anchor="middle">2</text>
+  <rect x="100" y="214" width="100" height="30" rx="5" fill="#0d0d0d" stroke="rgb(138,133,128)" stroke-width="1.1" stroke-dasharray="4 3"/><text x="150" y="235" class="axis" text-anchor="middle">없음</text>
+  <rect x="100" y="268" width="100" height="28" rx="5" fill="rgb(245,237,218)"/><text x="150" y="288" class="cnt" text-anchor="middle">4</text>
+
+  <!-- col 2 : 0.8 applied -->
+  <rect x="340" y="110" width="100" height="30" rx="5" fill="rgb(140,190,235)"/><text x="390" y="132" class="cnt" text-anchor="middle">2</text>
+  <rect x="340" y="162" width="100" height="30" rx="5" fill="rgb(140,190,235)"/><text x="390" y="184" class="cnt" text-anchor="middle">2</text>
+  <rect x="340" y="214" width="100" height="30" rx="5" fill="rgb(205,236,207)" stroke="rgb(102,187,106)" stroke-width="1.3"/><text x="390" y="235" class="cnt" text-anchor="middle">0</text>
+  <rect x="340" y="268" width="100" height="28" rx="5" fill="rgb(245,237,218)"/><text x="390" y="288" class="cnt" text-anchor="middle">4</text>
+
+  <!-- col 3 : progressing -->
+  <rect x="580" y="110" width="100" height="30" rx="5" fill="rgb(140,190,235)"/><text x="630" y="132" class="cnt" text-anchor="middle">1</text>
+  <rect x="580" y="162" width="100" height="30" rx="5" fill="rgb(140,190,235)"/><text x="630" y="184" class="cnt" text-anchor="middle">1</text>
+  <rect x="580" y="214" width="100" height="30" rx="5" fill="rgb(102,187,106)"/><text x="630" y="235" class="cnt" text-anchor="middle">2</text>
+  <rect x="580" y="268" width="100" height="28" rx="5" fill="rgb(245,237,218)"/><text x="630" y="288" class="cnt" text-anchor="middle">4</text>
+
+  <!-- col 4 : done -->
+  <rect x="808" y="110" width="100" height="30" rx="5" fill="rgb(220,234,247)"/><text x="858" y="132" class="cnt" text-anchor="middle">0</text>
+  <rect x="808" y="162" width="100" height="30" rx="5" fill="rgb(220,234,247)"/><text x="858" y="184" class="cnt" text-anchor="middle">0</text>
+  <rect x="808" y="214" width="100" height="30" rx="5" fill="rgb(102,187,106)"/><text x="858" y="235" class="cnt" text-anchor="middle">3</text>
+  <rect x="808" y="268" width="100" height="28" rx="5" fill="rgb(245,237,218)"/><text x="858" y="288" class="cnt" text-anchor="middle">3</text>
+
+  <!-- arrows -->
+  <line x1="206" y1="180" x2="330" y2="180" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#rr-a)"/>
+  <text x="268" y="172" class="axis" text-anchor="middle">0.8 적용</text>
+  <line x1="446" y1="180" x2="570" y2="180" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#rr-a)"/>
+  <line x1="686" y1="180" x2="798" y2="180" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#rr-a)"/>
+
+  <!-- key insight band -->
+  <rect x="100" y="316" width="808" height="44" rx="8" fill="rgb(245,237,218)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="504" y="336" class="step" text-anchor="middle">0.8 이 등장하는 순간 0.7 도 옛 ReplicaSet 이 됩니다 — 파랑 두 줄이 함께 줄어듭니다</text>
+  <text x="504" y="353" class="desc" text-anchor="middle">컨트롤러는 "진행 중이던 작업"을 들고 있지 않고, 매번 현재 템플릿 해시와 맞는 것만 새 것으로 지목합니다</text>
+
+  <!-- footnote -->
+  <text x="24" y="388" class="note">기다렸다가 0.7 을 끝내고 0.8 로 가는 것이 아닙니다. 기다린다는 개념 자체가 없습니다(level-triggered).</text>
+  <text x="24" y="409" class="note">0.6 과 0.7 은 replicas 0 인 채 남아 리비전 이력이 됩니다 — 0.7 은 한 번도 완전히 배포된 적이 없는 리비전입니다.</text>
+  <text x="24" y="430" class="axis">합계는 내내 상한 4(= replicas 3 + maxSurge 1)를 넘지 않습니다. 종료 중 파드는 이 합계에 세지 않습니다.</text>
+</svg>
