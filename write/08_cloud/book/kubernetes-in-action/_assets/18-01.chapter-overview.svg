@@ -1,0 +1,62 @@
+<svg viewBox="0 0 820 560" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>18-01 전체 지도 — 끝나는 워크로드의 생애주기</title>
+  <desc>계속 도는 워크로드와 달리 Job은 한 번 성공하면 끝난다는 전제에서 출발해, 매니페스트를 쓰고 상태를 읽고 로그를 확인한 뒤, 필요하면 멈췄다 재개하고, 마지막에 지우거나 자동 삭제를 설정하는 다섯 단계를 세로로 이은 그림입니다. 두 번째 상자에는 restartPolicy에 Always를 쓸 수 없다는 위험 표시가, 마지막 다섯 번째 상자에는 자동 삭제가 로그까지 지운다는 주의 표시가 붙어 있습니다. 상자 번호는 다이어그램 안의 순서이고, 각 상자가 다루는 본문 절은 오른쪽에 따로 표시했습니다.</desc>
+  <rect width="820" height="560" fill="#0d0d0d"/>
+
+  <text x="40" y="40" fill="#e8e4df" font-size="15" font-weight="700">끝나야 완료되는 워크로드</text>
+
+  <rect x="40" y="62" width="740" height="66" rx="4" fill="#e8e4df"/>
+  <text x="60" y="88" fill="#0d0d0d" font-size="14" font-weight="700">1. 무한 실행이 아니다</text>
+  <text x="740" y="88" text-anchor="end" fill="#3a3632" font-size="11">§1</text>
+  <text x="60" y="112" fill="#3a3632" font-size="12">Deployment — 계속 살린다</text>
+  <text x="330" y="112" fill="#3a3632" font-size="12">Job — 성공하면 끝</text>
+
+  <path d="M410 128 L410 150" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="40" y="154" width="740" height="80" rx="4" fill="#e8e4df"/>
+  <text x="60" y="180" fill="#0d0d0d" font-size="14" font-weight="700">2. 매니페스트를 쓴다</text>
+  <text x="740" y="180" text-anchor="end" fill="#3a3632" font-size="11">§2</text>
+  <text x="60" y="204" fill="#3a3632" font-size="12">selector는 자동 생성</text>
+  <text x="300" y="204" fill="#3a3632" font-size="12">템플릿은 불변</text>
+  <rect x="480" y="190" width="240" height="22" rx="3" fill="#f2d4d4"/>
+  <text x="492" y="205" fill="#7a1f1f" font-size="11.5" font-weight="700">위험 · Always는 쓸 수 없다</text>
+  <text x="60" y="223" fill="#3a3632" font-size="12">OnFailure 또는 Never</text>
+
+  <path d="M410 234 L410 256" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="40" y="260" width="740" height="66" rx="4" fill="#e8e4df"/>
+  <text x="60" y="286" fill="#0d0d0d" font-size="14" font-weight="700">3. 상태와 로그를 읽는다</text>
+  <text x="740" y="286" text-anchor="end" fill="#3a3632" font-size="11">§3·§4</text>
+  <text x="60" y="310" fill="#3a3632" font-size="12">COMPLETIONS 현재/목표</text>
+  <text x="330" y="310" fill="#3a3632" font-size="12">logs job/이름</text>
+
+  <path d="M410 326 L410 348" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="40" y="352" width="740" height="66" rx="4" fill="#e8e4df"/>
+  <text x="60" y="378" fill="#0d0d0d" font-size="14" font-weight="700">4. 멈췄다 재개한다</text>
+  <text x="740" y="378" text-anchor="end" fill="#3a3632" font-size="11">§5</text>
+  <text x="60" y="402" fill="#3a3632" font-size="12">suspend true — 파드 삭제</text>
+  <text x="330" y="402" fill="#3a3632" font-size="12">false — 다시 생성</text>
+
+  <path d="M410 418 L410 440" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="40" y="444" width="740" height="80" rx="4" fill="#e8e4df"/>
+  <text x="60" y="470" fill="#0d0d0d" font-size="14" font-weight="700">5. 치운다</text>
+  <text x="740" y="470" text-anchor="end" fill="#3a3632" font-size="11">§6·§7</text>
+  <text x="60" y="494" fill="#3a3632" font-size="12">삭제하면 파드도 함께</text>
+  <text x="300" y="494" fill="#3a3632" font-size="12">orphan이면 남는다</text>
+  <rect x="490" y="480" width="230" height="22" rx="3" fill="rgb(212,168,83)"/>
+  <text x="502" y="495" fill="#0d0d0d" font-size="11.5" font-weight="700">주의 · TTL은 로그도 지운다</text>
+  <text x="60" y="513" fill="#3a3632" font-size="12">ttlSeconds</text>
+  <text x="128" y="513" fill="#3a3632" font-size="12">AfterFinished</text>
+
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+</svg>
