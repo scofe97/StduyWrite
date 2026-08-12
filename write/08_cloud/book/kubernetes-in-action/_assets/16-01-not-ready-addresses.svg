@@ -1,0 +1,62 @@
+<svg viewBox="0 0 720 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>publishNotReadyAddresses가 끊는 부팅 순환</title>
+  <desc>publishNotReadyAddresses가 false면 ready인 파드만 DNS에 오른다. 파드 셋이 모두 not ready인 부팅 시점에는 레코드가 없어 rs.initiate가 Host not found로 실패하고, 리플리카 셋이 초기화되지 않아 readiness probe도 계속 실패한다. ready가 되려면 DNS가 필요하고 DNS가 생기려면 ready여야 하는 순환이며, publishNotReadyAddresses를 true로 두면 이 고리가 끊긴다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: #b8b3ad; }
+      .box    { fill: #e8e4df; }
+      .warn   { fill: rgb(212,168,83); }
+      .danger { fill: #f2d4d4; }
+      .t      { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
+      .d      { font-size: 10.5px; fill: #3a3632; }
+      .dt     { font-size: 11px; font-weight: 700; fill: #7a1f1f; }
+      .n      { font-size: 10.5px; fill: #b8b3ad; }
+    </style>
+    <marker id="nra-a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="720" height="400" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">부팅 순환</text>
+  <text x="24" y="50" class="sub">not ready 주소 미공개 시</text>
+
+  <rect x="255" y="72" width="210" height="46" rx="8" class="box"/>
+  <text x="360" y="92" class="t" text-anchor="middle">1. 파드 3개 Running</text>
+  <text x="360" y="109" class="d" text-anchor="middle">아직 not ready</text>
+
+  <rect x="470" y="160" width="210" height="46" rx="8" class="danger"/>
+  <text x="575" y="180" class="dt" text-anchor="middle">2. DNS 레코드 없음</text>
+  <text x="575" y="197" class="d" text-anchor="middle">ready 인 파드만 등록</text>
+
+  <rect x="470" y="252" width="210" height="46" rx="8" class="box"/>
+  <text x="575" y="272" class="t" text-anchor="middle">3. Host not found</text>
+  <text x="575" y="289" class="d" text-anchor="middle">rs.initiate 실패</text>
+
+  <rect x="40" y="252" width="210" height="46" rx="8" class="box"/>
+  <text x="145" y="272" class="t" text-anchor="middle">4. 복제 미초기화</text>
+  <text x="145" y="289" class="d" text-anchor="middle">멤버 구성 안 됨</text>
+
+  <rect x="40" y="160" width="210" height="46" rx="8" class="box"/>
+  <text x="145" y="180" class="t" text-anchor="middle">5. probe 실패</text>
+  <text x="145" y="197" class="d" text-anchor="middle">MongoDB ping 불가</text>
+
+  <g stroke="#b8b3ad" stroke-width="1.6" fill="none">
+    <path d="M465,100 L575,100 L575,157" marker-end="url(#nra-a)"/>
+    <path d="M575,206 L575,249" marker-end="url(#nra-a)"/>
+    <path d="M468,275 L253,275" marker-end="url(#nra-a)"/>
+    <path d="M145,250 L145,209" marker-end="url(#nra-a)"/>
+    <path d="M145,158 L145,95 L253,95" marker-end="url(#nra-a)"/>
+  </g>
+
+  <rect x="255" y="160" width="210" height="86" rx="8" class="warn"/>
+  <text x="360" y="192" class="t" text-anchor="middle">주의 · 순환</text>
+  <text x="360" y="212" class="d" text-anchor="middle">ready 하려면 DNS 필요</text>
+  <text x="360" y="230" class="d" text-anchor="middle">DNS 생기려면 ready 필요</text>
+
+  <text x="360" y="345" class="n" text-anchor="middle">true 로 두면 1 에서 끊김</text>
+</svg>

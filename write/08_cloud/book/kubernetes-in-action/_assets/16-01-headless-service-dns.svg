@@ -1,56 +1,69 @@
-<svg viewBox="0 0 960 380" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>headless Service와 StatefulSet의 DNS</title>
-  <desc>clusterIP가 None인 headless Service를 StatefulSet과 결합하면, Service 이름은 모든 파드 IP로 resolve되고, 파드마다 추가 DNS 레코드(quiz-N.quiz-pods...)가 생겨 개별 IP를 조회할 수 있다. 이것이 안정된 네트워크 신원의 핵심이다.</desc>
+<svg viewBox="0 0 820 440" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>headless Service가 만드는 DNS 대응표와 개별 파드 조회</title>
+  <desc>보통의 ClusterIP Service는 이름 하나가 가상 IP 하나로 resolve된다. headless Service는 가상 IP가 없어 이름이 소속 파드 IP 전부로 resolve되지만 그것만으로는 특정 파드를 지목할 수 없다. StatefulSet과 결합하면 파드 하나당 한 줄씩 레코드가 추가되어, quiz-2 이름으로 조회하면 그 파드의 IP 하나만 돌아온다. 받은 값이 이미 실제 파드 IP이므로 kube-proxy의 DNAT 바꿔치기가 없고, 파드가 재생성돼 IP가 바뀌어도 이름은 같으므로 그 줄의 IP만 갱신된다.</desc>
   <defs>
     <style>
       .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
-      .sub   { font-size: 11px; fill: rgb(138,133,128); }
-      .svc   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
-      .pod   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
-      .dns   { font-size: 10.5px; font-weight: 700; fill: rgb(212,168,83); font-family: 'JetBrains Mono', monospace; }
-      .note  { font-size: 10.5px; fill: #e8e4df; }
+      .sub   { font-size: 11px; fill: #b8b3ad; }
+      .stage { font-size: 12px; font-weight: 800; fill: #e8e4df; }
+      .box   { fill: #e8e4df; }
+      .warn  { fill: rgb(212,168,83); }
+      .k     { font-size: 11px; font-weight: 700; fill: #0d0d0d;
+               font-family: 'JetBrains Mono', monospace; }
+      .v     { font-size: 11px; fill: #3a3632;
+               font-family: 'JetBrains Mono', monospace; }
+      .t     { font-size: 11.5px; font-weight: 700; fill: #0d0d0d; }
+      .d     { font-size: 10.5px; fill: #3a3632; }
+      .n     { font-size: 10.5px; fill: #b8b3ad; }
     </style>
-    <marker id="hdns-a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+    <marker id="dns-a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#b8b3ad"/>
+    </marker>
   </defs>
 
-  <rect x="0" y="0" width="960" height="380" fill="#0d0d0d"/>
-  <text x="24" y="30" class="title">headless Service + StatefulSet — 파드마다 DNS 레코드</text>
-  <text x="24" y="50" class="sub">clusterIP: None → Service 이름은 모든 파드 IP로, 파드 이름은 개별 IP로 resolve</text>
+  <rect x="0" y="0" width="820" height="440" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">DNS 표에 줄이 늘어납니다</text>
+  <text x="24" y="50" class="sub">이름 하나에서 파드마다 한 줄로</text>
 
-  <!-- StatefulSet -->
-  <rect x="30" y="150" width="120" height="70" rx="8" fill="rgb(140,190,235)"/>
-  <text x="90" y="180" class="svc" text-anchor="middle">quiz</text>
-  <text x="90" y="197" class="svc" text-anchor="middle" font-size="10">StatefulSet</text>
+  <text x="24" y="86" class="stage">1. ClusterIP</text>
+  <rect x="24" y="96" width="380" height="34" rx="6" class="box"/>
+  <text x="38" y="118" class="k">quiz-pods</text>
+  <text x="250" y="118" class="v">10.96.0.42</text>
+  <text x="420" y="118" class="n">가상 IP 하나</text>
 
-  <!-- headless Service -->
-  <rect x="200" y="70" width="170" height="52" rx="8" fill="rgb(240,215,120)"/>
-  <text x="285" y="90" class="svc" text-anchor="middle">quiz-pods Service</text>
-  <text x="285" y="108" class="svc" text-anchor="middle" font-size="10" style="fill:#0d0d0d">clusterIP: None (headless)</text>
+  <text x="24" y="164" class="stage">2. headless</text>
+  <rect x="24" y="174" width="380" height="34" rx="6" class="box"/>
+  <text x="38" y="196" class="k">quiz-pods</text>
+  <text x="250" y="196" class="v">.1.5 .2.7 .3.9</text>
+  <text x="420" y="196" class="n">목록만 · 지목 불가</text>
 
-  <!-- pods -->
-  <rect x="220" y="150" width="130" height="46" rx="6" fill="rgb(91,155,213)"/><text x="285" y="178" class="pod" text-anchor="middle" style="fill:#e8e4df">quiz-0 Pod</text>
-  <rect x="220" y="208" width="130" height="46" rx="6" fill="rgb(91,155,213)"/><text x="285" y="236" class="pod" text-anchor="middle" style="fill:#e8e4df">quiz-1 Pod</text>
-  <rect x="220" y="266" width="130" height="46" rx="6" fill="rgb(91,155,213)"/><text x="285" y="294" class="pod" text-anchor="middle" style="fill:#e8e4df">quiz-2 Pod</text>
+  <text x="24" y="242" class="stage">3. StatefulSet 결합</text>
 
-  <line x1="150" y1="185" x2="218" y2="173" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#hdns-a)"/>
-  <line x1="285" y1="122" x2="285" y2="148" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#hdns-a)"/>
+  <rect x="24" y="252" width="380" height="34" rx="6" class="box"/>
+  <text x="38" y="274" class="k">quiz-0.quiz-pods</text>
+  <text x="250" y="274" class="v">10.244.1.5</text>
 
-  <!-- DNS cylinder -->
-  <ellipse cx="720" cy="80" rx="55" ry="14" fill="rgb(245,200,150)"/>
-  <rect x="665" y="80" width="110" height="40" fill="rgb(245,200,150)"/>
-  <ellipse cx="720" cy="120" rx="55" ry="14" fill="rgb(230,185,135)"/>
-  <text x="720" y="105" class="svc" text-anchor="middle">DNS</text>
+  <rect x="24" y="292" width="380" height="34" rx="6" class="box"/>
+  <text x="38" y="314" class="k">quiz-1.quiz-pods</text>
+  <text x="250" y="314" class="v">10.244.2.7</text>
 
-  <!-- per-pod DNS records -->
-  <g class="dns" text-anchor="start">
-    <text x="440" y="173">quiz-0.quiz-pods.kiada.svc.cluster.local</text>
-    <text x="440" y="231">quiz-1.quiz-pods.kiada.svc.cluster.local</text>
-    <text x="440" y="289">quiz-2.quiz-pods.kiada.svc.cluster.local</text>
-  </g>
-  <line x1="352" y1="173" x2="438" y2="173" stroke="rgb(212,168,83)" stroke-width="1.4" stroke-dasharray="4 3"/>
-  <line x1="352" y1="231" x2="438" y2="231" stroke="rgb(212,168,83)" stroke-width="1.4" stroke-dasharray="4 3"/>
-  <line x1="352" y1="289" x2="438" y2="289" stroke="rgb(212,168,83)" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <rect x="24" y="332" width="380" height="34" rx="6" class="warn"/>
+  <text x="38" y="354" class="k">quiz-2.quiz-pods</text>
+  <text x="250" y="354" class="v" style="fill:#0d0d0d">10.244.3.9</text>
 
-  <text x="600" y="330" class="note" text-anchor="middle">StatefulSet과 결합할 때만 파드별 레코드가 생성됩니다</text>
-  <text x="600" y="350" class="dns" text-anchor="middle" style="fill:rgb(138,133,128)">quiz-pods.kiada.svc.cluster.local → 모든 파드 IP</text>
+  <text x="420" y="314" class="n">파드마다 한 줄</text>
+
+  <rect x="500" y="252" width="290" height="114" rx="8" class="box"/>
+  <text x="645" y="278" class="t" text-anchor="middle">quiz-1 → quiz-2 조회</text>
+  <text x="645" y="304" class="d" text-anchor="middle">1. 이름으로 물음</text>
+  <text x="645" y="326" class="d" text-anchor="middle">2. IP 하나만 돌아옴</text>
+  <text x="645" y="348" class="d" text-anchor="middle">3. 그 주소로 직접 연결</text>
+
+  <path d="M406,349 L498,324" stroke="#b8b3ad" stroke-width="1.6" fill="none" marker-end="url(#dns-a)"/>
+
+  <text x="24" y="400" class="n">이름 뒤 생략 · .kiada.svc</text>
+  <text x="500" y="400" class="n">DNAT 바꿔치기 없음</text>
 </svg>
