@@ -1,47 +1,65 @@
-<svg viewBox="0 0 960 340" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>Operator가 CRD·커스텀 오브젝트로 상태 앱을 관리</title>
-  <desc>사용자가 Kubernetes API로 커스텀 오브젝트(MongoDB)를 만들면, Operator가 이를 감시해 StatefulSet·Service·Secret을 만들고 관리한다. 사용자는 하위 오브젝트를 직접 다루지 않고 커스텀 오브젝트만 수정한다.</desc>
+<svg viewBox="0 0 900 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     aria-labelledby="sts-operator-title sts-operator-desc"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title id="sts-operator-title">Operator가 CRD와 커스텀 오브젝트로 상태 앱을 관리하는 구조</title>
+  <desc id="sts-operator-desc">CRD가 MongoDBCommunity 라는 오브젝트 타입을 API에 추가하고, 사용자가 그 인스턴스를 만들면 Operator가 감시해 StatefulSet과 Service와 Secret을 생성한다. StatefulSet은 없어지지 않고 Operator가 만들어 쓰는 하위 오브젝트이며, 그 StatefulSet이 ordinal 이름을 가진 파드를 만든다. 사용자는 하위 오브젝트를 직접 다루지 않고 커스텀 오브젝트만 수정하며, 하위를 직접 바꾸면 Operator가 되돌린다.</desc>
   <defs>
     <style>
-      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
-      .sub   { font-size: 11px; fill: rgb(138,133,128); }
-      .obj   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
-      .step  { font-size: 10.5px; fill: #e8e4df; }
-      .num   { font-size: 12px; font-weight: 800; fill: rgb(212,168,83); }
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 12px; fill: #b8b3ad; }
+      .box   { fill: #e8e4df; }
+      .warn  { fill: rgb(212,168,83); }
+      .t     { font-size: 12.5px; font-weight: 700; fill: #0d0d0d; }
+      .d     { font-size: 12px; fill: #3a3632; }
+      .n     { font-size: 12px; fill: #b8b3ad; }
+      .step  { font-size: 12.5px; font-weight: 800; fill: #e8e4df; }
     </style>
-    <marker id="ocr-a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+    <marker id="ocr-a" viewBox="0 0 7 6" markerUnits="strokeWidth"
+            markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#b8b3ad"/>
+    </marker>
   </defs>
 
-  <rect x="0" y="0" width="960" height="340" fill="#0d0d0d"/>
-  <text x="24" y="30" class="title">Operator — CRD와 커스텀 오브젝트로 상태 앱 자동화</text>
-  <text x="24" y="50" class="sub">사용자는 커스텀 오브젝트만 다루고, Operator가 StatefulSet·Service·Secret을 관리</text>
+  <rect x="0" y="0" width="900" height="400" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">사용자는 위 하나만 다룹니다</text>
+  <text x="24" y="54" class="sub">아래는 Operator 가 만듭니다</text>
 
-  <!-- MongoDB custom object (user creates) -->
-  <rect x="40" y="150" width="150" height="60" rx="8" fill="rgb(91,155,213)"/>
-  <text x="115" y="178" class="obj" text-anchor="middle" style="fill:#e8e4df">MongoDB</text>
-  <text x="115" y="196" class="obj" text-anchor="middle" style="fill:#e8e4df" font-size="10">(커스텀 오브젝트)</text>
-  <text x="115" y="130" class="num" text-anchor="middle">① API로 생성</text>
+  <text x="130" y="92" class="step">1. 사용자가 만듦</text>
+  <rect class="warn" x="40" y="104" width="230" height="56" rx="8"/>
+  <text x="155" y="128" class="t" text-anchor="middle">MongoDBCommunity</text>
+  <text x="155" y="148" class="d" text-anchor="middle">members: 3</text>
+  <text x="40" y="180" class="n">CRD 가 추가한 타입</text>
 
-  <!-- Operator -->
-  <rect x="360" y="60" width="150" height="50" rx="8" fill="rgb(212,168,83)"/>
-  <text x="435" y="90" class="obj" text-anchor="middle">MongoDB Operator</text>
-  <text x="435" y="128" class="num" text-anchor="middle">② StatefulSet·Service·Secret 생성</text>
+  <path d="M275,132 L360,132" stroke="#b8b3ad" stroke-width="1.8" fill="none" marker-end="url(#ocr-a)"/>
 
-  <!-- managed objects box -->
-  <rect x="340" y="150" width="340" height="150" rx="10" fill="none" stroke="rgb(138,133,128)" stroke-width="1.4" stroke-dasharray="6 4"/>
-  <rect x="365" y="170" width="140" height="42" rx="6" fill="rgb(140,190,235)"/><text x="435" y="196" class="obj" text-anchor="middle">StatefulSet</text>
-  <rect x="365" y="222" width="140" height="42" rx="6" fill="rgb(240,215,120)"/><text x="435" y="248" class="obj" text-anchor="middle">Service</text>
-  <rect x="520" y="222" width="140" height="42" rx="6" fill="rgb(240,150,190)"/><text x="590" y="248" class="obj" text-anchor="middle">Secret</text>
+  <text x="470" y="92" class="step">2. Operator 가 감시</text>
+  <rect class="box" x="370" y="104" width="220" height="56" rx="8"/>
+  <text x="480" y="128" class="t" text-anchor="middle">MongoDB Operator</text>
+  <text x="480" y="148" class="d" text-anchor="middle">앱 지식을 가진 컨트롤러</text>
 
-  <!-- Pods -->
-  <rect x="740" y="180" width="120" height="46" rx="8" fill="rgb(180,210,245)"/>
-  <rect x="730" y="172" width="120" height="46" rx="8" fill="rgb(180,210,245)"/>
-  <text x="790" y="200" class="obj" text-anchor="middle">Pods</text>
+  <path d="M480,164 L480,214" stroke="#b8b3ad" stroke-width="1.8" fill="none" marker-end="url(#ocr-a)"/>
 
-  <!-- arrows -->
-  <line x1="190" y1="180" x2="338" y2="185" stroke="rgb(138,133,128)" stroke-width="1.8" marker-end="url(#ocr-a)"/>
-  <line x1="435" y1="110" x2="435" y2="168" stroke="rgb(138,133,128)" stroke-width="1.8" marker-end="url(#ocr-a)"/>
-  <line x1="505" y1="191" x2="728" y2="195" stroke="rgb(138,133,128)" stroke-width="1.8" marker-end="url(#ocr-a)"/>
+  <text x="370" y="242" class="step">3. 하위 오브젝트 생성</text>
+  <rect x="360" y="254" width="500" height="112" rx="10" fill="none"
+        stroke="#b8b3ad" stroke-width="1.4" stroke-dasharray="6 4"/>
+  <rect class="box" x="380" y="276" width="150" height="42" rx="6"/>
+  <text x="455" y="303" class="t" text-anchor="middle">StatefulSet</text>
+  <rect class="box" x="550" y="276" width="130" height="42" rx="6"/>
+  <text x="615" y="303" class="t" text-anchor="middle">Service</text>
+  <rect class="box" x="700" y="276" width="130" height="42" rx="6"/>
+  <text x="765" y="303" class="t" text-anchor="middle">Secret</text>
 
-  <text x="435" y="325" class="step" text-anchor="middle">③ 하위 오브젝트를 직접 바꾸면 Operator가 되돌림 — members 값만 바꾸면 스케일·리플리카 셋 재구성 자동</text>
+  <rect class="box" x="380" y="328" width="300" height="26" rx="5"/>
+  <text x="530" y="346" class="d" text-anchor="middle"
+        data-svg-literal="true">example-mongodb-0 · -1 · -2</text>
+  <path d="M455,320 L455,326" stroke="#b8b3ad" stroke-width="1.6" fill="none" marker-end="url(#ocr-a)"/>
+
+  <text x="24" y="290" class="n">StatefulSet 은</text>
+  <text x="24" y="312" class="n">사라지지 않습니다</text>
+  <text x="24" y="334" class="n">Operator 가</text>
+  <text x="24" y="356" class="n">만들어 씁니다</text>
+
+  <text x="360" y="388" class="n">직접 바꾸면 되돌아옵니다</text>
 </svg>
