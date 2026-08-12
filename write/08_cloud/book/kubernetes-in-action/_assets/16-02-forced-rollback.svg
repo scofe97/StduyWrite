@@ -1,0 +1,65 @@
+<svg viewBox="0 0 760 430" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>OrderedReady에서 템플릿을 되돌려도 풀리지 않는 교착</title>
+  <desc>OrderedReady 정책에서 파드가 Ready가 되지 못하면 롤아웃이 멈춘다. 이때 Pod 템플릿을 정상 설정으로 되돌려도 컨트롤러는 깨진 파드가 Ready가 되기를 계속 기다리므로 되돌린 템플릿을 적용하지 못한다. 공식 문서가 known issue로 분류한 상태이며, 운영자가 그 파드를 직접 삭제해야 새 템플릿으로 재생성되고 뒤따르는 파드가 순서대로 올라온다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: #b8b3ad; }
+      .box    { fill: #e8e4df; }
+      .warn   { fill: rgb(212,168,83); }
+      .danger { fill: #f2d4d4; }
+      .t      { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
+      .dt     { font-size: 12px; font-weight: 700; fill: #7a1f1f; }
+      .d      { font-size: 10.5px; fill: #3a3632; }
+      .n      { font-size: 10.5px; fill: #b8b3ad; }
+    </style>
+    <marker id="fr-a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#b8b3ad"/>
+    </marker>
+    <marker id="fr-b" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#7a1f1f"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="760" height="430" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">되돌려도 풀리지 않습니다</text>
+  <text x="24" y="50" class="sub">OrderedReady 의 결함</text>
+
+  <rect x="40" y="80" width="230" height="50" rx="8" class="box"/>
+  <text x="155" y="102" class="t" text-anchor="middle">1. quiz-0 not ready</text>
+  <text x="155" y="120" class="d" text-anchor="middle">probe 가 quorum 요구</text>
+
+  <rect x="40" y="160" width="230" height="50" rx="8" class="box"/>
+  <text x="155" y="182" class="t" text-anchor="middle">2. 템플릿 수정</text>
+  <text x="155" y="200" class="d" text-anchor="middle">probe 를 root URI 로</text>
+
+  <rect x="380" y="160" width="300" height="110" rx="8" class="danger"/>
+  <text x="530" y="186" class="dt" text-anchor="middle">3. 교착</text>
+  <text x="530" y="212" class="d" text-anchor="middle">컨트롤러가 Ready 를 기다림</text>
+  <text x="530" y="234" class="d" text-anchor="middle">quiz-0 은 옛 probe 유지</text>
+  <text x="530" y="256" class="d" text-anchor="middle">새 템플릿이 닿지 못함</text>
+
+  <path d="M155,130 L155,157" stroke="#b8b3ad" stroke-width="1.6" fill="none" marker-end="url(#fr-a)"/>
+  <path d="M272,185 L376,185" stroke="#b8b3ad" stroke-width="1.6" fill="none" marker-end="url(#fr-a)"/>
+
+  <path d="M690,215 C726,215 726,150 690,150 L684,150" stroke="#7a1f1f" stroke-width="1.8"
+        fill="none" marker-end="url(#fr-b)"/>
+  <text x="530" y="292" class="n" text-anchor="middle">스스로 빠져나오지 못함</text>
+
+  <rect x="40" y="330" width="230" height="50" rx="8" class="warn"/>
+  <text x="155" y="352" class="t" text-anchor="middle">4. 수동 삭제</text>
+  <text x="155" y="370" class="d" text-anchor="middle">delete po quiz-0</text>
+
+  <rect x="380" y="330" width="300" height="50" rx="8" class="box"/>
+  <text x="530" y="352" class="t" text-anchor="middle">5. 새 템플릿으로 재생성</text>
+  <text x="530" y="370" class="d" text-anchor="middle">이후 순차 진행</text>
+
+  <path d="M380,240 L300,240 L300,330" stroke="#b8b3ad" stroke-width="1.6"
+        stroke-dasharray="4 3" fill="none" marker-end="url(#fr-a)"/>
+  <path d="M272,355 L376,355" stroke="#b8b3ad" stroke-width="1.6" fill="none" marker-end="url(#fr-a)"/>
+
+  <text x="24" y="410" class="n">점선 · 사람이 개입하는 지점</text>
+</svg>
