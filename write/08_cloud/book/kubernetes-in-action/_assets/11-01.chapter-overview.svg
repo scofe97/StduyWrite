@@ -1,0 +1,57 @@
+<svg viewBox="0 0 820 560" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>11-01 전체 지도 — 변하는 파드 IP를 변하지 않는 하나의 주소로</title>
+  <desc>파드 IP가 수시로 바뀐다는 문제에서 출발해, 파드끼리는 NAT 없는 flat 네트워크로 통신하고, Service가 label selector로 파드를 골라 고정된 ClusterIP를 세우며, 그 ClusterIP가 DNS 이름으로 불리고 커널 DNAT로 실제 파드 IP가 되는 흐름을 세로로 이은 그림입니다. 세션 어피니티 단계에는 Service가 L4라 쿠키를 못 읽는다는 열쇠 표시가, ClusterIP 단계에는 가상 IP라 ping이 안 된다는 주의 표시가 붙어 있습니다.</desc>
+  <rect width="820" height="560" fill="#0d0d0d"/>
+
+  <text x="40" y="40" fill="#e8e4df" font-size="15" font-weight="700">변하는 파드 IP를 변하지 않는 하나의 주소로</text>
+
+  <rect x="40" y="62" width="740" height="66" rx="4" fill="#e8e4df"/>
+  <text x="60" y="88" fill="#0d0d0d" font-size="14" font-weight="700">진입·1. 파드 IP는 붙잡을 수 없습니다</text>
+  <text x="740" y="88" text-anchor="end" fill="#3a3632" font-size="11">진입 · §1</text>
+  <text x="60" y="112" fill="#3a3632" font-size="12">ephemeral · 배정 전엔 모름 · replica마다 다름</text>
+  <text x="420" y="112" fill="#3a3632" font-size="12">파드끼리는 NAT 없는 flat 네트워크</text>
+
+  <path d="M410 128 L410 150" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="40" y="154" width="740" height="66" rx="4" fill="#e8e4df"/>
+  <text x="60" y="180" fill="#0d0d0d" font-size="14" font-weight="700">2·3. label selector가 뒤에 설 파드를 정합니다</text>
+  <text x="740" y="180" text-anchor="end" fill="#3a3632" font-size="11">§2 · §3</text>
+  <text x="60" y="204" fill="#3a3632" font-size="12">selector ↔ 파드 라벨 (네임스페이스 안)</text>
+  <text x="420" y="204" fill="#3a3632" font-size="12">CNI=IP 발급 · 컨트롤러=명단 · kube-proxy=길</text>
+
+  <path d="M410 220 L410 242" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="40" y="246" width="740" height="80" rx="4" fill="#e8e4df"/>
+  <text x="60" y="272" fill="#0d0d0d" font-size="14" font-weight="700">4·5. ClusterIP는 고정되지만 실재하지 않습니다</text>
+  <text x="740" y="272" text-anchor="end" fill="#3a3632" font-size="11">§4 · §5</text>
+  <text x="60" y="296" fill="#3a3632" font-size="12">파드가 죽어도 안 바뀝니다</text>
+  <rect x="300" y="282" width="420" height="22" rx="3" fill="#f2d4d4"/>
+  <text x="312" y="297" fill="#7a1f1f" font-size="11.5" font-weight="700">주의 · 어느 인터페이스에도 없는 가상 IP라 ping이 안 됩니다</text>
+
+  <path d="M410 326 L410 348" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="40" y="352" width="740" height="80" rx="4" fill="#e8e4df"/>
+  <text x="60" y="378" fill="#0d0d0d" font-size="14" font-weight="700">6. 어피니티는 클라이언트 IP까지만</text>
+  <text x="740" y="378" text-anchor="end" fill="#3a3632" font-size="11">§6</text>
+  <text x="60" y="402" fill="#3a3632" font-size="12">None · ClientIP 둘뿐</text>
+  <rect x="300" y="388" width="420" height="22" rx="3" fill="rgb(212,168,83)"/>
+  <text x="312" y="403" fill="#0d0d0d" font-size="11.5" font-weight="700">열쇠 · L4라 HTTP 쿠키를 아예 못 읽습니다</text>
+
+  <path d="M410 432 L410 454" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect x="40" y="458" width="740" height="66" rx="4" fill="#e8e4df"/>
+  <text x="60" y="484" fill="#0d0d0d" font-size="14" font-weight="700">7. 이름 해석과 주소 변환은 다른 단계입니다</text>
+  <text x="740" y="484" text-anchor="end" fill="#3a3632" font-size="11">§7</text>
+  <text x="60" y="508" fill="#3a3632" font-size="12">DNS: quiz → ClusterIP</text>
+  <text x="320" y="508" fill="#3a3632" font-size="12">DNAT: ClusterIP → 실제 파드 IP</text>
+
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+</svg>

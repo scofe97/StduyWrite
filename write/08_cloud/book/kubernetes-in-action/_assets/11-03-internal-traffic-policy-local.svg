@@ -1,0 +1,94 @@
+<svg viewBox="0 0 1120 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>internalTrafficPolicy Local의 실제 내부 요청 경로</title>
+  <desc>클러스터 내부의 클라이언트 Pod가 Service의 ClusterIP로 요청하면 그 요청을 보낸 노드의 Service 규칙이 같은 노드에 있는 Endpoint만 선택한다. Node A에는 로컬 수집기 Pod가 있어 요청이 성공하지만 Node B에는 로컬 Endpoint가 없어 Node A의 원격 Pod를 사용하지 못하고 연결이 실패한다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 25px; font-weight: 800; fill: #e8e4df; }
+      .sub { font-size: 15px; fill: #b8b3ad; }
+      .panel-title { font-size: 15px; font-weight: 800; fill: #e8e4df; }
+      .box { fill: #e8e4df; stroke: #b8b3ad; stroke-width: 1.4; }
+      .box-title { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .box-detail { font-size: 11px; fill: #3a3632; }
+      .label { font-size: 12px; fill: #b8b3ad; }
+      .danger { fill: #f2d4d4; stroke: #b8b3ad; stroke-width: 1.4; }
+      .danger-text { font-size: 12px; font-weight: 800; fill: #7a1f1f; }
+    </style>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#b8b3ad"/>
+    </marker>
+    <marker id="danger-arrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#7a1f1f"/>
+    </marker>
+  </defs>
+
+  <rect width="1120" height="560" fill="#0d0d0d"/>
+  <text x="36" y="42" class="title">internal · Local</text>
+  <text x="36" y="68" class="sub">내부 요청의 노드 로컬 경로</text>
+
+  <rect x="36" y="96" width="1048" height="178" rx="14" fill="rgb(20,20,20)" stroke="#b8b3ad" stroke-width="1.4"/>
+  <text x="58" y="126" class="panel-title">Node A · Endpoint 있음</text>
+
+  <rect x="62" y="154" width="144" height="64" rx="9" class="box"/>
+  <text x="134" y="180" text-anchor="middle" class="box-title">애플리케이션 Pod</text>
+  <text x="134" y="201" text-anchor="middle" class="box-detail">내부 클라이언트</text>
+
+  <line x1="206" y1="186" x2="260" y2="186" stroke="#b8b3ad" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="233" y="171" text-anchor="middle" class="label">요청</text>
+
+  <rect x="268" y="154" width="154" height="64" rx="9" class="box"/>
+  <text x="345" y="180" text-anchor="middle" class="box-title">Service ClusterIP</text>
+  <text x="345" y="201" text-anchor="middle" class="box-detail">otel-collector:4318</text>
+
+  <line x1="422" y1="186" x2="476" y2="186" stroke="#b8b3ad" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="484" y="154" width="164" height="64" rx="9" class="box"/>
+  <text x="566" y="180" text-anchor="middle" class="box-title">Node A Service 규칙</text>
+  <text x="566" y="201" text-anchor="middle" class="box-detail">nodeName=A만 선택</text>
+
+  <line x1="648" y1="186" x2="702" y2="186" stroke="#b8b3ad" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="710" y="154" width="178" height="64" rx="9" class="box"/>
+  <text x="799" y="180" text-anchor="middle" class="box-title">OTel DaemonSet Pod</text>
+  <text x="799" y="201" text-anchor="middle" class="box-detail">Node A의 로컬 Endpoint</text>
+
+  <rect x="922" y="154" width="134" height="64" rx="9" class="box"/>
+  <text x="989" y="180" text-anchor="middle" class="box-title">요청 성공</text>
+  <text x="989" y="201" text-anchor="middle" class="box-detail">교차 노드 홉 없음</text>
+
+  <line x1="888" y1="186" x2="914" y2="186" stroke="#b8b3ad" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="36" y="294" width="1048" height="178" rx="14" fill="rgb(20,20,20)" stroke="#b8b3ad" stroke-width="1.4"/>
+  <text x="58" y="324" class="panel-title">Node B · Endpoint 없음</text>
+
+  <rect x="62" y="352" width="144" height="64" rx="9" class="box"/>
+  <text x="134" y="378" text-anchor="middle" class="box-title">애플리케이션 Pod</text>
+  <text x="134" y="399" text-anchor="middle" class="box-detail">내부 클라이언트</text>
+
+  <line x1="206" y1="384" x2="260" y2="384" stroke="#b8b3ad" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="268" y="352" width="154" height="64" rx="9" class="box"/>
+  <text x="345" y="378" text-anchor="middle" class="box-title">Service ClusterIP</text>
+  <text x="345" y="399" text-anchor="middle" class="box-detail">같은 Service 이름</text>
+
+  <line x1="422" y1="384" x2="476" y2="384" stroke="#b8b3ad" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="484" y="352" width="164" height="64" rx="9" class="box"/>
+  <text x="566" y="378" text-anchor="middle" class="box-title">Node B Service 규칙</text>
+  <text x="566" y="399" text-anchor="middle" class="box-detail">nodeName=B만 선택</text>
+
+  <line x1="648" y1="384" x2="702" y2="384" stroke="#7a1f1f" stroke-width="2" marker-end="url(#danger-arrow)"/>
+
+  <rect x="710" y="352" width="178" height="64" rx="9" class="danger"/>
+  <text x="799" y="378" text-anchor="middle" class="danger-text">위험 · Endpoint 없음</text>
+  <text x="799" y="399" text-anchor="middle" class="box-detail">원격 Pod는 선택 제외</text>
+
+  <line x1="888" y1="384" x2="914" y2="384" stroke="#7a1f1f" stroke-width="2" marker-end="url(#danger-arrow)"/>
+
+  <rect x="922" y="352" width="134" height="64" rx="9" class="danger"/>
+  <text x="989" y="378" text-anchor="middle" class="danger-text">연결 실패</text>
+  <text x="989" y="399" text-anchor="middle" class="box-detail">다른 노드로 안 감</text>
+
+  <rect x="36" y="494" width="1048" height="46" rx="10" fill="rgb(20,20,20)" stroke="#b8b3ad" stroke-width="1.2"/>
+  <text x="58" y="522" class="label">Slice: 전체 Pod</text>
+  <text x="326" y="522" class="label">Service 규칙: 로컬만</text>
+</svg>
