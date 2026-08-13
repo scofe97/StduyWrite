@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "completions와 parallelism — 컨트롤러가 유지하는 두 값",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "Job 컨트롤러"
+    },
+    {
+      "id": "judge",
+      "label": "동시 실행 창"
+    },
+    {
+      "id": "terminal",
+      "label": "완료 판정"
+    }
+  ],
+  "states": [
+    {
+      "id": "created",
+      "type": "start",
+      "lane": "main",
+      "col": 0,
+      "label": "목표 5회",
+      "sublabel": "completions 5",
+      "step": "01"
+    },
+    {
+      "id": "running",
+      "type": "active",
+      "lane": "main",
+      "col": 1,
+      "label": "동시 2개",
+      "sublabel": "parallelism 2",
+      "step": "02"
+    },
+    {
+      "id": "complete",
+      "type": "success",
+      "lane": "main",
+      "col": 2,
+      "label": "작은 쪽 상한",
+      "sublabel": "둘 중 최소",
+      "step": "03"
+    },
+    {
+      "id": "suspended",
+      "type": "waiting",
+      "lane": "judge",
+      "col": 0,
+      "label": "파드 2개",
+      "sublabel": "창이 꽉 참"
+    },
+    {
+      "id": "podrun",
+      "type": "active",
+      "lane": "judge",
+      "col": 1,
+      "label": "하나 끝남",
+      "sublabel": "즉시 다음 생성"
+    },
+    {
+      "id": "failed",
+      "type": "failure",
+      "lane": "judge",
+      "col": 2,
+      "label": "다시 2개",
+      "sublabel": "창을 채움"
+    },
+    {
+      "id": "kept",
+      "type": "waiting",
+      "lane": "terminal",
+      "col": 0,
+      "label": "성공 누적",
+      "sublabel": "3/5 진행"
+    },
+    {
+      "id": "deleted",
+      "type": "success",
+      "lane": "terminal",
+      "col": 1,
+      "label": "목표 도달",
+      "sublabel": "5/5 성공"
+    },
+    {
+      "id": "ttl",
+      "type": "failure",
+      "lane": "terminal",
+      "col": 2,
+      "label": "Job 완료",
+      "sublabel": "더 안 만듦"
+    }
+  ],
+  "transitions": [
+    {
+      "id": "t1",
+      "from": "created",
+      "to": "running",
+      "variant": "emphasis",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "t2",
+      "from": "running",
+      "to": "complete",
+      "variant": "emphasis",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "t3",
+      "from": "complete",
+      "to": "podrun",
+      "label": "동시 기동",
+      "variant": "emphasis",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        436,
+        218
+      ]
+    },
+    {
+      "id": "t4",
+      "from": "suspended",
+      "to": "kept",
+      "label": "if: 여유",
+      "variant": "dashed",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        434,
+        393
+      ]
+    },
+    {
+      "id": "t5",
+      "from": "podrun",
+      "to": "deleted",
+      "label": "교체",
+      "variant": "emphasis",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        578,
+        393
+      ]
+    },
+    {
+      "id": "t6",
+      "from": "failed",
+      "to": "ttl",
+      "label": "if: 도달",
+      "variant": "security",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        742,
+        393
+      ]
+    }
+  ]
+}

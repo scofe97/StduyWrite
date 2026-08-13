@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "18-01 전체 지도 — Job이 파드를 완료까지 끌고 가는 구조",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Control Plane",
+      "wraps": [
+        "apiserver",
+        "jobctl"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "Worker Node",
+      "wraps": [
+        "kubelet",
+        "pod"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "user",
+      "type": "external",
+      "label": "사용자",
+      "sublabel": "apply·patch·delete",
+      "tag": "§2·§5·§6",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "apiserver",
+      "type": "cloud",
+      "label": "API Server",
+      "sublabel": "Job 오브젝트",
+      "tag": "§2 매니페스트",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "jobctl",
+      "type": "backend",
+      "label": "Job 컨트롤러",
+      "sublabel": "완료 파드 수",
+      "tag": "§3 상태 조회",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "kubelet",
+      "type": "security",
+      "label": "kubelet",
+      "sublabel": "restartPolicy 판정",
+      "tag": "§2 Always 금지",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "pod",
+      "type": "messagebus",
+      "label": "Pod",
+      "sublabel": "Completed 유지",
+      "tag": "§4 로그",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "ttl",
+      "type": "database",
+      "label": "TTL 컨트롤러",
+      "sublabel": "자동 삭제",
+      "tag": "§7 로그도 사라짐",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "user",
+      "to": "apiserver",
+      "label": "Job 생성"
+    },
+    {
+      "from": "apiserver",
+      "to": "jobctl",
+      "label": "observe: 감시",
+      "variant": "dashed"
+    },
+    {
+      "from": "jobctl",
+      "to": "pod"
+    },
+    {
+      "from": "kubelet",
+      "to": "pod",
+      "label": "support: 기동",
+      "variant": "dashed"
+    },
+    {
+      "from": "pod",
+      "to": "ttl"
+    }
+  ]
+}

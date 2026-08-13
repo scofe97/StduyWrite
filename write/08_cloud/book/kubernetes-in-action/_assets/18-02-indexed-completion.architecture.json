@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Indexed 완료 모드 — 한 템플릿에서 인덱스로 갈리는 파드",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Control Plane",
+      "wraps": [
+        "jobspec",
+        "jobctl"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "Worker Nodes",
+      "wraps": [
+        "pod0",
+        "pod1",
+        "pod11"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "jobspec",
+      "type": "cloud",
+      "label": "Job spec",
+      "sublabel": "completionMode",
+      "tag": "Indexed",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "jobctl",
+      "type": "backend",
+      "label": "Job 컨트롤러",
+      "sublabel": "completions 12",
+      "tag": "인덱스 배정",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "data",
+      "type": "external",
+      "label": "월별 데이터",
+      "sublabel": "2021년 12개월",
+      "tag": "조각끼리 독립",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "pod0",
+      "type": "messagebus",
+      "label": "Pod 0",
+      "sublabel": "INDEX=0",
+      "tag": "1월 처리",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "pod1",
+      "type": "messagebus",
+      "label": "Pod 1",
+      "sublabel": "INDEX=1",
+      "tag": "2월 처리",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "pod11",
+      "type": "database",
+      "label": "Pod 11",
+      "sublabel": "INDEX=11",
+      "tag": "12월 처리",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "jobspec",
+      "to": "jobctl",
+      "label": "모드 전달"
+    },
+    {
+      "from": "jobctl",
+      "to": "pod1"
+    },
+    {
+      "from": "data",
+      "to": "pod11"
+    },
+    {
+      "from": "pod0",
+      "to": "pod1"
+    },
+    {
+      "from": "pod1",
+      "to": "pod11"
+    }
+  ]
+}

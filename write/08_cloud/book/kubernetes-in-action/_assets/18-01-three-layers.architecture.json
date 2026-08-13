@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Job·Pod·Container — 누가 만들고 무엇을 세는가",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Control Plane",
+      "wraps": [
+        "apiserver",
+        "jobctl"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "Worker Node",
+      "wraps": [
+        "kubelet",
+        "pod",
+        "container"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "user",
+      "type": "external",
+      "label": "사용자",
+      "sublabel": "kubectl apply",
+      "tag": "지시서를 낸다",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "apiserver",
+      "type": "cloud",
+      "label": "API Server",
+      "sublabel": "Job 오브젝트 저장",
+      "tag": "etcd에 기록",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "jobctl",
+      "type": "backend",
+      "label": "Job 컨트롤러",
+      "sublabel": "controller manager",
+      "tag": "완료 파드 수를 셈",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "kubelet",
+      "type": "security",
+      "label": "kubelet",
+      "sublabel": "노드마다 하나",
+      "tag": "종료 코드를 봄",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "pod",
+      "type": "messagebus",
+      "label": "Pod",
+      "sublabel": "실행 단위",
+      "tag": "Succeeded로 끝남",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "container",
+      "type": "database",
+      "label": "Container",
+      "sublabel": "실제 프로세스",
+      "tag": "exit code 0",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "user",
+      "to": "apiserver",
+      "label": "Job 생성"
+    },
+    {
+      "from": "apiserver",
+      "to": "jobctl",
+      "label": "observe: 감시",
+      "variant": "dashed"
+    },
+    {
+      "from": "jobctl",
+      "to": "pod"
+    },
+    {
+      "from": "kubelet",
+      "to": "container",
+      "label": "support: 기동",
+      "variant": "dashed"
+    },
+    {
+      "from": "pod",
+      "to": "container",
+      "label": "실행"
+    }
+  ]
+}

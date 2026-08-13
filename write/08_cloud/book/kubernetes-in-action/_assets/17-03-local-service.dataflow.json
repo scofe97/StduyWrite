@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "internalTrafficPolicy Local은 로컬 엔드포인트만 남긴다",
+    "viewBox": [
+      1000,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "stages": [
+    {
+      "label": "요청"
+    },
+    {
+      "label": "정책 적용"
+    },
+    {
+      "label": "엔드포인트"
+    },
+    {
+      "label": "결과"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "kiadaA",
+      "type": "frontend",
+      "stage": 0,
+      "row": 0,
+      "label": "A의 Kiada",
+      "sublabel": "Service 이름 호출",
+      "tag": "노드 A",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "kiadaB",
+      "type": "frontend",
+      "stage": 0,
+      "row": 1,
+      "label": "B의 Kiada",
+      "sublabel": "Service 이름 호출",
+      "tag": "노드 B",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "kiadaC",
+      "type": "frontend",
+      "stage": 0,
+      "row": 2,
+      "label": "C의 Kiada",
+      "sublabel": "Service 이름 호출",
+      "tag": "노드 C",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "polA",
+      "type": "backend",
+      "stage": 1,
+      "row": 0,
+      "label": "Local 필터",
+      "sublabel": "같은 노드만",
+      "tag": "kube-proxy",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "polB",
+      "type": "backend",
+      "stage": 1,
+      "row": 1,
+      "label": "Local 필터",
+      "sublabel": "같은 노드만",
+      "tag": "kube-proxy",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "polC",
+      "type": "backend",
+      "stage": 1,
+      "row": 2,
+      "label": "Local 필터",
+      "sublabel": "같은 노드만",
+      "tag": "kube-proxy",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "epA",
+      "type": "security",
+      "stage": 2,
+      "row": 0,
+      "label": "엔드포인트 1",
+      "sublabel": "A 에이전트",
+      "tag": "후보 있음",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "epB",
+      "type": "security",
+      "stage": 2,
+      "row": 1,
+      "label": "엔드포인트 1",
+      "sublabel": "B 에이전트",
+      "tag": "후보 있음",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "epC",
+      "type": "external",
+      "stage": 2,
+      "row": 2,
+      "label": "엔드포인트 0",
+      "sublabel": "에이전트 없음",
+      "tag": "후보 없음",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "okA",
+      "type": "cloud",
+      "stage": 3,
+      "row": 0,
+      "label": "A로 전달",
+      "sublabel": "로컬 응답",
+      "tag": "성공",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "okB",
+      "type": "cloud",
+      "stage": 3,
+      "row": 1,
+      "label": "B로 전달",
+      "sublabel": "로컬 응답",
+      "tag": "성공",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "failC",
+      "type": "external",
+      "stage": 3,
+      "row": 2,
+      "label": "접속 실패",
+      "sublabel": "zero endpoints",
+      "tag": "if: 없는 노드",
+      "width": 129,
+      "height": 90
+    }
+  ],
+  "flows": [
+    {
+      "id": "f1",
+      "from": "kiadaA",
+      "to": "polA",
+      "label": "이름 해석",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "f2",
+      "from": "kiadaB",
+      "to": "polB",
+      "label": "이름 해석",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "f3",
+      "from": "kiadaC",
+      "to": "polC",
+      "label": "이름 해석",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "g1",
+      "from": "polA",
+      "to": "epA",
+      "label": "로컬 조회",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "g2",
+      "from": "polB",
+      "to": "epB",
+      "label": "로컬 조회",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "g3",
+      "from": "polC",
+      "to": "epC",
+      "label": "로컬 조회",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "h1",
+      "from": "epA",
+      "to": "okA",
+      "label": "전달",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "h2",
+      "from": "epB",
+      "to": "okB",
+      "label": "전달",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "h3",
+      "from": "epC",
+      "to": "failC",
+      "label": "if: 0개",
+      "variant": "security",
+      "route": "straight"
+    }
+  ]
+}

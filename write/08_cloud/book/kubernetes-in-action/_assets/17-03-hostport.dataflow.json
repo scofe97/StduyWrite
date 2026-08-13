@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "hostPort는 노드 포트를 그 노드 파드로만 보낸다",
+    "viewBox": [
+      1000,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "stages": [
+    {
+      "label": "요청"
+    },
+    {
+      "label": "노드 수신"
+    },
+    {
+      "label": "포트 매핑"
+    },
+    {
+      "label": "도착"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "curlA",
+      "type": "frontend",
+      "stage": 0,
+      "row": 0,
+      "label": "curl A",
+      "sublabel": "172.18.0.2:11559",
+      "tag": "노드 A 지정",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "curlB",
+      "type": "frontend",
+      "stage": 0,
+      "row": 1,
+      "label": "curl B",
+      "sublabel": "172.18.0.3:11559",
+      "tag": "노드 B 지정",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "curlC",
+      "type": "frontend",
+      "stage": 0,
+      "row": 2,
+      "label": "curl C",
+      "sublabel": "172.18.0.4:11559",
+      "tag": "노드 C 지정",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "nodeA",
+      "type": "cloud",
+      "stage": 1,
+      "row": 0,
+      "label": "노드 A",
+      "sublabel": "hostPort 11559",
+      "tag": "에이전트 있음",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "nodeB",
+      "type": "cloud",
+      "stage": 1,
+      "row": 1,
+      "label": "노드 B",
+      "sublabel": "hostPort 11559",
+      "tag": "에이전트 있음",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "nodeC",
+      "type": "external",
+      "stage": 1,
+      "row": 2,
+      "label": "노드 C",
+      "sublabel": "포트 미점유",
+      "tag": "에이전트 없음",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "mapA",
+      "type": "backend",
+      "stage": 2,
+      "row": 0,
+      "label": "11559 → 80",
+      "sublabel": "같은 노드만",
+      "tag": "로컬 매핑",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "mapB",
+      "type": "backend",
+      "stage": 2,
+      "row": 1,
+      "label": "11559 → 80",
+      "sublabel": "같은 노드만",
+      "tag": "로컬 매핑",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "mapC",
+      "type": "external",
+      "stage": 2,
+      "row": 2,
+      "label": "매핑 없음",
+      "sublabel": "수신 주체 부재",
+      "tag": "연결 거부",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "agentA",
+      "type": "security",
+      "stage": 3,
+      "row": 0,
+      "label": "A 에이전트",
+      "sublabel": "컨테이너 80",
+      "tag": "정확한 값",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "agentB",
+      "type": "security",
+      "stage": 3,
+      "row": 1,
+      "label": "B 에이전트",
+      "sublabel": "컨테이너 80",
+      "tag": "정확한 값",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "failC",
+      "type": "external",
+      "stage": 3,
+      "row": 2,
+      "label": "접속 실패",
+      "sublabel": "응답 없음",
+      "tag": "if: 파드 없음",
+      "width": 129,
+      "height": 90
+    }
+  ],
+  "flows": [
+    {
+      "id": "f1",
+      "from": "curlA",
+      "to": "nodeA",
+      "label": "노드 접속",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "f2",
+      "from": "curlB",
+      "to": "nodeB",
+      "label": "노드 접속",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "f3",
+      "from": "curlC",
+      "to": "nodeC",
+      "label": "노드 접속",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "g1",
+      "from": "nodeA",
+      "to": "mapA",
+      "label": "포트 매치",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "g2",
+      "from": "nodeB",
+      "to": "mapB",
+      "label": "포트 매치",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "g3",
+      "from": "nodeC",
+      "to": "mapC",
+      "label": "if: 미점유",
+      "variant": "dashed",
+      "route": "straight"
+    },
+    {
+      "id": "h1",
+      "from": "mapA",
+      "to": "agentA",
+      "label": "로컬 전달",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "h2",
+      "from": "mapB",
+      "to": "agentB",
+      "label": "로컬 전달",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "h3",
+      "from": "mapC",
+      "to": "failC",
+      "label": "if: 실패",
+      "variant": "security",
+      "route": "straight"
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "노드 에이전트가 노드 경계를 여는 네 축",
+    "viewBox": [900, 470],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "privileged",
+      "type": "external",
+      "label": "privileged",
+      "sublabel": "커널 권한 전체",
+      "tag": "위험 · 검사 우회",
+      "pos": [55, 100],
+      "size": [155, 90]
+    },
+    {
+      "id": "capabilities",
+      "type": "external",
+      "label": "capabilities",
+      "sublabel": "필요 권한만 선택",
+      "tag": "drop 후 add",
+      "pos": [245, 100],
+      "size": [155, 90]
+    },
+    {
+      "id": "hostpath",
+      "type": "external",
+      "label": "hostPath",
+      "sublabel": "노드 경로 마운트",
+      "tag": "/lib/modules",
+      "pos": [489, 100],
+      "size": [155, 90]
+    },
+    {
+      "id": "xtables",
+      "type": "external",
+      "label": "xtables.lock",
+      "sublabel": "iptables 직렬화",
+      "tag": "노드 파일",
+      "pos": [679, 100],
+      "size": [155, 90]
+    },
+    {
+      "id": "hostnetwork",
+      "type": "external",
+      "label": "hostNetwork",
+      "sublabel": "노드 netns 사용",
+      "tag": "파드 IP = 노드 IP",
+      "pos": [55, 315],
+      "size": [155, 90]
+    },
+    {
+      "id": "hostnamespaces",
+      "type": "external",
+      "label": "hostIPC/PID",
+      "sublabel": "각각 따로 개방",
+      "tag": "필요한 축만",
+      "pos": [245, 315],
+      "size": [155, 90]
+    },
+    {
+      "id": "priorityclass",
+      "type": "external",
+      "label": "PriorityClass",
+      "sublabel": "스케줄 중요도",
+      "tag": "자리를 지킴",
+      "pos": [489, 315],
+      "size": [155, 90]
+    },
+    {
+      "id": "nodecritical",
+      "type": "external",
+      "label": "내장 클래스",
+      "sublabel": "system-node-critical",
+      "tag": "20억대 값",
+      "pos": [679, 315],
+      "size": [155, 90]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "01 · 커널 접근 · §1",
+      "wraps": ["privileged", "capabilities"],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "02 · 파일시스템 접근 · §2",
+      "wraps": ["hostpath", "xtables"],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "03 · 네트워크 네임스페이스 · §3",
+      "wraps": ["hostnetwork", "hostnamespaces"],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "04 · 스케줄 우선순위 · §4",
+      "wraps": ["priorityclass", "nodecritical"],
+      "pad": 32
+    }
+  ],
+  "connections": []
+}

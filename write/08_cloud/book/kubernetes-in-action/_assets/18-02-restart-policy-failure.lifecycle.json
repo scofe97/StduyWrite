@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "restartPolicy — kubelet과 Job 컨트롤러 중 누가 다시 만드나",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "컨테이너 실패"
+    },
+    {
+      "id": "judge",
+      "label": "OnFailure"
+    },
+    {
+      "id": "terminal",
+      "label": "Never"
+    }
+  ],
+  "states": [
+    {
+      "id": "created",
+      "type": "start",
+      "lane": "main",
+      "col": 0,
+      "label": "비정상 종료",
+      "sublabel": "exit 0 아님",
+      "step": "01"
+    },
+    {
+      "id": "running",
+      "type": "active",
+      "lane": "main",
+      "col": 1,
+      "label": "kubelet",
+      "sublabel": "종료 코드만",
+      "step": "02"
+    },
+    {
+      "id": "complete",
+      "type": "success",
+      "lane": "main",
+      "col": 2,
+      "label": "정책 판정",
+      "sublabel": "Pod spec",
+      "step": "03"
+    },
+    {
+      "id": "suspended",
+      "type": "waiting",
+      "lane": "judge",
+      "col": 0,
+      "label": "같은 파드",
+      "sublabel": "컨테이너 재시작"
+    },
+    {
+      "id": "podrun",
+      "type": "active",
+      "lane": "judge",
+      "col": 1,
+      "label": "Running",
+      "sublabel": "RESTARTS 증가"
+    },
+    {
+      "id": "failed",
+      "type": "failure",
+      "lane": "judge",
+      "col": 2,
+      "label": "로그 덮임",
+      "sublabel": "previous만"
+    },
+    {
+      "id": "kept",
+      "type": "waiting",
+      "lane": "terminal",
+      "col": 0,
+      "label": "Failed 확정",
+      "sublabel": "kubelet 멈춤"
+    },
+    {
+      "id": "deleted",
+      "type": "success",
+      "lane": "terminal",
+      "col": 1,
+      "label": "새 파드",
+      "sublabel": "컨트롤러가"
+    },
+    {
+      "id": "ttl",
+      "type": "failure",
+      "lane": "terminal",
+      "col": 2,
+      "label": "파드 누적",
+      "sublabel": "시도마다"
+    }
+  ],
+  "transitions": [
+    {
+      "id": "t1",
+      "from": "created",
+      "to": "running",
+      "variant": "emphasis",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "t2",
+      "from": "running",
+      "to": "complete",
+      "variant": "emphasis",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "t3",
+      "from": "complete",
+      "to": "podrun",
+      "label": "정책 확인",
+      "variant": "emphasis",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        436,
+        218
+      ]
+    },
+    {
+      "id": "t4",
+      "from": "suspended",
+      "to": "kept",
+      "label": "if: 같음",
+      "variant": "dashed",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        434,
+        393
+      ]
+    },
+    {
+      "id": "t5",
+      "from": "podrun",
+      "to": "deleted",
+      "label": "유지",
+      "variant": "emphasis",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        578,
+        393
+      ]
+    },
+    {
+      "id": "t6",
+      "from": "failed",
+      "to": "ttl",
+      "label": "if: 새것",
+      "variant": "security",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        742,
+        393
+      ]
+    }
+  ]
+}

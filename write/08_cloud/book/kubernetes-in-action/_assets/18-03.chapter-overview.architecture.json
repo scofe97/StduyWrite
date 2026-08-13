@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "18-03 전체 지도 — 큐와 시간표가 Job을 움직이는 구조",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Control Plane",
+      "wraps": [
+        "cronctl",
+        "jobctl"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "Worker Node",
+      "wraps": [
+        "worker",
+        "sidecar",
+        "peer"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "queue",
+      "type": "external",
+      "label": "외부 큐",
+      "sublabel": "Redis·Kafka·Mongo",
+      "tag": "§1 k8s 밖",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "cronctl",
+      "type": "cloud",
+      "label": "CronJob 컨트롤러",
+      "sublabel": "schedule 평가",
+      "tag": "§4·§5 시간표",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "jobctl",
+      "type": "backend",
+      "label": "Job 컨트롤러",
+      "sublabel": "주기마다 새 Job",
+      "tag": "§6 동시성 정책",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "worker",
+      "type": "messagebus",
+      "label": "워커 파드",
+      "sublabel": "아이템을 꺼냄",
+      "tag": "§1 큐에서 꺼냄",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "sidecar",
+      "type": "security",
+      "label": "사이드카",
+      "sublabel": "init에 Always",
+      "tag": "§3 안 끝나면 막힘",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "peer",
+      "type": "database",
+      "label": "peer 파드",
+      "sublabel": "headless DNS",
+      "tag": "§2 이름 계산",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "cronctl",
+      "to": "jobctl",
+      "label": "Job 생성"
+    },
+    {
+      "from": "queue",
+      "to": "worker"
+    },
+    {
+      "from": "jobctl",
+      "to": "peer"
+    },
+    {
+      "from": "worker",
+      "to": "sidecar"
+    },
+    {
+      "from": "sidecar",
+      "to": "peer"
+    }
+  ]
+}
