@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "work queue — 큐를 아는 것은 컨테이너뿐",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Control Plane",
+      "wraps": [
+        "jobctl"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "Worker Node",
+      "wraps": [
+        "pod",
+        "container"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "queue",
+      "type": "external",
+      "label": "외부 큐",
+      "sublabel": "findOneAndDelete",
+      "tag": "k8s는 모름",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "jobctl",
+      "type": "backend",
+      "label": "Job 컨트롤러",
+      "sublabel": "완료 파드 수만 셈",
+      "tag": "큐를 모름",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "kubelet",
+      "type": "security",
+      "label": "kubelet",
+      "sublabel": "종료 코드만 봄",
+      "tag": "큐를 모름",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "pod",
+      "type": "messagebus",
+      "label": "워커 파드",
+      "sublabel": "coarse는 1개",
+      "tag": "fine은 빌 때까지",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "container",
+      "type": "database",
+      "label": "컨테이너",
+      "sublabel": "큐에 붙는다",
+      "tag": "kubelet이 띄움",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "done",
+      "type": "cloud",
+      "label": "Job 완료",
+      "sublabel": "성공 수 충족",
+      "tag": "큐가 비었다는 뜻",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "queue",
+      "to": "pod"
+    },
+    {
+      "from": "jobctl",
+      "to": "kubelet",
+      "label": "observe: 파드 수",
+      "variant": "dashed"
+    },
+    {
+      "from": "pod",
+      "to": "container"
+    },
+    {
+      "from": "container",
+      "to": "done"
+    },
+    {
+      "from": "kubelet",
+      "to": "container"
+    }
+  ]
+}

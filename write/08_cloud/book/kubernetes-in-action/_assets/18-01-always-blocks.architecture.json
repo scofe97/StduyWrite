@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Always는 왜 완료를 막나 — 두 갈래의 끝",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Always — 막히는 길",
+      "wraps": [
+        "always",
+        "restart",
+        "crash"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "OnFailure·Never — 끝나는 길",
+      "wraps": [
+        "allowed",
+        "stay",
+        "done"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "always",
+      "type": "security",
+      "label": "Always",
+      "sublabel": "성공해도 재시작",
+      "tag": "Job 기본값 금지",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "restart",
+      "type": "messagebus",
+      "label": "즉시 재시작",
+      "sublabel": "끝난 순간 없음",
+      "tag": "phase 미도달",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "crash",
+      "type": "database",
+      "label": "CrashLoopBackOff",
+      "sublabel": "이름과 달리 성공도",
+      "tag": "Job이 안 끝남",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "allowed",
+      "type": "cloud",
+      "label": "OnFailure·Never",
+      "sublabel": "성공이면 그대로",
+      "tag": "Job에서 허용",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "stay",
+      "type": "backend",
+      "label": "끝난 채 유지",
+      "sublabel": "재시작 없음",
+      "tag": "Succeeded 진입",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "done",
+      "type": "external",
+      "label": "Completed",
+      "sublabel": "목표 수 충족",
+      "tag": "Job 완료",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "always",
+      "to": "restart"
+    },
+    {
+      "from": "restart",
+      "to": "crash"
+    },
+    {
+      "from": "allowed",
+      "to": "stay"
+    },
+    {
+      "from": "stay",
+      "to": "done"
+    }
+  ]
+}

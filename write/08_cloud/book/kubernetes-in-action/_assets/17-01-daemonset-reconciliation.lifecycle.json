@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "DaemonSet 컨트롤러의 reconciliation 루프",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "루프 본체"
+    },
+    {
+      "id": "judge",
+      "label": "노드별 판정"
+    },
+    {
+      "id": "terminal",
+      "label": "조치"
+    }
+  ],
+  "states": [
+    {
+      "id": "watch",
+      "type": "start",
+      "label": "변화 감시",
+      "sublabel": "ds·Pod·Node",
+      "lane": "main",
+      "col": 0,
+      "step": "01",
+      "tag": "watch"
+    },
+    {
+      "id": "list",
+      "type": "active",
+      "label": "파드 수집",
+      "sublabel": "selector 일치",
+      "lane": "main",
+      "col": 1,
+      "step": "02",
+      "tag": "list"
+    },
+    {
+      "id": "count",
+      "type": "decision",
+      "label": "노드별 개수",
+      "sublabel": "0 · 1 · N",
+      "lane": "main",
+      "col": 2,
+      "step": "03",
+      "tag": "gate"
+    },
+    {
+      "id": "zero",
+      "type": "waiting",
+      "label": "파드 0개",
+      "sublabel": "있어야 할 노드",
+      "lane": "judge",
+      "col": 0,
+      "tag": "부족"
+    },
+    {
+      "id": "one",
+      "type": "success",
+      "label": "파드 1개",
+      "sublabel": "기대 상태",
+      "lane": "judge",
+      "col": 1,
+      "tag": "일치"
+    },
+    {
+      "id": "many",
+      "type": "failure",
+      "label": "2개 이상",
+      "sublabel": "같은 노드 중복",
+      "lane": "judge",
+      "col": 2,
+      "tag": "초과"
+    },
+    {
+      "id": "create",
+      "type": "active",
+      "label": "파드 생성",
+      "sublabel": "그 노드 전용",
+      "lane": "terminal",
+      "col": 0,
+      "tag": "nodeAffinity"
+    },
+    {
+      "id": "noop",
+      "type": "success",
+      "label": "무동작",
+      "sublabel": "변경 없음",
+      "lane": "terminal",
+      "col": 1,
+      "tag": "in-sync"
+    },
+    {
+      "id": "prune",
+      "type": "failure",
+      "label": "초과 삭제",
+      "sublabel": "중복 제거",
+      "lane": "terminal",
+      "col": 2,
+      "tag": "정리"
+    }
+  ],
+  "transitions": [
+    {
+      "id": "t1",
+      "from": "watch",
+      "to": "list",
+      "variant": "emphasis",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "t2",
+      "from": "list",
+      "to": "count",
+      "variant": "emphasis",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "t3",
+      "from": "count",
+      "to": "one",
+      "label": "개수 판정",
+      "variant": "emphasis",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        436,
+        218
+      ]
+    },
+    {
+      "id": "t4",
+      "from": "zero",
+      "to": "create",
+      "label": "if: 부족",
+      "variant": "dashed",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        434,
+        393
+      ]
+    },
+    {
+      "id": "t5",
+      "from": "one",
+      "to": "noop",
+      "label": "유지",
+      "variant": "emphasis",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        578,
+        393
+      ]
+    },
+    {
+      "id": "t6",
+      "from": "many",
+      "to": "prune",
+      "label": "if: 초과",
+      "variant": "security",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        742,
+        393
+      ]
+    }
+  ]
+}

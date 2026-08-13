@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "DaemonSet은 노드마다 파드를 하나씩 만든다",
+    "viewBox": [
+      1000,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "stages": [
+    {
+      "label": "선언"
+    },
+    {
+      "label": "노드"
+    },
+    {
+      "label": "스케줄"
+    },
+    {
+      "label": "파드"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "ds",
+      "type": "backend",
+      "stage": 0,
+      "row": 1,
+      "label": "DaemonSet",
+      "sublabel": "replicas 없음",
+      "tag": "spec.template",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "nodeA",
+      "type": "messagebus",
+      "stage": 1,
+      "row": 0,
+      "label": "Node A",
+      "sublabel": "워커 노드",
+      "tag": "대상",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "nodeB",
+      "type": "messagebus",
+      "stage": 1,
+      "row": 1,
+      "label": "Node B",
+      "sublabel": "워커 노드",
+      "tag": "대상",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "nodeC",
+      "type": "messagebus",
+      "stage": 1,
+      "row": 2,
+      "label": "Node C",
+      "sublabel": "워커 노드",
+      "tag": "대상",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "schedA",
+      "type": "security",
+      "stage": 2,
+      "row": 0,
+      "label": "A 배정",
+      "sublabel": "nodeAffinity A",
+      "tag": "파드 1개",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "schedB",
+      "type": "security",
+      "stage": 2,
+      "row": 1,
+      "label": "B 배정",
+      "sublabel": "nodeAffinity B",
+      "tag": "파드 1개",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "schedC",
+      "type": "security",
+      "stage": 2,
+      "row": 2,
+      "label": "C 배정",
+      "sublabel": "nodeAffinity C",
+      "tag": "파드 1개",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "podA",
+      "type": "cloud",
+      "stage": 3,
+      "row": 0,
+      "label": "A 파드",
+      "sublabel": "kubelet 실행",
+      "tag": "daemon",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "podB",
+      "type": "cloud",
+      "stage": 3,
+      "row": 1,
+      "label": "B 파드",
+      "sublabel": "kubelet 실행",
+      "tag": "daemon",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "podC",
+      "type": "cloud",
+      "stage": 3,
+      "row": 2,
+      "label": "C 파드",
+      "sublabel": "kubelet 실행",
+      "tag": "daemon",
+      "width": 129,
+      "height": 90
+    }
+  ],
+  "flows": [
+    {
+      "id": "f1",
+      "from": "ds",
+      "to": "nodeB",
+      "label": "노드 조회",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "fa1",
+      "from": "nodeA",
+      "to": "schedA",
+      "label": "배정",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "fb1",
+      "from": "nodeB",
+      "to": "schedB",
+      "label": "배정",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "fc1",
+      "from": "nodeC",
+      "to": "schedC",
+      "label": "배정",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "fa2",
+      "from": "schedA",
+      "to": "podA",
+      "label": "생성",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "fb2",
+      "from": "schedB",
+      "to": "podB",
+      "label": "생성",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "fc2",
+      "from": "schedC",
+      "to": "podC",
+      "label": "생성",
+      "variant": "emphasis",
+      "route": "straight"
+    }
+  ]
+}

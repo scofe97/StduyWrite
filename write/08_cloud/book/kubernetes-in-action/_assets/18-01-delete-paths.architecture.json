@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "완료된 Job과 파드를 치우는 세 경로",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Control Plane",
+      "wraps": [
+        "gc",
+        "ttlctl"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "남는 오브젝트",
+      "wraps": [
+        "job",
+        "pod"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "user",
+      "type": "external",
+      "label": "사용자",
+      "sublabel": "delete job",
+      "tag": "직접 지운다",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "gc",
+      "type": "backend",
+      "label": "가비지 컬렉터",
+      "sublabel": "ownerReferences 추적",
+      "tag": "고아 파드 회수",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "ttlctl",
+      "type": "cloud",
+      "label": "TTL 컨트롤러",
+      "sublabel": "ttlSecondsAfter",
+      "tag": "만료되면 지움",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "job",
+      "type": "messagebus",
+      "label": "Job",
+      "sublabel": "완료 상태",
+      "tag": "소유자",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "pod",
+      "type": "database",
+      "label": "Pod",
+      "sublabel": "Completed 유지",
+      "tag": "로그를 품음",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "orphan",
+      "type": "security",
+      "label": "cascade orphan",
+      "sublabel": "Job만 지움",
+      "tag": "파드는 남는다",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "user",
+      "to": "gc",
+      "label": "delete job"
+    },
+    {
+      "from": "gc",
+      "to": "job"
+    },
+    {
+      "from": "ttlctl",
+      "to": "pod"
+    },
+    {
+      "from": "job",
+      "to": "pod",
+      "label": "소유"
+    },
+    {
+      "from": "user",
+      "to": "orphan"
+    }
+  ]
+}

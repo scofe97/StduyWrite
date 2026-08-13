@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Downward API는 kubelet이 노드 IP를 채운다",
+    "viewBox": [
+      1000,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "stages": [
+    {
+      "label": "선언"
+    },
+    {
+      "label": "스케줄"
+    },
+    {
+      "label": "값 주입"
+    },
+    {
+      "label": "앱이 읽음"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "manifest",
+      "type": "backend",
+      "stage": 0,
+      "row": 1,
+      "label": "매니페스트",
+      "sublabel": "status.hostIP 경로",
+      "tag": "값 아닌 선언",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "schedA",
+      "type": "messagebus",
+      "stage": 1,
+      "row": 0,
+      "label": "노드 A 배정",
+      "sublabel": "nodeName 기록",
+      "tag": "스케줄러",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "schedB",
+      "type": "messagebus",
+      "stage": 1,
+      "row": 1,
+      "label": "노드 B 배정",
+      "sublabel": "nodeName 기록",
+      "tag": "스케줄러",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "schedC",
+      "type": "messagebus",
+      "stage": 1,
+      "row": 2,
+      "label": "노드 C 배정",
+      "sublabel": "nodeName 기록",
+      "tag": "스케줄러",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "kubeA",
+      "type": "security",
+      "stage": 2,
+      "row": 0,
+      "label": "A의 kubelet",
+      "sublabel": "172.18.0.2 채움",
+      "tag": "파드 생성 시점",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "kubeB",
+      "type": "security",
+      "stage": 2,
+      "row": 1,
+      "label": "B의 kubelet",
+      "sublabel": "172.18.0.3 채움",
+      "tag": "파드 생성 시점",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "kubeC",
+      "type": "security",
+      "stage": 2,
+      "row": 2,
+      "label": "C의 kubelet",
+      "sublabel": "172.18.0.4 채움",
+      "tag": "파드 생성 시점",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "envA",
+      "type": "cloud",
+      "stage": 3,
+      "row": 0,
+      "label": "A의 NODE_IP",
+      "sublabel": "172.18.0.2:11559",
+      "tag": "환경변수",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "envB",
+      "type": "cloud",
+      "stage": 3,
+      "row": 1,
+      "label": "B의 NODE_IP",
+      "sublabel": "172.18.0.3:11559",
+      "tag": "환경변수",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "envC",
+      "type": "cloud",
+      "stage": 3,
+      "row": 2,
+      "label": "C의 NODE_IP",
+      "sublabel": "172.18.0.4:11559",
+      "tag": "환경변수",
+      "width": 129,
+      "height": 90
+    }
+  ],
+  "flows": [
+    {
+      "id": "f1",
+      "from": "manifest",
+      "to": "schedB",
+      "label": "노드 미정",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "g1",
+      "from": "schedA",
+      "to": "kubeA",
+      "label": "노드 확정",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "g2",
+      "from": "schedB",
+      "to": "kubeB",
+      "label": "노드 확정",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "g3",
+      "from": "schedC",
+      "to": "kubeC",
+      "label": "노드 확정",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "h1",
+      "from": "kubeA",
+      "to": "envA",
+      "label": "env 주입",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "h2",
+      "from": "kubeB",
+      "to": "envB",
+      "label": "env 주입",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "h3",
+      "from": "kubeC",
+      "to": "envC",
+      "label": "env 주입",
+      "variant": "emphasis",
+      "route": "straight"
+    }
+  ]
+}

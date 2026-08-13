@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "hostNetwork 파드 — 노드 netns를 그대로 쓰는 경로",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Worker Node — 노드 네트워크 스택",
+      "wraps": [
+        "rule",
+        "dnat"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "같은 노드 netns — 파드 전용 공간 없음",
+      "wraps": [
+        "nodens",
+        "proc"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "client",
+      "type": "external",
+      "label": "클라이언트",
+      "sublabel": "Service 이름 호출",
+      "tag": "dst 10.96.0.10:80",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "rule",
+      "type": "backend",
+      "label": "커널 규칙",
+      "sublabel": "iptables / IPVS",
+      "tag": "VIP:port 매치",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "dnat",
+      "type": "cloud",
+      "label": "DNAT 변환",
+      "sublabel": "dst 재작성",
+      "tag": "172.18.0.4:8080",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "conflict",
+      "type": "database",
+      "label": "다른 파드",
+      "sublabel": "같은 8080 요구",
+      "tag": "포트 충돌",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "proc",
+      "type": "messagebus",
+      "label": "프로세스",
+      "sublabel": ":8080 수신",
+      "tag": "노드 포트를 점유",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "nodens",
+      "type": "security",
+      "label": "노드 netns",
+      "sublabel": "노드 IP 172.18.0.4",
+      "tag": "veth 없음",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "client",
+      "to": "rule",
+      "label": "VIP 요청"
+    },
+    {
+      "from": "rule",
+      "to": "dnat",
+      "label": "대상 선택"
+    },
+    {
+      "from": "dnat",
+      "to": "nodens"
+    },
+    {
+      "from": "nodens",
+      "to": "proc"
+    },
+    {
+      "from": "proc",
+      "to": "conflict"
+    }
+  ]
+}

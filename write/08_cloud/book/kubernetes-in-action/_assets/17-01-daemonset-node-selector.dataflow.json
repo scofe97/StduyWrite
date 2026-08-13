@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "node selector가 노드마다 배포 여부를 가른다",
+    "viewBox": [
+      1000,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "stages": [
+    {
+      "label": "선언"
+    },
+    {
+      "label": "노드 label"
+    },
+    {
+      "label": "대조 판정"
+    },
+    {
+      "label": "결과"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "ds",
+      "type": "backend",
+      "stage": 0,
+      "row": 1,
+      "label": "DaemonSet",
+      "sublabel": "nodeSelector 지정",
+      "tag": "gpu=cuda 요구",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "labelA",
+      "type": "messagebus",
+      "stage": 1,
+      "row": 0,
+      "label": "Node A",
+      "sublabel": "gpu: cuda",
+      "tag": "label 보유",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "labelB",
+      "type": "messagebus",
+      "stage": 1,
+      "row": 1,
+      "label": "Node B",
+      "sublabel": "gpu: cuda",
+      "tag": "label 보유",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "labelC",
+      "type": "external",
+      "stage": 1,
+      "row": 2,
+      "label": "Node C",
+      "sublabel": "gpu: openCL",
+      "tag": "값이 다름",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "matchA",
+      "type": "security",
+      "stage": 2,
+      "row": 0,
+      "label": "A 일치",
+      "sublabel": "요구값과 같음",
+      "tag": "배포 대상",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "matchB",
+      "type": "security",
+      "stage": 2,
+      "row": 1,
+      "label": "B 일치",
+      "sublabel": "요구값과 같음",
+      "tag": "배포 대상",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "matchC",
+      "type": "external",
+      "stage": 2,
+      "row": 2,
+      "label": "C 불일치",
+      "sublabel": "openCL ≠ cuda",
+      "tag": "대상 제외",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "podA",
+      "type": "cloud",
+      "stage": 3,
+      "row": 0,
+      "label": "A 파드",
+      "sublabel": "node-agent 실행",
+      "tag": "생성됨",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "podB",
+      "type": "cloud",
+      "stage": 3,
+      "row": 1,
+      "label": "B 파드",
+      "sublabel": "node-agent 실행",
+      "tag": "생성됨",
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "none",
+      "type": "external",
+      "stage": 3,
+      "row": 2,
+      "label": "파드 없음",
+      "sublabel": "DESIRED 미포함",
+      "tag": "생성 안 함",
+      "width": 129,
+      "height": 90
+    }
+  ],
+  "flows": [
+    {
+      "id": "f1",
+      "from": "ds",
+      "to": "labelB",
+      "label": "label 조회",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "fa1",
+      "from": "labelA",
+      "to": "matchA",
+      "label": "대조",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "fb1",
+      "from": "labelB",
+      "to": "matchB",
+      "label": "대조",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "fc1",
+      "from": "labelC",
+      "to": "matchC",
+      "label": "대조",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "fa2",
+      "from": "matchA",
+      "to": "podA",
+      "label": "생성",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "fb2",
+      "from": "matchB",
+      "to": "podB",
+      "label": "생성",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "fc2",
+      "from": "matchC",
+      "to": "none",
+      "label": "if: 제외",
+      "variant": "dashed",
+      "route": "straight"
+    }
+  ]
+}

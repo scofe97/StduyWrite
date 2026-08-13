@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "일반 파드 — Service 패킷이 파드 netns 안에서 끝나는 경로",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Worker Node — 노드 네트워크 스택",
+      "wraps": [
+        "rule",
+        "dnat"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "Pod netns — 파드 전용 네임스페이스",
+      "wraps": [
+        "veth",
+        "app"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "client",
+      "type": "external",
+      "label": "클라이언트",
+      "sublabel": "Service 이름 호출",
+      "tag": "dst 10.96.0.10:80",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "rule",
+      "type": "backend",
+      "label": "커널 규칙",
+      "sublabel": "iptables / IPVS",
+      "tag": "VIP:port 매치",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "dnat",
+      "type": "cloud",
+      "label": "DNAT 변환",
+      "sublabel": "dst 재작성",
+      "tag": "10.244.1.7:8080",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "other",
+      "type": "database",
+      "label": "다른 파드",
+      "sublabel": "10.244.1.8:8080",
+      "tag": "같은 포트 안전",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "app",
+      "type": "messagebus",
+      "label": "컨테이너",
+      "sublabel": ":8080 수신",
+      "tag": "파드 안에서만",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "veth",
+      "type": "security",
+      "label": "veth 페어",
+      "sublabel": "파드 IP 부여",
+      "tag": "노드와 분리",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "client",
+      "to": "rule",
+      "label": "VIP 요청"
+    },
+    {
+      "from": "rule",
+      "to": "dnat",
+      "label": "대상 선택"
+    },
+    {
+      "from": "dnat",
+      "to": "veth"
+    },
+    {
+      "from": "veth",
+      "to": "app"
+    },
+    {
+      "from": "app",
+      "to": "other"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "kube-proxy의 EndpointSlice 제어 루프",
+    "viewBox": [1240, 650],
+    "quality_profile": "showcase",
+    "legend": { "mode": "hidden" }
+  },
+  "participants": [
+    {
+      "id": "proxy",
+      "type": "backend",
+      "label": "KP",
+      "sublabel": "kube-proxy"
+    },
+    {
+      "id": "informer",
+      "type": "messagebus",
+      "label": "INF",
+      "sublabel": "cache"
+    },
+    {
+      "id": "api",
+      "type": "external",
+      "label": "API",
+      "sublabel": "api-server"
+    },
+    {
+      "id": "kernel",
+      "type": "external",
+      "label": "OS",
+      "sublabel": "kernel"
+    }
+  ],
+  "segments": [],
+  "messages": [
+    {
+      "id": "watch-endpoints",
+      "from": "informer",
+      "to": "api",
+      "y": 220,
+      "label": "LIST/WATCH Service·EndpointSlice",
+      "variant": "emphasis",
+      "note": "초기 목록을 받은 뒤 변경 이벤트를 계속 감시"
+    },
+    {
+      "id": "endpoint-state",
+      "from": "api",
+      "to": "informer",
+      "y": 300,
+      "label": "대상: PodIP:8080 또는 NodeIP:8080",
+      "variant": "default"
+    },
+    {
+      "id": "publish-snapshot",
+      "from": "informer",
+      "to": "proxy",
+      "y": 380,
+      "label": "Service VIP와 target snapshot",
+      "variant": "return"
+    },
+    {
+      "id": "sync-rules",
+      "from": "proxy",
+      "to": "kernel",
+      "y": 460,
+      "label": "VIP:80 → 선택한 target:8080 규칙 적용",
+      "variant": "emphasis"
+    },
+    {
+      "id": "rule-applied",
+      "from": "kernel",
+      "to": "proxy",
+      "y": 540,
+      "label": "적용 완료: rule revision 갱신",
+      "variant": "return"
+    }
+  ],
+  "activations": [
+    { "participant": "proxy", "from": 370, "to": 555, "type": "backend" },
+    { "participant": "informer", "from": 210, "to": 395, "type": "messagebus" },
+    { "participant": "api", "from": 210, "to": 315, "type": "external" },
+    { "participant": "kernel", "from": 450, "to": 555, "type": "external" }
+  ]
+}
