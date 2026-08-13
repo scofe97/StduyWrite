@@ -2,7 +2,7 @@
   "schema_version": 1,
   "diagram_type": "lifecycle",
   "meta": {
-    "title": "restartPolicy — kubelet과 Job 컨트롤러 중 누가 다시 만드나",
+    "title": "스케일다운과 스케일업 — PVC는 남고 파드만 오간다",
     "quality_profile": "showcase",
     "legend": {
       "mode": "hidden"
@@ -11,15 +11,15 @@
   "lanes": [
     {
       "id": "main",
-      "label": "컨테이너 실패"
+      "label": "StatefulSet"
     },
     {
       "id": "judge",
-      "label": "OnFailure"
+      "label": "스케일다운"
     },
     {
       "id": "terminal",
-      "label": "Never"
+      "label": "스케일업"
     }
   ],
   "states": [
@@ -28,8 +28,8 @@
       "type": "start",
       "lane": "main",
       "col": 0,
-      "label": "비정상 종료",
-      "sublabel": "exit 0 아님",
+      "label": "파드 3개",
+      "sublabel": "quiz-0·1·2",
       "step": "01"
     },
     {
@@ -37,8 +37,8 @@
       "type": "active",
       "lane": "main",
       "col": 1,
-      "label": "kubelet",
-      "sublabel": "종료 코드만",
+      "label": "값 변경",
+      "sublabel": "3 → 2 → 3",
       "step": "02"
     },
     {
@@ -46,8 +46,8 @@
       "type": "success",
       "lane": "main",
       "col": 2,
-      "label": "정책 판정",
-      "sublabel": "Pod spec",
+      "label": "신원 복원",
+      "sublabel": "같은 이름",
       "step": "03"
     },
     {
@@ -55,48 +55,48 @@
       "type": "waiting",
       "lane": "judge",
       "col": 0,
-      "label": "같은 파드",
-      "sublabel": "컨테이너 재시작"
+      "label": "quiz-2 삭제",
+      "sublabel": "역순으로"
     },
     {
       "id": "podrun",
       "type": "active",
       "lane": "judge",
       "col": 1,
-      "label": "Running",
-      "sublabel": "RESTARTS 증가"
+      "label": "PVC 보존",
+      "sublabel": "데이터 유지"
     },
     {
       "id": "failed",
       "type": "failure",
       "lane": "judge",
       "col": 2,
-      "label": "로그 덮임",
-      "sublabel": "previous만"
+      "label": "파드만 사라짐",
+      "sublabel": "저장소 잔존"
     },
     {
       "id": "kept",
       "type": "waiting",
       "lane": "terminal",
       "col": 0,
-      "label": "Failed 확정",
-      "sublabel": "kubelet 멈춤"
+      "label": "재생성",
+      "sublabel": "같은 ordinal"
     },
     {
       "id": "deleted",
       "type": "success",
       "lane": "terminal",
       "col": 1,
-      "label": "새 파드",
-      "sublabel": "컨트롤러가"
+      "label": "PVC 연결",
+      "sublabel": "데이터 복귀"
     },
     {
       "id": "ttl",
       "type": "failure",
       "lane": "terminal",
       "col": 2,
-      "label": "파드 누적",
-      "sublabel": "시도마다"
+      "label": "상태 이어짐",
+      "sublabel": "무손실"
     }
   ],
   "transitions": [
@@ -122,7 +122,7 @@
       "id": "t3",
       "from": "complete",
       "to": "podrun",
-      "label": "정책 확인",
+      "label": "값 적용",
       "variant": "emphasis",
       "route": "drop",
       "fromSide": "bottom",
@@ -136,7 +136,7 @@
       "id": "t4",
       "from": "suspended",
       "to": "kept",
-      "label": "if: 같음",
+      "label": "if: 감소",
       "variant": "dashed",
       "route": "drop",
       "fromSide": "bottom",
@@ -150,7 +150,7 @@
       "id": "t5",
       "from": "podrun",
       "to": "deleted",
-      "label": "유지",
+      "label": "보존",
       "variant": "emphasis",
       "route": "drop",
       "fromSide": "bottom",
@@ -164,7 +164,7 @@
       "id": "t6",
       "from": "failed",
       "to": "ttl",
-      "label": "if: 새것",
+      "label": "if: 증가",
       "variant": "security",
       "route": "drop",
       "fromSide": "bottom",

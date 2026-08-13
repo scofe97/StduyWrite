@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Operator와 CRD — API를 확장해 운영을 코드화한다",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Control Plane — 확장된 API",
+      "wraps": [
+        "apiserver",
+        "crd"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "Operator가 만드는 것",
+      "wraps": [
+        "operator",
+        "sts"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "user",
+      "type": "external",
+      "label": "사용자",
+      "sublabel": "커스텀 오브젝트",
+      "tag": "kind: Quiz",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "apiserver",
+      "type": "cloud",
+      "label": "API Server",
+      "sublabel": "표준 리소스 + CRD",
+      "tag": "같은 방식으로 저장",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "crd",
+      "type": "backend",
+      "label": "CRD",
+      "sublabel": "새 kind 정의",
+      "tag": "API 확장",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "sts",
+      "type": "security",
+      "label": "StatefulSet",
+      "sublabel": "Operator가 생성",
+      "tag": "실제 워크로드",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "operator",
+      "type": "messagebus",
+      "label": "Operator",
+      "sublabel": "도메인 지식 코드화",
+      "tag": "백업·복구 자동",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "watch",
+      "type": "database",
+      "label": "조정 루프",
+      "sublabel": "desired와 비교",
+      "tag": "컨트롤러 패턴",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "user",
+      "to": "apiserver",
+      "label": "커스텀 오브젝트"
+    },
+    {
+      "from": "apiserver",
+      "to": "crd",
+      "label": "kind 해석"
+    },
+    {
+      "from": "crd",
+      "to": "watch"
+    },
+    {
+      "from": "watch",
+      "to": "operator"
+    },
+    {
+      "from": "operator",
+      "to": "sts"
+    }
+  ]
+}

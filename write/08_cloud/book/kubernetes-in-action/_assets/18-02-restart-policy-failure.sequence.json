@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "restartPolicy — 같은 실패에 kubelet과 Job 컨트롤러가 다르게 반응한다",
+    "viewBox": [
+      1240,
+      720
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "participants": [
+    {
+      "id": "ctr",
+      "type": "database",
+      "label": "CTR"
+    },
+    {
+      "id": "kubelet",
+      "type": "security",
+      "label": "KUBELET"
+    },
+    {
+      "id": "api",
+      "type": "cloud",
+      "label": "API"
+    },
+    {
+      "id": "jobctl",
+      "type": "messagebus",
+      "label": "JOB"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m1",
+      "from": "ctr",
+      "to": "kubelet",
+      "y": 200,
+      "label": "exit code 1 — 비정상 종료",
+      "variant": "security"
+    },
+    {
+      "id": "m2",
+      "from": "kubelet",
+      "to": "ctr",
+      "y": 275,
+      "label": "OnFailure: 같은 파드에서 재시작",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m3",
+      "from": "kubelet",
+      "to": "api",
+      "y": 350,
+      "label": "RESTARTS 증가 · 파드는 Running",
+      "variant": "return"
+    },
+    {
+      "id": "m4",
+      "from": "kubelet",
+      "to": "api",
+      "y": 440,
+      "label": "Never: 재시작 없이 Pod를 Failed로",
+      "variant": "dashed"
+    },
+    {
+      "id": "m5",
+      "from": "api",
+      "to": "jobctl",
+      "y": 515,
+      "label": "완료 수 부족 감지",
+      "variant": "return"
+    },
+    {
+      "id": "m6",
+      "from": "jobctl",
+      "to": "api",
+      "y": 590,
+      "label": "새 파드 생성 — 실패 파드는 잔존",
+      "variant": "emphasis"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "kubelet",
+      "from": 190,
+      "to": 460,
+      "type": "security"
+    },
+    {
+      "participant": "jobctl",
+      "from": 505,
+      "to": 610,
+      "type": "messagebus"
+    }
+  ]
+}

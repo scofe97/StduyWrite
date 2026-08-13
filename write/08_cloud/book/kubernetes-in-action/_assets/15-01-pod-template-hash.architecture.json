@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "pod-template-hash — 세대를 가르는 열쇠",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "v1 세대",
+      "wraps": [
+        "rs1",
+        "pod1"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "v2 세대",
+      "wraps": [
+        "rs2",
+        "pod2"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "tmpl",
+      "type": "external",
+      "label": "Pod 템플릿",
+      "sublabel": "이미지 바뀜",
+      "tag": "해시 입력",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "rs1",
+      "type": "cloud",
+      "label": "ReplicaSet 6f9b",
+      "sublabel": "해시 6f9b",
+      "tag": "옛 세대",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "pod1",
+      "type": "backend",
+      "label": "파드 -6f9b-",
+      "sublabel": "label에도 해시",
+      "tag": "selector 대상",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "sel",
+      "type": "security",
+      "label": "selector 격리",
+      "sublabel": "해시가 label에",
+      "tag": "섞이지 않음",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "pod2",
+      "type": "messagebus",
+      "label": "파드 -7c4d-",
+      "sublabel": "새 label",
+      "tag": "새 selector",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "rs2",
+      "type": "database",
+      "label": "ReplicaSet 7c4d",
+      "sublabel": "해시 7c4d",
+      "tag": "새 세대",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "tmpl",
+      "to": "rs1",
+      "label": "해시 계산"
+    },
+    {
+      "from": "rs1",
+      "to": "pod1",
+      "label": "생성"
+    },
+    {
+      "from": "pod1",
+      "to": "rs2"
+    },
+    {
+      "from": "rs2",
+      "to": "pod2"
+    },
+    {
+      "from": "pod2",
+      "to": "sel"
+    }
+  ]
+}

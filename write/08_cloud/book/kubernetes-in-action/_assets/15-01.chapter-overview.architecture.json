@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "15-01 전체 지도 — 간접 구조가 무엇을 가능하게 하는가",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Control Plane — 컨트롤러 계층",
+      "wraps": [
+        "deploy",
+        "rs"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "Worker Node — 실행 계층",
+      "wraps": [
+        "hash",
+        "pod"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "user",
+      "type": "external",
+      "label": "사용자",
+      "sublabel": "apply·scale·delete",
+      "tag": "§2·§5·§6",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "deploy",
+      "type": "cloud",
+      "label": "Deployment",
+      "sublabel": "strategy 보유",
+      "tag": "§1 직접 안 만듦",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "rs",
+      "type": "backend",
+      "label": "ReplicaSet",
+      "sublabel": "세대마다 하나",
+      "tag": "§4 해시로 구분",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "orphan",
+      "type": "database",
+      "label": "cascade orphan",
+      "sublabel": "한 단계만 끊음",
+      "tag": "§6 파드는 잔존",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "hash",
+      "type": "security",
+      "label": "pod-template-hash",
+      "sublabel": "이름·label 양쪽",
+      "tag": "§4 옛 RS와 격리",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "pod",
+      "type": "messagebus",
+      "label": "Pod",
+      "sublabel": "replicas 만큼",
+      "tag": "§3 소유자 추적",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "user",
+      "to": "deploy",
+      "label": "매니페스트"
+    },
+    {
+      "from": "deploy",
+      "to": "rs",
+      "label": "세대 생성"
+    },
+    {
+      "from": "rs",
+      "to": "pod"
+    },
+    {
+      "from": "pod",
+      "to": "hash"
+    },
+    {
+      "from": "hash",
+      "to": "orphan"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "ReplicaSet — 셀렉터로 파드를 모으고 수를 맞춘다",
+    "viewBox": [860, 620],
+    "quality_profile": "showcase",
+    "legend": { "mode": "hidden" }
+  },
+  "boundaries": [
+    { "kind": "region", "label": "Control Plane", "wraps": ["rs", "ctrl"], "pad": 32 },
+    { "kind": "region", "label": "Worker Nodes — 셀렉터가 모으는 파드", "wraps": ["podA", "podB"], "pad": 32 }
+  ],
+  "components": [
+    { "id": "user", "type": "external",   "label": "사용자",      "sublabel": "replicas 선언",   "tag": "원하는 수",     "pos": [60, 50],  "size": [140, 88] },
+    { "id": "rs",   "type": "cloud",      "label": "ReplicaSet", "sublabel": "label selector", "tag": "소유 판정",     "pos": [330, 50], "size": [140, 88] },
+    { "id": "ctrl", "type": "backend",    "label": "컨트롤러",     "sublabel": "실제와 비교",     "tag": "차이를 메움",   "pos": [600, 50], "size": [140, 88] },
+    { "id": "svc",  "type": "security",   "label": "Service",    "sublabel": "같은 label 선택",  "tag": "파드를 공유",   "pos": [60, 350], "size": [140, 88] },
+    { "id": "podA", "type": "messagebus", "label": "파드 A",      "sublabel": "app=quiz",       "tag": "셀렉터 일치",   "pos": [330, 350], "size": [140, 88] },
+    { "id": "podB", "type": "database",   "label": "파드 B",      "sublabel": "app=quiz",       "tag": "셀렉터 일치",   "pos": [600, 350], "size": [140, 88] }
+  ],
+  "connections": [
+    { "from": "user", "to": "rs" },
+    { "from": "rs", "to": "ctrl" },
+    { "from": "ctrl", "to": "podB" },
+    { "from": "svc", "to": "podA" },
+    { "from": "podA", "to": "podB" }
+  ]
+}

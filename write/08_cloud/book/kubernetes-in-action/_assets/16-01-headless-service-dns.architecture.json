@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "headless Service와 per-pod DNS — 파드를 이름으로 지목한다",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Control Plane — DNS 레코드",
+      "wraps": [
+        "headless",
+        "dns"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "StatefulSet 파드",
+      "wraps": [
+        "pod0",
+        "pod1"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "client",
+      "type": "external",
+      "label": "클라이언트 파드",
+      "sublabel": "peer 이름 계산",
+      "tag": "§5 discovery",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "headless",
+      "type": "cloud",
+      "label": "headless Service",
+      "sublabel": "clusterIP none",
+      "tag": "VIP 없음",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "dns",
+      "type": "backend",
+      "label": "DNS 레코드",
+      "sublabel": "파드마다 A 레코드",
+      "tag": "이름 → 파드 IP",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "pod1",
+      "type": "security",
+      "label": "quiz-1",
+      "sublabel": "전용 PVC",
+      "tag": "ordinal 1",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "pod0",
+      "type": "messagebus",
+      "label": "quiz-0",
+      "sublabel": "전용 PVC",
+      "tag": "ordinal 0",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "sts",
+      "type": "database",
+      "label": "StatefulSet",
+      "sublabel": "serviceName 지정",
+      "tag": "governing",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "client",
+      "to": "headless",
+      "label": "이름 조회"
+    },
+    {
+      "from": "headless",
+      "to": "dns",
+      "label": "레코드 생성"
+    },
+    {
+      "from": "dns",
+      "to": "sts"
+    },
+    {
+      "from": "sts",
+      "to": "pod0"
+    },
+    {
+      "from": "pod0",
+      "to": "pod1"
+    }
+  ]
+}

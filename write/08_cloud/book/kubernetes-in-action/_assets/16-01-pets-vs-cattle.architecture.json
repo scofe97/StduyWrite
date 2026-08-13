@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Pets vs Cattle — 신원이 있는 파드와 균질한 파드",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Cattle — Deployment 방식",
+      "wraps": [
+        "deploy",
+        "cpod"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "Pets — StatefulSet 방식",
+      "wraps": [
+        "sts",
+        "spod"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "need",
+      "type": "external",
+      "label": "무엇이 필요한가",
+      "sublabel": "고정 신원 여부",
+      "tag": "선택 기준",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "deploy",
+      "type": "cloud",
+      "label": "Deployment",
+      "sublabel": "임의 이름 접미사",
+      "tag": "교체 자유",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "cpod",
+      "type": "backend",
+      "label": "균질한 파드",
+      "sublabel": "-7c4d-x9k2",
+      "tag": "아무거나 대체",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "pvc",
+      "type": "security",
+      "label": "전용 PVC",
+      "sublabel": "파드마다 하나",
+      "tag": "신원에 묶임",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "spod",
+      "type": "messagebus",
+      "label": "이름 있는 파드",
+      "sublabel": "quiz-0·quiz-1",
+      "tag": "대체 불가",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "sts",
+      "type": "database",
+      "label": "StatefulSet",
+      "sublabel": "ordinal 접미사",
+      "tag": "신원 유지",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "need",
+      "to": "deploy",
+      "label": "상태 없음"
+    },
+    {
+      "from": "deploy",
+      "to": "cpod",
+      "label": "무작위 이름"
+    },
+    {
+      "from": "cpod",
+      "to": "sts"
+    },
+    {
+      "from": "sts",
+      "to": "spod"
+    },
+    {
+      "from": "spod",
+      "to": "pvc"
+    }
+  ]
+}
