@@ -2,150 +2,137 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "Indexed 완료 모드 — 한 템플릿에서 인덱스로 갈리는 파드",
-    "viewBox": [
-      860,
-      620
-    ],
+    "title": "Indexed 완료 모드 — 템플릿 하나로 만든 파드가 서로 다른 인덱스를 받는다",
     "quality_profile": "showcase",
     "legend": {
       "mode": "hidden"
     }
   },
-  "boundaries": [
-    {
-      "kind": "region",
-      "label": "Control Plane",
-      "wraps": [
-        "jobspec",
-        "jobctl"
-      ],
-      "pad": 32
-    },
-    {
-      "kind": "region",
-      "label": "Worker Nodes",
-      "wraps": [
-        "pod0",
-        "pod1",
-        "pod11"
-      ],
-      "pad": 32
-    }
-  ],
   "components": [
     {
-      "id": "jobspec",
+      "id": "job",
       "type": "cloud",
-      "label": "Job spec",
-      "sublabel": "completionMode",
-      "tag": "Indexed",
+      "label": "Job",
       "pos": [
-        60,
-        50
+        46,
+        280
       ],
       "size": [
-        140,
+        160,
         88
-      ]
+      ],
+      "sublabel": "completions: 12"
     },
     {
-      "id": "jobctl",
+      "id": "tpl",
       "type": "backend",
-      "label": "Job 컨트롤러",
-      "sublabel": "completions 12",
-      "tag": "인덱스 배정",
+      "label": "Pod 템플릿",
       "pos": [
-        330,
-        50
+        282,
+        280
       ],
       "size": [
-        140,
+        160,
         88
-      ]
+      ],
+      "sublabel": "하나뿐"
     },
     {
-      "id": "data",
-      "type": "external",
-      "label": "월별 데이터",
-      "sublabel": "2021년 12개월",
-      "tag": "조각끼리 독립",
+      "id": "p0",
+      "type": "backend",
+      "label": "Pod index 0",
       "pos": [
-        600,
-        50
+        518,
+        164
       ],
       "size": [
-        140,
+        160,
         88
-      ]
+      ],
+      "sublabel": "2020-01 처리"
     },
     {
-      "id": "pod0",
-      "type": "messagebus",
-      "label": "Pod 0",
-      "sublabel": "INDEX=0",
-      "tag": "1월 처리",
+      "id": "p1",
+      "type": "backend",
+      "label": "Pod index 1",
       "pos": [
-        60,
-        350
+        518,
+        280
       ],
       "size": [
-        140,
+        160,
         88
-      ]
+      ],
+      "sublabel": "2020-02 처리"
     },
     {
-      "id": "pod1",
-      "type": "messagebus",
-      "label": "Pod 1",
-      "sublabel": "INDEX=1",
-      "tag": "2월 처리",
+      "id": "p11",
+      "type": "backend",
+      "label": "Pod index 11",
       "pos": [
-        330,
-        350
+        518,
+        396
       ],
       "size": [
-        140,
+        160,
         88
-      ]
-    },
-    {
-      "id": "pod11",
-      "type": "database",
-      "label": "Pod 11",
-      "sublabel": "INDEX=11",
-      "tag": "12월 처리",
-      "pos": [
-        600,
-        350
       ],
-      "size": [
-        140,
-        88
-      ]
+      "sublabel": "2020-12 처리"
     }
   ],
   "connections": [
     {
-      "from": "jobspec",
-      "to": "jobctl",
-      "label": "모드 전달"
+      "from": "job",
+      "to": "tpl",
+      "label": "Indexed",
+      "variant": "emphasis"
     },
     {
-      "from": "jobctl",
-      "to": "pod1"
+      "from": "tpl",
+      "to": "p0",
+      "variant": "emphasis"
     },
     {
-      "from": "data",
-      "to": "pod11"
+      "from": "tpl",
+      "to": "p1",
+      "variant": "emphasis"
     },
     {
-      "from": "pod0",
-      "to": "pod1"
+      "from": "tpl",
+      "to": "p11",
+      "variant": "emphasis"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "파드마다 JOB_COMPLETION_INDEX가 다르다",
+      "wraps": [
+        "p0",
+        "p1",
+        "p11"
+      ],
+      "pad": 30
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "템플릿은 하나, 인덱스는 제각각",
+      "items": [
+        "completionMode를 Indexed로 둔다",
+        "파드마다 0부터 completions-1까지 인덱스를 받는다",
+        "환경 변수와 애노테이션으로 전달된다"
+      ]
     },
     {
-      "from": "pod1",
-      "to": "pod11"
+      "dot": "emerald",
+      "title": "NonIndexed로는 안 되는 이유",
+      "items": [
+        "모든 파드가 동일해 구분할 값이 없다",
+        "각 파드에 다른 월을 넘길 수 없다",
+        "Indexed가 그 구분을 만들어 준다"
+      ]
     }
   ]
 }

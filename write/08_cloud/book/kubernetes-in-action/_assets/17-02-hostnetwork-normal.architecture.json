@@ -2,150 +2,165 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "일반 파드 — Service 패킷이 파드 netns 안에서 끝나는 경로",
-    "viewBox": [
-      860,
-      620
-    ],
+    "title": "일반 파드 — DNAT를 거쳐 파드 전용 netns로 들어가므로 포트가 겹쳐도 된다",
     "quality_profile": "showcase",
     "legend": {
       "mode": "hidden"
     }
   },
-  "boundaries": [
-    {
-      "kind": "region",
-      "label": "Worker Node — 노드 네트워크 스택",
-      "wraps": [
-        "rule",
-        "dnat"
-      ],
-      "pad": 32
-    },
-    {
-      "kind": "region",
-      "label": "Pod netns — 파드 전용 네임스페이스",
-      "wraps": [
-        "veth",
-        "app"
-      ],
-      "pad": 32
-    }
-  ],
   "components": [
     {
-      "id": "client",
+      "id": "req",
       "type": "external",
-      "label": "클라이언트",
-      "sublabel": "Service 이름 호출",
-      "tag": "dst 10.96.0.10:80",
+      "label": "요청",
       "pos": [
-        60,
-        50
+        46,
+        210
       ],
       "size": [
-        140,
+        150,
         88
-      ]
-    },
-    {
-      "id": "rule",
-      "type": "backend",
-      "label": "커널 규칙",
-      "sublabel": "iptables / IPVS",
-      "tag": "VIP:port 매치",
-      "pos": [
-        330,
-        50
       ],
-      "size": [
-        140,
-        88
-      ]
+      "sublabel": "10.96.0.10:80"
     },
     {
-      "id": "dnat",
-      "type": "cloud",
-      "label": "DNAT 변환",
-      "sublabel": "dst 재작성",
-      "tag": "10.244.1.7:8080",
-      "pos": [
-        600,
-        50
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "other",
-      "type": "database",
-      "label": "다른 파드",
-      "sublabel": "10.244.1.8:8080",
-      "tag": "같은 포트 안전",
-      "pos": [
-        60,
-        350
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "app",
-      "type": "messagebus",
-      "label": "컨테이너",
-      "sublabel": ":8080 수신",
-      "tag": "파드 안에서만",
-      "pos": [
-        330,
-        350
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "veth",
+      "id": "krule",
       "type": "security",
-      "label": "veth 페어",
-      "sublabel": "파드 IP 부여",
-      "tag": "노드와 분리",
+      "label": "노드 커널 규칙",
       "pos": [
-        600,
-        350
+        246,
+        210
       ],
       "size": [
-        140,
+        150,
         88
-      ]
+      ],
+      "sublabel": "Service VIP 매치"
+    },
+    {
+      "id": "vethA",
+      "type": "messagebus",
+      "label": "veth 쌍 A",
+      "pos": [
+        446,
+        210
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "파드 A netns"
+    },
+    {
+      "id": "ctrA",
+      "type": "backend",
+      "label": "컨테이너 A",
+      "pos": [
+        646,
+        210
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "10.244.1.7:8080"
+    },
+    {
+      "id": "vethB",
+      "type": "messagebus",
+      "label": "veth 쌍 B",
+      "pos": [
+        446,
+        378
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "파드 B netns"
+    },
+    {
+      "id": "ctrB",
+      "type": "backend",
+      "label": "컨테이너 B",
+      "pos": [
+        646,
+        378
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "10.244.1.8:8080"
     }
   ],
   "connections": [
     {
-      "from": "client",
-      "to": "rule",
-      "label": "VIP 요청"
+      "from": "req",
+      "to": "krule",
+      "label": "들어옴",
+      "variant": "emphasis"
     },
     {
-      "from": "rule",
-      "to": "dnat",
-      "label": "대상 선택"
+      "from": "krule",
+      "to": "vethA",
+      "label": "DNAT",
+      "variant": "emphasis"
     },
     {
-      "from": "dnat",
-      "to": "veth"
+      "from": "vethA",
+      "to": "ctrA",
+      "label": "전달",
+      "variant": "emphasis"
     },
     {
-      "from": "veth",
-      "to": "app"
+      "from": "krule",
+      "to": "vethB"
     },
     {
-      "from": "app",
-      "to": "other"
+      "from": "vethB",
+      "to": "ctrB",
+      "label": "전달 B"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "파드 A 네트워크 네임스페이스",
+      "wraps": [
+        "vethA",
+        "ctrA"
+      ],
+      "pad": 38
+    },
+    {
+      "kind": "security-group",
+      "label": "파드 B 네트워크 네임스페이스",
+      "wraps": [
+        "vethB",
+        "ctrB"
+      ],
+      "pad": 38
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "목적지가 파드 IP로 바뀐다",
+      "items": [
+        "EndpointSlice에 파드 IP가 기록된다",
+        "커널 규칙이 목적지를 파드 IP:8080으로 재작성한다",
+        "패킷은 파드 전용 netns로 들어간다"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "같은 포트가 충돌하지 않는다",
+      "items": [
+        "파드 A와 B가 모두 8080을 연다",
+        "netns가 분리돼 서로 간섭하지 않는다",
+        "노드 포트를 점유하지 않는다"
+      ]
     }
   ]
 }

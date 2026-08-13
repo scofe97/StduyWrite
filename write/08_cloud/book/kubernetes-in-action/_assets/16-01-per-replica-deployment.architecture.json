@@ -2,150 +2,216 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "replica마다 따로 만들면 — Deployment·Service·PVC가 3배가 된다",
-    "viewBox": [
-      860,
-      620
-    ],
+    "title": "replica마다 Deployment·Service·PVC를 따로 만드는 방식 — 오브젝트가 곱해진다",
     "quality_profile": "showcase",
     "legend": {
       "mode": "hidden"
     }
   },
-  "boundaries": [
-    {
-      "kind": "region",
-      "label": "replica 0 전용 묶음",
-      "wraps": [
-        "dep0",
-        "svc0"
-      ],
-      "pad": 32
-    },
-    {
-      "kind": "region",
-      "label": "replica 1 전용 묶음",
-      "wraps": [
-        "dep1",
-        "svc1"
-      ],
-      "pad": 32
-    }
-  ],
   "components": [
     {
-      "id": "admin",
-      "type": "external",
-      "label": "운영자",
-      "sublabel": "매니페스트 N벌",
-      "tag": "수동 관리",
-      "pos": [
-        60,
-        50
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "dep0",
+      "id": "d0",
       "type": "cloud",
       "label": "Deployment 0",
-      "sublabel": "replicas 1",
-      "tag": "전용 하나",
       "pos": [
-        330,
-        50
+        46,
+        70
       ],
       "size": [
-        140,
+        180,
         88
-      ]
+      ],
+      "sublabel": "replicas: 1"
     },
     {
-      "id": "svc0",
-      "type": "backend",
+      "id": "s0",
+      "type": "messagebus",
       "label": "Service 0",
-      "sublabel": "고정 이름",
-      "tag": "전용 하나",
       "pos": [
-        600,
-        50
+        280,
+        70
       ],
       "size": [
-        140,
+        180,
         88
-      ]
+      ],
+      "sublabel": "전용 주소"
     },
     {
-      "id": "pvc0",
-      "type": "security",
+      "id": "v0",
+      "type": "database",
       "label": "PVC 0",
-      "sublabel": "전용 저장소",
-      "tag": "신원에 묶임",
       "pos": [
-        60,
-        350
+        514,
+        70
       ],
       "size": [
-        140,
+        180,
         88
-      ]
+      ],
+      "sublabel": "전용 볼륨"
     },
     {
-      "id": "svc1",
+      "id": "d1",
+      "type": "cloud",
+      "label": "Deployment 1",
+      "pos": [
+        46,
+        234
+      ],
+      "size": [
+        180,
+        88
+      ],
+      "sublabel": "replicas: 1"
+    },
+    {
+      "id": "s1",
       "type": "messagebus",
       "label": "Service 1",
-      "sublabel": "고정 이름",
-      "tag": "또 하나",
       "pos": [
-        330,
-        350
+        280,
+        234
       ],
       "size": [
-        140,
+        180,
         88
-      ]
+      ],
+      "sublabel": "전용 주소"
     },
     {
-      "id": "dep1",
+      "id": "v1",
       "type": "database",
-      "label": "Deployment 1",
-      "sublabel": "replicas 1",
-      "tag": "또 하나",
+      "label": "PVC 1",
       "pos": [
-        600,
-        350
+        514,
+        234
       ],
       "size": [
-        140,
+        180,
         88
-      ]
+      ],
+      "sublabel": "전용 볼륨"
+    },
+    {
+      "id": "d2",
+      "type": "cloud",
+      "label": "Deployment 2",
+      "pos": [
+        46,
+        398
+      ],
+      "size": [
+        180,
+        88
+      ],
+      "sublabel": "replicas: 1"
+    },
+    {
+      "id": "s2",
+      "type": "messagebus",
+      "label": "Service 2",
+      "pos": [
+        280,
+        398
+      ],
+      "size": [
+        180,
+        88
+      ],
+      "sublabel": "전용 주소"
+    },
+    {
+      "id": "v2",
+      "type": "database",
+      "label": "PVC 2",
+      "pos": [
+        514,
+        398
+      ],
+      "size": [
+        180,
+        88
+      ],
+      "sublabel": "전용 볼륨"
     }
   ],
   "connections": [
     {
-      "from": "admin",
-      "to": "dep0",
-      "label": "각각 선언"
+      "from": "d0",
+      "to": "s0"
     },
     {
-      "from": "dep0",
-      "to": "svc0",
-      "label": "짝지음"
+      "from": "s0",
+      "to": "v0"
     },
     {
-      "from": "svc0",
-      "to": "dep1"
+      "from": "d1",
+      "to": "s1"
     },
     {
-      "from": "dep1",
-      "to": "svc1"
+      "from": "s1",
+      "to": "v1"
     },
     {
-      "from": "svc1",
-      "to": "pvc0"
+      "from": "d2",
+      "to": "s2"
+    },
+    {
+      "from": "s2",
+      "to": "v2"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "replica 0 — 오브젝트 3종",
+      "wraps": [
+        "d0",
+        "s0",
+        "v0"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "replica 1 — 오브젝트 3종",
+      "wraps": [
+        "d1",
+        "s1",
+        "v1"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "replica 2 — 오브젝트 3종",
+      "wraps": [
+        "d2",
+        "s2",
+        "v2"
+      ],
+      "pad": 30
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "오브젝트가 replica 수만큼 곱해진다",
+      "items": [
+        "replica 3개에 오브젝트 9개가 필요하다",
+        "단일 Deployment·Service로는 안 된다",
+        "하나 늘릴 때마다 3종을 더 만든다"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "그래서 운영이 어렵다",
+      "items": [
+        "kubectl scale 을 쓸 수 없다",
+        "가능은 하지만 복잡도가 계속 커진다",
+        "StatefulSet은 이를 단일 오브젝트로 푼다"
+      ]
     }
   ]
 }

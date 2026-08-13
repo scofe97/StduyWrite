@@ -2,155 +2,167 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "Job·Pod·Container — 누가 만들고 무엇을 세는가",
-    "viewBox": [
-      860,
-      620
-    ],
+    "title": "Job 실행 3계층 — 사용자·컨트롤 플레인·워커 노드가 나눠 맡는다",
     "quality_profile": "showcase",
     "legend": {
       "mode": "hidden"
     }
   },
-  "boundaries": [
-    {
-      "kind": "region",
-      "label": "Control Plane",
-      "wraps": [
-        "apiserver",
-        "jobctl"
-      ],
-      "pad": 32
-    },
-    {
-      "kind": "region",
-      "label": "Worker Node",
-      "wraps": [
-        "kubelet",
-        "pod",
-        "container"
-      ],
-      "pad": 32
-    }
-  ],
   "components": [
     {
       "id": "user",
       "type": "external",
       "label": "사용자",
-      "sublabel": "kubectl apply",
-      "tag": "지시서를 낸다",
       "pos": [
-        60,
-        50
+        46,
+        70
       ],
       "size": [
-        140,
+        152,
         88
-      ]
+      ],
+      "sublabel": "kubectl apply"
     },
     {
-      "id": "apiserver",
-      "type": "cloud",
+      "id": "api",
+      "type": "security",
       "label": "API Server",
-      "sublabel": "Job 오브젝트 저장",
-      "tag": "etcd에 기록",
       "pos": [
-        330,
-        50
+        262,
+        70
       ],
       "size": [
-        140,
+        152,
         88
-      ]
+      ],
+      "sublabel": "오브젝트 등록"
     },
     {
-      "id": "jobctl",
+      "id": "jctrl",
       "type": "backend",
       "label": "Job 컨트롤러",
-      "sublabel": "controller manager",
-      "tag": "완료 파드 수를 셈",
       "pos": [
-        600,
-        50
+        478,
+        70
       ],
       "size": [
-        140,
+        152,
         88
-      ]
+      ],
+      "sublabel": "완료 수 판정"
+    },
+    {
+      "id": "ctr",
+      "type": "backend",
+      "label": "컨테이너",
+      "pos": [
+        46,
+        248
+      ],
+      "size": [
+        152,
+        88
+      ],
+      "sublabel": "실제 실행"
     },
     {
       "id": "kubelet",
-      "type": "security",
+      "type": "backend",
       "label": "kubelet",
-      "sublabel": "노드마다 하나",
-      "tag": "종료 코드를 봄",
       "pos": [
-        60,
-        350
+        262,
+        248
       ],
       "size": [
-        140,
+        152,
         88
-      ]
+      ],
+      "sublabel": "노드 에이전트"
     },
     {
       "id": "pod",
-      "type": "messagebus",
+      "type": "cloud",
       "label": "Pod",
-      "sublabel": "실행 단위",
-      "tag": "Succeeded로 끝남",
       "pos": [
-        600,
-        350
+        478,
+        248
       ],
       "size": [
-        140,
+        152,
         88
-      ]
-    },
-    {
-      "id": "container",
-      "type": "database",
-      "label": "Container",
-      "sublabel": "실제 프로세스",
-      "tag": "exit code 0",
-      "pos": [
-        330,
-        350
       ],
-      "size": [
-        140,
-        88
-      ]
+      "sublabel": "스케줄됨"
     }
   ],
   "connections": [
     {
       "from": "user",
-      "to": "apiserver",
-      "label": "Job 생성"
+      "to": "api",
+      "label": "Job 생성",
+      "variant": "emphasis"
     },
     {
-      "from": "apiserver",
-      "to": "jobctl",
-      "label": "observe: 감시",
+      "from": "api",
+      "to": "jctrl",
+      "label": "관찰: 감시",
       "variant": "dashed"
     },
     {
-      "from": "jobctl",
-      "to": "pod"
-    },
-    {
-      "from": "kubelet",
-      "to": "container",
-      "label": "support: 기동",
-      "variant": "dashed"
+      "from": "jctrl",
+      "to": "pod",
+      "variant": "emphasis"
     },
     {
       "from": "pod",
-      "to": "container",
-      "label": "실행"
+      "to": "kubelet",
+      "label": "할당",
+      "variant": "emphasis"
+    },
+    {
+      "from": "kubelet",
+      "to": "ctr",
+      "label": "기동",
+      "variant": "emphasis"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "control plane",
+      "wraps": [
+        "api",
+        "jctrl"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "worker node",
+      "wraps": [
+        "ctr",
+        "kubelet"
+      ],
+      "pad": 30
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "세 층이 각자 다른 일을 한다",
+      "items": [
+        "사용자는 원하는 상태만 적는다",
+        "컨트롤 플레인이 파드 오브젝트를 만든다",
+        "워커 노드가 컨테이너를 실제로 띄운다"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Job 컨트롤러의 역할",
+      "items": [
+        "Job spec을 보고 파드를 만든다",
+        "완료 수를 세어 목표 도달을 판단한다",
+        "파드를 직접 실행하지는 않는다"
+      ]
     }
   ]
 }

@@ -2,149 +2,162 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "work queue — 큐를 아는 것은 컨테이너뿐",
-    "viewBox": [
-      860,
-      620
-    ],
+    "title": "work queue 두 방식 — coarse는 아이템당 파드, fine은 파드가 큐를 비운다",
     "quality_profile": "showcase",
     "legend": {
       "mode": "hidden"
     }
   },
-  "boundaries": [
-    {
-      "kind": "region",
-      "label": "Control Plane",
-      "wraps": [
-        "jobctl"
-      ],
-      "pad": 32
-    },
-    {
-      "kind": "region",
-      "label": "Worker Node",
-      "wraps": [
-        "pod",
-        "container"
-      ],
-      "pad": 32
-    }
-  ],
   "components": [
     {
-      "id": "queue",
-      "type": "external",
-      "label": "외부 큐",
-      "sublabel": "findOneAndDelete",
-      "tag": "k8s는 모름",
-      "pos": [
-        60,
-        50
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "jobctl",
-      "type": "backend",
-      "label": "Job 컨트롤러",
-      "sublabel": "완료 파드 수만 셈",
-      "tag": "큐를 모름",
-      "pos": [
-        330,
-        50
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "kubelet",
-      "type": "security",
-      "label": "kubelet",
-      "sublabel": "종료 코드만 봄",
-      "tag": "큐를 모름",
-      "pos": [
-        600,
-        50
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "pod",
-      "type": "messagebus",
-      "label": "워커 파드",
-      "sublabel": "coarse는 1개",
-      "tag": "fine은 빌 때까지",
-      "pos": [
-        60,
-        350
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "container",
+      "id": "q1",
       "type": "database",
-      "label": "컨테이너",
-      "sublabel": "큐에 붙는다",
-      "tag": "kubelet이 띄움",
+      "label": "작업 큐",
       "pos": [
-        330,
-        350
+        46,
+        80
       ],
       "size": [
-        140,
+        170,
         88
-      ]
+      ],
+      "sublabel": "아이템 N개"
     },
     {
-      "id": "done",
-      "type": "cloud",
-      "label": "Job 완료",
-      "sublabel": "성공 수 충족",
-      "tag": "큐가 비었다는 뜻",
+      "id": "q2",
+      "type": "database",
+      "label": "작업 큐",
       "pos": [
-        600,
-        350
+        46,
+        268
       ],
       "size": [
-        140,
+        170,
         88
-      ]
+      ],
+      "sublabel": "아이템 N개"
+    },
+    {
+      "id": "cp",
+      "type": "backend",
+      "label": "파드 N개",
+      "pos": [
+        270,
+        80
+      ],
+      "size": [
+        170,
+        88
+      ],
+      "sublabel": "아이템 하나씩"
+    },
+    {
+      "id": "fp",
+      "type": "backend",
+      "label": "파드 소수",
+      "pos": [
+        270,
+        268
+      ],
+      "size": [
+        170,
+        88
+      ],
+      "sublabel": "여러 개 처리"
+    },
+    {
+      "id": "cend",
+      "type": "cloud",
+      "label": "각자 종료",
+      "pos": [
+        494,
+        80
+      ],
+      "size": [
+        170,
+        88
+      ],
+      "sublabel": "아이템당 파드 하나"
+    },
+    {
+      "id": "fend",
+      "type": "cloud",
+      "label": "큐가 빌 때까지",
+      "pos": [
+        494,
+        268
+      ],
+      "size": [
+        170,
+        88
+      ],
+      "sublabel": "비면 종료"
     }
   ],
   "connections": [
     {
-      "from": "queue",
-      "to": "pod"
+      "from": "q1",
+      "to": "cp",
+      "label": "하나 꺼냄",
+      "variant": "emphasis"
     },
     {
-      "from": "jobctl",
-      "to": "kubelet",
-      "label": "observe: 파드 수",
-      "variant": "dashed"
+      "from": "cp",
+      "to": "cend",
+      "label": "처리 후",
+      "variant": "emphasis"
     },
     {
-      "from": "pod",
-      "to": "container"
+      "from": "q2",
+      "to": "fp",
+      "label": "반복 조회"
     },
     {
-      "from": "container",
-      "to": "done"
+      "from": "fp",
+      "to": "fend",
+      "label": "계속 처리"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "coarse — 파드당 아이템 하나",
+      "wraps": [
+        "q1",
+        "cp",
+        "cend"
+      ],
+      "pad": 30
     },
     {
-      "from": "kubelet",
-      "to": "container"
+      "kind": "region",
+      "label": "fine — 파드당 여러 아이템",
+      "wraps": [
+        "q2",
+        "fp",
+        "fend"
+      ],
+      "pad": 30
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "coarse는 파드가 아이템 수만큼",
+      "items": [
+        "큐에서 하나를 꺼내 처리하고 종료한다",
+        "work 아이템당 파드 하나가 나온다",
+        "completions를 아이템 수로 둔다"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "fine은 파드가 계속 가져간다",
+      "items": [
+        "큐가 빌 때까지 반복해서 꺼낸다",
+        "파드 수가 아이템 수와 무관하다",
+        "기동 비용을 아낀다"
+      ]
     }
   ]
 }

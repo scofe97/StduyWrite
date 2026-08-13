@@ -2,150 +2,144 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "Blue/Green — Service selector를 바꿔 트래픽을 옮긴다",
-    "viewBox": [
-      860,
-      620
-    ],
+    "title": "Blue/Green — Service label selector를 바꿔 트래픽을 한 번에 넘긴다",
     "quality_profile": "showcase",
     "legend": {
       "mode": "hidden"
     }
   },
-  "boundaries": [
-    {
-      "kind": "region",
-      "label": "Blue — 현재 트래픽",
-      "wraps": [
-        "blue",
-        "bluepod"
-      ],
-      "pad": 32
-    },
-    {
-      "kind": "region",
-      "label": "Green — 대기 중 새 버전",
-      "wraps": [
-        "green",
-        "greenpod"
-      ],
-      "pad": 32
-    }
-  ],
   "components": [
     {
-      "id": "svc",
+      "id": "client",
       "type": "external",
-      "label": "Service",
-      "sublabel": "label selector",
-      "tag": "한쪽만 지목",
+      "label": "클라이언트",
       "pos": [
-        60,
-        50
+        46,
+        250
       ],
       "size": [
-        140,
+        150,
         88
-      ]
+      ],
+      "sublabel": "요청"
+    },
+    {
+      "id": "svc",
+      "type": "messagebus",
+      "label": "Service",
+      "pos": [
+        254,
+        250
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "selector: col"
     },
     {
       "id": "blue",
       "type": "cloud",
-      "label": "Blue Deployment",
-      "sublabel": "color=blue",
-      "tag": "현재 서비스",
+      "label": "Deployment blue",
       "pos": [
-        330,
-        50
+        462,
+        146
       ],
       "size": [
-        140,
+        150,
         88
-      ]
-    },
-    {
-      "id": "bluepod",
-      "type": "backend",
-      "label": "v1 파드",
-      "sublabel": "트래픽 수신",
-      "tag": "검증된 버전",
-      "pos": [
-        600,
-        50
       ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "switch",
-      "type": "security",
-      "label": "selector 교체",
-      "sublabel": "blue → green",
-      "tag": "한 번에 전환",
-      "pos": [
-        60,
-        350
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "greenpod",
-      "type": "messagebus",
-      "label": "v2 파드",
-      "sublabel": "미리 기동",
-      "tag": "검증 대기",
-      "pos": [
-        330,
-        350
-      ],
-      "size": [
-        140,
-        88
-      ]
+      "sublabel": "col=blue · 현재"
     },
     {
       "id": "green",
-      "type": "database",
-      "label": "Green Deployment",
-      "sublabel": "color=green",
-      "tag": "트래픽 없음",
+      "type": "cloud",
+      "label": "Deployment green",
       "pos": [
-        600,
-        350
+        462,
+        354
       ],
       "size": [
-        140,
+        150,
         88
-      ]
+      ],
+      "sublabel": "col=green · 대기"
+    },
+    {
+      "id": "bp",
+      "type": "backend",
+      "label": "Pod v1 ×3",
+      "pos": [
+        670,
+        146
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "지금 트래픽"
+    },
+    {
+      "id": "gp",
+      "type": "backend",
+      "label": "Pod v2 ×3",
+      "pos": [
+        670,
+        354
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "전환 뒤 트래픽"
     }
   ],
   "connections": [
     {
+      "from": "client",
+      "to": "svc",
+      "label": "트래픽",
+      "variant": "emphasis"
+    },
+    {
       "from": "svc",
       "to": "blue",
-      "label": "selector 일치"
+      "variant": "emphasis"
     },
     {
-      "from": "blue",
-      "to": "bluepod",
-      "label": "파드 소유"
-    },
-    {
-      "from": "bluepod",
+      "from": "svc",
       "to": "green"
     },
     {
-      "from": "green",
-      "to": "greenpod"
+      "from": "blue",
+      "to": "bp",
+      "label": "수신",
+      "variant": "emphasis"
     },
     {
-      "from": "greenpod",
-      "to": "switch"
+      "from": "green",
+      "to": "gp",
+      "label": "대기"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "전환은 selector 한 줄이다",
+      "items": [
+        "Green을 Blue 옆에 미리 만들어 둔다",
+        "Service selector를 col=green으로 바꾼다",
+        "두 그룹의 label이 달라 한 번에 한쪽만 잡힌다"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "네이티브 전략은 아니다",
+      "items": [
+        "strategy.type에 Blue/Green은 못 적는다",
+        "Deployment 컨트롤러가 지원하지 않는다",
+        "다만 Service만 바꾸면 되어 추가 도구는 없다"
+      ]
     }
   ]
 }

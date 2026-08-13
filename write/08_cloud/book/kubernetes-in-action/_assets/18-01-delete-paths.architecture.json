@@ -2,150 +2,203 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "완료된 Job과 파드를 치우는 세 경로",
-    "viewBox": [
-      860,
-      620
-    ],
+    "title": "Job 삭제 세 경로 — 함께 회수·파드 독립·시간 경과 자동 삭제",
     "quality_profile": "showcase",
     "legend": {
       "mode": "hidden"
     }
   },
-  "boundaries": [
-    {
-      "kind": "region",
-      "label": "Control Plane",
-      "wraps": [
-        "gc",
-        "ttlctl"
-      ],
-      "pad": 32
-    },
-    {
-      "kind": "region",
-      "label": "남는 오브젝트",
-      "wraps": [
-        "job",
-        "pod"
-      ],
-      "pad": 32
-    }
-  ],
   "components": [
     {
-      "id": "user",
+      "id": "del",
       "type": "external",
-      "label": "사용자",
-      "sublabel": "delete job",
-      "tag": "직접 지운다",
+      "label": "사용자 삭제",
       "pos": [
-        60,
-        50
+        46,
+        70
       ],
       "size": [
-        140,
+        160,
         88
-      ]
+      ],
+      "sublabel": "kubectl delete job"
+    },
+    {
+      "id": "orph",
+      "type": "external",
+      "label": "cascade=orphan",
+      "pos": [
+        46,
+        174
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "사용자 지정"
+    },
+    {
+      "id": "ttl",
+      "type": "cloud",
+      "label": "TTL 컨트롤러",
+      "pos": [
+        46,
+        278
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "완료 후 자동"
     },
     {
       "id": "gc",
-      "type": "backend",
-      "label": "가비지 컬렉터",
-      "sublabel": "ownerReferences 추적",
-      "tag": "고아 파드 회수",
-      "pos": [
-        330,
-        50
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "ttlctl",
-      "type": "cloud",
-      "label": "TTL 컨트롤러",
-      "sublabel": "ttlSecondsAfter",
-      "tag": "만료되면 지움",
-      "pos": [
-        600,
-        50
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "job",
-      "type": "messagebus",
-      "label": "Job",
-      "sublabel": "완료 상태",
-      "tag": "소유자",
-      "pos": [
-        330,
-        350
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "pod",
-      "type": "database",
-      "label": "Pod",
-      "sublabel": "Completed 유지",
-      "tag": "로그를 품음",
-      "pos": [
-        600,
-        350
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "orphan",
       "type": "security",
-      "label": "cascade orphan",
-      "sublabel": "Job만 지움",
-      "tag": "파드는 남는다",
+      "label": "가비지 컬렉터",
       "pos": [
-        60,
-        350
+        278,
+        70
       ],
       "size": [
-        140,
+        160,
         88
-      ]
+      ],
+      "sublabel": "ownerReference 추적"
+    },
+    {
+      "id": "cut",
+      "type": "security",
+      "label": "소유 관계 해제",
+      "pos": [
+        278,
+        174
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "ownerReference 제거"
+    },
+    {
+      "id": "timer",
+      "type": "security",
+      "label": "TTL 만료 대기",
+      "pos": [
+        278,
+        278
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "ttlSecondsAfterFinished"
+    },
+    {
+      "id": "gone",
+      "type": "backend",
+      "label": "파드까지 회수",
+      "pos": [
+        510,
+        70
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "함께 삭제"
+    },
+    {
+      "id": "alone",
+      "type": "backend",
+      "label": "파드 독립",
+      "pos": [
+        510,
+        174
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "남아서 계속 실행"
+    },
+    {
+      "id": "auto",
+      "type": "backend",
+      "label": "Job 자동 삭제",
+      "pos": [
+        510,
+        278
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "파드도 함께"
     }
   ],
   "connections": [
     {
-      "from": "user",
+      "from": "del",
       "to": "gc",
-      "label": "delete job"
+      "label": "요청",
+      "variant": "emphasis"
     },
     {
       "from": "gc",
-      "to": "job"
+      "to": "gone",
+      "label": "회수",
+      "variant": "emphasis"
     },
     {
-      "from": "ttlctl",
-      "to": "pod"
+      "from": "orph",
+      "to": "cut",
+      "label": "요청"
     },
     {
-      "from": "job",
-      "to": "pod",
-      "label": "소유"
+      "from": "cut",
+      "to": "alone",
+      "label": "분리"
     },
     {
-      "from": "user",
-      "to": "orphan"
+      "from": "ttl",
+      "to": "timer",
+      "label": "감시",
+      "variant": "emphasis"
+    },
+    {
+      "from": "timer",
+      "to": "auto",
+      "label": "만료",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "기본은 함께 지운다",
+      "items": [
+        "Job을 지우면 가비지 컬렉터가 파드도 회수한다",
+        "ownerReference로 소유 관계를 추적한다",
+        "별도 지시가 없으면 이 경로다"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "orphan은 파드를 남긴다",
+      "items": [
+        "소유 관계만 끊는다",
+        "파드는 남아서 계속 실행된다",
+        "직접 지워야 한다"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "TTL은 사람 없이 지운다",
+      "items": [
+        "완료 시점부터 시간을 센다",
+        "지정한 초가 지나면 Job을 지운다",
+        "파드도 함께 사라진다"
+      ]
     }
   ]
 }

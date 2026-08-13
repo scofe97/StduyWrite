@@ -2,150 +2,182 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "Deployment·ReplicaSet·Pod — 간접 구조의 소유 계층",
-    "viewBox": [
-      860,
-      620
-    ],
+    "title": "Deployment → ReplicaSet → Pod 3계층 위임 — 층마다 담당 컨트롤러가 다르다",
     "quality_profile": "showcase",
     "legend": {
       "mode": "hidden"
     }
   },
-  "boundaries": [
-    {
-      "kind": "region",
-      "label": "사용자가 선언하는 것",
-      "wraps": [
-        "deploy",
-        "tmpl"
-      ],
-      "pad": 32
-    },
-    {
-      "kind": "region",
-      "label": "컨트롤러가 만드는 것",
-      "wraps": [
-        "rs",
-        "pod"
-      ],
-      "pad": 32
-    }
-  ],
   "components": [
     {
-      "id": "user",
-      "type": "external",
-      "label": "kubectl apply",
-      "sublabel": "Deployment 매니페스트",
-      "tag": "선언은 하나",
+      "id": "dctrl",
+      "type": "security",
+      "label": "Deploy 컨트롤러",
       "pos": [
-        60,
-        50
+        46,
+        70
       ],
       "size": [
         140,
         88
-      ]
+      ],
+      "sublabel": "ReplicaSet 생성"
+    },
+    {
+      "id": "rctrl",
+      "type": "security",
+      "label": "RS 컨트롤러",
+      "pos": [
+        292,
+        70
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "Pod 생성·유지"
     },
     {
       "id": "deploy",
       "type": "cloud",
       "label": "Deployment",
-      "sublabel": "replicas·strategy",
-      "tag": "세대를 관리",
       "pos": [
-        330,
-        50
+        46,
+        280
       ],
       "size": [
         140,
         88
-      ]
-    },
-    {
-      "id": "tmpl",
-      "type": "backend",
-      "label": "Pod 템플릿",
-      "sublabel": "이미지·포트",
-      "tag": "해시의 입력",
-      "pos": [
-        600,
-        50
       ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "hash",
-      "type": "security",
-      "label": "pod-template-hash",
-      "sublabel": "템플릿에서 계산",
-      "tag": "세대 식별자",
-      "pos": [
-        60,
-        350
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "pod",
-      "type": "messagebus",
-      "label": "Pod",
-      "sublabel": "이름에 해시 포함",
-      "tag": "실제 실행",
-      "pos": [
-        330,
-        350
-      ],
-      "size": [
-        140,
-        88
-      ]
+      "sublabel": "선언적 업데이트"
     },
     {
       "id": "rs",
-      "type": "database",
+      "type": "backend",
       "label": "ReplicaSet",
-      "sublabel": "세대마다 하나",
-      "tag": "파드를 소유",
       "pos": [
-        600,
-        350
+        292,
+        280
       ],
       "size": [
         140,
         88
-      ]
+      ],
+      "sublabel": "복제본 수 유지"
+    },
+    {
+      "id": "p1",
+      "type": "backend",
+      "label": "Pod",
+      "pos": [
+        538,
+        164
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "kiada"
+    },
+    {
+      "id": "p2",
+      "type": "backend",
+      "label": "Pod",
+      "pos": [
+        538,
+        280
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "kiada"
+    },
+    {
+      "id": "p3",
+      "type": "backend",
+      "label": "Pod",
+      "pos": [
+        538,
+        396
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "kiada"
     }
   ],
   "connections": [
     {
-      "from": "user",
-      "to": "deploy",
-      "label": "선언"
+      "from": "dctrl",
+      "to": "deploy"
     },
     {
-      "from": "deploy",
-      "to": "tmpl",
-      "label": "템플릿 포함"
-    },
-    {
-      "from": "tmpl",
+      "from": "rctrl",
       "to": "rs"
     },
     {
-      "from": "rs",
-      "to": "pod"
+      "from": "deploy",
+      "to": "rs",
+      "label": "제어",
+      "variant": "emphasis"
     },
     {
-      "from": "pod",
-      "to": "hash"
+      "from": "rs",
+      "to": "p1",
+      "variant": "emphasis"
+    },
+    {
+      "from": "rs",
+      "to": "p2",
+      "variant": "emphasis"
+    },
+    {
+      "from": "rs",
+      "to": "p3",
+      "variant": "emphasis"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "control plane — 층마다 컨트롤러가 다르다",
+      "wraps": [
+        "dctrl",
+        "rctrl"
+      ],
+      "pad": 38
+    },
+    {
+      "kind": "security-group",
+      "label": "교체 가능한 복제본",
+      "wraps": [
+        "p1",
+        "p2",
+        "p3"
+      ],
+      "pad": 38
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Deployment는 파드를 직접 안 만든다",
+      "items": [
+        "생성될 때 ReplicaSet이 자동으로 만들어진다",
+        "Deployment가 ReplicaSet을 제어한다",
+        "ReplicaSet이 개별 파드를 제어한다"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "층마다 담당이 갈린다",
+      "items": [
+        "Deployment 컨트롤러는 업데이트만 맡는다",
+        "복제·유지는 ReplicaSet 컨트롤러 몫이다",
+        "그래서 ReplicaSet을 알아야 Deployment를 안다"
+      ]
     }
   ]
 }
