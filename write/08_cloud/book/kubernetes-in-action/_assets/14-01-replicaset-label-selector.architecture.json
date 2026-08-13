@@ -2,27 +2,154 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "label selector — 무엇이 이 세트에 속하는가",
-    "viewBox": [860, 620],
+    "title": "ReplicaSet label selector — 맞는 파드만 관리하고 나머지는 무시한다",
     "quality_profile": "showcase",
-    "legend": { "mode": "hidden" }
+    "legend": {
+      "mode": "hidden"
+    }
   },
-  "boundaries": [
-    { "kind": "region", "label": "selector에 맞는 파드 — 관리 대상", "wraps": ["podA", "podB"], "pad": 32 },
-    { "kind": "security-group", "label": "맞지 않는 파드 — 무시된다", "wraps": ["quote", "free"], "pad": 32 }
-  ],
   "components": [
-    { "id": "rs",    "type": "cloud",      "label": "ReplicaSet", "sublabel": "app=quiz 선택",  "tag": "replicas 3",  "pos": [60, 50],  "size": [140, 88] },
-    { "id": "podA",  "type": "messagebus", "label": "quiz-a1b2",  "sublabel": "app=quiz",      "tag": "소유",        "pos": [330, 50], "size": [140, 88] },
-    { "id": "podB",  "type": "messagebus", "label": "quiz-c3d4",  "sublabel": "app=quiz",      "tag": "소유",        "pos": [600, 50], "size": [140, 88] },
-    { "id": "gc",    "type": "backend",    "label": "수 세기",      "sublabel": "일치 파드만",    "tag": "2/3 → 하나 더", "pos": [60, 350], "size": [140, 88] },
-    { "id": "quote", "type": "external",   "label": "quote-x9",   "sublabel": "app=quote",     "tag": "다른 label",   "pos": [330, 350], "size": [140, 88] },
-    { "id": "free",  "type": "database",   "label": "직접 만든 파드", "sublabel": "label 없음",   "tag": "소유자 없음",  "pos": [600, 350], "size": [140, 88] }
+    {
+      "id": "rs",
+      "type": "cloud",
+      "label": "ReplicaSet",
+      "pos": [
+        46,
+        206
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "kiada"
+    },
+    {
+      "id": "sel",
+      "type": "security",
+      "label": "selector",
+      "pos": [
+        336,
+        206
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "app=kiada"
+    },
+    {
+      "id": "p1",
+      "type": "backend",
+      "label": "Pod kiada-1",
+      "pos": [
+        626,
+        98
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "app=kiada"
+    },
+    {
+      "id": "p2",
+      "type": "backend",
+      "label": "Pod kiada-2",
+      "pos": [
+        626,
+        206
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "app=kiada"
+    },
+    {
+      "id": "p3",
+      "type": "backend",
+      "label": "Pod kiada-3",
+      "pos": [
+        626,
+        314
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "app=kiada"
+    },
+    {
+      "id": "q",
+      "type": "external",
+      "label": "Pod quote",
+      "pos": [
+        336,
+        470
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "app=quote · 제외됨"
+    }
   ],
   "connections": [
-    { "from": "rs", "to": "podA" },
-    { "from": "podA", "to": "podB" },
-    { "from": "rs", "to": "gc" },
-    { "from": "quote", "to": "free" }
+    {
+      "from": "rs",
+      "to": "sel",
+      "variant": "emphasis"
+    },
+    {
+      "from": "sel",
+      "to": "p1",
+      "variant": "emphasis"
+    },
+    {
+      "from": "sel",
+      "to": "p2",
+      "variant": "emphasis"
+    },
+    {
+      "from": "sel",
+      "to": "p3",
+      "variant": "emphasis"
+    },
+    {
+      "from": "sel",
+      "to": "q"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "selector에 맞는 파드",
+      "wraps": [
+        "p1",
+        "p2",
+        "p3"
+      ],
+      "pad": 30
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "selector가 소속을 정한다",
+      "items": [
+        "label selector와 파드 label이 소속을 결정한다",
+        "맞는 파드만 이 세트의 일부로 본다",
+        "Service의 selector와 같은 방식이다"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "맞지 않으면 무시한다",
+      "items": [
+        "app=quote 파드는 세트 밖이다",
+        "ReplicaSet은 이 파드를 세지도 지우지도 않는다",
+        "같은 네임스페이스에 있어도 무관하다"
+      ]
+    }
   ]
 }

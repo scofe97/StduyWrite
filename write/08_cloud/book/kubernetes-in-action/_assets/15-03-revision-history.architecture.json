@@ -2,150 +2,252 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "revision 히스토리 — 되돌릴 수 있는 이유",
-    "viewBox": [
-      860,
-      620
-    ],
+    "title": "revision 히스토리 — 각 ReplicaSet이 한 revision, 활성 하나만 파드를 관리한다",
     "quality_profile": "showcase",
     "legend": {
       "mode": "hidden"
     }
   },
+  "components": [
+    {
+      "id": "api",
+      "type": "security",
+      "label": "API Server",
+      "sublabel": "spec 갱신",
+      "pos": [
+        46,
+        210
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "dctrl",
+      "type": "backend",
+      "label": "Deployment 컨트롤러",
+      "sublabel": "해시 비교",
+      "pos": [
+        38,
+        330
+      ],
+      "size": [
+        156,
+        88
+      ]
+    },
+    {
+      "id": "etcd",
+      "type": "database",
+      "label": "etcd",
+      "sublabel": "오브젝트 저장",
+      "pos": [
+        46,
+        90
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "deploy",
+      "type": "cloud",
+      "label": "Deployment",
+      "sublabel": "kiada",
+      "pos": [
+        252,
+        330
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "rs1",
+      "type": "backend",
+      "label": "ReplicaSet -abc",
+      "sublabel": "revision 1",
+      "pos": [
+        458,
+        90
+      ],
+      "size": [
+        152,
+        88
+      ],
+      "tag": "replicas 0"
+    },
+    {
+      "id": "rs2",
+      "type": "backend",
+      "label": "ReplicaSet -def",
+      "sublabel": "revision 2",
+      "pos": [
+        458,
+        210
+      ],
+      "size": [
+        152,
+        88
+      ],
+      "tag": "replicas 0"
+    },
+    {
+      "id": "rs3",
+      "type": "backend",
+      "label": "ReplicaSet -ghi",
+      "sublabel": "revision 3",
+      "pos": [
+        458,
+        330
+      ],
+      "size": [
+        152,
+        88
+      ],
+      "tag": "replicas 3"
+    },
+    {
+      "id": "pod1",
+      "type": "backend",
+      "label": "Pod v3",
+      "sublabel": "Running",
+      "pos": [
+        664,
+        270
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "pod2",
+      "type": "backend",
+      "label": "Pod v3",
+      "sublabel": "Running",
+      "pos": [
+        664,
+        382
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "pod3",
+      "type": "backend",
+      "label": "Pod v3",
+      "sublabel": "Running",
+      "pos": [
+        664,
+        494
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
   "boundaries": [
     {
       "kind": "region",
-      "label": "현재 세대",
+      "label": "control plane",
       "wraps": [
-        "current",
-        "curpod"
+        "api",
+        "dctrl",
+        "etcd"
       ],
-      "pad": 32
+      "pad": 34
     },
     {
-      "kind": "region",
-      "label": "보존된 옛 세대",
+      "kind": "security-group",
+      "label": "revision 히스토리 — 옛 ReplicaSet은 지우지 않는다",
       "wraps": [
-        "rev2",
-        "rev1"
+        "rs1",
+        "rs2",
+        "rs3"
       ],
-      "pad": 32
-    }
-  ],
-  "components": [
-    {
-      "id": "deploy",
-      "type": "external",
-      "label": "Deployment",
-      "sublabel": "revisionHistoryLimit",
-      "tag": "기본 10개 보존",
-      "pos": [
-        60,
-        50
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "current",
-      "type": "cloud",
-      "label": "revision 3",
-      "sublabel": "replicas 3",
-      "tag": "지금 서비스",
-      "pos": [
-        330,
-        50
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "curpod",
-      "type": "backend",
-      "label": "파드 3개",
-      "sublabel": "현재 이미지",
-      "tag": "트래픽 수신",
-      "pos": [
-        600,
-        50
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "undo",
-      "type": "security",
-      "label": "rollout undo",
-      "sublabel": "이전으로 되돌림",
-      "tag": "replicas 교환",
-      "pos": [
-        60,
-        350
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "rev1",
-      "type": "messagebus",
-      "label": "revision 1",
-      "sublabel": "replicas 0",
-      "tag": "템플릿만 남음",
-      "pos": [
-        330,
-        350
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "rev2",
-      "type": "database",
-      "label": "revision 2",
-      "sublabel": "replicas 0",
-      "tag": "템플릿만 남음",
-      "pos": [
-        600,
-        350
-      ],
-      "size": [
-        140,
-        88
-      ]
+      "pad": 34
     }
   ],
   "connections": [
     {
+      "from": "api",
+      "to": "dctrl",
+      "variant": "security"
+    },
+    {
+      "from": "api",
+      "to": "etcd",
+      "variant": "security"
+    },
+    {
+      "from": "dctrl",
+      "to": "deploy",
+      "label": "조정",
+      "variant": "emphasis"
+    },
+    {
       "from": "deploy",
-      "to": "current",
-      "label": "현재 지정"
+      "to": "rs1"
     },
     {
-      "from": "current",
-      "to": "curpod",
-      "label": "파드 소유"
+      "from": "deploy",
+      "to": "rs2"
     },
     {
-      "from": "curpod",
-      "to": "rev2"
+      "from": "deploy",
+      "to": "rs3",
+      "variant": "emphasis"
     },
     {
-      "from": "rev2",
-      "to": "rev1"
+      "from": "rs3",
+      "to": "pod1",
+      "variant": "emphasis"
     },
     {
-      "from": "rev1",
-      "to": "undo"
+      "from": "rs3",
+      "to": "pod2",
+      "variant": "emphasis"
+    },
+    {
+      "from": "rs3",
+      "to": "pod3",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "revision은 어디에 있나",
+      "items": [
+        "Deployment 오브젝트가 아니라 연관된 ReplicaSet들이 히스토리다",
+        "각 ReplicaSet 하나가 한 revision",
+        "업데이트 후에도 옛 ReplicaSet을 지우지 않는 이유"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "활성은 언제나 하나",
+      "items": [
+        "replicas가 0이 아닌 ReplicaSet이 현재 파드를 관리한다",
+        "나머지는 replicas 0으로 껍데기만 보존",
+        "undo는 이 replicas 값을 옮기는 일이다"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "undo가 되돌리지 않는 것",
+      "items": [
+        "revision에 담긴 것은 Pod 템플릿뿐",
+        "replicas 수·selector는 되돌아오지 않는다",
+        "매니페스트 재적용은 모든 필드를 덮어쓴다"
+      ]
     }
   ]
 }
