@@ -2,28 +2,192 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "ReplicaSet — 셀렉터로 파드를 모으고 수를 맞춘다",
-    "viewBox": [860, 620],
+    "title": "ReplicaSet — 원하는 복제본 수와 Pod 템플릿으로 파드를 만들고 유지한다",
     "quality_profile": "showcase",
-    "legend": { "mode": "hidden" }
+    "legend": {
+      "mode": "hidden"
+    }
   },
-  "boundaries": [
-    { "kind": "region", "label": "Control Plane", "wraps": ["rs", "ctrl"], "pad": 32 },
-    { "kind": "region", "label": "Worker Nodes — 셀렉터가 모으는 파드", "wraps": ["podA", "podB"], "pad": 32 }
-  ],
   "components": [
-    { "id": "user", "type": "external",   "label": "사용자",      "sublabel": "replicas 선언",   "tag": "원하는 수",     "pos": [60, 50],  "size": [140, 88] },
-    { "id": "rs",   "type": "cloud",      "label": "ReplicaSet", "sublabel": "label selector", "tag": "소유 판정",     "pos": [330, 50], "size": [140, 88] },
-    { "id": "ctrl", "type": "backend",    "label": "컨트롤러",     "sublabel": "실제와 비교",     "tag": "차이를 메움",   "pos": [600, 50], "size": [140, 88] },
-    { "id": "svc",  "type": "security",   "label": "Service",    "sublabel": "같은 label 선택",  "tag": "파드를 공유",   "pos": [60, 350], "size": [140, 88] },
-    { "id": "podA", "type": "messagebus", "label": "파드 A",      "sublabel": "app=quiz",       "tag": "셀렉터 일치",   "pos": [330, 350], "size": [140, 88] },
-    { "id": "podB", "type": "database",   "label": "파드 B",      "sublabel": "app=quiz",       "tag": "셀렉터 일치",   "pos": [600, 350], "size": [140, 88] }
+    {
+      "id": "replicas",
+      "type": "backend",
+      "label": "replicas: 3",
+      "pos": [
+        46,
+        60
+      ],
+      "size": [
+        150,
+        74
+      ],
+      "sublabel": "원하는 수"
+    },
+    {
+      "id": "spec",
+      "type": "cloud",
+      "label": "ReplicaSet",
+      "pos": [
+        46,
+        210
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "kiada"
+    },
+    {
+      "id": "template",
+      "type": "backend",
+      "label": "template",
+      "pos": [
+        46,
+        364
+      ],
+      "size": [
+        150,
+        74
+      ],
+      "sublabel": "Pod 템플릿"
+    },
+    {
+      "id": "ctrl",
+      "type": "security",
+      "label": "ReplicaSet 컨트롤러",
+      "pos": [
+        250,
+        210
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "현재 수 비교"
+    },
+    {
+      "id": "p1",
+      "type": "backend",
+      "label": "Pod",
+      "pos": [
+        454,
+        100
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "kiada"
+    },
+    {
+      "id": "p2",
+      "type": "backend",
+      "label": "Pod",
+      "pos": [
+        454,
+        210
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "kiada"
+    },
+    {
+      "id": "p3",
+      "type": "backend",
+      "label": "Pod",
+      "pos": [
+        454,
+        320
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "kiada"
+    },
+    {
+      "id": "svc",
+      "type": "messagebus",
+      "label": "Service",
+      "pos": [
+        658,
+        210
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "하나로 노출"
+    }
   ],
   "connections": [
-    { "from": "user", "to": "rs" },
-    { "from": "rs", "to": "ctrl" },
-    { "from": "ctrl", "to": "podB" },
-    { "from": "svc", "to": "podA" },
-    { "from": "podA", "to": "podB" }
+    {
+      "from": "replicas",
+      "to": "spec"
+    },
+    {
+      "from": "template",
+      "to": "spec"
+    },
+    {
+      "from": "spec",
+      "to": "ctrl",
+      "label": "조정",
+      "variant": "emphasis"
+    },
+    {
+      "from": "ctrl",
+      "to": "p1",
+      "variant": "emphasis"
+    },
+    {
+      "from": "ctrl",
+      "to": "p2",
+      "variant": "emphasis"
+    },
+    {
+      "from": "ctrl",
+      "to": "p3",
+      "variant": "emphasis"
+    },
+    {
+      "from": "p2",
+      "to": "svc",
+      "label": "노출"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "복제본 3개 — 이 수를 유지한다",
+      "wraps": [
+        "p1",
+        "p2",
+        "p3"
+      ],
+      "pad": 38
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "ReplicaSet이 하는 일",
+      "items": [
+        "replicas 수만큼 template으로 파드를 만든다",
+        "삭제 전까지 그 수를 계속 유지한다",
+        "파드를 한 단위로 관리할 뿐이다"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Service가 하는 일",
+      "items": [
+        "파드 세트를 하나의 대상으로 노출한다",
+        "ReplicaSet은 노출을 맡지 않는다",
+        "그래서 둘을 짝으로 둔다"
+      ]
+    }
   ]
 }
