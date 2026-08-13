@@ -2,150 +2,175 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "Operator와 CRD — API를 확장해 운영을 코드화한다",
-    "viewBox": [
-      860,
-      620
-    ],
+    "title": "Operator와 CRD — 커스텀 오브젝트 하나가 StatefulSet·Service·Secret으로 펼쳐진다",
     "quality_profile": "showcase",
     "legend": {
       "mode": "hidden"
     }
   },
-  "boundaries": [
-    {
-      "kind": "region",
-      "label": "Control Plane — 확장된 API",
-      "wraps": [
-        "apiserver",
-        "crd"
-      ],
-      "pad": 32
-    },
-    {
-      "kind": "region",
-      "label": "Operator가 만드는 것",
-      "wraps": [
-        "operator",
-        "sts"
-      ],
-      "pad": 32
-    }
-  ],
   "components": [
     {
       "id": "user",
       "type": "external",
       "label": "사용자",
-      "sublabel": "커스텀 오브젝트",
-      "tag": "kind: Quiz",
       "pos": [
-        60,
-        50
+        46,
+        280
       ],
       "size": [
-        140,
+        126,
         88
-      ]
+      ],
+      "sublabel": "MongoDB 하나"
     },
     {
-      "id": "apiserver",
-      "type": "cloud",
+      "id": "api",
+      "type": "security",
       "label": "API Server",
-      "sublabel": "표준 리소스 + CRD",
-      "tag": "같은 방식으로 저장",
       "pos": [
-        330,
-        50
+        236,
+        280
       ],
       "size": [
-        140,
+        126,
         88
-      ]
+      ],
+      "sublabel": "커스텀 리소스"
     },
     {
       "id": "crd",
-      "type": "backend",
+      "type": "security",
       "label": "CRD",
-      "sublabel": "새 kind 정의",
-      "tag": "API 확장",
       "pos": [
-        600,
-        50
+        236,
+        166
       ],
       "size": [
-        140,
+        126,
         88
-      ]
+      ],
+      "sublabel": "타입 등록"
+    },
+    {
+      "id": "op",
+      "type": "backend",
+      "label": "Operator",
+      "pos": [
+        426,
+        280
+      ],
+      "size": [
+        126,
+        88
+      ],
+      "sublabel": "감시·조정"
     },
     {
       "id": "sts",
-      "type": "security",
+      "type": "cloud",
       "label": "StatefulSet",
-      "sublabel": "Operator가 생성",
-      "tag": "실제 워크로드",
       "pos": [
-        60,
-        350
+        616,
+        166
       ],
       "size": [
-        140,
+        126,
         88
-      ]
+      ],
+      "sublabel": "파드 관리"
     },
     {
-      "id": "operator",
+      "id": "svc",
       "type": "messagebus",
-      "label": "Operator",
-      "sublabel": "도메인 지식 코드화",
-      "tag": "백업·복구 자동",
+      "label": "Service",
       "pos": [
-        330,
-        350
+        616,
+        280
       ],
       "size": [
-        140,
+        126,
         88
-      ]
+      ],
+      "sublabel": "접근 경로"
     },
     {
-      "id": "watch",
+      "id": "sec",
       "type": "database",
-      "label": "조정 루프",
-      "sublabel": "desired와 비교",
-      "tag": "컨트롤러 패턴",
+      "label": "Secret",
       "pos": [
-        600,
-        350
+        616,
+        394
       ],
       "size": [
-        140,
+        126,
         88
-      ]
+      ],
+      "sublabel": "자격 증명"
     }
   ],
   "connections": [
     {
       "from": "user",
-      "to": "apiserver",
-      "label": "커스텀 오브젝트"
-    },
-    {
-      "from": "apiserver",
-      "to": "crd",
-      "label": "kind 해석"
+      "to": "api",
+      "label": "생성 요청",
+      "variant": "emphasis"
     },
     {
       "from": "crd",
-      "to": "watch"
+      "to": "api"
     },
     {
-      "from": "watch",
-      "to": "operator"
+      "from": "api",
+      "to": "op",
+      "label": "관찰: 감시",
+      "variant": "dashed"
     },
     {
-      "from": "operator",
-      "to": "sts"
+      "from": "op",
+      "to": "sts",
+      "variant": "emphasis"
+    },
+    {
+      "from": "op",
+      "to": "svc",
+      "variant": "emphasis"
+    },
+    {
+      "from": "op",
+      "to": "sec",
+      "variant": "emphasis"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Operator가 만들고 관리하는 오브젝트",
+      "wraps": [
+        "sts",
+        "svc",
+        "sec"
+      ],
+      "pad": 30
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "사용자는 한 오브젝트만 다룬다",
+      "items": [
+        "MongoDB 커스텀 오브젝트 하나만 만든다",
+        "하위 오브젝트는 Operator가 알아서 만든다",
+        "CRD가 그 타입을 API에 등록해 둔다"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Operator는 컨트롤러다",
+      "items": [
+        "커스텀 오브젝트를 감시한다",
+        "원하는 상태와 현재 상태를 맞춘다",
+        "도메인 운영 지식이 코드로 들어간다"
+      ]
     }
   ]
 }

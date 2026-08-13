@@ -2,150 +2,135 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "headless Service와 per-pod DNS — 파드를 이름으로 지목한다",
-    "viewBox": [
-      860,
-      620
-    ],
+    "title": "headless Service + StatefulSet — 파드 이름으로 개별 IP를 조회한다",
     "quality_profile": "showcase",
     "legend": {
       "mode": "hidden"
     }
   },
-  "boundaries": [
-    {
-      "kind": "region",
-      "label": "Control Plane — DNS 레코드",
-      "wraps": [
-        "headless",
-        "dns"
-      ],
-      "pad": 32
-    },
-    {
-      "kind": "region",
-      "label": "StatefulSet 파드",
-      "wraps": [
-        "pod0",
-        "pod1"
-      ],
-      "pad": 32
-    }
-  ],
   "components": [
     {
-      "id": "client",
-      "type": "external",
-      "label": "클라이언트 파드",
-      "sublabel": "peer 이름 계산",
-      "tag": "§5 discovery",
+      "id": "q1",
+      "type": "backend",
+      "label": "quiz-1",
       "pos": [
-        60,
-        50
+        46,
+        200
       ],
       "size": [
         140,
         88
-      ]
-    },
-    {
-      "id": "headless",
-      "type": "cloud",
-      "label": "headless Service",
-      "sublabel": "clusterIP none",
-      "tag": "VIP 없음",
-      "pos": [
-        330,
-        50
       ],
-      "size": [
-        140,
-        88
-      ]
+      "sublabel": "호출하는 쪽"
     },
     {
       "id": "dns",
-      "type": "backend",
-      "label": "DNS 레코드",
-      "sublabel": "파드마다 A 레코드",
-      "tag": "이름 → 파드 IP",
-      "pos": [
-        600,
-        50
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "pod1",
       "type": "security",
-      "label": "quiz-1",
-      "sublabel": "전용 PVC",
-      "tag": "ordinal 1",
+      "label": "CoreDNS",
       "pos": [
-        60,
-        350
+        252,
+        200
       ],
       "size": [
         140,
         88
-      ]
-    },
-    {
-      "id": "pod0",
-      "type": "messagebus",
-      "label": "quiz-0",
-      "sublabel": "전용 PVC",
-      "tag": "ordinal 0",
-      "pos": [
-        330,
-        350
       ],
-      "size": [
-        140,
-        88
-      ]
+      "sublabel": "이름-IP 표"
     },
     {
-      "id": "sts",
+      "id": "rec",
       "type": "database",
-      "label": "StatefulSet",
-      "sublabel": "serviceName 지정",
-      "tag": "governing",
+      "label": "파드별 레코드",
       "pos": [
-        600,
-        350
+        458,
+        200
       ],
       "size": [
         140,
         88
-      ]
+      ],
+      "sublabel": "quiz-2 한 줄"
+    },
+    {
+      "id": "q2",
+      "type": "backend",
+      "label": "quiz-2",
+      "pos": [
+        664,
+        200
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "10.244.3.9 직행"
+    },
+    {
+      "id": "svc",
+      "type": "messagebus",
+      "label": "headless Service",
+      "pos": [
+        252,
+        328
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "clusterIP: None"
     }
   ],
   "connections": [
     {
-      "from": "client",
-      "to": "headless",
-      "label": "이름 조회"
-    },
-    {
-      "from": "headless",
+      "from": "q1",
       "to": "dns",
-      "label": "레코드 생성"
+      "label": "이름 조회",
+      "variant": "emphasis"
     },
     {
       "from": "dns",
-      "to": "sts"
+      "to": "rec",
+      "label": "한 줄"
     },
     {
-      "from": "sts",
-      "to": "pod0"
+      "from": "rec",
+      "to": "q2",
+      "label": "IP 한 개",
+      "variant": "emphasis"
     },
     {
-      "from": "pod0",
-      "to": "pod1"
+      "from": "svc",
+      "to": "dns",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "파드마다 레코드가 한 줄씩 는다",
+      "items": [
+        "ClusterIP는 가상 IP 한 줄뿐이다",
+        "headless는 그 자리에 파드 IP 전부가 들어간다",
+        "StatefulSet과 결합하면 파드별 줄이 추가된다"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "중간에 바꿔치기가 없다",
+      "items": [
+        "받은 값이 이미 실제 파드 IP다",
+        "kube-proxy가 DNAT할 지점이 없다",
+        "지목한 파드에 그대로 도달한다"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "이 Service는 직접 만든다",
+      "items": [
+        "컨트롤러가 대신 만들어 주지 않는다",
+        "없으면 파드별 레코드도 없다",
+        "이름은 그대로고 IP만 갱신된다"
+      ]
     }
   ]
 }

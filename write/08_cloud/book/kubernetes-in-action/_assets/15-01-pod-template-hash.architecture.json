@@ -2,150 +2,115 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "pod-template-hash — 세대를 가르는 열쇠",
-    "viewBox": [
-      860,
-      620
-    ],
+    "title": "pod-template-hash — 이 label 하나가 기존 파드의 흡수를 막는다",
     "quality_profile": "showcase",
     "legend": {
       "mode": "hidden"
     }
   },
-  "boundaries": [
-    {
-      "kind": "region",
-      "label": "v1 세대",
-      "wraps": [
-        "rs1",
-        "pod1"
-      ],
-      "pad": 32
-    },
-    {
-      "kind": "region",
-      "label": "v2 세대",
-      "wraps": [
-        "rs2",
-        "pod2"
-      ],
-      "pad": 32
-    }
-  ],
   "components": [
     {
-      "id": "tmpl",
-      "type": "external",
-      "label": "Pod 템플릿",
-      "sublabel": "이미지 바뀜",
-      "tag": "해시 입력",
-      "pos": [
-        60,
-        50
-      ],
-      "size": [
-        140,
-        88
-      ]
-    },
-    {
-      "id": "rs1",
+      "id": "dep",
       "type": "cloud",
-      "label": "ReplicaSet 6f9b",
-      "sublabel": "해시 6f9b",
-      "tag": "옛 세대",
+      "label": "Deployment",
       "pos": [
-        330,
-        50
+        46,
+        250
       ],
       "size": [
-        140,
+        168,
         88
-      ]
+      ],
+      "sublabel": "app=kiada,rel=stable"
     },
     {
-      "id": "pod1",
+      "id": "rs",
       "type": "backend",
-      "label": "파드 -6f9b-",
-      "sublabel": "label에도 해시",
-      "tag": "selector 대상",
+      "label": "ReplicaSet",
       "pos": [
-        600,
-        50
+        282,
+        250
       ],
       "size": [
-        140,
+        168,
         88
-      ]
+      ],
+      "sublabel": "selector +hash"
     },
     {
-      "id": "sel",
-      "type": "security",
-      "label": "selector 격리",
-      "sublabel": "해시가 label에",
-      "tag": "섞이지 않음",
+      "id": "newp",
+      "type": "backend",
+      "label": "새 파드 3개",
       "pos": [
-        60,
-        350
+        518,
+        146
       ],
       "size": [
-        140,
+        168,
         88
-      ]
+      ],
+      "sublabel": "hash 있음 · 흡수"
     },
     {
-      "id": "pod2",
-      "type": "messagebus",
-      "label": "파드 -7c4d-",
-      "sublabel": "새 label",
-      "tag": "새 selector",
+      "id": "oldp",
+      "type": "external",
+      "label": "기존 파드 2개",
       "pos": [
-        330,
-        350
+        518,
+        354
       ],
       "size": [
-        140,
+        168,
         88
-      ]
-    },
-    {
-      "id": "rs2",
-      "type": "database",
-      "label": "ReplicaSet 7c4d",
-      "sublabel": "해시 7c4d",
-      "tag": "새 세대",
-      "pos": [
-        600,
-        350
       ],
-      "size": [
-        140,
-        88
-      ]
+      "sublabel": "hash 없음 · 제외"
     }
   ],
   "connections": [
     {
-      "from": "tmpl",
-      "to": "rs1",
-      "label": "해시 계산"
+      "from": "dep",
+      "to": "rs",
+      "label": "hash 부여",
+      "variant": "emphasis"
     },
     {
-      "from": "rs1",
-      "to": "pod1",
-      "label": "생성"
+      "from": "rs",
+      "to": "newp",
+      "variant": "emphasis"
     },
     {
-      "from": "pod1",
-      "to": "rs2"
+      "from": "rs",
+      "to": "oldp"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "이 ReplicaSet이 관리하는 파드",
+      "wraps": [
+        "newp"
+      ],
+      "pad": 30
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "hash는 ReplicaSet이 붙인다",
+      "items": [
+        "Deployment에는 없고 ReplicaSet에만 있다",
+        "값이 ReplicaSet 이름 끝과 같다",
+        "selector·template·파드 label 세 곳에 붙는다"
+      ]
     },
     {
-      "from": "rs2",
-      "to": "pod2"
-    },
-    {
-      "from": "pod2",
-      "to": "sel"
+      "dot": "rose",
+      "title": "그래서 기존 파드가 안 섞인다",
+      "items": [
+        "기존 파드에는 이 label이 없다",
+        "selector에 맞지 않아 흡수되지 않는다",
+        "미리 붙였다면 흡수됐을 것이다"
+      ]
     }
   ]
 }
