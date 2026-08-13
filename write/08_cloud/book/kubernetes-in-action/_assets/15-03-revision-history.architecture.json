@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "revision 히스토리 — 되돌릴 수 있는 이유",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "현재 세대",
+      "wraps": [
+        "current",
+        "curpod"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "보존된 옛 세대",
+      "wraps": [
+        "rev2",
+        "rev1"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "deploy",
+      "type": "external",
+      "label": "Deployment",
+      "sublabel": "revisionHistoryLimit",
+      "tag": "기본 10개 보존",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "current",
+      "type": "cloud",
+      "label": "revision 3",
+      "sublabel": "replicas 3",
+      "tag": "지금 서비스",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "curpod",
+      "type": "backend",
+      "label": "파드 3개",
+      "sublabel": "현재 이미지",
+      "tag": "트래픽 수신",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "undo",
+      "type": "security",
+      "label": "rollout undo",
+      "sublabel": "이전으로 되돌림",
+      "tag": "replicas 교환",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "rev1",
+      "type": "messagebus",
+      "label": "revision 1",
+      "sublabel": "replicas 0",
+      "tag": "템플릿만 남음",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "rev2",
+      "type": "database",
+      "label": "revision 2",
+      "sublabel": "replicas 0",
+      "tag": "템플릿만 남음",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "deploy",
+      "to": "current",
+      "label": "현재 지정"
+    },
+    {
+      "from": "current",
+      "to": "curpod",
+      "label": "파드 소유"
+    },
+    {
+      "from": "curpod",
+      "to": "rev2"
+    },
+    {
+      "from": "rev2",
+      "to": "rev1"
+    },
+    {
+      "from": "rev1",
+      "to": "undo"
+    }
+  ]
+}

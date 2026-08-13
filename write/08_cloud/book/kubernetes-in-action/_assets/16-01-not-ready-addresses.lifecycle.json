@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "publishNotReadyAddresses — ready 전에도 DNS를 여는 이유",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "파드 기동"
+    },
+    {
+      "id": "judge",
+      "label": "기본 동작"
+    },
+    {
+      "id": "terminal",
+      "label": "publishNotReady"
+    }
+  ],
+  "states": [
+    {
+      "id": "created",
+      "type": "start",
+      "lane": "main",
+      "col": 0,
+      "label": "파드 시작",
+      "sublabel": "아직 not ready",
+      "step": "01"
+    },
+    {
+      "id": "running",
+      "type": "active",
+      "lane": "main",
+      "col": 1,
+      "label": "peer 탐색",
+      "sublabel": "서로를 찾아야",
+      "step": "02"
+    },
+    {
+      "id": "complete",
+      "type": "success",
+      "lane": "main",
+      "col": 2,
+      "label": "클러스터 구성",
+      "sublabel": "ready 도달",
+      "step": "03"
+    },
+    {
+      "id": "suspended",
+      "type": "waiting",
+      "lane": "judge",
+      "col": 0,
+      "label": "DNS 없음",
+      "sublabel": "주소 미등록"
+    },
+    {
+      "id": "podrun",
+      "type": "active",
+      "lane": "judge",
+      "col": 1,
+      "label": "peer 못 찾음",
+      "sublabel": "탐색 실패"
+    },
+    {
+      "id": "failed",
+      "type": "failure",
+      "lane": "judge",
+      "col": 2,
+      "label": "교착",
+      "sublabel": "영영 not ready"
+    },
+    {
+      "id": "kept",
+      "type": "waiting",
+      "lane": "terminal",
+      "col": 0,
+      "label": "DNS 등록",
+      "sublabel": "not ready여도"
+    },
+    {
+      "id": "deleted",
+      "type": "success",
+      "lane": "terminal",
+      "col": 1,
+      "label": "peer 발견",
+      "sublabel": "서로 연결"
+    },
+    {
+      "id": "ttl",
+      "type": "failure",
+      "lane": "terminal",
+      "col": 2,
+      "label": "ready 전환",
+      "sublabel": "정상 기동"
+    }
+  ],
+  "transitions": [
+    {
+      "id": "t1",
+      "from": "created",
+      "to": "running",
+      "variant": "emphasis",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "t2",
+      "from": "running",
+      "to": "complete",
+      "variant": "emphasis",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "t3",
+      "from": "complete",
+      "to": "podrun",
+      "label": "주소 등록",
+      "variant": "emphasis",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        436,
+        218
+      ]
+    },
+    {
+      "id": "t4",
+      "from": "suspended",
+      "to": "kept",
+      "label": "if: 기본",
+      "variant": "dashed",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        434,
+        393
+      ]
+    },
+    {
+      "id": "t5",
+      "from": "podrun",
+      "to": "deleted",
+      "label": "해소",
+      "variant": "emphasis",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        578,
+        393
+      ]
+    },
+    {
+      "id": "t6",
+      "from": "failed",
+      "to": "ttl",
+      "label": "if: 허용",
+      "variant": "security",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        742,
+        393
+      ]
+    }
+  ]
+}

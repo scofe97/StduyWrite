@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "maxSurge와 maxUnavailable — 총 파드 수의 상한과 하한",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "기준"
+    },
+    {
+      "id": "judge",
+      "label": "상한 — maxSurge"
+    },
+    {
+      "id": "terminal",
+      "label": "하한 — maxUnavailable"
+    }
+  ],
+  "states": [
+    {
+      "id": "created",
+      "type": "start",
+      "lane": "main",
+      "col": 0,
+      "label": "목표 3개",
+      "sublabel": "replicas 3",
+      "step": "01"
+    },
+    {
+      "id": "running",
+      "type": "active",
+      "lane": "main",
+      "col": 1,
+      "label": "교체 시작",
+      "sublabel": "새 세대 전개",
+      "step": "02"
+    },
+    {
+      "id": "complete",
+      "type": "success",
+      "lane": "main",
+      "col": 2,
+      "label": "두 값이 범위",
+      "sublabel": "동시 적용",
+      "step": "03"
+    },
+    {
+      "id": "suspended",
+      "type": "waiting",
+      "lane": "judge",
+      "col": 0,
+      "label": "최대 4개",
+      "sublabel": "3 + surge 1"
+    },
+    {
+      "id": "podrun",
+      "type": "active",
+      "lane": "judge",
+      "col": 1,
+      "label": "새 파드 먼저",
+      "sublabel": "자리 늘림"
+    },
+    {
+      "id": "failed",
+      "type": "failure",
+      "lane": "judge",
+      "col": 2,
+      "label": "자원 더 씀",
+      "sublabel": "여유 필요"
+    },
+    {
+      "id": "kept",
+      "type": "waiting",
+      "lane": "terminal",
+      "col": 0,
+      "label": "최소 2개",
+      "sublabel": "3 - unavail 1"
+    },
+    {
+      "id": "deleted",
+      "type": "success",
+      "lane": "terminal",
+      "col": 1,
+      "label": "옛 파드 먼저",
+      "sublabel": "자리 비움"
+    },
+    {
+      "id": "ttl",
+      "type": "failure",
+      "lane": "terminal",
+      "col": 2,
+      "label": "가용 떨어짐",
+      "sublabel": "여유 없어도 됨"
+    }
+  ],
+  "transitions": [
+    {
+      "id": "t1",
+      "from": "created",
+      "to": "running",
+      "variant": "emphasis",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "t2",
+      "from": "running",
+      "to": "complete",
+      "variant": "emphasis",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "t3",
+      "from": "complete",
+      "to": "podrun",
+      "label": "범위 계산",
+      "variant": "emphasis",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        436,
+        218
+      ]
+    },
+    {
+      "id": "t4",
+      "from": "suspended",
+      "to": "kept",
+      "label": "if: 초과",
+      "variant": "dashed",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        434,
+        393
+      ]
+    },
+    {
+      "id": "t5",
+      "from": "podrun",
+      "to": "deleted",
+      "label": "동시",
+      "variant": "emphasis",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        578,
+        393
+      ]
+    },
+    {
+      "id": "t6",
+      "from": "failed",
+      "to": "ttl",
+      "label": "if: 미달",
+      "variant": "security",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        742,
+        393
+      ]
+    }
+  ]
+}

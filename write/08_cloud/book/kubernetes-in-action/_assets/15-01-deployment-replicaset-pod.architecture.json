@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Deployment·ReplicaSet·Pod — 간접 구조의 소유 계층",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "사용자가 선언하는 것",
+      "wraps": [
+        "deploy",
+        "tmpl"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "컨트롤러가 만드는 것",
+      "wraps": [
+        "rs",
+        "pod"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "user",
+      "type": "external",
+      "label": "kubectl apply",
+      "sublabel": "Deployment 매니페스트",
+      "tag": "선언은 하나",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "deploy",
+      "type": "cloud",
+      "label": "Deployment",
+      "sublabel": "replicas·strategy",
+      "tag": "세대를 관리",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "tmpl",
+      "type": "backend",
+      "label": "Pod 템플릿",
+      "sublabel": "이미지·포트",
+      "tag": "해시의 입력",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "hash",
+      "type": "security",
+      "label": "pod-template-hash",
+      "sublabel": "템플릿에서 계산",
+      "tag": "세대 식별자",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "pod",
+      "type": "messagebus",
+      "label": "Pod",
+      "sublabel": "이름에 해시 포함",
+      "tag": "실제 실행",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "rs",
+      "type": "database",
+      "label": "ReplicaSet",
+      "sublabel": "세대마다 하나",
+      "tag": "파드를 소유",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "user",
+      "to": "deploy",
+      "label": "선언"
+    },
+    {
+      "from": "deploy",
+      "to": "tmpl",
+      "label": "템플릿 포함"
+    },
+    {
+      "from": "tmpl",
+      "to": "rs"
+    },
+    {
+      "from": "rs",
+      "to": "pod"
+    },
+    {
+      "from": "pod",
+      "to": "hash"
+    }
+  ]
+}

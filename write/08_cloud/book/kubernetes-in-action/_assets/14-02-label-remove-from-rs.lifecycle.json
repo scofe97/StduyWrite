@@ -2,7 +2,7 @@
   "schema_version": 1,
   "diagram_type": "lifecycle",
   "meta": {
-    "title": "CronJob 동작 — 시간표가 주기마다 새 Job을 만든다",
+    "title": "label 제거 — selector에서 빼면 대체 파드가 생긴다",
     "quality_profile": "showcase",
     "legend": {
       "mode": "hidden"
@@ -11,15 +11,15 @@
   "lanes": [
     {
       "id": "main",
-      "label": "CronJob 컨트롤러"
+      "label": "파드 label"
     },
     {
       "id": "judge",
-      "label": "생성된 Job"
+      "label": "selector 판정"
     },
     {
       "id": "terminal",
-      "label": "파드 실행"
+      "label": "컨트롤러 반응"
     }
   ],
   "states": [
@@ -28,8 +28,8 @@
       "type": "start",
       "lane": "main",
       "col": 0,
-      "label": "schedule",
-      "sublabel": "다섯 필드",
+      "label": "파드 3개",
+      "sublabel": "app=quiz",
       "step": "01"
     },
     {
@@ -37,8 +37,8 @@
       "type": "active",
       "lane": "main",
       "col": 1,
-      "label": "시각 도달",
-      "sublabel": "10초마다 확인",
+      "label": "하나 수정",
+      "sublabel": "label 변경",
       "step": "02"
     },
     {
@@ -46,8 +46,8 @@
       "type": "success",
       "lane": "main",
       "col": 2,
-      "label": "Job 생성",
-      "sublabel": "새 오브젝트",
+      "label": "app=debug",
+      "sublabel": "값이 달라짐",
       "step": "03"
     },
     {
@@ -55,48 +55,48 @@
       "type": "waiting",
       "lane": "judge",
       "col": 0,
-      "label": "이름·UID 다름",
-      "sublabel": "완료 수 분리"
+      "label": "일치 3개",
+      "sublabel": "수 충족"
     },
     {
       "id": "podrun",
       "type": "active",
       "lane": "judge",
       "col": 1,
-      "label": "파드 템플릿",
-      "sublabel": "jobTemplate"
+      "label": "일치 2개",
+      "sublabel": "하나가 빠짐"
     },
     {
       "id": "failed",
       "type": "failure",
       "lane": "judge",
       "col": 2,
-      "label": "보존 한도",
-      "sublabel": "성공 3개"
+      "label": "부족 판정",
+      "sublabel": "2 < 3"
     },
     {
       "id": "kept",
       "type": "waiting",
       "lane": "terminal",
       "col": 0,
-      "label": "파드 기동",
-      "sublabel": "작업 수행"
+      "label": "변화 없음",
+      "sublabel": "그대로"
     },
     {
       "id": "deleted",
       "type": "success",
       "lane": "terminal",
       "col": 1,
-      "label": "완료",
-      "sublabel": "Complete"
+      "label": "대체 생성",
+      "sublabel": "다시 3개"
     },
     {
       "id": "ttl",
       "type": "failure",
       "lane": "terminal",
       "col": 2,
-      "label": "다음 주기",
-      "sublabel": "또 새 Job"
+      "label": "뺀 파드 잔존",
+      "sublabel": "조사용"
     }
   ],
   "transitions": [
@@ -122,7 +122,7 @@
       "id": "t3",
       "from": "complete",
       "to": "podrun",
-      "label": "시각 판정",
+      "label": "수 확인",
       "variant": "emphasis",
       "route": "drop",
       "fromSide": "bottom",
@@ -136,7 +136,7 @@
       "id": "t4",
       "from": "suspended",
       "to": "kept",
-      "label": "if: 보존",
+      "label": "if: 이탈",
       "variant": "dashed",
       "route": "drop",
       "fromSide": "bottom",
@@ -150,7 +150,7 @@
       "id": "t5",
       "from": "podrun",
       "to": "deleted",
-      "label": "실행",
+      "label": "유지",
       "variant": "emphasis",
       "route": "drop",
       "fromSide": "bottom",
@@ -164,7 +164,7 @@
       "id": "t6",
       "from": "failed",
       "to": "ttl",
-      "label": "if: 반복",
+      "label": "if: 보충",
       "variant": "security",
       "route": "drop",
       "fromSide": "bottom",

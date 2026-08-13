@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "16-02 전체 지도 — 무엇이 사라졌는가에 따라 갈리는 대응",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "자동으로 복구되는 것",
+      "wraps": [
+        "missing",
+        "recreate"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "사람 손이 필요한 것",
+      "wraps": [
+        "manual",
+        "nodefail"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "event",
+      "type": "external",
+      "label": "무언가 사라짐",
+      "sublabel": "파드·노드·레플리카",
+      "tag": "§1 시험대",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "missing",
+      "type": "cloud",
+      "label": "파드만 삭제",
+      "sublabel": "같은 신원으로",
+      "tag": "§1 자동 교체",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "recreate",
+      "type": "backend",
+      "label": "같은 이름 재생성",
+      "sublabel": "PVC 재연결",
+      "tag": "§1 신원 유지",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "manual",
+      "type": "messagebus",
+      "label": "강제 삭제 필요",
+      "sublabel": "at-most-one",
+      "tag": "§6 사람 손",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "nodefail",
+      "type": "database",
+      "label": "노드 장애",
+      "sublabel": "Unknown 상태",
+      "tag": "§2 자동 대체 안 함",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "scale",
+      "type": "security",
+      "label": "스케일다운",
+      "sublabel": "역순 삭제",
+      "tag": "§3 PVC 보존",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "event",
+      "to": "missing",
+      "label": "파드 소실"
+    },
+    {
+      "from": "missing",
+      "to": "recreate",
+      "label": "컨트롤러 감지"
+    },
+    {
+      "from": "recreate",
+      "to": "scale"
+    },
+    {
+      "from": "scale",
+      "to": "nodefail"
+    },
+    {
+      "from": "nodefail",
+      "to": "manual"
+    }
+  ]
+}

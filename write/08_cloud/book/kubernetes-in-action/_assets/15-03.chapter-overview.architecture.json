@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "15-03 전체 지도 — 자동 롤아웃을 제어하는 네 방법",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "진행 중 개입",
+      "wraps": [
+        "pause",
+        "minready"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "끝난 뒤 되돌리기",
+      "wraps": [
+        "history",
+        "undo"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "rollout",
+      "type": "external",
+      "label": "롤아웃 시작",
+      "sublabel": "새 세대 전개",
+      "tag": "§1 자동 진행",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "pause",
+      "type": "cloud",
+      "label": "pause / resume",
+      "sublabel": "중간에 멈춤",
+      "tag": "§1 카나리 확인",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "minready",
+      "type": "backend",
+      "label": "minReadySeconds",
+      "sublabel": "Ready 유지 시간",
+      "tag": "§2 결함 자동 차단",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "strategy",
+      "type": "security",
+      "label": "다섯 배포 전략",
+      "sublabel": "Blue/Green·카나리",
+      "tag": "§4 선택 기준",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "undo",
+      "type": "messagebus",
+      "label": "rollout undo",
+      "sublabel": "이전 세대로",
+      "tag": "§3 롤백",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "history",
+      "type": "database",
+      "label": "revision 히스토리",
+      "sublabel": "옛 ReplicaSet 보존",
+      "tag": "§3 되돌릴 대상",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "rollout",
+      "to": "pause",
+      "label": "진행 제어"
+    },
+    {
+      "from": "pause",
+      "to": "minready",
+      "label": "검증 통과"
+    },
+    {
+      "from": "minready",
+      "to": "history"
+    },
+    {
+      "from": "history",
+      "to": "undo"
+    },
+    {
+      "from": "undo",
+      "to": "strategy"
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "replica마다 따로 만들면 — Deployment·Service·PVC가 3배가 된다",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "replica 0 전용 묶음",
+      "wraps": [
+        "dep0",
+        "svc0"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "replica 1 전용 묶음",
+      "wraps": [
+        "dep1",
+        "svc1"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "admin",
+      "type": "external",
+      "label": "운영자",
+      "sublabel": "매니페스트 N벌",
+      "tag": "수동 관리",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "dep0",
+      "type": "cloud",
+      "label": "Deployment 0",
+      "sublabel": "replicas 1",
+      "tag": "전용 하나",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "svc0",
+      "type": "backend",
+      "label": "Service 0",
+      "sublabel": "고정 이름",
+      "tag": "전용 하나",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "pvc0",
+      "type": "security",
+      "label": "PVC 0",
+      "sublabel": "전용 저장소",
+      "tag": "신원에 묶임",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "svc1",
+      "type": "messagebus",
+      "label": "Service 1",
+      "sublabel": "고정 이름",
+      "tag": "또 하나",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "dep1",
+      "type": "database",
+      "label": "Deployment 1",
+      "sublabel": "replicas 1",
+      "tag": "또 하나",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "admin",
+      "to": "dep0",
+      "label": "각각 선언"
+    },
+    {
+      "from": "dep0",
+      "to": "svc0",
+      "label": "짝지음"
+    },
+    {
+      "from": "svc0",
+      "to": "dep1"
+    },
+    {
+      "from": "dep1",
+      "to": "svc1"
+    },
+    {
+      "from": "svc1",
+      "to": "pvc0"
+    }
+  ]
+}

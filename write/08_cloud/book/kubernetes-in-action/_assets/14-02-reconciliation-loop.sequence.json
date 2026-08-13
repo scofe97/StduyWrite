@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "reconciliation 루프 — 컨트롤러가 API 서버와 주고받는 것",
+    "viewBox": [
+      1240,
+      720
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "participants": [
+    {
+      "id": "api",
+      "type": "cloud",
+      "label": "API"
+    },
+    {
+      "id": "inf",
+      "type": "backend",
+      "label": "INF"
+    },
+    {
+      "id": "rs",
+      "type": "messagebus",
+      "label": "RS"
+    },
+    {
+      "id": "kubelet",
+      "type": "security",
+      "label": "KUBELET"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m1",
+      "from": "inf",
+      "to": "api",
+      "y": 200,
+      "label": "LIST/WATCH Pod·ReplicaSet",
+      "variant": "dashed"
+    },
+    {
+      "id": "m2",
+      "from": "api",
+      "to": "inf",
+      "y": 270,
+      "label": "파드 추가·삭제 이벤트",
+      "variant": "return"
+    },
+    {
+      "id": "m3",
+      "from": "inf",
+      "to": "rs",
+      "y": 340,
+      "label": "캐시 갱신 → 조정 큐에 넣음",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m4",
+      "from": "rs",
+      "to": "api",
+      "y": 420,
+      "label": "selector 일치 파드 수를 조회",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m5",
+      "from": "api",
+      "to": "rs",
+      "y": 490,
+      "label": "현재 3개 (Terminating 제외)",
+      "variant": "return"
+    },
+    {
+      "id": "m6",
+      "from": "rs",
+      "to": "api",
+      "y": 560,
+      "label": "replicas 와 차이만큼 create·delete",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m7",
+      "from": "api",
+      "to": "kubelet",
+      "y": 630,
+      "label": "스케줄된 파드를 노드로",
+      "variant": "default"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "rs",
+      "from": 330,
+      "to": 510,
+      "type": "messagebus"
+    },
+    {
+      "participant": "inf",
+      "from": 190,
+      "to": 350,
+      "type": "backend"
+    }
+  ]
+}

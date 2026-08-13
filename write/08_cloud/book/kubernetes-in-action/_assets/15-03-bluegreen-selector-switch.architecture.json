@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Blue/Green — Service selector를 바꿔 트래픽을 옮긴다",
+    "viewBox": [
+      860,
+      620
+    ],
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Blue — 현재 트래픽",
+      "wraps": [
+        "blue",
+        "bluepod"
+      ],
+      "pad": 32
+    },
+    {
+      "kind": "region",
+      "label": "Green — 대기 중 새 버전",
+      "wraps": [
+        "green",
+        "greenpod"
+      ],
+      "pad": 32
+    }
+  ],
+  "components": [
+    {
+      "id": "svc",
+      "type": "external",
+      "label": "Service",
+      "sublabel": "label selector",
+      "tag": "한쪽만 지목",
+      "pos": [
+        60,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "blue",
+      "type": "cloud",
+      "label": "Blue Deployment",
+      "sublabel": "color=blue",
+      "tag": "현재 서비스",
+      "pos": [
+        330,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "bluepod",
+      "type": "backend",
+      "label": "v1 파드",
+      "sublabel": "트래픽 수신",
+      "tag": "검증된 버전",
+      "pos": [
+        600,
+        50
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "switch",
+      "type": "security",
+      "label": "selector 교체",
+      "sublabel": "blue → green",
+      "tag": "한 번에 전환",
+      "pos": [
+        60,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "greenpod",
+      "type": "messagebus",
+      "label": "v2 파드",
+      "sublabel": "미리 기동",
+      "tag": "검증 대기",
+      "pos": [
+        330,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    },
+    {
+      "id": "green",
+      "type": "database",
+      "label": "Green Deployment",
+      "sublabel": "color=green",
+      "tag": "트래픽 없음",
+      "pos": [
+        600,
+        350
+      ],
+      "size": [
+        140,
+        88
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "svc",
+      "to": "blue",
+      "label": "selector 일치"
+    },
+    {
+      "from": "blue",
+      "to": "bluepod",
+      "label": "파드 소유"
+    },
+    {
+      "from": "bluepod",
+      "to": "green"
+    },
+    {
+      "from": "green",
+      "to": "greenpod"
+    },
+    {
+      "from": "greenpod",
+      "to": "switch"
+    }
+  ]
+}

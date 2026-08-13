@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "label selector — 무엇이 이 세트에 속하는가",
+    "viewBox": [860, 620],
+    "quality_profile": "showcase",
+    "legend": { "mode": "hidden" }
+  },
+  "boundaries": [
+    { "kind": "region", "label": "selector에 맞는 파드 — 관리 대상", "wraps": ["podA", "podB"], "pad": 32 },
+    { "kind": "security-group", "label": "맞지 않는 파드 — 무시된다", "wraps": ["quote", "free"], "pad": 32 }
+  ],
+  "components": [
+    { "id": "rs",    "type": "cloud",      "label": "ReplicaSet", "sublabel": "app=quiz 선택",  "tag": "replicas 3",  "pos": [60, 50],  "size": [140, 88] },
+    { "id": "podA",  "type": "messagebus", "label": "quiz-a1b2",  "sublabel": "app=quiz",      "tag": "소유",        "pos": [330, 50], "size": [140, 88] },
+    { "id": "podB",  "type": "messagebus", "label": "quiz-c3d4",  "sublabel": "app=quiz",      "tag": "소유",        "pos": [600, 50], "size": [140, 88] },
+    { "id": "gc",    "type": "backend",    "label": "수 세기",      "sublabel": "일치 파드만",    "tag": "2/3 → 하나 더", "pos": [60, 350], "size": [140, 88] },
+    { "id": "quote", "type": "external",   "label": "quote-x9",   "sublabel": "app=quote",     "tag": "다른 label",   "pos": [330, 350], "size": [140, 88] },
+    { "id": "free",  "type": "database",   "label": "직접 만든 파드", "sublabel": "label 없음",   "tag": "소유자 없음",  "pos": [600, 350], "size": [140, 88] }
+  ],
+  "connections": [
+    { "from": "rs", "to": "podA" },
+    { "from": "podA", "to": "podB" },
+    { "from": "rs", "to": "gc" },
+    { "from": "quote", "to": "free" }
+  ]
+}
