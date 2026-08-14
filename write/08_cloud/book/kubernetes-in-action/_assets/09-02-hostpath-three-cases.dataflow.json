@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "hostPath type 은 마운트 전에 경로의 종류를 검사한다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "stages": [
+    {
+      "label": "노드의 상태"
+    },
+    {
+      "label": "선언한 type"
+    },
+    {
+      "label": "kubelet 이 하는 일"
+    },
+    {
+      "label": "파드 상태"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "c1",
+      "type": "external",
+      "label": "경로 있음",
+      "stage": 0,
+      "row": 0,
+      "sublabel": "/var/log"
+    },
+    {
+      "id": "t1",
+      "type": "security",
+      "label": "그대로",
+      "stage": 1,
+      "row": 0,
+      "sublabel": "type: Directory"
+    },
+    {
+      "id": "m1",
+      "type": "cloud",
+      "label": "성공",
+      "stage": 2,
+      "row": 0,
+      "sublabel": "바로 마운트"
+    },
+    {
+      "id": "r1",
+      "type": "backend",
+      "label": "Running",
+      "stage": 3,
+      "row": 0,
+      "sublabel": "파일이 보인다"
+    },
+    {
+      "id": "c2",
+      "type": "external",
+      "label": "경로 없음",
+      "stage": 0,
+      "row": 1,
+      "sublabel": "아직 안 만듦"
+    },
+    {
+      "id": "t2",
+      "type": "security",
+      "label": "만든다",
+      "stage": 1,
+      "row": 1,
+      "sublabel": "type: OrCreate"
+    },
+    {
+      "id": "m2",
+      "type": "cloud",
+      "label": "자동 생성",
+      "stage": 2,
+      "row": 1,
+      "sublabel": "0755 · kubelet"
+    },
+    {
+      "id": "r2",
+      "type": "backend",
+      "label": "Running",
+      "stage": 3,
+      "row": 1,
+      "sublabel": "빈 디렉터리"
+    },
+    {
+      "id": "c3",
+      "type": "external",
+      "label": "파일임",
+      "stage": 0,
+      "row": 2,
+      "sublabel": "디렉터리 아님"
+    },
+    {
+      "id": "t3",
+      "type": "security",
+      "label": "불일치",
+      "stage": 1,
+      "row": 2,
+      "sublabel": "type: Directory"
+    },
+    {
+      "id": "m3",
+      "type": "database",
+      "label": "실패",
+      "stage": 2,
+      "row": 2,
+      "sublabel": "FailedMount"
+    },
+    {
+      "id": "r3",
+      "type": "database",
+      "label": "못 뜬다",
+      "stage": 3,
+      "row": 2,
+      "sublabel": "ContainerCreating"
+    }
+  ],
+  "flows": [
+    {
+      "id": "c1-t1",
+      "from": "c1",
+      "to": "t1",
+      "variant": "emphasis",
+      "label": "type 지정"
+    },
+    {
+      "id": "t1-m1",
+      "from": "t1",
+      "to": "m1",
+      "variant": "default",
+      "label": "확인됨"
+    },
+    {
+      "id": "m1-r1",
+      "from": "m1",
+      "to": "r1",
+      "variant": "emphasis",
+      "label": "시작"
+    },
+    {
+      "id": "c2-t2",
+      "from": "c2",
+      "to": "t2",
+      "variant": "emphasis",
+      "label": "type 지정"
+    },
+    {
+      "id": "t2-m2",
+      "from": "t2",
+      "to": "m2",
+      "variant": "default",
+      "label": "만들어 줌"
+    },
+    {
+      "id": "m2-r2",
+      "from": "m2",
+      "to": "r2",
+      "variant": "emphasis",
+      "label": "시작함"
+    },
+    {
+      "id": "c3-t3",
+      "from": "c3",
+      "to": "t3",
+      "variant": "emphasis",
+      "label": "type 지정"
+    },
+    {
+      "id": "t3-m3",
+      "from": "t3",
+      "to": "m3",
+      "variant": "default",
+      "label": "불일치"
+    },
+    {
+      "id": "m3-r3",
+      "from": "m3",
+      "to": "r3",
+      "variant": "emphasis",
+      "label": "못 뜸"
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "마운트는 파일 트리의 한 자리를 다른 파일시스템에 내주는 일이다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "bin",
+      "type": "backend",
+      "label": "/bin",
+      "pos": [
+        46,
+        80
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "이미지 레이어"
+    },
+    {
+      "id": "etc",
+      "type": "backend",
+      "label": "/etc",
+      "pos": [
+        46,
+        196
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "이미지 레이어"
+    },
+    {
+      "id": "mp",
+      "type": "security",
+      "label": "/var/data",
+      "pos": [
+        46,
+        312
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "마운트 지점",
+      "tag": "원래 내용은 가려짐"
+    },
+    {
+      "id": "vol",
+      "type": "database",
+      "label": "볼륨",
+      "pos": [
+        330,
+        312
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "파드가 소유"
+    },
+    {
+      "id": "store",
+      "type": "external",
+      "label": "실제 저장소",
+      "pos": [
+        572,
+        312
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "노드 디렉터리 등"
+    }
+  ],
+  "connections": [
+    {
+      "from": "bin",
+      "to": "etc"
+    },
+    {
+      "from": "etc",
+      "to": "mp"
+    },
+    {
+      "from": "mp",
+      "to": "vol",
+      "label": "여기 붙는다",
+      "variant": "emphasis"
+    },
+    {
+      "from": "vol",
+      "to": "store",
+      "label": "실체는 밖",
+      "variant": "emphasis"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "컨테이너 파일 트리 — 이미지가 만든다",
+      "wraps": [
+        "bin",
+        "etc",
+        "mp"
+      ],
+      "pad": 30
+    }
+  ]
+}

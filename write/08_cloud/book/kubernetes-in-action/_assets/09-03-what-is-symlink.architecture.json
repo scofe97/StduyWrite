@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "심볼릭 링크는 내용이 아니라 다른 경로를 담은 파일이다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "name",
+      "type": "external",
+      "label": "app.conf",
+      "pos": [
+        46,
+        60
+      ],
+      "size": [
+        164,
+        88
+      ],
+      "sublabel": "이름만 보면 파일"
+    },
+    {
+      "id": "ls",
+      "type": "cloud",
+      "label": "ls -l 결과",
+      "pos": [
+        330,
+        60
+      ],
+      "size": [
+        164,
+        88
+      ],
+      "sublabel": "링크 자체 권한",
+      "tag": "rwxrwxrwx"
+    },
+    {
+      "id": "link",
+      "type": "security",
+      "label": "실은 심링크",
+      "pos": [
+        46,
+        220
+      ],
+      "size": [
+        164,
+        88
+      ],
+      "sublabel": "경로를 담고 있음"
+    },
+    {
+      "id": "target",
+      "type": "backend",
+      "label": "..data/app.conf",
+      "pos": [
+        330,
+        220
+      ],
+      "size": [
+        164,
+        88
+      ],
+      "sublabel": "가리켜진 경로"
+    },
+    {
+      "id": "real",
+      "type": "database",
+      "label": "실제 파일",
+      "pos": [
+        614,
+        220
+      ],
+      "size": [
+        164,
+        88
+      ],
+      "sublabel": "내용이 여기"
+    }
+  ],
+  "connections": [
+    {
+      "from": "name",
+      "to": "ls",
+      "label": "권한이 이상함"
+    },
+    {
+      "from": "name",
+      "to": "link"
+    },
+    {
+      "from": "link",
+      "to": "target",
+      "label": "경로를 담음",
+      "variant": "emphasis"
+    },
+    {
+      "from": "target",
+      "to": "real",
+      "label": "따라가면 실파일",
+      "variant": "emphasis"
+    }
+  ]
+}
