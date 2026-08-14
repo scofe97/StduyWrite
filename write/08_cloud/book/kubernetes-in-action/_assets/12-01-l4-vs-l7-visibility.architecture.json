@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "같은 패킷이라도 커널은 봉투 겉면까지, 프록시는 그 안까지 읽는다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "ip",
+      "type": "database",
+      "label": "IP · TCP 헤더",
+      "pos": [
+        46,
+        80
+      ],
+      "size": [
+        168,
+        88
+      ],
+      "sublabel": "봉투 겉면"
+    },
+    {
+      "id": "http",
+      "type": "database",
+      "label": "HTTP 본문",
+      "pos": [
+        46,
+        224
+      ],
+      "size": [
+        168,
+        88
+      ],
+      "sublabel": "헤더 · 경로 · 쿠키"
+    },
+    {
+      "id": "krn",
+      "type": "security",
+      "label": "노드 커널",
+      "pos": [
+        298,
+        80
+      ],
+      "size": [
+        168,
+        88
+      ],
+      "sublabel": "겉면까지만 읽음"
+    },
+    {
+      "id": "px",
+      "type": "security",
+      "label": "L7 프록시",
+      "pos": [
+        298,
+        224
+      ],
+      "size": [
+        168,
+        88
+      ],
+      "sublabel": "봉투를 연다"
+    },
+    {
+      "id": "k1",
+      "type": "cloud",
+      "label": "주소와 포트",
+      "pos": [
+        550,
+        80
+      ],
+      "size": [
+        168,
+        88
+      ],
+      "sublabel": "경로는 모른다"
+    },
+    {
+      "id": "p1",
+      "type": "cloud",
+      "label": "경로로 가르기",
+      "pos": [
+        550,
+        224
+      ],
+      "size": [
+        168,
+        88
+      ],
+      "sublabel": "호스트 · 쿠키도"
+    }
+  ],
+  "connections": [
+    {
+      "from": "ip",
+      "to": "krn",
+      "label": "읽힘",
+      "variant": "emphasis"
+    },
+    {
+      "from": "krn",
+      "to": "k1",
+      "label": "판단",
+      "variant": "emphasis"
+    },
+    {
+      "from": "http",
+      "to": "px",
+      "label": "읽힘 2",
+      "variant": "emphasis"
+    },
+    {
+      "from": "px",
+      "to": "p1",
+      "label": "판단 2",
+      "variant": "emphasis"
+    },
+    {
+      "from": "ip",
+      "to": "http"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "같은 패킷 — 겉면 안에 내용이 들어 있다",
+      "wraps": [
+        "ip",
+        "http"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "security-group",
+      "label": "커널이 닿는 깊이",
+      "wraps": [
+        "krn",
+        "k1"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "security-group",
+      "label": "프록시가 닿는 깊이",
+      "wraps": [
+        "px",
+        "p1"
+      ],
+      "pad": 30
+    }
+  ]
+}

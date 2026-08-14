@@ -1,0 +1,204 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "경로가 규칙에 걸리는 방식이 목적지를 정한다 — Exact 는 정확히, Prefix 는 요소 단위로",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      1000,
+      620
+    ]
+  },
+  "stages": [
+    {
+      "label": "요청"
+    },
+    {
+      "label": "규칙 대조"
+    },
+    {
+      "label": "pathType"
+    },
+    {
+      "label": "목적지"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "r1",
+      "type": "external",
+      "label": "요청 1",
+      "stage": 0,
+      "row": 0,
+      "sublabel": "GET /quote",
+      "width": 124
+    },
+    {
+      "id": "m1",
+      "type": "security",
+      "label": "규칙 1",
+      "stage": 1,
+      "row": 0,
+      "sublabel": "path /quote",
+      "width": 124
+    },
+    {
+      "id": "t1",
+      "type": "cloud",
+      "label": "Exact",
+      "stage": 2,
+      "row": 0,
+      "sublabel": "글자까지 같음",
+      "width": 124
+    },
+    {
+      "id": "d1",
+      "type": "backend",
+      "label": "quote",
+      "stage": 3,
+      "row": 0,
+      "sublabel": "port name http",
+      "width": 124
+    },
+    {
+      "id": "r2",
+      "type": "external",
+      "label": "요청 2",
+      "stage": 0,
+      "row": 1,
+      "sublabel": "/questions/random",
+      "width": 124
+    },
+    {
+      "id": "m2",
+      "type": "security",
+      "label": "규칙 2",
+      "stage": 1,
+      "row": 1,
+      "sublabel": "/questions",
+      "width": 124
+    },
+    {
+      "id": "t2",
+      "type": "cloud",
+      "label": "Prefix",
+      "stage": 2,
+      "row": 1,
+      "sublabel": "요소 단위",
+      "width": 124
+    },
+    {
+      "id": "d2",
+      "type": "backend",
+      "label": "quiz",
+      "stage": 3,
+      "row": 1,
+      "sublabel": "첫 요소 일치",
+      "width": 124
+    },
+    {
+      "id": "r3",
+      "type": "external",
+      "label": "요청 3",
+      "stage": 0,
+      "row": 2,
+      "sublabel": "GET /quotes",
+      "width": 124
+    },
+    {
+      "id": "m3",
+      "type": "security",
+      "label": "불일치",
+      "stage": 1,
+      "row": 2,
+      "sublabel": "둘 다 안 맞음",
+      "width": 124
+    },
+    {
+      "id": "t3",
+      "type": "external",
+      "label": "없음",
+      "stage": 2,
+      "row": 2,
+      "sublabel": "요소도 다름",
+      "width": 124
+    },
+    {
+      "id": "d3",
+      "type": "external",
+      "label": "default",
+      "stage": 3,
+      "row": 2,
+      "sublabel": "404 를 준다",
+      "width": 124
+    }
+  ],
+  "flows": [
+    {
+      "id": "r1-m1",
+      "from": "r1",
+      "to": "m1",
+      "variant": "emphasis",
+      "label": "대조"
+    },
+    {
+      "id": "m1-t1",
+      "from": "m1",
+      "to": "t1",
+      "variant": "emphasis",
+      "label": "정확 일치"
+    },
+    {
+      "id": "t1-d1",
+      "from": "t1",
+      "to": "d1",
+      "variant": "emphasis",
+      "label": "전달"
+    },
+    {
+      "id": "r2-m2",
+      "from": "r2",
+      "to": "m2",
+      "variant": "emphasis",
+      "label": "대조 2"
+    },
+    {
+      "id": "m2-t2",
+      "from": "m2",
+      "to": "t2",
+      "variant": "emphasis",
+      "label": "요소 일치"
+    },
+    {
+      "id": "t2-d2",
+      "from": "t2",
+      "to": "d2",
+      "variant": "emphasis",
+      "label": "전달 2"
+    },
+    {
+      "id": "r3-m3",
+      "from": "r3",
+      "to": "m3",
+      "variant": "emphasis",
+      "label": "대조 3"
+    },
+    {
+      "id": "m3-t3",
+      "from": "m3",
+      "to": "t3",
+      "variant": "security",
+      "label": "불일치"
+    },
+    {
+      "id": "t3-d3",
+      "from": "t3",
+      "to": "d3",
+      "variant": "security",
+      "label": "흘려보냄"
+    }
+  ]
+}
