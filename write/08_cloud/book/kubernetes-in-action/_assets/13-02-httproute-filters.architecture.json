@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HTTPRoute 필터 여섯 — 고치는 쪽과 흐름을 바꾸는 쪽",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "rq",
+      "type": "security",
+      "label": "RequestHeader",
+      "pos": [
+        46,
+        80
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "요청 헤더 수정"
+    },
+    {
+      "id": "rs",
+      "type": "security",
+      "label": "ResponseHeader",
+      "pos": [
+        46,
+        192
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "응답 헤더 수정"
+    },
+    {
+      "id": "rw",
+      "type": "security",
+      "label": "URLRewrite",
+      "pos": [
+        46,
+        304
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "경로·호스트 교체"
+    },
+    {
+      "id": "rd",
+      "type": "cloud",
+      "label": "RequestRedirect",
+      "pos": [
+        502,
+        80
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "직접 응답"
+    },
+    {
+      "id": "mr",
+      "type": "cloud",
+      "label": "RequestMirror",
+      "pos": [
+        502,
+        192
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "복사본 전송"
+    },
+    {
+      "id": "ex",
+      "type": "cloud",
+      "label": "ExtensionRef",
+      "pos": [
+        502,
+        304
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "구현에 위임"
+    },
+    {
+      "id": "core",
+      "type": "database",
+      "label": "필터 여섯",
+      "pos": [
+        274,
+        192
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "HTTPRoute 안에"
+    }
+  ],
+  "connections": [
+    {
+      "from": "rq",
+      "to": "core"
+    },
+    {
+      "from": "rs",
+      "to": "core"
+    },
+    {
+      "from": "rw",
+      "to": "core"
+    },
+    {
+      "from": "core",
+      "to": "rd"
+    },
+    {
+      "from": "core",
+      "to": "mr"
+    },
+    {
+      "from": "core",
+      "to": "ex"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "요청·응답을 고친다",
+      "wraps": [
+        "rq",
+        "rs",
+        "rw"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "흐름 자체를 바꾼다",
+      "wraps": [
+        "rd",
+        "mr",
+        "ex"
+      ],
+      "pad": 30
+    }
+  ]
+}
