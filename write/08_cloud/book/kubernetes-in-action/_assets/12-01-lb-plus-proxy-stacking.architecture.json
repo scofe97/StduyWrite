@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "서비스마다 LB 를 두는 구조와 LB 하나 뒤에 프록시를 두는 구조",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "c1",
+      "type": "external",
+      "label": "서비스 셋",
+      "pos": [
+        46,
+        80
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "각각 노출"
+    },
+    {
+      "id": "l1",
+      "type": "cloud",
+      "label": "LB 세 개",
+      "pos": [
+        276,
+        80
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "IP 도 세 개"
+    },
+    {
+      "id": "p1",
+      "type": "external",
+      "label": "비용 세 배",
+      "pos": [
+        506,
+        80
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "분기 못 함"
+    },
+    {
+      "id": "c2",
+      "type": "external",
+      "label": "서비스 셋",
+      "pos": [
+        46,
+        356
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "한 IP 아래"
+    },
+    {
+      "id": "l2",
+      "type": "cloud",
+      "label": "LB 한 개",
+      "pos": [
+        276,
+        356
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "IP 하나"
+    },
+    {
+      "id": "px",
+      "type": "security",
+      "label": "L7 프록시",
+      "pos": [
+        506,
+        356
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "규칙으로 가름"
+    },
+    {
+      "id": "p2",
+      "type": "backend",
+      "label": "세 서비스로",
+      "pos": [
+        506,
+        494
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "경로별 분기"
+    }
+  ],
+  "connections": [
+    {
+      "from": "c1",
+      "to": "l1",
+      "label": "각자 노출",
+      "variant": "emphasis"
+    },
+    {
+      "from": "l1",
+      "to": "p1",
+      "label": "결과",
+      "variant": "emphasis"
+    },
+    {
+      "from": "c2",
+      "to": "l2",
+      "label": "하나로 묶음",
+      "variant": "emphasis"
+    },
+    {
+      "from": "l2",
+      "to": "px",
+      "label": "뒤에 세움",
+      "variant": "emphasis"
+    },
+    {
+      "from": "px",
+      "to": "p2"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "서비스마다 LoadBalancer",
+      "wraps": [
+        "c1",
+        "l1",
+        "p1"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "LB 하나 뒤에 프록시",
+      "wraps": [
+        "c2",
+        "l2",
+        "px",
+        "p2"
+      ],
+      "pad": 30
+    }
+  ]
+}

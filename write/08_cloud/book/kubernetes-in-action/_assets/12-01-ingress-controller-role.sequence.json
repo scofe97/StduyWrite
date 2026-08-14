@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "컨트롤러는 설정을 만들고, 프록시가 트래픽을 처리한다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "participants": [
+    {
+      "id": "api",
+      "type": "security",
+      "label": "API",
+      "sublabel": "오브젝트 원본"
+    },
+    {
+      "id": "ctl",
+      "type": "backend",
+      "label": "컨트롤러",
+      "sublabel": "watch 감시"
+    },
+    {
+      "id": "px",
+      "type": "cloud",
+      "label": "L7 프록시",
+      "sublabel": "설정을 받는다"
+    },
+    {
+      "id": "cl",
+      "type": "external",
+      "label": "클라이언트",
+      "sublabel": "요청"
+    }
+  ],
+  "segments": [
+    {
+      "from": 162,
+      "to": 318,
+      "label": "컨트롤러가 설정을 만든다"
+    },
+    {
+      "from": 354,
+      "to": 458,
+      "label": "프록시가 트래픽을 처리한다"
+    }
+  ],
+  "messages": [
+    {
+      "id": "c1",
+      "from": "ctl",
+      "to": "api",
+      "y": 190,
+      "label": "Ingress watch",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c2",
+      "from": "api",
+      "to": "ctl",
+      "y": 242,
+      "label": "변경 이벤트",
+      "variant": "default"
+    },
+    {
+      "id": "c3",
+      "from": "ctl",
+      "to": "px",
+      "y": 294,
+      "label": "설정 생성 · reload",
+      "variant": "security"
+    },
+    {
+      "id": "c4",
+      "from": "cl",
+      "to": "px",
+      "y": 382,
+      "label": "HTTP 요청",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c5",
+      "from": "px",
+      "to": "cl",
+      "y": 434,
+      "label": "규칙대로 응답",
+      "variant": "emphasis"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "ctl",
+      "from": 190,
+      "to": 298,
+      "type": "backend"
+    },
+    {
+      "participant": "px",
+      "from": 382,
+      "to": 438,
+      "type": "cloud"
+    }
+  ]
+}

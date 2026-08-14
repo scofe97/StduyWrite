@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "전파가 끝나기 전 창이 열린다 — 재시도와 preStop 이 그 구간을 메운다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "participants": [
+    {
+      "id": "pod",
+      "type": "backend",
+      "label": "파드",
+      "sublabel": "종료 중"
+    },
+    {
+      "id": "eps",
+      "type": "database",
+      "label": "명단",
+      "sublabel": "EndpointSlice"
+    },
+    {
+      "id": "ctl",
+      "type": "security",
+      "label": "컨트롤러",
+      "sublabel": "설정 생성"
+    },
+    {
+      "id": "px",
+      "type": "cloud",
+      "label": "프록시",
+      "sublabel": "upstream"
+    }
+  ],
+  "segments": [
+    {
+      "from": 164,
+      "to": 312,
+      "label": "창이 열린다 — 수백 ms 에서 수 초"
+    },
+    {
+      "from": 348,
+      "to": 496,
+      "label": "창을 메우는 장치 둘"
+    }
+  ],
+  "messages": [
+    {
+      "id": "w1",
+      "from": "pod",
+      "to": "eps",
+      "y": 190,
+      "label": "파드가 죽음",
+      "variant": "security"
+    },
+    {
+      "id": "w2",
+      "from": "eps",
+      "to": "ctl",
+      "y": 240,
+      "label": "변경 통지",
+      "variant": "default"
+    },
+    {
+      "id": "w3",
+      "from": "ctl",
+      "to": "px",
+      "y": 290,
+      "label": "설정 생성 · reload",
+      "variant": "default"
+    },
+    {
+      "id": "w4",
+      "from": "px",
+      "to": "pod",
+      "y": 374,
+      "label": "죽은 주소로 요청",
+      "variant": "security"
+    },
+    {
+      "id": "w6",
+      "from": "pod",
+      "to": "px",
+      "y": 474,
+      "label": "preStop 이 더 받아 줌",
+      "variant": "emphasis"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "ctl",
+      "from": 240,
+      "to": 294,
+      "type": "security"
+    }
+  ]
+}
