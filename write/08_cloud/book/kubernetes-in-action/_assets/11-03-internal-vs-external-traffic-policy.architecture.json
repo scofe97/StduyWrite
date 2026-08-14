@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "두 정책의 차이 — 앞단에 노드를 고르는 장치가 있느냐",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "ex",
+      "type": "cloud",
+      "label": "externalTraffic",
+      "pos": [
+        46,
+        80
+      ],
+      "size": [
+        180,
+        88
+      ],
+      "sublabel": "Policy: Local"
+    },
+    {
+      "id": "ei",
+      "type": "external",
+      "label": "클러스터 밖",
+      "pos": [
+        292,
+        80
+      ],
+      "size": [
+        180,
+        88
+      ],
+      "sublabel": "nodePort · LB"
+    },
+    {
+      "id": "elb",
+      "type": "security",
+      "label": "로드밸런서 있음",
+      "pos": [
+        538,
+        80
+      ],
+      "size": [
+        180,
+        88
+      ],
+      "sublabel": "노드를 고른다"
+    },
+    {
+      "id": "ehc",
+      "type": "backend",
+      "label": "healthCheck",
+      "pos": [
+        538,
+        224
+      ],
+      "size": [
+        180,
+        88
+      ],
+      "sublabel": "유실을 막는다"
+    },
+    {
+      "id": "it",
+      "type": "cloud",
+      "label": "internalTraffic",
+      "pos": [
+        46,
+        368
+      ],
+      "size": [
+        180,
+        88
+      ],
+      "sublabel": "Policy: Local"
+    },
+    {
+      "id": "ii",
+      "type": "external",
+      "label": "클러스터 안 파드",
+      "pos": [
+        292,
+        368
+      ],
+      "size": [
+        180,
+        88
+      ],
+      "sublabel": "cluster IP"
+    },
+    {
+      "id": "inone",
+      "type": "external",
+      "label": "앞단 장치 없음",
+      "pos": [
+        538,
+        368
+      ],
+      "size": [
+        180,
+        88
+      ],
+      "sublabel": "막을 수단 없음"
+    }
+  ],
+  "connections": [
+    {
+      "from": "ex",
+      "to": "ei",
+      "label": "대상",
+      "variant": "emphasis"
+    },
+    {
+      "from": "ei",
+      "to": "elb",
+      "label": "앞단",
+      "variant": "emphasis"
+    },
+    {
+      "from": "elb",
+      "to": "ehc"
+    },
+    {
+      "from": "it",
+      "to": "ii",
+      "label": "대상 2",
+      "variant": "emphasis"
+    },
+    {
+      "from": "ii",
+      "to": "inone",
+      "label": "앞단 2",
+      "variant": "emphasis"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "밖에서 들어오는 요청 — 막을 장치가 있다",
+      "wraps": [
+        "ex",
+        "ei",
+        "elb",
+        "ehc"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "안에서 나가는 요청 — 막을 장치가 없다",
+      "wraps": [
+        "it",
+        "ii",
+        "inone"
+      ],
+      "pad": 30
+    }
+  ]
+}

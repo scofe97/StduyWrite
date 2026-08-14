@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "EndpointSlice — 오브젝트를 쪼개 파드 하나의 변화가 퍼지는 범위를 줄인다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      1000,
+      620
+    ]
+  },
+  "stages": [
+    {
+      "label": "파드 하나가 죽음"
+    },
+    {
+      "label": "단위"
+    },
+    {
+      "label": "노드 100대"
+    },
+    {
+      "label": "전송량"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "e0",
+      "type": "cloud",
+      "label": "Endpoints",
+      "stage": 0,
+      "row": 0,
+      "sublabel": "하나에 다 담음",
+      "width": 124
+    },
+    {
+      "id": "e1",
+      "type": "database",
+      "label": "99개 IP",
+      "stage": 1,
+      "row": 0,
+      "sublabel": "통째로 갱신",
+      "width": 124
+    },
+    {
+      "id": "e2",
+      "type": "messagebus",
+      "label": "100곳",
+      "stage": 2,
+      "row": 0,
+      "sublabel": "watch 수신자",
+      "width": 124
+    },
+    {
+      "id": "e3",
+      "type": "external",
+      "label": "9,900",
+      "stage": 3,
+      "row": 0,
+      "sublabel": "99 × 100",
+      "width": 190
+    },
+    {
+      "id": "s0",
+      "type": "cloud",
+      "label": "EPSlice",
+      "stage": 0,
+      "row": 1,
+      "sublabel": "20개씩 5조각",
+      "width": 124
+    },
+    {
+      "id": "s1",
+      "type": "database",
+      "label": "19개",
+      "stage": 1,
+      "row": 1,
+      "sublabel": "4조각은 그대로",
+      "width": 124
+    },
+    {
+      "id": "s2",
+      "type": "messagebus",
+      "label": "100곳",
+      "stage": 2,
+      "row": 1,
+      "sublabel": "바뀐 것만",
+      "width": 124
+    },
+    {
+      "id": "s3",
+      "type": "backend",
+      "label": "1,900",
+      "stage": 3,
+      "row": 1,
+      "sublabel": "19 × 100",
+      "width": 190
+    }
+  ],
+  "flows": [
+    {
+      "id": "e0-e1",
+      "from": "e0",
+      "to": "e1",
+      "variant": "emphasis",
+      "label": "통째로"
+    },
+    {
+      "id": "e1-e2",
+      "from": "e1",
+      "to": "e2",
+      "variant": "emphasis",
+      "label": "발송"
+    },
+    {
+      "id": "e2-e3",
+      "from": "e2",
+      "to": "e3",
+      "variant": "security",
+      "label": "99×100"
+    },
+    {
+      "id": "s0-s1",
+      "from": "s0",
+      "to": "s1",
+      "variant": "emphasis",
+      "label": "조각으로"
+    },
+    {
+      "id": "s1-s2",
+      "from": "s1",
+      "to": "s2",
+      "variant": "emphasis",
+      "label": "바뀐 것만"
+    },
+    {
+      "id": "s2-s3",
+      "from": "s2",
+      "to": "s3",
+      "variant": "security",
+      "label": "19×100"
+    }
+  ]
+}
