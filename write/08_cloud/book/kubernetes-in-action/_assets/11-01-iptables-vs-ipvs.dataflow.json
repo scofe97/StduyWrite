@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "kube-proxy 구현 — iptables는 규칙을 훑고 IPVS는 해시로 한 번에 찾는다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      1000,
+      620
+    ]
+  },
+  "stages": [
+    {
+      "label": "패킷 도착"
+    },
+    {
+      "label": "규칙 조회 방식"
+    },
+    {
+      "label": "조회 비용"
+    },
+    {
+      "label": "선택 결과"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "p1",
+      "type": "backend",
+      "label": "패킷",
+      "stage": 0,
+      "row": 0,
+      "sublabel": "dst = VIP"
+    },
+    {
+      "id": "ipt",
+      "type": "security",
+      "label": "iptables",
+      "stage": 1,
+      "row": 0,
+      "sublabel": "차례로 검사"
+    },
+    {
+      "id": "c1",
+      "type": "database",
+      "label": "규칙 수만큼",
+      "stage": 2,
+      "row": 0,
+      "sublabel": "서비스 늘면 증가"
+    },
+    {
+      "id": "r1",
+      "type": "cloud",
+      "label": "선택된 Pod",
+      "stage": 3,
+      "row": 0,
+      "sublabel": "같은 결과"
+    },
+    {
+      "id": "p2",
+      "type": "backend",
+      "label": "패킷",
+      "stage": 0,
+      "row": 1,
+      "sublabel": "dst = VIP"
+    },
+    {
+      "id": "ipv",
+      "type": "security",
+      "label": "IPVS",
+      "stage": 1,
+      "row": 1,
+      "sublabel": "해시 테이블"
+    },
+    {
+      "id": "c2",
+      "type": "database",
+      "label": "한 번",
+      "stage": 2,
+      "row": 1,
+      "sublabel": "규모와 무관"
+    },
+    {
+      "id": "r2",
+      "type": "cloud",
+      "label": "선택된 Pod",
+      "stage": 3,
+      "row": 1,
+      "sublabel": "같은 결과"
+    }
+  ],
+  "flows": [
+    {
+      "id": "p1-ipt",
+      "from": "p1",
+      "to": "ipt",
+      "variant": "emphasis",
+      "label": "진입"
+    },
+    {
+      "id": "ipt-c1",
+      "from": "ipt",
+      "to": "c1",
+      "variant": "emphasis",
+      "label": "순차 탐색"
+    },
+    {
+      "id": "c1-r1",
+      "from": "c1",
+      "to": "r1",
+      "variant": "emphasis",
+      "label": "결정"
+    },
+    {
+      "id": "p2-ipv",
+      "from": "p2",
+      "to": "ipv",
+      "variant": "emphasis",
+      "label": "진입 2"
+    },
+    {
+      "id": "ipv-c2",
+      "from": "ipv",
+      "to": "c2",
+      "variant": "emphasis",
+      "label": "해시 조회"
+    },
+    {
+      "id": "c2-r2",
+      "from": "c2",
+      "to": "r2",
+      "variant": "emphasis",
+      "label": "결정 2"
+    }
+  ]
+}
