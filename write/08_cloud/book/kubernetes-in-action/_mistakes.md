@@ -2,10 +2,39 @@
 title: Kubernetes in Action 오답 노트
 tags: [kubernetes, mistakes, review]
 status: in_progress
-updated: 2026-07-28
+updated: 2026-08-12
 ---
 
 # Kubernetes in Action 오답 노트
+
+## 2026-08-12 — 단위와 판정 주체를 놓침 (17-01 DaemonSet 4-Phase · Phase 1 통과 · Phase 4 5축 중 2문항 막힘)
+
+- **무엇**: 17-01 DaemonSet 기초를 `learning-session` 4-Phase로 진행했습니다. kind 클러스터가 없어 Phase 3은 생략하고 실습 연결을 뺀 5축으로 검증했습니다. Phase 1은 다섯 문항 모두 자력 또는 되물음 한 번으로 통과했고, Phase 4에서 두 문항이 막혔습니다. 막힌 둘의 뿌리가 같아 축으로 묶어 기록합니다.
+
+- **★ 뿌리 A — 세는 대상의 단위를 놓쳤습니다**: 두 오개념이 한 뿌리에서 나왔습니다.
+  - **자기 답 (Phase 1 Q1)**: "레플리카가 없다는 건 DaemonSet이 무조건 **1개만** 올라간다는 의미 아닌가"로 답했습니다. 되물음("노드 5개면 파드 몇 개일까요") 한 번에 **스스로 5개로 교정**했습니다.
+  - **자기 답 (Phase 4 Q1)**: `DESIRED 2 / CURRENT 3` 출력에서 `CURRENT`를 "실제 올라간 **파드 수**"로 읽고 왜 3인지 막혔습니다. "여기선 노드 수가 되나요"라고 되물었습니다.
+  - **정답**: DaemonSet status 6필드(`currentNumberScheduled`·`desiredNumberScheduled`·`numberAvailable`·`numberMisscheduled`·`numberReady`·`updatedNumberScheduled`)는 이름이 파드를 세는 것처럼 생겼지만 **전부 노드 수**입니다. `numberReady`는 "ready 파드 수"가 아니라 "ready daemon 파드가 도는 **노드** 수"입니다. 관심사가 "파드 몇 개 돌리나"가 아니라 "**몇 개 노드를 커버하나**"이기 때문입니다. `DESIRED 2 / CURRENT 3`이 모순이 아닌 이유는 두 숫자의 **단위가 갈리는 순간**이 있기 때문입니다 — 업데이트 중 한 노드에서 옛 파드가 `Terminating`으로 사라지는 동안 새 파드가 만들어져 총 3개가 됩니다. `AVAILABLE 2`가 그대로인 것이 단서입니다(겹친 파드가 커버 노드를 늘려 주지 않음).
+  - **원인 추정**: `replicas`가 없다는 사실에서 "숫자를 안 적는다 → 하나뿐이다"로 건너뛰었습니다. 실제 함의는 "숫자를 **클러스터 상태에서 파생**시킨다"입니다. 같은 건너뛰기가 status 필드에서 재발했습니다 — 필드 **이름**(파드처럼 생김)을 단위의 근거로 삼고 정의문("파드가 하나 이상 도는 노드 수")을 안 읽었습니다.
+
+- **★ 뿌리 B — 판정하는 주체를 놓쳤습니다**: 세 오개념이 "무엇이 이 결정을 내리는가"를 잘못 짚은 것입니다.
+  - **자기 답**: (1) control plane에 파드가 안 뜨는 이유를 "마스터 노드에는 **kube-system과 관련된 파드만** 올라가는 걸로 안다"로 답했습니다. (2) control plane 회피를 "**예외 대상**"이라 불렀습니다. (3) "데몬셋 말고는 보통 메타데이터에 **노드 이름을 그대로 적는 걸로 안다**"고 했습니다.
+  - **정답**: (1) `kube-system`은 **네임스페이스**이고 네임스페이스는 스케줄링에 영향을 주지 않습니다. kube-proxy가 kube-system에 있는 건 맞지만 control plane에 뜨는 이유는 네임스페이스가 아니라 매니페스트에 직접 적은 `tolerations: [{operator: Exists}]`입니다. (2) 하드코딩된 예외 규칙이 아니라 **taint/toleration이라는 범용 장치의 한 사례**입니다. 노드에 표시(taint)를 붙이고 파드가 감당을 선언(toleration)하면 통과시키는 구조라, control plane도 특별 대우가 아닙니다. (3) `nodeName` 직접 지정은 일반적 방법이 **아닙니다**. 정석은 nodeSelector·nodeAffinity로 조건을 주고 스케줄러가 고르는 것이고, nodeName 직접 지정은 스케줄러를 **의도적으로 우회**하는 특수 용례(static pod, 디버깅)입니다. DaemonSet 컨트롤러도 옛 버전에서 쓰다 버렸습니다.
+  - **원인 추정**: "무엇이 이 파드를 여기 있게 했나"를 물을 때, 눈에 보이는 표식(네임스페이스 이름·필드에 박힌 노드 이름)을 원인으로 삼았습니다. 실제 판정자는 taint 매칭과 스케줄러이고, 표식은 결과일 뿐입니다. (1)이 07-02 label selector 오답(2026-07-14)과 같은 계통입니다 — 인접하고 익숙한 개념으로 빈칸을 메우는 패턴.
+
+- **주어가 생략된 채 외운 것 하나**: "노드당 하나"의 주어를 **클러스터 전체**로 읽어, "노드에 daemon 파드가 하나만 있어야 하나 / 데몬셋 종류가 많을 텐데"라고 두 번 되물었습니다. 생략된 주어는 항상 **"그 DaemonSet의"** 입니다 — 같은 DaemonSet의 파드는 노드당 하나이고, 서로 다른 DaemonSet(kube-proxy·CNI·로그 수집기)의 파드는 한 노드에 여러 개 공존합니다. lock 충돌도 같은 범위입니다(Fluent Bit 둘은 충돌, Fluent Bit + node-exporter는 무관). 문서 11곳 전부에서 이 주어가 생략돼 있어 **문서 보강 대상**으로 잡았습니다(§1 진입부).
+
+- **살아남은 축 — 자력으로 도달한 것들**: 다음 복습에서 건너뛸 수 있습니다.
+  - **maxSurge 0의 이유를 스스로 추론**했습니다. "노드당 1개라는 성질을 지녀서 2개를 지니면 안 된다는 건가 (2개 이상이면 중복으로 문제가 생기는 이슈가 있는가)" — lock 충돌이라는 결론까지 되물음 형태로 도달했습니다.
+  - **OnDelete의 안전성을 16장과 연결**했습니다. "배포 진행 이후 다른 파드를 망가뜨리거나 하는 경우에 멈춰야 하는데 멈추지 못한다"로 답했고, 컨트롤러의 판정 대상(daemon 자신의 readiness probe)과 실제 피해 대상(그 노드의 다른 파드)이 어긋난다는 급소를 짚었습니다. "수작업은 실수가 생기고 오래 걸린다"는 비용까지 덧붙여 OnDelete가 기본값이 아닌 이유도 함께 봤습니다.
+  - **kubelet 순환 의존을 되물음이 열쇠가 되어 도달**했습니다. "kubelet도 데몬 파드의 종류인가"라는 물음 자체가 답의 입구였습니다 — kubelet은 daemon 파드가 아니라 **파드를 실행하는 주체**라, DaemonSet으로 배포하면 kubelet 파드를 띄울 kubelet이 필요한 순환이 생깁니다. 자동 toleration이 끊어 주는 CNI 교착("네트워크가 있어야 노드 ready, 노드 ready여야 CNI 뜸")과 같은 계통이고, kubelet 쪽 고리는 끊을 방법이 없어 **아예 파드 밖으로 빼낸** 것입니다.
+  - **스케줄러 위임의 이득을 힌트 1단계로 도달**했습니다. "너의 힌트를 보면 자원도 보는 거 같다" — nodeName을 박으면 자원 검증이 생략돼 문제를 노드까지 배달한 뒤 터진다는 지점입니다.
+
+- **⛔ 트레이드오프 결론은 맞고 근거가 틀렸습니다**: arch 혼재 클러스터에서 "그냥 B(multiarch 단일 DaemonSet)가 낫지 않나"는 방향이 맞았지만, 근거로 댄 "**A는 노드 추가될 때마다 매번 작업해야 할 것 같다**"가 틀렸습니다. A에서도 nodeSelector가 arch label을 걸고 있어 노드 추가 시 컨트롤러가 알아서 파드를 만듭니다(Node 오브젝트 감시 → label 변화에 reconciliation). A의 비용은 수작업이 아니라 **매니페스트 두 벌 유지**입니다. 판단 기준은 **아키텍처별로 달라져야 하는 것이 이미지뿐인지** — 이미지만 다르면 B, `resources.requests` 처럼 다른 필드도 달라야 하면 Pod 템플릿이 하나뿐이라 A입니다. Phase 1에서 잡은 "개수가 클러스터 상태에서 파생된다"를 A에도 적용하지 못한 것이 원인입니다.
+
+- **참고 챕터**: 17-01 §1(reconciliation·워크로드 종류)·§2(status는 노드 수·control plane taint·자동 toleration·nodeAffinity)·§4(maxSurge 0·OnDelete). taint/toleration 개념본은 `../../kubernetes/05_scheduling/05-01`.
+- **다음 편 예고로 미룬 것**: DaemonSet과 Service의 관계를 물었습니다. daemon 파드도 label이 있어 Service로 묶을 수는 있지만 노드 에이전트에는 보통 불필요하고(데이터를 내보내는 쪽), node-exporter처럼 긁혀야 하는 경우엔 ClusterIP로 로드밸런싱하면 **어느 노드의 메트릭인지 알 수 없어** 목적이 깨집니다. `hostNetwork`·`hostPort` 로 노드 IP에 직접 노출하는 방식은 **17-02**가 다룹니다.
+- **재방문 트리거**: 다음 복습에서 (1) `DESIRED 2 / CURRENT 3` 출력을 다시 던져 두 숫자의 **단위**로 모순이 아님을 설명, (2) "노드당 하나"를 **주어를 붙여** 말하고 한 워커 노드에 daemon 파드가 여러 개 도는 예를 들기, (3) control plane 회피를 네임스페이스 언급 없이 taint/toleration으로만 설명, (4) arch 혼재에서 A/B 판단 기준을 `resources.requests` 를 근거로 대기. maxSurge·OnDelete·kubelet 순환은 자력 도달했으니 **제외**합니다.
 
 ## 2026-07-28 — 보강했는데 인출이 거의 안 됨 → Phase 1 재실행 결정 (12-02 즉석 복습 · 평균 1.6)
 
