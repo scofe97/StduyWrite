@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "파드 하나의 변화가 노드 100대로 퍼지는 범위 — 오브젝트를 쪼개면 줄어든다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "dead",
+      "type": "external",
+      "label": "파드 하나 죽음",
+      "pos": [
+        46,
+        184
+      ],
+      "size": [
+        152,
+        88
+      ],
+      "sublabel": "사소한 사건"
+    },
+    {
+      "id": "ep",
+      "type": "database",
+      "label": "Endpoints",
+      "pos": [
+        284,
+        70
+      ],
+      "size": [
+        152,
+        88
+      ],
+      "sublabel": "99개 IP 한 덩어리"
+    },
+    {
+      "id": "n1",
+      "type": "messagebus",
+      "label": "노드 100대",
+      "pos": [
+        522,
+        70
+      ],
+      "size": [
+        152,
+        88
+      ],
+      "sublabel": "전부 통째로 받음"
+    },
+    {
+      "id": "sum1",
+      "type": "external",
+      "label": "9,900 IP분",
+      "pos": [
+        522,
+        184
+      ],
+      "size": [
+        152,
+        88
+      ],
+      "sublabel": "99 × 100"
+    },
+    {
+      "id": "es",
+      "type": "database",
+      "label": "EPSlice 5조각",
+      "pos": [
+        284,
+        358
+      ],
+      "size": [
+        152,
+        88
+      ],
+      "sublabel": "20개씩 나눔"
+    },
+    {
+      "id": "n2",
+      "type": "messagebus",
+      "label": "바뀐 1조각",
+      "pos": [
+        522,
+        358
+      ],
+      "size": [
+        152,
+        88
+      ],
+      "sublabel": "4조각은 안 보냄"
+    },
+    {
+      "id": "sum2",
+      "type": "backend",
+      "label": "1,900 IP분",
+      "pos": [
+        522,
+        472
+      ],
+      "size": [
+        152,
+        88
+      ],
+      "sublabel": "19 × 100"
+    }
+  ],
+  "connections": [
+    {
+      "from": "dead",
+      "to": "ep",
+      "variant": "emphasis"
+    },
+    {
+      "from": "dead",
+      "to": "es",
+      "variant": "emphasis"
+    },
+    {
+      "from": "ep",
+      "to": "n1",
+      "label": "전송",
+      "variant": "emphasis"
+    },
+    {
+      "from": "n1",
+      "to": "sum1"
+    },
+    {
+      "from": "es",
+      "to": "n2",
+      "label": "바뀐 것만",
+      "variant": "emphasis"
+    },
+    {
+      "from": "n2",
+      "to": "sum2"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "오브젝트 통째 — 전송량이 크다",
+      "wraps": [
+        "ep",
+        "n1",
+        "sum1"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "조각 단위 — 퍼지는 범위가 준다",
+      "wraps": [
+        "es",
+        "n2",
+        "sum2"
+      ],
+      "pad": 30
+    }
+  ]
+}
