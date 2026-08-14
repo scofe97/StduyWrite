@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "두 소관은 만나지 않는다 — LB에서 프록시까지 한 구간만 겹친다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "lb",
+      "type": "cloud",
+      "label": "로드밸런서",
+      "pos": [
+        46,
+        80
+      ],
+      "size": [
+        154,
+        88
+      ],
+      "sublabel": "LB Service"
+    },
+    {
+      "id": "px",
+      "type": "security",
+      "label": "Ingress 프록시",
+      "pos": [
+        278,
+        80
+      ],
+      "size": [
+        154,
+        88
+      ],
+      "sublabel": "파드로 직접 보냄"
+    },
+    {
+      "id": "pod",
+      "type": "backend",
+      "label": "백엔드 파드",
+      "pos": [
+        510,
+        80
+      ],
+      "size": [
+        154,
+        88
+      ],
+      "sublabel": "cluster IP 안 거침"
+    },
+    {
+      "id": "svc",
+      "type": "external",
+      "label": "Service 소관",
+      "pos": [
+        278,
+        206
+      ],
+      "size": [
+        154,
+        88
+      ],
+      "sublabel": "여기까지만"
+    },
+    {
+      "id": "none",
+      "type": "external",
+      "label": "개입할 자리 없음",
+      "pos": [
+        510,
+        206
+      ],
+      "size": [
+        154,
+        88
+      ],
+      "sublabel": "정책이 안 먹음"
+    },
+    {
+      "id": "snat",
+      "type": "external",
+      "label": "Cluster 면 SNAT",
+      "pos": [
+        46,
+        206
+      ],
+      "size": [
+        154,
+        88
+      ],
+      "sublabel": "클라이언트 IP 오염"
+    }
+  ],
+  "connections": [
+    {
+      "from": "lb",
+      "to": "px",
+      "label": "겹치는 곳",
+      "variant": "emphasis"
+    },
+    {
+      "from": "px",
+      "to": "pod",
+      "label": "프록시만",
+      "variant": "emphasis"
+    },
+    {
+      "from": "snat",
+      "to": "svc",
+      "label": "오염",
+      "variant": "emphasis"
+    },
+    {
+      "from": "svc",
+      "to": "none"
+    },
+    {
+      "from": "lb",
+      "to": "snat"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Service 정책이 닿는 구간",
+      "wraps": [
+        "lb",
+        "svc",
+        "snat"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "프록시가 혼자 정하는 구간",
+      "wraps": [
+        "pod",
+        "none"
+      ],
+      "pad": 30
+    }
+  ]
+}
