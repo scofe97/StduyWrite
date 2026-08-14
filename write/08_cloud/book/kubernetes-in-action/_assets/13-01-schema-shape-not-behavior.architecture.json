@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "스키마 관문은 모양만 보고 통과시킨다 — 동작 여부는 컨트롤러가 정한다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "ap",
+      "type": "external",
+      "label": "apply 한 필드",
+      "pos": [
+        46,
+        80
+      ],
+      "size": [
+        130,
+        88
+      ],
+      "sublabel": "새 설정"
+    },
+    {
+      "id": "crd",
+      "type": "security",
+      "label": "CRD 스키마",
+      "pos": [
+        246,
+        80
+      ],
+      "size": [
+        130,
+        88
+      ],
+      "sublabel": "모양만 본다"
+    },
+    {
+      "id": "etcd",
+      "type": "database",
+      "label": "저장됨",
+      "pos": [
+        446,
+        80
+      ],
+      "size": [
+        130,
+        88
+      ],
+      "sublabel": "통과"
+    },
+    {
+      "id": "impl",
+      "type": "security",
+      "label": "컨트롤러",
+      "pos": [
+        646,
+        80
+      ],
+      "size": [
+        130,
+        88
+      ],
+      "sublabel": "구현 여부를 본다"
+    },
+    {
+      "id": "yes",
+      "type": "backend",
+      "label": "반영됨",
+      "pos": [
+        646,
+        238
+      ],
+      "size": [
+        130,
+        88
+      ],
+      "sublabel": "지원하면"
+    },
+    {
+      "id": "no",
+      "type": "external",
+      "label": "조용히 지나감",
+      "pos": [
+        446,
+        238
+      ],
+      "size": [
+        130,
+        88
+      ],
+      "sublabel": "지원 안 하면"
+    }
+  ],
+  "connections": [
+    {
+      "from": "ap",
+      "to": "crd",
+      "label": "1차 관문",
+      "variant": "emphasis"
+    },
+    {
+      "from": "crd",
+      "to": "etcd",
+      "label": "모양 맞음",
+      "variant": "emphasis"
+    },
+    {
+      "from": "etcd",
+      "to": "impl",
+      "label": "2차 관문",
+      "variant": "emphasis"
+    },
+    {
+      "from": "impl",
+      "to": "yes"
+    },
+    {
+      "from": "no",
+      "to": "yes",
+      "variant": "emphasis"
+    },
+    {
+      "from": "impl",
+      "to": "no"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "스키마는 모양만 본다 — 동작은 안 본다",
+      "wraps": [
+        "ap",
+        "crd",
+        "etcd"
+      ],
+      "pad": 36
+    },
+    {
+      "kind": "region",
+      "label": "여기서 갈린다",
+      "wraps": [
+        "yes",
+        "no"
+      ],
+      "pad": 36
+    }
+  ]
+}

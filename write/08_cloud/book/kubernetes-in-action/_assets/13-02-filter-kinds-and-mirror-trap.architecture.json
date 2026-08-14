@@ -1,0 +1,192 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "필터 여섯은 흐름 하나·흐름 복제·백엔드 없음 세 갈래로 갈린다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "req",
+      "type": "external",
+      "label": "요청 하나",
+      "pos": [
+        46,
+        222
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "필터를 지난다"
+    },
+    {
+      "id": "mod",
+      "type": "security",
+      "label": "Header 2종 등",
+      "pos": [
+        304,
+        80
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "URLRewrite · Ext"
+    },
+    {
+      "id": "one",
+      "type": "backend",
+      "label": "목적지 하나",
+      "pos": [
+        562,
+        80
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "흐름은 하나"
+    },
+    {
+      "id": "mir",
+      "type": "security",
+      "label": "RequestMirror",
+      "pos": [
+        304,
+        222
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "흐름 복제"
+    },
+    {
+      "id": "two",
+      "type": "external",
+      "label": "백엔드 둘 동시",
+      "pos": [
+        562,
+        222
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "복사본 응답 버림"
+    },
+    {
+      "id": "trap",
+      "type": "external",
+      "label": "부수효과 함정",
+      "pos": [
+        562,
+        364
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "미러도 실제로 처리"
+    },
+    {
+      "id": "red",
+      "type": "security",
+      "label": "RequestRedirect",
+      "pos": [
+        304,
+        506
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "백엔드 없음"
+    },
+    {
+      "id": "gwr",
+      "type": "backend",
+      "label": "게이트웨이가 응답",
+      "pos": [
+        562,
+        506
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "backendRefs 불필요"
+    }
+  ],
+  "connections": [
+    {
+      "from": "req",
+      "to": "mod"
+    },
+    {
+      "from": "mod",
+      "to": "one",
+      "label": "하나로",
+      "variant": "emphasis"
+    },
+    {
+      "from": "req",
+      "to": "mir",
+      "variant": "emphasis"
+    },
+    {
+      "from": "mir",
+      "to": "two",
+      "label": "둘로",
+      "variant": "emphasis"
+    },
+    {
+      "from": "req",
+      "to": "red"
+    },
+    {
+      "from": "red",
+      "to": "gwr",
+      "label": "직접 응답",
+      "variant": "emphasis"
+    },
+    {
+      "from": "two",
+      "to": "trap"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "흐름 하나",
+      "wraps": [
+        "mod",
+        "one"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "흐름 복제 — 부수효과를 주의한다",
+      "wraps": [
+        "mir",
+        "two",
+        "trap"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "백엔드 없음",
+      "wraps": [
+        "red",
+        "gwr"
+      ],
+      "pad": 30
+    }
+  ]
+}

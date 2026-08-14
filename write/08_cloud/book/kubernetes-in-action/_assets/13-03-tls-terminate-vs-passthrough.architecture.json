@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "복호화하면 경로로, 그대로 흘리면 SNI 호스트로 라우팅한다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "t0",
+      "type": "security",
+      "label": "게이트웨이 복호화",
+      "pos": [
+        46,
+        80
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "termination"
+    },
+    {
+      "id": "t1",
+      "type": "database",
+      "label": "평문 HTTP",
+      "pos": [
+        276,
+        80
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "경로가 보인다"
+    },
+    {
+      "id": "t2",
+      "type": "backend",
+      "label": "HTTPRoute",
+      "pos": [
+        506,
+        80
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "경로로 라우팅"
+    },
+    {
+      "id": "p0",
+      "type": "security",
+      "label": "그대로 흘림",
+      "pos": [
+        46,
+        218
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "passthrough"
+    },
+    {
+      "id": "p1",
+      "type": "database",
+      "label": "SNI 만 평문",
+      "pos": [
+        276,
+        218
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "호스트만 보임"
+    },
+    {
+      "id": "p2",
+      "type": "backend",
+      "label": "TLSRoute",
+      "pos": [
+        506,
+        218
+      ],
+      "size": [
+        160,
+        88
+      ],
+      "sublabel": "호스트로 라우팅"
+    }
+  ],
+  "connections": [
+    {
+      "from": "t0",
+      "to": "t1",
+      "label": "복호화",
+      "variant": "emphasis"
+    },
+    {
+      "from": "t1",
+      "to": "t2",
+      "label": "경로 사용",
+      "variant": "emphasis"
+    },
+    {
+      "from": "p0",
+      "to": "p1",
+      "label": "안 푼다",
+      "variant": "emphasis"
+    },
+    {
+      "from": "p1",
+      "to": "p2",
+      "label": "호스트만",
+      "variant": "emphasis"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "복호화하면 HTTPRoute 를 쓴다",
+      "wraps": [
+        "t0",
+        "t1",
+        "t2"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "안 풀면 TLSRoute 를 쓴다",
+      "wraps": [
+        "p0",
+        "p1",
+        "p2"
+      ],
+      "pad": 30
+    }
+  ]
+}
