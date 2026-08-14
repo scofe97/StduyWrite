@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "DNAT가 일어나는 자리 — 보내는 노드의 커널에서 목적지가 파드 IP로 바뀐다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "cl",
+      "type": "backend",
+      "label": "클라이언트 Pod",
+      "pos": [
+        46,
+        80
+      ],
+      "size": [
+        148,
+        88
+      ],
+      "sublabel": "노드 A 위"
+    },
+    {
+      "id": "krn",
+      "type": "security",
+      "label": "노드 A 커널",
+      "pos": [
+        260,
+        80
+      ],
+      "size": [
+        148,
+        88
+      ],
+      "sublabel": "여기서 DNAT"
+    },
+    {
+      "id": "vip",
+      "type": "cloud",
+      "label": "ClusterIP",
+      "pos": [
+        474,
+        80
+      ],
+      "size": [
+        148,
+        88
+      ],
+      "sublabel": "가상 주소"
+    },
+    {
+      "id": "tgt",
+      "type": "backend",
+      "label": "대상 Pod",
+      "pos": [
+        46,
+        218
+      ],
+      "size": [
+        148,
+        88
+      ],
+      "sublabel": "노드 B 위"
+    },
+    {
+      "id": "ovl",
+      "type": "messagebus",
+      "label": "오버레이 전송",
+      "pos": [
+        260,
+        218
+      ],
+      "size": [
+        148,
+        88
+      ],
+      "sublabel": "노드 경계를 넘는다"
+    },
+    {
+      "id": "dst",
+      "type": "database",
+      "label": "바뀐 목적지",
+      "pos": [
+        474,
+        218
+      ],
+      "size": [
+        148,
+        88
+      ],
+      "sublabel": "10.244.2.9:8080"
+    }
+  ],
+  "connections": [
+    {
+      "from": "cl",
+      "to": "krn",
+      "label": "요청",
+      "variant": "emphasis"
+    },
+    {
+      "from": "krn",
+      "to": "vip",
+      "label": "매치",
+      "variant": "emphasis"
+    },
+    {
+      "from": "vip",
+      "to": "dst"
+    },
+    {
+      "from": "dst",
+      "to": "ovl",
+      "label": "전송",
+      "variant": "emphasis"
+    },
+    {
+      "from": "ovl",
+      "to": "tgt",
+      "label": "도착",
+      "variant": "emphasis"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "DNAT는 보내는 쪽 노드에서 끝난다",
+      "wraps": [
+        "cl",
+        "krn",
+        "vip"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "바뀐 주소로 노드를 건넌다",
+      "wraps": [
+        "tgt",
+        "ovl",
+        "dst"
+      ],
+      "pad": 30
+    }
+  ]
+}

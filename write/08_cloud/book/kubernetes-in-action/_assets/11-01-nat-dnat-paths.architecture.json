@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "NAT가 끼는 곳 — 파드 직접 통신엔 없고 ClusterIP 경유엔 DNAT가 붙는다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "a1",
+      "type": "backend",
+      "label": "Pod A",
+      "pos": [
+        46,
+        80
+      ],
+      "size": [
+        142,
+        88
+      ],
+      "sublabel": "파드 IP를 안다"
+    },
+    {
+      "id": "d1",
+      "type": "messagebus",
+      "label": "직접 전송",
+      "pos": [
+        274,
+        80
+      ],
+      "size": [
+        142,
+        88
+      ],
+      "sublabel": "NAT 없음"
+    },
+    {
+      "id": "b1",
+      "type": "backend",
+      "label": "Pod B",
+      "pos": [
+        502,
+        80
+      ],
+      "size": [
+        142,
+        88
+      ],
+      "sublabel": "src 그대로 보임"
+    },
+    {
+      "id": "a2",
+      "type": "backend",
+      "label": "Pod A",
+      "pos": [
+        46,
+        230
+      ],
+      "size": [
+        142,
+        88
+      ],
+      "sublabel": "이름만 안다"
+    },
+    {
+      "id": "v2",
+      "type": "cloud",
+      "label": "ClusterIP",
+      "pos": [
+        274,
+        230
+      ],
+      "size": [
+        142,
+        88
+      ],
+      "sublabel": "가상 목적지"
+    },
+    {
+      "id": "b2",
+      "type": "backend",
+      "label": "Pod B",
+      "pos": [
+        502,
+        230
+      ],
+      "size": [
+        142,
+        88
+      ],
+      "sublabel": "DNAT 뒤 도착"
+    }
+  ],
+  "connections": [
+    {
+      "from": "a1",
+      "to": "d1",
+      "label": "IP 지정",
+      "variant": "emphasis"
+    },
+    {
+      "from": "d1",
+      "to": "b1",
+      "label": "그대로",
+      "variant": "emphasis"
+    },
+    {
+      "from": "a2",
+      "to": "v2",
+      "label": "이름 사용",
+      "variant": "emphasis"
+    },
+    {
+      "from": "v2",
+      "to": "b2",
+      "label": "목적지 교체",
+      "variant": "emphasis"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "파드끼리 직접 — NAT 안 낌",
+      "wraps": [
+        "a1",
+        "d1",
+        "b1"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "ClusterIP 경유 — DNAT 낌",
+      "wraps": [
+        "a2",
+        "v2",
+        "b2"
+      ],
+      "pad": 30
+    }
+  ]
+}

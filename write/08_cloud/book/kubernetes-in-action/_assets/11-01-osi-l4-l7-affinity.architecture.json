@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "ClientIP 세션 어피니티 — 출발지 IP 기록이 같은 파드로 되돌린다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "c1",
+      "type": "backend",
+      "label": "첫 연결",
+      "pos": [
+        46,
+        70
+      ],
+      "size": [
+        156,
+        88
+      ],
+      "sublabel": "src 10.244.1.7"
+    },
+    {
+      "id": "dp1",
+      "type": "security",
+      "label": "노드 데이터패스",
+      "pos": [
+        278,
+        70
+      ],
+      "size": [
+        156,
+        88
+      ],
+      "sublabel": "기록 없음"
+    },
+    {
+      "id": "p1",
+      "type": "cloud",
+      "label": "ready endpoint",
+      "pos": [
+        510,
+        70
+      ],
+      "size": [
+        156,
+        88
+      ],
+      "sublabel": "하나를 고른다"
+    },
+    {
+      "id": "st",
+      "type": "database",
+      "label": "어피니티 기록",
+      "pos": [
+        278,
+        200
+      ],
+      "size": [
+        156,
+        88
+      ],
+      "sublabel": "출발지 IP → 파드"
+    },
+    {
+      "id": "to",
+      "type": "external",
+      "label": "timeoutSeconds",
+      "pos": [
+        510,
+        200
+      ],
+      "size": [
+        156,
+        88
+      ],
+      "sublabel": "기본 10800초"
+    },
+    {
+      "id": "c2",
+      "type": "backend",
+      "label": "다음 연결",
+      "pos": [
+        46,
+        330
+      ],
+      "size": [
+        156,
+        88
+      ],
+      "sublabel": "같은 출발지 IP"
+    },
+    {
+      "id": "dp2",
+      "type": "security",
+      "label": "데이터패스 재조회",
+      "pos": [
+        278,
+        330
+      ],
+      "size": [
+        156,
+        88
+      ],
+      "sublabel": "기록 있음"
+    },
+    {
+      "id": "p2",
+      "type": "cloud",
+      "label": "같은 파드",
+      "pos": [
+        510,
+        330
+      ],
+      "size": [
+        156,
+        88
+      ],
+      "sublabel": "재사용된다"
+    }
+  ],
+  "connections": [
+    {
+      "from": "c1",
+      "to": "dp1",
+      "label": "연결",
+      "variant": "emphasis"
+    },
+    {
+      "from": "dp1",
+      "to": "p1",
+      "label": "선택",
+      "variant": "emphasis"
+    },
+    {
+      "from": "dp1",
+      "to": "st"
+    },
+    {
+      "from": "st",
+      "to": "to",
+      "label": "유지",
+      "variant": "emphasis"
+    },
+    {
+      "from": "st",
+      "to": "dp2"
+    },
+    {
+      "from": "c2",
+      "to": "dp2",
+      "label": "재연결",
+      "variant": "emphasis"
+    },
+    {
+      "from": "dp2",
+      "to": "p2",
+      "label": "동일",
+      "variant": "emphasis"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "첫 연결 — 고르고 기록한다",
+      "wraps": [
+        "c1",
+        "dp1",
+        "p1"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "이후 연결 — 기록을 따른다",
+      "wraps": [
+        "c2",
+        "dp2",
+        "p2"
+      ],
+      "pad": 30
+    }
+  ]
+}

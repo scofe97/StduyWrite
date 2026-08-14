@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "11-01 전체 지도 — 변하는 파드 IP를 변하지 않는 하나의 주소로",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "prob",
+      "type": "external",
+      "label": "변하는 파드 IP",
+      "pos": [
+        46,
+        80
+      ],
+      "size": [
+        152,
+        88
+      ],
+      "sublabel": "재생성마다 달라진다"
+    },
+    {
+      "id": "svc",
+      "type": "cloud",
+      "label": "Service",
+      "pos": [
+        268,
+        80
+      ],
+      "size": [
+        152,
+        88
+      ],
+      "sublabel": "변하지 않는 주소"
+    },
+    {
+      "id": "sel",
+      "type": "security",
+      "label": "label selector",
+      "pos": [
+        490,
+        80
+      ],
+      "size": [
+        152,
+        88
+      ],
+      "sublabel": "뒤에 설 파드 결정"
+    },
+    {
+      "id": "dns",
+      "type": "security",
+      "label": "DNS 이름",
+      "pos": [
+        46,
+        230
+      ],
+      "size": [
+        152,
+        88
+      ],
+      "sublabel": "1단계"
+    },
+    {
+      "id": "vip",
+      "type": "cloud",
+      "label": "ClusterIP",
+      "pos": [
+        268,
+        230
+      ],
+      "size": [
+        152,
+        88
+      ],
+      "sublabel": "2단계 입구"
+    },
+    {
+      "id": "aff",
+      "type": "database",
+      "label": "세션 어피니티",
+      "pos": [
+        490,
+        230
+      ],
+      "size": [
+        152,
+        88
+      ],
+      "sublabel": "같은 파드로 고정"
+    }
+  ],
+  "connections": [
+    {
+      "from": "prob",
+      "to": "svc",
+      "label": "해결",
+      "variant": "emphasis"
+    },
+    {
+      "from": "svc",
+      "to": "sel",
+      "label": "구성",
+      "variant": "emphasis"
+    },
+    {
+      "from": "sel",
+      "to": "aff"
+    },
+    {
+      "from": "dns",
+      "to": "vip",
+      "label": "해석",
+      "variant": "emphasis"
+    },
+    {
+      "from": "vip",
+      "to": "aff",
+      "label": "선택",
+      "variant": "emphasis"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "무엇을 푸는가",
+      "wraps": [
+        "prob",
+        "svc",
+        "sel"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "어떻게 닿는가",
+      "wraps": [
+        "dns",
+        "vip",
+        "aff"
+      ],
+      "pad": 30
+    }
+  ]
+}
