@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "블록 확장은 즉시, 파일시스템 확장은 온라인 여부로 갈린다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "participants": [
+    {
+      "id": "user",
+      "type": "external",
+      "label": "사용자"
+    },
+    {
+      "id": "ctl",
+      "type": "security",
+      "label": "컨트롤러"
+    },
+    {
+      "id": "kbl",
+      "type": "cloud",
+      "label": "kubelet"
+    },
+    {
+      "id": "pod",
+      "type": "backend",
+      "label": "파드"
+    }
+  ],
+  "segments": [
+    {
+      "from": 200,
+      "to": 300,
+      "label": "A층 — 블록 디바이스는 즉시"
+    },
+    {
+      "from": 330,
+      "to": 470,
+      "label": "B층 — 파일시스템은 갈린다"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m1",
+      "from": "user",
+      "to": "ctl",
+      "y": 230,
+      "label": "크기 수정",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m2",
+      "from": "ctl",
+      "to": "kbl",
+      "y": 275,
+      "label": "디바이스 확장",
+      "variant": "default"
+    },
+    {
+      "id": "m3",
+      "from": "kbl",
+      "to": "pod",
+      "y": 355,
+      "label": "온라인이면 바로",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m4",
+      "from": "kbl",
+      "to": "pod",
+      "y": 400,
+      "label": "아니면 대기",
+      "variant": "default"
+    },
+    {
+      "id": "m5",
+      "from": "pod",
+      "to": "kbl",
+      "y": 445,
+      "label": "재마운트 때",
+      "variant": "emphasis"
+    }
+  ]
+}

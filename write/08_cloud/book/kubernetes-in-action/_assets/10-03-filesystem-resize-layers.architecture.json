@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "확장은 두 층에서 따로 일어난다 — 땅이 먼저, 지도가 나중",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "pvc",
+      "type": "cloud",
+      "label": "PVC 크기 수정",
+      "pos": [
+        46,
+        70
+      ],
+      "size": [
+        172,
+        88
+      ],
+      "sublabel": "1Gi → 10Gi"
+    },
+    {
+      "id": "blk",
+      "type": "security",
+      "label": "블록 디바이스",
+      "pos": [
+        330,
+        70
+      ],
+      "size": [
+        172,
+        88
+      ],
+      "sublabel": "A층 — 번호 매긴 칸"
+    },
+    {
+      "id": "ctl",
+      "type": "database",
+      "label": "즉시 커진다",
+      "pos": [
+        638,
+        70
+      ],
+      "size": [
+        172,
+        88
+      ],
+      "sublabel": "CSI 컨트롤러가"
+    },
+    {
+      "id": "fs",
+      "type": "backend",
+      "label": "파일시스템",
+      "pos": [
+        330,
+        250
+      ],
+      "size": [
+        172,
+        88
+      ],
+      "sublabel": "B층 — 관리 대장"
+    },
+    {
+      "id": "grow",
+      "type": "external",
+      "label": "나중에 따라감",
+      "pos": [
+        638,
+        250
+      ],
+      "size": [
+        200,
+        88
+      ],
+      "sublabel": "resize2fs · xfs_growfs",
+      "tag": "XFS · Ext3 · Ext4 만"
+    }
+  ],
+  "connections": [
+    {
+      "from": "pvc",
+      "to": "blk",
+      "label": "먼저 닿는 층",
+      "variant": "emphasis"
+    },
+    {
+      "from": "blk",
+      "to": "ctl",
+      "label": "파드와 무관",
+      "variant": "emphasis"
+    },
+    {
+      "from": "blk",
+      "to": "fs",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "fs",
+      "to": "grow",
+      "label": "알려 줘야 안다",
+      "variant": "emphasis"
+    }
+  ]
+}
