@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "IP 어피니티는 양방향으로 어긋난다 — 쿠키는 사람을 식별한다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "many",
+      "type": "external",
+      "label": "사무실 100명",
+      "pos": [
+        46,
+        80
+      ],
+      "size": [
+        154,
+        88
+      ],
+      "sublabel": "NAT 뒤에 있음"
+    },
+    {
+      "id": "one_ip",
+      "type": "database",
+      "label": "출발지 하나",
+      "pos": [
+        278,
+        80
+      ],
+      "size": [
+        154,
+        88
+      ],
+      "sublabel": "주소가 합쳐짐"
+    },
+    {
+      "id": "pod1",
+      "type": "external",
+      "label": "한 파드에 몰림",
+      "pos": [
+        510,
+        80
+      ],
+      "size": [
+        154,
+        88
+      ],
+      "sublabel": "분산을 잃는다"
+    },
+    {
+      "id": "mob",
+      "type": "external",
+      "label": "모바일 한 명",
+      "pos": [
+        46,
+        198
+      ],
+      "size": [
+        154,
+        88
+      ],
+      "sublabel": "Wi-Fi → LTE"
+    },
+    {
+      "id": "two_ip",
+      "type": "database",
+      "label": "출발지 둘",
+      "pos": [
+        278,
+        198
+      ],
+      "size": [
+        154,
+        88
+      ],
+      "sublabel": "주소가 바뀜"
+    },
+    {
+      "id": "cut",
+      "type": "external",
+      "label": "세션 끊김",
+      "pos": [
+        510,
+        198
+      ],
+      "size": [
+        154,
+        88
+      ],
+      "sublabel": "한 일이 없는데"
+    },
+    {
+      "id": "ck",
+      "type": "security",
+      "label": "쿠키 기준",
+      "pos": [
+        278,
+        388
+      ],
+      "size": [
+        154,
+        88
+      ],
+      "sublabel": "사람을 식별"
+    },
+    {
+      "id": "ok",
+      "type": "backend",
+      "label": "둘 다 정상",
+      "pos": [
+        510,
+        388
+      ],
+      "size": [
+        154,
+        88
+      ],
+      "sublabel": "IP 와 무관"
+    }
+  ],
+  "connections": [
+    {
+      "from": "many",
+      "to": "one_ip",
+      "label": "합쳐짐",
+      "variant": "emphasis"
+    },
+    {
+      "from": "one_ip",
+      "to": "pod1",
+      "label": "한 파드로",
+      "variant": "emphasis"
+    },
+    {
+      "from": "mob",
+      "to": "two_ip",
+      "label": "갈라짐",
+      "variant": "emphasis"
+    },
+    {
+      "from": "two_ip",
+      "to": "cut",
+      "label": "세션 끊김",
+      "variant": "emphasis"
+    },
+    {
+      "from": "ck",
+      "to": "ok",
+      "label": "올바르게",
+      "variant": "emphasis"
+    },
+    {
+      "from": "two_ip",
+      "to": "ck"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "IP 기준 — 실패가 양방향이다",
+      "wraps": [
+        "many",
+        "one_ip",
+        "pod1",
+        "mob",
+        "two_ip",
+        "cut"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "쿠키 기준 — 주소와 무관하다",
+      "wraps": [
+        "ck",
+        "ok"
+      ],
+      "pad": 30
+    }
+  ]
+}

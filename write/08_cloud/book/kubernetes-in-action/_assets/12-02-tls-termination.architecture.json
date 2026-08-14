@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "프록시가 TLS 를 종료하고 백엔드로는 평문 HTTP 를 보낸다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "cl",
+      "type": "external",
+      "label": "클라이언트",
+      "pos": [
+        46,
+        80
+      ],
+      "size": [
+        156,
+        88
+      ],
+      "sublabel": "HTTPS"
+    },
+    {
+      "id": "px",
+      "type": "security",
+      "label": "프록시",
+      "pos": [
+        280,
+        80
+      ],
+      "size": [
+        156,
+        88
+      ],
+      "sublabel": "TLS 를 종료"
+    },
+    {
+      "id": "pod",
+      "type": "backend",
+      "label": "백엔드 파드",
+      "pos": [
+        514,
+        80
+      ],
+      "size": [
+        156,
+        88
+      ],
+      "sublabel": "HTTPS 를 모름"
+    },
+    {
+      "id": "sec",
+      "type": "database",
+      "label": "Secret",
+      "pos": [
+        280,
+        198
+      ],
+      "size": [
+        156,
+        88
+      ],
+      "sublabel": "인증서·키"
+    },
+    {
+      "id": "plain",
+      "type": "cloud",
+      "label": "평문 HTTP",
+      "pos": [
+        514,
+        198
+      ],
+      "size": [
+        156,
+        88
+      ],
+      "sublabel": "클러스터 안에서만"
+    }
+  ],
+  "connections": [
+    {
+      "from": "cl",
+      "to": "px",
+      "label": "암호문",
+      "variant": "emphasis"
+    },
+    {
+      "from": "px",
+      "to": "pod",
+      "label": "평문",
+      "variant": "emphasis"
+    },
+    {
+      "from": "sec",
+      "to": "px"
+    },
+    {
+      "from": "sec",
+      "to": "plain",
+      "label": "복호화",
+      "variant": "emphasis"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "밖에서는 암호문",
+      "wraps": [
+        "cl"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "안에서는 평문",
+      "wraps": [
+        "pod",
+        "plain"
+      ],
+      "pad": 30
+    }
+  ]
+}
