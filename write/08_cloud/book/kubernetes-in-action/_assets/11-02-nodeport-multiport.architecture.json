@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "NodePort의 여섯 번호 — 차례로 밟는 경로가 아니라 어디로 들어오면 어디에 닿는지의 매핑",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "nh",
+      "type": "external",
+      "label": "노드 IP",
+      "pos": [
+        46,
+        80
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "30080 · HTTP"
+    },
+    {
+      "id": "ch",
+      "type": "cloud",
+      "label": "cluster IP",
+      "pos": [
+        46,
+        196
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "80 · HTTP"
+    },
+    {
+      "id": "ns",
+      "type": "external",
+      "label": "노드 IP",
+      "pos": [
+        46,
+        382
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "30443 · HTTPS"
+    },
+    {
+      "id": "cs",
+      "type": "cloud",
+      "label": "cluster IP",
+      "pos": [
+        46,
+        498
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "443 · HTTPS"
+    },
+    {
+      "id": "eh",
+      "type": "security",
+      "label": "같은 파드 목록",
+      "pos": [
+        270,
+        80
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "HTTP 쪽 입구 둘"
+    },
+    {
+      "id": "es",
+      "type": "security",
+      "label": "같은 파드 목록",
+      "pos": [
+        270,
+        382
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "HTTPS 쪽 입구 둘"
+    },
+    {
+      "id": "th",
+      "type": "backend",
+      "label": "targetPort",
+      "pos": [
+        494,
+        80
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "8080"
+    },
+    {
+      "id": "ts",
+      "type": "backend",
+      "label": "targetPort",
+      "pos": [
+        494,
+        382
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "8443"
+    },
+    {
+      "id": "pod",
+      "type": "backend",
+      "label": "kiada 파드",
+      "pos": [
+        718,
+        196
+      ],
+      "size": [
+        140,
+        88
+      ],
+      "sublabel": "두 포트를 듣는다"
+    }
+  ],
+  "connections": [
+    {
+      "from": "nh",
+      "to": "eh",
+      "label": "매핑",
+      "variant": "emphasis"
+    },
+    {
+      "from": "ch",
+      "to": "eh"
+    },
+    {
+      "from": "ns",
+      "to": "es",
+      "label": "매핑 2",
+      "variant": "emphasis"
+    },
+    {
+      "from": "cs",
+      "to": "es"
+    },
+    {
+      "from": "eh",
+      "to": "th",
+      "label": "도달",
+      "variant": "emphasis"
+    },
+    {
+      "from": "es",
+      "to": "ts",
+      "label": "도달 2",
+      "variant": "emphasis"
+    },
+    {
+      "from": "th",
+      "to": "pod"
+    },
+    {
+      "from": "ts",
+      "to": "pod"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "HTTP — 번호 셋",
+      "wraps": [
+        "nh",
+        "ch",
+        "eh",
+        "th"
+      ],
+      "pad": 34
+    },
+    {
+      "kind": "region",
+      "label": "HTTPS — 번호 셋",
+      "wraps": [
+        "ns",
+        "cs",
+        "es",
+        "ts"
+      ],
+      "pad": 34
+    }
+  ]
+}

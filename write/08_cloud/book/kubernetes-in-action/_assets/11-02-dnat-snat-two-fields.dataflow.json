@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "한 패킷에서 바뀌는 필드는 둘 — 목적지는 늘, 출발지는 Cluster만",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      1000,
+      620
+    ]
+  },
+  "stages": [
+    {
+      "label": "노드 A에 도착"
+    },
+    {
+      "label": "목적지 필드"
+    },
+    {
+      "label": "출발지 필드"
+    },
+    {
+      "label": "파드가 보는 것"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "c1",
+      "type": "external",
+      "label": "Cluster",
+      "stage": 0,
+      "row": 0,
+      "sublabel": "203.0.113.7 요청"
+    },
+    {
+      "id": "d1",
+      "type": "database",
+      "label": "DNAT",
+      "stage": 1,
+      "row": 0,
+      "sublabel": "→ 10.244.2.9:8080"
+    },
+    {
+      "id": "s1",
+      "type": "database",
+      "label": "SNAT 함",
+      "stage": 2,
+      "row": 0,
+      "sublabel": "→ 172.18.0.4"
+    },
+    {
+      "id": "p1",
+      "type": "backend",
+      "label": "파드",
+      "stage": 3,
+      "row": 0,
+      "sublabel": "노드 주소로 보임"
+    },
+    {
+      "id": "c2",
+      "type": "external",
+      "label": "Local",
+      "stage": 0,
+      "row": 1,
+      "sublabel": "203.0.113.7 요청"
+    },
+    {
+      "id": "d2",
+      "type": "database",
+      "label": "DNAT",
+      "stage": 1,
+      "row": 1,
+      "sublabel": "→ 10.244.2.9:8080"
+    },
+    {
+      "id": "s2",
+      "type": "database",
+      "label": "안 바꿈",
+      "stage": 2,
+      "row": 1,
+      "sublabel": "203.0.113.7 그대로"
+    },
+    {
+      "id": "p2",
+      "type": "backend",
+      "label": "파드",
+      "stage": 3,
+      "row": 1,
+      "sublabel": "진짜 출발지 보임"
+    }
+  ],
+  "flows": [
+    {
+      "id": "c1-d1",
+      "from": "c1",
+      "to": "d1",
+      "variant": "emphasis",
+      "label": "목적지 교체"
+    },
+    {
+      "id": "d1-s1",
+      "from": "d1",
+      "to": "s1",
+      "variant": "security",
+      "label": "출발지도 교체"
+    },
+    {
+      "id": "s1-p1",
+      "from": "s1",
+      "to": "p1",
+      "variant": "emphasis",
+      "label": "전달"
+    },
+    {
+      "id": "c2-d2",
+      "from": "c2",
+      "to": "d2",
+      "variant": "emphasis",
+      "label": "목적지 교체 2"
+    },
+    {
+      "id": "d2-s2",
+      "from": "d2",
+      "to": "s2",
+      "variant": "security",
+      "label": "출발지는 유지"
+    },
+    {
+      "id": "s2-p2",
+      "from": "s2",
+      "to": "p2",
+      "variant": "emphasis",
+      "label": "전달 2"
+    }
+  ]
+}
