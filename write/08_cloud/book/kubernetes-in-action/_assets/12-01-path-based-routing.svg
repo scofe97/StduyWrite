@@ -1,45 +1,68 @@
-<svg viewBox="0 0 960 320" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>경로 기반 라우팅 — 같은 호스트를 경로로 나눈다</title>
-  <desc>api.example.com 한 호스트를 경로로 나눠, /quote는 quote 서비스로(Exact), /questions로 시작하면 quiz 서비스로(Prefix) 보낸다. 요청의 Host 헤더와 경로가 어느 서비스로 갈지 정한다.</desc>
+<svg viewBox="0 0 1120 640" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t d" preserveAspectRatio="xMidYMid meet" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title id="t">경로 기반 라우팅 — pathType이 어디까지 잡는지가 목적지를 정한다</title>
+  <desc id="d">api.example.com 한 호스트에 규칙 둘을 건다. /quote 는 pathType Exact 라 정확히 그 경로만 잡고, /questions 는 Prefix 라 슬래시로 쪼갠 요소가 일치하면 그 아래까지 잡는다. 요청 GET /quote 는 Exact 규칙에 정확히 걸려 quote 서비스로, GET /questions/random 은 첫 요소 questions 가 일치해 quiz 서비스로 간다. GET /quotes 는 Exact 와 글자가 달라 어긋나고 Prefix 규칙과도 요소가 달라, 어느 규칙에도 걸리지 않고 default backend 로 가 404 를 받는다.</desc>
   <defs>
     <style>
-      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
-      .sub   { font-size: 11px; fill: rgb(138,133,128); }
-      .cli   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
-      .ing   { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
-      .svc   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
-      .req   { font-size: 11px; fill: #e8e4df; }
-      .path  { font-size: 11px; font-weight: 700; fill: rgb(212,168,83); }
+      .h1{font-size:25px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:15px;fill:rgb(168,163,158)}
+      .ct{font-size:15px;font-weight:800}
+      .bd{font-size:13px;fill:#e8e4df}
+      .mu{font-size:12.5px;fill:rgb(168,163,158)}
+      .mo{font-size:12.5px;font-family:'JetBrains Mono','D2Coding',ui-monospace,monospace;fill:#e8e4df}
+      .ok{font-size:13px;fill:rgb(102,187,106)}
+      .bad{font-size:13px;fill:rgb(240,150,190)}
+      .wn{font-size:13px;fill:rgb(230,180,90)}
     </style>
-    <marker id="pr-a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+    <marker id="ar" viewBox="0 0 10 7" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L10 3.5 L0 7 z" fill="rgb(168,163,158)"/></marker>
+    <marker id="arok" viewBox="0 0 10 7" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L10 3.5 L0 7 z" fill="rgb(102,187,106)"/></marker>
+    <marker id="arbad" viewBox="0 0 10 7" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L10 3.5 L0 7 z" fill="rgb(240,150,190)"/></marker>
   </defs>
-
-  <rect x="0" y="0" width="960" height="320" fill="#0d0d0d"/>
-  <text x="24" y="30" class="title">경로 기반 라우팅 — 같은 호스트를 경로로 나눕니다</text>
-  <text x="24" y="50" class="sub">api.example.com/quote는 quote(Exact), /questions로 시작하면 quiz(Prefix)로 갑니다</text>
-
-  <!-- Client -->
-  <rect x="40" y="150" width="120" height="52" rx="8" fill="rgb(102,187,106)"/>
-  <text x="100" y="181" class="cli" text-anchor="middle">Client</text>
-  <text x="45" y="130" class="req">GET /questions/random</text>
-  <text x="45" y="228" class="req">Host: api.example.com</text>
-
-  <!-- Ingress -->
-  <rect x="360" y="145" width="120" height="60" rx="8" fill="rgb(150,130,220)"/>
-  <text x="420" y="180" class="ing" text-anchor="middle">Ingress</text>
-  <line x1="160" y1="176" x2="358" y2="176" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#pr-a)"/>
-
-  <!-- quote svc -->
-  <rect x="720" y="110" width="180" height="52" rx="8" fill="rgb(102,187,106)"/>
-  <text x="810" y="141" class="svc" text-anchor="middle">Quote service</text>
-  <text x="560" y="120" class="path" text-anchor="middle">api.example.com /quote</text>
-  <line x1="480" y1="165" x2="718" y2="140" stroke="rgb(138,133,128)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#pr-a)"/>
-
-  <!-- quiz svc -->
-  <rect x="720" y="200" width="180" height="52" rx="8" fill="rgb(230,150,90)"/>
-  <text x="810" y="231" class="svc" text-anchor="middle">Quiz service</text>
-  <text x="560" y="248" class="path" text-anchor="middle">api.example.com /questions</text>
-  <line x1="480" y1="188" x2="718" y2="222" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#pr-a)"/>
-
-  <text x="480" y="295" class="sub" text-anchor="middle">이 예에서 클라이언트의 /questions/random 요청은 Prefix 매칭으로 quiz 서비스로 라우팅됩니다</text>
+  <rect x="0" y="0" width="1120" height="640" fill="#0d0d0d"/>
+  <text x="30" y="42" class="h1">경로가 규칙에 걸리는 방식이 목적지를 정합니다</text>
+  <text x="30" y="68" class="sub">호스트는 api.example.com 하나. pathType 이 Exact 냐 Prefix 냐에 따라 잡는 범위가 달라집니다.</text>
+  <text x="30" y="120" class="ct" text-anchor="start" fill="rgb(168,163,158)">클라이언트 요청</text>
+  <rect x="30" y="148" width="236" height="58" rx="10" fill="#141210" stroke="rgb(90,86,82)" stroke-width="1.5" opacity="1"/>
+  <text x="48" y="183" class="mo" text-anchor="start">GET /quote</text>
+  <rect x="30" y="236" width="236" height="58" rx="10" fill="#141210" stroke="rgb(90,86,82)" stroke-width="1.5" opacity="1"/>
+  <text x="48" y="271" class="mo" text-anchor="start">GET /questions/random</text>
+  <rect x="30" y="324" width="236" height="58" rx="10" fill="#141210" stroke="rgb(90,86,82)" stroke-width="1.5" opacity="1"/>
+  <text x="48" y="359" class="mo" text-anchor="start">GET /quotes</text>
+  <rect x="330" y="120" width="392" height="262" rx="10" fill="#141210" stroke="rgb(150,175,235)" stroke-width="1.5" opacity="1"/>
+  <text x="352" y="148" class="ct" text-anchor="start" fill="rgb(150,175,235)">Ingress · api.example.com</text>
+  <text x="352" y="172" class="mu" text-anchor="start">규칙 둘. 안 걸리면 default backend.</text>
+  <rect x="352" y="190" width="348" height="76" rx="10" fill="#181513" stroke="rgb(90,86,82)" stroke-width="1.5" opacity="1"/>
+  <text x="370" y="214" class="mo" text-anchor="start">path /quote</text>
+  <text x="370" y="236" class="mo" text-anchor="start" fill="rgb(230,180,90)">pathType Exact</text>
+  <text x="682" y="214" class="mu" text-anchor="end">→ quote</text>
+  <text x="682" y="236" class="mu" text-anchor="end">정확히 그 경로만</text>
+  <rect x="352" y="282" width="348" height="76" rx="10" fill="#181513" stroke="rgb(90,86,82)" stroke-width="1.5" opacity="1"/>
+  <text x="370" y="306" class="mo" text-anchor="start">path /questions</text>
+  <text x="370" y="328" class="mo" text-anchor="start" fill="rgb(230,180,90)">pathType Prefix</text>
+  <text x="682" y="306" class="mu" text-anchor="end">→ quiz</text>
+  <text x="682" y="328" class="mu" text-anchor="end">요소 단위로 그 아래까지</text>
+  <text x="790" y="120" class="ct" text-anchor="start" fill="rgb(168,163,158)">목적지</text>
+  <rect x="790" y="148" width="300" height="58" rx="10" fill="#141210" stroke="rgb(102,187,106)" stroke-width="1.5" opacity="1"/>
+  <text x="810" y="174" class="bd" text-anchor="start">quote service</text>
+  <text x="810" y="194" class="mu" text-anchor="start">port name: http</text>
+  <rect x="790" y="236" width="300" height="58" rx="10" fill="#141210" stroke="rgb(102,187,106)" stroke-width="1.5" opacity="1"/>
+  <text x="810" y="262" class="bd" text-anchor="start">quiz service</text>
+  <text x="810" y="282" class="mu" text-anchor="start">port name: http</text>
+  <rect x="790" y="324" width="300" height="58" rx="10" fill="#141210" stroke="rgb(240,150,190)" stroke-width="1.5" opacity="1"/>
+  <text x="810" y="350" class="bd" text-anchor="start">default backend</text>
+  <text x="810" y="370" class="mu" text-anchor="start">404 를 돌려준다</text>
+  <path d="M266 177 L330 190" stroke="rgb(102,187,106)" stroke-width="1.6" fill="none" marker-end="url(#arok)"/>
+  <text x="276" y="166" class="ok" text-anchor="start">정확 일치</text>
+  <path d="M700 177 L790 177" stroke="rgb(102,187,106)" stroke-width="1.6" fill="none" marker-end="url(#arok)"/>
+  <path d="M266 265 L330 300" stroke="rgb(102,187,106)" stroke-width="1.6" fill="none" marker-end="url(#arok)"/>
+  <text x="276" y="254" class="ok" text-anchor="start">첫 요소 questions 일치</text>
+  <path d="M700 320 L790 265" stroke="rgb(102,187,106)" stroke-width="1.6" fill="none" marker-end="url(#arok)"/>
+  <path d="M266 353 H300 V408 H760 V353 H784" stroke="rgb(240,150,190)" stroke-width="1.6" fill="none" stroke-dasharray="6 5" marker-end="url(#arbad)"/>
+  <text x="330" y="400" class="bad" text-anchor="start">Exact 와 글자 다름 · Prefix 요소도 다름 → 어느 규칙에도 안 걸림</text>
+  <rect x="30" y="448" width="1060" height="92" rx="10" fill="#131110" stroke="rgb(70,66,62)" stroke-width="1.5" opacity="1"/>
+  <text x="48" y="474" class="bd" text-anchor="start">Prefix 는 문자열 접두사가 아니라 / 로 쪼갠 요소의 접두사입니다.</text>
+  <text x="48" y="496" class="mu" text-anchor="start">그래서 /questions 는 /questions/random 을 잡지만 /questionsX 는 잡지 못합니다 — 이름 때문에 문자열로 읽히는 것이 함정입니다.</text>
+  <text x="48" y="518" class="mu" text-anchor="start">둘 다 걸리면 Exact 가 이깁니다. 좁게 지정한 쪽의 의도를 존중하므로 YAML 선언 순서를 바꿔도 결과는 같습니다.</text>
 </svg>
