@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "동적 프로비저닝은 PVC 를 만든 순간 시작되고 지운 순간 끝난다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "사용자가 하는 일"
+    },
+    {
+      "id": "judge",
+      "label": "클러스터가 하는 일"
+    },
+    {
+      "id": "terminal",
+      "label": "다 쓴 뒤"
+    }
+  ],
+  "states": [
+    {
+      "id": "s1",
+      "type": "start",
+      "label": "PVC 생성",
+      "lane": "main",
+      "col": 0,
+      "step": "01",
+      "sublabel": "속성만 적는다"
+    },
+    {
+      "id": "s2",
+      "type": "active",
+      "label": "파드 생성",
+      "lane": "main",
+      "col": 1,
+      "step": "02",
+      "sublabel": "claimName 참조"
+    },
+    {
+      "id": "s3",
+      "type": "success",
+      "label": "쓴다",
+      "lane": "main",
+      "col": 2,
+      "step": "03",
+      "sublabel": "파드는 교체돼도"
+    },
+    {
+      "id": "j1",
+      "type": "active",
+      "label": "PV 프로비저닝",
+      "lane": "judge",
+      "col": 1,
+      "step": "04",
+      "sublabel": "프로비저너가"
+    },
+    {
+      "id": "t1",
+      "type": "waiting",
+      "label": "PVC 삭제",
+      "lane": "terminal",
+      "col": 1,
+      "step": "05",
+      "sublabel": "사용자가 지운다"
+    },
+    {
+      "id": "t2",
+      "type": "success",
+      "label": "PV 도 삭제",
+      "lane": "terminal",
+      "col": 2,
+      "step": "06",
+      "sublabel": "Delete 정책이면"
+    }
+  ],
+  "transitions": [
+    {
+      "from": "s1",
+      "to": "s2",
+      "id": "t1",
+      "variant": "emphasis",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "s2",
+      "to": "s3",
+      "id": "t2",
+      "variant": "emphasis",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "s2",
+      "to": "j1",
+      "id": "t3",
+      "variant": "emphasis",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "j1",
+      "to": "t1",
+      "id": "t4",
+      "variant": "emphasis",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "t1",
+      "to": "t2",
+      "id": "t5",
+      "variant": "emphasis",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    }
+  ]
+}

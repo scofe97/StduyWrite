@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "RWX 는 잠금이 있어야 성립하고 ROX 는 채운 뒤에야 쓸모가 있다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "stages": [
+    {
+      "label": "필요"
+    },
+    {
+      "label": "무엇으로"
+    },
+    {
+      "label": "왜 되나"
+    },
+    {
+      "label": "access mode"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "need",
+      "type": "cloud",
+      "label": "동시 쓰기",
+      "stage": 0,
+      "row": 0,
+      "sublabel": "여러 노드에서"
+    },
+    {
+      "id": "file",
+      "type": "security",
+      "label": "파일형",
+      "stage": 1,
+      "row": 0,
+      "sublabel": "NFS · Filestore"
+    },
+    {
+      "id": "lock",
+      "type": "backend",
+      "label": "잠금",
+      "stage": 2,
+      "row": 0,
+      "sublabel": "서버가 조정"
+    },
+    {
+      "id": "rwx",
+      "type": "external",
+      "label": "RWX",
+      "stage": 3,
+      "row": 0,
+      "sublabel": "쓰기 충돌 없음"
+    },
+    {
+      "id": "need2",
+      "type": "cloud",
+      "label": "같은 원본",
+      "stage": 0,
+      "row": 1,
+      "sublabel": "여러 곳에서 읽기"
+    },
+    {
+      "id": "clone",
+      "type": "security",
+      "label": "복제",
+      "stage": 1,
+      "row": 1,
+      "sublabel": "dataSourceRef 로"
+    },
+    {
+      "id": "ro",
+      "type": "backend",
+      "label": "읽기 전용",
+      "stage": 2,
+      "row": 1,
+      "sublabel": "쓰기는 선언뿐"
+    },
+    {
+      "id": "rox",
+      "type": "external",
+      "label": "ROX",
+      "stage": 3,
+      "row": 1,
+      "sublabel": "강제되진 않음"
+    }
+  ],
+  "flows": [
+    {
+      "id": "need-file",
+      "from": "need",
+      "to": "file",
+      "variant": "emphasis",
+      "label": "무엇이 필요한가"
+    },
+    {
+      "id": "file-lock",
+      "from": "file",
+      "to": "lock",
+      "variant": "default",
+      "label": "조정 장치"
+    },
+    {
+      "id": "lock-rwx",
+      "from": "lock",
+      "to": "rwx",
+      "variant": "emphasis",
+      "label": "성립"
+    },
+    {
+      "id": "need2-clone",
+      "from": "need2",
+      "to": "clone",
+      "variant": "emphasis",
+      "label": "무엇이 필요한가"
+    },
+    {
+      "id": "clone-ro",
+      "from": "clone",
+      "to": "ro",
+      "variant": "default",
+      "label": "채운 뒤"
+    },
+    {
+      "id": "ro-rox",
+      "from": "ro",
+      "to": "rox",
+      "variant": "emphasis",
+      "label": "성립"
+    }
+  ]
+}

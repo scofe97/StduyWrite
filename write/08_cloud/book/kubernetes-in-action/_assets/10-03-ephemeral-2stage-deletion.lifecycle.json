@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "ephemeral 볼륨은 두 단으로 지워진다 — GC 가 PVC 를, 정책이 PV 를",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "파드가 살아 있을 때"
+    },
+    {
+      "id": "judge",
+      "label": "파드를 지우면"
+    },
+    {
+      "id": "terminal",
+      "label": "그다음"
+    }
+  ],
+  "states": [
+    {
+      "id": "s1",
+      "type": "start",
+      "label": "파드 생성",
+      "lane": "main",
+      "col": 0,
+      "step": "01",
+      "sublabel": "ephemeral 볼륨"
+    },
+    {
+      "id": "s2",
+      "type": "active",
+      "label": "PVC 생성",
+      "lane": "main",
+      "col": 1,
+      "step": "02",
+      "sublabel": "파드가 소유자"
+    },
+    {
+      "id": "s3",
+      "type": "success",
+      "label": "PV 바인딩",
+      "lane": "main",
+      "col": 2,
+      "step": "03",
+      "sublabel": "정상 PV"
+    },
+    {
+      "id": "j1",
+      "type": "active",
+      "label": "GC 회수",
+      "lane": "judge",
+      "col": 1,
+      "step": "04",
+      "sublabel": "ownerReference"
+    },
+    {
+      "id": "t1",
+      "type": "success",
+      "label": "PV 삭제",
+      "lane": "terminal",
+      "col": 1,
+      "step": "05",
+      "sublabel": "Delete 정책"
+    },
+    {
+      "id": "t2",
+      "type": "waiting",
+      "label": "Released",
+      "lane": "terminal",
+      "col": 2,
+      "step": "06",
+      "sublabel": "Retain 정책"
+    }
+  ],
+  "transitions": [
+    {
+      "from": "s1",
+      "to": "s2",
+      "id": "t1",
+      "variant": "emphasis",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "s2",
+      "to": "s3",
+      "id": "t2",
+      "variant": "emphasis",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "s3",
+      "to": "j1",
+      "id": "t3",
+      "variant": "emphasis",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "j1",
+      "to": "t1",
+      "id": "t4",
+      "variant": "emphasis",
+      "route": "drop",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "t1",
+      "to": "t2",
+      "id": "t5",
+      "variant": "emphasis",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    }
+  ]
+}

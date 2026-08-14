@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "RWO 가 막는 것은 파드가 아니라 노드다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "pvc",
+      "type": "cloud",
+      "label": "같은 PVC",
+      "pos": [
+        46,
+        190
+      ],
+      "size": [
+        164,
+        88
+      ],
+      "sublabel": "한 청구를 공유"
+    },
+    {
+      "id": "n1",
+      "type": "security",
+      "label": "노드 A",
+      "pos": [
+        330,
+        60
+      ],
+      "size": [
+        164,
+        88
+      ],
+      "sublabel": "볼륨이 붙은 곳"
+    },
+    {
+      "id": "n2",
+      "type": "database",
+      "label": "노드 B",
+      "pos": [
+        330,
+        320
+      ],
+      "size": [
+        164,
+        88
+      ],
+      "sublabel": "같은 볼륨을 원함"
+    },
+    {
+      "id": "ok",
+      "type": "backend",
+      "label": "둘 다 실행",
+      "pos": [
+        614,
+        60
+      ],
+      "size": [
+        164,
+        88
+      ],
+      "sublabel": "같은 노드라 가능"
+    },
+    {
+      "id": "ng",
+      "type": "external",
+      "label": "Multi-Attach",
+      "pos": [
+        614,
+        320
+      ],
+      "size": [
+        164,
+        88
+      ],
+      "sublabel": "RWO 면 막힌다",
+      "tag": "Pending 에 걸림"
+    }
+  ],
+  "connections": [
+    {
+      "from": "pvc",
+      "to": "n1"
+    },
+    {
+      "from": "pvc",
+      "to": "n2"
+    },
+    {
+      "from": "n1",
+      "to": "ok",
+      "label": "파드 여럿 OK",
+      "variant": "emphasis"
+    },
+    {
+      "from": "n2",
+      "to": "ng",
+      "label": "두 번째 노드",
+      "variant": "emphasis"
+    }
+  ]
+}
