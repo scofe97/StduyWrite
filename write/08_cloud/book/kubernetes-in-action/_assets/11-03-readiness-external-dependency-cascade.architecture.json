@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "공유 의존을 readiness 로 검사하면 파드 전원이 한꺼번에 빠진다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "q",
+      "type": "external",
+      "label": "Quote 1초 지연",
+      "pos": [
+        46,
+        194
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "공유 의존"
+    },
+    {
+      "id": "p1",
+      "type": "backend",
+      "label": "Kiada 파드 1",
+      "pos": [
+        312,
+        70
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "probe 실패"
+    },
+    {
+      "id": "p2",
+      "type": "backend",
+      "label": "Kiada 파드 2",
+      "pos": [
+        312,
+        194
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "전원 같은 답"
+    },
+    {
+      "id": "pn",
+      "type": "backend",
+      "label": "… 10번째까지",
+      "pos": [
+        312,
+        318
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "모두 실패"
+    },
+    {
+      "id": "empty",
+      "type": "external",
+      "label": "명단이 빈다",
+      "pos": [
+        578,
+        194
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "전원 제거"
+    },
+    {
+      "id": "down",
+      "type": "external",
+      "label": "전면 장애",
+      "pos": [
+        578,
+        318
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "요청 전부 실패"
+    },
+    {
+      "id": "self",
+      "type": "security",
+      "label": "자기 상태만 검사",
+      "pos": [
+        312,
+        512
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "의존을 안 본다"
+    },
+    {
+      "id": "keep",
+      "type": "backend",
+      "label": "명단 유지",
+      "pos": [
+        578,
+        512
+      ],
+      "size": [
+        150,
+        88
+      ],
+      "sublabel": "부분 저하로 그침"
+    }
+  ],
+  "connections": [
+    {
+      "from": "q",
+      "to": "p1"
+    },
+    {
+      "from": "q",
+      "to": "p2",
+      "variant": "emphasis"
+    },
+    {
+      "from": "q",
+      "to": "pn"
+    },
+    {
+      "from": "p2",
+      "to": "empty",
+      "label": "전원 탈락",
+      "variant": "emphasis"
+    },
+    {
+      "from": "empty",
+      "to": "down"
+    },
+    {
+      "from": "self",
+      "to": "keep",
+      "label": "영향 없음",
+      "variant": "emphasis"
+    },
+    {
+      "from": "q",
+      "to": "self"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "외부 의존을 검사하면 전원이 함께 빠진다",
+      "wraps": [
+        "p1",
+        "p2",
+        "pn",
+        "empty",
+        "down"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "자기 상태만 보면 명단이 남는다",
+      "wraps": [
+        "self",
+        "keep"
+      ],
+      "pad": 30
+    }
+  ]
+}

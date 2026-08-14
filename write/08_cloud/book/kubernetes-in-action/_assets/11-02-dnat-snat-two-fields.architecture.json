@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "한 패킷에서 바뀌는 필드는 둘 — 목적지는 늘, 출발지는 Cluster 만",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "pkt",
+      "type": "messagebus",
+      "label": "들어온 패킷",
+      "pos": [
+        46,
+        212
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "203.0.113.7 발"
+    },
+    {
+      "id": "dst",
+      "type": "database",
+      "label": "목적지 필드",
+      "pos": [
+        274,
+        70
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "172.18.0.4:30080"
+    },
+    {
+      "id": "src",
+      "type": "database",
+      "label": "출발지 필드",
+      "pos": [
+        274,
+        354
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "203.0.113.7"
+    },
+    {
+      "id": "dnat",
+      "type": "security",
+      "label": "DNAT",
+      "pos": [
+        502,
+        70
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "10.244.2.9:8080"
+    },
+    {
+      "id": "both",
+      "type": "cloud",
+      "label": "Cluster 만 함",
+      "pos": [
+        502,
+        212
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "→ 172.18.0.4"
+    },
+    {
+      "id": "keep",
+      "type": "backend",
+      "label": "Local 은 그대로",
+      "pos": [
+        502,
+        354
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "출발지 보존"
+    }
+  ],
+  "connections": [
+    {
+      "from": "pkt",
+      "to": "dst",
+      "variant": "emphasis"
+    },
+    {
+      "from": "pkt",
+      "to": "src",
+      "variant": "emphasis"
+    },
+    {
+      "from": "dst",
+      "to": "dnat",
+      "label": "둘 다",
+      "variant": "emphasis"
+    },
+    {
+      "from": "src",
+      "to": "keep",
+      "variant": "emphasis"
+    },
+    {
+      "from": "src",
+      "to": "both"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "목적지 — 안 바꾸면 파드에 못 닿는다",
+      "wraps": [
+        "dst",
+        "dnat"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "출발지 — 응답이 돌아올 길이 필요할 때만",
+      "wraps": [
+        "src",
+        "both",
+        "keep"
+      ],
+      "pad": 30
+    }
+  ]
+}
