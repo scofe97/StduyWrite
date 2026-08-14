@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "값의 모양이 주입 방식을 정한다 — 짧으면 환경변수, 길면 파일",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "val",
+      "type": "cloud",
+      "label": "전달할 값",
+      "pos": [
+        46,
+        200
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "ConfigMap 엔트리"
+    },
+    {
+      "id": "short",
+      "type": "external",
+      "label": "짧은 단일 값",
+      "pos": [
+        278,
+        60
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "포트·플래그"
+    },
+    {
+      "id": "long",
+      "type": "external",
+      "label": "길고 여러 줄",
+      "pos": [
+        278,
+        320
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "설정 파일 통째"
+    },
+    {
+      "id": "env",
+      "type": "backend",
+      "label": "환경변수",
+      "pos": [
+        510,
+        60
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "시작 시 고정",
+      "tag": "재기동 필요"
+    },
+    {
+      "id": "file",
+      "type": "security",
+      "label": "configMap 볼륨",
+      "pos": [
+        510,
+        320
+      ],
+      "size": [
+        158,
+        88
+      ],
+      "sublabel": "갱신이 전파됨",
+      "tag": "앱이 다시 읽어야"
+    }
+  ],
+  "connections": [
+    {
+      "from": "val",
+      "to": "short"
+    },
+    {
+      "from": "val",
+      "to": "long"
+    },
+    {
+      "from": "short",
+      "to": "env",
+      "label": "환경변수로",
+      "variant": "emphasis"
+    },
+    {
+      "from": "long",
+      "to": "file",
+      "label": "파일로",
+      "variant": "emphasis"
+    }
+  ]
+}
