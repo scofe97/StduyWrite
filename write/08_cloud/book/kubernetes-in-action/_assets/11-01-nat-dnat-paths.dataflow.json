@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "NAT가 끼는 곳 — 파드 직접 통신엔 없고 ClusterIP 경유엔 DNAT가 붙는다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      1000,
+      620
+    ]
+  },
+  "stages": [
+    {
+      "label": "출발 파드"
+    },
+    {
+      "label": "중간에 거치는 것"
+    },
+    {
+      "label": "주소 변화"
+    },
+    {
+      "label": "도착 파드"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "a1",
+      "type": "backend",
+      "label": "Pod A",
+      "stage": 0,
+      "row": 0,
+      "sublabel": "IP를 안다"
+    },
+    {
+      "id": "m1",
+      "type": "messagebus",
+      "label": "중간 없음",
+      "stage": 1,
+      "row": 0,
+      "sublabel": "NAT 안 낌"
+    },
+    {
+      "id": "c1",
+      "type": "database",
+      "label": "안 바뀜",
+      "stage": 2,
+      "row": 0,
+      "sublabel": "src·dst 그대로"
+    },
+    {
+      "id": "b1",
+      "type": "backend",
+      "label": "Pod B",
+      "stage": 3,
+      "row": 0,
+      "sublabel": "src 그대로 봄"
+    },
+    {
+      "id": "a2",
+      "type": "backend",
+      "label": "Pod A",
+      "stage": 0,
+      "row": 1,
+      "sublabel": "이름만 안다"
+    },
+    {
+      "id": "m2",
+      "type": "cloud",
+      "label": "VIP",
+      "stage": 1,
+      "row": 1,
+      "sublabel": "ClusterIP · DNAT"
+    },
+    {
+      "id": "c2",
+      "type": "database",
+      "label": "dst 교체",
+      "stage": 2,
+      "row": 1,
+      "sublabel": "파드 IP로"
+    },
+    {
+      "id": "b2",
+      "type": "backend",
+      "label": "Pod B",
+      "stage": 3,
+      "row": 1,
+      "sublabel": "DNAT 뒤 도착"
+    }
+  ],
+  "flows": [
+    {
+      "id": "a1-m1",
+      "from": "a1",
+      "to": "m1",
+      "variant": "emphasis",
+      "label": "파드 IP 지정"
+    },
+    {
+      "id": "m1-c1",
+      "from": "m1",
+      "to": "c1",
+      "variant": "default",
+      "label": "헤더 확인"
+    },
+    {
+      "id": "c1-b1",
+      "from": "c1",
+      "to": "b1",
+      "variant": "emphasis",
+      "label": "그대로 전달"
+    },
+    {
+      "id": "a2-m2",
+      "from": "a2",
+      "to": "m2",
+      "variant": "emphasis",
+      "label": "Service 이름"
+    },
+    {
+      "id": "m2-c2",
+      "from": "m2",
+      "to": "c2",
+      "variant": "security",
+      "label": "DNAT 적용"
+    },
+    {
+      "id": "c2-b2",
+      "from": "c2",
+      "to": "b2",
+      "variant": "emphasis",
+      "label": "바뀐 주소로"
+    }
+  ]
+}

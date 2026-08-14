@@ -3,9 +3,14 @@
   "diagram_type": "sequence",
   "meta": {
     "title": "kube-proxy의 EndpointSlice 제어 루프",
-    "viewBox": [1240, 650],
+    "viewBox": [
+      1200,
+      650
+    ],
     "quality_profile": "showcase",
-    "legend": { "mode": "hidden" }
+    "legend": {
+      "mode": "hidden"
+    }
   },
   "participants": [
     {
@@ -18,7 +23,7 @@
       "id": "informer",
       "type": "messagebus",
       "label": "INF",
-      "sublabel": "cache"
+      "sublabel": "informer"
     },
     {
       "id": "api",
@@ -57,7 +62,7 @@
       "from": "informer",
       "to": "proxy",
       "y": 380,
-      "label": "Service VIP와 target snapshot",
+      "label": "Service VIP + 엔드포인트 목록",
       "variant": "return"
     },
     {
@@ -65,7 +70,7 @@
       "from": "proxy",
       "to": "kernel",
       "y": 460,
-      "label": "VIP:80 → 선택한 target:8080 규칙 적용",
+      "label": "KUBE-SERVICES → SVC → SEP 갱신",
       "variant": "emphasis"
     },
     {
@@ -78,9 +83,29 @@
     }
   ],
   "activations": [
-    { "participant": "proxy", "from": 370, "to": 555, "type": "backend" },
-    { "participant": "informer", "from": 210, "to": 395, "type": "messagebus" },
-    { "participant": "api", "from": 210, "to": 315, "type": "external" },
-    { "participant": "kernel", "from": 450, "to": 555, "type": "external" }
+    {
+      "participant": "proxy",
+      "from": 370,
+      "to": 555,
+      "type": "backend"
+    },
+    {
+      "participant": "informer",
+      "from": 210,
+      "to": 395,
+      "type": "messagebus"
+    },
+    {
+      "participant": "api",
+      "from": 210,
+      "to": 315,
+      "type": "external"
+    },
+    {
+      "participant": "kernel",
+      "from": 450,
+      "to": 555,
+      "type": "external"
+    }
   ]
 }

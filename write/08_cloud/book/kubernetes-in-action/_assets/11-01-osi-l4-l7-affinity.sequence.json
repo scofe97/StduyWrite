@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "ClientIP 세션 어피니티 — 기록이 이후 연결을 같은 파드로 되돌린다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "participants": [
+    {
+      "id": "cl",
+      "type": "backend",
+      "label": "클라이언트",
+      "sublabel": "src .1.7"
+    },
+    {
+      "id": "dp",
+      "type": "security",
+      "label": "커널 규칙",
+      "sublabel": "데이터패스"
+    },
+    {
+      "id": "rec",
+      "type": "database",
+      "label": "기록",
+      "sublabel": "src → Pod"
+    },
+    {
+      "id": "pod",
+      "type": "cloud",
+      "label": "대상 Pod",
+      "sublabel": "ready endpoint"
+    }
+  ],
+  "segments": [
+    {
+      "from": 162,
+      "to": 318,
+      "label": "첫 연결 · 고르고 기록한다"
+    },
+    {
+      "from": 352,
+      "to": 508,
+      "label": "이후 연결 · 기록을 따른다"
+    }
+  ],
+  "messages": [
+    {
+      "id": "a1",
+      "from": "cl",
+      "to": "dp",
+      "y": 190,
+      "label": "첫 연결",
+      "variant": "emphasis"
+    },
+    {
+      "id": "a2",
+      "from": "dp",
+      "to": "pod",
+      "y": 242,
+      "label": "endpoint 하나 선택",
+      "variant": "emphasis"
+    },
+    {
+      "id": "a3",
+      "from": "dp",
+      "to": "rec",
+      "y": 294,
+      "label": "src → Pod 저장",
+      "variant": "security"
+    },
+    {
+      "id": "a4",
+      "from": "cl",
+      "to": "dp",
+      "y": 380,
+      "label": "같은 src 새 연결",
+      "variant": "emphasis"
+    },
+    {
+      "id": "a5",
+      "from": "dp",
+      "to": "rec",
+      "y": 432,
+      "label": "기록 조회",
+      "variant": "default"
+    },
+    {
+      "id": "a6",
+      "from": "dp",
+      "to": "pod",
+      "y": 484,
+      "label": "같은 파드로",
+      "variant": "emphasis"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "dp",
+      "from": 190,
+      "to": 298,
+      "type": "security"
+    },
+    {
+      "participant": "dp",
+      "from": 380,
+      "to": 488,
+      "type": "security"
+    }
+  ]
+}

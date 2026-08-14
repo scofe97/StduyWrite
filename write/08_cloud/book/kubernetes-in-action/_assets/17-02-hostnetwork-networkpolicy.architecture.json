@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "hostNetwork 파드의 NetworkPolicy — CNI가 구분하느냐에 따라 갈린다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "np",
+      "type": "security",
+      "label": "NetworkPolicy",
+      "pos": [
+        40,
+        240
+      ],
+      "size": [
+        120,
+        88
+      ],
+      "sublabel": "podSelector",
+      "tag": "app=agent"
+    },
+    {
+      "id": "pod",
+      "type": "cloud",
+      "label": "hostNetwork",
+      "pos": [
+        185,
+        240
+      ],
+      "size": [
+        120,
+        88
+      ],
+      "sublabel": "노드 IP를 쓴다",
+      "tag": "파드 IP 없음"
+    },
+    {
+      "id": "cni",
+      "type": "security",
+      "label": "CNI 판정",
+      "pos": [
+        330,
+        240
+      ],
+      "size": [
+        120,
+        88
+      ],
+      "sublabel": "파드로 식별되나",
+      "tag": "구현마다 다름"
+    },
+    {
+      "id": "tell",
+      "type": "backend",
+      "label": "구분 가능",
+      "pos": [
+        500,
+        110
+      ],
+      "size": [
+        120,
+        88
+      ],
+      "sublabel": "일반 파드와 동일",
+      "tag": "드문 구현"
+    },
+    {
+      "id": "block",
+      "type": "backend",
+      "label": "정책 적용",
+      "pos": [
+        645,
+        110
+      ],
+      "size": [
+        120,
+        88
+      ],
+      "sublabel": "의도대로 차단",
+      "tag": "셀렉터가 잡는다"
+    },
+    {
+      "id": "skip",
+      "type": "external",
+      "label": "구분 불가",
+      "pos": [
+        500,
+        370
+      ],
+      "size": [
+        120,
+        88
+      ],
+      "sublabel": "셀렉터가 건너뜀",
+      "tag": "흔한 구현"
+    },
+    {
+      "id": "nodeip",
+      "type": "security",
+      "label": "노드 취급",
+      "pos": [
+        645,
+        370
+      ],
+      "size": [
+        120,
+        88
+      ],
+      "sublabel": "정책이 안 걸린다",
+      "tag": "ipBlock 으로만"
+    }
+  ],
+  "connections": [
+    {
+      "from": "np",
+      "to": "pod",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "from": "pod",
+      "to": "cni",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "from": "cni",
+      "to": "tell"
+    },
+    {
+      "from": "cni",
+      "to": "skip",
+      "variant": "emphasis"
+    },
+    {
+      "from": "tell",
+      "to": "block",
+      "route": "straight"
+    },
+    {
+      "from": "skip",
+      "to": "nodeip",
+      "variant": "emphasis",
+      "route": "straight"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "플러그인이 파드를 구분하는 경우",
+      "wraps": [
+        "tell",
+        "block"
+      ],
+      "pad": 34
+    },
+    {
+      "kind": "region",
+      "label": "플러그인이 구분하지 못하는 경우",
+      "wraps": [
+        "skip",
+        "nodeip"
+      ],
+      "pad": 34
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "왜 불확실한가",
+      "items": [
+        "공식 문서가 이 동작을 undefined로 둔다",
+        "hostNetwork 파드는 노드 IP를 그대로 쓴다",
+        "패킷만으로는 노드가 보낸 것과 구별되지 않는다"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "흔한 구현에서 벌어지는 일",
+      "items": [
+        "podSelector·namespaceSelector가 이 파드를 건너뛴다",
+        "이 파드를 지목한 정책이 아무것도 잡지 못한다",
+        "막으려면 노드 IP를 ipBlock 으로 다뤄야 한다"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "그래서 확인할 것",
+      "items": [
+        "쓰는 CNI 문서에서 hostNetwork 취급을 읽는다",
+        "정책을 건 뒤 실제 요청으로 막히는지 시험한다",
+        "막힌다는 가정을 근거 없이 두지 않는다"
+      ]
+    }
+  ]
+}
