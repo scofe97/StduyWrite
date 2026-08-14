@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "hostPort는 veth를 건너 변환되고, hostNetwork는 노드 소켓에 바로 앉는다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "reqA",
+      "type": "external",
+      "label": "요청",
+      "pos": [
+        46,
+        96
+      ],
+      "size": [
+        120,
+        88
+      ],
+      "sublabel": "노드IP:11559",
+      "tag": "hostPort 경로"
+    },
+    {
+      "id": "dnat",
+      "type": "security",
+      "label": "portmap",
+      "pos": [
+        226,
+        96
+      ],
+      "size": [
+        120,
+        88
+      ],
+      "sublabel": "DNAT 재작성",
+      "tag": "CNI-HOSTPORT-DNAT"
+    },
+    {
+      "id": "veth",
+      "type": "messagebus",
+      "label": "veth 쌍",
+      "pos": [
+        406,
+        96
+      ],
+      "size": [
+        120,
+        88
+      ],
+      "sublabel": "netns 경계",
+      "tag": "여기를 건넌다"
+    },
+    {
+      "id": "ctrA",
+      "type": "backend",
+      "label": "컨테이너",
+      "pos": [
+        586,
+        96
+      ],
+      "size": [
+        120,
+        88
+      ],
+      "sublabel": "파드 netns",
+      "tag": "10.244.1.7:80"
+    },
+    {
+      "id": "reqB",
+      "type": "external",
+      "label": "요청",
+      "pos": [
+        46,
+        360
+      ],
+      "size": [
+        120,
+        88
+      ],
+      "sublabel": "노드IP:11559",
+      "tag": "hostNetwork 경로"
+    },
+    {
+      "id": "nosnat",
+      "type": "cloud",
+      "label": "변환 없음",
+      "pos": [
+        226,
+        360
+      ],
+      "size": [
+        120,
+        88
+      ],
+      "sublabel": "DNAT 불필요",
+      "tag": "목적지가 이미 노드"
+    },
+    {
+      "id": "sock",
+      "type": "backend",
+      "label": "노드 소켓",
+      "pos": [
+        406,
+        360
+      ],
+      "size": [
+        120,
+        88
+      ],
+      "sublabel": "노드IP:11559",
+      "tag": "veth 없이 직접"
+    },
+    {
+      "id": "ctrB",
+      "type": "backend",
+      "label": "컨테이너",
+      "pos": [
+        586,
+        360
+      ],
+      "size": [
+        120,
+        88
+      ],
+      "sublabel": "노드 netns",
+      "tag": "자기 IP 없음"
+    }
+  ],
+  "connections": [
+    {
+      "from": "reqA",
+      "to": "dnat",
+      "label": "노드 진입",
+      "variant": "emphasis"
+    },
+    {
+      "from": "dnat",
+      "to": "veth",
+      "label": "80으로 변환",
+      "variant": "emphasis"
+    },
+    {
+      "from": "veth",
+      "to": "ctrA",
+      "label": "진입",
+      "variant": "emphasis"
+    },
+    {
+      "from": "reqB",
+      "to": "nosnat",
+      "label": "노드 도착",
+      "variant": "emphasis"
+    },
+    {
+      "from": "nosnat",
+      "to": "sock",
+      "label": "그대로 전달",
+      "variant": "emphasis"
+    },
+    {
+      "from": "sock",
+      "to": "ctrB",
+      "label": "공유",
+      "variant": "emphasis"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "파드 전용 네트워크 네임스페이스",
+      "wraps": [
+        "ctrA"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "security-group",
+      "label": "노드 네트워크 네임스페이스 공유",
+      "wraps": [
+        "sock",
+        "ctrB"
+      ],
+      "pad": 30
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "hostPort — 포워딩이라 변환이 있다",
+      "items": [
+        "CNI portmap이 노드 11559를 컨테이너 80으로 DNAT 재작성한다",
+        "패킷이 veth 쌍을 건너 파드 전용 netns로 들어간다",
+        "파드는 자기 IP를 그대로 가지고 EndpointSlice에도 파드 IP가 적힌다",
+        "스펙에 적은 포트 하나만 노드에 열린다"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "hostNetwork — 공유라 변환이 없다",
+      "items": [
+        "프로세스가 노드 인터페이스에 직접 바인딩해 재작성할 목적지가 없다",
+        "veth를 한 번도 건너지 않고 파드는 노드 IP를 쓴다",
+        "hostPort를 적으면 containerPort와 같아야 하고 생략하면 그 값이 기본값이 된다",
+        "프로세스가 바인딩하는 모든 포트가 노드에 열려 노출면이 넓다"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "충돌이 드러나는 시점이 다르다",
+      "items": [
+        "hostPort는 스케줄러가 포트 점유를 검사해 자리가 없으면 Pending으로 막는다",
+        "hostNetwork는 포트를 선언해야 스케줄러가 인지하며 안 하면 런타임에 바인딩이 실패한다",
+        "노출면이 넓은 쪽이 hostNetwork라 원서는 보안상 이상적이지 않다고 지적한다"
+      ]
+    }
+  ]
+}
