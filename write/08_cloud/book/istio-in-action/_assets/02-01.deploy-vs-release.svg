@@ -1,0 +1,75 @@
+<svg viewBox="0 0 820 300" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     aria-labelledby="t1 d1"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title id="t1">배포와 릴리스가 한 사건일 때와 분리됐을 때</title>
+  <desc id="d1">위쪽은 새 버전을 올리는 순간 Kubernetes Service가 트래픽을 나눠 보내 유료 고객이 곧바로 새 코드를 만나는 흐름입니다. 아래쪽은 DestinationRule로 버전을 구분하고 VirtualService로 전량 v1에 묶은 뒤, x-dark-launch 헤더를 가진 요청만 v2로 보내는 흐름입니다.</desc>
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 13px; }
+    .box-detail { fill: #3a3632; font-size: 12px; }
+    .stem { fill: #e8e4df; font-size: 15px; }
+    .sub { fill: #b8b3ad; font-size: 12px; }
+    .risk-box { fill: #f2d4d4; }
+    .risk-text { fill: #7a1f1f; font-size: 12px; }
+    .edge { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+  </style>
+  <rect width="820" height="300" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5"
+            markerUnits="strokeWidth"
+            markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="30" class="stem">배포 = 릴리스</text>
+  <text x="24" y="49" class="sub">Kubernetes 기본값</text>
+
+  <rect x="24" y="62" width="134" height="50" rx="4" class="box"/>
+  <text x="91" y="84" text-anchor="middle" class="box-title">kubectl apply</text>
+  <text x="91" y="103" text-anchor="middle" class="box-detail">catalog v2 배포</text>
+
+  <path d="M 166 87 L 210 87" class="edge" marker-end="url(#ar)"/>
+
+  <rect x="218" y="62" width="134" height="50" rx="4" class="box"/>
+  <text x="285" y="84" text-anchor="middle" class="box-title">Service</text>
+  <text x="285" y="103" text-anchor="middle" class="box-detail">부하 자동 분배</text>
+
+  <path d="M 360 87 L 404 87" class="edge" marker-end="url(#ar)"/>
+
+  <rect x="412" y="62" width="170" height="50" rx="4" class="risk-box"/>
+  <text x="497" y="84" text-anchor="middle" class="risk-text">위험 · 유료 고객이</text>
+  <text x="497" y="103" text-anchor="middle" class="risk-text">v2 를 먼저 만남</text>
+
+  <line x1="24" y1="140" x2="796" y2="140" class="edge"/>
+
+  <text x="24" y="172" class="stem">배포 다음 릴리스</text>
+  <text x="24" y="191" class="sub">§4 · 메시가 분리</text>
+
+  <rect x="24" y="204" width="134" height="58" rx="4" class="box"/>
+  <text x="91" y="226" text-anchor="middle" class="box-title">1. 배포</text>
+  <text x="91" y="247" text-anchor="middle" class="box-detail">catalog v2 올림</text>
+
+  <path d="M 166 233 L 210 233" class="edge" marker-end="url(#ar)"/>
+
+  <rect x="218" y="204" width="164" height="58" rx="4" class="box"/>
+  <text x="300" y="224" text-anchor="middle" class="box-title">2. 트래픽 고정</text>
+  <text x="300" y="243" text-anchor="middle" class="box-detail">DestinationRule</text>
+  <text x="300" y="258" text-anchor="middle" class="box-detail">전량 v1</text>
+
+  <path d="M 390 233 L 434 233" class="edge" marker-end="url(#ar)"/>
+
+  <rect x="442" y="204" width="176" height="58" rx="4" class="box"/>
+  <text x="530" y="224" text-anchor="middle" class="box-title">3. 릴리스</text>
+  <text x="530" y="243" text-anchor="middle" class="box-detail">x-dark-launch: v2</text>
+  <text x="530" y="258" text-anchor="middle" class="box-detail">이 헤더만 v2 로</text>
+
+  <path d="M 626 233 L 670 233" class="edge" marker-end="url(#ar)"/>
+
+  <rect x="678" y="204" width="118" height="58" rx="4" class="box"/>
+  <text x="737" y="226" text-anchor="middle" class="box-title">나머지</text>
+  <text x="737" y="247" text-anchor="middle" class="box-detail">전부 v1</text>
+</svg>

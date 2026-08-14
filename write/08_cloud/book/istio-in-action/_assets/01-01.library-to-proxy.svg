@@ -1,0 +1,85 @@
+<svg viewBox="0 0 760 352" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     aria-labelledby="t1 d1"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title id="t1">애플리케이션 네트워킹이 라이브러리에서 프록시로 옮겨간 구조</title>
+  <desc id="d1">왼쪽은 각 서비스가 Hystrix, Ribbon, Eureka 같은 라이브러리를 애플리케이션 안에 직접 포함해 언어 제약을 받는 구조입니다. 오른쪽은 같은 기능이 애플리케이션 옆의 Envoy 프록시로 빠져 사이드카로 배포되고, 컨트롤 플레인이 그 프록시들에 설정을 내려보내는 구조입니다.</desc>
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 13px; }
+    .box-detail { fill: #3a3632; font-size: 12px; }
+    .stem { fill: #e8e4df; font-size: 15px; }
+    .sub { fill: #b8b3ad; font-size: 12px; }
+    .warn-box { fill: rgb(212,168,83); }
+    .warn-text { fill: #0d0d0d; font-size: 12px; }
+    .edge { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+  </style>
+  <rect width="760" height="352" fill="#0d0d0d"/>
+
+  <text x="30" y="34" class="stem">라이브러리 방식</text>
+  <text x="30" y="52" class="sub">§3 · 애플리케이션 안</text>
+
+  <rect x="30" y="70" width="150" height="86" rx="4" class="box"/>
+  <text x="105" y="92" text-anchor="middle" class="box-title">서비스 A (Java)</text>
+  <text x="105" y="112" text-anchor="middle" class="box-detail">Hystrix</text>
+  <text x="105" y="130" text-anchor="middle" class="box-detail">Ribbon</text>
+  <text x="105" y="148" text-anchor="middle" class="box-detail">Eureka</text>
+
+  <rect x="30" y="172" width="150" height="86" rx="4" class="box"/>
+  <text x="105" y="194" text-anchor="middle" class="box-title">서비스 B (Java)</text>
+  <text x="105" y="214" text-anchor="middle" class="box-detail">Hystrix</text>
+  <text x="105" y="232" text-anchor="middle" class="box-detail">Ribbon</text>
+  <text x="105" y="250" text-anchor="middle" class="box-detail">Eureka</text>
+
+  <rect x="30" y="274" width="150" height="66" rx="4" class="warn-box"/>
+  <text x="105" y="298" text-anchor="middle" class="warn-text">주의 · 서비스 C</text>
+  <text x="105" y="316" text-anchor="middle" class="warn-text">NodeJS 라면</text>
+  <text x="105" y="332" text-anchor="middle" class="warn-text">대응물을 다시 탐색</text>
+
+  <path d="M 200 205 L 250 205" class="edge" marker-end="url(#a)"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5"
+            markerUnits="strokeWidth"
+            markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+  <text x="225" y="196" text-anchor="middle" class="sub">밀어내기</text>
+
+  <text x="290" y="34" class="stem">프록시 방식</text>
+  <text x="290" y="52" class="sub">§4·§5 · 프로세스 밖</text>
+
+  <rect x="290" y="70" width="220" height="86" rx="4" class="box"/>
+  <text x="400" y="92" text-anchor="middle" class="box-title">Pod</text>
+  <rect x="304" y="104" width="90" height="38" rx="3" fill="#e8e4df" stroke="#b8b3ad"/>
+  <text x="349" y="128" text-anchor="middle" class="box-detail" style="fill:#0d0d0d">서비스 A</text>
+  <rect x="406" y="104" width="90" height="38" rx="3" fill="#e8e4df" stroke="#b8b3ad"/>
+  <text x="451" y="128" text-anchor="middle" class="box-detail" style="fill:#0d0d0d">Envoy</text>
+
+  <rect x="290" y="172" width="220" height="86" rx="4" class="box"/>
+  <text x="400" y="194" text-anchor="middle" class="box-title">Pod</text>
+  <rect x="304" y="206" width="90" height="38" rx="3" fill="#e8e4df" stroke="#b8b3ad"/>
+  <text x="349" y="230" text-anchor="middle" class="box-detail" style="fill:#0d0d0d">서비스 B</text>
+  <rect x="406" y="206" width="90" height="38" rx="3" fill="#e8e4df" stroke="#b8b3ad"/>
+  <text x="451" y="230" text-anchor="middle" class="box-detail" style="fill:#0d0d0d">Envoy</text>
+
+  <rect x="290" y="274" width="220" height="66" rx="4" class="box"/>
+  <text x="400" y="298" text-anchor="middle" class="box-title">Pod</text>
+  <rect x="304" y="308" width="90" height="24" rx="3" fill="#e8e4df" stroke="#b8b3ad"/>
+  <text x="349" y="325" text-anchor="middle" class="box-detail" style="fill:#0d0d0d">서비스 C</text>
+  <rect x="406" y="308" width="90" height="24" rx="3" fill="#e8e4df" stroke="#b8b3ad"/>
+  <text x="451" y="325" text-anchor="middle" class="box-detail" style="fill:#0d0d0d">Envoy</text>
+
+  <path d="M 600 150 L 520 113" class="edge" marker-end="url(#a)"/>
+  <path d="M 600 190 L 520 215" class="edge" marker-end="url(#a)"/>
+  <path d="M 600 215 L 520 305" class="edge" marker-end="url(#a)"/>
+
+  <rect x="590" y="150" width="150" height="66" rx="4" class="box"/>
+  <text x="665" y="174" text-anchor="middle" class="box-title">컨트롤 플레인</text>
+  <text x="665" y="194" text-anchor="middle" class="box-detail">설정을 내려보냄</text>
+  <text x="665" y="210" text-anchor="middle" class="box-detail">운영자 API 노출</text>
+
+  <text x="590" y="248" class="sub">데이터 플레인 = Envoy 집합</text>
+  <text x="590" y="266" class="sub">언어 제약 없음</text>
+</svg>
