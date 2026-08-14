@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "fsGroup 은 양쪽을 함께 움직여 권한의 그룹 칸을 맞춘다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "proc",
+      "type": "cloud",
+      "label": "컨테이너 프로세스",
+      "pos": [
+        46,
+        60
+      ],
+      "size": [
+        168,
+        88
+      ],
+      "sublabel": "runAsUser 1000"
+    },
+    {
+      "id": "supp",
+      "type": "security",
+      "label": "보충 그룹 2000",
+      "pos": [
+        340,
+        60
+      ],
+      "size": [
+        168,
+        88
+      ],
+      "sublabel": "프로세스 쪽 변화"
+    },
+    {
+      "id": "file",
+      "type": "database",
+      "label": "볼륨 파일",
+      "pos": [
+        46,
+        320
+      ],
+      "size": [
+        168,
+        88
+      ],
+      "sublabel": "mode 0640"
+    },
+    {
+      "id": "own",
+      "type": "backend",
+      "label": "그룹 소유자 2000",
+      "pos": [
+        340,
+        320
+      ],
+      "size": [
+        168,
+        88
+      ],
+      "sublabel": "파일 쪽 변화"
+    },
+    {
+      "id": "match",
+      "type": "external",
+      "label": "그룹 칸이 맞는다",
+      "pos": [
+        634,
+        190
+      ],
+      "size": [
+        168,
+        88
+      ],
+      "sublabel": "읽고 쓸 수 있음",
+      "tag": "사용자 칸은 못 바꿈"
+    }
+  ],
+  "connections": [
+    {
+      "from": "proc",
+      "to": "supp",
+      "label": "fsGroup 이 넣음",
+      "variant": "emphasis"
+    },
+    {
+      "from": "file",
+      "to": "own",
+      "label": "fsGroup 이 바꿈",
+      "variant": "emphasis"
+    },
+    {
+      "from": "supp",
+      "to": "match"
+    },
+    {
+      "from": "own",
+      "to": "match"
+    }
+  ]
+}
