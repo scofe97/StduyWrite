@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Downward API 는 파드 자신의 값을 두 갈래로 넣는다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "stages": [
+    {
+      "label": "무엇을"
+    },
+    {
+      "label": "어떻게 참조"
+    },
+    {
+      "label": "주입 형태"
+    },
+    {
+      "label": "앱이 받는 값"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "meta",
+      "type": "cloud",
+      "label": "메타데이터",
+      "stage": 0,
+      "row": 0,
+      "sublabel": "이름·IP·노드"
+    },
+    {
+      "id": "fr",
+      "type": "security",
+      "label": "fieldRef",
+      "stage": 1,
+      "row": 0,
+      "sublabel": "스케줄 후 확정"
+    },
+    {
+      "id": "envv",
+      "type": "backend",
+      "label": "환경변수",
+      "stage": 2,
+      "row": 0,
+      "sublabel": "POD_NAME 등"
+    },
+    {
+      "id": "proc",
+      "type": "external",
+      "label": "문자열",
+      "stage": 3,
+      "row": 0,
+      "sublabel": "그대로 도착"
+    },
+    {
+      "id": "res",
+      "type": "cloud",
+      "label": "한도 값",
+      "stage": 0,
+      "row": 1,
+      "sublabel": "같은 spec 에 있음"
+    },
+    {
+      "id": "rf",
+      "type": "security",
+      "label": "resource",
+      "stage": 1,
+      "row": 1,
+      "sublabel": "divisor 로 단위"
+    },
+    {
+      "id": "volf",
+      "type": "backend",
+      "label": "볼륨 파일",
+      "stage": 2,
+      "row": 1,
+      "sublabel": "containerName 필수"
+    },
+    {
+      "id": "read",
+      "type": "external",
+      "label": "정수",
+      "stage": 3,
+      "row": 1,
+      "sublabel": "500m 이 1 로 올림"
+    }
+  ],
+  "flows": [
+    {
+      "id": "meta-fr",
+      "from": "meta",
+      "to": "fr",
+      "variant": "emphasis",
+      "label": "메타를 고름"
+    },
+    {
+      "id": "fr-envv",
+      "from": "fr",
+      "to": "envv",
+      "variant": "default",
+      "label": "값이 채워짐"
+    },
+    {
+      "id": "envv-proc",
+      "from": "envv",
+      "to": "proc",
+      "variant": "emphasis",
+      "label": "환경에서 읽음"
+    },
+    {
+      "id": "res-rf",
+      "from": "res",
+      "to": "rf",
+      "variant": "emphasis",
+      "label": "리소스를 고름"
+    },
+    {
+      "id": "rf-volf",
+      "from": "rf",
+      "to": "volf",
+      "variant": "default",
+      "label": "파일로 투영"
+    },
+    {
+      "id": "volf-read",
+      "from": "volf",
+      "to": "read",
+      "variant": "emphasis",
+      "label": "나눈 뒤 올림"
+    }
+  ]
+}

@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "같은 수정이 주입 방식에 따라 세 갈래로 갈린다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "stages": [
+    {
+      "label": "ConfigMap 수정"
+    },
+    {
+      "label": "받은 방식"
+    },
+    {
+      "label": "기다린 뒤"
+    },
+    {
+      "label": "결과"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "e1",
+      "type": "external",
+      "label": "수정",
+      "stage": 0,
+      "row": 0,
+      "sublabel": "kubectl edit"
+    },
+    {
+      "id": "m1",
+      "type": "security",
+      "label": "환경변수",
+      "stage": 1,
+      "row": 0,
+      "sublabel": "시작 시 복사됨"
+    },
+    {
+      "id": "w1",
+      "type": "cloud",
+      "label": "그대로",
+      "stage": 2,
+      "row": 0,
+      "sublabel": "아무리 기다려도"
+    },
+    {
+      "id": "r1",
+      "type": "database",
+      "label": "파드 교체",
+      "stage": 3,
+      "row": 0,
+      "sublabel": "그때야 새 값"
+    },
+    {
+      "id": "e2",
+      "type": "external",
+      "label": "같은 수정",
+      "stage": 0,
+      "row": 1,
+      "sublabel": "같은 오브젝트"
+    },
+    {
+      "id": "m2",
+      "type": "security",
+      "label": "볼륨",
+      "stage": 1,
+      "row": 1,
+      "sublabel": "일반 마운트"
+    },
+    {
+      "id": "w2",
+      "type": "cloud",
+      "label": "약 60초",
+      "stage": 2,
+      "row": 1,
+      "sublabel": "동기화 주기"
+    },
+    {
+      "id": "r2",
+      "type": "backend",
+      "label": "무중단",
+      "stage": 3,
+      "row": 1,
+      "sublabel": "파일이 바뀜"
+    },
+    {
+      "id": "e3",
+      "type": "external",
+      "label": "같은 수정",
+      "stage": 0,
+      "row": 2,
+      "sublabel": "같은 오브젝트"
+    },
+    {
+      "id": "m3",
+      "type": "security",
+      "label": "subPath",
+      "stage": 1,
+      "row": 2,
+      "sublabel": "심링크 밖"
+    },
+    {
+      "id": "w3",
+      "type": "cloud",
+      "label": "그대로",
+      "stage": 2,
+      "row": 2,
+      "sublabel": "체인이 끊김"
+    },
+    {
+      "id": "r3",
+      "type": "database",
+      "label": "옛 값",
+      "stage": 3,
+      "row": 2,
+      "sublabel": "영영 안 바뀜"
+    }
+  ],
+  "flows": [
+    {
+      "id": "e1-m1",
+      "from": "e1",
+      "to": "m1",
+      "variant": "emphasis",
+      "label": "env 로"
+    },
+    {
+      "id": "m1-w1",
+      "from": "m1",
+      "to": "w1",
+      "variant": "default",
+      "label": "고정됨"
+    },
+    {
+      "id": "w1-r1",
+      "from": "w1",
+      "to": "r1",
+      "variant": "emphasis",
+      "label": "재시작"
+    },
+    {
+      "id": "e2-m2",
+      "from": "e2",
+      "to": "m2",
+      "variant": "emphasis",
+      "label": "볼륨으로"
+    },
+    {
+      "id": "m2-w2",
+      "from": "m2",
+      "to": "w2",
+      "variant": "default",
+      "label": "동기화"
+    },
+    {
+      "id": "w2-r2",
+      "from": "w2",
+      "to": "r2",
+      "variant": "emphasis",
+      "label": "교체"
+    },
+    {
+      "id": "e3-m3",
+      "from": "e3",
+      "to": "m3",
+      "variant": "emphasis",
+      "label": "subPath 로"
+    },
+    {
+      "id": "m3-w3",
+      "from": "m3",
+      "to": "w3",
+      "variant": "default",
+      "label": "우회"
+    },
+    {
+      "id": "w3-r3",
+      "from": "w3",
+      "to": "r3",
+      "variant": "emphasis",
+      "label": "미전파"
+    }
+  ]
+}
