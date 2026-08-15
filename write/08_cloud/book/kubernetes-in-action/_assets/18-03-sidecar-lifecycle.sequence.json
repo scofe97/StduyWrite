@@ -3,15 +3,40 @@
   "diagram_type": "sequence",
   "meta": {
     "title": "네이티브 사이드카는 먼저 뜨고 나중에 내려간다",
-    "viewBox": [1200, 660],
+    "viewBox": [
+      1200,
+      700
+    ],
     "quality_profile": "showcase",
-    "legend": { "mode": "hidden" }
+    "legend": {
+      "mode": "hidden"
+    }
   },
   "participants": [
-    { "id": "kubelet", "type": "backend", "label": "KL", "sublabel": "kubelet" },
-    { "id": "side", "type": "messagebus", "label": "SC", "sublabel": "사이드카" },
-    { "id": "main", "type": "frontend", "label": "MC", "sublabel": "메인 컨테이너" },
-    { "id": "job", "type": "external", "label": "JOB", "sublabel": "Job 컨트롤러" }
+    {
+      "id": "kubelet",
+      "type": "backend",
+      "label": "KL",
+      "sublabel": "kubelet"
+    },
+    {
+      "id": "side",
+      "type": "messagebus",
+      "label": "SC",
+      "sublabel": "사이드카"
+    },
+    {
+      "id": "main",
+      "type": "frontend",
+      "label": "MC",
+      "sublabel": "메인 컨테이너"
+    },
+    {
+      "id": "job",
+      "type": "external",
+      "label": "JOB",
+      "sublabel": "Job 컨트롤러"
+    }
   ],
   "segments": [],
   "messages": [
@@ -21,8 +46,7 @@
       "to": "side",
       "y": 200,
       "label": "시작 — restartPolicy: Always",
-      "variant": "emphasis",
-      "note": "initContainers 에 있지만 종료를 기다리지 않는다"
+      "variant": "emphasis"
     },
     {
       "id": "started",
@@ -74,38 +98,29 @@
     }
   ],
   "activations": [
-    { "participant": "kubelet", "from": 190, "to": 625, "type": "backend" },
-    { "participant": "side", "from": 210, "to": 560, "type": "messagebus" },
-    { "participant": "main", "from": 350, "to": 420, "type": "frontend" },
-    { "participant": "job", "from": 605, "to": 640, "type": "external" }
-  ],
-  "cards": [
     {
-      "dot": "cyan",
-      "title": "먼저 뜬다",
-      "items": [
-        "initContainers 에 있지만 종료를 기다리지 않는다",
-        "started=true 만 확인하고 메인으로 넘어간다",
-        "그래서 메인과 나란히 돈다"
-      ]
+      "participant": "kubelet",
+      "from": 190,
+      "to": 625,
+      "type": "backend"
     },
     {
-      "dot": "emerald",
-      "title": "나중에 내려간다",
-      "items": [
-        "메인이 완전히 멈춘 뒤에야 SIGTERM 을 받는다",
-        "여러 개면 스펙에 적은 역순으로 내려간다",
-        "READY 가 2/2 → 1/2 → 0/2 로 두 번 떨어진다"
-      ]
+      "participant": "side",
+      "from": 210,
+      "to": 560,
+      "type": "messagebus"
     },
     {
-      "dot": "violet",
-      "title": "완료 판정에서 빠진다",
-      "items": [
-        "사이드카의 종료 코드는 보지 않는다",
-        "메인만 성공하면 파드가 Succeeded 다",
-        "Job 완료는 사이드카까지 내려간 뒤 올라간다"
-      ]
+      "participant": "main",
+      "from": 350,
+      "to": 420,
+      "type": "frontend"
+    },
+    {
+      "participant": "job",
+      "from": 605,
+      "to": 640,
+      "type": "external"
     }
   ]
 }
