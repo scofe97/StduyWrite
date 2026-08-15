@@ -4,15 +4,23 @@
   "meta": {
     "title": "peer 주소는 API server가 아니라 이름 계산과 DNS로 얻는다",
     "quality_profile": "showcase",
-    "legend": { "mode": "hidden" }
+    "legend": {
+      "mode": "hidden"
+    }
   },
   "components": [
     {
       "id": "down",
       "type": "cloud",
       "label": "Downward API",
-      "pos": [40, 190],
-      "size": [120, 88],
+      "pos": [
+        40,
+        190
+      ],
+      "size": [
+        120,
+        88
+      ],
       "sublabel": "자기 인덱스",
       "tag": "자기 정보만"
     },
@@ -20,8 +28,14 @@
       "id": "comp",
       "type": "external",
       "label": "completions",
-      "pos": [185, 190],
-      "size": [120, 88],
+      "pos": [
+        185,
+        190
+      ],
+      "size": [
+        120,
+        88
+      ],
       "sublabel": "2",
       "tag": "peer 범위 0..1"
     },
@@ -29,8 +43,14 @@
       "id": "pod0",
       "type": "backend",
       "label": "파드 0",
-      "pos": [40, 360],
-      "size": [120, 88],
+      "pos": [
+        40,
+        360
+      ],
+      "size": [
+        120,
+        88
+      ],
       "sublabel": "comm-demo-0",
       "tag": "나는 0번"
     },
@@ -38,8 +58,14 @@
       "id": "calc",
       "type": "frontend",
       "label": "이름 조립",
-      "pos": [185, 360],
-      "size": [120, 88],
+      "pos": [
+        185,
+        360
+      ],
+      "size": [
+        120,
+        88
+      ],
       "sublabel": "comm-demo-1",
       "tag": ".demo-service"
     },
@@ -47,8 +73,14 @@
       "id": "dns",
       "type": "messagebus",
       "label": "클러스터 DNS",
-      "pos": [330, 360],
-      "size": [120, 88],
+      "pos": [
+        330,
+        360
+      ],
+      "size": [
+        120,
+        88
+      ],
       "sublabel": "headless Service",
       "tag": "VIP 없음"
     },
@@ -56,37 +88,49 @@
       "id": "pod1",
       "type": "backend",
       "label": "파드 1",
-      "pos": [475, 360],
-      "size": [120, 88],
+      "pos": [
+        475,
+        360
+      ],
+      "size": [
+        120,
+        88
+      ],
       "sublabel": "comm-demo-1",
       "tag": "파드 IP 응답"
     }
   ],
   "connections": [
-    { "from": "down", "to": "pod0", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" },
-    { "from": "comp", "to": "calc", "fromSide": "bottom", "toSide": "top" },
-    { "from": "pod0", "to": "calc", "variant": "emphasis", "route": "straight" },
-    { "from": "calc", "to": "dns", "variant": "emphasis", "route": "straight" },
-    { "from": "dns", "to": "pod1", "variant": "emphasis", "route": "straight" }
-  ],
-  "cards": [
     {
-      "dot": "cyan",
-      "title": "자기 정보와 남의 주소가 갈린다",
-      "items": [
-        "Downward API는 자기 인덱스까지만 알려 준다",
-        "peer 주소는 headless Service DNS가 답한다",
-        "API server에는 묻지 않는다"
-      ]
+      "from": "down",
+      "to": "pod0",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
     },
     {
-      "dot": "emerald",
-      "title": "이름이 계산 가능한 이유",
-      "items": [
-        "파드 이름에는 임의 문자열이 붙지만 hostname에는 없다",
-        "Indexed 모드라 인덱스가 0부터 연속이다",
-        "completions만 알면 나머지 peer를 전부 짚는다"
-      ]
+      "from": "comp",
+      "to": "calc",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "pod0",
+      "to": "calc",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "from": "calc",
+      "to": "dns",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "from": "dns",
+      "to": "pod1",
+      "variant": "emphasis",
+      "route": "straight"
     }
   ]
 }
