@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "위 유형이 아래 유형을 품는다 — 호출자는 층마다 다르다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "c1",
+      "type": "external",
+      "label": "외부 클라이언트",
+      "sublabel": "인터넷에서",
+      "tag": "",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        200,
+        90
+      ]
+    },
+    {
+      "id": "lb",
+      "type": "cloud",
+      "label": "LoadBalancer",
+      "sublabel": "클라우드 LB · MetalLB",
+      "tag": "L4 외부 통합",
+      "pos": [
+        340,
+        40
+      ],
+      "size": [
+        220,
+        90
+      ]
+    },
+    {
+      "id": "c2",
+      "type": "external",
+      "label": "외부 LB",
+      "sublabel": "노드 IP 를 앎",
+      "tag": "",
+      "pos": [
+        40,
+        180
+      ],
+      "size": [
+        200,
+        90
+      ]
+    },
+    {
+      "id": "np",
+      "type": "messagebus",
+      "label": "NodePort",
+      "sublabel": "30000~32767",
+      "tag": "모든 노드에 고정 포트",
+      "pos": [
+        340,
+        180
+      ],
+      "size": [
+        220,
+        90
+      ]
+    },
+    {
+      "id": "c3",
+      "type": "external",
+      "label": "안쪽 워크로드",
+      "sublabel": "다른 Pod 에서",
+      "tag": "",
+      "pos": [
+        40,
+        320
+      ],
+      "size": [
+        200,
+        90
+      ]
+    },
+    {
+      "id": "cip",
+      "type": "backend",
+      "label": "ClusterIP",
+      "sublabel": "가상 IP",
+      "tag": "kube-proxy 가 DNAT",
+      "pos": [
+        340,
+        320
+      ],
+      "size": [
+        220,
+        90
+      ]
+    },
+    {
+      "id": "hl",
+      "type": "frontend",
+      "label": "Headless",
+      "sublabel": "clusterIP: None",
+      "tag": "DNS 가 명단을 반환",
+      "pos": [
+        660,
+        320
+      ],
+      "size": [
+        210,
+        90
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "s1",
+      "from": "c1",
+      "to": "lb",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "s2",
+      "from": "c2",
+      "to": "np",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "s3",
+      "from": "c3",
+      "to": "cip",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "s4",
+      "from": "lb",
+      "to": "np",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "s5",
+      "from": "np",
+      "to": "cip",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "s6",
+      "from": "cip",
+      "to": "hl",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "LB 를 뺀 변형"
+    }
+  ]
+}

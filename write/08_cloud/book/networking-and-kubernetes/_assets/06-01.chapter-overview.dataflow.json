@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "VPC 부품에서 시작해 Pod IP 가 VPC 주소가 되는 데까지",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      1280,
+      460
+    ]
+  },
+  "stages": [
+    {
+      "label": "§1 부품"
+    },
+    {
+      "label": "§2·§3 경계와 관문"
+    },
+    {
+      "label": "§4·§5 EKS"
+    },
+    {
+      "label": "§6·§7 직결"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "part",
+      "type": "cloud",
+      "label": "부품",
+      "sublabel": "VPC·서브넷·ENI",
+      "tag": "Pod IP 도 여기서",
+      "stage": 0,
+      "row": 0,
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "gate",
+      "type": "security",
+      "label": "경계·관문",
+      "sublabel": "SG·NACL·NAT·ELB",
+      "tag": "사고의 단골 지점",
+      "stage": 1,
+      "row": 0,
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "eks",
+      "type": "backend",
+      "label": "EKS",
+      "sublabel": "두 VPC · 세 모드",
+      "tag": "노드당 Pod 상한",
+      "stage": 2,
+      "row": 0,
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "direct",
+      "type": "messagebus",
+      "label": "직결",
+      "sublabel": "VPC CNI · ALB",
+      "tag": "Pod IP 로 바로",
+      "stage": 3,
+      "row": 0,
+      "width": 129,
+      "height": 90
+    }
+  ],
+  "flows": [
+    {
+      "id": "o1",
+      "from": "part",
+      "to": "gate",
+      "label": "그 위에",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "o2",
+      "from": "gate",
+      "to": "eks",
+      "label": "얹으면",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "o3",
+      "from": "eks",
+      "to": "direct",
+      "label": "그래서",
+      "variant": "emphasis",
+      "route": "straight"
+    }
+  ]
+}

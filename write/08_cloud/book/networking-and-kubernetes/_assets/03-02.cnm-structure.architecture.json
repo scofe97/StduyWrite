@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "CNM 세 부품과 CNM 이 제공하지 않는 것",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "ctrl",
+      "type": "frontend",
+      "label": "네트워크 컨트롤러",
+      "sublabel": "Docker engine API",
+      "pos": [
+        40,
+        210
+      ],
+      "size": [
+        180,
+        80
+      ],
+      "tag": "배선을 지휘"
+    },
+    {
+      "id": "sandbox",
+      "type": "backend",
+      "label": "sandbox",
+      "sublabel": "netns 를 관리",
+      "pos": [
+        310,
+        90
+      ],
+      "size": [
+        190,
+        80
+      ],
+      "tag": "호스트의 모든 컨테이너"
+    },
+    {
+      "id": "endpoint",
+      "type": "messagebus",
+      "label": "endpoint",
+      "sublabel": "네트워크 위의 호스트",
+      "pos": [
+        310,
+        210
+      ],
+      "size": [
+        190,
+        80
+      ],
+      "tag": "iptables 로 격리"
+    },
+    {
+      "id": "network",
+      "type": "cloud",
+      "label": "network",
+      "sublabel": "endpoint 의 집합",
+      "pos": [
+        310,
+        330
+      ],
+      "size": [
+        190,
+        80
+      ],
+      "tag": "global 드라이버가 조율"
+    },
+    {
+      "id": "kv",
+      "type": "security",
+      "label": "외부 KV 저장소",
+      "sublabel": "Consul·etcd·Zookeeper",
+      "pos": [
+        590,
+        330
+      ],
+      "size": [
+        190,
+        80
+      ],
+      "tag": "CNM 이 제공하지 않음"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "libnetwork — Docker 의 CNM 구현",
+      "wraps": [
+        "sandbox",
+        "endpoint",
+        "network"
+      ],
+      "pad": 30
+    }
+  ],
+  "connections": [
+    {
+      "id": "c1",
+      "from": "ctrl",
+      "to": "endpoint",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "c2",
+      "from": "sandbox",
+      "to": "endpoint",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "c3",
+      "from": "endpoint",
+      "to": "network",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "c4",
+      "from": "network",
+      "to": "kv",
+      "variant": "dashed",
+      "label": "지원: libkv 의존",
+      "route": "straight"
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "정책은 선택되는 순간부터 판정을 시작한다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      1280,
+      520
+    ]
+  },
+  "stages": [
+    {
+      "label": "① 선택 판정"
+    },
+    {
+      "label": "② 방향 판정"
+    },
+    {
+      "label": "③ 규칙 대조"
+    },
+    {
+      "label": "④ 결과"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "sel",
+      "type": "security",
+      "label": "선택 판정",
+      "sublabel": "spec.podSelector",
+      "tag": "안 걸리면 무제한",
+      "stage": 0,
+      "row": 0,
+      "width": 129,
+      "height": 80
+    },
+    {
+      "id": "dir",
+      "type": "backend",
+      "label": "방향 판정",
+      "sublabel": "policyTypes",
+      "tag": "없는 방향은 제한 없음",
+      "stage": 1,
+      "row": 0,
+      "width": 129,
+      "height": 80
+    },
+    {
+      "id": "rule",
+      "type": "cloud",
+      "label": "규칙 대조",
+      "sublabel": "전 정책 합집합",
+      "tag": "허용만 더해짐",
+      "stage": 2,
+      "row": 0,
+      "width": 129,
+      "height": 80
+    },
+    {
+      "id": "allow",
+      "type": "backend",
+      "label": "허용",
+      "sublabel": "규칙이 매칭됨",
+      "tag": "예외로 열린 것",
+      "stage": 3,
+      "row": 0,
+      "width": 129,
+      "height": 80
+    },
+    {
+      "id": "deny",
+      "type": "security",
+      "label": "차단",
+      "sublabel": "매칭 없음",
+      "tag": "선택된 순간의 기본값",
+      "stage": 3,
+      "row": 1,
+      "width": 129,
+      "height": 80
+    }
+  ],
+  "flows": [
+    {
+      "id": "d1",
+      "from": "sel",
+      "to": "dir",
+      "label": "걸리면",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "d2",
+      "from": "dir",
+      "to": "rule",
+      "label": "그 방향",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "d3",
+      "from": "rule",
+      "to": "allow",
+      "label": "매칭되면",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "d4",
+      "from": "rule",
+      "to": "deny",
+      "label": "조건: 매칭 없음",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "left",
+      "via": [
+        [
+          530,
+          282
+        ]
+      ],
+      "labelAt": [
+        602,
+        268
+      ]
+    }
+  ]
+}

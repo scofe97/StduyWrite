@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "스케줄러는 이름만 적고, 만드는 일은 그 노드의 Kubelet 이 한다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "participants": [
+    {
+      "id": "api",
+      "type": "security",
+      "label": "API 서버"
+    },
+    {
+      "id": "sched",
+      "type": "cloud",
+      "label": "스케줄러"
+    },
+    {
+      "id": "kubelet",
+      "type": "backend",
+      "label": "kubelet"
+    },
+    {
+      "id": "cni",
+      "type": "messagebus",
+      "label": "CNI"
+    }
+  ],
+  "segments": [
+    {
+      "from": 200,
+      "to": 320,
+      "label": "① 스케줄러는 노드 이름만 적는다"
+    },
+    {
+      "from": 340,
+      "to": 420,
+      "label": "② Kubelet 이 자기 몫을 발견한다"
+    },
+    {
+      "from": 440,
+      "to": 560,
+      "label": "③ CRI 로 컨테이너, CNI 로 네트워크"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m1",
+      "from": "api",
+      "to": "sched",
+      "y": 245,
+      "label": "노드 미정 Pod",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m2",
+      "from": "sched",
+      "to": "api",
+      "y": 285,
+      "label": "nodeName = node-1",
+      "variant": "return"
+    },
+    {
+      "id": "m3",
+      "from": "api",
+      "to": "kubelet",
+      "y": 380,
+      "label": "node-1 에 할당됨",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m4",
+      "from": "kubelet",
+      "to": "cni",
+      "y": 480,
+      "label": "ADD — netns·주소 요청",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m5",
+      "from": "cni",
+      "to": "kubelet",
+      "y": 520,
+      "label": "IP·경로 완료",
+      "variant": "return"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "sched",
+      "from": 235,
+      "to": 300,
+      "type": "cloud"
+    },
+    {
+      "participant": "kubelet",
+      "from": 370,
+      "to": 545,
+      "type": "backend"
+    },
+    {
+      "participant": "cni",
+      "from": 470,
+      "to": 530,
+      "type": "messagebus"
+    }
+  ]
+}
