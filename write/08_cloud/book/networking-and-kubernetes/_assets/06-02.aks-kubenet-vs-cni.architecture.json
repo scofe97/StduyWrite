@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Pod IP 가 Vnet 에서 라우팅돼야 하는가 — 그 답이 둘을 가른다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "kn",
+      "type": "backend",
+      "label": "kubenet (기본)",
+      "sublabel": "노드만 Vnet IP 수령",
+      "tag": "Pod 는 다른 대역",
+      "pos": [
+        40,
+        60
+      ],
+      "size": [
+        250,
+        100
+      ]
+    },
+    {
+      "id": "knr",
+      "type": "cloud",
+      "label": "운영이 단순",
+      "sublabel": "Pod→Vnet 은 노드 IP 로 SNAT",
+      "tag": "4장 Island 레이아웃",
+      "pos": [
+        40,
+        240
+      ],
+      "size": [
+        250,
+        100
+      ]
+    },
+    {
+      "id": "cn",
+      "type": "messagebus",
+      "label": "Azure CNI",
+      "sublabel": "Pod 가 라우터블 IP 수령",
+      "tag": "직접 접근 가능",
+      "pos": [
+        420,
+        60
+      ],
+      "size": [
+        250,
+        100
+      ]
+    },
+    {
+      "id": "cnr",
+      "type": "security",
+      "label": "IP 계획이 무거움",
+      "sublabel": "노드당 최대 Pod 만큼 예약",
+      "tag": "네트워킹 자원 별도 RG",
+      "pos": [
+        420,
+        240
+      ],
+      "size": [
+        250,
+        100
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "k1",
+      "from": "kn",
+      "to": "knr",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "k2",
+      "from": "cn",
+      "to": "cnr",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}

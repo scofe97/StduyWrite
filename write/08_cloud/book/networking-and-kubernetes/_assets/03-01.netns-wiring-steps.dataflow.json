@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "런타임이 대신해 주는 배선을 손으로 — 네 단계와 마지막 함정",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      1280,
+      520
+    ]
+  },
+  "stages": [
+    {
+      "label": "①② 격리"
+    },
+    {
+      "label": "③④ 선 걸기"
+    },
+    {
+      "label": "⑤~⑨ 주소·브리지"
+    },
+    {
+      "label": "⑩ 기본 경로"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "ns",
+      "type": "security",
+      "label": "격리 공간",
+      "sublabel": "ip netns add net1",
+      "tag": "ip_forward=1 선행",
+      "stage": 0,
+      "row": 0,
+      "width": 129,
+      "height": 80
+    },
+    {
+      "id": "veth",
+      "type": "messagebus",
+      "label": "선 걸기",
+      "sublabel": "veth0 ↔ veth1",
+      "tag": "한쪽만 net1 로",
+      "stage": 1,
+      "row": 0,
+      "width": 129,
+      "height": 80
+    },
+    {
+      "id": "addr",
+      "type": "backend",
+      "label": "주소·연결",
+      "sublabel": "192.168.1.101/24",
+      "tag": "up 해도 NO-CARRIER",
+      "stage": 2,
+      "row": 0,
+      "width": 129,
+      "height": 80
+    },
+    {
+      "id": "route",
+      "type": "cloud",
+      "label": "기본 경로",
+      "sublabel": "default via .100",
+      "tag": "그제야 ping 성공",
+      "stage": 3,
+      "row": 0,
+      "width": 129,
+      "height": 80
+    },
+    {
+      "id": "unreach",
+      "type": "external",
+      "label": "길 없음",
+      "sublabel": "Host Unreachable",
+      "tag": "새 netns 는 테이블이 빔",
+      "stage": 3,
+      "row": 1,
+      "width": 129,
+      "height": 80
+    }
+  ],
+  "flows": [
+    {
+      "id": "w1",
+      "from": "ns",
+      "to": "veth",
+      "label": "빈 스택에",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "w2",
+      "from": "veth",
+      "to": "addr",
+      "label": "한쪽만",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "w3",
+      "from": "addr",
+      "to": "route",
+      "label": "마지막",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "e1",
+      "from": "addr",
+      "to": "unreach",
+      "label": "if: 경로 없음",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "left",
+      "labelAt": [
+        602,
+        268
+      ],
+      "via": [
+        [
+          530,
+          282
+        ]
+      ]
+    }
+  ]
+}

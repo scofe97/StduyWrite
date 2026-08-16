@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "컨트롤 플레인과 워커는 다른 VPC 에 산다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "api",
+      "type": "security",
+      "label": "API 서버",
+      "sublabel": "etcd 와 함께",
+      "tag": "AWS 가 운영",
+      "pos": [
+        40,
+        60
+      ],
+      "size": [
+        190,
+        90
+      ]
+    },
+    {
+      "id": "eni",
+      "type": "messagebus",
+      "label": "cross-account ENI",
+      "sublabel": "최대 4개",
+      "tag": "두 VPC 를 잇는 다리",
+      "pos": [
+        300,
+        60
+      ],
+      "size": [
+        200,
+        90
+      ]
+    },
+    {
+      "id": "node",
+      "type": "backend",
+      "label": "워커 노드",
+      "sublabel": "Kubelet 이 등록",
+      "tag": "EC2 인스턴스",
+      "pos": [
+        590,
+        60
+      ],
+      "size": [
+        200,
+        90
+      ]
+    },
+    {
+      "id": "pod",
+      "type": "cloud",
+      "label": "Pod",
+      "sublabel": "IP = ENI 보조 IP",
+      "tag": "Pod 수 공식의 근거",
+      "pos": [
+        590,
+        250
+      ],
+      "size": [
+        200,
+        90
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "EKS 소유 VPC",
+      "wraps": [
+        "api"
+      ],
+      "pad": 34
+    },
+    {
+      "kind": "region",
+      "label": "고객 VPC",
+      "wraps": [
+        "node",
+        "pod"
+      ],
+      "pad": 34
+    }
+  ],
+  "connections": [
+    {
+      "id": "n1",
+      "from": "api",
+      "to": "eni",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "관리 방향"
+    },
+    {
+      "id": "n2",
+      "from": "eni",
+      "to": "node",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "등록 방향"
+    },
+    {
+      "id": "n3",
+      "from": "node",
+      "to": "pod",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}

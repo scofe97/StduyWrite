@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "runC 는 컨테이너를 띄우고 떠나고, containerd-shim 이 부모로 남는다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "participants": [
+    {
+      "id": "dockerd",
+      "type": "backend",
+      "label": "dockerd"
+    },
+    {
+      "id": "shim",
+      "type": "messagebus",
+      "label": "shim"
+    },
+    {
+      "id": "runc",
+      "type": "cloud",
+      "label": "runC"
+    },
+    {
+      "id": "proc",
+      "type": "external",
+      "label": "컨테이너"
+    }
+  ],
+  "segments": [
+    {
+      "from": 200,
+      "to": 290,
+      "label": "① dockerd → containerd 위임"
+    },
+    {
+      "from": 310,
+      "to": 430,
+      "label": "② 컨테이너 생성"
+    },
+    {
+      "from": 450,
+      "to": 570,
+      "label": "③ runC 소멸 · shim 존속"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m1",
+      "from": "dockerd",
+      "to": "shim",
+      "y": 250,
+      "label": "containerd 경유 · shim 기동",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m2",
+      "from": "shim",
+      "to": "runc",
+      "y": 355,
+      "label": "컨테이너 생성 지시",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m3",
+      "from": "runc",
+      "to": "proc",
+      "y": 400,
+      "label": "cgroup·namespace 생성",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m4",
+      "from": "runc",
+      "to": "shim",
+      "y": 495,
+      "label": "기동 완료 후 종료",
+      "variant": "return"
+    },
+    {
+      "id": "m5",
+      "from": "shim",
+      "to": "proc",
+      "y": 540,
+      "label": "부모로 남아 stdio 유지",
+      "variant": "default"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "shim",
+      "from": 275,
+      "to": 560,
+      "type": "messagebus"
+    },
+    {
+      "participant": "runc",
+      "from": 340,
+      "to": 510,
+      "type": "cloud"
+    },
+    {
+      "participant": "proc",
+      "from": 390,
+      "to": 560,
+      "type": "external"
+    }
+  ]
+}

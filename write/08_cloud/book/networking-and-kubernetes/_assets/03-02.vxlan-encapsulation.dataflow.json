@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "MAC-in-UDP — 껍질을 씌워 보내고 반대편에서 벗긴다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      1280,
+      460
+    ]
+  },
+  "stages": [
+    {
+      "label": "① 호스트1 컨테이너"
+    },
+    {
+      "label": "② 송신 VTEP"
+    },
+    {
+      "label": "③ L3 언더레이"
+    },
+    {
+      "label": "④ 호스트2 VTEP"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "src",
+      "type": "frontend",
+      "label": "원본 프레임",
+      "sublabel": "Ethernet·IP·TCP",
+      "tag": "브리지로 나감",
+      "stage": 0,
+      "row": 0,
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "enc",
+      "type": "messagebus",
+      "label": "캡슐화",
+      "sublabel": "VNI 24비트",
+      "tag": "MAC-in-UDP",
+      "stage": 1,
+      "row": 0,
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "under",
+      "type": "cloud",
+      "label": "물리망",
+      "sublabel": "바깥 헤더만",
+      "tag": "내용물은 모름",
+      "stage": 2,
+      "row": 0,
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "dec",
+      "type": "backend",
+      "label": "역캡슐화",
+      "sublabel": "껍질 벗김",
+      "tag": "목적지 컨테이너",
+      "stage": 3,
+      "row": 0,
+      "width": 129,
+      "height": 90
+    }
+  ],
+  "flows": [
+    {
+      "id": "f1",
+      "from": "src",
+      "to": "enc",
+      "label": "브리지로",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "f2",
+      "from": "enc",
+      "to": "under",
+      "label": "UDP 로",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "f3",
+      "from": "under",
+      "to": "dec",
+      "label": "반대편",
+      "variant": "emphasis",
+      "route": "straight"
+    }
+  ]
+}

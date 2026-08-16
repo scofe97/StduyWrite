@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "격리를 얼마나 포기하는가에서 시작해 표준이 갈리는 곳까지",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      1280,
+      460
+    ]
+  },
+  "stages": [
+    {
+      "label": "§1 모드 7종"
+    },
+    {
+      "label": "§2·§3 Docker 방식"
+    },
+    {
+      "label": "§4 호스트 넘기"
+    },
+    {
+      "label": "§5 표준 갈림길"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "mode",
+      "type": "external",
+      "label": "격리 눈금",
+      "sublabel": "None → Host",
+      "tag": "무엇을 포기하나",
+      "stage": 0,
+      "row": 0,
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "dock",
+      "type": "cloud",
+      "label": "Docker 배선",
+      "sublabel": "docker0 · CNM",
+      "tag": "sandbox·endpoint",
+      "stage": 1,
+      "row": 0,
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "vxlan",
+      "type": "messagebus",
+      "label": "호스트 넘기",
+      "sublabel": "MAC-in-UDP",
+      "tag": "VTEP 가 감싸고 벗김",
+      "stage": 2,
+      "row": 0,
+      "width": 129,
+      "height": 90
+    },
+    {
+      "id": "cni",
+      "type": "security",
+      "label": "표준 갈림",
+      "sublabel": "CNM 아닌 CNI",
+      "tag": "Kubernetes 의 선택",
+      "stage": 3,
+      "row": 0,
+      "width": 129,
+      "height": 90
+    }
+  ],
+  "flows": [
+    {
+      "id": "f1",
+      "from": "mode",
+      "to": "dock",
+      "label": "실측하면",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "f2",
+      "from": "dock",
+      "to": "vxlan",
+      "label": "호스트 밖",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "f3",
+      "from": "vxlan",
+      "to": "cni",
+      "label": "표준은",
+      "variant": "emphasis",
+      "route": "straight"
+    }
+  ]
+}
