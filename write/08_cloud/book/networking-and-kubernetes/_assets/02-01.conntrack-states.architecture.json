@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "conntrack 엔트리 실물 — 상태마다 수명과 플래그가 바뀐다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "e1",
+      "type": "external",
+      "label": "SYN 송신",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "첫 패킷이 나감",
+      "tag": "응답은 아직"
+    },
+    {
+      "id": "e2",
+      "type": "external",
+      "label": "SYN-ACK 수신",
+      "pos": [
+        40,
+        180
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "반대 방향 관측",
+      "tag": "양방향 성립"
+    },
+    {
+      "id": "e3",
+      "type": "external",
+      "label": "FIN 또는 무통신",
+      "pos": [
+        40,
+        320
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "수명이 다함",
+      "tag": "정리 대상"
+    },
+    {
+      "id": "s1",
+      "type": "security",
+      "label": "SYN_SENT",
+      "pos": [
+        410,
+        40
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "ttl 120초",
+      "tag": "[UNREPLIED]"
+    },
+    {
+      "id": "s2",
+      "type": "backend",
+      "label": "ESTABLISHED",
+      "pos": [
+        410,
+        180
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "ttl 432000초",
+      "tag": "[ASSURED]"
+    },
+    {
+      "id": "s3",
+      "type": "cloud",
+      "label": "테이블에서 삭제",
+      "pos": [
+        410,
+        320
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "ttl 0",
+      "tag": "자리 반환"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "패킷 사건",
+      "wraps": [
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "conntrack -L 이 보여 주는 엔트리",
+      "wraps": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "pad": 30
+    }
+  ],
+  "connections": [
+    {
+      "from": "e1",
+      "to": "s1",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "등록"
+    },
+    {
+      "from": "e2",
+      "to": "s2",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "승격"
+    },
+    {
+      "from": "e3",
+      "to": "s3",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "만료"
+    },
+    {
+      "from": "e1",
+      "to": "e2",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "e2",
+      "to": "e3",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}

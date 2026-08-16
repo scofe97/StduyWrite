@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "3-way 핸드셰이크 — 보낸 쪽이 먼저 열리고 서버는 세 번째에야 열린다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "p1",
+      "type": "frontend",
+      "label": "① SYN",
+      "pos": [
+        40,
+        120
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "seq=x · SYN 비트",
+      "tag": "클라 → 서버"
+    },
+    {
+      "id": "p2",
+      "type": "backend",
+      "label": "② SYN-ACK",
+      "pos": [
+        206,
+        120
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "seq=y · ack=x+1",
+      "tag": "서버 → 클라"
+    },
+    {
+      "id": "p3",
+      "type": "frontend",
+      "label": "③ ACK",
+      "pos": [
+        372,
+        120
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "ack=y+1",
+      "tag": "클라 → 서버"
+    },
+    {
+      "id": "p4",
+      "type": "cloud",
+      "label": "데이터",
+      "pos": [
+        538,
+        120
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "GET / 첫 바이트",
+      "tag": "4번째 패킷"
+    },
+    {
+      "id": "s1",
+      "type": "frontend",
+      "label": "SYN-SENT",
+      "pos": [
+        40,
+        320
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "클라이언트",
+      "tag": "응답 대기"
+    },
+    {
+      "id": "s2",
+      "type": "backend",
+      "label": "SYN-RECEIVED",
+      "pos": [
+        206,
+        320
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "서버",
+      "tag": "확인 대기"
+    },
+    {
+      "id": "s3",
+      "type": "frontend",
+      "label": "ESTABLISHED",
+      "pos": [
+        372,
+        320
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "클라이언트",
+      "tag": "먼저 열림"
+    },
+    {
+      "id": "s4",
+      "type": "backend",
+      "label": "ESTABLISHED",
+      "pos": [
+        538,
+        320
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "서버",
+      "tag": "③ 도착 시점"
+    }
+  ],
+  "connections": [
+    {
+      "from": "p1",
+      "to": "p2",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "응답"
+    },
+    {
+      "from": "p2",
+      "to": "p3",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "확인"
+    },
+    {
+      "from": "p3",
+      "to": "p4",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "수립"
+    },
+    {
+      "from": "p1",
+      "to": "s1",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "p2",
+      "to": "s2",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "p3",
+      "to": "s3",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "p4",
+      "to": "s4",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}

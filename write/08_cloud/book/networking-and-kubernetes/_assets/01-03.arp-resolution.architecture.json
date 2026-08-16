@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "ARP 주소 해석 — 브로드캐스트로 묻고 유니캐스트로 답한다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "host",
+      "type": "external",
+      "label": "요청 컴퓨터",
+      "pos": [
+        40,
+        120
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "DNS 로 IP 확보",
+      "tag": "10.0.0.1 을 찾음"
+    },
+    {
+      "id": "cache",
+      "type": "database",
+      "label": "ARP 캐시",
+      "pos": [
+        206,
+        120
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "IP↔MAC 표",
+      "tag": "미스"
+    },
+    {
+      "id": "bcast",
+      "type": "messagebus",
+      "label": "브로드캐스트",
+      "pos": [
+        372,
+        120
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "FF:FF:FF:FF:FF:FF",
+      "tag": "도메인 전체"
+    },
+    {
+      "id": "others",
+      "type": "external",
+      "label": "다른 호스트",
+      "pos": [
+        538,
+        120
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "받고 폐기",
+      "tag": "내 IP 아님"
+    },
+    {
+      "id": "server",
+      "type": "backend",
+      "label": "대상 서버",
+      "pos": [
+        704,
+        120
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "10.0.0.1",
+      "tag": "내 IP 맞음"
+    },
+    {
+      "id": "reply",
+      "type": "backend",
+      "label": "ARP 응답",
+      "pos": [
+        704,
+        320
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "내 MAC 은 xx",
+      "tag": "유니캐스트"
+    },
+    {
+      "id": "stable",
+      "type": "database",
+      "label": "서버 ARP 표",
+      "pos": [
+        538,
+        320
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "요청자 MAC 저장",
+      "tag": "역방향 미리"
+    },
+    {
+      "id": "frame",
+      "type": "cloud",
+      "label": "Ethernet 프레임",
+      "pos": [
+        206,
+        320
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "목적지 = 서버 MAC",
+      "tag": "이제 전송"
+    }
+  ],
+  "connections": [
+    {
+      "from": "host",
+      "to": "cache",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "조회"
+    },
+    {
+      "from": "cache",
+      "to": "bcast",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "미스"
+    },
+    {
+      "from": "bcast",
+      "to": "others",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "수신"
+    },
+    {
+      "from": "others",
+      "to": "server",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "일치"
+    },
+    {
+      "from": "server",
+      "to": "reply",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "reply",
+      "to": "stable",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "저장"
+    },
+    {
+      "from": "stable",
+      "to": "frame",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "도착"
+    }
+  ]
+}

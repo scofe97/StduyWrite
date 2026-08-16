@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "수사 사다리 — 관문마다 무엇을 치고 어디를 읽는가",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "q1",
+      "type": "external",
+      "label": "이름이 풀리는가",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "안 풀리면 DNS 문제",
+      "tag": "여기서 멈춤"
+    },
+    {
+      "id": "q2",
+      "type": "backend",
+      "label": "호스트에 닿는가",
+      "pos": [
+        40,
+        180
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "안 닿으면 경로 문제",
+      "tag": "Service 는 예외"
+    },
+    {
+      "id": "q3",
+      "type": "backend",
+      "label": "포트가 열렸는가",
+      "pos": [
+        40,
+        320
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "안 열렸으면 바인딩 문제",
+      "tag": "프로세스 확인"
+    },
+    {
+      "id": "q4",
+      "type": "cloud",
+      "label": "대화가 되는가",
+      "pos": [
+        40,
+        460
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "안 되면 L7 문제",
+      "tag": "앱 로직으로"
+    },
+    {
+      "id": "c1",
+      "type": "security",
+      "label": "dig <도메인>",
+      "pos": [
+        430,
+        40
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "status 와 ANSWER SECTION",
+      "tag": "NXDOMAIN 이면 없음"
+    },
+    {
+      "id": "c2",
+      "type": "security",
+      "label": "ping -c 3 <주소>",
+      "pos": [
+        430,
+        180
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "손실률과 왕복 시간",
+      "tag": "Service 면 건너뛴다"
+    },
+    {
+      "id": "c3",
+      "type": "security",
+      "label": "netstat -lp",
+      "pos": [
+        430,
+        320
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "Local Address 열",
+      "tag": "와일드카드인지 루프백인지"
+    },
+    {
+      "id": "c4",
+      "type": "security",
+      "label": "curl -v <URL>",
+      "pos": [
+        430,
+        460
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "핸드셰이크와 응답 헤더",
+      "tag": "어느 단계에서 멈추나"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "관문",
+      "wraps": [
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "실제로 치는 명령과 읽을 자리",
+      "wraps": [
+        "c1",
+        "c2",
+        "c3",
+        "c4"
+      ],
+      "pad": 30
+    }
+  ],
+  "connections": [
+    {
+      "from": "q1",
+      "to": "q2",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "q2",
+      "to": "q3",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "q3",
+      "to": "q4",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "q1",
+      "to": "c1",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "조회"
+    },
+    {
+      "from": "q2",
+      "to": "c2",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "확인"
+    },
+    {
+      "from": "q3",
+      "to": "c3",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "점검"
+    },
+    {
+      "from": "q4",
+      "to": "c4",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "대화"
+    }
+  ]
+}

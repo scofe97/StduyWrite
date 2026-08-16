@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "소켓 syscall — 애플리케이션이 부르면 커널이 무엇을 만드는가",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "a1",
+      "type": "frontend",
+      "label": "socket()",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "AF_INET6 · SOCK_STREAM",
+      "tag": "반환값 3"
+    },
+    {
+      "id": "a2",
+      "type": "frontend",
+      "label": "bind()",
+      "pos": [
+        40,
+        180
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "htons(8080) · [::]",
+      "tag": "반환값 0"
+    },
+    {
+      "id": "a3",
+      "type": "frontend",
+      "label": "listen()",
+      "pos": [
+        40,
+        320
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "두 번째 인자 128",
+      "tag": "반환값 0"
+    },
+    {
+      "id": "a4",
+      "type": "frontend",
+      "label": "accept4()",
+      "pos": [
+        40,
+        460
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "epoll 이 깨운 뒤",
+      "tag": "연결마다 호출"
+    },
+    {
+      "id": "k1",
+      "type": "backend",
+      "label": "파일 디스크립터 3",
+      "pos": [
+        430,
+        40
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "연결을 파일로 다룬다",
+      "tag": "0·1·2 다음 번호"
+    },
+    {
+      "id": "k2",
+      "type": "backend",
+      "label": "포트 8080 예약",
+      "pos": [
+        430,
+        180
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "와일드카드 주소에 묶임",
+      "tag": "v4·v6 함께 수신"
+    },
+    {
+      "id": "k3",
+      "type": "backend",
+      "label": "백로그 큐 128칸",
+      "pos": [
+        430,
+        320
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "수립됐지만 아직 안 받은 연결",
+      "tag": "넘치면 새 연결 거절"
+    },
+    {
+      "id": "k4",
+      "type": "backend",
+      "label": "연결마다 새 fd",
+      "pos": [
+        430,
+        460
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "듣는 소켓과 별개",
+      "tag": "여기부터 read·write"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "애플리케이션이 부르는 것",
+      "wraps": [
+        "a1",
+        "a2",
+        "a3",
+        "a4"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "커널이 만드는 것",
+      "wraps": [
+        "k1",
+        "k2",
+        "k3",
+        "k4"
+      ],
+      "pad": 30
+    }
+  ],
+  "connections": [
+    {
+      "from": "a1",
+      "to": "a2",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "a2",
+      "to": "a3",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "a3",
+      "to": "a4",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "a1",
+      "to": "k1",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "할당"
+    },
+    {
+      "from": "a2",
+      "to": "k2",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "예약"
+    },
+    {
+      "from": "a3",
+      "to": "k3",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "생성"
+    },
+    {
+      "from": "a4",
+      "to": "k4",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "수락"
+    }
+  ]
+}

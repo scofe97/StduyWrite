@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "세션 키의 계보 — 재료 셋이 합쳐지고 키 자체는 망을 건너지 않는다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "r1",
+      "type": "frontend",
+      "label": "클라 난수",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        160,
+        86
+      ],
+      "sublabel": "클라이언트가 생성",
+      "tag": "평문으로 건너감"
+    },
+    {
+      "id": "r2",
+      "type": "backend",
+      "label": "서버 난수",
+      "pos": [
+        250,
+        40
+      ],
+      "size": [
+        160,
+        86
+      ],
+      "sublabel": "서버가 생성",
+      "tag": "평문으로 건너감"
+    },
+    {
+      "id": "pm",
+      "type": "security",
+      "label": "premaster",
+      "pos": [
+        460,
+        40
+      ],
+      "size": [
+        160,
+        86
+      ],
+      "sublabel": "클라이언트가 생성",
+      "tag": "공개키로 봉해 건너감"
+    },
+    {
+      "id": "ms",
+      "type": "database",
+      "label": "master secret",
+      "pos": [
+        250,
+        190
+      ],
+      "size": [
+        160,
+        86
+      ],
+      "sublabel": "세 재료를 결합",
+      "tag": "양쪽이 각자 계산"
+    },
+    {
+      "id": "sk",
+      "type": "messagebus",
+      "label": "세션 키",
+      "pos": [
+        250,
+        340
+      ],
+      "size": [
+        160,
+        86
+      ],
+      "sublabel": "대칭키 한 벌",
+      "tag": "망을 건넌 적 없음"
+    }
+  ],
+  "connections": [
+    {
+      "from": "r1",
+      "to": "ms",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "from": "r2",
+      "to": "ms",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "route": "straight"
+    },
+    {
+      "from": "pm",
+      "to": "ms",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "right"
+    },
+    {
+      "from": "ms",
+      "to": "sk",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "route": "straight"
+    }
+  ]
+}

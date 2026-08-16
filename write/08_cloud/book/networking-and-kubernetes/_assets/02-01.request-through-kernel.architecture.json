@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "요청 하나가 커널을 관통하는 순서 — 네 절이 실제로 이어지는 자리",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "nic",
+      "type": "external",
+      "label": "NIC 도착",
+      "pos": [
+        40,
+        120
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "8080 행 SYN",
+      "tag": "외부 클라이언트"
+    },
+    {
+      "id": "pre",
+      "type": "security",
+      "label": "PRE_ROUTING",
+      "pos": [
+        206,
+        120
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "Raw·Mangle·NAT",
+      "tag": "§4 훅"
+    },
+    {
+      "id": "ct",
+      "type": "database",
+      "label": "Conntrack",
+      "pos": [
+        372,
+        120
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "5-tuple 조회",
+      "tag": "§5 없으면 NEW"
+    },
+    {
+      "id": "route",
+      "type": "backend",
+      "label": "라우팅 판단",
+      "pos": [
+        538,
+        120
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "목적지가 내 IP",
+      "tag": "§6 구체성 우선"
+    },
+    {
+      "id": "lin",
+      "type": "security",
+      "label": "LOCAL_IN",
+      "pos": [
+        538,
+        320
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "Mangle·NAT·Filter",
+      "tag": "§4 INPUT"
+    },
+    {
+      "id": "sock",
+      "type": "cloud",
+      "label": "소켓 큐",
+      "pos": [
+        372,
+        320
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "포트로 소켓 선택",
+      "tag": "§1 fd 로 전달"
+    },
+    {
+      "id": "app",
+      "type": "frontend",
+      "label": "Go 서버",
+      "pos": [
+        206,
+        320
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "epoll 이 깨어남",
+      "tag": "§1 여정 끝"
+    }
+  ],
+  "connections": [
+    {
+      "from": "nic",
+      "to": "pre",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "진입"
+    },
+    {
+      "from": "pre",
+      "to": "ct",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "조회"
+    },
+    {
+      "from": "ct",
+      "to": "route",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "질의"
+    },
+    {
+      "from": "route",
+      "to": "lin",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "lin",
+      "to": "sock",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "통과"
+    },
+    {
+      "from": "sock",
+      "to": "app",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "알림"
+    }
+  ]
+}

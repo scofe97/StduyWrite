@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "TLS 1.2 핸드셰이크 — 무엇이 평문으로 흐르고 무엇이 봉해져 건너는가",
+    "subtitle": "RSA 키 교환 기준 · 막대는 그 쪽이 계산하는 구간",
+    "quality_profile": "showcase",
+    "viewBox": [
+      900,
+      980
+    ],
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "participants": [
+    {
+      "id": "c",
+      "type": "frontend",
+      "label": "클라이언트",
+      "sublabel": "브라우저 · curl"
+    },
+    {
+      "id": "s",
+      "type": "backend",
+      "label": "서버",
+      "sublabel": "개인키 보유"
+    }
+  ],
+  "segments": [
+    {
+      "from": 170,
+      "to": 404,
+      "label": "1단계 · 평문 협상 — 도청자에게 그대로 보인다"
+    },
+    {
+      "from": 474,
+      "to": 534,
+      "label": "2단계 · 망을 건너는 비밀은 여기 하나뿐"
+    },
+    {
+      "from": 604,
+      "to": 906,
+      "label": "3단계 · 세션 키 확정 후 — 여기부터 전부 암호문"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "s",
+      "from": 208,
+      "to": 386,
+      "type": "backend"
+    },
+    {
+      "participant": "c",
+      "from": 392,
+      "to": 448,
+      "type": "frontend"
+    },
+    {
+      "participant": "s",
+      "from": 510,
+      "to": 570,
+      "type": "backend"
+    },
+    {
+      "participant": "c",
+      "from": 616,
+      "to": 688,
+      "type": "frontend"
+    },
+    {
+      "participant": "s",
+      "from": 700,
+      "to": 830,
+      "type": "backend"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m1",
+      "from": "c",
+      "to": "s",
+      "y": 200,
+      "label": "ClientHello · 난수와 지원 cipher 목록 · 평문",
+      "variant": "default"
+    },
+    {
+      "id": "m2",
+      "from": "s",
+      "to": "c",
+      "y": 260,
+      "label": "ServerHello · cipher suite 하나 선택 + 난수 · 평문",
+      "variant": "default"
+    },
+    {
+      "id": "m3",
+      "from": "s",
+      "to": "c",
+      "y": 320,
+      "label": "Certificate · 서버 공개키와 CA 서명 · 평문",
+      "variant": "default"
+    },
+    {
+      "id": "m4",
+      "from": "s",
+      "to": "c",
+      "y": 380,
+      "label": "ServerHelloDone · 다 보냈다는 표시뿐",
+      "variant": "dashed"
+    },
+    {
+      "id": "m5",
+      "from": "c",
+      "to": "s",
+      "y": 504,
+      "label": "ClientKeyExchange · premaster 를 서버 공개키로 봉함",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m6",
+      "from": "c",
+      "to": "s",
+      "y": 634,
+      "label": "ChangeCipherSpec · 이제부터 세션 키로 암호화한다",
+      "variant": "dashed"
+    },
+    {
+      "id": "m7",
+      "from": "c",
+      "to": "s",
+      "y": 694,
+      "label": "Finished · 클라이언트의 첫 암호문",
+      "variant": "default"
+    },
+    {
+      "id": "m8",
+      "from": "s",
+      "to": "c",
+      "y": 754,
+      "label": "ChangeCipherSpec · 서버도 같은 선언",
+      "variant": "dashed"
+    },
+    {
+      "id": "m9",
+      "from": "s",
+      "to": "c",
+      "y": 814,
+      "label": "Finished · 앞의 평문 협상이 조작되지 않았다는 확인",
+      "variant": "default"
+    },
+    {
+      "id": "m10",
+      "from": "c",
+      "to": "s",
+      "y": 874,
+      "label": "Application Data · 이제야 HTTP 본문이 나간다",
+      "variant": "default"
+    }
+  ]
+}

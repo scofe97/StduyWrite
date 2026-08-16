@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "관측 지점이 보여 주는 계층 — 루프백은 L3 까지, 실제 인터페이스는 L2 까지",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "lo",
+      "type": "backend",
+      "label": "lo0 캡처",
+      "pos": [
+        40,
+        120
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "localhost:8080",
+      "tag": "통제된 환경"
+    },
+    {
+      "id": "lofloor",
+      "type": "database",
+      "label": "IP 까지",
+      "pos": [
+        206,
+        120
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "L2 헤더 없음",
+      "tag": "MAC·ARP 못 봄"
+    },
+    {
+      "id": "lomtu",
+      "type": "database",
+      "label": "MTU 16384",
+      "pos": [
+        372,
+        120
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "en0 의 10배",
+      "tag": "분할이 안 생김"
+    },
+    {
+      "id": "louse",
+      "type": "frontend",
+      "label": "12패킷 세기",
+      "pos": [
+        538,
+        120
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "남의 트래픽 0",
+      "tag": "§2 가 여기"
+    },
+    {
+      "id": "en",
+      "type": "cloud",
+      "label": "en0 캡처",
+      "pos": [
+        538,
+        320
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "실제 랜",
+      "tag": "§3·§4·§5"
+    },
+    {
+      "id": "enfloor",
+      "type": "messagebus",
+      "label": "Ethernet 까지",
+      "pos": [
+        372,
+        320
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "MAC 헤더 있음",
+      "tag": "ARP 관측 가능"
+    },
+    {
+      "id": "enmtu",
+      "type": "messagebus",
+      "label": "MTU 1500",
+      "pos": [
+        206,
+        320
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "표준 이더넷",
+      "tag": "분할이 보임"
+    },
+    {
+      "id": "enfilter",
+      "type": "security",
+      "label": "필터 필수",
+      "pos": [
+        40,
+        320
+      ],
+      "size": [
+        118,
+        86
+      ],
+      "sublabel": "남의 트래픽 섞임",
+      "tag": "port·arp 로 좁힘"
+    }
+  ],
+  "connections": [
+    {
+      "from": "lo",
+      "to": "lofloor",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "하한"
+    },
+    {
+      "from": "lofloor",
+      "to": "lomtu",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "크기"
+    },
+    {
+      "from": "lomtu",
+      "to": "louse",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "쓸모"
+    },
+    {
+      "from": "louse",
+      "to": "en",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "en",
+      "to": "enfloor",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "깊이"
+    },
+    {
+      "from": "enfloor",
+      "to": "enmtu",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "규모"
+    },
+    {
+      "from": "enmtu",
+      "to": "enfilter",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "대가"
+    }
+  ]
+}
