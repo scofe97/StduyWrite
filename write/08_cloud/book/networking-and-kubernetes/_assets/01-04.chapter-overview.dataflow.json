@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "1장 패킷 캡처 실습 전체 지도",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      1280,
+      420
+    ]
+  },
+  "stages": [
+    {
+      "label": "§1 준비"
+    },
+    {
+      "label": "§2 루프백"
+    },
+    {
+      "label": "§3·§4 실제 랜"
+    },
+    {
+      "label": "§5 대조"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "prep",
+      "type": "security",
+      "label": "관측 지점",
+      "stage": 0,
+      "row": 0,
+      "sublabel": "무엇이 보이나",
+      "width": 129,
+      "height": 100
+    },
+    {
+      "id": "loop",
+      "type": "backend",
+      "label": "12패킷",
+      "stage": 1,
+      "row": 0,
+      "sublabel": "잡음 없이",
+      "width": 129,
+      "height": 100
+    },
+    {
+      "id": "lan",
+      "type": "cloud",
+      "label": "ARP·상태",
+      "stage": 2,
+      "row": 0,
+      "sublabel": "L2 가 열림",
+      "width": 129,
+      "height": 100
+    },
+    {
+      "id": "cmp",
+      "type": "messagebus",
+      "label": "TLS·UDP",
+      "stage": 3,
+      "row": 0,
+      "sublabel": "값을 매김",
+      "width": 129,
+      "height": 100
+    }
+  ],
+  "flows": [
+    {
+      "id": "f1",
+      "from": "prep",
+      "to": "loop",
+      "variant": "emphasis",
+      "label": "통제부터",
+      "route": "straight"
+    },
+    {
+      "id": "f2",
+      "from": "loop",
+      "to": "lan",
+      "variant": "emphasis",
+      "label": "못 본 층",
+      "route": "straight"
+    },
+    {
+      "id": "f3",
+      "from": "lan",
+      "to": "cmp",
+      "variant": "emphasis",
+      "label": "비교로",
+      "route": "straight"
+    }
+  ]
+}

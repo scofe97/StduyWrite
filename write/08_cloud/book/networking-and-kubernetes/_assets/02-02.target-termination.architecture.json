@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "ACCEPT 는 자기 체인만 끝낸다 — 서브체인을 통과해도 부모가 다시 본다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "p0",
+      "type": "external",
+      "label": "INPUT 규칙 1",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "sublabel": "--dport 22 매치",
+      "tag": "-j incoming-ssh"
+    },
+    {
+      "id": "s0",
+      "type": "backend",
+      "label": "incoming-ssh",
+      "pos": [
+        420,
+        40
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "sublabel": "JUMP 로 진입",
+      "tag": "서브체인 시작"
+    },
+    {
+      "id": "s1",
+      "type": "messagebus",
+      "label": "-j ACCEPT",
+      "pos": [
+        420,
+        170
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "sublabel": "-s 10.0.0.1 에 걸림",
+      "tag": "이 체인만 종결"
+    },
+    {
+      "id": "s2",
+      "type": "cloud",
+      "label": "서브체인 종료",
+      "pos": [
+        420,
+        300
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "sublabel": "부모로 돌아감",
+      "tag": "패킷은 아직 안 끝남"
+    },
+    {
+      "id": "p2",
+      "type": "security",
+      "label": "INPUT 규칙 2",
+      "pos": [
+        40,
+        300
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "sublabel": "부모 평가 재개",
+      "tag": "여기서 DROP 가능"
+    },
+    {
+      "id": "p3",
+      "type": "external",
+      "label": "최종 판정",
+      "pos": [
+        40,
+        430
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "sublabel": "부모 체인의 결론",
+      "tag": "패킷의 운명"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "INPUT 부모 체인",
+      "wraps": [
+        "p0",
+        "p2",
+        "p3"
+      ],
+      "pad": 34
+    },
+    {
+      "kind": "region",
+      "label": "incoming-ssh 서브",
+      "wraps": [
+        "s0",
+        "s1",
+        "s2"
+      ],
+      "pad": 34
+    }
+  ],
+  "connections": [
+    {
+      "from": "p0",
+      "to": "s0",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "from": "s0",
+      "to": "s1",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "s1",
+      "to": "s2",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "s2",
+      "to": "p2",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "from": "p2",
+      "to": "p3",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}

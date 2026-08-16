@@ -10,7 +10,7 @@ related:
   - ../../kubernetes/README.md
   - ../../service-mesh/README.md
   - ../../README.md
-updated: 2026-07-16
+updated: 2026-08-15
 ---
 
 # Networking and Kubernetes — 정독 인덱스
@@ -51,6 +51,7 @@ updated: 2026-07-16
 | [01-01](./01-01.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9%20%EC%97%AD%EC%82%AC%EC%99%80%20OSI%20%EB%AA%A8%EB%8D%B8%20%E2%80%94%20%EA%B3%84%EC%B8%B5%EC%9C%BC%EB%A1%9C%20%EB%82%98%EB%88%88%20%EC%9D%B4%EC%9C%A0.md) | 네트워킹 역사와 OSI 모델 — 계층으로 나눈 이유 (Ch1 역사·OSI·TCP/IP 개관) | 완료 |
 | [01-02](./01-02.HTTP%EC%97%90%EC%84%9C%20TCP%C2%B7TLS%C2%B7UDP%EA%B9%8C%EC%A7%80%20%E2%80%94%20Transport%20%EA%B3%84%EC%B8%B5%20%ED%95%B4%EB%B6%80.md) | HTTP에서 TCP·TLS·UDP까지 — Transport 계층 해부 (Ch1 Application·Transport) | 완료 |
 | [01-03](./01-03.IP%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85%C2%B7Ethernet%20%E2%80%94%20%ED%8C%A8%ED%82%B7%EC%9D%B4%20%EA%B8%B8%EC%9D%84%20%EC%B0%BE%EB%8A%94%20%EB%B2%95.md) | IP·라우팅·Ethernet — 패킷이 길을 찾는 법 (Ch1 Network·Link·재조립) | 완료 |
+| [01-04](./01-04.%ED%8C%A8%ED%82%B7%20%EC%BA%A1%EC%B2%98%20%EC%8B%A4%EC%8A%B5%20%E2%80%94%201%EC%9E%A5%20%EA%B0%9C%EB%85%90%EC%9D%84%20%EB%88%88%EC%9C%BC%EB%A1%9C%20%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0.md) | 패킷 캡처 실습 — 1장 개념을 눈으로 확인하기 (Ch1 실습편) | 작성 완료·실행 전 |
 | [02-01](./02-01.%EC%BB%A4%EB%84%90%EC%9D%B4%20%ED%8C%A8%ED%82%B7%EC%9D%84%20%EB%8B%A4%EB%A3%A8%EB%8A%94%20%EB%B2%95%20%E2%80%94%20%EC%86%8C%EC%BC%93%C2%B7Netfilter%C2%B7Conntrack%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85.md) | 커널이 패킷을 다루는 법 — 소켓·Netfilter·Conntrack·라우팅 (Ch2 Basics·Kernel) | 완료 |
 | [02-02](./02-02.iptables%C2%B7IPVS%C2%B7eBPF%20%E2%80%94%20kube-proxy%EB%A5%BC%20%EC%9D%B4%ED%95%B4%ED%95%98%EB%8A%94%20%EC%84%B8%20%EA%B8%B0%EC%88%A0.md) | iptables·IPVS·eBPF — kube-proxy를 이해하는 세 기술 (Ch2 High-Level Routing) | 완료 |
 | [02-03](./02-03.Linux%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%EC%A7%84%EB%8B%A8%20%EB%8F%84%EA%B5%AC%20%E2%80%94%20%EA%B3%84%EC%B8%B5%20%EC%88%9C%EC%84%9C%EB%8C%80%EB%A1%9C%20%EC%88%98%EC%82%AC%ED%95%98%EA%B8%B0.md) | Linux 네트워크 진단 도구 — 계층 순서대로 수사하기 (Ch2 Troubleshooting Tools) | 완료 |
@@ -77,12 +78,12 @@ updated: 2026-07-16
 | 항목 | 현재 값 |
 |------|--------|
 | 진행률 | 6/6 장 완주 — 정독 노트 17편 + 시리즈 산출물 2편(용어집·결정 치트시트) |
-| 난이도 레벨 | 6장은 3사 대응이 핵심 — EKS 최대 Pod 공식·VPC-native/NEG·kubenet vs Azure CNI가 복습 포인트 |
-| 막힌 지점 | 없음 |
-| 다음 레슨 후보 | 복습 1회차 — 00-02 결정 치트시트로 판단 규칙 회상 후 막히는 편 재독 |
-| 최근 검증 결과 | 2026-08-08 보강 러너 4축을 17편 전수 적용. 한다체·AI 강조어·`##` 여백 위반·벽 단락 전부 0, 마크다운 호환성 전 편 PASS, 링크 깨짐 0. 원문 정오 누적 9건 |
-| 보강 산출물 | 전체 요약 도식 13장 신설(`*.chapter-overview.svg`, svg-check 전부 PASS) · H2 요약 인용 전 절 삽입 · 원문자 본문·SVG 전수 제거 · 기존 SVG 15장 가독성 정합화(대비 경고 100→8) |
-| 복습 회차 | 0 |
+| 난이도 레벨 | **한 단계 내림** — 01-01 Phase 4 자답에서 3문항 막힘(전제 오류 1건 포함). 01-02 도 같은 밀도로 진행. 아래 막힌 지점 3건을 먼저 재확인한 뒤 본문 진입 |
+| 막힌 지점 | (1) 캡슐화 PDU 이름 미회상(Bit·Frame·Packet·Segment·Data) (2) 중계기가 관여하는 계층을 L4 까지로 봄 — 실제는 Internet 계층까지 (3) NCP·OSI·TCP/IP 를 한 사건으로 묶음. NCP 는 안 쪼갠 쪽, OSI 와 TCP/IP 는 둘 다 쪼갠 경쟁자 |
+| 다음 레슨 후보 | **01-02 Phase 1** (위 3건 재확인부터 시작). 1장 실습은 01-04 가 01-02·01-03 개념에 의존하므로 01-04 까지 읽은 뒤 한 세션으로 몰아서 진행 |
+| 최근 검증 결과 | 2026-08-15 01-01 learning-session — Phase 1 통과(잘못 알던 인과 1건 교정: "경로는 양 끝이 정한다" → "양 끝은 목적지만 적고 중간이 매 홉마다 다음 한 칸을 정한다"), Phase 3 연기, Phase 4 5축 자답 완료(막힘 3). 이전 회차는 2026-08-08 보강 러너 4축 17편 전수 적용, 형식 센서 위반 0 |
+| 보강 산출물 | 전체 요약 도식 13장 신설(`*.chapter-overview.svg`, svg-check 전부 PASS) · H2 요약 인용 전 절 삽입 · 원문자 본문·SVG 전수 제거 · 기존 SVG 15장 가독성 정합화(대비 경고 100→8) · 2026-08-15 `01-01.encapsulation-roundtrip` 신설(Archify architecture, 정적 QA 31개 통과) + 01-01 §3·§4 설명 빈틈 3곳 보강 |
+| 복습 회차 | 0 (간격 반복 `_review` 기준). 별도로 learning-session Phase 4 자답 1회 완료 — 01-01 |
 
 
 

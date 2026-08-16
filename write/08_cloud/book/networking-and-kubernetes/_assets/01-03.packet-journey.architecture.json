@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "패킷 하나의 전 계층 여정 — 내려가며 감싸고 올라가며 벗긴다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "app",
+      "type": "frontend",
+      "label": "Application",
+      "pos": [
+        40,
+        60
+      ],
+      "size": [
+        160,
+        70
+      ],
+      "sublabel": "HTTP GET /",
+      "tag": "요청 생성"
+    },
+    {
+      "id": "tran",
+      "type": "backend",
+      "label": "Transport",
+      "pos": [
+        40,
+        160
+      ],
+      "size": [
+        160,
+        70
+      ],
+      "sublabel": "TCP 헤더 붙임",
+      "tag": "출발·목적 포트"
+    },
+    {
+      "id": "netw",
+      "type": "database",
+      "label": "Network",
+      "pos": [
+        40,
+        260
+      ],
+      "size": [
+        160,
+        70
+      ],
+      "sublabel": "IP 헤더 붙임",
+      "tag": "출발·목적 IP"
+    },
+    {
+      "id": "link",
+      "type": "cloud",
+      "label": "Link",
+      "pos": [
+        40,
+        360
+      ],
+      "size": [
+        160,
+        70
+      ],
+      "sublabel": "Ethernet 프레임",
+      "tag": "MAC 은 ARP 로"
+    },
+    {
+      "id": "rlink",
+      "type": "cloud",
+      "label": "Link",
+      "pos": [
+        640,
+        360
+      ],
+      "size": [
+        160,
+        70
+      ],
+      "sublabel": "MAC 제거",
+      "tag": "프레임 도착"
+    },
+    {
+      "id": "rnetw",
+      "type": "database",
+      "label": "Network",
+      "pos": [
+        640,
+        260
+      ],
+      "size": [
+        160,
+        70
+      ],
+      "sublabel": "IP 확인·제거",
+      "tag": "목적 IP = 나"
+    },
+    {
+      "id": "rtran",
+      "type": "backend",
+      "label": "Transport",
+      "pos": [
+        640,
+        160
+      ],
+      "size": [
+        160,
+        70
+      ],
+      "sublabel": "소켓 판별",
+      "tag": "포트로 프로세스"
+    },
+    {
+      "id": "rapp",
+      "type": "frontend",
+      "label": "Application",
+      "pos": [
+        640,
+        60
+      ],
+      "size": [
+        160,
+        70
+      ],
+      "sublabel": "앱에 전달",
+      "tag": "IP 는 이미 사라짐"
+    }
+  ],
+  "connections": [
+    {
+      "from": "app",
+      "to": "tran",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "tran",
+      "to": "netw",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "netw",
+      "to": "link",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "link",
+      "to": "rlink",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "IP 로 목적지 · MAC 으로 다음 홉"
+    },
+    {
+      "from": "rlink",
+      "to": "rnetw",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "rnetw",
+      "to": "rtran",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "rtran",
+      "to": "rapp",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom"
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "확률 fan-out 실물 — 규칙마다 확률이 다른데 최종 분배는 균등하다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "r1",
+      "type": "security",
+      "label": "규칙 1",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "--probability 0.33333333349",
+      "tag": "1/3 로 적중"
+    },
+    {
+      "id": "r2",
+      "type": "security",
+      "label": "규칙 2",
+      "pos": [
+        40,
+        180
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "--probability 0.50000000000",
+      "tag": "남은 둘 중 하나"
+    },
+    {
+      "id": "r3",
+      "type": "security",
+      "label": "규칙 3",
+      "pos": [
+        40,
+        320
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "확률 조건 없음",
+      "tag": "남은 하나뿐"
+    },
+    {
+      "id": "e1",
+      "type": "backend",
+      "label": "KUBE-SEP-2MJG…",
+      "pos": [
+        430,
+        40
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "DNAT 10.244.1.66:8080",
+      "tag": "최종 1/3"
+    },
+    {
+      "id": "e2",
+      "type": "backend",
+      "label": "KUBE-SEP-R4KM…",
+      "pos": [
+        430,
+        180
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "DNAT 10.244.1.67:8080",
+      "tag": "최종 1/3"
+    },
+    {
+      "id": "e3",
+      "type": "backend",
+      "label": "KUBE-SEP-MIOV…",
+      "pos": [
+        430,
+        320
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "DNAT 10.244.1.8:8080",
+      "tag": "최종 1/3"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "KUBE-SVC 체인 — 위에서부터 평가",
+      "wraps": [
+        "r1",
+        "r2",
+        "r3"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "KUBE-SEP 체인 — 목적지를 바꾼다",
+      "wraps": [
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "pad": 30
+    }
+  ],
+  "connections": [
+    {
+      "from": "r1",
+      "to": "r2",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "r2",
+      "to": "r3",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "r1",
+      "to": "e1",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "적중"
+    },
+    {
+      "from": "r2",
+      "to": "e2",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "적중"
+    },
+    {
+      "from": "r3",
+      "to": "e3",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "확정"
+    }
+  ]
+}

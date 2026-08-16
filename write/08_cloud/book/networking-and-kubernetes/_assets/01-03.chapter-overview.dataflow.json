@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "IP 라우팅과 Ethernet 전체 지도",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      1280,
+      420
+    ]
+  },
+  "stages": [
+    {
+      "label": "§1 전제"
+    },
+    {
+      "label": "§2 주소"
+    },
+    {
+      "label": "§3·§4 길 찾기"
+    },
+    {
+      "label": "§5 종합"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "best",
+      "type": "security",
+      "label": "보장 안 함",
+      "stage": 0,
+      "row": 0,
+      "sublabel": "양 끝 몫",
+      "width": 129,
+      "height": 100
+    },
+    {
+      "id": "addr",
+      "type": "cloud",
+      "label": "주소 진화",
+      "stage": 1,
+      "row": 0,
+      "sublabel": "CIDR·IPv6",
+      "width": 129,
+      "height": 100
+    },
+    {
+      "id": "path",
+      "type": "cloud",
+      "label": "경로·이웃",
+      "stage": 2,
+      "row": 0,
+      "sublabel": "BGP·ARP",
+      "width": 129,
+      "height": 100
+    },
+    {
+      "id": "trip",
+      "type": "backend",
+      "label": "전 계층",
+      "stage": 3,
+      "row": 0,
+      "sublabel": "감싸고 벗김",
+      "width": 129,
+      "height": 100
+    }
+  ],
+  "flows": [
+    {
+      "id": "f1",
+      "from": "best",
+      "to": "addr",
+      "variant": "emphasis",
+      "label": "그 위에서",
+      "route": "straight"
+    },
+    {
+      "id": "f2",
+      "from": "addr",
+      "to": "path",
+      "variant": "emphasis",
+      "label": "범위 좁힘",
+      "route": "straight"
+    },
+    {
+      "id": "f3",
+      "from": "path",
+      "to": "trip",
+      "variant": "emphasis",
+      "label": "한 요청",
+      "route": "straight"
+    }
+  ]
+}

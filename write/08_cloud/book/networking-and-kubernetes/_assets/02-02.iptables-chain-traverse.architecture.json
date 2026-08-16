@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "규칙 한 줄의 해부 — 어디까지가 조건이고 어디부터가 변환인가",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "p1",
+      "type": "external",
+      "label": "체인 지정",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "이 규칙을 어디에 넣나",
+      "tag": "평가 시점이 정해짐"
+    },
+    {
+      "id": "p2",
+      "type": "security",
+      "label": "매치 조건",
+      "pos": [
+        40,
+        180
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "맞으면 타깃 실행",
+      "tag": "아니면 다음 규칙"
+    },
+    {
+      "id": "p3",
+      "type": "backend",
+      "label": "타깃",
+      "pos": [
+        40,
+        320
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "실제로 하는 일",
+      "tag": "여기서 패킷이 바뀜"
+    },
+    {
+      "id": "t1",
+      "type": "cloud",
+      "label": "-A KUBE-SVC-LOLE4…",
+      "pos": [
+        430,
+        40
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "PREROUTING 에서 점프됨",
+      "tag": "kind 실측 규칙"
+    },
+    {
+      "id": "t2",
+      "type": "cloud",
+      "label": "-m statistic",
+      "pos": [
+        430,
+        180
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "--mode random",
+      "tag": "--probability 0.333…"
+    },
+    {
+      "id": "t3",
+      "type": "cloud",
+      "label": "-j DNAT",
+      "pos": [
+        430,
+        320
+      ],
+      "size": [
+        270,
+        100
+      ],
+      "sublabel": "--to-destination",
+      "tag": "10.244.1.66:8080"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "규칙의 구조",
+      "wraps": [
+        "p1",
+        "p2",
+        "p3"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "실제로 적힌 문자열",
+      "wraps": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "pad": 30
+    }
+  ],
+  "connections": [
+    {
+      "from": "p1",
+      "to": "p2",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "p2",
+      "to": "p3",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "p1",
+      "to": "t1",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "해당"
+    },
+    {
+      "from": "p2",
+      "to": "t2",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "조건"
+    },
+    {
+      "from": "p3",
+      "to": "t3",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "변환"
+    }
+  ]
+}
