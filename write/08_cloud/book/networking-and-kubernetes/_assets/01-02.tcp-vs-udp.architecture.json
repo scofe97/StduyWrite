@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "TCP 와 UDP — 같은 자리에서 반대 방향을 고른 둘",
+    "subtitle": "헤더에 무엇을 두느냐가 무엇을 할 수 있는지를 정하고, 그 값이 대가로 돌아온다",
+    "quality_profile": "showcase",
+    "viewBox": [
+      900,
+      480
+    ],
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "th",
+      "type": "backend",
+      "label": "TCP 헤더",
+      "pos": [
+        40,
+        60
+      ],
+      "size": [
+        240,
+        100
+      ],
+      "sublabel": "시퀀스 · 확인 응답 · 윈도우 · 플래그",
+      "tag": "최소 20바이트"
+    },
+    {
+      "id": "tw",
+      "type": "cloud",
+      "label": "할 수 있는 일",
+      "pos": [
+        330,
+        60
+      ],
+      "size": [
+        240,
+        100
+      ],
+      "sublabel": "재전송 · 순서 재조립 · 흐름 제어",
+      "tag": "그래서 연결을 먼저 세운다"
+    },
+    {
+      "id": "tc",
+      "type": "security",
+      "label": "치르는 값",
+      "pos": [
+        620,
+        60
+      ],
+      "size": [
+        240,
+        100
+      ],
+      "sublabel": "왕복 지연 · 앞이 막히면 뒤도 멈춤",
+      "tag": "Hello 하나에 12패킷"
+    },
+    {
+      "id": "uh",
+      "type": "messagebus",
+      "label": "UDP 헤더",
+      "pos": [
+        40,
+        300
+      ],
+      "size": [
+        240,
+        100
+      ],
+      "sublabel": "포트 둘 · 길이 · 체크섬",
+      "tag": "8바이트 고정"
+    },
+    {
+      "id": "uw",
+      "type": "cloud",
+      "label": "할 수 있는 일",
+      "pos": [
+        330,
+        300
+      ],
+      "size": [
+        240,
+        100
+      ],
+      "sublabel": "어디로 보낼지와 깨짐 확인만",
+      "tag": "세울 연결이 없다"
+    },
+    {
+      "id": "uc",
+      "type": "frontend",
+      "label": "얻는 것",
+      "pos": [
+        620,
+        300
+      ],
+      "size": [
+        240,
+        100
+      ],
+      "sublabel": "기다림 없음 · 앞이 빠져도 흐름",
+      "tag": "음성 · DNS · DHCP"
+    }
+  ],
+  "connections": [
+    {
+      "from": "th",
+      "to": "tw",
+      "variant": "default",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "tw",
+      "to": "tc",
+      "variant": "default",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "uh",
+      "to": "uw",
+      "variant": "default",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "uw",
+      "to": "uc",
+      "variant": "emphasis",
+      "route": "straight",
+      "fromSide": "right",
+      "toSide": "left"
+    }
+  ]
+}
