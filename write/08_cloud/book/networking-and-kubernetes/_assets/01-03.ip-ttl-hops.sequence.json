@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "TTL — 패킷이 영원히 돌지 못하게 하는 숫자",
+    "subtitle": "라우터를 지날 때마다 1씩 줄고, 0 이 되면 그 자리에서 버려진다",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1000,
+      680
+    ],
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "participants": [
+    {
+      "id": "a",
+      "type": "frontend",
+      "label": "호스트 A",
+      "sublabel": "TTL 을 정한다"
+    },
+    {
+      "id": "r1",
+      "type": "cloud",
+      "label": "라우터 1",
+      "sublabel": "다음 홉만"
+    },
+    {
+      "id": "r2",
+      "type": "cloud",
+      "label": "라우터 2",
+      "sublabel": "다음 홉만"
+    },
+    {
+      "id": "b",
+      "type": "backend",
+      "label": "호스트 B",
+      "sublabel": "목적지"
+    }
+  ],
+  "segments": [
+    {
+      "from": 170,
+      "to": 380,
+      "label": "정상 전달 — 홉을 지날 때마다 1 씩 줄어든다"
+    },
+    {
+      "from": 450,
+      "to": 600,
+      "label": "경로가 고리를 이루면 — 0 에 닿는 순간 버려지고 다음 홉으로 가지 않는다"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "r1",
+      "from": 218,
+      "to": 250,
+      "type": "cloud"
+    },
+    {
+      "participant": "r2",
+      "from": 278,
+      "to": 310,
+      "type": "cloud"
+    },
+    {
+      "participant": "r1",
+      "from": 498,
+      "to": 552,
+      "type": "security"
+    }
+  ],
+  "messages": [
+    {
+      "id": "h1",
+      "from": "a",
+      "to": "r1",
+      "y": 210,
+      "label": "TTL 64 로 출발",
+      "variant": "emphasis"
+    },
+    {
+      "id": "h2",
+      "from": "r1",
+      "to": "r2",
+      "y": 270,
+      "label": "TTL 63 · 지나며 1 을 뺀다",
+      "variant": "emphasis"
+    },
+    {
+      "id": "h3",
+      "from": "r2",
+      "to": "b",
+      "y": 330,
+      "label": "TTL 62 · 도착",
+      "variant": "emphasis"
+    },
+    {
+      "id": "h4",
+      "from": "a",
+      "to": "r1",
+      "y": 490,
+      "label": "잘못된 경로를 63 번 돌아 TTL 1 로 도착",
+      "variant": "emphasis"
+    },
+    {
+      "id": "h6",
+      "from": "r1",
+      "to": "a",
+      "y": 560,
+      "label": "ICMP Time Exceeded · 버렸다고 알린다",
+      "variant": "dashed"
+    }
+  ]
+}

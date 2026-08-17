@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "NAT — 공인 주소 하나를 여럿이 나눠 쓰는 법",
+    "subtitle": "주소만으로는 구분이 안 되므로 공유기가 포트를 바꿔 적고 그 표로 되돌린다",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1000,
+      760
+    ],
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "participants": [
+    {
+      "id": "nb",
+      "type": "frontend",
+      "label": "노트북",
+      "sublabel": "192.168.0.15"
+    },
+    {
+      "id": "ph",
+      "type": "frontend",
+      "label": "폰",
+      "sublabel": "192.168.0.16"
+    },
+    {
+      "id": "gw",
+      "type": "cloud",
+      "label": "공유기",
+      "sublabel": "매핑 표 보유"
+    },
+    {
+      "id": "srv",
+      "type": "backend",
+      "label": "웹 서버",
+      "sublabel": "같은 주소로 보인다"
+    }
+  ],
+  "segments": [
+    {
+      "from": 170,
+      "to": 400,
+      "label": "나갈 때 — 사설 주소와 포트를 공인 주소와 새 포트로 바꿔 적는다"
+    },
+    {
+      "from": 460,
+      "to": 660,
+      "label": "돌아올 때 — 도착 포트만 보고 표에서 주인을 찾는다"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "gw",
+      "from": 210,
+      "to": 620,
+      "type": "cloud"
+    }
+  ],
+  "messages": [
+    {
+      "id": "n1",
+      "from": "nb",
+      "to": "gw",
+      "y": 210,
+      "label": "192.168.0.15:50000",
+      "variant": "emphasis"
+    },
+    {
+      "id": "n2",
+      "from": "gw",
+      "to": "srv",
+      "y": 265,
+      "label": "공인IP:60001 로 바꿔 보낸다",
+      "variant": "emphasis"
+    },
+    {
+      "id": "n3",
+      "from": "ph",
+      "to": "gw",
+      "y": 320,
+      "label": "192.168.0.16:50000 · 내부 포트가 같아도 무관",
+      "variant": "emphasis"
+    },
+    {
+      "id": "n4",
+      "from": "gw",
+      "to": "srv",
+      "y": 375,
+      "label": "공인IP:60002 · 다른 포트를 배정한다",
+      "variant": "emphasis"
+    },
+    {
+      "id": "n5",
+      "from": "srv",
+      "to": "gw",
+      "y": 500,
+      "label": "응답 → 공인IP:60001",
+      "variant": "dashed"
+    },
+    {
+      "id": "n6",
+      "from": "gw",
+      "to": "nb",
+      "y": 555,
+      "label": "표를 보고 노트북에게",
+      "variant": "dashed"
+    },
+    {
+      "id": "n7",
+      "from": "srv",
+      "to": "gw",
+      "y": 600,
+      "label": "응답 → 공인IP:60002",
+      "variant": "dashed"
+    },
+    {
+      "id": "n8",
+      "from": "gw",
+      "to": "ph",
+      "y": 645,
+      "label": "표를 보고 폰에게",
+      "variant": "dashed"
+    }
+  ]
+}
