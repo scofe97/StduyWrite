@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "윈도우 크기 — 받는 쪽이 매번 알려 주는 여유분",
+    "subtitle": "숫자가 줄었다 늘었다 하는 것이 흐름 제어다 · 0 이 되면 송신이 멈춘다",
+    "quality_profile": "showcase",
+    "viewBox": [
+      900,
+      840
+    ],
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "participants": [
+    {
+      "id": "c",
+      "type": "frontend",
+      "label": "보내는 쪽",
+      "sublabel": "창만큼 앞서 간다"
+    },
+    {
+      "id": "s",
+      "type": "backend",
+      "label": "받는 쪽",
+      "sublabel": "여유분을 알린다"
+    }
+  ],
+  "segments": [
+    {
+      "from": 170,
+      "to": 400,
+      "label": "받는 쪽 앱이 제때 읽어 가는 동안 — 창이 열려 있다"
+    },
+    {
+      "from": 460,
+      "to": 620,
+      "label": "앱이 밀리면 창이 좁아지고 0 에서 송신이 멈춘다"
+    },
+    {
+      "from": 660,
+      "to": 730,
+      "label": "앱이 다시 읽어 가면 창이 열리고 송신이 재개된다"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "s",
+      "from": 200,
+      "to": 380,
+      "type": "backend"
+    },
+    {
+      "participant": "c",
+      "from": 500,
+      "to": 610,
+      "type": "security"
+    }
+  ],
+  "messages": [
+    {
+      "id": "w1",
+      "from": "c",
+      "to": "s",
+      "y": 210,
+      "label": "데이터 · 창이 허락하는 만큼",
+      "variant": "emphasis"
+    },
+    {
+      "id": "w2",
+      "from": "s",
+      "to": "c",
+      "y": 280,
+      "label": "ACK  win=4096 · 아직 이만큼 더 받을 수 있다",
+      "variant": "dashed"
+    },
+    {
+      "id": "w3",
+      "from": "c",
+      "to": "s",
+      "y": 350,
+      "label": "데이터 · 창이 그대로라 계속 흐른다",
+      "variant": "emphasis"
+    },
+    {
+      "id": "w4",
+      "from": "s",
+      "to": "c",
+      "y": 500,
+      "label": "ACK  win=1024 · 앱이 밀려 버퍼가 차 간다",
+      "variant": "dashed"
+    },
+    {
+      "id": "w5",
+      "from": "s",
+      "to": "c",
+      "y": 570,
+      "label": "ACK  win=0 · 보내는 쪽은 여기서 멈춘다",
+      "variant": "security"
+    },
+    {
+      "id": "w6",
+      "from": "s",
+      "to": "c",
+      "y": 700,
+      "label": "ACK  win=4096 · 앱이 읽어 가서 창이 다시 열렸다",
+      "variant": "dashed"
+    }
+  ]
+}
