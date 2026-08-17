@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "네 리소스가 만드는 권한 범위 조합",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      880,
+      400
+    ]
+  },
+  "components": [
+    {
+      "id": "role",
+      "type": "security",
+      "label": "Role",
+      "sublabel": "rules: 리소스 + 동사",
+      "tag": "이 네임스페이스 안에서만",
+      "pos": [
+        80,
+        70
+      ],
+      "size": [
+        230,
+        90
+      ]
+    },
+    {
+      "id": "rb",
+      "type": "cloud",
+      "label": "RoleBinding",
+      "sublabel": "subjects → roleRef",
+      "tag": "Role 과 같은 네임스페이스",
+      "pos": [
+        80,
+        250
+      ],
+      "size": [
+        230,
+        90
+      ]
+    },
+    {
+      "id": "crb",
+      "type": "cloud",
+      "label": "ClusterRoleBinding",
+      "sublabel": "subjects → roleRef",
+      "tag": "전 네임스페이스에 적용",
+      "pos": [
+        560,
+        70
+      ],
+      "size": [
+        250,
+        90
+      ]
+    },
+    {
+      "id": "crole",
+      "type": "security",
+      "label": "ClusterRole",
+      "sublabel": "비네임스페이스 리소스 포함",
+      "tag": "정의는 클러스터 전역",
+      "pos": [
+        560,
+        250
+      ],
+      "size": [
+        250,
+        90
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "네임스페이스 범위",
+      "wraps": [
+        "role",
+        "rb"
+      ],
+      "pad": 46
+    },
+    {
+      "kind": "region",
+      "label": "클러스터 범위",
+      "wraps": [
+        "crb",
+        "crole"
+      ],
+      "pad": 46
+    }
+  ],
+  "connections": [
+    {
+      "id": "c1",
+      "from": "rb",
+      "to": "role",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "c2",
+      "from": "crb",
+      "to": "crole",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "c3",
+      "from": "rb",
+      "to": "crole",
+      "variant": "dashed",
+      "route": "straight",
+      "label": "조건: 범위를 좁혀 재사용"
+    }
+  ]
+}

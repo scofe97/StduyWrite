@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "DNS로만 찾을 때 잘못된 IP에 닿는 경로",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      1280,
+      520
+    ]
+  },
+  "stages": [
+    {
+      "label": "조회"
+    },
+    {
+      "label": "응답"
+    },
+    {
+      "label": "보관"
+    },
+    {
+      "label": "이후 요청"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "client",
+      "type": "frontend",
+      "label": "클라이언트",
+      "stage": 0,
+      "row": 0,
+      "sublabel": "Java 기본 동작",
+      "width": 129,
+      "height": 80
+    },
+    {
+      "id": "resolve",
+      "type": "cloud",
+      "label": "이름 조회",
+      "stage": 1,
+      "row": 0,
+      "sublabel": "A 레코드",
+      "width": 129,
+      "height": 80
+    },
+    {
+      "id": "cache",
+      "type": "database",
+      "label": "IP 캐시",
+      "stage": 2,
+      "row": 0,
+      "sublabel": "재조회 안 함",
+      "width": 129,
+      "height": 80
+    },
+    {
+      "id": "ok",
+      "type": "backend",
+      "label": "정상 도달",
+      "stage": 3,
+      "row": 0,
+      "sublabel": "IP 유효",
+      "width": 129,
+      "height": 80
+    },
+    {
+      "id": "stale",
+      "type": "security",
+      "label": "잘못된 IP",
+      "stage": 3,
+      "row": 1,
+      "sublabel": "사라진 Pod",
+      "width": 129,
+      "height": 80
+    }
+  ],
+  "flows": [
+    {
+      "id": "s1",
+      "from": "client",
+      "to": "resolve",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "이름"
+    },
+    {
+      "id": "s2",
+      "from": "resolve",
+      "to": "cache",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "IP 하나"
+    },
+    {
+      "id": "s3",
+      "from": "cache",
+      "to": "ok",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "그대로 사용"
+    },
+    {
+      "id": "s4",
+      "from": "cache",
+      "to": "stale",
+      "variant": "dashed",
+      "label": "조건: Pod 교체",
+      "via": [
+        [
+          530,
+          282
+        ]
+      ],
+      "labelAt": [
+        602,
+        268
+      ],
+      "fromSide": "bottom",
+      "toSide": "left"
+    }
+  ]
+}
