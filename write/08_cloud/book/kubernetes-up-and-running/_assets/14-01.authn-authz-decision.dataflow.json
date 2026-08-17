@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "API 요청이 인증과 인가를 거쳐 판정되는 경로",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      1280,
+      520
+    ]
+  },
+  "stages": [
+    {
+      "label": "요청"
+    },
+    {
+      "label": "인증"
+    },
+    {
+      "label": "인가"
+    },
+    {
+      "label": "판정"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "caller",
+      "type": "external",
+      "label": "API 요청",
+      "stage": 0,
+      "row": 0,
+      "sublabel": "kubectl · Pod",
+      "width": 129,
+      "height": 80
+    },
+    {
+      "id": "authn",
+      "type": "security",
+      "label": "인증",
+      "stage": 1,
+      "row": 0,
+      "sublabel": "신원 확립",
+      "width": 129,
+      "height": 80
+    },
+    {
+      "id": "authz",
+      "type": "security",
+      "label": "인가",
+      "stage": 2,
+      "row": 0,
+      "sublabel": "신원·리소스·동사",
+      "width": 129,
+      "height": 80
+    },
+    {
+      "id": "allow",
+      "type": "backend",
+      "label": "허용",
+      "stage": 3,
+      "row": 0,
+      "sublabel": "요청 수행",
+      "width": 129,
+      "height": 80
+    },
+    {
+      "id": "deny",
+      "type": "cloud",
+      "label": "거부",
+      "stage": 3,
+      "row": 1,
+      "sublabel": "HTTP 403",
+      "width": 129,
+      "height": 80
+    }
+  ],
+  "flows": [
+    {
+      "id": "f1",
+      "from": "caller",
+      "to": "authn",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "요청 도착"
+    },
+    {
+      "id": "f2",
+      "from": "authn",
+      "to": "authz",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "신원 확정"
+    },
+    {
+      "id": "f3",
+      "from": "authz",
+      "to": "allow",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "규칙 일치"
+    },
+    {
+      "id": "f4",
+      "from": "authz",
+      "to": "deny",
+      "variant": "dashed",
+      "label": "조건: 일치 없음",
+      "labelAt": [
+        602,
+        268
+      ],
+      "fromSide": "bottom",
+      "toSide": "left",
+      "via": [
+        [
+          530,
+          282
+        ]
+      ]
+    }
+  ]
+}
