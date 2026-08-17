@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "ARP — 전원에게 묻고 한 대에게만 답한다",
+    "subtitle": "묻는 길은 브로드캐스트, 답하는 길은 유니캐스트 · 한 번의 교환으로 양쪽 표가 채워진다",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1000,
+      740
+    ],
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "participants": [
+    {
+      "id": "b",
+      "type": "frontend",
+      "label": "요청 컴퓨터",
+      "sublabel": "10.0.0.5"
+    },
+    {
+      "id": "o",
+      "type": "messagebus",
+      "label": "다른 호스트",
+      "sublabel": "10.0.0.7"
+    },
+    {
+      "id": "s",
+      "type": "backend",
+      "label": "대상 서버",
+      "sublabel": "10.0.0.1"
+    }
+  ],
+  "segments": [
+    {
+      "from": 170,
+      "to": 470,
+      "label": "ARP 캐시에 없을 때만 — 있으면 이 구간을 통째로 건너뛴다"
+    },
+    {
+      "from": 540,
+      "to": 660,
+      "label": "MAC 을 알았으니 이제 프레임을 보낸다"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "o",
+      "from": 218,
+      "to": 260,
+      "type": "security"
+    },
+    {
+      "participant": "s",
+      "from": 288,
+      "to": 420,
+      "type": "backend"
+    }
+  ],
+  "messages": [
+    {
+      "id": "p1",
+      "from": "b",
+      "to": "o",
+      "y": 210,
+      "label": "ARP 요청 · 목적지 MAC 은 FF:FF:FF:FF:FF:FF",
+      "variant": "emphasis"
+    },
+    {
+      "id": "p2",
+      "from": "b",
+      "to": "s",
+      "y": 280,
+      "label": "같은 프레임이 브로드캐스트 도메인 전체에 닿는다",
+      "variant": "emphasis"
+    },
+    {
+      "id": "p3",
+      "from": "s",
+      "to": "b",
+      "y": 410,
+      "label": "ARP 응답 · 10.0.0.1 의 MAC 은 나다 (그 한 대에게만)",
+      "variant": "dashed"
+    },
+    {
+      "id": "p4",
+      "from": "b",
+      "to": "s",
+      "y": 600,
+      "label": "Ethernet 프레임 · 목적지 = 서버 MAC · EtherType 0x0800",
+      "variant": "emphasis"
+    }
+  ]
+}

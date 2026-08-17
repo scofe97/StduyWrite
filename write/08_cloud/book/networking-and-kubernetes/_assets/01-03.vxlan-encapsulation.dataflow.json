@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "VXLAN — 경계를 못 넘는 프레임을 넘게 하는 법",
+    "subtitle": "L2 프레임을 UDP 페이로드로 감싸면 라우터에게는 평범한 IP 트래픽으로 보인다",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1280,
+      440
+    ],
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "stages": [
+    {
+      "label": "노드 A 안에서"
+    },
+    {
+      "label": "감싼다"
+    },
+    {
+      "label": "IP 망을 건넌다"
+    },
+    {
+      "label": "노드 B 안에서"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "frame",
+      "type": "frontend",
+      "label": "L2 프레임",
+      "stage": 0,
+      "row": 0,
+      "sublabel": "경계를 못 넘음",
+      "width": 124,
+      "height": 100
+    },
+    {
+      "id": "wrap",
+      "type": "cloud",
+      "label": "UDP 봉함",
+      "stage": 1,
+      "row": 0,
+      "sublabel": "VXLAN+UDP+IP",
+      "width": 124,
+      "height": 100
+    },
+    {
+      "id": "router",
+      "type": "messagebus",
+      "label": "라우터",
+      "stage": 2,
+      "row": 0,
+      "sublabel": "평범한 IP 로",
+      "width": 124,
+      "height": 100
+    },
+    {
+      "id": "unwrap",
+      "type": "backend",
+      "label": "개봉",
+      "stage": 3,
+      "row": 0,
+      "sublabel": "원래 프레임",
+      "width": 124,
+      "height": 100
+    }
+  ],
+  "flows": [
+    {
+      "id": "v1",
+      "from": "frame",
+      "to": "wrap",
+      "variant": "emphasis",
+      "label": "페이로드로"
+    },
+    {
+      "id": "v2",
+      "from": "wrap",
+      "to": "router",
+      "variant": "emphasis",
+      "label": "노드 간 IP"
+    },
+    {
+      "id": "v3",
+      "from": "router",
+      "to": "unwrap",
+      "variant": "emphasis",
+      "label": "정상 전달"
+    }
+  ]
+}
