@@ -5,7 +5,6 @@ status: final
 related:
   - ./kubernetes/README.md
   - ./argocd/README.md
-  - ./service-mesh/README.md
   - ./book/networking-and-kubernetes/README.md
   - ./book/container-security/README.md
 updated: 2026-08-09
@@ -21,8 +20,8 @@ updated: 2026-08-09
 |--------------|------|------|
 | [kubernetes/](./kubernetes/README.md) | 로컬 클러스터 운영, Helm·Operator, DB/DevTools 운영, RBAC, 오토스케일링 | 20개 장 |
 | [argocd/](./argocd/README.md) | GitOps, Application, AppProject, App of Apps, ApplicationSet, Image Updater, 운영 심화 | 14개 장 |
-| [service-mesh/](./service-mesh/README.md) | Linkerd·Istio·Cilium, 사이드카/앰비언트, mTLS, 멀티클러스터 | 26개 장 |
-| [openstack/](./openstack/README.md) | IaaS 개요, AWS 서비스 대응, 오픈스택↔Kubernetes 층 관계(CMP 바닥 인프라) | 1개 장 |
+| `service-mesh/` <!-- 링크 끊김(2026-08): ./service-mesh/README.md --> | Linkerd·Istio·Cilium, 사이드카/앰비언트, mTLS, 멀티클러스터 | 26개 장 |
+| `openstack/` <!-- 링크 끊김(2026-08): ./openstack/README.md --> | IaaS 개요, AWS 서비스 대응, 오픈스택↔Kubernetes 층 관계(CMP 바닥 인프라) | 1개 장 |
 | [book/networking-and-kubernetes/](./book/networking-and-kubernetes/README.md) | 《Networking and Kubernetes》 정독 — OSI/TCP-IP, Linux 네트워킹, 컨테이너·K8s 네트워킹, Service 추상화, AWS/GCP/Azure | 정독 노트 17편 + 용어집·결정 치트시트 |
 | [book/container-security/](./book/container-security/README.md) | 《Container Security》(Liz Rice, 1판) 정독 — 위협 모델, syscall·capability·cgroup·namespace가 세우는 격리 경계, 이미지·공급망 보안, 취약점 스캐닝, 샌드박싱과 격리 파괴 | 정독 노트 17편 (본문 14/14 + 부록 완독) |
 
@@ -35,13 +34,13 @@ updated: 2026-08-09
 - Spring Cloud Stream (Kafka·RabbitMQ 추상화) — 단, 메시징 도메인 측면은 [`../04_messaging/`](../04_messaging/) 확인
 - K8s 친화적 설정 — `application-k8s.yml`, probes, graceful shutdown
 
-경계: K8s 매니페스트·Helm 차트 설계는 [`kubernetes/`](./kubernetes/README.md). Service Mesh 개념도 [`service-mesh/`](./service-mesh/README.md). *Spring 애플리케이션이 이들 위에서 돌 때 필요한 Spring 스택*만 위의 예정 주제 범위.
+경계: K8s 매니페스트·Helm 차트 설계는 [`kubernetes/`](./kubernetes/README.md). Service Mesh 개념도 `service-mesh/` <!-- 링크 끊김(2026-08): ./service-mesh/README.md -->. *Spring 애플리케이션이 이들 위에서 돌 때 필요한 Spring 스택*만 위의 예정 주제 범위.
 
 ## 경계 기준
 
 CI/CD 파이프라인 작성 자체는 [`07_devops/`](../07_devops/)로 간다. 반대로 K8s 매니페스트 설계, 네트워크 정책, 서비스 메시 사이드카처럼 "클러스터 내부에서 어떻게 돌아가는가"는 여기다. GitOps 도구 중에서도 ArgoCD는 문서 양과 운영 주제가 커져 별도 `argocd/` 서브카테고리로 분리했다. 메시징 미들웨어(Kafka, Redpanda) 자체는 [`04_messaging/`](../04_messaging/)에 있고, 그것을 K8s 위에 올리는 Operator 패턴 관점은 `kubernetes/03-09` `06-06`에서 다룬다.
 
-층으로 보면 [`openstack/`](./openstack/README.md)(IaaS)이 인프라를 *만드는* 아래층이고, `kubernetes/`·`service-mesh/`는 그 위에서 컨테이너를 *굴리는* 층이다. 오픈스택은 회사 CMP·컨테이너가 딛고 선 바닥이라, 서비스 내부 딥다이브가 아니라 개발자가 바닥을 조망하는 개요 범위로 둔다.
+층으로 보면 `openstack/` <!-- 링크 끊김(2026-08): ./openstack/README.md -->(IaaS)이 인프라를 *만드는* 아래층이고, `kubernetes/`·`service-mesh/`는 그 위에서 컨테이너를 *굴리는* 층이다. 오픈스택은 회사 CMP·컨테이너가 딛고 선 바닥이라, 서비스 내부 딥다이브가 아니라 개발자가 바닥을 조망하는 개요 범위로 둔다.
 
 ## 이관 연혁
 

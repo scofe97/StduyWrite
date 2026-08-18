@@ -34,4 +34,4 @@ updated: 2026-07-15
 - 통합 경로: [02_os 통합 학습 로드맵](../roadmap.md) — 네트워크 경로 단계의 진입점
 - 상위: [02_os/ MOC](../README.md)
 - 이웃: [02_os/kernel/](../kernel/README.md) — 커널 일반 메커니즘(시스템 콜·namespace·cgroup·/proc)
-- 활용처: [08_cloud/kubernetes/](../../08_cloud/kubernetes/README.md), [08_cloud/service-mesh/](../../08_cloud/service-mesh/README.md)
+- 활용처: [08_cloud/kubernetes/](../../08_cloud/kubernetes/README.md), `08_cloud/service-mesh/` <!-- 링크 끊김(2026-08): ../../08_cloud/service-mesh/README.md -->

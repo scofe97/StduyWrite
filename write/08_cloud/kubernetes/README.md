@@ -9,7 +9,6 @@ related:
   - roadmap.md
   - ../README.md
   - ../argocd/README.md
-  - ../service-mesh/README.md
   - ../book/kubernetes-in-action/README.md
 updated: 2026-07-12
 ---
@@ -18,7 +17,7 @@ updated: 2026-07-12
 ---
 > Kubernetes를 개념 축으로 정리한 딥다이브 노트입니다. 공식 문서(kubernetes.io/docs/concepts)의 대분류를 뼈대로 삼되, 폴더 번호는 "무엇을 먼저 배우는가"라는 학습 흐름을 따릅니다. 워크로드에서 시작해 설정·저장소·네트워크로 넓히고, 스케줄링·내부 구조·보안·확장을 거쳐 Day-2 운영까지 한 지도로 잇습니다.
 
-이 카테고리는 "클러스터 안에서 어떻게 선언되고, 배치되고, 연결되고, 운영되는가"를 기본 범위로 둡니다. Service Mesh처럼 서비스 간 L7 정책·mTLS·세밀한 트래픽 제어가 본격적으로 필요해지는 지점부터는 별도 [`service-mesh`](../service-mesh/README.md) 카테고리로 넘깁니다. ArgoCD는 여기서 입문 수준으로만 소개하고, App of Apps·ApplicationSet·Image Updater 같은 상세 운영은 별도 [`argocd`](../argocd/README.md) 카테고리가 맡습니다.
+이 카테고리는 "클러스터 안에서 어떻게 선언되고, 배치되고, 연결되고, 운영되는가"를 기본 범위로 둡니다. Service Mesh처럼 서비스 간 L7 정책·mTLS·세밀한 트래픽 제어가 본격적으로 필요해지는 지점부터는 별도 `service-mesh` <!-- 링크 끊김(2026-08): ../service-mesh/README.md --> 카테고리로 넘깁니다. ArgoCD는 여기서 입문 수준으로만 소개하고, App of Apps·ApplicationSet·Image Updater 같은 상세 운영은 별도 [`argocd`](../argocd/README.md) 카테고리가 맡습니다.
 
 책 한 권을 저자 순서대로 따라가는 정독본은 [`book/kubernetes-in-action`](../book/kubernetes-in-action/README.md)에 따로 있습니다. 이 개념 노트는 주제로 검색해 펼쳐 보는 참조용이고, 정독본은 저자가 개념을 쌓아 올린 순서를 보존하는 학습용이라 역할이 다릅니다. 개념이 겹치면 서로 링크로만 잇고 통째 병합하지 않습니다.
 
@@ -207,7 +206,7 @@ Jenkins·SonarQube·ArgoCD·Harbor를 K8s 위에 올려 개발 생산성과 배�
 
 > service-mesh·argocd·devops 카테고리로 이어지는 선후 관계와, 같은 책을 정독한 노트를 함께 봅니다.
 
-- [service-mesh MOC](../service-mesh/README.md) — 본 카테고리의 다음 단계. Pod 간 트래픽 제어·mTLS·관측성을 메시 계층에서 해결합니다
+- `service-mesh MOC` <!-- 링크 끊김(2026-08): ../service-mesh/README.md --> — 본 카테고리의 다음 단계. Pod 간 트래픽 제어·mTLS·관측성을 메시 계층에서 해결합니다
 - [argocd MOC](../argocd/README.md) — ArgoCD 상세 시리즈. AppProject·App of Apps·ApplicationSet·Image Updater 운영을 별도로 다룬다
 - [Kubernetes in Action 정독본](../book/kubernetes-in-action/README.md) — 같은 개념을 저자 순서대로 쌓아 올린 책-종속 노트. 개념이 겹치면 이 개념 노트로 링크를 건다
 - [devops MOC](../../07_devops/README.md) — CI/CD 파이프라인 자체 설계는 이곳

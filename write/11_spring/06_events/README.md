@@ -59,7 +59,7 @@ updated: 2026-05-24
 
 ## 원본 학습 자료
 
-본 묶음은 노션 학습 노트(`_notion_import/_unsorted/` 의 이벤트 리스너 1~3편 + 스프링 이벤트 동기/비동기)를 통합 재작성한 산출물입니다. 원본은 재작성 완료 후 제거됐고, 이력은 [`../_notion_import/README.md`](../_notion_import/README.md) 에 있습니다.
+본 묶음은 노션 학습 노트(`_notion_import/_unsorted/` 의 이벤트 리스너 1~3편 + 스프링 이벤트 동기/비동기)를 통합 재작성한 산출물입니다. 원본은 재작성 완료 후 제거됐고, 이력은 `../_notion_import/README.md` <!-- 링크 끊김(2026-08): ../_notion_import/README.md --> 에 있습니다.
 
 ## 관련 문서
 

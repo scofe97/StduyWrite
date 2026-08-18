@@ -59,4 +59,4 @@ updated: 2026-08-06
 > 이 폴더는 Kubernetes 전체 지도와 Service Mesh의 L7 정책 학습으로 이어집니다.
 
 - [Kubernetes MOC](../README.md) — 스토리지·스케줄링·보안을 포함한 전체 대주제 지도입니다.
-- [서비스 메시 기초](../../service-mesh/01_foundation/01-01.%EC%84%9C%EB%B9%84%EC%8A%A4%20%EB%A9%94%EC%8B%9C%20%EA%B8%B0%EC%B4%88.md) — 기본 연결성 위에 L7 트래픽 정책·mTLS·관측성을 추가합니다.
+- `서비스 메시 기초` <!-- 링크 끊김(2026-08): ../../service-mesh/01_foundation/01-01.서비스 메시 기초.md --> — 기본 연결성 위에 L7 트래픽 정책·mTLS·관측성을 추가합니다.
