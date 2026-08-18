@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "MySQL 싱글턴 랩 — PV 에서 Service 까지",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      1280,
+      420
+    ]
+  },
+  "stages": [
+    {
+      "label": "볼륨"
+    },
+    {
+      "label": "청구"
+    },
+    {
+      "label": "워크로드"
+    },
+    {
+      "label": "노출"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "pv",
+      "type": "database",
+      "label": "PV",
+      "stage": 0,
+      "row": 0,
+      "sublabel": "NFS 1Gi",
+      "width": 129,
+      "height": 100
+    },
+    {
+      "id": "pvc",
+      "type": "cloud",
+      "label": "PVC",
+      "stage": 1,
+      "row": 0,
+      "sublabel": "라벨로 바인딩",
+      "width": 129,
+      "height": 100
+    },
+    {
+      "id": "rs",
+      "type": "backend",
+      "label": "ReplicaSet",
+      "stage": 2,
+      "row": 0,
+      "sublabel": "replicas 1",
+      "width": 129,
+      "height": 100
+    },
+    {
+      "id": "svc",
+      "type": "frontend",
+      "label": "Service",
+      "stage": 3,
+      "row": 0,
+      "sublabel": "3306/TCP",
+      "width": 129,
+      "height": 100
+    }
+  ],
+  "flows": [
+    {
+      "id": "v1",
+      "from": "pv",
+      "to": "pvc",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "라벨 매칭"
+    },
+    {
+      "id": "v2",
+      "from": "pvc",
+      "to": "rs",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "마운트"
+    },
+    {
+      "id": "v3",
+      "from": "rs",
+      "to": "svc",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "셀렉터"
+    }
+  ]
+}
