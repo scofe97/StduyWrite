@@ -1,0 +1,275 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "모르면 위로 떠넘기기 — 그 사슬은 어디서 끝나는가",
+    "subtitle": "표에서 어느 줄에 걸리느냐가 다음 행선지를 정한다 · 좁은 줄에 걸리면 집 안에서 끝나고, 아무 데도 안 걸려 0.0.0.0/0 으로 내려오면 그때 밖으로 나간다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "t1a",
+      "type": "messagebus",
+      "label": "상위 사업자",
+      "pos": [
+        200,
+        90
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "기본 경로가 없다",
+      "tag": "전체 표 보유"
+    },
+    {
+      "id": "t1b",
+      "type": "messagebus",
+      "label": "이웃 사업자",
+      "pos": [
+        460,
+        90
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "대등한 관계",
+      "tag": "전체 표 보유"
+    },
+    {
+      "id": "isp",
+      "type": "cloud",
+      "label": "지역 ISP",
+      "pos": [
+        200,
+        240
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "고객 대역만 안다",
+      "tag": "모르면 위로"
+    },
+    {
+      "id": "gisp",
+      "type": "cloud",
+      "label": "구글 쪽 망",
+      "pos": [
+        460,
+        240
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "8.8.8.0/24 광고",
+      "tag": "여기가 주인"
+    },
+    {
+      "id": "home",
+      "type": "cloud",
+      "label": "집 공유기",
+      "pos": [
+        40,
+        390
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "표는 두세 줄뿐",
+      "tag": "모르면 위로"
+    },
+    {
+      "id": "grt",
+      "type": "cloud",
+      "label": "구글 라우터",
+      "pos": [
+        660,
+        390
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "내 대역이다",
+      "tag": "구체 경로"
+    },
+    {
+      "id": "nb",
+      "type": "frontend",
+      "label": "내 노트북",
+      "pos": [
+        40,
+        540
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "10.0.0.5",
+      "tag": "출발"
+    },
+    {
+      "id": "dns",
+      "type": "backend",
+      "label": "8.8.8.8",
+      "pos": [
+        660,
+        540
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "목적지 호스트",
+      "tag": "도착"
+    },
+    {
+      "id": "tbl1",
+      "type": "security",
+      "label": "10.0.0.0/24",
+      "pos": [
+        300,
+        700
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "→ 집 안 쪽 문",
+      "tag": "8.8.8.8 안 걸림"
+    },
+    {
+      "id": "tbl2",
+      "type": "messagebus",
+      "label": "0.0.0.0/0",
+      "pos": [
+        500,
+        700
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "→ ISP 쪽 문",
+      "tag": "여기 걸린다"
+    },
+    {
+      "id": "lan",
+      "type": "frontend",
+      "label": "집 안 기기",
+      "pos": [
+        300,
+        880
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "10.0.0.x 라면",
+      "tag": "여기서 끝난다"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "꼭대기 — 떠넘길 위가 없는 자리",
+      "wraps": [
+        "t1a",
+        "t1b"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "집 공유기 안",
+      "wraps": [
+        "tbl1",
+        "tbl2"
+      ],
+      "pad": 30
+    }
+  ],
+  "connections": [
+    {
+      "from": "nb",
+      "to": "home",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "home",
+      "to": "tbl1",
+      "variant": "default",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "tbl1",
+      "to": "tbl2",
+      "variant": "default",
+      "route": "straight",
+      "label": "다음",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "tbl1",
+      "to": "lan",
+      "variant": "default",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "tbl2",
+      "to": "isp",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "isp",
+      "to": "t1a",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "t1a",
+      "to": "t1b",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "경로 광고",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "t1b",
+      "to": "gisp",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "gisp",
+      "to": "grt",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "from": "grt",
+      "to": "dns",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}

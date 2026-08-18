@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "CIDR 위임 계보 — 받은 블록을 쪼개 내주고, 그중 하나만 따라간다",
+    "subtitle": "호스트부가 21비트(209만 개)에서 0비트(1개)로 줄어드는 과정 · 윗줄이 따라가는 조각이고 아랫줄은 같은 단계에서 남에게 간 형제 조각",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "iana",
+      "type": "cloud",
+      "label": "IANA 블록",
+      "pos": [
+        40,
+        60
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "208.128.0.0/11",
+      "tag": "208.128 ~ 208.159"
+    },
+    {
+      "id": "arin",
+      "type": "cloud",
+      "label": "ARIN",
+      "pos": [
+        240,
+        60
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "북미 레지스트리",
+      "tag": "받은 /11 을 쪼갠다"
+    },
+    {
+      "id": "sub",
+      "type": "cloud",
+      "label": "하위 조직",
+      "pos": [
+        440,
+        60
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "ISP · 기업",
+      "tag": "받은 몫을 또 쪼갠다"
+    },
+    {
+      "id": "host",
+      "type": "backend",
+      "label": "단일 호스트",
+      "pos": [
+        640,
+        60
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "208.130.29.33/32",
+      "tag": "그 범위 안의 한 점"
+    },
+    {
+      "id": "sib1",
+      "type": "messagebus",
+      "label": "형제 조각",
+      "pos": [
+        240,
+        240
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "다른 레지스트리 몫",
+      "tag": "같은 /11 에서 갈렸다"
+    },
+    {
+      "id": "sib2",
+      "type": "messagebus",
+      "label": "형제 조각",
+      "pos": [
+        440,
+        240
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "다른 고객 몫",
+      "tag": "같은 블록에서 갈렸다"
+    }
+  ],
+  "connections": [
+    {
+      "from": "iana",
+      "to": "arin",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "위임",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "arin",
+      "to": "sub",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "분할",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "sub",
+      "to": "host",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "할당",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "arin",
+      "to": "sib1",
+      "variant": "default",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "sub",
+      "to": "sib2",
+      "variant": "default",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}

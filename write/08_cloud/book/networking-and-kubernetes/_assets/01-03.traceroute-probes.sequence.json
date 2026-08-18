@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "traceroute — 한 번에 한 대씩, 일부러 죽여서 알아낸다",
+    "subtitle": "TTL 을 1 부터 올려 가며 여러 번 쏜다 · 매번 다른 라우터가 항의하고, 그 항의의 출발지 IP 가 곧 그 홉의 정체다",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1000,
+      1020
+    ],
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "participants": [
+    {
+      "id": "c",
+      "type": "frontend",
+      "label": "내 노트북",
+      "sublabel": "traceroute"
+    },
+    {
+      "id": "r1",
+      "type": "cloud",
+      "label": "라우터 1",
+      "sublabel": "첫 홉"
+    },
+    {
+      "id": "r2",
+      "type": "cloud",
+      "label": "라우터 2",
+      "sublabel": "둘째 홉"
+    },
+    {
+      "id": "d",
+      "type": "backend",
+      "label": "목적지",
+      "sublabel": "최종 호스트"
+    }
+  ],
+  "segments": [
+    {
+      "from": 170,
+      "to": 330,
+      "label": "1 차 — TTL 을 일부러 1 로 쏜다"
+    },
+    {
+      "from": 390,
+      "to": 610,
+      "label": "2 차 — TTL 2 · 한 칸 더 가서 버려진다"
+    },
+    {
+      "from": 670,
+      "to": 950,
+      "label": "3 차 — TTL 3 · 목적지에 닿아 다른 종류의 응답이 온다"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "c",
+      "from": 200,
+      "to": 295,
+      "type": "frontend"
+    },
+    {
+      "participant": "c",
+      "from": 420,
+      "to": 445,
+      "type": "frontend"
+    },
+    {
+      "participant": "c",
+      "from": 550,
+      "to": 575,
+      "type": "frontend"
+    },
+    {
+      "participant": "c",
+      "from": 700,
+      "to": 725,
+      "type": "frontend"
+    },
+    {
+      "participant": "c",
+      "from": 890,
+      "to": 915,
+      "type": "frontend"
+    },
+    {
+      "participant": "r1",
+      "from": 200,
+      "to": 295,
+      "type": "cloud"
+    },
+    {
+      "participant": "r1",
+      "from": 420,
+      "to": 505,
+      "type": "cloud"
+    },
+    {
+      "participant": "r1",
+      "from": 700,
+      "to": 785,
+      "type": "cloud"
+    },
+    {
+      "participant": "r2",
+      "from": 480,
+      "to": 575,
+      "type": "cloud"
+    },
+    {
+      "participant": "r2",
+      "from": 760,
+      "to": 845,
+      "type": "cloud"
+    },
+    {
+      "participant": "d",
+      "from": 820,
+      "to": 915,
+      "type": "backend"
+    }
+  ],
+  "messages": [
+    {
+      "id": "p1",
+      "from": "c",
+      "to": "r1",
+      "y": 210,
+      "label": "TTL 1 로 출발",
+      "variant": "emphasis"
+    },
+    {
+      "id": "p2",
+      "from": "r1",
+      "to": "c",
+      "y": 280,
+      "label": "ICMP 11 · 출발지가 라우터 1 의 주소",
+      "variant": "dashed"
+    },
+    {
+      "id": "p3",
+      "from": "c",
+      "to": "r1",
+      "y": 430,
+      "label": "TTL 2 로 출발",
+      "variant": "emphasis"
+    },
+    {
+      "id": "p4",
+      "from": "r1",
+      "to": "r2",
+      "y": 490,
+      "label": "1 을 빼서 TTL 1 로 넘긴다",
+      "variant": "emphasis"
+    },
+    {
+      "id": "p5",
+      "from": "r2",
+      "to": "c",
+      "y": 560,
+      "label": "ICMP 11 · 출발지가 라우터 2 의 주소",
+      "variant": "dashed"
+    },
+    {
+      "id": "p6",
+      "from": "c",
+      "to": "r1",
+      "y": 710,
+      "label": "TTL 3 으로 출발",
+      "variant": "emphasis"
+    },
+    {
+      "id": "p7",
+      "from": "r1",
+      "to": "r2",
+      "y": 770,
+      "label": "TTL 2 로 넘긴다",
+      "variant": "emphasis"
+    },
+    {
+      "id": "p8",
+      "from": "r2",
+      "to": "d",
+      "y": 830,
+      "label": "TTL 1 로 넘긴다 · 이번엔 도착한다",
+      "variant": "emphasis"
+    },
+    {
+      "id": "p9",
+      "from": "d",
+      "to": "c",
+      "y": 900,
+      "label": "TTL 초과가 아닌 응답 · 여기서 멈춘다",
+      "variant": "dashed"
+    }
+  ]
+}

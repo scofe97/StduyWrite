@@ -2,7 +2,8 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "패킷 하나의 전 계층 여정 — 내려가며 감싸고 올라가며 벗긴다",
+    "title": "패킷 하나의 전 계층 여정 — 라우터는 L3 까지만 올라온다",
+    "subtitle": "가운데 기둥에 Application·Transport 칸이 없는 것이 이 그림의 요점 · 괄호는 그 자리에서의 PDU 이름",
     "quality_profile": "showcase",
     "legend": {
       "mode": "hidden"
@@ -10,173 +11,255 @@
   },
   "components": [
     {
-      "id": "app",
+      "id": "sapp",
       "type": "frontend",
       "label": "Application",
       "pos": [
         40,
-        60
+        40
       ],
       "size": [
-        160,
-        70
+        150,
+        110
       ],
-      "sublabel": "HTTP GET /",
-      "tag": "요청 생성"
+      "sublabel": "HTTP GET 을 만든다",
+      "tag": "Data"
     },
     {
-      "id": "tran",
+      "id": "stran",
       "type": "backend",
       "label": "Transport",
       "pos": [
         40,
-        160
+        190
       ],
       "size": [
-        160,
-        70
+        150,
+        110
       ],
-      "sublabel": "TCP 헤더 붙임",
-      "tag": "출발·목적 포트"
+      "sublabel": "TCP 헤더 · 포트",
+      "tag": "Segment"
     },
     {
-      "id": "netw",
-      "type": "database",
+      "id": "snetw",
+      "type": "cloud",
       "label": "Network",
       "pos": [
         40,
-        260
+        340
       ],
       "size": [
-        160,
-        70
+        150,
+        110
       ],
-      "sublabel": "IP 헤더 붙임",
-      "tag": "출발·목적 IP"
+      "sublabel": "IP 헤더 · 주소",
+      "tag": "Packet"
     },
     {
-      "id": "link",
-      "type": "cloud",
+      "id": "slink",
+      "type": "messagebus",
       "label": "Link",
       "pos": [
         40,
-        360
+        490
       ],
       "size": [
-        160,
-        70
+        150,
+        110
       ],
-      "sublabel": "Ethernet 프레임",
-      "tag": "MAC 은 ARP 로"
+      "sublabel": "Ethernet · MAC",
+      "tag": "Frame"
     },
     {
-      "id": "rlink",
-      "type": "cloud",
-      "label": "Link",
+      "id": "rin",
+      "type": "messagebus",
+      "label": "Link 수신",
       "pos": [
-        640,
-        360
+        270,
+        490
       ],
       "size": [
-        160,
-        70
+        130,
+        110
       ],
-      "sublabel": "MAC 제거",
-      "tag": "프레임 도착"
+      "sublabel": "MAC 을 벗긴다",
+      "tag": "L2"
     },
     {
       "id": "rnetw",
-      "type": "database",
+      "type": "security",
+      "label": "Network",
+      "pos": [
+        430,
+        340
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "IP 로 다음 홉",
+      "tag": "L3 · 여기가 천장"
+    },
+    {
+      "id": "rout",
+      "type": "messagebus",
+      "label": "Link 송신",
+      "pos": [
+        440,
+        490
+      ],
+      "size": [
+        130,
+        110
+      ],
+      "sublabel": "새 MAC 을 쓴다",
+      "tag": "L2"
+    },
+    {
+      "id": "dlink",
+      "type": "messagebus",
+      "label": "Link",
+      "pos": [
+        640,
+        490
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "MAC 을 벗긴다",
+      "tag": "Frame 해제"
+    },
+    {
+      "id": "dnetw",
+      "type": "cloud",
       "label": "Network",
       "pos": [
         640,
-        260
+        340
       ],
       "size": [
-        160,
-        70
+        150,
+        110
       ],
-      "sublabel": "IP 확인·제거",
-      "tag": "목적 IP = 나"
+      "sublabel": "내 IP 인지 확인",
+      "tag": "Packet 해제"
     },
     {
-      "id": "rtran",
+      "id": "dtran",
       "type": "backend",
       "label": "Transport",
       "pos": [
         640,
-        160
+        190
       ],
       "size": [
-        160,
-        70
+        150,
+        110
       ],
-      "sublabel": "소켓 판별",
-      "tag": "포트로 프로세스"
+      "sublabel": "포트로 소켓 판별",
+      "tag": "Segment 해제"
     },
     {
-      "id": "rapp",
+      "id": "dapp",
       "type": "frontend",
       "label": "Application",
       "pos": [
         640,
-        60
+        40
       ],
       "size": [
-        160,
-        70
+        150,
+        110
       ],
-      "sublabel": "앱에 전달",
-      "tag": "IP 는 이미 사라짐"
+      "sublabel": "cURL 이 받는다",
+      "tag": "IP 는 이미 없다"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "중간 라우터 (L3 가 천장)",
+      "wraps": [
+        "rin",
+        "rnetw",
+        "rout"
+      ],
+      "pad": 36
     }
   ],
   "connections": [
     {
-      "from": "app",
-      "to": "tran",
+      "from": "sapp",
+      "to": "stran",
       "variant": "emphasis",
       "fromSide": "bottom",
       "toSide": "top"
     },
     {
-      "from": "tran",
-      "to": "netw",
+      "from": "stran",
+      "to": "snetw",
       "variant": "emphasis",
       "fromSide": "bottom",
       "toSide": "top"
     },
     {
-      "from": "netw",
-      "to": "link",
+      "from": "snetw",
+      "to": "slink",
       "variant": "emphasis",
       "fromSide": "bottom",
       "toSide": "top"
     },
     {
-      "from": "link",
-      "to": "rlink",
+      "from": "slink",
+      "to": "rin",
       "variant": "emphasis",
       "route": "straight",
-      "label": "IP 로 목적지 · MAC 으로 다음 홉"
+      "label": "프레임",
+      "fromSide": "right",
+      "toSide": "left"
     },
     {
-      "from": "rlink",
+      "from": "rin",
       "to": "rnetw",
       "variant": "emphasis",
       "fromSide": "top",
-      "toSide": "bottom"
+      "toSide": "left"
     },
     {
       "from": "rnetw",
-      "to": "rtran",
+      "to": "rout",
       "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "rout",
+      "to": "dlink",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "새 프레임",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "dlink",
+      "to": "dnetw",
+      "variant": "default",
       "fromSide": "top",
       "toSide": "bottom"
     },
     {
-      "from": "rtran",
-      "to": "rapp",
-      "variant": "emphasis",
+      "from": "dnetw",
+      "to": "dtran",
+      "variant": "default",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "dtran",
+      "to": "dapp",
+      "variant": "default",
       "fromSide": "top",
       "toSide": "bottom"
     }

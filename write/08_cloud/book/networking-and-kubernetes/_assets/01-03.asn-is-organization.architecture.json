@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "ASN 은 라우터가 아니라 조직에 붙는다",
+    "subtitle": "가로 초록 한 줄만 eBGP 이고 세로 회색 줄은 모두 iBGP 다 · 라우터는 여섯 대지만 밖에서 보이는 번호는 둘뿐이라 AS 목록에도 숫자가 두 개만 남는다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "r1",
+      "type": "cloud",
+      "label": "경계 라우터",
+      "pos": [
+        40,
+        140
+      ],
+      "size": [
+        170,
+        110
+      ],
+      "sublabel": "eBGP 를 맡는다",
+      "tag": "AS 100 · 경계"
+    },
+    {
+      "id": "r2",
+      "type": "cloud",
+      "label": "내부 라우터",
+      "pos": [
+        40,
+        290
+      ],
+      "size": [
+        170,
+        110
+      ],
+      "sublabel": "iBGP 만 한다",
+      "tag": "AS 100 · 내부"
+    },
+    {
+      "id": "r3",
+      "type": "cloud",
+      "label": "내부 라우터",
+      "pos": [
+        40,
+        440
+      ],
+      "size": [
+        170,
+        110
+      ],
+      "sublabel": "iBGP 만 한다",
+      "tag": "AS 100 · 내부"
+    },
+    {
+      "id": "r4",
+      "type": "messagebus",
+      "label": "경계 라우터",
+      "pos": [
+        380,
+        140
+      ],
+      "size": [
+        170,
+        110
+      ],
+      "sublabel": "eBGP 를 맡는다",
+      "tag": "AS 200 · 경계"
+    },
+    {
+      "id": "r5",
+      "type": "messagebus",
+      "label": "내부 라우터",
+      "pos": [
+        380,
+        290
+      ],
+      "size": [
+        170,
+        110
+      ],
+      "sublabel": "iBGP 만 한다",
+      "tag": "AS 200 · 내부"
+    },
+    {
+      "id": "r6",
+      "type": "messagebus",
+      "label": "내부 라우터",
+      "pos": [
+        380,
+        440
+      ],
+      "size": [
+        170,
+        110
+      ],
+      "sublabel": "iBGP 만 한다",
+      "tag": "AS 200 · 내부"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "AS 100 — 사업자 한 곳",
+      "wraps": [
+        "r1",
+        "r2",
+        "r3"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "AS 200 — 다른 사업자",
+      "wraps": [
+        "r4",
+        "r5",
+        "r6"
+      ],
+      "pad": 30
+    }
+  ],
+  "connections": [
+    {
+      "from": "r1",
+      "to": "r2",
+      "variant": "default",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "r2",
+      "to": "r3",
+      "variant": "default",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "r1",
+      "to": "r4",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "eBGP",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "r4",
+      "to": "r5",
+      "variant": "default",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "r5",
+      "to": "r6",
+      "variant": "default",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}
