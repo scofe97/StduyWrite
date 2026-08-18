@@ -63,7 +63,7 @@ updated: 2026-05-24
 
 ## 원본 학습 자료
 
-본 묶음은 노션 학습 노트(`_notion_import/study/`)를 통합 재작성한 산출물입니다. 원본 study 시리즈는 재작성 완료 후 제거됐고, 재작성 이력은 [`_notion_import/README.md`](../_notion_import/README.md) 의 진척표에 있습니다.
+본 묶음은 노션 학습 노트(`_notion_import/study/`)를 통합 재작성한 산출물입니다. 원본 study 시리즈는 재작성 완료 후 제거됐고, 재작성 이력은 `_notion_import/README.md` <!-- 링크 끊김(2026-08): ../_notion_import/README.md --> 의 진척표에 있습니다.
 
 ## 후속 묶음
 

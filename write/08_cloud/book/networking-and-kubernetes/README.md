@@ -8,7 +8,6 @@ source:
 related:
   - ../kubernetes-in-action/README.md
   - ../../kubernetes/README.md
-  - ../../service-mesh/README.md
   - ../../README.md
 updated: 2026-08-15
 ---
@@ -23,7 +22,7 @@ updated: 2026-08-15
 
 같은 폴더의 [『Kubernetes in Action』 정독본](../kubernetes-in-action/README.md)이 오브젝트 중심이라면 이 책은 패킷 중심입니다. 저쪽이 무엇을 배포하는가를 다루고, 여기는 그 오브젝트 사이를 트래픽이 실제로 어떻게 흐르는가를 다룹니다.
 
-그래서 Service·Ingress처럼 겹치는 주제가 나와도 관점이 다릅니다. 저쪽이 사용법이라면 여기는 구현 원리입니다. 개념이 겹치는 지점은 [`../../kubernetes/`](../../kubernetes/README.md) 개념 노트와 [`../../service-mesh/`](../../service-mesh/README.md)로 링크를 걸어 넘깁니다. 이 폴더에는 이 책만의 계층 관점과 예제에서 새로 얻는 것만 남깁니다.
+그래서 Service·Ingress처럼 겹치는 주제가 나와도 관점이 다릅니다. 저쪽이 사용법이라면 여기는 구현 원리입니다. 개념이 겹치는 지점은 [`../../kubernetes/`](../../kubernetes/README.md) 개념 노트와 `../../service-mesh/` <!-- 링크 끊김(2026-08): ../../service-mesh/README.md -->로 링크를 걸어 넘깁니다. 이 폴더에는 이 책만의 계층 관점과 예제에서 새로 얻는 것만 남깁니다.
 
 
 
@@ -101,4 +100,4 @@ updated: 2026-08-15
 
 - [『Kubernetes in Action, 2판』 정독본](../kubernetes-in-action/README.md) — 같은 `book/` 영역, 오브젝트 중심 관점의 짝
 - [08_cloud/kubernetes — 개념 노트](../../kubernetes/README.md) — 개념 중복을 링크로 위임하는 대상
-- [08_cloud/service-mesh](../../service-mesh/README.md) — 이 책 이후 계층(L7 프록시·mTLS)을 다루는 이웃 카테고리
+- `08_cloud/service-mesh` <!-- 링크 끊김(2026-08): ../../service-mesh/README.md --> — 이 책 이후 계층(L7 프록시·mTLS)을 다루는 이웃 카테고리

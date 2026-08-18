@@ -13,7 +13,7 @@ related:
   - ./networking/README.md
   - ./book/linux-kernel-programming/README.md
   - ./book/systems-performance/README.md
-  - ./book/container-security/README.md
+  - ../08_cloud/book/container-security/README.md
 updated: 2026-07-15
 ---
 
@@ -78,9 +78,9 @@ CPU 사용률 하나만 보고 병목을 판단하면 I/O 대기·락 경합·�
 
 보안 옵션은 체크리스트로 외우기보다 실행 모델을 얼마나 줄이는지로 판단해야 합니다. capability·user namespace·seccomp는 모두 프로세스가 커널에 요청할 수 있는 권한과 범위를 제한하지만, 줄이는 공격 표면과 운영 비용은 서로 다릅니다.
 
-1. [리눅스 시스템 콜·권한·Capabilities](./book/container-security/02-01.리눅스%20시스템%20콜·권한·Capabilities.md)와 [제어 그룹](./book/container-security/03-01.제어%20그룹(cgroups)%20—%20자원%20제한과%20격리.md)으로 권한과 자원 경계를 복습합니다.
-2. [컨테이너 격리 (1)](./book/container-security/04-01.컨테이너%20격리%20(1)%20—%20namespace와%20root%20디렉토리%20변경.md), [컨테이너 격리 (2)](./book/container-security/04-02.컨테이너%20격리%20(2)%20—%20user%20namespace·Pod·호스트%20관점.md), [격리 강화 (1)](./book/container-security/10-01.격리%20강화%20(1)%20—%20seccomp·AppArmor·SELinux.md) 순서로 방어 계층을 연결합니다.
-3. 이미지·공급망·런타임 정책은 [container-security MOC](./book/container-security/README.md)의 6~16장을 따라 확장하고, 애플리케이션 보안 자체는 [10_security](../10_security/README.md)에서 이어서 다룹니다.
+1. [리눅스 시스템 콜·권한·Capabilities](../08_cloud/book/container-security/02-01.Linux%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%BD%9C%C2%B7%EA%B6%8C%ED%95%9C%C2%B7capability%20%E2%80%94%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%B3%B4%EC%95%88%EC%9D%98%20%EB%B0%94%EB%8B%A5.md)와 [제어 그룹](../08_cloud/book/container-security/03-01.Control%20Group%20%E2%80%94%20%EC%9E%90%EC%9B%90%EC%9D%84%20%EC%A0%9C%ED%95%9C%ED%95%B4%20%EA%B5%B6%EA%B8%B0%EA%B8%B0%EB%A5%BC%20%EB%A7%89%EB%8B%A4.md)으로 권한과 자원 경계를 복습합니다.
+2. [컨테이너 격리 (1)](../08_cloud/book/container-security/04-01.namespace%EC%99%80%20%EB%A3%A8%ED%8A%B8%20%EB%94%94%EB%A0%89%ED%86%A0%EB%A6%AC%20%E2%80%94%20%EA%B2%A9%EB%A6%AC%EB%A5%BC%20%EB%A7%8C%EB%93%9C%EB%8A%94%20%EB%91%90%20%EC%9E%A5%EC%B9%98.md), [컨테이너 격리 (2)](../08_cloud/book/container-security/04-02.%EB%82%98%EB%A8%B8%EC%A7%80%20namespace%EC%99%80%20%ED%98%B8%EC%8A%A4%ED%8A%B8%EC%97%90%EC%84%9C%20%EB%B3%B8%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88.md), [격리 강화 (1)](../08_cloud/book/container-security/08-01.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EA%B2%A9%EB%A6%AC%20%EA%B0%95%ED%99%94%20%E2%80%94%20%EC%83%8C%EB%93%9C%EB%B0%95%EC%8B%B1%EC%9D%98%20%EC%84%B8%20%EA%B0%88%EB%9E%98.md) 순서로 방어 계층을 연결합니다.
+3. 이미지·공급망·런타임 정책은 [container-security MOC](../08_cloud/book/container-security/README.md)의 6~16장을 따라 확장하고, 애플리케이션 보안 자체는 [10_security](../10_security/README.md)에서 이어서 다룹니다.
 
 이 단계의 목표는 `privileged`, host namespace 공유, root 실행, capability 추가 요청을 받았을 때 위험·필요성·대안을 구분해 설명하는 것입니다.
 
@@ -92,7 +92,7 @@ CPU 사용률 하나만 보고 병목을 판단하면 I/O 대기·락 경합·�
 |---|---|---|
 | 커널 코드와 LKM 이해 | [Linux Kernel Programming](./book/linux-kernel-programming/README.md) | 커널 모듈 작성자 |
 | 병목 분석과 추적 도구 사용 | [Systems Performance](./book/systems-performance/README.md) | 성능 분석가 |
-| 컨테이너 위협과 완화책 판단 | [Container Security](./book/container-security/README.md) | 보안 엔지니어 |
+| 컨테이너 위협과 완화책 판단 | [Container Security](../08_cloud/book/container-security/README.md) | 보안 엔지니어 |
 
 ## 8. 후속 후보
 

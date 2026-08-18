@@ -8,8 +8,6 @@ source:
 related:
   - ../networking-and-kubernetes/README.md
   - ../kubernetes-in-action/README.md
-  - ../../service-mesh/README.md
-  - ../../service-mesh/03_istio/README.md
 updated: 2026-08-11
 ---
 
@@ -21,13 +19,13 @@ updated: 2026-08-11
 
 ## 이 책을 여기 두는 이유
 
-`08_cloud`는 클러스터 안에서 무엇이 어떻게 돌아가는지를 다루는 카테고리이고, 그 안에서 서비스 메시는 이미 [`service-mesh/`](../../service-mesh/README.md)가 맡고 있습니다. 이 책을 별도 폴더로 두는 이유는 주제가 새로워서가 아니라 **자료의 성격이 다르기 때문**입니다. 기존 `service-mesh/`는 직접 띄운 클러스터에서 얻은 실습 기록이고, 이 폴더는 저자가 왜 그렇게 설계했는지를 따라가는 정독 기록입니다.
+`08_cloud`는 클러스터 안에서 무엇이 어떻게 돌아가는지를 다루는 카테고리이고, 그 안에서 서비스 메시는 이미 `service-mesh/` <!-- 링크 끊김(2026-08): ../../service-mesh/README.md -->가 맡고 있습니다. 이 책을 별도 폴더로 두는 이유는 주제가 새로워서가 아니라 **자료의 성격이 다르기 때문**입니다. 기존 `service-mesh/`는 직접 띄운 클러스터에서 얻은 실습 기록이고, 이 폴더는 저자가 왜 그렇게 설계했는지를 따라가는 정독 기록입니다.
 
 같은 폴더의 [『Networking and Kubernetes』 정독본](../networking-and-kubernetes/README.md)이 패킷이 어떤 계층을 지나는지를 다룬다면, 이 책은 그 위에 프록시를 하나 더 얹었을 때 무엇을 얻고 무엇을 잃는지를 다룹니다. 저쪽이 커널과 CNI를 파고들고, 여기는 애플리케이션 계층 프록시의 설계 판단을 파고듭니다.
 
 ## 기존 `service-mesh/03_istio`와의 경계
 
-이 폴더를 열기 전에 이미 [`service-mesh/03_istio/`](../../service-mesh/03_istio/README.md)에 Istio 문서 22편이 있습니다. 그쪽은 개인 GCP 클러스터 실습에서 나온 자체 기록이고, 주제 구성이 이 책과 거의 1:1로 겹칩니다. 4장은 Ingress Gateway, 5장은 트래픽 관리, 6장은 레질리언스, 9장은 보안, 10장은 트러블슈팅, 11장은 성능 튜닝, 14장은 EnvoyFilter로 대응합니다.
+이 폴더를 열기 전에 이미 `service-mesh/03_istio/` <!-- 링크 끊김(2026-08): ../../service-mesh/03_istio/README.md -->에 Istio 문서 22편이 있습니다. 그쪽은 개인 GCP 클러스터 실습에서 나온 자체 기록이고, 주제 구성이 이 책과 거의 1:1로 겹칩니다. 4장은 Ingress Gateway, 5장은 트래픽 관리, 6장은 레질리언스, 9장은 보안, 10장은 트러블슈팅, 11장은 성능 튜닝, 14장은 EnvoyFilter로 대응합니다.
 
 그래서 이 정독본은 **겹치는 개념을 다시 쓰지 않습니다.** 다음 규칙으로 가릅니다.
 
