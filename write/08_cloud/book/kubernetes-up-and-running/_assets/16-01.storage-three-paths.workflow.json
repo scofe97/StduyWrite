@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "스토리지를 클러스터에 들이는 세 갈래",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "outside",
+      "label": "밖에 그대로 둔다"
+    },
+    {
+      "id": "simple",
+      "label": "안에 두되 단순히"
+    },
+    {
+      "id": "native",
+      "label": "안에 두고 복제까지"
+    }
+  ],
+  "mainPath": [
+    "import",
+    "single",
+    "sts"
+  ],
+  "nodes": [
+    {
+      "id": "import",
+      "lane": "outside",
+      "col": 0,
+      "type": "external",
+      "label": "가져오기",
+      "sublabel": "ExternalName",
+      "height": 52
+    },
+    {
+      "id": "single",
+      "lane": "simple",
+      "col": 2,
+      "type": "backend",
+      "label": "싱글턴",
+      "sublabel": "복제 없이 하나",
+      "height": 52,
+      "width": 120
+    },
+    {
+      "id": "sts",
+      "lane": "native",
+      "col": 4,
+      "type": "database",
+      "label": "StatefulSet",
+      "sublabel": "안정 이름·순서",
+      "height": 52,
+      "width": 120
+    }
+  ],
+  "edges": [
+    {
+      "id": "s1",
+      "from": "import",
+      "to": "single",
+      "label": "조건: 클러스터로 옮김",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "top"
+    },
+    {
+      "id": "s2",
+      "from": "single",
+      "to": "sts",
+      "label": "조건: 다운타임 불가",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "top"
+    }
+  ]
+}
