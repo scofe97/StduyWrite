@@ -4,36 +4,24 @@
   "meta": {
     "title": "kube-proxy를 이해하는 세 기술 전체 지도",
     "quality_profile": "showcase",
-    "legend": {
-      "mode": "hidden"
-    },
-    "viewBox": [
-      1280,
-      420
-    ]
+    "legend": { "mode": "hidden" },
+    "viewBox": [1280, 460]
   },
   "stages": [
-    {
-      "label": "§1 구조"
-    },
-    {
-      "label": "§2 규칙"
-    },
-    {
-      "label": "§3 실전"
-    },
-    {
-      "label": "§4·§5 대안"
-    }
+    { "label": "§1 구조" },
+    { "label": "§2 규칙" },
+    { "label": "§3 실전" },
+    { "label": "§4·§5 대안" }
   ],
   "nodes": [
     {
       "id": "str",
       "type": "security",
       "label": "테이블·체인",
+      "sublabel": "nat · PREROUTING",
+      "tag": "KUBE-SERVICES 로",
       "stage": 0,
       "row": 0,
-      "sublabel": "언제 평가되나",
       "width": 129,
       "height": 100
     },
@@ -41,9 +29,10 @@
       "id": "rule",
       "type": "backend",
       "label": "매치·타깃",
+      "sublabel": "조건은 안 바꾼다",
+      "tag": "바꾸는 건 -j 하나",
       "stage": 1,
       "row": 0,
-      "sublabel": "종결이 미묘함",
       "width": 129,
       "height": 100
     },
@@ -51,9 +40,10 @@
       "id": "fan",
       "type": "cloud",
       "label": "확률 분배",
+      "sublabel": "0.333 · 0.5 · 무조건",
+      "tag": "mark 0x4000 · DNAT",
       "stage": 2,
       "row": 0,
-      "sublabel": "kube-proxy 방식",
       "width": 129,
       "height": 100
     },
@@ -61,37 +51,17 @@
       "id": "alt",
       "type": "messagebus",
       "label": "IPVS·eBPF",
+      "sublabel": "해시 표 · 커널 맵",
+      "tag": "16만 규칙 = 5시간",
       "stage": 3,
       "row": 0,
-      "sublabel": "리스트를 벗어남",
       "width": 129,
       "height": 100
     }
   ],
   "flows": [
-    {
-      "id": "f1",
-      "from": "str",
-      "to": "rule",
-      "variant": "emphasis",
-      "label": "그 안에",
-      "route": "straight"
-    },
-    {
-      "id": "f2",
-      "from": "rule",
-      "to": "fan",
-      "variant": "emphasis",
-      "label": "쌓으면",
-      "route": "straight"
-    },
-    {
-      "id": "f3",
-      "from": "fan",
-      "to": "alt",
-      "variant": "emphasis",
-      "label": "한계에서",
-      "route": "straight"
-    }
+    { "id": "f1", "from": "str", "to": "rule", "variant": "emphasis", "label": "그 안에", "route": "straight" },
+    { "id": "f2", "from": "rule", "to": "fan", "variant": "emphasis", "label": "쌓으면", "route": "straight" },
+    { "id": "f3", "from": "fan", "to": "alt", "variant": "emphasis", "label": "한계에서", "route": "straight" }
   ]
 }
