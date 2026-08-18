@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "서브넷은 마스크가 자른 앞자리로 정해진다",
+    "subtitle": "내 주소와 목적지의 앞 24 비트를 맞대 보고 같으면 안, 다르면 밖이다 · 그 한 번의 대조가 누구의 MAC 을 물을지까지 정한다",
+    "quality_profile": "showcase",
+    "legend": { "mode": "hidden" }
+  },
+  "components": [
+    { "id": "me", "type": "frontend", "label": "내 주소", "pos": [40, 240], "size": [180, 110], "sublabel": "192.168.0.10/24", "tag": "앞 24 비트가 기준" },
+    { "id": "t1", "type": "cloud", "label": "목적지 A", "pos": [320, 90], "size": [180, 110], "sublabel": "192.168.0.11", "tag": "앞 24 = 192.168.0" },
+    { "id": "v1", "type": "backend", "label": "직접 건넨다", "pos": [600, 90], "size": [180, 110], "sublabel": "그 기계의 MAC", "tag": "ARP 로 알아낸다" },
+    { "id": "t2", "type": "cloud", "label": "목적지 B", "pos": [320, 400], "size": [180, 110], "sublabel": "10.244.2.7", "tag": "앞 24 = 10.244.2" },
+    { "id": "v2", "type": "security", "label": "게이트웨이로", "pos": [600, 400], "size": [180, 110], "sublabel": "게이트웨이의 MAC", "tag": "상대 MAC 은 못 구한다" }
+  ],
+  "connections": [
+    { "from": "me", "to": "t1", "variant": "emphasis", "fromSide": "top", "toSide": "left" },
+    { "from": "t1", "to": "v1", "variant": "emphasis", "route": "straight", "label": "같으니 안", "fromSide": "right", "toSide": "left" },
+    { "from": "me", "to": "t2", "variant": "emphasis", "fromSide": "bottom", "toSide": "left" },
+    { "from": "t2", "to": "v2", "variant": "security", "route": "straight", "label": "다르니 밖", "fromSide": "right", "toSide": "left" }
+  ]
+}
