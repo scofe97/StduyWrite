@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "커널이 패킷을 다루는 법 전체 지도 — 이 편은 점선 안을 다룬다",
+    "subtitle": "위는 유저 공간에서 부르는 쪽 · 아래는 물리 네트워크 · 그 사이 커널 안에서 벌어지는 네 단계가 §1~§6 이다",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "app",
+      "type": "frontend",
+      "label": "애플리케이션",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "socket() 을 부른다",
+      "tag": "유저 공간"
+    },
+    {
+      "id": "sock",
+      "type": "backend",
+      "label": "소켓 · fd",
+      "pos": [
+        40,
+        220
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "번역은 커널 몫",
+      "tag": "§1 · §2"
+    },
+    {
+      "id": "wire",
+      "type": "messagebus",
+      "label": "veth · 브리지",
+      "pos": [
+        240,
+        220
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "네임스페이스 연결",
+      "tag": "§3"
+    },
+    {
+      "id": "hook",
+      "type": "security",
+      "label": "훅 · 연결 추적",
+      "pos": [
+        440,
+        220
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "버릴지 고칠지",
+      "tag": "§4 · §5"
+    },
+    {
+      "id": "route",
+      "type": "cloud",
+      "label": "라우팅",
+      "pos": [
+        640,
+        220
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "구체성이 먼저",
+      "tag": "§6"
+    },
+    {
+      "id": "nic",
+      "type": "external",
+      "label": "NIC",
+      "pos": [
+        640,
+        410
+      ],
+      "size": [
+        150,
+        110
+      ],
+      "sublabel": "물리 네트워크로",
+      "tag": "커널 밖"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "커널 공간 — 이 편이 다루는 곳",
+      "wraps": [
+        "sock",
+        "wire",
+        "hook",
+        "route"
+      ],
+      "pad": 34
+    }
+  ],
+  "connections": [
+    {
+      "from": "app",
+      "to": "sock",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "sock",
+      "to": "wire",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "그 아래",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "wire",
+      "to": "hook",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "지나며",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "hook",
+      "to": "route",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "끝으로",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "route",
+      "to": "nic",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}

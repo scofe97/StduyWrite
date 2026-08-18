@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "127.0.0.1 은 접근 제어가 아니다 — 밖에서 경계를 넘어온 길",
+    "subtitle": "점선 안이 '로컬 전용' 이라 믿는 구간 · 노드 설정 하나가 그 안으로 들어가는 길을 열어 준 것이 CVE-2020-8558 이다",
+    "quality_profile": "showcase",
+    "legend": { "mode": "hidden" }
+  },
+  "components": [
+    {
+      "id": "adj",
+      "type": "external",
+      "label": "인접 호스트",
+      "pos": [40, 40],
+      "size": [150, 110],
+      "sublabel": "같은 네트워크의 옆 기계",
+      "tag": "노드 밖에 있다"
+    },
+    {
+      "id": "nic",
+      "type": "cloud",
+      "label": "노드 NIC",
+      "pos": [240, 40],
+      "size": [150, 110],
+      "sublabel": "평범한 패킷 도착",
+      "tag": "여기까진 정상"
+    },
+    {
+      "id": "rule",
+      "type": "security",
+      "label": "노드 설정",
+      "pos": [440, 40],
+      "size": [150, 110],
+      "sublabel": "로컬 주소로 가는 길 허용",
+      "tag": "CVE-2020-8558"
+    },
+    {
+      "id": "lo",
+      "type": "messagebus",
+      "label": "lo · 127.0.0.1",
+      "pos": [640, 40],
+      "size": [150, 110],
+      "sublabel": "호스트를 안 떠난다는 주소",
+      "tag": "그런데 밖에서 닿았다"
+    },
+    {
+      "id": "svc",
+      "type": "backend",
+      "label": "8080 서비스",
+      "pos": [640, 260],
+      "size": [150, 110],
+      "sublabel": "127.0.0.1 에 바인딩",
+      "tag": "로컬 전용이라 믿었다"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "로컬 전용이라 믿는 구간",
+      "wraps": ["lo", "svc"],
+      "pad": 34
+    }
+  ],
+  "connections": [
+    { "from": "adj",  "to": "nic",  "variant": "emphasis", "route": "straight", "label": "도착", "fromSide": "right", "toSide": "left" },
+    { "from": "nic",  "to": "rule", "variant": "emphasis", "route": "straight", "label": "판단", "fromSide": "right", "toSide": "left" },
+    { "from": "rule", "to": "lo",   "variant": "emphasis", "route": "straight", "label": "허용", "fromSide": "right", "toSide": "left" },
+    { "from": "lo",   "to": "svc",  "variant": "emphasis", "fromSide": "bottom", "toSide": "top" }
+  ]
+}

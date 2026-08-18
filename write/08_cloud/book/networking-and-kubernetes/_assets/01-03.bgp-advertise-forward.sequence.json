@@ -2,29 +2,32 @@
   "schema_version": 1,
   "diagram_type": "sequence",
   "meta": {
-    "title": "BGP — 아무도 전체 경로를 모르지만 배달은 완성된다",
-    "subtitle": "먼저 서로에게 책임 범위를 광고하고, 그 표를 보고 각자 다음 하나만 고른다",
+    "title": "광고와 전달은 다른 시간에 일어난다",
+    "subtitle": "위 구간은 패킷과 무관하게 평소에 오가며 표를 채우고, 아래 구간은 그 표를 흘끗 보는 것으로 끝난다 · 도착한 뒤 남에게 묻는 일은 없다",
     "quality_profile": "showcase",
-    "viewBox": [900, 680],
+    "viewBox": [
+      900,
+      640
+    ],
     "legend": {
       "mode": "hidden"
     }
   },
   "participants": [
     {
-      "id": "as100",
+      "id": "a1",
       "type": "frontend",
       "label": "AS 100",
       "sublabel": "출발지 관할"
     },
     {
-      "id": "as200",
+      "id": "a2",
       "type": "cloud",
       "label": "AS 200",
       "sublabel": "중간 사업자"
     },
     {
-      "id": "as300",
+      "id": "a3",
       "type": "backend",
       "label": "AS 300",
       "sublabel": "목적지 관할"
@@ -32,62 +35,100 @@
   ],
   "segments": [
     {
-      "from": 170,
-      "to": 350,
-      "label": "평소에 — 각자 자기가 책임지는 범위를 이웃에게 알린다"
+      "from": 160,
+      "to": 310,
+      "label": "평소 — 패킷과 무관하게 광고가 오가며 표가 채워진다"
     },
     {
-      "from": 420,
-      "to": 620,
-      "label": "패킷이 올 때 — 표에서 다음 하나만 고른다"
+      "from": 380,
+      "to": 588,
+      "label": "패킷이 올 때 — 채워 둔 표에서 다음 하나만 고른다"
     }
   ],
   "activations": [
     {
-      "participant": "as200",
-      "from": 268,
-      "to": 300,
+      "participant": "a1",
+      "from": 250,
+      "to": 275,
+      "type": "frontend"
+    },
+    {
+      "participant": "a1",
+      "from": 400,
+      "to": 425,
+      "type": "frontend"
+    },
+    {
+      "participant": "a1",
+      "from": 535,
+      "to": 560,
+      "type": "frontend"
+    },
+    {
+      "participant": "a2",
+      "from": 190,
+      "to": 275,
       "type": "cloud"
     },
     {
-      "participant": "as300",
-      "from": 578,
-      "to": 610,
+      "participant": "a2",
+      "from": 400,
+      "to": 485,
+      "type": "cloud"
+    },
+    {
+      "participant": "a3",
+      "from": 190,
+      "to": 215,
+      "type": "backend"
+    },
+    {
+      "participant": "a3",
+      "from": 460,
+      "to": 560,
       "type": "backend"
     }
   ],
   "messages": [
     {
-      "id": "b1",
-      "from": "as300",
-      "to": "as200",
-      "y": 210,
+      "id": "g1",
+      "from": "a3",
+      "to": "a2",
+      "y": 200,
       "label": "150.10.0.0/16 은 우리 관할이다",
       "variant": "dashed"
     },
     {
-      "id": "b2",
-      "from": "as200",
-      "to": "as100",
-      "y": 300,
+      "id": "g2",
+      "from": "a2",
+      "to": "a1",
+      "y": 260,
       "label": "150.10.0.0/16 은 나를 거치면 닿는다",
       "variant": "dashed"
     },
     {
-      "id": "b3",
-      "from": "as100",
-      "to": "as200",
-      "y": 470,
-      "label": "목적지 150.10.2.300 · 전체 경로는 모른 채 넘긴다",
+      "id": "g3",
+      "from": "a1",
+      "to": "a2",
+      "y": 410,
+      "label": "목적지 150.10.2.30 · 전체 경로는 모른 채 넘긴다",
       "variant": "emphasis"
     },
     {
-      "id": "b4",
-      "from": "as200",
-      "to": "as300",
-      "y": 560,
-      "label": "광고받아 둔 표에서 다음 AS 를 고른다",
+      "id": "g4",
+      "from": "a2",
+      "to": "a3",
+      "y": 470,
+      "label": "채워 둔 표에서 다음 AS 를 고른다",
       "variant": "emphasis"
+    },
+    {
+      "id": "g5",
+      "from": "a3",
+      "to": "a1",
+      "y": 545,
+      "label": "도착 · 어느 AS 도 전체 경로를 갖고 있지 않았다",
+      "variant": "dashed"
     }
   ]
 }

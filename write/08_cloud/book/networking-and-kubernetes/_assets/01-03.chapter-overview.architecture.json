@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "IP 라우팅과 Ethernet 전체 지도 — 전제 하나가 나머지를 감싼다",
+    "subtitle": "IP 가 도착을 보장하지 않기 때문에 안쪽 셋이 필요해진다 · 각 칸의 꼬리표가 그 대목을 다루는 절",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "addr",
+      "type": "cloud",
+      "label": "주소",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        170,
+        110
+      ],
+      "sublabel": "CIDR · NAT · IPv6",
+      "tag": "§2 어디로 보낼까"
+    },
+    {
+      "id": "path",
+      "type": "messagebus",
+      "label": "길 찾기",
+      "pos": [
+        270,
+        40
+      ],
+      "size": [
+        170,
+        110
+      ],
+      "sublabel": "BGP 로 망 사이",
+      "tag": "§3 어느 망으로"
+    },
+    {
+      "id": "near",
+      "type": "frontend",
+      "label": "옆 이웃",
+      "pos": [
+        500,
+        40
+      ],
+      "size": [
+        170,
+        110
+      ],
+      "sublabel": "ARP 로 MAC 을",
+      "tag": "§4 어느 기계로"
+    },
+    {
+      "id": "trip",
+      "type": "backend",
+      "label": "한 요청",
+      "pos": [
+        270,
+        240
+      ],
+      "size": [
+        170,
+        110
+      ],
+      "sublabel": "감싸고 벗긴다",
+      "tag": "§5 전 계층 종합"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "§1 전제 — IP 는 도착을 보장하지 않는다",
+      "wraps": [
+        "addr",
+        "path",
+        "near",
+        "trip"
+      ],
+      "pad": 34
+    }
+  ],
+  "connections": [
+    {
+      "from": "addr",
+      "to": "path",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "망 단위",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "path",
+      "to": "near",
+      "variant": "emphasis",
+      "route": "straight",
+      "label": "기계 단위",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "near",
+      "to": "trip",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}

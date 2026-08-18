@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "VLAN — 같은 장비인데 서로 들리지 않는다",
+    "subtitle": "물리 배선은 그대로 두고 태그로 브로드캐스트 도메인을 가른다",
+    "quality_profile": "showcase",
+    "viewBox": [900, 460],
+    "legend": { "mode": "hidden" }
+  },
+  "components": [
+    {
+      "id": "sw",
+      "type": "cloud",
+      "label": "물리 스위치 한 대",
+      "pos": [40, 160],
+      "size": [230, 100],
+      "sublabel": "포트는 전부 같은 장비",
+      "tag": "배선은 그대로"
+    },
+    {
+      "id": "v10",
+      "type": "frontend",
+      "label": "VLAN 10",
+      "pos": [370, 40],
+      "size": [230, 100],
+      "sublabel": "브로드캐스트가 이 안에서만",
+      "tag": "태그 10"
+    },
+    {
+      "id": "v20",
+      "type": "backend",
+      "label": "VLAN 20",
+      "pos": [370, 280],
+      "size": [230, 100],
+      "sublabel": "옆 태그의 방송은 안 들린다",
+      "tag": "태그 20"
+    },
+    {
+      "id": "gain",
+      "type": "security",
+      "label": "얻는 것",
+      "pos": [660, 160],
+      "size": [200, 100],
+      "sublabel": "혼잡과 노출이 함께 줄어든다",
+      "tag": "받고 버릴 남의 프레임이 준다"
+    }
+  ],
+  "connections": [
+    { "from": "sw", "to": "v10",  "variant": "emphasis", "fromSide": "right", "toSide": "left" },
+    { "from": "sw", "to": "v20",  "variant": "emphasis", "fromSide": "right", "toSide": "left" },
+    { "from": "v10", "to": "gain", "variant": "default",  "fromSide": "right", "toSide": "top" },
+    { "from": "v20", "to": "gain", "variant": "default",  "fromSide": "right", "toSide": "bottom" }
+  ]
+}
