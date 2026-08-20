@@ -68,3 +68,32 @@ def lanes(d, names, y0=104, lane_w=212):
         d.t(x, y0 + 37, sub, 9 if ascii_only else 11, MUTED, MONO if ascii_only else KR)
     d.lane_top = y0 + 44
     return d.LX
+
+
+def textw_tight(txt, size):
+    """마스크·배경 박스를 텍스트에 바짝 붙일 때 쓰는 실측 근사.
+    fit() 의 textw 는 일부러 넉넉하게(넘침을 못 잡느니 헛경보가 낫다) 잡지만,
+    마스크에 그 값을 쓰면 띠가 글자보다 한참 길어져 테두리를 과하게 끊는다."""
+    w = 0.0
+    for c in str(txt):
+        if c == ' ': w += size * 0.30
+        elif '가' <= c <= '힣' or 'ㄱ' <= c <= 'ㆎ': w += size * 1.0
+        else: w += size * 0.56
+    return w
+
+def ring_label(d, x, y, txt, size=11, c=None):
+    """type-nested — 링 라벨은 paper 마스크를 테두리 위에 얹고 그 위에 쓴다."""
+    from dd import PAPER, ACC
+    c = c or ACC
+    w = textw_tight(txt, size) + 20
+    d.o.append(f'<rect x="{x+24}" y="{y-9}" width="{w:.0f}" height="18" fill="{PAPER}"/>')
+    d.t(x + 34, y + 4, txt, size, c, KR, "start", 600)
+
+
+def bracket(d, x, y0, y1, label, c=None, w=10, size=11):
+    """가시 범위를 표시하는 대괄호. 오른쪽으로 열린다."""
+    from dd import MUTED
+    c = c or MUTED
+    d.path(f"M {x+w} {y0} L {x} {y0} L {x} {y1} L {x+w} {y1}", c, 1.2)
+    d.line(x, (y0 + y1) / 2, x + w + 6, (y0 + y1) / 2, c, 1.2)
+    d.t(x + w + 12, (y0 + y1) / 2 + 4, label, size, c, KR, "start")
