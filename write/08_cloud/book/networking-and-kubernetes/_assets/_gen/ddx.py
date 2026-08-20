@@ -81,13 +81,13 @@ def textw_tight(txt, size):
         else: w += size * 0.56
     return w
 
-def ring_label(d, x, y, txt, size=11, c=None):
+def ring_label(d, x, y, txt, size=11, c=None, off=24):
     """type-nested — 링 라벨은 paper 마스크를 테두리 위에 얹고 그 위에 쓴다."""
     from dd import PAPER, ACC
     c = c or ACC
     w = textw_tight(txt, size) + 20
-    d.o.append(f'<rect x="{x+24}" y="{y-9}" width="{w:.0f}" height="18" fill="{PAPER}"/>')
-    d.t(x + 34, y + 4, txt, size, c, KR, "start", 600)
+    d.o.append(f'<rect x="{x+off}" y="{y-9}" width="{w:.0f}" height="18" fill="{PAPER}"/>')
+    d.t(x + off + 10, y + 4, txt, size, c, KR, "start", 600)
 
 
 def bracket(d, x, y0, y1, label, c=None, w=10, size=11):
