@@ -1,0 +1,36 @@
+# 18-02 §4 — 템플릿 하나로 서로 다른 몫을 맡는다
+# 인덱스가 붙는다는 사실만으로는 쓸모가 안 보인다. 그 번호로 각자 다른 데이터를 집는다는
+# 결과까지 그려야 "왜 번호를 주나"가 답해진다.
+import sys; sys.path.insert(0, ".")
+from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
+import ddx
+
+d = D(1220, 620, "KUBERNETES IN ACTION · 18-02",
+      "같은 템플릿, 다른 몫",
+      "completionMode 를 Indexed 로 두면 파드마다 0 부터 번호가 붙는다. 그 번호를 환경변수와 "
+      "어노테이션으로 받아 각자 처리할 범위를 스스로 계산한다.",
+      "completions 12 · 템플릿은 하나")
+
+ddx.node(d, 170, 300, "Pod 템플릿", "하나뿐이다", 220, 88, INFO)
+d.t(170, 372, "completionMode: Indexed", 10, MUTED, MONO)
+
+for i, idx in enumerate((0, 1, 2, 11)):
+    cy = 190 + i * 76
+    if i == 3:
+        d.t(700, cy - 34, "…", 14, SOFT, KR)
+    c = ACC if i == 0 else INFO
+    d.box(520, cy - 26, 360, 52, PAPER2, c, 1.1, 5)
+    d.t(545, cy + 4, f"파드 index {idx}", 11, c, MONO, "start", 600)
+    d.t(760, cy + 4, f"JOB_COMPLETION_INDEX={idx}", 10, MUTED, MONO, "start")
+    d.path(f"M 282 300 L 512 {cy}", c, 1.2, m="acc" if i == 0 else "info")
+
+d.box(940, 164, 240, 288, PAPER, RULE, 0.9, 8)
+d.t(1060, 192, "각자 맡는 몫", 11, SOFT, KR)
+for i, (idx, rng) in enumerate(((0, "0 ~ 999"), (1, "1000 ~ 1999"), (2, "2000 ~ 2999"), (11, "11000 ~ 11999"))):
+    d.t(1060, 236 + i * 44, rng, 11, ACC if i == 0 else MUTED, MONO)
+
+d.t(24, 508, "번호가 없으면(NonIndexed) 파드들이 서로 구분되지 않아, 누가 무엇을 맡을지 밖에서 정해 줘야 한다. "
+             "그 조율을 큐로 미는 방법이 18-03 이다.", 11, MUTED, KR, "start")
+d.legend(536, [("템플릿과 파드", INFO), ("번호가 정하는 몫", ACC)])
+d.save("18-02-indexed-completion.svg")
+print("ok")
