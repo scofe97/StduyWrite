@@ -5,7 +5,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx
 
-d = D(1240, 640, "KUBERNETES IN ACTION · 09-02",
+d = D(1240, 664, "KUBERNETES IN ACTION · 09-02",
       "같은 결과에 이르는 두 길",
       "파일을 컨테이너에 놓는 일은 같다. init 컨테이너는 그것을 복사로 하고, image 볼륨은 "
       "이미지 자체를 볼륨으로 마운트해 복사 단계를 없앤다.",
