@@ -97,3 +97,36 @@ def bracket(d, x, y0, y1, label, c=None, w=10, size=11):
     d.path(f"M {x+w} {y0} L {x} {y0} L {x} {y1} L {x+w} {y1}", c, 1.2)
     d.line(x, (y0 + y1) / 2, x + w + 6, (y0 + y1) / 2, c, 1.2)
     d.t(x + w + 12, (y0 + y1) / 2 + 4, label, size, c, KR, "start")
+
+
+def lane_pair(d, CX, top_cy, bot_cy, bw, bh, top_label, bot_label,
+              top_cells, bot_cells, links, top_c=None, bot_c=None,
+              top_mono=False, x0=40, x1=960, sizes=(13, 11, 10)):
+    """레인 둘 — 가로는 순서, 세로는 대응. 02 장이 반복해 쓰는 형태.
+    top_cells/bot_cells 는 (제목, 부제, 꼬리표) 세 쪽. links 는 세로 화살표 라벨."""
+    from dd import INFO, ACC
+    top_c = top_c or INFO; bot_c = bot_c or ACC
+    ts, ss, gs = sizes
+    for cy, lab, c in ((top_cy, top_label, top_c), (bot_cy, bot_label, bot_c)):
+        y0 = cy - bh // 2 - 26
+        d.o.append(f'<rect x="{x0}" y="{y0}" width="{x1-x0}" height="{bh+38}" rx="8" '
+                   f'fill="{c}06" stroke="{c}" stroke-width="1.2" stroke-dasharray="7 6"/>')
+        ring_label(d, x0, y0, lab, 11, c, off=16)
+
+    def cell(cx, cy, t, s, tag, c, mono):
+        d.box(cx - bw // 2, cy - bh // 2, bw, bh, PAPER2, c, 1.1, 6)
+        d.t(cx, cy - 20, fit(t, ts, bw - 16, t), ts, c,
+            MONO if mono else KR, "middle", 600)
+        d.t(cx, cy + 2, fit(s, ss, bw - 14, s), ss, MUTED,
+            MONO if all(ord(ch) < 128 or ch in '·' for ch in s) else KR)
+        d.t(cx, cy + 26, fit(tag, gs, bw - 12, tag), gs, SOFT,
+            MONO if all(ord(ch) < 128 or ch in '·:' for ch in tag) else KR)
+
+    for cx, c in zip(CX, top_cells): cell(cx, top_cy, *c, top_c, top_mono)
+    for cx, b in zip(CX, bot_cells): cell(cx, bot_cy, *b, bot_c, False)
+    for a, b in zip(CX, CX[1:]):
+        d.path(f"M {a+bw//2+6} {top_cy} L {b-bw//2-10} {top_cy}", MUTED, 1.4, m="ar")
+    for cx, lab in zip(CX, links):
+        d.path(f"M {cx} {top_cy+bh//2+6} L {cx} {bot_cy-bh//2-10}", bot_c, 1.5, m="acc")
+        # 중간 높이에 두면 아래 레인의 라벨 마스크와 겹친다 — 위 레인 바로 밑에 붙인다
+        if lab: d.t(cx + 12, top_cy + bh // 2 + 22, lab, 11, bot_c, KR, "start")
