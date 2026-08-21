@@ -4,12 +4,15 @@ from dd import INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, 
 
 BAND_X, BAND_W = 24, 952
 
-def band(d, y0, y1, label, x=BAND_X, w=BAND_W, focal=False):
-    """focal=True 면 왼쪽 모서리에 accent 막대를 세운다 — 도식당 한 곳만."""
+def band(d, y0, y1, label, x=BAND_X, w=BAND_W, focal=False, bar=None):
+    """focal=True 면 왼쪽 모서리에 막대를 세운다 — 도식당 한 곳만.
+    bar 로 막대 색을 지정한다(기본 accent). 15~16 장 개요는 본문이 앰버·붉은 띠를 지목하므로 쓴다."""
     d.box(x, y0, w, y1 - y0, PAPER2, RULE, 0.9, 8)
+    c = bar or ACC
     if focal:
-        d.o.append(f'<rect x="{x}" y="{y0}" width="4" height="{y1-y0}" rx="2" fill="{ACC}"/>')
-    d.t(x + 14, y0 + 20, label, 12, ACC if focal else SOFT, KR, "start")
+        d.o.append(f'<rect x="{x}" y="{y0}" width="4" height="{y1-y0}" rx="2" fill="{c}"/>')
+    if label:
+        d.t(x + 14, y0 + 20, label, 12, c if focal else SOFT, KR, "start")
 
 def node(d, cx, cy, title, sub, w=112, h=56, c=None, focal=False, dim=False):
     x, y = cx - w // 2, cy - h // 2
@@ -224,3 +227,18 @@ def state(d, a, txt, y, c, dx=0):
     d.o.append(f'<rect x="{x-w/2:.0f}" y="{y-13}" width="{w:.0f}" height="26" rx="5" '
                f'fill="{c}14" stroke="{c}" stroke-width="1.2"/>')
     d.t(x, y + 4, txt, 11, c, KR)
+
+
+def chapter_map(d, y0, rows, x=BAND_X, w=BAND_W, h=80, gap=12):
+    """장 개요 — 절마다 띠 하나. rows 는 (절, 요점, 경고|None, 막대색|None).
+
+    15~16 장 본문은 이 도식을 두고 "색이 붙은 곳은 두 군데뿐이고 나머지 상자는 전부 같은 회색"
+    이라고 서술한다. 그러니 색은 본문이 지목한 자리에만 넣는다 — 임의로 칠하면 본문이 틀려진다."""
+    for i, (sec, point, warn, c) in enumerate(rows):
+        yy = y0 + i * (h + gap)
+        band(d, yy, yy + h, "", x=x, w=w, focal=c is not None, bar=c)
+        d.t(x + 26, yy + 32, sec, 13, c or INK, KR, "start", 600)
+        d.t(x + 26, yy + 56, point, 11, MUTED, KR, "start")
+        if warn:
+            d.t(x + w - 26, yy + 46, warn, 11, c, KR, "end")
+    return y0 + len(rows) * (h + gap) - gap
