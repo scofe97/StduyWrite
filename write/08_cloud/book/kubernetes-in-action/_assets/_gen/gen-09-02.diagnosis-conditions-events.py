@@ -5,7 +5,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx
 
-d = D(1220, 700, "KUBERNETES IN ACTION · 09-02",
+d = D(1220, 720, "KUBERNETES IN ACTION · 09-02",
       "어디서 멈췄는지와 왜 멈췄는지",
       "conditions 는 어느 단계까지 통과했는지를 말해 준다. 왜 거기서 멈췄는지는 말해 주지 않는다 — "
       "그 답은 events 에 있다.",
