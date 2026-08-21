@@ -130,3 +130,35 @@ def lane_pair(d, CX, top_cy, bot_cy, bw, bh, top_label, bot_label,
         d.path(f"M {cx} {top_cy+bh//2+6} L {cx} {bot_cy-bh//2-10}", bot_c, 1.5, m="acc")
         # 중간 높이에 두면 아래 레인의 라벨 마스크와 겹친다 — 위 레인 바로 밑에 붙인다
         if lab: d.t(cx + 12, top_cy + bh // 2 + 22, lab, 11, bot_c, KR, "start")
+
+
+def stage_chain(d, cy, stages, nodes, edges, bw=190, gap=60, x0=30,
+                stage_y=None, sizes=(14, 11, 10)):
+    """단계 머리 + 한 줄 체인. 각 장 chapter-overview 가 반복해 쓰는 형태.
+    nodes 는 (제목, 부제, 꼬리표, 색|None|ACC). ACC 면 focal 로 그린다.
+    코리도어 라벨은 실제 코리도어 폭으로 fit 한다 — 넉넉한 값을 넘기면 가드가 통과시킨다."""
+    from dd import INK, ACC, PAPER2, RULE
+    n = len(nodes); bh = 116
+    CX = [x0 + bw // 2 + i * (bw + gap) for i in range(n)]
+    ts, ss, gs = sizes
+    if stage_y is None: stage_y = cy - bh // 2 - 42
+    for cx, s in zip(CX, stages):
+        d.t(cx, stage_y, s, 12, SOFT, KR, "middle", 600)
+    for cx, (t, sub, tag, c) in zip(CX, nodes):
+        x, y = cx - bw // 2, cy - bh // 2
+        if c is ACC:
+            d.o.append(f'<rect x="{x}" y="{y}" width="{bw}" height="{bh}" rx="6" '
+                       f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>'); tc = ACC
+        else:
+            d.box(x, y, bw, bh, PAPER2, c or RULE, 1.1, 6); tc = c or INK
+        d.t(cx, cy - 24, fit(t, ts, bw - 18, t), ts, tc, KR, "middle", 600)
+        d.t(cx, cy + 2, fit(sub, ss, bw - 16, sub), ss, MUTED,
+            MONO if all(ord(ch) < 128 or ch in '·→' for ch in sub) else KR)
+        d.t(cx, cy + 30, fit(tag, gs, bw - 14, tag), gs, SOFT,
+            MONO if all(ord(ch) < 128 or ch in '·' for ch in tag) else KR)
+    for i, lab in enumerate(edges):
+        a, b = CX[i] + bw // 2, CX[i + 1] - bw // 2
+        d.path(f"M {a+6} {cy} L {b-10} {cy}", MUTED, 1.5, m="ar")
+        # textw 는 일부러 넉넉히 잡으므로 여유를 4px 만 둔다 (6px 이면 정상 라벨도 걸린다)
+        d.t((a + b) // 2, cy - 16, fit(lab, 11, gap - 4, f"corridor {lab}"), 11, MUTED, KR)
+    return CX
