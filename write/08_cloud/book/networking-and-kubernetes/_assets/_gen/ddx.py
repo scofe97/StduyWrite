@@ -162,3 +162,33 @@ def stage_chain(d, cy, stages, nodes, edges, bw=190, gap=60, x0=30,
         # textw 는 일부러 넉넉히 잡으므로 여유를 4px 만 둔다 (6px 이면 정상 라벨도 걸린다)
         d.t((a + b) // 2, cy - 16, fit(lab, 11, gap - 4, f"corridor {lab}"), 11, MUTED, KR)
     return CX
+
+
+def matrix(d, x0, cols, rows, hdr_y, row_h=84, gap=12, focal_col=None, sizes=(13, 11)):
+    """행렬 — 행은 항목, 열은 축. 값이 몇 줄뿐이어도 행렬은 행렬로 그린다.
+    cols 는 (폭, 머리글). rows 는 (셀 목록, 행 색). 셀은 (윗줄, 아랫줄) 또는 (한 줄,).
+    focal_col 열은 행 색으로 칠해 그 열이 판정 축임을 드러낸다."""
+    from dd import INK, PAPER, PAPER2, RULE
+    ts, ss = sizes
+    XS, x = [], x0
+    for w, name in cols:
+        XS.append((x, w))
+        d.t(x + w // 2, hdr_y, name, 11, SOFT, KR, "middle", 600)
+        x += w + gap
+    for r, (cells, rc) in enumerate(rows):
+        y = hdr_y + 24 + r * (row_h + gap)
+        for i, (cx0, cw) in enumerate(XS):
+            hit = (i == focal_col)
+            d.o.append(f'<rect x="{cx0}" y="{y}" width="{cw}" height="{row_h}" rx="6" '
+                       f'fill="{rc+"12" if hit else PAPER2}" stroke="{rc if hit else RULE}" '
+                       f'stroke-width="{1.4 if hit else 1.1}"/>')
+            cell = cells[i]
+            if len(cell) == 1:
+                d.t(cx0 + cw // 2, y + row_h // 2 + 6, cell[0], 15, rc if hit else INK, KR, "middle", 600)
+            else:
+                d.t(cx0 + 20, y + 34, fit(cell[0], ts, cw - 40, cell[0]), ts,
+                    rc if hit else INK,
+                    MONO if all(ord(ch) < 128 for ch in cell[0]) else KR, "start", 600)
+                d.t(cx0 + 20, y + 58, fit(cell[1], ss, cw - 40, cell[1]), ss, MUTED,
+                    MONO if all(ord(ch) < 128 for ch in cell[1]) else KR, "start")
+    return XS
