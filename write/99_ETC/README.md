@@ -22,6 +22,10 @@ Step C에서 옮겨진 고아 파일:
 - `TodoList.md`
 - `message-lib 스펙.md`
 
+하위 폴더:
+- `youtube-summaries/` → 영상 자막 기반 요약. 네트워킹 계열이 몇 편 쌓이면 `02_os/networking/`으로 이동 검토
+- `대본/`, `분석/` → 기존 하위 폴더
+
 기존 분석 문서들:
 - `01-jenkins-analysis.md` → `07_devops/02_Jenkins/`로 이동 검토
 - `03-message-queue-lgtm-study-resources.md` → 리소스 성격이면 `_meta/`로
