@@ -41,8 +41,10 @@ d.t(rx - 6, EXT[1] - 16, "밖에서 안으로", 10, INFO, KR, "end")
 d.path(f"M {ING[0]+BW//2+6} {ING[1]} L {SVA[0]-BW//2-10} {SVA[1]}", INFO, 1.6, m="info")
 d.path(f"M {SVA[0]+BW//2+6} {SVA[1]} L {SVB[0]-BW//2-10} {SVB[1]}", ACC, 1.8, m="acc")
 d.t((SVA[0] + SVB[0]) // 2, SVA[1] - 16, "안쪽끼리", 10, ACC, KR)
+# 컨트롤 플레인 상자(580~860)가 서비스 A(598)·B(840)의 중심 x 를 둘 다 품으므로
+# 꺾을 것 없이 그 두 열에서 곧게 올린다. '설정 배포' 라벨은 두 열 사이(720)에 있다.
 for t in (SVA, SVB):
-    d.path(f"M {CPL[0] + (t[0]-CPL[0])//3} {CPL[1]-54-6} L {t[0]} {t[1]+BH//2+10}", MUTED, 1.3, m="ar", dash="5 5")
+    d.path(f"M {t[0]} {CPL[1]-54-6} L {t[0]} {t[1]+BH//2+10}", MUTED, 1.3, m="ar", dash="5 5")
 d.t(CPL[0], CPL[1] - 74, "설정 배포", 10, MUTED, KR)
 
 d.t(36, 572, "같은 L7 이라도 방향이 다르다 — Ingress 는 진입 하나를 맡고, 메시는 서비스 사이 "
