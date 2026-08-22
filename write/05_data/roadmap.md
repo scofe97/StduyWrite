@@ -10,7 +10,7 @@ source:
 related:
   - ./README.md
   - ../04_messaging/README.md
-  - ../11_spring/README.md
+  - ../10_spring/README.md
 updated: 2026-07-15
 ---
 
@@ -58,4 +58,4 @@ PostgreSQL을 사용한다면 [postgres/](./02_relational/postgres/README.md)의
 
 - [05_data MOC](./README.md) — 폴더 경계와 전체 자료의 진입점
 - [04_messaging](../04_messaging/README.md) — 메시지 브로커·CDC·스트림 구현
-- [11_spring](../11_spring/README.md) — Spring 프레임워크 전반
+- [10_spring](../10_spring/README.md) — Spring 프레임워크 전반

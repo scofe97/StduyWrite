@@ -18,7 +18,7 @@ updated: 2026-06-30
 
 책의 무게중심은 **CI/CD·GitOps·배포 전략**입니다. ArgoCD로 깃 푸시만으로 배포하고, Rolling Update → Blue/Green → Canary로 배포 전략을 한 단계씩 발전시키며, 멀티 노드풀·멀티테넌시로 규모를 키우는 흐름이 본문의 뼈대입니다. 이는 `04_cicd`가 모으는 "도구를 관통하는 배포 이론·전략"의 경계 안에 들어옵니다. 그래서 형제 단행본인 [`fdsd_fundamentals-devops`](../fdsd_fundamentals-devops/README.md)·[`cicd_cicd-patterns`](../cicd_cicd-patterns/README.md)와 같은 `book/{슬러그}/` 자리에 둡니다.
 
-"Claude로 만든다"는 *주제*가 아니라 *방법*입니다. 각 장은 인프라를 한 조각 쌓을 때마다 그 작업을 Claude Code와 어떻게 협업했는지를 마무리 절에 정리합니다(`CLAUDE.md` 행동규칙 → 메모리 컨텍스트 → 아키텍처 결정 기록 → `claude-context/` → `settings.local.json` 권한 분리 → `command-guardrails/`). 모델 자체의 특성·LLM 일반론은 `12_AI/` <!-- 링크 끊김(2026-08): ../../../../12_AI/README.md -->, 순수 K8s 네트워킹·오브젝트 이론은 `08_cloud/kubernetes/` <!-- 링크 끊김(2026-08): ../../../../08_cloud/kubernetes/README.md -->가 맡습니다. 이 책은 그 둘을 *배포 인프라를 만드는 워크플로우*로 엮는 자리입니다.
+"Claude로 만든다"는 *주제*가 아니라 *방법*입니다. 각 장은 인프라를 한 조각 쌓을 때마다 그 작업을 Claude Code와 어떻게 협업했는지를 마무리 절에 정리합니다(`CLAUDE.md` 행동규칙 → 메모리 컨텍스트 → 아키텍처 결정 기록 → `claude-context/` → `settings.local.json` 권한 분리 → `command-guardrails/`). 모델 자체의 특성·LLM 일반론은 `11_AI/` <!-- 링크 끊김(2026-08): ../../../../11_AI/README.md -->, 순수 K8s 네트워킹·오브젝트 이론은 `08_cloud/kubernetes/` <!-- 링크 끊김(2026-08): ../../../../08_cloud/kubernetes/README.md -->가 맡습니다. 이 책은 그 둘을 *배포 인프라를 만드는 워크플로우*로 엮는 자리입니다.
 
 ## 장 구성
 
