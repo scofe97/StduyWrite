@@ -45,7 +45,7 @@ for (ax, ay), (bx, by) in [(N1, N2), (N1, N3), (N2, N3)]:
                bx + (BW // 2 - 30) * (1 if ax > bx else -1), by - BH // 2 - 6, OK, 1.5)
 d.chip(624, 246, "iBGP · 세 쌍 모두", OK, 12)
 
-d.path(f"M {EXT[0]+BW//2+8} {EXT[1]} L {N1[0]-BW//2-10} {N1[1]+22}", ACC, 1.8, m="acc")
+d.path(ddx.elbow(EXT[0]+BW//2+8, EXT[1], N1[0]-BW//2-10, N1[1]+22), ACC, 1.8, m="acc")
 d.t(286, 282, "eBGP", 12, ACC, MONO, "middle", 600)
 d.t(286, 336, "밖으로 나가는 자리", 11, ACC, KR, "end")
 

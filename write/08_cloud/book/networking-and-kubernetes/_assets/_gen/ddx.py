@@ -192,3 +192,10 @@ def matrix(d, x0, cols, rows, hdr_y, row_h=84, gap=12, focal_col=None, sizes=(13
                 d.t(cx0 + 20, y + 58, fit(cell[1], ss, cw - 40, cell[1]), ss, MUTED,
                     MONO if all(ord(ch) < 128 for ch in cell[1]) else KR, "start")
     return XS
+
+
+def elbow(x1, y1, x2, y2):
+    """가로 중간에서 한 번 꺾는 직각 경로. 통로를 혼자 쓰는 연결선에만 쓴다 —
+    한 점에서 여러 갈래가 뻗으면 세로 구간이 겹치므로 줄기를 세워야 한다."""
+    xb = (x1 + x2) // 2
+    return f"M {x1} {y1} L {xb} {y1} L {xb} {y2} L {x2} {y2}"

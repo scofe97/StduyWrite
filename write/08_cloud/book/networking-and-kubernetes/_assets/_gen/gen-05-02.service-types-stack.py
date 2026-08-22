@@ -46,7 +46,7 @@ box(CIP[0] + CIP[2] // 2, CIP[1] + CIP[3] // 2, CIP[2], CIP[3],
     "ClusterIP", "가상 IP", "kube-proxy 가 DNAT", focal=True)
 box(HL[0] + HL[2] // 2, HL[1] + HL[3] // 2, HL[2], HL[3],
     "Headless", "clusterIP: None", "DNS 가 명단을 반환", OK, dash=True)
-d.path(f"M {CIP[0]+CIP[2]+6} {CIP[1]+CIP[3]//2} L {HL[0]-10} {HL[1]+HL[3]//2}", OK, 1.4, m="ok", dash="6 5")
+d.path(ddx.elbow(CIP[0]+CIP[2]+6, CIP[1]+CIP[3]//2, HL[0]-10, HL[1]+HL[3]//2), OK, 1.4, m="ok", dash="6 5")
 d.t(HL[0] + HL[2] // 2, HL[1] - 14, "LB 를 뺀 변형", 10, OK, KR)
 
 for cx, cy, t, s in CALL: box(cx, cy, CW, CH, t, s, "", INFO)
