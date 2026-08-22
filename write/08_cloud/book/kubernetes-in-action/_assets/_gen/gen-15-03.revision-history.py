@@ -15,6 +15,12 @@ ddx.node(d, 180, 236, "Deployment  kiada", "지금 template = 0.7", 280, 84, INF
 
 RS = [("kiada-7bffb9bf96", "0.5", 1, 0, SOFT), ("kiada-5d5c5f9d76", "0.6", 2, 0, SOFT),
       ("kiada-6c9d8b4f52", "0.7", 3, 3, ACC)]
+
+# 소유 관계 세 갈래를 한 점에서 비스듬히 뻗지 않는다. 줄기 하나를 세워 거기서 갈라내면
+# 세 선이 서로 겹치지도, 남의 선을 건너지도 않는다 — 내려가는 선은 반드시 중간 행의
+# 가로선을 건너기 때문이다.
+d.path("M 322 236 L 368 236", INFO, 1.3)
+d.path("M 368 168 L 368 360", INFO, 1.3)
 for i, (nm, ver, rev, n, c) in enumerate(RS):
     cx = 620 + i * 0
     cy = 168 + i * 96
@@ -26,7 +32,7 @@ for i, (nm, ver, rev, n, c) in enumerate(RS):
     d.t(cx - 178, cy - 8, nm, 12, tc, MONO, "start", 600)
     d.t(cx - 178, cy + 16, f"ver {ver}   ·   replicas {n}", 10, MUTED, MONO, "start")
     d.t(cx + 178, cy + 4, f"revision {rev}", 11, tc, MONO, "end")
-    d.path(f"M 322 236 L 412 {cy}", INFO, 1.3, m="info")
+    d.path(f"M 368 {cy} L 412 {cy}", INFO, 1.3, m="info")
 
 for i, (nm, ver, rev, n, c) in enumerate(RS):
     cy = 168 + i * 96

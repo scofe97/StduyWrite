@@ -16,14 +16,19 @@ def scene(y0, label, sel, blue_on, green_on, note, note_c):
     d.box(60, y0 + 60, 300, 84, PAPER2, ACC, 1.2, 6)
     d.t(210, y0 + 90, "Service", 13, ACC, KR, "middle", 600)
     d.t(210, y0 + 114, sel, 11, ACC, MONO)
-    for on, nm, col, cy in ((blue_on, "Blue Deployment", "col: blue", y0 + 62),
-                            (green_on, "Green Deployment", "col: green", y0 + 148)):
+    # ey 는 Service 오른쪽 변에서 나가는 높이다. 한 점에서 같이 나가면 두 길이 겹쳐 그려지고
+    # 비스듬히 내려가므로, 각자의 접점을 주고 높이가 다른 쪽만 직각으로 꺾는다.
+    for on, nm, col, cy, ey in ((blue_on, "Blue Deployment", "col: blue", y0 + 62, y0 + 84),
+                                (green_on, "Green Deployment", "col: green", y0 + 148, y0 + 120)):
         c = OK if on else None
         ddx.node(d, 700, cy + 22, nm, col, 300, 62, c, dim=not on)
+        ty = cy + 22
+        seg = (f"M 364 {ey} L 544 {ty}" if ey == ty
+               else f"M 364 {ey} L 456 {ey} L 456 {ty} L 544 {ty}")
         if on:
-            d.path(f"M 364 {y0+102} L 544 {cy+22}", OK, 1.5, m="ok")
+            d.path(seg, OK, 1.5, m="ok")
         else:
-            d.path(f"M 364 {y0+102} L 544 {cy+22}", SOFT, 1.2, m="ar", dash="5 5")
+            d.path(seg, SOFT, 1.2, m="ar", dash="5 5")
     d.t(1040, y0 + 116, note, 11, note_c, KR)
 
 scene(100, "전환 전", "selector  col: blue", True, False, "Green 은 떠 있지만 트래픽이 안 간다", SOFT)
