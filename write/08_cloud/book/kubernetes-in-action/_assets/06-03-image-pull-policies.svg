@@ -1,109 +1,67 @@
-<svg viewBox="0 0 960 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>imagePullPolicy 세 가지의 동작 비교</title>
-  <desc>Always는 컨테이너가 재시작될 때마다 이미지를 pull한다. IfNotPresent는 이미지가 로컬에 없을 때만 pull하므로 처음 만들 때 한 번만 받는다. Never는 절대 pull하지 않으며 로컬에 이미지가 없으면 ErrImageNeverPull 경고 이벤트가 기록된다.</desc>
-  <defs>
-    <style>
-      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
-      .sub    { font-size: 11px; fill: rgb(138,133,128); }
-      .pol    { font-size: 12px; font-weight: 700; fill: rgb(212,168,83); font-family: 'JetBrains Mono', monospace; }
-      .box    { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
-      .boxlt  { font-size: 11px; font-weight: 700; fill: #e8e4df; }
-      .lab    { font-size: 9.5px; fill: rgb(138,133,128); }
-      .note   { font-size: 10px; fill: #e8e4df; }
-    </style>
-    <marker id="a65" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <path d="M0,0 L6,3 L0,6 Z" fill="rgb(212,168,83)"/>
-    </marker>
-  </defs>
-
-  <rect x="0" y="0" width="960" height="420" fill="#0d0d0d"/>
-  <text x="24" y="28" class="title">imagePullPolicy 세 가지의 동작 비교</text>
-  <text x="24" y="46" class="sub">미지정이면 :latest 태그 → Always, 그 외 태그 → IfNotPresent가 기본값</text>
-
-  <!-- column separators -->
-  <line x1="330" y1="66" x2="330" y2="400" stroke="rgb(42,37,32)" stroke-width="1.5"/>
-  <line x1="640" y1="66" x2="640" y2="400" stroke="rgb(42,37,32)" stroke-width="1.5"/>
-
-  <!-- ===== Column 1: Always ===== -->
-  <text x="170" y="82" class="pol" text-anchor="middle">Always</text>
-  <circle cx="170" cy="102" r="5" fill="#e8e4df"/>
-  <line x1="170" y1="107" x2="170" y2="122" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a65)"/>
-  <rect x="105" y="126" width="130" height="34" rx="6" fill="rgb(102,187,106)"/>
-  <text x="170" y="148" class="box" text-anchor="middle">Pull image</text>
-  <line x1="170" y1="160" x2="170" y2="180" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a65)"/>
-  <rect x="105" y="184" width="130" height="34" rx="6" fill="rgb(174,214,241)"/>
-  <text x="170" y="206" class="box" text-anchor="middle">Run container</text>
-  <line x1="170" y1="218" x2="170" y2="238" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a65)"/>
-  <polygon points="170,242 225,268 170,294 115,268" fill="rgb(197,179,224)"/>
-  <text x="170" y="272" class="box" text-anchor="middle">Restart?</text>
-  <!-- Yes loop back to Pull -->
-  <path d="M225,268 L268,268 L268,143 L237,143" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a65)"/>
-  <text x="252" y="260" class="lab">Yes</text>
-  <!-- No end -->
-  <line x1="170" y1="294" x2="170" y2="318" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a65)"/>
-  <text x="182" y="312" class="lab">No</text>
-  <circle cx="170" cy="330" r="7" fill="none" stroke="#e8e4df" stroke-width="2"/>
-  <circle cx="170" cy="330" r="3.5" fill="#e8e4df"/>
-  <text x="170" y="366" class="note" text-anchor="middle">재시작되면 이미지를 다시 pull</text>
-  <text x="170" y="382" class="note" text-anchor="middle">(레지스트리가 죽으면 재시작 불가)</text>
-
-  <!-- ===== Column 2: IfNotPresent ===== -->
-  <text x="485" y="82" class="pol" text-anchor="middle">IfNotPresent</text>
-  <circle cx="485" cy="102" r="5" fill="#e8e4df"/>
-  <line x1="485" y1="107" x2="485" y2="122" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a65)"/>
-  <polygon points="485,126 552,154 485,182 418,154" fill="rgb(245,215,110)"/>
-  <text x="485" y="150" class="box" text-anchor="middle">로컬에 이미지</text>
-  <text x="485" y="164" class="box" text-anchor="middle">있는가?</text>
-  <!-- No → Pull -->
-  <path d="M418,154 L380,154 L380,200" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a65)"/>
-  <text x="392" y="148" class="lab">No</text>
-  <rect x="352" y="204" width="88" height="34" rx="6" fill="rgb(102,187,106)"/>
-  <text x="396" y="226" class="box" text-anchor="middle">Pull image</text>
-  <path d="M440,221 L470,221 L470,232" fill="none" stroke="rgb(212,168,83)" stroke-width="2"/>
-  <!-- Yes → Run -->
-  <line x1="485" y1="182" x2="485" y2="232" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a65)"/>
-  <text x="497" y="200" class="lab">Yes</text>
-  <rect x="420" y="236" width="130" height="34" rx="6" fill="rgb(174,214,241)"/>
-  <text x="485" y="258" class="box" text-anchor="middle">Run container</text>
-  <line x1="485" y1="270" x2="485" y2="288" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a65)"/>
-  <polygon points="485,292 540,316 485,340 430,316" fill="rgb(197,179,224)"/>
-  <text x="485" y="320" class="box" text-anchor="middle">Restart?</text>
-  <!-- Yes loop back to diamond -->
-  <path d="M540,316 L590,316 L590,154 L554,154" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a65)"/>
-  <text x="568" y="308" class="lab">Yes</text>
-  <line x1="485" y1="340" x2="485" y2="358" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a65)"/>
-  <text x="497" y="354" class="lab">No</text>
-  <circle cx="485" cy="368" r="7" fill="none" stroke="#e8e4df" stroke-width="2"/>
-  <circle cx="485" cy="368" r="3.5" fill="#e8e4df"/>
-  <text x="485" y="400" class="note" text-anchor="middle">처음 만들 때만 pull — 재시작 시 캐시 사용</text>
-
-  <!-- ===== Column 3: Never ===== -->
-  <text x="795" y="82" class="pol" text-anchor="middle">Never</text>
-  <circle cx="795" cy="102" r="5" fill="#e8e4df"/>
-  <line x1="795" y1="107" x2="795" y2="122" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a65)"/>
-  <polygon points="795,126 862,154 795,182 728,154" fill="rgb(245,215,110)"/>
-  <text x="795" y="150" class="box" text-anchor="middle">로컬에 이미지</text>
-  <text x="795" y="164" class="box" text-anchor="middle">있는가?</text>
-  <!-- No → ErrImageNeverPull -->
-  <path d="M728,154 L692,154 L692,200" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a65)"/>
-  <text x="702" y="148" class="lab">No</text>
-  <rect x="656" y="204" width="90" height="40" rx="6" fill="rgb(240,150,190)"/>
-  <text x="701" y="221" class="box" text-anchor="middle" font-size="9.5">ErrImage</text>
-  <text x="701" y="235" class="box" text-anchor="middle" font-size="9.5">NeverPull</text>
-  <path d="M701,244 L701,262 L780,262" fill="none" stroke="rgb(212,168,83)" stroke-width="1.5" stroke-dasharray="3 3"/>
-  <!-- Yes → Run -->
-  <line x1="795" y1="182" x2="795" y2="232" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a65)"/>
-  <text x="807" y="200" class="lab">Yes</text>
-  <rect x="730" y="236" width="130" height="34" rx="6" fill="rgb(174,214,241)"/>
-  <text x="795" y="258" class="box" text-anchor="middle">Run container</text>
-  <line x1="795" y1="270" x2="795" y2="288" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a65)"/>
-  <polygon points="795,292 850,316 795,340 740,316" fill="rgb(197,179,224)"/>
-  <text x="795" y="320" class="box" text-anchor="middle">Restart?</text>
-  <path d="M850,316 L898,316 L898,154 L864,154" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a65)"/>
-  <text x="874" y="308" class="lab">Yes</text>
-  <line x1="795" y1="340" x2="795" y2="358" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a65)"/>
-  <text x="807" y="354" class="lab">No</text>
-  <circle cx="795" cy="368" r="7" fill="none" stroke="#e8e4df" stroke-width="2"/>
-  <circle cx="795" cy="368" r="3.5" fill="#e8e4df"/>
-  <text x="795" y="400" class="note" text-anchor="middle">절대 pull 안 함 — 없으면 경고 이벤트 기록</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 628" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">세 정책은 레지스트리를 언제 보는가에서 갈린다</title><desc id="dd">Always 는 (재)시작마다 레지스트리에서 digest 를 확인하고, IfNotPresent 는 로컬에 없을 때만 조회하며, Never 는 아예 조회하지 않는다.</desc>
+<rect width="1000" height="628" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES IN ACTION · 06-03</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">세 정책은 레지스트리를 언제 보는가에서 갈린다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">첫 시작은 셋이 비슷해 보인다 — 차이는 재시작과 이미지가 없을 때 드러난다</text>
+<rect x="24" y="104" width="952" height="468" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="38" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">미지정이면 :latest 는 Always, 그 외 태그는 IfNotPresent 가 기본값이 된다</text>
+<text x="141" y="210" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">imagePullPolicy</text>
+<text x="365" y="210" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">언제 레지스트리를 보는가</text>
+<text x="592" y="210" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">재시작할 때</text>
+<text x="837" y="210" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">로컬에 이미지가 없으면</text>
+<rect x="36" y="234" width="210" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="56" y="268" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">Always</text>
+<text x="56" y="292" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">:latest 의 기본값</text>
+<rect x="258" y="234" width="215" height="88" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.4"/>
+<text x="278" y="268" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">(재)시작마다</text>
+<text x="278" y="292" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">digest 를 확인한다</text>
+<rect x="485" y="234" width="215" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="505" y="268" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">또 조회한다</text>
+<text x="505" y="292" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">레지스트리가 죽으면 못 뜬다</text>
+<rect x="712" y="234" width="250" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="732" y="268" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">pull 한다</text>
+<text x="732" y="292" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">받아서 시작한다</text>
+<rect x="36" y="334" width="210" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="56" y="368" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">IfNotPresent</text>
+<text x="56" y="392" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">그 외 태그의 기본값</text>
+<rect x="258" y="334" width="215" height="88" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.4"/>
+<text x="278" y="368" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">로컬에 없을 때만</text>
+<text x="278" y="392" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">있으면 안 본다</text>
+<rect x="485" y="334" width="215" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="505" y="368" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">캐시를 쓴다</text>
+<text x="505" y="392" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">레지스트리와 무관하다</text>
+<rect x="712" y="334" width="250" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="732" y="368" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">pull 한다</text>
+<text x="732" y="392" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">받아서 시작한다</text>
+<rect x="36" y="434" width="210" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="56" y="468" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">Never</text>
+<text x="56" y="492" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">기본값이 되지 않는다</text>
+<rect x="258" y="434" width="215" height="88" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.4"/>
+<text x="278" y="468" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">보지 않는다</text>
+<text x="278" y="492" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">조회 자체를 안 한다</text>
+<rect x="485" y="434" width="215" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="505" y="468" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">캐시를 쓴다</text>
+<text x="505" y="492" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">레지스트리와 무관하다</text>
+<rect x="712" y="434" width="250" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="732" y="468" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">시작하지 못한다</text>
+<text x="732" y="492" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">ErrImageNeverPull</text>
+<text x="36" y="548" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">노드에 이미지를 미리 심어 두는 운영이라면 Never 가 맞고, 태그를 덮어쓰는 운영이라면 Always 여야 한다 — 대신 레지스트리가 재시작 경로에 들어온다</text>
+<line x1="12" y1="588" x2="952" y2="588" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="610" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="600" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="122" y="610" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">매번 조회</text>
+<rect x="209" y="600" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="231" y="610" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">있으면 재사용</text>
+<rect x="344" y="600" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="366" y="610" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">없으면 실패</text>
 </svg>
