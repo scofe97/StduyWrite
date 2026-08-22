@@ -17,9 +17,11 @@ d.t(330, 186, "Ingress 하나", 13, WARN, KR, "middle", 600)
 for i, line in enumerate(("host: api.example.com", "tls: secretName", "path /orders → orders",
                           "path /payments → payments")):
     d.t(330, 212 + i * 22, line, 10, MUTED, MONO)
+d.path("M 544 233 L 660 233", MUTED, 1.4)
+d.path("M 660 202 L 660 264", MUTED, 1.4)
 for nm, cy in (("orders", 202), ("payments", 264)):
     ddx.node(d, 860, cy, nm, "Service", 180, 54, INFO)
-    d.path(f"M 544 {233} L 766 {cy}", MUTED, 1.4, m="ar")
+    d.path(f"M 660 {cy} L 766 {cy}", MUTED, 1.4, m="ar")
 ddx.tag(d, 1080, 233, "권한을 나눌 수 없다", WARN, 210)
 d.t(330, 322, "주문 팀에 수정 권한을 주면 결제 경로와 TLS 까지 열린다", 11, WARN, KR)
 
@@ -29,12 +31,14 @@ d.t(250, 450, "Gateway", 13, INFO, KR, "middle", 600)
 d.t(250, 472, "플랫폼 팀", 11, MUTED, KR)
 for i, line in enumerate(("host · port", "인증서 · 공인 IP")):
     d.t(250, 500 + i * 20, line, 10, SOFT, MONO if i == 0 else KR)
+d.path("M 384 488 L 400 488", INFO, 1.4)
+d.path("M 400 458 L 400 526", INFO, 1.4)
 for nm, team, cy in (("HTTPRoute", "주문 팀 · orders ns", 458), ("HTTPRoute", "결제 팀 · payments ns", 526)):
     d.o.append(f'<rect x="{560-140}" y="{cy-31}" width="280" height="62" rx="6" '
                f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
     d.t(560, cy - 6, nm, 12, ACC, MONO, "middle", 600)
     d.t(560, cy + 16, team, 10, MUTED, KR)
-    d.path(f"M 384 488 L 414 {cy}", INFO, 1.4, m="info")
+    d.path(f"M 400 {cy} L 414 {cy}", INFO, 1.4, m="info")
     d.path(f"M 702 {cy} L 766 {cy}", ACC, 1.4, m="acc")
     ddx.node(d, 860, cy, nm.replace("HTTPRoute", "orders" if cy < 490 else "payments"), "Service", 180, 54, INFO)
 ddx.tag(d, 1080, 492, "서로 못 건드린다", OK, 210)

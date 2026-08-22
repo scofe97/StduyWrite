@@ -16,12 +16,12 @@ ddx.node(d, 460, 300, "kubectl get gtw", "PROGRAMMED: True", 240, 84)
 d.path("M 258 300 L 334 300", MUTED, 1.5, m="ar")
 d.t(360, 348, "여기까지는 누구나 같다", 10, SOFT, KR)
 
-d.path("M 584 276 L 680 200", BAD, 1.5, m="bad")
+d.path("M 584 276 L 640 276 L 640 200 L 680 200", BAD, 1.5, m="bad")
 d.box(700, 158, 420, 84, PAPER2, BAD, 1.1, 6)
 d.t(910, 190, "초록불로 읽고 멈춘다", 13, BAD, KR, "middle", 600)
 d.t(910, 214, "게이트웨이 바깥을 뒤지게 된다 — 서비스·파드·DNS", 11, MUTED, KR)
 
-d.path("M 584 324 L 680 400", ACC, 1.5, m="acc")
+d.path("M 584 324 L 640 324 L 640 400 L 680 400", ACC, 1.5, m="acc")
 d.o.append(f'<rect x="700" y="358" width="420" height="112" rx="6" '
            f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
 d.t(910, 388, "3 층을 따로 조회한다", 13, ACC, KR, "middle", 600)

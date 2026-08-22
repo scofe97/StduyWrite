@@ -19,9 +19,11 @@ d.t(190, 340, "이 둘을 다 가진 파드만", 10, SOFT, KR)
 
 d.box(420, 160, 340, 276, PAPER, OK, 0.9, 8)
 d.t(590, 186, "selector 에 맞는다 — 이 세트의 파드", 11, OK, KR)
+d.path("M 324 296 L 384 296", OK, 1.3)
+d.path("M 384 226 L 384 358", OK, 1.3)
 for i in range(3):
     ddx.node(d, 590, 226 + i * 66, f"kiada-{i}", "app=kiada · rel=stable", 280, 52, OK)
-    d.path(f"M 324 296 L 444 {226+i*66}", OK, 1.3, m="ok")
+    d.path(f"M 384 {226+i*66} L 444 {226+i*66}", OK, 1.3, m="ok")
 d.t(590, 414, "replicas 를 채우는 데 셈해진다", 11, OK, KR)
 
 d.box(820, 160, 340, 276, PAPER, WARN, 0.9, 8)
