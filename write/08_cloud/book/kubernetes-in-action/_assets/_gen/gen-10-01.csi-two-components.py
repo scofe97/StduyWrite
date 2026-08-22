@@ -5,7 +5,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx
 
-d = D(1220, 676, "KUBERNETES IN ACTION · 10-01",
+d = D(1220, 696, "KUBERNETES IN ACTION · 10-01",
       "만드는 일과 붙이는 일은 자리가 다르다",
       "볼륨을 만들고 지우는 일은 클러스터 어디서 한 번만 하면 된다. 그것을 노드에 붙여 마운트하는 일은 "
       "그 볼륨이 필요한 노드에서 해야 한다.",
@@ -31,6 +31,6 @@ for i, (t, s) in enumerate((("NodeStageVolume", "노드에 포맷·마운트"),
 
 d.t(24, 632 - 8, "그래서 컨트롤러는 Deployment 로 하나만 띄우고, 노드 플러그인은 DaemonSet 으로 노드마다 띄운다. "
                  "17 장의 '노드마다 하나'가 여기서 쓰인다.", 11, MUTED, KR, "start")
-d.legend(628, [("한 번만 하면 되는 일", ACC), ("그 노드에서 해야 하는 일", OK)])
+d.legend(648, [("한 번만 하면 되는 일", ACC), ("그 노드에서 해야 하는 일", OK)])
 d.save("10-01-csi-two-components.svg")
 print("ok")

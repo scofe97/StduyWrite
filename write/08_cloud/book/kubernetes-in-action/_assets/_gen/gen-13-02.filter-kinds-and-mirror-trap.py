@@ -5,7 +5,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx
 
-d = D(1220, 744, "KUBERNETES IN ACTION · 13-02",
+d = D(1220, 754, "KUBERNETES IN ACTION · 13-02",
       "흐름이 하나냐, 둘이냐, 없냐",
       "필터 여섯은 트래픽 흐름 구조로 세 갈래가 된다. 화살표가 몇 개 나가는지가 그 갈래를 정한다.",
       "게이트웨이에서 백엔드로 가는 모양")

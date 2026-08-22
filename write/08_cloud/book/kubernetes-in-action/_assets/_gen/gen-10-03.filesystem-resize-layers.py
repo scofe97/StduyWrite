@@ -5,7 +5,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx
 
-d = D(1220, 620, "KUBERNETES IN ACTION · 10-03",
+d = D(1220, 632, "KUBERNETES IN ACTION · 10-03",
       "두 층을 각각 넓혀야 끝난다",
       "PVC 의 용량을 올리면 먼저 밑바탕 블록 디바이스가 커지고, 그다음 그 위 파일시스템이 늘어난 칸을 "
       "쓰도록 확장된다. 둘을 하는 주체와 시점이 다르다.",
