@@ -125,12 +125,17 @@ updated: 2026-06-26
 │   ├── 01-NN.{개관·운영 흡수본}.md       # 옛 루트 부 요약의 정독 폴더 이주본
 │   └── 02-{절}.{제목}.md                  # 책의 절 정독 노트
 │   └── (ch05만) 주제축 혼합           # 《자바 동시성》 실무를 주제별로 01·03·04-NN에 배치
+├── book/                              # 3·4번째 정독 대상 책 (장 단위 노트)
+│   ├── jpf_java-performance/          # Java Performance (Scott Oaks) 50편
+│   └── tsj_troubleshooting-java/      # Troubleshooting Java (Laurentiu Spilca) 38편
 └── _practice/                             # 챕터별 Gradle 실습 코드
     ├── settings.gradle.kts
     ├── build.gradle.kts
     └── chNN/
         └── src/main/java/org/runners/jvm/chNN/...
 ```
+
+[`book/`](./book/)에는 세 번째·네 번째 정독 대상 책이 들어간다. 위 두 표가 소개한 책이 `chNN_{topic}/`에 절 단위로 흩어지는 것과 달리, 이 둘은 장 단위 인덱스를 각자 갖는다 — [Java Performance](./book/jpf_java-performance/README.md) 50편과 [Troubleshooting Java](./book/tsj_troubleshooting-java/README.md) 38편이다.
 
 [`JVM-TOOLS.md`](./JVM-TOOLS.md)는 챕터에 종속되지 않는 횡단 레퍼런스다. `java`·`javac`·`javap`·`jcmd` 같은 도구와 플래그가 여러 챕터에 흩어져 있어, "어디서 무엇을 찾는지"를 한 곳에 모으고 깊은 설명은 각 챕터 SSOT로 링크한다.
 

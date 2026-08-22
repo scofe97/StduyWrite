@@ -36,9 +36,8 @@ updated: 2026-06-28
 | [07_autoconfig/](07_autoconfig/) | 7편 | 스프링 부트 자동 구성·외부 설정 — 스타터/BOM·@AutoConfiguration·@Conditional·커스텀 스타터·외부 설정·@ConfigurationProperties·프로필 |
 | [08_transaction/](08_transaction/) | 2편 | 트랜잭션 집계 MOC — 본체는 [`05_data/03_persistence/jpa/04-01`](../05_data/03_persistence/jpa/04-01.%EC%8A%A4%ED%94%84%EB%A7%81%20%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98.md)에 두고, Spring 관점에서 비어 있던 격리 수준·@Transactional 테스트 2편만 보강 |
 | [09_validation/](09_validation/) | 3편 | 입력 검증 — 수동 검증·BindingResult / Bean Validation·그룹 / 커스텀 ConstraintValidator. 옛 02_data-binding 의 단일 편을 분할·확장 |
-| [10_security/](10_security/) | 8편 | Spring Security 6.x 구현 — Filter Chain·기본 구현·Form 로그인 / OAuth2 Login(개념·Google·Facebook·Naver) / JWT 인증. 프레임워크 독립 이론은 [`99_ETC/security/01_concepts/`](../99_ETC/security/01_concepts/) |
 
-> 편수는 2026-06-25 실측이며, `10_security/` 행은 2026-08-23 에 추가했다. 8편이 실재하는데도 표에 빠져 있어 상위 MOC 에서 1-hop 으로 닿지 않았다. 폴더별 신설·재편 이력(통합·분할·이관 날짜)은 `STUDY_INDEX.md` 이관 표와 각 폴더 README 에서 관리한다.
+> 편수는 2026-06-25 실측. 폴더별 신설·재편 이력(통합·분할·이관 날짜)은 `STUDY_INDEX.md` 이관 표와 각 폴더 README 에서 관리한다.
 
 > Boot 자체(auto-config/Properties/Profile)는 [`07_autoconfig/`](07_autoconfig/), 내장 톰캣은 [`01_core/02-02`](01_core/), 액츄에이터·메트릭은 [`06_observability/05_SpringActuator/`](../06_observability/05_SpringActuator/) 에 정식 문서로 작성됐다(2026-05-25, 김영한 스프링 부트 강의 기반). 노션 import raw 는 `_notion_import/` <!-- 링크 끊김(2026-08): _notion_import/ --> 에 있으며, 재작성이 끝난 묶음부터 위 표에 행을 추가한다.
 
@@ -78,7 +77,7 @@ grep -rl "^  - spring$\|tags:.*spring" write/ --include="*.md" | sort
 6. **`03_network/`** — 외부·실시간 통신. 클라이언트 두 갈래(`webflux/` WebClient, `feign/` OpenFeign)에 더해 전송 엔진(`reactive-net/`), 실시간(`realtime/` SSE·WebSocket·STOMP), 회복탄력성(`resilience/`)까지. RestTemplate 경험자는 `webflux/01-01` 부터, 신규 MSA 설계자는 `feign/01-01` 부터 진입.
 7. **`04_testing/`** — 단위·통합·E2E 전 범위. Spring Boot 3.x 기준.
 8. **운영·모니터링** — [`06_observability/05_SpringActuator/`](../06_observability/05_SpringActuator/) 액츄에이터·마이크로미터·프로메테우스로 스프링 앱 메트릭을 노출·시각화.
-9. **도메인별** — 본인 관심 영역. 메시징이면 [`04_messaging/`](../04_messaging/), 데이터·ORM 이면 [`05_data/03_persistence/querydsl/`](../05_data/03_persistence/querydsl/), 보안이면 [`10_security/`](10_security/).
+9. **도메인별** — 본인 관심 영역. 메시징이면 [`04_messaging/`](../04_messaging/), 데이터·ORM 이면 [`05_data/03_persistence/querydsl/`](../05_data/03_persistence/querydsl/).
 
 
 
@@ -96,7 +95,7 @@ grep -rl "^  - spring$\|tags:.*spring" write/ --include="*.md" | sort
 | 4 | Spring MVC / 요청 처리 (대주제 8~10) | [01_core/03-01](01_core/03-01.Spring%20MVC%20—%20FrontController에서%20DispatcherServlet까지.md) · [03-02](01_core/03-02.예외%20처리%20—%20서블릿에서%20@ControllerAdvice까지.md), [02_data-binding/01-01](02_data-binding/01-01.HTTP%20요청·응답과%20메시지%20컨버터.md), [01_core/04-01](01_core/04-01.WebFlux%20서버%20—%20리액티브%20스택과%20어노테이션%20모델.md) · [04-02](01_core/04-02.WebFlux%20함수형%20엔드포인트%20—%20RouterFunction과%20HandlerFunction.md) | Custom ArgumentResolver / ReturnValueHandler 실습편 |
 | 5 | Validation / Binding / Conversion (대주제 11) | [02_data-binding/](02_data-binding/), [09_validation/](09_validation/) | Converter / Formatter / ConversionService 전용편 |
 | 6 | Spring Boot 자동구성·외부설정 (대주제 12~14) | [07_autoconfig/](07_autoconfig/) | 7편으로 충분 — 신규 후보 없음 |
-| 7 | 운영·연동·테스트 (대주제 15~24) | Event [06_events/](06_events/), Async/Scheduling [05_aop/01-02](05_aop/01-02.스프링%20스케줄링%20—%20@Scheduled에서%20Quartz까지.md)·01-04, Test [04_testing/](04_testing/), Data [../05_data/](../05_data/), Security [10_security/](10_security/), Actuator [../06_observability/05_SpringActuator/](../06_observability/05_SpringActuator/) | Cache Abstraction 전용편, MyBatis 연동 전용편, 성능 튜닝·장애 분석편 |
+| 7 | 운영·연동·테스트 (대주제 15~24) | Event [06_events/](06_events/), Async/Scheduling [05_aop/01-02](05_aop/01-02.스프링%20스케줄링%20—%20@Scheduled에서%20Quartz까지.md)·01-04, Test [04_testing/](04_testing/), Data [../05_data/](../05_data/), Actuator [../06_observability/05_SpringActuator/](../06_observability/05_SpringActuator/) | Cache Abstraction 전용편, MyBatis 연동 전용편, 성능 튜닝·장애 분석편 |
 | 8 | 빌드·패키징·Tomcat 배포 ([roadmap 16단계](roadmap.md)) | [01_core/02-02](01_core/02-02.내장%20톰캣과%20SpringApplication%20—%20JAR로%20WAS를%20품다.md) | bootJar vs plain jar·Boot Loader(JarLauncher/WarLauncher)·외부 WAR(SpringBootServletInitializer·providedRuntime)·Layered JAR·Docker layer cache·CI/CD 산출물 관리 전용편 |
 
 각 단계의 핵심 키워드 전체·핵심 흐름·단계별 요약·심화 실습 후보 5종은 [roadmap.md](roadmap.md)에 정리돼 있다. 우리 자료의 미작성 갭은 위 표의 "갭" 열에 모았다 — BeanPostProcessor·순환 참조 전용편, Weaving 4종+AspectJ 실험편, MyBatis Connection 바인딩편, Custom ArgumentResolver 실습편, Converter/ConversionService편, Cache Abstraction·성능 튜닝·장애 분석편, 빌드·패키징·Tomcat 배포 전용편(bootJar vs plain jar·Boot Loader·외부 WAR·Layered/Docker).

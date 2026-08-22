@@ -12,20 +12,20 @@ updated: 2026-08-22
 
 ## 경계 기준
 
-Jenkins 파이프라인 그루비 작성법은 여기로 온다. 반면 Jenkins가 만들어낸 메트릭을 해석하는 대시보드 구성은 `06_observability/`다.
+Jenkins 파이프라인 그루비 작성법은 여기로 온다. 반면 Jenkins가 만들어낸 메트릭을 해석하는 대시보드 구성은 [`06_observability/`](../06_observability/)다.
 
 ## 하위
 
-- `02_Jenkins/` — 7개 주제 묶음 (2026-06-10 `07_engine` 신설)
-  - `01_core/` — Jenkins 제어 영역과 Declarative Pipeline 기초
-  - `02_security/` — 인증·인가·시크릿·JCasC
-  - `03_agent/` — VM/Docker Agent·이미지 빌드·Kubernetes Jenkins
-  - `04_api/` — REST API 18+편 (TPS 통합 패턴 포함)
-  - `05_operations/` — 내구성·가용성·공유 라이브러리·Groovy 커스텀·Hook
-  - `06_infra/` — 용량 산정·IaC·GitHub/SonarQube/Artifactory 통합·CI/CD 구현
-  - `07_engine/` — 엔진 심화: 내부 동작(Stapler·큐·실행기)·플러그인 확장·Script Console 제어·외부 통합
+- [`02_Jenkins/`](02_Jenkins/) — 7개 주제 묶음 (2026-06-10 [`07_engine`](02_Jenkins/07_engine/) 신설)
+  - [`01_core/`](02_Jenkins/01_core/) — Jenkins 제어 영역과 Declarative Pipeline 기초
+  - [`02_security/`](02_Jenkins/02_security/) — 인증·인가·시크릿·JCasC
+  - [`03_agent/`](02_Jenkins/03_agent/) — VM/Docker Agent·이미지 빌드·Kubernetes Jenkins
+  - [`04_api/`](02_Jenkins/04_api/) — REST API 18+편 (TPS 통합 패턴 포함)
+  - [`05_operations/`](02_Jenkins/05_operations/) — 내구성·가용성·공유 라이브러리·Groovy 커스텀·Hook
+  - [`06_infra/`](02_Jenkins/06_infra/) — 용량 산정·IaC·GitHub/SonarQube/Artifactory 통합·CI/CD 구현
+  - [`07_engine/`](02_Jenkins/07_engine/) — 엔진 심화: 내부 동작(Stapler·큐·실행기)·플러그인 확장·Script Console 제어·외부 통합
   - `_archive/`, `_practice/` (이전 검토본·실습 코드)
-- `03_Nexus/` — 아티팩트 저장소
-- `book/` — 단행본 정독 노트
-- `docs/` — 공식 문서 기반 노트
-  - `sonarqube/` — 정적 분석, Quality Gate, CI 연계, Web API (2026.1 LTA 기준 19편)
+- [`03_Nexus/`](03_Nexus/) — 아티팩트 저장소
+- [`book/`](book/) — 단행본 정독 노트
+- [`docs/`](docs/) — 공식 문서 기반 노트
+  - [`sonarqube/`](docs/sonarqube/) — 정적 분석, Quality Gate, CI 연계, Web API (2026.1 LTA 기준 19편)

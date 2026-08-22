@@ -33,6 +33,17 @@ updated: 2026-06-25
 | 02-09 | [Evaluation · Test Harness](./02-09.Evaluation%20·%20Test%20Harness%20—%20비결정적%20시스템을%20채점하기.md) | 골든 데이터셋·회귀 테스트, groundedness↔faithfulness↔answer relevance, task success rate·latency·cost, LLM-as-a-judge, CI gate |
 | 02-10 | [Guardrail · Safety & Observability](./02-10.Guardrail%20·%20Safety%20&%20Observability%20—%20권한·방어·관측.md) | 주입 3종(prompt/tool/data exfiltration), 권한 경계(read-only↔write↔approval gate), redaction·PII masking·sandbox·budget limit, 관측 지표, audit log·trace |
 
+## 하위 폴더
+
+| 폴더 | 편수 | 다루는 범위 |
+|------|------|------------|
+| [`hermes/`](hermes/) | 1편 | Hermes 에이전트 하네스 사례 — 자기개선 로컬 에이전트의 루프와 메모리 구조 |
+| [`quiz/`](quiz/) | 4편 | 학습 퀴즈 축적본, AI 엔지니어링·Agentization 각 100문항, 오답 노트 |
+
+위 "등록된 절"이 개념 본문이라면 이 둘은 사례와 자가 점검입니다. 본문 개정 시 함께 보지 않아도 되도록 분리해 둡니다.
+
+
+
 ## 경계 기준
 
 특정 프레임워크에 종속된 AI 활용(예: Spring AI, LangChain4j 연동)은 해당 언어·프레임워크 카테고리로 보내고, 모델 자체의 특성·릴리스·API와 모델 독립적인 에이전트 도구만 여기에 둡니다. Claude Code 같은 CLI 도구 설정은 `09_tools/`와 겹칠 수 있는데, *도구 설치·키맵*은 09_tools, *모델 능력·API 동작*은 본 카테고리로 나눕니다.
