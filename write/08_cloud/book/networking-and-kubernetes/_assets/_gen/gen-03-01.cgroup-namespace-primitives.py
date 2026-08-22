@@ -37,13 +37,19 @@ box(*CG, BW, BH, "cgroup", "CPU·Memory·Disk I/O·net_cls", "얼마나 쓸 수 
 box(*NS, BW, BH, "namespace", "PID·Net·IPC·Mount·UTS·User", "무엇을 볼 수 있는가", INFO)
 box(*PROC, PW, PH, "컨테이너 프로세스", "호스트 커널을 공유", "게스트 OS 없음")
 
+# RUNC(330~670)·PROC(330~670) 의 x 범위가 CG(150~450)·NS(550~850) 와 겹치므로
+# 꺾을 것 없이 곧은 세로 두 열이면 된다. 열은 420 / 580 — 링 라벨 마스크(~396)를
+# 24px 비껴 서고, 위 구간과 아래 구간은 y 가 갈려 같은 열을 나눠 써도 겹치지 않는다.
+COL = {CG[0]: 420, NS[0]: 580}
 for (cx, cy) in (CG, NS):
-    d.path(f"M {RUNC[0] + (cx-RUNC[0])//4} {RUNC[1]+PH//2+6} L {cx} {cy-BH//2-10}", ACC, 1.5, m="acc")
-    d.path(f"M {cx} {cy+BH//2+6} L {PROC[0] + (cx-PROC[0])//4} {PROC[1]-PH//2-10}", MUTED, 1.5, m="ar")
-d.t(400, 270, "만든다", 11, ACC, KR, "end")
-d.t(600, 270, "만든다", 11, ACC, KR, "start")
-d.t(400, 470, "제한", 11, MUTED, KR, "end")
-d.t(600, 470, "가림", 11, MUTED, KR, "start")
+    x = COL[cx]
+    d.path(f"M {x} {RUNC[1]+PH//2+6} L {x} {cy-BH//2-8}", ACC, 1.5, m="acc")
+    d.path(f"M {x} {cy+BH//2+6} L {x} {PROC[1]-PH//2-8}", MUTED, 1.5, m="ar")
+# 라벨은 세로줄에서 8px 떼고, 위 두 개는 링 라벨 마스크(y 267~285) 아래로 내린다
+d.t(412, 300, "만든다", 11, ACC, KR, "end")
+d.t(588, 300, "만든다", 11, ACC, KR, "start")
+d.t(412, 470, "제한", 11, MUTED, KR, "end")
+d.t(588, 470, "가림", 11, MUTED, KR, "start")
 
 d.t(36, 604, "두 축은 서로 다른 것을 정한다 — 쓰는 양을 줄여도 보이는 범위는 그대로이고, "
              "그 반대도 마찬가지다", 12, MUTED, KR, "start")
