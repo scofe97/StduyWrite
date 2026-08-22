@@ -34,10 +34,13 @@ for i, lab in enumerate(["80 포트", "전달"]):
     a, b = CX[i] + BW // 2, CX[i + 1] - BW // 2
     d.path(f"M {a+6} {CY} L {b-10} {CY}", MUTED, 1.5, m="ar")
     d.t((a + b) // 2, CY - 16, ddx.fit(lab, 10, GAP - 4, lab), 10, MUTED, KR)
+# 04-02 와 같은 처방 — 통로 92px 에 줄기를 세울 자리가 없다. /host(280)는 컨트롤러
+# 상자의 y 범위(246~354) 안이라 곧은 가로 한 줄, /data 만 x=620 에서 꺾는다.
 A_X, B_X = CX[2] + BW // 2 + 6, EP_X - EP_W // 2 - 10
-for ey, lab in zip(EP_Y, ["path /host", "path /data"]):
-    d.path(f"M {A_X} {CY + (ey-CY)//4} L {B_X} {ey}", OK, 1.5, m="ok")
-    d.t((A_X + B_X) // 2, (CY + ey) // 2 - 10, ddx.fit(lab, 10, B_X - A_X - 4, lab), 10, OK, MONO)
+d.path(f"M {A_X} {EP_Y[0]} L {B_X} {EP_Y[0]}", OK, 1.5, m="ok")
+d.path(f"M {A_X} {CY+40} L 620 {CY+40} L 620 {EP_Y[1]} L {B_X} {EP_Y[1]}", OK, 1.5, m="ok")
+d.t(B_X, EP_Y[0] - 12, ddx.fit("path /host", 10, B_X - A_X - 4, "path /host"), 10, OK, MONO, "end")
+d.t(B_X, EP_Y[1] + 16, ddx.fit("path /data", 10, B_X - A_X - 4, "path /data"), 10, OK, MONO, "end")
 d.t(36, 540, "규칙을 고르는 것은 컨트롤러 Pod 다 — LB 는 80 포트를 그 Pod 로 넘길 뿐이다",
      12, MUTED, KR, "start")
 d.legend(584, [("들어오는 요청", INFO), ("규칙을 고르는 자리", ACC), ("백엔드", OK)])
