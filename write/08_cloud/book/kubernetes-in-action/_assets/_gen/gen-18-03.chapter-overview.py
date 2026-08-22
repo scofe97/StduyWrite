@@ -5,7 +5,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx
 
-d = D(1200, 700, "KUBERNETES IN ACTION · 18-03",
+d = D(1200, 704, "KUBERNETES IN ACTION · 18-03",
       "Job 을 넓히는 일과 시간표에 올리는 일",
       "앞 두 축은 Job 하나 안에서 무엇을 더 할 수 있는지를 다룬다. CronJob 은 그 Job 을 고치는 것이 "
       "아니라, 만들어 주는 바깥 껍질이다.",
@@ -31,8 +31,8 @@ d.t(600, 534, "schedule · concurrencyPolicy · 보존 개수", 11, ACC, MONO)
 d.path("M 600 576 L 600 600 L 40 600 L 40 290 L 84 290", ACC, 1.4, m="acc", dash="6 5")
 d.t(56, 330, "때가 되면 Job 을 만든다", 10, ACC, KR, "start")
 
-d.t(24, 612, "그래서 CronJob 안에는 jobTemplate 이 통째로 들어간다 — 위 두 층에서 정한 것이 그 안에 그대로 실린다.",
+d.t(24, 624, "그래서 CronJob 안에는 jobTemplate 이 통째로 들어간다 — 위 두 층에서 정한 것이 그 안에 그대로 실린다.",
      11, MUTED, KR, "start")
-d.legend(644, [("Job 하나 안", INFO), ("바깥 껍질", ACC)])
+d.legend(656, [("Job 하나 안", INFO), ("바깥 껍질", ACC)])
 d.save("18-03.chapter-overview.svg")
 print("ok")

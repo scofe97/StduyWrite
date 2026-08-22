@@ -5,7 +5,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx
 
-d = D(1240, 692, "KUBERNETES IN ACTION · 18-01",
+d = D(1240, 744, "KUBERNETES IN ACTION · 18-01",
       "몇 개가 언제 도는가",
       "completions 와 parallelism 두 값이 실행 모양을 만든다. 하나도 안 적으면 파드 하나, "
       "completions 만 적으면 순차, 둘 다 적으면 병렬이 된다.",
@@ -29,8 +29,8 @@ row(292, "순차 다중 — completions 3", "parallelism 없음(=1)",
 row(484, "병렬 다중 — completions 3 · parallelism 2", "동시에 둘씩",
     [(0, 1.6, 0, "파드 1"), (0, 1.8, 1, "파드 2"), (1.7, 3.3, 0, "파드 3")], ACC, True)
 
-d.t(24, 636 - 8, "셋 다 성공 횟수를 채우면 끝난다. 다른 것은 그 횟수를 채우는 데 파드를 몇 개 쓰고 "
+d.t(24, 672, "셋 다 성공 횟수를 채우면 끝난다. 다른 것은 그 횟수를 채우는 데 파드를 몇 개 쓰고 "
                  "동시에 몇 개를 돌리느냐다.", 11, MUTED, KR, "start")
-d.legend(644, [("도는 파드", INFO), ("동시에 도는 창", ACC), ("완료", OK)])
+d.legend(696, [("도는 파드", INFO), ("동시에 도는 창", ACC), ("완료", OK)])
 d.save("18-01-job-types.svg")
 print("ok")
