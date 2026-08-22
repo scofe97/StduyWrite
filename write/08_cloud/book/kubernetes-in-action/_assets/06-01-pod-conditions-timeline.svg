@@ -1,87 +1,76 @@
-<svg viewBox="0 0 960 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>Pod conditions의 생애주기 전이</title>
-  <desc>PodScheduled와 Initialized는 각각 스케줄링 완료·init 컨테이너 완료 시점에 True가 된 뒤 Pod의 남은 생애 동안 유지된다. ContainersReady와 Ready는 컨테이너 준비 상태에 따라 True와 False 사이를 여러 번 오갈 수 있다.</desc>
-  <defs>
-    <style>
-      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
-      .sub    { font-size: 11px; fill: rgb(138,133,128); }
-      .cond   { font-size: 12px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', monospace; }
-      .seg    { font-size: 11px; font-weight: 800; fill: #0d0d0d; }
-      .note   { font-size: 10px; fill: #e8e4df; }
-    </style>
-    <marker id="a62" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
-      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
-    </marker>
-  </defs>
-
-  <rect x="0" y="0" width="960" height="420" fill="#0d0d0d"/>
-  <text x="24" y="28" class="title">Pod conditions의 생애주기 전이</text>
-  <text x="24" y="46" class="sub">PodScheduled·Initialized는 한 번 True가 되면 유지 · ContainersReady·Ready는 여러 번 바뀔 수 있음</text>
-
-  <!-- event dashed lines -->
-  <line x1="230" y1="150" x2="230" y2="386" stroke="rgb(138,133,128)" stroke-width="1" stroke-dasharray="4 4"/>
-  <line x1="330" y1="150" x2="330" y2="386" stroke="rgb(138,133,128)" stroke-width="1" stroke-dasharray="4 4"/>
-  <line x1="450" y1="150" x2="450" y2="386" stroke="rgb(138,133,128)" stroke-width="1" stroke-dasharray="4 4"/>
-  <line x1="570" y1="150" x2="570" y2="386" stroke="rgb(138,133,128)" stroke-width="1" stroke-dasharray="4 4"/>
-  <line x1="660" y1="150" x2="660" y2="386" stroke="rgb(138,133,128)" stroke-width="1" stroke-dasharray="4 4"/>
-  <line x1="810" y1="150" x2="810" y2="386" stroke="rgb(138,133,128)" stroke-width="1" stroke-dasharray="4 4"/>
-
-  <!-- event labels (staggered) -->
-  <text x="230" y="76" class="note" text-anchor="middle">Pod 오브젝트</text>
-  <text x="230" y="90" class="note" text-anchor="middle">생성</text>
-  <line x1="230" y1="96" x2="230" y2="148" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#a62)"/>
-
-  <text x="330" y="106" class="note" text-anchor="middle">워커 노드에</text>
-  <text x="330" y="120" class="note" text-anchor="middle">스케줄링됨</text>
-  <line x1="330" y1="126" x2="330" y2="148" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#a62)"/>
-
-  <text x="450" y="76" class="note" text-anchor="middle">init 컨테이너</text>
-  <text x="450" y="90" class="note" text-anchor="middle">전부 완료</text>
-  <line x1="450" y1="96" x2="450" y2="148" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#a62)"/>
-
-  <text x="570" y="106" class="note" text-anchor="middle">컨테이너 전부 준비,</text>
-  <text x="570" y="120" class="note" text-anchor="middle">readiness gate는 아직</text>
-  <line x1="570" y1="126" x2="570" y2="148" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#a62)"/>
-
-  <text x="660" y="76" class="note" text-anchor="middle">클라이언트에 서비스</text>
-  <text x="660" y="90" class="note" text-anchor="middle">제공 준비 완료</text>
-  <line x1="660" y1="96" x2="660" y2="148" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#a62)"/>
-
-  <text x="810" y="106" class="note" text-anchor="middle">컨테이너 하나 이상이</text>
-  <text x="810" y="120" class="note" text-anchor="middle">준비 안 됨을 보고</text>
-  <line x1="810" y1="126" x2="810" y2="148" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#a62)"/>
-
-  <!-- Row 1: PodScheduled -->
-  <text x="196" y="176" class="cond" text-anchor="end">PodScheduled</text>
-  <rect x="230" y="158" width="100" height="28" fill="rgb(240,150,190)"/>
-  <text x="280" y="177" class="seg" text-anchor="middle">False</text>
-  <rect x="330" y="158" width="590" height="28" fill="rgb(102,187,106)"/>
-  <text x="360" y="177" class="seg">True</text>
-
-  <!-- Row 2: Initialized -->
-  <text x="196" y="234" class="cond" text-anchor="end">Initialized</text>
-  <rect x="230" y="216" width="220" height="28" fill="rgb(240,150,190)"/>
-  <text x="280" y="235" class="seg" text-anchor="middle">False</text>
-  <rect x="450" y="216" width="470" height="28" fill="rgb(102,187,106)"/>
-  <text x="480" y="235" class="seg">True</text>
-
-  <!-- Row 3: ContainersReady -->
-  <text x="196" y="292" class="cond" text-anchor="end">ContainersReady</text>
-  <rect x="230" y="274" width="340" height="28" fill="rgb(240,150,190)"/>
-  <text x="280" y="293" class="seg" text-anchor="middle">False</text>
-  <rect x="570" y="274" width="240" height="28" fill="rgb(102,187,106)"/>
-  <text x="600" y="293" class="seg">True</text>
-  <rect x="810" y="274" width="110" height="28" fill="rgb(240,150,190)"/>
-  <text x="850" y="293" class="seg" text-anchor="middle">False</text>
-
-  <!-- Row 4: Ready -->
-  <text x="196" y="350" class="cond" text-anchor="end">Ready</text>
-  <rect x="230" y="332" width="430" height="28" fill="rgb(240,150,190)"/>
-  <text x="280" y="351" class="seg" text-anchor="middle">False</text>
-  <rect x="660" y="332" width="150" height="28" fill="rgb(102,187,106)"/>
-  <text x="690" y="351" class="seg">True</text>
-  <rect x="810" y="332" width="110" height="28" fill="rgb(240,150,190)"/>
-  <text x="850" y="351" class="seg" text-anchor="middle">False</text>
-
-  <text x="480" y="410" class="sub" text-anchor="middle">시간 → · 초록=True, 분홍=False · ContainersReady는 Ready의 필요조건이지만 충분조건은 아니다(readiness gate는 11장)</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 556" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">condition 넷은 성격이 갈린다 — 한 번 서면 유지 vs 여러 번 바뀜</title><desc id="dd">PodScheduled 와 Initialized 는 한 번 True 가 되면 Pod 의 남은 생애 동안 유지된다. ContainersReady 와 Ready 는 생애 동안 여러 번 바뀐다.</desc>
+<rect width="1000" height="556" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES IN ACTION · 06-01</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">condition 넷은 성격이 갈린다 — 한 번 서면 유지 vs 여러 번 바뀜</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">phase 만 보면 '돌고 있네'지만, conditions 를 봐야 '트래픽 받을 준비는 안 됐네'를 안다</text>
+<rect x="24" y="104" width="952" height="396" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="38" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">성격이 갈리므로 진단할 때 보는 자리도 다르다</text>
+<text x="240" y="168" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">① 생성</text>
+<text x="348" y="168" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">② 스케줄링</text>
+<text x="456" y="168" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">③ 샌드박스 준비</text>
+<text x="564" y="168" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">④ init 완료</text>
+<text x="672" y="168" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">⑤ 컨테이너 준비</text>
+<text x="780" y="168" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">⑥ gate 통과</text>
+<text x="888" y="168" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">⑦ 하나가 실패</text>
+<line x1="40" y1="184" x2="952" y2="184" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="40" y="196" width="912" height="132" rx="8" fill="rgba(191,192,192,0.22)" fill-opacity="0.03" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="56" y="187" width="196" height="18" fill="#0D1117"/>
+<text x="66" y="200" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">한 번 True 가 되면 그대로 유지된다</text>
+<rect x="40" y="348" width="912" height="88" rx="8" fill="rgba(191,192,192,0.22)" fill-opacity="0.03" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="56" y="339" width="172" height="18" fill="#0D1117"/>
+<text x="66" y="352" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">생애 동안 여러 번 바뀔 수 있다</text>
+<text x="224" y="222" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">PodScheduled</text>
+<rect x="240" y="205" width="108" height="26" rx="4" fill="#F0616D22" stroke="#F0616D" stroke-width="1.0"/>
+<text x="294" y="222" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F0616D">False</text>
+<rect x="348" y="205" width="604" height="26" rx="4" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="650" y="222" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#3FB98C">True</text>
+<text x="224" y="266" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">PodReadyToStartContainers</text>
+<rect x="240" y="249" width="216" height="26" rx="4" fill="#F0616D22" stroke="#F0616D" stroke-width="1.0"/>
+<text x="348" y="266" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F0616D">False</text>
+<rect x="456" y="249" width="496" height="26" rx="4" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="704" y="266" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#3FB98C">True</text>
+<text x="224" y="310" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">Initialized</text>
+<rect x="240" y="293" width="324" height="26" rx="4" fill="#F0616D22" stroke="#F0616D" stroke-width="1.0"/>
+<text x="402" y="310" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F0616D">False</text>
+<rect x="564" y="293" width="388" height="26" rx="4" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="758" y="310" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#3FB98C">True</text>
+<text x="224" y="374" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">ContainersReady</text>
+<rect x="240" y="357" width="432" height="26" rx="4" fill="#F0616D22" stroke="#F0616D" stroke-width="1.0"/>
+<text x="456" y="374" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F0616D">False</text>
+<rect x="672" y="357" width="216" height="26" rx="4" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="780" y="374" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#3FB98C">True</text>
+<rect x="888" y="357" width="64" height="26" rx="4" fill="#F0616D22" stroke="#F0616D" stroke-width="1.0"/>
+<text x="224" y="418" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F08A59">Ready</text>
+<rect x="240" y="401" width="540" height="26" rx="4" fill="#F0616D22" stroke="#F0616D" stroke-width="1.0"/>
+<text x="510" y="418" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F0616D">False</text>
+<rect x="780" y="401" width="108" height="26" rx="4" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="834" y="418" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#3FB98C">True</text>
+<rect x="888" y="401" width="64" height="26" rx="4" fill="#F0616D22" stroke="#F0616D" stroke-width="1.0"/>
+<rect x="40" y="392" width="4" height="44" rx="2" fill="#F08A59"/>
+<line x1="348" y1="190" x2="348" y2="436" stroke="rgba(191,192,192,0.22)" stroke-width="0.8" stroke-dasharray="4 6"/>
+<line x1="456" y1="190" x2="456" y2="436" stroke="rgba(191,192,192,0.22)" stroke-width="0.8" stroke-dasharray="4 6"/>
+<line x1="564" y1="190" x2="564" y2="436" stroke="rgba(191,192,192,0.22)" stroke-width="0.8" stroke-dasharray="4 6"/>
+<line x1="672" y1="190" x2="672" y2="436" stroke="rgba(191,192,192,0.22)" stroke-width="0.8" stroke-dasharray="4 6"/>
+<line x1="780" y1="190" x2="780" y2="436" stroke="rgba(191,192,192,0.22)" stroke-width="0.8" stroke-dasharray="4 6"/>
+<line x1="888" y1="190" x2="888" y2="436" stroke="rgba(191,192,192,0.22)" stroke-width="0.8" stroke-dasharray="4 6"/>
+<text x="36" y="466" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">PodReadyToStartContainers 는 1.29 에서 더해진 다섯 번째다 — 책 표에는 없고 실측(v1.35)에만 보인다.</text>
+<text x="36" y="486" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">쿠버네티스는 새 관측 축이 필요할 때 기존 것을 바꾸지 않고 목록에 더한다.</text>
+<line x1="12" y1="516" x2="952" y2="516" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="538" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="528" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">True</text>
+<rect x="196" y="528" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="218" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">False</text>
+<rect x="305" y="528" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="327" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">본문이 짚는 행</text>
 </svg>
