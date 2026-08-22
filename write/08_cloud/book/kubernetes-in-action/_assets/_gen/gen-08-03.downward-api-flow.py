@@ -24,8 +24,8 @@ for t, s, cy, c in REF:
     d.box(460, cy - 32, 300, 64, PAPER2, c, 1.2, 6)
     d.t(610, cy - 6, t, 12, c, MONO, "middle", 600)
     d.t(610, cy + 16, s, 10, MUTED, KR)
-d.path("M 362 290 L 452 262", ACC, 1.4, m="acc")
-d.path("M 362 350 L 452 340", ACC, 1.4, m="acc")
+d.path("M 362 290 L 416 290 L 416 262 L 452 262", ACC, 1.4, m="acc")
+d.path("M 362 350 L 416 350 L 416 340 L 452 340", ACC, 1.4, m="acc")
 d.t(610, 400, "valueFrom 아래 — configMapKeyRef 가 있던 그 자리", 10, SOFT, KR)
 
 d.box(830, 168, 350, 268, PAPER, RULE, 0.9, 8)
@@ -33,7 +33,7 @@ d.t(1005, 196, "컨테이너", 11, SOFT, KR)
 ddx.node(d, 1005, 262, "환경변수", "POD_IP · NODE_NAME", 300, 62, OK)
 ddx.node(d, 1005, 366, "downwardAPI 볼륨", "파일로도 받는다", 300, 62, OK)
 d.path("M 762 262 L 848 262", OK, 1.4, m="ok")
-d.path("M 762 348 L 848 360", OK, 1.4, m="ok")
+d.path("M 762 348 L 800 348 L 800 360 L 848 360", OK, 1.4, m="ok")
 
 d.t(24, 496, "이렇게 전달할 수밖에 없는 값이 두 부류다. 하나는 Pod 가 생성·스케줄링되기 전에는 알 수 없는 값 — "
              "Pod IP, 노드 이름, Pod 이름 자신이다.", 11, MUTED, KR, "start")
