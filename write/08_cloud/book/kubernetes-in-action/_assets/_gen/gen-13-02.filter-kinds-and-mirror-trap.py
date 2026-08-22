@@ -25,8 +25,8 @@ lane(300, 232, "흐름 복제 — RequestMirror", "복사본 응답은 버려진
 ddx.node(d, 320, 440, "게이트웨이", "복사본을 하나 더 만든다", 200, 62, INFO)
 ddx.node(d, 700, 400, "kiada-stable", "이 응답만 클라이언트로", 200, 62, OK)
 ddx.node(d, 700, 486, "kiada-new", "응답은 버려진다", 200, 62, ACC)
-d.path("M 422 428 L 596 400", MUTED, 1.5, m="ar")
-d.path("M 422 452 L 596 486", ACC, 1.5, m="acc", dash="6 5")
+d.path("M 422 428 L 500 428 L 500 400 L 596 400", MUTED, 1.5, m="ar")
+d.path("M 422 452 L 520 452 L 520 486 L 596 486", ACC, 1.5, m="acc", dash="6 5")
 ddx.focal_tag(d, 1000, 486, "부수효과는 두 번 일어난다", 260)
 d.t(1000, 518, "복사본을 받은 백엔드는 복사본인 줄 모른다", 10, ACC, KR)
 

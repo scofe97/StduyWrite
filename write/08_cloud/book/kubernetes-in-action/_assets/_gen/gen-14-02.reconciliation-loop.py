@@ -17,8 +17,8 @@ STEP = [("관찰한다", "ReplicaSet · Pod", 200, 200),
         ("조정한다", "만들거나 지운다", 200, 352)]
 for t, s, cx, cy in STEP:
     ddx.node(d, cx, cy, t, s, 250, 80, INFO)
-d.path("M 326 216 L 396 250", INFO, 1.5, m="info")
-d.path("M 456 314 L 326 344", INFO, 1.5, m="info")
+d.path("M 326 216 L 360 216 L 360 250 L 396 250", INFO, 1.5, m="info")
+d.path("M 456 316 L 456 344 L 326 344", INFO, 1.5, m="info")
 # 되돌아가는 선은 박스 바깥으로 돌린다 — 조정 박스가 x 75~325 라 그 안을 지나면 관통한다
 d.path("M 71 352 L 52 352 L 52 200 L 71 200", INFO, 1.5, m="info")
 d.t(364, 414, "같으면 아무것도 하지 않는다", 11, SOFT, KR)
