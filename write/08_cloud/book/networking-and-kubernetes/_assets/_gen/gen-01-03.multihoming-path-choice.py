@@ -36,14 +36,20 @@ node(*US,   "우리 ISP", "AS 100 · 둘 다 받는다", "표엔 한 줄만 적�
 node(*PICK, "고르는 순서", "1. Local Pref · 정책", "2. AS_PATH 길이", ACC, dash=True)
 
 HB, HH = BW // 2, BH // 2
+# 네 빗변을 직각으로 편다. 짧은 길은 y=300 · y=260 두 행을 쓰고 꺾는 열은 676 / 324 로
+# 멀리 떼어 놓았다. 먼 길은 DST 와 MID 의 x 범위가 겹치므로 곧은 세로 한 줄이면 되고,
+# TOPB→US 는 x=268 한 열만 쓴다 — PICK(≤238) 과 US→PICK 열(148) 어디와도 겹치지 않는다.
 # 짧은 길 — 두 홉
-d.path(f"M {DST[0]-HB-8} {DST[1]-20} L {TOPA[0]+HB+10} {TOPA[1]+24}", INFO, 1.6, m="info")
-d.path(f"M {TOPA[0]-HB-8} {TOPA[1]+24} L {US[0]+HB+10} {US[1]-20}", INFO, 1.6, m="info")
-d.chip(700, 250, "2 홉", INFO, 12)
+d.path(f"M {DST[0]-HB-8} {DST[1]-20} L 676 {DST[1]-20} L 676 {TOPA[1]+24} "
+       f"L {TOPA[0]+HB+10} {TOPA[1]+24}", INFO, 1.6, m="info")
+d.path(f"M {TOPA[0]-HB-8} {TOPA[1]+24} L 324 {TOPA[1]+24} L 324 {US[1]-20} "
+       f"L {US[0]+HB+10} {US[1]-20}", INFO, 1.6, m="info")
+d.chip(719, 300, "2 홉", INFO, 12)
 # 먼 길 — 세 홉
-d.path(f"M {DST[0]-56} {DST[1]+HH+6} L {MID[0]+64} {MID[1]-HH-10}", MUTED, 1.5, m="ar")
+d.path(f"M 776 {DST[1]+HH+6} L 776 {MID[1]-HH-6}", MUTED, 1.5, m="ar")
 d.path(f"M {MID[0]-HB-8} {MID[1]} L {TOPB[0]+HB+10} {TOPB[1]}", MUTED, 1.5, m="ar")
-d.path(f"M {TOPB[0]-HB-8} {TOPB[1]} L {US[0]+40} {US[1]+HH+10}", MUTED, 1.5, m="ar")
+d.path(f"M {TOPB[0]-HB-8} {TOPB[1]} L 268 {TOPB[1]} L 268 {US[1]+20} "
+       f"L {US[0]+HB+10} {US[1]+20}", MUTED, 1.5, m="ar")
 d.chip(550, 484, "3 홉", MUTED, 12)
 d.path(f"M {US[0]} {US[1]+HH+6} L {US[0]} {PICK[1]-HH-10}", ACC, 1.6, m="acc")
 
