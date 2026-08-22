@@ -6,7 +6,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
 
-W, H = 1000, 612
+W, H = 1000, 624
 d = D(W, H, "CALICO · iBGP FULL MESH",
       "안쪽은 iBGP 풀메시, 밖으로 나가는 자리만 eBGP",
       "화살표는 한 방향으로 그렸지만 이웃 관계는 쌍방이다 — 점선 상자 하나가 AS 하나다",

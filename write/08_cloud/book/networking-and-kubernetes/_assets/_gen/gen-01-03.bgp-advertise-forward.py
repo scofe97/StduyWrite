@@ -5,7 +5,7 @@
 import dd, ddx
 from dd import D, Seq, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, KR, MONO
 
-W, H = 1000, 636
+W, H = 1000, 648
 d = Seq(W, H, "BGP · ADVERTISE vs FORWARD",
         "광고와 전달은 다른 시간에 일어난다",
         "위 구간은 패킷과 무관하게 평소에 오가며 표를 채우고, 아래 구간은 그 표를 흘끗 보는 것으로 끝난다",

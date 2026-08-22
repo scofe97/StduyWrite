@@ -1,6 +1,6 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
-W, H = 1000, 544
+W, H = 1000, 560
 d = D(W, H, "05-01 · MATERIALS OF A SERVICE",
       "서비스가 쓰는 재료 셋 — 이름, 주소 목록, 그리고 그 목록을 쪼갠 이유",
       "이름과 순서가 있고, 준비된 주소만 모이고, 그 목록이 커지면 쪼갠다. 쪼갠 이유가 이 편의 결론이다.",

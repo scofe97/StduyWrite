@@ -6,7 +6,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 560
+W, H = 1000, 576
 d = D(W, H, "ONE REQUEST · THROUGH THE KERNEL",
       "요청 하나가 커널을 관통하는 순서 — 네 절이 실제로 이어지는 자리",
       "점선 안이 커널 공간. 양 끝 두 칸은 그 밖(하드웨어와 유저 공간)이고, 패킷은 경계를 두 번 넘는다.",

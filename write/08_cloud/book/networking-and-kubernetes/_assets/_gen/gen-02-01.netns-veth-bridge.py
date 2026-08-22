@@ -5,7 +5,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 592
+W, H = 1000, 608
 d = D(W, H, "NETNS · veth PAIR · BRIDGE",
       "veth 는 두 네임스페이스에 양 끝을 걸친 한 장치다",
       "왼쪽 링과 오른쪽 링을 잇는 굵은 선 하나가 장치 하나다. 두 장치가 연결된 것이 아니라 한 장치의 두 끝이다.",

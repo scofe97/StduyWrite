@@ -6,7 +6,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 536
+W, H = 1000, 552
 d = D(W, H, "ONE REQUEST · 12 PACKETS",
       "요청 하나가 12패킷 — 그중 실제 데이터는 2개뿐이다",
       "lo0 캡처에서 세는 12개를 시간 순서로 묶은 것. 가운데 한 칸만 데이터이고 나머지 열 개가 신뢰성에 드는 값이다.",

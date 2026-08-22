@@ -4,7 +4,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 616
+W, H = 1000, 632
 d = D(W, H, "NetworkPolicy · WHEN IT LOCKS",
       "정책은 선택되는 순간부터 판정을 시작한다",
       "선택되지 않은 Pod 는 아무 제한도 받지 않는다. 선택된 순간 기본값이 차단으로 뒤집히고, 규칙은 허용만 더한다.",

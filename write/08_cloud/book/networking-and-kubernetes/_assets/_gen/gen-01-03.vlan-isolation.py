@@ -7,7 +7,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 604
+W, H = 1000, 616
 d = D(W, H, "VLAN · ONE SWITCH, TWO DOMAINS",
       "VLAN — 같은 장비인데 서로 들리지 않는다",
       "물리 배선은 그대로 두고 태그로 브로드캐스트 도메인을 가른다",

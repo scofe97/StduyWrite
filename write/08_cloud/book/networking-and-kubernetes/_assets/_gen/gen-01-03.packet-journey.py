@@ -6,7 +6,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 652
+W, H = 1000, 664
 d = D(W, H, "ONE PACKET · FULL STACK JOURNEY",
       "패킷 하나의 전 계층 여정 — 라우터는 L3 까지만 올라온다",
       "가운데 기둥에 Application·Transport 칸이 없는 것이 이 그림의 요점이다. 괄호는 그 자리에서의 PDU 이름이다.",

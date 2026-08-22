@@ -1,6 +1,6 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
-W, H = 1000, 544
+W, H = 1000, 560
 d = D(W, H, "04-01 · POD NETWORKING MODEL", "주소를 어떻게 줄지 정하고, 그 결정을 실행하는 컴포넌트로 내려간다", "세 약속에서 시작해 배치를 고르고, 그 결정을 실행하는 컴포넌트까지 내려간 뒤 자격 판정으로 닫는다.", lead="세 약속 → 배치 선택 → 그 결정을 실행하는 컴포넌트 → 자격 판정")
 ddx.band(d, 104, 496, "무엇을 약속했느냐가 배치를 고르게 하고, 배치가 컴포넌트의 일을 정한다")
 ddx.stage_chain(d, 316,

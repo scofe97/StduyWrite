@@ -5,7 +5,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 616
+W, H = 1000, 632
 d = D(W, H, "netns WIRING BY HAND · FOUR STEPS",
       "런타임이 대신해 주는 배선을 손으로 — 네 단계와 마지막 함정",
       "격리 공간을 만들고 선을 걸고 주소를 줘도 아직 안 된다. 기본 경로를 넣는 마지막 한 줄에서야 ping 이 통한다.",

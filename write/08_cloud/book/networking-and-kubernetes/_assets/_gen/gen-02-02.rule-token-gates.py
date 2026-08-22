@@ -5,7 +5,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 620
+W, H = 1000, 636
 d = D(W, H, "ONE iptables RULE · GATES THEN ONE TARGET",
       "규칙 한 줄은 관문의 연속 — 조건은 통과 여부만 정하고 타깃 하나가 패킷을 바꾼다",
       "앞의 셋은 통과 여부만 정한다. 헤더를 실제로 고치는 것은 마지막 -j 하나뿐이다.",

@@ -6,7 +6,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 604
+W, H = 1000, 616
 d = D(W, H, "INSIDE THE SUBNET · L2 -> L3",
       "내부망을 빠져나가는 순서 — 번호를 따라가면 프레임 한 장의 일생이다",
       "(1) 가른다 → (2) 묻는다 → (3) 넘긴다 → (4) 나간다 → (5) 고른다. 점선을 넘는 순간 판단 근거가 MAC 에서 IP 로 바뀐다.",

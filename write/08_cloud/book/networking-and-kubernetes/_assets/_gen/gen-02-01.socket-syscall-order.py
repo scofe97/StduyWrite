@@ -5,7 +5,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 616
+W, H = 1000, 632
 d = D(W, H, "SOCKET SYSCALLS · CALL vs WHAT IT CREATES",
       "소켓 syscall — 애플리케이션이 부르면 커널이 무엇을 만드는가",
       "가로는 부르는 순서, 세로는 그 호출이 커널에 남기는 것. 네 번의 호출이 네 가지를 만든다.",

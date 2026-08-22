@@ -5,7 +5,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 616
+W, H = 1000, 632
 d = D(W, H, "kube-proxy · ClusterIP TO POD",
       "ClusterIP 로 온 패킷이 실제 Pod 주소로 바뀌기까지의 체인",
       "앞의 세 체인은 어디로 갈지만 고르고, 목적지를 실제로 바꾸는 것은 마지막 엔드포인트 체인이다.",

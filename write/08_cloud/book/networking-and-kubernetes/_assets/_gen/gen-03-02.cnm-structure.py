@@ -4,7 +4,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 600
+W, H = 1000, 616
 d = D(W, H, "CNM · THREE PARTS AND ONE GAP",
       "CNM 세 부품과 CNM 이 제공하지 않는 것",
       "sandbox·endpoint·network 셋은 libnetwork 안에 있다. 여러 호스트를 묶으려면 밖에 KV 저장소를 따로 세워야 한다.",

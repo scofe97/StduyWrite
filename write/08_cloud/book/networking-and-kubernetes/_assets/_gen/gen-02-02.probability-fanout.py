@@ -5,7 +5,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 664
+W, H = 1000, 680
 d = D(W, H, "KUBE-SVC · PROBABILITY FANOUT",
       "KUBE-SVC 체인을 위에서부터 — 마킹 규칙이 먼저이고 확률은 그 다음이다",
       "확률은 0.333 · 0.5 · 무조건으로 다르지만 최종 몫은 셋 다 1/3 이다. 앞 규칙이 빗나간 만큼만 남기 때문이다.",

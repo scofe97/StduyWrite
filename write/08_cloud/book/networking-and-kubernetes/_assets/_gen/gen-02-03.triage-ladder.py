@@ -5,7 +5,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 616
+W, H = 1000, 632
 d = D(W, H, "TRIAGE LADDER · ASK THEN RUN",
       "수사 사다리 — 관문마다 무엇을 치고 어디를 읽는가",
       "위에서부터 하나씩 묻고, 처음 막히는 관문이 곧 원인의 층이다. 아래 줄이 그 관문에서 실제로 치는 명령이다.",

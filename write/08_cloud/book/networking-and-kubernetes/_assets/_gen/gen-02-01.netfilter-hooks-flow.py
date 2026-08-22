@@ -5,7 +5,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 616
+W, H = 1000, 632
 d = D(W, H, "NETFILTER HOOKS · WHICH FIELD CHANGES",
       "훅마다 패킷의 어느 필드가 바뀌는가 — DNAT 가 라우팅보다 먼저인 이유",
       "라우팅 이전에는 목적지를 바꿀 수 있고, 이후에는 출발지만 바뀐다. 같은 필드를 세로로 맞춰 보면 어디서 바뀌는지 드러난다.",
