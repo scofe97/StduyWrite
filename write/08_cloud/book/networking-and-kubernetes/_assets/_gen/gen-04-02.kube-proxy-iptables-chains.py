@@ -43,12 +43,15 @@ for i, lab in enumerate(["도착", "매칭"]):
     a, b = CX[i] + BW // 2, CX[i + 1] - BW // 2
     d.path(f"M {a+6} {CY} L {b-10} {CY}", MUTED, 1.5, m="ar")
     d.t((a + b) // 2, CY - 16, ddx.fit(lab, 10, GAP - 4, lab), 10, MUTED, KR)
-# 부채꼴 — 시작 x 가 도착 x 보다 왼쪽이어야 방향이 바로 읽힌다
+# 부채꼴 — 통로가 88px 뿐이라 줄기를 세우면 라벨 자리가 없어진다. 서비스 체인의
+# 오른쪽 변 두 지점에서 따로 나간다. 엔드포인트 A(280)는 체인 상자의 y 범위
+# (246~354) 안이라 곧은 가로 한 줄이면 되고, B 만 x=620 에서 한 번 꺾는다.
+# 라벨은 화살촉 x(654)에 오른쪽을 맞춰 세로 구간(620·y 340~430)을 비껴 앉는다.
 A_X, B_X = CX[2] + BW // 2 + 6, EP_X - EP_W // 2 - 10
-for ey, lab in zip(EP_Y, ["확률 0.5", "나머지 전부"]):
-    d.path(f"M {A_X} {CY + (ey-CY)//4} L {B_X} {ey}", ACC, 1.5, m="acc")
-    d.t((A_X + B_X) // 2, (CY + ey) // 2 - 10,
-        ddx.fit(lab, 10, B_X - A_X - 4, f"fan {lab}"), 10, ACC, KR)
+d.path(f"M {A_X} {EP_Y[0]} L {B_X} {EP_Y[0]}", ACC, 1.5, m="acc")
+d.path(f"M {A_X} {CY+40} L 620 {CY+40} L 620 {EP_Y[1]} L {B_X} {EP_Y[1]}", ACC, 1.5, m="acc")
+d.t(B_X, EP_Y[0] - 12, ddx.fit("확률 0.5", 10, B_X - A_X - 4, "fan 확률 0.5"), 10, ACC, KR, "end")
+d.t(B_X, EP_Y[1] + 16, ddx.fit("나머지 전부", 10, B_X - A_X - 4, "fan 나머지 전부"), 10, ACC, KR, "end")
 
 d.t(36, 540, "확률은 서비스 체인이 고르고, 고른 뒤 목적지를 실제로 바꾸는 것은 엔드포인트 체인의 DNAT 다",
      12, MUTED, KR, "start")
