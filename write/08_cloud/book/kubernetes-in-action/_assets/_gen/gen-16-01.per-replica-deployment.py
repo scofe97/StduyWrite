@@ -11,16 +11,16 @@ d = D(1220, 660, "KUBERNETES IN ACTION · 16-01",
       "단일 Deployment·Service 로는 이 셋을 줄 수 없다.",
       "MongoDB 리플리카 셋 세 멤버를 Deployment 로 세우려면")
 
-ddx.band(d, 100, 452, "Deployment 로 하면 — replica 마다 세 벌", x=24, w=760)
+ddx.band(d, 100, 464, "Deployment 로 하면 — replica 마다 세 벌", x=24, w=760)
 for i in range(3):
     x0 = 60 + i * 240
     d.box(x0, 156, 200, 268, PAPER, RULE, 0.9, 8)
     d.t(x0 + 100, 182, f"멤버 {i}", 11, SOFT, KR)
     for j, (nm, c) in enumerate((("Deployment", INFO), ("Service", INFO), ("PVC", INFO))):
         ddx.node(d, x0 + 100, 226 + j * 62, nm, f"quiz-{i}", 168, 50, c)
-d.t(404, 428, "오브젝트 9 개 — 멤버 셋에", 11, MUTED, KR)
+d.t(404, 444, "오브젝트 9 개 — 멤버 셋에", 11, MUTED, KR)
 
-ddx.band(d, 100, 452, "StatefulSet 으로 하면", x=808, w=388)
+ddx.band(d, 100, 464, "StatefulSet 으로 하면", x=808, w=388)
 ddx.node(d, 1002, 200, "headless Service", "quiz-pods", 320, 62, OK)
 ddx.node(d, 1002, 286, "StatefulSet", "replicas: 3", 320, 62, OK)
 d.t(1002, 344, "PVC 는 volumeClaimTemplates 가", 11, MUTED, KR)

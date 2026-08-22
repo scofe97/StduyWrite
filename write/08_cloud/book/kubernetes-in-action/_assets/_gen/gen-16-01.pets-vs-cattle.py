@@ -2,7 +2,7 @@
 # 비유만 그리면 "그래서 뭐"로 끝난다. 본문이 "같은 신원과 같은 상태를 줄 수 있다면 대체가
 # 성립한다"로 비유를 되받으므로, 그 되받는 줄이 도식 안에 있어야 한다.
 import sys; sys.path.insert(0, ".")
-from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, KR
+from dd import D, INFO, OK, WARN, MUTED, SOFT, INK, KR
 import ddx
 
 d = D(1200, 600, "KUBERNETES IN ACTION · 16-01",
@@ -27,6 +27,6 @@ d.t(24, 412, "그래서 StatefulSet 이 하는 일은 애완동물을 소로 바
              "교체 인스턴스에 그대로 넘겨주는 것이다.", 11, MUTED, KR, "start")
 d.t(24, 434, "이름은 ordinal 이, 볼륨은 전용 PVC 가, 주소는 headless Service 의 DNS 레코드가 맡는다 — §3~§5 가 그 셋을 차례로 세운다.",
      11, MUTED, KR, "start")
-d.legend(464, [("교체가 자명하다", INFO), ("신원을 되돌려야 한다", OK), ("성립 조건", ACC)])
+d.legend(464, [("교체가 자명하다", INFO), ("신원을 되돌려야 한다", OK)])
 d.save("16-01-pets-vs-cattle.svg")
 print("ok")
