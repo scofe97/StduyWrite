@@ -3,7 +3,7 @@ title: 07_devops MOC
 tags: [moc, devops, jenkins, nexus]
 status: final
 related: []
-updated: 2026-06-10
+updated: 2026-08-22
 ---
 
 # 07_devops
@@ -16,7 +16,6 @@ Jenkins 파이프라인 그루비 작성법은 여기로 온다. 반면 Jenkins�
 
 ## 하위
 
-- `01_Sonarqube/` — 정적 분석, Quality Gate
 - `02_Jenkins/` — 7개 주제 묶음 (2026-06-10 `07_engine` 신설)
   - `01_core/` — Jenkins 제어 영역과 Declarative Pipeline 기초
   - `02_security/` — 인증·인가·시크릿·JCasC
@@ -27,6 +26,6 @@ Jenkins 파이프라인 그루비 작성법은 여기로 온다. 반면 Jenkins�
   - `07_engine/` — 엔진 심화: 내부 동작(Stapler·큐·실행기)·플러그인 확장·Script Console 제어·외부 통합
   - `_archive/`, `_practice/` (이전 검토본·실습 코드)
 - `03_Nexus/` — 아티팩트 저장소
-- `04_cicd/` — 도구 무관 CI/CD 이론: 단행본 정독 노트(book/) + 공통 개념 로드맵
-- `04_OS/` — 운영 OS 레벨 설정
-- `quiz/` — 실무형 DevOps 객관식 문제 모음 (정답 A~D 균등 분포)
+- `book/` — 단행본 정독 노트
+- `docs/` — 공식 문서 기반 노트
+  - `sonarqube/` — 정적 분석, Quality Gate, CI 연계, Web API (2026.1 LTA 기준 19편)
