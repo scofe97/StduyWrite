@@ -61,6 +61,12 @@ updated: 2026-05-28
 | 04-03 | [DDD 와 CI/CD](04-03.DDD%20와%20CI_CD.md) | Bounded Context 단위 파이프라인 | final |
 | 04-04 | [AI 코딩 시대의 DDD](04-04.AI%20코딩%20시대의%20DDD.md) | 구조가 패턴이 된다는 4 원칙 | final |
 
+### 99번대 — 영상 자료 기반
+
+[`99_youtube/`](99_youtube/)에 외부 유튜브 강의에서 정리한 6편을 둡니다. 교과서(Evans·Vernon) 기반 문서와 섞지 않고 분리해, 실무자의 현장 경험과 코드 데모를 따로 모읍니다.
+
+
+
 ## SSOT 매핑 / 갭
 
 [`GAP.md`](GAP.md) 가 `docs/02_Architecture/02_DDD/` 13편 ↔ 본 시리즈의 매핑과 미작성 챕터를 박제합니다.

@@ -83,6 +83,8 @@ ArgoCD를 실무에 붙이면 플러그인, 자동 태그 갱신, 점진 배포,
 
 현재 기준 실습은 개인 GCP K8s 클러스터(dev-server 1~3, asia-northeast3-a, kubeadm v1.31.14)에서 수행한다. 본문은 `kubectl`, `argocd`, Helm 중심의 범용 흐름으로 쓰고, 환경 특화 값은 deepdive 상단의 `## 실습 환경`에만 둔다.
 
+그 deepdive 가 [`deepdive/`](deepdive/) 18편이다. 위 Part 1~5 의 본편 17편에 각각 대응하는 점검·실습 짝이며, 본편이 개념을 세우면 이쪽이 클러스터에서 확인한다.
+
 
 
 ## 관련 문서
