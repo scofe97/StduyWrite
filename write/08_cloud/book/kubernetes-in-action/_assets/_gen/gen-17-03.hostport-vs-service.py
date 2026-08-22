@@ -13,12 +13,12 @@ d = D(1240, 620, "KUBERNETES IN ACTION · 17-03",
 
 ddx.node(d, 160, 320, "노드 A IP", "패킷이 들어온다", 220, 84, INFO)
 
-d.path("M 272 296 L 380 220", INFO, 1.5, m="info")
+d.path("M 272 296 L 326 296 L 326 220 L 380 220", INFO, 1.5, m="info")
 ddx.node(d, 540, 220, "kube-proxy 의 규칙", "NodePort Service", 300, 76, INFO)
 d.path("M 692 220 L 800 220", INFO, 1.4, m="info")
 ddx.node(d, 990, 220, "클러스터 전역 엔드포인트", "어느 노드의 파드든", 340, 76, INFO)
 
-d.path("M 272 344 L 380 420", ACC, 1.5, m="acc")
+d.path("M 272 344 L 326 344 L 326 420 L 380 420", ACC, 1.5, m="acc")
 ddx.node(d, 540, 420, "CNI portmap 의 규칙", "hostPort", 300, 76, ACC)
 d.path("M 692 420 L 800 420", ACC, 1.4, m="acc")
 ddx.node(d, 990, 420, "노드 A 의 로컬 컨테이너", "이 노드로 고정", 340, 76, ACC)
