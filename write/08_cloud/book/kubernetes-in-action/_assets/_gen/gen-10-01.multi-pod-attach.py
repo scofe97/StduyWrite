@@ -22,7 +22,8 @@ for i, (nm, pods, c, note) in enumerate((
     for j, p in enumerate(pods):
         ddx.node(d, x0 + 230, 396 + j * 62, p, "", 380, 48, c)
     d.t(x0 + 230, 492, note, 11, c, KR)
-    d.path(f"M {610 + (i*2-1)*90} 242 L {x0+230} 312", c, 1.5,
+    sx = 610 + (i * 2 - 1) * 90
+    d.path(f"M {sx} 242 L {sx} 280 L {x0+230} 280 L {x0+230} 312", c, 1.5,
            m="ok" if c is OK else "bad", dash=None if c is OK else "5 5")
 
 d.t(24, 560, "RWOP 라면 이야기가 더 좁아진다 — 같은 노드라도 둘째 파드가 Pending 이다. "

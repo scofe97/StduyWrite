@@ -27,8 +27,8 @@ for i, f in enumerate(("WiredTiger", "_mdb_catalog.wt", "collection-5b3e9bdf-…
 d.o.append(f'<rect x="{610-130}" y="420" width="260" height="56" rx="6" '
            f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
 d.t(610, 454, "같은 실체", 14, ACC, KR, "middle", 600)
-d.path("M 300 380 L 540 424", ACC, 1.5, m="acc")
-d.path("M 920 380 L 680 424", ACC, 1.5, m="acc")
+d.path("M 300 380 L 300 400 L 540 400 L 540 416", ACC, 1.5, m="acc")
+d.path("M 920 380 L 920 400 L 680 400 L 680 416", ACC, 1.5, m="acc")
 d.t(610, 400, "mount", 11, SOFT, MONO)
 
 d.t(24, 522, "이 경로는 kubelet 의 구현 세부이지 보장된 API 가 아니다. 실습에서 눈으로 확인하는 데는 쓸모 있지만 "
