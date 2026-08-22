@@ -16,11 +16,15 @@ ddx.node(d, 150, 320, "ConfigMap 수정", "값 한 줄을 고쳤다", 220, 88, I
 PATHS = [("환경변수로 받았다면", "기존 값 그대로", "Pod 롤링 교체", 190, BAD),
          ("일반 볼륨으로 받았다면", "kubelet 동기화 후 파일 갱신", "앱이 파일을 다시 읽기", 320, ACC),
          ("subPath 로 받았다면", "파일이 갱신되지 않는다", "Pod 를 새로 생성", 450, WARN)]
+# 세 갈래가 한 점에서 비스듬히 뻗었다. 줄기는 중립색으로 세우고 색은 갈라진 팔에만 준다 —
+# 공유 구간을 한 색이 덮으면 나머지가 그 색에서 갈라진 가지처럼 읽힌다.
+d.path("M 262 320 L 340 320", SOFT, 1.2)
+d.path("M 340 190 L 340 450", SOFT, 1.2)
 for t, res, fix, cy, c in PATHS:
     d.box(420, cy - 40, 340, 80, PAPER2, c, 1.1, 6)
     d.t(440, cy - 12, t, 12, c, KR, "start", 600)
     d.t(440, cy + 14, res, 11, MUTED, KR, "start")
-    d.path(f"M 262 320 L 414 {cy}", c, 1.4, m="acc" if c is ACC else ("bad" if c is BAD else "warn"))
+    d.path(f"M 340 {cy} L 414 {cy}", c, 1.4, m="acc" if c is ACC else ("bad" if c is BAD else "warn"))
     ddx.node(d, 940, cy, fix, "새 설정을 적용하려면", 280, 68, c)
     d.path(f"M 762 {cy} L 794 {cy}", c, 1.3, m="acc" if c is ACC else ("bad" if c is BAD else "warn"))
 
