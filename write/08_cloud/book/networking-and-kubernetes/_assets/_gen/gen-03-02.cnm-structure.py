@@ -41,8 +41,12 @@ box(*EPT, "endpoint", "네트워크 위의 호스트", "iptables 로 격리", IN
 box(*NET, "network", "endpoint 의 집합", "global 드라이버가 조율", INFO)
 box(*KV, "외부 KV 저장소", "Consul·etcd·Zookeeper", "CNM 이 제공하지 않음", focal=True)
 
-for a in (CTRL, SBOX):
-    d.path(f"M {a[0]+BW//2+6} {a[1]} L {EPT[0]-BW//2-10} {EPT[1] + (a[1]-EPT[1])//4}", MUTED, 1.4, m="ar")
+# 왼쪽 두 상자(오른쪽 변 250)와 endpoint(왼쪽 변 300) 사이 통로는 50px 뿐이라
+# 꺾는 열을 나눌 자리가 없다. 한 열(275)을 같이 쓰되 도착 행을 336 / 380 으로 갈라
+# 세로 구간이 292~336 · 380~424 로 서로 떨어지게 했다.
+for a, ey in ((CTRL, 336), (SBOX, 380)):
+    d.path(f"M {a[0]+BW//2+6} {a[1]} L 275 {a[1]} L 275 {ey} L {EPT[0]-BW//2-10} {ey}",
+           MUTED, 1.4, m="ar")
 d.path(f"M {EPT[0]+BW//2+6} {EPT[1]} L {NET[0]-BW//2-10} {NET[1]}", MUTED, 1.4, m="ar")
 d.path(f"M {NET[0]+BW//2+6} {NET[1]} L {KV[0]-BW//2-10} {KV[1]}", ACC, 1.6, m="acc", dash="6 5")
 d.t(KV[0], KV[1] - BH // 2 - 14, "libkv 의존", 10, ACC, KR)
