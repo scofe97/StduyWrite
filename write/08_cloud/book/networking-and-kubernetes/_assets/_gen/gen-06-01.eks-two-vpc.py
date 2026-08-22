@@ -39,7 +39,7 @@ box(*POD, 280, 96, "Pod", "IP = ENI 보조 IP", "Pod 수 공식의 근거", WARN
 
 d.path(f"M {API[0]+120+6} {API[1]} L {ENI[0]-110-10} {ENI[1]}", ACC, 1.6, m="acc")
 d.t((API[0] + 120 + ENI[0] - 110) // 2, API[1] - 16, "관리 방향", 10, ACC, KR)
-d.path(f"M {ENI[0]+110+6} {ENI[1]} L {NODE[0]-140-10} {NODE[1]+24}", ACC, 1.6, m="acc")
+d.path(ddx.elbow(ENI[0]+110+6, ENI[1], NODE[0]-140-10, NODE[1]+24), ACC, 1.6, m="acc")
 d.t(CUS[0] - 6, ENI[1] - 16, "등록 방향", 10, ACC, KR, "end")
 d.path(f"M {NODE[0]} {NODE[1]+48+6} L {POD[0]} {POD[1]-48-10}", MUTED, 1.4, m="ar")
 
