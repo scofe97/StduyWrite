@@ -5,7 +5,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx
 
-d = D(1220, 620, "KUBERNETES IN ACTION · 10-03",
+d = D(1220, 632, "KUBERNETES IN ACTION · 10-03",
       "이미 아는 짝 구조가 한 층 더 있을 뿐",
       "VolumeSnapshot 은 PVC 자리에, VolumeSnapshotContent 는 PV 자리에 대응한다. "
       "요구하는 오브젝트와 실체를 가리키는 오브젝트로 갈리는 모양이 같다.",

@@ -2,7 +2,7 @@
 # 두 방식 × 할 수 있는 일의 교차라 행렬. 호스트 분기는 양쪽 다 되고 경로 분기에서 갈리므로
 # 그 열을 판정 축으로 둔다.
 import sys; sys.path.insert(0, ".")
-from dd import D, ACC, INFO, OK, BAD, MUTED, SOFT, KR
+from dd import D, INFO, OK, BAD, MUTED, SOFT, KR
 import ddx
 
 d = D(1216, 512, "KUBERNETES IN ACTION · 12-02",
@@ -25,6 +25,6 @@ ddx.matrix(
 
 d.t(24, 396, "12-01 에서 커널이 경로로 가르지 못한 이유가 '페이로드를 안 읽어서'였다면 여기서는 "
              "'읽으려 해도 암호문이어서'다. 막히는 지점만 다르고 결과는 같다.", 11, MUTED, KR, "start")
-d.legend(422, [("프록시가 읽는다", OK), ("프록시가 못 읽는다", BAD), ("갈리는 축", ACC)])
+d.legend(422, [("프록시가 읽는다", OK), ("프록시가 못 읽는다", BAD)])
 d.save("12-02-termination-vs-passthrough-visibility.svg")
 print("ok")

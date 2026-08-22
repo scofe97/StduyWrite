@@ -2,7 +2,7 @@
 # 캡션이 "채워 가는 순서"와 "attachedRoutes 만 Route 가 채운다"를 함께 요구한다. 그러니 단계
 # 순서 위에 채우는 주체를 표시해야 하고, 주체가 다른 마지막 칸이 focal 이다.
 import sys; sys.path.insert(0, ".")
-from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
+from dd import D, ACC, OK, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx
 
 d = D(1240, 600, "KUBERNETES IN ACTION · 13-01",
@@ -42,6 +42,6 @@ d.t(24, 440, "conditions 에서 먼저 볼 것은 Accepted(게이트웨이가 �
 d.t(24, 462, "listener 의 conditions 다섯 중 ResolvedRefs 가 12-02 의 아픈 곳을 덮는다 — "
              "TLS Secret 이름을 잘못 적으면 접속이 아니라 배포 시점 status 에 False 로 남는다.",
      11, MUTED, KR, "start")
-d.legend(500, [("컨트롤러가 채운다", INFO), ("Route 가 채운다", ACC)])
+d.legend(500, [("Route 가 채운다", ACC)])
 d.save("13-01-gateway-status.svg")
 print("ok")

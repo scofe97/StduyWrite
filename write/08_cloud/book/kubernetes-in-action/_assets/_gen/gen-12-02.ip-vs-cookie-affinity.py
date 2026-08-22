@@ -2,7 +2,7 @@
 # 상황 둘 × 기준 둘의 교차라 행렬. IP 기준 열에서만 깨지므로 그 열이 판정 축이다.
 # "IP 는 사람이 아니라 경로의 속성"이라는 본문의 한 줄이 아래에 붙는다.
 import sys; sys.path.insert(0, ".")
-from dd import D, ACC, INFO, OK, BAD, MUTED, SOFT, KR
+from dd import D, INFO, OK, BAD, MUTED, SOFT, KR
 import ddx
 
 d = D(1216, 512, "KUBERNETES IN ACTION · 12-02",
@@ -25,6 +25,6 @@ ddx.matrix(
 
 d.t(24, 396, "쿠키는 사람에 묶이므로 같은 회선에서 나온 100 명을 구별하고, 회선이 바뀐 한 명을 같은 사람으로 알아본다. "
              "Ingress 가 L7 이라 할 수 있는 일이다.", 11, MUTED, KR, "start")
-d.legend(422, [("깨지는 자리", BAD), ("판정 축", ACC)])
+d.legend(422, [("깨지는 자리", BAD)])
 d.save("12-02-ip-vs-cookie-affinity.svg")
 print("ok")

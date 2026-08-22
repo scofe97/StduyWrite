@@ -5,7 +5,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx
 
-d = D(1120, 684, "KUBERNETES IN ACTION · 11-02",
+d = D(1120, 694, "KUBERNETES IN ACTION · 11-02",
       "여섯 번호는 두 입구와 한 도착지다",
       "NodePort 는 포트 번호를 여섯 개 쓴다. 프로토콜마다 밖에서 들어오는 입구와 안에서 들어오는 입구가 따로 있고, "
       "둘은 같은 파드 포트로 이어진다. 한 요청이 세 번호를 차례로 밟는 것이 아니다.",
