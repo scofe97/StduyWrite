@@ -24,6 +24,7 @@ updated: 2026-05-20
 | [→ 11_spring/10_security/](../11_spring/10_security/) | Spring Security 6.x Filter Chain·OAuth2 Login·JWT 인증 — 8편. Spring 프레임워크 구현이라 Spring 카테고리로 이관(구 `02_spring-security/`). 이론은 여기 `01_concepts/`, 구현은 Spring 쪽. |
 | [03_vulnerabilities/](03_vulnerabilities/) | OWASP Top 10 — SQL Injection, XSS, CSRF 등 |
 | [04_threat-modeling/](04_threat-modeling/) | STRIDE, Attack Tree, 공격자 관점 설계 분석 |
+| [05_network/](05_network/) | 네트워크 계층(L2~L4) 공격과 방어 — ARP 스푸핑·중간자 공격, mTLS가 근본 해법인 이유 |
 
 ## 03_architecture와의 경계 가이드
 
@@ -36,7 +37,7 @@ updated: 2026-05-20
 | OAuth2, OIDC, SAML 이론 | `10_security/01_concepts/` | 프로토콜 기술 |
 | Zero Trust Architecture | `10_security/` (cross-link to 03) | 보안 전략 |
 | 권한 경계 설계 (컨텍스트별 권한) | `03_architecture/` | 경계 컨텍스트 관점 |
-| mTLS, TLS 핸드셰이크 | `10_security/` 또는 `08_cloud/` | 네트워크 보안 |
+| mTLS, TLS 핸드셰이크 | `10_security/05_network/` 또는 `08_cloud/` | 네트워크 보안 |
 | OWASP Top 10 | `10_security/03_vulnerabilities/` | 취약점 카탈로그 |
 | API Gateway 설계 (rate limit) | `03_architecture/` 또는 `08_cloud/` | 아키텍처 패턴 |
 

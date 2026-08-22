@@ -26,6 +26,7 @@ updated: 2026-07-15
 | 01-01 | [네트워킹 기초](./01-01.네트워킹%20기초.md) | netns·veth·bridge·라우팅·netfilter·conntrack·TC·eBPF는 K8s 추상 아래에서 어떻게 협력하는가? |
 | 01-02 | [K8s 패킷 여정 — netfilter·conntrack·라우팅](./01-02.K8s%20패킷%20여정%20—%20netfilter·conntrack·라우팅.md) | Pod에서 나간 패킷이 Service·NAT·conntrack을 거쳐 목적지에 닿기까지 커널을 어떻게 통과하는가? |
 | 01-03 | [DNS 필터링 차단 — NXDOMAIN·DoH·우회 마찰](./01-03.DNS%20필터링%20차단%20—%20NXDOMAIN·DoH·우회%20마찰.md) | DNS 차단은 어느 계층에서 일어나고 NXDOMAIN·DoH는 그 차단과 우회에 어떻게 작용하는가? |
+| 01-04 | [서브네팅과 CIDR — 주소 공간을 자르는 법](./01-04.서브네팅과%20CIDR%20—%20주소%20공간을%20자르는%20법.md) | prefix 길이 하나가 정하는 것은 무엇이고, 그 감각이 없으면 왜 VPC·Pod·Service 대역이 겹쳐 터지는가? |
 
 
 
