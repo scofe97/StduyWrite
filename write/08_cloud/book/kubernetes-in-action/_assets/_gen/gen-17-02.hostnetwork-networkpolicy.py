@@ -2,7 +2,7 @@
 # 캡션이 "CNI 의 식별 여부에 따라 갈리는 두 결과"라 못박는다. 그러니 정책 자체가 아니라
 # 식별 여부가 판정 축이어야 한다.
 import sys; sys.path.insert(0, ".")
-from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, KR
+from dd import D, INFO, OK, WARN, BAD, MUTED, SOFT, KR
 import ddx
 
 d = D(1240, 600, "KUBERNETES IN ACTION · 17-02",
@@ -25,6 +25,6 @@ d.t(24, 420, "그래서 hostNetwork 를 켜는 순간 NetworkPolicy 로 막고 �
              "정책을 걸어 뒀다는 사실이 그 파드에도 적용된다는 뜻은 아니다.", 11, MUTED, KR, "start")
 d.t(24, 442, "노드 자신의 트래픽을 정책 대상으로 삼을 수 있는지도 CNI 마다 다르다 — 확인하지 않고 전제하지 않는다.",
      11, MUTED, KR, "start")
-d.legend(472, [("걸린다", OK), ("새어 나간다", BAD), ("판정 축", ACC)])
+d.legend(472, [("걸린다", OK), ("새어 나간다", BAD)])
 d.save("17-02-hostnetwork-networkpolicy.svg")
 print("ok")
