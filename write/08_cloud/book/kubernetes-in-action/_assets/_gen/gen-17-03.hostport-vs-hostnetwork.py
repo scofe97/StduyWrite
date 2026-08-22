@@ -22,7 +22,9 @@ def road(y0, label, steps, c, focal, note):
         d.t(cx, y0 + 130, ddx.fit(s, 10, BW - 14, s), 10, MUTED, KR)
     for a, b in zip(CX, CX[1:]):
         d.path(f"M {a+BW//2+5} {y0+114} L {b-BW//2-9} {y0+114}", MUTED, 1.4, m="ar")
-    d.t(1080, y0 + 114, note, 11, c, KR)
+    # x=1080 은 4 단 행의 마지막 상자(942~1182) 안이라 제목·부제와 겹쳤다. 단 수가 행마다
+    # 다르므로 상자 오른쪽이 아니라 상자 아래 띠 가운데에 둔다 — 두 행이 같은 자리를 쓴다.
+    d.t(610, y0 + 180, note, 11, c, KR)
 
 road(100, "hostPort — 파드는 자기 netns 를 가진다", [
     ("노드 포트", "9090"), ("portmap DNAT", "목적지를 파드 IP 로"),
