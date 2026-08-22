@@ -29,8 +29,11 @@ CTL = [("ingress-nginx 컨트롤러", "프록시 파드를 세운다", 220),
 for t, s, cy in CTL:
     ddx.node(d, 1010, cy, t, s, 300, 84, OK)
 
-for _, _, cy, idx in ING:
-    d.path(f"M 322 {cy} L 494 {CLS[idx][2]}", ACC, 1.4, m="acc")
+for i, (_, _, cy, idx) in enumerate(ING):
+    ty = CLS[idx][2]
+    ay = ty + (0 if cy == ty else (-12 if cy < ty else 12))
+    bx = 380 + i * 24
+    d.path(f"M 322 {cy} L {bx} {cy} L {bx} {ay} L 494 {ay}", ACC, 1.4, m="acc")
 for _, _, cy in CLS:
     d.path(f"M 822 {cy} L 854 {cy}", OK, 1.4, m="ok")
 

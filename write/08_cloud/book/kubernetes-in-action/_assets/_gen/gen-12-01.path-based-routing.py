@@ -17,23 +17,28 @@ REQ = [("GET /quote", "정확히 그 경로", 190),
 for t, s, y in REQ:
     ddx.node(d, 170, y, t, s, 260, 76, INFO)
 
+d.path(f"M 344 {REQ[0][2]} L 344 {REQ[-1][2]}", MUTED, 1.4)
+d.path("M 344 300 L 386 300", MUTED, 1.4, m="ar")
 ddx.node(d, 500, 300, "L7 프록시", "경로를 읽어 맞춘다", 220, 92)
 for _, _, y in REQ:
-    d.path(f"M 302 {y} L 386 300", MUTED, 1.4, m="ar")
+    d.path(f"M 302 {y} L 344 {y}", MUTED, 1.4)
 
 RULE = [("path: /quote", "pathType: Exact", "quote", OK, 190),
         ("path: /questions", "pathType: Prefix", "quiz", OK, 300),
         (None, None, "어느 규칙에도 안 맞는다", BAD, 410)]
+# 규칙마다 색이 갈리므로 줄기는 중립색으로 둔다.
+d.path("M 612 300 L 668 300", MUTED, 1.2)
+d.path(f"M 668 {RULE[0][4]} L 668 {RULE[-1][4]}", MUTED, 1.2)
 for t, s, svc, c, y in RULE:
     if t:
         d.box(760, y - 32, 240, 64, PAPER2, c, 1.1, 6)
         d.t(880, y - 8, t, 12, c, MONO, "middle", 600)
         d.t(880, y + 14, s, 10, MUTED, MONO)
-        d.path(f"M 612 300 L 754 {y}", c, 1.4, m="ok")
+        d.path(f"M 668 {y} L 754 {y}", c, 1.4, m="ok")
         ddx.node(d, 1120, y, svc, "ClusterIP", 160, 64, c)
         d.path(f"M 1002 {y} L 1034 {y}", c, 1.3, m="ok")
     else:
-        d.path(f"M 612 300 L 790 {y}", c, 1.4, m="bad", dash="5 5")
+        d.path(f"M 668 {y} L 790 {y}", c, 1.4, m="bad", dash="5 5")
         ddx.tag(d, 960, y, svc, c, 300)
 
 ddx.focal_tag(d, 500, 452, "Exact 가 Prefix 를 이긴다 — 순서가 아니라 구체성", 340)

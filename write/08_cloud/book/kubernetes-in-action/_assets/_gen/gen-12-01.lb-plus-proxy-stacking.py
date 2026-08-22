@@ -37,7 +37,7 @@ d.t(790, 549, "규칙으로 가른다", 11, MUTED, KR)
 RULES = ("host: kiada", "path: /quote", "path: /questions")
 for rule, ry, sy, nm in zip(RULES, (588, 613, 638), (519, 589, 659), SVC):
     d.t(790, ry, rule, 10, ACC, MONO)
-    d.path(f"M 884 {ry-4} L 961 {sy}", ACC, 1.3, m="acc")
+    d.path(f"M 884 {ry-4} L 922 {ry-4} L 922 {sy} L 961 {sy}", ACC, 1.3, m="acc")
     ddx.node(d, 1040, sy, nm, "ClusterIP", 150, 58, INFO)
 ddx.focal_tag(d, 790, 714, "늘어나는 건 규칙 줄뿐", 200)
 
