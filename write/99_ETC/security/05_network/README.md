@@ -1,0 +1,48 @@
+---
+title: 99_ETC/security/05_network — 네트워크 계층 공격과 방어
+tags: [moc, security, network, l2, arp, mtls]
+status: draft
+related:
+  - ../README.md
+  - ../../../02_os/networking/README.md
+updated: 2026-08-23
+---
+
+# 99_ETC/security/05_network
+---
+> L2에서 L4까지, 프로토콜 자체의 설계가 만들어 낸 공격면과 그 방어책을 모읍니다. 애플리케이션 계층 취약점은 [03_vulnerabilities/](../03_vulnerabilities/)가 맡고, 여기서는 그 아래 계층을 다룹니다.
+
+## 왜 별도 폴더인가
+
+상위 [99_ETC/security MOC](../README.md)의 경계 가이드는 "mTLS, TLS 핸드셰이크" 같은 네트워크 보안 주제를 이 카테고리에 두라고 적어 두었습니다. 그런데 정작 받아 줄 폴더가 없었습니다. [01_concepts/](../01_concepts/)는 인증·인가 프로토콜 이론으로 채워져 있습니다. [03_vulnerabilities/](../03_vulnerabilities/)는 OWASP 애플리케이션 계층 카탈로그입니다.
+
+그 사이에 빠진 것이 프로토콜 자체의 신뢰 모델입니다. ARP에 인증이 없다는 사실은 취약한 코드의 문제가 아니라 프로토콜 설계의 결과이며, 그래서 방어도 코드 수정이 아니라 상위 계층의 암호학으로 올라갑니다. 이 성격의 주제를 모으는 자리입니다.
+
+
+
+## 문서
+
+| 장·절 | 제목 | 핵심 질문 |
+|---|---|---|
+| 01-01 | [ARP 스푸핑과 중간자 공격](./01-01.ARP%20%EC%8A%A4%ED%91%B8%ED%95%91%EA%B3%BC%20%EC%A4%91%EA%B0%84%EC%9E%90%20%EA%B3%B5%EA%B2%A9%20%E2%80%94%20%EC%9D%B8%EC%A6%9D%20%EC%97%86%EB%8A%94%20L2%EA%B0%80%20%EB%A7%8C%EB%93%9C%EB%8A%94%20%EC%8B%A0%EB%A2%B0%20%EB%AC%B8%EC%A0%9C.md) | 주소를 묻는 질문에 아무나 답할 수 있을 때 무엇이 무너지고, 왜 그 해답이 mTLS인가? |
+
+
+
+## 예정 주제
+
+- TLS 핸드셰이크와 인증서 검증 실패 유형
+- IPsec과 터널 모드의 위치
+- DNS 스푸핑과 캐시 오염
+
+
+
+## 서술 원칙
+
+[03_vulnerabilities/](../03_vulnerabilities/)의 원칙을 그대로 따릅니다. 공격은 "왜 성립하는가"를 이해할 정도의 메커니즘까지만 적고, 실제 악용 가능한 도구 사용법과 페이로드는 범위 밖입니다. 서술의 무게는 방어와 완화에 둡니다.
+
+
+
+## 관련 문서
+
+- [99_ETC/security MOC](../README.md) — 상위 카테고리와 경계 가이드
+- [02_os/networking/](../../../02_os/networking/README.md) — 같은 프로토콜을 커널 동작과 진단 관점으로 다루는 곳

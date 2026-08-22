@@ -11,12 +11,14 @@ d = D(W, H, "KUBE-SVC · PROBABILITY FANOUT",
       "확률은 0.333 · 0.5 · 무조건으로 다르지만 최종 몫은 셋 다 1/3 이다. 앞 규칙이 빗나간 만큼만 남기 때문이다.",
       lead="확률은 셋 다 다른데 최종 몫은 같다 — 앞이 빗나간 만큼만 남기 때문이다")
 
-LW, LH, RW, RH = 400, 72, 380, 80
+LW, LH, RW, RH = 400, 72, 380, 72
 LX, RX = 244, 748
 LEFT = (40, 196, 408, 380)
 RIGHT = (530, 254, 430, 322)
 LCY = [246, 334, 422, 510]
-RCY = [310, 410, 510]
+# 규칙 1·2·3 과 KUBE-SEP 은 1:1 대응이므로 행을 맞춘다. 행이 어긋나 있던 탓에
+# 잇는 선이 비스듬했다 — 오른쪽 행 높이를 왼쪽과 같이 두면 선이 곧아진다.
+RCY = LCY[1:]
 
 def bx(cx, cy, w, h, t, s, tag, c=None, focal=False):
     x, y = cx - w // 2, cy - h // 2
@@ -52,7 +54,7 @@ for cy, (t, s, tag) in zip(RCY, [("KUBE-SEP-2MJG…", "DNAT 10.244.1.66:8080", "
     bx(RX, cy, RW, RH, t, s, tag, ACC)
 for lcy, rcy, lab in zip(LCY[1:], RCY, ["1/3 적중", "남은 절반", "마지막 하나"]):
     d.path(f"M {LX+LW//2+6} {lcy} L {RX-RW//2-8} {rcy}", MUTED, 1.4, m="ar")
-    d.t((LX + LW // 2 + RX - RW // 2) // 2, (lcy + rcy) // 2 - 10, lab, 10, MUTED, KR)
+    d.t((LX + LW // 2 + RX - RW // 2) // 2, lcy - 14, lab, 10, MUTED, KR)
 
 d.t(36, 592, "1/3 이 빗나가면 2/3 이 남고, 그 절반이 다시 1/3 이다 — 마지막은 조건 없이 나머지 전부를 받는다",
      12, MUTED, KR, "start")

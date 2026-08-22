@@ -9,7 +9,7 @@ related:
   - ../roadmap.md
   - ../01_foundation/03-01.배치 처리.md
   - ../01_foundation/03-02.스트림 처리.md
-  - ../../11_spring/05_aop/01-02.스프링 스케줄링 — @Scheduled에서 Quartz까지.md
+  - ../../10_spring/05_aop/01-02.스프링 스케줄링 — @Scheduled에서 Quartz까지.md
 updated: 2026-07-15
 ---
 
@@ -50,7 +50,7 @@ updated: 2026-07-15
 | 본 폴더 (`batch/`) | Spring Batch 5.x 구현·운영, Airflow·Spark 와의 비교 | 여기 |
 | 일반 이론 (DDIA) | 배치 vs 스트림 vs 온라인 모델, MapReduce, Shuffle | [`../01_foundation/03-01.배치 처리.md`](../01_foundation/03-01.%EB%B0%B0%EC%B9%98%20%EC%B2%98%EB%A6%AC.md) |
 | 스트리밍 | 무한 이벤트 흐름 처리, Kafka Streams | [`../01_foundation/03-02.스트림 처리.md`](../01_foundation/03-02.%EC%8A%A4%ED%8A%B8%EB%A6%BC%20%EC%B2%98%EB%A6%AC.md), [`../../04_messaging/06_StreamProcessing/`](../../04_messaging/06_StreamProcessing/) |
-| Spring 스케줄러 | `@Scheduled`·Quartz 일반 | [`../../11_spring/05_aop/01-02.스프링 스케줄링 — @Scheduled에서 Quartz까지.md`](../../11_spring/05_aop/01-02.스프링%20스케줄링%20—%20%40Scheduled에서%20Quartz까지.md) |
+| Spring 스케줄러 | `@Scheduled`·Quartz 일반 | [`../../10_spring/05_aop/01-02.스프링 스케줄링 — @Scheduled에서 Quartz까지.md`](../../10_spring/05_aop/01-02.스프링%20스케줄링%20—%20%40Scheduled에서%20Quartz까지.md) |
 | 메시지 큐 기반 배치 분산 | Kafka 위에서 도는 배치성 워크로드 | [`../../04_messaging/`](../../04_messaging/) |
 
 ETL 패턴 자체는 *도구가 아닌 패턴* 이라 단독 편으로 두지 않고, `01-07` 의 운영 섹션과 `02-01` Airflow 비교 안에서 흡수합니다.
@@ -69,6 +69,6 @@ ETL 패턴 자체는 *도구가 아닌 패턴* 이라 단독 편으로 두지 �
 
 본 카테고리는 다음을 가정합니다.
 
-1. Spring Boot 3.x 의 빈 등록과 `@Configuration` 기본을 압니다. 모르면 [`../../11_spring/01_core/`](../../11_spring/01_core/) 를 먼저 읽습니다.
+1. Spring Boot 3.x 의 빈 등록과 `@Configuration` 기본을 압니다. 모르면 [`../../10_spring/01_core/`](../../10_spring/01_core/) 를 먼저 읽습니다.
 2. JDBC 트랜잭션과 `PlatformTransactionManager` 가 어떤 역할인지 한 문장으로 답할 수 있습니다. 모르면 [`../03_persistence/jdbc/01-01.커넥션 풀과 DataSource.md`](../03_persistence/jdbc/01-01.%EC%BB%A4%EB%84%A5%EC%85%98%20%ED%92%80%EA%B3%BC%20DataSource.md) 와 [`../03_persistence/jpa/04-01.스프링 트랜잭션.md`](../03_persistence/jpa/04-01.%EC%8A%A4%ED%94%84%EB%A7%81%20%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98.md) 가 시작점입니다.
 3. DDIA Ch.11 기준 *배치 vs 스트림* 의 차이를 한 줄로 답할 수 있습니다. 모르면 [`../01_foundation/03-01`](../01_foundation/03-01.%EB%B0%B0%EC%B9%98%20%EC%B2%98%EB%A6%AC.md) 부터입니다.
