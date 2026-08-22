@@ -2,7 +2,7 @@
 # 타입 스펙: type-data-flow.md §2 격자 — 단계 머리 + 한 줄 체인 (ddx.stage_chain)
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
-W, H = 1000, 544
+W, H = 1000, 560
 d = D(W, H, "03-01 · CONTAINER BIRTH",
       "컨테이너를 분해했다가 손으로 다시 조립하는 순서",
       "왜 컨테이너가 필요했는지에서 시작해, 그것을 만드는 커널 프리미티브까지 내려간 뒤 손으로 배선한다.",

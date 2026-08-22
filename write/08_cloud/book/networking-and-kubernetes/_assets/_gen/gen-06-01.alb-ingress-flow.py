@@ -1,7 +1,7 @@
 # 06-01.alb-ingress-flow — 어노테이션이 실제 AWS 자원이 되기까지
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
-W, H = 1000, 544
+W, H = 1000, 560
 d = D(W, H, "ANNOTATIONS BECOME REAL AWS RESOURCES",
       "어노테이션 몇 줄이 실제 AWS 자원이 되기까지",
       "컨트롤러가 Ingress 를 보고 ALB·Target Group·Rule 을 실제로 만든다. YAML 몇 줄이 과금되는 자원이 된다.",

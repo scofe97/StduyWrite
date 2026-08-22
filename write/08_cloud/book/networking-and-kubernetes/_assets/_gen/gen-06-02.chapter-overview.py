@@ -1,6 +1,6 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
-W, H = 1000, 544
+W, H = 1000, 560
 d = D(W, H, "06-02 · SAME PROBLEM, DIFFERENT DEFAULTS",
       "같은 문제를 세 클라우드가 다른 기본값으로 푼다",
       "글로벌인가 리전인가, 기본이 열려 있는가 닫혀 있는가. 그 기본값 차이가 설계 이식을 어긋나게 한다.",

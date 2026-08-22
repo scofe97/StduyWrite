@@ -3,7 +3,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 596
+W, H = 1000, 612
 d = D(W, H, "EKS · TWO VPCs, ONE BRIDGE",
       "컨트롤 플레인과 워커는 다른 VPC 에 산다",
       "API 서버는 AWS 소유 VPC 에 있고 워커는 고객 VPC 에 있다. 둘을 잇는 것은 cross-account ENI 몇 개뿐이다.",

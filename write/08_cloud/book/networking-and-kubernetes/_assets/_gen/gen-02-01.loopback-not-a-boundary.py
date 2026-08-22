@@ -6,7 +6,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 560
+W, H = 1000, 576
 d = D(W, H, "CVE-2020-8558 · 127.0.0.1 IS NOT A FENCE",
       "127.0.0.1 은 접근 제어가 아니다 — 밖에서 경계를 넘어온 길",
       "점선 안이 '로컬 전용'이라 믿는 구간이다. 노드 설정 하나가 그 안으로 들어가는 길을 열어 줬다.",

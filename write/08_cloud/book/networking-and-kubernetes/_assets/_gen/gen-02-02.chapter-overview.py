@@ -4,7 +4,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 544
+W, H = 1000, 560
 d = D(W, H, "02-02 · CHAPTER MAP",
       "kube-proxy 를 이해하는 세 기술 전체 지도",
       "구조를 알고 규칙 한 줄을 읽으면 확률 분배가 보이고, 그 한계에서 IPVS·eBPF 가 나온다.",

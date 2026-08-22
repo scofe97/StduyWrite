@@ -1,7 +1,7 @@
 # 06-01.pod-per-node-capacity — 인스턴스의 IP 수용량이 곧 Pod 상한
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
-W, H = 1000, 544
+W, H = 1000, 560
 d = D(W, H, "INSTANCE IP CAPACITY = POD LIMIT",
       "인스턴스 타입의 IP 수용량이 그대로 노드당 Pod 상한이 된다",
       "Pod 마다 ENI 보조 IP 를 하나씩 쓰므로, 인스턴스가 가질 수 있는 IP 수가 곧 담을 수 있는 Pod 수다.",

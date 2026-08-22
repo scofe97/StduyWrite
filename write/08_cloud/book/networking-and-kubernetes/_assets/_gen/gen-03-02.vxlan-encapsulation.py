@@ -5,7 +5,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 552
+W, H = 1000, 564
 d = D(W, H, "VXLAN · MAC-in-UDP",
       "MAC-in-UDP — 껍질을 씌워 보내고 반대편에서 벗긴다",
       "물리망은 바깥 헤더만 보고 내용물은 모른다. VNI 24비트가 어느 논리 네트워크인지를 가른다.",

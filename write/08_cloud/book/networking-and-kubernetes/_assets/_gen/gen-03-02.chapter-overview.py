@@ -1,7 +1,7 @@
 # 03-02.chapter-overview — 네 단계 지도
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
-W, H = 1000, 544
+W, H = 1000, 560
 d = D(W, H, "03-02 · MODES AND CNI",
       "격리를 얼마나 포기하는가에서 시작해 표준이 갈리는 곳까지",
       "모드는 격리를 얼마나 내주느냐의 눈금이다. 그 눈금을 따라가면 호스트를 넘는 방법과 표준의 갈림길이 나온다.",

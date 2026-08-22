@@ -2,7 +2,7 @@
 # 타입 스펙: type-flowchart.md — 마지막에서 경로로 둘로 갈리므로 체인 셋 + 부채꼴 둘.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
-W, H = 1000, 616
+W, H = 1000, 632
 d = D(W, H, "INGRESS · ONE ENTRY, PATHS SPLIT",
       "같은 진입점으로 들어와 경로만으로 다른 서비스에 닿는다",
       "포트도 호스트도 같다. 갈리는 것은 경로 하나뿐이고, 어디에도 안 걸리면 기본 백엔드로 간다.",

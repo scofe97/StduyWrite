@@ -6,7 +6,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 604
+W, H = 1000, 620
 d = D(W, H, "SAME HOST · SEPARATE STACKS",
       "같은 호스트 안 — 컨테이너마다 자기 스택을 따로 가진다",
       "매핑은 호스트 스택에만 있다. 컨테이너 안에서는 컨테이너 포트만 열려 있고, 자기 lo 는 자기 것이라 서로 닿지 않는다.",

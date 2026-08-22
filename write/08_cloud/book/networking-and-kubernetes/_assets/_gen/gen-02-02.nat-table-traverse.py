@@ -5,7 +5,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 636
+W, H = 1000, 652
 d = D(W, H, "nat TABLE · WHERE IT LANDS, WHAT CHANGES",
       "패킷 하나가 nat 테이블을 지나는 동안 — 어느 규칙에 걸려 어느 필드가 바뀌는가",
       "위는 지나는 자리와 거기서 걸린 규칙, 아래는 그 직후 패킷 상태다. 마지막 칸은 노드에서 온 요청일 때만 일어난다.",

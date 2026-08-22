@@ -4,7 +4,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 616
+W, H = 1000, 632
 d = D(W, H, "CONNTRACK · THE RETURN PATH",
       "응답은 규칙을 다시 안 본다 — conntrack 항목이 목적지를 되돌린다",
       "위는 응답 패킷이 지나는 자리, 아래는 그때 conntrack 항목이 쥐고 있는 값이다. 확률은 재평가되지 않는다.",

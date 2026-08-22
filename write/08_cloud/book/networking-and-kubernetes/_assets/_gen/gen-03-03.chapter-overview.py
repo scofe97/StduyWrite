@@ -1,7 +1,7 @@
 # 03-03.chapter-overview — 네 단계 지도
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
-W, H = 1000, 544
+W, H = 1000, 560
 d = D(W, H, "03-03 · KNOCK FROM EVERY SIDE",
       "이미지를 만들어 띄우고 사방에서 두드려 규칙을 찾는 순서",
       "여섯 방향에서 두드려 보면 무엇이 되고 무엇이 안 되는지가 갈리고, 안 되는 쪽이 다음 기술의 이유가 된다.",

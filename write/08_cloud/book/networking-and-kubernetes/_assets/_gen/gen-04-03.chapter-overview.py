@@ -1,6 +1,6 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
-W, H = 1000, 544
+W, H = 1000, 560
 d = D(W, H, "04-03 · POLICY AND NAMES", "누가 통할 수 있는지를 정하고, 그 통신의 이름과 주소로 4장을 닫는다", "정책은 선택되는 순간부터 판정을 시작한다. 문법의 대시 하나가 범위를 바꾸고, 그다음이 이름과 주소다.", lead="정책은 선택되는 순간 잠긴다 · 문법의 대시 하나가 범위를 바꾼다")
 ddx.band(d, 104, 496, "기본은 전부 허용이고, 선택되는 순간 기본이 뒤집힌다")
 ddx.stage_chain(d, 316, ["§1 동작 모델", "§2·§3 문법", "§4 Cilium", "§5·§6 이름과 주소"], [("잠기는 순간", "선택되면 차단", "기본은 전부 허용", ACC),

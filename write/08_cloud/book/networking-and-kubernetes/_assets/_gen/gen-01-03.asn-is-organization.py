@@ -6,7 +6,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
 
-W, H = 1000, 600
+W, H = 1000, 612
 d = D(W, H, "ASN BELONGS TO AN ORGANIZATION",
       "ASN 은 라우터가 아니라 조직에 붙는다",
       "가로 한 줄만 eBGP 이고 나머지는 모두 iBGP 다 — 라우터는 여섯 대지만 밖에서 보이는 번호는 둘뿐이다",

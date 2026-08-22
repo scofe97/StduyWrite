@@ -1,6 +1,6 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
-W, H = 1000, 544
+W, H = 1000, 560
 d = D(W, H, "06-01 · AWS AND EKS",
       "VPC 부품에서 시작해 Pod IP 가 VPC 주소가 되는 데까지",
       "부품을 알고 관문을 알면, EKS 가 그 위에 무엇을 얹었는지가 보인다. 끝은 Pod IP 가 VPC 주소가 되는 자리다.",

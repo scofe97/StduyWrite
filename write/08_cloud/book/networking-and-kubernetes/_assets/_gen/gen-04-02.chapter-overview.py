@@ -1,6 +1,6 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
-W, H = 1000, 544
+W, H = 1000, 560
 d = D(W, H, "04-02 · CNI AND kube-proxy", "주소를 주는 쪽과 트래픽을 잇는 쪽 — 두 직군이 만나 서비스가 된다", "CNI 는 주소를 주고 kube-proxy 는 트래픽을 잇는다. 둘이 만나야 ClusterIP 가 Pod 까지 닿는다.", lead="CNI 는 주소를 주고 kube-proxy 는 트래픽을 잇는다")
 ddx.band(d, 104, 496, "명세는 얇고 구현체가 갈린다 — 갈리는 지점은 정책 지원이다")
 ddx.stage_chain(d, 316, ["§1 명세", "§2 구현체", "§3 실습", "§4 kube-proxy"], [("네 연산", "JSON stdin·stdout", "바이너리 하나면 끝", None),

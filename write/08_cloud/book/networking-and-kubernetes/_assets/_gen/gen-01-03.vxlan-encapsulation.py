@@ -7,7 +7,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 540
+W, H = 1000, 552
 d = D(W, H, "VXLAN · WRAP -> CROSS -> UNWRAP",
       "VXLAN — 경계를 못 넘는 프레임을 넘게 하는 법",
       "L2 프레임을 UDP 페이로드로 감싸면 라우터에게는 평범한 IP 트래픽으로 보인다",
