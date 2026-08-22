@@ -16,7 +16,12 @@ d = D(W, H, "KUBERNETES UP AND RUNNING · 18-01",
       "kind 로컬 클러스터 실측 — 오른쪽 아래 403 은 실제로 받은 응답이다")
 
 QY = 116
-d.chip(W / 2, QY, "코드가 어디서 도는가", SOFT, 11)
+# 갈림길 칩이 곧 분기점이다. 칩 아래에서 두 갈래를 내면 패널 윗변(152)까지 14px 뿐이라
+# 줄기를 세울 자리가 없다 — 그래서 칩의 좌·우 변에서 옆으로 나가 각 패널의 중심 열에서
+# 아래로 꺾는다. 칩 폭은 dd.chip 과 같은 셈(한글 1em + pad 7 양쪽)으로 구한다.
+QTXT = "코드가 어디서 도는가"
+QW = len(QTXT) * 11.0 + 14
+d.chip(W / 2, QY, QTXT, SOFT, 11)
 
 PW, PX = 590, (24, 626)
 Y0, CH = 152, 384
@@ -48,7 +53,9 @@ for (x, (eb, title, c, reads, calls, wc, whead, wsub)) in zip(PX, PANELS):
     d.t(x + 20, Y0 + 26, eb, 12, c, KR, "start", 600)
     d.t(x + PW - 20, Y0 + 26, title, 11, MUTED, KR, "end")
     d.line(x + 20, Y0 + 42, x + PW - 20, Y0 + 42, RULE, 0.8)
-    d.arrow([(W / 2, QY + 12), (x + PW / 2, Y0 - 10)], c, "acc" if c is ACC else "info", 1.3)
+    col = x + PW / 2
+    d.arrow([(W / 2 + (QW / 2 if col > W / 2 else -QW / 2), QY), (col, QY), (col, Y0 - 10)],
+            c, "acc" if c is ACC else "info", 1.3)
 
     d.t(x + 20, Y0 + 66, "읽는 것", 9, SOFT, KR, "start")
     for j, (k, v) in enumerate(reads):
