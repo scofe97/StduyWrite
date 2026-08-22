@@ -34,8 +34,10 @@ def outcome(x, w, y0, y1, title, sub, c=None, focal=False):
 outcome(454, 270, 176, 228, "신원 있음", "user 와 groups 를 얻는다")
 outcome(454, 270, 240, 292, "신원 없음", "system:unauthenticated 그룹", focal=True)
 
-d.path(f"M 404 {CY} L 429 {CY} L 429 202 L 450 202", MUTED, 1.4, m="ar")
-d.path(f"M 404 {CY} L 429 {CY} L 429 266 L 450 266", ACC, 1.4, m="acc")
+# 두 길은 인증의 오른쪽 변에서 각자 나간다. 한 점에서 같이 나가면 뒤에 그리는 초점색이
+# 공유 구간을 덮어, 신원 있음이 신원 없음 경로에서 갈라진 가지처럼 읽힌다.
+d.path("M 404 216 L 429 216 L 429 202 L 450 202", MUTED, 1.4, m="ar")
+d.path("M 404 252 L 429 252 L 429 266 L 450 266", ACC, 1.4, m="acc")
 d.path("M 724 202 L 754 202 L 754 234 L 780 234", MUTED, 1.4, m="ar")
 d.path("M 724 266 L 754 266 L 754 234", ACC, 1.4)
 d.t(754, 322, "둘 다 인가로 간다", 11, ACC, KR)
