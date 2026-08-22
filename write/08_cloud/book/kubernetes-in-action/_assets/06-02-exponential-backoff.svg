@@ -1,76 +1,68 @@
-<svg viewBox="0 0 960 300" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>컨테이너 재시작 사이의 지수 백오프</title>
-  <desc>프로세스가 종료되면 컨테이너가 파괴되고 새 컨테이너가 즉시 만들어진다. 계속 크래시가 나면 재시작 전 지연이 10초에서 시작해 매번 두 배로 늘어나며 5분에서 상한에 닿는다. 컨테이너가 10분 동안 정상 동작하면 지연은 0으로 리셋된다.</desc>
-  <defs>
-    <style>
-      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
-      .sub    { font-size: 11px; fill: rgb(138,133,128); }
-      .cbox   { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
-      .fail   { font-size: 15px; font-weight: 800; fill: rgb(240,80,90); }
-      .delay  { font-size: 12px; font-weight: 800; fill: rgb(212,168,83); font-family: 'JetBrains Mono', monospace; }
-      .note   { font-size: 10.5px; fill: #e8e4df; }
-    </style>
-    <marker id="a63" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
-      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
-    </marker>
-  </defs>
-
-  <rect x="0" y="0" width="960" height="300" fill="#0d0d0d"/>
-  <text x="24" y="28" class="title">컨테이너 재시작 사이의 지수 백오프</text>
-  <text x="24" y="46" class="sub">첫 재시작은 즉시 · 이후 10초부터 두 배씩 · 5분 상한 · 10분 정상 동작 시 0으로 리셋</text>
-
-  <!-- container boxes with failing process -->
-  <!-- box 1 -->
-  <rect x="40" y="100" width="120" height="60" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
-  <rect x="52" y="118" width="96" height="28" rx="4" fill="rgb(230,126,34)"/>
-  <text x="92" y="137" class="cbox">Process</text>
-  <text x="138" y="139" class="fail">✕</text>
-  <text x="100" y="92" class="note" text-anchor="middle">Container</text>
-
-  <!-- immediate arrow -->
-  <line x1="160" y1="130" x2="196" y2="130" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#a63)"/>
-  <text x="178" y="118" class="delay" text-anchor="middle">0s</text>
-
-  <!-- box 2 -->
-  <rect x="200" y="100" width="120" height="60" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
-  <rect x="212" y="118" width="96" height="28" rx="4" fill="rgb(230,126,34)"/>
-  <text x="252" y="137" class="cbox">Process</text>
-  <text x="298" y="139" class="fail">✕</text>
-  <text x="260" y="92" class="note" text-anchor="middle">New container</text>
-
-  <line x1="320" y1="130" x2="376" y2="130" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#a63)"/>
-  <text x="348" y="118" class="delay" text-anchor="middle">10s</text>
-
-  <!-- box 3 -->
-  <rect x="380" y="100" width="120" height="60" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
-  <rect x="392" y="118" width="96" height="28" rx="4" fill="rgb(230,126,34)"/>
-  <text x="432" y="137" class="cbox">Process</text>
-  <text x="478" y="139" class="fail">✕</text>
-
-  <line x1="500" y1="130" x2="576" y2="130" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#a63)"/>
-  <text x="538" y="118" class="delay" text-anchor="middle">20s</text>
-
-  <!-- box 4 -->
-  <rect x="580" y="100" width="120" height="60" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
-  <rect x="592" y="118" width="96" height="28" rx="4" fill="rgb(230,126,34)"/>
-  <text x="632" y="137" class="cbox">Process</text>
-  <text x="678" y="139" class="fail">✕</text>
-
-  <line x1="700" y1="130" x2="796" y2="130" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#a63)"/>
-  <text x="748" y="118" class="delay" text-anchor="middle">40s …</text>
-
-  <!-- box 5 -->
-  <rect x="800" y="100" width="120" height="60" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
-  <rect x="812" y="118" width="96" height="28" rx="4" fill="rgb(230,126,34)"/>
-  <text x="852" y="137" class="cbox">Process</text>
-  <text x="898" y="139" class="fail">✕</text>
-
-  <!-- annotations -->
-  <text x="40" y="210" class="note">프로세스가 종료되면 컨테이너는 파괴되고,</text>
-  <text x="40" y="226" class="note">첫 번째는 즉시 새 컨테이너로 교체된다</text>
-
-  <text x="430" y="210" class="note">계속 크래시가 나면 새 컨테이너 생성 전 지연이 생기고,</text>
-  <text x="430" y="226" class="note">매번 두 배로 늘어나되 5분에서 상한에 닿는다</text>
-
-  <text x="480" y="270" class="sub" text-anchor="middle">이 대기 상태가 CrashLoopBackOff — 이미지 pull 실패의 재시도에도 같은 지수 백오프가 적용된다</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 556" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">재시작 지연은 두 배씩 늘다가 5분에서 멈춘다</title><desc id="dd">첫 종료는 즉시 재시작되고 그다음부터 10초에서 시작해 매번 두 배가 된다. 300초에서 상한에 닿고, 컨테이너가 10분 동안 정상으로 돌면 지연은 0 으로 리셋된다.</desc>
+<rect width="1000" height="556" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES IN ACTION · 06-02</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">재시작 지연은 두 배씩 늘다가 5분에서 멈춘다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">이 대기 상태가 CrashLoopBackOff 다 — state 는 Waiting, reason 이 그 이름이다</text>
+<rect x="24" y="104" width="952" height="396" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="38" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">지연이 두 배가 되는 것과 5분에서 멈추는 것, 둘 다 막대 길이로 읽힌다</text>
+<line x1="120" y1="400" x2="960" y2="400" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="112" y="404" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">0s</text>
+<line x1="120" y1="355" x2="960" y2="355" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="112" y="359" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">60s</text>
+<line x1="120" y1="310" x2="960" y2="310" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="112" y="314" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">120s</text>
+<line x1="120" y1="266" x2="960" y2="266" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="112" y="270" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">180s</text>
+<line x1="120" y1="221" x2="960" y2="221" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="112" y="225" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">240s</text>
+<line x1="120" y1="176" x2="960" y2="176" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="112" y="180" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">300s</text>
+<line x1="120" y1="176" x2="120" y2="400" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="120" y1="400" x2="960" y2="400" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="146.0" y="375" width="36.0" height="18" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="164" y="388" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">즉시</text>
+<text x="164" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#8B98A9">1회차</text>
+<rect x="232" y="393" width="72" height="7" rx="4" fill="#6A95D818" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="268" y="385" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#6A95D8">10s</text>
+<text x="268" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#8B98A9">2회차</text>
+<rect x="336" y="385" width="72" height="15" rx="4" fill="#6A95D818" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="372" y="377" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#6A95D8">20s</text>
+<text x="372" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#8B98A9">3회차</text>
+<rect x="440" y="370" width="72" height="30" rx="4" fill="#6A95D818" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="476" y="362" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#6A95D8">40s</text>
+<text x="476" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#8B98A9">4회차</text>
+<rect x="544" y="340" width="72" height="60" rx="4" fill="#6A95D818" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="580" y="332" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#6A95D8">80s</text>
+<text x="580" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#8B98A9">5회차</text>
+<rect x="648" y="281" width="72" height="119" rx="4" fill="#6A95D818" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="684" y="273" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#6A95D8">160s</text>
+<text x="684" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#8B98A9">6회차</text>
+<rect x="752" y="176" width="72" height="224" rx="4" fill="#F08A5922" stroke="#F08A59" stroke-width="1.4"/>
+<text x="788" y="168" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#F08A59">300s</text>
+<text x="788" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">7회차</text>
+<rect x="856" y="176" width="72" height="224" rx="4" fill="#6A95D818" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="892" y="168" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#6A95D8">300s</text>
+<text x="892" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#8B98A9">8회차</text>
+<line x1="120" y1="176" x2="960" y2="176" stroke="#8B98A9" stroke-width="1.2" stroke-dasharray="6 5"/>
+<text x="128" y="168" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">300s · 5분 상한</text>
+<path d="M 892 434 L 892 448 L 164 448 L 164 434" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)" stroke-dasharray="6 5"/>
+<rect x="400.0" y="439" width="256.0" height="18" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="528" y="452" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">10분 정상 동작 → 지연 0 으로 리셋</text>
+<text x="36" y="478" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">최악의 경우 컨테이너는 5분 동안 시작하지 못한다 — 이미지 pull 실패의 재시도에도 같은 백오프가 적용된다</text>
+<line x1="12" y1="516" x2="952" y2="516" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="538" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="528" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">재시작 전 대기</text>
+<rect x="248" y="528" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="270" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">상한에 처음 닿는 회차</text>
 </svg>
