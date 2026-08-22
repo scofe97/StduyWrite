@@ -14,7 +14,9 @@ d = D(1200, 684, "KUBERNETES IN ACTION · 12-02",
 ddx.band(d, 100, 316, "컨트롤러를 직접 적는다면", x=24, w=1152)
 for t, cy in (("사내 API", 186), ("외부 공개 API", 262)):
     ddx.node(d, 200, cy, t, "controller: ingress.k8s.aws/alb", 300, 62, INFO)
-    d.path(f"M 352 {cy} L 600 224", MUTED, 1.4, m="ar")
+    d.path(f"M 352 {cy} L 480 {cy}", MUTED, 1.4)
+d.path("M 480 186 L 480 262", MUTED, 1.4)
+d.path("M 480 224 L 600 224", MUTED, 1.4, m="ar")
 ddx.node(d, 760, 224, "ALB 컨트롤러", "둘 다 같은 이름을 적었다", 300, 76)
 ddx.tag(d, 1020, 224, "구별할 방법이 없다", BAD, 220)
 
@@ -27,7 +29,9 @@ for cls, param, cy in (("alb-internal", "scheme: internal", 426), ("alb-public",
     d.t(600, cy - 6, cls, 12, ACC, MONO, "middle", 600)
     d.t(600, cy + 16, param, 10, MUTED, MONO)
     d.path(f"M 352 {cy} L 454 {cy}", ACC, 1.4, m="acc")
-    d.path(f"M 742 {cy} L 830 464", OK, 1.4, m="ok")
+    d.path(f"M 742 {cy} L 786 {cy}", OK, 1.4)
+d.path("M 786 426 L 786 502", OK, 1.4)
+d.path("M 786 464 L 830 464", OK, 1.4, m="ok")
 ddx.node(d, 990, 464, "ALB 컨트롤러", "같은 컨트롤러, 다른 설정", 300, 76, OK)
 d.t(600, 552, "이름이 경계가 되어 앱 쪽은 클래스 이름 하나만 알면 된다", 11, ACC, KR)
 

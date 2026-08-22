@@ -15,11 +15,11 @@ ddx.node(d, 160, 280, "안 맞은 요청", "GET /quotes", 220, 84, INFO)
 ddx.node(d, 470, 280, "규칙 판정", "host · path 모두 불일치", 240, 84)
 d.path("M 272 280 L 344 280", MUTED, 1.5, m="ar")
 
-d.path("M 592 258 L 700 196", WARN, 1.4, m="warn", dash="5 5")
+d.path("M 592 258 L 650 258 L 650 196 L 700 196", WARN, 1.4, m="warn", dash="5 5")
 ddx.node(d, 850, 196, "프록시 기본 404", "텍스트 한 줄로 끝난다", 260, 76, WARN)
 d.t(660, 178, "defaultBackend 가 없으면", 10, WARN, KR)
 
-d.path("M 592 302 L 700 380", ACC, 1.5, m="acc")
+d.path("M 592 302 L 650 302 L 650 380 L 700 380", ACC, 1.5, m="acc")
 ddx.node(d, 850, 380, "defaultBackend", "fun404 서비스로", 260, 76, focal=True)
 d.t(660, 372, "두면", 10, ACC, KR)
 

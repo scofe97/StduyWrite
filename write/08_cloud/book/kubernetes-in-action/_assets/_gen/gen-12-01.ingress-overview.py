@@ -25,9 +25,11 @@ ddx.node(d, 560, 285, "11.22.33.44", "Ingress 의 공인 IP", 200, 84, focal=Tru
 d.path("M 662 285 L 726 285", MUTED, 1.5, m="ar")
 ddx.node(d, 840, 285, "L7 프록시", "HTTP 를 읽어 규칙에 맞춘다", 220, 84)
 
+d.path("M 952 285 L 990 285", OK, 1.4)
+d.path(f"M 990 {YS[0]} L 990 {YS[-1]}", OK, 1.4)
 for nm, y in zip(("kiada", "quote", "quiz"), YS):
     ddx.node(d, 1110, y, nm, "ClusterIP", 160, 66, OK)
-    d.path(f"M 952 285 L 1026 {y}", OK, 1.4, m="ok")
+    d.path(f"M 990 {y} L 1026 {y}", OK, 1.4, m="ok")
 
 d.t(24, 486, "그래서 서비스를 더 내보내도 DNS 에 추가되는 값은 같고, 늘어나는 것은 프록시가 읽을 규칙 줄뿐이다.",
      11, MUTED, KR, "start")
