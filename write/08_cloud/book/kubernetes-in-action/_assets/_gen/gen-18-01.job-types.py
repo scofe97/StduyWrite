@@ -5,7 +5,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx
 
-d = D(1240, 680, "KUBERNETES IN ACTION · 18-01",
+d = D(1240, 692, "KUBERNETES IN ACTION · 18-01",
       "몇 개가 언제 도는가",
       "completions 와 parallelism 두 값이 실행 모양을 만든다. 하나도 안 적으면 파드 하나, "
       "completions 만 적으면 순차, 둘 다 적으면 병렬이 된다.",
