@@ -5,7 +5,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx
 
-d = D(1200, 640, "KUBERNETES IN ACTION · 15-02",
+d = D(1200, 662, "KUBERNETES IN ACTION · 15-02",
       "기다린다는 개념 자체가 없다",
       "컨트롤러가 매 조정마다 하는 일은 현재 template 의 해시와 맞는 ReplicaSet 을 새 것으로 지목하고 "
       "나머지를 줄이는 것뿐이다. 0.8 을 적는 순간 지목 대상이 바뀐다.",
@@ -38,6 +38,6 @@ scene(340, "0.8 을 적은 뒤", [
 
 d.t(24, 596, "0.7 을 완성한 뒤 0.8 로 넘어가지 않는다. 14-02 에서 이름 붙인 level-triggered 성질이 "
              "그대로 나타나는 자리라, 중간값 0.7 을 거쳐 갈 의무가 없다.", 11, MUTED, KR, "start")
-d.legend(618 - 4, [("줄어드는 쪽", WARN), ("늘어나는 쪽", OK), ("신분이 바뀐 것", ACC)])
+d.legend(614, [("줄어드는 쪽", WARN), ("늘어나는 쪽", OK), ("신분이 바뀐 것", ACC)])
 d.save("15-02-rollout-during-rollout.svg")
 print("ok")
