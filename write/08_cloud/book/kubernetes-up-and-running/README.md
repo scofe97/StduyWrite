@@ -10,7 +10,7 @@ related:
   - ../kubernetes-patterns/README.md
   - ../networking-and-kubernetes/README.md
   - ../../kubernetes/README.md
-updated: 2026-08-18
+updated: 2026-08-23
 ---
 
 # Kubernetes — Up and Running, 3rd Edition — 정독 인덱스
@@ -92,6 +92,7 @@ updated: 2026-08-18
 | [15-01](./15-01.Service%20Meshes%20%E2%80%94%20%EC%93%B8%20%EA%B2%83%EC%9D%B8%EA%B0%80%EB%A5%BC%20%EB%A8%BC%EC%A0%80%20%EB%94%B0%EC%A7%84%EB%8B%A4.md) | Service Meshes — 쓸 것인가를 먼저 따진다 (Ch15) | 완료 · 델타 |
 | [16-01](./16-01.Integrating%20Storage%20%E2%80%94%20%EB%B3%B5%EC%A0%9C%ED%95%98%EC%A7%80%20%EC%95%8A%EB%8A%94%20%EC%84%A0%ED%83%9D%EC%A7%80%EC%99%80%20MySQL%20%EC%8B%B1%EA%B8%80%ED%84%B4%20%EB%9E%A9.md) | Integrating Storage — 복제하지 않는 선택지와 MySQL 싱글턴 랩 (Ch16) | 완료 · 델타 · 랩 |
 | [17-01](./17-01.Extending%20Kubernetes%20%E2%80%94%20%EC%96%B4%EB%93%9C%EB%AF%B8%EC%85%98%C2%B7%EC%BB%A4%EC%8A%A4%ED%85%80%20%EB%A6%AC%EC%86%8C%EC%8A%A4%EC%99%80%20%EC%9D%B8%EC%A6%9D%EC%84%9C%20%EC%97%86%EB%8A%94%20%EA%B2%80%EC%A6%9D%20%EB%9E%A9.md) | Extending Kubernetes — 어드미션·커스텀 리소스와 인증서 없는 검증 랩 (Ch17) | 완료 · 델타 · 랩 |
+| [18-01](./18-01.Accessing%20Kubernetes%20%E2%80%94%20%ED%81%B4%EB%9D%BC%EC%9D%B4%EC%96%B8%ED%8A%B8%EA%B0%80%20%EA%B0%90%EC%B6%94%EB%8A%94%20HTTP%EC%99%80%20%EC%9B%90%EC%84%9C%20%EC%BD%94%EB%93%9C%20%EC%8B%A4%EC%A6%9D%20%EB%9E%A9.md) | Accessing Kubernetes — 클라이언트가 감추는 HTTP와 원서 코드 실증 랩 (Ch18) | 완료 · 랩 |
 
 표시의 뜻은 이렇습니다. **델타**는 기존 노트와 겹침이 커서 이 책이 새로 주는 것만 남긴 편이고, **랩**은 개념이 이미 충분히 정리돼 있어 이 책만의 실습을 중심에 둔 편입니다. 둘 다 맨 아래 위임 표가 나머지를 어디서 읽을지 가리킵니다.
 
@@ -106,7 +107,7 @@ updated: 2026-08-18
 | 현재 난이도 레벨 (ZPD) | 기본 — 관심 있는 장부터 선택 진행 |
 | 막힌 지점 | 기록 전 |
 | 다음 레슨 후보 | 미정 — 다음 챕터 PDF를 받는 시점에 결정 |
-| 최근 검증 결과 | 17장 — 전항 통과, 버전 차이 5건 병기(v1beta1 3종 소멸·`v1` CRD 스키마 필수화·`signerName`·웹훅 필수 필드 2종·VAP 대체 경로). kind 클러스터 서버 dry-run 으로 랩 전 단계 실증 · 16장 6건 · 15장 3건 · 12장 2건 · 7장 4건 · 14장 5건, 모두 전항 통과 |
+| 최근 검증 결과 | 18장 — 전항 통과, 원서 코드 오류 19건 병기(실행 7 · 원문 8 · 공식 대조 2 · 버전 차이 2). Python 클라이언트 36.0.3 을 격리 venv 에 두고 kind 클러스터로 실제 실행해 판정 · 17장 — 전항 통과, 버전 차이 5건 병기(v1beta1 3종 소멸·`v1` CRD 스키마 필수화·`signerName`·웹훅 필수 필드 2종·VAP 대체 경로). kind 클러스터 서버 dry-run 으로 랩 전 단계 실증 · 16장 6건 · 15장 3건 · 12장 2건 · 7장 4건 · 14장 5건, 모두 전항 통과 |
 | 복습 회차 (_review) | 미개시 |
 
 14장에서 원서 오류가 다섯 나왔습니다. 그중 하나는 보안 권고가 뒤집히는 문장이고 둘은 그대로 옮겨 적으면 동작하지 않는 식별자입니다. 모두 노트에 `> **원문 정오**` 로 병기했습니다. 다음 장을 읽을 때도 공식 문서 대조를 같은 강도로 겁니다.
