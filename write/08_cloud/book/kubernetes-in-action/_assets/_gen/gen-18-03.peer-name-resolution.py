@@ -11,19 +11,19 @@ d = D(1240, 660, "KUBERNETES IN ACTION · 18-03",
       "headless Service 의 DNS 가 그 이름을 IP 로 바꿔 준다.",
       "중앙 조율자 없이 서로를 찾는 길")
 
-d.box(60, 176, 380, 200, PAPER, RULE, 0.9, 8)
-d.t(250, 204, "파드 0 이 아는 것", 11, SOFT, KR)
+d.box(60, 176, 320, 200, PAPER, RULE, 0.9, 8)
+d.t(220, 204, "파드 0 이 아는 것", 11, SOFT, KR)
 for i, (k, v) in enumerate((("JOB_COMPLETION_INDEX", "0 — 나는 0 번"),
                             ("completions", "3 — 전부 셋"))):
     d.t(84, 250 + i * 44, k, 11, INFO, MONO, "start")
     d.t(84, 272 + i * 44, v, 10, MUTED, KR, "start")
-d.t(250, 356, "이 둘이면 이름을 만들 수 있다", 10, SOFT, KR)
+d.t(220, 356, "이 둘이면 이름을 만들 수 있다", 10, SOFT, KR)
 
 d.o.append(f'<rect x="{640-180}" y="232" width="360" height="88" rx="6" '
            f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
 d.t(640, 262, "이름을 조립한다", 13, ACC, KR, "middle", 600)
 d.t(640, 288, "job-1-{index}.headless-svc", 10, MUTED, MONO)
-d.path("M 444 276 L 452 276", ACC, 1.5, m="acc")
+d.path("M 384 276 L 454 276", ACC, 1.5, m="acc")
 
 ddx.node(d, 1050, 276, "headless Service DNS", "이름 → 파드 IP", 300, 88, OK)
 d.path("M 824 276 L 894 276", OK, 1.5, m="ok")
