@@ -13,15 +13,17 @@ d = D(1240, 620, "KUBERNETES IN ACTION · 18-03",
 
 ddx.node(d, 170, 300, "CronJob", "schedule · jobTemplate", 240, 96, ACC)
 
+d.path("M 292 300 L 380 300", ACC, 1.3)
+d.path("M 380 200 L 380 400", ACC, 1.3)
 for i, (t, when) in enumerate((("Job  #1", "01:00"), ("Job  #2", "02:00"), ("Job  #3", "03:00"))):
     cy = 200 + i * 100
     ddx.node(d, 600, cy, t, when, 240, 72, INFO)
-    d.path(f"M 292 {300 - (1-i)*8} L 474 {cy}", ACC, 1.3, m="acc")
+    d.path(f"M 380 {cy} L 474 {cy}", ACC, 1.3, m="acc")
     ddx.node(d, 1000, cy, "파드", "완료까지 실행", 220, 72, OK)
     d.path(f"M 722 {cy} L 884 {cy}", OK, 1.3, m="ok")
 
-d.t(383, 400, "때가 되면 만든다", 10, ACC, KR)
-d.t(860, 400, "Job 이 만든다", 10, OK, KR)
+d.t(383, 176, "때가 되면 만든다", 10, ACC, KR)
+d.t(803, 176, "Job 이 만든다", 10, OK, KR)
 
 d.t(24, 470, "그래서 CronJob 안에는 jobTemplate 이 통째로 들어간다. completions·parallelism·backoffLimit 처럼 "
              "18-02 에서 정한 것이 그 안에 그대로 실린다.", 11, MUTED, KR, "start")

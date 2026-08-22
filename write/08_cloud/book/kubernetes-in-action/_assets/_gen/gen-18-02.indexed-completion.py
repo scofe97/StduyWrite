@@ -14,6 +14,10 @@ d = D(1220, 620, "KUBERNETES IN ACTION · 18-02",
 ddx.node(d, 170, 300, "Pod 템플릿", "하나뿐이다", 220, 88, INFO)
 d.t(170, 372, "completionMode: Indexed", 10, MUTED, MONO)
 
+# 하나의 템플릿에서 넷으로 비스듬히 뻗지 않는다. 줄기(x=400)는 중립색으로 세우고 색은
+# 갈라진 팔에만 준다 — 공유 구간이 초점색으로 덮이는 것도 함께 막는다.
+d.path("M 282 300 L 400 300", SOFT, 1.2)
+d.path("M 400 190 L 400 418", SOFT, 1.2)
 for i, idx in enumerate((0, 1, 2, 11)):
     cy = 190 + i * 76
     if i == 3:
@@ -22,7 +26,7 @@ for i, idx in enumerate((0, 1, 2, 11)):
     d.box(520, cy - 26, 360, 52, PAPER2, c, 1.1, 5)
     d.t(545, cy + 4, f"파드 index {idx}", 11, c, MONO, "start", 600)
     d.t(760, cy + 4, f"JOB_COMPLETION_INDEX={idx}", 10, MUTED, MONO, "start")
-    d.path(f"M 282 300 L 512 {cy}", c, 1.2, m="acc" if i == 0 else "info")
+    d.path(f"M 400 {cy} L 512 {cy}", c, 1.2, m="acc" if i == 0 else "info")
 
 d.box(940, 164, 240, 288, PAPER, RULE, 0.9, 8)
 d.t(1060, 192, "각자 맡는 몫", 11, SOFT, KR)

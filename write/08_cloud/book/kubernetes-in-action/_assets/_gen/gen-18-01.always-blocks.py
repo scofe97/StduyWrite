@@ -13,13 +13,13 @@ d = D(1240, 640, "KUBERNETES IN ACTION · 18-01",
 
 ddx.node(d, 170, 300, "컨테이너 종료", "exit 0 — 성공", 220, 84, INFO)
 
-d.path("M 282 268 L 380 200", BAD, 1.5, m="bad")
+d.path("M 282 268 L 350 268 L 350 200 L 380 200", BAD, 1.5, m="bad")
 ddx.node(d, 560, 200, "Always", "이유를 묻지 않고 재시작", 280, 76, BAD)
 d.path("M 702 200 L 800 200", BAD, 1.4, m="bad")
 ddx.tag(d, 990, 200, "CrashLoopBackOff", BAD, 300)
 d.t(990, 240, "Completed 에 이르지 못한다", 10, BAD, KR)
 
-d.path("M 282 332 L 380 400", OK, 1.5, m="ok")
+d.path("M 282 332 L 350 332 L 350 400 L 380 400", OK, 1.5, m="ok")
 d.o.append(f'<rect x="{560-140}" y="362" width="280" height="76" rx="6" '
            f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
 d.t(560, 392, "OnFailure · Never", 13, ACC, KR, "middle", 600)

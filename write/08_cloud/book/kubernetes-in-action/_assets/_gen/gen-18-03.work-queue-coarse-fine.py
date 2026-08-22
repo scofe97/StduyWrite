@@ -18,12 +18,15 @@ def scene(y0, label, per_pod, completions, note, c, focal):
     for i in range(4):
         d.box(112, y0 + 116 + i * 26, 156, 20, PAPER2, RULE, 0.9, 3)
     d.t(190, y0 + 230, "아이템들", 10, SOFT, KR)
+    d.path(f"M 296 {y0+116} L 366 {y0+116} L 366 {y0+64} L 980 {y0+64}", c, 1.2)
     for j in range(3):
         cx = 480 + j * 250
         ddx.node(d, cx, y0 + 116, f"파드 {j+1}", per_pod, 220, 62, c)
-        d.path(f"M 296 {y0+130} L {cx-114} {y0+120}", c, 1.2, m="ok" if c is OK else "acc")
+        d.path(f"M {cx} {y0+64} L {cx} {y0+81}", c, 1.2, m="ok" if c is OK else "acc")
         d.t(cx, y0 + 176, completions, 10, MUTED, KR)
-    d.t(1090, y0 + 116, note, 11, c, KR)
+    # x=1090 은 파드 3 상자의 오른쪽 변이라 글자 절반이 상자 안에 들어갔다. 옆에는 폭이
+    # 157px 짜리 글이 들어갈 자리(126px)가 없으므로 띠 오른쪽 위로 올린다.
+    d.t(1192, y0 + 40, note, 11, c, KR, "end")
 
 scene(100, "coarse — 아이템 하나에 파드 하나", "아이템 1 개 처리", "처리하면 끝난다",
       "completions 를 아이템 수만큼", OK, False)

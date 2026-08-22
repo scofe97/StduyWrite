@@ -16,11 +16,14 @@ ddx.node(d, 150, 320, "완료된 Job", "파드가 Completed 로 남아 있다", 
 PATHS = [("kubectl delete job", "사용자가 지운다", "가비지 컬렉터가 파드까지 회수", 190, OK),
          ("--cascade=orphan", "Job 만 지운다", "파드가 독립해 남는다", 320, WARN),
          ("ttlSecondsAfterFinished", "TTL 컨트롤러가", "완료 후 자동으로 지운다", 450, ACC)]
+
+d.path("M 272 320 L 350 320", SOFT, 1.2)
+d.path("M 350 190 L 350 450", SOFT, 1.2)
 for t, who, result, cy, c in PATHS:
     d.box(430, cy - 38, 320, 76, PAPER2, c, 1.1, 6)
     d.t(450, cy - 10, t, 11, c, MONO, "start", 600)
     d.t(450, cy + 14, who, 10, MUTED, KR, "start")
-    d.path(f"M 272 320 L 424 {cy}", c, 1.4,
+    d.path(f"M 350 {cy} L 424 {cy}", c, 1.4,
            m="ok" if c is OK else ("warn" if c is WARN else "acc"))
     ddx.node(d, 990, cy, result, "", 380, 60, c)
     d.path(f"M 752 {cy} L 794 {cy}", c, 1.3,
