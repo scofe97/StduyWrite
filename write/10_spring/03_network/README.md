@@ -8,6 +8,7 @@ related:
   - feign/README.md
   - reactive-net/README.md
   - realtime/README.md
+  - resilience/README.md
 updated: 2026-05-30
 ---
 
@@ -72,8 +73,9 @@ flowchart TB
 | [feign/](feign/) | OpenFeign 입문(WebClient 비교 포함) + 기본 설정과 인터페이스 선언 | 2편 (압축본) | Spring Cloud 2023.0.x 기준. 2026-05-27 작성 |
 | [reactive-net/](reactive-net/) | Reactor Netty — WebClient·WebFlux 가 올라타는 전송 엔진. 입문·이벤트 모델·부트스트랩·파이프라인·버퍼·서버·클라이언트 | 7편 | netty raw 이관 완료. 2026-05-30 작성 |
 | [realtime/](realtime/) | SSE·WebSocket·STOMP 실시간 통신. 통신 모델·HTTP/2 기반·SSE·WebSocket 프로토콜·STOMP·연결관리·메시지 동기화 | 10편 | raw 이관 + 프로토콜 이론·Spring 보강. 2026-05-30 작성 |
+| [resilience/](resilience/) | Resilience4j 회복탄력성 — 5모듈 도입 결정·Circuit Breaker 상태 전이·Retry 백오프와 jitter·Bulkhead 격리·Rate/Time Limiter | 5편 | RestClient·WebClient·OpenFeign 호출에 적용하는 관점 |
 
-> webflux/ 와 feign/ 는 *외부 호출 클라이언트* 두 갈래이고, reactive-net/ 은 그 호출이 올라타는 *전송 엔진*, realtime/ 은 요청-응답이 아닌 *실시간 통신*(SSE·WebSocket·STOMP) 입니다. reactive-net/ 과 realtime/ 의 raw 이관은 모두 끝났고, feign/ 풀 보강은 본인 프로젝트에서 실제로 OpenFeign 을 도입하기로 한 시점에 채웁니다.
+> webflux/ 와 feign/ 는 *외부 호출 클라이언트* 두 갈래이고, reactive-net/ 은 그 호출이 올라타는 *전송 엔진*, realtime/ 은 요청-응답이 아닌 *실시간 통신*(SSE·WebSocket·STOMP) 입니다. resilience/ 는 앞의 넷과 축이 다릅니다. 무엇으로 호출할지가 아니라 그 호출이 실패했을 때 무엇으로 막을지를 다룹니다. reactive-net/ 과 realtime/ 의 raw 이관은 모두 끝났고, feign/ 풀 보강은 본인 프로젝트에서 실제로 OpenFeign 을 도입하기로 한 시점에 채웁니다.
 
 
 
