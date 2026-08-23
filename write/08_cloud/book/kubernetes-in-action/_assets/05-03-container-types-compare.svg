@@ -1,73 +1,67 @@
-<svg viewBox="0 0 960 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>세 가지 컨테이너 종류의 생명주기 비교</title>
-  <desc>init 컨테이너·일반 사이드카·네이티브 사이드카를 시작 시점, 종료 시점, 정의 위치, 용도로 비교한다. init 은 주 컨테이너 전에 순차로 돌고 끝나면 죽는다. 일반 사이드카는 주 컨테이너와 병렬로 시작하고 함께 죽는다. 네이티브 사이드카는 init 자리에 restartPolicy Always 를 붙여 주 컨테이너보다 먼저 뜨고 맨 마지막에 죽는다.</desc>
-  <defs>
-    <style>
-      .title { font-size: 16px; font-weight: 800; fill: #e8e4df; }
-      .sub   { font-size: 10.5px; fill: rgb(138,133,128); }
-      .hd    { font-size: 13px; font-weight: 800; }
-      .rowlbl{ font-size: 10.5px; font-weight: 800; fill: rgb(212,168,83); }
-      .cell  { font-size: 10px; fill: #1a1a1a; }
-      .mono  { font-family: 'JetBrains Mono', ui-monospace, monospace; }
-    </style>
-  </defs>
-  <rect x="0" y="0" width="960" height="420" fill="#0d0d0d"/>
-  <text x="24" y="32" class="title">init 컨테이너 · 일반 사이드카 · 네이티브 사이드카 — 무엇이 다른가</text>
-  <text x="24" y="54" class="sub">시작·종료 시점과 정의 위치가 다르다. 세 컬럼으로 비교한다.</text>
-
-  <!-- 행 레이블 열 -->
-  <text x="30" y="150" class="rowlbl">시작 시점</text>
-  <text x="30" y="222" class="rowlbl">종료 시점</text>
-  <text x="30" y="294" class="rowlbl">정의 위치</text>
-  <text x="30" y="366" class="rowlbl">언제 쓰나</text>
-
-  <!-- ===== 컬럼 1: init 컨테이너 (초록) ===== -->
-  <rect x="150" y="78" width="250" height="40" rx="8" fill="#66bb6a" stroke="#3d8b40" stroke-width="1.3"/>
-  <text x="275" y="104" class="hd" text-anchor="middle" style="fill:#0d0d0d">init 컨테이너</text>
-  <!-- 시작 -->
-  <rect x="150" y="126" width="250" height="56" rx="7" fill="#cdeccf" stroke="#3d8b40" stroke-width="1"/>
-  <text x="160" y="148" class="cell">주 컨테이너 <tspan style="font-weight:800">전에</tspan>, 순차로</text>
-  <text x="160" y="166" class="cell">(하나 끝나야 다음)</text>
-  <!-- 종료 -->
-  <rect x="150" y="198" width="250" height="56" rx="7" fill="#cdeccf" stroke="#3d8b40" stroke-width="1"/>
-  <text x="160" y="220" class="cell"><tspan style="font-weight:800">끝나면 죽는다</tspan> (일회성)</text>
-  <text x="160" y="238" class="cell">Completed 후 사라짐</text>
-  <!-- 정의 -->
-  <rect x="150" y="270" width="250" height="48" rx="7" fill="#cdeccf" stroke="#3d8b40" stroke-width="1"/>
-  <text x="160" y="298" class="cell mono">initContainers</text>
-  <!-- 용도 -->
-  <rect x="150" y="334" width="250" height="56" rx="7" fill="#cdeccf" stroke="#3d8b40" stroke-width="1"/>
-  <text x="160" y="356" class="cell">시작 전 준비: 파일·인증서</text>
-  <text x="160" y="374" class="cell">생성, 전제조건 대기</text>
-
-  <!-- ===== 컬럼 2: 일반 사이드카 (파랑) ===== -->
-  <rect x="416" y="78" width="250" height="40" rx="8" fill="#5b9bd5" stroke="#2f6ba3" stroke-width="1.3"/>
-  <text x="541" y="104" class="hd" text-anchor="middle" style="fill:#e8e4df">일반 사이드카</text>
-  <rect x="416" y="126" width="250" height="56" rx="7" fill="#dceaf7" stroke="#2f6ba3" stroke-width="1"/>
-  <text x="426" y="148" class="cell">주 컨테이너와 <tspan style="font-weight:800">동시</tspan></text>
-  <text x="426" y="166" class="cell">(병렬 시작)</text>
-  <rect x="416" y="198" width="250" height="56" rx="7" fill="#dceaf7" stroke="#2f6ba3" stroke-width="1"/>
-  <text x="426" y="220" class="cell">주 컨테이너와 <tspan style="font-weight:800">함께</tspan></text>
-  <text x="426" y="238" class="cell">(먼저 죽을 위험 있음)</text>
-  <rect x="416" y="270" width="250" height="48" rx="7" fill="#dceaf7" stroke="#2f6ba3" stroke-width="1"/>
-  <text x="426" y="298" class="cell mono">containers</text>
-  <rect x="416" y="334" width="250" height="56" rx="7" fill="#dceaf7" stroke="#2f6ba3" stroke-width="1"/>
-  <text x="426" y="356" class="cell">먼저 뜰 필요 없고 같이</text>
-  <text x="426" y="374" class="cell">죽어도 되는 보조 (예: envoy)</text>
-
-  <!-- ===== 컬럼 3: 네이티브 사이드카 (앰버) ===== -->
-  <rect x="682" y="78" width="254" height="40" rx="8" fill="rgb(212,168,83)" stroke="#a67c1a" stroke-width="1.3"/>
-  <text x="809" y="104" class="hd" text-anchor="middle" style="fill:#0d0d0d">네이티브 사이드카</text>
-  <rect x="682" y="126" width="254" height="56" rx="7" fill="#faeecd" stroke="#a67c1a" stroke-width="1"/>
-  <text x="692" y="148" class="cell">주 컨테이너보다 <tspan style="font-weight:800">먼저</tspan></text>
-  <text x="692" y="166" class="cell">(init 도 서비스 받음)</text>
-  <rect x="682" y="198" width="254" height="56" rx="7" fill="#faeecd" stroke="#a67c1a" stroke-width="1"/>
-  <text x="692" y="220" class="cell">주 컨테이너 다 죽은 뒤</text>
-  <text x="692" y="238" class="cell"><tspan style="font-weight:800">맨 마지막</tspan></text>
-  <rect x="682" y="270" width="254" height="48" rx="7" fill="#faeecd" stroke="#a67c1a" stroke-width="1"/>
-  <text x="692" y="292" class="cell mono">initContainers +</text>
-  <text x="692" y="308" class="cell mono" style="font-weight:800">restartPolicy: Always</text>
-  <rect x="682" y="334" width="254" height="56" rx="7" fill="#faeecd" stroke="#a67c1a" stroke-width="1"/>
-  <text x="692" y="356" class="cell">Pod에 <tspan style="font-weight:800">반드시 필요한</tspan> 사이드카,</text>
-  <text x="692" y="374" class="cell">배치 Job(18장) 사이드카</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 588" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">정의 위치가 시작·종료 시점을 결정한다</title><desc id="dd">init 컨테이너는 끝나면 죽고, 일반 사이드카는 주 컨테이너와 동급이며, 네이티브 사이드카만 먼저 뜨고 맨 나중에 죽는다. 세 성질의 차이는 어디에 어떻게 적었는가에서 온다.</desc>
+<rect width="1000" height="588" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES IN ACTION · 05-03</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">정의 위치가 시작·종료 시점을 결정한다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">같은 '사이드카' 라는 말이 두 가지를 가리킨다 — 정의 위치를 봐야 어느 쪽인지 안다</text>
+<rect x="24" y="104" width="952" height="428" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="38" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">판정 열 하나가 나머지 세 열을 결정한다</text>
+<text x="126" y="196" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">종류</text>
+<text x="353" y="196" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">정의 위치</text>
+<text x="615" y="196" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">시작 시점</text>
+<text x="872" y="196" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">종료 시점</text>
+<rect x="36" y="220" width="180" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="56" y="254" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">init 컨테이너</text>
+<text x="56" y="278" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">일회성</text>
+<rect x="228" y="220" width="250" height="88" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.4"/>
+<text x="248" y="254" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">initContainers</text>
+<text x="248" y="278" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정책 없음</text>
+<rect x="490" y="220" width="250" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="510" y="254" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">주 컨테이너 전에</text>
+<text x="510" y="278" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정의된 순서대로 하나씩</text>
+<rect x="752" y="220" width="240" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="772" y="254" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">끝나면 죽는다</text>
+<text x="772" y="278" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Completed 후 사라진다</text>
+<rect x="36" y="320" width="180" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="56" y="354" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">일반 사이드카</text>
+<text x="56" y="378" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">주 컨테이너와 동급</text>
+<rect x="228" y="320" width="250" height="88" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.4"/>
+<text x="248" y="354" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#E3B341">containers</text>
+<text x="248" y="378" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">주 컨테이너와 같은 자리</text>
+<rect x="490" y="320" width="250" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="510" y="354" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">주 컨테이너와 동시</text>
+<text x="510" y="378" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">순서 보장이 없다</text>
+<rect x="752" y="320" width="240" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="772" y="354" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">함께 죽는다</text>
+<text x="772" y="378" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">먼저 죽을 위험이 있다</text>
+<rect x="36" y="420" width="180" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="56" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">네이티브 사이드카</text>
+<text x="56" y="478" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">먼저·계속·마지막</text>
+<rect x="228" y="420" width="250" height="88" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.4"/>
+<text x="248" y="454" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">initContainers</text>
+<text x="248" y="478" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">restartPolicy: Always</text>
+<rect x="490" y="420" width="250" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="510" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">주 컨테이너보다 먼저</text>
+<text x="510" y="478" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">뒤따르는 init 도 쓸 수 있다</text>
+<rect x="752" y="420" width="240" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="772" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">맨 나중에 죽는다</text>
+<text x="772" y="478" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">주 컨테이너가 다 죽은 뒤</text>
+<text x="36" y="484" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">네이티브 사이드카를 쓸 자리는 Pod 에 반드시 있어야 하는 보조다 — 로그 수집기·프록시, 그리고 배치 Job(18장)의 사이드카.</text>
+<line x1="12" y1="548" x2="952" y2="548" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="570" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="560" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="570" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">일회성</text>
+<rect x="183" y="560" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="205" y="570" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">동급이라 순서가 없다</text>
+<rect x="370" y="560" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="392" y="570" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">순서가 보장된다</text>
 </svg>
