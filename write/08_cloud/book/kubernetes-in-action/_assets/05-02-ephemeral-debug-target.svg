@@ -1,75 +1,50 @@
-<svg viewBox="0 0 1060 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>ephemeral 디버그 컨테이너와 --target 프로세스 공유</title>
-  <desc>운영 컨테이너는 셸·도구가 없어 kubectl exec로 들여다볼 수 없다. kubectl debug로 도구가 든 임시 디버그 컨테이너를 같은 Pod에 붙이고, --target으로 대상과 PID 네임스페이스를 공유하면, 디버거의 ps에 대상 컨테이너의 프로세스가 그대로 보인다. 대상은 재시작하지 않는다.</desc>
-  <defs>
-    <style>
-      .title  { font-size: 18px; font-weight: 800; fill: #e8e4df; }
-      .sub    { font-size: 11px; fill: rgb(138,133,128); }
-      .zone   { font-size: 12px; font-weight: 800; fill: rgb(212,168,83); }
-      .box    { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
-      .boxd   { font-size: 13px; font-weight: 800; fill: #e8e4df; }
-      .desc   { font-size: 10px; font-weight: 600; fill: #e8e4df; }
-      .muted  { font-size: 9.5px; fill: rgb(138,133,128); }
-      .mono   { font-size: 10px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
-      .chip   { font-size: 10px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; fill: #0d0d0d; }
-    </style>
-    <marker id="ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
-    <marker id="arg" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/></marker>
-  </defs>
-
-  <rect x="0" y="0" width="1060" height="500" fill="#0d0d0d"/>
-  <text x="24" y="30" class="title">ephemeral 디버그 컨테이너 — --target으로 대상 프로세스 보기</text>
-  <text x="24" y="50" class="sub">도구 없는 운영 컨테이너를 재시작하지 않고, 도구가 든 임시 컨테이너를 붙여 PID 네임스페이스를 공유해 들여다본다.</text>
-
-  <!-- 명령 -->
-  <rect x="36" y="72" width="988" height="34" rx="7" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1"/>
-  <text x="52" y="94" class="mono" style="fill:rgb(212,168,83)">kubectl debug -it kiada-…-2vm7s --image=busybox --profile=general --target=kiada -- sh -c 'ps -eo pid,comm'</text>
-
-  <!-- Pod 박스 -->
-  <rect x="120" y="132" width="600" height="330" rx="14" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
-  <text x="142" y="158" class="zone">kiada Pod (재생성 없음)</text>
-
-  <!-- 대상 컨테이너 kiada -->
-  <rect x="150" y="180" width="250" height="240" rx="10" fill="#5b9bd5" stroke="#2f6ba3" stroke-width="1.5"/>
-  <text x="275" y="206" class="boxd" text-anchor="middle" style="fill:#e8e4df">대상: kiada 컨테이너</text>
-  <rect x="170" y="222" width="210" height="26" rx="5" fill="#dceaf7"/>
-  <text x="275" y="240" class="chip" text-anchor="middle">PID 1: MainThread (node)</text>
-  <rect x="170" y="258" width="210" height="52" rx="6" fill="rgb(20,22,26)" stroke="#e06666" stroke-width="1.2"/>
-  <text x="275" y="279" class="muted" text-anchor="middle" style="fill:#f0b0b0">✕ sh / ps / curl 없음</text>
-  <text x="275" y="296" class="muted" text-anchor="middle" style="fill:#f0b0b0">경량 이미지 → exec 불가</text>
-  <text x="275" y="340" class="desc" text-anchor="middle" style="fill:#e8e4df">재빌드·재시작 안 함</text>
-  <text x="275" y="360" class="muted" text-anchor="middle" style="fill:#dbe8f5">문제 난 그 상태 그대로 유지</text>
-
-  <!-- 디버그 컨테이너 busybox -->
-  <rect x="440" y="180" width="250" height="240" rx="10" fill="#66bb6a" stroke="#3a8c40" stroke-width="1.5"/>
-  <text x="565" y="206" class="box" text-anchor="middle">디버거: busybox (임시)</text>
-  <rect x="460" y="222" width="210" height="26" rx="5" fill="#e6f7e7"/>
-  <text x="565" y="240" class="chip" text-anchor="middle">ps / sh / netcat 있음</text>
-  <rect x="460" y="262" width="210" height="118" rx="6" fill="rgb(20,22,26)" stroke="#66bb6a" stroke-width="1.2"/>
-  <text x="565" y="284" class="muted" text-anchor="middle" style="fill:#bfe6c2">디버거에서 ps -eo pid,comm →</text>
-  <text x="478" y="308" class="mono" style="fill:#e8e4df">  1  MainThread</text>
-  <text x="478" y="326" class="muted" style="fill:rgb(138,133,128)">        ↑ kiada 프로세스가 보인다</text>
-  <text x="478" y="350" class="mono" style="fill:#e8e4df"> 17  ps</text>
-  <text x="478" y="368" class="muted" style="fill:rgb(138,133,128)">        ↑ 디버거 자신</text>
-
-  <!-- 공유 화살표 -->
-  <path d="M440,300 L400,300" fill="none" stroke="#66bb6a" stroke-width="3" marker-end="url(#arg)"/>
-  <rect x="392" y="428" width="356" height="24" rx="5" fill="rgb(20,22,26)" stroke="#66bb6a" stroke-width="1"/>
-  <text x="570" y="444" class="mono" text-anchor="middle" style="fill:#66bb6a">--target=kiada → 같은 PID 네임스페이스 공유</text>
-
-  <!-- 우측 설명: 05-01 연결 -->
-  <rect x="748" y="132" width="276" height="330" rx="12" fill="rgb(20,22,26)" stroke="rgb(138,133,128)" stroke-width="1.3"/>
-  <text x="768" y="158" class="boxd">05-01과의 연결</text>
-  <text x="768" y="186" class="desc">share-demo(05-01):</text>
-  <text x="768" y="204" class="muted">두 컨테이너 PID 격리</text>
-  <text x="768" y="220" class="muted">→ 서로 프로세스 안 보임</text>
-  <text x="768" y="252" class="desc" style="fill:rgb(212,168,83)">여기(05-02 §7):</text>
-  <text x="768" y="270" class="muted">--target으로 일부러 공유</text>
-  <text x="768" y="286" class="muted">→ 대상 프로세스 관찰</text>
-  <rect x="768" y="308" width="236" height="132" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1"/>
-  <text x="784" y="330" class="desc">같은 커널 기능(PID 네임</text>
-  <text x="784" y="348" class="desc">스페이스)을 두 방향으로:</text>
-  <text x="784" y="372" class="muted">• 기본 = 격리(안전)</text>
-  <text x="784" y="392" class="muted">• 디버깅 = 공유(관찰)</text>
-  <text x="784" y="420" class="muted" style="fill:rgb(212,168,83)">exec가 막혀도 debug로 진입</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 652" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">--target 은 PID 네임스페이스를 일부러 공유시킨다</title><desc id="dd">도구가 없는 운영 컨테이너를 재빌드도 재시작도 하지 않고, 도구가 든 임시 컨테이너를 붙여 같은 PID 네임스페이스에 넣는다. 그러면 대상의 프로세스가 그대로 보인다.</desc>
+<rect width="1000" height="652" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES IN ACTION · 05-02</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">--target 은 PID 네임스페이스를 일부러 공유시킨다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">05-01 의 PID 격리를 반대 방향으로 쓴 것이다 — 기본은 격리, 디버깅은 공유</text>
+<rect x="24" y="104" width="952" height="492" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="38" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">문제가 난 바로 그 컨테이너를 그대로 관찰한다 — 재생성하면 그 상태가 사라진다</text>
+<rect x="47.47999999999999" y="167" width="505.04" height="18" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="300" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">kubectl debug -it &lt;pod&gt; --image=busybox --profile=general --target=kiada</text>
+<rect x="48" y="214" width="560" height="268" rx="8" fill="#6A95D806" stroke="#6A95D8" stroke-width="1.2" stroke-dasharray="7 6"/>
+<rect x="64" y="205" width="177" height="18" fill="#0D1117"/>
+<text x="74" y="218" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">kiada Pod — 재생성하지 않는다</text>
+<rect x="98" y="238" width="460" height="88" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.1"/>
+<text x="328" y="264" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">대상 — kiada 컨테이너</text>
+<text x="328" y="286" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">PID 1  MainThread</text>
+<text x="328" y="308" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">sh · ps · curl 이 없다 — exec 로는 못 들어간다</text>
+<rect x="98" y="370" width="460" height="88" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="328" y="396" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">디버거 — busybox (임시)</text>
+<text x="328" y="418" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">PID 17  ps</text>
+<text x="328" y="440" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">도구가 들어 있다 — 붙였다 떼면 그만이다</text>
+<rect x="98" y="326" width="460" height="44" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4" stroke-dasharray="6 5"/>
+<text x="328" y="356" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">--target=kiada → 같은 PID 네임스페이스</text>
+<rect x="638" y="252" width="320" height="192" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="798" y="282" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">디버거에서 ps -eo pid,comm</text>
+<text x="666" y="318" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#E3B341">  1  MainThread</text>
+<text x="666" y="338" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">대상의 프로세스가 보인다</text>
+<text x="666" y="380" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C"> 17  ps</text>
+<text x="666" y="400" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">디버거 자신</text>
+<path d="M 564 348 L 628 348" fill="none" stroke="#F08A59" stroke-width="1.6" marker-end="url(#acc)"/>
+<text x="36" y="528" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">05-01 의 share-demo 는 같은 커널 기능을 격리 쪽으로 썼다 — 두 컨테이너가 서로의 프로세스를 못 봤다.</text>
+<text x="36" y="552" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">shareProcessNamespace 는 Pod 전체를 다시 만들어야 하지만, --target 은 돌고 있는 Pod 에 그대로 붙는다.</text>
+<line x1="12" y1="612" x2="952" y2="612" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="634" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="624" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="122" y="634" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">도구가 없는 대상</text>
+<rect x="261" y="624" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="283" y="634" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">도구가 든 디버거</text>
+<rect x="422" y="624" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="444" y="634" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">일부러 공유시키는 것</text>
 </svg>

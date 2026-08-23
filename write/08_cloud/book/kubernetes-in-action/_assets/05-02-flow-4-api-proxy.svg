@@ -1,67 +1,62 @@
-<svg viewBox="0 0 960 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>방법 ④ API 서버 프록시 — 실제 아키텍처 흐름</title>
-  <desc>내 노트북에서 kubectl get --raw로 API 서버에 요청하면, API 서버가 그 요청을 kiada Pod로 프록시한다. Control Plane의 API 서버가 마지막으로 kiada에 연결하므로 Client IP는 API 서버 IP다. kubelet은 관여하지 않는다.</desc>
-  <defs>
-    <style>
-      .title  { font-size: 16px; font-weight: 800; fill: #e8e4df; }
-      .sub    { font-size: 10.5px; fill: rgb(138,133,128); }
-      .zone   { font-size: 11px; font-weight: 800; fill: rgb(212,168,83); }
-      .comp   { font-size: 11.5px; font-weight: 800; fill: #e8e4df; }
-      .note   { font-size: 9px; fill: rgb(138,133,128); }
-      .step   { font-size: 9.5px; font-weight: 800; fill: rgb(212,168,83); }
-      .ip     { font-size: 11px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; fill: rgb(212,168,83); }
-      .last   { font-size: 10.5px; font-weight: 800; fill: rgb(212,168,83); }
-      .dim    { font-size: 10px; fill: rgb(90,88,84); }
-    </style>
-    <marker id="ar" markerWidth="10" markerHeight="10" refX="6.5" refY="3.2" orient="auto"><path d="M0,0 L8,3.2 L0,6.4 Z" fill="rgb(180,150,90)"/></marker>
-    <marker id="arL" markerWidth="11" markerHeight="11" refX="7" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="rgb(212,168,83)"/></marker>
-  </defs>
-  <rect x="0" y="0" width="960" height="480" fill="#0d0d0d"/>
-  <text x="24" y="32" class="title">④ API 서버 프록시 — API 서버가 kiada에 연결</text>
-  <text x="24" y="54" class="sub">kubectl get --raw .../proxy/ 로 API 서버에 요청하면 API 서버가 kiada로 프록시. kubelet은 거치지 않는다.</text>
-
-  <!-- 내 노트북 -->
-  <rect x="24" y="94" width="150" height="80" rx="9" fill="rgb(28,30,34)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
-  <text x="99" y="122" class="comp" text-anchor="middle">내 노트북</text>
-  <text x="99" y="142" class="note" text-anchor="middle">kubectl get --raw</text>
-  <text x="99" y="158" class="note" text-anchor="middle">원래 요청자</text>
-
-  <!-- Control Plane -->
-  <rect x="24" y="230" width="230" height="150" rx="12" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
-  <text x="40" y="254" class="zone">Control Plane</text>
-  <rect x="46" y="268" width="186" height="56" rx="7" fill="rgb(28,30,34)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
-  <text x="139" y="292" class="comp" text-anchor="middle">API 서버</text>
-  <text x="139" y="310" class="note" text-anchor="middle">IP 172.18.0.5 · Pod로 프록시</text>
-  <rect x="46" y="334" width="186" height="34" rx="7" fill="rgb(22,24,28)" stroke="rgb(60,58,54)" stroke-width="1"/>
-  <text x="139" y="356" class="note" text-anchor="middle">etcd · 스케줄러 (무관)</text>
-
-  <!-- Worker 노드 -->
-  <rect x="330" y="94" width="600" height="286" rx="12" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
-  <text x="350" y="118" class="zone">Worker 노드 (kiada를 호스팅)</text>
-
-  <!-- kubelet (dim, 안 거침) -->
-  <rect x="356" y="240" width="180" height="66" rx="9" fill="rgb(22,24,28)" stroke="rgb(60,58,54)" stroke-width="1" stroke-dasharray="4 3"/>
-  <text x="446" y="278" class="dim" text-anchor="middle">kubelet (관여 안 함)</text>
-
-  <!-- kiada Pod -->
-  <rect x="640" y="170" width="260" height="120" rx="11" fill="#5b9bd5" stroke="#2f6ba3" stroke-width="1.5"/>
-  <text x="770" y="204" class="comp" text-anchor="middle" style="fill:#e8e4df">kiada Pod</text>
-  <text x="770" y="228" class="note" text-anchor="middle" style="fill:#dbe8f5">10.244.2.5:8080</text>
-  <text x="770" y="250" class="note" text-anchor="middle" style="fill:#dbe8f5">응답에 Client IP 찍음</text>
-
-  <!-- 경로 -->
-  <!-- ① 노트북 → API 서버 -->
-  <path d="M99,174 L99,266" fill="none" stroke="rgb(180,150,90)" stroke-width="2" marker-end="url(#ar)"/>
-  <text x="112" y="212" class="step">① 요청</text>
-  <!-- ② API 서버 → kiada (마지막, 굵은 앰버, kubelet 건너뜀) -->
-  <path d="M232,282 C440,270 520,220 636,214" fill="none" stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#arL)"/>
-  <text x="500" y="182" class="step" text-anchor="middle">② API 서버가 Pod로 직접 프록시</text>
-  <text x="500" y="198" class="note" text-anchor="middle" style="fill:rgb(138,133,128)">(kubelet 건너뜀)</text>
-
-  <!-- 결과 바 -->
-  <rect x="330" y="396" width="600" height="66" rx="8" fill="rgb(26,26,26)" stroke="rgb(212,168,83)" stroke-width="1.1"/>
-  <text x="350" y="422" class="last">마지막 연결자 = API 서버</text>
-  <text x="350" y="446" class="last">→ Client IP =</text>
-  <text x="460" y="446" class="ip">172.18.0.5</text>
-  <text x="570" y="446" class="note" style="fill:#e8e4df">(API 서버 IP — 내 노트북은 한 홉 뒤라 안 보임)</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 630" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">④ API 서버 프록시 — kubelet 을 건너뛴다</title><desc id="dd">kubectl get --raw 로 API 서버에 요청하면 API 서버가 직접 Pod 로 프록시한다. kubelet 이 경로에 없으므로 홉이 하나 줄고, 마지막으로 붙은 것은 API 서버다.</desc>
+<rect width="1000" height="630" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES IN ACTION · 05-02</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">④ API 서버 프록시 — kubelet 을 건너뛴다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">추가 명령도 port-forward 설정도 필요 없다 — 덜 알려졌지만 빠르다</text>
+<rect x="24" y="104" width="952" height="470" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="38" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">③ 과 같은 곳에서 출발하지만 kubelet 을 건너뛴다 — 그만큼 Client IP 가 달라진다</text>
+<rect x="24" y="198" width="152" height="104" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="100" y="232" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">내 노트북</text>
+<text x="100" y="254" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">kubectl get --raw</text>
+<text x="100" y="276" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">원래 요청자</text>
+<rect x="238" y="182" width="300" height="268" rx="8" fill="#6A95D806" stroke="#6A95D8" stroke-width="1.2" stroke-dasharray="7 6"/>
+<rect x="254" y="173" width="97" height="18" fill="#0D1117"/>
+<text x="264" y="186" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">Control Plane</text>
+<rect x="263" y="208" width="250" height="84" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="388" y="242" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">API 서버</text>
+<text x="388" y="254" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">172.18.0.5 · Pod 로 프록시</text>
+<rect x="263" y="356" width="250" height="64" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="388" y="380" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#5E6B7E">etcd · 스케줄러</text>
+<text x="388" y="392" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">무관</text>
+<rect x="586" y="182" width="374" height="268" rx="8" fill="#3FB98C06" stroke="#3FB98C" stroke-width="1.2" stroke-dasharray="7 6"/>
+<rect x="602" y="173" width="224" height="18" fill="#0D1117"/>
+<text x="612" y="186" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">Worker 노드 — kiada 를 호스팅하는 노드</text>
+<rect x="628" y="208" width="290" height="72" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="773" y="226" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#5E6B7E">kubelet</text>
+<text x="773" y="248" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">경로에 없다</text>
+<text x="773" y="270" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">건너뛴다</text>
+<rect x="628" y="340" width="290" height="96" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="773" y="370" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">kiada Pod</text>
+<text x="773" y="392" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">10.244.2.5:8080</text>
+<text x="773" y="414" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">응답에 Client IP 를 찍는다</text>
+<path d="M 182 250 L 255 250" fill="none" stroke="#F08A59" stroke-width="2.0" marker-end="url(#acc)"/>
+<rect x="207.59" y="241" width="20.82" height="18" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="218" y="254" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">①</text>
+<path d="M 519 264 L 562 264 L 562 388 L 618 388" fill="none" stroke="#F08A59" stroke-width="2.0" marker-end="url(#acc)"/>
+<rect x="551.59" y="317" width="20.82" height="18" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="562" y="330" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">②</text>
+<line x1="36" y1="470" x2="964" y2="470" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="36" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">① 내 노트북 → API 서버   ② API 서버 → kiada Pod (kubelet 을 건너뛴다)</text>
+<text x="36" y="522" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">마지막으로 kiada 에게 연결을 연 것 = API 서버</text>
+<text x="36" y="548" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">그래서 Client IP =</text>
+<text x="180" y="548" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">172.18.0.5</text>
+<text x="275" y="548" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">— 내 노트북은 한 홉 뒤라 보이지 않는다</text>
+<line x1="12" y1="590" x2="952" y2="590" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="612" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="602" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="612" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">경로에 있는 것</text>
+<rect x="248" y="602" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="270" y="612" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">kiada Pod</text>
+<rect x="409" y="602" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="431" y="612" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">마지막 연결자와 그 경로</text>
 </svg>
