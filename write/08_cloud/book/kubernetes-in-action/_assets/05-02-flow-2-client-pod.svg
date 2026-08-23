@@ -1,64 +1,59 @@
-<svg viewBox="0 0 960 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>방법 ② 임시 클라이언트 Pod에서 접근 — 실제 아키텍처 흐름</title>
-  <desc>클러스터 안에 임시 클라이언트 Pod를 띄워 그 Pod에서 curl로 kiada Pod에 직접 연결한다. Control Plane을 거치지 않고 Pod에서 Pod로 직접 가므로, 마지막 연결자는 그 임시 Pod이고 Client IP는 임시 Pod의 IP다.</desc>
-  <defs>
-    <style>
-      .title  { font-size: 16px; font-weight: 800; fill: #e8e4df; }
-      .sub    { font-size: 10.5px; fill: rgb(138,133,128); }
-      .zone   { font-size: 11px; font-weight: 800; fill: rgb(138,133,128); }
-      .comp   { font-size: 11.5px; font-weight: 800; fill: #e8e4df; }
-      .note   { font-size: 9px; fill: rgb(138,133,128); }
-      .ip     { font-size: 11px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; fill: rgb(212,168,83); }
-      .last   { font-size: 10.5px; font-weight: 800; fill: rgb(212,168,83); }
-      .dim    { font-size: 10px; fill: rgb(90,88,84); }
-    </style>
-    <marker id="arL" markerWidth="11" markerHeight="11" refX="7" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="rgb(212,168,83)"/></marker>
-  </defs>
-  <rect x="0" y="0" width="960" height="480" fill="#0d0d0d"/>
-  <text x="24" y="32" class="title">② 임시 클라이언트 Pod — Pod가 kiada에 직접 연결</text>
-  <text x="24" y="54" class="sub">클러스터 안에 curl Pod를 띄워 거기서 kiada IP로 연결. Control Plane을 거치지 않고 Pod→Pod로 직접 간다(CNI 네트워크).</text>
-
-  <!-- 내 노트북 (dim) -->
-  <rect x="30" y="90" width="150" height="70" rx="9" fill="rgb(18,20,24)" stroke="rgb(60,58,54)" stroke-width="1.2" stroke-dasharray="4 3"/>
-  <text x="105" y="120" class="dim" text-anchor="middle">내 노트북</text>
-  <text x="105" y="140" class="dim" text-anchor="middle">(이 방법 미사용)</text>
-
-  <!-- Control Plane (dim) -->
-  <rect x="30" y="200" width="230" height="240" rx="12" fill="rgb(16,18,22)" stroke="rgb(60,58,54)" stroke-width="1.2" stroke-dasharray="4 3"/>
-  <text x="46" y="224" class="dim">Control Plane (안 거침)</text>
-  <rect x="52" y="238" width="186" height="42" rx="7" fill="rgb(22,24,28)" stroke="rgb(60,58,54)" stroke-width="1"/>
-  <text x="145" y="264" class="dim" text-anchor="middle">API 서버</text>
-  <rect x="52" y="292" width="88" height="40" rx="7" fill="rgb(22,24,28)" stroke="rgb(60,58,54)" stroke-width="1"/>
-  <text x="96" y="317" class="dim" text-anchor="middle">etcd</text>
-  <rect x="150" y="292" width="88" height="40" rx="7" fill="rgb(22,24,28)" stroke="rgb(60,58,54)" stroke-width="1"/>
-  <text x="194" y="317" class="dim" text-anchor="middle">스케줄러</text>
-
-  <!-- Worker 노드 A (임시 Pod) -->
-  <rect x="300" y="90" width="220" height="180" rx="12" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
-  <text x="316" y="114" class="zone" style="fill:rgb(212,168,83)">Worker 노드 A</text>
-  <rect x="322" y="132" width="176" height="110" rx="9" fill="rgb(28,30,34)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
-  <text x="410" y="162" class="comp" text-anchor="middle">임시 Pod (curl)</text>
-  <text x="410" y="184" class="note" text-anchor="middle">kubectl run --rm</text>
-  <text x="410" y="204" class="note" text-anchor="middle">IP 10.244.1.13</text>
-  <text x="410" y="224" class="note" text-anchor="middle">조사 끝나면 삭제</text>
-
-  <!-- Worker 노드 B (kiada) -->
-  <rect x="560" y="90" width="370" height="180" rx="12" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
-  <text x="576" y="114" class="zone" style="fill:rgb(212,168,83)">Worker 노드 B</text>
-  <rect x="656" y="140" width="240" height="90" rx="10" fill="#5b9bd5" stroke="#2f6ba3" stroke-width="1.4"/>
-  <text x="776" y="170" class="comp" text-anchor="middle" style="fill:#e8e4df">kiada Pod</text>
-  <text x="776" y="192" class="note" text-anchor="middle" style="fill:#dbe8f5">10.244.2.5:8080</text>
-  <text x="776" y="210" class="note" text-anchor="middle" style="fill:#dbe8f5">응답에 Client IP 찍음</text>
-
-  <!-- 경로: 임시 Pod → kiada (앰버, 노드 경계 넘음, CNI) -->
-  <path d="M498,185 L652,185" fill="none" stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#arL)"/>
-  <text x="575" y="172" class="last" text-anchor="middle">직접 연결</text>
-  <text x="575" y="205" class="note" text-anchor="middle">(CNI가 노드 경계 넘어 라우팅)</text>
-
-  <!-- 결과 바 -->
-  <rect x="300" y="366" width="630" height="60" rx="8" fill="rgb(26,26,26)" stroke="rgb(212,168,83)" stroke-width="1.1"/>
-  <text x="320" y="392" class="last">마지막 연결자 = 임시 Pod (중계 없음)</text>
-  <text x="320" y="414" class="last">→ Client IP =</text>
-  <text x="430" y="414" class="ip">10.244.1.13</text>
-  <text x="545" y="414" class="note" style="fill:#e8e4df">(요청한 임시 Pod의 IP)</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 630" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">② 임시 클라이언트 Pod — Pod 가 Pod 에 직접 붙는다</title><desc id="dd">클러스터 안에 curl Pod 를 띄워 kiada 의 IP 로 연결한다. Control Plane 을 거치지 않고 CNI 가 노드 경계를 넘어 라우팅하므로, kiada 가 보는 것은 그 임시 Pod 의 IP 다.</desc>
+<rect width="1000" height="630" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES IN ACTION · 05-02</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">② 임시 클라이언트 Pod — Pod 가 Pod 에 직접 붙는다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">네트워크가 멀쩡해도 정책으로 막힐 수 있다 — Pod 대 Pod 를 시험하는 방법이다</text>
+<rect x="24" y="104" width="952" height="470" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="38" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">Control Plane 은 Pod 를 만들 때만 쓰였고 통신 경로에는 없다</text>
+<rect x="24" y="198" width="152" height="104" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="100" y="232" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#5E6B7E">내 노트북</text>
+<text x="100" y="254" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">kubectl run 으로</text>
+<text x="100" y="276" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">Pod 를 만들기만 한다</text>
+<rect x="238" y="182" width="300" height="268" rx="8" fill="#6A95D803" stroke="#6A95D8" stroke-width="1.2" stroke-dasharray="7 6" opacity="0.45"/>
+<rect x="254" y="173" width="205" height="18" fill="#0D1117"/>
+<text x="264" y="186" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">Control Plane — 통신 경로에는 없다</text>
+<rect x="263" y="208" width="250" height="84" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="388" y="242" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#5E6B7E">API 서버</text>
+<text x="388" y="254" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">관여하지 않는다</text>
+<rect x="263" y="356" width="250" height="64" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="388" y="380" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#5E6B7E">etcd · 스케줄러</text>
+<text x="388" y="392" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">무관</text>
+<rect x="586" y="182" width="374" height="268" rx="8" fill="#3FB98C06" stroke="#3FB98C" stroke-width="1.2" stroke-dasharray="7 6"/>
+<rect x="602" y="173" width="261" height="18" fill="#0D1117"/>
+<text x="612" y="186" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">클러스터 안 — 두 Pod 는 다른 노드에 있어도 된다</text>
+<rect x="628" y="208" width="290" height="72" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="773" y="226" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">임시 Pod (curl)</text>
+<text x="773" y="248" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">IP 10.244.1.13</text>
+<text x="773" y="270" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">조사 끝나면 삭제된다</text>
+<rect x="628" y="340" width="290" height="96" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="773" y="370" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">kiada Pod</text>
+<text x="773" y="392" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">10.244.2.5:8080</text>
+<text x="773" y="414" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">응답에 Client IP 를 찍는다</text>
+<path d="M 773 286 L 773 330" fill="none" stroke="#F08A59" stroke-width="2.0" marker-end="url(#acc)"/>
+<rect x="762.59" y="299" width="20.82" height="18" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="773" y="312" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">①</text>
+<line x1="36" y1="470" x2="964" y2="470" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="36" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">① 임시 Pod 에서 kiada 로 — CNI 가 노드 경계를 넘어 라우팅한다</text>
+<text x="36" y="522" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">마지막으로 kiada 에게 연결을 연 것 = 임시 Pod</text>
+<text x="36" y="548" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">그래서 Client IP =</text>
+<text x="180" y="548" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">10.244.1.13</text>
+<text x="283" y="548" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">— 요청한 그 Pod 의 IP</text>
+<line x1="12" y1="590" x2="952" y2="590" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="612" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="602" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="612" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">경로에 있는 것</text>
+<rect x="248" y="602" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="270" y="612" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">kiada Pod</text>
+<rect x="409" y="602" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="431" y="612" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">마지막 연결자와 그 경로</text>
 </svg>
