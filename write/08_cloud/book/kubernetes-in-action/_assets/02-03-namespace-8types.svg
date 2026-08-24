@@ -1,125 +1,73 @@
-<svg viewBox="0 0 980 640" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>리눅스 네임스페이스 8종류 — 각자 다른 자원을 격리한다</title>
-  <desc>리눅스 커널은 시스템 자원을 8종류의 네임스페이스로 나눠 프로세스마다 다른 뷰를 보게 한다. Mount는 파일시스템, PID는 프로세스 번호, Network는 네트워크 장치와 포트, IPC는 프로세스 간 통신, UTS는 호스트명, User는 사용자·그룹 ID, Time은 시스템 클록, Cgroup은 cgroup 루트를 격리한다. 하나의 컨테이너는 이 여러 네임스페이스가 동시에 배정된 프로세스이며, Docker 기본은 mnt·pid·net·ipc·uts를 격리하고 user·time을 호스트와 공유한다.</desc>
-  <defs>
-    <style>
-      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
-      .sub   { font-size: 11px; fill: rgb(138,133,128); }
-      .zlabel{ font-size: 12px; font-weight: 800; fill: rgb(212,168,83); }
-      .nsname{ font-size: 14px; font-weight: 800; fill: #0d0d0d; }
-      .nseng { font-size: 9.5px; font-weight: 700; fill: #1a1a1a; font-family: 'JetBrains Mono', monospace; }
-      .nsdesc{ font-size: 10.5px; font-weight: 600; fill: #1a1a1a; }
-      .nsex  { font-size: 9.5px; fill: #333; }
-      .badge { font-size: 9px; font-weight: 800; }
-      .note  { font-size: 10.5px; fill: #e8e4df; }
-      .cnt   { font-size: 11px; font-weight: 800; fill: rgb(212,168,83); }
-    </style>
-  </defs>
-
-  <rect x="0" y="0" width="980" height="640" fill="#0d0d0d"/>
-  <text x="24" y="32" class="title">리눅스 네임스페이스 8종류 — 각자 다른 자원을 격리</text>
-  <text x="24" y="52" class="sub">커널이 시스템 자원을 8개의 "그릇"으로 나눕니다. 프로세스는 종류별로 하나씩 배정받아, 그 그릇 안의 것만 봅니다.</text>
-
-  <!-- 범례 -->
-  <rect x="620" y="20" width="16" height="12" rx="2" fill="#f2d4d4"/>
-  <text x="642" y="30" class="badge" fill="#e88b8b">Docker 기본 격리</text>
-  <rect x="770" y="20" width="16" height="12" rx="2" fill="#cdeccf"/>
-  <text x="792" y="30" class="badge" fill="#7bc47f">기본 공유(호스트와)</text>
-
-  <!-- 8개 카드: 2행 4열 -->
-  <!-- 행1 -->
-  <!-- Mount -->
-  <rect x="24" y="72" width="228" height="128" rx="10" fill="#f2d4d4"/>
-  <text x="40" y="98" class="nsname">Mount</text>
-  <text x="150" y="98" class="nseng">mnt</text>
-  <rect x="40" y="108" width="52" height="16" rx="3" fill="#7a1f1f"/>
-  <text x="66" y="120" class="badge" fill="#fff" text-anchor="middle">격리</text>
-  <text x="40" y="146" class="nsdesc">파일시스템·마운트 지점</text>
-  <text x="40" y="166" class="nsex">각 컨테이너가 자기만의</text>
-  <text x="40" y="181" class="nsex">루트 파일시스템(/)을 봄</text>
-
-  <!-- PID -->
-  <rect x="264" y="72" width="228" height="128" rx="10" fill="#f2d4d4"/>
-  <text x="280" y="98" class="nsname">PID</text>
-  <text x="390" y="98" class="nseng">pid</text>
-  <rect x="280" y="108" width="52" height="16" rx="3" fill="#7a1f1f"/>
-  <text x="306" y="120" class="badge" fill="#fff" text-anchor="middle">격리</text>
-  <text x="280" y="146" class="nsdesc">프로세스 번호(PID)</text>
-  <text x="280" y="166" class="nsex">안에서 PID 1부터 새로 셈</text>
-  <text x="280" y="181" class="nsex">(node = 안:1 / 밖:32687)</text>
-
-  <!-- Network -->
-  <rect x="504" y="72" width="228" height="128" rx="10" fill="#f2d4d4"/>
-  <text x="520" y="98" class="nsname">Network</text>
-  <text x="640" y="98" class="nseng">net</text>
-  <rect x="520" y="108" width="52" height="16" rx="3" fill="#7a1f1f"/>
-  <text x="546" y="120" class="badge" fill="#fff" text-anchor="middle">격리</text>
-  <text x="520" y="146" class="nsdesc">네트워크 장치·포트·스택</text>
-  <text x="520" y="166" class="nsex">각자 자기 eth0·IP·포트</text>
-  <text x="520" y="181" class="nsex">→ 컨테이너마다 :8080 가능</text>
-
-  <!-- IPC -->
-  <rect x="744" y="72" width="212" height="128" rx="10" fill="#f2d4d4"/>
-  <text x="760" y="98" class="nsname">IPC</text>
-  <text x="870" y="98" class="nseng">ipc</text>
-  <rect x="760" y="108" width="52" height="16" rx="3" fill="#7a1f1f"/>
-  <text x="786" y="120" class="badge" fill="#fff" text-anchor="middle">격리</text>
-  <text x="760" y="146" class="nsdesc">프로세스 간 통신</text>
-  <text x="760" y="166" class="nsex">공유 메모리·메시지 큐·</text>
-  <text x="760" y="181" class="nsex">세마포어를 격리</text>
-
-  <!-- 행2 -->
-  <!-- UTS -->
-  <rect x="24" y="212" width="228" height="128" rx="10" fill="#f2d4d4"/>
-  <text x="40" y="238" class="nsname">UTS</text>
-  <text x="150" y="238" class="nseng">uts</text>
-  <rect x="40" y="248" width="52" height="16" rx="3" fill="#7a1f1f"/>
-  <text x="66" y="260" class="badge" fill="#fff" text-anchor="middle">격리</text>
-  <text x="40" y="286" class="nsdesc">호스트명·도메인명</text>
-  <text x="40" y="306" class="nsex">호스트명 = 컨테이너 ID</text>
-  <text x="40" y="321" class="nsex">(fe6daee29272)</text>
-
-  <!-- Cgroup ns -->
-  <rect x="264" y="212" width="228" height="128" rx="10" fill="#f2d4d4"/>
-  <text x="280" y="238" class="nsname">Cgroup</text>
-  <text x="390" y="238" class="nseng">cgroup</text>
-  <rect x="280" y="248" width="52" height="16" rx="3" fill="#7a1f1f"/>
-  <text x="306" y="260" class="badge" fill="#fff" text-anchor="middle">격리</text>
-  <text x="280" y="286" class="nsdesc">cgroup 루트 디렉터리</text>
-  <text x="280" y="306" class="nsex">자기 cgroup 트리만 보이게</text>
-  <text x="280" y="321" class="nsex">(자원 제한값은 §2 cgroup)</text>
-
-  <!-- User -->
-  <rect x="504" y="212" width="228" height="128" rx="10" fill="#cdeccf"/>
-  <text x="520" y="238" class="nsname">User</text>
-  <text x="640" y="238" class="nseng">user</text>
-  <rect x="520" y="248" width="64" height="16" rx="3" fill="#14521d"/>
-  <text x="552" y="260" class="badge" fill="#fff" text-anchor="middle">기본 공유</text>
-  <text x="520" y="286" class="nsdesc">사용자·그룹 ID(UID/GID)</text>
-  <text x="520" y="306" class="nsex">Docker 기본은 안 나눔 →</text>
-  <text x="520" y="321" class="nsex">안 root = 호스트 root (보안↓)</text>
-
-  <!-- Time -->
-  <rect x="744" y="212" width="212" height="128" rx="10" fill="#cdeccf"/>
-  <text x="760" y="238" class="nsname">Time</text>
-  <text x="870" y="238" class="nseng">time</text>
-  <rect x="760" y="248" width="64" height="16" rx="3" fill="#14521d"/>
-  <text x="792" y="260" class="badge" fill="#fff" text-anchor="middle">기본 공유</text>
-  <text x="760" y="286" class="nsdesc">시스템 클록 오프셋</text>
-  <text x="760" y="306" class="nsex">시계 공유 → 악성 컨테이너의</text>
-  <text x="760" y="321" class="nsex">시간 변경이 번질 위험(§3)</text>
-
-  <!-- 하단: 컨테이너 = 여러 ns 배정된 프로세스 -->
-  <rect x="24" y="366" width="932" height="90" rx="10" fill="rgb(24,28,32)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
-  <text x="44" y="392" class="cnt">컨테이너 하나 = 이 네임스페이스들이 "동시에" 배정된 프로세스</text>
-  <text x="44" y="416" class="note">VM처럼 무언가에 감싸인 게 아닙니다. node app.js 프로세스에 mnt·pid·net·ipc·uts·cgroup 네임스페이스(격리)와</text>
-  <text x="44" y="436" class="note">user·time 네임스페이스(호스트 공유)가 함께 배정됩니다. 격리 여부가 종류마다 다르므로 경계가 딱 떨어지지 않습니다.</text>
-
-  <!-- 확인 방법 -->
-  <rect x="24" y="470" width="932" height="150" rx="10" fill="rgb(24,28,32)" stroke="rgb(42,37,32)" stroke-width="1.2"/>
-  <text x="44" y="496" class="zlabel">직접 확인하는 법</text>
-  <text x="44" y="520" class="note">• 프로세스가 가진 네임스페이스 목록:  <tspan font-family="'JetBrains Mono', monospace" fill="rgb(212,168,83)">ls -l /proc/&lt;pid&gt;/ns/</tspan>  → 종류별 심볼릭 링크와 고유 번호가 보임</text>
-  <text x="44" y="544" class="note">• 격리 여부 판정:  <tspan font-family="'JetBrains Mono', monospace" fill="rgb(212,168,83)">readlink /proc/1/ns/uts</tspan>  를 두 컨테이너에서 비교 → 번호 다르면 격리, 같으면 공유</text>
-  <text x="44" y="568" class="note">• 골라서 공유:  관련 컨테이너끼리 net·uts만 공유하고 mnt는 각자 쓸 수 있음(쿠버네티스 Pod가 이 방식으로 컨테이너를 묶음)</text>
-  <text x="44" y="596" class="cnt">→ 8종류의 세부 동작·unshare 실습은 커널 카테고리(namespace 실습 — 8가지 격리와 unshare)가 정본입니다.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">여덟 종류 중 여섯이 격리되고 둘은 호스트와 공유된다</title><desc id="dd">컨테이너는 무언가에 감싸인 것이 아니라, 이 네임스페이스들이 동시에 배정된 프로세스다. 격리 여부가 종류마다 다르므로 경계가 딱 떨어지지 않는다.</desc>
+<rect width="1000" height="640" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES IN ACTION · 02-03</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">여덟 종류 중 여섯이 격리되고 둘은 호스트와 공유된다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">Docker 기본값 기준이다 — user 를 안 나누므로 안의 root 가 호스트 root 다</text>
+<rect x="24" y="104" width="952" height="480" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="38" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">격리 여부는 종류마다 다르다 — 그래서 '컨테이너 경계' 가 한 줄로 그어지지 않는다</text>
+<rect x="32" y="216" width="222" height="148" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="143" y="250" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="15" font-weight="600" fill="#6A95D8">mnt</text>
+<rect x="126.0" y="267" width="34.0" height="18" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="143" y="280" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#6A95D8">격리</text>
+<text x="143" y="312" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">파일시스템·마운트 지점</text>
+<text x="143" y="338" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">자기만의 루트(/) 를 본다</text>
+<rect x="270" y="216" width="222" height="148" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="381" y="250" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="15" font-weight="600" fill="#6A95D8">pid</text>
+<rect x="364.0" y="267" width="34.0" height="18" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="381" y="280" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#6A95D8">격리</text>
+<text x="381" y="312" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">프로세스 번호</text>
+<text x="381" y="338" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">안에서 1번부터 새로 센다</text>
+<rect x="508" y="216" width="222" height="148" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="619" y="250" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="15" font-weight="600" fill="#6A95D8">net</text>
+<rect x="602.0" y="267" width="34.0" height="18" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="619" y="280" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#6A95D8">격리</text>
+<text x="619" y="312" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">네트워크 장치·포트</text>
+<text x="619" y="338" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">자기 eth0·IP·포트를 가진다</text>
+<rect x="746" y="216" width="222" height="148" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="857" y="250" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="15" font-weight="600" fill="#6A95D8">ipc</text>
+<rect x="840.0" y="267" width="34.0" height="18" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="857" y="280" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#6A95D8">격리</text>
+<text x="857" y="312" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">프로세스 간 통신</text>
+<text x="857" y="338" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">공유 메모리·큐가 갈린다</text>
+<rect x="32" y="380" width="222" height="148" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="143" y="414" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="15" font-weight="600" fill="#6A95D8">uts</text>
+<rect x="126.0" y="431" width="34.0" height="18" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="143" y="444" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#6A95D8">격리</text>
+<text x="143" y="476" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">호스트명·도메인명</text>
+<text x="143" y="502" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">호스트명이 컨테이너 ID 다</text>
+<rect x="270" y="380" width="222" height="148" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="381" y="414" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="15" font-weight="600" fill="#6A95D8">cgroup</text>
+<rect x="364.0" y="431" width="34.0" height="18" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="381" y="444" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#6A95D8">격리</text>
+<text x="381" y="476" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">cgroup 루트 디렉터리</text>
+<text x="381" y="502" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">자기 cgroup 트리만 본다</text>
+<rect x="508" y="380" width="222" height="148" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.1"/>
+<text x="619" y="414" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="15" font-weight="600" fill="#E3B341">user</text>
+<rect x="587.0" y="431" width="64.0" height="18" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="619" y="444" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#E3B341">기본 공유</text>
+<text x="619" y="476" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">사용자·그룹 ID</text>
+<text x="619" y="502" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">안 root = 호스트 root</text>
+<rect x="746" y="380" width="222" height="148" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.1"/>
+<text x="857" y="414" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="15" font-weight="600" fill="#E3B341">time</text>
+<rect x="825.0" y="431" width="64.0" height="18" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="857" y="444" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#E3B341">기본 공유</text>
+<text x="857" y="476" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">시스템 클록 오프셋</text>
+<text x="857" y="502" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">시계를 호스트와 함께 쓴다</text>
+<text x="36" y="552" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">직접 확인하려면 readlink /proc/1/ns/uts 를 두 컨테이너에서 비교한다 — 번호가 다르면 격리, 같으면 공유다.</text>
+<line x1="12" y1="600" x2="952" y2="600" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="622" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="612" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">Docker 기본이 격리하는 것</text>
+<rect x="365" y="612" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="387" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">호스트와 공유하는 것</text>
 </svg>
