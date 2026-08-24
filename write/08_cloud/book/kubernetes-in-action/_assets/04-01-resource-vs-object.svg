@@ -1,79 +1,56 @@
-<svg viewBox="0 0 960 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>리소스와 오브젝트는 같은 말이 아니다</title>
-  <desc>왼쪽의 리소스 URI 다섯 개 중 subjectaccessreviews 리소스는 어떤 저장된 오브젝트와도 연결되지 않는다. 나머지 네 리소스(apps/v1 컬렉션·개별, extensions/v1beta1 개별·컬렉션)는 스키마만 다른 표현으로 같은 오브젝트 집합을 가리킨다. 즉 하나의 오브젝트가 여러 리소스로 노출된다.</desc>
-  <defs>
-    <style>
-      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
-      .sub    { font-size: 11px; fill: rgb(138,133,128); }
-      .colh   { font-size: 12px; font-weight: 800; fill: #e8e4df; }
-      .uri    { font-size: 11px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
-      .obj    { font-size: 13px; font-weight: 800; fill: #e8e4df; }
-      .objsub { font-size: 11px; font-weight: 700; fill: #dbe9f7; font-family: 'JetBrains Mono', monospace; }
-      .note   { font-size: 10.5px; fill: #e8e4df; }
-      .mt     { font-size: 10px; fill: rgb(138,133,128); }
-    </style>
-    <marker id="ah4" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
-      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
-    </marker>
-  </defs>
-
-  <rect x="0" y="0" width="960" height="440" fill="#0d0d0d"/>
-  <text x="24" y="30" class="title">리소스와 오브젝트는 같은 말이 아니다</text>
-  <text x="24" y="48" class="sub">하나의 오브젝트가 여러 리소스(URI)로 노출되고, 어떤 리소스는 아무 오브젝트도 가리키지 않는다</text>
-
-  <!-- Kubernetes API 경계 -->
-  <rect x="20" y="70" width="920" height="330" rx="10" fill="rgb(20,20,20)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
-  <text x="36" y="92" class="mt">Kubernetes API</text>
-
-  <text x="36" y="116" class="colh">리소스 (창구 · URI)</text>
-  <text x="720" y="116" class="colh">오브젝트</text>
-
-  <!-- subjectaccessreviews (보라, 오브젝트 없음) -->
-  <rect x="36" y="128" width="470" height="40" rx="6" fill="rgb(197,179,224)"/>
-  <text x="48" y="153" class="uri">/apis/authorization.k8s.io/v1/subjectaccessreviews</text>
-  <line x1="506" y1="148" x2="556" y2="148" stroke="rgb(240,150,190)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ah4)"/>
-  <text x="620" y="145" class="mt" text-anchor="middle" fill="rgb(240,150,190)">가리키는 오브젝트 없음</text>
-  <text x="620" y="159" class="mt" text-anchor="middle" fill="rgb(240,150,190)">(권한 여부만 응답)</text>
-
-  <!-- apps/v1 컬렉션 (노랑) -->
-  <rect x="36" y="180" width="470" height="36" rx="6" fill="rgb(245,215,110)"/>
-  <text x="48" y="203" class="uri">/apis/apps/v1/.../deployments</text>
-
-  <!-- apps/v1 개별 (노랑) -->
-  <rect x="36" y="224" width="470" height="36" rx="6" fill="rgb(245,215,110)"/>
-  <text x="48" y="247" class="uri">/apis/apps/v1/.../deployments/mydeploy</text>
-
-  <!-- extensions/v1beta1 개별 (초록) -->
-  <rect x="36" y="268" width="470" height="36" rx="6" fill="rgb(102,187,106)"/>
-  <text x="48" y="291" class="uri">/apis/extensions/v1beta1/.../deployments/mydeploy</text>
-
-  <!-- extensions/v1beta1 컬렉션 (초록) -->
-  <rect x="36" y="312" width="470" height="36" rx="6" fill="rgb(102,187,106)"/>
-  <text x="48" y="335" class="uri">/apis/extensions/v1beta1/.../deployments</text>
-
-  <!-- 오브젝트 박스 (점선 묶음) -->
-  <rect x="640" y="176" width="280" height="120" rx="10" fill="rgb(26,26,26)" stroke="rgb(220,234,247)" stroke-width="1.5" stroke-dasharray="6 4"/>
-  <rect x="656" y="196" width="120" height="80" rx="6" fill="rgb(91,155,213)"/>
-  <text x="716" y="230" class="obj" text-anchor="middle">Deployment</text>
-  <text x="716" y="250" class="objsub" text-anchor="middle">mydeploy</text>
-  <rect x="784" y="196" width="120" height="80" rx="6" fill="rgb(91,155,213)"/>
-  <text x="844" y="230" class="obj" text-anchor="middle" font-size="12">Another</text>
-  <text x="844" y="248" class="obj" text-anchor="middle" font-size="12">Deployment</text>
-
-  <!-- 화살표: 컬렉션 apps/v1 -> 두 오브젝트 모두 -->
-  <path d="M506,198 C560,198 590,210 654,220" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ah4)"/>
-  <path d="M506,198 C580,190 700,175 800,194" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ah4)"/>
-  <!-- 화살표: 개별 apps/v1 -> mydeploy -->
-  <path d="M506,242 C560,242 600,240 654,238" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ah4)"/>
-  <!-- 화살표: 개별 extensions -> mydeploy -->
-  <path d="M506,286 C560,286 600,260 654,252" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ah4)"/>
-  <!-- 화살표: 컬렉션 extensions -> 두 오브젝트 -->
-  <path d="M506,330 C580,330 600,270 654,262" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ah4)"/>
-  <path d="M506,330 C620,330 720,300 800,280" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ah4)"/>
-
-  <text x="780" y="316" class="note" text-anchor="middle">같은 오브젝트(집합)가</text>
-  <text x="780" y="332" class="note" text-anchor="middle">여러 리소스로 노출된다</text>
-
-  <text x="270" y="376" class="mt" text-anchor="middle">노랑 = apps/v1 스키마 · 초록 = extensions/v1beta1 스키마 (같은 객체, 다른 표현)</text>
-  <text x="480" y="392" class="sub" text-anchor="middle">리소스는 오브젝트와 상호작용하는 창구(뷰)이고, 오브젝트는 실제 저장 대상(테이블)이다 — 둘은 1:1이 아니다</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">리소스는 창구이고 오브젝트는 대상이다 — 1:1 이 아니다</title><desc id="dd">같은 Deployment 오브젝트가 apps/v1 과 extensions/v1beta1 두 스키마의 리소스로 노출되고, 어떤 리소스는 아무 오브젝트도 가리키지 않고 판정만 돌려준다.</desc>
+<rect width="1000" height="640" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES IN ACTION · 04-01</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">리소스는 창구이고 오브젝트는 대상이다 — 1:1 이 아니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">리소스는 상호작용하는 창구(뷰)이고 오브젝트는 저장되는 대상(테이블)이다</text>
+<rect x="24" y="104" width="952" height="480" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="38" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">URI 가 다르다고 다른 오브젝트가 아니고, URI 가 있다고 오브젝트가 있는 것도 아니다</text>
+<text x="320" y="190" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">리소스 — 창구(URI)</text>
+<text x="800" y="190" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">오브젝트 — 저장되는 대상</text>
+<rect x="40" y="204" width="560" height="48" rx="5" fill="#161B22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="56" y="233" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F0616D">/apis/authorization.k8s.io/v1/subjectaccessreviews</text>
+<rect x="660" y="198" width="280" height="60" rx="6" fill="#161B22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="800" y="222" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">가리키는 오브젝트 없다</text>
+<text x="800" y="244" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">권한 여부만 응답한다</text>
+<path d="M 606 228 L 650 228" fill="none" stroke="#F0616D" stroke-width="1.6" marker-end="url(#bad)"/>
+<rect x="40" y="296" width="560" height="48" rx="5" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="56" y="325" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">/apis/apps/v1/…/deployments</text>
+<rect x="40" y="352" width="560" height="48" rx="5" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="56" y="381" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">/apis/apps/v1/…/deployments/mydeploy</text>
+<rect x="40" y="408" width="560" height="48" rx="5" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="56" y="437" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">/apis/extensions/v1beta1/…/deployments</text>
+<rect x="40" y="464" width="560" height="48" rx="5" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="56" y="493" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">/apis/extensions/v1beta1/…/deployments/mydeploy</text>
+<rect x="660" y="344" width="280" height="120" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.1"/>
+<text x="800" y="398" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">Deployment mydeploy</text>
+<text x="800" y="420" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">저장되는 것은 이 하나뿐이다</text>
+<path d="M 606 320 L 660 320" fill="none" stroke="#3FB98C" stroke-width="1.4"/>
+<path d="M 606 376 L 660 376" fill="none" stroke="#3FB98C" stroke-width="1.4"/>
+<path d="M 606 432 L 660 432" fill="none" stroke="#6A95D8" stroke-width="1.4"/>
+<path d="M 606 488 L 660 488" fill="none" stroke="#6A95D8" stroke-width="1.4"/>
+<path d="M 660 320 L 660 488" fill="none" stroke="#8B98A9" stroke-width="1.4"/>
+<path d="M 660 404 L 650 404" fill="none" stroke="#F08A59" stroke-width="1.8" marker-end="url(#acc)"/>
+<circle cx="660" cy="404" r="4" fill="#F5F5F3"/>
+<text x="660" y="290" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">넷 다 같은 것을 가리킨다</text>
+<text x="36" y="536" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">apps/v1 과 extensions/v1beta1 은 같은 객체의 다른 표현이다 — 스키마가 다를 뿐 저장된 것은 하나다.</text>
+<line x1="12" y1="600" x2="952" y2="600" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="622" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="612" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="122" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">가리키는 대상이 없는 리소스</text>
+<rect x="339" y="612" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="361" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">apps/v1 스키마</text>
+<rect x="526" y="612" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="548" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">extensions/v1beta1 스키마</text>
+<rect x="856" y="612" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="878" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">저장되는 오브젝트</text>
 </svg>
