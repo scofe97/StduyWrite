@@ -7,7 +7,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 652
+W, H = 1000, 596
 d = D(W, H, "eBGP vs iBGP · SAME PROTOCOL",
       "상대가 남이냐 식구냐가 출력을 가른다",
       "윗줄이 eBGP(AS 65001↔65002), 아랫줄이 iBGP(AS 65001 안). 같은 자리끼리 세로로 맞춰 본다.",
@@ -16,8 +16,8 @@ d = D(W, H, "eBGP vs iBGP · SAME PROTOCOL",
 LBL_W, CW, GAP, CH = 156, 183, 16, 100
 COL0 = 196
 COLX = [COL0 + i * (CW + GAP) for i in range(4)]
-ROW_Y = [300, 428]
-HEAD_Y = 214
+ROW_Y = [244, 372]
+HEAD_Y = 158
 HEADS = ["AS_PATH", "표시", "localpref", "iBGP 이웃에 재전달"]
 FOCAL_COL = 3                                                   # 본문이 "갈림길"이라 부른 그 열
 
@@ -50,8 +50,8 @@ for r, (kind, sub, cells, c) in enumerate([
             ACC if i == FOCAL_COL else INK, KR, "middle", 600)
         d.t(x + CW // 2, cy + 16, ddx.fit(note, 11, CW - 16, note), 11, MUTED, KR)
 
-d.t(36, 556, "금지되는 것은 iBGP 로 배운 것을 다시 iBGP 로 넘기는 경우뿐이다 — "
+d.t(36, 500, "금지되는 것은 iBGP 로 배운 것을 다시 iBGP 로 넘기는 경우뿐이다 — "
              "eBGP 로 배운 경로는 iBGP 이웃에게 넘어간다", 12, MUTED, KR, "start")
-d.legend(612, [("eBGP", WARN), ("iBGP", INFO), ("갈림길", ACC)])
+d.legend(556, [("eBGP", WARN), ("iBGP", INFO), ("갈림길", ACC)])
 d.save("01-04.bgp-ebgp-vs-ibgp.svg")
 print("ok bgp-ebgp-vs-ibgp")
