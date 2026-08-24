@@ -1,74 +1,58 @@
-<svg viewBox="0 0 900 460" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>배포된 애플리케이션의 논리 뷰 — Deployment · Pod · Service</title>
-  <desc>Deployment는 원하는 이미지·복제본 수를 선언하고 그만큼의 Pod 오브젝트를 만든다. 각 Pod는 휘발성이라 언제든 사라지고 새 IP로 교체될 수 있다. Service는 정적 IP를 갖는 단일 진입점으로, Pod 집합이 바뀌어도 클라이언트 연결을 항상 건강한 Pod로 라우팅한다.</desc>
-  <defs>
-    <style>
-      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
-      .sub    { font-size: 11px; fill: rgb(138,133,128); }
-      .zlabel { font-size: 12.5px; font-weight: 700; fill: #e8e4df; }
-      .nm     { font-size: 12px; font-weight: 700; fill: #000; font-family: 'JetBrains Mono', monospace; }
-      .nm-lt  { font-size: 12px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', monospace; }
-      .mt     { font-size: 10px; fill: rgb(138,133,128); }
-      .note   { font-size: 10.5px; fill: #e8e4df; }
-      .fail   { font-size: 10px; fill: #f44336; font-weight: 700; }
-    </style>
-    <marker id="arrow-amber" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
-      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
-    </marker>
-    <marker id="arrow-green" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
-      <path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/>
-    </marker>
-  </defs>
-
-  <rect x="0" y="0" width="900" height="460" fill="#0d0d0d"/>
-  <text x="24" y="30" class="title">배포된 애플리케이션의 논리 뷰</text>
-  <text x="24" y="48" class="sub">클러스터 규모와 무관하게 항상 같은 세 오브젝트 — Deployment가 선언하고, Pod가 실행되고, Service가 진입점을 고정한다</text>
-
-  <!-- Deployment -->
-  <rect x="60" y="76" width="230" height="86" rx="10" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="2"/>
-  <text x="175" y="100" class="nm-lt" text-anchor="middle">Deployment: kiada</text>
-  <text x="175" y="120" class="mt" text-anchor="middle">이미지 + 원하는 복제본 수 선언</text>
-  <text x="175" y="138" class="mt" text-anchor="middle">지정된 수의 Pod 오브젝트만 생성</text>
-  <text x="175" y="154" class="mt" text-anchor="middle">— 그 외엔 관여하지 않는다</text>
-
-  <!-- Pods -->
-  <rect x="360" y="76" width="150" height="60" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
-  <text x="435" y="100" class="nm-lt" text-anchor="middle">Pod A</text>
-  <text x="435" y="118" class="mt" text-anchor="middle">고유 IP</text>
-
-  <rect x="360" y="150" width="150" height="60" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
-  <text x="435" y="174" class="nm-lt" text-anchor="middle">Pod B</text>
-  <text x="435" y="192" class="mt" text-anchor="middle">고유 IP</text>
-
-  <rect x="360" y="224" width="150" height="60" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
-  <text x="435" y="248" class="nm-lt" text-anchor="middle">Pod C</text>
-  <text x="435" y="266" class="mt" text-anchor="middle">고유 IP</text>
-
-  <!-- Deployment -> Pods arrows -->
-  <path d="M290,105 C325,105 325,106 358,106" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrow-amber)"/>
-  <path d="M290,119 C330,119 330,180 358,180" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrow-amber)"/>
-  <path d="M290,133 C335,133 335,254 358,254" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrow-amber)"/>
-
-  <!-- Pod A dies, replaced -->
-  <rect x="360" y="150" width="150" height="60" rx="8" fill="rgba(244,67,54,0.08)" stroke="#f44336" stroke-width="1.2" stroke-dasharray="4 3"/>
-  <text x="590" y="180" class="fail">Pod B 소멸 → 새 Pod(다른 IP)로 즉시 교체</text>
-
-  <!-- Service -->
-  <rect x="60" y="230" width="230" height="120" rx="10" fill="rgba(102,187,106,0.12)" stroke="#66bb6a" stroke-width="2"/>
-  <text x="175" y="256" class="nm-lt" text-anchor="middle">Service: kiada</text>
-  <text x="175" y="278" class="mt" text-anchor="middle">단일 진입점 — 생성 시 정적 IP</text>
-  <text x="175" y="296" class="mt" text-anchor="middle">Service 생애 동안 IP 불변</text>
-  <text x="175" y="314" class="mt" text-anchor="middle">Pod 집합이 바뀌어도</text>
-  <text x="175" y="330" class="mt" text-anchor="middle">항상 건강한 Pod로 라우팅</text>
-
-  <!-- Service -> Pods arrows -->
-  <path d="M290,290 C325,290 325,106 358,106" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#arrow-green)"/>
-  <path d="M290,290 C325,290 325,180 358,180" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#arrow-green)"/>
-  <path d="M290,290 C325,290 325,254 358,254" fill="none" stroke="#66bb6a" stroke-width="2" marker-end="url(#arrow-green)"/>
-
-  <!-- Bottom callouts -->
-  <rect x="60" y="374" width="780" height="70" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1.2"/>
-  <text x="80" y="396" class="note">Pod는 <tspan fill="#f44336" font-weight="700">휘발성</tspan>입니다 — 노드 실패·삭제·축출로 언제든 사라지고, 교체된 새 Pod는 완전히 다른 IP를 갖습니다.</text>
-  <text x="80" y="418" class="note">그래서 클라이언트는 Pod IP가 아니라 <tspan fill="#66bb6a" font-weight="700">Service IP</tspan>에 연결해야 하고, Deployment는 Pod를 직접 만들지 않고 이 교체·복제 책임을 대신 집니다.</text>
-  <text x="80" y="438" class="mt">— 03-02 §5 "왜 Service가 필수인가"</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Pod 는 갈아 끼워지고 Service IP 만 그대로 있다</title><desc id="dd">Deployment 는 지정된 수의 Pod 를 만들 뿐 그 외엔 관여하지 않고, Service 는 생성 시 받은 IP 를 생애 내내 유지하며 건강한 Pod 로만 보낸다.</desc>
+<rect width="1000" height="620" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES IN ACTION · 03-02</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Pod 는 갈아 끼워지고 Service IP 만 그대로 있다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">그래서 클라이언트는 Pod IP 가 아니라 Service IP 에 연결한다</text>
+<rect x="24" y="104" width="952" height="460" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="38" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">Pod 가 죽고 새 IP 로 교체돼도 Service IP 는 바뀌지 않는다</text>
+<rect x="430" y="190" width="380" height="88" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="620" y="214" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">Deployment: kiada</text>
+<text x="620" y="238" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">이미지와 복제본 수를 선언한다</text>
+<text x="620" y="260" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">그 외엔 관여하지 않는다</text>
+<rect x="40" y="346" width="200" height="108" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.1"/>
+<text x="140" y="380" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">Service: kiada</text>
+<text x="140" y="404" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">생성 시 받은 IP</text>
+<text x="140" y="426" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">생애 내내 안 바뀐다</text>
+<rect x="345" y="356" width="170" height="88" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="430" y="380" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">Pod A</text>
+<text x="430" y="404" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">고유 IP</text>
+<text x="430" y="426" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">휘발성</text>
+<rect x="555" y="356" width="170" height="88" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.1" stroke-dasharray="6 5"/>
+<text x="640" y="380" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">Pod B</text>
+<text x="640" y="404" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">고유 IP</text>
+<text x="640" y="426" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">휘발성</text>
+<rect x="765" y="356" width="170" height="88" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="850" y="380" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">Pod C</text>
+<text x="850" y="404" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">고유 IP</text>
+<text x="850" y="426" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">휘발성</text>
+<path d="M 620 284 L 620 320" fill="none" stroke="#8B98A9" stroke-width="1.4"/>
+<path d="M 430 320 L 850 320" fill="none" stroke="#8B98A9" stroke-width="1.4"/>
+<path d="M 430 320 L 430 346" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 640 320 L 640 346" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 850 320 L 850 346" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="300" y="308" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">지정된 수만큼 만든다</text>
+<path d="M 246 400 L 335 400" fill="none" stroke="#F08A59" stroke-width="1.8" marker-end="url(#acc)"/>
+<rect x="257.5" y="391" width="69.0" height="18" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="292" y="404" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">건강한 쪽</text>
+<rect x="517.5" y="467" width="245.0" height="18" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="640" y="480" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">소멸 → 새 Pod(다른 IP)로 교체</text>
+<text x="36" y="512" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Deployment 는 Pod 를 직접 돌보지 않고 교체·복제 책임을 대신 진다 — 그것이 Pod 를 직접 만들지 않는 이유다.</text>
+<line x1="12" y1="580" x2="952" y2="580" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="602" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="592" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="602" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">선언하는 쪽</text>
+<rect x="222" y="592" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="244" y="602" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">갈아 끼워지는 실행 단위</text>
+<rect x="435" y="592" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="457" y="602" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">고정된 진입점</text>
 </svg>

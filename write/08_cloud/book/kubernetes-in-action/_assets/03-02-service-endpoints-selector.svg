@@ -1,90 +1,59 @@
-<svg viewBox="0 0 900 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>Service → Endpoints — 라벨 셀렉터가 Pod를 자동 등록한다</title>
-  <desc>Service는 고정된 ClusterIP를 가진 안정적 진입점이다. Service는 app=kiada 라벨 셀렉터로 해당 라벨을 가진 Pod를 자동으로 찾아 Endpoints 목록에 등록한다. Pod가 늘거나 죽어 IP가 바뀌어도 Service의 ClusterIP는 변하지 않고, Endpoints 목록만 자동으로 갱신된다. 오늘 실측에서 kiada Service(ClusterIP 10.96.154.45)가 세 Pod IP를 자동으로 물었다.</desc>
-  <defs>
-    <style>
-      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
-      .sub    { font-size: 11px; fill: rgb(138,133,128); }
-      .zlabel { font-size: 12.5px; font-weight: 700; fill: #e8e4df; }
-      .big    { font-size: 14px; font-weight: 800; fill: #0d0d0d; }
-      .lbl    { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
-      .ip     { font-size: 11px; font-weight: 800; fill: #e8e4df; font-family: 'JetBrains Mono', monospace; }
-      .ipd    { font-size: 11px; font-weight: 800; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
-      .note   { font-size: 10.5px; fill: #e8e4df; }
-      .tag    { font-size: 10px; font-weight: 800; fill: #14521d; font-family: 'JetBrains Mono', monospace; }
-    </style>
-    <marker id="ag" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
-      <path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/>
-    </marker>
-    <marker id="aa" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
-      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
-    </marker>
-  </defs>
-
-  <rect x="0" y="0" width="900" height="480" fill="#0d0d0d"/>
-  <text x="24" y="30" class="title">Service → Endpoints — 라벨 셀렉터가 Pod를 자동 등록</text>
-  <text x="24" y="48" class="sub">Service는 고정 IP를 가진 이름표이고, app=kiada 라벨을 가진 Pod를 스스로 찾아 Endpoints에 연결합니다.</text>
-
-  <!-- 왼쪽: Service -->
-  <rect x="40" y="80" width="250" height="130" rx="12" fill="rgb(212,168,83)"/>
-  <text x="60" y="108" class="big">Service: kiada</text>
-  <rect x="60" y="120" width="210" height="30" rx="5" fill="#fdf3df"/>
-  <text x="70" y="140" class="ipd">ClusterIP 10.96.154.45</text>
-  <text x="60" y="170" class="lbl">셀렉터: app=kiada</text>
-  <text x="60" y="192" class="lbl" style="font-weight:600">이 IP는 절대 안 바뀜 (안정적 진입점)</text>
-
-  <!-- 셀렉터 매칭 표시 -->
-  <text x="315" y="120" class="note" style="fill:rgb(212,168,83);font-weight:800">app=kiada 라벨</text>
-  <text x="315" y="138" class="note" style="fill:rgb(212,168,83);font-weight:800">가진 Pod를 자동 검색</text>
-  <line x1="290" y1="145" x2="440" y2="145" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#aa)"/>
-
-  <!-- 가운데: Endpoints 목록 -->
-  <rect x="40" y="240" width="250" height="180" rx="12" fill="rgb(24,28,32)" stroke="#66bb6a" stroke-width="1.4"/>
-  <text x="60" y="266" class="zlabel" style="fill:#7bc47f">Endpoints (자동 갱신)</text>
-  <rect x="60" y="278" width="210" height="26" rx="4" fill="#e6f7e7"/>
-  <text x="70" y="296" class="ipd">10.244.1.8:8080</text>
-  <rect x="60" y="310" width="210" height="26" rx="4" fill="#e6f7e7"/>
-  <text x="70" y="328" class="ipd">10.244.1.9:8080</text>
-  <rect x="60" y="342" width="210" height="26" rx="4" fill="#e6f7e7"/>
-  <text x="70" y="360" class="ipd">10.244.2.5:8080</text>
-  <text x="60" y="392" class="note">Pod가 늘거나 죽으면 이 목록만 갱신</text>
-  <text x="60" y="409" class="note">ClusterIP는 그대로 → 클라이언트 무영향</text>
-
-  <line x1="165" y1="210" x2="165" y2="238" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#aa)"/>
-
-  <!-- 오른쪽: Pod 3개 -->
-  <rect x="480" y="90" width="380" height="330" rx="12" fill="rgb(18,20,22)" stroke="rgb(42,37,32)" stroke-width="1.2"/>
-  <text x="500" y="116" class="zlabel">app=kiada 라벨을 가진 Pod들</text>
-
-  <rect x="500" y="130" width="340" height="82" rx="8" fill="#66bb6a"/>
-  <text x="516" y="154" class="lbl">Pod  kiada-...-bhgc5</text>
-  <rect x="516" y="164" width="150" height="22" rx="4" fill="#e6f7e7"/>
-  <text x="524" y="180" class="ipd" font-size="10">IP 10.244.1.8</text>
-  <rect x="676" y="164" width="148" height="22" rx="4" fill="#dceaf7"/>
-  <text x="684" y="180" class="tag" style="fill:#10243a">app=kiada</text>
-  <text x="516" y="203" class="lbl" style="font-weight:600">worker 노드</text>
-
-  <rect x="500" y="222" width="340" height="82" rx="8" fill="#66bb6a"/>
-  <text x="516" y="246" class="lbl">Pod  kiada-...-8phwt</text>
-  <rect x="516" y="256" width="150" height="22" rx="4" fill="#e6f7e7"/>
-  <text x="524" y="272" class="ipd" font-size="10">IP 10.244.1.9</text>
-  <rect x="676" y="256" width="148" height="22" rx="4" fill="#dceaf7"/>
-  <text x="684" y="272" class="tag" style="fill:#10243a">app=kiada</text>
-  <text x="516" y="295" class="lbl" style="font-weight:600">worker 노드</text>
-
-  <rect x="500" y="314" width="340" height="82" rx="8" fill="#66bb6a"/>
-  <text x="516" y="338" class="lbl">Pod  kiada-...-2vm7s</text>
-  <rect x="516" y="348" width="150" height="22" rx="4" fill="#e6f7e7"/>
-  <text x="524" y="364" class="ipd" font-size="10">IP 10.244.2.5</text>
-  <rect x="676" y="348" width="148" height="22" rx="4" fill="#dceaf7"/>
-  <text x="684" y="364" class="tag" style="fill:#10243a">app=kiada</text>
-  <text x="516" y="387" class="lbl" style="font-weight:600">worker2 노드 (다른 노드!)</text>
-
-  <!-- Endpoints → Pod 연결 -->
-  <line x1="290" y1="291" x2="498" y2="171" stroke="#66bb6a" stroke-width="1.6" marker-end="url(#ag)"/>
-  <line x1="290" y1="323" x2="498" y2="263" stroke="#66bb6a" stroke-width="1.6" marker-end="url(#ag)"/>
-  <line x1="290" y1="355" x2="498" y2="355" stroke="#66bb6a" stroke-width="1.6" marker-end="url(#ag)"/>
-
-  <text x="24" y="452" class="note" style="fill:#7bc47f">→ 오늘 실측: kubectl expose 한 줄로 kiada Service 생성 → 스케일하자 3개 Pod IP를 Service가 스스로 물었습니다(Endpoints 자동 확장).</text>
-  <text x="24" y="470" class="sub">내가 Service를 건드리지 않았는데도 새 Pod가 app=kiada 라벨을 갖자마자 Endpoints에 추가됨 — 이것이 라벨 셀렉터의 힘입니다.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">라벨이 붙는 순간 Endpoints 가 스스로 늘어난다</title><desc id="dd">Service 는 고정 IP 를 가진 이름표이고, app=kiada 라벨을 가진 Pod 를 스스로 찾아 Endpoints 에 등록한다. Pod 가 바뀌면 그 목록만 갱신되고 ClusterIP 는 그대로다.</desc>
+<rect width="1000" height="640" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES IN ACTION · 03-02</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">라벨이 붙는 순간 Endpoints 가 스스로 늘어난다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">Service 를 건드리지 않았는데 새 Pod 가 라벨을 갖자마자 목록에 들어왔다</text>
+<rect x="24" y="104" width="952" height="480" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="38" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">클라이언트가 아는 것은 ClusterIP 하나뿐이고, 뒤의 목록이 바뀌어도 그대로다</text>
+<rect x="30" y="270" width="240" height="120" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.1"/>
+<text x="150" y="312" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">Service: kiada</text>
+<text x="150" y="334" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">10.96.154.45</text>
+<text x="150" y="356" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">이 IP 는 안 바뀐다</text>
+<text x="150" y="412" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">셀렉터  app=kiada</text>
+<rect x="360" y="226" width="280" height="208" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="500" y="256" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">Endpoints — 자동 갱신</text>
+<text x="500" y="294" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">10.244.1.8:8080</text>
+<text x="500" y="324" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">10.244.1.9:8080</text>
+<text x="500" y="354" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">10.244.2.5:8080</text>
+<text x="500" y="408" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">Pod 가 늘거나 죽으면 이 목록만 바뀐다</text>
+<rect x="730" y="204" width="230" height="84" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="845" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">kiada-…-bhgc5</text>
+<text x="845" y="250" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">10.244.1.8</text>
+<text x="845" y="272" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">app=kiada · worker 노드</text>
+<rect x="730" y="302" width="230" height="84" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="845" y="326" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">kiada-…-8phwt</text>
+<text x="845" y="348" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">10.244.1.9</text>
+<text x="845" y="370" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">app=kiada · worker 노드</text>
+<rect x="730" y="400" width="230" height="84" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="845" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">kiada-…-2vm7s</text>
+<text x="845" y="446" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">10.244.2.5</text>
+<text x="845" y="468" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">app=kiada · worker2 노드</text>
+<path d="M 276 330 L 350 330" fill="none" stroke="#F08A59" stroke-width="1.8" marker-end="url(#acc)"/>
+<rect x="289.5" y="321" width="47.0" height="18" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="313" y="334" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">라벨로</text>
+<path d="M 646 330 L 690 330" fill="none" stroke="#8B98A9" stroke-width="1.4"/>
+<path d="M 690 246 L 690 442" fill="none" stroke="#8B98A9" stroke-width="1.4"/>
+<path d="M 690 246 L 720 246" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 690 344 L 720 344" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 690 442 L 720 442" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="36" y="520" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">스케일하자 세 Pod 의 IP 를 Service 가 스스로 물었다 — Endpoints 가 자동으로 늘어난 것이다.</text>
+<text x="36" y="544" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">그중 하나는 다른 노드(worker2)에 있었다 — 라벨만 맞으면 노드는 상관하지 않는다.</text>
+<line x1="12" y1="600" x2="952" y2="600" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="622" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="612" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">고정 진입점</text>
+<rect x="222" y="612" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="244" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">자동 갱신되는 목록</text>
+<rect x="396" y="612" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="418" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">라벨을 가진 Pod</text>
 </svg>
