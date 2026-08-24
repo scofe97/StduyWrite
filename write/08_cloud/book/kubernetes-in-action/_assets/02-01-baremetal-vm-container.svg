@@ -1,98 +1,80 @@
-<svg viewBox="0 0 960 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>베어메탈·VM·컨테이너 — 애플리케이션 3개를 돌리는 세 가지 격리 방식</title>
-  <desc>같은 애플리케이션 3개를 베어메탈(격리 없음), VM 2개(App A·B는 커널 공유, C는 별도 커널), 컨테이너 3개(커널은 공유하되 서로 격리)로 돌릴 때의 차이. 격리가 강해질수록 커널이 나뉘고, 커널을 공유할수록 가볍다.</desc>
-  <defs>
-    <style>
-      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
-      .sub   { font-size: 11px; fill: rgb(138,133,128); }
-      .zlabel{ font-size: 12.5px; font-weight: 800; fill: rgb(212,168,83); }
-      .zdesc { font-size: 10px; fill: rgb(138,133,128); }
-      .app   { font-size: 12px; font-weight: 700; fill: #0d0d0d; }
-      .kn    { font-size: 11.5px; font-weight: 800; fill: #0d0d0d; }
-      .note  { font-size: 10px; fill: #e8e4df; }
-    </style>
-  </defs>
-
-  <rect x="0" y="0" width="960" height="400" fill="#0d0d0d"/>
-  <text x="24" y="30" class="title">애플리케이션 3개를 돌리는 세 가지 방식 — 격리와 커널의 관계</text>
-  <text x="24" y="50" class="sub">왼쪽으로 갈수록 격리가 없고 가볍고, 오른쪽으로 갈수록 격리가 강하고 무겁습니다. 컨테이너는 그 중간 — 커널은 공유하되 격리는 적용합니다.</text>
-
-  <!-- ===== 1) 베어메탈 ===== -->
-  <rect x="24" y="74" width="290" height="290" rx="12" fill="rgb(24,28,32)" stroke="rgb(138,133,128)" stroke-width="1.3"/>
-  <text x="42" y="98" class="zlabel">① 베어메탈 — 격리 없음</text>
-  <text x="42" y="114" class="zdesc">세 앱이 한 커널을 그냥 공유. 서로 다 보임</text>
-
-  <rect x="42" y="130" width="80" height="40" rx="6" fill="rgb(230,230,230)"/>
-  <text x="82" y="155" class="app" text-anchor="middle">App A</text>
-  <rect x="130" y="130" width="80" height="40" rx="6" fill="rgb(230,230,230)"/>
-  <text x="170" y="155" class="app" text-anchor="middle">App B</text>
-  <rect x="218" y="130" width="80" height="40" rx="6" fill="rgb(230,230,230)"/>
-  <text x="258" y="155" class="app" text-anchor="middle">App C</text>
-
-  <line x1="82" y1="170" x2="130" y2="230" stroke="rgb(138,133,128)" stroke-width="1.4"/>
-  <line x1="170" y1="170" x2="170" y2="230" stroke="rgb(138,133,128)" stroke-width="1.4"/>
-  <line x1="258" y1="170" x2="210" y2="230" stroke="rgb(138,133,128)" stroke-width="1.4"/>
-
-  <rect x="42" y="230" width="256" height="42" rx="6" fill="rgb(102,187,106)"/>
-  <text x="170" y="256" class="kn" text-anchor="middle">Kernel (공유, 격리 없음)</text>
-  <rect x="42" y="282" width="256" height="34" rx="6" fill="#e8e4df"/>
-  <text x="170" y="304" class="kn" text-anchor="middle">Physical Hardware</text>
-  <text x="170" y="342" class="note" text-anchor="middle">가장 가볍지만 서로 침범 가능</text>
-
-  <!-- ===== 2) VM 2개 ===== -->
-  <rect x="335" y="74" width="290" height="290" rx="12" fill="rgb(24,28,32)" stroke="rgb(138,133,128)" stroke-width="1.3"/>
-  <text x="353" y="98" class="zlabel">② VM 2개 — 커널이 나뉨</text>
-  <text x="353" y="114" class="zdesc">A·B는 VM1 커널 공유, C는 VM2 별도 커널</text>
-
-  <!-- VM1 -->
-  <rect x="353" y="126" width="130" height="120" rx="8" fill="rgb(20,24,28)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
-  <text x="360" y="140" class="zdesc">VM 1</text>
-  <rect x="363" y="146" width="50" height="30" rx="5" fill="rgb(230,230,230)"/>
-  <text x="388" y="166" class="app" text-anchor="middle">A</text>
-  <rect x="421" y="146" width="50" height="30" rx="5" fill="rgb(230,230,230)"/>
-  <text x="446" y="166" class="app" text-anchor="middle">B</text>
-  <rect x="363" y="184" width="108" height="30" rx="5" fill="rgb(102,187,106)"/>
-  <text x="417" y="204" class="kn" text-anchor="middle" font-size="10">Guest Kernel</text>
-  <rect x="363" y="218" width="108" height="20" rx="4" fill="none" stroke="rgb(138,133,128)" stroke-width="1"/>
-  <text x="417" y="232" class="zdesc" text-anchor="middle">Virtual HW</text>
-
-  <!-- VM2 -->
-  <rect x="491" y="126" width="126" height="120" rx="8" fill="rgb(20,24,28)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
-  <text x="498" y="140" class="zdesc">VM 2</text>
-  <rect x="501" y="146" width="100" height="30" rx="5" fill="rgb(230,230,230)"/>
-  <text x="551" y="166" class="app" text-anchor="middle">C</text>
-  <rect x="501" y="184" width="100" height="30" rx="5" fill="rgb(102,187,106)"/>
-  <text x="551" y="204" class="kn" text-anchor="middle" font-size="10">Guest Kernel</text>
-  <rect x="501" y="218" width="100" height="20" rx="4" fill="none" stroke="rgb(138,133,128)" stroke-width="1"/>
-  <text x="551" y="232" class="zdesc" text-anchor="middle">Virtual HW</text>
-
-  <rect x="353" y="254" width="264" height="26" rx="5" fill="rgb(150,130,220)"/>
-  <text x="485" y="272" class="kn" text-anchor="middle" font-size="11">Hypervisor</text>
-  <rect x="353" y="286" width="264" height="30" rx="5" fill="#e8e4df"/>
-  <text x="485" y="306" class="kn" text-anchor="middle">Physical Hardware</text>
-  <text x="485" y="342" class="note" text-anchor="middle">가장 강한 격리, 하지만 커널 2개라 무거움</text>
-
-  <!-- ===== 3) 컨테이너 3개 ===== -->
-  <rect x="646" y="74" width="290" height="290" rx="12" fill="rgb(24,28,32)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
-  <text x="664" y="98" class="zlabel">③ 컨테이너 3개 — 공유+격리</text>
-  <text x="664" y="114" class="zdesc">커널 하나를 공유하되 서로 격리됨</text>
-
-  <rect x="664" y="130" width="78" height="40" rx="6" fill="rgb(230,230,230)" stroke="rgb(212,168,83)" stroke-width="1.3" stroke-dasharray="4 3"/>
-  <text x="703" y="155" class="app" text-anchor="middle">Ctr A</text>
-  <rect x="750" y="130" width="78" height="40" rx="6" fill="rgb(230,230,230)" stroke="rgb(212,168,83)" stroke-width="1.3" stroke-dasharray="4 3"/>
-  <text x="789" y="155" class="app" text-anchor="middle">Ctr B</text>
-  <rect x="836" y="130" width="82" height="40" rx="6" fill="rgb(230,230,230)" stroke="rgb(212,168,83)" stroke-width="1.3" stroke-dasharray="4 3"/>
-  <text x="877" y="155" class="app" text-anchor="middle">Ctr C</text>
-
-  <line x1="703" y1="170" x2="750" y2="230" stroke="rgb(138,133,128)" stroke-width="1.4"/>
-  <line x1="789" y1="170" x2="789" y2="230" stroke="rgb(138,133,128)" stroke-width="1.4"/>
-  <line x1="877" y1="170" x2="828" y2="230" stroke="rgb(138,133,128)" stroke-width="1.4"/>
-
-  <rect x="664" y="230" width="254" height="42" rx="6" fill="rgb(102,187,106)"/>
-  <text x="791" y="256" class="kn" text-anchor="middle">Host Kernel (공유, 격리 적용)</text>
-  <rect x="664" y="282" width="254" height="34" rx="6" fill="#e8e4df"/>
-  <text x="791" y="304" class="kn" text-anchor="middle">Physical Hardware</text>
-  <text x="791" y="342" class="note" text-anchor="middle">커널 1개로 가벼우면서 격리도 유지</text>
-
-  <text x="480" y="388" class="sub" text-anchor="middle">점선 테두리(③)가 "커널은 공유하지만 namespace·cgroup으로 격리"를 뜻합니다 — ①의 무방비와 다릅니다</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 748" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">커널이 몇 개이고 어디에 있는가</title><desc id="dd">베어메탈은 커널 하나를 격리 없이 나눠 쓰고, VM 은 커널을 나눠 강하게 격리하며, 컨테이너는 커널 하나를 공유하면서 격리를 적용한다.</desc>
+<rect width="1000" height="748" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES IN ACTION · 02-01</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">커널이 몇 개이고 어디에 있는가</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">왼쪽으로 갈수록 가볍고 무방비, 오른쪽으로 갈수록 무겁고 강한 격리 — 컨테이너는 그 사이다</text>
+<rect x="24" y="104" width="952" height="588" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="38" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">컨테이너의 점선은 커널은 공유하되 namespace·cgroup 으로 격리한다는 뜻이다</text>
+<rect x="46" y="214" width="88" height="46" rx="5" fill="#E3B34112" stroke="#E3B341" stroke-width="1.1"/>
+<text x="90" y="243" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">App A</text>
+<rect x="142" y="214" width="88" height="46" rx="5" fill="#E3B34112" stroke="#E3B341" stroke-width="1.1"/>
+<text x="186" y="243" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">App B</text>
+<rect x="238" y="214" width="88" height="46" rx="5" fill="#E3B34112" stroke="#E3B341" stroke-width="1.1"/>
+<text x="282" y="243" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">App C</text>
+<text x="186" y="186" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">① 베어메탈</text>
+<text x="186" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">격리가 없다</text>
+<rect x="46" y="268" width="280" height="46" rx="5" fill="#F0616D12" stroke="#F0616D" stroke-width="1.1"/>
+<text x="186" y="295" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">커널 하나 — 격리 없음</text>
+<rect x="46" y="322" width="280" height="46" rx="5" fill="#8B98A912" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="186" y="349" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">물리 하드웨어</text>
+<text x="500" y="186" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">② VM 두 개</text>
+<text x="500" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">커널이 나뉜다</text>
+<rect x="360" y="220" width="136" height="46" rx="5" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="428" y="249" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">App A</text>
+<rect x="504" y="220" width="136" height="46" rx="5" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="572" y="249" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">App B</text>
+<rect x="360" y="274" width="280" height="46" rx="5" fill="#F0616D12" stroke="#F0616D" stroke-width="1.1"/>
+<text x="500" y="303" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">게스트 커널 1</text>
+<rect x="348" y="212" width="304" height="116" rx="8" fill="none" stroke="rgba(191,192,192,0.22)" stroke-width="1.1" stroke-dasharray="7 6"/>
+<rect x="362" y="203" width="40" height="18" fill="#0D1117"/>
+<text x="372" y="216" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="600" fill="#5E6B7E">VM 1</text>
+<rect x="360" y="346" width="280" height="46" rx="5" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="500" y="375" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">App C</text>
+<rect x="360" y="400" width="280" height="46" rx="5" fill="#F0616D12" stroke="#F0616D" stroke-width="1.1"/>
+<text x="500" y="429" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">게스트 커널 2</text>
+<rect x="348" y="338" width="304" height="116" rx="8" fill="none" stroke="rgba(191,192,192,0.22)" stroke-width="1.1" stroke-dasharray="7 6"/>
+<rect x="362" y="329" width="40" height="18" fill="#0D1117"/>
+<text x="372" y="342" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="600" fill="#5E6B7E">VM 2</text>
+<rect x="360" y="472" width="280" height="46" rx="5" fill="#8B98A912" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="500" y="501" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">하이퍼바이저</text>
+<rect x="360" y="526" width="280" height="46" rx="5" fill="#8B98A912" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="500" y="555" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">물리 하드웨어</text>
+<text x="814" y="186" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">③ 컨테이너 셋</text>
+<text x="814" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">공유하되 격리한다</text>
+<rect x="674" y="214" width="88" height="46" rx="5" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.1" stroke-dasharray="6 5"/>
+<text x="718" y="243" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">Ctr A</text>
+<rect x="770" y="214" width="88" height="46" rx="5" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.1" stroke-dasharray="6 5"/>
+<text x="814" y="243" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">Ctr B</text>
+<rect x="866" y="214" width="88" height="46" rx="5" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.1" stroke-dasharray="6 5"/>
+<text x="910" y="243" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">Ctr C</text>
+<rect x="674" y="268" width="280" height="46" rx="5" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="814" y="297" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">호스트 커널 하나 — 격리 적용</text>
+<rect x="674" y="322" width="280" height="46" rx="5" fill="#8B98A912" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="814" y="351" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">물리 하드웨어</text>
+<rect x="113.0" y="595" width="146.0" height="18" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="186" y="608" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">커널 1개 · 격리 0</text>
+<rect x="421.5" y="595" width="157.0" height="18" rx="4" fill="#0D1117" stroke="#F0616D" stroke-width="0.8"/>
+<text x="500" y="608" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">커널 2개 · 격리 강함</text>
+<rect x="735.5" y="595" width="157.0" height="18" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="814" y="608" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">커널 1개 · 격리 있음</text>
+<text x="36" y="644" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">VM 은 커널을 하나 더 얹어 격리를 사고, 컨테이너는 커널을 공유한 채 커널의 기능으로 격리를 만든다.</text>
+<text x="36" y="668" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">베어메탈은 그 격리를 아예 사지 않은 상태다.</text>
+<line x1="12" y1="708" x2="952" y2="708" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="730" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="720" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="122" y="730" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">격리되지 않은 앱</text>
+<rect x="261" y="720" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="283" y="730" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">추가로 얹은 커널</text>
+<rect x="422" y="720" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="444" y="730" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">격리된 컨테이너와 공유 커널</text>
 </svg>
