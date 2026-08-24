@@ -1,78 +1,66 @@
-<svg viewBox="0 0 960 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>Docker Desktop · Minikube · kind 아키텍처 비교</title>
-  <desc>세 로컬 옵션의 핵심 차이는 쿠버네티스 컴포넌트가 어디서 도는가다. Docker Desktop과 Minikube는 Linux VM 안에서 컨트롤 플레인과 Kubelet을 돌리고, kind는 VM 없이 각 노드를 컨테이너 하나로 표현해 멀티 노드 구성을 컨테이너 여러 개로 흉내 낸다.</desc>
-  <defs>
-    <style>
-      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
-      .sub    { font-size: 11px; fill: rgb(138,133,128); }
-      .zlabel { font-size: 13px; font-weight: 700; fill: #e8e4df; }
-      .nm     { font-size: 11.5px; font-weight: 700; fill: #000; font-family: 'JetBrains Mono', monospace; }
-      .nm-lt  { font-size: 11.5px; font-weight: 700; fill: #e8e4df; font-family: 'JetBrains Mono', monospace; }
-      .mt     { font-size: 9.5px; fill: rgb(138,133,128); }
-      .note   { font-size: 10px; fill: #e8e4df; }
-    </style>
-  </defs>
-
-  <rect x="0" y="0" width="960" height="400" fill="#0d0d0d"/>
-  <text x="24" y="30" class="title">Docker Desktop · Minikube · kind 아키텍처 비교</text>
-  <text x="24" y="48" class="sub">핵심 차이는 "쿠버네티스 컴포넌트가 어디서 도는가" — VM 안, VM 없이 호스트, 또는 컨테이너 안</text>
-
-  <!-- Docker Desktop -->
-  <text x="40" y="80" class="zlabel">Docker Desktop</text>
-  <rect x="30" y="92" width="270" height="270" rx="10" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="2"/>
-  <text x="46" y="114" class="mt">Linux VM</text>
-  <rect x="46" y="124" width="238" height="34" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
-  <text x="165" y="146" class="nm-lt" text-anchor="middle">Control Plane (컨테이너)</text>
-  <rect x="46" y="166" width="238" height="34" rx="6" fill="rgb(102,187,106)"/>
-  <text x="165" y="188" class="nm" text-anchor="middle">Kubelet</text>
-  <text x="165" y="208" class="mt" text-anchor="middle">VM에 직접 (컨테이너 아님)</text>
-  <rect x="46" y="222" width="238" height="34" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
-  <text x="165" y="244" class="nm-lt" text-anchor="middle">Deployed Apps (컨테이너)</text>
-  <text x="46" y="290" class="note">docker CLI(호스트)로 컨테이너 조회 가능</text>
-  <text x="46" y="310" class="mt">VM 내부 접근은 --net=host 등</text>
-  <text x="46" y="326" class="mt">특수 alpine 컨테이너로 우회</text>
-  <text x="46" y="346" class="mt">쿠버네티스 버전이 다소 구버전</text>
-
-  <!-- Minikube -->
-  <text x="345" y="80" class="zlabel">Minikube</text>
-  <rect x="335" y="92" width="270" height="270" rx="10" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="2"/>
-  <text x="351" y="114" class="mt">Linux VM (또는 --vm-driver none)</text>
-  <rect x="351" y="124" width="238" height="34" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
-  <text x="470" y="146" class="nm-lt" text-anchor="middle">Control Plane (컨테이너)</text>
-  <rect x="351" y="166" width="238" height="34" rx="6" fill="rgb(102,187,106)"/>
-  <text x="470" y="188" class="nm" text-anchor="middle">Kubelet</text>
-  <text x="470" y="208" class="mt" text-anchor="middle">VM 또는 호스트에 직접</text>
-  <rect x="351" y="222" width="238" height="34" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
-  <text x="470" y="244" class="nm-lt" text-anchor="middle">Deployed Apps (컨테이너)</text>
-  <text x="351" y="290" class="note">minikube ssh로 VM 내부 진입</text>
-  <text x="351" y="310" class="mt">단일 노드 — 테스트·로컬 개발용</text>
-  <text x="351" y="326" class="mt">--vm-driver none이면 VM 없이</text>
-  <text x="351" y="342" class="mt">호스트에 직접 배포 (Linux 한정)</text>
-
-  <!-- kind -->
-  <text x="650" y="80" class="zlabel">kind (Kubernetes in Docker)</text>
-  <rect x="640" y="92" width="290" height="270" rx="10" fill="rgb(26,26,26)" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="6 4"/>
-  <text x="656" y="114" class="mt">노드마다 컨테이너 하나 (VM 없음)</text>
-
-  <rect x="656" y="124" width="258" height="40" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
-  <text x="785" y="142" class="nm-lt" text-anchor="middle">control-plane 컨테이너</text>
-  <text x="785" y="158" class="mt" text-anchor="middle">CRI-O 런타임</text>
-
-  <rect x="656" y="172" width="123" height="40" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
-  <text x="717" y="190" class="nm-lt" text-anchor="middle" font-size="10.5">worker 컨테이너</text>
-  <text x="717" y="206" class="mt" text-anchor="middle">CRI-O</text>
-
-  <rect x="791" y="172" width="123" height="40" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
-  <text x="852" y="190" class="nm-lt" text-anchor="middle" font-size="10.5">worker 컨테이너</text>
-  <text x="852" y="206" class="mt" text-anchor="middle">CRI-O</text>
-
-  <rect x="656" y="222" width="258" height="34" rx="6" fill="rgb(102,187,106)"/>
-  <text x="785" y="244" class="nm" text-anchor="middle">호스트 OS (실제 배포 앱도 여기서 실행)</text>
-
-  <text x="656" y="290" class="note">2장 원리: 컨테이너 안 프로세스 = 호스트 OS 프로세스</text>
-  <text x="656" y="310" class="mt">docker exec로 각 노드 컨테이너 로그인</text>
-  <text x="656" y="326" class="mt">crictl ps로 노드 안 컨테이너 조회 (Docker 대신 CRI-O)</text>
-  <text x="656" y="342" class="mt">멀티 노드를 컨테이너 여러 개로 쉽게 구성</text>
-
-  <text x="480" y="386" class="sub" text-anchor="middle">Docker Desktop·Minikube는 VM 한 겹을 더 거치고, kind는 그 VM 층을 컨테이너로 대체해 호스트에 더 가깝다</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 604" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">갈리는 것은 VM 층이 있는가 하나다</title><desc id="dd">Docker Desktop 과 Minikube 는 리눅스 VM 을 한 겹 두고 그 안에서 컴포넌트를 돌리고, kind 는 그 VM 층을 컨테이너로 대체해 호스트에 더 가깝다.</desc>
+<rect width="1000" height="604" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES IN ACTION · 03-01</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">갈리는 것은 VM 층이 있는가 하나다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">노드 안에 들어가는 방법도 그 층 구조를 그대로 따라간다</text>
+<rect x="24" y="104" width="952" height="444" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="38" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">VM 층이 있으면 노드 안에 들어가는 데 한 단계가 더 든다</text>
+<text x="141" y="196" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">도구</text>
+<text x="383" y="196" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">컴포넌트가 어디서 도나</text>
+<text x="640" y="196" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">노드 안에 들어가려면</text>
+<text x="866" y="196" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">노드 수</text>
+<rect x="36" y="220" width="210" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="56" y="254" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">Docker Desktop</text>
+<text x="56" y="278" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">가장 간편하다</text>
+<rect x="258" y="220" width="250" height="88" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.4"/>
+<text x="278" y="254" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">리눅스 VM 안</text>
+<text x="278" y="278" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">VM 층이 한 겹 있다</text>
+<rect x="520" y="220" width="240" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="540" y="254" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">특수 컨테이너로 우회</text>
+<text x="540" y="278" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">--net=host 등</text>
+<rect x="772" y="220" width="188" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="792" y="254" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">단일 노드</text>
+<text x="792" y="278" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9"></text>
+<rect x="36" y="320" width="210" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="56" y="354" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">Minikube</text>
+<text x="56" y="378" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">로컬 개발용</text>
+<rect x="258" y="320" width="250" height="88" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.4"/>
+<text x="278" y="354" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">리눅스 VM 안</text>
+<text x="278" y="378" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">--vm-driver none 이면 호스트</text>
+<rect x="520" y="320" width="240" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="540" y="354" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">minikube ssh</text>
+<text x="540" y="378" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">VM 에 바로 들어간다</text>
+<rect x="772" y="320" width="188" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="792" y="354" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">단일 노드</text>
+<text x="792" y="378" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9"></text>
+<rect x="36" y="420" width="210" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="56" y="454" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">kind</text>
+<text x="56" y="478" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">Kubernetes in Docker</text>
+<rect x="258" y="420" width="250" height="88" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.4"/>
+<text x="278" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">컨테이너 안</text>
+<text x="278" y="478" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">VM 층이 없다</text>
+<rect x="520" y="420" width="240" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="540" y="454" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">docker exec + crictl</text>
+<text x="540" y="478" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">노드가 컨테이너라서</text>
+<rect x="772" y="420" width="188" height="88" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="792" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">여러 노드</text>
+<text x="792" y="478" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">컨테이너를 늘리면 된다</text>
+<text x="36" y="484" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">kind 의 노드는 컨테이너이므로 02장의 원리가 그대로 적용된다 — 컨테이너 안 프로세스는 호스트 OS 의 프로세스다.</text>
+<text x="36" y="508" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">그래서 노드 안 컨테이너는 Docker 가 아니라 CRI-O 를 crictl 로 조회한다.</text>
+<line x1="12" y1="564" x2="952" y2="564" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="586" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="576" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="122" y="586" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">VM 층이 있다</text>
+<rect x="248" y="576" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="270" y="586" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">VM 층이 없다 — 호스트에 더 가깝다</text>
 </svg>
