@@ -1,131 +1,66 @@
-<svg viewBox="0 0 960 620" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>쿠버네티스 API 오브젝트 모델과 실제 아키텍처 — 사용자가 오브젝트를 조작하면 컨트롤 플레인이 워커 노드의 실제 구성을 맞춘다</title>
-  <desc>사용자는 kubectl로 API Server에 오브젝트(spec)를 쓴다. API Server가 유일한 관문으로 etcd에 오브젝트를 저장한다. 스케줄러는 새 Pod를 노드에 배정하고, 컨트롤러 매니저 안의 각 컨트롤러(deployment·replicaset 등)는 감시 루프를 돌며 spec의 원하는 상태와 실제 상태의 간극을 좁히고 status를 다시 쓴다. 워커 노드의 kubelet은 자기 노드에 배정된 Pod를 감지해 컨테이너 런타임으로 컨테이너를 실행한다. 사용자는 서버를 직접 만지지 않고 오브젝트만 조작하며, 실제 구성은 이 컴포넌트들이 맞춘다.</desc>
-  <defs>
-    <style>
-      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
-      .sub    { font-size: 11px; fill: rgb(138,133,128); }
-      .zlabel { font-size: 12px; font-weight: 800; fill: rgb(212,168,83); }
-      .comp   { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
-      .compd  { font-size: 12px; font-weight: 800; fill: #e8e4df; }
-      .role   { font-size: 9.5px; font-weight: 600; fill: #1a1a1a; }
-      .roled  { font-size: 9.5px; font-weight: 600; fill: rgb(138,133,128); }
-      .note   { font-size: 10.5px; fill: #e8e4df; }
-      .arrl   { font-size: 10px; font-weight: 800; fill: rgb(212,168,83); }
-      .arrg   { font-size: 10px; font-weight: 800; fill: #7bc47f; }
-      .obj    { font-size: 10px; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
-    </style>
-    <marker id="aa" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
-      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
-    </marker>
-    <marker id="ag" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
-      <path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/>
-    </marker>
-    <marker id="ab" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
-      <path d="M0,0 L7,3 L0,6 Z" fill="#5b9bd5"/>
-    </marker>
-  </defs>
-
-  <rect x="0" y="0" width="960" height="620" fill="#0d0d0d"/>
-  <text x="24" y="30" class="title">쿠버네티스 API 오브젝트 모델 — 실제 아키텍처</text>
-  <text x="24" y="48" class="sub">사용자는 서버를 직접 만지지 않고 오브젝트(spec)만 씁니다. 컨트롤 플레인이 그 원하는 상태에 맞춰 워커 노드의 실제 구성을 조정합니다.</text>
-
-  <!-- ===== 사용자 ===== -->
-  <circle cx="66" cy="150" r="22" fill="rgb(220,234,247)"/>
-  <text x="66" y="188" class="note" text-anchor="middle">사용자</text>
-  <text x="66" y="204" class="sub" text-anchor="middle">kubectl</text>
-  <!-- write/read arrows to API server -->
-  <line x1="92" y1="138" x2="196" y2="122" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#aa)"/>
-  <text x="150" y="120" class="arrl" text-anchor="middle">① spec 쓰기</text>
-  <line x1="196" y1="166" x2="92" y2="160" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#aa)"/>
-  <text x="146" y="182" class="arrl" text-anchor="middle">status 읽기</text>
-
-  <!-- ===== 컨트롤 플레인 ===== -->
-  <text x="200" y="82" class="zlabel">컨트롤 플레인 (Control Plane) — 클러스터의 두뇌</text>
-  <rect x="200" y="92" width="740" height="200" rx="12" fill="rgb(20,22,26)" stroke="rgb(212,168,83)" stroke-width="1.6"/>
-
-  <!-- API Server (관문) -->
-  <rect x="216" y="110" width="180" height="70" rx="8" fill="rgb(212,168,83)"/>
-  <text x="306" y="134" class="comp" text-anchor="middle">API Server</text>
-  <text x="306" y="152" class="role" text-anchor="middle">모든 요청의 유일한 관문</text>
-  <text x="306" y="166" class="role" text-anchor="middle">인증·검증 후 etcd에 저장</text>
-
-  <!-- etcd -->
-  <rect x="216" y="196" width="180" height="72" rx="8" fill="rgb(230,230,230)"/>
-  <text x="306" y="222" class="comp" text-anchor="middle">etcd</text>
-  <text x="306" y="240" class="role" text-anchor="middle">모든 오브젝트가 저장되는</text>
-  <text x="306" y="254" class="role" text-anchor="middle">유일한 진실의 원천(키-값)</text>
-  <line x1="306" y1="180" x2="306" y2="194" stroke="rgb(138,133,128)" stroke-width="2" marker-end="url(#aa)"/>
-  <text x="330" y="192" class="sub">저장</text>
-
-  <!-- Scheduler -->
-  <rect x="416" y="110" width="230" height="70" rx="8" fill="#5b9bd5"/>
-  <text x="531" y="134" class="compd" text-anchor="middle">Scheduler</text>
-  <text x="531" y="152" class="role" text-anchor="middle" style="fill:#e8e4df">노드가 안 정해진 새 Pod를 감지해</text>
-  <text x="531" y="166" class="role" text-anchor="middle" style="fill:#e8e4df">적절한 워커 노드에 배정</text>
-
-  <!-- Controller Manager -->
-  <rect x="416" y="196" width="508" height="72" rx="8" fill="#66bb6a"/>
-  <text x="440" y="220" class="comp">Controller Manager — 감시 루프(reconcile)의 집합</text>
-  <text x="440" y="240" class="role">deployment·replicaset·node 등 타입마다 전담 컨트롤러가 있음</text>
-  <text x="440" y="256" class="role">각 컨트롤러: spec(원함) 읽기 → 실제와 간극 확인 → 작업 수행 → status(실제) 쓰기 → 반복</text>
-
-  <!-- API Server 안 오브젝트 예시 (작은 칩) -->
-  <rect x="662" y="110" width="262" height="70" rx="8" fill="rgb(28,30,34)" stroke="rgb(42,37,32)" stroke-width="1"/>
-  <text x="676" y="128" class="sub">API에 저장되는 오브젝트 (예)</text>
-  <rect x="676" y="136" width="76" height="18" rx="3" fill="#5b9bd5"/><text x="714" y="149" class="obj" fill="#0d0d0d" text-anchor="middle">Pod</text>
-  <rect x="758" y="136" width="96" height="18" rx="3" fill="#c5b3e0"/><text x="806" y="149" class="obj" fill="#0d0d0d" text-anchor="middle">Deployment</text>
-  <rect x="860" y="136" width="52" height="18" rx="3" fill="#66bb6a"/><text x="886" y="149" class="obj" fill="#0d0d0d" text-anchor="middle">Svc</text>
-  <rect x="676" y="158" width="66" height="18" rx="3" fill="#e8e4df"/><text x="709" y="171" class="obj" fill="#0d0d0d" text-anchor="middle">Node</text>
-  <rect x="748" y="158" width="92" height="18" rx="3" fill="#f5d76e"/><text x="794" y="171" class="obj" fill="#0d0d0d" text-anchor="middle">ConfigMap</text>
-  <rect x="846" y="158" width="66" height="18" rx="3" fill="#f096be"/><text x="879" y="171" class="obj" fill="#0d0d0d" text-anchor="middle">PV…</text>
-
-  <!-- 사용자 → API Server 진입 화살표 앵커용 (이미 위에) -->
-
-  <!-- ===== 컨트롤 플레인 → 워커 노드 (조정) ===== -->
-  <line x1="531" y1="292" x2="531" y2="330" stroke="#66bb6a" stroke-width="3" marker-end="url(#ag)"/>
-  <text x="551" y="316" class="arrg">② kubelet이 배정된 Pod 감지 → 실행</text>
-
-  <!-- ===== 워커 노드 ===== -->
-  <text x="24" y="356" class="zlabel">워커 노드 (Worker Nodes) — 실제로 컨테이너가 도는 곳</text>
-
-  <!-- worker 1 -->
-  <rect x="24" y="366" width="450" height="220" rx="12" fill="rgb(20,22,26)" stroke="rgb(138,133,128)" stroke-width="1.4"/>
-  <text x="44" y="390" class="note" style="fill:#e8e4df">worker 노드 1</text>
-  <rect x="40" y="400" width="418" height="40" rx="6" fill="rgb(212,168,83)"/>
-  <text x="60" y="420" class="comp">kubelet</text>
-  <text x="200" y="420" class="role">API Server를 지켜보다 이 노드에 배정된 Pod를 컨테이너로 실행</text>
-  <rect x="40" y="448" width="200" height="128" rx="8" fill="rgb(28,30,34)" stroke="#5b9bd5" stroke-width="1.2"/>
-  <text x="56" y="470" class="note" style="fill:#8fc0ea">Pod (kiada)</text>
-  <rect x="56" y="480" width="168" height="40" rx="5" fill="#5b9bd5"/>
-  <text x="140" y="505" class="role" style="fill:#0d0d0d" text-anchor="middle">컨테이너 (node app.js)</text>
-  <text x="56" y="540" class="roled">자기 IP·호스트명(=Pod명)</text>
-  <text x="56" y="558" class="roled">= 02-03의 리눅스 네임스페이스</text>
-  <rect x="256" y="448" width="202" height="128" rx="8" fill="rgb(28,30,34)" stroke="rgb(42,37,32)" stroke-width="1.2"/>
-  <text x="272" y="470" class="note">컨테이너 런타임</text>
-  <text x="272" y="490" class="roled">containerd — 이미지 pull</text>
-  <text x="272" y="508" class="roled">+ 컨테이너 생성·실행</text>
-  <text x="272" y="536" class="roled">kubelet의 지시를 받아</text>
-  <text x="272" y="554" class="roled">실제 프로세스를 띄움</text>
-
-  <!-- worker 2 -->
-  <rect x="490" y="366" width="446" height="220" rx="12" fill="rgb(20,22,26)" stroke="rgb(138,133,128)" stroke-width="1.4"/>
-  <text x="510" y="390" class="note" style="fill:#e8e4df">worker 노드 2</text>
-  <rect x="506" y="400" width="414" height="40" rx="6" fill="rgb(212,168,83)"/>
-  <text x="526" y="420" class="comp">kubelet</text>
-  <text x="666" y="420" class="role">스케일 아웃 시 여기에도 Pod가 분산 배치됨</text>
-  <rect x="506" y="448" width="200" height="128" rx="8" fill="rgb(28,30,34)" stroke="#5b9bd5" stroke-width="1.2"/>
-  <text x="522" y="470" class="note" style="fill:#8fc0ea">Pod (kiada)</text>
-  <rect x="522" y="480" width="168" height="40" rx="5" fill="#5b9bd5"/>
-  <text x="606" y="505" class="role" style="fill:#0d0d0d" text-anchor="middle">컨테이너 (node app.js)</text>
-  <text x="522" y="540" class="roled">Pod마다 독립된 IP</text>
-  <text x="522" y="558" class="roled">CNI가 노드 간 통신 연결</text>
-  <rect x="722" y="448" width="198" height="128" rx="8" fill="rgb(28,30,34)" stroke="rgb(42,37,32)" stroke-width="1.2"/>
-  <text x="738" y="470" class="note">컨테이너 런타임</text>
-  <text x="738" y="490" class="roled">containerd</text>
-  <text x="738" y="516" class="roled">03-02 실측: 스케일하면</text>
-  <text x="738" y="534" class="roled">worker1·worker2에 Pod가</text>
-  <text x="738" y="552" class="roled">분산됨(13/10/7 로드밸런싱)</text>
-
-  <text x="24" y="606" class="sub">핵심: 사용자는 오브젝트만 조작(선언), 컨트롤 플레인이 감시 루프로 실제 상태를 그 선언에 맞춥니다 — 명령이 아니라 원하는 상태의 선언입니다.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 826" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">사용자는 오브젝트만 쓰고, 컨트롤 플레인이 실제를 맞춘다</title><desc id="dd">사용자는 서버를 직접 만지지 않고 spec 을 쓴다. 컨트롤러가 감시 루프로 실제 상태를 그 선언에 맞추고, kubelet 이 배정된 Pod 를 컨테이너로 실행한다.</desc>
+<rect width="1000" height="826" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES IN ACTION · 04-01</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">사용자는 오브젝트만 쓰고, 컨트롤 플레인이 실제를 맞춘다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">명령이 아니라 원하는 상태의 선언이다 — 그래서 같은 매니페스트를 몇 번 넣어도 같다</text>
+<rect x="24" y="104" width="952" height="666" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="38" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">API Server 가 유일한 관문이고 etcd 가 유일한 진실의 원천이다</text>
+<rect x="80" y="182" width="240" height="76" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.1"/>
+<text x="200" y="212" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">사용자 · kubectl</text>
+<text x="200" y="234" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">서버가 아니라 오브젝트를 만진다</text>
+<rect x="60" y="292" width="880" height="210" rx="8" fill="#6A95D806" stroke="#6A95D8" stroke-width="1.2" stroke-dasharray="7 6"/>
+<rect x="76" y="283" width="252" height="18" fill="#0D1117"/>
+<text x="86" y="296" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">Control Plane — 원하는 상태에 실제를 맞춘다</text>
+<rect x="110" y="346" width="300" height="108" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="260" y="392" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">API Server</text>
+<text x="260" y="414" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">모든 요청의 유일한 관문 · 인증·검증</text>
+<rect x="500" y="312" width="280" height="76" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="640" y="342" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">etcd</text>
+<text x="640" y="364" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">모든 오브젝트가 저장되는 곳</text>
+<rect x="500" y="414" width="280" height="76" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="640" y="444" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">Scheduler · Controller Manager</text>
+<text x="640" y="466" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">spec 을 읽고 status 를 쓴다</text>
+<rect x="60" y="542" width="880" height="180" rx="8" fill="#3FB98C06" stroke="#3FB98C" stroke-width="1.2" stroke-dasharray="7 6"/>
+<rect x="76" y="533" width="235" height="18" fill="#0D1117"/>
+<text x="86" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">Worker Nodes — 실제로 컨테이너가 도는 곳</text>
+<rect x="140" y="592" width="320" height="100" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="300" y="634" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">kubelet · worker 1</text>
+<text x="300" y="656" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">배정된 Pod 를 컨테이너로 실행한다</text>
+<rect x="540" y="592" width="320" height="100" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="700" y="634" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">kubelet · worker 2</text>
+<text x="700" y="656" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">스케일하면 여기에도 분산된다</text>
+<path d="M 200 264 L 200 336" fill="none" stroke="#F08A59" stroke-width="1.8" marker-end="url(#acc)"/>
+<rect x="143.5" y="311" width="113.0" height="18" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="200" y="324" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">spec 을 쓴다</text>
+<path d="M 416 350 L 490 350" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="435.0" y="341" width="36.0" height="18" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="453" y="354" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">저장</text>
+<path d="M 416 452 L 490 452" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="424.0" y="443" width="58.0" height="18" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="453" y="456" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">감시한다</text>
+<path d="M 260 508 L 260 582" fill="none" stroke="#3FB98C" stroke-width="1.6" marker-end="url(#ok)"/>
+<rect x="316.0" y="561" width="168.0" height="18" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="400" y="574" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">배정된 Pod 를 감지한다</text>
+<path d="M 466 642 L 530 642" fill="none" stroke="#8B98A9" stroke-width="1.4" stroke-dasharray="6 5"/>
+<rect x="471.0" y="633" width="58.0" height="18" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="500" y="646" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">분산된다</text>
+<text x="36" y="748" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">컨트롤러는 spec(원함)을 읽고 실제와의 간극을 확인해 작업한 뒤 status(실제)를 쓴다 — 그 루프가 계속 돈다.</text>
+<line x1="12" y1="786" x2="952" y2="786" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="808" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="798" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="808" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">선언하는 쪽</text>
+<rect x="222" y="798" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="244" y="808" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">컨트롤 플레인</text>
+<rect x="357" y="798" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="379" y="808" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">워커 노드</text>
 </svg>

@@ -1,144 +1,63 @@
-<svg viewBox="0 0 1120 620" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>오브젝트 매니페스트의 네 섹션과 spec·status 흐름</title>
-  <desc>오브젝트 매니페스트는 type metadata, object metadata, spec, status 네 섹션으로 이뤄진다. 사용자는 API Server에 전체 오브젝트를 보내 spec에 원하는 상태를 쓰고, 조회 결과의 status에서 실제 상태를 읽는다. 컨트롤러는 API Server를 watch하며 spec을 읽고, 실제 클러스터 상태를 맞춘 뒤 status에 관측 결과를 쓴다.</desc>
-  <defs>
-    <style>
-      .title  { font-size: 18px; font-weight: 800; fill: #e8e4df; }
-      .sub    { font-size: 11px; fill: rgb(138,133,128); }
-      .zone   { font-size: 12px; font-weight: 800; fill: rgb(212,168,83); }
-      .label  { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
-      .labeld { font-size: 13px; font-weight: 800; fill: #e8e4df; }
-      .desc   { font-size: 10.5px; font-weight: 600; fill: #1a1a1a; }
-      .descd  { font-size: 10.5px; font-weight: 600; fill: #e8e4df; }
-      .muted  { font-size: 10px; fill: rgb(138,133,128); }
-      .note   { font-size: 10.5px; fill: #e8e4df; }
-      .mono   { font-size: 10px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
-      .step   { font-size: 10px; font-weight: 800; fill: #0d0d0d; }
-      .arr    { font-size: 10px; font-weight: 800; fill: rgb(212,168,83); }
-      .arrg   { font-size: 10px; font-weight: 800; fill: #66bb6a; }
-      .arrb   { font-size: 10px; font-weight: 800; fill: #5b9bd5; }
-    </style>
-    <marker id="amber" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
-      <path d="M0,0 L8,3 L0,6 Z" fill="rgb(212,168,83)"/>
-    </marker>
-    <marker id="green" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
-      <path d="M0,0 L8,3 L0,6 Z" fill="#66bb6a"/>
-    </marker>
-    <marker id="blue" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
-      <path d="M0,0 L8,3 L0,6 Z" fill="#5b9bd5"/>
-    </marker>
-  </defs>
-
-  <rect x="0" y="0" width="1120" height="620" fill="#0d0d0d"/>
-  <text x="24" y="30" class="title">오브젝트 매니페스트의 네 섹션과 spec·status 흐름</text>
-  <text x="24" y="50" class="sub">사용자는 spec에 원하는 상태를 쓰고 status에서 실제 상태를 읽습니다. 컨트롤러는 spec을 읽어 실제 클러스터를 맞춘 뒤 status를 씁니다.</text>
-
-  <!-- ===== User side ===== -->
-  <text x="38" y="90" class="zone">사용자 / 클라이언트</text>
-  <rect x="36" y="106" width="206" height="160" rx="12" fill="rgb(20,22,26)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
-  <circle cx="86" cy="156" r="24" fill="rgb(220,234,247)"/>
-  <text x="86" y="198" class="note" text-anchor="middle">사용자</text>
-  <rect x="126" y="126" width="92" height="28" rx="5" fill="rgb(232,228,223)"/>
-  <text x="172" y="145" class="label" text-anchor="middle">kubectl</text>
-  <text x="126" y="178" class="muted">create / apply / edit</text>
-  <text x="126" y="196" class="muted">get / list / watch</text>
-  <text x="54" y="238" class="note">서버를 직접 만지지 않고</text>
-  <text x="54" y="254" class="note">API 오브젝트만 조작</text>
-
-  <rect x="36" y="332" width="206" height="128" rx="12" fill="rgb(20,22,26)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
-  <text x="56" y="360" class="labeld">읽기/쓰기 관점</text>
-  <rect x="56" y="378" width="166" height="26" rx="5" fill="#66bb6a"/>
-  <text x="139" y="396" class="step" text-anchor="middle">spec = 내가 원하는 값</text>
-  <rect x="56" y="414" width="166" height="26" rx="5" fill="#5b9bd5"/>
-  <text x="139" y="432" class="step" text-anchor="middle">status = 시스템이 본 값</text>
-
-  <!-- ===== API object ===== -->
-  <text x="312" y="90" class="zone">API Server에 저장되는 오브젝트</text>
-  <rect x="302" y="106" width="374" height="420" rx="14" fill="rgb(20,22,26)" stroke="rgb(212,168,83)" stroke-width="1.6"/>
-  <text x="326" y="132" class="labeld">Object Manifest</text>
-  <text x="536" y="132" class="muted">네 섹션이 한 객체로 저장·조회됨</text>
-
-  <rect x="326" y="150" width="326" height="64" rx="8" fill="rgb(245,215,110)"/>
-  <text x="346" y="174" class="label">1. Type metadata</text>
-  <text x="346" y="194" class="desc">YAML 키: </text>
-  <text x="400" y="194" class="mono" fill="#1a1a1a">apiVersion</text>
-  <text x="476" y="194" class="desc">+</text>
-  <text x="494" y="194" class="mono" fill="#1a1a1a">kind</text>
-  <text x="566" y="194" class="desc">무슨 타입인가</text>
-
-  <rect x="326" y="224" width="326" height="72" rx="8" fill="rgb(245,215,110)"/>
-  <text x="346" y="250" class="label">2. Object metadata</text>
-  <text x="346" y="272" class="desc">YAML 키: </text>
-  <text x="400" y="272" class="mono" fill="#1a1a1a">metadata</text>
-  <text x="474" y="272" class="desc">이 인스턴스의 이름·라벨·UID</text>
-
-  <rect x="326" y="306" width="326" height="88" rx="8" fill="#66bb6a"/>
-  <text x="346" y="332" class="label">3. Spec</text>
-  <text x="438" y="332" class="mono" fill="#14521d">spec:</text>
-  <text x="346" y="354" class="desc" style="fill:#14521d">사용자가 쓰는 원하는 상태(desired state)</text>
-  <text x="346" y="372" class="desc" style="fill:#14521d">예: replicas, image, ports, volumes</text>
-
-  <rect x="326" y="404" width="326" height="88" rx="8" fill="#5b9bd5"/>
-  <text x="346" y="430" class="labeld">4. Status</text>
-  <text x="446" y="430" class="mono" fill="#e8e4df">status:</text>
-  <text x="346" y="452" class="descd">컨트롤러가 쓰는 실제 상태(actual state)</text>
-  <text x="346" y="470" class="descd">예: phase, readyReplicas, conditions</text>
-  <text x="489" y="516" class="muted" text-anchor="middle">GET/PUT은 섹션 하나가 아니라 오브젝트 전체를 주고받는다</text>
-
-  <!-- User API flows -->
-  <path d="M242,154 C268,154 276,206 324,332" fill="none" stroke="#66bb6a" stroke-width="3" marker-end="url(#green)"/>
-  <rect x="214" y="190" width="106" height="42" rx="6" fill="#66bb6a"/>
-  <text x="267" y="207" class="step" text-anchor="middle">① 전체 객체</text>
-  <text x="267" y="223" class="step" text-anchor="middle">전송 + spec 작성</text>
-
-  <path d="M324,448 C276,448 268,430 242,414" fill="none" stroke="#5b9bd5" stroke-width="3" marker-end="url(#blue)"/>
-  <rect x="214" y="470" width="106" height="42" rx="6" fill="#5b9bd5"/>
-  <text x="267" y="487" class="step" text-anchor="middle">⑥ 전체 객체</text>
-  <text x="267" y="503" class="step" text-anchor="middle">조회 + status 읽기</text>
-
-  <!-- ===== Controller side ===== -->
-  <text x="748" y="90" class="zone">컨트롤러 / 실제 클러스터</text>
-  <rect x="742" y="106" width="336" height="144" rx="12" fill="rgb(232,228,223)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
-  <text x="768" y="134" class="label">Controller</text>
-  <text x="768" y="156" class="desc">Deployment·ReplicaSet·Node 등 타입마다 전담</text>
-  <text x="768" y="176" class="desc">watch → compare → act → update status 반복</text>
-  <rect x="768" y="196" width="284" height="30" rx="6" fill="rgb(20,22,26)"/>
-  <text x="910" y="216" class="descd" text-anchor="middle">reconcile loop: 원하는 상태와 실제 상태의 간극을 좁힘</text>
-
-  <path d="M652,346 C704,316 716,210 742,178" fill="none" stroke="#66bb6a" stroke-width="3" marker-end="url(#green)"/>
-  <rect x="610" y="260" width="118" height="24" rx="5" fill="rgb(20,22,26)" stroke="#66bb6a" stroke-width="1"/>
-  <text x="669" y="276" class="arrg" text-anchor="middle">② watch/read spec</text>
-
-  <path d="M742,208 C714,248 704,392 652,448" fill="none" stroke="#5b9bd5" stroke-width="3" marker-end="url(#blue)"/>
-  <rect x="606" y="368" width="126" height="24" rx="5" fill="rgb(20,22,26)" stroke="#5b9bd5" stroke-width="1"/>
-  <text x="669" y="384" class="arrb" text-anchor="middle">⑤ update status</text>
-
-  <!-- Expanded Cluster State -->
-  <rect x="742" y="292" width="336" height="210" rx="14" fill="rgb(20,22,26)" stroke="rgb(138,133,128)" stroke-width="1.5"/>
-  <text x="768" y="322" class="labeld">Cluster State</text>
-  <text x="768" y="342" class="muted">컨트롤러가 만들고 관측하는 실제 세계</text>
-
-  <rect x="768" y="360" width="128" height="52" rx="8" fill="rgb(28,30,34)" stroke="#5b9bd5" stroke-width="1.2"/>
-  <text x="786" y="382" class="descd">Pods</text>
-  <text x="786" y="400" class="muted">Running / Pending</text>
-  <rect x="918" y="360" width="128" height="52" rx="8" fill="rgb(28,30,34)" stroke="#66bb6a" stroke-width="1.2"/>
-  <text x="936" y="382" class="descd">Replica count</text>
-  <text x="936" y="400" class="muted">desired vs ready</text>
-  <rect x="768" y="430" width="128" height="52" rx="8" fill="rgb(28,30,34)" stroke="rgb(245,215,110)" stroke-width="1.2"/>
-  <text x="786" y="452" class="descd">Nodes</text>
-  <text x="786" y="470" class="muted">capacity / health</text>
-  <rect x="918" y="430" width="128" height="52" rx="8" fill="rgb(28,30,34)" stroke="rgb(212,168,83)" stroke-width="1.2"/>
-  <text x="936" y="452" class="descd">Conditions</text>
-  <text x="936" y="470" class="muted">Progressing / Ready</text>
-
-  <path d="M910,250 C910,266 910,274 910,292" fill="none" stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#amber)"/>
-  <rect x="928" y="262" width="136" height="24" rx="5" fill="rgb(20,22,26)" stroke="rgb(212,168,83)" stroke-width="1"/>
-  <text x="996" y="278" class="arr" text-anchor="middle">③ act: 생성·삭제·수정</text>
-  <path d="M742,392 C704,392 704,250 780,228" fill="none" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#amber)"/>
-  <rect x="628" y="312" width="112" height="24" rx="5" fill="rgb(20,22,26)" stroke="rgb(212,168,83)" stroke-width="1"/>
-  <text x="684" y="328" class="arr" text-anchor="middle">④ observe actual</text>
-
-  <!-- Bottom invariant -->
-  <rect x="238" y="554" width="642" height="38" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1"/>
-  <text x="559" y="578" class="note" text-anchor="middle">핵심: spec은 선언된 목표, status는 관측된 결과다. 컨트롤러는 둘의 차이를 계속 줄이는 루프다.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 724" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">사용자는 spec 을 쓰고 컨트롤러는 status 를 쓴다</title><desc id="dd">한 오브젝트 안에서 쓰는 칸이 갈린다. 사용자는 spec 에 목표를 적고 status 를 읽으며, 컨트롤러는 spec 을 읽어 실제를 맞춘 뒤 status 에 결과를 적는다.</desc>
+<rect width="1000" height="724" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES IN ACTION · 04-01</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">사용자는 spec 을 쓰고 컨트롤러는 status 를 쓴다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">GET·PUT 은 섹션 하나가 아니라 오브젝트 전체를 주고받는다</text>
+<rect x="24" y="104" width="952" height="564" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="38" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">spec 은 선언된 목표이고 status 는 관측된 결과다 — 컨트롤러는 둘의 차이를 줄인다</text>
+<rect x="25" y="246" width="250" height="108" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.1"/>
+<text x="150" y="284" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">사용자 · kubectl</text>
+<text x="150" y="308" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">create · apply · get</text>
+<text x="150" y="330" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">서버가 아니라 오브젝트를 만진다</text>
+<rect x="725" y="246" width="250" height="108" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="850" y="284" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">Controller</text>
+<text x="850" y="308" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">watch → compare → act</text>
+<text x="850" y="330" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">타입마다 전담 컨트롤러가 있다</text>
+<rect x="314" y="220" width="372" height="368" rx="8" fill="#6A95D806" stroke="#6A95D8" stroke-width="1.2" stroke-dasharray="7 6"/>
+<rect x="330" y="211" width="268" height="18" fill="#0D1117"/>
+<text x="340" y="224" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">Object Manifest — 네 섹션이 한 객체로 저장된다</text>
+<rect x="330" y="252" width="340" height="76" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="500" y="282" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">apiVersion + kind</text>
+<text x="500" y="306" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">1. Type metadata — 무슨 타입인가</text>
+<rect x="330" y="340" width="340" height="76" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="500" y="370" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">metadata</text>
+<text x="500" y="394" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">2. Object metadata — 이름·라벨·UID</text>
+<rect x="330" y="428" width="340" height="76" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.1"/>
+<text x="500" y="458" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">spec</text>
+<text x="500" y="482" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">3. Spec — 사용자가 쓰는 원하는 상태</text>
+<rect x="330" y="516" width="340" height="76" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="500" y="546" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">status</text>
+<text x="500" y="570" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">4. Status — 컨트롤러가 쓰는 실제 상태</text>
+<path d="M 281 300 L 300 300 L 300 466 L 320 466" fill="none" stroke="#F08A59" stroke-width="1.8" marker-end="url(#acc)"/>
+<rect x="289.59" y="335" width="20.82" height="18" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="300" y="348" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">①</text>
+<path d="M 324 554 L 300 554 L 300 372 L 150 372 L 150 364" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="289.59" y="543" width="20.82" height="18" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="300" y="556" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">④</text>
+<path d="M 676 466 L 700 466 L 700 300 L 715 300" fill="none" stroke="#3FB98C" stroke-width="1.8" marker-end="url(#ok)"/>
+<rect x="689.59" y="335" width="20.82" height="18" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="700" y="348" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">②</text>
+<path d="M 850 360 L 850 554 L 680 554" fill="none" stroke="#3FB98C" stroke-width="1.8" marker-end="url(#ok)"/>
+<rect x="689.59" y="543" width="20.82" height="18" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="700" y="556" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">③</text>
+<text x="36" y="612" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">① 사용자가 spec 을 쓴다   ② 컨트롤러가 spec 을 읽는다   ③ 컨트롤러가 status 를 쓴다   ④ 사용자가 status 를 읽는다</text>
+<text x="36" y="636" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">쓰는 칸이 갈려 있어 충돌하지 않는다 — 사용자가 status 를 쓰지 않고 컨트롤러가 spec 을 쓰지 않는다.</text>
+<line x1="12" y1="684" x2="952" y2="684" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="706" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="696" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="706" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">사용자가 쓰는 칸</text>
+<rect x="261" y="696" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="283" y="706" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">컨트롤러가 쓰는 칸</text>
+<rect x="435" y="696" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="457" y="706" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">한 오브젝트</text>
 </svg>
