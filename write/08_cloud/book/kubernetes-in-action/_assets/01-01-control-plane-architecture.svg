@@ -1,88 +1,57 @@
-<svg viewBox="0 0 980 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>컨트롤 플레인·워커 노드 아키텍처와 배포 흐름</title>
-  <desc>사용자가 매니페스트를 API Server에 제출하면 etcd에 저장되고, Controller가 Pod를 생성하고 Scheduler가 노드를 배정하며 Kubelet이 컨테이너를 실행한다. 모든 컴포넌트는 서로 직접 통신하지 않고 API Server만 거친다.</desc>
-  <defs>
-    <style>
-      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
-      .sub    { font-size: 11px; fill: #e8e4df; }
-      .dim    { font-size: 11px; fill: rgb(138,133,128); }
-      .zone   { font-size: 12px; font-weight: 800; fill: rgb(212,168,83); }
-      .lbl    { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
-      .lbl2   { font-size: 10.5px; font-weight: 600; fill: #0d0d0d; }
-      .step   { font-size: 11px; fill: #e8e4df; }
-      .stepn  { font-size: 11px; font-weight: 800; fill: rgb(212,168,83); }
-      .mono   { font-family: 'JetBrains Mono', monospace; }
-    </style>
-    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="rgb(138,133,128)"/>
-    </marker>
-  </defs>
-
-  <rect x="0" y="0" width="980" height="560" fill="#0d0d0d"/>
-  <text x="24" y="32" class="title">쿠버네티스 아키텍처 — 모든 통신은 API Server를 거칩니다</text>
-  <text x="24" y="52" class="sub">컨트롤 플레인은 상태를 통제하고, 워커 노드는 실제로 컨테이너를 실행합니다. 컴포넌트끼리 직접 연결되지 않습니다.</text>
-
-  <!-- ===== Control Plane frame ===== -->
-  <rect x="30" y="78" width="560" height="440" rx="12" fill="rgb(24,28,32)" stroke="rgb(212,168,83)" stroke-width="1.4" stroke-dasharray="6 4"/>
-  <text x="48" y="102" class="zone">Control Plane (두뇌 — 통제하지만 실행하지 않음)</text>
-
-  <!-- API Server (hub) -->
-  <rect x="220" y="120" width="180" height="66" rx="9" fill="rgb(212,168,83)"/>
-  <text x="310" y="150" class="lbl" text-anchor="middle">API Server</text>
-  <text x="310" y="168" class="lbl2" text-anchor="middle">유일한 통신 허브 · RESTful</text>
-
-  <!-- etcd -->
-  <rect x="220" y="430" width="180" height="60" rx="9" fill="rgb(150,130,220)"/>
-  <text x="310" y="456" class="lbl" text-anchor="middle">etcd</text>
-  <text x="310" y="474" class="lbl2" text-anchor="middle">분산 저장소 · 오브젝트 영속</text>
-
-  <!-- Controllers -->
-  <rect x="55" y="250" width="150" height="66" rx="9" fill="rgb(230,230,230)"/>
-  <text x="130" y="278" class="lbl" text-anchor="middle">Controllers</text>
-  <text x="130" y="296" class="lbl2" text-anchor="middle">조정(reconcile)</text>
-
-  <!-- Scheduler -->
-  <rect x="415" y="250" width="150" height="66" rx="9" fill="rgb(230,230,230)"/>
-  <text x="490" y="278" class="lbl" text-anchor="middle">Scheduler</text>
-  <text x="490" y="296" class="lbl2" text-anchor="middle">노드 배치 결정</text>
-
-  <!-- edges within control plane (all via API Server) -->
-  <line x1="310" y1="186" x2="310" y2="430" stroke="rgb(138,133,128)" stroke-width="1.6" marker-start="url(#arr)" marker-end="url(#arr)"/>
-  <text x="322" y="310" class="dim">읽기·쓰기</text>
-  <line x1="205" y1="270" x2="218" y2="180" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#arr)"/>
-  <line x1="415" y1="270" x2="402" y2="180" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#arr)"/>
-
-  <!-- ===== Worker Node frame ===== -->
-  <rect x="640" y="78" width="310" height="440" rx="12" fill="rgb(20,24,28)" stroke="rgb(138,133,128)" stroke-width="1.3"/>
-  <text x="658" y="102" class="zone">Worker Node (워크로드 — 실제 실행)</text>
-
-  <!-- Kubelet -->
-  <rect x="700" y="150" width="190" height="60" rx="9" fill="rgb(102,187,106)"/>
-  <text x="795" y="176" class="lbl" text-anchor="middle">Kubelet</text>
-  <text x="795" y="194" class="lbl2" text-anchor="middle">노드 에이전트 · 상태 보고</text>
-
-  <!-- Container runtime -->
-  <rect x="700" y="240" width="190" height="60" rx="9" fill="rgb(230,230,230)"/>
-  <text x="795" y="266" class="lbl" text-anchor="middle">컨테이너 런타임</text>
-  <text x="795" y="284" class="lbl2" text-anchor="middle">컨테이너 실제 실행</text>
-
-  <!-- kube-proxy -->
-  <rect x="700" y="330" width="190" height="60" rx="9" fill="rgb(230,230,230)"/>
-  <text x="795" y="356" class="lbl" text-anchor="middle">kube-proxy</text>
-  <text x="795" y="374" class="lbl2" text-anchor="middle">서비스 트래픽 라우팅</text>
-
-  <!-- API Server <-> Kubelet (the only cross-plane link) -->
-  <line x1="400" y1="153" x2="700" y2="176" stroke="rgb(212,168,83)" stroke-width="1.8" marker-start="url(#arr)" marker-end="url(#arr)"/>
-  <text x="470" y="140" class="stepn">API Server ↔ Kubelet 만 연결</text>
-  <line x1="795" y1="210" x2="795" y2="238" stroke="rgb(138,133,128)" stroke-width="1.6" marker-end="url(#arr)"/>
-
-  <!-- ===== deploy flow steps (bottom-right) ===== -->
-  <text x="658" y="428" class="stepn" font-weight="800">배포 흐름</text>
-  <text x="658" y="447" class="step"><tspan class="stepn">①</tspan> 매니페스트 제출 → etcd 저장</text>
-  <text x="658" y="464" class="step"><tspan class="stepn">②</tspan> Controller가 부족분 Pod 생성</text>
-  <text x="658" y="481" class="step"><tspan class="stepn">③</tspan> Scheduler가 노드 배정</text>
-  <text x="658" y="498" class="step"><tspan class="stepn">④</tspan> Kubelet이 컨테이너 실행</text>
-
-  <!-- user -->
-  <text x="310" y="540" class="sub" text-anchor="middle">▲ 개발자·운영자(kubectl) 는 오직 API Server 로만 오브젝트를 만듭니다</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">모든 통신이 API Server 한 곳을 거친다</title><desc id="dd">컨트롤 플레인은 상태를 통제하고 워커 노드는 실제로 실행한다. 컴포넌트끼리는 서로 직접 연결되지 않고 언제나 API Server 를 통한다.</desc>
+<rect width="1000" height="700" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES IN ACTION · 01-01</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">모든 통신이 API Server 한 곳을 거친다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">개발자·운영자도 예외가 아니다 — kubectl 은 API Server 로만 말한다</text>
+<rect x="24" y="104" width="952" height="540" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="38" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">컴포넌트끼리 잇는 선이 하나도 없다 — 그것이 이 그림의 요점이다</text>
+<rect x="340" y="304" width="320" height="104" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4"/>
+<text x="500" y="344" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="16" font-weight="600" fill="#F08A59">API Server</text>
+<text x="500" y="370" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">유일한 통신 허브 · RESTful</text>
+<rect x="370" y="162" width="260" height="76" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="500" y="192" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">kubectl — 개발자·운영자</text>
+<text x="500" y="214" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">오브젝트를 만든다</text>
+<rect x="30" y="202" width="260" height="76" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="160" y="232" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">etcd</text>
+<text x="160" y="254" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">오브젝트를 영속한다</text>
+<rect x="710" y="202" width="260" height="76" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="840" y="232" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">Controllers</text>
+<text x="840" y="254" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">부족분을 조정한다</text>
+<rect x="30" y="434" width="260" height="76" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="160" y="464" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">Scheduler</text>
+<text x="160" y="486" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">노드를 정한다</text>
+<rect x="710" y="434" width="260" height="76" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="840" y="464" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">Kubelet</text>
+<text x="840" y="486" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">컨테이너를 실행한다</text>
+<path d="M 500 244 L 500 294" fill="none" stroke="#6A95D8" stroke-width="1.6" marker-end="url(#info)"/>
+<path d="M 296 240 L 320 240 L 320 356 L 336 356" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 704 240 L 680 240 L 680 356 L 664 356" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 296 472 L 320 472 L 320 356 L 336 356" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 704 472 L 680 472 L 680 356 L 664 356" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 160 284 L 160 428" fill="none" stroke="#F0616D" stroke-width="1.4" stroke-dasharray="6 5"/>
+<line x1="172" y1="368" x2="148" y2="344" stroke="#F0616D" stroke-width="2.4"/>
+<line x1="172" y1="344" x2="148" y2="368" stroke="#F0616D" stroke-width="2.4"/>
+<text x="160" y="404" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">컴포넌트끼리 직접 잇지 않는다</text>
+<text x="36" y="556" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">① 매니페스트 제출 → etcd 저장   ② Controller 가 부족분 Pod 생성   ③ Scheduler 가 노드 배정   ④ Kubelet 이 컨테이너 실행</text>
+<text x="36" y="584" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">네 단계가 모두 API Server 를 거쳐 간다 — 그래서 허브가 하나뿐이어도 전체가 돈다.</text>
+<line x1="12" y1="660" x2="952" y2="660" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="682" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="672" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="682" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">컨트롤 플레인 쪽</text>
+<rect x="261" y="672" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="283" y="682" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">실행하는 쪽</text>
+<rect x="383" y="672" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="405" y="682" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">유일한 허브</text>
+<rect x="505" y="672" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="527" y="682" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">존재하지 않는 연결</text>
 </svg>
