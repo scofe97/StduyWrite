@@ -3,20 +3,23 @@ Output "01-04.arp-resolution.gif"
 Require tcpdump
 Require ping
 
-# ⛔ 이 테이프의 산출물은 공개 저장소에 커밋하지 않는다.
-#    ARP 출력에는 이 랜의 게이트웨이 IP 와 양쪽 MAC 주소가 그대로 찍힌다.
-#    5부 §11 민감정보 규약상 사설 대역 주소는 문서에 싣지 않는다.
-#    굽더라도 로컬에서 확인만 하고 지우거나, private_dir 로 옮긴다.
+# §3 실행 장면. 이 랜의 게이트웨이 IP 와 양쪽 MAC 은 화면에 그대로 찍히므로
+# 캡처를 미리 떠 두고, 화면에서는 sed 로 마스킹한 결과만 읽는다.
+# 그래서 이 GIF 는 공개 저장소에 올려도 된다.
 #
-# 굽기 전에:
-#   1. sudo -v                                        # 자격 증명 캐시
-#   2. GW=$(netstat -rn -f inet | awk '$1=="default"{print $2}')
-#      아래 <GATEWAY_IP> 두 곳을 그 값으로 바꾼다. Type 은 변수 확장을 하지 않는다.
+# 굽기 전에 (터미널에서 직접, sudo 암호를 여기서만 친다):
+#   GW=$(netstat -rn -f inet | awk '$1=="default" && $NF=="en0"{print $2; exit}')
+#   sudo tcpdump -i en0 -e -n arp -c 4 -w /tmp/arp.pcap &
+#   sleep 2; sudo arp -d "$GW"; ping -c 1 "$GW" >/dev/null; sleep 2
+#   sudo pkill tcpdump; sudo chmod 644 /tmp/arp.pcap
+#
+# vhs 는 새 가상 터미널을 띄우고 macOS sudo 는 터미널마다 자격 증명을 따로
+# 캐시하므로(tty_tickets), 화면 안에서 sudo 를 쓰면 암호를 물어 멈춘다.
 
 Set Shell "bash"
 Set Width 1440
 Set Height 420
-Set FontSize 19
+Set FontSize 18
 Set FontFamily "JetBrains Mono"
 Set Theme "GitHub Dark"
 Set Padding 26
@@ -31,18 +34,11 @@ Type "clear"
 Enter
 Show
 
-Type "sudo tcpdump -i en0 -e -n arp -c 4 &"
-Sleep 400ms
+Type "# 주소는 마스킹해 읽는다 — 형태만 보면 되기 때문이다"
 Enter
-Sleep 3s
+Sleep 1s
 
-Type "sudo arp -d <GATEWAY_IP>"
+Type `tcpdump -r /tmp/arp.pcap -e -n 2>/dev/null | sed -E 's/([0-9a-f]{1,2}:){5}[0-9a-f]{1,2}/MAC/g; s/([0-9]{1,3}\.){3}[0-9]{1,3}/IP/g' | cut -c1-104`
 Sleep 400ms
 Enter
-Sleep 1500ms
-
-Type "ping -c 1 <GATEWAY_IP>"
-Sleep 400ms
-Enter
-Wait+Screen /ff:ff:ff:ff:ff:ff/
-Sleep 7s
+Sleep 8s
