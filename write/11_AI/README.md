@@ -37,10 +37,13 @@ updated: 2026-06-25
 
 | 폴더 | 편수 | 다루는 범위 |
 |------|------|------------|
+| [`docs/`](docs/) | 12편 | 도구 하나를 설치본 기준으로 파고든 노트. 현재 [`docs/orca/`](docs/orca/) — ADE(Agentic Development Environment) ORCA를 격리·관측·조율 세 축으로 |
 | [`hermes/`](hermes/) | 1편 | Hermes 에이전트 하네스 사례 — 자기개선 로컬 에이전트의 루프와 메모리 구조 |
 | [`quiz/`](quiz/) | 4편 | 학습 퀴즈 축적본, AI 엔지니어링·Agentization 각 100문항, 오답 노트 |
 
-위 "등록된 절"이 개념 본문이라면 이 둘은 사례와 자가 점검입니다. 본문 개정 시 함께 보지 않아도 되도록 분리해 둡니다.
+위 "등록된 절"이 개념 본문이라면 이 셋은 제품 사례와 자가 점검입니다. 본문 개정 시 함께 보지 않아도 되도록 분리해 둡니다.
+
+`docs/`가 `hermes/`와 다른 점은 깊이입니다. `hermes/`가 사례 한 편짜리 읽을거리라면 `docs/`는 도구 하나를 장 단위로 끝까지 따라가고, 근거를 설치본에서 직접 뽑습니다.
 
 
 
@@ -50,7 +53,7 @@ updated: 2026-06-25
 
 ## 향후 추가 후보
 
-> 02-06~10 신규 5편으로 roadmap 18주제의 개념 갭(Prompt·Context·RAG·Evaluation·Guardrail·Observability)은 메웠습니다. RAG↔롱컨텍스트 트레이드오프는 02-08 §7에, 프롬프트 구조화 출력은 02-06 §4에 흡수됐습니다. 남은 후보는 아래와 같습니다.
+> 02-06~10 신규 5편으로 roadmap 18주제의 개념 갭(Prompt·Context·RAG·Evaluation·Guardrail·Observability)은 메웠습니다. 2026-08-26 [`docs/orca/`](docs/orca/) 12편으로 Agentization·Harness의 *제품 구현 사례* 축을 추가했습니다 — 개념편이 답하지 못하던 "실제로 어떤 명령과 상태 모델로 떨어지는가"를 봅니다. RAG↔롱컨텍스트 트레이드오프는 02-08 §7에, 프롬프트 구조화 출력은 02-06 §4에 흡수됐습니다. 남은 후보는 아래와 같습니다.
 
 - 01-02: 다른 LLM 벤더(OpenAI·Gemini) 모델 라인업·가격 비교 — 벤더별 모델명 문제 대비
 - 02-11: Tool/Function Calling 심화 전용편 — 현재 02-02(tool_use)·02-08(retrieval tool)·02-10(permission)에 분산 흡수. 시험이 tool schema·retry·timeout을 깊게 물으면 분리
