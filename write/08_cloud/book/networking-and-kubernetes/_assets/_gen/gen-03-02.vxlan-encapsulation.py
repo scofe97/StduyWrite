@@ -1,7 +1,10 @@
 # 03-02.vxlan-encapsulation — MAC-in-UDP, 껍질을 씌우고 벗긴다
 # 본문 요구: 네 단계 — 원본 프레임 / 캡슐화(VNI 24비트) / L3 언더레이 / 역캡슐화
-# 타입 스펙: type-nested.md 의 겹 + 4 단계. 01-03 의 같은 개념과 시각 언어를 맞춰
-#           독자가 두 장을 이어 읽을 수 있게 한다.
+# 타입 스펙: type-data-flow.md — 배치는 ①~④ 네 단계 진행이고, 겹(type-nested.md)은 각 칸의
+#           *내용*이지 배치 문법이 아니다. 2026-08-28 재분류: 겹을 앞세워 선언해 두면
+#           표현형 감사에서 nested 로 집계돼 실제 배치가 가려진다.
+#           01-03 의 같은 개념 도식과 시각 언어는 그대로 맞춰 둔다 — 그쪽 선언도 같은 이유로
+#           data-flow 가 맞지만 이번 회차 범위(02-02~06-02) 밖이라 손대지 않았다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
