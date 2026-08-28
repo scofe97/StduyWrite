@@ -1,6 +1,8 @@
 # 09-03 §4 — 두 곳을 동시에 손대야 칸이 맞는다
 # 본문이 "fsGroup 은 두 가지를 동시에 한다"고 못박고 실측(groups 1000 → 1000,2000)을 든다.
 # 그러니 파일 쪽과 프로세스 쪽을 나란히 놓고, 맞물리는 칸이 어디인지가 보여야 한다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 fsGroup 유무 두 경우, 열은 볼륨 파일 쪽 · 프로세스 쪽 · 판정이다. 두 칸의 그룹 값이
+#           맞물리는지가 판정 열을 정한다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

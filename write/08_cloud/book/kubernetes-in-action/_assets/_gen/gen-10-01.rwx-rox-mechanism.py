@@ -1,6 +1,8 @@
 # 10-01 §5 — Many 가 되려면 스토리지 쪽이 받쳐 줘야 한다
 # access mode 는 요구일 뿐이고 실제로 되느냐는 밑바탕 스토리지가 정한다. 그러니 모드 이름이
 # 아니라 그것을 가능하게 하는 기전이 그림의 중심이어야 한다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 모드 둘, 열은 요구 · 그것을 가능하게 하는 기전 · 실제 예다. 모드 이름이 아니라
+#           기전 열이 판정 축이라는 것이 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

@@ -1,6 +1,8 @@
 # 10-03 §1 — 벽과 대장은 다른 층이다
 # 캡션이 "번호 매긴 사물함 벽과 그 위의 관리 대장"이라는 비유를 준다. 그 비유를 그림으로
 # 옮기되, 두 층이 각각 무엇을 아는지가 함께 보여야 리사이즈 2 층 구조로 이어진다.
+# 타입 스펙: type-architecture.md — 블록 디바이스라는 칸의 벽과 그 위 파일시스템 대장 두 구성 요소, 그리고 대장이 벽을
+#           가리키는 화살표로 이뤄진다. 층 이야기는 짝 도식(filesystem-resize-layers)이 맡는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

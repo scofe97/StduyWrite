@@ -1,6 +1,8 @@
 # 09-02 §2 — 같은 파드가 다른 노드로 가면 다른 데이터를 본다
 # hostPath 의 위험은 "노드에 묶인다"는 문장보다 그 결과에 있다. 그러니 노드 둘을 놓고 같은
 # 경로가 서로 다른 내용을 담고 있음을 보여야 한다.
+# 타입 스펙: type-deployment.md — 노드 두 상자가 존이고 그 안의 파일과 파드가 artifact 다. 같은 매니페스트가 어느 노드에
+#           놓이느냐가 곧 결과라, 배치 그 자체가 값인 type-deployment 의 zone > node > artifact 문법이 맞는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

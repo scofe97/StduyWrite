@@ -1,6 +1,11 @@
 # 09-02 §1 — 같은 결과, 더 짧은 경로
 # 캡션이 "같은 결과, 더 짧은 경로"라고 결론을 준다. 그러니 두 방식을 나란히 놓되 단계 수가
 # 눈에 띄게 달라야 하고, 무엇이 사라졌는지가 표시돼야 한다.
+# 타입 스펙: type-process.md — 두 밴드가 같은 슬롯의 단계를 반복하되 하나는 넷, 하나는 둘이다. 단계 수의 차이가
+#           논지라 지나가는 것이 구성 요소가 아니라 하는 일이다.
+#           type-process 정본의 입력 계약은 역할 레인 1~6 이 전제인데 이 그림에 레인은 없다.
+#           주체를 요구하지 않는 유일한 라우팅 규칙이 semantic-patterns 의
+#           "Stage framework with semantic slots" 한 줄이라 그것을 근거로 둔다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx
@@ -22,10 +27,12 @@ def road(y0, label, steps, c, focal, verdict, vc):
         d.t(cx, y0 + 134, ddx.fit(s, 10, BW - 14, s), 10, MUTED, KR)
     for a, b in zip(CX, CX[1:]):
         d.path(f"M {a+BW//2+5} {y0+118} L {b-BW//2-9} {y0+118}", MUTED, 1.4, m="ar")
+    # x=1000 은 4 단 행의 마지막 상자(816~1016)를 156px 덮었다. 단 수가 행마다 달라
+    # 상자 오른쪽이 아니라 상자 아래 띠 가운데에 둔다 — 두 행이 같은 자리를 쓴다.
     if focal:
-        ddx.focal_tag(d, 1000, y0 + 118, verdict, 280)
+        ddx.focal_tag(d, 610, y0 + 190, verdict, 280)
     else:
-        ddx.tag(d, 1000, y0 + 118, verdict, vc, 280)
+        ddx.tag(d, 610, y0 + 190, verdict, vc, 280)
 
 road(100, "init 컨테이너로 복사", [
     ("이미지를 만든다", "파일을 담아"), ("init 이 뜬다", "볼륨을 마운트"),

@@ -1,6 +1,8 @@
 # 10-03 §5 — emptyDir 하나면 되는데 왜
 # 본문이 그 물음을 직접 던진다. 답은 "만들어지는 것이 진짜 PV 라서"이므로, 두 볼륨의 실체가
 # 무엇인지가 그림의 축이어야 하고 거기서 기능 차이가 따라 나와야 한다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 볼륨 둘, 열은 실체 · 쓸 수 있는 것 · 고르는 자리다. focal 열이 실체라
+#           그 한 칸이 나머지를 정한다는 것이 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, KR
 import ddx

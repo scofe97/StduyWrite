@@ -1,6 +1,11 @@
 # 09-01 §4 — 볼륨이 먼저, 그다음 init 컨테이너
 # 본문이 "매니페스트에서 볼륨을 앞에 정의하든 뒤에 정의하든 마찬가지"라고 못박는다. 그러니
 # 매니페스트 순서가 아니라 실제 시작 순서를 축으로 삼아야 한다.
+# 타입 스펙: type-process.md — ①~⑤ 다섯 단계가 같은 슬롯(무엇이 일어난다 · 무엇으로)으로 반복되고, 그 아래를 볼륨 구간 띠가
+#           가로지른다. 매니페스트 순서가 아니라 실제 시작 순서가 축이다.
+#           type-process 정본의 입력 계약은 역할 레인 1~6 이 전제인데 이 그림에 레인은 없다.
+#           주체를 요구하지 않는 유일한 라우팅 규칙이 semantic-patterns 의
+#           "Stage framework with semantic slots" 한 줄이라 그것을 근거로 둔다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

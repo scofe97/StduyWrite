@@ -1,6 +1,8 @@
 # 10-01 §2 — 언제 만들어지고 언제 사라지는가
 # 세 오브젝트의 수명이 서로 다른 시점에 시작하고 끝난다. 그러니 관계도가 아니라 시간축 위의
 # 세 레인이어야 "PVC 는 남고 PV 는 바인딩된 채"라는 서술이 보인다.
+# 타입 스펙: type-gantt.md — PVC·PV·파드 둘 네 레인이 하나의 시간축을 공유하고, 각자 다른 지점에서 시작하고 끝난다.
+#           겹침과 어긋남이 논지이고 아래 눈금이 여섯 사건을 마일스톤으로 찍는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, RULE, KR, MONO
 import ddx

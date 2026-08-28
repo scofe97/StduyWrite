@@ -1,6 +1,8 @@
 # 10-03 §2 — PVC·PV 와 같은 짝 구조를 한 층 더
 # 오브젝트 넷을 나열하면 외울 것이 넷이 된다. 이미 아는 PVC·PV 짝과 대응시키면 하나만
 # 새로 배우면 되므로, 그 대응이 그림의 뼈대여야 한다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 짝 둘(PVC·PV / VolumeSnapshot·VolumeSnapshotContent), 열은 요구 · 실체 · 클래스다.
+#           이미 아는 짝과 같은 자리에 새 짝을 놓아 대응이 칸으로 읽히게 한다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

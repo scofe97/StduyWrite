@@ -1,6 +1,8 @@
 # 10-03 §4 — 한 번에 지워지지 않는다
 # 본문이 "이 정리는 한 번에 일어나지 않고 두 단계로 진행된다"고 못박고, 2 단이 분기라고 한다.
 # 그러니 삭제를 한 화살표로 그리면 안 되고 단계와 분기가 함께 보여야 한다.
+# 타입 스펙: type-flowchart.md — 파드 삭제에서 1 단을 거쳐 2 단에서 reclaim policy 에 따라 두 결말로 갈린다.
+#           판정 하나가 배타적 결말 둘을 만드는 구조다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx
@@ -23,7 +25,8 @@ ddx.node(d, 900, 200, "Delete 면", "PV 와 밑바탕 볼륨까지 삭제", 320,
 d.path("M 594 324 L 666 324 L 666 400 L 690 400", WARN, 1.5, m="warn")
 ddx.node(d, 900, 400, "Retain 이면", "PV 가 Released 로 남는다", 320, 76, WARN)
 d.t(900, 452, "운영자가 수동으로 정리한다", 10, WARN, KR)
-d.t(642, 300, "2 단 — PV 의 reclaim policy 가 정한다", 11, SOFT, KR)
+# x=642 에 가운데 정렬하면 왼쪽 끝이 1 단 상자(310~590)를 파고든다. 갈림 아래 빈 구간으로 내린다.
+d.t(450, 372, "2 단 — PV 의 reclaim policy 가 정한다", 11, SOFT, KR)
 
 d.t(24, 512, "ephemeral PVC 의 생애주기가 파드에 묶이는 것은 이 ownerReferences 때문이다. "
              "직접 만든 PVC 에는 그 주인이 없어 파드를 지워도 남는다.", 11, MUTED, KR, "start")

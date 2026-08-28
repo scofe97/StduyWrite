@@ -1,6 +1,11 @@
 # 08-03 §4 — 값의 출처가 Pod 자신이다
 # 본문이 "ConfigMap·Secret 주입과 다를 게 없고, 값의 출처가 Pod 오브젝트 자신이라는 점만
 # 다르다"고 못박는다. 그러니 새 구조로 그리면 안 되고, 같은 골격에 출처만 바뀐 그림이어야 한다.
+# 타입 스펙: type-architecture.md — Pod 오브젝트 경계 상자에서 fieldRef 를 거쳐 컨테이너 경계 상자로 값이 건너간다.
+#           ConfigMap 주입 도식과 같은 골격에 출처만 바뀐 것이 논지라 구성도여야 한다.
+#           type-data-flow 는 역할 레인 1~4 × 단계 열 × 타입 있는 페이로드 칩이 입력 계약인
+#           데이터 플랫폼 전용 타입이라 여기엔 맞지 않는다. type-architecture 의 Best for 에
+#           "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

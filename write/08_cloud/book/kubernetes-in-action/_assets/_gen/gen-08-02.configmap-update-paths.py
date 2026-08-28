@@ -1,6 +1,8 @@
 # 08-02 §5 — 한 번의 수정이 세 갈래로 갈린다
 # 짝 도식(env-vs-file-choice)이 선택 기준을 맡으므로 이쪽은 '수정한 뒤 무슨 일이 나는가'만
 # 본다. 그래서 표가 아니라 수정 하나에서 뻗는 갈래여야 한다.
+# 타입 스펙: type-flowchart.md — ConfigMap 수정 하나에서 값을 어떻게 받았느냐에 따라 세 결말로 갈린다. 마름모를 쓰지 않았지만
+#           판정 하나가 배타적 결말 셋을 만드는 구조라 flowchart 계약에 맞는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

@@ -1,6 +1,8 @@
 # 09-02 §2 — type 검사가 무엇을 바꾸는가
 # 본문이 kind 실측 셋을 든다. 표로 옮기면 "검사의 효과"가 안 보이므로, 같은 hostPath 에서
 # type 만 달리했을 때 결과가 어떻게 갈리는지가 축이어야 한다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 type 값 셋, 열은 경로 상태와 결과다. 같은 hostPath 에서 type 만 달리했을 때
+#           무엇이 갈리는지가 칸으로 드러난다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, KR
 import ddx

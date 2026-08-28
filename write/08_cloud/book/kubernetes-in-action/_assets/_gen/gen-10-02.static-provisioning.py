@@ -1,6 +1,11 @@
 # 10-02 §1 — 만드는 순서가 뒤집힌다
 # 동적과 정적의 차이는 기능이 아니라 순서다. 그러니 두 순서를 나란히 놓아야 "운영자가 먼저"라는
 # 말이 무엇을 뜻하는지 보인다.
+# 타입 스펙: type-process.md — 두 밴드가 같은 슬롯의 세 단계를 반복하되 순서가 뒤집혀 있고, 각 단계 위에 그 일을 하는
+#           주체(개발자 · 운영자 · 프로비저너 · 컨트롤 플레인)가 적힌다.
+#           type-process 정본의 입력 계약은 역할 레인 1~6 이 전제인데 이 그림에 레인은 없다.
+#           주체를 요구하지 않는 유일한 라우팅 규칙이 semantic-patterns 의
+#           "Stage framework with semantic slots" 한 줄이라 그것을 근거로 둔다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, KR, MONO
 import ddx

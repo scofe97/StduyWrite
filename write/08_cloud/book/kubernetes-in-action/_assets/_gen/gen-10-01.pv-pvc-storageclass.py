@@ -1,6 +1,11 @@
 # 10-01 §1 — 요구와 실체 사이에 클래스가 선다
 # 세 오브젝트를 나열하면 "왜 셋인가"가 안 보인다. 요구하는 쪽·만들어지는 쪽·그 사이에서
 # 방법을 정하는 쪽으로 역할을 갈라 놓아야 한다.
+# 타입 스펙: type-architecture.md — 파드·PVC·StorageClass·PV 네 구성 요소와 그 사이 흐름을 그린 구성도다.
+#           코럴 초점은 방법을 정하는 StorageClass 하나다.
+#           type-data-flow 는 역할 레인 1~4 × 단계 열 × 타입 있는 페이로드 칩이 입력 계약인
+#           데이터 플랫폼 전용 타입이라 여기엔 맞지 않는다. type-architecture 의 Best for 에
+#           "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

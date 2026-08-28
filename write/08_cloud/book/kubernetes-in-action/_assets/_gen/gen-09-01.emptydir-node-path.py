@@ -1,6 +1,8 @@
 # 09-01 §3 — 복사본이 아니라 같은 실체를 두 곳에서 본다
 # 본문이 "노드의 ls 결과와 컨테이너 안 ls 가 한 글자도 다르지 않았다"를 근거로 든다.
 # 그러니 두 경로를 잇는 화살표가 아니라, 같은 것을 가리키고 있음이 보여야 한다.
+# 타입 스펙: type-architecture.md — 노드에서 본 경로와 컨테이너에서 본 경로 두 상자가 가운데 "같은 실체" 로 모인다.
+#           05-02 의 pid-uts-two-views 와 같은 형태 — 대상은 하나이고 보는 자리가 둘이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

@@ -1,6 +1,8 @@
 # 08-02 §5 — 무중단이되 즉시가 아니다
 # 본문이 실측값(kind v1.35 에서 약 56 초)과 "파드 UID·restartCount 는 그대로"를 함께 든다.
 # 시간축 하나로는 그 둘이 안 보이므로, 지연 구간과 변하지 않은 것을 같이 얹는다.
+# 타입 스펙: type-gantt.md — 0~70 초 눈금이 찍힌 시간축 위에 옛 값 구간과 새 값 구간이 이어 놓이고, 변하지 않은 것이
+#           그 아래 한 구간으로 겹쳐 놓인다. 56 초 지점의 세로 점선이 정본의 마일스톤 표시에 해당한다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx
