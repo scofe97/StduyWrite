@@ -1,6 +1,8 @@
 # 18-02 §1 — 창의 크기와 채워야 할 횟수
 # 두 값이 각각 무엇을 정하는지가 헷갈리는 자리다. 그러니 정의를 적는 대신, 동시 실행 창을
 # 고정 폭으로 그려 그 안이 계속 채워지는 장면이어야 한다.
+# 타입 스펙: type-gantt.md — 창 둘을 레인으로 두고 파드 다섯을 시간 구간 막대로 놓았다. 하나가 끝난 자리에 다음이
+#           들어오는 겹침과 이어짐이 논지이고, 아래 기준선이 공용 시간축이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

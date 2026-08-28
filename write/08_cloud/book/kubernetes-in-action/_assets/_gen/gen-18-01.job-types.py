@@ -1,6 +1,8 @@
 # 18-01 §2 — 세 실행 방식이 완료에 이르는 길
 # 캡션이 "각각 완료에 이르는 경로"라 한다. 그러니 유형 이름만 늘어놓지 말고 파드가 몇 개
 # 언제 도는지가 시간 위에 보여야 한다.
+# 타입 스펙: type-gantt.md — 세 밴드가 같은 시간축을 공유하고 파드마다 구간 막대가 놓인다. 병렬 밴드에서 두 막대가
+#           겹치는 것이 논지라, 시간 겹침을 보이는 gantt 계약에 맞는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

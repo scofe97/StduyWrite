@@ -1,6 +1,9 @@
 # 17-01 §1 — 무엇을 세느냐가 다르다
 # 배치 결과만 그리면 우연처럼 보인다. 각자 무엇을 맞추려 하는지를 함께 적어야 "노드가 늘면
 # 파드가 따라 는다"가 결과가 아니라 정의에서 나온 것임이 읽힌다.
+# 타입 스펙: type-deployment.md — 두 밴드가 같은 노드 셋 위에 서로 다른 배치를 그린다. 노드 상자가 존, 그 안의 칩이 파드이고
+#           칸마다 개수(2·1·0 대 1·1·1)가 적히므로 type-deployment 정본이 요구하는 replica 수와
+#           배치 결정이 둘 다 있다. 격자로 읽을 값이 아니라 배치 그 자체가 값이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

@@ -1,6 +1,12 @@
 # 18-01 전체 지도 — 끝나야 완료되는 워크로드
 # 본문이 층 구조를 지정한다 — "위층은 Job 상태가 생성에서 완료까지 가로로, 가운데는 그 아래에서
 # 실제로 도는 파드, 아래층은 끝난 뒤의 정리". 그 세 층을 그대로 세운다.
+# 타입 스펙: type-process.md — 위 밴드가 생성에서 완료까지 네 단계이고, 아래 두 밴드가 그 단계마다 파드와 정리를 같은
+#           슬롯으로 되풀이한다 — 단계 열 × 의미 행의 틀이다.
+#           2026-08-29 덧붙임: type-process 정본의 입력 계약도 역할 레인 1~6 이 전제인데 이 그림에
+#           레인은 없다. 그래도 process 를 두는 것은, 주체를 요구하지 않는 유일한 라우팅 규칙이
+#           semantic-patterns 의 "Stage framework with semantic slots" 한 줄이기 때문이다.
+#           38개 메뉴의 공백이라 visual-diagram-selection 의 "알려진 공백" 에 같이 적어 두었다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

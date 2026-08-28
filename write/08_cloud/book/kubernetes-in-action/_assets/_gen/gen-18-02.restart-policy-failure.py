@@ -1,6 +1,13 @@
 # 18-02 §2 — 어느 수준에서 다시 하느냐
 # 캡션이 두 흐름을 구체적으로 준다 — OnFailure 는 같은 파드에서 컨테이너를, Never 는 새 파드를.
 # 그러니 결과만 비교하면 안 되고 무엇이 다시 만들어지는지가 보여야 한다.
+# 타입 스펙: type-process.md — 두 밴드가 실패 처리 세 단계를 같은 슬롯(무엇이 실패했나 · 어디서 다시 하나 · 무엇이 남나)으로
+#           되풀이하고, 각 밴드 오른쪽에 그 일을 하는 주체(kubelet · Job 컨트롤러)가 적힌다. 지나가는
+#           구성 요소가 아니라 주체가 하는 동작의 순서라 architecture 가 아니라 process 다.
+#           2026-08-29 덧붙임: type-process 정본의 입력 계약도 역할 레인 1~6 이 전제인데 이 그림에
+#           레인은 없다. 그래도 process 를 두는 것은, 주체를 요구하지 않는 유일한 라우팅 규칙이
+#           semantic-patterns 의 "Stage framework with semantic slots" 한 줄이기 때문이다.
+#           38개 메뉴의 공백이라 visual-diagram-selection 의 "알려진 공백" 에 같이 적어 두었다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

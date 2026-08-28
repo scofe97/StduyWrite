@@ -1,6 +1,8 @@
 # 17-02 전체 지도 — 무엇을 열어 줄 것인가
 # 본문이 "2×2 로 압축한 지도"이고 "네 영역은 각각 독립한다"고 못박는다. 그러니 체인이나
 # 띠가 아니라 격자여야 하고, 순서를 암시하는 화살표를 두면 안 된다.
+# 타입 스펙: type-dp-security-matrix.md — 본문이 "네 영역은 각각 독립한다"고 못박아 화살표를 두지 않았다 — 순서 없는 2×2 격자다.
+#           13-03 chapter-overview 와 같은 형태이고, 단계 체인으로 그린 다른 편 개요와 일부러 다르다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

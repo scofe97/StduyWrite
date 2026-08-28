@@ -1,6 +1,11 @@
 # 17-01 전체 지도 — 노드 수가 기준이 된다
 # 본문이 "색이 붙은 곳은 두 군데뿐이고 둘 다 주의 표시"라 서술하고, 2 단계와 4 단계의 앰버 띠가
 # 각각 무엇을 뜻하는지 적는다. 둘 다 앰버다 — 붉은 띠는 없다.
+# 타입 스펙: type-process.md — 절마다 같은 의미 슬롯(절 번호·요점·주의)이 세로로 반복된다.
+#           2026-08-29 덧붙임: type-process 정본의 입력 계약도 역할 레인 1~6 이 전제인데 이 그림에
+#           레인은 없다. 그래도 process 를 두는 것은, 주체를 요구하지 않는 유일한 라우팅 규칙이
+#           semantic-patterns 의 "Stage framework with semantic slots" 한 줄이기 때문이다.
+#           38개 메뉴의 공백이라 visual-diagram-selection 의 "알려진 공백" 에 같이 적어 두었다.
 import sys; sys.path.insert(0, ".")
 from dd import D, WARN, MUTED, KR
 import ddx

@@ -1,6 +1,8 @@
 # 17-01 §1 — 세 가지를 감시해 하나를 보장한다
 # 14-02 의 reconciliation 고리와 같은 골격이되 감시 대상에 노드가 들어간다는 점이 다르다.
 # 그 차이가 "노드가 늘면 파드가 따라 는다"의 기전이므로 노드를 따로 세워 둔다.
+# 타입 스펙: type-loop.md — 마지막 단계가 첫 단계로 돌아온다 — 조정 결과를 다시 관찰 대상으로 되먹이는 점선이
+#           그 고리다. 14-02 의 reconciliation-loop 와 같은 골격이고 감시 대상만 하나 늘었다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

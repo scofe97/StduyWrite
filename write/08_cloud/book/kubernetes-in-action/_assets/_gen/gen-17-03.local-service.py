@@ -1,6 +1,9 @@
 # 17-03 §3 — 이름으로 부르되 같은 노드로만
 # 앞의 둘이 노드 IP 를 알아야 했다면 이쪽은 Service 이름만으로 된다. 그 이득과 함께,
 # 에이전트 없는 노드에서 어떻게 되는지가 같은 그림에 있어야 판단이 선다.
+# 타입 스펙: type-architecture.md — 노드 두 경우를 같은 골격으로 위아래에 놓고 각각의 흐름이 닿는지 막히는지를 보인다.
+#           밴드가 둘이지만 레인이 주체가 아니라 노드 상황이라 swimlane 은 아니다 — 레인을 넘는
+#           인계도 없다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

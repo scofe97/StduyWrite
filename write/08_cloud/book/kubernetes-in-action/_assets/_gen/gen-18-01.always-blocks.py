@@ -1,6 +1,8 @@
 # 18-01 §2 — Always 는 끝을 못 본다
 # 캡션이 "성공해도 재시작해 CrashLoopBackOff 에 머문다"고 결과까지 말한다. 그러니 세 값을
 # 비교하는 표가 아니라, 성공 뒤에 무슨 일이 나는지가 경로로 갈려야 한다.
+# 타입 스펙: type-flowchart.md — 종료 하나에서 restartPolicy 값에 따라 두 결말로 갈린다 — 위는 CrashLoopBackOff 로 되돌고
+#           아래는 Completed 에 닿는다. 판정 하나가 두 경로를 만드는 구조다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

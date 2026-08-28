@@ -1,6 +1,10 @@
 # 17-03 §1 — 노드 IP 를 앱이 어떻게 아는가
 # hostPort 를 쓰려면 노드 IP 가 필요한데 그 값은 스케줄 전에는 없다. 08-03 에서 세운 Downward
 # API 가 그 자리를 메운다는 것이 요점이라, 값의 출처가 Pod status 임이 보여야 한다.
+# 타입 스펙: type-architecture.md — Pod status 에서 fieldRef 를 거쳐 환경변수로 값이 건너가는 세 칸짜리 구성도다.
+#           type-data-flow 는 역할 레인 1~4 × 단계 열 × 타입 있는 페이로드 칩이 입력 계약인
+#           데이터 플랫폼 전용 타입이라 여기엔 맞지 않는다. type-architecture 의 Best for 에
+#           "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

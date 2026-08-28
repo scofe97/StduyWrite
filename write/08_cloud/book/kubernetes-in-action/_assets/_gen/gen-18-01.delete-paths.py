@@ -1,6 +1,8 @@
 # 18-01 §6·§7 — 지우는 길이 셋이고 결과가 다르다
 # 캡션이 세 경로와 각각의 결과를 준다. 그러니 삭제를 한 동작으로 그리면 안 되고, 파드가
 # 어떻게 되는지가 경로마다 달라야 한다.
+# 타입 스펙: type-flowchart.md — 완료된 Job 하나에서 지우는 방법을 무엇으로 고르느냐에 따라 파드의 운명이 셋으로 갈린다.
+#           세 갈래가 서로 배타적이라 격자가 아니라 분기다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

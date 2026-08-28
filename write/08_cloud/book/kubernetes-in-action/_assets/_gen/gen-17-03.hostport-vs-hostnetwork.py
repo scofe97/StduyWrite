@@ -1,6 +1,9 @@
 # 17-03 §2 — 무엇이 사라졌는지가 차이다
 # 캡션이 두 경로를 구성 요소로 서술한다 — 한쪽은 portmap DNAT 와 veth 를 거치고, 다른 쪽은
 # 변환도 veth 도 없다. 그러니 같은 골격에서 사라진 조각이 보이는 대비여야 한다.
+# 타입 스펙: type-architecture.md — 두 밴드가 같은 입구에서 출발해 지나는 구성 요소(노드 포트 · portmap DNAT · veth · 컨테이너)를
+#           늘어놓는다. 단계가 아니라 패킷이 통과하는 구성 요소라 process 가 아니라 architecture 다.
+#           아래 밴드에서 두 칸이 사라진 것이 이 그림의 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

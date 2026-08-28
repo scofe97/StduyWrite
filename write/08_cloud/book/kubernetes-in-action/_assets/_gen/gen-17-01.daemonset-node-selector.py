@@ -1,6 +1,9 @@
 # 17-01 §3 — 좁히는 일도 노드 쪽에서 한다
 # replicas 로 개수를 줄이는 것이 아니라 대상 노드를 고르는 것이 요점이다. 그러니 라벨 유무로
 # 노드가 갈리는 장면이어야 하고, 제외된 노드에 파드가 없다는 사실이 함께 보여야 한다.
+# 타입 스펙: type-deployment.md — 노드 상자가 존이고 그 안의 파드가 artifact 다 — nodeSelector 라벨이 곧 배치 결정이라
+#           type-deployment 정본의 zone > node > artifact 문법이 그대로 맞는다. 라벨 없는 노드의
+#           빈 칸도 배치 결과라 같은 격에 놓았다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

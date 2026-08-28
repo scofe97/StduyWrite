@@ -1,6 +1,10 @@
 # 18-02 §4 — 템플릿 하나로 서로 다른 몫을 맡는다
 # 인덱스가 붙는다는 사실만으로는 쓸모가 안 보인다. 그 번호로 각자 다른 데이터를 집는다는
 # 결과까지 그려야 "왜 번호를 주나"가 답해진다.
+# 타입 스펙: type-tree.md — 템플릿 하나가 부모이고 인덱스 파드들이 자식이다. 줄기에서 직각으로 갈라지는 연결선,
+#           깊이 2 · 너비 4 로 정본 상한 안에 있다.
+#           type-dependency 정본은 트리로 표현 못 하는 두 가지(한 노드에 부모가 둘인 팬인, 순환)를
+#           위한 타입이고 '둘 다 없으면 Tree 를 쓰고 그렇다고 밝히라'고 명시한다. 여기엔 둘 다 없다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx
@@ -25,7 +29,9 @@ for i, idx in enumerate((0, 1, 2, 11)):
     c = ACC if i == 0 else INFO
     d.box(520, cy - 26, 360, 52, PAPER2, c, 1.1, 5)
     d.t(545, cy + 4, f"파드 index {idx}", 11, c, MONO, "start", 600)
-    d.t(760, cy + 4, f"JOB_COMPLETION_INDEX={idx}", 10, MUTED, MONO, "start")
+    # x=760 에서 왼쪽 정렬하면 22~24 글자짜리 mono 가 상자 오른쪽 변(x=880)을 넘었다.
+    # 오른쪽 정렬로 바꿔 인덱스 자릿수가 늘어도 상자 안에 머물게 한다.
+    d.t(860, cy + 4, f"JOB_COMPLETION_INDEX={idx}", 10, MUTED, MONO, "end")
     d.path(f"M 400 {cy} L 512 {cy}", c, 1.2, m="acc" if i == 0 else "info")
 
 d.box(940, 164, 240, 288, PAPER, RULE, 0.9, 8)

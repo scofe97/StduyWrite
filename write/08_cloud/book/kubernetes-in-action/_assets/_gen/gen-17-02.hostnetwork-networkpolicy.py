@@ -1,6 +1,8 @@
 # 17-02 §3 — CNI 가 그 파드를 식별하느냐에 갈린다
 # 캡션이 "CNI 의 식별 여부에 따라 갈리는 두 결과"라 못박는다. 그러니 정책 자체가 아니라
 # 식별 여부가 판정 축이어야 한다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 파드 종류, 열은 판정 축(CNI 식별 · 정책 적용 · 결과)인 4열 2행 격자다.
+#           focal 열이 "CNI 가 식별하나"라, 그 한 칸이 나머지 두 열을 정한다는 것이 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INFO, OK, WARN, BAD, MUTED, SOFT, KR
 import ddx

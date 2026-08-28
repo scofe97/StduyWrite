@@ -1,6 +1,10 @@
 # 18-03 §2 — 이름을 조립할 재료가 이미 손에 있다
 # 캡션이 "자기 인덱스와 completions 로 peer 이름을 조립한다"고 한다. 그러니 DNS 조회만
 # 그리면 절반이고, 그 이름이 어디서 나왔는지가 함께 있어야 한다.
+# 타입 스펙: type-architecture.md — 파드가 아는 값에서 조립한 이름을 거쳐 headless Service DNS 로 넘어가는 세 칸 구성도다.
+#           type-data-flow 는 역할 레인 1~4 × 단계 열 × 타입 있는 페이로드 칩이 입력 계약인
+#           데이터 플랫폼 전용 타입이라 여기엔 맞지 않는다. type-architecture 의 Best for 에
+#           "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

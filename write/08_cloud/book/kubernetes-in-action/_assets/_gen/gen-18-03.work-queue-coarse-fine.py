@@ -1,6 +1,8 @@
 # 18-03 §1 — 파드 하나가 몇 개를 집는가
 # 캡션이 두 방식을 "아이템 하나 vs 큐가 빌 때까지"로 가른다. 그러니 큐 그림 하나로는 부족하고,
 # 파드가 집는 횟수가 눈에 띄게 달라야 한다.
+# 타입 스펙: type-architecture.md — 큐 상자와 파드 셋을 잇는 구성도 두 벌이다. 파드가 큐에서 몇 번 꺼내느냐만 다르고
+#           구성 요소는 같다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

@@ -1,6 +1,9 @@
 # 18-01 §1 — 만드는 주체가 층마다 다르다
 # "사용자 → Job → 파드 → 컨테이너"를 한 줄로 그리면 누가 무엇을 만드는지가 뭉개진다.
 # 각 층이 어디서 도는지를 함께 놓아야 Job 컨트롤러와 kubelet 의 분업이 보인다.
+# 타입 스펙: type-layers.md — 같은 x·같은 폭의 전폭 띠 넷이 세로로 쌓이고 각 띠가 이름 · 어디서 · 무엇을 순으로 읽힌다.
+#           선언 → 저장 → 감시 → 집행이 실제로 층위라, "계층이 아닌 것을 층으로 그리지 말라"는
+#           정본의 안티패턴에 걸리지 않는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx
