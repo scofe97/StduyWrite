@@ -1,6 +1,8 @@
 # 16-01 §3 — 대응표에 줄이 늘어난다
 # 본문이 "DNS 의 이름-IP 대응표에 줄이 늘어난다"로 세 단계를 갈라 설명한다. 그러니 구조도가
 # 아니라 실제 레코드 줄이 몇 개인지가 보이는 표여야 한다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 물어보는 이름, 열은 돌아오는 값. 세 구간이 보통 Service · headless · StatefulSet
+#           세 경우이고, 이름 하나에 줄이 늘어나는 것이 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

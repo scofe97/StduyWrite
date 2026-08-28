@@ -1,6 +1,7 @@
 # 14-01 §4 — 어느 것을 지우느냐가 분산을 정한다
 # 본문이 "안 그러면 한 노드에 3벌이 몰릴 수 있다"로 반사실을 든다. before/after 만으로는
 # 부족하고, 몰린 노드를 골라 지운 결과와 아무거나 지운 결과가 나란히 놓여야 한다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 세 경우(지금·몰린 것부터·아무거나), 열은 노드 셋과 그 결과. 칸만 있고 흐름은 없다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

@@ -1,6 +1,8 @@
 # 15-02 §2 — 같은 순간인데 응답이 다른 이유
 # 본문이 "요청을 받아 주는 주체가 있느냐"로 이유를 댄다. 그러니 두 경로를 나란히 두되
 # 중간에 서 있는 것이 무엇인지가 보여야 한다. kube-proxy 모드 갈림도 함께 적는다.
+# 타입 스펙: type-data-flow.md — 같은 요청 경로를 두 진입점으로 지나는 두 벌의 흐름. 파드가 없을 때 무엇이 응답하는지가
+#           경로마다 달라진다는 것이 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, KR, MONO
 import ddx

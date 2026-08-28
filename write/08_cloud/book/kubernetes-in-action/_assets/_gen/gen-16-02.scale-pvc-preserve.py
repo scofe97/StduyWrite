@@ -1,6 +1,8 @@
 # 16-02 §3 — 파드는 지우고 PVC 는 남긴다
 # 스케일다운·업을 따로 그리면 "번호로 되찾는다"가 안 보인다. 같은 번호 축 위에 두 단계를
 # 겹쳐 놓아야 PVC 가 그 자리에 남아 있었다는 사실이 읽힌다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 세 시점(3벌 · 1로 줄임 · 다시 3), 열은 번호별 파드와 PVC. PVC 줄이 세 행 내내
+#           그대로라는 것이 판정이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

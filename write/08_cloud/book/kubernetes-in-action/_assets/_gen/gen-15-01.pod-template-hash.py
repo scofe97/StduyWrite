@@ -1,6 +1,8 @@
 # 15-01 §4 — 해시가 있고 없고가 흡수를 가른다
 # 본문의 물음은 "selector 가 맞는데 왜 흡수하지 않았나"다. 그러니 selector 문자열만 보여선
 # 안 되고, 해시 label 유무가 판정을 뒤집는 열로 서 있어야 한다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 파드 둘, 열은 가진 label · pod-template-hash · ReplicaSet 판정. 해시 칸 하나가
+#           판정을 가른다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INFO, OK, BAD, MUTED, SOFT, KR
 import ddx

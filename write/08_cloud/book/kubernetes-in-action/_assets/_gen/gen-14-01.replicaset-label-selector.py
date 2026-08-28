@@ -1,6 +1,8 @@
 # 14-01 §1 — '무시한다'가 무슨 뜻인지까지 그린다
 # 본문이 "무시란 세지도 지우지도 않는다는 뜻"이라고 따로 풀어 준다. 매칭 여부만 그리면
 # 그 두 결과가 안 보이므로, 안 맞는 파드 쪽에 결과 둘을 붙인다.
+# 타입 스펙: type-dependency.md — selector 가 무엇을 가리키고 무엇을 안 가리키는가. 화살표가 닿지 않는 오른쪽 상자가
+#           이 그림의 절반이다 — 소속을 정하는 것이 위치가 아니라 label 이라는 말이 거기서 산다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

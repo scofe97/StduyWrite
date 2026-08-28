@@ -1,6 +1,8 @@
 # 16-01 §3 — ready 와 DNS 가 서로를 기다린다
 # 부팅 시점 분산 시스템의 순환이라 사슬이 아니라 고리로 그린다. 고리를 끊는 필드 한 줄이
 # focal 이고, 12-02 의 SNI 고리와 같은 형태로 맞춰 읽는 사람이 패턴을 알아보게 한다.
+# 타입 스펙: type-dependency.md — 세 노드가 서로를 기다려 고리가 닫힌다 — 트리로 못 그리는 순환이라 dependency 다.
+#           오른쪽 칸이 그 고리를 끊는 한 줄이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, BAD, MUTED, SOFT, INK, KR, MONO
 import ddx

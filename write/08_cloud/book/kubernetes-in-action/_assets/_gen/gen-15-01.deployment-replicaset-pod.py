@@ -1,6 +1,8 @@
 # 15-01 §1 — 각 층이 모르는 것이 층을 나눈 이유다
 # 본문이 표의 "오른쪽 열이 더 중요하다"고 직접 말한다. 그러니 위임 화살표만 그리면 요점이
 # 빠지고, 층마다 '모르는 것'이 나란히 보여야 한다.
+# 타입 스펙: type-layers.md — 위아래로 쌓인 추상 수준 셋. 오른쪽 '모르는 것' 열이 층을 나눈 이유를 받는다 —
+#           각 층은 바로 아래만 알고 그 아래는 모른다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

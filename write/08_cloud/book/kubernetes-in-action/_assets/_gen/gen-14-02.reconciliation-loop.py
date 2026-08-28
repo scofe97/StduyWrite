@@ -1,6 +1,8 @@
 # 14-02 §1 — 기억하지 않고 매번 지금만 본다
 # 본문이 루프 그림 뒤에 두 사실을 더 붙인다 — 폴링이 아니라 watch + resync 이중이고,
 # 루프가 무슨 일이 있었는지 기억하지 않는다(level-triggered). 고리만 그리면 그 둘이 빠진다.
+# 타입 스펙: type-loop.md — 관찰 → 비교 → 조정이 닫힌 고리를 이룬다. 시작도 끝도 없다는 것이 level-triggered 의
+#           뜻이라, 사슬이 아니라 고리로 그려야 그 성질이 보인다. 오른쪽은 고리에서 따라 나오는 성질이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

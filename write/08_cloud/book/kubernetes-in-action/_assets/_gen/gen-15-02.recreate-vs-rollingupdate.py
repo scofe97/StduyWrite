@@ -1,6 +1,8 @@
 # 15-02 §1 — 가용 파드 수가 바닥에 닿느냐
 # 두 전략의 차이는 절차가 아니라 그 절차가 가용 수를 어디까지 떨어뜨리느냐다. 그러니
 # 단계 나열이 아니라 가용 수를 세로 축으로 둔 두 줄이어야 한다.
+# 타입 스펙: type-data-flow.md — 같은 네 단계를 두 전략으로 지나는 두 벌의 흐름. 단계마다 옛/새 파드 수가 바뀌고,
+#           가용 수가 0 에 닿느냐가 갈림길이라 그 값을 칸마다 적었다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

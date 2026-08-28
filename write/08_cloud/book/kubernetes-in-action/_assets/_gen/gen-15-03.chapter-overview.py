@@ -1,6 +1,7 @@
 # 15-03 전체 지도 — 롤아웃을 사람이 어디까지 잡는가
 # 본문이 "색이 붙은 곳은 두 군데뿐이고 둘 다 오해하기 쉬운 지점"이라 서술하고 두 띠의 뜻을
 # 적는다. 앰버는 §2 의 available 오해, 붉은은 §3 의 undo 부작용이다.
+# 타입 스펙: type-process.md — 절마다 같은 의미 슬롯이 세로로 반복된다.
 import sys; sys.path.insert(0, ".")
 from dd import D, WARN, BAD, MUTED, KR
 import ddx

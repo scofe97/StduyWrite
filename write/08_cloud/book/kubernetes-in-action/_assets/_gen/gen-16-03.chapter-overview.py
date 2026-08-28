@@ -1,6 +1,7 @@
 # 16-03 전체 지도 — 교체의 주도권을 누가 쥐는가
 # 본문이 "색이 붙은 곳은 두 군데뿐"이라 서술하고 앰버는 maxSurge 부재, 붉은은 OnDelete 의
 # ready 판단 책임이라고 적는다. 세 절이 주도권을 사용자 쪽으로 한 칸씩 옮기는 축이다.
+# 타입 스펙: type-process.md — 절마다 같은 의미 슬롯이 세로로 반복된다.
 import sys; sys.path.insert(0, ".")
 from dd import D, WARN, BAD, MUTED, KR
 import ddx

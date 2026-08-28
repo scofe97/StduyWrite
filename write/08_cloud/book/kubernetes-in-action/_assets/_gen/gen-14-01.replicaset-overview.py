@@ -1,6 +1,8 @@
 # 14-01 §1 — 개수를 맡는 쪽과 노출을 맡는 쪽
 # 본문이 "복제본을 만드는 일과 하나로 노출하는 일은 별개"라 못박고 둘을 짝으로 둔다.
 # 그러니 파드 묶음을 가운데 두고 양쪽에서 각자 맡는 그림이어야 한다.
+# 타입 스펙: type-architecture.md — 구성요소 셋과 그 사이 책임 관계. 흐르는 것도 가리키는 것도 아니라, ReplicaSet 이 수를
+#           맡고 Service 가 노출을 맡는 분담 자체가 논지다 — 둘이 같은 파드 묶음에서 만난다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

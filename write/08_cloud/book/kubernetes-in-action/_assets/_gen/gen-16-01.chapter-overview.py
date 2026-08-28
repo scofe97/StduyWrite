@@ -1,6 +1,7 @@
 # 16-01 전체 지도 — 파드에 신원을 주는 일
 # 본문이 "색이 붙은 곳은 두 군데뿐이고 둘 다 경고"라 서술하고 두 띠의 뜻을 적는다.
 # 앰버는 §3 의 headless Service 순서, 붉은은 §5 의 rs.initiate 미실행이다.
+# 타입 스펙: type-process.md — 절마다 같은 의미 슬롯이 세로로 반복된다.
 import sys; sys.path.insert(0, ".")
 from dd import D, WARN, BAD, MUTED, KR
 import ddx

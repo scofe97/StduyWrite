@@ -1,6 +1,8 @@
 # 15-03 §3 — 히스토리는 Deployment 가 아니라 ReplicaSet 들이다
 # 본문이 "revision 히스토리는 Deployment 오브젝트가 아니라 연관된 ReplicaSet 들로 표현된다"고
 # 못박는다. 그러니 목록을 그리면 안 되고, 각 revision 이 실재하는 오브젝트여야 한다.
+# 타입 스펙: type-tree.md — 부모 하나가 자식 셋을 거느린다 — Deployment 가 ReplicaSet 을 revision 으로 쥐고 있다.
+#           자식 중 하나만 파드를 달고 있고 나머지는 replicas 0 이라는 것이 이 트리의 요점이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx
