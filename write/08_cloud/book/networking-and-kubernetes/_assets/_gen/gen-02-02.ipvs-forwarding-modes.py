@@ -2,7 +2,9 @@
 # 본문 요구: "NAT 는 주소 재작성 / DR 은 IP 그대로 목적지 MAC 만 / IP 터널링은 원본을
 #           다른 IP 데이터그램으로 감쌈" — 셋이 건드리는 자리가 다르다는 것이 논점.
 #           책이 DR 과 터널링 설명을 뒤바꿔 인쇄했으므로 focal 은 DR 의 MAC 셀에 건다.
-# 타입 스펙: 비교 행렬 — 행이 방식, 열이 패킷의 구성부. 공식 없는 타입이라 stride 로 배치.
+# 타입 스펙: type-dp-security-matrix.md 의 행 대조 — 행이 포워딩 방식, 열이 패킷의 구성부.
+#           계약이 "'비교 행렬' 처럼 스펙에 없는 이름을 쓰지 말라"고 못박은 자리라 스펙명으로 고쳤다.
+#           평가 대상이 role×component 가 아니라 방식×구성부라 열 폭만 이 내용에 맞춰 stride 로 잡는다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER2, KR, MONO
 
