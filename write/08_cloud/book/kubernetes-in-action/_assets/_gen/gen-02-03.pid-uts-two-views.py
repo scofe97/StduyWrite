@@ -1,8 +1,10 @@
 # 02-03 §하나의 프로세스, 두 개의 뷰
 # 실측: 컨테이너 안 — ps 는 PID 1 node, hostname 은 fe6daee29272.
 #       호스트 밖 — docker inspect .State.Pid 는 32687, systemd 등 수천 프로세스와 나란히.
-# 타입 스펙: 대상이 하나이고 관측 지점이 둘이라, 가운데에 그 하나를 두고 좌우로 뷰를 낸다.
+# 타입 스펙: type-architecture.md — 대상이 하나이고 관측 지점이 둘이라, 가운데에 그 하나를 두고 좌우로 뷰를 낸다.
 #           같은 것을 두 번 그리면 프로세스가 둘인 것처럼 읽히므로 반드시 하나여야 한다.
+#           가운데 코럴 노드 하나에서 좌우 두 관측 지점으로 경로가 갈린다 — 초점 노드 하나에
+#           경로가 붙는 구성이다. 대상이 하나라는 것이 논지라 좌우를 격자 두 행으로 세우지 않았다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx

@@ -2,9 +2,11 @@
 # 본문·실측: mnt·pid·net·ipc·uts·cgroup 은 Docker 기본이 격리, user·time 은 기본 공유.
 #   pid → 안에서 1번부터 새로 셈(node = 안:1 / 밖:32687), uts → 호스트명이 컨테이너 ID,
 #   user → 안 root 가 호스트 root 라 보안이 약해진다, time → 시계 공유.
-# 타입 스펙: 여덟 개를 한 축으로 세우면 행이 여덟이라 세로로 길어지고, 두 줄짜리 셀은
+# 타입 스펙: type-dp-security-matrix.md — 여덟 개를 한 축으로 세우면 행이 여덟이라 세로로 길어지고, 두 줄짜리 셀은
 #           행 높이가 76px 아래로 못 내려간다. 대신 카드 격자로 두어 격리 여섯과 공유 둘이
 #           한 화면에서 갈리게 했다 — 개수를 세는 것이 이 그림의 일이다.
+#           여덟 종류를 같은 슬롯(이름 · 격리 여부 · 무엇을 · 결과)으로 4×2 격자에 늘어놓았다.
+#           칸 사이에 순서가 없고 격리 여섯과 공유 둘을 세는 것이 이 그림의 일이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx

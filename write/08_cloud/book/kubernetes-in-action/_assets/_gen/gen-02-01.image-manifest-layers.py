@@ -3,8 +3,11 @@
 #        쌓을지' 적은 목록(manifest)입니다. 레이어 실물은 해시로 식별되는 저장소에 딱 한 벌씩
 #        있고, 여러 이미지의 manifest 가 같은 해시 레이어를 함께 가리킵니다."
 #       "pull 할 때도 manifest 를 먼저 받고 거기 적힌 레이어 중 없는 것만 다운로드합니다."
-# 타입 스펙: 목록이 실물을 *가리키는* 구조라 참조 매핑이다. 같은 해시를 둘이 가리키는 자리가
+# 타입 스펙: type-dependency.md — 목록이 실물을 *가리키는* 구조라 참조 매핑이다. 같은 해시를 둘이 가리키는 자리가
 #           요점이므로 그 레이어에만 focal 을 걸고, 나머지는 고유 레이어로 묶어 화살표 수를 줄인다.
+#           manifest 둘이 같은 해시 레이어 하나를 가리킨다 — 정본이 트리로 표현 못 한다고 못 박는
+#           두 경우 중 하나인 팬인(부모가 둘인 노드)이 여기 있다. 순환은 없어 back-edge 도 없고,
+#           그래서 코럴 예산은 정본의 CYCLE 라벨 대신 팬인 노드와 그 두 간선에 썼다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx

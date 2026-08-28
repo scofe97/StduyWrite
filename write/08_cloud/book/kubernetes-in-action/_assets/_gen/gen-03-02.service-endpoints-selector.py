@@ -3,8 +3,13 @@
 #   가진 Pod 를 스스로 찾아 Endpoints 에 등록한다. Pod 가 늘거나 죽으면 그 목록만 갱신되고
 #   ClusterIP 는 그대로라 클라이언트는 영향을 받지 않는다.
 # 실측 Pod: 10.244.1.8 / 10.244.1.9 (worker) · 10.244.2.5 (worker2)
-# 타입 스펙: 이름표 하나가 라벨로 여럿을 물어 오는 구조라 참조 매핑. 중간의 Endpoints 가
+# 타입 스펙: type-architecture.md — 이름표 하나가 라벨로 여럿을 물어 오는 구조라 참조 매핑. 중간의 Endpoints 가
 #           '갱신되는 목록' 임을 드러내야 하므로 별도 칸으로 세운다.
+#           Service → Endpoints → 파드 셋으로 이어지는 참조 매핑이고, 갱신되는 목록인 Endpoints 를
+#           가운데 칸으로 세웠다.
+#           type-data-flow 는 역할 레인 1~4 × 단계 열 × 타입 있는 페이로드 칩이 입력 계약인
+#           데이터 플랫폼 전용 타입이라 여기엔 맞지 않는다. type-architecture 의 Best for 에
+#           "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx
