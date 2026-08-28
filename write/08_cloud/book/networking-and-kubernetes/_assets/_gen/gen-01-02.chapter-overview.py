@@ -2,11 +2,13 @@
 # 본문 요구: 이 편의 결론은 §4 의 "12패킷 중 내용은 둘뿐"이다. 그래서 네 칸 중 셋째 칸만 붉고,
 #           아래 한 줄이 "붉은 칸이 이 편의 결론"이라고 못 박는다. 마지막 칸에서 TLS 와 UDP 로
 #           길이 갈리는 것도 같은 축이다 — 값을 더 낼지 안 낼지의 갈림이라 §5·6 이 한 칸에 든다.
-# 타입 스펙: type-process.md — 단계마다 같은 의미 슬롯(절 번호 · 이름 · 한 줄 요약 · 항목 셋)이
-#           같은 자리에 반복된다(semantic-patterns 의 "Stage framework with semantic slots").
-#           같은 폴더의 다른 chapter-overview 들은 이 모양을 type-data-flow 로 선언해 두었는데,
-#           여기 화살표는 데이터가 아니라 읽는 순서를 나르므로 process 로 적는다. 형태가 같고
-#           선언이 갈리는 자리라 근거를 남긴다.
+# 타입 스펙: type-process.md — 단계 머리 + 한 줄 체인. 칸마다 같은 의미 슬롯(절 번호 · 이름 ·
+#           한 줄 요약 · 꼬리표)이 같은 자리에 반복된다(semantic-patterns 의 "Stage framework
+#           with semantic slots"). 화살표는 데이터가 아니라 읽는 순서를 나른다.
+#           2026-08-28 type-data-flow 에서 옮겼다 — data-flow 정본은 "who does what at each
+#           stage" 와 role-scoped lane 을 전제로 하는데, 편 지도에는 주체도 레인도 없다.
+#           엄밀히는 두 정본 다 주체 기반이라 편 지도는 표의 공백에 가깝고, 주체 없이도 맞는
+#           유일한 라우팅 규칙이 위 semantic-patterns 한 줄이라 그쪽을 따랐다.
 # 이력: 2026-08-28 신설. 생성기 없이 손으로 만들어진 SVG 였다. 값·좌표를 그대로 옮겼다.
 from dd import D, INK, MUTED, SOFT, RULE, OK, BAD, INFO, KR, MONO
 
