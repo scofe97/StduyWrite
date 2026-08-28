@@ -1,6 +1,8 @@
 # 18-03 §3 — 먼저 뜨고 나중에 내려간다
 # 캡션이 순서를 정확히 준다 — 사이드카를 먼저, started 만 확인, 메인이 끝난 뒤 역순으로.
 # 그러니 시간축 위에 두 컨테이너의 구간이 겹쳐 보여야 하고 started 지점이 표시돼야 한다.
+# 타입 스펙: type-gantt.md — 사이드카와 메인의 구간 막대가 하나의 시간축 위에서 겹치고, started 확인과 종료 시점이
+#           눈금으로 찍힌다 — 겹침과 순서가 곧 논지라 gantt 계약 그대로다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, RULE, KR, MONO
 import ddx

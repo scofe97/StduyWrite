@@ -1,6 +1,9 @@
 # 17-03 전체 지도 — 같은 노드로만 보내려면
 # 본문이 구조를 직접 준다 — "맨 위가 풀어야 할 문제", "점선 아래 세 방법은 순서가 아니라
 # 병렬 대안". 색은 두 군데로, 붉은은 §2 의 노출면, 앰버는 §3 의 엔드포인트 0 이다.
+# 타입 스펙: type-dp-security-matrix.md — 가운데 세 칸이 세 방법을 같은 슬롯(이름 · 무엇을 한다 · 주의)으로 늘어놓은 격자다.
+#           본문이 "순서가 아니라 병렬 대안"이라 못박아 칸 사이에 화살표를 두지 않았고, 위아래의
+#           문제·판정 상자는 격자 밖 틀이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

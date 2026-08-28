@@ -1,6 +1,9 @@
 # 17-02 §3 — 목록을 받고 규칙을 심는 왕복
 # 캡션이 "목록과 변경 이벤트를 받아 커널 규칙을 동기화하는 왕복"이라 한다. 그러니 한 방향
 # 화살표가 아니라 초기 목록과 이후 이벤트가 갈라져 보여야 한다.
+# 타입 스펙: type-architecture.md — API 서버 · kube-proxy · 커널 규칙 셋을 잇는 통합도이고, 두 엣지(처음 목록 전체 · 이후 변경
+#           이벤트)가 성격이 다르다는 것이 논지다. type-sequence 는 후보에서 뺐다 — 그 정본은 생명선
+#           점선과 위에서 아래로 흐르는 시간축이 계약인데 여기는 가로 배치다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

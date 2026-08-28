@@ -1,6 +1,8 @@
 # 18-03 §5 — 앞의 것이 아직 돌고 있을 때
 # 세 값을 설명으로 나열하면 차이가 뭉갠다. 앞 Job 이 도는 중에 다음 시각이 온 장면을 고정해 두고,
 # 그때 무슨 일이 나는지만 갈라야 한다.
+# 타입 스펙: type-gantt.md — 세 정책을 같은 시각(01:00 · 02:00) 위에 올려 앞 Job 과 다음 Job 의 구간이 겹치는지
+#           건너뛰는지 교체되는지를 보인다. 02:00 세로 점선이 정본의 마일스톤 표시에 해당한다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, RULE, KR, MONO
 import ddx

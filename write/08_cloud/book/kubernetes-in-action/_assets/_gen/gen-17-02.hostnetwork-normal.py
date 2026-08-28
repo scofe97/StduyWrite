@@ -1,6 +1,9 @@
 # 17-02 §3 — 일반 파드가 받는 경로
 # 짝 도식(hostnetwork-node)과 나란히 읽히도록 같은 골격으로 그린다. 이쪽에는 DNAT 와 veth 와
 # 파드 전용 netns 가 있고, 저쪽에는 그 셋이 없다.
+# 타입 스펙: type-architecture.md — 노드 경계 안에 파드 전용 netns 가 또 하나 있고 그 사이를 DNAT 와 veth 가 잇는다 — 구성 요소
+#           배치도다. 안쪽 상자가 있다고 nested 가 되지는 않는다. 그 정본은 동심 링 3~5 겹이 계약이고
+#           여기서는 통과하는 흐름이 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

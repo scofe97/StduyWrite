@@ -1,6 +1,11 @@
 # 18-03 §4 — 껍질이 만드는 것은 Job 이지 파드가 아니다
 # CronJob 이 파드를 직접 만든다고 오해하기 쉬운 자리다. 그러니 층을 하나 더 두어
 # CronJob → Job → 파드 순서가 그림에서 강제돼야 한다.
+# 타입 스펙: type-tree.md — CronJob 이 뿌리, Job 셋이 자식, 그 아래 파드가 손자다 — 깊이 3 · 너비 3.
+#           01:00·02:00·03:00 이 붙어 있지만 시간축 위에 얹힌 구간이 아니라 자식의 라벨이라
+#           timeline 이 아니다.
+#           type-dependency 정본은 트리로 표현 못 하는 두 가지(한 노드에 부모가 둘인 팬인, 순환)를
+#           위한 타입이고 '둘 다 없으면 Tree 를 쓰고 그렇다고 밝히라'고 명시한다. 여기엔 둘 다 없다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

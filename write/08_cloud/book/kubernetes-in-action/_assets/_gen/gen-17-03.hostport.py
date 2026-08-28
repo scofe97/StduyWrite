@@ -1,6 +1,8 @@
 # 17-03 §1 — 각 노드가 자기 것으로만 보낸다
 # NodePort 와 헷갈리기 쉬운 자리라, 캡션도 "NodePort Service 처럼 무작위 파드로 가지 않는다"로
 # 대비를 건다. 그러니 노드 둘을 그려 각자 자기 것으로만 가는 것이 보여야 한다.
+# 타입 스펙: type-architecture.md — 노드 둘이 각각 경계 상자이고 화살표가 그 안에서만 닫힌다 — 경계를 넘지 않는다는 것이
+#           곧 논지라, 존 경계와 흐름을 함께 그리는 architecture 가 맞는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

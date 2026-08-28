@@ -1,6 +1,11 @@
 # 17-02 §3 — hostNetwork 파드가 받는 경로
 # 앞 도식과 같은 골격에서 무엇이 사라졌는지가 요점이다. DNAT 도 veth 도 없고, 대신 노드 포트를
 # 점유해 두 번째 레플리카와 충돌한다는 결과가 따라 나온다.
+# 타입 스펙: type-architecture.md — 노드 netns 가 경계 상자이고 그 안에서 패킷이 왼쪽에서 오른쪽으로 간다. 짝 도식과 같은
+#           골격이라 사라진 구성 요소(DNAT · veth)가 대비로 읽힌다.
+#           type-data-flow 는 역할 레인 1~4 × 단계 열 × 타입 있는 페이로드 칩이 입력 계약인
+#           데이터 플랫폼 전용 타입이라 여기엔 맞지 않는다. type-architecture 의 Best for 에
+#           "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx
