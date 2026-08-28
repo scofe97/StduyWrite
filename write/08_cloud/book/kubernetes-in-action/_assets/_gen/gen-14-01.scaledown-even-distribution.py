@@ -1,7 +1,11 @@
 # 14-01 §4 — 어느 것을 지우느냐가 분산을 정한다
 # 본문이 "안 그러면 한 노드에 3벌이 몰릴 수 있다"로 반사실을 든다. before/after 만으로는
 # 부족하고, 몰린 노드를 골라 지운 결과와 아무거나 지운 결과가 나란히 놓여야 한다.
-# 타입 스펙: type-dp-security-matrix.md — 행은 세 경우(지금·몰린 것부터·아무거나), 열은 노드 셋과 그 결과. 칸만 있고 흐름은 없다.
+# 타입 스펙: type-deployment.md — 파드가 어느 노드에 놓이는가가 논지다 — 노드 상자가 존이고 그 안의 칩이 파드이며,
+#           지울 파드를 고르는 것이 곧 배치 결정이다. type-deployment 정본의 zone > node > artifact
+#           문법이 그대로 맞는다. 세 밴드는 같은 배치를 세 경우로 다시 그린 것이다.
+#           2026-08-28 정정: 처음에 dp-security-matrix 로 적었으나, 격자로 읽을 값이 아니라
+#           배치 그 자체가 값이라 바꿨다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx
