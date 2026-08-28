@@ -1,6 +1,8 @@
 # 16-02 §5 — 되돌린 처방이 정작 고쳐야 할 파드에 닿지 못한다
 # 본문이 도식을 직접 가리켜 설명한다 — "3번 상자로 돌아오는 붉은 화살표가 교착 고리",
 # "점선으로 표시한 4번이 사람이 개입하는 지점", "그 개입 뒤에야 5번". 번호와 표시를 그대로 지킨다.
+# 타입 스펙: type-data-flow.md — 다섯 단계가 한 줄로 이어지는 인과 파이프라인. 가운데 점선 칸만 사람이 손으로 넣는
+#           단계라, 자동으로는 이 사슬이 끊기지 않는다는 것이 결론이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

@@ -1,6 +1,8 @@
 # 16-01 §2 — 소프트웨어에서는 이야기가 조금 다르다
 # 비유만 그리면 "그래서 뭐"로 끝난다. 본문이 "같은 신원과 같은 상태를 줄 수 있다면 대체가
 # 성립한다"로 비유를 되받으므로, 그 되받는 줄이 도식 안에 있어야 한다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 두 관점(Cattle · Pets), 열은 무엇으로 보나 · 교체하면 · 쿠버네티스에서 · 대체가
+#           성립하려면. 마지막 열이 판정이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INFO, OK, WARN, MUTED, SOFT, INK, KR
 import ddx

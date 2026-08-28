@@ -1,6 +1,7 @@
 # 15-02 전체 지도 — 무엇이 교체 속도를 정하는가
 # 본문이 "색이 붙은 곳은 두 군데뿐이고 둘 다 다운타임에 관한 경고"라 서술하고 앰버·붉은 띠가
 # 각각 무엇을 가리키는지 적는다. 그 규격을 지킨다 — 임의로 칠하면 본문이 틀려진다.
+# 타입 스펙: type-process.md — 절마다 같은 의미 슬롯이 세로로 반복된다.
 import sys; sys.path.insert(0, ".")
 from dd import D, WARN, BAD, MUTED, KR
 import ddx

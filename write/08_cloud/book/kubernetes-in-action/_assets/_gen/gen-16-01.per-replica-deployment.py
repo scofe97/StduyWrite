@@ -1,6 +1,8 @@
 # 16-01 §1 — 되기는 되는데 운영이 daunting 하다
 # 본문이 "가능은 하지만"이라고 열어 두고 복잡도로 닫는다. 그러니 불가능을 그리면 안 되고,
 # replica 하나 늘릴 때 무엇이 몇 개 늘어나는지가 보여야 한다.
+# 타입 스펙: type-nested.md — 담김의 깊이가 곧 손이 가는 양이다. 왼쪽은 멤버마다 상자를 하나씩 더 열어 오브젝트가
+#           아홉이고, 오른쪽은 상자가 둘뿐이다 — 그 개수 차이를 포함 관계로 보인다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

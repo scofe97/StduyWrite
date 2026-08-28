@@ -1,6 +1,8 @@
 # 16-03 §4 — 사용자가 만지는 것은 하나뿐이다
 # 캡션의 마지막 절("사용자는 커스텀 오브젝트만 다룹니다")이 요점이라, 만들어지는 오브젝트를
 # 나열하는 데서 그치면 안 되고 사용자 손이 닿는 경계가 그어져 있어야 한다.
+# 타입 스펙: type-architecture.md — 구성요소와 연결. CRD 가 타입을 만들고, 사용자가 그 타입의 오브젝트를 만들고, Operator 가
+#           그것을 감시해 아래 셋을 만든다. 위 대괄호가 사용자 손이 닿는 범위를 가른다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

@@ -1,6 +1,7 @@
 # 14-02 §4 — label 하나로 세트에서 빼낸다
 # 14-01 의 '무시한다' 성질을 도구로 쓰는 장면이다. 전후를 나란히 놓아야 "빼는 순간 대체가
 # 만들어진다"는 인과가 보인다. 조사 대상이 살아남는 것이 이 수의 목적이므로 그쪽이 focal.
+# 타입 스펙: type-dp-security-matrix.md — 열이 바꾸기 전과 뒤 두 벌, 행이 파드. 뒤쪽에 한 줄이 늘어난 것이 판정이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

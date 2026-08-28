@@ -1,6 +1,8 @@
 # 16-03 §2 — 경계선 하나가 세 가지 쓰임을 만든다
 # partition 을 "일부만 업데이트"로만 그리면 staging 과 canary 가 왜 같은 필드인지 안 보인다.
 # 값을 옮겨 가며 세 상태를 나란히 놓아야 한 축의 눈금이라는 게 읽힌다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 partition 값 셋, 열은 번호별 파드. 경계선이 어디에 서느냐에 따라 같은 열의 값이
+#           달라지는 것이 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

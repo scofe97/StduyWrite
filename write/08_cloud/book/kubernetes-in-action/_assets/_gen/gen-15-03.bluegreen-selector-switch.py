@@ -1,6 +1,8 @@
 # 15-03 §4 — 같은 도구를 정반대로 쓴다
 # 본문이 Canary 와 Blue/Green 을 "같은 label selector 를 정반대로 쓴다"로 묶는다. 그러니 전환
 # 장면만 그리면 절반이고, 라벨을 같게 주느냐 다르게 주느냐가 함께 보여야 한다.
+# 타입 스펙: type-dependency.md — Service 의 selector 가 어느 Deployment 를 가리키는가. 실선과 점선이 바뀌는 것이
+#           전환의 전부라, 흐르는 것이 아니라 가리키는 방향이 값이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

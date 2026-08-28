@@ -1,6 +1,8 @@
 # 14-02 §3 — 장부와 실물이 어긋나 있는 구간
 # 본문이 "Terminating 은 실제 종료가 아니라 삭제 표시"라고 따로 절을 뗀다. 시간축 하나로는
 # 그 어긋남이 안 보이므로 장부(API 서버)와 실물(그 노드) 두 레인을 겹쳐 놓는다.
+# 타입 스펙: type-gantt.md — 시간축 위의 구간 막대. 장부(API 서버가 아는 것)와 실물(노드에서 도는 것) 두 줄이 같은
+#           시간대에 서로 어긋나 있다는 것이 논지라, 구간의 시작과 끝이 곧 값이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

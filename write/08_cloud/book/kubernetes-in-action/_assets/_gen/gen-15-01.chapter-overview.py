@@ -1,6 +1,8 @@
 # 15-01 전체 지도 — 간접 구조가 무엇을 가능하게 하는가
 # 본문이 이 도식을 두고 "색이 붙은 곳은 두 군데뿐이고 나머지는 전부 회색"이라 서술하고,
 # 앰버 띠와 붉은 띠가 각각 무엇을 가리키는지까지 적는다. 그 규격을 그대로 지킨다.
+# 타입 스펙: type-process.md — 절마다 같은 의미 슬롯(절 번호 · 이름 · 한 줄)이 같은 자리에 반복된다. 가로 체인이 아니라
+#           세로로 쌓았을 뿐 판단은 같다 — semantic-patterns 의 Stage framework with semantic slots.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, KR
 import ddx

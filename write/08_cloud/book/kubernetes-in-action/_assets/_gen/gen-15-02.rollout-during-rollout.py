@@ -1,6 +1,8 @@
 # 15-02 §6 — 0.7 의 신분이 바뀐다
 # 본문이 "기다린다는 개념 자체가 없다"고 못박는다. 그러니 중간에 멈췄다 가는 그림이 아니라,
 # 0.8 이 등장하는 순간 0.7 이 옛 것 쪽으로 넘어가는 장면이어야 한다.
+# 타입 스펙: type-dp-security-matrix.md — 열이 ReplicaSet 셋, 행이 0.8 을 적기 전과 뒤. 중간 단계를 거치지 않는다는 것이
+#           두 행의 차이로 드러난다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

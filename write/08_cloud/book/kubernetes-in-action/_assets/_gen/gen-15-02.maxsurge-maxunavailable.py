@@ -1,6 +1,8 @@
 # 15-02 §4 — 두 값이 정하는 것은 상한과 하한이다
 # 본문이 "값이 원하는 복제본 수에 상대적"이라고 못박는다. 그러니 단계별 개수만 나열하면
 # 안 되고, 총합의 천장과 가용의 바닥이 선으로 그어져 있어야 그 상대성이 보인다.
+# 타입 스펙: type-data-flow.md — 네 단계를 지나며 총합과 가용 수가 어떻게 움직이는지. 위아래 점선은 그 움직임을 가두는
+#           천장(replicas + maxSurge)과 바닥(replicas − maxUnavailable)이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx
