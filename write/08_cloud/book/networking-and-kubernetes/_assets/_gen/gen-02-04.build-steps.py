@@ -5,6 +5,10 @@
 # 타입 스펙: type-state.md — 명령이 전이(입력), 상태가 변화, 상태 안의 값이 결과다.
 #           세로로 쌓아 전이 옆에 명령 전문을 실을 자리를 준다.
 #           coral 은 한 상태 — 경계를 넘어 목록이 갈라지는 자리.
+#           2026-08-29 대조: type-state 정본의 표식(시작 점 · 끝 링 · `event [guard] / action` 전이 라벨)이
+#           이 그림에는 없고, 상자에 든 것도 유한 상태가 아니라 명령 뒤의 목록 내용이다. 눈썹도
+#           INPUT → CHANGE → RESULT 라 상태기가 아니라 단계 사슬에 가깝다. 다만 명령이 곧 전이라는
+#           읽기도 성립해 그대로 두고, 어긋나는 지점만 적어 둔다.
 # 주의: RULE 은 rgba() 문자열이라 f"{RULE}12" 로 투명도를 붙이면 색이 깨진다. 무채색 상태는 PAPER2 로.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, INFO, PAPER, PAPER2, KR, MONO

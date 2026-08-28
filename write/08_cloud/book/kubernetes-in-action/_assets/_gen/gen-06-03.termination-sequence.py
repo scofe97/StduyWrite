@@ -5,6 +5,9 @@
 #        바로 보낸 경우, C 는 유예 시간 안에 멈추지 않아 SIGKILL 로 종료된 경우"
 # 타입 스펙: type-swimlane — 세 컨테이너가 같은 시간축을 나눠 쓰고, 레인마다 결말이 다르다.
 #           유예 만료가 셋 모두에 걸리는 하나의 마감이므로 세 레인을 관통하는 세로선으로 세운다.
+#           2026-08-29 대조: type-gantt 도 후보였다 — 레인마다 구간 막대가 있고 공용 시간축 위에
+#           deletionGracePeriodSeconds 만료선이 걸린다. 다만 레인이 컨테이너라는 주체이고
+#           `kubectl delete pod` 에서 세 레인으로 갈라지는 인계가 있어 swimlane 을 유지한다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx
