@@ -1,7 +1,10 @@
 # 01-01.two-defeats — NCP 의 몰락과 OSI 의 패배는 다른 사건이다
 # 본문 요구: "§1 의 NCP 가 무너진 것과 OSI 가 진 것은 다른 사건입니다" + "쪼갰느냐가 아니라
 #           몇 조각으로 어떻게 쪼갰느냐, 누가 먼저 돌아가게 만들었느냐" — 두 사건을 축으로 가른다.
-# 타입 스펙: 비교 행렬. 행이 사건, 열이 설계·진 이유·남은 것. 공식 없는 타입이라 stride 배치.
+# 타입 스펙: type-dp-security-matrix.md — 행은 두 사건(NCP·OSI), 열은 설계·진 이유·지금 남은 것.
+#           같은 열에서 두 행이 갈리는 자리가 판정이다. NCP 는 "남은 것" 칸이 비어 흐리고(사라짐)
+#           OSI 는 그 칸만 살아 focal 이다 — 본문의 "사라진 것은 계층 분리라는 발상이 아니라
+#           그 발상을 구현한 프로토콜들"이 그 한 칸에 걸린다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER2, KR, MONO
 
