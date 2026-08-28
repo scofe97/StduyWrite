@@ -1,4 +1,5 @@
 # 06-01.sg-vs-nacl — 층도 성격도 다르다
+# 타입 스펙: type-dp-security-matrix.md — 행이 보안 그룹·NACL, 열이 층과 성격 — 연결 장애 때 볼 곳이 갈린다
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
 W, H = 1000, 556

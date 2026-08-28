@@ -2,7 +2,7 @@
 # 본문 요구: "트래픽 흐름은 3층 스택 그대로입니다 — LB 공인 IP:80(port) → ClusterIP →
 #           컨테이너 8080(targetPort)" + "로드밸런서와 워크로드가 1:1 이라 그 비용이 다음 편
 #           Ingress 의 존재 이유".
-# 타입 스펙: 계층 스택 + 오른쪽 트래픽 경로. 공식 없는 타입이라 stride 로 배치.
+# 타입 스펙: type-layers.md — 위층이 아래층을 토대로 얹히는 3층 스택 — 순서축이 형태로 존재한다
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER2, PAPER, KR, MONO
 

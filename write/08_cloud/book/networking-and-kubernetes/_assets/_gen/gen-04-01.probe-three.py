@@ -1,7 +1,7 @@
 # 04-01.probe-three — 세 프로브는 실패했을 때 무엇을 하느냐로 갈린다
 # 본문 요구: 표 "프로브 | 실패 시 | 용도" 세 행 그대로. 절 요약이 "실패했을 때 무엇을
 #           하느냐로 갈립니다" 이므로 실패 시 동작을 가운데 축으로 둔다.
-# 타입 스펙: 비교 행렬. focal 은 본문이 경고하는 liveness.
+# 타입 스펙: type-dp-security-matrix.md — 행이 프로브 셋, 열이 실패 시·용도 — 본문 표 세 행 그대로
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, BAD, INFO, PAPER2, KR, MONO
 

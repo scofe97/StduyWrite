@@ -1,7 +1,7 @@
 # 05-02.clusterip-peel — ClusterIP 가 추상화한 것을 네 번에 걸쳐 벗긴다
 # 본문 요구: 1 veth 짝 찾기 → 2 netns 확인 → 3 프로세스 둘(웹 서버·/pause) → 4 iptables
 #           KUBE-SVC·KUBE-SEP 의 DNAT. 결론은 "DNS 레코드 + DNAT 체인 + Endpoints 삼위일체".
-# 타입 스펙: 계층 벗기기. 공식 없는 타입이라 stride 로 배치.
+# 타입 스펙: type-dp-security-matrix.md — 열 머리가 "치는 명령"과 "드러나는 것", 행이 명령 넷 — 세로 대조가 논지
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER2, PAPER, KR, MONO
 

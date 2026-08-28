@@ -63,5 +63,5 @@ d.t(X0, 448, "리스트는 규칙이 늘수록 대조 횟수가 함께 늘고, �
 d.legend(468, [("규칙 수에 비례 · 이 편의 병목", BAD),
                ("해시 조회로 상수시간", INFO),
                ("커널 안에서 처리 · L7 까지", OK)])
-d.save("../02-02.kube-proxy-three-generations.svg")
+d.save("02-02.kube-proxy-three-generations.svg")
 print("ok kube-proxy-three-generations")

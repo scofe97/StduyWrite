@@ -2,7 +2,7 @@
 # 본문 요구: "일반 질의는 <service>.default.svc.cluster.local → svc.cluster.local →
 #           cluster.local → 호스트 검색 경로 순으로 시도되므로, 짧은 이름 하나에 다섯 번의
 #           요청이 나가 지연을 키울 수 있습니다" + 처방 둘(Autopath · ndots).
-# 타입 스펙: 순서 체인 + 결과. 공식 없는 타입이라 stride 로 배치.
+# 타입 스펙: type-data-flow.md — 1차에서 4차까지 시도가 한 줄로 이어지고 그 끝에 처방 둘
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER2, PAPER, KR, MONO
 

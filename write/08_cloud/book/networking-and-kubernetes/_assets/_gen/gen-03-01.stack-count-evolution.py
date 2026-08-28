@@ -2,7 +2,7 @@
 # 본문 요구: "운영체제가 하나면 TCP/IP 스택도 하나이고 … 팀마다 자기 게스트 OS와 네트워크
 #           스택 … 컨테이너마다 자기 네트워크 스택을 가지면서도 게스트 OS 없이" — 절 제목이
 #           곧 축이므로 행을 그 축으로 두고 세대를 열로 놓는다.
-# 타입 스펙: 비교 행렬. 공식 없는 타입이라 stride 로 배치.
+# 타입 스펙: type-dp-security-matrix.md — 행이 축이고 열이 세대다 — 본문이 "두 번째 행만 따라 읽으면"이라 읽는 법을 지정한다
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER2, KR, MONO
 

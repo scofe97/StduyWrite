@@ -1,3 +1,4 @@
+# 타입 스펙: type-dp-security-matrix.md — 행이 항목, 열이 3사 — 용어 대응표가 곧 이 장의 요약이다
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
 W, H = 1000, 604

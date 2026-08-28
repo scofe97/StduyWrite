@@ -1,4 +1,5 @@
 # 03-02.chapter-overview — 네 단계 지도
+# 타입 스펙: type-data-flow.md — 단계 머리를 세우고 그 아래 한 칸씩 — 편 전체를 한 줄로 잇는 지도
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
 W, H = 1000, 560

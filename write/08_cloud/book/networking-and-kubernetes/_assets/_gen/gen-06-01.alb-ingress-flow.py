@@ -1,4 +1,5 @@
 # 06-01.alb-ingress-flow — 어노테이션이 실제 AWS 자원이 되기까지
+# 타입 스펙: type-data-flow.md — 어노테이션에서 실제 AWS 자원까지 네 단계 한 줄
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
 W, H = 1000, 560

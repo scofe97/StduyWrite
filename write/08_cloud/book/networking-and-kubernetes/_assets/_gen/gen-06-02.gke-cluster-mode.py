@@ -1,3 +1,4 @@
+# 타입 스펙: type-dp-security-matrix.md — 행이 routes-based·VPC-native, 열이 각 모드에서 트래픽이 Pod 에 닿는 방식
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
 W, H = 1000, 556
