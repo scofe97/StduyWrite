@@ -1,8 +1,10 @@
 # 15-03 §4 — 같은 도구를 정반대로 쓴다
 # 본문이 Canary 와 Blue/Green 을 "같은 label selector 를 정반대로 쓴다"로 묶는다. 그러니 전환
 # 장면만 그리면 절반이고, 라벨을 같게 주느냐 다르게 주느냐가 함께 보여야 한다.
-# 타입 스펙: type-dependency.md — Service 의 selector 가 어느 Deployment 를 가리키는가. 실선과 점선이 바뀌는 것이
-#           전환의 전부라, 흐르는 것이 아니라 가리키는 방향이 값이다.
+# 타입 스펙: type-architecture.md — 구성요소 셋(Service · 두 Deployment)과 그 사이 연결. 연결 하나가 어디를 향하느냐가
+#           전환의 전부라, 두 밴드가 그 화살표의 전과 후다.
+#           2026-08-28 정정: 처음에 dependency 로 적었으나 팬인도 순환도 없어 그 정본의 조건을
+#           못 채운다. 존도 복제 수도 없으니 deployment 도 아니다 — 남는 것이 architecture 다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx
