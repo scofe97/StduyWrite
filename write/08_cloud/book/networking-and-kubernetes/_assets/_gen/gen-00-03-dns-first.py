@@ -1,7 +1,12 @@
 # 00-03-dns-first — 이름을 IP 로 바꾸는 조회가 연결보다 먼저다
 # 본문 요구: "이름으로는 아무것도 보낼 수 없다" — IP 헤더에 이름 칸이 없으므로 조회가 선행한다.
 #           IP 를 실제로 받아 오는 3 단계가 이 도식의 초점이다.
-# 타입 스펙: type-data-flow.md — 이름에서 연결까지 네 단계가 한 줄로 이어진다.
+# 타입 스펙: type-architecture.md — 상자에 든 것은 이름과 주소라는 값이고, 조회가 통신 앞에 따로 붙는다는 순서가 논지다.
+#           38개 메뉴에 이 형태(주체 레인 없는 값·단계 사슬)를 담을 타입이 없다 —
+#           layout 문법만 architecture 를 따르고 그 사실을 여기 적어 둔다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 # 이력: 2026-08-28 신설. 생성기 없이 손으로 만들어진 SVG 였다. 값·좌표를 그대로 옮겼다.
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, PAPER2, KR, MONO

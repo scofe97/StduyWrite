@@ -1,11 +1,10 @@
 # 01-01.ncp-split — 하나였던 프로토콜이 둘로 갈라진 자리
 # 본문 요구: "NCP 는 하나가 모든 일을 했고, 다양성을 감당하지 못했다. 1974 TCP, 1981
 #           RFC 791 이 IP 를 떼어 내 책임을 덜었다" — 무엇이 쪼개졌는지가 논점.
-# 타입 스펙: type-data-flow.md — 단계 머리(연도) + 한 줄 체인. 이 폴더의 chapter-overview 들이
-#           쓰는 stage_chain 과 같은 형태다. 다만 흐르는 것은 데이터가 아니라 *책임*이다 —
-#           신뢰성·주소·전달 세 슬롯이 세 세대를 지나며 어느 상자에 담기는지가 바뀐다.
-#           마지막 칸에서 한 상자가 둘로 갈라지는 자리가 이 그림의 논지라 거기만 focal 이다.
-#           type-timeline 은 아니다 — 기준선·눈금·원이 없고, 연도는 축이 아니라 칸 머리글이다.
+# 타입 스펙: type-architecture.md — NCP · TCP · IP 라는 실재 프로토콜 컴포넌트와 그것이 나눠 가진 책임. 마지막 칸에서 한 컴포넌트가 둘로 갈라지는 것이 논지다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER2, KR, MONO
 

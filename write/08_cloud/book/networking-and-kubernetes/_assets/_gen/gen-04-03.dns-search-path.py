@@ -2,7 +2,12 @@
 # 본문 요구: "일반 질의는 <service>.default.svc.cluster.local → svc.cluster.local →
 #           cluster.local → 호스트 검색 경로 순으로 시도되므로, 짧은 이름 하나에 다섯 번의
 #           요청이 나가 지연을 키울 수 있습니다" + 처방 둘(Autopath · ndots).
-# 타입 스펙: type-data-flow.md — 1차에서 4차까지 시도가 한 줄로 이어지고 그 끝에 처방 둘
+# 타입 스펙: type-architecture.md — 상자에 든 것은 차례로 시도하는 질의 이름이다. 다섯 번 묻는다는 횟수가 값이다.
+#           38개 메뉴에 이 형태(주체 레인 없는 값·단계 사슬)를 담을 타입이 없다 —
+#           layout 문법만 architecture 를 따르고 그 사실을 여기 적어 둔다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER2, PAPER, KR, MONO
 

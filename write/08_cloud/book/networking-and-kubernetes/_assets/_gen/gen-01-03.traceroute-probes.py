@@ -1,7 +1,10 @@
 # 01-03.traceroute-probes — TTL 1·2·3 반복 프로브
 # 본문: "일부러 1 부터 시작, 죽을 자리를 지정해 쏜다",
 #       "매번 다른 라우터가 내가 버렸다고 답하므로 그 답들을 모으면 경로가 순서대로 드러난다"
-# 타입 스펙: type-data-flow.md §2 격자를 세 번 반복 — 죽는 자리가 한 칸씩 밀리는 계단이 요점
+# 타입 스펙: type-architecture.md — 노트북 · 라우터 둘 · 목적지를 잇는 구성도 셋. 밴드가 계층이 아니라 TTL 을 1씩 올린 세 번의 시도다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, KR, MONO
 

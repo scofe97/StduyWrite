@@ -1,7 +1,12 @@
 # 04-01.nat-free-promise — 포트 제약에서 세 약속, 그리고 그 대가까지
 # 본문 요구: "IP를 Pod마다 주는 동기는 포트 제약 제거 … 세 요구사항 … 대가는 명확합니다 —
 #           Pod마다 IP를 할당하고 라우팅하는 일이 클러스터에 상당한 복잡성을 더합니다"
-# 타입 스펙: type-data-flow.md — 왼쪽 끝 제약에서 오른쪽 끝 대가까지 네 칸 한 줄
+# 타입 스펙: type-architecture.md — 상자에 든 것은 컴포넌트가 아니라 제약 · 선택 · 약속 · 대가라는 논지의 마디다.
+#           38개 메뉴에 이 형태(주체 레인 없는 값·단계 사슬)를 담을 타입이 없다 —
+#           layout 문법만 architecture 를 따르고 그 사실을 여기 적어 둔다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER2, KR, MONO
 

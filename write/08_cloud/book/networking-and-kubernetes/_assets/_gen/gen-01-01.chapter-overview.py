@@ -8,6 +8,9 @@
 # 타입 스펙: type-process.md — 단계마다 같은 의미 슬롯(절 번호 · 이름 · 한 줄 요약 · 항목 셋)이
 #           같은 자리에 반복된다(semantic-patterns 의 "Stage framework with semantic slots").
 #           화살표는 데이터가 아니라 읽는 순서를 나른다 — 01-02.chapter-overview 와 같은 판단이다.
+#           2026-08-29 덧붙임: type-process 정본의 입력 계약도 역할 레인 1~6 이 전제인데 이 그림에
+#           레인은 없다. 그래도 process 를 두는 것은, 주체를 요구하지 않는 유일한 라우팅 규칙이
+#           semantic-patterns 의 "Stage framework with semantic slots" 한 줄이기 때문이다.
 # 이력: 2026-08-28 신설. 생성기 없이 손으로 만들어진 SVG 였다. 값·좌표를 그대로 옮겼다.
 from dd import D, INK, MUTED, SOFT, RULE, OK, BAD, INFO, KR, MONO
 
