@@ -1,9 +1,10 @@
 # 01-03.ip-ttl-hops — 홉별 감소 카운터
 # 본문: "라우터는 지날 때마다 1 을 뺀다, 0 이면 그 자리에서 버린다",
 #       "고리가 생겨도 무한히 도는 대신 예순몇 홉 안에 사라진다"
-# 타입 스펙: type-data-flow.md §2 — label 열 + step 슬롯 격자를 이 장의 1000 캔버스로 환산
-#   레인 라벨을 쓰지 않으므로 label 열은 두지 않고 4 슬롯을 캔버스에 균등 배치한다
-#   step_slot_w 232 · node_w 112 → 코리도어 120 (원 스펙 112/100/12 의 비례 확대)
+# 타입 스펙: type-architecture.md — 호스트와 라우터라는 실재 컴포넌트를 잇고, TTL 칩이 그 위를 흐르는 값이다. 두 밴드는 정상 전달과 경로 고리 두 경우다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import dd
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 

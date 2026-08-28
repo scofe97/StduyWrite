@@ -1,5 +1,10 @@
 # 06-01.pod-per-node-capacity — 인스턴스의 IP 수용량이 곧 Pod 상한
-# 타입 스펙: type-data-flow.md — 인스턴스 타입에서 실제 배포 가능 수까지 네 칸 계산 한 줄
+# 타입 스펙: type-architecture.md — 상자에 든 것은 계산 단계의 값(인스턴스 타입 · ENI×IP · 29 · 27)이다.
+#           38개 메뉴에 이 형태(주체 레인 없는 값·단계 사슬)를 담을 타입이 없다 —
+#           layout 문법만 architecture 를 따르고 그 사실을 여기 적어 둔다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
 W, H = 1000, 560

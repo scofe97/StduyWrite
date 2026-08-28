@@ -4,6 +4,9 @@
 # 타입 스펙: type-process.md — 구간마다 DST MAC · SRC IP · DST IP 라는 같은 의미 슬롯이 반복되고,
 #           구간 간 비교가 메시지 타이밍보다 중요하다. semantic-patterns.md 의
 #           "Stage framework with semantic slots" 가 이 형태를 process 로 보낸다.
+#           2026-08-29 덧붙임: type-process 정본의 입력 계약도 역할 레인 1~6 이 전제인데 이 그림에
+#           레인은 없다. 그래도 process 를 두는 것은, 주체를 요구하지 않는 유일한 라우팅 규칙이
+#           semantic-patterns 의 "Stage framework with semantic slots" 한 줄이기 때문이다.
 # 이력: 2026-08-28 신설. 생성기 없이 손으로 만들어진 SVG 였다. 값·좌표를 그대로 옮겼다.
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, INFO, PAPER2, KR, MONO
 

@@ -1,9 +1,12 @@
 # 01-03.vxlan-encapsulation — 캡슐화 (01-01 encapsulation 참고)
 # 본문: "L2 프레임을 L4 UDP 패킷에 캡슐화해 IP 네트워크를 가로질러 L2 인접성을 만든다"
 #        "VLAN 이 가두는 기술이라면 VXLAN 은 잇는 기술이다"
-# 타입 스펙: type-data-flow.md — 씌우고 나르고 벗기는 네 단계가 가로 사슬이고,
-#           겹(type-nested.md)은 각 칸의 *내용*이지 배치 문법이 아니다.
-#           2026-08-28 렌더 확인 후 재분류. 03-02 의 같은 개념 도식과 같은 이유로 함께 맞춘다.
+# 타입 스펙: type-architecture.md — 상자에 든 것은 단계마다의 프레임 모습이다. 컴포넌트는 밴드 머리(노드 A · 라우터 · 노드 B)에 있다.
+#           38개 메뉴에 이 형태(주체 레인 없는 값·단계 사슬)를 담을 타입이 없다 —
+#           layout 문법만 architecture 를 따르고 그 사실을 여기 적어 둔다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 

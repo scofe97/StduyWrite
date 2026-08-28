@@ -1,9 +1,10 @@
 # 05-03.mesh-relocation — 메시의 본질은 기능의 자리 이동이다
 # 본문 요구: 일곱 기능(디스커버리·로드밸런싱·복원력·보안 mTLS·관측·라우팅 제어·API) + 구조
 #           셋(게이트웨이·사이드카·컨트롤 플레인) + "컨트롤 플레인이 죽어도 데이터 플레인은 돈다".
-# 타입 스펙: type-data-flow.md — 앱 코드 안에서 사이드카로 기능이 *옮겨 가는* 것이 논지다.
-#           2026-08-28 렌더 확인 후 재분류: 앞서 행 대조(dp-security-matrix)로 적었으나
-#           열 머리도 없고 행도 하나뿐이라 격자 문법이 아니었다. 두 칸과 그 사이 이동이 전부다.
+# 타입 스펙: type-architecture.md — 앱 코드와 사이드카 프록시라는 두 자리를 잇는다. 같은 기능이 어느 컴포넌트에 사는지가 논지다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER2, PAPER, KR, MONO
 

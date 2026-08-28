@@ -6,6 +6,9 @@
 #           stage" 와 role-scoped lane 을 전제로 하는데, 편 지도에는 주체도 레인도 없다.
 #           엄밀히는 두 정본 다 주체 기반이라 편 지도는 표의 공백에 가깝고, 주체 없이도 맞는
 #           유일한 라우팅 규칙이 위 semantic-patterns 한 줄이라 그쪽을 따랐다.
+#           2026-08-29 덧붙임: type-process 정본의 입력 계약도 역할 레인 1~6 이 전제인데 이 그림에
+#           레인은 없다. 그래도 process 를 두는 것은, 주체를 요구하지 않는 유일한 라우팅 규칙이
+#           semantic-patterns 의 "Stage framework with semantic slots" 한 줄이기 때문이다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
 W, H = 1000, 560

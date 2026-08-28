@@ -1,10 +1,11 @@
 # 03-02.vxlan-encapsulation — MAC-in-UDP, 껍질을 씌우고 벗긴다
 # 본문 요구: 네 단계 — 원본 프레임 / 캡슐화(VNI 24비트) / L3 언더레이 / 역캡슐화
-# 타입 스펙: type-data-flow.md — 배치는 ①~④ 네 단계 진행이고, 겹(type-nested.md)은 각 칸의
-#           *내용*이지 배치 문법이 아니다. 2026-08-28 재분류: 겹을 앞세워 선언해 두면
-#           표현형 감사에서 nested 로 집계돼 실제 배치가 가려진다.
-#           01-03 의 같은 개념 도식과 시각 언어는 그대로 맞춰 둔다 — 그쪽 선언도 같은 이유로
-#           data-flow 가 맞지만 이번 회차 범위(02-02~06-02) 밖이라 손대지 않았다.
+# 타입 스펙: type-architecture.md — 상자에 든 것은 단계마다의 프레임 모습이고, 컴포넌트는 단계 머리(호스트1 컨테이너 · 송신 VTEP · L3 언더레이 · 호스트2 VTEP)에 있다.
+#           38개 메뉴에 이 형태(주체 레인 없는 값·단계 사슬)를 담을 타입이 없다 —
+#           layout 문법만 architecture 를 따르고 그 사실을 여기 적어 둔다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 

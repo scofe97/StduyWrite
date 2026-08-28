@@ -1,10 +1,10 @@
 # 02-01.loopback-not-a-boundary — 밖에서 경계를 넘어온 길
 # 본문: "점선 안이 '로컬 전용'이라 믿는 구간. 노드 설정 하나가 그 안으로 들어가는 길을
 #        열어 준 것이 CVE-2020-8558 이다."
-# 타입 스펙: type-data-flow.md — 인접 호스트에서 lo 까지 뚫고 들어가는 단선 경로가 배치다.
-#           경계 링(type-nested.md)은 그 경로가 넘는 대상이지 배치 문법이 아니다.
-#           2026-08-28 렌더 확인 후 재분류: 앞서 flowchart 였으나 스스로 "단선 경로"라 적어 두었고
-#           실제로 분기가 없다.
+# 타입 스펙: type-architecture.md — 인접 호스트 · 노드 NIC · 노드 설정 · lo · 서비스를 잇는 구성도. 점선 사각형이 '로컬 전용이라 믿는 구간'을 표시하는데, architecture 정본이 신뢰 경계를 그렇게 그리라고 적은 그 문법이다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 

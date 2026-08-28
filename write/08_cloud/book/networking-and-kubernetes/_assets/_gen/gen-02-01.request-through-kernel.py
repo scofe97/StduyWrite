@@ -3,6 +3,9 @@
 #        패킷은 경계를 두 번 넘는다."
 # 타입 스펙: type-process.md 의 단계 열 + type-nested.md 의 경계 링.
 #           링을 가운데 다섯 칸에만 씌워 '두 번 넘는다'가 자리로 드러나게 한다.
+#           2026-08-29 덧붙임: type-process 정본의 입력 계약도 역할 레인 1~6 이 전제인데 이 그림에
+#           레인은 없다. 그래도 process 를 두는 것은, 주체를 요구하지 않는 유일한 라우팅 규칙이
+#           semantic-patterns 의 "Stage framework with semantic slots" 한 줄이기 때문이다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 

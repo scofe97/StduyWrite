@@ -3,6 +3,11 @@
 # 타입 스펙: type-process.md — 관문마다 "무엇을 확인하나 / 그때 치는 명령"이라는 같은 슬롯이
 #           반복되고, 도구가 슬롯의 일부다. 스펙이 "도구가 중요하면 process"라 지정한다.
 #           2026-08-28 렌더 확인 후 swimlane 에서 재분류.
+#           2026-08-29 덧붙임: type-process 정본의 입력 계약도 역할 레인 1~6 이 전제인데 이 그림에
+#           레인은 없다. 그래도 process 를 두는 것은, 주체를 요구하지 않는 유일한 라우팅 규칙이
+#           semantic-patterns 의 "Stage framework with semantic slots" 한 줄이기 때문이다.
+# 2026-08-28 명령 갱신 — 관문 3 의 `netstat -lp` 를 `ss -ltnp` 로. net-tools 는 지금 배포판에
+#           기본으로 없고 본문 §4 도 ss 로 옮겼다. 읽을 자리 이름도 ss 의 열 이름을 따른다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
@@ -23,7 +28,7 @@ ddx.lane_pair(d, CX, 276, 452, BW, BH,
                ("대화가 되는가", "안 되면 L7 문제", "앱 로직으로")],
               [("dig <도메인>", "status · ANSWER SECTION", "NXDOMAIN 이면 없음"),
                ("ping -c 3 <주소>", "손실률과 왕복 시간", "Service 면 건너뛴다"),
-               ("netstat -lp", "Local Address 열", "와일드카드인지 루프백인지"),
+               ("ss -ltnp", "Local Address:Port 열", "와일드카드인지 루프백인지"),
                ("curl -v <URL>", "핸드셰이크와 응답 헤더", "어느 단계에서 멈추나")],
               ["조회", "확인", "점검", "대화"])
 d.t(36, 540, "Service 주소는 ping 에 답하지 않는다 — 두 번째 관문만 예외로 두고 세 번째로 넘어간다",
