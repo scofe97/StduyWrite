@@ -3,8 +3,10 @@
 #           httpd:alpine → sha256:b2848c02… (다르다 → 별도 저장)
 #       "내용이 1바이트만 달라도 해시가 완전히 달라지므로, '공유' 는 우연이 아니라 바이트 단위로
 #        동일할 때만 성립합니다 — 그래서 팀이 베이스 이미지를 통일해야 이 절약을 얻습니다."
-# 타입 스펙: 세 이미지 × 해시 × 저장 결과라 비교 행렬. 판정 축은 해시다 — 그 열만 같으면
+# 타입 스펙: type-dp-security-matrix.md — 세 이미지 × 해시 × 저장 결과라 비교 행렬. 판정 축은 해시다 — 그 열만 같으면
 #           나머지가 따라온다. manifest 장이 구조를 지고, 이 장은 그 판정만 진다.
+#           행은 이미지 셋, 열은 해시·저장·공유 여부인 격자다. focal 열이 해시라 그 열만 같으면
+#           나머지가 따라온다는 것이 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx

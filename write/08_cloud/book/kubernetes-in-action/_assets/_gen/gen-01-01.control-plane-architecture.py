@@ -3,9 +3,13 @@
 #   "컴포넌트끼리 직접 연결되지 않습니다." API Server 만이 통신 허브다.
 #   배포 흐름 넷: ① 매니페스트 제출 → etcd 저장 ② Controller 가 부족분 Pod 생성
 #   ③ Scheduler 가 노드 배정 ④ Kubelet 이 컨테이너 실행.
-# 타입 스펙: 04-01 은 spec·status 축을 지므로 이 장은 다른 것을 진다 — 허브 앤 스포크다.
+# 타입 스펙: type-architecture.md — 04-01 은 spec·status 축을 지므로 이 장은 다른 것을 진다 — 허브 앤 스포크다.
 #           '직접 연결되지 않는다' 가 요점이므로 컴포넌트끼리 잇지 않는 것 자체를 보이고,
 #           그 사실을 ✕ 로 못 박는다.
+#           API Server 가 유일한 통합 지점이라 코럴 초점 노드 하나에 나머지가 모두 붙는다 —
+#           정본이 말하는 "the primary integration point" 가 그대로 이 그림의 허브다.
+#           스포크 다섯이 한 노드로 모이니 팬인이지만 type-dependency 는 아니다 — 그 정본은
+#           랭크 행·팬인 배지·순환 back-edge 가 문법이고, 여기 초점은 순환이 아니라 허브다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx

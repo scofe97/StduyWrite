@@ -1,9 +1,11 @@
 # 02-03 §전체도 — 번호가 다르면 격리, 같으면 공유
 # 실측: kiada 와 web1 의 uts·pid·net 번호는 다르고 user·time 번호는 같다.
 #       cgroup: docker --memory=100m → memory.max = 104857600 에 박힌다(커널이 강제).
-# 타입 스펙: 두 컨테이너의 같은 항목을 나란히 놓고 같은지 다른지를 판정하는 일이라 비교 행렬.
+# 타입 스펙: type-dp-security-matrix.md — 두 컨테이너의 같은 항목을 나란히 놓고 같은지 다른지를 판정하는 일이라 비교 행렬.
 #           옛 판은 상자 안에 번호를 늘어놓아 '같다/다르다' 를 독자가 대조해야 했다.
 #           판정 열을 만들어 그 대조를 그림이 대신한다.
+#           행은 네임스페이스 다섯, 열은 두 컨테이너의 번호와 판정인 격자다. focal 열이 판정이라
+#           같다/다르다의 대조를 독자가 아니라 그림이 한다. 아래 cgroup 상자는 격자 밖 다른 축이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx

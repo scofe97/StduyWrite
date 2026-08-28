@@ -2,9 +2,11 @@
 # 본문: "Pod 는 휘발성이라 노드 실패·삭제·축출로 언제든 사라지고, 교체된 새 Pod 는 완전히 다른
 #        IP 를 갖습니다. 그래서 클라이언트는 Pod IP 가 아니라 Service IP 에 연결해야 하고,
 #        Deployment 는 Pod 를 직접 만들지 않고 이 교체·복제 책임을 대신 집니다."
-# 타입 스펙: 세 오브젝트의 역할이 서로 다른 방향을 보는 것이 요점이다 — Deployment 는 위에서
+# 타입 스펙: type-architecture.md — 세 오브젝트의 역할이 서로 다른 방향을 보는 것이 요점이다 — Deployment 는 위에서
 #           선언하고, Service 는 앞에서 진입점을 고정한다. 그래서 Pod 줄을 가운데 두고
 #           선언은 위에서, 진입은 왼쪽에서 오게 배치한다.
+#           Deployment 가 위에서 선언하고 Service 가 왼쪽에서 진입점을 고정하며 그 사이에 파드 줄이
+#           있는 구성도다. 코럴 초점은 바뀌지 않는 진입점인 Service 하나다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx

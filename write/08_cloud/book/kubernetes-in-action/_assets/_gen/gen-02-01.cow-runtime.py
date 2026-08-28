@@ -2,8 +2,10 @@
 # 본문 실측: docker run web1/web2 (nginx:alpine) → web1 에서만 index.html 수정.
 #   web1 → "web1이 바꿈" · web2 → 원본 Welcome · 새 컨테이너(--rm) → 원본 Welcome
 #   "web1 은 파일을 건드렸기 때문에 복사가 일어났고, web2 는 건드리지 않아서 원본을 봅니다."
-# 타입 스펙: 결과 셋이 갈리는 이유가 '건드렸는가' 하나이므로 비교 행렬. 개념도(copy-on-write)는
+# 타입 스펙: type-dp-security-matrix.md — 결과 셋이 갈리는 이유가 '건드렸는가' 하나이므로 비교 행렬. 개념도(copy-on-write)는
 #           층 구조를 지고, 이 장은 결과와 그 원인만 진다 — 두 장의 역할을 갈랐다.
+#           행은 컨테이너 셋, 열은 판정 축(건드렸나 · 쓰기 레이어 · 본 내용)인 격자다.
+#           focal 열이 "파일을 건드렸나"라 그 한 칸이 나머지 두 열을 정한다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx

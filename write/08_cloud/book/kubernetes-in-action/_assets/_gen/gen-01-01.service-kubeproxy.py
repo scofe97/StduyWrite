@@ -3,8 +3,11 @@
 #   kube-proxy 가 그 가상 IP 로 온 요청을 실제 파드로 나눠 보낸다. 클라이언트는 가상 IP 하나만
 #   안다. kube-proxy 모드는 User Space(구식)·iptables(기본)·IPVS(대규모) — 규칙을 노드 커널에
 #   심는 방식이 다르다.
-# 타입 스펙: 가상 하나가 실제 여럿으로 갈리는 구조라 fan-out. 규칙이 노드마다 심긴다는 것이
+# 타입 스펙: type-architecture.md — 가상 하나가 실제 여럿으로 갈리는 구조라 fan-out. 규칙이 노드마다 심긴다는 것이
 #           요점이므로 노드 경계를 그려 kube-proxy 를 그 안에 둔다.
+#           점선 사각형이 노드 경계를 표시하고 그 안에 kube-proxy 와 파드를 둔다 — 정본의
+#           "Dashed boundary rectangles mark regions" 그대로다. 파드 배치가 아니라 가상 IP 가
+#           규칙을 타고 갈리는 경로가 논지라 type-deployment 가 아니다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx
