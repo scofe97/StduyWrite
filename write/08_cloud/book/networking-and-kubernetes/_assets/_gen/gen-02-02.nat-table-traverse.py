@@ -1,7 +1,11 @@
 # 02-02.nat-table-traverse — 지나는 자리와 그 직후 패킷 상태를 세로로 짝지운다
 # 본문 요구: "패킷 하나가 nat 테이블을 지나는 동안 — 어느 규칙에 걸려 어느 필드가 바뀌는가"
-# 타입 스펙: type-swimlane.md 레인 둘. 여섯 자리라 글자를 한 단 줄이고 fit 으로 강제한다.
-#           마지막 칸은 조건부라 점선 표시를 덧붙인다.
+# 타입 스펙: type-process.md — 단계마다 "지나는 자리와 걸린 규칙 / 그 직후 패킷 상태"라는
+#           같은 의미 슬롯이 반복된다. semantic-patterns.md 의 "Stage framework with semantic slots"
+#           가 이 형태를 process 로 보낸다.
+#           2026-08-28 렌더 확인 후 재분류: 앞서 swimlane 이었으나 두 레인이 행위 주체가 아니라
+#           관점이고, 레인을 가로지르는 handoff 도 없다. 스펙이 "데이터·도구가 중요하지 않을 때만
+#           swimlane, 각 단계의 입출력이 읽혀야 하면 process"라 갈라 둔 그 경우다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 

@@ -1,9 +1,9 @@
 # 01-03.vxlan-encapsulation — 캡슐화 (01-01 encapsulation 참고)
 # 본문: "L2 프레임을 L4 UDP 패킷에 캡슐화해 IP 네트워크를 가로질러 L2 인접성을 만든다"
 #        "VLAN 이 가두는 기술이라면 VXLAN 은 잇는 기술이다"
-# 타입 스펙: type-nested.md(껍데기가 붙었다 벗겨진다) + type-data-flow.md §2 격자(4 단계)
-#   코리도어 폭을 먼저 산출하고 화살표 라벨을 ddx.fit 으로 그 폭에 가둔다 —
-#   라벨이 봉투 박스를 덮는 겹침은 overflow-check 가 못 잡는다.
+# 타입 스펙: type-data-flow.md — 씌우고 나르고 벗기는 네 단계가 가로 사슬이고,
+#           겹(type-nested.md)은 각 칸의 *내용*이지 배치 문법이 아니다.
+#           2026-08-28 렌더 확인 후 재분류. 03-02 의 같은 개념 도식과 같은 이유로 함께 맞춘다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
