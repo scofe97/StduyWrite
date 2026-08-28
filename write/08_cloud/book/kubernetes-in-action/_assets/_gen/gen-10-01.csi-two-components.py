@@ -1,6 +1,9 @@
 # 10-01 §3 — 만드는 쪽과 붙이는 쪽이 다른 자리에 있다
 # CSI 드라이버를 한 상자로 그리면 "왜 둘인가"가 안 보인다. 클러스터 어디서 도는지가 다르고
 # 그래서 하는 일이 갈린다는 것이 요점이다.
+# 타입 스펙: type-deployment.md — 밴드 둘이 "클러스터에 하나(Deployment)" 와 "노드마다 하나(DaemonSet)" 라는 배치 자체를
+#           말한다 — 정본이 요구하는 존과 복제 수가 여기 있다. 하는 일이 갈리는 이유가 도는 자리이므로
+#           배치가 곧 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

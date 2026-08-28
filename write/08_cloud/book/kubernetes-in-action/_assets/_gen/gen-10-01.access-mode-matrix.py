@@ -1,6 +1,9 @@
 # 10-01 §5 — Once 의 '하나'가 무엇인지가 갈린다
 # 본문이 축 둘(제한 단위 · 동시 사용)을 직접 준다. 그러니 네 모드를 나열하지 말고 그 두 축의
 # 교차로 놓아야 "RWOP 와 RWO 가 비슷해 보이지만 다르다"가 좌표로 드러난다.
+# 타입 스펙: type-dp-security-matrix.md — 가로축이 제한 단위(파드·노드), 세로축이 동시 사용(하나만·여럿)인 2 차원 격자이고 네 모드가
+#           그 교차에 놓인다. 축 둘이 다 의미를 지는 정본 그대로의 격자다. type-quadrant 는 뺐다 —
+#           그 정본은 축선 십자와 점 배치가 문법인데 여기는 칸이 값을 담는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

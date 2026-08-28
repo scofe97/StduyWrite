@@ -1,6 +1,8 @@
 # 09-03 §2 — 심링크는 경로를 담은 파일이다
 # 뒤 도식 둘(원자적 갱신·subPath)이 심링크 체인 위에 서 있으므로, 여기서 "무엇을 가리키는
 # 포인터"라는 사실이 확실히 잡혀야 한다. 내용이 아니라 경로를 담는다는 점이 요점이다.
+# 타입 스펙: type-architecture.md — 심링크 상자와 실파일 노드 둘, 그리고 커널이 따라가는 화살표 하나로 이뤄진 구성도다.
+#           뒤 도식 둘이 이 체인 위에 서므로 여기서는 관계 하나만 확실히 세운다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

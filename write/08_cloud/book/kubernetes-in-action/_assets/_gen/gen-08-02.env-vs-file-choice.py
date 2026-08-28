@@ -1,6 +1,8 @@
 # 08-02 §4 — 무엇을 담느냐가 경로를 정한다
 # 짝 도식(configmap-update-paths)이 '수정하면 어떻게 되나'를 맡으므로, 이쪽은 '무엇을
 # 고를 것인가'만 본다. 축을 갈라 둘이 같은 표가 되지 않게 한다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 담는 값의 성격, 열은 어느 경로로 줄지와 그 이유인 격자다. 짝 도식이 '수정하면 어떻게 되나'를
+#           맡으므로 이쪽은 '무엇을 고를 것인가' 축만 진다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, KR
 import ddx

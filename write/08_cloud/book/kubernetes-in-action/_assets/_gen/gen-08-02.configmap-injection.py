@@ -1,6 +1,11 @@
 # 08-02 §1 — 같은 값이 두 경로로 들어간다
 # 본문이 "앱이 REST API 로 ConfigMap 을 읽게 하지 않는다"를 전제로 깔고 두 주입 경로를 든다.
 # 그러니 앱이 쿠버네티스를 모른다는 사실이 그림에 남아 있어야 한다.
+# 타입 스펙: type-architecture.md — ConfigMap 에서 환경변수 경로와 볼륨 경로 둘로 갈려 컨테이너 상자 안으로 들어가는 구성도다.
+#           앱이 쿠버네티스를 모른다는 사실이 컨테이너 경계 안쪽 노드로 남아 있다.
+#           type-data-flow 는 역할 레인 1~4 × 단계 열 × 타입 있는 페이로드 칩이 입력 계약인
+#           데이터 플랫폼 전용 타입이라 여기엔 맞지 않는다. type-architecture 의 Best for 에
+#           "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

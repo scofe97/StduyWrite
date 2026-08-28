@@ -1,6 +1,8 @@
 # 08-03 §1 — 지금 만든다면 하나였을 둘
 # 본문이 "기능이 수렴했지만 각자 진화한 탓에 차이가 남았다"로 틀을 잡고 세 축을 든다.
 # 그러니 우열이 아니라 '어느 축에서 갈리는지'가 보이는 표여야 한다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 두 오브젝트, 열은 갈리는 축 셋이다. 우열이 아니라 어느 축에서 갈리는지가 논지라
+#           칸 대조가 그 일을 한다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, KR
 import ddx

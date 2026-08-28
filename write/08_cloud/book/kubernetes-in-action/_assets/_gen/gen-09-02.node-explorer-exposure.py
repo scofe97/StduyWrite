@@ -1,6 +1,8 @@
 # 09-02 §2 — path: / 하나가 여는 것
 # 위험을 문장으로 적으면 크기가 안 잡힌다. 노드 루트 아래 무엇이 함께 딸려 오는지를
 # 실제 경로로 늘어놓아야 노출면의 넓이가 보인다.
+# 타입 스펙: type-architecture.md — hostPath 선언 상자에서 마운트 화살표가 컨테이너 경계 상자로 들어가고, 그 안에 열리는
+#           경로들이 늘어선다. 노출면의 넓이를 목록 길이로 보이는 구성도다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

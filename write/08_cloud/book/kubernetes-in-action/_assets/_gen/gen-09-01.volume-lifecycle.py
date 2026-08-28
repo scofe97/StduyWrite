@@ -1,6 +1,8 @@
 # 09-01 §2 — 볼륨은 파드에 속하고 컨테이너는 죽었다 산다
 # 본문의 요점은 수명의 층이 다르다는 것이다. 그러니 시간축 위에 컨테이너와 볼륨을 두 레인으로
 # 놓아, 한쪽만 끊기고 다른 쪽은 이어지는 것이 보여야 한다.
+# 타입 스펙: type-gantt.md — 시간축 위에 컨테이너 레인과 볼륨 레인이 있고, 컨테이너는 세 구간으로 끊기는데 볼륨은
+#           한 구간으로 이어진다. 끊김과 이어짐이 막대 모양으로 대조되는 것이 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

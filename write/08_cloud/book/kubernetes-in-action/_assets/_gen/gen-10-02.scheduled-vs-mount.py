@@ -1,6 +1,11 @@
 # 10-02 §3 — 선언은 통과했는데 실재가 없다
 # 본문의 요점은 스케줄러와 kubelet 이 서로 다른 것을 본다는 것이다. 그러니 시간 순서 위에
 # 두 주체의 판단을 나란히 놓고, 통과와 실패가 같은 파드에서 이어지는 것이 보여야 한다.
+# 타입 스펙: type-process.md — ①~⑤ 다섯 단계가 같은 슬롯으로 이어지고, 앞 셋을 묶는 대괄호가 "선언을 본다" 구간을
+#           표시한다. 주체가 스케줄러에서 kubelet 으로 넘어가는 지점이 논지다.
+#           type-process 정본의 입력 계약은 역할 레인 1~6 이 전제인데 이 그림에 레인은 없다.
+#           주체를 요구하지 않는 유일한 라우팅 규칙이 semantic-patterns 의
+#           "Stage framework with semantic slots" 한 줄이라 그것을 근거로 둔다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

@@ -1,6 +1,11 @@
 # 10-03 §1 — 벽을 넓히는 일과 대장을 고치는 일
 # 앞 도식이 두 층을 세웠으므로 여기서는 그 각각을 누가 언제 하는지가 주제다.
 # 두 단계가 다른 주체·다른 시점이라는 것이 요점이다.
+# 타입 스펙: type-process.md — 1 층과 2 층 두 단계가 같은 슬롯(누가 · 언제 · 무엇을)으로 반복된다. 두 밴드 사이에
+#           화살표를 두지 않았지만 층 번호가 순서를 지고 있다.
+#           type-process 정본의 입력 계약은 역할 레인 1~6 이 전제인데 이 그림에 레인은 없다.
+#           주체를 요구하지 않는 유일한 라우팅 규칙이 semantic-patterns 의
+#           "Stage framework with semantic slots" 한 줄이라 그것을 근거로 둔다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

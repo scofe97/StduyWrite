@@ -1,6 +1,9 @@
 # 09-01 §3 — 두 줄이 무엇을 바꾸는지 숫자로 본다
 # 본문이 kind 실측 숫자 셋(0 · 1 · 6)을 든다. 설명 대신 그 숫자가 나란히 놓여야
 # "두 줄의 무게"라는 말이 근거를 갖는다.
+# 타입 스펙: type-dp-security-matrix.md — 세 형태를 같은 슬롯(무엇을 했나 · 어디에 쓰나 · 재시작 뒤 질문 수 · 결과)으로 늘어놓은 격자다.
+#           실측 숫자 0·1·6 을 막대 길이가 아니라 큰 글자로 둔 것이 type-bar 와 갈리는 지점이다 —
+#           값이 셋뿐이라 길이로 비교할 것이 없다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, BAD, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

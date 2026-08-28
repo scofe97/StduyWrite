@@ -1,6 +1,8 @@
 # 09-03 §2 — ..data 하나만 튼다
 # 본문이 물증을 든다 — 개별 파일 심링크의 mtime 은 그대로인데 두 파일 내용이 함께 바뀐다.
 # 그러니 갱신 전후를 나란히 놓고 무엇이 바뀌고 무엇이 그대로인지가 보여야 한다.
+# 타입 스펙: type-dp-security-matrix.md — 갱신 전과 후를 같은 슬롯(개별 심링크 · ..data · 가리켜지는 디렉터리)으로 나란히 둔다.
+#           무엇이 그대로이고 무엇이 바뀌었는지가 같은 자리끼리의 대조로 읽힌다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

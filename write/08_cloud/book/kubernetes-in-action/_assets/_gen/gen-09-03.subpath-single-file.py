@@ -1,6 +1,8 @@
 # 09-03 §2 — 디렉터리를 덮지 않고 파일 하나만 얹는다
 # subPath 의 쓸모는 "기존 디렉터리를 가리지 않는다"에 있다. 그러니 마운트 전후의 디렉터리
 # 내용을 나란히 놓아, 나머지 파일이 살아남는 것이 보여야 한다.
+# 타입 스펙: type-dp-security-matrix.md — 세 디렉터리 뷰를 같은 형식으로 늘어놓고 어떤 파일이 남고 가려지는지를 대조한다.
+#           행이 아니라 열로 늘어섰지만 같은 슬롯이 반복되는 격자다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

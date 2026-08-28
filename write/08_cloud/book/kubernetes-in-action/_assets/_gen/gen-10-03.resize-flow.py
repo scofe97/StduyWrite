@@ -1,6 +1,9 @@
 # 10-03 §1 — 어느 지점에서 무엇이 갱신되는가
 # 짝 도식(filesystem-resize-layers)이 '누가 무엇을' 을 맡으므로, 이쪽은 시간축만 본다.
 # 사용자가 보는 값이 언제 바뀌는지가 축이어야 "미뤄진다"는 말이 눈에 잡힌다.
+# 타입 스펙: type-timeline.md — 기준선 하나 위에 다섯 사건이 순서대로 찍히고 각 사건에서 세로 눈금이 내려온다.
+#           구간의 길이가 아니라 값이 바뀌는 시점이 논지라 gantt 가 아니라 timeline 이다.
+#           정본이 쓰는 원 표식 대신 사건 상자를 얹은 것이 어긋나는 지점이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, RULE, KR, MONO
 import ddx

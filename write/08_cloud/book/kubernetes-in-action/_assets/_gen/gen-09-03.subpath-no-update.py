@@ -1,6 +1,8 @@
 # 09-03 §2 — 체인 밖에 있어 교체가 닿지 않는다
 # 앞 도식이 "..data 하나만 튼다"를 세웠으므로, 여기서는 그 교체가 어디까지 전파되는지가
 # 주제다. subPath 를 0 단으로 그려 체인 밖이라는 사실이 그림에서 나와야 한다.
+# 타입 스펙: type-architecture.md — 위 밴드는 심링크 → 심링크 → 실파일 2 단 체인, 아래는 실파일로 바로 가는 0 단이다.
+#           교체가 어디까지 전파되는지가 체인 길이로 드러난다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx
