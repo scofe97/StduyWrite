@@ -1,8 +1,12 @@
 # 13-01 §5 — 누가 채우는지가 갈린다
 # 캡션이 "채워 가는 순서"와 "attachedRoutes 만 Route 가 채운다"를 함께 요구한다. 그러니 단계
 # 순서 위에 채우는 주체를 표시해야 하고, 주체가 다른 마지막 칸이 focal 이다.
-# 타입 스펙: type-data-flow.md — status 의 칸이 순서대로 채워지는 파이프라인. 단계 머리가 그 칸을 *누가* 채우는지를 맡고,
-#           마지막 한 칸만 다른 주체(Route 오브젝트)가 채운다는 것이 논지다.
+# 타입 스펙: type-architecture.md — 상자에 든 것은 status 의 필드이고, 그 칸을 누가 채우는지가 단계 머리에 있다.
+#           38개 메뉴에 이 형태(주체 레인 없는 값·단계 사슬)를 담을 타입이 없다 —
+#           layout 문법만 architecture 를 따르고 그 사실을 여기 적어 둔다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

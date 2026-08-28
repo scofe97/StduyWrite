@@ -1,8 +1,12 @@
 # 12-02 §1 — 조용히 지나가고 접속에서 터진다
 # 본문이 "당위만 알면 어긋났을 때를 대비할 수 없다"고 짚는다. 그러니 규칙이 아니라
 # 배포 단계가 전부 초록불인 장면을 보여야 한다. 실패 지점 하나만 focal.
-# 타입 스펙: type-data-flow.md — 다섯 단계를 다 통과하고 마지막 브라우저에서만 실패하는 파이프라인. 앞 네 칸이 초록인 것이
+# 타입 스펙: type-flowchart.md — 관문 다섯을 차례로 지나며 판정하는 사슬. 앞 넷이 다 통과하고 마지막에서만 실패한다는 것이
 #           "여기까지 아무도 검증하지 않는다"는 주장이다.
+
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, BAD, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

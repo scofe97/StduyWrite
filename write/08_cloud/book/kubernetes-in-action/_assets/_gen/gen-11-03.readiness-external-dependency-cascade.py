@@ -1,7 +1,11 @@
 # 11-03 §4 — 무엇을 묻느냐가 장애 범위를 정한다
 # 같은 사건에서 갈리는 두 결말이라 같은 골격의 체인 둘. 치르는 값(전면 장애)이 focal.
-# 타입 스펙: type-data-flow.md — 원인이 한 줄로 번지는 인과 파이프라인 두 벌. 무엇을 묻느냐(외부 의존 / 자기 상태)에 따라
-#           같은 지연이 전면 장애도 되고 부분 응답도 된다.
+# 타입 스펙: type-flowchart.md — readiness 가 외부 의존을 검사하느냐 자기 상태를 검사하느냐 — 조건 하나에서 두 결말로 갈린다.
+#           같은 지연이 전면 장애도 되고 부분 응답도 되는 것이 그 분기의 값이다.
+
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, KR
 import ddx

@@ -3,6 +3,10 @@
 # 앰버 띠와 붉은 띠가 각각 무엇을 가리키는지까지 적는다. 그 규격을 그대로 지킨다.
 # 타입 스펙: type-process.md — 절마다 같은 의미 슬롯(절 번호 · 이름 · 한 줄)이 같은 자리에 반복된다. 가로 체인이 아니라
 #           세로로 쌓았을 뿐 판단은 같다 — semantic-patterns 의 Stage framework with semantic slots.
+#           2026-08-29 덧붙임: type-process 정본의 입력 계약도 역할 레인 1~6 이 전제인데 이 그림에
+#           레인은 없다. 그래도 process 를 두는 것은, 주체를 요구하지 않는 유일한 라우팅 규칙이
+#           semantic-patterns 의 "Stage framework with semantic slots" 한 줄이기 때문이다.
+#           38개 메뉴의 공백이라 visual-diagram-selection 의 "알려진 공백" 에 같이 적어 두었다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, KR
 import ddx

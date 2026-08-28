@@ -1,8 +1,10 @@
 # 12-01 §2 — 컨트롤러와 프록시는 별개다
 # 본문이 "흔히 한 덩어리로 부르지만 둘은 별개 컴포넌트"라고 못박는다. 그러니 한 상자로
 # 그리면 안 되고, 설정이 만들어지는 길과 트래픽이 지나는 길을 갈라 놓아야 한다.
-# 타입 스펙: type-data-flow.md — 설정이 만들어지는 길과 트래픽이 지나는 길을 두 밴드로 나누고, 만들어진 설정이 아래
-#           경로에서 쓰이는 것을 점선으로 잇는다.
+# 타입 스펙: type-architecture.md — API 서버 · 컨트롤러 · 프록시 · 파드라는 컴포넌트 구성도. 두 밴드가 설정 경로와 트래픽 경로다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, KR, MONO
 import ddx

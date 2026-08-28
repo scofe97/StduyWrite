@@ -1,8 +1,10 @@
 # 11-01 §3 — 누가 IP 를 만들고 누가 명단에 적는가
 # 캡션이 '준비 단계와 실제 요청 경로' 둘을 요구한다. 띠 둘로 나누고, 준비 중 요청 때 실제로
 # 쓰이는 둘만 대괄호로 묶어 아래 띠로 내린다. 세로로 1:1 정렬하지 않는다 — 대응이 아니다.
-# 타입 스펙: type-data-flow.md — 단계마다 *누가* 무엇을 만드는지가 논지다 — 제목이 "누가 IP를 만들고 누가 명단에 적는가"다.
-#           위 밴드에서 만들어진 것(IP·명단·규칙)이 아래 요청 경로에서 쓰인다.
+# 타입 스펙: type-architecture.md — 스케줄러 · CNI · EndpointSlice 컨트롤러 · kube-proxy 라는 실재 컴포넌트와 그 산출물의 연결.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

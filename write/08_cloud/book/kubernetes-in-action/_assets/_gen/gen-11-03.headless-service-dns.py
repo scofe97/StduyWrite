@@ -1,8 +1,10 @@
 # 11-03 §2 — headless 는 파드 IP 를 그대로 돌려준다
 # 이름 해석에서 직접 연결까지의 한 줄 흐름. 파드로 뻗는 화살표의 출발점을 '클라이언트가 받은
 # 목록'으로 이름 붙였다 — DNS 가 파드에 붙는 것처럼 읽히면 안 된다.
-# 타입 스펙: type-data-flow.md — 이름 조회 파이프라인 뒤에 파드 넷으로 갈라지는 팬아웃. 일반 Service 와 달리 목록이
-#           그대로 앱에게 건네진다는 것이 갈래 넷으로 보인다.
+# 타입 스펙: type-architecture.md — 클라이언트 파드 · cluster DNS · 파드 넷을 잇는 구성도. 목록에서 파드로 갈라지는 팬아웃이 논지다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx
