@@ -1,4 +1,10 @@
-# 타입 스펙: type-data-flow.md — 단계 머리를 세우고 그 아래 한 칸씩 — 편 전체를 한 줄로 잇는 지도
+# 타입 스펙: type-process.md — 단계 머리 + 한 줄 체인. 칸마다 같은 의미 슬롯(절 번호 · 이름 ·
+#           한 줄 요약 · 꼬리표)이 같은 자리에 반복된다(semantic-patterns 의 "Stage framework
+#           with semantic slots"). 화살표는 데이터가 아니라 읽는 순서를 나른다.
+#           2026-08-28 type-data-flow 에서 옮겼다 — data-flow 정본은 "who does what at each
+#           stage" 와 role-scoped lane 을 전제로 하는데, 편 지도에는 주체도 레인도 없다.
+#           엄밀히는 두 정본 다 주체 기반이라 편 지도는 표의 공백에 가깝고, 주체 없이도 맞는
+#           유일한 라우팅 규칙이 위 semantic-patterns 한 줄이라 그쪽을 따랐다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
 W, H = 1000, 560
