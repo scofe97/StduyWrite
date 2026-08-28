@@ -1,6 +1,8 @@
 # 13-03 §3 — 다른 층 이야기다
 # "네임스페이스가 달라도 통신은 되잖아"라는 반문이 출발점이라, 같은 두 네임스페이스를 두 층으로
 # 겹쳐 놓고 한 층은 뚫려 있고 한 층은 막혀 있음을 보인다. 막힌 자리가 focal.
+# 타입 스펙: type-layers.md — 네트워크 층과 오브젝트 층을 위아래로 놓고 대조한다 — 파드끼리는 통하는데 오브젝트 참조는
+#           막힌다는 것이 두 층을 나눈 이유다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

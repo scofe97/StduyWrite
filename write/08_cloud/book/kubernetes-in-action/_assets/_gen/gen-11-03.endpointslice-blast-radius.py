@@ -1,6 +1,8 @@
 # 11-03 §1 — 줄어든 것은 저장량이 아니라 퍼지는 넓이다
 # 본문이 '저장량 이득이 아니다'를 명시한다. 그래서 총량이 같음을 아래 산문으로 못박고,
 # 도식은 전송 단위(오브젝트 하나 vs 조각 하나)의 차이만 보이게 했다.
+# 타입 스펙: type-data-flow.md — 같은 전파 경로를 두 설계로 지나는 두 벌의 흐름. 끝에 붙은 수치 칩(9,900 대 1,900)이
+#           그 차이를 받는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

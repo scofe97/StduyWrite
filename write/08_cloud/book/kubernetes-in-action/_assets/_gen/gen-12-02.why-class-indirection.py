@@ -1,6 +1,8 @@
 # 12-02 §4 — 한 단계가 무엇을 가능하게 하나
 # 본문이 "직접 적는 구조였다면 이 구분이 불가능하다"고 반사실로 설명한다. 그러니 두 구조를
 # 나란히 놓고, 위쪽에서 구별이 안 된다는 사실 자체를 보여야 한다.
+# 타입 스펙: type-dependency.md — Ingress 가 무엇을 가리키느냐의 참조 그래프. 직접 controller 이름을 적으면 구별이 안 되고,
+#           클래스를 한 단계 두면 이름이 경계가 된다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, BAD, MUTED, SOFT, INK, KR, MONO
 import ddx

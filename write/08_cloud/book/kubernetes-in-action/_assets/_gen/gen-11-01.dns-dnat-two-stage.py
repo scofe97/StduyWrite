@@ -1,6 +1,8 @@
 # 11-01 §7 — 이름이 주소가 되고, 주소가 다시 주소가 된다
 # 값이 두 번 바뀌는 사슬이라 stage_chain. 변환의 성격이 다르다는 게 요점이므로
 # 화살표 아래에 '누가 바꾸는지'를 따로 적었다. 가운데 가상 주소가 focal.
+# 타입 스펙: type-data-flow.md — 이름 → ClusterIP → 파드 IP 로 값이 두 번 바뀌는 파이프라인. 단계 머리가 그 변환을 누가
+#           했는지(애플리케이션·DNS·커널)를 맡는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, MUTED, SOFT, KR, MONO
 import ddx

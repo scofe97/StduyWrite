@@ -1,5 +1,6 @@
 # 11-02 §3 — 결정은 두 번, 주체도 둘이다
 # 두 결정을 행으로, 주체·기준·후보를 열로 둔 행렬. 후보 범위가 갈리는 축이라 그 열이 focal.
+# 타입 스펙: type-dp-security-matrix.md — 행은 두 번의 결정, 열은 주체·판단 기준·후보 범위. 칸만 있고 흐름이 없다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, MUTED, SOFT, KR
 import ddx

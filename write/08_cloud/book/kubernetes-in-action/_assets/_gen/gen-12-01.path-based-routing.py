@@ -1,6 +1,8 @@
 # 12-01 §5 — 같은 호스트, 갈라지는 경로
 # 규칙과 요청을 마주 놓고 어느 쪽이 잡히는지를 보인다. pathType 이 판정을 바꾸는 축이라
 # 규칙 칩에 함께 박았다. 요소 단위 비교라는 함정은 아래 산문이 맡는다.
+# 타입 스펙: type-flowchart.md — 경로에 따라 갈리는 판단 논리. 어느 규칙에도 안 맞는 갈래까지 그려야 Exact·Prefix 차이가
+#           드러난다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, BAD, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

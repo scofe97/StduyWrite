@@ -1,6 +1,7 @@
 # 13-02 §1 — 위로 붙고 아래로 보낸다
 # HTTPRoute 는 두 방향으로 참조한다는 것이 요점이라, 좌우가 아니라 위아래로 놓아야
 # parentRefs 와 backendRefs 의 방향이 이름 그대로 읽힌다.
+# 타입 스펙: type-dependency.md — parentRefs 는 위를, backendRefs 는 아래를 가리킨다. 참조의 방향 자체가 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, KR, MONO
 import ddx

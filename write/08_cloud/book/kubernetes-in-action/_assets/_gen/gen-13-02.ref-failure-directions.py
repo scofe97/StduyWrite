@@ -1,6 +1,7 @@
 # 13-02 §1 — 같은 사건이 양쪽에 다르게 기록된다
 # 본문이 "한쪽만 보면 한 문장만 읽게 된다"로 팁의 근거를 댄다. 그러니 두 방향을 좌우가 아니라
 # 위아래로 두고, 같은 오타가 Gateway 쪽과 Route 쪽에 어떻게 다르게 남는지를 나란히 보인다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 조건 둘, 열은 보는 방향과 False 일 때 reason. 왼쪽 참조 그래프는 그 방향을 읽는 열쇠다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, BAD, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

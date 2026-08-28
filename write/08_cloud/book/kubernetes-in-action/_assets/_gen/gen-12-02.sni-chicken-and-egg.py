@@ -1,6 +1,8 @@
 # 12-02 §2 — 서로가 서로를 기다린다
 # 순환 의존이 주제라 사슬이 아니라 고리로 그려야 한다. 고리 옆에 푸는 수를 따로 두어
 # '순서를 앞으로 당겼다'가 보이게 한다.
+# 타입 스펙: type-dependency.md — 세 노드가 서로를 필요로 해 고리가 닫힌다 — 트리로 못 그리는 순환이라 dependency 다.
+#           오른쪽 칸이 그 고리를 푸는 자리다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, BAD, MUTED, SOFT, INK, KR, MONO
 import ddx

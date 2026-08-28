@@ -1,6 +1,8 @@
 # 12-01 §3 — 설치가 만드는 것과, 그중 도는 것
 # 본문이 "파드를 낳는 것은 Deployment 하나뿐"과 "IngressClass 는 설치가 데려온다"는
 # 두 사실을 못박는다. 그래서 목록만 그리면 안 되고 순서 축이 함께 있어야 한다.
+# 타입 스펙: type-process.md — 설치 순서 세 단계가 같은 슬롯(번호·행위·객체)으로 반복된다. 위 밴드는 그 순서가 다루는
+#           객체 목록이라 화살표가 없다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

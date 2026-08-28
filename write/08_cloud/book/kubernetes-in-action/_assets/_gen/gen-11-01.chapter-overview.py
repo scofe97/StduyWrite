@@ -1,6 +1,8 @@
 # 11-01 전체 지도 — 변하는 파드 IP 를 변하지 않는 하나의 주소로
 # 본문 §진입이 §2→§3→§5·§7 순서를 직접 적어 둔다. 그 순서를 한 줄 체인으로 놓고
 # 장 전체가 지키려는 것(바뀌지 않는 번호)에만 focal 을 준다.
+# 타입 스펙: type-process.md — 단계마다 같은 의미 슬롯(절 번호·이름·값·한 줄)이 반복된다. 화살표는 데이터가 아니라
+#           읽는 순서를 나른다 — semantic-patterns 의 "Stage framework with semantic slots".
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, KR, MONO
 import ddx

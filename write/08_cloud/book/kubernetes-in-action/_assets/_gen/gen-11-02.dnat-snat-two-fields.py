@@ -1,5 +1,7 @@
 # 11-02 §3 — 한 패킷에서 바뀌는 자리는 둘
 # 필드 둘 × 정책 둘의 교차라 행렬. Local 열에서만 값이 갈리므로 그 열을 focal 로 둔다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 바뀌는 자리 둘(DNAT·SNAT), 열은 두 정책의 판정. 두 정책이 갈리는 칸이 하나뿐이라는
+#           것이 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, MUTED, SOFT, KR
 import ddx

@@ -1,6 +1,8 @@
 # 12-02 §2 — 평문 구간은 생각보다 짧다
 # 캡션이 "핸드셰이크 앞의 두 메시지뿐"을 요구한다. 메시지 순서 위에 평문 구간을 대괄호로
 # 묶어야 그 짧음이 보인다. SNI 가 실린 자리 하나만 focal.
+# 타입 스펙: type-gantt.md — 메시지 순서를 축으로 삼고 평문·암호화 구간을 대괄호로 잰다. 시간축이 아니라 순서축이지만
+#           구간의 시작과 끝이 논지라는 점은 같다 — SNI 가 평문 구간 안에 든다는 것이 결론이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

@@ -1,6 +1,8 @@
 # 13-01 §2 — 관문이 둘이고 보는 것이 다르다
 # 본문이 "스키마는 모양을 강제해도 행동은 강제하지 못한다"를 요점으로 둔다. 그러니 한 필드가
 # 지나는 경로 위에 관문 둘을 세우고, 둘째 관문에서 조용히 사라지는 갈래를 focal 로 잡는다.
+# 타입 스펙: type-flowchart.md — 관문 둘을 지나 갈리는 판단 — 스키마는 모양만 보고 통과시키고, 컨트롤러가 구현하지 않으면
+#           에러 없이 조용히 지나간다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, BAD, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

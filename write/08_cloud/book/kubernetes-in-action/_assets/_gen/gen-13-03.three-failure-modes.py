@@ -1,6 +1,8 @@
 # 13-03 §2 — 뜻대로 안 되는 양상이 셋이고 각각 다르다
 # 본문이 "값이 틀린 것을 찾는 눈과 값이 없는 것을 찾는 눈은 다르다"로 진단법을 갈라 둔다.
 # status 열이 셋을 가르는 축이라 그 열을 판정 축으로 둔다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 세 실패 상황, 열은 apply 결과·status·어떻게 아나. status 칸이 비는 세 번째 행이
+#           가장 어려운 실패다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, KR
 import ddx

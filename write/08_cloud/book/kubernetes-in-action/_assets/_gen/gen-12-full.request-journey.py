@@ -1,6 +1,8 @@
 # 12장 마무리 — 두 줄이 만나지 않는다
 # 본문이 "위 줄과 아래 줄이 만나지 않는 것이 이 그림의 뼈대"라고 직접 적는다. 그러니 두 줄을
 # 나란히 두되 이어지는 세로선은 설정 하나뿐이어야 한다. 12장 대부분이 몰린 프록시가 focal.
+# 타입 스펙: type-data-flow.md — 요청 경로와 제어 경로를 두 밴드로 나누고, 만들어진 설정이 요청 경로로 올라가는 자리를
+#           세로 화살표로 잇는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

@@ -1,6 +1,8 @@
 # 12-02 §3 — 다른 구간의 일이라 만나지 않는다
 # 본문이 "정책과 무관해서가 아니라 애초에 다른 구간이라서"로 이유를 바꿔 놓는다.
 # 그러니 구간 축 위에 소관 범위를 대괄호로 얹고, 겹치는 한 곳만 focal 로 짚는다.
+# 타입 스펙: type-gantt.md — 요청 경로를 축으로 삼고 두 소관을 구간 막대로 얹는다. 두 구간이 겹치는 곳이 한 군데뿐이라는
+#           것이 결론이라 구간의 시작·끝이 값이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, KR, MONO
 import ddx

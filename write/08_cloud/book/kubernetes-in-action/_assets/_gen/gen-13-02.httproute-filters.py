@@ -1,6 +1,8 @@
 # 13-02 §4 — 무엇을 건드리는가로 가른 여섯
 # 짝 도식(filter-kinds-and-mirror-trap)이 '흐름 구조' 축을 맡으므로, 이쪽은 '무엇을 고치는가'
 # 축만 본다. 두 도식이 같은 그림이 되지 않게 축을 확실히 갈라 둔다.
+# 타입 스펙: type-nested.md — 두 상자가 필터를 나눠 담는다 — 포함 관계가 곧 분류다. 오가는 것을 고치는 쪽과 흐름 자체를
+#           바꾸는 쪽이 갈린다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

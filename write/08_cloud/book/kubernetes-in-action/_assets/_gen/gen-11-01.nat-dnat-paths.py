@@ -1,6 +1,8 @@
 # 11-01 §7 — NAT 가 끼는 곳은 목적지가 정한다
 # 같은 출발지에서 목적지만 달리한 두 경로 대비. 띠 둘을 같은 좌표로 겹쳐 놓아
 # 같은 자리의 칩 값이 어디서 갈리는지 세로로 읽히게 했다.
+# 타입 스펙: type-data-flow.md — 같은 세 단계를 두 조건(파드 IP / ClusterIP)으로 지나는 두 벌의 흐름. 가로 화살표가 있으므로
+#           격자가 아니라 흐름으로 읽는다 — 갈리는 자리는 가운데 커널 한 칸뿐이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, KR, MONO
 import ddx

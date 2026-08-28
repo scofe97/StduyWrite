@@ -1,6 +1,8 @@
 # 11-03 §3 — externalTrafficPolicy Local, 밖에서 온 요청
 # 짝인 internal 편과 같은 골격으로 그려 비대칭이 나란히 읽히게 했다.
 # 이쪽에는 구제 장치가 있으므로 되돌아가는 화살표가 로드밸런서에 닿는다.
+# 타입 스펙: type-flowchart.md — 로드밸런서 하나에서 두 갈래로 갈리는 판단 — 로컬 파드가 있는 노드는 닿고 없는 노드는
+#           503 이다. 헬스체크가 그 조건이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER, RULE, KR
 import ddx

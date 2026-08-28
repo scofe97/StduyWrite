@@ -1,6 +1,7 @@
 # 13-01 §5 — 같은 True 를 어떻게 읽느냐에서 갈린다
 # 앞 도식이 채워지는 순서를 따라갔다면 이쪽은 반대 방향이다. 404 를 만난 뒤 조회가 갈라지는
 # 지점이 주제라, 공통 구간을 하나 두고 그 뒤를 두 갈래로 벌린다. 원인을 찾는 갈래가 focal.
+# 타입 스펙: type-flowchart.md — 같은 404 에서 두 갈래 — 초록만 읽고 멈추느냐, 세 층을 따로 조회하느냐.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, BAD, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

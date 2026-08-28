@@ -1,6 +1,7 @@
 # 11-01 §6 — ClientIP 어피니티가 붙잡는 것
 # 캡션이 '첫 연결이 고르고 이후 연결이 재사용'이라는 시간 순서를 말한다 → 시퀀스.
 # 기록(상태 칩)이 요점이라 그것만 focal. L4/L7 대비는 아래 산문 한 줄로 내린다.
+# 타입 스펙: type-sequence.md — 참여자 넷 사이의 시간순 메시지. 어피니티 기록은 레인 옆 칩이 받는다.
 import sys; sys.path.insert(0, ".")
 from dd import Seq, ACC, INFO, OK, WARN, MUTED, SOFT, INK, KR, MONO
 import ddx

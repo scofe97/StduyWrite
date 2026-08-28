@@ -1,6 +1,8 @@
 # 12-01 §2 — 컨트롤러와 프록시는 별개다
 # 본문이 "흔히 한 덩어리로 부르지만 둘은 별개 컴포넌트"라고 못박는다. 그러니 한 상자로
 # 그리면 안 되고, 설정이 만들어지는 길과 트래픽이 지나는 길을 갈라 놓아야 한다.
+# 타입 스펙: type-data-flow.md — 설정이 만들어지는 길과 트래픽이 지나는 길을 두 밴드로 나누고, 만들어진 설정이 아래
+#           경로에서 쓰이는 것을 점선으로 잇는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, KR, MONO
 import ddx

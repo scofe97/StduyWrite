@@ -1,6 +1,7 @@
 # 12-01 §2 — Ingress 는 LoadBalancer 를 없앤 게 아니라 그 위에 얹혔다
 # 본문이 "진화가 아니라 계층별 도구"라고 못박으므로, 아래 구조에서도 LB 가 사라지지 않고
 # 프록시 앞에 그대로 남아 있는 것이 도식의 요점이다. 늘어나는 것은 규칙 줄 수뿐이다.
+# 타입 스펙: type-data-flow.md — 서비스마다 LB 를 두는 구성과 LB 하나에 규칙을 얹는 구성을 두 밴드로 나눈 흐름.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

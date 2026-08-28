@@ -1,6 +1,7 @@
 # 13-03 §1 — 어디서 푸느냐가 어느 Route 를 쓰는지까지 정한다
 # 12-02 의 termination/passthrough 도식과 겹치지 않게, 여기서는 '그래서 어느 Route 오브젝트를
 # 쓰는가'까지 끌고 간다. listener 프로토콜 이름이 갈리는 이유도 같은 축이다.
+# 타입 스펙: type-data-flow.md — 같은 네 단계를 termination 과 passthrough 두 방식으로 지나는 두 벌의 흐름.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, KR, MONO
 import ddx

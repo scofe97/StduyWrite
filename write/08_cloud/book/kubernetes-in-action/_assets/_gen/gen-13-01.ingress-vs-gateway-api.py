@@ -1,6 +1,8 @@
 # 13-01 §1 — 쪼갠 자리가 조직 경계와 맞는다
 # 본문이 리소스 대응표보다 "결정 주체와 변경 빈도가 다르다"를 요점으로 둔다. 그러니 상자 대응이
 # 아니라 누가 무엇을 소유하는지가 보이는 구조여야 한다. Route 를 뺀 자리가 focal.
+# 타입 스펙: type-dependency.md — 오브젝트가 무엇을 가리키는지의 참조 그래프 두 벌. 한 오브젝트에 다 들어 있으면 권한을
+#           못 나누고, Route 로 떼면 RBAC 경계가 조직 경계와 맞아떨어진다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

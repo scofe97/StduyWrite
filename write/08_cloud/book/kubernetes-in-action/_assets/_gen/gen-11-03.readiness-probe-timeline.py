@@ -1,6 +1,8 @@
 # 11-03 §4 — 상태는 연속 횟수를 채워야 바뀐다
 # 임계값이 시간 위에서만 읽히므로 timeline. 상태 띠·probe 결과·구간 괄호를 세 층으로 쌓고,
 # 상태가 실제로 뒤집히는 한 지점만 focal.
+# 타입 스펙: type-gantt.md — 시간축 위의 구간 막대 — 상태 밴드 둘이 지속 구간이고 아래 대괄호가 initialDelaySeconds·
+#           failureThreshold·periodSeconds 를 잰다. probe 결과는 그 위에 놓인 점 사건이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

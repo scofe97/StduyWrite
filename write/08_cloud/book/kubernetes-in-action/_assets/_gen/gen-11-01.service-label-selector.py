@@ -1,6 +1,7 @@
 # 11-01 §2 — selector 가 뒤에 설 파드를 고른다
 # '어느 조합이 되고 안 되는가'라 행렬이다(계약 §타입을 본문이 정한다). 행은 후보 파드,
 # 열은 판단 축, 판정 열을 focal 로 둔다. 네임스페이스 탈락이 함정이라 마지막 행에 담았다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 후보 파드 넷, 열은 라벨·네임스페이스·판정. 어느 조합이 포함되고 빠지는지가 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, BAD, MUTED, SOFT, KR, MONO
 import ddx

@@ -1,6 +1,8 @@
 # 11-03 §2 — headless 는 파드 IP 를 그대로 돌려준다
 # 이름 해석에서 직접 연결까지의 한 줄 흐름. 파드로 뻗는 화살표의 출발점을 '클라이언트가 받은
 # 목록'으로 이름 붙였다 — DNS 가 파드에 붙는 것처럼 읽히면 안 된다.
+# 타입 스펙: type-data-flow.md — 이름 조회 파이프라인 뒤에 파드 넷으로 갈라지는 팬아웃. 일반 Service 와 달리 목록이
+#           그대로 앱에게 건네진다는 것이 갈래 넷으로 보인다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

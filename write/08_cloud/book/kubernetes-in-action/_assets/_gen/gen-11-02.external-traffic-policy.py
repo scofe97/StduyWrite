@@ -1,6 +1,7 @@
 # 11-02 §3 — Local 의 대가는 둘, 장치가 푸는 것은 하나
 # 설정 셋을 같은 배치로 반복하는 소규모 다중(small multiples). 숫자만 표로 옮기면
 # '노드 3 개 vs 파드 3:1:0'이라는 어긋남의 뿌리가 안 보여, 노드 안에 파드를 그려 넣었다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 세 설정, 열은 노드 셋과 소스 IP 결과. 칸의 수치가 곧 판정이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx
