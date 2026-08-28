@@ -1,8 +1,8 @@
 # 01-03.request-components — 접히는 왕복 경로
 # 본문: "눈여겨볼 것은 가운데가 접힌다는 점이다. localhost 요청이라 패킷이 물리 케이블로
 #        나가지 않고 lo0 에서 되돌아온다. 같은 커널이 송신에서 붙이고 수신에서 벗긴다."
-# 타입 스펙: type-flowchart.md 관례 — 되돌아오는 흐름은 직교 라우팅으로 접고,
-#           접히는 지점 하나에만 focal 을 건다
+# 타입 스펙: type-data-flow.md — 요청이 컴포넌트를 거쳐 lo0 에서 접혀 되돌아오는 한 줄이다.
+#           2026-08-28 렌더 확인 후 재분류: 앞서 flowchart 로 적었으나 판단 분기가 하나도 없다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 

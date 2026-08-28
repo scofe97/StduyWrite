@@ -1,8 +1,10 @@
 # 02-01.loopback-not-a-boundary — 밖에서 경계를 넘어온 길
 # 본문: "점선 안이 '로컬 전용'이라 믿는 구간. 노드 설정 하나가 그 안으로 들어가는 길을
 #        열어 준 것이 CVE-2020-8558 이다."
-# 타입 스펙: type-flowchart.md 의 단선 경로 + type-nested.md 의 경계 링.
-#           경로가 링을 밖에서 뚫고 들어가는 자리 하나에만 focal 을 건다.
+# 타입 스펙: type-data-flow.md — 인접 호스트에서 lo 까지 뚫고 들어가는 단선 경로가 배치다.
+#           경계 링(type-nested.md)은 그 경로가 넘는 대상이지 배치 문법이 아니다.
+#           2026-08-28 렌더 확인 후 재분류: 앞서 flowchart 였으나 스스로 "단선 경로"라 적어 두었고
+#           실제로 분기가 없다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 

@@ -1,6 +1,8 @@
 # 02-02.conntrack-return-path — 지나는 자리와 conntrack 이 쥔 값을 세로로 짝지운다
 # 본문 요구: "응답은 규칙을 다시 안 본다 — conntrack 항목이 목적지를 되돌린다"
-# 타입 스펙: type-swimlane.md 레인 둘. 위는 응답 패킷의 자리, 아래는 그때 conntrack 이 쥔 값.
+# 타입 스펙: type-process.md — 단계마다 "응답 패킷의 자리 / 그때 conntrack 이 쥔 값"이라는
+#           같은 의미 슬롯이 반복된다. 2026-08-28 렌더 확인 후 swimlane 에서 재분류
+#           (레인이 주체가 아니고 handoff 도 없다 — nat-table-traverse 와 같은 판단).
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 

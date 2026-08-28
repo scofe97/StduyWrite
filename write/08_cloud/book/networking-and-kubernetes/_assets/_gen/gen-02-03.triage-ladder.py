@@ -1,7 +1,8 @@
 # 02-03.triage-ladder — 관문과 명령을 세로로 짝지운다
 # 본문 요구: 관문마다 무엇을 치고 어디를 읽는가 — 물음 넷과 명령 넷이 짝
-# 타입 스펙: type-swimlane.md 레인 둘. 가로는 사다리 순서(위에서부터 막히는 곳이 원인),
-#           세로는 그 관문에서 실제로 치는 명령.
+# 타입 스펙: type-process.md — 관문마다 "무엇을 확인하나 / 그때 치는 명령"이라는 같은 슬롯이
+#           반복되고, 도구가 슬롯의 일부다. 스펙이 "도구가 중요하면 process"라 지정한다.
+#           2026-08-28 렌더 확인 후 swimlane 에서 재분류.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
