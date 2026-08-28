@@ -2,8 +2,10 @@
 # 본문: "kiada 앱은 HTTP 만 안다. Envoy 를 옆에 붙인 것만으로 HTTPS 가 된다 — 앱 코드 0줄 수정."
 #       실측: 8080(HTTP)과 8443(HTTPS)이 완전히 같은 응답. Client IP=127.0.0.1 →
 #       앱에는 자기 Pod 안 Envoy 가 localhost 로 넘긴 것으로 보인다.
-# 타입 스펙: 세 칸 한 줄 사슬 + 되돌아오는 응답. 어디서 암호가 풀리는지가 요점이므로
+# 타입 스펙: type-architecture.md — 세 칸 한 줄 사슬 + 되돌아오는 응답. 어디서 암호가 풀리는지가 요점이므로
 #           그 경계(TLS 종료)를 Envoy 상자 위에 못 박는다.
+#           Pod 경계가 점선 영역이고 그 안에 Envoy 와 앱을 위아래로 둔 뒤 왕복 세 화살표를 잇는다.
+#           암호가 풀리는 경계가 영역 안이라는 사실이 논지라 경계와 흐름을 함께 그리는 형태여야 한다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx

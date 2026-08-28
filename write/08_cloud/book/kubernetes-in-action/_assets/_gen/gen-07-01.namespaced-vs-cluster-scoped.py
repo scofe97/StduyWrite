@@ -35,15 +35,18 @@ for (cx, cy), name in zip((NSA, NSB), ("Namespace A", "Namespace B")):
     for i, t in enumerate(NAMESPACED):
         d.t(cx, cy - NH // 2 + 52 + i * 24, t, 11, MUTED, MONO)
 
-d.t(760, 262, "같은 타입이 namespace 마다", 11, SOFT, KR)
-d.t(760, 282, "따로 존재한다", 11, SOFT, KR)
+# 760 에 가운데 정렬하면 왼쪽 끝이 Namespace B 상자(~690)를 파고든다 — 오른쪽으로 민다.
+d.t(800, 262, "같은 타입이 namespace 마다", 11, SOFT, KR)
+d.t(800, 282, "따로 존재한다", 11, SOFT, KR)
 
 CLUSTER = ["Nodes", "PersistentVolumes", "StorageClasses", "Namespaces"]
 for i, t in enumerate(CLUSTER):
     x = 60 + i * 224
     d.box(x, CLUSTER_Y - 26, 208, 52, PAPER2, WARN, 1.1, 6)
     d.t(x + 104, CLUSTER_Y + 5, t, 12, WARN, MONO)
-d.t(48, CLUSTER_Y - 44, "namespace 밖 — 클러스터 수준에 하나씩만 있다", 11, WARN, KR, "start")
+# CLUSTER_Y-44 는 namespace 상자(218~398)의 아래 변을 지나 글자가 관통했다.
+# 상자 아래와 클러스터 칸 위(422) 사이 빈 구간에 둔다.
+d.t(48, CLUSTER_Y - 34, "namespace 밖 — 클러스터 수준에 하나씩만 있다", 11, WARN, KR, "start")
 
 d.t(36, 524, "namespace 안에 사는 타입은 이름이 namespace 안에서만 고유하면 되고, 밖에 사는 "
              "타입은 클러스터 전체에서 고유해야 한다.", 12, MUTED, KR, "start")

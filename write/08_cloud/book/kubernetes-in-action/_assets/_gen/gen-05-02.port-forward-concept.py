@@ -1,8 +1,10 @@
 # 05-02 §방법 ③ — port-forward 가 쓰는 쪽에 보이는 모습
 # 본문: "로컬 컴퓨터의 포트에 바인딩된 프록시를 통해 Pod 와 통신합니다."
 #       "Pod IP 를 찾을 필요 없이 이름과 포트만 지정하면 됩니다."
-# 타입 스펙: 세 칸짜리 한 줄 사슬. 같은 편의 port-forward-path 는 *속*의 긴 경로를 그리므로,
+# 타입 스펙: type-architecture.md — 세 칸짜리 한 줄 사슬. 같은 편의 port-forward-path 는 *속*의 긴 경로를 그리므로,
 #           이 장은 쓰는 사람이 실제로 치는 것과 보는 것만 남긴다 — 둘의 역할을 갈라 둔다.
+#           내 컴퓨터 · 로컬 프록시 · 클러스터 안이라는 세 영역에 컴포넌트를 하나씩 두고 이은 구성도다.
+#           쓰는 쪽에 보이는 모습만 담고, 속의 긴 경로는 짝 도식(port-forward-path)이 진다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx

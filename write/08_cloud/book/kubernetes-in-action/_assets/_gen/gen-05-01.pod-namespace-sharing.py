@@ -3,9 +3,11 @@
 #        공유되지 않습니다 ... shareProcessNamespace: true 를 명시적으로 켜야 합니다."
 #       "각 컨테이너는 항상 자기만의 Mount 네임스페이스를 가져 ... 볼륨이라는 명시적 통로를
 #        걸어야만 그 지점이 공유됩니다."
-# 타입 스펙: 축이 다섯이고 각 축마다 기본값·가능·불가능이 갈리므로 비교 행렬.
+# 타입 스펙: type-dp-security-matrix.md — 축이 다섯이고 각 축마다 기본값·가능·불가능이 갈리므로 비교 행렬.
 #           옛 판은 Pod 상자에 eth0·lo 를 그려 Network 하나만 보였다 — 부제는 UTS·IPC 를
 #           말하는데 그림에는 없었고, PID 는 아예 빠져 있었다.
+#           행은 네임스페이스 다섯, 열은 기본값·할 수 있는 것·못 하는 것인 격자다.
+#           focal 열이 기본값이라 그 한 칸이 나머지 두 열을 정한다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx

@@ -3,8 +3,16 @@
 #       ① init 단계에서 먼저 뜬다(뒤따르는 것들에 서비스 제공)
 #       ② Pod 수명 내내 산다(끝나고 죽지 않는다 — Always 가 즉시 되살린다)
 #       ③ 주 컨테이너가 모두 죽은 뒤에야 SIGTERM 을 받는다
-# 타입 스펙: 한 대상의 시간순 세 국면이라 한 줄 사슬(stage_chain). 정의 한 줄이 이 셋을
+# 타입 스펙: type-process.md — 한 대상의 시간순 세 국면이라 한 줄 사슬(stage_chain). 정의 한 줄이 이 셋을
 #           동시에 만드는 것이 요점이므로 사슬 위에 그 선언을 못 박는다.
+#           세 국면이 같은 슬롯(무엇을 한다 · 언제 · 그래서)으로 반복되고 그 사이를 전환 라벨이 잇는다.
+#           type-state 도 후보였다 — 전환 라벨(Ready 되면 · 종료 시작)이 사건이기 때문이다. 다만 상자에
+#           든 것은 컨테이너가 오가는 상태가 아니라 선언 한 줄이 만드는 성질 셋이고, 정본이 요구하는
+#           시작 점·끝 링 표식도 없어 process 를 택했다.
+#           type-process 정본의 입력 계약은 역할 레인 1~6 이 전제인데 이 그림에 레인은 없다.
+#           그래도 process 를 두는 것은, 주체를 요구하지 않는 유일한 라우팅 규칙이
+#           semantic-patterns 의 "Stage framework with semantic slots" 한 줄이기 때문이다.
+#           38개 메뉴의 공백이라 visual-diagram-selection 의 "알려진 공백" 에 같이 적어 두었다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx

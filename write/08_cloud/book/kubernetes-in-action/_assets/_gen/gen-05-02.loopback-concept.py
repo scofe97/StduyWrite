@@ -3,8 +3,11 @@
 #        네트워크로 나가지 않고 커널 안에서 곧바로 자기에게 되돌아옵니다(loop back = 되돌아옴).
 #        port-forward 에서 kubelet 이 Pod 의 이 loopback 장치를 통해 컨테이너에 붙기 때문에,
 #        컨테이너 입장에서는 요청이 자기 자신에게서 온 것처럼 보여 Client IP 가 127.0.0.1 로 찍힙니다."
-# 타입 스펙: 같은 출발점에서 두 경로가 갈리는 대비이므로 레인 둘. 어디서 갈리는지가 요점이라
+# 타입 스펙: type-flowchart.md — 같은 출발점에서 두 경로가 갈리는 대비이므로 레인 둘. 어디서 갈리는지가 요점이라
 #           갈림점(커널 네트워크 스택)을 두 레인이 공유하게 두고 그 뒤만 다르게 그린다.
+#           커널 네트워크 스택이라는 판정 하나에서 목적지 주소에 따라 두 갈래로 갈린다 —
+#           밖으로 나가는 길과 커널 안에서 회송되는 길이다. 마름모를 쓰지 않았지만 판정 하나가
+#           두 결말을 만드는 구조라 flowchart 계약에 맞는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx
