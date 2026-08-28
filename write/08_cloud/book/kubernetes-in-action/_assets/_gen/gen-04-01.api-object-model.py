@@ -2,9 +2,12 @@
 # 본문: 사용자는 서버를 직접 만지지 않고 오브젝트(spec)만 쓴다. API Server 가 모든 요청의
 #   유일한 관문이고 etcd 가 유일한 진실의 원천이며, 컨트롤러는 spec 을 읽고 status 를 쓰는
 #   감시 루프다. kubelet 은 자기 노드에 배정된 Pod 를 컨테이너로 실행한다.
-# 타입 스펙: 층이 셋(사용자 · 컨트롤 플레인 · 워커 노드)이라 경계 링을 세로로 쌓는다.
+# 타입 스펙: type-architecture.md — 층이 셋(사용자 · 컨트롤 플레인 · 워커 노드)이라 경계 링을 세로로 쌓는다.
 #           코리도어를 74px 이상 확보한 뒤 칩을 넣는다 — 처음 배치에서 30px 통로에 칩을
 #           넣어 상자를 덮었다(chip error).
+#           점선 경계가 사용자 · 컨트롤 플레인 · 워커 노드 세 영역을 표시하고 그 안에 컴포넌트를 둔다 —
+#           정본의 "Dashed boundary rectangles mark regions" 에 위에서 아래로 흐르는 주 경로다.
+#           코럴 초점은 선언하는 쪽 하나다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx

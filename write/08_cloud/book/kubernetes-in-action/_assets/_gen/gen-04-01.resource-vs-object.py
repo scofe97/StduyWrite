@@ -2,8 +2,12 @@
 # 본문·옛 도식: 하나의 오브젝트가 여러 리소스(URI)로 노출되고, 어떤 리소스는 아무 오브젝트도
 #   가리키지 않는다(subjectaccessreviews 는 권한 여부만 응답). apps/v1 과 extensions/v1beta1 은
 #   같은 객체의 다른 표현이다.
-# 타입 스펙: 왼쪽 창구와 오른쪽 대상이 1:1 이 아니라는 것이 요점이므로 참조 매핑으로 두되,
+# 타입 스펙: type-er.md — 왼쪽 창구와 오른쪽 대상이 1:1 이 아니라는 것이 요점이므로 참조 매핑으로 두되,
 #           '가리키는 것이 없는' 리소스를 맨 위에 따로 두어 그 예외가 눈에 먼저 들어오게 한다.
+#           정본 Best for 에 "API resource relationships" 가 그대로 있고, 이 그림의 논지가 곧 카디널리티다 —
+#           제목이 "1:1 이 아니다" 이고 URI 넷이 오브젝트 하나로, URI 하나가 0 개로 간다.
+#           정본이 요구하는 엔티티 필드 목록과 선 양끝의 1·N 표기가 없는 것이 어긋나는 지점이다.
+#           dependency 는 뺐다 — 팬인은 있지만 그 정본의 대상은 패키지·모듈·서비스 사이의 의존이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx

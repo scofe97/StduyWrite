@@ -2,12 +2,14 @@
 # 본문: "다른 Pod 가 이 Pod 에 접근할 수 있는지 시험할 때는 전용 Pod 를 만들어 그 안에서
 #        curl 을 돌립니다." Client IP 는 10.244.1.13(요청한 임시 Pod 의 IP).
 # 좌표계는 k05_access 가 정본.
+# 타입 스펙: type-architecture.md — 같은 좌표계(k05_access)를 쓰는 연작의 둘째 장이다. 영역 경계와 흐린 처리로
+#           Control Plane 이 통신 경로 밖이라는 사실을 보인다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx, k05_access as K
 
 d = D(K.W, K.H, "KUBERNETES IN ACTION · 05-02",
-      "② 임시 클라이언트 Pod — Pod 가 Pod 에 직접 붙는다",
+      "방법 2 임시 클라이언트 Pod — Pod 가 Pod 에 직접 붙는다",
       "클러스터 안에 curl Pod 를 띄워 kiada 의 IP 로 연결한다. Control Plane 을 거치지 않고 "
       "CNI 가 노드 경계를 넘어 라우팅하므로, kiada 가 보는 것은 그 임시 Pod 의 IP 다.",
       lead="네트워크가 멀쩡해도 정책으로 막힐 수 있다 — Pod 대 Pod 를 시험하는 방법이다")

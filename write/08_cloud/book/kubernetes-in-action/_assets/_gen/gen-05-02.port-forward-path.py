@@ -3,8 +3,13 @@
 #        노드의 Kubelet 에, Kubelet 이 Pod 의 loopback 장치(localhost)를 통해 컨테이너에
 #        연결합니다." / "통신이 여러 컴포넌트를 거치므로 경로 어딘가가 깨지면 Pod 자체는
 #        정상이어도 통신이 안 될 수 있습니다."
-# 타입 스펙: 다섯 칸 한 줄 사슬. 코리도어가 24px 뿐이라 문장 라벨이 안 들어가므로 번호 칩만
+# 타입 스펙: type-architecture.md — 다섯 칸 한 줄 사슬. 코리도어가 24px 뿐이라 문장 라벨이 안 들어가므로 번호 칩만
 #           얹고 설명은 아래 산문이 맡는다 — 05-02 의 다른 장들과 같은 규약.
+#           curl → 프록시 → API 서버 → kubelet → 컨테이너 다섯 칸을 지나는 경로도다.
+#           지나가는 것이 주체의 동작이 아니라 구성 요소라 process 가 아니라 architecture 다.
+#           type-data-flow 는 역할 레인 1~4 × 단계 열 × 타입 있는 페이로드 칩이 입력 계약인
+#           데이터 플랫폼 전용 타입이라 여기엔 맞지 않는다. type-architecture 의 Best for 에
+#           "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx

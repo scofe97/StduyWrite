@@ -3,12 +3,14 @@
 #        노드의 Kubelet 에, Kubelet 이 Pod 의 loopback 장치(localhost)를 통해 컨테이너에
 #        연결합니다." → Client IP 는 127.0.0.1.
 # 좌표계는 k05_access 가 정본. 네 방법 중 유일하게 모든 컴포넌트가 경로에 있다.
+# 타입 스펙: type-architecture.md — 연작의 셋째 장이고 네 방법 중 유일하게 모든 컴포넌트가 경로에 있다. type-sequence 는 뺐다 —
+#           그 정본은 생명선 점선과 위에서 아래로 흐르는 시간축이 계약인데 여기는 가로 배치다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx, k05_access as K
 
 d = D(K.W, K.H, "KUBERNETES IN ACTION · 05-02",
-      "③ port-forward — 홉이 가장 많고, 마지막 홉이 Pod 자신이다",
+      "방법 3 port-forward — 홉이 가장 많고, 마지막 홉이 Pod 자신이다",
       "curl → 프록시 → API 서버 → kubelet → Pod 의 loopback 순으로 간다. 마지막에 kubelet 이 "
       "Pod 의 lo 로 붙기 때문에, 컨테이너는 요청이 자기 자신에게서 온 것으로 본다.",
       lead="가장 쉬운 방법이지만 내부적으로는 가장 복잡하다 — 경로 어딘가가 깨지면 Pod 는 멀쩡해도 안 된다")

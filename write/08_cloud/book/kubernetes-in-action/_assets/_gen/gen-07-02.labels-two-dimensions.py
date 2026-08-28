@@ -2,8 +2,10 @@
 # 본문·옛 도식: 가로 = app(애플리케이션), 세로 = rel(릴리스). app=quote 셀렉터는 quote 열의
 #   stable+canary 를 전부 고르고, rel=canary 는 canary 행 전체를, app=quote,rel=canary 는
 #   quote-canary 하나만 고른다.
-# 타입 스펙: 축이 둘이고 셀렉터가 '행 또는 열' 을 고른다는 것이 요점이라 격자로 둔다.
+# 타입 스펙: type-dp-security-matrix.md — 축이 둘이고 셀렉터가 '행 또는 열' 을 고른다는 것이 요점이라 격자로 둔다.
 #           격자여야 셀렉터가 무엇을 고르는지가 면적으로 보인다 — 목록으로는 안 보인다.
+#           가로축이 app 라벨, 세로축이 rel 라벨인 2 차원 격자이고 칸이 곧 Pod 다. 셀렉터가 고르는 것이
+#           열인지 행인지 한 칸인지가 면적으로 읽힌다 — 축이 둘 다 의미를 지는 정본 그대로의 격자다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx

@@ -2,9 +2,11 @@
 # 본문: "startup probe 는 실패하는 것이 지극히 정상입니다. 실패는 앱이 아직 완전히 시작되지
 #        않았다는 뜻일 뿐입니다. 다만 startup probe 도 failureThreshold 에 닿을 만큼 실패하면
 #        liveness probe 가 실패한 것처럼 컨테이너가 종료됩니다."
-# 타입 스펙: 축이 다섯(언제·주기·허용 실패·허용 시간·실패의 뜻)이고 값이 둘씩이라 비교 행렬.
+# 타입 스펙: type-dp-security-matrix.md — 축이 다섯(언제·주기·허용 실패·허용 시간·실패의 뜻)이고 값이 둘씩이라 비교 행렬.
 #           같은 실패라도 뜻이 갈리는 것이 본문의 요점이므로 '실패의 뜻'을 판정 열로 세운다.
 #           전환 자체는 첫 열이 이미 말한다 — 화살표를 따로 그리면 축이 둘로 섞인다.
+#           행은 probe 둘, 열은 주기·허용 실패·허용 시간·실패의 뜻인 격자다. focal 열이 실패의 뜻이라
+#           같은 실패가 두 행에서 정반대 값을 갖는 것이 한눈에 대조된다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx

@@ -2,9 +2,13 @@
 # 본문: 사용자는 spec 에 원하는 상태를 쓰고 status 에서 실제 상태를 읽는다. 컨트롤러는 spec 을
 #   읽어 실제 클러스터를 맞춘 뒤 status 를 쓴다. GET/PUT 은 섹션 하나가 아니라 오브젝트 전체를
 #   주고받는다. 네 섹션 = Type metadata(apiVersion+kind) · Object metadata · Spec · Status.
-# 타입 스펙: 한 오브젝트 안의 네 칸과 그 둘레를 도는 루프가 함께 있어야 하므로, 오브젝트를
+# 타입 스펙: type-loop.md — 한 오브젝트 안의 네 칸과 그 둘레를 도는 루프가 함께 있어야 하므로, 오브젝트를
 #           가운데 두고 사용자와 컨트롤러가 각각 어느 칸을 읽고 쓰는지를 화살표로 잇는다.
 #           루프가 요점이므로 방향이 서로 반대인 것이 보여야 한다.
+#           네 화살표가 오브젝트를 가운데 두고 한 바퀴 돈다 — ①사용자가 spec 을 쓰고 ②컨트롤러가 읽고
+#           ③status 를 쓰고 ④사용자가 읽는다. 마지막이 처음으로 이어지고, 가운데 오브젝트가 상태를
+#           쌓아 두는 공용 중심이라 정본이 말하는 "writes durable state back to one common center" 다.
+#           정본의 방사형 링 대신 사각 고리로 그린 것이 어긋나는 지점이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx

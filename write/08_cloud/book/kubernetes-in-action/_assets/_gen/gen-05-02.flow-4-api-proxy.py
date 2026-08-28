@@ -2,12 +2,14 @@
 # 본문: "kubectl get --raw 가 API 서버에 요청을 보내고 API 서버가 그것을 Pod 로 프록시합니다."
 #        → Client IP 는 172.18.0.5(API 서버). kubelet 은 거치지 않는다.
 # 좌표계는 k05_access 가 정본.
+# 타입 스펙: type-architecture.md — 연작의 넷째 장이다. 셋째 장과 같은 골격에서 kubelet 칸만 흐려지는 대비가 논지라,
+#           같은 좌표계를 공유하는 것이 그 대비의 조건이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx, k05_access as K
 
 d = D(K.W, K.H, "KUBERNETES IN ACTION · 05-02",
-      "④ API 서버 프록시 — kubelet 을 건너뛴다",
+      "방법 4 API 서버 프록시 — kubelet 을 건너뛴다",
       "kubectl get --raw 로 API 서버에 요청하면 API 서버가 직접 Pod 로 프록시한다. "
       "kubelet 이 경로에 없으므로 홉이 하나 줄고, 마지막으로 붙은 것은 API 서버다.",
       lead="추가 명령도 port-forward 설정도 필요 없다 — 덜 알려졌지만 빠르다")
