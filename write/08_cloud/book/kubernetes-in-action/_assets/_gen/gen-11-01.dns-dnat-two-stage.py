@@ -1,8 +1,12 @@
 # 11-01 §7 — 이름이 주소가 되고, 주소가 다시 주소가 된다
 # 값이 두 번 바뀌는 사슬이라 stage_chain. 변환의 성격이 다르다는 게 요점이므로
 # 화살표 아래에 '누가 바꾸는지'를 따로 적었다. 가운데 가상 주소가 focal.
-# 타입 스펙: type-data-flow.md — 이름 → ClusterIP → 파드 IP 로 값이 두 번 바뀌는 파이프라인. 단계 머리가 그 변환을 누가
-#           했는지(애플리케이션·DNS·커널)를 맡는다.
+# 타입 스펙: type-architecture.md — 상자에 든 것은 컴포넌트가 아니라 목적지 주소이고, 그것을 바꾸는 주체는 단계 머리에 있다.
+#           38개 메뉴에 이 형태(주체 레인 없는 값·단계 사슬)를 담을 타입이 없다 —
+#           layout 문법만 architecture 를 따르고 그 사실을 여기 적어 둔다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, MUTED, SOFT, KR, MONO
 import ddx

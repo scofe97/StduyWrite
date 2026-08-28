@@ -1,8 +1,10 @@
 # 12-01 §2 — 판단은 목적지를 정하는 자리까지 살아남아야 한다
 # 본문의 결론 문장("판단하는 주체와 목적지를 정하는 주체가 갈리면, 판단은 버려집니다")이
 # 도식의 형태를 정한다. 같은 판단을 두 경로에 태워 어디서 사라지는지를 보인다.
-# 타입 스펙: type-data-flow.md — 프록시가 고른 결과가 어디까지 살아남는지를 두 경로로 나눈 흐름 — cluster IP 를 거치면
-#           커널이 다시 고르고, 파드로 직접 보내면 판단이 닿는다.
+# 타입 스펙: type-architecture.md — L7 프록시 · 노드 커널 · 파드 구성도 두 벌. 가운데를 거치느냐가 판단의 운명을 가른다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, BAD, MUTED, SOFT, INK, KR
 import ddx

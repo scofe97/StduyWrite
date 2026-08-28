@@ -1,8 +1,10 @@
 # 12장 마무리 — 두 줄이 만나지 않는다
 # 본문이 "위 줄과 아래 줄이 만나지 않는 것이 이 그림의 뼈대"라고 직접 적는다. 그러니 두 줄을
 # 나란히 두되 이어지는 세로선은 설정 하나뿐이어야 한다. 12장 대부분이 몰린 프록시가 focal.
-# 타입 스펙: type-data-flow.md — 요청 경로와 제어 경로를 두 밴드로 나누고, 만들어진 설정이 요청 경로로 올라가는 자리를
-#           세로 화살표로 잇는다.
+# 타입 스펙: type-architecture.md — 브라우저부터 파드까지의 요청 경로와 관리자부터 프록시 설정까지의 제어 경로, 두 구성도가 한 지점에서 만난다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

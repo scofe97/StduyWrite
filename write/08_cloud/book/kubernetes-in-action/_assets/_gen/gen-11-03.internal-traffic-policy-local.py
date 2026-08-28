@@ -1,8 +1,10 @@
 # 11-03 §3 — internalTrafficPolicy Local, 안에서 온 요청
 # external 편과 같은 골격. 다른 점은 앞단에 노드를 고르는 장치가 없다는 것이고,
 # 그래서 구제책 없음이 이 도식의 focal 이다.
-# 타입 스펙: type-data-flow.md — 같은 요청 경로를 두 노드 상황으로 지나는 두 벌의 흐름. 앞단에 고르는 장치가 없어
-#           갈래가 아니라 각자 끝난다는 것이 논지다.
+# 타입 스펙: type-architecture.md — 노드 안의 클라이언트 파드와 대상 파드를 잇는 구성도 두 벌.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER, RULE, KR
 import ddx

@@ -1,8 +1,10 @@
 # 12-02 §1 — 암호가 어디서 풀리는가
 # 구간마다 실린 것이 다르다는 게 요점이라, 경로 위에 구간별 라벨을 얹고 암호화 범위를
 # 대괄호로 묶는다. 파드가 HTTPS 를 몰라도 되는 이유가 그 범위의 끝에서 나온다.
-# 타입 스펙: type-data-flow.md — 한 요청이 지나는 세 구간과 각 구간의 암·복호 상태. 구간 라벨이 곧 무엇이 평문이고
-#           무엇이 암호문인지다.
+# 타입 스펙: type-architecture.md — 클라이언트 · L7 프록시 · 백엔드 파드 구성도. 구간 라벨이 암호 범위를 나눈다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, KR, MONO
 import ddx

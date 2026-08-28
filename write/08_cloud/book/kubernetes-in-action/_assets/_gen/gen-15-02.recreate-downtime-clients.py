@@ -1,8 +1,10 @@
 # 15-02 §2 — 같은 순간인데 응답이 다른 이유
 # 본문이 "요청을 받아 주는 주체가 있느냐"로 이유를 댄다. 그러니 두 경로를 나란히 두되
 # 중간에 서 있는 것이 무엇인지가 보여야 한다. kube-proxy 모드 갈림도 함께 적는다.
-# 타입 스펙: type-data-flow.md — 같은 요청 경로를 두 진입점으로 지나는 두 벌의 흐름. 파드가 없을 때 무엇이 응답하는지가
-#           경로마다 달라진다는 것이 논지다.
+# 타입 스펙: type-architecture.md — 클라이언트 · 프록시(또는 커널) · 파드 구성도 두 벌. 파드가 없을 때 무엇이 응답하는지가 경로마다 다르다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, KR, MONO
 import ddx

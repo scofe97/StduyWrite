@@ -1,7 +1,10 @@
 # 12-01 §2 — Ingress 는 LoadBalancer 를 없앤 게 아니라 그 위에 얹혔다
 # 본문이 "진화가 아니라 계층별 도구"라고 못박으므로, 아래 구조에서도 LB 가 사라지지 않고
 # 프록시 앞에 그대로 남아 있는 것이 도식의 요점이다. 늘어나는 것은 규칙 줄 수뿐이다.
-# 타입 스펙: type-data-flow.md — 서비스마다 LB 를 두는 구성과 LB 하나에 규칙을 얹는 구성을 두 밴드로 나눈 흐름.
+# 타입 스펙: type-architecture.md — LoadBalancer · 프록시 · 서비스를 어떻게 쌓느냐의 구성도 두 벌.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

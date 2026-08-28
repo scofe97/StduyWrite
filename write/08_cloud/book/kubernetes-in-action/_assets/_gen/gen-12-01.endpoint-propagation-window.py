@@ -1,8 +1,12 @@
 # 12-01 §2 — 위험한 것은 IP 가 바뀌는 게 아니라 바뀐 걸 아는 데 걸리는 시간
 # 본문의 그 문장이 시간축을 요구한다. 창(window)이 열려 있는 구간을 띠로 칠하고,
 # 그 구간을 메우는 장치 둘을 아래에 붙인다.
-# 타입 스펙: type-data-flow.md — 죽은 주소가 upstream 에 남아 있는 동안을 파이프라인 위에 구간 막대로 얹었다. 아래 두 칸은
-#           그 창을 메우는 장치다.
+# 타입 스펙: type-gantt.md — 단계 축 위에 얹힌 구간 막대 — 죽은 주소가 upstream 에 남아 있는 창이 어디서 열리고 닫히는가.
+#           축이 시간이 아니라 단계인 것은 clienthello-sni-position · affinity-scope-boundary 와 같은 판단이다.
+
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

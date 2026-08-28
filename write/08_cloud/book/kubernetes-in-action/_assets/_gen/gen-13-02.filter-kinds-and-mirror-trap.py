@@ -1,8 +1,10 @@
 # 13-02 §4 — 흐름 구조로 가른 세 갈래
 # 짝 도식이 '무엇을 고치는가'를 맡으므로 이쪽은 흐름 모양만 그린다. 갈래마다 화살표 개수가
 # 달라야 세 갈래라는 말이 눈에 보인다. 부수효과 함정이 이 도식의 focal.
-# 타입 스펙: type-data-flow.md — 흐름의 *모양*이 셋으로 갈린다 — 하나로 가거나, 복사본이 하나 더 생기거나, 백엔드 없이
-#           클라이언트로 되돌아가거나.
+# 타입 스펙: type-architecture.md — 게이트웨이와 백엔드를 잇는 구성도 셋. 연결의 *모양*(하나 · 복제 · 되돌림)이 갈래다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

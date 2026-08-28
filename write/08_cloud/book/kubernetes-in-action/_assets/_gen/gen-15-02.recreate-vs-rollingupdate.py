@@ -1,8 +1,12 @@
 # 15-02 §1 — 가용 파드 수가 바닥에 닿느냐
 # 두 전략의 차이는 절차가 아니라 그 절차가 가용 수를 어디까지 떨어뜨리느냐다. 그러니
 # 단계 나열이 아니라 가용 수를 세로 축으로 둔 두 줄이어야 한다.
-# 타입 스펙: type-data-flow.md — 같은 네 단계를 두 전략으로 지나는 두 벌의 흐름. 단계마다 옛/새 파드 수가 바뀌고,
-#           가용 수가 0 에 닿느냐가 갈림길이라 그 값을 칸마다 적었다.
+# 타입 스펙: type-architecture.md — 상자에 든 것은 단계마다의 옛·새 파드 수다. 위와 같은 이유로 line 후보를 남겨 둔다.
+#           38개 메뉴에 이 형태(주체 레인 없는 값·단계 사슬)를 담을 타입이 없다 —
+#           layout 문법만 architecture 를 따르고 그 사실을 여기 적어 둔다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

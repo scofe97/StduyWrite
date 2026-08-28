@@ -1,8 +1,12 @@
 # 15-02 §4 — 두 값이 정하는 것은 상한과 하한이다
 # 본문이 "값이 원하는 복제본 수에 상대적"이라고 못박는다. 그러니 단계별 개수만 나열하면
 # 안 되고, 총합의 천장과 가용의 바닥이 선으로 그어져 있어야 그 상대성이 보인다.
-# 타입 스펙: type-data-flow.md — 네 단계를 지나며 총합과 가용 수가 어떻게 움직이는지. 위아래 점선은 그 움직임을 가두는
-#           천장(replicas + maxSurge)과 바닥(replicas − maxUnavailable)이다.
+# 타입 스펙: type-architecture.md — 상자에 든 것은 단계마다의 파드 수다. 내용만 보면 순차 인덱스 위의 값 추이라 type-line 이 더 맞을 수 있는데, 그림은 상자 사슬로 그려져 있어 재설계 없이는 line 을 선언할 수 없다.
+#           38개 메뉴에 이 형태(주체 레인 없는 값·단계 사슬)를 담을 타입이 없다 —
+#           layout 문법만 architecture 를 따르고 그 사실을 여기 적어 둔다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

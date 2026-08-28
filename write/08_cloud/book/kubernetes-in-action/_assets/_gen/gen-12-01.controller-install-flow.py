@@ -3,6 +3,10 @@
 # 두 사실을 못박는다. 그래서 목록만 그리면 안 되고 순서 축이 함께 있어야 한다.
 # 타입 스펙: type-process.md — 설치 순서 세 단계가 같은 슬롯(번호·행위·객체)으로 반복된다. 위 밴드는 그 순서가 다루는
 #           객체 목록이라 화살표가 없다.
+#           2026-08-29 덧붙임: type-process 정본의 입력 계약도 역할 레인 1~6 이 전제인데 이 그림에
+#           레인은 없다. 그래도 process 를 두는 것은, 주체를 요구하지 않는 유일한 라우팅 규칙이
+#           semantic-patterns 의 "Stage framework with semantic slots" 한 줄이기 때문이다.
+#           38개 메뉴의 공백이라 visual-diagram-selection 의 "알려진 공백" 에 같이 적어 두었다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

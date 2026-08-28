@@ -1,8 +1,10 @@
 # 11-01 §7 — NAT 가 끼는 곳은 목적지가 정한다
 # 같은 출발지에서 목적지만 달리한 두 경로 대비. 띠 둘을 같은 좌표로 겹쳐 놓아
 # 같은 자리의 칩 값이 어디서 갈리는지 세로로 읽히게 했다.
-# 타입 스펙: type-data-flow.md — 같은 세 단계를 두 조건(파드 IP / ClusterIP)으로 지나는 두 벌의 흐름. 가로 화살표가 있으므로
-#           격자가 아니라 흐름으로 읽는다 — 갈리는 자리는 가운데 커널 한 칸뿐이다.
+# 타입 스펙: type-architecture.md — 출발 파드 · 노드 커널 · 도착 파드라는 실재 컴포넌트를 잇는다. 두 밴드는 계층이 아니라 목적지 두 경우다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, KR, MONO
 import ddx

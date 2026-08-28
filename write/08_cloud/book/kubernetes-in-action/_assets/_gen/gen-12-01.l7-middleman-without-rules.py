@@ -1,7 +1,10 @@
 # 12-01 §7 — 규칙이 없어도 중간자가 생긴다
 # 본문이 흔한 오해("Ingress 는 HTTP 를 쓰니까")를 먼저 걷어내고 "차이는 누가 HTTP 를
 # 이해하느냐"로 옮긴다. 그러니 오가는 트래픽은 양쪽 같게 그리고, 중간자의 유무만 달라야 한다.
-# 타입 스펙: type-data-flow.md — 같은 요청 경로에 중간자가 있고 없고를 두 밴드로 나눈 흐름.
+# 타입 스펙: type-architecture.md — 클라이언트 · 프록시 · 앱 파드 구성도 두 벌. 가운데 컴포넌트가 있고 없고가 차이다.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

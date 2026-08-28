@@ -1,7 +1,10 @@
 # 13-03 §1 — 어디서 푸느냐가 어느 Route 를 쓰는지까지 정한다
 # 12-02 의 termination/passthrough 도식과 겹치지 않게, 여기서는 '그래서 어느 Route 오브젝트를
 # 쓰는가'까지 끌고 간다. listener 프로토콜 이름이 갈리는 이유도 같은 축이다.
-# 타입 스펙: type-data-flow.md — 같은 네 단계를 termination 과 passthrough 두 방식으로 지나는 두 벌의 흐름.
+# 타입 스펙: type-architecture.md — 클라이언트 · 게이트웨이 · Route · 백엔드 구성도 두 벌.
+#           2026-08-29 정정: type-data-flow 로 적었으나 그 정본은 역할 레인 1~4 × 단계 열 ×
+#           타입 있는 페이로드 칩이 입력 계약인 데이터 플랫폼 전용 타입이다. 이 그림에 레인은 없다.
+#           type-architecture 의 Best for 에 "data-flow diagrams" 가 그대로 들어 있다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, KR, MONO
 import ddx
