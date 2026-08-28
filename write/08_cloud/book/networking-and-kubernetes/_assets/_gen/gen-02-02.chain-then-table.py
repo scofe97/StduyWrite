@@ -89,5 +89,5 @@ d.t(CX[3], 564, "로컬 프로세스", 12, MUTED, KR)
 d.t(24, 608, "두 레인의 칸이 같은 자리에 놓인 것은 평가 순서가 같기 때문이다. "
              "달라지는 것은 그 체인이 어느 테이블을 갖느냐뿐이다.", 12, MUTED, KR, "start")
 d.legend(632, [("그 체인이 가진 테이블", INFO), ("없는 테이블", SOFT), ("체인을 갈아타는 자리", ACC)])
-d.save("../02-02.chain-then-table.svg")
+d.save("02-02.chain-then-table.svg")
 print("ok chain-then-table")

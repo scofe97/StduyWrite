@@ -1,3 +1,4 @@
+# 타입 스펙: type-dp-security-matrix.md — 행이 kubenet·Azure CNI, 열이 4장의 그 선택 축들
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
 W, H = 1000, 556

@@ -1,7 +1,7 @@
 # 04-01.nat-free-promise — 포트 제약에서 세 약속, 그리고 그 대가까지
 # 본문 요구: "IP를 Pod마다 주는 동기는 포트 제약 제거 … 세 요구사항 … 대가는 명확합니다 —
 #           Pod마다 IP를 할당하고 라우팅하는 일이 클러스터에 상당한 복잡성을 더합니다"
-# 타입 스펙: 인과 사슬. 공식 없는 타입이라 stride 로 배치.
+# 타입 스펙: type-data-flow.md — 왼쪽 끝 제약에서 오른쪽 끝 대가까지 네 칸 한 줄
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER2, KR, MONO
 

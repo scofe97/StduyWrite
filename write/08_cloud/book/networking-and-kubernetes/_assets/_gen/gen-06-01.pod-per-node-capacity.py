@@ -1,4 +1,5 @@
 # 06-01.pod-per-node-capacity — 인스턴스의 IP 수용량이 곧 Pod 상한
+# 타입 스펙: type-data-flow.md — 인스턴스 타입에서 실제 배포 가능 수까지 네 칸 계산 한 줄
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
 W, H = 1000, 560

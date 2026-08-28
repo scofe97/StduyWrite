@@ -1,7 +1,7 @@
 # 04-02.cni-contract — 명세가 작아서 구현이 다양해졌다
 # 본문 요구: "지원해야 하는 연산은 넷뿐 (ADD·DEL·CHECK·VERSION) … 설정 JSON 을 stdin 으로
 #           주고 결과 JSON 을 stdout 으로 받는다 … 플러그인 바이너리는 얇은" + IPAM 분리.
-# 타입 스펙: 호출 계약. 공식 없는 타입이라 stride 로 배치.
+# 타입 스펙: type-architecture.md — 런타임·플러그인 바이너리·IPAM 세 구성요소와 stdin/stdout 연결
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER2, PAPER, KR, MONO
 

@@ -2,7 +2,8 @@
 # 본문 요구: "한쪽 끝이 아무것도 연결하지 않는 None, 반대쪽 끝이 격리를 통째로 내주는 Host"
 #           — 두 극단만 본문이 못박았으므로 그 둘만 축의 끝에 두고, 나머지 다섯은 순서를
 #           지어내지 않고 가운데 구간에 표의 거래 문구 그대로 나열한다.
-# 타입 스펙: 스팬(눈금) + 가운데 구간. 공식 없는 타입이라 stride 로 배치.
+# 타입 스펙: type-dp-security-matrix.md — 한 행 세 구간(None · 사이 다섯 · Host) 대조 + 위에 격리 눈금 축.
+#           카탈로그에 1차원 스펙트럼 타입이 없어 행 대조로 축약했다
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER2, KR, MONO
 

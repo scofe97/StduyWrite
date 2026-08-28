@@ -1,7 +1,8 @@
 # 05-03.mesh-relocation — 메시의 본질은 기능의 자리 이동이다
 # 본문 요구: 일곱 기능(디스커버리·로드밸런싱·복원력·보안 mTLS·관측·라우팅 제어·API) + 구조
 #           셋(게이트웨이·사이드카·컨트롤 플레인) + "컨트롤 플레인이 죽어도 데이터 플레인은 돈다".
-# 타입 스펙: before/after 자리 이동. 공식 없는 타입이라 stride 로 배치.
+# 타입 스펙: type-dp-security-matrix.md — 앱 코드 안 / 사이드카 프록시 두 칸 대조 + 사이 화살표에 옮겨 간 기능.
+#           01-04.capture-vantage 의 2행 대조와 같은 축약이다
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER2, PAPER, KR, MONO
 
