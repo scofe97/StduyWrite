@@ -1,6 +1,7 @@
 # 12-02 §3 — 실패가 양방향이다
 # 상황 둘 × 기준 둘의 교차라 행렬. IP 기준 열에서만 깨지므로 그 열이 판정 축이다.
 # "IP 는 사람이 아니라 경로의 속성"이라는 본문의 한 줄이 아래에 붙는다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 두 상황, 열은 실제 인원·IP 기준·쿠키 기준. 같은 상황에서 두 기준이 갈리는 칸이 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INFO, OK, BAD, MUTED, SOFT, KR
 import ddx

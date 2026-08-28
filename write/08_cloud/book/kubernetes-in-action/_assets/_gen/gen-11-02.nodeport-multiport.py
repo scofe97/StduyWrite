@@ -1,6 +1,7 @@
 # 11-02 §1 — 여섯 번호는 두 입구와 한 도착지다
 # 본문이 '세 주소를 차례로 밟는 것이 아니다'라고 못박는다. 그래서 3 단 체인으로 그리면 안 되고,
 # 두 입구가 한 도착지로 합류하는 Y 형태여야 한다. 프로토콜마다 한 벌씩.
+# 타입 스펙: type-data-flow.md — 밴드마다 입구 둘이 한 목적지로 몰리는 팬인. 두 밴드는 HTTP·HTTPS 두 포트 짝이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

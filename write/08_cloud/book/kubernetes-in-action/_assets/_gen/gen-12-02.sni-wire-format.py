@@ -1,6 +1,8 @@
 # 12-02 §2 — 껍질 셋이 벗겨지며 바이트로 펴진다
 # 중첩과 선형 배치를 한 장에 나란히 둔다. 길이가 앞에 붙는다는 사실이 "암호를 풀지 않아도
 # 셀 수 있다"의 근거라, 바이트 줄에서 길이 칸을 따로 표시한다.
+# 타입 스펙: type-nested.md — Extension ⊃ ServerNameList ⊃ ServerName ⊃ host_name 의 포함 관계. 오른쪽 바이트 띠는
+#           그 중첩을 실제 바이트로 편 것이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

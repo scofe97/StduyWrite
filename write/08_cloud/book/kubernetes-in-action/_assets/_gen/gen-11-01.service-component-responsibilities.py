@@ -1,6 +1,8 @@
 # 11-01 §3 — 누가 IP 를 만들고 누가 명단에 적는가
 # 캡션이 '준비 단계와 실제 요청 경로' 둘을 요구한다. 띠 둘로 나누고, 준비 중 요청 때 실제로
 # 쓰이는 둘만 대괄호로 묶어 아래 띠로 내린다. 세로로 1:1 정렬하지 않는다 — 대응이 아니다.
+# 타입 스펙: type-data-flow.md — 단계마다 *누가* 무엇을 만드는지가 논지다 — 제목이 "누가 IP를 만들고 누가 명단에 적는가"다.
+#           위 밴드에서 만들어진 것(IP·명단·규칙)이 아래 요청 경로에서 쓰인다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

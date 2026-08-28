@@ -1,6 +1,8 @@
 # 13-03 §3 — 허가는 반대 방향으로 나온다
 # 본문이 "위치를 외울 게 아니라 허가하는 사람이 있는 곳으로 이해하라"고 한다. 그러니 참조 화살표와
 # 허가 화살표를 반대 방향으로 그려, ReferenceGrant 가 대상 쪽에 서는 이유가 그림에서 나오게 한다.
+# 타입 스펙: type-dependency.md — 참조는 왼쪽에서 오른쪽으로, 허가는 반대 방향으로 난다. 두 화살표의 방향이 반대라는 것이
+#           논지라 네임스페이스 상자로 그 경계를 감쌌다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

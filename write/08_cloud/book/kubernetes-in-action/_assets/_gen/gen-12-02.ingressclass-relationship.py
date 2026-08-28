@@ -1,6 +1,8 @@
 # 12-02 §4 — 이름으로 맞물린다
 # 캡션이 "한 Ingress 에서 나가는 화살표는 언제나 하나"를 못박는다. 그러니 여러 Ingress 가
 # 각자 클래스 하나를 지목하는 그림이어야 하고, 개수 관계가 함께 보여야 한다.
+# 타입 스펙: type-dependency.md — Ingress 셋 → IngressClass 둘 → 컨트롤러 둘의 참조 팬인. 흐르는 것이 아니라 가리키는
+#           관계라 data-flow 가 아니다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

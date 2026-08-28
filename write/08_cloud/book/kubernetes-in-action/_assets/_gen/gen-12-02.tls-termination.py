@@ -1,6 +1,8 @@
 # 12-02 §1 — 암호가 어디서 풀리는가
 # 구간마다 실린 것이 다르다는 게 요점이라, 경로 위에 구간별 라벨을 얹고 암호화 범위를
 # 대괄호로 묶는다. 파드가 HTTPS 를 몰라도 되는 이유가 그 범위의 끝에서 나온다.
+# 타입 스펙: type-data-flow.md — 한 요청이 지나는 세 구간과 각 구간의 암·복호 상태. 구간 라벨이 곧 무엇이 평문이고
+#           무엇이 암호문인지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, KR, MONO
 import ddx

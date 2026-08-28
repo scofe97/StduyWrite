@@ -1,6 +1,7 @@
 # 12-01 진입 — 이름은 여럿, IP 는 하나
 # 캡션이 "DNS 레코드가 모두 같은 Ingress IP 를 가리킨다"를 요구한다. 수렴한 뒤 다시
 # 갈라지는 형태여야 그 말이 눈에 보인다. 수렴점 하나만 focal.
+# 타입 스펙: type-data-flow.md — 이름 셋이 공인 IP 하나로 몰렸다가 프록시를 지나 서비스 셋으로 갈라진다 — 수렴이 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, KR, MONO
 import ddx

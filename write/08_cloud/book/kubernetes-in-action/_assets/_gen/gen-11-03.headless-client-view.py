@@ -1,5 +1,6 @@
 # 11-03 §2 — 목적지를 누가 확정하는가
 # 본문이 '주소를 누가 확정하는가 한 지점'이라 못박으므로 그 열을 focal 로 둔 행렬.
+# 타입 스펙: type-dp-security-matrix.md — 행은 Service 두 종류, 열은 앱이 쥔 주소·목적지를 정하는 곳·앱이 알 수 있는 것.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, MUTED, SOFT, KR
 import ddx

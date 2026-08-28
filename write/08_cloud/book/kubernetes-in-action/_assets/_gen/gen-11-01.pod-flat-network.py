@@ -1,6 +1,8 @@
 # 11-01 §1 — 파드끼리는 NAT 없이 통신한다
 # 본문의 요지는 '홉을 지나도 주소가 그대로'다. 물리 토폴로지와 파드가 보는 층을 위아래로 놓고,
 # 홉마다 같은 목적지 칩을 반복해 불변을 눈으로 세게 한다. type-layers 의 두 층 관례.
+# 타입 스펙: type-layers.md — 물리 토폴로지와 파드가 보는 층을 위아래로 놓은 두 층. 같은 목적지 칩을 홉마다 반복해
+#           주소 불변을 눈으로 세게 한다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

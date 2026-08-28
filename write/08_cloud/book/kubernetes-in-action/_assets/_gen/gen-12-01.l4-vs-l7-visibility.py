@@ -1,6 +1,7 @@
 # 12-01 §1 — 같은 패킷, 다른 가시 범위
 # 본문이 "커널이 보기에 완전히 같은 요청"이라고 못박는다. 그 '같음'은 계층 그림 하나로는
 # 안 보이고, 같은 패킷 두 벌을 나란히 놓고 한쪽 층을 꺼야 드러난다.
+# 타입 스펙: type-layers.md — 같은 패킷을 쌓아 올린 세 층을 두 벌 나란히 두고, 어느 층까지 보이는지를 대조한다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx

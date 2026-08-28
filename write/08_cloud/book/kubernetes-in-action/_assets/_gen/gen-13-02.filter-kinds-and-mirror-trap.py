@@ -1,6 +1,8 @@
 # 13-02 §4 — 흐름 구조로 가른 세 갈래
 # 짝 도식이 '무엇을 고치는가'를 맡으므로 이쪽은 흐름 모양만 그린다. 갈래마다 화살표 개수가
 # 달라야 세 갈래라는 말이 눈에 보인다. 부수효과 함정이 이 도식의 focal.
+# 타입 스펙: type-data-flow.md — 흐름의 *모양*이 셋으로 갈린다 — 하나로 가거나, 복사본이 하나 더 생기거나, 백엔드 없이
+#           클라이언트로 되돌아가거나.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

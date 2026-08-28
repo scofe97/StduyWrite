@@ -1,6 +1,8 @@
 # 11-03 §3 — internalTrafficPolicy Local, 안에서 온 요청
 # external 편과 같은 골격. 다른 점은 앞단에 노드를 고르는 장치가 없다는 것이고,
 # 그래서 구제책 없음이 이 도식의 focal 이다.
+# 타입 스펙: type-data-flow.md — 같은 요청 경로를 두 노드 상황으로 지나는 두 벌의 흐름. 앞단에 고르는 장치가 없어
+#           갈래가 아니라 각자 끝난다는 것이 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER, RULE, KR
 import ddx

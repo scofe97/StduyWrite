@@ -1,6 +1,7 @@
 # 12-01 §7 — 안 맞은 요청이 가는 곳
 # 규칙 판정에서 떨어진 요청의 행선지가 주제다. 기본 404 와 defaultBackend 를 나란히 놓고,
 # 서비스를 하나 두는 쓸모 셋을 그 아래 붙인다.
+# 타입 스펙: type-flowchart.md — 규칙 판정 하나에서 두 갈래 — defaultBackend 가 없으면 프록시 기본 404, 있으면 그쪽으로.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

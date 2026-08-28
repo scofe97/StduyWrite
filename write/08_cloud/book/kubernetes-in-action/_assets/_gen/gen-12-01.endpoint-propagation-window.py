@@ -1,6 +1,8 @@
 # 12-01 §2 — 위험한 것은 IP 가 바뀌는 게 아니라 바뀐 걸 아는 데 걸리는 시간
 # 본문의 그 문장이 시간축을 요구한다. 창(window)이 열려 있는 구간을 띠로 칠하고,
 # 그 구간을 메우는 장치 둘을 아래에 붙인다.
+# 타입 스펙: type-data-flow.md — 죽은 주소가 upstream 에 남아 있는 동안을 파이프라인 위에 구간 막대로 얹었다. 아래 두 칸은
+#           그 창을 메우는 장치다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

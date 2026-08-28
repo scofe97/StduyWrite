@@ -1,5 +1,7 @@
 # 11-03 §4 — 무엇을 묻느냐가 장애 범위를 정한다
 # 같은 사건에서 갈리는 두 결말이라 같은 골격의 체인 둘. 치르는 값(전면 장애)이 focal.
+# 타입 스펙: type-data-flow.md — 원인이 한 줄로 번지는 인과 파이프라인 두 벌. 무엇을 묻느냐(외부 의존 / 자기 상태)에 따라
+#           같은 지연이 전면 장애도 되고 부분 응답도 된다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, KR
 import ddx

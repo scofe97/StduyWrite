@@ -1,6 +1,7 @@
 # 11-02 전체 지도 — 밖으로 열수록 무엇 하나를 내준다
 # 노출 수단이 단계적으로 밖을 향하므로 체인. 마지막 칸이 수단이 아니라 대가를 고르는
 # 손잡이라서 그곳만 focal 로 둔다.
+# 타입 스펙: type-process.md — 단계마다 같은 의미 슬롯이 반복되고 화살표는 읽는 순서를 나른다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, MUTED, SOFT, KR
 import ddx

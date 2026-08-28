@@ -1,6 +1,8 @@
 # 12-02 §1 — 조용히 지나가고 접속에서 터진다
 # 본문이 "당위만 알면 어긋났을 때를 대비할 수 없다"고 짚는다. 그러니 규칙이 아니라
 # 배포 단계가 전부 초록불인 장면을 보여야 한다. 실패 지점 하나만 focal.
+# 타입 스펙: type-data-flow.md — 다섯 단계를 다 통과하고 마지막 브라우저에서만 실패하는 파이프라인. 앞 네 칸이 초록인 것이
+#           "여기까지 아무도 검증하지 않는다"는 주장이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, BAD, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx

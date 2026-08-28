@@ -1,6 +1,7 @@
 # 12-02 §1 — 무엇이 보이느냐가 무엇을 할 수 있느냐를 정한다
 # 두 방식 × 할 수 있는 일의 교차라 행렬. 호스트 분기는 양쪽 다 되고 경로 분기에서 갈리므로
 # 그 열을 판정 축으로 둔다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 두 방식, 열은 프록시가 보는 것·경로 분기·호스트 분기. 가능/불가능 칸이 판정이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INFO, OK, BAD, MUTED, SOFT, KR
 import ddx

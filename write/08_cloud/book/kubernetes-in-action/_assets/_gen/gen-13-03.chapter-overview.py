@@ -1,6 +1,9 @@
 # 13-03 전체 지도 — 네 축은 순서가 아니다
 # 본문이 "순서대로 이어지는 파이프라인이 아니라 각각 독립된 주제"라고 못박으므로 체인으로
 # 그리면 안 된다. 관통 질문("무엇을 아는가")을 사다리로 세우고 네 축은 그 아래 나란히 둔다.
+# 타입 스펙: type-dp-security-matrix.md — 위 한 행은 "아는 것의 사다리" 세 구간을 늘어세운 1차원 스펙트럼이고, 양 끝(다 안다 /
+#           아무것도 모른다)이 확정이다. 아래 넷은 순서가 아니라 각각 독립된 주제라 화살표를
+#           두지 않았다 — 다른 편 chapter-overview 의 단계 체인과 일부러 다른 형태다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 import ddx
