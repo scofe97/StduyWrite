@@ -1,14 +1,12 @@
 # 06-01 §2 — 죽음에는 두 경우가 있다
 # 본문: "여기서 두 경우를 구분해야 합니다 — 같은 Pod 안의 컨테이너가 죽은 경우 / Pod 자체가 사라진 경우"
 #       각 경우를 "누가 대응 → 오브젝트는 → phase 는" 으로 끝까지 따라간다.
-# 타입 스펙: type-swimlane.md — 대응 주체가 갈리므로(kubelet / Deployment) 주체당 레인 하나를
-#           두고 단계는 그 레인 안에 놓는다. 옛 판은 이 인과를 2x4 격자로 그려 칸이 서로
-#           독립처럼 보였고, 위쪽에 pod-phases 도식의 phase 사슬을 재탕했다. 격자는 방향을
-#           주지 않고 레인은 준다 — 스펙의 "steps placed inside the lane of the actor
-#           performing them; arrows show flow" 를 따른다.
-#           레인을 넘는 화살표(handoff)는 없다 — 두 경우는 인계가 아니라 서로 배타적 대안이다.
-#           스펙이 handoff 를 "consider" 로 두므로 없어도 위반이 아니다.
-#           1열은 레인 주체의 동작이 아니라 촉발 사건이라 파선·muted 로 낮추고 열 머리에 밝힌다.
+# 타입 스펙: type-dp-security-matrix.md — 행은 주체 둘(kubelet · Deployment), 열은 네 질문(무엇이 죽었나 ·
+#           대응 동작 · Pod 오브젝트는 · phase 는). 칸을 가로로 읽으면 한 주체의 처리, 세로로 읽으면
+#           같은 질문에 두 주체가 다르게 답하는 자리다.
+#           2026-08-29 정정: type-swimlane 으로 적었으나 그 정본은 "Handoffs — 레인 경계를 넘는 화살표 —
+#           가 가장 중요한 간선" 이라고 못 박는다. 이 그림에 레인을 넘는 화살표는 하나도 없다.
+#           레인이 주체인 것은 맞지만 인계가 없으면 swimlane 이 아니라 격자다.
 # 관례형(§2 공식 없음) → stride 를 4의 배수로 고정: 셀폭 184 · 간격 24 · 레인 높이 136 · 레인 stride 152
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER, PAPER2, KR, MONO

@@ -5,6 +5,10 @@
 # 타입 스펙: type-swimlane.md — 레인 = 체인(행위 주체), 레인 안 단계 = 그 체인이 실제로 가진 테이블.
 #           레인을 가로지르는 화살표(라우팅 판단)가 스펙이 말하는 handoff 라 focal 을 건다.
 #           "레인마다 단계 수가 같을 필요는 없다"는 관례를 써서 없는 테이블은 ghost 로 남긴다.
+#           2026-08-29 대조: type-swimlane 정본은 레인을 "one per actor/team" 으로 둔다. 여기 레인은
+#           팀이 아니라 Netfilter 훅이다 — 다만 그 훅이 자기 레인의 테이블을 수행하는 주체이고,
+#           레인을 넘는 인계 화살표(PREROUTING → 라우팅 판단 → INPUT)가 실제로 가장 중요한 간선이라
+#           swimlane 을 유지한다. 어긋나는 지점만 여기 적어 둔다.
 # 좌표: Layout conventions 타입이라 공식이 없다 — stride 192 하나로 고정하고 전부 4의 배수.
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, PAPER, PAPER2, INFO, KR, MONO
