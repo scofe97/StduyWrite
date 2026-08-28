@@ -1,6 +1,8 @@
 # 06-01.traffic-gateways — 나가는 길과 들어오는 길이 다르다
 # 본문 요구: "NAT 는 나가기만, IGW 는 양방향, ELB 4종은 계층이 다르다" + ELB 넷의 성격.
-# 타입 스펙: type-dp-security-matrix.md — 윗줄이 방향 다른 두 관문, 아랫줄이 계층 다른 ELB 넷 — 두 행 대조
+# 타입 스펙: type-layers.md — 통제·부품을 묶음으로 세우는 control catalog 패턴이 이 타입으로 간다.
+#           2026-08-28 렌더 확인 후 재분류: 앞서 행 대조로 적었으나 윗줄 2칸과 아랫줄 4칸의
+#           열이 서로 대응하지 않아 격자가 아니다. 방향 관문 층과 ELB 계층 층, 두 띠다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, BAD, INFO, PAPER2, PAPER, KR, MONO
 
