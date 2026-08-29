@@ -3,6 +3,11 @@
 # 못 박는다. 그래서 클라이언트를 하나만 그리면 "설정을 잘못했다" 로 읽힌다 — 얌전한 쪽과
 # 안 얌전한 쪽을 같은 시간축에 나란히 놓아야 "줄지만 0 이 되지 않는다" 가 보인다.
 # 아래 고침 띠는 본문의 반전("캐싱을 막는 대신 캐싱해도 되는 대상을 만들었다") 을 받는다.
+# 타입 스펙: type-gantt.md — 왼쪽 레인 이름 열 + 공용 시간축 위에 구간 막대, 사건마다 세로 눈금.
+#           세 레인이 병렬 트랙이고 초점은 M1~M2 구간을 재는 대괄호다 — 정본의 milestone marker 관례.
+#           어긋나는 지점: 막대가 작업이 아니라 *그때 믿고 있는 값* 이고, 아래 고침 띠는
+#           architecture 어휘(노드 사슬)라 gantt 에 자리가 없다. timeline 은 기각 — 기준선 하나 위
+#           사건 점이 아니라 병렬 레인의 구간 겹침이 요점이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, BAD, MUTED, SOFT, INK, PAPER2, PAPER, RULE, KR, MONO
 import ddx

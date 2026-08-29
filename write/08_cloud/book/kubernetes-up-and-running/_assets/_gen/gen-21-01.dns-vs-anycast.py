@@ -6,6 +6,11 @@
 # ⚠ 초판은 anycast 칸에 "광고를 내리면 경로가 바뀐다 — 캐시가 끼지 않는다" 라고 적었다가
 #   적대적 검증에서 반증됐다. 원서의 anycast 서술은 성질과 "대체로 낫다" 까지이고
 #   BGP 광고 철회나 캐시 면역은 한 줄도 없다. 빈칸을 지어 채우지 않고 비었다고 적는다.
+# 타입 스펙: type-dp-security-matrix.md — 열 둘(GeoDNS · anycast) × 행 넷(무엇으로 가르나 ·
+#           정상 운영 · 장애 때 옮기려면 · 자주 틀리는 곳)에 행 머리말이 붙은 대조 격자이고
+#           연결선이 없다. 정상 행에서 둘이 비슷하고 장애 행에서 갈리는 것이 논지다.
+#           어긋나는 지점: 칸이 권한값이 아니라 문장이다. 초점을 셋째 행 *양쪽* 에 주었는데,
+#           갈리는 자리를 한쪽만 칠하면 다른 쪽이 비어 보이기 때문이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, PAPER, RULE, INFO, KR, MONO
 import ddx
@@ -63,5 +68,5 @@ d.t(24, BY + 46, "웹 애플리케이션이라면 여기에 더해 HTTP 계층�
                  "프로토콜을 아는 분산기는 쿠키를 보고 요청 단위로 판단한다.", 11, MUTED, KR, "start")
 d.legend(BY + 62, [("갈리는 자리", BAD), ("유리한 쪽", OK), ("치러야 할 것", WARN),
                    ("원서가 말하지 않는 것", SOFT)])
-d.save("../21-01.dns-vs-anycast.svg")
+d.save("21-01.dns-vs-anycast.svg")
 print("필요 h:", BY + 62 + 48, "· 실제:", H)

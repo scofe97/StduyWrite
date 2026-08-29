@@ -4,6 +4,11 @@
 # 그러니 3표준·3모드를 격자로 늘어놓기만 하면 안 되고 *시간 순서* 가 형태로 있어야 한다.
 # 위에 재료(표준·모드)를 두고 아래에 그 재료를 쓰는 4 단계 사다리를 둔다.
 # 1 단계에 초점을 준다 — dry-run 평가가 이 장에서 실무적으로 가장 값한 명령이다.
+# 타입 스펙: type-process.md — 네 단계가 같은 의미 슬롯(번호 · 하는 일 · 명령 · 돌아오는 것)으로
+#           반복되고 단계 사이를 아래 화살표가 잇는다. 본문이 "재고 → 낮게 막고 높게 보고 →
+#           고치고 → 올린다" 라고 순서를 명시하므로 3×3 격자로 늘어놓으면 안 된다.
+#           어긋나는 지점: 정본의 lane=주체가 없다. 위 재료 띠(표준 셋 · 모드 셋)는 절차가 아니라
+#           그 절차가 쓰는 어휘를 먼저 깔아 둔 것이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, PAPER, RULE, INFO, KR, MONO
 import ddx
@@ -74,5 +79,5 @@ d.t(24, BY + 22, "버전을 고정하지 않으면 표준 내용이 릴리스마
                  "조용히 달라진다. enforce-version 을 함께 적는다.", 11, MUTED, KR, "start")
 d.legend(BY + 38, [("먼저 재는 자리", ACC), ("막는 선", OK), ("목표 선", WARN),
                    ("거부", BAD), ("관찰·안내", INFO)])
-d.save("../19-01.podsecurity-rollout.svg")
+d.save("19-01.podsecurity-rollout.svg")
 print("필요 h:", BY + 38 + 48, "· 실제:", H)

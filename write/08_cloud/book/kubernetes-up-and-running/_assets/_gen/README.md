@@ -9,12 +9,24 @@
 
 ## 돌리는 법
 
+생성기는 `_assets` 를 현재 디렉토리로 두고 돌린다. `dd.py` 를 저장소 밖 임시 폴더에 두고
+`PYTHONPATH` 로 잡아 주면 `_gen/` 이 깨끗하게 남는다 — 자매 책 `kubernetes-in-action` 과 같은 규약이다.
+
 ```bash
-cp ~/claude/.claude/skills/writing-method/assets/scripts/dd-primitives.py ./dd.py
-python3 gen-<이름>.py                     # 같은 폴더에 svg 를 뱉는다
-python3 ~/claude/.claude/skills/writing-method/assets/scripts/dd-overflow-check.py <svg>
-~/claude/.claude/skills/writing-method/assets/scripts/dd-render.sh <svg>   # shots/ 에 png
+SC=~/claude/.claude/skills/writing-method/assets/scripts
+mkdir -p /tmp/ddmod && cp $SC/dd-primitives.py /tmp/ddmod/dd.py
+
+cd _assets                                       # ← 여기서 돌린다
+PYTHONPATH="/tmp/ddmod:_gen" python3 _gen/gen-<이름>.py    # 옆에 svg 를 뱉는다
+
+python3 $SC/dd-overflow-check.py <svg>
+python3 $SC/dd-lint.py <svg>
+$SC/dd-render.sh <svg>                           # shots/ 에 png
 ```
+
+`d.save()` 경로는 파일명만 적는다. 한때 열둘이 `"../이름.svg"` 로 적혀 있어 `_gen` 에서 돌려야
+제자리에 떨어졌는데, 나머지 열셋과 규약이 갈려 `_assets` 에서 한 번에 돌리면 책 루트로
+파일이 흘렀다. 2026-08-30 에 전부 파일명만 쓰도록 맞췄다.
 
 `dd.py` 는 정본이 바뀔 수 있으므로 커밋하지 않는다. `ddx.py` 는 이 저장소의 공용 헬퍼로,
 `../../kubernetes-in-action/_assets/_gen/ddx.py` 와 같은 파일이다.

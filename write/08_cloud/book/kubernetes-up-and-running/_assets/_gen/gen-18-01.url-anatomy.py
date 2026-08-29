@@ -5,6 +5,12 @@
 # 열이 맞아야 "여기가 비어 있다" 가 형태로 보인다 — Namespace 행의 네임스페이스 칸이 그것이다.
 # 마지막 열에 클라이언트 메서드 이름을 붙이는 이유도 같다. 이름이 URL 에서 나왔다는 게
 # 본문의 주장이므로, 주장과 근거가 한 행에 있어야 한다.
+# 타입 스펙: type-dp-security-matrix.md — 열 넷(API 그룹 · 네임스페이스 범위 · 리소스 · 클라이언트)
+#           × 행 셋(Pod · Deployment · Namespace)에 열 머리말이 붙은 격자이고 연결선이 하나도 없다.
+#           본문이 "*같은 자리* 가 세로로 맞은 격자여야 한다" 라고 규격을 직접 적어 둔 자리다.
+#           어긋나는 지점: 정본은 값이 빈 칸을 렌더하지 말라고 하는데, 여기서는 Namespace 행의
+#           빈 마디가 논지 그 자체다. 그래서 비우는 대신 "이 마디가 없다" 로 명시해 둔다 —
+#           모호한 공백이 아니라 표시된 부재다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, PAPER, RULE, INFO, KR, MONO
 import ddx
@@ -73,5 +79,5 @@ for i, (head, c, sub) in enumerate(NOTES):
 
 d.legend(BY + 104, [("API 그룹", INFO), ("네임스페이스 범위", ACC),
                     ("리소스", OK), ("마디가 빠지는 자리", WARN)])
-d.save("../18-01.url-anatomy.svg")
+d.save("18-01.url-anatomy.svg")
 print("필요 h:", BY + 104 + 48, "· 실제:", H)

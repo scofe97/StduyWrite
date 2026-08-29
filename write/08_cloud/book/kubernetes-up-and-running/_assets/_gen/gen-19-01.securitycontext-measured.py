@@ -4,6 +4,12 @@
 # 행이 맞아야 "CapBnd 는 거의 안 변했는데 CapEff 만 무너졌다" 가 눈으로 잡힌다 —
 # 그게 이 절 전체의 논지이고, 책의 도구가 가려 버린 것이다.
 # 마지막 열에 변화를 적는 이유도 같다. 두 값만 보면 16진수라 차이가 안 읽힌다.
+# 타입 스펙: type-dp-security-matrix.md — 열 넷(항목 · 기본 · 강화 · 무엇이 달라졌나) × 행 아홉의
+#           격자이고 연결선이 없다. 본문이 "두 출력을 나란히 놓으면" 이라고 규격을 적어 두었고,
+#           행이 맞아야 "CapBnd 는 그대로인데 CapEff 만 무너졌다" 가 눈으로 잡힌다.
+#           어긋나는 지점: 정본이 초점 칸을 하나로 제한하는데 여기는 두 행(CapEff · CapPrm)이 초점이다.
+#           둘을 함께 짚지 않으면 "상한은 남았으니 되찾을 수 있다" 로 잘못 읽히므로, 신호가
+#           흐려지는 비용을 알고 감수한 것이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, PAPER, RULE, INFO, KR, MONO
 import ddx
@@ -70,5 +76,5 @@ d.t(44, BY + 66, "runAsUser 만 빼고 나머지를 그대로 두면 CapEff 가 
     10, MUTED, KR, "start")
 
 d.legend(BY + 96, [("이 절의 초점", ACC), ("확실히 좋아진 것", OK), ("상한은 그대로", MUTED)])
-d.save("../19-01.securitycontext-measured.svg")
+d.save("19-01.securitycontext-measured.svg")
 print("필요 h:", BY + 96 + 48, "· 실제:", H)

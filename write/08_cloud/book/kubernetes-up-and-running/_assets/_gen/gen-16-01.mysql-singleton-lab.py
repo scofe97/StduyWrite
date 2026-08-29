@@ -2,6 +2,10 @@
 # 다섯 상자를 잇는 레시피로 그리면 본문의 요점이 통째로 빠진다. 본문이 힘주어 답하는 것은
 # 순서가 아니라 "왜 이 두 단계가 더 있는가" 다 — PVC 한 단계와, 파드 하나짜리 ReplicaSet.
 # 그래서 둘을 "없으면 무슨 일이 나는가" 로 아래에 달아 두고 사슬은 뼈대만 남긴다.
+# 타입 스펙: type-architecture.md — 네 리소스가 컴포넌트이고 칩(volume 라벨 · claimName · app 라벨)이
+#           둘을 잇는 필드를 이름 붙인다. ReplicaSet 경계 상자가 정본의 region 사각형에 해당한다.
+#           어긋나는 지점: 화살표가 데이터 흐름이 아니라 만드는 순서다 — 도식이 그 사실을 자기
+#           takeaway 줄에 적어 둔다. 아래 두 해설 패널은 점선 리더로 앵커에 붙는 주석이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, PAPER, RULE, KR, MONO
 import ddx

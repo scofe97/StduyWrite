@@ -6,6 +6,11 @@
 # ⚠ 초판 도식은 아래 칸을 "원서에 없음" 으로 적었다가 적대적 검증에서 반증됐다. 원서는
 # 웹훅 출력을 `...` 로 생략했을 뿐이고, 두 번째 웹훅은 원서보다 앞선 차트에도 있었다.
 # 생략을 부재로 읽은 것이므로, 아래 칸은 "원서가 무엇을 보여 줬는가" 만 적는다.
+# 타입 스펙: type-dp-security-matrix.md — 열 셋(웹훅) × 같은 행 기준(failurePolicy · 왜 ·
+#           원서가 무엇을 보여 줬는가)인 대조 격자다. 순서가 없고 독자의 동작은 "어느 하나만
+#           Fail 인가" 를 찾는 것이라, 본문 표가 못 보이는 것을 형태로 보인다. 연결선 없음 ✓.
+#           어긋나는 지점: 칸이 권한값이 아니라 정책값과 문장이다. 세로 카드 배치라 격자선이
+#           명시적으로 그어지지는 않는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, PAPER, RULE, INFO, KR, MONO
 import ddx
@@ -58,5 +63,5 @@ d.t(24, BY + 24, "검증 웹훅은 admission.gatekeeper.sh/ignore 레이블이 �
 d.t(24, BY + 46, "그래서 레이블을 붙이는 길만 닫고 지킨다 — 가운데 카드가 유일하게 Fail 인 이유다. "
                  "원서가 안 보여 준 것이지 없던 것이 아니다.", 11, ACC, KR, "start")
 d.legend(BY + 62, [("원서가 생략한 자리", ACC), ("열고 실패", OK), ("닫고 실패", BAD), ("원서가 안 켜진다고 한 것", WARN)])
-d.save("../20-01.webhook-topology.svg")
+d.save("20-01.webhook-topology.svg")
 print("필요 h:", BY + 62 + 48, "· 실제:", H)

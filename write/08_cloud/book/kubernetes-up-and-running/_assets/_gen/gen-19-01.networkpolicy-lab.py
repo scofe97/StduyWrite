@@ -4,6 +4,10 @@
 # 응답은 지어내지 않고 본문이 실측해 적어 둔 문자열을 그대로 옮긴다.
 # 가운데 줄이 초점이다 — 여기서 막히는 것이 kindnet 이 정책을 집행한다는 증거이고,
 # 로컬 kind 에서는 안 될 거라고 넘겨짚기 쉬운 자리다.
+# 타입 스펙: type-process.md — 세 단계가 같은 의미 슬롯(무엇을 걸었나 · 응답 · 무엇을 뜻하나)으로
+#           반복되고 순서가 있다. 앞 단계의 결과가 다음 단계를 부르므로 절차다(17-01 랩과 같은 형태).
+#           어긋나는 지점: 행이 단계이고 열이 시도/응답이라 정본의 축과 뒤집혀 있다.
+#           응답은 지어내지 않고 본문이 실측한 문자열을 그대로 옮긴다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, PAPER, RULE, INFO, KR, MONO
 import ddx
@@ -64,5 +68,5 @@ d.t(24, BY + 24, "NetworkPolicy 는 컨트롤러가 함께 오지 않는다. 집
 d.t(24, BY + 46, "정책을 만들었는데 아무것도 막히지 않으면 플러그인부터 확인한다. "
                  "Calico · Cilium · Weave Net · kindnet 이 그 역할을 한다.", 11, MUTED, KR, "start")
 d.legend(BY + 62, [("집행이 확인되는 자리", ACC), ("통신이 붙음", OK), ("차단됨", BAD)])
-d.save("../19-01.networkpolicy-lab.svg")
+d.save("19-01.networkpolicy-lab.svg")
 print("필요 h:", BY + 62 + 48, "· 실제:", H)
