@@ -7,6 +7,8 @@ updated: 2026-07-31
 
 # Mastering Prometheus 오답 노트
 
+---
+
 > 편별 Phase 1·복습에서 막힌 지점을 기록합니다. 각 항목은 **자기 답 · 정답 · 원인 추정 · 참고 챕터 · 재방문 트리거**로 씁니다.
 > 형식은 `08_cloud/book/kubernetes-in-action/_mistakes.md` 와 같습니다.
 
