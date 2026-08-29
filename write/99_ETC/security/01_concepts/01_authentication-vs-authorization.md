@@ -8,7 +8,7 @@ source:
   - https://owasp.org/www-community/Access_Control
 related:
   - README.md
-  - ../../../10_spring/10_security/01-01.Spring Security 개념과 Filter Chain.md
+  - ../../../09_spring/10_security/01-01.Spring Security 개념과 Filter Chain.md
 updated: 2026-05-29
 ---
 
@@ -21,7 +21,7 @@ updated: 2026-05-29
 
 ## 0. 학습 목표
 
-이 문서를 읽고 나면 인증과 인가를 한 문장씩으로 구분하고, RBAC 와 ABAC 가 각각 언제 맞는지 결정 트리로 답하며, HTTP 401 과 403 이 왜 다른 코드인지 설명할 수 있습니다. 구현(Spring Security Filter Chain)은 [`../../10_spring/10_security/01-01`](../../../10_spring/10_security/01-01.Spring%20Security%20%EA%B0%9C%EB%85%90%EA%B3%BC%20Filter%20Chain.md) 으로 위임하고, 여기서는 이론만 봅니다.
+이 문서를 읽고 나면 인증과 인가를 한 문장씩으로 구분하고, RBAC 와 ABAC 가 각각 언제 맞는지 결정 트리로 답하며, HTTP 401 과 403 이 왜 다른 코드인지 설명할 수 있습니다. 구현(Spring Security Filter Chain)은 [`../../09_spring/10_security/01-01`](../../../09_spring/10_security/01-01.Spring%20Security%20%EA%B0%9C%EB%85%90%EA%B3%BC%20Filter%20Chain.md) 으로 위임하고, 여기서는 이론만 봅니다.
 
 ## 1. 한 줄 정의 — 순서가 중요하다
 
@@ -78,7 +78,7 @@ RBAC 는 NIST 가 표준화한 모델로, 역할 수가 관리 가능한 수준�
 
 ## 4. 분리가 설계에 주는 이득
 
-인증과 인가를 분리하면 변경의 파급이 줄어듭니다. 인증은 *입구* 에서 한 번 일어나 주체(principal)를 확립하고, 인가는 *각 자원 접근 지점* 에서 그 주체의 권한을 확인합니다. 이 둘이 코드에서 섞이면 — 예를 들어 로그인 핸들러 안에 "그리고 이 사용자가 관리자면…" 같은 분기가 들어가면 — 권한 규칙이 흩어져 한 곳에서 감사할 수 없게 됩니다. 그래서 Spring Security 같은 프레임워크도 인증 필터와 인가 결정(`AccessDecisionManager` 계열)을 별도 단계로 둡니다. 구현은 [`../../10_spring/10_security/01-01`](../../../10_spring/10_security/01-01.Spring%20Security%20%EA%B0%9C%EB%85%90%EA%B3%BC%20Filter%20Chain.md) 에서 확인합니다.
+인증과 인가를 분리하면 변경의 파급이 줄어듭니다. 인증은 *입구* 에서 한 번 일어나 주체(principal)를 확립하고, 인가는 *각 자원 접근 지점* 에서 그 주체의 권한을 확인합니다. 이 둘이 코드에서 섞이면 — 예를 들어 로그인 핸들러 안에 "그리고 이 사용자가 관리자면…" 같은 분기가 들어가면 — 권한 규칙이 흩어져 한 곳에서 감사할 수 없게 됩니다. 그래서 Spring Security 같은 프레임워크도 인증 필터와 인가 결정(`AccessDecisionManager` 계열)을 별도 단계로 둡니다. 구현은 [`../../09_spring/10_security/01-01`](../../../09_spring/10_security/01-01.Spring%20Security%20%EA%B0%9C%EB%85%90%EA%B3%BC%20Filter%20Chain.md) 에서 확인합니다.
 
 ## 5. 자주 어긋나는 자리 — 인가 누락과 IDOR
 

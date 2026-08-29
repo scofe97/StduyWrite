@@ -22,10 +22,10 @@
 | 06 | [`06_observability/`](write/06_observability/) | Logging, Tracing, Metrics, OpenTelemetry |
 | 07 | [`07_devops/`](write/07_devops/) | CI/CD, Jenkins, Nexus, SonarQube |
 | 08 | [`08_cloud/`](write/08_cloud/) | Cloud Native, Kubernetes, Service Mesh |
-| 09 | [`09_tools/`](write/09_tools/) | tmux, vim, Git, Claude Code |
-| 10 | [`10_spring/`](write/10_spring/) | Spring Framework·Boot·Cloud (전 카테고리 집계는 하위 README) |
-| 11 | [`11_AI/`](write/11_AI/) | 생성형 AI·에이전트 활용 |
-| 12 | [`12_career/`](write/12_career/) | 커리어·성장 기록 |
+| — | [`tools/`](write/tools/) | tmux, vim, Git, Claude Code |
+| 09 | [`09_spring/`](write/09_spring/) | Spring Framework·Boot·Cloud (전 카테고리 집계는 하위 README) |
+| 10 | [`10_AI/`](write/10_AI/) | 생성형 AI·에이전트 활용 |
+| 11 | [`11_career/`](write/11_career/) | 커리어·성장 기록 |
 | 99 | [`99_ETC/`](write/99_ETC/) | 분류 보류 — 일정 기간 체류 후 재배치 |
 
 `write/` 안에는 밑줄로 시작하는 예약 폴더도 있다. `_meta/`는 저장소 컨벤션과 작성 규약을, `_archive/`는 오래 갱신·참조되지 않은 문서를 보관한다.
@@ -40,7 +40,7 @@
 
 - 전체 지도: [STUDY_INDEX.md](STUDY_INDEX.md) — 카테고리 맵과 이관 진척
 - `write/` 구조 상세: [write/README.md](write/README.md)
-- Spring 학습 진입점: [write/10_spring/README.md](write/10_spring/README.md)
+- Spring 학습 진입점: [write/09_spring/README.md](write/09_spring/README.md)
 
 ## 작성 규약
 

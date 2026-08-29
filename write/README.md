@@ -29,17 +29,17 @@ updated: 2026-07-05
 | 06 | [`06_observability/`](06_observability/) | 로깅·트레이싱·메트릭·OpenTelemetry |
 | 07 | [`07_devops/`](07_devops/) | CI/CD·Jenkins·Nexus·SonarQube |
 | 08 | [`08_cloud/`](08_cloud/) | Kubernetes·Service Mesh·ArgoCD·OpenStack |
-| 09 | [`09_tools/`](09_tools/) | tmux·vim·Git·Claude Code |
-| 10 | [`99_ETC/security/`](99_ETC/security/) | OAuth/JWT·OWASP·Spring Security |
-| 11 | [`10_spring/`](10_spring/) | Spring 본질 이론. 도메인과 얽힌 Spring 문서는 각 카테고리에 흩어져 있고, 이 폴더가 집계점 |
-| 12 | [`11_AI/`](11_AI/) | 생성형 AI·에이전트 활용 |
-| 13 | [`12_career/`](12_career/) | 커리어·성장 기록 |
+| — | [`tools/`](tools/) | tmux·vim·Git·Claude Code |
+| — | [`99_ETC/security/`](99_ETC/security/) | OAuth/JWT·OWASP·Spring Security |
+| 09 | [`09_spring/`](09_spring/) | Spring 본질 이론. 도메인과 얽힌 Spring 문서는 각 카테고리에 흩어져 있고, 이 폴더가 집계점 |
+| 10 | [`10_AI/`](10_AI/) | 생성형 AI·에이전트 활용 |
+| 11 | [`11_career/`](11_career/) | 커리어·성장 기록 |
 | 99 | [`99_ETC/`](99_ETC/) | 분류 보류. 일정 기간 체류한 뒤 재배치하거나 아카이브 |
 
 
 ## Spring 문서를 찾을 때
 
-Spring 자료는 주제별로 흩어져 있습니다. WebFlux나 테스트처럼 Spring 본질에 가까운 문서는 `10_spring/`에 있고, QueryDSL이나 Kafka 연동처럼 도메인과 붙은 문서는 해당 카테고리에 있습니다. 전 카테고리에 걸친 Spring 문서 집계는 [`10_spring/README.md`](10_spring/README.md)에서 확인합니다.
+Spring 자료는 주제별로 흩어져 있습니다. WebFlux나 테스트처럼 Spring 본질에 가까운 문서는 `09_spring/`에 있고, QueryDSL이나 Kafka 연동처럼 도메인과 붙은 문서는 해당 카테고리에 있습니다. 전 카테고리에 걸친 Spring 문서 집계는 [`09_spring/README.md`](09_spring/README.md)에서 확인합니다.
 
 
 ## 예약 폴더
