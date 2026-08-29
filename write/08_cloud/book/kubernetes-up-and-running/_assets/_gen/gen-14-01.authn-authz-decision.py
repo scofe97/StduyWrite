@@ -3,6 +3,10 @@
 # "결과가 신원 없음이어도 인증은 끝난 것" 이고 system:unauthenticated 그룹이 붙어 인가로 간다.
 # 그래서 인증에서 나가는 길은 둘이되 둘 다 인가로 합류해야 한다 — 이 합류가 뒤에 나올
 # 익명 접근 구멍의 출발점이므로 초점으로 둔다.
+# 타입 스펙: type-architecture.md — 요청이 지나가는 것이 *구성 요소*(인증·인가)이고 흐름은
+#           왼→오른쪽 한 방향, 연결은 전부 정본이 강제하는 직각 엘보다. 초점 하나(신원 없음).
+#           flowchart 는 기각 — 정본이 판정을 마름모로, 종류를 색이 아니라 *모양* 으로 나르라고
+#           못 박는데 이 도식은 상자와 색으로 결과를 가른다. 규격을 어기며 이름만 빌리지 않는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, BAD, MUTED, SOFT, INK, PAPER2, PAPER, RULE, KR, MONO
 import ddx

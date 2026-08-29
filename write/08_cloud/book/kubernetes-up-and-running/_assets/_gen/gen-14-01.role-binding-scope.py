@@ -3,6 +3,13 @@
 # 좁히는 조합" 이라고 도식을 직접 가리킨다. 그러니 점선은 반드시 그 조합이어야 하고,
 # 읽는 사람이 "점선" 을 찾아 짚을 수 있게 아래에 이름을 붙여 둔다.
 # 네 칸 격자로 그리면 "범위는 바인딩이 정한다" 가 안 보이므로, 바인딩을 범위 띠 안에 넣는다.
+# 타입 스펙: type-er.md — 정본이 Best-for 에 "API resource relationships" 를 명시한다. 네 API
+#           리소스(Role · ClusterRole · RoleBinding · ClusterRoleBinding)가 어느 것과 짝지어지는지가
+#           이야기 전부다. 본문이 "위 도식의 점선" 이라 도식을 직접 가리키므로 점선은 반드시
+#           ClusterRole × RoleBinding 조합이어야 한다.
+#           어긋나는 지점: 카디널리티 표기가 없다 — 이 넷의 짝은 전부 1:1 이고, 대신 정본이
+#           관계 라벨을 두는 자리에 *범위 띠* 를 놓았다. 본문이 "범위는 바인딩이 정한다" 라고
+#           적으므로 범위를 라벨이 아니라 바인딩을 감싸는 담음으로 표현한 것이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, PAPER, RULE, KR, MONO
 import ddx

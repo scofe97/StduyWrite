@@ -3,6 +3,11 @@
 # worker-pool 모드가 되고, 그래서 "일이 다 끝나기 전에는 어떤 워커도 먼저 나가면 안 된다".
 # 그 규칙은 워커 다섯이 *같은 x 에서 함께 끝나는* 것으로만 눈에 보이므로 레인을 다섯 줄 깐다.
 # 윗단은 본문이 따로 적는 비대칭 — 넣는 길은 클러스터 밖 port-forward, 꺼내는 길은 안의 DNS.
+# 타입 스펙: type-gantt.md — 아랫단이 공용 시간축이고 워커 다섯이 병렬 트랙으로 깔린다.
+#           초점 세로선(큐가 비었다)이 정본의 milestone marker 이고, 다섯이 *같은 x 에서* 끝나는 것이
+#           이 도식의 논지다. 세로 눈금 셋에 라벨이 붙어 시간 눈금 관례를 지킨다.
+#           어긋나는 지점: 윗단은 컴포넌트 넷과 ReplicaSet 경계 상자라 architecture 어휘다.
+#           type-line 은 기각 — 깊이 곡선에 축 눈금도 측정값도 없다. 값이 아니라 모양이 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, INFO, MUTED, SOFT, INK, PAPER2, PAPER, RULE, KR, MONO
 import ddx

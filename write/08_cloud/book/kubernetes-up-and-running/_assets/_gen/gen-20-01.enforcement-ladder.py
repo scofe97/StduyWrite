@@ -4,6 +4,10 @@
 # 각 칸에 "넣으면 무엇이 돌아오는가" 를 실측 문자열로 붙여, 모드 차이가 설명이 아니라
 # 응답으로 보이게 한다(17-01 랩 도식과 같은 형태). 초점은 첫 칸이다 — 여기서 목록을
 # 얻지 않고 바로 deny 로 가면 스케일링 순간에 터진다.
+# 타입 스펙: type-process.md — 세 모드가 같은 의미 슬롯(모드 · 넣으면 무엇이 돌아오나 · 얻는 것)으로
+#           반복되고 아래 화살표가 올라가는 순서를 나른다. 본문이 "dryrun 으로 먼저 걸고 감사로
+#           확인한 뒤에 deny 로 올려라" 라고 순서를 못 박으므로 나란한 카드로 두면 논지가 죽는다.
+#           어긋나는 지점: 정본의 lane=주체가 없고 행이 단계다. 응답은 실측 문자열 그대로다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, PAPER, RULE, INFO, KR, MONO
 import ddx
@@ -63,5 +67,5 @@ d.t(24, BY + 24, "제약 대상이 Pod 인데 ReplicaSet 을 만들면 오류가
                  "Pod 를 만들려던 컨트롤러에게 가므로 그 리소스의 이벤트 로그를 봐야 한다.",
     11, MUTED, KR, "start")
 d.legend(BY + 40, [("먼저 재는 자리", ACC), ("허용하고 센다", OK), ("허용하고 알린다", WARN), ("거부", BAD)])
-d.save("../20-01.enforcement-ladder.svg")
+d.save("20-01.enforcement-ladder.svg")
 print("필요 h:", BY + 40 + 48, "· 실제:", H)

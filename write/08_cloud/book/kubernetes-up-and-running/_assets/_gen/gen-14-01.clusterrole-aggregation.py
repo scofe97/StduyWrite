@@ -3,6 +3,10 @@
 # 그 변경이 집계 롤까지 가는 경로를 따로 그린다 — 본문이 집계를 쓰는 이유로 든 것이 그것이다.
 # 아래 경고 띠는 곁가지가 아니라 위 구조의 결과다. rules 를 컨트롤 플레인이 쓰기 때문에
 # 매니페스트에 rules 를 두면 소유권이 부딪힌다.
+# 타입 스펙: type-architecture.md — 구성 롤 셋 → aggregationRule → 집계 롤로 흐르는 컴포넌트 지도.
+#           집계 롤 안에 rules 상자가 중첩되고, 되돌아 나가는 점선이 전파 경로다. 초점 하나.
+#           type-loop 은 기각 — 정본이 loop 의 결정적 신호로 든 것은 마지막 단계가 첫 단계를 먹이는
+#           순환인데, 여기 점선은 같은 방향(구성 → 집계)을 강조해 다시 그린 것이지 되먹임이 아니다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, WARN, MUTED, SOFT, INK, PAPER2, PAPER, RULE, KR, MONO
 import ddx

@@ -4,6 +4,12 @@
 # 올 때까지 기다린다" 가 빈 구간으로 보이고, "watch 는 연결이 열려 있다" 가 끊기지 않은 선으로
 # 보인다. 왼쪽의 회색 왕복은 바뀐 게 없는데도 돌려주는 응답이라 부하 축을 함께 보인다.
 # 본문이 실측으로 적어 둔 두 값(26ms 에 닫힘 · ADDED 뒤 MODIFIED)을 각 축에 그대로 옮긴다.
+# 타입 스펙: type-sequence.md — 참여자 상자가 위에 한 줄, 점선 lifeline 이 아래로 내려오고,
+#           가로 메시지 화살표가 그 사이를 오가며 시간이 위→아래로 흐른다. 응답을 점선으로
+#           되돌리는 것까지 정본의 관례 그대로다. 초점은 실제로 달라진 MODIFIED 메시지다.
+#           어긋나는 지점: 정본은 시퀀스 하나를 전제하는데 여기는 둘을 나란히 놓아 대조한다 —
+#           본문이 대조 축을 지연과 부하 둘로 주므로 같은 세로 시간축 위에 놓아야
+#           "폴링은 주기가 올 때까지 기다린다" 가 빈 구간으로 보인다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, PAPER, RULE, INFO, KR, MONO
 import ddx
@@ -80,5 +86,5 @@ d.t(24, BY + 24, "왼쪽의 점선 응답은 바뀐 것이 없는데도 리소�
     11, MUTED, KR, "start")
 d.legend(BY + 40, [("폴링이 치르는 비용", WARN), ("watch 가 여는 스트림", OK),
                    ("실제로 달라진 것", ACC), ("헛돈 왕복", SOFT)])
-d.save("../18-01.poll-vs-watch.svg")
+d.save("18-01.poll-vs-watch.svg")
 print("필요 h:", BY + 40 + 48, "· 실제:", H)

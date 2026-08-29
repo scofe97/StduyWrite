@@ -3,6 +3,11 @@
 # 그러고 나서 "Kubernetes 자체가 단일 장애점" 이라고 뒤집는다. 그러니 셋을 나란한
 # 카드로 놓으면 안 되고, *막는 것* 과 *못 막는 것* 이 같은 자리에서 대비돼야 한다.
 # 가운데 칸에 초점을 준다 — 리전 클러스터를 충분하다고 읽는 것이 이 절이 깨려는 오해다.
+# 타입 스펙: type-process.md — 세 배치가 같은 의미 슬롯(막는다 · 못 막는다)으로 반복되고
+#           칸 사이를 화살표가 잇는다. 같은 자리에 막는 것과 못 막는 것을 마주 놓아야
+#           "리전 클러스터로도 부족하다" 는 반전이 형태로 보인다.
+#           어긋나는 지점: 정본의 lane=주체가 없고 열이 단계다. 셋째 칸의 아래 라벨은
+#           "못 막는다" 가 아니라 "치르는 것" 이다 — 종류가 다른 것을 같은 라벨로 묶지 않는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, BAD, MUTED, SOFT, INK, PAPER2, PAPER, RULE, INFO, KR, MONO
 import ddx
@@ -64,5 +69,5 @@ d.line(24, BY, W - 48, BY, RULE, 0.8)
 d.t(24, BY + 24, "가운데 칸을 충분하다고 읽는 것이 이 절이 깨려는 오해다. "
                  "존을 나눠도 클러스터는 여전히 한 버전에 묶여 있다.", 11, ACC, KR, "start")
 d.legend(BY + 40, [("오해가 생기는 자리", ACC), ("막아 주는 것", OK), ("새는 것", BAD)])
-d.save("../21-01.failure-domains.svg")
+d.save("21-01.failure-domains.svg")
 print("필요 h:", BY + 40 + 48, "· 실제:", H)
