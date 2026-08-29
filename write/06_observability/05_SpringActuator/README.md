@@ -5,7 +5,7 @@ status: draft
 related:
   - ../README.md
   - ../02_LGTMStack/02-01.Grafana Core.md
-  - ../../10_spring/07_autoconfig/README.md
+  - ../../09_spring/07_autoconfig/README.md
 updated: 2026-05-25
 ---
 
@@ -61,5 +61,5 @@ updated: 2026-05-25
 
 - [관측 가능성 통합 MOC](../README.md) — 06_observability 전체 진입점
 - [`../02_LGTMStack/02-01.Grafana Core`](../02_LGTMStack/02-01.Grafana%20Core.md) — 메트릭을 수집·시각화하는 인프라
-- [`../../10_spring/07_autoconfig/`](../../10_spring/07_autoconfig/) — 액츄에이터 엔드포인트가 자동 등록되는 원리
+- [`../../09_spring/07_autoconfig/`](../../09_spring/07_autoconfig/) — 액츄에이터 엔드포인트가 자동 등록되는 원리
 - [Spring Boot Reference — Actuator](https://docs.spring.io/spring-boot/reference/actuator/endpoints.html) — 공식 문서

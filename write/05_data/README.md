@@ -7,7 +7,7 @@ source:
 related:
   - ./roadmap.md
   - ../04_messaging/README.md
-  - ../10_spring/README.md
+  - ../09_spring/README.md
 updated: 2026-07-15
 ---
 
@@ -45,4 +45,4 @@ MinIO 같은 오브젝트 스토리지는 분산 파일시스템·오브젝트 �
 
 - [통합 학습 로드맵](./roadmap.md) — Spring 백엔드 기준 추천 읽기 순서
 - [04_messaging](../04_messaging/README.md) — Kafka·Redpanda·CDC 구현과 운영
-- [10_spring](../10_spring/README.md) — Spring 프레임워크 전반의 진입점
+- [09_spring](../09_spring/README.md) — Spring 프레임워크 전반의 진입점

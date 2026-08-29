@@ -16,15 +16,15 @@
 | 06 | [`write/06_observability/`](write/06_observability/) | Logging, Tracing, Metrics, OpenTelemetry |
 | 07 | [`write/07_devops/`](write/07_devops/) | CI/CD, Jenkins(`02_Jenkins/07_engine` 엔진 심화 포함), Nexus, Sonarqube |
 | 08 | [`write/08_cloud/`](write/08_cloud/) | Cloud Native, K8s, Service Mesh (미래) |
-| 09 | [`write/09_tools/`](write/09_tools/) | tmux, vim, Claude Code, Git |
-| 10 | [`write/10_spring/`](write/10_spring/) | Spring Framework, Spring Boot, Spring Cloud |
-| 11 | [`write/11_AI/`](write/11_AI/) | 생성형 AI·에이전트 활용 |
-| 12 | [`write/12_career/`](write/12_career/) | 커리어·업계 인터뷰·성장론 |
+| — | [`write/tools/`](write/tools/) | tmux, vim, Claude Code, Git |
+| 09 | [`write/09_spring/`](write/09_spring/) | Spring Framework, Spring Boot, Spring Cloud |
+| 10 | [`write/10_AI/`](write/10_AI/) | 생성형 AI·에이전트 활용 |
+| 11 | [`write/11_career/`](write/11_career/) | 커리어·업계 인터뷰·성장론 |
 | 99 | [`write/99_ETC/`](write/99_ETC/) | 분류 보류 — 3개월 체류 후 재배치 또는 아카이브. 보안 문서는 [`security/`](write/99_ETC/security/)에 임시 보관 |
 
 ## Spring 학습 진입점
 
-Spring 문서는 주제별로 분산 배치된다. 전 카테고리 집계는 [`write/10_spring/README.md`](write/10_spring/README.md)에서 확인한다.
+Spring 문서는 주제별로 분산 배치된다. 전 카테고리 집계는 [`write/09_spring/README.md`](write/09_spring/README.md)에서 확인한다.
 
 ## 예약 폴더
 

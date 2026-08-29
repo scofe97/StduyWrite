@@ -19,7 +19,7 @@ Java/Spring 백엔드 맥락의 객체지향 설계 학습 카테고리다. 패�
 
 Spring 컨테이너 차원의 디자인 패턴 흡수는 별도 카테고리에 있다.
 
-- [10_spring/01_core/01-02.Spring과 디자인 패턴.md](../../../10_spring/01_core/01-02.Spring과 디자인 패턴.md) — Spring이 내부에 흡수한 GoF 패턴 9가지
+- [09_spring/01_core/01-02.Spring과 디자인 패턴.md](../../../09_spring/01_core/01-02.Spring과 디자인 패턴.md) — Spring이 내부에 흡수한 GoF 패턴 9가지
 
 
 
@@ -65,4 +65,4 @@ GoF(Gang of Four) 분류 축은 세 가지다. *생성*은 객체를 어떻게 �
 
 - [01_language/java/02_CollectionAndStream/](../02_CollectionAndStream/) — Stream/Optional 기반 함수형 코드 스타일
 - [03_architecture/](../../../03_architecture/) — DDD, Hexagonal, Clean Architecture 등 시스템 차원 설계
-- [10_spring/01_core/](../../../10_spring/01_core/) — Spring DI/IoC와 디자인 패턴 흡수
+- [09_spring/01_core/](../../../09_spring/01_core/) — Spring DI/IoC와 디자인 패턴 흡수

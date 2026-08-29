@@ -4,7 +4,7 @@ tags: [moc, security]
 status: final
 related:
   - ../../03_architecture/README.md
-  - ../../10_spring/README.md
+  - ../../09_spring/README.md
 updated: 2026-05-20
 ---
 
@@ -23,7 +23,7 @@ updated: 2026-05-20
 | 폴더 | 범위 |
 |------|------|
 | [01_concepts/](./01_concepts/) | 프레임워크 독립 이론 — OAuth2, OIDC, JWT, 세션 vs 토큰, 암호학 기초 |
-| [→ 10_spring/10_security/](../../10_spring/10_security/) | Spring Security 6.x Filter Chain·OAuth2 Login·JWT 인증 — 8편. Spring 프레임워크 구현이라 Spring 카테고리로 이관(구 `02_spring-security/`). 이론은 여기 `01_concepts/`, 구현은 Spring 쪽. |
+| [→ 09_spring/10_security/](../../09_spring/10_security/) | Spring Security 6.x Filter Chain·OAuth2 Login·JWT 인증 — 8편. Spring 프레임워크 구현이라 Spring 카테고리로 이관(구 `02_spring-security/`). 이론은 여기 `01_concepts/`, 구현은 Spring 쪽. |
 | [03_vulnerabilities/](./03_vulnerabilities/) | OWASP Top 10 — SQL Injection, XSS, CSRF 등 |
 | [04_threat-modeling/](./04_threat-modeling/) | STRIDE, Attack Tree, 공격자 관점 설계 분석 |
 | [05_network/](./05_network/) | 네트워크 계층(L2~L4) 공격과 방어 — ARP 스푸핑·중간자 공격, mTLS가 근본 해법인 이유 |
@@ -53,5 +53,5 @@ updated: 2026-05-20
 
 ## 관련 문서
 
-- [Spring 통합 MOC](../../10_spring/README.md)
+- [Spring 통합 MOC](../../09_spring/README.md)
 - [03_architecture MOC](../../03_architecture/README.md)
