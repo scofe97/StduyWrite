@@ -15,6 +15,8 @@ updated: 2026-08-23
 
 # Kubernetes — Up and Running, 3rd Edition — 정독 인덱스
 
+---
+
 > 이 폴더는 『Kubernetes: Up and Running』 3판을 장 단위로 정독하며 정리하는 **책-종속 학습노트**입니다. 챕터 PDF를 한 편씩 받아 원문을 1차 자료로 삼고 채워 넣습니다.
 
 ## 이 정독본은 형제 세 권과 무엇이 다른가
