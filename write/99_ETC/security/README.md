@@ -10,7 +10,7 @@ updated: 2026-05-20
 
 # 99_ETC/security
 ---
-> 인증·인가, 암호학, OWASP, 위협 모델링, Spring Security 구현을 통합한 보안 문서 묶음.
+> 인증·인가, 암호학, OWASP, 위협 모델링을 통합한 보안 문서 묶음.
 
 > ⚠️ **임시 보관 중.** 2026-08-23에 대분류 `10_security/`를 걷어내고 번호를 당기면서 이 묶음을 `99_ETC/security/`로 옮겼다. 아래 "왜 별도 대분류인가"는 *옮기기 전의 근거*를 그대로 남긴 것이다. 3개월 뒤 문서가 늘었으면 대분류로 되돌리고, 그대로면 각 주제를 해당 카테고리로 흩는다.
 
@@ -23,7 +23,6 @@ updated: 2026-05-20
 | 폴더 | 범위 |
 |------|------|
 | [01_concepts/](./01_concepts/) | 프레임워크 독립 이론 — OAuth2, OIDC, JWT, 세션 vs 토큰, 암호학 기초 |
-| [→ 09_spring/10_security/](../../09_spring/10_security/) | Spring Security 6.x Filter Chain·OAuth2 Login·JWT 인증 — 8편. Spring 프레임워크 구현이라 Spring 카테고리로 이관(구 `02_spring-security/`). 이론은 여기 `01_concepts/`, 구현은 Spring 쪽. |
 | [03_vulnerabilities/](./03_vulnerabilities/) | OWASP Top 10 — SQL Injection, XSS, CSRF 등 |
 | [04_threat-modeling/](./04_threat-modeling/) | STRIDE, Attack Tree, 공격자 관점 설계 분석 |
 | [05_network/](./05_network/) | 네트워크 계층(L2~L4) 공격과 방어 — ARP 스푸핑·중간자 공격, mTLS가 근본 해법인 이유 |
