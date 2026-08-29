@@ -22,10 +22,8 @@ updated: 2026-07-15
 | 주제군 | 범위 | 진입점 |
 |---|---|---|
 | [01_foundation/](./01_foundation/README.md) | 데이터 모델·저장·트랜잭션·분산·배치·스트림의 공통 이론과 DDIA 정독 | [README](./01_foundation/README.md) |
-| [02_relational/](./02_relational/README.md) | SQL·MySQL·InnoDB와 PostgreSQL의 관계형 DB 원리·제품 기능 | [README](./02_relational/README.md) |
+| [02_relational/](./02_relational/README.md) | SQL·MySQL·InnoDB의 관계형 DB 원리·제품 기능 | [README](./02_relational/README.md) |
 | [03_persistence/](./03_persistence/README.md) | JDBC·JPA·Spring Data JPA·MyBatis·QueryDSL의 애플리케이션 영속성 계층 | [README](./03_persistence/README.md) |
-| [04_processing/](./04_processing/README.md) | Spring Batch, Airflow·Spark 비교, 유한 데이터 처리의 구현과 운영 | [README](./04_processing/README.md) |
-| [05_nonrelational/](./05_nonrelational/README.md) | Redis의 자료구조·캐시·세션·백업 | [README](./05_nonrelational/README.md) |
 | [06_operations/](./06_operations/README.md) | 덤프·로컬 이관·테스트 DB·테스트 트랜잭션 | [README](./06_operations/README.md) |
 | [book/](./book/designing-data-intensive-applications/README.md) | 책 한 권을 장 단위로 정독한 노트 묶음 | [DDIA 2판](./book/designing-data-intensive-applications/README.md) |
 
@@ -35,7 +33,7 @@ updated: 2026-07-15
 
 `book/`은 주제군이 아니라 **출처 단위** 묶음입니다. 번호 폴더가 주제로 자료를 모은다면, `book/`은 책 한 권을 장 순서대로 끝까지 따라간 정독 노트를 그 책 이름 아래 둡니다. 판본이 다르면 장 번호가 어긋나므로 1판 요약은 `01_foundation/`에, 2판 정독은 `book/designing-data-intensive-applications/`에 나눠 두었습니다. 같은 구조를 `08_cloud/book/`이 이미 쓰고 있습니다.
 
-Redis는 단순 캐시가 아니라 별도 저장소이므로 `05_nonrelational/`에서 다룹니다. Spring Batch와 Airflow·Spark의 책임 분담은 `04_processing/`에 두되, 스트림 처리의 일반 이론은 `01_foundation/`, 브로커·Kafka Streams·CDC의 구현은 `04_messaging/`이 SSOT입니다.
+스트림 처리의 일반 이론은 `01_foundation/`, 브로커·Kafka Streams·CDC의 구현은 `04_messaging/`이 SSOT입니다.
 
 ## 후속 후보
 

@@ -9,7 +9,6 @@ source:
 related:
   - README.md
   - 03_jwt-design.md
-  - ../../../09_spring/10_security/03-01.JWT 인증 구현.md
 updated: 2026-05-29
 ---
 

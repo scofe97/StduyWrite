@@ -38,17 +38,11 @@ updated: 2026-07-15
 
 ## 4. 제품 운영과 개발 환경
 
-PostgreSQL을 사용한다면 [postgres/](./02_relational/postgres/README.md)의 인덱스·확장·성능 관측을 읽습니다. 로컬 이관, 임베디드 DB, 테스트 트랜잭션은 [06_operations/](./06_operations/README.md)에서 다룹니다.
+로컬 이관, 임베디드 DB, 테스트 트랜잭션은 [06_operations/](./06_operations/README.md)에서 다룹니다.
 
 완료 기준은 느린 쿼리를 `EXPLAIN`으로 확인할 지점과, 로컬·테스트 환경이 운영 DB에 의존하지 않게 만드는 방법을 설명하는 것입니다.
 
-## 5. Redis와 유한 데이터 처리
-
-[05_nonrelational/](./05_nonrelational/README.md)에서 캐시·세션·자료구조를 데이터베이스의 대체재가 아니라 별도 역할을 가진 저장소로 배웁니다. 대량·정기 작업은 [04_processing/](./04_processing/README.md)에서 Spring Batch의 Job·Step·재시작·병렬 처리로 연결합니다.
-
-완료 기준은 캐시 일관성, 세션 저장, 배치 재시작 문제를 관계형 DB 트랜잭션과 혼동하지 않고 설명하는 것입니다.
-
-## 6. 분산 데이터와 데이터 통합 심화
+## 5. 분산 데이터와 데이터 통합 심화
 
 복제·샤딩·일관성·합의는 [01_foundation/](./01_foundation/README.md)의 02번대를, 배치·스트림·데이터 통합은 03번대와 [DDIA 2판 정독](./book/designing-data-intensive-applications/README.md)에서 확장합니다. Kafka·Redpanda·Outbox·CDC의 구체 구현은 [04_messaging](../04_messaging/README.md)에서 이어서 봅니다.
 
