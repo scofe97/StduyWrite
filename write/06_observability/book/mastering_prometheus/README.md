@@ -20,6 +20,8 @@ updated: 2026-07-10
 
 책의 뒷부분은 기존 노트와 직접 이어집니다. 13장(SLO)은 [`01-04.SLO와 알림 — Error Budget, Burn Rate`](../../01_Foundations/01-04.SLO와%20알림%20—%20Error%20Budget,%20Burn%20Rate.md) 의 개념을 Sloth·Pyrra 라는 실제 도구로 내려보내고, 14장(OpenTelemetry)은 [`03-11.305P OpenTelemetry 도입 고려사항`](../../03_Project/03-11.305P%20OpenTelemetry%20도입%20고려사항.md) 에서 검토한 내용을 Collector 설정 수준에서 다시 짚습니다. 노트를 쓸 때 이 지점마다 교차참조를 남깁니다.
 
+
+
 ## 파트 구조
 
 | 파트 | 제목 | 장 |
@@ -29,6 +31,8 @@ updated: 2026-07-10
 | Part 3 | Extending Prometheus | 9–15 |
 
 > Part 2·3 의 제목과 장 범위는 참고 폴더의 `Part 2_*.pdf`·`Part 3_*.pdf` 디바이더 원문에서 확인했습니다. **Part 1 디바이더 PDF 는 참고 폴더에 없어** 처음에는 장 범위를 역산한 추정으로 두었으나, 5장 요약이 "This is also the conclusion of the first part of our journey, in which we focused on the fundamentals of Prometheus" 와 "Next, we'll dive into part two" 로 못 박아 **1–5장 범위는 확정**되었습니다. 파트 제목만 여전히 확인되지 않았습니다.
+
+
 
 ## 장별 목표
 
@@ -51,6 +55,8 @@ updated: 2026-07-10
 | 13 | Defining and Alerting on SLOs | SLI·SLO·SLA 이해 · Prometheus 데이터로 SLO 정의 · Sloth 와 Pyrra |
 | 14 | Integrating Prometheus with OpenTelemetry | OpenTelemetry 소개 · OTel Collector 로 Prometheus 메트릭 수집 · OTel Collector 로 Prometheus 에 전송 |
 | 15 | Beyond Prometheus | Prometheus 너머로 관측성 확장 · 관측 시스템 간 점 잇기(메트릭·로그·트레이스) |
+
+
 
 ## 작성된 정독 노트
 
@@ -83,6 +89,8 @@ updated: 2026-07-10
 | [14-01 Prometheus 와 OpenTelemetry 통합 — 규격·Collector·OTLP 수신구](./14-01.Prometheus%20와%20OpenTelemetry%20통합%20—%20규격·Collector·OTLP%20수신구.md) | 14장 전체 — OTel 은 실행 기술이 아니라 규격(API·SDK·시맨틱 컨벤션+OTLP) · OpenCensus+OpenTracing→2019 CNCF · Collector = receiver·processor·exporter 파이프라인 · prometheus receiver 로 긁고 otlphttp 로 밀기 · push 경로의 `up` 은 전송 성공 아님. 책의 `otlp-write-receiver`(2.47.0 실험)는 3.0 에서 `--web.enable-otlp-receiver` 로 승격(버전 드리프트) |
 | [15-01 Prometheus 너머 — 세 신호를 잇는 관측 가능성과 exemplar](./15-01.Prometheus%20너머%20—%20세%20신호를%20잇는%20관측%20가능성과%20exemplar.md) | 15장 전체(마지막 장) — Prometheus 는 관측의 3분의 1 · unknown unknown · 로그(신호대잡음 최악·최후의 보루)·트레이스(최상·샘플링) · 로그에서 메트릭 추출 금지 · "잇되 의존시키지 않는다" · 라벨 일관성·exemplar(메트릭→트레이스 다리) · Loki/Tempo/LGTM. exemplar 는 아직 실험(승격 안 됨). Loki·Tempo 내부는 02-03·02-04 참조 |
 
+
+
 ## 학습 프레젠테이션
 
 > 3·4·5·8장의 데이터 모델, 수집·저장, 알림, Node Exporter 흐름을 기초 용어에서 운영 판단까지 한 흐름으로 연결한 발표·복습 자료입니다. 역색인·mmap·staleness·벡터 매칭, promtool 룰 단위 테스트와 Alertmanager HA 까지 다룹니다. `~/notification-lab/observability/experiments/`와 내부 Kind 실습 결과를 핵심 장표에 대조했으며, 모든 HTML은 외부 네트워크 없이 열립니다.
@@ -91,6 +99,8 @@ updated: 2026-07-10
 - [02-01 스크레이프와 저장 흐름 (인터랙티브)](./_study/02-01.%EC%8A%A4%ED%81%AC%EB%A0%88%EC%9D%B4%ED%94%84%EC%99%80%20%EC%A0%80%EC%9E%A5%20%ED%9D%90%EB%A6%84.html)
 - [02-02 알림 흐름 (인터랙티브)](./_study/02-02.%EC%95%8C%EB%A6%BC%20%ED%9D%90%EB%A6%84.html)
 - [2주차 발표 흐름 (발표자 노트)](./_study/2%EC%A3%BC%EC%B0%A8%20%EB%B0%9C%ED%91%9C%20%ED%9D%90%EB%A6%84.md) — 각 장이 무엇을 전달하는지, 시연 지점, 시간이 부족할 때 줄일 순서
+
+
 
 ## 출처·톤 메모
 
