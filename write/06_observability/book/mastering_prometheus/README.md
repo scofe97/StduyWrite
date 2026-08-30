@@ -14,7 +14,9 @@ updated: 2026-07-10
 
 ## 이 책을 여기 두는 이유
 
-상위 [`06_observability/README.md`](../../README.md) 의 "예정 주제 — 관측 저장소 심화(TBD)" 절은 **Thanos** 를 "Prometheus 의 한계(단일 노드 보존·수평 확장 부재)를 메우는 장기보존·다중 클러스터 글로벌 쿼리 계층" 으로 예고해 두었습니다. 이 폴더가 그 예고를 실현합니다. 같은 절의 다른 축(OpenSearch)은 형제 폴더 [`dgos_opensearch/`](../dgos_opensearch/README.md) 가 이미 맡고 있으니, 둘이 짝을 이룹니다.
+> 상위 README 가 예고해 둔 "관측 저장소 심화" 를 이 폴더가 실현합니다. 단일 Prometheus 의 한계를 원격 저장소로 미느냐 Thanos 로 합치느냐 — 그 두 갈래가 이 책을 여기 두는 이유입니다.
+
+상위 [`06_observability/README.md`](../../README.md) 의 "예정 주제 — 관측 저장소 심화(TBD)" 절이 **Thanos** 를 예고해 두었습니다. "Prometheus 의 한계(단일 노드 보존·수평 확장 부재)를 메우는 장기보존·다중 클러스터 글로벌 쿼리 계층" 이라는 표현입니다. 이 폴더가 그 예고를 실현합니다. 같은 절의 다른 축인 OpenSearch 는 형제 폴더 [`dgos_opensearch/`](../dgos_opensearch/README.md) 가 이미 맡고 있습니다. 둘이 짝을 이룹니다.
 
 핵심 대비는 **"단일 Prometheus 의 한계를 어느 방향으로 푸는가"** 입니다. 이 책은 그 답을 두 갈래로 나눠 보여줍니다. 9장의 원격 저장소(VictoriaMetrics·Mimir)는 메트릭을 *중앙의 큰 저장소로 remote write 해 밀어 넣는* 해법이고, 10장의 Thanos 는 *각 Prometheus 옆에 사이드카를 붙여 오브젝트 스토리지에 블록을 올리고 쿼리 시점에 합치는* 분산형 해법입니다. 이미 정리해 둔 [`02-05.Grafana Mimir`](../../02_LGTMStack/02-05.Grafana%20Mimir.md) 편이 전자에 해당하므로, 10장을 읽을 때 후자와 나란히 놓고 보면 저장·쿼리 비용의 트레이드오프가 선명해집니다.
 
@@ -23,6 +25,8 @@ updated: 2026-07-10
 
 
 ## 파트 구조
+
+> 15개 장이 세 파트로 갈립니다. Part 1 의 제목만 디바이더 PDF 가 없어 확인되지 않았고, 장 범위는 확정입니다.
 
 | 파트 | 제목 | 장 |
 |------|------|----|
@@ -35,6 +39,8 @@ updated: 2026-07-10
 
 
 ## 장별 목표
+
+> 각 장 앞머리의 "we'll be covering these main topics" 목록을 그대로 옮긴 표입니다. 무엇을 읽게 되는지 먼저 보고 순서를 고르는 자리입니다.
 
 각 장 앞머리의 "we'll be covering these main topics" 목록을 근거로 정리했습니다.
 
@@ -103,6 +109,8 @@ updated: 2026-07-10
 
 
 ## 출처·톤 메모
+
+> 원본 판본과 예제 저장소, 그리고 이 폴더가 따르는 어체와 편 구조를 적어 둡니다. 확정하지 못한 것은 확정하지 못했다고 남깁니다.
 
 - 원본: Packt — *Mastering Prometheus* (ISBN 9781805125662). O'Reilly 학습 플랫폼 경로는 각 장 PDF 하단 URL 에서 확인했습니다(`learning.oreilly.com/library/view/mastering-prometheus/9781805125662`). 예제 코드 저장소는 본문이 반복해 안내하는 `github.com/PacktPublishing/Mastering-Prometheus` 입니다.
 - 장별 목표·토픽은 각 챕터 PDF 앞머리의 "covering these main topics" 목록에서 추출했습니다. 저자명은 PDF 본문에서 확정하지 못해 적지 않았습니다.
