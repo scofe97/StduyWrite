@@ -1,0 +1,98 @@
+---
+title: Building Micro-Frontends 2nd Edition — 정독 인덱스
+tags: [moc, study-index, book, micro-frontends, frontend-architecture, microservices, distributed-systems]
+status: draft
+source:
+  - 《Building Micro-Frontends, 2nd Edition》(Luca Mezzalira, O'Reilly, 2026) ISBN 978-1-098-17078-3 — 챕터 PDF 14편 + Preface
+  - 챕터 PDF 폴더 — GoogleDrive/내 드라이브/book/Micro Frontends in Action/ (폴더명과 책 제목이 다릅니다. 아래 서지 표 참조)
+related:
+  - ../system-design/README.md
+  - ../../README.md
+  - ../../03_distributed/README.md
+learning:
+  topic: building-micro-frontends
+  scope: durable
+  level: 입문
+  last_verified:            # Phase 4 자답·_review 회차 미실시 — 원문 대조일로 대신 채우지 않습니다
+  blocked_count:
+  next_lesson: "02장 Micro-Frontend Architectures and Challenges — 네 기둥과 의사결정 프레임워크. 1장이 세운 원칙을 설계 결정으로 바꾸는 장입니다"
+updated: 2026-08-31
+---
+
+# Building Micro-Frontends 2nd Edition — 정독 인덱스
+
+---
+
+> 이 폴더는 『Building Micro-Frontends, 2nd Edition』(Luca Mezzalira, O'Reilly)을 장 단위로 정독하며 정리하는 **책-종속 학습노트**입니다. 챕터 PDF를 하나씩 읽은 뒤 한 편씩 채워 넣습니다.
+
+## 이 책을 여기 두는 이유
+
+`03_architecture`는 설계 원칙과 패턴을 다루는 카테고리이고, 그 안의 `book/`은 단행본 정독 기록을 모읍니다. 이 책은 프론트엔드를 소재로 삼지만 다루는 것은 **분산 시스템의 경계 결정**입니다. 어디에 경계를 긋고, 그 경계를 누가 소유하고, 경계를 넘는 통신을 얼마나 얇게 유지할지가 1장부터 마지막 장까지의 축입니다. 그래서 언어나 프레임워크 카테고리가 아니라 아키텍처 카테고리에 둡니다.
+
+같은 폴더의 [『가상 면접 사례로 배우는 대규모 시스템 설계 기초』 정독본](../system-design/README.md)이 백엔드 규모 확장의 정형 문제를 다룬다면, 이 책은 같은 질문을 프론트엔드로 옮겼을 때 무엇이 달라지는지를 다룹니다. 저쪽이 트래픽과 저장소를 나누는 이야기라면, 여기는 **팀과 배포 단위를 나누는 이야기**입니다.
+
+`03_distributed/`의 서비스 경계·이벤트 문서와도 맞닿습니다. 다만 그쪽은 서버 사이의 경계를 다루고, 이 정독본은 그 경계가 브라우저까지 이어질 때 생기는 문제 — 런타임 조합, 공유 상태, 라우팅 분담 — 를 맡습니다.
+
+## 서지
+
+> Drive 폴더명은 `Micro Frontends in Action`이지만 그 안의 PDF는 **다른 책**입니다. 폴더명을 믿지 말고 아래 서지를 쓰십시오.
+
+| 항목 | 내용 |
+|------|------|
+| 제목 | Building Micro-Frontends, Second Edition |
+| 저자 | Luca Mezzalira |
+| 출판사 | O'Reilly Media |
+| 저작권 | Copyright 2026 Luca Mezzalira |
+| ISBN | 978-1-098-17078-3 |
+| 예제 코드 | https://github.com/lucamezzalira |
+| 보유 PDF | Preface + 14개 장 |
+
+저자는 2015년부터 마이크로 프론트엔드를 고민했고, 2016년 말 스포츠 전문 OTT 플랫폼(웹·모바일·콘솔·셋톱박스·스마트TV 등 30종 이상 디바이스)의 아키텍트로서 수백 명 규모로 확장할 아키텍처를 제안해야 했던 경험에서 이 책이 출발했다고 서문에 적었습니다.
+
+## 장별 목표
+
+> Preface의 "How This Book Is Organized"에서 저자가 직접 밝힌 각 장의 범위를 옮겼습니다. 원문에 없는 목표를 추측해 넣지 않습니다.
+
+| 장 | 제목 | 저자가 밝힌 범위 | 주요 토픽 |
+|----|------|-----------------|----------|
+| 1 | Micro-Frontend Principles | 마이크로서비스의 토대가 된 생각을 살피고 그것이 프론트엔드로 어떻게 옮겨지는지 본다. 모든 아키텍처 결정을 이끄는 "북극성" 원칙을 익힌다 | 모놀리스→마이크로서비스, 7원칙, 프론트엔드 번역 |
+| 2 | Micro-Frontend Architectures and Challenges | 성공하는 아키텍처를 설계하는 네 기둥과, 식별·조합·오케스트레이션·통신을 가르는 의사결정 프레임워크를 소개한다 | 네 기둥, 의사결정 프레임워크 |
+| 3 | Discovering Micro-Frontend Architectures | 구현 방식을 분류·평가하고 각각의 이점·트레이드오프·적합한 상황을 살핀다 | 구현 방식 분류 |
+| 4 | Client-Side Rendering Micro-Frontends | Module Federation 같은 프레임워크로 클라이언트 사이드 렌더링 마이크로 프론트엔드를 만드는 모범 사례를 깊이 다룬다 | Module Federation, CSR |
+| 5 | Server-Side Rendering Micro-Frontends | SSR 마이크로 프론트엔드의 구현과, 이 접근을 가장 어렵게 만드는 인프라 고려사항을 다룬다 | SSR, 인프라 |
+| 6 | Micro-Frontend Automation | 저장소 구성·지속적 통합 등 팀 속도를 지키는 자동화 기초를 공유한다 | 저장소 전략, CI |
+| 7 | Discover and Deploy Micro-Frontends | 다중 환경 배포를 관리하는 디스커버리 패턴과 카나리아·블루그린 기법을 다룬다 | 디스커버리, 카나리아, 블루그린 |
+| 8 | Automation Pipeline for Micro-Frontends: A Case Study | 6·7장 위에서 실제 자동화 파이프라인 사례를 따라가며 이론이 실무로 옮겨지는 과정을 본다 | CI/CD 사례 연구 |
+| 9 | Backend Patterns For Micro-Frontends | 모놀리식 백엔드·마이크로서비스와의 통합 패턴 — BFF, API 게이트웨이, 서비스 딕셔너리 | BFF, API Gateway |
+| 10 | Common Antipatterns in Micro-Frontend Implementations | 지난 5년간 저자가 마주친 안티패턴과 실패 이유, 그리고 대안 | 안티패턴 |
+| 11 | Migrating to Micro-Frontends | 모놀리식 프론트엔드에서 옮겨 갈 때 물어야 할 질문·우선순위·핵심 국면 | 마이그레이션 전략 |
+| 12 | From Monolith to Micro-Frontends: A Case Study | 가상 기업 ACME Inc.의 마이그레이션 여정에서 기술적·조직적 결정을 따라간다 | 사례 연구 |
+| 13 | Introducing Micro-Frontends in Your Organization | 팀 정렬·협업·장기적 성공을 뒷받침하는 프로세스 등 조직 측면 | 조직 구조, 팀 정렬 |
+| 14 | AI and Micro-Frontends: Augmenting, Not Replacing | 마이크로 프론트엔드 영역에서 AI를 1년간 실험한 결과 — 어디서 통하고 어디서 모자라는지 | AI 활용 플레이북 |
+
+저자는 각 장이 서로 참조를 최소화하도록 썼으니 필요한 장만 골라 읽어도 된다고 밝혔습니다. 다만 순서대로 읽는 것이 가장 좋다고 덧붙입니다.
+
+## 작성된 정독 노트
+
+| 장 | 노트 | 한 줄 핵심 | 상태 |
+|----|------|-----------|------|
+| 1 | [모놀리스에서 분산 프론트엔드까지](01-01.모놀리스에서%20분산%20프론트엔드까지.md) | 백엔드를 쪼갠 힘이 프론트엔드에는 닿지 않은 이유와, 그 자리를 마이크로 프론트엔드가 메우는 방식 | 작성 완료 |
+| 1 | [일곱 원칙과 프론트엔드로의 번역](01-02.일곱%20원칙과%20프론트엔드로의%20번역.md) | 마이크로서비스 7원칙을 프론트엔드로 옮기면 무엇이 그대로이고 무엇이 더 비싸지는가 | 작성 완료 |
+| 2 | (미착수) | | ◻ |
+
+## 학습 상태
+
+| 항목 | 값 |
+|------|-----|
+| 난이도 레벨 | 입문 — 마이크로서비스 배경 지식은 있으나 프론트엔드 아키텍처는 처음입니다 |
+| 막힌 지점 | 없음 (1장은 개념 도입장이라 코드·설정이 없습니다) |
+| 다음 레슨 후보 | 2장 — 네 기둥과 의사결정 프레임워크. 1장의 원칙이 실제 설계 결정으로 바뀌는 자리입니다 |
+| 최근 검증 결과 | 1장 §18 적대적 검증 — 아래 각 노트의 보고 참조 |
+| 복습 회차 | 0회차 (미실시) |
+
+## 출처·톤 메모
+
+- **원문이 1차 자료입니다.** 사실·수치·인용·저자명은 `pdftotext`로 추출한 챕터 PDF 본문에서만 가져옵니다. 책 밖 보강은 `## 심화 학습`으로 분리하고 공식 1차 링크를 답니다.
+- **톤은 합니다체**로 통일합니다. 도식은 흐름·비교·계층이 있는 소절에만 두고, 형태가 없으면 표로 갑니다.
+- 도식 SVG는 `_assets/`에 두고 본문에서 상대 경로 이미지로 참조합니다. 도식 선언(생성기)은 `_assets/_gen/`에 짝으로 둡니다.
+- 이 책은 프론트엔드 소재이지만 독자는 백엔드(Spring/Java) 개발자입니다. 각 노트의 `## 적용 관점` 절이 이미 아는 마이크로서비스 지식과 잇는 다리를 놓습니다.
