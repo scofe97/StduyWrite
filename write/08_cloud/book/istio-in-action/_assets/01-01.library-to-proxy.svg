@@ -1,85 +1,61 @@
-<svg viewBox="0 0 760 352" width="100%"
-     xmlns="http://www.w3.org/2000/svg"
-     role="img"
-     aria-labelledby="t1 d1"
-     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title id="t1">애플리케이션 네트워킹이 라이브러리에서 프록시로 옮겨간 구조</title>
-  <desc id="d1">왼쪽은 각 서비스가 Hystrix, Ribbon, Eureka 같은 라이브러리를 애플리케이션 안에 직접 포함해 언어 제약을 받는 구조입니다. 오른쪽은 같은 기능이 애플리케이션 옆의 Envoy 프록시로 빠져 사이드카로 배포되고, 컨트롤 플레인이 그 프록시들에 설정을 내려보내는 구조입니다.</desc>
-  <style>
-    .box { fill: #e8e4df; }
-    .box-title { fill: #0d0d0d; font-size: 13px; }
-    .box-detail { fill: #3a3632; font-size: 12px; }
-    .stem { fill: #e8e4df; font-size: 15px; }
-    .sub { fill: #b8b3ad; font-size: 12px; }
-    .warn-box { fill: rgb(212,168,83); }
-    .warn-text { fill: #0d0d0d; font-size: 12px; }
-    .edge { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
-  </style>
-  <rect width="760" height="352" fill="#0d0d0d"/>
-
-  <text x="30" y="34" class="stem">라이브러리 방식</text>
-  <text x="30" y="52" class="sub">§3 · 애플리케이션 안</text>
-
-  <rect x="30" y="70" width="150" height="86" rx="4" class="box"/>
-  <text x="105" y="92" text-anchor="middle" class="box-title">서비스 A (Java)</text>
-  <text x="105" y="112" text-anchor="middle" class="box-detail">Hystrix</text>
-  <text x="105" y="130" text-anchor="middle" class="box-detail">Ribbon</text>
-  <text x="105" y="148" text-anchor="middle" class="box-detail">Eureka</text>
-
-  <rect x="30" y="172" width="150" height="86" rx="4" class="box"/>
-  <text x="105" y="194" text-anchor="middle" class="box-title">서비스 B (Java)</text>
-  <text x="105" y="214" text-anchor="middle" class="box-detail">Hystrix</text>
-  <text x="105" y="232" text-anchor="middle" class="box-detail">Ribbon</text>
-  <text x="105" y="250" text-anchor="middle" class="box-detail">Eureka</text>
-
-  <rect x="30" y="274" width="150" height="66" rx="4" class="warn-box"/>
-  <text x="105" y="298" text-anchor="middle" class="warn-text">주의 · 서비스 C</text>
-  <text x="105" y="316" text-anchor="middle" class="warn-text">NodeJS 라면</text>
-  <text x="105" y="332" text-anchor="middle" class="warn-text">대응물을 다시 탐색</text>
-
-  <path d="M 200 205 L 250 205" class="edge" marker-end="url(#a)"/>
-  <defs>
-    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5"
-            markerUnits="strokeWidth"
-            markerWidth="6" markerHeight="6" orient="auto">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#b8b3ad"/>
-    </marker>
-  </defs>
-  <text x="225" y="196" text-anchor="middle" class="sub">밀어내기</text>
-
-  <text x="290" y="34" class="stem">프록시 방식</text>
-  <text x="290" y="52" class="sub">§4·§5 · 프로세스 밖</text>
-
-  <rect x="290" y="70" width="220" height="86" rx="4" class="box"/>
-  <text x="400" y="92" text-anchor="middle" class="box-title">Pod</text>
-  <rect x="304" y="104" width="90" height="38" rx="3" fill="#e8e4df" stroke="#b8b3ad"/>
-  <text x="349" y="128" text-anchor="middle" class="box-detail" style="fill:#0d0d0d">서비스 A</text>
-  <rect x="406" y="104" width="90" height="38" rx="3" fill="#e8e4df" stroke="#b8b3ad"/>
-  <text x="451" y="128" text-anchor="middle" class="box-detail" style="fill:#0d0d0d">Envoy</text>
-
-  <rect x="290" y="172" width="220" height="86" rx="4" class="box"/>
-  <text x="400" y="194" text-anchor="middle" class="box-title">Pod</text>
-  <rect x="304" y="206" width="90" height="38" rx="3" fill="#e8e4df" stroke="#b8b3ad"/>
-  <text x="349" y="230" text-anchor="middle" class="box-detail" style="fill:#0d0d0d">서비스 B</text>
-  <rect x="406" y="206" width="90" height="38" rx="3" fill="#e8e4df" stroke="#b8b3ad"/>
-  <text x="451" y="230" text-anchor="middle" class="box-detail" style="fill:#0d0d0d">Envoy</text>
-
-  <rect x="290" y="274" width="220" height="66" rx="4" class="box"/>
-  <text x="400" y="298" text-anchor="middle" class="box-title">Pod</text>
-  <rect x="304" y="308" width="90" height="24" rx="3" fill="#e8e4df" stroke="#b8b3ad"/>
-  <text x="349" y="325" text-anchor="middle" class="box-detail" style="fill:#0d0d0d">서비스 C</text>
-  <rect x="406" y="308" width="90" height="24" rx="3" fill="#e8e4df" stroke="#b8b3ad"/>
-  <text x="451" y="325" text-anchor="middle" class="box-detail" style="fill:#0d0d0d">Envoy</text>
-
-  <path d="M 600 150 L 520 113" class="edge" marker-end="url(#a)"/>
-  <path d="M 600 190 L 520 215" class="edge" marker-end="url(#a)"/>
-  <path d="M 600 215 L 520 305" class="edge" marker-end="url(#a)"/>
-
-  <rect x="590" y="150" width="150" height="66" rx="4" class="box"/>
-  <text x="665" y="174" text-anchor="middle" class="box-title">컨트롤 플레인</text>
-  <text x="665" y="194" text-anchor="middle" class="box-detail">설정을 내려보냄</text>
-  <text x="665" y="210" text-anchor="middle" class="box-detail">운영자 API 노출</text>
-
-  <text x="590" y="248" class="sub">데이터 플레인 = Envoy 집합</text>
-  <text x="590" y="266" class="sub">언어 제약 없음</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 500" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">같은 기능이 프로세스 밖으로 나간다</title><desc id="dd">재시도·타임아웃·서킷 브레이킹·디스커버리는 그대로 필요하다. 달라지는 것은 그것이 어디 사는가다. 색이 붙은 칸이 옮겨서 얻는 것이고, 그것이 이 장이 라이브러리 방식의 결정적 한계로 지목한 자리다.</desc>
+<rect width="1240" height="500" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">ISTIO IN ACTION · 01-01 §4</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">같은 기능이 프로세스 밖으로 나간다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">전통적 프록시는 커넥션과 패킷을, Envoy 는 메시지와 요청을 이해합니다</text>
+<line x1="0" y1="104" x2="1240" y2="104" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="20" y="154" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="600" fill="#5E6B7E">APPLICATION</text>
+<text x="20" y="172" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">우리 프로세스 안</text>
+<line x1="0" y1="220" x2="1240" y2="220" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="20" y="270" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="600" fill="#5E6B7E">SIDECAR PROXY</text>
+<text x="20" y="288" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">프로세스 밖 · Envoy</text>
+<line x1="0" y1="336" x2="1240" y2="336" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<line x1="200" y1="104" x2="200" y2="336" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="232" y="132" width="220" height="60" rx="6" fill="#F5F5F304" stroke="#8B98A9" stroke-width="1" stroke-dasharray="5 5"/>
+<text x="342.0" y="158" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">레질리언스</text>
+<text x="342.0" y="176" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">retry · timeout</text>
+<rect x="232" y="248" width="220" height="60" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="342.0" y="274" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">레질리언스</text>
+<text x="342.0" y="292" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">retry · timeout</text>
+<rect x="476" y="132" width="220" height="60" rx="6" fill="#F5F5F304" stroke="#8B98A9" stroke-width="1" stroke-dasharray="5 5"/>
+<text x="586.0" y="158" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">로드밸런싱</text>
+<text x="586.0" y="176" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">client-side LB</text>
+<rect x="476" y="248" width="220" height="60" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="586.0" y="274" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">로드밸런싱</text>
+<text x="586.0" y="292" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">client-side LB</text>
+<rect x="720" y="132" width="220" height="60" rx="6" fill="#F5F5F304" stroke="#8B98A9" stroke-width="1" stroke-dasharray="5 5"/>
+<text x="830.0" y="158" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">디스커버리</text>
+<text x="830.0" y="176" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">registry</text>
+<rect x="720" y="248" width="220" height="60" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="830.0" y="274" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">디스커버리</text>
+<text x="830.0" y="292" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">registry</text>
+<rect x="964" y="132" width="220" height="60" rx="6" fill="#F5F5F304" stroke="#8B98A9" stroke-width="1" stroke-dasharray="5 5"/>
+<text x="1074.0" y="158" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">메트릭 수집</text>
+<text x="1074.0" y="176" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">rps · failures</text>
+<rect x="964" y="248" width="220" height="60" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="1074.0" y="274" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">메트릭 수집</text>
+<text x="1074.0" y="292" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">rps · failures</text>
+<path d="M 342.0 192 L 342.0 246" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 586.0 192 L 586.0 246" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 830.0 192 L 830.0 246" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 1074.0 192 L 1074.0 246" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<text x="32" y="372" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">옮겨서 얻는 것 — 언어와 프레임워크 의존성이 사라지고, 처리가 전부 애플리케이션 프로세스 밖에서 일어난다</text>
+<text x="32" y="400" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">덤으로 얻는 것 — 초당 요청 수 · 실패 건수 · 서킷 브레이킹 발생이 자동으로 관측된다</text>
+<text x="32" y="424" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">배포 형태는 사이드카다 — 애플리케이션은 먼저 Envoy 에 요청을 넘기고 그다음은 Envoy 가 처리한다</text>
+<line x1="12" y1="452" x2="1192" y2="452" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="474" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="464" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="474" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">옮겨서 얻는 것</text>
+<rect x="248" y="464" width="14" height="12" rx="2" fill="#8B98A922" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="270" y="474" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">비워지는 자리</text>
 </svg>
