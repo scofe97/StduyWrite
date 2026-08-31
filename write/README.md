@@ -17,7 +17,7 @@ updated: 2026-07-05
 
 ## 카테고리
 
-> 주제가 1차 분류 축입니다. 언어·프레임워크 구분은 그 아래 폴더로 내려갑니다. 예를 들어 JVM은 `01_language/book/05_JVM/`에 있습니다.
+> 주제가 1차 분류 축입니다. 언어·프레임워크 구분은 그 아래 폴더로 내려갑니다. 예를 들어 JVM은 `01_language/book/Inside the Java Virtual Machine JVM Advanced Features and Best Practices/`에 있습니다.
 
 | # | 카테고리 | 범위 |
 |---|----------|------|
