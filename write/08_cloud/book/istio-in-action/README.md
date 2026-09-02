@@ -14,8 +14,8 @@ learning:
   level: 기본
   last_verified:            # Phase 4 자답·_review 회차 미실시 — 원문 대조일로 대신 채우지 않음
   blocked_count:
-  next_lesson: "11-01 컨트롤 플레인 성능 튜닝 — xDS 부하와 성능 메트릭. 10장이 큰 클러스터에서는 동기화가 비례해 느려진다고 적고 미룬 자리를 그대로 받는 장이다"
-updated: 2026-09-01
+  next_lesson: "본편 1~14장 완주. 다음은 부록 선별 — B·C·E 는 본편이 이미 위임처로 지목했고 A·D 는 2장·10장에 흡수하는 쪽이 맞다"
+updated: 2026-09-02
 ---
 
 # Istio in Action — 정독 인덱스
@@ -68,6 +68,21 @@ updated: 2026-09-01
 9장에도 경계가 하나 더 생깁니다. 인증과 인가, JWT 설계, OAuth2·OIDC 는 `write/99_ETC/security/01_concepts/` 가 SSOT 입니다. X.509 와 CA 는 같은 폴더의 [『Container Security』 11장](../container-security/11-01.TLS%EB%A1%9C%20%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8%20%EC%95%88%EC%A0%84%ED%95%98%EA%B2%8C%20%EC%97%B0%EA%B2%B0%ED%95%98%EA%B8%B0%20%E2%80%94%20%ED%82%A4%C2%B7%EC%9D%B8%EC%A6%9D%EC%84%9C%C2%B7CA%EC%9D%98%20%EC%97%AD%ED%95%A0.md)이, 쿠버네티스 자체의 인가는 [『Kubernetes Up and Running』 14장](../kubernetes-up-and-running/14-01.RBAC%20%E2%80%94%20%EC%9D%B8%EA%B0%80%EB%A5%BC%20%EC%84%A4%EA%B3%84%ED%95%98%EA%B3%A0%20%EC%9A%B4%EC%98%81%ED%95%98%EB%8A%94%20%EB%B2%95.md)이 갖습니다. 저자 자신이 9.1 을 "간단한 복습"이라 부르고 상세를 부록 C 로 넘기므로, 정독본도 같은 자리에서 넘기고 메시가 있어야만 생기는 이야기만 남깁니다.
 
 10장은 도구를 여럿 부르지만 그 도구 자체는 다른 폴더가 갖고 있습니다. PromQL 질의 문법과 Grafana 대시보드 모델은 `06_observability` 가 SSOT 입니다. TCP 의 3방향 핸드셰이크와 `tcpdump`·Wireshark 실습은 같은 폴더의 [『Networking and Kubernetes』 정독본](../networking-and-kubernetes/README.md)이 갖습니다. 저자 스스로 ksniff 절을 연습이 목적이라 밝히므로 정독본도 그 무게로 둡니다. 여기 남기는 것은 프록시가 들고 있는 설정과 로그를 사람이 읽을 크기로 줄이는 방법입니다.
+
+11장도 지표를 많이 부르지만 그 지표의 문법은 다른 폴더가 갖습니다. 골든 시그널 넷의 정의는 `06_observability/01_Foundations` 가 SSOT 이고, PromQL 과 Prometheus 스택 구성은 `mastering_prometheus` 정독본이 SSOT 입니다. 여기 남기는 것은 istiod 가 일을 덜 하게 만드는 손잡이와 그 순서입니다.
+
+1. `Sidecar` 로 설정 크기를 깎는다
+2. 발견 범위를 좁힌다
+3. 이벤트를 묶는다
+4. 마지막에 자원을 늘린다
+
+12장은 여러 클러스터를 하나의 메시로 묶는 장이라 다른 폴더의 기초를 여럿 빌려 씁니다. 서비스 어카운트와 롤 같은 쿠버네티스 인가는 같은 폴더의 [『Kubernetes Up and Running』 14장](../kubernetes-up-and-running/14-01.RBAC%20%E2%80%94%20%EC%9D%B8%EA%B0%80%EB%A5%BC%20%EC%84%A4%EA%B3%84%ED%95%98%EA%B3%A0%20%EC%9A%B4%EC%98%81%ED%95%98%EB%8A%94%20%EB%B2%95.md)이 SSOT 이고, X.509 와 중간 CA 는 [『Container Security』 11장](../container-security/11-01.TLS%EB%A1%9C%20%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8%20%EC%95%88%EC%A0%84%ED%95%98%EA%B2%8C%20%EC%97%B0%EA%B2%B0%ED%95%98%EA%B8%B0%20%E2%80%94%20%ED%82%A4%C2%B7%EC%9D%B8%EC%A6%9D%EC%84%9C%C2%B7CA%EC%9D%98%20%EC%97%AD%ED%95%A0.md)이 갖습니다. 저자 자신이 RBAC 을 "이 책의 범위 밖"이라 적으므로 정독본도 같은 자리에서 넘깁니다. 여기 남기는 것은 클러스터 경계를 메시가 어떻게 덮는가, 그리고 어디서 덮지 못하는가입니다.
+
+13장은 쿠버네티스 밖으로 나가는 장이라 플랫폼 기초를 여럿 빌려 씁니다. `Deployment` 와 `Pod` 의 관계, 준비성·생존성 프로브의 기본 동작은 같은 폴더의 [『Networking and Kubernetes』 4장](../networking-and-kubernetes/04-01.Kubernetes%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9%20%EB%AA%A8%EB%8D%B8%20%E2%80%94%20Pod%20IP%C2%B7%EB%A0%88%EC%9D%B4%EC%95%84%EC%9B%83%C2%B7Probe.md)가 SSOT 이고, `iptables` 리디렉션과 클러스터 안의 이름 해석도 그 정독본이 갖습니다. 서비스 디스커버리가 DNS 로 풀리지 않는 지점은 [『Kubernetes Up and Running』 7장](../kubernetes-up-and-running/07-01.Service%20Discovery%20%E2%80%94%20DNS%EA%B0%80%20%EB%AA%BB%20%ED%95%98%EB%8A%94%20%EC%9D%BC%EA%B3%BC%20%EB%B0%94%EA%B9%A5%EC%9D%84%20%EC%9E%87%EB%8A%94%20%EB%B2%95.md)이 맡습니다.
+
+저자 자신이 생성된 설정 파일의 내부를 부록 E 로, 사이드카 주입 방식을 부록 B 로 넘기므로 정독본도 같은 자리에서 멈춥니다. 여기 남기는 것은 플랫폼이 대신해 주던 여섯 가지를 손으로 옮길 때 무엇이 드러나는가입니다.
+
+14 장은 Envoy 안으로 한 겹 더 들어가지만 그 아래의 기초는 다른 정독본이 갖습니다. HTTP/1.1 과 HTTP/2, 그 아래 전송 계층은 같은 폴더의 [『Networking and Kubernetes』 정독본](../networking-and-kubernetes/README.md)이 SSOT 이고, OCI 이미지의 층과 식별자는 [『Container Security』 6장](../container-security/06-01.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%95%B4%EB%B6%80%20%E2%80%94%20%EB%91%90%20%EB%B6%80%EB%B6%84%EA%B3%BC%20%EC%B8%B5%EA%B3%BC%20%EC%8B%9D%EB%B3%84%EC%9E%90.md)이 갖습니다. 저자 자신이 C++ 로 네이티브 필터를 쓰는 일을 "이 책의 범위 밖" 이라 적고 타임아웃과 재시도의 동작은 6 장과 Envoy 문서로 넘기므로, 정독본도 같은 자리에서 멈춥니다. 여기 남기는 것은 확장의 문 넷이 각각 무엇을 대신 요구하는가입니다.
 
 
 
@@ -125,7 +140,10 @@ updated: 2026-09-01
 | 8 | [메시가 절반까지만 해 주는 일](08-01.%EB%A9%94%EC%8B%9C%EA%B0%80%20%EC%A0%88%EB%B0%98%EA%B9%8C%EC%A7%80%EB%A7%8C%20%ED%95%B4%20%EC%A3%BC%EB%8A%94%20%EC%9D%BC.md) | 프록시는 스팬을 만들지만 트레이스를 잇는 헤더 전파는 애플리케이션의 몫으로 남는다 | 작성 완료 |
 | 9 | [거의 안전한 기본값을 닫아 가는 순서](09-01.%EA%B1%B0%EC%9D%98%20%EC%95%88%EC%A0%84%ED%95%9C%20%EA%B8%B0%EB%B3%B8%EA%B0%92%EC%9D%84%20%EB%8B%AB%EC%95%84%20%EA%B0%80%EB%8A%94%20%EC%88%9C%EC%84%9C.md) | 신원을 문서로 옮기면 프록시가 판정할 수 있지만, 허용을 하나 적는 순간 기본값이 거부로 뒤집힌다 | 작성 완료 |
 | 10 | [프록시는 다 알고 있고 사람은 못 읽는다](10-01.%ED%94%84%EB%A1%9D%EC%8B%9C%EB%8A%94%20%EB%8B%A4%20%EC%95%8C%EA%B3%A0%20%EC%9E%88%EA%B3%A0%20%EC%82%AC%EB%9E%8C%EC%9D%80%20%EB%AA%BB%20%EC%9D%BD%EB%8A%94%EB%8B%A4.md) | 진단 도구가 여럿인 것은 기능이 달라서가 아니라 의심 범위를 좁히는 단계가 달라서다 | 작성 완료 |
-| 11~14 | | | 미작성 |
+| 11 | [컨트롤 플레인의 성능은 낡은 설정의 수명이다](11-01.%EC%BB%A8%ED%8A%B8%EB%A1%A4%20%ED%94%8C%EB%A0%88%EC%9D%B8%EC%9D%98%20%EC%84%B1%EB%8A%A5%EC%9D%80%20%EB%82%A1%EC%9D%80%20%EC%84%A4%EC%A0%95%EC%9D%98%20%EC%88%98%EB%AA%85%EC%9D%B4%EB%8B%A4.md) | 성능 문제는 데이터 플레인이 옛 설정으로 도는 시간이고, 손잡이는 일을 줄이는 것부터 순서가 있다 | 작성 완료 |
+| 12 | [경계를 지우는 전제 셋과 남는 한 자리](12-01.%EA%B2%BD%EA%B3%84%EB%A5%BC%20%EC%A7%80%EC%9A%B0%EB%8A%94%20%EC%A0%84%EC%A0%9C%20%EC%85%8B%EA%B3%BC%20%EB%82%A8%EB%8A%94%20%ED%95%9C%20%EC%9E%90%EB%A6%AC.md) | 발견·연결·공통 신뢰만 채우면 기능은 클러스터 경계를 모르고, 원격 안의 분산 하나만 예외로 남는다 | 작성 완료 |
+| 13 | [자동으로 되던 일이 목록이 되어 나타난다](13-01.%EC%9E%90%EB%8F%99%EC%9C%BC%EB%A1%9C%20%EB%90%98%EB%8D%98%20%EC%9D%BC%EC%9D%B4%20%EB%AA%A9%EB%A1%9D%EC%9D%B4%20%EB%90%98%EC%96%B4%20%EB%82%98%ED%83%80%EB%82%9C%EB%8B%A4.md) | 쿠버네티스가 말없이 해 주던 여섯 가지가 VM 에서는 사람의 목록이 되고, 그중 이름 해석이 없으면 트래픽은 나가지도 못한다 | 작성 완료 |
+| 14 | [Envoy를 새로 빌드하지 않으려고 낸 네 개의 문](14-01.Envoy%EB%A5%BC%20%EC%83%88%EB%A1%9C%20%EB%B9%8C%EB%93%9C%ED%95%98%EC%A7%80%20%EC%95%8A%EC%9C%BC%EB%A0%A4%EA%B3%A0%20%EB%82%B8%20%EB%84%A4%20%EA%B0%9C%EC%9D%98%20%EB%AC%B8.md) | 확장의 방법 넷은 기능이 아니라 커스텀 Envoy 빌드를 피한 대가로 갈린다 | 작성 완료 |
 
 
 
@@ -135,10 +153,10 @@ updated: 2026-09-01
 
 | 항목 | 값 |
 |------|-----|
-| 난이도 레벨 | 기본. 3장 Envoy 단독 설정·Admin API, 4장 SNI 패스스루·게이트웨이 주입, 7장 stats·attribute-gen 플러그인과 CEL 표현식, 8장 `bootstrapOverride` 와 Kiali 오퍼레이터, 9장 SPIFFE·인가 규칙의 AND·OR 결합과 ExtAuthz, 10장 `proxy-config` 체인 질의와 Envoy 로거 스코프가 새 재료였고 Gateway·VirtualService·TLS 종료·Prometheus 스크랩·분산 추적·인증과 인가의 기초는 이미 익숙 |
+| 난이도 레벨 | 기본. 3장 Envoy 단독 설정·Admin API, 4장 SNI 패스스루·게이트웨이 주입, 7장 stats·attribute-gen 플러그인과 CEL 표현식, 8장 `bootstrapOverride` 와 Kiali 오퍼레이터, 9장 SPIFFE·인가 규칙의 AND·OR 결합과 ExtAuthz, 10장 `proxy-config` 체인 질의와 Envoy 로거 스코프, 11장 디바운스·스로틀 환경변수와 `Sidecar` 스코프, 12장 SNI 클러스터와 `sni-dnat`·`AUTO_PASSTHROUGH`, 13장 `WorkloadGroup`·`WorkloadEntry` 와 로컬 DNS 프록시·NDS, 14장 `EnvoyFilter` 의 패치 좌표와 Wasm ABI·`WasmPlugin` 이 새 재료였고 Gateway·VirtualService·TLS 종료·Prometheus 스크랩·분산 추적·인증과 인가의 기초는 이미 익숙 |
 | 막힌 지점 | 없음 |
-| 다음 레슨 후보 | 11장 컨트롤 플레인 성능 튜닝 — xDS 부하와 성능 메트릭. 10장이 클러스터가 커지면 동기화 기간도 비례해 늘어난다고 적고 미룬 자리를 받는 장이다 |
-| 최근 검증 결과 | 10장 §1 검사·벽 단락 0곳 통과, 도식 9장(타입 9종) 렌더 확인, 적대적 검증 완료 (2026-09-01). 9장도 같은 게이트를 통과했다. 같은 날 1·2장을 현행 규약으로 보강했다 — `---` 구분선·`## 심화 학습`·생성기 기반 도식(1장 9장, 2장 5장). 3~8장도 같은 게이트를 통과했다. Phase 4 자답은 아직 없어 `learning.last_verified` 비움 |
+| 다음 레슨 후보 | **본편 14장 완주.** 남은 것은 부록 5편이고 그중 B(사이드카 주입)·C(SPIFFE)·E(VM 설정 파일)는 이미 본편 노트가 위임처로 지목해 둔 자리다. A(설치 커스터마이징)·D(컴포넌트 트러블슈팅)는 2장·10장과 겹침이 커 흡수 쪽이 맞다 |
+| 최근 검증 결과 | 14장 §1 검사·벽 단락 0곳 통과, 도식 9장(타입 9종 — `pyramid`·`uml-class` 첫 사용) 렌더 확인, 절 서사 골격 검출 0곳, 원문 식별자 108개 대조 일치 (2026-09-02). 자체 적대적 점검에서 셋을 고쳤다 — `WasmPlugin` 도식이 모듈을 당겨 오는 주체를 컨트롤 플레인으로 그린 것(원문은 프록시가 직접 내려받는다), `EnvoyFilter` 를 13장 리소스라 적은 것, 그리고 저자가 하지 않은 "라스트 마일은 대개 첫째·둘째 문에서 끝난다"는 분류. 13장도 같은 방식으로 셋을 고쳤고 10~12장은 서브에이전트 적대적 검증으로 각각 6·6·11건을 고쳤다. 1~9장까지 같은 게이트를 통과했다. Phase 4 자답은 아직 없어 `learning.last_verified` 비움 |
 | 복습 회차 | 0 |
 
 `03_istio` 22편과 겹치는 주제는 정독본에서 되풀이하지 않고 링크로 넘깁니다. 2장처럼 실습 비중이 큰 장은 `## 이 문서가 다루지 않는 것` 절에 위임 대상을 명시합니다.
