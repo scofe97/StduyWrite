@@ -47,7 +47,7 @@ d.arrow([(620, 312), (620, 336)], INFO, "info", 1.4)
 for x, ax in ((64, 480), (456, 620), (848, 760)):
     cx = x + 164
     d.arrow([(ax, 412), (ax, 446), (cx, 446), (cx, 482)], INFO, "info", 1.4)
-d.t(636, 292, "HTTP", 8.5, INFO, MONO, "start")
+d.t(634, 222, "HTTP", 8.5, INFO, MONO, "start")
 d.t(620, 440, "병렬 요청 · Promise.allSettled", 8.5, INFO, MONO)
 
 d.legend(LEGEND_Y, [("비즈니스 로직을 모르는 조립 지점", ACC), ("네트워크를 건너는 요청", INFO)])
