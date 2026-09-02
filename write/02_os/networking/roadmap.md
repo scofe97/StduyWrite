@@ -163,6 +163,8 @@ OS 관점 흐름: application 이 hostname 요청 → resolver 설정 확인 →
 
 실무 질문: DNS 가 실패한 것인가 / DNS 는 됐는데 TCP 연결이 실패한 것인가 / search domain 때문에 예상보다 많은 DNS 질의가 발생하는가 / JVM DNS cache 때문에 오래된 IP 를 들고 있지는 않은가.
 
+질의를 *받는* 서버 쪽(Corefile·플러그인 체인·존 데이터·쿠버네티스 연동)은 본 로드맵 범위 밖이며 [Learning CoreDNS 정독 인덱스](../../08_cloud/book/learning-coredns/README.md)가 맡는다.
+
 ## 7. Network Interface
 
 알아야 할 것:

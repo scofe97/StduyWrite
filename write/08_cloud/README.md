@@ -8,7 +8,8 @@ related:
   - ./argocd/README.md
   - ./book/networking-and-kubernetes/README.md
   - ./book/container-security/README.md
-updated: 2026-08-09
+  - ./book/learning-coredns/README.md
+updated: 2026-09-02
 ---
 
 # 08_cloud
@@ -26,6 +27,7 @@ updated: 2026-08-09
 | `openstack/` <!-- 링크 끊김(2026-08): ./openstack/README.md --> | IaaS 개요, AWS 서비스 대응, 오픈스택↔Kubernetes 층 관계(CMP 바닥 인프라) | 1개 장 |
 | [book/networking-and-kubernetes/](./book/networking-and-kubernetes/README.md) | 《Networking and Kubernetes》 정독 — OSI/TCP-IP, Linux 네트워킹, 컨테이너·K8s 네트워킹, Service 추상화, AWS/GCP/Azure | 정독 노트 17편 + 용어집·결정 치트시트 |
 | [book/container-security/](./book/container-security/README.md) | 《Container Security》(Liz Rice, 1판) 정독 — 위협 모델, syscall·capability·cgroup·namespace가 세우는 격리 경계, 이미지·공급망 보안, 취약점 스캐닝, 샌드박싱과 격리 파괴 | 정독 노트 17편 (본문 14/14 + 부록 완독) |
+| [book/learning-coredns/](./book/learning-coredns/README.md) | 《Learning CoreDNS》(Belamaric·Liu) 정독 — 컨테이너 환경의 서비스 디스커버리를 떠받치는 DNS 서버 편. Corefile·플러그인 체인, 존 데이터, 쿠버네티스 연동, 완전 재귀를 포기한 교환 | 정독 노트 1편 / 9장 |
 
 ## 예정 주제 — Spring Cloud 스택 (TBD)
 
