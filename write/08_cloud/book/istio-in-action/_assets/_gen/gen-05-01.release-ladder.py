@@ -12,11 +12,11 @@ d = D(W, H, "ISTIO IN ACTION · 05-01 §1",
       "옛 버전이 대부분을 받고 새 버전이 작은 몫을 받는 동안 지켜보는 자리가 카나리입니다")
 
 SW, SH, Y = 180, 64, 140
-xs = [24, 260, 496, 732]          # stride 276, 사이 80px 에 전이 라벨이 든다
+xs = [48, 284, 520, 756]          # stride 276, 사이 80px 에 전이 라벨이 든다
 states = [("배포됨", "트래픽 0 · 스모크 테스트", False), ("내부 직원", "작은 몫 · 관찰", True), ("비유료 · 실버", "노출 확대", False), ("전체 고객", "릴리스 완료", False)]
 # 시작점
-d.o.append(f'<circle cx="40" cy="{Y + SH / 2}" r="6" fill="{INK}"/>')
-d.path(f"M 46 {Y + SH / 2} H {xs[0] - 2}", MUTED, 1.4, m="ar")
+d.o.append(f'<circle cx="16" cy="{Y + SH / 2}" r="6" fill="{INK}"/>')
+d.path(f"M 24 {Y + SH / 2} H {xs[0] - 2}", MUTED, 1.4, m="ar")
 for i, (name, sub, focal) in enumerate(states):
     x = xs[i]
     if focal:
