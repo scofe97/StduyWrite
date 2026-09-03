@@ -25,14 +25,16 @@ def state(x, y, name, sub, focal=False):
     d.t(x + SW / 2, y + 30, name, 13, ACC if focal else INK, KR, "middle", 600)
     d.t(x + SW / 2, y + 52, sub, 11, MUTED, MONO)
 
-d.o.append(f'<circle cx="48" cy="{CY + SH / 2}" r="6" fill="{INK}"/>')
-d.o.append(f'<circle cx="964" cy="{CY + SH / 2}" r="8" fill="none" stroke="{INK}" stroke-width="1.2"/>')
-d.o.append(f'<circle cx="964" cy="{CY + SH / 2}" r="5" fill="{INK}"/>')
+# 시작점은 첫 상자(x=36) 왼쪽에 둔다. 상자 안(cx=48·60)에 그리면 상자가 나중에 그려지며
+# 불투명 fill 로 덮어 시작점과 진입 화살표가 통째로 사라진다. 종료점 쪽 여백과 대칭으로 맞춘다.
+d.o.append(f'<circle cx="12" cy="{CY + SH / 2}" r="6" fill="{INK}"/>')
+d.o.append(f'<circle cx="988" cy="{CY + SH / 2}" r="8" fill="none" stroke="{INK}" stroke-width="1.2"/>')
+d.o.append(f'<circle cx="988" cy="{CY + SH / 2}" r="5" fill="{INK}"/>')
 
 MY = CY + SH / 2
-d.arrow([(56, MY), (XS[0] - 2, MY)], MUTED, "ar", 1.4)
+d.arrow([(24, MY), (XS[0] - 2, MY)], MUTED, "ar", 1.4)
 d.arrow([(XS[1] + SW, MY), (XS[2] - 2, MY)], MUTED, "ar", 1.4)
-d.arrow([(XS[2] + SW, MY), (954, MY)], MUTED, "ar", 1.4)
+d.arrow([(XS[2] + SW, MY), (974, MY)], MUTED, "ar", 1.4)
 
 # 아래 경로 — 저자가 만드는 길
 d.path(f"M {XS[0] + SW} {MY} L {XS[1] - 2} {MY}", MUTED, 1.4, m="ar")

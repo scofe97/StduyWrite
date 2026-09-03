@@ -27,11 +27,13 @@ def state(x, name, sub, focal=False):
     d.t(x + SW / 2, y + 30, name, 13, ACC if focal else INK, KR, "middle", 600)
     d.t(x + SW / 2, y + 52, sub, 11, MUTED, MONO)
 
-d.o.append(f'<circle cx="60" cy="{CY}" r="6" fill="{INK}"/>')
+# 시작점은 첫 상자(x=36) 왼쪽에 둔다. 상자 안(cx=48·60)에 그리면 상자가 나중에 그려지며
+# 불투명 fill 로 덮어 시작점과 진입 화살표가 통째로 사라진다. 종료점 쪽 여백과 대칭으로 맞춘다.
+d.o.append(f'<circle cx="12" cy="{CY}" r="6" fill="{INK}"/>')
 d.o.append(f'<circle cx="988" cy="{CY}" r="8" fill="none" stroke="{INK}" stroke-width="1.2"/>')
 d.o.append(f'<circle cx="988" cy="{CY}" r="5" fill="{INK}"/>')
 
-d.arrow([(68, CY), (XS[0] - 2, CY)], MUTED, "ar", 1.4)
+d.arrow([(24, CY), (XS[0] - 2, CY)], MUTED, "ar", 1.4)
 d.arrow([(XS[0] + SW, CY), (XS[1] - 2, CY)], ACC, "acc", 1.5)
 d.arrow([(XS[1] + SW, CY), (XS[2] - 2, CY)], MUTED, "ar", 1.4)
 d.arrow([(XS[2] + SW, CY), (974, CY)], MUTED, "ar", 1.4)

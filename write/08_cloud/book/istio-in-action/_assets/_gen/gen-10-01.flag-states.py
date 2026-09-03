@@ -30,7 +30,7 @@ def state(x, y, w, h, label, sub, c=None, r=8):
 
 S1, S2, S3 = 24, 276, 528
 END_X, END_W = 780, 184
-d.o.append(f'<circle cx="24" cy="{MAIN_Y + SH / 2}" r="6" fill="{INK}"/>')
+d.o.append(f'<circle cx="12" cy="{MAIN_Y + SH / 2}" r="6" fill="{INK}"/>')
 d.arrow([(32, MAIN_Y + SH / 2), (S1 - 2, MAIN_Y + SH / 2)], MUTED, "ar", 1.4)
 for a, b in ((S1, S2), (S2, S3), (S3, END_X)):
     d.arrow([(a + SW, MAIN_Y + SH / 2), (b - 2, MAIN_Y + SH / 2)], MUTED, "ar", 1.4)

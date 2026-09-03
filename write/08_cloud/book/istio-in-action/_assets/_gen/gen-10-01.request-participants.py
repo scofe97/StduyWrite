@@ -50,10 +50,15 @@ def cy(n): return n[1] + n[3] / 2
 for n in (GW, VS, DR):
     c = ACC if n is DR else MUTED
     m = "acc" if n is DR else "ar"
-    d.path(f"M {n[0] + n[2]} {cy(n)} H 380 V {cy(IS)} H {IS[0] - 2}", c, 1.2, m=m)
+    # 버스는 리소스 오른쪽(276)과 istiod 왼쪽(340) 사이에 둔다. 380 은 istiod(340~516)
+    # 안쪽이라 꺾임과 화살촉이 상자 뒤로 숨었다.
+    d.path(f"M {n[0] + n[2]} {cy(n)} H 308 V {cy(IS)} H {IS[0] - 2}", c, 1.2, m=m)
 
-d.path(f"M {IS[0] + IS[2]} {cy(IS)} H 668 V {cy(IG)} H {IG[0] - 2}", INFO, 1.2, m="info")
-d.path(f"M {IS[0] + IS[2]} {cy(IS)} H 668 V {cy(SP)} H {SP[0] - 2}", INFO, 1.2, m="info")
+# 668 은 IG · SP(둘 다 568~768) 안쪽이라 두 화살표가 통째로 상자 뒤에 가려졌고,
+# 하필 IG 의 가로 중앙과 같아 아래 요청 흐름 화살표와도 겹쳤다. istiod 오른쪽(516)과
+# 상자 왼쪽(568) 사이인 544 로 옮겨 하나의 줄기에서 둘로 갈라지게 한다.
+d.path(f"M {IS[0] + IS[2]} {cy(IS)} H 544 V {cy(IG)} H {IG[0] - 2}", INFO, 1.2, m="info")
+d.path(f"M {IS[0] + IS[2]} {cy(IS)} H 544 V {cy(SP)} H {SP[0] - 2}", INFO, 1.2, m="info")
 
 d.path(f"M {CL[0] + CL[2] / 2} {CL[1] + CL[3]} V {IG[1] - 2}", MUTED, 1.2, m="ar")
 d.path(f"M {IG[0] + IG[2] / 2} {IG[1] + IG[3]} V {SP[1] - 2}", MUTED, 1.2, m="ar")
