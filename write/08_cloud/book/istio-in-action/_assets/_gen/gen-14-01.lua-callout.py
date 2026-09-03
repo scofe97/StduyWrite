@@ -10,7 +10,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import Seq, ACC, MUTED, SOFT, INK, OK, INFO, KR, MONO
 
-W, H = 1240, 700
+W, H = 1000, 700
 d = Seq(W, H, "ISTIO IN ACTION · 14-01 §6",
         "스크립트가 요청을 멈춰 세우고 밖에 묻는다",
         "요청이 업스트림으로 가기 전에 Lua 필터가 A/B 엔진을 부르고 그 답을 헤더로 붙인다. 색이 붙은 "
@@ -30,7 +30,7 @@ d.selfmsg("Lua 필터", "headers():add", 388, MUTED, sub="x-test-cohort 를 붙�
 d.msg("Lua 필터", "업스트림", "요청을 넘긴다", 452, MUTED, "ar", sub="헤더가 실려서 간다")
 d.msg("업스트림", "클라이언트", "응답", 516, OK, "ok", sub="X-Test-Cohort: dark-launch-7")
 
-d.t(24, 596, "본문을 들여다보면 스트림 취급이 달라진다 — 통째로 메모리에 버퍼링하게 만들 수 있고 성능에 영향이 간다", 11, SOFT, KR, "start")
-d.t(24, 620, "구현할 함수는 둘이다 — 요청 쪽은 envoy_on_request, 응답 쪽은 envoy_on_response. Envoy 의 Lua VM 은 LuaJIT 이다", 11, MUTED, KR, "start")
+d.t(20, 596, "본문을 들여다보면 스트림 취급이 달라진다 — 통째로 메모리에 버퍼링하게 만들 수 있고 성능에 영향이 간다", 11, SOFT, KR, "start")
+d.t(20, 620, "구현할 함수는 둘이다 — 요청 쪽은 envoy_on_request, 응답 쪽은 envoy_on_response. Envoy 의 Lua VM 은 LuaJIT 이다", 11, MUTED, KR, "start")
 d.legend(640, [("Envoy 가 준 함수로만 걸어야 하는 호출", ACC), ("콜아웃이 돌려주는 값", INFO), ("업스트림이 돌려주는 응답", OK)])
 d.save("14-01.lua-callout.svg")

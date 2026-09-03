@@ -8,7 +8,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1160, 912
+W, H = 1000, 912
 d = D(W, H, "ISTIO IN ACTION · 08-01 §5",
       "이 요청이 추적될지 정해지는 순서",
       "저자가 세 자리에 나눠 적은 규칙을 요청 하나의 관점으로 이었다. 색이 붙은 갈래가 샘플링을 낮게 "
@@ -34,16 +34,16 @@ def diamond(cx, cy, l1, l2):
 
 CA, CB = 360, 830
 
-oval(CA - 130, 116, 260, 44, "요청이 프록시에 닿는다")
+oval(CA - 130, 116, 224, 44, "요청이 프록시에 닿는다")
 diamond(CA, 240, "추적 헤더가", "이미 붙어 있나")
-step(CB - 150, 212, 300, 56, "진행 중 트레이스로 본다")
-step(CA - 150, 320, 300, 56, "새 트레이스를 시작한다")
+step(CB - 150, 212, 260, 56, "진행 중 트레이스로 본다")
+step(CA - 150, 320, 260, 56, "새 트레이스를 시작한다")
 d.o.append(f'<circle cx="{CA}" cy="402" r="4" fill="{MUTED}"/>')
 diamond(CA, 496, "x-envoy-force-trace 가", "내부 요청에 실렸나")
-step(CB - 150, 468, 300, 56, "무조건 수집한다", focal=True)
+step(CB - 150, 468, 260, 56, "무조건 수집한다", focal=True)
 diamond(CA, 656, "sampling 비율", "안에 드나")
-oval(CB - 140, 634, 280, 44, "스팬을 보낸다")
-oval(CA - 110, 768, 220, 44, "버린다")
+oval(CB - 140, 634, 240, 44, "스팬을 보낸다")
+oval(CA - 110, 768, 188, 44, "버린다")
 
 d.arrow([(CA, 160), (CA, 186)], MUTED, "ar", 1.4)
 d.arrow([(CA, 292), (CA, 318)], MUTED, "ar", 1.4)
@@ -64,6 +64,6 @@ d.t(CA + 22, 308, "아니오", 12, MUTED, KR, "start", 600)
 d.t(CA + 22, 578, "아니오", 12, MUTED, KR, "start", 600)
 d.t(CA + 22, 740, "아니오", 12, MUTED, KR, "start", 600)
 
-d.t(32, 836, "\"내부 요청\" 조건은 저자가 아니라 Envoy 공식 문서에서 왔다 — 저자는 이 전제를 적지 않는다", 11, SOFT, KR, "start")
+d.t(28, 836, "\"내부 요청\" 조건은 저자가 아니라 Envoy 공식 문서에서 왔다 — 저자는 이 전제를 적지 않는다", 11, SOFT, KR, "start")
 d.legend(856, [("낮은 샘플링에서도 붙잡는 갈래", ACC)])
 d.save("08-01.sampling-decision.svg")

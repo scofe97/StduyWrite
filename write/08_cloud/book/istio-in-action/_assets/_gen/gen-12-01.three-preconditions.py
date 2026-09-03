@@ -11,17 +11,17 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, KR, MONO
 
-W, H = 1080, 720
+W, H = 1000, 720
 d = D(W, H, "ISTIO IN ACTION · 12-01 §1",
       "셋을 다 채워야 하나의 메시가 된다",
       "저자가 든 전제 셋을 집합으로 놓았다. 둘만 채운 자리에는 각각 다른 것이 빠지고, 색이 붙은 "
       "가운데에서만 메시가 성립한다. 셋은 순서가 아니라 조건이다.",
       "엔드포인트를 아는 것만으로는 쓸모가 없다는 저자의 문장이 이 그림의 출발점입니다")
 
-AX, AY = 540, 268
-BX, BY = 452, 424
-CX, CY = 628, 424
-R = 148
+AX, AY = 500, 268
+BX, BY = 420, 424
+CX, CY = 580, 424
+R = 136
 GX, GY = 540, 372
 
 for cx, cy, col in ((AX, AY, MUTED), (BX, BY, SOFT), (CX, CY, INK)):
@@ -31,26 +31,26 @@ d.t(GX, GY + 4, "메시 성립", 11, ACC, KR, "middle", 600)
 
 d.t(AX, 100, "CROSS-CLUSTER DISCOVERY", 8, SOFT, MONO, "middle")
 d.t(AX, 118, "워크로드 발견", 14, MUTED, KR, "middle", 600)
-d.t(264, 452, "워크로드 연결성", 14, SOFT, KR, "middle", 600)
-d.path("M 264 464 L 264 512 L 344 512", SOFT, 0.8, m="soft")
-d.t(816, 452, "공통 신뢰", 14, INK, KR, "middle", 600)
-d.path("M 816 464 L 816 512 L 736 512", INK, 0.8, m="ar")
+d.t(244, 452, "워크로드 연결성", 14, SOFT, KR, "middle", 600)
+d.path("M 244 464 L 244 512 L 320 512", SOFT, 0.8, m="soft")
+d.t(756, 452, "공통 신뢰", 14, INK, KR, "middle", 600)
+d.path("M 756 464 L 756 512 L 680 512", INK, 0.8, m="ar")
 
 d.t(AX, 180, "상대의 API 서버를 읽는다", 11, MUTED, KR, "middle")
 d.t(AX, 200, "서비스와 엔드포인트", 9, MUTED, MONO, "middle")
-d.t(360, 470, "IP 로 닿는다", 11, SOFT, KR, "middle")
-d.t(360, 490, "또는 동서 게이트웨이", 11, SOFT, KR, "middle")
-d.t(720, 470, "같은 뿌리의 인증서", 11, INK, KR, "middle")
-d.t(720, 490, "상호 인증이 선다", 11, INK, KR, "middle")
+d.t(332, 470, "IP 로 닿는다", 11, SOFT, KR, "middle")
+d.t(332, 490, "또는 동서 게이트웨이", 11, SOFT, KR, "middle")
+d.t(668, 470, "같은 뿌리의 인증서", 11, INK, KR, "middle")
+d.t(668, 490, "상호 인증이 선다", 11, INK, KR, "middle")
 
-d.t(424, 328, "알고 닿지만", 10, MUTED, KR, "middle")
-d.t(424, 346, "서로를 못 믿는다", 10, MUTED, KR, "middle")
-d.t(656, 328, "알고 믿지만", 10, MUTED, KR, "middle")
-d.t(656, 346, "닿지 못한다", 10, MUTED, KR, "middle")
-d.t(540, 468, "닿고 믿지만", 10, MUTED, KR, "middle")
-d.t(540, 486, "있는 줄 모른다", 10, MUTED, KR, "middle")
+d.t(392, 328, "알고 닿지만", 11, MUTED, KR, "middle")
+d.t(392, 346, "서로를 못 믿는다", 11, MUTED, KR, "middle")
+d.t(608, 328, "알고 믿지만", 11, MUTED, KR, "middle")
+d.t(608, 346, "닿지 못한다", 11, MUTED, KR, "middle")
+d.t(500, 468, "닿고 믿지만", 11, MUTED, KR, "middle")
+d.t(500, 486, "있는 줄 모른다", 11, MUTED, KR, "middle")
 
-d.t(32, 604, "저자가 못 박는 문장 — 워크로드 엔드포인트를 아는 것은 그리로 연결을 걸 수 없으면 쓸모가 없다", 11, SOFT, KR, "start")
-d.t(32, 628, "셋을 채우는 일은 대부분 istioctl 이 자동화한다 — 어려운 것은 조직이 그 권한을 허용하느냐다", 11, MUTED, KR, "start")
+d.t(28, 604, "저자가 못 박는 문장 — 워크로드 엔드포인트를 아는 것은 그리로 연결을 걸 수 없으면 쓸모가 없다", 11, SOFT, KR, "start")
+d.t(28, 628, "셋을 채우는 일은 대부분 istioctl 이 자동화한다 — 어려운 것은 조직이 그 권한을 허용하느냐다", 11, MUTED, KR, "start")
 d.legend(652, [("셋이 모두 채워진 자리", ACC), ("하나가 빠진 자리", MUTED)])
 d.save("12-01.three-preconditions.svg")

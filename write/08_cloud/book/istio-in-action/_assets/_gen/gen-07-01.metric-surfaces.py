@@ -6,14 +6,14 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1080, 500
+W, H = 1000, 500
 d = D(W, H, "ISTIO IN ACTION · 07-01 §2",
       "메트릭을 어디에 묻고 무엇을 돌려받는가",
       "같은 프록시가 포트와 경로를 여럿 열어 두고, 같은 계열의 값을 다른 형식으로 두 번 낸다. "
       "색이 붙은 잎이 Prometheus 가 실제로 긁어 가는 곳이다.",
       "앞의 셋은 사이드카가, 마지막 하나는 istiod 가 엽니다")
 
-LW, LH = 220, 56
+LW, LH = 204, 56
 LY = 336
 def leaf_x(i): return 40 + i * 244
 leaves = [
@@ -22,7 +22,7 @@ leaves = [
     ("Prometheus 형식", ":15090/stats/prometheus", True),
     ("컨트롤 플레인 통계", ":15014/metrics", False),
 ]
-TW, TH = 240, 60
+TW, TH = 224, 60
 TY = 208
 tiers = [("istio-proxy 사이드카", "앱 파드마다 하나", 394 - TW / 2),
          ("istiod", "istio-system", 882 - TW / 2)]
@@ -60,6 +60,6 @@ for i, (name, port, focal) in enumerate(leaves):
     d.t(x + LW / 2, LY + 24, name, 12, ACC if focal else INK, KR, "middle", 600)
     d.t(x + LW / 2, LY + 44, port, 9, ACC if focal else MUTED, MONO, "middle")
 
-d.t(40, 424, "distroless 이미지에는 curl 이 없어 pilot-agent request GET stats 로 같은 값을 꺼낸다", 11, SOFT, KR, "start")
+d.t(36, 424, "distroless 이미지에는 curl 이 없어 pilot-agent request GET stats 로 같은 값을 꺼낸다", 11, SOFT, KR, "start")
 d.legend(444, [("Prometheus 가 긁는 곳", ACC)])
 d.save("07-01.metric-surfaces.svg")

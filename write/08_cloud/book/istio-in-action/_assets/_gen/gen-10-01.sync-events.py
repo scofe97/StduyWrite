@@ -8,7 +8,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import Seq, ACC, MUTED, SOFT, INK, KR, MONO
 
-W, H = 1240, 620
+W, H = 1000, 620
 d = Seq(W, H, "ISTIO IN ACTION · 10-01 §2",
         "설정이 늦게 도착하는 것은 고장이 아니다",
         "워크로드가 불건강해진 뒤 프록시가 그 사실을 반영하기까지 네 참여자가 차례로 움직인다. "
@@ -28,6 +28,6 @@ d.selfmsg("istiod", "변경 인식", 372, MUTED, sub="여기도 즉시가 아니
 d.msg("istiod", "Envoy 프록시", "EDS 갱신 전송", 436, MUTED, "ar", sub="그 엔드포인트를 뺀 목록")
 d.msg("Envoy 프록시", "istiod", "수신 확인", 494, ACC, "acc", sub="여기까지 와야 SYNCED 다")
 
-d.t(24, 556, "proxy-status 가 이 파이프라인의 끝을 보여 준다 — STALE 이면 보냈는데 확인이 안 온 것이다", 11, SOFT, KR, "start")
+d.t(20, 556, "proxy-status 가 이 파이프라인의 끝을 보여 준다 — STALE 이면 보냈는데 확인이 안 온 것이다", 11, SOFT, KR, "start")
 d.legend(576, [("proxy-status 가 SYNCED 로 적는 지점", ACC)])
 d.save("10-01.sync-events.svg")

@@ -7,7 +7,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1200, 600
+W, H = 1000, 600
 d = D(W, H, "ISTIO IN ACTION · 01-01 §7",
       "프록시가 밖에 살아서 기존 시스템도 들어온다",
       "저자는 Istio 가 마이크로서비스를 겨냥하지만 거기 한정되지 않는다고 명시한다. 근거는 프록시가 "
@@ -31,22 +31,22 @@ def node(x, y, w, h, tag, name, sub, focal=False):
     d.t(x + 62, y + 24, name, 13, ACC if focal else INK, KR, "start", 600)
     d.t(x + 62, y + 42, sub, 9, MUTED, MONO, "start")
 
-zone(56, 148, 500, 100, "KUBERNETES")
-zone(56, 292, 500, 100, "VIRTUAL MACHINE")
-zone(640, 148, 504, 244, "SAME MESH")
+zone(48, 148, 416, 100, "KUBERNETES")
+zone(48, 292, 416, 100, "VIRTUAL MACHINE")
+zone(532, 148, 420, 244, "SAME MESH")
 
-node(80, 176, 452, 60, "POD", "새 마이크로서비스", "app + istio-proxy")
-node(80, 320, 452, 60, "VM", "모놀리스", "app + istio-proxy", focal=True)
-node(664, 176, 456, 60, "CP", "컨트롤 플레인", "설정 · 아이덴티티 · 텔레메트리")
-node(664, 320, 456, 60, "OPS", "얻는 것", "요청 메트릭 · 정책 강제")
+node(68, 176, 376, 60, "POD", "새 마이크로서비스", "app + istio-proxy")
+node(68, 320, 376, 60, "VM", "모놀리스", "app + istio-proxy", focal=True)
+node(552, 176, 380, 60, "CP", "컨트롤 플레인", "설정 · 아이덴티티 · 텔레메트리")
+node(552, 320, 380, 60, "OPS", "얻는 것", "요청 메트릭 · 정책 강제")
 
-d.path("M 532 206 L 620 206 L 620 206 L 660 206", INFO, 1.2, m="info")
-d.path("M 532 350 L 620 350 L 620 350 L 660 350", ACC, 1.5, m="acc")
-d.t(600, 188, "같은 방식", 9, MUTED, KR, "middle")
-d.t(600, 332, "코드 변경 없이", 9, ACC, KR, "middle", 600)
+d.path("M 444 206 L 516 206 L 516 206 L 552 206", INFO, 1.2, m="info")
+d.path("M 444 350 L 516 350 L 516 350 L 552 350", ACC, 1.5, m="acc")
+d.t(500, 188, "같은 방식", 11, MUTED, KR, "middle")
+d.t(500, 332, "코드 변경 없이", 11, ACC, KR, "middle", 600)
 
-d.t(32, 448, "모놀리스에서 최소한 얻는 것 — 사용량 · 지연 · 처리량 · 실패 특성", 11, SOFT, KR, "start")
-d.t(32, 472, "저자가 든 정책 예 — \"클라우드 서비스는 온프레미스 애플리케이션과 통신하거나 그 데이터를 쓸 수 없다\"", 11, MUTED, KR, "start")
-d.t(32, 496, "옛 서비스에 서킷 브레이커가 남아 있어도 더 제한적인 쪽이 이긴다 — 다만 타임아웃과 재시도는 충돌할 수 있다", 11, SOFT, KR, "start")
+d.t(28, 448, "모놀리스에서 최소한 얻는 것 — 사용량 · 지연 · 처리량 · 실패 특성", 11, SOFT, KR, "start")
+d.t(28, 472, "저자가 든 정책 예 — \"클라우드 서비스는 온프레미스 애플리케이션과 통신하거나 그 데이터를 쓸 수 없다\"", 11, MUTED, KR, "start")
+d.t(28, 496, "옛 서비스에 서킷 브레이커가 남아 있어도 더 제한적인 쪽이 이긴다 — 다만 타임아웃과 재시도는 충돌할 수 있다", 11, SOFT, KR, "start")
 d.legend(536, [("코드를 바꾸지 않고 편입되는 자리", ACC), ("메시가 원래 겨냥한 쪽", INFO)])
 d.save("01-01.brownfield.svg")

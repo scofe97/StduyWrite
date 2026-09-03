@@ -8,7 +8,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 468
+W, H = 1000, 468
 d = D(W, H, "ISTIO IN ACTION · 09-01 §7",
       "같은 요청에 신원이 둘 실린다",
       "전송 계층은 인증서에서, 요청 계층은 토큰에서 신원을 얻는다. 정책이 쓰는 필드 이름이 다른 이유가 "
@@ -21,13 +21,13 @@ lanes = [("TRANSPORT", "사이드카끼리"),
 for k, (name, sub) in enumerate(lanes):
     top = LANE_Y0 + k * LANE_H
     d.line(0, top, W, top, RULE, 0.8)
-    d.t(20, top + 52, name, 9, SOFT, MONO, "start", 600)
-    d.t(20, top + 70, sub, 11, MUTED, KR, "start")
+    d.t(16, top + 52, name, 9, SOFT, MONO, "start", 600)
+    d.t(16, top + 70, sub, 11, MUTED, KR, "start")
 d.line(0, LANE_Y0 + 2 * LANE_H, W, LANE_Y0 + 2 * LANE_H, RULE, 0.8)
-d.line(184, LANE_Y0, 184, LANE_Y0 + 2 * LANE_H, RULE, 1.0)
+d.line(148, LANE_Y0, 148, LANE_Y0 + 2 * LANE_H, RULE, 1.0)
 
-SW, SH = 210, 64
-def sx(j): return 232 + j * 246
+SW, SH = 168, 64
+def sx(j): return 188 + j * 200
 def sy(k): return LANE_Y0 + k * LANE_H + 28
 def step(k, j, label, sub, focal=False):
     x, y = sx(j), sy(k)
@@ -53,6 +53,6 @@ step(1, 1, "RequestAuthentication", "jwks 로 서명 검증")
 step(1, 2, "iss / sub", "auth@istioinaction.io/…")
 step(1, 3, "requestPrincipals", "없으면 비어 있다", focal=True)
 
-d.t(32, 376, "정책이 쓰는 필드 이름이 갈리는 이유가 이 두 경로다 — 앞은 mTLS 가 있어야, 뒤는 토큰이 있어야 찬다", 11, SOFT, KR, "start")
+d.t(24, 376, "정책이 쓰는 필드 이름이 갈리는 이유가 이 두 경로다 — 앞은 mTLS 가 있어야, 뒤는 토큰이 있어야 찬다", 11, SOFT, KR, "start")
 d.legend(404, [("토큰이 없으면 비는 칸", ACC), ("인증서에서 오는 경로", MUTED)])
 d.save("09-01.two-identities.svg")

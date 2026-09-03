@@ -6,7 +6,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 528
+W, H = 1000, 528
 d = D(W, H, "ISTIO IN ACTION · 08-01 §2",
       "대시보드는 라벨 하나로 건너간다",
       "Istio 배포판에서 빠진 대시보드 JSON 여섯을 받아 컨피그맵으로 만들고, 라벨을 달면 Grafana 사이드카가 "
@@ -20,13 +20,13 @@ lanes = [("ISTIO SOURCE", "github · grafana.com"),
 for k, (name, sub) in enumerate(lanes):
     top = LANE_Y0 + k * LANE_H
     d.line(0, top, W, top, RULE, 0.8)
-    d.t(20, top + 48, name, 9, SOFT, MONO, "start", 600)
-    d.t(20, top + 66, sub, 11, MUTED, KR, "start")
+    d.t(16, top + 48, name, 9, SOFT, MONO, "start", 600)
+    d.t(16, top + 66, sub, 11, MUTED, KR, "start")
 d.line(0, LANE_Y0 + 3 * LANE_H, W, LANE_Y0 + 3 * LANE_H, RULE, 0.8)
-d.line(184, LANE_Y0, 184, LANE_Y0 + 3 * LANE_H, RULE, 1.0)
+d.line(148, LANE_Y0, 148, LANE_Y0 + 3 * LANE_H, RULE, 1.0)
 
-SW, SH = 210, 64
-def sx(j): return 232 + j * 246
+SW, SH = 168, 64
+def sx(j): return 188 + j * 200
 def sy(k): return LANE_Y0 + k * LANE_H + 24
 def step(k, j, label, sub, focal=False):
     x, y = sx(j), sy(k)
@@ -50,6 +50,6 @@ step(1, 1, "컨피그맵으로 만든다", "create cm istio-dashboards")
 step(1, 2, "라벨을 단다", "kubectl label cm")
 step(2, 3, "사이드카가 집어 간다", "Home 에 목록이 뜬다", focal=True)
 
-d.t(32, 464, "공식 배포판에는 없다 — 소스나 grafana.com/orgs/istio/dashboards 에서 받는다", 11, SOFT, KR, "start")
+d.t(24, 464, "공식 배포판에는 없다 — 소스나 grafana.com/orgs/istio/dashboards 에서 받는다", 11, SOFT, KR, "start")
 d.legend(488, [("라벨이 없으면 건너가지 않는다", ACC)])
 d.save("08-01.dashboard-handoff.svg")
