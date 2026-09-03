@@ -5,15 +5,9 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 432
-d = D(W, H, "ISTIO IN ACTION · 01-01",
-      "서비스 메시는 무엇을 인프라로 밀어냈는가 — 읽는 순서",
-      "1장 노트의 절 여덟을 읽는 순서로 이은 지도. §1~§3 이 문제와 라이브러리 해법의 한계이고, "
-      "§4~§5 가 프록시로 옮긴 결과, §6~§8 이 앞선 기술과의 비교와 저자가 인정한 대가다.",
-      "§8 에서 저자가 스스로 단점 셋을 꺼내 놓습니다")
-
-CW, CH, GAP, X0 = 280, 96, 16, 36
-Y1, Y2 = 104, 248
+# 폭은 계약의 본문 삽입용 상한(880~1000) 안으로 두고, 4 열을 2 열로 접어 담는다.
+# 계약: "넓은 캔버스에 담기지 않으면 폭을 늘리지 말고 배치를 바꾼다."
+COLS, CW, CH, GAP, VGAP, X0, Y0 = 2, 396, 100, 16, 56, 36, 104
 cards = [
     ("§1", "인프라는 신뢰할 수 없다", "지연의 원인을 구분 못 한다"),
     ("§2", "애플리케이션 네트워킹 여덟", "패킷이 아니라 메시지 계층"),
@@ -24,25 +18,41 @@ cards = [
     ("§7", "마이크로서비스가 아니어도", "모놀리스에도 붙는다"),
     ("§8", "저자가 인정하는 단점 셋", "기술보다 조직이 어렵다"),
 ]
+FOCAL = 7
+ROWS = -(-len(cards) // COLS)
+BOTTOM = Y0 + ROWS * (CH + VGAP) - VGAP
+LEGY = BOTTOM + 48
+W, H = 880, LEGY + 40
+
+d = D(W, H, "ISTIO IN ACTION · 01-01",
+      "서비스 메시는 무엇을 인프라로 밀어냈는가 — 읽는 순서",
+      "1장 노트의 절 여덟을 읽는 순서로 이은 지도. §1~§3 이 문제와 라이브러리 해법의 한계이고, "
+      "§4~§5 가 프록시로 옮긴 결과, §6~§8 이 앞선 기술과의 비교와 저자가 인정한 대가다.",
+      "§8 에서 저자가 스스로 단점 셋을 꺼내 놓습니다")
+
 def pos(i):
-    if i < 4: return X0 + i * (CW + GAP), Y1
-    return X0 + (i - 4) * (CW + GAP), Y2
-def card(i, focal=False):
-    x, y = pos(i); n, title, q = cards[i]
-    if focal:
-        d.o.append(f'<rect x="{x}" y="{y}" width="{CW}" height="{CH}" rx="8" fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
-    else:
-        d.box(x, y, CW, CH, PAPER2, RULE, 1.0, 8)
-    d.t(x + 16, y + 26, n, 11, ACC if focal else SOFT, MONO, "start", 600)
-    d.t(x + 16, y + 52, title, 13, ACC if focal else INK, KR, "start", 600)
-    d.t(x + 16, y + 76, q, 11, MUTED, KR, "start")
-for i in range(7):
+    r, c = divmod(i, COLS)
+    return X0 + c * (CW + GAP), Y0 + r * (CH + VGAP)
+
+for i in range(len(cards) - 1):
     x1, y1 = pos(i); x2, y2 = pos(i + 1)
     if y1 == y2:
         d.arrow([(x1 + CW, y1 + CH / 2), (x2 - 2, y2 + CH / 2)], MUTED, "ar", 1.4)
     else:
-        d.path(f"M {x1 + CW / 2} {y1 + CH} L {x1 + CW / 2} 224 L {x2 + CW / 2} 224 L {x2 + CW / 2} {y2 - 2}", MUTED, 1.4, m="ar")
-for i in range(8):
-    card(i, focal=(i == 7))
-d.legend(376, [("저자가 스스로 대가를 꺼내는 자리", ACC)])
+        my = y1 + CH + VGAP / 2
+        d.path(f"M {x1 + CW / 2} {y1 + CH} L {x1 + CW / 2} {my} "
+               f"L {x2 + CW / 2} {my} L {x2 + CW / 2} {y2 - 2}", MUTED, 1.4, m="ar")
+
+for i, (num, title, q) in enumerate(cards):
+    x, y = pos(i); focal = (i == FOCAL)
+    if focal:
+        d.o.append(f'<rect x="{x}" y="{y}" width="{CW}" height="{CH}" rx="8" '
+                   f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
+    else:
+        d.box(x, y, CW, CH, PAPER2, RULE, 1.0, 8)
+    d.t(x + 20, y + 28, num, 11, ACC if focal else SOFT, MONO, "start", 600)
+    d.t(x + 20, y + 56, title, 14, ACC if focal else INK, KR, "start", 600)
+    d.t(x + 20, y + 82, q, 12, MUTED, KR, "start")
+
+d.legend(LEGY, [("저자가 스스로 대가를 꺼내는 자리", ACC)])
 d.save("01-01.chapter-overview.svg")

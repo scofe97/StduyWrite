@@ -7,15 +7,9 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 520
-d = D(W, H, "ISTIO IN ACTION · 11-01",
-      "컨트롤 플레인의 성능은 낡은 설정의 수명이다 — 읽는 순서",
-      "11장 노트의 절 여덟을 읽는 순서로 이은 지도. 앞의 셋이 무엇이 느려지는지를 세우고, 가운데 둘이 "
-      "그것을 어떻게 재는지를 정하며, 뒤의 셋이 손잡이를 순서대로 돌린다.",
-      "자원 증설이 마지막인 이유가 이 순서 자체입니다")
-
-CW, CH, GAP, X0 = 280, 96, 16, 36
-Y1, Y2 = 104, 248
+# 폭은 계약의 본문 삽입용 상한(880~1000) 안으로 두고, 4 열을 2 열로 접어 담는다.
+# 계약: "넓은 캔버스에 담기지 않으면 폭을 늘리지 말고 배치를 바꾼다."
+COLS, CW, CH, GAP, VGAP, X0, Y0 = 2, 396, 100, 16, 56, 36, 104
 cards = [
     ("§1", "늦은 설정이 유령을 만든다", "없는 엔드포인트로 보낸다"),
     ("§2", "이벤트가 닿기까지 다섯 걸음", "일부러 늦추는 자리가 둘"),
@@ -27,28 +21,40 @@ cards = [
     ("§8", "자원은 마지막 손잡이", "오토스케일링은 아직 안 먹는다"),
 ]
 FOCAL = 5
+ROWS = -(-len(cards) // COLS)
+BOTTOM = Y0 + ROWS * (CH + VGAP) - VGAP
+LEGY = BOTTOM + 48
+W, H = 880, LEGY + 40
+
+d = D(W, H, "ISTIO IN ACTION · 11-01",
+      "컨트롤 플레인의 성능은 낡은 설정의 수명이다 — 읽는 순서",
+      "11장 노트의 절 여덟을 읽는 순서로 이은 지도. 앞의 셋이 무엇이 느려지는지를 세우고, 가운데 둘이 "
+      "그것을 어떻게 재는지를 정하며, 뒤의 셋이 손잡이를 순서대로 돌린다.",
+      "자원 증설이 마지막인 이유가 이 순서 자체입니다")
+
 def pos(i):
-    if i < 4: return X0 + i * (CW + GAP), Y1
-    return X0 + (i - 4) * (CW + GAP), Y2
-def card(i):
-    x, Y = pos(i); n, title, q = cards[i]; focal = (i == FOCAL)
-    if focal:
-        d.o.append(f'<rect x="{x}" y="{Y}" width="{CW}" height="{CH}" rx="8" fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
-    else:
-        d.box(x, Y, CW, CH, PAPER2, RULE, 1.0, 8)
-    d.t(x + 16, Y + 26, n, 11, ACC if focal else SOFT, MONO, "start", 600)
-    d.t(x + 16, Y + 52, title, 13, ACC if focal else INK, KR, "start", 600)
-    d.t(x + 16, Y + 76, q, 11, MUTED, KR, "start")
-for i in range(7):
+    r, c = divmod(i, COLS)
+    return X0 + c * (CW + GAP), Y0 + r * (CH + VGAP)
+
+for i in range(len(cards) - 1):
     x1, y1 = pos(i); x2, y2 = pos(i + 1)
     if y1 == y2:
         d.arrow([(x1 + CW, y1 + CH / 2), (x2 - 2, y2 + CH / 2)], MUTED, "ar", 1.4)
     else:
-        d.path(f"M {x1 + CW / 2} {y1 + CH} L {x1 + CW / 2} 224 L {x2 + CW / 2} 224 L {x2 + CW / 2} {y2 - 2}", MUTED, 1.4, m="ar")
-for i in range(8):
-    card(i)
+        my = y1 + CH + VGAP / 2
+        d.path(f"M {x1 + CW / 2} {y1 + CH} L {x1 + CW / 2} {my} "
+               f"L {x2 + CW / 2} {my} L {x2 + CW / 2} {y2 - 2}", MUTED, 1.4, m="ar")
 
-d.t(32, 396, "손잡이의 순서는 일을 줄이는 것부터다 — 무시하기 · 묶기 · 좁히기를 다 해 본 뒤에 자원을 늘린다", 11, SOFT, KR, "start")
-d.t(32, 420, "저자가 든 기준값 — 서비스 1,000개와 워크로드 2,000개를 vCPU 하나와 메모리 1.5GB 로 감당한다", 11, MUTED, KR, "start")
-d.legend(444, [("이득의 대부분이 나온다고 적은 손잡이", ACC), ("그 앞뒤로 도는 손잡이", MUTED)])
+for i, (num, title, q) in enumerate(cards):
+    x, y = pos(i); focal = (i == FOCAL)
+    if focal:
+        d.o.append(f'<rect x="{x}" y="{y}" width="{CW}" height="{CH}" rx="8" '
+                   f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
+    else:
+        d.box(x, y, CW, CH, PAPER2, RULE, 1.0, 8)
+    d.t(x + 20, y + 28, num, 11, ACC if focal else SOFT, MONO, "start", 600)
+    d.t(x + 20, y + 56, title, 14, ACC if focal else INK, KR, "start", 600)
+    d.t(x + 20, y + 82, q, 12, MUTED, KR, "start")
+
+d.legend(LEGY, [("이득의 대부분이 나온다고 적은 손잡이", ACC), ("그 앞뒤로 도는 손잡이", MUTED)])
 d.save("11-01.chapter-overview.svg")
