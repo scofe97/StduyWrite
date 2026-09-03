@@ -10,7 +10,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1200, 640
+W, H = 992, 640
 d = D(W, H, "ISTIO IN ACTION · 01-01 §3",
       "하나를 고르면 나머지가 딸려 온다",
       "서킷 브레이킹을 쓰려고 Hystrix 를 고르면 Ribbon 이 필요하고, Ribbon 은 Eureka 를 필요로 한다. "

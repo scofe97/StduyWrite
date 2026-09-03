@@ -12,7 +12,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, RULE, KR, MONO
 
-W, H = 1160, 640
+W, H = 1000, 640
 d = D(W, H, "ISTIO IN ACTION · 12-01 §5",
       "식별자 셋이 어디까지가 한 몸인지를 정한다",
       "같은 meshID 를 가진 설치들이 하나의 메시가 되고, 그 안에서 clusterName 이 클러스터를 가르며, "
@@ -22,23 +22,24 @@ d = D(W, H, "ISTIO IN ACTION · 12-01 §5",
 def ring(x, y, w, h, tag, sub, stroke, fill, focal=False):
     d.o.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="8" fill="{fill}" '
                f'stroke="{stroke}" stroke-width="{1.4 if focal else 1.0}"/>')
-    tw = len(tag) * 6 + 16
+    # 마스크는 11px 라벨을 덮어야 한다 — 한글은 1em, 라틴 mono 는 0.62em.
+    tw = int(sum(11 if '가' <= c <= '힣' else 6.9 for c in tag)) + 20
     d.o.append(f'<rect x="{x + 20}" y="{y - 7}" width="{tw}" height="14" fill="{PAPER}"/>')
     d.t(x + 28, y + 3, tag, 11, ACC if focal else SOFT, MONO, "start", 600)
     d.t(x + 28, y + 30, sub, 11, ACC if focal else MUTED, KR, "start")
 
-ring(72, 128, 1016, 372, "MESHID = USMESH · 설치 하나 기준", "같은 값을 쓴 설치들이 하나의 메시가 된다", f"{INK}30", f"{INK}04")
-ring(116, 184, 928, 280, "CLUSTERNAME = WEST-CLUSTER", "메시 안에서 클러스터를 가른다 · 원격 시크릿의 이름이 된다", MUTED, f"{INK}07")
-ring(160, 240, 840, 184, "NETWORK = WEST-NETWORK", "같은 망이면 IP 로, 다르면 동서 게이트웨이로", ACC, f"{ACC}0E", focal=True)
+ring(40, 128, 920, 372, "MESHID = USMESH · 설치 하나 기준", "같은 값을 쓴 설치들이 하나의 메시가 된다", f"{INK}30", f"{INK}04")
+ring(84, 184, 832, 280, "CLUSTERNAME = WEST-CLUSTER", "메시 안에서 클러스터를 가른다 · 원격 시크릿의 이름이 된다", MUTED, f"{INK}07")
+ring(128, 240, 744, 184, "NETWORK = WEST-NETWORK", "같은 망이면 IP 로, 다르면 동서 게이트웨이로", ACC, f"{ACC}0E", focal=True)
 
 items = [("IstioOperator", "values.global.multiCluster"),
          ("네임스페이스 라벨", "topology.istio.io/network"),
          ("게이트웨이 환경변수", "ISTIO_META_REQUESTED_NETWORK_VIEW")]
 for i, (name, sub) in enumerate(items):
-    x = 196 + i * 268
-    d.o.append(f'<rect x="{x}" y="{316}" width="248" height="64" rx="6" fill="{ACC}10" stroke="{ACC}66" stroke-width="1"/>')
-    d.t(x + 124, 342, name, 12, INK, KR, "middle", 600)
-    d.t(x + 124, 364, sub, 8, MUTED, MONO)
+    x = 152 + i * 236
+    d.o.append(f'<rect x="{x}" y="{316}" width="228" height="64" rx="6" fill="{ACC}10" stroke="{ACC}66" stroke-width="1"/>')
+    d.t(x + 114, 342, name, 12, INK, KR, "middle", 600)
+    d.t(x + 114, 364, sub, 8, MUTED, MONO)
 
 d.t(32, 528, "east 쪽 설치는 clusterName 과 network 만 바꾸고 meshID 는 그대로 둔다 — 그래야 한 메시가 된다", 11, SOFT, KR, "start")
 d.t(32, 552, "네트워크 지형을 MeshNetwork 로도 적을 수 있지만 저자는 드물고 고급인 경우에만 남은 옛 설정이라 적는다", 11, MUTED, KR, "start")

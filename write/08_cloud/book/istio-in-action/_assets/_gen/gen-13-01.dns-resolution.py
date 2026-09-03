@@ -11,7 +11,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1200, 936
+W, H = 1000, 936
 d = D(W, H, "ISTIO IN ACTION · 13-01 §5",
       "가로채기가 없으면 이름은 기계 밖으로 나간다",
       "질의는 평소의 리졸버로 가려다가 Iptable 규칙에 붙들려 사이드카 안의 DNS 프록시로 향한다. "
@@ -37,7 +37,7 @@ def diamond(cx, cy, l1, l2):
     d.t(cx, cy - 4, l1, 12, INK, KR, "middle", 600)
     d.t(cx, cy + 16, l2, 12, INK, KR, "middle", 600)
 
-CA, CB = 356, 872
+CA, CB = 236, 752
 
 oval(CA - 168, 112, 336, 64, "webapp.istioinaction 을 묻는다", "01 · 애플리케이션의 DNS 질의")
 diamond(CA, 268, "hosts 파일에", "맞는 항목이 있나")

@@ -10,7 +10,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1200, 880
+W, H = 1000, 880
 d = D(W, H, "ISTIO IN ACTION · 10-01 §8",
       "0 은 5xx 가 아니라서 실패로 세지 않는다",
       "같은 타임아웃 하나를 두 프록시가 각자 기록하는데, 실패율 집계가 5xx 여부만 보기 때문에 한쪽에서만 "
@@ -41,7 +41,7 @@ def diamond(cx, cy, l1, l2, focal=False):
     d.t(cx, cy - 4, l1, 12, ACC if focal else INK, KR, "middle", 600)
     d.t(cx, cy + 16, l2, 12, ACC if focal else INK, KR, "middle", 600)
 
-CA, CB = 320, 856
+CA, CB = 232, 768
 
 oval(CA - 170, 112, 340, 56, "업스트림이 0.5초를 넘긴다", "catalog v2 인스턴스 하나")
 step(CA - 170, 212, 340, 68, "게이트웨이 프록시가 적는다", "504 · response_flags UT")

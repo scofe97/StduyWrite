@@ -9,7 +9,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, RULE, KR, MONO
 
-W, H = 1160, 640
+W, H = 1000, 640
 d = D(W, H, "ISTIO IN ACTION · 11-01 §6",
       "안쪽이 바깥을 덮어쓴다",
       "Sidecar 설정은 세 스코프로 놓이고 안쪽이 더 구체적이라 바깥을 덮어쓴다. 색이 붙은 가장 안쪽이 "
@@ -19,23 +19,24 @@ d = D(W, H, "ISTIO IN ACTION · 11-01 §6",
 def ring(x, y, w, h, tag, sub, stroke, fill, focal=False):
     d.o.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="8" fill="{fill}" '
                f'stroke="{stroke}" stroke-width="{1.4 if focal else 1.0}"/>')
-    tw = len(tag) * 6 + 16
+    # 마스크는 11px 라벨을 덮어야 한다 — 한글은 1em, 라틴 mono 는 0.62em.
+    tw = int(sum(11 if '가' <= c <= '힣' else 6.9 for c in tag)) + 20
     d.o.append(f'<rect x="{x + 20}" y="{y - 7}" width="{tw}" height="14" fill="{PAPER}"/>')
     d.t(x + 28, y + 3, tag, 11, ACC if focal else SOFT, MONO, "start", 600)
     d.t(x + 28, y + 30, sub, 11, ACC if focal else MUTED, KR, "start")
 
-ring(72, 128, 1016, 372, "MESH-WIDE · NAMESPACE ISTIO-SYSTEM", "이름은 default · 메시 전체의 기본값", f"{INK}30", f"{INK}04")
-ring(116, 184, 928, 280, "NAMESPACE-WIDE · WORKLOADSELECTOR 없음", "이름은 default · 그 네임스페이스를 덮어쓴다", MUTED, f"{INK}07")
-ring(160, 240, 840, 184, "WORKLOAD-SPECIFIC · WORKLOADSELECTOR 있음", "가장 구체적이라 앞의 둘을 덮어쓴다", ACC, f"{ACC}0E", focal=True)
+ring(40, 128, 920, 372, "MESH-WIDE · NAMESPACE ISTIO-SYSTEM", "이름은 default · 메시 전체의 기본값", f"{INK}30", f"{INK}04")
+ring(84, 184, 832, 280, "NAMESPACE-WIDE · WORKLOADSELECTOR 없음", "이름은 default · 그 네임스페이스를 덮어쓴다", MUTED, f"{INK}07")
+ring(128, 240, 744, 184, "WORKLOAD-SPECIFIC · WORKLOADSELECTOR 있음", "가장 구체적이라 앞의 둘을 덮어쓴다", ACC, f"{ACC}0E", focal=True)
 
 fields = [("egress", "어디로 나갈 수 있나"),
           ("ingress", "생략하면 파드에서 유추"),
           ("outboundTrafficPolicy", "REGISTRY_ONLY · ALLOW_ANY")]
 for i, (name, sub) in enumerate(fields):
-    x = 196 + i * 268
-    d.o.append(f'<rect x="{x}" y="{316}" width="248" height="64" rx="6" fill="{ACC}10" stroke="{ACC}66" stroke-width="1"/>')
-    d.t(x + 124, 342, name, 12, INK, MONO, "middle", 600)
-    d.t(x + 124, 364, sub, 11, MUTED, KR)
+    x = 152 + i * 236
+    d.o.append(f'<rect x="{x}" y="{316}" width="228" height="64" rx="6" fill="{ACC}10" stroke="{ACC}66" stroke-width="1"/>')
+    d.t(x + 114, 342, name, 12, INK, MONO, "middle", 600)
+    d.t(x + 114, 364, sub, 11, MUTED, KR)
 
 d.t(32, 528, "egress 를 적어 두면 컨트롤 플레인이 그 워크로드에 필요한 설정만 골라 내려보낸다", 11, SOFT, KR, "start")
 d.t(32, 552, "메시 전역으로 istio-system 만 허용하면 catalog 의 설정이 2MB 에서 644K 로 줄어든다", 11, MUTED, KR, "start")

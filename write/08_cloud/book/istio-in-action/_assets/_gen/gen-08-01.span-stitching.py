@@ -6,7 +6,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import Seq, ACC, MUTED, SOFT, BAD, INK, KR, MONO
 
-W, H = 1240, 620
+W, H = 1000, 620
 d = Seq(W, H, "ISTIO IN ACTION · 08-01 §3",
         "프록시는 스팬을 만들고 트레이스는 앱이 잇는다",
         "요청 하나가 인그레스 게이트웨이와 webapp 을 지나 catalog 로 간다. 프록시는 홉마다 스팬을 만들지만, "
@@ -16,7 +16,7 @@ d = Seq(W, H, "ISTIO IN ACTION · 08-01 §3",
 d.lanes([("클라이언트", "curl"),
          ("인그레스 게이트웨이", "istio-proxy"),
          ("webapp", "app + istio-proxy"),
-         ("catalog", "app + istio-proxy")], y0=104, lane_w=248)
+         ("catalog", "app + istio-proxy")], y0=104, lane_w=216)
 d.rails(524)
 
 d.msg("클라이언트", "인그레스 게이트웨이", "GET /api/catalog", 196, MUTED, "ar", sub="추적 헤더 없이 들어온다")
@@ -27,10 +27,10 @@ d.msg("webapp", "catalog", "같은 traceid · 새 spanid", 436, ACC, "acc", sub=
 d.msg("webapp", "catalog", "헤더 없음", 496, BAD, "bad", sub="복사하지 않으면 새 트레이스가 선다")
 
 # 마지막 둘은 동시에 일어나지 않는다 — 택일임을 왼쪽 대괄호로 표시
-d.line(700, 418, 700, 512, MUTED, 1.0)
-d.line(700, 418, 716, 418, MUTED, 1.0)
-d.line(700, 512, 716, 512, MUTED, 1.0)
-d.t(692, 462, "택일", 11, SOFT, KR, "end", 600)
+d.line(544, 418, 544, 512, MUTED, 1.0)
+d.line(544, 418, 560, 418, MUTED, 1.0)
+d.line(544, 512, 560, 512, MUTED, 1.0)
+d.t(536, 462, "택일", 11, SOFT, KR, "end", 600)
 
 d.t(24, 552, "저자는 이 말을 8.2.1 본문과 8.2.4 별도 상자에서 두 번 반복한다", 11, SOFT, KR, "start")
 d.legend(576, [("앱이 해야 하는 몫", ACC), ("전파하지 않았을 때", BAD)])

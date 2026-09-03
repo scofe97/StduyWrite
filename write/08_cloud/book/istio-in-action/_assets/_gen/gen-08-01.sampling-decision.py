@@ -8,7 +8,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1160, 912
+W, H = 1000, 912
 d = D(W, H, "ISTIO IN ACTION · 08-01 §5",
       "이 요청이 추적될지 정해지는 순서",
       "저자가 세 자리에 나눠 적은 규칙을 요청 하나의 관점으로 이었다. 색이 붙은 갈래가 샘플링을 낮게 "

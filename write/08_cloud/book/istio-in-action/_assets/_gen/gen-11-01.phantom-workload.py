@@ -10,7 +10,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1200, 616
+W, H = 1000, 616
 d = D(W, H, "ISTIO IN ACTION · 11-01 §1",
       "설정에는 남아 있고 클러스터에는 없다",
       "왼쪽은 실제 클러스터, 오른쪽은 프록시가 들고 있는 엔드포인트 목록이다. 색이 붙은 줄이 이미 "
@@ -38,19 +38,19 @@ def node(x, y, w, h, tag, name, sub, c=None, focal=False, gone=False):
     d.t(x + 66, y + 24, name, 13, ACC if focal else (SOFT if gone else INK), KR, "start", 600)
     d.t(x + 66, y + 42, sub, 11, MUTED, MONO, "start")
 
-zone(24, 128, 520, 200, "실제 클러스터")
-zone(660, 128, 516, 300, "프록시가 들고 있는 엔드포인트 목록")
+zone(24, 128, 446, 200, "실제 클러스터")
+zone(554, 128, 422, 300, "프록시가 들고 있는 엔드포인트 목록")
 
-node(48, 160, 472, 60, "POD", "catalog-1", "Running", OK)
-node(48, 236, 472, 60, "POD", "catalog-2", "terminated", gone=True)
-node(684, 160, 468, 60, "EP", "catalog-1 의 주소", "HEALTHY")
-node(684, 236, 468, 60, "EP", "catalog-2 의 주소", "가리키는 파드가 없다", focal=True)
-node(684, 336, 468, 60, "REQ", "그리로 간 요청", "실패한다", BAD)
+node(44, 160, 406, 60, "POD", "catalog-1", "Running", OK)
+node(44, 236, 406, 60, "POD", "catalog-2", "terminated", gone=True)
+node(574, 160, 382, 60, "EP", "catalog-1 의 주소", "HEALTHY")
+node(574, 236, 382, 60, "EP", "catalog-2 의 주소", "가리키는 파드가 없다", focal=True)
+node(574, 336, 382, 60, "REQ", "그리로 간 요청", "실패한다", BAD)
 
-d.path("M 520 190 H 620 V 190 H 680", MUTED, 1.2, m="ar")
-d.path("M 520 266 H 620 V 266 H 680", ACC, 1.5, m="acc", dash="5 4")
-d.t(600, 250, "갱신이 늦다", 11, ACC, KR, "middle", 600)
-d.path("M 918 296 V 332", BAD, 1.4, m="bad")
+d.path("M 450 190 H 512 V 190 H 570", MUTED, 1.2, m="ar")
+d.path("M 450 266 H 512 V 266 H 570", ACC, 1.5, m="acc", dash="5 4")
+d.t(510, 250, "갱신이 늦다", 11, ACC, KR, "middle", 600)
+d.path("M 764 296 V 332", BAD, 1.4, m="bad")
 
 d.t(32, 476, "저자가 든 순서 — 워크로드가 불건강해져 이벤트가 나고, 갱신이 늦어 설정이 낡고, 낡은 설정이 없는 곳으로 보낸다", 11, SOFT, KR, "start")
 d.t(32, 500, "기본 재시도 두 번과 이상값 감지가 짧은 지연을 덮어 준다 — 그래서 몇 초까지는 견딜 만하다", 11, MUTED, KR, "start")

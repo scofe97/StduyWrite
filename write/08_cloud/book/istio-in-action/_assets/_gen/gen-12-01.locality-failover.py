@@ -11,7 +11,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 524
+W, H = 1000, 524
 d = D(W, H, "ISTIO IN ACTION · 12-01 §7",
       "가까운 곳부터 쓰고 죽으면 넘긴다",
       "같은 서비스가 두 클러스터에 있을 때 기본은 고르게 나누는 것이고, 이상값 감지를 켜야 지역 정보가 "

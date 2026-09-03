@@ -9,7 +9,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1160, 964
+W, H = 1000, 964
 d = D(W, H, "ISTIO IN ACTION · 09-01 §5",
       "우선순위 필드 대신 액션의 종류가 순서를 정한다",
       "CUSTOM · DENY · ALLOW 순으로 보고, 아무것도 맞지 않으면 ALLOW 정책이 하나라도 있는지가 결정한다. "
