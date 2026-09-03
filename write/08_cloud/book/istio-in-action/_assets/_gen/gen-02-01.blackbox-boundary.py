@@ -14,8 +14,8 @@ d = D(W, H, "ISTIO IN ACTION · 02-01 §3",
       "진실은 프록시 쪽입니다. 다만 색이 붙은 조각은 프록시가 볼 수 없어 애플리케이션이 넘겨야 합니다.",
       "레질리언스와 상위 메트릭은 정말 코드 변경이 없고, 분산 추적만 협조를 요구합니다")
 
-PX, PY, PR = 440, 316, 176   # 프록시가 보는 것
-AX, AY, AR = 592, 316, 176   # 애플리케이션이 아는 것
+PX, PY, PR = 388, 316, 176   # 프록시가 보는 것
+AX, AY, AR = 612, 316, 176   # 애플리케이션이 아는 것
 
 d.o.append(f'<circle cx="{PX}" cy="{PY}" r="{PR}" fill="{INK}08" stroke="{MUTED}" stroke-width="1.2"/>')
 d.o.append(f'<circle cx="{AX}" cy="{AY}" r="{AR}" fill="{INK}08" stroke="{MUTED}" stroke-width="1.2"/>')
@@ -46,7 +46,7 @@ d.t(684, 286, "요청 하나가", 11, ACC, KR, "middle")
 d.t(684, 308, "안에서 만든 인과", 11, ACC, KR, "middle", 600)
 d.t(684, 336, "들어온 헤더를 나가는", 11, MUTED, KR, "middle")
 d.t(684, 354, "요청에 넣는 일", 11, MUTED, KR, "middle")
-d.o.append(f'<circle cx="{766}" cy="{258}" r="5" fill="{ACC}"/>')
+d.o.append(f'<circle cx="{714}" cy="{258}" r="5" fill="{ACC}"/>')
 
 d.t(28, 552, "계측을 아무리 해도 그것은 자기 보고다 — 둘이 어긋나면 프록시 쪽이 실제로 오간 요청이다", 11, SOFT, KR, "start")
 d.t(28, 576, "Istio 는 서비스 안에서 무슨 일이 있었는지 알 수 없어 인과를 짝지을 수 없다", 11, MUTED, KR, "start")

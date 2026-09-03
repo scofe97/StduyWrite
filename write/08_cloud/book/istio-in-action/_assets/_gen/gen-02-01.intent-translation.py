@@ -6,7 +6,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import Seq, ACC, MUTED, SOFT, INK, KR, MONO
 
-W, H = 1000, 560
+W, H = 1240, 560
 d = Seq(W, H, "ISTIO IN ACTION · 02-01 §2",
         "위쪽은 무엇을 원하는가, 아래쪽은 어떻게 할 것인가",
         "운영자는 의도만 적고 kubectl 로 적용한다. istiod 가 그것을 프록시마다 맞는 낮은 수준 설정으로 "
@@ -25,6 +25,6 @@ d.selfmsg("istiod", "낮은 수준으로 번역", 316, ACC, sub="cluster 이름�
 d.msg("istiod", "Envoy", "outbound|80|v2|catalog…", 380, ACC, "acc", sub="운영자가 쓰지 않는 형태")
 d.selfmsg("Envoy", "라우팅 적용", 432, MUTED, sub="요청마다 헤더 확인")
 
-d.t(20, 488, "저자는 같은 규칙을 두 형태로 나란히 보여 이 번역을 드러낸다", 11, SOFT, KR, "start")
+d.t(24, 488, "저자는 같은 규칙을 두 형태로 나란히 보여 이 번역을 드러낸다", 11, SOFT, KR, "start")
 d.legend(516, [("번역이 일어나는 자리", ACC)])
 d.save("02-01.intent-translation.svg")

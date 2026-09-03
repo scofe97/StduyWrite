@@ -16,8 +16,8 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-COL_W, GUT, X0 = 164, 24, 64
-W, H = 1000, 632
+COL_W, GUT, X0 = 200, 24, 76
+W, H = 1208, 632
 d = D(W, H, "ISTIO IN ACTION · 13-01 §8",
       "저자는 500 을 고치지 않고 훈련으로 남겼다",
       "메시 운영자가 클러스터에서 VM 서비스를 처음 부를 때 지나는 다섯 마디. 색이 붙은 자리가 골짜기이고, "
@@ -84,6 +84,6 @@ for j, p in enumerate(pains):
                f'fill="{ACC}0A" stroke="{ACC}80" stroke-width="1" stroke-dasharray="3 3"/>')
     d.t(cx(TROUGH), py + 13, p, 11, ACC, KR, "middle")
 
-d.t(20, 566, "저자가 이 실패에서 뽑아 내는 것은 고치는 방법이 아니라 Istio 가 준비되지 않은 워크로드를 다루는 방식이다", 11, SOFT, KR, "start")
+d.t(24, 566, "저자가 이 실패에서 뽑아 내는 것은 고치는 방법이 아니라 Istio 가 준비되지 않은 워크로드를 다루는 방식이다", 11, SOFT, KR, "start")
 d.legend(584, [("골짜기 — 원인을 모른 채 실패한 자리", ACC), ("운영자가 느끼는 흐름", MUTED)])
 d.save("13-01.first-failure.svg")

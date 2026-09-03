@@ -11,14 +11,14 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1000, 520
+W, H = 1240, 520
 d = D(W, H, "ISTIO IN ACTION · 13-01 §1",
       "오른쪽 여섯 칸이 모두 누군가의 일이 된다",
       "저자가 장을 닫으며 놓는 표를 그대로 옮겼다. 왼쪽은 대개 플랫폼의 이름이고 오른쪽은 전부 사람이나 "
       "새 리소스의 이름이다. 색이 붙은 칸이 저자가 마지막 이정표라 부른 자리다.",
       "이 장의 나머지는 오른쪽 레인의 여섯 칸을 하나씩 채우는 일입니다")
 
-LABEL_W, LANE_H, LANE_Y0 = 140, 116, 128
+LABEL_W, LANE_H, LANE_Y0 = 176, 116, 128
 HDR_Y = LANE_Y0 - 26
 SLOT = (W - LABEL_W - 32) / 6
 CW, CH = SLOT - 12, 72
@@ -41,8 +41,8 @@ for j, name in enumerate(stages):
 for k, (name, sub) in enumerate(lanes):
     top = lane_top(k)
     d.line(0, top, W, top, RULE, 0.8)
-    d.t(16, top + 48, name, 9, SOFT, MONO, "start", 600)
-    d.t(16, top + 68, sub, 11, MUTED, KR, "start")
+    d.t(20, top + 48, name, 9, SOFT, MONO, "start", 600)
+    d.t(20, top + 68, sub, 11, MUTED, KR, "start")
 d.line(0, lane_top(2), W, lane_top(2), RULE, 0.8)
 d.line(LABEL_W - 16, lane_top(0), LABEL_W - 16, lane_top(2), RULE, 1.0)
 
@@ -58,8 +58,8 @@ for k in range(2):
         d.t(x + CW / 2, y + 30, a, 11, ACC if focal else INK, KR, "middle", 600)
         d.t(x + CW / 2, y + 50, b, 11, ACC if focal else MUTED, KR, "middle")
 
-d.t(24, 400, "쿠버네티스에서도 같은 셋이 필요하다 — 프록시 설치 · istiod 에 붙는 설정 · 신원 토큰. 다만 플랫폼이 대신한다", 11, SOFT, KR, "start")
-d.t(24, 424, "저자가 못 박는 문장 — 이 편의는 쿠버네티스 밖의 워크로드로 확장되지 않는다", 11, MUTED, KR, "start")
-d.t(24, 448, "설치 한 줄만은 쿠버네티스에서도 istioctl 로 손수 주입하는 선택지가 웹훅과 나란히 적혀 있다", 11, SOFT, KR, "start")
+d.t(32, 400, "쿠버네티스에서도 같은 셋이 필요하다 — 프록시 설치 · istiod 에 붙는 설정 · 신원 토큰. 다만 플랫폼이 대신한다", 11, SOFT, KR, "start")
+d.t(32, 424, "저자가 못 박는 문장 — 이 편의는 쿠버네티스 밖의 워크로드로 확장되지 않는다", 11, MUTED, KR, "start")
+d.t(32, 448, "설치 한 줄만은 쿠버네티스에서도 istioctl 로 손수 주입하는 선택지가 웹훅과 나란히 적혀 있다", 11, SOFT, KR, "start")
 d.legend(468, [("마지막 이정표", ACC), ("플랫폼이 대신하는 자리", MUTED)])
 d.save("13-01.who-does-what.svg")

@@ -6,7 +6,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import Seq, ACC, MUTED, SOFT, INK, KR, MONO
 
-W, H = 1000, 620
+W, H = 1240, 620
 d = Seq(W, H, "ISTIO IN ACTION · 09-01 §2",
         "앞의 둘은 꺼내 놓고 판정은 뒤가 한다",
         "요청 하나가 세 필터를 차례로 지난다. 두 인증 필터가 자격 증명에서 값을 꺼내 필터 메타데이터에 "
@@ -26,6 +26,6 @@ d.selfmsg("RequestAuthentication", "requestPrincipal 적재", 364, MUTED, sub="i
 d.msg("RequestAuthentication", "AuthorizationPolicy", "필터 메타데이터", 428, ACC, "acc", sub="이 연결의 신원")
 d.selfmsg("AuthorizationPolicy", "허용 또는 거부", 486, ACC, sub="여기서만 막힌다")
 
-d.t(20, 552, "토큰이 없어도 두 번째 필터는 요청을 통과시킨다 — 클레임이 비어 있을 뿐이다", 11, SOFT, KR, "start")
+d.t(24, 552, "토큰이 없어도 두 번째 필터는 요청을 통과시킨다 — 클레임이 비어 있을 뿐이다", 11, SOFT, KR, "start")
 d.legend(576, [("판정이 일어나는 자리", ACC)])
 d.save("09-01.resource-pipeline.svg")

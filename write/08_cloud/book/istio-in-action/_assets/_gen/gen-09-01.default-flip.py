@@ -28,13 +28,13 @@ def state(x, name, sub, focal=False):
     d.t(x + SW / 2, y + 52, sub, 11, MUTED, MONO)
 
 d.o.append(f'<circle cx="60" cy="{CY}" r="6" fill="{INK}"/>')
-d.o.append(f'<circle cx="1206" cy="{CY}" r="8" fill="none" stroke="{INK}" stroke-width="1.2"/>')
-d.o.append(f'<circle cx="1206" cy="{CY}" r="5" fill="{INK}"/>')
+d.o.append(f'<circle cx="988" cy="{CY}" r="8" fill="none" stroke="{INK}" stroke-width="1.2"/>')
+d.o.append(f'<circle cx="988" cy="{CY}" r="5" fill="{INK}"/>')
 
 d.arrow([(68, CY), (XS[0] - 2, CY)], MUTED, "ar", 1.4)
 d.arrow([(XS[0] + SW, CY), (XS[1] - 2, CY)], ACC, "acc", 1.5)
 d.arrow([(XS[1] + SW, CY), (XS[2] - 2, CY)], MUTED, "ar", 1.4)
-d.arrow([(XS[2] + SW, CY), (1196, CY)], MUTED, "ar", 1.4)
+d.arrow([(XS[2] + SW, CY), (974, CY)], MUTED, "ar", 1.4)
 
 state(XS[0], "정책 없음", "전부 허용")
 state(XS[1], "기본 거부", "ALLOW 에 맞아야 통과", focal=True)

@@ -9,7 +9,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import Seq, ACC, MUTED, SOFT, INK, KR, MONO
 
-W, H = 1000, 620
+W, H = 1240, 620
 d = Seq(W, H, "ISTIO IN ACTION · 12-01 §3",
         "남의 클러스터를 읽으려면 남의 신원이 필요하다",
         "west 의 컨트롤 플레인이 east 의 워크로드를 알려면 east 가 발급한 서비스 어카운트 토큰을 들고 "
@@ -29,6 +29,6 @@ d.selfmsg("west 의 istiod", "라벨을 보고 등록", 372, MUTED, sub="Adding 
 d.msg("west 의 istiod", "east 클러스터", "서비스와 엔드포인트 조회", 436, MUTED, "ar", sub="토큰으로 인증")
 d.msg("west 의 istiod", "west 의 프록시", "원격 엔드포인트 반영", 494, MUTED, "ar", sub="xDS")
 
-d.t(20, 556, "primary-primary 에서는 이 과정을 양쪽으로 한 번씩 한다 — 서로가 서로를 읽어야 하기 때문이다", 11, SOFT, KR, "start")
+d.t(24, 556, "primary-primary 에서는 이 과정을 양쪽으로 한 번씩 한다 — 서로가 서로를 읽어야 하기 때문이다", 11, SOFT, KR, "start")
 d.legend(576, [("상대의 신원이 건너오는 지점", ACC)])
 d.save("12-01.remote-discovery.svg")

@@ -19,10 +19,10 @@ d = D(W, H, "ISTIO IN ACTION · 12-01 §1",
       "엔드포인트를 아는 것만으로는 쓸모가 없다는 저자의 문장이 이 그림의 출발점입니다")
 
 AX, AY = 500, 268
-BX, BY = 420, 424
-CX, CY = 580, 424
-R = 136
-GX, GY = 540, 372
+BX, BY = 412, 424
+CX, CY = 588, 424
+R = 148
+GX, GY = 500, 372
 
 for cx, cy, col in ((AX, AY, MUTED), (BX, BY, SOFT), (CX, CY, INK)):
     d.o.append(f'<circle cx="{cx}" cy="{cy}" r="{R}" fill="{col}0A" stroke="{col}" stroke-width="1"/>')

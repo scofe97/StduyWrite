@@ -7,14 +7,14 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1000, 540
+W, H = 1160, 540
 d = D(W, H, "ISTIO IN ACTION · 09-01 §3",
       "넓게 닫고 좁게 연다",
       "PeerAuthentication 의 적용 범위는 셋이다. 저자는 메시 전역을 STRICT 로 닫은 뒤 아직 못 들어온 "
       "워크로드 하나에만 예외를 얹는다. 색이 붙은 층이 그 예외가 놓이는 자리다.",
       "7 장의 두 자리 · 8 장의 세 수준과 같은 모양이 세 번째로 나옵니다")
 
-LX, LW, LH, Y0 = 172, 760, 72, 136
+LX, LW, LH, Y0 = 200, 880, 72, 136
 rows = [
     ("MESH", "메시 전역", "PeerAuthentication · STRICT", "루트 네임스페이스 · 이름은 관례", "have"),
     ("NS", "네임스페이스", "저자가 쓰지 않고 건너뛴 층", "\"더 잘할 수 있다\"며 넘어간다", "skip"),
@@ -39,7 +39,7 @@ d.path(f"M {LX - 44} {Y0 + 8} L {LX - 44} {Y0 + 3 * LH - 8}", MUTED, 1.2, m="ar"
 d.t(LX - 60, Y0 + 24, "적용 범위", 11, SOFT, KR, "end")
 d.t(LX - 60, Y0 + 3 * LH - 24, "좁아진다", 11, SOFT, KR, "end")
 
-d.t(28, 420, "결과 — sleep 은 webapp 에만 평문으로 닿고, catalog 는 상호 인증된 요청만 받는다", 11, SOFT, KR, "start")
-d.t(28, 444, "기본값이 PERMISSIVE 인 것은 실수가 아니라 도입을 막지 않으려는 설계 결정이다", 11, MUTED, KR, "start")
+d.t(32, 420, "결과 — sleep 은 webapp 에만 평문으로 닿고, catalog 는 상호 인증된 요청만 받는다", 11, SOFT, KR, "start")
+d.t(32, 444, "기본값이 PERMISSIVE 인 것은 실수가 아니라 도입을 막지 않으려는 설계 결정이다", 11, MUTED, KR, "start")
 d.legend(476, [("예외를 얹는 자리", ACC), ("쓸 수 있지만 쓰지 않은 층", MUTED)])
 d.save("09-01.policy-scopes.svg")
