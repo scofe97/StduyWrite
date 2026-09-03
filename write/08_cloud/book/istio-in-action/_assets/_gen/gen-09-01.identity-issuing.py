@@ -51,9 +51,12 @@ d.t(432, 374, "catalog 의 X.509 안에 든 것", 11, ACC, KR, "start", 600)
 d.t(432, 398, "X509v3 Subject Alternative Name: critical", 10, MUTED, MONO, "start")
 d.t(432, 420, "URI:spiffe://cluster.local/ns/istioinaction/sa/catalog", 10, INK, MONO, "start")
 # URI 는 trust-domain 과 path 둘로 갈린다. ns/sa 는 path 의 내부 구조이지 세 번째 조각이 아니다.
-# 라벨 위치는 mono 10px 문자폭 6px 로 계산했다.
-d.t(528, 442, "trust-domain", 9, SOFT, MONO)
-d.t(648, 442, "path — Istio 는 서비스 어카운트로 채운다", 11, ACC, KR)
+# 라벨은 URI 조각의 중앙에 놓는다 — mono 10px 문자폭 6px.
+#   "URI:spiffe://" 13자 -> 432+78=510, "cluster.local" 13자 -> 510~588 (중앙 549),
+#   나머지 "/ns/istioinaction/sa/catalog" 28자 -> 588~756 (중앙 672).
+# path 를 무엇으로 채우는지는 도식 리드 문장이 이미 말하므로 여기서는 조각 이름만 단다.
+d.t(549, 442, "trust-domain", 11, SOFT, MONO)
+d.t(672, 442, "path", 11, ACC, MONO, "middle", 600)
 d.line(868, 224, 868, 348, MUTED, 1.0, "3 5")
 
 d.t(28, 496, "인증서 발급과 순환을 사람이 하던 시절의 실수가 값비싼 장애로 이어졌다 — 자동화는 편의가 아니다", 11, SOFT, KR, "start")
