@@ -104,7 +104,7 @@ for k in range(N):
         mx, my = (s[0] + e[0]) / 2, (s[1] + e[1]) / 2
         tw = len(lab) * 5.6 + 12
         d.o.append(f'<rect x="{mx - tw / 2:.2f}" y="{my - 8}" width="{tw:.2f}" height="14" rx="3" fill="{PAPER}"/>')
-        d.t(mx, my + 3, lab, 8, SOFT, MONO, "middle", 600)
+        d.t(mx, my + 3, lab, 11, SOFT, MONO, "middle", 600)
 
 d.o.append(f'<rect x="{CX - HW / 2}" y="{CY - HH / 2}" width="{HW}" height="{HH}" rx="8" '
            f'fill="{PAPER2}" stroke="{INK}44" stroke-width="1.2"/>')

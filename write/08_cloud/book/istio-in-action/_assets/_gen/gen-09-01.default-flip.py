@@ -25,7 +25,7 @@ def state(x, name, sub, focal=False):
     else:
         d.box(x, y, SW, SH, PAPER2, RULE, 1.0, 8)
     d.t(x + SW / 2, y + 30, name, 13, ACC if focal else INK, KR, "middle", 600)
-    d.t(x + SW / 2, y + 52, sub, 9, MUTED, MONO)
+    d.t(x + SW / 2, y + 52, sub, 11, MUTED, MONO)
 
 d.o.append(f'<circle cx="60" cy="{CY}" r="6" fill="{INK}"/>')
 d.o.append(f'<circle cx="1206" cy="{CY}" r="8" fill="none" stroke="{INK}" stroke-width="1.2"/>')
@@ -40,17 +40,17 @@ state(XS[0], "정책 없음", "전부 허용")
 state(XS[1], "기본 거부", "ALLOW 에 맞아야 통과", focal=True)
 state(XS[2], "명시한 것만 허용", "catch-all DENY 가 나머지")
 
-d.t((XS[0] + SW + XS[1]) / 2, CY - 70, "ALLOW 정책 하나 추가", 10, ACC, MONO, "middle", 600)
-d.t((XS[0] + SW + XS[1]) / 2, CY - 52, "[그 워크로드에 적용될 때]", 9, MUTED, MONO)
-d.t((XS[1] + SW + XS[2]) / 2, CY - 70, "catch-all DENY 추가", 10, MUTED, MONO, "middle", 600)
-d.t((XS[1] + SW + XS[2]) / 2, CY - 52, "[spec: {} · 루트 네임스페이스]", 9, MUTED, MONO)
+d.t((XS[0] + SW + XS[1]) / 2, CY - 70, "ALLOW 정책 하나 추가", 11, ACC, MONO, "middle", 600)
+d.t((XS[0] + SW + XS[1]) / 2, CY - 52, "[그 워크로드에 적용될 때]", 11, MUTED, MONO)
+d.t((XS[1] + SW + XS[2]) / 2, CY - 70, "catch-all DENY 추가", 11, MUTED, MONO, "middle", 600)
+d.t((XS[1] + SW + XS[2]) / 2, CY - 52, "[spec: {} · 루트 네임스페이스]", 11, MUTED, MONO)
 
 OY = CY + SH / 2 + 40
 d.box(XS[1] - 60, OY, 420, 108, PAPER2, RULE, 1.0, 6)
 d.t(XS[1] - 44, OY + 26, "가운데 상태에서 벌어지는 일", 11, ACC, KR, "start", 600)
-d.t(XS[1] - 44, OY + 50, "/api/catalog   ->  허용  (경로가 맞는다)", 10, MUTED, MONO, "start")
-d.t(XS[1] - 44, OY + 72, "/hello/world   ->  거부  (맞는 정책 없음)", 10, MUTED, MONO, "start")
-d.t(XS[1] - 44, OY + 94, "허용도 거부도 적지 않은 요청이 막힌다", 10, SOFT, KR, "start")
+d.t(XS[1] - 44, OY + 50, "/api/catalog   ->  허용  (경로가 맞는다)", 11, MUTED, MONO, "start")
+d.t(XS[1] - 44, OY + 72, "/hello/world   ->  거부  (맞는 정책 없음)", 11, MUTED, MONO, "start")
+d.t(XS[1] - 44, OY + 94, "허용도 거부도 적지 않은 요청이 막힌다", 11, SOFT, KR, "start")
 d.line(XS[1] + 110, CY + SH / 2, XS[1] + 110, OY, MUTED, 1.0, "3 5")
 
 d.t(32, 480, "catch-all 을 먼저 깔면 생각할 것이 하나로 준다 — 무엇을 들일지만 적는다", 11, SOFT, KR, "start")

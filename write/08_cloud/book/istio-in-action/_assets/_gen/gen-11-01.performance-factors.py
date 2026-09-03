@@ -41,12 +41,12 @@ for k, (cat, subs, side, focal) in enumerate(bones):
         t = 0.34 + j * 0.30
         tx, ty = ax + (fx - ax) * t, CY + (fy - CY) * t
         d.line(tx, ty, tx + 28, ty, SOFT, 1.0)
-        d.t(tx + 36, ty + 4, sc, 9, ACC if focal else MUTED, KR, "start")
+        d.t(tx + 36, ty + 4, sc, 11, ACC if focal else MUTED, KR, "start")
 
 d.o.append(f'<rect x="{HEAD}" y="{CY - 48}" width="{W - HEAD - 24}" height="96" rx="6" fill="{INK}07" stroke="{INK}44" stroke-width="1.2"/>')
 d.t(HEAD + (W - HEAD - 24) / 2, CY - 16, "데이터 플레인이", 13, INK, KR, "middle", 600)
 d.t(HEAD + (W - HEAD - 24) / 2, CY + 6, "제때 갱신되지 않는다", 13, INK, KR, "middle", 600)
-d.t(HEAD + (W - HEAD - 24) / 2, CY + 32, "낡은 설정의 수명이 길어진다", 9, MUTED, KR, "middle")
+d.t(HEAD + (W - HEAD - 24) / 2, CY + 32, "낡은 설정의 수명이 길어진다", 11, MUTED, KR, "middle")
 
 d.t(32, 556, "저자가 못 박는 문장 — 사이드카 설정을 정의하는 것만으로 이득의 대부분을 얻는다", 11, SOFT, KR, "start")
 d.t(32, 580, "변경률은 운영자가 정하는 값이 아니다 — 대신 얼마나 묶을지를 정할 수 있다", 11, MUTED, KR, "start")

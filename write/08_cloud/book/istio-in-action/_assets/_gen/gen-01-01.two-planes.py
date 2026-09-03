@@ -23,7 +23,7 @@ def zone(x, y, w, h, label):
 def node(x, y, w, h, name, sub):
     d.box(x, y, w, h, PAPER2, RULE, 1.0, 6)
     d.t(x + w / 2, y + 28, name, 13, INK, KR, "middle", 600)
-    d.t(x + w / 2, y + 48, sub, 9, MUTED, MONO)
+    d.t(x + w / 2, y + 48, sub, 11, MUTED, MONO)
 
 zone(52, 132, 892, 104, "CONTROL PLANE")
 zone(52, 300, 892, 116, "DATA PLANE")
@@ -47,7 +47,7 @@ d.t(644, 344, "요청", 11, MUTED, KR, "middle")
 # 운영자
 d.box(52, 156, 240, 64, PAPER2, RULE, 1.0, 6)
 d.t(172, 184, "운영자", 13, INK, KR, "middle", 600)
-d.t(172, 204, "의도를 적는다", 9, MUTED, MONO)
+d.t(172, 204, "의도를 적는다", 11, MUTED, MONO)
 d.arrow([(292, 188), (332, 188)], INFO, "info", 1.3)
 
 BY = 452

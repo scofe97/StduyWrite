@@ -23,7 +23,7 @@ def state(x, y, name, sub, focal=False):
     else:
         d.box(x, y, SW, SH, PAPER2, RULE, 1.0, 8)
     d.t(x + SW / 2, y + 30, name, 13, ACC if focal else INK, KR, "middle", 600)
-    d.t(x + SW / 2, y + 52, sub, 9, MUTED, MONO)
+    d.t(x + SW / 2, y + 52, sub, 11, MUTED, MONO)
 
 d.o.append(f'<circle cx="48" cy="{CY + SH / 2}" r="6" fill="{INK}"/>')
 d.o.append(f'<circle cx="1196" cy="{CY + SH / 2}" r="8" fill="none" stroke="{INK}" stroke-width="1.2"/>')
@@ -44,15 +44,15 @@ state(XS[0], CY, "배포됨", "kubectl apply · v2 기동")
 state(XS[1], CY, "릴리스되지 않음", "VirtualService 전량 v1")
 state(XS[2], CY, "일부에게 릴리스", "x-dark-launch: v2", focal=True)
 
-d.t((XS[0] + SW + XS[1]) / 2, CY - 26, "DestinationRule 로 subset 을 가른다", 10, MUTED, MONO, "middle", 600)
-d.t((XS[1] + SW + XS[2]) / 2, CY - 26, "헤더 매칭 라우팅", 10, MUTED, MONO, "middle", 600)
-d.t((XS[2] + SW + 1186) / 2, CY - 26, "비율을 넓힌다", 10, MUTED, MONO, "middle", 600)
+d.t((XS[0] + SW + XS[1]) / 2, CY - 26, "DestinationRule 로 subset 을 가른다", 11, MUTED, MONO, "middle", 600)
+d.t((XS[1] + SW + XS[2]) / 2, CY - 26, "헤더 매칭 라우팅", 11, MUTED, MONO, "middle", 600)
+d.t((XS[2] + SW + 1186) / 2, CY - 26, "비율을 넓힌다", 11, MUTED, MONO, "middle", 600)
 
 BY = CY + SH + 48
 d.box(XS[0], BY, 1000, 104, PAPER2, RULE, 1.0, 6)
 d.t(XS[0] + 20, BY + 28, "저자가 제시하는 단계적 릴리스", 11, ACC, KR, "start", 600)
 d.t(XS[0] + 20, BY + 54, "내부 직원  ->  비유료 고객  ->  실버 등급 고객  ->  전체", 11, INK, MONO, "start")
-d.t(XS[0] + 20, BY + 80, "등급을 판정하는 주체는 메시가 아니다 — 헤더나 쿠키로 만들어 주는 계층이 앞에 있어야 한다", 10, SOFT, KR, "start")
+d.t(XS[0] + 20, BY + 80, "등급을 판정하는 주체는 메시가 아니다 — 헤더나 쿠키로 만들어 주는 계층이 앞에 있어야 한다", 11, SOFT, KR, "start")
 
 d.t(32, 524, "목적은 둘이다 — 프로덕션에서 깨질 확률을 낮추고, 유료 고객이 최전선에 서지 않게 한다", 11, SOFT, KR, "start")
 d.legend(548, [("정책 없이 올렸을 때 가는 길", ACC)])

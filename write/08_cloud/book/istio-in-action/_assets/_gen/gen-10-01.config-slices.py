@@ -38,7 +38,7 @@ def cell(k, j, label, sub, focal=False):
     else:
         d.box(x, y, SW, SH, PAPER2, RULE, 1.0, 6)
     d.t(x + SW / 2, y + 26, label, 12, ACC if focal else INK, KR, "middle", 600)
-    d.t(x + SW / 2, y + 46, sub, 9, MUTED, MONO)
+    d.t(x + SW / 2, y + 46, sub, 11, MUTED, MONO)
 
 for j in range(4):
     d.line(sx(j) + SW / 2, LANE_Y0 + 8, sx(j) + SW / 2, LANE_Y0 + 3 * LANE_H - 8, RULE, 0.8, "3 6")

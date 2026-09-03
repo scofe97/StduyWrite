@@ -34,7 +34,7 @@ d.t(left_pad + comp_col_w / 2, header_y + 40, "vs. tls.mode", 9, MUTED, MONO)
 for j, (name, sec) in enumerate(roles):
     d.box(role_x(j), header_y, role_col_w, header_h, PAPER2, RULE, 0.8, 6)
     d.t(role_cx(j), header_y + 22, name, 12, INK, MONO, "middle", 600)
-    d.t(role_cx(j), header_y + 40, f"원문 {sec}", 9, MUTED, MONO)
+    d.t(role_cx(j), header_y + 40, f"원문 {sec}", 11, MUTED, MONO)
 
 # 2.4 셀 스타일 (다크)
 STYLE = {

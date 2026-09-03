@@ -25,10 +25,10 @@ d.path(f"M {AX0} {CY} L {AX1} {CY}", INK, 1.2, m="ar")
 d.line(CX, AY1, CX, CY, INK, 1.2)
 d.line(AX0, CY, CX, CY, INK, 1.2)
 
-d.t(CX, AY0 - 14, "넓게", 9, INK, MONO, "middle", 400)
-d.t(CX, AY1 + 22, "좁게", 9, INK, MONO, "middle", 400)
-d.t(AX0 - 14, CY + 4, "사전", 9, INK, MONO, "end", 400)
-d.t(AX1 + 14, CY + 4, "사후", 9, INK, MONO, "start", 400)
+d.t(CX, AY0 - 14, "넓게", 11, INK, MONO, "middle", 400)
+d.t(CX, AY1 + 22, "좁게", 11, INK, MONO, "middle", 400)
+d.t(AX0 - 14, CY + 4, "사전", 11, INK, MONO, "end", 400)
+d.t(AX1 + 14, CY + 4, "사후", 11, INK, MONO, "start", 400)
 
 def item(x, y, name, sub, focal=False, dx=14, anchor="start"):
     c = ACC if focal else MUTED
@@ -41,10 +41,10 @@ item(596, 200, "Kiali 설정 검증", "KIA1107 subset not found")
 item(624, 288, "네임스페이스 분석", "istioctl analyze -n <ns>")
 item(628, 440, "워크로드 요약", "istioctl x describe pod")
 
-d.t(196, 176, "고치기 전에 막는다", 10, SOFT, KR, "start")
-d.t(804, 176, "이미 난 문제를 훑는다", 10, SOFT, KR, "end")
-d.t(196, 500, "이 자리에 도구가 없다", 10, SOFT, KR, "start")
-d.t(804, 500, "한 워크로드로 좁힌다", 10, SOFT, KR, "end")
+d.t(196, 176, "고치기 전에 막는다", 11, SOFT, KR, "start")
+d.t(804, 176, "이미 난 문제를 훑는다", 11, SOFT, KR, "end")
+d.t(196, 500, "이 자리에 도구가 없다", 11, SOFT, KR, "start")
+d.t(804, 500, "한 워크로드로 좁힌다", 11, SOFT, KR, "end")
 
 d.t(32, 560, "describe 는 파드가 이미 떠 있어야 답한다 — 그래서 사전 쪽으로 오지 못한다", 11, SOFT, KR, "start")
 d.legend(584, [("클러스터에 넣기 전에 막는 자리", ACC), ("난 뒤에 훑는 자리", MUTED)])

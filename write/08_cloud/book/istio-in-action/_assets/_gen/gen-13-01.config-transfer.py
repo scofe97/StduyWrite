@@ -68,8 +68,8 @@ for i, (name, what, dest, focal) in enumerate(rows):
             ACC if focal else MUTED, "acc" if focal else "ar", 1.5 if focal else 1.2)
 
 d.path(f"M {AX + AW} {TOP + 106} L {BX - 2} {TOP + 106}", INFO, 1.3, m="info")
-d.chip((AX + AW + BX) / 2, TOP + 84, "생성", INFO, 9)
-d.chip((BX + BW + CX_) / 2, TOP - 2, "rsync · SSH", MUTED, 9)
+d.chip((AX + AW + BX) / 2, TOP + 84, "생성", INFO, 11)
+d.chip((BX + BW + CX_) / 2, TOP - 2, "rsync · SSH", MUTED, 11)
 
 d.t(28, 588, "저자가 요약한 네 가지 내용 — 동서 게이트웨이 IP · 루트 인증서 · 서비스 어카운트 토큰 · 메시와 망 설정", 11, SOFT, KR, "start")
 d.t(28, 612, "토큰이 들어 있어 전송이 문제가 된다 — 시연은 SSH 위의 rsync 이고 운영에서는 사람의 개입이 없어야 한다", 11, MUTED, KR, "start")

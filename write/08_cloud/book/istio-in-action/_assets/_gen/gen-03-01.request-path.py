@@ -97,7 +97,7 @@ for k, j, title, sub, focal in nodes:
         d.o.append(f'<rect x="{x + 4}" y="{y + 4}" width="18" height="10" rx="3" fill="rgba(245,245,245,0.12)"/>')
         d.t(x + 13, y + 12, lanes[k][1], 6, INK, MONO, "middle", 600)
     d.t(step_cx(j), y + 34, title, 12, INK, KR, "middle", 600)
-    d.t(step_cx(j), y + 52, sub, 9, MUTED, MONO, "middle")
+    d.t(step_cx(j), y + 52, sub, 11, MUTED, MONO, "middle")
 
 # 9. 범례 — STEPS · FLOW 두 줄 (데이터 칩이 없어 DATA TYPE 줄은 없다)
 ly1, ly2 = legend_top + 22, legend_top + 52

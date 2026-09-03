@@ -29,7 +29,7 @@ def node(x, y, w, h, tag, name, sub, focal=False):
     d.o.append(f'<rect x="{x + 12}" y="{y + 12}" width="40" height="14" rx="2" fill="{INK}14"/>')
     d.t(x + 32, y + 23, tag, 8, INK, MONO, "middle", 600)
     d.t(x + 62, y + 24, name, 13, ACC if focal else INK, KR, "start", 600)
-    d.t(x + 62, y + 42, sub, 9, MUTED, MONO, "start")
+    d.t(x + 62, y + 42, sub, 11, MUTED, MONO, "start")
 
 zone(48, 152, 316, 208, "ISTIOINACTION")
 zone(432, 152, 316, 208, "SAME POD")
@@ -46,7 +46,7 @@ d.path("M 204 252 L 204 274", ACC, 1.6, m="acc")
 d.t(216, 268, "요청이 멈춘다", 11, ACC, KR, "start", 600)
 d.path("M 588 252 L 588 274", MUTED, 1.2, m="ar")
 d.path("M 204 336 L 204 380 L 408 380 L 408 454", INFO, 1.2, m="ar")
-d.t(216, 372, "extensionProviders 에 등록한 주소로", 9, MUTED, MONO, "start")
+d.t(216, 372, "extensionProviders 에 등록한 주소로", 11, MUTED, MONO, "start")
 
 d.t(28, 584, "action: CUSTOM 은 가장 먼저 평가된다 — 외부가 거부하면 DENY·ALLOW 는 볼 일이 없다", 11, SOFT, KR, "start")
 d.legend(608, [("요청 경로에 더해지는 지연", ACC), ("설정으로 가리키는 주소", INFO)])

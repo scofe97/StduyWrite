@@ -48,7 +48,7 @@ d.t(RX + RW / 2, RY + 46, "kubectl exec + curl", 9, MUTED, MONO, "middle")
 for name, sub, tx in tiers:
     d.box(tx, TY, TW, TH, PAPER2, RULE, 1.0, 6)
     d.t(tx + TW / 2, TY + 26, name, 12, INK, KR, "middle", 600)
-    d.t(tx + TW / 2, TY + 46, sub, 9, MUTED, MONO, "middle")
+    d.t(tx + TW / 2, TY + 46, sub, 11, MUTED, MONO, "middle")
 
 # 잎
 for i, (name, port, focal) in enumerate(leaves):

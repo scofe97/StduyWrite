@@ -25,7 +25,7 @@ def node(x, y, name, sub, focal=False, w=NW, h=NH):
     else:
         d.box(x, y, w, h, PAPER2, RULE, 1.0, 6)
     d.t(x + w / 2, y + 22, name, 12, ACC if focal else INK, KR, "middle", 600)
-    d.t(x + w / 2, y + 40, sub, 9, MUTED, KR)
+    d.t(x + w / 2, y + 40, sub, 11, MUTED, KR)
 
 ROOT_X, ROOT_Y, ROOT_W = 390, 112, 380
 d.box(ROOT_X, ROOT_Y, ROOT_W, 56, PAPER2, RULE, 1.0, 6)
@@ -52,7 +52,7 @@ def leaf(x, y, lines, focal=False):
     else:
         d.box(x, y, NW, h, PAPER2, RULE, 1.0, 6)
     for j, ln in enumerate(lines):
-        d.t(x + 16, y + 30 + j * 22, ln, 10, MUTED, MONO, "start")
+        d.t(x + 16, y + 30 + j * 22, ln, 11, MUTED, MONO, "start")
 
 leaf(XS[0], LEAF_Y, ["PILOT_DEBOUNCE_AFTER      100ms",
                      "PILOT_DEBOUNCE_MAX        10s",

@@ -25,7 +25,7 @@ def ring(x, y, w, h, tag, sub, stroke, fill, focal=False):
                f'stroke="{stroke}" stroke-width="{1.4 if focal else 1.0}"/>')
     tw = len(tag) * 6 + 16
     d.o.append(f'<rect x="{x + 20}" y="{y - 7}" width="{tw}" height="14" fill="{PAPER}"/>')
-    d.t(x + 28, y + 3, tag, 8, ACC if focal else SOFT, MONO, "start", 600)
+    d.t(x + 28, y + 3, tag, 11, ACC if focal else SOFT, MONO, "start", 600)
     d.t(x + 28, y + 30, sub, 11, ACC if focal else MUTED, KR, "start")
 
 ring(48, 132, 908, 396, "LISTENER · 포트를 열고 바이트를 읽는다", "Envoy 는 L3/L4 프록시다", f"{INK}30", f"{INK}04")

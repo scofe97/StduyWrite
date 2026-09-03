@@ -24,7 +24,7 @@ def state(x, name, sub, focal=False):
     else:
         d.box(x, y, SW, SH, PAPER2, RULE, 1.0, 8)
     d.t(x + SW / 2, y + 30, name, 13, ACC if focal else INK, KR, "middle", 600)
-    d.t(x + SW / 2, y + 52, sub, 9, MUTED, MONO)
+    d.t(x + SW / 2, y + 52, sub, 11, MUTED, MONO)
 
 # 시작점 · 종료점
 d.o.append(f'<circle cx="60" cy="{CY}" r="6" fill="{INK}"/>')
@@ -41,9 +41,9 @@ state(XS[1], "커스텀 부트스트랩", "collectorEndpoint /zipkin/api/v1/span
 state(XS[2], "기본으로 되돌림", "webapp.yaml 재적용")
 
 d.t((XS[0] + SW + XS[1]) / 2, CY - 70, "bootstrapOverride", 10, ACC, MONO, "middle", 600)
-d.t((XS[0] + SW + XS[1]) / 2, CY - 52, "[configmap 이 같은 ns 에 있을 때]", 9, MUTED, MONO)
+d.t((XS[0] + SW + XS[1]) / 2, CY - 52, "[configmap 이 같은 ns 에 있을 때]", 11, MUTED, MONO)
 d.t((XS[1] + SW + XS[2]) / 2, CY - 70, "kubectl apply", 10, MUTED, MONO, "middle", 600)
-d.t((XS[1] + SW + XS[2]) / 2, CY - 52, "[원본 Deployment]", 9, MUTED, MONO)
+d.t((XS[1] + SW + XS[2]) / 2, CY - 52, "[원본 Deployment]", 11, MUTED, MONO)
 
 # 관찰 — 가운데 상태 아래
 OY = CY + SH / 2 + 40
@@ -51,7 +51,7 @@ d.box(XS[1] - 40, OY, 380, 108, PAPER2, RULE, 1.0, 6)
 d.t(XS[1] - 24, OY + 26, "적용 후 출력에서 사라진 것", 11, ACC, KR, "start", 600)
 d.t(XS[1] - 24, OY + 50, '- "sharedSpanContext": false', 10, MUTED, MONO, "start")
 d.t(XS[1] - 24, OY + 72, '"traceId128bit": "true" -> true', 10, MUTED, MONO, "start")
-d.t(XS[1] - 24, OY + 94, "저자는 둘 다 언급하지 않는다", 10, SOFT, KR, "start")
+d.t(XS[1] - 24, OY + 94, "저자는 둘 다 언급하지 않는다", 11, SOFT, KR, "start")
 d.line(XS[1] + 110, CY + SH / 2, XS[1] + 110, OY, MUTED, 1.0, "3 5")
 
 d.t(32, 480, "Jaeger 의 Zipkin 수신구는 9411 에서 /api/v1/spans 와 /api/v2/spans 를 받는다 — /zipkin 접두 경로는 없다", 11, SOFT, KR, "start")

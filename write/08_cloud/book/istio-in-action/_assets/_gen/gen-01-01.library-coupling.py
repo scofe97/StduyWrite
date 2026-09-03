@@ -26,7 +26,7 @@ def node(x, y, name, sub, fanin, focal=False, ext=False):
     else:
         d.box(x, y, NW, NH, PAPER2, RULE, 1.0, 6)
     d.t(x + 14, y + 24, name, 12, ACC if focal else INK, KR, "start", 600)
-    d.t(x + 14, y + 42, sub, 9, MUTED, MONO, "start")
+    d.t(x + 14, y + 42, sub, 11, MUTED, MONO, "start")
     bw = len(fanin) * 6 + 10
     d.o.append(f'<rect x="{x + NW - bw - 8}" y="{y + 8}" width="{bw}" height="14" rx="2" fill="{INK}14"/>')
     d.t(x + NW - bw / 2 - 8, y + 19, fanin, 8, INK, MONO, "middle", 600)

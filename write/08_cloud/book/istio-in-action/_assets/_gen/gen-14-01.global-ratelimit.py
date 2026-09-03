@@ -28,7 +28,7 @@ def node(x, y, w, h, tag, name, sub, focal=False, c=None):
     d.o.append(f'<rect x="{x + 12}" y="{y + 12}" width="40" height="14" rx="2" fill="{INK}14"/>')
     d.t(x + 32, y + 23, tag, 8, INK, MONO, "middle", 600)
     d.t(x + 62, y + 24, name, 13, ACC if focal else INK, KR, "start", 600)
-    d.t(x + 62, y + 42, sub, 9, MUTED, MONO, "start")
+    d.t(x + 62, y + 42, sub, 11, MUTED, MONO, "start")
 
 REPY = [140, 236, 332]
 for i, y in enumerate(REPY):
@@ -41,8 +41,8 @@ node(452, 236, 260, 68, "RLS", "레이트 리밋 서버", "Envoy 레이트 리�
 node(740, 236, 220, 68, "KV", "Redis", "카운터를 저장한다 · Memcache 가능")
 d.path("M 708 270 H 740", ACC, 1.5, m="acc")
 
-d.t(424, 258, "디스크립터", 9, INFO, MONO, "middle", 600)
-d.t(848, 220, "전역 카운터", 9, ACC, MONO, "middle", 600)
+d.t(424, 258, "디스크립터", 11, INFO, MONO, "middle", 600)
+d.t(848, 220, "전역 카운터", 11, ACC, MONO, "middle", 600)
 
 BY = 424
 d.box(40, BY, 924, 116, PAPER2, RULE, 1.0, 6)

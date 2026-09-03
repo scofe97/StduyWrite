@@ -51,7 +51,7 @@ def leaf(x, y, lines, focal=False):
     else:
         d.box(x, y, NW, h, PAPER2, RULE, 1.0, 6)
     for j, ln in enumerate(lines):
-        d.t(x + 16, y + 28 + j * 20, ln, 10, MUTED, MONO, "start")
+        d.t(x + 16, y + 28 + j * 20, ln, 11, MUTED, MONO, "start")
 
 leaf(XS[0], LEAF_Y, ["--direction outbound", "나가는 쪽인지 들어오는 쪽인지"])
 leaf(XS[1], LEAF_Y, ["--port 80", "서비스가 노출한 포트"])

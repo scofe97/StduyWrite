@@ -22,7 +22,7 @@ def node(x, y, name, sub, focal=False, w=NW):
     else:
         d.box(x, y, w, NH, PAPER2, RULE, 1.0, 6)
     d.t(x + w / 2, y + 22, name, 12, ACC if focal else INK, KR, "middle", 600)
-    d.t(x + w / 2, y + 40, sub, 9, MUTED, MONO)
+    d.t(x + w / 2, y + 40, sub, 11, MUTED, MONO)
 
 ROOT_X, ROOT_Y = 430, 116
 BUS_Y = 216

@@ -28,7 +28,7 @@ d.line(TX, AXIS_Y, TX + TW, AXIS_Y, RULE, 1.0)
 def phase(top, rows, label):
     h = 28 + rows * ROWH + 12
     d.o.append(f'<rect x="{LX - 12}" y="{top}" width="{W - LX - 20}" height="{h}" rx="8" fill="rgba(245,245,245,0.02)" stroke="rgba(245,245,245,0.10)" stroke-width="0.8"/>')
-    d.t(LX, top + 18, label, 9, SOFT, MONO, "start")
+    d.t(LX, top + 18, label, 11, SOFT, MONO, "start")
 
 def bar(top, i, name, sub, start, end, focal=False, dashed=False):
     y = row_y(top, i)
@@ -39,7 +39,7 @@ def bar(top, i, name, sub, start, end, focal=False, dashed=False):
     else:
         dash = ' stroke-dasharray="4 3"' if dashed else ''
         d.o.append(f'<rect x="{x0}" y="{y + 4}" width="{w}" height="24" rx="4" fill="rgba(139,152,169,0.15)" stroke="{MUTED}" stroke-width="1"{dash}/>')
-    d.t(x0 + w + 10, y + 21, sub, 9, ACC if focal else MUTED, MONO, "start")
+    d.t(x0 + w + 10, y + 21, sub, 11, ACC if focal else MUTED, MONO, "start")
 
 phase(P1_TOP, 3, "저자의 예 — 중첩된 타임아웃")
 bar(P1_TOP, 0, "A → B", "timeout 1s", 0, 1.0, focal=True)

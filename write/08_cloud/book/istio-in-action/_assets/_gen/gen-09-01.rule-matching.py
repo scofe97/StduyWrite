@@ -21,7 +21,7 @@ def node(x, y, name, sub, focal=False, w=NW, h=NH):
     else:
         d.box(x, y, w, h, PAPER2, RULE, 1.0, 6)
     d.t(x + w / 2, y + 22, name, 12, ACC if focal else INK, KR, "middle", 600)
-    d.t(x + w / 2, y + 40, sub, 9, MUTED, MONO)
+    d.t(x + w / 2, y + 40, sub, 11, MUTED, MONO)
 
 ROOT_X, ROOT_Y = 450, 116
 BUS_Y = 210
@@ -47,7 +47,7 @@ def leaf(x, y, lines, focal=False):
     else:
         d.box(x, y, NW, h, PAPER2, RULE, 1.0, 6)
     for j, ln in enumerate(lines):
-        d.t(x + 16, y + 28 + j * 20, ln, 10, MUTED, MONO, "start")
+        d.t(x + 16, y + 28 + j * 20, ln, 11, MUTED, MONO, "start")
 
 leaf(XS[0], LEAF_Y, ["principals: [ … /sa/webapp ]", "namespaces: [\"default\"]", "ipBlocks: [ CIDR ]"])
 leaf(XS[1], LEAF_Y, ["methods: [\"GET\"]  paths: [\"/users*\"]", "methods: [\"POST\"] paths: [\"/data\"]", "한 작업 안의 두 속성은 AND"])

@@ -32,11 +32,11 @@ for i, (idx, osi, name, note, focal) in enumerate(layers):
 
 # 왼쪽 여백 방향 표시 — 요청은 아래(L4)에서 위(L7)로 처리된다
 d.path(f"M 64 {Y0 + 3 * STRIDE - 12} V {Y0 + 12}", SOFT, 1.2, m="soft")
-d.t(64, Y0 + 3 * STRIDE + 8, "처리 순서", 9, SOFT, MONO)
+d.t(64, Y0 + 3 * STRIDE + 8, "처리 순서", 11, SOFT, MONO)
 # 오른쪽은 리소스 묶음 — 아래 두 층이 한 리소스
 d.line(X + LW + 16, Y0 + STRIDE + 4, X + LW + 16, Y0 + 3 * STRIDE - 12, MUTED, 1.2)
 d.t(X + LW + 24, Y0 + 2 * STRIDE, "Gateway", 9, MUTED, MONO, "start")
-d.t(X + LW + 24, Y0 + 2 * STRIDE + 12, "리소스", 9, MUTED, MONO, "start")
+d.t(X + LW + 24, Y0 + 2 * STRIDE + 12, "리소스", 11, MUTED, MONO, "start")
 
 d.t(X, Y0 + 3 * STRIDE + 28, "L6 표현 계층은 저자가 언급하지 않아 비웠고, tls 를 L5 에 둔 것은 노트의 배치입니다", 12, SOFT, KR, "start")
 d.legend(404, [("80·443 밖 포트가 열리는 층", ACC)])

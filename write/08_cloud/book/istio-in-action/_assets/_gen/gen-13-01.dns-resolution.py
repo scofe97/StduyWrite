@@ -21,7 +21,7 @@ d = D(W, H, "ISTIO IN ACTION · 13-01 §5",
 def oval(x, y, w, h, label, sub=None):
     d.box(x, y, w, h, PAPER2, RULE, 1.0, 22)
     d.t(x + w / 2, y + (h / 2 + 5 if not sub else 24), label, 13, INK, KR, "middle", 600)
-    if sub: d.t(x + w / 2, y + 44, sub, 9, MUTED, MONO)
+    if sub: d.t(x + w / 2, y + 44, sub, 11, MUTED, MONO)
 
 def step(x, y, w, h, label, sub, focal=False):
     if focal:
@@ -64,7 +64,7 @@ d.t(CA + 20, 752, "아니오", 12, MUTED, KR, "start", 600)
 d.t(CB - 190, 736, "여기서 풀리는 이유 — istiod 가 NDS 로", 11, SOFT, KR, "start")
 d.t(CB - 190, 758, "메시가 아는 서비스를 채워 두기 때문", 11, SOFT, KR, "start")
 d.t(CB - 190, 786, "짧은 변형은 agent 가 만든다", 11, MUTED, KR, "start")
-d.t(CB - 190, 808, "webapp.istioinaction.svc 등", 9, MUTED, MONO, "start")
+d.t(CB - 190, 808, "webapp.istioinaction.svc 등", 11, MUTED, MONO, "start")
 
 d.t(20, 876, "가로채기가 UDP 와 TCP 양쪽에 걸린다 — 규칙 두 줄이 127.0.0.53 의 53 번을 15053 으로 돌린다", 11, SOFT, KR, "start")
 d.legend(894, [("가로채기 — 이 한 걸음이 전부를 가른다", ACC), ("평소의 해석 경로", MUTED)])

@@ -26,7 +26,7 @@ def Yv(v): return PB - v / 60 * (PB - PT)
 for v in range(0, 61, 10):
     d.line(PL, Yv(v), PR, Yv(v), RULE, 0.8 if v else 1.0)
     d.t(PL - 10, Yv(v) + 4, f"{v}%", 9, SOFT, MONO, "end")
-d.t(8, PT - 12, "canary 가중치 (%)", 9, SOFT, KR, "start")
+d.t(8, PT - 12, "canary 가중치 (%)", 11, SOFT, KR, "start")
 # 시간 눈금 — 점마다
 for t, st, v in rows:
     d.line(X(t), PB, X(t), PB + 6, RULE, 0.8)

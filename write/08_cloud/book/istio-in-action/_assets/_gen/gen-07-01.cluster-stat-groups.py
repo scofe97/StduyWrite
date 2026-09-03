@@ -42,5 +42,5 @@ for name, cnt, share, x, y, w, h, desc, focal, op in cells:
         d.t(x + w - 16, y + 28, f"{cnt} · {share}%", 9, MUTED, MONO, "end")
 
 d.legend(496, [("6장이 필요로 한 묶음", ACC), ("밝을수록 지표가 많음", INK)])
-d.t(W - 48, 518, "AREA = 원문 7.2.1 리스팅의 지표 개수 · n=61", 8, SOFT, MONO, "end")
+d.t(W - 48, 518, "AREA = 원문 7.2.1 리스팅의 지표 개수 · n=61", 11, SOFT, MONO, "end")
 d.save("07-01.cluster-stat-groups.svg")

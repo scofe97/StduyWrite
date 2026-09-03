@@ -22,7 +22,7 @@ def Y(v): return PB - v / YMAX * (PB - PT)
 for g in range(0, YMAX + 1, 8):
     d.line(PL, Y(g), PR, Y(g), RULE, 1.0 if g == 0 else 0.8)
     d.t(PL - 10, Y(g) + 4, f"{g}", 8, SOFT, MONO, "end")
-d.t(PL - 10, PT - 14, "요청 수", 9, SOFT, KR, "end")
+d.t(PL - 10, PT - 14, "요청 수", 11, SOFT, KR, "end")
 d.line(PL, PT, PL, PB, RULE, 0.8)
 for i, (lab, v) in enumerate(zip(labels, vals)):
     cx = PL + pitch * (i + 0.5)

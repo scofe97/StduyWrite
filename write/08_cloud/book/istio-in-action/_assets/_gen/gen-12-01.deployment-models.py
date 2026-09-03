@@ -33,7 +33,7 @@ def node(x, y, w, h, tag, name, sub, c=None):
     d.o.append(f'<rect x="{x + 10}" y="{y + 10}" width="34" height="14" rx="2" fill="{INK}14"/>')
     d.t(x + 27, y + 21, tag, 8, INK, MONO, "middle", 600)
     d.t(x + 54, y + 22, name, 12, c or INK, KR, "start", 600)
-    d.t(x + 54, y + 40, sub, 9, MUTED, MONO, "start")
+    d.t(x + 54, y + 40, sub, 11, MUTED, MONO, "start")
 
 CW, GAP, X0, ZY, ZH = 308, 20, 20, 128, 216
 def zx(i): return X0 + i * (CW + GAP)

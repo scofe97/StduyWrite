@@ -22,7 +22,7 @@ def node(x, y, name, sub, focal=False, w=NW, h=NH):
     else:
         d.box(x, y, w, h, PAPER2, RULE, 1.0, 6)
     d.t(x + w / 2, y + 20, name, 12, ACC if focal else INK, KR, "middle", 600)
-    d.t(x + w / 2, y + 38, sub, 9, MUTED, MONO)
+    d.t(x + w / 2, y + 38, sub, 11, MUTED, MONO)
 
 ROOT_X, ROOT_Y = 420, 112
 BUS_Y = 196
@@ -48,7 +48,7 @@ def leaf(x, y, lines, focal=False):
     else:
         d.box(x, y, NW, h, PAPER2, RULE, 1.0, 6)
     for j, ln in enumerate(lines):
-        d.t(x + 16, y + 28 + j * 22, ln, 10, MUTED, KR, "start")
+        d.t(x + 16, y + 28 + j * 22, ln, 11, MUTED, KR, "start")
 
 leaf(XS[0], LEAF_Y, ["클라이언트 사이드 로드밸런싱", "서비스 디스커버리"])
 leaf(XS[1], LEAF_Y, ["타임아웃", "데드라인", "재시도"])
