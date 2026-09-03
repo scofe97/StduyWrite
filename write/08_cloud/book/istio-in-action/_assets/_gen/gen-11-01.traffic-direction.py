@@ -9,7 +9,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1000, 888
+W, H = 1200, 888
 d = D(W, H, "ISTIO IN ACTION · 11-01 §5",
       "포화가 어느 쪽과 함께 오르는가가 처방을 가른다",
       "CPU 포화만 보면 무엇을 해야 할지 정해지지 않는다. 들어오는 트래픽과 나가는 트래픽 중 어느 쪽과 "
@@ -41,14 +41,14 @@ def diamond(cx, cy, l1, l2, focal=False):
 
 CA, CB = 330, 860
 
-oval(CA - 180, 112, 300, 56, "지연이 늘었다", "proxy convergence time")
+oval(CA - 180, 112, 360, 56, "지연이 늘었다", "proxy convergence time")
 diamond(CA, 268, "CPU 사용률이", "90% 를 넘나")
-step(CB - 180, 236, 300, 68, "동시 푸시 수를 올린다", "자원이 남는데 안 쓰고 있다")
+step(CB - 180, 236, 360, 68, "동시 푸시 수를 올린다", "자원이 남는데 안 쓰고 있다")
 diamond(CA, 440, "들어오는 트래픽과", "함께 오르나")
-step(CB - 180, 408, 300, 68, "배칭을 늘리거나 수직 확장", "설정 생성이 병목이다")
+step(CB - 180, 408, 360, 68, "배칭을 늘리거나 수직 확장", "설정 생성이 병목이다")
 diamond(CA, 612, "나가는 트래픽과", "함께 오르나", focal=True)
-step(CB - 180, 580, 300, 68, "Sidecar 정의 + 수평 확장", "배포 대상과 크기가 병목이다", focal=True)
-oval(CA - 180, 712, 300, 56, "플랫폼 쪽을 의심한다", "API 서버 · 연결")
+step(CB - 180, 580, 360, 68, "Sidecar 정의 + 수평 확장", "배포 대상과 크기가 병목이다", focal=True)
+oval(CA - 180, 712, 360, 56, "플랫폼 쪽을 의심한다", "API 서버 · 연결")
 
 d.arrow([(CA, 168), (CA, 208)], MUTED, "ar", 1.4)
 d.arrow([(CA + 170, 268), (CB - 182, 268)], MUTED, "ar", 1.4)
@@ -65,6 +65,6 @@ d.t(CA + 24, 356, "예", 12, MUTED, KR, "start", 600)
 d.t(CA + 24, 528, "아니오", 12, MUTED, KR, "start", 600)
 d.t(CA + 24, 694, "아니오", 12, MUTED, KR, "start", 600)
 
-d.t(28, 804, "저자의 우선순위 — 자원을 늘리는 것은 Sidecar 와 발견 범위와 배칭을 다 손본 뒤의 마지막 수단이다", 11, SOFT, KR, "start")
+d.t(32, 804, "저자의 우선순위 — 자원을 늘리는 것은 Sidecar 와 발견 범위와 배칭을 다 손본 뒤의 마지막 수단이다", 11, SOFT, KR, "start")
 d.legend(828, [("Sidecar 가 먼저 오는 갈래", ACC), ("나머지 갈래", MUTED)])
 d.save("11-01.traffic-direction.svg")

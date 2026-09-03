@@ -13,14 +13,14 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1000, 640
+W, H = 1200, 640
 d = D(W, H, "ISTIO IN ACTION · 14-01 §1",
       "네 층 모두가 커스텀 빌드를 피하려는 우회다",
       "밑의 셋은 이미 있는 필터를 쓰는 일이고 꼭대기만 없는 것을 만드는 일이다. 위로 갈수록 손이 많이 가며, "
       "그 위의 점선은 저자가 이 책의 범위 밖이라 잘라 낸 길이다.",
       "네 층이 얻는 것은 같습니다 — Envoy 를 새로 빌드하지 않아도 된다는 것")
 
-BASE_W, TOP_W, LH, CX, Y0 = 732, 332, 68, 516, 236
+BASE_W, TOP_W, LH, CX, Y0 = 880, 400, 68, 620, 236
 layers = [
     ("EnvoyFilter 로 기존 필터를 켠다", "이미 있는 것 · Istio 가 노출하지 않은 자리", "설정만"),
     ("외부 서비스로 판정을 뺀다", "레이트 리밋 · 외부 인가", "서버 하나 더"),
@@ -50,12 +50,12 @@ d.o.append(f'<rect x="{CX - TOP_W / 2}" y="{TOPY}" width="{TOP_W}" height="40" r
 d.t(CX, TOPY + 18, "C++ 로 써서 정적으로 빌드한다", 12, SOFT, KR, "middle", 600)
 d.t(CX, TOPY + 33, "이 책의 범위 밖 — 커스텀 Envoy 빌드가 된다", 11, MUTED, KR)
 
-AX = 140
+AX = 168
 d.path(f"M {AX} {Y0 + N * LH - 8} L {AX} {Y0 + 8}", MUTED, 1.2, m="ar")
 d.t(AX - 16, Y0 + N * LH - 24, "있는 것을 쓴다", 11, SOFT, KR, "end")
 d.t(AX - 16, Y0 + 28, "없는 것을 만든다", 11, SOFT, KR, "end")
 
-d.t(28, 540, "저자가 든 확장 예 — 레이트 리미팅 · 외부 인가 연동 · 헤더 조작 · 페이로드를 채우는 콜아웃 · HMAC · 비표준 토큰", 11, SOFT, KR, "start")
-d.t(28, 564, "네이티브 필터의 두 단점 — 반드시 C++ 이어야 하고, 변경을 새 Envoy 바이너리에 정적으로 빌드해야 한다", 11, MUTED, KR, "start")
+d.t(32, 540, "저자가 든 확장 예 — 레이트 리미팅 · 외부 인가 연동 · 헤더 조작 · 페이로드를 채우는 콜아웃 · HMAC · 비표준 토큰", 11, SOFT, KR, "start")
+d.t(32, 564, "네이티브 필터의 두 단점 — 반드시 C++ 이어야 하고, 변경을 새 Envoy 바이너리에 정적으로 빌드해야 한다", 11, MUTED, KR, "start")
 d.legend(584, [("없는 것을 만드는 층", ACC), ("있는 것을 쓰는 층", MUTED)])
 d.save("14-01.four-doors.svg")

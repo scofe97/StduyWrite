@@ -13,7 +13,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1000, 664
+W, H = 1200, 664
 d = D(W, H, "ISTIO IN ACTION · 14-01 §7",
       "설정을 드는 클래스와 요청을 만지는 클래스",
       "생성기가 만들어 주는 뼈대는 둘로 나뉜다. 뿌리 클래스가 모듈 설정을 들고, 색이 붙은 클래스가 "
@@ -44,9 +44,9 @@ def cls(x, y, w, name, stereo, attrs, ops, focal=False, italic=False):
             d.t(x + 16, yy + 20 + i * 22, o, 9.5, MUTED, MONO, "start")
     return h
 
-CTX_X, CTX_Y, CTX_W = 588, 132, 332
-ADD_X, ADD_Y, ADD_W = 588, 300, 332
-ROOT_X, ROOT_Y, ROOT_W = 48, 300, 332
+CTX_X, CTX_Y, CTX_W = 704, 132, 400
+ADD_X, ADD_Y, ADD_W = 704, 300, 400
+ROOT_X, ROOT_Y, ROOT_W = 60, 300, 400
 
 h_ctx = cls(CTX_X, CTX_Y, CTX_W, "Context", "«SDK 가 주는 기반»", [], [])
 h_add = cls(ADD_X, ADD_Y, ADD_W, "AddHeader", None,
@@ -74,8 +74,8 @@ d.chip((ROOT_X + ROOT_W + ADD_X) / 2, AY - 22, "설정을 참조한다", MUTED, 
 d.t(ROOT_X + ROOT_W + 16, AY + 18, "1", 8, SOFT, MONO, "start", 600)
 d.t(ADD_X - 16, AY + 18, "1", 8, SOFT, MONO, "end", 600)
 
-d.t(48, 540, "예제가 손대는 것은 onResponseHeaders 하나 — 설정이 비면 hello: world! 를, 아니면 설정값을 붙이고 Continue 를 돌려준다", 11, SOFT, KR, "start")
-d.t(48, 564, "빌드 산출물은 .wasm 모듈을 레이어 하나로 담은 OCI 이미지이고, 메타데이터가 호환되는 Envoy 버전과 ABI 를 적는다", 11, MUTED, KR, "start")
-d.t(48, 588, "SDK 는 넷이다 — C++ · Rust · AssemblyScript · TinyGo. 저자는 TypeScript 변종인 AssemblyScript 를 고른다", 11, SOFT, KR, "start")
+d.t(60, 540, "예제가 손대는 것은 onResponseHeaders 하나 — 설정이 비면 hello: world! 를, 아니면 설정값을 붙이고 Continue 를 돌려준다", 11, SOFT, KR, "start")
+d.t(60, 564, "빌드 산출물은 .wasm 모듈을 레이어 하나로 담은 OCI 이미지이고, 메타데이터가 호환되는 Envoy 버전과 ABI 를 적는다", 11, MUTED, KR, "start")
+d.t(60, 588, "SDK 는 넷이다 — C++ · Rust · AssemblyScript · TinyGo. 저자는 TypeScript 변종인 AssemblyScript 를 고른다", 11, SOFT, KR, "start")
 d.legend(608, [("요청 경로의 콜백이 들어가는 클래스", ACC), ("설정을 드는 뿌리 클래스", MUTED)])
 d.save("14-01.wasm-module.svg")

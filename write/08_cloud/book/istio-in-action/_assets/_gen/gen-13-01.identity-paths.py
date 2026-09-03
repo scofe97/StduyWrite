@@ -11,7 +11,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import Seq, ACC, MUTED, SOFT, INK, OK, INFO, KR, MONO
 
-W, H = 1000, 936
+W, H = 1240, 936
 d = Seq(W, H, "ISTIO IN ACTION · 13-01 §2",
         "차이는 하나인데 손이 셋 늘어난다",
         "두 경로의 끝은 같다. 토큰으로 istiod 에 인증하고 SVID 를 받는다. 다른 것은 그 토큰이 어떻게 "
@@ -24,16 +24,16 @@ d.lanes([("운영자", "service mesh operator"),
          ("istiod", "인증 · 발급")], y0=104, lane_w=232)
 d.rails(816)
 
-d.t(20, 196, "클러스터 안 — 플랫폼이 대신한다", 11, SOFT, KR, "start", 600)
+d.t(24, 196, "클러스터 안 — 플랫폼이 대신한다", 11, SOFT, KR, "start", 600)
 d.state("워크로드", "파드", 228, INFO)
 d.msg("쿠버네티스", "워크로드", "서비스 어카운트 토큰 주입", 292, INFO, "info",
       sub="사람이 개입하지 않는다")
 d.msg("워크로드", "istiod", "토큰으로 인증", 356, MUTED, "ar")
 d.msg("istiod", "워크로드", "SVID 발급", 412, OK, "ok", sub="메시의 일원이 된다")
 
-d.line(20, 460, W - 48, 460, "rgba(191,192,192,0.22)", 0.8, "4 6")
+d.line(24, 460, W - 48, 460, "rgba(191,192,192,0.22)", 0.8, "4 6")
 
-d.t(20, 508, "클러스터 밖 — 운영자가 그 자리를 메운다", 11, SOFT, KR, "start", 600)
+d.t(24, 508, "클러스터 밖 — 운영자가 그 자리를 메운다", 11, SOFT, KR, "start", 600)
 d.state("워크로드", "VM · istio-agent", 540, ACC)
 d.msg("운영자", "쿠버네티스", "서비스 어카운트 생성", 596, MUTED, "ar")
 d.msg("쿠버네티스", "운영자", "토큰", 640, MUTED, "ar")
@@ -41,7 +41,7 @@ d.msg("운영자", "워크로드", "안전하게 전송", 692, ACC, "acc", sub="
 d.msg("워크로드", "istiod", "토큰으로 인증", 748, MUTED, "ar")
 d.msg("istiod", "워크로드", "SVID 발급", 792, OK, "ok", sub="여기서부터는 구분되지 않는다")
 
-d.t(20, 852, "끝은 같다 — istiod 가 SVID 를 발급하고 그때부터 두 워크로드는 구분되지 않는다", 11, SOFT, KR, "start")
-d.t(20, 876, "저자가 준비 중이라 밝힌 대안은 클라우드가 VM 에 부여한 플랫폼 할당 신원이며 아직 개발되지 않았다", 11, MUTED, KR, "start")
+d.t(24, 852, "끝은 같다 — istiod 가 SVID 를 발급하고 그때부터 두 워크로드는 구분되지 않는다", 11, SOFT, KR, "start")
+d.t(24, 876, "저자가 준비 중이라 밝힌 대안은 클라우드가 VM 에 부여한 플랫폼 할당 신원이며 아직 개발되지 않았다", 11, MUTED, KR, "start")
 d.legend(896, [("운영자가 손으로 메우는 한 걸음", ACC), ("플랫폼이 자동으로 하는 자리", INFO), ("신원을 받는 지점", OK)])
 d.save("13-01.identity-paths.svg")

@@ -7,7 +7,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1000, 660
+W, H = 1200, 660
 d = D(W, H, "ISTIO IN ACTION · 09-01 §8",
       "판단을 밖으로 내보내면 요청 경로가 하나 길어진다",
       "프록시가 요청을 잠시 멈추고 외부 인가 서비스에 물어본다. 그 서비스가 살 수 있는 자리는 셋이고, "
@@ -31,23 +31,23 @@ def node(x, y, w, h, tag, name, sub, focal=False):
     d.t(x + 62, y + 24, name, 13, ACC if focal else INK, KR, "start", 600)
     d.t(x + 62, y + 42, sub, 11, MUTED, MONO, "start")
 
-zone(48, 152, 316, 208, "ISTIOINACTION")
-zone(432, 152, 316, 208, "SAME POD")
-zone(48, 428, 700, 120, "OUTSIDE THE MESH")
+zone(56, 152, 380, 208, "ISTIOINACTION")
+zone(516, 152, 380, 208, "SAME POD")
+zone(56, 428, 840, 120, "OUTSIDE THE MESH")
 
-node(68, 184, 276, 68, "POD", "webapp", "app + istio-proxy", focal=True)
-node(68, 276, 276, 60, "SVC", "ext-authz", "8000/TCP · 9000/TCP")
-node(448, 184, 276, 68, "POD", "webapp", "app + proxy + ext-authz")
-node(448, 276, 276, 60, "NOTE", "사이드카 배치", "네트워크 오버헤드가 가장 작다")
-node(68, 456, 680, 64, "EXT", "메시 밖 인가 서버", "OPA · Gloo Edge · 자체 구현 — CheckRequest API")
+node(80, 184, 332, 68, "POD", "webapp", "app + istio-proxy", focal=True)
+node(80, 276, 332, 60, "SVC", "ext-authz", "8000/TCP · 9000/TCP")
+node(540, 184, 332, 68, "POD", "webapp", "app + proxy + ext-authz")
+node(540, 276, 332, 60, "NOTE", "사이드카 배치", "네트워크 오버헤드가 가장 작다")
+node(80, 456, 816, 64, "EXT", "메시 밖 인가 서버", "OPA · Gloo Edge · 자체 구현 — CheckRequest API")
 
 # 요청 경로에 끼어드는 호출
-d.path("M 204 252 L 204 274", ACC, 1.6, m="acc")
-d.t(216, 268, "요청이 멈춘다", 11, ACC, KR, "start", 600)
-d.path("M 588 252 L 588 274", MUTED, 1.2, m="ar")
-d.path("M 204 336 L 204 380 L 408 380 L 408 454", INFO, 1.2, m="ar")
-d.t(216, 372, "extensionProviders 에 등록한 주소로", 11, MUTED, MONO, "start")
+d.path("M 246 252 L 246 274", ACC, 1.6, m="acc")
+d.t(258, 268, "요청이 멈춘다", 11, ACC, KR, "start", 600)
+d.path("M 706 252 L 706 274", MUTED, 1.2, m="ar")
+d.path("M 246 336 L 246 380 L 488 380 L 488 454", INFO, 1.2, m="ar")
+d.t(258, 372, "extensionProviders 에 등록한 주소로", 11, MUTED, MONO, "start")
 
-d.t(28, 584, "action: CUSTOM 은 가장 먼저 평가된다 — 외부가 거부하면 DENY·ALLOW 는 볼 일이 없다", 11, SOFT, KR, "start")
+d.t(32, 584, "action: CUSTOM 은 가장 먼저 평가된다 — 외부가 거부하면 DENY·ALLOW 는 볼 일이 없다", 11, SOFT, KR, "start")
 d.legend(608, [("요청 경로에 더해지는 지연", ACC), ("설정으로 가리키는 주소", INFO)])
 d.save("09-01.extauthz-placement.svg")

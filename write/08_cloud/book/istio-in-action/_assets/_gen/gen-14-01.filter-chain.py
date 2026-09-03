@@ -13,7 +13,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1000, 660
+W, H = 1200, 660
 d = D(W, H, "ISTIO IN ACTION · 14-01 §2",
       "필터 안에 또 필터가 있고 확장은 안쪽에 꽂힌다",
       "리스너가 바이트를 읽어 네트워크 필터 체인으로 넘기고, 그중 HCM 이 바이트를 HTTP 로 바꾼다. "
@@ -28,12 +28,12 @@ def ring(x, y, w, h, tag, sub, stroke, fill, focal=False):
     d.t(x + 28, y + 3, tag, 11, ACC if focal else SOFT, MONO, "start", 600)
     d.t(x + 28, y + 30, sub, 11, ACC if focal else MUTED, KR, "start")
 
-ring(48, 132, 908, 396, "LISTENER · 포트를 열고 바이트를 읽는다", "Envoy 는 L3/L4 프록시다", f"{INK}30", f"{INK}04")
-ring(84, 196, 832, 296, "NETWORK FILTER CHAIN", "바이트 스트림을 인코딩 · 디코딩한다 — MongoDB · Redis · Thrift · Kafka", MUTED, f"{INK}07")
-ring(120, 260, 760, 196, "HTTP CONNECTION MANAGER", "바이트를 HTTP 헤더 · 본문 · 트레일러로 바꾼다", f"{INK}55", f"{INK}09")
-ring(156, 324, 688, 108, "HTTP FILTER CHAIN", "요청 위에서 도는 필터들 — 이 장의 확장이 꽂히는 자리", ACC, f"{ACC}0E", focal=True)
+ring(56, 132, 1088, 396, "LISTENER · 포트를 열고 바이트를 읽는다", "Envoy 는 L3/L4 프록시다", f"{INK}30", f"{INK}04")
+ring(100, 196, 1000, 296, "NETWORK FILTER CHAIN", "바이트 스트림을 인코딩 · 디코딩한다 — MongoDB · Redis · Thrift · Kafka", MUTED, f"{INK}07")
+ring(144, 260, 912, 196, "HTTP CONNECTION MANAGER", "바이트를 HTTP 헤더 · 본문 · 트레일러로 바꾼다", f"{INK}55", f"{INK}09")
+ring(188, 324, 824, 108, "HTTP FILTER CHAIN", "요청 위에서 도는 필터들 — 이 장의 확장이 꽂히는 자리", ACC, f"{ACC}0E", focal=True)
 
-BW, BH, BY = 140, 44, 364
+BW, BH, BY = 168, 44, 364
 labels = [("CORS · CSRF", MUTED), ("RateLimit", MUTED), ("Lua", MUTED), ("Wasm", MUTED), ("Router", ACC)]
 for i, (lab, c) in enumerate(labels):
     x = 212 + i * 160
@@ -46,7 +46,7 @@ for i, (lab, c) in enumerate(labels):
     if i < len(labels) - 1:
         d.path(f"M {x + BW - 24} {BY + BH / 2} H {x + 158}", MUTED, 1.0, m="ar")
 
-d.t(28, 566, "안쪽 상자 넷의 배열 순서는 설정하기 나름이다 — 원문이 정하는 것은 라우터가 마지막이어야 한다는 규칙 하나뿐이다", 11, SOFT, KR, "start")
-d.t(28, 590, "HCM 이 함께 맡는 것 — 액세스 로깅 · 요청 재시도 · 헤더 조작 · 헤더와 경로 접두사 기반 라우팅", 11, MUTED, KR, "start")
+d.t(32, 566, "안쪽 상자 넷의 배열 순서는 설정하기 나름이다 — 원문이 정하는 것은 라우터가 마지막이어야 한다는 규칙 하나뿐이다", 11, SOFT, KR, "start")
+d.t(32, 590, "HCM 이 함께 맡는 것 — 액세스 로깅 · 요청 재시도 · 헤더 조작 · 헤더와 경로 접두사 기반 라우팅", 11, MUTED, KR, "start")
 d.legend(610, [("확장이 꽂히는 안쪽 체인", ACC), ("그 위를 감싸는 층", MUTED)])
 d.save("14-01.filter-chain.svg")

@@ -8,7 +8,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1000, 640
+W, H = 1120, 640
 d = D(W, H, "ISTIO IN ACTION · 07-01 §5",
       "Prometheus 는 두 리소스로 두 대상을 긁는다",
       "ServiceMonitor 는 istiod 를 서비스 셀렉터로 잡고, PodMonitor 는 모든 파드를 훑어 istio-proxy "
@@ -34,35 +34,35 @@ def chip(x, y, w, name, ver):
     d.t(x + 12, y + 16, name, 12, INK, KR, "start")
     d.t(x + w - 12, y + 16, ver, 9, MUTED, MONO, "end")
 
-zone(28, 200, 276, 196, "PROMETHEUS")
-zone(500, 100, 464, 164, "ISTIO-SYSTEM")
-zone(500, 300, 464, 244, "ISTIOINACTION")
+zone(32, 200, 308, 196, "PROMETHEUS")
+zone(560, 100, 520, 164, "ISTIO-SYSTEM")
+zone(560, 300, 520, 244, "ISTIOINACTION")
 
-node(56, 240, 216, 116, "STS", "prometheus", "prometheus ns")
-chip(68, 296, 196, "kube-prometheus-stack", "13.13.1")
+node(64, 240, 244, 116, "STS", "prometheus", "prometheus ns")
+chip(76, 296, 220, "kube-prometheus-stack", "13.13.1")
 
-node(528, 132, 408, 100, "POD", "istiod", "istio-system")
-chip(540, 188, 384, "istiod", "1.13.0")
+node(592, 132, 456, 100, "POD", "istiod", "istio-system")
+chip(604, 188, 432, "istiod", "1.13.0")
 
-node(528, 328, 408, 84, "POD", "webapp", "2/2 READY")
-chip(540, 374, 384, "istio-proxy", "1.13.0")
+node(592, 328, 456, 84, "POD", "webapp", "2/2 READY")
+chip(604, 374, 432, "istio-proxy", "1.13.0")
 
-node(528, 436, 408, 84, "POD", "catalog", "2/2 READY")
-chip(540, 482, 384, "istio-proxy", "1.13.0")
+node(592, 436, 456, 84, "POD", "catalog", "2/2 READY")
+chip(604, 482, 432, "istio-proxy", "1.13.0")
 
 # 스크랩 경로 — 네임스페이스를 넘으므로 link 색, PodMonitor 경로만 accent
-d.path("M 276 268 L 356 268 L 356 182 L 524 182", INFO, 1.2, m="info")
-d.t(364, 200, "ServiceMonitor", 9, INFO, MONO, "start", 600)
-d.t(364, 216, ":15014 http-monitoring · 15s", 8, MUTED, MONO, "start")
+d.path("M 308 268 L 400 268 L 400 182 L 588 182", INFO, 1.2, m="info")
+d.t(408, 200, "ServiceMonitor", 9, INFO, MONO, "start", 600)
+d.t(408, 216, ":15014 http-monitoring · 15s", 8, MUTED, MONO, "start")
 
-d.path("M 276 312 L 392 312 L 392 370 L 524 370", ACC, 1.5, m="acc")
-d.t(400, 326, "PodMonitor · 15s", 9, ACC, MONO, "start", 600)
-d.t(400, 342, "/stats/prometheus", 8, ACC, MONO, "start")
-d.t(400, 356, "port = prometheus.io/port", 8, ACC, MONO, "start")
+d.path("M 308 312 L 440 312 L 440 370 L 588 370", ACC, 1.5, m="acc")
+d.t(448, 326, "PodMonitor · 15s", 9, ACC, MONO, "start", 600)
+d.t(448, 342, "/stats/prometheus", 8, ACC, MONO, "start")
+d.t(448, 356, "port = prometheus.io/port", 8, ACC, MONO, "start")
 
-d.path("M 276 340 L 320 340 L 320 478 L 524 478", INFO, 1.2, m="info")
-d.t(328, 462, "PodMonitor", 8, MUTED, MONO, "start")
+d.path("M 308 340 L 360 340 L 360 478 L 588 478", INFO, 1.2, m="info")
+d.t(368, 462, "PodMonitor", 8, MUTED, MONO, "start")
 
-d.t(28, 572, "PodMonitor 에는 포트 필드가 없다 — relabeling 이 파드 애노테이션에서 주소를 만든다", 11, SOFT, KR, "start")
+d.t(32, 572, "PodMonitor 에는 포트 필드가 없다 — relabeling 이 파드 애노테이션에서 주소를 만든다", 11, SOFT, KR, "start")
 d.legend(592, [("사이드카를 잡는 경로", ACC), ("네임스페이스를 넘는 스크랩", INFO)])
 d.save("07-01.scrape-topology.svg")

@@ -8,7 +8,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1000, 640
+W, H = 1200, 640
 d = D(W, H, "ISTIO IN ACTION · 02-01 §1",
       "설치가 끝나도 데이터 플레인은 아직 없다",
       "istioctl install 이 세우는 것은 컨트롤 플레인과 게이트웨이 둘뿐이다. 색이 붙은 자리가 아직 "
@@ -35,27 +35,27 @@ def node(x, y, w, h, tag, name, sub, focal=False, faint=False):
     d.t(x + 62, y + 24, name, 13, ACC if focal else (SOFT if faint else INK), KR, "start", 600)
     d.t(x + 62, y + 42, sub, 11, MUTED, MONO, "start")
 
-zone(48, 148, 448, 244, "ISTIO-SYSTEM")
-zone(552, 148, 404, 116, "ADDONS · SAMPLES")
-zone(552, 296, 404, 96, "APPLICATION NAMESPACE")
+zone(56, 148, 540, 244, "ISTIO-SYSTEM")
+zone(660, 148, 484, 116, "ADDONS · SAMPLES")
+zone(660, 296, 484, 96, "APPLICATION NAMESPACE")
 
-node(68, 176, 408, 60, "POD", "istiod", "1/1 · 컨트롤 플레인")
-node(68, 244, 408, 60, "POD", "istio-ingressgateway", "1/1 · 들어오는 트래픽")
-node(68, 312, 408, 60, "POD", "istio-egressgateway", "1/1 · 나가는 트래픽")
-node(568, 176, 364, 60, "ADD", "Grafana · Jaeger · Kiali", "demo only · 7장이 걷어낸다", faint=True)
-node(568, 320, 364, 52, "GAP", "데이터 플레인", "아직 없다", focal=True)
+node(80, 176, 492, 60, "POD", "istiod", "1/1 · 컨트롤 플레인")
+node(80, 244, 492, 60, "POD", "istio-ingressgateway", "1/1 · 들어오는 트래픽")
+node(80, 312, 492, 60, "POD", "istio-egressgateway", "1/1 · 나가는 트래픽")
+node(684, 176, 436, 60, "ADD", "Grafana · Jaeger · Kiali", "demo only · 7장이 걷어낸다", faint=True)
+node(684, 320, 436, 52, "GAP", "데이터 플레인", "아직 없다", focal=True)
 
-d.path("M 476 206 L 532 206 L 532 206 L 568 206", INFO, 1.2, m="info")
-d.t(520, 190, "함께 깔지만 필수는 아니다", 11, MUTED, KR, "middle")
-d.path("M 476 342 L 532 342 L 532 346 L 568 346", ACC, 1.5, m="acc")
-d.t(520, 330, "앱 + 주입이 있어야 생긴다", 11, ACC, KR, "middle", 600)
+d.path("M 572 206 L 640 206 L 640 206 L 680 206", INFO, 1.2, m="info")
+d.t(626, 190, "함께 깔지만 필수는 아니다", 11, MUTED, KR, "middle")
+d.path("M 572 342 L 640 342 L 640 346 L 680 346", ACC, 1.5, m="acc")
+d.t(626, 330, "앱 + 주입이 있어야 생긴다", 11, ACC, KR, "middle", 600)
 
 BY = 424
-d.box(48, BY, 908, 84, PAPER2, RULE, 1.0, 6)
-d.t(64, BY + 26, "설치 앞뒤로 붙는 확인 명령", 11, ACC, KR, "start", 600)
-d.t(64, BY + 50, "istioctl x precheck   ->   istioctl install --set profile=demo -y   ->   istioctl verify-install", 11, INK, MONO, "start")
-d.t(64, BY + 70, "마지막 명령은 설치 매니페스트와 클러스터의 실제 상태를 대조해 어긋난 곳을 알린다", 11, SOFT, KR, "start")
+d.box(56, BY, 1088, 84, PAPER2, RULE, 1.0, 6)
+d.t(76, BY + 26, "설치 앞뒤로 붙는 확인 명령", 11, ACC, KR, "start", 600)
+d.t(76, BY + 50, "istioctl x precheck   ->   istioctl install --set profile=demo -y   ->   istioctl verify-install", 11, INK, MONO, "start")
+d.t(76, BY + 70, "마지막 명령은 설치 매니페스트와 클러스터의 실제 상태를 대조해 어긋난 곳을 알린다", 11, SOFT, KR, "start")
 
-d.t(28, 548, "컨트롤 플레인이 통째로 내려가도 데이터 플레인은 단절 기간을 견디도록 구현돼 있다", 11, SOFT, KR, "start")
+d.t(32, 548, "컨트롤 플레인이 통째로 내려가도 데이터 플레인은 단절 기간을 견디도록 구현돼 있다", 11, SOFT, KR, "start")
 d.legend(576, [("아직 비어 있는 자리", ACC), ("필수가 아닌 것", INFO)])
 d.save("02-01.install-state.svg")
