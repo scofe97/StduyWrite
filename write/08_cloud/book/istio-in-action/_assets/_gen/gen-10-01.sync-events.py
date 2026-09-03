@@ -8,7 +8,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import Seq, ACC, MUTED, SOFT, INK, KR, MONO
 
-W, H = 1240, 620
+W, H = 1000, 620
 d = Seq(W, H, "ISTIO IN ACTION · 10-01 §2",
         "설정이 늦게 도착하는 것은 고장이 아니다",
         "워크로드가 불건강해진 뒤 프록시가 그 사실을 반영하기까지 네 참여자가 차례로 움직인다. "
@@ -18,7 +18,7 @@ d = Seq(W, H, "ISTIO IN ACTION · 10-01 §2",
 d.lanes([("워크로드", "catalog pod"),
          ("쿠버네티스", "kubelet · API"),
          ("istiod", "control plane"),
-         ("Envoy 프록시", "data plane")], y0=104, lane_w=250)
+         ("Envoy 프록시", "data plane")], y0=104, lane_w=216)
 d.rails(524)
 
 d.msg("워크로드", "쿠버네티스", "응답 실패", 196, MUTED, "ar", sub="엔드포인트가 불건강해진다")

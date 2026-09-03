@@ -12,7 +12,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 676
+W, H = 1000, 676
 d = D(W, H, "ISTIO IN ACTION · 14-01 §4",
       "복제본이 셋이어도 세는 곳은 하나여야 한다",
       "워크로드의 모든 Envoy 가 같은 레이트 리밋 서버를 부르고 그 서버가 공용 저장소를 본다. 색이 붙은 "
@@ -32,26 +32,26 @@ def node(x, y, w, h, tag, name, sub, focal=False, c=None):
 
 REPY = [140, 236, 332]
 for i, y in enumerate(REPY):
-    node(48, y, 328, 68, "POD", f"catalog 복제본 {i + 1}", "app + istio-proxy")
-    d.line(376, y + 34, 500, y + 34, INFO, 1.2)
-d.line(500, REPY[0] + 34, 500, REPY[2] + 34, INFO, 1.2)
-d.path("M 500 270 H 556", INFO, 1.3, m="info")
+    node(40, y, 264, 68, "POD", f"catalog 복제본 {i + 1}", "app + istio-proxy")
+    d.line(304, y + 34, 404, y + 34, INFO, 1.2)
+d.line(404, REPY[0] + 34, 404, REPY[2] + 34, INFO, 1.2)
+d.path("M 404 270 H 448", INFO, 1.3, m="info")
 
-node(560, 236, 320, 68, "RLS", "레이트 리밋 서버", "Envoy 레이트 리밋 API 구현", focal=True)
-node(920, 236, 272, 68, "KV", "Redis", "카운터를 저장한다 · Memcache 가능")
-d.path("M 880 270 H 916", ACC, 1.5, m="acc")
+node(452, 236, 260, 68, "RLS", "레이트 리밋 서버", "Envoy 레이트 리밋 API 구현", focal=True)
+node(740, 236, 220, 68, "KV", "Redis", "카운터를 저장한다 · Memcache 가능")
+d.path("M 708 270 H 740", ACC, 1.5, m="acc")
 
-d.t(528, 258, "디스크립터", 11, INFO, MONO, "middle", 600)
-d.t(1052, 220, "전역 카운터", 11, ACC, MONO, "middle", 600)
+d.t(424, 258, "디스크립터", 11, INFO, MONO, "middle", 600)
+d.t(848, 220, "전역 카운터", 11, ACC, MONO, "middle", 600)
 
 BY = 424
-d.box(48, BY, 1144, 116, PAPER2, RULE, 1.0, 6)
-d.t(68, BY + 26, "디스크립터 — Envoy 용어로 요청의 속성 또는 속성 묶음", 11, ACC, KR, "start", 600)
-d.t(68, BY + 50, "원격 주소 · 요청 헤더 · 목적지 · 그 밖의 일반적인 요청 속성", 11, INK, KR, "start")
-d.line(68, BY + 66, 1172, BY + 66, RULE, 0.9)
-d.t(68, BY + 90, "서버가 하는 일 — 보내진 속성을 미리 정의된 집합과 대조하고 카운터를 올린다. 임계를 넘으면 그 요청을 제한한다", 11, SOFT, KR, "start")
+d.box(40, BY, 924, 116, PAPER2, RULE, 1.0, 6)
+d.t(56, BY + 26, "디스크립터 — Envoy 용어로 요청의 속성 또는 속성 묶음", 11, ACC, KR, "start", 600)
+d.t(56, BY + 50, "원격 주소 · 요청 헤더 · 목적지 · 그 밖의 일반적인 요청 속성", 11, INK, KR, "start")
+d.line(56, BY + 66, 944, BY + 66, RULE, 0.9)
+d.t(56, BY + 90, "서버가 하는 일 — 보내진 속성을 미리 정의된 집합과 대조하고 카운터를 올린다. 임계를 넘으면 그 요청을 제한한다", 11, SOFT, KR, "start")
 
-d.t(32, 576, "Envoy 의 레이트 리미팅은 여럿이다 — 네트워크 필터로도, 로컬로도, 전역으로도 된다. 저자가 고르는 것은 전역", 11, SOFT, KR, "start")
-d.t(32, 600, "같은 콜아웃 구조를 9 장의 외부 인가에서 이미 봤다 — 대신 요청 경로에 홉이 하나 는다", 11, MUTED, KR, "start")
+d.t(24, 576, "Envoy 의 레이트 리미팅은 여럿이다 — 네트워크 필터로도, 로컬로도, 전역으로도 된다. 저자가 고르는 것은 전역", 11, SOFT, KR, "start")
+d.t(24, 600, "같은 콜아웃 구조를 9 장의 외부 인가에서 이미 봤다 — 대신 요청 경로에 홉이 하나 는다", 11, MUTED, KR, "start")
 d.legend(620, [("복제본이 공유하는 자리", ACC), ("프록시가 보내는 것", INFO)])
 d.save("14-01.global-ratelimit.svg")

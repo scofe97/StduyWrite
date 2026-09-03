@@ -10,7 +10,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import Seq, ACC, MUTED, SOFT, INK, OK, INFO, KR, MONO
 
-W, H = 1240, 700
+W, H = 1000, 700
 d = Seq(W, H, "ISTIO IN ACTION · 14-01 §6",
         "스크립트가 요청을 멈춰 세우고 밖에 묻는다",
         "요청이 업스트림으로 가기 전에 Lua 필터가 A/B 엔진을 부르고 그 답을 헤더로 붙인다. 색이 붙은 "
@@ -20,7 +20,7 @@ d = Seq(W, H, "ISTIO IN ACTION · 14-01 §6",
 d.lanes([("클라이언트", "sleep 파드"),
          ("Lua 필터", "envoy_on_request"),
          ("A/B 엔진", "bucket-tester"),
-         ("업스트림", "httpbin")], y0=104, lane_w=232)
+         ("업스트림", "httpbin")], y0=104, lane_w=216)
 d.rails(560)
 
 d.msg("클라이언트", "Lua 필터", "요청이 들어온다", 196, MUTED, "ar", sub="라우터 필터 앞에서 붙들린다")

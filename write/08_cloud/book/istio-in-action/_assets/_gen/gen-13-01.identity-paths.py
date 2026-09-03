@@ -11,7 +11,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import Seq, ACC, MUTED, SOFT, INK, OK, INFO, KR, MONO
 
-W, H = 1240, 936
+W, H = 1000, 936
 d = Seq(W, H, "ISTIO IN ACTION · 13-01 §2",
         "차이는 하나인데 손이 셋 늘어난다",
         "두 경로의 끝은 같다. 토큰으로 istiod 에 인증하고 SVID 를 받는다. 다른 것은 그 토큰이 어떻게 "
@@ -21,7 +21,7 @@ d = Seq(W, H, "ISTIO IN ACTION · 13-01 §2",
 d.lanes([("운영자", "service mesh operator"),
          ("쿠버네티스", "신뢰의 원천"),
          ("워크로드", "파드 또는 VM"),
-         ("istiod", "인증 · 발급")], y0=104, lane_w=232)
+         ("istiod", "인증 · 발급")], y0=104, lane_w=216)
 d.rails(816)
 
 d.t(24, 196, "클러스터 안 — 플랫폼이 대신한다", 11, SOFT, KR, "start", 600)

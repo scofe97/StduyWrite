@@ -9,14 +9,14 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1160, 560
+W, H = 1000, 560
 d = D(W, H, "ISTIO IN ACTION · 10-01 §7",
       "스코프를 고르면 볼 계층을 고르는 것이다",
       "로거는 스코프마다 레벨을 따로 갖는다. 위로 갈수록 애플리케이션에 가깝고 아래로 갈수록 전송에 "
       "가깝다. 색이 붙은 층에서 타임아웃 판정과 어느 클러스터로 갔는지가 함께 나온다.",
       "전부 debug 로 올리면 로그에 잠기므로 볼 계층만 골라 올립니다")
 
-LX, LW, LH, Y0 = 210, 870, 72, 132
+LX, LW, LH, Y0 = 180, 752, 72, 132
 rows = [("HTTP", "http", "레이어 7 · 애플리케이션", "헤더 · 경로 · 스트림 ID", False),
         ("ROUTER", "router", "라우팅 판단", "맞은 클러스터와 upstream timeout", True),
         ("POOL", "pool", "커넥션 풀", "업스트림 커넥션을 얻거나 버린다", False),
@@ -36,7 +36,7 @@ d.path(f"M {LX - 44} {Y0 + 8} L {LX - 44} {Y0 + 4 * LH - 8}", MUTED, 1.2, m="ar"
 d.t(LX - 60, Y0 + 24, "애플리케이션", 11, SOFT, KR, "end")
 d.t(LX - 60, Y0 + 4 * LH - 24, "전송", 11, SOFT, KR, "end")
 
-d.t(32, 456, "레벨은 none · error · warning · info · debug 다섯이고 기본은 warning 이다", 11, SOFT, KR, "start")
-d.t(32, 480, "커넥션 ID 로 한 커넥션을 묶고 스트림 ID 로 그 안의 요청 하나를 묶는다", 11, MUTED, KR, "start")
+d.t(28, 456, "레벨은 none · error · warning · info · debug 다섯이고 기본은 warning 이다", 11, SOFT, KR, "start")
+d.t(28, 480, "커넥션 ID 로 한 커넥션을 묶고 스트림 ID 로 그 안의 요청 하나를 묶는다", 11, MUTED, KR, "start")
 d.legend(504, [("타임아웃 판정이 찍히는 층", ACC), ("함께 올리면 도움이 되는 층", MUTED)])
 d.save("10-01.logger-scopes.svg")

@@ -11,7 +11,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 640
+W, H = 1000, 640
 d = D(W, H, "ISTIO IN ACTION · 14-01 §8",
       "좌표를 찍는 대신 워크로드와 URL 만 적는다",
       "3 절의 EnvoyFilter 가 Envoy 이름으로 자리를 찍어야 했다면, 여기서는 고를 워크로드와 모듈의 주소만 "
@@ -35,28 +35,28 @@ def node(x, y, w, h, tag, name, sub, focal=False):
     d.t(x + 62, y + 24, name, 13, ACC if focal else INK, KR, "start", 600)
     d.t(x + 62, y + 42, sub, 11, MUTED, MONO, "start")
 
-zone(48, 140, 348, 236, "CONTROL PLANE")
-zone(452, 140, 344, 236, "DATA PLANE")
-zone(852, 140, 340, 236, "OCI REGISTRY")
+zone(40, 140, 280, 236, "CONTROL PLANE")
+zone(364, 140, 276, 236, "DATA PLANE")
+zone(688, 140, 276, 236, "OCI REGISTRY")
 
-node(72, 168, 300, 68, "CRD", "WasmPlugin", "selector · pluginName · url", focal=True)
-node(72, 264, 300, 68, "CFG", "istiod", "고른 워크로드에 내려보낸다")
-node(476, 216, 296, 68, "POD", "httpbin 사이드카", "모듈을 런타임에 로드한다")
-node(876, 168, 292, 68, "IMG", "istioinaction-demo", "레이어 하나가 .wasm 모듈")
-node(876, 264, 292, 68, "META", "runtime-config.json", "호환 Envoy 버전 · ABI")
+node(60, 168, 240, 68, "CRD", "WasmPlugin", "selector · pluginName · url", focal=True)
+node(60, 264, 240, 68, "CFG", "istiod", "고른 워크로드에 내려보낸다")
+node(384, 216, 240, 68, "POD", "httpbin 사이드카", "모듈을 런타임에 로드한다")
+node(708, 168, 236, 68, "IMG", "istioinaction-demo", "레이어 하나가 .wasm 모듈")
+node(708, 264, 236, 68, "META", "runtime-config.json", "호환 Envoy 버전 · ABI")
 
-d.path("M 222 236 V 260", MUTED, 1.2, m="ar")
-d.path("M 372 298 H 412 V 250 H 472", INFO, 1.3, m="info")
-d.path("M 772 240 H 812 V 202 H 872", ACC, 1.5, m="acc")
-d.t(438, 232, "설정", 11, INFO, KR, "middle", 600)
-d.t(812, 186, "url 이 가리키는 곳", 11, ACC, KR, "middle", 600)
+d.path("M 180 236 V 260", MUTED, 1.2, m="ar")
+d.path("M 300 298 H 332 V 250 H 380", INFO, 1.3, m="info")
+d.path("M 624 240 H 656 V 202 H 704", ACC, 1.5, m="acc")
+d.t(352, 232, "설정", 11, INFO, KR, "middle", 600)
+d.t(656, 186, "url 이 가리키는 곳", 11, ACC, KR, "middle", 600)
 
 BY = 412
-d.box(48, BY, 1144, 92, PAPER2, RULE, 1.0, 6)
-d.t(68, BY + 26, "저자가 드는 URL 스킴 셋", 11, ACC, KR, "start", 600)
-d.t(68, BY + 50, "oci  ·  file  ·  https", 12, INK, MONO, "start")
-d.t(68, BY + 72, "적용한 뒤 httpbin 을 부르면 응답 헤더에 hello: world! 가 붙어 온다", 11, SOFT, KR, "start")
+d.box(40, BY, 924, 92, PAPER2, RULE, 1.0, 6)
+d.t(56, BY + 26, "저자가 드는 URL 스킴 셋", 11, ACC, KR, "start", 600)
+d.t(56, BY + 50, "oci  ·  file  ·  https", 12, INK, MONO, "start")
+d.t(56, BY + 72, "적용한 뒤 httpbin 을 부르면 응답 헤더에 hello: world! 가 붙어 온다", 11, SOFT, KR, "start")
 
-d.t(32, 548, "3 절과 견주면 — 거기서는 방향 · 포트 · 네트워크 필터 · 서브필터를 Envoy 이름으로 찍어야 했다", 11, SOFT, KR, "start")
+d.t(24, 548, "3 절과 견주면 — 거기서는 방향 · 포트 · 네트워크 필터 · 서브필터를 Envoy 이름으로 찍어야 했다", 11, SOFT, KR, "start")
 d.legend(568, [("선언 하나로 그 일이 일어나는 자리", ACC), ("컨트롤 플레인이 내려보내는 것", INFO)])
 d.save("14-01.wasmplugin-pull.svg")

@@ -5,7 +5,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import Seq, ACC, MUTED, SOFT, INK, KR, MONO
 
-W, H = 1200, 524
+W, H = 1000, 524
 d = Seq(W, H, "ISTIO IN ACTION · 07-01 §8",
         "attribute-gen 이 앞에 서야 stats 가 쓴다",
         "요청 하나가 두 Wasm 확장을 차례로 지난다. 앞의 것이 기존 속성 둘을 조합해 새 속성을 만들고, "
@@ -15,7 +15,7 @@ d = Seq(W, H, "ISTIO IN ACTION · 07-01 §8",
 d.lanes([("요청", "GET /items"),
          ("attribute-gen", "wasm ext"),
          ("stats", "istio.stats"),
-         ("프록시 통계", ":15090")], y0=104, lane_w=240)
+         ("프록시 통계", ":15090")], y0=104, lane_w=216)
 d.rails(440)
 
 d.msg("요청", "attribute-gen", "request.url_path", 196, MUTED, "ar", sub="request.method 도 함께 읽는다")

@@ -11,7 +11,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 616
+W, H = 1000, 616
 d = D(W, H, "ISTIO IN ACTION · 14-01 §5",
       "서버는 헤더를 모르고 값만 안다",
       "데이터 플레인이 헤더를 디스크립터 값으로 바꿔 보내고, 서버는 그 값에 붙은 한도만 안다. 색이 붙은 "
@@ -25,9 +25,9 @@ def zone(x, y, w, h, label):
     d.o.append(f'<rect x="{x + 12}" y="{y - 7}" width="{tw}" height="14" fill="{PAPER}"/>')
     d.t(x + 18, y + 3, label, 11, SOFT, MONO, "start", 600)
 
-AX, AW = 36, 300
-BX, BW = 440, 300
-CX_, CW = 844, 360
+AX, AW = 28, 240
+BX, BW = 356, 240
+CX_, CW = 680, 292
 TOP, RH = 152, 84
 
 zone(AX - 8, TOP - 20, AW + 16, 4 * RH + 4, "REQUEST · 클라이언트가 보내는 것")
@@ -55,7 +55,7 @@ for i, (req, how, val, lim) in enumerate(rows):
     d.path(f"M {AX + AW} {y + hh / 2} H {BX - 2}", INFO, 1.2, m="info")
     d.path(f"M {BX + BW} {y + hh / 2} H {CX_ - 2}", ACC, 1.5, m="acc")
 
-d.t(36, 512, "액션 설정을 EnvoyFilter 로 쓰는 이유 — Istio 에 아직 이것을 위한 API 가 없다", 11, SOFT, KR, "start")
-d.t(36, 536, "제한이 안 걸릴 때 점검 셋 — 리소스가 다 적용됐는가 · 서버 로그에 오류가 없는가 · routes 출력에 actions 가 있는가", 11, MUTED, KR, "start")
+d.t(28, 512, "액션 설정을 EnvoyFilter 로 쓰는 이유 — Istio 에 아직 이것을 위한 API 가 없다", 11, SOFT, KR, "start")
+d.t(28, 536, "제한이 안 걸릴 때 점검 셋 — 리소스가 다 적용됐는가 · 서버 로그에 오류가 없는가 · routes 출력에 actions 가 있는가", 11, MUTED, KR, "start")
 d.legend(556, [("두 설정이 만나는 유일한 자리", ACC), ("프록시가 헤더에서 읽는 것", INFO)])
 d.save("14-01.descriptor-handoff.svg")

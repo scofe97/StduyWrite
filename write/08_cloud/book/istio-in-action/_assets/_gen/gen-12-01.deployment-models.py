@@ -10,7 +10,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 560
+W, H = 1000, 560
 d = D(W, H, "ISTIO IN ACTION · 12-01 §2",
       "컨트롤 플레인을 어디에 몇 개 둘까",
       "세 모델은 컨트롤 플레인의 자리와 개수만 다르다. 저자가 자원과 가용성을 맞대어 비교하는 것은 앞의 둘뿐이고, "
@@ -35,7 +35,7 @@ def node(x, y, w, h, tag, name, sub, c=None):
     d.t(x + 54, y + 22, name, 12, c or INK, KR, "start", 600)
     d.t(x + 54, y + 40, sub, 11, MUTED, MONO, "start")
 
-CW, GAP, X0, ZY, ZH = 384, 24, 24, 128, 216
+CW, GAP, X0, ZY, ZH = 308, 20, 20, 128, 216
 def zx(i): return X0 + i * (CW + GAP)
 
 zone(zx(0), ZY, CW, ZH, "primary-remote")
@@ -65,6 +65,6 @@ for k, (label, *vals) in enumerate(rows):
     for i, v in enumerate(vals):
         d.t(zx(i) + CW / 2, y, v, 11, ACC if i == 1 else MUTED, KR, "middle")
 
-d.t(32, 464, "저자가 고른 근거 — ACME 는 1분의 다운타임이 수백만 달러라 고가용성이 최우선이다", 11, SOFT, KR, "start")
+d.t(24, 464, "저자가 고른 근거 — ACME 는 1분의 다운타임이 수백만 달러라 고가용성이 최우선이다", 11, SOFT, KR, "start")
 d.legend(492, [("저자가 실습에서 고른 모델", ACC), ("컨트롤 플레인", INFO)])
 d.save("12-01.deployment-models.svg")
