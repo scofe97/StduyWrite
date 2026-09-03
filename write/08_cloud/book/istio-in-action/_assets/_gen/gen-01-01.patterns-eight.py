@@ -8,14 +8,14 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1200, 616
+W, H = 1000, 616
 d = D(W, H, "ISTIO IN ACTION · 01-01 §2",
       "여덟 패턴이 막으려는 것은 셋이다",
       "저자가 든 여덟을 무엇을 막는지로 묶었다. 색이 붙은 갈래만 저자가 단서를 답니다 — 재시도는 "
       "이미 과부하인 하류의 문제를 키울 수 있어 예산이라는 별도 패턴이 따라붙는다.",
       "패킷이 아니라 메시지 계층에서 동작한다는 점이 하위 계층 구성요소와 다릅니다")
 
-NW, NH = 320, 48
+NW, NH = 288, 48
 def node(x, y, name, sub, focal=False, w=NW, h=NH):
     if focal:
         d.o.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="6" fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
@@ -24,9 +24,9 @@ def node(x, y, name, sub, focal=False, w=NW, h=NH):
     d.t(x + w / 2, y + 20, name, 12, ACC if focal else INK, KR, "middle", 600)
     d.t(x + w / 2, y + 38, sub, 11, MUTED, MONO)
 
-ROOT_X, ROOT_Y = 420, 112
+ROOT_X, ROOT_Y = 356, 112
 BUS_Y = 196
-XS = [40, 420, 800]
+XS = [36, 356, 676]
 MID_Y, LEAF_Y = 232, 336
 
 d.line(ROOT_X + NW / 2, ROOT_Y + NH, ROOT_X + NW / 2, BUS_Y, MUTED, 1.0)

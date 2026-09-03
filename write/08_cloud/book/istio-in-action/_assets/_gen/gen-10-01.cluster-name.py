@@ -8,14 +8,14 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 616
+W, H = 1000, 616
 d = D(W, H, "ISTIO IN ACTION · 10-01 §5",
       "이름 한 줄을 파이프로 끊으면 질의 조건이 된다",
       "클러스터 이름은 방향 · 포트 · subset · FQDN 네 조각을 파이프로 이은 것이고, 그 넷이 그대로 "
       "istioctl 의 질의 플래그다. 색이 붙은 조각이 없어서 이 장의 요청이 전부 실패한다.",
       "이름을 읽을 줄 알면 어느 플래그로 좁혀야 하는지가 함께 정해집니다")
 
-NW, NH = 264, 52
+NW, NH = 208, 52
 def node(x, y, name, sub, focal=False, w=NW, h=NH):
     if focal:
         d.o.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="6" fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
@@ -24,13 +24,13 @@ def node(x, y, name, sub, focal=False, w=NW, h=NH):
     d.t(x + w / 2, y + 22, name, 12, ACC if focal else INK, KR, "middle", 600)
     d.t(x + w / 2, y + 40, sub, 9, MUTED, MONO)
 
-ROOT_X, ROOT_Y, ROOT_W = 120, 112, 1000
+ROOT_X, ROOT_Y, ROOT_W = 36, 112, 928
 d.box(ROOT_X, ROOT_Y, ROOT_W, 60, PAPER2, RULE, 1.0, 6)
 d.t(ROOT_X + ROOT_W / 2, ROOT_Y + 26, "인그레스 게이트웨이가 라우트에서 지목한 클러스터 이름", 12, INK, KR, "middle", 600)
 d.t(ROOT_X + ROOT_W / 2, ROOT_Y + 46, "outbound|80|version-v1|catalog.istioinaction.svc.cluster.local", 11, MUTED, MONO)
 
 BUS_Y = 216
-XS = [32, 336, 640, 944]
+XS = [36, 276, 516, 756]
 MID_Y, LEAF_Y = 256, 372
 d.line(ROOT_X + ROOT_W / 2, ROOT_Y + 60, ROOT_X + ROOT_W / 2, BUS_Y, MUTED, 1.0)
 d.line(XS[0] + NW / 2, BUS_Y, XS[3] + NW / 2, BUS_Y, MUTED, 1.0)

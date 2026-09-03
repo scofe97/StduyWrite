@@ -10,7 +10,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1160, 640
+W, H = 1000, 640
 d = D(W, H, "ISTIO IN ACTION · 12-01 §4",
       "같은 뿌리에서 갈라져야 서로를 알아본다",
       "두 클러스터에 각자 다른 중간 CA 를 꽂되 같은 루트가 서명한 것으로 둔다. 색이 붙은 뿌리가 "
@@ -26,11 +26,11 @@ def node(x, y, name, sub, focal=False, w=NW, h=NH):
     d.t(x + w / 2, y + 24, name, 13, ACC if focal else INK, KR, "middle", 600)
     d.t(x + w / 2, y + 44, sub, 11, MUTED, MONO)
 
-ROOT_X, ROOT_Y = 390, 112
+ROOT_X, ROOT_Y = 310, 112
 node(ROOT_X, ROOT_Y, "루트 CA", "개인키는 클러스터 밖에 둔다", focal=True)
 
 BUS_Y = 216
-XS = [88, 692]
+XS = [48, 572]
 MID_Y, LEAF_Y = 256, 372
 d.line(ROOT_X + NW / 2, ROOT_Y + NH, ROOT_X + NW / 2, BUS_Y, ACC, 1.4)
 d.line(XS[0] + NW / 2, BUS_Y, XS[1] + NW / 2, BUS_Y, ACC, 1.4)

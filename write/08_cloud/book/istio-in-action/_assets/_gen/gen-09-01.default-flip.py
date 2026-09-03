@@ -8,15 +8,15 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 560
+W, H = 1000, 560
 d = D(W, H, "ISTIO IN ACTION · 09-01 §4",
       "허용을 하나 적으면 나머지가 닫힌다",
       "정책이 없을 때는 전부 허용이다. ALLOW 정책을 하나 붙이는 순간 그 워크로드의 기본값이 거부로 "
       "뒤집힌다. 색이 붙은 상태가 저자가 gotcha 라 부른 자리이고, 오른쪽이 그 처방이다.",
       "저자는 이 뒤집힘을 세부 설명보다 먼저 꺼내 놓습니다")
 
-CY, SW, SH = 236, 300, 72
-XS = [116, 496, 876]
+CY, SW, SH = 236, 280, 72
+XS = [36, 360, 684]
 
 def state(x, name, sub, focal=False):
     y = CY - SH / 2

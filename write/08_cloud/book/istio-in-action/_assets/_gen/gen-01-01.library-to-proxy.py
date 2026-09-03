@@ -7,7 +7,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 500
+W, H = 1000, 500
 d = D(W, H, "ISTIO IN ACTION · 01-01 §4",
       "같은 기능이 프로세스 밖으로 나간다",
       "재시도·타임아웃·서킷 브레이킹·디스커버리는 그대로 필요하다. 달라지는 것은 그것이 어디 사는가다. "
@@ -23,11 +23,11 @@ for k, (name, sub) in enumerate(lanes):
     d.t(20, top + 50, name, 9, SOFT, MONO, "start", 600)
     d.t(20, top + 68, sub, 11, MUTED, KR, "start")
 d.line(0, LANE_Y0 + 2 * LANE_H, W, LANE_Y0 + 2 * LANE_H, RULE, 0.8)
-d.line(200, LANE_Y0, 200, LANE_Y0 + 2 * LANE_H, RULE, 1.0)
+d.line(168, LANE_Y0, 168, LANE_Y0 + 2 * LANE_H, RULE, 1.0)
 
-BW, BH = 220, 60
+BW, BH = 180, 60
 def cell(k, j, label, sub, faint=False, focal=False):
-    x = 232 + j * 244; y = LANE_Y0 + k * LANE_H + 28
+    x = 188 + j * 196; y = LANE_Y0 + k * LANE_H + 28
     if focal:
         d.o.append(f'<rect x="{x}" y="{y}" width="{BW}" height="{BH}" rx="6" fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
     elif faint:

@@ -11,7 +11,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1160, 600
+W, H = 1000, 600
 d = D(W, H, "ISTIO IN ACTION · 11-01 §7",
       "언제 넣을지와 얼마나 꺼낼지가 갈린다",
       "환경변수 넷은 두 축으로 갈린다. 앞의 셋은 이벤트를 언제 푸시 큐에 넣을지를 정하고, 마지막 하나는 "
@@ -27,13 +27,13 @@ def node(x, y, name, sub, focal=False, w=NW, h=NH):
     d.t(x + w / 2, y + 22, name, 12, ACC if focal else INK, KR, "middle", 600)
     d.t(x + w / 2, y + 40, sub, 11, MUTED, KR)
 
-ROOT_X, ROOT_Y, ROOT_W = 390, 112, 380
+ROOT_X, ROOT_Y, ROOT_W = 310, 112, 380
 d.box(ROOT_X, ROOT_Y, ROOT_W, 56, PAPER2, RULE, 1.0, 6)
 d.t(ROOT_X + ROOT_W / 2, ROOT_Y + 24, "istiod 가 자신을 지키는 두 방법", 13, INK, KR, "middle", 600)
 d.t(ROOT_X + ROOT_W / 2, ROOT_Y + 44, "debounce · throttle", 9, MUTED, MONO)
 
 BUS_Y = 212
-XS = [88, 692]
+XS = [48, 572]
 MID_Y, LEAF_Y = 252, 368
 d.line(ROOT_X + ROOT_W / 2, ROOT_Y + 56, ROOT_X + ROOT_W / 2, BUS_Y, MUTED, 1.0)
 d.line(XS[0] + NW / 2, BUS_Y, XS[1] + NW / 2, BUS_Y, MUTED, 1.0)

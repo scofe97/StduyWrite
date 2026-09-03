@@ -6,14 +6,14 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 600
+W, H = 1000, 600
 d = D(W, H, "ISTIO IN ACTION · 02-01 §1",
       "아홉 가지를 한 컴포넌트에 맡기는 결정",
       "저자가 든 컨트롤 플레인의 책임 아홉을 성격별로 묶었다. 대부분이 istiod 라는 단일 컴포넌트에 "
       "구현돼 있다. 색이 붙은 묶음이 1 장의 단점 셋 중 \"또 하나의 계층\"이 무엇을 뜻하는지 보이는 자리다.",
       "묶음 이름은 노트가 붙인 것이고 잎 아홉은 저자의 목록 그대로입니다")
 
-NW, NH = 268, 48
+NW, NH = 208, 48
 def node(x, y, name, sub, focal=False, w=NW, h=NH):
     if focal:
         d.o.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="6" fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
@@ -22,9 +22,9 @@ def node(x, y, name, sub, focal=False, w=NW, h=NH):
     d.t(x + w / 2, y + 20, name, 12, ACC if focal else INK, KR, "middle", 600)
     d.t(x + w / 2, y + 38, sub, 11, MUTED, MONO)
 
-ROOT_X, ROOT_Y = 486, 112
+ROOT_X, ROOT_Y = 396, 112
 BUS_Y = 196
-XS = [36, 336, 636, 936]
+XS = [36, 276, 516, 756]
 MID_Y, LEAF_Y = 232, 336
 
 d.line(ROOT_X + NW / 2, ROOT_Y + NH, ROOT_X + NW / 2, BUS_Y, MUTED, 1.0)

@@ -8,7 +8,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1120, 572
+W, H = 1000, 572
 d = D(W, H, "ISTIO IN ACTION · 08-01 §6",
       "태그 값이 오는 곳은 셋이다",
       "customTags 아래에 태그 이름을 두고, 그 값을 어디서 끌어올지 고른다. 색이 붙은 갈래만 값의 "
@@ -24,9 +24,9 @@ def node(x, y, name, sub, focal=False, w=NW):
     d.t(x + w / 2, y + 22, name, 12, ACC if focal else INK, KR, "middle", 600)
     d.t(x + w / 2, y + 40, sub, 11, MUTED, MONO)
 
-ROOT_X, ROOT_Y = 430, 116
+ROOT_X, ROOT_Y = 370, 116
 BUS_Y = 216
-XS = [64, 430, 796]
+XS = [36, 370, 704]
 MID_Y, LEAF_Y = 264, 388
 
 # 연결선 먼저
