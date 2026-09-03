@@ -45,7 +45,7 @@ d.arrow([(sx(0) + SW, sy(1) + SH / 2), (sx(1) - 2, sy(1) + SH / 2)], MUTED, "ar"
 # 레인을 넘는 손잡이
 d.path(f"M 912 {sy(0) + SH} L 912 {sy(2) - 2}", MUTED, 1.4, m="ar")
 d.path(f"M 632 {sy(1) + SH} L 632 {sy(2) + SH / 2} L {sx(2) - 2} {sy(2) + SH / 2}", ACC, 1.6, m="acc")
-d.t(520, sy(2) + SH / 2 - 12, "없으면 노출되지 않는다", 11, ACC, KR, "start", 600)
+d.t(500, sy(2) + SH / 2 - 12, "없으면 노출되지 않는다", 11, ACC, KR, "start", 600)   # 손잡이 수직 구간(x=632) 왼쪽에서 끝나게
 
 step(0, 0, "dimensions 를 적는다", "configOverride")
 step(0, 1, "설치를 갱신한다", "istioctl install")
