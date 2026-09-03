@@ -49,7 +49,7 @@ d.path(f"M {CX + 190} 420 L 618 420", ACC, 1.6, m="acc")
 d.t(460, 410, "넘는다", 11, ACC, KR)
 side(376, "빠른 실패 — HTTP 500", ["x-envoy-overloaded 헤더", "upstream_rq_pending_overflow"], ACC, focal=True, h=76)
 d.path(f"M {CX - 190} 420 L 120 420 L 120 316", OK, 1.4, m="ok")
-d.t(112, 336, "안 넘는다 → 상위로 전송", 11, OK, KR, "start")
+d.t(132, 336, "안 넘는다 → 상위로 전송", 11, OK, KR, "start")   # 화살표 수직 구간(x=120) 오른쪽으로
 
 d.legend(520, [("오류를 내지 않는 오버플로", WARN), ("빠른 실패 — 이 절의 논점", ACC), ("통과", OK)])
 d.save("06-01.connection-pool.svg")
