@@ -9,7 +9,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-label_col_w, step_slot_w, right_pad = 152, 168, 32
+label_col_w, step_slot_w, right_pad = 136, 164, 24
 lanes = [("WEST-CLUSTER", "WST"), ("NETWORK EDGE", "EDG"), ("EAST-CLUSTER", "EST")]
 steps = [("01", "CLIENT"), ("02", "SIDECAR"), ("03", "EW GATEWAY"), ("04", "SNI READ"), ("05", "WORKLOAD")]
 FOCAL_STEP = 3

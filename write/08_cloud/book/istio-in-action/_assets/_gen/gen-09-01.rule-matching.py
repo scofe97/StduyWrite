@@ -7,14 +7,14 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1200, 640
+W, H = 1000, 640
 d = D(W, H, "ISTIO IN ACTION · 09-01 §6",
       "묶음 사이는 AND, 묶음 안은 OR",
       "규칙 하나가 발동하려면 출처 하나와 작업 하나가 맞고 조건이 전부 맞아야 한다. 색이 붙은 묶음만 "
       "전부 맞아야 하고 나머지 둘은 하나만 맞으면 된다. 작업 하나 안의 속성은 다시 전부 맞아야 한다.",
       "from 을 빼면 출처를 따지지 않아 인증되지 않은 요청도 들어옵니다")
 
-NW, NH = 300, 52
+NW, NH = 288, 52
 def node(x, y, name, sub, focal=False, w=NW, h=NH):
     if focal:
         d.o.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="6" fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
@@ -23,9 +23,9 @@ def node(x, y, name, sub, focal=False, w=NW, h=NH):
     d.t(x + w / 2, y + 22, name, 12, ACC if focal else INK, KR, "middle", 600)
     d.t(x + w / 2, y + 40, sub, 11, MUTED, MONO)
 
-ROOT_X, ROOT_Y = 450, 116
+ROOT_X, ROOT_Y = 356, 116
 BUS_Y = 210
-XS = [60, 450, 840]
+XS = [36, 356, 676]
 MID_Y, LEAF_Y = 256, 380
 
 d.line(ROOT_X + NW / 2, ROOT_Y + NH, ROOT_X + NW / 2, BUS_Y, MUTED, 1.0)

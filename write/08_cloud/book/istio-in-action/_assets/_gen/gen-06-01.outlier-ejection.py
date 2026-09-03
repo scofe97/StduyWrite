@@ -7,7 +7,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1180, 484
+W, H = 1000, 484
 d = D(W, H, "ISTIO IN ACTION · 06-01 §8",
       "엔드포인트가 축출되고 돌아오는 상태 전이",
       "연속 5xx 가 임계에 닿으면 다음 검사 주기에 엔드포인트가 축출된다. 축출 시간은 축출 횟수 n 에 baseEjectionTime 을 곱한 값이고, "
@@ -15,7 +15,7 @@ d = D(W, H, "ISTIO IN ACTION · 06-01 §8",
       "이상치 감지는 실패를 사후에 알아채는 장치입니다. 그 틈을 재시도가 메웁니다")
 
 SW, SH, Y = 240, 72, 176
-xs = [64, 470, 876]
+xs = [36, 380, 724]
 states = [("풀에 있음", "요청을 받는다", OK, False),
           ("아프지만 아직 풀에", "consecutive5xxErrors 누적", WARN, False),
           ("축출됨", "n × baseEjectionTime", BAD, True)]

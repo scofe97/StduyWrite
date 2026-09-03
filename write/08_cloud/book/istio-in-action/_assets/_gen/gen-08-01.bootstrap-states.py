@@ -7,15 +7,15 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 560
+W, H = 1000, 560
 d = D(W, H, "ISTIO IN ACTION · 08-01 §7",
       "갈아 끼운 뒤 되돌아오는 것까지가 저자의 절차",
       "저자는 커스텀 부트스트랩을 적용해 보인 다음 그 설정이 추적을 깨뜨린다고 밝히고 복구 명령을 붙인다. "
       "가운데 상태에서 손대지 않은 필드 하나가 사라지는 것이 이 절의 관찰이다.",
       "typedConfig 는 Any 로 감싼 블록이라 병합이 필드 단위로 내려가지 않습니다")
 
-CY, SW, SH = 236, 300, 72
-XS = [116, 496, 876]
+CY, SW, SH = 236, 280, 72
+XS = [36, 360, 684]
 
 def state(x, name, sub, focal=False):
     y = CY - SH / 2

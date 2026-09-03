@@ -6,7 +6,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1080, 580
+W, H = 1000, 580
 d = D(W, H, "ISTIO IN ACTION · 03-01 §7",
       "Envoy를 부양하는 것 — 저자가 든 예 넷",
       "Kubernetes API 에서 Istio 설정과 서비스 레지스트리를 읽은 istiod 가 xDS 로 설정을, CA 로 인증서를 Envoy 사이드카에 내려보낸다. "
@@ -29,17 +29,17 @@ def node(x, y, w, h, title, subs, focal=False):
         d.t(x + w / 2, y + 48 + i * 18, s, 12, MUTED, KR)
 
 # 존 (배경 → 존 → 화살표 → 노드)
-zone(320, 140, 248, 176, "컨트롤 플레인")
-zone(696, 108, 248, 256, "데이터 플레인")
-zone(600, 388, 440, 120, "관측 인프라")
+zone(296, 140, 232, 176, "컨트롤 플레인")
+zone(644, 108, 232, 256, "데이터 플레인")
+zone(556, 388, 408, 120, "관측 인프라")
 
 # 좌표
-K8 = (24, 192, 176, 88)        # Kubernetes API
-IS = (344, 172, 200, 112)      # istiod
-EA = (720, 140, 200, 72)       # Envoy A
-EB = (720, 268, 200, 72)       # Envoy B
-PR = (628, 420, 168, 64)       # Prometheus
-JG = (852, 420, 168, 64)       # Jaeger / Zipkin
+K8 = (24, 192, 168, 88)        # Kubernetes API
+IS = (320, 172, 184, 112)      # istiod
+EA = (668, 140, 184, 72)       # Envoy A
+EB = (668, 268, 184, 72)       # Envoy B
+PR = (584, 420, 160, 64)       # Prometheus
+JG = (772, 420, 160, 64)       # Jaeger / Zipkin
 
 def cx(n): return n[0] + n[2] / 2
 def cy(n): return n[1] + n[3] / 2

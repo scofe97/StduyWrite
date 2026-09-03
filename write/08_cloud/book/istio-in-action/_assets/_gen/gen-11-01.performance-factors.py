@@ -9,14 +9,14 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 660
+W, H = 1000, 660
 d = D(W, H, "ISTIO IN ACTION · 11-01 §3",
       "네 갈래가 같은 증상으로 모인다",
       "저자가 든 성능 요인 넷을 결과 하나에 붙였다. 색이 붙은 뼈대가 저자가 첫 손잡이로 지목한 것이고, "
       "나머지 셋은 그것을 다 돌린 뒤에 본다.",
       "변경률만은 우리 손 밖입니다 — 나머지 셋은 설정으로 줄일 수 있습니다")
 
-CY, HEAD = 328, 892
+CY, HEAD = 328, 684
 d.path(f"M 96 {CY} L {HEAD - 8} {CY}", INK, 1.2, m="ar")
 
 bones = [
@@ -26,8 +26,8 @@ bones = [
     ("설정 크기", ["기본은 모두가 모두를 안다", "워크로드당 2MB"], 1, True),
 ]
 for k, (cat, subs, side, focal) in enumerate(bones):
-    ax = HEAD - 120 - (k + 1) * 152
-    fx, fy = ax - 88, CY + side * 156
+    ax = HEAD - 116 - (k + 1) * 108
+    fx, fy = ax - 68, CY + side * 156
     c = ACC if focal else MUTED
     d.line(ax, CY, fx, fy, c, 1.4 if focal else 1.1)
     tw = len(cat) * 13 + 28

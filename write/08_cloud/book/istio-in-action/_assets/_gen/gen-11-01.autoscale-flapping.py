@@ -8,7 +8,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1200, 620
+W, H = 1000, 620
 d = D(W, H, "ISTIO IN ACTION · 11-01 §8",
       "새 레플리카가 부하를 못 받아 다시 줄어든다",
       "오토스케일러가 레플리카를 늘려도 기존 프록시의 커넥션이 30분 동안 유지되어 새 레플리카에 부하가 "
@@ -27,7 +27,7 @@ def state(x, y, label, sub, c=None, focal=False):
     d.t(x + SW / 2, y + 44, sub, 11, MUTED, KR)
 
 TOP, BOT = 156, 340
-S1, S2, S3 = 96, 452, 808
+S1, S2, S3 = 88, 372, 656
 d.o.append(f'<circle cx="60" cy="{TOP + SH / 2}" r="6" fill="{INK}"/>')
 d.arrow([(68, TOP + SH / 2), (S1 - 2, TOP + SH / 2)], MUTED, "ar", 1.4)
 

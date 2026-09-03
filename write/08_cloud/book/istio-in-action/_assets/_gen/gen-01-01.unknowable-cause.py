@@ -9,14 +9,14 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 640
+W, H = 1000, 640
 d = D(W, H, "ISTIO IN ACTION · 01-01 §1",
       "여섯 갈래가 호출자에게는 한 증상이다",
       "저자가 든 원인 후보 여섯을 성격별로 묶었다. 호출자는 이 중 어느 것인지 가릴 수 없고, "
       "그것이 이 장의 설계를 바꾼다. 확정된 뼈대가 없다는 것이 이 그림의 요점이다.",
       "구분할 수 없으므로 원인별 대응이 아니라 증상에 대한 방어책이 필요해집니다")
 
-CY, HEAD = 320, 904
+CY, HEAD = 320, 684
 d.path(f"M 96 {CY} L {HEAD - 8} {CY}", INK, 1.2, m="ar")
 
 bones = [
@@ -25,8 +25,8 @@ bones = [
     ("하드웨어", ["장비 장애로 우회 중", "NIC 장애"], -1),
 ]
 for k, (cat, subs, side) in enumerate(bones):
-    ax = HEAD - 160 - (k + 1) * 168
-    fx, fy = ax - 96, CY + side * 168
+    ax = HEAD - 140 - (k + 1) * 120
+    fx, fy = ax - 72, CY + side * 168
     d.line(ax, CY, fx, fy, MUTED, 1.1)
     tw = len(cat) * 12 + 24
     bx, by = fx - tw / 2, fy - (26 if side < 0 else 0)

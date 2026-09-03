@@ -7,15 +7,15 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 600
+W, H = 1000, 600
 d = D(W, H, "ISTIO IN ACTION · 02-01 §4",
       "올리는 일과 흘리는 일을 떼어 놓는다",
       "기본값은 둘이 붙어 있다. 올리는 순간 Kubernetes 가 이미 부하를 나눠 보내므로 유료 고객이 새 "
       "코드의 첫 시험대가 된다. 색이 붙은 전이가 그 지름길이고, 아래 경로가 저자가 만드는 길이다.",
       "올릴 때 트래픽 정책을 함께 정하지 않았다면 그것은 이미 릴리스입니다")
 
-CY, SW, SH = 216, 296, 72
-XS = [96, 472, 848]
+CY, SW, SH = 216, 280, 72
+XS = [36, 360, 684]
 
 def state(x, y, name, sub, focal=False):
     if focal:
@@ -26,13 +26,13 @@ def state(x, y, name, sub, focal=False):
     d.t(x + SW / 2, y + 52, sub, 11, MUTED, MONO)
 
 d.o.append(f'<circle cx="48" cy="{CY + SH / 2}" r="6" fill="{INK}"/>')
-d.o.append(f'<circle cx="1196" cy="{CY + SH / 2}" r="8" fill="none" stroke="{INK}" stroke-width="1.2"/>')
-d.o.append(f'<circle cx="1196" cy="{CY + SH / 2}" r="5" fill="{INK}"/>')
+d.o.append(f'<circle cx="964" cy="{CY + SH / 2}" r="8" fill="none" stroke="{INK}" stroke-width="1.2"/>')
+d.o.append(f'<circle cx="964" cy="{CY + SH / 2}" r="5" fill="{INK}"/>')
 
 MY = CY + SH / 2
 d.arrow([(56, MY), (XS[0] - 2, MY)], MUTED, "ar", 1.4)
 d.arrow([(XS[1] + SW, MY), (XS[2] - 2, MY)], MUTED, "ar", 1.4)
-d.arrow([(XS[2] + SW, MY), (1186, MY)], MUTED, "ar", 1.4)
+d.arrow([(XS[2] + SW, MY), (954, MY)], MUTED, "ar", 1.4)
 
 # 아래 경로 — 저자가 만드는 길
 d.path(f"M {XS[0] + SW} {MY} L {XS[1] - 2} {MY}", MUTED, 1.4, m="ar")
@@ -46,10 +46,10 @@ state(XS[2], CY, "일부에게 릴리스", "x-dark-launch: v2", focal=True)
 
 d.t((XS[0] + SW + XS[1]) / 2, CY - 26, "DestinationRule 로 subset 을 가른다", 11, MUTED, MONO, "middle", 600)
 d.t((XS[1] + SW + XS[2]) / 2, CY - 26, "헤더 매칭 라우팅", 11, MUTED, MONO, "middle", 600)
-d.t((XS[2] + SW + 1186) / 2, CY - 26, "비율을 넓힌다", 11, MUTED, MONO, "middle", 600)
+d.t((XS[2] + SW + 954) / 2, CY - 26, "비율을 넓힌다", 11, MUTED, MONO, "middle", 600)
 
 BY = CY + SH + 48
-d.box(XS[0], BY, 1000, 104, PAPER2, RULE, 1.0, 6)
+d.box(XS[0], BY, 928, 104, PAPER2, RULE, 1.0, 6)
 d.t(XS[0] + 20, BY + 28, "저자가 제시하는 단계적 릴리스", 11, ACC, KR, "start", 600)
 d.t(XS[0] + 20, BY + 54, "내부 직원  ->  비유료 고객  ->  실버 등급 고객  ->  전체", 11, INK, MONO, "start")
 d.t(XS[0] + 20, BY + 80, "등급을 판정하는 주체는 메시가 아니다 — 헤더나 쿠키로 만들어 주는 계층이 앞에 있어야 한다", 11, SOFT, KR, "start")

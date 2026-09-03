@@ -11,14 +11,14 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 624
+W, H = 1000, 624
 d = D(W, H, "ISTIO IN ACTION · 10-01 §6",
       "플래그는 요청이 어디서 끝났는지를 적는다",
       "요청이 프록시 안에서 지나는 자리마다 실패로 끝날 수 있고, 액세스 로그의 두 글자가 그 자리를 "
       "지목한다. 색이 붙은 상태가 이 장의 504 이고, 그 두 글자 덕에 앱이 아니라 프록시가 끊었음을 안다.",
       "UT 가 있으면 타임아웃을 판정한 쪽이 애플리케이션이 아니라 프록시입니다")
 
-SW, SH = 216, 56
+SW, SH = 160, 56
 MAIN_Y = 140
 def state(x, y, w, h, label, sub, c=None, r=8):
     if c:
@@ -28,13 +28,13 @@ def state(x, y, w, h, label, sub, c=None, r=8):
     d.t(x + w / 2, y + 24, label, 12, c or INK, KR, "middle", 600)
     d.t(x + w / 2, y + 42, sub, 9, MUTED, MONO)
 
-S1, S2, S3 = 48, 380, 712
-END_X, END_W = 1004, 200
+S1, S2, S3 = 24, 276, 528
+END_X, END_W = 780, 184
 d.o.append(f'<circle cx="24" cy="{MAIN_Y + SH / 2}" r="6" fill="{INK}"/>')
 d.arrow([(32, MAIN_Y + SH / 2), (S1 - 2, MAIN_Y + SH / 2)], MUTED, "ar", 1.4)
 for a, b in ((S1, S2), (S2, S3), (S3, END_X)):
     d.arrow([(a + SW, MAIN_Y + SH / 2), (b - 2, MAIN_Y + SH / 2)], MUTED, "ar", 1.4)
-for a_end, b_start, lab in ((S1 + SW, S2, "라우트가 맞는다"), (S2 + SW, S3, "커넥션이 선다"),
+for a_end, b_start, lab in ((S1 + SW, S2, "라우트 매칭"), (S2 + SW, S3, "커넥션"),
                             (S3 + SW, END_X, "응답 도착")):
     mx = (a_end + b_start) / 2
     mw = len(lab) * 11 + 12
@@ -49,16 +49,16 @@ d.o.append(f'<circle cx="{END_X + END_W + 24}" cy="{MAIN_Y + SH / 2}" r="8" fill
 d.o.append(f'<circle cx="{END_X + END_W + 24}" cy="{MAIN_Y + SH / 2}" r="5" fill="{OK}"/>')
 
 TERM_Y, TW, TH = 400, 176, 60
-terms = [(136, "NR", "no route configured", "라우트가 없다", False,
-          f"M 136 {MAIN_Y + SH} V {TERM_Y - 4}"),
-         (468, "UH", "no healthy upstream", "건강한 워크로드가 없다", False,
-          f"M 468 {MAIN_Y + SH} V {TERM_Y - 4}"),
-         (660, "UC", "upstream connection termination", "업스트림이 끊는다", False,
-          f"M 748 {MAIN_Y + SH} V 296 H 660 V {TERM_Y - 4}"),
-         (880, "UT", "upstream request timeout", "제한 시간을 넘긴다", True,
-          f"M 820 {MAIN_Y + SH} V 320 H 880 V {TERM_Y - 4}"),
-         (1100, "DC", "downstream connection termination", "다운스트림이 끊는다", False,
-          f"M 900 {MAIN_Y + SH} V 296 H 1100 V {TERM_Y - 4}")]
+terms = [(108, "NR", "no route configured", "라우트가 없다", False,
+          f"M 104 {MAIN_Y + SH} V 296 H 108 V {TERM_Y - 4}"),
+         (304, "UH", "no healthy upstream", "건강한 워크로드가 없다", False,
+          f"M 356 {MAIN_Y + SH} V 296 H 304 V {TERM_Y - 4}"),
+         (500, "UC", "upstream connection termination", "업스트림이 끊는다", False,
+          f"M 564 {MAIN_Y + SH} V 296 H 500 V {TERM_Y - 4}"),
+         (696, "UT", "upstream request timeout", "제한 시간을 넘긴다", True,
+          f"M 608 {MAIN_Y + SH} V 320 H 696 V {TERM_Y - 4}"),
+         (892, "DC", "downstream connection termination", "다운스트림이 끊는다", False,
+          f"M 652 {MAIN_Y + SH} V 296 H 892 V {TERM_Y - 4}")]
 for cx, code, eng, trig, focal, p in terms:
     d.path(p, ACC if focal else BAD, 1.4 if focal else 1.1, m="acc" if focal else "bad")
 for cx, code, eng, trig, focal, p in terms:
