@@ -6,7 +6,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import Seq, ACC, MUTED, SOFT, INK, KR, MONO
 
-W, H = 1240, 560
+W, H = 1000, 560
 d = Seq(W, H, "ISTIO IN ACTION · 02-01 §2",
         "위쪽은 무엇을 원하는가, 아래쪽은 어떻게 할 것인가",
         "운영자는 의도만 적고 kubectl 로 적용한다. istiod 가 그것을 프록시마다 맞는 낮은 수준 설정으로 "
@@ -16,14 +16,14 @@ d = Seq(W, H, "ISTIO IN ACTION · 02-01 §2",
 d.lanes([("운영자", "VirtualService"),
          ("Kubernetes API", "CRD"),
          ("istiod", "control plane"),
-         ("Envoy", "sidecar")], y0=104, lane_w=248)
+         ("Envoy", "sidecar")], y0=104, lane_w=216)
 d.rails(452)
 
 d.msg("운영자", "Kubernetes API", "kubectl apply", 196, MUTED, "ar", sub="x-dark-launch: v2 -> subset v2")
 d.msg("Kubernetes API", "istiod", "리소스 변경 통지", 260, MUTED, "ar", sub="networking.istio.io")
 d.selfmsg("istiod", "낮은 수준으로 번역", 316, ACC, sub="cluster 이름과 prefix 로 푼다")
 d.msg("istiod", "Envoy", "outbound|80|v2|catalog…", 380, ACC, "acc", sub="운영자가 쓰지 않는 형태")
-d.selfmsg("Envoy", "라우팅 적용", 432, MUTED, sub="요청마다 헤더 확인")
+d.selfmsg("Envoy", "라우팅 적용", 432, MUTED, sub="헤더를 본다")
 
 d.t(24, 488, "저자는 같은 규칙을 두 형태로 나란히 보여 이 번역을 드러낸다", 11, SOFT, KR, "start")
 d.legend(516, [("번역이 일어나는 자리", ACC)])

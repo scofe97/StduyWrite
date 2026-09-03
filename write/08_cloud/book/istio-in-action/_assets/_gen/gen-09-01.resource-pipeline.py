@@ -6,7 +6,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import Seq, ACC, MUTED, SOFT, INK, KR, MONO
 
-W, H = 1240, 620
+W, H = 1000, 620
 d = Seq(W, H, "ISTIO IN ACTION · 09-01 §2",
         "앞의 둘은 꺼내 놓고 판정은 뒤가 한다",
         "요청 하나가 세 필터를 차례로 지난다. 두 인증 필터가 자격 증명에서 값을 꺼내 필터 메타데이터에 "
@@ -16,7 +16,7 @@ d = Seq(W, H, "ISTIO IN ACTION · 09-01 §2",
 d.lanes([("들어온 요청", "SVID + JWT"),
          ("PeerAuthentication", "peer authn filter"),
          ("RequestAuthentication", "jwt authn filter"),
-         ("AuthorizationPolicy", "rbac filter")], y0=104, lane_w=250)
+         ("AuthorizationPolicy", "rbac filter")], y0=104, lane_w=216)
 d.rails(520)
 
 d.msg("들어온 요청", "PeerAuthentication", "상대 인증서 제시", 196, MUTED, "ar", sub="X.509 SVID")

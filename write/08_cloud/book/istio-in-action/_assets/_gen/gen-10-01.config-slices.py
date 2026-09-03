@@ -9,7 +9,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 540
+W, H = 1000, 540
 d = D(W, H, "ISTIO IN ACTION · 10-01 §4",
       "같은 네 칸을 셋이 다른 이름으로 부른다",
       "13,934줄짜리 config_dump 를 xDS 축으로 자르면 네 칸이 남는다. 명령 · 프록시 설정 · 사람이 쓰는 "
@@ -23,13 +23,13 @@ lanes = [("ISTIOCTL", "꺼내는 명령"),
 for k, (name, sub) in enumerate(lanes):
     top = LANE_Y0 + k * LANE_H
     d.line(0, top, W, top, RULE, 0.8)
-    d.t(20, top + 46, name, 9, SOFT, MONO, "start", 600)
-    d.t(20, top + 64, sub, 11, MUTED, KR, "start")
+    d.t(16, top + 46, name, 9, SOFT, MONO, "start", 600)
+    d.t(16, top + 64, sub, 11, MUTED, KR, "start")
 d.line(0, LANE_Y0 + 3 * LANE_H, W, LANE_Y0 + 3 * LANE_H, RULE, 0.8)
-d.line(184, LANE_Y0, 184, LANE_Y0 + 3 * LANE_H, RULE, 1.0)
+d.line(148, LANE_Y0, 148, LANE_Y0 + 3 * LANE_H, RULE, 1.0)
 
-SW, SH = 210, 60
-def sx(j): return 232 + j * 246
+SW, SH = 168, 60
+def sx(j): return 188 + j * 200
 def sy(k): return LANE_Y0 + k * LANE_H + 22
 def cell(k, j, label, sub, focal=False):
     x, y = sx(j), sy(k)
@@ -58,6 +58,6 @@ cell(2, 1, "VirtualService", "가중치를 적는다")
 cell(2, 2, "DestinationRule", "없으면 클러스터도 없다", focal=True)
 cell(2, 3, "자동 발견", "쿠버네티스 엔드포인트")
 
-d.t(32, 456, "라우트는 나열된 순서대로 평가되고 처음 맞는 것이 쓰인다 — 뒤에 적은 규칙은 가려질 수 있다", 11, SOFT, KR, "start")
+d.t(24, 456, "라우트는 나열된 순서대로 평가되고 처음 맞는 것이 쓰인다 — 뒤에 적은 규칙은 가려질 수 있다", 11, SOFT, KR, "start")
 d.legend(484, [("예제에서 비어 있던 칸", ACC), ("요청이 지나는 순서", MUTED)])
 d.save("10-01.config-slices.svg")

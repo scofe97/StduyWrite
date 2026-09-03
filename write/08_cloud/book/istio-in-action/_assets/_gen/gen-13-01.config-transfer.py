@@ -12,7 +12,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 728
+W, H = 1000, 728
 d = D(W, H, "ISTIO IN ACTION · 13-01 §7",
       "다섯 조각에 앉을 자리가 미리 정해져 있다",
       "WorkloadGroup 을 읽어 istioctl 이 파일 다섯을 만들고, 그것이 VM 의 정해진 경로로 간다. 색이 붙은 "
@@ -26,9 +26,9 @@ def zone(x, y, w, h, label):
     d.o.append(f'<rect x="{x + 12}" y="{y - 7}" width="{tw}" height="14" fill="{PAPER}"/>')
     d.t(x + 18, y + 3, label, 8, SOFT, MONO, "start", 600)
 
-AX, AW = 36, 232
-BX, BW = 332, 340
-CX_, CW = 792, 412
+AX, AW = 28, 188
+BX, BW = 268, 276
+CX_, CW = 640, 332
 TOP, RH = 148, 76
 
 zone(AX - 8, TOP - 20, AW + 16, 5 * RH + 12, "CLUSTER")
@@ -71,9 +71,9 @@ d.path(f"M {AX + AW} {TOP + 106} L {BX - 2} {TOP + 106}", INFO, 1.3, m="info")
 d.chip((AX + AW + BX) / 2, TOP + 84, "생성", INFO, 11)
 d.chip((BX + BW + CX_) / 2, TOP - 2, "rsync · SSH", MUTED, 9)
 
-d.t(36, 588, "저자가 요약한 네 가지 내용 — 동서 게이트웨이 IP · 루트 인증서 · 서비스 어카운트 토큰 · 메시와 망 설정", 11, SOFT, KR, "start")
-d.t(36, 612, "토큰이 들어 있어 전송이 문제가 된다 — 시연은 SSH 위의 rsync 이고 운영에서는 사람의 개입이 없어야 한다", 11, MUTED, KR, "start")
-d.t(36, 636, "hosts 가 필요한 이유 — 아직 컨트롤 플레인에 붙지 않아 DNS 프록시에 항목이 하나도 없다", 11, SOFT, KR, "start")
-d.t(36, 660, "옮긴 뒤에는 소유권을 istio-proxy 에 주고 systemctl 로 에이전트를 시작한다", 11, MUTED, KR, "start")
+d.t(28, 588, "저자가 요약한 네 가지 내용 — 동서 게이트웨이 IP · 루트 인증서 · 서비스 어카운트 토큰 · 메시와 망 설정", 11, SOFT, KR, "start")
+d.t(28, 612, "토큰이 들어 있어 전송이 문제가 된다 — 시연은 SSH 위의 rsync 이고 운영에서는 사람의 개입이 없어야 한다", 11, MUTED, KR, "start")
+d.t(28, 636, "hosts 가 필요한 이유 — 아직 컨트롤 플레인에 붙지 않아 DNS 프록시에 항목이 하나도 없다", 11, SOFT, KR, "start")
+d.t(28, 660, "옮긴 뒤에는 소유권을 istio-proxy 에 주고 systemctl 로 에이전트를 시작한다", 11, MUTED, KR, "start")
 d.legend(680, [("민감해서 전송 방식을 정하게 만드는 짐", ACC), ("설정을 만드는 근거", INFO)])
 d.save("13-01.config-transfer.svg")

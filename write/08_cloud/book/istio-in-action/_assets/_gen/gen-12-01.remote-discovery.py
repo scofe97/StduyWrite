@@ -9,7 +9,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import Seq, ACC, MUTED, SOFT, INK, KR, MONO
 
-W, H = 1240, 620
+W, H = 1000, 620
 d = Seq(W, H, "ISTIO IN ACTION · 12-01 §3",
         "남의 클러스터를 읽으려면 남의 신원이 필요하다",
         "west 의 컨트롤 플레인이 east 의 워크로드를 알려면 east 가 발급한 서비스 어카운트 토큰을 들고 "
@@ -19,7 +19,7 @@ d = Seq(W, H, "ISTIO IN ACTION · 12-01 §3",
 d.lanes([("운영자", "istioctl"),
          ("east 클러스터", "API server"),
          ("west 의 istiod", "control plane"),
-         ("west 의 프록시", "envoy")], y0=104, lane_w=250)
+         ("west 의 프록시", "envoy")], y0=104, lane_w=216)
 d.rails(524)
 
 d.msg("운영자", "east 클러스터", "create-remote-secret", 196, MUTED, "ar", sub="reader 서비스 어카운트로")
