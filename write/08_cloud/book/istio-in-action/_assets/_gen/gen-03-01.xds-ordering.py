@@ -6,7 +6,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import Seq, ACC, WARN, INFO, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 880, 560
+W, H = 880, 572
 d = Seq(W, H, "ISTIO IN ACTION · 03-01 §5",
         "RDS와 CDS가 따로 올 때와 ADS로 묶일 때",
         "위 구간: RDS 가 cluster foo 를 가리키는 라우트를 먼저 보내고 CDS 가 뒤늦게 foo 를 보내 그 사이 라우팅 오류가 난다. "
@@ -15,7 +15,7 @@ d = Seq(W, H, "ISTIO IN ACTION · 03-01 §5",
 
 LX = d.lanes([("xDS 서버", "istiod · gRPC stream"), ("Envoy", "service proxy")], y0=104, lane_w=210)
 XS, XE = LX["xDS 서버"], LX["Envoy"]
-d.rails(500)
+d.rails(512)
 
 def push(label, y, c=MUTED, mk="ar"):
     d.path(f"M {XS + 10} {y} L {XE - 12} {y}", c, 1.5, m=mk)
@@ -26,7 +26,7 @@ def state(txt, y, c, w):
     d.t(XE, y + 4, txt, 12, c, KR)
 
 # alt 프레임 — 레일 바깥 60px 안쪽
-FX, FY, FH = XS - 68, 172, 316
+FX, FY, FH = XS - 68, 172, 328
 FW = (XE + 104) - FX          # 오른쪽 변이 상태 상자(XE ± 92)보다 바깥에 오게
 d.o.append(f'<rect x="{FX}" y="{FY}" width="{FW}" height="{FH}" rx="4" fill="rgba(245,245,245,0.04)" stroke="rgba(245,245,245,0.22)" stroke-width="1"/>')
 d.o.append(f'<rect x="{FX}" y="{FY}" width="40" height="16" rx="2" fill="{PAPER}" stroke="rgba(245,245,245,0.22)" stroke-width="1"/>')
@@ -46,6 +46,6 @@ push("ADS: CDS(cluster foo)", 412)
 push("ADS: RDS(route → foo)", 448)
 state("오류 구간 없이 수렴", 480, ACC, 168)
 
-d.legend(516, [("오류 구간", WARN), ("수렴", INFO), ("Istio의 선택", ACC)])
+d.legend(528, [("오류 구간", WARN), ("수렴", INFO), ("Istio의 선택", ACC)])
 d.save("03-01.xds-ordering.svg")
-print("h 필요:", 516 + 22 + 16, " 실제:", H)
+print("h 필요:", 528 + 22 + 16, " 실제:", H)

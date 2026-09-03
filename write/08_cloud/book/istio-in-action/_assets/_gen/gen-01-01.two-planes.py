@@ -33,10 +33,16 @@ node(92, 324, 240, 72, "app + proxy", "webapp")
 node(380, 324, 240, 72, "app + proxy", "catalog")
 node(668, 324, 240, 72, "app + proxy", "orders")
 
-# 설정이 내려가는 경로
-for cx in (256, 600, 944):
-    d.path(f"M {cx} 220 L {cx} 268 L {cx} 322", ACC, 1.4, m="acc")
-d.t(512, 262, "설정을 내려보낸다", 11, ACC, KR, "start", 600)
+# 설정이 내려가는 경로 — 컨트롤 플레인 한 곳에서 갈라져 워크로드 셋으로 내려간다.
+# 좌표는 상자에서 산출한다. 워크로드는 x=92·380·668 에 폭 240 이므로 중앙은 212·500·788,
+# 컨트롤 플레인은 x=332 에 폭 332 이므로 중앙은 498 이고 가운데 내림선(500)과 사실상 겹친다.
+APP_CX = (212, 500, 788)
+BUS_Y = 268
+d.path(f"M 500 220 L 500 {BUS_Y}", ACC, 1.4)
+d.path(f"M {APP_CX[0]} {BUS_Y} L {APP_CX[-1]} {BUS_Y}", ACC, 1.4)
+for cx in APP_CX:
+    d.path(f"M {cx} {BUS_Y} L {cx} 322", ACC, 1.4, m="acc")
+d.t(516, 258, "설정을 내려보낸다", 11, ACC, KR, "start", 600)
 
 # 트래픽이 흐르는 방향
 d.arrow([(332, 360), (380, 360)], MUTED, "ar", 1.4)
