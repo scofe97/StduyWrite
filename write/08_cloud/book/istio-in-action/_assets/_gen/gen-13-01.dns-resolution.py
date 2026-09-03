@@ -11,7 +11,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1200, 936
+W, H = 1000, 936
 d = D(W, H, "ISTIO IN ACTION · 13-01 §5",
       "가로채기가 없으면 이름은 기계 밖으로 나간다",
       "질의는 평소의 리졸버로 가려다가 Iptable 규칙에 붙들려 사이드카 안의 DNS 프록시로 향한다. "
@@ -39,14 +39,14 @@ def diamond(cx, cy, l1, l2):
 
 CA, CB = 356, 872
 
-oval(CA - 168, 112, 336, 64, "webapp.istioinaction 을 묻는다", "01 · 애플리케이션의 DNS 질의")
+oval(CA - 168, 112, 280, 64, "webapp.istioinaction 을 묻는다", "01 · 애플리케이션의 DNS 질의")
 diamond(CA, 268, "hosts 파일에", "맞는 항목이 있나")
-oval(CB - 150, 240, 300, 56, "그 값으로 끝난다")
-step(CA - 168, 384, 336, 68, "기본 리졸버로 간다", "02 · systemd-resolved 127.0.0.53:53")
-step(CA - 168, 508, 336, 68, "Iptable 규칙이 붙든다", "03 · REDIRECT --to-ports 15053", focal=True)
+oval(CB - 150, 240, 248, 56, "그 값으로 끝난다")
+step(CA - 168, 384, 280, 68, "기본 리졸버로 간다", "02 · systemd-resolved 127.0.0.53:53")
+step(CA - 168, 508, 280, 68, "Iptable 규칙이 붙든다", "03 · REDIRECT --to-ports 15053", focal=True)
 diamond(CA, 664, "DNS 프록시가", "아는 이름인가")
-oval(CB - 190, 636, 380, 56, "주소를 돌려준다")
-oval(CA - 180, 796, 360, 56, "resolv.conf 네임서버로 폴백")
+oval(CB - 190, 636, 316, 56, "주소를 돌려준다")
+oval(CA - 180, 796, 300, 56, "resolv.conf 네임서버로 폴백")
 
 d.arrow([(CA, 176), (CA, 214)], MUTED, "ar", 1.4)
 d.arrow([(CA, 324), (CA, 380)], MUTED, "ar", 1.4)
@@ -66,6 +66,6 @@ d.t(CB - 190, 758, "메시가 아는 서비스를 채워 두기 때문", 11, SOF
 d.t(CB - 190, 786, "짧은 변형은 agent 가 만든다", 11, MUTED, KR, "start")
 d.t(CB - 190, 808, "webapp.istioinaction.svc 등", 9, MUTED, MONO, "start")
 
-d.t(24, 876, "가로채기가 UDP 와 TCP 양쪽에 걸린다 — 규칙 두 줄이 127.0.0.53 의 53 번을 15053 으로 돌린다", 11, SOFT, KR, "start")
+d.t(20, 876, "가로채기가 UDP 와 TCP 양쪽에 걸린다 — 규칙 두 줄이 127.0.0.53 의 53 번을 15053 으로 돌린다", 11, SOFT, KR, "start")
 d.legend(894, [("가로채기 — 이 한 걸음이 전부를 가른다", ACC), ("평소의 해석 경로", MUTED)])
 d.save("13-01.dns-resolution.svg")

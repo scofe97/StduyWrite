@@ -11,14 +11,14 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 524
+W, H = 1000, 524
 d = D(W, H, "ISTIO IN ACTION · 12-01 §7",
       "가까운 곳부터 쓰고 죽으면 넘긴다",
       "같은 서비스가 두 클러스터에 있을 때 기본은 고르게 나누는 것이고, 이상값 감지를 켜야 지역 정보가 "
       "쓰인다. 색이 붙은 상태가 우선순위 0 이 죽어 1 로 넘어간 자리다.",
       "지역 정보만으로는 부족하고 수동적 헬스 체크가 있어야 발동합니다")
 
-SW, SH = 268, 68
+SW, SH = 216, 68
 Y = 176
 XS = [40, 364, 688, 968]
 def state(i, label, sub, c=None, focal=False, w=SW):
@@ -49,12 +49,12 @@ lab((XS[1] + SW + XS[2]) / 2, Y - 16, "가까운 쪽이 죽는다", ACC)
 # 복귀 전이는 그리지 않는다 — 12 장은 페일오버까지만 보이고 되돌아오는 장면을 적지 않는다.
 
 BY = 292
-d.box(24, BY, W - 48, 92, PAPER2, RULE, 1.0, 6)
-d.t(44, BY + 26, "엔드포인트에 붙는 우선순위", 11, ACC, KR, "start", 600)
-d.t(44, BY + 50, '"locality": { "region": "westus", "zone": "0" }                    priority 없음 = 0', 11, INK, MONO, "start")
-d.t(44, BY + 70, '"priority": 1,  "locality": { "region": "eastus", "zone": "0" }', 11, MUTED, MONO, "start")
+d.box(20, BY, W - 48, 92, PAPER2, RULE, 1.0, 6)
+d.t(36, BY + 26, "엔드포인트에 붙는 우선순위", 11, ACC, KR, "start", 600)
+d.t(36, BY + 50, '"locality": { "region": "westus", "zone": "0" }                    priority 없음 = 0', 11, INK, MONO, "start")
+d.t(36, BY + 70, '"priority": 1,  "locality": { "region": "eastus", "zone": "0" }', 11, MUTED, MONO, "start")
 
-d.t(32, 420, "지역 라벨은 클라우드가 노드에 붙여 둔 것이고 istiod 가 그것을 읽어 워크로드에 채운다", 11, SOFT, KR, "start")
-d.t(32, 444, "위는 원문 출력에서 두 호스트의 locality 와 priority 만 뽑아 줄인 것이다 — 실제 출력에는 address · stats · weight 가 함께 나온다", 11, MUTED, KR, "start")
+d.t(24, 420, "지역 라벨은 클라우드가 노드에 붙여 둔 것이고 istiod 가 그것을 읽어 워크로드에 채운다", 11, SOFT, KR, "start")
+d.t(24, 444, "위는 원문 출력에서 두 호스트의 locality 와 priority 만 뽑아 줄인 것이다 — 실제 출력에는 address · stats · weight 가 함께 나온다", 11, MUTED, KR, "start")
 d.legend(468, [("페일오버가 실제로 일어난 자리", ACC), ("우선순위가 정한 순서", MUTED)])
 d.save("12-01.locality-failover.svg")

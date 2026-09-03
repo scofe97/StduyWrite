@@ -6,14 +6,14 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 508
+W, H = 1000, 508
 d = D(W, H, "ISTIO IN ACTION · 07-01 §7",
       "새 차원은 두 자리를 함께 고쳐야 보인다",
       "컨트롤 플레인 설정이 무엇을 셀지 정하고, 워크로드 애노테이션이 프록시에 그 이름을 알린다. "
       "색이 붙은 손잡이가 빠뜨리기 쉬운 쪽이다. 애노테이션 없이는 차원이 설정돼 있어도 노출되지 않는다.",
       "애노테이션은 배포의 metadata 가 아니라 spec.template.metadata 에 붙습니다")
 
-LX, LW = 200, 1040
+LX, LW = 160, 840
 LANE_H, LANE_Y0 = 112, 104
 lanes = [("CONTROL PLANE", "IstioOperator"),
          ("WORKLOAD", "Deployment"),
@@ -21,12 +21,12 @@ lanes = [("CONTROL PLANE", "IstioOperator"),
 for k, (name, sub) in enumerate(lanes):
     top = LANE_Y0 + k * LANE_H
     d.line(0, top, W, top, RULE, 0.8)
-    d.t(20, top + 48, name, 9, SOFT, MONO, "start", 600)
-    d.t(20, top + 66, sub, 11, MUTED, KR, "start")
+    d.t(16, top + 48, name, 9, SOFT, MONO, "start", 600)
+    d.t(16, top + 66, sub, 11, MUTED, KR, "start")
 d.line(0, LANE_Y0 + 3 * LANE_H, W, LANE_Y0 + 3 * LANE_H, RULE, 0.8)
 d.line(LX - 16, LANE_Y0, LX - 16, LANE_Y0 + 3 * LANE_H, RULE, 1.0)
 
-SW, SH = 240, 64
+SW, SH = 192, 64
 def sx(j): return 232 + j * 280
 def sy(k): return LANE_Y0 + k * LANE_H + 24
 def step(k, j, label, sub, focal=False):
@@ -45,7 +45,7 @@ d.arrow([(sx(0) + SW, sy(1) + SH / 2), (sx(1) - 2, sy(1) + SH / 2)], MUTED, "ar"
 # 레인을 넘는 손잡이
 d.path(f"M 912 {sy(0) + SH} L 912 {sy(2) - 2}", MUTED, 1.4, m="ar")
 d.path(f"M 632 {sy(1) + SH} L 632 {sy(2) + SH / 2} L {sx(2) - 2} {sy(2) + SH / 2}", ACC, 1.6, m="acc")
-d.t(644, sy(2) + SH / 2 - 12, "없으면 노출되지 않는다", 11, ACC, KR, "start", 600)
+d.t(520, sy(2) + SH / 2 - 12, "없으면 노출되지 않는다", 11, ACC, KR, "start", 600)
 
 step(0, 0, "dimensions 를 적는다", "configOverride")
 step(0, 1, "설치를 갱신한다", "istioctl install")

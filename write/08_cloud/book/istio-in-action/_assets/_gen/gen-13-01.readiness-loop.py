@@ -16,9 +16,9 @@ import sys, math
 sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1040, 848
-CX, CY, R = 520, 452, 300
-SW, SH = 176, 64
+W, H = 1000, 848
+CX, CY, R = 500, 452, 288
+SW, SH = 168, 64
 HW, HH = 224, 104
 N = 5
 
@@ -121,7 +121,7 @@ for k in range(N):
     else:
         d.box(bx, by, SW, SH, PAPER2, RULE, 1.0, 6)
     d.t(bx + SW / 2, by + 28, stations[k][0], 13, ACC if focal else INK, KR, "middle", 600)
-    d.t(bx + SW / 2, by + 48, stations[k][1], 9, MUTED, KR, "middle")
+    d.t(bx + SW / 2, by + 48, stations[k][1], 11, MUTED, KR, "middle")
 
 d.t(24, 764, "생존성 고리는 이 밖에서 따로 돈다 — 클라우드의 자동 복구는 실패한 기계를 새 인스턴스로 갈아 끼운다", 11, SOFT, KR, "start")
 d.t(24, 788, "저자의 어림 규칙 — 준비성 프로브가 항상 생존성 프로브보다 먼저 실패해야 한다", 11, MUTED, KR, "start")

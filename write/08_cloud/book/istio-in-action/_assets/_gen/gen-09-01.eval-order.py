@@ -9,7 +9,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1160, 964
+W, H = 1000, 964
 d = D(W, H, "ISTIO IN ACTION · 09-01 §5",
       "우선순위 필드 대신 액션의 종류가 순서를 정한다",
       "CUSTOM · DENY · ALLOW 순으로 보고, 아무것도 맞지 않으면 ALLOW 정책이 하나라도 있는지가 결정한다. "
@@ -35,16 +35,16 @@ def diamond(cx, cy, l1, l2):
 
 CA, CB = 340, 830
 
-oval(CA - 130, 116, 260, 44, "요청이 프록시에 닿는다")
+oval(CA - 130, 116, 224, 44, "요청이 프록시에 닿는다")
 diamond(CA, 240, "CUSTOM 이 맞고", "거부로 판정했나")
-step(CB - 150, 212, 300, 56, "거부한다")
+step(CB - 150, 212, 260, 56, "거부한다")
 diamond(CA, 400, "DENY 가", "맞았나")
-step(CB - 150, 372, 300, 56, "거부한다")
+step(CB - 150, 372, 260, 56, "거부한다")
 diamond(CA, 560, "ALLOW 정책이", "하나도 없나")
-step(CB - 150, 532, 300, 56, "허용한다")
+step(CB - 150, 532, 260, 56, "허용한다")
 diamond(CA, 720, "그중 하나가", "맞았나")
-oval(CB - 130, 698, 260, 44, "허용한다")
-oval(CA - 130, 828, 260, 44, "거부한다")
+oval(CB - 130, 698, 224, 44, "허용한다")
+oval(CA - 130, 828, 224, 44, "거부한다")
 
 d.arrow([(CA, 160), (CA, 186)], MUTED, "ar", 1.4)
 d.arrow([(CA, 292), (CA, 346)], MUTED, "ar", 1.4)
@@ -63,6 +63,6 @@ d.t(CA + 22, 482, "아니오", 12, MUTED, KR, "start", 600)
 d.t(CA + 22, 642, "아니오", 12, MUTED, KR, "start", 600)
 d.t(CA + 22, 802, "아니오", 12, ACC, KR, "start", 600)
 
-d.t(32, 900, "마지막 갈래가 §4 의 gotcha 다 — ALLOW 는 있는데 맞는 것이 없어 거부된다", 11, SOFT, KR, "start")
+d.t(28, 900, "마지막 갈래가 §4 의 gotcha 다 — ALLOW 는 있는데 맞는 것이 없어 거부된다", 11, SOFT, KR, "start")
 d.legend(920, [("허용도 거부도 적지 않은 요청이 막히는 갈래", ACC)])
 d.save("09-01.eval-order.svg")

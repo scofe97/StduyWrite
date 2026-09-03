@@ -8,14 +8,14 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, RULE, KR, MONO
 
-W, H = 1040, 660
+W, H = 1000, 660
 d = D(W, H, "ISTIO IN ACTION · 01-01 §6",
       "범위를 좁히고 자리를 흩는다",
       "가로축은 어디에 배치되는가, 세로축은 무엇까지 맡는가. 저자가 ESB 를 인용문으로 소환해 같은 점과 "
       "다른 점을 가르는 대목이 이 두 축이다. 색이 붙은 것이 이 책이 고른 자리다.",
       "ESB 는 새 사일로를 만들었고 그 조직이 통합의 문지기가 됐습니다")
 
-CX, CY = 520, 356
+CX, CY = 500, 356
 AX0, AX1 = 176, 864
 AY0, AY1 = 164, 536
 
@@ -35,14 +35,14 @@ def item(x, y, name, sub, focal=False, anchor="start", dx=14):
     d.t(x + dx, y - 3, name, 13, ACC if focal else INK, KR, anchor, 600)
     d.t(x + dx, y + 14, sub, 9, MUTED, MONO, anchor)
 
-item(300, 232, "ESB", "silo · single point")
-item(316, 452, "API gateway", "extra hop per service")
-item(700, 468, "service mesh", "sidecar · no extra hop", focal=True)
+item(288, 232, "ESB", "silo · single point")
+item(304, 452, "API gateway", "extra hop per service")
+item(672, 468, "service mesh", "sidecar · no extra hop", focal=True)
 
-d.t(196, 188, "중앙에서 비즈니스까지", 10, SOFT, KR, "start")
-d.t(844, 188, "분산인데 중재까지 — 비어 있다", 10, SOFT, KR, "end")
-d.t(196, 512, "중앙에서 네트워킹만", 10, SOFT, KR, "start")
-d.t(844, 512, "분산에서 네트워킹만", 10, SOFT, KR, "end")
+d.t(188, 188, "중앙에서 비즈니스까지", 11, SOFT, KR, "start")
+d.t(812, 188, "분산인데 중재까지 — 비어 있다", 11, SOFT, KR, "end")
+d.t(188, 512, "중앙에서 네트워킹만", 11, SOFT, KR, "start")
+d.t(812, 512, "분산에서 네트워킹만", 11, SOFT, KR, "end")
 
 d.t(32, 580, "메시가 맡지 않는 것 — X12·EDI·HL7 변환 · 비즈니스 프로세스 오케스트레이션 · 예외 처리 · 서비스 오케스트레이션", 11, SOFT, KR, "start")
 d.legend(604, [("이 책이 고른 자리", ACC), ("앞선 기술", MUTED)])

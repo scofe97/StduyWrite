@@ -10,7 +10,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1200, 880
+W, H = 1000, 880
 d = D(W, H, "ISTIO IN ACTION · 10-01 §8",
       "0 은 5xx 가 아니라서 실패로 세지 않는다",
       "같은 타임아웃 하나를 두 프록시가 각자 기록하는데, 실패율 집계가 5xx 여부만 보기 때문에 한쪽에서만 "
@@ -43,14 +43,14 @@ def diamond(cx, cy, l1, l2, focal=False):
 
 CA, CB = 320, 856
 
-oval(CA - 170, 112, 340, 56, "업스트림이 0.5초를 넘긴다", "catalog v2 인스턴스 하나")
-step(CA - 170, 212, 340, 68, "게이트웨이 프록시가 적는다", "504 · response_flags UT")
+oval(CA - 170, 112, 284, 56, "업스트림이 0.5초를 넘긴다", "catalog v2 인스턴스 하나")
+step(CA - 170, 212, 284, 68, "게이트웨이 프록시가 적는다", "504 · response_flags UT")
 diamond(CA, 380, "적은 응답 코드가", "5xx 인가")
-step(CB - 170, 348, 340, 68, "실패로 집계된다", "client success rate ~ 70%")
-step(CA - 170, 500, 340, 68, "업스트림 커넥션을 끊는다", "resetting pool request")
-step(CB - 170, 500, 340, 68, "catalog 프록시가 적는다", "0 · response_flags DC")
+step(CB - 170, 348, 284, 68, "실패로 집계된다", "client success rate ~ 70%")
+step(CA - 170, 500, 284, 68, "업스트림 커넥션을 끊는다", "resetting pool request")
+step(CB - 170, 500, 284, 68, "catalog 프록시가 적는다", "0 · response_flags DC")
 diamond(CB, 668, "적은 응답 코드가", "5xx 인가", focal=True)
-oval(CA - 170, 640, 340, 56, "성공으로 집계된다", "server success rate 100%", focal=True)
+oval(CA - 170, 640, 284, 56, "성공으로 집계된다", "server success rate 100%", focal=True)
 
 d.arrow([(CA, 168), (CA, 206)], MUTED, "ar", 1.4)
 d.arrow([(CA, 280), (CA, 322)], MUTED, "ar", 1.4)
@@ -64,7 +64,7 @@ d.t((CA + CB) / 2, 366, "예", 12, MUTED, KR, "middle", 600)
 d.t(CA + 22, 470, "아니오 · 프록시가 먼저 끊는다", 12, MUTED, KR, "start", 600)
 d.t((CA + CB) / 2, 654, "아니오 · 0 은 5xx 가 아니다", 12, ACC, KR, "middle", 600)
 
-d.t(32, 772, "같은 판정을 두 번 지나는데 들어오는 값이 달라 결과가 갈린다 — 옳은 쪽은 클라이언트가 적은 값이다", 11, SOFT, KR, "start")
-d.t(32, 796, "Grafana 는 서비스 뒤의 모든 워크로드를 합쳐 보이므로 파드 하나를 지목하려면 Prometheus 로 내려간다", 11, MUTED, KR, "start")
+d.t(28, 772, "같은 판정을 두 번 지나는데 들어오는 값이 달라 결과가 갈린다 — 옳은 쪽은 클라이언트가 적은 값이다", 11, SOFT, KR, "start")
+d.t(28, 796, "Grafana 는 서비스 뒤의 모든 워크로드를 합쳐 보이므로 파드 하나를 지목하려면 Prometheus 로 내려간다", 11, MUTED, KR, "start")
 d.legend(820, [("서버 대시보드를 100% 로 만드는 갈래", ACC), ("같은 요청의 다른 기록", MUTED)])
 d.save("10-01.reporter-gap.svg")

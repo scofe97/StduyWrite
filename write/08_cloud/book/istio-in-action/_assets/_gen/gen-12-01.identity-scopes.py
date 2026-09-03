@@ -12,7 +12,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, RULE, KR, MONO
 
-W, H = 1160, 640
+W, H = 1000, 640
 d = D(W, H, "ISTIO IN ACTION · 12-01 §5",
       "식별자 셋이 어디까지가 한 몸인지를 정한다",
       "같은 meshID 를 가진 설치들이 하나의 메시가 되고, 그 안에서 clusterName 이 클러스터를 가르며, "
@@ -27,9 +27,9 @@ def ring(x, y, w, h, tag, sub, stroke, fill, focal=False):
     d.t(x + 28, y + 3, tag, 8, ACC if focal else SOFT, MONO, "start", 600)
     d.t(x + 28, y + 30, sub, 11, ACC if focal else MUTED, KR, "start")
 
-ring(72, 128, 1016, 372, "MESHID = USMESH · 설치 하나 기준", "같은 값을 쓴 설치들이 하나의 메시가 된다", f"{INK}30", f"{INK}04")
-ring(116, 184, 928, 280, "CLUSTERNAME = WEST-CLUSTER", "메시 안에서 클러스터를 가른다 · 원격 시크릿의 이름이 된다", MUTED, f"{INK}07")
-ring(160, 240, 840, 184, "NETWORK = WEST-NETWORK", "같은 망이면 IP 로, 다르면 동서 게이트웨이로", ACC, f"{ACC}0E", focal=True)
+ring(64, 128, 876, 372, "MESHID = USMESH · 설치 하나 기준", "같은 값을 쓴 설치들이 하나의 메시가 된다", f"{INK}30", f"{INK}04")
+ring(100, 184, 800, 280, "CLUSTERNAME = WEST-CLUSTER", "메시 안에서 클러스터를 가른다 · 원격 시크릿의 이름이 된다", MUTED, f"{INK}07")
+ring(136, 240, 724, 184, "NETWORK = WEST-NETWORK", "같은 망이면 IP 로, 다르면 동서 게이트웨이로", ACC, f"{ACC}0E", focal=True)
 
 items = [("IstioOperator", "values.global.multiCluster"),
          ("네임스페이스 라벨", "topology.istio.io/network"),
@@ -40,8 +40,8 @@ for i, (name, sub) in enumerate(items):
     d.t(x + 124, 342, name, 12, INK, KR, "middle", 600)
     d.t(x + 124, 364, sub, 8, MUTED, MONO)
 
-d.t(32, 528, "east 쪽 설치는 clusterName 과 network 만 바꾸고 meshID 는 그대로 둔다 — 그래야 한 메시가 된다", 11, SOFT, KR, "start")
-d.t(32, 552, "네트워크 지형을 MeshNetwork 로도 적을 수 있지만 저자는 드물고 고급인 경우에만 남은 옛 설정이라 적는다", 11, MUTED, KR, "start")
-d.t(32, 576, "이 포함은 설치 하나를 기준으로 한 것이다 — 클러스터들이 하나의 평평한 망을 공유하면 network 는 클러스터 밖에서 겹친다", 11, SOFT, KR, "start")
+d.t(28, 528, "east 쪽 설치는 clusterName 과 network 만 바꾸고 meshID 는 그대로 둔다 — 그래야 한 메시가 된다", 11, SOFT, KR, "start")
+d.t(28, 552, "네트워크 지형을 MeshNetwork 로도 적을 수 있지만 저자는 드물고 고급인 경우에만 남은 옛 설정이라 적는다", 11, MUTED, KR, "start")
+d.t(28, 576, "이 포함은 설치 하나를 기준으로 한 것이다 — 클러스터들이 하나의 평평한 망을 공유하면 network 는 클러스터 밖에서 겹친다", 11, SOFT, KR, "start")
 d.legend(600, [("게이트웨이 경유 여부를 정하는 값", ACC), ("그 위를 감싸는 식별자", MUTED)])
 d.save("12-01.identity-scopes.svg")
