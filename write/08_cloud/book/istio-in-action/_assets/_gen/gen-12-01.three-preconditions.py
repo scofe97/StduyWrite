@@ -37,7 +37,7 @@ d.t(756, 452, "공통 신뢰", 14, INK, KR, "middle", 600)
 d.path("M 756 464 L 756 512 L 680 512", INK, 0.8, m="ar")
 
 d.t(AX, 180, "상대의 API 서버를 읽는다", 11, MUTED, KR, "middle")
-d.t(AX, 200, "서비스와 엔드포인트", 9, MUTED, MONO, "middle")
+d.t(AX, 200, "서비스와 엔드포인트", 11, MUTED, MONO, "middle")
 d.t(332, 470, "IP 로 닿는다", 11, SOFT, KR, "middle")
 d.t(332, 490, "또는 동서 게이트웨이", 11, SOFT, KR, "middle")
 d.t(668, 470, "같은 뿌리의 인증서", 11, INK, KR, "middle")

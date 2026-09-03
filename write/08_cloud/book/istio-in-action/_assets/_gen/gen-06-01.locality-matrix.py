@@ -28,7 +28,7 @@ d = D(W, H, "ISTIO IN ACTION · 06-01 §3",
 
 d.box(left_pad, header_y, comp_col_w, header_h, PAPER2, RULE, 0.8, 6)
 d.t(left_pad + comp_col_w / 2, header_y + 24, "조건", 12, INK, KR, "middle", 600)
-d.t(left_pad + comp_col_w / 2, header_y + 40, "vs. 응답한 백엔드", 9, MUTED, MONO)
+d.t(left_pad + comp_col_w / 2, header_y + 40, "vs. 응답한 백엔드", 11, MUTED, MONO)
 for j, (name, sub) in enumerate(roles):
     d.box(role_x(j), header_y, role_col_w, header_h, PAPER2, RULE, 0.8, 6)
     d.t(role_cx(j), header_y + 22, name, 12, INK, MONO, "middle", 600)
@@ -47,7 +47,7 @@ for k, (name, hint) in enumerate(comps):
     y = row_y(k)
     d.box(left_pad, y, comp_col_w, row_h, PAPER2, RULE, 0.8, 4)
     d.t(left_pad + 12, y + 22, name, 12, INK, KR, "start", 600)
-    d.t(left_pad + comp_col_w - 12, y + 22, f"원문 {hint}", 9, MUTED, MONO, "end")
+    d.t(left_pad + comp_col_w - 12, y + 22, f"원문 {hint}", 11, MUTED, MONO, "end")
     for j in range(n_roles):
         val, lv, sub = cells[(k, j)]
         x = role_x(j)

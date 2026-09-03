@@ -24,7 +24,7 @@ def node(x, y, name, sub, focal=False, w=NW, h=NH):
     else:
         d.box(x, y, w, h, PAPER2, RULE, 1.0, 6)
     d.t(x + w / 2, y + 24, name, 13, ACC if focal else INK, KR, "middle", 600)
-    d.t(x + w / 2, y + 44, sub, 9, MUTED, MONO)
+    d.t(x + w / 2, y + 44, sub, 11, MUTED, MONO)
 
 ROOT_X, ROOT_Y = 390, 112
 node(ROOT_X, ROOT_Y, "루트 CA", "개인키는 클러스터 밖에 둔다", focal=True)
@@ -45,7 +45,7 @@ def leaf(x, y, lines):
     h = 24 + len(lines) * 22
     d.box(x, y, NW, h, PAPER2, RULE, 1.0, 6)
     for j, ln in enumerate(lines):
-        d.t(x + 16, y + 30 + j * 22, ln, 10, MUTED, MONO, "start")
+        d.t(x + 16, y + 30 + j * 22, ln, 11, MUTED, MONO, "start")
 
 files = ["ca-cert.pem      중간 CA 인증서",
          "ca-key.pem       중간 CA 개인키",

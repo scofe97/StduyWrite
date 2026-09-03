@@ -20,7 +20,7 @@ def node(x, y, name, sub, focal=False, w=NW, h=NH):
     else:
         d.box(x, y, w, h, PAPER2, RULE, 1.0, 6)
     d.t(x + w / 2, y + 20, name, 12, ACC if focal else INK, KR, "middle", 600)
-    d.t(x + w / 2, y + 38, sub, 9, MUTED, MONO)
+    d.t(x + w / 2, y + 38, sub, 11, MUTED, MONO)
 
 ROOT_X, ROOT_Y = 486, 112
 BUS_Y = 196
@@ -47,7 +47,7 @@ def leaf(x, y, lines, focal=False):
     else:
         d.box(x, y, NW, h, PAPER2, RULE, 1.0, 6)
     for j, ln in enumerate(lines):
-        d.t(x + 16, y + 26 + j * 20, ln, 10, MUTED, KR, "start")
+        d.t(x + 16, y + 26 + j * 20, ln, 11, MUTED, KR, "start")
 
 leaf(XS[0], LEAF_Y, ["운영자용 라우팅·레질리언스 API", "데이터 플레인용 설정 API", "사용 정책 지정 API"])
 leaf(XS[1], LEAF_Y, ["서비스 디스커버리 추상화", "네트워크 경계와 접근 방법 명세"])

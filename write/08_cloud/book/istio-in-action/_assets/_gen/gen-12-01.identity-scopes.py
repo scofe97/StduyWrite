@@ -24,7 +24,7 @@ def ring(x, y, w, h, tag, sub, stroke, fill, focal=False):
                f'stroke="{stroke}" stroke-width="{1.4 if focal else 1.0}"/>')
     tw = len(tag) * 6 + 16
     d.o.append(f'<rect x="{x + 20}" y="{y - 7}" width="{tw}" height="14" fill="{PAPER}"/>')
-    d.t(x + 28, y + 3, tag, 8, ACC if focal else SOFT, MONO, "start", 600)
+    d.t(x + 28, y + 3, tag, 11, ACC if focal else SOFT, MONO, "start", 600)
     d.t(x + 28, y + 30, sub, 11, ACC if focal else MUTED, KR, "start")
 
 ring(64, 128, 876, 372, "MESHID = USMESH · 설치 하나 기준", "같은 값을 쓴 설치들이 하나의 메시가 된다", f"{INK}30", f"{INK}04")

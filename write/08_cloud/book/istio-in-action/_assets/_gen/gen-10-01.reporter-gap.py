@@ -25,7 +25,7 @@ def oval(x, y, w, h, label, sub=None, focal=False):
     c = ACC if focal else INK
     if sub:
         d.t(x + w / 2, y + h / 2 - 2, label, 13, c, KR, "middle", 600)
-        d.t(x + w / 2, y + h / 2 + 18, sub, 9, MUTED, MONO)
+        d.t(x + w / 2, y + h / 2 + 18, sub, 11, MUTED, MONO)
     else:
         d.t(x + w / 2, y + h / 2 + 5, label, 13, c, KR, "middle", 600)
 

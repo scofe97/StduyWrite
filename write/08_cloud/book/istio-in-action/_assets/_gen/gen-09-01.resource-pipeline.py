@@ -24,7 +24,7 @@ d.selfmsg("PeerAuthentication", "principal 적재", 248, MUTED, sub="cluster.loc
 d.msg("PeerAuthentication", "RequestAuthentication", "Authorization 헤더", 312, MUTED, "ar", sub="Bearer JWT")
 d.selfmsg("RequestAuthentication", "requestPrincipal 적재", 364, MUTED, sub="iss/sub · claims")
 d.msg("RequestAuthentication", "AuthorizationPolicy", "필터 메타데이터", 428, ACC, "acc", sub="이 연결의 신원")
-d.selfmsg("AuthorizationPolicy", "허용 또는 거부", 486, ACC, sub="여기서만 요청이 막힌다")
+d.selfmsg("AuthorizationPolicy", "허용 또는 거부", 486, ACC, sub="여기서만 막힌다")
 
 d.t(20, 552, "토큰이 없어도 두 번째 필터는 요청을 통과시킨다 — 클레임이 비어 있을 뿐이다", 11, SOFT, KR, "start")
 d.legend(576, [("판정이 일어나는 자리", ACC)])

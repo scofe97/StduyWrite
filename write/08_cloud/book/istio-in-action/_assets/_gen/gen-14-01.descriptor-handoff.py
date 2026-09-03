@@ -23,7 +23,7 @@ def zone(x, y, w, h, label):
                f'stroke="{INK}33" stroke-width="1" stroke-dasharray="4 4"/>')
     tw = len(label) * 6 + 12
     d.o.append(f'<rect x="{x + 12}" y="{y - 7}" width="{tw}" height="14" fill="{PAPER}"/>')
-    d.t(x + 18, y + 3, label, 8, SOFT, MONO, "start", 600)
+    d.t(x + 18, y + 3, label, 11, SOFT, MONO, "start", 600)
 
 AX, AW = 28, 240
 BX, BW = 356, 240

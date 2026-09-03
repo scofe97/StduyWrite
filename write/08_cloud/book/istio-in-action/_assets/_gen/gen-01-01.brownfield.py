@@ -29,7 +29,7 @@ def node(x, y, w, h, tag, name, sub, focal=False):
     d.o.append(f'<rect x="{x + 12}" y="{y + 12}" width="40" height="14" rx="2" fill="{INK}14"/>')
     d.t(x + 32, y + 23, tag, 8, INK, MONO, "middle", 600)
     d.t(x + 62, y + 24, name, 13, ACC if focal else INK, KR, "start", 600)
-    d.t(x + 62, y + 42, sub, 9, MUTED, MONO, "start")
+    d.t(x + 62, y + 42, sub, 11, MUTED, MONO, "start")
 
 zone(48, 148, 416, 100, "KUBERNETES")
 zone(48, 292, 416, 100, "VIRTUAL MACHINE")

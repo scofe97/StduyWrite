@@ -36,7 +36,7 @@ def node(x, y, w, h, tag, name, sub, c=None, focal=False, gone=False):
     d.o.append(f'<rect x="{x + 12}" y="{y + 12}" width="44" height="14" rx="2" fill="{INK}14"/>')
     d.t(x + 34, y + 23, tag, 8, INK, MONO, "middle", 600)
     d.t(x + 66, y + 24, name, 13, ACC if focal else (SOFT if gone else INK), KR, "start", 600)
-    d.t(x + 66, y + 42, sub, 9, MUTED, MONO, "start")
+    d.t(x + 66, y + 42, sub, 11, MUTED, MONO, "start")
 
 zone(20, 128, 432, 200, "실제 클러스터")
 zone(552, 128, 432, 300, "프록시가 들고 있는 엔드포인트 목록")

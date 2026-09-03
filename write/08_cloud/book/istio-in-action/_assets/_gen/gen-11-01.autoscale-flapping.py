@@ -24,7 +24,7 @@ def state(x, y, label, sub, c=None, focal=False):
     else:
         d.box(x, y, SW, SH, PAPER2, RULE, 1.0, 8)
     d.t(x + SW / 2, y + 26, label, 12, ACC if focal else INK, KR, "middle", 600)
-    d.t(x + SW / 2, y + 44, sub, 9, MUTED, KR)
+    d.t(x + SW / 2, y + 44, sub, 11, MUTED, KR)
 
 TOP, BOT = 156, 340
 S1, S2, S3 = 96, 452, 808

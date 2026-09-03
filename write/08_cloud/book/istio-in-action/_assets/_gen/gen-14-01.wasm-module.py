@@ -30,7 +30,7 @@ def cls(x, y, w, name, stereo, attrs, ops, focal=False, italic=False):
     else:
         d.box(x, y, w, h, PAPER2, RULE, 1.0, 6)
     if stereo:
-        d.t(x + w / 2, y + 18, stereo, 8, SOFT, MONO, "middle", 600)
+        d.t(x + w / 2, y + 18, stereo, 11, SOFT, MONO, "middle", 600)
     d.t(x + w / 2, y + (38 if stereo else 30), name, 13, ACC if focal else INK, MONO, "middle", 600)
     yy = y + hn
     if attrs:
@@ -70,7 +70,7 @@ d.t(MX + 18, CTX_Y + h_ctx + 32, "extends", 8, SOFT, MONO, "start", 600)
 # 연관 — 다중도 양끝
 AY = ADD_Y + 40
 d.path(f"M {ADD_X} {AY} H {ROOT_X + ROOT_W + 2}", MUTED, 1.2, m="ar")
-d.chip((ROOT_X + ROOT_W + ADD_X) / 2, AY - 22, "설정을 참조한다", MUTED, 9)
+d.chip((ROOT_X + ROOT_W + ADD_X) / 2, AY - 22, "설정을 참조한다", MUTED, 11)
 d.t(ROOT_X + ROOT_W + 16, AY + 18, "1", 8, SOFT, MONO, "start", 600)
 d.t(ADD_X - 16, AY + 18, "1", 8, SOFT, MONO, "end", 600)
 

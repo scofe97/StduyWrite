@@ -27,7 +27,7 @@ for i, (name, sub, focal) in enumerate(states):
     d.t(x + SW / 2, Y + 48, sub, 12, MUTED, KR)
     if i < 3:
         d.path(f"M {x + SW} {Y + SH / 2} H {xs[i + 1] - 2}", MUTED, 1.4, m="ar")
-        d.t((x + SW + xs[i + 1]) / 2, Y + SH / 2 - 10, "관찰 양호", 9, SOFT, KR)
+        d.t((x + SW + xs[i + 1]) / 2, Y + SH / 2 - 10, "관찰 양호", 11, SOFT, KR)
 # 종료점
 ex = xs[3] + SW + 40
 d.path(f"M {xs[3] + SW} {Y + SH / 2} H {ex - 10}", MUTED, 1.4, m="ar")

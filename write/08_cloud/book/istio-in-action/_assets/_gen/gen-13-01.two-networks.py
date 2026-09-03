@@ -39,7 +39,7 @@ def node(x, y, w, h, tag, name, sub, focal=False, stack=False):
         d.t(x + w / 2, y + 84, sub, 11, MUTED, KR, "middle")
     else:
         d.t(x + 62, y + 24, name, 13, ACC if focal else INK, KR, "start", 600)
-        d.t(x + 62, y + 42, sub, 9, MUTED, MONO, "start")
+        d.t(x + 62, y + 42, sub, 11, MUTED, MONO, "start")
 
 zone(40, 140, 516, 356, "WEST-NETWORK · KUBERNETES")
 zone(636, 140, 324, 356, "VM-NETWORK")

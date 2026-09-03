@@ -25,10 +25,10 @@ def entity(x, y, w, tag, name, fields, focal=False):
     else:
         d.box(x, y, w, h, PAPER2, RULE, 1.0, 6)
     d.line(x, y + hh, x + w, y + hh, RULE, 0.9)
-    d.t(x + 16, y + 20, tag, 8, SOFT, MONO, "start", 600)
+    d.t(x + 16, y + 20, tag, 11, SOFT, MONO, "start", 600)
     d.t(x + 16, y + 38, name, 13, ACC if focal else INK, MONO, "start", 600)
     for i, f in enumerate(fields):
-        d.t(x + 16, y + hh + 16 + i * fh, f, 9.5, MUTED, MONO, "start")
+        d.t(x + 16, y + hh + 16 + i * fh, f, 11, MUTED, MONO, "start")
     return h
 
 AX, BX, CX = 28, 376, 732
@@ -59,13 +59,13 @@ ch = entity(CX, CY, CW, "ENTITY · 고르는 쪽", "Service", [
 
 my = AY + ah / 2
 d.path(f"M {AX + AW} {my} H {BX - 2}", MUTED, 1.2, m="ar")
-d.chip((AX + AW + BX) / 2, my - 22, "템플릿이 된다", MUTED, 9)
+d.chip((AX + AW + BX) / 2, my - 22, "템플릿이 된다", MUTED, 11)
 d.t(AX + AW + 16, my + 16, "1", 8, SOFT, MONO, "start", 600)
 d.t(BX - 16, my + 16, "N", 8, SOFT, MONO, "end", 600)
 
 cy_mid = CY + ch / 2
 d.path(f"M {CX} {cy_mid} H {BX + BW + 2}", MUTED, 1.2, m="ar")
-d.chip((BX + BW + CX) / 2, cy_mid - 22, "라벨로 고른다", MUTED, 9)
+d.chip((BX + BW + CX) / 2, cy_mid - 22, "라벨로 고른다", MUTED, 11)
 d.t(CX - 16, cy_mid + 16, "1", 8, SOFT, MONO, "end", 600)
 d.t(BX + BW + 16, cy_mid + 16, "N", 8, SOFT, MONO, "start", 600)
 

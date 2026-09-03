@@ -27,7 +27,7 @@ d.selfmsg("DiscoveryServer", "디바운스", 252, ACC, sub="그 사이 이벤트
 d.msg("DiscoveryServer", "푸시 큐", "병합된 배치 투입", 316, MUTED, "ar", sub="처리 대기 목록")
 d.selfmsg("푸시 큐", "동시 처리 수 제한", 372, INFO, sub="컨텍스트 전환을 줄인다")
 d.msg("푸시 큐", "서비스 프록시", "Envoy 설정 푸시", 436, MUTED, "ar", sub="변환한 뒤 내려보낸다")
-d.selfmsg("서비스 프록시", "설정 반영", 494, MUTED, sub="여기까지가 한 바퀴다")
+d.selfmsg("서비스 프록시", "설정 반영", 494, MUTED, sub="여기까지 한 바퀴")
 
 d.t(20, 556, "디바운스는 일을 줄이려고 늦추고, 스로틀은 진행을 빠르게 하려고 동시 수를 줄인다 — 방향이 반대다", 11, SOFT, KR, "start")
 d.legend(576, [("이벤트를 묶으려고 미루는 자리", ACC), ("동시 처리 수를 제한하는 자리", INFO)])

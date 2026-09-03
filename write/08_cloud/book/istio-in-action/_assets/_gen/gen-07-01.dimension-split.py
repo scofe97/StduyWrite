@@ -24,7 +24,7 @@ def step(x, y, w, h, label, sub=None, focal=False):
         d.box(x, y, w, h, PAPER2, RULE, 1.0, 6)
     col = ACC if focal else INK
     d.t(x + w / 2, y + (h / 2 + 5 if not sub else 26), label, 13, col, KR, "middle", 600)
-    if sub: d.t(x + w / 2, y + 46, sub, 9, MUTED, MONO)
+    if sub: d.t(x + w / 2, y + 46, sub, 11, MUTED, MONO)
 
 # 시작
 oval(240, 96, 232, 44, "요청이 프록시를 지난다")

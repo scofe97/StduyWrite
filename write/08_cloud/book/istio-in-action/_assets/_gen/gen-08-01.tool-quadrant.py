@@ -27,10 +27,10 @@ d.line(CX, AY1, CX, CY, INK, 1.2)
 d.line(AX0, CY, CX, CY, INK, 1.2)
 
 # 축 라벨 — 팁 바깥, 한 단어
-d.t(CX, AY0 - 14, "관계", 9, INK, MONO, "middle", 400)
-d.t(CX, AY1 + 22, "수치", 9, INK, MONO, "middle", 400)
-d.t(AX0 - 14, CY + 4, "집계", 9, INK, MONO, "end", 400)
-d.t(AX1 + 14, CY + 4, "개별", 9, INK, MONO, "start", 400)
+d.t(CX, AY0 - 14, "관계", 11, INK, MONO, "middle", 400)
+d.t(CX, AY1 + 22, "수치", 11, INK, MONO, "middle", 400)
+d.t(AX0 - 14, CY + 4, "집계", 11, INK, MONO, "end", 400)
+d.t(AX1 + 14, CY + 4, "개별", 11, INK, MONO, "start", 400)
 
 def item(x, y, name, sub, focal=False, dx=14, anchor="start"):
     c = ACC if focal else MUTED
@@ -44,10 +44,10 @@ item(340, 432, "Grafana", "prometheus -> panels")
 item(676, 440, "Envoy access log", "ch.10 · not covered here")
 
 # 칸 이름 — 축선에서 떨어뜨려 모서리에
-d.t(196, 176, "집계에서 관계로", 10, SOFT, KR, "start")
-d.t(804, 176, "한 요청의 관계", 10, SOFT, KR, "end")
-d.t(196, 500, "집계된 값", 10, SOFT, KR, "start")
-d.t(804, 500, "한 요청의 값", 10, SOFT, KR, "end")
+d.t(196, 176, "집계에서 관계로", 11, SOFT, KR, "start")
+d.t(804, 176, "한 요청의 관계", 11, SOFT, KR, "end")
+d.t(196, 500, "집계된 값", 11, SOFT, KR, "start")
+d.t(804, 500, "한 요청의 값", 11, SOFT, KR, "end")
 
 d.t(32, 576, "Prometheus 는 Kiali 의 선택지가 아니라 먼저 깔려 있어야 하는 하드 의존이다", 11, SOFT, KR, "start")
 d.legend(596, [("이 장의 절반이 쓰이는 화면", ACC), ("나머지 화면", MUTED)])

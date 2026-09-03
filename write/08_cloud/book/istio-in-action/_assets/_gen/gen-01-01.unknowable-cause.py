@@ -36,12 +36,12 @@ for k, (cat, subs, side) in enumerate(bones):
         t = 0.34 + j * 0.30
         tx, ty = ax + (fx - ax) * t, CY + (fy - CY) * t
         d.line(tx, ty, tx + 32, ty, SOFT, 1.0)
-        d.t(tx + 40, ty + 4, sc, 9, MUTED, KR, "start")
+        d.t(tx + 40, ty + 4, sc, 11, MUTED, KR, "start")
 
 d.o.append(f'<rect x="{HEAD}" y="{CY - 46}" width="292" height="92" rx="6" fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
 d.t(HEAD + 146, CY - 16, "Customer 응답이", 13, ACC, KR, "middle", 600)
 d.t(HEAD + 146, CY + 6, "심하게 느려졌다", 13, ACC, KR, "middle", 600)
-d.t(HEAD + 146, CY + 30, "Preference 가 관찰한 것", 9, MUTED, KR, "middle")
+d.t(HEAD + 146, CY + 30, "Preference 가 관찰한 것", 11, MUTED, KR, "middle")
 
 d.t(32, 552, "저자가 못 박는 문장 — 클라우드에서는 인프라가 일시적이며 때때로 사용 불가능하다는 가정 위에서 짓는다", 11, SOFT, KR, "start")
 d.t(32, 576, "Preference 입장에서는 이것이 Customer 의 장애인지조차 판별되지 않는다", 11, MUTED, KR, "start")

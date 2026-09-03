@@ -82,7 +82,7 @@ for k, j, title, sub, focal in nodes:
     d.o.append(f'<rect x="{x + 4}" y="{y + 4}" width="20" height="10" rx="3" fill="{ACC + "38" if focal else "rgba(245,245,245,0.12)"}"/>')
     d.t(x + 14, y + 12, lanes[k][1], 6, ACC if focal else INK, MONO, "middle", 600)
     d.t(step_cx(j), y + 36, title, 12, ACC if focal else INK, KR, "middle", 600)
-    d.t(step_cx(j), y + 54, sub, 9, MUTED, KR, "middle")
+    d.t(step_cx(j), y + 54, sub, 11, MUTED, KR, "middle")
 
 ly1, ly2, ly3 = legend_top + 26, legend_top + 50, legend_top + 74
 d.t(24, ly1, "SNI 에 실리는 것 — 방향 · subset · 포트 · FQDN 을 이어 붙인 Envoy 클러스터 이름", 11, SOFT, KR, "start")

@@ -41,7 +41,7 @@ for i, (name, sub, side) in enumerate(layers):
     else:
         d.o.append(f'<polygon points="{pts}" fill="{PAPER2}" stroke="{RULE}" stroke-width="1"/>')
     d.t(CX, y + 30, name, 13, ACC if focal else INK, KR, "middle", 600)
-    d.t(CX, y + 50, sub, 9.5, MUTED, MONO)
+    d.t(CX, y + 50, sub, 11, MUTED, MONO)
     d.t(CX + wb / 2 + 20, y + 40, side, 11, SOFT, KR, "start")
 
 TOPY = Y0 - 56

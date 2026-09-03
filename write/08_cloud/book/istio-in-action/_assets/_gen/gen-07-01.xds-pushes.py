@@ -25,7 +25,7 @@ def Y(v): return PB - v / YMAX * (PB - PT)
 for g in range(0, YMAX + 1, 200):
     d.line(PL, Y(g), PR, Y(g), RULE, 1.0 if g == 0 else 0.8)
     d.t(PL - 12, Y(g) + 4, f"{g}", 8, SOFT, MONO, "end")
-d.t(PL - 12, PT - 16, "푸시 횟수", 9, SOFT, KR, "end")
+d.t(PL - 12, PT - 16, "푸시 횟수", 11, SOFT, KR, "end")
 d.line(PL, PT, PL, PB, RULE, 0.8)
 for i, (code, kor, v, focal) in enumerate(rows):
     cx = PL + pitch * (i + 0.5)

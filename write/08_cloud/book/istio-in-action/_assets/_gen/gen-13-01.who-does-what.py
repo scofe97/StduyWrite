@@ -37,7 +37,7 @@ def slot_x(j): return LABEL_W + j * SLOT + (SLOT - CW) / 2
 def lane_top(k): return LANE_Y0 + k * LANE_H
 
 for j, name in enumerate(stages):
-    d.t(LABEL_W + j * SLOT + SLOT / 2, HDR_Y, name, 10, SOFT, MONO, "middle", 600)
+    d.t(LABEL_W + j * SLOT + SLOT / 2, HDR_Y, name, 11, SOFT, MONO, "middle", 600)
 for k, (name, sub) in enumerate(lanes):
     top = lane_top(k)
     d.line(0, top, W, top, RULE, 0.8)

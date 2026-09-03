@@ -35,7 +35,7 @@ def step(k, j, label, sub, focal=False):
     else:
         d.box(x, y, SW, SH, PAPER2, RULE, 1.0, 6)
     d.t(x + SW / 2, y + 26, label, 12, ACC if focal else INK, KR, "middle", 600)
-    d.t(x + SW / 2, y + 46, sub, 9, MUTED, MONO)
+    d.t(x + SW / 2, y + 46, sub, 11, MUTED, MONO)
 
 # 레인 안 이동
 d.arrow([(sx(1) + SW, sy(1) + SH / 2), (sx(2) - 2, sy(1) + SH / 2)], MUTED, "ar", 1.4)

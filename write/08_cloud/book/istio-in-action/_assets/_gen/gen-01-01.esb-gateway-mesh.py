@@ -24,10 +24,10 @@ d.path(f"M {AX0} {CY} L {AX1} {CY}", INK, 1.2, m="ar")
 d.line(CX, AY1, CX, CY, INK, 1.2)
 d.line(AX0, CY, CX, CY, INK, 1.2)
 
-d.t(CX, AY0 - 14, "중재까지", 9, INK, MONO, "middle", 400)
-d.t(CX, AY1 + 22, "네트워킹만", 9, INK, MONO, "middle", 400)
-d.t(AX0 - 14, CY + 4, "중앙", 9, INK, MONO, "end", 400)
-d.t(AX1 + 14, CY + 4, "분산", 9, INK, MONO, "start", 400)
+d.t(CX, AY0 - 14, "중재까지", 11, INK, MONO, "middle", 400)
+d.t(CX, AY1 + 22, "네트워킹만", 11, INK, MONO, "middle", 400)
+d.t(AX0 - 14, CY + 4, "중앙", 11, INK, MONO, "end", 400)
+d.t(AX1 + 14, CY + 4, "분산", 11, INK, MONO, "start", 400)
 
 def item(x, y, name, sub, focal=False, anchor="start", dx=14):
     c = ACC if focal else MUTED

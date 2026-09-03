@@ -33,7 +33,7 @@ for i, (tag, name, mid, right, kind) in enumerate(rows):
     d.t(LX + 20, y + 42, tag, 9, SOFT, MONO, "start", 600)
     d.t(LX + 132, y + 42, name, 15, c, KR, "start", 600)
     d.t(LX + 300, y + 42, mid, 11, MUTED if kind != "focal" else ACC, MONO, "start")
-    d.t(LX + LW - 20, y + 42, right, 9, MUTED, MONO, "end")
+    d.t(LX + LW - 20, y + 42, right, 11, MUTED, MONO, "end")
 
 # 방향 표시 — 스택 바깥 왼쪽
 d.path(f"M {LX - 44} {Y0 + 8} L {LX - 44} {Y0 + 3 * LH - 8}", MUTED, 1.2, m="ar")
