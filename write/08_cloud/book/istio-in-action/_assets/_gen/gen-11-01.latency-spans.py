@@ -9,14 +9,14 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1200, 560
+W, H = 1000, 560
 d = D(W, H, "ISTIO IN ACTION · 11-01 §4",
       "지연 하나를 세 구간으로 나눠 잰다",
       "가로축은 국면 경계이고 막대 길이는 순서만 나타낸다. 색이 붙은 막대가 전체를 재는 지표이고, "
       "왼쪽 점선 막대는 어떤 지표도 세지 않는 구간이다.",
       "저자가 구간별 시간을 적지 않아 눈금 대신 경계만 둡니다")
 
-LX, TX, TW = 24, 300, 800
+LX, TX, TW = 24, 240, 700
 AXIS_Y, ROWH, TOP = 128, 44, 152
 marks = [("이벤트 도착", 0.00), ("큐 진입", 0.28), ("워커 착수", 0.56), ("배포 완료", 1.00)]
 def X(t): return TX + t * TW

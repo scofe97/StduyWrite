@@ -8,7 +8,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, RULE, KR, MONO
 
-W, H = 1120, 620
+W, H = 1000, 620
 d = D(W, H, "ISTIO IN ACTION · 08-01 §8",
       "Kiali 는 두 단위로 세고 화면도 그렇게 갈린다",
       "워크로드는 동일한 복제본으로 배포되는 바이너리 하나이고, 애플리케이션은 그런 워크로드들과 서비스·설정을 "
@@ -23,13 +23,13 @@ def ring(x, y, w, h, tag, sub, stroke, fill, focal=False):
     d.t(x + 28, y + 3, tag, 8, ACC if focal else SOFT, MONO, "start", 600)
     d.t(x + 28, y + 30, sub, 11, ACC if focal else MUTED, KR, "start")
 
-ring(96, 128, 928, 372, "NAMESPACE · ISTIOINACTION", "개요 화면이 세는 가장 바깥 단위", f"{INK}30", f"{INK}04")
-ring(140, 184, 840, 280, "APPLICATION", "워크로드들 + 서비스 · 설정을 묶은 것", MUTED, f"{INK}07")
-ring(184, 240, 752, 184, "WORKLOAD", "동일한 복제본으로 배포되는 바이너리 하나", ACC, f"{ACC}0E", focal=True)
+ring(40, 128, 920, 372, "NAMESPACE · ISTIOINACTION", "개요 화면이 세는 가장 바깥 단위", f"{INK}30", f"{INK}04")
+ring(84, 184, 832, 280, "APPLICATION", "워크로드들 + 서비스 · 설정을 묶은 것", MUTED, f"{INK}07")
+ring(128, 240, 744, 184, "WORKLOAD", "동일한 복제본으로 배포되는 바이너리 하나", ACC, f"{ACC}0E", focal=True)
 
 # 워크로드의 내용물 — 디플로이먼트에 속한 파드들
 for i in range(3):
-    x = 232 + i * 232
+    x = 168 + i * 232
     d.o.append(f'<rect x="{x}" y="{316}" width="200" height="60" rx="6" fill="{ACC}10" stroke="{ACC}66" stroke-width="1"/>')
     d.t(x + 100, 342, f"webapp-{i + 1}", 12, INK, KR, "middle", 600)
     d.t(x + 100, 362, "2/2 · app + istio-proxy", 9, MUTED, MONO)

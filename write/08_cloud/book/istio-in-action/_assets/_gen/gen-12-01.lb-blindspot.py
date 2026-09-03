@@ -9,7 +9,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1240, 540
+W, H = 1000, 540
 d = D(W, H, "ISTIO IN ACTION · 12-01 §8",
       "클라이언트까지는 요청 단위, 그 뒤는 연결 단위",
       "클라이언트 쪽 프록시는 요청마다 목적지를 고르지만, 동서 게이트웨이는 TLS 를 풀지 않아 연결을 그대로 "
@@ -25,10 +25,10 @@ for k, (name, sub) in enumerate(lanes):
     d.t(20, top + 48, name, 9, SOFT, MONO, "start", 600)
     d.t(20, top + 66, sub, 11, MUTED, KR, "start")
 d.line(0, LANE_Y0 + 2 * LANE_H, W, LANE_Y0 + 2 * LANE_H, RULE, 0.8)
-d.line(200, LANE_Y0, 200, LANE_Y0 + 2 * LANE_H, RULE, 1.0)
+d.line(128, LANE_Y0, 128, LANE_Y0 + 2 * LANE_H, RULE, 1.0)
 
-SW, SH = 216, 64
-def sx(j): return 244 + j * 248
+SW, SH = 176, 64
+def sx(j): return 152 + j * 208
 def sy(k): return LANE_Y0 + k * LANE_H + 22
 def cell(k, j, label, sub, focal=False):
     x, y = sx(j), sy(k)
