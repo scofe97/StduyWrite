@@ -23,9 +23,9 @@ updated: 2026-05-20
 | 폴더 | 범위 |
 |------|------|
 | [01_concepts/](./01_concepts/) | 프레임워크 독립 이론 — OAuth2, OIDC, JWT, 세션 vs 토큰, 암호학 기초 |
-| [03_vulnerabilities/](./03_vulnerabilities/) | OWASP Top 10 — SQL Injection, XSS, CSRF 등 |
-| [04_threat-modeling/](./04_threat-modeling/) | STRIDE, Attack Tree, 공격자 관점 설계 분석 |
 | [05_network/](./05_network/) | 네트워크 계층(L2~L4) 공격과 방어 — ARP 스푸핑·중간자 공격, mTLS가 근본 해법인 이유 |
+
+OWASP 취약점 카탈로그(`03_vulnerabilities/`)와 위협 모델링(`04_threat-modeling/`)은 2026-04-19에 "예정 주제"만 적은 폴더로 만들었다가 2026-09-05에 걷어냈다. 넉 달 반 동안 본문이 한 편도 붙지 않았기 때문이다. 첫 문서를 쓸 때 폴더를 다시 만든다.
 
 ## 03_architecture와의 경계 가이드
 
@@ -33,13 +33,13 @@ updated: 2026-05-20
 
 | 주제 | 배치 | 근거 |
 |------|------|------|
-| Threat Modeling (STRIDE) | `99_ETC/security/04_threat-modeling/` | 공격자 관점 기법 |
+| Threat Modeling (STRIDE) | `99_ETC/security/` (폴더 신설) | 공격자 관점 기법 |
 | Secure by Design 원칙 | `03_architecture/` (cross-link) | 설계 철학 |
 | OAuth2, OIDC, SAML 이론 | `99_ETC/security/01_concepts/` | 프로토콜 기술 |
 | Zero Trust Architecture | `99_ETC/security/` (cross-link to 03) | 보안 전략 |
 | 권한 경계 설계 (컨텍스트별 권한) | `03_architecture/` | 경계 컨텍스트 관점 |
 | mTLS, TLS 핸드셰이크 | `99_ETC/security/05_network/` 또는 `08_cloud/` | 네트워크 보안 |
-| OWASP Top 10 | `99_ETC/security/03_vulnerabilities/` | 취약점 카탈로그 |
+| OWASP Top 10 | `99_ETC/security/` (폴더 신설) | 취약점 카탈로그 |
 | API Gateway 설계 (rate limit) | `03_architecture/` 또는 `08_cloud/` | 아키텍처 패턴 |
 
 ## 예정 주제 — 시크릿 관리 (TBD)

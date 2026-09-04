@@ -1,5 +1,5 @@
 ---
-title: manifest
+title: ArgoCD App-of-Apps 패턴
 tags: []
 status: draft
 related: []

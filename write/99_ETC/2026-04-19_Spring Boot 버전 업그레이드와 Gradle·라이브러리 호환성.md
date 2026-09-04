@@ -1,5 +1,5 @@
 ---
-title: 05-spring-boot-gradle-version-compatibility
+title: Spring Boot 버전 업그레이드와 Gradle·라이브러리 호환성
 tags: []
 status: draft
 related: []

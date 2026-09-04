@@ -1,5 +1,5 @@
 ---
-title: 03-reconciliation-genealogy
+title: Reconciliation Loop의 계보 — 제어이론에서 GitOps까지
 tags: []
 status: draft
 related: []
