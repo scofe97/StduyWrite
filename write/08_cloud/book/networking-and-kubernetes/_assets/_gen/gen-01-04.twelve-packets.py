@@ -34,7 +34,7 @@ for i, (name, n, note, flags) in enumerate(SEGS):
     d.o.append(f'<rect x="{x:.1f}" y="{BY}" width="{w:.1f}" height="{BH}" rx="5" '
                f'fill="{c}{"18" if focal else "0E"}" stroke="{c}" stroke-width="{1.6 if focal else 1.1}"/>')
     d.t(x + w / 2, BY + 40, str(n), 22, c, MONO, "middle", 600)
-    d.t(x + w / 2, BY + 64, "개", 10, MUTED, KR)
+    d.t(x + w / 2, BY + 64, "개", 11, MUTED, KR)
     # 좁은 칸과 focal 칸은 한 줄 올린다 — focal 은 위에 '실어 나른 것' 라벨이 붙으므로
     ny = 216 if (i % 2 == 1 or focal) else 240
     d.t(x + w / 2, ny, ddx.fit(name, 12, w - 6, f"seg{i} name"), 12,

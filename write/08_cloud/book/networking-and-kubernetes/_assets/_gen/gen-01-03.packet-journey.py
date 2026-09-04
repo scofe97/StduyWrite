@@ -27,7 +27,7 @@ def cell(cx, cy, title, sub, tag, c=None, w=BW):
     d.t(cx, cy - 10, ddx.fit(title, 12, w - 20, title), 12, c or INK, KR, "middle", 600)
     d.t(cx, cy + 8,  ddx.fit(sub, 11, w - 20, sub), 11, MUTED, KR)
     ascii_only = all(ord(ch) < 128 for ch in tag)
-    d.t(cx, cy + 26, tag, 9 if ascii_only else 10, SOFT, MONO if ascii_only else KR)
+    d.t(cx, cy + 26, tag, 9 if ascii_only else 11, SOFT, MONO if ascii_only else KR)
 
 # ── 출발 호스트 — 내려가며 감싼다 ──────────────────────────
 for cy, (t, s, g) in zip(CY, [("Application", "HTTP GET 을 만든다", "DATA"),

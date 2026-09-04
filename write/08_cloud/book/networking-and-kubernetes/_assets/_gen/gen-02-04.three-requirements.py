@@ -14,7 +14,7 @@ d = D(W, H, "THREE REQUIREMENTS · ONE PATH",
       "셋 중 하나만 빠져도 통하지 않으며 빠진 것에 따라 실패 문구가 달라집니다.",
       lead="나갈 길·중계 허가·돌아올 길이 서로 다른 곳에 있다")
 
-LANE_X, LANE_W, BODY_X = 40, 232, 292
+LANE_X, LANE_W, BODY_X = 40, 240, 292   # 명령 11px 수용
 LANES = [("ns1", "필요: default 경로", "route add default via 10.10.1.1", 200, INFO),
          ("ubuntu", "필요: 중계 허가", "net.ipv4.ip_forward = 1", 336, ACC),
          ("ubuntu2", "필요: 돌아올 경로", "route add 10.10.1.0/24 via .208", 472, INFO)]
@@ -26,7 +26,7 @@ for name, need, cmd, cy, c in LANES:
     d.line(BODY_X - 16, cy - 58, BODY_X - 16, cy + 58, RULE, 0.9)
     d.t(LANE_X + 20, cy - 22, name, 14, INK, MONO, "start", 600)
     d.t(LANE_X + 20, cy + 2, need, 12, c, KR, "start", 600)
-    d.t(LANE_X + 20, cy + 26, ddx.fit(cmd, 10, LANE_W - 24, cmd), 10, SOFT, MONO, "start")
+    d.t(LANE_X + 20, cy + 26, ddx.fit(cmd, 11, LANE_W - 24, cmd), 11, SOFT, MONO, "start")
 
 def step(cx, cy, title, sub, focal=False):
     x, y = cx - NW // 2, cy - NH // 2

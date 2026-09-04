@@ -28,7 +28,7 @@ d = D(W, H, "KEY LINEAGE · 01-02 TLS",
       "master secret과 세션 키에는 화살표가 들어오기만 하고 나가지 않는다.",
       lead="화살표가 들어오기만 하고 나가지 않는 칸이 곧 망을 건너지 않는 값입니다.")
 
-d.t(12, 102, "재료 셋 — 망을 건넌다", 10, SOFT, MONO, "start")
+d.t(12, 102, "재료 셋 — 망을 건넌다", 11, SOFT, MONO, "start")
 
 # (x, 이름, 누가·무엇, 어떻게 건넜나, 색, 노출 칩, 합류점 x)
 SRCS = [(12,  "client random",    "클라이언트 난수",   "평문으로 그냥 건넜다",   INFO, "노출", 332.0),
@@ -40,8 +40,8 @@ for x, name, who, how, c, seal, join in SRCS:
     d.tone(x, SRC_Y, SRC_W, SRC_H, c, 6, "12", 1.2)
     d.t(cx, SRC_Y + 30, name, 13, c, MONO, "middle", 600)
     d.t(cx, SRC_Y + 52, who, 11, INK)
-    d.t(cx, SRC_Y + 74, how, 10, MUTED)
-    d.chip(x + 254, SRC_Y + 15, seal, c, 8)
+    d.t(cx, SRC_Y + 74, how, 11, MUTED)
+    d.chip(x + 254, SRC_Y + 15, seal, c, 11)
     # 셋이 한 칸으로 모인다 — 합류점을 벌려 세 갈래가 각자 들어오는 것이 보이게
     d.arrow([(cx, SRC_Y + 98), (cx, 248), (join, 248), (join, 275)],
             c, "acc" if c is ACC else "info", 1.5)
@@ -53,12 +53,12 @@ for i, (x, y, w, c, name, sub, sw, op, chip_dx) in enumerate(DERIVED):
     d.tone(x, y, w, 76, c, 6, op, sw)
     d.t(MID_X, y + 32, name, 15, c, MONO, "middle", 600)
     d.t(MID_X, y + 54, sub, 11, INK)
-    d.chip(x + chip_dx, y + 14, "안 건넌다", c, 8)
+    d.chip(x + chip_dx, y + 14, "안 건넌다", c, 11)
     if i == 0:
         d.arrow([(MID_X, y + 78), (MID_X, 409)], c, "ok", 1.6)
 
-d.t(W - 54, 320.0, "도청자가 위 셋을 다 주워도", 10, BAD, KR, "end")
-d.t(W - 54, 336.0, "봉인 하나를 못 열면 여기 못 온다", 10, BAD, KR, "end")
+d.t(W - 54, 320.0, "도청자가 위 셋을 다 주워도", 11, BAD, KR, "end")
+d.t(W - 54, 336.0, "봉인 하나를 못 열면 여기 못 온다", 11, BAD, KR, "end")
 d.legend(514, [("평문으로 건넘", INFO), ("공개키로 봉해져 건넘", ACC), ("망을 건너지 않음", OK)])
 d.save("01-02.tls-key-lineage.svg")
 print("ok tls-key-lineage")

@@ -31,14 +31,14 @@ MACS = ["MAC = 게이트웨이", "MAC = 중간 라우터", "MAC = 8.8.8.8"]
 for j in range(3):
     x = MID[j] - CARD_W // 2
     d.line(MID[j], CY + 14, MID[j], CARD_Y - 4, RULE, 0.9, "3 4")
-    d.t(x + 4, CARD_Y + 6, f"구간 {j+1}", 9, SOFT, MONO, "start")
+    d.t(x + 4, CARD_Y + 6, f"구간 {j+1}", 11, SOFT, MONO, "start")
     # 겉봉 — 구간마다 다시 쓴다
     d.tone(x, CARD_Y + 14, CARD_W, ROW_H, WARN, 5, "14", 1.0)
-    d.t(x + 10, CARD_Y + 35, "Ethernet", 9, WARN, MONO, "start")
+    d.t(x + 10, CARD_Y + 35, "Ethernet", 11, WARN, MONO, "start")
     d.t(x + 62, CARD_Y + 36, ddx.fit(MACS[j], 12, CARD_W - 70, f"card{j+1} MAC"), 12, INK, KR, "start")
     # 속 — 세 번 똑같다
     d.tone(x, CARD_Y + 54, CARD_W, ROW_H, INFO, 5, "14", 1.0)
-    d.t(x + 10, CARD_Y + 75, "IP", 9, INFO, MONO, "start")
+    d.t(x + 10, CARD_Y + 75, "IP", 11, INFO, MONO, "start")
     d.t(x + 62, CARD_Y + 76, ddx.fit("목적지 = 8.8.8.8", 12, CARD_W - 70, f"card{j+1} IP"), 12, INK, KR, "start")
 
 d.t(500, 376, "IP 헤더는 어디로 가야 하는지를 끝까지 지고 가고, "

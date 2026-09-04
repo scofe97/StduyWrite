@@ -101,7 +101,7 @@ def bracket(d, x, y0, y1, label, c=None, w=10, size=11):
 
 def lane_pair(d, CX, top_cy, bot_cy, bw, bh, top_label, bot_label,
               top_cells, bot_cells, links, top_c=None, bot_c=None,
-              top_mono=False, x0=40, x1=960, sizes=(13, 11, 10)):
+              top_mono=False, x0=40, x1=960, sizes=(13, 11, 11)):
     """레인 둘 — 가로는 순서, 세로는 대응. 02 장이 반복해 쓰는 형태.
     top_cells/bot_cells 는 (제목, 부제, 꼬리표) 세 쪽. links 는 세로 화살표 라벨."""
     from dd import INFO, ACC
@@ -133,7 +133,7 @@ def lane_pair(d, CX, top_cy, bot_cy, bw, bh, top_label, bot_label,
 
 
 def stage_chain(d, cy, stages, nodes, edges, bw=190, gap=60, x0=30,
-                stage_y=None, sizes=(14, 11, 10)):
+                stage_y=None, sizes=(14, 11, 11)):
     """단계 머리 + 한 줄 체인. 각 장 chapter-overview 가 반복해 쓰는 형태.
     nodes 는 (제목, 부제, 꼬리표, 색|None|ACC). ACC 면 focal 로 그린다.
     코리도어 라벨은 실제 코리도어 폭으로 fit 한다 — 넉넉한 값을 넘기면 가드가 통과시킨다."""

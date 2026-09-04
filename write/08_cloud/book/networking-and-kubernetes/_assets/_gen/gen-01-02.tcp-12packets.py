@@ -44,10 +44,10 @@ for i, (fwd, label, sub, c, mk, sw, dash, weight) in enumerate(PKTS):
         d.path(f"M {LX[C]+10} {y} L {LX[S]-12} {y}", c, sw, m=mk, dash=dash)
     else:
         d.path(f"M {LX[S]-10} {y} L {LX[C]+12} {y}", c, sw, m=mk, dash=dash)
-    d.t(LX[C] - 24, y + 4, str(i + 1), 10, SOFT, MONO, "end")
+    d.t(LX[C] - 24, y + 4, str(i + 1), 11, SOFT, MONO, "end")
     d.t(MID, y - 8, label, 11, c, MONO, "middle", weight)
     if sub:
-        d.t(MID, y + 13, sub, 9, MUTED)
+        d.t(MID, y + 13, sub, 11, MUTED)
 
 # 같은 열둘을 몫으로 다시 센다 — 시간이 아니라 비율이다
 d.line(12, 746, W - 48, 746, RULE, 0.8)
@@ -57,9 +57,9 @@ for count, name, c in ((3, "수립 3", WARN), (3, "확인 3", INFO),
                        (4, "종료 4", BAD), (2, "데이터 2", OK)):
     w = BAR_W * count / TOTAL
     d.tone(x, BAR_Y, w, 26, c, 4, "33", 1.2)
-    d.t(x + w / 2, BAR_Y + 17, name, 10, c)
+    d.t(x + w / 2, BAR_Y + 17, name, 11, c)
     x += w
-d.t(W - 54, BAR_Y + 17, "내용은 2/12", 10, OK, KR, "end", 600)
+d.t(W - 54, BAR_Y + 17, "내용은 2/12", 11, OK, KR, "end", 600)
 
 d.legend(816, [("실제 내용", OK), ("연결 수립", WARN), ("확인 응답", INFO), ("연결 종료", BAD)])
 d.save("01-02.tcp-12packets.svg")

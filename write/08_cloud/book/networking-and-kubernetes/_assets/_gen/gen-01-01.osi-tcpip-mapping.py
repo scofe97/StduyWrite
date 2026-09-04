@@ -47,7 +47,7 @@ for i, (name, pdu, sub, c) in enumerate(LEFT):
     y = Y0 + STRIDE * i
     d.tone(LX, y, COLW, ROW_H, c, 6, "12", 1.1)
     d.t(LX + 16, y + 24, name, 13, c, MONO, "start", 600)
-    d.t(LX + COLW - 14, y + 24, pdu, 10, MUTED, MONO, "end")
+    d.t(LX + COLW - 14, y + 24, pdu, 11, MUTED, MONO, "end")
     d.t(LX + 16, y + 43, sub, 11, MUTED, KR, "start")
 
 # (첫 행, 흡수한 줄 수, 이름, 한 줄, 덧줄, 색, 비율 칩)
@@ -65,7 +65,7 @@ for start, span, name, sub, sub2, c, ratio in RIGHT:
     if sub2:                       # 흡수한 칸은 세 줄, 1:1 인 칸은 두 줄
         d.t(cx, cy - 6, name, 14, c, MONO, "middle", 600)
         d.t(cx, cy + 12, sub, 11, INK)
-        d.t(cx, cy + 29, sub2, 10, MUTED)
+        d.t(cx, cy + 29, sub2, 11, MUTED)
     else:
         d.t(cx, cy - 2, name, 14, c, MONO, "middle", 600)
         d.t(cx, cy + 15, sub, 11, INK)

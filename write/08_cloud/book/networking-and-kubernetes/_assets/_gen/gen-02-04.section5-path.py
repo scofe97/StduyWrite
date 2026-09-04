@@ -30,7 +30,7 @@ def diamond(cx, cy, txt, sub):
     d.path(f"M {cx} {cy-hh} L {cx+hw} {cy} L {cx} {cy+hh} L {cx-hw} {cy} Z", RULE, 1.2)
     d.t(cx, cy - 10, ddx.fit(txt, 12, DW - 48, txt), 12, INK, KR, "middle", 600)
     avail = int(2 * hw * (1 - 16 / hh)) - 24
-    d.t(cx, cy + 16, ddx.fit(sub, 10, avail, f"sub@{cy}"), 10, SOFT, MONO)
+    d.t(cx, cy + 16, ddx.fit(sub, 11, avail, f"sub@{cy}"), 11, SOFT, MONO)
 
 def step(cx, cy, t, s, c=None):
     d.box(cx - BW // 2, cy - BH // 2, BW, BH, PAPER, c or RULE, 1.1, 6)

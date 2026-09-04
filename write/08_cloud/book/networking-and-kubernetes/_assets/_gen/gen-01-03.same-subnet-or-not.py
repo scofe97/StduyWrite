@@ -29,7 +29,7 @@ def cell(cx, cy, title, sub, tag, c=None, focal=False, dash=False):
     d.t(cx, cy - 14, ddx.fit(title, 13, BW - 20, title), 13, tc, KR, "middle", 600)
     d.t(cx, cy + 6,  ddx.fit(sub, 11, BW - 20, sub), 11, MUTED,
         MONO if all(ord(ch) < 128 for ch in sub) else KR)
-    d.t(cx, cy + 26, ddx.fit(tag, 10, BW - 16, tag), 10, SOFT, KR)
+    d.t(cx, cy + 26, ddx.fit(tag, 11, BW - 16, tag), 11, SOFT, KR)
 
 ddx.band(d, 104, 572, "같은 줄에 있으면 겉봉만으로 끝나고, 줄이 갈리면 표를 뒤져야 한다")
 

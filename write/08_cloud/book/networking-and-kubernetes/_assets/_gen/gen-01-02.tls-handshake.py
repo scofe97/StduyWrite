@@ -11,7 +11,7 @@
 # 이력: 2026-08-28 신설. 생성기 없이 손으로 만들어진 SVG 였다. 값·좌표를 그대로 옮겼다.
 from dd import Seq, INK, MUTED, SOFT, RULE, ACC, OK, BAD, INFO, KR, MONO
 
-W, H = 1060, 756
+W, H = 1000, 756   # 캔버스 상한 준수
 Y0, STRIDE = 222, 48
 
 d = Seq(W, H, "SEQUENCE · 01-02 TLS 1.2",
@@ -31,7 +31,7 @@ for y0, h, label, c in ((198, 190, "1단계 — 전부 평문", INFO),
                         (390, 46, "2단계 — 봉인 하나", OK),
                         (438, 238, "3단계 — 암호문", ACC)):
     d.box(12, y0, W - 60, h, f"{c}0A", f"{c}33", 1, 8)
-    d.t(24, y0 + 16, label, 10, c, KR, "start", 600)
+    d.t(24, y0 + 16, label, 11, c, KR, "start", 600)
 
 # (방향, 이름, 부제, 색, 마커, 선 굵기, 라벨 굵기, 점선, 노출 상태)
 MSGS = [(1, "ClientHello",       "cipher 목록 + 난수",              INFO, "info", 1.4, 400, None,  "평문"),
@@ -51,13 +51,13 @@ for i, (fwd, name, sub, c, mk, sw, weight, dash, seal) in enumerate(MSGS):
         d.path(f"M {LX[C]+10} {y} L {LX[S]-12} {y}", c, sw, m=mk, dash=dash)
     else:
         d.path(f"M {LX[S]-10} {y} L {LX[C]+12} {y}", c, sw, m=mk, dash=dash)
-    d.t(LX[C] - 26, y + 4, str(i + 1), 10, SOFT, MONO, "end")
+    d.t(LX[C] - 26, y + 4, str(i + 1), 11, SOFT, MONO, "end")
     d.t(MID, y - 8, name, 11, c, MONO, "middle", weight)
     if sub:
-        d.t(MID, y + 13, sub, 9, MUTED)
-    d.chip(CHIP_X, y, seal, c, 8)
+        d.t(MID, y + 13, sub, 11, MUTED)
+    d.chip(CHIP_X, y, seal, c, 11)
 
-d.t(W - 68, 440, "이 하나를 못 열면 아래는 통째로 못 읽는다", 10, BAD, KR, "end")
+d.t(W - 68, 440, "이 하나를 못 열면 아래는 통째로 못 읽는다", 11, BAD, KR, "end")
 d.legend(712, [("평문 — 다 보인다", INFO), ("봉인 — 유일한 비밀", OK),
                ("암호문", ACC), ("선언 — 내용 없음", SOFT)])
 d.save("01-02.tls-handshake.svg")

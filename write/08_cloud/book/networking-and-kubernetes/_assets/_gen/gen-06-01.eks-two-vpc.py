@@ -23,7 +23,7 @@ def box(cx, cy, w, h, t, s, tag, c=None, focal=False):
         d.box(x, y, w, h, PAPER2, c or RULE, 1.1, 6); tc = c or INK
     d.t(cx, cy - 16, ddx.fit(t, 13, w - 18, t), 13, tc, KR, "middle", 600)
     d.t(cx, cy + 4, ddx.fit(s, 11, w - 16, s), 11, MUTED, KR)
-    d.t(cx, cy + 26, ddx.fit(tag, 10, w - 14, tag), 10, SOFT, KR)
+    d.t(cx, cy + 26, ddx.fit(tag, 11, w - 14, tag), 11, SOFT, KR)
 
 ddx.band(d, 104, 548, "다리가 몇 개뿐이라 그 수가 곧 관리 경로의 여유다")
 for (rx, ry, rw, rh), lab, c in [(EKS, "EKS 소유 VPC — AWS 가 운영", INFO),
@@ -38,9 +38,9 @@ box(*NODE, 280, 96, "워커 노드", "Kubelet 이 등록", "EC2 인스턴스", W
 box(*POD, 280, 96, "Pod", "IP = ENI 보조 IP", "Pod 수 공식의 근거", WARN)
 
 d.path(f"M {API[0]+120+6} {API[1]} L {ENI[0]-110-10} {ENI[1]}", ACC, 1.6, m="acc")
-d.t((API[0] + 120 + ENI[0] - 110) // 2, API[1] - 16, "관리 방향", 10, ACC, KR)
+d.t((API[0] + 120 + ENI[0] - 110) // 2, API[1] - 16, "관리 방향", 11, ACC, KR)
 d.path(ddx.elbow(ENI[0]+110+6, ENI[1], NODE[0]-140-10, NODE[1]+24), ACC, 1.6, m="acc")
-d.t(CUS[0] - 6, ENI[1] - 16, "등록 방향", 10, ACC, KR, "end")
+d.t(CUS[0] - 6, ENI[1] - 16, "등록 방향", 11, ACC, KR, "end")
 d.path(f"M {NODE[0]} {NODE[1]+48+6} L {POD[0]} {POD[1]-48-10}", MUTED, 1.4, m="ar")
 
 d.t(36, 508, "Pod IP 가 ENI 보조 IP 라서 고객 VPC 주소를 그대로 쓴다 — 노드당 Pod 상한이 "

@@ -23,7 +23,7 @@ def node(cx, cy, title, sub, tag, c=None, dash=False):
                f'stroke="{c or RULE}" stroke-width="1.1"{" stroke-dasharray=\"6 5\"" if dash else ""}/>')
     d.t(cx, cy - 20, title, 13, c or INK, KR, "middle", 600)
     d.t(cx, cy + 2, ddx.fit(sub, 11, BW - 18, sub), 11, MUTED, KR)
-    d.t(cx, cy + 26, ddx.fit(tag, 10, BW - 14, tag), 10, SOFT, KR)
+    d.t(cx, cy + 26, ddx.fit(tag, 11, BW - 14, tag), 11, SOFT, KR)
 
 ddx.band(d, 104, 628, "같은 대역이 두 길로 들어와도 표에는 한 줄만 남는다")
 ddx.focal_tag(d, 500, 152, "화살표는 광고 방향 — 패킷은 반대로 흐른다", 320)

@@ -22,7 +22,7 @@ ddx.stage_chain(d, 316,
    ("경계·관문", "SG·NACL·NAT·ELB", "사고의 단골 지점", WARN),
    ("EKS", "두 VPC · 세 모드", "노드당 Pod 상한", None),
    ("직결", "VPC CNI · ALB", "Pod IP 로 바로", ACC)],
-  ["그 위에", "얹으면", "그래서"])
+  ["그 위에", "얹으면", "그래서"], sizes=(14, 11, 11))
 d.t(36, 468, "Pod 가 VPC 주소를 그대로 쓰기 때문에 SG 도 ALB 도 Pod 를 직접 가리킬 수 있다",
      12, MUTED, KR, "start")
 d.legend(512, [("사고의 단골 지점", WARN), ("이 편의 결론", ACC)])

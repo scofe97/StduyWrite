@@ -37,7 +37,7 @@ def cell(x, y, name, rule, result, focal=False, w=BW, h=BH):
     d.t(x + 20, y + 26, ddx.fit(name, 13, w - 40, name), 13, c, MONO, "start", 600)
     d.t(x + 20, y + 46, ddx.fit(rule, 11, w - 40, rule), 11, MUTED,
         MONO if all(ord(ch) < 128 for ch in rule) else KR, "start")
-    d.t(x + 20, y + 62, ddx.fit(result, 10, w - 40, result), 10, SOFT, KR, "start")
+    d.t(x + 20, y + 62, ddx.fit(result, 11, w - 40, result), 11, SOFT, KR, "start")
 
 
 def state(cy, txt, val, c=MUTED):

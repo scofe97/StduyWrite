@@ -26,7 +26,7 @@ for i, op in enumerate(["ADD", "DEL", "CHECK", "VERSION"]):
     cx = PX + 16 + 74 + (i % 2) * 148
     cy = BY + 112 + (i // 2) * 48
     d.t(cx, cy, op, 13, ACC, MONO, "middle", 600)
-    d.t(cx, cy + 20, ["네트워크에 추가", "제거", "이상 시 오류", "버전 보고"][i], 10, MUTED, KR)
+    d.t(cx, cy + 20, ["네트워크에 추가", "제거", "이상 시 오류", "버전 보고"][i], 11, MUTED, KR)
 
 d.box(728, BY, 240, BH, PAPER2, WARN, 1.1, 8)
 d.t(848, BY + 56, "IPAM", 14, WARN, MONO, "middle", 600)
@@ -34,9 +34,9 @@ for i, ln in enumerate(["IP 할당은", "한 번 더 분리된", "별도 플러�
     d.t(848, BY + 96 + i * 26, ddx.fit(ln, 12, 208, ln), 12, MUTED, KR)
 
 d.path(f"M 272 {BY+72} L {PX-10} {BY+72}", MUTED, 1.5, m="ar")
-d.t(300, BY + 60, "stdin", 10, MUTED, MONO)
+d.t(300, BY + 60, "stdin", 11, MUTED, MONO)
 d.path(f"M {PX-2} {BY+152} L 274 {BY+152}", MUTED, 1.5, m="ar")
-d.t(300, BY + 140, "stdout", 10, MUTED, MONO)
+d.t(300, BY + 140, "stdout", 11, MUTED, MONO)
 d.path(f"M {PX+PW+8} {BY+108} L 718 {BY+108}", MUTED, 1.5, m="ar", dash="4 4")
 
 d.t(36, 424, "설정 JSON 이 들어가고 결과 JSON 이 나오는 것이 전부다 — 데몬도 상주 프로세스도 요구하지 않는다",

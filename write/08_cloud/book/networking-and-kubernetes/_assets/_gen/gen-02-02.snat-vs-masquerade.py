@@ -54,18 +54,18 @@ for x, c, mk, head, sub, *cells in BRANCHES:
     d.arrow([(CX, 178), (CX, 204), (cx, 204), (cx, 229)], c, mk, 1.5)
     d.tone(x, 232, COLW, 60, c, 6, "14", 1.3)
     d.t(cx, 257, head, 12, c, KR, "middle", 600)
-    d.t(cx, 278, sub, 10, INK)
+    d.t(cx, 278, sub, 11, INK)
     for i, y in enumerate(ROWS):
         top, val = cells[i * 2], cells[i * 2 + 1]
         d.box(x, y, COLW, 56, PAPER2, RULE, 0.9)
-        d.t(x + 12, y + 20, LABELS[i], 9, SOFT, KR, "start")
+        d.t(x + 12, y + 20, LABELS[i], 11, SOFT, KR, "start")
         d.t(cx, y + 24, top, 12, c, KR, "middle", 600)
         mono = val.startswith("-j ")
-        d.t(cx, y + 44, val, 11 if not mono else 10, INK if not mono else MUTED,
+        d.t(cx, y + 44, val, 11 if not mono else 11, INK if not mono else MUTED,
             KR if not mono else MONO)
 
 d.t(CX, 524, "POSTROUTING 전용인 것도 같은 이유입니다 — 나가는 인터페이스가 정해진 뒤라야 그 주소를 알 수 있습니다.",
-    10, ACC)
+    11, ACC)
 d.legend(544, [("SNAT — 값을 적는다", OK), ("MASQUERADE — 자리를 가리킨다", WARN)])
 d.save("02-02.snat-vs-masquerade.svg")
 print("ok snat-vs-masquerade")

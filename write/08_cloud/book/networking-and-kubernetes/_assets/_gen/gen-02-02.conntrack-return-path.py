@@ -89,7 +89,7 @@ for i, (title, tup, note, c) in enumerate(
     d.box(x, 632, 448, 72, PAPER2, c, 1.1, 6)
     d.t(x + 20, 656, title, 12, c, KR, "start", 600)
     d.t(x + 20, 676, ddx.fit(tup, 11, 408, tup), 11, MUTED, MONO, "start")
-    d.t(x + 20, 694, note, 10, SOFT, KR, "start")
+    d.t(x + 20, 694, note, 11, SOFT, KR, "start")
 
 d.t(36, 748, "응답이 역방향 기대 튜플과 맞으면 커널이 출발지를 되돌린다 — 확률 규칙은 연결 수명 동안 다시 평가되지 않는다",
      12, MUTED, KR, "start")

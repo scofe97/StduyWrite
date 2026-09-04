@@ -33,7 +33,7 @@ d.state(A, "FIN-WAIT-1", 246, WARN)
 d.msg(B, A, "ACK", 292, OK, "ok", sub="알겠다 — 여기서 끝나지 않는다")
 d.state(A, "FIN-WAIT-2", 326, WARN)
 d.state(B, "CLOSE-WAIT", 326, ACC)
-d.t(MID + 12, 354, "CLOSE-WAIT 는 상대가 아니라 자기 사정을 기다린다", 10, ACC)
+d.t(MID + 12, 354, "CLOSE-WAIT 는 상대가 아니라 자기 사정을 기다린다", 11, ACC)
 
 d.msg(B, A, "FIN", 396, WARN, "warn", sub="나도 다 했다")
 d.state(B, "LAST-ACK", 430, WARN)
@@ -41,14 +41,14 @@ d.state(B, "LAST-ACK", 430, WARN)
 d.msg(A, B, "ACK", 476, OK, "ok")
 d.state(A, "TIME-WAIT", 510, BAD)
 d.state(B, "CLOSED", 510, SOFT)
-d.t(MID + 12, 534, "TIME-WAIT 가 포트를 붙잡아 임시 포트 고갈로 이어진다", 10, BAD)
+d.t(MID + 12, 534, "TIME-WAIT 가 포트를 붙잡아 임시 포트 고갈로 이어진다", 11, BAD)
 
 # 다른 길 — 순서가 없어서 레일 밖에 띠로 둔다
 d.tone(12, 570, 920, 96, BAD, 6, "0E", 1.3)
 d.t(30, 596, "다른 길 — RST 통보", 12, BAD, KR, "start", 600)
 d.t(30, 620, "확인 응답 없이 그 자리에서 연결 삭제 · 미전달 데이터는 버려진다", 11, INK, KR, "start")
 d.t(30, 644, "열린 적 없는 포트 · 죽은 프로세스 · 정리된 연결에 뒤늦게 도착한 패킷",
-    10, MUTED, KR, "start")
+    11, MUTED, KR, "start")
 d.chip(830, 604, "절차 없음", BAD)
 
 d.legend(688, [("종료 요청 FIN", WARN), ("확인 ACK", OK),

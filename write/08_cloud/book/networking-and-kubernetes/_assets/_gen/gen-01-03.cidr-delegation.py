@@ -46,9 +46,9 @@ for i, (who, cidr, count, c) in enumerate(ROWS):
     ty = y + 22
     d.box(TX, ty, TW, TH, "#161B22", RULE, 0.8, 4)
     d.tone(TX, ty, TW * math.log2(count + 1) / MAXBITS, TH, c, 4, "44", 1.1)
-    d.t(TX + TW + 10, ty + 17, f"{count:,}", 10, c, MONO, "start", 600)
+    d.t(TX + TW + 10, ty + 17, f"{count:,}", 11, c, MONO, "start", 600)
 
-d.t(TX, 114, "담는 주소 수 (로그 눈금)", 9, SOFT, MONO, "start")
+d.t(TX, 114, "담는 주소 수 (로그 눈금)", 11, SOFT, MONO, "start")
 d.legend(546, [("넓은 위임", INFO), ("좁아지는 중", WARN), ("단일 호스트", ACC)])
 d.save("01-03.cidr-delegation.svg")
 print("ok cidr-delegation")

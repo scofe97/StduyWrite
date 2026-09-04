@@ -23,7 +23,7 @@ def node(cx, cy, title, sub, tag, c=None):
     d.t(cx, cy - 16, title, 13, c or INK, KR, "middle", 600)
     d.t(cx, cy + 4, ddx.fit(sub, 11, BW - 18, sub), 11, MUTED,
         MONO if all(ord(ch) < 128 or ch == '/' for ch in sub) else KR)
-    d.t(cx, cy + 26, ddx.fit(tag, 10, BW - 14, tag), 10, SOFT, KR)
+    d.t(cx, cy + 26, ddx.fit(tag, 11, BW - 14, tag), 11, SOFT, KR)
 
 ddx.band(d, 104, 560, "중계가 없으니 모두가 모두와 직접 맺어야 한다")
 rx, ry, rw, rh = RING

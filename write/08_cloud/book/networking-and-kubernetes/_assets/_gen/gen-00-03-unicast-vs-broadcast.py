@@ -23,10 +23,10 @@ d = D(W, H, "FRAME COMPARISON · ONE FIELD",
 
 # 열 머리
 d.line(RX, 128, RX + RW, 128, RULE, 0.8)
-d.t(120, 152, "목적지 MAC 칸", 9, SOFT, KR, "start")
+d.t(120, 152, "목적지 MAC 칸", 11, SOFT, KR, "start")
 for cx, no in zip(CARDS, ("2 번", "3 번", "4 번")):
-    d.t(cx + 32, 152, no, 9, SOFT, KR, "start")
-d.t(RX + RW - 20, 152, "처리한 대수", 9, SOFT, KR, "end")
+    d.t(cx + 32, 152, no, 11, SOFT, KR, "start")
+d.t(RX + RW - 20, 152, "처리한 대수", 11, SOFT, KR, "end")
 
 for r, (kind, mac, note, cells, tally) in enumerate(ROWS):
     y = Y0 + r * RH

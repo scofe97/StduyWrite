@@ -7,7 +7,7 @@ d = D(W, H, "INGRESS · ONE ENTRY, PATHS SPLIT",
       "같은 진입점으로 들어와 경로만으로 다른 서비스에 닿는다",
       "포트도 호스트도 같다. 갈리는 것은 경로 하나뿐이고, 어디에도 안 걸리면 기본 백엔드로 간다.",
       lead="포트도 호스트도 같고 갈리는 것은 경로 하나뿐이다")
-BW, BH, GAP, EP_W = 148, 108, 44, 296
+BW, BH, GAP, EP_W = 148, 108, 48, 270   # GAP 44->48: 코리도어 라벨 11px 수용. EP_W 296->270: 갈림 통로 확보
 CX = [40 + BW // 2 + i * (BW + GAP) for i in range(3)]
 EP_X, EP_Y = 812, (280, 430)
 CY = 300
@@ -21,9 +21,9 @@ def box(cx, cy, t, s, tag, c=None, focal=False, w=BW):
     d.t(cx, cy - 22, ddx.fit(t, 13, w - 18, t), 13, tc, KR, "middle", 600)
     d.t(cx, cy + 0, ddx.fit(s, 11, w - 16, s), 11, MUTED,
         MONO if all(ord(ch) < 128 or ch in ':/…-' for ch in s) else KR)
-    d.t(cx, cy + 26, ddx.fit(tag, 10, w - 14, tag), 10, SOFT, KR)
+    d.t(cx, cy + 26, ddx.fit(tag, 11, w - 14, tag), 11, SOFT, KR)
 ddx.band(d, 104, 568, "경로가 어디에도 안 걸리면 기본 백엔드로 간다 — 그것도 규칙의 일부다")
-for cx, s in zip(CX + [EP_X], ["① 외부 요청", "② 진입점", "③ 규칙 대조", "④ 백엔드"]):
+for cx, s in zip(CX + [EP_X], ["1 외부 요청", "2 진입점", "3 규칙 대조", "4 백엔드"]):
     d.t(cx, 196, s, 12, SOFT, KR, "middle", 600)
 box(CX[0], CY, "요청", "curl localhost/…", "같은 진입점 하나", INFO)
 box(CX[1], CY, "LB", "extraPortMappings", "KIND 로컬 80/443")
@@ -33,14 +33,14 @@ box(EP_X, EP_Y[1], "/data", "clusterip-service-2", "app2 Pod 들", OK, w=EP_W)
 for i, lab in enumerate(["80 포트", "전달"]):
     a, b = CX[i] + BW // 2, CX[i + 1] - BW // 2
     d.path(f"M {a+6} {CY} L {b-10} {CY}", MUTED, 1.5, m="ar")
-    d.t((a + b) // 2, CY - 16, ddx.fit(lab, 10, GAP - 4, lab), 10, MUTED, KR)
+    d.t((a + b) // 2, CY - 16, ddx.fit(lab, 11, GAP - 4, lab), 11, MUTED, KR)
 # 04-02 와 같은 처방 — 통로 92px 에 줄기를 세울 자리가 없다. /host(280)는 컨트롤러
 # 상자의 y 범위(246~354) 안이라 곧은 가로 한 줄, /data 만 x=620 에서 꺾는다.
 A_X, B_X = CX[2] + BW // 2 + 6, EP_X - EP_W // 2 - 10
 d.path(f"M {A_X} {EP_Y[0]} L {B_X} {EP_Y[0]}", OK, 1.5, m="ok")
 d.path(f"M {A_X} {CY+40} L 620 {CY+40} L 620 {EP_Y[1]} L {B_X} {EP_Y[1]}", OK, 1.5, m="ok")
-d.t(B_X, EP_Y[0] - 12, ddx.fit("path /host", 10, B_X - A_X - 4, "path /host"), 10, OK, MONO, "end")
-d.t(B_X, EP_Y[1] + 16, ddx.fit("path /data", 10, B_X - A_X - 4, "path /data"), 10, OK, MONO, "end")
+d.t(B_X, EP_Y[0] - 12, ddx.fit("path /host", 11, B_X - A_X - 4, "path /host"), 11, OK, MONO, "end")
+d.t(B_X, EP_Y[1] + 16, ddx.fit("path /data", 11, B_X - A_X - 4, "path /data"), 11, OK, MONO, "end")
 d.t(36, 540, "규칙을 고르는 것은 컨트롤러 Pod 다 — LB 는 80 포트를 그 Pod 로 넘길 뿐이다",
      12, MUTED, KR, "start")
 d.legend(584, [("들어오는 요청", INFO), ("규칙을 고르는 자리", ACC), ("백엔드", OK)])

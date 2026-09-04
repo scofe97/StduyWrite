@@ -22,7 +22,7 @@ def cell(cx, cy, title, sub, tag, c=None):
     d.box(x, y, BW, BH, PAPER2, c or RULE, 1.1, 6)
     d.t(cx, cy - 22, ddx.fit(title, 13, BW - 20, title), 13, c or INK, KR, "middle", 600)
     d.t(cx, cy - 1, ddx.fit(sub, 12, BW - 20, sub), 12, MUTED, KR)
-    d.t(cx, cy + 24, ddx.fit(tag, 10, BW - 16, tag), 10, SOFT, KR)
+    d.t(cx, cy + 24, ddx.fit(tag, 11, BW - 16, tag), 11, SOFT, KR)
 
 ddx.band(d, 104, 548, "바깥으로 가는 프레임은 예외 없이 게이트웨이로 모인다")
 

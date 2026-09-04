@@ -30,7 +30,7 @@ def box(cx, cy, w, h, title, sub, tag, c=None, dash=False):
     d.t(cx, cy - 16, title, 13, c or INK, KR, "middle", 600)
     d.t(cx, cy + 4, ddx.fit(sub, 11, w - 18, sub), 11, MUTED,
         MONO if all(ord(ch) < 128 for ch in sub) else KR)
-    d.t(cx, cy + 26, ddx.fit(tag, 10, w - 14, tag), 10, SOFT, KR)
+    d.t(cx, cy + 26, ddx.fit(tag, 11, w - 14, tag), 11, SOFT, KR)
 
 ddx.band(d, 104, 764, "모르면 위로 — 그러나 꼭대기에는 떠넘길 위가 없다")
 

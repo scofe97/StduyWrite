@@ -31,7 +31,7 @@ def cell(cx, cy, title, sub, tag, c=None, focal=False):
     d.t(cx, cy - 12, ddx.fit(title, 12, BW - 16, title), 12, tc, KR, "middle", 600)
     d.t(cx, cy + 6,  ddx.fit(sub, 11, BW - 16, sub), 11, MUTED,
         MONO if all(ord(ch) < 128 or ch in "→" for ch in sub) else KR)
-    d.t(cx, cy + 25, ddx.fit(tag, 10, BW - 12, tag), 10, SOFT, KR)
+    d.t(cx, cy + 25, ddx.fit(tag, 11, BW - 12, tag), 11, SOFT, KR)
 
 ddx.band(d, 104, 588, "Pod = 호스트 · 노드 = 라우터 · 클러스터 = AS 하나")
 
@@ -60,7 +60,7 @@ nx, ny, nw, nh = NET
 d.box(nx - nw // 2, ny - nh // 2, nw, nh, PAPER2, INFO, 1.1, 6)
 d.t(nx, ny - 12, "회사 네트워크", 13, INFO, KR, "middle", 600)
 d.t(nx, ny + 8, "라우터 · 스위치", 11, MUTED, KR)
-d.t(nx, ny + 28, "겉이 한 겹뿐", 10, SOFT, KR)
+d.t(nx, ny + 28, "겉이 한 겹뿐", 11, SOFT, KR)
 d.path(f"M {CX[3]+HB+6} {OUT} L {nx} {OUT} L {nx} {ny-nh//2-10}", MUTED, 1.5, m="ar")
 d.path(f"M {nx} {ny+nh//2+6} L {nx} {IN} L {CX[3]+HB+10} {IN}", MUTED, 1.5, m="ar")
 

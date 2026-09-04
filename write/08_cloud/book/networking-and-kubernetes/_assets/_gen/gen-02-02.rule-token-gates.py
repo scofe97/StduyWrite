@@ -19,7 +19,7 @@ d = D(W, H, "ONE iptables RULE · GATES THEN ONE TARGET",
       "앞의 셋은 통과 여부만 정하고, 헤더를 고치는 것은 마지막 -j 하나뿐이다.",
       lead="맨 위 한 줄이 원본 · 번호가 토막과 아래 칸을 잇는다 · 헤더를 고치는 것은 마지막 -j 하나뿐")
 
-BW, BH, GAP = 184, 104, 56
+BW, BH, GAP = 184, 104, 62   # 코리도어 11px 수용
 CX = [48 + BW // 2 + i * (BW + GAP) for i in range(4)]           # 140 380 620 860
 CY, SKIP_CY = 372, 528
 STRIP_Y = 208                                                     # 원본 한 줄의 baseline
@@ -68,18 +68,18 @@ for cx, (t, s, tag, focal), (_, num, c) in zip(CX, NODES, [SEG[0], SEG[1], SEG[2
     d.chip(x0 + 16, y0 - 12, num, c)                              # 위 토막과 같은 번호 — 테두리 위에 얹지 않고 바깥에 세운다
     d.t(cx, CY - 20, ddx.fit(t, 12, BW - 16, t), 12, tc, MONO, "middle", 600)
     d.t(cx, CY + 4, ddx.fit(s, 12, BW - 14, s), 12, MUTED, KR)
-    d.t(cx, CY + 28, ddx.fit(tag, 10, BW - 12, tag), 10, ACC if focal else SOFT,
+    d.t(cx, CY + 28, ddx.fit(tag, 11, BW - 12, tag), 11, ACC if focal else SOFT,
         MONO if all(ord(ch) < 128 or ch in '·-.:→' for ch in tag) else KR)
 for i, lab in enumerate(EDGE):
     a, b = CX[i] + BW // 2, CX[i + 1] - BW // 2
     d.path(f"M {a+6} {CY} L {b-10} {CY}", MUTED, 1.5, m="ar")
-    d.t((a + b) // 2, CY - 16, ddx.fit(lab, 10, GAP - 6, f"corridor {lab}"), 10, MUTED, KR)
+    d.t((a + b) // 2, CY - 16, ddx.fit(lab, 11, GAP - 6, f"corridor {lab}"), 11, MUTED, KR)
 
 # ── 조건이 어긋나면 뒤 토큰은 아예 평가되지 않는다 ─────────────────────────
 d.box(CX[1] - 116, SKIP_CY - 44, 232, 88, PAPER2, RULE, 1.1, 6)
 d.t(CX[1], SKIP_CY - 14, "규칙 전체를 건너뛴다", 13, MUTED, KR, "middle", 600)
 d.t(CX[1], SKIP_CY + 8, "뒤 토큰은 평가되지 않는다", 11, MUTED, KR)
-d.t(CX[1], SKIP_CY + 28, "헤더 불변 · 다음 줄로", 10, SOFT, KR)
+d.t(CX[1], SKIP_CY + 28, "헤더 불변 · 다음 줄로", 11, SOFT, KR)
 d.path(f"M {CX[1]} {CY+BH//2+6} L {CX[1]} {SKIP_CY-44-10}", MUTED, 1.4, m="ar", dash="6 5")
 d.t(CX[1] + 14, (CY + BH // 2 + SKIP_CY - 44) // 2 + 4, "TCP 아님", 11, MUTED, KR, "start")
 
@@ -92,7 +92,7 @@ for i, (lab, val, c) in enumerate((("규칙에 걸리기 전", "dst 10.96.192.22
     d.t(x0 + BBW // 2, BY - 12, lab, 12, c, KR, "middle", 600)
     d.t(x0 + BBW // 2, BY + 14, val, 11, c, MONO)
 d.path(f"M {BX+BBW+8} {BY} L {BX+BBW+64} {BY}", ACC, 1.6, m="acc")
-d.t(BX + BBW + 36, BY - 12, "-j DNAT", 10, ACC, MONO)
+d.t(BX + BBW + 36, BY - 12, "-j DNAT", 11, ACC, MONO)
 
 d.t(36, 620, "조건이 몇 개든 패킷을 바꾸는 것은 마지막 -j 하나뿐이다 — 규칙을 읽을 때 눈이 먼저 갈 자리가 거기다",
      12, MUTED, KR, "start")

@@ -14,9 +14,9 @@ d = Seq(W, H, "docker ENGINE · runC LEAVES, shim STAYS",
 LX = ddx.lanes(d, [("dockerd", "요청을 받는다"), ("containerd-shim", "부모로 남는다"),
                    ("runC", "만들고 떠난다"), ("컨테이너", "프로세스")], y0=104, lane_w=196)
 DK, SH, RC, PR = (int(LX[k]) for k in ("dockerd", "containerd-shim", "runC", "컨테이너"))
-SEGS = [(164, 268, "① dockerd → containerd 위임"),
-        (284, 428, "② 컨테이너 생성"),
-        (444, 572, "③ runC 는 떠나고 shim 은 남는다")]
+SEGS = [(164, 268, "1 dockerd → containerd 위임"),
+        (284, 428, "2 컨테이너 생성"),
+        (444, 572, "3 runC 는 떠나고 shim 은 남는다")]
 Y_END = 596
 for a, b, lab in SEGS: ddx.band(d, a, b, lab)
 # 레일을 직접 그린다 — runC 만 기동 완료 지점에서 끊는다.

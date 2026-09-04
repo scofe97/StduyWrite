@@ -34,7 +34,7 @@ ddx.matrix(d, X0,
               ("클라우드 · 회사", "빌려 쓰거나 소유한다"), ("경우에 따라 다르다",)], WARN)],
            hdr_y=118, row_h=84, gap=12, focal_col=3)
 
-d.t(X0, 342, "하부가 Pod 주소를 아는가 — 이 한 칸이 방식을 가른다", 10, SOFT, KR, "start")
+d.t(X0, 342, "하부가 Pod 주소를 아는가 — 이 한 칸이 방식을 가른다", 11, SOFT, KR, "start")
 
 PANELS = [
     (X0, ACC, True,
