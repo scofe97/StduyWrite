@@ -79,16 +79,22 @@ tail = [
      ["장애 대응과 회고", "용량 계획"]),
 ]
 
+NOTE_H = 76
+NOTES = {'부팅에서 서비스까지': '장애를 만났을 때 여는 순서 그대로다. 로그를 보고, 유닛과 마운트를 보고, 그다음 자원 제한을 본다.', '관측과 성능': '도구부터 배우면 도구 목록만 남는다. USE 방법론을 먼저 세워야 어떤 도구를 왜 쓰는지가 정해진다.'}
+
+def ph_note(name):
+    return NOTES.get(name)
+
 def row_h(left, right, extra):
     n = max(len(left), len(right) + len(extra))
     return max(NODE_H, n * CH_H + (n - 1) * CH_GAP) + 24
 
-y = 116 + 48 + PHASE_GAP
-for _, _, _, steps in phases:
+y = 116 + 96 + 48 + PHASE_GAP
+for _n, _, _, steps in phases:
     y += NODE_H + ROW_GAP
     for s in steps:
         y += row_h(s[2], s[3], s[4]) + ROW_GAP
-    y += PHASE_GAP - ROW_GAP
+    y += (NOTE_H if ph_note(_n) else 0) + PHASE_GAP - ROW_GAP
 y += 56
 for s in tail:
     y += row_h(s[2], s[3], s[4]) + ROW_GAP
@@ -101,7 +107,30 @@ d = D(W, H, "WRITE · OS ROADMAP",
       "네트워크 스택은 network-roadmap 이 맡는다.",
       "0~9 가 DevOps 범위입니다. 절단선 아래는 그 뒤에 여는 확장입니다")
 
-ROOT_Y = 116
+READ_KINDS = [('책이 다루는 개념', 'book'), ('공식 문서 · minzkn 정리본', 'extra')]
+
+# 좌상단 읽는 법 상자 — roadmap.sh 판형의 범례 자리
+LX, LY, LW, LH = 40, 96, 320, 84
+d.box(LX, LY, LW, LH, PAPER2, RULE, 1.0)
+d.t(LX + 16, LY + 24, "읽는 법", 13, INK, KR, "start", 600)
+for _i, (_txt, _kind) in enumerate(READ_KINDS):
+    _cy = LY + 46 + _i * 20
+    if _kind == "extra":
+        d.o.append(f'<rect x="{LX + 16}" y="{_cy - 8}" width="18" height="14" rx="3" fill="{PAPER}" '
+                   f'stroke="{SOFT}" stroke-width="0.9" stroke-dasharray="3 3"/>')
+    else:
+        d.o.append(f'<rect x="{LX + 16}" y="{_cy - 8}" width="18" height="14" rx="3" '
+                   f'fill="{PAPER2}" stroke="{RULE}" stroke-width="0.9"/>')
+    d.t(LX + 44, _cy + 3, _txt, 13, MUTED, KR, "start")
+
+def draw_note(text, y):
+    d.o.append(f'<rect x="120" y="{y}" width="760" height="{NOTE_H - 12}" rx="6" '
+               f'fill="{PAPER}" stroke="{RULE}" stroke-width="0.9" stroke-dasharray="2 4"/>')
+    d.t(140, y + 26, "메모", 11, SOFT, MONO, "start")
+    d.t(140, y + 46, text, 13, MUTED, KR, "start")
+    return NOTE_H
+
+ROOT_Y = 116 + 96
 d.box(SX - 130, ROOT_Y, 260, 48, PAPER2, RULE, 1.0)
 d.t(SX, ROOT_Y + 30, "매일 만지는 것부터", 14, INK, KR, "middle", 600)
 d.line(SX, ROOT_Y + 48, SX, H - 100, RULE, 1.4)
@@ -144,6 +173,8 @@ def draw_phase(name, stage, color, steps, y):
     y += NODE_H + ROW_GAP
     for s in steps:
         y += draw_step(*s, y) + ROW_GAP
+    if ph_note(name):
+        y += draw_note(ph_note(name), y)
     return y + PHASE_GAP - ROW_GAP
 
 y = ROOT_Y + 48 + PHASE_GAP

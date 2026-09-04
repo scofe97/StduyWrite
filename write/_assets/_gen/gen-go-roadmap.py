@@ -76,16 +76,22 @@ tail = [
      ["Writing a Compiler in Go 로 잇기"]),
 ]
 
+NOTE_H = 76
+NOTES = {'관용구와 도구': '문법을 알아도 관용구를 모르면 Go 로 Java 를 쓰게 된다. 이 국면이 그 간격을 메운다.', '동시성': 'Go 를 쓰는 이유의 절반이 여기 있다. 2017년 책 대신 2023년 LCPG 8~10장으로 채웠다.'}
+
+def ph_note(name):
+    return NOTES.get(name)
+
 def row_h(left, right, extra):
     n = max(len(left), len(right) + len(extra))
     return max(NODE_H, n * CH_H + (n - 1) * CH_GAP) + 24
 
-y = 116 + 48 + PHASE_GAP
-for _, _, _, steps in phases:
+y = 116 + 96 + 48 + PHASE_GAP
+for _n, _, _, steps in phases:
     y += NODE_H + ROW_GAP
     for s in steps:
         y += row_h(s[2], s[3], s[4]) + ROW_GAP
-    y += PHASE_GAP - ROW_GAP
+    y += (NOTE_H if ph_note(_n) else 0) + PHASE_GAP - ROW_GAP
 y += 56
 for s in tail:
     y += row_h(s[2], s[3], s[4]) + ROW_GAP
@@ -98,7 +104,30 @@ d = D(W, H, "WRITE · GO ROADMAP",
       "절단선 아래 둘은 목표가 생겼을 때만 여는 조건부 단계다.",
       "실선은 책과 공식 문서가 다루는 개념, 점선은 그 밖에서 채울 키워드입니다")
 
-ROOT_Y = 116
+READ_KINDS = [('책과 공식 문서가 다루는 개념', 'book'), ('그 밖에서 채울 키워드', 'extra')]
+
+# 좌상단 읽는 법 상자 — roadmap.sh 판형의 범례 자리
+LX, LY, LW, LH = 40, 96, 320, 84
+d.box(LX, LY, LW, LH, PAPER2, RULE, 1.0)
+d.t(LX + 16, LY + 24, "읽는 법", 13, INK, KR, "start", 600)
+for _i, (_txt, _kind) in enumerate(READ_KINDS):
+    _cy = LY + 46 + _i * 20
+    if _kind == "extra":
+        d.o.append(f'<rect x="{LX + 16}" y="{_cy - 8}" width="18" height="14" rx="3" fill="{PAPER}" '
+                   f'stroke="{SOFT}" stroke-width="0.9" stroke-dasharray="3 3"/>')
+    else:
+        d.o.append(f'<rect x="{LX + 16}" y="{_cy - 8}" width="18" height="14" rx="3" '
+                   f'fill="{PAPER2}" stroke="{RULE}" stroke-width="0.9"/>')
+    d.t(LX + 44, _cy + 3, _txt, 13, MUTED, KR, "start")
+
+def draw_note(text, y):
+    d.o.append(f'<rect x="120" y="{y}" width="760" height="{NOTE_H - 12}" rx="6" '
+               f'fill="{PAPER}" stroke="{RULE}" stroke-width="0.9" stroke-dasharray="2 4"/>')
+    d.t(140, y + 26, "메모", 11, SOFT, MONO, "start")
+    d.t(140, y + 46, text, 13, MUTED, KR, "start")
+    return NOTE_H
+
+ROOT_Y = 116 + 96
 d.box(SX - 120, ROOT_Y, 240, 48, PAPER2, RULE, 1.0)
 d.t(SX, ROOT_Y + 30, "여기서 시작합니다", 14, INK, KR, "middle", 600)
 d.line(SX, ROOT_Y + 48, SX, H - 100, RULE, 1.4)
@@ -142,6 +171,8 @@ for name, stage, color, steps in phases:
     y += NODE_H + ROW_GAP
     for s in steps:
         y += draw_step(*s, y) + ROW_GAP
+    if ph_note(name):
+        y += draw_note(ph_note(name), y)
     y += PHASE_GAP - ROW_GAP
 
 d.line(40, y + 20, W - 40, y + 20, WARN, 1.4, "6 5")
