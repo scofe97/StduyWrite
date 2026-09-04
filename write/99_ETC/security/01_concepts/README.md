@@ -25,4 +25,4 @@ updated: 2026-05-29
 
 ## 경계 — 이론만 다룬다
 
-본 폴더는 프로토콜·모델·트레이드오프 같은 *이론* 만 다룬다. 같은 주제의 Spring 구현 — OAuth2 Login, JWT TokenProvider·필터, Filter Chain — 을 다루던 묶음이 있었으나 제거됐고, 현재 이 저장소에 구현 편은 없다. 공격 기법 카탈로그는 [`../03_vulnerabilities/`](../03_vulnerabilities/) 로.
+본 폴더는 프로토콜·모델·트레이드오프 같은 *이론* 만 다룬다. 같은 주제의 Spring 구현 — OAuth2 Login, JWT TokenProvider·필터, Filter Chain — 을 다루던 묶음이 있었으나 제거됐고, 현재 이 저장소에 구현 편은 없다.
