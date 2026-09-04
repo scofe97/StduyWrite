@@ -46,5 +46,7 @@ d.t(X(4) - 4, 145, "90% 부터는 가장 높다", 11, ACC, KR, "end")
 # 두 선이 6ms 안에서 겹쳐 포개진다 — 값을 옮기지 않고 그 사실을 적는다
 d.t(X(0) + 12, Y(700), "ROUND_ROBIN 과 RANDOM 은 다섯 값이 모두 6ms 안에 들어", 11, SOFT, KR, "start")
 d.t(X(0) + 12, Y(640), "선이 거의 포개집니다", 11, SOFT, KR, "start")
-d.legend(512, [("ROUND_ROBIN", MUTED), ("RANDOM", INFO), ("LEAST_CONN — 저자가 권하는 쪽", ACC)])
+# 원문의 문장은 "least connection performs better than both random and round robin" 이다.
+# "권하는" 은 그보다 강하므로 적은 그대로 옮긴다.
+d.legend(512, [("ROUND_ROBIN", MUTED), ("RANDOM", INFO), ("LEAST_CONN — 저자가 더 낫다고 적은 쪽", ACC)])
 d.save("06-01.lb-latency.svg")
