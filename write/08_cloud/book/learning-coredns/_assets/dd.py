@@ -41,9 +41,9 @@ class D:
         mk=f' marker-end="url(#{m})"' if m else ""
         ds=f' stroke-dasharray="{dash}"' if dash else ""
         s.o.append(f'<path d="{d}" fill="none" stroke="{c}" stroke-width="{sw}"{mk}{ds}/>')
-    def chip(s,cx,cy,txt,c=MUTED,size=9,pad=7):
+    def chip(s,cx,cy,txt,c=MUTED,size=11,pad=7):
         w=len(str(txt))*(size*0.62 if not any('가'<=ch<='힣' for ch in str(txt)) else size*1.0)+pad*2
-        s.o.append(f'<rect x="{cx-w/2}" y="{cy-9}" width="{w}" height="18" rx="4" fill="{PAPER}" stroke="{c}" stroke-width="0.8"/>')
+        s.o.append(f'<rect x="{cx-w/2}" y="{cy-10}" width="{w}" height="20" rx="4" fill="{PAPER}" stroke="{c}" stroke-width="0.8"/>')
         s.t(cx,cy+4,txt,size,c,MONO if not any('가'<=ch<='힣' for ch in str(txt)) else KR)
     def legend(s,y,items):
         s.line(12,y,s.w-48,y,RULE,0.8)
@@ -51,7 +51,7 @@ class D:
         x=100
         for lab,c in items:
             s.o.append(f'<rect x="{x}" y="{y+12}" width="14" height="12" rx="2" fill="{c}22" stroke="{c}" stroke-width="1.1"/>')
-            s.t(x+22,y+22,lab,10,MUTED,KR,"start"); x+=44+len(lab)*13
+            s.t(x+22,y+22,lab,11,MUTED,KR,"start"); x+=44+len(lab)*13
     def save(s,p):
         s.o.append('</svg>'); open(p,"w",encoding="utf-8").write("\n".join(s.o)); return p
 
@@ -65,7 +65,7 @@ class Seq(D):
             s.LX[nm]=x
             s.box(x-lane_w/2,y0,lane_w,44,PAPER2,RULE,1.0)
             s.t(x,y0+20,nm,12,INK,KR,"middle",600)
-            s.t(x,y0+37,sub,9,MUTED,MONO)
+            s.t(x,y0+37,sub,11,MUTED,MONO)
         s.lane_top=y0+44
         return s.LX
     def rails(s,ybot):
@@ -76,14 +76,14 @@ class Seq(D):
         s.path(f"M {x1+10*d} {y} L {x2-12*d} {y}",c,1.5,m=mk,dash=dash)
         mx=(x1+x2)/2
         s.t(mx,y-9,label,11,c,MONO,"middle",600)
-        if sub: s.t(mx,y+15,sub,9,MUTED)
+        if sub: s.t(mx,y+17,sub,11,MUTED)
     def selfmsg(s,a,label,y,c=MUTED,sub=None):
         x=s.LX[a]
         s.path(f"M {x+10} {y-10} L {x+58} {y-10} L {x+58} {y+10} L {x+13} {y+10}",c,1.4,m="ar")
-        s.t(x+68,y-4,label,10,c,MONO,"start")
-        if sub: s.t(x+68,y+11,sub,9,MUTED,KR,"start")
+        s.t(x+68,y-4,label,11,c,MONO,"start")
+        if sub: s.t(x+68,y+13,sub,11,MUTED,KR,"start")
     def state(s,a,txt,y,c):
         x=s.LX[a]
         w=len(txt)*7.0+18
         s.o.append(f'<rect x="{x-w/2}" y="{y-10}" width="{w}" height="20" rx="4" fill="{c}22" stroke="{c}" stroke-width="1.1"/>')
-        s.t(x,y+4,txt,9.5,c,MONO)
+        s.t(x,y+4,txt,11,c,MONO)
