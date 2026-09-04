@@ -37,18 +37,19 @@ for j, (name, sec) in enumerate(roles):
     d.t(role_cx(j), header_y + 40, f"원문 {sec}", 11, MUTED, MONO)
 
 # 2.4 셀 스타일 (다크)
+# 본문이 이 도식에 요구하는 구분은 "색이 붙은 칸" 하나뿐이다. 나머지를 넷으로 칠하면
+# 흰색 투명도 0.10 · 0.06 · 0.02 가 14x12px 범례 스와치에서 서로 구분되지 않아
+# 계약이 안티패턴으로 적은 "상태 구분이 죽는" 상태가 된다. 값이 있는가로만 가른다.
 STYLE = {
-    "full": ("rgba(245,245,245,0.10)", RULE, INK, 600),
-    "rw":   ("rgba(245,245,245,0.06)", RULE, INK, 400),
-    "read": (f"{SOFT}1F", RULE, MUTED, 400),
+    "full": ("rgba(245,245,245,0.08)", RULE, INK, 600),
     "none": ("rgba(245,245,245,0.02)", RULE, SOFT, 400),
 }
 cells = {
     (0, 0): ("tls.key · tls.crt", "full", None), (0, 1): ("tls.key · tls.crt", "full", "+ ca.crt"), (0, 2): ("없음", "none", None),
     (1, 0): ("안 함", "none", None), (1, 1): ("함", "full", None), (1, 2): ("원문 언급 없음", "none", None),
     (2, 0): ("게이트웨이", "full", None), (2, 1): ("게이트웨이", "full", None), (2, 2): ("백엔드", "focal", "SNI만 읽음"),
-    (3, 0): ("http · Host", "rw", None), (3, 1): ("http · Host", "rw", None), (3, 2): ("tls · sniHosts", "rw", None),
-    (4, 0): ("HTTPS", "read", None), (4, 1): ("HTTPS", "read", None), (4, 2): ("TLS", "read", None),
+    (3, 0): ("http · Host", "full", None), (3, 1): ("http · Host", "full", None), (3, 2): ("tls · sniHosts", "full", None),
+    (4, 0): ("HTTPS", "full", None), (4, 1): ("HTTPS", "full", None), (4, 2): ("TLS", "full", None),
 }
 for k, (name, hint) in enumerate(comps):
     y = row_y(k)
@@ -76,7 +77,7 @@ for k, (name, hint) in enumerate(comps):
 d.line(left_pad, legend_top, W - right_pad, legend_top, RULE, 0.8)
 d.t(left_pad, legend_top + 22, "LEGEND", 8, SOFT, MONO, "start")
 x = left_pad + 88
-for lab, fill, stroke in [("게이트웨이가 맡음", STYLE["full"][0], MUTED), ("매칭 필드", STYLE["rw"][0], MUTED), ("정보", STYLE["read"][0], SOFT), ("없음", STYLE["none"][0], SOFT), ("이 장의 논점", f"{ACC}1F", ACC)]:
+for lab, fill, stroke in [("이 장의 논점", f"{ACC}1F", ACC), ("없거나 원문에 언급 없음", STYLE["none"][0], SOFT)]:
     d.o.append(f'<rect x="{x}" y="{legend_top + 12}" width="14" height="12" rx="2" fill="{fill}" stroke="{stroke}" stroke-width="1.1"/>')
     d.t(x + 22, legend_top + 22, lab, 12, MUTED, KR, "start")
     x += 44 + len(lab) * 12
