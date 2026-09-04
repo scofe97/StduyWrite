@@ -22,7 +22,7 @@ ddx.stage_chain(d, 316,
    ("준비된 주소", "Endpoints", "ready 만 트래픽", None),
    ("규모의 병목", "객체 전체 재전송", "노드 수천 × 변경 빈도", BAD),
    ("쪼개기", "EndpointSlice", "바뀐 slice 만", ACC)],
-  ["누가 준비됐나", "커지면", "그래서"], bw=176, gap=84, x0=22)
+  ["누가 준비됐나", "커지면", "그래서"], bw=176, gap=84, x0=22, sizes=(14, 11, 11))
 d.t(36, 468, "주소 하나가 바뀔 때 무엇이 얼마나 오가느냐가 규모의 한계를 정한다", 12, MUTED, KR, "start")
 d.legend(512, [("규모의 병목", BAD), ("그래서 나온 것", ACC)])
 d.save("05-01.chapter-overview.svg"); print("ok 05-01.chapter-overview")
