@@ -9,11 +9,12 @@
 #       2026-08-28 신설. 생성기 없이 손으로 만들어져 타입 선택 단계를 건너뛴 자산이었다
 #       (러너 "생성기가 없는 SVG 는 만들지 않는다"). 좌표·값·색을 기존 SVG 그대로 옮겼다.
 # 좌표: 열 stride 128 · 행 stride 54 하나로 고정. 막대는 행 중심 ±16 에서 시작해 54 씩 늘어난다.
+import ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, INFO, PAPER2, KR, MONO
 
-W, H = 1296, 508
-COL_X0, COL_W, COL_STRIDE = 234, 118, 128
-ROW_X, ROW_W, ROW_Y0, ROW_H, ROW_STRIDE = 12, 210, 176, 48, 54
+W, H = 1000, 508   # 캔버스 상한 준수 — 열 stride 를 줄이고 두 낱말 도구명을 두 줄로 내렸다
+COL_X0, COL_W, COL_STRIDE = 200, 88, 96
+ROW_X, ROW_W, ROW_Y0, ROW_H, ROW_STRIDE = 12, 176, 176, 48, 54
 BAR_W, HALF = 26, 16
 
 LAYERS = ["L7 Application", "L6/5 Presentation·Session", "L4 Transport", "L3 Network", "L2 Data Link"]
@@ -41,15 +42,21 @@ for r, name in enumerate(LAYERS):
     y = ROW_Y0 + r * ROW_STRIDE
     d.box(ROW_X, y, ROW_W, ROW_H, "none", RULE, 0.9, 6)
     d.t(24, y + 29, name, 12, MUTED, KR, "start")
-    d.line(230, row_cy(r), 1248, row_cy(r), RULE, 0.6, "3 6")
+    d.line(196, row_cy(r), 964, row_cy(r), RULE, 0.6, "3 6")
 
 # 도구 열 머리 + 스팬 막대
 for i, (name, order, r0, r1, c) in enumerate(TOOLS):
     x, cx = COL_X0 + i * COL_STRIDE, COL_X0 + i * COL_STRIDE + COL_W // 2
     d.box(x, 96, COL_W, 56, PAPER2, RULE, 0.9, 6)
-    # `openssl s_client` 하나만 12px 로는 118px 칸을 넘는다 — 그 칸만 한 단 줄인다
-    d.t(cx, 120, name, 12 if len(name) * 7.5 < COL_W - 12 else 11, INK, MONO, "middle", 600)
-    d.t(cx, 140, order, 12, SOFT, KR)   # 한글은 12px 이상 (스타일 계약 타이포그래피)
+    # 칸이 좁아졌으므로 두 낱말짜리 이름은 줄을 나눈다 — 한 줄로 밀어 넣으려고
+    # 글꼴을 더 줄이면 한글 하한(11px)과 같은 이유로 읽기가 나빠진다.
+    parts = name.split(" ")
+    if len(parts) == 2:
+        d.t(cx, 114, ddx.fit(parts[0], 11, COL_W - 12, parts[0]), 11, INK, MONO, "middle", 600)
+        d.t(cx, 129, ddx.fit(parts[1], 11, COL_W - 12, parts[1]), 11, INK, MONO, "middle", 600)
+    else:
+        d.t(cx, 122, ddx.fit(name, 11, COL_W - 12, name), 11, INK, MONO, "middle", 600)
+    d.t(cx, 145, order, 12, SOFT, KR)   # 한글은 12px 이상 (스타일 계약 타이포그래피)
     top = row_cy(r0) - HALF
     d.box(cx - BAR_W // 2, top, BAR_W, row_cy(r1) + HALF - top, f"{c}2E", c, 1.2, 5)
 
