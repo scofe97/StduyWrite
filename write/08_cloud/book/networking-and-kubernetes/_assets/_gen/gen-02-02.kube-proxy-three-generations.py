@@ -12,10 +12,10 @@
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, OK, BAD, INFO, PAPER2, KR, MONO
 
-W, H = 1236, 532
-X0, GAP, HDR_Y, ROW_H = 24, 12, 108, 84
-COLS = [(176, "세대"), (168, "자료구조"), (196, "목적지를 찾는 법"),
-        (180, "비용"), (232, "확인 명령"), (176, "할 수 있게 된 일")]
+W, H = 1000, 532   # 캔버스 상한 준수 — 배치(왼쪽 세대 / 오른쪽 찾는 법·비용)는 본문이 지목하므로 유지하고 폭만 줄였다
+X0, GAP, HDR_Y, ROW_H = 16, 8, 108, 84
+COLS = [(140, "세대"), (112, "자료구조"), (188, "목적지를 찾는 법"),
+        (128, "비용"), (208, "확인 명령"), (136, "할 수 있게 된 일")]
 COST_COL = 3                                       # 본문의 논점이 서는 열
 
 d = D(W, H, "COMPARISON MATRIX · 02-02 KUBE-PROXY",
@@ -52,10 +52,10 @@ for r, (rc, cells) in enumerate(ROWS):
             d.box(cx0, y, cw, ROW_H, PAPER2, RULE, 1.1, 6)
         mono = all(ord(ch) < 128 for ch in main)
         my = y + (ROW_H // 2 + 5 if sub is None else 34)
-        d.t(cx0 + 20, my, ddx.fit(main, 13, cw - 40, main), 13,
+        d.t(cx0 + 14, my, ddx.fit(main, 13, cw - 28, main), 13,
             rc if (hit or i == 0) else INK, MONO if mono else KR, "start", 600)
         if sub:
-            d.t(cx0 + 20, y + 58, ddx.fit(sub, 11, cw - 40, sub), 11, MUTED,
+            d.t(cx0 + 14, y + 58, ddx.fit(sub, 11, cw - 28, sub), 11, MUTED,
                 MONO if all(ord(ch) < 128 for ch in sub) else KR, "start")
 
 d.t(X0, 448, "리스트는 규칙이 늘수록 대조 횟수가 함께 늘고, 해시는 규칙 수와 무관하다. "
