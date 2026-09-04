@@ -4,12 +4,13 @@ tags: [moc, cloud, kubernetes, argocd, service-mesh]
 status: final
 related:
   - ./kubernetes/README.md
+  - ./troubleshooting/README.md
   - ./docs/README.md
   - ./argocd/README.md
   - ./book/networking-and-kubernetes/README.md
   - ./book/container-security/README.md
   - ./book/learning-coredns/README.md
-updated: 2026-09-02
+updated: 2026-09-05
 ---
 
 # 08_cloud
@@ -23,6 +24,7 @@ updated: 2026-09-02
 | [kubernetes/](./kubernetes/README.md) | 로컬 클러스터 운영, Helm·Operator, DB/DevTools 운영, RBAC, 오토스케일링 | 20개 장 |
 | [argocd/](./argocd/README.md) | GitOps, Application, AppProject, App of Apps, ApplicationSet, Image Updater, 운영 심화 | 14개 장 |
 | [docs/](./docs/README.md) | 쿠버네티스 공식문서(k8s.io) 정독 — 섹션 슬러그 폴더 아래 궁금한 주제만 한 편씩 | 3개 편 |
+| [troubleshooting/](./troubleshooting/README.md) | 증상에서 원인으로 역추적하는 장애 사례집 — 기동·자원·설정·네트워크·스토리지·권한·관측 | 12개 편 |
 | `service-mesh/` <!-- 링크 끊김(2026-08): ./service-mesh/README.md --> | Linkerd·Istio·Cilium, 사이드카/앰비언트, mTLS, 멀티클러스터 | 26개 장 |
 | `openstack/` <!-- 링크 끊김(2026-08): ./openstack/README.md --> | IaaS 개요, AWS 서비스 대응, 오픈스택↔Kubernetes 층 관계(CMP 바닥 인프라) | 1개 장 |
 | [book/networking-and-kubernetes/](./book/networking-and-kubernetes/README.md) | 《Networking and Kubernetes》 정독 — OSI/TCP-IP, Linux 네트워킹, 컨테이너·K8s 네트워킹, Service 추상화, AWS/GCP/Azure | 정독 노트 17편 + 용어집·결정 치트시트 |
