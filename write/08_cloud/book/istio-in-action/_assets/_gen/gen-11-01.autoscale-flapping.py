@@ -15,7 +15,7 @@ d = D(W, H, "ISTIO IN ACTION · 11-01 §8",
       "붙지 않는다. 색이 붙은 상태가 그 원인 자리이고, 거기서 곧장 축소로 이어져 진동이 된다.",
       "그래서 현재 권고는 며칠·몇 주 단위의 완만한 증가에 맞추는 것입니다")
 
-SW, SH = 244, 60
+SW, SH = 200, 60
 def state(x, y, label, sub, c=None, focal=False):
     if focal:
         d.o.append(f'<rect x="{x}" y="{y}" width="{SW}" height="{SH}" rx="8" fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
@@ -27,7 +27,9 @@ def state(x, y, label, sub, c=None, focal=False):
     d.t(x + SW / 2, y + 44, sub, 11, MUTED, KR)
 
 TOP, BOT = 156, 340
-S1, S2, S3 = 88, 372, 656
+# 상자 사이 간격이 40px 뿐이라 전이 라벨의 종이 마스크(78~100px)가 상자 변을 파먹었다.
+# 상자를 200 으로 줄여 간격을 112 로 벌린다 — 가장 긴 마스크(100)가 들어간다.
+S1, S2, S3 = 96, 408, 720
 d.o.append(f'<circle cx="60" cy="{TOP + SH / 2}" r="6" fill="{INK}"/>')
 d.arrow([(68, TOP + SH / 2), (S1 - 2, TOP + SH / 2)], MUTED, "ar", 1.4)
 

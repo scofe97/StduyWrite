@@ -38,11 +38,12 @@ d.line(404, REPY[0] + 34, 404, REPY[2] + 34, INFO, 1.2)
 d.path("M 404 270 H 448", INFO, 1.3, m="info")
 
 node(452, 236, 260, 68, "RLS", "레이트 리밋 서버", "Envoy 레이트 리밋 API 구현", focal=True)
-node(740, 236, 220, 68, "KV", "Redis", "카운터를 저장한다 · Memcache 가능")
-d.path("M 708 270 H 740", ACC, 1.5, m="acc")
+# 부제가 상자(740~960)를 34px 넘겼다. 상자를 넓히고(736~976) 부제를 줄인다.
+node(736, 236, 240, 68, "KV", "Redis", "카운터 저장 · Memcache 가능")
+d.path("M 716 270 H 734", ACC, 1.5, m="acc")
 
 d.t(424, 258, "디스크립터", 11, INFO, MONO, "middle", 600)
-d.t(848, 220, "전역 카운터", 11, ACC, MONO, "middle", 600)
+d.t(856, 220, "전역 카운터", 11, ACC, MONO, "middle", 600)
 
 BY = 424
 d.box(40, BY, 924, 116, PAPER2, RULE, 1.0, 6)

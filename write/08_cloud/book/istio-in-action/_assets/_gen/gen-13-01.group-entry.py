@@ -31,30 +31,33 @@ def entity(x, y, w, tag, name, fields, focal=False):
         d.t(x + 16, y + hh + 16 + i * fh, f, 11, MUTED, MONO, "start")
     return h
 
-AX, BX, CX = 28, 376, 732
-AW, BW, CW = 272, 276, 232
+# 필드 줄이 상자를 넘쳤다 — 열 정렬용 공백이 길어 11px mono 로 최대 299px 이 되는데
+# 상자 안폭은 244 뿐이었다. 정렬을 두 칸 간격으로 줄이고 폭을 내용에 맞춰 다시 잡는다.
+# 상자 780 + 칩이 들어갈 간격 80 둘 = 940, 좌우 여백 24 · 36.
+AX, BX, CX = 24, 360, 752
+AW, BW, CW = 256, 312, 212
 AY, BY, CY = 132, 132, 168
 
 ah = entity(AX, AY, AW, "ENTITY · 템플릿", "WorkloadGroup", [
-    "# metadata.name        forum",
-    "metadata.labels        app: forum",
-    "template.ports         http: 8080",
+    "# metadata.name  forum",
+    "metadata.labels  app: forum",
+    "template.ports  http: 8080",
     "template.serviceAccount  forum-sa",
-    "template.network       vm-network",
-    "probe                  httpGet /api/healthz",
+    "template.network  vm-network",
+    "probe  httpGet /api/healthz",
 ])
 bh = entity(BX, BY, BW, "ENTITY · 인스턴스", "WorkloadEntry", [
-    "# metadata.name        forum-<주소>-<망>",
-    "spec.address           VM 의 주소",
-    "spec.labels            그룹에서 물려받는다",
-    "spec.network           vm-network",
-    "spec.serviceAccount    forum-sa",
-    "status.conditions      Healthy: True | False",
+    "# metadata.name  forum-<주소>-<망>",
+    "spec.address  VM 의 주소",
+    "spec.labels  그룹에서 물려받는다",
+    "spec.network  vm-network",
+    "spec.serviceAccount  forum-sa",
+    "status.conditions  Healthy: True | False",
 ], focal=True)
 ch = entity(CX, CY, CW, "ENTITY · 고르는 쪽", "Service", [
-    "# metadata.name        forum",
-    "spec.ports             80 -> 8080",
-    "spec.selector          app: forum",
+    "# metadata.name  forum",
+    "spec.ports  80 -> 8080",
+    "spec.selector  app: forum",
 ])
 
 my = AY + ah / 2
