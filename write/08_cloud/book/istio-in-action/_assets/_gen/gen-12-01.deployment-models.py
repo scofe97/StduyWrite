@@ -49,10 +49,15 @@ node(zx(1) + 20, ZY + 132, CW - 40, 60, "CP", "istiod", "클러스터마다 하�
 node(zx(2) + 20, ZY + 44, CW - 40, 60, "EXT", "istiod", "메시 밖에 산다", INFO)
 node(zx(2) + 20, ZY + 132, CW - 40, 60, "REM", "모든 클러스터", "전부 원격이다")
 
+# primary-remote 와 external 은 위가 아래로 설정을 내리는 관계라 화살표가 맞다.
+# primary-primary 는 컨트롤 플레인 둘이 각자 자기 클러스터를 맡는 peer 이므로
+# 화살표를 그리면 없는 방향이 생긴다. 그 열만 방향 없는 점선으로 잇는다.
 for i in range(3):
-    c = ACC if i == 1 else MUTED
-    m = "acc" if i == 1 else "ar"
-    d.path(f"M {zx(i) + CW / 2} {ZY + 104} V {ZY + 130}", c, 1.4 if i == 1 else 1.2, m=m)
+    if i == 1:
+        d.path(f"M {zx(i) + CW / 2} {ZY + 104} V {ZY + 130}", ACC, 1.4, dash="5 4")
+        d.t(zx(i) + CW / 2 + 14, ZY + 122, "서로 독립", 11, ACC, KR, "start", 600)
+        continue
+    d.path(f"M {zx(i) + CW / 2} {ZY + 104} V {ZY + 130}", MUTED, 1.2, m="ar")
 
 BY = 388
 # 저자는 자원·가용성을 primary-remote 와 primary-primary 둘 사이에서만 비교한다.

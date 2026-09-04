@@ -43,7 +43,9 @@ d.arrow([(sx(0) + SW, sy(0) + SH / 2), (sx(1) - 2, sy(0) + SH / 2)], MUTED, "ar"
 d.arrow([(sx(1) + SW, sy(0) + SH / 2), (sx(2) - 2, sy(0) + SH / 2)], MUTED, "ar", 1.4)
 d.arrow([(sx(0) + SW, sy(1) + SH / 2), (sx(1) - 2, sy(1) + SH / 2)], MUTED, "ar", 1.4)
 # 레인을 넘는 손잡이
-d.path(f"M 912 {sy(0) + SH} L 912 {sy(2) - 2}", MUTED, 1.4, m="ar")
+# 컨트롤 플레인 경로도 같은 상자로 들어가야 한다. 세로로만 내리면 그 열(636~828)
+# 오른쪽 빈 자리에서 끝나 허공을 가리킨다. ACC 손잡이가 왼쪽에서 들어오므로 대칭으로 오른쪽에서.
+d.path(f"M 912 {sy(0) + SH} L 912 {sy(2) + SH / 2} L {sx(2) + SW + 2} {sy(2) + SH / 2}", MUTED, 1.4, m="ar")
 d.path(f"M 632 {sy(1) + SH} L 632 {sy(2) + SH / 2} L {sx(2) - 2} {sy(2) + SH / 2}", ACC, 1.6, m="acc")
 d.t(500, sy(2) + SH / 2 - 12, "없으면 노출되지 않는다", 11, ACC, KR, "start", 600)   # 손잡이 수직 구간(x=632) 왼쪽에서 끝나게
 

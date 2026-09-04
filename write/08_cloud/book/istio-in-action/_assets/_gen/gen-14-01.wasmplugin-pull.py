@@ -33,7 +33,9 @@ def node(x, y, w, h, tag, name, sub, focal=False):
     d.o.append(f'<rect x="{x + 12}" y="{y + 12}" width="40" height="14" rx="2" fill="{INK}14"/>')
     d.t(x + 32, y + 23, tag, 8, INK, MONO, "middle", 600)
     d.t(x + 62, y + 24, name, 13, ACC if focal else INK, KR, "start", 600)
-    d.t(x + 62, y + 42, sub, 11, MUTED, MONO, "start")
+    # 부제는 태그 칩 아래 줄이라 칩을 피해 들여쓸 이유가 없다. x+62 로 두면
+    # "selector · pluginName · url" 이 상자 오른쪽 변에 정확히 닿아 url 이 잘려 보인다.
+    d.t(x + 16, y + 42, sub, 11, MUTED, MONO, "start")
 
 zone(40, 140, 280, 236, "CONTROL PLANE")
 zone(364, 140, 276, 236, "DATA PLANE")
