@@ -35,7 +35,7 @@ updated: 2026-04-19
 
 그래서 이 폴더는 이제 "규칙을 완화한 예외"가 아니라 **다른 규칙을 쓰는 공간**이다. 번호 prefix 자리에 날짜가 들어간다. 규칙과 근거는 [`99_ETC/README.md`](../99_ETC/README.md)가 갖는다.
 
-하위 폴더 `security/`와 `대본/`은 이미 카테고리 구조를 갖췄으므로 날짜 규칙 밖이다. `security/`는 `08_cloud/book/istio-in-action/`이 상대 링크로 SSOT 참조 중이라 경로를 고정한다.
+하위 폴더 `security/`와 `대본/`의 문서 9편도 같은 날 날짜 규칙으로 넘어갔다. 폴더 이름(`01_concepts/`, `05_network/`)은 분류 축이라 그대로 두고 파일명만 바꿨다. `security/`는 `08_cloud/book/istio-in-action/`과 `02_os/networking/`이 상대 링크로 참조하고 있어 그쪽 5건을 함께 고쳤다.
 
 ### 04_messaging/ — 10개
 
