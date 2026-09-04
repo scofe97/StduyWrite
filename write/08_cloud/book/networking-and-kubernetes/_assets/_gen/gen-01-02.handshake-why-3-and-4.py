@@ -33,7 +33,7 @@ for x, c, head, sub in ((OX, OK, "열 때 — 3-way", "셋으로 줄어든다"),
                         (CX_, WARN, "닫을 때 — 4-way", "넷 그대로")):
     d.tone(x, HDR_Y, CW, 44, c, 6, "18", 1.2)
     d.t(x + CW / 2, HDR_Y + 20, head, 12, c, KR, "middle", 600)
-    d.t(x + CW / 2, HDR_Y + 37, sub, 10, MUTED)
+    d.t(x + CW / 2, HDR_Y + 37, sub, 11, MUTED)
 
 ROWS = [("1. 내 말이 가는지",   "SYN", "내가 SYN",   "FIN", "내가 FIN"),
         ("2. 그 답이 오는지",   None,  None,        "ACK", "상대가 ACK"),
@@ -46,7 +46,7 @@ for i, (label, _o, _os, cl, cls) in enumerate(ROWS):
     d.t(LX + 14, y + 38, label, 12, INK, KR, "start")
     d.tone(CX_, y, CW, ROW_H, WARN, 6, "0E", 0.9)
     d.t(CX_ + CW / 2, y + 30, cl, 13, WARN, MONO, "middle", 600)
-    d.t(CX_ + CW / 2, y + 48, cls, 10, MUTED)
+    d.t(CX_ + CW / 2, y + 48, cls, 11, MUTED)
 
 # 여는 쪽 — 1행은 그대로, 2·3행은 한 칸으로 합쳐지고, 4행이 다시 그대로
 MCY = MERGE_Y + MERGE_H / 2
@@ -56,7 +56,7 @@ def open_cell(i):
     y = ROW_Y + STRIDE * i
     d.tone(OX, y, CW, ROW_H, OK, 6, "0E", 0.9)
     d.t(OX + CW / 2, y + 30, ROWS[i][1], 13, OK, MONO, "middle", 600)
-    d.t(OX + CW / 2, y + 48, ROWS[i][2], 10, MUTED)
+    d.t(OX + CW / 2, y + 48, ROWS[i][2], 11, MUTED)
 
 
 open_cell(0)
@@ -68,8 +68,8 @@ open_cell(3)
 # 왼쪽 대괄호가 어느 두 행이 합쳐졌는지를 물어 준다
 R2, R3 = ROW_Y + STRIDE + ROW_H / 2, ROW_Y + STRIDE * 2 + ROW_H / 2
 d.path(f"M {OX-10} {R2} L {OX-4} {R2} L {OX-4} {R3} L {OX-10} {R3}", ACC, 1.4)
-d.chip(OX - 7.0, MCY, "합쳐짐", ACC, 9)
+d.chip(OX - 7.0, MCY, "합쳐짐", ACC, 11)
 
-d.legend(486, [("개별 패킷", OK), ("한 패킷으로 병합", ACC), ("닫을 때는 못 합침", WARN)])
+d.legend(486, [("개별 패킷", OK), ("한 패킷으로 병합", ACC), ("닫을 때는 대개 못 합침", WARN)])
 d.save("01-02.handshake-why-3-and-4.svg")
 print("ok handshake-why-3-and-4")

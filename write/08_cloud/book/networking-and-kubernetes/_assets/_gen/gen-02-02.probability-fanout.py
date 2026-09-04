@@ -28,9 +28,9 @@ def bx(cx, cy, w, h, t, s, tag, c=None, focal=False):
     else:
         d.box(x, y, w, h, PAPER2, c or RULE, 1.1, 6); tc = c or INK
     d.t(x + 16, cy - 8, ddx.fit(t, 12, w // 2, t), 12, tc, KR, "start", 600)
-    d.t(x + 16, cy + 14, ddx.fit(s, 10, w // 2 + 20, s), 10, MUTED,
+    d.t(x + 16, cy + 14, ddx.fit(s, 11, w // 2 + 20, s), 11, MUTED,
         MONO if all(ord(ch) < 128 or ch in '·!' for ch in s) else KR, "start")
-    d.t(x + w - 16, cy + 4, ddx.fit(tag, 10, w // 2 - 20, tag), 10, SOFT,
+    d.t(x + w - 16, cy + 4, ddx.fit(tag, 11, w // 2 - 20, tag), 11, SOFT,
         MONO if all(ord(ch) < 128 or ch in '·-' for ch in tag) else KR, "end")
 
 ddx.band(d, 104, 616, "확률이 다른 이유는 앞 규칙이 걸러 간 뒤의 남은 몫을 나누기 때문이다")
@@ -56,7 +56,7 @@ for lcy, rcy, lab in zip(LCY[1:], RCY, ["1/3 적중", "남은 절반", "마지�
     d.path(f"M {LX+LW//2+6} {lcy} L {RX-RW//2-8} {rcy}", MUTED, 1.4, m="ar")
     # 라벨은 두 점선 경계(448 · 530) 한가운데에 둔다 — 선 중점(500)에 두면
     # '마지막 하나' 처럼 긴 라벨이 오른쪽 경계에 2px 까지 붙는다.
-    d.t((LEFT[0] + LEFT[2] + RIGHT[0]) // 2, lcy - 14, lab, 10, MUTED, KR)
+    d.t((LEFT[0] + LEFT[2] + RIGHT[0]) // 2, lcy - 14, lab, 11, MUTED, KR)
 
 d.t(36, 592, "1/3 이 빗나가면 2/3 이 남고, 그 절반이 다시 1/3 이다 — 마지막은 조건 없이 나머지 전부를 받는다",
      12, MUTED, KR, "start")

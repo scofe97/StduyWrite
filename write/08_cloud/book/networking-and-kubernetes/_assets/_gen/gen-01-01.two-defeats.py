@@ -34,7 +34,7 @@ for cx, h in zip(CX, HEAD):
 for y, name, sub, nc, cells in ROWS:
     d.box(LX, y, LW, RH, PAPER2, nc, 1.1, 6)
     d.t(LX + LW // 2, y + 44, name, 16, nc, KR, "middle", 600)
-    d.t(LX + LW // 2, y + 70, sub, 10, MUTED, MONO)
+    d.t(LX + LW // 2, y + 70, sub, 11, MUTED, MONO)
     for cx, (lines, c) in zip(CX, cells):
         if c is ACC:
             d.tone(cx, y, CW, RH, ACC, 6, "12", 1.4)

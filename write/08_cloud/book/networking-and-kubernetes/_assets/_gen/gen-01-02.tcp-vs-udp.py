@@ -26,7 +26,7 @@ d = D(W, H, "COMPARISON MATRIX · 01-02 TRANSPORT",
       lead="헤더에 무엇을 두느냐가 할 수 있는 일을 정하고, 그 능력이 다시 값으로 돌아옵니다.")
 
 d.box(X0, HDR_Y, LW, HDR_H, "none", RULE, 0.9)
-d.t(X0 + LW / 2, HDR_Y + 27, "프로토콜 vs. 축", 9, SOFT)
+d.t(X0 + LW / 2, HDR_Y + 27, "프로토콜 vs. 축", 11, SOFT)
 for cx, name in zip(CX, ("헤더에 무엇을 두나", "그래서 할 수 있는 일", "그래서 치르는 값")):
     d.box(cx, HDR_Y, CW, HDR_H, PAPER2, RULE, 0.9)
     d.t(cx + CW / 2, HDR_Y + 27, name, 12, INK, KR, "middle", 600)
@@ -45,14 +45,14 @@ for r, (proto, sub, rc, cells) in enumerate(ROWS):
     y = ROW_Y + STRIDE * r
     d.tone(X0, y, LW, ROW_H, rc, 6, "14", 1.2)
     d.t(X0 + LW / 2, y + 42, proto, 20, rc, KR, "middle", 600)
-    d.t(X0 + LW / 2, y + 62, sub, 10, MUTED)
+    d.t(X0 + LW / 2, y + 62, sub, 11, MUTED)
     for cx, (top, bot, c) in zip(CX, cells):
         d.box(cx, y, CW, ROW_H, f"{c}12", f"{c}59", 1.0)
         # 가운데 정렬이라 여백은 양쪽으로 갈린다 — 안쪽 4px 씩만 빼고 잰다.
         # fit 의 폭 추정은 일부러 넉넉해서(· 를 전각으로 센다) 16px 을 빼면
         # 실제로는 들어가는 'Src · Dst · Length · Checksum' 이 헛경보로 걸린다.
         d.t(cx + CW / 2, y + 38, ddx.fit(top, 12, CW - 8, top), 12, INK, KR, "middle", 600)
-        d.t(cx + CW / 2, y + 62, ddx.fit(bot, 10, CW - 8, bot), 10, c)
+        d.t(cx + CW / 2, y + 62, ddx.fit(bot, 11, CW - 8, bot), 11, c)
     for a, b in zip(CX, CX[1:]):        # "그래서" — 인과가 왼쪽에서 오른쪽으로 흐른다
         d.path(f"M {a+CW+2} {y+ROW_H/2} L {b-2} {y+ROW_H/2}", SOFT, 1.2, m="soft")
 

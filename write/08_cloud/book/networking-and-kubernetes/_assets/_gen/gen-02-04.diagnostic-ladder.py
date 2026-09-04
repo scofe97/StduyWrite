@@ -34,15 +34,15 @@ for i, (tag, name, symptom, cmd, focal) in enumerate(BANDS):
         ACC if focal else INK, KR, "start", 600)
     d.t(X0 + 268, y + RH // 2 + 5, ddx.fit(symptom, 12, 300, symptom), 12,
         ACC if focal else MUTED, MONO if symptom[0].isupper() else KR, "start")
-    d.t(X0 + WID - 20, y + RH // 2 + 4, cmd, 10, SOFT, MONO, "end")
+    d.t(X0 + WID - 20, y + RH // 2 + 4, cmd, 11, SOFT, MONO, "end")
 
 # 방향 표시 — 스택 바깥 왼쪽 여백
 BOT = TOP + len(BANDS) * RH
 d.path(f"M 72 {BOT-12} L 72 {TOP+12}", MUTED, 1.4, m="ar")
-d.t(56, (TOP + BOT) // 2, "진", 10, MUTED, KR, "middle")
-d.t(56, (TOP + BOT) // 2 + 14, "단", 10, MUTED, KR, "middle")
-d.t(56, (TOP + BOT) // 2 + 28, "순", 10, MUTED, KR, "middle")
-d.t(56, (TOP + BOT) // 2 + 42, "서", 10, MUTED, KR, "middle")
+d.t(56, (TOP + BOT) // 2, "진", 11, MUTED, KR, "middle")
+d.t(56, (TOP + BOT) // 2 + 14, "단", 11, MUTED, KR, "middle")
+d.t(56, (TOP + BOT) // 2 + 28, "순", 11, MUTED, KR, "middle")
+d.t(56, (TOP + BOT) // 2 + 42, "서", 11, MUTED, KR, "middle")
 
 d.t(40, BOT + 40, "실습에서 아래 두 단을 연달아 맞았습니다. 라우팅 줄이 없어 한 번, br0 주소를 10.0.1.1 로 "
                   "잘못 적어 ARP 가 실패해 또 한 번입니다.", 12, MUTED, KR, "start")

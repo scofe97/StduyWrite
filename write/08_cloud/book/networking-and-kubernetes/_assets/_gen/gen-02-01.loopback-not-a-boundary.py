@@ -40,13 +40,13 @@ for cx, (l, s, t, c, focal) in zip(CX, NODES):
         d.box(x, y, BW, BH, PAPER2, c or RULE, 1.1, 6); tc = c or INK
     d.t(cx, CY - 22, ddx.fit(l, 12, BW - 14, l), 12, tc, KR, "middle", 600)
     d.t(cx, CY + 0, ddx.fit(s, 11, BW - 12, s), 11, MUTED, KR)
-    d.t(cx, CY + 26, ddx.fit(t, 10, BW - 10, t), 10, ACC if focal else SOFT, KR)
+    d.t(cx, CY + 26, ddx.fit(t, 11, BW - 10, t), 11, ACC if focal else SOFT, KR)
 
 for i, lab in enumerate(EDGE):
     a, b = CX[i] + BW // 2, CX[i + 1] - BW // 2
     c = ACC if i == 2 else MUTED                                 # 링을 뚫고 들어가는 그 한 걸음
     d.path(f"M {a+6} {CY} L {b-8} {CY}", c, 1.8 if c is ACC else 1.5, m="acc" if c is ACC else "ar")
-    if lab: d.t((a + b) // 2, CY - BH // 2 - 12, lab, 10, c, KR)
+    if lab: d.t((a + b) // 2, CY - BH // 2 - 12, lab, 11, c, KR)
 d.t((CX[2] + CX[3]) // 2, CY + BH // 2 + 26, "여기서 경계가 뚫린다", 11, ACC, KR)
 
 d.t(36, 476, "주소가 로컬이라고 해서 밖에서 못 닿는 것은 아니다 — 닿을 수 있게 하는 설정이 "

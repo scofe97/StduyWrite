@@ -29,7 +29,7 @@ def sec(cx, cy, name, sub, tag, c=None, focal=False):
         d.box(x, y, BW, BH, PAPER2, c or RULE, 1.1, 6); tc = c or INK
     d.t(cx, cy - 24, name, 13, tc, KR, "middle", 600)
     d.t(cx, cy - 2, ddx.fit(sub, 11, BW - 16, sub), 11, MUTED, KR)
-    d.t(cx, cy + 26, ddx.fit(tag, 10, BW - 12, tag), 10, SOFT, KR)
+    d.t(cx, cy + 26, ddx.fit(tag, 11, BW - 12, tag), 11, SOFT, KR)
 
 ddx.band(d, 104, 548, "통제된 lo0 에서 시작해 실제 랜인 en0 으로 넓힌다")
 for (rx, ry, rw, rh), lab, c in [(RING_LO, "lo0 캡처 — 잡음 없는 통제 환경", INFO),

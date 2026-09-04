@@ -22,7 +22,7 @@ def box(cx, cy, t, s, tag, c=None, w=BW):
     d.t(cx, cy - 20, ddx.fit(t, 12, w - 16, t), 12, c or INK,
         MONO if all(ord(ch) < 128 or ch == '@' for ch in t) else KR, "middle", 600)
     d.t(cx, cy + 2, ddx.fit(s, 11, w - 14, s), 11, MUTED, KR)
-    d.t(cx, cy + 26, ddx.fit(tag, 10, w - 12, tag), 10, SOFT, KR)
+    d.t(cx, cy + 26, ddx.fit(tag, 11, w - 12, tag), 11, SOFT, KR)
 
 ddx.band(d, 104, 544, "Pod 가 늘면 veth 가 하나씩 늘어 브리지에 붙는다")
 for (rx, ry, rw, rh), lab, c in [(POD, "Pod 네트워크 네임스페이스 — 자기 스택 한 벌", INFO),

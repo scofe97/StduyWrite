@@ -22,7 +22,7 @@ def box(cx, cy, t, s, tag, c=None, w=BW):
     d.t(cx, cy - 20, ddx.fit(t, 13, w - 18, t), 13, c or INK, KR, "middle", 600)
     d.t(cx, cy + 2, ddx.fit(s, 11, w - 16, s), 11, MUTED,
         MONO if all(ord(ch) < 128 or ch in ':.' for ch in s) else KR)
-    d.t(cx, cy + 26, ddx.fit(tag, 10, w - 14, tag), 10, SOFT, KR)
+    d.t(cx, cy + 26, ddx.fit(tag, 11, w - 14, tag), 11, SOFT, KR)
 
 ddx.band(d, 104, 556, "밖에서 두드릴 때 쓰는 포트와 안에서 열려 있는 포트가 다르다")
 rx, ry, rw, rh = RING
@@ -36,7 +36,7 @@ box(*WEB, "go-web", "172.17.0.2:8080", "8080 은 여기서만 열림", OK)
 box(*DNS, "dnsutils", "dnsutils:1.3 이미지", "자기 lo 는 자기 것")
 
 d.path(f"M {HOST[0]+BW//2+6} {HOST[1]} L {D0[0]-BW//2-10} {D0[1]}", MUTED, 1.5, m="ar")
-d.t((HOST[0] + D0[0]) // 2, HOST[1] - 16, "호스트 포트 80", 10, MUTED, KR)
+d.t((HOST[0] + D0[0]) // 2, HOST[1] - 16, "호스트 포트 80", 11, MUTED, KR)
 # 부채꼴이지만 통로 한가운데(y=346)는 아래의 '안 통한다' 라벨 자리다. 그래서 줄기를
 # 세우지 않고 docker0 의 오른쪽 변 두 지점(310 / 382)에서 각각 나가 x=600 에서 꺾는다.
 # 세로 구간이 276~310 · 382~416 으로 갈려, 그 사이 342~353 의 라벨과 닿지 않는다.

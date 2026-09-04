@@ -32,7 +32,7 @@ def box(cx, cy, w, h, t, s, tag, c=None, focal=False, dash=False):
     d.t(cx, cy - 14, ddx.fit(t, 13, w - 18, t), 13, tc, KR, "middle", 600)
     d.t(cx, cy + 8, ddx.fit(s, 11, w - 16, s), 11, MUTED,
         MONO if all(ord(ch) < 128 or ch in ':~' for ch in s) else KR)
-    if tag: d.t(cx, cy + 30, ddx.fit(tag, 10, w - 14, tag), 10, SOFT, KR)
+    if tag: d.t(cx, cy + 30, ddx.fit(tag, 11, w - 14, tag), 11, SOFT, KR)
 
 ddx.band(d, 104, 608, "안쪽에서 부르면 ClusterIP 로 끝나고, 밖에서 오면 겹을 하나씩 더 지난다")
 for (rx, ry, rw, rh), lab, sub, c in [
@@ -47,7 +47,7 @@ box(CIP[0] + CIP[2] // 2, CIP[1] + CIP[3] // 2, CIP[2], CIP[3],
 box(HL[0] + HL[2] // 2, HL[1] + HL[3] // 2, HL[2], HL[3],
     "Headless", "clusterIP: None", "DNS 가 명단을 반환", OK, dash=True)
 d.path(ddx.elbow(CIP[0]+CIP[2]+6, CIP[1]+CIP[3]//2, HL[0]-10, HL[1]+HL[3]//2), OK, 1.4, m="ok", dash="6 5")
-d.t(HL[0] + HL[2] // 2, HL[1] - 14, "LB 를 뺀 변형", 10, OK, KR)
+d.t(HL[0] + HL[2] // 2, HL[1] - 14, "LB 를 뺀 변형", 11, OK, KR)
 
 for cx, cy, t, s in CALL: box(cx, cy, CW, CH, t, s, "", INFO)
 for (cx, cy, *_), tx in zip(CALL, [LB[0], NP[0], CIP[0]]):

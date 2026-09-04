@@ -24,7 +24,7 @@ def rt(cx, cy, title, sub, tag, c=None):
     d.box(x, y, BW, BH, PAPER2, c or RULE, 1.1, 6)
     d.t(cx, cy - 16, title, 12, c or INK, KR, "middle", 600)
     d.t(cx, cy + 4, ddx.fit(sub, 11, BW - 18, sub), 11, MUTED, KR)
-    d.t(cx, cy + 26, tag, 10, SOFT, MONO)
+    d.t(cx, cy + 26, tag, 11, SOFT, MONO)
 
 ddx.band(d, 104, 548, "번호는 라우터 대수와 무관하다 — 조직 하나에 하나씩 붙는다")
 for (rx, ry, rw, rh), lab in [(R1, "AS 100 — 사업자 한 곳"), (R2, "AS 200 — 다른 사업자")]:

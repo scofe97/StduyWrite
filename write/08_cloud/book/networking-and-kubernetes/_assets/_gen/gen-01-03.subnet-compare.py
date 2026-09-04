@@ -41,13 +41,13 @@ d.line(LX, 338, W - 48, 338, RULE, 0.8)
 
 for j, (dst, verdict, note, c, mk) in enumerate(CASES):
     y = 352 + 54 * j
-    d.t(20, y + 22, "목적지", 10, SOFT, KR, "start")
+    d.t(20, y + 22, "목적지", 11, SOFT, KR, "start")
     d.box(96, y, 200, 40, PAPER2, RULE, 0.9)
     d.t(196, y + 25, dst, 12, INK, MONO)
     d.path(f"M 310 {y+20} L 360 {y+20}", c, 1.4, m=mk)
     d.tone(372, y, 220, 40, c, 6, "16", 1.3)
     d.t(482, y + 25, verdict, 11, c, KR, "middle", 600)
-    d.t(612, y + 25, note, 10, MUTED, KR, "start")
+    d.t(612, y + 25, note, 11, MUTED, KR, "start")
 
 d.legend(472, [("같은 서브넷", OK), ("다른 서브넷", BAD), ("비트 표현", INFO)])
 d.save("01-03.subnet-compare.svg")

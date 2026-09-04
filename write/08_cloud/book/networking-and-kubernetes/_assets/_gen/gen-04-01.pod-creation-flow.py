@@ -14,9 +14,9 @@ d = Seq(W, H, "POD CREATION · WHO ACTUALLY BUILDS IT",
 LX = ddx.lanes(d, [("API 서버", "상태를 쥔다"), ("스케줄러", "이름만 적는다"),
                    ("kubelet", "실제로 만든다"), ("CNI", "주소와 경로")], y0=104, lane_w=196)
 API, SCH, KUB, CNI = (int(LX[k]) for k in ("API 서버", "스케줄러", "kubelet", "CNI"))
-SEGS = [(164, 292, "① 스케줄러는 노드 이름만 적는다", False),
-        (308, 396, "② Kubelet 이 자기 몫을 발견한다", False),
-        (412, 556, "③ CRI 로 컨테이너, CNI 로 네트워크", True)]
+SEGS = [(164, 292, "1 스케줄러는 노드 이름만 적는다", False),
+        (308, 396, "2 Kubelet 이 자기 몫을 발견한다", False),
+        (412, 556, "3 CRI 로 컨테이너, CNI 로 네트워크", True)]
 Y_END = 576
 for a, b, lab, f in SEGS: ddx.band(d, a, b, lab, focal=f)
 d.rails(Y_END)

@@ -27,10 +27,10 @@ def box(cx, cy, t, s, tag, c=None, focal=False, w=BW):
     d.t(cx, cy - 22, ddx.fit(t, 13, w - 18, t), 13, tc, KR, "middle", 600)
     d.t(cx, cy + 0, ddx.fit(s, 11, w - 16, s), 11, MUTED,
         MONO if all(ord(ch) < 128 or ch in ':.…-' for ch in s) else KR)
-    d.t(cx, cy + 26, ddx.fit(tag, 10, w - 14, tag), 10, SOFT, KR)
+    d.t(cx, cy + 26, ddx.fit(tag, 11, w - 14, tag), 11, SOFT, KR)
 
 ddx.band(d, 104, 568, "확률 규칙은 서비스 체인에 있고, 주소를 바꾸는 DNAT 는 그 아래에 있다")
-for cx, s in zip(CX + [EP_X], ["① 도착", "② 진입 체인", "③ 서비스 체인", "④ 엔드포인트 체인"]):
+for cx, s in zip(CX + [EP_X], ["1 도착", "2 진입 체인", "3 서비스 체인", "4 엔드포인트 체인"]):
     d.t(cx, 196, s, 12, SOFT, KR, "middle", 600)
 
 box(CX[0], CY, "패킷", "10.96.0.10:53", "kube-dns ClusterIP", INFO)
@@ -42,7 +42,7 @@ box(EP_X, EP_Y[1], "엔드포인트 B", "DNAT 다른 CoreDNS", "앞에서 안 �
 for i, lab in enumerate(["도착", "매칭"]):
     a, b = CX[i] + BW // 2, CX[i + 1] - BW // 2
     d.path(f"M {a+6} {CY} L {b-10} {CY}", MUTED, 1.5, m="ar")
-    d.t((a + b) // 2, CY - 16, ddx.fit(lab, 10, GAP - 4, lab), 10, MUTED, KR)
+    d.t((a + b) // 2, CY - 16, ddx.fit(lab, 11, GAP - 4, lab), 11, MUTED, KR)
 # 부채꼴 — 통로가 88px 뿐이라 줄기를 세우면 라벨 자리가 없어진다. 서비스 체인의
 # 오른쪽 변 두 지점에서 따로 나간다. 엔드포인트 A(280)는 체인 상자의 y 범위
 # (246~354) 안이라 곧은 가로 한 줄이면 되고, B 만 x=620 에서 한 번 꺾는다.
@@ -50,8 +50,8 @@ for i, lab in enumerate(["도착", "매칭"]):
 A_X, B_X = CX[2] + BW // 2 + 6, EP_X - EP_W // 2 - 10
 d.path(f"M {A_X} {EP_Y[0]} L {B_X} {EP_Y[0]}", ACC, 1.5, m="acc")
 d.path(f"M {A_X} {CY+40} L 620 {CY+40} L 620 {EP_Y[1]} L {B_X} {EP_Y[1]}", ACC, 1.5, m="acc")
-d.t(B_X, EP_Y[0] - 12, ddx.fit("확률 0.5", 10, B_X - A_X - 4, "fan 확률 0.5"), 10, ACC, KR, "end")
-d.t(B_X, EP_Y[1] + 16, ddx.fit("나머지 전부", 10, B_X - A_X - 4, "fan 나머지 전부"), 10, ACC, KR, "end")
+d.t(B_X, EP_Y[0] - 12, ddx.fit("확률 0.5", 11, B_X - A_X - 4, "fan 확률 0.5"), 11, ACC, KR, "end")
+d.t(B_X, EP_Y[1] + 16, ddx.fit("나머지 전부", 11, B_X - A_X - 4, "fan 나머지 전부"), 11, ACC, KR, "end")
 
 d.t(36, 540, "확률은 서비스 체인이 고르고, 고른 뒤 목적지를 실제로 바꾸는 것은 엔드포인트 체인의 DNAT 다",
      12, MUTED, KR, "start")

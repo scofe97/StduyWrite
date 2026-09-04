@@ -39,8 +39,8 @@ d.msg(C, S, "ACK  ack=y+1", 398, OK, "ok", sub="y 확인")
 # 같은 상태인데 시점이 다르다 — 칩 높이가 그 시차다.
 d.state(C, "ESTABLISHED", 440, OK)
 d.state(S, "ESTABLISHED", 472, OK)
-d.t(MID + 12, 440, "클라이언트가 먼저 열린다", 10, MUTED)
-d.t(MID + 12, 472, "서버는 3번째가 도착해야 열린다", 10, MUTED)
+d.t(MID + 12, 440, "클라이언트가 먼저 열린다", 11, MUTED)
+d.t(MID + 12, 472, "서버는 3번째가 도착해야 열린다", 11, MUTED)
 
 d.legend(502, [("연결 요청·확인", OK), ("대기 상태", WARN), ("번호 두 개가 한 패킷에", ACC)])
 d.save("01-02.tcp-open-3way.svg")

@@ -42,7 +42,7 @@ for cx, (l, sub, tag, c) in zip(CX, NODES):
     d.t(cx, CY - 24, ddx.fit(l, 14, BW - 18, l), 14, tc, KR, "middle", 600)
     d.t(cx, CY + 2, ddx.fit(sub, 11, BW - 16, sub), 11, MUTED,
         MONO if all(ord(ch) < 128 or ch in '·' for ch in sub) else KR)
-    d.t(cx, CY + 30, ddx.fit(tag, 10, BW - 14, tag), 10, SOFT,
+    d.t(cx, CY + 30, ddx.fit(tag, 11, BW - 14, tag), 11, SOFT,
         MONO if all(ord(ch) < 128 or ch in '·' for ch in tag) else KR)
 for i, lab in enumerate(EDGE):
     a, b = CX[i] + BW // 2, CX[i + 1] - BW // 2

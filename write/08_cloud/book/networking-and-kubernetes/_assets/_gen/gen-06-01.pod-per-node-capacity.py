@@ -14,12 +14,12 @@ d = D(W, H, "INSTANCE IP CAPACITY = POD LIMIT",
       lead="Pod 마다 ENI 보조 IP 하나 — 인스턴스의 IP 수가 곧 Pod 수다")
 ddx.band(d, 104, 496, "타입을 고르는 순간 노드당 Pod 상한이 함께 정해진다")
 ddx.stage_chain(d, 316,
-  ["① 인스턴스 타입", "② IP 수용량", "③ 최대 Pod", "④ 실제 가용"],
+  ["1 인스턴스 타입", "2 IP 수용량", "3 최대 Pod", "4 실제 가용"],
   [("타입 선택", "m5.large", "eksctl 기본값", None),
    ("ENI × IP", "(ENI 수 × (IP-1))", "+2 를 더한다", None),
    ("상한 29", "노드 하나가 담는 수", "넘으면 Pod 는 waiting", WARN),
    ("실제 27", "시스템 Pod 를 뺀 값", "CNI·kube-proxy 상주", ACC)],
-  ["수용량이", "공식으로", "빼고 나면"])
+  ["수용량이", "공식으로", "빼고 나면"], sizes=(14, 11, 11))
 d.t(36, 468, "상한에 걸린 Pod 는 스케줄되지 않고 waiting 으로 남는다 — 노드를 늘리거나 타입을 키워야 한다",
      12, MUTED, KR, "start")
 d.legend(512, [("걸리면 스케줄 안 됨", WARN), ("실제로 쓸 수 있는 수", ACC)])

@@ -44,18 +44,18 @@ for i in (0, 1):
 
 AVAIL = W - LX - 48
 # 첫 상태에도 그것을 만든 명령이 붙어야 입력→결과 짝이 빠짐없이 선다
-d.t(LX, 168, "ip netns add ns1", 10, INK, MONO, "start")
+d.t(LX, 168, "ip netns add ns1", 11, INK, MONO, "start")
 d.t(LX, 194, "빈 네임스페이스 둘을 만든다 — 아직 장치는 없다", 12, MUTED, KR, "start")
 d.path(f"M {SX+SW+16} 176 L {LX-12} 176", RULE, 1.0, dash="4 4")
 
 G1 = [("ip link add veth1 type veth peer name veth1-br", INK, 252),
       ("ip link add br0 type bridge", INK, 276)]
 for cmd, c, y in G1:
-    d.t(LX, y, ddx.fit(cmd, 10, AVAIL, cmd), 10, c, MONO, "start")
+    d.t(LX, y, ddx.fit(cmd, 11, AVAIL, cmd), 11, c, MONO, "start")
 d.t(LX, 302, "관 하나에 두 끝 — 둘 다 기본 netns 에 생긴다", 12, MUTED, KR, "start")
 d.path(f"M {SX+SW+16} 272 L {LX-12} 272", RULE, 1.0, dash="4 4")
 
-d.t(LX, 452, ddx.fit("ip link set veth1 netns ns1", 10, AVAIL, "move"), 10, ACC, MONO, "start")
+d.t(LX, 452, ddx.fit("ip link set veth1 netns ns1", 11, AVAIL, "move"), 11, ACC, MONO, "start")
 d.t(LX, 478, "안쪽 끝만 옮긴다 — 이때 경계를 넘는다", 12, ACC, KR, "start")
 d.path(f"M {SX+SW+16} 464 L {LX-12} 464", ACC, 1.2, dash="4 4")
 

@@ -15,7 +15,7 @@
 # 이력: 2026-08-28 신설. 생성기 없이 손으로 만들어진 SVG 였다. 값·좌표를 그대로 옮겼다.
 from dd import D, INK, MUTED, SOFT, RULE, OK, BAD, INFO, KR, MONO
 
-W, H = 1080, 406
+W, H = 1000, 406   # 캔버스 상한 준수 (CARD_W 는 W 에서 파생)
 X0, GAP, CARD_Y, CARD_H = 12, 26, 132, 196
 CARD_W = (W - 48 - X0 - GAP * 3) / 4
 
@@ -44,12 +44,12 @@ for i, (tag, title, sub, c, bullets) in enumerate(CARDS):
     d.line(x + 18, 182, x + CARD_W - 18, 182, f"{c}44", 0.9)
     d.t(cx, 206, sub, 11, INK)
     for j, b in enumerate(bullets):
-        d.t(x + 18, 236 + j * 24, b, 10, MUTED, KR, "start")
+        d.t(x + 18, 236 + j * 24, b, 11, MUTED, KR, "start")
     if i < len(CARDS) - 1:
         d.path(f"M {x+CARD_W+3} {CARD_Y+CARD_H/2} L {x+CARD_W+GAP-4} {CARD_Y+CARD_H/2}",
                MUTED, 1.6, m="ar")
 
-d.t(W / 2, 350, "붉은 칸이 이 편의 결론입니다 — 마지막 칸에서 길이 갈립니다.", 10, MUTED)
+d.t(W / 2, 350, "붉은 칸이 이 편의 결론입니다 — 마지막 칸에서 길이 갈립니다.", 11, MUTED)
 d.legend(362, [("도입·전개", INFO), ("핵심·결론", BAD), ("다음으로 이어짐", OK)])
 d.save("01-02.chapter-overview.svg")
 print("ok chapter-overview")

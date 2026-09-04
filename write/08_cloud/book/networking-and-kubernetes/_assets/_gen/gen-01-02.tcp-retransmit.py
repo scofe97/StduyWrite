@@ -48,14 +48,14 @@ for i, (fwd, label, sub, c, mk, sw, dash) in enumerate(MSGS):
     else:
         d.path(f"M {RX-10} {y} L {LX+12} {y}", c, sw, m=mk, dash=dash)
     d.t(MID, y - 9, label, 11, c, MONO, "middle", 600)
-    d.t(MID, y + 15, sub, 9, MUTED)
+    d.t(MID, y + 15, sub, 11, MUTED)
 
 # 붙들린 구간 — seq=201 이 도착한 줄부터 재전송이 도착할 때까지
 HOLD_Y0, HOLD_H = 316, 228
 d.o.append(f'<rect x="{RX+26}" y="{HOLD_Y0}" width="20" height="{HOLD_H}" rx="10" '
            f'fill="{WARN}2E" stroke="{WARN}" stroke-width="1.3"/>')
-d.t(RX + 58, HOLD_Y0 + HOLD_H / 2 - 6, "버퍼에 붙들린 구간", 10, WARN, KR, "start")
-d.t(RX + 58, HOLD_Y0 + HOLD_H / 2 + 10, "앱으로 못 올라간다", 9, MUTED, KR, "start")
+d.t(RX + 46, HOLD_Y0 + HOLD_H / 2 - 6, "버퍼에 붙들린 구간", 11, WARN, KR, "start")
+d.t(RX + 46, HOLD_Y0 + HOLD_H / 2 + 10, "앱으로 못 올라간다", 11, MUTED, KR, "start")
 
 d.legend(708, [("정상 도착", OK), ("유실", BAD), ("순서 대기", WARN),
                ("중복 ACK", INFO), ("재전송", ACC)])

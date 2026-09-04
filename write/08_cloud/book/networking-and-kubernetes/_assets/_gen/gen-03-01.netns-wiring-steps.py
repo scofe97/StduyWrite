@@ -13,7 +13,7 @@ d = D(W, H, "netns WIRING BY HAND · FOUR STEPS",
 
 ddx.band(d, 104, 568, "새 netns 는 라우팅 테이블이 비어 있다 — 그것이 마지막 함정이다")
 CX = ddx.stage_chain(d, 300,
-  ["①② 격리", "③④ 선 걸기", "⑤~⑨ 주소·브리지", "⑩ 기본 경로"],
+  ["1·2 격리", "3·4 선 걸기", "5~9 주소·브리지", "10 기본 경로"],
   [("격리 공간", "ip netns add net1", "ip_forward=1 선행", None),
    ("선 걸기", "veth0 ↔ veth1", "한쪽만 net1 로", None),
    ("주소·연결", "192.168.1.101/24", "up 해도 NO-CARRIER", None),
@@ -29,7 +29,7 @@ d.t(SKIP[0], SKIP[1] + 28, "새 netns 는 테이블이 빔", 11, BAD, KR)
 d.path(f"M {CX[2]} {300+58+6} L {CX[2]} {SKIP[1]-46-10}", BAD, 1.4, m="bad", dash="6 5")
 d.t(CX[2] + 14, (300 + 58 + SKIP[1] - 46) // 2 + 4, "경로가 없으면", 11, BAD, KR, "start")
 
-d.t(36, 540, "런타임은 이 열 줄을 대신 쳐 준다 — 손으로 해 보면 CNI 가 무엇을 자동화하는지가 드러난다",
+d.t(36, 540, "런타임은 이 명령들을 대신 쳐 준다 — 손으로 해 보면 CNI 가 무엇을 자동화하는지가 드러난다",
      12, MUTED, KR, "start")
 d.legend(584, [("그제야 통하는 한 줄", ACC), ("빠뜨리면 여기", BAD)])
 d.save("03-01.netns-wiring-steps.svg")

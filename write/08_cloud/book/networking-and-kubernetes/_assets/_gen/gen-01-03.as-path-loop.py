@@ -20,7 +20,7 @@ def asbox(cx, cy, name, sub, tag, c=None):
     d.box(x, y, BW, BH, PAPER2, c or RULE, 1.1, 6)
     d.t(cx, cy - 20, name, 14, c or INK, KR, "middle", 600)
     d.t(cx, cy + 2, ddx.fit(sub, 11, BW - 20, sub), 11, MUTED, KR)
-    d.t(cx, cy + 26, ddx.fit(tag, 10, BW - 16, tag), 10, SOFT, KR)
+    d.t(cx, cy + 26, ddx.fit(tag, 11, BW - 16, tag), 11, SOFT, KR)
 
 ddx.band(d, 104, 532, "한 바퀴를 돌면 목록이 스스로 고리를 증언한다")
 ddx.focal_tag(d, 500, 152, "목록에 내 번호가 있다 → 받지 않는다", 300)
