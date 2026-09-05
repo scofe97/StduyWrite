@@ -44,9 +44,9 @@ def row_y(k):
 
 
 d.box(204, 136, 752, 304, PAPER, RULE, 0.8, 6)
-d.t(212, 156, "원서가 적은 일곱", 9, SOFT, MONO, "start", 600)
+d.t(212, 156, "원서가 적은 일곱", 11, SOFT, MONO, "start", 600)
 d.box(204, 452, 752, 144, PAPER, RULE, 0.8, 6)
-d.t(212, 472, "원서 이후 붙은 셋", 9, SOFT, MONO, "start", 600)
+d.t(212, 472, "원서 이후 붙은 셋", 11, SOFT, MONO, "start", 600)
 
 for k, (nm, start, span, color, dash) in enumerate(rows):
     ry = row_y(k)

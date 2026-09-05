@@ -43,6 +43,8 @@ for i, (c1, c2, verified, other) in enumerate(CATS):
         else:
             d.o.append(f'<rect x="{x}" y="{y}" width="{BW}" height="{PY1 - y}" rx="4" '
                        f'fill="{INFO}16" stroke="{INFO}" stroke-width="1.2"/>')
+        # 값 라벨 — 격자선이 글자를 가르지 않게 paper 마스크를 깔고 얹는다(연표와 같은 기법)
+        d.o.append(f'<rect x="{x + BW / 2 - 34}" y="{y + 7}" width="68" height="18" fill="{PAPER}"/>')
         d.t(x + BW / 2, y + 20, f"{val} MiB", 12, color, MONO)
     d.t(cx, PY1 + 26, c1, 13, INK, KR, "middle", 600)
     d.t(cx, PY1 + 46, c2, 12, MUTED, KR)

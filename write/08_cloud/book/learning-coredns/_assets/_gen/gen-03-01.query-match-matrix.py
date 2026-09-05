@@ -4,14 +4,14 @@
 #            label. In the event that the domain name in the query matches multiple labels, the
 #            longest (i.e., most specific) match wins." 이어지는 문단이 질의 다섯의 귀속을 하나씩 적는다.
 # 타입 스펙: type-dp-security-matrix — 행×열 격자에서 어느 조합이 되고 안 되는가가 논지다.
-#           좌표는 스펙 §2 Layout formulas 를 그대로 쓴다(role_col_w 148, row_stride 40 등).
+#           좌표는 스펙 §2 Layout formulas 를 그대로 쓴다(row_stride 40 등. 열 폭은 viewBox 상한 1000 에 맞춰 148 → 138 로 줄였다).
 #           색은 이 저장소의 다크 스킨 계약으로 치환한다 — 스펙의 white/ink 배색은 밝은 테마 전제다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-LEFT_PAD, RIGHT_PAD = 12, 48
+LEFT_PAD, RIGHT_PAD = 12, 16
 COMP_COL_W, COMP_ROLE_GAP = 208, 12
-ROLE_COL_W, ROLE_COL_GAP = 148, 16
+ROLE_COL_W, ROLE_COL_GAP = 138, 12
 HEADER_H, ROW_H, ROW_STRIDE = 52, 36, 40
 HEADER_Y = 104   # 스펙은 72 지만 이 저장소의 D() 머리글(eyebrow·제목·요약)이 74 까지 쓰므로 32 내린다
 

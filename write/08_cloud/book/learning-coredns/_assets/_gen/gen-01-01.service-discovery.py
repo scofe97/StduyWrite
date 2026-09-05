@@ -17,7 +17,7 @@ d = D(W, H, "LEARNING COREDNS · 01-01 §1",
 ZX, ZY, ZW, ZH = 660, 100, 200, 248
 d.box(ZX, ZY, ZW, ZH, PAPER, RULE, 0.8, 8)
 d.o.append(f'<rect x="{ZX + 10}" y="{ZY + 3}" width="176" height="16" rx="2" fill="{PAPER}"/>')
-d.t(ZX + 14, ZY + 15, "인가 서비스 · 부하 따라 증감", 10, SOFT, KR, "start")
+d.t(ZX + 14, ZY + 15, "인가 서비스 · 부하 따라 증감", 11, SOFT, KR, "start")
 
 d.arrow([(220, 220), (348, 220)], MUTED, "ar", 1.4)
 d.t(290, 208, "이름으로 질의", 13, MUTED, KR)

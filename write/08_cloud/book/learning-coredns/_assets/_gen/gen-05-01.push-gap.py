@@ -5,7 +5,7 @@
 # 타입 스펙: type-sequence — 주체 셋 사이의 시간순 왕복이고, 가운데의 빈 구간이 논지다.
 #           프리미티브의 mono 하드코딩을 SeqKR 로 덮는다(계약 §프리미티브가 한글을 mono 로 내보내는 자리).
 import sys; sys.path.insert(0, ".")
-from dd import Seq, ACC, MUTED, BAD, OK, INK, PAPER2, RULE, KR, MONO
+from dd import Seq, ACC, MUTED, BAD, OK, INK, PAPER2, RULE, KR, MONO, PAPER
 
 
 def _kr(txt):
@@ -50,15 +50,27 @@ d = SeqKR(W, H, "LEARNING COREDNS · 05-01 §3",
           "클라이언트는 캐시의 TTL 이 만료될 때까지 옛 주소를 계속 쓴다.",
           "붉은 점선이 DNS 에 없는 경로입니다")
 
+
+# dd.state 는 상자 폭을 ASCII 기준(len*7px)으로 잡아 한글(11px)이 상자를 넘치고,
+# 채움이 반투명이라 레인 점선이 글자 사이로 비친다. 이 책에서는 아래로 대신한다.
+def chip(a, txt, y, c):
+    x = d.LX[a]
+    w = sum(11.0 if "\uac00" <= ch <= "\ud7a3" else 6.6 for ch in txt) + 20
+    for f, st, sw in ((PAPER, "none", 0), (c + "22", c, 1.1)):
+        d.o.append(f'<rect x="{x - w / 2}" y="{y - 10}" width="{w}" height="20" rx="4" '
+                   f'fill="{f}" stroke="{st}" stroke-width="{sw}"/>')
+    d.t(x, y + 4, txt, 11, c, KR)
+
+
 d.lanes([("서비스 인스턴스", "self-register"),
          ("레지스트리와 DNS", "registry · dns"),
          ("클라이언트", "resolver cache")], y0=104, lane_w=248)
 d.rails(452)
 
 d.msg("서비스 인스턴스", "레지스트리와 DNS", "등록 API 호출", 196, MUTED, sub="자기 이름과 위치를 알린다")
-d.state("레지스트리와 DNS", "새 주소를 안다", 252, OK)
+chip("레지스트리와 DNS", "새 주소를 안다", 252, OK)
 d.msg("레지스트리와 DNS", "클라이언트", "밀어 줄 경로가 없다", 312, BAD, mk="bad", dash="5 4")
-d.state("클라이언트", "옛 주소를 계속 쓴다", 372, BAD)
+chip("클라이언트", "옛 주소를 계속 쓴다", 372, BAD)
 d.msg("클라이언트", "레지스트리와 DNS", "TTL 만료 후 재질의", 428, ACC, mk="acc")
 
 d.t(20, 492, "이 공백을 없애려고 Consul 같은 제품은 DNS 밖에 별도 프로토콜을 얹는다", 13, MUTED, KR, "start")
