@@ -9,12 +9,13 @@ source:
   - ./book/systems-performance/README.md
 related:
   - ./README.md
+  - ./troubleshooting/README.md
   - ./kernel/README.md
   - ./networking/README.md
   - ./book/linux-kernel-programming/README.md
   - ./book/systems-performance/README.md
   - ../08_cloud/book/container-security/README.md
-updated: 2026-07-15
+updated: 2026-09-05
 ---
 
 # 02_os 통합 학습 로드맵
@@ -23,7 +24,7 @@ updated: 2026-07-15
 
 ## 1. 이 로드맵을 쓰는 법
 
-한 단계를 모두 끝낸 뒤에만 다음 단계로 갈 필요는 없습니다. 실제 장애를 만났다면 해당 증상 단계로 바로 들어가고, 이해에 필요한 선행 문서만 되돌아봅니다.
+한 단계를 모두 끝낸 뒤에만 다음 단계로 갈 필요는 없습니다. 실제 장애를 만났다면 해당 증상 단계로 바로 들어가고, 이해에 필요한 선행 문서만 되돌아봅니다. 증상에서 출발하는 편이 빠를 때는 [troubleshooting/](./troubleshooting/README.md)이 지름길입니다. 사례집이 증상별 확인 순서를 정리해 두었고 각 사례가 원리를 다루는 문서로 되돌아가는 링크를 함께 답니다.
 
 책 정독은 필수가 아니라 심화 경로입니다. 먼저 `kernel/`과 `networking/`의 운영자 관점 문서로 문제를 해석할 뼈대를 만들고, 더 깊은 원리나 도구가 필요할 때 `book/` 아래의 정독 노트를 사용합니다.
 
@@ -33,6 +34,7 @@ updated: 2026-07-15
 | Service 연결·DNS·NAT 문제를 추적하기 | 1 → 3 → 4단계 | CPU·메모리 심화 |
 | 컨테이너 보안 설정을 판단하기 | 1 → 2 → 5단계 | 성능 도구 심화 |
 | 커널 내부 구현을 이해하기 | 1 → 2 뒤 6단계 | 운영 사례 중심 문서 |
+| 지금 난 장애부터 끄기 | [troubleshooting/](./troubleshooting/README.md) → 해당 증상 단계 | 개념 정독 |
 
 ## 2. 1단계 — 실행 모델을 먼저 잡는다
 
@@ -105,6 +107,7 @@ CPU 사용률 하나만 보고 병목을 판단하면 I/O 대기·락 경합·�
 ## 관련 문서
 
 - [02_os MOC](./README.md) — 폴더 경계와 모든 자료의 진입점
+- [troubleshooting 사례집](./troubleshooting/README.md) — 증상에서 원인으로 역추적하는 리눅스 장애 41건
 - [kernel 상세 로드맵](./kernel/roadmap.md) — 커널 주제 전체와 장애 매핑
 - [networking 상세 로드맵](./networking/roadmap.md) — 네트워크 주제 전체와 추천 프로젝트
 - [08_cloud/kubernetes](../08_cloud/kubernetes/README.md) — 이 OS 메커니즘을 사용하는 상위 플랫폼
