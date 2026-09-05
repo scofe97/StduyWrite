@@ -49,6 +49,18 @@ d = SeqKR(W, H, "LEARNING COREDNS · 01-01 §5",
         "그래서 질의를 포워더에 넘기고, 루트에서 권한 서버까지 내려가는 구간은 포워더가 대신 밟는다.",
         "붉은 칩이 CoreDNS 가 스스로 못 하는 지점입니다")
 
+
+# dd.state 는 상자 폭을 ASCII 기준(len*7px)으로 잡아 한글(11px)이 상자를 넘치고,
+# 채움이 반투명이라 레인 점선이 글자 사이로 비친다. 이 책에서는 아래로 대신한다.
+def chip(a, txt, y, c):
+    x = d.LX[a]
+    w = sum(11.0 if "\uac00" <= ch <= "\ud7a3" else 6.6 for ch in txt) + 20
+    for f, st, sw in ((PAPER, "none", 0), (c + "22", c, 1.1)):
+        d.o.append(f'<rect x="{x - w / 2}" y="{y - 10}" width="{w}" height="20" rx="4" '
+                   f'fill="{f}" stroke="{st}" stroke-width="{sw}"/>')
+    d.t(x, y + 4, txt, 11, c, KR)
+
+
 d.lanes([("클라이언트", "stub resolver"),
          ("CoreDNS", "forwarders 의존"),
          ("포워더", "재귀 수행"),
@@ -57,7 +69,7 @@ d.lanes([("클라이언트", "stub resolver"),
 d.rails(584)
 
 d.msg("클라이언트", "CoreDNS", "질의", 196, MUTED, sub="www.example.com A")
-d.state("CoreDNS", "루트부터 따라갈 수 없다", 248, BAD)
+chip("CoreDNS", "루트부터 따라갈 수 없다", 248, BAD)
 d.msg("CoreDNS", "포워더", "질의 전달", 300, MUTED, sub="포워딩 플러그인")
 d.msg("포워더", "루트 · 상위 서버", "루트부터 질의", 352, MUTED)
 d.msg("루트 · 상위 서버", "포워더", "referral", 396, MUTED, dash="5 4")

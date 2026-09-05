@@ -5,7 +5,7 @@
 #            alias.foo.example were permitted, the results ... would be ambiguous."
 # 타입 스펙: type-sequence — 두 주체 사이의 시간순 왕복이고, 가운데의 재시작이 논지다.
 import sys; sys.path.insert(0, ".")
-from dd import Seq, ACC, MUTED, BAD, INK, PAPER2, RULE, KR, MONO
+from dd import Seq, ACC, MUTED, BAD, INK, PAPER2, RULE, KR, MONO, PAPER
 
 
 def _kr(txt):
@@ -50,6 +50,18 @@ d = SeqKR(W, H, "LEARNING COREDNS · 02-02 §3",
           "이 재시작 때문에 별칭에 다른 타입을 직접 붙이는 것이 금지된다.",
           "붉은 칩이 이 규칙을 필요하게 만든 지점입니다")
 
+
+# dd.state 는 상자 폭을 ASCII 기준(len*7px)으로 잡아 한글(11px)이 상자를 넘치고,
+# 채움이 반투명이라 레인 점선이 글자 사이로 비친다. 이 책에서는 아래로 대신한다.
+def chip(a, txt, y, c):
+    x = d.LX[a]
+    w = sum(11.0 if "\uac00" <= ch <= "\ud7a3" else 6.6 for ch in txt) + 20
+    for f, st, sw in ((PAPER, "none", 0), (c + "22", c, 1.1)):
+        d.o.append(f'<rect x="{x - w / 2}" y="{y - 10}" width="{w}" height="20" rx="4" '
+                   f'fill="{f}" stroke="{st}" stroke-width="{sw}"/>')
+    d.t(x, y + 4, txt, 11, c, KR)
+
+
 d.lanes([("재귀 DNS 서버", "recursive"),
          ("foo.example 권한 서버", "authoritative")], y0=104, lane_w=280)
 d.rails(420)
@@ -57,7 +69,7 @@ d.rails(420)
 d.msg("재귀 DNS 서버", "foo.example 권한 서버", "AAAA 질의", 196, MUTED, sub="alias.foo.example")
 d.msg("foo.example 권한 서버", "재귀 DNS 서버", "CNAME 응답", 248, MUTED, dash="5 4",
       sub="canonicalname.foo.example")
-d.state("재귀 DNS 서버", "질의를 다시 시작한다", 304, BAD)
+chip("재귀 DNS 서버", "질의를 다시 시작한다", 304, BAD)
 d.msg("재귀 DNS 서버", "foo.example 권한 서버", "AAAA 질의", 356, MUTED, sub="canonicalname.foo.example")
 d.msg("foo.example 권한 서버", "재귀 DNS 서버", "AAAA 응답", 408, ACC, mk="acc")
 

@@ -29,7 +29,7 @@ for y in range(2015, 2020):
 events = [
     (2015.5, "up",   "CNCF 설립",              "쿠버네티스를 관리하려고",     INFO, 4),
     (2016.5, "down", "Caddy 를 포크",          "Miek Gieben 이 CoreDNS 작성", INFO, 4),
-    (2017.5, "up",   "CNCF 에 제출",           "졸업까지 두 해",              INFO, 4),
+    (2017.5, "up",   "CNCF 에 제출",           "월은 공식 발표에 없다",              INFO, 4),
     (2018.923, "up", "쿠버네티스 1.13 기본 DNS", "GA 로 승격",                ACC,  6),
     (2019.063, "down", "CNCF graduated",       "성숙도 최상위",               INFO, 4),
 ]

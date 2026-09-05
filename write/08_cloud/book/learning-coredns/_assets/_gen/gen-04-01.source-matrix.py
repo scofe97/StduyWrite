@@ -64,11 +64,12 @@ for k, (nm, hint) in enumerate(methods):
             d.o.append(f'<rect x="{x}" y="{y}" width="{ROLE_COL_W}" height="{ROW_H}" rx="4" fill="{INK}14" stroke="{RULE}" stroke-width="0.6"/>')
             d.t(x + ROLE_COL_W / 2, y + 23, val, 12, INK, KR, "middle", 600)
         elif lvl == "read":
-            d.o.append(f'<rect x="{x}" y="{y}" width="{ROLE_COL_W}" height="{ROW_H}" rx="4" fill="{MUTED}14" stroke="{RULE}" stroke-width="0.6"/>')
+            # 원서가 말하지 않은 칸은 점선으로 — 실선 흐린 칸(안 된다)과 렌더에서 구분되지 않아 범례가 헛짚힌다
+            d.o.append(f'<rect x="{x}" y="{y}" width="{ROLE_COL_W}" height="{ROW_H}" rx="4" fill="{MUTED}14" stroke="{MUTED}" stroke-width="1.0" stroke-dasharray="5 4"/>')
             d.t(x + ROLE_COL_W / 2, y + 23, val, 12, MUTED, KR)
         else:
             d.box(x, y, ROLE_COL_W, ROW_H, PAPER, RULE, 0.6, 4)
             d.t(x + ROLE_COL_W / 2, y + 23, val, 12, SOFT, KR)
 
-d.legend(LEGEND_Y, [("auto 만 되는 것", ACC), ("된다", INK), ("원서가 말하지 않은 칸", MUTED)])
+d.legend(LEGEND_Y, [("auto 만 되는 것", ACC), ("된다고 적힌 칸", INK), ("원서가 말하지 않은 칸 · 점선", MUTED)])
 d.save("04-01.source-matrix.svg")

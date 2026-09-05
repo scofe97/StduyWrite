@@ -39,6 +39,18 @@ d = SeqKR(W, H, "LEARNING COREDNS · 07-01 §3",
           "저절로 돌아오지 않는다. answer name 을 적었느냐가 두 갈래를 만든다.",
           "빨강 갈래에서 클라이언트가 응답을 버립니다")
 
+
+# dd.state 는 상자 폭을 ASCII 기준(len*7px)으로 잡아 한글(11px)이 상자를 넘치고,
+# 채움이 반투명이라 레인 점선이 글자 사이로 비친다. 이 책에서는 아래로 대신한다.
+def chip(a, txt, y, c):
+    x = d.LX[a]
+    w = sum(11.0 if "\uac00" <= ch <= "\ud7a3" else 6.6 for ch in txt) + 20
+    for f, st, sw in ((PAPER, "none", 0), (c + "22", c, 1.1)):
+        d.o.append(f'<rect x="{x - w / 2}" y="{y - 10}" width="{w}" height="20" rx="4" '
+                   f'fill="{f}" stroke="{st}" stroke-width="{sw}"/>')
+    d.t(x, y + 4, txt, 11, c, KR)
+
+
 d.lanes([("클라이언트", "stub resolver"),
          ("rewrite", "plugin"),
          ("kubernetes", "plugin")], y0=104, lane_w=200)
@@ -52,7 +64,7 @@ d.msg("rewrite", "kubernetes", "api.example.svc.cluster.local", 300, MUTED)
 d.msg("kubernetes", "rewrite", "A 10.7.249.102", 348, MUTED,
       sub="레코드는 정상적으로 찾았다")
 
-d.state("rewrite", "여기서 갈린다", 396, ACC)
+chip("rewrite", "여기서 갈린다", 396, ACC)
 
 d.msg("rewrite", "클라이언트", "Question = api.example.svc.cluster.local", 444, BAD,
       sub="answer name 을 적지 않았을 때")

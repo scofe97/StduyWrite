@@ -62,7 +62,7 @@ for i, (name, color, result) in enumerate(tries):
     d.msg("파드 안 클라이언트", "클러스터 DNS", name, y, color,
           mk="acc" if color is ACC else "bad", sub=result)
 
-d.t(20, 560, "검색 경로 넷 중 앞 셋은 kubelet 이 클러스터용으로 넣은 것이고 뒤는 호스트의 것이다", 13, MUTED, KR, "start")
+d.t(20, 560, "원서의 검색 경로 목록은 넷인데 넷째가 호스트 도메인 둘로 풀려 접미사는 다섯이 된다", 13, MUTED, KR, "start")
 d.t(20, 584, "짧은 이름을 쓰게 해 주는 설정의 값을 바깥 이름을 부를 때 치르는 구조다", 13, MUTED, KR, "start")
 d.t(20, 608, "외부 조회가 잦은 워크로드라면 이것만으로 CoreDNS 부하가 극적으로 는다", 13, MUTED, KR, "start")
 

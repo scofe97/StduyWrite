@@ -5,7 +5,7 @@
 # 타입 스펙: type-sequence — 두 주체 사이의 시간순 왕복이고, 없어진 왕복 넷이 논지다.
 #           프리미티브의 mono 하드코딩을 SeqKR 로 덮는다(계약 §프리미티브가 한글을 mono 로 내보내는 자리).
 import sys; sys.path.insert(0, ".")
-from dd import Seq, ACC, MUTED, BAD, OK, INK, PAPER2, RULE, KR, MONO
+from dd import Seq, ACC, MUTED, BAD, OK, INK, PAPER2, RULE, KR, MONO, PAPER
 
 
 def _kr(txt):
@@ -49,6 +49,18 @@ d = SeqKR(W, H, "LEARNING COREDNS · 06-01 §6",
           "엔드포인트가 넷이면 뒤따랐을 A 질의 넷이 통째로 사라진다.",
           "붉은 점선이 이 설계가 없앤 왕복입니다")
 
+
+# dd.state 는 상자 폭을 ASCII 기준(len*7px)으로 잡아 한글(11px)이 상자를 넘치고,
+# 채움이 반투명이라 레인 점선이 글자 사이로 비친다. 이 책에서는 아래로 대신한다.
+def chip(a, txt, y, c):
+    x = d.LX[a]
+    w = sum(11.0 if "\uac00" <= ch <= "\ud7a3" else 6.6 for ch in txt) + 20
+    for f, st, sw in ((PAPER, "none", 0), (c + "22", c, 1.1)):
+        d.o.append(f'<rect x="{x - w / 2}" y="{y - 10}" width="{w}" height="20" rx="4" '
+                   f'fill="{f}" stroke="{st}" stroke-width="{sw}"/>')
+    d.t(x, y + 4, txt, 11, c, KR)
+
+
 d.lanes([("파드 안 클라이언트", "dnstools"),
          ("클러스터 DNS", "CoreDNS")], y0=104, lane_w=300)
 d.rails(408)
@@ -61,7 +73,7 @@ d.msg("클러스터 DNS", "파드 안 클라이언트", "같은 응답 · ADDITI
       sub="A 넷 — 대상 이름의 주소")
 d.msg("파드 안 클라이언트", "클러스터 DNS", "없었다면 A 질의 넷", 384, BAD, mk="bad", dash="5 4")
 
-d.state("파드 안 클라이언트", "추가 조회 없이 접속", 452, OK)
+chip("파드 안 클라이언트", "추가 조회 없이 접속", 452, OK)
 
 d.t(20, 496, "SRV 는 대상 이름만 주므로 원래대로면 이름마다 A 를 한 번 더 물어야 한다", 13, MUTED, KR, "start")
 d.t(20, 520, "ADDITIONAL 이 그 답을 미리 실어 보내 왕복이 하나로 끝난다", 13, MUTED, KR, "start")

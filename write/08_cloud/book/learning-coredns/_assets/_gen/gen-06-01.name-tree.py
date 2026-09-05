@@ -37,7 +37,7 @@ def node(cx, y, name, sub, c=INK, tone=False):
         d.t(cx, y + 46, sub, 12, MUTED, KR)
 
 
-node(470, ROOT_Y, "cluster.local", "클러스터 도메인 · 바닐라는 바꿀 수 있다")
+node(470, ROOT_Y, "cluster.local", "클러스터 도메인 · 바닐라 쿠버네티스는 바꾼다")
 node(LX, L2_Y, "svc", "Service 선언에서 유도된다", OK, True)
 node(RX, L2_Y, "pod", "폐기된 갈래", BAD, True)
 node(LX, L3_Y, "<namespace>", "")
