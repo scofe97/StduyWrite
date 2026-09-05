@@ -2,7 +2,9 @@
 # 네트워크는 02_os·08_cloud·99_ETC 에 걸쳐 있어 문서를 write/ 직계에 둔다. eyebrow 도 WRITE 다.
 # 판형은 roadmap.sh 를 따른다 — 세로 척추에 국면과 단계를 걸고, 각 단계의 개념을 좌우로 뻗는다.
 # 박스는 세 종류다 — 실선(책이 다루는 개념), 점선(책 밖 키워드), 초록 테두리 + LAB 태그(실습편).
-#   실습은 network-fundamentals-lab 17편이고 읽는 축이 아니라 손으로 확인하는 축이라 왼쪽 열 아래에 붙인다.
+#   LAB 은 '손으로 확인하는 자리' 이고 출처는 셋이다 — network-fundamentals-lab 편 번호,
+#   책의 예제 저장소, 공식 핸즈온 문서. 실습이 필요 없어서 비는 단계는 없고,
+#   검증한 자료를 못 찾은 단계만 비운다(11·12·13·14). 지어낸 출처를 채우지 않는다.
 # 좌상단 '읽는 법' 상자와 국면 사이 주석 띠는 roadmap.sh 판형을 따른 것 — 판단 근거를 그림 안에 남긴다.
 # 낡음 기준을 적용해 13단계에서 HPBN(2013)을, 15단계에서 Programming Kubernetes(2019)를 뺐다.
 #   그 자리는 RFC 9000·9113·9114 와 client-go 공식 문서가 맡는다. 근거는 본문 낡음 점검 절에 있다.
@@ -36,30 +38,30 @@ phases = [
          ["CNI 스펙과 체이닝", "Multus · SR-IOV"], ["03·07 · VLAN 과 VXLAN", "10·11 · NAT 와 대칭성"]),
         ("3 · Kubernetes in Action 2nd", "11~13장 · 2023",
          ["Service 선언과 어피니티", "Ingress 와 TLS"], ["Gateway API 와 HTTPRoute"],
-         ["GAMMA 이니셔티브", "Ingress 에서 이행하기"], ["16 · NAT 헤어핀"]),
+         ["GAMMA 이니셔티브", "Ingress 에서 이행하기"], ["16 · NAT 헤어핀", "책 예제 · kia-2nd"]),
         ("4 · Learning CoreDNS", "1~8장 · 2019",
          ["Corefile 과 플러그인 체인", "존 데이터와 위임"], ["서비스 디스커버리", "질의 조작과 관측"],
-         ["ndots:5 질의 폭증", "NodeLocal DNSCache"], ["14·15 · DNS TTL 과 ICMP"]),
+         ["ndots:5 질의 폭증", "NodeLocal DNSCache"], ["14·15 · DNS TTL 과 ICMP", "공식 · CoreDNS 플러그인"]),
     ], None),
     ("데이터패스", "5~6단계", ACC, [
         ("5 · Learning eBPF", "1~3 / 6~9장 · 2023",
          ["프로그램 구조와 맵", "verifier 가 거는 제약"], ["XDP · TC · socket 훅", "커널에서 패킷 가로채기"],
-         ["cgroup · sockmap 훅", "bpftool"], []),
+         ["cgroup · sockmap 훅", "bpftool"], ["책 예제 · learning-ebpf"]),
         ("6 · Cilium Up and Running", "16장",
          ["데이터패스", "IPAM 과 Pod IP", "kube-proxy 대체"],
          ["L3~L7 · FQDN 정책", "egress 와 전송 암호화", "Hubble 흐름 관측"],
-         ["kube-proxy nftables 모드", "ClusterMesh · netkit"], ["13 · 터널 오버레이 MTU"]),
+         ["kube-proxy nftables 모드", "ClusterMesh · netkit"], ["13 · 터널 오버레이 MTU", "공식 · Cilium 시작하기"]),
     ], "이 국면이 필수 분량의 절반 가까이를 차지한다. 앞의 두 국면을 건너뛰면 설정 이름만 외우게 된다."),
     ("정책과 메시", "7~9단계", INFO, [
         ("7 · Policy as Code · KBP", "4·5·7·8장 / 9·11장",
          ["OPA 와 Rego 판정", "어드미션 컨트롤"], ["Gatekeeper · Kyverno"],
-         ["AdminNetworkPolicy", "CEL 어드미션 정책"], []),
+         ["AdminNetworkPolicy", "CEL 어드미션 정책"], ["공식 · OPA Playground", "공식 · Kyverno 정책 모음"]),
         ("8 · Istio in Action", "1~9장 · 2022",
          ["메시가 인프라로 민 것", "Envoy 와 데이터 플레인"], ["게이트웨이와 트래픽 라우팅", "mTLS 와 메시 관측"],
-         ["Envoy xDS 프로토콜", "SPIFFE · SPIRE"], []),
+         ["Envoy xDS 프로토콜", "SPIFFE · SPIRE"], ["책 예제 · istio-in-action"]),
         ("9 · Sidecar-less Istio Explained", "4장",
          ["앰비언트 모드의 전제", "ztunnel 이 맡는 L4"], ["waypoint 가 맡는 L7", "사이드카와의 차이"],
-         ["waypoint 배치 단위"], []),
+         ["waypoint 배치 단위"], ["공식 · Ambient 시작하기"]),
     ], None),
     ("운영과 신뢰", "10~12단계", INFO, [
         ("10 · Production Kubernetes", "5·6·10장 · 2021",
@@ -83,7 +85,7 @@ tail = [
      ["ENI 한계와 prefix delegation", "OVN-Kubernetes"], []),
     ("15 · Go · client-go 공식 문서", "1~7장 / 공식",
      ["소켓과 주소 해석", "TCP · UDP 직접 다루기"], ["sample-controller 로 배우기"],
-     ["CNI 의 ADD · DEL · CHECK", "netlink 로 veth"], []),
+     ["CNI 의 ADD · DEL · CHECK", "netlink 로 veth"], ["공식 · sample-controller", "내 프로젝트 · podwire"]),
 ]
 
 def row_h(left, right, extra, lab):
@@ -116,7 +118,7 @@ d.t(LX + 16, LY + 24, "읽는 법", 13, INK, KR, "start", 600)
 for i, (txt, kind) in enumerate([
         ("책이 다루는 개념", "book"),
         ("공식 문서로 채울 키워드", "extra"),
-        ("containerlab 실습편", "lab")]):
+        ("손으로 확인하는 자리", "lab")]):
     cy = LY + 44 + i * 18
     if kind == "extra":
         d.o.append(f'<rect x="{LX + 16}" y="{cy - 8}" width="18" height="14" rx="3" fill="{PAPER}" '

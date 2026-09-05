@@ -55,7 +55,23 @@ updated: 2026-09-05
 
 ## 손으로 확인하는 실습
 
-> 읽기만 하면 남의 말을 옮기게 됩니다. [network-fundamentals-lab](https://github.com/gnu-gnu/network-fundamentals-lab) 이 이 로드맵 앞 단계의 개념을 고장 내고 고치는 실습으로 덮습니다.
+> 읽기만 하면 남의 말을 옮기게 됩니다. 단계마다 손으로 확인할 자리를 도식에 초록 `LAB` 박스로 걸었습니다.
+
+`LAB` 박스의 기준은 **그 단계를 손으로 확인할 검증된 자료가 있는가** 하나입니다. 출처는 셋입니다. 실습 저장소의 편 번호, 책이 딸린 예제 저장소, 공식 핸즈온 문서입니다. 비어 있는 단계는 실습이 필요 없어서가 아니라 제가 확인한 자료를 못 찾아서이고, 지어낸 출처를 채우지 않았습니다.
+
+| 출처 | 어느 단계 | 무엇 |
+|---|---|---|
+| [network-fundamentals-lab](https://github.com/gnu-gnu/network-fundamentals-lab) | 0~4 · 6 · 10 | 17편 트러블슈팅 실습과 자가 진단 두 편 |
+| [luksa/kubernetes-in-action-2nd-edition](https://github.com/luksa/kubernetes-in-action-2nd-edition) | 3 | Service·Ingress·Gateway API 매니페스트 |
+| [lizrice/learning-ebpf](https://github.com/lizrice/learning-ebpf) | 5 | 장별 eBPF 프로그램과 빌드 환경 |
+| [Cilium 시작하기](https://docs.cilium.io/en/stable/gettingstarted/) | 6 | kind 위에 Cilium 을 올리고 정책을 걸기 |
+| [OPA Playground](https://play.openpolicyagent.org/) · [Kyverno 정책 모음](https://kyverno.io/policies/) | 7 | Rego 를 브라우저에서 돌리고, 검증된 정책을 읽기 |
+| [istioinaction/book-source-code](https://github.com/istioinaction/book-source-code) | 8 | 책의 샘플 서비스와 Istio 설정 |
+| [Istio Ambient 시작하기](https://istio.io/latest/docs/ambient/getting-started/) | 9 | ztunnel 과 waypoint 를 실제로 띄우기 |
+| [CoreDNS kubernetes 플러그인](https://coredns.io/plugins/kubernetes/) | 4 | Corefile 을 고쳐 보며 레코드 모양 확인 |
+| [kubernetes/sample-controller](https://github.com/kubernetes/sample-controller) · `~/study/podwire` | 15 | 컨트롤러 현행 코드, 그리고 직접 짓는 CNI |
+
+11·12·13·14단계는 비어 있습니다. 컨테이너 네트워크 보안, 제로 트러스트, HTTP/3, 클라우드 네트워킹은 클러스터나 계정이 있어야 손으로 확인되는데, 그 조건을 로드맵이 정할 수 없어 자리를 비웠습니다.
 
 한국어로 쓰인 containerlab 기반 트러블슈팅 시리즈입니다. 17편과 자가 진단 두 편으로 이뤄져 있고, 편마다 **개념·고장·관찰·교훈** 네 칸이 같은 자리에 반복됩니다. 각 디렉토리에 토폴로지(`.clab.yml`), 지시문(`README.md`), 실행 기록이 붙은 모범 답안(`WALKTHROUGH.md`), 복구 스크립트(`fix.sh`)가 들어 있습니다.
 
@@ -74,6 +90,8 @@ updated: 2026-09-05
 | 13 터널·오버레이 MTU | 6단계. 오버레이의 50바이트 세금 |
 | 17 동적 라우팅 OSPF·BGP | 10단계. Production Kubernetes 5장의 BGP 와 짝 |
 | CP-1 · CP-2 자가 진단 | 1단계를 끝낸 뒤. README 없이 증상만으로 원인 좁히기 |
+
+실습 저장소는 `~/study/network-fundamentals-lab` 에 클론해 두었습니다. 랩 디렉토리와 `clab.sh` 가 저장소 루트에 바로 있습니다.
 
 **환경은 미리 확인하고 시작합니다.** containerlab 을 깔지 않아도 Docker 만 있으면 저장소가 주는 `clab.sh` 래퍼로 macOS 에서 돌아갑니다. 다만 17편의 FRR 은 x86 네이티브를 전제로 하고 arm64 에서는 에뮬레이션이 필요하다고 저장소가 적어 두었으니, Apple Silicon 에서는 그 편만 따로 판단합니다. 관리망이 이미 쓰는 Docker 네트워크와 겹치면 배포가 실패하므로 각 토폴로지의 `mgmt.ipv4-subnet` 을 먼저 봅니다.
 
@@ -394,7 +412,7 @@ Envoy 와 gRPC 가 실제로 무엇을 나르는지까지 팔 때 엽니다. Hig
 
 ### 15단계 · Network Programming with Go 1~7장과 client-go 공식 문서
 
-읽는 축에서 만드는 축으로 넘어가는 자리입니다. `~/podwire` 의 로드맵이 미니 CNI 에서 Service, Policy, eBPF, WireGuard, ztunnel 로 올라가는 순서라 이 단계와 그대로 이어집니다.
+읽는 축에서 만드는 축으로 넘어가는 자리입니다. `~/study/podwire` 의 로드맵이 미니 CNI 에서 Service, Policy, eBPF, WireGuard, ztunnel 로 올라가는 순서라 이 단계와 그대로 이어집니다.
 
 Programming Kubernetes 를 빼고 공식 문서를 넣었습니다. 2019년 책이라 그사이 client-go 와 코드 생성 방식이 많이 바뀌었고, Kubernetes 의 `sample-controller` 저장소가 현행 코드를 그대로 보여 줍니다.
 
