@@ -383,4 +383,4 @@ Efficient Go 를 쓰지 않는 자리입니다. 평가가 3.55점으로 낮아 �
 | Learn Go with Pocket-Sized Projects 부록 | 벤치마킹·퍼징·값 전달·DB 연결을 짧게 확인할 때 |
 | Cloud Native Go 1~3장 | Go 를 처음 볼 때의 도입부. 1단계와 겹칩니다 |
 
-`~/podwire` 는 이 로드맵의 11단계 이후를 실제로 쓰는 자리입니다. 미니 CNI 에서 시작해 Service, Policy, eBPF, WireGuard 로 올라가는 Go 프로젝트라, 네트워크 쪽 순서는 [`network-roadmap.md`](network-roadmap.md) 가 맡습니다.
+`~/study/podwire` 는 이 로드맵의 11단계 이후를 실제로 쓰는 자리입니다. 미니 CNI 에서 시작해 Service, Policy, eBPF, WireGuard 로 올라가는 Go 프로젝트라, 네트워크 쪽 순서는 [`network-roadmap.md`](network-roadmap.md) 가 맡습니다.
