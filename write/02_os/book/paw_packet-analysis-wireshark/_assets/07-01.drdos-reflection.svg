@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 888 584" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">반사와 증폭이 방향을 바꾸는 법</title><desc id="dd">DrDoS 에서 공격자는 피해자에게 아무것도 보내지 않는다. 출발지를 피해자로 위조한 작은 요청이 공개 서버에 닿고, 규격대로 답한 큰 응답이 피해자에게 쏟아진다.</desc>
+<rect width="888" height="584" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">PACKET ANALYSIS WITH WIRESHARK · 07-01 §5</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">반사와 증폭이 방향을 바꾸는 법</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">피해자의 캡처에는 공격자가 아니라 멀쩡한 서버들만 남습니다</text>
+<rect x="202.0" y="102" width="20" height="18" rx="9" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="212.0" y="115" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">01</text>
+<text x="232.0" y="115" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#8B98A9">위조</text>
+<rect x="442.0" y="102" width="20" height="18" rx="9" fill="#F08A59" stroke="#F08A59" stroke-width="1"/>
+<text x="452.0" y="115" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#0D1117">02</text>
+<text x="472.0" y="115" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">반사</text>
+<rect x="682.0" y="102" width="20" height="18" rx="9" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="692.0" y="115" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">03</text>
+<text x="712.0" y="115" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#8B98A9">도착</text>
+<line x1="140" y1="132" x2="860" y2="132" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="20" y="188.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">공격자</text>
+<text x="20" y="204.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">ATTACKER</text>
+<line x1="140" y1="248" x2="860" y2="248" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="20" y="304.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">공개 UDP 서버</text>
+<text x="20" y="320.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">REFLECTOR</text>
+<line x1="140" y1="364" x2="860" y2="364" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="20" y="420.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">피해자</text>
+<text x="20" y="436.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">VICTIM</text>
+<line x1="140" y1="480" x2="860" y2="480" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="140" y1="132" x2="140" y2="480" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="160.0" y="152.0" width="196" height="76" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="258.0" y="176.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">작은 요청을 보냅니다</text>
+<text x="258.0" y="196.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">src = 피해자 IP</text>
+<text x="258.0" y="214.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">출발지만 바꿔 씁니다</text>
+<rect x="400.0" y="268.0" width="196" height="76" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.2"/>
+<text x="498.0" y="292.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">규격대로 답합니다</text>
+<text x="498.0" y="312.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">dst = src = 피해자 IP</text>
+<text x="498.0" y="330.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">서버는 속은 줄 모릅니다</text>
+<rect x="640.0" y="384.0" width="196" height="76" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.2"/>
+<text x="738.0" y="408.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F0616D">증폭된 응답이 몰립니다</text>
+<text x="738.0" y="428.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">NTP 556.9x · DNS 28~54x</text>
+<text x="738.0" y="446.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">보낸 적 없는 답만 쌓입니다</text>
+<path d="M 356.0 190.0 L 378.0 190.0 L 378.0 306.0 L 396.0 306.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 596.0 306.0 L 618.0 306.0 L 618.0 422.0 L 636.0 422.0" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#bad)"/>
+<text x="140" y="508" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">증폭 배수는 US-CERT TA14-017A 의 값입니다 — BitTorrent 3.8x 까지 같은 목록에 올라 있습니다</text>
+<line x1="12" y1="522" x2="840" y2="522" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="544" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="534" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="544" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">속은 채 규격대로 답하는 쪽</text>
+<rect x="339" y="534" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="361" y="544" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">증폭된 응답이 닿는 쪽</text>
+</svg>
