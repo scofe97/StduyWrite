@@ -8,8 +8,10 @@ related:
   - ./networking/README.md
   - ./troubleshooting/README.md
   - ./kernel/README.md
+  - ./book/learning-modern-linux/README.md
   - ./book/linux-kernel-programming/README.md
   - ./book/systems-performance/README.md
+  - ./book/paw_packet-analysis-wireshark/README.md
   - ../08_cloud/book/container-security/README.md
   - ../08_cloud/book/learning-coredns/README.md
 updated: 2026-09-05
@@ -33,10 +35,12 @@ updated: 2026-09-05
 | [networking/](./networking/README.md) | Linux 네트워크 네임스페이스·veth·bridge·netfilter·conntrack·TC·eBPF |
 | [kernel/](./kernel/README.md) | 유저/커널 스페이스, 시스템 콜, 커널 코어 영역, namespace·cgroup, /proc, K8s 노드 필수 커널 파라미터 |
 | [troubleshooting/](./troubleshooting/README.md) | 증상에서 원인으로 역추적하는 장애 사례집 — 디스크·프로세스·자원·서비스 가용성·로그·네트워크 |
+| [learning-modern-linux/](./book/learning-modern-linux/README.md) | 클라우드 네이티브 환경을 전제로 리눅스를 한 바퀴 도는 개론 — 커널·셸·접근 제어·파일시스템·네트워크·관측 (책 기반) |
 | [linux-kernel-programming/](./book/linux-kernel-programming/README.md) | 커널 개발자 관점의 리눅스 내부 — LKM 모듈 개발, 커널 빌드, 메모리 관리, CPU 스케줄러, 동기화 (책 기반) |
 | [container-security/](../08_cloud/book/container-security/README.md) | 보안 관점의 컨테이너 — 커널 기초(namespace·cgroup·root 변경) 위의 이미지·공급망·런타임·통신 보안 (책 기반) |
 | [learning-coredns/](../08_cloud/book/learning-coredns/README.md) | 이름 해석의 *서버* 편 — Corefile·플러그인 체인·존 데이터·쿠버네티스 연동. `networking/`이 맡는 resolver 클라이언트 측과 편을 나눠 가진다 (책 기반) |
 | [systems-performance/](./book/systems-performance/README.md) | 성능 분석가 관점의 시스템 성능 — 방법론·CPU·메모리·디스크·네트워크·클라우드·고급 추적(perf·Ftrace·BPF) (책 기반) |
+| [paw_packet-analysis-wireshark/](./book/paw_packet-analysis-wireshark/README.md) | 선 위의 프레임을 떠서 프로토콜별로 읽는 법 — Wireshark 캡처·필터·TCP·TLS·응용 프로토콜·WLAN·보안 분석 (책 기반) |
 
 
 
@@ -50,6 +54,7 @@ updated: 2026-09-05
 - 컨테이너 보안(격리 메커니즘을 보안 관점에서 보기, 이미지·공급망·런타임 위협) → `container-security/`. namespace·cgroup 같은 메커니즘 자체는 `kernel/`이 SSOT이고 교차참조한다
 - DNS 는 방향으로 가른다. 질의를 *보내는* 쪽(`/etc/resolv.conf`·ndots·search domain·glibc resolver)은 `networking/` 이 SSOT 이고, 질의를 *받는* 쪽(Corefile·플러그인·존 데이터)은 `learning-coredns/` 가 맡는다
 - 증상에서 출발해 원인을 역추적하는 진단 문서(디스크가 찼다, 포트가 안 열린다, 패킷이 사라진다) → `troubleshooting/`. 같은 주제라도 메커니즘을 설명하는 쪽은 `networking/`·`kernel/`이 SSOT이고, 사례집은 그것을 교차참조한다
+- 패킷을 떠서 읽는 일(캡처 필터·디스플레이 필터, 프로토콜 해독, tcpdump·tshark) → `paw_packet-analysis-wireshark/`. `networking/`이 커널이 패킷을 *어떻게 나르는가*를 맡고, 이쪽은 그 패킷을 *어떻게 들여다보는가*를 맡는다. 애플리케이션이 스스로 내보내는 메트릭·로그·트레이스는 `06_observability/` 소관이라 본 폴더 아님
 - 시스템 성능 분석(방법론·병목 진단, CPU·메모리·디스크·네트워크 성능, perf·Ftrace·BPF 추적) → `systems-performance/`. 커널 메커니즘 자체는 `linux-kernel-programming/`·`kernel/`이 SSOT이고 "성능 관점"으로 교차참조한다. LGTM 스택·SLO 같은 앱·인프라 관측 운영은 `06_observability/` 소관이라 본 폴더 아님
 
 > `kernel/`과 `linux-kernel-programming/`은 둘 다 커널을 다루지만 시선이 다르다. 전자는 "K8s가 cgroup 파일을 어떻게 쓰는가"(운영자), 후자는 "모듈에서 커널 메모리를 어떻게 할당하는가"(개발자) 관점이다. 같은 메커니즘이 양쪽에 나오면 교차참조한다.
