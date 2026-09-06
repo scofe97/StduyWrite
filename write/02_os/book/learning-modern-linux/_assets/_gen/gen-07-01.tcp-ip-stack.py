@@ -48,12 +48,12 @@ for i, (name, num, note, col) in enumerate(layers):
     hy = y + 62
     d.o.append(f'<rect x="{LX + 20}" y="{hy}" width="56" height="14" rx="3" '
                f'fill="{col}30" stroke="{col}" stroke-width="0.9"/>')
-    d.t(LX + 48, hy + 11, "헤더", 9.5, col, KR)
+    d.t(LX + 48, hy + 11, "헤더", 11, col, KR)
     d.o.append(f'<rect x="{LX + 80}" y="{hy}" width="{LW - 100}" height="14" rx="3" '
                f'fill="{MUTED}18" stroke="{MUTED}" stroke-width="0.9"/>')
     d.t(LX + 80 + (LW - 100) / 2, hy + 11,
         "위층의 헤더와 페이로드를 통째로 — 열어 보지 않는다" if i > 0 else "앱의 데이터",
-        9.5, MUTED, KR)
+        11, MUTED, KR)
 
 BOT = Y0 + 4 * (LH + GAP)
 d.path(f"M {LX - 60} {Y0 + 20} L {LX - 60} {BOT - GAP - 20}", MUTED, 1.6, m="ar")
