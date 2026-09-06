@@ -25,7 +25,14 @@ related:
   - ../ai-infra-gitaiops/README.md
   - ../../kubernetes/README.md
   - ../../README.md
-updated: 2026-07-05
+learning:
+  topic: kubernetes-in-action
+  scope: durable
+  level: 내림 — 8장 복습 회차 2 에서 셸·프로세스 기초와 kubectl 상태 명명이 함께 비어 있음이 드러남
+  last_verified: 2026-09-06
+  blocked_count: 3
+  next_lesson: "**재학습 우선(2026-09-06 등록)** — 08-01·08-02 회차 2 가 각각 quality 1(회차 1 은 3, 퇴행). 축은 둘이다. ①`command`/`args` 배열은 셸을 거치지 않고 곧장 exec 된다 — exec·$JAVA_OPTS·CMD 폐기가 이 한 문장으로 모인다. ②상태 이름을 화면에서 읽기 — `kubectl get pod` 의 STATUS, `describe` 의 Events, `create configmap --dry-run=client -o yaml` 의 data 블록. 본문 재독이 아니라 출력 화면을 보고 이름을 대는 과제로 짠다."
+updated: 2026-09-06
 ---
 
 # Kubernetes in Action, 2nd Edition — 정독 인덱스
@@ -49,7 +56,7 @@ updated: 2026-07-05
 이 정독본은 세 가지 렌즈를 함께 씁니다.
 
 1. **개념 + kubectl/YAML 실습.** 각 오브젝트의 정의와 함께 재현 가능한 `kubectl` 명령·매니페스트를 곁들여, 읽고 나서 바로 손으로 확인할 수 있게 합니다.
-2. **Spring 앱 배포·운영 렌즈.** 저는 대부분 Spring 위에서 자바를 씁니다. 그래서 K8s 개념이 "Spring Boot 앱을 배포·운영할 때 어떻게 나타나는가"를 한 줄씩 곁들입니다. 단 Actuator·Micrometer 같은 Spring 전용 주제로 본문을 끌고 가지는 않고, 필요하면 `10_spring` 계열로 링크만 겁니다.
+2. **Spring 앱 배포·운영 렌즈.** 저는 대부분 Spring 위에서 자바를 씁니다. 그래서 K8s 개념이 "Spring Boot 앱을 배포·운영할 때 어떻게 나타나는가"를 한 줄씩 곁들입니다. 단 Actuator·Micrometer 같은 Spring 전용 주제로 본문을 끌고 가지는 않고, 필요하면 `09_spring` 계열로 링크만 겁니다.
 3. **원서 예제 충실.** 저자가 든 예제(Kubia 앱 등)를 그대로 따라가며 저자의 설명 흐름을 보존합니다.
 
 
