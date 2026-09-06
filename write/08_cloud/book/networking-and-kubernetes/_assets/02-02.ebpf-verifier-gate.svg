@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 792" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">eBPF 가 커널 안으로 들어가는 길 — verifier 를 통과해야 붙는다</title><desc id="dd">위 레인이 유저스페이스이고 아래가 커널이다. 경계를 넘는 곳은 둘뿐 — 로드할 때 제어가 한 번 내려가고, 그 뒤로는 맵을 통해 데이터만 올라온다. 붙은 프로그램은 이벤트마다 커널 안에서만 돈다.</desc>
+<rect width="1000" height="792" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">EBPF · THE VERIFIER IS THE GATE</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">eBPF 가 커널 안으로 들어가는 길 — verifier 를 통과해야 붙는다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">Netfilter·iptables 는 패킷마다 경계를 오간다 · eBPF 는 로드할 때 한 번만 넘는다</text>
+<rect x="24" y="156" width="952" height="120" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="40" y="188" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">유저스페이스</text>
+<text x="40" y="208" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">여기서 만들고 읽는다</text>
+<rect x="24" y="316" width="952" height="120" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="40" y="348" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">커널</text>
+<text x="40" y="368" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">검사·컴파일·실행이 여기서</text>
+<rect x="192" y="180" width="160" height="72" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="272" y="210" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">1 작성·컴파일</text>
+<text x="272" y="232" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">C → eBPF 바이트코드</text>
+<rect x="816" y="180" width="160" height="72" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="896" y="210" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">맵 읽기</text>
+<text x="896" y="232" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">결과 데이터만 올라온다</text>
+<rect x="400" y="340" width="160" height="72" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4"/>
+<text x="480" y="370" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">2 verifier</text>
+<text x="480" y="392" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">로드 시점 정적 검사</text>
+<rect x="608" y="340" width="160" height="72" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="688" y="370" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">3 JIT</text>
+<text x="688" y="392" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">네이티브 코드로 번역</text>
+<rect x="816" y="340" width="160" height="72" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="896" y="370" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">4 attach·실행</text>
+<text x="896" y="392" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">이벤트마다 커널 안에서</text>
+<path d="M 272 252 L 272 292 L 388 292 L 388 376 L 392 376" fill="none" stroke="#F08A59" stroke-width="1.6" marker-end="url(#acc)"/>
+<rect x="309.0" y="282" width="134.0" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="376" y="296" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">bpf() 시스템콜</text>
+<path d="M 936 340 L 936 252" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)" stroke-dasharray="5 5"/>
+<text x="944" y="300" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#6A95D8">맵</text>
+<path d="M 568 376 L 598 376" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 776 376 L 806 376" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="413.0" y="414" width="134.0" height="20" rx="4" fill="#0D1117" stroke="#F0616D" stroke-width="0.8"/>
+<text x="480" y="428" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F0616D">거부 → 로드 실패</text>
+<rect x="24" y="476" width="952" height="80" rx="8" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="40" y="500" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">verifier 가 로드 시점에 확인하는 넷</text>
+<text x="148" y="536" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">끝나는 것이 보장되는가</text>
+<text x="380" y="536" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">메모리 접근이 범위 안인가</text>
+<text x="612" y="536" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">쓰지 않은 자리를 읽지 않는가</text>
+<text x="844" y="536" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">허용된 helper 만 부르는가</text>
+<rect x="24" y="580" width="952" height="88" rx="8" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="40" y="604" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">4 단계에서 붙을 수 있는 자리</text>
+<text x="116" y="632" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">kprobes</text>
+<text x="116" y="652" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">커널 동적 추적</text>
+<text x="300" y="632" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">uprobes</text>
+<text x="300" y="652" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">유저스페이스 추적</text>
+<text x="484" y="632" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">tracepoints</text>
+<text x="484" y="652" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">정적 · 버전 안정</text>
+<text x="668" y="632" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">perf_events</text>
+<text x="668" y="652" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">시간 샘플링</text>
+<text x="852" y="632" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">XDP</text>
+<text x="852" y="652" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">드라이버 수준 패킷</text>
+<text x="24" y="700" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">verifier 는 성능을 주지 않습니다. 성능은 경계를 안 넘는 것과 해시 조회에서 나옵니다.</text>
+<text x="24" y="722" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">verifier 가 푸는 것은 신뢰입니다 — 커널을 못 죽인다는 보장이 로드 시점에 서므로 재부팅 없이 기능을 넣습니다.</text>
+<line x1="12" y1="744" x2="952" y2="744" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="766" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="756" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="766" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">관문 — 통과해야 붙는다</text>
+<rect x="313" y="756" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="335" y="766" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">경계를 넘는 데이터</text>
+<rect x="487" y="756" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="509" y="766" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">통과 못 한 경우</text>
+</svg>
