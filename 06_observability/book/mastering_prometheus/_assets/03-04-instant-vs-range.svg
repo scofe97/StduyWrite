@@ -1,0 +1,105 @@
+<svg viewBox="0 0 900 560" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif">
+  <title>벡터 타입과 질의 엔드포인트는 서로 다른 축</title>
+  <desc>순간 벡터는 시계열마다 값 하나를, 범위 벡터는 대괄호로 지정한 기간의 값 여럿을 돌려준다. /query 는 결과를 그대로 내려주므로 둘 다 받지만, /query_range 는 start·end·step 으로 순간 벡터를 여러 번 반복 평가해 점을 모아 선을 그리므로 순간 벡터만 받는다. 범위 벡터를 그래프에 넣으려면 rate 같은 함수로 감싸 값 하나로 접어야 한다.</desc>
+  <rect width="900" height="560" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#b8b3ad"/>
+    </marker>
+    <marker id="arB" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#5b9bd5"/>
+    </marker>
+    <marker id="arA" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <text x="450" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#e8e4df">타입과 엔드포인트는 다른 축</text>
+
+  <!-- ================= 축 1: 벡터 타입 ================= -->
+  <text x="40" y="62" font-size="13" font-weight="700" fill="rgb(212,168,83)">축 1. 타입 — 결과의 모양</text>
+
+  <!-- 순간 벡터 -->
+  <rect x="40" y="74" width="390" height="132" rx="10" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.4"/>
+  <text x="58" y="97" font-size="13.5" font-weight="700" fill="#8ab6e0">순간 벡터 (instant)</text>
+  <rect x="58" y="108" width="354" height="26" rx="4" fill="#dceaf7"/>
+  <text x="235" y="126" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10243a">http_requests_total</text>
+  <text x="58" y="152" font-size="12" fill="#c9c4be">시계열마다 값 1개</text>
+  <line x1="70" y1="176" x2="400" y2="176" stroke="#6b6660" stroke-width="1.2"/>
+  <circle cx="380" cy="176" r="6" fill="#5b9bd5"/>
+  <text x="70" y="196" font-size="10.5" fill="#b8b3ad">과거</text>
+  <text x="392" y="196" text-anchor="end" font-size="10.5" fill="#8ab6e0">지금</text>
+
+  <!-- 범위 벡터 -->
+  <rect x="470" y="74" width="390" height="132" rx="10" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.4"/>
+  <text x="488" y="97" font-size="13.5" font-weight="700" fill="#8fdc93">범위 벡터 (range)</text>
+  <rect x="488" y="108" width="354" height="26" rx="4" fill="#e6f7e7"/>
+  <text x="665" y="126" text-anchor="middle" font-size="11.5" font-weight="700" fill="#14521d">http_requests_total[5m]</text>
+  <text x="488" y="152" font-size="12" fill="#c9c4be">시계열마다 값 여러 개</text>
+  <line x1="500" y1="176" x2="830" y2="176" stroke="#6b6660" stroke-width="1.2"/>
+  <circle cx="722" cy="176" r="5" fill="#66bb6a"/>
+  <circle cx="758" cy="176" r="5" fill="#66bb6a"/>
+  <circle cx="794" cy="176" r="5" fill="#66bb6a"/>
+  <circle cx="826" cy="176" r="5" fill="#66bb6a"/>
+  <text x="774" y="197" text-anchor="middle" font-size="10.5" fill="#8fdc93">[5m] 구간</text>
+
+  <!-- ================= 축 2: 엔드포인트 ================= -->
+  <text x="40" y="240" font-size="13" font-weight="700" fill="rgb(212,168,83)">축 2. 평가 횟수</text>
+
+  <!-- /query -->
+  <rect x="40" y="252" width="390" height="150" rx="10" fill="#dceaf7"/>
+  <text x="58" y="276" font-size="13" font-weight="700" fill="#10243a">/api/v1/query</text>
+  <text x="58" y="298" font-size="11.5" font-weight="700" fill="#10243a">1 회 평가</text>
+  <rect x="58" y="310" width="354" height="34" rx="4" fill="#f4f9fd"/>
+  <text x="76" y="326" font-size="10.5" fill="#10243a">t</text>
+  <circle cx="90" cy="322" r="4" fill="#10243a"/>
+  <line x1="106" y1="322" x2="140" y2="322" stroke="#5b9bd5" stroke-width="1.5" marker-end="url(#arB)"/>
+  <text x="150" y="326" font-size="10.5" font-weight="700" fill="#10243a">결과 그대로 내려줌</text>
+  <text x="76" y="340" font-size="10" fill="#10243a">평가 1회</text>
+  <text x="58" y="366" font-size="11.5" font-weight="700" fill="#14521d">순간 벡터 OK</text>
+  <text x="200" y="366" font-size="11.5" font-weight="700" fill="#14521d">범위 벡터 OK</text>
+  <text x="58" y="388" font-size="11" fill="#10243a">모양 제약이 없음</text>
+
+  <!-- /query_range -->
+  <rect x="470" y="252" width="390" height="150" rx="10" fill="#f5edda"/>
+  <text x="488" y="276" font-size="13" font-weight="700" fill="#3a2f10">/api/v1/query_range</text>
+  <text x="488" y="298" font-size="11.5" font-weight="700" fill="#3a2f10">step 마다 반복 평가</text>
+
+  <!-- 반복 평가 흐름 -->
+  <rect x="488" y="310" width="354" height="34" rx="4" fill="#fdf3df"/>
+  <text x="506" y="326" font-size="10.5" fill="#3a2f10">t1</text>
+  <circle cx="524" cy="322" r="4" fill="#3a2f10"/>
+  <text x="544" y="326" font-size="10.5" fill="#3a2f10">t2</text>
+  <circle cx="562" cy="322" r="4" fill="#3a2f10"/>
+  <text x="582" y="326" font-size="10.5" fill="#3a2f10">t3</text>
+  <circle cx="600" cy="322" r="4" fill="#3a2f10"/>
+  <text x="620" y="326" font-size="10.5" fill="#3a2f10">...</text>
+  <line x1="642" y1="322" x2="676" y2="322" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#arA)"/>
+  <text x="686" y="326" font-size="10.5" font-weight="700" fill="#3a2f10">점 배열 1개 응답</text>
+  <text x="506" y="340" font-size="10" fill="#7a1f1f">시각마다 값 1개씩</text>
+
+  <text x="488" y="366" font-size="11.5" font-weight="700" fill="#14521d">순간 벡터 OK</text>
+  <text x="630" y="366" font-size="11.5" font-weight="700" fill="#7a1f1f">범위 벡터 FAIL</text>
+  <text x="488" y="388" font-size="11" fill="#3a2f10">시각당 점 1개가 필요함</text>
+
+  <!-- ================= 오해 짚기 ================= -->
+  <rect x="40" y="418" width="820" height="52" rx="10" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.3"/>
+  <text x="58" y="440" font-size="12" font-weight="700" fill="#8ab6e0">흔한 오해</text>
+  <text x="150" y="440" font-size="11.5" fill="#c9c4be">응답에 점이 여럿 = 범위 벡터</text>
+  <line x1="420" y1="435" x2="452" y2="435" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#ar)"/>
+  <text x="466" y="440" font-size="11.5" font-weight="700" fill="#8fdc93">아니오. 여러 번 평가한 것</text>
+  <text x="58" y="460" font-size="11" fill="#b8b3ad">점 여럿은 축 2, 값 하나는 축 1</text>
+
+  <!-- ================= 함정 ================= -->
+  <rect x="40" y="484" width="820" height="56" rx="10" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="58" y="506" font-size="12" font-weight="700" fill="rgb(212,168,83)">Grafana 그래프가 안 그려질 때</text>
+  <rect x="58" y="514" width="320" height="24" rx="4" fill="#f2d4d4"/>
+  <text x="218" y="531" text-anchor="middle" font-size="11" font-weight="700" fill="#7a1f1f">http_requests_total[5m] FAIL</text>
+  <line x1="388" y1="526" x2="420" y2="526" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#ar)"/>
+  <rect x="430" y="514" width="410" height="24" rx="4" fill="#e6f7e7"/>
+  <text x="635" y="531" text-anchor="middle" font-size="11" font-weight="700" fill="#14521d">rate(http_requests_total[5m]) OK</text>
+</svg>

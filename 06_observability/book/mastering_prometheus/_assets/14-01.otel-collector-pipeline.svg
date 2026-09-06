@@ -1,0 +1,76 @@
+<svg viewBox="0 0 880 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>OpenTelemetry Collector 파이프라인과 Prometheus 의 pull·push 긴장</title>
+  <desc>Collector 는 receiver·processor·exporter 세 단계 파이프라인이다. prometheus receiver 로 애플리케이션의 메트릭을 긁어 들이고, otlphttp exporter 로 Prometheus 의 OTLP 수신구로 밀어 넣을 수 있다. 그런데 Prometheus 는 원래 pull 모델이라, 이 push 경로에서 보이는 up 메트릭은 전송 성공을 뜻하지 않는다. 실운영에서는 Prometheus 가 직접 Collector 를 긁는 편이 낫다.</desc>
+
+  <defs>
+    <marker id="oa" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="og" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="880" height="500" fill="#0d0d0d"/>
+  <text x="20" y="30" fill="#e8e4df" font-size="15">Collector 는 세 단계 파이프라인 — 그리고 Prometheus 로 되밀 때의 함정</text>
+  <text x="20" y="54" fill="rgb(138,133,128)" font-size="10.5">신호 종류마다 <tspan fill="#e8e4df">receiver → processor → exporter</tspan> 파이프라인 하나. processor 는 선택입니다.</text>
+
+  <!-- pipeline: three stages -->
+  <rect x="20" y="82" width="180" height="96" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="110" y="106" fill="#e8e4df" font-size="12" text-anchor="middle">① receiver</text>
+  <text x="110" y="128" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">입력. 긁거나(pull) 받거나(push)</text>
+  <rect x="34" y="140" width="152" height="20" fill="#dceaf7"/>
+  <text x="110" y="154" fill="#10243a" font-size="8.5" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono', monospace">prometheus receiver</text>
+  <text x="110" y="173" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">scrape_configs 그대로 지원</text>
+
+  <line x1="202" y1="130" x2="238" y2="130" stroke="rgb(138,133,128)" stroke-width="1.4" marker-end="url(#og)"/>
+
+  <rect x="246" y="82" width="180" height="96" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="336" y="106" fill="#e8e4df" font-size="12" text-anchor="middle">② processor</text>
+  <text x="336" y="128" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">미들웨어. 필터·변환</text>
+  <text x="336" y="148" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">선택 단계라 생략 가능</text>
+  <text x="336" y="170" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">Prometheus 의 metric_relabel_configs 격</text>
+
+  <line x1="428" y1="130" x2="464" y2="130" stroke="rgb(212,168,83)" stroke-width="1.6" marker-end="url(#oa)"/>
+
+  <rect x="472" y="82" width="180" height="96" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="562" y="106" fill="#e8e4df" font-size="12" text-anchor="middle">③ exporter</text>
+  <text x="562" y="128" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">출력. 어디로 보낼지</text>
+  <rect x="486" y="140" width="152" height="20" fill="#f5edda"/>
+  <text x="562" y="154" fill="#0d0d0d" font-size="8.5" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono', monospace">otlphttp exporter</text>
+  <text x="562" y="173" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">OTLP 로 밀어냄</text>
+
+  <line x1="654" y1="130" x2="690" y2="130" stroke="rgb(212,168,83)" stroke-width="1.6" marker-end="url(#oa)"/>
+
+  <rect x="698" y="94" width="162" height="72" fill="rgb(26,26,26)" stroke="rgb(212,168,83)"/>
+  <text x="779" y="118" fill="#e8e4df" font-size="11" text-anchor="middle">Prometheus</text>
+  <text x="779" y="138" fill="rgb(212,168,83)" font-size="8" text-anchor="middle" font-family="'JetBrains Mono', monospace">OTLP 수신구</text>
+  <text x="779" y="156" fill="rgb(138,133,128)" font-size="7.5" text-anchor="middle">/api/v1/otlp/v1/metrics</text>
+
+  <line x1="20" y1="200" x2="860" y2="200" stroke="rgb(42,37,32)"/>
+
+  <!-- push vs pull tension -->
+  <text x="20" y="226" fill="#e8e4df" font-size="12">그런데 Prometheus 는 원래 <tspan fill="rgb(212,168,83)">pull</tspan> 모델입니다</text>
+
+  <rect x="20" y="242" width="410" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="40" y="266" fill="#e8e4df" font-size="11">이 push 경로에서 보이는 <tspan font-family="'JetBrains Mono', monospace" fill="rgb(212,168,83)">up</tspan> 을 믿지 마세요</text>
+  <text x="40" y="288" fill="rgb(138,133,128)" font-size="9.5">그 <tspan font-family="'JetBrains Mono', monospace">up</tspan> 은 Collector 의 prometheus receiver 가</text>
+  <text x="40" y="304" fill="rgb(138,133,128)" font-size="9.5">스스로를 긁을 때 나온 값입니다.</text>
+  <rect x="40" y="316" width="372" height="34" fill="#f2d4d4"/>
+  <text x="226" y="330" fill="#7a1f1f" font-size="9" text-anchor="middle" font-weight="700">전송 성공을 뜻하지 않습니다</text>
+  <text x="226" y="344" fill="#7a1f1f" font-size="8">Prometheus 로 잘 밀렸는지는 이 up 이 말해 주지 않습니다</text>
+
+  <rect x="450" y="242" width="410" height="120" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="470" y="266" fill="#e8e4df" font-size="11">실운영에서는 <tspan fill="rgb(212,168,83)">Prometheus 가 직접 긁게</tspan> 두세요</text>
+  <text x="470" y="288" fill="rgb(138,133,128)" font-size="9.5">Prometheus 가 Collector 를 scrape 해야</text>
+  <text x="470" y="304" fill="rgb(138,133,128)" font-size="9.5">Collector 가 살아 있는지·전송이 되는지 압니다.</text>
+  <text x="470" y="326" fill="rgb(138,133,128)" font-size="9">전송 실패는 <tspan font-family="'JetBrains Mono', monospace" fill="#e8e4df" font-size="8">otelcol_exporter_send_failed_metric_points_total</tspan></text>
+  <text x="470" y="346" fill="rgb(138,133,128)" font-size="9">로 확인합니다. pull·push 를 섞기 전에 다시 생각해 보세요.</text>
+
+  <!-- footnote: flag drift -->
+  <line x1="20" y1="384" x2="860" y2="384" stroke="rgb(42,37,32)"/>
+  <text x="20" y="408" fill="rgb(138,133,128)" font-size="10">OTLP 수신구는 켜야 열립니다. 책의 <tspan font-family="'JetBrains Mono', monospace" fill="#e8e4df">--enable-feature=otlp-write-receiver</tspan>(2.47.0 실험)는 3.0 에서</text>
+  <text x="20" y="428" fill="rgb(138,133,128)" font-size="10"><tspan font-family="'JetBrains Mono', monospace" fill="rgb(212,168,83)">--web.enable-otlp-receiver</tspan> 로 승격됐고, remote-write 수신구처럼 기본은 꺼져 있습니다(인증 없는 수신은 위험하니까요).</text>
+  <text x="20" y="454" fill="rgb(138,133,128)" font-size="10">OTLP 전송은 gRPC 와 HTTP 둘 다 되지만, 원조이자 더 흔한 gRPC 가 기본 추천입니다. Prometheus API 는 HTTP 라 여기선 otlphttp 를 씁니다.</text>
+  <text x="20" y="478" fill="rgb(138,133,128)" font-size="10">OTel 은 "실행하는 것"이 아니라 <tspan fill="#e8e4df">규격</tspan>입니다. 실제로 돌리는 조각은 Collector 하나뿐입니다.</text>
+</svg>

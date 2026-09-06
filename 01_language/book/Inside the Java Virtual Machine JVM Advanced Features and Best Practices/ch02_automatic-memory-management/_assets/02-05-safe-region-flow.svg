@@ -1,0 +1,89 @@
+<svg viewBox="0 0 980 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>안전 지점과 안전 영역 — STW 전체 작업 흐름 타임라인</title>
+  <desc>시간축을 따라 GC·실행 스레드·대기 스레드 세 레인이 어떻게 STW에 합류하고 재개하는지 보여준다. GC 요청 → 실행 스레드는 가까운 안전 지점까지 진행 후 폴링으로 정지, 대기 스레드는 이미 안전 영역이라 즉시 정지로 간주 → 모두 멈춘 STW 구간에 GC 수행 → 일괄 재개.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 16px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .phase  { font-size: 11px; font-weight: 800; fill: rgb(212,168,83); }
+      .lane   { font-size: 12.5px; font-weight: 800; fill: #e8e4df; }
+      .lanesub{ font-size: 10px; fill: rgb(138,133,128); }
+      .step   { font-size: 11px; font-weight: 700; }
+      .note   { font-size: 10px; fill: rgb(160,155,150); }
+      .lbl    { font-size: 10.5px; fill: rgb(180,175,170); }
+    </style>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="5" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L9,4.5 L0,9 z" fill="rgb(212,168,83)"/></marker>
+    <marker id="ag" markerWidth="9" markerHeight="9" refX="5" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L9,4.5 L0,9 z" fill="#81c784"/></marker>
+    <marker id="ab" markerWidth="9" markerHeight="9" refX="5" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L9,4.5 L0,9 z" fill="#5b9bd5"/></marker>
+  </defs>
+  <rect x="0" y="0" width="980" height="600" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">안전 지점·안전 영역 — STW 전체 작업 흐름 (시간 →)</text>
+  <text x="24" y="52" class="sub">GC가 직접 멈추지 않는다. 폴링 페이지를 막아 각 스레드가 스스로 가까운 안전 지점에서 멈추도록 유도한다.</text>
+
+  <!-- 시간 컬럼: 라벨컬럼 x=24~168, 타임라인 x=180~960 -->
+  <!-- 3구간 시간 헤더 -->
+  <text x="270" y="84" class="phase" text-anchor="middle">① 정상 실행</text>
+  <text x="600" y="84" class="phase" text-anchor="middle">②~④ STW (모든 스레드 정지 · GC 수행)</text>
+  <text x="880" y="84" class="phase" text-anchor="middle">⑤ 일괄 재개</text>
+
+  <!-- STW 음영 구간 (x=400~800) -->
+  <rect x="400" y="92" width="400" height="396" fill="#1a1410" stroke="#5a4a20" stroke-width="1" stroke-dasharray="5,4"/>
+  <line x1="400" y1="64" x2="400" y2="488" stroke="#d4a853" stroke-width="1.5"/>
+  <text x="360" y="108" class="lbl" text-anchor="middle">GC 요청 ▶</text>
+
+  <!-- ===== 레인 1: GC ===== -->
+  <text x="24" y="150" class="lane">GC 스레드</text>
+  <line x1="180" y1="170" x2="960" y2="170" stroke="#2a2a2a" stroke-width="1"/>
+  <rect x="408" y="124" width="120" height="46" rx="5" fill="#2c4a63" stroke="#5b9bd5"/>
+  <text x="468" y="143" class="step" text-anchor="middle" fill="#dceaf7">① 멈춰라</text>
+  <text x="468" y="159" class="note" text-anchor="middle" fill="#b8d4e8">폴링 페이지 차단</text>
+  <rect x="560" y="124" width="200" height="46" rx="5" fill="#2c4a63" stroke="#5b9bd5"/>
+  <text x="660" y="143" class="step" text-anchor="middle" fill="#dceaf7">③ 모두 멈춤 확인 → GC 수행</text>
+  <text x="660" y="159" class="note" text-anchor="middle" fill="#b8d4e8">OopMap으로 Root 열거 · 마크 · 회수</text>
+  <rect x="800" y="124" width="120" height="46" rx="5" fill="#2c4a63" stroke="#5b9bd5"/>
+  <text x="860" y="143" class="step" text-anchor="middle" fill="#dceaf7">④ 폴링 해제</text>
+  <text x="860" y="159" class="note" text-anchor="middle" fill="#b8d4e8">페이지 복구</text>
+  <line x1="528" y1="147" x2="558" y2="147" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="760" y1="147" x2="798" y2="147" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#ar)"/>
+
+  <!-- ===== 레인 2: 실행 중 스레드 ===== -->
+  <text x="24" y="246" class="lane">실행 중 스레드</text>
+  <text x="24" y="262" class="lanesub">명령 실행 → 안전 지점 폴링</text>
+  <line x1="180" y1="300" x2="960" y2="300" stroke="#2a2a2a" stroke-width="1"/>
+  <rect x="190" y="226" width="170" height="46" rx="5" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="275" y="245" class="step" text-anchor="middle" fill="#dceaf7">자바 코드 실행 중</text>
+  <text x="275" y="261" class="note" text-anchor="middle">객체 참조 변경 가능</text>
+  <rect x="430" y="226" width="200" height="46" rx="5" fill="#2a1f0a" stroke="#d4a853" stroke-width="1.6"/>
+  <text x="530" y="245" class="step" text-anchor="middle" fill="#f5d76e">② 가까운 안전 지점까지 진행 후 정지</text>
+  <text x="530" y="261" class="note" text-anchor="middle">폴링서 SIGSEGV → 트랩 (그 위치에 OopMap 있음)</text>
+  <rect x="800" y="226" width="160" height="46" rx="5" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="880" y="245" class="step" text-anchor="middle" fill="#dceaf7">멈췄던 위치서 재개</text>
+  <text x="880" y="261" class="note" text-anchor="middle">다음 명령 실행</text>
+  <line x1="360" y1="249" x2="428" y2="249" stroke="#4a8ab0" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="630" y1="249" x2="798" y2="249" stroke="#81c784" stroke-width="1.5" marker-end="url(#ag)"/>
+  <!-- GC 폴링차단 → 실행스레드 정지 유발 -->
+  <line x1="468" y1="170" x2="500" y2="224" stroke="#5b9bd5" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#ab)"/>
+  <text x="540" y="196" class="note" style="fill:#7fb0d8">폴링 차단이 정지를 유발</text>
+
+  <!-- ===== 레인 3: 대기 중 스레드 ===== -->
+  <text x="24" y="372" class="lane">대기 중 스레드</text>
+  <text x="24" y="388" class="lanesub">명령 안 함 → 안전 영역</text>
+  <line x1="180" y1="426" x2="960" y2="426" stroke="#2a2a2a" stroke-width="1"/>
+  <rect x="190" y="352" width="180" height="46" rx="5" fill="#1e2a1e" stroke="#4ab080"/>
+  <text x="280" y="371" class="step" text-anchor="middle" fill="#cdeccf">sleep / wait / I/O 블로킹</text>
+  <text x="280" y="387" class="note" text-anchor="middle">진입 시 안전 영역 플래그 ON</text>
+  <rect x="430" y="352" width="220" height="46" rx="5" fill="#15300f" stroke="#66bb6a" stroke-width="1.6"/>
+  <text x="540" y="371" class="step" text-anchor="middle" fill="#81c784">②′ 이미 멈춘 것으로 간주</text>
+  <text x="540" y="387" class="note" text-anchor="middle">폴링 불가 → 안전 영역이 대신 보증</text>
+  <rect x="700" y="352" width="240" height="46" rx="5" fill="#1e2a1e" stroke="#4ab080"/>
+  <text x="820" y="371" class="step" text-anchor="middle" fill="#cdeccf">깨어나는 시점 — GC 끝났나 확인</text>
+  <text x="820" y="387" class="note" text-anchor="middle">진행 중이면 대기, 끝났으면 안전 영역 탈출</text>
+  <line x1="370" y1="375" x2="428" y2="375" stroke="#4ab080" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="650" y1="375" x2="698" y2="375" stroke="#81c784" stroke-width="1.5" marker-end="url(#ag)"/>
+
+  <!-- 하단 핵심 박스 -->
+  <rect x="24" y="506" width="932" height="80" rx="8" fill="#141414" stroke="#3a3a3a"/>
+  <text x="42" y="530" class="lane" font-size="12.5" fill="rgb(212,168,83)">왜 두 메커니즘인가 — 둘이 합쳐져야 *모든* 스레드가 STW에 든다</text>
+  <text x="42" y="552" class="lbl">• <tspan font-weight="800" fill="#f5d76e">안전 지점</tspan> — 실행 중 스레드용. 명령을 도니까 폴링으로 "가까운 OopMap 있는 위치"까지 가서 멈춘다.</text>
+  <text x="42" y="572" class="lbl">• <tspan font-weight="800" fill="#81c784">안전 영역</tspan> — 대기 중 스레드용. 명령을 안 도니 폴링 불가 → "여긴 언제 멈춰도 안전"이라 미리 선언해, GC가 즉시 멈춘 것으로 취급한다.</text>
+</svg>

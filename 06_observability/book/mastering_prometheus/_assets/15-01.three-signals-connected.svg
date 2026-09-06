@@ -1,0 +1,84 @@
+<svg viewBox="0 0 880 520" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>세 신호를 잇되 서로 의존시키지 않기 — 메트릭·로그·트레이스와 exemplar</title>
+  <desc>Prometheus 메트릭은 관측의 3분의 1이다. 로그는 신호대잡음이 가장 나쁘지만 언제나 남는 최후의 보루이고, 트레이스는 신호대잡음이 가장 좋지만 샘플링이 필요해 전체 조망은 못 준다. 세 신호를 잇는 열쇠는 라벨·메타데이터의 일관성이며, 메트릭에서 트레이스로 바로 뛰는 exemplar 가 그 다리다. 잇되 서로 의존시키지 않는 것이 원칙이다.</desc>
+
+  <defs>
+    <marker id="sa" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="880" height="520" fill="#0d0d0d"/>
+  <text x="20" y="30" fill="#e8e4df" font-size="15">Prometheus 는 관측의 3분의 1 — 나머지를 어떻게 잇는가</text>
+  <text x="20" y="54" fill="rgb(138,133,128)" font-size="10.5">메트릭·로그·트레이스 세 신호를 <tspan fill="#e8e4df">잇되</tspan>, 하나가 무너져도 나머지가 살도록 <tspan fill="#e8e4df">의존시키지는 않습니다</tspan>.</text>
+
+  <!-- three signal columns -->
+  <!-- metrics -->
+  <rect x="20" y="80" width="270" height="180" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="155" y="106" fill="#e8e4df" font-size="13" text-anchor="middle">메트릭 (Prometheus)</text>
+  <rect x="40" y="120" width="230" height="20" fill="#f5edda"/>
+  <text x="155" y="134" fill="#0d0d0d" font-size="9" text-anchor="middle" font-weight="700">전체를 낮은 비용으로 조망</text>
+  <text x="36" y="162" fill="rgb(138,133,128)" font-size="9.5">· 미리 정의한 시계열만 봅니다</text>
+  <text x="36" y="182" fill="rgb(138,133,128)" font-size="9.5">· "무엇이 언제" 는 알아도</text>
+  <text x="36" y="200" fill="rgb(138,133,128)" font-size="9.5">  "왜" 의 세부는 못 담습니다</text>
+  <text x="36" y="228" fill="rgb(138,133,128)" font-size="9">unknown unknown = 아예 없는 메트릭</text>
+  <text x="36" y="246" fill="rgb(138,133,128)" font-size="9">known unknown = 있지만 값은 쿼리 때 앎</text>
+
+  <!-- logs -->
+  <rect x="305" y="80" width="270" height="180" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="440" y="106" fill="#e8e4df" font-size="13" text-anchor="middle">로그</text>
+  <rect x="325" y="120" width="230" height="20" fill="#f2d4d4"/>
+  <text x="440" y="134" fill="#7a1f1f" font-size="9" text-anchor="middle" font-weight="700">신호대잡음 최악</text>
+  <text x="321" y="162" fill="rgb(138,133,128)" font-size="9.5">· 추가는 가장 쉬움 (남용 위험)</text>
+  <text x="321" y="182" fill="rgb(138,133,128)" font-size="9.5">· 대부분 비구조 — 사람용이라</text>
+  <text x="321" y="200" fill="rgb(138,133,128)" font-size="9.5">· logfmt 가 그나마 절충</text>
+  <rect x="325" y="216" width="230" height="34" fill="#cdeccf"/>
+  <text x="440" y="230" fill="#14521d" font-size="9" text-anchor="middle" font-weight="700">그래도 최후의 보루</text>
+  <text x="440" y="244" fill="#14521d" font-size="8" text-anchor="middle">다른 신호가 다 죽어도 로그는 남습니다</text>
+
+  <!-- traces -->
+  <rect x="590" y="80" width="270" height="180" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="725" y="106" fill="#e8e4df" font-size="13" text-anchor="middle">트레이스</text>
+  <rect x="610" y="120" width="230" height="20" fill="#dceaf7"/>
+  <text x="725" y="134" fill="#10243a" font-size="9" text-anchor="middle" font-weight="700">신호대잡음 최상 (샘플링 시)</text>
+  <text x="606" y="162" fill="rgb(138,133,128)" font-size="9.5">· 요청 하나에 수십 span 가능</text>
+  <text x="606" y="182" fill="rgb(138,133,128)" font-size="9.5">· 샘플링 필수 (기본 1%·느림 50%·</text>
+  <text x="606" y="200" fill="rgb(138,133,128)" font-size="9.5">  에러 100% 처럼)</text>
+  <text x="606" y="228" fill="rgb(138,133,128)" font-size="9">샘플링하니 전체 조망은 못 줍니다</text>
+  <text x="606" y="246" fill="rgb(138,133,128)" font-size="9">메트릭이 못 담는 세부를 채웁니다</text>
+
+  <!-- connective tissue: metadata consistency -->
+  <line x1="20" y1="282" x2="860" y2="282" stroke="rgb(42,37,32)"/>
+  <text x="20" y="308" fill="#e8e4df" font-size="12">잇는 열쇠 ① — <tspan fill="rgb(212,168,83)">라벨·메타데이터의 일관성</tspan></text>
+  <rect x="20" y="322" width="410" height="52" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="36" y="344" fill="rgb(138,133,128)" font-size="9.5">같은 서비스면 어느 신호에서든 라벨이 같아야 합니다.</text>
+  <text x="36" y="364" fill="#66bb6a" font-size="9.5" font-family="'JetBrains Mono', monospace">app=servicex</text>
+  <text x="150" y="364" fill="rgb(138,133,128)" font-size="9.5">(메트릭·로그·트레이스 모두 동일)</text>
+  <rect x="450" y="322" width="410" height="52" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="466" y="344" fill="rgb(138,133,128)" font-size="9.5">한 글자만 달라도 신호 간 점프가 끊깁니다.</text>
+  <text x="466" y="364" fill="#e57373" font-size="9.5" font-family="'JetBrains Mono', monospace">app=service-x</text>
+  <text x="590" y="364" fill="rgb(138,133,128)" font-size="9.5">← 이러면 안 됩니다</text>
+
+  <!-- exemplar bridge -->
+  <text x="20" y="400" fill="#e8e4df" font-size="12">잇는 열쇠 ② — <tspan fill="rgb(212,168,83)">exemplar</tspan> (메트릭 → 트레이스 다리)</text>
+
+  <rect x="20" y="414" width="200" height="40" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="120" y="431" fill="#e8e4df" font-size="10" text-anchor="middle">메트릭 데이터 포인트</text>
+  <text x="120" y="447" fill="rgb(138,133,128)" font-size="8.5" text-anchor="middle">스파이크가 보이는 지점</text>
+
+  <line x1="222" y1="434" x2="290" y2="434" stroke="rgb(212,168,83)" stroke-width="1.6" marker-end="url(#sa)"/>
+  <rect x="242" y="416" width="30" height="16" fill="#f5edda"/>
+  <text x="257" y="428" fill="#0d0d0d" font-size="8" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono', monospace">tid</text>
+
+  <rect x="298" y="414" width="200" height="40" fill="rgb(26,26,26)" stroke="rgb(212,168,83)"/>
+  <text x="398" y="431" fill="#e8e4df" font-size="10" text-anchor="middle">그 순간의 트레이스</text>
+  <text x="398" y="447" fill="rgb(138,133,128)" font-size="8.5" text-anchor="middle">클릭 한 번으로 세부로 내려감</text>
+
+  <text x="516" y="428" fill="rgb(138,133,128)" font-size="9.5">수집 시점에 최신 trace ID 를 데이터 포인트에 붙여</text>
+  <text x="516" y="446" fill="rgb(138,133,128)" font-size="9.5">스파이크 → 그 시각의 트레이스로 바로 뜁니다.</text>
+
+  <!-- footnote -->
+  <line x1="20" y1="470" x2="860" y2="470" stroke="rgb(42,37,32)"/>
+  <text x="20" y="491" fill="rgb(138,133,128)" font-size="10">exemplar 는 <tspan fill="#e8e4df">여전히 실험 기능</tspan>입니다 — <tspan font-family="'JetBrains Mono', monospace" fill="rgb(212,168,83)">--enable-feature=exemplar-storage</tspan> (OTLP·remote-write 수신구와 달리 아직 승격 안 됨).</text>
+  <text x="20" y="511" fill="rgb(138,133,128)" font-size="10">로그는 Loki, 트레이스는 Tempo — 둘 다 PromQL 을 닮은 질의어(LogQL·TraceQL)를 써서 신호 사이를 오가기 쉽습니다.</text>
+</svg>

@@ -1,0 +1,90 @@
+<svg viewBox="0 0 900 540" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>GC 운영 사이클 — 로그 관측에서 튜닝까지 닫히는 순환</title>
+  <desc>GC 운영은 로그를 관측해 네 가지 지표(STW 시간·GC 빈도·힙 증감·Promotion Failure)를 읽고, 증상을 분류한 뒤 그에 맞는 튜닝 옵션을 조정하고, 다시 로그로 효과를 재측정하는 순환이다. 힙 증감은 회수량 비율(A−B가 큰가)과 GC 후 점유율(B/전체가 낮은가) 두 비율로 건강을 판단한다. 측정 없는 튜닝은 추측일 뿐이라 사이클은 항상 관측에서 시작한다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: rgb(138,133,128); }
+      .step  { font-size: 13px; font-weight: 800; fill: #e8e4df; }
+      .nm    { font-size: 11px; font-weight: 700; fill: #e8e4df; }
+      .mt    { font-size: 10px; fill: rgb(138,133,128); }
+      .tick  { font-size: 10px; fill: rgb(212,168,83); font-weight: 700; }
+      .mono  { font-family: 'JetBrains Mono', monospace; }
+      .ok    { font-size: 10px; fill: #66bb6a; font-weight: 700; }
+      .bad   { font-size: 10px; fill: #f44336; font-weight: 700; }
+    </style>
+    <marker id="flow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="540" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">GC 운영 사이클 — 관측 → 진단 → 튜닝 → 재측정</text>
+  <text x="28" y="58" class="sub">측정 없는 튜닝은 추측이다 · 사이클은 항상 GC 로그 관측에서 시작해 다시 로그로 닫힌다</text>
+
+  <!-- ===== ① 관측 ===== -->
+  <rect x="28" y="80" width="250" height="120" rx="10" fill="rgba(224,224,224,0.10)" stroke="#E0E0E0" stroke-width="1.5"/>
+  <text x="44" y="106" class="step">① 관측 — GC 로그</text>
+  <rect x="44" y="118" width="218" height="22" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="133" class="mt mono">-Xlog:gc*  ·  jstat -gcutil</text>
+  <text x="44" y="160" class="mt">로그 한 줄: 128M-&gt;64M(512M) 12.3ms</text>
+  <text x="44" y="178" class="mt">(GC 전 → GC 후 (전체) · STW 시간)</text>
+  <text x="44" y="194" class="tick">먼저 본다 — 추측 금지</text>
+
+  <!-- 화살표 ①→② -->
+  <line x1="278" y1="140" x2="322" y2="140" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#flow)"/>
+
+  <!-- ===== ② 지표 4종 ===== -->
+  <rect x="326" y="80" width="546" height="120" rx="10" fill="rgba(96,165,224,0.08)" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="342" y="106" class="step">② 지표 — 무엇을 읽나</text>
+  <rect x="342" y="118" width="250" height="34" rx="5" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="352" y="132" class="nm">STW 시간</text>
+  <text x="352" y="147" class="mt">멈춤 = 응답 지연 (가장 먼저)</text>
+  <rect x="606" y="118" width="250" height="34" rx="5" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="616" y="132" class="nm">GC 빈도</text>
+  <text x="616" y="147" class="mt">Minor·Full GC 간격</text>
+  <rect x="342" y="158" width="250" height="34" rx="5" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)"/>
+  <text x="352" y="172" class="nm">힙 증감 — 두 비율로 본다</text>
+  <text x="352" y="187" class="mt">회수량(A−B) 큰가 · 점유율(B/전체) 낮은가</text>
+  <rect x="606" y="158" width="250" height="34" rx="5" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="616" y="172" class="nm">Promotion Failure</text>
+  <text x="616" y="187" class="mt">Old 꽉 참 → Full GC 유발</text>
+
+  <!-- 화살표 ②→③ -->
+  <line x1="599" y1="200" x2="599" y2="240" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#flow)"/>
+  <text x="615" y="225" class="mt">증상 분류 ↓</text>
+
+  <!-- ===== ③ 진단·처방 ===== -->
+  <rect x="326" y="248" width="546" height="184" rx="10" fill="rgba(102,187,106,0.07)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="342" y="274" class="step">③ 진단 → 처방</text>
+
+  <rect x="342" y="286" width="514" height="28" rx="5" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="352" y="304" class="nm">Full GC 잦음<tspan class="mt">  →  Old 부족이면 </tspan><tspan class="tick mono">-Xmx↑</tspan><tspan class="mt"> · 줄지 않으면 누수 점검</tspan></text>
+  <rect x="342" y="318" width="514" height="28" rx="5" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="352" y="336" class="nm">STW 김<tspan class="mt">  →  </tspan><tspan class="tick mono">-XX:MaxGCPauseMillis↓</tspan><tspan class="mt"> · ZGC·Shenandoah 고려</tspan></text>
+  <rect x="342" y="350" width="514" height="28" rx="5" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="352" y="368" class="nm">Minor GC 잦음<tspan class="mt">  →  </tspan><tspan class="tick mono">-Xmn / -XX:NewRatio</tspan><tspan class="mt"> (신세대 확대)</tspan></text>
+  <rect x="342" y="382" width="514" height="28" rx="5" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="352" y="400" class="nm">Promotion Failure<tspan class="mt">  →  힙 크기 조정 · 객체 생명주기 검토</tspan></text>
+  <text x="352" y="424" class="mt">한 번에 한 옵션만 바꾼다 — 동시에 여러 개 바꾸면 무엇이 들었는지 모른다</text>
+
+  <!-- 화살표 ③→④ (왼쪽으로) -->
+  <line x1="326" y1="340" x2="160" y2="340" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#flow)"/>
+
+  <!-- ===== ④ 재측정 (닫힘) ===== -->
+  <rect x="28" y="248" width="250" height="184" rx="10" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="44" y="274" class="step">④ 재측정</text>
+  <text x="44" y="298" class="mt">바꾼 옵션으로 다시 띄우고</text>
+  <text x="44" y="314" class="mt">→ 같은 로그를 다시 본다</text>
+  <text x="44" y="338" class="ok">나아졌으면 ✔ 유지</text>
+  <text x="44" y="358" class="bad">그대로면 ✘ 다른 처방으로</text>
+  <text x="44" y="384" class="tick">사이클은 ①로 돌아간다</text>
+  <text x="44" y="404" class="mt">한 줄이 아니라 추세로 판단</text>
+
+  <!-- 닫힘 화살표 ④→① -->
+  <line x1="153" y1="248" x2="153" y2="204" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#flow)"/>
+
+  <!-- ===== 하단: 한 문장 ===== -->
+  <rect x="28" y="450" width="844" height="38" rx="10" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="450" y="474" class="nm" text-anchor="middle">🔑 측정 → 분석 → 조정 → 재측정 — GC 튜닝은 추측이 아니라 닫힌 사이클이다</text>
+</svg>

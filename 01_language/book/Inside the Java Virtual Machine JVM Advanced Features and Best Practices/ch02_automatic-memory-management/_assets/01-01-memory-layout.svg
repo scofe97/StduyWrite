@@ -1,0 +1,123 @@
+<svg viewBox="0 0 900 838" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>JVM 런타임 데이터 영역 — 프로세스 메모리 레이아웃 (JDK 21 기준)</title>
+  <desc>OS 프로세스 메모리를 자바 힙(-Xmx 안)과 힙 밖 네이티브 영역이 나눠 가진다. 자바 힙 안에는 객체 인스턴스(Young+Old)와 String.intern 문자열 실체, 그리고 JDK 7 이전의 PermGen 자취가 있고, 힙 밖에는 스레드 스택·Metaspace·다이렉트 메모리가 산다. 어느 칸이 깨지느냐가 OOM 메시지를 가른다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub     { font-size: 11.5px; fill: rgb(138,133,128); }
+      .zlabel  { font-size: 12px; font-weight: 700; fill: #e8e4df; }
+      .nm      { font-size: 12px; font-weight: 700; fill: #e8e4df; }
+      .mt      { font-size: 10px; fill: rgb(138,133,128); }
+      .oom     { font-size: 9.5px; font-weight: 700; fill: #f44336; font-family: 'JetBrains Mono', monospace; }
+      .ok      { font-size: 10px; font-weight: 700; fill: #66bb6a; }
+      .cap     { font-size: 10.5px; fill: rgb(138,133,128); }
+      .tick    { font-size: 9.5px; fill: rgb(212,168,83); font-weight: 700; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="838" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">JVM 런타임 데이터 영역 — 프로세스 메모리 레이아웃</text>
+  <text x="28" y="58" class="sub">OS가 준 한 판을 자바 힙(-Xmx 안)과 힙 밖 네이티브가 나눠 가진다 · 어느 칸이 깨지느냐가 OOM 메시지를 가른다</text>
+
+  <!-- ===== 바깥 프레임: OS 프로세스 메모리 (RSS 전체) ===== -->
+  <rect x="28" y="78" width="844" height="492" rx="12" fill="none" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="48" y="104" class="zlabel">🖥️ OS 프로세스 메모리 (RSS 전체) — 진단 첫 단서: RSS − 자바 힙 사용량</text>
+
+  <!-- 왼쪽: 자바 힙 (-Xmx 경계) -->
+  <rect x="44" y="120" width="360" height="392" rx="10" fill="rgba(96,165,224,0.10)" stroke="#5b9bd5" stroke-width="2"/>
+  <text x="64" y="144" class="zlabel">자바 힙 — 전체 공유 · 수명=가상 머신</text>
+  <text x="64" y="163" class="mt">-Xms(시작) / -Xmx(최대)로 조절 · GC의 무대 · 힙 덤프(.hprof)에 잡힘</text>
+
+  <!-- 힙 내부: A 객체 인스턴스 -->
+  <rect x="60" y="178" width="328" height="98" rx="8" fill="rgb(26,26,26)" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="80" y="201" class="nm">객체 인스턴스 (Young + Old 세대)</text>
+  <text x="80" y="222" class="mt">거의 모든 new 객체가 여기. 세대 분리는 3장 GC 주제.</text>
+  <text x="80" y="241" class="mt">할당 = bump-the-pointer (GC가 compaction해 구멍 제거)</text>
+  <text x="80" y="263" class="oom">💥 OutOfMemoryError: Java heap space</text>
+
+  <!-- 힙 내부: B String.intern -->
+  <rect x="60" y="288" width="328" height="74" rx="8" fill="rgb(26,26,26)" stroke="#5b9bd5" stroke-width="1.2"/>
+  <text x="80" y="311" class="nm">String.intern() 문자열 실체 (JDK 7+)</text>
+  <text x="80" y="332" class="mt">실체는 힙으로 이동. 단, 참조 등록부는 런타임 상수 풀(메서드 영역).</text>
+  <text x="80" y="351" class="mt">동적 추가 폭주 시 메서드 영역 OOM.</text>
+
+  <!-- 힙 내부: C PermGen (JDK7 이전) -->
+  <rect x="60" y="374" width="328" height="130" rx="8" fill="rgb(26,26,26)" stroke="#f44336" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="80" y="397" class="nm">⟳ (JDK 7 이전) PermGen = 메서드 영역</text>
+  <text x="80" y="418" class="mt">JDK 7까지 메서드 영역이 힙 안 PermGen에 있었다.</text>
+  <text x="80" y="437" class="mt">-XX:MaxPermSize · 💥 PermGen space</text>
+  <text x="80" y="456" class="mt">클래스 다수 로딩 시 자바 힙을 압박 → JDK 8에서 힙 밖으로 분리.</text>
+  <text x="80" y="479" class="tick">➜ JDK 8부터 이 칸이 힙 밖 Metaspace로 이사 (오른쪽 참조)</text>
+
+  <!-- -Xmx 경계선 표시 -->
+  <line x1="404" y1="120" x2="404" y2="512" stroke="#5b9bd5" stroke-width="3"/>
+  <text x="404" y="538" class="tick" text-anchor="middle">↑ -Xmx 경계 (이 안만 -Xmx가 통제)</text>
+
+  <!-- 오른쪽: 힙 밖 네이티브 영역 -->
+  <rect x="416" y="120" width="440" height="392" rx="10" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="436" y="144" class="zlabel">힙 밖 네이티브 영역 — -Xmx 무관 · 힙 덤프에 안 잡힘</text>
+
+  <!-- 스레드 스택들 -->
+  <rect x="432" y="158" width="408" height="142" rx="8" fill="rgb(26,26,26)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="452" y="181" class="nm">스레드별 스택 (스레드 전용 · 수명=스레드)</text>
+  <text x="452" y="200" class="mt">스레드 하나당 한 벌: PC · JVM 스택 · 네이티브 스택. -Xss 크기.</text>
+  <!-- 작은 스택 박스 3개 -->
+  <rect x="452" y="212" width="86" height="58" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="495" y="230" class="mt" text-anchor="middle">스레드1</text>
+  <text x="495" y="245" class="mt" text-anchor="middle">스택</text>
+  <text x="495" y="260" class="mt" text-anchor="middle">-Xss</text>
+  <rect x="546" y="212" width="86" height="58" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="589" y="230" class="mt" text-anchor="middle">스레드2</text>
+  <text x="589" y="245" class="mt" text-anchor="middle">스택</text>
+  <rect x="640" y="212" width="86" height="58" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="683" y="230" class="mt" text-anchor="middle">스레드N</text>
+  <text x="683" y="245" class="mt" text-anchor="middle">스택</text>
+  <text x="768" y="237" class="mt">… 많아질수록</text>
+  <text x="768" y="253" class="oom">스택용 메모리 고갈</text>
+  <text x="452" y="290" class="oom">💥 너무 깊은 재귀 → StackOverflowError | 스레드 과다 → OutOfMemoryError</text>
+
+  <!-- Metaspace -->
+  <rect x="432" y="312" width="408" height="86" rx="8" fill="rgb(26,26,26)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="452" y="335" class="nm">Metaspace (JDK 8+ 메서드 영역) — 전체 공유</text>
+  <text x="452" y="356" class="mt">클래스·메서드·정적 변수·런타임 상수 풀(참조부). 네이티브 메모리로 이사함.</text>
+  <text x="452" y="375" class="mt">-XX:MaxMetaspaceSize (기본 무제한) · 힙과 분리 → 힙 압박 없음</text>
+  <text x="452" y="392" class="oom">💥 OutOfMemoryError: Metaspace</text>
+
+  <!-- 다이렉트 메모리 -->
+  <rect x="432" y="410" width="408" height="94" rx="8" fill="rgb(26,26,26)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="452" y="433" class="nm">다이렉트 메모리 (NIO) — 전체 공유</text>
+  <text x="452" y="454" class="mt">ByteBuffer.allocateDirect(). 힙엔 참조 객체만, 실체는 네이티브.</text>
+  <text x="452" y="473" class="mt">힙→네이티브 복사 1회 절감. -XX:MaxDirectMemorySize (기본=-Xmx).</text>
+  <text x="452" y="494" class="oom">💥 OutOfMemoryError: Direct buffer memory (힙 덤프엔 안 보임)</text>
+
+  <!-- 이사 화살표: PermGen(힙) → Metaspace(네이티브) -->
+  <path d="M 392 430 q 28 -6 44 -70" fill="none" stroke="rgb(212,168,83)" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+
+  <!-- ===== 하단: 핵심 한 문장 — 힙 밖 3총사 ===== -->
+  <rect x="28" y="590" width="844" height="224" rx="12" fill="rgb(26,26,26)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="48" y="618" class="zlabel">🔑 한 문장 — "힙 밖에 사는 3총사" (이 챕터의 척추)</text>
+
+  <rect x="48" y="636" width="258" height="62" rx="8" fill="rgba(102,187,106,0.12)" stroke="#66bb6a"/>
+  <text x="68" y="662" class="nm">① 스레드 스택</text>
+  <text x="68" y="684" class="mt">-Xss · 스레드 OOM</text>
+  <rect x="321" y="636" width="258" height="62" rx="8" fill="rgba(102,187,106,0.12)" stroke="#66bb6a"/>
+  <text x="341" y="662" class="nm">② Metaspace</text>
+  <text x="341" y="684" class="mt">-XX:MaxMetaspaceSize</text>
+  <rect x="594" y="636" width="258" height="62" rx="8" fill="rgba(102,187,106,0.12)" stroke="#66bb6a"/>
+  <text x="614" y="662" class="nm">③ 다이렉트 메모리</text>
+  <text x="614" y="684" class="mt">-XX:MaxDirectMemorySize</text>
+
+  <text x="48" y="732" class="nm">공통점 3가지 →</text>
+  <rect x="168" y="718" width="220" height="26" rx="13" fill="rgb(26,26,26)" stroke="rgb(138,133,128)"/>
+  <text x="278" y="735" class="cap" text-anchor="middle">① -Xmx로 안 잡힘</text>
+  <rect x="400" y="718" width="240" height="26" rx="13" fill="rgb(26,26,26)" stroke="rgb(138,133,128)"/>
+  <text x="520" y="735" class="cap" text-anchor="middle">② 힙 덤프(.hprof)에 안 나옴</text>
+  <rect x="652" y="718" width="212" height="26" rx="13" fill="rgb(26,26,26)" stroke="rgb(138,133,128)"/>
+  <text x="758" y="735" class="cap" text-anchor="middle">③ OS 네이티브 메모리에 산다</text>
+
+  <text x="48" y="774" class="cap">역설: 스레드 생성 OOM이면 -Xmx를 <tspan font-weight="800" fill="#66bb6a">줄여</tspan> 스택용 네이티브 공간을 비운다. 힙을 키우면 스택 몫이 좁아져 악화.</text>
+  <text x="48" y="795" class="cap">PC 카운터만 OOM 명세가 없다 — 한 스레드에 한 칸이면 충분하므로. (위 스택 박스 안에 PC도 포함)</text>
+</svg>

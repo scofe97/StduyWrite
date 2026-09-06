@@ -1,0 +1,49 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>JDBC 기초 — 드라이버·connection pool·prepared statement</title>
+  <desc>JDBC 드라이버는 DB 애플리케이션 성능의 가장 중요한 요인이다. 작업을 client에서 하느냐 server에서 하느냐로 thin과 thick으로 나뉜다. 어느 모델도 본질적 우위는 없고 환경에 달렸다. 작은 2코어가 큰 DB에 붙으면 thin이 낫고, 100 부서가 한 HR DB에 붙으면 thick이 낫다. 드라이버는 1~4 type이 있고 오늘날은 type 2(native)와 type 4(pure Java)가 널리 쓰인다. 둘 다 같은 wire protocol을 써 본질적 우위가 없다. ODBC와 type 1은 피한다. connection은 생성이 비싸 풀해 재사용한다. 일반 규칙은 스레드당 connection 하나다. 단 DB가 병목이면 과도한 connection이 성능을 떨어뜨려, 풀로 throttle한다. PreparedStatement는 Statement보다 SQL 정보를 재사용해 빠르지만, 한 번만 쓰면 셋업이 낭비다. statement pool은 connection별로 동작해 standalone은 connection pool이 필요하다. setMaxStatements로 관리하되 driver와 framework 중 하나만 설정한다. statement는 heap을 많이 써 풀 크기를 신중히 튜닝한다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">JDBC 기초 — 드라이버·pool·statement</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">JDBC 드라이버는 DB 애플리케이션 성능의 가장 중요한 요인입니다</text>
+
+  <!-- thin vs thick -->
+  <rect x="20" y="74" width="320" height="118" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="96" fill="#9cc3df" font-size="12" font-weight="bold">thin (client 가벼움)</text>
+  <text x="38" y="116" fill="rgb(138,133,128)" font-size="10">작업을 DB server에 의존</text>
+  <text x="38" y="134" fill="rgb(138,133,128)" font-size="10">작은 footprint</text>
+  <text x="38" y="154" fill="#66bb6a" font-size="10">작은 2코어 → 큰 DB일 때 유리</text>
+  <text x="38" y="174" fill="rgb(138,133,128)" font-size="9">client CPU가 먼저 포화될 때</text>
+
+  <rect x="350" y="74" width="312" height="118" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="368" y="96" fill="rgb(212,168,83)" font-size="12" font-weight="bold">thick (client 무거움)</text>
+  <text x="368" y="116" fill="rgb(138,133,128)" font-size="10">DB 작업을 client로 offload</text>
+  <text x="368" y="134" fill="rgb(138,133,128)" font-size="10">client CPU·메모리 더 씀</text>
+  <text x="368" y="154" fill="#66bb6a" font-size="10">100 부서 → 한 HR DB일 때 유리</text>
+  <text x="368" y="174" fill="rgb(138,133,128)" font-size="9">DB 자원을 아껴야 할 때</text>
+
+  <!-- driver type -->
+  <rect x="20" y="200" width="642" height="78" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="222" fill="#e8e4df" font-size="13" font-weight="bold">드라이버 type 1~4 — 오늘날은 2·4</text>
+  <text x="38" y="244" fill="#66bb6a" font-size="11">type 2 (native lib) · type 4 (pure Java) — 같은 wire protocol, 본질적 우위 없음</text>
+  <text x="38" y="264" fill="#f47f72" font-size="11">type 1 (ODBC 브리지) 피함 · type 3 (middleware) 거의 미채택. 환경에서 직접 테스트</text>
+
+  <!-- connection pool -->
+  <rect x="20" y="286" width="642" height="92" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="308" fill="#66bb6a" font-size="13" font-weight="bold">connection pool — 스레드당 하나</text>
+  <text x="38" y="330" fill="rgb(138,133,128)" font-size="11">connection은 생성이 비쌈 → 풀해 재사용. 일반 규칙: 스레드당 connection 하나</text>
+  <text x="38" y="350" fill="rgb(138,133,128)" font-size="11">서버는 스레드 풀과 같은 크기로 시작 · standalone은 스레드 수 기준</text>
+  <text x="38" y="370" fill="#f47f72" font-size="11">단 DB가 병목이면 과도한 connection이 성능↓ → 풀로 throttle</text>
+
+  <!-- prepared statement -->
+  <rect x="20" y="386" width="642" height="196" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="408" fill="rgb(212,168,83)" font-size="13" font-weight="bold">PreparedStatement — 재사용이 핵심</text>
+  <text x="38" y="430" fill="rgb(138,133,128)" font-size="11">Statement보다 SQL 정보를 재사용 → 후속 실행이 빠름 (보안·파라미터 이점도)</text>
+  <text x="38" y="450" fill="#f47f72" font-size="11">단 첫 실행은 셋업으로 더 느림 — 한 번만 쓰면 Statement가 나음</text>
+  <rect x="38" y="460" width="606" height="58" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9"/>
+  <text x="50" y="480" fill="#9cc3df" font-size="11" font-weight="bold">statement pool은 connection별로 동작</text>
+  <text x="50" y="500" fill="rgb(138,133,128)" font-size="10">→ standalone은 connection pool 필요. connection별로 자기 statement 풀을 가짐</text>
+  <text x="50" y="514" fill="rgb(138,133,128)" font-size="10">setMaxStatements(0이면 비활성) · driver와 framework 중 하나만 설정</text>
+  <text x="38" y="538" fill="rgb(138,133,128)" font-size="11">일반 규칙: driver가 더 나은 statement pooling (DB 특화 최적화)</text>
+  <text x="38" y="558" fill="#f47f72" font-size="11">statement는 heap을 많이 씀 → 풀 크기를 신중히 튜닝(GC 주의)</text>
+  <text x="38" y="576" fill="rgb(138,133,128)" font-size="10">Oracle: implicit/explicit caching 프로퍼티 · MySQL: caching 활성 프로퍼티</text>
+</svg>

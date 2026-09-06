@@ -1,0 +1,70 @@
+<svg viewBox="0 0 680 540" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>물리 메모리 계층 — 노드·존·페이지 프레임과 NUMA</title>
+  <desc>커널은 부팅 시 물리 RAM을 노드→존→페이지프레임 3단계 트리로 조직한다. 노드는 물리 RAM 뱅크를 추상화하며 NUMA는 노드 2개 이상, UMA는 1개(리눅스는 UMA도 가짜 NUMA로 취급). 존은 노드 안에서 DMA·DMA32·Normal 등으로 나뉜다. RAM은 PAGE_OFFSET부터 커널 VAS에 1:1 direct-map된다. sparsemem 모델이 모든 페이지를 struct page로 추적한다.</desc>
+  <rect x="0" y="0" width="680" height="540" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">물리 메모리 계층과 NUMA</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">커널은 부팅 시 물리 RAM 을 노드 → 존 → 페이지 프레임 3단계 트리로 조직합니다</text>
+
+  <!-- 3단계 트리 -->
+  <rect x="20" y="74" width="320" height="180" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="96" fill="#66bb6a" font-size="13" font-weight="bold">3단계 계층</text>
+
+  <rect x="38" y="108" width="284" height="36" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="54" y="125" fill="rgb(212,168,83)" font-size="12">① 노드 (Level 1)</text>
+  <text x="54" y="139" fill="rgb(138,133,128)" font-size="10">물리 RAM 뱅크 추상화 · CPU 코어와 연관</text>
+
+  <rect x="58" y="150" width="264" height="36" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="74" y="167" fill="#e8e4df" font-size="12">② 존 (Level 2)</text>
+  <text x="74" y="181" fill="rgb(138,133,128)" font-size="10">DMA · DMA32 · Normal · (HIGHMEM)</text>
+
+  <rect x="78" y="192" width="244" height="36" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="94" y="209" fill="#e8e4df" font-size="12">③ 페이지 프레임 (Level 3)</text>
+  <text x="94" y="223" fill="rgb(138,133,128)" font-size="10">물리 RAM 페이지 · PFN 으로 추적</text>
+
+  <text x="38" y="246" fill="rgb(138,133,128)" font-size="10">각 페이지는 struct page(64바이트)로 추적</text>
+
+  <!-- NUMA vs UMA -->
+  <rect x="350" y="74" width="312" height="180" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="368" y="96" fill="#e8e4df" font-size="13" font-weight="bold">NUMA vs UMA</text>
+
+  <rect x="368" y="108" width="276" height="58" fill="rgba(173,216,230,0.12)" stroke="#7fa8c9"/>
+  <text x="382" y="128" fill="#9cc3df" font-size="12">NUMA — 노드 2개 이상</text>
+  <text x="382" y="146" fill="rgb(138,133,128)" font-size="10">코어에 가장 가까운 RAM 에서 할당(성능)</text>
+  <text x="382" y="160" fill="rgb(138,133,128)" font-size="10">서버·슈퍼컴 · 항상 SMP</text>
+
+  <rect x="368" y="174" width="276" height="58" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/>
+  <text x="382" y="194" fill="#66bb6a" font-size="12">UMA — 노드 1개</text>
+  <text x="382" y="212" fill="rgb(138,133,128)" font-size="10">코어 무관 · 임베디드·노트북·데스크톱</text>
+  <text x="382" y="226" fill="rgb(138,133,128)" font-size="10">리눅스는 UMA 도 가짜 NUMA 로 취급</text>
+
+  <text x="350" y="248" fill="rgb(138,133,128)" font-size="10">numactl --hardware · lstopo 로 확인</text>
+
+  <!-- direct-map -->
+  <rect x="20" y="266" width="642" height="120" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="288" fill="rgb(212,168,83)" font-size="13" font-weight="bold">direct-map — RAM 을 커널 VAS 에 1:1 매핑</text>
+  <text x="38" y="308" fill="#e8e4df" font-size="11">부팅 시 모든 RAM 을 PAGE_OFFSET 부터 lowmem 영역에 1:1(identity) 매핑 — kernel logical address</text>
+
+  <rect x="38" y="320" width="180" height="30" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="128" y="340" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="middle">물리 프레임 0,1,2...</text>
+  <defs>
+    <marker id="ar73" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <line x1="218" y1="335" x2="270" y2="335" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar73)"/>
+  <text x="244" y="328" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">+PAGE_OFFSET</text>
+  <rect x="274" y="320" width="220" height="30" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="384" y="340" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="middle">커널 가상 페이지 0,1,2...</text>
+
+  <text x="38" y="370" fill="rgb(138,133,128)" font-size="10">변환 API: virt_to_phys()·phys_to_virt() — 단 lowmem(direct-map) KVA 에만 유효 (UVA·기타 KVA 는 안 됨)</text>
+
+  <!-- sparsemem -->
+  <rect x="20" y="398" width="642" height="124" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="420" fill="#e8e4df" font-size="13" font-weight="bold">메모리 모델 — sparsemem</text>
+  <text x="38" y="440" fill="#e8e4df" font-size="11">물리 메모리는 hole 이 많아 sparse 함. 3 모델 중 sparsemem 이 모던 64비트의 사실상 표준</text>
+  <text x="38" y="458" fill="rgb(138,133,128)" font-size="11">모든 RAM 페이지를 struct page 로 추적 · PFN ↔ struct page 1:1 (page_to_pfn / pfn_to_page)</text>
+  <text x="38" y="476" fill="rgb(138,133,128)" font-size="11">sparsemem-vmemmap: vmemmap 포인터가 struct page 배열 베이스를 가리킴 (VMEMMAP_START)</text>
+  <text x="38" y="494" fill="rgb(138,133,128)" font-size="10">SECTION_SIZE_BITS = 섹션 크기 · MAX_PHYSMEM_BITS = 최대 RAM (x86_64 보통 46 → 64TB)</text>
+  <text x="38" y="512" fill="rgb(138,133,128)" font-size="10">flatmem(32비트 소량 RAM) · discontigmem(폐기) · sparsemem(모던 표준)</text>
+</svg>

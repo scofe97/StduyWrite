@@ -1,0 +1,61 @@
+<svg viewBox="0 0 680 580" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>mutex vs spinlock 선택과 mutex 사용 — sleep vs spin·API·RT-mutex</title>
+  <desc>mutex와 spinlock의 핵심 차이는 loser 스레드가 unlock을 어떻게 기다리느냐다. mutex는 loser를 sleep시키고(blocking call, 두 번의 context switch 비용), spinlock은 spin하며 기다린다. 선택 기준: atomic/인터럽트 컨텍스트거나 sleep 불가면 spinlock, 프로세스 컨텍스트에서 sleep/blocking I/O 가능하면 mutex. 둘 다 가능하면 spinlock이 낮은 오버헤드. mutex는 process context 전용이며 DEFINE_MUTEX/mutex_init로 초기화, mutex_lock/unlock으로 (un)lock한다. 변형은 interruptible(신호로 깨움)·killable·trylock(non-blocking)·io다. priority inversion은 RT-mutex(PI)로 해결한다.</desc>
+  <rect x="0" y="0" width="680" height="580" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">mutex vs spinlock 과 mutex 사용</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">loser 가 unlock 을 어떻게 기다리는가 — sleep(mutex) vs spin(spinlock)</text>
+
+  <!-- 핵심 차이 -->
+  <rect x="20" y="74" width="320" height="118" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="96" fill="#66bb6a" font-size="13" font-weight="bold">mutex — sleep</text>
+  <text x="38" y="116" fill="#e8e4df" font-size="11">loser 를 sleep 시킴 (blocking call)</text>
+  <text x="38" y="134" fill="rgb(138,133,128)" font-size="10">unlock 시 깨어나 다시 경쟁</text>
+  <text x="38" y="152" fill="rgb(138,133,128)" font-size="10">최소 비용 = 2 × context switch</text>
+  <text x="38" y="172" fill="#f47f72" font-size="10">process context 전용 (sleep 가능할 때만)</text>
+  <text x="38" y="186" fill="rgb(138,133,128)" font-size="9">sleeplock · might_sleep() 가 atomic 오용 catch</text>
+
+  <rect x="350" y="74" width="312" height="118" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="368" y="96" fill="rgb(212,168,83)" font-size="13" font-weight="bold">spinlock — spin</text>
+  <text x="368" y="116" fill="#e8e4df" font-size="11">loser 가 spin 하며 기다림 (sleep 없음)</text>
+  <text x="368" y="134" fill="rgb(138,133,128)" font-size="10">SMP 에서 다른 코어가 winner 도는 동안 spin</text>
+  <text x="368" y="152" fill="rgb(138,133,128)" font-size="10">낮은 오버헤드 (context switch 없음)</text>
+  <text x="368" y="172" fill="#66bb6a" font-size="10">atomic·인터럽트 컨텍스트 가능 (non-blocking)</text>
+  <text x="368" y="186" fill="rgb(138,133,128)" font-size="9">ARM 은 WFE 명령으로 저전력 대기</text>
+
+  <!-- 선택 기준 -->
+  <rect x="20" y="204" width="642" height="76" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="226" fill="#e8e4df" font-size="13" font-weight="bold">선택 기준 — in_task() 로 컨텍스트 판별</text>
+  <text x="38" y="246" fill="#f47f72" font-size="11">atomic/인터럽트 컨텍스트거나 sleep 불가 → spinlock</text>
+  <text x="38" y="264" fill="#66bb6a" font-size="11">process context + sleep/blocking I/O 가능 → mutex (둘 다 되면 spinlock 선호)</text>
+
+  <!-- mutex 초기화/API -->
+  <rect x="20" y="292" width="320" height="146" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="314" fill="#e8e4df" font-size="13" font-weight="bold">mutex 초기화·API</text>
+  <text x="38" y="334" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">DEFINE_MUTEX(m)  // 정적</text>
+  <text x="38" y="350" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">mutex_init(&amp;m)   // 동적</text>
+  <text x="38" y="370" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">mutex_lock(&amp;m)</text>
+  <text x="38" y="386" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">  ... 임계 구역 ...</text>
+  <text x="38" y="402" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">mutex_unlock(&amp;m)</text>
+  <text x="38" y="422" fill="rgb(138,133,128)" font-size="9">한 task 만 hold · owner 만 unlock · 재귀 금지</text>
+  <text x="38" y="434" fill="rgb(138,133,128)" font-size="9">보호 데이터 구조체 안에 락 멤버로 두는 패턴</text>
+
+  <!-- mutex 변형 -->
+  <rect x="350" y="292" width="312" height="146" fill="rgba(173,216,230,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="368" y="314" fill="#9cc3df" font-size="13" font-weight="bold">mutex 변형</text>
+  <text x="368" y="334" fill="#e8e4df" font-size="11">_interruptible — 신호로 깨움(-EINTR)</text>
+  <text x="368" y="352" fill="#e8e4df" font-size="11">_killable — 치명 신호로만 깨움</text>
+  <text x="368" y="370" fill="#e8e4df" font-size="11">_trylock — non-blocking(1 성공/0 contended)</text>
+  <text x="368" y="388" fill="#e8e4df" font-size="11">_io — wait 를 I/O 대기로 회계</text>
+  <text x="368" y="408" fill="rgb(138,133,128)" font-size="10">기본 mutex_lock 은 uninterruptible sleep</text>
+  <text x="368" y="424" fill="rgb(138,133,128)" font-size="9">CONFIG_DEBUG_MUTEXES 가 오용·deadlock catch</text>
+
+  <!-- priority inversion / RT-mutex -->
+  <rect x="20" y="450" width="642" height="122" fill="rgba(244,67,54,0.10)" stroke="#f44336" stroke-width="2"/>
+  <text x="38" y="472" fill="#f44336" font-size="13" font-weight="bold">priority inversion 과 RT-mutex</text>
+  <text x="38" y="492" fill="#e8e4df" font-size="11">priority inversion: 고우선순위 스레드가 mutex 대기로 CPU 에서 너무 오래 밀려남</text>
+  <text x="38" y="510" fill="rgb(138,133,128)" font-size="11">1997 NASA Mars Pathfinder 가 이 문제로 재부팅 반복 → PI 로 수정 후 화성에서 업로드</text>
+  <text x="38" y="528" fill="#66bb6a" font-size="11">해결: RT-mutex(PI capability) · CONFIG_RT_MUTEXES · futex 내부 구현에 사용</text>
+  <text x="38" y="546" fill="rgb(138,133,128)" font-size="10">semaphore: mutex 의 일반형(여러 번 (un)lock) · 소유 개념 없음 · mutex 권장</text>
+  <text x="38" y="564" fill="rgb(138,133,128)" font-size="10">내부: fast-path(무락) → mid-path(optimistic spin) → slow-path(sleep) · WW-mutex(graphics)</text>
+</svg>

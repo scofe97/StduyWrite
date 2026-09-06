@@ -1,0 +1,69 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>스레드 락 모니터링 — 락의 정의·da-ch7-ex1 producer-consumer·Threads 탭의 교대 점유</title>
+  <desc>이 편의 요약입니다. 7장은 멀티스레드 아키텍처에서 락을 조사합니다. 스레드 락은 여러 스레드가 같은 자원에 동시에 접근하지 못하게 막는 장치로 충돌을 피하지만 서로를 기다리다 멈추면 프리즈나 성능 문제를 일으킵니다. 예제 da-ch7-ex1 은 producer 와 consumer 두 스레드가 ArrayList 하나를 공유하며, producer 는 난수를 더하고 consumer 는 값을 빼냅니다. 두 로직 모두 list 자신을 모니터로 삼아 synchronized 로 묶여 한 번에 한 스레드만 리스트를 바꿉니다. Main 은 시작 전 10초를 재워 프로파일러를 붙일 시간을 줍니다. VisualVM Threads 탭에서 두 스레드의 색이 번갈아 바뀌는데 코드 대부분이 synchronized 라 한쪽이 점유하면 다른 쪽이 대기하기 때문입니다. synchronized 밖의 for 루프 같은 코드는 둘이 동시에 실행할 수 있습니다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="38" fill="#e8e4df" font-size="18" font-weight="bold">스레드 락 모니터링</text>
+  <text x="20" y="60" fill="rgb(138,133,128)" font-size="11">Troubleshooting Java · 7장 도입~§7.1 · da-ch7-ex1</text>
+
+  <!-- 락 정의 -->
+  <rect x="20" y="78" width="640" height="80" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="34" y="100" fill="rgb(212,168,83)" font-size="13" font-weight="bold">스레드 락 (thread lock) — 정의</text>
+  <text x="34" y="124" fill="#e8e4df" font-size="11">여러 스레드가 같은 자원에 동시에 접근하지 못하게 막는 장치</text>
+  <text x="34" y="146" fill="#e8e4df" font-size="11">충돌(race condition)은 피하지만, 서로 기다리다 멈추면 프리즈·성능 문제</text>
+
+  <!-- 예제 구조 -->
+  <rect x="20" y="172" width="640" height="150" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="194" fill="#e8e4df" font-size="13" font-weight="bold">da-ch7-ex1 — ArrayList 하나를 공유하는 두 스레드</text>
+
+  <rect x="34" y="208" width="180" height="60" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9"/>
+  <text x="124" y="232" fill="#9cc3df" font-size="12" font-weight="bold" text-anchor="middle">_Producer</text>
+  <text x="124" y="252" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">난수 추가 (size&lt;100)</text>
+
+  <rect x="250" y="208" width="180" height="60" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)"/>
+  <text x="340" y="226" fill="rgb(212,168,83)" font-size="11" font-weight="bold" text-anchor="middle">ArrayList (모니터)</text>
+  <text x="340" y="244" fill="#e8e4df" font-size="10" text-anchor="middle">static Main.list</text>
+  <text x="340" y="260" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">synchronized(list)</text>
+
+  <rect x="466" y="208" width="180" height="60" fill="rgba(102,187,106,0.10)" stroke="#66bb6a"/>
+  <text x="556" y="232" fill="#66bb6a" font-size="12" font-weight="bold" text-anchor="middle">_Consumer</text>
+  <text x="556" y="252" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">첫 값 제거 (size&gt;0)</text>
+
+  <line x1="214" y1="238" x2="248" y2="238" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <polygon points="248,238 240,234 240,242" fill="rgb(212,168,83)"/>
+  <line x1="466" y1="238" x2="432" y2="238" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <polygon points="432,238 440,234 440,242" fill="rgb(212,168,83)"/>
+
+  <text x="34" y="290" fill="rgb(138,133,128)" font-size="10.5">각자 백만 번 반복 · Main 은 시작 전 10초 sleep (프로파일러 붙일 여유)</text>
+  <text x="34" y="310" fill="rgb(138,133,128)" font-size="10.5">모니터 = list 자신 → producer·consumer 중 한 번에 하나만 리스트 변경</text>
+
+  <!-- Threads 탭 교대 -->
+  <rect x="20" y="336" width="640" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="358" fill="#e8e4df" font-size="13" font-weight="bold">VisualVM Threads 탭 — 색이 교대하는 이유</text>
+  <text x="34" y="380" fill="#e8e4df" font-size="11">코드 대부분이 synchronized → 한쪽이 블록 점유하면 다른 쪽은 대기</text>
+
+  <!-- 타임라인 모사 -->
+  <text x="34" y="408" fill="#9cc3df" font-size="10">_Producer</text>
+  <rect x="110" y="398" width="70" height="14" fill="rgba(127,168,201,0.5)" stroke="#7fa8c9"/>
+  <rect x="180" y="398" width="70" height="14" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
+  <rect x="250" y="398" width="70" height="14" fill="rgba(127,168,201,0.5)" stroke="#7fa8c9"/>
+  <rect x="320" y="398" width="70" height="14" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
+  <rect x="390" y="398" width="70" height="14" fill="rgba(127,168,201,0.5)" stroke="#7fa8c9"/>
+  <text x="34" y="430" fill="#66bb6a" font-size="10">_Consumer</text>
+  <rect x="110" y="420" width="70" height="14" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
+  <rect x="180" y="420" width="70" height="14" fill="rgba(102,187,106,0.5)" stroke="#66bb6a"/>
+  <rect x="250" y="420" width="70" height="14" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
+  <rect x="320" y="420" width="70" height="14" fill="rgba(102,187,106,0.5)" stroke="#66bb6a"/>
+  <rect x="390" y="420" width="70" height="14" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
+  <text x="478" y="410" fill="rgb(138,133,128)" font-size="9">■ 실행</text>
+  <text x="478" y="428" fill="rgb(138,133,128)" font-size="9">□ 대기(락)</text>
+  <text x="34" y="450" fill="rgb(138,133,128)" font-size="10">synchronized 밖(for 루프)은 둘이 동시에 실행 가능</text>
+
+  <!-- §7.1 알고 싶은 것 -->
+  <rect x="20" y="470" width="640" height="114" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="492" fill="rgb(212,168,83)" font-size="13" font-weight="bold">§7.1 에서 락에 대해 알고 싶은 것</text>
+  <text x="34" y="516" fill="#e8e4df" font-size="11">• 어느 스레드가 어느 스레드를 막는가</text>
+  <text x="34" y="538" fill="#e8e4df" font-size="11">• 한 스레드가 몇 번 막히는가  → 수치 분석은 07-02</text>
+  <text x="34" y="560" fill="#e8e4df" font-size="11">• 스레드가 실행 대신 멈춰 있는 시점은 언제인가</text>
+  <text x="34" y="578" fill="rgb(138,133,128)" font-size="9.5">locked = synchronized 블록에 막힘 · join 대기 · 블로킹 객체에 통제</text>
+</svg>

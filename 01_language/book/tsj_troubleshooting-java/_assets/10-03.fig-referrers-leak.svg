@@ -1,0 +1,37 @@
+<svg viewBox="0 0 680 340" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>referrers()로 누수 탐지 — unique(referrers(p))가 단 하나(리스트)면 다수를 소수가 붙드는 누수 (원문 Figure 10.14 개념도)</title>
+  <desc>원문 Figure 10.14 의 개념을 도식으로 옮긴 것입니다. select unique referrers p from model.Product p 쿼리는 Product 인스턴스를 참조하는 고유한 객체를 모두 뽑습니다. 결과를 보면 모든 Product 인스턴스가 단 하나의 객체인 리스트에 참조됩니다. 보통 다수의 인스턴스가 소수의 referrer 에 참조되면 누수 신호입니다. 우리 경우 리스트 하나가 모든 Product 의 참조를 쥐고 있어 GC 가 그것들을 메모리에서 제거하지 못합니다. 결과가 고유하지 않으면 count referrers p 로 인스턴스별 referral 수를 세 누수에 얽힌 인스턴스를 찾습니다.</desc>
+  <rect x="0" y="0" width="680" height="340" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">referrers()로 누수를 한 줄에 드러낸다</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 Figure 10.14 개념도 — 다수 인스턴스 ← 소수 referrer = 누수</text>
+
+  <!-- 쿼리 -->
+  <rect x="20" y="76" width="640" height="34" fill="rgb(18,18,18)" stroke="rgb(60,55,50)"/>
+  <text x="34" y="98" fill="#f47f72" font-size="12" font-family="monospace">select unique(referrers(p)) from model.Product p</text>
+
+  <!-- 단 하나의 리스트 -->
+  <rect x="270" y="128" width="140" height="50" fill="rgba(244,127,114,0.1)" stroke="#f47f72" stroke-width="2"/>
+  <text x="340" y="150" fill="#f47f72" font-size="12" font-weight="bold" text-anchor="middle">리스트 1개</text>
+  <text x="340" y="168" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">unique referrer</text>
+
+  <!-- 다수 Product (아래) -->
+  <g fill="rgba(212,168,83,0.3)" stroke="rgb(212,168,83)">
+    <rect x="40" y="226" width="40" height="26"/><rect x="92" y="226" width="40" height="26"/><rect x="144" y="226" width="40" height="26"/><rect x="196" y="226" width="40" height="26"/><rect x="248" y="226" width="40" height="26"/><rect x="300" y="226" width="40" height="26"/><rect x="352" y="226" width="40" height="26"/><rect x="404" y="226" width="40" height="26"/><rect x="456" y="226" width="40" height="26"/><rect x="508" y="226" width="40" height="26"/><rect x="560" y="226" width="40" height="26"/><rect x="612" y="226" width="32" height="26"/>
+  </g>
+  <text x="340" y="244" fill="rgb(212,168,83)" font-size="10" text-anchor="middle" font-weight="bold">Product 인스턴스 백만+</text>
+
+  <!-- 화살표 리스트 → 각 Product -->
+  <line x1="300" y1="178" x2="120" y2="224" stroke="#f47f72" stroke-width="1"/>
+  <line x1="320" y1="178" x2="260" y2="224" stroke="#f47f72" stroke-width="1"/>
+  <line x1="340" y1="178" x2="340" y2="224" stroke="#f47f72" stroke-width="1"/>
+  <line x1="360" y1="178" x2="420" y2="224" stroke="#f47f72" stroke-width="1"/>
+  <line x1="380" y1="178" x2="560" y2="224" stroke="#f47f72" stroke-width="1"/>
+  <text x="430" y="200" fill="rgb(138,133,128)" font-size="9">모두 이 리스트가 붙듦</text>
+
+  <!-- 판정 -->
+  <rect x="20" y="268" width="640" height="62" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="290" fill="#f47f72" font-size="12" font-weight="bold">판정 — 누수</text>
+  <text x="34" y="312" fill="#e8e4df" font-size="10.5">리스트 하나가 모든 Product 참조 보유 → GC 회수 불가 (다수를 소수가 붙듦)</text>
+  <text x="34" y="328" fill="rgb(138,133,128)" font-size="9.5">고유하지 않으면 count(referrers(p))로 인스턴스별 referral 수를 세 원인 인스턴스 식별</text>
+</svg>

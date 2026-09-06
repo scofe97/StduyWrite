@@ -1,0 +1,69 @@
+<svg viewBox="0 0 880 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>원자성 vs 가시성 — 두 개의 독립된 축</title>
+  <rect x="0" y="0" width="880" height="470" fill="#0d0d0d"/>
+
+  <text x="440" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="#e8e4df">원자성과 가시성은 다른 축이다</text>
+  <text x="440" y="62" text-anchor="middle" font-size="13" fill="#8a857f">연산이 쪼개져 섞이는가  vs  쓴 값이 남에게 전파되는가</text>
+
+  <!-- ===== 왼쪽: 원자성 ===== -->
+  <rect x="30" y="86" width="390" height="350" rx="12" fill="#0d0d0d" stroke="#d4a853" stroke-width="2"/>
+  <text x="225" y="116" text-anchor="middle" font-size="17" font-weight="700" fill="#d4a853">원자성 깨짐 — 연산이 섞임</text>
+  <text x="225" y="138" text-anchor="middle" font-size="12" fill="#8a857f">여러 연산의 묶음에서만 발생</text>
+
+  <!-- A1 -->
+  <rect x="62" y="156" width="326" height="48" rx="8" fill="#fdf3df"/>
+  <text x="225" y="180" text-anchor="middle" font-size="14" font-weight="700" fill="#5a3d0a">count++</text>
+  <text x="225" y="197" text-anchor="middle" font-size="11.5" fill="#5a3d0a">읽기 · 더하기 · 쓰기 (세 동작)</text>
+  <!-- arrow -->
+  <line x1="225" y1="204" x2="225" y2="226" stroke="#d4a853" stroke-width="2"/>
+  <polygon points="225,232 220,222 230,222" fill="#d4a853"/>
+
+  <!-- A2 -->
+  <rect x="62" y="234" width="326" height="44" rx="8" fill="#dceaf7"/>
+  <text x="225" y="261" text-anchor="middle" font-size="13.5" fill="#10243a">두 스레드가 동시에 5를 읽음</text>
+  <!-- arrow -->
+  <line x1="225" y1="278" x2="225" y2="300" stroke="#d4a853" stroke-width="2"/>
+  <polygon points="225,306 220,296 230,296" fill="#d4a853"/>
+
+  <!-- A3 -->
+  <rect x="62" y="308" width="326" height="62" rx="8" fill="#d4a853"/>
+  <text x="225" y="332" text-anchor="middle" font-size="13.5" fill="#0d0d0d">각자 6을 씀</text>
+  <text x="225" y="354" text-anchor="middle" font-size="14" font-weight="700" fill="#0d0d0d">한 번의 증가가 사라짐 → 6</text>
+
+  <!-- 증상 라벨 -->
+  <rect x="62" y="386" width="326" height="34" rx="6" fill="#0d0d0d" stroke="#d4a853" stroke-width="1.2"/>
+  <text x="225" y="408" text-anchor="middle" font-size="12.5" fill="#e8e4df">증상: 잃어버린 갱신 — 50번 더했는데 47</text>
+
+  <!-- ===== 오른쪽: 가시성 ===== -->
+  <rect x="460" y="86" width="390" height="350" rx="12" fill="#0d0d0d" stroke="#66bb6a" stroke-width="2"/>
+  <text x="655" y="116" text-anchor="middle" font-size="17" font-weight="700" fill="#66bb6a">가시성 깨짐 — 전파가 안 됨</text>
+  <text x="655" y="138" text-anchor="middle" font-size="12" fill="#8a857f">단 한 번의 쓰기로도 발생</text>
+
+  <!-- V1 -->
+  <rect x="492" y="156" width="326" height="48" rx="8" fill="#e6f7e7"/>
+  <text x="655" y="180" text-anchor="middle" font-size="14" font-weight="700" fill="#14521d">stopped = true</text>
+  <text x="655" y="197" text-anchor="middle" font-size="11.5" fill="#14521d">단일 쓰기 — 그 자체는 원자적</text>
+  <!-- arrow -->
+  <line x1="655" y1="204" x2="655" y2="226" stroke="#66bb6a" stroke-width="2"/>
+  <polygon points="655,232 650,222 660,222" fill="#66bb6a"/>
+
+  <!-- V2 -->
+  <rect x="492" y="234" width="326" height="44" rx="8" fill="#dceaf7"/>
+  <text x="655" y="261" text-anchor="middle" font-size="13.5" fill="#10243a">쓴 스레드의 작업 메모리만 갱신</text>
+  <!-- arrow -->
+  <line x1="655" y1="278" x2="655" y2="300" stroke="#66bb6a" stroke-width="2"/>
+  <polygon points="655,306 650,296 660,296" fill="#66bb6a"/>
+
+  <!-- V3 -->
+  <rect x="492" y="308" width="326" height="62" rx="8" fill="#66bb6a"/>
+  <text x="655" y="332" text-anchor="middle" font-size="13.5" fill="#0d0d0d">읽는 스레드는 옛 복사본 false</text>
+  <text x="655" y="354" text-anchor="middle" font-size="14" font-weight="700" fill="#0d0d0d">루프가 끝나지 않음</text>
+
+  <!-- 증상 라벨 -->
+  <rect x="492" y="386" width="326" height="34" rx="6" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="655" y="408" text-anchor="middle" font-size="12.5" fill="#e8e4df">증상: 옛 값 관찰 — stop 켰는데 안 멈춤</text>
+
+  <!-- 가운데 VS -->
+  <circle cx="440" cy="261" r="22" fill="#0d0d0d" stroke="#8a857f" stroke-width="1.5"/>
+  <text x="440" y="267" text-anchor="middle" font-size="14" font-weight="700" fill="#e8e4df">vs</text>
+</svg>

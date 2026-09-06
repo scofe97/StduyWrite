@@ -1,0 +1,46 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Random·JNI·Exceptions</title>
+  <desc>세 가지 비싼 연산이다. Random은 세 클래스가 있다. Random은 nextGaussian이 synchronized라 경쟁한다. ThreadLocalRandom은 스레드별이라 동기화가 없다. SecureRandom은 entropy 기반으로 더 안전하지만 느리다. Linux는 seed에 dev random, 난수에 dev urandom을 쓴다. dev random은 entropy가 부족하면 block한다. seed가 많이 필요하면 오래 걸려 startup이 느릴 수 있다. egd를 dev urandom으로 설정하거나 rngd로 OS에 entropy를 더한다. JNI는 성능 해법이 아니다. Java가 C보다 보통 빠르다. JNI boundary를 넘는 게 비싸 호출을 최소화한다. 안쪽만 C로 하면 1000만 transition으로 1.96초인데 0이면 0.1초다. array와 string은 pinning이 필요해 GC를 막는다. exception은 stack trace를 채우는 게 비싸 깊을수록 비싸다. system exception은 JVM이 재사용해 stack 없이 거의 공짜다. StackTraceInThrowable로 끌 수 있지만 정보를 잃는다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">Random·JNI·Exceptions — 비싼 연산 3종</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">Random은 동기화·entropy, JNI는 boundary, exception은 stack trace가 비용입니다</text>
+
+  <!-- Random -->
+  <rect x="20" y="74" width="642" height="128" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="96" fill="#66bb6a" font-size="13" font-weight="bold">Random — 세 클래스</text>
+  <rect x="38" y="106" width="290" height="42" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="50" y="124" fill="#f47f72" font-size="11" font-weight="bold">Random</text>
+  <text x="50" y="140" fill="rgb(138,133,128)" font-size="10">nextGaussian synchronized → 경쟁</text>
+  <rect x="336" y="106" width="318" height="42" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="348" y="124" fill="#66bb6a" font-size="11" font-weight="bold">ThreadLocalRandom</text>
+  <text x="348" y="140" fill="rgb(138,133,128)" font-size="10">스레드별 → 동기화 없음(멀티스레드 선호)</text>
+  <text x="38" y="168" fill="rgb(212,168,83)" font-size="11">SecureRandom — entropy 기반(truly random), seed는 dev random·난수는 dev urandom</text>
+  <text x="38" y="188" fill="#f47f72" font-size="10">dev random은 entropy 부족 시 block → startup 느림. egd=dev urandom 또는 rngd로 OS entropy 추가</text>
+
+  <!-- JNI -->
+  <rect x="20" y="210" width="642" height="148" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="232" fill="#f47f72" font-size="13" font-weight="bold">JNI — 성능 해법이 아니다</text>
+  <text x="38" y="254" fill="rgb(138,133,128)" font-size="11">Java가 보통 C/C++만큼 빠름(1996년 아님). JNI boundary 넘는 게 비싸 → 호출 최소화</text>
+  <text x="38" y="274" fill="rgb(138,133,128)" font-size="11">coarse-grained 인터페이스로 여러 호출을 한 번에. 역방향(C→Java)은 페널티 작음</text>
+  <rect x="38" y="284" width="606" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="50" y="302" fill="#e8e4df" font-size="10" font-weight="bold">transition 수에 비례</text>
+  <text x="50" y="318" fill="rgb(138,133,128)" font-size="10">안쪽만 C: 1000만 transition 1.96초 → 1만: 0.13초 → 0: 0.1초</text>
+  <text x="38" y="342" fill="#f47f72" font-size="11">array·string은 pinning 필요 → GC 못 함(GC Locker Initiated GC). pin 구간 최단으로</text>
+
+  <!-- Exceptions -->
+  <rect x="20" y="366" width="642" height="148" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="388" fill="#9cc3df" font-size="13" font-weight="bold">Exceptions — stack trace가 비용</text>
+  <text x="38" y="410" fill="rgb(138,133,128)" font-size="11">try-catch 블록 자체는 안 비쌈(옛말). stack trace 채우기가 비쌈 → 깊을수록 비쌈</text>
+  <rect x="38" y="420" width="606" height="58" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="50" y="440" fill="#e8e4df" font-size="10" font-weight="bold">100% 예외 (shallow / deep)</text>
+  <text x="50" y="458" fill="#f47f72" font-size="10">checked: 24031 / 30613 μs (깊이에 비례)</text>
+  <text x="50" y="474" fill="#66bb6a" font-size="10">unchecked(NPE)·defensive: 21000μs 부근 (system exception은 JVM이 재사용·stack 없음)</text>
+  <text x="38" y="498" fill="rgb(212,168,83)" font-size="11">-XX:-StackTraceInThrowable로 끌 수 있으나 정보 손실 — classloader처럼 대량 예외 시만</text>
+
+  <!-- 핵심 -->
+  <rect x="20" y="522" width="642" height="60" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="544" fill="rgb(212,168,83)" font-size="12" font-weight="bold">핵심</text>
+  <text x="38" y="564" fill="#e8e4df" font-size="11">exception은 예상 못 한 일에만 · JNI는 호출 최소화·pin 최단 · ThreadLocalRandom 선호</text>
+  <text x="38" y="578" fill="rgb(138,133,128)" font-size="10">자주 생성되는 system exception의 stack 페널티는 JVM이 최적화로 거의 제거</text>
+</svg>

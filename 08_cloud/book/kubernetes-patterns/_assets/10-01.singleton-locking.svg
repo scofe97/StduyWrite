@@ -1,0 +1,82 @@
+<svg viewBox="0 0 900 360" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>out-of-application 잠금과 in-application 잠금의 구조 비교</title>
+  <desc>싱글턴을 만드는 두 가지 층위를 나란히 비교합니다. 왼쪽 out-of-application 잠금은 앱 바깥의 컨트롤러가 replica를 하나로 유지하는 방식이며, 앱 자신은 자기가 싱글턴이라는 사실을 알지 못합니다. Pod가 하나만 뜨므로 그 하나가 곧 활성 인스턴스입니다. 오른쪽 in-application 잠금은 Pod replica가 셋 다 떠서 모두 건강하지만, 분산 락을 먼저 잡은 하나만 리더가 되어 활성이 되고 나머지 둘은 passive 상태로 락이 풀리기를 기다립니다. 아래쪽에는 각 방식이 제공하는 보장을 표시합니다. ReplicaSet은 가용성을 우선해 at-least-once라 가끔 둘이 될 수 있고, StatefulSet은 일관성을 우선해 at-most-one이라 가끔 0개가 되며, in-application 락은 Pod 수와 무관하게 활성 하나를 보장합니다.</desc>
+
+  <rect width="900" height="360" fill="#0d0d0d"/>
+
+  <text x="24" y="30" fill="#e8e4df" font-size="15" font-weight="700">싱글턴을 만드는 두 층위</text>
+
+  <!-- ============ LEFT: out-of-application ============ -->
+  <rect x="24" y="46" width="410" height="212" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="44" y="70" fill="rgb(212,168,83)" font-size="13" font-weight="700">out-of-application 락</text>
+  <text x="44" y="88" fill="#b8b3ad" font-size="10">앱은 모른 채 싱글턴이 됩니다</text>
+
+  <rect x="44" y="100" width="370" height="34" fill="rgb(212,168,83)"/>
+  <text x="229" y="122" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700">컨트롤러 · replicas: 1</text>
+
+  <path d="M 229 138 L 229 158" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#am)"/>
+
+  <rect x="150" y="162" width="158" height="46" fill="#cdeccf"/>
+  <text x="229" y="182" text-anchor="middle" fill="#14521d" font-size="11" font-weight="700">Pod</text>
+  <text x="229" y="199" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">활성</text>
+
+  <text x="44" y="232" fill="#b8b3ad" font-size="10">Pod가 하나뿐이라 그것이 활성</text>
+  <text x="44" y="249" fill="#b8b3ad" font-size="10">replica 증가는 막지 못합니다</text>
+
+  <!-- ============ RIGHT: in-application ============ -->
+  <rect x="466" y="46" width="410" height="212" fill="#0d0d0d" stroke="#66bb6a"/>
+  <text x="486" y="70" fill="#66bb6a" font-size="13" font-weight="700">in-application 락</text>
+  <text x="486" y="88" fill="#b8b3ad" font-size="10">앱이 리더 선출을 수행합니다</text>
+
+  <rect x="486" y="100" width="370" height="34" fill="#66bb6a"/>
+  <text x="671" y="122" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700">분산 락 · Lease</text>
+
+  <path d="M 545 138 L 545 158" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#g)"/>
+  <path d="M 671 138 L 671 158" stroke="#b8b3ad" stroke-width="1.5" stroke-dasharray="3 3" marker-end="url(#a)"/>
+  <path d="M 797 138 L 797 158" stroke="#b8b3ad" stroke-width="1.5" stroke-dasharray="3 3" marker-end="url(#a)"/>
+
+  <rect x="486" y="162" width="118" height="46" fill="#cdeccf"/>
+  <text x="545" y="182" text-anchor="middle" fill="#14521d" font-size="11" font-weight="700">Pod 1</text>
+  <text x="545" y="199" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">활성 · 락 보유</text>
+
+  <rect x="612" y="162" width="118" height="46" fill="#0d0d0d" stroke="#b8b3ad" stroke-dasharray="3 3"/>
+  <text x="671" y="182" text-anchor="middle" fill="#b8b3ad" font-size="11" font-weight="700">Pod 2</text>
+  <text x="671" y="199" text-anchor="middle" fill="#b8b3ad" font-size="10">passive</text>
+
+  <rect x="738" y="162" width="118" height="46" fill="#0d0d0d" stroke="#b8b3ad" stroke-dasharray="3 3"/>
+  <text x="797" y="182" text-anchor="middle" fill="#b8b3ad" font-size="11" font-weight="700">Pod 3</text>
+  <text x="797" y="199" text-anchor="middle" fill="#b8b3ad" font-size="10">passive</text>
+
+  <text x="486" y="232" fill="#b8b3ad" font-size="10">셋 다 건강하지만 활성은 하나</text>
+  <text x="486" y="249" fill="#b8b3ad" font-size="10">일부 컴포넌트만 잠글 수 있습니다</text>
+
+  <!-- ============ BOTTOM: guarantees ============ -->
+  <text x="24" y="288" fill="#e8e4df" font-size="12" font-weight="700">각 방식이 주는 보장</text>
+
+  <rect x="24" y="300" width="276" height="46" fill="#f2d4d4"/>
+  <text x="44" y="319" fill="#7a1f1f" font-size="11" font-weight="700">at-least-once</text>
+  <text x="44" y="336" fill="#7a1f1f" font-size="10">ReplicaSet · 가끔 2개</text>
+
+  <rect x="312" y="300" width="276" height="46" fill="#dceaf7"/>
+  <text x="332" y="319" fill="#10243a" font-size="11" font-weight="700">at-most-one</text>
+  <text x="332" y="336" fill="#10243a" font-size="10">StatefulSet · 가끔 0개</text>
+
+  <rect x="600" y="300" width="276" height="46" fill="#cdeccf"/>
+  <text x="620" y="319" fill="#14521d" font-size="11" font-weight="700">in-app 락 · 활성 하나</text>
+  <text x="620" y="336" fill="#14521d" font-size="10">Pod 수와 무관합니다</text>
+
+  <defs>
+    <marker id="am" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="g" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#66bb6a"/>
+    </marker>
+    <marker id="a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+</svg>

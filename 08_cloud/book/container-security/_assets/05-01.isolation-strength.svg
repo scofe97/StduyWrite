@@ -1,0 +1,59 @@
+<svg viewBox="0 0 700 420" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>커널 격리와 하이퍼바이저 격리의 강도가 갈리는 이유</title>
+  <desc>커널은 유저 공간 프로세스끼리 서로를 어느 정도 볼 수 있게 허용합니다. 프로세스 목록을 보거나 proc 디렉토리를 뒤지거나 프로세스 간 통신과 공유 메모리로 의도적으로 메모리를 나눠 쓸 수 있습니다. 이렇게 합법적으로 서로를 알 수 있는 통로가 많을수록 예상치 못한 상황에서 그 통로가 열릴 가능성도 커져 격리가 약해집니다. 가상머신에는 대응물이 없습니다. 한 머신에서 다른 머신의 프로세스를 볼 수 없고 메모리를 공유하지도 않으므로 관리 코드가 훨씬 적습니다. 코드가 적고 단순할수록 공격 표면이 작고 결함 가능성도 낮습니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 12px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10px; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .divider { stroke: #b8b3ad; stroke-width: 1.2; stroke-dasharray: 5 4; fill: none; }
+    .bar-label { fill: #0d0d0d; font-size: 11px; font-weight: 700; }
+    .caution-title { fill: #0d0d0d; font-size: 12px; font-weight: 700; }
+    .caution-detail { fill: #0d0d0d; font-size: 10px; }
+  </style>
+
+  <rect width="700" height="420" fill="#0d0d0d"/>
+
+  <text class="head" x="40" y="30">커널이 프로세스를 가를 때</text>
+  <text class="head" x="380" y="30">하이퍼바이저가 VM을 가를 때</text>
+
+  <path class="divider" d="M355,40 L355,300"/>
+
+  <!-- 좌: 커널이 허용하는 통로 -->
+  <rect x="40" y="46" width="295" height="118" rx="4" fill="rgb(212,168,83)"/>
+  <text class="caution-title" x="56" y="68">서로를 볼 통로가 열려 있다</text>
+  <text class="caution-detail" x="56" y="90">ps 로 다른 프로세스가 보인다</text>
+  <text class="caution-detail" x="56" y="110">/proc 에서 정보를 읽는다</text>
+  <text class="caution-detail" x="56" y="130">IPC · 공유 메모리로 나눠 쓴다</text>
+  <text class="caution-detail" x="56" y="152">통로가 많을수록 격리가 약하다</text>
+
+  <!-- 우: 하이퍼바이저 -->
+  <rect class="box" x="380" y="46" width="280" height="118" rx="4"/>
+  <text class="box-title" x="396" y="68">대응하는 통로가 없다</text>
+  <text class="box-detail" x="396" y="90">다른 VM의 프로세스를 못 본다</text>
+  <text class="box-detail" x="396" y="110">VM끼리 메모리를 공유하지 않는다</text>
+  <text class="box-detail" x="396" y="130">그래서 관리 코드가 적다</text>
+  <text class="box-detail" x="396" y="152">일이 훨씬 단순하다</text>
+
+  <!-- 코드 규모 대비 -->
+  <text class="head" x="40" y="196">코드 규모 대비 · 원문 기준</text>
+
+  <rect class="box" x="40" y="208" width="480" height="30" rx="4"/>
+  <text class="bar-label" x="54" y="228">Linux 커널 · 2천만 줄 이상</text>
+
+  <rect class="box" x="40" y="248" width="60" height="30" rx="4"/>
+  <text class="hint" x="112" y="268">Xen · 약 5만 줄</text>
+
+  <text class="hint" x="40" y="302">코드가 적을수록 표면이 작다</text>
+  <text class="hint" x="40" y="322">그래서 VM 격리가 강하다</text>
+
+  <!-- 단서 -->
+  <rect class="box" x="40" y="342" width="620" height="58" rx="4"/>
+  <text class="box-title" x="56" y="364">다만 절대적이지는 않습니다</text>
+  <text class="box-detail" x="56" y="384">VM 익스플로잇도 존재합니다</text>
+</svg>

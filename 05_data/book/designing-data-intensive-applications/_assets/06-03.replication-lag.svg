@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 640" font-family="Pretendard, sans-serif">
+  <rect width="680" height="640" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">복제 지연 문제와 일관성 보장</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">비동기 팔로워에서 읽으면 stale · 세 가지 일관성 보장으로 완화</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- read scaling -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">read-scaling 아키텍처와 eventual consistency</text>
+  <rect x="32" y="124" width="616" height="76" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="146" fill="#e8e4df" font-size="11">읽기 多·쓰기 少 워크로드: 팔로워를 늘려 읽기 분산 → 비동기 복제일 때만 현실적</text>
+  <text x="48" y="166" fill="#f47f72" font-size="11">팔로워가 뒤처지면 stale(낡은) 값을 읽음 → 리더·팔로워 결과가 일시적으로 다름</text>
+  <text x="48" y="186" fill="#66bb6a" font-size="10.5">eventual consistency = 쓰기 멈추면 팔로워가 결국 따라잡음(replication lag: 보통 1초 미만, 때로 분)</text>
+
+  <!-- 세 보장 -->
+  <text x="32" y="240" fill="rgb(212,168,83)" font-size="14" font-weight="700">세 가지 일관성 보장</text>
+
+  <rect x="32" y="252" width="616" height="110" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="48" y="274" fill="rgb(212,168,83)" font-size="12" font-weight="700">① read-your-writes(read-after-write)</text>
+  <text x="64" y="292" fill="#e8e4df" font-size="10.5">증상: 쓰기 직후 stale 팔로워에서 읽어 "내 입력이 사라진" 듯 보임</text>
+  <text x="64" y="310" fill="#66bb6a" font-size="10.5">보장: 자기가 쓴 것은 항상 보임(타인 갱신은 미보장) · 자기 프로필은 리더에서 읽기 등</text>
+  <text x="48" y="334" fill="rgb(138,133,128)" font-size="10">교차 기기(데스크톱↔모바일)·다중 리전이면 라우팅·메타데이터 중앙화가 추가로 필요</text>
+
+  <rect x="32" y="374" width="300" height="100" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="48" y="396" fill="#7fa8c9" font-size="12" font-weight="700">② monotonic reads</text>
+  <text x="48" y="414" fill="#e8e4df" font-size="10.5">증상: 두 팔로워(랙 다름)에서 읽어</text>
+  <text x="48" y="430" fill="#e8e4df" font-size="10.5">시간이 뒤로 감(봤던 댓글이 사라짐)</text>
+  <text x="48" y="450" fill="#66bb6a" font-size="10.5">보장: 옛 값을 본 뒤 더 옛 값 안 봄</text>
+  <text x="48" y="466" fill="rgb(138,133,128)" font-size="9.5">해법: 사용자별 같은 레플리카(ID 해시)</text>
+
+  <rect x="348" y="374" width="300" height="100" rx="6" fill="#101620" stroke="#9cc3df"/>
+  <text x="364" y="396" fill="#9cc3df" font-size="12" font-weight="700">③ consistent prefix reads</text>
+  <text x="364" y="414" fill="#e8e4df" font-size="10.5">증상: 인과 위반 — 답을 질문보다</text>
+  <text x="364" y="430" fill="#e8e4df" font-size="10.5">먼저 봄(샤드별 랙 차이)</text>
+  <text x="364" y="450" fill="#66bb6a" font-size="10.5">보장: 쓰기 순서대로 보임</text>
+  <text x="364" y="466" fill="rgb(138,133,128)" font-size="9.5">해법: 인과 관련 쓰기를 같은 샤드로</text>
+
+  <!-- region/AZ -->
+  <text x="32" y="514" fill="rgb(212,168,83)" font-size="14" font-weight="700">region vs availability zone</text>
+  <rect x="32" y="526" width="300" height="64" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="548" fill="#e8e4df" font-size="10.5">zone = 독립 전원·냉각의 단일 데이터센터</text>
+  <text x="48" y="566" fill="#e8e4df" font-size="10.5">region = 같은 지역의 여러 zone 묶음</text>
+  <text x="48" y="582" fill="rgb(138,133,128)" font-size="9.5">멀티존=존 장애 견딤 · 멀티리전=리전 장애 견딤(지연·비용↑)</text>
+
+  <rect x="348" y="526" width="300" height="64" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="364" y="548" fill="rgb(212,168,83)" font-size="11" font-weight="700">근본 해법</text>
+  <text x="364" y="566" fill="#e8e4df" font-size="10.5">강한 보장이 필요하면 앱 코드 우회 대신</text>
+  <text x="364" y="582" fill="#e8e4df" font-size="10.5">linearizable·트랜잭션 DB 선택(NewSQL)</text>
+
+  <text x="32" y="616" fill="rgb(138,133,128)" font-size="10">비동기인데 동기인 척하면 나중에 탈 난다 → 랙이 분·시간으로 커질 때 앱 거동을 미리 설계</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>

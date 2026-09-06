@@ -1,0 +1,71 @@
+<svg viewBox="0 0 900 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>URL 단축기 — 두 해시 접근·base62 변환·301/302 리다이렉트</title>
+  <desc>긴 URL 을 짧은 URL 로 바꾸는 단축기 설계. 해시+충돌 해결과 base62 변환 두 접근의 차이, base62 변환 과정, 301 영구 리다이렉트와 302 임시 리다이렉트의 트레이드오프를 한 장에 정리한 종합도.</desc>
+
+  <rect x="0" y="0" width="900" height="600" fill="#0d0d0d"/>
+
+  <text x="30" y="40" fill="rgb(212,168,83)" font-size="20" font-weight="bold">URL 단축기 (URL Shortener)</text>
+  <text x="30" y="62" fill="rgb(138,133,128)" font-size="12">긴 URL → 짧은 별칭. 일 1억 건·10년 365억 건 기준 hashValue 7자(62^7 ≈ 3.5조)면 충분.</text>
+
+  <!-- 두 API -->
+  <text x="30" y="92" fill="#e8e4df" font-size="14" font-weight="bold">두 핵심 API</text>
+  <rect x="30" y="104" width="400" height="56" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="46" y="126" fill="#66bb6a" font-size="11.5" font-family="'JetBrains Mono',monospace">POST /api/v1/data/shorten</text>
+  <text x="46" y="148" fill="rgb(138,133,128)" font-size="10.5">longUrl → shortURL (단축)</text>
+  <rect x="450" y="104" width="420" height="56" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="466" y="126" fill="#66bb6a" font-size="11.5" font-family="'JetBrains Mono',monospace">GET /api/v1/{shortUrl}</text>
+  <text x="466" y="148" fill="rgb(138,133,128)" font-size="10.5">shortURL → longURL 로 HTTP 리다이렉트</text>
+
+  <!-- 두 해시 접근 비교 -->
+  <text x="30" y="194" fill="#e8e4df" font-size="14" font-weight="bold">두 해시 접근</text>
+  <rect x="30" y="206" width="410" height="150" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="46" y="230" fill="#e8e4df" font-size="13" font-weight="bold">A. 해시 + 충돌 해결</text>
+  <text x="46" y="252" fill="#e8e4df" font-size="10.5">CRC32·MD5·SHA-1 해시 → 앞 7자 사용</text>
+  <text x="46" y="270" fill="#e8e4df" font-size="10.5">충돌 시 미리 정한 문자열 덧붙여 재해시</text>
+  <text x="46" y="292" fill="#66bb6a" font-size="10.5">+ 짧은 URL 길이 고정 · ID 생성기 불필요</text>
+  <text x="46" y="310" fill="#f44336" font-size="10.5">− 충돌 가능 · DB 조회 비용 (bloom filter 완화)</text>
+  <text x="46" y="332" fill="rgb(138,133,128)" font-size="10.5">− 다음 shortURL 예측 불가</text>
+
+  <rect x="460" y="206" width="410" height="150" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)"/>
+  <text x="476" y="230" fill="rgb(212,168,83)" font-size="13" font-weight="bold">B. base62 변환 (채택)</text>
+  <text x="476" y="252" fill="#e8e4df" font-size="10.5">유일 ID 를 62진법(0-9,a-z,A-Z)으로 변환</text>
+  <text x="476" y="270" fill="#e8e4df" font-size="10.5">예: 2009215674938 → "zn9edcu"</text>
+  <text x="476" y="292" fill="#66bb6a" font-size="10.5">+ 충돌 불가 (ID 가 유일) · 다음 URL 계산 쉬움</text>
+  <text x="476" y="310" fill="#f44336" font-size="10.5">− 길이 가변 (ID 따라) · ID 생성기 의존</text>
+  <text x="476" y="332" fill="#f44336" font-size="10.5">− ID +1 예측 가능 → 보안 우려</text>
+
+  <!-- base62 변환 흐름 -->
+  <text x="30" y="392" fill="#e8e4df" font-size="14" font-weight="bold">단축 흐름 (base62)</text>
+  <rect x="30" y="404" width="840" height="78" fill="rgba(212,168,83,0.06)" stroke="rgb(42,37,32)"/>
+
+  <defs>
+    <marker id="ua" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/>
+    </marker>
+  </defs>
+
+  <rect x="50" y="424" width="130" height="38" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="115" y="448" fill="#e8e4df" font-size="11" text-anchor="middle">longURL 입력</text>
+  <rect x="230" y="424" width="150" height="38" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="305" y="442" fill="#e8e4df" font-size="11" text-anchor="middle">DB 에 있나?</text>
+  <text x="305" y="456" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">있으면 기존 shortURL 반환</text>
+  <rect x="430" y="424" width="140" height="38" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="500" y="448" fill="#e8e4df" font-size="11" text-anchor="middle">유일 ID 생성</text>
+  <rect x="620" y="424" width="150" height="38" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="695" y="448" fill="#e8e4df" font-size="11" text-anchor="middle">base62 → shortURL</text>
+
+  <line x1="180" y1="443" x2="230" y2="443" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ua)"/>
+  <line x1="380" y1="443" x2="430" y2="443" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ua)"/>
+  <line x1="570" y1="443" x2="620" y2="443" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ua)"/>
+  <text x="790" y="448" fill="rgb(138,133,128)" font-size="10">→ DB 저장</text>
+
+  <!-- 301 vs 302 -->
+  <text x="30" y="518" fill="#e8e4df" font-size="14" font-weight="bold">리다이렉트 — 301 vs 302</text>
+  <rect x="30" y="530" width="410" height="58" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="46" y="552" fill="rgb(212,168,83)" font-size="12" font-weight="bold">301 (영구)</text>
+  <text x="46" y="572" fill="rgb(138,133,128)" font-size="10.5">브라우저가 캐시 → 이후 단축 서버 안 거침 · 서버 부하↓</text>
+
+  <rect x="460" y="530" width="410" height="58" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="476" y="552" fill="rgb(212,168,83)" font-size="12" font-weight="bold">302 (임시)</text>
+  <text x="476" y="572" fill="rgb(138,133,128)" font-size="10.5">매번 단축 서버 경유 → 클릭 추적·분석에 유리</text>
+</svg>

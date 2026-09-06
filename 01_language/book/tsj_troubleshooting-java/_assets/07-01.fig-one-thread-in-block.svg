@@ -1,0 +1,40 @@
+<svg viewBox="0 0 680 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>synchronized 블록은 한 번에 한 스레드만 — producer가 돌면 consumer가 대기, 반대도 같다 (원문 Figure 7.2 개념도)</title>
+  <desc>원문 Figure 7.2 의 개념을 도식으로 옮긴 것입니다. synchronized 블록 안에는 한 번에 한 스레드만 들어갈 수 있습니다. producer 가 자신의 run 메서드 로직을 실행하거나 consumer 가 자신의 로직을 실행하거나 둘 중 하나입니다. 모니터는 한 스레드를 자기 로직에 들이고 다른 스레드는 자기 블록 입구에서 대기시키며, 먼저 들어간 스레드가 synchronized 블록을 끝낼 때까지 기다리게 합니다. 같은 모니터 list 를 쓰므로 producer 와 consumer 는 동시에 리스트를 바꿀 수 없습니다.</desc>
+  <rect x="0" y="0" width="680" height="360" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">synchronized 블록 — 한 번에 한 스레드만</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 Figure 7.2 개념도 — 모니터(list)가 한쪽만 들이고 다른 쪽은 입구에서 대기</text>
+
+  <!-- 모니터 블록 (가운데) -->
+  <rect x="240" y="92" width="200" height="200" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="340" y="116" fill="rgb(212,168,83)" font-size="12" font-weight="bold" text-anchor="middle">synchronized(Main.list)</text>
+  <text x="340" y="136" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">모니터 = ArrayList 인스턴스</text>
+
+  <!-- 안에 있는 스레드 (producer 실행 중 가정) -->
+  <rect x="270" y="158" width="140" height="44" fill="rgba(127,168,201,0.45)" stroke="#7fa8c9" stroke-width="1.5"/>
+  <text x="340" y="184" fill="#e8e4df" font-size="12" font-weight="bold" text-anchor="middle">_Producer 실행 중</text>
+  <text x="340" y="232" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">한 스레드만 입장</text>
+  <text x="340" y="250" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">→ 리스트 변경</text>
+
+  <!-- 입구에서 대기하는 consumer -->
+  <rect x="466" y="158" width="180" height="44" fill="rgb(30,30,30)" stroke="rgb(60,55,50)" stroke-dasharray="4 3"/>
+  <text x="556" y="184" fill="#66bb6a" font-size="12" font-weight="bold" text-anchor="middle">_Consumer 대기</text>
+  <text x="556" y="226" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">입구에서 막힘 (locked)</text>
+  <text x="556" y="244" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">producer 끝나길 기다림</text>
+
+  <!-- consumer가 입구에서 막힌 화살표 -->
+  <line x1="466" y1="180" x2="442" y2="180" stroke="#66bb6a" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <polygon points="442,180 450,176 450,184" fill="#66bb6a"/>
+  <text x="490" y="288" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">■ 입장 □ 대기</text>
+
+  <!-- producer 입장 화살표 -->
+  <line x1="214" y1="180" x2="268" y2="180" stroke="#7fa8c9" stroke-width="1.5"/>
+  <polygon points="268,180 260,176 260,184" fill="#7fa8c9"/>
+  <text x="124" y="176" fill="#9cc3df" font-size="11" font-weight="bold" text-anchor="middle">_Producer</text>
+  <text x="124" y="196" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">모니터 획득</text>
+
+  <!-- 하단 규칙 -->
+  <rect x="20" y="306" width="640" height="38" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="330" fill="#e8e4df" font-size="11">둘 중 하나만 실행: producer 가 run() 로직을 돌거나 consumer 가 돈다. 같은 모니터라 동시에 리스트를 못 바꾼다.</text>
+</svg>

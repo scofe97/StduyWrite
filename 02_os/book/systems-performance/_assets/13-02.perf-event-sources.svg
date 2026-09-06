@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 440" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>perf 이벤트 소스 — PMC 기반과 추적 기반</title>
+  <desc>perf가 계측하는 이벤트를 PMC 기반(하드웨어·캐시·PMU, 빈도 샘플링)과 추적 기반(tracepoint 정적·kprobe/uprobe 동적·USDT)으로 나눈 분류. 동적 프로브는 초기화 후 Tracepoint event로 나타난다.</desc>
+  <rect width="780" height="440" fill="#0d0d0d"/>
+  <text x="30" y="40" fill="#e8e4df" font-size="20" font-weight="700">perf 이벤트 소스</text>
+  <text x="30" y="64" fill="rgb(138,133,128)" font-size="13">PMC 기반(마이크로아키텍처) vs 추적 기반(정적·동적 계측점)</text>
+
+  <!-- PMC based -->
+  <rect x="40" y="90" width="340" height="150" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="210" y="114" fill="rgb(212,168,83)" font-size="14" font-weight="700" text-anchor="middle">PMC 기반 (하드웨어)</text>
+  <text x="60" y="140" fill="#e8e4df" font-size="12">• Hardware event (사이클·분기·캐시 미스)</text>
+  <text x="60" y="162" fill="#e8e4df" font-size="12">• Hardware cache event (L1·L3 등)</text>
+  <text x="60" y="184" fill="#e8e4df" font-size="12">• Kernel PMU event · raw 디스크립터(r00c4)</text>
+  <text x="60" y="210" fill="#f44336" font-size="11">함정: 매핑 오류(의심 시 raw 확인)</text>
+  <text x="60" y="228" fill="#f44336" font-size="11">record는 빈도 샘플링(기본 4000Hz, 일부만)</text>
+
+  <!-- trace based -->
+  <rect x="400" y="90" width="340" height="150" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.4"/>
+  <text x="570" y="114" fill="rgb(212,168,83)" font-size="14" font-weight="700" text-anchor="middle">추적 기반</text>
+  <text x="420" y="140" fill="#e8e4df" font-size="12">• Software event (context-switch·cpu-clock)</text>
+  <text x="420" y="162" fill="#e8e4df" font-size="12">• Tracepoint event (커널 정적)</text>
+  <text x="420" y="184" fill="#e8e4df" font-size="12">• SDT event (USDT, 유저 정적)</text>
+  <text x="420" y="210" fill="#66bb6a" font-size="11">tracepoint: 주기 1(모든 이벤트), 안정적</text>
+  <text x="420" y="228" fill="rgb(138,133,128)" font-size="11">software event: 빈도 샘플링(-c 1로 전부)</text>
+
+  <!-- dynamic probes -->
+  <rect x="40" y="262" width="700" height="80" rx="8" fill="none" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="390" y="286" fill="rgb(212,168,83)" font-size="13" font-weight="700" text-anchor="middle">동적 프로브 (perf probe로 초기화 → "Tracepoint event")</text>
+  <text x="60" y="312" fill="#e8e4df" font-size="12">• kprobe (커널 함수 동적) · uprobe (유저 함수 동적, 불안정)</text>
+  <text x="60" y="332" fill="#e8e4df" font-size="12">• USDT (유저 정적, 안정적 — uprobe로 USDT 위치 계측)</text>
+  <text x="470" y="312" fill="rgb(138,133,128)" font-size="11">인자: debuginfo·레지스터·</text>
+  <text x="470" y="328" fill="rgb(138,133,128)" font-size="11">ABI·BTF로 읽음</text>
+
+  <!-- conclusion -->
+  <rect x="40" y="356" width="700" height="64" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="60" y="382" fill="#e8e4df" font-size="13" font-weight="600">안정성 위계: tracepoint·USDT (안정) &gt; kprobe·uprobe (불안정, 버전 의존)</text>
+  <text x="60" y="404" fill="rgb(138,133,128)" font-size="12">우선 안정적 인터페이스를 쓰고, 없는 영역만 동적 프로브로 내려간다. record는 빈도 샘플링 함정 주의.</text>
+</svg>

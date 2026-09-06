@@ -1,0 +1,44 @@
+<svg viewBox="0 0 680 380" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>GC 이벤트 해부 — 단계별 시간과 수집 후 힙 변화 (원문 listing 11.2·11.3 개념도)</title>
+  <desc>원문 listing 11.2 와 11.3 의 개념을 도식으로 옮긴 것입니다. GC 이벤트 로그에서 집중할 둘은 이벤트 타입과 각 단계에 쓴 시간입니다. listing 11.2 는 Pause Young Normal 타입으로 evacuation 의 네 단계 즉 Pre Evacuate, Merge Heap Roots, Evacuate Collection Set, Post Evacuate Collection Set 가 모두 ms 단위라 메모리 해제에 문제가 없고 잘 튜닝된 정상 수집입니다. listing 11.3 은 수집 후 변화를 보여 줍니다. Eden 은 4 개 사용에서 0 으로 모두 비워졌고 가용은 5 개, Survivor 는 0 에서 1 사용, Old 로 승격은 없고, humongous 즉 초대형 객체 수집도 없습니다.</desc>
+  <rect x="0" y="0" width="680" height="380" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">GC 이벤트 해부 — 단계별 시간 + 힙 변화</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 listing 11.2·11.3 개념도 — 집중할 둘: 타입 + 시간</text>
+
+  <!-- listing 11.2 단계 -->
+  <rect x="20" y="78" width="320" height="220" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="100" fill="rgb(212,168,83)" font-size="12" font-weight="bold">listing 11.2 — evacuation 단계</text>
+  <rect x="34" y="110" width="292" height="26" fill="rgba(102,187,106,0.12)" stroke="#66bb6a"/>
+  <text x="44" y="128" fill="#66bb6a" font-size="10" font-weight="bold">Pause Young (Normal) ← 일상 수집</text>
+  <rect x="34" y="142" width="292" height="22" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
+  <text x="44" y="158" fill="#e8e4df" font-size="9.5">Pre Evacuate: 0.13ms (회수 대상 식별)</text>
+  <rect x="34" y="168" width="292" height="22" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
+  <text x="44" y="184" fill="#e8e4df" font-size="9.5">Merge Heap Roots: 0.20ms (참조 정렬)</text>
+  <rect x="34" y="194" width="292" height="22" fill="rgba(212,168,83,0.1)" stroke="rgb(212,168,83)"/>
+  <text x="44" y="210" fill="#e8e4df" font-size="9.5">Evacuate Collection Set: 4.04ms (이동/제거)</text>
+  <rect x="34" y="220" width="292" height="22" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
+  <text x="44" y="236" fill="#e8e4df" font-size="9.5">Post Evacuate: 0.73ms (마무리)</text>
+  <text x="34" y="264" fill="#66bb6a" font-size="10" font-weight="bold">모두 ms 단위 → 문제 없음</text>
+  <text x="34" y="284" fill="rgb(138,133,128)" font-size="9">GC 가 지연 없이 효율적으로 돔</text>
+
+  <!-- listing 11.3 변화 -->
+  <rect x="360" y="78" width="300" height="220" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="374" y="100" fill="#e8e4df" font-size="12" font-weight="bold">listing 11.3 — 수집 후 힙 변화</text>
+  <rect x="374" y="112" width="272" height="36" fill="rgba(102,187,106,0.08)" stroke="#66bb6a"/>
+  <text x="384" y="130" fill="#66bb6a" font-size="11" font-family="monospace">Eden: 4-&gt;0(5)</text>
+  <text x="384" y="143" fill="rgb(138,133,128)" font-size="9">4개 사용 → 모두 비움 (가용 5)</text>
+  <rect x="374" y="152" width="272" height="36" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9"/>
+  <text x="384" y="170" fill="#9cc3df" font-size="11" font-family="monospace">Survivor: 0-&gt;1(1)</text>
+  <text x="384" y="183" fill="rgb(138,133,128)" font-size="9">0 → 1 사용 (가용 1)</text>
+  <rect x="374" y="192" width="272" height="32" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
+  <text x="384" y="212" fill="#e8e4df" font-size="11" font-family="monospace">Old: 0-&gt;0  (승격 없음)</text>
+  <rect x="374" y="228" width="272" height="32" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
+  <text x="384" y="248" fill="#e8e4df" font-size="11" font-family="monospace">Humongous: 0-&gt;0  (초대형 없음)</text>
+  <text x="374" y="284" fill="rgb(138,133,128)" font-size="9">humongous = region 절반 넘는 초대형 객체</text>
+
+  <!-- 결론 -->
+  <rect x="20" y="312" width="640" height="52" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="34" y="334" fill="#66bb6a" font-size="12" font-weight="bold">결론</text>
+  <text x="34" y="356" fill="#e8e4df" font-size="10.5">G1·region 8M·max ~12GB · 1.336s Young 수집 · Eden 전부 비움+Survivor 1 · 몇 ms = 잘 튜닝된 GC</text>
+</svg>

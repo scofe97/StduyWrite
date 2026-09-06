@@ -1,0 +1,96 @@
+<svg viewBox="0 0 680 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>OpenSearch 운영 회복탄력성 — 모니터링·과부하 방어 사다리·백업/DR</title>
+  <desc>3유형 지표로 모니터링하고, 알람→admission control→Search Backpressure→circuit breaker→자동 블록의 방어 사다리로 과부하를 앞단에서 막으며, RPO/RTO 에 맞춰 Backup&amp;Restore·Pilot Light·CCR 로 재해에 대비하고 복구 후 검증하는 운영 구조.</desc>
+
+  <rect x="0" y="0" width="680" height="480" fill="#0d0d0d"/>
+  <text x="24" y="32" fill="#e8e4df" font-size="15" font-weight="600">운영 회복탄력성 — 앞단에서 막고, RPO/RTO 에 맞춰 대비하고, 복구는 검증한다</text>
+
+  <defs>
+    <marker id="oa" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+      <path d="M0,0 L8,3.5 L0,7 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <!-- 기둥① 모니터링 -->
+  <text x="24" y="58" fill="#e8e4df" font-size="12" font-weight="600">① 모니터링 — 3유형 지표</text>
+  <rect x="24" y="68" width="200" height="128" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="88" fill="rgb(212,168,83)" font-size="10" font-weight="600">Cluster</text>
+  <text x="34" y="102" fill="rgb(138,133,128)" font-size="8.5">ClusterStatus (green/yellow/red)</text>
+  <text x="34" y="121" fill="rgb(212,168,83)" font-size="10" font-weight="600">Node</text>
+  <text x="34" y="135" fill="rgb(138,133,128)" font-size="8.5">JVMMemoryPressure · CPU · FreeStorage</text>
+  <text x="34" y="154" fill="rgb(212,168,83)" font-size="10" font-weight="600">Shard</text>
+  <text x="34" y="168" fill="rgb(138,133,128)" font-size="8.5">분포 · 크기 skew (1000/노드 한계)</text>
+  <text x="34" y="187" fill="rgb(138,133,128)" font-size="8">도구: CloudWatch · Prometheus+Exporter · PA(5s)</text>
+
+  <!-- 기둥② 과부하 방어 사다리 -->
+  <text x="244" y="58" fill="#e8e4df" font-size="12" font-weight="600">② 과부하 방어 사다리 — 위로 갈수록 사용자 영향 큼(뒤로 밀지 마라)</text>
+  <rect x="244" y="68" width="412" height="128" fill="rgba(212,168,83,0.06)" stroke="rgb(42,37,32)"/>
+
+  <rect x="256" y="78" width="388" height="20" fill="rgba(102,187,106,0.14)" stroke="rgb(102,187,106)"/>
+  <text x="264" y="92" fill="rgb(102,187,106)" font-size="9" font-weight="600">1. 알람</text>
+  <text x="330" y="92" fill="rgb(138,133,128)" font-size="8.5">CPU 80% · JVM 95% · FreeStorage 25% · Queue 100 — 경고</text>
+
+  <rect x="256" y="101" width="388" height="20" fill="rgba(102,187,106,0.11)" stroke="rgb(102,187,106)"/>
+  <text x="264" y="115" fill="rgb(102,187,106)" font-size="9" font-weight="600">2. admission control</text>
+  <text x="390" y="115" fill="rgb(138,133,128)" font-size="8.5">진입 제어 — JVM·요청 크기 임계 시 throttle/큐잉</text>
+
+  <rect x="256" y="124" width="388" height="20" fill="rgba(102,187,106,0.09)" stroke="rgb(102,187,106)"/>
+  <text x="264" y="138" fill="rgb(102,187,106)" font-size="9" font-weight="600">3. Search Backpressure</text>
+  <text x="398" y="138" fill="rgb(138,133,128)" font-size="8.5">무거운 검색 취소 → HTTP 429 (부분 결과 허용)</text>
+
+  <rect x="256" y="147" width="388" height="20" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)"/>
+  <text x="264" y="161" fill="rgb(212,168,83)" font-size="9" font-weight="600">4. circuit breaker ×6</text>
+  <text x="380" y="161" fill="rgb(138,133,128)" font-size="8.5">parent·field data·request·in-flight·accounting·script</text>
+
+  <rect x="256" y="170" width="388" height="20" fill="rgba(212,168,83,0.16)" stroke="rgb(212,168,83)"/>
+  <text x="264" y="184" fill="rgb(212,168,83)" font-size="9" font-weight="600">5. 자동 쓰기 블록</text>
+  <text x="378" y="184" fill="rgb(138,133,128)" font-size="8.5">JVM 92%/30분 — 최후 방어선 (여기 닿으면 이미 늦음)</text>
+
+  <line x1="124" y1="196" x2="124" y2="220" stroke="rgb(212,168,83)" stroke-width="1.3" marker-end="url(#oa)"/>
+  <line x1="450" y1="196" x2="450" y2="220" stroke="rgb(212,168,83)" stroke-width="1.3" marker-end="url(#oa)"/>
+
+  <!-- 기둥③ 백업·DR -->
+  <text x="24" y="240" fill="#e8e4df" font-size="12" font-weight="600">③ 백업·DR — RPO(손실 허용)·RTO(복구 시간) 로 고른다 (비용↔회복력 스펙트럼)</text>
+
+  <rect x="24" y="252" width="150" height="86" fill="rgba(212,168,83,0.06)" stroke="rgb(42,37,32)"/>
+  <text x="99" y="270" fill="rgb(212,168,83)" font-size="9.5" text-anchor="middle" font-weight="600">Backup &amp; Restore</text>
+  <text x="34" y="288" fill="rgb(138,133,128)" font-size="8">스냅샷 → 객체 저장소</text>
+  <text x="34" y="303" fill="rgb(138,133,128)" font-size="8">ISM 보존 · KMS 암호화</text>
+  <text x="34" y="320" fill="rgb(138,133,128)" font-size="8">RPO·RTO 큼 · 최저 비용</text>
+  <text x="34" y="333" fill="rgb(138,133,128)" font-size="7.5">비핵심 분석 · 일간(≤24h 손실)</text>
+
+  <rect x="184" y="252" width="150" height="86" fill="rgba(212,168,83,0.06)" stroke="rgb(42,37,32)"/>
+  <text x="259" y="270" fill="rgb(212,168,83)" font-size="9.5" text-anchor="middle" font-weight="600">Pilot Light</text>
+  <text x="194" y="288" fill="rgb(138,133,128)" font-size="8">보조 리전 최소 상시</text>
+  <text x="194" y="303" fill="rgb(138,133,128)" font-size="8">설정·매핑·핵심 인덱스</text>
+  <text x="194" y="320" fill="rgb(138,133,128)" font-size="8">재해 시 스케일업 + 복원</text>
+  <text x="194" y="333" fill="rgb(138,133,128)" font-size="7.5">다운타임↓ · 일부 손실 OK</text>
+
+  <rect x="344" y="252" width="150" height="86" fill="rgba(102,187,106,0.10)" stroke="rgb(102,187,106)"/>
+  <text x="419" y="270" fill="rgb(102,187,106)" font-size="9.5" text-anchor="middle" font-weight="600">CCR (active-passive)</text>
+  <text x="354" y="288" fill="rgb(138,133,128)" font-size="8">leader → follower 지속 복제</text>
+  <text x="354" y="303" fill="rgb(138,133,128)" font-size="8">준실시간 · API 관리</text>
+  <text x="354" y="320" fill="rgb(138,133,128)" font-size="8">RPO 준실시간 · 규제 대응</text>
+  <text x="354" y="333" fill="rgb(138,133,128)" font-size="7.5">Warm Standby / Active-Active</text>
+
+  <rect x="504" y="252" width="152" height="86" fill="rgb(26,26,26)" stroke="rgb(212,168,83)"/>
+  <text x="580" y="270" fill="rgb(212,168,83)" font-size="9.5" text-anchor="middle" font-weight="600">복구 후 검증</text>
+  <text x="514" y="288" fill="rgb(138,133,128)" font-size="8">consistency: _cat/recovery</text>
+  <text x="514" y="303" fill="rgb(138,133,128)" font-size="8">query: 샘플 쿼리</text>
+  <text x="514" y="320" fill="rgb(138,133,128)" font-size="8">benchmark: RTO 대비</text>
+  <text x="514" y="333" fill="rgb(138,133,128)" font-size="7.5">문서수·SLO 정량 확인</text>
+
+  <!-- 통찰 띠 -->
+  <rect x="24" y="352" width="632" height="30" fill="rgba(102,187,106,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="40" y="371" fill="rgb(138,133,128)" font-size="9.5">열쇠: 모든 안전장치는 검증돼야 실체 — 백업은 월간 복원 테스트+체크섬, 알람은 임계 초과, DR 은 RPO/RTO 정량 목표</text>
+
+  <!-- Spring 관점 -->
+  <rect x="24" y="388" width="632" height="30" fill="rgba(212,168,83,0.06)" stroke="rgb(42,37,32)"/>
+  <text x="40" y="407" fill="rgb(138,133,128)" font-size="9.5">Spring 앱: ① Actuator 로 클러스터 헬스를 앱 헬스에 ② Micrometer→Prometheus export ③ 429(backpressure)에 재시도/차단으로 협조</text>
+
+  <!-- 하단 원칙 -->
+  <rect x="24" y="424" width="632" height="42" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="40" y="442" fill="#e8e4df" font-size="10" font-weight="600">세 기둥은 서로를 검증한다:</text>
+  <text x="220" y="442" fill="rgb(138,133,128)" font-size="9">모니터링 없는 백업 = 복원 되는지 모름 · 백업 없는 모니터링 = 봐도 못 되돌림</text>
+  <text x="40" y="458" fill="rgb(138,133,128)" font-size="9">검증 없는 복구 = 복원했다는 착각 · defense-in-depth 는 보안(12장)만이 아니라 운영에도 적용된다</text>
+</svg>

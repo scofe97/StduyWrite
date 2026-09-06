@@ -1,0 +1,60 @@
+<svg viewBox="0 0 880 340" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>노드 분단에서 ReplicaSet 싱글턴이 잠시 둘이 되는 경로</title>
+  <desc>replicas를 1로 둔 ReplicaSet에서 Pod가 일시적으로 둘이 되는 대표적인 코너 케이스를 단계로 보입니다. 처음에는 Node A에서 Pod 하나가 정상 동작합니다. 다음으로 Node A가 비정상이 되어 클러스터의 나머지와 연결이 끊깁니다. 이때 컨트롤 플레인은 그 Pod가 죽었는지 단지 연결만 끊긴 것인지 관측만으로는 구분할 수 없습니다. ReplicaSet은 가용성을 우선하므로 분단된 노드의 Pod가 종료됐음을 보장하지 않은 채 건강한 Node B에 새 Pod를 띄웁니다. 그 결과 분단된 Pod가 실제로는 살아 있다면 두 Pod가 동시에 도는 구간이 생기며, 이것이 ReplicaSet이 at-most-one이 아니라 at-least-once인 이유입니다.</desc>
+
+  <rect width="880" height="340" fill="#0d0d0d"/>
+
+  <text x="24" y="30" fill="#e8e4df" font-size="15" font-weight="700">싱글턴이 둘이 되는 길</text>
+
+  <!-- step 1 -->
+  <text x="24" y="60" fill="#66bb6a" font-size="11" font-weight="700">1. 정상</text>
+  <rect x="24" y="70" width="230" height="72" fill="#0d0d0d" stroke="#66bb6a"/>
+  <text x="139" y="92" text-anchor="middle" fill="#66bb6a" font-size="11" font-weight="700">Node A</text>
+  <rect x="60" y="102" width="158" height="30" fill="#cdeccf"/>
+  <text x="139" y="122" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">Pod · 활성</text>
+
+  <path d="M 262 106 L 296 106" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- step 2 -->
+  <text x="304" y="60" fill="rgb(212,168,83)" font-size="11" font-weight="700">2. 분단</text>
+  <rect x="304" y="70" width="230" height="72" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-dasharray="4 3"/>
+  <text x="419" y="92" text-anchor="middle" fill="rgb(212,168,83)" font-size="11" font-weight="700">Node A · 연결 끊김</text>
+  <rect x="340" y="102" width="158" height="30" fill="#f5edda"/>
+  <text x="419" y="122" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">Pod · 상태 불명</text>
+
+  <path d="M 542 106 L 576 106" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- step 3 -->
+  <text x="584" y="60" fill="#f44336" font-size="11" font-weight="700">3. 둘</text>
+  <rect x="584" y="70" width="272" height="72" fill="#0d0d0d" stroke="#f44336"/>
+  <text x="720" y="92" text-anchor="middle" fill="#f44336" font-size="11" font-weight="700">Node B에 새 Pod</text>
+  <rect x="600" y="102" width="118" height="30" fill="#f2d4d4"/>
+  <text x="659" y="122" text-anchor="middle" fill="#7a1f1f" font-size="10" font-weight="700">옛 Pod</text>
+  <rect x="726" y="102" width="118" height="30" fill="#f2d4d4"/>
+  <text x="785" y="122" text-anchor="middle" fill="#7a1f1f" font-size="10" font-weight="700">새 Pod</text>
+
+  <!-- the ambiguity -->
+  <rect x="24" y="166" width="832" height="60" fill="#f5edda"/>
+  <text x="44" y="188" fill="#0d0d0d" font-size="12" font-weight="700">컨트롤 플레인이 구분할 수 없는 것</text>
+  <text x="44" y="210" fill="#0d0d0d" font-size="10">죽었나 끊겼나 · 관측이 같습니다</text>
+
+  <!-- two choices -->
+  <text x="24" y="252" fill="#e8e4df" font-size="12" font-weight="700">그래서 둘 중 하나를 포기합니다</text>
+
+  <rect x="24" y="264" width="410" height="60" fill="#f2d4d4"/>
+  <text x="44" y="286" fill="#7a1f1f" font-size="11" font-weight="700">가용성 우선 — ReplicaSet</text>
+  <text x="44" y="306" fill="#7a1f1f" font-size="10">일단 띄웁니다 · 그래서 2개</text>
+
+  <rect x="446" y="264" width="410" height="60" fill="#dceaf7"/>
+  <text x="466" y="286" fill="#10243a" font-size="11" font-weight="700">일관성 우선 — StatefulSet</text>
+  <text x="466" y="306" fill="#10243a" font-size="10">확인 전엔 안 띄웁니다</text>
+
+  <defs>
+    <marker id="a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+</svg>

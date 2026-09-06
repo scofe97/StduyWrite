@@ -1,0 +1,54 @@
+<svg viewBox="0 0 780 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>wfapi의 Blue Ocean 커버리지와 폐기 타임라인 기반 구현 판단</title>
+  <desc>wfapi는 Blue Ocean-like 화면의 상위 70~80%를 커버한다. 상태 바·stage 상태·flow node 목록·node 로그는 만들 수 있지만, step 전용 REST 계층과 steps/{stepId}/log 같은 step 로그 드릴다운은 커버하지 못한다. Blue Ocean은 2026년 7월 폐기 예정이라 step parity를 위해 신규 의존을 새로 묶으면 폐기 시점에 회수 비용이 든다. 그래서 신규 구현은 flow node 중심으로 가고, step이 꼭 필요한 기존 화면에만 Blue Ocean을 한정한다.</desc>
+
+  <rect x="0" y="0" width="780" height="500" fill="#0d0d0d"/>
+  <text x="30" y="34" fill="#e8e4df" font-size="16">wfapi는 Blue Ocean의 70~80%를 덮는다 — 끊기는 곳은 step</text>
+  <text x="30" y="56" fill="rgb(138,133,128)" font-size="11">폐기 타임라인이 "신규는 flow node, 기존 step 화면만 Blue Ocean" 판단을 굳힌다</text>
+
+  <!-- 커버리지 바 -->
+  <text x="30" y="92" fill="#e8e4df" font-size="13">커버리지</text>
+  <rect x="30" y="104" width="720" height="46" rx="6" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <!-- 커버 영역 70~80% (약 552px) -->
+  <rect x="30" y="104" width="552" height="46" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="306" y="126" fill="rgb(212,168,83)" font-size="13" text-anchor="middle">wfapi로 커버 — 약 70~80%</text>
+  <text x="306" y="143" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">상태 바 · stage 상태 · flow node 목록 · node 로그</text>
+  <!-- 끊김 영역 -->
+  <text x="666" y="126" fill="#f44336" font-size="12" text-anchor="middle">step 끊김</text>
+  <text x="666" y="143" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">steps/{id}/log</text>
+  <line x1="582" y1="100" x2="582" y2="154" stroke="#f44336" stroke-dasharray="4 3"/>
+
+  <!-- 좌: wfapi로 되는 것 -->
+  <rect x="30" y="178" width="355" height="150" rx="6" fill="rgba(212,168,83,0.07)" stroke="rgb(212,168,83)"/>
+  <text x="48" y="204" fill="rgb(212,168,83)" font-size="13">wfapi로 자연스럽게 되는 것 ✓</text>
+  <text x="48" y="230" fill="rgb(138,133,128)" font-size="11">· 파이프라인 상단 상태 바</text>
+  <text x="48" y="252" fill="rgb(138,133,128)" font-size="11">· stage별 성공/실패/진행 중 표시</text>
+  <text x="48" y="274" fill="rgb(138,133,128)" font-size="11">· stage 클릭 후 내부 flow node 목록</text>
+  <text x="48" y="296" fill="rgb(138,133,128)" font-size="11">· 선택 stage 또는 flow node 로그</text>
+  <text x="48" y="318" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">최소 단위 = flow node</text>
+
+  <!-- 우: Blue Ocean이 필요한 것 -->
+  <rect x="397" y="178" width="353" height="150" rx="6" fill="rgba(244,67,54,0.05)" stroke="#f44336"/>
+  <text x="415" y="204" fill="#f44336" font-size="13">Blue Ocean만 되는 것 ✕</text>
+  <text x="415" y="230" fill="rgb(138,133,128)" font-size="11">· step 전용 REST 계층</text>
+  <text x="415" y="252" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">· steps/{stepId}/log drill-down</text>
+  <text x="415" y="274" fill="rgb(138,133,128)" font-size="11">· step 중심 정보 모델의 세밀함</text>
+  <text x="415" y="304" fill="#f44336" font-size="11">그런데 이 계층이 2026-07 폐기 예정</text>
+
+  <!-- 폐기 타임라인 -->
+  <text x="30" y="364" fill="#e8e4df" font-size="13">폐기 타임라인</text>
+  <line x1="48" y1="392" x2="730" y2="392" stroke="rgb(42,37,32)"/>
+  <circle cx="120" cy="392" r="5" fill="rgb(138,133,128)"/>
+  <text x="120" y="416" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">2022~</text>
+  <text x="120" y="432" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">유지보수 모드</text>
+  <circle cx="400" cy="392" r="5" fill="rgb(138,133,128)"/>
+  <text x="400" y="416" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">현재</text>
+  <text x="400" y="432" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">동결 · 보안/결함만 선택 수정</text>
+  <circle cx="680" cy="392" r="6" fill="#f44336"/>
+  <text x="680" y="416" fill="#f44336" font-size="11" text-anchor="middle">2026-07</text>
+  <text x="680" y="432" fill="#f44336" font-size="10" text-anchor="middle">폐기 — 이후 갱신 없음</text>
+
+  <!-- 결론 박스 -->
+  <rect x="30" y="452" width="720" height="34" rx="6" fill="rgba(102,187,106,0.08)" stroke="#66bb6a"/>
+  <text x="48" y="474" fill="#66bb6a" font-size="12">판단: 신규 구현은 flow node 중심(wfapi) · step이 꼭 필요한 기존 화면에만 Blue Ocean 한정 · UI는 Graph View / Stage View</text>
+</svg>

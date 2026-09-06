@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 580" font-family="Pretendard, sans-serif">
+  <rect width="680" height="580" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">OLTP 저장과 인덱스 기초</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">append 로그는 쓰기 빠름 · 읽기는 인덱스로 가속 · 인덱스는 쓰기를 늦춘다</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- append-only 로그 -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">append-only 로그 (db_set)</text>
+  <rect x="32" y="124" width="380" height="120" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="48" y="148" fill="#e8e4df" font-size="11" font-family="monospace">offset 0  → 12,{London ...}</text>
+  <text x="48" y="170" fill="#e8e4df" font-size="11" font-family="monospace">offset 64 → 42,{San Francisco ...}</text>
+  <text x="48" y="192" fill="rgb(138,133,128)" font-size="11" font-family="monospace">offset 128→ 42,{... Exploratorium}  ← 최신</text>
+  <text x="48" y="220" fill="#66bb6a" font-size="11">append = 가장 단순·효율적 쓰기 · 옛 값 덮지 않음(마지막 등장이 최신)</text>
+  <text x="48" y="238" fill="#f47f72" font-size="11">db_get은 전체 스캔 O(n) → 인덱스 필요</text>
+
+  <!-- 인메모리 해시 인덱스 -->
+  <text x="430" y="112" fill="#7fa8c9" font-size="14" font-weight="700">인메모리 해시 인덱스</text>
+  <rect x="430" y="124" width="218" height="120" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="446" y="148" fill="#e8e4df" font-size="11">키 → 바이트 offset 맵</text>
+  <text x="446" y="170" fill="#e8e4df" font-size="11" font-family="monospace">12 → 0</text>
+  <text x="446" y="188" fill="#e8e4df" font-size="11" font-family="monospace">42 → 128</text>
+  <text x="446" y="212" fill="rgb(138,133,128)" font-size="10.5">조회: 맵 → seek → 읽기</text>
+  <text x="446" y="230" fill="rgb(138,133,128)" font-size="10.5">(캐시에 있으면 디스크 I/O 0)</text>
+
+  <line x1="412" y1="184" x2="428" y2="184" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar)"/>
+
+  <!-- 해시 인덱스 한계 -->
+  <text x="32" y="284" fill="#f47f72" font-size="14" font-weight="700">해시 인덱스의 한계 (4가지)</text>
+  <rect x="32" y="296" width="616" height="86" rx="6" fill="#141414" stroke="#f47f72"/>
+  <text x="48" y="318" fill="#e8e4df" font-size="11">· 옛 로그 공간 회수 안 됨 → 디스크 고갈 가능</text>
+  <text x="48" y="338" fill="#e8e4df" font-size="11">· 맵 비영속 → 재시작 시 전체 스캔으로 재구축(느림)</text>
+  <text x="356" y="318" fill="#e8e4df" font-size="11">· 해시 테이블이 메모리에 다 들어가야 함</text>
+  <text x="356" y="338" fill="#e8e4df" font-size="11">· 범위 쿼리 비효율(키 하나씩 조회)</text>
+  <text x="48" y="362" fill="rgb(138,133,128)" font-size="10.5">→ 실무에선 해시보다 키로 정렬된 구조(SSTable·B-tree)가 흔함</text>
+
+  <!-- 인덱스 trade-off -->
+  <text x="32" y="422" fill="rgb(212,168,83)" font-size="14" font-weight="700">핵심 trade-off — 인덱스는 파생 구조</text>
+  <rect x="32" y="434" width="300" height="100" rx="6" fill="#141414" stroke="#66bb6a"/>
+  <text x="48" y="456" fill="#66bb6a" font-size="12" font-weight="700">인덱스 추가</text>
+  <text x="48" y="478" fill="#e8e4df" font-size="11">읽기 쿼리 가속</text>
+  <text x="48" y="498" fill="#e8e4df" font-size="11">기본 데이터에서 파생</text>
+  <text x="48" y="520" fill="rgb(138,133,128)" font-size="10.5">DB 내용은 안 바뀜, 성능만 영향</text>
+
+  <rect x="348" y="434" width="300" height="100" rx="6" fill="#141414" stroke="#f47f72"/>
+  <text x="364" y="456" fill="#f47f72" font-size="12" font-weight="700">인덱스 비용</text>
+  <text x="364" y="478" fill="#e8e4df" font-size="11">디스크 공간 추가 소비</text>
+  <text x="364" y="498" fill="#e8e4df" font-size="11">쓰기마다 인덱스도 갱신 → 쓰기 느림</text>
+  <text x="364" y="520" fill="rgb(138,133,128)" font-size="10.5">→ 전부 인덱싱 안 함, 쿼리 패턴 보고 수동 선택</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>

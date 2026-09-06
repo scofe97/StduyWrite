@@ -1,0 +1,56 @@
+<svg viewBox="0 0 920 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>G1 Region 기반 힙 — 균등한 칸에 논리적 역할을 붙인다 (연속일 필요 없음)</title>
+  <desc>G1은 힙을 1~32MB의 균등한 Region 격자로 나눈다. 각 Region에 그 순간 Eden·Survivor·Old·Humongous·Free 중 하나의 역할을 붙인다. 기존 컬렉터의 세대가 연속된 주소 공간이었던 것과 달리, G1의 Eden·Survivor·Old는 흩어진 Region 집합에 붙는 논리적 역할일 뿐이라 연속일 필요가 없다. Region 크기의 50%를 넘는 큰 객체는 Humongous로, 연속된 Region 집합에 별도로 담는다.</desc>
+  <defs>
+    <style>
+      .title{font-size:16px;font-weight:800;fill:#e8e4df;}
+      .sub{font-size:11px;fill:rgb(138,133,128);}
+      .shead{font-size:12.5px;font-weight:800;fill:rgb(212,168,83);}
+      .rl{font-size:13px;font-weight:800;}
+      .rt{font-size:8.5px;}
+      .note{font-size:10px;fill:rgb(160,155,150);}
+      .lbl{font-size:10.5px;fill:rgb(180,175,170);}
+    </style>
+  </defs>
+  <rect x="0" y="0" width="920" height="420" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">G1 Region 기반 힙 — 균등한 칸에 *논리적 역할*을 붙인다</text>
+  <text x="24" y="52" class="sub">힙을 1~32MB 균등 Region으로 나누고(약 2,000개 목표), 각 칸에 그 순간 Eden·Survivor·Old·Humongous·Free 역할을 붙인다.</text>
+
+  <!-- 격자: 6 x 3 = 18 regions -->
+  <text x="24" y="84" class="shead">힙 전체 — 18개 Region 예시 (역할이 흩어져 있어도 됨)</text>
+  <g font-weight="700">
+    <!-- row 1 -->
+    <rect x="24"  y="96" width="140" height="56" rx="5" fill="#1e3a4a" stroke="#4a8ab0"/><text x="94"  y="120" class="rl" text-anchor="middle" fill="#9cc4dc">E</text><text x="94"  y="138" class="rt" text-anchor="middle" fill="#6a8aa0">Eden</text>
+    <rect x="172" y="96" width="140" height="56" rx="5" fill="#1e3a4a" stroke="#4a8ab0"/><text x="242" y="120" class="rl" text-anchor="middle" fill="#9cc4dc">E</text><text x="242" y="138" class="rt" text-anchor="middle" fill="#6a8aa0">Eden</text>
+    <rect x="320" y="96" width="140" height="56" rx="5" fill="#2a2410" stroke="#d4a853"/><text x="390" y="120" class="rl" text-anchor="middle" fill="#f5d76e">S</text><text x="390" y="138" class="rt" text-anchor="middle" fill="#a08a50">Survivor</text>
+    <rect x="468" y="96" width="140" height="56" rx="5" fill="#241e30" stroke="#8a70c0"/><text x="538" y="120" class="rl" text-anchor="middle" fill="#b8a0e0">O</text><text x="538" y="138" class="rt" text-anchor="middle" fill="#8a70b0">Old</text>
+    <rect x="616" y="96" width="140" height="56" rx="5" fill="#141414" stroke="#555" stroke-dasharray="4,3"/><text x="686" y="128" class="rt" text-anchor="middle" fill="#888">Free</text>
+    <rect x="764" y="96" width="132" height="56" rx="5" fill="#241e30" stroke="#8a70c0"/><text x="830" y="120" class="rl" text-anchor="middle" fill="#b8a0e0">O</text><text x="830" y="138" class="rt" text-anchor="middle" fill="#8a70b0">Old</text>
+    <!-- row 2 -->
+    <rect x="24"  y="160" width="140" height="56" rx="5" fill="#241e30" stroke="#8a70c0"/><text x="94"  y="184" class="rl" text-anchor="middle" fill="#b8a0e0">O</text><text x="94"  y="202" class="rt" text-anchor="middle" fill="#8a70b0">Old</text>
+    <!-- Humongous: 2칸 연속 -->
+    <rect x="172" y="160" width="288" height="56" rx="5" fill="#2a1414" stroke="#e57373" stroke-width="1.8"/><text x="316" y="184" class="rl" text-anchor="middle" fill="#f5b0b0">H  H</text><text x="316" y="202" class="rt" text-anchor="middle" fill="#c08080">Humongous — 큰 객체, 연속 Region 집합</text>
+    <rect x="468" y="160" width="140" height="56" rx="5" fill="#1e3a4a" stroke="#4a8ab0"/><text x="538" y="184" class="rl" text-anchor="middle" fill="#9cc4dc">E</text><text x="538" y="202" class="rt" text-anchor="middle" fill="#6a8aa0">Eden</text>
+    <rect x="616" y="160" width="140" height="56" rx="5" fill="#2a2410" stroke="#d4a853"/><text x="686" y="184" class="rl" text-anchor="middle" fill="#f5d76e">S</text><text x="686" y="202" class="rt" text-anchor="middle" fill="#a08a50">Survivor</text>
+    <rect x="764" y="160" width="132" height="56" rx="5" fill="#141414" stroke="#555" stroke-dasharray="4,3"/><text x="830" y="192" class="rt" text-anchor="middle" fill="#888">Free</text>
+    <!-- row 3 -->
+    <rect x="24"  y="224" width="140" height="56" rx="5" fill="#241e30" stroke="#8a70c0"/><text x="94"  y="248" class="rl" text-anchor="middle" fill="#b8a0e0">O</text><text x="94"  y="266" class="rt" text-anchor="middle" fill="#8a70b0">Old</text>
+    <rect x="172" y="224" width="140" height="56" rx="5" fill="#141414" stroke="#555" stroke-dasharray="4,3"/><text x="242" y="256" class="rt" text-anchor="middle" fill="#888">Free</text>
+    <rect x="320" y="224" width="140" height="56" rx="5" fill="#241e30" stroke="#8a70c0"/><text x="390" y="248" class="rl" text-anchor="middle" fill="#b8a0e0">O</text><text x="390" y="266" class="rt" text-anchor="middle" fill="#8a70b0">Old</text>
+    <rect x="468" y="224" width="140" height="56" rx="5" fill="#1e3a4a" stroke="#4a8ab0"/><text x="538" y="248" class="rl" text-anchor="middle" fill="#9cc4dc">E</text><text x="538" y="266" class="rt" text-anchor="middle" fill="#6a8aa0">Eden</text>
+    <rect x="616" y="224" width="140" height="56" rx="5" fill="#241e30" stroke="#8a70c0"/><text x="686" y="248" class="rl" text-anchor="middle" fill="#b8a0e0">O</text><text x="686" y="266" class="rt" text-anchor="middle" fill="#8a70b0">Old</text>
+    <rect x="764" y="224" width="132" height="56" rx="5" fill="#2a2410" stroke="#d4a853"/><text x="830" y="248" class="rl" text-anchor="middle" fill="#f5d76e">S</text><text x="830" y="266" class="rt" text-anchor="middle" fill="#a08a50">Survivor</text>
+  </g>
+
+  <!-- 핵심 대비: 기존 연속 세대 vs G1 -->
+  <text x="24" y="312" class="shead">기존 컬렉터와의 차이 — 세대가 *연속 주소*가 아니라 *흩어진 Region 역할*</text>
+  <rect x="24" y="324" width="430" height="80" rx="8" fill="#1a1010" stroke="#5a3a3a"/>
+  <text x="44" y="348" class="lbl"><tspan font-weight="700" fill="#f5b0b0">기존 (Serial·Parallel·CMS)</tspan></text>
+  <text x="44" y="368" class="note">[ Young 영역 ][ Old 영역 ] — 한 덩어리 연속 주소.</text>
+  <text x="44" y="386" class="note">세대 크기를 바꾸려면 *메모리 재배치*가 필요하다.</text>
+
+  <rect x="466" y="324" width="430" height="80" rx="8" fill="#101a10" stroke="#3a5a3a"/>
+  <text x="486" y="348" class="lbl"><tspan font-weight="700" fill="#81c784">G1</tspan></text>
+  <text x="486" y="368" class="note">Eden·Survivor·Old가 *흩어진 Region 집합*에 붙는 논리 역할.</text>
+  <text x="486" y="386" class="note">크기 변경 = Region의 *역할만* 바꾸면 끝(재배치 없음 → 6.3).</text>
+</svg>

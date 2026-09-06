@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="900" height="560" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif" role="img">
+  <title>쿠버네티스 수집기의 배포 형태</title>
+  <desc>쿠버네티스에서 노드마다 하나씩 두는 DaemonSet 수집기와 클러스터에 하나만 두는 단일 인스턴스 수집기가 갈리고, Kubernetes Attributes Processor 가 모든 파이프라인에 붙는 구조입니다.</desc>
+  <style>
+    .bg { fill: #0d0d0d; }
+    .title { fill: #e8e4df; font-size: 17px; font-weight: 700; }
+    .sub { fill: #b8b3ad; font-size: 12px; }
+    .zone { fill: #b8b3ad; font-size: 12px; font-weight: 700; }
+    .hd { font-size: 13.5px; font-weight: 700; }
+    .note { font-size: 11px; }
+    .mono { font-size: 10.5px; }
+    .code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11px; }
+  </style>
+  <rect class="bg" x="0" y="0" width="900" height="560"/>
+
+  <text class="title" x="30" y="34">배포 형태가 컴포넌트를 정한다</text>
+  <text class="sub" x="30" y="55">틀리면 비거나 중복된다</text>
+
+  <!-- DaemonSet zone -->
+  <rect x="30" y="78" width="410" height="304" rx="10" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.8"/>
+  <rect x="30" y="78" width="410" height="34" rx="10" fill="#5b9bd5"/>
+  <rect x="30" y="102" width="410" height="10" fill="#5b9bd5"/>
+  <text class="zone" x="48" y="101" style="fill:#e8e4df">DaemonSet — 노드마다 하나</text>
+
+  <rect x="48" y="126" width="374" height="70" rx="6" fill="#dceaf7"/>
+  <text class="hd" x="62" y="147" fill="#10243a">Kubeletstats</text>
+  <text class="note" x="62" y="165" fill="#1a1a1a">kubelet API 에서 pull</text>
+  <rect x="62" y="172" width="346" height="18" rx="3" fill="#0d0d0d"/>
+  <text class="code" x="70" y="185" fill="#5b9bd5">endpoint: ${env:K8S_NODE_NAME}:10250</text>
+
+  <rect x="48" y="204" width="374" height="76" rx="6" fill="#dceaf7"/>
+  <text class="hd" x="62" y="225" fill="#10243a">Filelog Receiver</text>
+  <text class="note" x="62" y="243" fill="#1a1a1a">stdout·stderr 를 tail</text>
+  <rect x="62" y="250" width="346" height="18" rx="3" fill="#0d0d0d"/>
+  <text class="code" x="70" y="263" fill="#5b9bd5">include: /var/log/pods/*/*/*.log</text>
+
+  <rect x="48" y="288" width="374" height="78" rx="6" fill="#dceaf7"/>
+  <text class="hd" x="62" y="309" fill="#10243a">Host Metrics</text>
+  <text class="note" x="62" y="327" fill="#1a1a1a">호스트 볼륨 접근 필요</text>
+  <rect x="62" y="334" width="346" height="24" rx="3" fill="#f2d4d4"/>
+  <text class="note" x="70" y="350" fill="#7a1f1f" font-weight="700">기본 10초 — 60초 고려</text>
+
+  <!-- Single instance zone -->
+  <rect x="460" y="78" width="410" height="304" rx="10" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.8"/>
+  <rect x="460" y="78" width="410" height="34" rx="10" fill="rgb(212,168,83)"/>
+  <rect x="460" y="102" width="410" height="10" fill="rgb(212,168,83)"/>
+  <text class="zone" x="478" y="101" style="fill:#0d0d0d">단일 인스턴스 — 클러스터에 하나</text>
+
+  <rect x="478" y="126" width="374" height="76" rx="6" fill="#fdf3df"/>
+  <text class="hd" x="492" y="147" fill="#0d0d0d">K8s Cluster Receiver</text>
+  <text class="note" x="492" y="165" fill="#1a1a1a">API 서버 — 클러스터 수준</text>
+  <rect x="492" y="172" width="346" height="22" rx="3" fill="#f2d4d4"/>
+  <text class="note" x="500" y="187" fill="#7a1f1f" font-weight="700">여러 개 띄우면 데이터가 중복된다</text>
+
+  <rect x="478" y="210" width="374" height="76" rx="6" fill="#fdf3df"/>
+  <text class="hd" x="492" y="231" fill="#0d0d0d">K8s Object Receiver</text>
+  <text class="note" x="492" y="249" fill="#1a1a1a">API 서버 — pull/watch</text>
+  <rect x="492" y="256" width="346" height="22" rx="3" fill="#f2d4d4"/>
+  <text class="note" x="500" y="271" fill="#7a1f1f" font-weight="700">여기도 단일 인스턴스여야 중복이 없다</text>
+
+  <rect x="478" y="294" width="374" height="72" rx="6" fill="#fdf3df"/>
+  <text class="hd" x="492" y="315" fill="#0d0d0d">Prometheus Receiver</text>
+  <text class="note" x="492" y="333" fill="#1a1a1a">전 범위 지원 · <tspan font-weight="700">stateful</tspan></text>
+  <rect x="492" y="340" width="346" height="20" rx="3" fill="#f2d4d4"/>
+  <text class="note" x="500" y="354" fill="#7a1f1f" font-weight="700">복제본 늘리면 중복 수집</text>
+
+  <!-- Attributes processor spans both -->
+  <rect x="30" y="396" width="840" height="72" rx="8" fill="#66bb6a"/>
+  <text class="hd" x="48" y="419" fill="#0d0d0d">K8s Attributes</text>
+  <text class="note" x="48" y="438" fill="#1a1a1a">Pod 메타데이터를 속성으로 더한다</text>
+  <rect x="48" y="444" width="804" height="18" rx="3" fill="#e6f7e7"/>
+  <text class="code" x="58" y="457" fill="#14521d">k8s.namespace.name · k8s.pod.name · k8s.pod.uid · k8s.pod.start_time · k8s.deployment.name · k8s.node.name</text>
+
+  <!-- bottom -->
+  <rect x="30" y="482" width="840" height="60" rx="8" fill="#0d0d0d" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text class="note" x="50" y="504" fill="rgb(212,168,83)" font-weight="700">Helm 프리셋이 RBAC 도 붙인다</text>
+  <text class="note" x="50" y="524" fill="#e8e4df">프리셋이 ClusterRole 추가</text>
+  <text class="note" x="50" y="538" fill="#b8b3ad">안 쓰면 권한을 직접 준다</text>
+</svg>

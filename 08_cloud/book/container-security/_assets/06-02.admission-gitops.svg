@@ -1,0 +1,84 @@
+<svg viewBox="0 0 700 420" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>어드미션 컨트롤의 네 가지 질문과 GitOps 의 접근 통제</title>
+  <desc>어드미션 컨트롤러는 자원을 클러스터에 배포하려는 시점에 검사를 수행합니다. 이미지가 스캔을 거쳤는지, 신뢰하는 레지스트리에서 왔는지, 서명됐는지, 승인된 것인지, root 로 도는지를 확인하고 통과하지 못하면 컨테이너를 실행하지 않습니다. 이 검사가 중요한 이유는 앞 단계의 검사를 우회하지 못하게 막기 때문입니다. GitOps 는 다른 각도의 방어로, 사용자가 실행 중인 시스템을 직접 고치지 못하게 하고 소스 관리 시스템에 원하는 상태를 커밋하면 자동화된 오퍼레이터만 시스템을 바꿉니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 12px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10px; }
+    .q { fill: #0d0d0d; font-size: 10.5px; font-weight: 700; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .blocked { stroke: #7a1f1f; stroke-width: 1.8; fill: none; }
+    .divider { stroke: #b8b3ad; stroke-width: 1.2; stroke-dasharray: 5 4; fill: none; }
+    .danger-title { fill: #7a1f1f; font-size: 12px; font-weight: 700; }
+  </style>
+
+  <rect width="700" height="420" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="vh" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="30">어드미션 컨트롤 · 배포 직전의 관문</text>
+
+  <rect class="box" x="40" y="42" width="150" height="40" rx="4"/>
+  <text class="box-title" x="56" y="66">배포 요청</text>
+
+  <path class="arrow" d="M190,62 L240,62" marker-end="url(#vh)"/>
+
+  <!-- 질문 5개 -->
+  <rect class="box" x="240" y="42" width="290" height="150" rx="4"/>
+  <text class="box-title" x="256" y="64">이미지에 묻는 것</text>
+  <text class="q" x="256" y="88">스캔을 거쳤는가</text>
+  <text class="q" x="256" y="110">신뢰하는 레지스트리인가</text>
+  <text class="q" x="256" y="132">서명됐는가</text>
+  <text class="q" x="256" y="154">승인된 이미지인가</text>
+  <text class="q" x="256" y="176">root 로 도는가</text>
+
+  <path class="arrow" d="M530,90 L580,90" marker-end="url(#vh)"/>
+  <rect class="box" x="580" y="70" width="80" height="40" rx="4"/>
+  <text class="box-title" x="596" y="94">실행</text>
+
+  <path class="blocked" d="M530,150 L580,150"/>
+  <path class="blocked" d="M568,140 L580,150 L568,160"/>
+  <rect x="580" y="130" width="80" height="40" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="596" y="154">차단</text>
+
+  <text class="hint" x="40" y="216">앞 검사 우회를 막는다</text>
+
+  <path class="divider" d="M40,232 L660,232"/>
+
+  <!-- GitOps -->
+  <text class="head" x="40" y="260">GitOps · 접근 경로를 바꾼다</text>
+
+  <rect class="box" x="40" y="272" width="180" height="60" rx="4"/>
+  <text class="box-title" x="56" y="294">사용자</text>
+  <text class="box-detail" x="56" y="314">자격증명은 소스 관리용</text>
+
+  <path class="arrow" d="M220,302 L270,302" marker-end="url(#vh)"/>
+
+  <rect class="box" x="270" y="272" width="180" height="60" rx="4"/>
+  <text class="box-title" x="286" y="294">Git 저장소</text>
+  <text class="box-detail" x="286" y="314">원하는 상태를 커밋</text>
+
+  <path class="arrow" d="M450,302 L500,302" marker-end="url(#vh)"/>
+
+  <rect class="box" x="500" y="272" width="160" height="60" rx="4"/>
+  <text class="box-title" x="516" y="294">GitOps 오퍼레이터</text>
+  <text class="box-detail" x="516" y="314">이것만 시스템을 바꾼다</text>
+
+  <path class="blocked" d="M130,332 L130,360"/>
+  <path class="blocked" d="M120,348 L130,360 L140,348"/>
+  <text class="hint" x="150" y="356">시스템에 직접 손대지 않는다</text>
+
+  <text class="hint" x="40" y="388">Git 이 감사 추적을 남긴다</text>
+  <text class="hint" x="40" y="408">배포 YAML 출처도 확인한다</text>
+</svg>

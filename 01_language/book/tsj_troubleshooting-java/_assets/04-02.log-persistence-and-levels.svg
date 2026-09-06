@@ -1,0 +1,74 @@
+<svg viewBox="0 0 680 580" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>로그 영속화와 로깅 레벨 (Ch.4 §4.2.1~§4.2.2)</title>
+  <desc>로그는 과거를 읽으려는 것이라 나중에 읽으려면 저장이 필수이고 저장 방식이 로그의 쓸모와 앱 성능을 좌우합니다. 세 가지 저장 방식이 있습니다. NoSQL 은 성능을 위해 일관성을 양보해 로그를 놓치거나 정확한 시간 순서가 아닐 수 있고 ELK 스택과 Splunk 가 가장 흔합니다. 파일은 느리고 검색이 어려워 현대 앱에서는 권장하지 않습니다. RDB 는 일관성을 보장해 로그 유실이 없되 성능을 희생하므로 금융과 결제처럼 유실이 허용 안 되는 규제 대상에 씁니다. 대부분은 성능을 일관성보다 택합니다. 로깅 레벨은 메시지를 중요도로 분류해 저장량을 줄이는 장치입니다. 위에서 아래로 ERROR 와 WARN 과 INFO 와 DEBUG 순이며 위로 갈수록 적고 중대하고 아래로 갈수록 많고 덜 중요해 DEBUG 는 기본 비활성입니다. System out 과 printStackTrace 는 설정 유연성이 없어 Logback 과 Log4j 와 JUL 같은 프레임워크로 재컴파일 없이 레벨을 바꿔 가며 로깅합니다. Log4j 설정의 세 축은 logger 가 무엇을 쓸지 appender 가 어디에 쓸지 formatter 가 어떻게 쓸지를 정합니다. status 속성은 라이브러리 자체 이벤트의 심각도이고 level 속성이 내 앱 메시지가 찍힐 심각도이므로 보통 신경 쓸 것은 level 입니다.</desc>
+  <rect x="0" y="0" width="680" height="580" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">로그 영속화와 로깅 레벨</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">과거를 읽으려면 저장이 필수 — 저장 방식은 성능↔일관성 트레이드오프 (Ch.4 §4.2)</text>
+
+  <!-- 영속화 3방식 -->
+  <text x="20" y="80" fill="#e8e4df" font-size="13" font-weight="bold">① 영속화 — 세 가지 저장 방식</text>
+  <rect x="20" y="90" width="210" height="100" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="112" fill="#66bb6a" font-size="12" font-weight="bold">NoSQL (흔함)</text>
+  <text x="38" y="132" fill="#e8e4df" font-size="10">성능↔일관성 타협</text>
+  <text x="38" y="150" fill="rgb(138,133,128)" font-size="10">유실·순서 어긋남 가능</text>
+  <text x="38" y="168" fill="rgb(138,133,128)" font-size="10">ELK 스택 · Splunk</text>
+  <text x="38" y="184" fill="rgb(212,168,83)" font-size="9">timestamp 맨 앞 필수</text>
+
+  <rect x="236" y="90" width="210" height="100" fill="rgba(244,127,114,0.07)" stroke="#f47f72" stroke-width="2"/>
+  <text x="254" y="112" fill="#f47f72" font-size="12" font-weight="bold">파일 (비권장)</text>
+  <text x="254" y="132" fill="#e8e4df" font-size="10">과거 방식</text>
+  <text x="254" y="150" fill="rgb(138,133,128)" font-size="10">느리고 검색 어려움</text>
+  <text x="254" y="168" fill="rgb(138,133,128)" font-size="10">튜토리얼엔 많지만</text>
+  <text x="254" y="184" fill="#f47f72" font-size="9">현대 앱은 피한다</text>
+
+  <rect x="452" y="90" width="208" height="100" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="470" y="112" fill="#9cc3df" font-size="12" font-weight="bold">RDB (드묾)</text>
+  <text x="470" y="132" fill="#e8e4df" font-size="10">일관성 보장(유실 없음)</text>
+  <text x="470" y="150" fill="rgb(138,133,128)" font-size="10">대신 성능 희생</text>
+  <text x="470" y="168" fill="rgb(138,133,128)" font-size="10">금융·결제 규제 대상</text>
+  <text x="470" y="184" fill="#f47f72" font-size="9">유실 시 제재·벌금</text>
+
+  <!-- 심각도 피라미드 -->
+  <text x="20" y="214" fill="#e8e4df" font-size="13" font-weight="bold">② 로깅 레벨 — 심각도 피라미드 (양을 다스린다)</text>
+  <rect x="180" y="224" width="200" height="26" fill="rgba(244,127,114,0.20)" stroke="#f47f72"/>
+  <text x="280" y="242" fill="#f47f72" font-size="11" font-weight="bold" text-anchor="middle">ERROR — 치명적, 항상 로그</text>
+  <rect x="150" y="252" width="260" height="26" fill="rgba(212,168,83,0.16)" stroke="rgb(212,168,83)"/>
+  <text x="280" y="270" fill="rgb(212,168,83)" font-size="11" text-anchor="middle">WARN — 처리된 잠재 오류 (재시도 성공 등)</text>
+  <rect x="110" y="280" width="340" height="26" fill="rgba(127,168,201,0.14)" stroke="#7fa8c9"/>
+  <text x="280" y="298" fill="#9cc3df" font-size="11" text-anchor="middle">INFO — 평범한 주요 실행 사건 (기본)</text>
+  <rect x="70" y="308" width="420" height="26" fill="rgba(102,187,106,0.10)" stroke="#66bb6a"/>
+  <text x="280" y="326" fill="#66bb6a" font-size="11" text-anchor="middle">DEBUG — 세밀한 세부, 많음, 기본 비활성</text>
+  <text x="505" y="270" fill="rgb(138,133,128)" font-size="10">↑ 적고 중대</text>
+  <text x="505" y="320" fill="rgb(138,133,128)" font-size="10">↓ 많고 덜 중요</text>
+
+  <!-- 프레임워크 + 3축 -->
+  <rect x="20" y="346" width="640" height="48" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="368" fill="#e8e4df" font-size="12" font-weight="bold">③ 프레임워크 — System.out 대신 Logback·Log4j·JUL</text>
+  <text x="38" y="386" fill="rgb(138,133,128)" font-size="10">System.out·printStackTrace는 설정 유연성 없음 → 프레임워크는 재컴파일 없이 레벨 변경</text>
+
+  <!-- logger/appender/formatter -->
+  <rect x="20" y="404" width="210" height="78" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="426" fill="rgb(212,168,83)" font-size="12" font-weight="bold">logger</text>
+  <text x="38" y="446" fill="#e8e4df" font-size="11">무엇을 쓸지</text>
+  <text x="38" y="464" fill="rgb(138,133,128)" font-size="10">심각도·출처 (Root level=info)</text>
+  <text x="38" y="478" fill="rgb(138,133,128)" font-size="9">→ INFO 이상만 로그</text>
+
+  <rect x="236" y="404" width="210" height="78" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="254" y="426" fill="#9cc3df" font-size="12" font-weight="bold">appender</text>
+  <text x="254" y="446" fill="#e8e4df" font-size="11">어디에 쓸지</text>
+  <text x="254" y="464" fill="rgb(138,133,128)" font-size="10">콘솔·파일·DB</text>
+  <text x="254" y="478" fill="rgb(138,133,128)" font-size="9">여러 개 둘 수 있음</text>
+
+  <rect x="452" y="404" width="208" height="78" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="470" y="426" fill="#66bb6a" font-size="12" font-weight="bold">formatter</text>
+  <text x="470" y="446" fill="#e8e4df" font-size="11">어떻게 쓸지</text>
+  <text x="470" y="464" fill="rgb(138,133,128)" font-size="10">timestamp·심각도 형식</text>
+  <text x="470" y="478" fill="rgb(138,133,128)" font-size="9">PatternLayout</text>
+
+  <!-- status vs level -->
+  <rect x="20" y="494" width="640" height="62" fill="rgba(244,127,114,0.07)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="516" fill="#f47f72" font-size="12" font-weight="bold">혼동 주의 — status ≠ level</text>
+  <text x="38" y="536" fill="rgb(138,133,128)" font-size="10">status = Log4j 라이브러리 자체 이벤트의 심각도 / level = 내 앱 메시지가 찍힐 심각도</text>
+  <text x="38" y="552" fill="rgb(212,168,83)" font-size="10">대개 신경 쓸 것은 level — 조사에 필요한 최소 메시지만 남기는 게 좋은 습관</text>
+</svg>

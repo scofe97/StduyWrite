@@ -1,0 +1,47 @@
+<svg viewBox="0 0 680 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>GC 병렬성 튜닝 — 워커 과소(8 중 2)는 늘리고 과다(16)는 CPU 경합이라 줄임 (원문 로그 예시 개념도)</title>
+  <desc>원문 §11.4.4 로그 예시의 개념을 도식으로 옮긴 것입니다. GC 병렬성은 두 방향으로 잘못될 수 있습니다. 과소 활용은 가용 8개 중 2개 워커만 써 멈춤이 115ms 로 길어지는 경우로 CPU 를 과소 활용합니다. 이때는 ParallelGCThreads 를 늘려 워크로드를 CPU 코어에 더 분산합니다. ParallelGCThreads 는 STW 단계의 스레드 수를 ConcGCThreads 는 백그라운드 non-STW 단계의 스레드 수를 조절합니다. 과다는 16개 워커를 써 멈춤이 310ms 로 길어지는 경우로 너무 많은 스레드가 CPU 시간을 두고 다투는 CPU 경합입니다. 이때는 ParallelGCThreads 를 줄여 경합을 낮춥니다. 원칙은 작게 시작해 관찰하고 조정하고 반복하는 것입니다.</desc>
+  <rect x="0" y="0" width="680" height="360" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">GC 병렬성 튜닝 — 과소와 과다 사이</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 §11.4.4 로그 예시 개념도 · ParallelGCThreads / ConcGCThreads</text>
+
+  <!-- 과소 -->
+  <rect x="20" y="80" width="312" height="180" fill="rgba(127,168,201,0.05)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="176" y="102" fill="#9cc3df" font-size="13" font-weight="bold" text-anchor="middle">과소 — 8 중 2 워커</text>
+  <text x="176" y="122" fill="rgb(138,133,128)" font-size="9.5" text-anchor="middle">멈춤 115ms (Workers: 2 of 8)</text>
+  <!-- 코어 8개, 2개만 활성 -->
+  <g>
+    <rect x="44" y="138" width="26" height="26" fill="rgba(127,168,201,0.5)" stroke="#7fa8c9"/>
+    <rect x="76" y="138" width="26" height="26" fill="rgba(127,168,201,0.5)" stroke="#7fa8c9"/>
+    <rect x="108" y="138" width="26" height="26" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
+    <rect x="140" y="138" width="26" height="26" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
+    <rect x="172" y="138" width="26" height="26" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
+    <rect x="204" y="138" width="26" height="26" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
+    <rect x="236" y="138" width="26" height="26" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
+    <rect x="268" y="138" width="26" height="26" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
+  </g>
+  <text x="176" y="186" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">코어 8개 중 2개만 일함 (CPU 과소 활용)</text>
+  <rect x="44" y="200" width="244" height="30" fill="rgba(102,187,106,0.1)" stroke="#66bb6a"/>
+  <text x="166" y="220" fill="#66bb6a" font-size="11" font-weight="bold" text-anchor="middle">→ ParallelGCThreads 늘림</text>
+  <text x="176" y="248" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">워크로드를 코어에 더 분산 → 멈춤↓</text>
+
+  <!-- 과다 -->
+  <rect x="348" y="80" width="312" height="180" fill="rgba(244,127,114,0.05)" stroke="#f47f72" stroke-width="2"/>
+  <text x="504" y="102" fill="#f47f72" font-size="13" font-weight="bold" text-anchor="middle">과다 — 16 워커</text>
+  <text x="504" y="122" fill="rgb(138,133,128)" font-size="9.5" text-anchor="middle">멈춤 310ms (workers: 16)</text>
+  <!-- 많은 스레드가 CPU 두고 다툼 -->
+  <g fill="rgba(244,127,114,0.5)" stroke="#f47f72">
+    <rect x="372" y="138" width="16" height="26"/><rect x="392" y="138" width="16" height="26"/><rect x="412" y="138" width="16" height="26"/><rect x="432" y="138" width="16" height="26"/><rect x="452" y="138" width="16" height="26"/><rect x="472" y="138" width="16" height="26"/><rect x="492" y="138" width="16" height="26"/><rect x="512" y="138" width="16" height="26"/><rect x="532" y="138" width="16" height="26"/><rect x="552" y="138" width="16" height="26"/><rect x="572" y="138" width="16" height="26"/><rect x="592" y="138" width="16" height="26"/><rect x="612" y="138" width="16" height="26"/><rect x="632" y="138" width="16" height="26"/>
+  </g>
+  <text x="504" y="186" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">너무 많은 스레드가 CPU 시간을 두고 다툼</text>
+  <rect x="372" y="200" width="256" height="30" fill="rgba(244,127,114,0.12)" stroke="#f47f72"/>
+  <text x="500" y="220" fill="#f47f72" font-size="11" font-weight="bold" text-anchor="middle">CPU 경합 → ParallelGCThreads 줄임</text>
+  <text x="504" y="248" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">race condition 과 비슷(CPU 시간을 두고)</text>
+
+  <!-- 하단 -->
+  <rect x="20" y="276" width="640" height="68" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="298" fill="#e8e4df" font-size="11" font-weight="bold">두 플래그 + 원칙</text>
+  <text x="34" y="318" fill="rgb(138,133,128)" font-size="10">ParallelGCThreads = STW 단계(young evacuation) · ConcGCThreads = 백그라운드 non-STW(마킹·회수)</text>
+  <text x="34" y="338" fill="rgb(212,168,83)" font-size="10.5" font-weight="bold">원칙: 작게 시작 → 관찰 → 조정 → 반복 (커피 내리듯)</text>
+</svg>

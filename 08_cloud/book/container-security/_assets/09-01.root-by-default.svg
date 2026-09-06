@@ -1,0 +1,85 @@
+<svg viewBox="0 0 700 380" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>컨테이너 안의 root 는 호스트의 root 다</title>
+  <desc>이미지가 비root 사용자를 지정하지 않았고 실행할 때도 사용자를 지정하지 않으면 컨테이너는 기본적으로 root 로 돕니다. user namespace 를 쓰지 않는 한 이것은 컨테이너 안의 root 일 뿐 아니라 호스트의 root 이기도 합니다. 비root 사용자가 docker 명령으로 컨테이너를 만들어도 컨테이너 안의 신원은 root 이고, 호스트에서 그 프로세스를 조회하면 소유자가 root 로 나옵니다. Docker 에서는 root 로 도는 Docker 데몬이 대신 컨테이너를 만들어 주기 때문에 이것이 권한 상승의 한 형태가 됩니다. 공격자가 root 로 도는 컨테이너를 탈출하면 호스트 전체에 대한 root 접근을 얻습니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .code { fill: #0d0d0d; font-size: 9.5px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .chip { fill: #f5edda; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .danger-title { fill: #7a1f1f; font-size: 11.5px; font-weight: 700; }
+    .danger-detail { fill: #7a1f1f; font-size: 9.5px; }
+    .ok-title { fill: #14521d; font-size: 11.5px; font-weight: 700; }
+    .ok-detail { fill: #14521d; font-size: 9.5px; }
+  </style>
+
+  <rect width="700" height="380" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="uh9" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="30">같은 root 입니다</text>
+
+  <rect class="box" x="40" y="42" width="190" height="88" rx="4"/>
+  <text class="box-title" x="56" y="63">호스트의 나</text>
+  <rect class="chip" x="56" y="72" width="100" height="15" rx="3"/>
+  <text class="code" x="60" y="83">$ whoami</text>
+  <text class="box-detail" x="56" y="102">vagrant — 비root</text>
+  <text class="box-detail" x="56" y="120">docker 명령을 친다</text>
+
+  <path class="arrow" d="M230,86 L256,86" marker-end="url(#uh9)"/>
+
+  <rect class="box" x="260" y="42" width="190" height="88" rx="4"/>
+  <text class="box-title" x="276" y="63">컨테이너 안</text>
+  <rect class="chip" x="276" y="72" width="100" height="15" rx="3"/>
+  <text class="code" x="280" y="83">/ $ whoami</text>
+  <text class="box-detail" x="276" y="102">root — 바뀌었다</text>
+  <text class="box-detail" x="276" y="120">이미지에 USER 가 없으면</text>
+
+  <path class="arrow" d="M450,86 L476,86" marker-end="url(#uh9)"/>
+
+  <rect x="480" y="42" width="180" height="88" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="496" y="63">호스트에서 보면</text>
+  <rect class="chip" x="496" y="72" width="110" height="15" rx="3"/>
+  <text class="code" x="500" y="83">$ ps -fC sleep</text>
+  <text class="danger-detail" x="496" y="102">UID 가 root 로 나온다</text>
+  <text class="danger-detail" x="496" y="120">같은 root 입니다</text>
+
+  <!-- 왜 위험한가 -->
+  <text class="head" x="40" y="164">왜 경보가 울리는가</text>
+
+  <rect x="40" y="176" width="300" height="86" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="56" y="197">권한 상승의 한 형태</text>
+  <text class="danger-detail" x="56" y="216">비root 가 시작해도 root</text>
+  <text class="danger-detail" x="56" y="232">root 데몬이 대신 만든다</text>
+  <text class="danger-detail" x="56" y="250">탈출하면 호스트 전체에 root 접근</text>
+
+  <rect class="box" x="360" y="176" width="300" height="86" rx="4"/>
+  <text class="box-title" x="376" y="197">저자의 물음</text>
+  <text class="box-detail" x="376" y="216">공격자가 호스트를 장악하기까지</text>
+  <text class="box-detail" x="376" y="232">방어선이 단 하나뿐인 상태를</text>
+  <text class="box-detail" x="376" y="250">받아들일 것인가</text>
+
+  <!-- 대응 -->
+  <text class="head" x="40" y="296">피하는 두 방법</text>
+
+  <rect x="40" y="308" width="300" height="56" rx="4" fill="#cdeccf"/>
+  <text class="ok-title" x="56" y="329">사용자 ID 를 덮어쓴다</text>
+  <rect class="chip" x="56" y="337" width="180" height="15" rx="3"/>
+  <text class="code" x="60" y="348">docker run --user 5000</text>
+
+  <rect x="360" y="308" width="300" height="56" rx="4" fill="#cdeccf"/>
+  <text class="ok-title" x="376" y="329">rootless 컨테이너</text>
+  <text class="ok-detail" x="376" y="348">호스트 root 와 분리됩니다</text>
+</svg>

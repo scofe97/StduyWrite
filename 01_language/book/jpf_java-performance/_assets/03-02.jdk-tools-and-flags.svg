@@ -1,0 +1,55 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>JDK 기본 모니터링 도구와 VM 정보·튜닝 플래그</title>
+  <desc>JVM 내부를 보려면 JDK에 딸린 모니터링 도구가 필요하다. jcmd는 클래스·스레드·JVM 기본 정보를 스크립트로 출력한다. jconsole은 스레드·클래스·GC 활동의 그래픽 뷰를 준다. jmap은 힙 덤프와 메모리 정보를, jinfo는 시스템 프로퍼티 가시성과 일부 플래그 동적 변경을, jstack은 스레드 스택 덤프를, jstat은 GC·클래스로딩 정보를, jvisualvm은 모니터·프로파일·힙 덤프 분석 GUI를 준다. 이 도구들은 여섯 영역으로 나뉜다. 기본 VM 정보, 스레드 정보, 클래스 정보, 실시간 GC 분석, 힙 덤프 후처리, JVM 프로파일링이다. 도구와 영역은 일대일이 아니다. 기본 VM 정보로는 uptime, system properties, JVM version, command line, tuning flags를 본다. 플래그의 출처는 셋이다. 명령행에서 직접 지정, 다른 옵션이 간접 변경, JVM이 ergonomic하게 계산이다. PrintFlagsFinal 출력에서 콜론(:=)은 비기본값, 등호(=)는 기본값을 뜻한다. product는 모든 플랫폼 공통 기본값, pd product는 플랫폼 의존이다. manageable 플래그는 런타임에 jinfo로 바꿀 수 있다. JDK 11의 jinfo는 바꿀 수 없는 플래그 변경 시 에러를 낸다. Docker 안에서도 비그래픽 도구는 docker exec로 실행할 수 있으니 JRE만이 아니라 JDK 도구를 이미지에 넣는 것이 좋다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">JDK 모니터링 도구와 VM 정보·플래그</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">JVM 내부 가시성은 JDK에 딸린 도구로 얻습니다 (jcmd 중심)</text>
+
+  <!-- 7도구 -->
+  <rect x="20" y="74" width="642" height="124" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="96" fill="#e8e4df" font-size="13" font-weight="bold">JDK 기본 도구 7종 (* = 스크립트 적합, GUI 제외)</text>
+  <rect x="38" y="106" width="150" height="40" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/><text x="113" y="123" fill="#66bb6a" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="middle">jcmd *</text><text x="113" y="139" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">기본 정보 만능</text>
+  <rect x="196" y="106" width="150" height="40" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="271" y="123" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="middle">jconsole</text><text x="271" y="139" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">GUI 모니터</text>
+  <rect x="354" y="106" width="150" height="40" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="429" y="123" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="middle">jmap *</text><text x="429" y="139" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">힙 덤프</text>
+  <rect x="512" y="106" width="150" height="40" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="587" y="123" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="middle">jinfo *</text><text x="587" y="139" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">플래그 조회·변경</text>
+  <rect x="38" y="150" width="150" height="40" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="113" y="167" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="middle">jstack *</text><text x="113" y="183" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">스레드 스택</text>
+  <rect x="196" y="150" width="150" height="40" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="271" y="167" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="middle">jstat *</text><text x="271" y="183" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">GC·클래스로딩</text>
+  <rect x="354" y="150" width="308" height="40" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="508" y="167" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="middle">jvisualvm</text><text x="508" y="183" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">GUI 모니터·프로파일·힙 덤프 분석</text>
+
+  <!-- 6 영역 -->
+  <rect x="20" y="208" width="642" height="58" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="230" fill="#9cc3df" font-size="13" font-weight="bold">가시성 6영역 (도구와 일대일 아님)</text>
+  <text x="38" y="250" fill="rgb(138,133,128)" font-size="11">기본 VM 정보 · 스레드 정보 · 클래스 정보 · 실시간 GC 분석 · 힙 덤프 후처리 · JVM 프로파일링</text>
+
+  <!-- 기본 VM 정보 -->
+  <rect x="20" y="276" width="642" height="96" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="298" fill="rgb(212,168,83)" font-size="13" font-weight="bold">기본 VM 정보 — jcmd process_id 명령</text>
+  <text x="38" y="318" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="9">VM.uptime · VM.system_properties · VM.version · VM.command_line · VM.flags [-all]</text>
+  <text x="38" y="338" fill="rgb(138,133,128)" font-size="10">command_line: 명령행에서 직접 준 플래그 · flags: 명령행 + JVM이 ergonomic하게 정한 것</text>
+  <text x="38" y="356" fill="rgb(138,133,128)" font-size="10">플랫폼별 기본값은 java ... -XX:+PrintFlagsFinal -version 으로 확인(다른 옵션도 함께 줄 것)</text>
+
+  <!-- 플래그 출처/표기 -->
+  <rect x="20" y="382" width="320" height="118" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="404" fill="#e8e4df" font-size="12" font-weight="bold">플래그가 비기본값인 3가지 이유</text>
+  <text x="38" y="424" fill="rgb(138,133,128)" font-size="10">① 명령행에서 직접 지정</text>
+  <text x="38" y="442" fill="rgb(138,133,128)" font-size="10">② 다른 옵션이 간접 변경</text>
+  <text x="38" y="460" fill="rgb(138,133,128)" font-size="10">③ JVM이 ergonomic하게 계산</text>
+  <text x="38" y="482" fill="#9cc3df" font-family="'JetBrains Mono',monospace" font-size="10">:=  비기본값  /  =  기본값</text>
+
+  <!-- product / manageable -->
+  <rect x="350" y="382" width="312" height="118" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="368" y="404" fill="#e8e4df" font-size="12" font-weight="bold">마지막 컬럼 의미</text>
+  <text x="368" y="424" fill="rgb(138,133,128)" font-size="10">product: 모든 플랫폼 공통 기본값</text>
+  <text x="368" y="442" fill="rgb(138,133,128)" font-size="10">pd product: 플랫폼 의존 기본값</text>
+  <text x="368" y="460" fill="#66bb6a" font-size="10">manageable: 런타임에 jinfo로 변경 가능</text>
+  <text x="368" y="478" fill="rgb(138,133,128)" font-size="10">C2 diagnostic: 컴파일러 진단 출력</text>
+  <text x="368" y="494" fill="#f47f72" font-size="9">비-manageable 변경은 JVM이 반응 안 함</text>
+
+  <!-- 결론 띠 -->
+  <rect x="20" y="510" width="642" height="74" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="532" fill="#66bb6a" font-size="12" font-weight="bold">핵심</text>
+  <text x="90" y="532" fill="rgb(138,133,128)" font-size="11">jcmd로 실행 중 JVM의 기본 정보·모든 플래그 값 확인, jinfo로 개별 플래그 조회·일부 변경</text>
+  <text x="90" y="552" fill="rgb(138,133,128)" font-size="11">729개(JDK 8u202) 플래그 대부분은 바꾸지 말 것 — 강력한 근거 없이 변경 금지</text>
+  <text x="90" y="572" fill="rgb(212,168,83)" font-size="11">Docker: 비그래픽 도구는 docker exec로 실행 → JDK 도구를 이미지에 넣는 것이 좋습니다</text>
+</svg>

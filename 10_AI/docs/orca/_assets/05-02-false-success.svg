@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 372" role="img" aria-labelledby="u8 v8">
+<title id="u8">응답과 실제가 어긋나는 명령들과 대신 확인할 상태</title>
+<desc id="v8">다섯 명령이 성공 응답을 주면서 실제로는 그 일이 일어나지 않았음을 나열하고, 오른쪽에 응답 대신 확인할 상태를 짝지은 표입니다. v1.4.188에서 고쳐진 클릭 행만 강조돼 있습니다.</desc>
+<style>
+svg{--paper:#0D1117;--paper2:#161B22;--ink:#F5F5F3;--muted:#8B98A9;--soft:#5E6B7E;--rule:rgba(191,192,192,0.22);--accent:#F08A59;--accent12:rgba(240,138,89,0.12);--ok:#3FB98C;--bad:#F0616D}
+.kr{font-family:'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif}
+.mn{font-family:'Geist Mono','Noto Sans Mono CJK KR',monospace}
+.eyebrow{fill:var(--soft);font-size:9px;letter-spacing:.14em}
+.h1{fill:var(--ink);font-size:20px;font-weight:600}
+.sub{fill:var(--muted);font-size:11px}
+.col{fill:var(--soft);font-size:10px;letter-spacing:.08em}
+.cmd{fill:var(--ink);font-size:11px}
+.resp{fill:var(--ok);font-size:11px}
+.real{fill:var(--bad);font-size:11px}
+.note{fill:var(--muted);font-size:10px}
+.hair{stroke:var(--rule);stroke-width:1}
+</style>
+<rect width="1000" height="372" fill="var(--paper)"/>
+<text class="mn eyebrow" x="64" y="44">ok: true ≠ IT HAPPENED</text>
+<text class="kr h1" x="64" y="76">응답이 아니라 상태를 봅니다</text>
+<text class="kr sub" x="64" y="98">ok: true 는 요청을 접수했다는 뜻입니다. 그렇게 됐다는 뜻이 아닙니다.</text>
+
+<line class="hair" x1="64" y1="128" x2="936" y2="128"/>
+<text class="kr col" x="64" y="148">명령</text>
+<text class="kr col" x="376" y="148">응답</text>
+<text class="kr col" x="600" y="148">실제</text>
+<line class="hair" x1="64" y1="164" x2="936" y2="164"/>
+
+<text class="mn cmd" x="64" y="192">terminal stop</text>
+<text class="mn resp" x="376" y="192">{"stopped": 1}</text>
+<text class="kr real" x="600" y="192">TUI 프로세스는 살아남음</text>
+
+<text class="mn cmd" x="64" y="224">terminal close --tab</text>
+<text class="mn resp" x="376" y="224">{"ptyKilled": true}</text>
+<text class="kr real" x="600" y="224">곧바로 다시 생김</text>
+
+<rect x="56" y="240" width="888" height="44" rx="4" fill="var(--accent12)" stroke="var(--accent)" stroke-width="1.4"/>
+<text class="mn cmd" x="64" y="262">click --element</text>
+<text class="mn resp" x="376" y="262">{"clicked": "e4"}</text>
+<text class="kr real" x="600" y="262">이벤트 미전달 — v1.4.188 에서 고쳐짐</text>
+<text class="kr note" x="64" y="280">목록은 버전마다 바뀝니다. 외우는 것보다 습관을 들이는 쪽이 낫습니다</text>
+
+<text class="mn cmd" x="64" y="316">cookie delete --name</text>
+<text class="mn resp" x="376" y="316">{"cleared": true}</text>
+<text class="kr real" x="600" y="316">이름과 무관하게 전부 삭제</text>
+
+<line class="hair" x1="64" y1="336" x2="936" y2="336"/>
+<text class="kr note" x="64" y="358">대신 볼 것 — 터미널은 worktree ps 의 live: · 워크트리는 worktree list · 클릭은 재스냅샷 · 파일은 git status --short</text>
+</svg>

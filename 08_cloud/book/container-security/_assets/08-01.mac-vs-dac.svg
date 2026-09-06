@@ -1,0 +1,68 @@
+<svg viewBox="0 0 700 380" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>임의 접근 제어와 강제 접근 제어의 차이, 그리고 AppArmor 와 SELinux</title>
+  <desc>Linux 파일 권한은 임의 접근 제어입니다. 내 계정이 파일을 소유하면 다른 사용자에게 접근을 줄 수도 있고, 실수로 고치는 것을 막으려고 내 계정조차 못 쓰게 만들 수도 있습니다. 권한을 가진 사람이 재량으로 정한다는 뜻입니다. AppArmor 와 SELinux 같은 보안 모듈은 강제 접근 제어를 구현합니다. 중앙 관리자가 설정하며, 한번 설정되면 다른 사용자는 그 제어를 바꾸거나 남에게 넘길 수 없습니다. 관리자가 시스템에서 무엇이 일어날 수 있는지를 훨씬 세밀하게 통제할 수 있고 개별 사용자가 뒤집을 수 없습니다. AppArmor 는 실행 파일에 프로파일을 묶어 capability 와 파일 접근 권한을 정하고, SELinux 는 프로세스가 도메인에서 돌고 파일마다 타입이 붙어 사용자 신원과 무관하게 라벨로만 판정합니다. 두 제어는 함께 작동해서 어떤 동작이든 양쪽 모두가 허용해야 합니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .code { fill: #0d0d0d; font-size: 9.5px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .chip { fill: #f5edda; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+  </style>
+
+  <rect width="700" height="380" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="uh8c" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="30">누가 정하는가로 갈립니다</text>
+
+  <rect class="box" x="40" y="42" width="300" height="112" rx="4"/>
+  <text class="box-title" x="56" y="63">DAC — 임의 접근 제어</text>
+  <text class="box-detail" x="56" y="82">Linux 파일 권한이 여기 속한다</text>
+  <text class="box-detail" x="56" y="98">파일 주인이 재량으로 정한다</text>
+  <text class="box-detail" x="56" y="114">남에게 접근을 줄 수 있고</text>
+  <text class="box-detail" x="56" y="130">내 계정조차 못 쓰게 막을 수도 있다</text>
+  <text class="box-detail" x="56" y="146">2장에서 본 그 권한 비트</text>
+
+  <rect class="box" x="360" y="42" width="300" height="112" rx="4"/>
+  <text class="box-title" x="376" y="63">MAC — 강제 접근 제어</text>
+  <text class="box-detail" x="376" y="82">중앙 관리자가 설정한다</text>
+  <text class="box-detail" x="376" y="98">사용자가 바꿀 수 없다</text>
+  <text class="box-detail" x="376" y="114">남에게 넘길 수도 없다</text>
+  <text class="box-detail" x="376" y="130">훨씬 세밀한 통제가 가능하다</text>
+  <text class="box-detail" x="376" y="146">LSM 이 구현하는 방식</text>
+
+  <!-- 둘은 함께 -->
+  <path class="arrow" d="M190,154 L190,176 L350,176" marker-end="url(#uh8c)"/>
+  <path class="arrow" d="M510,154 L510,176 L350,176"/>
+  <rect class="box" x="230" y="186" width="240" height="42" rx="4"/>
+  <text class="box-title" x="246" y="212">둘 다 허용해야 통과합니다</text>
+
+  <!-- 두 LSM -->
+  <text class="head" x="40" y="256">같은 MAC, 다른 판정 축</text>
+
+  <rect class="box" x="40" y="268" width="300" height="86" rx="4"/>
+  <text class="box-title" x="56" y="289">AppArmor</text>
+  <text class="box-detail" x="56" y="308">프로파일을 실행 파일에 묶는다</text>
+  <text class="box-detail" x="56" y="324">capability 와 파일 접근</text>
+  <rect class="chip" x="56" y="332" width="250" height="15" rx="3"/>
+  <text class="code" x="60" y="343">/sys/module/apparmor/parameters/enabled</text>
+
+  <rect class="box" x="360" y="268" width="300" height="86" rx="4"/>
+  <text class="box-title" x="376" y="289">SELinux</text>
+  <text class="box-detail" x="376" y="308">프로세스는 도메인, 파일은 타입</text>
+  <text class="box-detail" x="376" y="324">사용자 신원과 무관하게 라벨로만</text>
+  <rect class="chip" x="376" y="332" width="130" height="15" rx="3"/>
+  <text class="code" x="380" y="343">ls -lZ · ps -Z</text>
+</svg>

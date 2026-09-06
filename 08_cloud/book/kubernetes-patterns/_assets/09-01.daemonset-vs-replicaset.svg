@@ -1,0 +1,101 @@
+<svg viewBox="0 0 900 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>노드가 늘었을 때 ReplicaSet과 DaemonSet의 Pod 수 변화</title>
+  <desc>노드를 두 대에서 세 대로 늘렸을 때 두 컨트롤러가 서로 다르게 반응하는 모습을 비교합니다. 위쪽 ReplicaSet은 replicas를 3으로 선언했으므로 노드가 두 대일 때 세 Pod를 배치하고, 노드가 세 대로 늘어도 여전히 세 Pod입니다. 새로 추가된 노드는 비어 있을 수 있으며 개수를 정하는 것은 사용자 부하와 가용성 요구입니다. 아래쪽 DaemonSet은 노드마다 하나를 유지하므로 노드가 두 대일 때 두 Pod이고 세 대로 늘면 새 노드에 자동으로 세 번째 Pod가 생겨 셋이 됩니다. 개수를 정하는 것은 노드 수입니다. 그래서 로그 수집기나 메트릭 익스포터처럼 수집 대상이 노드에 묶인 워크로드는 DaemonSet이 맞습니다.</desc>
+
+  <rect width="900" height="400" fill="#0d0d0d"/>
+
+  <text x="24" y="30" fill="#e8e4df" font-size="15" font-weight="700">노드를 한 대 늘리면 어떻게 되는가</text>
+
+  <text x="150" y="56" text-anchor="middle" fill="#b8b3ad" font-size="11" font-weight="700">노드 2대</text>
+  <text x="565" y="56" text-anchor="middle" fill="#b8b3ad" font-size="11" font-weight="700">노드 3대</text>
+
+  <!-- ============ ReplicaSet row ============ -->
+  <text x="24" y="84" fill="#dceaf7" font-size="13" font-weight="700">ReplicaSet</text>
+  <text x="152" y="84" fill="#b8b3ad" font-size="11" font-weight="700">replicas: 3</text>
+
+  <rect x="24" y="94" width="122" height="78" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="85" y="112" text-anchor="middle" fill="#b8b3ad" font-size="10" font-weight="700">Node 1</text>
+  <rect x="36" y="120" width="98" height="20" fill="#dceaf7"/>
+  <text x="85" y="135" text-anchor="middle" fill="#10243a" font-size="9" font-weight="700">Pod</text>
+  <rect x="36" y="144" width="98" height="20" fill="#dceaf7"/>
+  <text x="85" y="159" text-anchor="middle" fill="#10243a" font-size="9" font-weight="700">Pod</text>
+
+  <rect x="158" y="94" width="122" height="78" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="219" y="112" text-anchor="middle" fill="#b8b3ad" font-size="10" font-weight="700">Node 2</text>
+  <rect x="170" y="120" width="98" height="20" fill="#dceaf7"/>
+  <text x="219" y="135" text-anchor="middle" fill="#10243a" font-size="9" font-weight="700">Pod</text>
+
+  <path d="M 292 133 L 348 133" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#am)"/>
+  <text x="320" y="125" text-anchor="middle" fill="rgb(212,168,83)" font-size="9" font-weight="700">노드 추가</text>
+
+  <rect x="360" y="94" width="122" height="78" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="421" y="112" text-anchor="middle" fill="#b8b3ad" font-size="10" font-weight="700">Node 1</text>
+  <rect x="372" y="120" width="98" height="20" fill="#dceaf7"/>
+  <text x="421" y="135" text-anchor="middle" fill="#10243a" font-size="9" font-weight="700">Pod</text>
+  <rect x="372" y="144" width="98" height="20" fill="#dceaf7"/>
+  <text x="421" y="159" text-anchor="middle" fill="#10243a" font-size="9" font-weight="700">Pod</text>
+
+  <rect x="494" y="94" width="122" height="78" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="555" y="112" text-anchor="middle" fill="#b8b3ad" font-size="10" font-weight="700">Node 2</text>
+  <rect x="506" y="120" width="98" height="20" fill="#dceaf7"/>
+  <text x="555" y="135" text-anchor="middle" fill="#10243a" font-size="9" font-weight="700">Pod</text>
+
+  <rect x="628" y="94" width="122" height="78" fill="#0d0d0d" stroke="#f44336" stroke-dasharray="4 3"/>
+  <text x="689" y="112" text-anchor="middle" fill="#f44336" font-size="10" font-weight="700">Node 3 신규</text>
+  <text x="689" y="142" text-anchor="middle" fill="#f44336" font-size="10" font-weight="700">비어 있음</text>
+
+  <text x="766" y="138" fill="#b8b3ad" font-size="12" font-weight="700">계속 3개</text>
+
+  <line x1="24" y1="192" x2="876" y2="192" stroke="#2a2a2a"/>
+
+  <!-- ============ DaemonSet row ============ -->
+  <text x="24" y="218" fill="#cdeccf" font-size="13" font-weight="700">DaemonSet · 노드마다 하나</text>
+
+  <rect x="24" y="228" width="122" height="60" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="85" y="246" text-anchor="middle" fill="#b8b3ad" font-size="10" font-weight="700">Node 1</text>
+  <rect x="36" y="254" width="98" height="20" fill="#cdeccf"/>
+  <text x="85" y="269" text-anchor="middle" fill="#14521d" font-size="9" font-weight="700">Pod</text>
+
+  <rect x="158" y="228" width="122" height="60" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="219" y="246" text-anchor="middle" fill="#b8b3ad" font-size="10" font-weight="700">Node 2</text>
+  <rect x="170" y="254" width="98" height="20" fill="#cdeccf"/>
+  <text x="219" y="269" text-anchor="middle" fill="#14521d" font-size="9" font-weight="700">Pod</text>
+
+  <path d="M 292 258 L 348 258" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#am)"/>
+  <text x="320" y="250" text-anchor="middle" fill="rgb(212,168,83)" font-size="9" font-weight="700">노드 추가</text>
+
+  <rect x="360" y="228" width="122" height="60" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="421" y="246" text-anchor="middle" fill="#b8b3ad" font-size="10" font-weight="700">Node 1</text>
+  <rect x="372" y="254" width="98" height="20" fill="#cdeccf"/>
+  <text x="421" y="269" text-anchor="middle" fill="#14521d" font-size="9" font-weight="700">Pod</text>
+
+  <rect x="494" y="228" width="122" height="60" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="555" y="246" text-anchor="middle" fill="#b8b3ad" font-size="10" font-weight="700">Node 2</text>
+  <rect x="506" y="254" width="98" height="20" fill="#cdeccf"/>
+  <text x="555" y="269" text-anchor="middle" fill="#14521d" font-size="9" font-weight="700">Pod</text>
+
+  <rect x="628" y="228" width="122" height="60" fill="#0d0d0d" stroke="#66bb6a"/>
+  <text x="689" y="246" text-anchor="middle" fill="#66bb6a" font-size="10" font-weight="700">Node 3 신규</text>
+  <rect x="640" y="254" width="98" height="20" fill="#cdeccf"/>
+  <text x="689" y="269" text-anchor="middle" fill="#14521d" font-size="9" font-weight="700">Pod 자동 생성</text>
+
+  <text x="766" y="264" fill="#66bb6a" font-size="12" font-weight="700">3개로 증가</text>
+
+  <!-- bottom: who decides -->
+  <rect x="24" y="316" width="410" height="60" fill="#dceaf7"/>
+  <text x="44" y="338" fill="#10243a" font-size="11" font-weight="700">개수를 정하는 것 · 부하</text>
+  <text x="44" y="358" fill="#10243a" font-size="10">노드 수와 무관합니다</text>
+
+  <rect x="466" y="316" width="410" height="60" fill="#cdeccf"/>
+  <text x="486" y="338" fill="#14521d" font-size="11" font-weight="700">개수를 정하는 것 · 노드</text>
+  <text x="486" y="358" fill="#14521d" font-size="10">노드에 묶인 수집에 맞습니다</text>
+
+  <defs>
+    <marker id="am" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,61 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>기본 튜닝 — 힙과 세대 크기</title>
+  <desc>힙 크기 선택은 균형이다. 너무 작으면 GC에 시간을 너무 쓰고, 너무 크면 pause가 길어진다(빈도는 줄지만). 큰 힙의 두 번째 위험은 swapping이다. OS는 비활성 메모리를 디스크로 옮기는데, 물리 메모리보다 큰 힙을 쓰면 full GC 때 디스크-RAM 복사로 pause가 한 자릿수 더 길어진다. 그래서 첫 규칙은 힙을 물리 메모리보다 크게 잡지 않는 것이다. 여러 JVM이면 합이 물리 메모리 이하여야 하고, native 메모리와 다른 앱을 위해 최소 1GB를 남긴다. 힙 크기는 초기값 Xms와 최대값 Xmx로 정한다. JVM은 GC를 너무 많이 하면 최대까지 힙을 늘린다. 좋은 규칙은 full GC 후 30% 점유되게 사이징하는 것이다. 힙 안에서 세대 크기는 young 세대에 얼마를 주느냐로 정한다. NewRatio 기본 2이면 young은 초기 힙의 33%다. NewSize·MaxNewSize·Xmn으로 직접 지정한다. young이 크면 minor pause가 길지만 덜 잦고 old 승격이 적다. adaptive sizing은 과거 GC를 보고 세대 비율을 자동 조정하는데, 작은 앱은 힙을 과지정 안 해도 되고 많은 앱은 튜닝을 안 해도 되게 한다. 기본 켜진 채 두되, 정밀 튜닝한 힙은 UseAdaptiveSizePolicy를 끌 수 있다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">기본 튜닝 — 힙과 세대 크기</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">힙 크기는 균형 — 너무 작으면 GC 과다, 너무 크면 pause가 길어집니다</text>
+
+  <!-- 힙 사이징 균형 -->
+  <rect x="20" y="74" width="320" height="106" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="96" fill="#f47f72" font-size="13" font-weight="bold">힙이 너무 작으면</text>
+  <text x="38" y="116" fill="#e8e4df" font-size="11">GC에 시간을 너무 씀</text>
+  <text x="38" y="134" fill="rgb(138,133,128)" font-size="10">애플리케이션 로직 시간이 부족</text>
+  <text x="38" y="156" fill="#f47f72" font-size="13" font-weight="bold">힙이 너무 크면</text>
+  <text x="38" y="174" fill="#e8e4df" font-size="11">pause가 길어짐(빈도는 줄어듦)</text>
+
+  <rect x="350" y="74" width="312" height="106" fill="rgba(244,67,54,0.10)" stroke="#f44336" stroke-width="2"/>
+  <text x="368" y="96" fill="#f44336" font-size="13" font-weight="bold">최대 위험 — swapping</text>
+  <text x="368" y="116" fill="#e8e4df" font-size="11">물리 메모리보다 큰 힙 → OS가 디스크로 paging</text>
+  <text x="368" y="134" fill="#f47f72" font-size="10">full GC는 전체 힙 접근 → swap 보장됨</text>
+  <text x="368" y="152" fill="#f47f72" font-size="11">pause가 한 자릿수(10배+) 더 길어짐</text>
+  <text x="368" y="172" fill="rgb(138,133,128)" font-size="9">G1 백그라운드도 concurrent mode failure</text>
+
+  <!-- 첫 규칙 -->
+  <rect x="20" y="188" width="642" height="54" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="210" fill="rgb(212,168,83)" font-size="13" font-weight="bold">첫 규칙 — 힙은 물리 메모리보다 크게 잡지 않습니다</text>
+  <text x="38" y="230" fill="rgb(138,133,128)" font-size="11">여러 JVM이면 힙 합이 물리 메모리 이하 · native 메모리·다른 앱 위해 최소 1GB 남김</text>
+
+  <!-- Xms/Xmx -->
+  <rect x="20" y="250" width="320" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="272" fill="#e8e4df" font-size="13" font-weight="bold">힙 크기 — Xms / Xmx</text>
+  <text x="38" y="292" fill="#9cc3df" font-family="'JetBrains Mono',monospace" font-size="10">-XmsN</text><text x="110" y="292" fill="rgb(138,133,128)" font-size="10">초기 크기</text>
+  <text x="38" y="310" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="10">-XmxN</text><text x="110" y="310" fill="rgb(138,133,128)" font-size="10">최대 크기</text>
+  <text x="38" y="330" fill="#e8e4df" font-size="11">GC를 너무 많이 하면 최대까지 힙을 늘림</text>
+  <text x="38" y="348" fill="#66bb6a" font-size="10">규칙: full GC 후 30% 점유되게 사이징</text>
+  <text x="38" y="364" fill="rgb(138,133,128)" font-size="9">정확한 크기를 알면 Xms=Xmx로 (GC 약간 효율적)</text>
+
+  <!-- 기본 힙 -->
+  <rect x="350" y="250" width="312" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="368" y="272" fill="#e8e4df" font-size="13" font-weight="bold">기본 힙 크기 (Linux 64bit)</text>
+  <text x="368" y="292" fill="rgb(138,133,128)" font-size="10">초기: min(512MB, 물리의 1/64)</text>
+  <text x="368" y="310" fill="rgb(138,133,128)" font-size="10">최대: min(32GB, 물리의 1/4)</text>
+  <text x="368" y="330" fill="rgb(138,133,128)" font-size="10">macOS·Win64: 최대 min(1GB, 1/4)</text>
+  <text x="368" y="350" fill="#f47f72" font-size="10">JDK 8 u192 이전 Docker: 호스트 전체로 계산</text>
+  <text x="368" y="366" fill="rgb(138,133,128)" font-size="9">컨테이너 전용이면 최대 힙 명시 권장</text>
+
+  <!-- 세대 사이징 -->
+  <rect x="20" y="380" width="642" height="98" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="402" fill="#9cc3df" font-size="13" font-weight="bold">세대 사이징 — young에 얼마를 주느냐 (old는 나머지)</text>
+  <text x="38" y="422" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">NewRatio(기본 2) · NewSize · MaxNewSize · -Xmn</text>
+  <text x="38" y="440" fill="rgb(138,133,128)" font-size="10">초기 young = 초기 힙 / (1 + NewRatio) → 기본 33%</text>
+  <text x="38" y="458" fill="rgb(138,133,128)" font-size="10">young 크면: minor pause 길지만 덜 잦고 old 승격 적음 → old는 더 자주 참 (균형이 핵심)</text>
+  <text x="38" y="472" fill="rgb(212,168,83)" font-size="9">힙 고정(Xms=Xmx)이면 -Xmn으로 young 고정, 동적 힙이면 NewRatio</text>
+
+  <!-- adaptive sizing -->
+  <rect x="20" y="488" width="642" height="96" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="510" fill="#66bb6a" font-size="13" font-weight="bold">adaptive sizing — 자동 세대 비율 조정</text>
+  <text x="38" y="530" fill="#e8e4df" font-size="11">과거 GC 사이클을 보고 힙·세대·survivor 크기를 자동 조정 (기본 켜짐)</text>
+  <text x="38" y="550" fill="rgb(138,133,128)" font-size="10">① 작은 앱은 힙 과지정 불필요(64MB만 씀)  ② 많은 앱은 힙 튜닝 자체가 불필요</text>
+  <text x="38" y="570" fill="#f47f72" font-size="10">끄기(-XX:-UseAdaptiveSizePolicy): 정밀 튜닝한 힙이나 단계별 앱에만 — 약간의 성능 이득</text>
+</svg>
