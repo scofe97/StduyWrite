@@ -28,7 +28,7 @@ d = D(W, H, "LEARNING MODERN LINUX · 07-02 §5",
 RX, RY, RW, RH = 372, 152, 136, 46
 d.box(RX, RY, RW, RH, PAPER2, RULE, 1.1, 8)
 d.t(RX + RW / 2, RY + 20, "루트 · \".\"", 13, INK, MONO, "middle", 600)
-d.t(RX + RW / 2, RY + 38, "루트 서버 13", 10.5, MUTED, KR)
+d.t(RX + RW / 2, RY + 38, "루트 서버 13개", 11.5, MUTED, KR)
 
 TW, TGAP, TY, BUS = 196, 12, 258, 226
 tlds = [
@@ -45,7 +45,7 @@ for i, (kind, name, note, col) in enumerate(tlds):
     d.box(x, TY, TW, 76, PAPER2, col, 1.2, 6)
     d.t(x + TW / 2, TY + 26, kind, 13, col, KR, "middle", 600)
     d.t(x + TW / 2, TY + 48, name, 12, INK, MONO)
-    d.t(x + TW / 2, TY + 68, note, 10.5, MUTED, KR)
+    d.t(x + TW / 2, TY + 68, note, 11.5, MUTED, KR)
 
 # .info 갈래를 아래로 이어 FQDN 을 만든다
 IX = 24 + 1 * (TW + TGAP)
@@ -61,7 +61,7 @@ for i, (name, note, y) in enumerate(chain):
     else:
         d.box(IX, y, CHW, 52, PAPER2, RULE, 1.0, 6)
     d.t(IX + 16, y + 24, name, 13, ACC if focal else INK, MONO, "start", 600)
-    d.t(IX + CHW - 16, y + 42, note, 10.5, MUTED, KR, "end")
+    d.t(IX + CHW - 16, y + 42, note, 11.5, MUTED, KR, "end")
     src_y = TY + 76 if i == 0 else chain[i - 1][2] + 52
     d.path(f"M {IX + CHW / 2} {src_y} L {IX + CHW / 2} {y - 2}", MUTED, 1.2, m="ar")
 

@@ -24,7 +24,7 @@ d = D(W, H, "LEARNING MODERN LINUX · 07-02 §2·§3",
       "빠진 만큼 위층이 대신 해야 합니다")
 
 LX, LABW, SCALE, RH = 32, 190, 8.0, 34
-TCP_Y, UDP_Y = 176, 400
+TCP_Y = 176
 fields_tcp = [
     ("Source port", 16, OK), ("Destination port", 16, OK),
     ("Sequence number", 32, ACC), ("Acknowledgment number", 32, ACC),
@@ -34,6 +34,10 @@ fields_udp = [
     ("Source port", 16, OK), ("Destination port", 16, OK),
     ("Length", 16, INFO), ("Checksum", 16, OK),
 ]
+# TCP 블록의 실제 아래끝에서 UDP 블록의 시작을 산출한다. 상수로 박아 두었던 400 은
+# TCP 7행(176 + 7×34 = 414)의 안쪽이라 마지막 행과 UDP 제목이 겹쳤다. 겹침 검사기는
+# 글자끼리만 보므로 이 상자 겹침을 잡지 못한다 — 렌더해서 눈으로 확인해 찾았다.
+UDP_Y = TCP_Y + len(fields_tcp) * RH + 38
 
 
 def block(y, title, sub, fields, col):
@@ -53,7 +57,7 @@ def block(y, title, sub, fields, col):
             MONO, "start")
 
 
-block(TCP_Y, "TCP", "RFC 793 · 연결 지향 · 순서와 재전송을 보장", fields_tcp, OK)
+block(TCP_Y, "TCP", "RFC 9293(구 793) · 연결 지향 · 순서와 재전송을 보장", fields_tcp, OK)
 block(UDP_Y, "UDP", "RFC 768 · 비연결", fields_udp, INFO)
 
 RX = 560
@@ -66,17 +70,18 @@ for i, (n, why) in enumerate([("Sequence number", "순서대로 전달"),
                               ("Window", "받을 수 있는 양")]):
     yy = TCP_Y + 56 + i * 40
     d.t(RX + 20, yy, n, 11, ACC, MONO, "start")
-    d.t(RX + 20, yy + 17, why, 10.5, MUTED, KR, "start")
+    d.t(RX + 20, yy + 17, why, 11.5, MUTED, KR, "start")
 
 d.tone(RX, TCP_Y + 220, 288, 84, WARN)
 d.t(RX + 20, TCP_Y + 248, "TCP 에는 방어 장치가 없습니다", 12.5, INK, KR, "start", 600)
 d.t(RX + 20, TCP_Y + 270, "페이로드가 평문으로 갑니다. 사이의", 11, MUTED, KR, "start")
 d.t(RX + 20, TCP_Y + 288, "누구든 볼 수 있으니 TLS 1.3 을 씁니다.", 11, MUTED, KR, "start")
 
-d.tone(RX, UDP_Y + 104, 288, 84, INFO)
-d.t(RX + 20, UDP_Y + 132, "UDP 가 얻는 것", 12.5, INK, KR, "start", 600)
-d.t(RX + 20, UDP_Y + 154, "오버헤드가 아주 적어 높은 처리량을", 11, MUTED, KR, "start")
-d.t(RX + 20, UDP_Y + 172, "냅니다. NTP · DHCP · DNS 가 씁니다.", 11, MUTED, KR, "start")
+RIGHT3_Y = TCP_Y + 320
+d.tone(RX, RIGHT3_Y, 288, 84, INFO)
+d.t(RX + 20, RIGHT3_Y + 28, "UDP 가 얻는 것", 12.5, INK, KR, "start", 600)
+d.t(RX + 20, RIGHT3_Y + 50, "오버헤드가 아주 적어 높은 처리량을", 11, MUTED, KR, "start")
+d.t(RX + 20, RIGHT3_Y + 68, "냅니다. NTP · DHCP · DNS 가 씁니다.", 11, MUTED, KR, "start")
 
 d.legend(620, [("두 프로토콜에 공통", OK), ("TCP 에만 있는 것", ACC),
                ("UDP 고유", INFO), ("암호화가 필요한 이유", WARN)])

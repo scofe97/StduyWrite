@@ -70,7 +70,7 @@ for i, (part, mean) in enumerate([("wl", "무선 인터페이스"), ("p1", "PCI 
     d.o.append(f'<rect x="{x}" y="{MY + 42}" width="108" height="26" rx="4" '
                f'fill="{ACC}20" stroke="{ACC}" stroke-width="1.1"/>')
     d.t(x + 54, MY + 60, part, 12, ACC, MONO, "middle", 600)
-    d.t(x + 54, MY + 84, mean, 10.5, MUTED, KR)
+    d.t(x + 54, MY + 84, mean, 11.5, MUTED, KR)
 
 BY = 444
 d.tone(32, BY, W - 64, 62, MUTED)
