@@ -7,6 +7,8 @@ source:
   - 챕터 PDF 폴더 — GoogleDrive/내 드라이브/book/Learning CoreDNS/ (9개 장)
   - https://coredns.io/plugins/
 related:
+  - ./00-01.%EC%9A%A9%EC%96%B4%EC%A7%91.md
+  - ./00-02.%EA%B2%B0%EC%A0%95%20%EC%B9%98%ED%8A%B8%EC%8B%9C%ED%8A%B8.md
   - ../networking-and-kubernetes/README.md
   - ../kubernetes-in-action/README.md
   - ../../README.md
@@ -17,8 +19,8 @@ learning:
   level: 기본
   last_verified:            # Phase 4 자답·_review 회차 미실시 — 원문 대조일로 대신 채우지 않는다
   blocked_count:
-  next_lesson: "00-01 용어집과 00-02 결정 치트시트 — 아홉 장을 다 읽었으므로 이제 편을 가로질러 모으는 차례. 폴더 계획이 완주 시점에 추가하기로 잡아 둔 두 문서"
-updated: 2026-09-05
+  next_lesson: "Phase 4 자답 — 용어집과 결정 치트시트까지 섰으므로 남은 것은 문항 104개에 스스로 답하는 단계"
+updated: 2026-09-06
 ---
 
 # Learning CoreDNS — 정독 인덱스
@@ -80,6 +82,8 @@ DNS를 다루는 기존 노트와는 편을 나눠 가집니다. 질의를 **보
 | [08-01](./08-01.%EB%AC%B4%EC%97%87%EC%9D%84%20%EB%B3%BC%EC%A7%80%20%EC%A2%81%ED%9E%88%EB%8A%94%20%EC%86%90%EC%9E%A1%EC%9D%B4%EA%B0%80%20%EB%8F%84%EA%B5%AC%EB%A7%88%EB%8B%A4%20%EB%8B%A4%EB%A5%B4%EB%8B%A4.md) | 무엇을 볼지 좁히는 손잡이가 도구마다 다르다 (Ch8 전체) | 완료 |
 | [09-01](./09-01.%ED%95%9C%20%EC%A4%84%EC%9D%84%20%EC%98%AE%EA%B8%B0%EB%A9%B4%20%EA%B7%B8%20%ED%94%8C%EB%9F%AC%EA%B7%B8%EC%9D%B8%EC%9D%B4%20%EC%93%B8%EB%AA%A8%EC%97%86%EC%96%B4%EC%A7%84%EB%8B%A4.md) | 한 줄을 옮기면 그 플러그인이 쓸모없어진다 (Ch9 1/2) | 완료 |
 | [09-02](./09-02.%EB%84%A4%20%ED%95%A8%EC%88%98%EB%A5%BC%20%EA%B5%AC%ED%98%84%ED%95%98%EB%A9%B4%20%EC%B2%B4%EC%9D%B8%EC%9D%98%20%ED%95%9C%20%EC%B9%B8%EC%9D%B4%20%EB%90%9C%EB%8B%A4.md) | 네 함수를 구현하면 체인의 한 칸이 된다 (Ch9 2/2) | 완료 |
+| [00-01](./00-01.%EC%9A%A9%EC%96%B4%EC%A7%91.md) | 용어집 — 15편의 말을 장 순서로 모음 (용어 99개) | 완료 |
+| [00-02](./00-02.%EA%B2%B0%EC%A0%95%20%EC%B9%98%ED%8A%B8%EC%8B%9C%ED%8A%B8.md) | 결정 치트시트 — 15편의 표를 결정 축 16개로 통합 (126행) | 완료 |
 
 
 
@@ -89,10 +93,10 @@ DNS를 다루는 기존 노트와는 편을 나눠 가집니다. 질의를 **보
 
 | 항목 | 현재 값 |
 |------|--------|
-| 진행률 | **9/9 장 완주**. 정독 노트 15편 (2·3·9장은 전·후반부로, 6장은 네 편으로 나눔) |
+| 진행률 | **9/9 장 완주 + 가로지르기 둘**. 정독 노트 15편과 용어집·결정 치트시트 (2·3·9장은 전·후반부로, 6장은 네 편으로 나눔) |
 | 난이도 레벨 | 기본에서 심화 경계. 6장이 가장 두껍고(13,965 단어) 1장이 가장 얇습니다(1,389 단어). 8장은 3,353 단어로 셋째입니다. 붙잡을 것 일곱 — **도메인과 존의 차이**, **레코드 한 줄의 다섯 칸**, **플러그인 처리 순서가 빌드 때 고정된다**는 점, **DNS 에는 푸시가 없어 조회는 TTL 을 기다린다**는 비대칭, **`ndots:5` 가 외부 이름 하나에 질의 여섯 번을 만든다**는 구조, **정규식으로 이름을 바꾸면 질문이 저절로 돌아오지 않는다**는 것, 그리고 **관측 도구마다 값을 깎는 손잡이가 따로 있다**는 것입니다. 뒤의 셋이 실무 비용과 장애로 곧장 이어집니다 |
 | 막힌 지점 | 없음. 다만 원서가 출력만 보여 주고 설명하지 않는 숫자가 계속 나와 소스로 메워야 했습니다 — 5장의 TTL 300 과 `SRV` 가중치 100, 6장의 TTL 5, 7장의 `dns-version` TXT `"1.0.1"` 이 그렇습니다 |
-| 다음 레슨 후보 | 00-01 용어집과 00-02 결정 치트시트. 아홉 장을 다 읽었으니 이제 편을 가로질러 모으는 차례이고, 이 폴더의 계획이 완주 시점에 추가하기로 잡아 둔 두 문서입니다. 용어집은 존·도메인·레코드·체인처럼 편마다 다시 나온 말을 한자리에 모으고, 결정 치트시트는 각 편 끝의 표들을 하나로 잇습니다 |
+| 다음 레슨 후보 | Phase 4 자답. 면접 문항 104개와 정답 104개가 편마다 준비돼 있고, 자답은 학습자가 직접 하는 단계입니다. 그것을 마쳐야 `last_verified` 에 날짜를 적을 수 있습니다 |
 | 최근 검증 결과 | **2026-09-05 전체 재점검(도식 포함).** 15편 모두 §1 검사 12개·절 도입부·요약 계층 통과, 벽 단락 0곳, 각주 63개 짝 일치, 링크 깨짐 0, 원문자 0. 도식 78장은 네 센서(overflow·lint·가독성·겹침) 전부 error 0 이고 78장 모두 렌더해 눈으로 대조했습니다. 이번 점검이 잡은 것 — **`dd.py` 가 정본과 어긋난 채 1~6장 도식 51장이 옛 글자 크기로 남아 가독성 error 52건**(재생성으로 해소), **`dd.state` 가 칩 폭을 ASCII 기준으로 잡아 한글 칩 10개가 상자를 넘치고 레인 점선이 글자 사이로 비친 것**(센서 넷이 모두 놓쳤고 눈으로만 잡혔습니다. 이 책은 국소 `chip()` 헬퍼로 대체), **7장에서 고친 "여섯 해"가 01-01·08-01·09-01·README 에 그대로 남은 것**, **README 가 8장을 가장 얇다고 적은 것**(실측 1장 1,389 · 4장 2,492 · 8장 3,353), **README 가 `resyncperiod`·`upstream`·`transfer to` 셋 다 저자가 제거를 예고했다고 적은 것**(원서 축자 확인 결과 예고는 `resyncperiod` 하나뿐), 정오 블록 수·버전 차이 건수 오기 2건, 사용처 없는 `allow:` 선언 3줄, 도식 표현 4건(연표의 경과 연수 단정 · 검색 경로 넷↔접미사 다섯 · 범례가 그림에 없는 "고리" 지칭 · 등급 둘이 렌더에서 구분 안 됨). 전부 1차 자료로 재확인 후 수정했습니다 |
 | 적대적 검증 (§18) | **7·8·9장**은 별개 서브에이전트로 돌리고 보고서를 회수했습니다. **1~6장 11편은 2026-09-05 에 다시 걸었는데, 이 세션이 서브에이전트를 쓸 수 없어 직접 돌린 약한 변형입니다** — 정본 `07-verification.md` §5 는 "맥락을 공유하지 않는 서브에이전트가 반박을 기본값으로" 점검하라고 정합니다. 판정은 전부 1차 자료(원서 PDF 추출본 6개 · CoreDNS 공식 문서와 `.go` 소스 · etcd CHANGELOG)로 확정했습니다. 검사 규모 — 영문 인용 83개 축자 대조, Example 참조 전수, 원서 귀속 수치 37개, 기본값 15종(`-cpu` 100% · `max_fails` 2 · `health_check` 0.5초 · `expire` 10초 · cache CAPACITY 9,984/최소 1,024 · TTL 상한 3,600 · `hosts` ttl 3600·reload 5초 · etcd `defaultTTL` 300·`defaultPriority` 10 · `min/max-lease-ttl` 30초/24시간 · `kubernetes` ttl 5초 · health 8080 · 레이블 63자 · 루트 서버 13대), **원문 정오 27건 전수**, Binary 층 6항목. 결과는 **결함 2건 · 헛고발 0건** 입니다. 결함은 `grpc` 절의 "페이지 어디에도 push·stream·watch·service discovery 라는 말이 없다" (`stream` 이 `upstream` 의 일부로 14번 나와 grep 으로 반증됨)와 `max_fails` 를 "연속 실패 횟수"로 줄여 무엇을 세는지 지운 것 둘입니다. 가장 어려운 확인은 `forward` 헬스 체크였습니다 — 현재 README 가 "네트워크 오류가 아닌 응답은 전부 healthy" 라 적어 원서의 "빈 응답도 실패" 와 충돌하는 듯했으나, `plugin/pkg/proxy/health.go` 주석이 "Dial timeouts and empty replies are considered fails, basically anything else constitutes a healthy upstream" 이라 원서와 노트가 맞고 현재 문서 쪽이 느슨한 것이었습니다. **남은 일 — 1~6장을 정본이 정한 서브에이전트 형태로 다시 거는 것** |
 | 원문 정오 누적 | **49건 · 블록 38개** — 1장 1건(쿠버네티스 오픈소스화 2015 → 공식문서 2014) · 2장 4건(`precious`→`previous`, IPv6 역방향 `first`→`last`, `2001:db8:42:1:1` 은 유효한 IPv6 아님, Example 2-18 닫는 괄호 누락) · 3장 9건(`file` 산문의 `transfer from`→`transfer to`, Example 3-30 닫는 중괄호 누락, `{>do}` 의 `but`→`bit`, `errors and logs`→`log`, Example 3-39 의 `secondary` 누락, Example 3-38·3-39 의 `forward` 가 `FROM` 누락, 환경 변수 산문이 `{$VAR}` 의 `$` 를 빠뜨림, `along`→`alone` 오타, 인자 없는 `tls` 설명의 `server's client certificate`) · 4장 2건(Example 4-10 의 `--repo` 이하 세 줄에 줄바꿈 이스케이프 누락, Example 4-3 의 `2001:db8:42:1:1` 이 유효한 IPv6 아님) · 5장 7건(Example 5-3 의 `put` 이 키를 `"port "` 로 적어 같은 예제의 `get` 출력과 어긋남, Docker 플래그를 `-link` 로 적음, 산문의 `Corefile-etcd-1` 과 Example 5-8 의 `Corefile-etcd` 불일치, 철자 `ectdv2`·`etdctl`·`overide`·`descibed`) · 6장 14건(dnstools 사이드바의 `--restart=Never` 와 Example 6-10 의 Deployment 형 파드 이름 불일치, Example 6-10 의 `kubectl get po` 출력 둘이 서로 어긋남, `even if though`, 산문의 `ipv6.arpa`·`ip6.arp` 가 같은 페이지 코드 블록의 `ip6.arpa` 와 어긋남, `is create`, `REVERSE_CIDR` 단수, **Example 6-17 이 캡션·산문으로는 서비스 이름이 `kube-dns` 라는데 YAML 은 `name: coredns`**, **Example 6-21 의 HPA 가 `namespace: default` 라 `kube-system` 의 Deployment 를 못 찾음**, 철자 `uses cases`·`presented to client`·`programatically`·`infastructure`, **옵션을 `nodendpoints` 로 적음**). 각 편의 정오 블록에 병기 · 7장 5건(**Example 7-24 의 캡션이 `Hello World in Python` 인데 블록 내용은 `dig soa +dnssec` 출력**, `Kcluster.local+013+47746` 이 `dnssec-keygen` 출력 형식과 달리 존 이름 뒤 점이 빠짐, `the their`, `(i.e,`, NIST 를 복수형 `National Institutes of Standards and Technology` 로 적음). 각 편의 정오 블록에 병기 · 8장 2건(Example 8-12 가 TCP 소켓을 `tcp://127.0.0.1/8053` 로 적는데 바로 앞 문장의 형식 설명과 같은 장의 Example 8-17 은 콜론을 씀, Example 8-21 의 정규식 `".* network is unreachable$"` 과 바로 뒤 접힌 출력 `'^.* network is unreachable$'` 이 어긋남 — 접힌 줄은 설정한 정규식을 소스가 그대로 되뇜). 각 편의 정오 블록에 병기 · 9장 5건(`plugin.ClientWrite` 가 `true` 를 돌려주면 응답이 **쓰이지 않은** 것이라고 적었으나 소스 주석과 호출부는 정반대 — `true` 가 이미 썼다는 뜻, 재시작 훅 셋을 열거한 뒤 "이것들은 전부 `OnShutdown` 앞에 불린다"고 적어 `OnShutdown` 이 자기보다 먼저 불릴 수 없게 됨, `Metadata` 가 `ServeDNS` 와 같은 인자를 받는다고 적었으나 실제는 `(ctx, request.Request)`, `nonwriter` 경로에서 저장소 이름 누락(`github.com/coredns/plugin/...`), 등록되는 곳을 `plug-in change` 로 적음). 각 편의 정오 블록에 병기 |
