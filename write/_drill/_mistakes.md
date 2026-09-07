@@ -6,7 +6,7 @@ source:
   - experience
 related:
   - ./README.md
-  - ./curriculum.md
+  - ./sources.md
 updated: 2026-09-07
 ---
 
@@ -59,4 +59,4 @@ updated: 2026-09-07
 ## 관련 문서
 
 - [드릴 진입점](./README.md) — 채점 척도와 재출제 규칙
-- [문제 은행](./curriculum.md) — 문항별 근거 노트와 상태
+- [출제 소스](./sources.md) — 커버리지 맵과 출제 이력
