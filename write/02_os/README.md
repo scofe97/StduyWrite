@@ -12,6 +12,7 @@ related:
   - ./book/linux-kernel-programming/README.md
   - ./book/systems-performance/README.md
   - ./book/paw_packet-analysis-wireshark/README.md
+  - ./book/cntd_computer-networking-top-down/README.md
   - ../08_cloud/book/container-security/README.md
   - ../08_cloud/book/learning-coredns/README.md
 updated: 2026-09-05
@@ -41,6 +42,7 @@ updated: 2026-09-05
 | [learning-coredns/](../08_cloud/book/learning-coredns/README.md) | 이름 해석의 *서버* 편 — Corefile·플러그인 체인·존 데이터·쿠버네티스 연동. `networking/`이 맡는 resolver 클라이언트 측과 편을 나눠 가진다 (책 기반) |
 | [systems-performance/](./book/systems-performance/README.md) | 성능 분석가 관점의 시스템 성능 — 방법론·CPU·메모리·디스크·네트워크·클라우드·고급 추적(perf·Ftrace·BPF) (책 기반) |
 | [paw_packet-analysis-wireshark/](./book/paw_packet-analysis-wireshark/README.md) | 선 위의 프레임을 떠서 프로토콜별로 읽는 법 — Wireshark 캡처·필터·TCP·TLS·응용 프로토콜·WLAN·보안 분석 (책 기반) |
+| [cntd_computer-networking-top-down/](./book/cntd_computer-networking-top-down/README.md) | 프로토콜을 위에서 아래로 훑는 규격 축 — 응용·트랜스포트·네트워크 계층의 원리와 라우팅·SDN·망 관리. `paw_` 가 캡처로 확인하는 것을 여기서 규격으로 배운다 (책 기반) |
 
 
 
