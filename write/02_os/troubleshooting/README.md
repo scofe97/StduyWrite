@@ -89,5 +89,6 @@ updated: 2026-09-05
 - 이웃: [02_os/networking/](../networking/README.md) — 여기 사례들이 딛고 선 커널 네트워크 메커니즘
 - 이웃: [02_os/kernel/](../kernel/README.md) — namespace·cgroup 같은 격리와 자원 제한 메커니즘
 - 짝: [08_cloud/troubleshooting/](../../08_cloud/troubleshooting/README.md) — 같은 사례집의 쿠버네티스 편
+- 훈련: [troubleshooting/_drill/](../../troubleshooting/_drill/README.md) — 이 사례들을 증상만 보고 직접 풀어 보는 트랙. 여기가 그 예비 풀입니다
 
 > 사례 원문은 [Infratice](https://github.com/kiku99/Infratice)(MIT, `0aba7df`)의 `content/problems/` 에서 가져와 재구성했습니다.
