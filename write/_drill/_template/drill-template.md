@@ -1,5 +1,5 @@
 ---
-title: 트러블슈팅 드릴 — {YYYY-MM-DD}
+title: 트러블슈팅 드릴 — {그날의 주제}
 tags: [drill, troubleshooting]
 status: draft
 mode: 지면
@@ -11,7 +11,7 @@ related:
 updated: {YYYY-MM-DD}
 ---
 
-# 트러블슈팅 드릴 — {YYYY-MM-DD}
+# 트러블슈팅 드릴 — {그날의 주제}
 
 ---
 
