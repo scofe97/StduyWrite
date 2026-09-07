@@ -6,8 +6,8 @@ source:
   - experience
 related:
   - ./README.md
-  - ../02_os/troubleshooting/README.md
-  - ../08_cloud/troubleshooting/README.md
+  - ../../02_os/troubleshooting/README.md
+  - ../../08_cloud/troubleshooting/README.md
 updated: 2026-09-07
 ---
 
@@ -53,38 +53,38 @@ updated: 2026-09-07
 
 | 배운 주제 | 근거 폴더 | 편수 |
 |----------|----------|------|
-| 라우팅, DNS 해석, 서브네팅, netfilter 와 conntrack | [02_os/networking/](../02_os/networking/) | 4 |
-| namespace, cgroup, OverlayFS, 컨테이너 격리 | [02_os/kernel/](../02_os/kernel/) | 7 |
-| 디스크, 프로세스, 서비스 기동, 로그, 포트와 소켓 | [02_os/troubleshooting/](../02_os/troubleshooting/) | 13 |
-| 셸, 파일 추상화, systemd, 관측, 네트워킹 기초 | [02_os/book/learning-modern-linux/](../02_os/book/learning-modern-linux/) | 17 |
-| TCP 와 TLS, IP 와 라우팅, 커널 패킷 처리, 진단 도구 | [08_cloud/book/networking-and-kubernetes/](../08_cloud/book/networking-and-kubernetes/) 1~2장 | 9 |
-| 전송 계층 이론, 큐잉, 이름 해석 | [02_os/book/cntd_computer-networking-top-down/](../02_os/book/cntd_computer-networking-top-down/) | 다수 |
+| 라우팅, DNS 해석, 서브네팅, netfilter 와 conntrack | [02_os/networking/](../../02_os/networking/) | 4 |
+| namespace, cgroup, OverlayFS, 컨테이너 격리 | [02_os/kernel/](../../02_os/kernel/) | 7 |
+| 디스크, 프로세스, 서비스 기동, 로그, 포트와 소켓 | [02_os/troubleshooting/](../../02_os/troubleshooting/) | 13 |
+| 셸, 파일 추상화, systemd, 관측, 네트워킹 기초 | [02_os/book/learning-modern-linux/](../../02_os/book/learning-modern-linux/) | 17 |
+| TCP 와 TLS, IP 와 라우팅, 커널 패킷 처리, 진단 도구 | [08_cloud/book/networking-and-kubernetes/](../../08_cloud/book/networking-and-kubernetes/) 1~2장 | 9 |
+| 전송 계층 이론, 큐잉, 이름 해석 | [02_os/book/cntd_computer-networking-top-down/](../../02_os/book/cntd_computer-networking-top-down/) | 다수 |
 
 ### B. 쿠버네티스 클러스터 내부
 
 | 배운 주제 | 근거 폴더 | 편수 |
 |----------|----------|------|
-| Pod 네트워크, 오버레이, Service, DNS, Ingress, NetworkPolicy, 이중 스택, 토폴로지 라우팅 | [08_cloud/kubernetes/04_networking/](../08_cloud/kubernetes/04_networking/) | 10 |
-| 이미지 풀, 자원 한계, 설정 주입, 배치, 볼륨, 권한, CRD, 관측 | [08_cloud/troubleshooting/](../08_cloud/troubleshooting/) | 12 |
-| 컨테이너 네트워킹, CNI, kube-proxy, EndpointSlice, Service 5유형 | [08_cloud/book/networking-and-kubernetes/](../08_cloud/book/networking-and-kubernetes/) 3~5장 | 11 |
-| 워크로드와 운영 전반 | [08_cloud/book/kubernetes-in-action/](../08_cloud/book/kubernetes-in-action/) | 진행 중 |
+| Pod 네트워크, 오버레이, Service, DNS, Ingress, NetworkPolicy, 이중 스택, 토폴로지 라우팅 | [08_cloud/kubernetes/04_networking/](../../08_cloud/kubernetes/04_networking/) | 10 |
+| 이미지 풀, 자원 한계, 설정 주입, 배치, 볼륨, 권한, CRD, 관측 | [08_cloud/troubleshooting/](../../08_cloud/troubleshooting/) | 12 |
+| 컨테이너 네트워킹, CNI, kube-proxy, EndpointSlice, Service 5유형 | [08_cloud/book/networking-and-kubernetes/](../../08_cloud/book/networking-and-kubernetes/) 3~5장 | 11 |
+| 워크로드와 운영 전반 | [08_cloud/book/kubernetes-in-action/](../../08_cloud/book/kubernetes-in-action/) | 진행 중 |
 
 ### C. 서비스 메시
 
 | 배운 주제 | 근거 폴더 | 편수 |
 |----------|----------|------|
-| Envoy, 게이트웨이와 라우팅, 트래픽 제어, 복원력, 관측, mTLS, 인증과 인가, 컨트롤 플레인 성능, 확장 | [08_cloud/book/istio-in-action/](../08_cloud/book/istio-in-action/) | 14 |
+| Envoy, 게이트웨이와 라우팅, 트래픽 제어, 복원력, 관측, mTLS, 인증과 인가, 컨트롤 플레인 성능, 확장 | [08_cloud/book/istio-in-action/](../../08_cloud/book/istio-in-action/) | 14 |
 | 설치 프로파일, 사이드카 구성, 신원 규격, 포트와 디버그 엔드포인트 | 같은 폴더 부록 | 4 |
 
 ### E. 런타임 (JVM · 애플리케이션)
 
 | 배운 주제 | 근거 폴더 | 편수 |
 |----------|----------|------|
-| 자바 애플리케이션 장애 진단 — 덤프·프로파일링·재현 | [01_language/book/tsj_troubleshooting-java/](../01_language/book/tsj_troubleshooting-java/) | 38 |
-| JVM 메모리 구조, GC, 클래스로딩, 바이트코드 | [01_language/book/](../01_language/book/) Inside the JVM | 109 |
-| 성능 측정과 튜닝 | [01_language/book/jpf_java-performance/](../01_language/book/jpf_java-performance/) | 50 |
-| 코어 문법, 컬렉션과 스트림, 테스트, 빌드 | [01_language/java/](../01_language/java/) | 59 |
-| 코어 컨테이너, 데이터 바인딩, AOP, 이벤트, 자동설정, 트랜잭션 | [09_spring/](../09_spring/) | 115 |
+| 자바 애플리케이션 장애 진단 — 덤프·프로파일링·재현 | [01_language/book/tsj_troubleshooting-java/](../../01_language/book/tsj_troubleshooting-java/) | 38 |
+| JVM 메모리 구조, GC, 클래스로딩, 바이트코드 | [01_language/book/](../../01_language/book/) Inside the JVM | 109 |
+| 성능 측정과 튜닝 | [01_language/book/jpf_java-performance/](../../01_language/book/jpf_java-performance/) | 50 |
+| 코어 문법, 컬렉션과 스트림, 테스트, 빌드 | [01_language/java/](../../01_language/java/) | 59 |
+| 코어 컨테이너, 데이터 바인딩, AOP, 이벤트, 자동설정, 트랜잭션 | [09_spring/](../../09_spring/) | 115 |
 
 이 계층은 근거가 가장 두껍습니다. 특히 `tsj_troubleshooting-java` 38편은 제목부터 트러블슈팅이라 예비 풀로 바로 씁니다.
 
@@ -96,9 +96,9 @@ updated: 2026-09-07
 
 | 배운 주제 | 근거 폴더 | 편수 |
 |----------|----------|------|
-| VPC 부품, 보안 그룹과 NACL, NAT 와 IGW 와 ELB, EKS 두 VPC, 노드당 Pod 수와 ENI 한도, VPC CNI, ALB ingress | [08_cloud/book/networking-and-kubernetes/](../08_cloud/book/networking-and-kubernetes/) 06-01 | 1 |
+| VPC 부품, 보안 그룹과 NACL, NAT 와 IGW 와 ELB, EKS 두 VPC, 노드당 Pod 수와 ENI 한도, VPC CNI, ALB ingress | [08_cloud/book/networking-and-kubernetes/](../../08_cloud/book/networking-and-kubernetes/) 06-01 | 1 |
 | GCP 글로벌 네트워크, GKE 와 NEG, Azure 라우트, AKS, 3사 비교 | 같은 폴더 06-02 | 1 |
-| 존 간 트래픽과 토폴로지 인지 라우팅 | [08_cloud/kubernetes/04_networking/](../08_cloud/kubernetes/04_networking/) 04-09 | 1 |
+| 존 간 트래픽과 토폴로지 인지 라우팅 | [08_cloud/kubernetes/04_networking/](../../08_cloud/kubernetes/04_networking/) 04-09 | 1 |
 
 D 계층은 근거가 셋뿐입니다. 여기서 뽑을 때는 위 세 편이 실제로 덮는 범위 안인지 먼저 확인하고, 벗어나면 다른 계층으로 돌립니다. 노트에 없는 주제로는 출제하지 않습니다.
 
@@ -128,7 +128,7 @@ D 계층은 근거가 셋뿐입니다. 여기서 뽑을 때는 위 세 편이 �
 
 ## 외부 사이트
 
-> 사이트 목록의 정본은 [OS 사례집 README](../02_os/troubleshooting/README.md) 의 연습 사이트 절입니다. 아래는 2026-09-07 에 실제로 열어 확인한 후보 목록입니다.
+> 사이트 목록의 정본은 [OS 사례집 README](../../02_os/troubleshooting/README.md) 의 연습 사이트 절입니다. 아래는 2026-09-07 에 실제로 열어 확인한 후보 목록입니다.
 
 가져올 때는 **이름과 주제만** 옮깁니다. 문제 본문을 복제하지 않고 증상은 제 노트의 어휘로 다시 씁니다. 출처는 그 회차 파일의 `source` 에 남깁니다.
 
@@ -203,5 +203,5 @@ iximiuz Labs, Killercoda, Killer Shell, KodeKloud 는 목록을 확인하지 않
 
 - [드릴 진입점](./README.md) — 루틴, 문항 포맷, 채점 규약
 - [오답 노트](./_mistakes.md) — 막힌 지점의 누적 기록
-- [OS 트러블슈팅 사례집](../02_os/troubleshooting/README.md) — A 계층 예비 풀과 연습 사이트 목록의 출처
-- [Kubernetes 트러블슈팅 사례집](../08_cloud/troubleshooting/README.md) — B 계층 예비 풀
+- [OS 트러블슈팅 사례집](../../02_os/troubleshooting/README.md) — A 계층 예비 풀과 연습 사이트 목록의 출처
+- [Kubernetes 트러블슈팅 사례집](../../08_cloud/troubleshooting/README.md) — B 계층 예비 풀

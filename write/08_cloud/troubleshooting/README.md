@@ -101,5 +101,6 @@ updated: 2026-09-05
 - 이웃: [08_cloud/kubernetes/](../kubernetes/README.md) — 여기 사례들이 다루는 리소스의 개념과 운영
 - 짝: [02_os/troubleshooting/](../../02_os/troubleshooting/README.md) — 같은 사례집의 리눅스 호스트 편
 - 관측: [06_observability/](../../06_observability/README.md) — 06-02 가 다루는 스택의 설계와 운영
+- 훈련: [troubleshooting/_drill/](../../troubleshooting/_drill/README.md) — 이 사례들을 증상만 보고 직접 풀어 보는 트랙. 여기가 그 예비 풀입니다
 
 > 사례 원문은 [Infratice](https://github.com/kiku99/Infratice)(MIT, `0aba7df`)의 `content/problems/` 에서 가져와 재구성했습니다.
