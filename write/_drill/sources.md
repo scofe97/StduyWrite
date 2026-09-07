@@ -128,13 +128,43 @@ D 계층은 근거가 셋뿐입니다. 여기서 뽑을 때는 위 세 편이 �
 
 ## 외부 사이트
 
-> 사이트 목록의 정본은 [OS 사례집 README](../02_os/troubleshooting/README.md) 의 연습 사이트 절입니다. 성격이 셋으로 갈립니다.
+> 사이트 목록의 정본은 [OS 사례집 README](../02_os/troubleshooting/README.md) 의 연습 사이트 절입니다. 아래는 2026-09-07 에 실제로 열어 확인한 후보 목록입니다.
 
-- **정적 문제**: Infratice — 환경 없이 로그와 설정만 읽습니다. 사례집이 41건을 편입했고 나머지가 바로 후보입니다
-- **대화형 셸**: SadServers, iximiuz Labs, Killercoda, Killer Shell — 실제 서버를 주므로 주말 실습을 대체할 수 있습니다
-- **학습 과정**: LFWS313, DevOps-Learn-By-Doing — 커리큘럼과 큐레이션입니다
+가져올 때는 **이름과 주제만** 옮깁니다. 문제 본문을 복제하지 않고 증상은 제 노트의 어휘로 다시 씁니다. 출처는 그 회차 파일의 `source` 에 남깁니다.
 
-외부에서 가져올 때는 주제와 링크만 옮깁니다. 증상 서술은 제 노트의 어휘로 다시 쓰고, 출처는 그 회차 파일의 `source` 에 남깁니다.
+### SadServers — 계층별 후보
+
+[sadservers.com/scenarios](https://sadservers.com/scenarios) 에 Easy 32개와 Medium 65개 이상이 있습니다. 브라우저 안에서 실제 서버를 주므로 **주말 실습을 대체**할 수 있습니다.
+
+| 계층 | 시나리오 | 주제 |
+|------|---------|------|
+| A | Saint John · Porto · Nara | 로그를 쓰는 프로세스 찾기, 유틸리티 없이 포트 감사, ls 없이 파일 찾기 |
+| A | Kihei · Cordoba · Genova | 디스크 공간, 공간 수치 불일치, cgroups 메모리 제한 |
+| A | Oaxaca · Bata | 프로세스를 죽이지 않고 열린 파일 닫기, `/proc` 에서 값 찾기 |
+| B | Bilbao · Buenos Aires · Bengaluru | 배포 고치기, 크래시 루프, StatefulSet 파드 축출 |
+| B | Kilifi · Ruaka · Poznań · Lyon | 자원 할당, Helm 차트 배포, Ingress 컨트롤러 이관 |
+| **C** | **Bangalore** | **Envoy 프록시의 패닉 모드** |
+| D | Hamburg · Bologna | EBS 볼륨 식별, ELB 백엔드 5xx 집계 |
+| E | Bizerte · Rio de Janeiro · Melbourne | 느린 애플리케이션 진단, Jenkins 기동 실패, WSGI 구성 |
+
+Bangalore 는 오늘 D3 와 정면으로 이어집니다. 패닉 모드는 건강한 엔드포인트 비율이 임계 아래로 떨어지면 Envoy 가 **건강 판정을 무시하고 전부에게 보내기 시작하는** 동작이라, `outlierDetection` 이 만드는 악순환의 반대편입니다.
+
+아직 계층을 배정하지 않은 것 중에도 쓸 만한 게 있습니다. Geneva 와 Lisbon 은 인증서 만료, Warsaw 는 Prometheus 스크레이프, Tunis 와 Suzhou 와 Helsingør 는 각각 Redis 복제와 MongoDB 레플리카셋과 PostgreSQL 물리 복제입니다. 관측과 데이터 계층을 열면 그때 배정합니다.
+
+### Infratice — 미편입분
+
+[Infratice](https://github.com/kiku99/Infratice) 의 `content/problems/` 는 다섯 갈래입니다. `linux`·`kubernetes`·`network` 는 사례집 41건으로 이미 편입했고, 남은 것이 아래입니다.
+
+| 갈래 | 편수 | 내용 |
+|------|-----|------|
+| `cicd` | 13 | Actions 실패, 타임아웃, 이미지 태깅, 재시도, 환경 게이트, 잡 의존, 경로 기반 워크플로, PR 게이트, 매트릭스 빌드, 아티팩트 인계, 배포 롤백, GitOps 승격, 재사용 워크플로 |
+| `monitoring` | 1 | node-exporter 메트릭 누락 (나머지 넷은 사례집 06-02 에 편입) |
+
+`cicd` 13개는 **파이프라인 계층을 열면 그대로 예비 풀**이 됩니다. 정적 문제라 환경 없이 로그와 설정만 읽고 푸는 형식입니다.
+
+### 아직 안 본 곳
+
+iximiuz Labs, Killercoda, Killer Shell, KodeKloud 는 목록을 확인하지 않았습니다. 위 후보만으로 한 달치가 넘어 급하지 않습니다.
 
 
 
