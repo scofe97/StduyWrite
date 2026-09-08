@@ -6,7 +6,7 @@ related:
   - ./_template/review-template.md
   - ./_template/review-routine.md
   - ../README.md
-updated: 2026-09-06
+updated: 2026-09-08
 ---
 
 # write 학습 문서 복습 시스템
@@ -67,6 +67,7 @@ write/_review/
 | 1 | 2026-08-31 | 7 (Networking and Kubernetes 01-01·01-02 + 02-01~02-05) | _ | _ | _ |
 | 1 | 2026-09-06 | 2 (Networking and Kubernetes 01-01·01-02 — 08-31 폴더 미완분) | 2.0 | 2.17 | 0 |
 | 2 | 2026-09-06 | 2 (Kubernetes in Action 08-01·08-02) | 1.0 | 1.33 | 0 |
+| 1 | 2026-09-08 | 3 (Learning Modern Linux 07-01·07-02·07-03) | 2.67 | 2.89 | 0 |
 
 회차 5 에서 *졸업 수 / 대상 편수 ≥ 80%* 면 본 시스템이 잘 작동하는 것.
 
