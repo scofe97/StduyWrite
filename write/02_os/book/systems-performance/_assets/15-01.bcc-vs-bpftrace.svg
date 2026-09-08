@@ -1,36 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 430" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>BCC vs bpftrace — 두 BPF 프론트엔드</title>
-  <desc>extended BPF 위에 선 두 프론트엔드 비교. BCC는 복잡·강력한 도구(C 프로그래밍 같음, 228줄), bpftrace는 일회성·짧은 도구(셸 스크립팅 같음, 28줄)로, 커널에서 집계해 저오버헤드를 낸다.</desc>
-  <rect width="780" height="430" fill="#0d0d0d"/>
-  <text x="30" y="40" fill="#e8e4df" font-size="20" font-weight="700">BCC vs bpftrace</text>
-  <text x="30" y="64" fill="rgb(138,133,128)" font-size="13">프로그래밍 가능한 트레이서 — 커널에서 집계해 저오버헤드</text>
-
-  <!-- BCC -->
-  <rect x="40" y="90" width="340" height="160" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
-  <text x="210" y="114" fill="rgb(212,168,83)" font-size="14" font-weight="700" text-anchor="middle">BCC (BPF Compiler Collection)</text>
-  <text x="60" y="140" fill="#e8e4df" font-size="12">• 복잡한 도구 (옵션 -h·-P PID·인자)</text>
-  <text x="60" y="162" fill="#e8e4df" font-size="12">• 유저: Python·C++ / 커널: C</text>
-  <text x="60" y="184" fill="#e8e4df" font-size="12">• 라이브러리 지원 · 80개+ 도구</text>
-  <text x="60" y="206" fill="rgb(138,133,128)" font-size="11">평균 228줄 · 개발 어려움</text>
-  <text x="60" y="232" fill="#66bb6a" font-size="11">≈ C 프로그래밍 (미리 만든 도구 실행)</text>
-
-  <!-- bpftrace -->
-  <rect x="400" y="90" width="340" height="160" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.4"/>
-  <text x="570" y="114" fill="rgb(212,168,83)" font-size="14" font-weight="700" text-anchor="middle">bpftrace</text>
-  <text x="420" y="140" fill="#e8e4df" font-size="12">• 단순 (옵션 없거나 인자 0~1개)</text>
-  <text x="420" y="162" fill="#e8e4df" font-size="12">• bpftrace 언어 (awk·C 영감)</text>
-  <text x="420" y="184" fill="#e8e4df" font-size="12">• count·hist 등 요약 · 120개+ 도구</text>
-  <text x="420" y="206" fill="rgb(138,133,128)" font-size="11">평균 28줄 · 개발 쉬움</text>
-  <text x="420" y="232" fill="#66bb6a" font-size="11">≈ 셸 스크립팅 (일회성 커스텀)</text>
-
-  <!-- BPF base -->
-  <rect x="40" y="270" width="700" height="50" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
-  <text x="390" y="292" fill="rgb(212,168,83)" font-size="13" font-weight="700" text-anchor="middle">extended BPF (커널 실행 환경)</text>
-  <text x="390" y="310" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">이벤트에서 프로그램 실행 — 필터·집계·지연 계산을 커널 컨텍스트에서</text>
-
-  <!-- note -->
-  <rect x="40" y="336" width="700" height="80" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.2"/>
-  <text x="60" y="362" fill="#e8e4df" font-size="13" font-weight="600">선택 — 먼저 bpftrace로 빠르게, 필요하면 BCC로 포팅</text>
-  <text x="60" y="384" fill="rgb(138,133,128)" font-size="12">BCC는 커스텀·복잡 도구(C 제어, 개발 10배), bpftrace는 일회성·짧은 도구. 둘 다 커널 집계로 저오버헤드.</text>
-  <text x="60" y="404" fill="rgb(138,133,128)" font-size="12">다른 트레이서가 이벤트를 전부 덤프해 후처리하는 것과 달리, BPF는 커널에서 처리 — 운영 환경에 실용적.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 928 512" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">BCC 와 bpftrace — 같은 BPF, 다른 쓰임</title><desc id="dd">둘 다 커널의 BPF 위에 서지만 겨냥하는 자리가 다르다. BCC 는 완성된 도구를, bpftrace 는 그 자리에서 짜는 한 줄을 준다.</desc>
+<rect width="928" height="512" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">SYSTEMS PERFORMANCE · 15-01 §1</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">BCC 와 bpftrace — 같은 BPF, 다른 쓰임</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" fill="#8B98A9">복잡한 도구는 BCC 로, 즉석 질문은 bpftrace 로 갑니다</text>
+<rect x="24" y="132" width="424" height="216" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="40" y="162" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#6A95D8">BCC</text>
+<text x="40" y="184" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">완성된 도구 모음</text>
+<line x1="40" y1="198" x2="432" y2="198" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="40" y="224" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">Python 으로 프론트엔드를 짜고</text>
+<text x="40" y="244" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">복잡한 인자·출력을 다룹니다.</text>
+<text x="40" y="264" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">opensnoop · execsnoop 처럼</text>
+<text x="40" y="284" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">단일 목적 도구가 수십 개입니다</text>
+<text x="40" y="330" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#6A95D8">남이 만든 것을 가져다 씁니다</text>
+<rect x="480" y="132" width="424" height="216" rx="8" fill="#F08A5914" stroke="#F08A59" stroke-width="1.2"/>
+<text x="496" y="162" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#F08A59">bpftrace</text>
+<text x="496" y="184" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">추적의 awk</text>
+<line x1="496" y1="198" x2="888" y2="198" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="496" y="224" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">한 줄로 프로브·필터·액션을</text>
+<text x="496" y="244" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">적어 바로 돌립니다.</text>
+<text x="496" y="264" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">기성 도구로 답이 안 나올 때</text>
+<text x="496" y="284" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">질문을 직접 짭니다</text>
+<text x="496" y="330" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#F08A59">내가 그 자리에서 만듭니다</text>
+<text x="24" y="388" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">둘은 경쟁 관계가 아니라 층이 다릅니다 — bpftrace 로 답을 찾은 뒤 반복해 쓸 것을 BCC 도구로 옮기기도 합니다</text>
+<line x1="12" y1="412" x2="880" y2="412" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="434" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="423" width="14" height="14" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="435" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">즉석에서 질문을 짜는 쪽</text>
+<rect x="343" y="423" width="14" height="14" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="365" y="435" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">완성품을 가져다 쓰는 쪽</text>
 </svg>
