@@ -2,6 +2,7 @@
 # 타입 스펙: type-process — 같은 데이터를 세 방식으로 볼 때 무엇이 보이고 무엇이 사라지는지의 대조 지도.
 #           축약: 주체(lane)가 없는 대조라 §1 lanes 와 §2 공식을 쓰지 않고 카드 stride 로 놓는다
 #           (visual-diagram-selection §알려진 공백 "주체 없는 단계 지도" 관례).
+import re
 import sys; sys.path.insert(0, ".")
 from ddk import DK
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
@@ -30,7 +31,9 @@ for i, (name, tool, c, body, foot) in enumerate(CARDS):
     if c is ACC: d.tone(x, Y, CW, CH, c, 8)
     else: d.box(x, Y, CW, CH, PAPER2, RULE, 1.0, 8)
     d.t(x + 16, Y + 30, name, 15, c, KR, "start", 600)
-    d.t(x + CW - 16, Y + 30, tool, 12, SOFT, MONO, "end")
+    # 라벨에 한글이 섞이면 KR 13px(계약 하한 1.3%), 순수 명령이면 MONO 12px 로 나눈다.
+    kr = bool(re.search(r"[가-힣]", tool))
+    d.t(x + CW - 16, Y + 30, tool, 13 if kr else 12, SOFT, KR if kr else MONO, "end")
     d.line(x + 16, Y + 46, x + CW - 16, Y + 46, RULE, 0.8)
     for j, l in enumerate(body):
         d.t(x + 16, Y + 72 + j * 20, l, 13, MUTED, KR, "start")
