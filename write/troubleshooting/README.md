@@ -7,8 +7,7 @@ source:
 related:
   - ../README.md
   - ./_drill/README.md
-  - ../02_os/troubleshooting/README.md
-  - ../08_cloud/troubleshooting/README.md
+  - ./_drill/candidates.md
 updated: 2026-09-07
 ---
 
@@ -75,10 +74,10 @@ A 부터 D 까지가 "패킷이 어디서 사라지나"를 묻는 네트워크 �
 
 직접 풀어 보려면 [`_drill/`](./_drill/README.md) 입니다. 하루 세 문항을 증상만 보고 진단하는 루틴과 채점 규약이 거기 있습니다. 문항은 [`_drill/sources.md`](./_drill/sources.md) 의 소스에서 그날 새로 뽑고, 기존 사례집 두 곳이 그 예비 풀입니다.
 
-- [리눅스 사례집](../02_os/troubleshooting/README.md) — Infratice 41건. 디스크·프로세스·서비스·로그·네트워크
-- [쿠버네티스 사례집](../08_cloud/troubleshooting/README.md) — Infratice 38건. 이미지·자원·설정·배치·볼륨·권한·관측
+- [출제 후보 풀](./_drill/candidates.md) — 아직 안 푼 증상 79건. A 계층 41 · B 계층 38
+- [Infratice](https://github.com/kiku99/Infratice) — 그 79건의 원문. 해설이 필요하면 여기서 봅니다
 
-두 사례집은 남이 만든 해설이라 여기로 옮기지 않습니다. 풀어서 제 어휘로 정리한 것만 이 폴더에 들어옵니다.
+원문은 남이 만든 해설이라 본문을 옮기지 않습니다. 증상 한 줄만 후보 풀에 남기고, 풀어서 제 어휘로 정리한 것만 이 폴더에 사례로 들어옵니다.
 
 
 

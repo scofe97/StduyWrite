@@ -6,9 +6,8 @@ source:
   - experience
 related:
   - ./README.md
-  - ../../02_os/troubleshooting/README.md
-  - ../../08_cloud/troubleshooting/README.md
-updated: 2026-09-07
+  - ./candidates.md
+updated: 2026-09-08
 ---
 
 # 트러블슈팅 드릴 출제 소스
@@ -26,6 +25,32 @@ updated: 2026-09-07
 미리 채운 근거는 확인 없이 굳습니다. 실제로 그랬습니다. 41행의 근거를 문서 제목만 보고 채웠는데, 두 건이 어긋나 있었습니다. `nk/01-02` 는 keepalive 를 다루지 않았고 `single-request` 는 `write/` 전체에 0건이었습니다. 매 회차에 뽑으면 그때 근거를 확인하므로 틀린 매핑이 쌓이지 않습니다.
 
 소스만 두면 자료가 자동으로 따라옵니다. 노트를 새로 쓰면 그 주제가 바로 출제 범위에 들어오고, 외부 사이트에 새 시나리오가 올라오면 그것도 후보가 됩니다. 목록을 두면 목록을 갱신해야 합니다.
+
+### 대신 남은 개수만 셉니다
+
+> 제목을 적으면 스포일러가 되지만, 몇 개가 남았는지는 스포일러가 아닙니다.
+
+목록을 안 두는 대신 진행이 안 보이는 문제가 생깁니다. 그건 세는 것으로 해결됩니다. 사례집 두 곳의 개별 사례는 `## 사례` 헤딩 하나가 하나이므로 기계로 셉니다.
+
+```bash
+# write/ 에서 실행합니다
+grep -hc "^| [0-9]" troubleshooting/_drill/candidates.md   # 후보 풀 전체
+ls troubleshooting/*/[0-9]*.md | wc -l                     # 승격
+```
+
+`-c` 대신 `-h | wc -l` 을 쓰는 이유가 있습니다. `grep -c` 는 파일마다 한 줄씩 개수를 내므로 합치려면 한 단계가 더 필요하고, 환경에 따라 출력 형식이 달라 합산이 조용히 0 이 되기도 합니다. 매칭된 줄을 전부 뽑아 세면 그런 차이를 타지 않습니다.
+
+2026-09-08 기준 예비 풀 79건, 승격 3건입니다. 사례집 문서 하나가 사례 두셋을 묶고 있어 문서 25편이 사례 79건으로 풀립니다.
+
+### 사례집을 옮기지 않고 두는 이유
+
+> 같은 RCA 사례인데 폴더가 둘로 갈려 있는 것이 이상해 보입니다. 실제로 성격은 같고, 다른 것은 **푼 사람**입니다.
+
+사례집 25편은 남이 만든 해설을 제가 재구성한 것이고, `troubleshooting/` 의 문항은 증상만 보고 직접 푼 것입니다. 전자를 통째로 옮기면 안 푼 76건이 "푼 사례" 폴더에 섞여 들어가고, 그러면 그 폴더가 무엇을 모은 곳인지가 흐려집니다.
+
+그래서 **승격 방식**으로 둡니다. 사례집은 후보 큐로 두고, 그중 하나를 그날 문항으로 뽑아 풀면 그때 `troubleshooting/{계층}/` 에 제 어휘로 쓴 파일 하나가 생깁니다. 승격된 사례는 원본을 지우지 않고 `## 나온 개념` 에서 교차참조합니다. 원본은 대조 대상으로 계속 쓰이기 때문입니다.
+
+풀 것이 떨어지면 그때 남은 것을 한꺼번에 옮길지 다시 판단합니다. 지금은 76건이 남아 있어 판단할 때가 아닙니다.
 
 
 
@@ -55,7 +80,7 @@ updated: 2026-09-07
 |----------|----------|------|
 | 라우팅, DNS 해석, 서브네팅, netfilter 와 conntrack | [02_os/networking/](../../02_os/networking/) | 4 |
 | namespace, cgroup, OverlayFS, 컨테이너 격리 | [02_os/kernel/](../../02_os/kernel/) | 7 |
-| 디스크, 프로세스, 서비스 기동, 로그, 포트와 소켓 | [02_os/troubleshooting/](../../02_os/troubleshooting/) | 13 |
+| 디스크, 프로세스, 서비스 기동, 로그, 포트와 소켓 | [후보 풀 A 계층](./candidates.md) | 41 |
 | 셸, 파일 추상화, systemd, 관측, 네트워킹 기초 | [02_os/book/learning-modern-linux/](../../02_os/book/learning-modern-linux/) | 17 |
 | TCP 와 TLS, IP 와 라우팅, 커널 패킷 처리, 진단 도구 | [08_cloud/book/networking-and-kubernetes/](../../08_cloud/book/networking-and-kubernetes/) 1~2장 | 9 |
 | 전송 계층 이론, 큐잉, 이름 해석 | [02_os/book/cntd_computer-networking-top-down/](../../02_os/book/cntd_computer-networking-top-down/) | 다수 |
@@ -65,7 +90,7 @@ updated: 2026-09-07
 | 배운 주제 | 근거 폴더 | 편수 |
 |----------|----------|------|
 | Pod 네트워크, 오버레이, Service, DNS, Ingress, NetworkPolicy, 이중 스택, 토폴로지 라우팅 | [08_cloud/kubernetes/04_networking/](../../08_cloud/kubernetes/04_networking/) | 10 |
-| 이미지 풀, 자원 한계, 설정 주입, 배치, 볼륨, 권한, CRD, 관측 | [08_cloud/troubleshooting/](../../08_cloud/troubleshooting/) | 12 |
+| 이미지 풀, 자원 한계, 설정 주입, 배치, 볼륨, 권한, CRD, 관측 | [후보 풀 B 계층](./candidates.md) | 38 |
 | 컨테이너 네트워킹, CNI, kube-proxy, EndpointSlice, Service 5유형 | [08_cloud/book/networking-and-kubernetes/](../../08_cloud/book/networking-and-kubernetes/) 3~5장 | 11 |
 | 워크로드와 운영 전반 | [08_cloud/book/kubernetes-in-action/](../../08_cloud/book/kubernetes-in-action/) | 진행 중 |
 
@@ -128,7 +153,30 @@ D 계층은 근거가 셋뿐입니다. 여기서 뽑을 때는 위 세 편이 �
 
 ## 외부 사이트
 
-> 사이트 목록의 정본은 [OS 사례집 README](../../02_os/troubleshooting/README.md) 의 연습 사이트 절입니다. 아래는 2026-09-07 에 실제로 열어 확인한 후보 목록입니다.
+> 아래 표가 사이트 목록의 정본입니다. 사례집 README 두 곳에 같은 표가 있었는데, 그 문서들을 걷어내면서 여기로 합쳤습니다.
+
+> 아래 목록은 각 사이트를 직접 열어 제목과 소개 문구를 확인한 것입니다(2026-09-05 기준). 유료 여부와 무료 범위는 자주 바뀌므로 링크에서 직접 확인합니다.
+
+| 사이트 | 방식 | 다루는 범위 |
+|--------|------|------------|
+| [Infratice](https://infratice.co.kr/) | 정적 문제 — 로그·설정만 보고 원인을 추론하고 AI로 풀이를 검토 | Linux · Kubernetes · Network · CI/CD · Monitoring (한국어) |
+| [SadServers](https://sadservers.com/scenarios) | 브라우저 안 실서버에 붙어 제한 시간 안에 복구 | Linux 트러블슈팅 랩, 면접·채용 평가 겸용 |
+| [iximiuz Labs](https://labs.iximiuz.com/) | 브라우저나 SSH로 실서버 실습, 학습 경로 제공 | Linux · Docker · Kubernetes · Networking |
+| [Killercoda](https://killercoda.com/) | 브라우저 터미널 시나리오, 직접 시나리오 작성 가능 | DevOps · Linux · Kubernetes · CKA/CKS/CKAD |
+| [Killer Shell](https://killer.sh/) | 자격 시험 시뮬레이터 | CKA · CKS · CKAD · LFCS · CNPE |
+| [KodeKloud](https://kodekloud.com/) | 핸즈온 랩과 가이드 영상 | DevOps · Cloud · AI 전반 |
+| [Deadnodes](https://deadnodes.com/) | 실습·팀 챌린지·면접 워크플로를 묶은 플랫폼 | 시스템 엔지니어링 실습 |
+| [DevOpsEngine Labs](https://devopsengine.cloud/labs/) | 핸즈온 랩 | Kubernetes · Linux · CI/CD · 트러블슈팅 |
+| [Kubernetes Troubleshooting (LFWS313)](https://training.linuxfoundation.org/training/kubernetes-troubleshooting-lfws313/) | Linux Foundation 공식 과정, 랩과 실사례 중심 | Kubernetes |
+| [DevOps-Learn-By-Doing](https://github.com/deepakkumar-platform/DevOps-Learn-By-Doing) | 무료 랩·챌린지 큐레이션 저장소 | Linux 부터 Kubernetes 까지 |
+
+성격으로 나누면 셋입니다.
+
+- 정적 문제: Infratice — 환경 없이 로그와 설정만 읽습니다
+- 대화형 셸: SadServers · iximiuz Labs · Killercoda · Killer Shell — 실제 서버를 줍니다
+- 학습 과정: LFWS313 · DevOps-Learn-By-Doing — 커리큘럼과 큐레이션입니다
+
+쿠버네티스만 놓고 보면 Killercoda 와 Killer Shell 이 가장 밀도가 높습니다. 자격 시험 문제가 곧 트러블슈팅 문제이기 때문입니다.
 
 가져올 때는 **이름과 주제만** 옮깁니다. 문제 본문을 복제하지 않고 증상은 제 노트의 어휘로 다시 씁니다. 출처는 그 회차 파일의 `source` 에 남깁니다.
 
@@ -203,5 +251,5 @@ iximiuz Labs, Killercoda, Killer Shell, KodeKloud 는 목록을 확인하지 않
 
 - [드릴 진입점](./README.md) — 루틴, 문항 포맷, 채점 규약
 - [오답 노트](./_mistakes.md) — 막힌 지점의 누적 기록
-- [OS 트러블슈팅 사례집](../../02_os/troubleshooting/README.md) — A 계층 예비 풀과 연습 사이트 목록의 출처
-- [Kubernetes 트러블슈팅 사례집](../../08_cloud/troubleshooting/README.md) — B 계층 예비 풀
+- [출제 후보 풀](./candidates.md) — 아직 안 푼 증상 79건. A 41 · B 38
+- [Infratice](https://github.com/kiku99/Infratice) — 그 79건의 원문
