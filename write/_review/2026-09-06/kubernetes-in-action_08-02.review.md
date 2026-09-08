@@ -22,7 +22,7 @@ updated: 2026-09-06
 >
 > **본 복습 규약 (Karpicke & Roediger 2006, testing effect):**
 > 1. 각 질문에 *먼저 자기 답을 적어라* — 답을 보지 말 것
-> 2. 자기 답 작성 후에만 `<details>` 의 정답을 열어라
+> 2. 자기 답 작성 후에만 **파일 끝 §정답** 을 읽어라
 > 3. 정답과 비교해 0~5 점 self-quality 점수를 매겨라
 > 4. 회차 끝 종합 평가에서 다음 회차 날짜가 결정됨
 
@@ -44,32 +44,6 @@ updated: 2026-09-06
 (여기에 자기 답 작성)
 ```
 
-<details>
-<summary>정답 보기 (먼저 자기 답 적은 뒤)</summary>
-
-- `--from-file` — 키는 **1개**, 파일명(`application.env`)이 키가 되고 **파일 내용 전체**가 값이 됩니다.
-- `--from-env-file` — 키는 **3개**, 파일의 각 `KEY=value` 줄이 **별도 엔트리**가 됩니다 (`APP_MODE: practice`, `LOG_LEVEL: info`, `SERVER_PORT: "8080"`).
-
-원본 §2의 dry-run 출력:
-
-```yaml
-# --from-file 결과: 파일명 하나가 키, 파일 전체가 값이 됩니다.
-data:
-  application.yml: |
-    server:
-      port: 8080
----
-# --from-env-file 결과: 각 KEY=value 줄이 별도 엔트리가 됩니다.
-data:
-  APP_MODE: practice
-  LOG_LEVEL: info
-  SERVER_PORT: "8080"
-```
-
-회차 1에서 이 둘을 "원문이냐 치환이냐"의 차이로 잡았던 것이 오답의 원인이었습니다. **두 방식 모두 값을 치환하지 않습니다** (원본 §6 Q1). 갈리는 것은 치환 여부가 아니라 **키를 몇 개로 쪼개는가**입니다.
-
-곁가지 — `--from-file`에 **디렉터리**를 주면 안의 각 파일이 별도 엔트리가 되고, `key=파일` 형태로 키를 직접 지정할 수도 있습니다. UTF-8이 아닌 바이트가 있으면 kubectl이 `binaryData`에 Base64로 넣습니다 (원본 §2).
-</details>
 
 **점수 (0~5)**: **0** (채점: Claude — 미답. "차이를 모르겠다". 회차 1 에서 2/5 로 최저였던 축이 0 으로 내려감)
 *점수 기준: 0=완전 못 답함, 1=틀린 답, 2=부분 답+큰 누락, 3=핵심 맞음+세부 누락, 4=정확하지만 머뭇, 5=막힘 없이 정확*
@@ -85,23 +59,6 @@ data:
 (여기에 자기 답 작성)
 ```
 
-<details>
-<summary>정답</summary>
-
-두 필드가 나뉜 이유는 **ConfigMap과 컨테이너 사이의 결합 범위**를 선택하기 위해서입니다 (원본 §3).
-
-| 선택 기준 | configMapKeyRef | envFrom |
-|---|---|---|
-| 가져오는 범위 | 지정한 키 하나 | ConfigMap의 모든 키 |
-| 환경변수 이름 | `env[].name`으로 변경 가능 | ConfigMap 키를 그대로 사용하며 prefix만 추가 가능 |
-| 새 키가 추가될 때 | 매니페스트를 고치기 전에는 안 들어옴 | 매니페스트를 안 고쳐도 들어오지만 **다음에 만들어지는 파드부터** |
-
-`status-message`를 `envFrom`으로 주입하면 **환경변수가 하나도 만들어지지 않습니다.** 대시가 들어간 이름은 유효한 환경변수 이름이 아니기 때문입니다 (원본 §3).
-
-이 제약이 두 필드가 나뉜 이유를 선명하게 합니다 — `configMapKeyRef`는 `env[].name`으로 이름을 새로 지으므로 `status-message` 같은 키도 `INITIAL_STATUS_MESSAGE`로 받을 수 있습니다. `envFrom`은 키 이름을 그대로 쓰니 ConfigMap을 만들 때부터 이름을 맞춰 둬야 합니다.
-
-우선순위도 함께 — envFrom은 리스트라 여러 ConfigMap을 조합할 수 있고, 같은 키가 있으면 **마지막 것이 우선**합니다. envFrom과 env를 함께 쓰면 **env가 우선**합니다 (원본 §3).
-</details>
 
 **점수 (0~5)**: **0** (채점: Claude — 미답. 더불어 Q1 재진술에서 `--from-file` 을 `--from-literal` 자리로 오인)
 
@@ -116,23 +73,6 @@ data:
 (여기에 자기 답 작성)
 ```
 
-<details>
-<summary>정답</summary>
-
-(가) Pod phase는 **`Pending`** — Pod는 스케줄링됩니다 (원본 §6 Q3).
-(나) 참조하는 컨테이너는 **`state.waiting.reason=CreateContainerConfigError`**로 기다립니다 (원본 §3·§6 Q3).
-(다) 같은 Pod의 다른 컨테이너는 **문제가 된 ConfigMap을 참조하지 않는다면 실행될 수 있습니다.** 실습에서 READY가 `1/2`로 나왔습니다 (원본 §5).
-
-```pseudocode
-configmap-required   1/2   CreateContainerConfigError
-independent => running
-required => configmap "does-not-exist" not found
-```
-
-(라) `optional: true`면 ConfigMap이나 키가 없어도 **컨테이너가 실행되고 환경변수만 설정되지 않습니다.** 실습에서 `1/1 Running`이 됐고, 없는 변수를 `printenv`로 조회하니 종료 코드 1이었습니다 (원본 §3·§5).
-
-회차 1에서 막힌 지점은 phase와 waiting reason을 **구분**하는 것이었습니다. 둘은 다른 층위입니다 — phase는 Pod 전체의 생애주기 단계, waiting reason은 개별 컨테이너가 왜 못 뜨는지의 이유입니다.
-</details>
 
 **점수 (0~5)**: **2** (채점: Claude — (다) 다른 컨테이너 정상 실행 정확, (라) 방향 맞음. (가)`Pending`·(나)`CreateContainerConfigError` 명명 미도달 — 회차 1 과 동일 지점. (라) 를 "공백 값"으로 답해 부재와 빈 문자열을 혼동)
 
@@ -147,27 +87,6 @@ required => configmap "does-not-exist" not found
 (여기에 자기 답 작성)
 ```
 
-<details>
-<summary>정답</summary>
-
-원본 §4의 표가 그대로 답입니다.
-
-| 전달 방식 | 실행 중인 Pod에서 ConfigMap 수정 결과 | 새 설정을 적용하는 방법 |
-|---|---|---|
-| 환경변수 | 기존 값 유지 | Pod 롤링 교체 |
-| 일반 ConfigMap 볼륨 | kubelet 동기화 후 파일 갱신 | 애플리케이션이 파일을 다시 읽음 |
-| `subPath` 파일 마운트 | 파일이 갱신되지 않음 | Pod를 새로 생성 |
-
-(가) 환경변수는 **kubelet이 컨테이너 시작 전에 값을 복사**해 실행 환경을 만듭니다. 실행 중인 프로세스의 환경은 ConfigMap과 계속 연결돼 있지 않으므로 원본을 수정해도 바뀌지 않습니다. 통일하려면 `kubectl rollout restart deployment/<이름>`.
-
-여기서 **설정 혼재**가 생깁니다 — 교체 전에 스케일 아웃하거나 장애로 새 Pod가 만들어지면 기존 Pod는 `info`, 새 Pod는 `debug`를 씁니다. 실습에서 그대로 재현됐습니다 (원본 §5).
-
-(나) 일반 볼륨은 kubelet 동기화 후 파일이 바뀝니다. **파드 교체나 컨테이너 재시작 없이 일어나므로 무중단이되 즉시는 아닙니다** — kind v1.35 실측으로 약 56초, 그동안 파드 UID와 `restartCount`는 그대로였습니다 (원본 §4). 다만 애플리케이션이 파일을 다시 읽지 않으면 실제 동작은 이전 설정을 계속 씁니다.
-
-(다) `subPath`는 컨테이너 시작 시 선택한 파일 하나를 고정 마운트하므로 **갱신되지 않습니다.** 실습에서 일반 마운트는 `after`, `subPath`는 `before`였습니다 (원본 §5).
-
-**원문 밖 보충 아님 — 원본 §Spring 관점**: "파일 갱신은 무중단"과 "그 값을 앱이 런타임에 받아들인다"는 별개입니다. `server.port`는 톰캣이 부팅하며 소켓을 bind하므로 파일이 바뀌어도 재기동이 필요하고, 로그 레벨·기능 플래그는 요청마다 다시 읽히므로 무중단 반영됩니다.
-</details>
 
 **점수 (0~5)**: **3** (채점: Claude — (가) 환경변수는 파드 재생성 필요 정확. (나) 파일 갱신은 맞으나 "자동으로 읽힌다"로 앱 재읽기 필요를 놓침. (다) subPath 개념 미보유로 일반 볼륨과 동일하다고 답함 — 회차 1 과 같은 지점)
 
@@ -182,23 +101,6 @@ required => configmap "does-not-exist" not found
 (여기에 자기 답 작성)
 ```
 
-<details>
-<summary>정답</summary>
-
-**원인**: 유효하지 않은 환경변수 이름의 키는 **오류 없이 건너뛰어지고 파드는 정상적으로 뜹니다.** 실패가 조용합니다 (원본 §3).
-
-**확인**: 파드 이벤트의 `InvalidVariableNames`를 봅니다.
-
-```bash
-kubectl describe pod <pod-name> | grep -A2 InvalidVariableNames
-```
-
-**immutable**: 한 번 설정하면 `data`와 `binaryData`를 바꿀 수 없고 `immutable` 필드를 다시 제거할 수도 없습니다. API 서버가 `field is immutable`로 요청을 거부합니다 (원본 §4·§5). 사용자의 실수를 막을 뿐 아니라 kubelet이 변경 감시를 유지할 필요가 없어 API 서버 부하도 줄입니다.
-
-값을 바꾸려면 **새 이름의 ConfigMap을 만들고 Deployment의 참조 이름을 변경해 롤링 업데이트를 일으킵니다.** 운영에서는 `kiada-config-8f3a2b`처럼 내용 해시를 이름에 넣고, Kustomize의 `configMapGenerator`가 이 이름 생성과 참조 변경을 자동화합니다 (원본 §Spring 관점).
-
-삭제도 같은 결이 있습니다 — ConfigMap을 지우면 환경변수로 이미 받은 실행 중 Pod는 계속 돌지만, optional이 아닌 참조를 가진 **새 Pod는 시작하지 못합니다** (원본 §4).
-</details>
 
 **점수 (0~5)**: **1** (채점: Claude — immutable 은 이름 뜻 재진술까지. 새 오브젝트 생성이라는 변경 경로와 envFrom 의 조용한 실패·InvalidVariableNames 이벤트 미도달)
 
@@ -247,3 +149,102 @@ quality ≤ 3인 질문을 `write/08_cloud/book/kubernetes-in-action/_mistakes.m
 - [원본 학습 문서](../../08_cloud/book/kubernetes-in-action/08-02.ConfigMap%EC%9C%BC%EB%A1%9C%20%EC%84%A4%EC%A0%95%20%EB%B6%84%EB%A6%AC%ED%95%98%EA%B8%B0.md)
 - 이전 회차: [회차 1 (2026-07-14)](../2026-07-14/kubernetes-in-action_08-02.review.md)
 - 실습: `study/k8s_in_action/08-configuring-apps/configmap/`
+
+
+## 정답 (자답 후 펼치기)
+
+> 다섯 문항에 *먼저 자답한 뒤* 읽으세요. 자답 없이 먼저 읽으면 학습 효과가 0 입니다.
+> 정답을 문항 옆이 아니라 파일 끝에 모은 것은 Typora 가 raw HTML 접힘을 지원하지 않기 때문입니다 — 접기로는 가려지지 않습니다.
+
+### 정답 1
+
+- `--from-file` — 키는 **1개**, 파일명(`application.env`)이 키가 되고 **파일 내용 전체**가 값이 됩니다.
+- `--from-env-file` — 키는 **3개**, 파일의 각 `KEY=value` 줄이 **별도 엔트리**가 됩니다 (`APP_MODE: practice`, `LOG_LEVEL: info`, `SERVER_PORT: "8080"`).
+
+원본 §2의 dry-run 출력:
+
+```yaml
+# --from-file 결과: 파일명 하나가 키, 파일 전체가 값이 됩니다.
+data:
+  application.yml: |
+    server:
+      port: 8080
+---
+# --from-env-file 결과: 각 KEY=value 줄이 별도 엔트리가 됩니다.
+data:
+  APP_MODE: practice
+  LOG_LEVEL: info
+  SERVER_PORT: "8080"
+```
+
+회차 1에서 이 둘을 "원문이냐 치환이냐"의 차이로 잡았던 것이 오답의 원인이었습니다. **두 방식 모두 값을 치환하지 않습니다** (원본 §6 Q1). 갈리는 것은 치환 여부가 아니라 **키를 몇 개로 쪼개는가**입니다.
+
+곁가지 — `--from-file`에 **디렉터리**를 주면 안의 각 파일이 별도 엔트리가 되고, `key=파일` 형태로 키를 직접 지정할 수도 있습니다. UTF-8이 아닌 바이트가 있으면 kubectl이 `binaryData`에 Base64로 넣습니다 (원본 §2).
+
+### 정답 2
+
+두 필드가 나뉜 이유는 **ConfigMap과 컨테이너 사이의 결합 범위**를 선택하기 위해서입니다 (원본 §3).
+
+| 선택 기준 | configMapKeyRef | envFrom |
+|---|---|---|
+| 가져오는 범위 | 지정한 키 하나 | ConfigMap의 모든 키 |
+| 환경변수 이름 | `env[].name`으로 변경 가능 | ConfigMap 키를 그대로 사용하며 prefix만 추가 가능 |
+| 새 키가 추가될 때 | 매니페스트를 고치기 전에는 안 들어옴 | 매니페스트를 안 고쳐도 들어오지만 **다음에 만들어지는 파드부터** |
+
+`status-message`를 `envFrom`으로 주입하면 **환경변수가 하나도 만들어지지 않습니다.** 대시가 들어간 이름은 유효한 환경변수 이름이 아니기 때문입니다 (원본 §3).
+
+이 제약이 두 필드가 나뉜 이유를 선명하게 합니다 — `configMapKeyRef`는 `env[].name`으로 이름을 새로 지으므로 `status-message` 같은 키도 `INITIAL_STATUS_MESSAGE`로 받을 수 있습니다. `envFrom`은 키 이름을 그대로 쓰니 ConfigMap을 만들 때부터 이름을 맞춰 둬야 합니다.
+
+우선순위도 함께 — envFrom은 리스트라 여러 ConfigMap을 조합할 수 있고, 같은 키가 있으면 **마지막 것이 우선**합니다. envFrom과 env를 함께 쓰면 **env가 우선**합니다 (원본 §3).
+
+### 정답 3
+
+(가) Pod phase는 **`Pending`** — Pod는 스케줄링됩니다 (원본 §6 Q3).
+(나) 참조하는 컨테이너는 **`state.waiting.reason=CreateContainerConfigError`**로 기다립니다 (원본 §3·§6 Q3).
+(다) 같은 Pod의 다른 컨테이너는 **문제가 된 ConfigMap을 참조하지 않는다면 실행될 수 있습니다.** 실습에서 READY가 `1/2`로 나왔습니다 (원본 §5).
+
+```pseudocode
+configmap-required   1/2   CreateContainerConfigError
+independent => running
+required => configmap "does-not-exist" not found
+```
+
+(라) `optional: true`면 ConfigMap이나 키가 없어도 **컨테이너가 실행되고 환경변수만 설정되지 않습니다.** 실습에서 `1/1 Running`이 됐고, 없는 변수를 `printenv`로 조회하니 종료 코드 1이었습니다 (원본 §3·§5).
+
+회차 1에서 막힌 지점은 phase와 waiting reason을 **구분**하는 것이었습니다. 둘은 다른 층위입니다 — phase는 Pod 전체의 생애주기 단계, waiting reason은 개별 컨테이너가 왜 못 뜨는지의 이유입니다.
+
+### 정답 4
+
+원본 §4의 표가 그대로 답입니다.
+
+| 전달 방식 | 실행 중인 Pod에서 ConfigMap 수정 결과 | 새 설정을 적용하는 방법 |
+|---|---|---|
+| 환경변수 | 기존 값 유지 | Pod 롤링 교체 |
+| 일반 ConfigMap 볼륨 | kubelet 동기화 후 파일 갱신 | 애플리케이션이 파일을 다시 읽음 |
+| `subPath` 파일 마운트 | 파일이 갱신되지 않음 | Pod를 새로 생성 |
+
+(가) 환경변수는 **kubelet이 컨테이너 시작 전에 값을 복사**해 실행 환경을 만듭니다. 실행 중인 프로세스의 환경은 ConfigMap과 계속 연결돼 있지 않으므로 원본을 수정해도 바뀌지 않습니다. 통일하려면 `kubectl rollout restart deployment/<이름>`.
+
+여기서 **설정 혼재**가 생깁니다 — 교체 전에 스케일 아웃하거나 장애로 새 Pod가 만들어지면 기존 Pod는 `info`, 새 Pod는 `debug`를 씁니다. 실습에서 그대로 재현됐습니다 (원본 §5).
+
+(나) 일반 볼륨은 kubelet 동기화 후 파일이 바뀝니다. **파드 교체나 컨테이너 재시작 없이 일어나므로 무중단이되 즉시는 아닙니다** — kind v1.35 실측으로 약 56초, 그동안 파드 UID와 `restartCount`는 그대로였습니다 (원본 §4). 다만 애플리케이션이 파일을 다시 읽지 않으면 실제 동작은 이전 설정을 계속 씁니다.
+
+(다) `subPath`는 컨테이너 시작 시 선택한 파일 하나를 고정 마운트하므로 **갱신되지 않습니다.** 실습에서 일반 마운트는 `after`, `subPath`는 `before`였습니다 (원본 §5).
+
+**원문 밖 보충 아님 — 원본 §Spring 관점**: "파일 갱신은 무중단"과 "그 값을 앱이 런타임에 받아들인다"는 별개입니다. `server.port`는 톰캣이 부팅하며 소켓을 bind하므로 파일이 바뀌어도 재기동이 필요하고, 로그 레벨·기능 플래그는 요청마다 다시 읽히므로 무중단 반영됩니다.
+
+### 정답 5
+
+**원인**: 유효하지 않은 환경변수 이름의 키는 **오류 없이 건너뛰어지고 파드는 정상적으로 뜹니다.** 실패가 조용합니다 (원본 §3).
+
+**확인**: 파드 이벤트의 `InvalidVariableNames`를 봅니다.
+
+```bash
+kubectl describe pod <pod-name> | grep -A2 InvalidVariableNames
+```
+
+**immutable**: 한 번 설정하면 `data`와 `binaryData`를 바꿀 수 없고 `immutable` 필드를 다시 제거할 수도 없습니다. API 서버가 `field is immutable`로 요청을 거부합니다 (원본 §4·§5). 사용자의 실수를 막을 뿐 아니라 kubelet이 변경 감시를 유지할 필요가 없어 API 서버 부하도 줄입니다.
+
+값을 바꾸려면 **새 이름의 ConfigMap을 만들고 Deployment의 참조 이름을 변경해 롤링 업데이트를 일으킵니다.** 운영에서는 `kiada-config-8f3a2b`처럼 내용 해시를 이름에 넣고, Kustomize의 `configMapGenerator`가 이 이름 생성과 참조 변경을 자동화합니다 (원본 §Spring 관점).
+
+삭제도 같은 결이 있습니다 — ConfigMap을 지우면 환경변수로 이미 받은 실행 중 Pod는 계속 돌지만, optional이 아닌 참조를 가진 **새 Pod는 시작하지 못합니다** (원본 §4).
