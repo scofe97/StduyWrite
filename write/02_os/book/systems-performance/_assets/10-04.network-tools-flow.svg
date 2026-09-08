@@ -1,39 +1,58 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>네트워크 관측 도구 — 소켓에서 패킷까지</title>
-  <desc>소켓 통계(ss)에서 인터페이스·스택 통계(ip·nstat·sar·nicstat·ethtool), BPF 트레이싱(tcplife·tcptop·tcpretrans·bpftrace), 패킷 캡처(tcpdump·Wireshark)로 깊어지는 도구 흐름.</desc>
-  <defs>
-    <marker id="t1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
-    </marker>
-  </defs>
-  <rect width="760" height="470" fill="#0d0d0d"/>
-  <text x="30" y="40" fill="#e8e4df" font-size="20" font-weight="700">네트워크 관측 도구 흐름</text>
-  <text x="30" y="64" fill="rgb(138,133,128)" font-size="13">소켓 → 인터페이스·스택 → BPF 트레이싱 → 패킷 캡처</text>
-
-  <rect x="40" y="90" width="680" height="56" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
-  <text x="60" y="114" fill="rgb(212,168,83)" font-size="13" font-weight="700">① ss — 소켓 통계의 출발점</text>
-  <text x="60" y="135" fill="#e8e4df" font-size="12">상태·주소·rtt·cwnd · limited 플래그(app/rwnd/sndbuf) · netlink로 효율 조회</text>
-
-  <rect x="40" y="158" width="680" height="56" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.3"/>
-  <text x="60" y="182" fill="rgb(212,168,83)" font-size="13" font-weight="700">② ip · nstat · sar · nicstat · ethtool — 인터페이스·스택</text>
-  <text x="60" y="203" fill="#e8e4df" font-size="12">ip(에러·라우팅) · nstat(SNMP 재전송율) · sar(시계열) · nicstat(USE 사용률·포화) · ethtool(드라이버)</text>
-
-  <rect x="40" y="226" width="680" height="56" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.3"/>
-  <text x="60" y="250" fill="rgb(212,168,83)" font-size="13" font-weight="700">③ tcplife · tcptop · tcpretrans — BPF 연결 트레이싱</text>
-  <text x="60" y="271" fill="#e8e4df" font-size="12">tcplife(수명·상태변화, 상시 가능) · tcptop(누가 많이) · tcpretrans(재전송+TCP 상태)</text>
-
-  <rect x="40" y="294" width="680" height="56" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.3"/>
-  <text x="60" y="318" fill="rgb(212,168,83)" font-size="13" font-weight="700">④ bpftrace — 커스텀 추적</text>
-  <text x="60" y="339" fill="#e8e4df" font-size="12">소켓 층(책임 프로세스 on-CPU) · TCP/패킷 층 · 안정적 tracepoint 우선, kprobe는 보조</text>
-
-  <rect x="40" y="362" width="680" height="60" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
-  <text x="60" y="386" fill="rgb(212,168,83)" font-size="13" font-weight="700">⑤ tcpdump · Wireshark — 패킷 캡처 (마지막 수단)</text>
-  <text x="60" y="407" fill="#e8e4df" font-size="12">패킷 단위 헤더·데이터 · 커널 BPF 필터로 효율화 · 비싸서 짧게만 · Wireshark로 그래픽 검사</text>
-
-  <line x1="730" y1="146" x2="730" y2="156" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#t1)"/>
-  <line x1="730" y1="214" x2="730" y2="224" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#t1)"/>
-  <line x1="730" y1="282" x2="730" y2="292" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#t1)"/>
-  <line x1="730" y1="350" x2="730" y2="360" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#t1)"/>
-
-  <text x="40" y="446" fill="rgb(138,133,128)" font-size="11">전통 통계가 *무엇이* 막히는지 거르면, BPF가 *어떤* 연결·재전송인지 커널 안에서 집계하고, 패킷 캡처는 *마지막* 정밀 검사다.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 952 636" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">관측 도구는 소켓에서 패킷으로 내려간다</title><desc id="dd">무엇을 보는지에 따라 도구가 갈리고, 아래로 갈수록 자세하지만 비싸진다. 패킷 캡처는 가장 아래이자 마지막 수단이다.</desc>
+<rect width="952" height="636" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">SYSTEMS PERFORMANCE · 10-04 §1</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">관측 도구는 소켓에서 패킷으로 내려간다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" fill="#8B98A9">가능하면 위쪽에서 끝내고, 아래로는 필요할 때만 내려갑니다</text>
+<rect x="148" y="116" width="692" height="60" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="128" y="152" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#5E6B7E">01</text>
+<text x="168" y="142" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">소켓</text>
+<text x="168" y="162" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">ss</text>
+<text x="820" y="152" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#5E6B7E">어떤 연결이 무엇에 제약되나</text>
+<rect x="148" y="184" width="692" height="60" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="128" y="220" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#5E6B7E">02</text>
+<text x="168" y="210" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">인터페이스</text>
+<text x="168" y="230" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">ip · nicstat · ethtool</text>
+<text x="820" y="220" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#5E6B7E">에러 · 사용률 · 드라이버 설정</text>
+<rect x="148" y="252" width="692" height="60" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="128" y="288" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#5E6B7E">03</text>
+<text x="168" y="278" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">스택 집계</text>
+<text x="168" y="298" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">nstat · sar</text>
+<text x="820" y="288" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#5E6B7E">재전송율 같은 전체 지표 · 추세</text>
+<rect x="148" y="320" width="692" height="60" rx="8" fill="#F08A5914" stroke="#F08A59" stroke-width="1.2"/>
+<text x="128" y="356" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">04</text>
+<text x="168" y="346" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">연결 이벤트 (BPF)</text>
+<text x="168" y="366" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">tcplife · tcptop · tcpretrans</text>
+<text x="820" y="356" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#F08A59">커널 안에서 집계해 싸다</text>
+<rect x="148" y="388" width="692" height="60" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="128" y="424" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#5E6B7E">05</text>
+<text x="168" y="414" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">커스텀 추적</text>
+<text x="168" y="434" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">bpftrace</text>
+<text x="820" y="424" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#5E6B7E">질문을 직접 짠다</text>
+<rect x="148" y="456" width="692" height="60" rx="8" fill="#E3B34114" stroke="#E3B341" stroke-width="1.2"/>
+<text x="128" y="492" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#E3B341">06</text>
+<text x="168" y="482" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#E3B341">패킷</text>
+<text x="168" y="502" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">tcpdump · Wireshark</text>
+<text x="820" y="492" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#E3B341">가장 자세하고 가장 비싸다</text>
+<text x="40" y="120" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#5E6B7E">싸다</text>
+<path d="M 72 132 L 72 508" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)" stroke-dasharray="4 6"/>
+<text x="32" y="508" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#5E6B7E">비싸다</text>
+<text x="32" y="560" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">ss·ip·nstat 은 iproute2 라 최신 커널 기능을 가장 잘 따라갑니다. ifconfig·netstat 은 deprecated 입니다</text>
+<line x1="12" y1="588" x2="904" y2="588" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="610" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="599" width="14" height="14" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="611" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">커널 안 집계로 싼 층</text>
+<rect x="328" y="599" width="14" height="14" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="350" y="611" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">마지막 수단</text>
+<rect x="466" y="599" width="14" height="14" rx="2" fill="#8B98A922" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="488" y="611" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">전통 통계</text>
 </svg>
