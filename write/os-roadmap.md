@@ -5,8 +5,9 @@ status: final
 related:
   - README.md
   - network-roadmap.md
+  - go-roadmap.md
   - 02_os/networking/roadmap.md
-updated: 2026-09-05
+updated: 2026-09-06
 ---
 
 # DevOps 엔지니어를 위한 OS 학습 로드맵
@@ -14,7 +15,7 @@ updated: 2026-09-05
 
 ## 이 순서를 잡은 기준
 
-> OS 를 아래에서 위로 배우면 커널 자료구조에서 지쳐 정작 매일 쓰는 것에 못 닿습니다. 이 로드맵은 반대로 갑니다. **손이 매일 만지는 것에서 시작해 필요해질 때 한 층씩 내려갑니다.**
+> OS 를 아래에서 위로 배우면 커널 자료구조에서 지쳐 정작 매일 쓰는 것에 못 닿습니다. 이 로드맵은 반대로 갑니다 — **손이 매일 만지는 것에서 시작해 필요해질 때 한 층씩 내려갑니다.**
 
 ![척추에 국면 다섯과 단계 열여섯을 걸고 개념을 좌우로 뻗은 OS 학습 로드맵](_assets/os-roadmap.svg)
 
@@ -27,6 +28,14 @@ updated: 2026-09-05
 **네트워크 스택은 이 로드맵에 넣지 않았습니다.** [`network-roadmap.md`](network-roadmap.md) 가 그 축을 통째로 맡고 있어서 중복입니다. `How Linux Works` 9장과 `Learning Modern Linux` 7장도 같은 이유로 뺐습니다.
 
 단계마다 표를 둘 둡니다. 하나는 책이 다루는 개념이고 다른 하나는 **책 밖 키워드**입니다. 실선과 점선 박스가 도식에서 그 둘을 가릅니다.
+
+배지는 셋입니다. **필수**는 빼면 뒤가 막히는 것, **추천**은 빼도 뒤가 굴러가지만 손해가 큰 것, **선택**은 목표가 생겼을 때만 여는 것입니다. 필수는 2·3·4·5·7 단계 다섯입니다. 부팅에서 자원 격리까지 한 줄로 이어지는 구간이 그것입니다.
+
+절단선 아래 10~12단계는 확장이라 전부 추천이고 13~15단계는 선택입니다.
+
+배지가 필수인 자리는 뒤가 실제로 막히기 때문입니다. 마운트를 모르면 5단계에서 컨테이너 이미지 레이어가 설명되지 않고, cgroup 과 namespace 를 모르면 6단계의 격리 파괴 시나리오가 남의 말로 남습니다. 7단계의 USE 방법론을 건너뛰고 8·9단계로 가면 도구 목록만 손에 남습니다.
+
+읽는 축과 별개로 손으로 확인하는 축이 하나 더 있는데, 그것은 아래 실습 절이 맡습니다. 책은 찍힌 시점에 멈춰 있고 커널과 배포판은 그 뒤로도 움직이므로, 책 밖 키워드의 기본값은 공식 문서에서 다시 확인하고 표는 무엇을 검색할지 정하는 용도로만 씁니다.
 
 
 
@@ -50,7 +59,57 @@ updated: 2026-09-05
 
 공식 문서는 세 곳을 씁니다. [cgroup v2](https://docs.kernel.org/admin-guide/cgroup-v2.html) 가 5단계의 정본이고, [systemd man](https://www.freedesktop.org/software/systemd/man/latest/systemd.html) 이 3단계를, [`proc(5)`](https://man7.org/linux/man-pages/man5/proc.5.html) 가 4단계의 `/proc` 읽기를 맡습니다.
 
-낡음 기준은 앞선 로드맵과 같습니다. 도구와 배포판처럼 빨리 바뀌는 축은 5년을 넘기면 공식 문서로 대신하고, OS 이론처럼 느리게 바뀌는 축은 오래돼도 남깁니다. Operating System Concepts 9판이 2012년이라 그 예외에 해당하는데, 10판이 2018년에 나왔으니 구할 수 있으면 그쪽을 봅니다. Container Security 도 Drive 에 있는 것은 2020년 1판이고 2025년에 2판이 나왔습니다.
+
+
+## 낡음 점검
+
+> 책은 찍힌 시점에 멈춥니다. 낡음 기준은 앞선 로드맵과 같습니다 — 도구와 배포판처럼 빨리 바뀌는 축은 5년을 넘기면 공식 문서로 대신하고, OS 이론처럼 느리게 바뀌는 축은 오래돼도 남깁니다.
+
+이 로드맵은 앞선 둘과 달리 낡음을 이유로 뺀 자료가 없습니다. 대신 조건을 붙여 남긴 자리가 둘이고, 그 조건을 모르고 읽으면 지금 안 맞는 내용을 사실로 가져가게 됩니다.
+
+| 자료 | 출간 | 조치 |
+|---|:---:|---|
+| [minzkn 리눅스 커널 정리](https://www.minzkn.com/linuxkernel/index.html) | 2026-09-02 갱신 | 목록에서 가장 최신. 커널 6.x~7.2 기준 |
+| Learning eBPF | 2023 | 그대로 |
+| Efficient Linux at the Command Line · Learning Modern Linux | 2022 | 그대로 |
+| How Linux Works 3판 | 2021 | 그대로. 9장은 네트워크라 이 로드맵에서 뺌 |
+| Systems Performance 2판 | 2020 | 그대로. 느리게 바뀌는 방법론 축 |
+| The Linux Command Line 3판 | 3판 | 그대로. [7th Internet Edition](https://linuxcommand.org/tlcl.php) 이 무료 PDF |
+| **Container Security** | **2020** | **조건부 유지.** Drive 는 1판이고 2025년에 2판이 나옴 |
+| **Operating System Concepts 9판** | **2012** | **조건부 유지.** 느린 축의 예외. 10판(2018) 을 구하면 그쪽 |
+
+Operating System Concepts 9판이 2012년이라 그 예외에 해당하는데, 10판이 2018년에 나왔으니 구할 수 있으면 그쪽을 봅니다. Container Security 도 Drive 에 있는 것은 2020년 1판이고 2025년에 2판이 나왔습니다.
+
+**장 번호가 판마다 다릅니다.** 이 문서의 5·6단계가 적은 장 번호는 Drive 에 있는 1판 기준이고, 저자가 운영하는 [예제 저장소](https://github.com/lizrice/container-security)는 2판 기준으로 갱신돼 있습니다. 저장소에서 코드를 찾을 때는 디렉토리 번호가 아니라 주제로 짚습니다.
+
+
+
+## 손으로 확인하는 실습
+
+> 읽기만 하면 남의 말을 옮기게 됩니다. 다만 이건 책과 다른 축이라 도식에서는 뺐고, 아래 표가 맡습니다.
+
+기준은 **그 자리를 손으로 확인할 검증된 자료가 있는가** 하나입니다. 출처는 셋입니다. 저자가 올린 예제 저장소, 커널과 도구의 공식 문서, 그리고 무료로 전문이 공개된 자료입니다. 비어 있는 단계는 실습이 필요 없어서가 아니라 확인한 자료를 못 찾아서이고, 지어낸 출처를 채우지 않았습니다. 아래 링크는 2026-09-06 에 직접 열어 응답을 확인했습니다.
+
+| 출처 | 어느 자리 | 무엇 |
+|---|---|---|
+| [linuxcommand.org](https://linuxcommand.org/tlcl.php) | 0 | 책의 예제 스크립트 내려받기. 7th Internet Edition PDF 도 같은 자리에 |
+| [efficientlinux.com/examples](https://efficientlinux.com/examples) | 1 | 저자가 올린 예제 파일 |
+| [lizrice/container-security](https://github.com/lizrice/container-security) | 5·6 | 장별 코드와 macOS 용 `lima.yaml` |
+| [lizrice/containers-from-scratch](https://github.com/lizrice/containers-from-scratch) | 5 | 몇십 줄 Go 로 namespace 와 cgroup 을 직접 걸어 컨테이너를 만드는 데모 |
+| [cgroup v2 공식 문서](https://docs.kernel.org/admin-guide/cgroup-v2.html) | 5 | 컨트롤러 인터페이스 파일을 직접 열어 값을 써 보기 |
+| [Linux Performance](https://www.brendangregg.com/linuxperf.html) | 7·8 | 저자가 정리한 도구 지도. 어느 도구가 어느 층을 읽는지 한 장으로 |
+| [iovisor/bcc](https://github.com/iovisor/bcc) · [bpftrace](https://github.com/bpftrace/bpftrace) | 9 | 책이 쓰는 추적 도구의 현행 소스와 원라이너 예제 |
+| [brendangregg/perf-tools](https://github.com/brendangregg/perf-tools) · [FlameGraph](https://github.com/brendangregg/FlameGraph) | 9 | Ftrace 기반 도구 모음과 플레임 그래프 생성기 |
+| [lizrice/learning-ebpf](https://github.com/lizrice/learning-ebpf) | 10 | 장별 eBPF 프로그램과 Lima 설정 `learning-ebpf.yaml` |
+| [Linux Kernel Teaching](https://linux-kernel-labs.github.io/) | 11·12·13 | QEMU 위에서 커널 모듈·문자 디바이스·지연 작업을 직접 짓는 실습 |
+| [os-book.com/OS10](https://www.os-book.com/OS10/) | 14 | 연습문제 해답, 리눅스 가상머신, C·Java 소스 |
+| [Google SRE 도서](https://sre.google/books/) | 15 | 1판과 2판 전문이 무료로 공개돼 있습니다 |
+
+2~4단계 자리는 비어 있습니다. How Linux Works 는 예제 저장소가 없고, 이 구간의 실습 대상은 손에 있는 리눅스 시스템 자체입니다. 부트 로그를 `journalctl -b` 로 되짚고 유닛 의존을 `systemd-analyze critical-chain` 으로 펼쳐 보는 일에 별도 자료가 필요하지 않습니다.
+
+**환경은 Lima 로 세웁니다.** 이 로드맵의 실습은 대부분 리눅스 커널이 있어야 도는데 Apple Silicon 맥에는 그것이 없습니다. Liz Rice 의 두 저장소가 그 문제를 미리 풀어 두었습니다. `container-security` 의 `lima.yaml` 은 저자가 macOS 에서 Ubuntu 24.04 로 검증한 설정이고, `learning-ebpf` 의 `learning-ebpf.yaml` 은 빌드에 필요한 패키지를 미리 넣은 설정입니다.
+
+**저장소마다 걸리는 조건이 다릅니다.** `learning-ebpf` 는 libbpf 를 서브모듈로 두므로 `git clone --recurse-submodules` 로 받아야 하고, 저장소가 밝힌 검증 환경은 커널 5.15 의 Ubuntu 22.04 이며 장마다 요구하는 최소 커널 버전이 다릅니다. Linux Kernel Teaching 은 커널 5.10 기준의 QEMU 실습이라 minzkn 정리가 다루는 6.x 와 세대가 갈리므로, 최신 구조는 minzkn 으로 읽고 이쪽은 손으로 짓는 절차에만 씁니다.
 
 
 
@@ -58,7 +117,7 @@ updated: 2026-09-05
 
 > 셸이 느리면 그 뒤의 모든 진단이 느립니다. 도구를 손에 붙이는 구간입니다.
 
-### 0단계 · The Linux Command Line 3판 1~11장
+### 0단계 · The Linux Command Line 3판 1~11장  `추천`
 
 DevOps 의 하루가 여기서 시작합니다. 이미 쓰던 명령이라도 리다이렉션과 권한, 프로세스 제어를 이유와 함께 다시 세우면 뒤 단계의 진단이 빨라집니다. 12장 이후의 vi·패키지 관리·스크립트는 필요할 때 찾아 읽습니다.
 
@@ -74,7 +133,7 @@ DevOps 의 하루가 여기서 시작합니다. 이미 쓰던 명령이라도 �
 | `set -euo pipefail` | 스크립트가 조용히 실패하지 않게 하는 최소 장치 |
 | man 절 번호 | `man 2 open` 과 `man 3 printf` 가 다른 문서인 이유 |
 
-### 1단계 · Efficient Linux at the Command Line 1~9장
+### 1단계 · Efficient Linux at the Command Line 1~9장  `추천`
 
 같은 일을 절반의 타이핑으로 하는 법입니다. 명령을 조합하는 방식이 여섯 가지로 정리돼 있어서, 파이프 하나로 때우던 습관이 여기서 넓어집니다.
 
@@ -96,7 +155,7 @@ DevOps 의 하루가 여기서 시작합니다. 이미 쓰던 명령이라도 �
 
 > 서버가 뜨고 서비스가 도는 경로를 순서대로 훑습니다. 여기를 알면 "왜 안 떴는가"의 절반이 풀립니다.
 
-### 2단계 · How Linux Works 3판 1~4장
+### 2단계 · How Linux Works 3판 1~4장  `필수`
 
 디스크가 어떻게 파일시스템이 되고 그것이 어디에 붙는지가 이 구간입니다. 컨테이너 이미지가 레이어로 쌓이는 것도, 볼륨이 마운트되는 것도 결국 여기 위에서 벌어집니다.
 
@@ -112,7 +171,7 @@ DevOps 의 하루가 여기서 시작합니다. 이미 쓰던 명령이라도 �
 | overlayfs 와 union mount | 컨테이너 이미지 레이어의 실체 |
 | LVM 과 스냅샷 | 볼륨을 늘리고 되돌리는 운영 수단 |
 
-### 3단계 · How Linux Works 3판 5~7장
+### 3단계 · How Linux Works 3판 5~7장  `필수`
 
 부트로더에서 systemd 까지 이어지는 기동 경로입니다. 서비스가 안 뜨는 장애의 대부분이 이 구간의 의존 관계와 로그에서 풀립니다.
 
@@ -128,7 +187,7 @@ DevOps 의 하루가 여기서 시작합니다. 이미 쓰던 명령이라도 �
 | systemd 공식 man | 유닛 옵션의 정본. 책보다 훨씬 상세합니다 |
 | `journalctl` 로 장애 추적 | 부팅 실패를 시간축으로 되짚기 |
 
-### 4단계 · How Linux Works 8장과 Learning Modern Linux 4~5장
+### 4단계 · How Linux Works 8장과 Learning Modern Linux 4~5장  `필수`
 
 프로세스가 자원을 얼마나 쓰는지 보는 법과, 그것을 제한하는 첫 수단입니다. 다음 국면의 cgroup 으로 넘어가는 다리입니다.
 
@@ -150,7 +209,7 @@ DevOps 의 하루가 여기서 시작합니다. 이미 쓰던 명령이라도 �
 
 > 컨테이너가 서는 바닥입니다. 이 국면을 모르면 Kubernetes 의 자원 설정이 주문이 됩니다.
 
-### 5단계 · Container Security 2~4장
+### 5단계 · Container Security 2~4장  `필수`
 
 컨테이너는 하나의 기술이 아니라 커널 프리미티브 셋의 조합입니다. namespace 가 보이는 것을 가르고 cgroup 이 쓸 수 있는 양을 가릅니다. capability 는 할 수 있는 일을 가릅니다.
 
@@ -168,7 +227,7 @@ DevOps 의 하루가 여기서 시작합니다. 이미 쓰던 명령이라도 �
 | cgroup v2 공식 문서 | 컨트롤러와 인터페이스 파일의 정본 |
 | seccomp 프로파일 | 허용할 시스템 콜을 목록으로 좁히기 |
 
-### 6단계 · Learning Modern Linux 2·6장과 Container Security 5·8·9장
+### 6단계 · Learning Modern Linux 2·6장과 Container Security 5·8·9장  `추천`
 
 앞 단계가 프리미티브라면 여기는 그것들이 런타임으로 조립된 모습과, 그 조립이 깨지는 조건입니다. 격리를 깨뜨리는 장을 함께 읽어야 무엇을 막아야 하는지가 손에 잡힙니다.
 
@@ -190,7 +249,7 @@ DevOps 의 하루가 여기서 시작합니다. 이미 쓰던 명령이라도 �
 
 > "느리다"는 신고를 수치로 바꾸는 구간입니다. DevOps 로서 가장 자주 요구받는 능력입니다.
 
-### 7단계 · Systems Performance 2판 2~4장
+### 7단계 · Systems Performance 2판 2~4장  `필수`
 
 도구부터 배우면 도구 목록만 남습니다. 방법론을 먼저 세우면 어떤 도구를 왜 쓰는지가 정해집니다. USE 방법론은 자원마다 사용률·포화·에러를 보는 절차라, 처음 보는 시스템에서도 순서가 생깁니다.
 
@@ -206,7 +265,7 @@ DevOps 의 하루가 여기서 시작합니다. 이미 쓰던 명령이라도 �
 | 부하 평균을 오해하지 않기 | load average 가 실제로 세는 것 |
 | 관측의 관측 | 도구 자체가 만드는 오버헤드 |
 
-### 8단계 · Systems Performance 2판 6~9장
+### 8단계 · Systems Performance 2판 6~9장  `추천`
 
 자원 축을 하나씩 내려갑니다. 각 장이 배경, 아키텍처, 방법론, 관측 도구 순서로 같은 골격을 반복해서 훑기 좋습니다.
 
@@ -222,7 +281,7 @@ DevOps 의 하루가 여기서 시작합니다. 이미 쓰던 명령이라도 �
 | 압박 지표 PSI | 자원이 부족해지는 순간을 수치로 |
 | cgroup 별 자원 통계 | 컨테이너 단위로 같은 축을 보기 |
 
-### 9단계 · Systems Performance 2판 13~15장
+### 9단계 · Systems Performance 2판 13~15장  `추천`
 
 여기서부터 커널 안을 봅니다. `perf` 로 프로파일을 뜨고 Ftrace 로 커널 경로를 추적하고 BPF 로 원하는 것만 집습니다. 10단계의 eBPF 로 자연스럽게 이어집니다.
 
@@ -243,7 +302,7 @@ DevOps 의 하루가 여기서 시작합니다. 이미 쓰던 명령이라도 �
 
 > 여기부터 확장입니다. DevOps 로서 꼭 필요하지는 않지만, 앞의 아홉 단계에서 만난 것들이 왜 그렇게 동작하는지가 여기서 설명됩니다.
 
-### 10단계 · Learning eBPF 1~3·6·7·9장
+### 10단계 · Learning eBPF 1~3·6·7·9장  `추천`
 
 9단계에서 도구로 쓴 BPF 를 원리로 다시 봅니다. verifier 가 왜 그렇게 까다로운지, 훅이 어디에 붙는지를 알면 남이 만든 도구를 고르는 눈이 생깁니다.
 
@@ -259,7 +318,7 @@ DevOps 의 하루가 여기서 시작합니다. 이미 쓰던 명령이라도 �
 | CO-RE 와 BTF | 커널 버전이 달라도 같은 바이너리가 도는 이유 |
 | `bpftool` | 올라간 프로그램과 맵을 직접 들여다보기 |
 
-### 11단계 · minzkn 리눅스 커널 정리 1~5절
+### 11단계 · minzkn 리눅스 커널 정리 1~5절  `추천`
 
 여기서 한국어 자료로 갈아탑니다. 커널 6.x~7.2 기준으로 갱신되고 있어서, 2020년 전후에 나온 책들이 담지 못한 최신 구조가 들어 있습니다. 빌드 환경과 모듈로 시작해 프로세스와 메모리 관리까지 갑니다.
 
@@ -275,7 +334,7 @@ DevOps 의 하루가 여기서 시작합니다. 이미 쓰던 명령이라도 �
 | EEVDF 스케줄러 | CFS 를 대체한 최신 스케줄러 |
 | TLB 와 페이지 테이블 | 주소 변환이 비용이 되는 지점 |
 
-### 12단계 · minzkn 리눅스 커널 정리 6~9절
+### 12단계 · minzkn 리눅스 커널 정리 6~9절  `추천`
 
 인터럽트와 동기화, 파일시스템과 네트워크 스택입니다. 앞에서 도구로 본 지연과 경합이 커널 안에서 어떤 구조로 생기는지가 여기서 풀립니다.
 
@@ -297,7 +356,7 @@ DevOps 의 하루가 여기서 시작합니다. 이미 쓰던 명령이라도 �
 
 > 목표가 생겼을 때만 엽니다. 순서대로 읽을 이유는 없습니다.
 
-### 13단계 · minzkn 리눅스 커널 정리 10~13절
+### 13단계 · minzkn 리눅스 커널 정리 10~13절  `선택`
 
 스토리지와 가상화, 보안과 디버깅입니다. 컨테이너 런타임을 직접 다루거나 커널 크래시를 분석할 일이 생기면 엽니다.
 
@@ -313,7 +372,7 @@ DevOps 의 하루가 여기서 시작합니다. 이미 쓰던 명령이라도 �
 | Device Mapper | LVM 과 컨테이너 스토리지가 딛는 층 |
 | TPM 과 IMA/EVM | 부팅부터 신뢰를 잇는 장치 |
 
-### 14단계 · Operating System Concepts 3~9장
+### 14단계 · Operating System Concepts 3~9장  `선택`
 
 이론 축입니다. 앞에서 리눅스로만 본 것들을 운영체제 일반의 용어로 다시 정리합니다. 면접이나 설계 논의에서 쓰는 어휘가 여기서 나옵니다.
 
@@ -331,7 +390,7 @@ Drive 에 있는 것은 2012년 9판이라 이 목록에서 가장 오래됐습�
 | 10판(2018) | 구할 수 있으면 9판 대신 |
 | 리눅스 구현과 대조 | 이론이 리눅스에서 어떻게 구현됐는지 짝지어 보기 |
 
-### 15단계 · Learning Modern Linux 8·9장과 SRE 2판
+### 15단계 · Learning Modern Linux 8·9장과 SRE 2판  `선택`
 
 OS 를 벗어나 운영 실무로 넓히는 자리입니다. 관측 가능성과 커널 튜닝을 지나 신뢰성 공학으로 갑니다.
 
@@ -348,18 +407,41 @@ OS 를 벗어나 운영 실무로 넓히는 자리입니다. 관측 가능성과
 
 
 
-## 참조서와 이웃
+## 로드맵에 넣지 않은 것
 
-> 단계에 넣지 않았지만 옆에 두는 자료입니다.
+> 단계에 넣지 않은 자료에도 이유가 있어서 어디에 쓸지를 적어 둡니다.
 
-| 자료 | 언제 여는가 |
+### 참조서 · 통독하지 않고 막힐 때만 엽니다
+
+같은 책의 안 읽는 장들입니다. 단계에 넣지 않은 이유는 분량입니다. 앞에서 끝까지 읽으면 로드맵이 두 배가 되는데, 정작 필요한 것은 특정 장 하나일 때가 많습니다.
+
+| 자료 | 열 장면 |
 |---|---|
 | The Linux Command Line 3판 12~38장 | vi, 패키지 관리, 정규식, 셸 스크립팅이 필요할 때 |
 | Efficient Linux at the Command Line 10~11장 | 키보드 효율과 시간 절약 도구 |
 | How Linux Works 3판 11~17장 | 셸 스크립트, 사용자 환경, 컴파일, 가상화 |
 | Systems Performance 2판 11~12장 | 클라우드 환경의 성능과 벤치마킹 |
+
+### 네트워크 로드맵이 가져간 장
+
+같은 책의 장인데 이 로드맵이 아니라 [`network-roadmap.md`](network-roadmap.md) 에 서 있습니다. 여기서 안 보인다고 안 읽는 것이 아니라 저쪽 순서를 따라 읽습니다.
+
+| 장 | 저쪽에서의 자리 |
+|---|---|
+| How Linux Works 3판 9·10장 | 네트워크 설정과 응용. 참조서 |
+| Learning Modern Linux 7장 | 네트워크 네임스페이스. 바닥 국면 |
+| Systems Performance 2판 10장 | 네트워크 성능 방법론. 자리가 겹치는 책 |
+| Container Security 10·11장 | 컨테이너 네트워크 보안과 TLS. 운영과 신뢰 국면 |
+
+### 이웃 주제
+
+OS 요소를 직접 채우지는 않지만 옆에서 만나는 자료입니다.
+
+| 자료 | 무엇을 보태는가 |
+|---|---|
 | Fundamentals of DevOps and Software Delivery | OS 가 아니라 배포·CI/CD·인프라 코드 축 |
 | Learning DevSecOps | 파이프라인에 보안을 끼우는 축 |
+| [Go 학습 로드맵](go-roadmap.md) | 이 로드맵의 도구를 직접 짓는 쪽. 11단계 이후가 그 자리 |
 
 
 
