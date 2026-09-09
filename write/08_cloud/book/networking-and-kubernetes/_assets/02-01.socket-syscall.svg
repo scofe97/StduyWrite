@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 452" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+</defs>
+<title id="dt">net.Listen 한 줄이 커널에 남기는 세 가지</title><desc id="dd">net.Listen 한 줄이 socket·bind·listen 세 syscall로 펼쳐지고, 각각 파일 디스크립터·포트 예약·accept 큐를 커널에 남긴다. 그리고 각 객체가 어떤 실무 문제로 이어지는지 보인다.</desc>
+<rect width="1000" height="452" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">ONE LINE → THREE SYSCALLS → KERNEL OBJECTS</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">한 줄 코드가 커널에 남기는 세 가지</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">내가 쓰는 한 줄 → 커널에 건 세 부탁 → 각 부탁이 남기는 것 → 그게 부르는 실무 문제</text>
+
+<!-- 내 코드 한 줄 -->
+<rect x="24" y="92" width="952" height="52" rx="8" fill="#161B22" stroke="#F08A59" stroke-width="1.4"/>
+<text x="40" y="114" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">ln, _ := net.Listen("tcp", ":8080")</text>
+<text x="40" y="132" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">내가 쓰는 코드는 이 한 줄뿐 — 아래 세 부탁은 Go 런타임이 커널에 대신 넣는다</text>
+
+<!-- 펼쳐지는 화살표 -->
+<path d="M 200 144 L 164 168" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<path d="M 460 144 L 448 168" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<path d="M 720 144 L 732 168" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+
+<!-- syscall 행 -->
+<rect x="40" y="172" width="280" height="60" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="180" y="198" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">socket()</text>
+<text x="180" y="218" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" fill="#8B98A9">AF_INET6 · SOCK_STREAM</text>
+
+<rect x="360" y="172" width="280" height="60" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="500" y="198" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">bind()</text>
+<text x="500" y="218" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" fill="#8B98A9">htons(8080) · [::]</text>
+
+<rect x="680" y="172" width="280" height="60" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="820" y="198" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">listen()</text>
+<text x="820" y="218" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" fill="#8B98A9">두 번째 인자 = 백로그</text>
+
+<!-- syscall → 객체 화살표 + 동사 -->
+<path d="M 180 232 L 180 266" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="192" y="254" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#5E6B7E">할당</text>
+<path d="M 500 232 L 500 266" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="512" y="254" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#5E6B7E">예약</text>
+<path d="M 820 232 L 820 266" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="832" y="254" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#5E6B7E">생성</text>
+
+<!-- 커널 객체 행 -->
+<rect x="40" y="270" width="280" height="72" rx="6" fill="#161B2200" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="180" y="296" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">파일 디스크립터 (fd)</text>
+<text x="180" y="316" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#8B98A9">연결을 파일로 다루는 번호표</text>
+<text x="180" y="332" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#5E6B7E">0·1·2 다음 번호</text>
+
+<rect x="360" y="270" width="280" height="72" rx="6" fill="#161B2200" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="500" y="296" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">포트 8080 예약</text>
+<text x="500" y="316" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#8B98A9">와일드카드 주소에 묶임</text>
+<text x="500" y="332" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#5E6B7E">v4·v6 함께 수신</text>
+
+<rect x="680" y="270" width="280" height="72" rx="6" fill="#161B2200" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="820" y="296" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">accept 큐</text>
+<text x="820" y="316" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#8B98A9">수립됐지만 아직 안 받은 연결</text>
+<text x="820" y="332" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#5E6B7E">칸 수 = somaxconn</text>
+
+<!-- 객체 → 실무 문제 -->
+<text x="40" y="366" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#E3B341">↳ 같은 포트에 두 번 bind → "Address already in use"</text>
+<text x="680" y="366" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#E3B341">↳ 넘치면 거절이 아니라 조용한 drop → 접속 지연</text>
+
+<!-- 범례 -->
+<line x1="12" y1="404" x2="976" y2="404" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="424" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" fill="#5E6B7E">LEGEND</text>
+<rect x="90" y="414" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="112" y="424" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#8B98A9">내 코드</text>
+<rect x="200" y="414" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="222" y="424" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#8B98A9">syscall (커널에 건 부탁)</text>
+<text x="430" y="424" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#E3B341">노랑 = 그 자리에서 터지는 실무 문제</text>
+</svg>

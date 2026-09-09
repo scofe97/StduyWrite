@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+</defs>
+<title id="dt">확률은 새 연결에만 걸린다</title><desc id="dd">기존 연결은 확률 규칙을 다시 지나지 않으므로 살아남은 Pod 에 그대로 남고, 끊겨서 재수립된 연결만 규칙을 지나 나뉘기 때문에 롤링 업데이트 뒤 트래픽이 한쪽으로 쏠린다.</desc>
+<rect width="1000" height="640" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">iptables MODE · WHY LONG-LIVED CONNECTIONS SKEW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">확률은 새 연결에만 걸린다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">기존 연결은 규칙을 다시 지나지 않는다. 그래서 살아남은 Pod 의 몫이 그대로 얹힌 채로 새 몫까지 받는다</text>
+
+<rect x="32" y="120" width="150" height="404" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="107" y="308" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">클라이언트</text>
+<text x="107" y="332" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">gRPC 연결 100개</text>
+
+<text x="210" y="138" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="600" fill="#5E6B7E">1 · 업데이트 전</text>
+<rect x="230" y="148" width="340" height="40" rx="5" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="400" y="173" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#6A95D8">Pod X · 연결 50</text>
+<rect x="590" y="148" width="340" height="40" rx="5" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="760" y="173" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#6A95D8">Pod Y · 연결 50</text>
+<line x1="186" y1="168" x2="224" y2="168" stroke="#6A95D8" stroke-width="1.2" marker-end="url(#info)"/>
+
+<text x="210" y="228" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="600" fill="#F08A59">2 · 롤링 업데이트</text>
+<rect x="230" y="238" width="340" height="40" rx="5" fill="#F0616D12" stroke="#F0616D" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="400" y="263" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#F0616D">Pod X 종료 · 연결 50 이 끊긴다</text>
+<rect x="590" y="238" width="340" height="40" rx="5" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="760" y="263" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#6A95D8">Pod Y · 연결 50 은 그대로</text>
+
+<line x1="400" y1="282" x2="400" y2="316" stroke="#F0616D" stroke-width="1.2" marker-end="url(#bad)"/>
+<text x="412" y="304" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#F0616D">끊긴 50 이 다시 붙는다</text>
+
+<rect x="230" y="320" width="340" height="52" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4"/>
+<text x="400" y="342" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">확률 규칙 · 새 연결만 여기를 지난다</text>
+<text x="400" y="362" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" fill="#8B98A9">KUBE-SVC · 남은 백엔드 둘로 반씩</text>
+
+<line x1="760" y1="282" x2="760" y2="418" stroke="#6A95D8" stroke-width="1.2" stroke-dasharray="4 4"/>
+<line x1="760" y1="418" x2="640" y2="454" stroke="#6A95D8" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#info)"/>
+<text x="772" y="372" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#6A95D8">기존 50 은 규칙을 안 지난다</text>
+
+<line x1="330" y1="376" x2="420" y2="454" stroke="#F08A59" stroke-width="1.2" marker-end="url(#acc)"/>
+<text x="286" y="416" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#F08A59">새 연결 25</text>
+<line x1="500" y1="376" x2="838" y2="454" stroke="#F08A59" stroke-width="1.2" marker-end="url(#acc)"/>
+<text x="600" y="410" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#F08A59">새 연결 25</text>
+
+<text x="230" y="450" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="600" fill="#F0616D">3 · 업데이트 후</text>
+<rect x="230" y="460" width="525" height="46" rx="5" fill="#F0616D12" stroke="#F0616D" stroke-width="1.4"/>
+<text x="492" y="489" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F0616D">Pod Y · 기존 50 + 새 25 = 75</text>
+<rect x="770" y="460" width="175" height="46" rx="5" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="857" y="489" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#8B98A9">Pod Z · 25</text>
+<text x="230" y="524" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#5E6B7E">막대 길이가 연결 수다. 확률은 균등했는데 결과는 3 대 1 이다</text>
+
+<text x="36" y="566" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#8B98A9">쏠림을 만든 것은 확률이 아니라 기존 연결이 규칙을 건너뛴다는 성질이다. IPVS 로 바꿔도 같은 이유로 남는다</text>
+<line x1="12" y1="590" x2="952" y2="590" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="614" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="604" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="614" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#8B98A9">규칙을 지나지 않는 기존 연결</text>
+<rect x="320" y="604" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="342" y="614" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#8B98A9">규칙을 지나는 새 연결</text>
+<rect x="520" y="604" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="542" y="614" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#8B98A9">쏠린 결과</text>
+</svg>

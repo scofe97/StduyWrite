@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" width="100%" role="img" aria-labelledby="dt dd">
+<title id="dt">kube-proxy 모드 다섯은 무엇으로 찾느냐로 갈린다</title><desc id="dd">userspace 는 제거됐고 iptables 가 기본이며 IPVS 는 해시, nftables 는 1.33 GA 후계, kernelspace 는 Windows 전용이다.</desc>
+<rect width="1000" height="520" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBE-PROXY · FIVE MODES · HOW EACH ONE LOOKS UP</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">모드 다섯은 백엔드를 무엇으로 찾느냐로 갈린다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">책은 넷으로 적고 "전부 iptables 에 의존"이라 했지만 지금은 다섯이고 그중 둘은 iptables 를 쓰지 않는다</text>
+
+<text x="112" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">모드</text>
+<text x="366" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">무엇으로 찾나</text>
+<text x="640" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">지금 상태</text>
+<text x="866" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">iptables 를 쓰나</text>
+
+<rect x="32" y="140" width="160" height="58" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="112" y="175" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" fill="#5E6B7E">userspace</text>
+<rect x="204" y="140" width="324" height="58" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="366" y="175" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#5E6B7E">자체 프로세스가 프록시. 패킷이 유저 공간을 왕복</text>
+<rect x="540" y="140" width="200" height="58" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.4"/>
+<text x="640" y="175" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F0616D">1.26 에서 제거됨</text>
+<rect x="752" y="140" width="216" height="58" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="860" y="175" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#5E6B7E">썼다</text>
+
+<rect x="32" y="212" width="160" height="58" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.4"/>
+<text x="112" y="247" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">iptables</text>
+<rect x="204" y="212" width="324" height="58" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="366" y="240" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#8B98A9">규칙을 앞에서부터 순서대로 평가</text>
+<text x="366" y="260" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#5E6B7E">확률 규칙으로 백엔드를 고른다</text>
+<rect x="540" y="212" width="200" height="58" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.4"/>
+<text x="640" y="247" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">기본값 · 최다 사용</text>
+<rect x="752" y="212" width="216" height="58" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="860" y="247" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#8B98A9">쓴다</text>
+
+<rect x="32" y="284" width="160" height="58" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="112" y="319" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" fill="#F5F5F3">ipvs</text>
+<rect x="204" y="284" width="324" height="58" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="366" y="312" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#8B98A9">커널 해시 테이블에서 조회</text>
+<text x="366" y="332" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#5E6B7E">스케줄러 6종 · 기본 rr</text>
+<rect x="540" y="284" width="200" height="58" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="640" y="319" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#8B98A9">대규모에서 고른다</text>
+<rect x="752" y="284" width="216" height="58" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="860" y="319" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#8B98A9">일부 함께 쓴다</text>
+
+<rect x="32" y="356" width="160" height="58" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.4"/>
+<text x="112" y="391" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">nftables</text>
+<rect x="204" y="356" width="324" height="58" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="366" y="391" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#8B98A9">맵과 집합으로 조회 · 선형 순회를 벗어난다</text>
+<rect x="540" y="356" width="200" height="58" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.4"/>
+<text x="640" y="391" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">1.33 GA · 후계</text>
+<rect x="752" y="356" width="216" height="58" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="860" y="391" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#F08A59">아니다 · nft 를 쓴다</text>
+
+<rect x="32" y="428" width="160" height="58" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="112" y="463" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" fill="#F5F5F3">kernelspace</text>
+<rect x="204" y="428" width="324" height="58" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="366" y="463" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#8B98A9">Windows 의 HNS·VFP 로 처리</text>
+<rect x="540" y="428" width="200" height="58" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="640" y="463" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#8B98A9">Windows 노드 전용</text>
+<rect x="752" y="428" width="216" height="58" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="860" y="463" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#F08A59">아니다 · Linux 기술이다</text>
+</svg>

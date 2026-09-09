@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 616" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">체인은 어떻게 존재하게 되는가</title><desc id="dd">내장 체인은 커널이 부르지만 사용자 체인은 선언·규칙·호출 세 줄이 다 있어야 실행된다.</desc>
+<rect width="1000" height="616" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">iptables · BUILT-IN vs USER CHAIN</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">체인은 어떻게 존재하게 되는가</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">셋 중 하나만 빠져도 목록에는 보이는데 아무 패킷도 안 지난다</text>
+<rect x="24" y="98" width="464" height="74" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="40" y="122" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">내장 체인 다섯</text>
+<text x="40" y="144" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">:PREROUTING ACCEPT [93:5148]</text>
+<text x="40" y="162" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정책이 있다 · 커널이 직접 부른다</text>
+<rect x="512" y="98" width="464" height="74" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="528" y="122" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">사용자 체인</text>
+<text x="528" y="144" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">:KUBE-SERVICES - [0:0]</text>
+<text x="528" y="162" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정책 자리가 - · 끝나면 부른 자리로 돌아간다</text>
+<text x="24" y="198" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">오른쪽은 저절로 생기지 않는다. 아래 세 줄이 모두 있어야 한다.</text>
+<rect x="24" y="214" width="300" height="282" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="42" y="238" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">STEP 1</text>
+<text x="42" y="262" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#F5F5F3">선언</text>
+<line x1="42" y1="290" x2="306" y2="290" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="42" y="308" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">MAKES</text>
+<text x="42" y="332" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">이름만 있는 빈 체인</text>
+<line x1="42" y1="360" x2="306" y2="360" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="42" y="378" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">IPTABLES</text>
+<text x="42" y="402" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">-N KUBE-SERVICES</text>
+<line x1="42" y1="430" x2="306" y2="430" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="42" y="448" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">IF MISSING</text>
+<text x="42" y="472" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">규칙을 넣을 곳이 없다</text>
+<path d="M 328 355.0 L 344 355.0" fill="none" stroke="#5E6B7E" stroke-width="1.5" marker-end="url(#soft)"/>
+<rect x="350" y="214" width="300" height="282" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="368" y="238" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">STEP 2</text>
+<text x="368" y="262" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#F5F5F3">규칙</text>
+<line x1="368" y1="290" x2="632" y2="290" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="368" y="308" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">MAKES</text>
+<text x="368" y="332" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">그 체인 안에 넣는 줄</text>
+<line x1="368" y1="360" x2="632" y2="360" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="368" y="378" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">IPTABLES</text>
+<text x="368" y="402" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">-A KUBE-SERVICES -d ... -j SVC</text>
+<line x1="368" y1="430" x2="632" y2="430" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="368" y="448" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">IF MISSING</text>
+<text x="368" y="472" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">들어와도 할 일이 없다</text>
+<path d="M 654 355.0 L 670 355.0" fill="none" stroke="#5E6B7E" stroke-width="1.5" marker-end="url(#soft)"/>
+<rect x="676" y="214" width="300" height="282" rx="8" fill="#F08A590E" stroke="#F08A59" stroke-width="1.4"/>
+<text x="694" y="238" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">STEP 3</text>
+<text x="694" y="262" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#F08A59">호출</text>
+<line x1="694" y1="290" x2="958" y2="290" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="694" y="308" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">MAKES</text>
+<text x="694" y="332" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">내장 체인에서 점프</text>
+<line x1="694" y1="360" x2="958" y2="360" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="694" y="378" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">IPTABLES</text>
+<text x="694" y="402" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">-A PREROUTING -j KUBE-SERVICES</text>
+<line x1="694" y1="430" x2="958" y2="430" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="694" y="448" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">IF MISSING</text>
+<text x="694" y="472" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">죽은 코드 — 패킷이 안 온다</text>
+<text x="24" y="530" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">세 줄은 순서대로 필요하지만 셋 다 있어야 비로소 한 줄이 평가된다. 가장 자주 빠지는 것이 호출이다.</text>
+<text x="24" y="550" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">커널이 아는 것은 훅 다섯뿐이고, 사용자 체인은 그 다섯에서 누가 불러 줄 때만 실행된다.</text>
+<line x1="12" y1="568" x2="952" y2="568" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="590" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="580" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="590" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">내장 체인 — 커널이 부른다</text>
+<rect x="339" y="580" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="361" y="590" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">여기가 빠지면 죽은 코드</text>
+</svg>
