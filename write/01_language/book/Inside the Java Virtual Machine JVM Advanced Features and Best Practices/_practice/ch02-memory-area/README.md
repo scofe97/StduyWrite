@@ -21,7 +21,7 @@
 ### 안전 실행 가능 (5개) — 본 저장소에서 동작 검증 완료
 
 ```bash
-cd write/01_language/book/05_JVM/_practice
+cd write/01_language/book/Inside the Java Virtual Machine JVM Advanced Features and Best Practices/_practice
 
 ./gradlew :ch02-memory-area:heap:run                # Java heap space (검증 완료)
 ./gradlew :ch02-memory-area:jvm-stack:run           # StackOverflowError, stack length 출력 (검증 완료)

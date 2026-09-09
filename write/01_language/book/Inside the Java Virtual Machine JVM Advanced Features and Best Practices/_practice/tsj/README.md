@@ -57,4 +57,4 @@ mvn spring-boot:run
 
 ## 노트 위치
 
-`~/Library/CloudStorage/GoogleDrive-.../study/runners-high/write/01_language/book/05_JVM/tsj_troubleshooting-java/`
+`~/Library/CloudStorage/GoogleDrive-.../study/runners-high/write/01_language/book/Inside the Java Virtual Machine JVM Advanced Features and Best Practices/tsj_troubleshooting-java/`

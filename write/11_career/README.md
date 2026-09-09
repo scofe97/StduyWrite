@@ -1,12 +1,12 @@
 ---
-title: 12_career MOC
+title: 11_career MOC
 tags: [moc, career, interview]
 status: final
 related: []
 updated: 2026-05-31
 ---
 
-# 12_career
+# 11_career
 ---
 > 커리어·업계 인터뷰·성장론을 다루는 카테고리입니다. 현업자의 회사 선택 기준, 성장 전략, 채용·조직 관점 같은 주제를 모읍니다. 기술 자체의 본문(APM 이론, 정적 분석, 테스트)은 해당 기술 카테고리로 보내고, 여기에는 그 기술을 '어떻게 일에 쓰는가'에 대한 관점과 경험을 둡니다.
 
@@ -19,7 +19,7 @@ updated: 2026-05-31
 
 ## 경계 기준
 
-커리어·인터뷰·업계 인사이트만 여기에 둡니다. 특정 기술의 동작 원리나 구현 방법은 각 카테고리가 SSOT입니다. 예를 들어 APM의 시그널 모델은 [`06_observability/`](../06_observability/), 정적 분석 도구는 [`07_devops/docs/sonarqube/`](../07_devops/docs/sonarqube/), 테스트 전략은 [`10_spring/04_testing/`](../10_spring/04_testing/), 모델·도구로서의 AI는 [`11_AI/`](../11_AI/)로 보냅니다. 본 카테고리의 문서는 그 기술을 '실무에서 어떻게 판단하고 쓰는가'라는 관점만 담고, 기술 본문은 위 카테고리로 링크합니다.
+커리어·인터뷰·업계 인사이트만 여기에 둡니다. 특정 기술의 동작 원리나 구현 방법은 각 카테고리가 SSOT입니다. 예를 들어 APM의 시그널 모델은 [`06_observability/`](../06_observability/), 정적 분석 도구는 [`07_devops/docs/sonarqube/`](../07_devops/docs/sonarqube/), 테스트 전략은 [`09_spring/04_testing/`](../09_spring/04_testing/), 모델·도구로서의 AI는 [`10_AI/`](../10_AI/)로 보냅니다. 본 카테고리의 문서는 그 기술을 '실무에서 어떻게 판단하고 쓰는가'라는 관점만 담고, 기술 본문은 위 카테고리로 링크합니다.
 
 ## 원문 아카이브
 
