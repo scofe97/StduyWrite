@@ -20,7 +20,7 @@
 각 GC 모듈은 *짧은 워크로드*만 돌린다. OOM을 의도하지 않으므로 시스템 위험이 낮다.
 
 ```bash
-cd write/01_language/book/05_JVM/_practice
+cd write/01_language/book/Inside the Java Virtual Machine JVM Advanced Features and Best Practices/_practice
 
 ./gradlew :ch03-gc:serial:run        # Serial GC
 ./gradlew :ch03-gc:parallel:run      # Parallel GC

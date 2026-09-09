@@ -19,7 +19,7 @@
 루트(`_practice/`)에서 Gradle task를 호출한다.
 
 ```bash
-cd write/01_language/book/05_JVM/_practice
+cd write/01_language/book/Inside the Java Virtual Machine JVM Advanced Features and Best Practices/_practice
 
 ./gradlew :ch01:run
 ```
@@ -39,7 +39,7 @@ java.home          = /Users/.../jdk-21.0.3.jdk/Contents/Home
 두 스크립트 모두 **dry-run이 기본**이다. 인자 없이 실행하면 무엇을 하려는지만 출력하고 종료하므로, 처음 한 번은 dry-run으로 계획을 확인하고 `-y`를 붙여 실제로 실행한다.
 
 ```bash
-cd write/01_language/book/05_JVM/_practice/ch01/scripts
+cd write/01_language/book/Inside the Java Virtual Machine JVM Advanced Features and Best Practices/_practice/ch01/scripts
 
 # 1) 빌드 도구 설치 — Ubuntu/Debian (sudo 필요)
 ./install-build-deps-ubuntu.sh           # 설치 대상 패키지 목록만 출력
