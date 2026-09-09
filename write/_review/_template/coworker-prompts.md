@@ -45,7 +45,7 @@ updated: 2026-05-22
     - write/_review/README.md 통계 표 갱신
   → No: 다음 판단으로
 
-[판단 3] 직전 git push (HEAD~3..HEAD 범위) 에서 write/ 안에 추가/수정된 학습 문서가 5편 이상 있는가?
+[판단 3] 직전 git push (HEAD~3..HEAD 범위) 에서 write/ 안에 새로 학습한 문서가 있는가?
   → Yes: [동작 B] 신규 회차 1 케이스
     - write/_review/{오늘 YYYY-MM-DD}/ 폴더 생성
     - 각 신규 학습 문서별 .review.md 생성 (round=1, prev_round_date=null)
