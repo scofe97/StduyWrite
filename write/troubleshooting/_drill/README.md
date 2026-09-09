@@ -42,6 +42,7 @@ write/troubleshooting/
 ├── README.md              # 계층 지도와 여는 절차
 ├── os/  kubernetes/  mesh/  cloud/  runtime/
 │   └── YYYY-MM-DD_{증상}.md    # 푼 문항 하나가 파일 하나
+├── _concepts/             # 문항에서 갈라져 나온 이론 — 주제별로 한 번만
 ├── _assets/               # 도식 SVG 와 생성기
 └── _drill/                # 이 폴더 · 배포 제외
     ├── README.md          # 진입점 (현재 파일)
