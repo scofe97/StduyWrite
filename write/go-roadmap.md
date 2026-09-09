@@ -5,7 +5,8 @@ status: final
 related:
   - README.md
   - network-roadmap.md
-updated: 2026-09-05
+  - os-roadmap.md
+updated: 2026-09-06
 ---
 
 # Go 언어 학습 로드맵
@@ -22,6 +23,16 @@ updated: 2026-09-05
 둘째, **Spring 에서 Java 를 쓰던 습관이 어긋나는 자리에 단계를 더 두었습니다.** 인터페이스를 구현 쪽이 아니라 쓰는 쪽에서 선언하는 것, 예외 대신 에러를 값으로 돌려받는 것, 상속 대신 임베딩을 쓰는 것, 스레드풀 대신 고루틴을 값싸게 만드는 것이 그런 자리입니다. 문법을 다 외워도 이 넷을 모르면 Go 로 Java 를 쓰게 됩니다.
 
 도식은 위에서 아래로 읽습니다. 실선 박스는 책과 공식 문서가 다루는 개념이고, 점선 박스는 그 밖에서 채울 키워드입니다. 단계마다 표를 둘 두는데 하나는 개념이고 다른 하나는 **책 밖 키워드**입니다.
+
+배지는 셋입니다. **필수**는 빼면 뒤가 막히는 것, **추천**은 빼도 뒤가 굴러가지만 손해가 큰 것, **선택**은 목표가 생겼을 때만 여는 것입니다. 번호가 붙어 있다고 열다섯을 다 밟아야 하는 것은 아닙니다. 필수는 1·2·4·7·11 단계 다섯이고, 이 다섯이 문법에서 서비스까지 이어지는 척추입니다.
+
+실제로 뒤가 막히는 선행은 셋입니다.
+
+1. 4단계를 건너뛰면 7단계의 취소 전파가 문법으로만 남습니다. `context` 를 만든 자리가 4단계이고 그것을 쓰는 자리가 7단계입니다.
+2. 6·7단계를 건너뛰면 8단계의 happens-before 가 규칙 나열로 끝납니다. 짧은 명세라 앞의 두 단계가 없으면 읽을 것이 없습니다.
+3. 4단계 전에 5단계를 열면 값이 나오지 않습니다. 100개 항목이 문법을 아는 독자를 전제하고 쓰였습니다.
+
+읽는 축과 별개로 손으로 확인하는 축이 하나 더 있는데, 그것은 아래 실습 절이 맡습니다. 책은 찍힌 시점에 멈춰 있고 Go 의 표준 라이브러리와 도구는 그 뒤로도 움직이므로, 책 밖 키워드의 기본값은 go.dev 에서 다시 확인하고 표는 무엇을 검색할지 정하는 용도로만 씁니다.
 
 
 
@@ -45,9 +56,26 @@ updated: 2026-09-05
 
 Alex Edwards 의 Let's Go 는 Go 웹 개발서로 자주 거론되지만 Goodreads 에 등재돼 있지 않습니다. 평가를 확인하지 못한 것을 추천 목록에 올리지는 않았습니다.
 
-**낡은 책은 평점과 무관하게 뺐습니다.** 출간 연도는 Manning·OpenLibrary·Goodreads 에서 2026-09-05 에 확인했습니다.
+공식 문서는 평점 대상이 아니어서 표에 없지만 0·3·8·10단계의 절반을 차지합니다. [A Tour of Go](https://go.dev/tour/), [Effective Go](https://go.dev/doc/effective_go), [The Go Memory Model](https://go.dev/ref/mem), [Language Specification](https://go.dev/ref/spec) 은 go.dev 가 직접 학습 경로로 제시하는 자료입니다.
+
+
+
+## 낡음 점검
+
+> 책은 찍힌 시점에 멈춥니다. 출간 연도를 Manning·OpenLibrary·Goodreads 에서 2026-09-05 에 확인하고, **낡은 책은 평점과 무관하게** 단계에서 뺐습니다.
 
 기준은 주제가 바뀌는 속도입니다. 언어 문법·표준 라이브러리·도구처럼 **빨리 바뀌는 축은 5년**을 넘기면 단계에서 뺍니다. 프로토콜이나 컴파일러 구성처럼 느리게 바뀌는 축은 오래돼도 남기되 무엇이 낡았는지를 적습니다.
+
+| 책 | 출간 | 조치 |
+|---|:---:|---|
+| Learn Go with Pocket-Sized Projects | 2025 | 그대로 |
+| Learning Go 2판 · Cloud Native Go 2판 | 2024 | 그대로 |
+| Learn Concurrent Programming with Go | 2023 | 그대로 |
+| 100 Go Mistakes | 2022 | 그대로 |
+| Network Programming with Go | 2020 | 유지. 라우팅 패턴과 `log/slog` 는 11단계의 책 밖 키워드로 |
+| Writing An Interpreter In Go | 2020 | 유지. 인터프리터를 짓는 일이 언어 버전을 거의 타지 않음 |
+| **Concurrency in Go** | **2017** | **뺌.** 모듈·제네릭 이전이고 같은 자리를 LCPG 8~10장이 덮음 |
+| **The Go Programming Language** | **2015** | **뺌.** 제네릭·모듈 이전. 문법 근거는 Language Specification 이 정확 |
 
 The Go Programming Language 는 평가 수가 1,788개로 압도적이지만 2015년 책이라 제네릭과 모듈 이전입니다. 문법의 근거가 필요하면 지금도 갱신되는 [Language Specification](https://go.dev/ref/spec) 이 더 정확하므로 목록에서 뺐습니다.
 
@@ -56,8 +84,6 @@ Concurrency in Go 는 2017년 9월 책이고 2판이 나오지 않았습니다. 
 남긴 예외는 하나입니다. Writing An Interpreter In Go 는 2020년 5월 1.7판이고, 인터프리터를 짓는 일 자체가 언어 버전을 거의 타지 않습니다.
 
 Network Programming with Go 는 2020년 책이라 단계에 남기되 무엇이 빠졌는지를 11단계에 적어 두었습니다. `net` 패키지 자체는 안정적이지만 표준 라이브러리의 구조화 로깅과 라우팅 패턴이 그 뒤에 들어왔습니다.
-
-공식 문서는 평점 대상이 아니어서 표에 없지만 0·3·8·10단계의 절반을 차지합니다. [A Tour of Go](https://go.dev/tour/), [Effective Go](https://go.dev/doc/effective_go), [The Go Memory Model](https://go.dev/ref/mem), [Language Specification](https://go.dev/ref/spec) 은 go.dev 가 직접 학습 경로로 제시하는 자료입니다.
 
 
 
@@ -82,11 +108,36 @@ Network Programming with Go 는 2020년 책이라 단계에 남기되 무엇이 
 
 
 
+## 손으로 확인하는 실습
+
+> 읽기만 하면 남의 말을 옮기게 됩니다. 다만 이건 책과 다른 축이라 도식에서는 뺐고, 아래 표가 맡습니다.
+
+기준은 **그 자리를 손으로 확인할 검증된 자료가 있는가** 하나입니다. 출처는 둘로 갈립니다. 저자나 출판사가 올린 예제 저장소, 그리고 go.dev 가 직접 주는 튜토리얼과 명세입니다. 비어 있는 단계는 실습이 필요 없어서가 아니라 확인한 자료를 못 찾아서이고, 지어낸 출처를 채우지 않았습니다. 아래 링크는 2026-09-06 에 직접 열어 응답을 확인했습니다.
+
+| 출처 | 어느 자리 | 무엇 |
+|---|---|---|
+| [A Tour of Go](https://go.dev/tour/) · [go.dev 튜토리얼](https://go.dev/doc/tutorial/) | 0 | 브라우저에서 고쳐 돌리는 투어. [제네릭](https://go.dev/doc/tutorial/generics)·[퍼징](https://go.dev/doc/tutorial/fuzz)·[워크스페이스](https://go.dev/doc/tutorial/workspaces)가 각각 짧은 편으로 있습니다 |
+| [learning-go-book-2e](https://github.com/learning-go-book-2e) | 1·2·4·7·9·10 | 장별 저장소 `ch01`~`ch16`. 장마다 `sample_code` 와 `exercise_solutions` 가 들어 있습니다 |
+| [Effective Go](https://go.dev/doc/effective_go) · [Go Code Review Comments](https://go.dev/wiki/CodeReviewComments) | 3 | 리뷰에서 인용되는 기준의 원문 |
+| [teivah/100-go-mistakes](https://github.com/teivah/100-go-mistakes) | 5 | 100go.co 사이트의 소스와 항목별 코드 |
+| [cutajarj/ConcurrentProgrammingWithGo](https://github.com/cutajarj/ConcurrentProgrammingWithGo) | 6·7·8 | 저자가 올린 `chapter2`~`chapter12` 리스팅과 `exercises` |
+| [race detector 공식 문서](https://go.dev/doc/articles/race_detector) | 5·8 | `go test -race` 로 경합을 재현하고 잡기 |
+| [Learn Go with Tests](https://quii.gitbook.io/learn-go-with-tests) · [저장소](https://github.com/quii/learn-go-with-tests) | 9 | 테스트로 문법을 배우는 구성. [한국어 번역](https://miryang.gitbook.io/learn-go-with-tests/)이 있습니다 |
+| [Diagnostics](https://go.dev/doc/diagnostics) · [pprof 소개](https://go.dev/blog/pprof) | 10 | 프로파일과 실행 추적을 서비스에 붙이는 공식 절차 |
+| [awoodbeck/gnp](https://github.com/awoodbeck/gnp) | 11 | 책의 장별 코드와 정오표 `ERRATA.md` |
+| [cloud-native-go/examples](https://github.com/cloud-native-go/examples) | 12 | `ch04`~`ch12` 예제 |
+
+13·14단계 자리는 비어 있습니다. Learn Go with Pocket-Sized Projects 와 Writing An Interpreter In Go 는 저자나 출판사가 올린 저장소를 찾지 못했습니다. 검색에 걸리는 것은 전부 독자들이 각자 올린 사본이라 출처로 쓰지 않았습니다. 두 책 모두 본문이 코드를 처음부터 끝까지 적어 주는 구성이라, 손으로 치는 것이 그대로 실습이 됩니다.
+
+**환경은 따로 세울 것이 없습니다.** Go 툴체인이 Apple Silicon 을 네이티브로 지원해서 VM 도 컨테이너도 필요 없습니다. 이 문서를 쓴 기기의 `go version` 은 `go1.25.1 darwin/arm64` 입니다. 다만 `learning-go-book-2e` 는 장마다 저장소가 갈려 있어 한 번에 받을 수 없고 필요한 장만 클론합니다. `gnp` 는 gRPC 의 파괴적 변경 때문에 12장을 `ch12` 와 `ch12-2026` 둘로 두었으니, 11단계 범위인 9장을 넘어갈 때는 뒤쪽을 봅니다.
+
+
+
 ## 문법과 손 · 0~2단계
 
 > 문법은 빨리 통과합니다. 여기서 오래 머물면 정작 시간을 써야 할 관용구와 동시성에 못 갑니다.
 
-### 0단계 · A Tour of Go 와 공식 튜토리얼
+### 0단계 · A Tour of Go 와 공식 튜토리얼  `추천`
 
 먼저 손이 움직여야 책이 읽힙니다. 브라우저에서 코드를 고쳐 돌려 보는 투어가 가장 빠른 진입로이고, 여기서 문법을 다 잡으려 하지 말고 "이렇게 생겼구나"까지만 가져갑니다.
 
@@ -101,7 +152,7 @@ Network Programming with Go 는 2020년 책이라 단계에 남기되 무엇이 
 | Go 설치와 `go mod init` | 프로젝트가 시작되는 최소 형태 |
 | go.dev 시작 튜토리얼 여덟 | 모듈·워크스페이스·제네릭·퍼징·DB·JSON 을 각각 짧게 |
 
-### 1단계 · Learning Go 2nd 1~6장
+### 1단계 · Learning Go 2nd 1~6장  `필수`
 
 투어에서 훑은 것을 이유와 함께 다시 세웁니다. Java 와 가장 먼저 어긋나는 곳은 **값 의미론**입니다. 구조체를 넘기면 복사되고, 슬라이스를 넘기면 헤더만 복사되며 배열은 공유됩니다. 이 차이를 모르면 나중에 슬라이스 버그를 원인 없이 만나게 됩니다.
 
@@ -118,7 +169,7 @@ Network Programming with Go 는 2020년 책이라 단계에 남기되 무엇이 
 | 이스케이프 분석 | 무엇이 힙으로 가는지가 성능의 출발점 |
 | `go vet` 과 staticcheck | 컴파일러가 안 잡는 실수를 잡는 도구 |
 
-### 2단계 · Learning Go 2nd 7~9장
+### 2단계 · Learning Go 2nd 7~9장  `필수`
 
 Java 습관이 가장 크게 어긋나는 구간입니다. 인터페이스를 **쓰는 쪽에서 작게 선언**하고 구현 타입은 그 사실을 모릅니다. `implements` 가 없으므로 의존이 한 방향으로만 흐르고, 그래서 작은 인터페이스가 좋은 설계가 됩니다.
 
@@ -143,7 +194,7 @@ Java 습관이 가장 크게 어긋나는 구간입니다. 인터페이스를 **
 
 > 문법을 알아도 관용구를 모르면 Go 로 Java 를 쓰게 됩니다. 이 구간이 그 간격을 메웁니다.
 
-### 3단계 · Effective Go 와 Code Review Comments
+### 3단계 · Effective Go 와 Code Review Comments  `추천`
 
 Go 는 스타일 논쟁을 `gofmt` 로 끝내고, 남은 합의를 문서로 남겼습니다. 이 둘은 분량이 짧지만 코드 리뷰에서 실제로 인용되는 기준이라 먼저 읽습니다.
 
@@ -159,7 +210,7 @@ Go 는 스타일 논쟁을 `gofmt` 로 끝내고, 남은 합의를 문서로 남
 | Google Go Style Guide | 회사 규모에서 굳은 관례 |
 | `gofmt` 가 끝낸 논쟁 | 포맷을 도구에 넘긴 결정의 효과 |
 
-### 4단계 · Learning Go 2nd 10·11·13·14장
+### 4단계 · Learning Go 2nd 10·11·13·14장  `필수`
 
 도구와 표준 라이브러리를 잡는 구간입니다. Maven 이나 Gradle 과 달리 Go 모듈은 **최소 버전 선택**을 쓰므로, 의존성이 저절로 올라가지 않습니다. 이 차이를 모르면 왜 버전이 안 바뀌는지에서 막힙니다.
 
@@ -177,7 +228,7 @@ Go 는 스타일 논쟁을 `gofmt` 로 끝내고, 남은 합의를 문서로 남
 | workspace 모드 | 여러 모듈을 한 번에 고칠 때 |
 | pkg.go.dev 읽는 법 | 표준 라이브러리를 문서에서 바로 확인하기 |
 
-### 5단계 · 100 Go Mistakes and How to Avoid Them
+### 5단계 · 100 Go Mistakes and How to Avoid Them  `추천`
 
 평가가 가장 높은 책이고, 이 로드맵에서 관용구 축의 중심입니다. 문법을 아는 상태에서 읽어야 값이 나오므로 4단계 뒤에 둡니다. 한 항목이 짧아 앞에서 배운 것을 하나씩 되짚는 방식으로 읽힙니다.
 
@@ -199,7 +250,7 @@ Go 는 스타일 논쟁을 `gofmt` 로 끝내고, 남은 합의를 문서로 남
 
 > 이 로드맵에서 가장 큰 덩어리입니다. Go 를 쓰는 이유의 절반이 여기 있고, Java 의 스레드 감각이 가장 크게 어긋나는 곳이기도 합니다.
 
-### 6단계 · Learn Concurrent Programming with Go 1~7장
+### 6단계 · Learn Concurrent Programming with Go 1~7장  `추천`
 
 Go 문법으로 바로 들어가지 않고 동시성 자체를 먼저 봅니다. 스레드가 무엇이고 메모리 공유가 왜 위험한지를 세운 뒤에야 "채널로 통신하라"는 권고가 권고 이상으로 읽힙니다.
 
@@ -216,7 +267,7 @@ Go 문법으로 바로 들어가지 않고 동시성 자체를 먼저 봅니다.
 | GOMAXPROCS 와 스케줄러 | 고루틴이 OS 스레드에 얹히는 구조 |
 | 세마포어 패턴 | 버퍼 채널로 동시 실행 수를 제한하기 |
 
-### 7단계 · Learning Go 2nd 12장과 LCPG 8~10장
+### 7단계 · Learning Go 2nd 12장과 LCPG 8~10장  `필수`
 
 앞 단계가 원리라면 여기는 Go 의 관용구입니다. 채널과 select 로 파이프라인을 짜고, 취소를 아래로 전파하는 형태가 핵심입니다. 4단계의 `context` 가 여기서 회수됩니다.
 
@@ -236,7 +287,7 @@ Go 문법으로 바로 들어가지 않고 동시성 자체를 먼저 봅니다.
 | `errgroup` | 여럿 중 하나가 실패했을 때 전부 접기 |
 | 채널 대신 뮤텍스를 고를 때 | 관용구를 기계적으로 적용하지 않기 |
 
-### 8단계 · The Go Memory Model 과 LCPG 11~12장
+### 8단계 · The Go Memory Model 과 LCPG 11~12장  `추천`
 
 "경합이 없다"를 말하려면 무엇이 무엇보다 먼저 일어나는지를 정의해야 합니다. 공식 메모리 모델 문서가 그 규칙이고, 짧지만 앞 두 단계를 다 읽고 봐야 뜻이 잡힙니다.
 
@@ -257,7 +308,7 @@ Go 문법으로 바로 들어가지 않고 동시성 자체를 먼저 봅니다.
 
 > 남길 가치가 있는 코드로 만드는 구간입니다. Go 는 테스트와 프로파일링이 표준 도구에 들어 있어 따로 고를 것이 적습니다.
 
-### 9단계 · Learn Go with Tests 와 Learning Go 2nd 15장
+### 9단계 · Learn Go with Tests 와 Learning Go 2nd 15장  `추천`
 
 무료 온라인 자료지만 평가가 4.44점으로 낮지 않고, 문법을 테스트로 배우는 구성이라 앞에서 배운 것을 다시 훑는 효과가 있습니다. JUnit 과 Mockito 에 익숙하다면 **가짜를 라이브러리 없이 인터페이스로 만든다**는 점이 가장 큰 차이입니다.
 
@@ -273,7 +324,7 @@ Go 문법으로 바로 들어가지 않고 동시성 자체를 먼저 봅니다.
 | testify 를 쓸지 말지 | 표준만으로 갈 것인가에 대한 커뮤니티의 갈림 |
 | golden file 테스트 | 출력이 큰 경우의 관용구 |
 
-### 10단계 · pprof·trace 공식 문서와 Learning Go 2nd 16장
+### 10단계 · pprof·trace 공식 문서와 Learning Go 2nd 16장  `추천`
 
 Efficient Go 를 쓰지 않는 자리입니다. 평가가 3.55점으로 낮아 공식 프로파일링 문서로 대신하는데, Go 는 `net/http/pprof` 를 표준으로 갖고 있어 문서만으로도 실습이 됩니다.
 
@@ -296,7 +347,7 @@ Efficient Go 를 쓰지 않는 자리입니다. 평가가 3.55점으로 낮아 �
 
 > 언어를 서비스로 바꾸는 구간입니다. Spring 없이 표준 라이브러리로 서버가 서는 경험이 여기서 나옵니다.
 
-### 11단계 · Network Programming with Go 1~9장
+### 11단계 · Network Programming with Go 1~9장  `필수`
 
 `net/http` 로 시작하지 않고 소켓에서 올라옵니다. Spring MVC 가 감춰 주던 것들, 즉 연결이 언제 열리고 닫히는지, 타임아웃을 어디에 걸어야 하는지가 여기서 드러납니다.
 
@@ -314,7 +365,7 @@ Efficient Go 를 쓰지 않는 자리입니다. 평가가 3.55점으로 낮아 �
 | `net/http` 미들웨어 패턴 | 필터 체인을 함수 합성으로 만드는 관용구 |
 | 타임아웃 네 종류 | 클라이언트와 서버 양쪽에 거는 자리가 다르다 |
 
-### 12단계 · Cloud Native Go 2nd 4~13장
+### 12단계 · Cloud Native Go 2nd 4~13장  `추천`
 
 언어를 넘어 서비스의 성질로 갑니다. 확장성·느슨한 결합·복원력·관측 가능성·보안을 Go 코드로 어떻게 표현하는지가 내용이고, [`network-roadmap.md`](network-roadmap.md) 의 메시 구간과 같은 문제를 애플리케이션 쪽에서 봅니다.
 
@@ -336,7 +387,7 @@ Efficient Go 를 쓰지 않는 자리입니다. 평가가 3.55점으로 낮아 �
 
 > 목표가 생겼을 때만 엽니다. 순서대로 읽을 이유는 없습니다.
 
-### 13단계 · Learn Go with Pocket-Sized Projects 전 12장
+### 13단계 · Learn Go with Pocket-Sized Projects 전 12장  `선택`
 
 읽은 것이 손에 안 붙었다고 느낄 때 엽니다. 작은 프로젝트 열둘로 앞 단계를 다시 훑는 구성이라 복습에 가깝습니다. 평점은 4.60이지만 평가 수가 10개라 표본이 작다는 점은 감안합니다.
 
@@ -352,7 +403,7 @@ Efficient Go 를 쓰지 않는 자리입니다. 평가가 3.55점으로 낮아 �
 | 크로스 컴파일 | `GOOS`·`GOARCH` 로 배포 대상을 바꾸기 |
 | `database/sql` 과 커넥션 풀 | JDBC 와 다른 부분 |
 
-### 14단계 · Writing An Interpreter In Go
+### 14단계 · Writing An Interpreter In Go  `선택`
 
 언어를 만들며 Go 를 쓰는 책입니다. Go 학습서가 아니라 Go 로 쓴 컴파일러 입문서라 순서상 맨 뒤에 둡니다. 평점 4.60에 평가 354개로 이 목록에서 안정적인 평가를 받은 축입니다.
 
@@ -372,15 +423,50 @@ Efficient Go 를 쓰지 않는 자리입니다. 평가가 3.55점으로 낮아 �
 
 
 
-## 참조서와 이웃
+## 로드맵에 넣지 않은 책
 
-> 단계에 넣지 않았지만 옆에 두는 자료입니다.
+> 단계에 넣지 않은 자료에도 이유가 있어서 어디에 쓸지를 적어 둡니다.
 
-| 자료 | 언제 여는가 |
+### 참조서 · 통독하지 않고 막힐 때만 엽니다
+
+단계에 넣지 않은 이유는 성격입니다. 앞에서부터 끝까지 읽을 자료가 아니라 특정 질문이 생겼을 때 그 항목만 여는 자료입니다.
+
+| 자료 | 열 장면 |
 |---|---|
-| Language Specification | 문법이 모호할 때의 최종 근거. 릴리스마다 갱신됩니다 |
-| Go blog | 제네릭·에러 래핑·스케줄러 같은 주제의 1차 설명 |
-| Learn Go with Pocket-Sized Projects 부록 | 벤치마킹·퍼징·값 전달·DB 연결을 짧게 확인할 때 |
-| Cloud Native Go 1~3장 | Go 를 처음 볼 때의 도입부. 1단계와 겹칩니다 |
+| [Language Specification](https://go.dev/ref/spec) | 문법이 모호할 때의 최종 근거. 릴리스마다 갱신됩니다 |
+| [Go blog](https://go.dev/blog/) | 제네릭·에러 래핑·스케줄러 같은 주제의 1차 설명 |
+| [pkg.go.dev](https://pkg.go.dev/) | 표준 라이브러리의 시그니처와 예제를 그 자리에서 확인할 때 |
 
-`~/study/podwire` 는 이 로드맵의 11단계 이후를 실제로 쓰는 자리입니다. 미니 CNI 에서 시작해 Service, Policy, eBPF, WireGuard 로 올라가는 Go 프로젝트라, 네트워크 쪽 순서는 [`network-roadmap.md`](network-roadmap.md) 가 맡습니다.
+### 단계와 자리가 겹치는 책
+
+같은 요소를 다른 각도에서 다룹니다. 단계 대신 이쪽을 골라도 되고, 설명이 부족할 때 대조 자료로 씁니다.
+
+| 책 | 겹치는 자리 |
+|---|---|
+| Cloud Native Go 1~3장 | Go 를 처음 볼 때의 도입부. 1단계와 겹칩니다 |
+| Learn Go with Pocket-Sized Projects 부록 | 벤치마킹·퍼징·값 전달·DB 연결을 짧게 확인할 때 |
+| The Go Programming Language | 1·2단계의 문법 자리. 2015년 책이라 제네릭과 모듈이 없습니다 |
+| Concurrency in Go | 7단계의 패턴 카탈로그. 2017년 책이라 `errgroup` 이전입니다 |
+| Efficient Go | 10단계의 성능 자리. 평가가 3.55점이라 공식 문서를 먼저 봅니다 |
+
+### 이웃 주제
+
+Go 로 짓기는 하지만 언어 자체를 채우지는 않는 자료입니다.
+
+| 자료 | 무엇을 보태는가 |
+|---|---|
+| Writing A Compiler In Go | 14단계의 후속. 트리 순회 인터프리터를 바이트코드 VM 으로 바꿉니다 |
+| Distributed Services with Go | 12단계 자리를 두고 겨뤘던 책. 분산 서비스 축으로 넓힙니다 |
+| Alex Edwards 의 Let's Go | 웹 애플리케이션 축. Goodreads 미등재라 평가를 확인하지 못했습니다 |
+
+
+
+## 경계
+
+> 같은 주제를 다루는 문서가 셋이라 무엇을 어디서 찾을지 갈라 둡니다.
+
+Go 는 한 카테고리에 담기지 않습니다. 언어 문법은 `01_language`, 소켓과 프로파일링은 `02_os`, 서비스와 관측은 `08_cloud` 에 걸칩니다. `01_language/` 아래에는 아직 `java/` 와 `python/` 만 있어서 어느 카테고리 README 도 이 순서를 혼자 가질 수 없고, 그래서 이 문서는 `write/` 직계에 둡니다.
+
+책을 고르고 순서를 정하는 일은 이 문서가 맡습니다. 패킷이 지나는 경로와 Kubernetes 네트워크는 [`network-roadmap.md`](network-roadmap.md) 가, 셸에서 커널까지의 OS 축은 [`os-roadmap.md`](os-roadmap.md) 가 맡습니다. 셋이 겹치는 자리는 11단계의 소켓과 12단계의 관측 가능성인데, 여기서는 그것을 Go 코드로 쓰는 법으로 봅니다.
+
+`~/study/podwire` 는 이 로드맵의 11단계 이후를 실제로 쓰는 자리입니다. 미니 CNI 에서 시작해 Service, Policy, eBPF, WireGuard 로 올라가는 Go 프로젝트라, 그 안의 네트워크 순서는 [`network-roadmap.md`](network-roadmap.md) 가 맡습니다.

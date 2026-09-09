@@ -6,7 +6,8 @@ related:
   - README.md
   - 02_os/networking/roadmap.md
   - 08_cloud/kubernetes/04_networking/README.md
-updated: 2026-09-05
+  - 02_os/book/cntd_computer-networking-top-down/README.md
+updated: 2026-09-07
 ---
 
 # Kubernetes 네트워크 학습 로드맵
@@ -134,13 +135,17 @@ Kubernetes 네트워크 문서는 "Pod 마다 네트워크 네임스페이스가
 
 로드맵의 나머지가 전제하지만 아무도 가르치지 않던 자리입니다. 717쪽 전권이 아니라 세 장, 약 220쪽만 봅니다.
 
-**4장이 이 로드맵에서 가장 값이 큽니다.** `generalized forwarding` 이 22회, `match-plus-action` 이 24회, `OpenFlow` 가 49회 나오는데, **match + action** 이 바로 iptables 규칙과 eBPF 데이터패스가 하는 일의 추상입니다. 이 모델을 먼저 잡으면 뒤에서 만날 Cilium 의 eBPF 맵 조회가 새로운 것이 아니라 같은 모델의 다른 구현으로 읽힙니다.
+**4장이 이 로드맵에서 가장 값이 큽니다.** 4장 안에서 `match + action` 이 15회, `OpenFlow` 가 21회 나오는데, 이 **match + action** 이 바로 iptables 규칙과 eBPF 데이터패스가 하는 일의 추상입니다. 이 모델을 먼저 잡으면 뒤에서 만날 Cilium 의 eBPF 맵 조회가 새로운 것이 아니라 같은 모델의 다른 구현으로 읽힙니다.
 
-5장은 통째로 컨트롤 플레인이고 `SDN` 이 39회 나옵니다. 데이터 플레인과 컨트롤 플레인을 가르는 발상이 Kubernetes 네트워크의 뼈대인데, 이 로드맵에서 그걸 정면으로 다루는 유일한 책입니다.
+5장은 통째로 컨트롤 플레인이고 5장 안에서만 `SDN` 이 104회 나옵니다. 데이터 플레인과 컨트롤 플레인을 가르는 발상이 Kubernetes 네트워크의 뼈대인데, 이 로드맵에서 그걸 정면으로 다루는 유일한 책입니다.
 
-3장은 `congestion control` 이 128회입니다. 책 밖 키워드에 MTU·PMTUD 와 conntrack 을 적어 뒀는데 TCP 를 이 깊이로 다루는 자료가 없었습니다.
+3장은 3장 안에서 `congestion control` 이 139회입니다. 책 밖 키워드에 MTU·PMTUD 와 conntrack 을 적어 뒀는데 TCP 를 이 깊이로 다루는 자료가 없었습니다.
 
-**1장과 7장은 읽지 않습니다.** 1장 개론은 Networking and Kubernetes 가 덮고, 7장은 `802.11`·`cellular` 이 249회 나오는 무선 전용이라 이 로드맵과 겹치지 않습니다. 2·6·8장은 참조서로 돌립니다.
+**1장과 7장은 이 로드맵의 필수 범위가 아닙니다.** 1장 개론은 Networking and Kubernetes 가 덮고, 7장은 7장 안에서 `802.11` 이 88회 `cellular` 가 75회 나오는 무선 전용이라 이 로드맵과 겹치지 않습니다. 2·6·8장은 참조서로 돌립니다.
+
+> **수치 정정 (2026-09-06)**: 위 다섯 빈도는 앞서 적혀 있던 값(4장 generalized forwarding 22 · match-plus-action 24 · OpenFlow 49, 5장 SDN 39, 3장 congestion control 128, 7장 802.11·cellular 249)이 재현되지 않아 다시 셌습니다. PDF 를 `pdftotext -layout` 으로 뽑고 줄바꿈 하이픈을 이어 붙인 뒤 대소문자를 무시하고 표기 변형까지 함께 센 값입니다. 앞선 값들은 해당 장으로도 전권으로도 맞지 않았고, `match-plus-action` 은 표기 변형을 다 합쳐도 전권이 26회라 4장 24회가 성립하지 않습니다. **결론은 그대로입니다** — 오히려 5장의 SDN 밀도는 적혀 있던 것보다 훨씬 높습니다.
+
+**진행 상태 (2026-09-06)**: 이 책은 [정독 노트 20편](02_os/book/cntd_computer-networking-top-down/README.md)으로 옮겨져 있습니다. 로드맵이 지정한 3·4·5장은 12편으로 모두 덮였고(3장 5편 · 4장 4편 · 5장 3편), 범위 밖인 1·2장도 8편이 있습니다. 1·2장을 쓴 것은 로드맵의 권고를 바꾼 것이 아니라 그 폴더가 원문 6,000~8,000단어를 한 편에 담는 압축 정독 방침으로 전권을 훑기 때문입니다. **이 로드맵을 따르는 독자는 여전히 3·4·5장부터 보면 됩니다.**
 
 | 개념 | 무엇을 알게 되는가 |
 |---|---|
@@ -324,6 +329,8 @@ Cilium 의 네이티브 라우팅과 Production Kubernetes 5장의 BGP 가 여�
 ### Policy as Code 4·5·7·8장, Kubernetes Best Practices 9·11장  `추천`
 
 NetworkPolicy 는 트래픽이 흐를 때 막고, 어드미션 컨트롤은 그 정책이 만들어지기 전에 막습니다. 층이 다르므로 둘 다 필요합니다. Gatekeeper 가 Rego 를 쓰는 반면 Kyverno 는 YAML 로 규칙을 쓴다는 차이가 도입 비용을 가릅니다.
+
+**KBP 17장 `Admission Control and Authorization` 은 걸지 않습니다.** 제목만 보면 이 단계의 중심 같지만 겹칩니다. 17장에서 webhook 이 89회 나오는 동안 Gatekeeper·Kyverno·Rego 는 한 번도 나오지 않고, 같은 어드미션 웹훅을 Policy as Code 4·5장이 admission 189회와 webhook 167회로 이미 다루면서 OPA 385회로 판정 엔진까지 함께 답니다. 정책 엔진을 쓰는 쪽이 이 국면의 논점이라 그쪽을 남깁니다. 다만 17장의 뒷절 Authorization 은 겹치지 않습니다 — ABAC·RBAC·Webhook·Node 인가 모듈과 인증 다음 어드미션 앞이라는 요청 흐름상의 자리는 Policy as Code 에 없습니다. 그것은 네트워크가 아니라 접근 제어 축이라 이 로드맵 밖이고, 인가를 볼 일이 생기면 그때 17장을 엽니다.
 
 | 개념 | 무엇을 알게 되는가 |
 |---|---|
