@@ -48,18 +48,18 @@ for i, (name, when, how, col, focal) in enumerate(opts):
         d.box(BX, y, BW, BH2, PAPER2, col, 1.2, 8)
     d.t(BX + 18, y + 28, name, 13.5, col, MONO, "start", 600)
     d.t(BX + 18, y + 50, when, 11.5, MUTED, KR, "start")
-    d.t(BX + BW - 18, y + 60, how, 10.5, SOFT, MONO, "end")
+    d.t(BX + BW - 18, y + 60, how, 11.5, SOFT, MONO, "end")
     d.path(f"M {QX + QW} {QY + 38} L {(QX + QW + BX) / 2} {QY + 38} "
            f"L {(QX + QW + BX) / 2} {y + 38} L {BX - 8} {y + 38}",
            col, 1.3, m="acc" if focal else "ar")
 
-SX, SY = 32, 424
+SX, SY = 32, 408
 d.o.append(f'<rect x="{SX}" y="{SY}" width="208" height="{QY + 3 * (BH2 + BGAP) + BH2 - SY}" rx="8" '
            f'fill="{OK}06" stroke="{OK}" stroke-width="1.2" stroke-dasharray="7 6"/>')
-d.t(SX + 104, SY + 28, "앞의 둘은", 12.5, OK, KR, "middle", 600)
-d.t(SX + 104, SY + 50, "SSH 위에 얹힙니다", 12.5, OK, KR, "middle", 600)
-d.t(SX + 104, SY + 76, "키 기반 인증을", 11, MUTED, KR)
-d.t(SX + 104, SY + 94, "먼저 갖춰야 합니다", 11, MUTED, KR)
+d.t(SX + 104, SY + 26, "앞의 둘은", 12.5, OK, KR, "middle", 600)
+d.t(SX + 104, SY + 46, "SSH 위에 얹힙니다", 12.5, OK, KR, "middle", 600)
+d.t(SX + 104, SY + 70, "키 기반 인증을", 11.5, MUTED, KR)
+d.t(SX + 104, SY + 88, "먼저 갖춰야 합니다", 11.5, MUTED, KR)
 
 WY = 528
 d.o.append(f'<rect x="32" y="{WY}" width="{W - 64}" height="52" rx="8" '
