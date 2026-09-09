@@ -6,16 +6,16 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, WARN, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1472, 448
+W, H = 1472, 616
 d = D(W, H, "BUILDING MICRO-FRONTENDS · 01-01 §4",
       "세 세대 — 무엇이 쪼개졌고 무엇이 통짜로 남았는가",
       "원문 Figure 1-1·1-2·1-3 을 한 축 위에 이어 붙인 상태 전이. 세 계층 가운데 presentation 만 두 번째 세대까지 통짜로 남는다.",
       "전이 화살표 아래가 그 전이를 일으킨 조건입니다. 막대가 나뉜 층이 그 세대에 쪼개진 층입니다")
 
-BW, BH, GAP, X0, BY = 400, 200, 64, 88, 112     # stride = BW + GAP = 464
+BW, BH, GAP, X0, BY = 400, 344, 64, 88, 112     # stride = BW + GAP = 464
 CY = BY + BH / 2                                 # 212
 LAYERS = ("PRESENTATION", "APPLICATION", "PERSISTENCE")
-BAR_X, BAR_W, ROW_H, ROW0, ROW_STRIDE = 150, 230, 32, 72, 40
+BAR_X, BAR_W, ROW_H, ROW0, ROW_STRIDE = 150, 230, 60, 84, 84
 
 states = [
     ("3계층 모놀리스", "아티팩트 하나 · 파이프라인 하나", (False, False, False), None),
@@ -37,9 +37,9 @@ for i in range(2):
     x1, x2 = bx(i) + BW, bx(i + 1)
     d.arrow([(x1, CY), (x2 - 2, CY)], MUTED, "ar", 1.4)
     cx = (x1 + x2) / 2
-    d.line(cx, CY + 8, cx, 340, RULE, 0.8, "3 5")     # 라벨로 내려가는 실낱
-    d.t(cx, 356, transitions[i][0], 11, INK, KR, "middle", 600)
-    d.t(cx, 374, transitions[i][1], 10, MUTED, MONO)
+    d.line(cx, CY + 8, cx, BY + BH + 36, RULE, 0.8, "3 5")     # 라벨로 내려가는 실낱
+    d.t(cx, BY + BH + 52, transitions[i][0], 11, INK, KR, "middle", 600)
+    d.t(cx, BY + BH + 70, transitions[i][1], 10, MUTED, MONO)
 
 for i, (name, sub, split, stuck) in enumerate(states):
     x, focal = bx(i), (i == 2)
@@ -62,6 +62,6 @@ for i, (name, sub, split, stuck) in enumerate(states):
             fill = f"{WARN}14" if stuck == r else PAPER
             d.o.append(f'<rect x="{x + BAR_X}" y="{ry}" width="{BAR_W}" height="{ROW_H}" rx="4" fill="{fill}" stroke="{c}" stroke-width="{sw}"/>')
 
-d.legend(404, [("이 책이 다루는 자리", ACC), ("아직 쪼개지지 않은 층", WARN)])
+d.legend(BY + BH + 100, [("이 책이 다루는 자리", ACC), ("아직 쪼개지지 않은 층", WARN)])
 d.save("01-01.three-generations.svg")
-print("h 필요:", 404 + 22 + 16, " 실제:", H, " 우측끝:", bx(2) + BW, "/", W)
+print("h 필요:", BY + BH + 100 + 22 + 16, " 실제:", H, " 우측끝:", bx(2) + BW, "/", W)
