@@ -8,7 +8,7 @@ related:
   - ../README.md
   - ./_drill/README.md
   - ./_drill/candidates.md
-updated: 2026-09-07
+updated: 2026-09-08
 ---
 
 # troubleshooting
@@ -33,11 +33,11 @@ updated: 2026-09-07
 
 | 폴더 | 문자 | 문제가 사는 곳 | 문항 |
 |------|------|--------------|------|
-| [os/](./os/) | A | 리눅스 호스트 한 대 안 — 소켓·conntrack·MTU·라우팅·NIC | 1 |
-| [kubernetes/](./kubernetes/) | B | 클러스터 안 — Pod 네트워크·Service·CoreDNS·CNI·NetworkPolicy | 1 |
+| [os/](./os/) | A | 리눅스 호스트 한 대 안 — 소켓·conntrack·MTU·라우팅·NIC | 2 |
+| [kubernetes/](./kubernetes/) | B | 클러스터 안 — Pod 네트워크·Service·CoreDNS·CNI·NetworkPolicy | 2 |
 | [mesh/](./mesh/) | C | 서비스 메시 — Envoy 사이드카·mTLS·xDS·서킷 브레이커 | 1 |
 | [cloud/](./cloud/) | D | 클러스터 바깥 — VPC·보안 그룹·NAT·로드밸런서·리전 간 | 0 |
-| [runtime/](./runtime/) | E | JVM 과 애플리케이션 — GC·OOM·스레드·커넥션 누수·트랜잭션 | 0 |
+| [runtime/](./runtime/) | E | JVM 과 애플리케이션 — GC·OOM·스레드·커넥션 누수·트랜잭션 | 1 |
 
 A 부터 D 까지가 "패킷이 어디서 사라지나"를 묻는 네트워크 축이고, E 는 "프로세스가 왜 멈추거나 느려지나"를 묻습니다.
 
@@ -74,6 +74,7 @@ A 부터 D 까지가 "패킷이 어디서 사라지나"를 묻는 네트워크 �
 
 직접 풀어 보려면 [`_drill/`](./_drill/README.md) 입니다. 하루 세 문항을 증상만 보고 진단하는 루틴과 채점 규약이 거기 있습니다. 문항은 [`_drill/sources.md`](./_drill/sources.md) 의 소스에서 그날 새로 뽑고, 기존 사례집 두 곳이 그 예비 풀입니다.
 
+- [개념 노트](./_concepts/README.md) — 문항에서 갈라져 나온 이론. 여러 문항에 걸리는 것만 여기 모읍니다
 - [출제 후보 풀](./_drill/candidates.md) — 아직 안 푼 증상 79건. A 계층 41 · B 계층 38
 - [Infratice](https://github.com/kiku99/Infratice) — 그 79건의 원문. 해설이 필요하면 여기서 봅니다
 
