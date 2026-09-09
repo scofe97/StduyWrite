@@ -6,7 +6,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, OK, WARN, INFO, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1000, 596
+W, H = 1000, 608
 SPINE_Y = 300
 SX0, SX1 = 90, 800
 DX, DY = 64, 112
@@ -43,5 +43,5 @@ d.t(24, 508, "시나리오 2 의 숫자 — 제공 부하가 R/2 일 때 처리�
 d.t(24, 530, "패킷마다 평균 두 번 전달되면 처리량이 R/4 로 수렴합니다. 링크는 쉬지 않는데 쓸모 있는 일은 줄어듭니다.",
      11, MUTED, KR, "start")
 
-d.legend(H - 32, [("셋이 모인 결과", ACC), ("지연 쪽 대가", INFO), ("재전송 쪽 대가", WARN), ("낭비 쪽 대가", OK)])
+d.legend(H - 44, [("셋이 모인 결과", ACC), ("지연 쪽 대가", INFO), ("재전송 쪽 대가", WARN), ("낭비 쪽 대가", OK)])
 d.save("03-04.congestion-costs.svg")

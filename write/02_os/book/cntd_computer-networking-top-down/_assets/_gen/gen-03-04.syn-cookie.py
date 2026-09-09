@@ -14,7 +14,7 @@ class SeqKR(Seq):
         s.t(mx, y - 9, label, 11, c, _kr(label), "middle", 600)
         if sub: s.t(mx, y + 17, sub, 11, MUTED, KR)
 
-W, H = 1000, 648
+W, H = 1000, 660
 d = SeqKR(W, H, "COMPUTER NETWORKING TOP-DOWN · 03-04 §3",
           "자원을 언제 잡느냐가 갈림길입니다",
           "정상 3-way 핸드셰이크는 2단계에서 서버가 버퍼와 변수를 잡는다. SYN 쿠키는 그 시점을 없애고 3단계에서 검산으로 대신한다.",
@@ -41,5 +41,5 @@ d.t(20, 566, "서버가 상태를 기억하는 대신 다시 계산할 수 있�
 d.t(20, 588, "ACK 가 안 오면 원래의 가짜 SYN 은 아무 해도 끼치지 않습니다 — 자원을 할당한 적이 없기 때문입니다.",
      11, MUTED, KR, "start")
 
-d.legend(H - 32, [("쿠키를 검산하는 자리", ACC), ("공격이 노리는 자리", WARN), ("정상 완료", OK)])
+d.legend(H - 44, [("쿠키를 검산하는 자리", ACC), ("공격이 노리는 자리", WARN), ("정상 완료", OK)])
 d.save("03-04.syn-cookie.svg")
