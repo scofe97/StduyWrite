@@ -1,5 +1,5 @@
 ---
-title: 10_spring/03_network/resilience — Resilience4j 회복탄력성 시리즈
+title: 09_spring/03_network/resilience — Resilience4j 회복탄력성 시리즈
 tags: [moc, resilience4j, circuit-breaker, retry, bulkhead, rate-limiter, spring-boot]
 status: draft
 source:
