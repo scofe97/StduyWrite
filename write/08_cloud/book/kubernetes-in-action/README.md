@@ -28,11 +28,11 @@ related:
 learning:
   topic: kubernetes-in-action
   scope: durable
-  level: 내림 — 8장 복습 회차 2 에서 셸·프로세스 기초와 kubectl 상태 명명이 함께 비어 있음이 드러남
-  last_verified: 2026-09-06
-  blocked_count: 3
-  next_lesson: "**재학습 우선(2026-09-06 등록)** — 08-01·08-02 회차 2 가 각각 quality 1(회차 1 은 3, 퇴행). 축은 둘이다. ①`command`/`args` 배열은 셸을 거치지 않고 곧장 exec 된다 — exec·$JAVA_OPTS·CMD 폐기가 이 한 문장으로 모인다. ②상태 이름을 화면에서 읽기 — `kubectl get pod` 의 STATUS, `describe` 의 Events, `create configmap --dry-run=client -o yaml` 의 data 블록. 본문 재독이 아니라 출력 화면을 보고 이름을 대는 과제로 짠다."
-updated: 2026-09-06
+  level: 내림 유지 — 2026-09-10 재학습 드릴 평균 2.0. 회차 2 의 quality 1 에서는 올랐지만 한 번으로 안 닫혔다. 「무슨 일이 일어난 화면인가」 는 나오고 「무엇과 무엇이 어떻게 다른가」 는 안 나온다
+  last_verified: 2026-09-10
+  blocked_count: 2
+  next_lesson: "**재학습 1 회차 완료(2026-09-10) — 안 닫혔다. 표적 재확인이 먼저이고 복습 회차 3 은 그 뒤다.** 상태 채널이 지정한 대로 본문 재독 없이 출력 화면만 보고 이름을 대는 드릴 6 개로 진행했다(축 ① 3 개 · 축 ② 3 개). 점수는 2·2·1 / 3·0·4, 평균 2.0. **갈린 선이 뚜렷하다** — 4·6 번(`1/2`·`optional`·`subPath`)은 「이 화면을 보면 무슨 일이 일어난 것인가」 를 묻는 **상황형**이라 나왔고, 1·2·3·5 번은 전부 「무엇과 무엇이 어떻게 다른가」 를 묻는 **구성형**이라 안 나왔다. 2026-09-06 이래 세 책(networking-and-kubernetes·learning-modern-linux·이 책)에서 같은 선이 반복된다. **아직 안 닫힌 것 넷.** ①`exec` 라는 단어 자체가 안 나왔다 — 두 매니페스트의 차이를 `sh -c` 유무로 답했다. ②PID 1 이 죽으면 네임스페이스가 정리된다는 것을 「sh 가 죽고 sleep 은 살아남는다」 로 뒤집었다. ③`command` 만 적으면 CMD 가 **버려진다**는 것을 「같은 거 아니냐」 로 답했다(유지로 오인). ④**`--from-literal`·`--from-file`·`--from-env-file` 세 옵션이 통째로 공백(0 점)** — ConfigMap 장의 입구인데 비어 있어 가장 급하다. 손잡이는 「`--from-file` 은 파일을 **안 읽고**, `--from-env-file` 은 **읽는다**」 한 문장이다. **다음: 위 넷만 표적 재확인한다.** 통과하면 08-01·08-02 회차 3 파일을 만든다. 통과 못 하면 실습으로 내린다 — `k8s_in_action/08-configuring-apps/command-env/` 매니페스트를 직접 고쳐 `ps` 출력이 바뀌는 것을 손으로 보는 쪽이다. **나머지 39 편의 회차 파일 대량 생성은 계속 보류한다**(11~13 장 8 편은 2026-09-09 에 신설, 미실행)."
+updated: 2026-09-10
 ---
 
 # Kubernetes in Action, 2nd Edition — 정독 인덱스
