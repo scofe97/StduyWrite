@@ -33,11 +33,30 @@ updated: 2026-09-13
 
 
 
+## 학습 순서
+
+> 단계마다 배우는 개념입니다. 우선순위와 자료 위치는 아래 단계별 표가 짚습니다.
+
+![Linux 운영에서 커널 내부로 내려가는 OS 학습 순서](_assets/os-roadmap.svg)
+
+| 단계 | 무엇을 여는가 | 배우는 개념 |
+|---|---|---|
+| 1 · Linux 사용 | 명령을 치는 자리 | 셸 · 스트림 · 변수 · 종료 상태 · 파일 · 권한 · 리다이렉션 · 파이프 · 모든 것이 파일 · VFS · mount · 부팅 · initramfs · systemd unit · 의존성 · journal |
+| 2 · 실행 모델 | 애플리케이션이 하는 일 | 유저 스페이스 · 커널 스페이스 · 시스템 콜 · `strace` · process · thread · task 구조 · signal · 종료 코드 137 · 143 · zombie · PID 1 · file descriptor · `ulimit` · `epoll` · 동기화 · 교착 |
+| 3 · 컨테이너 기반 | 컨테이너가 서는 바닥 | namespace 여덟 · `unshare` · cgroup v2 · controller · `cpu.max` · `cpu.stat` · `memory.max` · PSI · OOM Killer · mount propagation · OverlayFS · copy-on-write · user namespace · rootless · capability |
+| 4 · 성능 분석 | 왜 느린가 | USE · RED · 드릴다운 · run queue · CFS · context switch · load average · softirq · RSS · VSS · PSS · page cache · swap · overcommit · block I/O · IOPS · `fsync` · 파일 시스템 캐시 |
+| 5 · 관측과 보안 | 어느 창을 여는가 | procfs · sysfs · `sar` · perf · Ftrace · tracepoint · kprobe · uprobe · BCC · bpftrace · verifier · CO-RE · BTF · capability · seccomp · AppArmor · SELinux · 샌드박싱 |
+| 6 · 커널 내부 | 커널의 안 | VAS · 주소 변환 · KASLR · 페이지 할당자 · GFP 플래그 · slab · `kmalloc` · `vmalloc` · demand paging · 스케줄링 클래스 · CFS 구현 · 임계 구역 · mutex · spinlock · atomic · lock-free · lockdep · 하이퍼바이저 · KVM |
+
+
+
 ## 책 읽기 흐름
 
-> 이 로드맵이 쓰는 책 열하나와 각 책에서 읽을 장입니다. 통독하는 책은 없습니다.
+> 위 단계를 무엇으로 배우는가입니다. 책 열하나가 각각 어느 단계의 무엇을 다루는지와 읽을 장을 적습니다.
 
 ![OS 책 읽기 흐름 — 우선순위와 읽을 장](_assets/os-books.svg)
+
+통독하는 책은 없습니다.
 
 | 책 | 읽을 장 | 우선순위 | 자리 |
 |---|---|:---:|---|
@@ -54,23 +73,6 @@ updated: 2026-09-13
 | Mastering KVM Virtualization | 1·2 · 15장 | 대체 | 6단계 — Virtualization Essentials 자리 |
 
 소장 목록은 계속 늘어납니다. 새 책이 들어오면 이 표와 아래 단계별 표의 `책` 열을 함께 갱신합니다.
-
-
-
-## 학습 순서
-
-> 단계마다 배우는 개념입니다. 우선순위와 자료 위치는 아래 단계별 표가 짚습니다.
-
-![Linux 운영에서 커널 내부로 내려가는 OS 학습 순서](_assets/os-roadmap.svg)
-
-| 단계 | 무엇을 여는가 | 배우는 개념 |
-|---|---|---|
-| 1 · Linux 사용 | 명령을 치는 자리 | 셸 · 스트림 · 변수 · 종료 상태 · 파일 · 권한 · 리다이렉션 · 파이프 · 모든 것이 파일 · VFS · mount · 부팅 · initramfs · systemd unit · 의존성 · journal |
-| 2 · 실행 모델 | 애플리케이션이 하는 일 | 유저 스페이스 · 커널 스페이스 · 시스템 콜 · `strace` · process · thread · task 구조 · signal · 종료 코드 137 · 143 · zombie · PID 1 · file descriptor · `ulimit` · `epoll` · 동기화 · 교착 |
-| 3 · 컨테이너 기반 | 컨테이너가 서는 바닥 | namespace 여덟 · `unshare` · cgroup v2 · controller · `cpu.max` · `cpu.stat` · `memory.max` · PSI · OOM Killer · mount propagation · OverlayFS · copy-on-write · user namespace · rootless · capability |
-| 4 · 성능 분석 | 왜 느린가 | USE · RED · 드릴다운 · run queue · CFS · context switch · load average · softirq · RSS · VSS · PSS · page cache · swap · overcommit · block I/O · IOPS · `fsync` · 파일 시스템 캐시 |
-| 5 · 관측과 보안 | 어느 창을 여는가 | procfs · sysfs · `sar` · perf · Ftrace · tracepoint · kprobe · uprobe · BCC · bpftrace · verifier · CO-RE · BTF · capability · seccomp · AppArmor · SELinux · 샌드박싱 |
-| 6 · 커널 내부 | 커널의 안 | VAS · 주소 변환 · KASLR · 페이지 할당자 · GFP 플래그 · slab · `kmalloc` · `vmalloc` · demand paging · 스케줄링 클래스 · CFS 구현 · 임계 구역 · mutex · spinlock · atomic · lock-free · lockdep · 하이퍼바이저 · KVM |
 
 
 
