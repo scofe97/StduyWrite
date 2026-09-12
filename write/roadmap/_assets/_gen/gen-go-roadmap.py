@@ -70,6 +70,7 @@ stages = [
       ("message passing · 채널 패턴", "Learn Concurrent Go 7~9장", "필수"),
       ("pipeline · fan-in · fan-out", "Learn Concurrent Go 10장", "추천"),
       ("deadlock 회피", "Learn Concurrent Go 11장", "추천"),
+      ("채널 소유권 — 닫기는 한 곳에서", "Learn Concurrent Go 7장", "필수"),
       ("atomic · spin lock · futex", "Learn Concurrent Go 12장", "추천"),
       ("happens-before · race detector", "", "필수")]),
 
@@ -93,6 +94,9 @@ stages = [
       ("직렬화 · 로깅 · 지표", "Network Programming Go 12·13장", "추천"),
       ("복원력 · 느슨한 결합", "Cloud Native Go 8·9장", "추천"),
       ("관리성 · 관측성 · 보안", "Cloud Native Go 10~12장", "추천"),
+      ("go:embed — 정적 자원 품기", "Cloud Native Go 10장", "추천"),
+      ("distroless · 멀티스테이지 이미지", "", "추천"),
+      ("syscall/js — Wasm 이라는 경계", "", "선택"),
       ("gRPC 서비스 만들기", "Pocket-Sized Projects 10·11장", "선택")]),
 ]
 

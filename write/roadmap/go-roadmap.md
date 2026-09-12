@@ -128,6 +128,7 @@ updated: 2026-09-13
 | 조건 변수 · 세마포어 | 추천 | | Learn Concurrent Programming with Go 5장 |
 | pipeline · fan-in · fan-out · errgroup | 추천 | | Learn Concurrent Programming with Go 10장 |
 | deadlock 회피 | 추천 | | Learn Concurrent Programming with Go 11장 |
+| 채널 소유권 — 닫기는 한 곳에서만 | 필수 | | Learn Concurrent Go 7장 |
 | atomic · spin lock · futex | 추천 | | Learn Concurrent Programming with Go 12장 |
 
 ### 5단계 · 테스트와 성능
@@ -157,6 +158,9 @@ updated: 2026-09-13
 | 복원력 · 느슨한 결합 · 확장성 | 추천 | | Cloud Native Go 7~9장 |
 | 관리성 · 관측성 · 보안 · 분산 상태 | 추천 | | Cloud Native Go 10~13장 |
 | Unix domain socket | 선택 | | Network Programming with Go 7장 |
+| go:embed — 정적 자원을 바이너리에 품기 | 추천 | | Cloud Native Go 10장 |
+| distroless · 멀티스테이지 이미지 | 추천 | | |
+| syscall/js — Wasm 이라는 경계 | 선택 | | |
 | gRPC 서비스 만들기 | 선택 | | Pocket-Sized Projects 10·11장 |
 
 
@@ -189,7 +193,7 @@ updated: 2026-09-13
 | epoll · 스케줄러 · 프로파일 방법론 | [OS 로드맵](os-roadmap.md) 2·4단계가 맡습니다 |
 | Cloud Native Go 1~3장 | 클라우드 네이티브 개론과 Go 소개입니다. 순서에 넣을 축이 아닙니다 |
 | Learning Go 16장 | reflect · unsafe · cgo 입니다. 필요가 생겼을 때 엽니다 |
-| P2P · 익명 오버레이 구현 | [네트워크 로드맵](network-roadmap.md) 8단계가 개념을 맡습니다 |
+| P2P · 익명 오버레이 구현 | [네트워크 로드맵](network-roadmap.md) 8·9단계가 개념을 맡습니다 |
 
 
 

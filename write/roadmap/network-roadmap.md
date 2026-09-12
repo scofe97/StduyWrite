@@ -43,6 +43,7 @@ updated: 2026-09-13
 | 3 · 관측 | 이름 진단 | `resolv.conf` · search domain · `ndots` · NXDOMAIN · Corefile · 플러그인 체인 · 응답 불일치 |
 | 3 · 관측 | 측정의 함정 | 연결 지연 분포 · P99 · 측정 오차 · GRO · GSO · TSO 오프로딩 · `tc qdisc` · `netem` |
 | 4 · Kubernetes | Pod 네트워크 | Pod IP · Pod CIDR · Node CIDR · pause container · CNI · CNI 계약 ADD·DEL·CHECK |
+| 4 · Kubernetes | CNI 구현체 | Calico · Flannel · Cilium 의 갈림 · 라우팅 대 오버레이 · iptables 대 eBPF · 정책 표현력 |
 | 4 · Kubernetes | 노드 간 전달 | 오버레이 · VXLAN · underlay 와 overlay 의 갈림 |
 | 4 · Kubernetes | 서비스 추상화 | Service · EndpointSlice · Service 5유형 · kube-proxy · iptables · IPVS · readiness · stale Endpoint |
 | 4 · Kubernetes | 이름과 진입 | 클러스터 DNS · Service FQDN · service discovery · east-west · Ingress · Gateway API · HTTPRoute |
@@ -64,9 +65,12 @@ updated: 2026-09-13
 | 8 · 오버레이와 신뢰 | 발견 | peer discovery · DHT · Kademlia · gossip · membership · peer store |
 | 8 · 오버레이와 신뢰 | 식별 | node ID · signed descriptor · 공개키 신원 · key rotation · replay · freshness |
 | 8 · 오버레이와 신뢰 | 신뢰 | Sybil · eclipse · poisoning · identity 와 trust 의 차이 · 인증과 인가의 차이 · behavior score |
-| 8 · 오버레이와 신뢰 | 경로 | path selection · latency · 가용성 · subnet · ASN diversity · 비용 함수 · selection bias |
 | 8 · 오버레이와 신뢰 | 관측 가능성 | traffic correlation · metadata · timing side-channel · 암호화가 숨기지 않는 것 |
 | 8 · 오버레이와 신뢰 | 오버레이 | 물리와 논리의 분리 · 터널링 · 가상 토폴로지 · relay · hole punching · reachability |
+| 9 · 터널과 경로 | 구성 | 터널 구성 · 피어 발견과의 차이 · 멀티홉 · 홉 수의 대가 · inbound 와 outbound 의 분리 · RX 와 TX |
+| 9 · 터널과 경로 | 선택 | path selection · latency · 가용성 · subnet · ASN diversity · 비용 함수 · selection bias · 클라이언트가 정하는 경로 |
+| 9 · 터널과 경로 | 확률 | 종단 성공 확률 · 곱으로 쌓이는 실패 · 기하분포 · 평균 시도 횟수 · 재시도 · 타임아웃 · 감지 시간 |
+| 9 · 터널과 경로 | 자원 | 터널 풀 · 미리 열어 두기 · 예비 터널 · 준비 비용 · 전환 시간 · 자원 사용량 |
 
 
 
@@ -87,16 +91,18 @@ updated: 2026-09-13
 | HTTP/2 in Action | 4·8·9장 | 추천 | 1단계 |
 | [Learning CoreDNS](../08_cloud/book/learning-coredns/README.md) | 3·6·7장 | 추천 | 3·4단계 |
 | Cloud Native Data Center Networking | 2·6·7·14장 | 추천 | 4·5단계 |
-| Cilium Up and Running | 4~7 · 12~15장 | 추천 | 4·6단계 |
+| Cilium Up and Running | 1~16장 | 필수 | 4~7단계 |
 | Learning eBPF | 3·5~8장 | 추천 | 6단계 |
 | [Istio in Action](../08_cloud/book/istio-in-action/README.md) | 1·3·4·5·9·12장 | 추천 | 7단계 |
 | Zero Trust Networks | 1·2·6·8·10장 | 추천 | 7·8단계 |
 | Real-World Cryptography | 5 · 7~10장 | 추천 | 8단계 |
-| Patterns of Distributed Systems | 7·8장 | 선택 | 8단계 |
+| Patterns of Distributed Systems | 7·8장 | 추천 | 8·9단계 |
 | High Performance Browser Networking | 2·4·11·12장 | 대체 | 1단계 — HTTP/2 in Action 자리 |
 | Sidecar-less Istio Explained | 전 4장 | 대체 | 7단계 — Istio in Action 12장 자리 |
 
 소장 목록은 계속 늘어납니다. 새 책이 들어오면 이 표와 아래 단계별 표의 `책` 열을 함께 갱신합니다.
+
+**책만으로 안 되는 축이 둘입니다.** Gateway API 와 멀티클러스터는 소장본 중 Cilium 만 최신이라 [Gateway API 가이드](https://gateway-api.sigs.k8s.io/guides/)와 [CNI 규격](https://github.com/containernetworking/cni/blob/main/SPEC.md), [CoreDNS Manual](https://coredns.io/manual/toc/), [Kubernetes 서비스·네트워킹 문서](https://kubernetes.io/ko/docs/concepts/services-networking/)로 메웁니다. LLM 트래픽은 아직 책이 없어 [Gateway API Inference Extension](https://gateway-api-inference-extension.sigs.k8s.io/guides/) 문서가 유일한 기준입니다.
 
 
 
@@ -171,6 +177,7 @@ updated: 2026-09-13
 |---|:---:|---|---|
 | Pod IP · Pod CIDR · Node CIDR · pause container | 필수 | [04-01](../08_cloud/book/networking-and-kubernetes/04-01.Kubernetes%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9%20%EB%AA%A8%EB%8D%B8%20%E2%80%94%20Pod%20IP%C2%B7%EB%A0%88%EC%9D%B4%EC%95%84%EC%9B%83%C2%B7Probe.md) | Networking and Kubernetes 4장 |
 | CNI | 필수 | [04-02](../08_cloud/kubernetes/04_networking/04-02.Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%99%80%20Linux%20%EA%B8%B0%EB%B0%98.md) · [04-02](../08_cloud/book/networking-and-kubernetes/04-02.CNI%EC%99%80%20kube-proxy%20%E2%80%94%20Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%9D%98%20%EB%B0%B0%EC%84%A0%EA%B3%B5%EA%B3%BC%20%EB%A1%9C%EB%93%9C%EB%B0%B8%EB%9F%B0%EC%84%9C.md) | Cilium 4장 |
+| CNI 구현체 비교 — 무엇이 다른가 | 추천 | | Cilium 1~3장 |
 | CNI 계약 — ADD · DEL · CHECK | 추천 | | Networking and Kubernetes 4장 |
 | 오버레이 · VXLAN | 필수 | [04-03](../08_cloud/kubernetes/04_networking/04-03.%EC%98%A4%EB%B2%84%EB%A0%88%EC%9D%B4%EC%99%80%20%EB%85%B8%EB%93%9C%20%EA%B0%84%20%ED%8A%B8%EB%9E%98%ED%94%BD.md) | Cilium 5장 |
 | underlay 와 overlay 의 갈림 | 추천 | | Cloud Native Data Center Networking 6장 |
@@ -222,7 +229,7 @@ updated: 2026-09-13
 
 
 
-## 운영 경계와 오버레이 · 7~8단계
+## 운영 경계와 오버레이 · 7~9단계
 
 > 클러스터가 한 종류가 아닐 때, 그리고 노드끼리 서로를 모르는 채로 만날 때 생기는 문제들입니다.
 
@@ -254,12 +261,30 @@ updated: 2026-09-13
 | signed descriptor · 공개키 신원 · 무결성 | 추천 | | Real-World Cryptography 7장 |
 | key rotation · replay 방지 · freshness | 추천 | | Real-World Cryptography 5·8장 |
 | Sybil · eclipse · poisoning · behavior score | 추천 | | Zero Trust Networks 10장 |
-| path selection · latency · 가용성 · 다양성 · 비용 함수 | 추천 | | |
-| subnet · ASN · operator diversity · selection bias | 추천 | | |
 | 오버레이 — 물리와 논리의 분리 · 터널링 · 가상 토폴로지 | 추천 | | |
 | relay · hole punching · reachability | 선택 | | |
 
 **같은 질문이 이름만 바꿔 되풀이됩니다.** 아직 아무도 모르는 노드가 처음 네트워크에 어떻게 들어오는가는 Kubernetes node discovery, etcd cluster join, Kafka broker discovery, VPN mesh에서 같은 형태로 나옵니다. 그래서 이 단계를 마지막에 두되 특정 제품을 학습 대상으로 두지 않습니다.
+
+### 9단계 · 터널과 경로
+
+> 노드를 골랐다고 길이 나는 것은 아닙니다. 여기서는 실패가 곱으로 쌓이는 구조를 셈으로 다룹니다.
+
+| 개념 | 우선순위 | 노트 | 책 |
+|---|:---:|---|---|
+| 피어 발견 성공과 터널 구성 성공은 다르다 | 필수 | | |
+| 멀티홉 — 홉 수가 지연 · 성공률 · 프라이버시에 미치는 값 | 필수 | | |
+| path selection · latency · 가용성 · 다양성 · 비용 함수 | 필수 | | |
+| subnet · ASN · operator diversity · selection bias | 추천 | | |
+| inbound 와 outbound — 단방향 터널을 조합한 양방향 통신 | 추천 | | |
+| RX 와 TX 경로를 나누는 이유 | 추천 | | |
+| 클라이언트가 경로를 정하고 서버는 목록만 준다 | 추천 | | |
+| 종단 성공 확률 — 단계별 실패가 곱으로 쌓인다 | 필수 | | |
+| 기하분포 — 최초 성공까지의 평균 시도 횟수 | 추천 | | |
+| 재시도와 타임아웃 — 확률만큼 감지 시간도 값이다 | 필수 | | Patterns of Distributed Systems 7장 |
+| 터널 풀 — 연결마다 새로 여는 방식과의 갈림 | 추천 | | |
+| 예비 터널 — 준비 비용 · 전환 시간 · 자원 사용량 | 추천 | | |
+
 
 
 
@@ -278,6 +303,8 @@ updated: 2026-09-13
 | [troubleshooting/os](../troubleshooting/os/README.md) · [cloud](../troubleshooting/cloud/README.md) · [mesh](../troubleshooting/mesh/README.md) | 1~4·7 | 증상에서 원인 역추적 다섯 편 |
 
 5·7단계 자리는 비어 있습니다. 클라우드 축은 계정과 과금이 걸리고, 서비스 메시는 컨트롤 플레인이 서야 재현됩니다.
+
+**노트 밖의 실습 경로가 둘 있습니다.** [LFS146 Introduction to Cilium](https://training.linuxfoundation.org/training/introduction-to-cilium-lfs146/)은 무료 26시간 과정으로 NetworkPolicy · Hubble · 투명 암호화 · kube-proxy replacement · Cluster Mesh 를 6·7단계 범위에서 손으로 밟게 합니다. [Isovalent Universe](https://labs.isovalent.com/)는 설치 없이 브라우저에서 도는 랩이라 클러스터를 세울 수 없을 때 씁니다.
 
 **장애를 주입해 확인할 목록을 따로 둡니다.** 실습 자료가 없는 자리도 증상은 만들 수 있습니다.
 

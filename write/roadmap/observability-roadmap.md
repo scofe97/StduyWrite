@@ -28,7 +28,7 @@ updated: 2026-09-13
 |---|---|---|
 | 1 · 관측 가능성의 자리 | 관점 | 모니터링과 관측 가능성의 차이 · 세 신호 — 지표 · 로그 · 트레이스 · 질문 중심 사고 |
 | 1 · 관측 가능성의 자리 | 기본 단위 | 구조화 이벤트 · 임의로 넓은 이벤트 · 고카디널리티 · 카디널리티 폭발 |
-| 1 · 관측 가능성의 자리 | 도구 지형 | Grafana 스택 · LGTM · 페르소나 · SRE 가 보는 관측과 모니터링 |
+| 1 · 관측 가능성의 자리 | 도구 지형 | Grafana 스택 · LGTM · 페르소나 · SRE 가 보는 관측과 모니터링 · Metrics Server 와 시계열 DB 의 갈림 |
 | 2 · 계측 | 로그 | 구조화 필드 · `timestamp` · `severity` · `trace_id` · `request_id` · 민감정보 제거 |
 | 2 · 계측 | 지표 | counter · gauge · histogram · summary · exposition · exporter · 클라이언트 라이브러리 |
 | 2 · 계측 | 라벨 | 라벨 설계 · 카디널리티 한계 · Pod UID 같은 무제한 값 · bucket 경계 |
@@ -89,6 +89,7 @@ updated: 2026-09-13
 | 구조화 이벤트가 기본 단위 | 필수 | | Observability Engineering 5·6장 |
 | 고카디널리티와 질문 중심 사고 | 추천 | | Observability Engineering 8장 |
 | Grafana 스택과 페르소나 · LGTM | 추천 | [01-01](../06_observability/book/observability_with_grafana/01-01.%EA%B4%80%EC%B8%A1%20%EA%B0%80%EB%8A%A5%EC%84%B1%EA%B3%BC%20Grafana%20%EC%8A%A4%ED%83%9D%20%E2%80%94%20%ED%8C%8C%EB%82%98%EB%A7%88%20%EC%9A%B4%ED%95%98%C2%B7%ED%8E%98%EB%A5%B4%EC%86%8C%EB%82%98%C2%B7LGTM.md) | Observability with Grafana 1장 |
+| Metrics Server 와 시계열 DB 의 갈림 | 추천 | | |
 | SRE 가 보는 관측과 모니터링 | 추천 | | Site Reliability Engineering 8장 |
 | 관측 가능성의 기원 | 선택 | | Observability Engineering 3장 |
 | 용어를 먼저 고정하기 | 추천 | [00-01](../06_observability/book/mastering_prometheus/00-01.%EC%9A%A9%EC%96%B4%EC%A7%91.md) | |
