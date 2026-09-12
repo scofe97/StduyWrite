@@ -13,7 +13,7 @@ updated: 2026-06-25
 
 주요 LLM 모델의 특성과 활용 방식을 이해하고, AI 기반 개발 환경에서 요구되는 Harness Engineering, Token Optimization, MCP 설계 등 핵심 AI 엔지니어링 기술을 습득하여 AI Agentization하는 실무 역량을 함양하고자 함
 
-> AI Engineering 딥다이브 로드맵의 **섹션별 키워드 전체**(모델 특성·Prompt·Context·Token·RAG·Tool Calling·MCP·Harness·Agent·Evaluation·Guardrail·Observability 18주제)는 [roadmap.md](roadmap.md)에 원문 그대로 정리해 두었습니다. 아래 "등록된 절"이 *이미 작성된 문서*(Claude/Anthropic 관점)라면, roadmap.md는 *다뤄야 할 전체 범위*(벤더 중립·OpenAI 관점 보완)의 SSOT입니다.
+> 읽는 순서는 [AI 학습 로드맵](../roadmap/ai-roadmap.md)이 정합니다. DevOps 직무 축으로 여덟 단계를 세우고, 아래 "등록된 절"을 1~4·7단계의 자료로 겁니다. 모델을 만드는 쪽(사전학습·파인튜닝·데이터셋 구축)은 그 로드맵의 대상이 아닙니다.
 
 ## 등록된 절
 
@@ -39,7 +39,6 @@ updated: 2026-06-25
 |------|------|------------|
 | [`docs/`](docs/) | 12편 | 도구 하나를 설치본 기준으로 파고든 노트. 현재 [`docs/orca/`](docs/orca/) — ADE(Agentic Development Environment) ORCA를 격리·관측·조율 세 축으로 |
 | [`hermes/`](hermes/) | 1편 | Hermes 에이전트 하네스 사례 — 자기개선 로컬 에이전트의 루프와 메모리 구조 |
-| [`quiz/`](quiz/) | 4편 | 학습 퀴즈 축적본, AI 엔지니어링·Agentization 각 100문항, 오답 노트 |
 
 위 "등록된 절"이 개념 본문이라면 이 셋은 제품 사례와 자가 점검입니다. 본문 개정 시 함께 보지 않아도 되도록 분리해 둡니다.
 
@@ -49,7 +48,7 @@ updated: 2026-06-25
 
 ## 경계 기준
 
-특정 프레임워크에 종속된 AI 활용(예: Spring AI, LangChain4j 연동)은 해당 언어·프레임워크 카테고리로 보내고, 모델 자체의 특성·릴리스·API와 모델 독립적인 에이전트 도구만 여기에 둡니다. Claude Code 같은 CLI 도구 설정은 `tools/`와 겹칠 수 있는데, *도구 설치·키맵*은 tools, *모델 능력·API 동작*은 본 카테고리로 나눕니다.
+특정 프레임워크에 종속된 AI 활용(예: Spring AI, LangChain4j 연동)은 해당 언어·프레임워크 카테고리로 보내고, 모델 자체의 특성·릴리스·API와 모델 독립적인 에이전트 도구만 여기에 둡니다. Claude Code 같은 CLI 도구도 *모델 능력·API 동작* 축에서 다루고, 설치·키맵 수준의 설정은 다루지 않습니다.
 
 ## 향후 추가 후보
 

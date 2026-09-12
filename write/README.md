@@ -3,9 +3,9 @@ title: README
 tags: [moc, index]
 status: final
 related:
-  - 02_os/networking/roadmap.md
+  - roadmap/README.md
   - 08_cloud/kubernetes/04_networking/README.md
-updated: 2026-09-05
+updated: 2026-09-12
 ---
 
 # write — 학습 문서 지도(MOC)
@@ -30,7 +30,6 @@ updated: 2026-09-05
 | 06 | [`06_observability/`](06_observability/) | 로깅·트레이싱·메트릭·OpenTelemetry |
 | 07 | [`07_devops/`](07_devops/) | CI/CD·Jenkins·Nexus·SonarQube |
 | 08 | [`08_cloud/`](08_cloud/) | Kubernetes·Service Mesh·ArgoCD·OpenStack |
-| — | `tools/` <!-- 링크 끊김(2026-09): 99_ETC/tools/ 가 사라짐 --> | tmux·vim·Git·Claude Code |
 | — | [`99_ETC/security/`](99_ETC/security/) | OAuth/JWT·OWASP·Spring Security |
 | 09 | [`09_spring/`](09_spring/) | Spring 본질 이론. 도메인과 얽힌 Spring 문서는 각 카테고리에 흩어져 있고, 이 폴더가 집계점 |
 | 10 | [`10_AI/`](10_AI/) | 생성형 AI·에이전트 활용 |
@@ -42,15 +41,25 @@ updated: 2026-09-05
 
 ## 학습 로드맵
 
-> 한 카테고리에 담기지 않는 주제의 읽기 순서입니다. 여러 카테고리를 가로질러서 카테고리 README가 혼자 가질 수 없어 이 층에 둡니다.
+> 무엇을 어떤 순서로 읽을지는 [`roadmap/`](roadmap/) 이 정합니다. 카테고리 README 는 자료가 *어디에* 있는지를 맡고, 로드맵은 *무엇부터* 열지를 맡습니다.
 
-| 로드맵 | 무엇을 정하나 | 가로지르는 카테고리 |
+로드맵을 카테고리 안에 두지 않는 이유는 하나입니다 — **학습 주제가 카테고리 경계를 지키지 않습니다.** 네트워크는 `02_os`·`08_cloud`·`99_ETC` 에 걸쳐 있고, Kubernetes 로드맵은 커널·분산 합의·관측을 각각 다른 카테고리에서 끌어옵니다. 로드맵을 폴더에 두면 문서마다 "이건 저쪽" 위임 각주를 달아야 하고 그 각주가 서로를 가리킵니다. 한곳에 모으면 그 조율을 문서 사이에서 한 번만 합니다.
+
+| 로드맵 | 무엇을 정하나 | 상태 |
 |---|---|---|
-| [network-roadmap.md](network-roadmap.md) | Kubernetes 네트워크를 요소 단위로 덮는 읽기 순서 | `02_os` · `08_cloud` · `99_ETC/security` |
-| [os-roadmap.md](os-roadmap.md) | DevOps 로서 쓰는 OS 지식부터 커널 내부까지 | `02_os` · `08_cloud` |
-| [go-roadmap.md](go-roadmap.md) | 문법을 빨리 통과하고 관용구와 동시성에 시간을 몰아주는 순서 | `01_language` · `02_os` · `08_cloud` |
+| [go-roadmap.md](roadmap/go-roadmap.md) | 문법을 빨리 통과하고 관용구와 동시성에 시간을 몰아주는 순서 | `final` |
+| [network-roadmap.md](roadmap/network-roadmap.md) | socket과 Linux 패킷 경로에서 Kubernetes 네트워크까지 | `final` |
+| [os-roadmap.md](roadmap/os-roadmap.md) | DevOps 로서 쓰는 OS 지식부터 커널 내부까지 | `final` |
+| [k8s-roadmap.md](roadmap/k8s-roadmap.md) | 오브젝트를 굴려 보고 안 될 때 한 층씩 안으로 | `final` |
+| [data-roadmap.md](roadmap/data-roadmap.md) | 코드가 만드는 쿼리에서 시작해 분산 일관성까지 | `final` |
+| [observability-roadmap.md](roadmap/observability-roadmap.md) | 계측과 세 신호에서 SLO·확장·플랫폼까지 | `final` |
+| [jvm-roadmap.md](roadmap/jvm-roadmap.md) | 런타임 데이터 영역에서 GC·동시성·장애 진단까지 | `final` |
+| [ai-roadmap.md](roadmap/ai-roadmap.md) | 모델을 도구로 부리는 법에서 GitAIOps 운영까지 | `final` |
+| [spring-roadmap.md](roadmap/spring-roadmap.md) | 받은 원문의 키워드를 절별로 보존한 기록 | `reference` |
 
-셋 다 단계마다 배우는 개념 표와 책 밖 키워드 표를 두고, 출간 연도로 낡은 책을 걸러 공식 문서로 대신합니다.
+`final` 로드맵은 단계마다 키워드, 연결 문서, 완료 기준을 함께 둡니다. `reference` 문서는 읽기 순서보다 원래 키워드를 보존합니다.
+
+OS 기반은 `os-roadmap.md`, Kubernetes 오브젝트와 운영은 `k8s-roadmap.md`, 패킷 경로는 `network-roadmap.md`를 정본으로 봅니다.
 
 
 
