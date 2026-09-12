@@ -16,7 +16,7 @@ MARK = {"필수": INFO, "추천": OK, "선택": SOFT, "대체": ACC}
 
 # (단계, 국면, [(책, 읽을 장, [다루는 것 2줄], 우선순위)])
 rows = [
-    ("1", "연결", [
+    ("1·2", "연결", [
         ("Computer Networking", "1~5장", ["응용·전송·네트워크 계층", "라우팅과 SDN"], "필수"),
         ("TCP/IP Illustrated", "2~8 · 10~18장", ["주소·ARP·IP·NAT·ICMP", "TCP 연결·재전송·혼잡"], "필수"),
     ]),
@@ -27,18 +27,18 @@ rows = [
     ("2–6", "계층 종주", [
         ("Networking and Kubernetes", "전독 · 6장이 클라우드 축", ["OSI 부터 EKS 까지 한 축", "실습 다섯 편 포함"], "필수"),
     ]),
-    ("3", "관측", [
+    ("3·4", "관측", [
         ("Packet Analysis with Wireshark", "1~5장", ["캡처·필터·TCP·TLS", "DHCP 와 이름 질의"], "필수"),
         ("Learning CoreDNS", "3·6·7장", ["Corefile 과 플러그인 체인", "Kubernetes 레코드"], "추천"),
     ]),
     ("4–5", "underlay·클라우드", [
         ("Cloud Native Data Center Networking", "2·6·7·14장", ["Clos 토폴로지·네트워크 가상화", "컨테이너 네트워킹·BGP"], "추천"),
     ]),
-    ("6", "데이터패스", [
+    ("4–7", "데이터패스", [
         ("Cilium Up and Running", "1~16장", ["왜 Cilium 인가·CNI 비교·IPAM", "정책·BGP·Egress·암호화·Hubble"], "필수"),
         ("Learning eBPF", "3·5~8장", ["프로그램 구조·CO-RE·BTF", "verifier·네트워킹"], "추천"),
     ]),
-    ("7", "운영 경계", [
+    ("7·8", "운영 경계", [
         ("Istio in Action", "1·3·4·5·9·12장", ["Envoy·Gateway·mTLS", "기본값 닫기·Zero Trust"], "추천"),
         ("Zero Trust Networks", "1·2·6·8·10장", ["신뢰 관리와 identity", "트래픽 신뢰·공격자 관점"], "추천"),
     ]),

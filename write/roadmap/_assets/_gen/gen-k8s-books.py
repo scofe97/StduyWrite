@@ -20,10 +20,10 @@ rows = [
     ("3", "연결 보강", [
         ("Networking and Kubernetes", "4·5장", ["CNI·kube-proxy·정책·DNS", "Service·EndpointSlice·Ingress"], "추천"),
     ]),
-    ("4–5", "자원·내부 구조", [
+    ("4·5 · 7", "자원·내부 구조", [
         ("Production Kubernetes", "3~9 · 12~13장", ["런타임·저장·라우팅·어드미션", "관측·멀티테넌시·오토스케일"], "추천"),
     ]),
-    ("6", "확장", [
+    ("5·6", "확장", [
         ("Programming Kubernetes", "1~6 · 9장", ["client-go·CRD·코드 생성", "Operator 와 고급 커스텀 리소스"], "추천"),
         ("Policy as Code", "4·5 · 7·8장", ["OPA 와 Kubernetes", "Gatekeeper 와 Kyverno"], "선택"),
     ]),
