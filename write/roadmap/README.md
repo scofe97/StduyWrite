@@ -22,7 +22,7 @@ updated: 2026-09-13
 | [네트워크](network-roadmap.md) | socket과 Linux 패킷 경로에서 클라우드 underlay와 오버레이 신뢰까지 |
 | [Kubernetes](k8s-roadmap.md) | 오브젝트 선언에서 클러스터 내부 구조·확장·운영까지 |
 | [Go](go-roadmap.md) | 문법과 타입 설계에서 동시성·테스트·네트워크 서비스까지 |
-| [데이터](data-roadmap.md) | 애플리케이션 쿼리에서 복제·샤딩·합의·스트림까지 |
+| [데이터](data-roadmap.md) | 데이터 시스템의 축에서 저장 엔진·복제·합의·스트림까지 |
 | [관측 가능성](observability-roadmap.md) | 계측과 세 신호에서 SLO·확장·플랫폼까지 |
 | [JVM](jvm-roadmap.md) | 런타임 데이터 영역에서 클래스 로딩·GC·동시성·장애 진단까지 |
 | [Spring](spring-roadmap.md) | 컨테이너와 프록시에서 부트·보안·운영·배포까지 |

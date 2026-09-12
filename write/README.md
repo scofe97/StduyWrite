@@ -51,7 +51,7 @@ updated: 2026-09-12
 | [network-roadmap.md](roadmap/network-roadmap.md) | socket과 Linux 패킷 경로에서 Kubernetes 네트워크까지 | `final` |
 | [os-roadmap.md](roadmap/os-roadmap.md) | DevOps 로서 쓰는 OS 지식부터 커널 내부까지 | `final` |
 | [k8s-roadmap.md](roadmap/k8s-roadmap.md) | 오브젝트를 굴려 보고 안 될 때 한 층씩 안으로 | `final` |
-| [data-roadmap.md](roadmap/data-roadmap.md) | 코드가 만드는 쿼리에서 시작해 분산 일관성까지 | `final` |
+| [data-roadmap.md](roadmap/data-roadmap.md) | 데이터 시스템의 축에서 저장 엔진·복제·합의·스트림까지 | `final` |
 | [observability-roadmap.md](roadmap/observability-roadmap.md) | 계측과 세 신호에서 SLO·확장·플랫폼까지 | `final` |
 | [jvm-roadmap.md](roadmap/jvm-roadmap.md) | 런타임 데이터 영역에서 GC·동시성·장애 진단까지 | `final` |
 | [ai-roadmap.md](roadmap/ai-roadmap.md) | 모델을 도구로 부리는 법에서 GitAIOps 운영까지 | `final` |
