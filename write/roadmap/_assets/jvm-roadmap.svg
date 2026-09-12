@@ -1,0 +1,467 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 3028" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">JVM 학습 로드맵</title><desc id="dd">애플리케이션이 여는 socket 에서 커널 패킷 경로로 내려간 뒤 Kubernetes 데이터패스로 다시 올라간다. 척추에 단계 여덟을 걸고 개념을 좌우로 뻗었다. 노드의 주인공은 개념이고 아래 줄은 그 개념을 다루는 책의 장이다. 점 색이 우선순위이고, 책 줄이 비면 아직 자료가 없는 자리다.</desc>
+<rect width="1000" height="3028" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">WRITE · JVM ROADMAP</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">JVM 학습 로드맵</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">노드는 개념, 아래 줄은 그 개념을 다루는 책의 장입니다</text>
+<rect x="40" y="96" width="380" height="190" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="56" y="120" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">읽는 법</text>
+<circle cx="64" cy="150" r="5" fill="#6A95D8"/>
+<text x="80" y="154" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">필수</text>
+<text x="118" y="154" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">빼면 뒤가 막힙니다</text>
+<circle cx="64" cy="176" r="5" fill="#3FB98C"/>
+<text x="80" y="180" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">추천</text>
+<text x="118" y="180" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">빼도 되지만 손해가 큽니다</text>
+<circle cx="64" cy="202" r="5" fill="#5E6B7E"/>
+<text x="80" y="206" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">선택</text>
+<text x="118" y="206" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">목표가 생겼을 때만</text>
+<circle cx="64" cy="228" r="5" fill="#F08A59"/>
+<text x="80" y="232" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">대체</text>
+<text x="118" y="232" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">같은 자리 — 하나만 고릅니다</text>
+<text x="56" y="268" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">책 줄이 비면 아직 자료가 없는 자리 — 개념이 먼저입니다</text>
+<rect x="580" y="96" width="380" height="190" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="580" y="96" width="380" height="190" rx="6" fill="none" stroke="#5E6B7E" stroke-width="0.9" stroke-dasharray="4 4"/>
+<text x="596" y="120" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">여기서 다루지 않는 것</text>
+<text x="596" y="152" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">spring-roadmap</text>
+<text x="596" y="168" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">프레임워크의 DI · AOP · 트랜잭션</text>
+<text x="596" y="185" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">os-roadmap</text>
+<text x="596" y="201" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">cgroup 이 재는 RSS 와 커널 메모리</text>
+<text x="596" y="218" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">data-roadmap</text>
+<text x="596" y="234" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">JDBC · JPA 의 쿼리와 트랜잭션 설계</text>
+<text x="596" y="251" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">01_language/java</text>
+<text x="596" y="267" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">언어 문법 · 컬렉션 · 디자인 패턴</text>
+<rect x="370" y="306" width="260" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="500" y="338" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">여기서 시작합니다</text>
+<line x1="500" y1="358" x2="500" y2="2908" stroke="rgba(191,192,192,0.22)" stroke-width="1.4"/>
+<line x1="340.0" y1="491.0" x2="316" y2="491.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="491.0" x2="316" y2="435.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="435.0" x2="302" y2="435.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="412.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="427.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="431.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">런타임 데이터 영역</text>
+<text x="62" y="449.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 2장</text>
+<line x1="316" y1="491.0" x2="316" y2="491.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="491.0" x2="302" y2="491.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="468.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="483.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="487.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">객체 레이아웃 · 헤더 · 접근 방식</text>
+<text x="62" y="505.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 2장</text>
+<line x1="316" y1="491.0" x2="316" y2="547.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="547.0" x2="302" y2="547.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="524.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="539.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="543.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">스택 프레임 · 피연산자 스택</text>
+<text x="62" y="561.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 8장</text>
+<line x1="660.0" y1="491.0" x2="684" y2="491.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="491.0" x2="684" y2="435.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="435.0" x2="698" y2="435.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="412.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="427.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="431.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">OutOfMemoryError 를 영역별로 재현</text>
+<text x="726" y="449.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 2장</text>
+<line x1="684" y1="491.0" x2="684" y2="491.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="491.0" x2="698" y2="491.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="468.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="483.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="487.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">컨테이너 네이티브 메모리와 OOMKilled</text>
+<text x="726" y="505.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 2장</text>
+<line x1="684" y1="491.0" x2="684" y2="547.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="547.0" x2="698" y2="547.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="524.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="539.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="543.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">힙 밖 — Metaspace · direct</text>
+<text x="726" y="561.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 8장</text>
+<rect x="340.0" y="465.0" width="320" height="52" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="500" y="487.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">1 · 실행 모델</text>
+<text x="500" y="507.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">코드가 JVM 안에서 어디에 놓이는가</text>
+<line x1="340.0" y1="749.0" x2="316" y2="749.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="749.0" x2="316" y2="665.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="665.0" x2="302" y2="665.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="642.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="657.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="661.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">클래스 파일 구조 · 상수 풀</text>
+<text x="62" y="679.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 6장</text>
+<line x1="316" y1="749.0" x2="316" y2="721.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="721.0" x2="302" y2="721.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="698.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="713.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="717.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">바이트코드 명령어</text>
+<text x="62" y="735.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 6장</text>
+<line x1="316" y1="749.0" x2="316" y2="777.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="777.0" x2="302" y2="777.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="754.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="769.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="773.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">로딩 시점과 생명주기</text>
+<text x="62" y="791.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 7장</text>
+<line x1="316" y1="749.0" x2="316" y2="833.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="833.0" x2="302" y2="833.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="810.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="825.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="829.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">로딩 · 검증 · 준비 · 해석 · 초기화</text>
+<text x="62" y="847.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 7장</text>
+<line x1="660.0" y1="749.0" x2="684" y2="749.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="749.0" x2="684" y2="665.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="665.0" x2="698" y2="665.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="642.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="657.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="661.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">클래스 로더와 부모 위임 모델</text>
+<text x="726" y="679.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 7장</text>
+<line x1="684" y1="749.0" x2="684" y2="721.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="721.0" x2="698" y2="721.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="698.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="713.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="717.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">모듈 시스템과 로더 변화 · JPMS</text>
+<text x="726" y="735.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 7장</text>
+<line x1="684" y1="749.0" x2="684" y2="777.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="777.0" x2="698" y2="777.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="754.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="769.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="773.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">톰캣 로더 · 격리 · TCCL · 로더 누수</text>
+<text x="726" y="791.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 9장</text>
+<line x1="684" y1="749.0" x2="684" y2="833.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="833.0" x2="698" y2="833.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="810.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="825.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="829.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">Spring Boot 실행 JAR 와 로딩</text>
+<text x="726" y="847.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 9장</text>
+<rect x="340.0" y="723.0" width="320" height="52" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="500" y="745.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">2 · 클래스 로딩</text>
+<text x="500" y="765.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">무엇이 언제 타입이 되는가</text>
+<line x1="340.0" y1="1063.0" x2="316" y2="1063.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1063.0" x2="316" y2="979.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="979.0" x2="302" y2="979.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="956.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="971.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="975.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">메서드 호출 · 정적·동적 디스패치</text>
+<text x="62" y="993.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 8장</text>
+<line x1="316" y1="1063.0" x2="316" y2="1035.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1035.0" x2="302" y2="1035.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1012.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1027.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="1031.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">invokedynamic · 동적 타입 지원</text>
+<text x="62" y="1049.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 8장</text>
+<line x1="316" y1="1063.0" x2="316" y2="1091.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1091.0" x2="302" y2="1091.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1068.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1083.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="1087.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">스택 기반 해석 실행 엔진</text>
+<text x="62" y="1105.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 8장</text>
+<line x1="316" y1="1063.0" x2="316" y2="1147.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1147.0" x2="302" y2="1147.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1124.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1139.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="1143.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">javac 컴파일 과정 · 구문 설탕</text>
+<text x="62" y="1161.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 10장</text>
+<line x1="660.0" y1="1063.0" x2="684" y2="1063.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1063.0" x2="684" y2="951.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="951.0" x2="698" y2="951.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="928.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="943.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="947.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">JIT · 인터프리터 · 계층형 컴파일</text>
+<text x="726" y="965.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 11장</text>
+<line x1="684" y1="1063.0" x2="684" y2="1007.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1007.0" x2="698" y2="1007.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="984.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="999.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="1003.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">핫스폿 탐지 · 컴파일 대상</text>
+<text x="726" y="1021.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 11장</text>
+<line x1="684" y1="1063.0" x2="684" y2="1063.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1063.0" x2="698" y2="1063.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1040.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1055.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="1059.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">인라인 · 탈출 분석 · 공통식 제거</text>
+<text x="726" y="1077.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 11장</text>
+<line x1="684" y1="1063.0" x2="684" y2="1119.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1119.0" x2="698" y2="1119.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1096.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1111.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="1115.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">code cache · deoptimization</text>
+<text x="726" y="1133.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 4장</text>
+<line x1="684" y1="1063.0" x2="684" y2="1175.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1175.0" x2="698" y2="1175.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1152.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1167.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="1171.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">GraalVM · AOT · native image</text>
+<text x="726" y="1189.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 4장</text>
+<rect x="340.0" y="1037.0" width="320" height="52" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="500" y="1059.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">3 · 실행 엔진과 컴파일</text>
+<text x="500" y="1079.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">같은 바이트코드가 왜 다르게 도는가</text>
+<line x1="340.0" y1="1405.0" x2="316" y2="1405.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1405.0" x2="316" y2="1321.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1321.0" x2="302" y2="1321.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1298.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1313.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="1317.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">대상이 죽었는가 — 도달성과 참조 네 종</text>
+<text x="62" y="1335.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 3장</text>
+<line x1="316" y1="1405.0" x2="316" y2="1377.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1377.0" x2="302" y2="1377.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1354.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1369.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="1373.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">GC 알고리즘 — 마크·복사·정리·세대</text>
+<text x="62" y="1391.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 3장</text>
+<line x1="316" y1="1405.0" x2="316" y2="1433.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1433.0" x2="302" y2="1433.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1410.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1425.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="1429.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">핫스팟 구현 — 안전 지점 · 카드 테이블</text>
+<text x="62" y="1447.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 3장</text>
+<line x1="316" y1="1405.0" x2="316" y2="1489.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1489.0" x2="302" y2="1489.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1466.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1481.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="1485.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">클래식 컬렉터 · Parallel · CMS</text>
+<text x="62" y="1503.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 3장</text>
+<line x1="660.0" y1="1405.0" x2="684" y2="1405.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1405.0" x2="684" y2="1293.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1293.0" x2="698" y2="1293.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1270.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1285.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="1289.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">G1 — Region · full GC 실패</text>
+<text x="726" y="1307.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 6장</text>
+<line x1="684" y1="1405.0" x2="684" y2="1349.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1349.0" x2="698" y2="1349.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1326.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1341.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="1345.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">ZGC · Shenandoah 같은 저지연 컬렉터</text>
+<text x="726" y="1363.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 6장</text>
+<line x1="684" y1="1405.0" x2="684" y2="1405.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1405.0" x2="698" y2="1405.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1382.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1397.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="1401.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">힙과 세대 크기 · metaspace 튜닝</text>
+<text x="726" y="1419.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 5장</text>
+<line x1="684" y1="1405.0" x2="684" y2="1461.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1461.0" x2="698" y2="1461.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1438.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1453.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="1457.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">TLAB · humongous · tenuring</text>
+<text x="726" y="1475.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 6장</text>
+<line x1="684" y1="1405.0" x2="684" y2="1517.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1517.0" x2="698" y2="1517.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1494.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1509.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="1513.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">GC 선택 · graceful degradation</text>
+<text x="726" y="1531.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 3장</text>
+<rect x="340.0" y="1379.0" width="320" height="52" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="500" y="1401.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">4 · 가비지 컬렉션</text>
+<text x="500" y="1421.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">무엇을 죽었다 하고 언제 멈추는가</text>
+<line x1="340.0" y1="1747.0" x2="316" y2="1747.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1747.0" x2="316" y2="1663.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1663.0" x2="302" y2="1663.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1640.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1655.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="1659.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">자바 메모리 모델과 하드웨어 효율</text>
+<text x="62" y="1677.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 12장</text>
+<line x1="316" y1="1747.0" x2="316" y2="1719.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1719.0" x2="302" y2="1719.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1696.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1711.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="1715.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">volatile · happens-before</text>
+<text x="62" y="1733.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 12장</text>
+<line x1="316" y1="1747.0" x2="316" y2="1775.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1775.0" x2="302" y2="1775.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1752.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1767.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="1771.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">스레드 구현 · 스케줄링 · 상태</text>
+<text x="62" y="1789.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 12장</text>
+<line x1="316" y1="1747.0" x2="316" y2="1831.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1831.0" x2="302" y2="1831.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1808.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1823.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="1827.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">가상 스레드 · 구조적 동시성</text>
+<text x="62" y="1845.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 12장</text>
+<line x1="660.0" y1="1747.0" x2="684" y2="1747.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1747.0" x2="684" y2="1635.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1635.0" x2="698" y2="1635.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1612.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1627.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="1631.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">스레드 안전성 다섯 등급</text>
+<text x="726" y="1649.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 13장</text>
+<line x1="684" y1="1747.0" x2="684" y2="1691.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1691.0" x2="698" y2="1691.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1668.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1683.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="1687.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">동기화와 락 · 락 최적화</text>
+<text x="726" y="1705.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">심층 자바 가상 머신 13장</text>
+<line x1="684" y1="1747.0" x2="684" y2="1747.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1747.0" x2="698" y2="1747.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1724.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1739.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="1743.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">Executor · 스레드 풀 크기</text>
+<text x="726" y="1761.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 9장</text>
+<line x1="684" y1="1747.0" x2="684" y2="1803.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1803.0" x2="698" y2="1803.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1780.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1795.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="1799.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">ForkJoinPool · work stealing</text>
+<text x="726" y="1817.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 9장</text>
+<line x1="684" y1="1747.0" x2="684" y2="1859.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1859.0" x2="698" y2="1859.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1836.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1851.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="1855.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">CAS · false sharing · 동기화 비용</text>
+<text x="726" y="1873.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 9장</text>
+<rect x="340.0" y="1721.0" width="320" height="52" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="500" y="1743.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">5 · 동시성</text>
+<text x="500" y="1763.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">메모리 모델이 무엇을 보장하는가</text>
+<rect x="110" y="1940" width="780" height="64" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="2 4"/>
+<text x="130" y="1966" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">메모</text>
+<text x="130" y="1986" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">1~5단계는 JVM 이 하는 일이고 6단계부터는 그것을 재고 고치는 일이다.</text>
+<line x1="40" y1="2028" x2="960" y2="2028" stroke="#E3B341" stroke-width="1.4" stroke-dasharray="6 5"/>
+<rect x="265" y="2016" width="470" height="22" rx="4" fill="#0D1117"/>
+<text x="500" y="2033" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#E3B341">1~5단계는 JVM 이 하는 일 · 6단계부터는 재고 고치는 일</text>
+<line x1="340.0" y1="2249.0" x2="316" y2="2249.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2249.0" x2="316" y2="2165.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2165.0" x2="302" y2="2165.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2142.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2157.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="2161.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">무엇을 측정할까 — 벤치마크와 지표</text>
+<text x="62" y="2179.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 2장</text>
+<line x1="316" y1="2249.0" x2="316" y2="2221.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2221.0" x2="302" y2="2221.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2198.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2213.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="2217.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">변동성과 통계 · 일찍 자주</text>
+<text x="62" y="2235.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 2장</text>
+<line x1="316" y1="2249.0" x2="316" y2="2277.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2277.0" x2="302" y2="2277.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2254.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2269.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="2273.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">JMH 로 마이크로벤치마크</text>
+<text x="62" y="2291.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 2장</text>
+<line x1="316" y1="2249.0" x2="316" y2="2333.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2333.0" x2="302" y2="2333.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2310.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2325.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="2329.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">OS 레벨 도구 · JDK 기본 도구</text>
+<text x="62" y="2347.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 3장</text>
+<line x1="660.0" y1="2249.0" x2="684" y2="2249.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2249.0" x2="684" y2="2109.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2109.0" x2="698" y2="2109.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2086.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2101.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="2105.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">프로파일러 두 방식</text>
+<text x="726" y="2123.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 3장</text>
+<line x1="684" y1="2249.0" x2="684" y2="2165.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2165.0" x2="698" y2="2165.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2142.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2157.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="2161.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">Java Flight Recorder · JMC</text>
+<text x="726" y="2179.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 3장</text>
+<line x1="684" y1="2249.0" x2="684" y2="2221.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2221.0" x2="698" y2="2221.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2198.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2213.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="2217.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">힙 분석 · retained · OOM 진단</text>
+<text x="726" y="2235.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 7장</text>
+<line x1="684" y1="2249.0" x2="684" y2="2277.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2277.0" x2="698" y2="2277.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2254.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2269.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="2273.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">메모리 적게 쓰기 · 객체 재사용</text>
+<text x="726" y="2291.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 7장</text>
+<line x1="684" y1="2249.0" x2="684" y2="2333.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2333.0" x2="698" y2="2333.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2310.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2325.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="2329.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">footprint · NMT · large pages</text>
+<text x="726" y="2347.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 8장</text>
+<line x1="684" y1="2249.0" x2="684" y2="2389.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2389.0" x2="698" y2="2389.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2366.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2381.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="2385.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">JDBC · JPA · String · Stream 비용</text>
+<text x="726" y="2403.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Java Performance 11·12장</text>
+<rect x="340.0" y="2223.0" width="320" height="52" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="500" y="2245.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">6 · 성능 측정과 튜닝</text>
+<text x="500" y="2265.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">추측하지 않고 재는 법</text>
+<line x1="340.0" y1="2647.0" x2="316" y2="2647.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2647.0" x2="316" y2="2563.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2563.0" x2="302" y2="2563.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2540.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2555.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="2559.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">조사 기법의 지형과 네 시나리오</text>
+<text x="62" y="2577.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Troubleshooting Java 1장</text>
+<line x1="316" y1="2647.0" x2="316" y2="2619.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2619.0" x2="302" y2="2619.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2596.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2611.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="2615.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">디버거 · 조건부·비중단 중단점</text>
+<text x="62" y="2633.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Troubleshooting Java 2·3장</text>
+<line x1="316" y1="2647.0" x2="316" y2="2675.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2675.0" x2="302" y2="2675.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2652.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2667.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="2671.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">로그로 조사하기 · 로그가 만드는 문제</text>
+<text x="62" y="2689.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Troubleshooting Java 4장</text>
+<line x1="316" y1="2647.0" x2="316" y2="2731.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2731.0" x2="302" y2="2731.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2708.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2723.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="2727.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">스레드 락 · 대기 · wait·notify 함정</text>
+<text x="62" y="2745.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Troubleshooting Java 7장</text>
+<line x1="660.0" y1="2647.0" x2="684" y2="2647.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2647.0" x2="684" y2="2507.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2507.0" x2="698" y2="2507.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2484.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2499.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="2503.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">스레드 덤프 획득과 데드락 추적</text>
+<text x="726" y="2521.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Troubleshooting Java 8장</text>
+<line x1="684" y1="2647.0" x2="684" y2="2563.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2563.0" x2="698" y2="2563.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2540.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2555.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="2559.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">힙 덤프 · referrers · OQL</text>
+<text x="726" y="2577.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Troubleshooting Java 10장</text>
+<line x1="684" y1="2647.0" x2="684" y2="2619.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2619.0" x2="698" y2="2619.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2596.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2611.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="2615.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">GC 로그로 진단하는 네 시나리오</text>
+<text x="726" y="2633.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Troubleshooting Java 11장</text>
+<line x1="684" y1="2647.0" x2="684" y2="2675.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2675.0" x2="698" y2="2675.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2652.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2667.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="2671.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">분산 추적 · trace ID 와 span</text>
+<text x="726" y="2689.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Troubleshooting Java 12장</text>
+<line x1="684" y1="2647.0" x2="684" y2="2731.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2731.0" x2="698" y2="2731.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2708.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2723.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="2727.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">cascading · retry · timeout</text>
+<text x="726" y="2745.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Troubleshooting Java 12장</text>
+<line x1="684" y1="2647.0" x2="684" y2="2787.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2787.0" x2="698" y2="2787.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2764.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2779.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="2783.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">서비스 간 데이터 불일치와 재생</text>
+<text x="726" y="2801.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Troubleshooting Java 13장</text>
+<rect x="340.0" y="2621.0" width="320" height="52" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="500" y="2643.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">7 · 장애 진단</text>
+<text x="500" y="2663.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">증상에서 원인으로 좁히는 절차</text>
+<rect x="110" y="2868" width="780" height="64" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="2 4"/>
+<text x="130" y="2894" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">메모</text>
+<text x="130" y="2914" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">정독 노트 171편이 이 로드맵의 자료다. 책은 셋뿐이라 아래 줄이 장 번호만 가리킨다.</text>
+<line x1="12" y1="2968" x2="952" y2="2968" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="2990" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="2980" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="2990" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">필수</text>
+<rect x="170" y="2980" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="192" y="2990" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">추천</text>
+<rect x="240" y="2980" width="14" height="12" rx="2" fill="#5E6B7E22" stroke="#5E6B7E" stroke-width="1.1"/>
+<text x="262" y="2990" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">선택</text>
+<rect x="310" y="2980" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="332" y="2990" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">대체 선택지</text>
+<rect x="432" y="2980" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="454" y="2990" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">동작과 진단의 경계</text>
+</svg>
