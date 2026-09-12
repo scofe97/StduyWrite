@@ -5,9 +5,9 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, BAD, INFO, PAPER2, RULE, KR, MONO
 
-W, H = 1020, 560
-LX, LW, LANE_H, Y0 = 168, 828, 108, 116
-NW, NH = 168, 76
+W, H = 836, 560
+LX, LW, LANE_H, Y0 = 124, 688, 108, 116
+NW, NH = 150, 76
 
 d = D(W, H, "TROUBLESHOOTING DRILL · 2026-09-07 D3",
       "상한은 어디에 몇 개나 있는가",
@@ -21,12 +21,12 @@ def lane_mid(k): return lane_top(k) + LANE_H / 2
 
 for k, (name, eyebrow) in enumerate(LANES):
     d.line(LX, lane_top(k), LX + LW, lane_top(k), RULE, 1.0)
-    d.t(20, lane_mid(k) - 2, name, 12, INK, KR, "start", 600)
+    d.t(16, lane_mid(k) - 2, name, 12, INK, KR, "start", 600)
     d.t(20, lane_mid(k) + 16, eyebrow, 9, SOFT, MONO, "start")
 d.line(LX, lane_top(3), LX + LW, lane_top(3), RULE, 1.0)
 d.line(LX, Y0, LX, lane_top(3), RULE, 1.0)
 
-COLS = [196, 400, 604, 808]
+COLS = [148, 314, 480, 646]
 
 def node(j, k, title, limit, over, c=None, focal=False):
     x, y = COLS[j], lane_mid(k) - NH / 2
@@ -36,8 +36,8 @@ def node(j, k, title, limit, over, c=None, focal=False):
         d.box(x, y, NW, NH, PAPER2, RULE, 1.0, 6)
     col = (c or ACC) if (focal or c) else INK
     d.t(x + NW / 2, y + 22, title, 12, col, KR, "middle", 600)
-    d.t(x + NW / 2, y + 42, limit, 10, MUTED, MONO)
-    d.t(x + NW / 2, y + 60, over, 10, SOFT, KR)
+    d.t(x + NW / 2, y + 42, limit, 11, MUTED, MONO)
+    d.t(x + NW / 2, y + 60, over, 12, SOFT, KR)
 
 d.arrow([(COLS[0] + NW, lane_mid(0)), (COLS[0] + NW + 16, lane_mid(0)),
          (COLS[0] + NW + 16, lane_mid(1)), (COLS[1] - 4, lane_mid(1))], MUTED, "ar", 1.4)
@@ -48,7 +48,7 @@ d.arrow([(COLS[2] + NW, lane_mid(2)), (COLS[3] - 4, lane_mid(2))], MUTED, "ar", 
 node(0, 0, "사이드카 커넥션 풀", "maxConnections", "넘치면 503 · UO", focal=True)
 node(1, 1, "accept 큐", "somaxconn", "넘치면 조용히 DROP", c=BAD)
 node(2, 2, "사이드카 인바운드", "상한 없음", "그대로 넘깁니다", c=INFO)
-node(3, 2, "톰캣", "accept-count · threads", "차면 대기 · 거절")
+node(3, 2, "톰캣", "accept-count", "차면 대기 · 거절")
 
 BOT = lane_top(3)
 d.t(LX, BOT + 32, "이름이 다른 것은 지키는 자원과 방향이 달라서입니다. 커널은 말없이 버리고 Envoy 는 503 으로 알려 줍니다.",

@@ -5,8 +5,8 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, OK, INFO, PAPER2, RULE, KR, MONO
 
-W, H = 1000, 664
-X = [120, 400, 680]
+W, H = 836, 664
+X = [148, 406, 664]
 SW, SH = 200, 68
 Y1, Y2, Y3 = 144, 304, 448
 
@@ -24,10 +24,8 @@ def state(cx, y, name, sub, cap, c=None, focal=False, cap_right=False):
     col = (c or ACC) if (focal or c) else INK
     d.t(cx, y + 26, name, 13, col, KR, "middle", 600)
     d.t(cx, y + 46, sub, 11, MUTED, KR)
-    if cap_right:
-        d.t(cx + SW / 2 + 16, y + SH / 2 + 4, cap, 11, SOFT, MONO, "start")
-    else:
-        d.t(cx, y + SH + 18, cap, 11, SOFT, MONO)
+    # 오른쪽 끝 열은 바깥으로 나가므로 캡션을 상자 아래에 둔다.
+    d.t(cx, y + SH + 18, cap, 11, SOFT, MONO)
 
 d.arrow([(X[0] + SW / 2, Y1 + SH / 2), (X[1] - SW / 2 - 4, Y1 + SH / 2)], MUTED, "ar", 1.4)
 d.arrow([(X[1] + SW / 2, Y1 + SH / 2), (X[2] - SW / 2 - 4, Y1 + SH / 2)], MUTED, "ar", 1.4)
@@ -37,7 +35,7 @@ d.arrow([(X[2], Y2 + SH), (X[2], Y3 - 4)], SOFT, "ar", 1.2, dash="4 4")
 
 state(X[0], Y1, "accept 큐 대기", "커널이 물고 있음", "accept-count 100")
 state(X[1], Y1, "수락됨", "톰캣이 목록에 등록", "max-connections 8192")
-state(X[2], Y1, "요청 처리 중", "스레드 점유", "threads.max 200", cap_right=True)
+state(X[2], Y1, "요청 처리 중", "스레드 점유", "threads.max 200")
 state(X[2], Y2, "keep-alive 유휴", "스레드 반납 · 연결 유지", "max-connections 8192", focal=True, cap_right=True)
 state(X[2], Y3, "종료", "목록에서 빠짐", "", c=INFO)
 
