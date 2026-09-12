@@ -34,8 +34,9 @@ updated: 2026-09-13
 | 2 · 실행 모델 | 경계와 진입 | 유저 스페이스 · 커널 스페이스 · 시스템 콜 · `strace` |
 | 2 · 실행 모델 | 프로세스와 스레드 | process · thread · task 구조 · PID · TID · VAS · 컨텍스트 |
 | 2 · 실행 모델 | 종료와 신호 | signal · SIGTERM · SIGKILL · 종료 코드 137 · 143 · zombie · PID 1 · core dump |
-| 2 · 실행 모델 | 파일 디스크립터 | FD · `ulimit` · `epoll` · 논블로킹 I/O · 자원별 관측 창 |
-| 2 · 실행 모델 | 동시성의 문제 | 동기화 · 교착 · `prctl` · `PR_SET_PDEATHSIG` · `vfork` · `clone3` |
+| 2 · 실행 모델 | 프로세스 메모리 배치 | 주소 공간 · heap · stack · `mmap` · 공유 메모리 · copy-on-write · zero-fill |
+| 2 · 실행 모델 | 파일 디스크립터 | FD · `ulimit` · `epoll` · 논블로킹 I/O · event loop · readiness 모델 · 배압 · 자원별 관측 창 |
+| 2 · 실행 모델 | 동시성의 문제 | 동기화 · 교착 · 조건 변수 · `prctl` · `PR_SET_PDEATHSIG` · `vfork` · `clone3` |
 | 3 · 컨테이너 기반 | 격리 | namespace 여덟 · `unshare` · shared kernel · cgroup namespace · user namespace · rootless |
 | 3 · 컨테이너 기반 | 자원 제한 | cgroup v2 · controller · `cpu.max` · `cpu.stat` · throttling · `memory.max` · `memory.events` · PSI · OOM Killer |
 | 3 · 컨테이너 기반 | 파일시스템 | mount propagation · OverlayFS · copy-on-write · hugetlbfs |
@@ -44,11 +45,13 @@ updated: 2026-09-13
 | 4 · 성능 분석 | CPU | run queue · CFS · context switch · load average · softirq · IRQ affinity · `irqbalance` |
 | 4 · 성능 분석 | 메모리 | virtual memory · RSS · VSS · PSS · page cache · swap · overcommit |
 | 4 · 성능 분석 | 저장 I/O | block I/O · IOPS · queue depth · `fsync` · 파일 시스템 캐시 · blk-cgroup · `io.max` |
+| 4 · 성능 분석 | 사용자 공간 allocator | malloc · free list · arena · 단편화 · 대체 allocator |
+| 4 · 성능 분석 | 측정의 함정 | throughput · tail latency · P99 · P99.9 · coordinated omission · flame graph · CPU·heap·block·mutex 프로파일 · 워밍업 · steal time · noisy neighbor · CPU quota |
 | 5 · 관측과 보안 | 관측 도구 | procfs · sysfs · `sar` · 도구 커버리지 · 관측 소스 |
 | 5 · 관측과 보안 | 추적 | perf · Ftrace · tracepoint · kprobe · uprobe · BCC · bpftrace · verifier · CO-RE · BTF |
 | 5 · 관측과 보안 | 실행 권한 | capability · seccomp · `no-new-privileges` · AppArmor · SELinux · Landlock |
 | 5 · 관측과 보안 | 격리 강화 | 샌드박싱 세 갈래 · 설정 하나로 무너지는 경계 |
-| 6 · 커널 내부 | 메모리 관리 | VM split · 주소 변환 · KASLR · NUMA · 페이지 할당자 · GFP 플래그 · slab · `kmalloc` · `vmalloc` · demand paging |
+| 6 · 커널 내부 | 메모리 관리 | VM split · 주소 변환 · page table · KASLR · NUMA · 페이지 할당자 · GFP 플래그 · slab · `kmalloc` · `vmalloc` · demand paging · 가용 공간 관리 |
 | 6 · 커널 내부 | 스케줄러 | 스케줄링 클래스 · CFS 구현 · 선점 · 진입점 · CPU affinity |
 | 6 · 커널 내부 | 동기화 | 임계 구역 · data race · mutex · spinlock · atomic · refcount · lock-free · lockdep · memory barrier |
 | 6 · 커널 내부 | 가상화와 사후 분석 | 하이퍼바이저 · VM · CPU·메모리 배분 · KVM · kdump · crash 분석 · io_uring · VFS 구현 · LSM 훅 |
@@ -110,8 +113,11 @@ updated: 2026-09-13
 | signal · 종료 코드 137 · 143 | 필수 | [03-01](../02_os/book/learning-modern-linux/03-01.%EC%85%B8%EC%9D%98%20%EC%8B%A4%EC%B2%B4%EB%8A%94%20%EC%8A%A4%ED%8A%B8%EB%A6%BC%EA%B3%BC%20%EB%B3%80%EC%88%98%EC%99%80%20%EC%A2%85%EB%A3%8C%20%EC%83%81%ED%83%9C%EB%8B%A4.md) | The Linux Command Line 10장 |
 | zombie · PID 1 | 필수 | [06-01](../02_os/book/learning-modern-linux/06-01.%EB%A8%BC%EC%A0%80%20%EC%BC%9C%EC%A7%80%EB%8A%94%20%EA%B2%83%20%ED%95%98%EB%82%98%EA%B0%80%20%EB%82%98%EB%A8%B8%EC%A7%80%20%EC%A0%84%EB%B6%80%EB%A5%BC%20%EC%BC%A0%EB%8B%A4.md) | How Linux Works 8장 |
 | file descriptor · `ulimit` · 관측 창 | 필수 | [05-01](../02_os/book/learning-modern-linux/05-01.%EB%AA%A8%EB%93%A0%20%EA%B2%83%EC%9D%B4%20%ED%8C%8C%EC%9D%BC%EC%9D%B4%EB%9D%BC%EB%8A%94%20%EB%A7%90%EC%9D%80%20%EC%86%90%EC%9E%A1%EC%9D%B4%EA%B0%80%20%ED%95%98%EB%82%98%EB%9D%BC%EB%8A%94%20%EB%9C%BB%EC%9D%B4%EB%8B%A4.md) · [08-02](../02_os/book/learning-modern-linux/08-02.%EC%9E%90%EC%9B%90%EB%A7%88%EB%8B%A4%20%EC%B0%BD%EC%9D%B4%20%EB%94%B0%EB%A1%9C%20%EB%82%98%20%EC%9E%88%EC%96%B4%20%EC%96%B4%EB%8A%90%20%EC%B0%BD%EC%9D%84%20%EC%97%AC%EB%8A%90%EB%83%90%EA%B0%80%20%EA%B3%A7%20%EC%A7%84%EB%8B%A8%EC%9D%B4%EB%8B%A4.md) | |
+| 주소 공간 · heap · stack · 프로세스 메모리 배치 | 필수 | | Operating System Concepts 8장 |
+| `mmap` · 공유 메모리 · copy-on-write · zero-fill | 추천 | | Operating System Concepts 9장 |
+| event loop · readiness 모델 · 배압 | 추천 | | |
 | `epoll` · 논블로킹 I/O | 추천 | [03-03](../02_os/book/systems-performance/03-03.%EC%9A%B4%EC%98%81%EC%B2%B4%EC%A0%9C%20%283%29%20%E2%80%94%20%EC%BB%A4%EB%84%90%20%EA%B5%AC%ED%98%84%C2%B7Linux%20%EB%B0%9C%EC%A0%84%EC%82%AC%C2%B7BPF.md) · [05-01](../02_os/book/systems-performance/05-01.%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98%20%281%29%20%E2%80%94%20%EA%B8%B0%EC%B4%88%EC%99%80%20%EC%84%B1%EB%8A%A5%20%EA%B8%B0%EB%B2%95.md) | Operating System Concepts 13장 |
-| 동기화 · 교착 | 추천 | | Operating System Concepts 5·7장 |
+| 동기화 · 교착 · 조건 변수 | 추천 | | Operating System Concepts 5·7장 |
 | `prctl` · `PR_SET_PDEATHSIG` | 선택 | | |
 | `vfork` · `clone3` | 선택 | | |
 
@@ -150,6 +156,11 @@ updated: 2026-09-13
 | swap · overcommit | 추천 | [07-03](../02_os/book/systems-performance/07-03.%EB%A9%94%EB%AA%A8%EB%A6%AC%20%283%29%20%E2%80%94%20%EB%B0%A9%EB%B2%95%EB%A1%A0%C2%B7%ED%8A%9C%EB%8B%9D.md) | |
 | 재는 것은 바깥이고 알고 싶은 것은 안이다 | 추천 | [08-01](../02_os/book/learning-modern-linux/08-01.%EC%9E%AC%EB%8A%94%20%EA%B2%83%EC%9D%80%20%EB%B0%94%EA%B9%A5%EC%9D%B4%EA%B3%A0%20%EC%95%8C%EA%B3%A0%20%EC%8B%B6%EC%9D%80%20%EA%B2%83%EC%9D%80%20%EC%95%88%EC%9D%B4%EB%8B%A4.md) | |
 | 모델링 · 용량계획 · 통계 · 시각화 | 선택 | [02-03](../02_os/book/systems-performance/02-03.%EB%B0%A9%EB%B2%95%EB%A1%A0%20%283%29%20%E2%80%94%20%EB%AA%A8%EB%8D%B8%EB%A7%81%C2%B7%EC%9A%A9%EB%9F%89%EA%B3%84%ED%9A%8D%C2%B7%ED%86%B5%EA%B3%84%C2%B7%EC%8B%9C%EA%B0%81%ED%99%94.md) | |
+| throughput · tail latency · P99 · P99.9 | 필수 | [02-01](../02_os/book/systems-performance/02-01.%EB%B0%A9%EB%B2%95%EB%A1%A0%20%281%29%20%E2%80%94%20%EC%9A%A9%EC%96%B4%C2%B7%EB%AA%A8%EB%8D%B8%C2%B7%ED%95%B5%EC%8B%AC%20%EA%B0%9C%EB%85%90.md) | Systems Performance 2장 |
+| coordinated omission — 측정이 놓치는 지연 | 필수 | | |
+| flame graph · CPU·heap·block·mutex 프로파일 | 추천 | [06-04](../02_os/book/systems-performance/06-04.CPU%20%284%29%20%E2%80%94%20%EA%B4%80%EC%B8%A1%20%EB%8F%84%EA%B5%AC%C2%B7%EC%8B%9C%EA%B0%81%ED%99%94.md) | Systems Performance 6장 |
+| malloc · free list · arena · 단편화 · 대체 allocator | 추천 | | |
+| steal time · noisy neighbor · CPU quota · 워밍업 | 추천 | [11-02](../02_os/book/systems-performance/11-02.%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C%20%EC%BB%B4%ED%93%A8%ED%8C%85%20%282%29%20%E2%80%94%20%ED%95%98%EB%93%9C%EC%9B%A8%EC%96%B4%20%EA%B0%80%EC%83%81%ED%99%94.md) | Systems Performance 11장 |
 | blk-cgroup · `io.max` | 선택 | | |
 | IRQ affinity · `irqbalance` | 선택 | | |
 
@@ -180,6 +191,7 @@ updated: 2026-09-13
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
 | VM split · 주소 변환 · KASLR · NUMA | 추천 | [07-01](../02_os/book/linux-kernel-programming/07-01.%EB%A9%94%EB%AA%A8%EB%A6%AC%20%EA%B4%80%EB%A6%AC%20%281%29%20%E2%80%94%20VM%20split%EA%B3%BC%20%EC%A3%BC%EC%86%8C%20%EB%B3%80%ED%99%98.md) ~ [07-03](../02_os/book/linux-kernel-programming/07-03.%EB%A9%94%EB%AA%A8%EB%A6%AC%20%EA%B4%80%EB%A6%AC%20%283%29%20%E2%80%94%20%EB%AC%BC%EB%A6%AC%20%EB%A9%94%EB%AA%A8%EB%A6%AC%EC%99%80%20NUMA.md) | Operating System Concepts 8·9장 |
+| page table · 가용 공간 관리 | 추천 | | Operating System Concepts 8·9장 |
 | 페이지 할당자 · GFP 플래그 | 추천 | [08-01](../02_os/book/linux-kernel-programming/08-01.%EB%A9%94%EB%AA%A8%EB%A6%AC%20%ED%95%A0%EB%8B%B9%20%281%29%20%E2%80%94%20%ED%8E%98%EC%9D%B4%EC%A7%80%20%ED%95%A0%EB%8B%B9%EC%9E%90%EC%99%80%20GFP%20%ED%94%8C%EB%9E%98%EA%B7%B8.md) | |
 | slab · `kmalloc` 낭비 · `vmalloc` | 추천 | [08-02](../02_os/book/linux-kernel-programming/08-02.%EB%A9%94%EB%AA%A8%EB%A6%AC%20%ED%95%A0%EB%8B%B9%20%282%29%20%E2%80%94%20slab%20%ED%95%A0%EB%8B%B9%EC%9E%90%EC%99%80%20kmalloc%20%EB%82%AD%EB%B9%84.md) · [09-01](../02_os/book/linux-kernel-programming/09-01.%EB%A9%94%EB%AA%A8%EB%A6%AC%20%ED%95%A0%EB%8B%B9%20%283%29%20%E2%80%94%20custom%20slab%20cache%EC%99%80%20vmalloc.md) | |
 | demand paging · OOM killer | 추천 | [09-03](../02_os/book/linux-kernel-programming/09-03.%EB%A9%94%EB%AA%A8%EB%A6%AC%20%ED%95%A0%EB%8B%B9%20%285%29%20%E2%80%94%20demand%20paging%EA%B3%BC%20OOM%20killer.md) | Operating System Concepts 9장 |
@@ -222,6 +234,8 @@ updated: 2026-09-13
 | Container Security 6·7장 | 이미지와 공급망. `07_devops` 소관입니다 |
 | Operating System Concepts 17~20장 | 분산 시스템과 특정 OS 사례. 이 로드맵의 축이 아닙니다 |
 | How Linux Works 9~17장 | 네트워크 · 데스크톱 · 컴파일. 다른 로드맵이거나 축 밖입니다 |
+| JVM heap · G1GC · ZGC · native memory | [JVM 로드맵](jvm-roadmap.md) 소관입니다. 3단계는 cgroup 이 재는 RSS 까지만 봅니다 |
+| OSTEP · The Linux Programming Interface · BPF Performance Tools | 소장본이 없어 `책` 칸이 빈 자리를 메울 후보입니다 |
 
 
 
