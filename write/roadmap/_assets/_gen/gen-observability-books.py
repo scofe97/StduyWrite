@@ -19,16 +19,16 @@ rows = [
     ("2 · 4", "트레이싱", [
         ("Distributed Tracing in Practice", "2~6 · 8·9장", ["계측 온톨로지·전파·모범 사례", "배포·오버헤드·샘플링"], "추천"),
     ]),
-    ("2–3", "지표 기초", [
+    ("2·3 · 5·6", "지표 기초", [
         ("Prometheus Up & Running", "3~5 · 9 · 13~20장", ["계측·exposition·라벨", "PromQL·룰·알림·보안"], "필수"),
     ]),
-    ("3 · 5–7", "Prometheus 운영", [
+    ("1 · 3 · 5–7", "Prometheus 운영", [
         ("Mastering Prometheus", "1~15장", ["데이터 모델·TSDB·SD·알림", "샤딩·Thanos·믹스인·SLO"], "필수"),
     ]),
     ("4 · 7", "Grafana 스택", [
         ("Observability with Grafana", "4 · 6~12장", ["Loki·Tempo·대시보드", "IaC·플랫폼·RUM"], "필수"),
     ]),
-    ("5", "운영 판단", [
+    ("1 · 5", "운영 판단", [
         ("Site Reliability Engineering", "7~10장", ["SLO 와 에러 버짓", "사고 관리·온콜·포스트모템"], "필수"),
     ]),
     ("4", "로그 검색 백엔드", [
