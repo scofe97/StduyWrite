@@ -226,6 +226,8 @@ updated: 2026-09-13
 | eBPF 네트워킹 | 추천 | [01-01](../02_os/networking/01-01.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9%20%EA%B8%B0%EC%B4%88.md) | Learning eBPF 8장 |
 | Cilium 데이터패스 · IPAM | 추천 | | Cilium 4·5장 |
 | Hubble 관측 | 선택 | | Cilium 15장 |
+| L4 와 L7 텔레메트리의 갈림 | 추천 | | |
+| Beyla · Caretta — 자동 계측과 토폴로지 추출 | 선택 | | |
 | 투명 암호화 · WireGuard | 선택 | | Cilium 14장 |
 | 클러스터 access · egress 게이트웨이 | 선택 | | Cilium 10·11장 |
 | eBPF host routing · bandwidth manager | 선택 | | |

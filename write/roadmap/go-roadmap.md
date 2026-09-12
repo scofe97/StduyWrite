@@ -160,6 +160,8 @@ updated: 2026-09-13
 | UDP · 신뢰성 보강 | 추천 | | Network Programming with Go 5·6장 |
 | TLS 로 통신 지키기 | 추천 | | Network Programming with Go 11장 |
 | 직렬화 · `log/slog` · 지표 | 추천 | | Network Programming with Go 12·13장 |
+| SSE — 서버가 미는 스트리밍 HTTP | 추천 | | |
+| 폴링과 이벤트 구동의 갈림 | 추천 | | |
 | 복원력 · 느슨한 결합 · 확장성 | 추천 | | Cloud Native Go 7~9장 |
 | 관리성 · 관측성 · 보안 · 분산 상태 | 추천 | | Cloud Native Go 10~13장 |
 | Unix domain socket | 선택 | | Network Programming with Go 7장 |

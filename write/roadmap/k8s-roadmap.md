@@ -47,9 +47,10 @@ updated: 2026-09-13
 | 5 · 내부 구조 | Control Plane | API Server · etcd · Scheduler · Controller Manager · kubelet |
 | 5 · 내부 구조 | 노드 인터페이스 | CRI · CNI · CSI · containerd · 조정 루프 · watch · informer |
 | 5 · 내부 구조 | 컨트롤러 | List·Watch · resourceVersion · 410 Gone · level-driven 과 edge-driven · GVK · Scheme · controller-runtime · upsert 의미 |
+| 5 · 내부 구조 | 감시 부품 | Reflector · DeltaFIFO · Indexer · Lister · SharedInformer · resync · 캐시 웜업 · 페이지네이션 |
 | 5 · 내부 구조 | 접근 통제 | authentication · authorization · admission · TLS · PKI · 인증서 수명 |
 | 5 · 내부 구조 | 상태 저장소 | etcd quorum · Raft · 백업 · 복구 · 클러스터 업그레이드 |
-| 6 · 보안과 확장 | 권한 | RBAC · Role · ClusterRole · RoleBinding · ServiceAccount |
+| 6 · 보안과 확장 | 권한 | RBAC · Role · ClusterRole · RoleBinding · ServiceAccount · SelfSubjectAccessReview · 권한에 따라 기능 끄기 |
 | 6 · 보안과 확장 | 실행 권한 | SecurityContext · capability · seccomp · Pod Security Admission · NetworkPolicy |
 | 6 · 보안과 확장 | 비밀과 공급망 | Secret 관리 · 외부 저장소 · 이미지 서명 · 공급망 보안 |
 | 6 · 보안과 확장 | 확장 지점 | CRD · custom resource · controller · Operator · finalizer · OwnerReference · status subresource |
@@ -170,6 +171,8 @@ updated: 2026-09-13
 | level-driven 과 edge-driven 의 차이 | 필수 | | Programming Kubernetes 1장 |
 | GVK · Scheme · TypeMeta | 추천 | | Programming Kubernetes 2·3장 |
 | controller-runtime 으로 감싸기 | 추천 | | Programming Kubernetes 6장 |
+| Reflector · DeltaFIFO · Indexer · Lister | 추천 | | Programming Kubernetes 3장 |
+| SharedInformer 와 resync | 추천 | | Programming Kubernetes 3장 |
 | 이벤트 병합과 upsert — 감사 로그가 아니다 | 추천 | | Programming Kubernetes 1장 |
 | authentication · authorization · admission | 필수 | [06-02](../08_cloud/kubernetes/06_architecture/06-02.TLS%EC%99%80%20API%20%EC%A0%91%EA%B7%BC%20%EB%B3%B4%EC%95%88.md) | Production Kubernetes 8장 |
 | TLS · PKI · 인증서 수명 | 필수 | [06-02](../08_cloud/kubernetes/06_architecture/06-02.TLS%EC%99%80%20API%20%EC%A0%91%EA%B7%BC%20%EB%B3%B4%EC%95%88.md) | |
@@ -182,6 +185,8 @@ updated: 2026-09-13
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
 | RBAC · Role · ClusterRole · RoleBinding · ServiceAccount | 필수 | [14-01](../08_cloud/book/kubernetes-up-and-running/14-01.RBAC%20%E2%80%94%20%EC%9D%B8%EA%B0%80%EB%A5%BC%20%EC%84%A4%EA%B3%84%ED%95%98%EA%B3%A0%20%EC%9A%B4%EC%98%81%ED%95%98%EB%8A%94%20%EB%B2%95.md) · [26-01](../08_cloud/book/kubernetes-patterns/26-01.Access%20Control%20%E2%80%94%20RBAC%EC%9C%BC%EB%A1%9C%20%EB%88%84%EA%B0%80%20%EB%AC%B4%EC%97%87%EC%9D%84%20%ED%95%A0%20%EC%88%98%20%EC%9E%88%EB%8A%94%EC%A7%80.md) | Kubernetes Up and Running 14장 |
+| 내가 볼 수 있는가 — SelfSubjectAccessReview | 추천 | | |
+| 권한에 따라 기능을 끄는 설계 | 추천 | | |
 | SecurityContext · capability · seccomp · 최소 권한 | 필수 | [23-01](../08_cloud/book/kubernetes-patterns/23-01.Process%20Containment%20%E2%80%94%20%EC%B5%9C%EC%86%8C%20%EA%B6%8C%ED%95%9C%EC%9C%BC%EB%A1%9C%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%EB%A5%BC%20%EA%B0%80%EB%91%90%EA%B8%B0.md) · [02-01](../08_cloud/book/container-security/02-01.Linux%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%BD%9C%C2%B7%EA%B6%8C%ED%95%9C%C2%B7capability%20%E2%80%94%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%B3%B4%EC%95%88%EC%9D%98%20%EB%B0%94%EB%8B%A5.md) | Kubernetes Patterns 23장 |
 | Pod Security Admission | 필수 | [19-01](../08_cloud/book/kubernetes-up-and-running/19-01.Securing%20Applications%20%E2%80%94%20%EC%A3%BD%EC%9D%80%20%EC%8B%A4%EC%8A%B5%20%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%99%80%20proc%20%EB%A1%9C%20%EB%8B%A4%EC%8B%9C%20%EC%84%B8%EC%9A%B4%20%EB%9E%A9.md) | CKS Study Guide 3장 |
 | NetworkPolicy · 네트워크 분할 | 추천 | [04-07](../08_cloud/kubernetes/04_networking/04-07.NetworkPolicy.md) · [24-01](../08_cloud/book/kubernetes-patterns/24-01.Network%20Segmentation%20%E2%80%94%20%ED%86%B5%EC%8B%A0%EC%9D%84%20%ED%95%84%EC%9A%94%ED%95%9C%20%EA%B2%BD%EB%A1%9C%EB%A7%8C%20%EB%82%A8%EA%B8%B0%EA%B8%B0.md) | Kubernetes Patterns 24장 |

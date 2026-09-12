@@ -110,6 +110,8 @@ stages = [
      [("eBPF 네트워킹", "Learning eBPF 8장", "추천"),
       ("Cilium 데이터패스 · IPAM", "Cilium 4·5장", "추천"),
       ("Hubble 관측", "Cilium 15장", "선택"),
+      ("L4 와 L7 텔레메트리의 갈림", "", "추천"),
+      ("Beyla · Caretta — 자동 계측", "", "선택"),
       ("투명 암호화 · WireGuard", "Cilium 14장", "선택"),
       ("egress 게이트웨이 · 클러스터 access", "Cilium 10·11장", "선택"),
       ("eBPF host routing", "", "선택")]),
