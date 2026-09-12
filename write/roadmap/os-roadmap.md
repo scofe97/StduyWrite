@@ -48,6 +48,7 @@ updated: 2026-09-13
 | 4 · 성능 분석 | 사용자 공간 allocator | malloc · free list · arena · 단편화 · 대체 allocator |
 | 4 · 성능 분석 | 측정의 함정 | throughput · tail latency · P99 · P99.9 · coordinated omission · flame graph · CPU·heap·block·mutex 프로파일 · 워밍업 · steal time · noisy neighbor · CPU quota |
 | 5 · 관측과 보안 | 관측 도구 | procfs · sysfs · `sar` · 도구 커버리지 · 관측 소스 |
+| 5 · 관측과 보안 | 커널 인터페이스 | `/proc/stat` · `meminfo` · `PID/stat` · `diskstats` · `net/snmp` · `/proc/pressure` · some 과 full |
 | 5 · 관측과 보안 | 추적 | perf · Ftrace · tracepoint · kprobe · uprobe · BCC · bpftrace · verifier · CO-RE · BTF |
 | 5 · 관측과 보안 | 실행 권한 | capability · seccomp · `no-new-privileges` · AppArmor · SELinux · Landlock |
 | 5 · 관측과 보안 | 격리 강화 | 샌드박싱 세 갈래 · 설정 하나로 무너지는 경계 |
@@ -73,6 +74,8 @@ updated: 2026-09-13
 | [Container Security](../08_cloud/book/container-security/README.md) | 2~4 · 8·9장 | 필수 | 3·5단계 |
 | [Systems Performance](../02_os/book/systems-performance/README.md) | 2 · 4 · 6~9 · 13~15장 | 필수 | 4·5단계 |
 | How Linux Works | 1~8장 | 추천 | 1·2단계 |
+| OSTEP (무료 공개판) | 가상화 · 병행성 · 지속성 | 필수 | 2·4·6단계 |
+| Linux Kernel Docs (공식) | proc · cgroup-v2 · psi | 필수 | 3~5단계 |
 | Operating System Concepts | 1~9 · 13~16장 | 추천 | 2·4·6단계 |
 | Learning eBPF | 3 · 5~7 · 9장 | 추천 | 5단계 |
 | [Linux Kernel Programming](../02_os/book/linux-kernel-programming/README.md) | 6~13장 | 추천 | 2·6단계 |
@@ -81,6 +84,8 @@ updated: 2026-09-13
 | Mastering KVM Virtualization | 1·2 · 15장 | 대체 | 6단계 — Virtualization Essentials 자리 |
 
 소장 목록은 계속 늘어납니다. 새 책이 들어오면 이 표와 아래 단계별 표의 `책` 열을 함께 갱신합니다.
+
+**두 자료는 책이 아니라 문서입니다.** [OSTEP](https://pages.cs.wisc.edu/~remzi/OSTEP/)은 왜 OS 가 그렇게 동작하는지를 맡습니다. Linux 공식 문서 셋인 [proc](https://docs.kernel.org/filesystems/proc.html)과 [cgroup v2](https://docs.kernel.org/admin-guide/cgroup-v2.html), [PSI](https://docs.kernel.org/accounting/psi.html)는 Linux 가 실제로 내주는 인터페이스를 맡습니다. Systems Performance 가 그 사이에서 무엇을 재고 어떻게 좁힐지를 잇습니다.
 
 
 
@@ -127,6 +132,7 @@ updated: 2026-09-13
 |---|:---:|---|---|
 | namespace 여덟 가지 · `unshare` | 필수 | [namespace 실습](../02_os/kernel/01-05.namespace%20%EC%8B%A4%EC%8A%B5%20%E2%80%94%208%EA%B0%80%EC%A7%80%20%EA%B2%A9%EB%A6%AC%EC%99%80%20unshare.md) | Container Security 4장 |
 | cgroup v2 — controller · PSI | 필수 | [cgroup v2 깊이](../02_os/kernel/01-02.cgroup%20v2%20%EA%B9%8A%EC%9D%B4.md) | Container Security 3장 |
+| 한도는 어디서 오는가 — 사람 · 기계 · 상속 | 필수 | [진단 개념](../troubleshooting/_concepts/%ED%95%9C%EB%8F%84%EB%8A%94-%EC%96%B4%EB%94%94%EC%84%9C-%EC%98%A4%EB%8A%94%EA%B0%80.md) | Linux Kernel Docs — cgroup v2 |
 | `memory.max` · `memory.events` · OOM Killer | 필수 | [cgroup 파일시스템 실습](../02_os/kernel/01-04.cgroup%20%ED%8C%8C%EC%9D%BC%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%8B%A4%EC%8A%B5.md) · [Endowus OOMKilled](../02_os/kernel/01-06.cgroup%20%EC%82%AC%EB%A1%80%20%E2%80%94%20Endowus%20OOMKilled.md) | |
 | `cpu.max` · `cpu.stat` · throttling | 필수 | [cgroup v2 깊이](../02_os/kernel/01-02.cgroup%20v2%20%EA%B9%8A%EC%9D%B4.md) | |
 | mount propagation 네 가지 | 필수 | [마운트 네임스페이스와 propagation](../02_os/kernel/01-03.%EB%A7%88%EC%9A%B4%ED%8A%B8%20%EB%84%A4%EC%9E%84%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4%EC%99%80%20propagation.md) | |
@@ -148,6 +154,7 @@ updated: 2026-09-13
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
 | USE · RED · 드릴다운 · 지연 분석 | 필수 | [02-01](../02_os/book/systems-performance/02-01.%EB%B0%A9%EB%B2%95%EB%A1%A0%20%281%29%20%E2%80%94%20%EC%9A%A9%EC%96%B4%C2%B7%EB%AA%A8%EB%8D%B8%C2%B7%ED%95%B5%EC%8B%AC%20%EA%B0%9C%EB%85%90.md) · [02-02](../02_os/book/systems-performance/02-02.%EB%B0%A9%EB%B2%95%EB%A1%A0%20%282%29%20%E2%80%94%20%EB%B6%84%EC%84%9D%20%EB%B0%A9%EB%B2%95%EB%A1%A0%2020%EC%A2%85.md) | |
+| 활용률과 압력은 다른 질문이다 | 필수 | | Linux Kernel Docs — psi |
 | run queue · CFS · context switch | 필수 | [06-01](../02_os/book/systems-performance/06-01.CPU%20%281%29%20%E2%80%94%20%EC%9A%A9%EC%96%B4%C2%B7%EB%AA%A8%EB%8D%B8%C2%B7%ED%95%B5%EC%8B%AC%20%EA%B0%9C%EB%85%90.md) ~ [06-04](../02_os/book/systems-performance/06-04.CPU%20%284%29%20%E2%80%94%20%EA%B4%80%EC%B8%A1%20%EB%8F%84%EA%B5%AC%C2%B7%EC%8B%9C%EA%B0%81%ED%99%94.md) | Operating System Concepts 6장 |
 | RSS · VSS · PSS · page cache | 필수 | [07-01](../02_os/book/systems-performance/07-01.%EB%A9%94%EB%AA%A8%EB%A6%AC%20%281%29%20%E2%80%94%20%EC%9A%A9%EC%96%B4%C2%B7%ED%95%B5%EC%8B%AC%20%EA%B0%9C%EB%85%90.md) ~ [07-04](../02_os/book/systems-performance/07-04.%EB%A9%94%EB%AA%A8%EB%A6%AC%20%284%29%20%E2%80%94%20%EA%B4%80%EC%B8%A1%20%EB%8F%84%EA%B5%AC.md) | Operating System Concepts 8·9장 |
 | block I/O · IOPS · queue depth · `fsync` | 필수 | [09-01](../02_os/book/systems-performance/09-01.%EB%94%94%EC%8A%A4%ED%81%AC%20%281%29%20%E2%80%94%20%EB%B0%B0%EA%B2%BD%C2%B7%EB%AA%A8%EB%8D%B8%C2%B7%ED%95%B5%EC%8B%AC%20%EA%B0%9C%EB%85%90.md) ~ [09-04](../02_os/book/systems-performance/09-04.%EB%94%94%EC%8A%A4%ED%81%AC%20%284%29%20%E2%80%94%20%EA%B4%80%EC%B8%A1%20%EB%8F%84%EA%B5%AC.md) | Operating System Concepts 10장 |
@@ -169,6 +176,10 @@ updated: 2026-09-13
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
 | procfs · sysfs · `sar` · 관측 소스 | 필수 | [04-01](../02_os/book/systems-performance/04-01.%EA%B4%80%EC%B8%A1%20%EB%8F%84%EA%B5%AC%20%281%29%20%E2%80%94%20%EB%8F%84%EA%B5%AC%20%EC%BB%A4%EB%B2%84%EB%A6%AC%EC%A7%80%C2%B7%EC%9C%A0%ED%98%95.md) ~ [04-03](../02_os/book/systems-performance/04-03.%EA%B4%80%EC%B8%A1%20%EB%8F%84%EA%B5%AC%20%283%29%20%E2%80%94%20sar%C2%B7%ED%8A%B8%EB%A0%88%EC%9D%B4%EC%8B%B1%20%EB%8F%84%EA%B5%AC%C2%B7%EA%B4%80%EC%B8%A1%EC%9D%98%20%EA%B4%80%EC%B8%A1.md) | |
+| `/proc/stat` · `/proc/meminfo` 읽기 | 필수 | | Linux Kernel Docs — proc |
+| `/proc/PID/stat` · `status` · `statm` | 필수 | | Linux Kernel Docs — proc |
+| `/proc/diskstats` · `/proc/net/snmp` | 추천 | | Linux Kernel Docs — proc |
+| `/proc/pressure` — some 과 full · avg10 | 필수 | | Linux Kernel Docs — psi |
 | perf — 샘플링과 이벤트 소스 | 필수 | [13-01](../02_os/book/systems-performance/13-01.perf%20%281%29%20%E2%80%94%20%EA%B0%9C%EC%9A%94%C2%B7%EC%84%9C%EB%B8%8C%EC%BB%A4%EB%A7%A8%EB%93%9C%C2%B7%EC%9B%90%EB%9D%BC%EC%9D%B4%EB%84%88.md) ~ [13-03](../02_os/book/systems-performance/13-03.perf%20%283%29%20%E2%80%94%20%EB%AA%85%EB%A0%B9.md) | |
 | capability · seccomp | 필수 | [02-01](../08_cloud/book/container-security/02-01.Linux%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%BD%9C%C2%B7%EA%B6%8C%ED%95%9C%C2%B7capability%20%E2%80%94%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%B3%B4%EC%95%88%EC%9D%98%20%EB%B0%94%EB%8B%A5.md) | Container Security 2장 |
 | Ftrace — tracefs · 트레이서 | 추천 | [14-01](../02_os/book/systems-performance/14-01.Ftrace%20%281%29%20%E2%80%94%20%EA%B0%9C%EC%9A%94%C2%B7tracefs%C2%B7%ED%94%84%EB%A1%9C%ED%8C%8C%EC%9D%BC%EB%9F%AC.md) ~ [14-03](../02_os/book/systems-performance/14-03.Ftrace%20%283%29%20%E2%80%94%20%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C.md) | |
@@ -235,7 +246,9 @@ updated: 2026-09-13
 | Operating System Concepts 17~20장 | 분산 시스템과 특정 OS 사례. 이 로드맵의 축이 아닙니다 |
 | How Linux Works 9~17장 | 네트워크 · 데스크톱 · 컴파일. 다른 로드맵이거나 축 밖입니다 |
 | JVM heap · G1GC · ZGC · native memory | [JVM 로드맵](jvm-roadmap.md) 소관입니다. 3단계는 cgroup 이 재는 RSS 까지만 봅니다 |
-| OSTEP · The Linux Programming Interface · BPF Performance Tools | 소장본이 없어 `책` 칸이 빈 자리를 메울 후보입니다 |
+| The Linux Programming Interface | 정독용이 아니라 사전입니다. 시스템 콜과 API 가 왜 그 모양인지 궁금할 때만 펴 봅니다 |
+| BPF Performance Tools | 5단계 다음의 tracing 심화입니다. `/proc` · cgroup · PSI · perf 를 지난 뒤에 엽니다 |
+| Below · OpenMetrics · exporter | Below 는 위 인터페이스를 프로그램이 어떻게 수집하는지 보는 코드입니다. 수집한 뒤 시각화는 [관측 가능성 로드맵](observability-roadmap.md)이 맡습니다 |
 
 
 

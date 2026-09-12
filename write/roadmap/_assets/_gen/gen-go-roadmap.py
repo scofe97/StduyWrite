@@ -71,6 +71,7 @@ stages = [
       ("pipeline · fan-in · fan-out", "Learn Concurrent Go 10장", "추천"),
       ("deadlock 회피", "Learn Concurrent Go 11장", "추천"),
       ("채널 소유권 — 닫기는 한 곳에서", "Learn Concurrent Go 7장", "필수"),
+      ("sync.Once — 중복 close 막기", "", "추천"),
       ("atomic · spin lock · futex", "Learn Concurrent Go 12장", "추천"),
       ("happens-before · race detector", "", "필수")]),
 
@@ -98,6 +99,17 @@ stages = [
       ("distroless · 멀티스테이지 이미지", "", "추천"),
       ("syscall/js — Wasm 이라는 경계", "", "선택"),
       ("gRPC 서비스 만들기", "Pocket-Sized Projects 10·11장", "선택")]),
+
+    ("7 · 터미널과 세션", "사람이 붙어 있는 연결을 다룬다",
+     [("SSH 3계층 — 전송 · 인증 · 연결", "", "필수"),
+      ("pty-req 와 window-change", "", "필수"),
+      ("세션 채널과 애플리케이션 경계", "", "필수"),
+      ("ANSI CSI 로 화면 직접 그리기", "", "추천")],
+     [("rune · grapheme · 터미널 셀 폭", "", "필수"),
+      ("논블로킹 알림과 신호 병합", "", "필수"),
+      ("인증과 인가는 다른 문제다", "", "필수"),
+      ("슬라이딩 윈도우 속도 제한", "", "추천"),
+      ("세션 정리와 자원 상한", "", "추천")]),
 ]
 
 CUT_AFTER = 2          # 3단계 뒤에 "언어" ↔ "동시성과 서비스" 절단선

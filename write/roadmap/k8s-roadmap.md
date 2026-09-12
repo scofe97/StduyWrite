@@ -228,6 +228,7 @@ updated: 2026-09-13
 | [Integrating Storage](../08_cloud/book/kubernetes-up-and-running/16-01.Integrating%20Storage%20%E2%80%94%20%EB%B3%B5%EC%A0%9C%ED%95%98%EC%A7%80%20%EC%95%8A%EB%8A%94%20%EC%84%A0%ED%83%9D%EC%A7%80%EC%99%80%20MySQL%20%EC%8B%B1%EA%B8%80%ED%84%B4%20%EB%9E%A9.md) | 4 | MySQL 싱글턴으로 저장소 통합 |
 | [OOMKilled 사례 분석](../08_cloud/kubernetes/09_operations/09-02.OOMKilled%20%EC%82%AC%EB%A1%80%20%EB%B6%84%EC%84%9D.md) | 7 | cgroup 파일로 OOM 원인 좁히기 |
 | [Kubernetes 장애 기록](../troubleshooting/kubernetes/README.md) | 3·7 | 증상에서 원인 역추적 다섯 편 |
+| [클라우드 장애 기록](../troubleshooting/cloud/README.md) | 4·7 | 절반만 뜨고 멈춘 배포 |
 
 
 
