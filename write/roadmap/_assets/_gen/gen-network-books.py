@@ -35,16 +35,16 @@ rows = [
         ("Cloud Native Data Center Networking", "2·6·7·14장", ["Clos 토폴로지·네트워크 가상화", "컨테이너 네트워킹·BGP"], "추천"),
     ]),
     ("6", "데이터패스", [
-        ("Cilium Up and Running", "4~7 · 12~15장", ["IPAM·데이터패스·Service", "정책·투명 암호화·Hubble"], "추천"),
+        ("Cilium Up and Running", "1~16장", ["왜 Cilium 인가·CNI 비교·IPAM", "정책·BGP·Egress·암호화·Hubble"], "필수"),
         ("Learning eBPF", "3·5~8장", ["프로그램 구조·CO-RE·BTF", "verifier·네트워킹"], "추천"),
     ]),
     ("7", "운영 경계", [
         ("Istio in Action", "1·3·4·5·9·12장", ["Envoy·Gateway·mTLS", "기본값 닫기·Zero Trust"], "추천"),
         ("Zero Trust Networks", "1·2·6·8·10장", ["신뢰 관리와 identity", "트래픽 신뢰·공격자 관점"], "추천"),
     ]),
-    ("8", "신뢰와 익명", [
+    ("8–9", "신뢰와 경로", [
         ("Real-World Cryptography", "5·7~10장", ["키 교환·서명·난수", "안전한 전송과 종단 암호화"], "추천"),
-        ("Patterns of Distributed Systems", "7·8장", ["HeartBeat 와 membership", "Majority Quorum"], "선택"),
+        ("Patterns of Distributed Systems", "7·8장", ["HeartBeat 와 실패 감지 시간", "membership 과 정족수"], "추천"),
     ]),
     ("7", "메시 후속", [
         ("Sidecar-less Istio Explained", "전 4장", ["ambient 모드 구조", "ztunnel 과 waypoint"], "대체"),
