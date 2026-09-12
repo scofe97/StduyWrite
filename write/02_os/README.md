@@ -12,9 +12,10 @@ related:
   - ./book/systems-performance/README.md
   - ./book/paw_packet-analysis-wireshark/README.md
   - ./book/cntd_computer-networking-top-down/README.md
+  - ./book/network-fundamentals-lab/README.md
   - ../08_cloud/book/container-security/README.md
   - ../08_cloud/book/learning-coredns/README.md
-updated: 2026-09-05
+updated: 2026-09-13
 ---
 
 # 02_os
@@ -41,6 +42,7 @@ updated: 2026-09-05
 | [systems-performance/](./book/systems-performance/README.md) | 성능 분석가 관점의 시스템 성능 — 방법론·CPU·메모리·디스크·네트워크·클라우드·고급 추적(perf·Ftrace·BPF) (책 기반) |
 | [paw_packet-analysis-wireshark/](./book/paw_packet-analysis-wireshark/README.md) | 선 위의 프레임을 떠서 프로토콜별로 읽는 법 — Wireshark 캡처·필터·TCP·TLS·응용 프로토콜·WLAN·보안 분석 (책 기반) |
 | [cntd_computer-networking-top-down/](./book/cntd_computer-networking-top-down/README.md) | 프로토콜을 위에서 아래로 훑는 규격 축 — 응용·트랜스포트·네트워크 계층의 원리와 라우팅·SDN·망 관리. `paw_` 가 캡처로 확인하는 것을 여기서 규격으로 배운다 (책 기반) |
+| [network-fundamentals-lab/](./book/network-fundamentals-lab/README.md) | 고장이 장전된 채로 뜨는 containerlab 토폴로지 18편 — 증상에서 계층을 좁히는 훈련. `networking/` 이 맡는 메커니즘을 깨뜨려 확인하는 축이다 (랩 저장소 기반) |
 
 
 
@@ -56,6 +58,7 @@ updated: 2026-09-05
 - 증상에서 출발해 원인을 역추적하는 진단 문서(디스크가 찼다, 포트가 안 열린다, 패킷이 사라진다) → 최상위 [`troubleshooting/`](../troubleshooting/README.md). 메커니즘을 설명하는 쪽은 `networking/`·`kernel/`이 SSOT이고, 진단 사례가 그것을 교차참조한다
 - 패킷을 떠서 읽는 일(캡처 필터·디스플레이 필터, 프로토콜 해독, tcpdump·tshark) → `paw_packet-analysis-wireshark/`. `networking/`이 커널이 패킷을 *어떻게 나르는가*를 맡고, 이쪽은 그 패킷을 *어떻게 들여다보는가*를 맡는다. 애플리케이션이 스스로 내보내는 메트릭·로그·트레이스는 `06_observability/` 소관이라 본 폴더 아님
 - 시스템 성능 분석(방법론·병목 진단, CPU·메모리·디스크·네트워크 성능, perf·Ftrace·BPF 추적) → `systems-performance/`. 커널 메커니즘 자체는 `linux-kernel-programming/`·`kernel/`이 SSOT이고 "성능 관점"으로 교차참조한다. LGTM 스택·SLO 같은 앱·인프라 관측 운영은 `06_observability/` 소관이라 본 폴더 아님
+- 메커니즘을 고장 내서 증상으로 되짚는 실습 → `network-fundamentals-lab/`. 메커니즘 자체는 `networking/`·`kernel/` 이 SSOT 이고 이쪽은 깨졌을 때의 지문을 맡는다. 직접 푼 진단 사례는 최상위 `troubleshooting/` 소관이라 본 폴더 아님
 
 > `kernel/`과 `linux-kernel-programming/`은 둘 다 커널을 다루지만 시선이 다르다. 전자는 "K8s가 cgroup 파일을 어떻게 쓰는가"(운영자), 후자는 "모듈에서 커널 메모리를 어떻게 할당하는가"(개발자) 관점이다. 같은 메커니즘이 양쪽에 나오면 교차참조한다.
 
