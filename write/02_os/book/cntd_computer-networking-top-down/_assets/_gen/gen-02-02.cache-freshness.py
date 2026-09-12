@@ -20,7 +20,7 @@ def state(cx, label, sub, c=MUTED, focal=False):
     else:
         d.box(x, y, BW, BH, PAPER2, RULE, 1.0, 8)
     d.t(cx, SY - 4, label, 12, c if focal else INK, KR, "middle", 600)
-    d.t(cx, SY + 16, sub, 11, SOFT, MONO)
+    d.t(cx, SY + 16, sub, 12, SOFT, MONO)
 
 S1, S2, S3 = 210, 512, 830
 
@@ -34,31 +34,32 @@ state(S3, "만료 의심", "stale?")
 
 # 전이
 d.path(f"M {S1 + BW / 2 + 6} {SY} L {S2 - BW / 2 - 10} {SY}", MUTED, 1.3, m="ar")
-d.t((S1 + S2) / 2, SY - 14, "GET / 200 OK", 11, MUTED, MONO)
-d.t((S1 + S2) / 2, SY + 22, "max-age=N", 11, SOFT, MONO)
+d.t((S1 + S2) / 2, SY - 14, "GET / 200 OK", 12, MUTED, MONO)
+d.t((S1 + S2) / 2, SY + 22, "max-age=N", 12, SOFT, MONO)
 
 d.path(f"M {S2 + BW / 2 + 6} {SY} L {S3 - BW / 2 - 10} {SY}", MUTED, 1.3, m="ar")
-d.t((S2 + S3) / 2, SY - 14, "max-age 만료", 11, MUTED, KR)
+d.t((S2 + S3) / 2, SY - 14, "max-age 만료", 12, MUTED, KR)
 
 # 자기 전이 — 상태 위로
 d.path(f"M {S2 - 44} {SY - BH / 2 - 2} L {S2 - 44} {SY - BH / 2 - 46} "
        f"L {S2 + 44} {SY - BH / 2 - 46} L {S2 + 44} {SY - BH / 2 - 10}", ACC, 1.4, m="acc")
-d.t(S2 + 60, SY - BH / 2 - 42, "사용자 요청 / 캐시에서 바로 표시 — 서버에 묻지 않습니다", 11, ACC, KR, "start")
+d.t(S2 + 60, SY - BH / 2 - 42, "사용자 요청 / 캐시에서 바로 표시 — 서버에 묻지 않습니다", 12, ACC, KR, "start")
 
 # 돌아오는 두 갈래
 d.path(f"M {S3 - 40} {SY + BH / 2 + 2} L {S3 - 40} {SY + BH / 2 + 54} "
        f"L {S2 - 30} {SY + BH / 2 + 54} L {S2 - 30} {SY + BH / 2 + 10}", OK, 1.4, m="ok")
-d.t((S2 + S3) / 2 + 26, SY + BH / 2 + 48, "조건부 GET / 304 Not Modified — 본문이 오지 않습니다", 11, OK, KR)
+# 라벨은 가로 구간(+54) 위로 6px 띄운다 — 같은 y 에 두면 선이 글자를 관통한다.
+d.t((S2 + S3) / 2 - 40, SY + BH / 2 + 40, "조건부 GET / 304 Not Modified — 본문이 오지 않습니다", 12, OK, KR)
 
 d.path(f"M {S3 + 40} {SY + BH / 2 + 2} L {S3 + 40} {SY + BH / 2 + 118} "
        f"L {S2 + 30} {SY + BH / 2 + 118} L {S2 + 30} {SY + BH / 2 + 10}", INFO, 1.4, m="info")
-d.t((S2 + S3) / 2 + 20, SY + BH / 2 + 112, "조건부 GET / 200 OK — 새 본문을 받습니다", 11, INFO, KR)
+d.t((S2 + S3) / 2 + 20, SY + BH / 2 + 104, "조건부 GET / 200 OK — 새 본문을 받습니다", 12, INFO, KR)
 
-d.t(S1, SY + BH / 2 + 34, "Cache-Control: no-store 면", 11, SOFT, KR)
-d.t(S1, SY + BH / 2 + 54, "이 상태를 벗어나지 않습니다", 11, SOFT, KR)
+d.t(S1, SY + BH / 2 + 34, "Cache-Control: no-store 면", 12, SOFT, KR)
+d.t(S1, SY + BH / 2 + 54, "이 상태를 벗어나지 않습니다", 12, SOFT, KR)
 
-d.t(20, 444, "서버가 Cache-Control: max-age=N 을 주면 그 시간 동안 신선하고, 지나면 만료를 의심합니다.", 11, MUTED, KR, "start")
-d.t(20, 466, "조건부 GET 은 왕복 한 번을 쓰지만 객체 본문의 전송 시간은 아낍니다. 객체가 클수록 그 차이가 커집니다.", 11, MUTED, KR, "start")
+d.t(20, 444, "서버가 Cache-Control: max-age=N 을 주면 그 시간 동안 신선하고, 지나면 만료를 의심합니다.", 12, MUTED, KR, "start")
+d.t(20, 466, "조건부 GET 은 왕복 한 번을 쓰지만 객체 본문의 전송 시간은 아낍니다. 객체가 클수록 그 차이가 커집니다.", 12, MUTED, KR, "start")
 
 d.legend(H - 56, [("왕복이 0 인 자리", ACC), ("본문 없이 끝남", OK), ("본문을 다시 받음", INFO)])
 d.save("02-02.cache-freshness.svg")

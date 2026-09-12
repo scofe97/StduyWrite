@@ -20,7 +20,7 @@ def xp(t): return TX0 + t / TMAX * (TX1 - TX0)
 for g in range(0, TMAX + 1, 80):
     x = xp(g)
     d.line(x, 142, x, Y0 + 5 * ROW_H, RULE, 0.8)
-    d.t(x, 134, f"{g} ms", 11, MUTED, MONO)
+    d.t(x, 134, f"{g} ms", 12, MUTED, MONO)
 d.line(TX0, 142, TX1, 142, RULE, 1.0)
 
 ROWS = [
@@ -30,20 +30,20 @@ ROWS = [
 ]
 for i, (name, s, e, c, focal, note) in enumerate(ROWS):
     y = Y0 + i * ROW_H
-    d.t(LX + 8, y + 30, name, 11, INK, KR, "start", 600)
+    d.t(LX + 8, y + 30, name, 12, INK, KR, "start", 600)
     x0, x1 = xp(s), xp(e)
     if focal: d.tone(x0, y + 12, max(x1 - x0, 12), BAR_H, c, 4)
     else: d.box(x0, y + 12, x1 - x0, BAR_H, PAPER, c, 1.0, 4)
     nx = x1 + 12 if x1 + 12 + len(note) * 11 < 980 else x0 - 12
-    d.t(nx, y + 28, note, 11, c if focal else SOFT, KR, "start" if nx > x0 else "end")
+    d.t(nx, y + 28, note, 12, c if focal else SOFT, KR, "start" if nx > x0 else "end")
 
 QY = Y0 + 3 * ROW_H + 12
-d.t(LX + 8, QY + 26, "큐 길이", 11, INK, KR, "start", 600)
+d.t(LX + 8, QY + 26, "큐 길이", 12, INK, KR, "start", 600)
 for i, (t, q) in enumerate([(0, 25), (80, 21), (160, 17), (240, 13), (320, 9), (400, 5), (480, 5)]):
     c = ACC if t >= 400 else MUTED
     d.o.append(f'<circle cx="{xp(t):.1f}" cy="{QY + 26 - q * 1.6:.1f}" r="4" fill="{c}"/>')
-    d.t(xp(t), QY + 26 - q * 1.6 - 12, str(q), 11, c, MONO)
-d.t(xp(440), QY + 26 - 5 * 1.6 + 22, "여기서부터 줄지 않습니다", 11, ACC, KR)
+    d.t(xp(t), QY + 26 - q * 1.6 - 12, str(q), 12, c, MONO)
+d.t(xp(440), QY + 26 - 5 * 1.6 + 22, "여기서부터 줄지 않습니다", 12, ACC, KR)
 
 d.t(20, 414, "정상 상태 큐 = 윈도 − 대역폭·지연 곱. 여기서는 25 − 20 = 5 이고, 그 다섯이 만드는 지연이 사라지지 않습니다.",
      11, MUTED, KR, "start")
