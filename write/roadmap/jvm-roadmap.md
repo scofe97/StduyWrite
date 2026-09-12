@@ -11,7 +11,7 @@ updated: 2026-07-09
 
 ---
 
-> "Java 코드를 작성하는 개발자" 에서 "Java 코드가 JVM 안에서 어떻게 로딩되고, 실행되고, 최적화되고, 멈추고, 장애 나는지 설명할 수 있는 개발자" 로 가는 것이 목표입니다. 이 문서는 제공받은 JVM 딥다이브 로드맵 원문을 **섹션별로 빠짐없이** 옮긴 기록입니다. 책 매핑·폴더 구조는 [README.md](README.md) 가 맡고, 이 문서는 "각 섹션이 원래 무엇을 다루라고 했는가" 의 SSOT 입니다.
+> "Java 코드를 작성하는 개발자" 에서 "Java 코드가 JVM 안에서 어떻게 로딩되고, 실행되고, 최적화되고, 멈추고, 장애 나는지 설명할 수 있는 개발자" 로 가는 것이 목표입니다. 이 문서는 제공받은 JVM 딥다이브 로드맵 원문을 **섹션별로 빠짐없이** 옮긴 기록입니다. 책 매핑·폴더 구조는 [README.md](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/README.md) 가 맡고, 이 문서는 "각 섹션이 원래 무엇을 다루라고 했는가" 의 SSOT 입니다.
 
 ## 1. JVM 딥다이브 전체 지도
 
@@ -757,7 +757,7 @@ volumeMounts:
 
 3. **PEM CA bundle 배포 + initContainer 에서 truststore 생성** — ConfigMap/Secret 의 `company-root-ca.crt` 를 initContainer 가 `keytool` 로 `truststore.jks` 로 변환, main container 가 `JAVA_TOOL_OPTIONS` 로 지정. CA 를 표준 PEM 으로 관리.
 
-4. **cert-manager trust-manager** — 여러 namespace 에 X.509 신뢰 번들 배포. 최종적으로 ConfigMap CA bundle → Pod mount → JVM truststore 변환/연결까지 이어야 함. (K8s 측 상세는 [kubernetes roadmap](../../../08_cloud/kubernetes/roadmap.md) 참조)
+4. **cert-manager trust-manager** — 여러 namespace 에 X.509 신뢰 번들 배포. 최종적으로 ConfigMap CA bundle → Pod mount → JVM truststore 변환/연결까지 이어야 함. (K8s 측 상세는 [kubernetes roadmap](k8s-roadmap.md) 참조)
 
 ### 26.6 흔한 오류와 책임 분리
 
@@ -813,7 +813,7 @@ truststore 에 CA 가 없으면 `javax.net.ssl.SSLHandshakeException: PKIX path 
 | GC 가 너무 자주 돈다 | Heap 이 작거나 객체 생성량 과다 |
 | Pod 가 OOMKilled | Heap 밖 native memory 포함 컨테이너 초과 |
 
-> 깊은 설명 → [`01-05.실전 — Docker 컨테이너 네이티브 메모리와 OOMKilled`](./ch02_automatic-memory-management/01-05.실전%20—%20Docker%20컨테이너%20네이티브%20메모리와%20OOMKilled.md), 로드맵 §11·§17·§19.
+> 깊은 설명 → [`01-05.실전 — Docker 컨테이너 네이티브 메모리와 OOMKilled`](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch02_automatic-memory-management/01-05.%EC%8B%A4%EC%A0%84%20%E2%80%94%20Docker%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%84%A4%EC%9D%B4%ED%8B%B0%EB%B8%8C%20%EB%A9%94%EB%AA%A8%EB%A6%AC%EC%99%80%20OOMKilled.md), 로드맵 §11·§17·§19.
 
 ### 27.2 컨테이너 / Kubernetes 리소스 인식
 
@@ -846,7 +846,7 @@ Java 21 HotSpot 의 기본 GC 는 G1 이다. 짧은 pause 를 얻는 대신 처�
 | Full GC 발생 | heap 압박·humongous object·old 회수 지연 |
 | young GC 가 너무 잦다 | allocation rate 높음 |
 
-> 깊은 설명 → [`02-01.GC 운영 — 로그와 튜닝`](./ch02_automatic-memory-management/02-01.GC%20운영%20—%20로그와%20튜닝.md). GC 알고리즘 본문은 로드맵 §10.
+> 깊은 설명 → [`02-01.GC 운영 — 로그와 튜닝`](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch02_automatic-memory-management/02-01.GC%20%EC%9A%B4%EC%98%81%20%E2%80%94%20%EB%A1%9C%EA%B7%B8%EC%99%80%20%ED%8A%9C%EB%8B%9D.md). GC 알고리즘 본문은 로드맵 §10.
 
 ### 27.4 GC 로그 / JVM Unified Logging
 
@@ -858,7 +858,7 @@ Java 21 HotSpot 의 기본 GC 는 G1 이다. 짧은 pause 를 얻는 대신 처�
 
 JDK 9 이후 JVM 로그는 대부분 `-Xlog` 체계로 통합됐다. `gc`·`safepoint`·`os+container`·`class+load`·`jit` 태그 조합으로 내부 사건을 관찰한다. 자주 보는 태그는 `gc*`(GC 원인·pause·heap 변화), `safepoint`(전체 정지 지점), `os+container`(컨테이너 감지), `class+load`(클래스 로딩 과다).
 
-> 깊은 설명 → [`03-03.통합 JVM 로깅 — Xlog와 비동기 로깅`](./ch02_automatic-memory-management/03-03.통합%20JVM%20로깅%20—%20Xlog와%20비동기%20로깅.md).
+> 깊은 설명 → [`03-03.통합 JVM 로깅 — Xlog와 비동기 로깅`](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch02_automatic-memory-management/03-03.%ED%86%B5%ED%95%A9%20JVM%20%EB%A1%9C%EA%B9%85%20%E2%80%94%20Xlog%EC%99%80%20%EB%B9%84%EB%8F%99%EA%B8%B0%20%EB%A1%9C%EA%B9%85.md).
 
 ### 27.5 OOM 발생 시 증거 수집
 
@@ -870,7 +870,7 @@ JDK 9 이후 JVM 로그는 대부분 `-Xlog` 체계로 통합됐다. `gc`·`safe
 
 `HeapDumpOnOutOfMemoryError` 는 기본 비활성화라 명시해야 `OutOfMemoryError` 시 heap dump 를 남긴다. 죽었다는 사실만 남기지 말고 사인을 남기게 하는 옵션이다. 주의할 점 — dump 는 `Xmx` 에 가까운 큰 파일이라 디스크가 필요하고, K8s 에서 `/tmp` 에 남기면 재시작 시 사라지므로 PVC/별도 볼륨을 고려한다. heap dump 에는 토큰·비밀번호·요청 데이터가 들어갈 수 있어 취급에 주의한다.
 
-> 깊은 설명 → [`07-02.OutOfMemoryError 진단 — 네 가지 원인과 자동 덤프`](../jpf_java-performance/07-02.OutOfMemoryError%20진단%20—%20네%20가지%20원인과%20자동%20덤프.md).
+> 깊은 설명 → [`07-02.OutOfMemoryError 진단 — 네 가지 원인과 자동 덤프`](../01_language/book/jpf_java-performance/07-02.OutOfMemoryError%20%EC%A7%84%EB%8B%A8%20%E2%80%94%20%EB%84%A4%20%EA%B0%80%EC%A7%80%20%EC%9B%90%EC%9D%B8%EA%B3%BC%20%EC%9E%90%EB%8F%99%20%EB%8D%A4%ED%94%84.md).
 
 ### 27.6 Metaspace / ClassLoader
 
@@ -883,7 +883,7 @@ JDK 9 이후 JVM 로그는 대부분 `-Xlog` 체계로 통합됐다. `gc`·`safe
 
 Metaspace 는 클래스 메타데이터가 저장되는 native memory 영역이다. `MaxMetaspaceSize` 는 기본 무제한이다. Jenkins(플러그인·Groovy·Shared Library), Spring Boot DevTools(재시작 classloader), Tomcat(배포 반복 후 classloader leak), 동적 프록시(CGLIB·ByteBuddy 다량 생성) 에서 자주 문제가 된다. 너무 작게 잡으면 장애가 빨리 드러나고, 무작정 크게 잡으면 누수를 늦게 발견한다.
 
-> 깊은 설명 → [`05-04.기본 튜닝 (2) — metaspace·병렬·GC 도구`](../jpf_java-performance/05-04.기본%20튜닝%20(2)%20—%20metaspace·병렬·GC%20도구.md).
+> 깊은 설명 → [`05-04.기본 튜닝 (2) — metaspace·병렬·GC 도구`](../01_language/book/jpf_java-performance/05-04.%EA%B8%B0%EB%B3%B8%20%ED%8A%9C%EB%8B%9D%20(2)%20%E2%80%94%20metaspace%C2%B7%EB%B3%91%EB%A0%AC%C2%B7GC%20%EB%8F%84%EA%B5%AC.md).
 
 ### 27.7 Direct Memory / Native Memory
 
@@ -901,7 +901,7 @@ Metaspace 는 클래스 메타데이터가 저장되는 native memory 영역이�
 | Kafka/Netty 사용 중 메모리 증가 | direct buffer pool |
 | heap dump 엔 안 보이는 메모리 증가 | NMT·OS RSS 확인 |
 
-> 깊은 설명 → [`08-02.Native Memory Tracking — NMT와 shared library 한계`](../jpf_java-performance/08-02.Native%20Memory%20Tracking%20—%20NMT와%20shared%20library%20한계.md), [`01-05.실전 — Docker 컨테이너 네이티브 메모리와 OOMKilled`](./ch02_automatic-memory-management/01-05.실전%20—%20Docker%20컨테이너%20네이티브%20메모리와%20OOMKilled.md).
+> 깊은 설명 → [`08-02.Native Memory Tracking — NMT와 shared library 한계`](../01_language/book/jpf_java-performance/08-02.Native%20Memory%20Tracking%20%E2%80%94%20NMT%EC%99%80%20shared%20library%20%ED%95%9C%EA%B3%84.md), [`01-05.실전 — Docker 컨테이너 네이티브 메모리와 OOMKilled`](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch02_automatic-memory-management/01-05.%EC%8B%A4%EC%A0%84%20%E2%80%94%20Docker%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%84%A4%EC%9D%B4%ED%8B%B0%EB%B8%8C%20%EB%A9%94%EB%AA%A8%EB%A6%AC%EC%99%80%20OOMKilled.md).
 
 ### 27.8 Thread Stack / 스레드 수
 
@@ -919,7 +919,7 @@ Metaspace 는 클래스 메타데이터가 저장되는 native memory 영역이�
 | thread dump 가 수천 개 | thread pool 설정 문제 |
 | context switching 증가 | thread 과다 |
 
-> 깊은 설명 → [`09-05.JVM 스레드 튜닝과 모니터링`](../jpf_java-performance/09-05.JVM%20스레드%20튜닝과%20모니터링.md). Thread state·lock 진단은 로드맵 §14.
+> 깊은 설명 → [`09-05.JVM 스레드 튜닝과 모니터링`](../01_language/book/jpf_java-performance/09-05.JVM%20%EC%8A%A4%EB%A0%88%EB%93%9C%20%ED%8A%9C%EB%8B%9D%EA%B3%BC%20%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81.md). Thread state·lock 진단은 로드맵 §14.
 
 ### 27.9 JFR / jcmd / 운영 진단
 
@@ -936,7 +936,7 @@ jcmd <pid> JFR.start ; jcmd <pid> JFR.dump
 
 예전의 `jstack`·`jmap` 중심에서 `jcmd`·JFR 중심으로 이동했다. JFR 은 장애 난 뒤 로그를 뒤지는 도구라기보다 블랙박스처럼 JVM 내부 사건(allocation·GC pause·thread blocking·IO·CPU hot method·exception rate) 을 시간축으로 남기는 도구다.
 
-> 깊은 설명 → [`03-04.Java Flight Recorder와 JMC`](../jpf_java-performance/03-04.Java%20Flight%20Recorder와%20JMC.md). 진단 도구 카탈로그는 로드맵 §20, 플래그 허브는 [`JVM-TOOLS.md`](./JVM-TOOLS.md).
+> 깊은 설명 → [`03-04.Java Flight Recorder와 JMC`](../01_language/book/jpf_java-performance/03-04.Java%20Flight%20Recorder%EC%99%80%20JMC.md). 진단 도구 카탈로그는 로드맵 §20, 플래그 허브는 [`JVM-TOOLS.md`](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/JVM-TOOLS.md).
 
 ### 27.10 DNS / 네트워크 캐시 TTL — 신규 본문
 

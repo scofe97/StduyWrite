@@ -11,7 +11,7 @@ updated: 2026-07-07
 
 ---
 
-> "Spring Boot 로 API 를 만들 줄 아는 개발자" 에서 "Spring 이 왜 그렇게 동작하는지 설명하고, 장애·성능·테스트·트랜잭션까지 설계할 수 있는 개발자" 로 가는 것이 목표입니다. 이 문서는 제공받은 Spring 딥다이브 로드맵 원문을 **섹션별로 빠짐없이** 옮긴 기록입니다. 폴더 배치·학습 경로·보유 문서 매핑은 [README.md](README.md) 가 맡고, 이 문서는 "각 섹션이 원래 무엇을 다루라고 했는가" 의 SSOT 입니다.
+> "Spring Boot 로 API 를 만들 줄 아는 개발자" 에서 "Spring 이 왜 그렇게 동작하는지 설명하고, 장애·성능·테스트·트랜잭션까지 설계할 수 있는 개발자" 로 가는 것이 목표입니다. 이 문서는 제공받은 Spring 딥다이브 로드맵 원문을 **섹션별로 빠짐없이** 옮긴 기록입니다. 폴더 배치·학습 경로·보유 문서 매핑은 [README.md](../09_spring/README.md) 가 맡고, 이 문서는 "각 섹션이 원래 무엇을 다루라고 했는가" 의 SSOT 입니다.
 
 ## 1. Spring 딥다이브 전체 지도
 
@@ -493,7 +493,7 @@ Testcontainers
 
 여기까지가 "Spring 이 어떻게 동작하는가" 였다면, 이 단계는 "그 Spring 애플리케이션이 어떻게 빌드되어 어떤 산출물이 되고, Tomcat 위에서 어떻게 실행되는가" 입니다. `./gradlew build` 하면 `jar` 가 나온다는 수준이 아니라, 소스가 class 로 컴파일되고 의존성이 classpath 에 놓이고 Gradle/Maven 이 산출물을 만들고 Spring Boot 플러그인이 실행 가능한 구조로 재패키징하고 Boot Loader 가 중첩 jar 를 읽어 Tomcat 이 요청을 DispatcherServlet 까지 흘려보내는 흐름을 설명할 수 있는 것이 목표입니다.
 
-JAR 와 WAR 의 진짜 차이는 확장자가 아니라 **실행 주도권** 입니다. JAR 는 애플리케이션이 내장 Tomcat 을 *품고* 스스로 실행하고(`java -jar app.jar`), WAR 는 외부 Tomcat 이 애플리케이션을 *품고* 실행합니다(`webapps/` 배포). 이 한 줄이 배포 모델 전체를 가릅니다. 빌드 산출물은 애플리케이션의 껍질이고, Tomcat 은 요청이 들어오는 문이며, Boot Loader 는 그 문 안쪽에서 애플리케이션을 깨우는 점화 장치입니다. (내장 톰캣·실행 JAR 의 서사 본체는 [01_core/02-02](01_core/02-02.내장%20톰캣과%20SpringApplication%20—%20JAR로%20WAS를%20품다.md) 에 있고, 이 절은 빌드 도구·Boot Loader 내부·외부 WAR·Layered/Docker 까지 키워드 축을 넓힙니다.)
+JAR 와 WAR 의 진짜 차이는 확장자가 아니라 **실행 주도권** 입니다. JAR 는 애플리케이션이 내장 Tomcat 을 *품고* 스스로 실행하고(`java -jar app.jar`), WAR 는 외부 Tomcat 이 애플리케이션을 *품고* 실행합니다(`webapps/` 배포). 이 한 줄이 배포 모델 전체를 가릅니다. 빌드 산출물은 애플리케이션의 껍질이고, Tomcat 은 요청이 들어오는 문이며, Boot Loader 는 그 문 안쪽에서 애플리케이션을 깨우는 점화 장치입니다. (내장 톰캣·실행 JAR 의 서사 본체는 [01_core/02-02](../09_spring/01_core/02-02.%EB%82%B4%EC%9E%A5%20%ED%86%B0%EC%BA%A3%EA%B3%BC%20SpringApplication%20%E2%80%94%20JAR%EB%A1%9C%20WAS%EB%A5%BC%20%ED%92%88%EB%8B%A4.md) 에 있고, 이 절은 빌드 도구·Boot Loader 내부·외부 WAR·Layered/Docker 까지 키워드 축을 넓힙니다.)
 
 반드시 알아야 할 것:
 
