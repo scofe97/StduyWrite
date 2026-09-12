@@ -19,34 +19,39 @@ updated: 2026-09-13
 
 > Linux 운영에서 실행 모델과 격리로 내려간 뒤 성능·관측·커널 내부로 이어집니다. 개념이 주인공이고 책은 그 개념을 다루는 자리입니다.
 
-## 이 순서를 잡은 기준
-
-> 커널을 자료구조부터 배우면 `task_struct` 에서 지칩니다. 운영에서 올라온 증상에서 시작해 그 증상이 서 있는 층으로 내려갑니다.
-
-1~3단계는 컨테이너가 무엇 위에 서 있는지를 잡는 바닥입니다. 4~5단계는 느려진 이유를 재는 축이고, 6단계는 그 아래 커널 구현입니다.
-
-**증상이 단계를 정합니다.** Pod가 137로 죽으면 3단계, 서비스가 안 뜨면 1단계, CPU 사용률이 낮은데 응답이 느리면 4단계가 첫 자리입니다. 번호는 의존 순서이지 진도가 아닙니다.
-
-**우선순위는 개념마다 붙습니다.** `필수` 는 빼면 뒤가 막히는 자리, `추천` 은 빼도 되지만 손해가 큰 자리, `선택` 은 목표가 생겼을 때 여는 자리입니다. `대체` 는 같은 자리를 다른 자료가 대신 채우는 경우이므로 둘 다 읽지 않습니다.
-
-**책이 없는 개념도 노드로 둡니다.** 소장본이 그 주제를 안 다루면 `책` 칸을 비워 두고, 책이 들어오면 그 칸만 채웁니다. 네트워크는 3단계의 network namespace까지만 잡고 [네트워크 로드맵](network-roadmap.md)에 넘깁니다.
-
-
-
 ## 학습 순서
 
-> 단계마다 배우는 개념입니다. 우선순위와 자료 위치는 아래 단계별 표가 짚습니다.
+> 단계마다 배우는 개념을 묶음으로 갈랐습니다. 자료 위치는 아래 단계별 표가 짚습니다.
 
 ![Linux 운영에서 커널 내부로 내려가는 OS 학습 순서](_assets/os-roadmap.svg)
 
-| 단계 | 무엇을 여는가 | 배우는 개념 |
+| 단계 | 묶음 | 배우는 개념 |
 |---|---|---|
-| 1 · Linux 사용 | 명령을 치는 자리 | 셸 · 스트림 · 변수 · 종료 상태 · 파일 · 권한 · 리다이렉션 · 파이프 · 모든 것이 파일 · VFS · mount · 부팅 · initramfs · systemd unit · 의존성 · journal |
-| 2 · 실행 모델 | 애플리케이션이 하는 일 | 유저 스페이스 · 커널 스페이스 · 시스템 콜 · `strace` · process · thread · task 구조 · signal · 종료 코드 137 · 143 · zombie · PID 1 · file descriptor · `ulimit` · `epoll` · 동기화 · 교착 |
-| 3 · 컨테이너 기반 | 컨테이너가 서는 바닥 | namespace 여덟 · `unshare` · cgroup v2 · controller · `cpu.max` · `cpu.stat` · `memory.max` · PSI · OOM Killer · mount propagation · OverlayFS · copy-on-write · user namespace · rootless · capability |
-| 4 · 성능 분석 | 왜 느린가 | USE · RED · 드릴다운 · run queue · CFS · context switch · load average · softirq · RSS · VSS · PSS · page cache · swap · overcommit · block I/O · IOPS · `fsync` · 파일 시스템 캐시 |
-| 5 · 관측과 보안 | 어느 창을 여는가 | procfs · sysfs · `sar` · perf · Ftrace · tracepoint · kprobe · uprobe · BCC · bpftrace · verifier · CO-RE · BTF · capability · seccomp · AppArmor · SELinux · 샌드박싱 |
-| 6 · 커널 내부 | 커널의 안 | VAS · 주소 변환 · KASLR · 페이지 할당자 · GFP 플래그 · slab · `kmalloc` · `vmalloc` · demand paging · 스케줄링 클래스 · CFS 구현 · 임계 구역 · mutex · spinlock · atomic · lock-free · lockdep · 하이퍼바이저 · KVM |
+| 1 · Linux 사용 | 셸과 명령 | 스트림 · 변수 · 종료 상태 · 리다이렉션 · 파이프 · 명령 조합 · 조용한 실패 |
+| 1 · Linux 사용 | 파일과 권한 | 모든 것이 파일 · VFS · mount · 장치 · 사용자 · 권한 |
+| 1 · Linux 사용 | 부팅과 서비스 | bootloader · initramfs · systemd unit · 의존성 · journal · `systemd-analyze` |
+| 1 · Linux 사용 | 커널의 경계 | 커널이 맡는 일과 맡지 않는 일 · 배포판이 얹는 것 |
+| 2 · 실행 모델 | 경계와 진입 | 유저 스페이스 · 커널 스페이스 · 시스템 콜 · `strace` |
+| 2 · 실행 모델 | 프로세스와 스레드 | process · thread · task 구조 · PID · TID · VAS · 컨텍스트 |
+| 2 · 실행 모델 | 종료와 신호 | signal · SIGTERM · SIGKILL · 종료 코드 137 · 143 · zombie · PID 1 · core dump |
+| 2 · 실행 모델 | 파일 디스크립터 | FD · `ulimit` · `epoll` · 논블로킹 I/O · 자원별 관측 창 |
+| 2 · 실행 모델 | 동시성의 문제 | 동기화 · 교착 · `prctl` · `PR_SET_PDEATHSIG` · `vfork` · `clone3` |
+| 3 · 컨테이너 기반 | 격리 | namespace 여덟 · `unshare` · shared kernel · cgroup namespace · user namespace · rootless |
+| 3 · 컨테이너 기반 | 자원 제한 | cgroup v2 · controller · `cpu.max` · `cpu.stat` · throttling · `memory.max` · `memory.events` · PSI · OOM Killer |
+| 3 · 컨테이너 기반 | 파일시스템 | mount propagation · OverlayFS · copy-on-write · hugetlbfs |
+| 3 · 컨테이너 기반 | 보안의 바닥 | capability · 권한 · 시스템 콜 표면 |
+| 4 · 성능 분석 | 방법론 | USE · RED · 드릴다운 · 지연 분석 · 사용률 · 포화 · 오류 · 모델링 · 용량계획 |
+| 4 · 성능 분석 | CPU | run queue · CFS · context switch · load average · softirq · IRQ affinity · `irqbalance` |
+| 4 · 성능 분석 | 메모리 | virtual memory · RSS · VSS · PSS · page cache · swap · overcommit |
+| 4 · 성능 분석 | 저장 I/O | block I/O · IOPS · queue depth · `fsync` · 파일 시스템 캐시 · blk-cgroup · `io.max` |
+| 5 · 관측과 보안 | 관측 도구 | procfs · sysfs · `sar` · 도구 커버리지 · 관측 소스 |
+| 5 · 관측과 보안 | 추적 | perf · Ftrace · tracepoint · kprobe · uprobe · BCC · bpftrace · verifier · CO-RE · BTF |
+| 5 · 관측과 보안 | 실행 권한 | capability · seccomp · `no-new-privileges` · AppArmor · SELinux · Landlock |
+| 5 · 관측과 보안 | 격리 강화 | 샌드박싱 세 갈래 · 설정 하나로 무너지는 경계 |
+| 6 · 커널 내부 | 메모리 관리 | VM split · 주소 변환 · KASLR · NUMA · 페이지 할당자 · GFP 플래그 · slab · `kmalloc` · `vmalloc` · demand paging |
+| 6 · 커널 내부 | 스케줄러 | 스케줄링 클래스 · CFS 구현 · 선점 · 진입점 · CPU affinity |
+| 6 · 커널 내부 | 동기화 | 임계 구역 · data race · mutex · spinlock · atomic · refcount · lock-free · lockdep · memory barrier |
+| 6 · 커널 내부 | 가상화와 사후 분석 | 하이퍼바이저 · VM · CPU·메모리 배분 · KVM · kdump · crash 분석 · io_uring · VFS 구현 · LSM 훅 |
 
 
 

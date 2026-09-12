@@ -20,41 +20,59 @@ updated: 2026-09-13
 
 > socket에서 시작해 커널 패킷 경로로 내려간 뒤 Kubernetes와 클라우드 underlay로 올라갑니다. 개념이 주인공이고 책은 그 개념을 다루는 자리입니다.
 
-## 이 순서를 잡은 기준
-
-> 내려갔다가 올라오는 모양입니다. 1~3단계는 노드 한 대 안에서 끝나고, 4단계부터 클러스터와 클라우드로 넓힙니다.
-
-**Kubernetes 네트워크 장애의 상당수는 4단계가 아니라 2단계에서 풀립니다.** Service가 안 되는 이유가 selector보다 conntrack이나 MTU인 경우가 많습니다. 그래서 오브젝트를 먼저 배우지 않습니다.
-
-단계 번호는 의존 순서이지 진도가 아닙니다. 연결이 거부되면 1단계, 패킷이 사라지면 2단계, 이름이 안 풀리면 3단계, Service가 안 되면 4단계, 노드 밖에서 막히면 5단계가 첫 자리입니다.
-
-**우선순위는 개념마다 붙습니다.** `필수` 는 빼면 뒤가 막히는 자리, `추천` 은 빼도 되지만 손해가 큰 자리, `선택` 은 목표가 생겼을 때 여는 자리입니다. `대체` 는 같은 자리를 다른 자료가 대신 채우는 경우이므로 둘 다 읽지 않습니다.
-
-**책이 없는 개념도 노드로 둡니다.** 소장본이 그 주제를 안 다루면 `책` 칸을 비워 두고, 책이 들어오면 그 칸만 채웁니다. 5단계 클라우드 축이 특히 그렇습니다 — 소장본이 《Networking and Kubernetes》 6장 하나뿐이라 나머지는 각 클라우드의 공식 문서로 메웁니다.
-
-
-
 ## 학습 순서
 
-> 단계마다 배우는 개념입니다. 우선순위와 자료 위치는 아래 단계별 표가 짚습니다.
+> 단계마다 배우는 개념을 묶음으로 갈랐습니다. 자료 위치는 아래 단계별 표가 짚습니다.
 
-![socket에서 클라우드 underlay까지 이어지는 네트워크 학습 순서](_assets/network-roadmap.svg)
+![socket에서 오버레이와 신뢰까지 이어지는 네트워크 학습 순서](_assets/network-roadmap.svg)
 
-| 단계 | 무엇을 여는가 | 배우는 개념 |
+| 단계 | 묶음 | 배우는 개념 |
 |---|---|---|
-| 1 · 연결 | 연결이 무엇인가 | socket · bind · listen · accept · 4-tuple · 듣는 소켓과 연결 소켓 · TCP 상태 · handshake · 재전송 · RTT · 흐름 제어 · cwnd · 혼잡 제어 · CUBIC · BBR · UDP · 단편화 · keepalive · DNS 질의 · HTTP/1.1 · HTTP/2 · QUIC · HTTP/3 · TLS · SNI · ECH · reverse proxy · half-close · 배압 |
-| 2 · Linux 경로 | 커널 안에서 지나는 길 | interface · MAC · ARP · NDP · IP 주소 · 서브네팅 · CIDR · 라우팅 테이블 · next hop · 포워딩 · ICMP · netns · veth · bridge · netfilter · iptables · nftables · NAT · SNAT · DNAT · MASQUERADE · conntrack · MTU · MSS · PMTUD · DHCP · NAT traversal |
-| 3 · 관측 | 정말 그 길로 갔는지 | 캡처 위치 · 디스플레이 필터 · RST · 재전송 판독 · TLS 판독 · 계층 순서 진단 · `resolv.conf` · `ndots` · NXDOMAIN · Corefile · 플러그인 체인 · 응답 불일치 · 연결 지연 분포 · P99 |
-| 4 · Kubernetes | 커널 경로 위의 이름 | Pod IP · Pod CIDR · Node CIDR · CNI · CNI 계약 · 오버레이 · VXLAN · underlay · Service · EndpointSlice · kube-proxy · IPVS · readiness · stale Endpoint · 클러스터 DNS · service discovery · east-west · Ingress · Gateway API · L4 로드밸런싱 |
-| 5 · 클라우드 네트워크 | 클러스터가 서 있는 바닥 | VPC · 서브넷 · 라우트 테이블 · Security Group · NACL · 클라우드 로드밸런서 · L4 · L7 · VPN · 사이트 간 연결 · AWS Direct Connect · 전용선 · Clos 토폴로지 · BGP · ECMP · 3사 기본값의 갈림 |
-| 6 · 데이터패스와 정책 | 같은 일을 다른 경로로 | NetworkPolicy · default deny · L7 정책 · FQDN 정책 · identity-aware policy · eBPF 프로그램 유형 · hook · XDP · TC · map · helper · verifier · CO-RE · BTF · Cilium 데이터패스 · IPAM · Hubble · 투명 암호화 · egress 게이트웨이 |
-| 7 · 운영 경계 | 클러스터가 한 종류가 아닐 때 | dual-stack · `ipFamilyPolicy` · topology-aware routing · Windows HNS · HCS · 멀티클러스터 · Envoy · Gateway · VirtualService · mTLS · Zero Trust · ambient · ztunnel |
+| 1 · 연결 | 소켓과 연결 | socket · `bind` · `listen` · `accept` · `connect` · 4-tuple · 듣는 소켓과 연결 소켓 |
+| 1 · 연결 | TCP 동작 | 상태 · 3-way handshake · 재전송 · 타임아웃 · RTT · 흐름 제어 · cwnd · in-flight · 혼잡 제어 · CUBIC · BBR · keepalive |
+| 1 · 연결 | 이름과 응용 | DNS 질의 · HTTP/1.1 · HTTP/2 · 멀티플렉싱 · QUIC · HTTP/3 |
+| 1 · 연결 | 보안 전송 | TLS 핸드셰이크 · SNI · ECH · OS CA bundle · truststore |
+| 1 · 연결 | 중계와 한계 | reverse proxy · half-close · 배압 · listen 큐 · accept 큐 · ephemeral 포트 고갈 · UDP · 단편화 |
+| 2 · Linux 경로 | 주소와 이웃 | interface · MAC · ARP · NDP · IP 주소 · 서브네팅 · CIDR |
+| 2 · Linux 경로 | 경로 결정 | 라우팅 테이블 · next hop · IP 포워딩 · ICMP · traceroute · policy routing · `ip rule` · VRF |
+| 2 · Linux 경로 | 가상 인터페이스 | network namespace · veth · bridge · 컨테이너 네트워킹 모드 · 포트 매핑 |
+| 2 · Linux 경로 | 패킷 변형 | netfilter hook · iptables · nftables · NAT · SNAT · DNAT · MASQUERADE · conntrack |
+| 2 · Linux 경로 | 크기와 구성 | MTU · MSS · PMTUD · DHCP · bonding · LACP · NAT traversal |
+| 3 · 관측 | 캡처와 판독 | 캡처 위치 · 캡처 필터 · 디스플레이 필터 · RST · 재전송 · 중복 ACK · TLS 핸드셰이크 판독 |
+| 3 · 관측 | 계층별 도구 | `ss` · `ip` · `ethtool` · `conntrack -L` · `nft list ruleset` |
+| 3 · 관측 | 이름 진단 | `resolv.conf` · search domain · `ndots` · NXDOMAIN · Corefile · 플러그인 체인 · 응답 불일치 |
+| 3 · 관측 | 측정의 함정 | 연결 지연 분포 · P99 · 측정 오차 · GRO · GSO · TSO 오프로딩 · `tc qdisc` · `netem` |
+| 4 · Kubernetes | Pod 네트워크 | Pod IP · Pod CIDR · Node CIDR · pause container · CNI · CNI 계약 ADD·DEL·CHECK |
+| 4 · Kubernetes | 노드 간 전달 | 오버레이 · VXLAN · underlay 와 overlay 의 갈림 |
+| 4 · Kubernetes | 서비스 추상화 | Service · EndpointSlice · Service 5유형 · kube-proxy · iptables · IPVS · readiness · stale Endpoint |
+| 4 · Kubernetes | 이름과 진입 | 클러스터 DNS · Service FQDN · service discovery · east-west · Ingress · Gateway API · HTTPRoute |
+| 4 · Kubernetes | 분배와 보존 | L4 로드밸런싱 · health check · round-robin · least connections · draining · `externalTrafficPolicy` · 소스 IP · 인증서 만료 구분 |
+| 5 · 클라우드 | VPC 구성 | VPC · 서브넷 · 라우트 테이블 · IGW · NAT GW |
+| 5 · 클라우드 | 경계 제어 | Security Group · NACL · stateful 과 stateless 의 갈림 |
+| 5 · 클라우드 | 진입과 분배 | 클라우드 로드밸런서 · L4 · L7 |
+| 5 · 클라우드 | 사이트 간 연결 | VPN · IPsec · AWS Direct Connect · 전용선 · VPC 피어링 · Transit Gateway |
+| 5 · 클라우드 | 데이터센터 축 | Clos 토폴로지 · BGP · ECMP · 3사 기본값의 갈림 |
+| 6 · 데이터패스 | 정책 모델 | NetworkPolicy · ingress · egress · default deny · L7 정책 · FQDN 정책 · identity-aware policy |
+| 6 · 데이터패스 | eBPF 기초 | 프로그램 구조 · 유형 · attach · hook · map · helper · verifier · CO-RE · BTF |
+| 6 · 데이터패스 | 데이터패스 구현 | XDP · TC hook · Cilium 데이터패스 · IPAM · eBPF host routing · bandwidth manager |
+| 6 · 데이터패스 | 암호화와 관측 | 투명 암호화 · WireGuard · Hubble · egress 게이트웨이 · 클러스터 access |
+| 7 · 운영 경계 | 주소와 배치 | dual-stack · `ipFamilyPolicy` · topology-aware routing · EndpointSlice hint |
+| 7 · 운영 경계 | 혼합 환경 | Windows HNS · HCS · Windows CNI · 멀티클러스터 메시 |
+| 7 · 운영 경계 | 메시 데이터 플레인 | 서비스 메시가 옮긴 것 · Envoy · Gateway · VirtualService · DestinationRule |
+| 7 · 운영 경계 | 신원과 기본값 | mTLS · 기본값 닫아 가기 · Zero Trust 전제 · ambient · ztunnel · waypoint |
+| 8 · 오버레이와 신뢰 | 진입 | bootstrap · reseed · 최초 접점 · trust anchor · stale data |
+| 8 · 오버레이와 신뢰 | 발견 | peer discovery · DHT · Kademlia · gossip · membership · peer store |
+| 8 · 오버레이와 신뢰 | 식별 | node ID · signed descriptor · 공개키 신원 · key rotation · replay · freshness |
+| 8 · 오버레이와 신뢰 | 신뢰 | Sybil · eclipse · poisoning · identity 와 trust 의 차이 · 인증과 인가의 차이 · behavior score |
+| 8 · 오버레이와 신뢰 | 경로 | path selection · latency · 가용성 · subnet · ASN diversity · 비용 함수 · selection bias |
+| 8 · 오버레이와 신뢰 | 관측 가능성 | traffic correlation · metadata · timing side-channel · 암호화가 숨기지 않는 것 |
+| 8 · 오버레이와 신뢰 | 오버레이 | 물리와 논리의 분리 · 터널링 · 가상 토폴로지 · relay · hole punching · reachability |
 
 
 
 ## 책 읽기 흐름
 
-> 위 단계를 무엇으로 배우는가입니다. 책 열셋이 각각 어느 단계의 무엇을 다루는지와 읽을 장을 적습니다.
+> 위 단계를 무엇으로 배우는가입니다. 책 열다섯이 각각 어느 단계의 무엇을 다루는지와 읽을 장을 적습니다.
 
 ![네트워크 책 읽기 흐름 — 우선순위와 읽을 장](_assets/network-books.svg)
 
@@ -72,7 +90,9 @@ updated: 2026-09-13
 | Cilium Up and Running | 4~7 · 12~15장 | 추천 | 4·6단계 |
 | Learning eBPF | 3·5~8장 | 추천 | 6단계 |
 | [Istio in Action](../08_cloud/book/istio-in-action/README.md) | 1·3·4·5·9·12장 | 추천 | 7단계 |
-| Zero Trust Networks | 1·2·8장 | 선택 | 7단계 |
+| Zero Trust Networks | 1·2·6·8·10장 | 추천 | 7·8단계 |
+| Real-World Cryptography | 5 · 7~10장 | 추천 | 8단계 |
+| Patterns of Distributed Systems | 7·8장 | 선택 | 8단계 |
 | High Performance Browser Networking | 2·4·11·12장 | 대체 | 1단계 — HTTP/2 in Action 자리 |
 | Sidecar-less Istio Explained | 전 4장 | 대체 | 7단계 — Istio in Action 12장 자리 |
 
@@ -202,9 +222,9 @@ updated: 2026-09-13
 
 
 
-## 운영 경계 · 7단계
+## 운영 경계와 오버레이 · 7~8단계
 
-> 클러스터가 한 종류가 아닐 때 생기는 문제들입니다. 필요가 생겼을 때 엽니다.
+> 클러스터가 한 종류가 아닐 때, 그리고 노드끼리 서로를 모르는 채로 만날 때 생기는 문제들입니다.
 
 ### 7단계 · 운영 경계
 
@@ -219,6 +239,27 @@ updated: 2026-09-13
 | Zero Trust 전제 · 신뢰 관리 | 선택 | [12-01](../08_cloud/book/istio-in-action/12-01.%EA%B2%BD%EA%B3%84%EB%A5%BC%20%EC%A7%80%EC%9A%B0%EB%8A%94%20%EC%A0%84%EC%A0%9C%20%EC%85%8B%EA%B3%BC%20%EB%82%A8%EB%8A%94%20%ED%95%9C%20%EC%9E%90%EB%A6%AC.md) | Zero Trust Networks 1·2·8장 |
 | 멀티클러스터 메시 | 선택 | | Cilium 9장 |
 | ambient mode · ztunnel · waypoint | 대체 | | Sidecar-less Istio Explained 1~3장 |
+
+### 8단계 · 오버레이와 신뢰
+
+> 기술 이름이 아니라 문제를 배우는 자리입니다. Tor · I2P · libp2p · WireGuard · Consul 은 같은 문제에 대한 서로 다른 답입니다.
+
+| 개념 | 우선순위 | 노트 | 책 |
+|---|:---:|---|---|
+| identity 와 trust 의 차이 · 인증과 인가의 차이 | 필수 | | Zero Trust Networks 2·6장 |
+| traffic correlation · metadata · timing side-channel | 필수 | | Zero Trust Networks 8장 |
+| 암호화가 숨기는 것과 숨기지 않는 것 | 필수 | | Real-World Cryptography 9·10장 |
+| bootstrap · reseed · 최초 접점 · trust anchor | 추천 | | |
+| peer discovery · DHT · Kademlia · gossip · membership | 추천 | | Patterns of Distributed Systems 7·8장 |
+| signed descriptor · 공개키 신원 · 무결성 | 추천 | | Real-World Cryptography 7장 |
+| key rotation · replay 방지 · freshness | 추천 | | Real-World Cryptography 5·8장 |
+| Sybil · eclipse · poisoning · behavior score | 추천 | | Zero Trust Networks 10장 |
+| path selection · latency · 가용성 · 다양성 · 비용 함수 | 추천 | | |
+| subnet · ASN · operator diversity · selection bias | 추천 | | |
+| 오버레이 — 물리와 논리의 분리 · 터널링 · 가상 토폴로지 | 추천 | | |
+| relay · hole punching · reachability | 선택 | | |
+
+**같은 질문이 이름만 바꿔 되풀이됩니다.** 아직 아무도 모르는 노드가 처음 네트워크에 어떻게 들어오는가는 Kubernetes node discovery, etcd cluster join, Kafka broker discovery, VPN mesh에서 같은 형태로 나옵니다. 그래서 이 단계를 마지막에 두되 특정 제품을 학습 대상으로 두지 않습니다.
 
 
 

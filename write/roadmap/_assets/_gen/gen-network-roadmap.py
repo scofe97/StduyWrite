@@ -123,6 +123,18 @@ stages = [
       ("mTLS · 기본값 닫아 가기", "Istio in Action 5·9장", "추천"),
       ("Zero Trust 전제", "Zero Trust Networks 1·2장", "선택"),
       ("ambient · ztunnel · waypoint", "Sidecar-less Istio 1~3장", "대체")]),
+
+    ("8 · 오버레이와 신뢰", "분산 네트워크가 되풀이하는 문제들",
+     [("bootstrap · trust anchor", "", "추천"),
+      ("peer discovery · DHT · gossip", "Patterns of Distributed Sys 7장", "추천"),
+      ("signed descriptor · 공개키 신원", "Real-World Crypto 7장", "추천"),
+      ("key rotation · replay 방지", "Real-World Crypto 5·8장", "추천"),
+      ("Sybil · eclipse · poisoning", "Zero Trust Networks 10장", "추천")],
+     [("identity 와 trust 의 차이", "Zero Trust Networks 2·6장", "필수"),
+      ("path selection · 경로 다양성", "", "추천"),
+      ("traffic correlation", "Zero Trust Networks 8장", "필수"),
+      ("암호화가 숨기지 않는 것", "Real-World Crypto 9·10장", "필수"),
+      ("오버레이 · 터널링 · relay", "", "추천")]),
 ]
 
 CUT_AFTER = 2          # 3단계 뒤에 노드 한 대 ↔ 클러스터 절단선
@@ -130,6 +142,7 @@ NOTES = {
     2: "Kubernetes 네트워크 장애의 상당수가 4단계가 아니라 2단계에서 풀린다. conntrack 과 MTU 가 먼저다.",
     4: "클라우드 축은 소장본이 Networking and Kubernetes 6장 하나뿐이다. 나머지는 공식 문서로 메운다.",
     6: "책 줄이 빈 노드는 아직 자료가 없는 자리다. 소장 목록이 늘면 그 줄만 채운다.",
+    7: "8단계는 기술 이름이 아니라 문제를 배우는 자리다. Tor·I2P·libp2p 는 그 문제의 답 중 하나다.",
 }
 
 
@@ -151,7 +164,7 @@ H = y + 84
 d = D(W, H, "WRITE · NETWORK ROADMAP",
       "네트워크 학습 로드맵",
       "애플리케이션이 여는 socket 에서 커널 패킷 경로로 내려간 뒤 Kubernetes 데이터패스로 다시 "
-      "올라간다. 척추에 단계 일곱을 걸고 개념을 좌우로 뻗었다. 노드의 주인공은 개념이고 아래 줄은 "
+      "올라간다. 척추에 단계 여덟을 걸고 개념을 좌우로 뻗었다. 노드의 주인공은 개념이고 아래 줄은 "
       "그 개념을 다루는 책의 장이다. 점 색이 우선순위이고, 책 줄이 비면 아직 자료가 없는 자리다.",
       "노드는 개념, 아래 줄은 그 개념을 다루는 책의 장입니다")
 
