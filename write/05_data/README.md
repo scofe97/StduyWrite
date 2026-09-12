@@ -15,7 +15,7 @@ updated: 2026-07-15
 ---
 > 데이터 모델과 관계형 DB부터 JDBC·JPA·QueryDSL, Redis, 배치 처리, 분산 데이터 이론과 DB 운영까지를 다룹니다. Kafka·Redpanda·CDC의 구체 구현과 운영은 `04_messaging/`에 두고, 이 카테고리에서는 데이터의 저장·조회·처리·일관성 원리를 다룹니다.
 
-처음에는 [통합 학습 로드맵](./roadmap.md)을 읽습니다. 폴더 이름이나 도구가 아니라, Spring 백엔드가 데이터를 저장하고 조회하고 운영하는 흐름으로 자료를 연결합니다.
+읽는 순서는 [데이터 학습 로드맵](../roadmap/data-roadmap.md)이 정합니다. DDIA 2판을 척추로 삼아 원리 축만 세운 문서라, SQL·JDBC·JPA·QueryDSL 을 익히는 도구 축은 이 MOC 의 주제군 표가 맡습니다.
 
 ## 주제군
 
@@ -41,6 +41,6 @@ MinIO 같은 오브젝트 스토리지는 분산 파일시스템·오브젝트 �
 
 ## 관련 문서
 
-- [통합 학습 로드맵](./roadmap.md) — Spring 백엔드 기준 추천 읽기 순서
+- [데이터 학습 로드맵](../roadmap/data-roadmap.md) — 소장 책과 정독 노트로 세운 원리 축 읽기 순서
 - [04_messaging](../04_messaging/README.md) — Kafka·Redpanda·CDC 구현과 운영
 - [09_spring](../09_spring/README.md) — Spring 프레임워크 전반의 진입점

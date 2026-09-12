@@ -97,8 +97,6 @@ updated: 2026-09-13
 | Spring 이 쓰는 디자인 패턴 | 추천 | [01-02](../09_spring/01_core/01-02.Spring%EA%B3%BC%20%EB%94%94%EC%9E%90%EC%9D%B8%20%ED%8C%A8%ED%84%B4.md) | |
 | 웹 스코프와 로그인 | 선택 | [09](../09_spring/books/spring-start-here/09.%EC%9B%B9%20%EC%8A%A4%EC%BD%94%ED%94%84%EC%99%80%20%EB%A1%9C%EA%B7%B8%EC%9D%B8.md) | Spring Start Here 9장 |
 
-`@Service` 하나가 언제 설계도가 되고 언제 객체가 되는지를 말할 수 있어야 합니다. 그 답이 **BeanDefinition 을 먼저 만들고 그것으로 조립한다**이고, 뒤 단계의 프록시와 자동 구성이 전부 이 순서 위에 얹힙니다.
-
 ### 2단계 · 프록시와 AOP
 
 | 개념 | 우선순위 | 노트 | 책 |
@@ -111,8 +109,6 @@ updated: 2026-09-13
 | 템플릿·콜백과 ThreadLocal | 추천 | [01-03](../09_spring/05_aop/01-03.%ED%85%9C%ED%94%8C%EB%A6%BF%C2%B7%EC%BD%9C%EB%B0%B1%EA%B3%BC%20ThreadLocal%20%E2%80%94%20AOP%20%EB%93%B1%EC%9E%A5%20%EC%A7%81%EC%A0%84%EC%9D%98%20%EB%91%90%20%EC%8B%9C%EB%8F%84.md) | |
 | 어노테이션 기반 응용 | 추천 | [01-04](../09_spring/05_aop/01-04.%EC%96%B4%EB%85%B8%ED%85%8C%EC%9D%B4%EC%85%98%20%EA%B8%B0%EB%B0%98%20AOP%20%EC%9D%91%EC%9A%A9%20%E2%80%94%20%40Async%C2%B7%40Cacheable%C2%B7%40Retryable.md) | |
 | 위빙 네 방식과 AspectJ | 선택 | | |
-
-프록시를 이해하지 못하면 `@Transactional` 이 왜 같은 클래스 안에서 안 먹는지 설명할 수 없습니다. 이 단계는 **부가기능이 객체 바깥에서 끼어드는 자리**를 손에 쥐는 구간입니다.
 
 ### 3단계 · 요청 처리
 
@@ -131,8 +127,6 @@ updated: 2026-09-13
 | REST 서비스 만들고 소비하기 | 필수 | [10](../09_spring/books/spring-start-here/10.REST%20%EC%84%9C%EB%B9%84%EC%8A%A4.md) | Spring Start Here 10·11장 |
 | 메시지와 국제화 | 선택 | [03-01](../09_spring/02_data-binding/03-01.%EB%A9%94%EC%8B%9C%EC%A7%80%C2%B7%EA%B5%AD%EC%A0%9C%ED%99%94%20%E2%80%94%20MessageSource%EC%99%80%20LocaleResolver.md) | |
 
-요청 한 건이 소켓에서 컨트롤러 메서드 인자까지 어떤 손을 거치는지 그릴 수 있어야 합니다. **그 그림이 있어야 커스텀 `ArgumentResolver` 를 어디에 끼울지가 보입니다.**
-
 ### 4단계 · 트랜잭션과 이벤트
 
 | 개념 | 우선순위 | 노트 | 책 |
@@ -147,8 +141,6 @@ updated: 2026-09-13
 | 커밋 전후 Phase 와 전파 | 필수 | [01-03](../09_spring/06_events/01-03.%40TransactionalEventListener%20%EB%82%B4%EB%B6%80%20%EB%8F%99%EC%9E%91%20%EC%9B%90%EB%A6%AC.md) | |
 | 죽은 트랜잭션 피하기 | 필수 | [01-02](../09_spring/06_events/01-02.%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%20%EC%A0%84%ED%8C%8C%20%EC%A1%B0%ED%95%A9%20%E2%80%94%20%EC%A3%BD%EC%9D%80%20%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%EA%B3%BC%20REQUIRES_NEW.md) | |
 | 동기와 비동기 이벤트 · 보상 | 추천 | [01-04](../09_spring/06_events/01-04.%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B9%84%EB%8F%99%EA%B8%B0%20%EC%9D%B4%EB%B2%A4%ED%8A%B8%20%E2%80%94%20%40Async%EC%99%80%20%EB%B3%B4%EC%83%81%20%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98.md) | |
-
-이벤트를 트랜잭션과 같은 단계에 둔 이유가 있습니다. `@TransactionalEventListener` 는 **커밋 시점에 매달린 콜백**이라, 전파 조합을 모르면 커밋 뒤에 죽은 트랜잭션 위에서 DB 를 건드리게 됩니다.
 
 
 
@@ -169,8 +161,6 @@ updated: 2026-09-13
 | 프로필로 환경 가르기 | 필수 | [02-03](../09_spring/07_autoconfig/02-03.%ED%94%84%EB%A1%9C%ED%95%84%20%E2%80%94%20%ED%99%98%EA%B2%BD%EB%B3%84%20%EC%84%A4%EC%A0%95%20%EB%B6%84%EB%A6%AC.md) | |
 | 설정과 비밀 관리 | 추천 | [04](../09_spring/books/cloud-native-spring-in-action/04.%EC%99%B8%EB%B6%80%ED%99%94%20%EC%84%A4%EC%A0%95%20%EA%B4%80%EB%A6%AC.md) | Cloud Native Spring 4·14장 |
 
-자동 구성은 마법이 아니라 **조건이 붙은 `@Bean` 목록**입니다. `--debug` 로 조건 평가 보고서를 열어 무엇이 켜지고 무엇이 밀렸는지 읽을 수 있으면 이 단계는 끝난 것입니다.
-
 ### 6단계 · 외부 통신과 회복탄력성
 
 | 개념 | 우선순위 | 노트 | 책 |
@@ -188,8 +178,6 @@ updated: 2026-09-13
 | 격벽과 속도 제한 | 추천 | [01-04](../09_spring/03_network/resilience/01-04.Bulkhead%20%E2%80%94%20Semaphore%20vs%20ThreadPool%20%EA%B2%A9%EB%A6%AC.md) | |
 | API 게이트웨이 | 추천 | | Cloud Native Spring 9장 |
 
-호출하는 쪽이 안 죽는 법을 배우는 구간입니다. **재시도를 걸기 전에 그 실패가 재시도해도 되는 실패인지 가르는 것**이 순서상 먼저이고, 그래서 Feign 의 에러 모델이 Resilience4j 앞에 옵니다.
-
 ### 7단계 · 비동기와 실시간
 
 | 개념 | 우선순위 | 노트 | 책 |
@@ -206,8 +194,6 @@ updated: 2026-09-13
 | 배치 — 잡과 스텝 | 선택 | | Spring Batch 2~4장 |
 | 배치 — 리더 · 프로세서 · 라이터 | 선택 | | Spring Batch 7~9장 |
 
-`@Scheduled` 로 감당이 안 되는 규모가 오면 그때 Spring Batch 를 엽니다. **재시작 가능성과 청크 단위 커밋이 필요해진 순간**이 그 경계이고, 그 전까지는 소장본을 덮어 둡니다.
-
 ### 8단계 · 보안과 운영
 
 | 개념 | 우선순위 | 노트 | 책 |
@@ -221,8 +207,6 @@ updated: 2026-09-13
 | 액츄에이터 엔드포인트 | 필수 | [01-01](../06_observability/05_SpringActuator/01-01.%EC%95%A1%EC%B8%84%EC%97%90%EC%9D%B4%ED%84%B0%20%E2%80%94%20%EC%9A%B4%EC%98%81%20%EC%97%94%EB%93%9C%ED%8F%AC%EC%9D%B8%ED%8A%B8.md) | Spring in Action 15장 |
 | 마이크로미터와 메트릭 | 필수 | [01-02](../06_observability/05_SpringActuator/01-02.%EB%A7%88%EC%9D%B4%ED%81%AC%EB%A1%9C%EB%AF%B8%ED%84%B0%EC%99%80%20%EB%A9%94%ED%8A%B8%EB%A6%AD%20%E2%80%94%20Counter%C2%B7Gauge%C2%B7Timer.md) | Spring in Action 16·17장 |
 | 프로메테우스 연동 | 추천 | [01-03](../06_observability/05_SpringActuator/01-03.%ED%94%84%EB%A1%9C%EB%A9%94%ED%85%8C%EC%9A%B0%EC%8A%A4%C2%B7%EA%B7%B8%EB%9D%BC%ED%8C%8C%EB%82%98%20%EC%97%B0%EB%8F%99.md) | Cloud Native Spring 13장 |
-
-보안은 이 로드맵에서 **노트가 한 편도 없는 유일한 축**입니다. 소장본이 열여덟 장짜리 단행본 하나뿐이라 책과 공식 문서로만 받고, 정독 노트를 쓰면 그때 이 표의 `노트` 칸을 채웁니다.
 
 ### 9단계 · 테스트와 배포
 
@@ -240,8 +224,6 @@ updated: 2026-09-13
 | bootJar 와 Layered JAR | 필수 | [02-02](../09_spring/01_core/02-02.%EB%82%B4%EC%9E%A5%20%ED%86%B0%EC%BA%A3%EA%B3%BC%20SpringApplication%20%E2%80%94%20JAR%EB%A1%9C%20WAS%EB%A5%BC%20%ED%92%88%EB%8B%A4.md) | Spring in Action 18장 |
 | 컨테이너화와 쿠버네티스 | 추천 | [06](../09_spring/books/cloud-native-spring-in-action/06.Spring%20Boot%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%ED%99%94.md) | Cloud Native Spring 6·7장 |
 | 지속 배포와 GitOps | 선택 | | Cloud Native Spring 15장 |
-
-테스트를 마지막에 둔 것은 덜 중요해서가 아닙니다. **무엇을 격리하고 무엇을 진짜로 띄울지 고르려면 앞 여덟 단계의 경계를 알아야** 하기 때문이고, 그래서 슬라이스 테스트가 1단계가 아니라 여기 있습니다.
 
 
 
