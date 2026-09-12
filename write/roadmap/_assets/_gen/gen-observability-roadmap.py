@@ -54,6 +54,7 @@ stages = [
      [("Prometheus 데이터 모델", "Mastering Prometheus 3장", "필수"),
       ("TSDB 쓰기 경로와 저장 구조", "Mastering Prometheus 3장", "필수"),
       ("PromQL 기초 · 집계 연산자", "Prometheus Up and Running 13·14장", "필수"),
+      ("range query · step · 시간 창", "Prometheus Up and Running 13장", "추천"),
       ("이항 연산자 · 함수 · 레코딩 룰", "Prometheus Up and Running 15~17장", "추천")],
      [("서비스 디스커버리와 relabeling", "Mastering Prometheus 4장", "필수"),
       ("컨테이너와 Kubernetes 지표", "Prometheus Up and Running 9장", "필수"),
@@ -77,7 +78,8 @@ stages = [
      [("SLI · SLO · 에러 버짓", "SRE 2판 7장", "필수"),
       ("SLO 를 Prometheus 로 정의하기", "Mastering Prometheus 13장", "필수"),
       ("사고 관리 · 온콜 · 지휘 체계", "SRE 2판 9장", "추천"),
-      ("사고에서 배우기 · 포스트모템", "SRE 2판 10장", "추천")]),
+      ("사고에서 배우기 · 포스트모템", "SRE 2판 10장", "추천"),
+      ("근거의 출처를 함께 남기기", "", "추천")]),
 
     ("6 · 확장과 운영", "지표가 한 대에 안 들어갈 때",
      [("샤딩 · 페더레이션 · 고가용성", "Mastering Prometheus 6장", "필수"),

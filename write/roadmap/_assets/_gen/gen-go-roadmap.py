@@ -93,6 +93,8 @@ stages = [
      [("HTTP 클라이언트 · 타임아웃", "Network Programming Go 8장", "필수"),
       ("HTTP 서비스 · 라우팅", "Network Programming Go 9장", "필수"),
       ("직렬화 · 로깅 · 지표", "Network Programming Go 12·13장", "추천"),
+      ("SSE — 서버가 미는 스트리밍 HTTP", "", "추천"),
+      ("폴링과 이벤트 구동의 갈림", "", "추천"),
       ("복원력 · 느슨한 결합", "Cloud Native Go 8·9장", "추천"),
       ("관리성 · 관측성 · 보안", "Cloud Native Go 10~12장", "추천"),
       ("go:embed — 정적 자원 품기", "Cloud Native Go 10장", "추천"),

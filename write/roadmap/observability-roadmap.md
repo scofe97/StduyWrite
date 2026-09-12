@@ -117,6 +117,7 @@ updated: 2026-09-13
 | TSDB 저장 구조 — 블록 · WAL · 압축 | 필수 | [03-03](../06_observability/book/mastering_prometheus/03-03.TSDB%20%EC%A0%80%EC%9E%A5%20%EA%B5%AC%EC%A1%B0.md) | Mastering Prometheus 3장 |
 | PromQL 기초 | 필수 | [03-04](../06_observability/book/mastering_prometheus/03-04.PromQL%20%EA%B8%B0%EC%B4%88.md) | Prometheus Up & Running 13장 |
 | 집계 연산자 · 이항 연산자 · 함수 | 필수 | | Prometheus Up & Running 14~16장 |
+| range query · step · 시간 창 | 추천 | | Prometheus Up & Running 13장 |
 | 레코딩 룰 | 추천 | | Prometheus Up & Running 17장 |
 | 서비스 디스커버리와 relabeling | 필수 | [04-01](../06_observability/book/mastering_prometheus/04-01.%EC%84%9C%EB%B9%84%EC%8A%A4%20%EB%94%94%EC%8A%A4%EC%BB%A4%EB%B2%84%EB%A6%AC%EC%99%80%20relabeling.md) | Mastering Prometheus 4장 |
 | 컨테이너와 Kubernetes 지표 | 필수 | [k8s 로드맵](k8s-roadmap.md) | Prometheus Up & Running 9장 |
@@ -155,6 +156,7 @@ updated: 2026-09-13
 | SLO 를 Prometheus 로 정의하기 · burn rate | 필수 | [13-01](../06_observability/book/mastering_prometheus/13-01.SLO%20%EB%A5%BC%20Prometheus%20%EB%A1%9C%20%EC%A0%95%EC%9D%98%ED%95%98%EA%B3%A0%20%EC%95%8C%EB%A6%BC%ED%95%98%EA%B8%B0%20%E2%80%94%20%EC%9A%94%EC%B2%AD%C2%B7%EC%9C%88%EB%8F%84%EC%9A%B0%20%EA%B8%B0%EB%B0%98%EA%B3%BC%20Sloth%C2%B7Pyrra.md) | Mastering Prometheus 13장 |
 | 사고 관리 · 온콜 · 지휘 체계 | 추천 | [09-01](../06_observability/book/observability_with_grafana/09-01.%EC%82%AC%EA%B3%A0%20%EA%B4%80%EB%A6%AC%20%E2%80%94%20%EA%B8%88%EC%9D%80%EB%8F%99%20%EC%A7%80%ED%9C%98%C2%B7SLI%20%EC%95%8C%EB%A6%BC%C2%B7IRM%20%EB%8F%84%EA%B5%AC%20%EC%85%8B.md) | Site Reliability Engineering 9장 |
 | 사고에서 배우기 · 포스트모템 | 추천 | | Site Reliability Engineering 10장 |
+| 근거의 출처를 함께 남기기 | 추천 | | |
 | SLO 기반 신뢰성 | 추천 | | Observability Engineering 11장 |
 
 ### 6단계 · 확장과 운영

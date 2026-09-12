@@ -80,7 +80,9 @@ stages = [
       ("List·Watch 와 resourceVersion", "Programming Kubernetes 3장", "필수"),
       ("level-driven 과 edge-driven", "Programming Kubernetes 1장", "필수"),
       ("GVK · Scheme · TypeMeta", "Programming Kubernetes 2·3장", "추천"),
-      ("controller-runtime 으로 감싸기", "Programming Kubernetes 6장", "추천")],
+      ("controller-runtime 으로 감싸기", "Programming Kubernetes 6장", "추천"),
+      ("Reflector · DeltaFIFO · Indexer", "Programming Kubernetes 3장", "추천"),
+      ("SharedInformer 와 resync", "Programming Kubernetes 3장", "추천")],
      [("authn · authz · admission", "Production Kubernetes 8장", "필수"),
       ("TLS · PKI · 인증서 수명", "", "필수"),
       ("etcd quorum · Raft · 백업 · 복구", "", "필수"),
@@ -88,6 +90,7 @@ stages = [
 
     ("6 · 보안과 확장", "누가 무엇을 할 수 있는가",
      [("RBAC · Role · ServiceAccount", "K8s Up and Running 14장", "필수"),
+      ("내가 볼 수 있는가 — AccessReview", "", "추천"),
       ("SecurityContext · seccomp", "K8s Patterns 23장", "필수"),
       ("Pod Security Admission", "CKS Study Guide 3장", "필수"),
       ("NetworkPolicy · 네트워크 분할", "K8s Patterns 24장", "추천"),
