@@ -6,8 +6,8 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, BAD, PAPER2, RULE, KR, MONO
 
-W, H = 976, 592
-X0, RW, RH, GAP, Y0 = 236, 684, 64, 12, 120
+W, H = 836, 592
+X0, RW, RH, GAP, Y0 = 176, 624, 64, 12, 120
 
 ROWS = [
     ("NIC 링 버퍼", "ethtool -S · rx_missed_errors", "물리 NIC 에만 있습니다", None),
@@ -34,14 +34,14 @@ for i, (name, cmd, note, c) in enumerate(ROWS):
     d.t(X0 + RW - 16, y + 38, note, 11, SOFT, KR, "end")
 
 BOT = Y0 + len(ROWS) * (RH + GAP) - GAP
-d.arrow([(200, Y0 + 8), (200, BOT - 4)], SOFT, "soft", 1.2)
-d.t(184, Y0 + 20, "패킷 도착", 11, MUTED, KR, "end")
-d.t(184, BOT - 8, "앱 도달", 11, MUTED, KR, "end")
+d.arrow([(144, Y0 + 8), (144, BOT - 4)], SOFT, "soft", 1.2)
+d.t(128, Y0 + 20, "패킷 도착", 11, MUTED, KR, "end")
+d.t(128, BOT - 8, "앱 도달", 11, MUTED, KR, "end")
 
-d.t(24, Y0 + 24, "총량이 아니라", 11, SOFT, KR, "start")
-d.t(24, Y0 + 40, "증가분을 봅니다", 11, SOFT, KR, "start")
-d.t(24, Y0 + 64, "카운터는 부팅", 11, SOFT, KR, "start")
-d.t(24, Y0 + 80, "이후 누적이라", 11, SOFT, KR, "start")
+d.t(24, Y0 + 150, "총량이 아니라", 11, SOFT, KR, "start")
+d.t(24, Y0 + 166, "증가분을 봅니다", 11, SOFT, KR, "start")
+d.t(24, Y0 + 190, "카운터는 부팅", 11, SOFT, KR, "start")
+d.t(24, Y0 + 206, "이후 누적이라", 11, SOFT, KR, "start")
 d.t(24, Y0 + 96, "총량만 보면", 11, SOFT, KR, "start")
 d.t(24, Y0 + 112, "정상 오차를", 11, SOFT, KR, "start")
 d.t(24, Y0 + 128, "문제로 읽습니다", 11, SOFT, KR, "start")

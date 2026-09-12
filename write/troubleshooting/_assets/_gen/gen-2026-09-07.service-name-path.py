@@ -6,8 +6,8 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, OK, BAD, WARN, PAPER2, RULE, KR, MONO
 
-W, H = 900, 728
-CX, RX = 296, 686
+W, H = 836, 728
+CX, RX = 276, 616
 
 d = D(W, H, "TROUBLESHOOTING DRILL · 2026-09-07 D2",
       "이름이 Pod 에 닿기까지",
@@ -55,8 +55,8 @@ step(RX, Y_D2, 320, 68, "Operation timed out",
 
 d.t(CX + 12, Y_D1 + 104, "풀린다", 11, MUTED, KR, "start", 600)
 d.t(CX + 12, Y_D2 + 104, "있다", 11, MUTED, KR, "start", 600)
-d.t(CX + 168, Y_D1 + 30, "못 푼다", 11, SOFT, KR, "start")
-d.t(CX + 168, Y_D2 + 30, "비었다", 11, BAD, KR, "start", 600)
+d.t(CX + 186, Y_D1 + 30, "못 푼다", 11, SOFT, KR, "start")
+d.t(CX + 186, Y_D2 + 30, "비었다", 11, BAD, KR, "start", 600)
 
 d.t(24, Y_D2 + 24, "Pod IP 직접", 11, SOFT, KR, "start")
 d.t(24, Y_D2 + 42, "호출이 성공한", 11, SOFT, KR, "start")
