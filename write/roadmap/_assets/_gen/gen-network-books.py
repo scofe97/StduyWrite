@@ -40,7 +40,11 @@ rows = [
     ]),
     ("7", "운영 경계", [
         ("Istio in Action", "1·3·4·5·9·12장", ["Envoy·Gateway·mTLS", "기본값 닫기·Zero Trust"], "추천"),
-        ("Zero Trust Networks", "1·2·8장", ["신뢰 관리 모델", "트래픽을 신뢰한다는 것"], "선택"),
+        ("Zero Trust Networks", "1·2·6·8·10장", ["신뢰 관리와 identity", "트래픽 신뢰·공격자 관점"], "추천"),
+    ]),
+    ("8", "신뢰와 익명", [
+        ("Real-World Cryptography", "5·7~10장", ["키 교환·서명·난수", "안전한 전송과 종단 암호화"], "추천"),
+        ("Patterns of Distributed Systems", "7·8장", ["HeartBeat 와 membership", "Majority Quorum"], "선택"),
     ]),
     ("7", "메시 후속", [
         ("Sidecar-less Istio Explained", "전 4장", ["ambient 모드 구조", "ztunnel 과 waypoint"], "대체"),
@@ -54,7 +58,7 @@ d = D(
     H,
     "WRITE · NETWORK BOOK FLOW",
     "네트워크 책 읽기 흐름",
-    "이 로드맵이 쓰는 책 열셋을 단계 순으로 걸고 각 책에서 읽을 장만 적었다. 통독하는 책은 셋이고 "
+    "이 로드맵이 쓰는 책 열다섯을 단계 순으로 걸고 각 책에서 읽을 장만 적었다. 통독하는 책은 셋이고 "
     "나머지는 부분 독서다. 테두리 색이 우선순위이고, 대체는 같은 자리를 다른 책이 대신 채우는 경우다.",
     "위에서 아래로 진행하고, 같은 행의 책은 병행합니다",
 )
