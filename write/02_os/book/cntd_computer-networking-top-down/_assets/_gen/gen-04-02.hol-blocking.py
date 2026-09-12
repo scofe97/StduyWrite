@@ -18,14 +18,14 @@ d = D(W, H, "COMPUTER NETWORKING TOP-DOWN · 04-02 §1",
 for name, sub, y in LANES:
     d.line(LX, y, LR, y, RULE, 0.8)
     d.t(12, y + 54, name, 12, INK, KR, "start", 600)
-    d.t(12, y + 74, sub, 11, SOFT, KR, "start")
+    d.t(12, y + 74, sub, 12, SOFT, KR, "start")
 d.line(LX, LANES[-1][2] + LH, LR, LANES[-1][2] + LH, RULE, 0.8)
 
 def pkt(cx, cy, lab, dst, c=MUTED, focal=False):
     if focal: d.tone(cx - PW / 2, cy - PH / 2, PW, PH, c, 5, "14", 1.4)
     else: d.box(cx - PW / 2, cy - PH / 2, PW, PH, PAPER2, c, 1.0, 5)
-    d.t(cx, cy - 4, lab, 11, c if focal else INK, MONO, "middle", 600)
-    d.t(cx, cy + 14, dst, 11, SOFT, KR)
+    d.t(cx, cy - 4, lab, 12, c if focal else INK, MONO, "middle", 600)
+    d.t(cx, cy + 14, dst, 12, SOFT, KR)
 
 Y1, Y2 = LANES[0][2] + LH / 2, LANES[1][2] + LH / 2
 pkt(300, Y1, "A1", "→ 출력 1", OK, True)
@@ -38,17 +38,17 @@ for i, y in enumerate(OY):
     c = OK if i == 0 else MUTED
     d.box(OX - 80, y - 30, 160, 60, PAPER2, c, 1.2, 6)
     d.t(OX, y - 4, f"출력 포트 {i+1}", 12, c, KR, "middle", 600)
-    d.t(OX, y + 16, "비어 있음" if i else "이번에 A1 을 받음", 11, SOFT, KR)
+    d.t(OX, y + 16, "비어 있음" if i else "이번에 A1 을 받음", 12, SOFT, KR)
 
 d.path(f"M {300 + PW/2 + 6} {Y1} L {OX - 86} {Y1}", OK, 1.5, m="ok")
-d.t((300 + OX) / 2, Y1 - 14, "건넙니다", 11, OK, KR)
+d.t((300 + OX) / 2, Y1 - 14, "건넙니다", 12, OK, KR)
 
 d.path(f"M {300 + PW/2 + 6} {Y2} L {480} {Y2} L {480} {Y1 + 34}", WARN, 1.5, m="warn", dash="5 4")
-d.t(500, Y2 - 14, "같은 출력을 노려 막힙니다", 11, WARN, KR, "start")
+d.t(500, Y2 - 14, "같은 출력을 노려 막힙니다", 12, WARN, KR, "start")
 
 d.path(f"M {206} {Y2 + PH/2 + 4} L {206} {Y2 + 54} L {OX - 86} {Y2 + 54} L {OX - 86} {Y2 + 24}",
        ACC, 1.5, m="acc", dash="4 4")
-d.t(300, Y2 + 68, "출력 2 는 비어 있는데도 B2 가 함께 기다립니다", 11, ACC, KR, "start")
+d.t(300, Y2 + 44, "출력 2 는 비어 있는데도 B2 가 함께 기다립니다", 12, ACC, KR, "start")
 
 d.t(24, 452, "이것이 HOL 블로킹입니다. 줄 맨 앞이 막히면 뒤에 선 것도 자기 길이 열려 있는지와 무관하게 멈춥니다.",
      11, MUTED, KR, "start")

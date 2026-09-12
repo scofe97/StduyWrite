@@ -20,14 +20,14 @@ d = D(W, H, "COMPUTER NETWORKING TOP-DOWN · 02-02 §2",
 for i in range(UNITS + 1):
     x = TX0 + i * PITCH
     d.line(x, 126, x, Y0 + 9 * ROW_H, RULE, 0.8)
-    d.t(x, 118, "0" if i == 0 else f"{i} RTT", 11, MUTED, MONO)
+    d.t(x, 118, "0" if i == 0 else f"{i} RTT", 12, MUTED, MONO)
 d.line(TX0, 126, TX1, 126, RULE, 1.0)
 
 ZONES = [("비지속 연결 — 객체마다 새 TCP 연결", 0, 6), ("지속 연결 — 연결 하나를 계속", 6, 3)]
 for name, start, n in ZONES:
     zy = Y0 + start * ROW_H
     d.box(20, zy - 4, W - 44, n * ROW_H, PAPER2, RULE, 0.8, 6)
-    d.t(LX + 8, zy + 14, name, 11, SOFT, KR, "start", 600)
+    d.t(LX + 8, zy + 14, name, 12, SOFT, KR, "start", 600)
 
 ROWS = [
     ("TCP 연결 · HTML",      0, 1, 0, INFO, False),
@@ -42,13 +42,13 @@ ROWS = [
 ]
 for name, s, e, i, col, focal in ROWS:
     y = Y0 + i * ROW_H
-    d.t(LX + 8, y + 30, name, 11, INK, KR, "start", 600)
+    d.t(LX + 8, y + 30, name, 12, INK, KR, "start", 600)
     x, w = TX0 + s * PITCH, (e - s) * PITCH
     if focal:
         d.tone(x, y + 12, w, BAR_H, ACC, 4)
     else:
         d.box(x, y + 12, w, BAR_H, PAPER, col, 1.0, 4)
-    d.t(x + w / 2, y + 27, f"{s} → {e}", 11, ACC if focal else col, MONO)
+    d.t(x + w / 2, y + 27, f"{s} → {e}", 12, ACC if focal else col, MONO)
 
 BOT = Y0 + 9 * ROW_H
 d.t(LX, BOT + 30, "객체 하나에 2 RTT 가 드는 것은 연결 수립 1 회와 요청·응답 1 회이기 때문입니다. 객체가 11개인 원문 예에서는 22 RTT 대 3 RTT 가 됩니다",
