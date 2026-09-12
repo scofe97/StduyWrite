@@ -25,7 +25,7 @@ rows = [
         ("Network Programming with Go", "1~9 · 11~13장", ["TCP·UDP·소켓·TLS", "HTTP 클라이언트와 서비스"], "필수"),
         ("Cloud Native Go", "4~13장", ["패턴·확장성·느슨한 결합", "복원력·관리성·관측성·보안"], "추천"),
     ]),
-    ("6", "실습 확장", [
+    ("5·6", "실습 확장", [
         ("Learn Go with Pocket-Sized Projects", "8~11장 · 부록 D·F", ["동시성 미로·gRPC 서비스", "벤치마킹과 퍼징"], "선택"),
     ]),
 ]

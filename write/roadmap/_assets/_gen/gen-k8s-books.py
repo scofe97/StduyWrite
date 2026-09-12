@@ -13,7 +13,7 @@ from dd import ACC, INFO, INK, KR, MONO, MUTED, OK, PAPER, PAPER2, RULE, SOFT, D
 MARK = {"필수": INFO, "추천": OK, "선택": SOFT, "대체": ACC}
 
 rows = [
-    ("1–3", "오브젝트·워크로드·연결", [
+    ("1–4 · 6", "오브젝트·워크로드·연결", [
         ("Kubernetes in Action", "1~18장", ["Pod·컨트롤러·볼륨", "Service·Ingress·Gateway API"], "필수"),
         ("Kubernetes Patterns", "2~9 · 12 · 15~24장", ["예측 가능한 요구·배포·probe", "구조 패턴과 격리 패턴"], "추천"),
     ]),

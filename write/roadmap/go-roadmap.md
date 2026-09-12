@@ -42,6 +42,10 @@ updated: 2026-09-13
 | 6 · 서비스 | 전송 계층 | 주소 해석 · 라우팅 · TCP 스트림 · 데이터 전송 · UDP · 신뢰성 보강 · Unix domain socket |
 | 6 · 서비스 | HTTP | 클라이언트 타임아웃 · 서버 라우팅 · 미들웨어 · graceful shutdown |
 | 6 · 서비스 | 운영 요소 | TLS · 직렬화 · `log/slog` · 지표 · 복원력 · 느슨한 결합 · 관측성 · 보안 |
+| 6 · 서비스 | 산출물 | `go:embed` · distroless · 멀티스테이지 이미지 · `syscall/js` 와 Wasm 경계 |
+| 7 · 터미널과 세션 | SSH | 전송 · 사용자 인증 · 연결 3계층 · `pty-req` · `window-change` · 세션 채널의 경계 |
+| 7 · 터미널과 세션 | 화면 | ANSI CSI · 화면 직접 그리기 · rune 과 grapheme · 터미널 셀 폭 |
+| 7 · 터미널과 세션 | 세션 관리 | 논블로킹 알림 · 신호 병합 · 슬라이딩 윈도우 속도 제한 · 자원 상한 · 인증과 인가의 차이 |
 
 
 
@@ -110,7 +114,7 @@ updated: 2026-09-13
 
 
 
-## Go 를 고르는 이유 · 4~6단계
+## Go 를 고르는 이유 · 4~7단계
 
 > 동시성과 네트워크 서비스입니다. 다른 언어에서 옮겨 올 때 값이 가장 크게 갈리는 구간입니다.
 
@@ -129,6 +133,7 @@ updated: 2026-09-13
 | pipeline · fan-in · fan-out · errgroup | 추천 | | Learn Concurrent Programming with Go 10장 |
 | deadlock 회피 | 추천 | | Learn Concurrent Programming with Go 11장 |
 | 채널 소유권 — 닫기는 한 곳에서만 | 필수 | | Learn Concurrent Go 7장 |
+| `sync.Once` — 중복 close 막기 | 추천 | | |
 | atomic · spin lock · futex | 추천 | | Learn Concurrent Programming with Go 12장 |
 
 ### 5단계 · 테스트와 성능
@@ -162,6 +167,25 @@ updated: 2026-09-13
 | distroless · 멀티스테이지 이미지 | 추천 | | |
 | syscall/js — Wasm 이라는 경계 | 선택 | | |
 | gRPC 서비스 만들기 | 선택 | | Pocket-Sized Projects 10·11장 |
+
+
+### 7단계 · 터미널과 세션
+
+> 사람이 붙어 있는 연결은 요청·응답과 다릅니다. 화면과 세션과 신원을 함께 다뤄야 합니다.
+
+| 개념 | 우선순위 | 노트 | 책 |
+|---|:---:|---|---|
+| SSH 3계층 — 전송 · 사용자 인증 · 연결 | 필수 | | |
+| `pty-req` 와 `window-change` | 필수 | | |
+| 세션 채널과 애플리케이션의 경계 | 필수 | | |
+| ANSI CSI 로 화면 직접 그리기 | 추천 | | |
+| rune 과 grapheme 과 터미널 셀 폭 | 필수 | | |
+| 논블로킹 알림과 신호 병합 | 필수 | | Learn Concurrent Go 7장 |
+| 인증과 인가는 다른 문제다 | 필수 | | Cloud Native Go 12장 |
+| 슬라이딩 윈도우 속도 제한 | 추천 | | |
+| 세션 정리와 자원 상한 | 추천 | | |
+
+**여기는 노트가 없는 단계입니다.** SSH 애플리케이션 서버와 손으로 만든 TUI 는 소장 책이 다루지 않아 `노트` 와 `책` 칸이 대부분 비어 있습니다. `gliderlabs/ssh` 문서와 [RFC 4254](https://www.rfc-editor.org/info/rfc4254)의 `pty-req` · `window-change` 정의가 그 자리를 받습니다.
 
 
 

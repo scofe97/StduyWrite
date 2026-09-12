@@ -74,6 +74,7 @@ stages = [
       ("파일 시스템 캐시 · 유형", "Operating System Concepts 11·12장", "추천")],
      [("throughput · tail latency · P99", "Systems Performance 2장", "필수"),
       ("coordinated omission", "", "필수"),
+      ("활용률과 압력은 다른 질문이다", "PSI 공식 문서", "필수"),
       ("flame graph · 프로파일 네 축", "Systems Performance 6장", "추천"),
       ("malloc · arena · 단편화", "", "추천"),
       ("load average · softirq · swap", "", "추천"),
@@ -82,6 +83,10 @@ stages = [
 
     ("5 · 관측과 보안", "증상마다 맞는 창이 다르다",
      [("procfs · sysfs · sar", "", "필수"),
+      ("/proc/stat · meminfo 읽기", "proc 공식 문서", "필수"),
+      ("/proc/PID/stat · status · statm", "proc 공식 문서", "필수"),
+      ("/proc/diskstats · net/snmp", "proc 공식 문서", "추천"),
+      ("/proc/pressure — some · full", "PSI 공식 문서", "필수"),
       ("perf — 샘플링과 이벤트", "", "필수"),
       ("Ftrace — tracefs · 트레이서", "", "추천"),
       ("eBPF · BCC · bpftrace", "Learning eBPF 3장", "추천"),

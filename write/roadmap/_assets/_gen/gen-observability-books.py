@@ -12,7 +12,7 @@ from dd import ACC, INFO, INK, KR, MONO, MUTED, OK, PAPER, PAPER2, RULE, SOFT, D
 MARK = {"필수": INFO, "추천": OK, "선택": SOFT, "대체": ACC}
 
 rows = [
-    ("1–2", "관점과 계측", [
+    ("1·2 · 7", "관점과 계측", [
         ("Observability Engineering", "1 · 3 · 5~9장", ["관측 가능성과 구조화 이벤트", "OpenTelemetry 계측·분석"], "필수"),
         ("Observability with Grafana", "1·2장", ["LGTM 스택과 페르소나", "로그·메트릭·트레이스 계측"], "추천"),
     ]),
