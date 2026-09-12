@@ -34,11 +34,31 @@ updated: 2026-09-13
 
 
 
+## 학습 순서
+
+> 단계마다 배우는 개념입니다. 우선순위와 자료 위치는 아래 단계별 표가 짚습니다.
+
+![socket에서 클라우드 underlay까지 이어지는 네트워크 학습 순서](_assets/network-roadmap.svg)
+
+| 단계 | 무엇을 여는가 | 배우는 개념 |
+|---|---|---|
+| 1 · 연결 | 연결이 무엇인가 | socket · bind · listen · accept · 4-tuple · 듣는 소켓과 연결 소켓 · TCP 상태 · handshake · 재전송 · RTT · 흐름 제어 · cwnd · 혼잡 제어 · CUBIC · BBR · UDP · 단편화 · keepalive · DNS 질의 · HTTP/1.1 · HTTP/2 · QUIC · HTTP/3 · TLS · SNI · ECH · reverse proxy · half-close · 배압 |
+| 2 · Linux 경로 | 커널 안에서 지나는 길 | interface · MAC · ARP · NDP · IP 주소 · 서브네팅 · CIDR · 라우팅 테이블 · next hop · 포워딩 · ICMP · netns · veth · bridge · netfilter · iptables · nftables · NAT · SNAT · DNAT · MASQUERADE · conntrack · MTU · MSS · PMTUD · DHCP · NAT traversal |
+| 3 · 관측 | 정말 그 길로 갔는지 | 캡처 위치 · 디스플레이 필터 · RST · 재전송 판독 · TLS 판독 · 계층 순서 진단 · `resolv.conf` · `ndots` · NXDOMAIN · Corefile · 플러그인 체인 · 응답 불일치 · 연결 지연 분포 · P99 |
+| 4 · Kubernetes | 커널 경로 위의 이름 | Pod IP · Pod CIDR · Node CIDR · CNI · CNI 계약 · 오버레이 · VXLAN · underlay · Service · EndpointSlice · kube-proxy · IPVS · readiness · stale Endpoint · 클러스터 DNS · service discovery · east-west · Ingress · Gateway API · L4 로드밸런싱 |
+| 5 · 클라우드 네트워크 | 클러스터가 서 있는 바닥 | VPC · 서브넷 · 라우트 테이블 · Security Group · NACL · 클라우드 로드밸런서 · L4 · L7 · VPN · 사이트 간 연결 · AWS Direct Connect · 전용선 · Clos 토폴로지 · BGP · ECMP · 3사 기본값의 갈림 |
+| 6 · 데이터패스와 정책 | 같은 일을 다른 경로로 | NetworkPolicy · default deny · L7 정책 · FQDN 정책 · identity-aware policy · eBPF 프로그램 유형 · hook · XDP · TC · map · helper · verifier · CO-RE · BTF · Cilium 데이터패스 · IPAM · Hubble · 투명 암호화 · egress 게이트웨이 |
+| 7 · 운영 경계 | 클러스터가 한 종류가 아닐 때 | dual-stack · `ipFamilyPolicy` · topology-aware routing · Windows HNS · HCS · 멀티클러스터 · Envoy · Gateway · VirtualService · mTLS · Zero Trust · ambient · ztunnel |
+
+
+
 ## 책 읽기 흐름
 
-> 이 로드맵이 쓰는 책 열셋과 각 책에서 읽을 장입니다. 통독하는 책은 셋뿐입니다.
+> 위 단계를 무엇으로 배우는가입니다. 책 열셋이 각각 어느 단계의 무엇을 다루는지와 읽을 장을 적습니다.
 
 ![네트워크 책 읽기 흐름 — 우선순위와 읽을 장](_assets/network-books.svg)
+
+통독하는 책은 셋뿐이고 나머지는 표의 `읽을 장`만 봅니다.
 
 | 책 | 읽을 장 | 우선순위 | 자리 |
 |---|---|:---:|---|
@@ -57,24 +77,6 @@ updated: 2026-09-13
 | Sidecar-less Istio Explained | 전 4장 | 대체 | 7단계 — Istio in Action 12장 자리 |
 
 소장 목록은 계속 늘어납니다. 새 책이 들어오면 이 표와 아래 단계별 표의 `책` 열을 함께 갱신합니다.
-
-
-
-## 학습 순서
-
-> 단계마다 배우는 개념입니다. 우선순위와 자료 위치는 아래 단계별 표가 짚습니다.
-
-![socket에서 클라우드 underlay까지 이어지는 네트워크 학습 순서](_assets/network-roadmap.svg)
-
-| 단계 | 무엇을 여는가 | 배우는 개념 |
-|---|---|---|
-| 1 · 연결 | 연결이 무엇인가 | socket · bind · listen · accept · 4-tuple · 듣는 소켓과 연결 소켓 · TCP 상태 · handshake · 재전송 · RTT · 흐름 제어 · cwnd · 혼잡 제어 · CUBIC · BBR · UDP · 단편화 · keepalive · DNS 질의 · HTTP/1.1 · HTTP/2 · QUIC · HTTP/3 · TLS · SNI · ECH · reverse proxy · half-close · 배압 |
-| 2 · Linux 경로 | 커널 안에서 지나는 길 | interface · MAC · ARP · NDP · IP 주소 · 서브네팅 · CIDR · 라우팅 테이블 · next hop · 포워딩 · ICMP · netns · veth · bridge · netfilter · iptables · nftables · NAT · SNAT · DNAT · MASQUERADE · conntrack · MTU · MSS · PMTUD · DHCP · NAT traversal |
-| 3 · 관측 | 정말 그 길로 갔는지 | 캡처 위치 · 디스플레이 필터 · RST · 재전송 판독 · TLS 판독 · 계층 순서 진단 · `resolv.conf` · `ndots` · NXDOMAIN · Corefile · 플러그인 체인 · 응답 불일치 · 연결 지연 분포 · P99 |
-| 4 · Kubernetes | 커널 경로 위의 이름 | Pod IP · Pod CIDR · Node CIDR · CNI · CNI 계약 · 오버레이 · VXLAN · underlay · Service · EndpointSlice · kube-proxy · IPVS · readiness · stale Endpoint · 클러스터 DNS · service discovery · east-west · Ingress · Gateway API · L4 로드밸런싱 |
-| 5 · 클라우드 네트워크 | 클러스터가 서 있는 바닥 | VPC · 서브넷 · 라우트 테이블 · Security Group · NACL · 클라우드 로드밸런서 · L4 · L7 · VPN · 사이트 간 연결 · AWS Direct Connect · 전용선 · Clos 토폴로지 · BGP · ECMP · 3사 기본값의 갈림 |
-| 6 · 데이터패스와 정책 | 같은 일을 다른 경로로 | NetworkPolicy · default deny · L7 정책 · FQDN 정책 · identity-aware policy · eBPF 프로그램 유형 · hook · XDP · TC · map · helper · verifier · CO-RE · BTF · Cilium 데이터패스 · IPAM · Hubble · 투명 암호화 · egress 게이트웨이 |
-| 7 · 운영 경계 | 클러스터가 한 종류가 아닐 때 | dual-stack · `ipFamilyPolicy` · topology-aware routing · Windows HNS · HCS · 멀티클러스터 · Envoy · Gateway · VirtualService · mTLS · Zero Trust · ambient · ztunnel |
 
 
 
