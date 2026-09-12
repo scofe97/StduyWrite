@@ -3,7 +3,7 @@ title: Spring 학습 통합 MOC
 tags: [moc, spring, spring-boot]
 status: final
 related:
-  - roadmap.md
+  - ../roadmap/spring-roadmap.md
   - ../README.md
   - ../03_architecture/README.md
   - ../04_messaging/README.md
@@ -34,8 +34,6 @@ updated: 2026-06-28
 | [05_aop/](05_aop/) | 4편 | 횡단 관심사·필터/인터셉터·JDK 동적 프록시·프록시 팩토리·빈 후처리기·@Aspect · 템플릿·콜백·ThreadLocal — AOP 등장 직전 · 스프링 스케줄링/Quartz · @Async·@Cacheable·@Retryable |
 | [06_events/](06_events/) | 4편 | 스프링 이벤트 — @EventListener vs @TransactionalEventListener·트랜잭션 Phase·전파 조합·내부 동작·동기/비동기(@Async) |
 | [07_autoconfig/](07_autoconfig/) | 7편 | 스프링 부트 자동 구성·외부 설정 — 스타터/BOM·@AutoConfiguration·@Conditional·커스텀 스타터·외부 설정·@ConfigurationProperties·프로필 |
-| [08_transaction/](08_transaction/) | 2편 | 트랜잭션 집계 MOC — 본체는 [`05_data/03_persistence/jpa/04-01`](../05_data/03_persistence/jpa/04-01.%EC%8A%A4%ED%94%84%EB%A7%81%20%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98.md)에 두고, Spring 관점에서 비어 있던 격리 수준·@Transactional 테스트 2편만 보강 |
-| [09_validation/](09_validation/) | 3편 | 입력 검증 — 수동 검증·BindingResult / Bean Validation·그룹 / 커스텀 ConstraintValidator. 옛 02_data-binding 의 단일 편을 분할·확장 |
 
 > 편수는 2026-06-25 실측. 폴더별 신설·재편 이력(통합·분할·이관 날짜)은 `STUDY_INDEX.md` 이관 표와 각 폴더 README 에서 관리한다.
 
@@ -83,7 +81,7 @@ grep -rl "^  - spring$\|tags:.*spring" write/ --include="*.md" | sort
 
 ## Spring 딥다이브 전체 지도
 
-위의 "카테고리별 배치"가 *어떤 폴더에 무엇이 있나*를, "학습 경로 추천"이 *어떤 순서로 읽나*를 답한다면, 이 절은 *Spring 본질을 어디까지 깊게 파야 하는가*를 답한다. 딥다이브 로드맵의 **섹션별 키워드 전체**(Core·AOP/Weaving·@Transactional·MVC·Validation·Boot·운영·테스트 24주제)는 [roadmap.md](roadmap.md)에 원문 그대로 옮겨 두었다. 아래는 그 24개 대주제를 7개 학습 단계로 묶어, 우리 보유 문서·미작성 갭과 연결한 네비게이션이다.
+위의 "카테고리별 배치"가 *어떤 폴더에 무엇이 있나*를, "학습 경로 추천"이 *어떤 순서로 읽나*를 답한다면, 이 절은 *Spring 본질을 어디까지 깊게 파야 하는가*를 답한다. 읽는 순서는 [Spring 학습 로드맵](../roadmap/spring-roadmap.md)이 정한다 — 컨테이너·프록시·요청 처리·트랜잭션을 지나 부트·통신·보안·운영·테스트까지 9단계다. 아래는 그 단계와 짝을 맞춰 우리 보유 문서·미작성 갭을 연결한 네비게이션이다.
 
 한 문장으로 줄이면, Spring Container가 Bean을 만들고, Proxy가 부가기능을 감싸고, DispatcherServlet이 요청을 흘려보내고, TransactionManager가 DB 경계를 관리하고, Boot AutoConfiguration이 설정을 조립하며, Actuator와 Test가 운영성과 검증 가능성을 열어준다.
 
@@ -91,14 +89,14 @@ grep -rl "^  - spring$\|tags:.*spring" write/ --include="*.md" | sort
 |------|--------|----------|-----------|
 | 1 | Core / IoC / Bean 생명주기 (대주제 1~5) | [01_core/01-01](01_core/01-01.객체지향%20원리%20적용%20—%20DI와%20IoC.md) · [01-02](01_core/01-02.Spring과%20디자인%20패턴.md) | BeanPostProcessor 내부 흐름, 순환 참조 전용편 |
 | 2 | AOP / Proxy / Weaving (대주제 6) | [05_aop/01-01](05_aop/01-01.횡단%20관심사와%20AOP%20—%20프록시로%20풀어내기.md) · [01-03](05_aop/01-03.템플릿·콜백과%20ThreadLocal%20—%20AOP%20등장%20직전의%20두%20시도.md) · [01-04](05_aop/01-04.어노테이션%20기반%20AOP%20응용%20—%20@Async·@Cacheable·@Retryable.md) | Weaving 4종 + Spring AOP vs AspectJ + `@EnableLoadTimeWeaving` 실험 전용편 |
-| 3 | @Transactional (대주제 7) | 본체 [../05_data/03_persistence/jpa/04-01](../05_data/03_persistence/jpa/04-01.%EC%8A%A4%ED%94%84%EB%A7%81%20%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98.md) · [04-01b](../05_data/03_persistence/jpa/04-01b.%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%20%EC%A0%84%ED%8C%8C%20%ED%99%9C%EC%9A%A9.md), [08_transaction/01-01](08_transaction/01-01.트랜잭션%20격리%20수준%20—%20Spring%20관점.md) · [01-02](08_transaction/01-02.@Transactional%20테스트%20가드.md), [06_events/01-02](06_events/01-02.트랜잭션%20전파%20조합%20—%20죽은%20트랜잭션과%20REQUIRES_NEW.md) | MyBatis ↔ Spring 트랜잭션 Connection 바인딩 전용편 |
+| 3 | @Transactional (대주제 7) | 본체 [../05_data/03_persistence/jpa/04-01](../05_data/03_persistence/jpa/04-01.%EC%8A%A4%ED%94%84%EB%A7%81%20%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98.md) · [04-01b](../05_data/03_persistence/jpa/04-01b.%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%20%EC%A0%84%ED%8C%8C%20%ED%99%9C%EC%9A%A9.md), [06_events/01-02](06_events/01-02.트랜잭션%20전파%20조합%20—%20죽은%20트랜잭션과%20REQUIRES_NEW.md) | MyBatis ↔ Spring 트랜잭션 Connection 바인딩 전용편 |
 | 4 | Spring MVC / 요청 처리 (대주제 8~10) | [01_core/03-01](01_core/03-01.Spring%20MVC%20—%20FrontController에서%20DispatcherServlet까지.md) · [03-02](01_core/03-02.예외%20처리%20—%20서블릿에서%20@ControllerAdvice까지.md), [02_data-binding/01-01](02_data-binding/01-01.HTTP%20요청·응답과%20메시지%20컨버터.md), [01_core/04-01](01_core/04-01.WebFlux%20서버%20—%20리액티브%20스택과%20어노테이션%20모델.md) · [04-02](01_core/04-02.WebFlux%20함수형%20엔드포인트%20—%20RouterFunction과%20HandlerFunction.md) | Custom ArgumentResolver / ReturnValueHandler 실습편 |
-| 5 | Validation / Binding / Conversion (대주제 11) | [02_data-binding/](02_data-binding/), [09_validation/](09_validation/) | Converter / Formatter / ConversionService 전용편 |
+| 5 | Validation / Binding / Conversion (대주제 11) | [02_data-binding/](02_data-binding/) | Converter / Formatter / ConversionService 전용편 |
 | 6 | Spring Boot 자동구성·외부설정 (대주제 12~14) | [07_autoconfig/](07_autoconfig/) | 7편으로 충분 — 신규 후보 없음 |
 | 7 | 운영·연동·테스트 (대주제 15~24) | Event [06_events/](06_events/), Async/Scheduling [05_aop/01-02](05_aop/01-02.스프링%20스케줄링%20—%20@Scheduled에서%20Quartz까지.md)·01-04, Test [04_testing/](04_testing/), Data [../05_data/](../05_data/), Actuator [../06_observability/05_SpringActuator/](../06_observability/05_SpringActuator/) | Cache Abstraction 전용편, MyBatis 연동 전용편, 성능 튜닝·장애 분석편 |
-| 8 | 빌드·패키징·Tomcat 배포 ([roadmap 16단계](roadmap.md)) | [01_core/02-02](01_core/02-02.내장%20톰캣과%20SpringApplication%20—%20JAR로%20WAS를%20품다.md) | bootJar vs plain jar·Boot Loader(JarLauncher/WarLauncher)·외부 WAR(SpringBootServletInitializer·providedRuntime)·Layered JAR·Docker layer cache·CI/CD 산출물 관리 전용편 |
+| 8 | 빌드·패키징·Tomcat 배포 ([로드맵 9단계](../roadmap/spring-roadmap.md)) | [01_core/02-02](01_core/02-02.내장%20톰캣과%20SpringApplication%20—%20JAR로%20WAS를%20품다.md) | bootJar vs plain jar·Boot Loader(JarLauncher/WarLauncher)·외부 WAR(SpringBootServletInitializer·providedRuntime)·Layered JAR·Docker layer cache·CI/CD 산출물 관리 전용편 |
 
-각 단계의 핵심 키워드 전체·핵심 흐름·단계별 요약·심화 실습 후보 5종은 [roadmap.md](roadmap.md)에 정리돼 있다. 우리 자료의 미작성 갭은 위 표의 "갭" 열에 모았다 — BeanPostProcessor·순환 참조 전용편, Weaving 4종+AspectJ 실험편, MyBatis Connection 바인딩편, Custom ArgumentResolver 실습편, Converter/ConversionService편, Cache Abstraction·성능 튜닝·장애 분석편, 빌드·패키징·Tomcat 배포 전용편(bootJar vs plain jar·Boot Loader·외부 WAR·Layered/Docker).
+단계별 개념 표와 우선순위, 책의 읽을 장은 [로드맵](../roadmap/spring-roadmap.md)이 정본이다. 우리 자료의 미작성 갭은 위 표의 "갭" 열에 모았다 — BeanPostProcessor·순환 참조 전용편, Weaving 4종+AspectJ 실험편, MyBatis Connection 바인딩편, Custom ArgumentResolver 실습편, Converter/ConversionService편, Cache Abstraction·성능 튜닝·장애 분석편, 빌드·패키징·Tomcat 배포 전용편(bootJar vs plain jar·Boot Loader·외부 WAR·Layered/Docker).
 
 
 
