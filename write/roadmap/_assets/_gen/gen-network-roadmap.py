@@ -1,186 +1,185 @@
 # write/roadmap/network-roadmap.md §학습 순서 — 네트워크 학습 로드맵.
-# 판형은 data-roadmap 과 같다 — 세로 척추에 국면과 단계를 걸고, 왼쪽에 배우는 개념을,
-#   오른쪽에 자료가 다루지 않는 키워드를 뻗는다.
 #
-# 이 로드맵은 자료가 두 종류다. 정독 노트가 있는 자리(cntd·paw·CoreDNS·Istio·nk)와
-#   소장본만 있고 노트가 없는 자리(Cilium·Learning eBPF·TCP/IP Illustrated)다.
-#   후자는 부제 mono 슬롯에 "책만" 으로 표시한다. 노드 스타일로 올리면 배지·국면 accent 와
-#   시각 어휘가 셋이 되어 읽히지 않는다. 출처의 SSOT 는 본문 §책 읽기 흐름 표다.
+# 판형은 roadmap.sh 계열이다 — 세로 척추에 단계를 걸고 개념을 좌우로 뻗되,
+#   노드마다 우선순위 점을 찍는다. 단계에만 배지를 달던 앞 판은 한 단계 안에서
+#   무엇이 뼈대이고 무엇이 곁가지인지 말하지 못했다.
 #
-# 절단선은 3단계 뒤에 긋는다 — 1~3 이 노드 한 대, 4 부터가 클러스터다.
-#   본문이 "Kubernetes 네트워크 장애의 상당수는 4단계가 아니라 2단계에서 풀린다"고 적은
-#   자리라 이 선이 편집상 논점이다. accent 도 클러스터 국면 하나에만 쓴다.
-# 타입 스펙: type-tree — 부모(국면)에서 자식(단계)으로 갈라지는 계층.
+# 노드의 주인공은 개념이고 책은 그 개념을 다루는 자리다. 책 줄이 비면 아직 자료가 없다는 뜻이고,
+#   소장 목록이 늘면 그 줄만 채운다. 정독 노트 편수는 도식에 적지 않는다 —
+#   "어디를 펴야 하는가"에 답하지 않는 정보다. 노트 링크는 본문 단계 표가 맡는다.
+#
+# 대체(ACC)는 같은 자리를 두 자료가 대신 채우는 경우다. 둘 다 읽으라는 뜻이 아니다.
+# 타입 스펙: type-tree — 부모(단계)에서 자식(개념)으로 갈라지는 계층.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, INFO, WARN, OK, KR, MONO
 
 SX = 500
 W = 1000
-NODE_W, NODE_H = 320, 48
-CH_W, CH_H, CH_GAP = 256, 32, 8
-BUS, ROW_GAP, PHASE_GAP = 190, 40, 36
+NODE_W, NODE_H = 320, 52
+CH_W, CH_H, CH_GAP = 268, 46, 10
+BUS, ROW_GAP, PHASE_GAP = 184, 44, 40
 NOTE_H = 76
+ELBOW = 14
 
-BADGE = {"필수": INFO, "추천": OK, "선택": SOFT}
+MARK = {"필수": INFO, "추천": OK, "선택": SOFT, "대체": ACC}
 
-# (제목, 부제 mono, 배지, 왼쪽 개념, 오른쪽 자료 밖 키워드, 점선 여부)
-phases = [
-    ("호스트", "1~3단계", INFO, [
-        ("1 · 연결", "cntd 1~5장 · TCP/IP Illustrated", "필수",
-         ["socket · bind · listen · accept",
-          "handshake · TCP 상태 · 재전송",
-          "흐름 제어 · 혼잡 제어",
-          "UDP · 단편화 · DNS 질의",
-          "HTTP/1.1·2·3 · TLS 핸드셰이크"],
-         ["listen 큐 · 포트 고갈", "OS CA bundle · truststore"], False),
+# (단계 제목, 단계 부제, [왼쪽], [오른쪽])
+#   개념 노드 = (개념, 책 챕터 — 없으면 빈 문자열, 우선순위)
+stages = [
+    ("1 · 연결", "응용과 전송 — 연결이 무엇인가",
+     [("socket · bind · listen · accept", "TCP/IP Illustrated 12·13장", "필수"),
+      ("TCP 상태 · 3-way handshake", "TCP/IP Illustrated 13장", "필수"),
+      ("재전송 · 타임아웃", "TCP/IP Illustrated 14장", "필수"),
+      ("흐름 제어 · 혼잡 제어", "TCP/IP Illustrated 15·16장", "필수"),
+      ("DNS 질의 · 이름 해석", "TCP/IP Illustrated 11장", "필수")],
+     [("HTTP/1.1 · HTTP/2 · HTTP/3", "HTTP/2 in Action 4·9장", "필수"),
+      ("HTTP 성능 축", "HPBN 11·12장", "대체"),
+      ("TLS 핸드셰이크", "HPBN 4장", "필수"),
+      ("UDP · 단편화", "TCP/IP Illustrated 10장", "추천"),
+      ("listen 큐 · 포트 고갈", "", "추천"),
+      ("TCP keepalive", "TCP/IP Illustrated 17장", "선택")]),
 
-        ("2 · Linux 경로", "networking 4편 · nk 2·3장", "필수",
-         ["interface · MAC · ARP",
-          "IP 주소 · 서브네팅 · CIDR",
-          "라우팅 테이블 · next hop",
-          "netns · veth · bridge",
-          "netfilter · NAT · conntrack",
-          "MTU · MSS · ICMP"],
-         ["bonding · LACP", "policy routing · ip rule"], False),
+    ("2 · Linux 경로", "커널 안에서 패킷이 지나는 길",
+     [("interface · MAC · ARP", "TCP/IP Illustrated 3·4장", "필수"),
+      ("IP 주소 · 서브네팅 · CIDR", "TCP/IP Illustrated 2·5장", "필수"),
+      ("라우팅 테이블 · next hop", "TCP/IP Illustrated 5장", "필수"),
+      ("netns · veth · bridge", "Networking and K8s 2장", "필수"),
+      ("netfilter · iptables · nftables", "TCP/IP Illustrated 7장", "필수")],
+     [("NAT · SNAT · DNAT · MASQUERADE", "TCP/IP Illustrated 7장", "필수"),
+      ("conntrack", "Networking and K8s 2장", "필수"),
+      ("MTU · MSS", "TCP/IP Illustrated 10장", "필수"),
+      ("ICMP · traceroute", "TCP/IP Illustrated 8장", "추천"),
+      ("DHCP · 자동 구성", "TCP/IP Illustrated 6장", "선택"),
+      ("bonding · LACP", "", "선택")]),
 
-        ("3 · 관측", "paw 1~5장 · CoreDNS 3·7장", "필수",
-         ["캡처 위치 · 디스플레이 필터",
-          "TCP 이상 판독 · RST · 재전송",
-          "TLS 핸드셰이크 판독",
-          "resolv.conf · ndots · NXDOMAIN",
-          "Corefile · 플러그인 체인"],
-         ["GRO · GSO · TSO 오프로딩", "tc qdisc · netem"], False),
-    ]),
+    ("3 · 관측", "정말 그 길로 갔는지 눈으로 본다",
+     [("캡처 위치 · 디스플레이 필터", "Packet Analysis 2장", "필수"),
+      ("TCP 이상 판독 · RST · 재전송", "Packet Analysis 3장", "필수"),
+      ("TLS 핸드셰이크 판독", "Packet Analysis 4장", "필수"),
+      ("계층 순서 진단 — ss · ip · ethtool", "Networking and K8s 2장", "필수")],
+     [("resolv.conf · ndots · NXDOMAIN", "", "필수"),
+      ("Corefile · 플러그인 체인", "Learning CoreDNS 3장", "추천"),
+      ("질문과 답의 불일치", "Learning CoreDNS 7장", "추천"),
+      ("GRO · GSO · TSO 오프로딩", "", "선택")]),
 
-    ("클러스터", "4~5단계", ACC, [
-        ("4 · Kubernetes", "04_networking 10편 · nk 4·5장", "필수",
-         ["Pod IP · CNI · Pod CIDR",
-          "오버레이 · VXLAN · native routing",
-          "Service · EndpointSlice",
-          "kube-proxy · iptables · IPVS",
-          "클러스터 DNS · Service FQDN",
-          "Ingress · Gateway API"],
-         ["BGP · ECMP · Clos", "externalTrafficPolicy"], False),
+    ("4 · Kubernetes", "같은 커널 경로 위에 얹힌 이름과 정책",
+     [("Pod IP · Pod CIDR · pause", "Networking and K8s 4장", "필수"),
+      ("CNI", "Cilium 4장", "필수"),
+      ("오버레이 · VXLAN", "Cilium 5장", "필수"),
+      ("native routing · BGP", "Cloud Native DC Net 14장", "추천"),
+      ("Service · EndpointSlice", "Networking and K8s 5장", "필수")],
+     [("kube-proxy — iptables · IPVS", "Networking and K8s 2장", "필수"),
+      ("클러스터 DNS · Service FQDN", "Learning CoreDNS 6장", "필수"),
+      ("Ingress", "Networking and K8s 5장", "필수"),
+      ("Gateway API · HTTPRoute", "Cilium 7장", "추천"),
+      ("externalTrafficPolicy · 소스 IP", "", "추천"),
+      ("Clos 토폴로지", "Cloud Native DC Net 2장", "선택")]),
 
-        ("5 · 데이터패스와 정책", "Cilium · Learning eBPF — 책만", "추천",
-         ["eBPF 프로그램 유형 · hook",
-          "verifier · CO-RE · BTF",
-          "NetworkPolicy · default deny",
-          "L7 · FQDN 정책",
-          "Hubble · 투명 암호화"],
-         ["WireGuard 노드 간 암호화", "eBPF host routing"], True),
-    ]),
+    ("5 · 데이터패스와 정책", "같은 일을 다른 데이터패스로",
+     [("NetworkPolicy · default deny", "Cilium 12장", "필수"),
+      ("L7 · FQDN 정책", "Cilium 13장", "추천"),
+      ("eBPF 프로그램 유형 · hook", "Learning eBPF 3·7장", "추천"),
+      ("verifier · CO-RE · BTF", "Learning eBPF 5·6장", "추천")],
+     [("eBPF 네트워킹", "Learning eBPF 8장", "추천"),
+      ("Cilium 데이터패스 · IPAM", "Cilium 4·5장", "추천"),
+      ("Hubble 관측", "Cilium 15장", "선택"),
+      ("투명 암호화 · WireGuard", "Cilium 14장", "선택")]),
 
-    ("운영 경계", "6단계", OK, [
-        ("6 · 운영 경계", "04_networking 08~10 · Istio 6장", "추천",
-         ["dual-stack · 토폴로지 라우팅",
-          "Windows HNS · HCS",
-          "Envoy · Gateway · VirtualService",
-          "mTLS · 기본값 닫아 가기",
-          "Zero Trust 전제 셋"],
-         ["ambient mode · ztunnel", "멀티클러스터 메시"], False),
-    ]),
+    ("6 · 운영 경계", "클러스터가 한 종류가 아닐 때",
+     [("dual-stack · ipFamilyPolicy", "", "추천"),
+      ("topology-aware routing", "", "추천"),
+      ("서비스 메시가 옮긴 것", "Istio in Action 1장", "추천"),
+      ("Windows HNS · HCS", "", "선택")],
+     [("Envoy · Gateway · VirtualService", "Istio in Action 3·4장", "추천"),
+      ("mTLS · 기본값 닫아 가기", "Istio in Action 5·9장", "추천"),
+      ("Zero Trust 전제", "Zero Trust Networks 1·2장", "선택"),
+      ("ambient · ztunnel · waypoint", "Sidecar-less Istio 1~3장", "대체")]),
 ]
 
+CUT_AFTER = 2          # 3단계 뒤에 노드 한 대 ↔ 클러스터 절단선
 NOTES = {
-    "호스트":
-        "Kubernetes 네트워크 장애의 상당수가 4단계가 아니라 2단계에서 풀린다.",
-    "클러스터":
-        "5단계는 소장본만 있고 정독 노트가 없다. 점선 노드가 그 뜻이다.",
-    "운영 경계":
-        "실습 자료가 없는 유일한 단계다. zone 이 여럿이거나 컨트롤 플레인이 서야 한다.",
+    2: "Kubernetes 네트워크 장애의 상당수가 4단계가 아니라 2단계에서 풀린다. conntrack 과 MTU 가 먼저다.",
+    5: "책 줄이 빈 노드는 아직 자료가 없는 자리다. 소장 목록이 늘면 그 줄만 채운다.",
 }
-CUT_AFTER = "호스트"
 
 
 def row_h(left, right):
     n = max(len(left), len(right))
-    return max(NODE_H, n * CH_H + (n - 1) * CH_GAP) + 24
+    return max(NODE_H, n * CH_H + (n - 1) * CH_GAP) + 28
 
 
-ROOT_Y = 116 + 180
-y = ROOT_Y + 48 + PHASE_GAP
-for name, _s, _c, steps in phases:
-    y += NODE_H + ROW_GAP
-    for st in steps:
-        y += row_h(st[3], st[4]) + ROW_GAP
-    if NOTES.get(name):
+ROOT_Y = 116 + 190
+y = ROOT_Y + 52 + PHASE_GAP
+for i, (_t, _s, left, right) in enumerate(stages):
+    y += row_h(left, right) + ROW_GAP
+    if i in NOTES:
         y += NOTE_H
-    y += PHASE_GAP - ROW_GAP
-    if name == CUT_AFTER:
+    if i == CUT_AFTER:
         y += 56
-H = y + 80
+H = y + 84
 
 d = D(W, H, "WRITE · NETWORK ROADMAP",
       "네트워크 학습 로드맵",
-      "애플리케이션이 여는 socket 에서 시작해 커널 패킷 경로로 내려간 뒤 Kubernetes 데이터패스로 "
-      "다시 올라간다. 척추에 국면 셋과 단계 여섯을 걸고, 배우는 개념을 왼쪽에 자료가 다루지 않는 "
-      "키워드를 오른쪽에 뻗었다. 1~3단계가 노드 한 대이고 4단계부터가 클러스터다.",
-      "1~3 은 노드 한 대, 4 부터 클러스터입니다. 번호는 의존 순서이지 진도가 아닙니다")
+      "애플리케이션이 여는 socket 에서 커널 패킷 경로로 내려간 뒤 Kubernetes 데이터패스로 다시 "
+      "올라간다. 척추에 단계 여섯을 걸고 개념을 좌우로 뻗었다. 노드의 주인공은 개념이고 아래 줄은 "
+      "그 개념을 다루는 책의 장이다. 점 색이 우선순위이고, 책 줄이 비면 아직 자료가 없는 자리다.",
+      "노드는 개념, 아래 줄은 그 개념을 다루는 책의 장입니다")
 
-LX, LY, LW, LH = 40, 96, 336, 180
+LX, LY, LW, LH = 40, 96, 380, 190
 d.box(LX, LY, LW, LH, PAPER2, RULE, 1.0)
 d.t(LX + 16, LY + 24, "읽는 법", 13, INK, KR, "start", 600)
 for i, (lab, txt) in enumerate([("필수", "빼면 뒤가 막힙니다"),
                                 ("추천", "빼도 되지만 손해가 큽니다"),
-                                ("선택", "목표가 생겼을 때만")]):
-    cy = LY + 56 + i * 28
-    c = BADGE[lab]
-    d.o.append(f'<rect x="{LX + 16}" y="{cy - 9}" width="34" height="17" rx="4" '
-               f'fill="{c}22" stroke="{c}" stroke-width="0.9"/>')
-    d.t(LX + 33, cy + 3, lab, 11, c, KR)
-    d.t(LX + 60, cy + 3, txt, 13, MUTED, KR, "start")
-d.t(LX + 16, LY + 148, "왼쪽 — 배우는 개념 · 오른쪽 — 자료 밖 키워드", 12, SOFT, KR, "start")
-d.t(LX + 16, LY + 166, "점선 — 소장본만 있고 정독 노트가 없는 자리", 12, SOFT, KR, "start")
+                                ("선택", "목표가 생겼을 때만"),
+                                ("대체", "같은 자리 — 하나만 고릅니다")]):
+    cy = LY + 54 + i * 26
+    c = MARK[lab]
+    d.o.append(f'<circle cx="{LX + 24}" cy="{cy}" r="5" fill="{c}"/>')
+    d.t(LX + 40, cy + 4, lab, 12, c, KR, "start", 600)
+    d.t(LX + 78, cy + 4, txt, 12, MUTED, KR, "start")
+d.t(LX + 16, LY + 172, "책 줄이 비면 아직 자료가 없는 자리 — 개념이 먼저입니다", 12, SOFT, KR, "start")
 
-RX, RY, RW, RH = 624, 96, 336, 180
+RX, RY, RW, RH = 580, 96, 380, 190
 d.box(RX, RY, RW, RH, PAPER, RULE, 0.9)
 d.o.append(f'<rect x="{RX}" y="{RY}" width="{RW}" height="{RH}" rx="6" fill="none" '
            f'stroke="{SOFT}" stroke-width="0.9" stroke-dasharray="4 4"/>')
 d.t(RX + 16, RY + 24, "여기서 다루지 않는 것", 13, INK, KR, "start", 600)
 for i, (who, what) in enumerate([
         ("k8s-roadmap", "오브젝트 배포와 클러스터 운영"),
-        ("os-roadmap", "socket 과 FD 의 커널 쪽"),
-        ("cntd 6~8장", "무선 · 물리 계층 · 암호 일반"),
+        ("os-roadmap", "socket 과 파일 디스크립터의 커널 쪽"),
+        ("Computer Networking 6~8장", "무선 · 물리 계층 · 암호 일반"),
         ("06_observability", "앱이 내보내는 지표와 트레이스")]):
-    cy = RY + 56 + i * 32
+    cy = RY + 56 + i * 33
     d.t(RX + 16, cy, who, 13, MUTED, KR, "start", 600)
     d.t(RX + 16, cy + 16, what, 12, SOFT, KR, "start")
 
-d.box(SX - 130, ROOT_Y, 260, 48, PAPER2, RULE, 1.0)
-d.t(SX, ROOT_Y + 30, "여기서 시작합니다", 14, INK, KR, "middle", 600)
-d.line(SX, ROOT_Y + 48, SX, H - 116, RULE, 1.4)
+d.box(SX - 130, ROOT_Y, 260, 52, PAPER2, RULE, 1.0)
+d.t(SX, ROOT_Y + 32, "여기서 시작합니다", 14, INK, KR, "middle", 600)
+d.line(SX, ROOT_Y + 52, SX, H - 120, RULE, 1.4)
 
 
-def draw_step(title, sub, badge, left, right, dashed, y):
+def draw_stage(title, sub, left, right, y):
     h = row_h(left, right)
     mid = y + h / 2
     for side, items in (("left", left), ("right", right)):
-        if not items:
-            continue
         sign = -1 if side == "left" else 1
         bus = SX + sign * BUS
         top = mid - (len(items) * CH_H + (len(items) - 1) * CH_GAP) / 2
         d.line(SX + sign * (NODE_W / 2), mid, bus, mid, RULE, 1.0)
-        for i, label in enumerate(items):
+        for i, (concept, book, mark) in enumerate(items):
             cy = top + i * (CH_H + CH_GAP) + CH_H / 2
-            bx = bus + (sign * 14) - (CH_W if side == "left" else 0)
+            bx = bus + (sign * ELBOW) - (CH_W if side == "left" else 0)
+            c = MARK[mark]
             d.line(bus, mid, bus, cy, RULE, 1.0)
-            d.line(bus, cy, bus + sign * 14, cy, RULE, 1.0)
+            d.line(bus, cy, bus + sign * ELBOW, cy, RULE, 1.0)
             d.box(bx, cy - CH_H / 2, CH_W, CH_H, PAPER2, RULE, 0.9)
-            d.t(bx + CH_W / 2, cy + 5, label, 12, MUTED, KR, "middle")
-    if dashed:
-        d.o.append(f'<rect x="{SX - NODE_W/2}" y="{mid - NODE_H/2}" width="{NODE_W}" '
-                   f'height="{NODE_H}" rx="6" fill="{PAPER}" stroke="{SOFT}" '
-                   f'stroke-width="1.0" stroke-dasharray="4 4"/>')
-    else:
-        d.box(SX - NODE_W / 2, mid - NODE_H / 2, NODE_W, NODE_H, PAPER, RULE, 1.0)
-    c = BADGE[badge]
-    d.o.append(f'<rect x="{SX - NODE_W/2 + 12}" y="{mid - NODE_H/2 + 8}" width="34" height="17" '
-               f'rx="4" fill="{c}22" stroke="{c}" stroke-width="0.9"/>')
-    d.t(SX - NODE_W / 2 + 29, mid - NODE_H / 2 + 20, badge, 11, c, KR)
-    d.t(SX + 12, mid - 4, title, 13, INK, KR, "middle", 600)
-    d.t(SX, mid + 16, sub, 11, SOFT, MONO)
+            d.o.append(f'<circle cx="{bx + 15}" cy="{cy - 8}" r="4.5" fill="{c}"/>')
+            d.t(bx + 28, cy - 4, concept, 12, INK, KR, "start")
+            d.t(bx + 28, cy + 14, book if book else "책 없음 — 채울 자리", 10,
+                SOFT if book else MARK["선택"], MONO, "start")
+    d.box(SX - NODE_W / 2, mid - NODE_H / 2, NODE_W, NODE_H, PAPER, INFO, 1.2)
+    d.t(SX, mid - 4, title, 14, INK, KR, "middle", 600)
+    d.t(SX, mid + 16, sub, 11, SOFT, KR)
     return h
 
 
@@ -192,30 +191,17 @@ def draw_note(text, y):
     return NOTE_H
 
 
-def draw_phase(name, stage, color, steps, y):
-    if color is ACC:
-        d.tone(SX - NODE_W / 2, y, NODE_W, NODE_H, ACC, 6, "16", 1.4)
-    else:
-        d.box(SX - NODE_W / 2, y, NODE_W, NODE_H, PAPER, color, 1.2)
-    d.t(SX, y + 22, name, 15, ACC if color is ACC else INK, KR, "middle", 600)
-    d.t(SX, y + 40, stage, 12, SOFT, MONO)
-    y += NODE_H + ROW_GAP
-    for st in steps:
-        y += draw_step(*st, y) + ROW_GAP
-    if NOTES.get(name):
-        y += draw_note(NOTES[name], y)
-    return y + PHASE_GAP - ROW_GAP
-
-
-y = ROOT_Y + 48 + PHASE_GAP
-for ph in phases:
-    y = draw_phase(*ph, y)
-    if ph[0] == CUT_AFTER:
-        d.line(40, y + 20, W - 40, y + 20, WARN, 1.4, "6 5")
-        d.o.append(f'<rect x="{SX - 235}" y="{y + 8}" width="470" height="22" rx="4" fill="{PAPER}"/>')
-        d.t(SX, y + 25, "1~3단계는 노드 한 대 · 4단계부터 클러스터", 13, WARN, KR)
+y = ROOT_Y + 52 + PHASE_GAP
+for i, (title, sub, left, right) in enumerate(stages):
+    y += draw_stage(title, sub, left, right, y) + ROW_GAP
+    if i in NOTES:
+        y += draw_note(NOTES[i], y)
+    if i == CUT_AFTER:
+        d.line(40, y + 12, W - 40, y + 12, WARN, 1.4, "6 5")
+        d.o.append(f'<rect x="{SX - 235}" y="{y}" width="470" height="22" rx="4" fill="{PAPER}"/>')
+        d.t(SX, y + 17, "1~3단계는 노드 한 대 · 4단계부터 클러스터", 13, WARN, KR)
         y += 56
 
-d.legend(H - 68, [("필수", INFO), ("추천", OK), ("선택", SOFT), ("클러스터 구간", ACC),
+d.legend(H - 60, [("필수", INFO), ("추천", OK), ("선택", SOFT), ("대체 선택지", ACC),
                   ("노드 한 대와 클러스터의 경계", WARN)])
 d.save("network-roadmap.svg")
