@@ -1,701 +1,295 @@
 ---
-title: Spring 딥다이브 로드맵 — 섹션별 키워드 원문
-tags: [moc, spring, roadmap, keywords]
-status: reference
+title: Spring 학습 로드맵
+tags: [roadmap, spring, spring-boot, aop, transaction, webflux, security]
+status: final
+source:
+  - ../09_spring/README.md
+  - ../09_spring/books/spring-start-here/README.md
 related:
   - README.md
-updated: 2026-07-07
+  - jvm-roadmap.md
+  - data-roadmap.md
+  - observability-roadmap.md
+updated: 2026-09-13
 ---
 
-# Spring 딥다이브 로드맵 — 섹션별 키워드 원문
-
+# Spring 학습 로드맵
 ---
 
-> "Spring Boot 로 API 를 만들 줄 아는 개발자" 에서 "Spring 이 왜 그렇게 동작하는지 설명하고, 장애·성능·테스트·트랜잭션까지 설계할 수 있는 개발자" 로 가는 것이 목표입니다. 이 문서는 제공받은 Spring 딥다이브 로드맵 원문을 **섹션별로 빠짐없이** 옮긴 기록입니다. 폴더 배치·학습 경로·보유 문서 매핑은 [README.md](../09_spring/README.md) 가 맡고, 이 문서는 "각 섹션이 원래 무엇을 다루라고 했는가" 의 SSOT 입니다.
-
-## 1. Spring 딥다이브 전체 지도
-
-깊게 판다면 아래 순서가 좋습니다.
-
-```pseudocode
-1. Spring Core / IoC Container
-2. Bean 등록과 생명주기
-3. 의존성 주입과 순환 참조
-4. ApplicationContext와 BeanFactory
-5. BeanPostProcessor / BeanFactoryPostProcessor
-6. AOP와 Proxy
-7. @Transactional 내부 구조
-8. Spring MVC 요청 처리 흐름
-9. ArgumentResolver / MessageConverter
-10. Exception Handling
-11. Validation / Data Binding / Type Conversion
-12. Configuration / Profile / Externalized Config
-13. Spring Boot Auto Configuration
-14. Spring Boot Starter 구조
-15. Data Access / Transaction / MyBatis 연동
-16. Event / TransactionalEventListener
-17. Async / Scheduling / ThreadPool
-18. Cache Abstraction
-19. Spring Security
-20. Actuator / Observability
-21. Spring Test
-22. Spring 애플리케이션 성능 튜닝
-23. Spring 아키텍처 설계 패턴
-24. Spring 운영 장애 분석
-```
-
-한 문장으로 줄이면: Spring Container 가 Bean 을 만들고, Proxy 가 부가기능을 감싸고, DispatcherServlet 이 요청을 흘려보내고, TransactionManager 가 DB 경계를 관리하고, Boot AutoConfiguration 이 설정을 조립하며, Actuator 와 Test 가 운영성과 검증 가능성을 열어줍니다.
-
-## 2. 1단계: Spring Core / IoC Container
-
-반드시 알아야 할 것:
-
-```pseudocode
-IoC
-DI
-Bean
-BeanDefinition
-BeanFactory
-ApplicationContext
-DefaultListableBeanFactory
-Component Scan
-@Configuration
-@Bean
-@Component
-@Service
-@Repository
-@Controller
-@Autowired
-Constructor Injection
-Qualifier
-Primary
-Lazy
-Scope
-Singleton
-Prototype
-```
-
-깊게 볼 질문: @Service 는 언제 BeanDefinition 으로 변환되는가 / Bean 객체는 언제 실제로 생성되는가 / 싱글톤 Bean 은 어디에 캐싱되는가 / @Autowired 는 생성자 주입과 필드 주입에서 어떻게 다르게 동작하는가 / @Configuration 클래스는 왜 일반 클래스와 다르게 처리되는가 / @Bean 메서드를 직접 호출하면 정말 같은 Bean 이 반환되는가.
-
-핵심 내부 흐름: ClassPath Scan → BeanDefinition 생성 → BeanFactory 에 등록 → BeanFactoryPostProcessor 실행 → Bean 인스턴스 생성 → 의존성 주입 → BeanPostProcessor before → InitializingBean/@PostConstruct → BeanPostProcessor after → Singleton Bean 캐싱. Spring 은 처음부터 객체를 만드는 게 아니라 먼저 BeanDefinition 이라는 설계도를 만들고 그 설계도로 객체를 조립합니다.
-
-## 3. 2단계: Bean 생명주기
-
-학습 키워드:
-
-```pseudocode
-Bean Lifecycle
-Instantiation
-Dependency Injection
-Aware Interface
-BeanNameAware
-ApplicationContextAware
-InitializingBean
-DisposableBean
-@PostConstruct
-@PreDestroy
-initMethod
-destroyMethod
-SmartInitializingSingleton
-SmartLifecycle
-```
-
-생명주기 흐름: BeanDefinition 로딩 → Bean 인스턴스 생성 → 의존성 주입 → Aware 계열 콜백 → BeanPostProcessor before initialization → @PostConstruct → InitializingBean.afterPropertiesSet() → initMethod → BeanPostProcessor after initialization → 사용 → @PreDestroy → DisposableBean.destroy() → destroyMethod.
-
-실무 질문: 초기화 시점에 외부 API 를 호출해도 되는가 / Bean 생성 중 예외가 나면 전체 애플리케이션이 뜨지 않는가 / @PostConstruct 에서 트랜잭션이 적용되는가 / ApplicationReadyEvent 와 @PostConstruct 는 무엇이 다른가 / SmartLifecycle 은 언제 쓰는가. @PostConstruct 에서 너무 많은 일을 하면 부팅이 무거워집니다.
-
-## 4. 3단계: AOP 와 Proxy
-
-`@Transactional`·`@Async`·`@Cacheable`·Method Security 는 대부분 프록시 기반으로 이해할 수 있습니다.
-
-반드시 알아야 할 것:
-
-```pseudocode
-AOP
-Aspect
-Advice
-Pointcut
-JoinPoint
-Advisor
-Proxy
-JDK Dynamic Proxy
-CGLIB Proxy
-Target Object
-Self Invocation
-Proxy Chain
-Method Interceptor
-```
-
-핵심 질문: @Transactional 은 왜 private 메서드에 잘 맞지 않는가 / 같은 클래스 내부에서 `this.someMethod()` 를 호출하면 왜 트랜잭션이 안 걸리는가 / 인터페이스가 있으면 JDK Proxy, 없으면 CGLIB Proxy 가 쓰이는 이유는 / 프록시는 Bean 생성 과정 중 언제 만들어지는가 / 여러 AOP 가 걸리면 실행 순서는 어떻게 정해지는가.
-
-가장 중요한 함정 — Self Invocation: `outer()` 가 같은 객체 내부의 `@Transactional inner()` 를 직접 호출하면 프록시를 거치지 않아 트랜잭션이 기대처럼 동작하지 않습니다. Spring 초급자와 중급자를 가르는 문턱입니다.
-
-## 5. 3단계 보강: AOP 와 Weaving
-
-Spring AOP 는 보통 "진짜 바이트코드 위빙" 이 아니라 "런타임 프록시 기반 AOP" 로 동작합니다. AspectJ 는 컴파일 타임 또는 로드 타임에 클래스 자체를 엮는 위빙을 할 수 있습니다. 위빙은 부가기능 코드인 Aspect 를 실제 대상 코드에 엮는 과정입니다.
-
-추가 키워드:
-
-```pseudocode
-Weaving
-Compile-time Weaving
-Post-compile Weaving
-Load-time Weaving
-Runtime Proxy-based AOP
-AspectJ
-Spring AOP vs AspectJ
-@EnableLoadTimeWeaving
-aspectjWeaving
-spring-aspects.jar
-```
-
-Weaving 방식 4가지:
-
-1. **Compile-time Weaving** — 컴파일할 때 Aspect 가 대상 클래스에 엮인다(`ajc`). 대상 클래스 바이트코드 자체가 변경됨, 강력하지만 빌드 구성이 복잡.
-2. **Post-compile Weaving** — 이미 컴파일된 `.class`/`.jar` 에 나중에 AspectJ weaver 로 엮는다. 소스 없이 라이브러리·기존 산출물에 부가기능을 넣을 수 있음.
-3. **Load-time Weaving (LTW)** — 클래스가 JVM 에 로딩되는 순간 Java Agent / ClassFileTransformer 로 엮는다. `@EnableLoadTimeWeaving`, `@EnableLoadTimeWeaving(aspectjWeaving = ENABLED)` 로 활성화.
-4. **Runtime Proxy-based AOP** — Spring AOP 의 일반적 방식. 클래스 파일을 바꾸지 않고 Proxy 객체를 생성해 Client 가 Proxy 를 호출하면 Advice 실행 후 Target 호출.
-
-Runtime Proxy 방식의 제약: self-invocation 문제 · private 메서드 AOP 적용 어려움 · final 클래스/메서드 제약 · Spring Bean 이 아닌 객체에는 적용 어려움 · 메서드 실행 join point 중심.
-
-| 구분 | Spring AOP | AspectJ |
-|------|-----------|---------|
-| 기본 방식 | 런타임 프록시 | 실제 위빙 |
-| 적용 시점 | 런타임 Bean 프록시 생성 시 | 컴파일 타임 / 로드 타임 |
-| 대상 | 주로 Spring Bean | 거의 모든 Java 객체 |
-| 바이트코드 변경 | 일반적으로 없음 | 있음 |
-| private 메서드 | 적용 어려움 | 가능 |
-| 생성자 join point | 제한적 | 가능 |
-| field 접근 join point | 제한적 | 가능 |
-| 설정 난이도 | 낮음 | 높음 |
-| 실무 사용성 | 일반적인 Spring 앱에 적합 | 프레임워크/라이브러리/깊은 계측에 적합 |
-
-`@Transactional` 도 기본은 프록시 기반이지만 AspectJ 모드를 쓰면 weaving 기반으로 동작할 수 있습니다(`spring-aspects.jar` + LTW 또는 CTW 필요). 실무 우선순위: ① Spring AOP 는 기본 프록시 기반 → ② self-invocation 문제 → ③ @Transactional·@Async·@Cacheable 이 프록시 기반 → ④ AspectJ 는 실제 weaving 으로 더 넓게 개입 → ⑤ LTW 는 강력하지만 운영/빌드 복잡도가 있어 신중히. 가장 좋은 실험은 같은 로직을 순수 메서드 호출 / Spring AOP @Around / AspectJ LTW 세 방식으로 구현해보는 것입니다.
-
-## 6. 4단계: @Transactional 딥다이브
-
-반드시 알아야 할 것:
-
-```pseudocode
-PlatformTransactionManager
-DataSourceTransactionManager
-JpaTransactionManager
-TransactionInterceptor
-TransactionAttribute
-TransactionSynchronizationManager
-Propagation
-Isolation
-Rollback Rule
-readOnly
-timeout
-Checked Exception
-Unchecked Exception
-```
-
-Propagation: REQUIRED · REQUIRES_NEW · NESTED · SUPPORTS · NOT_SUPPORTED · MANDATORY · NEVER. Isolation: DEFAULT · READ_UNCOMMITTED · READ_COMMITTED · REPEATABLE_READ · SERIALIZABLE.
-
-실무 질문: @Transactional 은 어느 계층에 두는 게 좋은가 / Service 가 다른 Service 를 호출할 때 트랜잭션은 어떻게 전파되는가 / REQUIRES_NEW 는 정말 독립 트랜잭션인가 / 예외를 catch 하면 rollback 이 되는가 / checked exception 에서는 왜 기본 rollback 이 안 되는가 / readOnly=true 는 성능 최적화인가 안전장치인가 / MyBatis 에서 Spring 트랜잭션은 어떻게 연결되는가.
-
-꼭 실험할 것: REQUIRES_NEW 감사 로그 + 주문 rollback 시 주문 데이터는 rollback 되는가 / 감사 데이터는 commit 되는가 / AuditService 를 같은 클래스 내부 메서드로 옮기면 어떻게 되는가 / 예외 catch 위치에 따라 결과가 바뀌는가. 트랜잭션은 문서로만 배우지 않고 DB 에 데이터를 넣고 실패시키며 손으로 확인합니다.
-
-## 7. 5단계: Spring MVC 요청 처리 흐름
-
-반드시 알아야 할 것:
-
-```pseudocode
-DispatcherServlet
-HandlerMapping
-HandlerAdapter
-HandlerMethodArgumentResolver
-HttpMessageConverter
-ModelAndView
-ViewResolver
-HandlerExceptionResolver
-Filter
-Interceptor
-ControllerAdvice
-RestControllerAdvice
-```
-
-요청 흐름: Client Request → Servlet Filter → DispatcherServlet → HandlerMapping → HandlerAdapter → ArgumentResolver → Controller Method → ReturnValueHandler → HttpMessageConverter → Response.
-
-실무 질문: Filter 와 Interceptor 는 무엇이 다른가 / ArgumentResolver 는 언제 쓰는가 / @RequestBody 는 누가 JSON 을 객체로 바꾸는가 / @ResponseBody 는 누가 객체를 JSON 으로 바꾸는가 / ControllerAdvice 는 어느 시점에 개입하는가 / Validation 실패는 어떤 Exception 으로 올라오는가.
-
-깊게 실험할 것: Custom ArgumentResolver · Custom Annotation 으로 로그인 사용자 주입 · Custom HandlerInterceptor · Global Exception Handler · HttpMessageConverter 동작 확인 · Filter 에서 request body 를 읽었을 때 문제 확인. `@CurrentUser` 같은 커스텀 애너테이션 + ArgumentResolver 를 직접 만들면 MVC 가 더 이상 검은 상자가 아닙니다.
-
-## 8. 5단계 보강: Servlet Container 와 WAS (Tomcat · Jetty · Undertow)
-
-바로 앞 절의 요청 흐름은 `Client Request → Servlet Filter → DispatcherServlet` 으로 시작했는데, 그 Filter 와 DispatcherServlet 이 *올라타 있는 바닥*이 바로 Servlet Container(=WAS)입니다. DispatcherServlet 은 이름 그대로 `jakarta.servlet.Servlet` 을 구현한 Servlet 하나일 뿐이고, 그 Servlet 을 초기화하고 요청마다 스레드를 붙여 `service()` 를 호출해 주는 주체가 컨테이너입니다. 이 층을 건너뛰면 "요청이 Controller 까지 어떻게 도달하는가" 의 앞 절반이 빈 채로 남습니다.
-
-이 주제가 애매하게 느껴지는 이유는 한 권으로 닫히지 않기 때문입니다. Servlet 은 Jakarta EE **스펙**이고, Tomcat·Jetty·Undertow 는 그 스펙의 서로 다른 **구현체**이며, Spring MVC 는 그 위에 얹힌 **프레임워크**이고, thread·connection 튜닝은 **운영**의 영역이라 층이 넷으로 갈라져 있습니다. 그래서 스펙에서 구현체로, 다시 프레임워크로 내려오는 순서로 잡는 편이 좋습니다. 입문용 큰 그림은 Baeldung 의 Servlet/Servlet Container 소개글이 무난하고, 표준 이름(`jakarta.servlet.*`)은 Jakarta 공식 튜토리얼로 확인하면 됩니다.
-
-Tomcat 내부의 `Connector · Engine · Host · Context` 배치와 Acceptor/Poller/Worker 스레드 모델은 배포·운영 맥락이라 뒤의 "빌드·패키징·Tomcat 배포" 절에서 다시 다룹니다. 이 절은 그 앞단, 곧 "Servlet Container 가 대체 무엇을 하는 물건이고 구현체 셋이 어떻게 다른가" 에 초점을 둡니다.
-
-반드시 알아야 할 것:
-
-```pseudocode
-Servlet 원형: jakarta.servlet.Servlet · init/service/destroy · Filter · Listener · ServletContext
-Servlet Container 역할: request/response 객체 생성 · Thread per Request · Session · 멀티스레드 안전성
-DispatcherServlet = Servlet 하나 (Front Controller)
-Filter(컨테이너 문지기) vs HandlerInterceptor(Spring 문지기)
-Tomcat 구조: Server · Service · Connector · Engine · Host · Context
-Connector 내부: Acceptor · Poller · Worker Thread (상세는 배포 절)
-구현체 3종: Tomcat · Jetty · Undertow
-Jetty: 임베디드 서버 라이브러리 감각 · 경량
-Undertow: XNIO · IO Thread vs Worker Thread · blocking/non-blocking handler
-Embedded WAS vs Standalone WAS
-```
-
-실무 질문: DispatcherServlet 이 결국 Servlet 이라면 컨테이너는 이걸 언제 어떻게 등록·초기화하는가 / Filter 와 HandlerInterceptor 는 각각 어느 계층에 살고 무엇을 볼 수 있는가(앞 절 Spring MVC 요청 처리 흐름 참조) / Spring Boot 에서 Tomcat 을 Jetty·Undertow 로 바꾸려면 무엇을 건드리면 되는가 / Undertow 에서 IO Thread 를 블로킹하면 왜 여러 커넥션이 함께 멈추는가 / 요청이 느릴 때 컨테이너 Worker Thread 고갈인지 앱 로직·DB 대기인지 어디를 먼저 보는가.
-
-깊게 실험할 것 — 스프링 부트에서 컨테이너를 교체하고 관찰하는 축으로 네 가지 Lab 을 권합니다.
-
-1. **Raw Servlet Lab** — 스프링 없이 `jakarta.servlet.Servlet` 을 직접 구현하고 `init`·`service`·`destroy` 에 로그를 심어, 컨테이너가 언제 각 메서드를 부르는지 눈으로 확인합니다. (Servlet 생명주기·컨테이너가 주는 것)
-2. **Filter vs Interceptor Lab** — 같은 요청 경로에 Servlet Filter 와 HandlerInterceptor 를 동시에 걸고 실행 순서·각자 볼 수 있는 정보(요청 raw vs 핸들러 메타)를 비교합니다. (두 문지기가 사는 계층의 차이)
-3. **WAS 교체 Lab** — `spring-boot-starter-web` 에서 `spring-boot-starter-tomcat` 을 exclude 하고 Jetty·Undertow starter 로 바꿔 기동한 뒤, 기동 로그·기본 스레드 모델·기본 포트 동작을 비교합니다. (구현체 교체가 무엇을 바꾸고 무엇은 그대로인가)
-4. **Undertow Thread Lab** — Undertow 에서 IO Thread 위에 블로킹 작업을 올려 여러 커넥션이 함께 멈추는지 재현하고, worker(blocking) 로 넘겼을 때와 비교합니다. (non-blocking 서버의 스레드 규율)
-
-## 9. 6단계: Validation / Binding / Conversion
-
-반드시 알아야 할 것:
-
-```pseudocode
-Bean Validation
-@Valid
-@Validated
-BindingResult
-MethodArgumentNotValidException
-ConstraintViolationException
-Validator
-DataBinder
-WebDataBinder
-Converter
-Formatter
-PropertyEditor
-ConversionService
-```
-
-실무 질문: @Valid 와 @Validated 는 무엇이 다른가 / RequestBody 검증 실패와 RequestParam 검증 실패는 예외가 같은가 / Enum 변환 실패는 어디서 처리되는가 / 날짜 포맷은 어디서 통제하는가 / 비즈니스 검증과 입력값 검증은 어디서 나누는가.
-
-추천 구조: Controller(형식·필수값·타입 검증) → Application Service(유스케이스·상태·권한 검증) → Domain Component(도메인 규칙 검증). 검증은 문지기입니다 — 모든 것을 판단하면 병목, 아무것도 판단하지 않으면 성이 무너집니다.
-
-## 10. 7단계: Spring Boot Auto Configuration
-
-반드시 알아야 할 것:
-
-```pseudocode
-SpringApplication
-AutoConfiguration
-@EnableAutoConfiguration
-@SpringBootApplication
-Condition
-@ConditionalOnClass
-@ConditionalOnMissingBean
-@ConditionalOnProperty
-@ConfigurationProperties
-Binder
-Starter
-spring.factories
-AutoConfiguration.imports
-Environment
-PropertySource
-Profile
-```
-
-실무 질문: 왜 의존성만 추가했는데 Bean 이 자동 등록되는가 / 내가 만든 Bean 이 있으면 Boot 기본 Bean 은 왜 등록되지 않는가 / application.yml 값은 언제 객체에 바인딩되는가 / Profile 별 설정은 어떤 우선순위로 적용되는가 / Auto Configuration 이 너무 많이 켜질 때 어떻게 추적하는가.
-
-꼭 해볼 프로젝트 — 나만의 Spring Boot Starter: autoconfigure 모듈(AutoConfiguration·Properties·Client) + starter 모듈(의존성 모음). 자동 설정은 따뜻한 난로지만 내부를 모르면 불씨가 어디서 시작됐는지 모릅니다.
-
-## 11. 8단계: Configuration / Properties
-
-반드시 알아야 할 것:
-
-```pseudocode
-Environment
-PropertySource
-application.yml
-application-{profile}.yml
-@ConfigurationProperties
-@Value
-Profile
-ConfigData
-Environment Variable
-Command Line Argument
-Relaxed Binding
-```
-
-추천: `@ConfigurationProperties(prefix = "app.order")` record + `@EnableConfigurationProperties`. `@Value` 가 나쁜 건 아니지만 설정이 많아질수록 `@ConfigurationProperties` 가 구조화·테스트·문서화에 유리합니다.
-
-## 12. 9단계: Data Access / MyBatis / Transaction
-
-반드시 알아야 할 것:
-
-```pseudocode
-DataSource
-HikariCP
-SqlSessionFactory
-SqlSessionTemplate
-Mapper Proxy
-DataSourceTransactionManager
-TransactionSynchronizationManager
-Connection Binding
-MyBatis Executor
-Batch Executor
-Mapper XML
-Dynamic SQL
-```
-
-실무 질문: MyBatis Mapper 는 어떻게 인터페이스만으로 동작하는가 / SqlSessionTemplate 은 왜 thread-safe 한가 / @Transactional 이 걸리면 Connection 은 어디에 묶이는가 / 같은 트랜잭션 안에서 여러 Mapper 호출은 같은 Connection 을 쓰는가 / Batch Executor 는 언제 쓰는가 / select 후 update 사이에 lock 이 필요한가.
-
-핵심 연결: Spring @Transactional → TransactionInterceptor → DataSourceTransactionManager → Connection 획득 → TransactionSynchronizationManager 에 Connection 바인딩 → MyBatis SqlSessionTemplate 이 같은 Connection 사용 → commit/rollback → Connection 반환. 이 흐름을 이해하면 "왜 트랜잭션이 안 먹지?" 의 절반이 해결됩니다.
-
-## 13. 10단계: Event / TransactionalEventListener
-
-반드시 알아야 할 것:
-
-```pseudocode
-ApplicationEventPublisher
-ApplicationEvent
-@EventListener
-@TransactionalEventListener
-TransactionPhase
-BEFORE_COMMIT
-AFTER_COMMIT
-AFTER_ROLLBACK
-AFTER_COMPLETION
-Synchronous Event
-Asynchronous Event
-```
-
-실무 질문: 이 이벤트는 같은 트랜잭션 안에서 처리되어야 하는가 / 리스너 실패가 원래 로직 실패로 이어져야 하는가 / AFTER_COMMIT 에서 실패하면 보상 처리는 어떻게 하는가 / 비동기 이벤트에서 MDC/traceId 는 유지되는가.
-
-추천 기준: 같은 트랜잭션에서 반드시 성공 → 직접 메서드 호출 / 트랜잭션 성공 이후 부가 작업 → `@TransactionalEventListener(AFTER_COMMIT)` / 실패해도 원 요청을 막지 않아야 함 → Outbox 또는 비동기 이벤트 / 서비스 간 전달 → Kafka 같은 메시징.
-
-## 14. 11단계: Async / Scheduling / ThreadPool
-
-반드시 알아야 할 것:
-
-```pseudocode
-@Async
-@EnableAsync
-TaskExecutor
-ThreadPoolTaskExecutor
-@Scheduled
-@EnableScheduling
-TaskScheduler
-fixedRate
-fixedDelay
-cron
-MDC Propagation
-Exception Handling
-```
-
-실무 질문: 기본 executor 를 그대로 쓰고 있지는 않은가 / 스레드 풀이 고갈되면 어떻게 되는가 / @Async 메서드 예외는 어디로 가는가 / @Scheduled 작업이 여러 인스턴스에서 동시에 실행되어도 되는가 / 스케줄러에 분산락이 필요한가. 운영에서 스레드는 작은 강입니다 — 흐름을 만들 수 있지만 둑이 없으면 범람합니다.
-
-## 15. 12단계: Cache Abstraction
-
-반드시 알아야 할 것:
-
-```pseudocode
-CacheManager
-@Cacheable
-@CachePut
-@CacheEvict
-Cache Key
-TTL
-Local Cache
-Distributed Cache
-Caffeine
-Redis
-Cache Stampede
-Cache Penetration
-Cache Invalidation
-```
-
-실무 질문: 캐시 키는 안정적인가 / 캐시 무효화 시점은 명확한가 / 트랜잭션 rollback 시 캐시가 먼저 갱신되지는 않는가 / 여러 인스턴스에서 local cache 를 써도 되는가 / TTL 은 왜 그 값인가. 캐시는 성능의 단비이지만 정합성의 그림자를 만듭니다.
-
-## 16. 13단계: Spring Security
-
-반드시 알아야 할 것:
-
-```pseudocode
-SecurityFilterChain
-FilterChainProxy
-SecurityContext
-SecurityContextHolder
-Authentication
-Principal
-GrantedAuthority
-AuthenticationManager
-AuthenticationProvider
-UserDetailsService
-PasswordEncoder
-AuthorizationManager
-Method Security
-CSRF
-CORS
-Session
-JWT
-OAuth2 Resource Server
-```
-
-실무 질문: 인증과 인가는 어디서 나뉘는가 / JWT 검증은 어느 필터에서 수행되는가 / SecurityContext 는 ThreadLocal 기반인가 / 비동기 실행 시 SecurityContext 는 유지되는가 / URL 권한과 Method 권한 중 어디에 정책을 둘 것인가.
-
-## 17. 14단계: Actuator / 운영 기능
-
-반드시 알아야 할 것:
-
-```pseudocode
-spring-boot-starter-actuator
-HealthIndicator
-Readiness
-Liveness
-Metrics
-Micrometer
-Prometheus Endpoint
-Info Endpoint
-Loggers Endpoint
-Custom HealthIndicator
-Custom Meter
-```
-
-실무 endpoint: `/actuator/health` · `/health/readiness` · `/health/liveness` · `/metrics` · `/prometheus` · `/loggers` · `/info`.
-
-실무 질문: DB 장애가 readiness 에 반영되는가 / 외부 API 장애를 health down 으로 볼 것인가 / 운영에서 actuator endpoint 가 과도하게 노출되어 있지는 않은가 / 커스텀 비즈니스 metric 을 만들 수 있는가 / 장애 시 log level 을 동적으로 바꿀 수 있는가.
-
-## 18. 15단계: Spring Test
-
-반드시 알아야 할 것:
-
-```pseudocode
-JUnit 5
-Mockito
-AssertJ
-@SpringBootTest
-@WebMvcTest
-@DataJdbcTest
-@MybatisTest
-@MockBean 계열
-TestContext Framework
-ApplicationContext Caching
-@Transactional Test
-MockMvc
-WebTestClient
-TestRestTemplate
-Testcontainers
-```
-
-실무 질문: 이 테스트는 Spring Context 가 꼭 필요한가 / 단위 테스트로 충분한가 / @SpringBootTest 를 남용하고 있지는 않은가 / 테스트마다 ApplicationContext 가 새로 떠서 느려지지 않는가 / @Transactional 테스트의 rollback 때문에 실제 운영 흐름과 달라지지 않는가 / MockMvc 테스트에서 Filter/Security 를 포함할 것인가.
-
-추천 테스트 피라미드: Domain/Component 단위 테스트 → Application Service 통합 테스트 → Mapper/Repository 테스트 → Controller Slice 테스트 → 전체 SpringBootTest → E2E/Smoke Test.
-
-## 19. 16단계: 빌드 · 패키징 · Tomcat 배포
-
-여기까지가 "Spring 이 어떻게 동작하는가" 였다면, 이 단계는 "그 Spring 애플리케이션이 어떻게 빌드되어 어떤 산출물이 되고, Tomcat 위에서 어떻게 실행되는가" 입니다. `./gradlew build` 하면 `jar` 가 나온다는 수준이 아니라, 소스가 class 로 컴파일되고 의존성이 classpath 에 놓이고 Gradle/Maven 이 산출물을 만들고 Spring Boot 플러그인이 실행 가능한 구조로 재패키징하고 Boot Loader 가 중첩 jar 를 읽어 Tomcat 이 요청을 DispatcherServlet 까지 흘려보내는 흐름을 설명할 수 있는 것이 목표입니다.
-
-JAR 와 WAR 의 진짜 차이는 확장자가 아니라 **실행 주도권** 입니다. JAR 는 애플리케이션이 내장 Tomcat 을 *품고* 스스로 실행하고(`java -jar app.jar`), WAR 는 외부 Tomcat 이 애플리케이션을 *품고* 실행합니다(`webapps/` 배포). 이 한 줄이 배포 모델 전체를 가릅니다. 빌드 산출물은 애플리케이션의 껍질이고, Tomcat 은 요청이 들어오는 문이며, Boot Loader 는 그 문 안쪽에서 애플리케이션을 깨우는 점화 장치입니다. (내장 톰캣·실행 JAR 의 서사 본체는 [01_core/02-02](../09_spring/01_core/02-02.%EB%82%B4%EC%9E%A5%20%ED%86%B0%EC%BA%A3%EA%B3%BC%20SpringApplication%20%E2%80%94%20JAR%EB%A1%9C%20WAS%EB%A5%BC%20%ED%92%88%EB%8B%A4.md) 에 있고, 이 절은 빌드 도구·Boot Loader 내부·외부 WAR·Layered/Docker 까지 키워드 축을 넓힙니다.)
-
-반드시 알아야 할 것:
-
-```pseudocode
-Java Build
-Gradle Lifecycle
-Maven Lifecycle
-Dependency Resolution
-Classpath
-JAR
-WAR
-Fat JAR
-Thin JAR
-Executable JAR
-Executable WAR
-Spring Boot Loader
-JarLauncher
-WarLauncher
-PropertiesLauncher
-BOOT-INF/classes
-BOOT-INF/lib
-META-INF/MANIFEST.MF
-Main-Class
-Start-Class
-bootJar
-bootWar
-plain jar
-providedRuntime
-provided scope
-SpringBootServletInitializer
-Embedded Tomcat
-External Tomcat
-Servlet Container
-ServletContext
-DispatcherServlet
-Tomcat Connector
-Acceptor
-Poller
-Worker Thread
-maxThreads
-maxConnections
-acceptCount
-WEB-INF
-WEB-INF/classes
-WEB-INF/lib
-web.xml
-Layered JAR
-Docker Layer Cache
-Build Artifact
-CI/CD Artifact Management
-```
-
-JAR 실행 흐름: `java -jar app.jar` → Spring Boot Loader(`JarLauncher`) → `BOOT-INF/lib` 중첩 jar 로 classpath 구성 → Start-Class 의 `main()` → `SpringApplication.run()` → 내장 Tomcat 시작 → DispatcherServlet 등록 → 요청 처리. WAR 실행 흐름: 외부 Tomcat 시작 → `webapps/app.war` 감지·압축 해제 → `WEB-INF/classes`·`WEB-INF/lib` 로딩 → ServletContext 생성 → `SpringBootServletInitializer` 실행 → Spring ApplicationContext 생성 → DispatcherServlet 등록 → 요청 처리. 실행 JAR 의 `MANIFEST.MF` 는 `Main-Class` 로 `JarLauncher` 를, `Start-Class` 로 우리 `main` 클래스를 가리키므로, `java -jar` 시 내 `main()` 이 곧장 실행되는 게 아니라 Boot Loader 가 먼저 뜨고 그 다음 애플리케이션이 실행됩니다.
-
-실무 질문: 배포해야 하는 산출물은 `app.jar`(bootJar) 인가 `app-plain.jar`(plain jar) 인가 / 멀티모듈에서 `bootJar` 는 실행 모듈에만 켜고 라이브러리 모듈은 일반 `jar` 만 내야 하지 않는가 / 외부 Tomcat WAR 배포에는 왜 `SpringBootServletInitializer` 상속과 `providedRuntime`(내장 Tomcat 을 provided scope 로) 가 필요한가 / Docker 이미지 빌드가 매번 느린 이유는 의존성 layer 와 application layer 가 분리돼 있지 않아서가 아닌가 / 요청이 느린 원인이 Tomcat thread 고갈인가 DB connection pool 부족으로 인한 thread 대기인가 / `accept-count` 가 작아 연결이 거절되는가. 빌드 산출물이 *언제* 만들어지고 테스트가 *어느 단계*에서 도는지, 의존성 충돌을 어떻게 확인하는지(`./gradlew dependencyInsight`, `mvn dependency:tree`)에 답할 수 있어야 합니다.
-
-꼭 실험할 것 — 다섯 가지 Lab 을 권합니다.
-
-1. **JAR/WAR Packaging Lab** — 같은 앱을 `bootJar` 와 `bootWar` 두 방식으로 패키징하고 `plain jar` 와 비교합니다. `MANIFEST.MF`·`BOOT-INF` 구조·`WEB-INF` 구조를 직접 열어 보고(`jar tf app.jar`, `unzip -p app.jar META-INF/MANIFEST.MF`) `java -jar` 실행과 외부 Tomcat 배포를 모두 해 봅니다. (구조적 차이·실행 주도권·Boot Loader 역할)
-2. **Embedded Tomcat Internal Lab** — `TomcatServletWebServerFactory` 를 커스터마이징하고 Connector·`maxThreads`·Filter·`ServletRegistrationBean`·DispatcherServlet 등록을 추적합니다. (Spring Boot 와 Tomcat 의 연결 지점·Servlet Container 초기화)
-3. **External Tomcat WAR Lab** — `SpringBootServletInitializer` 를 추가하고 `providedRuntime` 를 설정해 WAR 를 외부 Tomcat `webapps` 에 배포한 뒤 context path·Tomcat 로그를 분석합니다. (Servlet Container 가 Spring Boot 앱을 로딩하는 방식·레거시 WAS 감각)
-4. **Gradle Build Lifecycle Lab** — `./gradlew tasks`·`clean build --dry-run`·`bootJar`·`jar`·`dependencies`·`dependencyInsight` 를 돌리고 멀티모듈에서 `bootJar` on/off 를 비교합니다. (산출물이 언제·어떻게 만들어지는지, 실행 모듈과 라이브러리 모듈 분리)
-5. **Docker Layered JAR Lab** — 단순 `COPY app.jar` 와 layered jar extract 를 비교하고 Docker build cache·이미지 크기·빌드 시간을 측정합니다. 의존성 변경과 코드 변경이 각각 어느 layer 를 무효화하는지 확인합니다. (빌드 산출물과 컨테이너 이미지 레이어의 관계·CI/CD 최적화)
-
-## 20. 추천 프로젝트
-
-- **프로젝트 1 — Mini Spring Container**: @Component 스캔 흉내 · BeanDefinition 등록 · 생성자 주입 · 싱글톤 캐시 · BeanPostProcessor 흉내 · @PostConstruct 흉내. (Spring 이 객체를 어떻게 만들고 보관하는지, DI 가 왜 중심인지)
-- **프로젝트 2 — Transaction Lab**: REQUIRED · REQUIRES_NEW · NESTED · self-invocation · checked/unchecked exception · catch 후 rollback · rollbackFor · readOnly · timeout · MyBatis Mapper 호출 을 (상황→예상→실제→이유→관련 컴포넌트) 로 정리.
-- **프로젝트 3 — Spring MVC Internal Lab**: Custom Filter · Interceptor · ArgumentResolver · ReturnValueHandler · HttpMessageConverter · ControllerAdvice · ProblemDetail 기반 에러 응답.
-- **프로젝트 4 — Custom Spring Boot Starter**: 공통 로깅 · 요청 traceId · 표준 에러 응답 · 감사 로그 · 공통 ObjectMapper · 공통 WebMvcConfigurer · 공통 Actuator HealthIndicator. (AutoConfiguration · Conditional · ConfigurationProperties · Starter 구조)
-- **프로젝트 5 — Production-ready Spring Template**: Layered Architecture · Global Exception Handling · Validation · Actuator · Health Check · Structured Logging · TraceId · Spring Security 기본 · MyBatis · Transaction · Testcontainers · Dockerfile · Jenkinsfile.
-
-## 21. 딥다이브 학습 순서 (7단계)
-
-1단계 Core: IoC · DI · BeanDefinition · ApplicationContext · Bean Lifecycle · Component Scan · @Configuration → "Spring 이 객체를 어떻게 만들고 주입하는지 설명할 수 있다".
-
-2단계 Proxy/AOP/Transaction: JDK Proxy · CGLIB · AOP · @Transactional · TransactionManager · Propagation · Rollback · Self Invocation → "@Transactional 이 안 먹는 이유를 설명하고 고칠 수 있다".
-
-3단계 Web MVC: DispatcherServlet · Filter · Interceptor · ArgumentResolver · MessageConverter · ExceptionResolver · Validation → "HTTP 요청이 Controller 까지 도달하고 응답이 나가는 과정을 설명할 수 있다".
-
-4단계 Boot: SpringApplication · AutoConfiguration · Conditional · ConfigurationProperties · Profile · Starter → "의존성 하나 추가했을 때 왜 기능이 자동으로 켜지는지 설명할 수 있다".
-
-5단계 Data/Transaction/MyBatis: DataSource · HikariCP · SqlSessionTemplate · Mapper Proxy · TransactionSynchronizationManager · Connection Binding → "Spring 트랜잭션과 MyBatis 가 같은 Connection 을 공유하는 흐름을 설명할 수 있다".
-
-6단계 운영 Spring: Actuator · HealthIndicator · Micrometer · Logging · ThreadPool · Graceful Shutdown · Cache · Security → "Spring 애플리케이션을 운영 환경에서 관측하고 안전하게 종료할 수 있다".
-
-7단계 Test: MockMvc · @SpringBootTest · Slice Test · TestContext Cache · Transactional Test · Testcontainers → "빠르고 신뢰할 수 있는 Spring 테스트 전략을 설계할 수 있다".
-
-## 22. 최종 압축 키워드
-
-```pseudocode
-Spring Core
-IoC Container
-Dependency Injection
-BeanDefinition
-BeanFactory
-ApplicationContext
-DefaultListableBeanFactory
-Component Scan
-Bean Lifecycle
-BeanPostProcessor
-BeanFactoryPostProcessor
-FactoryBean
-Aware Interfaces
-ApplicationEventPublisher
-AOP
-JDK Dynamic Proxy
-CGLIB Proxy
-Advisor
-MethodInterceptor
-Self Invocation
-Weaving
-Compile-time Weaving
-Load-time Weaving
-AspectJ
-@Transactional
-PlatformTransactionManager
-TransactionInterceptor
-TransactionSynchronizationManager
-Propagation
-Isolation
-Rollback Rules
-Spring MVC
-DispatcherServlet
-HandlerMapping
-HandlerAdapter
-HandlerMethodArgumentResolver
-HandlerMethodReturnValueHandler
-HttpMessageConverter
-HandlerExceptionResolver
-Filter
-Interceptor
-ControllerAdvice
-Validation
-DataBinder
-ConversionService
-Spring Boot
-SpringApplication
-AutoConfiguration
-Conditional
-ConfigurationProperties
-Profile
-Environment
-PropertySource
-Starter
-Externalized Configuration
-DataSource
-HikariCP
-MyBatis
-SqlSessionTemplate
-Mapper Proxy
-Spring Event
-@TransactionalEventListener
-Async
-TaskExecutor
-Scheduling
-Cache Abstraction
-Spring Security
-SecurityFilterChain
-SecurityContext
-Authentication
-Authorization
-Actuator
-HealthIndicator
-Micrometer
-Prometheus
-Spring Test
-MockMvc
-TestContext Framework
-ApplicationContext Caching
-Testcontainers
-```
-
-## 결론
-
-Spring 을 깊게 판다는 것은 어노테이션을 더 많이 외우는 일이 아니라, @Autowired 가 왜 주입되는지 · @Transactional 이 왜 실패하는지 · @RequestBody 가 어디서 변환되는지 · AutoConfiguration 이 왜 켜지는지 · 테스트가 왜 느려지는지 · 운영에서 health 가 왜 내려가는지 에 답할 수 있게 되는 일입니다.
-
-추천 학습 프로젝트 조합: Mini Spring Container → Transaction Lab → Spring MVC Internal Lab → Custom Spring Boot Starter → Production-ready Spring Template.
-
-## 출처
-
-- [Spring Framework Documentation](https://docs.spring.io/spring-framework/reference/index.html)
-- [Core Technologies](https://docs.spring.io/spring-framework/reference/core.html)
-- [Aspect Oriented Programming with Spring](https://docs.spring.io/spring-framework/reference/core/aop.html)
-- [AOP Concepts](https://docs.spring.io/spring-framework/reference/core/aop/introduction-defn.html)
-- [Using AspectJ with Spring Applications](https://docs.spring.io/spring-framework/reference/core/aop/using-aspectj.html)
-- [Transaction Management](https://docs.spring.io/spring-framework/reference/data-access/transaction.html)
-- [Using @Transactional](https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html)
-- [Spring Web MVC](https://docs.spring.io/spring-framework/reference/web/webmvc.html)
-- [Externalized Configuration](https://docs.spring.io/spring-boot/reference/features/external-config.html)
-- [Spring Security](https://docs.spring.io/spring-security/reference/index.html)
-- [Spring Security Architecture](https://docs.spring.io/spring-security/reference/servlet/architecture.html)
-- [Production-ready Features](https://docs.spring.io/spring-boot/reference/actuator/index.html)
-- [Testing](https://docs.spring.io/spring-framework/reference/testing.html)
-- [Packaging Executable Archives (Spring Boot Maven Plugin)](https://docs.spring.io/spring-boot/maven-plugin/packaging.html)
-- [Spring Boot Maven Plugin](https://docs.spring.io/spring-boot/maven-plugin/index.html)
-- [Traditional Deployment (WAR · SpringBootServletInitializer)](https://docs.spring.io/spring-boot/how-to/deployment/traditional-deployment.html)
-- [Efficient Container Images (Layered JAR)](https://docs.spring.io/spring-boot/reference/packaging/efficient.html)
-- [Apache Tomcat — Application Developer's Guide (Deployment · WEB-INF)](https://tomcat.apache.org/tomcat-8.5-doc/appdev/deployment.html)
-- [Jakarta Servlet — 공식 튜토리얼 (Servlet · Filter · Listener · lifecycle)](https://jakarta.ee/learn/docs/jakartaee-tutorial/current/web/servlets/servlets.html)
-- [Spring Web MVC — DispatcherServlet](https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-servlet.html)
-- [Apache Tomcat 10.1 Configuration Reference (Engine · Host · Context)](https://tomcat.apache.org/tomcat-10.1-doc/config/index.html)
-- [Apache Tomcat 10.1 — HTTP Connector](https://tomcat.apache.org/tomcat-10.1-doc/config/http.html)
-- [Eclipse Jetty 12.1 Programming Guide (임베디드 서버 라이브러리)](https://jetty.org/docs/jetty/12.1/programming-guide/index.html)
-- [Undertow (XNIO · IO Thread / Worker Thread)](https://undertow.io/)
+> API 를 만드는 법이 아니라 왜 그렇게 동작하는지를 여는 순서입니다. 컨테이너와 프록시에서 시작해 요청 처리와 트랜잭션을 지나 부트의 자동 구성, 통신과 보안과 운영, 테스트와 배포로 갑니다.
+
+## 학습 순서
+
+> 단계마다 배우는 개념을 묶음으로 갈랐습니다. 자료 위치는 아래 단계별 표가 짚습니다.
+
+![컨테이너에서 배포까지 이어지는 Spring 학습 순서](_assets/spring-roadmap.svg)
+
+| 단계 | 묶음 | 배우는 개념 |
+|---|---|---|
+| 1 · 컨테이너와 빈 | 등록 | IoC · DI · `BeanDefinition` · `BeanFactory` · `ApplicationContext` · 컴포넌트 스캔 |
+| 1 · 컨테이너와 빈 | 조립 | 생성자 주입 · `@Qualifier` · `@Primary` · 순환 참조 · `@Configuration` 프록시 |
+| 1 · 컨테이너와 빈 | 수명 | 싱글톤 · 프로토타입 · 웹 스코프 · `@PostConstruct` · 소멸 콜백 · 지연 초기화 |
+| 2 · 프록시와 AOP | 등장 배경 | 횡단 관심사 · 필터와 인터셉터의 한계 · 템플릿·콜백 · `ThreadLocal` |
+| 2 · 프록시와 AOP | 프록시 | JDK 동적 프록시 · CGLIB · 프록시 팩토리 · 빈 후처리기 · 어드바이저 |
+| 2 · 프록시와 AOP | 선언 | `@Aspect` · 포인트컷 표현식 · 어드바이스 다섯 · 자기 호출 문제 · 위빙 네 방식 |
+| 3 · 요청 처리 | 토대 | 서블릿 · WAS · 멀티스레드 · 내장 톰캣 · `SpringApplication` |
+| 3 · 요청 처리 | 흐름 | `DispatcherServlet` · 핸들러 매핑 · 핸들러 어댑터 · `ArgumentResolver` · 뷰 리졸버 |
+| 3 · 요청 처리 | 몸통 | 메시지 컨버터 · Jackson · 멀티파트 · `@JsonView` · 다형성 직렬화 |
+| 3 · 요청 처리 | 실패와 변환 | `@ControllerAdvice` · `HandlerExceptionResolver` · 검증 · 데이터 바인딩 · `ConversionService` |
+| 4 · 트랜잭션과 이벤트 | 경계 | `@Transactional` 프록시 · `PlatformTransactionManager` · 전파 · 격리 · 동기화 |
+| 4 · 트랜잭션과 이벤트 | 영속성 | 영속성 컨텍스트 · 쓰기 지연 · N+1 · 락 · Spring Data 리포지토리 · MyBatis 혼용 |
+| 4 · 트랜잭션과 이벤트 | 이벤트 | `@EventListener` · `@TransactionalEventListener` · Phase 넷 · 죽은 트랜잭션 · 보상 |
+| 5 · 부트가 조립하는 세계 | 스타터 | 스타터 · BOM · 의존성 버전 관리 · `@AutoConfiguration` · `@Conditional` · 순서와 게이트 |
+| 5 · 부트가 조립하는 세계 | 외부 설정 | 설정 우선순위 · `application.yml` · `@ConfigurationProperties` · 프로필 · 비밀 관리 |
+| 6 · 외부 통신과 회복탄력성 | 클라이언트 | `RestTemplate` · `RestClient` · `WebClient` · OpenFeign · `@HttpExchange` |
+| 6 · 외부 통신과 회복탄력성 | 실패 모델 | 상태 코드 실패 · 무응답 실패 · 타임아웃 · 필터 함수 · `block` 안티패턴 |
+| 6 · 외부 통신과 회복탄력성 | 방어 | 서킷 브레이커 · 슬라이딩 윈도우 · 재시도 · 백오프 · 지터 · 격벽 · 속도 제한 |
+| 7 · 비동기와 실시간 | 요청 밖 | `@Async` · 스레드 풀 · `@Scheduled` · Quartz · 캐시 추상화 · `@Retryable` |
+| 7 · 비동기와 실시간 | 리액티브 | Reactor · 백프레셔 · WebFlux 두 모델 · Netty 채널 파이프라인 · 바이트 버퍼 |
+| 7 · 비동기와 실시간 | 밀어 보내기 | SSE · WebSocket 핸드셰이크 · STOMP · 재연결 · 메시지 동기화 |
+| 7 · 비동기와 실시간 | 일괄 처리 | 잡 · 스텝 · `JobRepository` · 리더 · 프로세서 · 라이터 · 스케일링 |
+| 8 · 보안과 운영 | 인증 | 필터 체인 · `UserDetailsService` · 비밀번호 인코더 · 인증 제공자 |
+| 8 · 보안과 운영 | 인가 | 엔드포인트 인가 · 메서드 수준 보안 · CSRF · CORS · OAuth 2 · OIDC |
+| 8 · 보안과 운영 | 운영 | 액츄에이터 엔드포인트 · 마이크로미터 · Counter · Gauge · Timer · JMX |
+| 9 · 테스트와 배포 | 층 | 테스트 피라미드 · 단위 · 슬라이스 · `@SpringBootTest` · `ApplicationContextRunner` |
+| 9 · 테스트와 배포 | 진짜 의존 | Testcontainers · EmbeddedKafka · WireMock · ArchUnit · 보안 설정 테스트 |
+| 9 · 테스트와 배포 | 산출물 | `bootJar` 와 plain jar · Boot Loader · Layered JAR · 컨테이너화 · GitOps |
+
+
+
+## 책 읽기 흐름
+
+> 위 단계를 무엇으로 배우는가입니다. 통독하는 책은 하나뿐이고 나머지는 부분 독서입니다.
+
+![Spring 책 읽기 흐름 — 우선순위와 읽을 장](_assets/spring-books.svg)
+
+같은 책이 여러 단계에 갈려 걸리므로 행이 단계가 아니라 책의 역할로 묶입니다.
+
+| 책 | 읽을 장 | 우선순위 | 자리 |
+|---|---|:---:|---|
+| [Spring Start Here](../09_spring/books/spring-start-here/README.md) | 전 15장 | 필수 | 1~4 · 9단계 |
+| Spring in Action, 6판 | 2·3 · 6·7 · 9 · 11~18장 | 필수 | 3~5 · 7~9단계 |
+| Spring Security in Action, 2판 | 1~18장 | 필수 | 8·9단계 |
+| [Cloud Native Spring in Action](../09_spring/books/cloud-native-spring-in-action/README.md) | 4~9 · 13~15장 | 추천 | 5·6 · 8·9단계 |
+| The Definitive Guide to Spring Batch | 2~4 · 7~9 · 11장 | 선택 | 7단계 |
+
+공식 문서가 빈칸을 메웁니다. [Spring Framework Reference](https://docs.spring.io/spring-framework/reference/)가 1~4단계, [Spring Boot Reference](https://docs.spring.io/spring-boot/reference/)가 5단계, [Project Reactor](https://projectreactor.io/docs/core/release/reference/)와 [Resilience4j](https://resilience4j.readme.io/docs)가 6·7단계, [Spring Security Reference](https://docs.spring.io/spring-security/reference/)가 8단계를 받칩니다.
+
+**보유 노트가 백 편에 가깝지만 두 축이 비어 있습니다.** Spring Security 와 Bean Validation 은 소장 책만 있고 정독 노트가 없습니다. 그 자리의 `노트` 칸은 비워 두고 책과 공식 문서로 받습니다.
+
+
+
+## Framework 가 하는 일 · 1~4단계
+
+> 컨테이너와 프록시와 서블릿과 트랜잭션입니다. Boot 없이도 성립하는 구간입니다.
+
+### 1단계 · 컨테이너와 빈
+
+| 개념 | 우선순위 | 노트 | 책 |
+|---|:---:|---|---|
+| IoC 와 DI — 제어의 역전 | 필수 | [01-01](../09_spring/01_core/01-01.%EA%B0%9D%EC%B2%B4%EC%A7%80%ED%96%A5%20%EC%9B%90%EB%A6%AC%20%EC%A0%81%EC%9A%A9%20%E2%80%94%20DI%EC%99%80%20IoC.md) | Spring Start Here 2·3장 |
+| BeanDefinition 이 먼저다 | 필수 | [01-01](../09_spring/01_core/01-01.%EA%B0%9D%EC%B2%B4%EC%A7%80%ED%96%A5%20%EC%9B%90%EB%A6%AC%20%EC%A0%81%EC%9A%A9%20%E2%80%94%20DI%EC%99%80%20IoC.md) | |
+| 빈 팩토리와 컨텍스트 | 필수 | [02](../09_spring/books/spring-start-here/02.Spring%20Context%EC%99%80%20Bean%20%EB%93%B1%EB%A1%9D.md) | Spring Start Here 2장 |
+| 컴포넌트 스캔과 등록 | 필수 | [02](../09_spring/books/spring-start-here/02.Spring%20Context%EC%99%80%20Bean%20%EB%93%B1%EB%A1%9D.md) | Spring Start Here 2장 |
+| 주입 방식과 순환 참조 | 필수 | [03](../09_spring/books/spring-start-here/03.Bean%20%EC%99%80%EC%9D%B4%EC%96%B4%EB%A7%81%EA%B3%BC%20%EC%9D%98%EC%A1%B4%EC%84%B1%20%EC%A3%BC%EC%9E%85.md) | Spring Start Here 3장 |
+| 스코프와 생명주기 | 필수 | [05](../09_spring/books/spring-start-here/05.Bean%20%EC%8A%A4%EC%BD%94%ED%94%84%EC%99%80%20%EC%83%9D%EC%95%A0%EC%A3%BC%EA%B8%B0.md) | Spring Start Here 5장 |
+| 추상화로 갈아 끼우기 | 추천 | [04](../09_spring/books/spring-start-here/04.%EC%B6%94%EC%83%81%ED%99%94%EC%99%80%20%EC%9D%98%EC%A1%B4%EC%84%B1%20%EC%A3%BC%EC%9E%85.md) | Spring Start Here 4장 |
+| Spring 이 쓰는 디자인 패턴 | 추천 | [01-02](../09_spring/01_core/01-02.Spring%EA%B3%BC%20%EB%94%94%EC%9E%90%EC%9D%B8%20%ED%8C%A8%ED%84%B4.md) | |
+| 웹 스코프와 로그인 | 선택 | [09](../09_spring/books/spring-start-here/09.%EC%9B%B9%20%EC%8A%A4%EC%BD%94%ED%94%84%EC%99%80%20%EB%A1%9C%EA%B7%B8%EC%9D%B8.md) | Spring Start Here 9장 |
+
+`@Service` 하나가 언제 설계도가 되고 언제 객체가 되는지를 말할 수 있어야 합니다. 그 답이 **BeanDefinition 을 먼저 만들고 그것으로 조립한다**이고, 뒤 단계의 프록시와 자동 구성이 전부 이 순서 위에 얹힙니다.
+
+### 2단계 · 프록시와 AOP
+
+| 개념 | 우선순위 | 노트 | 책 |
+|---|:---:|---|---|
+| 횡단 관심사란 무엇인가 | 필수 | [01-01](../09_spring/05_aop/01-01.%ED%9A%A1%EB%8B%A8%20%EA%B4%80%EC%8B%AC%EC%82%AC%EC%99%80%20AOP%20%E2%80%94%20%ED%94%84%EB%A1%9D%EC%8B%9C%EB%A1%9C%20%ED%92%80%EC%96%B4%EB%82%B4%EA%B8%B0.md) | Spring Start Here 6장 |
+| 동적 프록시와 CGLIB | 필수 | [01-01](../09_spring/05_aop/01-01.%ED%9A%A1%EB%8B%A8%20%EA%B4%80%EC%8B%AC%EC%82%AC%EC%99%80%20AOP%20%E2%80%94%20%ED%94%84%EB%A1%9D%EC%8B%9C%EB%A1%9C%20%ED%92%80%EC%96%B4%EB%82%B4%EA%B8%B0.md) | |
+| 빈 후처리기가 끼워 넣는다 | 필수 | [01-01](../09_spring/05_aop/01-01.%ED%9A%A1%EB%8B%A8%20%EA%B4%80%EC%8B%AC%EC%82%AC%EC%99%80%20AOP%20%E2%80%94%20%ED%94%84%EB%A1%9D%EC%8B%9C%EB%A1%9C%20%ED%92%80%EC%96%B4%EB%82%B4%EA%B8%B0.md) | |
+| @Aspect 와 포인트컷 | 필수 | [06](../09_spring/books/spring-start-here/06.Spring%20AOP%EC%99%80%20Aspect.md) | Spring Start Here 6장 |
+| 자기 호출이 프록시를 지나침 | 필수 | [01-01](../09_spring/05_aop/01-01.%ED%9A%A1%EB%8B%A8%20%EA%B4%80%EC%8B%AC%EC%82%AC%EC%99%80%20AOP%20%E2%80%94%20%ED%94%84%EB%A1%9D%EC%8B%9C%EB%A1%9C%20%ED%92%80%EC%96%B4%EB%82%B4%EA%B8%B0.md) | |
+| 템플릿·콜백과 ThreadLocal | 추천 | [01-03](../09_spring/05_aop/01-03.%ED%85%9C%ED%94%8C%EB%A6%BF%C2%B7%EC%BD%9C%EB%B0%B1%EA%B3%BC%20ThreadLocal%20%E2%80%94%20AOP%20%EB%93%B1%EC%9E%A5%20%EC%A7%81%EC%A0%84%EC%9D%98%20%EB%91%90%20%EC%8B%9C%EB%8F%84.md) | |
+| 어노테이션 기반 응용 | 추천 | [01-04](../09_spring/05_aop/01-04.%EC%96%B4%EB%85%B8%ED%85%8C%EC%9D%B4%EC%85%98%20%EA%B8%B0%EB%B0%98%20AOP%20%EC%9D%91%EC%9A%A9%20%E2%80%94%20%40Async%C2%B7%40Cacheable%C2%B7%40Retryable.md) | |
+| 위빙 네 방식과 AspectJ | 선택 | | |
+
+프록시를 이해하지 못하면 `@Transactional` 이 왜 같은 클래스 안에서 안 먹는지 설명할 수 없습니다. 이 단계는 **부가기능이 객체 바깥에서 끼어드는 자리**를 손에 쥐는 구간입니다.
+
+### 3단계 · 요청 처리
+
+| 개념 | 우선순위 | 노트 | 책 |
+|---|:---:|---|---|
+| WAS 와 서블릿 컨테이너 | 필수 | [02-01](../09_spring/01_core/02-01.WAS%EC%99%80%20%EC%84%9C%EB%B8%94%EB%A6%BF%20%E2%80%94%20HTTP%20%EC%B2%98%EB%A6%AC%EC%9D%98%20%ED%86%A0%EB%8C%80.md) | |
+| 내장 톰캣과 SpringApplication | 필수 | [02-02](../09_spring/01_core/02-02.%EB%82%B4%EC%9E%A5%20%ED%86%B0%EC%BA%A3%EA%B3%BC%20SpringApplication%20%E2%80%94%20JAR%EB%A1%9C%20WAS%EB%A5%BC%20%ED%92%88%EB%8B%A4.md) | Spring in Action 부록 |
+| DispatcherServlet 흐름 | 필수 | [03-01](../09_spring/01_core/03-01.Spring%20MVC%20%E2%80%94%20FrontController%EC%97%90%EC%84%9C%20DispatcherServlet%EA%B9%8C%EC%A7%80.md) | Spring in Action 2장 |
+| 핸들러 매핑과 어댑터 | 필수 | [03-01](../09_spring/01_core/03-01.Spring%20MVC%20%E2%80%94%20FrontController%EC%97%90%EC%84%9C%20DispatcherServlet%EA%B9%8C%EC%A7%80.md) | |
+| 메시지 컨버터와 Jackson | 필수 | [01-01](../09_spring/02_data-binding/01-01.HTTP%20%EC%9A%94%EC%B2%AD%C2%B7%EC%9D%91%EB%8B%B5%EA%B3%BC%20%EB%A9%94%EC%8B%9C%EC%A7%80%20%EC%BB%A8%EB%B2%84%ED%84%B0.md) | Spring in Action 7장 |
+| 예외 처리 — @ControllerAdvice | 필수 | [03-02](../09_spring/01_core/03-02.%EC%98%88%EC%99%B8%20%EC%B2%98%EB%A6%AC%20%E2%80%94%20%EC%84%9C%EB%B8%94%EB%A6%BF%EC%97%90%EC%84%9C%20%40ControllerAdvice%EA%B9%8C%EC%A7%80.md) | |
+| 검증 · 바인딩 · 타입 변환 | 필수 | [01-01](../09_spring/02_data-binding/01-01.HTTP%20%EC%9A%94%EC%B2%AD%C2%B7%EC%9D%91%EB%8B%B5%EA%B3%BC%20%EB%A9%94%EC%8B%9C%EC%A7%80%20%EC%BB%A8%EB%B2%84%ED%84%B0.md) | Spring in Action 2장 |
+| 파일 업로드와 멀티파트 | 추천 | [01-02](../09_spring/02_data-binding/01-02.%ED%8C%8C%EC%9D%BC%20%EC%97%85%EB%A1%9C%EB%93%9C%20%E2%80%94%20Multipart.md) | |
+| JSON 직렬화 심화 | 추천 | [01-03](../09_spring/02_data-binding/01-03.JSON%20%EC%A7%81%EB%A0%AC%ED%99%94%20%EC%8B%AC%ED%99%94%20%E2%80%94%20%EC%BB%A4%EC%8A%A4%ED%85%80%20Serializer%C2%B7%40JsonView%C2%B7%EB%8B%A4%ED%98%95%EC%84%B1.md) | |
+| 컨버터 자동 설정 | 추천 | [01-04](../09_spring/02_data-binding/01-04.%EB%A9%94%EC%8B%9C%EC%A7%80%20%EC%BB%A8%EB%B2%84%ED%84%B0%20%EC%9E%90%EB%8F%99%20%EC%84%A4%EC%A0%95%20%E2%80%94%20WebMvcAutoConfiguration%EA%B3%BC%20%EB%93%B1%EB%A1%9D%20%EA%B2%B0%EC%A0%95.md) | |
+| REST 서비스 만들고 소비하기 | 필수 | [10](../09_spring/books/spring-start-here/10.REST%20%EC%84%9C%EB%B9%84%EC%8A%A4.md) | Spring Start Here 10·11장 |
+| 메시지와 국제화 | 선택 | [03-01](../09_spring/02_data-binding/03-01.%EB%A9%94%EC%8B%9C%EC%A7%80%C2%B7%EA%B5%AD%EC%A0%9C%ED%99%94%20%E2%80%94%20MessageSource%EC%99%80%20LocaleResolver.md) | |
+
+요청 한 건이 소켓에서 컨트롤러 메서드 인자까지 어떤 손을 거치는지 그릴 수 있어야 합니다. **그 그림이 있어야 커스텀 `ArgumentResolver` 를 어디에 끼울지가 보입니다.**
+
+### 4단계 · 트랜잭션과 이벤트
+
+| 개념 | 우선순위 | 노트 | 책 |
+|---|:---:|---|---|
+| @Transactional 내부 구조 | 필수 | [04-01](../05_data/03_persistence/jpa/04-01.%EC%8A%A4%ED%94%84%EB%A7%81%20%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98.md) | Spring Start Here 13장 |
+| 전파 · 격리 · 동기화 | 필수 | [04-01b](../05_data/03_persistence/jpa/04-01b.%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%20%EC%A0%84%ED%8C%8C%20%ED%99%9C%EC%9A%A9.md) | Spring Start Here 13장 |
+| 영속성 컨텍스트와 N+1 | 필수 | [03-03](../05_data/03_persistence/jpa/03-03.%ED%94%84%EB%A1%9D%EC%8B%9C%EC%99%80%20N%2B1.md) | Spring in Action 3장 |
+| 낙관적 · 비관적 락 | 추천 | [04-02](../05_data/03_persistence/jpa/04-02.%EB%82%99%EA%B4%80%EC%A0%81%20%EB%B9%84%EA%B4%80%EC%A0%81%20%EB%9D%BD.md) | |
+| MyBatis 와 JPA 혼용 | 추천 | [07-01](../05_data/03_persistence/jpa/07-01.%EB%8F%84%EA%B5%AC%20%ED%98%BC%EC%9A%A9%20%ED%8C%A8%ED%84%B4.md) | |
+| Spring Data 리포지토리 | 추천 | [03-01](../05_data/03_persistence/jpa/03-01.Spring%20Data%20JPA%20%EA%B3%B5%ED%86%B5%20%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4.md) | Spring Start Here 14장 |
+| 두 리스너의 차이 | 필수 | [01-01](../09_spring/06_events/01-01.%EC%8A%A4%ED%94%84%EB%A7%81%20%EC%9D%B4%EB%B2%A4%ED%8A%B8%EC%99%80%20%EB%91%90%20%EB%A6%AC%EC%8A%A4%EB%84%88%20%E2%80%94%20%40EventListener%20vs%20%40TransactionalEventListener.md) | |
+| 커밋 전후 Phase 와 전파 | 필수 | [01-03](../09_spring/06_events/01-03.%40TransactionalEventListener%20%EB%82%B4%EB%B6%80%20%EB%8F%99%EC%9E%91%20%EC%9B%90%EB%A6%AC.md) | |
+| 죽은 트랜잭션 피하기 | 필수 | [01-02](../09_spring/06_events/01-02.%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%20%EC%A0%84%ED%8C%8C%20%EC%A1%B0%ED%95%A9%20%E2%80%94%20%EC%A3%BD%EC%9D%80%20%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%EA%B3%BC%20REQUIRES_NEW.md) | |
+| 동기와 비동기 이벤트 · 보상 | 추천 | [01-04](../09_spring/06_events/01-04.%EB%8F%99%EA%B8%B0%EC%99%80%20%EB%B9%84%EB%8F%99%EA%B8%B0%20%EC%9D%B4%EB%B2%A4%ED%8A%B8%20%E2%80%94%20%40Async%EC%99%80%20%EB%B3%B4%EC%83%81%20%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98.md) | |
+
+이벤트를 트랜잭션과 같은 단계에 둔 이유가 있습니다. `@TransactionalEventListener` 는 **커밋 시점에 매달린 콜백**이라, 전파 조합을 모르면 커밋 뒤에 죽은 트랜잭션 위에서 DB 를 건드리게 됩니다.
+
+
+
+## Boot 가 조립하는 일 · 5~9단계
+
+> 자동 구성과 통신과 보안과 운영입니다. 여기부터는 애플리케이션을 실제로 굴리는 이야기입니다.
+
+### 5단계 · 부트가 조립하는 세계
+
+| 개념 | 우선순위 | 노트 | 책 |
+|---|:---:|---|---|
+| 스타터와 BOM 버전 관리 | 필수 | [01-01](../09_spring/07_autoconfig/01-01.%EC%8A%A4%ED%83%80%ED%84%B0%EC%99%80%20%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC%20%EB%B2%84%EC%A0%84%20%EA%B4%80%EB%A6%AC.md) | |
+| 자동 구성과 @Conditional | 필수 | [01-02](../09_spring/07_autoconfig/01-02.%EC%9E%90%EB%8F%99%20%EA%B5%AC%EC%84%B1%20%E2%80%94%20%40AutoConfiguration%EA%B3%BC%20%40Conditional.md) | |
+| 순서 · 게이트 · 기본값 | 필수 | [01-04](../09_spring/07_autoconfig/01-04.%EC%9E%90%EB%8F%99%20%EA%B5%AC%EC%84%B1%20%EC%8B%AC%ED%99%94%20%E2%80%94%20%EC%88%9C%EC%84%9C%C2%B7%EA%B2%8C%EC%9D%B4%ED%8A%B8%C2%B7%EA%B8%B0%EB%B3%B8%EA%B0%92%20%EC%A3%BC%EC%9E%85.md) | |
+| 커스텀 스타터 만들기 | 추천 | [01-03](../09_spring/07_autoconfig/01-03.%EC%BB%A4%EC%8A%A4%ED%85%80%20%EC%8A%A4%ED%83%80%ED%84%B0%20%EB%A7%8C%EB%93%A4%EA%B8%B0.md) | |
+| 외부 설정 우선순위 | 필수 | [02-01](../09_spring/07_autoconfig/02-01.%EC%99%B8%EB%B6%80%20%EC%84%A4%EC%A0%95%20%E2%80%94%20%EC%BB%A4%EB%A7%A8%EB%93%9C%EB%9D%BC%EC%9D%B8%EB%B6%80%ED%84%B0%20application.yml%EA%B9%8C%EC%A7%80.md) | Spring in Action 6장 |
+| @ConfigurationProperties | 필수 | [02-02](../09_spring/07_autoconfig/02-02.%40ConfigurationProperties%EC%99%80%20%ED%83%80%EC%9E%85%20%EC%95%88%EC%A0%84%20%EC%84%A4%EC%A0%95.md) | Spring in Action 6장 |
+| 프로필로 환경 가르기 | 필수 | [02-03](../09_spring/07_autoconfig/02-03.%ED%94%84%EB%A1%9C%ED%95%84%20%E2%80%94%20%ED%99%98%EA%B2%BD%EB%B3%84%20%EC%84%A4%EC%A0%95%20%EB%B6%84%EB%A6%AC.md) | |
+| 설정과 비밀 관리 | 추천 | [04](../09_spring/books/cloud-native-spring-in-action/04.%EC%99%B8%EB%B6%80%ED%99%94%20%EC%84%A4%EC%A0%95%20%EA%B4%80%EB%A6%AC.md) | Cloud Native Spring 4·14장 |
+
+자동 구성은 마법이 아니라 **조건이 붙은 `@Bean` 목록**입니다. `--debug` 로 조건 평가 보고서를 열어 무엇이 켜지고 무엇이 밀렸는지 읽을 수 있으면 이 단계는 끝난 것입니다.
+
+### 6단계 · 외부 통신과 회복탄력성
+
+| 개념 | 우선순위 | 노트 | 책 |
+|---|:---:|---|---|
+| 클라이언트 네 갈래 비교 | 필수 | [01-01](../09_spring/03_network/webflux/01-01.WebClient%20%EC%9E%85%EB%AC%B8%EA%B3%BC%20RestTemplate%C2%B7RestClient%20%EB%B9%84%EA%B5%90.md) | |
+| WebClient 빌드와 요청 | 필수 | [01-02](../09_spring/03_network/webflux/01-02.WebClient%20%EB%B9%8C%EB%93%9C%EC%99%80%20%EC%9D%B8%ED%94%84%EB%9D%BC%20%EC%84%A4%EC%A0%95.md) | |
+| 응답 처리와 에러 · 재시도 | 필수 | [01-05](../09_spring/03_network/webflux/01-05.%EC%97%90%EB%9F%AC%20%EC%B2%98%EB%A6%AC%EC%99%80%20%EC%9E%AC%EC%8B%9C%EB%8F%84.md) | |
+| 필터 함수로 공통 관심사 | 추천 | [01-06](../09_spring/03_network/webflux/01-06.ExchangeFilterFunction.md) | |
+| block 안티패턴 | 필수 | [02-02](../09_spring/03_network/webflux/02-02.%EB%8F%99%EA%B8%B0%C2%B7%EB%B9%84%EB%8F%99%EA%B8%B0%20%EA%B2%B0%EC%A0%95%20%28block%20%EC%95%88%ED%8B%B0%ED%8C%A8%ED%84%B4%29.md) | |
+| OpenFeign 선언형 호출 | 추천 | [01-02](../09_spring/03_network/feign/01-02.%EA%B8%B0%EB%B3%B8%20%EC%84%A4%EC%A0%95%EA%B3%BC%20%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%20%EC%84%A0%EC%96%B8.md) | |
+| 상태 코드 실패와 무응답 실패 | 필수 | [01-03](../09_spring/03_network/feign/01-03.%EC%97%90%EB%9F%AC%20%EB%AA%A8%EB%8D%B8%20%E2%80%94%20%EC%83%81%ED%83%9C%20%EC%BD%94%EB%93%9C%20%EC%8B%A4%ED%8C%A8%20vs%20%EB%AC%B4%EC%9D%91%EB%8B%B5%20%EC%8B%A4%ED%8C%A8.md) | |
+| Resilience4j 도입 결정 | 필수 | [01-01](../09_spring/03_network/resilience/01-01.Resilience4j%20%EA%B0%9C%EC%9A%94%20%E2%80%94%205%EA%B0%80%EC%A7%80%20%EB%AA%A8%EB%93%88%EA%B3%BC%20%EB%8F%84%EC%9E%85%20%EA%B2%B0%EC%A0%95.md) | |
+| 서킷 브레이커 상태 전이 | 필수 | [01-02](../09_spring/03_network/resilience/01-02.Circuit%20Breaker%20%EC%83%81%EC%84%B8%20%E2%80%94%20%EC%83%81%ED%83%9C%20%EC%A0%84%EC%9D%B4%EC%99%80%20Sliding%20Window.md) | Cloud Native Spring 9장 |
+| 재시도 · 백오프 · 지터 | 필수 | [01-03](../09_spring/03_network/resilience/01-03.Retry%20%E2%80%94%20exponential%20backoff%C2%B7jitter%C2%B7%EC%9E%AC%EC%8B%9C%EB%8F%84%20%ED%8F%AD%EC%A3%BC%20%EB%B0%A9%EC%A7%80.md) | |
+| 격벽과 속도 제한 | 추천 | [01-04](../09_spring/03_network/resilience/01-04.Bulkhead%20%E2%80%94%20Semaphore%20vs%20ThreadPool%20%EA%B2%A9%EB%A6%AC.md) | |
+| API 게이트웨이 | 추천 | | Cloud Native Spring 9장 |
+
+호출하는 쪽이 안 죽는 법을 배우는 구간입니다. **재시도를 걸기 전에 그 실패가 재시도해도 되는 실패인지 가르는 것**이 순서상 먼저이고, 그래서 Feign 의 에러 모델이 Resilience4j 앞에 옵니다.
+
+### 7단계 · 비동기와 실시간
+
+| 개념 | 우선순위 | 노트 | 책 |
+|---|:---:|---|---|
+| @Async 와 스레드 풀 | 필수 | [01-04](../09_spring/05_aop/01-04.%EC%96%B4%EB%85%B8%ED%85%8C%EC%9D%B4%EC%85%98%20%EA%B8%B0%EB%B0%98%20AOP%20%EC%9D%91%EC%9A%A9%20%E2%80%94%20%40Async%C2%B7%40Cacheable%C2%B7%40Retryable.md) | Spring in Action 9장 |
+| 스케줄링과 Quartz | 필수 | [01-02](../09_spring/05_aop/01-02.%EC%8A%A4%ED%94%84%EB%A7%81%20%EC%8A%A4%EC%BC%80%EC%A4%84%EB%A7%81%20%E2%80%94%20%40Scheduled%EC%97%90%EC%84%9C%20Quartz%EA%B9%8C%EC%A7%80.md) | |
+| 캐시 추상화 | 추천 | [01-04](../09_spring/05_aop/01-04.%EC%96%B4%EB%85%B8%ED%85%8C%EC%9D%B4%EC%85%98%20%EA%B8%B0%EB%B0%98%20AOP%20%EC%9D%91%EC%9A%A9%20%E2%80%94%20%40Async%C2%B7%40Cacheable%C2%B7%40Retryable.md) | |
+| Reactor 와 백프레셔 | 추천 | [01-02](../09_spring/03_network/reactive-net/01-02.%EC%9D%B4%EB%B2%A4%ED%8A%B8%20%EA%B8%B0%EB%B0%98%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%EA%B3%BC%20BIO%20vs%20NIO.md) | Spring in Action 11장 |
+| WebFlux 두 모델 | 추천 | [04-01](../09_spring/01_core/04-01.WebFlux%20%EC%84%9C%EB%B2%84%20%E2%80%94%20%EB%A6%AC%EC%95%A1%ED%8B%B0%EB%B8%8C%20%EC%8A%A4%ED%83%9D%EA%B3%BC%20%EC%96%B4%EB%85%B8%ED%85%8C%EC%9D%B4%EC%85%98%20%EB%AA%A8%EB%8D%B8.md) | Spring in Action 12장 |
+| Netty 파이프라인 | 선택 | [01-04](../09_spring/03_network/reactive-net/01-04.%EC%B1%84%EB%84%90%20%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8%EA%B3%BC%20%EC%BD%94%EB%8D%B1.md) | |
+| SSE 와 신뢰성 | 추천 | [02-01](../09_spring/03_network/realtime/02-01.SSE%20%EC%9B%90%EB%A6%AC%EC%99%80%20Spring%20%EA%B5%AC%ED%98%84.md) | |
+| WebSocket 과 STOMP | 추천 | [03-03](../09_spring/03_network/realtime/03-03.WebSocket%20vs%20STOMP.md) | |
+| 연결 관리와 재연결 | 추천 | [04-01](../09_spring/03_network/realtime/04-01.%EC%97%B0%EA%B2%B0%20%EA%B4%80%EB%A6%AC%EC%99%80%20%EC%9E%AC%EC%97%B0%EA%B2%B0%20%EC%A0%84%EB%9E%B5.md) | |
+| 배치 — 잡과 스텝 | 선택 | | Spring Batch 2~4장 |
+| 배치 — 리더 · 프로세서 · 라이터 | 선택 | | Spring Batch 7~9장 |
+
+`@Scheduled` 로 감당이 안 되는 규모가 오면 그때 Spring Batch 를 엽니다. **재시작 가능성과 청크 단위 커밋이 필요해진 순간**이 그 경계이고, 그 전까지는 소장본을 덮어 둡니다.
+
+### 8단계 · 보안과 운영
+
+| 개념 | 우선순위 | 노트 | 책 |
+|---|:---:|---|---|
+| 필터 체인이 먼저다 | 필수 | | Spring Security 5장 |
+| 인증과 사용자 · 비밀번호 | 필수 | | Spring Security 3·4·6장 |
+| 엔드포인트 인가 | 필수 | | Spring Security 7·8장 |
+| CSRF 와 CORS | 추천 | | Spring Security 9·10장 |
+| 메서드 수준 보안 | 추천 | | Spring Security 11·12장 |
+| OAuth 2 와 OIDC | 추천 | | Spring Security 13~16장 |
+| 액츄에이터 엔드포인트 | 필수 | [01-01](../06_observability/05_SpringActuator/01-01.%EC%95%A1%EC%B8%84%EC%97%90%EC%9D%B4%ED%84%B0%20%E2%80%94%20%EC%9A%B4%EC%98%81%20%EC%97%94%EB%93%9C%ED%8F%AC%EC%9D%B8%ED%8A%B8.md) | Spring in Action 15장 |
+| 마이크로미터와 메트릭 | 필수 | [01-02](../06_observability/05_SpringActuator/01-02.%EB%A7%88%EC%9D%B4%ED%81%AC%EB%A1%9C%EB%AF%B8%ED%84%B0%EC%99%80%20%EB%A9%94%ED%8A%B8%EB%A6%AD%20%E2%80%94%20Counter%C2%B7Gauge%C2%B7Timer.md) | Spring in Action 16·17장 |
+| 프로메테우스 연동 | 추천 | [01-03](../06_observability/05_SpringActuator/01-03.%ED%94%84%EB%A1%9C%EB%A9%94%ED%85%8C%EC%9A%B0%EC%8A%A4%C2%B7%EA%B7%B8%EB%9D%BC%ED%8C%8C%EB%82%98%20%EC%97%B0%EB%8F%99.md) | Cloud Native Spring 13장 |
+
+보안은 이 로드맵에서 **노트가 한 편도 없는 유일한 축**입니다. 소장본이 열여덟 장짜리 단행본 하나뿐이라 책과 공식 문서로만 받고, 정독 노트를 쓰면 그때 이 표의 `노트` 칸을 채웁니다.
+
+### 9단계 · 테스트와 배포
+
+| 개념 | 우선순위 | 노트 | 책 |
+|---|:---:|---|---|
+| 테스트 피라미드와 슬라이스 | 필수 | [01-01](../09_spring/04_testing/01-01.%ED%85%8C%EC%8A%A4%ED%8A%B8%20%ED%94%BC%EB%9D%BC%EB%AF%B8%EB%93%9C%EC%99%80%20Spring%20%ED%85%8C%EC%8A%A4%ED%8A%B8%20%EC%A2%85%EB%A5%98.md) | Spring Start Here 15장 |
+| JUnit 5 와 AssertJ | 필수 | [01-02](../09_spring/04_testing/01-02.JUnit%205%20%2B%20AssertJ%EB%A1%9C%20%EB%8B%A8%EC%9C%84%20%ED%85%8C%EC%8A%A4%ED%8A%B8%20%EC%9E%91%EC%84%B1.md) | |
+| Mockito 와 MockMvc | 필수 | [01-03](../09_spring/04_testing/01-03.Mockito%EC%99%80%20MockMvc%20%EC%8A%AC%EB%9D%BC%EC%9D%B4%EC%8A%A4.md) | |
+| @SpringBootTest 와 컨텍스트 러너 | 필수 | [01-04](../09_spring/04_testing/01-04.%40SpringBootTest%EC%99%80%20ApplicationContextRunner.md) | |
+| Testcontainers 로 진짜 DB | 필수 | [02-01](../09_spring/04_testing/02-01.Testcontainers%EC%99%80%20%EC%A7%84%EC%A7%9C%20DB%20%ED%86%B5%ED%95%A9%20%ED%85%8C%EC%8A%A4%ED%8A%B8.md) | |
+| 메시징 테스트 | 추천 | [02-02](../09_spring/04_testing/02-02.EmbeddedKafka%C2%B7Testcontainers%EB%A1%9C%20%EB%A9%94%EC%8B%9C%EC%A7%95%20%ED%85%8C%EC%8A%A4%ED%8A%B8.md) | |
+| ArchUnit 가드레일 | 추천 | [02-03](../09_spring/04_testing/02-03.ArchUnit%EC%9C%BC%EB%A1%9C%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98%20%EA%B0%80%EB%93%9C%EB%A0%88%EC%9D%BC.md) | |
+| WireMock 과 외부 시스템 | 추천 | [02-04](../09_spring/04_testing/02-04.WireMock%EA%B3%BC%20%EC%99%B8%EB%B6%80%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20E2E.md) | |
+| 보안 설정 테스트 | 추천 | | Spring Security 18장 |
+| bootJar 와 Layered JAR | 필수 | [02-02](../09_spring/01_core/02-02.%EB%82%B4%EC%9E%A5%20%ED%86%B0%EC%BA%A3%EA%B3%BC%20SpringApplication%20%E2%80%94%20JAR%EB%A1%9C%20WAS%EB%A5%BC%20%ED%92%88%EB%8B%A4.md) | Spring in Action 18장 |
+| 컨테이너화와 쿠버네티스 | 추천 | [06](../09_spring/books/cloud-native-spring-in-action/06.Spring%20Boot%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%ED%99%94.md) | Cloud Native Spring 6·7장 |
+| 지속 배포와 GitOps | 선택 | | Cloud Native Spring 15장 |
+
+테스트를 마지막에 둔 것은 덜 중요해서가 아닙니다. **무엇을 격리하고 무엇을 진짜로 띄울지 고르려면 앞 여덟 단계의 경계를 알아야** 하기 때문이고, 그래서 슬라이스 테스트가 1단계가 아니라 여기 있습니다.
+
+
+
+## 손으로 확인하는 실습
+
+> 노트 안에 실제로 있는 실습 자리만 적습니다. 지어낸 출처를 채우지 않았습니다.
+
+| 출처 | 단계 | 무엇 |
+|---|:---:|---|
+| [내장 톰캣과 SpringApplication](../09_spring/01_core/02-02.%EB%82%B4%EC%9E%A5%20%ED%86%B0%EC%BA%A3%EA%B3%BC%20SpringApplication%20%E2%80%94%20JAR%EB%A1%9C%20WAS%EB%A5%BC%20%ED%92%88%EB%8B%A4.md) | 3·9 | `bootJar` 를 풀어 안에 무엇이 들었는지 확인 |
+| [Netty 컴포넌트와 서버 구현](../09_spring/03_network/reactive-net/01-06.Netty%20%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8%EC%99%80%20%EC%84%9C%EB%B2%84%20%EA%B5%AC%ED%98%84.md) | 7 | 서버를 직접 세워 채널 파이프라인이 도는 것을 보기 |
+| [Netty 클라이언트 구현](../09_spring/03_network/reactive-net/01-07.Netty%20%ED%81%B4%EB%9D%BC%EC%9D%B4%EC%96%B8%ED%8A%B8%20%EA%B5%AC%ED%98%84.md) | 7 | 같은 파이프라인을 클라이언트 쪽에서 다시 짜기 |
+| [WebClient 테스트](../09_spring/03_network/webflux/02-03.%ED%85%8C%EC%8A%A4%ED%8A%B8%20%28MockWebServer%EC%99%80%20WebTestClient%29.md) | 6·9 | MockWebServer 로 응답을 조작해 재시도 동작 확인 |
+| [Testcontainers 와 진짜 DB](../09_spring/04_testing/02-01.Testcontainers%EC%99%80%20%EC%A7%84%EC%A7%9C%20DB%20%ED%86%B5%ED%95%A9%20%ED%85%8C%EC%8A%A4%ED%8A%B8.md) | 9 | 컨테이너 DB 를 띄워 트랜잭션 경계를 실제로 밟기 |
+| [ArchUnit 가드레일](../09_spring/04_testing/02-03.ArchUnit%EC%9C%BC%EB%A1%9C%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98%20%EA%B0%80%EB%93%9C%EB%A0%88%EC%9D%BC.md) | 9 | 계층 의존 규칙을 일부러 어겨 실패를 확인 |
+| [TPS 메시징 플로우 종합 E2E](../09_spring/04_testing/02-05.TPS%20%EB%A9%94%EC%8B%9C%EC%A7%95%20%ED%94%8C%EB%A1%9C%EC%9A%B0%20%EC%A2%85%ED%95%A9%20E2E.md) | 9 | 실제 업무 흐름 하나를 끝에서 끝까지 세우기 |
+
+**실무 사례 한 편이 6단계에 붙습니다.** [WebClient 로 결재 URL 어댑터를 만든 기록](../09_spring/03_network/webflux/02-04.%EC%8B%A4%EB%AC%B4%20%EC%82%AC%EB%A1%80%20-%20TPS%20ApprovalUrlAdapter.md)은 앞의 여섯 편을 한 어댑터에 모은 자리라, 개념을 다 읽은 뒤 마지막에 폅니다.
+
+
+
+## 로드맵에 넣지 않은 것
+
+> 다른 문서가 정본이거나 이 로드맵의 축과 다른 것들입니다.
+
+| 대상 | 이유 |
+|---|---|
+| GC · 클래스 로딩 · 힙 덤프 | [JVM 로드맵](jvm-roadmap.md)이 맡습니다. Spring 이 느린 것과 JVM 이 멈춘 것은 다른 층입니다 |
+| SQL 실행 계획 · 인덱스 · 분산 일관성 | [데이터 로드맵](data-roadmap.md)이 맡습니다. 4단계는 트랜잭션 경계까지만 봅니다 |
+| PromQL · SLO · 알림 설계 | [관측 가능성 로드맵](observability-roadmap.md)이 맡습니다. 8단계는 내보내는 쪽만 봅니다 |
+| 쿠버네티스 오브젝트와 내부 구조 | [Kubernetes 로드맵](k8s-roadmap.md)이 맡습니다. 9단계는 배포 산출물까지입니다 |
+| Kafka 프로듀서 · 컨슈머 설계 | `04_messaging` 이 정본입니다. `@KafkaListener` 는 그 주제 축 안에 둡니다 |
+| QueryDSL 과 동적 쿼리 | `05_data/03_persistence/querydsl` 이 정본입니다 |
+| 뷰 템플릿과 서버 렌더링 | Thymeleaf 로 화면을 그리는 축은 다룰 일이 없습니다. 3단계는 REST 응답까지입니다 |
+| XML 설정과 레거시 마이그레이션 | 소장본에 부록으로 있지만 새로 쓸 일이 없습니다 |
+| 비관계형 데이터 · Spring Integration · RSocket | Spring in Action 4·10·14장입니다. 쓰게 될 때 그 장만 폅니다 |
+| GraalVM 네이티브 이미지와 Knative | Cloud Native Spring 16장입니다. 기동 시간이 문제가 되면 엽니다 |
+
+
+
+## 경계
+
+> 이 문서가 정하는 것과 인접 문서에 넘기는 것입니다.
+
+이 문서는 **Spring 이 왜 그렇게 동작하는지를 여는 순서**를 정합니다. 프레임워크 자체의 동작이 대상이고, 그 위에 올라가는 도메인 기술은 각 주제 카테고리가 맡습니다. 자료가 여러 카테고리에 흩어져 있어도 순서는 여기 하나로 모읍니다.
+
+**절단선을 4단계 뒤에 그었습니다.** 1~4단계는 Spring Framework 가 직접 하는 일이라 Boot 없이도 성립하고, 5단계부터는 Boot 가 그 부품을 조립해 운영으로 잇습니다. 부트부터 배운 사람이 컨테이너를 모르는 채로 자동 구성을 읽으면 조건 평가 보고서가 무엇을 말하는지 알 수 없습니다.
+
+맞닿는 문서가 넷입니다. 런타임 아래층은 [JVM 로드맵](jvm-roadmap.md)이, 저장소 쪽은 [데이터 로드맵](data-roadmap.md)이, 지표를 받아 보는 쪽은 [관측 가능성 로드맵](observability-roadmap.md)이, 배포 대상 클러스터는 [Kubernetes 로드맵](k8s-roadmap.md)이 맡습니다.
+
+**같은 증상을 네 문서가 다른 층에서 봅니다.** 응답이 느려졌을 때 이 문서는 커넥션 풀과 트랜잭션 범위와 N+1 을 보고, JVM 로드맵은 GC 정지를, 데이터 로드맵은 실행 계획을, 관측 가능성 로드맵은 지표 분포와 에러 버짓을 봅니다.

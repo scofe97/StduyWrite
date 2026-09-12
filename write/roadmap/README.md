@@ -25,7 +25,7 @@ updated: 2026-09-13
 | [데이터](data-roadmap.md) | 애플리케이션 쿼리에서 복제·샤딩·합의·스트림까지 |
 | [관측 가능성](observability-roadmap.md) | 계측과 세 신호에서 SLO·확장·플랫폼까지 |
 | [JVM](jvm-roadmap.md) | 런타임 데이터 영역에서 클래스 로딩·GC·동시성·장애 진단까지 |
-| [Spring](spring-roadmap.md) | Spring 핵심 구조와 확장 키워드 |
+| [Spring](spring-roadmap.md) | 컨테이너와 프록시에서 부트·보안·운영·배포까지 |
 | [AI](ai-roadmap.md) | 모델을 도구로 부리는 법에서 GitAIOps 배포 운영까지 |
 
 
@@ -44,3 +44,4 @@ updated: 2026-09-13
 | JVM | [학습 순서](_assets/jvm-roadmap.svg) · [책 읽기 흐름](_assets/jvm-books.svg) | [학습 순서](_assets/_gen/gen-jvm-roadmap.py) · [책 흐름](_assets/_gen/gen-jvm-books.py) |
 | 관측 가능성 | [학습 순서](_assets/observability-roadmap.svg) · [책 읽기 흐름](_assets/observability-books.svg) | [학습 순서](_assets/_gen/gen-observability-roadmap.py) · [책 흐름](_assets/_gen/gen-observability-books.py) |
 | AI | [학습 순서](_assets/ai-roadmap.svg) · [책 읽기 흐름](_assets/ai-books.svg) | [학습 순서](_assets/_gen/gen-ai-roadmap.py) · [책 흐름](_assets/_gen/gen-ai-books.py) |
+| Spring | [학습 순서](_assets/spring-roadmap.svg) · [책 읽기 흐름](_assets/spring-books.svg) | [학습 순서](_assets/_gen/gen-spring-roadmap.py) · [책 흐름](_assets/_gen/gen-spring-books.py) |

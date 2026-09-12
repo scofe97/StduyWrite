@@ -55,9 +55,9 @@ updated: 2026-09-12
 | [observability-roadmap.md](roadmap/observability-roadmap.md) | 계측과 세 신호에서 SLO·확장·플랫폼까지 | `final` |
 | [jvm-roadmap.md](roadmap/jvm-roadmap.md) | 런타임 데이터 영역에서 GC·동시성·장애 진단까지 | `final` |
 | [ai-roadmap.md](roadmap/ai-roadmap.md) | 모델을 도구로 부리는 법에서 GitAIOps 운영까지 | `final` |
-| [spring-roadmap.md](roadmap/spring-roadmap.md) | 받은 원문의 키워드를 절별로 보존한 기록 | `reference` |
+| [spring-roadmap.md](roadmap/spring-roadmap.md) | 컨테이너와 프록시에서 부트·보안·운영·배포까지 | `final` |
 
-`final` 로드맵은 단계마다 키워드, 연결 문서, 완료 기준을 함께 둡니다. `reference` 문서는 읽기 순서보다 원래 키워드를 보존합니다.
+로드맵은 단계마다 배우는 개념 표와 우선순위, 그 개념을 다루는 책의 읽을 장을 함께 둡니다.
 
 OS 기반은 `os-roadmap.md`, Kubernetes 오브젝트와 운영은 `k8s-roadmap.md`, 패킷 경로는 `network-roadmap.md`를 정본으로 봅니다.
 
