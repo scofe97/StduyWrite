@@ -47,8 +47,8 @@ updated: 2026-09-12
 
 | 로드맵 | 무엇을 정하나 | 상태 |
 |---|---|---|
-| [go-roadmap.md](roadmap/go-roadmap.md) | 문법을 빨리 통과하고 관용구와 동시성에 시간을 몰아주는 순서 | `final` |
-| [network-roadmap.md](roadmap/network-roadmap.md) | socket과 Linux 패킷 경로에서 Kubernetes 네트워크까지 | `final` |
+| [go-roadmap.md](roadmap/go-roadmap.md) | 문법을 빨리 통과하고 동시성·서비스·터미널 세션에 시간을 몰아주는 순서 | `final` |
+| [network-roadmap.md](roadmap/network-roadmap.md) | socket과 Linux 패킷 경로에서 클라우드 underlay와 오버레이 터널까지 | `final` |
 | [os-roadmap.md](roadmap/os-roadmap.md) | DevOps 로서 쓰는 OS 지식부터 커널 내부까지 | `final` |
 | [k8s-roadmap.md](roadmap/k8s-roadmap.md) | 오브젝트를 굴려 보고 안 될 때 한 층씩 안으로 | `final` |
 | [data-roadmap.md](roadmap/data-roadmap.md) | 데이터 시스템의 축에서 저장 엔진·복제·합의·스트림까지 | `final` |
