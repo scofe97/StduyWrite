@@ -7,7 +7,7 @@ from dd import ACC, MUTED, SOFT, INK, OK, WARN, BAD, PAPER, PAPER2, RULE, KR, MO
 
 W, H = 976, 568
 SW, SH, SY = 208, 76, 168
-SX = [24, 272, 520, 768]
+SX = [24, 264, 504, 744]          # 4칸 + 32 간격, 오른쪽 여백 24 확보
 LX = [x + SW / 2 for x in SX]
 
 d = DK(W, H, "LINUX KERNEL PROGRAMMING · 08-02 §7",
@@ -34,8 +34,8 @@ for i, (name, sub, c) in enumerate(STATES):
         d.arrow([(SX[i] + SW + 4, SY + SH / 2), (SX[i + 1] - 6, SY + SH / 2)],
                 ACC if i == 2 else MUTED, "acc" if i == 2 else "ar", 1.4)
 
-d.chip(LX[0] + 124, SY + SH / 2 - 26, "devm_kzalloc()", OK, 13)
-d.chip(LX[2] + 124, SY + SH / 2 - 26, "자동", ACC, 13)
+d.t((SX[0] + SW + SX[1]) / 2, SY - 12, "devm_kzalloc()", 12, OK, MONO)
+d.t((SX[2] + SW + SX[3]) / 2, SY - 12, "자동", 13, ACC, KR)
 
 # 가드를 어긴 경로 — probe 밖에서 쓴 경우
 GY = 344

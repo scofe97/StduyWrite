@@ -5,7 +5,7 @@ import sys; sys.path.insert(0, ".")
 from ddk import DK
 from dd import ACC, MUTED, SOFT, INK, INFO, OK, WARN, BAD, PAPER2, RULE, KR, MONO
 
-W, H = 976, 448
+W, H = 976, 472
 X0, CW, STRIDE, CY, CH = 24, 176, 184, 116, 180
 
 d = DK(W, H, "LINUX KERNEL PROGRAMMING · 09-03",
@@ -34,13 +34,14 @@ for i, (tag, name, l1, l2, out, c) in enumerate(CARDS):
     d.t(x + 16, CY + 98, l2, 13, MUTED, KR, "start")
     d.chip(x + CW / 2, CY + 144, out, c, 13)
 
-for i in range(4):
-    x = X0 + i * STRIDE + CW
-    d.arrow([(x + 4, CY + CH / 2), (x + STRIDE - CW - 6, CY + CH / 2)],
-            ACC if i == 0 else MUTED, "acc" if i == 0 else "ar", 1.4)
+# 카드 사이 간격이 화살촉을 담기에 좁다 — 읽는 방향은 카드 아래 레일 하나로 보인다.
+RAIL = CY + CH + 24
+RIGHT = X0 + (len(CARDS) - 1) * STRIDE + CW
+d.t(X0, RAIL + 5, "읽는 순서", 12, SOFT, KR, "start")
+d.arrow([(X0 + 72, RAIL), (RIGHT, RAIL)], SOFT, "soft", 1.2, "4 6")
 
-d.t(X0, 336, "§1 의 사실 하나가 나머지를 다 끌고 옵니다 — 예약과 할당이 갈려 있으니 과약속이 가능하고, 과약속했으니 OOM 이 생깁니다.", 13, MUTED, KR, "start")
-d.t(X0, 360, "§6 은 그 상황을 사후에 수습하는 대신 미리 가두는 쪽입니다.", 13, SOFT, KR, "start")
+d.t(X0, 356, "§1 의 사실 하나가 나머지를 다 끌고 옵니다 — 예약과 할당이 갈려 있으니 과약속이 가능하고, 과약속했으니 OOM 이 생깁니다.", 13, MUTED, KR, "start")
+d.t(X0, 380, "§6 은 그 상황을 사후에 수습하는 대신 미리 가두는 쪽입니다.", 13, SOFT, KR, "start")
 
 d.legend(H - 56, [("이 편의 출발점", ACC), ("메커니즘", INFO), ("누가 죽나", BAD), ("예방", OK)])
 d.save("09-03.chapter-overview.svg")

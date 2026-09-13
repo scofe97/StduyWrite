@@ -5,7 +5,7 @@ import sys; sys.path.insert(0, ".")
 from ddk import DK
 from dd import ACC, MUTED, SOFT, INK, INFO, OK, PAPER2, RULE, KR, MONO
 
-W, H = 976, 448
+W, H = 976, 472
 X0, CW, STRIDE, CY, CH = 24, 176, 184, 116, 180
 
 d = DK(W, H, "LINUX KERNEL PROGRAMMING · 07-03",
@@ -34,13 +34,14 @@ for i, (tag, name, l1, l2, out, c) in enumerate(CARDS):
     d.t(x + 16, CY + 98, l2, 13, MUTED, KR, "start")
     d.chip(x + CW / 2, CY + 144, out, c, 13)
 
-for i in range(4):
-    x = X0 + i * STRIDE + CW
-    d.arrow([(x + 4, CY + CH / 2), (x + STRIDE - CW - 6, CY + CH / 2)],
-            ACC if i == 2 else MUTED, "acc" if i == 2 else "ar", 1.4)
+# 카드 사이 간격이 화살촉을 담기에 좁다 — 읽는 방향은 카드 아래 레일 하나로 보인다.
+RAIL = CY + CH + 24
+RIGHT = X0 + (len(CARDS) - 1) * STRIDE + CW
+d.t(X0, RAIL + 5, "읽는 순서", 12, SOFT, KR, "start")
+d.arrow([(X0 + 72, RAIL), (RIGHT, RAIL)], SOFT, "soft", 1.2, "4 6")
 
-d.t(X0, 336, "§1~§3 은 물리 쪽에서 RAM 을 나누고, §4 가 그것을 가상 주소로 덮습니다 — 두 세계가 여기서 만납니다.", 13, MUTED, KR, "start")
-d.t(X0, 360, "§5 는 그렇게 덮은 페이지를 커널이 무엇으로 세는지를 다룹니다.", 13, SOFT, KR, "start")
+d.t(X0, 356, "§1~§3 은 물리 쪽에서 RAM 을 나누고, §4 가 그것을 가상 주소로 덮습니다 — 두 세계가 여기서 만납니다.", 13, MUTED, KR, "start")
+d.t(X0, 380, "§5 는 그렇게 덮은 페이지를 커널이 무엇으로 세는지를 다룹니다.", 13, SOFT, KR, "start")
 
 d.legend(H - 56, [("가상과 물리가 만나는 자리", ACC), ("나머지 절", INFO)])
 d.save("07-03.chapter-overview.svg")
