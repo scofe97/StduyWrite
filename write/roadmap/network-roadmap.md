@@ -306,6 +306,7 @@ updated: 2026-09-13
 | [컨테이너 네트워크 실습](../08_cloud/book/networking-and-kubernetes/03-04.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%EC%8B%A4%EC%8A%B5%20%E2%80%94%20%EB%A7%A8%EC%86%90%20%EB%B0%B0%EC%84%A0%EC%97%90%EC%84%9C%20%ED%8F%AC%ED%8A%B8%20%EB%A7%A4%ED%95%91%EA%B9%8C%EC%A7%80.md) | 2·4 | 맨손 배선에서 포트 매핑까지 |
 | [Kubernetes 네트워크 실습](../08_cloud/book/networking-and-kubernetes/04-04.Kubernetes%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%EC%8B%A4%EC%8A%B5%20%E2%80%94%20CNI%20%EB%B6%80%EC%9E%AC%EB%B6%80%ED%84%B0%20%EC%A0%95%EC%B1%85%C2%B7DNS%EA%B9%8C%EC%A7%80.md) | 4·6 | CNI 부재 · 정책 · DNS |
 | [troubleshooting/os](../troubleshooting/os/README.md) · [cloud](../troubleshooting/cloud/README.md) · [mesh](../troubleshooting/mesh/README.md) | 1~4·7 | 증상에서 원인 역추적 다섯 편 |
+| [network-fundamentals-lab](../02_os/book/network-fundamentals-lab/README.md) | 1~4 | 고장이 장전된 containerlab 18편 — ARP·라우팅·NAT·MTU·DNS 를 깨뜨려 증상으로 되짚는다 |
 | [troubleshooting/kubernetes](../troubleshooting/kubernetes/README.md) | 4·7 | 이름 해석 · 배포 중 502 · 정확히 1초 지연 |
 
 5·7단계 자리는 비어 있습니다. 클라우드 축은 계정과 과금이 걸리고, 서비스 메시는 컨트롤 플레인이 서야 재현됩니다.
@@ -325,6 +326,8 @@ updated: 2026-09-13
 | conntrack 포화 | 간헐적 신규 연결 실패 | conntrack count · max |
 | stale Endpoint | 특정 목적지만 reset | EndpointSlice 와 Pod lifecycle |
 | 인증서 만료 | TCP 는 되고 TLS 만 실패 | TLS alert · 인증서 날짜 |
+
+위 목록 중 **conntrack 포화**와 **MTU mismatch** 는 [network-fundamentals-lab](../02_os/book/network-fundamentals-lab/README.md) 의 09·12·13편이 이미 랩으로 재현합니다. 주입할 것을 새로 만들기 전에 그쪽을 먼저 돌립니다.
 
 
 
