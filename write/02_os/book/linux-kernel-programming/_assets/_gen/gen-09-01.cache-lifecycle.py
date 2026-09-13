@@ -10,7 +10,7 @@ W, H = 976, 752
 d = SeqK(W, H, "LINUX KERNEL PROGRAMMING · 09-01 §1~§3",
          "생성자는 alloc 당 한 번이 아닙니다",
          "custom slab cache 의 3단계 수명주기. 모듈 init 에서 캐시를 만들고, 쓰는 동안 객체를 빌렸다 반납하고, exit 에서 캐시를 부순다. 생성자(ctor)는 kmem_cache_alloc() 호출당 한 번이 아니라 캐시가 새 페이지를 받을 때마다 호출되므로, alloc 한 번에 여러 번 도는 일이 흔하다.",
-         "세 단계 모두 프로세스 컨텍스트에서만 부를 수 있습니다")
+         "create 와 destroy 만 프로세스 컨텍스트 전용입니다 — alloc 은 GFP_ATOMIC 으로도 갑니다")
 
 d.lanes([("내 모듈", "module"), ("slab 계층", "kmem_cache"), ("페이지 할당자", "buddy system")], 104, 224)
 

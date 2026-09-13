@@ -9,15 +9,15 @@ W, H = 976, 700
 
 d = SeqK(W, H, "LINUX KERNEL PROGRAMMING · 07-02 §2",
          "maps 한 줄은 VMA 하나에서 나옵니다",
-         "cat /proc/self/maps 의 커널 경로. read() 시스템 콜이 VFS 를 거쳐 procfs 콜백으로 라우팅되고, 콜백이 프로세스의 VMA 체인을 순회하며 매핑마다 한 줄씩 만들어 user space 로 보낸다.",
+         "cat /proc/self/maps 의 커널 경로. read() 시스템 콜이 VFS 를 거쳐 procfs 콜백으로 라우팅되고, 콜백이 프로세스의 VMA 를 순회하며 매핑마다 한 줄씩 만들어 user space 로 보낸다.",
          "그래서 maps 줄 수가 곧 그 프로세스의 VMA 개수입니다")
 
-d.lanes([("cat", "user space"), ("VFS", "kernel"), ("procfs", "pseudo fs"), ("VMA 체인", "mm->mmap")], 104, 188)
+d.lanes([("cat", "user space"), ("VFS", "kernel"), ("procfs", "pseudo fs"), ("VMA 트리", "mm->mm_mt")], 104, 188)
 
 d.msg("cat", "VFS", "read()", 192, INFO, sub="시스템 콜로 커널에 들어갑니다")
 d.msg("VFS", "procfs", "route", 252, MUTED, sub="파일이 아니라 콜백입니다")
-d.msg("procfs", "VMA 체인", "traverse", 312, ACC, "acc", sub="red-black tree 를 순회합니다")
-d.msg("VMA 체인", "procfs", "vm_start · vm_end · vm_flags · vm_file", 376, MUTED, dash="4 4")
+d.msg("procfs", "VMA 트리", "traverse", 312, ACC, "acc", sub="maple tree 를 순회합니다")
+d.msg("VMA 트리", "procfs", "vm_start · vm_end · vm_flags · vm_file", 376, MUTED, dash="4 4")
 d.selfmsg("procfs", "per VMA", 440, ACC, sub="매핑 하나가 한 줄이 됩니다")
 d.msg("procfs", "cat", "copy_to_user", 500, OK, "ok", sub="한 줄씩 user space 로 넘깁니다")
 d.selfmsg("cat", "write(1)", 556, OK, sub="stdout 에 그대로 dump 합니다")

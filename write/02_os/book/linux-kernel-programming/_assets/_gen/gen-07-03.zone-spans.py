@@ -49,7 +49,7 @@ d.t(AX + AXW, TY + 26, "17.04 GiB", 12, SOFT, MONO, "end")
 d.t(LX, TY + 26, "물리 주소", 13, SOFT, KR, "start")
 
 BOT = TY + 56
-d.t(LX, BOT, "존 이름과 개수는 부팅 시 커널이 동적으로 정합니다. /proc/buddyinfo 의 맨 왼쪽이 Node 0 하나뿐이면 UMA 입니다.", 13, MUTED, KR, "start")
+d.t(LX, BOT, "존 이름은 zone_names[] 에 고정이고 어느 존이 생기는지가 부팅 시 정해집니다. /proc/buddyinfo 의 맨 왼쪽이 Node 0 하나뿐이면 UMA 입니다.", 13, MUTED, KR, "start")
 d.t(LX, BOT + 24, "존마다 PFN 범위가 할당되고, 자료 구조는 include/linux/mmzone.h 의 struct zone 입니다.", 13, MUTED, KR, "start")
 d.t(LX, BOT + 48, "32비트에는 ZONE_HIGHMEM 도 있었습니다 — 하드웨어 제약이 아니라 커널 VAS 가 모자라 생긴 소프트웨어 난점이었습니다.", 13, SOFT, KR, "start")
 
