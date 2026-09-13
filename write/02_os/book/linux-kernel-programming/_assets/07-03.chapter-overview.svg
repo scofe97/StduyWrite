@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 976 448" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">물리 RAM 을 커널이 나누는 법</title><desc id="dd">07-03 이 다루는 다섯 절. 커널은 부팅 시 물리 RAM 을 노드·존·페이지 프레임 3단계로 조직하고, 그 전부를 PAGE_OFFSET 부터 커널 VAS 에 1:1 로 덮은 뒤, 페이지마다 struct page 하나로 추적한다.</desc>
+<rect width="976" height="448" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LINUX KERNEL PROGRAMMING · 07-03</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">물리 RAM 을 커널이 나누는 법</text>
+<text x="12" y="76" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" fill="#8B98A9">가상 메모리 3부작의 마지막 — 여기까지가 할당 API 의 토대입니다</text>
+<rect x="24" y="116" width="176" height="180" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="40" y="146" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§1</text>
+<text x="184" y="146" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">3단계 계층</text>
+<line x1="40" y1="162" x2="184" y2="162" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="40" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">노드 · 존 ·</text>
+<text x="40" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">페이지 프레임</text>
+<rect x="67.72999999999999" y="249" width="88.54" height="22" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="112.0" y="265" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#6A95D8">pg_data_t</text>
+<rect x="208" y="116" width="176" height="180" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="224" y="146" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§2</text>
+<text x="368" y="146" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">노드 · NUMA</text>
+<line x1="224" y1="162" x2="368" y2="162" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="224" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">RAM 뱅크를 추상화하고</text>
+<text x="224" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">가까운 것부터 씁니다</text>
+<rect x="259.79" y="249" width="72.42" height="22" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="296.0" y="265" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#6A95D8">numactl</text>
+<rect x="392" y="116" width="176" height="180" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="408" y="146" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§3</text>
+<text x="552" y="146" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">존</text>
+<line x1="408" y1="162" x2="552" y2="162" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="408" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">하드웨어 제약이</text>
+<text x="408" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">구획을 가릅니다</text>
+<rect x="411.55" y="249" width="136.9" height="22" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="480.0" y="265" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#6A95D8">/proc/buddyinfo</text>
+<rect x="576" y="116" width="176" height="180" rx="8" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4"/>
+<text x="592" y="146" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">§4</text>
+<text x="736" y="146" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">direct-map</text>
+<line x1="592" y1="162" x2="736" y2="162" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="592" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">모든 RAM 을 커널</text>
+<text x="592" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">VAS 에 1:1 로 덮습니다</text>
+<rect x="611.67" y="249" width="104.66000000000001" height="22" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="664.0" y="265" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F08A59">PAGE_OFFSET</text>
+<rect x="760" y="116" width="176" height="180" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="776" y="146" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§5</text>
+<text x="920" y="146" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">sparsemem</text>
+<line x1="776" y1="162" x2="920" y2="162" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="776" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">페이지마다 구조체</text>
+<text x="776" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">하나로 추적합니다</text>
+<rect x="827.91" y="249" width="40.18" height="22" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="848.0" y="265" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#6A95D8">PFN</text>
+<path d="M 204 206.0 L 202 206.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 388 206.0 L 386 206.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 572 206.0 L 570 206.0" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<path d="M 756 206.0 L 754 206.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="24" y="336" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">§1~§3 은 물리 쪽에서 RAM 을 나누고, §4 가 그것을 가상 주소로 덮습니다 — 두 세계가 여기서 만납니다.</text>
+<text x="24" y="360" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#5E6B7E">§5 는 그렇게 덮은 페이지를 커널이 무엇으로 세는지를 다룹니다.</text>
+<line x1="12" y1="392" x2="928" y2="392" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="414" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="403" width="14" height="14" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="415" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">가상과 물리가 만나는 자리</text>
+<rect x="358" y="403" width="14" height="14" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="380" y="415" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">나머지 절</text>
+</svg>
