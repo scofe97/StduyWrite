@@ -63,7 +63,7 @@ for i, (kind, top, tail, c) in enumerate([
 
 BOT = HY + RH + 8 + 3 * RS
 d.t(LX, BOT + 30, "상위 16비트만 보면 KVA 인지 UVA 인지 즉시 갈립니다 — 커널 주소는 0xffff 로, 유저 주소는 0x0000 으로 시작합니다.", 13, ACC, KR, "start")
-d.t(LX, BOT + 54, "bit 63 은 페이징 테이블 selector 이기도 합니다 — 설정이면 커널 테이블, 클리어면 프로세스 테이블입니다.", 13, MUTED, KR, "start")
+d.t(LX, BOT + 54, "bit 63 은 커널·유저를 가릅니다. AArch64 는 이 비트로 TTBR1/TTBR0 까지 고르고, x86_64 는 CR3 하나만 씁니다.", 13, MUTED, KR, "start")
 d.t(LX, BOT + 78, "9비트 인덱스가 네 번 반복되는 것이 4-level paging 입니다. 마지막 12비트는 4KB 페이지 안의 자리를 가리킵니다.", 13, MUTED, KR, "start")
 
 d.legend(H - 56, [("상위 16비트 — 이 절의 논점", ACC), ("페이징 테이블 인덱스", INFO), ("페이지 내 offset", OK)])

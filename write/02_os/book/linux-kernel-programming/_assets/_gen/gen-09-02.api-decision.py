@@ -56,7 +56,7 @@ d.t(CX, FY + 31, "어디에도 안 걸리는 경우", 13, ACC, KR, "middle", 600
 exit_box(FY, "kmalloc() · kzalloc()", "1페이지 미만 일반 할당의 기본값", OK, True)
 d.arrow([(MX + MW + 4, FY + 26), (RX - 6, FY + 26)], ACC, "acc", 1.4)
 
-d.t(24, 588, "컨텍스트가 atomic 이면 어느 길로 가든 GFP_ATOMIC 입니다. spinlock 을 쥔 채 GFP_KERNEL 은 금지입니다.", 13, MUTED, KR, "start")
+d.t(24, 588, "atomic 컨텍스트면 kmalloc 계열만 GFP_ATOMIC 으로 갈 수 있습니다 — vmalloc·kvmalloc 은 잠들기 때문에 그 길이 막힙니다.", 13, MUTED, KR, "start")
 d.t(24, 612, "slab 으로 받았으면 ksize() 나 sysfs 의 slab_size 로 실제 크기를 확인합니다.", 13, SOFT, KR, "start")
 
 d.legend(H - 56, [("전용 API 를 써야 함", WARN), ("조건에 맞는 계층", INFO), ("자동 해제", OK), ("기본값 — 이 절의 결론", ACC)])
