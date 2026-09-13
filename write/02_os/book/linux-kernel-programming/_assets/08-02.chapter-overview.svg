@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 976 448" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">페이지보다 작은 조각을 위한 계층</title><desc id="dd">08-02 가 다루는 여덟 절. 페이지 할당자에 12바이트를 요청하면 4KB 를 통째로 받는다. slab 할당자는 그 낭비를 줄이려고 페이지 할당자 위에 얹힌 계층이고, 동시에 자주 쓰는 커널 객체를 미리 캐시해 두는 자리이기도 하다.</desc>
+<rect width="976" height="448" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LINUX KERNEL PROGRAMMING · 08-02</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">페이지보다 작은 조각을 위한 계층</text>
+<text x="12" y="76" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" fill="#8B98A9">slab 을 써도 낭비는 남습니다 — 그것을 재는 법이 이 편의 절반입니다</text>
+<rect x="24" y="116" width="176" height="180" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="40" y="146" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§1</text>
+<text x="184" y="146" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">두 존재 이유</text>
+<line x1="40" y1="162" x2="184" y2="162" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="40" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">객체를 미리 캐시하고</text>
+<text x="40" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">작은 낭비를 줄입니다</text>
+<rect x="87.88" y="249" width="48.24" height="22" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="112.0" y="265" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#6A95D8">SLUB</text>
+<rect x="208" y="116" width="176" height="180" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="224" y="146" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§2</text>
+<text x="368" y="146" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">kmalloc · kfree</text>
+<line x1="224" y1="162" x2="368" y2="162" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="224" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">커널에서 가장 자주</text>
+<text x="224" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">불리는 할당 API 입니다</text>
+<rect x="259.79" y="249" width="72.42" height="22" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="296.0" y="265" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#6A95D8">kzalloc</text>
+<rect x="392" y="116" width="176" height="180" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="408" y="146" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§3·4</text>
+<text x="552" y="146" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">kmalloc-N</text>
+<line x1="408" y1="162" x2="552" y2="162" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="408" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">8바이트부터 8KB 까지</text>
+<text x="408" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">best-fit 으로 줍니다</text>
+<rect x="433.0" y="249" width="94.0" height="22" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="480.0" y="265" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#6A95D8">최대 4MB</text>
+<rect x="576" y="116" width="176" height="180" rx="8" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4"/>
+<text x="592" y="146" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">§5·6</text>
+<text x="736" y="146" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">낭비 측정</text>
+<line x1="592" y1="162" x2="736" y2="162" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="592" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">임계값을 넘는 순간</text>
+<text x="592" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">낭비가 치솟습니다</text>
+<rect x="627.79" y="249" width="72.42" height="22" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="664.0" y="265" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F08A59">ksize()</text>
+<rect x="760" y="116" width="176" height="180" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="776" y="146" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§7·8</text>
+<text x="920" y="146" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">devm_ · 구현</text>
+<line x1="776" y1="162" x2="920" y2="162" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="776" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">드라이버 detach 때</text>
+<text x="776" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">자동으로 풀립니다</text>
+<rect x="815.82" y="249" width="64.36" height="22" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="848.0" y="265" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#6A95D8">devres</text>
+<path d="M 204 206.0 L 202 206.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 388 206.0 L 386 206.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 572 206.0 L 570 206.0" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<path d="M 756 206.0 L 754 206.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="24" y="336" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">§1~§4 가 계층의 동작이고 §5·§6 이 그 계층을 써도 남는 낭비를 재는 법입니다.</text>
+<text x="24" y="360" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#5E6B7E">slab 을 쓴다고 안심하지 말고 ksize() 로 실제 할당된 양을 확인하라는 것이 이 편의 교훈입니다.</text>
+<line x1="12" y1="392" x2="928" y2="392" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="414" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="403" width="14" height="14" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="415" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">이 편의 논점</text>
+<rect x="253" y="403" width="14" height="14" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="275" y="415" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">나머지 절</text>
+</svg>
