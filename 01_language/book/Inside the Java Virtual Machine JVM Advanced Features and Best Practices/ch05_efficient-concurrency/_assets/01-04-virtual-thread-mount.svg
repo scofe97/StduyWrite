@@ -1,0 +1,70 @@
+<svg viewBox="0 0 900 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>가상 스레드의 mount와 unmount — M:N 매핑</title>
+  <desc>많은 가상 스레드를 소수의 캐리어(플랫폼) 스레드에 M:N으로 묶는다. 가상 스레드는 실행할 때만 캐리어에 mount되고, 블로킹을 만나면 unmount되어 실행 상태를 Continuation으로 자바 힙에 저장한다. 비워진 캐리어에는 실행 준비된 다른 가상 스레드가 mount되어 일을 이어 간다. 캐리어 스레드는 커널 스레드와 1:1로 매핑되고 그 수는 보통 CPU 코어 수에 맞춰진다. 스케줄러는 ForkJoinPool로 가상 스레드를 캐리어에 분배한다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: #c9c4be; }
+      .zone  { font-size: 12px; font-weight: 800; fill: #e8e4df; }
+      .vt    { font-size: 11px; font-weight: 700; fill: #0d0d0d; }
+      .ct    { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .ck    { font-size: 9.5px; fill: rgba(13,13,13,0.78); }
+      .lab   { font-size: 10px; font-weight: 700; fill: rgb(212,168,83); }
+      .note  { font-size: 10px; fill: #c9c4be; }
+    </style>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="470" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">가상 스레드의 mount / unmount — M:N 매핑</text>
+  <text x="28" y="58" class="sub">실행할 때만 캐리어에 올라타고, 블로킹하면 내려와 상태를 Continuation으로 힙에 저장한다</text>
+
+  <!-- 가상 스레드 무리 -->
+  <text x="120" y="96" class="zone" text-anchor="middle">가상 스레드 (수만 개)</text>
+  <rect x="40" y="110" width="160" height="34" rx="6" fill="rgb(212,168,83)"/>
+  <text x="120" y="132" class="vt" text-anchor="middle">VT #1 (실행 중)</text>
+  <rect x="40" y="152" width="160" height="34" rx="6" fill="#fdf3df"/>
+  <text x="120" y="174" class="vt" text-anchor="middle">VT #2 (실행 대기)</text>
+  <rect x="40" y="194" width="160" height="34" rx="6" fill="#fdf3df"/>
+  <text x="120" y="216" class="vt" text-anchor="middle">VT #3 (실행 대기)</text>
+  <rect x="40" y="236" width="160" height="34" rx="6" fill="#dceaf7"/>
+  <text x="120" y="258" class="vt" text-anchor="middle" fill="#10243a">VT #4 (블로킹)</text>
+  <text x="120" y="300" class="note" text-anchor="middle">…</text>
+
+  <!-- Scheduler -->
+  <rect x="330" y="150" width="150" height="80" rx="10" fill="#66bb6a"/>
+  <text x="405" y="180" class="ct" text-anchor="middle" fill="#14521d">Scheduler</text>
+  <text x="405" y="200" class="ck" text-anchor="middle" fill="#14521d">ForkJoinPool</text>
+  <text x="405" y="216" class="ck" text-anchor="middle" fill="#14521d">캐리어에 분배</text>
+
+  <!-- 캐리어 스레드 -->
+  <text x="700" y="96" class="zone" text-anchor="middle">캐리어 스레드 (≈ CPU 코어 수)</text>
+  <rect x="600" y="120" width="200" height="50" rx="8" fill="#5b9bd5"/>
+  <text x="700" y="142" class="ct" text-anchor="middle">캐리어 #1</text>
+  <text x="700" y="160" class="ck" text-anchor="middle">커널 스레드와 1:1</text>
+  <rect x="600" y="186" width="200" height="50" rx="8" fill="#5b9bd5"/>
+  <text x="700" y="208" class="ct" text-anchor="middle">캐리어 #2</text>
+  <text x="700" y="226" class="ck" text-anchor="middle">커널 스레드와 1:1</text>
+
+  <!-- VT -> Scheduler -->
+  <line x1="200" y1="160" x2="330" y2="180" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#ar)"/>
+
+  <!-- Scheduler -> Carrier (mount) -->
+  <line x1="480" y1="175" x2="600" y2="150" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#ar)"/>
+  <text x="540" y="150" class="lab" text-anchor="middle">mount</text>
+  <line x1="480" y1="200" x2="600" y2="210" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#ar)"/>
+
+  <!-- unmount / Continuation 힙 저장 -->
+  <rect x="330" y="300" width="470" height="120" rx="10" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="350" y="328" class="zone" text-anchor="start">블로킹 발생 → unmount</text>
+  <text x="350" y="352" class="note" text-anchor="start">① VT #4가 블로킹 연산(네트워크 I/O 등)을 만남</text>
+  <text x="350" y="372" class="note" text-anchor="start">② 캐리어에서 unmount, Continuation이 실행 상태를 자바 힙에 저장</text>
+  <text x="350" y="392" class="note" text-anchor="start">③ 비워진 캐리어에 다른 VT가 mount되어 일을 이어 감</text>
+  <text x="350" y="412" class="note" text-anchor="start">④ 블로킹이 끝나면 VT #4는 다시 (임의의) 캐리어에 mount</text>
+
+  <!-- carrier -> unmount 영역 화살표 -->
+  <line x1="700" y1="236" x2="700" y2="300" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#ar)"/>
+  <text x="715" y="272" class="lab" text-anchor="start">unmount</text>
+</svg>

@@ -1,0 +1,60 @@
+<svg viewBox="0 0 680 580" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>인메모리 데이터 변경과 프레임 되감기 (Ch.3 §3.3~§3.4)</title>
+  <desc>디버거가 멈춘 스코프에서 변수 값을 직접 바꾸면 필요한 입력 데이터가 없어도 원하는 조사 시나리오를 만들 수 있습니다. 단 변수의 타입에 맞는 값을 써야 합니다. 이 기법은 가끔 한 시간 넘게 걸리는 장시간 프로세스나 보안 제약으로 접근할 수 없는 production 에서만 재현되는 문제에서 빛납니다. 조건부 중단점과 비교하면 데이터가 있고 실행이 짧으면 조건부 중단점이, 데이터가 없거나 실행이 길면 변수 값 변경이 적합합니다. 값 변경은 보통 가설 확인용이고 두어 개까지가 적당하며 무엇이 잘못인지 모를 때는 중단점으로 관찰하는 편이 낫습니다. final 변수와 record 속성은 암묵적 final 이라 디버깅 중 값을 바꿀 수 없습니다. 프레임 떨구기는 콜 스택의 이전 지점으로 돌아가 메서드를 다시 실행하는 것입니다. step out 은 메서드를 끝까지 실행하고 빠져나온 직후에 멈추는 빨리 감기라 다음 줄이 13 이고, drop frame 은 호출 직전으로 돌아가는 되감기라 다음 줄이 12 입니다. 치명적 함정은 DB 와 파일시스템과 다른 앱과 큐와 이메일처럼 앱 메모리 밖을 바꾼 변경은 프레임을 떨궈도 되돌릴 수 없다는 것입니다. drop frame 은 undo 가 아닙니다.</desc>
+  <rect x="0" y="0" width="680" height="580" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">인메모리 데이터 변경과 프레임 되감기</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">실행 흐름을 움직인다 — 값을 바꿔 시나리오를 만들고, 호출 직전으로 되감는다 (Ch.3 §3.3~§3.4)</text>
+
+  <!-- 데이터 변경 -->
+  <rect x="20" y="74" width="640" height="96" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="96" fill="rgb(212,168,83)" font-size="13" font-weight="bold">① 인메모리 데이터 변경 — 없는 입력을 만든다</text>
+  <text x="38" y="116" fill="#e8e4df" font-size="11">멈춘 스코프에서 변수 우클릭 → 값 변경 (타입 일치 필수: String → String)</text>
+  <text x="38" y="138" fill="rgb(138,133,128)" font-size="10">빛나는 두 상황: ① 한 시간+ 장시간 프로세스   ② 접근 불가 production 에서만 재현</text>
+  <text x="38" y="158" fill="rgb(212,168,83)" font-size="10">보통 가설 확인용 — 두어 개까지가 적당 (범위 커지면 관리 복잡도 급증)</text>
+
+  <!-- 조건부 vs 데이터 변경 -->
+  <rect x="20" y="184" width="315" height="84" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="206" fill="#66bb6a" font-size="12" font-weight="bold">조건부 중단점이 적합</text>
+  <text x="38" y="226" fill="#e8e4df" font-size="10">트리거 데이터를 이미 가짐</text>
+  <text x="38" y="244" fill="rgb(138,133,128)" font-size="10">+ 실행이 짧음</text>
+  <text x="38" y="262" fill="rgb(138,133,128)" font-size="9">무엇이 잘못인지 모를 땐 관찰용으로</text>
+
+  <rect x="345" y="184" width="315" height="84" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="363" y="206" fill="#9cc3df" font-size="12" font-weight="bold">데이터 변경이 적합</text>
+  <text x="363" y="226" fill="#e8e4df" font-size="10">시나리오 만들 데이터가 없음</text>
+  <text x="363" y="244" fill="rgb(138,133,128)" font-size="10">또는 실행이 너무 길다</text>
+  <text x="363" y="262" fill="#f47f72" font-size="9">final·record 속성은 못 바꾼다 (암묵적 final)</text>
+
+  <!-- drop frame vs step out -->
+  <text x="20" y="296" fill="#e8e4df" font-size="13" font-weight="bold">② drop frame(되감기) vs step out(빨리 감기)</text>
+  <rect x="20" y="308" width="315" height="92" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="330" fill="#9cc3df" font-size="12" font-weight="bold">step out = fast-forward</text>
+  <text x="38" y="350" fill="#e8e4df" font-size="11">메서드를 끝까지 실행 후</text>
+  <text x="38" y="368" fill="#e8e4df" font-size="11">빠져나온 직후에 멈춤</text>
+  <rect x="38" y="378" width="279" height="16" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="48" y="390" fill="#66bb6a" font-family="'JetBrains Mono',monospace" font-size="9">decode 12번 호출 자리 → 다음 줄 13</text>
+
+  <rect x="345" y="308" width="315" height="92" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="363" y="330" fill="rgb(212,168,83)" font-size="12" font-weight="bold">drop frame = rewind</text>
+  <text x="363" y="350" fill="#e8e4df" font-size="11">메서드 호출 직전으로 복귀</text>
+  <text x="363" y="368" fill="#e8e4df" font-size="11">→ 호출을 다시 재생 가능</text>
+  <rect x="363" y="378" width="279" height="16" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="373" y="390" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="9">decode 호출 직전 → 다음 줄 12</text>
+
+  <!-- 외부 변경 undo 불가 -->
+  <rect x="20" y="412" width="640" height="112" fill="rgba(244,127,114,0.07)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="434" fill="#f47f72" font-size="13" font-weight="bold">치명적 함정 — 앱 밖 변경은 undo 가 아니다</text>
+  <text x="38" y="454" fill="#e8e4df" font-size="11">프레임을 떨궈도 앱 메모리 밖을 바꾼 변경은 되돌릴 수 없다</text>
+  <rect x="38" y="464" width="120" height="22" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="98" y="479" fill="#f47f72" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle">DB insert/update</text>
+  <rect x="164" y="464" width="110" height="22" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="219" y="479" fill="#f47f72" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle">파일시스템 변경</text>
+  <rect x="280" y="464" width="100" height="22" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="330" y="479" fill="#f47f72" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle">다른 앱 호출</text>
+  <rect x="386" y="464" width="120" height="22" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="446" y="479" fill="#f47f72" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle">큐에 메시지 추가</text>
+  <rect x="512" y="464" width="100" height="22" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="562" y="479" fill="#f47f72" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle">이메일 전송</text>
+  <text x="38" y="504" fill="rgb(138,133,128)" font-size="10">예: Files.createFile() 후 drop frame → 파일은 남고, 재실행하면 "이미 존재" 예외</text>
+  <text x="38" y="519" fill="rgb(212,168,83)" font-size="10">권고: 큰 코드 반복 금지 + 쓰기 전 외부 변경이 없는지 확인</text>
+
+  <!-- 한 줄 결론 -->
+  <rect x="20" y="536" width="640" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="558" fill="#e8e4df" font-size="11" font-weight="bold">drop frame 은 undo 가 아니다 — 메모리는 되감겨도 부수효과(side effect)는 남는다</text>
+</svg>

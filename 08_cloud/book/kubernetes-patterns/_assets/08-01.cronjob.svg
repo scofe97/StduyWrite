@@ -1,0 +1,76 @@
+<svg viewBox="0 0 900 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>작업이 스케줄 간격보다 길어질 때 세 정책이 갈리는 지점</title>
+  <desc>concurrencyPolicy 세 값이 같은 상황에서 서로 다르게 동작하는 것을 시간 축으로 비교합니다. 상황은 하나입니다. 스케줄이 세 칸마다 발동하는데 작업 하나가 그보다 오래 걸려서 다음 발동 시각에 이전 실행이 아직 돌고 있습니다. Allow는 기본값으로 이전 Job을 그대로 둔 채 새 Job을 겹쳐 만들어서 둘이 동시에 돕니다. 작업이 계속 길어지면 겹친 Job이 쌓입니다. Forbid는 이전 실행이 끝나지 않았으므로 이번 발동을 건너뜁니다. 건너뛴 실행은 놓친 것으로 집계되고 이전 Job이 끝난 뒤 다음 스케줄에 새 Job이 만들어집니다. Replace는 돌고 있던 이전 Job을 취소하고 그 자리에 새 Job을 시작합니다. 겹치지는 않지만 진행 중이던 작업이 중간에 잘립니다. 그래서 겹치면 안 되는 작업에는 Forbid를 명시해야 하고 최신 실행만 의미가 있는 작업에는 Replace가 맞습니다.</desc>
+
+  <rect width="900" height="400" fill="#0d0d0d"/>
+
+  <text x="24" y="28" fill="#e8e4df" font-size="15" font-weight="700">겹칠 때 무엇을 하는가</text>
+  <text x="24" y="48" fill="#b8b3ad" font-size="10">작업이 스케줄보다 깁니다</text>
+
+  <!-- schedule tick markers -->
+  <text x="150" y="76" text-anchor="middle" fill="rgb(212,168,83)" font-size="9" font-weight="700">발동</text>
+  <text x="370" y="76" text-anchor="middle" fill="rgb(212,168,83)" font-size="9" font-weight="700">발동</text>
+  <text x="590" y="76" text-anchor="middle" fill="rgb(212,168,83)" font-size="9" font-weight="700">발동</text>
+
+  <line x1="150" y1="82" x2="150" y2="330" stroke="rgb(212,168,83)" stroke-width="1" stroke-dasharray="3 4"/>
+  <line x1="370" y1="82" x2="370" y2="330" stroke="rgb(212,168,83)" stroke-width="1" stroke-dasharray="3 4"/>
+  <line x1="590" y1="82" x2="590" y2="330" stroke="rgb(212,168,83)" stroke-width="1" stroke-dasharray="3 4"/>
+
+  <!-- ============ Allow ============ -->
+  <text x="24" y="112" fill="#f44336" font-size="11" font-weight="700">Allow</text>
+  <text x="24" y="128" fill="#b8b3ad" font-size="9">기본값</text>
+
+  <rect x="150" y="96" width="290" height="26" fill="#dceaf7"/>
+  <text x="295" y="114" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">Job 1</text>
+
+  <rect x="370" y="128" width="290" height="26" fill="#cdeccf"/>
+  <text x="515" y="146" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">Job 2</text>
+
+  <rect x="590" y="160" width="286" height="26" fill="#f5edda"/>
+  <text x="733" y="178" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">Job 3</text>
+
+  <text x="676" y="114" fill="#f44336" font-size="9" font-weight="700">겹쳐서 쌓입니다</text>
+
+  <line x1="24" y1="202" x2="876" y2="202" stroke="#4a4640"/>
+
+  <!-- ============ Forbid ============ -->
+  <text x="24" y="234" fill="#66bb6a" font-size="11" font-weight="700">Forbid</text>
+
+  <rect x="150" y="218" width="290" height="26" fill="#dceaf7"/>
+  <text x="270" y="236" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">Job 1 · 아직 도는 중</text>
+
+  <text x="452" y="236" fill="#66bb6a" font-size="9" font-weight="700">이번 발동은 건너뜁니다</text>
+
+  <rect x="590" y="218" width="286" height="26" fill="#cdeccf"/>
+  <text x="733" y="236" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">Job 2</text>
+
+  <line x1="24" y1="262" x2="876" y2="262" stroke="#4a4640"/>
+
+  <!-- ============ Replace ============ -->
+  <text x="24" y="294" fill="#d4a853" font-size="11" font-weight="700">Replace</text>
+
+  <rect x="150" y="278" width="212" height="26" fill="#dceaf7"/>
+  <text x="256" y="296" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">Job 1</text>
+
+  <line x1="366" y1="272" x2="366" y2="310" stroke="#f44336" stroke-width="3"/>
+  <text x="378" y="270" fill="#f44336" font-size="9" font-weight="700">여기서 잘립니다</text>
+
+  <rect x="370" y="278" width="212" height="26" fill="#cdeccf"/>
+  <text x="476" y="296" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">Job 2</text>
+
+  <rect x="590" y="278" width="286" height="26" fill="#f5edda"/>
+  <text x="733" y="296" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">Job 3</text>
+
+  <!-- guidance -->
+  <rect x="24" y="322" width="418" height="30" fill="#cdeccf"/>
+  <text x="44" y="342" fill="#14521d" font-size="10" font-weight="700">겹치면 안 되면 Forbid</text>
+
+  <rect x="458" y="322" width="418" height="30" fill="#f5edda"/>
+  <text x="478" y="342" fill="#0d0d0d" font-size="10" font-weight="700">최신 것만 의미 있으면 Replace</text>
+
+  <rect x="24" y="360" width="852" height="28" fill="rgb(212,168,83)"/>
+  <text x="450" y="379" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">기본값은 겹침을 막지 않습니다</text>
+</svg>

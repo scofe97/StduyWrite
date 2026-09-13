@@ -1,0 +1,96 @@
+<svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>WAL 자르기와 체크포인트 — 왜 그냥 못 지우는가</title>
+  <desc>head chunk 도 WAL 세그먼트도 시각을 기준으로 끊지 않는다. chunk 는 샘플 개수가 목표치에 차면 잘리고, WAL 세그먼트는 파일 크기가 128 MiB 에 차면 끊긴다. 갈리는 것은 끊는 기준이 아니라 끊긴 결과에 시간 범위를 적어 두느냐다. 잘린 chunk 가 메모리에 남기는 쪽지에는 샘플 개수와 함께 최소·최대 시각과 디스크 위치가 적혀 있어, 그 시각을 보고 "2 시간 이전" 을 정확히 골라 지울 수 있다. WAL 세그먼트는 Series·Samples·Tombstones 같은 여러 종류의 레코드가 여러 시계열 것과 도착 순서대로 섞여 있을 뿐이고, 끊긴 파일에 시간 범위를 적어 두지 않는다. 그래서 시간으로 자르지 못하고 앞 3분의 2 를 위치로 통째로 지운다. 문제는 지울 구간 안에 아직 살아 있는 정보가 섞여 있다는 것이다. 특히 시계열의 라벨은 그 시계열이 처음 등장할 때 딱 한 번 Series 레코드로 적히고 이후 샘플은 번호로만 가리키므로, 그 최초 한 줄을 지우면 뒤에 남은 샘플이 주인 없는 값이 된다. 그래서 지우기 전에 그 구간을 훑어 아직 필요한 것만 골라 체크포인트라는 작은 파일로 옮겨 둔다. 더 이상 head 에 없는 시계열의 레코드, 잘림 시각보다 이전의 샘플과 툼스톤은 버리고 나머지는 순서까지 그대로 남긴다. 그 뒤에 앞 3분의 2 를 지운다.</desc>
+
+  <defs>
+    <marker id="w" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="560" fill="#0d0d0d"/>
+  <text x="24" y="30" fill="#e8e4df" font-size="15">WAL 은 왜 그냥 못 지웁니까</text>
+
+  <!-- 1) 문제 — 내부 구조 대조 -->
+  <text x="24" y="62" fill="#e8e4df" font-size="11.5" font-weight="700">1. 둘 다 시각으로 끊지 않습니다</text>
+
+  <!-- head 블록 -->
+  <rect x="24" y="74" width="410" height="214" fill="#0d0d0d" stroke="#66bb6a"/>
+  <text x="40" y="94" fill="#66bb6a" font-size="10" font-weight="700">head 블록 (메모리)</text>
+  <text x="40" y="110" fill="#b8b3ad" font-size="8.5">기준은 샘플 개수 (목표 120)</text>
+
+  <text x="40" y="130" fill="#e8e4df" font-size="8.5">시계열 A — 잘린 chunk 가 남긴 쪽지</text>
+  <rect x="40" y="136" width="378" height="17" fill="#cdeccf" stroke="#cdeccf"/>
+  <text x="48" y="148" style="fill:#14521d" font-size="7.5" font-weight="700">numSamples=120   min 09:00   max 09:59   → 디스크 위치 ref</text>
+  <rect x="40" y="155" width="378" height="17" fill="#cdeccf" stroke="#cdeccf"/>
+  <text x="48" y="167" style="fill:#14521d" font-size="7.5" font-weight="700">numSamples=118   min 10:00   max 10:57   → 디스크 위치 ref</text>
+
+  <rect x="40" y="176" width="378" height="17" fill="#0d0d0d" stroke="#66bb6a" stroke-dasharray="3 2"/>
+  <text x="48" y="188" fill="#66bb6a" font-size="7.5">지금 쓰는 chunk — 아직 안 찼고 max 도 안 정해짐</text>
+
+  <text x="40" y="220" fill="#b8b3ad" font-size="8">개수로 끊되, 쪽지에 min·max 가 함께 적히므로</text>
+  <rect x="40" y="228" width="378" height="18" fill="#66bb6a" stroke="#66bb6a"/>
+  <text x="229" y="241" style="fill:#0d0d0d" font-size="8.5" text-anchor="middle" font-weight="700">→ "11:00 이전" 을 시각으로 고름</text>
+
+  <rect x="40" y="254" width="378" height="20" fill="#cdeccf" stroke="#cdeccf"/>
+  <text x="229" y="268" style="fill:#14521d" font-size="8.5" text-anchor="middle" font-weight="700">자르는 기준 = 시각</text>
+
+  <!-- WAL 세그먼트 -->
+  <rect x="466" y="74" width="410" height="214" fill="#0d0d0d" stroke="#f44336"/>
+  <text x="482" y="94" fill="#f44336" font-size="10" font-weight="700">WAL 세그먼트 (wal/00000142)</text>
+  <text x="482" y="110" fill="#b8b3ad" font-size="8.5">기준은 파일 크기 (128 MiB)</text>
+
+  <rect x="482" y="120" width="378" height="17" fill="#dceaf7" stroke="#dceaf7"/>
+  <text x="490" y="132" style="fill:#10243a" font-size="7.5" font-weight="700">[Series] ref=1  {__name__="wind"}   ← 라벨은 여기 딱 한 번</text>
+  <rect x="482" y="139" width="378" height="17" fill="#dceaf7" stroke="#dceaf7"/>
+  <text x="490" y="151" style="fill:#10243a" font-size="7.5" font-weight="700">[Series] ref=2  {__name__="temp"}</text>
+  <rect x="482" y="158" width="378" height="17" fill="#f5edda" stroke="#f5edda"/>
+  <text x="490" y="170" style="fill:#5a4a1f" font-size="7.5">[Samples] ref=1  t=09:00:00  v=3.2      ← 번호로만 가리킴</text>
+  <rect x="482" y="177" width="378" height="17" fill="#f5edda" stroke="#f5edda"/>
+  <text x="490" y="189" style="fill:#5a4a1f" font-size="7.5">[Samples] ref=2  t=09:00:00  v=20.1</text>
+  <rect x="482" y="196" width="378" height="17" fill="#dceaf7" stroke="#dceaf7"/>
+  <text x="490" y="208" style="fill:#10243a" font-size="7.5" font-weight="700">[Series] ref=3  {__name__="hum"}    ← 도중에 새로 등장</text>
+  <rect x="482" y="215" width="378" height="17" fill="#f2d4d4" stroke="#f2d4d4"/>
+  <text x="490" y="227" style="fill:#7a1f1f" font-size="7.5">[Tombstones] ref=2  삭제 표시</text>
+
+  <text x="482" y="248" fill="#b8b3ad" font-size="8">끊긴 파일에 min·max 를 적어 두지 않으므로</text>
+  <rect x="482" y="254" width="378" height="20" fill="#f2d4d4" stroke="#f2d4d4"/>
+  <text x="671" y="268" style="fill:#7a1f1f" font-size="8.5" text-anchor="middle" font-weight="700">자르는 기준 = 위치 (시각으로는 못 고름)</text>
+
+  <!-- 2) 그래서 앞 2/3 -->
+  <text x="24" y="322" fill="#e8e4df" font-size="11.5" font-weight="700">2. 그래서 앞 3분의 2 를 통째로 지웁니다</text>
+
+  <rect x="24" y="334" width="560" height="46" fill="#f2d4d4" stroke="#f2d4d4"/>
+  <text x="304" y="353" style="fill:#7a1f1f" font-size="10" text-anchor="middle" font-weight="700">지울 구간 — 세그먼트 앞 3분의 2</text>
+  <text x="304" y="370" style="fill:#7a1f1f" font-size="8.5" text-anchor="middle">지우면 뒤 샘플이 주인을 잃습니다</text>
+
+  <rect x="592" y="334" width="284" height="46" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="734" y="352" fill="#b8b3ad" font-size="9.5" text-anchor="middle">남길 구간 — 뒤 3분의 1</text>
+  <text x="734" y="368" fill="#b8b3ad" font-size="8" text-anchor="middle">[Samples] ref=1 … 이 계속됨</text>
+
+  <!-- 3) 체크포인트 -->
+  <text x="24" y="414" fill="#e8e4df" font-size="11.5" font-weight="700">3. 지우기 전에 "아직 필요한 것" 만 건져 냅니다 = 체크포인트</text>
+
+  <rect x="24" y="426" width="560" height="86" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="40" y="446" fill="#b8b3ad" font-size="9">기준은 "head 에 아직 있나"</text>
+
+  <rect x="40" y="454" width="256" height="18" fill="#f2d4d4" stroke="#f2d4d4"/>
+  <text x="50" y="467" style="fill:#7a1f1f" font-size="8">✕ head 에 없는 시계열의 레코드</text>
+  <rect x="40" y="476" width="256" height="18" fill="#f2d4d4" stroke="#f2d4d4"/>
+  <text x="50" y="489" style="fill:#7a1f1f" font-size="8">✕ 잘림 시각 이전의 샘플 · 툼스톤</text>
+
+  <rect x="308" y="454" width="260" height="40" fill="#66bb6a" stroke="#66bb6a"/>
+  <text x="438" y="470" style="fill:#0d0d0d" font-size="9" text-anchor="middle" font-weight="700">○ 나머지는 순서까지 그대로</text>
+  <text x="438" y="486" style="fill:#0d0d0d" font-size="8.5" text-anchor="middle">살아 있는 시계열의 [Series] 포함</text>
+
+  <line x1="592" y1="468" x2="628" y2="468" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#w)"/>
+
+  <rect x="636" y="438" width="240" height="60" fill="rgb(212,168,83)" stroke="rgb(212,168,83)"/>
+  <text x="756" y="460" style="fill:#0d0d0d" font-size="10.5" text-anchor="middle" font-weight="700">체크포인트 파일</text>
+  <text x="756" y="478" style="fill:#0d0d0d" font-size="8.5" text-anchor="middle">작지만 없으면 안 되는 것만</text>
+  <text x="756" y="491" style="fill:#0d0d0d" font-size="8.5" text-anchor="middle">담긴 요약본</text>
+
+  <!-- 결론 -->
+  <line x1="24" y1="526" x2="876" y2="526" stroke="rgb(92,84,74)"/>
+  <text x="24" y="548" fill="#e8e4df" font-size="11"><tspan fill="#66bb6a" font-weight="700">시간표를 남긴 쪽</tspan>은 시각으로, <tspan fill="#f44336" font-weight="700">안 남긴 쪽</tspan>은 <tspan fill="rgb(212,168,83)" font-weight="700">위치로</tspan></text>
+</svg>

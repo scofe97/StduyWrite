@@ -1,0 +1,61 @@
+<svg viewBox="0 0 900 430" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>synchronized 단일 대기 집합 vs ReentrantLock 다중 Condition</title>
+  <desc>synchronized는 객체 하나에 락도 대기 집합도 하나뿐이라 생산자와 소비자가 같은 대기 집합에 섞여, notify가 임의의 하나를 깨워 엉뚱한 쪽이 깨어날 수 있다. ReentrantLock은 락은 하나지만 newCondition으로 대기 집합을 notFull과 notEmpty 둘로 나눠, signal이 정확히 그 방의 스레드만 깨운다. 락은 둘 다 하나이고, 나뉘는 것은 대기 집합이라는 점이 핵심이다.</desc>
+  <rect x="0" y="0" width="900" height="430" fill="#0d0d0d"/>
+
+  <text x="450" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#e8e4df">락은 하나, 나뉘는 건 대기 집합</text>
+  <text x="450" y="54" text-anchor="middle" font-size="12.5" fill="#c9c4be">synchronized는 대기방 1개(섞임), ReentrantLock은 newCondition으로 여러 개</text>
+
+  <!-- ===== 좌: synchronized — 대기방 1개 ===== -->
+  <rect x="30" y="74" width="400" height="316" rx="12" fill="#0d0d0d" stroke="#c0504d" stroke-width="2"/>
+  <text x="230" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#e08a87">synchronized — 락 1 + 대기방 1</text>
+
+  <!-- 락 1개 -->
+  <rect x="160" y="116" width="140" height="32" rx="7" fill="#dceaf7"/>
+  <text x="230" y="137" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10243a">모니터 락 (1개)</text>
+
+  <!-- 단일 대기방 (생산자+소비자 섞임) -->
+  <rect x="60" y="166" width="340" height="120" rx="10" fill="#0d0d0d" stroke="#c0504d" stroke-width="1.4" stroke-dasharray="5 4"/>
+  <text x="230" y="187" text-anchor="middle" font-size="12" font-weight="700" fill="#e08a87">대기 집합 1개 (생산자·소비자 섞임)</text>
+  <!-- 섞인 스레드들 -->
+  <rect x="80"  y="200" width="70" height="32" rx="7" fill="#dceaf7"/><text x="115" y="221" text-anchor="middle" font-size="11" font-weight="700" fill="#10243a">생산자</text>
+  <rect x="160" y="200" width="70" height="32" rx="7" fill="#f5edda"/><text x="195" y="221" text-anchor="middle" font-size="11" font-weight="700" fill="#5a3d0a">소비자</text>
+  <rect x="240" y="200" width="70" height="32" rx="7" fill="#dceaf7"/><text x="275" y="221" text-anchor="middle" font-size="11" font-weight="700" fill="#10243a">생산자</text>
+  <rect x="320" y="200" width="70" height="32" rx="7" fill="#f5edda"/><text x="355" y="221" text-anchor="middle" font-size="11" font-weight="700" fill="#5a3d0a">소비자</text>
+  <text x="230" y="258" text-anchor="middle" font-size="11" fill="#c9c4be">notify() = 이 중 임의의 하나를 깨움</text>
+  <text x="230" y="276" text-anchor="middle" font-size="11" fill="#e08a87">→ 소비자 깨우려다 생산자가 깰 수도 (기아 위험)</text>
+
+  <rect x="60" y="298" width="340" height="78" rx="9" fill="#0d0d0d" stroke="#c0504d" stroke-width="1.4"/>
+  <text x="78" y="322" font-size="11.5" font-weight="700" fill="#e08a87">딜레마</text>
+  <text x="78" y="342" font-size="11" fill="#c9c4be">notify(효율) → 엉뚱한 쪽 깨워 기아 위험.</text>
+  <text x="78" y="361" font-size="11" fill="#c9c4be">notifyAll(안전) → 다 깨워 경합 낭비. 택1.</text>
+
+  <!-- ===== 우: ReentrantLock — 대기방 2개 ===== -->
+  <rect x="470" y="74" width="400" height="316" rx="12" fill="#0d0d0d" stroke="#66bb6a" stroke-width="2"/>
+  <text x="670" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="#66bb6a">ReentrantLock — 락 1 + 대기방 2</text>
+
+  <!-- 락 1개 (여전히 하나!) -->
+  <rect x="600" y="116" width="140" height="32" rx="7" fill="#dceaf7"/>
+  <text x="670" y="137" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10243a">락 (여전히 1개)</text>
+
+  <!-- 대기방 notFull (생산자만) -->
+  <rect x="500" y="166" width="170" height="120" rx="10" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="585" y="187" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5b9bd5">notFull 방</text>
+  <rect x="518" y="200" width="64" height="32" rx="7" fill="#dceaf7"/><text x="550" y="221" text-anchor="middle" font-size="10.5" font-weight="700" fill="#10243a">생산자</text>
+  <rect x="588" y="200" width="64" height="32" rx="7" fill="#dceaf7"/><text x="620" y="221" text-anchor="middle" font-size="10.5" font-weight="700" fill="#10243a">생산자</text>
+  <text x="585" y="256" text-anchor="middle" font-size="10.5" fill="#c9c4be">생산자만 대기</text>
+  <text x="585" y="273" text-anchor="middle" font-size="10.5" fill="#c9c4be">notFull.signal()로 깨움</text>
+
+  <!-- 대기방 notEmpty (소비자만) -->
+  <rect x="688" y="166" width="170" height="120" rx="10" fill="#0d0d0d" stroke="#d4a853" stroke-width="1.5"/>
+  <text x="773" y="187" text-anchor="middle" font-size="11.5" font-weight="700" fill="#d4a853">notEmpty 방</text>
+  <rect x="706" y="200" width="64" height="32" rx="7" fill="#f5edda"/><text x="738" y="221" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5a3d0a">소비자</text>
+  <rect x="776" y="200" width="64" height="32" rx="7" fill="#f5edda"/><text x="808" y="221" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5a3d0a">소비자</text>
+  <text x="773" y="256" text-anchor="middle" font-size="10.5" fill="#c9c4be">소비자만 대기</text>
+  <text x="773" y="273" text-anchor="middle" font-size="10.5" fill="#c9c4be">notEmpty.signal()로 깨움</text>
+
+  <rect x="500" y="298" width="358" height="78" rx="9" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.4"/>
+  <text x="518" y="322" font-size="11.5" font-weight="700" fill="#66bb6a">딜레마 해소</text>
+  <text x="518" y="342" font-size="11" fill="#c9c4be">signal()이 그 방의 스레드만 정확히 깨움.</text>
+  <text x="518" y="361" font-size="11" fill="#c9c4be">효율(하나만)·정확(맞는 쪽) 둘 다 얻음.</text>
+</svg>

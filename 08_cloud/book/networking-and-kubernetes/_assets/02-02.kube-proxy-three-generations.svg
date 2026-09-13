@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 532" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">서비스 조회의 세 세대 — 바뀐 것은 찾는 방법이다</title><desc id="dd">kube-proxy 세 세대(iptables·IPVS·eBPF)를 자료구조·조회 방법·비용·확인 명령·새로 가능해진 일 다섯 축으로 비교한 행렬. 리스트 순회에서 해시 조회로 바뀌며 비용이 규칙 수와 무관해진다.</desc>
+<rect width="1000" height="532" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">COMPARISON MATRIX · 02-02 KUBE-PROXY</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">서비스 조회의 세 세대 — 바뀐 것은 찾는 방법이다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">리스트는 규칙이 늘수록 대조가 늘지만, 해시는 규칙 수와 무관합니다 — 16만 규칙 5시간이 여기서 나옵니다.</text>
+<text x="86" y="108" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">세대</text>
+<text x="220" y="108" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">자료구조</text>
+<text x="378" y="108" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">목적지를 찾는 법</text>
+<text x="544" y="108" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">비용</text>
+<text x="720" y="108" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">확인 명령</text>
+<text x="900" y="108" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">할 수 있게 된 일</text>
+<rect x="16" y="132" width="140" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="30" y="166" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F0616D">iptables</text>
+<text x="30" y="190" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">kube-proxy 1세대</text>
+<rect x="164" y="132" width="112" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="178" y="179" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">규칙 리스트</text>
+<rect x="284" y="132" width="188" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="298" y="179" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">첫 줄부터 순차 대조</text>
+<rect x="480" y="132" width="128" height="84" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.4"/>
+<text x="494" y="166" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">규칙 수에 비례</text>
+<text x="494" y="190" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">O(n)</text>
+<rect x="616" y="132" width="208" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="630" y="179" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">iptables -t nat -S</text>
+<rect x="832" y="132" width="136" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="846" y="179" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">랜덤 분배만</text>
+<rect x="16" y="224" width="140" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="30" y="258" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">IPVS</text>
+<text x="30" y="282" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">커널 L4 LB</text>
+<rect x="164" y="224" width="112" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="178" y="271" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">해시 테이블</text>
+<rect x="284" y="224" width="188" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="298" y="271" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">해시 조회</text>
+<rect x="480" y="224" width="128" height="84" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.4"/>
+<text x="494" y="258" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">규칙 수와 무관</text>
+<text x="494" y="282" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">O(1)</text>
+<rect x="616" y="224" width="208" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="630" y="271" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">ipvsadm -Ln</text>
+<rect x="832" y="224" width="136" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="846" y="271" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">밸런싱 모드 선택</text>
+<rect x="16" y="316" width="140" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="30" y="350" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">eBPF</text>
+<text x="30" y="374" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Cilium 등</text>
+<rect x="164" y="316" width="112" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="178" y="350" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">BPF 맵</text>
+<text x="178" y="374" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">해시</text>
+<rect x="284" y="316" width="188" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="298" y="363" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">맵 조회 · 커널 내 처리</text>
+<rect x="480" y="316" width="128" height="84" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.4"/>
+<text x="494" y="350" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">규칙 수와 무관</text>
+<text x="494" y="374" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">O(1)</text>
+<rect x="616" y="316" width="208" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="630" y="363" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">cilium-dbg bpf lb list</text>
+<rect x="832" y="316" width="136" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="846" y="363" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">L7 정책 · 관측</text>
+<text x="16" y="448" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">리스트는 규칙이 늘수록 대조 횟수가 함께 늘고, 해시는 규칙 수와 무관하다. 세대가 바꾼 것은 결국 목적지를 찾는 방법 하나다.</text>
+<line x1="12" y1="468" x2="952" y2="468" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="490" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="480" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="122" y="490" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">규칙 수에 비례 · 이 편의 병목</text>
+<rect x="378" y="480" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="400" y="490" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">해시 조회로 상수시간</text>
+<rect x="565" y="480" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="587" y="490" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">커널 안에서 처리 · L7 까지</text>
+</svg>

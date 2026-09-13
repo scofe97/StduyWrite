@@ -1,0 +1,66 @@
+<svg viewBox="0 0 900 430" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>AtomicLong vs LongAdder — 단일 셀 경합 vs 셀 분산</title>
+  <desc>AtomicLong은 모든 스레드가 하나의 셀에 CAS로 경합해 충돌이 잦으면 재시도가 폭주한다. LongAdder는 스레드마다 다른 셀에 경합 없이 누적하고 sum() 호출 시에만 모든 셀을 합산하므로, 높은 경합에서 훨씬 빠르다.</desc>
+  <rect x="0" y="0" width="900" height="430" fill="#0d0d0d"/>
+
+  <text x="450" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#e8e4df">AtomicLong vs LongAdder — 같은 CAS, 경합을 어디에 거나</text>
+
+  <!-- ===== 좌: AtomicLong — 단일 셀 경합 ===== -->
+  <rect x="30" y="56" width="400" height="334" rx="12" fill="#0d0d0d" stroke="#c0504d" stroke-width="2"/>
+  <text x="230" y="82" text-anchor="middle" font-size="15" font-weight="700" fill="#e08a87">AtomicLong — 셀 하나에 다 같이</text>
+
+  <!-- 4 스레드 -->
+  <rect x="55"  y="100" width="78" height="34" rx="7" fill="#dceaf7"/><text x="94"  y="122" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10243a">T1</text>
+  <rect x="143" y="100" width="78" height="34" rx="7" fill="#dceaf7"/><text x="182" y="122" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10243a">T2</text>
+  <rect x="231" y="100" width="78" height="34" rx="7" fill="#dceaf7"/><text x="270" y="122" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10243a">T3</text>
+  <rect x="319" y="100" width="78" height="34" rx="7" fill="#dceaf7"/><text x="358" y="122" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10243a">T4</text>
+
+  <!-- 4개 화살표가 한 셀로 수렴 -->
+  <line x1="94"  y1="134" x2="220" y2="250" stroke="#c0504d" stroke-width="2"/>
+  <line x1="182" y1="134" x2="225" y2="250" stroke="#c0504d" stroke-width="2"/>
+  <line x1="270" y1="134" x2="235" y2="250" stroke="#c0504d" stroke-width="2"/>
+  <line x1="358" y1="134" x2="240" y2="250" stroke="#c0504d" stroke-width="2"/>
+
+  <!-- 단일 셀 -->
+  <rect x="170" y="252" width="120" height="48" rx="9" fill="#f2d4d4"/>
+  <text x="230" y="273" text-anchor="middle" font-size="12.5" font-weight="700" fill="#7a1f1f">value (셀 1개)</text>
+  <text x="230" y="291" text-anchor="middle" font-size="11" fill="#7a1f1f">CAS 충돌 → 재시도</text>
+
+  <rect x="55" y="324" width="350" height="52" rx="9" fill="#0d0d0d" stroke="#c0504d" stroke-width="1.5"/>
+  <text x="70" y="345" font-size="11.5" font-weight="700" fill="#e08a87">경합 ↑ → 한 셀에 CAS 실패가 쌓여 재시도 루프</text>
+  <text x="70" y="364" font-size="11" fill="#c9c4be">스레드가 많을수록 느려진다. 값은 항상 즉시 정확.</text>
+
+  <!-- ===== 우: LongAdder — 셀 분산 ===== -->
+  <rect x="470" y="56" width="400" height="334" rx="12" fill="#0d0d0d" stroke="#66bb6a" stroke-width="2"/>
+  <text x="670" y="82" text-anchor="middle" font-size="15" font-weight="700" fill="#66bb6a">LongAdder — 스레드마다 다른 셀</text>
+
+  <!-- 4 스레드 -->
+  <rect x="495" y="100" width="78" height="34" rx="7" fill="#dceaf7"/><text x="534" y="122" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10243a">T1</text>
+  <rect x="583" y="100" width="78" height="34" rx="7" fill="#dceaf7"/><text x="622" y="122" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10243a">T2</text>
+  <rect x="671" y="100" width="78" height="34" rx="7" fill="#dceaf7"/><text x="710" y="122" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10243a">T3</text>
+  <rect x="759" y="100" width="78" height="34" rx="7" fill="#dceaf7"/><text x="798" y="122" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10243a">T4</text>
+
+  <!-- 각자 다른 셀로 직진 (경합 없음) -->
+  <line x1="534" y1="134" x2="534" y2="186" stroke="#66bb6a" stroke-width="2"/>
+  <line x1="622" y1="134" x2="622" y2="186" stroke="#66bb6a" stroke-width="2"/>
+  <line x1="710" y1="134" x2="710" y2="186" stroke="#66bb6a" stroke-width="2"/>
+  <line x1="798" y1="134" x2="798" y2="186" stroke="#66bb6a" stroke-width="2"/>
+
+  <!-- 4개 셀 -->
+  <rect x="503" y="188" width="62" height="40" rx="7" fill="#cdeccf"/><text x="534" y="213" text-anchor="middle" font-size="11" font-weight="700" fill="#14521d">cell0</text>
+  <rect x="591" y="188" width="62" height="40" rx="7" fill="#cdeccf"/><text x="622" y="213" text-anchor="middle" font-size="11" font-weight="700" fill="#14521d">cell1</text>
+  <rect x="679" y="188" width="62" height="40" rx="7" fill="#cdeccf"/><text x="710" y="213" text-anchor="middle" font-size="11" font-weight="700" fill="#14521d">cell2</text>
+  <rect x="767" y="188" width="62" height="40" rx="7" fill="#cdeccf"/><text x="798" y="213" text-anchor="middle" font-size="11" font-weight="700" fill="#14521d">cell3</text>
+
+  <!-- sum() 합산 -->
+  <line x1="534" y1="228" x2="650" y2="276" stroke="#66bb6a" stroke-width="1.8"/>
+  <line x1="622" y1="228" x2="655" y2="276" stroke="#66bb6a" stroke-width="1.8"/>
+  <line x1="710" y1="228" x2="665" y2="276" stroke="#66bb6a" stroke-width="1.8"/>
+  <line x1="798" y1="228" x2="670" y2="276" stroke="#66bb6a" stroke-width="1.8"/>
+  <rect x="595" y="278" width="150" height="40" rx="9" fill="#66bb6a"/>
+  <text x="670" y="303" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0d0d0d">sum() = cell0+1+2+3</text>
+
+  <rect x="495" y="332" width="350" height="44" rx="9" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="510" y="353" font-size="11.5" font-weight="700" fill="#66bb6a">누적은 경합 0 → 빠름. 합산은 sum() 부를 때만</text>
+  <text x="510" y="370" font-size="11" fill="#c9c4be">단점: sum() 순간값은 근사 — 증가만 하는 통계에 적합</text>
+</svg>

@@ -1,0 +1,80 @@
+<svg viewBox="0 0 880 450" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>내가 띄운 프로세스 넷과 화면에서 보는 부품 넷은 다른 층입니다</title>
+  <desc>실습에서 헷갈리는 두 개의 넷을 구분한다. 왼쪽은 docker compose ps 에 뜨는 프로세스 넷으로 Prometheus, Alertmanager, Node Exporter, Pushgateway 이고 각각 별개의 컨테이너이며 고유한 포트를 가진다. 오른쪽은 Prometheus 웹 UI 한 화면 안에서 보이는 내부 부품 넷으로 스크레이프 매니저, 룰 매니저, TSDB, 웹 UI 겸 REST API 이고 넷 모두 9090 포트 하나를 공유하는 같은 프로세스의 부분이다. 둘 사이를 잇는 선은 하나뿐이다. 프로세스 목록의 Prometheus 한 칸이 부품 넷 전체로 펼쳐진다. Alertmanager 를 내부 부품으로 세는 것이 대표적인 층 혼동이며, 9090 포트 아래에서 alertmanager 경로를 찾으면 404 가 돌아오는 것으로 확인된다. Alertmanager 는 9093 이라는 자기 포트를 가진 별개 프로세스이기 때문이다. 판별 기준은 포트를 세어 보는 것이다. 포트가 다르면 프로세스가 다르고, 같은 포트 아래에서 화면만 갈리면 한 프로세스의 부품이다.</desc>
+
+  <defs>
+    <marker id="plvAmber" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="880" height="450" fill="#0d0d0d"/>
+
+  <text x="20" y="30" fill="#e8e4df" font-size="15">넷이 둘 있습니다 — 프로세스 넷과 부품 넷은 같은 넷이 아닙니다</text>
+  <text x="20" y="52" fill="rgb(138,133,128)" font-size="10.5">판별 기준은 포트입니다. 포트가 다르면 다른 프로세스, 같은 포트 아래 화면만 다르면 한 프로세스의 부품입니다.</text>
+
+  <line x1="20" y1="66" x2="860" y2="66" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- ══ 왼쪽: 프로세스 층 ══ -->
+  <rect x="20" y="84" width="330" height="266" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="36" y="106" fill="#e8e4df" font-size="12">프로세스 층</text>
+  <rect x="36" y="116" width="180" height="20" fill="#f5edda"/>
+  <text x="46" y="131" fill="#0d0d0d" font-size="9" font-family="'JetBrains Mono', monospace">docker compose ps 에 뜨는 것</text>
+  <text x="36" y="154" fill="rgb(138,133,128)" font-size="9.5">각각 별개 컨테이너 · 각자 포트를 가집니다</text>
+
+  <rect x="36" y="166" width="298" height="30" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="50" y="185" fill="#e8e4df" font-size="10.5">Prometheus</text>
+  <text x="270" y="185" fill="rgb(212,168,83)" font-size="9.5" font-family="'JetBrains Mono', monospace">:9090</text>
+
+  <rect x="36" y="202" width="298" height="30" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="50" y="221" fill="#e8e4df" font-size="10.5">Alertmanager</text>
+  <text x="270" y="221" fill="rgb(138,133,128)" font-size="9.5" font-family="'JetBrains Mono', monospace">:9093</text>
+
+  <rect x="36" y="238" width="298" height="30" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="50" y="257" fill="#e8e4df" font-size="10.5">Node Exporter</text>
+  <text x="270" y="257" fill="rgb(138,133,128)" font-size="9.5" font-family="'JetBrains Mono', monospace">:9100</text>
+
+  <rect x="36" y="274" width="298" height="30" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="50" y="293" fill="#e8e4df" font-size="10.5">Pushgateway</text>
+  <text x="270" y="293" fill="rgb(138,133,128)" font-size="9.5" font-family="'JetBrains Mono', monospace">:9091</text>
+
+  <text x="36" y="326" fill="rgb(138,133,128)" font-size="9.5">넷 다 따로 죽고 따로 삽니다 — 하나를 멈춰도</text>
+  <text x="36" y="341" fill="rgb(138,133,128)" font-size="9.5">나머지 셋은 계속 돕니다</text>
+
+  <!-- ══ 잇는 선 — 하나뿐 ══ -->
+  <text x="386" y="160" fill="rgb(212,168,83)" font-size="9" text-anchor="middle">이 한 칸이</text>
+  <text x="386" y="174" fill="rgb(212,168,83)" font-size="9" text-anchor="middle">넷으로 펼쳐집니다</text>
+  <line x1="354" y1="188" x2="418" y2="188" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#plvAmber)"/>
+
+  <!-- ══ 오른쪽: 부품 층 ══ -->
+  <rect x="422" y="84" width="438" height="266" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)" stroke-dasharray="5 3"/>
+  <text x="438" y="106" fill="#e8e4df" font-size="12">부품 층 — Prometheus 프로세스 하나 안</text>
+  <rect x="438" y="116" width="150" height="20" fill="#f5edda"/>
+  <text x="448" y="131" fill="#0d0d0d" font-size="9" font-family="'JetBrains Mono', monospace">:9090 화면에서 갈리는 것</text>
+  <text x="438" y="154" fill="rgb(138,133,128)" font-size="9.5">넷 모두 같은 포트를 씁니다 · 같이 살고 같이 죽습니다</text>
+
+  <rect x="438" y="166" width="200" height="30" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="452" y="185" fill="#e8e4df" font-size="10.5">스크레이프 매니저</text>
+  <rect x="650" y="166" width="194" height="30" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="664" y="185" fill="#e8e4df" font-size="10.5">룰 매니저</text>
+
+  <rect x="438" y="202" width="200" height="30" fill="rgb(212,168,83)"/>
+  <text x="452" y="221" fill="#0d0d0d" font-size="10.5" font-weight="700">TSDB</text>
+  <rect x="650" y="202" width="194" height="30" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="664" y="221" fill="#e8e4df" font-size="10.5">웹 UI · REST API</text>
+
+  <text x="438" y="256" fill="rgb(138,133,128)" font-size="9.5">넷은 모두 TSDB 를 향합니다. 상세 구조는 §2 도식이 다룹니다.</text>
+
+  <rect x="438" y="270" width="406" height="62" fill="#0d0d0d" stroke="#f2d4d4"/>
+  <text x="452" y="290" fill="#f2d4d4" font-size="10">층 혼동이 나는 자리 — Alertmanager 를 부품으로 세는 것</text>
+  <rect x="452" y="298" width="176" height="20" fill="#f2d4d4"/>
+  <text x="462" y="313" fill="#7a1f1f" font-size="9" font-family="'JetBrains Mono', monospace">:9090/alertmanager → 404</text>
+  <text x="452" y="330" fill="rgb(138,133,128)" font-size="9">자기 포트 :9093 을 가진 별개 프로세스라 9090 아래에 없습니다.</text>
+
+  <!-- ── 하단 못박기 ── -->
+  <rect x="20" y="368" width="840" height="62" fill="#0d0d0d" stroke="rgb(138,133,128)" stroke-dasharray="4 3"/>
+  <text x="36" y="388" fill="rgb(212,168,83)" font-size="10.5">핵심</text>
+  <text x="80" y="388" fill="#e8e4df" font-size="10.5">두 목록은 겹치지 않습니다. 겹치는 것은 Prometheus 라는 이름 하나뿐입니다.</text>
+  <text x="36" y="408" fill="rgb(138,133,128)" font-size="10">"스택 구성요소를 대 보라"와 "내부 부품을 대 보라"는 다른 질문입니다. 전자는 프로세스를, 후자는 한 프로세스의 안을 묻습니다.</text>
+  <text x="36" y="424" fill="rgb(138,133,128)" font-size="10">헷갈릴 때는 포트를 세어 봅니다. 그것이 프로세스 경계이기 때문입니다.</text>
+</svg>

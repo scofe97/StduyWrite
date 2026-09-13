@@ -1,0 +1,65 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>jmh 구조와 공통 예제 코드</title>
+  <desc>jmh(Java Microbenchmark Harness)는 OpenJDK의 마이크로벤치마크 프레임워크다. Maven archetype으로 프로젝트를 만들고 Benchmark 어노테이션을 단 메서드를 작성한다. Blackhole의 consume으로 결과를 소비해 컴파일러가 연산을 제거하지 못하게 한다. Param으로 입력 범위를, Setup으로 측정 밖 초기화를 한다. 실행 계층은 trial(포크된 JVM 1회) 안에 warm-up iteration 5회와 measurement iteration 5회가 있고, 이 trial을 5번(fork) 반복한다. 기본값으로 각 iteration은 10초이며, 5 warm-up + 5 measurement = 100초, 5 trial이면 총 8분 20초다. 결과는 평균 ops/s와 99.9% 신뢰구간을 보고한다. 명령행 옵션 f는 fork 수, wi는 warm-up iteration 수, i는 measurement iteration 수, r는 iteration 최소 길이다. Setup의 Level은 셋이다. Trial은 벤치마크 초기화 시 1회, Iteration은 각 측정 사이클 전, Invocation은 각 메서드 실행 전이다. 공통 예제는 가상의 주가를 다루는 StockPrice 인터페이스이며, 표준편차 계산에 BigDecimal의 제곱근을 바빌로니아 방법으로 구하고, JAX-RS REST로 노출한다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">jmh 구조와 공통 예제 코드</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">OpenJDK 마이크로벤치마크 프레임워크 — micro 함정을 프레임워크가 막아줍니다</text>
+
+  <!-- 실행 계층 -->
+  <rect x="20" y="74" width="400" height="200" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="96" fill="#e8e4df" font-size="13" font-weight="bold">실행 계층 — trial / fork / iteration</text>
+  <rect x="38" y="108" width="364" height="120" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)"/>
+  <text x="50" y="126" fill="rgb(212,168,83)" font-size="11" font-weight="bold">trial = 포크된 JVM 1회 (총 5 fork 반복)</text>
+  <rect x="54" y="136" width="160" height="40" fill="rgba(127,168,201,0.13)" stroke="#7fa8c9"/>
+  <text x="134" y="153" fill="#9cc3df" font-size="10" text-anchor="middle">warm-up iter 5회</text>
+  <text x="134" y="169" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">10s씩 (결과 버림)</text>
+  <rect x="222" y="136" width="168" height="40" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/>
+  <text x="306" y="153" fill="#66bb6a" font-size="10" text-anchor="middle">measurement iter 5회</text>
+  <text x="306" y="169" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">10s씩 (결과 사용)</text>
+  <text x="54" y="196" fill="rgb(138,133,128)" font-size="10">1 trial = 100초 → 5 fork 반복 → 총 8분 20초</text>
+  <text x="54" y="214" fill="rgb(138,133,128)" font-size="10">결과: 평균 ops/s + 99.9% 신뢰구간</text>
+  <text x="38" y="250" fill="#e8e4df" font-size="11">fork마다 새 JVM → 결과 재현성 확인</text>
+  <text x="38" y="268" fill="rgb(138,133,128)" font-size="10">warm-up이 JIT 최적화 시간을 줌</text>
+
+  <!-- 명령행 옵션 -->
+  <rect x="432" y="74" width="230" height="200" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="450" y="96" fill="#9cc3df" font-size="13" font-weight="bold">명령행 옵션</text>
+  <rect x="450" y="108" width="60" height="22" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="480" y="123" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="middle">-f 5</text>
+  <text x="520" y="123" fill="rgb(138,133,128)" font-size="10">fork 수</text>
+  <rect x="450" y="136" width="60" height="22" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="480" y="151" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="middle">-wi 5</text>
+  <text x="520" y="151" fill="rgb(138,133,128)" font-size="10">warm-up iter</text>
+  <rect x="450" y="164" width="60" height="22" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="480" y="179" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="middle">-i 5</text>
+  <text x="520" y="179" fill="rgb(138,133,128)" font-size="10">measure iter</text>
+  <rect x="450" y="192" width="60" height="22" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="480" y="207" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="middle">-r 10</text>
+  <text x="520" y="207" fill="rgb(138,133,128)" font-size="10">iter 최소 초</text>
+  <text x="450" y="234" fill="rgb(138,133,128)" font-size="10">↑ 키우면 변동 줄고</text>
+  <text x="450" y="250" fill="rgb(138,133,128)" font-size="10">신뢰구간 좁아짐</text>
+  <text x="450" y="266" fill="rgb(138,133,128)" font-size="10">↓ 줄이면 시간 절약</text>
+
+  <!-- 주요 어노테이션 -->
+  <rect x="20" y="282" width="642" height="98" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="304" fill="#66bb6a" font-size="13" font-weight="bold">주요 어노테이션</text>
+  <rect x="38" y="314" width="120" height="24" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/><text x="98" y="330" fill="#66bb6a" font-family="'JetBrains Mono',monospace" font-size="10" text-anchor="middle">@Benchmark</text>
+  <text x="166" y="330" fill="rgb(138,133,128)" font-size="10">측정 대상 메서드 표시</text>
+  <rect x="350" y="314" width="120" height="24" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="410" y="330" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10" text-anchor="middle">Blackhole</text>
+  <text x="478" y="330" fill="rgb(138,133,128)" font-size="10">consume로 결과 소비(제거 방지)</text>
+  <rect x="38" y="346" width="120" height="24" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="98" y="362" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10" text-anchor="middle">@Param</text>
+  <text x="166" y="362" fill="rgb(138,133,128)" font-size="10">입력 범위 주입</text>
+  <rect x="350" y="346" width="120" height="24" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="410" y="362" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10" text-anchor="middle">@Setup</text>
+  <text x="478" y="362" fill="rgb(138,133,128)" font-size="10">측정 밖 초기화 (Teardown 짝)</text>
+
+  <!-- Setup Level -->
+  <rect x="20" y="388" width="642" height="58" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="410" fill="#e8e4df" font-size="12" font-weight="bold">@Setup Level 3종 — 언제 실행되나</text>
+  <text x="38" y="430" fill="rgb(138,133,128)" font-size="10">Trial: 벤치마크 초기화 시 1회 · Iteration: 각 측정 사이클 전 · Invocation: 각 메서드 실행 전(드물게만)</text>
+
+  <!-- 공통 예제 -->
+  <rect x="20" y="454" width="642" height="130" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="476" fill="rgb(212,168,83)" font-size="13" font-weight="bold">공통 예제 코드 — 가상 주가 시스템</text>
+  <text x="38" y="496" fill="#e8e4df" font-size="11">StockPrice / StockPriceHistory 인터페이스 (가격·심볼은 무작위 생성)</text>
+  <text x="38" y="514" fill="rgb(138,133,128)" font-size="10">대부분 mock entity manager로 무작위 데이터 → 모듈 수준 meso 벤치마크</text>
+  <text x="38" y="532" fill="rgb(138,133,128)" font-size="10">통화 데이터는 BigDecimal (double는 반올림 문제) → 표준편차에 제곱근 필요</text>
+  <text x="38" y="550" fill="#9cc3df" font-size="10">제곱근: 바빌로니아 방법(일부러 비효율) → "더 나은 알고리즘"의 예시이기도</text>
+  <text x="38" y="570" fill="rgb(138,133,128)" font-size="10">JAX-RS REST로 노출 · eager/lazy 초기화·캐싱 트레이드오프를 예제마다 비교</text>
+</svg>

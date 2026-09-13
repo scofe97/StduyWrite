@@ -1,0 +1,53 @@
+<svg viewBox="0 0 900 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>ThreadLocal 스레드별 격리 — 각 스레드가 자기 ThreadLocalMap을 들고 있어 공유가 일어나지 않음</title>
+  <desc>ThreadLocal 인스턴스 USER_ID는 하나지만, 값은 각 스레드 내부의 ThreadLocalMap에 따로 저장된다. 스레드 A는 alice, 스레드 B는 bob, 스레드 C는 carol을 본다. get()은 현재 스레드의 맵만 조회하므로 다른 스레드 값과 절대 섞이지 않아, 동기화 없이도 안전하다.</desc>
+  <rect x="0" y="0" width="900" height="420" fill="#0d0d0d"/>
+
+  <text x="450" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#e8e4df">ThreadLocal — 스레드마다 자기 값을 들고 있어 공유가 없다</text>
+  <text x="450" y="54" text-anchor="middle" font-size="12.5" fill="#c9c4be">ThreadLocal 인스턴스는 하나(USER_ID), 값은 각 스레드의 ThreadLocalMap에 따로 — get()은 "내 맵"만 본다</text>
+
+  <!-- 공유 ThreadLocal 인스턴스 (키) -->
+  <rect x="330" y="78" width="240" height="46" rx="10" fill="#f5edda"/>
+  <text x="450" y="98" text-anchor="middle" font-size="12.5" font-weight="700" fill="#5a4a1a">static ThreadLocal&lt;String&gt; USER_ID</text>
+  <text x="450" y="115" text-anchor="middle" font-size="10.5" fill="#5a4a1a">인스턴스 하나는 "값 그릇"이 아니라 "맵의 키"일 뿐</text>
+
+  <!-- 분기 화살표 -->
+  <line x1="450" y1="124" x2="160" y2="170" stroke="#8a857f" stroke-width="1.6"/>
+  <line x1="450" y1="124" x2="450" y2="170" stroke="#8a857f" stroke-width="1.6"/>
+  <line x1="450" y1="124" x2="740" y2="170" stroke="#8a857f" stroke-width="1.6"/>
+
+  <!-- 스레드 A -->
+  <rect x="40" y="172" width="240" height="190" rx="12" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.8"/>
+  <text x="160" y="196" text-anchor="middle" font-size="13" font-weight="700" fill="#66bb6a">스레드 A</text>
+  <rect x="62" y="210" width="196" height="64" rx="8" fill="#cdeccf"/>
+  <text x="160" y="230" text-anchor="middle" font-size="11" font-weight="700" fill="#14521d">ThreadLocalMap (A 전용)</text>
+  <rect x="78" y="240" width="164" height="26" rx="5" fill="#e6f7e7"/>
+  <text x="160" y="258" text-anchor="middle" font-size="11" font-weight="700" fill="#14521d">USER_ID → "alice"</text>
+  <text x="160" y="300" text-anchor="middle" font-size="11" fill="#c9c4be">USER_ID.get()</text>
+  <text x="160" y="320" text-anchor="middle" font-size="13" font-weight="700" fill="#66bb6a">→ "alice"</text>
+  <text x="160" y="346" text-anchor="middle" font-size="10" fill="#c9c4be">B·C의 값은 보이지 않음</text>
+
+  <!-- 스레드 B -->
+  <rect x="330" y="172" width="240" height="190" rx="12" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.8"/>
+  <text x="450" y="196" text-anchor="middle" font-size="13" font-weight="700" fill="#5b9bd5">스레드 B</text>
+  <rect x="352" y="210" width="196" height="64" rx="8" fill="#dceaf7"/>
+  <text x="450" y="230" text-anchor="middle" font-size="11" font-weight="700" fill="#10243a">ThreadLocalMap (B 전용)</text>
+  <rect x="368" y="240" width="164" height="26" rx="5" fill="#eaf3fb"/>
+  <text x="450" y="258" text-anchor="middle" font-size="11" font-weight="700" fill="#10243a">USER_ID → "bob"</text>
+  <text x="450" y="300" text-anchor="middle" font-size="11" fill="#c9c4be">USER_ID.get()</text>
+  <text x="450" y="320" text-anchor="middle" font-size="13" font-weight="700" fill="#5b9bd5">→ "bob"</text>
+  <text x="450" y="346" text-anchor="middle" font-size="10" fill="#c9c4be">A·C의 값은 보이지 않음</text>
+
+  <!-- 스레드 C -->
+  <rect x="620" y="172" width="240" height="190" rx="12" fill="#0d0d0d" stroke="#d4a853" stroke-width="1.8"/>
+  <text x="740" y="196" text-anchor="middle" font-size="13" font-weight="700" fill="#d4a853">스레드 C</text>
+  <rect x="642" y="210" width="196" height="64" rx="8" fill="#f5edda"/>
+  <text x="740" y="230" text-anchor="middle" font-size="11" font-weight="700" fill="#5a4a1a">ThreadLocalMap (C 전용)</text>
+  <rect x="658" y="240" width="164" height="26" rx="5" fill="#fdf3df"/>
+  <text x="740" y="258" text-anchor="middle" font-size="11" font-weight="700" fill="#5a4a1a">USER_ID → "carol"</text>
+  <text x="740" y="300" text-anchor="middle" font-size="11" fill="#c9c4be">USER_ID.get()</text>
+  <text x="740" y="320" text-anchor="middle" font-size="13" font-weight="700" fill="#d4a853">→ "carol"</text>
+  <text x="740" y="346" text-anchor="middle" font-size="10" fill="#c9c4be">A·B의 값은 보이지 않음</text>
+
+  <text x="450" y="398" text-anchor="middle" font-size="12" fill="#e8e4df">맵이 스레드 안에 있으니 값이 애초에 안 섞인다 — 그래서 lock 없이 안전, 대신 풀에서는 remove()로 비워야 누수가 없다</text>
+</svg>

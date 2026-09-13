@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+</defs>
+<title id="dt">readiness 실패는 그 Pod 가 아니라 남의 노드 규칙을 바꾼다</title><desc id="dd">Kubelet 의 프로브 실패가 API 서버와 EndpointSlice 컨트롤러를 거쳐 각 노드 kube-proxy 의 규칙 재작성으로 이어지며, 그 Pod 자신의 네트워크는 어느 단계에서도 바뀌지 않는다.</desc>
+<rect width="1000" height="500" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">READINESS · HOW A FAILED PROBE REACHES THE RULES</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">readiness 실패는 그 Pod 가 아니라 남의 노드 규칙을 바꾼다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">네 주체를 거쳐 내려가는데, 어느 단계도 그 Pod 의 네트워크를 건드리지 않는다</text>
+
+<text x="132" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">Kubelet · 그 노드</text>
+<text x="377" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">API 서버</text>
+<text x="622" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">EndpointSlice 컨트롤러</text>
+<text x="867" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">kube-proxy · 모든 노드</text>
+
+<rect x="32" y="140" width="200" height="94" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="44" y="160" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#6A95D8">1</text>
+<text x="132" y="185" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#F5F5F3">프로브 3회 연속 실패</text>
+<text x="132" y="209" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" fill="#8B98A9">failureThreshold: 3</text>
+
+<rect x="277" y="140" width="200" height="94" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="289" y="160" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#5E6B7E">2</text>
+<text x="377" y="185" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#F5F5F3">Pod 상태를 기록</text>
+<text x="377" y="209" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" fill="#8B98A9">Ready: False</text>
+
+<rect x="522" y="140" width="200" height="94" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="534" y="160" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#5E6B7E">3</text>
+<text x="622" y="185" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#F5F5F3">명단에서 제외 표시</text>
+<text x="622" y="209" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" fill="#8B98A9">ready: false</text>
+
+<rect x="767" y="140" width="200" height="94" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4"/>
+<text x="779" y="160" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#F08A59">4</text>
+<text x="867" y="185" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#F08A59">서비스 체인 재작성</text>
+<text x="867" y="209" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#8B98A9">그 Pod 줄을 뺀다</text>
+
+<line x1="232" y1="187" x2="271" y2="187" stroke="#6A95D8" stroke-width="1.2" marker-end="url(#info)"/>
+<line x1="477" y1="187" x2="516" y2="187" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<line x1="722" y1="187" x2="761" y2="187" stroke="#F08A59" stroke-width="1.2" marker-end="url(#acc)"/>
+<text x="251" y="255" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" fill="#5E6B7E">write</text>
+<text x="496" y="255" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" fill="#5E6B7E">watch</text>
+<text x="741" y="255" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" fill="#5E6B7E">watch</text>
+
+<rect x="32" y="286" width="445" height="100" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="52" y="316" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">그 Pod 는 그대로다</text>
+<text x="52" y="341" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">라우팅도 인터페이스도 바뀌지 않는다</text>
+<text x="52" y="363" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">그래서 초기화 중인 커넥션 풀 작업이 계속된다</text>
+
+<rect x="522" y="286" width="446" height="100" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4"/>
+<text x="542" y="316" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">바뀌는 곳은 다른 노드다</text>
+<text x="542" y="341" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">그 Pod 를 가리키던 줄이 사라진다</text>
+<text x="542" y="363" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">남은 줄의 확률이 다시 계산된다</text>
+
+<text x="36" y="414" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" fill="#8B98A9">readiness 는 끊는 장치가 아니라 명단에서 빼는 장치다 — 들어오는 방향만 막고 나가는 방향은 남긴다</text>
+<line x1="12" y1="434" x2="952" y2="434" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="458" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="448" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="458" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#8B98A9">상태가 전파되는 단계</text>
+<rect x="290" y="448" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="312" y="458" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" fill="#8B98A9">규칙이 실제로 바뀌는 자리</text>
+</svg>

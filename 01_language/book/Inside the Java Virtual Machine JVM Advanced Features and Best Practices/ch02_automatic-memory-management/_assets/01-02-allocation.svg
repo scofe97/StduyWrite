@@ -1,0 +1,85 @@
+<svg viewBox="0 0 900 460" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>객체 할당 두 방식 — Bump-the-pointer vs Free List</title>
+  <desc>자바 힙이 연속이면 경계 포인터를 옆으로 미는 Bump-the-pointer(압축형 GC), 조각나 있으면 빈 칸 목록을 뒤지는 Free List(마크-스윕 GC)를 쓴다. GC가 청소 후 객체를 미느냐가 힙을 연속으로 둘지 조각으로 둘지를 정하고, 그게 다시 할당 방식을 강제한다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: rgb(138,133,128); }
+      .col   { font-size: 14px; font-weight: 800; fill: #e8e4df; }
+      .nm    { font-size: 12px; font-weight: 700; fill: #e8e4df; }
+      .mt    { font-size: 10.5px; fill: rgb(138,133,128); }
+      .tick  { font-size: 10px; fill: rgb(212,168,83); font-weight: 700; }
+      .mono  { font-family: 'JetBrains Mono', monospace; }
+      .used  { font-size: 10px; fill: #e8e4df; font-weight: 700; }
+    </style>
+    <marker id="amber" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="460" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">객체 할당 두 방식 — 힙 모양이 알고리즘을 정한다</text>
+  <text x="28" y="58" class="sub">GC가 청소 후 객체를 미느냐(압축형) 안 미느냐(마크-스윕)가 힙을 연속/조각으로 가르고, 그게 할당 방식을 강제한다</text>
+
+  <!-- ===== 왼쪽: Bump-the-pointer ===== -->
+  <rect x="28" y="84" width="408" height="300" rx="10" fill="rgba(96,165,224,0.08)" stroke="#5b9bd5" stroke-width="2"/>
+  <text x="48" y="112" class="col">① Bump-the-pointer (포인터 밀기)</text>
+  <text x="48" y="133" class="mt">힙이 <tspan fill="#5b9bd5" font-weight="700">연속된 한 덩어리</tspan>일 때 · Serial · ParNew (압축형 GC)</text>
+
+  <!-- 연속 힙 바 -->
+  <text x="48" y="170" class="mt">자바 힙 (사용 영역 ↔ 빈 영역이 경계로 나뉨)</text>
+  <rect x="48" y="178" width="220" height="44" fill="rgba(96,165,224,0.22)" stroke="#5b9bd5" stroke-width="1.2"/>
+  <text x="158" y="205" class="used" text-anchor="middle">사용 중 (빈틈 없음)</text>
+  <rect x="268" y="178" width="148" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1.2"/>
+  <text x="342" y="205" class="mt" text-anchor="middle">빈 영역</text>
+
+  <!-- 경계 포인터 -->
+  <line x1="268" y1="232" x2="268" y2="262" stroke="rgb(212,168,83)" stroke-width="2.5"/>
+  <text x="268" y="278" class="tick mono" text-anchor="middle">ptr</text>
+
+  <!-- 미는 화살표 -->
+  <line x1="278" y1="247" x2="356" y2="247" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#amber)"/>
+  <text x="318" y="241" class="tick" text-anchor="middle">+size 만큼 밀기</text>
+
+  <rect x="48" y="300" width="368" height="66" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="64" y="323" class="nm">새 객체 = 경계 포인터를 옆으로 한 번 밀기</text>
+  <text x="64" y="344" class="mt">덧셈 한 번이라 가장 빠르다. 압축형 GC가 청소 때 살아있는</text>
+  <text x="64" y="359" class="mt">객체를 한쪽으로 밀어 붙여 빈 영역을 한 덩어리로 유지해 준다.</text>
+
+  <!-- ===== 오른쪽: Free List ===== -->
+  <rect x="464" y="84" width="408" height="300" rx="10" fill="rgba(244,67,54,0.06)" stroke="#f44336" stroke-width="2"/>
+  <text x="484" y="112" class="col">② Free List (빈 칸 목록)</text>
+  <text x="484" y="133" class="mt">힙이 <tspan fill="#f44336" font-weight="700">조각조각</tspan> 났을 때 · CMS(마크-스윕)</text>
+
+  <!-- 조각난 힙 바: 사용/빈 칸 교차 -->
+  <text x="484" y="170" class="mt">자바 힙 (객체가 죽으며 구멍이 뚫림)</text>
+  <rect x="484" y="178" width="70"  height="44" fill="rgba(96,165,224,0.22)" stroke="#5b9bd5" stroke-width="1.2"/>
+  <rect x="554" y="178" width="44"  height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-dasharray="4 3"/>
+  <rect x="598" y="178" width="90"  height="44" fill="rgba(96,165,224,0.22)" stroke="#5b9bd5" stroke-width="1.2"/>
+  <rect x="688" y="178" width="34"  height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-dasharray="4 3"/>
+  <rect x="722" y="178" width="60"  height="44" fill="rgba(96,165,224,0.22)" stroke="#5b9bd5" stroke-width="1.2"/>
+  <rect x="782" y="178" width="50"  height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-dasharray="4 3"/>
+  <text x="576" y="205" class="mt" text-anchor="middle">빈칸</text>
+  <text x="705" y="205" class="mt" text-anchor="middle">빈칸</text>
+  <text x="807" y="205" class="mt" text-anchor="middle">빈칸</text>
+
+  <!-- 빈 칸 목록 노드 -->
+  <text x="484" y="252" class="mt">빈 칸 목록(free list): 흩어진 빈 칸 위치·크기를 따로 관리</text>
+  <rect x="484" y="262" width="60" height="26" rx="6" fill="rgb(26,26,26)" stroke="rgb(212,168,83)"/>
+  <text x="514" y="279" class="tick mono" text-anchor="middle">free1</text>
+  <line x1="544" y1="275" x2="566" y2="275" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#amber)"/>
+  <rect x="568" y="262" width="60" height="26" rx="6" fill="rgb(26,26,26)" stroke="rgb(212,168,83)"/>
+  <text x="598" y="279" class="tick mono" text-anchor="middle">free2</text>
+  <line x1="628" y1="275" x2="650" y2="275" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#amber)"/>
+  <rect x="652" y="262" width="60" height="26" rx="6" fill="rgb(26,26,26)" stroke="rgb(212,168,83)"/>
+  <text x="682" y="279" class="tick mono" text-anchor="middle">free3</text>
+
+  <rect x="484" y="300" width="368" height="66" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="500" y="323" class="nm">새 객체 = 목록에서 맞는 빈 칸을 찾아 그 자리에</text>
+  <text x="500" y="344" class="mt">마크-스윕은 죽은 객체만 지우고 산 객체는 안 옮긴다 →</text>
+  <text x="500" y="359" class="mt">구멍이 남아 연속 공간이 없으므로 Bump를 쓸 수 없다.</text>
+
+  <!-- ===== 하단: 한 문장 ===== -->
+  <rect x="28" y="402" width="844" height="42" rx="10" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="450" y="428" class="nm" text-anchor="middle">🔑 GC 종류가 할당 방식을 결정한다 — 객체 생성 한 줄의 비용조차 GC 알고리즘 선택에 달려 있다</text>
+</svg>

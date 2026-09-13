@@ -1,0 +1,69 @@
+<svg viewBox="0 0 900 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>ConcurrentHashMap (Java 8+) — 빈 버킷은 CAS, 찬 버킷은 그 버킷만 synchronized</title>
+  <desc>ConcurrentHashMap은 버킷마다 락 전략을 다르게 쓴다. 빈 버킷에 첫 노드를 넣을 때는 CAS 한 명령으로 락 없이 삽입하고, 이미 노드가 있어 충돌하는 버킷을 수정할 때만 그 버킷 헤드 하나에 synchronized를 건다. 서로 다른 버킷을 건드리는 스레드는 완전히 병렬로 동작한다.</desc>
+  <rect x="0" y="0" width="900" height="440" fill="#0d0d0d"/>
+
+  <text x="450" y="32" text-anchor="middle" font-size="19" font-weight="700" fill="#e8e4df">ConcurrentHashMap (Java 8+) — 버킷마다 락 전략을 다르게</text>
+  <text x="450" y="54" text-anchor="middle" font-size="12.5" fill="#c9c4be">맵 전체에 락 하나(synchronizedMap)가 아니라, 버킷 단위로 잘게</text>
+
+  <!-- 버킷 배열 (가로 6칸) -->
+  <text x="60" y="100" font-size="12.5" font-weight="700" fill="#e8e4df">버킷 배열</text>
+  <g>
+    <!-- bucket0: 빈 → CAS -->
+    <rect x="60"  y="110" width="120" height="60" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="2"/>
+    <text x="120" y="133" text-anchor="middle" font-size="11.5" font-weight="700" fill="#66bb6a">버킷0 (빈 칸)</text>
+    <text x="120" y="156" text-anchor="middle" font-size="11" fill="#c9c4be">노드 없음</text>
+    <!-- bucket1: 빈 -->
+    <rect x="190" y="110" width="120" height="60" rx="8" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+    <text x="250" y="133" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5b9bd5">버킷1</text>
+    <text x="250" y="156" text-anchor="middle" font-size="11" fill="#c9c4be">노드 1개</text>
+    <!-- bucket2: 찬 → synchronized -->
+    <rect x="320" y="110" width="120" height="60" rx="8" fill="#0d0d0d" stroke="#d4a853" stroke-width="2"/>
+    <text x="380" y="133" text-anchor="middle" font-size="11.5" font-weight="700" fill="#d4a853">버킷2 (찬 칸)</text>
+    <text x="380" y="156" text-anchor="middle" font-size="11" fill="#c9c4be">노드 → 노드 (충돌)</text>
+    <!-- bucket3 -->
+    <rect x="450" y="110" width="120" height="60" rx="8" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+    <text x="510" y="133" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5b9bd5">버킷3</text>
+    <text x="510" y="156" text-anchor="middle" font-size="11" fill="#c9c4be">노드 1개</text>
+  </g>
+
+  <!-- T1 → 빈 버킷0 : CAS -->
+  <rect x="60" y="220" width="120" height="36" rx="7" fill="#dceaf7"/>
+  <text x="120" y="243" text-anchor="middle" font-size="12" font-weight="700" fill="#10243a">T1: put (버킷0)</text>
+  <line x1="120" y1="218" x2="120" y2="172" stroke="#66bb6a" stroke-width="2.5"/>
+  <polygon points="120,168 115,178 125,178" fill="#66bb6a"/>
+  <rect x="50" y="276" width="140" height="44" rx="8" fill="#cdeccf"/>
+  <text x="120" y="297" text-anchor="middle" font-size="12" font-weight="700" fill="#14521d">CAS 한 명령</text>
+  <text x="120" y="313" text-anchor="middle" font-size="10.5" fill="#14521d">"비었으면 넣기" — 락 X</text>
+
+  <!-- T2 → 찬 버킷2 : synchronized -->
+  <rect x="320" y="220" width="120" height="36" rx="7" fill="#dceaf7"/>
+  <text x="380" y="243" text-anchor="middle" font-size="12" font-weight="700" fill="#10243a">T2: put (버킷2)</text>
+  <line x1="380" y1="218" x2="380" y2="172" stroke="#d4a853" stroke-width="2.5"/>
+  <polygon points="380,168 375,178 385,178" fill="#d4a853"/>
+  <rect x="310" y="276" width="140" height="44" rx="8" fill="#fdf3df"/>
+  <text x="380" y="297" text-anchor="middle" font-size="12" font-weight="700" fill="#5a3d0a">synchronized</text>
+  <text x="380" y="313" text-anchor="middle" font-size="10.5" fill="#5a3d0a">그 버킷 헤드 하나만 잠금</text>
+
+  <!-- T3 → 버킷3 : 병렬 -->
+  <rect x="450" y="220" width="120" height="36" rx="7" fill="#dceaf7"/>
+  <text x="510" y="243" text-anchor="middle" font-size="12" font-weight="700" fill="#10243a">T3: put (버킷3)</text>
+  <line x1="510" y1="218" x2="510" y2="172" stroke="#5b9bd5" stroke-width="2.5"/>
+  <polygon points="510,168 505,178 515,178" fill="#5b9bd5"/>
+
+  <!-- 병렬 강조 박스 -->
+  <rect x="600" y="110" width="250" height="210" rx="10" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="725" y="135" text-anchor="middle" font-size="13" font-weight="700" fill="#5b9bd5">서로 다른 버킷 = 완전 병렬</text>
+  <text x="618" y="162" font-size="11.5" fill="#e8e4df">T1(버킷0)·T2(버킷2)·T3(버킷3)은</text>
+  <text x="618" y="182" font-size="11.5" fill="#e8e4df">서로 다른 칸이라 *동시에* 진행.</text>
+  <text x="618" y="208" font-size="11.5" fill="#c9c4be">맵 전체 락 하나면 셋이 줄섰겠지만,</text>
+  <text x="618" y="228" font-size="11.5" fill="#c9c4be">버킷 단위라 안 막힌다.</text>
+  <text x="618" y="258" font-size="11" font-weight="700" fill="#d4a853">같은 버킷에 충돌할 때만</text>
+  <text x="618" y="277" font-size="11" fill="#c9c4be">그 버킷 헤드에 synchronized로</text>
+  <text x="618" y="296" font-size="11" fill="#c9c4be">줄을 세운다(버킷2 안에서만).</text>
+
+  <!-- 하단 못박기 -->
+  <rect x="50" y="356" width="800" height="62" rx="10" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="68" y="380" font-size="12.5" font-weight="700" fill="#66bb6a">한 문장: "빈 버킷이면 CAS, 찬 버킷이면 그 버킷만 synchronized"</text>
+  <text x="68" y="402" font-size="11.5" fill="#c9c4be">Java 7 세그먼트 락(맵을 N조각)에서 Java 8 노드(버킷) 단위로 더 잘게 쪼갠 결과 — 충돌 안 나는 put은 락 자체가 없다.</text>
+</svg>

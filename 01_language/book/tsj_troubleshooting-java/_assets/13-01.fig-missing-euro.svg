@@ -1,0 +1,71 @@
+<svg viewBox="0 0 680 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>1유로 누락 추적 — 끊긴 트레이스·미발행 Kafka·DB ID 갭이 모여 가리킨 PostgreSQL 데드락 (원문 Figure 13.1·13.2 개념도)</title>
+  <desc>원문 Figure 13.1 과 13.2 의 개념을 도식으로 옮긴 것입니다. POS 단말기가 트랜잭션을 시작하면 API gateway 를 거쳐 payment-processing service 가 처리하고 감사 후 DB 에 기록하고 Kafka 로 발행해야 합니다. 1유로 누락 사건에서 추적은 POS 와 API gateway 와 payment-processing service 까지는 span 이 보이는데 그 아래로는 기록이 없어 끊깁니다. Kafka 토픽에는 대응 메시지가 없어 큐에 닿기 전에 사라졌습니다. DB 감사 테이블을 직접 쿼리하면 누락 레코드와 함께 자동증가 트랜잭션 ID 시퀀스에 의심스러운 갭이 있습니다. 이 단서들이 모여 가리킨 근본 원인은 같은 테이블 동시 insert 두 개가 공유 인덱스 락을 두고 경합한 PostgreSQL 데드락으로 DB 가 한 트랜잭션을 abort 해 해소했지만 애플리케이션이 재시도하지 않아 데이터를 잃고 에러도 하류에 드러내지 않은 조율 사각지대입니다. POS 는 Success 를 봤지만 백엔드는 트랜잭션을 통째로 잃었습니다. 하나의 도구로는 답이 안 나와 추적과 Kafka 와 DB 쿼리를 결합해야 합니다.</desc>
+  <rect x="0" y="0" width="680" height="400" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">1유로의 행방 — 사슬을 따라 데드락까지</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 Figure 13.1·13.2 개념도 — 한 도구론 부족, 결합해야 보인다</text>
+
+  <!-- 흐름 파이프라인 -->
+  <rect x="20" y="78" width="110" height="48" fill="rgba(127,168,201,0.1)" stroke="#7fa8c9"/>
+  <text x="75" y="100" fill="#9cc3df" font-size="11" font-weight="bold" text-anchor="middle">POS 단말기</text>
+  <text x="75" y="118" fill="#66bb6a" font-size="9" text-anchor="middle">"Approved" ✓</text>
+
+  <line x1="130" y1="102" x2="168" y2="102" stroke="#7fa8c9" stroke-width="1.5"/>
+  <polygon points="168,102 160,98 160,106" fill="#7fa8c9"/>
+
+  <rect x="170" y="78" width="110" height="48" fill="rgba(127,168,201,0.1)" stroke="#7fa8c9"/>
+  <text x="225" y="100" fill="#9cc3df" font-size="11" font-weight="bold" text-anchor="middle">API gateway</text>
+  <text x="225" y="118" fill="#66bb6a" font-size="9" text-anchor="middle">forward ✓</text>
+
+  <line x1="280" y1="102" x2="318" y2="102" stroke="#7fa8c9" stroke-width="1.5"/>
+  <polygon points="318,102 310,98 310,106" fill="#7fa8c9"/>
+
+  <rect x="320" y="78" width="150" height="48" fill="rgba(212,168,83,0.1)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="395" y="100" fill="rgb(212,168,83)" font-size="11" font-weight="bold" text-anchor="middle">payment-processing</text>
+  <text x="395" y="118" fill="#f47f72" font-size="9" text-anchor="middle">processTransaction()</text>
+
+  <line x1="470" y1="102" x2="508" y2="102" stroke="#f47f72" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <polygon points="508,102 500,98 500,106" fill="#f47f72"/>
+  <text x="489" y="92" fill="#f47f72" font-size="14" text-anchor="middle" font-weight="bold">✖</text>
+
+  <rect x="510" y="78" width="150" height="48" fill="rgb(20,20,20)" stroke="rgb(60,55,50)"/>
+  <text x="585" y="100" fill="rgb(138,133,128)" font-size="10" font-weight="bold" text-anchor="middle">DB write / Kafka</text>
+  <text x="585" y="118" fill="#f47f72" font-size="9" text-anchor="middle">도달 못 함</text>
+
+  <!-- 세 단서 -->
+  <text x="20" y="158" fill="#e8e4df" font-size="12" font-weight="bold">세 단서를 결합 — 하나로는 답이 안 나온다</text>
+
+  <rect x="20" y="170" width="206" height="92" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="190" fill="#f47f72" font-size="11" font-weight="bold">① 분산 추적</text>
+  <text x="34" y="210" fill="#e8e4df" font-size="9.5">trace abc123</text>
+  <text x="34" y="226" fill="rgb(138,133,128)" font-size="9">POS→gateway→processing</text>
+  <text x="34" y="242" fill="#f47f72" font-size="9.5">✖ 그 아래 span 없음</text>
+  <text x="34" y="256" fill="rgb(138,133,128)" font-size="8.5">→ DB쓰기 전 끊긴 트리</text>
+
+  <rect x="237" y="170" width="206" height="92" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="251" y="190" fill="#f47f72" font-size="11" font-weight="bold">② Kafka 토픽</text>
+  <text x="251" y="210" fill="#e8e4df" font-size="9.5">트랜잭션 이벤트 채널</text>
+  <text x="251" y="226" fill="#f47f72" font-size="9.5">✖ 대응 메시지 없음</text>
+  <text x="251" y="242" fill="rgb(138,133,128)" font-size="9">지연 아님</text>
+  <text x="251" y="256" fill="rgb(138,133,128)" font-size="8.5">→ 큐 닿기 전 사라짐</text>
+
+  <rect x="454" y="170" width="206" height="92" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="468" y="190" fill="rgb(212,168,83)" font-size="11" font-weight="bold">③ DB 직접 쿼리</text>
+  <text x="468" y="210" fill="#e8e4df" font-size="9.5">감사 테이블(시간 창)</text>
+  <text x="468" y="226" fill="#f47f72" font-size="9.5">누락 + ID 시퀀스 갭</text>
+  <text x="468" y="242" fill="rgb(138,133,128)" font-size="9">자동증가 ID 건너뜀</text>
+  <text x="468" y="256" fill="rgb(138,133,128)" font-size="8.5">→ 동시성 의심</text>
+
+  <!-- 화살표 수렴 -->
+  <line x1="123" y1="262" x2="320" y2="296" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <line x1="340" y1="262" x2="340" y2="296" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <line x1="557" y1="262" x2="360" y2="296" stroke="rgb(138,133,128)" stroke-width="1"/>
+
+  <!-- 근본 원인 -->
+  <rect x="20" y="300" width="640" height="84" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="34" y="322" fill="#f47f72" font-size="13" font-weight="bold">★ 근본 원인 — PostgreSQL 데드락 + 재시도 누락</text>
+  <text x="34" y="343" fill="#e8e4df" font-size="10.5">동시 insert 두 개가 공유 인덱스 락 경합 → DB가 한 트랜잭션 abort(올바른 해소)</text>
+  <text x="34" y="362" fill="#f47f72" font-size="10.5">그런데 앱이 재시도 안 함 → 일반 경고로 로깅(noise에 묻힘) → 데이터·에러 둘 다 잃음</text>
+  <text x="34" y="379" fill="rgb(138,133,128)" font-size="10">POS는 "Success" · 백엔드는 트랜잭션 통째로 잃음 = 조율 사각지대 (로그 없으면 ID갭·부하재현·lock wait)</text>
+</svg>

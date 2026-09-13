@@ -1,0 +1,67 @@
+<svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Process Containment — 최소 권한으로 컨테이너를 가두기</title>
+  <desc>Kubernetes Patterns 23장. Process Containment는 최소 권한 원칙을 적용해 프로세스를 실행에 필요한 최소 권한으로 제약하는 패턴입니다. 공격 표면을 줄이고 방어선을 만들며, 악성 프로세스가 경계 밖으로 나가지 못하게 막습니다. 앱 코드가 뚫려도 런타임 프로세스 수준 통제가 없으면 공격자가 호스트·클러스터를 장악할 수 있으므로, securityContext로 컨테이너를 필요한 권한만 갖게 합니다. 주요 설정 — 비root 실행(runAsUser/runAsGroup 또는 runAsNonRoot), 권한 상승 차단(allowPrivilegeEscalation false), 능력 제한(capabilities drop ALL 후 필요한 것만 add, privileged 지양), 읽기전용 루트 파일시스템(readOnlyRootFilesystem), seccompProfile, seLinuxOptions. 개별 설정은 사람 실수가 많으므로 클러스터 관리자가 Pod Security Standards(PSS: Privileged/Baseline/Restricted 누적 3프로필)와 Pod Security Admission(PSA)으로 namespace 레이블(enforce/warn/audit)로 강제합니다. shift left — 개발 초기부터 운영 보안 기준을 고려합니다.</desc>
+
+  <rect x="0" y="0" width="900" height="560" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="16">Process Containment — 최소 권한으로 컨테이너를 가두기</text>
+  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">앱 코드가 뚫려도 <tspan fill="#e8e4df">런타임 프로세스 통제</tspan>가 있으면 호스트·클러스터 장악을 막는다. 컨테이너는 보안 울타리이기도.</text>
+
+  <!-- securityContext options -->
+  <text x="24" y="86" fill="#e8e4df" font-size="12">securityContext — Pod/컨테이너 수준 (컨테이너 값이 우선)</text>
+  <rect x="24" y="96" width="418" height="80" fill="#dceaf7"/>
+  <text x="36" y="116" fill="#10243a" font-size="10" font-weight="700">① 비root 실행</text>
+  <text x="36" y="134" fill="#10243a" font-size="8.5">runAsUser: 1000 · runAsGroup: 2000 (이미지 UID와 일치 확인).</text>
+  <text x="36" y="148" fill="#10243a" font-size="8.5">덜 침습적: runAsNonRoot: true (UID 0 시작 차단, 유저는 안 바꿈).</text>
+  <text x="36" y="165" fill="#10243a" font-size="8.5">root 필요 시 init container로 잠깐만 root, 앱은 비root 시작.</text>
+
+  <rect x="458" y="96" width="418" height="80" fill="#cdeccf"/>
+  <text x="470" y="116" fill="#14521d" font-size="10" font-weight="700">② 권한 상승 차단</text>
+  <text x="470" y="134" fill="#14521d" font-size="8.5">allowPrivilegeEscalation: false</text>
+  <text x="470" y="148" fill="#14521d" font-size="8.5">(리눅스 sudo로 root 되기 방지).</text>
+  <text x="470" y="165" fill="#14521d" font-size="8.5">비root 설계면 부작용 없음 — 상승이 필요 없어야 정상.</text>
+
+  <rect x="24" y="184" width="418" height="80" fill="#f5edda"/>
+  <text x="36" y="204" fill="#0d0d0d" font-size="10" font-weight="700">③ 능력(capabilities) 제한</text>
+  <text x="36" y="222" fill="#0d0d0d" font-size="8.5">기본 capabilities는 대부분 앱에 과함(빈칸 두면 위험).</text>
+  <text x="36" y="236" fill="#0d0d0d" font-size="8.5">drop: [ALL] 후 필요한 것만 add: [NET_BIND_SERVICE].</text>
+  <text x="36" y="253" fill="#7a1f1f" font-size="8.5">privileged: true는 호스트 root와 동급 — 지양.</text>
+
+  <rect x="458" y="184" width="418" height="80" fill="#f5edda"/>
+  <text x="470" y="204" fill="#0d0d0d" font-size="10" font-weight="700">④ 읽기전용 루트 FS + 기타</text>
+  <text x="470" y="222" fill="#0d0d0d" font-size="8.5">readOnlyRootFilesystem: true (설정 변조·바이너리 설치 차단).</text>
+  <text x="470" y="236" fill="#0d0d0d" font-size="8.5">상태는 외부로(11장 Stateless), 로그는 stdout으로.</text>
+  <text x="470" y="253" fill="#0d0d0d" font-size="8.5">seccompProfile(시스템콜 제한) · seLinuxOptions(라벨 정책).</text>
+
+  <!-- policy enforcement -->
+  <text x="24" y="290" fill="#e8e4df" font-size="12">정책 강제 — 개별 설정은 사람 실수가 많다 → 클러스터 정책으로</text>
+  <rect x="24" y="300" width="852" height="30" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="36" y="319" fill="#e8e4df" font-size="9.5">Pod Security Standards(PSS) = 공통 언어 · Pod Security Admission(PSA) = 강제. (구 PodSecurityPolicy는 1.25에서 PSA로 대체)</text>
+
+  <!-- 3 profiles -->
+  <rect x="24" y="340" width="276" height="70" fill="#cdeccf"/>
+  <text x="36" y="360" fill="#14521d" font-size="10" font-weight="700">Privileged</text>
+  <text x="36" y="378" fill="#14521d" font-size="8.5">무제한. 신뢰된 사용자·인프라</text>
+  <text x="36" y="392" fill="#14521d" font-size="8.5">워크로드용 allow-by-default.</text>
+
+  <rect x="312" y="340" width="276" height="70" fill="#f5edda"/>
+  <text x="324" y="360" fill="#0d0d0d" font-size="10" font-weight="700">Baseline</text>
+  <text x="324" y="378" fill="#0d0d0d" font-size="8.5">일반 비핵심 워크로드용.</text>
+  <text x="324" y="392" fill="#0d0d0d" font-size="8.5">최소 제약, 알려진 상승 방지</text>
+  <text x="324" y="404" fill="#0d0d0d" font-size="8.5">(privileged 컨테이너 등 불허).</text>
+
+  <rect x="600" y="340" width="276" height="70" fill="#f2d4d4"/>
+  <text x="612" y="360" fill="#7a1f1f" font-size="10" font-weight="700">Restricted</text>
+  <text x="612" y="378" fill="#7a1f1f" font-size="8.5">최신 하드닝 best practice.</text>
+  <text x="612" y="392" fill="#7a1f1f" font-size="8.5">Baseline 위에 위 필드들</text>
+  <text x="612" y="404" fill="#7a1f1f" font-size="8.5">(runAsNonRoot 등) 강제. 누적.</text>
+
+  <!-- PSA actions -->
+  <rect x="24" y="422" width="852" height="52" fill="#dceaf7"/>
+  <text x="36" y="441" fill="#10243a" font-size="10" font-weight="700">PSA 액션 (namespace 레이블 pod-security.kubernetes.io/…)</text>
+  <text x="36" y="459" fill="#10243a" font-size="8.5">Warn — 위반 허용 + 사용자 경고 · Audit — 위반 허용 + 감사 로그 · Enforce — 위반 Pod 거부.</text>
+  <text x="36" y="471" fill="#10243a" font-size="8">예: enforce: baseline + warn: restricted → baseline 위반은 거부, restricted 위반은 경고.</text>
+
+  <!-- bottom -->
+  <rect x="24" y="486" width="852" height="30" fill="#f5edda"/>
+  <text x="36" y="505" fill="#0d0d0d" font-size="9.5">shift left — 개발 초기부터 운영 보안 기준을 고려. Process Containment의 요지: <tspan font-weight="700">"컨테이너에서 일어난 일은 컨테이너 안에 머문다"</tspan>(보안 침해 포함).</text>
+</svg>

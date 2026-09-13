@@ -1,0 +1,86 @@
+<svg viewBox="0 0 700 380" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>namespace 공유 — 같은 장치가 위험도 되고 사이드카도 됩니다</title>
+  <desc>호스트와 같은 namespace 를 컨테이너가 쓰게 할 이유가 가끔 있습니다. Docker 에서는 pid 를 host 로 지정해 요청합니다. 컨테이너화된 프로세스는 모두 호스트에서 보이므로 프로세스 namespace 를 컨테이너에 공유하면 그 컨테이너가 다른 컨테이너의 프로세스까지 보게 됩니다. 한 컨테이너에서 오래 도는 sleep 을 띄우고 다른 컨테이너를 pid host 로 시작하면 그 프로세스가 보이고, 더 나아가 두 번째 컨테이너에서 kill 을 보내 첫 번째 컨테이너의 프로세스를 죽일 수 있습니다. 반면 사이드카 컨테이너는 애플리케이션 컨테이너의 namespace 에 일부러 접근 권한을 받아 기능을 대신 떠맡습니다. 서비스 메시 사이드카는 네트워킹을 대신해 상호 TLS 를 보장하고, 관측 사이드카는 로깅과 추적과 메트릭 수집을 설정하며, 보안 사이드카는 허용되는 실행 파일과 네트워크 연결을 단속합니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .code { fill: #0d0d0d; font-size: 9.5px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .chip { fill: #f5edda; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .danger-title { fill: #7a1f1f; font-size: 11.5px; font-weight: 700; }
+    .danger-detail { fill: #7a1f1f; font-size: 9.5px; }
+    .kill { stroke: #7a1f1f; stroke-width: 1.5; fill: none; stroke-dasharray: 4 3; }
+    .ok-title { fill: #14521d; font-size: 11.5px; font-weight: 700; }
+    .ok-detail { fill: #14521d; font-size: 9.5px; }
+  </style>
+
+  <rect width="700" height="380" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="rd9" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#7a1f1f"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="30">같은 공유가 두 얼굴을 갖습니다</text>
+
+  <!-- 위험 쪽 -->
+  <rect class="box" x="40" y="42" width="180" height="84" rx="4"/>
+  <text class="box-title" x="56" y="63">컨테이너 A</text>
+  <rect class="chip" x="56" y="72" width="120" height="15" rx="3"/>
+  <text class="code" x="60" y="83">sleep 1000</text>
+  <text class="box-detail" x="56" y="102">평범하게 돌고 있다</text>
+  <text class="box-detail" x="56" y="118">자기 namespace 안에서</text>
+
+  <rect x="286" y="42" width="200" height="84" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="302" y="63">컨테이너 B</text>
+  <rect class="chip" x="302" y="72" width="140" height="15" rx="3"/>
+  <text class="code" x="306" y="83">--pid=host</text>
+  <text class="danger-detail" x="302" y="102">A 의 프로세스가 보인다</text>
+  <text class="danger-detail" x="302" y="118">다른 컨테이너까지 전부</text>
+
+  <path class="kill" d="M286,84 L224,84" marker-end="url(#rd9)"/>
+  <text class="danger-detail" x="228" y="76">kill -9</text>
+
+  <rect x="506" y="42" width="154" height="84" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="522" y="63">결과</text>
+  <text class="danger-detail" x="522" y="82">A 의 프로세스를</text>
+  <text class="danger-detail" x="522" y="100">B 에서 죽일 수 있다</text>
+  <text class="danger-detail" x="522" y="118">격리가 사라진다</text>
+
+  <!-- 사이드카 -->
+  <text class="head" x="40" y="166">같은 장치를 의도적으로 — 사이드카</text>
+
+  <rect x="40" y="178" width="196" height="98" rx="4" fill="#cdeccf"/>
+  <text class="ok-title" x="56" y="199">서비스 메시</text>
+  <text class="ok-detail" x="56" y="218">네트워킹을 대신 떠맡는다</text>
+  <text class="ok-detail" x="56" y="236">모든 연결에 상호 TLS</text>
+  <text class="ok-detail" x="56" y="256">앱 팀이 따로 안 짜도 된다</text>
+  <text class="ok-detail" x="56" y="272">10장의 주제입니다</text>
+
+  <rect x="252" y="178" width="196" height="98" rx="4" fill="#cdeccf"/>
+  <text class="ok-title" x="268" y="199">관측</text>
+  <text class="ok-detail" x="268" y="218">로깅·추적·메트릭 수집</text>
+  <text class="ok-detail" x="268" y="236">목적지와 설정을 잡아 준다</text>
+  <text class="ok-detail" x="268" y="256">Prometheus 가 지원</text>
+  <text class="ok-detail" x="268" y="272">OpenTelemetry 도</text>
+
+  <rect x="464" y="178" width="196" height="98" rx="4" fill="#cdeccf"/>
+  <text class="ok-title" x="480" y="199">보안</text>
+  <text class="ok-detail" x="480" y="218">허용 실행 파일을 단속</text>
+  <text class="ok-detail" x="480" y="236">네트워크 연결도 함께</text>
+  <text class="ok-detail" x="480" y="256">앱 컨테이너 안의 행동을</text>
+  <text class="ok-detail" x="480" y="272">밖에서 통제한다</text>
+
+  <text class="hint" x="40" y="312">차이는 기술이 아니라 의도입니다</text>
+  <text class="hint" x="40" y="332">사이드카는 필요한 것만 받습니다</text>
+  <text class="hint" x="40" y="352">멀티테넌트면 특히 경계해야 합니다</text>
+</svg>

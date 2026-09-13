@@ -1,0 +1,79 @@
+<svg viewBox="0 0 900 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>init 컨테이너는 순차로, 앱 컨테이너는 병렬로 실행됩니다</title>
+  <desc>Pod 안 컨테이너가 두 그룹으로 나뉘어 실행되는 순서를 시간 축으로 보입니다. 왼쪽부터 init 컨테이너들이 하나씩 순차로 실행됩니다. 앞의 것이 성공적으로 종료해야 다음 것이 시작하므로 각 단계에서 이전 단계가 끝났음을 확신할 수 있습니다. 모든 init 컨테이너가 성공한 뒤에야 경계선을 넘어 앱 컨테이너들이 시작하고 이들은 서로 순서 보장 없이 병렬로 뜹니다. 그래서 순서에 의존하는 초기화는 init 쪽에 두어야 합니다. init 컨테이너 하나라도 실패하면 kubelet이 그것을 성공할 때까지 반복 재시작하므로 같은 로직이 여러 번 실행될 수 있고 따라서 멱등하게 만들어야 합니다. 다만 Pod의 restartPolicy가 Never이면 기동 중 init 실패는 Pod 전체 실패로 처리됩니다. 아래쪽은 두 그룹의 성격 차이입니다. init 컨테이너는 반드시 종료해야 하므로 probe가 없고 앱 컨테이너는 계속 돌기 때문에 probe를 갖습니다. 두 그룹은 같은 Pod에 속하므로 볼륨과 리소스 한계와 보안 설정을 공유하고 같은 노드에 배치됩니다.</desc>
+
+  <rect width="900" height="400" fill="#0d0d0d"/>
+
+  <text x="24" y="30" fill="#e8e4df" font-size="15" font-weight="700">순차로 끝나야 병렬이 시작합니다</text>
+
+  <!-- phase labels -->
+  <text x="200" y="60" text-anchor="middle" fill="#f5edda" font-size="10" font-weight="700">init · 순차</text>
+  <text x="660" y="60" text-anchor="middle" fill="#cdeccf" font-size="10" font-weight="700">app · 병렬</text>
+
+  <!-- boundary -->
+  <line x1="470" y1="66" x2="470" y2="250" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="470" y="266" text-anchor="middle" fill="rgb(212,168,83)" font-size="9" font-weight="700">전부 성공해야 넘어갑니다</text>
+
+  <!-- init containers : sequential -->
+  <rect x="40" y="74" width="120" height="40" fill="#f5edda"/>
+  <text x="100" y="99" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">init 1</text>
+
+  <path d="M 164 94 L 192 94" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#am)"/>
+
+  <rect x="196" y="74" width="120" height="40" fill="#f5edda"/>
+  <text x="256" y="99" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">init 2</text>
+
+  <path d="M 320 94 L 348 94" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#am)"/>
+
+  <rect x="352" y="74" width="112" height="40" fill="#f5edda"/>
+  <text x="408" y="99" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">init 3</text>
+
+  <text x="40" y="134" fill="#b8b3ad" font-size="9">앞이 끝나야 다음이 시작합니다</text>
+
+  <!-- app containers : parallel -->
+  <rect x="480" y="74" width="180" height="34" fill="#cdeccf"/>
+  <text x="570" y="96" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">app A</text>
+
+  <rect x="676" y="74" width="180" height="34" fill="#cdeccf"/>
+  <text x="766" y="96" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">app B</text>
+
+  <rect x="480" y="116" width="376" height="34" fill="#cdeccf"/>
+  <text x="668" y="138" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">app C</text>
+
+  <text x="480" y="168" fill="#b8b3ad" font-size="9">동시에 뜨고 순서 보장이 없습니다</text>
+
+  <!-- failure path -->
+  <path d="M 100 184 L 100 210" stroke="#f44336" stroke-width="2" marker-end="url(#rm)"/>
+  <text x="118" y="196" fill="#f44336" font-size="9" font-weight="700">실패하면</text>
+
+  <rect x="40" y="216" width="390" height="34" fill="#f2d4d4"/>
+  <text x="60" y="238" fill="#7a1f1f" font-size="10" font-weight="700">kubelet 이 반복 재시작합니다</text>
+
+  <text x="40" y="272" fill="#b8b3ad" font-size="9">여러 번 도니 멱등해야 합니다</text>
+
+  <line x1="24" y1="292" x2="876" y2="292" stroke="#4a4640"/>
+
+  <!-- differences -->
+  <rect x="24" y="304" width="418" height="52" fill="#0d0d0d" stroke="#f5edda"/>
+  <text x="44" y="324" fill="#f5edda" font-size="10" font-weight="700">init · 반드시 종료합니다</text>
+  <text x="44" y="343" fill="#f5edda" font-size="9">그래서 probe 가 없습니다</text>
+
+  <rect x="458" y="304" width="418" height="52" fill="#0d0d0d" stroke="#cdeccf"/>
+  <text x="478" y="324" fill="#cdeccf" font-size="10" font-weight="700">app · 계속 돕니다</text>
+  <text x="478" y="343" fill="#cdeccf" font-size="9">그래서 probe 를 갖습니다</text>
+
+  <rect x="24" y="364" width="852" height="28" fill="rgb(212,168,83)"/>
+  <text x="450" y="383" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">볼륨 · 리소스 · 노드는 공유</text>
+
+  <defs>
+    <marker id="am" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="rm" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#f44336"/>
+    </marker>
+  </defs>
+</svg>

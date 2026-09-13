@@ -1,0 +1,45 @@
+<svg viewBox="0 0 680 380" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>da-ch6-ex2의 N+1 호출 — getProductNamesForPurchases가 findProduct를 10번 호출 (원문 Figure 6.11 개념도)</title>
+  <desc>원문 Figure 6.11 의 개념을 도식으로 옮긴 것입니다. /products 를 호출하면 PurchaseController 의 findPurchasedProductNames 가 PurchaseService 의 getProductNamesForPurchases 로 위임합니다. 이 메서드는 PurchaseRepository 의 findAll 을 1번 호출해 구매 목록을 얻은 뒤, 그 목록을 순회하며 ProductRepository 의 findProduct 를 10번 호출합니다. 코드를 보지 않고도 프로파일러가 이 호출 그래프와 호출 횟수를 보여 주어, 같은 조회를 10번 반복하는 설계 문제를 짚을 수 있습니다. 두 테이블을 JOIN 하면 한 번으로 줄일 수 있습니다.</desc>
+  <rect x="0" y="0" width="680" height="380" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">코드 없이 드러난 호출 그래프 — findProduct 10회</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 Figure 6.11 개념도 — da-ch6-ex2 /products (N+1 의 징후)</text>
+
+  <!-- Controller -->
+  <rect x="20" y="78" width="300" height="42" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="104" fill="#9cc3df" font-size="11" font-weight="bold">PurchaseController.findPurchasedProductNames()</text>
+  <line x1="170" y1="120" x2="170" y2="138" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+  <polygon points="170,138 166,130 174,130" fill="rgb(138,133,128)"/>
+  <text x="180" y="134" fill="rgb(138,133,128)" font-size="9">위임</text>
+
+  <!-- Service -->
+  <rect x="20" y="140" width="300" height="42" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="34" y="166" fill="rgb(212,168,83)" font-size="11" font-weight="bold">PurchaseService.getProductNamesForPurchases()</text>
+
+  <!-- findAll 1회 -->
+  <line x1="170" y1="182" x2="170" y2="208" stroke="rgb(102,187,106)" stroke-width="1.5"/>
+  <polygon points="170,208 166,200 174,200" fill="rgb(102,187,106)"/>
+  <text x="182" y="200" fill="#66bb6a" font-size="10">1회</text>
+  <rect x="20" y="210" width="300" height="40" fill="rgba(102,187,106,0.08)" stroke="#66bb6a"/>
+  <text x="34" y="228" fill="#66bb6a" font-size="11" font-weight="bold">PurchaseRepository.findAll()</text>
+  <text x="34" y="244" fill="rgb(138,133,128)" font-size="9">구매 목록을 한 번에 조회</text>
+
+  <!-- findProduct 10회 -->
+  <line x1="320" y1="161" x2="380" y2="161" stroke="#f47f72" stroke-width="1.5"/>
+  <polygon points="380,161 372,157 372,165" fill="#f47f72"/>
+  <text x="350" y="153" fill="#f47f72" font-size="11" font-weight="bold" text-anchor="middle">10회</text>
+  <rect x="382" y="140" width="278" height="60" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="396" y="164" fill="#f47f72" font-size="11" font-weight="bold">ProductRepository.findProduct()</text>
+  <text x="396" y="184" fill="rgb(138,133,128)" font-size="10">각 구매마다 제품 상세를 따로 조회</text>
+
+  <!-- 반복 표시 -->
+  <text x="521" y="222" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">반복: ① ② ③ ④ ⑤ ⑥ ⑦ ⑧ ⑨ ⑩</text>
+
+  <!-- 진단 -->
+  <rect x="20" y="270" width="640" height="92" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="34" y="292" fill="rgb(212,168,83)" font-size="12" font-weight="bold">진단 — 이게 설계 문제인가?</text>
+  <text x="34" y="316" fill="#e8e4df" font-size="11">목록 1회 조회 후 순회하며 DB 재조회 → 보통 설계 문제 (쿼리 1개로 줄일 수 있음)</text>
+  <text x="34" y="338" fill="#e8e4df" font-size="11">findProduct 10회 = 같은 쿼리 10번 전송 → product·purchase JOIN 한 방으로 해결</text>
+  <text x="34" y="356" fill="rgb(138,133,128)" font-size="10">코드를 보지 않고도 클래스·메서드·호출 횟수를 알아 어디를 고칠지 안다</text>
+</svg>

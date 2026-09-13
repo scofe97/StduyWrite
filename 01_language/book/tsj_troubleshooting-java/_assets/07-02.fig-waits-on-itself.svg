@@ -1,0 +1,32 @@
+<svg viewBox="0 0 680 320" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>메서드가 외부가 아니라 자기 자신을 기다린다 — self 실행 시간 > 총 CPU 시간 = 락 (원문 Figure 7.6 개념도)</title>
+  <desc>원문 Figure 7.6 의 개념을 도식으로 옮긴 것입니다. 샘플링 데이터에서 메서드는 기다리지만 다른 무언가를 기다리는 게 아니라 자기 자신을 기다리는 것처럼 보입니다. Self time 행은 메서드가 실행에 쓴 시간을 알려 주는데, 이 메서드는 self time 으로 CPU 시간이 약 700밀리초인데 총 실행 self time 은 훨씬 큰 4903밀리초입니다. 6장에서는 앱이 외부 서비스 응답을 기다려 이유가 분명했지만 여기서는 외부의 무언가를 기다리는 게 아니어서 그 스레드는 락에 걸렸을 가능성이 높고, 다른 스레드가 막았을 수 있습니다. 무엇이 막았는지 알려면 계측으로 더 파야 합니다.</desc>
+  <rect x="0" y="0" width="680" height="320" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">메서드가 "자기 자신"을 기다린다 — 락의 신호</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 Figure 7.6 개념도 — self 실행 시간 ≫ CPU 시간 (da-ch7-ex1)</text>
+
+  <!-- 6장 대비 -->
+  <rect x="20" y="76" width="312" height="80" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="98" fill="#9cc3df" font-size="12" font-weight="bold">6장 — 외부를 기다림</text>
+  <text x="34" y="120" fill="#e8e4df" font-size="10.5">호출 보내고 외부 서비스 응답 대기</text>
+  <text x="34" y="140" fill="rgb(138,133,128)" font-size="10">→ 기다리는 이유가 분명함 (I/O)</text>
+
+  <rect x="348" y="76" width="312" height="80" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="362" y="98" fill="#f47f72" font-size="12" font-weight="bold">7장 — 자기 자신을 기다림</text>
+  <text x="362" y="120" fill="#e8e4df" font-size="10.5">외부를 안 기다리는데 self 가 김</text>
+  <text x="362" y="140" fill="#f47f72" font-size="10">→ 락 의심 (다른 스레드가 막음)</text>
+
+  <!-- self time 막대 비교 -->
+  <text x="34" y="186" fill="#e8e4df" font-size="11" font-weight="bold">Self time 비교</text>
+  <text x="34" y="212" fill="rgb(138,133,128)" font-size="10">CPU self</text>
+  <rect x="120" y="200" width="80" height="20" fill="rgba(102,187,106,0.35)" stroke="#66bb6a"/>
+  <text x="210" y="215" fill="#66bb6a" font-size="11" font-weight="bold">700 ms</text>
+  <text x="34" y="240" fill="rgb(138,133,128)" font-size="10">총 self 실행</text>
+  <rect x="120" y="228" width="500" height="20" fill="rgba(244,127,114,0.18)" stroke="#f47f72"/>
+  <text x="630" y="243" fill="#f47f72" font-size="11" font-weight="bold" text-anchor="end">4903 ms</text>
+
+  <!-- 결론 -->
+  <rect x="20" y="266" width="640" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="290" fill="#e8e4df" font-size="11">700ms 만 일하고 4903ms 는 묶여 있음 → 스레드가 락에 걸림. 무엇이 막았는지는 Locks 계측으로.</text>
+</svg>

@@ -1,0 +1,69 @@
+<svg viewBox="0 0 900 520" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>locals와 stack은 바이트가 아니라 칸 — 64비트만 2칸</title>
+  <desc>javap -v로 보는 locals=M과 stack=N은 바이트 크기가 아니라 칸(slot/엔트리) 개수다. 32비트 이하 값은 1칸, long과 double은 2칸을 차지한다. withLong(long x, int y)는 x가 slot 0~1, y가 slot 2, z(long)가 slot 3~4로 locals 5칸이다. int 둘을 더하면 stack 2이고 long이 섞이면 더 깊어진다. JVM이 스택과 지역변수를 32비트 고정 슬롯 배열로 다루기 때문이다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11.5px;fill:rgb(150,145,140)}
+      .head{font-size:12.5px;font-weight:800;fill:rgb(212,168,83)}
+      .body{font-size:10.5px;fill:rgb(200,195,190)}
+      .note{font-size:9.5px;fill:rgb(150,145,140)}
+      .slotlab{font-size:10px;font-weight:700;fill:#10243a;font-family:'JetBrains Mono',monospace}
+      .code{font-size:11px;font-weight:700;fill:#e6c878;font-family:'JetBrains Mono',monospace}
+    </style>
+  </defs>
+  <rect x="0" y="0" width="900" height="520" fill="#0d0d0d"/>
+  <text x="28" y="40" class="title">locals · stack 은 바이트가 아니라 칸(slot) 개수</text>
+  <text x="28" y="64" class="sub">32비트 이하 = 1칸 · long·double = 2칸 · JVM이 32비트 고정 슬롯 배열로 다루기 때문</text>
+
+  <!-- 대상 코드 -->
+  <rect x="28" y="88" width="844" height="40" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="48" y="113" class="code">static long withLong(long x, int y) { long z = x + y; return z; }   →  javap: stack=4, locals=5</text>
+
+  <!-- 지역 변수 테이블 (slot) -->
+  <text x="28" y="162" class="head">① 지역 변수 테이블 — locals=5 (칸 5개)</text>
+  <!-- slot 0~1 : x(long) -->
+  <rect x="28" y="174" width="200" height="48" rx="6" fill="#dceaf7"/>
+  <text x="128" y="196" class="slotlab" text-anchor="middle">slot 0~1 = x (long)</text>
+  <text x="128" y="212" class="slotlab" text-anchor="middle" font-size="9">2칸 (64비트)</text>
+  <!-- slot 2 : y(int) -->
+  <rect x="234" y="174" width="100" height="48" rx="6" fill="#dceaf7"/>
+  <text x="284" y="196" class="slotlab" text-anchor="middle">slot 2 = y</text>
+  <text x="284" y="212" class="slotlab" text-anchor="middle" font-size="9">1칸 (int)</text>
+  <!-- slot 3~4 : z(long) -->
+  <rect x="340" y="174" width="200" height="48" rx="6" fill="#dceaf7"/>
+  <text x="440" y="196" class="slotlab" text-anchor="middle">slot 3~4 = z (long)</text>
+  <text x="440" y="212" class="slotlab" text-anchor="middle" font-size="9">2칸 (64비트)</text>
+  <text x="556" y="195" class="body">합 2+1+2 = 5칸 → locals=5</text>
+  <text x="556" y="214" class="note">바이트로는 8+4+8=20B 지만 칸으론 5</text>
+
+  <!-- 피연산자 스택 (stack) -->
+  <text x="28" y="262" class="head">② 피연산자 스택 — stack=4 (가장 깊을 때 칸 4개)</text>
+  <text x="28" y="284" class="body">z = x + y 계산 중 스택 깊이 변화 (long은 2칸 차지):</text>
+  <!-- 깊이 단계 -->
+  <rect x="28" y="298" width="180" height="44" rx="6" fill="#f5edda"/>
+  <text x="118" y="320" class="slotlab" text-anchor="middle" fill="#3a2f10">x 올림 → 2칸</text>
+  <text x="118" y="335" class="slotlab" text-anchor="middle" fill="#3a2f10" font-size="9">long = 2</text>
+  <rect x="216" y="298" width="180" height="44" rx="6" fill="#f5edda"/>
+  <text x="306" y="320" class="slotlab" text-anchor="middle" fill="#3a2f10">y 올림 → 3칸</text>
+  <text x="306" y="335" class="slotlab" text-anchor="middle" fill="#3a2f10" font-size="9">+ int 1</text>
+  <rect x="404" y="298" width="200" height="44" rx="6" fill="#f3d9a0"/>
+  <text x="504" y="320" class="slotlab" text-anchor="middle" fill="#3a2f10">y를 long 변환 → 4칸</text>
+  <text x="504" y="335" class="slotlab" text-anchor="middle" fill="#3a2f10" font-size="9">i2l: 가장 깊음</text>
+  <rect x="612" y="298" width="180" height="44" rx="6" fill="#f5edda"/>
+  <text x="702" y="320" class="slotlab" text-anchor="middle" fill="#3a2f10">ladd → 2칸</text>
+  <text x="702" y="335" class="slotlab" text-anchor="middle" fill="#3a2f10" font-size="9">더해 줄어듦</text>
+  <text x="28" y="364" class="note">최대 깊이 4 → stack=4 · 대조: int 둘 더하면 a(1)+b(1)=2 → stack=2</text>
+
+  <!-- 칸 셈법 표 -->
+  <text x="28" y="402" class="head">칸 셈법 — 단위는 바이트가 아니라 칸</text>
+  <rect x="28" y="414" width="400" height="70" rx="8" fill="#5b9bd5"/>
+  <text x="48" y="438" class="slotlab">1칸: boolean·byte·char·short·int·float·reference</text>
+  <text x="48" y="460" class="slotlab">2칸: long · double  (64비트만)</text>
+  <text x="48" y="478" class="slotlab" font-size="9">int가 4바이트여도 1칸, long이 8바이트여도 2칸</text>
+
+  <rect x="444" y="414" width="428" height="70" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="464" y="438" class="body">왜 칸으로 세나 — JVM이 스택·지역변수를</text>
+  <text x="464" y="458" class="body">32비트 고정 슬롯 배열로 다뤄서. 64비트만 2칸 연속.</text>
+  <text x="464" y="476" class="note">이 통일된 셈법이 메모리 계산·StackMapTable 검증을 단순화</text>
+</svg>

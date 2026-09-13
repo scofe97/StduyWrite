@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 660" font-family="Pretendard, sans-serif">
+  <rect width="680" height="660" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">샤딩 개요와 키 범위 샤딩</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">데이터를 여러 노드에 나눔 · 복제(6장)와 조합 · 핫스팟 회피가 핵심</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- 샤딩 + 복제 조합 -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">샤딩 + 복제 조합</text>
+  <rect x="32" y="124" width="616" height="60" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="48" y="146" fill="#e8e4df" font-size="11">각 샤드는 하나의 레코드만 소유 · 복제본은 여러 노드에 분산 · 노드는 일부 샤드의 리더이자 다른 샤드의 팔로워</text>
+  <text x="48" y="166" fill="rgb(138,133,128)" font-size="10">단일 노드로 감당 못할 데이터 양·쓰기 처리량이 샤딩 도입 기준 · 읽기만 많으면 복제(read scaling)로 충분</text>
+
+  <!-- 핫스팟 -->
+  <text x="32" y="218" fill="rgb(212,168,83)" font-size="14" font-weight="700">핫스팟과 스큐</text>
+  <rect x="32" y="230" width="296" height="76" rx="6" fill="#141414" stroke="#f47f72"/>
+  <text x="48" y="252" fill="#f47f72" font-size="12" font-weight="700">스큐(skew)</text>
+  <text x="48" y="272" fill="#e8e4df" font-size="10.5">일부 샤드에 데이터·요청이 집중</text>
+  <text x="48" y="290" fill="#e8e4df" font-size="10.5">나머지 노드는 유휴 → 의미 없는 샤딩</text>
+
+  <rect x="352" y="230" width="296" height="76" rx="6" fill="#141414" stroke="#f47f72"/>
+  <text x="368" y="252" fill="#f47f72" font-size="12" font-weight="700">핫 키(hot key)</text>
+  <text x="368" y="272" fill="#e8e4df" font-size="10.5">소셜 미디어 유명인처럼 특정 키에만</text>
+  <text x="368" y="290" fill="#e8e4df" font-size="10.5">쓰기·읽기가 폭주하는 상황</text>
+
+  <!-- 키 범위 샤딩 -->
+  <text x="32" y="344" fill="rgb(212,168,83)" font-size="14" font-weight="700">키 범위 샤딩 (key-range sharding)</text>
+  <rect x="32" y="356" width="616" height="96" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="48" y="378" fill="#7fa8c9" font-size="12" font-weight="700">연속 범위를 각 샤드에 할당 · 백과사전 권별 분류와 동일 원리</text>
+  <text x="48" y="398" fill="#e8e4df" font-size="10.5">범위 내 키는 정렬 저장 → 범위 스캔 효율적 (예: 특정 달의 센서 측정값 일괄 조회)</text>
+  <text x="48" y="416" fill="#66bb6a" font-size="10.5">+ 범위 쿼리 가능 · 경계 자동 조정(HBase·CockroachDB·RethinkDB)</text>
+  <text x="48" y="436" fill="#f47f72" font-size="10.5">− 인접 키 집중 쓰기 → 핫스팟 위험 (타임스탬프를 단독 키로 쓰면 현재 시간 샤드에 집중)</text>
+
+  <!-- 핫스팟 우회 -->
+  <text x="32" y="490" fill="rgb(212,168,83)" font-size="14" font-weight="700">키 범위 핫스팟 우회 전략</text>
+  <rect x="32" y="502" width="616" height="60" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="48" y="524" fill="#e8e4df" font-size="11">센서 ID를 타임스탬프 앞에 붙임 → 키 순서: 센서 ID 우선, 동시에 활성된 많은 센서로 분산</text>
+  <text x="48" y="546" fill="rgb(138,133,128)" font-size="10">단점: 여러 센서를 묶어 시간 범위로 조회하려면 센서별로 따로 범위 쿼리 → 클라이언트가 합산</text>
+
+  <!-- 리밸런싱 -->
+  <text x="32" y="598" fill="rgb(212,168,83)" font-size="14" font-weight="700">키 범위 리밸런싱 — 샤드 분할</text>
+  <rect x="32" y="610" width="616" height="40" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="628" fill="#e8e4df" font-size="10.5">샤드가 임계 크기(HBase 기본 10 GB) 초과 시 두 하위 범위로 분할 후 다른 노드로 이전 · 소규모 병합도 가능</text>
+  <text x="48" y="645" fill="rgb(138,133,128)" font-size="9.5">주의: 분할은 컴팩션과 유사한 고비용 쓰기 재작성 · 핫 샤드를 분할하면 부하가 증가해 과부하 위험</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>

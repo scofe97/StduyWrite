@@ -1,0 +1,56 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>힙 덤프 획득 — 정의·da-ch10-ex1 누수 기제·세 가지 획득 방법</title>
+  <desc>이 편의 요약입니다. 힙 덤프는 특정 순간 앱 메모리에 저장된 모든 객체와 그 관계를 찍은 스냅숏입니다. 앱이 크래시해 프로파일러를 못 붙일 때도 메모리 문제를 조사하게 해 줍니다. 크래시의 흔한 원인은 메모리 누수로 더는 쓸모없는 객체를 붙들어 메모리가 차다 OutOfMemoryError 로 무너지는 것입니다. 힙 덤프를 얻는 세 방법은 OOM 시 자동 생성하도록 설정하는 것, VisualVM 같은 프로파일러 버튼으로 얻는 것, jmap 같은 명령줄 도구로 얻는 것입니다. 자동 생성은 -XX:+HeapDumpOnOutOfMemoryError 와 -XX:HeapDumpPath 두 인자로 설정합니다. da-ch10-ex1 은 Main 의 static 리스트에 Product 를 무한 루프로 더해 참조가 안 풀려 GC 가 회수 못 하고 100MB 힙이 몇 초 만에 찹니다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="38" fill="#e8e4df" font-size="18" font-weight="bold">힙 덤프 획득</text>
+  <text x="20" y="60" fill="rgb(138,133,128)" font-size="11">Troubleshooting Java · 10장 도입~§10.1 · da-ch10-ex1</text>
+
+  <!-- 정의 -->
+  <rect x="20" y="78" width="640" height="80" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="34" y="100" fill="rgb(212,168,83)" font-size="13" font-weight="bold">힙 덤프 (heap dump) — 정의</text>
+  <text x="34" y="124" fill="#e8e4df" font-size="11">특정 순간 앱 메모리의 스냅숏 · 힙에 저장된 모든 객체와 그 관계를 보여 줌</text>
+  <text x="34" y="146" fill="rgb(138,133,128)" font-size="10.5">프로파일링을 못 할 때(크래시·접근 불가) 메모리 문제 조사에 결정적</text>
+
+  <!-- 누수→OOM -->
+  <rect x="20" y="172" width="640" height="66" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="34" y="194" fill="#f47f72" font-size="13" font-weight="bold">크래시의 흔한 원인 — 메모리 누수</text>
+  <text x="34" y="218" fill="#e8e4df" font-size="11">쓸모없는 객체를 호더처럼 붙듦 → 메모리가 참 → OutOfMemoryError → 무너짐</text>
+
+  <!-- 세 방법 -->
+  <text x="20" y="266" fill="#e8e4df" font-size="14" font-weight="bold">힙 덤프 얻는 세 방법 (+ 프로그래밍적)</text>
+
+  <rect x="20" y="280" width="206" height="120" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="33" y="302" fill="rgb(212,168,83)" font-size="12" font-weight="bold">① OOM 자동 생성</text>
+  <text x="33" y="324" fill="#e8e4df" font-size="9.5" font-family="monospace">-XX:+HeapDump</text>
+  <text x="33" y="338" fill="#e8e4df" font-size="9.5" font-family="monospace">OnOutOfMemoryError</text>
+  <text x="33" y="356" fill="#e8e4df" font-size="9.5" font-family="monospace">-XX:HeapDumpPath=</text>
+  <text x="33" y="378" fill="rgb(138,133,128)" font-size="9.5">크래시 순간 자동 떨굼</text>
+  <text x="33" y="393" fill="rgb(138,133,128)" font-size="9">→ 정석(항상 설정)</text>
+
+  <rect x="237" y="280" width="206" height="120" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="250" y="302" fill="#9cc3df" font-size="12" font-weight="bold">② 프로파일러</text>
+  <text x="250" y="326" fill="#e8e4df" font-size="10.5">VisualVM Monitor 탭</text>
+  <text x="250" y="346" fill="#e8e4df" font-size="10.5">Heap Dump 버튼</text>
+  <text x="250" y="372" fill="rgb(138,133,128)" font-size="9.5">로컬 실행 중 프로세스</text>
+  <text x="250" y="390" fill="rgb(138,133,128)" font-size="9">버튼 한 번</text>
+
+  <rect x="454" y="280" width="206" height="120" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="467" y="302" fill="#9cc3df" font-size="12" font-weight="bold">③ 명령줄</text>
+  <text x="467" y="324" fill="#e8e4df" font-size="9.5" font-family="monospace">jps -l → PID</text>
+  <text x="467" y="346" fill="#e8e4df" font-size="9.5" font-family="monospace">jmap -dump:format=b</text>
+  <text x="467" y="372" fill="rgb(138,133,128)" font-size="9.5">프로파일러 못 붙는</text>
+  <text x="467" y="390" fill="rgb(138,133,128)" font-size="9">원격 환경</text>
+
+  <!-- da-ch10-ex1 -->
+  <rect x="20" y="414" width="640" height="100" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="436" fill="#e8e4df" font-size="13" font-weight="bold">da-ch10-ex1 — 왜 힙을 채우나</text>
+  <text x="34" y="460" fill="#9cc3df" font-size="10.5" font-family="monospace">static List products; while(true) products.add(new Product())</text>
+  <text x="34" y="484" fill="#e8e4df" font-size="11">static 리스트가 Product 를 붙듦 → 참조 안 풀림 → GC 회수 불가</text>
+  <text x="34" y="506" fill="#f47f72" font-size="11" font-weight="bold">-Xmx100m → 100MB 가 몇 초 만에 참 → heapdump.bin 생성</text>
+
+  <!-- 주의 -->
+  <rect x="20" y="528" width="640" height="56" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="1.5"/>
+  <text x="34" y="550" fill="#9cc3df" font-size="12" font-weight="bold">저장 위치 주의</text>
+  <text x="34" y="572" fill="rgb(138,133,128)" font-size="10.5">Docker = 영속 볼륨에(클래스패스는 재시작 때 사라짐) · 덤프가 크니 디스크 공간 확인 · 쓰기 권한 필요</text>
+</svg>

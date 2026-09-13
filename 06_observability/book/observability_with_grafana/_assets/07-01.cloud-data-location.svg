@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 450" width="100%" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>클라우드 3사 연결에서 데이터가 어디에 남는가</title>
+  <desc>데이터 소스 방식은 텔레메트리를 클라우드에 그대로 두고 Grafana 가 질의 시점에 원격으로 읽습니다. AWS 통합 방식만 데이터를 Grafana Cloud 로 보내 로그는 Loki 에 메트릭은 Mimir 에 저장하므로 질의 시간에서 이점이 있습니다. GCP 와 Azure 는 이 장에서 데이터 소스 방식만 소개됩니다. AWS 통합은 태그가 있는 리소스만 메트릭이 발견되는 제약이 있습니다.</desc>
+
+  <style>
+    .code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 10.5px; }
+  </style>
+
+  <rect width="880" height="450" fill="#0d0d0d"/>
+
+  <text x="30" y="34" fill="#e8e4df" font-size="17" font-weight="700">데이터가 어디에 남는가</text>
+  <text x="30" y="55" fill="#b8b3ad" font-size="12">AWS 에만 두 갈래가 있다</text>
+
+  <!-- remote path -->
+  <rect x="30" y="76" width="400" height="200" rx="8" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.8"/>
+  <rect x="30" y="76" width="400" height="30" rx="8" fill="#5b9bd5"/>
+  <rect x="30" y="98" width="400" height="8" fill="#5b9bd5"/>
+  <text x="48" y="97" fill="#e8e4df" font-size="13" font-weight="700">데이터 소스 — 그대로 둔다</text>
+
+  <text x="48" y="128" fill="#e8e4df" font-size="12">질의 시점에만 원격으로 읽는다</text>
+
+  <rect x="48" y="140" width="364" height="26" rx="4" fill="#dceaf7"/>
+  <text x="58" y="158" fill="#10243a" font-size="11.5" font-weight="700">AWS</text>
+  <text class="code" x="106" y="158" fill="#10243a">Amazon CloudWatch</text>
+  <rect x="48" y="172" width="364" height="26" rx="4" fill="#dceaf7"/>
+  <text x="58" y="190" fill="#10243a" font-size="11.5" font-weight="700">GCP</text>
+  <text class="code" x="106" y="190" fill="#10243a">Google Cloud Monitoring</text>
+  <rect x="48" y="204" width="364" height="26" rx="4" fill="#dceaf7"/>
+  <text x="58" y="222" fill="#10243a" font-size="11.5" font-weight="700">Azure</text>
+  <text class="code" x="106" y="222" fill="#10243a">Azure Monitor</text>
+
+  <rect x="48" y="238" width="364" height="24" rx="4" fill="#f2d4d4"/>
+  <text x="58" y="255" fill="#7a1f1f" font-size="11" font-weight="700">먼 거리를 넘으므로 지연이 생긴다</text>
+
+  <!-- integration path -->
+  <rect x="450" y="76" width="400" height="200" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.8"/>
+  <rect x="450" y="76" width="400" height="30" rx="8" fill="#66bb6a"/>
+  <rect x="450" y="98" width="400" height="8" fill="#66bb6a"/>
+  <text x="468" y="97" fill="#0d0d0d" font-size="13" font-weight="700">통합 — 가져와 저장한다</text>
+
+  <text x="468" y="128" fill="#e8e4df" font-size="12">AWS 에만 있는 두 번째 갈래</text>
+
+  <rect x="468" y="140" width="176" height="26" rx="4" fill="#e6f7e7"/>
+  <text x="478" y="158" fill="#14521d" font-size="11.5" font-weight="700">로그 → Loki</text>
+  <rect x="656" y="140" width="176" height="26" rx="4" fill="#e6f7e7"/>
+  <text x="666" y="158" fill="#14521d" font-size="11.5" font-weight="700">메트릭 → Mimir</text>
+
+  <rect x="468" y="172" width="364" height="26" rx="4" fill="#e6f7e7"/>
+  <text x="478" y="190" fill="#14521d" font-size="11.5" font-weight="700">스택 안에 있어 질의가 빠르다</text>
+
+  <rect x="468" y="204" width="364" height="26" rx="4" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1"/>
+  <text x="478" y="222" fill="#e8e4df" font-size="11">로그 경로</text>
+  <text class="code" x="546" y="222" fill="#e8e4df">Lambda · Firehose</text>
+
+  <rect x="468" y="238" width="364" height="24" rx="4" fill="#f2d4d4"/>
+  <text x="478" y="255" fill="#7a1f1f" font-size="11" font-weight="700">태그가 있는 리소스만 발견된다</text>
+
+  <!-- query languages -->
+  <rect x="30" y="292" width="820" height="70" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="50" y="315" fill="rgb(212,168,83)" font-size="12.5" font-weight="700">제공자마다 질의 언어가 다르다</text>
+  <rect x="50" y="326" width="250" height="22" rx="3" fill="#fdf3df"/>
+  <text class="code" x="58" y="341" fill="#5c4410">AWS  CloudWatch Logs QL</text>
+  <rect x="316" y="326" width="250" height="22" rx="3" fill="#fdf3df"/>
+  <text class="code" x="324" y="341" fill="#5c4410">GCP  MQL + SLO</text>
+  <rect x="582" y="326" width="250" height="22" rx="3" fill="#fdf3df"/>
+  <text class="code" x="590" y="341" fill="#5c4410">Azure  KQL + ARG</text>
+
+  <!-- auth -->
+  <rect x="30" y="376" width="820" height="56" rx="8" fill="#0d0d0d" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+  <text x="50" y="398" fill="#e8e4df" font-size="11.5">인증도 갈린다</text>
+  <text class="code" x="150" y="398" fill="#b8b3ad">IAM · JWT/GCE · Client Secret</text>
+  <text x="50" y="420" fill="#b8b3ad" font-size="11">규모에 따른 계정 제한을 설계에서</text>
+</svg>

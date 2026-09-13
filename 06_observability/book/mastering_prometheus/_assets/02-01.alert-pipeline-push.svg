@@ -1,0 +1,88 @@
+<svg viewBox="0 0 880 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>알림이 사람에게 닿기까지 — 두 프로세스가 나눠 맡고, 그 사이 한 구간만 push 입니다</title>
+  <desc>알림 파이프라인을 두 프로세스로 갈라 보여 준다. 왼쪽 Prometheus 프로세스 안에서는 룰 매니저가 TSDB 를 읽어 알림 룰을 평가하고, 임계치를 넘으면 알림 페이로드를 만든다. 거기까지가 Prometheus 의 책임이다. 가운데 굵은 화살표가 두 프로세스를 잇는 구간이며 이 방향이 push 다. 보내는 쪽인 Prometheus 만 상대 주소를 알고 있고 설정도 스크레이프 설정이 아니라 별도의 alerting 블록에 적는다. 생태계가 거의 전부 pull 인데 이 구간만 방향이 뒤집힌 이유는 알림이 터지는 즉시 가야 하기 때문이며, 긁어 가는 방식이면 다음 주기까지 기다려야 한다. 오른쪽 Alertmanager 프로세스는 받은 알림을 그룹핑과 억제와 침묵과 라우팅으로 가공해 메일이나 슬랙 같은 목적지로 보낸다. 아래쪽에는 실패했을 때의 흔적을 따로 두었다. Alertmanager 가 내려가 있으면 Prometheus 웹 UI 에는 firing 이 그대로 뜨지만 메일은 오지 않고, 보낸 쪽 카운터인 prometheus notifications dropped total 이 올라간다. 버린 주체가 보낸 쪽이라는 사실 자체가 이 구간의 방향이 push 임을 증명한다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 15px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 11px; fill: rgb(138,133,128); }
+      .lyr  { font-size: 10.5px; font-weight: 800; fill: rgb(138,133,128); }
+      .box  { font-size: 11.5px; fill: #e8e4df; }
+      .note { font-size: 10px; fill: rgb(138,133,128); }
+      .amb  { font-size: 11px; font-weight: 700; fill: rgb(212,168,83); }
+      .pink { font-size: 11px; font-weight: 700; fill: rgb(240,150,190); }
+      .mono { font-size: 10.5px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .monod{ font-size: 10.5px; font-weight: 700; fill: rgb(240,150,190); font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    </style>
+    <marker id="apA" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="apG" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="880" height="470" fill="#0d0d0d"/>
+
+  <text x="30" y="34" class="h1">알림은 두 프로세스가 나눠 맡습니다 — 그 사이 한 구간만 push 입니다</text>
+  <text x="30" y="54" class="sub">Prometheus 는 판단까지, Alertmanager 는 전달을 맡습니다. 둘을 잇는 구간의 방향이 생태계에서 예외입니다.</text>
+
+  <line x1="30" y1="68" x2="850" y2="68" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- ══ Prometheus 프로세스 ══ -->
+  <rect x="30" y="86" width="330" height="180" fill="#0d0d0d" stroke="rgb(92,84,74)" stroke-dasharray="5 3"/>
+  <text x="46" y="108" class="lyr">Prometheus 프로세스 — 판단까지</text>
+
+  <rect x="46" y="120" width="298" height="34" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="60" y="141" class="box">TSDB — 시계열을 읽습니다</text>
+
+  <line x1="195" y1="158" x2="195" y2="174" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#apG)"/>
+
+  <rect x="46" y="180" width="298" height="34" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="60" y="201" class="box">룰 매니저 — 임계치를 넘었나 평가합니다</text>
+
+  <line x1="195" y1="218" x2="195" y2="234" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#apA)"/>
+
+  <rect x="46" y="240" width="298" height="34" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="60" y="261" class="amb">알림 페이로드를 만듭니다 — 여기까지가 책임</text>
+
+  <!-- ══ push 구간 ══ -->
+  <line x1="366" y1="196" x2="516" y2="196" stroke="rgb(212,168,83)" stroke-width="3" marker-end="url(#apA)"/>
+  <text x="441" y="172" class="amb" text-anchor="middle">push — 이 구간만</text>
+  <text x="441" y="188" class="note" text-anchor="middle">방향이 뒤집힙니다</text>
+
+  <rect x="372" y="206" width="138" height="46" fill="#f5edda"/>
+  <text x="382" y="223" class="mono">alerting:</text>
+  <text x="382" y="240" class="mono">  alertmanagers:</text>
+  <text x="441" y="266" class="note" text-anchor="middle">보내는 쪽만 주소를 압니다</text>
+
+  <!-- ══ Alertmanager 프로세스 ══ -->
+  <rect x="522" y="86" width="328" height="180" fill="#0d0d0d" stroke="rgb(92,84,74)" stroke-dasharray="5 3"/>
+  <text x="538" y="108" class="lyr">Alertmanager 프로세스 — 전달을 맡습니다</text>
+
+  <rect x="538" y="120" width="296" height="88" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="552" y="141" class="box">사람이 감당할 형태로 가공합니다</text>
+  <text x="552" y="162" class="note">그룹핑 — 같은 원인을 한 상자로</text>
+  <text x="552" y="180" class="note">억제 · 침묵 — 눌러야 할 것을 누르고</text>
+  <text x="552" y="198" class="note">라우팅 — 조건별로 목적지를 가릅니다</text>
+
+  <line x1="686" y1="212" x2="686" y2="234" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#apG)"/>
+
+  <rect x="538" y="240" width="296" height="34" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="552" y="261" class="amb">메일 · Slack · PagerDuty 로 나갑니다</text>
+
+  <!-- ══ 실패했을 때 ══ -->
+  <rect x="30" y="296" width="820" height="96" fill="#0d0d0d" stroke="rgb(240,150,190)"/>
+  <text x="46" y="318" class="pink">Alertmanager 가 내려가 있으면 — 방향이 흔적으로 드러납니다</text>
+
+  <rect x="46" y="330" width="380" height="26" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="58" y="348" class="box">:9090/alerts 에는 firing 이 그대로 뜹니다</text>
+
+  <rect x="446" y="330" width="388" height="26" fill="#f2d4d4"/>
+  <text x="458" y="348" class="mono">메일함은 그대로 — 새 메일 0통</text>
+
+  <rect x="46" y="362" width="788" height="24" fill="#0d0d0d" stroke="rgb(240,150,190)"/>
+  <text x="58" y="379" class="monod">prometheus_notifications_dropped_total</text>
+  <text x="330" y="379" class="note">이 올라갑니다 — 버린 주체가 보낸 쪽입니다</text>
+
+  <!-- ══ 하단 못박기 ══ -->
+  <rect x="30" y="408" width="820" height="44" fill="#0d0d0d" stroke="rgb(138,133,128)" stroke-dasharray="4 3"/>
+  <text x="46" y="428" class="amb">핵심</text>
+  <text x="90" y="428" class="box">받을 쪽이 안 가지러 온 것이 아니라, 보낸 쪽이 실패해서 버린 것입니다.</text>
+  <text x="46" y="445" class="note">알림은 터지는 즉시 가야 하므로 긁는 방식을 쓸 수 없습니다 — 다음 주기까지 기다리는 지연이 알림에서는 곧 손해입니다.</text>
+</svg>

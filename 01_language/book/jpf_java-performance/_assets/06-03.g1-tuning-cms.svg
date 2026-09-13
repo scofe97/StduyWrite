@@ -1,0 +1,50 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>G1 GC 튜닝과 CMS</title>
+  <desc>G1 튜닝의 주 목표는 concurrent mode나 evacuation failure가 full GC를 부르지 않게 하는 것이다. full GC 방지 옵션은 넷이다. old 세대를 키우기, 백그라운드 스레드 늘리기, G1 백그라운드를 더 자주, mixed GC 작업량 늘리기다. G1은 주로 MaxGCPauseMillis 한 플래그로 튜닝하며 기본 200ms다. 이 값을 줄이면 young이 작아지고 mixed에서 처리할 old region이 줄어 concurrent mode failure 위험이 는다. 백그라운드 스레드는 ParallelGCThreads(STW 단계)와 ConcGCThreads(concurrent remark)로 조절한다. ConcGCThreads 기본은 (ParallelGCThreads+2)/4다. InitiatingHeapOccupancyPercent 기본 45는 전체 힙이 이 비율이면 marking cycle을 시작한다. 너무 높으면 full GC, 너무 낮으면 백그라운드 GC가 잦다. mixed GC는 G1MixedGCCountTarget(기본 8)으로 표시 region을 몇 사이클에 나눠 처리할지 정한다. 줄이면 promotion failure를 막지만 pause가 길어진다. CMS는 첫 concurrent collector로 young collection·concurrent cycle·필요 시 full GC를 한다. concurrent cycle은 initial-mark·mark·preclean·abortable preclean·remark·sweep·reset 단계다. concurrent mode failure·promotion failure·metaspace full이 비싼 full GC를 부른다. CMS는 CMSInitiatingOccupancyFraction과 UseCMSInitiatingOccupancyOnly로 백그라운드를 더 일찍 시작해 튜닝한다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">G1 GC 튜닝과 CMS</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">목표는 concurrent mode·evacuation failure가 full GC를 안 부르게 하는 것입니다</text>
+
+  <!-- G1 튜닝 4지점 -->
+  <rect x="20" y="74" width="642" height="148" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="96" fill="rgb(212,168,83)" font-size="13" font-weight="bold">G1 튜닝 — 주로 MaxGCPauseMillis 한 플래그 (기본 200ms)</text>
+  <text x="38" y="116" fill="#e8e4df" font-size="11">값↓ → young↓ + mixed에서 처리할 old region↓ → concurrent mode failure 위험↑</text>
+  <text x="38" y="134" fill="rgb(138,133,128)" font-size="11">그래도 full GC면 개별 튜닝:</text>
+  <rect x="38" y="144" width="200" height="36" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9"/>
+  <text x="48" y="162" fill="#9cc3df" font-size="10" font-weight="bold">ConcGCThreads</text>
+  <text x="48" y="176" fill="rgb(138,133,128)" font-size="9">(ParallelGCThreads+2)/4</text>
+  <rect x="246" y="144" width="200" height="36" fill="rgba(102,187,106,0.10)" stroke="#66bb6a"/>
+  <text x="256" y="162" fill="#66bb6a" font-size="10" font-weight="bold">IHOP (기본 45)</text>
+  <text x="256" y="176" fill="rgb(138,133,128)" font-size="9">전체 힙 % → marking 시작</text>
+  <rect x="454" y="144" width="208" height="36" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)"/>
+  <text x="464" y="162" fill="rgb(212,168,83)" font-size="10" font-weight="bold">G1MixedGCCountTarget</text>
+  <text x="464" y="176" fill="rgb(138,133,128)" font-size="9">기본 8, ↓로 promotion failure 막음</text>
+  <text x="38" y="200" fill="rgb(138,133,128)" font-size="10">IHOP 너무 높으면 full GC, 너무 낮으면 백그라운드 GC 잦음 → concurrent cycle 후 힙보다 높게</text>
+  <text x="38" y="216" fill="rgb(138,133,128)" font-size="10">region은 85% garbage면 mixed 대상 · mixed 작업량 = 표시 region 수 × count target × pause 여유</text>
+
+  <!-- CMS 동작 -->
+  <rect x="20" y="234" width="642" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="256" fill="#e8e4df" font-size="13" font-weight="bold">CMS — 첫 concurrent collector (deprecated)</text>
+  <text x="38" y="276" fill="rgb(138,133,128)" font-size="11">3 연산: young collection(STW) · old concurrent cycle · 필요 시 full GC(compaction)</text>
+  <text x="38" y="296" fill="#e8e4df" font-size="11">concurrent cycle 단계:</text>
+  <text x="38" y="316" fill="rgb(138,133,128)" font-size="10">initial-mark(STW) → mark → preclean → abortable preclean → remark(STW) → sweep → reset</text>
+  <text x="38" y="336" fill="rgb(212,168,83)" font-size="10">abortable preclean: young 50% 찰 때까지 대기 → remark가 young collection과 등 붙는 pause 회피</text>
+  <text x="38" y="350" fill="rgb(138,133,128)" font-size="9">old를 compaction 안 함 → high-water mark가 커짐</text>
+
+  <!-- CMS 실패 -->
+  <rect x="20" y="364" width="642" height="92" fill="rgba(244,67,54,0.06)" stroke="#f44336" stroke-width="2"/>
+  <text x="38" y="386" fill="#f44336" font-size="13" font-weight="bold">CMS 3가지 비싼 실패</text>
+  <text x="38" y="406" fill="#f47f72" font-size="10">concurrent mode failure — old를 제때 못 비움 → 단일 스레드 full GC (heap 클수록 더 나쁨)</text>
+  <text x="38" y="424" fill="#f47f72" font-size="10">promotion failure — old 단편화로 승격 실패 → 전체 compaction (예: 28초 pause)</text>
+  <text x="38" y="442" fill="#f47f72" font-size="10">metaspace full — CMS는 metaspace 미수집 → full GC로 미참조 클래스 폐기</text>
+
+  <!-- CMS 튜닝 -->
+  <rect x="20" y="468" width="642" height="116" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="490" fill="#66bb6a" font-size="13" font-weight="bold">CMS 튜닝 — concurrent mode failure 방지가 핵심</text>
+  <text x="38" y="510" fill="#e8e4df" font-size="11">① 힙↑(메모리 있으면 최선) ② 백그라운드 더 자주 ③ 백그라운드 스레드 늘리기</text>
+  <text x="38" y="530" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="9">-XX:CMSInitiatingOccupancyFraction=N + -XX:+UseCMSInitiatingOccupancyOnly</text>
+  <text x="38" y="548" fill="rgb(138,133,128)" font-size="10">old가 N% 차면 cycle 시작 (G1과 달리 old만, 전체 힙 아님) · 기본 70</text>
+  <text x="38" y="566" fill="rgb(212,168,83)" font-size="10">ConcGCThreads = (3 + ParallelGCThreads)/4 (G1보다 한 단계 일찍 늘림)</text>
+  <text x="38" y="580" fill="#f47f72" font-size="9">0으로 두면 백그라운드가 늘 돎 → CPU 낭비 + STW pause 누적, live+10~20% 이하로 두지 말 것</text>
+</svg>

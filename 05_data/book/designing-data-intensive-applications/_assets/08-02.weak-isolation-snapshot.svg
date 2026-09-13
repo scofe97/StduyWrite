@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 660" font-family="Pretendard, sans-serif">
+  <rect width="680" height="660" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">약한 격리 수준과 스냅샷 격리</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">Read Committed · 스냅샷 격리 · MVCC · 갱신 손실 방지</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- 격리 수준 비교 -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">격리 수준별 허용 이상 현상</text>
+
+  <!-- 헤더 행 -->
+  <rect x="32" y="122" width="616" height="24" rx="4" fill="#1a1410"/>
+  <text x="48" y="139" fill="rgb(212,168,83)" font-size="10" font-weight="700">격리 수준</text>
+  <text x="188" y="139" fill="rgb(212,168,83)" font-size="10" font-weight="700">더티 읽기</text>
+  <text x="298" y="139" fill="rgb(212,168,83)" font-size="10" font-weight="700">읽기 스큐</text>
+  <text x="398" y="139" fill="rgb(212,168,83)" font-size="10" font-weight="700">갱신 손실</text>
+  <text x="498" y="139" fill="rgb(212,168,83)" font-size="10" font-weight="700">쓰기 스큐</text>
+  <text x="588" y="139" fill="rgb(212,168,83)" font-size="10" font-weight="700">팬텀</text>
+
+  <!-- Read uncommitted -->
+  <rect x="32" y="146" width="616" height="22" rx="0" fill="#141414"/>
+  <text x="48" y="161" fill="#e8e4df" font-size="10">Read uncommitted</text>
+  <text x="188" y="161" fill="#f47f72" font-size="10">✗ 가능</text>
+  <text x="298" y="161" fill="#f47f72" font-size="10">✗ 가능</text>
+  <text x="398" y="161" fill="#f47f72" font-size="10">✗ 가능</text>
+  <text x="498" y="161" fill="#f47f72" font-size="10">✗ 가능</text>
+  <text x="588" y="161" fill="#f47f72" font-size="10">✗ 가능</text>
+
+  <!-- Read committed -->
+  <rect x="32" y="168" width="616" height="22" rx="0" fill="#0d0d0d"/>
+  <text x="48" y="183" fill="#e8e4df" font-size="10">Read committed</text>
+  <text x="188" y="183" fill="#66bb6a" font-size="10">✓ 방지</text>
+  <text x="298" y="183" fill="#f47f72" font-size="10">✗ 가능</text>
+  <text x="398" y="183" fill="#f47f72" font-size="10">✗ 가능</text>
+  <text x="498" y="183" fill="#f47f72" font-size="10">✗ 가능</text>
+  <text x="588" y="183" fill="#f47f72" font-size="10">✗ 가능</text>
+
+  <!-- Snapshot isolation -->
+  <rect x="32" y="190" width="616" height="22" rx="0" fill="#141414"/>
+  <text x="48" y="205" fill="#e8e4df" font-size="10">Snapshot isolation</text>
+  <text x="188" y="205" fill="#66bb6a" font-size="10">✓ 방지</text>
+  <text x="298" y="205" fill="#66bb6a" font-size="10">✓ 방지</text>
+  <text x="398" y="205" fill="rgb(212,168,83)" font-size="10">? DB 따라</text>
+  <text x="498" y="205" fill="#f47f72" font-size="10">✗ 가능</text>
+  <text x="588" y="205" fill="#f47f72" font-size="10">✗ 일부</text>
+
+  <!-- Serializable -->
+  <rect x="32" y="212" width="616" height="22" rx="0" fill="#0d0d0d"/>
+  <text x="48" y="227" fill="#e8e4df" font-size="10">Serializable</text>
+  <text x="188" y="227" fill="#66bb6a" font-size="10">✓ 방지</text>
+  <text x="298" y="227" fill="#66bb6a" font-size="10">✓ 방지</text>
+  <text x="398" y="227" fill="#66bb6a" font-size="10">✓ 방지</text>
+  <text x="498" y="227" fill="#66bb6a" font-size="10">✓ 방지</text>
+  <text x="588" y="227" fill="#66bb6a" font-size="10">✓ 방지</text>
+
+  <!-- MVCC -->
+  <text x="32" y="272" fill="rgb(212,168,83)" font-size="14" font-weight="700">MVCC — 다중 버전 동시성 제어</text>
+  <rect x="32" y="284" width="616" height="96" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="48" y="306" fill="#7fa8c9" font-size="12" font-weight="700">행마다 여러 버전을 유지 · 읽기는 자신의 스냅샷 버전을 선택</text>
+  <text x="48" y="326" fill="#e8e4df" font-size="10.5">각 행: inserted_by(삽입 txid) + deleted_by(삭제 요청 txid) 필드 보유</text>
+  <text x="48" y="344" fill="#e8e4df" font-size="10.5">UPDATE = 내부적으로 DELETE(old row deleted_by 기록) + INSERT(new row inserted_by 기록)</text>
+  <text x="48" y="362" fill="#66bb6a" font-size="10.5">읽기가 쓰기를 막지 않고, 쓰기도 읽기를 막지 않음 → 장시간 읽기와 쓰기 처리 동시 가능</text>
+  <text x="48" y="374" fill="rgb(138,133,128)" font-size="9.5">오래된 버전은 GC가 나중에 정리 · 장기 실행 트랜잭션은 오래된 버전을 오래 보존 → 스토리지 팽창 주의</text>
+
+  <!-- 갱신 손실 방지 방법 -->
+  <text x="32" y="422" fill="rgb(212,168,83)" font-size="14" font-weight="700">갱신 손실(Lost Update) 방지 방법</text>
+
+  <rect x="32" y="434" width="190" height="96" rx="6" fill="#141414" stroke="#66bb6a"/>
+  <text x="48" y="454" fill="#66bb6a" font-size="11" font-weight="700">① 원자 연산</text>
+  <text x="48" y="472" fill="#e8e4df" font-size="10">UPDATE ... SET val=val+1</text>
+  <text x="48" y="490" fill="#e8e4df" font-size="10">읽기-수정-쓰기 사이클 없앰</text>
+  <text x="48" y="508" fill="#66bb6a" font-size="10">가장 단순·안전</text>
+  <text x="48" y="522" fill="rgb(138,133,128)" font-size="9">MongoDB·Redis도 지원</text>
+
+  <rect x="236" y="434" width="190" height="96" rx="6" fill="#141414" stroke="rgb(212,168,83)"/>
+  <text x="252" y="454" fill="rgb(212,168,83)" font-size="11" font-weight="700">② 명시적 잠금</text>
+  <text x="252" y="472" fill="#e8e4df" font-size="10">SELECT ... FOR UPDATE</text>
+  <text x="252" y="490" fill="#e8e4df" font-size="10">읽은 행을 잠근 후 수정</text>
+  <text x="252" y="508" fill="#f47f72" font-size="10">잠금 누락 시 버그 잔존</text>
+  <text x="252" y="522" fill="rgb(138,133,128)" font-size="9">데드락 위험, 재시도 필요</text>
+
+  <rect x="440" y="434" width="208" height="96" rx="6" fill="#141414" stroke="#7fa8c9"/>
+  <text x="456" y="454" fill="#7fa8c9" font-size="11" font-weight="700">③ 자동 감지 + CAS</text>
+  <text x="456" y="472" fill="#e8e4df" font-size="10">PG repeatble read 자동 감지</text>
+  <text x="456" y="490" fill="#e8e4df" font-size="10">WHERE old_val 조건부 쓰기</text>
+  <text x="456" y="508" fill="#66bb6a" font-size="10">앱 코드 변경 최소</text>
+  <text x="456" y="522" fill="rgb(138,133,128)" font-size="9">MySQL InnoDB는 자동 감지 미지원</text>
+
+  <!-- 명칭 혼란 -->
+  <text x="32" y="572" fill="rgb(212,168,83)" font-size="13" font-weight="700">스냅샷 격리 명칭 혼란</text>
+  <rect x="32" y="584" width="616" height="56" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="604" fill="#e8e4df" font-size="10.5">PostgreSQL → "repeatable read" · Oracle → "serializable" · MySQL InnoDB → "repeatable read"(더 약함)</text>
+  <text x="48" y="622" fill="#f47f72" font-size="10.5">SQL 표준에 스냅샷 격리 개념 없음 → 같은 이름 다른 의미. 실제 격리 수준은 직접 테스트(Hermitage 벤치마크) 필요</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>

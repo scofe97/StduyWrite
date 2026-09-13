@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="tm dm">
+<title id="tm">delivery 배치를 재전달하다가 ack 로 소비하는 흐름</title>
+<desc id="dm">check 를 여러 번 불러도 같은 배치가 재전달되다가 ack 를 준 뒤에야 개수가 0이 되는 상태 변화를 순서대로 보인 그림입니다. ack 단계만 강조돼 있습니다.</desc>
+<style>
+svg{--paper:#0D1117;--paper2:#161B22;--ink:#F5F5F3;--muted:#8B98A9;--soft:#5E6B7E;--rule:rgba(191,192,192,0.22);--accent:#F08A59;--accent12:rgba(240,138,89,0.12);--ok:#3FB98C;--warn:#E3B341}
+.kr{font-family:'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif}
+.mn{font-family:'Geist Mono','Noto Sans Mono CJK KR',monospace}
+.eyebrow{fill:var(--soft);font-size:9px;letter-spacing:.14em}
+.h1{fill:var(--ink);font-size:20px;font-weight:600}
+.sub{fill:var(--muted);font-size:11px}
+.box{fill:var(--paper2);stroke:var(--rule);stroke-width:1}
+.cmd{fill:var(--ink);font-size:11px}
+.cnt{fill:var(--warn);font-size:13px;font-weight:600}
+.cnt0{fill:var(--ok);font-size:13px;font-weight:600}
+.note{fill:var(--muted);font-size:10px}
+.arrow{stroke:var(--soft);stroke-width:1;fill:none}
+.legend{fill:var(--soft);font-size:10px}
+</style>
+<rect width="1000" height="340" fill="var(--paper)"/>
+<text class="mn eyebrow" x="64" y="44">DELIVERY CONTRACT · v1.4.188</text>
+<text class="kr h1" x="64" y="76">확인해 줘야 소비됩니다</text>
+<text class="kr sub" x="64" y="98">조회만으로는 사라지지 않습니다. 원서의 v1.4.176 경고와 갈리는 지점입니다.</text>
+
+<rect class="box" x="64" y="140" width="192" height="76" rx="4"/>
+<text class="mn cmd" x="80" y="164">check --peek</text>
+<text class="kr cnt" x="80" y="190">count 7</text>
+<text class="kr note" x="80" y="208">읽지 않은 것만 표시</text>
+
+<path class="arrow" d="M256 178 L308 178"/><path class="arrow" d="M300 173 L308 178 L300 183"/>
+
+<rect class="box" x="308" y="140" width="192" height="76" rx="4"/>
+<text class="mn cmd" x="324" y="164">check</text>
+<text class="kr cnt" x="324" y="190">count 7</text>
+<text class="mn note" x="324" y="208">replayed: true</text>
+
+<path class="arrow" d="M500 178 L552 178"/><path class="arrow" d="M544 173 L552 178 L544 183"/>
+
+<rect class="box" x="552" y="140" width="192" height="76" rx="4"/>
+<text class="mn cmd" x="568" y="164">check --peek</text>
+<text class="kr cnt" x="568" y="190">count 7</text>
+<text class="kr note" x="568" y="208">그대로입니다</text>
+
+<path class="arrow" d="M648 216 L648 252 L308 252 L308 272"/><path class="arrow" d="M303 264 L308 272 L313 264"/>
+
+<rect x="120" y="272" width="376" height="48" rx="4" fill="var(--accent12)" stroke="var(--accent)" stroke-width="1.4"/>
+<text class="mn cmd" x="140" y="294">check --ack delivery_d75dacbf5113</text>
+<text class="kr cnt0" x="140" y="312">count 0 · acknowledged</text>
+
+<text class="kr legend" x="544" y="294">확인을 빠뜨리면 같은 배치를 계속 다시 받습니다.</text>
+<text class="kr legend" x="544" y="312">대신 워커가 죽어도 배치가 남아 다시 전달됩니다.</text>
+</svg>

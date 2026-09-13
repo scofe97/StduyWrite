@@ -1,0 +1,60 @@
+<svg viewBox="0 0 860 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>CPU 분석 방법론 권장 흐름</title>
+  <desc>저자가 권하는 CPU 분석 방법론 순서. 먼저 성능 모니터링으로 사용률과 포화를 시간에 따라 추적해 활성 이슈와 패턴을 찾는다. 다음 USE 방법으로 각 CPU의 사용률·포화·에러를 점검해 병목을 일찍 찾는다. 다음 프로파일링으로 99Hz 타이머 표집을 모아 플레임 그래프로 CPU 소비 코드 경로를 본다. 다음 마이크로벤치마킹으로 단순 연산을 반복해 성능을 잰다. 마지막으로 정적 성능 튜닝으로 설정 환경을 점검한다. 더 깊은 분석이 필요하면 사이클 분석으로 PMC를 써 IPC를 재고 stall 유형을 본다. 아래: 튜닝의 핵심은 불필요한 일 제거이며, 우선순위 튜닝과 CPU 바인딩으로 보완한다.</desc>
+
+  <rect x="0" y="0" width="860" height="440" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">CPU 분석 방법론 — 권장 흐름</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">모니터링 → USE → 프로파일링 → 마이크로벤치 → 정적 튜닝</text>
+
+  <defs>
+    <marker id="mf" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+
+  <rect x="32" y="90" width="150" height="60" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="8"/>
+  <text x="107" y="116" fill="#e8e4df" font-size="13" text-anchor="middle">① 성능 모니터링</text>
+  <text x="107" y="136" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">사용률·포화 추적</text>
+  <line x1="182" y1="120" x2="214" y2="120" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#mf)"/>
+
+  <rect x="218" y="90" width="150" height="60" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="8"/>
+  <text x="293" y="116" fill="#e8e4df" font-size="13" text-anchor="middle">② USE 방법</text>
+  <text x="293" y="136" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">에러→포화→사용률</text>
+  <line x1="368" y1="120" x2="400" y2="120" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#mf)"/>
+
+  <rect x="404" y="90" width="150" height="60" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="8"/>
+  <text x="479" y="116" fill="#e8e4df" font-size="13" text-anchor="middle">③ 프로파일링</text>
+  <text x="479" y="136" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">99Hz·플레임 그래프</text>
+  <line x1="554" y1="120" x2="586" y2="120" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#mf)"/>
+
+  <rect x="590" y="90" width="150" height="60" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="8"/>
+  <text x="665" y="116" fill="#e8e4df" font-size="13" text-anchor="middle">④ 마이크로벤치</text>
+  <text x="665" y="136" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">단순 연산 반복</text>
+
+  <line x1="665" y1="150" x2="665" y2="182" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#mf)"/>
+  <rect x="590" y="186" width="150" height="60" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="8"/>
+  <text x="665" y="212" fill="#e8e4df" font-size="13" text-anchor="middle">⑤ 정적 튜닝</text>
+  <text x="665" y="232" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">설정 환경 점검</text>
+
+  <!-- 사이클 분석 분기 -->
+  <line x1="479" y1="150" x2="479" y2="186" stroke="rgb(138,133,128)" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#mf)"/>
+  <rect x="404" y="190" width="150" height="56" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="479" y="214" fill="rgb(212,168,83)" font-size="12" text-anchor="middle">사이클 분석</text>
+  <text x="479" y="234" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">PMC·IPC·stall 유형</text>
+  <text x="404" y="266" fill="rgb(138,133,128)" font-size="9">(더 깊은 분석 필요 시)</text>
+
+  <!-- 튜닝 -->
+  <line x1="32" y1="290" x2="828" y2="290" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="316" fill="rgb(212,168,83)" font-size="14">튜닝 — 핵심은 불필요한 일 제거</text>
+
+  <rect x="32" y="330" width="256" height="70" fill="#66bb6a" fill-opacity="0.10" stroke="#66bb6a" rx="6"/>
+  <text x="160" y="356" fill="#e8e4df" font-size="13" text-anchor="middle">불필요한 일 제거</text>
+  <text x="160" y="378" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">가장 큰 이득 · 프로파일링으로 식별</text>
+
+  <rect x="300" y="330" width="256" height="70" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="428" y="356" fill="#e8e4df" font-size="13" text-anchor="middle">우선순위 튜닝</text>
+  <text x="428" y="378" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">nice — 저우선 일의 우선순위↓</text>
+
+  <rect x="568" y="330" width="260" height="70" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="698" y="356" fill="#e8e4df" font-size="13" text-anchor="middle">CPU 바인딩</text>
+  <text x="698" y="378" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">캐시 warmth·메모리 지역성↑</text>
+</svg>

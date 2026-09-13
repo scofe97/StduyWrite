@@ -1,0 +1,71 @@
+<svg viewBox="0 0 860 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>NUMA 메모리 구조와 메모리 해제 순서</title>
+  <desc>위: NUMA 메모리 구조. CPU 1은 DRAM A에 자기 메모리 버스로 직접 I/O하며 이것이 local 메모리로 낮은 지연이다. CPU 1이 DRAM B에 접근하려면 CPU 2와 CPU 인터커넥트를 거쳐야 하며 이것이 remote 메모리로 두 hop이고 높은 지연이다. 각 CPU에 붙은 메모리 뱅크가 메모리 노드다. OS는 노드 토폴로지를 알아 가능한 한 local 메모리를 우선해 성능을 높인다. 아래: 가용 메모리가 낮아지면 커널이 순서대로 메모리를 해제한다. free list는 즉시 할당 가능한 미사용 페이지, page cache는 파일시스템 캐시로 swappiness가 균형을 정하고, swapping은 kswapd가 page-out하며, reaping은 slab 캐시를 축소하고, 마지막으로 OOM killer가 희생 프로세스를 종료한다.</desc>
+
+  <rect x="0" y="0" width="860" height="480" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">NUMA 구조와 메모리 해제 순서</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">local 메모리는 낮은 지연 · 메모리 부족 시 순서대로 해제</text>
+
+  <!-- NUMA -->
+  <text x="32" y="96" fill="rgb(212,168,83)" font-size="14">NUMA — local vs remote 메모리</text>
+
+  <rect x="60" y="112" width="150" height="44" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="6"/>
+  <text x="135" y="138" fill="#e8e4df" font-size="12" text-anchor="middle">DRAM A (노드 0)</text>
+
+  <rect x="60" y="172" width="150" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="135" y="198" fill="#e8e4df" font-size="12" text-anchor="middle">CPU 1</text>
+
+  <defs>
+    <marker id="nm" markerWidth="9" markerHeight="9" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#66bb6a"/></marker>
+    <marker id="nr" markerWidth="9" markerHeight="9" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#f44336"/></marker>
+  </defs>
+  <line x1="135" y1="172" x2="135" y2="158" stroke="#66bb6a" stroke-width="2" marker-end="url(#nm)"/>
+  <text x="150" y="168" fill="#66bb6a" font-size="9">local (1 hop·낮은 지연)</text>
+
+  <rect x="620" y="112" width="150" height="44" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="6"/>
+  <text x="695" y="138" fill="#e8e4df" font-size="12" text-anchor="middle">DRAM B (노드 1)</text>
+
+  <rect x="620" y="172" width="150" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="695" y="198" fill="#e8e4df" font-size="12" text-anchor="middle">CPU 2</text>
+  <line x1="695" y1="172" x2="695" y2="158" stroke="#66bb6a" stroke-width="2" marker-end="url(#nm)"/>
+
+  <!-- 인터커넥트 -->
+  <line x1="210" y1="194" x2="620" y2="194" stroke="rgb(138,133,128)" stroke-width="2"/>
+  <text x="415" y="186" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">CPU 인터커넥트</text>
+  <line x1="135" y1="216" x2="135" y2="236" stroke="#f44336" stroke-width="2" stroke-dasharray="4,3"/>
+  <path d="M 135 236 L 135 250 L 695 250 L 695 220" fill="none" stroke="#f44336" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#nr)"/>
+  <text x="415" y="246" fill="#f44336" font-size="9" text-anchor="middle">remote (2 hop·높은 지연): CPU 1 → 인터커넥트 → DRAM B</text>
+
+  <!-- 메모리 해제 순서 -->
+  <line x1="32" y1="270" x2="828" y2="270" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="296" fill="rgb(212,168,83)" font-size="14">메모리 해제 순서 (가용 메모리 감소 →)</text>
+
+  <rect x="32" y="310" width="150" height="60" fill="#66bb6a" fill-opacity="0.10" stroke="#66bb6a" rx="6"/>
+  <text x="107" y="334" fill="#e8e4df" font-size="12" text-anchor="middle">① free list</text>
+  <text x="107" y="356" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">즉시 할당 가능</text>
+  <line x1="182" y1="340" x2="206" y2="340" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#nm)"/>
+
+  <rect x="210" y="310" width="150" height="60" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="285" y="334" fill="#e8e4df" font-size="12" text-anchor="middle">② page cache</text>
+  <text x="285" y="356" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">swappiness 균형</text>
+  <line x1="360" y1="340" x2="384" y2="340" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#nm)"/>
+
+  <rect x="388" y="310" width="150" height="60" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="463" y="334" fill="#e8e4df" font-size="12" text-anchor="middle">③ swapping</text>
+  <text x="463" y="356" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">kswapd page-out</text>
+  <line x1="538" y1="340" x2="562" y2="340" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#nm)"/>
+
+  <rect x="566" y="310" width="120" height="60" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="626" y="334" fill="#e8e4df" font-size="12" text-anchor="middle">④ reaping</text>
+  <text x="626" y="356" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">slab 축소</text>
+  <line x1="686" y1="340" x2="710" y2="340" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#nm)"/>
+
+  <rect x="714" y="310" width="114" height="60" fill="#f44336" fill-opacity="0.15" stroke="#f44336" rx="6"/>
+  <text x="771" y="334" fill="#f44336" font-size="12" text-anchor="middle">⑤ OOM</text>
+  <text x="771" y="356" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">희생 프로세스 종료</text>
+
+  <rect x="32" y="392" width="796" height="60" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="8"/>
+  <text x="430" y="418" fill="#e8e4df" font-size="13" text-anchor="middle">swappiness(0~100): 앱 페이징 vs page cache 회수의 균형</text>
+  <text x="430" y="440" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">Netflix는 swap 미사용 — 소진 시 OOM kill 후 트래픽을 healthy 인스턴스로</text>
+</svg>

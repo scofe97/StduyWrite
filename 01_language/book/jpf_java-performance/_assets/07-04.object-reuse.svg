@@ -1,0 +1,52 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>객체 재사용 — object pool·thread-local과 GC 비용</title>
+  <desc>객체 재사용은 GC 효율을 해친다. 재사용 객체는 오래 살아 old로 승급하고, full GC 시간은 old에 살아있는 객체 수에 비례한다. live data 양이 힙 크기보다 더 중요하다. live가 적은 3GB old가 75% 살아있는 1GB old보다 빠르다. GC 로그가 보여 주듯 차이는 한 자릿수를 넘는다. 그래도 초기화 비용이 큰 객체는 재사용이 정당하다. 스레드, JDBC 커넥션, 큰 배열, native NIO 버퍼, 보안 클래스, Random seed가 그렇다. 두 조건을 함께 본다. 초기화 비용이 크고, 수가 적어야 한다. object pool은 GC 영향, 동기화 경합, throttling 세 특성이 있다. thread-local은 생애주기 관리가 쉽고, 스레드 수만큼 cardinality를 갖고, 동기화가 없다. ThreadLocalRandom 벤치에서 새로 만들기 134마이크로초, ThreadLocalRandom 52, 공유 Random 3763마이크로초다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">객체 재사용 — pool vs thread-local</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">재사용은 GC 효율을 해치지만, 초기화 비용이 큰 소수 객체엔 정당합니다</text>
+
+  <!-- why bad: live data dominates full GC -->
+  <rect x="20" y="74" width="642" height="96" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="96" fill="#f47f72" font-size="13" font-weight="bold">왜 나쁜가 — full GC 시간은 live data에 비례</text>
+  <text x="38" y="118" fill="rgb(138,133,128)" font-size="11">재사용 객체는 old로 승급 → full GC가 처리할 live 객체↑</text>
+  <text x="38" y="138" fill="rgb(138,133,128)" font-size="11">live data 양 &gt; 힙 크기: live 적은 3GB old가 75% 살아있는 1GB old보다 빠름</text>
+  <text x="38" y="158" fill="#f47f72" font-size="10">GC 로그 실측: live 거의 비면 70ms, 대부분 살아있으면 540~730ms (단일 코어는 30배차)</text>
+
+  <!-- when justified -->
+  <rect x="20" y="178" width="642" height="92" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="200" fill="#66bb6a" font-size="13" font-weight="bold">언제 정당한가 — 두 조건 함께</text>
+  <text x="38" y="222" fill="#e8e4df" font-size="11">① 초기화 비용이 큼 (allocation 아닌 initialization)  ② 재사용 객체 수가 적음</text>
+  <text x="38" y="244" fill="rgb(138,133,128)" font-size="11">예: 스레드 풀 · JDBC 풀 · 큰 배열(zero-init) · native NIO 버퍼 · MessageDigest</text>
+  <text x="38" y="262" fill="rgb(138,133,128)" font-size="11">Random/SecureRandom seed · DNS 이름 · ZIP 코더(finalizer로 해제가 비쌈)</text>
+
+  <!-- pool vs thread-local -->
+  <rect x="20" y="278" width="320" height="170" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="300" fill="#9cc3df" font-size="13" font-weight="bold">object pool</text>
+  <text x="38" y="322" fill="rgb(138,133,128)" font-size="10">• GC 영향: 많이 담으면 효율↓</text>
+  <text x="38" y="342" fill="rgb(138,133,128)" font-size="10">• 동기화: 빈번한 입출력 시 경합</text>
+  <text x="38" y="362" fill="rgb(138,133,128)" font-size="10">• throttling: 희소 자원 접근 제한</text>
+  <text x="38" y="384" fill="#9cc3df" font-size="10">크기 임의 조정 가능</text>
+  <text x="38" y="404" fill="#f47f72" font-size="10">반납을 잊으면 안 됨(프로그래머 부담)</text>
+  <text x="38" y="426" fill="rgb(138,133,128)" font-size="10">JDBC: 풀 크기로 DB 과부하 차단</text>
+
+  <rect x="350" y="278" width="312" height="170" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="368" y="300" fill="#66bb6a" font-size="13" font-weight="bold">thread-local 변수</text>
+  <text x="368" y="322" fill="rgb(138,133,128)" font-size="10">• 생애주기: 반납 불필요(스레드 내 상주)</text>
+  <text x="368" y="342" fill="rgb(138,133,128)" font-size="10">• cardinality: 스레드 수 = 객체 수</text>
+  <text x="368" y="362" fill="rgb(138,133,128)" font-size="10">• 동기화: 없음(get 빠름)</text>
+  <text x="368" y="384" fill="#66bb6a" font-size="10">관리 쉽고 저렴</text>
+  <text x="368" y="404" fill="#f47f72" font-size="10">throttling 불가 · 크기 임의 조정 불가</text>
+  <text x="368" y="426" fill="rgb(138,133,128)" font-size="10">동기화 병목 회피에 유리</text>
+
+  <!-- ThreadLocalRandom bench -->
+  <rect x="20" y="456" width="642" height="126" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="480" fill="rgb(212,168,83)" font-size="13" font-weight="bold">ThreadLocalRandom 벤치 — 4 스레드 × 10,000개 난수</text>
+  <text x="38" y="506" fill="#e8e4df" font-size="11">새 Random 매번 생성</text>
+  <text x="360" y="506" fill="rgb(138,133,128)" font-size="11">134.9 마이크로초 (초기화 비쌈)</text>
+  <text x="38" y="530" fill="#66bb6a" font-size="11">ThreadLocalRandom</text>
+  <text x="360" y="530" fill="#66bb6a" font-size="11">52.0 마이크로초 (최선)</text>
+  <text x="38" y="554" fill="#f47f72" font-size="11">공유 Random (lock 경합)</text>
+  <text x="360" y="554" fill="#f47f72" font-size="11">3,763 마이크로초 (병목)</text>
+  <text x="38" y="574" fill="rgb(138,133,128)" font-size="10">교훈: 초기화가 오래 걸리는 객체만, 재사용 수가 적을 때 pool/thread-local을 쓴다</text>
+</svg>

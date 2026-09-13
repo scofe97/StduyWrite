@@ -1,0 +1,48 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>JDBC result set과 JPA 쓰기 최적화</title>
+  <desc>result set 처리는 데이터가 어디 사느냐가 문제다. executeQuery에서 전체를 받으면 heap에 큰 live data가 생겨 GC 이슈가 나고, next마다 한 행씩 받으면 왕복 트래픽이 많다. setFetchSize로 한 번에 전송할 행 수를 알린다. Oracle 기본은 10이다. statement에 거는 게 ResultSet보다 hint가 존중될 가능성이 높다. JPA는 JDBC 위에 있어 JDBC 고려사항이 대부분 적용된다. JPA는 entity 클래스의 bytecode를 변경해 성능을 높인다. 컴파일 시 postprocessor로 enhance하거나 javaagent로 로드 시 동적 enhance한다. JPA 쓰기 최적화는 statement 재사용과 batch다. JPA API에 직접 호출이 없어 persistence.xml 프로퍼티로 한다. 변경된 필드만 쓰는 건 bytecode enhance로 추적한다. EclipseLink는 cache-statements와 batch-writing 프로퍼티를 쓴다. 256 stock 삽입에서 no batch+no pool은 83초, batch면 10초다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">result set과 JPA 쓰기 최적화</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">fetch size로 한 번에 전송할 행 수를 조절하고, JPA 쓰기는 persistence.xml로 batch합니다</text>
+
+  <!-- result set -->
+  <rect x="20" y="74" width="642" height="120" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="96" fill="#9cc3df" font-size="13" font-weight="bold">result set — 데이터가 어디 사는가</text>
+  <rect x="38" y="106" width="290" height="50" fill="rgba(244,127,114,0.10)" stroke="#f47f72"/>
+  <text x="50" y="126" fill="#f47f72" font-size="11" font-weight="bold">전체 한 번에</text>
+  <text x="50" y="144" fill="rgb(138,133,128)" font-size="10">heap에 큰 live data → GC 이슈</text>
+  <rect x="336" y="106" width="318" height="50" fill="rgba(244,127,114,0.10)" stroke="#f47f72"/>
+  <text x="348" y="126" fill="#f47f72" font-size="11" font-weight="bold">next마다 한 행</text>
+  <text x="348" y="144" fill="rgb(138,133,128)" font-size="10">app↔DB 왕복 트래픽 많음</text>
+  <text x="38" y="176" fill="#66bb6a" font-size="11">setFetchSize(N)로 한 번에 전송할 행 수 hint (Oracle 기본 10)</text>
+  <text x="38" y="190" fill="rgb(138,133,128)" font-size="9">statement에 걸면 ResultSet보다 존중될 가능성↑ · 어디까지나 hint</text>
+
+  <!-- JPA bytecode -->
+  <rect x="20" y="202" width="642" height="92" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="224" fill="#e8e4df" font-size="13" font-weight="bold">JPA bytecode enhancement (필수)</text>
+  <text x="38" y="246" fill="rgb(138,133,128)" font-size="11">JPA는 entity 클래스 bytecode를 변경해 최적화 — 안 하면 동작이 예측 불가</text>
+  <text x="38" y="266" fill="rgb(138,133,128)" font-size="11">컴파일 시 postprocessor로 enhance (Hibernate는 Maven/Gradle 플러그인)</text>
+  <text x="38" y="286" fill="#9cc3df" font-size="11">또는 -javaagent로 로드 시 동적 enhance (EclipseLink는 eclipselink.jar)</text>
+
+  <!-- JPA write 최적화 -->
+  <rect x="20" y="302" width="642" height="124" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="324" fill="rgb(212,168,83)" font-size="13" font-weight="bold">JPA 쓰기 최적화 — persistence.xml 프로퍼티</text>
+  <text x="38" y="346" fill="rgb(138,133,128)" font-size="11">JPA API에 직접 호출 없음 → 프로퍼티로 설정 (JDBC의 statement 재사용·batch와 대응)</text>
+  <text x="38" y="366" fill="rgb(138,133,128)" font-size="11">변경된 필드만 쓰기 — bytecode enhance로 변경 추적 (월급 1필드만 UPDATE)</text>
+  <text x="38" y="386" fill="#9cc3df" font-size="11">eclipselink.jdbc.cache-statements (단 driver pool 가능하면 driver 우선)</text>
+  <text x="38" y="406" fill="#9cc3df" font-size="11">eclipselink.jdbc.batch-writing + size — JDBC가 자동 못 하므로 항상 유용</text>
+
+  <!-- JPA 표 -->
+  <rect x="20" y="434" width="642" height="148" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="456" fill="#66bb6a" font-size="13" font-weight="bold">256 stock 삽입 (JPA)</text>
+  <text x="38" y="480" fill="#f47f72" font-size="11">no batch, no statement pool</text>
+  <text x="380" y="480" fill="#f47f72" font-size="11">83초</text>
+  <text x="38" y="502" fill="rgb(138,133,128)" font-size="11">no batch, statement pool</text>
+  <text x="380" y="502" fill="rgb(138,133,128)" font-size="11">64초</text>
+  <text x="38" y="524" fill="#66bb6a" font-size="11">batch, no statement pool</text>
+  <text x="380" y="524" fill="#66bb6a" font-size="11">10초</text>
+  <text x="38" y="546" fill="#66bb6a" font-size="11">batch, statement pooling</text>
+  <text x="380" y="546" fill="#66bb6a" font-size="11">10초</text>
+  <text x="38" y="570" fill="rgb(212,168,83)" font-size="10">batch가 지배적 효과 — statement pool보다 batch가 더 큰 이득. batch는 항상 설정</text>
+</svg>

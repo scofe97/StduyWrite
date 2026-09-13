@@ -1,0 +1,57 @@
+<svg viewBox="0 0 1100 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>클래스 디렉터리가 JAR 내부 엔트리로 바뀌는 과정</title>
+  <desc>build/lib-classes 디렉터리의 내용이 jar -C 옵션으로 calculator.jar의 루트에 들어가는 구조다. 로컬 출력 디렉터리 이름은 JAR 안에 포함되지 않고 META-INF와 패키지 경로가 JAR 루트에서 시작한다.</desc>
+  <defs>
+    <marker id="arrowJar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <style>
+      .title{font-size:20px;font-weight:800;fill:#e8e4df}
+      .subtitle{font-size:12px;fill:rgb(138,133,128)}
+      .section{font-size:15px;font-weight:800;fill:rgb(212,168,83)}
+      .label{font-size:12px;fill:#e8e4df}
+      .muted{font-size:11px;fill:rgb(138,133,128)}
+      .code{font-size:12px;fill:#e8e4df;font-family:'JetBrains Mono',monospace}
+      .codeSmall{font-size:10.5px;fill:rgb(180,176,171);font-family:'JetBrains Mono',monospace}
+    </style>
+  </defs>
+  <rect x="0" y="0" width="1100" height="600" fill="#0d0d0d"/>
+  <text x="30" y="42" class="title">JAR는 클래스패스 루트를 파일 하나로 접습니다</text>
+  <text x="30" y="66" class="subtitle">-C build/lib-classes . 는 해당 디렉터리의 내용만 JAR 루트에 넣으라는 뜻입니다.</text>
+
+  <rect x="30" y="100" width="340" height="440" rx="10" fill="rgb(20,20,20)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="132" class="section">컴파일 출력 디렉터리</text>
+  <text x="52" y="160" class="code">build/lib-classes/</text>
+  <text x="76" y="194" class="code">└── com/</text>
+  <text x="100" y="224" class="code">    └── example/</text>
+  <text x="124" y="254" class="code">        └── math/</text>
+  <text x="148" y="284" class="codeSmall">            └── Calculator.class</text>
+  <rect x="52" y="330" width="296" height="100" rx="7" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="70" y="359" class="label">JAR에 들어갈 기준점</text>
+  <text x="70" y="386" class="codeSmall">build/lib-classes/</text>
+  <text x="70" y="412" class="muted">이 이름 자체는 아카이브에 넣지 않습니다.</text>
+
+  <rect x="402" y="234" width="278" height="132" rx="10" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)"/>
+  <text x="541" y="264" class="section" text-anchor="middle">jar --create</text>
+  <text x="541" y="294" class="codeSmall" text-anchor="middle">--file lib/calculator.jar</text>
+  <text x="541" y="320" class="codeSmall" text-anchor="middle">-C build/lib-classes .</text>
+  <text x="541" y="347" class="muted" text-anchor="middle">점(.) = 현재 내용 전체</text>
+  <line x1="370" y1="300" x2="400" y2="300" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrowJar)"/>
+  <line x1="680" y1="300" x2="710" y2="300" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrowJar)"/>
+
+  <rect x="712" y="82" width="358" height="476" rx="14" fill="rgb(20,20,20)" stroke="rgb(212,168,83)" stroke-width="1.6"/>
+  <text x="734" y="116" class="section">lib/calculator.jar</text>
+  <text x="734" y="140" class="muted">JAR 자체가 클래스패스 루트</text>
+  <rect x="734" y="164" width="314" height="104" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="752" y="194" class="code">META-INF/</text>
+  <text x="776" y="222" class="codeSmall">└── MANIFEST.MF</text>
+  <text x="776" y="247" class="muted">JAR 설정과 메타데이터</text>
+  <rect x="734" y="286" width="314" height="224" rx="8" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)"/>
+  <text x="752" y="316" class="code">com/</text>
+  <text x="776" y="346" class="code">└── example/</text>
+  <text x="800" y="376" class="code">    └── math/</text>
+  <text x="824" y="406" class="codeSmall">        └── Calculator.class</text>
+  <text x="752" y="454" class="label">요청 FQCN</text>
+  <text x="752" y="480" class="codeSmall">com.example.math.Calculator</text>
+  <text x="752" y="530" class="muted">build/lib-classes/ prefix가 없는 점에 주목합니다.</text>
+</svg>

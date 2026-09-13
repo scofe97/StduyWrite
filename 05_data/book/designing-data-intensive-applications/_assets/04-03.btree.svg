@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 640" font-family="Pretendard, sans-serif">
+  <rect width="680" height="640" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">B-tree와 LSM 비교</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">고정 크기 페이지를 제자리 갱신 · LSM=쓰기 유리, B-tree=읽기 유리</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- B-tree 구조 -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">B-tree — 페이지 트리 (키 251 조회)</text>
+  <rect x="270" y="124" width="140" height="32" rx="4" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="340" y="145" fill="#e8e4df" font-size="10.5" text-anchor="middle">root: ...100 | 200 | 300...</text>
+  <rect x="180" y="184" width="140" height="32" rx="4" fill="#101620" stroke="#7fa8c9"/>
+  <text x="250" y="205" fill="#e8e4df" font-size="10.5" text-anchor="middle">200–300: 250 | 270</text>
+  <rect x="360" y="184" width="140" height="32" rx="4" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="430" y="205" fill="rgb(138,133,128)" font-size="10.5" text-anchor="middle">300–400 ...</text>
+  <rect x="180" y="244" width="140" height="32" rx="4" fill="#101620" stroke="#9cc3df"/>
+  <text x="250" y="265" fill="#e8e4df" font-size="10.5" text-anchor="middle">leaf 250–270: [251]값</text>
+  <line x1="320" y1="156" x2="250" y2="182" stroke="rgb(138,133,128)" stroke-width="1.3" marker-end="url(#ar)"/>
+  <line x1="360" y1="156" x2="430" y2="182" stroke="rgb(138,133,128)" stroke-width="1.3"/>
+  <line x1="250" y1="216" x2="250" y2="242" stroke="rgb(138,133,128)" stroke-width="1.3" marker-end="url(#ar)"/>
+  <text x="516" y="200" fill="rgb(138,133,128)" font-size="10">분기 계수 수백</text>
+  <text x="516" y="216" fill="rgb(138,133,128)" font-size="10">깊이 O(log n)</text>
+  <text x="516" y="232" fill="rgb(138,133,128)" font-size="10">3~4 레벨로 250TB</text>
+
+  <!-- 신뢰성 -->
+  <text x="32" y="304" fill="rgb(212,168,83)" font-size="14" font-weight="700">신뢰성 — 제자리 덮어쓰기 + WAL</text>
+  <rect x="32" y="316" width="616" height="64" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="338" fill="#e8e4df" font-size="11">페이지 분할(여러 페이지 동시 덮어쓰기)은 위험 → 크래시 시 손상·torn page</text>
+  <text x="48" y="358" fill="#66bb6a" font-size="11">WAL(write-ahead log): 트리 수정 전 먼저 추가 → 크래시 후 일관 상태로 복원(파일시스템 journaling 대응)</text>
+  <text x="48" y="374" fill="rgb(138,133,128)" font-size="10">변형: copy-on-write(LMDB)·키 축약·leaf 형제 포인터</text>
+
+  <!-- 비교 표 -->
+  <text x="32" y="410" fill="rgb(212,168,83)" font-size="14" font-weight="700">B-tree vs LSM</text>
+  <rect x="32" y="422" width="300" height="150" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="48" y="444" fill="#7fa8c9" font-size="12.5" font-weight="700">B-tree (in-place)</text>
+  <text x="48" y="466" fill="#e8e4df" font-size="11">· 읽기 유리(레벨당 페이지 1개·예측 가능)</text>
+  <text x="48" y="486" fill="#e8e4df" font-size="11">· 범위 쿼리 단순·빠름</text>
+  <text x="48" y="506" fill="#e8e4df" font-size="11">· 랜덤 쓰기(흩어진 페이지)</text>
+  <text x="48" y="526" fill="#e8e4df" font-size="11">· 최소 2번 쓰기(WAL+페이지)</text>
+  <text x="48" y="546" fill="#f47f72" font-size="11">· 단편화 → vacuum 필요</text>
+  <text x="48" y="566" fill="rgb(138,133,128)" font-size="10">모든 주요 관계형 DB의 표준</text>
+
+  <rect x="348" y="422" width="300" height="150" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="364" y="444" fill="rgb(212,168,83)" font-size="12.5" font-weight="700">LSM (log-structured)</text>
+  <text x="364" y="466" fill="#e8e4df" font-size="11">· 쓰기 유리(높은 쓰기 처리량)</text>
+  <text x="364" y="486" fill="#e8e4df" font-size="11">· 순차 쓰기(세그먼트 통째)</text>
+  <text x="364" y="506" fill="#e8e4df" font-size="11">· 낮은 write amplification</text>
+  <text x="364" y="526" fill="#e8e4df" font-size="11">· 압축으로 디스크 작음·단편화 적음</text>
+  <text x="364" y="546" fill="#f47f72" font-size="11">· 읽기 시 여러 SSTable 확인(Bloom 완화)</text>
+  <text x="364" y="566" fill="rgb(138,133,128)" font-size="10">memtable 차면 쓰기 지연(backpressure)</text>
+
+  <line x1="32" y1="592" x2="648" y2="592" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="612" fill="rgb(138,133,128)" font-size="11">write amplification = 디스크 쓴 바이트 / 순수 로그 바이트. SSD에선 순차 쓰기가 랜덤보다 빠름(GC 적음)</text>
+  <text x="32" y="630" fill="rgb(138,133,128)" font-size="11">엄밀한 양자택일 아님 — 워크로드로 측정. 혼합형(B-tree 여럿을 LSM식 병합)도 존재</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>

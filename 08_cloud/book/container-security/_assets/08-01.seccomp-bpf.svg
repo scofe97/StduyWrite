@@ -1,0 +1,91 @@
+<svg viewBox="0 0 700 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>seccomp 의 두 세대와 BPF 필터가 시스템 콜을 판정하는 방식</title>
+  <desc>2005년 커널에 처음 들어간 seccomp 는 이 모드로 전환한 프로세스가 오직 네 가지 시스템 콜만 쓸 수 있게 했습니다. 시그널 핸들러에서 돌아오는 sigreturn, 프로세스를 끝내는 exit, 그리고 전환 전에 이미 열려 있던 파일 디스크립터에 한해서만 쓸 수 있는 read 와 write 입니다. 신뢰할 수 없는 코드를 여기서 돌리면 악의적인 일을 할 수 없었지만 부작용으로 쓸모 있는 일도 거의 할 수 없었습니다. 샌드박스가 지나치게 좁았습니다. 2012년에 seccomp-bpf 가 추가되면서 프로세스마다 프로파일을 가질 수 있게 됐습니다. BPF 필터가 시스템 콜 opcode 와 인자를 보고 프로파일이 그 호출을 허용하는지 판정합니다. 실제로는 오류 반환, 프로세스 종료, 트레이서 호출 같은 동작을 지정하지만 컨테이너 세계에서는 대개 허용 아니면 오류 반환이라 화이트리스트나 블랙리스트로 생각하면 됩니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .code { fill: #0d0d0d; font-size: 9.5px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .chip { fill: #f5edda; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .year { fill: #b8b3ad; font-size: 10px; font-weight: 700; }
+    .block-title { fill: #7a1f1f; font-size: 11px; font-weight: 700; }
+    .block-detail { fill: #7a1f1f; font-size: 9.5px; }
+    .ok-detail { fill: #14521d; font-size: 9.5px; }
+  </style>
+
+  <rect width="700" height="400" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="uh8b" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="30">1세대는 너무 좁았습니다</text>
+
+  <text class="year" x="40" y="52">2005 — seccomp</text>
+  <rect class="box" x="40" y="60" width="270" height="96" rx="4"/>
+  <text class="box-title" x="56" y="80">허용되는 syscall 이 넷뿐</text>
+  <rect class="chip" x="56" y="88" width="70" height="15" rx="3"/>
+  <text class="code" x="60" y="99">sigreturn</text>
+  <rect class="chip" x="132" y="88" width="44" height="15" rx="3"/>
+  <text class="code" x="136" y="99">exit</text>
+  <rect class="chip" x="56" y="108" width="100" height="15" rx="3"/>
+  <text class="code" x="60" y="119">read · write</text>
+  <text class="box-detail" x="162" y="119">이미 열린 fd 에만</text>
+  <text class="box-detail" x="56" y="138">악의적인 일도 못 하지만</text>
+  <text class="box-detail" x="56" y="152">쓸모 있는 일도 못 했습니다</text>
+
+  <path class="arrow" d="M310,108 L340,108" marker-end="url(#uh8b)"/>
+
+  <text class="year" x="348" y="52">2012 — seccomp-bpf</text>
+  <rect class="box" x="348" y="60" width="312" height="96" rx="4"/>
+  <text class="box-title" x="364" y="80">프로세스마다 프로파일</text>
+  <text class="box-detail" x="364" y="99">BPF 로 허용 여부를 판정</text>
+  <text class="box-detail" x="364" y="115">opcode 와 인자를 함께 본다</text>
+  <text class="box-detail" x="364" y="131">동작은 오류·종료·트레이서 호출</text>
+  <text class="box-detail" x="364" y="147">컨테이너에선 사실상 허용 아니면 오류</text>
+
+  <!-- Docker 기본 프로파일 -->
+  <text class="head" x="40" y="188">Docker 기본 프로파일이 막는 것</text>
+
+  <rect class="box" x="40" y="200" width="204" height="106" rx="4"/>
+  <text class="box-title" x="56" y="220">호스트 시계 변경</text>
+  <rect class="chip" x="56" y="228" width="120" height="15" rx="3"/>
+  <text class="code" x="60" y="239">clock_adjtime</text>
+  <rect class="chip" x="56" y="248" width="120" height="15" rx="3"/>
+  <text class="code" x="60" y="259">clock_settime</text>
+  <text class="box-detail" x="56" y="280">컨테이너가 호스트 시계를</text>
+  <text class="box-detail" x="56" y="296">건드릴 이유가 없습니다</text>
+
+  <rect class="box" x="256" y="200" width="204" height="106" rx="4"/>
+  <text class="box-title" x="272" y="220">커널 모듈 조작</text>
+  <rect class="chip" x="272" y="228" width="120" height="15" rx="3"/>
+  <text class="code" x="276" y="239">create_module</text>
+  <rect class="chip" x="272" y="248" width="120" height="15" rx="3"/>
+  <text class="code" x="276" y="259">delete_module</text>
+  <rect class="chip" x="272" y="268" width="120" height="15" rx="3"/>
+  <text class="code" x="276" y="279">init_module</text>
+  <text class="box-detail" x="272" y="298">모듈을 바꿀 일이 없습니다</text>
+
+  <rect class="box" x="472" y="200" width="188" height="106" rx="4"/>
+  <text class="box-title" x="488" y="220">커널 키링</text>
+  <rect class="chip" x="488" y="228" width="100" height="15" rx="3"/>
+  <text class="code" x="492" y="239">request_key</text>
+  <rect class="chip" x="488" y="248" width="70" height="15" rx="3"/>
+  <text class="code" x="492" y="259">keyctl</text>
+  <text class="box-detail" x="488" y="280">키링은 namespace 로</text>
+  <text class="box-detail" x="488" y="296">격리되지 않습니다</text>
+
+  <text class="hint" x="40" y="336">300여 개 중 40여 개를 막습니다</text>
+  <text class="hint" x="40" y="356">이유 없다면 기본을 쓰는 게 낫습니다</text>
+  <text class="hint" x="40" y="376">더 좁히려면 앱별 프로파일이 필요</text>
+</svg>

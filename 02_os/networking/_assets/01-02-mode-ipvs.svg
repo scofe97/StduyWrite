@@ -1,0 +1,76 @@
+<svg viewBox="0 0 900 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>kube-proxy IPVS 모드 — 리눅스 구조 위에서 커널 L4 로드밸런서를 빌려 해시로 조회한다</title>
+  <desc>리눅스 구조로 보면 위쪽 사용자 공간의 kube-proxy가 ipvsadm과 iptables 두 API를 함께 호출해 규칙을 심는다. 이 규칙은 커널 공간으로 내려가는데, iptables 모드와 달리 커널 안의 IPVS 서브시스템 즉 원래 4계층 로드밸런서 모듈에 해시 테이블로 담긴다. 조회할 때는 목록을 훑지 않고 ClusterIP와 포트를 해시 키로 삼아 엔드포인트를 한 번에 찾으므로 서비스 수와 무관하게 조회 시간이 일정하다. 태생이 부하 분산기라 라운드로빈 같은 알고리즘도 고를 수 있다. 다만 netfilter 외에 별도 커널 서브시스템을 끌어들이는 부담 탓에 v1.35에서 폐기 예정으로 표시됐다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .role   { font-size: 11px; font-weight: 700; fill: #8fc0ec; }
+      .zone   { font-size: 11px; font-weight: 800; }
+      .desc   { font-size: 10.5px; font-weight: 600; fill: #e8e4df; }
+      .muted  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .mono   { font-size: 9.5px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .big    { font-size: 14px; font-weight: 800; }
+      .badge  { font-size: 12px; font-weight: 800; fill: #f0b0b0; }
+    </style>
+    <marker id="arb" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#5b9bd5"/></marker>
+    <marker id="arg" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="600" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">IPVS 모드 — 커널 로드밸런서에 해시로 담는다</text>
+  <text x="24" y="52" class="role">정체 — 리눅스 L4 로드밸런서를 빌려 온 우회로</text>
+
+  <!-- USER SPACE -->
+  <rect x="24" y="70" width="852" height="80" rx="10" fill="rgb(14,20,26)" stroke="#5b9bd5" stroke-width="1.3" stroke-dasharray="6 4"/>
+  <text x="40" y="92" class="zone" style="fill:#8fc0ec">USER SPACE (사용자 공간)</text>
+  <rect x="40" y="102" width="230" height="38" rx="7" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="155" y="126" class="mono" text-anchor="middle" style="fill:#8fc0ec">kube-proxy</text>
+  <rect x="300" y="102" width="240" height="38" rx="7" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="420" y="126" class="mono" text-anchor="middle" style="fill:#8fc0ec">ipvsadm + iptables API</text>
+  <line x1="270" y1="121" x2="296" y2="121" stroke="#5b9bd5" stroke-width="1.6" marker-end="url(#arb)"/>
+  <text x="580" y="126" class="muted" style="fill:rgb(138,133,128)">두 API를 함께 써서 규칙을 심는다</text>
+
+  <line x1="450" y1="150" x2="450" y2="176" stroke="#5b9bd5" stroke-width="2" marker-end="url(#arb)"/>
+
+  <!-- KERNEL SPACE -->
+  <rect x="24" y="180" width="852" height="312" rx="10" fill="rgb(12,16,22)" stroke="#5b9bd5" stroke-width="1.3"/>
+  <text x="40" y="202" class="zone" style="fill:#8fc0ec">KERNEL SPACE (커널 공간)</text>
+
+  <!-- IPVS 서브시스템 강조 -->
+  <rect x="40" y="216" width="816" height="120" rx="9" fill="rgb(18,26,36)" stroke="#5b9bd5" stroke-width="1.4"/>
+  <text x="60" y="240" class="desc" style="fill:#8fc0ec">IPVS 서브시스템 — 원래 커널의 L4 로드밸런서 모듈 (netfilter 훅 위)</text>
+
+  <rect x="60" y="252" width="230" height="40" rx="7" fill="#5b9bd5"/>
+  <text x="175" y="277" class="mono" text-anchor="middle" style="fill:#e8e4df">조회: 10.96.74.151:80</text>
+
+  <rect x="330" y="248" width="300" height="70" rx="9" fill="#5b9bd5"/>
+  <text x="480" y="278" class="big" text-anchor="middle" style="fill:#e8e4df">hash(ClusterIP:포트)</text>
+  <text x="480" y="302" class="mono" text-anchor="middle" style="fill:#e8e4df">→ 엔드포인트 한 번에</text>
+  <line x1="290" y1="272" x2="326" y2="278" stroke="#5b9bd5" stroke-width="2" marker-end="url(#arb)"/>
+
+  <rect x="660" y="252" width="176" height="66" rx="8" fill="rgb(20,30,22)" stroke="#66bb6a" stroke-width="1.1"/>
+  <text x="748" y="282" class="desc" text-anchor="middle" style="fill:#66bb6a">단 한 번 조회</text>
+  <text x="748" y="304" class="mono" text-anchor="middle" style="fill:#66bb6a">즉시 도착</text>
+  <line x1="630" y1="283" x2="656" y2="283" stroke="#66bb6a" stroke-width="2" marker-end="url(#arg)"/>
+
+  <!-- 두 특성 -->
+  <rect x="40" y="350" width="408" height="58" rx="8" fill="rgb(20,22,26)" stroke="#5b9bd5" stroke-width="1"/>
+  <text x="244" y="375" class="desc" text-anchor="middle" style="fill:#8fc0ec">서비스가 10개든 5만 개든 조회 시간 일정</text>
+  <text x="244" y="396" class="muted" text-anchor="middle">해시 키로 바로 찾으니 서비스 수와 무관</text>
+
+  <rect x="464" y="350" width="392" height="58" rx="8" fill="rgb(20,22,26)" stroke="#5b9bd5" stroke-width="1"/>
+  <text x="660" y="375" class="desc" text-anchor="middle" style="fill:#8fc0ec">태생이 부하 분산기 → 알고리즘 선택</text>
+  <text x="660" y="396" class="muted" text-anchor="middle">라운드로빈 · 최소 연결 등</text>
+
+  <!-- 구조 부담 지적 -->
+  <rect x="40" y="420" width="816" height="60" rx="8" fill="rgb(30,20,20)" stroke="#f0b0b0" stroke-width="1.1"/>
+  <text x="448" y="445" class="desc" text-anchor="middle" style="fill:#f0b0b0">구조상 부담 — netfilter 하나로 안 끝나고 IPVS 서브시스템을 별도로 끌어들인다</text>
+  <text x="448" y="466" class="muted" text-anchor="middle">이 우회 구조가 결국 발목을 잡았다</text>
+
+  <!-- 상태 -->
+  <rect x="24" y="502" width="852" height="46" rx="8" fill="rgb(30,20,20)" stroke="#f0b0b0" stroke-width="1.4"/>
+  <text x="450" y="523" class="badge" text-anchor="middle">v1.35 deprecated (폐기 예정)</text>
+  <text x="450" y="541" class="muted" text-anchor="middle" style="fill:#f0b0b0">그 자리는 nftables가 이어받는 중이다</text>
+
+  <text x="24" y="576" class="muted">한때 대규모 클러스터의 표준 답이었지만, netfilter 안에서 같은 성능을 내는 nftables가 등장하며 존재 이유가 줄었다.</text>
+</svg>

@@ -1,0 +1,41 @@
+<svg viewBox="0 0 680 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>하나의 ArrayList 모니터로 서로를 차단 — consumer가 producer를 3,698번, producer가 consumer를 3,699번 (원문 Figure 7.8·7.9 개념도)</title>
+  <desc>원문 Figure 7.8 과 7.9 의 개념을 도식으로 옮긴 것입니다. 실행 내내 단 하나의 모니터 인스턴스인 ArrayList 가 두 스레드 중 하나를 번갈아 막습니다. 객체 참조 4476199c 가 그 모니터를 고유하게 식별합니다. consumer 스레드가 모니터 4476199c 를 획득해 producer 를 3698 번 막았고, producer 스레드가 같은 모니터를 보유해 consumer 를 3699 번 막았습니다. 한 스레드가 ArrayList 모니터로 동기화된 블록을 실행하는 동안 다른 스레드는 기다리며, 같은 모니터를 쓰므로 양쪽 차단 횟수가 거의 대칭입니다.</desc>
+  <rect x="0" y="0" width="680" height="360" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">하나의 모니터로 서로를 차단 (상호 배제)</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 Figure 7.8·7.9 개념도 — 모니터 4476199c(ArrayList) (da-ch7-ex1)</text>
+
+  <!-- producer -->
+  <rect x="20" y="120" width="180" height="80" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9" stroke-width="1.5"/>
+  <text x="110" y="152" fill="#9cc3df" font-size="13" font-weight="bold" text-anchor="middle">_Producer</text>
+  <text x="110" y="178" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">3,698번 막힘</text>
+
+  <!-- 모니터 (가운데) -->
+  <rect x="250" y="110" width="180" height="100" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="340" y="146" fill="rgb(212,168,83)" font-size="13" font-weight="bold" text-anchor="middle">모니터</text>
+  <text x="340" y="168" fill="#e8e4df" font-size="11" text-anchor="middle">ArrayList</text>
+  <text x="340" y="188" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">ref 4476199c</text>
+
+  <!-- consumer -->
+  <rect x="480" y="120" width="180" height="80" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="570" y="152" fill="#66bb6a" font-size="13" font-weight="bold" text-anchor="middle">_Consumer</text>
+  <text x="570" y="178" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">3,699번 막힘</text>
+
+  <!-- consumer가 producer 막는 화살표 (위) -->
+  <path d="M 480 138 Q 340 80 200 138" fill="none" stroke="#66bb6a" stroke-width="1.5"/>
+  <polygon points="200,138 208,132 209,141" fill="#66bb6a"/>
+  <text x="340" y="92" fill="#66bb6a" font-size="11" font-weight="bold" text-anchor="middle">consumer가 producer 차단 — 3,698번</text>
+
+  <!-- producer가 consumer 막는 화살표 (아래) -->
+  <path d="M 200 184 Q 340 240 480 184" fill="none" stroke="#7fa8c9" stroke-width="1.5"/>
+  <polygon points="480,184 472,182 473,191" fill="#7fa8c9"/>
+  <text x="340" y="238" fill="#9cc3df" font-size="11" font-weight="bold" text-anchor="middle">producer가 consumer 차단 — 3,699번</text>
+
+  <!-- 해석 -->
+  <rect x="20" y="262" width="640" height="84" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="284" fill="#e8e4df" font-size="11" font-weight="bold">읽는 법</text>
+  <text x="34" y="306" fill="#e8e4df" font-size="10.5">한 스레드가 ArrayList 모니터로 동기화된 블록을 실행하는 동안 다른 스레드는 대기</text>
+  <text x="34" y="326" fill="#e8e4df" font-size="10.5">같은 모니터를 쓰니 양쪽 차단 횟수가 거의 대칭 (3,698 ≈ 3,699) → 공정한 상호 배제</text>
+  <text x="34" y="343" fill="rgb(138,133,128)" font-size="9.5">참조 4476199c 로 같은 모니터가 여러 스레드에 영향을 줬는지 식별</text>
+</svg>

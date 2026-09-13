@@ -1,0 +1,72 @@
+<svg viewBox="0 0 680 420" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>user namespace가 컨테이너 root를 호스트 비특권 사용자로 매핑한다</title>
+  <desc>user namespace가 없으면 컨테이너 안의 root는 호스트에서도 root라, 컨테이너를 탈출한 공격자가 곧바로 호스트 root가 됩니다. user namespace를 쓰면 컨테이너 안의 아이디 0을 호스트의 비특권 사용자로 매핑할 수 있습니다. 매핑은 proc 디렉토리의 uid_map 파일에 세 값을 써서 정하는데, 자식 관점의 시작 아이디와 호스트의 대응 시작 아이디와 매핑할 개수입니다. 이렇게 하면 컨테이너 안에서는 root로 동작하지만 탈출해도 호스트에서는 비특권 신원입니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 12.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10px; }
+    .id { fill: #0d0d0d; font-size: 11px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .chip { fill: #f5edda; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .divider { stroke: #b8b3ad; stroke-width: 1.2; stroke-dasharray: 5 4; fill: none; }
+    .danger-title { fill: #7a1f1f; font-size: 12.5px; font-weight: 700; }
+    .danger-detail { fill: #7a1f1f; font-size: 10px; }
+  </style>
+
+  <rect width="680" height="420" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="nh" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="32">user namespace 없이</text>
+
+  <rect x="40" y="44" width="600" height="66" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="56" y="66">컨테이너 root = 호스트 root</text>
+  <text class="danger-detail" x="56" y="86">탈출하면 곧바로 호스트를 장악합니다</text>
+  <rect class="chip" x="440" y="60" width="180" height="34" rx="3"/>
+  <text class="box-title" x="450" y="74" font-size="11">컨테이너 uid 0</text>
+  <text class="box-title" x="450" y="88" font-size="11">호스트 uid 0</text>
+
+  <path class="arrow" d="M340,110 L340,132" marker-end="url(#nh)"/>
+  <text class="head" x="356" y="128">user namespace 를 쓰면</text>
+
+  <!-- 매핑 -->
+  <text class="head" x="40" y="164">컨테이너가 보는 신원</text>
+  <text class="head" x="640" y="164" text-anchor="end">호스트가 보는 신원</text>
+
+  <path class="divider" d="M340,150 L340,300"/>
+
+  <rect class="box" x="40" y="176" width="240" height="60" rx="4"/>
+  <text class="box-title" x="56" y="198">root 로 동작</text>
+  <rect class="chip" x="56" y="208" width="110" height="18" rx="3"/>
+  <text class="id" x="62" y="221">uid = 0</text>
+
+  <rect class="box" x="400" y="176" width="240" height="60" rx="4"/>
+  <text class="box-title" x="416" y="198">비특권 사용자</text>
+  <rect class="chip" x="416" y="208" width="150" height="18" rx="3"/>
+  <text class="id" x="422" y="221">uid = 1000</text>
+
+  <path class="arrow" d="M280,206 L400,206" marker-end="url(#nh)"/>
+  <text class="hint" x="340" y="200" text-anchor="middle">매핑</text>
+
+  <!-- uid_map -->
+  <rect class="box" x="40" y="252" width="600" height="76" rx="4"/>
+  <text class="box-title" x="56" y="274">uid_map 에 세 값을 쓴다</text>
+  <rect class="chip" x="56" y="284" width="260" height="18" rx="3"/>
+  <text class="id" x="62" y="297">echo '0 1000 1' &gt; uid_map</text>
+  <text class="box-detail" x="56" y="320">자식ID · 호스트ID · 개수</text>
+
+  <text class="hint" x="40" y="356">안에서는 root 권한 전부</text>
+  <text class="hint" x="40" y="376">탈출해도 호스트에서는 비특권입니다</text>
+  <text class="hint" x="40" y="396">한 번의 실수가 치명적이지 않다</text>
+</svg>

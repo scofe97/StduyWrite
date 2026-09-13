@@ -1,0 +1,78 @@
+<svg viewBox="0 0 880 520" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>모니터링 믹스인이 규칙과 대시보드가 되기까지</title>
+  <desc>jsonnet-bundler 가 믹스인 저장소를 내려받아 vendor 디렉토리에 풀고, 그 의존성까지 함께 가져온다. 쓰는 쪽은 mixin.libsonnet 을 불러 필요한 컴포넌트만 남기고 나머지는 널로 지운 뒤, 다중 출력 모드로 렌더링해 녹화 규칙·알림 규칙·대시보드 파일을 얻는다. 믹스인이 노출하는 필드는 네 개뿐이다.</desc>
+
+  <defs>
+    <marker id="ma" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="880" height="520" fill="#0d0d0d"/>
+  <text x="20" y="30" fill="#e8e4df" font-size="15">믹스인은 렌더링해야 비로소 규칙이 됩니다</text>
+  <text x="20" y="54" fill="rgb(138,133,128)" font-size="10.5">믹스인 자체는 Jsonnet 패키지입니다. Prometheus 가 읽는 YAML 은 그 패키지를 실행한 <tspan fill="#e8e4df">결과물</tspan>입니다.</text>
+
+  <!-- step 1 -->
+  <rect x="20" y="86" width="196" height="104" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="118" y="110" fill="#e8e4df" font-size="11.5" text-anchor="middle">① jb 가 받아옵니다</text>
+  <rect x="34" y="122" width="168" height="20" fill="#dceaf7"/>
+  <text x="118" y="136" fill="#10243a" font-size="8.5" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono', monospace">jb install …/mixin@main</text>
+  <text x="118" y="160" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">ZIP 을 풀어 vendor/ 에</text>
+  <text x="118" y="177" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">의존성까지 같이 받습니다</text>
+
+  <line x1="222" y1="138" x2="256" y2="138" stroke="rgb(212,168,83)" stroke-width="1.6" marker-end="url(#ma)"/>
+
+  <!-- step 2 -->
+  <rect x="264" y="86" width="216" height="104" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="372" y="110" fill="#e8e4df" font-size="11.5" text-anchor="middle">② mixin.libsonnet</text>
+  <text x="372" y="132" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">네 파일을 더해 놓은 진입점</text>
+  <text x="372" y="152" fill="rgb(212,168,83)" font-size="8.5" text-anchor="middle" font-family="'JetBrains Mono', monospace">dashboards + alerts</text>
+  <text x="372" y="168" fill="rgb(212,168,83)" font-size="8.5" text-anchor="middle" font-family="'JetBrains Mono', monospace">+ rules + config</text>
+
+  <line x1="486" y1="138" x2="520" y2="138" stroke="rgb(212,168,83)" stroke-width="1.6" marker-end="url(#ma)"/>
+
+  <!-- step 3 -->
+  <rect x="528" y="86" width="332" height="104" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="694" y="110" fill="#e8e4df" font-size="11.5" text-anchor="middle">③ 쓰는 쪽이 덮어씁니다</text>
+  <text x="546" y="134" fill="rgb(138,133,128)" font-size="9.5">필요한 컴포넌트만 남기고</text>
+  <rect x="546" y="144" width="140" height="20" fill="#f2d4d4"/>
+  <text x="616" y="158" fill="#7a1f1f" font-size="8.5" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono', monospace">store:: null</text>
+  <text x="696" y="158" fill="rgb(138,133,128)" font-size="9">나머지는 이렇게 지웁니다</text>
+  <text x="546" y="181" fill="rgb(138,133,128)" font-size="9">Sidecar·Query 만 쓰면 출력도 그 둘만 나옵니다</text>
+
+  <line x1="694" y1="196" x2="694" y2="224" stroke="rgb(212,168,83)" stroke-width="1.6" marker-end="url(#ma)"/>
+
+  <line x1="20" y1="240" x2="860" y2="240" stroke="rgb(42,37,32)"/>
+
+  <!-- render -->
+  <text x="20" y="266" fill="#e8e4df" font-size="12">④ 다중 출력 모드로 렌더링합니다 — <tspan fill="rgb(212,168,83)">-c</tspan> 를 빠뜨리면 디렉토리가 없다며 멈춥니다</text>
+  <rect x="20" y="280" width="480" height="22" fill="#f5edda"/>
+  <text x="34" y="295" fill="#0d0d0d" font-size="9.5" font-weight="700" font-family="'JetBrains Mono', monospace">jsonnet -J vendor -Scm . thanos.jsonnet</text>
+  <text x="516" y="295" fill="rgb(138,133,128)" font-size="9.5">-J 는 라이브러리 검색 경로, -m 은 다중 출력, -S 는 문자열 그대로</text>
+
+  <!-- outputs -->
+  <rect x="20" y="318" width="270" height="86" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="340" fill="rgb(212,168,83)" font-size="9.5" font-family="'JetBrains Mono', monospace">prometheusRules</text>
+  <text x="34" y="358" fill="rgb(138,133,128)" font-size="9">녹화 규칙 그룹의 배열</text>
+  <rect x="34" y="368" width="242" height="20" fill="#dceaf7"/>
+  <text x="155" y="382" fill="#10243a" font-size="8.5" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono', monospace">thanos_recording_rules.yaml</text>
+
+  <rect x="304" y="318" width="270" height="86" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="318" y="340" fill="rgb(212,168,83)" font-size="9.5" font-family="'JetBrains Mono', monospace">prometheusAlerts</text>
+  <text x="318" y="358" fill="rgb(138,133,128)" font-size="9">알림 규칙 그룹의 배열</text>
+  <rect x="318" y="368" width="242" height="20" fill="#dceaf7"/>
+  <text x="439" y="382" fill="#10243a" font-size="8.5" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono', monospace">thanos_alerting_rules.yaml</text>
+
+  <rect x="588" y="318" width="272" height="86" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="602" y="340" fill="rgb(212,168,83)" font-size="9.5" font-family="'JetBrains Mono', monospace">grafanaDashboards</text>
+  <text x="602" y="358" fill="rgb(138,133,128)" font-size="9">파일명 → 대시보드 JSON 객체</text>
+  <rect x="602" y="368" width="244" height="20" fill="#dceaf7"/>
+  <text x="724" y="382" fill="#10243a" font-size="8.5" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono', monospace">dashboard_*.json 세 개</text>
+
+  <rect x="20" y="418" width="840" height="46" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="40" y="438" fill="#e8e4df" font-size="10.5">네 번째 필드 <tspan font-family="'JetBrains Mono', monospace" fill="rgb(212,168,83)">_config</tspan> 만은 파일이 되지 않습니다. 숨은 필드라서 출력에 안 실리고, 나머지 셋을 <tspan fill="#e8e4df">조종</tspan>하는 손잡이입니다.</text>
+  <text x="40" y="456" fill="rgb(138,133,128)" font-size="9.5">그래서 믹스인의 스키마는 필드가 넷인데 산출물은 셋입니다.</text>
+
+  <text x="20" y="490" fill="rgb(138,133,128)" font-size="10">컴포넌트를 <tspan font-family="'JetBrains Mono', monospace" fill="#e8e4df">null</tspan> 로 지우면 그 컴포넌트의 규칙도 대시보드도 나오지 않습니다. 안 쓰는 Thanos Store 의 알림이 울릴 일이 없습니다.</text>
+  <text x="20" y="510" fill="rgb(138,133,128)" font-size="10">렌더링을 남에게 맡기지 말라는 저자의 권고는 여기서 나옵니다 — 기본값으로 뽑아둔 결과물은 내 라벨을 모릅니다.</text>
+</svg>

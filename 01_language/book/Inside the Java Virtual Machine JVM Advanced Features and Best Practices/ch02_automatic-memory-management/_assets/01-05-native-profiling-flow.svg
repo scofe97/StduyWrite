@@ -1,0 +1,68 @@
+<svg viewBox="0 0 900 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>jemalloc/jeprof + async-profiler 이중 프로파일링의 역할 분담</title>
+  <desc>jemalloc/jeprof는 네이티브 층에서 무엇이 malloc을 쓰는지 짚고(inflateBytesBytes 67.2퍼센트), async-profiler는 자바 층에서 어느 코드가 Inflater를 유발했는지 짚는다. 두 도구를 이어야 네이티브 증상과 자바 원인이 하나의 인과로 연결된다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: rgb(138,133,128); }
+      .head  { font-size: 13.5px; font-weight: 800; }
+      .nm    { font-size: 12px; font-weight: 700; fill: #e8e4df; }
+      .mt    { font-size: 10.5px; fill: rgb(138,133,128); }
+      .code  { font-size: 10.5px; font-weight: 700; font-family: 'JetBrains Mono', monospace; fill: #e8e4df; }
+      .hot   { font-size: 10.5px; font-weight: 700; font-family: 'JetBrains Mono', monospace; fill: #f44336; }
+      .tick  { font-size: 11px; fill: rgb(212,168,83); font-weight: 700; }
+    </style>
+    <marker id="arrowP" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="500" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">네이티브 프로파일링 이중창 — 무엇이 쓰나 × 어느 자바가 유발했나</text>
+  <text x="28" y="58" class="sub">NMT가 못 보는 네이티브를 두 도구로 겹쳐 좁힌다 · jeprof=네이티브 범인 · async-profiler=자바 유발자</text>
+
+  <!-- 왼쪽: jemalloc/jeprof -->
+  <rect x="40" y="90" width="380" height="270" rx="10" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="60" y="120" class="head" style="fill:#66bb6a">① jemalloc + jeprof — 무엇이 네이티브를 쓰나</text>
+
+  <rect x="60" y="138" width="340" height="70" rx="7" fill="rgb(26,26,26)" stroke="#66bb6a"/>
+  <text x="80" y="159" class="nm">설정 (컨테이너 환경 변수)</text>
+  <text x="80" y="178" class="code">LD_PRELOAD=.../libjemalloc.so</text>
+  <text x="80" y="196" class="code">MALLOC_CONF="prof:true,..."</text>
+
+  <rect x="60" y="218" width="340" height="42" rx="7" fill="rgb(26,26,26)" stroke="#66bb6a"/>
+  <text x="80" y="239" class="nm">렌더</text>
+  <text x="80" y="255" class="code">jeprof --show_bytes --svg</text>
+
+  <rect x="60" y="270" width="340" height="74" rx="7" fill="rgba(244,67,54,0.12)" stroke="#f44336"/>
+  <text x="80" y="291" class="nm">결과 — 네이티브 심볼</text>
+  <text x="80" y="310" class="hot">67.2% Java_..._Inflater_inflateBytesBytes</text>
+  <text x="80" y="328" class="mt">호출 사슬: inflate → updatewindow → inflateInit2_</text>
+
+  <!-- 오른쪽: async-profiler -->
+  <rect x="480" y="90" width="380" height="270" rx="10" fill="rgba(96,165,224,0.08)" stroke="#5b9bd5" stroke-width="2"/>
+  <text x="500" y="120" class="head" style="fill:#5b9bd5">② async-profiler — 어느 자바가 유발했나</text>
+
+  <rect x="500" y="138" width="340" height="52" rx="7" fill="rgb(26,26,26)" stroke="#5b9bd5"/>
+  <text x="520" y="159" class="nm">명령</text>
+  <text x="520" y="178" class="code">profiler.sh -d 30 -e alloc -f a.html</text>
+
+  <rect x="500" y="200" width="340" height="42" rx="7" fill="rgb(26,26,26)" stroke="#5b9bd5"/>
+  <text x="520" y="221" class="nm">-e alloc = JVM TLAB(힙) 할당 샘플링</text>
+  <text x="520" y="236" class="mt">네이티브 malloc이 아니라 자바 코드 경로를 찾는 용도</text>
+
+  <rect x="500" y="252" width="340" height="92" rx="7" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)"/>
+  <text x="520" y="273" class="nm">결과 — 자바 스택</text>
+  <text x="520" y="292" class="code">Undertow worker → handler</text>
+  <text x="520" y="310" class="code">→ getResourceAsStream</text>
+  <text x="520" y="328" class="code">→ InflaterInputStream.&lt;init&gt;</text>
+
+  <!-- 하단: 이어붙이기 -->
+  <line x1="230" y1="360" x2="230" y2="400" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrowP)"/>
+  <line x1="670" y1="360" x2="670" y2="400" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrowP)"/>
+
+  <rect x="40" y="406" width="820" height="76" rx="10" fill="rgb(26,26,26)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="60" y="432" class="nm">🔑 두 도구를 이어야 인과가 완성된다</text>
+  <text x="60" y="454" class="tick">jeprof: "네이티브 zlib이 범인"  +  async-profiler: "우리 핸들러의 리소스 읽기 코드가 그걸 유발"</text>
+  <text x="60" y="474" class="mt">= getResourceAsStream이 압축 JAR 엔트리를 읽으며 만든 Inflater가 네이티브 zlib 버퍼를 누수</text>
+</svg>

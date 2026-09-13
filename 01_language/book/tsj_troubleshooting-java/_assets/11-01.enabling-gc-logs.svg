@@ -1,0 +1,52 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>GC 로그 활성화와 힙 구조 — -Xlog:gc*·초기화 로그·Eden/Survivor/Old·GC 이벤트 해부</title>
+  <desc>이 편의 요약입니다. GC 로그는 JVM 의 메모리 일기로 minor 수집부터 전면 정리까지 모든 GC 이벤트를 기록합니다. 로그가 크고 앱을 느리게 할 수 있어 기본으로 꺼져 있으니 느림 높은 CPU 메모리 문제를 조사할 때만 -Xlog:gc* 로 켭니다. 초기화 로그는 GC 종류 G1, JVM 버전, 시스템 자원, 힙 할당 region min initial max, GC 병렬 설정을 드러냅니다. 힙은 옷장처럼 Eden Survivor Old 로 나뉘어 새 객체는 Eden 에서 시작해 GC 사이클을 살아남으면 Survivor 로 더 오래 살아남으면 Old 로 승격됩니다. GC 이벤트 로그에서 가장 중요한 둘은 이벤트 타입과 단계별 시간이고 listing 11.2 는 Pause Young Normal 로 단계들이 모두 ms 단위라 잘 튜닝된 정상 수집입니다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="38" fill="#e8e4df" font-size="18" font-weight="bold">GC 로그 활성화와 힙 구조</text>
+  <text x="20" y="60" fill="rgb(138,133,128)" font-size="11">Troubleshooting Java · 11장 도입~§11.1 · da-ch11-ex1 (G1)</text>
+
+  <!-- 켜기 -->
+  <rect x="20" y="78" width="640" height="66" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="34" y="100" fill="rgb(212,168,83)" font-size="13" font-weight="bold">GC 로그 = JVM 의 메모리 일기 · 기본 꺼짐</text>
+  <text x="34" y="124" fill="#9cc3df" font-size="12" font-family="monospace">-Xlog:gc*</text>
+  <text x="240" y="124" fill="#e8e4df" font-size="11">느림·높은 CPU·메모리 문제 조사할 때만 켬 (크고 느려질 수 있음)</text>
+
+  <!-- 초기화 로그 -->
+  <rect x="20" y="158" width="640" height="116" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="180" fill="#e8e4df" font-size="13" font-weight="bold">초기화 로그 — 조사 전 첫 한눈</text>
+  <text x="34" y="204" fill="#e8e4df" font-size="10.5">• GC 종류(Using G1) · JVM 버전(22.0.1)</text>
+  <text x="34" y="226" fill="#e8e4df" font-size="10.5">• 시스템(CPUs 8 · Memory 48899M)</text>
+  <text x="34" y="248" fill="#e8e4df" font-size="10.5">• 힙 할당(Region 8M · Initial 768M · Max 12232M)</text>
+  <text x="34" y="268" fill="rgb(138,133,128)" font-size="10">• GC 병렬(Parallel 8 · Concurrent 2) → 현재 실행의 기본 구성</text>
+
+  <!-- 힙 구조 -->
+  <rect x="20" y="288" width="640" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="310" fill="#e8e4df" font-size="13" font-weight="bold">힙 구조 — 옷장 비유 (나이=살아남은 GC 사이클)</text>
+  <rect x="34" y="322" width="180" height="60" fill="rgba(102,187,106,0.1)" stroke="#66bb6a"/>
+  <text x="124" y="344" fill="#66bb6a" font-size="11" font-weight="bold" text-anchor="middle">Eden</text>
+  <text x="124" y="362" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">새 객체 시작</text>
+  <text x="124" y="376" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">자주 청소</text>
+  <rect x="244" y="322" width="180" height="60" fill="rgba(127,168,201,0.1)" stroke="#7fa8c9"/>
+  <text x="334" y="344" fill="#9cc3df" font-size="11" font-weight="bold" text-anchor="middle">Survivor</text>
+  <text x="334" y="362" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">살아남은 것 (영역 둘)</text>
+  <text x="334" y="376" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">덜 자주 청소</text>
+  <rect x="454" y="322" width="192" height="60" fill="rgba(212,168,83,0.1)" stroke="rgb(212,168,83)"/>
+  <text x="550" y="344" fill="rgb(212,168,83)" font-size="11" font-weight="bold" text-anchor="middle">Old generation</text>
+  <text x="550" y="362" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">오래 살아남아 승격</text>
+  <text x="550" y="376" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">드물게 청소</text>
+  <text x="214" y="356" fill="rgb(212,168,83)" font-size="14">→</text>
+  <text x="424" y="356" fill="rgb(212,168,83)" font-size="14">→</text>
+  <text x="34" y="400" fill="rgb(138,133,128)" font-size="9.5">옷장이 차면 비움 = GC. 충분히 살아남으면 다음 구역으로 승격</text>
+
+  <!-- GC 이벤트 -->
+  <rect x="20" y="422" width="640" height="162" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="444" fill="rgb(212,168,83)" font-size="13" font-weight="bold">GC 이벤트 로그 — 타입 + 단계별 시간</text>
+  <text x="34" y="468" fill="#e8e4df" font-size="11">집중할 둘: ① 이벤트 타입(minor·full·mixed·emergency) ② 각 단계 시간</text>
+  <rect x="34" y="480" width="612" height="58" fill="rgb(18,18,18)" stroke="rgb(60,55,50)"/>
+  <text x="44" y="500" fill="#66bb6a" font-size="10" font-family="monospace">GC(0) Pause Young (Normal)  ← 일상 수집(긴급 아님)</text>
+  <text x="44" y="518" fill="#e8e4df" font-size="10" font-family="monospace">Evacuate Collection Set: 4.04ms  ← 모두 ms 단위</text>
+  <text x="44" y="532" fill="#9cc3df" font-size="10" font-family="monospace">Eden: 4-&gt;0(5)  Survivor: 0-&gt;1(1)  Old: 0-&gt;0</text>
+  <text x="34" y="558" fill="#66bb6a" font-size="11" font-weight="bold">결론: G1·region 8M·max ~12GB·Young 수집·몇 ms = 잘 튜닝된 GC</text>
+  <text x="34" y="577" fill="rgb(138,133,128)" font-size="9">humongous = region 절반 넘는 초대형 객체</text>
+</svg>

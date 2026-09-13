@@ -1,0 +1,37 @@
+<svg viewBox="0 0 680 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>GC 로그 파일 저장과 로테이션 — file= 데코레이터·filecount/filesize 로테이션·로그 레벨 피라미드</title>
+  <desc>이 편의 요약입니다. 콘솔 GC 로그는 학습용일 뿐 실환경에선 다른 로그와 섞이고 너무 큽니다. file= 로 파일에 저장하고 time uptime level tags 네 데코레이터로 형식을 갖춥니다. time 은 타임스탬프, uptime 은 JVM 가동시간, level 은 로그 레벨, tags 는 카테고리를 더합니다. filecount 로 최대 파일 수를 filesize 로 파일별 크기 한도를 정해 로테이션하면 한도에 닿을 때마다 인덱스 붙은 새 파일을 만들고 최대 수에 이르면 가장 오래된 파일을 덮어씁니다. 로그 레벨은 error warning info debug trace 로 위험도 내림차순이며 각 레벨은 더 위험한 상위를 자동 포함합니다. 운영은 error warning 만 기본은 info 깊은 조사는 staging 에서 debug trace 로 재현합니다. 파일은 GCeasy 나 AI 비서로 분석합니다.</desc>
+  <rect x="0" y="0" width="680" height="560" fill="#0d0d0d"/>
+
+  <text x="20" y="38" fill="#e8e4df" font-size="18" font-weight="bold">GC 로그 파일 저장과 로테이션</text>
+  <text x="20" y="60" fill="rgb(138,133,128)" font-size="11">Troubleshooting Java · §11.2~§11.3</text>
+
+  <!-- 왜 파일 -->
+  <rect x="20" y="78" width="640" height="50" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="1.5"/>
+  <text x="34" y="100" fill="#9cc3df" font-size="12" font-weight="bold">왜 콘솔 대신 파일?</text>
+  <text x="34" y="120" fill="#e8e4df" font-size="10.5">실환경 콘솔은 다른 앱 로그와 섞이고 양 많아 실시간 분석 어려움 → 파일=수집·필터·분석·공유 쉬움</text>
+
+  <!-- file= 데코레이터 -->
+  <rect x="20" y="142" width="640" height="110" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="164" fill="rgb(212,168,83)" font-size="13" font-weight="bold">file= 과 네 데코레이터</text>
+  <text x="34" y="186" fill="#9cc3df" font-size="10.5" font-family="monospace">-Xlog:gc*:file=&lt;경로&gt;:time,uptime,level,tags</text>
+  <text x="34" y="210" fill="#e8e4df" font-size="10.5">time(타임스탬프) · uptime(JVM 가동시간) · level(로그 레벨) · tags(카테고리)</text>
+  <text x="34" y="232" fill="rgb(138,133,128)" font-size="10">디렉토리 쓰기 권한 필요 · GCeasy.io·AI 비서로 분석 · 재시작 덮어쓰기 주의(타임스탬프+로테이션)</text>
+
+  <!-- 로테이션 -->
+  <rect x="20" y="266" width="640" height="110" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="288" fill="#e8e4df" font-size="13" font-weight="bold">로테이션 — filecount + filesize</text>
+  <text x="34" y="310" fill="#9cc3df" font-size="10.5" font-family="monospace">...:filecount=5,filesize=10M</text>
+  <text x="34" y="332" fill="#e8e4df" font-size="10.5">한도(10M) 닿을 때마다 인덱스(0부터) 붙은 새 파일 생성</text>
+  <text x="34" y="354" fill="#f47f72" font-size="10.5">최대 수(5) 이르면 가장 오래된 파일 덮어씀 → 디스크 절약</text>
+  <text x="34" y="372" fill="rgb(138,133,128)" font-size="9.5">특정 시간대는 find / Get-ChildItem 으로 타임스탬프 필터</text>
+
+  <!-- 레벨 -->
+  <rect x="20" y="390" width="640" height="150" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="34" y="412" fill="rgb(212,168,83)" font-size="13" font-weight="bold">로그 레벨 — 위험도 내림차순 (각 레벨은 상위 자동 포함)</text>
+  <text x="34" y="436" fill="#f47f72" font-size="10.5">Error(치명적) ⊃ Warning(잠재 문제) ⊃ Info(일반·기본) ⊃ Debug(진단) ⊃ Trace(전부)</text>
+  <text x="34" y="462" fill="#e8e4df" font-size="11">• 운영: error·warning 만 (성능 민감, verbose 금지)</text>
+  <text x="34" y="484" fill="#e8e4df" font-size="11">• 기본 info: 대개 충분 (앞 예제에 trace 안 보인 이유)</text>
+  <text x="34" y="506" fill="#e8e4df" font-size="11">• 깊은 조사: staging 에서 재현 후 debug·trace (개발 모드 미세 조정)</text>
+  <text x="34" y="528" fill="rgb(138,133,128)" font-size="9.5">핵심: 상세함 vs 성능 균형 — 너무 적으면 깜깜이, 너무 많으면 데이터의 바다</text>
+</svg>

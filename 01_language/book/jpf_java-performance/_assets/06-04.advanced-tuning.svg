@@ -1,0 +1,52 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>고급 튜닝 — tenuring·TLAB·humongous·힙 제어</title>
+  <desc>young 세대가 두 survivor space와 eden으로 나뉜 이유는 단명 객체에 young에서 회수될 추가 기회를 줘 old로 승격되는 것을 막기 위해서다. minor GC마다 살아있는 객체는 from survivor에서 to survivor로 옮겨지고 매번 from·to가 바뀐다. 객체가 old로 가는 두 경우는 to survivor가 차거나 tenuring threshold에 도달할 때다. InitialSurvivorRatio 기본 8이면 각 survivor가 young의 10%, MinSurvivorRatio 3이면 최대 20%다. TargetSurvivorRatio 기본 50은 GC 후 survivor가 50% 차게 리사이즈한다. tenuring threshold는 InitialTenuringThreshold(기본 7)에서 시작해 1과 MaxTenuringThreshold(기본 15) 사이로 정해진다. survivor가 너무 작으면 eden에서 old로 직접 승격돼 full GC가 잦아진다. 해결은 힙이나 young을 키우는 것이다. TLAB는 thread-local allocation buffer로 스레드마다 전용 할당 영역을 줘 동기화 없이 빠른 할당을 한다. 큰 객체는 TLAB 밖에서 할당된다. JFR로 TLAB 밖 할당을 모니터한다. TLABSize·ResizeTLAB로 조절한다. humongous 객체는 G1에서 region 절반보다 크면 old에 직접 할당된다. region 크기는 Xms 기반으로 1MB에서 32MB, 약 2048 region이 되게 정한다. 큰 객체는 region 크기를 키운다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">고급 튜닝 — tenuring·TLAB·humongous</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">단명 객체를 young에 오래 두고, 큰 객체 할당을 효율화하는 세부 튜닝입니다</text>
+
+  <!-- tenuring / survivor -->
+  <rect x="20" y="74" width="642" height="148" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="96" fill="#9cc3df" font-size="13" font-weight="bold">tenuring과 survivor space</text>
+  <text x="38" y="116" fill="#e8e4df" font-size="11">두 survivor + eden: 단명 객체에 young에서 회수될 추가 기회 → old 승격 막음</text>
+  <text x="38" y="134" fill="rgb(138,133,128)" font-size="10">minor GC마다 살아있는 객체를 from→to survivor로 (매번 from·to 교체)</text>
+  <text x="38" y="152" fill="rgb(138,133,128)" font-size="10">old로 가는 2경우: ① to survivor가 참 ② tenuring threshold 도달</text>
+  <text x="38" y="172" fill="rgb(138,133,128)" font-size="10">InitialSurvivorRatio 8 → 각 survivor 10% · MinSurvivorRatio 3 → 최대 20% · TargetSurvivorRatio 50</text>
+  <text x="38" y="190" fill="rgb(138,133,128)" font-size="10">tenuring threshold: Initial 7 시작, 1~Max(15) 사이 JVM 자동 결정 (CMS는 6)</text>
+  <text x="38" y="210" fill="#f47f72" font-size="11">survivor 너무 작으면 eden→old 직접 승격 → full GC 잦음. 해결: 힙/young 키우기</text>
+
+  <!-- TLAB -->
+  <rect x="20" y="234" width="320" height="146" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="256" fill="#66bb6a" font-size="13" font-weight="bold">TLAB (thread-local 할당 버퍼)</text>
+  <text x="38" y="276" fill="#e8e4df" font-size="11">스레드마다 전용 할당 영역</text>
+  <text x="38" y="294" fill="rgb(138,133,128)" font-size="10">→ 동기화 없이 빠른 할당 (eden 안)</text>
+  <text x="38" y="312" fill="#f47f72" font-size="10">큰 객체는 TLAB 밖(동기화) 할당</text>
+  <text x="38" y="330" fill="rgb(138,133,128)" font-size="10">크기: 스레드 수·eden·할당률 기반</text>
+  <text x="38" y="348" fill="rgb(138,133,128)" font-size="10">JFR로 TLAB 밖 할당 모니터(가장 강력)</text>
+  <text x="38" y="366" fill="rgb(138,133,128)" font-size="9">TLABSize·ResizeTLAB·MinTLABSize로 조절</text>
+
+  <!-- humongous / region -->
+  <rect x="350" y="234" width="312" height="146" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="368" y="256" fill="#f47f72" font-size="13" font-weight="bold">humongous 객체 / G1 region</text>
+  <text x="368" y="276" fill="#e8e4df" font-size="11">region 절반 초과 = humongous</text>
+  <text x="368" y="294" fill="rgb(138,133,128)" font-size="10">→ old에 직접·연속 region 할당</text>
+  <text x="368" y="312" fill="#f47f72" font-size="10">young GC로 못 비움(단명이면 손해)</text>
+  <text x="368" y="330" fill="rgb(138,133,128)" font-size="10">region: Xms 기반, 1MB~32MB</text>
+  <text x="368" y="348" fill="rgb(138,133,128)" font-size="10">약 2048 region 되게 (2의 거듭제곱)</text>
+  <text x="368" y="366" fill="rgb(212,168,83)" font-size="10">큰 객체 = 최대 객체×2+1B로 region 키움</text>
+
+  <!-- AggressiveHeap -->
+  <rect x="20" y="392" width="642" height="56" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="414" fill="#e8e4df" font-size="13" font-weight="bold">AggressiveHeap (권장 안 함)</text>
+  <text x="38" y="434" fill="rgb(138,133,128)" font-size="11">대형 단일 JVM용 레거시 일괄 설정 · 실제 튜닝을 숨겨 추적 어려움 · ergonomic 값과 충돌해 오히려 해로울 수 있음</text>
+
+  <!-- 힙 크기 완전 제어 -->
+  <rect x="20" y="460" width="642" height="124" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="482" fill="rgb(212,168,83)" font-size="13" font-weight="bold">힙 크기 완전 제어 — 기본값 계산</text>
+  <text x="38" y="502" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">기본 Xmx = MaxRAM / MaxRAMFraction(기본 4)</text>
+  <text x="38" y="520" fill="rgb(138,133,128)" font-size="10">MaxRAM 한도: 32bit Win 4GB, 64bit 128GB → 기본 최대 힙은 그 1/4 (최대 32GB)</text>
+  <text x="38" y="538" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">기본 Xms = MaxRAM / InitialRAMFraction(기본 64)</text>
+  <text x="38" y="556" fill="rgb(138,133,128)" font-size="10">작은 메모리 머신: MinRAMFraction(기본 2)으로 OS 여유 확보 (192MB면 최대 96MB)</text>
+  <text x="38" y="576" fill="rgb(138,133,128)" font-size="10">보통은 Xms·Xmx 직접 설정이 간단 — 이 플래그는 여러 JVM 공통 ergonomic 조정 시에만</text>
+</svg>

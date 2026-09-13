@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="740" height="370" viewBox="0 0 740 370" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" role="img" aria-label="Thanos Store 파티셔닝은 두 가지다. 시간 기반은 min-time·max-time 으로 Store 마다 다른 기간을 맡기고, external label 기반은 selector.relabel-config 의 keep·drop·hashmod 로 블록을 나눈다. 둘을 함께 쓸 수도 있다">
+  <rect width="740" height="370" fill="#0d0d0d"/>
+  <text x="370" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#e8e4df">Thanos Store 파티셔닝 — 두 방식 (함께 쓸 수 있음)</text>
+
+  <!-- LEFT: time-based -->
+  <rect x="28" y="52" width="330" height="270" rx="10" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.4"/>
+  <text x="46" y="76" font-size="14" font-weight="700" fill="#8ab6e0">① 시간 기반</text>
+  <text x="46" y="96" font-size="11.5" fill="#8a8580">--min-time / --max-time (절대·상대 모두)</text>
+
+  <rect x="46" y="112" width="294" height="42" rx="6" fill="#dceaf7"/>
+  <text x="60" y="130" font-size="12" font-weight="700" fill="#10243a">Store A</text>
+  <text x="60" y="147" font-size="11" fill="#10243a">0 ~ 29일 전</text>
+
+  <rect x="46" y="162" width="294" height="42" rx="6" fill="#dceaf7"/>
+  <text x="60" y="180" font-size="12" font-weight="700" fill="#10243a">Store B</text>
+  <text x="60" y="197" font-size="11" fill="#10243a">30 ~ 59일 전</text>
+
+  <rect x="46" y="212" width="294" height="42" rx="6" fill="#dceaf7"/>
+  <text x="60" y="230" font-size="12" font-weight="700" fill="#10243a">Store C</text>
+  <text x="60" y="247" font-size="11" fill="#10243a">60 ~ 90일 전</text>
+
+  <text x="46" y="278" font-size="11.5" fill="#c9c4be">인스턴스별 데이터셋이 작아져 자원 부담 ↓</text>
+  <text x="46" y="298" font-size="11.5" fill="#c9c4be">독립 구간이라 쿼리가 병렬로 흩어짐</text>
+  <text x="46" y="314" font-size="11" fill="#8a8580">예: 90일 보존 → Store 3대</text>
+
+  <!-- RIGHT: external label -->
+  <rect x="382" y="52" width="330" height="270" rx="10" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.4"/>
+  <text x="400" y="76" font-size="14" font-weight="700" fill="#8fdc93">② external label 기반</text>
+  <text x="400" y="96" font-size="11.5" fill="#8a8580">--selector.relabel-config (keep·drop·hashmod 만)</text>
+
+  <rect x="400" y="112" width="294" height="60" rx="6" fill="#e6f7e7"/>
+  <text x="414" y="132" font-size="11.5" font-weight="700" fill="#14521d">keep — 특정 복제본만</text>
+  <text x="414" y="152" font-size="10.5" fill="#14521d">regex: prometheus-...-kube-0</text>
+  <text x="414" y="166" font-size="10.5" fill="#14521d">source_labels: [prometheus_replica]</text>
+
+  <rect x="400" y="182" width="294" height="76" rx="6" fill="#66bb6a"/>
+  <text x="414" y="202" font-size="11.5" font-weight="700" fill="#0d0d0d">hashmod — __block_id 로 균등 분할</text>
+  <text x="414" y="222" font-size="10.5" fill="#14330a">modulus: 3 → shard 0 / 1 / 2</text>
+  <text x="414" y="240" font-size="10.5" fill="#14330a">Store 3대가 regex 0·1·2 로 각자 담당</text>
+  <text x="414" y="254" font-size="10.5" fill="#14330a">(6장 Prometheus 샤딩과 같은 요령)</text>
+
+  <text x="400" y="284" font-size="11.5" fill="#c9c4be">블록의 thanos 절에 담긴 external label 이 근거</text>
+  <text x="400" y="304" font-size="11.5" fill="#c9c4be">Query Frontend 와 달리 자동이 아니라 수동</text>
+
+  <text x="370" y="352" text-anchor="middle" font-size="11.5" fill="#8a8580">Store 는 처음엔 단순하지만 데이터가 쌓이면 병목이 됩니다 — 그때 두 축으로 나눕니다.</text>
+</svg>

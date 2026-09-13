@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 600" font-family="Pretendard, sans-serif">
+  <rect width="680" height="600" fill="#0d0d0d"/>
+
+  <!-- Title -->
+  <text x="340" y="38" text-anchor="middle" fill="#e8e4df" font-size="21" font-weight="700">정확성과 신뢰·13장 종합</text>
+  <text x="340" y="58" text-anchor="middle" fill="rgb(138,133,128)" font-size="13">End-to-End 인수 · 무결성 · 코디네이션 회피 · Trust-but-Verify</text>
+  <line x1="40" y1="70" x2="640" y2="70" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <defs>
+    <marker id="ar4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="rgb(138,133,128)"/>
+    </marker>
+  </defs>
+
+  <!-- Section A: End-to-end argument -->
+  <text x="50" y="92" fill="rgb(212,168,83)" font-size="12" font-weight="700">① End-to-End 인수 — 중복 억제는 양 끝에서</text>
+
+  <rect x="50" y="100" width="90" height="36" rx="5" fill="#1a1410" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <text x="95" y="118" text-anchor="middle" fill="#e8e4df" font-size="10">클라이언트</text>
+  <text x="95" y="130" text-anchor="middle" fill="rgb(138,133,128)" font-size="9">요청 ID 생성</text>
+
+  <line x1="140" y1="118" x2="165" y2="118" stroke="rgb(138,133,128)" stroke-width="1" marker-end="url(#ar4)"/>
+
+  <rect x="165" y="100" width="80" height="36" rx="5" fill="#141414" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <text x="205" y="122" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">TCP 연결</text>
+
+  <line x1="245" y1="118" x2="270" y2="118" stroke="rgb(138,133,128)" stroke-width="1" marker-end="url(#ar4)"/>
+
+  <rect x="270" y="100" width="90" height="36" rx="5" fill="#141414" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <text x="315" y="118" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">앱 서버</text>
+  <text x="315" y="130" text-anchor="middle" fill="rgb(138,133,128)" font-size="9">요청 ID 전달</text>
+
+  <line x1="360" y1="118" x2="385" y2="118" stroke="rgb(138,133,128)" stroke-width="1" marker-end="url(#ar4)"/>
+
+  <rect x="385" y="100" width="90" height="36" rx="5" fill="#141414" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="430" y="118" text-anchor="middle" fill="rgb(212,168,83)" font-size="10">DB</text>
+  <text x="430" y="130" text-anchor="middle" fill="rgb(138,133,128)" font-size="9">UNIQUE(request_id)</text>
+
+  <line x1="475" y1="118" x2="500" y2="118" stroke="rgb(138,133,128)" stroke-width="1" marker-end="url(#ar4)"/>
+
+  <rect x="500" y="100" width="130" height="36" rx="5" fill="#141414" stroke="#66bb6a" stroke-width="1"/>
+  <text x="565" y="118" text-anchor="middle" fill="#66bb6a" font-size="10">감사 로그 / 이벤트 소싱</text>
+  <text x="565" y="130" text-anchor="middle" fill="rgb(138,133,128)" font-size="9">인과 추적 가능</text>
+
+  <text x="340" y="155" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">TCP·DB 트랜잭션·스트림 프로세서 각각은 자기 범위 안에서만 중복 제거 → end-to-end 요청 ID가 유일한 완전한 해결책</text>
+
+  <line x1="40" y1="165" x2="640" y2="165" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- Section B: Timeliness vs Integrity -->
+  <text x="50" y="185" fill="rgb(212,168,83)" font-size="12" font-weight="700">② 적시성(Timeliness) vs 무결성(Integrity)</text>
+
+  <rect x="50" y="194" width="270" height="90" rx="6" fill="#1a1410" stroke="#7fa8c9" stroke-width="1.2"/>
+  <text x="185" y="213" text-anchor="middle" fill="#9cc3df" font-size="12" font-weight="700">적시성 (Timeliness)</text>
+  <text x="65" y="231" fill="rgb(138,133,128)" font-size="11">사용자가 최신 상태를 봐야 함</text>
+  <text x="65" y="247" fill="rgb(138,133,128)" font-size="11">위반: 구 버전 읽기 (복제 지연)</text>
+  <text x="65" y="263" fill="#7fa8c9" font-size="11">해결: 기다리면 됨 (일시적)</text>
+  <text x="65" y="279" fill="rgb(138,133,128)" font-size="10">→ 선형성으로 강하게 보장 가능</text>
+
+  <rect x="370" y="194" width="270" height="90" rx="6" fill="#141414" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="505" y="213" text-anchor="middle" fill="rgb(212,168,83)" font-size="12" font-weight="700">무결성 (Integrity)</text>
+  <text x="385" y="231" fill="rgb(138,133,128)" font-size="11">데이터 손실·모순 없음</text>
+  <text x="385" y="247" fill="rgb(138,133,128)" font-size="11">위반: 이중 청구, 잔액 불일치</text>
+  <text x="385" y="263" fill="rgb(212,168,83)" font-size="11">해결: 명시적 수리 필요 (영구적)</text>
+  <text x="385" y="279" fill="rgb(138,133,128)" font-size="10">→ 멱등성+exactly-once로 달성</text>
+
+  <text x="340" y="226" text-anchor="middle" fill="rgb(212,168,83)" font-size="12" font-weight="700">vs</text>
+
+  <line x1="40" y1="298" x2="640" y2="298" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- Section C: Coordination-avoiding -->
+  <text x="50" y="318" fill="rgb(212,168,83)" font-size="12" font-weight="700">③ 코디네이션 회피 + 느슨한 제약</text>
+
+  <!-- Four mechanisms -->
+  <rect x="50" y="328" width="140" height="68" rx="5" fill="#141414" stroke="#66bb6a" stroke-width="1"/>
+  <text x="120" y="346" text-anchor="middle" fill="#66bb6a" font-size="10" font-weight="700">단일 이벤트 기록</text>
+  <text x="120" y="362" text-anchor="middle" fill="rgb(138,133,128)" font-size="9">쓰기 = 원자적 메시지</text>
+  <text x="120" y="376" text-anchor="middle" fill="rgb(138,133,128)" font-size="9">로그에 append</text>
+  <text x="120" y="390" text-anchor="middle" fill="rgb(138,133,128)" font-size="9">→ 원자성의 근원</text>
+
+  <rect x="200" y="328" width="140" height="68" rx="5" fill="#141414" stroke="#66bb6a" stroke-width="1"/>
+  <text x="270" y="346" text-anchor="middle" fill="#66bb6a" font-size="10" font-weight="700">결정론적 파생</text>
+  <text x="270" y="362" text-anchor="middle" fill="rgb(138,133,128)" font-size="9">같은 이벤트 → 같은 결과</text>
+  <text x="270" y="376" text-anchor="middle" fill="rgb(138,133,128)" font-size="9">재처리로 복구 가능</text>
+  <text x="270" y="390" text-anchor="middle" fill="rgb(138,133,128)" font-size="9">→ 내결함성</text>
+
+  <rect x="350" y="328" width="140" height="68" rx="5" fill="#141414" stroke="#66bb6a" stroke-width="1"/>
+  <text x="420" y="346" text-anchor="middle" fill="#66bb6a" font-size="10" font-weight="700">End-to-End 요청 ID</text>
+  <text x="420" y="362" text-anchor="middle" fill="rgb(138,133,128)" font-size="9">UUID 클라이언트 생성</text>
+  <text x="420" y="376" text-anchor="middle" fill="rgb(138,133,128)" font-size="9">UNIQUE 제약으로 차단</text>
+  <text x="420" y="390" text-anchor="middle" fill="rgb(138,133,128)" font-size="9">→ 중복 억제</text>
+
+  <rect x="500" y="328" width="140" height="68" rx="5" fill="#141414" stroke="#66bb6a" stroke-width="1"/>
+  <text x="570" y="346" text-anchor="middle" fill="#66bb6a" font-size="10" font-weight="700">불변 메시지</text>
+  <text x="570" y="362" text-anchor="middle" fill="rgb(138,133,128)" font-size="9">이벤트 수정 불가</text>
+  <text x="570" y="376" text-anchor="middle" fill="rgb(138,133,128)" font-size="9">버그 수정 후 재처리</text>
+  <text x="570" y="390" text-anchor="middle" fill="rgb(138,133,128)" font-size="9">→ 감사 가능성</text>
+
+  <text x="340" y="414" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">4가지 조합 → 분산 트랜잭션 없이 effectively-once 달성 · 느슨한 제약 + 사후 보정으로 가용성 확보</text>
+
+  <line x1="40" y1="424" x2="640" y2="424" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- Section D: Trust but Verify + 13장 종합 -->
+  <text x="50" y="444" fill="rgb(212,168,83)" font-size="12" font-weight="700">④ Trust, but Verify · 13장 종합</text>
+
+  <rect x="50" y="453" width="270" height="90" rx="6" fill="#141414" stroke="#7fa8c9" stroke-width="1"/>
+  <text x="185" y="472" text-anchor="middle" fill="#9cc3df" font-size="11" font-weight="700">신뢰하되 검증 (HDFS/S3 방식)</text>
+  <text x="65" y="490" fill="rgb(138,133,128)" font-size="10">• 디스크 대부분 정상이라 가정</text>
+  <text x="65" y="506" fill="rgb(138,133,128)" font-size="10">• 백그라운드 스캔으로 손상 탐지</text>
+  <text x="65" y="522" fill="rgb(138,133,128)" font-size="10">• 백업 정기 복원으로 실제 검증</text>
+  <text x="65" y="535" fill="#7fa8c9" font-size="10">• 이벤트 소싱 → 해시 체인·Merkle 트리</text>
+
+  <rect x="370" y="453" width="270" height="90" rx="6" fill="#141414" stroke="rgb(212,168,83)" stroke-width="1"/>
+  <text x="505" y="472" text-anchor="middle" fill="rgb(212,168,83)" font-size="11" font-weight="700">13장 철학 요약</text>
+  <text x="385" y="490" fill="rgb(138,133,128)" font-size="10">단일 도구 → 전문 시스템 조합</text>
+  <text x="385" y="506" fill="rgb(138,133,128)" font-size="10">이벤트 로그 → 파생 데이터 흐름</text>
+  <text x="385" y="522" fill="rgb(138,133,128)" font-size="10">비동기 + 멱등성 → 무결성 달성</text>
+  <text x="385" y="535" fill="rgb(212,168,83)" font-size="10">코디네이션 회피 → 고성능·고가용</text>
+
+  <!-- Footer -->
+  <line x1="40" y1="556" x2="640" y2="556" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="340" y="576" text-anchor="middle" fill="rgb(138,133,128)" font-size="11">신뢰성·확장성·유지보수성 → 스트리밍 철학 안에서 수렴 (DDIA 2장 → 13장)</text>
+  <text x="340" y="594" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">DDIA 2nd Ed. Ch.13 — Correctness · Trust-but-Verify · Summary · 13-04</text>
+</svg>

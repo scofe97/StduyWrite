@@ -1,0 +1,52 @@
+<svg viewBox="0 0 760 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>비-root Jenkins 프로세스의 파일시스템 경계</title>
+  <desc>비-root로 실행되는 Jenkins 프로세스는 루트 파일시스템 전체에 읽기만 가능하고, JENKINS_HOME과 워크스페이스에만 쓰기가 허용된다. rm -rf / 를 실행해도 루트가 read-only라 거부되고, 시스템 파일은 비-root 권한이라 손대지 못한다. 쓰기 가능한 범위가 워킹 디렉토리로 좁혀진다.</desc>
+
+  <defs>
+    <marker id="ar2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="760" height="440" fill="#0d0d0d"/>
+  <text x="30" y="34" fill="#e8e4df" font-size="15">목표 상태 — 쓰기 가능 범위를 워킹 디렉토리로 좁힌다</text>
+
+  <!-- 프로세스 박스 -->
+  <rect x="30" y="56" width="220" height="64" rx="6" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)"/>
+  <text x="140" y="82" fill="rgb(212,168,83)" font-size="13" text-anchor="middle">Jenkins 프로세스</text>
+  <text x="140" y="104" fill="rgb(138,133,128)" font-size="11" text-anchor="middle"><tspan font-family="'JetBrains Mono',monospace">uid 1000</tspan> · 비-root</text>
+
+  <!-- 화살표: 읽기 (루트로) -->
+  <line x1="250" y1="78" x2="470" y2="78" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar2)"/>
+  <text x="360" y="68" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">읽기만 (read-only)</text>
+
+  <!-- 화살표: 쓰기 (워킹 디렉토리로) -->
+  <line x1="250" y1="100" x2="470" y2="270" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#ar2)"/>
+  <text x="330" y="200" fill="#66bb6a" font-size="11" text-anchor="middle" transform="rotate(36 330 200)">읽기·쓰기</text>
+
+  <!-- 루트 파일시스템 (read-only) -->
+  <rect x="470" y="48" width="262" height="170" rx="6" fill="rgba(244,67,54,0.06)" stroke="#f44336"/>
+  <text x="486" y="72" fill="#f44336" font-size="13">/ 루트 — read-only ✕</text>
+  <rect x="486" y="84" width="230" height="34" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="498" y="106" fill="rgb(138,133,128)" font-size="11"><tspan font-family="'JetBrains Mono',monospace">/etc/shadow</tspan> — 비-root라 못 읽음</text>
+  <rect x="486" y="124" width="230" height="34" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="498" y="146" fill="rgb(138,133,128)" font-size="11"><tspan font-family="'JetBrains Mono',monospace">/usr</tspan> <tspan font-family="'JetBrains Mono',monospace">/bin</tspan> — read-only라 못 지움</text>
+  <rect x="486" y="164" width="230" height="42" rx="4" fill="rgba(244,67,54,0.10)" stroke="#f44336"/>
+  <text x="601" y="181" fill="#f44336" font-size="11.5" text-anchor="middle"><tspan font-family="'JetBrains Mono',monospace">rm -rf /</tspan> 실행</text>
+  <text x="601" y="198" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">→ OS가 삭제 거부</text>
+
+  <!-- 워킹 디렉토리 (read-write) -->
+  <rect x="470" y="246" width="262" height="150" rx="6" fill="rgba(102,187,106,0.06)" stroke="#66bb6a"/>
+  <text x="486" y="270" fill="#66bb6a" font-size="13">워킹 디렉토리 — read-write ●</text>
+  <rect x="486" y="282" width="230" height="34" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="498" y="304" fill="rgb(138,133,128)" font-size="11"><tspan font-family="'JetBrains Mono',monospace">JENKINS_HOME</tspan> — 쓰기 허용</text>
+  <rect x="486" y="322" width="230" height="34" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="498" y="344" fill="rgb(138,133,128)" font-size="11">워크스페이스 — 빌드 산출물</text>
+  <text x="486" y="380" fill="rgb(138,133,128)" font-size="11">빌드가 망가뜨릴 수 있는 범위 = 이 영역뿐</text>
+
+  <!-- 범례 -->
+  <rect x="30" y="408" width="13" height="13" rx="2" fill="rgba(244,67,54,0.06)" stroke="#f44336"/>
+  <text x="50" y="419" fill="rgb(138,133,128)" font-size="11">읽기 전용 (시스템 보호)</text>
+  <rect x="250" y="408" width="13" height="13" rx="2" fill="rgba(102,187,106,0.06)" stroke="#66bb6a"/>
+  <text x="270" y="419" fill="rgb(138,133,128)" font-size="11">읽기·쓰기 (빌드 영역)</text>
+</svg>

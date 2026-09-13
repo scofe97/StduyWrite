@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 680" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">사후에 죽이는 대신 미리 가둡니다</title><desc id="dd">cgroup v2 의 메모리 컨트롤러는 그룹 안 프로세스들의 합산 메모리 사용을 제한한다. CPU 시간과 달리 메모리는 유한해 한계가 하나가 아니라 넷이다. high 는 조이기만 하고 OOM 을 부르지 않으며, max 에 닿고 줄일 수 없을 때 그 cgroup 안에서 OOM killer 가 불린다.</desc>
+<rect width="1000" height="680" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LINUX KERNEL PROGRAMMING · 09-03 §6</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">사후에 죽이는 대신 미리 가둡니다</text>
+<text x="12" y="76" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" fill="#8B98A9">OOM killer 에 대한 합리적 결론은 애초에 그 상황을 만들지 않는 것입니다</text>
+<rect x="24" y="140" width="560" height="372" rx="10" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="44" y="172" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#8B98A9">시스템 전체 RAM</text>
+<rect x="52" y="196" width="504" height="288" rx="10" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="72" y="228" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#8B98A9">부모 cgroup</text>
+<text x="536" y="228" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">자식의 합을 다시 가둡니다</text>
+<rect x="80" y="252" width="448" height="208" rx="10" fill="#F08A5910" stroke="#F08A59" stroke-width="1.4"/>
+<text x="100" y="284" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">자식 cgroup — 내 워크로드</text>
+<rect x="100" y="308" width="92" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="146" y="337" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">프로세스 1</text>
+<rect x="208" y="308" width="92" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="254" y="337" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">프로세스 2</text>
+<rect x="316" y="308" width="92" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="362" y="337" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">프로세스 3</text>
+<rect x="424" y="308" width="92" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="470" y="337" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">프로세스 4</text>
+<text x="100" y="390" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">이 안의 합산 사용량이 아래 네 한계에 걸립니다</text>
+<text x="100" y="420" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#F08A59">memory.oom.group 을 켜면 하나가 터질 때 이 상자째 죽습니다</text>
+<rect x="624" y="148" width="352" height="76" rx="8" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="640" y="174" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">memory.min</text>
+<text x="960" y="174" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#3FB98C">이만큼은 보장받습니다</text>
+<text x="640" y="200" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">회수 대상에서 제외</text>
+<rect x="624" y="240" width="352" height="76" rx="8" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="640" y="266" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">memory.low</text>
+<text x="960" y="266" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#3FB98C">가능하면 지켜 줍니다</text>
+<text x="640" y="292" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">다른 데가 급하면 양보</text>
+<rect x="624" y="332" width="352" height="76" rx="8" fill="#E3B34114" stroke="#E3B341" stroke-width="1.1"/>
+<text x="640" y="358" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#E3B341">memory.high</text>
+<text x="960" y="358" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#E3B341">넘으면 조입니다</text>
+<text x="640" y="384" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">throttle + 적극 회수 · OOM 은 안 부릅니다</text>
+<rect x="624" y="424" width="352" height="76" rx="8" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="640" y="450" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">memory.max</text>
+<text x="960" y="450" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#F0616D">닿으면 죽습니다</text>
+<text x="640" y="476" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">줄일 수 없으면 cgroup 안에서 OOM</text>
+<text x="24" y="544" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">systemd 로도 같은 것을 겁니다 — MemoryMin·MemoryLow·MemoryHigh·MemoryMax, swap 은 MemorySwapMax 입니다.</text>
+<text x="24" y="568" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#5E6B7E">5.9 커널부터 새 slab 메모리 컨트롤러가 memcg 마다 slab 을 복제하던 낭비를 없앴습니다. 절감은 35~50% 에 달합니다.</text>
+<line x1="12" y1="624" x2="952" y2="624" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="646" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="635" width="14" height="14" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="647" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">보장되는 바닥</text>
+<rect x="253" y="635" width="14" height="14" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="275" y="647" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">조이는 천장</text>
+<rect x="391" y="635" width="14" height="14" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="413" y="647" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">죽이는 천장</text>
+<rect x="529" y="635" width="14" height="14" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="551" y="647" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">내 워크로드</text>
+</svg>

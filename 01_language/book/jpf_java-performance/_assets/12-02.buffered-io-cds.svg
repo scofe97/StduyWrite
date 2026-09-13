@@ -1,0 +1,46 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Buffered I/O와 classloading (CDS)</title>
+  <desc>buffered I/O는 흔한 실수다. InputStream.read와 OutputStream.write는 한 바이트씩 동작해, FileInputStream의 read는 매 호출마다 커널로 들어가 1바이트를 가져와 아주 느리다. 파일은 BufferedInputStream BufferedOutputStream으로, 문자는 BufferedReader BufferedWriter로 감싼다. socket도 같다. 단 ByteArrayStream은 이미 메모리 버퍼라 버퍼로 감싸면 이중 복사가 된다. GZIP 같은 필터가 끼면 블록 단위가 효율적이라 버퍼가 필요하다. 압축 직렬화에서 버퍼를 빠뜨리면 21.3밀리초인데 버퍼하면 5.7밀리초로 네 배 차이다. classloading은 startup의 적이다. CDS는 클래스 메타데이터를 JVM 사이 공유해 메모리를 아끼고 startup을 개선한다. Java 11은 전 플랫폼 가능하다. DumpLoadedClassList로 클래스 목록을 만들고 Xshare dump로 archive를 생성하고 Xshare auto로 실행한다. off on auto 세 값이 있다. 6314 클래스 로드에 startup 30퍼센트를 아낀다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">Buffered I/O와 CDS</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">한 바이트씩 I/O는 매번 system call — 버퍼로 감싸고, classloading은 CDS로 가속합니다</text>
+
+  <!-- buffered I/O -->
+  <rect x="20" y="74" width="642" height="118" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="96" fill="#f47f72" font-size="13" font-weight="bold">buffered I/O — 한 바이트씩은 매번 system call</text>
+  <text x="38" y="118" fill="rgb(138,133,128)" font-size="11">InputStream.read()/write()는 1바이트씩 → FileInputStream.read는 매 호출 커널 진입(아주 느림)</text>
+  <text x="38" y="138" fill="#66bb6a" font-size="11">파일·socket: BufferedInputStream/OutputStream (문자는 BufferedReader/Writer)로 감쌈</text>
+  <text x="38" y="158" fill="#f47f72" font-size="11">단 ByteArrayStream은 이미 메모리 버퍼 → 버퍼로 감싸면 이중 복사(피함)</text>
+  <text x="38" y="178" fill="rgb(212,168,83)" font-size="10">GZIP·encoder는 블록 단위가 효율적 → 그 사이엔 버퍼 필요</text>
+
+  <!-- 압축 표 -->
+  <rect x="20" y="200" width="642" height="64" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="222" fill="#66bb6a" font-size="13" font-weight="bold">압축 직렬화 — 버퍼 유무 (저자도 한 실수)</text>
+  <text x="38" y="244" fill="#f47f72" font-size="11">버퍼 없음 21.3ms</text>
+  <text x="280" y="244" fill="#66bb6a" font-size="11">버퍼 있음 5.7ms → 약 4배 차이</text>
+  <text x="38" y="260" fill="rgb(138,133,128)" font-size="10">ObjectOutputStream → BufferedOutputStream → GZIPOutputStream → ByteArrayOutputStream 순</text>
+
+  <!-- CDS -->
+  <rect x="20" y="272" width="642" height="200" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="294" fill="#9cc3df" font-size="13" font-weight="bold">Class Data Sharing — startup·메모리 가속</text>
+  <text x="38" y="316" fill="rgb(138,133,128)" font-size="11">클래스 메타데이터를 JVM 사이 공유 → 메모리 절약 + 단일 JVM startup 개선</text>
+  <text x="38" y="336" fill="rgb(138,133,128)" font-size="11">Java 8: rt.jar·serial·client만. Java 11: 전 플랫폼·모든 클래스(JAR/모듈만, FS/URL 불가)</text>
+  <rect x="38" y="346" width="606" height="76" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="50" y="366" fill="#e8e4df" font-size="11" font-weight="bold">3단계</text>
+  <text x="50" y="384" fill="rgb(138,133,128)" font-size="10">① java -XX:+DumpLoadedClassList=list ... (클래스 목록 생성)</text>
+  <text x="50" y="402" fill="rgb(138,133,128)" font-size="10">② java -Xshare:dump -XX:SharedClassListFile=list -XX:SharedArchiveFile=my.jsa</text>
+  <text x="50" y="418" fill="rgb(138,133,128)" font-size="10">③ java -Xshare:auto -XX:SharedArchiveFile=my.jsa ... (실행)</text>
+  <text x="38" y="442" fill="#9cc3df" font-size="11">-Xshare: off(미사용) · on(항상·실패 시 실행 안 됨) · auto(시도·기본)</text>
+  <text x="38" y="462" fill="rgb(138,133,128)" font-size="10">검증: -Xlog:class+load=info → "source: shared objects file"</text>
+
+  <!-- CDS 표 -->
+  <rect x="20" y="480" width="642" height="102" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="502" fill="rgb(212,168,83)" font-size="13" font-weight="bold">startup (6,314 클래스 로드)</text>
+  <text x="38" y="524" fill="rgb(138,133,128)" font-size="11">-Xshare:off</text>
+  <text x="320" y="524" fill="rgb(138,133,128)" font-size="11">8.9초</text>
+  <text x="38" y="544" fill="rgb(138,133,128)" font-size="11">-Xshare:on (JDK 기본 archive)</text>
+  <text x="320" y="544" fill="rgb(138,133,128)" font-size="11">9.1초</text>
+  <text x="38" y="564" fill="#66bb6a" font-size="11">-Xshare:on (custom archive)</text>
+  <text x="320" y="564" fill="#66bb6a" font-size="11">7.0초 → 30% 절약</text>
+</svg>

@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 580" font-family="Pretendard, sans-serif">
+  <rect width="680" height="580" fill="#0d0d0d"/>
+
+  <!-- Title -->
+  <text x="340" y="38" text-anchor="middle" fill="#e8e4df" font-size="21" font-weight="700">데이터 통합 — 파생 데이터와 전순서의 한계</text>
+  <text x="340" y="58" text-anchor="middle" fill="rgb(138,133,128)" font-size="13">단일 진실 공급원 → 이벤트 로그 → 파생 시스템</text>
+  <line x1="40" y1="70" x2="640" y2="70" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- Section A: System of Record + CDC -->
+  <text x="50" y="95" fill="rgb(212,168,83)" font-size="12" font-weight="700">① 파생 데이터 흐름</text>
+
+  <!-- System of Record -->
+  <rect x="50" y="105" width="140" height="52" rx="6" fill="#1a1410" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="120" y="126" text-anchor="middle" fill="#e8e4df" font-size="12" font-weight="700">System of Record</text>
+  <text x="120" y="143" text-anchor="middle" fill="rgb(138,133,128)" font-size="11">(OLTP DB — 쓰기 순서 결정)</text>
+
+  <!-- Arrow: CDC -->
+  <defs>
+    <marker id="ar1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="rgb(138,133,128)"/>
+    </marker>
+  </defs>
+  <line x1="190" y1="131" x2="255" y2="131" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar1)"/>
+  <text x="222" y="124" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">CDC</text>
+
+  <!-- Event Log -->
+  <rect x="255" y="105" width="130" height="52" rx="6" fill="#141414" stroke="#7fa8c9" stroke-width="1.5"/>
+  <text x="320" y="126" text-anchor="middle" fill="#e8e4df" font-size="12" font-weight="700">Event Log</text>
+  <text x="320" y="143" text-anchor="middle" fill="rgb(138,133,128)" font-size="11">(Kafka — 전순서 기록)</text>
+
+  <!-- Fan out arrows -->
+  <line x1="385" y1="131" x2="430" y2="105" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar1)"/>
+  <line x1="385" y1="131" x2="430" y2="131" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar1)"/>
+  <line x1="385" y1="131" x2="430" y2="157" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar1)"/>
+
+  <!-- Derived systems -->
+  <rect x="430" y="90" width="120" height="30" rx="5" fill="#141414" stroke="#9cc3df" stroke-width="1"/>
+  <text x="490" y="109" text-anchor="middle" fill="#9cc3df" font-size="11">검색 인덱스</text>
+
+  <rect x="430" y="116" width="120" height="30" rx="5" fill="#141414" stroke="#9cc3df" stroke-width="1"/>
+  <text x="490" y="135" text-anchor="middle" fill="#9cc3df" font-size="11">분석 웨어하우스</text>
+
+  <rect x="430" y="142" width="120" height="30" rx="5" fill="#141414" stroke="#9cc3df" stroke-width="1"/>
+  <text x="490" y="161" text-anchor="middle" fill="#9cc3df" font-size="11">캐시 / ML 파이프라인</text>
+
+  <!-- Divider -->
+  <line x1="40" y1="190" x2="640" y2="190" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- Section B: Distributed Tx vs Log-based -->
+  <text x="50" y="212" fill="rgb(212,168,83)" font-size="12" font-weight="700">② 분산 트랜잭션 vs 로그 기반 파생</text>
+
+  <!-- Distributed Tx box -->
+  <rect x="50" y="222" width="260" height="110" rx="6" fill="#1a1410" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="180" y="242" text-anchor="middle" fill="#e8e4df" font-size="12" font-weight="700">분산 트랜잭션 (XA / 2PC)</text>
+  <text x="60" y="262" fill="rgb(138,133,128)" font-size="11">✓ 커밋 즉시 읽기 일관성</text>
+  <text x="60" y="278" fill="#f47f72" font-size="11">✗ 이종 시스템 표준 프로토콜 없음</text>
+  <text x="60" y="294" fill="#f47f72" font-size="11">✗ 참여자 하나 실패 시 전체 중단</text>
+  <text x="60" y="310" fill="#f47f72" font-size="11">✗ 성능·운영 비용 높음</text>
+  <text x="60" y="326" fill="rgb(138,133,128)" font-size="11">→ 단일 데이터센터에서만 현실적</text>
+
+  <!-- Log-based box -->
+  <rect x="370" y="222" width="260" height="110" rx="6" fill="#141414" stroke="#7fa8c9" stroke-width="1.2"/>
+  <text x="500" y="242" text-anchor="middle" fill="#e8e4df" font-size="12" font-weight="700">로그 기반 파생 (CDC / 이벤트 소싱)</text>
+  <text x="380" y="262" fill="#66bb6a" font-size="11">✓ 이종 시스템 자연스럽게 연결</text>
+  <text x="380" y="278" fill="#66bb6a" font-size="11">✓ 장애 국소화 — 소비자 독립 복구</text>
+  <text x="380" y="294" fill="#66bb6a" font-size="11">✓ 결정론적 재처리 + 멱등성</text>
+  <text x="380" y="310" fill="rgb(138,133,128)" font-size="11">△ 비동기 — 읽기 지연 허용 필요</text>
+  <text x="380" y="326" fill="rgb(138,133,128)" font-size="11">→ 대규모 이종 통합에 현실적</text>
+
+  <!-- vs label -->
+  <text x="340" y="284" text-anchor="middle" fill="rgb(212,168,83)" font-size="14" font-weight="700">vs</text>
+
+  <!-- Divider -->
+  <line x1="40" y1="348" x2="640" y2="348" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- Section C: Total ordering limits -->
+  <text x="50" y="370" fill="rgb(212,168,83)" font-size="12" font-weight="700">③ 전순서(Total Order)의 한계 — 분산 환경에서</text>
+
+  <!-- Four boxes -->
+  <!-- Sharding -->
+  <rect x="50" y="380" width="130" height="70" rx="5" fill="#141414" stroke="#f47f72" stroke-width="1"/>
+  <text x="115" y="400" text-anchor="middle" fill="#f47f72" font-size="11" font-weight="700">샤딩된 로그</text>
+  <text x="115" y="416" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">샤드 간 이벤트</text>
+  <text x="115" y="430" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">순서 정의 불가</text>
+  <text x="115" y="444" text-anchor="middle" fill="#f47f72" font-size="10">처리량 확장 시 발생</text>
+
+  <!-- Geo-distributed -->
+  <rect x="195" y="380" width="130" height="70" rx="5" fill="#141414" stroke="#f47f72" stroke-width="1"/>
+  <text x="260" y="400" text-anchor="middle" fill="#f47f72" font-size="11" font-weight="700">지리 분산</text>
+  <text x="260" y="416" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">데이터센터별</text>
+  <text x="260" y="430" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">독립 리더 존재</text>
+  <text x="260" y="444" text-anchor="middle" fill="#f47f72" font-size="10">네트워크 지연 원인</text>
+
+  <!-- Microservices -->
+  <rect x="340" y="380" width="130" height="70" rx="5" fill="#141414" stroke="#f47f72" stroke-width="1"/>
+  <text x="405" y="400" text-anchor="middle" fill="#f47f72" font-size="11" font-weight="700">마이크로서비스</text>
+  <text x="405" y="416" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">서비스 경계 넘으면</text>
+  <text x="405" y="430" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">공통 순서 없음</text>
+  <text x="405" y="444" text-anchor="middle" fill="#f47f72" font-size="10">독립 배포·상태</text>
+
+  <!-- Offline clients -->
+  <rect x="485" y="380" width="130" height="70" rx="5" fill="#141414" stroke="#f47f72" stroke-width="1"/>
+  <text x="550" y="400" text-anchor="middle" fill="#f47f72" font-size="11" font-weight="700">오프라인 클라이언트</text>
+  <text x="550" y="416" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">클라이언트/서버가</text>
+  <text x="550" y="430" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">이벤트를 다른</text>
+  <text x="550" y="444" text-anchor="middle" fill="#f47f72" font-size="10">순서로 관찰</text>
+
+  <!-- Bottom note -->
+  <line x1="40" y1="465" x2="640" y2="465" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="340" y="485" text-anchor="middle" fill="rgb(138,133,128)" font-size="11">전순서 브로드캐스트 ≡ 합의(Consensus) — 규모 확장 시 단일 노드 처리량이 병목</text>
+  <text x="340" y="502" text-anchor="middle" fill="rgb(138,133,128)" font-size="11">인과 관계 없는 이벤트는 임의 순서 허용 · 인과성 포착이 실용적 대안</text>
+
+  <!-- Footer -->
+  <line x1="40" y1="520" x2="640" y2="520" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="340" y="540" text-anchor="middle" fill="rgb(138,133,128)" font-size="11">DDIA 2nd Ed. Ch.13 — Data Integration · Total Ordering</text>
+  <text x="340" y="558" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">Kleppmann &amp; Riccomini, O'Reilly · 13-01</text>
+</svg>

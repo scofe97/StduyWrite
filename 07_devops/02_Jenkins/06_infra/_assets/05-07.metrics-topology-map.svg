@@ -1,0 +1,59 @@
+<svg viewBox="0 0 820 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Jenkins 지표 수집 토폴로지 — controller 단일 소스와 OS 계층 분기</title>
+  <desc>Jenkins 지표(큐·executor·빌드·vm)는 토폴로지와 무관하게 controller JVM 한 곳의 /prometheus와 /metrics 엔드포인트에서 나온다. 달라지는 것은 OS 계층 수집이다. VM 정적 agent는 node_exporter를 상주시키고, K8s 동적 Pod agent는 휘발성 때문에 노드 계층의 cAdvisor와 kube-state-metrics로 수집하며, 프로비저닝과 cap 도달은 kubernetes plugin이 controller 쪽 지표로 노출한다. 세 소스가 Prometheus 한 저장소로 모인다.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="820" height="500" fill="#0d0d0d"/>
+  <text x="20" y="34" fill="#e8e4df" font-size="16">지표는 어디서 나오는가 — Jenkins 지표의 단일 소스는 controller</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="11">토폴로지가 바뀌어도 큐·executor·빌드 지표는 controller 한 곳 — 달라지는 건 OS 계층 수집뿐</text>
+
+  <!-- controller -->
+  <rect x="210" y="80" width="400" height="150" rx="6" fill="rgba(212,168,83,0.07)" stroke="rgb(212,168,83)"/>
+  <text x="226" y="106" fill="rgb(212,168,83)" font-size="13">controller (JVM) — Jenkins 지표의 단일 소스</text>
+  <rect x="226" y="118" width="120" height="26" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="238" y="136" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">/prometheus/</text>
+  <rect x="358" y="118" width="120" height="26" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="370" y="136" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">/metrics</text>
+  <text x="226" y="164" fill="#e8e4df" font-size="11">큐 jenkins_queue_* · executor · 빌드 duration</text>
+  <text x="226" y="184" fill="rgb(138,133,128)" font-size="11">vm_* — heap·GC·threads (JVM이 본체)</text>
+  <text x="226" y="204" fill="rgb(138,133,128)" font-size="11">kubernetes.cloud.* — 프로비저닝·cap 도달 카운터</text>
+
+  <!-- 화살표: controller → Prometheus -->
+  <line x1="410" y1="232" x2="410" y2="296" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- VM agent -->
+  <rect x="20" y="300" width="240" height="116" rx="6" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="36" y="326" fill="#e8e4df" font-size="13">VM 정적 agent</text>
+  <rect x="34" y="338" width="144" height="26" rx="4" fill="#0d0d0d" stroke="rgb(42,37,32)"/>
+  <text x="46" y="356" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">node_exporter</text>
+  <text x="36" y="384" fill="rgb(138,133,128)" font-size="11">OS 지표 — CPU·메모리·I/O</text>
+  <text x="36" y="404" fill="rgb(138,133,128)" font-size="11">VM에 상주 설치</text>
+
+  <line x1="264" y1="358" x2="284" y2="358" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Prometheus -->
+  <rect x="290" y="300" width="240" height="116" rx="6" fill="rgba(102,187,106,0.06)" stroke="#66bb6a"/>
+  <text x="306" y="326" fill="#66bb6a" font-size="13">Prometheus (수집)</text>
+  <rect x="304" y="338" width="144" height="26" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="316" y="356" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">prometheus.yml</text>
+  <text x="306" y="384" fill="rgb(138,133,128)" font-size="11">세 소스를 한 저장소로</text>
+  <text x="306" y="404" fill="rgb(138,133,128)" font-size="11">시각화·경보는 LGTM 위임</text>
+
+  <line x1="556" y1="358" x2="536" y2="358" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- K8s Pod agent -->
+  <rect x="560" y="300" width="240" height="116" rx="6" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="576" y="326" fill="#e8e4df" font-size="13">K8s 동적 Pod agent</text>
+  <rect x="574" y="338" width="144" height="26" rx="4" fill="#0d0d0d" stroke="rgb(42,37,32)"/>
+  <text x="586" y="356" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">cAdvisor/kube-state</text>
+  <text x="576" y="384" fill="rgb(138,133,128)" font-size="11">Pod 휘발 — 노드 계층에서 수집</text>
+  <text x="576" y="404" fill="rgb(138,133,128)" font-size="11">Pod 단위 exporter는 불가</text>
+
+  <!-- 결론 -->
+  <rect x="20" y="440" width="780" height="44" rx="6" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)"/>
+  <text x="38" y="467" fill="rgb(212,168,83)" font-size="12">Jenkins 지표 scrape 대상은 토폴로지와 무관하게 controller 하나 — agent 쪽은 OS 계층 수집만 달라진다</text>
+</svg>

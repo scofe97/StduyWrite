@@ -1,0 +1,69 @@
+<svg viewBox="0 0 900 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>startup 프로브가 나머지 둘을 막았다가 넘겨주는 순서</title>
+  <desc>컨테이너가 기동한 뒤 세 프로브가 시간 축에서 언제 동작하는지를 보입니다. 위쪽은 startup 프로브를 둔 경우입니다. 컨테이너 기동 직후부터 startup 프로브만 홀로 돌고 이 구간에서는 liveness와 readiness가 아예 시작되지 않습니다. startup이 성공을 보고하는 순간이 경계이고 그 뒤부터 liveness와 readiness가 촘촘한 간격으로 돌기 시작합니다. 그래서 기동이 느린 앱이 조기에 재시작당하지 않으면서도 기동 후에는 빠른 재시작 능력을 유지합니다. startup이 정해진 실패 임계 안에 성공하지 못하면 컨테이너가 재시작됩니다. 아래쪽은 startup 없이 liveness의 타이밍만 늘려 대응한 경우입니다. 느슨한 타이밍이 기동 구간을 넘겨주기는 하지만 그 느슨함이 기동 후 단계에도 그대로 적용되어 치명적 오류가 났을 때 재시작이 늦어집니다. 이것이 startup 프로브가 별도로 필요한 이유입니다.</desc>
+
+  <rect width="900" height="400" fill="#0d0d0d"/>
+
+  <text x="24" y="30" fill="#e8e4df" font-size="15" font-weight="700">startup 이 끝나야 시작합니다</text>
+
+  <!-- ============ with startup probe ============ -->
+  <text x="24" y="64" fill="#66bb6a" font-size="11" font-weight="700">startup 을 두면</text>
+
+  <!-- timeline base -->
+  <line x1="150" y1="150" x2="860" y2="150" stroke="#4a4640"/>
+  <text x="150" y="86" fill="#b8b3ad" font-size="9" font-weight="700">컨테이너 기동</text>
+  <text x="470" y="86" text-anchor="middle" fill="rgb(212,168,83)" font-size="9" font-weight="700">startup 성공</text>
+
+  <!-- boundary marker -->
+  <line x1="470" y1="92" x2="470" y2="176" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="4 3"/>
+
+  <!-- startup band -->
+  <rect x="150" y="98" width="316" height="30" fill="#f5edda"/>
+  <text x="308" y="118" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">startup 만 돕니다</text>
+
+  <!-- blocked band -->
+  <rect x="150" y="132" width="316" height="30" fill="#0d0d0d" stroke="#f44336" stroke-dasharray="4 3"/>
+  <text x="308" y="152" text-anchor="middle" fill="#f44336" font-size="10" font-weight="700">둘은 아직 안 돕니다</text>
+
+  <!-- after boundary : liveness + readiness -->
+  <rect x="474" y="98" width="386" height="30" fill="#f2d4d4"/>
+  <text x="667" y="118" text-anchor="middle" fill="#7a1f1f" font-size="10" font-weight="700">liveness · 촘촘하게</text>
+
+  <rect x="474" y="132" width="386" height="30" fill="#dceaf7"/>
+  <text x="667" y="152" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">readiness · 촘촘하게</text>
+
+  <path d="M 150 176 L 466 176" stroke="#66bb6a" stroke-width="2" marker-end="url(#gm)"/>
+  <text x="308" y="192" text-anchor="middle" fill="#66bb6a" font-size="9" font-weight="700">기동을 넉넉히 기다립니다</text>
+
+  <text x="667" y="192" text-anchor="middle" fill="#b8b3ad" font-size="9">치명적 오류에 빠르게 반응합니다</text>
+
+  <line x1="24" y1="214" x2="876" y2="214" stroke="#4a4640"/>
+
+  <!-- ============ without startup probe ============ -->
+  <text x="24" y="248" fill="#f44336" font-size="11" font-weight="700">타이밍만 늘리면</text>
+
+  <line x1="150" y1="316" x2="860" y2="316" stroke="#4a4640"/>
+  <text x="150" y="270" fill="#b8b3ad" font-size="9" font-weight="700">컨테이너 기동</text>
+
+  <rect x="150" y="282" width="710" height="30" fill="#f5edda"/>
+  <text x="505" y="302" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">liveness 가 계속 느슨합니다</text>
+
+  <path d="M 150 340 L 856 340" stroke="#f44336" stroke-width="2" marker-end="url(#rm)"/>
+  <text x="308" y="356" text-anchor="middle" fill="#b8b3ad" font-size="9">기동은 넘겼지만</text>
+  <text x="667" y="356" text-anchor="middle" fill="#f44336" font-size="9" font-weight="700">기동 후에도 느슨해 재시작이 늦습니다</text>
+
+  <rect x="24" y="368" width="852" height="26" fill="rgb(212,168,83)"/>
+  <text x="450" y="386" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">기동 구간만 따로 보호합니다</text>
+
+  <defs>
+    <marker id="gm" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#66bb6a"/>
+    </marker>
+    <marker id="rm" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#f44336"/>
+    </marker>
+  </defs>
+</svg>

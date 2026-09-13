@@ -1,0 +1,56 @@
+<svg viewBox="0 0 900 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>ScopedValue vs ThreadLocal 수명 대비 — 맵 묶임·수동 remove 대 블록 범위·자동 소멸</title>
+  <desc>ThreadLocal은 값이 스레드의 ThreadLocalMap에 묶여 set()부터 명시적 remove()까지 살아 있고, remove()를 잊으면 풀 스레드에 값이 남아 누수가 된다. ScopedValue는 값이 where().run() 블록 범위에 묶여, 블록을 벗어나는 순간 스택이 풀리듯 자동으로 사라지므로 remove() 자체가 필요 없다.</desc>
+  <rect x="0" y="0" width="900" height="440" fill="#0d0d0d"/>
+
+  <text x="450" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#e8e4df">값의 수명이 무엇에 묶이는가 — 맵 vs 블록</text>
+  <text x="450" y="54" text-anchor="middle" font-size="12.5" fill="#c9c4be">ThreadLocal은 "내가 remove할 때까지", ScopedValue는 "이 블록이 끝날 때까지"</text>
+
+  <!-- 왼쪽: ThreadLocal -->
+  <rect x="36" y="78" width="396" height="324" rx="12" fill="#0d0d0d" stroke="#d4a853" stroke-width="1.8"/>
+  <text x="234" y="104" text-anchor="middle" font-size="14" font-weight="700" fill="#d4a853">ThreadLocal — 맵에 묶임 (수동 정리)</text>
+
+  <!-- 수명 막대 -->
+  <text x="72" y="148" text-anchor="middle" font-size="11" fill="#c9c4be">set()</text>
+  <line x1="72" y1="156" x2="72" y2="300" stroke="#8a857f" stroke-width="1.4" stroke-dasharray="3 3"/>
+  <text x="396" y="148" text-anchor="middle" font-size="11" fill="#c9c4be">remove()</text>
+  <line x1="396" y1="156" x2="396" y2="300" stroke="#8a857f" stroke-width="1.4" stroke-dasharray="3 3"/>
+
+  <rect x="72" y="166" width="324" height="30" rx="6" fill="#f5edda"/>
+  <text x="234" y="186" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5a4a1a">값이 ThreadLocalMap에 살아 있는 구간</text>
+
+  <rect x="72" y="208" width="324" height="58" rx="8" fill="#0d0d0d" stroke="#8a857f" stroke-width="1.2"/>
+  <text x="234" y="230" text-anchor="middle" font-size="11" fill="#c9c4be">USER_ID.set("alice");</text>
+  <text x="234" y="250" text-anchor="middle" font-size="11" fill="#c9c4be">try { ... } finally { USER_ID.remove(); }</text>
+
+  <!-- 누수 경고 -->
+  <rect x="72" y="282" width="324" height="100" rx="8" fill="#f2d4d4"/>
+  <text x="234" y="304" text-anchor="middle" font-size="12" font-weight="700" fill="#7a1f1f">remove()를 잊으면?</text>
+  <text x="234" y="326" text-anchor="middle" font-size="10.5" fill="#7a1f1f">풀 스레드는 안 죽으므로 값이 맵에 그대로 남는다</text>
+  <text x="234" y="346" text-anchor="middle" font-size="10.5" fill="#7a1f1f">→ 다음 요청이 남은 값을 보거나(값 누출),</text>
+  <text x="234" y="366" text-anchor="middle" font-size="10.5" fill="#7a1f1f">참조가 안 풀려 메모리 누수</text>
+
+  <!-- 오른쪽: ScopedValue -->
+  <rect x="468" y="78" width="396" height="324" rx="12" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.8"/>
+  <text x="666" y="104" text-anchor="middle" font-size="14" font-weight="700" fill="#66bb6a">ScopedValue — 블록에 묶임 (자동 소멸)</text>
+
+  <text x="504" y="148" text-anchor="middle" font-size="11" fill="#c9c4be">run() 시작</text>
+  <line x1="504" y1="156" x2="504" y2="300" stroke="#66bb6a" stroke-width="1.4" stroke-dasharray="3 3"/>
+  <text x="828" y="148" text-anchor="middle" font-size="11" fill="#c9c4be">run() 끝 = 소멸</text>
+  <line x1="828" y1="156" x2="828" y2="300" stroke="#66bb6a" stroke-width="1.4" stroke-dasharray="3 3"/>
+
+  <rect x="504" y="166" width="324" height="30" rx="6" fill="#cdeccf"/>
+  <text x="666" y="186" text-anchor="middle" font-size="11.5" font-weight="700" fill="#14521d">값이 유효한 구간 = 블록 범위 그 자체</text>
+
+  <rect x="504" y="208" width="324" height="58" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="666" y="230" text-anchor="middle" font-size="11" fill="#c9c4be">ScopedValue.where(USER_ID, "alice")</text>
+  <text x="666" y="250" text-anchor="middle" font-size="11" fill="#c9c4be">    .run(() -&gt; processOrder());</text>
+
+  <rect x="504" y="282" width="324" height="100" rx="8" fill="#e6f7e7"/>
+  <text x="666" y="304" text-anchor="middle" font-size="12" font-weight="700" fill="#14521d">remove()가 필요 없다</text>
+  <text x="666" y="326" text-anchor="middle" font-size="10.5" fill="#14521d">블록을 벗어나면 스택 풀리듯 값이 사라진다</text>
+  <text x="666" y="346" text-anchor="middle" font-size="10.5" fill="#14521d">→ 누락할 정리 자체가 없으니 누수 불가</text>
+  <text x="666" y="366" text-anchor="middle" font-size="10.5" fill="#14521d">불변이라 가상 스레드 수십만에도 가볍다</text>
+
+  <text x="450" y="426" text-anchor="middle" font-size="12" fill="#e8e4df">규율(remove를 잊지 마라)을 구조(블록이 알아서 푼다)로 바꾼 것 — 그래서 가상 스레드 신규 코드는 ScopedValue 우선</text>
+</svg>

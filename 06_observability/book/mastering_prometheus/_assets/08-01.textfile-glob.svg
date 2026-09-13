@@ -1,0 +1,122 @@
+<svg viewBox="0 0 1020 700" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif">
+  <title>textfile collector — 죽은 배치의 값이 파일로 남아 스크레이프에 실려 나갑니다</title>
+  <desc>textfile collector 가 푸는 문제와 그 해법을 시간 순으로 그린 도식이다. 위쪽은 문제 상황이다. cron 배치는 새벽 세 시에 잠깐 실행되고 몇 초 만에 끝나 사라진다. Prometheus 는 정해진 주기마다 대상의 HTTP 엔드포인트를 두드려 값을 가져오는데, 배치가 살아 있는 시간이 너무 짧아 스크레이프가 그 순간을 만날 수 없다. 배치에 HTTP 서버를 띄우는 것도 몇 초 사는 프로세스에는 맞지 않는다. 아래쪽은 해법이다. 배치는 끝나기 직전 자기 결과를 확장자가 prom 인 파일에 적어 두고 죽는다. 프로세스는 사라지지만 파일은 디스크에 남는다. 그 뒤 아무 때나 스크레이프가 들어오면 node_exporter 가 지정된 디렉토리에서 그 prom 파일을 읽어 자기 메트릭과 나란히 실어 응답한다. 즉 죽은 프로세스의 값이 파일을 매개로 살아남아 전달된다. 오른쪽 아래는 주의할 점이다. 배치가 망가져 파일을 갱신하지 못해도 옛 파일이 그대로 읽히므로 잘 돌고 있다고 잘못 보고된다. 이를 조용한 실패라 하며 node_textfile_mtime_seconds 로 파일의 수정 시각을 감시해 막는다. 맨 아래는 디렉토리 구조다. 지정하는 것은 파일이 아니라 디렉토리이며, 별표 두 개짜리 패턴은 정확히 두 단계 아래 디렉토리에 맞는다. 그 디렉토리 안에서 확장자가 prom 인 파일만 읽고 더 아래로는 내려가지 않는다.</desc>
+  <rect x="0" y="0" width="1020" height="700" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="tg" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="tr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#e08585"/>
+    </marker>
+    <marker id="tn" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/>
+    </marker>
+  </defs>
+
+  <text x="510" y="36" text-anchor="middle" fill="#e8e4df" font-size="17" font-weight="700">죽은 배치의 값이 파일로 남아 스크레이프에 실립니다</text>
+
+  <!-- ============ 문제 ============ -->
+  <rect x="24" y="62" width="972" height="164" rx="10" fill="#0d0d0d" stroke="#e08585" stroke-width="1.5"/>
+  <text x="48" y="88" fill="#f0a0a0" font-size="13" font-weight="700">문제 — 배치는 스크레이프를 기다려 주지 않습니다</text>
+
+  <!-- 타임라인 -->
+  <line x1="60" y1="150" x2="700" y2="150" stroke="#8a8580" stroke-width="1.5"/>
+  <text x="60" y="182" fill="#b8b3ad" font-size="10">03:00</text>
+  <text x="700" y="182" text-anchor="end" fill="#b8b3ad" font-size="10">시간</text>
+
+  <!-- 배치 실행 구간 -->
+  <rect x="150" y="136" width="34" height="28" rx="4" fill="#f2d4d4"/>
+  <text x="167" y="128" text-anchor="middle" fill="#f0a0a0" font-size="10" font-weight="700">배치</text>
+  <text x="167" y="155" text-anchor="middle" fill="#7a1f1f" font-size="9.5" font-weight="700">5초</text>
+
+  <!-- 스크레이프 시점들 -->
+  <line x1="90" y1="122" x2="90" y2="150" stroke="#66bb6a" stroke-width="1.5"/>
+  <circle cx="90" cy="120" r="4" fill="#66bb6a"/>
+  <line x1="290" y1="122" x2="290" y2="150" stroke="#66bb6a" stroke-width="1.5"/>
+  <circle cx="290" cy="120" r="4" fill="#66bb6a"/>
+  <line x1="490" y1="122" x2="490" y2="150" stroke="#66bb6a" stroke-width="1.5"/>
+  <circle cx="490" cy="120" r="4" fill="#66bb6a"/>
+  <line x1="690" y1="122" x2="690" y2="150" stroke="#66bb6a" stroke-width="1.5"/>
+  <circle cx="690" cy="120" r="4" fill="#66bb6a"/>
+  <text x="390" y="110" text-anchor="middle" fill="#8fd694" font-size="10" font-weight="700">스크레이프 (예: 15초마다)</text>
+
+  <rect x="730" y="104" width="240" height="72" rx="7" fill="#f2d4d4"/>
+  <text x="850" y="128" text-anchor="middle" fill="#7a1f1f" font-size="10.5" font-weight="700">배치가 살아 있는 5초 안에</text>
+  <text x="850" y="147" text-anchor="middle" fill="#7a1f1f" font-size="10.5" font-weight="700">스크레이프가 오지 않습니다</text>
+  <text x="850" y="166" text-anchor="middle" fill="#7a1f1f" font-size="10" font-weight="700">HTTP 서버를 띄울 수도 없습니다</text>
+
+  <text x="60" y="206" fill="#b8b3ad" font-size="10.5">배치는 끝나면 사라지므로 두드릴 대상 자체가 없습니다.</text>
+
+  <!-- ============ 해법 ============ -->
+  <rect x="24" y="242" width="972" height="216" rx="10" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="48" y="268" fill="#8fd694" font-size="13" font-weight="700">해법 — 값을 파일에 남기고 죽습니다</text>
+
+  <!-- 1. 배치 -->
+  <rect x="48" y="290" width="196" height="66" rx="7" fill="#f5edda"/>
+  <text x="146" y="314" text-anchor="middle" fill="#3a2f10" font-size="11.5" font-weight="700">cron 배치</text>
+  <text x="146" y="334" text-anchor="middle" fill="#3a2f10" font-size="10" font-weight="700">끝나기 직전 결과를</text>
+  <text x="146" y="350" text-anchor="middle" fill="#3a2f10" font-size="10" font-weight="700">파일에 적습니다</text>
+
+  <line x1="250" y1="323" x2="292" y2="323" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#tg)"/>
+
+  <!-- 2. 파일 -->
+  <rect x="298" y="282" width="216" height="82" rx="7" fill="#dceaf7"/>
+  <text x="406" y="306" text-anchor="middle" fill="#10243a" font-size="11.5" font-weight="700">job1/metrics.prom</text>
+  <text x="406" y="326" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">프로세스는 죽어도</text>
+  <text x="406" y="342" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">파일은 디스크에 남습니다</text>
+  <text x="406" y="358" text-anchor="middle" fill="#10243a" font-size="9.5" font-weight="700">my_job_last_run_success 1</text>
+
+  <line x1="520" y1="323" x2="562" y2="323" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#tg)"/>
+
+  <!-- 3. node_exporter -->
+  <rect x="568" y="282" width="216" height="82" rx="7" fill="rgb(212,168,83)"/>
+  <text x="676" y="306" text-anchor="middle" fill="#0d0d0d" font-size="11.5" font-weight="700">node_exporter</text>
+  <text x="676" y="326" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">스크레이프가 오면 그때</text>
+  <text x="676" y="342" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">디렉토리에서 파일을 읽어</text>
+  <text x="676" y="358" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">자기 메트릭에 얹습니다</text>
+
+  <line x1="790" y1="323" x2="832" y2="323" stroke="#66bb6a" stroke-width="2" marker-end="url(#tn)"/>
+
+  <!-- 4. 응답 -->
+  <rect x="838" y="290" width="134" height="66" rx="7" fill="#e6f7e7"/>
+  <text x="905" y="314" text-anchor="middle" fill="#14521d" font-size="11" font-weight="700">/metrics 응답</text>
+  <text x="905" y="334" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">CPU·메모리와</text>
+  <text x="905" y="350" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">나란히 실려 나갑니다</text>
+
+  <text x="48" y="390" fill="#b8b3ad" font-size="10.5">배치와 스크레이프가 만날 필요가 없어집니다 — 파일이 둘 사이의 우체통 노릇을 합니다.</text>
+
+  <!-- 조용한 실패 -->
+  <rect x="48" y="404" width="924" height="40" rx="7" fill="#f2d4d4"/>
+  <text x="70" y="429" fill="#7a1f1f" font-size="10.5" font-weight="700">주의 — 배치가 망가져 파일을 갱신하지 못해도 옛 파일이 그대로 읽혀 "잘 돌고 있다"고 보고합니다. node_textfile_mtime_seconds 로 수정 시각을 감시합니다.</text>
+
+  <!-- ============ 디렉토리 ============ -->
+  <rect x="24" y="474" width="972" height="200" rx="10" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="48" y="500" fill="#8ab6e0" font-size="13" font-weight="700">어디에 두는가 — 지정하는 것은 파일이 아니라 디렉토리입니다</text>
+
+  <rect x="48" y="514" width="420" height="30" rx="6" fill="#dceaf7"/>
+  <text x="258" y="534" text-anchor="middle" fill="#10243a" font-size="10.5" font-weight="700">--collector.textfile.directory=/var/lib/prometheus/*/*</text>
+
+  <text x="62" y="570" fill="#b8b3ad" font-size="10.5">/var/lib/prometheus/</text>
+  <text x="90" y="592" fill="#b8b3ad" font-size="10.5">cron_jobs/</text>
+
+  <rect x="112" y="600" width="66" height="22" rx="4" fill="rgb(212,168,83)"/>
+  <text x="145" y="616" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">job1/</text>
+  <text x="196" y="616" fill="#d4a853" font-size="10.5" font-weight="700">← 두 단계 아래라 패턴에 맞습니다</text>
+
+  <rect x="146" y="628" width="106" height="22" rx="4" fill="#dceaf7"/>
+  <text x="199" y="644" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">metrics.prom</text>
+  <text x="268" y="644" fill="#b8b3ad" font-size="10.5">← 이 안에서 .prom 파일만 읽습니다</text>
+
+  <rect x="112" y="656" width="66" height="22" rx="4" fill="rgb(212,168,83)"/>
+  <text x="145" y="672" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">job2/</text>
+  <text x="196" y="672" fill="#d4a853" font-size="10.5" font-weight="700">← 같은 깊이라 함께 걸립니다</text>
+
+  <text x="600" y="570" fill="#b8b3ad" font-size="10.5">/var/lib/prometheus/</text>
+  <rect x="628" y="580" width="74" height="22" rx="4" fill="#f2d4d4"/>
+  <text x="665" y="596" text-anchor="middle" fill="#7a1f1f" font-size="10" font-weight="700">my_app/</text>
+  <text x="716" y="596" fill="#f0a0a0" font-size="10.5" font-weight="700">← 한 단계뿐이라 안 맞습니다</text>
+  <text x="600" y="628" fill="#b8b3ad" font-size="10.5">별표 두 개는 정확히 두 단계를 내려갑니다.</text>
+  <text x="600" y="650" fill="#b8b3ad" font-size="10.5">그 아래로 더 파고들지는 않습니다.</text>
+</svg>

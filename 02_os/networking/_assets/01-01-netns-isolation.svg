@@ -1,0 +1,77 @@
+<svg viewBox="0 0 1000 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>네트워크 네임스페이스 격리 — 각 struct net이 자기 소켓 해시를 가져 같은 포트를 중복 점유한다</title>
+  <desc>한 리눅스 노드 안에 여러 네트워크 네임스페이스가 있고, 각각은 커널 객체 struct net으로 표현된다. struct net 하나는 인터페이스 목록, 라우팅 테이블, ARP 캐시, netfilter 규칙, 소켓 해시, 포트 상태를 통째로 격리한다. 그림에서 root와 pod-a와 pod-b가 각자 별도의 struct net을 가지므로, 소켓 해시도 서로 다르다. 그래서 세 네임스페이스가 동시에 8080 포트를 점유해도 충돌이 일어나지 않는다. 포트 중복이 허용되는 근거가 바로 이 소켓 해시 분리다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 10.5px; fill: rgb(138,133,128); }
+      .ns     { font-size: 12.5px; font-weight: 800; }
+      .row    { font-size: 10px; font-weight: 600; fill: #e8e4df; }
+      .muted  { font-size: 9px; fill: rgb(138,133,128); }
+      .mono   { font-size: 9.5px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .port   { font-size: 10.5px; font-weight: 800; fill: #0d0d0d; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="560" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">네트워크 네임스페이스 격리 — 소켓 해시가 따로라 포트가 겹친다</text>
+  <text x="24" y="52" class="sub">각 네임스페이스 = 커널 객체 struct net 하나. 안의 자료구조가 통째로 격리되므로 같은 8080을 셋이 동시에 쓴다.</text>
+
+  <!-- 노드 경계 -->
+  <rect x="24" y="72" width="952" height="420" rx="12" fill="rgb(14,16,20)" stroke="rgb(212,168,83)" stroke-width="1.2" stroke-dasharray="7 4"/>
+  <text x="42" y="96" class="mono" style="fill:rgb(212,168,83)">한 리눅스 노드 (커널 하나)</text>
+
+  <!-- root netns -->
+  <rect x="48" y="116" width="288" height="352" rx="10" fill="rgb(16,20,28)" stroke="#5b9bd5" stroke-width="1.4"/>
+  <text x="68" y="142" class="ns" style="fill:#8fc0ec">root netns</text>
+  <text x="68" y="160" class="muted">struct net #0</text>
+  <rect x="68" y="176" width="248" height="26" rx="4" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="80" y="194" class="row">인터페이스: eth0 (실제 NIC), lo</text>
+  <rect x="68" y="208" width="248" height="26" rx="4" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="80" y="226" class="row">라우팅 테이블 · ARP 캐시</text>
+  <rect x="68" y="240" width="248" height="26" rx="4" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="80" y="258" class="row">netfilter 규칙</text>
+  <rect x="68" y="272" width="248" height="26" rx="4" fill="rgb(20,22,26)" stroke="#5b9bd5" stroke-width="1.1"/>
+  <text x="80" y="290" class="mono" style="fill:#8fc0ec">소켓 해시 (자기만의)</text>
+  <text x="68" y="322" class="row">주소 10.0.0.10</text>
+  <rect x="68" y="336" width="200" height="34" rx="6" fill="#5b9bd5"/>
+  <text x="168" y="358" class="port" text-anchor="middle">포트 8080 점유</text>
+
+  <!-- pod-a netns -->
+  <rect x="356" y="116" width="288" height="352" rx="10" fill="rgb(24,20,14)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="376" y="142" class="ns" style="fill:rgb(212,168,83)">pod-a netns</text>
+  <text x="376" y="160" class="muted">struct net #1 (별도)</text>
+  <rect x="376" y="176" width="248" height="26" rx="4" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="388" y="194" class="row">인터페이스: eth0 (veth 한쪽)</text>
+  <rect x="376" y="208" width="248" height="26" rx="4" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="388" y="226" class="row">라우팅 테이블 · ARP 캐시</text>
+  <rect x="376" y="240" width="248" height="26" rx="4" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="388" y="258" class="row">netfilter 규칙</text>
+  <rect x="376" y="272" width="248" height="26" rx="4" fill="rgb(20,22,26)" stroke="rgb(212,168,83)" stroke-width="1.1"/>
+  <text x="388" y="290" class="mono" style="fill:rgb(212,168,83)">소켓 해시 (자기만의)</text>
+  <text x="376" y="322" class="row">주소 10.244.1.5</text>
+  <rect x="376" y="336" width="200" height="34" rx="6" fill="#d4a853"/>
+  <text x="476" y="358" class="port" text-anchor="middle">포트 8080 점유</text>
+
+  <!-- pod-b netns -->
+  <rect x="664" y="116" width="288" height="352" rx="10" fill="rgb(16,24,18)" stroke="#66bb6a" stroke-width="1.4"/>
+  <text x="684" y="142" class="ns" style="fill:#66bb6a">pod-b netns</text>
+  <text x="684" y="160" class="muted">struct net #2 (별도)</text>
+  <rect x="684" y="176" width="248" height="26" rx="4" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="696" y="194" class="row">인터페이스: eth0 (veth 한쪽)</text>
+  <rect x="684" y="208" width="248" height="26" rx="4" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="696" y="226" class="row">라우팅 테이블 · ARP 캐시</text>
+  <rect x="684" y="240" width="248" height="26" rx="4" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="696" y="258" class="row">netfilter 규칙</text>
+  <rect x="684" y="272" width="248" height="26" rx="4" fill="rgb(20,22,26)" stroke="#66bb6a" stroke-width="1.1"/>
+  <text x="696" y="290" class="mono" style="fill:#66bb6a">소켓 해시 (자기만의)</text>
+  <text x="684" y="322" class="row">주소 10.244.1.6</text>
+  <rect x="684" y="336" width="200" height="34" rx="6" fill="#66bb6a"/>
+  <text x="784" y="358" class="port" text-anchor="middle">포트 8080 점유</text>
+
+  <!-- 공통 결론 -->
+  <rect x="48" y="410" width="904" height="46" rx="8" fill="rgb(20,30,22)" stroke="#66bb6a" stroke-width="1.1"/>
+  <text x="500" y="438" class="row" text-anchor="middle" style="fill:#66bb6a">셋 다 8080을 점유해도 충돌 없음 — 소켓 해시가 struct net마다 따로라 포트 점유가 겹쳐도 서로 모른다</text>
+
+  <text x="24" y="516" class="muted">/var/run/netns/&lt;이름&gt;은 그 struct net을 잡아 두는 마운트 포인트일 뿐, 실제 격리 단위는 커널 안의 struct net 객체다.</text>
+</svg>

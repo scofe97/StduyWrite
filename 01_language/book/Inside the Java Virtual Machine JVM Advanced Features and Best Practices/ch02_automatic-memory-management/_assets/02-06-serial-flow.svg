@@ -1,0 +1,25 @@
+<svg viewBox="0 0 900 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>Serial과 Serial Old — 단일 GC 스레드가 Young과 Old를 순서대로 회수하는 기본형</title>
+  <desc>Serial GC는 모든 애플리케이션 스레드를 멈추고 한 GC 스레드가 신세대를 마크-카피로 회수한다. Serial Old는 구세대를 한 GC 스레드가 마크-컴팩트로 회수한다. 작은 힙에서는 단순함이 장점이지만 힙이 커지면 STW가 길어진다.</desc>
+  <defs><style>.title{font-size:17px;font-weight:800;fill:#e8e4df}.sub{font-size:11px;fill:rgb(138,133,128)}.head{font-size:13px;font-weight:800;fill:rgb(212,168,83)}.label{font-size:11px;font-weight:750;fill:#e8e4df}.body{font-size:10px;fill:rgb(180,175,170)}.note{font-size:9.5px;fill:rgb(138,133,128)}.code{font-size:10px;font-weight:700;fill:rgb(212,168,83);font-family:'JetBrains Mono',monospace}.bad{font-size:10px;font-weight:750;fill:#e57373}.ok{font-size:10px;font-weight:750;fill:#81c784}</style><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgb(212,168,83)"/></marker></defs>
+  <rect x="0" y="0" width="900" height="500" fill="#0d0d0d"/>
+  <text x="26" y="36" class="title">Serial / Serial Old — 단일 스레드 STW 기본형</text>
+  <text x="26" y="55" class="sub">단순해서 작은 힙에서는 빠르지만, 작업량이 커질수록 애플리케이션 전체 정지가 길어진다</text>
+  <rect x="22" y="84" width="856" height="300" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="44" y="112" class="head">방법론</text>
+  <rect x="58" y="150" width="170" height="64" rx="6" fill="#2a1414" stroke="#e57373"/><text x="143" y="176" class="bad" text-anchor="middle">STW</text><text x="143" y="195" class="body" text-anchor="middle">앱 스레드 모두 정지</text>
+  <line x1="228" y1="182" x2="292" y2="182" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="294" y="150" width="170" height="64" rx="6" fill="#1e3a4a" stroke="#4a8ab0"/><text x="379" y="176" class="label" text-anchor="middle">Serial</text><text x="379" y="195" class="body" text-anchor="middle">Young · 마크-카피</text>
+  <line x1="464" y1="182" x2="528" y2="182" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="530" y="150" width="170" height="64" rx="6" fill="#2a2a1a" stroke="rgb(212,168,83)"/><text x="615" y="176" class="label" text-anchor="middle">Serial Old</text><text x="615" y="195" class="body" text-anchor="middle">Old · 마크-컴팩트</text>
+  <line x1="700" y1="182" x2="764" y2="182" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="766" y="150" width="82" height="64" rx="6" fill="#1e2a1e" stroke="#4ab080"/><text x="807" y="176" class="ok" text-anchor="middle">재개</text><text x="807" y="195" class="body" text-anchor="middle">앱 실행</text>
+  <rect x="58" y="254" width="360" height="74" rx="6" fill="#111" stroke="#333"/>
+  <text x="80" y="280" class="code">장점</text><text x="132" y="280" class="body">단일 스레드라 GC 내부 동기화 비용이 없다.</text>
+  <text x="80" y="302" class="code">적합</text><text x="132" y="302" class="body">작은 힙, GC가 드문 앱, 단순성이 중요한 환경.</text>
+  <rect x="482" y="254" width="340" height="74" rx="6" fill="#111" stroke="#333"/>
+  <text x="504" y="280" class="code">한계</text><text x="556" y="280" class="body">GC 작업 동안 모든 앱 스레드가 기다린다.</text>
+  <text x="504" y="302" class="code">결과</text><text x="556" y="302" class="body">힙이 커질수록 pause가 그대로 길어진다.</text>
+  <rect x="22" y="414" width="856" height="44" rx="6" fill="#111" stroke="#333"/>
+  <text x="44" y="440" class="code">한 줄</text><text x="96" y="440" class="body">Serial은 “가장 단순하게 멈추고 한 스레드로 끝내는” 기본형이며, 작은 힙에서만 단순함이 이긴다.</text>
+</svg>

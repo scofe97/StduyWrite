@@ -1,0 +1,35 @@
+<svg viewBox="0 0 680 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>메모리 누수 vs 메모리 부족 — 계속 차오름(누수) vs peaks/valleys(부족) (원문 Figure 11.5 개념도)</title>
+  <desc>원문 Figure 11.5 의 개념을 도식으로 옮긴 것입니다. 메모리 소비 그래프로 누수와 메모리 부족을 구별합니다. 메모리 누수면 GC 가 회수에 거의 진전이 없어 메모리 사용이 힙이 꽉 찰 때까지 꾸준히 증가합니다. full GC 조차 효과가 미미합니다. 반면 메모리 부족이면 GC 가 능동적으로 회수해 그래프가 peaks 와 valleys 즉 톱니 모양을 보이며 앱을 계속 돌립니다. full GC 가 잦지만 메모리를 효과적으로 비웁니다. 다만 할당이 최대에 너무 가까우면 성능이 저하되고 OOM 위험이 커집니다. 두 경우 모두 GC 로그에 집중적인 GC 활동을 보여 구별이 까다롭지만 회수가 효과적인지가 갈림길입니다.</desc>
+  <rect x="0" y="0" width="680" height="360" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">메모리 누수 vs 메모리 부족 — 그래프로 구별</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 Figure 11.5 개념도 — 회수가 효과적인지가 갈림길</text>
+
+  <!-- 누수 그래프 -->
+  <rect x="20" y="80" width="312" height="200" fill="rgba(244,127,114,0.05)" stroke="#f47f72" stroke-width="2"/>
+  <text x="176" y="102" fill="#f47f72" font-size="13" font-weight="bold" text-anchor="middle">누수 — 계속 차오름</text>
+  <!-- 축 -->
+  <line x1="50" y1="250" x2="310" y2="250" stroke="rgb(60,55,50)"/>
+  <line x1="50" y1="120" x2="50" y2="250" stroke="rgb(60,55,50)"/>
+  <text x="44" y="124" fill="rgb(138,133,128)" font-size="8" text-anchor="end">max</text>
+  <!-- 우상향 톱니(계속 상승) -->
+  <polyline points="50,244 80,232 75,236 110,218 105,222 140,202 135,206 170,184 165,188 200,164 195,168 230,144 225,148 260,126 255,130 290,124" fill="none" stroke="#f47f72" stroke-width="2"/>
+  <line x1="50" y1="124" x2="310" y2="124" stroke="#f47f72" stroke-width="0.8" stroke-dasharray="3 2"/>
+  <text x="176" y="270" fill="rgb(138,133,128)" font-size="9.5" text-anchor="middle">GC 가 회수 못 함 → 힙 꽉 찰 때까지 상승 → OOM</text>
+
+  <!-- 부족 그래프 -->
+  <rect x="348" y="80" width="312" height="200" fill="rgba(127,168,201,0.05)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="504" y="102" fill="#9cc3df" font-size="13" font-weight="bold" text-anchor="middle">부족 — peaks/valleys</text>
+  <line x1="378" y1="250" x2="638" y2="250" stroke="rgb(60,55,50)"/>
+  <line x1="378" y1="120" x2="378" y2="250" stroke="rgb(60,55,50)"/>
+  <text x="372" y="124" fill="rgb(138,133,128)" font-size="8" text-anchor="end">max</text>
+  <!-- 톱니(오르내림 반복, 평균 일정) -->
+  <polyline points="378,210 410,150 442,210 474,150 506,210 538,150 570,210 602,150 634,210" fill="none" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="504" y="270" fill="rgb(138,133,128)" font-size="9.5" text-anchor="middle">GC 가 능동 회수 → 톱니 → 앱 계속 돎</text>
+
+  <!-- 로그 패턴 대비 -->
+  <rect x="20" y="296" width="640" height="50" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="316" fill="#e8e4df" font-size="11" font-weight="bold">로그로 구별</text>
+  <text x="34" y="336" fill="rgb(138,133,128)" font-size="10">누수=full GC 도 거의 못 비움(점점 더 남김) · 부족=full GC 가 효과적으로 비우되 잦음(8192→6100→5800→5600)</text>
+</svg>

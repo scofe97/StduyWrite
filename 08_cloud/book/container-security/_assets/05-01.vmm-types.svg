@@ -1,0 +1,80 @@
+<svg viewBox="0 0 700 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Type 1과 Type 2와 KVM의 계층 배치 비교</title>
+  <desc>Type 1은 하이퍼바이저가 하드웨어 위에서 직접 도는 구조로 밑에 운영체제가 없습니다. Type 2는 호스트 운영체제가 먼저 있고 그 위 유저 공간에 가상머신 모니터가 애플리케이션처럼 설치되는 구조입니다. KVM은 그 사이에 있습니다. 호스트 커널 안의 모듈로 들어가므로 게스트가 호스트 운영체제를 거치지 않아 보통 Type 1로 분류되지만, 저자는 이 분류가 지나치게 단순하다고 봅니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .hw { fill: #3a3632; font-size: 10.5px; font-weight: 700; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .divider { stroke: #b8b3ad; stroke-width: 1.2; stroke-dasharray: 5 4; fill: none; }
+  </style>
+
+  <rect width="700" height="400" fill="#0d0d0d"/>
+
+  <text class="head" x="40" y="30">Type 1 · 하이퍼바이저</text>
+  <text class="head" x="260" y="30">Type 2 · 호스티드</text>
+  <text class="head" x="480" y="30">KVM · 그 사이</text>
+
+  <path class="divider" d="M237,40 L237,300"/>
+  <path class="divider" d="M457,40 L457,300"/>
+
+  <!-- Type 1 -->
+  <rect class="box" x="40" y="52" width="175" height="42" rx="4"/>
+  <text class="box-title" x="54" y="70">게스트 OS</text>
+  <text class="box-detail" x="54" y="86">자기 커널을 가짐</text>
+
+  <rect class="box" x="40" y="102" width="175" height="42" rx="4"/>
+  <text class="box-title" x="54" y="120">하이퍼바이저</text>
+  <text class="box-detail" x="54" y="136">Hyper-V · Xen · ESXi</text>
+
+  <rect class="box" x="40" y="152" width="175" height="36" rx="4"/>
+  <text class="hw" x="54" y="175">하드웨어</text>
+
+  <text class="hint" x="40" y="212">밑에 OS가 없다</text>
+  <text class="hint" x="40" y="230">베어메탈 위에서 돈다</text>
+
+  <!-- Type 2 -->
+  <rect class="box" x="260" y="52" width="175" height="42" rx="4"/>
+  <text class="box-title" x="274" y="70">게스트 OS</text>
+  <text class="box-detail" x="274" y="86">Linux · Windows</text>
+
+  <rect class="box" x="260" y="102" width="175" height="56" rx="4"/>
+  <text class="box-title" x="274" y="120">VMM 애플리케이션</text>
+  <text class="box-detail" x="274" y="134">VirtualBox · QEMU</text>
+  <text class="box-detail" x="274" y="147">Parallels</text>
+
+  <rect class="box" x="260" y="166" width="175" height="42" rx="4"/>
+  <text class="box-title" x="274" y="184">호스트 OS</text>
+  <text class="box-detail" x="274" y="200">예컨대 macOS 커널</text>
+
+  <rect class="box" x="260" y="216" width="175" height="34" rx="4"/>
+  <text class="hw" x="274" y="238">하드웨어</text>
+
+  <text class="hint" x="260" y="272">호스트 OS 위에</text>
+  <text class="hint" x="260" y="290">앱처럼 설치된다</text>
+
+  <!-- KVM -->
+  <rect class="box" x="480" y="52" width="175" height="42" rx="4"/>
+  <text class="box-title" x="494" y="70">게스트 OS</text>
+  <text class="box-detail" x="494" y="86">QEMU와 함께 쓰인다</text>
+
+  <rect class="box" x="480" y="102" width="175" height="52" rx="4"/>
+  <text class="box-title" x="494" y="122">호스트 커널 + KVM</text>
+  <text class="box-detail" x="494" y="140">커널 모듈로 들어간다</text>
+
+  <rect class="box" x="480" y="162" width="175" height="34" rx="4"/>
+  <text class="hw" x="494" y="184">하드웨어</text>
+
+  <text class="hint" x="480" y="220">호스트 OS를 거치지 않아</text>
+  <text class="hint" x="480" y="238">보통 Type 1로 분류된다</text>
+  <text class="hint" x="480" y="256">저자는 단순화라고 본다</text>
+
+  <text class="hint" x="40" y="330">기법은 어느 유형이든 비슷</text>
+  <text class="hint" x="40" y="352">기본 아이디어가 트랩앤에뮬레이트입니다</text>
+</svg>

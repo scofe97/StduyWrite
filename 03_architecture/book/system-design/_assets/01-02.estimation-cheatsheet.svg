@@ -1,0 +1,114 @@
+<svg viewBox="0 0 900 540" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>개략적 규모 추정 치트시트 — 2의 거듭제곱·지연 시간·가용성</title>
+  <desc>면접 직전에 훑어보는 암기 카드. 데이터 단위를 정하는 2의 거듭제곱 표, 연산별 지연 시간(latency)의 핵심 수치, 가용성 퍼센트와 연간 다운타임의 대응 관계를 한 장에 정리한 종합도.</desc>
+
+  <rect x="0" y="0" width="900" height="540" fill="#0d0d0d"/>
+
+  <text x="30" y="40" fill="rgb(212,168,83)" font-size="20" font-weight="bold">개략적 규모 추정 치트시트</text>
+  <text x="30" y="62" fill="rgb(138,133,128)" font-size="12">QPS·스토리지·가용성을 수로 따지기 전에 외워둘 세 가지 기준</text>
+
+  <!-- ===== 패널 1: 2의 거듭제곱 ===== -->
+  <rect x="30" y="84" width="260" height="420" fill="rgba(212,168,83,0.06)" stroke="rgb(42,37,32)"/>
+  <text x="48" y="112" fill="#e8e4df" font-size="14" font-weight="bold">① 데이터 단위 (2의 거듭제곱)</text>
+  <text x="48" y="132" fill="rgb(138,133,128)" font-size="10.5">1 byte = 8 bit · ASCII 1자 = 1 byte</text>
+
+  <!-- 행들 -->
+  <g font-size="12.5">
+    <text x="48"  y="172" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace">2^10</text>
+    <text x="130" y="172" fill="#e8e4df">≈ 1천</text>
+    <text x="210" y="172" fill="#e8e4df" font-family="'JetBrains Mono',monospace">1 KB</text>
+
+    <text x="48"  y="212" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace">2^20</text>
+    <text x="130" y="212" fill="#e8e4df">≈ 1백만</text>
+    <text x="210" y="212" fill="#e8e4df" font-family="'JetBrains Mono',monospace">1 MB</text>
+
+    <text x="48"  y="252" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace">2^30</text>
+    <text x="130" y="252" fill="#e8e4df">≈ 10억</text>
+    <text x="210" y="252" fill="#e8e4df" font-family="'JetBrains Mono',monospace">1 GB</text>
+
+    <text x="48"  y="292" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace">2^40</text>
+    <text x="130" y="292" fill="#e8e4df">≈ 1조</text>
+    <text x="210" y="292" fill="#e8e4df" font-family="'JetBrains Mono',monospace">1 TB</text>
+
+    <text x="48"  y="332" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace">2^50</text>
+    <text x="130" y="332" fill="#e8e4df">≈ 1000조</text>
+    <text x="210" y="332" fill="#e8e4df" font-family="'JetBrains Mono',monospace">1 PB</text>
+  </g>
+
+  <line x1="48" y1="360" x2="272" y2="360" stroke="rgb(42,37,32)"/>
+  <text x="48" y="384" fill="rgb(138,133,128)" font-size="11">10 오를 때마다</text>
+  <text x="48" y="402" fill="#e8e4df" font-size="11">단위가 한 칸 커집니다</text>
+  <text x="48" y="430" fill="rgb(138,133,128)" font-size="11">스토리지 추정의</text>
+  <text x="48" y="448" fill="#e8e4df" font-size="11">기본 환산표입니다</text>
+
+  <!-- ===== 패널 2: latency ===== -->
+  <rect x="310" y="84" width="280" height="420" fill="rgba(212,168,83,0.06)" stroke="rgb(42,37,32)"/>
+  <text x="328" y="112" fill="#e8e4df" font-size="14" font-weight="bold">② 지연 시간 (핵심값)</text>
+  <text x="328" y="132" fill="rgb(138,133,128)" font-size="10.5">Jeff Dean 의 latency numbers</text>
+
+  <g font-size="11.5">
+    <text x="328" y="166" fill="#e8e4df">L1 캐시 참조</text>
+    <text x="560" y="166" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" text-anchor="end">0.5 ns</text>
+
+    <text x="328" y="194" fill="#e8e4df">메인 메모리 참조</text>
+    <text x="560" y="194" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" text-anchor="end">100 ns</text>
+
+    <text x="328" y="222" fill="#e8e4df">1 KB Zippy 압축</text>
+    <text x="560" y="222" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" text-anchor="end">10 µs</text>
+
+    <text x="328" y="250" fill="#e8e4df">메모리 1 MB 순차 읽기</text>
+    <text x="560" y="250" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" text-anchor="end">250 µs</text>
+
+    <text x="328" y="278" fill="#e8e4df">같은 DC 왕복</text>
+    <text x="560" y="278" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" text-anchor="end">500 µs</text>
+
+    <text x="328" y="306" fill="#e8e4df">디스크 seek</text>
+    <text x="560" y="306" fill="#f44336" font-family="'JetBrains Mono',monospace" text-anchor="end">10 ms</text>
+
+    <text x="328" y="334" fill="#e8e4df">디스크 1 MB 순차 읽기</text>
+    <text x="560" y="334" fill="#f44336" font-family="'JetBrains Mono',monospace" text-anchor="end">30 ms</text>
+
+    <text x="328" y="362" fill="#e8e4df">대륙 간 패킷 왕복</text>
+    <text x="560" y="362" fill="#f44336" font-family="'JetBrains Mono',monospace" text-anchor="end">150 ms</text>
+  </g>
+
+  <line x1="328" y1="382" x2="572" y2="382" stroke="rgb(42,37,32)"/>
+  <text x="328" y="406" fill="#66bb6a" font-size="11">메모리는 빠르고</text>
+  <text x="328" y="424" fill="#f44336" font-size="11">디스크·네트워크는 느립니다</text>
+  <text x="328" y="452" fill="rgb(138,133,128)" font-size="11">→ seek 회피, 전송 전 압축,</text>
+  <text x="328" y="470" fill="rgb(138,133,128)" font-size="11">→ DC 간 통신은 비용으로 계산</text>
+
+  <!-- ===== 패널 3: availability ===== -->
+  <rect x="610" y="84" width="260" height="420" fill="rgba(212,168,83,0.06)" stroke="rgb(42,37,32)"/>
+  <text x="628" y="112" fill="#e8e4df" font-size="14" font-weight="bold">③ 가용성 (나인의 수)</text>
+  <text x="628" y="132" fill="rgb(138,133,128)" font-size="10.5">나인이 많을수록 다운타임↓</text>
+
+  <text x="628" y="158" fill="rgb(138,133,128)" font-size="10.5" font-family="'JetBrains Mono',monospace">가용성</text>
+  <text x="848" y="158" fill="rgb(138,133,128)" font-size="10.5" font-family="'JetBrains Mono',monospace" text-anchor="end">연간 다운타임</text>
+
+  <g font-size="12" font-family="'JetBrains Mono',monospace">
+    <text x="628" y="190" fill="#e8e4df">99%</text>
+    <text x="848" y="190" fill="#f44336" text-anchor="end">3.65 일</text>
+
+    <text x="628" y="226" fill="#e8e4df">99.9%</text>
+    <text x="848" y="226" fill="#e8e4df" text-anchor="end">8.77 시간</text>
+
+    <text x="628" y="262" fill="#e8e4df">99.99%</text>
+    <text x="848" y="262" fill="rgb(212,168,83)" text-anchor="end">52.6 분</text>
+
+    <text x="628" y="298" fill="#e8e4df">99.999%</text>
+    <text x="848" y="298" fill="#66bb6a" text-anchor="end">5.26 분</text>
+
+    <text x="628" y="334" fill="#e8e4df">99.9999%</text>
+    <text x="848" y="334" fill="#66bb6a" text-anchor="end">31.6 초</text>
+  </g>
+
+  <line x1="628" y1="360" x2="852" y2="360" stroke="rgb(42,37,32)"/>
+  <text x="628" y="384" fill="rgb(138,133,128)" font-size="11">SLA 는 보통</text>
+  <text x="628" y="402" fill="#e8e4df" font-size="11">99.9% 이상으로 약속합니다</text>
+  <text x="628" y="430" fill="rgb(138,133,128)" font-size="11">나인 하나가 늘면</text>
+  <text x="628" y="448" fill="#e8e4df" font-size="11">다운타임은 약 1/10 로 줄어듭니다</text>
+
+  <!-- 하단 결론 -->
+  <text x="30" y="530" fill="rgb(212,168,83)" font-size="11.5">핵심: 정밀한 계산보다 과정이 중요합니다. 가정을 적고, 단위를 붙이고, 반올림해서 빠르게 답합니다.</text>
+</svg>

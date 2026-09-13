@@ -1,0 +1,80 @@
+<svg viewBox="0 0 900 380" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>유효 Pod 리소스는 둘 중 큰 값으로 정해집니다</title>
+  <desc>스케줄러가 Pod에 쓰는 유효 request와 limit이 어떻게 계산되는지를 보입니다. 왼쪽 위는 init 컨테이너들이고 이들은 순차로 실행되므로 동시에 자원을 쓰지 않습니다. 그래서 이 그룹의 대푯값은 합계가 아니라 개별 값 중 가장 큰 것입니다. 예시에서는 4코어를 요구하는 init이 가장 크므로 4코어가 이 그룹의 값이 됩니다. 왼쪽 아래는 앱 컨테이너들이고 이들은 병렬로 동시에 돌기 때문에 대푯값이 합계입니다. 예시에서는 0.3과 0.2를 더해 0.5코어입니다. 오른쪽에서 두 값을 비교해 더 큰 쪽이 유효 Pod 값이 되고 여기서는 init 쪽 4코어가 이깁니다. 그 결과 스케줄러는 이 Pod를 4코어 여유가 있는 노드에만 배치합니다. 문제는 init이 끝난 뒤입니다. 실제로 도는 것은 0.5코어짜리 앱뿐인데 나머지 3.5코어는 예약된 것처럼 묶여 다른 Pod가 쓰지 못합니다. init이 짧게 돌수록 이 낭비 구간이 길어집니다.</desc>
+
+  <rect width="900" height="380" fill="#0d0d0d"/>
+
+  <text x="24" y="30" fill="#e8e4df" font-size="15" font-weight="700">둘 중 큰 쪽이 이깁니다</text>
+
+  <!-- init group -->
+  <text x="24" y="62" fill="#f5edda" font-size="10" font-weight="700">init · 순차라 최대값</text>
+
+  <rect x="150" y="48" width="70" height="30" fill="#f5edda"/>
+  <text x="185" y="68" text-anchor="middle" fill="#0d0d0d" font-size="9" font-weight="700">0.5</text>
+
+  <rect x="226" y="48" width="70" height="30" fill="rgb(212,168,83)"/>
+  <text x="261" y="68" text-anchor="middle" fill="#0d0d0d" font-size="9" font-weight="700">4.0</text>
+
+  <rect x="302" y="48" width="70" height="30" fill="#f5edda"/>
+  <text x="337" y="68" text-anchor="middle" fill="#0d0d0d" font-size="9" font-weight="700">1.0</text>
+
+  <text x="384" y="68" fill="rgb(212,168,83)" font-size="9" font-weight="700">가장 큰 4.0</text>
+
+  <path d="M 470 63 L 506 63" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#am)"/>
+
+  <!-- app group -->
+  <text x="24" y="122" fill="#cdeccf" font-size="10" font-weight="700">app · 병렬이라 합계</text>
+
+  <rect x="150" y="108" width="70" height="30" fill="#cdeccf"/>
+  <text x="185" y="128" text-anchor="middle" fill="#14521d" font-size="9" font-weight="700">0.3</text>
+
+  <rect x="226" y="108" width="70" height="30" fill="#cdeccf"/>
+  <text x="261" y="128" text-anchor="middle" fill="#14521d" font-size="9" font-weight="700">0.2</text>
+
+  <text x="310" y="128" fill="#66bb6a" font-size="9" font-weight="700">더해서 0.5</text>
+
+  <path d="M 470 123 L 506 123" stroke="#66bb6a" stroke-width="2" marker-end="url(#gm)"/>
+
+  <!-- comparison -->
+  <rect x="512" y="48" width="364" height="90" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="694" y="76" text-anchor="middle" fill="#e8e4df" font-size="11" font-weight="700">큰 쪽을 고릅니다</text>
+  <text x="694" y="100" text-anchor="middle" fill="rgb(212,168,83)" font-size="14" font-weight="700">4.0</text>
+  <text x="694" y="122" text-anchor="middle" fill="#b8b3ad" font-size="9">init 쪽이 이겼습니다</text>
+
+  <line x1="24" y1="164" x2="876" y2="164" stroke="#4a4640"/>
+
+  <!-- timeline consequence -->
+  <text x="24" y="196" fill="#e8e4df" font-size="12" font-weight="700">그 뒤에 벌어지는 일</text>
+
+  <text x="24" y="230" fill="#b8b3ad" font-size="9" font-weight="700">예약된 몫</text>
+  <rect x="150" y="214" width="726" height="26" fill="rgb(212,168,83)"/>
+  <text x="513" y="232" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">4.0 이 계속 잡혀 있습니다</text>
+
+  <text x="24" y="272" fill="#b8b3ad" font-size="9" font-weight="700">실제 사용</text>
+  <rect x="150" y="256" width="120" height="26" fill="#f5edda"/>
+  <text x="210" y="274" text-anchor="middle" fill="#0d0d0d" font-size="9" font-weight="700">init 4.0</text>
+
+  <rect x="270" y="256" width="606" height="26" fill="#0d0d0d" stroke="#cdeccf"/>
+  <text x="573" y="274" text-anchor="middle" fill="#cdeccf" font-size="10" font-weight="700">app 0.5 · 나머지는 놉니다</text>
+
+  <line x1="270" y1="210" x2="270" y2="292" stroke="#f44336" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="282" y="304" fill="#f44336" font-size="9" font-weight="700">여기서부터 3.5 가 낭비됩니다</text>
+
+  <rect x="24" y="316" width="852" height="28" fill="#f2d4d4"/>
+  <text x="44" y="335" fill="#7a1f1f" font-size="10" font-weight="700">무거우면 Job 으로 빼세요</text>
+
+  <rect x="24" y="350" width="852" height="26" fill="rgb(212,168,83)"/>
+  <text x="450" y="368" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">짧게 돌수록 낭비 구간이 깁니다</text>
+
+  <defs>
+    <marker id="am" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="gm" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#66bb6a"/>
+    </marker>
+  </defs>
+</svg>

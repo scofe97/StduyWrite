@@ -1,0 +1,42 @@
+<svg viewBox="0 0 640 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>커널 개발 워크스페이스 — 호스트 위 VM 게스트 격리 구조</title>
+  <desc>호스트(Windows/Linux/macOS) 위에 VirtualBox로 Ubuntu 게스트 VM을 올리고, 그 안에서 커널 소스를 git clone 해 ctags/cscope로 인덱싱한다. VM은 격리 안전 계층이다.</desc>
+  <rect x="0" y="0" width="640" height="400" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">커널 개발 워크스페이스 — VM 격리 구조</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">커널 코드 실수는 시스템 전체를 멈출 수 있으므로 격리된 VM 게스트에서 작업합니다</text>
+
+  <!-- 호스트 -->
+  <rect x="20" y="74" width="600" height="306" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="2"/>
+  <text x="38" y="98" fill="rgb(138,133,128)" font-size="12">호스트 OS — Windows 10+ / 최신 Linux / macOS</text>
+
+  <!-- VirtualBox 계층 라벨 -->
+  <text x="38" y="120" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="11">Oracle VirtualBox 7.0</text>
+
+  <!-- 게스트 VM (격리 경계 = 골든 앰버) -->
+  <rect x="38" y="132" width="564" height="228" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="56" y="156" fill="rgb(212,168,83)" font-size="13" font-weight="bold">게스트 VM — 격리 안전 계층</text>
+  <text x="360" y="156" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11">x86_64 Ubuntu 22.04 LTS</text>
+
+  <!-- 1. 코드 저장소 -->
+  <rect x="56" y="172" width="528" height="50" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="70" y="192" fill="#e8e4df" font-size="12">① 책 코드 저장소 clone</text>
+  <text x="70" y="212" fill="#66bb6a" font-family="'JetBrains Mono',monospace" font-size="11">git clone https://github.com/PacktPublishing/Linux-Kernel-Programming_2E</text>
+
+  <!-- 2. 커널 소스 -->
+  <rect x="56" y="232" width="258" height="60" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="70" y="252" fill="#e8e4df" font-size="12">② 커널 소스 트리</text>
+  <text x="70" y="272" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="11">linux-6.1.25 (~1.5GB)</text>
+  <text x="70" y="286" fill="rgb(138,133,128)" font-size="11">챕터별 ch1/ ch2/ …</text>
+
+  <!-- 3. 인덱싱 도구 -->
+  <rect x="326" y="232" width="258" height="60" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="340" y="252" fill="#e8e4df" font-size="12">③ 코드 인덱싱</text>
+  <text x="340" y="272" fill="#66bb6a" font-family="'JetBrains Mono',monospace" font-size="11">ctags -R</text>
+  <text x="340" y="286" fill="rgb(138,133,128)" font-size="11">cscope — 30M SLOC 탐색</text>
+
+  <!-- 빌드/실험 영역 -->
+  <rect x="56" y="302" width="528" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="70" y="322" fill="#e8e4df" font-size="12">④ 빌드·모듈 적재 실험 (insmod / rmmod)</text>
+  <text x="70" y="338" fill="rgb(138,133,128)" font-size="11">망가져도 호스트는 안전 · 스냅숏으로 복원 가능 (성능은 네이티브 대비 최대 절반)</text>
+</svg>

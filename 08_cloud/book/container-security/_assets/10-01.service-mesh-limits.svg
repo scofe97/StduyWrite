@@ -1,0 +1,91 @@
+<svg viewBox="0 0 700 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>서비스 메시가 주는 것과 주지 못하는 것</title>
+  <desc>Kubernetes 에서 서비스 메시는 보통 각 애플리케이션 파드에 사이드카 컨테이너로 주입되고 그 사이드카가 파드 안 다른 컨테이너를 대신해 네트워킹을 처리합니다. 파드를 드나드는 모든 트래픽이 이 프록시를 거치고 규칙 적용은 프록시 안 사용자 공간에서 일어납니다. 사이드카 프록시에 상호 TLS 를 설정하면 배포 안의 연결이 암호화되어 공격자가 발판을 얻더라도 트래픽을 가로채기가 훨씬 어려워집니다. 다만 두 가지 한계가 있습니다. 첫째 서비스 메시는 사이드카가 주입된 파드에만 보안 지원을 줄 수 있고 사이드카가 없으면 아무것도 하지 못합니다. 둘째 서비스 메시 네트워크 정책은 서비스 수준에서 정의되므로 침해된 파드로부터 기저 인프라를 보호하는 데는 효과적이지 않습니다. 또한 사이드카와 애플리케이션 컨테이너가 같은 네트워크 namespace 를 공유하므로 애플리케이션 컨테이너에서 CAP_NET_ADMIN 을 빼 두는 것이 좋습니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .code { fill: #0d0d0d; font-size: 9.5px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .chip { fill: #f5edda; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .pod { fill: none; stroke: #4a4540; stroke-width: 1; stroke-dasharray: 3 3; }
+    .pod-label { fill: #b8b3ad; font-size: 9.5px; font-weight: 700; }
+    .danger-title { fill: #7a1f1f; font-size: 11.5px; font-weight: 700; }
+    .danger-detail { fill: #7a1f1f; font-size: 9.5px; }
+    .ok-detail { fill: #14521d; font-size: 9.5px; font-weight: 700; }
+    .mtls { stroke: #14521d; stroke-width: 2; fill: none; }
+  </style>
+
+  <rect width="700" height="400" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="gn10b" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#14521d"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="30">사이드카가 트래픽을 대신 받습니다</text>
+
+  <!-- 파드 1 -->
+  <rect class="pod" x="40" y="44" width="250" height="104" rx="4"/>
+  <text class="pod-label" x="52" y="62">파드 A</text>
+
+  <rect class="box" x="56" y="70" width="104" height="62" rx="4"/>
+  <text class="box-title" x="70" y="91">앱 컨테이너</text>
+  <text class="box-detail" x="70" y="109">비즈니스 로직</text>
+  <text class="box-detail" x="70" y="125">TLS 를 안 짜도 됨</text>
+
+  <rect class="box" x="172" y="70" width="102" height="62" rx="4"/>
+  <text class="box-title" x="186" y="91">사이드카</text>
+  <text class="box-detail" x="186" y="109">모든 트래픽 경유</text>
+  <text class="box-detail" x="186" y="125">사용자 공간 규칙</text>
+
+  <!-- 파드 2 -->
+  <rect class="pod" x="410" y="44" width="250" height="104" rx="4"/>
+  <text class="pod-label" x="422" y="62">파드 B</text>
+
+  <rect class="box" x="426" y="70" width="102" height="62" rx="4"/>
+  <text class="box-title" x="440" y="91">사이드카</text>
+  <text class="box-detail" x="440" y="109">모든 트래픽 경유</text>
+  <text class="box-detail" x="440" y="125">사용자 공간 규칙</text>
+
+  <rect class="box" x="540" y="70" width="104" height="62" rx="4"/>
+  <text class="box-title" x="554" y="91">앱 컨테이너</text>
+  <text class="box-detail" x="554" y="109">비즈니스 로직</text>
+  <text class="box-detail" x="554" y="125">TLS 를 안 짜도 됨</text>
+
+  <path class="mtls" d="M274,101 L422,101" marker-end="url(#gn10b)"/>
+  <text class="ok-detail" x="308" y="94">상호 TLS 로 암호화</text>
+
+  <!-- 두 한계 -->
+  <text class="head" x="40" y="184">그래도 못 하는 두 가지</text>
+
+  <rect x="40" y="196" width="300" height="80" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="56" y="217">주입되지 않으면 무력합니다</text>
+  <text class="danger-detail" x="56" y="236">사이드카가 있는 파드만 보호한다</text>
+  <text class="danger-detail" x="56" y="254">없으면 아무것도 못 한다</text>
+  <text class="danger-detail" x="56" y="270">전부 주입됐는지 확인할 도구가 필요</text>
+
+  <rect x="360" y="196" width="300" height="80" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="376" y="217">인프라는 못 지킵니다</text>
+  <text class="danger-detail" x="376" y="236">정책이 서비스 수준에서 정의된다</text>
+  <text class="danger-detail" x="376" y="254">침해된 파드로부터 기저 인프라를</text>
+  <text class="danger-detail" x="376" y="270">보호하는 데는 효과적이지 않다</text>
+
+  <!-- 보완 -->
+  <rect class="box" x="40" y="292" width="620" height="62" rx="4"/>
+  <text class="box-title" x="56" y="313">그래서 함께 둘 것</text>
+  <text class="box-detail" x="56" y="332">우회 트래픽은 L3·L4 가 막는다</text>
+  <rect class="chip" x="56" y="338" width="130" height="14" rx="3"/>
+  <text class="code" x="60" y="349">CAP_NET_ADMIN</text>
+  <text class="box-detail" x="196" y="349">은 앱 컨테이너에서 빼 둡니다</text>
+
+  <text class="hint" x="40" y="384">namespace 공유가 만드는 위험</text>
+</svg>

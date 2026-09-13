@@ -1,0 +1,40 @@
+<svg viewBox="0 0 900 460" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>상대적 안전 — 단건은 객체가, 복합은 호출자가 같은 객체 락으로</title>
+  <desc>Vector의 단건 메서드는 synchronized(this)로 객체 자신을 락으로 잡아 안전하다. 복합 연산은 두 호출 사이에 끼어듦이 생겨 깨지는데, 호출자가 같은 Vector 객체를 락으로 감싸면 내부 메서드와 같은 락을 공유해 직렬화된다. 외부 락과 내부 락이 같은 락을 중첩으로 잡아도 재진입 덕분에 막히지 않는다.</desc>
+  <rect x="0" y="0" width="900" height="460" fill="#0d0d0d"/>
+
+  <text x="450" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#e8e4df">상대적 안전 — 같은 객체를 락으로 잡아 복합 연산을 묶는다</text>
+
+  <!-- ===== 왼쪽: 단건 (객체가 책임) ===== -->
+  <rect x="30" y="64" width="400" height="170" rx="12" fill="#0d0d0d" stroke="#66bb6a" stroke-width="2"/>
+  <text x="230" y="92" text-anchor="middle" font-size="15" font-weight="700" fill="#66bb6a">단건 연산 — 객체가 책임 ✓</text>
+  <rect x="58" y="108" width="344" height="44" rx="7" fill="#e6f7e7"/>
+  <text x="230" y="130" text-anchor="middle" font-size="12.5" fill="#14521d">vector.add(x)  /  vector.get(i)</text>
+  <text x="230" y="146" text-anchor="middle" font-size="11" fill="#14521d">내부가 synchronized(this) — 자기 객체를 락으로</text>
+  <text x="230" y="180" text-anchor="middle" font-size="12" fill="#c9c4be">한 메서드 호출은 끼어듦 없이 통째로 실행</text>
+  <text x="230" y="210" text-anchor="middle" font-size="12.5" font-weight="700" fill="#66bb6a">→ 호출자가 따로 할 일 없음</text>
+
+  <!-- ===== 오른쪽: 복합 (호출자가 책임) ===== -->
+  <rect x="470" y="64" width="400" height="170" rx="12" fill="#0d0d0d" stroke="#c0504d" stroke-width="2"/>
+  <text x="670" y="92" text-anchor="middle" font-size="15" font-weight="700" fill="#e08a87">복합 연산 — 호출자가 책임 ⚠</text>
+  <rect x="498" y="108" width="344" height="44" rx="7" fill="#f2d4d4"/>
+  <text x="670" y="130" text-anchor="middle" font-size="12.5" fill="#7a1f1f">size() 확인 → 그 인덱스로 get()</text>
+  <text x="670" y="146" text-anchor="middle" font-size="11" fill="#7a1f1f">두 호출 사이에 다른 스레드가 remove()</text>
+  <text x="670" y="180" text-anchor="middle" font-size="12" fill="#c9c4be">개별은 안전해도 "사이"가 안 잠김</text>
+  <text x="670" y="210" text-anchor="middle" font-size="12.5" font-weight="700" fill="#e08a87">→ IndexOutOfBounds (호출자가 묶어야)</text>
+
+  <!-- ===== 아래: 해결 — 같은 객체 락 + 재진입 ===== -->
+  <rect x="30" y="254" width="840" height="186" rx="12" fill="#0d0d0d" stroke="#d4a853" stroke-width="2"/>
+  <text x="450" y="282" text-anchor="middle" font-size="15" font-weight="700" fill="#d4a853">해결 — 호출자가 같은 vector 객체를 락으로 감싼다</text>
+
+  <!-- 외부 락 박스 -->
+  <rect x="70" y="298" width="760" height="124" rx="9" fill="#fdf3df"/>
+  <text x="90" y="320" font-size="13" font-weight="700" fill="#5a3d0a">synchronized (vector) {   ← (A) 외부 락: vector 자신</text>
+
+  <!-- 내부 락 박스 (중첩) -->
+  <rect x="110" y="332" width="680" height="56" rx="8" fill="#cdeccf"/>
+  <text x="130" y="354" font-size="12.5" font-weight="700" fill="#14521d">for (...) vector.remove(i);   ← 내부 synchronized(this) 도 같은 락</text>
+  <text x="130" y="374" font-size="11.5" fill="#14521d">(A)와 같은 락을 중첩으로 잡음 — 재진입(reentrant)이라 막히지 않음</text>
+
+  <text x="90" y="408" font-size="13" font-weight="700" fill="#5a3d0a">}   ← 외부 락과 내부 락이 "같은 락" → 복합 연산 전체가 직렬화</text>
+</svg>

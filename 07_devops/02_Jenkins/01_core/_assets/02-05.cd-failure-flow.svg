@@ -1,0 +1,78 @@
+<svg viewBox="0 0 780 660" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>cd 실패 시 위치 이탈 사고 흐름</title>
+  <desc>cd build/output 한 줄이 디렉토리 존재 여부와 방어 장치 유무에 따라 갈리는 흐름. 실패하면 셸이 워크스페이스 루트에 머물고, 방어 장치가 없으면 rm -rf 가 루트에서 실행돼 산출물이 전부 삭제된다. set -e 또는 cd dir &amp;&amp; cmd 는 즉시 중단으로, dir 블록은 경계 안 이동으로 막는다.</desc>
+
+  <defs>
+    <marker id="arrowAmber" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="arrowMuted" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="780" height="660" fill="#0d0d0d"/>
+
+  <!-- ===== 노드: CD (시작) ===== -->
+  <rect x="300" y="24" width="180" height="48" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="390" y="53" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="14" text-anchor="middle">cd build/output</text>
+
+  <!-- 화살표 CD -> OK -->
+  <line x1="390" y1="72" x2="390" y2="104" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#arrowMuted)"/>
+
+  <!-- ===== 분기: OK (디렉토리 존재?) ===== -->
+  <polygon points="390,108 482,150 390,192 298,150" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)"/>
+  <text x="390" y="155" fill="#e8e4df" font-size="13" text-anchor="middle">디렉토리 존재?</text>
+
+  <!-- OK -> MOVE (성공, 오른쪽) -->
+  <line x1="482" y1="150" x2="592" y2="150" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#arrowMuted)"/>
+  <text x="524" y="140" fill="#66bb6a" font-size="12" text-anchor="middle">성공</text>
+  <rect x="592" y="126" width="166" height="48" rx="4" fill="rgb(26,26,26)" stroke="#66bb6a"/>
+  <text x="675" y="155" fill="#e8e4df" font-size="13" text-anchor="middle">대상 디렉토리로 이동</text>
+
+  <!-- OK -> STAY (실패, 아래) -->
+  <line x1="390" y1="192" x2="390" y2="226" stroke="#f44336" stroke-width="1.5" marker-end="url(#arrowMuted)"/>
+  <text x="412" y="214" fill="#f44336" font-size="12" text-anchor="start">실패</text>
+
+  <!-- ===== 노드: STAY (루트에 머묾) ===== -->
+  <rect x="280" y="228" width="220" height="64" rx="4" fill="rgba(244,67,54,0.10)" stroke="#f44336"/>
+  <text x="390" y="254" fill="#e8e4df" font-size="13" text-anchor="middle">셸은 멈추지 않고</text>
+  <text x="390" y="276" fill="#e8e4df" font-size="13" text-anchor="middle">워크스페이스 루트에 머묾</text>
+
+  <!-- 화살표 STAY -> G -->
+  <line x1="390" y1="292" x2="390" y2="324" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#arrowMuted)"/>
+
+  <!-- ===== 분기: G (방어 장치?) ===== -->
+  <polygon points="390,328 482,374 390,420 298,374" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)"/>
+  <text x="390" y="379" fill="#e8e4df" font-size="13" text-anchor="middle">방어 장치?</text>
+
+  <!-- G -> BAD (없음, 왼쪽 아래) -->
+  <line x1="324" y1="404" x2="150" y2="470" stroke="#f44336" stroke-width="1.5" marker-end="url(#arrowMuted)"/>
+  <text x="214" y="430" fill="#f44336" font-size="12" text-anchor="middle">없음</text>
+  <rect x="40" y="472" width="220" height="86" rx="4" fill="rgba(244,67,54,0.10)" stroke="#f44336"/>
+  <text x="150" y="500" fill="#e8e4df" font-size="13" text-anchor="middle"><tspan font-family="'JetBrains Mono',monospace">rm -rf *</tspan> 가</text>
+  <text x="150" y="522" fill="#e8e4df" font-size="13" text-anchor="middle">루트에서 실행</text>
+  <text x="150" y="544" fill="#e8e4df" font-size="13" text-anchor="middle">산출물 전체 삭제</text>
+
+  <!-- G -> STOP (set -e / cd dir && cmd, 가운데 아래) -->
+  <line x1="390" y1="420" x2="390" y2="470" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#arrowMuted)"/>
+  <text x="404" y="446" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="start">set -e</text>
+  <text x="404" y="462" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="start">cd dir &amp;&amp; cmd</text>
+  <rect x="296" y="472" width="188" height="62" rx="4" fill="rgba(102,187,106,0.10)" stroke="#66bb6a"/>
+  <text x="390" y="500" fill="#e8e4df" font-size="13" text-anchor="middle"><tspan font-family="'JetBrains Mono',monospace">cd</tspan> 실패 시</text>
+  <text x="390" y="522" fill="#e8e4df" font-size="13" text-anchor="middle">즉시 중단</text>
+
+  <!-- G -> SAFE (dir 블록, 오른쪽 아래) -->
+  <line x1="456" y1="404" x2="630" y2="470" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#arrowMuted)"/>
+  <text x="566" y="430" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="middle">dir { }</text>
+  <rect x="520" y="472" width="220" height="86" rx="4" fill="rgba(102,187,106,0.10)" stroke="#66bb6a"/>
+  <text x="630" y="508" fill="#e8e4df" font-size="13" text-anchor="middle">경계 안에서만 이동</text>
+  <text x="630" y="530" fill="#e8e4df" font-size="13" text-anchor="middle">블록 종료 시 자동 복귀</text>
+
+  <!-- ===== 범례 ===== -->
+  <line x1="40" y1="600" x2="740" y2="600" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <rect x="40" y="616" width="14" height="14" rx="2" fill="rgba(244,67,54,0.10)" stroke="#f44336"/>
+  <text x="62" y="627" fill="rgb(138,133,128)" font-size="12" text-anchor="start">위험 — 위치 이탈로 산출물 삭제</text>
+  <rect x="320" y="616" width="14" height="14" rx="2" fill="rgba(102,187,106,0.10)" stroke="#66bb6a"/>
+  <text x="342" y="627" fill="rgb(138,133,128)" font-size="12" text-anchor="start">안전 — 중단 또는 경계 내 이동</text>
+</svg>

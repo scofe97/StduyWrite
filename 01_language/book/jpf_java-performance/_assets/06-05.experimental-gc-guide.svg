@@ -1,0 +1,54 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>실험 GC — ZGC·Shenandoah·Epsilon과 선택 가이드</title>
+  <desc>기존 concurrent collector(G1·CMS)는 완전 concurrent가 아니다. young 수집과 compaction은 모든 스레드를 멈춘다. compaction 중 객체가 메모리 위치를 옮기는데, 참조 갱신을 단순화하려 스레드를 멈추기 때문이다. 두 실험 collector ZGC와 Shenandoah는 concurrent compaction을 한다. ZGC는 JDK 11, Shenandoah는 JDK 12에 처음 나왔다. UnlockExperimentalVMOptions와 UseZGC·UseShenandoahGC로 켠다. 두 효과가 있다. 첫째 힙이 더는 generational이 아니다. 스레드를 안 멈추니 young 세대의 짧은 pause 이점이 필요 없어진다. 둘째 애플리케이션 스레드 연산의 latency가 준다. 두 collector는 10ms 정도의 아주 짧은 pause만 갖는다. 객체 접근은 barrier로 보호되어, 객체가 옮겨지는 중이면 스레드가 barrier에서 대기한다. throughput은 백그라운드 CPU가 충분하면 G1·throughput보다 높다. Epsilon collector는 아무것도 안 한다. 객체를 안 비우고 힙이 차면 OOM이다. 매우 짧게 사는 프로그램이나 메모리 재사용 프로그램용이다. 선택 가이드: full GC를 못 견디면 G1, 기본값 먼저 시도, pause가 목표에 가까우면 MaxGCPauseMillis 조정, throughput이 부족하면 힙 키우기, concurrent mode failure면 백그라운드 스레드·IHOP 조정, promotion failure면 mixed GC count target 줄이기다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">실험 GC와 선택 가이드</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">concurrent compaction으로 pause를 더 줄이는 차세대 컬렉터입니다</text>
+
+  <!-- concurrent compaction -->
+  <rect x="20" y="74" width="642" height="78" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="96" fill="#e8e4df" font-size="13" font-weight="bold">concurrent compaction — 왜 필요한가</text>
+  <text x="38" y="116" fill="rgb(138,133,128)" font-size="11">G1·CMS도 완전 concurrent 아님: young 수집·compaction은 STW</text>
+  <text x="38" y="134" fill="rgb(138,133,128)" font-size="11">compaction 중 객체가 메모리 위치를 옮김 → 참조 갱신 단순화 위해 스레드 멈춤 → pause 지배</text>
+  <text x="38" y="148" fill="#f47f72" font-size="9">→ ZGC·Shenandoah가 이 문제를 concurrent compaction으로 해결</text>
+
+  <!-- ZGC/Shenandoah -->
+  <rect x="20" y="160" width="420" height="146" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="182" fill="#66bb6a" font-size="13" font-weight="bold">ZGC · Shenandoah (concurrent compaction)</text>
+  <text x="38" y="202" fill="rgb(138,133,128)" font-size="10">ZGC: JDK 11~ · Shenandoah: JDK 12~(8·11 백포트)</text>
+  <text x="38" y="220" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="9">+UnlockExperimentalVMOptions +UseZGC/+UseShenandoahGC</text>
+  <text x="38" y="240" fill="#66bb6a" font-size="11">① 힙이 non-generational (young/old 없음)</text>
+  <text x="38" y="258" fill="#66bb6a" font-size="11">② 연산 latency 감소 (아주 짧은 ~10ms pause만)</text>
+  <text x="38" y="276" fill="rgb(138,133,128)" font-size="10">객체 접근은 barrier로 보호 (옮기는 중이면 대기)</text>
+  <text x="38" y="294" fill="rgb(138,133,128)" font-size="10">barrier는 throughput에 작은 영향</text>
+
+  <!-- Epsilon -->
+  <rect x="450" y="160" width="212" height="146" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="468" y="182" fill="#f47f72" font-size="13" font-weight="bold">Epsilon (no-op)</text>
+  <text x="468" y="202" fill="#e8e4df" font-size="11">아무것도 안 함</text>
+  <text x="468" y="220" fill="rgb(138,133,128)" font-size="10">객체 안 비움, 차면 OOM</text>
+  <text x="468" y="238" fill="rgb(138,133,128)" font-size="10">용도: 매우 짧은 프로그램</text>
+  <text x="468" y="256" fill="rgb(138,133,128)" font-size="10">또는 메모리 재사용 프로그램</text>
+  <text x="468" y="276" fill="#66bb6a" font-size="10">2GB 할당 예: 1.6초·2052MB</text>
+  <text x="468" y="294" fill="rgb(138,133,128)" font-size="9">(throughput 2.3초, G1 3.24초)</text>
+
+  <!-- latency 표 -->
+  <rect x="20" y="316" width="642" height="78" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="338" fill="#9cc3df" font-size="13" font-weight="bold">latency 효과 (500 OPS REST 서버, 평균/99th/max ms)</text>
+  <text x="38" y="358" fill="rgb(138,133,128)" font-size="10">throughput: 13 / 160 / 265   ·   G1: 5 / 35 / 87</text>
+  <text x="38" y="376" fill="#66bb6a" font-size="10">ZGC: 1 / 5 / 20   ·   Shenandoah: 1 / 5 / 22  → outlier가 크게 줄어듦</text>
+  <text x="38" y="390" fill="rgb(138,133,128)" font-size="9">단 백그라운드 CPU 부족하면 concurrent failure → full GC (G1보다 백그라운드를 더 씀)</text>
+
+  <!-- 선택 가이드 -->
+  <rect x="20" y="406" width="642" height="178" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="428" fill="rgb(212,168,83)" font-size="14" font-weight="bold">선택·튜닝 의사결정</text>
+  <text x="38" y="448" fill="#e8e4df" font-size="11">① full GC pause 못 견딤? → G1 (CPU bound 아니면 대체로 G1이 parallel보다 나음)</text>
+  <text x="38" y="466" fill="#e8e4df" font-size="11">② 기본값으로 성능 충분? → 먼저 기본값. GC 3% 이하면 튜닝 이득 적음</text>
+  <text x="38" y="484" fill="#e8e4df" font-size="11">③ pause가 목표에 가까움? → MaxGCPauseMillis 조정. 너무 크고 throughput OK면 young↓</text>
+  <text x="38" y="502" fill="#e8e4df" font-size="11">④ pause 짧은데 throughput 부족? → 힙(또는 young)↑ (단 큰 힙 = 긴 pause)</text>
+  <text x="38" y="520" fill="#e8e4df" font-size="11">⑤ concurrent collector + concurrent mode failure? → ConcGCThreads↑·IHOP 조정</text>
+  <text x="38" y="538" fill="#e8e4df" font-size="11">⑥ concurrent collector + promotion/evacuation failure? → mixed GC count target↓</text>
+  <text x="38" y="560" fill="rgb(138,133,128)" font-size="10">GC pause는 latency outlier의 전통적 주범 — concurrent collector는 이를 ~5ms로 줄임</text>
+  <text x="38" y="578" fill="rgb(212,168,83)" font-size="10">그 지점 너머의 outlier는 네트워크·OS 스케줄링 등 다른 원인이 지배하기 시작합니다</text>
+</svg>

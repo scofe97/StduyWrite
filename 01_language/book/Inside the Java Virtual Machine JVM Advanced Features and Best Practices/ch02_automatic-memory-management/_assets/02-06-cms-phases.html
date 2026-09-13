@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMS — Root(힙 밖) → Old 영역 통합 흐름: 마크·스윕 / 증분 갱신</title>
+<style>
+  :root{--bg:#0d0d0d;--fg:#e8e4df;--border:rgb(42,37,32);--amber:rgb(212,168,83);--amber-bg:rgba(212,168,83,0.2);--muted:rgb(138,133,128);--panel:rgb(26,26,26);--stw:#e57373;--stw-bg:rgba(229,115,115,0.18);--conc:#66bb6a;--conc-bg:rgba(102,187,106,0.16);}
+  *{box-sizing:border-box;}
+  body{background:var(--bg);color:var(--fg);margin:0;padding:24px;font-family:'Pretendard',-apple-system,system-ui,sans-serif;}
+  h1{font-size:19px;margin:0 0 4px;}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 16px;}
+  .panel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:16px;}
+  .tabs{display:flex;gap:8px;margin-bottom:16px;}
+  .tab{flex:1;padding:12px 14px;border:1px solid var(--border);border-radius:9px;background:#141414;cursor:pointer;transition:.25s;}
+  .tab .tt{font-size:14px;font-weight:800;} .tab .td{font-size:11px;color:var(--muted);margin-top:3px;}
+  .tab.sel{border-color:var(--amber);background:var(--amber-bg);} .tab.sel .tt{color:var(--amber);}
+  .controls{display:flex;align-items:center;gap:14px;margin:8px 0 18px;flex-wrap:wrap;}
+  button{background:var(--panel);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+  button:hover{border-color:var(--amber);}
+  .speed{display:flex;gap:4px;} .speed button.sel{border-color:var(--amber);color:var(--amber);}
+  .now{font-size:13px;color:var(--muted);} .now b{color:var(--amber);}
+  .legend{font-size:11px;color:var(--muted);margin-top:12px;line-height:1.9;}
+  .legend .chip{display:inline-block;width:13px;height:13px;border-radius:50%;vertical-align:middle;margin:0 4px 0 12px;border:1.5px solid #888;}
+  .narr{font-size:12.5px;color:var(--fg);background:#141414;border-left:3px solid var(--amber);padding:10px 14px;border-radius:0 6px 6px 0;margin-top:14px;line-height:1.5;min-height:58px;}
+  .narr.evt{border-left-color:#e57373;background:#1a1010;}
+  .phasebar{display:grid;gap:6px;margin-top:14px;}
+  .pchip{border:1px solid var(--border);border-radius:7px;padding:7px 4px;text-align:center;background:#141414;transition:.3s;}
+  .pchip.on{border-color:var(--amber);background:var(--amber-bg);} .pchip.evt.on{border-color:#e57373;background:var(--stw-bg);}
+  .pchip .t{font-size:10.5px;font-weight:800;} .pchip .b{font-size:8.5px;font-weight:800;padding:1px 5px;border-radius:9px;display:inline-block;margin-top:3px;}
+  .b-stw{background:var(--stw-bg);color:var(--stw);} .b-conc{background:var(--conc-bg);color:var(--conc);} .b-evt{background:var(--stw-bg);color:#e57373;}
+  .cap{font-size:12px;font-weight:700;color:var(--muted);margin:0 0 10px;}
+</style>
+</head>
+<body>
+  <h1>CMS — Root(힙 밖)가 Old 영역 객체를 가리키는 전체 메모리 흐름</h1>
+  <p class="sub">GC Root는 힙 *바깥*(스택·static·JNI)에 있다. CMS는 Region이 없는 *연속된 Old 영역*을 마크-스윕한다. 탭으로 <b>정상</b>과 <b>증분 갱신</b>을 본다.</p>
+
+  <div class="tabs" id="tabs">
+    <div class="tab sel" data-mode="normal"><div class="tt">정상 — 마크·스윕</div><div class="td">스윕 후 빈칸이 흩어지는 단편화 (4단계)</div></div>
+    <div class="tab" data-mode="iu"><div class="tt">증분 갱신 케이스</div><div class="td">동시 마크 중 검은→흰 새 참조가 생기면 (6단계)</div></div>
+  </div>
+
+  <div class="controls">
+    <button id="play">▶ 재생</button>
+    <button id="reset">↻ 처음으로</button>
+    <div class="speed"><button data-sp="2400">0.5×</button><button data-sp="1300" class="sel">1×</button><button data-sp="650">2×</button></div>
+    <div class="now">단계 <b id="stepno">0</b>/<b id="stepmax">4</b> — <b id="stepname">대기</b></div>
+  </div>
+
+  <div class="panel"><div class="phasebar" id="phasebar"></div></div>
+
+  <div class="panel">
+    <div class="cap" id="cap">전체 메모리 구조 — 위: GC Root(힙 밖) · 아래: 연속된 Old 영역</div>
+    <svg id="canvas" viewBox="0 0 860 360" width="100%"></svg>
+  </div>
+
+  <div class="narr" id="narr"></div>
+
+  <div class="legend">
+    객체: <span class="chip" style="background:#f0f0f0;border-color:#e8e4df"></span>흰=안 봄
+    <span class="chip" style="background:#8a8580"></span>회=자식 아직
+    <span class="chip" style="background:#1a1a1a;border-color:#e8e4df"></span>검=생존
+    <span class="chip" style="background:#7a2828;border-color:#e57373"></span>죽음
+    &nbsp;|&nbsp; <span class="chip" style="background:#161616;border:1px dashed #555"></span>스윕 후 빈칸(□) · <b style="color:#5b9bd5">파란선</b>=Root 참조 · <b style="color:#e57373">빨강</b>=새 참조
+  </div>
+
+<script>
+(function(){
+  const ROOT_X=20, ROOT_Y=24, ROOT_W=150, ROOT_H=150;
+  const HEAP_X=200, HEAP_Y=24, HEAP_W=640, HEAP_H=300;
+  const FILL={white:'#f0f0f0',gray:'#8a8580',black:'#1a1a1a',dead:'#7a2828'};
+  const OTXT={white:'#0d0d0d',gray:'#0d0d0d',black:'#e8e4df',dead:'#f5b0b0'};
+
+  // Old 영역 띠: 객체들이 주소 순으로 배치. swept면 빈칸.
+  function drawCanvas(S,p){
+    const st=S.state(p);
+    let s='';
+    // 힙(Old 영역) 경계
+    s+=`<rect x="${HEAP_X}" y="${HEAP_Y}" width="${HEAP_W}" height="${HEAP_H}" rx="8" fill="none" stroke="#5a5a5a" stroke-width="1.4"/>`;
+    s+=`<text x="${HEAP_X+14}" y="${HEAP_Y+20}" font-size="10" fill="#8a8580">힙 — Old 영역 (연속 주소, Region 없음)</text>`;
+    // Root 패널
+    s+=`<rect x="${ROOT_X}" y="${ROOT_Y}" width="${ROOT_W}" height="${ROOT_H}" rx="8" fill="#10243a" stroke="#5b9bd5" stroke-width="1.5"/>`;
+    s+=`<text x="${ROOT_X+ROOT_W/2}" y="${ROOT_Y+22}" text-anchor="middle" font-size="11" font-weight="800" fill="#9cc4dc">GC Root (힙 밖)</text>`;
+    const rootItems=['스택 지역변수','static 필드','JNI 참조'], rootAnchors=[];
+    rootItems.forEach((t,i)=>{const ry=ROOT_Y+38+i*36;
+      s+=`<rect x="${ROOT_X+12}" y="${ry}" width="${ROOT_W-24}" height="28" rx="4" fill="#1a2e3e" stroke="#3a6a90"/>`;
+      s+=`<text x="${ROOT_X+20}" y="${ry+18}" font-size="10" font-weight="700" fill="#dceaf7">${t} ●</text>`;
+      rootAnchors.push({x:ROOT_X+ROOT_W-12, y:ry+14});
+    });
+    s+=`<text x="${ROOT_X+ROOT_W/2}" y="${ROOT_Y+ROOT_H+16}" text-anchor="middle" font-size="9" fill="#6a8aa0">힙 안 객체를 가리킴</text>`;
+
+    // Old 영역 객체 띠 (가로 한 줄, 주소 순)
+    const stripX=HEAP_X+24, stripY=HEAP_Y+90, stripW=HEAP_W-48, cellH=64;
+    s+=`<text x="${stripX}" y="${stripY-12}" font-size="10" fill="#8a8580">주소 →</text>`;
+    const objCenter={};
+    const n=st.cells.length, gap=6;
+    const cw=(stripW-(n-1)*gap)/n;
+    st.cells.forEach((c,i)=>{
+      const x=stripX+i*(cw+gap), y=stripY;
+      if(c.swept){
+        s+=`<rect x="${x}" y="${y}" width="${cw}" height="${cellH}" rx="4" fill="#161616" stroke="#555" stroke-dasharray="4,3"/>`;
+        s+=`<text x="${x+cw/2}" y="${y+cellH/2+4}" text-anchor="middle" font-size="13" fill="#666">□</text>`;
+      } else {
+        const col=c.dead?'dead':c.color;
+        s+=`<rect x="${x}" y="${y}" width="${cw}" height="${cellH}" rx="4" fill="${FILL[col]}" stroke="${col==='white'?'#bbb':col==='black'?'#e8e4df':col==='dead'?'#e57373':'#0d0d0d'}" stroke-width="1.6"${c.glow?' style="filter:drop-shadow(0 0 6px rgba(212,168,83,.85))"':''}/>`;
+        s+=`<text x="${x+cw/2}" y="${y+cellH/2+5}" text-anchor="middle" font-size="14" font-weight="800" fill="${OTXT[col]}">${c.dead?'×':c.id}</text>`;
+        objCenter[c.id]={x:x+cw/2, y:y+cellH/2, top:y, bottom:y+cellH};
+      }
+      // 주소 라벨
+      s+=`<text x="${x+cw/2}" y="${y+cellH+14}" text-anchor="middle" font-size="8" fill="#666" font-family="monospace">0x${(i*8).toString(16).padStart(2,'0')}</text>`;
+    });
+    if(st.fragNote) s+=`<text x="${stripX}" y="${stripY+cellH+34}" font-size="10" font-weight="700" fill="#e57373">${st.fragNote}</text>`;
+
+    // Root 참조선
+    (st.rootRefs||[]).forEach((ref,i)=>{
+      const a=rootAnchors[ref.anchor!==undefined?ref.anchor:i%3];
+      const o=objCenter[ref.toObj];
+      if(o) s+=`<line x1="${a.x}" y1="${a.y}" x2="${o.x}" y2="${o.top}" stroke="#5b9bd5" stroke-width="1.5" marker-end="url(#aR)" opacity="0.8"/>`;
+    });
+    // 객체간 참조 (증분갱신: 검은→흰 새 참조)
+    (st.edges||[]).forEach(e=>{
+      const A=objCenter[e.from], B=objCenter[e.to];
+      if(!A||!B)return;
+      if(e.cut){
+        s+=`<line x1="${A.x}" y1="${A.bottom}" x2="${B.x}" y2="${B.bottom}" stroke="#e57373" stroke-width="2.2" stroke-dasharray="5,4"/>`;
+      } else if(e.new){
+        // 아래로 곡선처럼 (직선 + 라벨)
+        s+=`<path d="M${A.x},${A.bottom} C${A.x},${A.bottom+40} ${B.x},${B.bottom+40} ${B.x},${B.bottom}" fill="none" stroke="#e57373" stroke-width="2.4" marker-end="url(#aN)"/>`;
+        s+=`<text x="${(A.x+B.x)/2}" y="${Math.max(A.bottom,B.bottom)+54}" text-anchor="middle" font-size="10" font-weight="700" fill="#e57373">새 참조!</text>`;
+      } else {
+        s+=`<line x1="${A.x}" y1="${A.bottom}" x2="${B.x}" y2="${B.bottom}" stroke="#7a7a7a" stroke-width="1.5"/>`;
+      }
+    });
+    document.getElementById('canvas').innerHTML=`<defs><marker id="aR" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#5b9bd5"/></marker><marker id="aN" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#e57373"/></marker></defs>${s}`;
+  }
+
+  // ═════════ NORMAL (4단계): 마크-스윕 + 단편화 ═════════
+  // Old 영역: A(생존) × B(생존) × C(생존) × D(생존) × E(생존) ×
+  const normal={
+    max:4,
+    names:{0:'대기',1:'초기 마크',2:'동시 마크',3:'재마크',4:'동시 스윕'},
+    phases:[{t:'1 초기 마크',b:'STW',c:'b-stw'},{t:'2 동시 마크',b:'동시',c:'b-conc'},{t:'3 재마크',b:'STW',c:'b-stw'},{t:'4 동시 스윕',b:'동시',c:'b-conc'}],
+    cap:'전체 흐름 — Root가 Old 영역 객체(A·C)를 가리키고, 마크 후 죽은 것만 스윕 → 빈칸 흩어짐',
+    state:(p)=>{
+      const live=(id)=>p===0?'white':(p===1?(['A','C'].includes(id)?'gray':'white'):'black');
+      // 객체 순서(주소): A × B × C × D × E ×
+      const layout=[['A',1],['',0],['B',1],['',0],['C',1],['',0],['D',1],['',0],['E',1],['',0]];
+      const cells=layout.map(([id,alive])=>{
+        if(alive) return {id,color:live(id)};
+        return p>=4 ? {swept:1} : {dead:1};
+      });
+      const st={cells, rootRefs:[{anchor:0,toObj:'A'},{anchor:1,toObj:'C'}]};
+      if(p>=4) st.fragNote='↑ 죽은 자리가 빈칸(□)이 됐지만 살아있는 건 *안 옮김* → 빈칸이 흩어진다 = 외부 단편화';
+      return st;
+    },
+    narr:{
+      0:{t:'▶ 재생 — Root(힙 밖)가 Old 영역의 A·C를 가리킨다. 마크 후 죽은 것만 쓸어내면 빈칸이 흩어진다.'},
+      1:{t:'<b style="color:#e57373">초기 마크 (STW)</b> — Root 직접 연결 A·C를 회색으로. <b>Root는 힙 밖에서 Old 영역 객체를 가리킨다</b>(파란 선).'},
+      2:{t:'<b style="color:#66bb6a">동시 마크 (동시)</b> — 도달 가능한 A~E를 검정 확정. 사이사이 ×는 죽은 객체.'},
+      3:{t:'<b style="color:#e57373">재마크 (STW)</b> — 변한 참조 보정, 표시 완결. ×는 회수 확정.'},
+      4:{t:'<b style="color:#66bb6a">동시 스윕</b> — 죽은(×) 자리만 비운다(□). <b>살아있는 A~E는 안 옮긴다</b> → 빈칸이 0x08·0x18·0x28…에 흩어진다 = <b>외부 단편화</b>. 연속 큰 공간이 모자라면 Concurrent Mode Failure.'}
+    }
+  };
+
+  // ═════════ INCREMENTAL UPDATE (6단계) ═════════
+  // Old 영역: A B C W D(dead). 사건: 검은 C가 흰 W를 새로 가리킴.
+  const iu={
+    max:6,
+    names:{0:'대기',1:'초기 마크',2:'동시 마크',3:'앱이 참조 변경(사건)',4:'증분 갱신(보정)',5:'재마크',6:'동시 스윕'},
+    phases:[{t:'1 초기 마크',b:'STW',c:'b-stw'},{t:'2 동시 마크',b:'동시',c:'b-conc'},{t:'3 참조 변경',b:'사건',c:'b-evt',evt:1},{t:'4 증분 갱신',b:'배리어',c:'b-evt',evt:1},{t:'5 재마크',b:'STW',c:'b-stw'},{t:'6 동시 스윕',b:'동시',c:'b-conc'}],
+    cap:'전체 흐름 — 동시 마크 중 검은 C가 흰 W를 새로 가리키면, 증분 갱신이 C를 회색으로 되돌린다',
+    state:(p)=>{
+      // 색: A,B 검정(p2+). C 검정(p2+)→p4 회색강등→p5+검정. W 회색(p1~4)→p5+검정. D 죽음.
+      const Acol=p===0?'white':(p===1?'gray':'black');
+      const Bcol=p===0?'white':(p===1?'gray':'black');
+      const Ccol=p===0?'white':(p===4?'gray':(p>=2?'black':'white'));
+      const Wcol=p<=4?(p===0?'white':'gray'):'black';
+      const cells=[
+        {id:'A',color:Acol},{id:'B',color:Bcol},{id:'C',color:Ccol,glow:(p===4)},
+        {id:'W',color:Wcol},
+        (p>=6?{swept:1}:{id:'D',dead:1})
+      ];
+      const st={cells, rootRefs:[{anchor:0,toObj:'A'},{anchor:1,toObj:'B'}]};
+      const e=[];
+      if(p<3) e.push({from:'B',to:'W'});        // 원래 B→W
+      if(p>=3) e.push({from:'B',to:'W',cut:1}); // 끊김
+      if(p>=3) e.push({from:'C',to:'W',new:1}); // 검은 C→흰 W 새 참조
+      st.edges=e;
+      return st;
+    },
+    narr:{
+      0:{t:'▶ 재생 — 동시 마크 도중 검은 객체가 흰 객체를 새로 가리키는 위험과, 증분 갱신이 그것을 잡는 과정.'},
+      1:{t:'<b style="color:#e57373">초기 마크 (STW)</b> — Root 직접 연결 A·B 회색. W는 B가 가리켜 곧 보일 예정(아래 회색선).'},
+      2:{t:'<b style="color:#66bb6a">동시 마크 (동시)</b> — A·B·C 검정. <b>W는 회색</b>(B→W로 곧 방문 예정).'},
+      3:{evt:1,t:'<b style="color:#e57373">⚠ 사건</b> — 앱이 <b>B→W를 끊고</b> 검은 <b>C가 W를 새로 가리킨다</b>(빨강 곡선). 검은 C는 재방문 안 하니 W를 놓쳐 회수할 뻔. (소실 조건 ①)'},
+      4:{evt:1,t:'<b style="color:#f5d76e">증분 갱신</b> — 배리어가 "검은 C가 흰 W를 새로 가리킴"을 감지하고 <b>C를 회색으로 강등</b>(글로우). 새 참조를 다시 따라가게.'},
+      5:{t:'<b style="color:#e57373">재마크 (STW)</b> — 회색 C 재방문 → <b>W 검정 확정</b>. 소실 막음.'},
+      6:{t:'<b style="color:#66bb6a">동시 스윕</b> — 죽은 D만 회수(□). W는 살아남았다.'}
+    }
+  };
+
+  let S=normal, phase=0, timer=null, speed=1300;
+  function renderPhasebar(){const pb=document.getElementById('phasebar');pb.style.gridTemplateColumns=`repeat(${S.max},1fr)`;pb.innerHTML=S.phases.map((p,i)=>`<div class="pchip${p.evt?' evt':''}" data-p="${i+1}"><div class="t">${p.t}</div><div class="b ${p.c}">${p.b}</div></div>`).join('');}
+  function paint(){
+    document.querySelectorAll('.pchip').forEach(c=>c.classList.toggle('on',+c.dataset.p===phase));
+    document.getElementById('stepno').textContent=phase;
+    document.getElementById('stepmax').textContent=S.max;
+    document.getElementById('stepname').textContent=S.names[phase];
+    document.getElementById('cap').textContent=S.cap;
+    const nv=S.narr[phase],ne=document.getElementById('narr');
+    ne.innerHTML=nv.t;ne.classList.toggle('evt',!!nv.evt);
+    drawCanvas(S,phase);
+  }
+  function step(){phase++;if(phase>S.max){phase=S.max;stop();return;}paint();}
+  function play(){if(timer)return;if(phase>=S.max)phase=0;document.getElementById('play').textContent='⏸ 일시정지';timer=setInterval(step,speed);if(phase===0)step();}
+  function stop(){clearInterval(timer);timer=null;document.getElementById('play').textContent='▶ 재생';}
+  function switchMode(m){stop();S=m==='iu'?iu:normal;phase=0;renderPhasebar();paint();}
+  document.getElementById('play').onclick=()=>timer?stop():play();
+  document.getElementById('reset').onclick=()=>{stop();phase=0;paint();};
+  document.querySelectorAll('#tabs .tab').forEach(t=>{t.onclick=()=>{document.querySelectorAll('#tabs .tab').forEach(x=>x.classList.remove('sel'));t.classList.add('sel');switchMode(t.dataset.mode);};});
+  document.querySelectorAll('.speed button').forEach(b=>{b.onclick=()=>{speed=+b.dataset.sp;document.querySelectorAll('.speed button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');if(timer){stop();play();}};});
+  renderPhasebar();paint();
+})();
+</script>
+</body>
+</html>

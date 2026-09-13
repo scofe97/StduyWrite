@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 640" font-family="Pretendard, sans-serif">
+  <rect width="680" height="640" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">단일 리더 복제</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">쓰기는 리더로만 · 읽기는 아무 레플리카 · 동기/비동기 선택이 핵심 트레이드오프</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- 쓰기 흐름 -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">쓰기 흐름 — 클라이언트는 리더로만 쓴다</text>
+
+  <rect x="32" y="124" width="120" height="44" rx="5" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="92" y="151" fill="#e8e4df" font-size="11" text-anchor="middle">클라이언트(write)</text>
+
+  <line x1="152" y1="146" x2="206" y2="146" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar)"/>
+
+  <rect x="210" y="124" width="120" height="44" rx="5" fill="#1a1410" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="270" y="146" fill="rgb(212,168,83)" font-size="12" font-weight="700" text-anchor="middle">리더(primary)</text>
+  <text x="270" y="161" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">먼저 로컬 저장</text>
+
+  <line x1="330" y1="138" x2="408" y2="124" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#ag)"/>
+  <line x1="330" y1="154" x2="408" y2="180" stroke="#7fa8c9" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ab)"/>
+
+  <rect x="412" y="106" width="160" height="40" rx="5" fill="#141414" stroke="#66bb6a"/>
+  <text x="492" y="125" fill="#e8e4df" font-size="11" text-anchor="middle">팔로워 1(동기)</text>
+  <text x="492" y="139" fill="#66bb6a" font-size="9" text-anchor="middle">확인 응답을 기다림</text>
+
+  <rect x="412" y="162" width="160" height="40" rx="5" fill="#141414" stroke="#7fa8c9"/>
+  <text x="492" y="181" fill="#e8e4df" font-size="11" text-anchor="middle">팔로워 2(비동기)</text>
+  <text x="492" y="195" fill="#7fa8c9" font-size="9" text-anchor="middle">기다리지 않음(뒤처질 수 있음)</text>
+
+  <text x="412" y="226" fill="rgb(138,133,128)" font-size="10">읽기는 리더·팔로워 어디서나 가능(팔로워 = 읽기 전용 = read replica)</text>
+  <text x="412" y="242" fill="rgb(138,133,128)" font-size="10">리더가 복제 로그(change stream)를 보내고 팔로워가 같은 순서로 적용</text>
+
+  <!-- 동기 vs 비동기 -->
+  <text x="32" y="282" fill="rgb(212,168,83)" font-size="14" font-weight="700">동기 vs 비동기 vs 반동기</text>
+
+  <rect x="32" y="294" width="196" height="120" rx="6" fill="#141414" stroke="#66bb6a"/>
+  <text x="48" y="316" fill="#66bb6a" font-size="12" font-weight="700">동기</text>
+  <text x="48" y="336" fill="#e8e4df" font-size="10.5">+ 팔로워가 최신 사본 보장</text>
+  <text x="48" y="354" fill="#e8e4df" font-size="10.5">+ 리더 죽어도 데이터 안전</text>
+  <text x="48" y="376" fill="#f47f72" font-size="10.5">− 팔로워 무응답 시 쓰기 중단</text>
+  <text x="48" y="394" fill="rgb(138,133,128)" font-size="9.5">모든 팔로워 동기 = 비현실적</text>
+
+  <rect x="242" y="294" width="196" height="120" rx="6" fill="#141414" stroke="#7fa8c9"/>
+  <text x="258" y="316" fill="#7fa8c9" font-size="12" font-weight="700">비동기</text>
+  <text x="258" y="336" fill="#e8e4df" font-size="10.5">+ 팔로워 뒤처져도 리더 진행</text>
+  <text x="258" y="354" fill="#e8e4df" font-size="10.5">+ 다수·지리 분산에 적합</text>
+  <text x="258" y="376" fill="#f47f72" font-size="10.5">− 확정 통보해도 내구성 미보장</text>
+  <text x="258" y="394" fill="rgb(138,133,128)" font-size="9.5">리더 소실 = 미복제 쓰기 손실</text>
+
+  <rect x="452" y="294" width="196" height="120" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="468" y="316" fill="rgb(212,168,83)" font-size="12" font-weight="700">반동기(semisync)</text>
+  <text x="468" y="336" fill="#e8e4df" font-size="10.5">팔로워 1개만 동기,</text>
+  <text x="468" y="354" fill="#e8e4df" font-size="10.5">나머지는 비동기</text>
+  <text x="468" y="376" fill="#e8e4df" font-size="10.5">동기 노드 느려지면</text>
+  <text x="468" y="394" fill="#e8e4df" font-size="10.5">비동기 하나를 동기로 승격</text>
+
+  <!-- 백업 vs 복제 -->
+  <text x="32" y="454" fill="rgb(212,168,83)" font-size="14" font-weight="700">백업 ≠ 복제 (둘 다 필요)</text>
+  <rect x="32" y="466" width="616" height="64" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="48" y="488" fill="#e8e4df" font-size="11">복제 = 한 노드의 쓰기를 다른 노드에 즉시 반영(시점 동일)</text>
+  <text x="48" y="508" fill="#e8e4df" font-size="11">백업 = 과거 스냅샷 보존(시간 되돌리기) — 실수 삭제는 복제로 못 살림(삭제도 전파됨)</text>
+  <text x="48" y="524" fill="rgb(138,133,128)" font-size="10">상호 보완: 백업은 복제 셋업의 일부, 복제 로그 아카이빙은 백업의 일부</text>
+
+  <!-- 신규 팔로워 -->
+  <text x="32" y="570" fill="rgb(212,168,83)" font-size="14" font-weight="700">신규 팔로워 셋업 — 다운타임 없이</text>
+  <rect x="32" y="582" width="616" height="46" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="603" fill="#e8e4df" font-size="10.5">① 리더의 일관 스냅샷(잠금 없이) → ② 팔로워로 복사 → ③ 스냅샷 이후 변경분 요청·적용 → ④ 따라잡음(caught up)</text>
+  <text x="48" y="620" fill="rgb(138,133,128)" font-size="9.5">스냅샷은 복제 로그의 정확한 위치와 연결(PostgreSQL=LSN · MySQL=binlog 좌표·GTID)</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+    <marker id="ag" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="#66bb6a" stroke-width="1.2"/>
+    </marker>
+    <marker id="ab" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="#7fa8c9" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>

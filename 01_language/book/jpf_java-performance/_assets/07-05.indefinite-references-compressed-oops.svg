@@ -1,0 +1,51 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>indefinite reference와 compressed oops</title>
+  <desc>indefinite reference는 soft, weak, phantom, final 참조를 통칭한다. 객체를 GC 친화적으로 재사용하게 하지만 자기 메모리를 쓰고 적어도 두 GC 사이클을 거쳐야 회수된다. soft reference는 LRU 캐시처럼 동작한다. SoftRefLRUPolicyMSPerMB 곱하기 free 메모리 MB가 곧 유지 시간이다. 기본 1000이면 free 2GB일 때 2048초 안 쓰면 해제다. weak reference는 여러 스레드가 동시 접근할 때 쓴다. strong 참조가 사라지면 즉시 해제된다. soft는 메모리와 접근 빈도를 보지만 weak는 다른 곳의 strong 참조 유무만 본다. WeakHashMap은 편하지만 참조될 때마다 큐를 처리해 성능이 불규칙하다. finalizer는 referent까지 잡아 비용이 더 크고 부활 위험이 있어 JDK11에서 deprecated다. 대신 Cleaner가 PhantomReference로 한다. compressed oops는 32GB까지 32비트로 참조한다. 3비트 shift로 8바이트 경계 정렬을 활용한다. 31GB 힙이 33GB보다 빠를 수 있다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">indefinite reference와 compressed oops</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">soft·weak·phantom·final 참조는 GC 친화 재사용을 주되, 2 GC 사이클 비용이 듭니다</text>
+
+  <!-- soft vs weak -->
+  <rect x="20" y="74" width="320" height="160" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="96" fill="rgb(212,168,83)" font-size="13" font-weight="bold">soft reference</text>
+  <text x="38" y="116" fill="#e8e4df" font-size="11">메모리 있고 최근 쓰였으면 유지</text>
+  <text x="38" y="136" fill="rgb(138,133,128)" font-size="10">= LRU 객체 풀</text>
+  <text x="38" y="156" fill="rgb(138,133,128)" font-size="10">유지시간(ms) =</text>
+  <text x="38" y="174" fill="#9cc3df" font-size="10">SoftRefLRUPolicyMSPerMB × freeMB</text>
+  <text x="38" y="194" fill="rgb(138,133,128)" font-size="10">기본 1000 · free 2GB → 2048초</text>
+  <text x="38" y="214" fill="#f47f72" font-size="10">너무 많이 쓰면 힙 잠식 주의</text>
+
+  <rect x="350" y="74" width="312" height="160" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="368" y="96" fill="#9cc3df" font-size="13" font-weight="bold">weak reference</text>
+  <text x="368" y="116" fill="#e8e4df" font-size="11">여러 스레드 동시 접근 시</text>
+  <text x="368" y="136" fill="rgb(138,133,128)" font-size="10">strong 참조 사라지면 즉시 해제</text>
+  <text x="368" y="156" fill="rgb(138,133,128)" font-size="10">매 GC마다 회수</text>
+  <text x="368" y="176" fill="rgb(138,133,128)" font-size="10">"다른 곳이 잡고 있으면 위치만 알려줘,</text>
+  <text x="368" y="194" fill="rgb(138,133,128)" font-size="10"> 아니면 버려, 내가 다시 만들게"</text>
+  <text x="368" y="214" fill="#f47f72" font-size="10">soft를 빨리 버려지는 weak로 오해 금지</text>
+
+  <!-- 2 GC cycle state transition -->
+  <rect x="20" y="242" width="642" height="84" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="264" fill="#e8e4df" font-size="13" font-weight="bold">2 GC 사이클 비용 (모든 indefinite ref)</text>
+  <text x="38" y="288" fill="rgb(138,133,128)" font-size="11">strong 사라짐 → 1차 GC: referent 해제(soft/weak), ref 객체는 reference queue로</text>
+  <text x="38" y="308" fill="rgb(138,133,128)" font-size="11">큐 처리로 strong 제거 → 2차 GC: ref 객체 자신 해제. -XX:+PrintReferenceGC로 관찰</text>
+
+  <!-- finalizer / cleaner -->
+  <rect x="20" y="334" width="642" height="96" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="356" fill="#f47f72" font-size="13" font-weight="bold">finalizer는 피하라 → Cleaner (JDK 11)</text>
+  <text x="38" y="378" fill="rgb(138,133,128)" font-size="11">finalizer는 referent까지 잡아 비용이 더 큼 + finalize()가 referent 부활시킬 위험</text>
+  <text x="38" y="398" fill="rgb(138,133,128)" font-size="11">JDK 11에서 deprecated. Cleaner가 PhantomReference로 대체(스레드·큐 처리 내장)</text>
+  <text x="38" y="418" fill="#f47f72" font-size="10">주의: cleanup 객체(static 내부 클래스)는 정리 대상을 참조하면 안 됨(phantom 도달 불가)</text>
+
+  <!-- WeakHashMap caution -->
+  <rect x="20" y="438" width="642" height="56" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9"/>
+  <text x="38" y="460" fill="#9cc3df" font-size="12" font-weight="bold">WeakHashMap 비용</text>
+  <text x="38" y="480" fill="rgb(138,133,128)" font-size="10">참조될 때마다 큐 처리 → 성능 불규칙. 가능하면 컬렉션을 앱이 직접 관리</text>
+
+  <!-- compressed oops -->
+  <rect x="20" y="502" width="642" height="80" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="524" fill="#66bb6a" font-size="13" font-weight="bold">compressed oops — 32비트로 32GB 참조</text>
+  <text x="38" y="544" fill="rgb(138,133,128)" font-size="11">마지막 3비트가 0이라 가정 → 3비트 shift로 8바이트 경계 정렬 활용 (32GB 미만 기본 on)</text>
+  <text x="38" y="564" fill="rgb(138,133,128)" font-size="11">31GB 힙이 33GB보다 빠를 수 있음 — 32GB 직후는 참조 커져 GC 잦아짐 → 38GB+ 권장</text>
+</svg>

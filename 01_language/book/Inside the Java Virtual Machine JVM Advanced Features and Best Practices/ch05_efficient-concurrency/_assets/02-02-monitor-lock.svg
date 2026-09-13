@@ -1,0 +1,35 @@
+<svg viewBox="0 0 900 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>synchronized 모니터 락 — 한 스레드만 임계 영역, 나머지는 BLOCKED</title>
+  <desc>synchronized 는 객체의 모니터 락을 잡아 한 번에 한 스레드만 임계 영역에 들어가게 한다. 락을 못 얻은 스레드는 BLOCKED 상태로 대기하다, 락이 풀리면 그중 하나가 락을 얻어 들어간다.</desc>
+  <rect x="0" y="0" width="900" height="360" fill="#0d0d0d"/>
+
+  <text x="450" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#e8e4df">synchronized — 모니터 락 하나로 임계 영역을 직렬화</text>
+
+  <!-- 임계 영역 (가운데) -->
+  <rect x="350" y="120" width="200" height="120" rx="10" fill="#fdf3df"/>
+  <text x="450" y="150" text-anchor="middle" font-size="13" font-weight="700" fill="#5a3d0a">임계 영역</text>
+  <text x="450" y="172" text-anchor="middle" font-size="11.5" fill="#5a3d0a">monitorenter</text>
+  <text x="450" y="190" text-anchor="middle" font-size="11.5" fill="#5a3d0a">count++</text>
+  <text x="450" y="208" text-anchor="middle" font-size="11.5" fill="#5a3d0a">monitorexit</text>
+  <text x="450" y="228" text-anchor="middle" font-size="11" fill="#5a3d0a">(모니터 락 보유)</text>
+
+  <!-- 들어간 스레드 A -->
+  <rect x="120" y="150" width="150" height="44" rx="8" fill="#66bb6a"/>
+  <text x="195" y="170" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0d0d0d">스레드 A</text>
+  <text x="195" y="187" text-anchor="middle" font-size="11" fill="#0d0d0d">락 획득 → 진입 ✓</text>
+  <line x1="270" y1="172" x2="344" y2="172" stroke="#66bb6a" stroke-width="2.5"/>
+  <polygon points="350,172 340,167 340,177" fill="#66bb6a"/>
+
+  <!-- 대기 스레드 B, C -->
+  <text x="700" y="110" text-anchor="middle" font-size="13" font-weight="700" fill="#e08a87">락 못 얻음 → BLOCKED 대기</text>
+  <rect x="630" y="128" width="150" height="40" rx="8" fill="#f2d4d4"/>
+  <text x="705" y="153" text-anchor="middle" font-size="12" fill="#7a1f1f">스레드 B (BLOCKED)</text>
+  <rect x="630" y="176" width="150" height="40" rx="8" fill="#f2d4d4"/>
+  <text x="705" y="201" text-anchor="middle" font-size="12" fill="#7a1f1f">스레드 C (BLOCKED)</text>
+  <line x1="628" y1="180" x2="556" y2="180" stroke="#c0504d" stroke-width="2" stroke-dasharray="4 3"/>
+  <polygon points="550,180 560,175 560,185" fill="#c0504d"/>
+  <text x="592" y="232" text-anchor="middle" font-size="11" fill="#8a857f">락 풀리면 그중 하나가 획득</text>
+
+  <text x="450" y="290" text-anchor="middle" font-size="12.5" fill="#c9c4be">한 번에 한 스레드만 통과 → 안전. 대신 못 들어간 스레드는 멈춰 기다림(커널 비용)</text>
+  <text x="450" y="318" text-anchor="middle" font-size="11.5" fill="#8a857f">재진입: 이미 락을 쥔 스레드는 같은 락을 다시 잡아도 안 막힘 (outer→inner)</text>
+</svg>
