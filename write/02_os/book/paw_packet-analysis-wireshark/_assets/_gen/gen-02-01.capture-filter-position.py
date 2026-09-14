@@ -63,12 +63,12 @@ d.arrow([(step_cx(2) + NODE_W / 2, lane_mid(2)), (step_cx(3) - NODE_W / 2 - 4, l
 d.arrow([(step_cx(1) - 44, lane_mid(1) + NODE_H / 2), (step_cx(1) - 44, lane_mid(1) + NODE_H / 2 + 32)],
         BAD, "bad", 1.2, dash="4,3")
 
-node(0, 0, "NIC 수신", "promiscuous 가 여기서 갈립니다", "en0 · eth0")
-node(1, 1, "캡처 필터", "커널이 BPF 로 매칭합니다", "tcp port 22", focal=True)
-node(2, 2, "dumpcap", "snaplen 만큼 잘라 씁니다", "dumpcap -w", c=OK)
+node(0, 0, "NIC 수신", "promiscuous 가 갈리는 자리", "en0 · eth0")
+node(1, 1, "캡처 필터", "커널의 BPF 매칭", "tcp port 22", focal=True)
+node(2, 2, "dumpcap", "snaplen 만큼 잘라 쓰기", "dumpcap -w", c=OK)
 node(3, 2, "pcapng 파일", "디스플레이 필터는 여기부터", "Wireshark", c=INFO)
 
-d.t(step_cx(1) - 52, lane_mid(1) + NODE_H / 2 + 48, "버린 프레임은 파일에 없습니다", 11, BAD, KR, "end")
+d.t(step_cx(1) - 52, lane_mid(1) + NODE_H / 2 + 48, "버린 프레임 · 파일에 없음", 11, BAD, KR, "end")
 d.legend(H - LEGEND_H + 24,
          [("걸러 내는 지점", ACC), ("잡아 쓰는 쪽", OK), ("저장된 파일", INFO), ("버려짐", BAD)])
 d.save("02-01.capture-filter-position.svg")

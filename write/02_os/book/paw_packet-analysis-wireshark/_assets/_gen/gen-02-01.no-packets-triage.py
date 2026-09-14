@@ -39,11 +39,11 @@ d.arrow([(CX, Y_R2 + 68), (CX, Y_END - 4)], MUTED, "ar", 1.4)
 
 oval(CX, Y_S, 200, 40, "패킷이 안 보인다")
 diamond(CX, Y_D, 140, 38, "인터페이스 목록이 뜨는가?", focal=True)
-step(CX, Y_L, 352, 68, "인터페이스와 트래픽을 확인합니다",
+step(CX, Y_L, 352, 68, "인터페이스 · 라이브 트래픽 확인",
      "맞는 인터페이스인가 · 라이브 트래픽이 있는가")
-step(CX, Y_R2, 352, 68, "promiscuous 를 껐다 켭니다",
+step(CX, Y_R2, 352, 68, "promiscuous 껐다 켜기",
      "자기 것 아닌 프레임을 버리고 있지 않은가")
-step(700, Y_D, 320, 76, "캡처 권한을 확인합니다",
+step(700, Y_D, 320, 76, "캡처 권한 확인",
      "Wireshark 가 NIC 을 쓸 권한이 있는가", c=BAD)
 oval(CX, Y_END, 200, 40, "다시 캡처", OK)
 
