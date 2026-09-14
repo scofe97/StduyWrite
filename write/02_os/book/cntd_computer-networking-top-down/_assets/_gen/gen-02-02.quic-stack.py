@@ -21,11 +21,11 @@ STACKS = [
 ]
 
 for cx, title, rows, focal in STACKS:
-    d.t(cx, 132, title, 12, ACC if focal else INK, KR, "middle", 600)
+    d.t(cx, 132, title, 13, ACC if focal else INK, KR, "middle", 600)
     # 애플리케이션 층 묶음 (위 두 칸)
     d.o.append(f'<rect x="{cx - BW / 2 - 12}" y="{Y0 - 12}" width="{BW + 24}" height="{PITCH + BH + 24}" '
                f'rx="8" fill="{INK}05" stroke="{RULE}" stroke-width="1" stroke-dasharray="4 4"/>')
-    d.t(cx - BW / 2 - 4, Y0 - 20, "애플리케이션 층", 12, SOFT, KR, "start")
+    d.t(cx - BW / 2 - 4, Y0 - 20, "애플리케이션 층", 13, SOFT, KR, "start")
     for i, name in enumerate(rows):
         y = Y0 + i * PITCH
         hot = focal and i == 1
@@ -36,16 +36,16 @@ for cx, title, rows, focal in STACKS:
         d.t(cx, y + 33, name, 12, ACC if hot else INK, MONO, "middle", 600)
 
 # 악수 표시
-d.t(LCX, Y0 + 4 * PITCH + 24, "악수 두 번", 12, MUTED, KR, "middle", 600)
-d.t(LCX, Y0 + 4 * PITCH + 46, "TCP 연결 수립 뒤에", 12, SOFT, KR)
-d.t(LCX, Y0 + 4 * PITCH + 66, "TLS 키 교환이 따로 옵니다", 12, SOFT, KR)
+d.t(LCX, Y0 + 4 * PITCH + 24, "악수 두 번", 13, MUTED, KR, "middle", 600)
+d.t(LCX, Y0 + 4 * PITCH + 46, "TCP 연결 수립 뒤에", 13, SOFT, KR)
+d.t(LCX, Y0 + 4 * PITCH + 66, "TLS 키 교환이 따로 옵니다", 13, SOFT, KR)
 
-d.t(RCX, Y0 + 4 * PITCH + 24, "악수 한 번", 12, ACC, KR, "middle", 600)
-d.t(RCX, Y0 + 4 * PITCH + 46, "QUIC 이 TLS 1.3 핸드셰이크를", 12, SOFT, KR)
-d.t(RCX, Y0 + 4 * PITCH + 66, "자기 핸드셰이크에 품습니다", 12, SOFT, KR)
+d.t(RCX, Y0 + 4 * PITCH + 24, "악수 한 번", 13, ACC, KR, "middle", 600)
+d.t(RCX, Y0 + 4 * PITCH + 46, "QUIC 이 TLS 1.3 악수를", 13, SOFT, KR)
+d.t(RCX, Y0 + 4 * PITCH + 66, "자기 핸드셰이크에 품습니다", 13, SOFT, KR)
 
-d.t(20, 546, "재접속할 때는 저장해 둔 세션과 암호 파라미터를 써서 0-RTT 로 바로 보낼 수도 있습니다.",
-     11, MUTED, KR, "start")
+d.t(20, 546, "재접속은 저장해 둔 세션 파라미터를 써서 0-RTT 로 바로 보냅니다.",
+     13, MUTED, KR, "start")
 
-d.legend(H - 48, [("이 층이 둘을 하나로 합칩니다", ACC), ("나머지 층", MUTED)])
+d.legend(H - 48, [("악수 둘을 하나로 합치는 층", ACC), ("나머지 층", MUTED)])
 d.save("02-02.quic-stack.svg")
