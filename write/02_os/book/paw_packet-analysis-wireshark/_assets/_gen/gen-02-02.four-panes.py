@@ -13,7 +13,7 @@ d = D(W, H, "PACKET ANALYSIS WITH WIRESHARK · 02-02 §1",
 # 안쪽으로 갈수록 좌우 32 · 위 48 · 아래 24 씩 들여쓴다. 레벨마다 같은 값이라 정렬이 유지되고,
 # 위아래를 다르게 준 이유는 라벨이 링 상단에만 있어 대칭 여백이면 아래가 빈 채로 쌓이기 때문이다.
 RINGS = [
-    ("FILTER TOOLBAR", "필터 도구모음", "여기 건 필터가 안쪽 전체를 좁힙니다", 24, 104, 832, 272),
+    ("FILTER TOOLBAR", "필터 도구모음", "안쪽 전체를 좁히는 필터", 24, 104, 832, 272),
     ("PACKET LIST",    "Packet List",   "한 줄에 프레임 하나. 잡힌 것 전부",   56, 152, 768, 200),
     ("PACKET DETAILS", "Packet Details", "고른 프레임 하나의 계층 트리",        88, 200, 704, 128),
     ("PACKET BYTES",   "Packet Bytes",  "고른 필드의 16진수 덤프",             120, 248, 640, 56),
@@ -29,13 +29,10 @@ for i, (tag, name, sub, x, y, w, h) in enumerate(RINGS):
         d.o.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="8" '
                    f'fill="{PAPER2}" fill-opacity="{0.25 + i * 0.2}" '
                    f'stroke="{RULE}" stroke-opacity="{op}" stroke-width="1.1"/>')
-    # 라벨은 링 상단 테두리 위 paper 마스크에 얹는다
-    lab = f"{tag}"
-    lw = len(lab) * 6 + 16
-    d.o.append(f'<rect x="{x + 16}" y="{y - 7}" width="{lw}" height="14" fill="{PAPER}"/>')
-    d.t(x + 24, y + 4, lab, 8, ACC if last else SOFT, MONO, "start")
-    d.t(x + 24, y + 30, name, 14, ACC if last else INK, KR, "start", 600)
-    d.t(x + w - 24, y + 30, sub, 12, MUTED, KR, "end")
+    # 라벨은 링 안쪽 상단에 둔다. 테두리 위 paper 마스크는 dd-prose-check 의 shape-overlap 에 걸린다
+    d.t(x + 24, y + 14, tag, 8, ACC if last else SOFT, MONO, "start")
+    d.t(x + 24, y + 34, name, 14, ACC if last else INK, KR, "start", 600)
+    d.t(x + w - 24, y + 34, sub, 12, MUTED, KR, "end")
 
 d.legend(408, [("가장 좁은 범위", ACC)])
 d.save("02-02.four-panes.svg")
