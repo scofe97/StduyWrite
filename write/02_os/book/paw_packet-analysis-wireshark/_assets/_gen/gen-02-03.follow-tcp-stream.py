@@ -28,9 +28,9 @@ d.rails(408)
 
 d.msg("클라이언트", "서버", "GET /", 196, INFO, "info", sub="요청 한 줄")
 d.msg("서버", "클라이언트", "HTTP/1.1 200 OK", 252, ACC, "acc", dash=None, sub="packet#35 — 원문이 스트림을 여는 기점")
-d.msg("서버", "클라이언트", "Continuation", 308, MUTED, "ar", dash="4,3", sub="본문이 여러 세그먼트로 옵니다")
+d.msg("서버", "클라이언트", "Continuation", 308, MUTED, "ar", dash="4,3", sub="여러 세그먼트로 나뉜 본문")
 d.selfmsg("Wireshark", "Follow TCP Stream", 366, ACC,
-          sub="같은 스트림의 세그먼트를 순서대로 이어 붙입니다")
+          sub="같은 스트림의 세그먼트를 순서대로 잇기")
 
 d.legend(436, [("요청", INFO), ("응답 · 스트림 재조립", ACC)])
 d.save("02-03.follow-tcp-stream.svg")
