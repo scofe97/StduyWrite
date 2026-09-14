@@ -71,6 +71,7 @@ write/_review/
 | 1 | 2026-09-09 | 5 (Computer Networking Top-Down `03-01`~`03-05`, 3장 전체) | _ | _ | _ |
 | 2 | 2026-09-09 | 1 (Learning Modern Linux `07-03` — 회차 1 이 quality 2 라 하루 뒤 재시도) | 2.0 | 2.67 | 0 |
 | 3 | 2026-09-10 | 1 (Learning Modern Linux `07-03` — 막힌 3축만 좁혀서) | 3.0 | 3.0 | 0 |
+| 1 | 2026-09-14 | 4 (Computer Networking Top-Down `05-01`~`05-04`, 5장 전체 — 즉석 모드) | 2.0 | 2.33 | 0 |
 
 회차 5 에서 *졸업 수 / 대상 편수 ≥ 80%* 면 본 시스템이 잘 작동하는 것.
 
