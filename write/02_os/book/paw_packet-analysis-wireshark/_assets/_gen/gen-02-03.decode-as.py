@@ -28,17 +28,17 @@ Y_S1, Y_D, Y_OK, Y_OVR, Y_END = 108, 200, 320, 320, 452
 
 d.arrow([(CX, Y_S1 + 64), (CX, Y_D - 4)], MUTED, "ar", 1.4)
 d.arrow([(CX, Y_D + 80), (CX, Y_OK - 4)], MUTED, "ar", 1.4)
-d.arrow([(CX + 148, Y_D + 40), (588, Y_D + 40)], WARN, "warn", 1.4)
+d.arrow([(CX + 148, Y_D + 40), (700 - 296 / 2 - 4, Y_D + 40)], WARN, "warn", 1.4)   # 오른쪽 상자 왼쪽 변(552)에서 멈춘다
 d.arrow([(700, Y_D + 80), (700, Y_OVR - 4)], WARN, "warn", 1.4)
 d.arrow([(CX, Y_OK + 64), (CX, Y_END - 4)], MUTED, "ar", 1.4)
 d.arrow([(700, Y_OVR + 64), (700, Y_END + 32), (CX + 152, Y_END + 32)], WARN, "warn", 1.4)
 
-step(CX, Y_S1, 300, 64, "프레임이 들어옵니다", "TCP 목적지 포트를 읽습니다")
+step(CX, Y_S1, 300, 64, "프레임 수신", "TCP 목적지 포트 읽기")
 diamond(CX, Y_D, 148, 40, "표준 포트인가?", focal=True)
-step(CX, Y_OK, 300, 64, "해당 디섹터로 해석", "443 이면 TLS 로 펼칩니다", c=OK)
-step(700, Y_D, 296, 80, "TCP 로만 보입니다", "4433 의 TLS 는 판별에 안 걸립니다", c=WARN)
+step(CX, Y_OK, 300, 64, "해당 디섹터로 해석", "443 은 TLS 로 해석", c=OK)
+step(700, Y_D, 296, 80, "TCP 로만 표시", "4433 의 TLS · 포트 판별 밖", c=WARN)
 step(700, Y_OVR, 296, 64, "Analyze | Decode As", "포트에 디섹터를 손으로 지정", c=WARN)
-step(CX, Y_END, 300, 64, "Packet Details 에 펼쳐집니다", "복호화가 아니라 해석입니다")
+step(CX, Y_END, 300, 64, "Packet Details 에 펼침", "복호화 아닌 해석")
 
 d.t(CX + 16, Y_D + 100, "예", 11, MUTED, KR, "start", 600)
 d.t(474, Y_D + 26, "아니오", 11, WARN, KR, "middle", 600)
