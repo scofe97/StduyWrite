@@ -9,11 +9,11 @@ from dd import D, ACC, MUTED, SOFT, INK, OK, BAD, PAPER, PAPER2, RULE, KR, MONO
 LABEL_W, COL_W, ROW_H = 384, 216, 76
 COLS = [("10.0.0.221", "→ 122.167.99.148"), ("122.167.99.148", "→ 10.0.0.221")]
 ROWS = [
-    ("ip.src == 10.0.0.221", "출발지만 고정합니다",
+    ("ip.src == 10.0.0.221", "출발지만 고정",
      [("보임", OK), ("안 보임", BAD)]),
-    ("(ip.src == …) && (ip.dst == …)", "양쪽을 고정해도 한 방향입니다",
+    ("(ip.src == …) && (ip.dst == …)", "양쪽을 고정해도 한 방향",
      [("보임", OK), ("안 보임", BAD)]),
-    ("ip.addr == 122.167.99.148", "출발지와 목적지를 모두 매칭합니다",
+    ("ip.addr == 122.167.99.148", "출발지 · 목적지 모두 매칭",
      [("보임", OK), ("보임", None)]),
 ]
 X0, Y0 = 24, 140
@@ -45,7 +45,7 @@ for i, (name, hint, cells) in enumerate(ROWS):
             d.o.append(f'<rect x="{x}" y="{y}" width="{COL_W - 12}" height="{ROW_H - 12}" rx="6" '
                        f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
             d.t(x + (COL_W - 12) / 2, y + 30, val, 13, ACC, KR, "middle", 600)
-            d.t(x + (COL_W - 12) / 2, y + 50, "대화가 드러납니다", 11, MUTED, KR)
+            d.t(x + (COL_W - 12) / 2, y + 50, "대화 전체", 11, MUTED, KR)
         else:
             d.tone(x, y, COL_W - 12, ROW_H - 12, c, 6)
             d.t(x + (COL_W - 12) / 2, y + 38, val, 13, c, KR, "middle", 600)
