@@ -4,6 +4,7 @@ tags: [roadmap, linux, networking, kubernetes, cloud, ebpf, cilium, dns, securit
 status: final
 source:
   - ../02_os/networking/README.md
+  - ../02_os/book/network-fundamentals-lab/README.md
   - ../08_cloud/kubernetes/04_networking/README.md
   - ../08_cloud/book/networking-and-kubernetes/README.md
 related:
@@ -11,8 +12,9 @@ related:
   - os-roadmap.md
   - k8s-roadmap.md
   - ../02_os/networking/README.md
+  - ../02_os/book/network-fundamentals-lab/README.md
   - ../08_cloud/kubernetes/04_networking/README.md
-updated: 2026-09-13
+updated: 2026-09-14
 ---
 
 # 네트워크 학습 로드맵
@@ -34,7 +36,7 @@ updated: 2026-09-13
 | 1 · 연결 | 보안 전송 | TLS 핸드셰이크 · SNI · ECH · OS CA bundle · truststore |
 | 1 · 연결 | 중계와 한계 | reverse proxy · half-close · 배압 · listen 큐 · accept 큐 · ephemeral 포트 고갈 · UDP · 단편화 |
 | 2 · Linux 경로 | 주소와 이웃 | interface · MAC · ARP · NDP · IP 주소 · 서브네팅 · CIDR |
-| 2 · Linux 경로 | 경로 결정 | 라우팅 테이블 · next hop · IP 포워딩 · ICMP · traceroute · policy routing · `ip rule` · VRF |
+| 2 · Linux 경로 | 경로 결정 | 라우팅 테이블 · next hop · IP 포워딩 · ICMP · traceroute · policy routing · `ip rule` · VRF · 동적 라우팅 · OSPF · BGP |
 | 2 · Linux 경로 | 가상 인터페이스 | network namespace · veth · bridge · 컨테이너 네트워킹 모드 · 포트 매핑 |
 | 2 · Linux 경로 | 패킷 변형 | netfilter hook · iptables · nftables · NAT · SNAT · DNAT · MASQUERADE · conntrack |
 | 2 · Linux 경로 | 크기와 구성 | MTU · MSS · PMTUD · DHCP · bonding · LACP · NAT traversal |
@@ -100,8 +102,11 @@ updated: 2026-09-13
 | Patterns of Distributed Systems | 7·8장 | 추천 | 8·9단계 |
 | High Performance Browser Networking | 2·4·11·12장 | 대체 | 1단계 — HTTP/2 in Action 자리 |
 | Sidecar-less Istio Explained | 전 4장 | 대체 | 7단계 — Istio in Action 12장 자리 |
+| [network-fundamentals-lab](../02_os/book/network-fundamentals-lab/README.md) | 00~17편 중 코어 10편 | 필수 | 1~4단계 — 유일한 랩 저장소 |
 
 소장 목록은 계속 늘어납니다. 새 책이 들어오면 이 표와 아래 단계별 표의 `책` 열을 함께 갱신합니다.
+
+**표의 마지막 줄만 책이 아닙니다.** [network-fundamentals-lab](../02_os/book/network-fundamentals-lab/README.md)은 containerlab 토폴로지 18편이 원자료이고, 배포하면 고장이 장전된 채로 뜹니다. 다른 자료가 규격과 원리를 위에서 아래로 설명한다면 이쪽은 증상에서 계층을 좁히는 순서를 훈련시킵니다. 그래서 아래 단계별 표에서 이 자료의 노트는 `책` 열이 아니라 `노트` 열에 놓았습니다 — 읽는 자리가 아니라 손으로 밟는 자리이기 때문입니다.
 
 **책만으로 안 되는 축이 둘입니다.** Gateway API 와 멀티클러스터는 소장본 중 Cilium 만 최신이라 [Gateway API 가이드](https://gateway-api.sigs.k8s.io/guides/)와 [CNI 규격](https://github.com/containernetworking/cni/blob/main/SPEC.md), [CoreDNS Manual](https://coredns.io/manual/toc/), [Kubernetes 서비스·네트워킹 문서](https://kubernetes.io/ko/docs/concepts/services-networking/)로 메웁니다. LLM 트래픽은 아직 책이 없어 [Gateway API Inference Extension](https://gateway-api-inference-extension.sigs.k8s.io/guides/) 문서가 유일한 기준입니다.
 
@@ -117,7 +122,7 @@ updated: 2026-09-13
 |---|:---:|---|---|
 | socket · `bind` · `listen` · `accept` · `connect` | 필수 | | TCP/IP Illustrated 12·13장 |
 | 4-tuple · 듣는 소켓과 연결 소켓의 구분 | 필수 | | TCP/IP Illustrated 12장 |
-| TCP 상태 · 3-way handshake · 연결 관리 | 필수 | [03-01](../02_os/book/cntd_computer-networking-top-down/03-01.%ED%8A%B8%EB%9E%9C%EC%8A%A4%ED%8F%AC%ED%8A%B8%EB%8A%94%20%EB%AC%B4%EC%97%87%EC%9D%84%20%EB%8D%94%ED%95%98%EB%8A%94%EA%B0%80.md) · [03-04](../02_os/book/cntd_computer-networking-top-down/03-04.%ED%9D%90%EB%A6%84%20%EC%A0%9C%EC%96%B4%EC%99%80%20%EC%97%B0%EA%B2%B0%20%EA%B4%80%EB%A6%AC%2C%20%EA%B7%B8%EB%A6%AC%EA%B3%A0%20%ED%98%BC%EC%9E%A1.md) | TCP/IP Illustrated 13장 |
+| TCP 상태 · 3-way handshake · 연결 관리 | 필수 | [랩 05-01](../02_os/book/network-fundamentals-lab/05-01.%EC%97%B0%EA%B2%B0%EC%9D%80%20%EC%96%91%20%EB%81%9D%EB%A7%8C%EC%9D%98%20%EC%9D%BC%EC%9D%B4%20%EC%95%84%EB%8B%88%EB%8B%A4.md) · [03-01](../02_os/book/cntd_computer-networking-top-down/03-01.%ED%8A%B8%EB%9E%9C%EC%8A%A4%ED%8F%AC%ED%8A%B8%EB%8A%94%20%EB%AC%B4%EC%97%87%EC%9D%84%20%EB%8D%94%ED%95%98%EB%8A%94%EA%B0%80.md) · [03-04](../02_os/book/cntd_computer-networking-top-down/03-04.%ED%9D%90%EB%A6%84%20%EC%A0%9C%EC%96%B4%EC%99%80%20%EC%97%B0%EA%B2%B0%20%EA%B4%80%EB%A6%AC%2C%20%EA%B7%B8%EB%A6%AC%EA%B3%A0%20%ED%98%BC%EC%9E%A1.md) | TCP/IP Illustrated 13장 |
 | 신뢰성 · 순서 번호 · 재전송 · 타임아웃 · RTT | 필수 | [03-02](../02_os/book/cntd_computer-networking-top-down/03-02.%EC%8B%A0%EB%A2%B0%EC%84%B1%EC%9D%80%20%EC%96%B4%EB%96%BB%EA%B2%8C%20%EB%A7%8C%EB%93%A4%EC%96%B4%EC%A7%80%EB%8A%94%EA%B0%80.md) · [03-03](../02_os/book/cntd_computer-networking-top-down/03-03.TCP%20%EB%8A%94%20%EC%96%B4%EB%96%BB%EA%B2%8C%20%EC%84%B8%EA%B3%A0%20%EC%96%B4%EB%96%BB%EA%B2%8C%20%EA%B8%B0%EB%8B%A4%EB%A6%AC%EB%8A%94%EA%B0%80.md) | TCP/IP Illustrated 14장 |
 | 흐름 제어 · 윈도 · cwnd · in-flight data | 필수 | [03-04](../02_os/book/cntd_computer-networking-top-down/03-04.%ED%9D%90%EB%A6%84%20%EC%A0%9C%EC%96%B4%EC%99%80%20%EC%97%B0%EA%B2%B0%20%EA%B4%80%EB%A6%AC%2C%20%EA%B7%B8%EB%A6%AC%EA%B3%A0%20%ED%98%BC%EC%9E%A1.md) | TCP/IP Illustrated 15장 |
 | 혼잡 제어 · CUBIC · BBR · Vegas | 필수 | [03-05](../02_os/book/cntd_computer-networking-top-down/03-05.%ED%98%BC%EC%9E%A1%EC%9D%84%20%EC%96%B4%EB%96%BB%EA%B2%8C%20%EB%8B%A4%EC%8A%A4%EB%A6%AC%EB%8A%94%EA%B0%80.md) | TCP/IP Illustrated 16장 |
@@ -136,20 +141,21 @@ updated: 2026-09-13
 
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
-| interface · MAC · ARP · NDP · neighbor | 필수 | [01-01](../02_os/networking/01-01.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9%20%EA%B8%B0%EC%B4%88.md) | TCP/IP Illustrated 3·4장 |
-| IP 주소 체계 · 서브네팅 · CIDR | 필수 | [01-04](../02_os/networking/01-04.%EC%84%9C%EB%B8%8C%EB%84%A4%ED%8C%85%EA%B3%BC%20CIDR%20%E2%80%94%20%EC%A3%BC%EC%86%8C%20%EA%B3%B5%EA%B0%84%EC%9D%84%20%EC%9E%90%EB%A5%B4%EB%8A%94%20%EB%B2%95.md) | TCP/IP Illustrated 2·5장 |
-| 라우팅 테이블 · next hop · IP 포워딩 | 필수 | [01-03](../08_cloud/book/networking-and-kubernetes/01-03.IP%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85%C2%B7Ethernet%20%E2%80%94%20%ED%8C%A8%ED%82%B7%EC%9D%B4%20%EA%B8%B8%EC%9D%84%20%EC%B0%BE%EB%8A%94%20%EB%B2%95.md) | TCP/IP Illustrated 5장 |
+| interface · MAC · ARP · NDP · neighbor | 필수 | [랩 02-01](../02_os/book/network-fundamentals-lab/02-01.%EA%B0%99%EC%9D%80%20%EC%84%B8%EA%B7%B8%EB%A8%BC%ED%8A%B8%20%EC%95%88%EC%97%90%EC%84%9C%EB%A7%8C%20%ED%86%B5%ED%95%9C%EB%8B%A4.md) · [01-01](../02_os/networking/01-01.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9%20%EA%B8%B0%EC%B4%88.md) | TCP/IP Illustrated 3·4장 |
+| IP 주소 체계 · 서브네팅 · CIDR | 필수 | [랩 01-01](../02_os/book/network-fundamentals-lab/01-01.%EC%A3%BC%EC%86%8C%EB%A5%BC%20%EC%9D%BD%EA%B3%A0%20%EB%8F%84%EA%B5%AC%20%EC%85%8B%EC%9D%84%20%EB%93%A0%EB%8B%A4.md) · [01-04](../02_os/networking/01-04.%EC%84%9C%EB%B8%8C%EB%84%A4%ED%8C%85%EA%B3%BC%20CIDR%20%E2%80%94%20%EC%A3%BC%EC%86%8C%20%EA%B3%B5%EA%B0%84%EC%9D%84%20%EC%9E%90%EB%A5%B4%EB%8A%94%20%EB%B2%95.md) | TCP/IP Illustrated 2·5장 |
+| 라우팅 테이블 · next hop · IP 포워딩 | 필수 | [랩 03-01](../02_os/book/network-fundamentals-lab/03-01.%EC%84%B8%EA%B7%B8%EB%A8%BC%ED%8A%B8%EB%A5%BC%20%EB%84%98%EC%9C%BC%EB%A9%B4%20%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%B4%20%EC%A0%84%EB%B6%80%EB%8B%A4.md) · [01-03](../08_cloud/book/networking-and-kubernetes/01-03.IP%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85%C2%B7Ethernet%20%E2%80%94%20%ED%8C%A8%ED%82%B7%EC%9D%B4%20%EA%B8%B8%EC%9D%84%20%EC%B0%BE%EB%8A%94%20%EB%B2%95.md) | TCP/IP Illustrated 5장 |
 | network namespace · veth · bridge | 필수 | [01-01](../02_os/networking/01-01.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9%20%EA%B8%B0%EC%B4%88.md) · [02-04](../08_cloud/book/networking-and-kubernetes/02-04.%EC%BB%A4%EB%84%90%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9%20%EC%8B%A4%EC%8A%B5%20%E2%80%94%20veth%C2%B7%EB%B8%8C%EB%A6%AC%EC%A7%80%C2%B7%ED%8F%AC%EC%9B%8C%EB%94%A9%EC%9D%84%20%EC%86%90%EC%9C%BC%EB%A1%9C%20%EC%A7%93%EA%B8%B0.md) | Networking and Kubernetes 2장 |
 | netfilter hook · iptables · nftables | 필수 | [01-02](../02_os/networking/01-02.K8s%20%ED%8C%A8%ED%82%B7%20%EC%97%AC%EC%A0%95%20%E2%80%94%20netfilter%C2%B7conntrack%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85.md) · [02-01](../08_cloud/book/networking-and-kubernetes/02-01.%EC%BB%A4%EB%84%90%EC%9D%B4%20%ED%8C%A8%ED%82%B7%EC%9D%84%20%EB%8B%A4%EB%A3%A8%EB%8A%94%20%EB%B2%95%20%E2%80%94%20%EC%86%8C%EC%BC%93%C2%B7Netfilter%C2%B7Conntrack%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85.md) | TCP/IP Illustrated 7장 |
-| NAT · SNAT · DNAT · MASQUERADE | 필수 | [01-02](../02_os/networking/01-02.K8s%20%ED%8C%A8%ED%82%B7%20%EC%97%AC%EC%A0%95%20%E2%80%94%20netfilter%C2%B7conntrack%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85.md) | TCP/IP Illustrated 7장 |
-| conntrack · 상태 테이블 포화 | 필수 | [01-02](../02_os/networking/01-02.K8s%20%ED%8C%A8%ED%82%B7%20%EC%97%AC%EC%A0%95%20%E2%80%94%20netfilter%C2%B7conntrack%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85.md) | Networking and Kubernetes 2장 |
-| MTU · MSS · PMTUD | 필수 | [01-02](../02_os/networking/01-02.K8s%20%ED%8C%A8%ED%82%B7%20%EC%97%AC%EC%A0%95%20%E2%80%94%20netfilter%C2%B7conntrack%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85.md) | TCP/IP Illustrated 10장 |
-| ICMP · traceroute | 추천 | [05-04](../02_os/book/cntd_computer-networking-top-down/05-04.5%EC%9E%A5%20%EC%8B%A4%EC%8A%B5%20%E2%80%94%20traceroute%C2%B7ICMP%C2%B7%ED%9D%90%EB%A6%84%20%ED%91%9C%EB%A5%BC%20%EC%86%90%EC%9C%BC%EB%A1%9C%20%ED%99%95%EC%9D%B8%ED%95%A9%EB%8B%88%EB%8B%A4.md) | TCP/IP Illustrated 8장 |
+| NAT · SNAT · DNAT · MASQUERADE | 필수 | [랩 05-01](../02_os/book/network-fundamentals-lab/05-01.%EC%97%B0%EA%B2%B0%EC%9D%80%20%EC%96%91%20%EB%81%9D%EB%A7%8C%EC%9D%98%20%EC%9D%BC%EC%9D%B4%20%EC%95%84%EB%8B%88%EB%8B%A4.md) · [01-02](../02_os/networking/01-02.K8s%20%ED%8C%A8%ED%82%B7%20%EC%97%AC%EC%A0%95%20%E2%80%94%20netfilter%C2%B7conntrack%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85.md) | TCP/IP Illustrated 7장 |
+| conntrack · 상태 테이블 포화 | 필수 | [랩 05-01](../02_os/book/network-fundamentals-lab/05-01.%EC%97%B0%EA%B2%B0%EC%9D%80%20%EC%96%91%20%EB%81%9D%EB%A7%8C%EC%9D%98%20%EC%9D%BC%EC%9D%B4%20%EC%95%84%EB%8B%88%EB%8B%A4.md) · [01-02](../02_os/networking/01-02.K8s%20%ED%8C%A8%ED%82%B7%20%EC%97%AC%EC%A0%95%20%E2%80%94%20netfilter%C2%B7conntrack%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85.md) | Networking and Kubernetes 2장 |
+| MTU · MSS · PMTUD | 필수 | [랩 06-01](../02_os/book/network-fundamentals-lab/06-01.%EC%9E%91%EC%9D%80%20%EA%B2%83%EC%9D%80%20%EB%90%98%EA%B3%A0%20%ED%81%B0%20%EA%B2%83%EB%A7%8C%20%EB%A9%8E%EB%8A%94%EB%8B%A4.md) · [01-02](../02_os/networking/01-02.K8s%20%ED%8C%A8%ED%82%B7%20%EC%97%AC%EC%A0%95%20%E2%80%94%20netfilter%C2%B7conntrack%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85.md) | TCP/IP Illustrated 10장 |
+| ICMP · traceroute | 추천 | [랩 03-01](../02_os/book/network-fundamentals-lab/03-01.%EC%84%B8%EA%B7%B8%EB%A8%BC%ED%8A%B8%EB%A5%BC%20%EB%84%98%EC%9C%BC%EB%A9%B4%20%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%B4%20%EC%A0%84%EB%B6%80%EB%8B%A4.md) · [랩 07-01](../02_os/book/network-fundamentals-lab/07-01.%EA%B8%B8%EC%9D%80%20%EB%A9%80%EC%A9%A1%ED%95%9C%EB%8D%B0%20%EC%95%88%20%ED%86%B5%ED%95%A0%20%EB%95%8C.md) · [05-04](../02_os/book/cntd_computer-networking-top-down/05-04.5%EC%9E%A5%20%EC%8B%A4%EC%8A%B5%20%E2%80%94%20traceroute%C2%B7ICMP%C2%B7%ED%9D%90%EB%A6%84%20%ED%91%9C%EB%A5%BC%20%EC%86%90%EC%9C%BC%EB%A1%9C%20%ED%99%95%EC%9D%B8%ED%95%A9%EB%8B%88%EB%8B%A4.md) | TCP/IP Illustrated 8장 |
 | 컨테이너 네트워킹 모드 · 포트 매핑 | 추천 | [03-02](../08_cloud/book/networking-and-kubernetes/03-02.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9%20%EB%AA%A8%EB%93%9C%EC%99%80%20CNI%20%E2%80%94%20%EA%B2%A9%EB%A6%AC%EC%99%80%20%EC%97%B0%EA%B2%B0%EC%9D%98%20%EA%B1%B0%EB%9E%98.md) · [03-03](../08_cloud/book/networking-and-kubernetes/03-03.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EC%97%B0%EA%B2%B0%EA%B3%BC%20%ED%8F%AC%ED%8A%B8%20%EB%A7%A4%ED%95%91%20%E2%80%94%20%EA%B0%99%EC%9D%80%20%ED%98%B8%EC%8A%A4%ED%8A%B8%2C%20%EB%8B%A4%EB%A5%B8%20%ED%98%B8%EC%8A%A4%ED%8A%B8.md) | Networking and Kubernetes 3장 |
 | DHCP · 자동 구성 | 선택 | [05-01](../02_os/book/paw_packet-analysis-wireshark/05-01.%EC%A3%BC%EC%86%8C%EB%A5%BC%20%EB%B0%9B%EC%95%84%20%EC%98%A4%EB%8A%94%20%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C.md) | TCP/IP Illustrated 6장 |
 | NAT traversal | 선택 | | |
 | bonding · LACP | 선택 | | |
 | policy routing · `ip rule` · VRF | 선택 | | |
+| 동적 라우팅 · OSPF · BGP 인접과 광고 | 선택 | [랩 03-02](../02_os/book/network-fundamentals-lab/03-02.%EB%9D%BC%EC%9A%B0%ED%8A%B8%EA%B0%80%20%EC%8A%A4%EC%8A%A4%EB%A1%9C%20%EA%B1%B8%EC%96%B4%EC%98%A4%EA%B2%8C%20%ED%95%9C%EB%8B%A4.md) | |
 
 ### 3단계 · 관측
 
@@ -161,7 +167,7 @@ updated: 2026-09-13
 | TCP 이상 판독 · RST · 재전송 · 중복 ACK | 필수 | [03-01](../02_os/book/paw_packet-analysis-wireshark/03-01.TCP%20%EC%97%B0%EA%B2%B0%EC%9D%98%20%EC%83%9D%EC%95%A0.md) · [03-02](../02_os/book/paw_packet-analysis-wireshark/03-02.TCP%EA%B0%80%20%EC%96%B4%EA%B8%8B%EB%82%A0%20%EB%95%8C.md) | Packet Analysis 3장 |
 | TLS 핸드셰이크 판독 · 실패 원인 | 필수 | [04-01](../02_os/book/paw_packet-analysis-wireshark/04-01.TLS%20%ED%95%B8%EB%93%9C%EC%85%B0%EC%9D%B4%ED%81%AC%20%EC%9D%BD%EA%B8%B0.md) · [04-02](../02_os/book/paw_packet-analysis-wireshark/04-02.%EC%97%B4%EC%87%A0%EC%99%80%20%EC%8B%A4%ED%8C%A8.md) | Packet Analysis 4장 |
 | 계층 순서 진단 — `ss` · `ip` · `ethtool` · `conntrack -L` | 필수 | [02-03](../08_cloud/book/networking-and-kubernetes/02-03.Linux%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%EC%A7%84%EB%8B%A8%20%EB%8F%84%EA%B5%AC%20%E2%80%94%20%EA%B3%84%EC%B8%B5%20%EC%88%9C%EC%84%9C%EB%8C%80%EB%A1%9C%20%EC%88%98%EC%82%AC%ED%95%98%EA%B8%B0.md) | Networking and Kubernetes 2장 |
-| `resolv.conf` · search domain · `ndots` · NXDOMAIN | 필수 | [01-03](../02_os/networking/01-03.DNS%20%ED%95%84%ED%84%B0%EB%A7%81%20%EC%B0%A8%EB%8B%A8%20%E2%80%94%20NXDOMAIN%C2%B7DoH%C2%B7%EC%9A%B0%ED%9A%8C%20%EB%A7%88%EC%B0%B0.md) | |
+| `resolv.conf` · search domain · `ndots` · NXDOMAIN | 필수 | [랩 07-01](../02_os/book/network-fundamentals-lab/07-01.%EA%B8%B8%EC%9D%80%20%EB%A9%80%EC%A9%A1%ED%95%9C%EB%8D%B0%20%EC%95%88%20%ED%86%B5%ED%95%A0%20%EB%95%8C.md) · [01-03](../02_os/networking/01-03.DNS%20%ED%95%84%ED%84%B0%EB%A7%81%20%EC%B0%A8%EB%8B%A8%20%E2%80%94%20NXDOMAIN%C2%B7DoH%C2%B7%EC%9A%B0%ED%9A%8C%20%EB%A7%88%EC%B0%B0.md) | |
 | Corefile · 플러그인 체인 | 추천 | [03-01](../08_cloud/book/learning-coredns/03-01.Corefile%EC%9D%80%20%EB%9D%BC%EB%B2%A8%EB%A1%9C%20%EC%84%9C%EB%B2%84%EB%A5%BC%20%EA%B0%80%EB%A5%B8%EB%8B%A4.md) · [03-02](../08_cloud/book/learning-coredns/03-02.%ED%94%8C%EB%9F%AC%EA%B7%B8%EC%9D%B8%20%EC%9D%BC%EA%B3%B1%EC%9D%B4%EB%A9%B4%20%EC%84%9C%EB%B2%84%20%ED%95%98%EB%82%98%EA%B0%80%20%EC%84%A0%EB%8B%A4.md) | Learning CoreDNS 3장 |
 | 질문과 답의 불일치 | 추천 | [07-01](../08_cloud/book/learning-coredns/07-01.%EC%A7%88%EB%AC%B8%EA%B3%BC%20%EB%8B%B5%EC%9D%B4%20%EC%96%B4%EA%B8%8B%EB%82%98%EB%A9%B4%20%ED%81%B4%EB%9D%BC%EC%9D%B4%EC%96%B8%ED%8A%B8%EA%B0%80%20%EB%B2%84%EB%A6%B0%EB%8B%A4.md) | Learning CoreDNS 7장 |
 | 연결 지연 분포 · P99 · 측정 오차 | 선택 | | |
@@ -182,7 +188,7 @@ updated: 2026-09-13
 | CNI | 필수 | [04-02](../08_cloud/kubernetes/04_networking/04-02.Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%99%80%20Linux%20%EA%B8%B0%EB%B0%98.md) · [04-02](../08_cloud/book/networking-and-kubernetes/04-02.CNI%EC%99%80%20kube-proxy%20%E2%80%94%20Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%9D%98%20%EB%B0%B0%EC%84%A0%EA%B3%B5%EA%B3%BC%20%EB%A1%9C%EB%93%9C%EB%B0%B8%EB%9F%B0%EC%84%9C.md) | Cilium 4장 |
 | CNI 구현체 비교 — 무엇이 다른가 | 추천 | | Cilium 1~3장 |
 | CNI 계약 — ADD · DEL · CHECK | 추천 | | Networking and Kubernetes 4장 |
-| 오버레이 · VXLAN | 필수 | [04-03](../08_cloud/kubernetes/04_networking/04-03.%EC%98%A4%EB%B2%84%EB%A0%88%EC%9D%B4%EC%99%80%20%EB%85%B8%EB%93%9C%20%EA%B0%84%20%ED%8A%B8%EB%9E%98%ED%94%BD.md) | Cilium 5장 |
+| 오버레이 · VXLAN | 필수 | [랩 04-01](../02_os/book/network-fundamentals-lab/04-01.%EB%9D%BC%EC%9A%B0%ED%84%B0%20%EB%84%88%EB%A8%B8%EC%97%90%20%EA%B0%99%EC%9D%80%20L2%EB%A5%BC%20%EB%A7%8C%EB%93%A0%EB%8B%A4.md) · [04-03](../08_cloud/kubernetes/04_networking/04-03.%EC%98%A4%EB%B2%84%EB%A0%88%EC%9D%B4%EC%99%80%20%EB%85%B8%EB%93%9C%20%EA%B0%84%20%ED%8A%B8%EB%9E%98%ED%94%BD.md) | Cilium 5장 |
 | underlay 와 overlay 의 갈림 | 추천 | | Cloud Native Data Center Networking 6장 |
 | Service · EndpointSlice · Service 5유형 | 필수 | [04-04](../08_cloud/kubernetes/04_networking/04-04.Service%EC%99%80%20EndpointSlice.md) · [05-02](../08_cloud/book/networking-and-kubernetes/05-02.Service%205%EC%9C%A0%ED%98%95%20%E2%80%94%20ClusterIP%EC%97%90%EC%84%9C%20LoadBalancer%EA%B9%8C%EC%A7%80.md) | Networking and Kubernetes 5장 |
 | kube-proxy — iptables · IPVS · eBPF | 필수 | [02-02](../08_cloud/book/networking-and-kubernetes/02-02.iptables%C2%B7IPVS%C2%B7eBPF%20%E2%80%94%20kube-proxy%EB%A5%BC%20%EC%9D%B4%ED%95%B4%ED%95%98%EB%8A%94%20%EC%84%B8%20%EA%B8%B0%EC%88%A0.md) | Networking and Kubernetes 2장 |
