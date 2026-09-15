@@ -94,20 +94,20 @@ def note(y, txt, c):
 
 
 # 막 1 — HTTP/1.1 · 응답 순서가 묶여 있다
-act(176, "01", "HTTP/1.1 · 지속 연결 + 파이프라이닝", "요청은 겹쳐 보냅니다")
+act(176, "01", "HTTP/1.1 · 지속 연결 + 파이프라이닝", "요청은 겹쳐 보냄")
 d.state(SEND_H, "요청 R1 R2 R3 접수", 244, MUTED)
-d.msg(SEND_H, SEND_T, "응답 O1 · 큰 객체", 284, MUTED, sub="O2·O3 는 뒤에서 기다립니다")
+d.msg(SEND_H, SEND_T, "응답 O1 · 큰 객체", 284, MUTED, sub="O2·O3 는 뒤에서 기다림")
 d.msg(SEND_T, RECV_T, "seg 1 ~ seg 4", 324, MUTED)
 d.msg(RECV_T, RECV_H, "O1 전달", 364, OK)
 d.state(SEND_H, "이제야 O2 차례", 404, BAD)
 d.msg(SEND_H, SEND_T, "응답 O2", 444, MUTED)
 d.msg(SEND_T, RECV_T, "seg 5", 484, MUTED)
 d.msg(RECV_T, RECV_H, "O2 전달", 524, OK)
-note(556, "막힌 자리는 HTTP 층입니다. 응답을 요청 순서로 묶어 두어, 앞의 큰 객체가 끝나야 뒤가 출발합니다.", BAD)
+note(556, "막힌 자리는 HTTP 층 · 응답을 요청 순서로 묶어 두어, 앞의 큰 객체가 끝나야 뒤가 출발함", BAD)
 
 # 막 2 — HTTP/2 · 응답 순서는 풀렸지만 TCP 가 다시 묶는다
-act(580, "02", "HTTP/2 · 프레임 인터리빙", "한 TCP 연결에 세 스트림을 섞습니다")
-d.msg(SEND_H, SEND_T, "프레임 1a 2a 3a 1b 2b", 648, OK, sub="세 스트림을 번갈아 내보냅니다")
+act(580, "02", "HTTP/2 · 프레임 인터리빙", "한 TCP 연결에 세 스트림을 섞음")
+d.msg(SEND_H, SEND_T, "프레임 1a 2a 3a 1b 2b", 648, OK, sub="세 스트림을 번갈아 내보냄")
 d.msg(SEND_T, RECV_T, "seg 1 · 1a 2a 3a", 688, MUTED)
 d.lost(SEND_T, RECV_T, "seg 2 · 1b 2b", 728, "도중에 사라짐")
 d.msg(SEND_T, RECV_T, "seg 3 · 3b 1c", 768, MUTED)
@@ -116,11 +116,11 @@ d.msg(RECV_T, RECV_H, "seg 1 분량까지만", 848, WARN)
 d.state(RECV_H, "스트림 2·3 도 함께 멈춤", 888, BAD)
 d.msg(SEND_T, RECV_T, "seg 2 재전송", 928, MUTED, dash="4 3")
 d.msg(RECV_T, RECV_H, "밀려 있던 것 일괄 전달", 968, OK)
-note(1000, "막힌 자리가 TCP 층으로 내려왔습니다. 바이트 스트림 하나라 스트림 경계를 몰라, 상관없는 스트림까지 붙듭니다.", BAD)
+note(1000, "막힌 자리가 TCP 층으로 내려왔음 · 바이트 스트림 하나라 스트림 경계를 몰라, 상관없는 스트림까지 붙듦", BAD)
 
 # 막 3 — HTTP/3 · 스트림마다 따로 센다
-act(1012, "03", "HTTP/3 · QUIC 스트림", "패킷마다 스트림 번호가 박혀 있습니다")
-d.msg(SEND_H, SEND_T, "프레임 1a 2a 3a 1b 2b", 1080, OK, sub="보내는 모습은 HTTP/2 와 같습니다")
+act(1012, "03", "HTTP/3 · QUIC 스트림", "패킷마다 스트림 번호가 박혀 있음")
+d.msg(SEND_H, SEND_T, "프레임 1a 2a 3a 1b 2b", 1080, OK, sub="보내는 모습은 HTTP/2 와 같음")
 d.lost(SEND_T, RECV_T, "pkt · 스트림 1", 1120, "도중에 사라짐")
 d.msg(SEND_T, RECV_T, "pkt · 스트림 2", 1160, MUTED)
 d.msg(SEND_T, RECV_T, "pkt · 스트림 3", 1200, MUTED)
@@ -128,13 +128,13 @@ d.msg(RECV_T, RECV_H, "스트림 2·3 바로 전달", 1240, OK)
 d.state(RECV_T, "스트림 1 만 기다림", 1280, WARN)
 d.msg(SEND_T, RECV_T, "스트림 1 재전송", 1320, MUTED, dash="4 3")
 d.msg(RECV_T, RECV_H, "스트림 1 전달", 1360, OK)
-note(1392, "순서의 줄은 끊겼습니다. 그래도 혼잡 윈도는 경로 단위라, 이 손실 하나가 세 스트림의 전송 속도를 함께 낮춥니다.", WARN)
+note(1392, "순서의 줄은 끊겼음 · 그래도 혼잡 윈도는 경로 단위라, 이 손실 하나가 세 스트림의 전송 속도를 함께 낮춤", WARN)
 
 d.rails(1404)
 
-d.t(20, 1440, "세 막을 같은 눈으로 읽으면, 판이 바뀔 때마다 막히는 자리가 HTTP 층에서 TCP 층으로, 다시 혼잡 제어로 옮겨 간 것이 보입니다.",
+d.t(20, 1440, "세 막을 같은 눈으로 읽으면, 판이 바뀔 때마다 막히는 자리가 HTTP 층에서 TCP 층으로, 다시 혼잡 제어로 옮겨 간 것이 보",
     13, MUTED, KR, "start")
-d.t(20, 1464, "애플리케이션 층에서 아무리 잘게 쪼개도 그 아래 층이 다시 묶으면 소용이 없다는 것이 HTTP/3 이 트랜스포트를 갈아치운 이유입니다.",
+d.t(20, 1464, "애플리케이션 층에서 아무리 잘게 쪼개도 그 아래 층이 다시 묶으면 소용이 없다는 것이 HTTP/3 이 트랜스포트를 갈아치운 이유",
     13, SOFT, KR, "start")
 
 d.legend(1488, [("전달됨", OK), ("전송 중", MUTED), ("대기·부분 전달", WARN),

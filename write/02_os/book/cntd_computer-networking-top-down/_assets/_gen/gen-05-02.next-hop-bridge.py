@@ -14,8 +14,7 @@ from dd import D, PAPER2, INK, MUTED, SOFT, ACC, INFO, OK, KR, MONO
 W, H = 1000, 656
 d = D(W, H, "SECTION 5.4.2 · NEXT-HOP",
       "1b 는 두 답을 합쳐 전달 표 한 줄을 만듭니다",
-      "1c 는 1b 에게 두 가지를 따로 보낸다. iBGP 로는 밖에서 배운 경로와 NEXT-HOP 주소를, OSPF 로는 AS 안의 링크 상태를 보낸다. "
-      "1b 는 NEXT-HOP 주소로 OSPF 가 계산한 길을 찾아 전달 표 항목 (x, I) 를 만든다.",
+      "1c 는 1b 에게 두 가지를 따로 보낸다. iBGP 로는 밖에서 배운 경로와 NEXT-HOP 주소를, OSPF 로는 AS 안의 링크 상태를 보낸다. 1b 는 NEXT-HOP 주소로 OSPF 가 계산한 길을 찾아 전달 표 항목 (x, I) 를 만든다.",
       "iBGP 는 '어느 출구로'를, OSPF 는 '그 출구까지 어떻게'를 줍니다. 둘은 NEXT-HOP 주소 하나에서 만납니다.")
 
 # ── 위: 망 모양 ─────────────────────────────────────────────
@@ -85,7 +84,7 @@ d.t(836, 412, "전달 표에 적는 한 줄", 13, INK, KR, "middle", 600)
 d.t(836, 448, "(x, I)", 20, ACC, MONO, "middle", 600)
 d.t(836, 474, "x 행 패킷은 인터페이스 I 로", 12, MUTED, KR)
 
-d.t(24, 584, "iBGP 와 OSPF 는 같은 1c→1b 사이를 오가지만 나르는 것이 다릅니다. 하나는 밖의 접두어, 하나는 안의 지도입니다.", 13, MUTED, KR, "start")
+d.t(24, 584, "iBGP 와 OSPF 는 같은 1c→1b 를 오가되 나르는 것이 다름 — 밖의 접두어 vs 안의 지도", 13, MUTED, KR, "start")
 
 d.legend(608, [("iBGP 가 준 답", INFO), ("OSPF 가 준 답", OK), ("NEXT-HOP 주소와 결과", ACC)])
 d.t(960, 648, "KUROSE-ROSS 9E §5.4.2 · §5.4.3 · FIG 5.10", 8, SOFT, MONO, "end")

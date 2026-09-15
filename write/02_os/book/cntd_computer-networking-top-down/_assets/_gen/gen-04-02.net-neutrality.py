@@ -36,8 +36,8 @@ for year, above, lab, sub, anchor, lx in EV:
     d.t(tx, ly + 10 if above else ly + 22, sub, 12, SOFT, KR, anchor)
     d.o.append(f'<circle cx="{x}" cy="{BY}" r="{r}" fill="{c}"/>')
 
-d.t(24, 420, "스케줄링은 순서를 정하는 힘이고, 그 힘을 누가 쥐느냐는 기술이 아니라 정책과 법이 정합니다.", 13, MUTED, KR, "start")
-d.t(24, 442, "원문의 말대로 미국에서도 다른 곳에서도 망 중립성의 마지막 장은 아직 쓰이지 않았습니다.", 13, SOFT, KR, "start")
+d.t(24, 420, "스케줄링 = 순서를 정하는 힘 · 그 힘의 주인은 기술이 아니라 정책과 법", 13, MUTED, KR, "start")
+d.t(24, 442, "망 중립성의 마지막 장은 아직 쓰이지 않음", 13, SOFT, KR, "start")
 
 d.legend(H - 44, [("밝은 선이 그어진 해", ACC), ("사건", MUTED)])
 d.save("04-02.net-neutrality.svg")

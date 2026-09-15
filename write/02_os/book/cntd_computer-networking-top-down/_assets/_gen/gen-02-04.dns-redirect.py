@@ -33,14 +33,14 @@ d.msg("netcinema", "LDNS", "a1105.kingcdn.com", 284, INFO, dash="5 4", lx=-60,
       sub="3단계 — 주소가 아니라 이름")
 d.msg("LDNS", "kingcdn DNS", "a1105.kingcdn.com ?", 350, lx=-118)
 d.msg("kingcdn DNS", "LDNS", "콘텐츠 서버 IP", 394, MUTED, dash="5 4", lx=-118,
-      sub="4단계 — 어느 서버인지 여기서 정해집니다")
+      sub="4단계 — 어느 서버인지 여기서 정해짐")
 d.msg("LDNS", "사용자 호스트", "IP 주소", 452, MUTED, dash="5 4", sub="5단계")
 d.msg("사용자 호스트", "a1105", "GET /6Y7B23V", 512, ACC, mk="acc", lx=-176,
       sub="6단계 — 직접 TCP 연결")
 
-d.t(20, 600, "DASH 를 쓰면 서버가 먼저 매니페스트를 보내고, 클라이언트가 그 목록에서 청크를 골라 가져갑니다.",
+d.t(20, 600, "DASH 를 쓰면 서버가 먼저 매니페스트를 보내고, 클라이언트가 그 목록에서 청크를 골라 가져감",
      11, MUTED, KR, "start")
-d.t(20, 622, "CDN 이 이 조회로 알게 되는 것은 클라이언트의 주소가 아니라 LDNS 의 주소입니다 — 이 설계의 근본 약점입니다.",
+d.t(20, 622, "CDN 이 이 조회로 알게 되는 것은 클라이언트의 주소가 아니라 LDNS 의 주소입니다 — 이 설계의 근본 약점",
      11, MUTED, KR, "start")
 
 d.legend(H - 60, [("최종 요청", ACC), ("넘겨주기", INFO), ("나머지", MUTED)])

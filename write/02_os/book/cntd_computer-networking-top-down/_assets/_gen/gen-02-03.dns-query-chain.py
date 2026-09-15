@@ -18,7 +18,7 @@ class SeqKR(Seq):
         s.t(mx, y - 9, label, 11, c, _kr(label), "middle", 600)
         if sub: s.t(mx, y + 17, sub, 11, MUTED, KR)
 
-W, H = 1000, 660
+W, H = 1000, 676
 d = SeqKR(W, H, "COMPUTER NETWORKING TOP-DOWN · 02-03 §6",
           "이름 하나에 메시지 여덟 개",
           "원문 Figure 2.17. cse.nyu.edu 가 gaia.cs.umass.edu 의 주소를 얻는 과정. 질의 넷과 응답 넷이 오간다.",
@@ -42,10 +42,10 @@ d.msg("dns.umass.edu", "dns.nyu.edu", "gaia 의 IP 주소", 484, MUTED, dash="5 
 
 d.msg("dns.nyu.edu", "cse.nyu.edu", "answer", 538, ACC, mk="acc", dash="5 4")
 
-d.t(20, 592, "가운데 여섯 개가 반복 질의입니다 — 루트도 TLD 도 답을 대신 구해다 주지 않고 다음 단계의 주소만 돌려줍니다.",
+d.t(20, 592, "가운데 여섯 개가 반복 질의입니다 — 루트도 TLD 도 답을 대신 구해다 주지 않고 다음 단계의 주소만 돌려줌",
      11, MUTED, KR, "start")
-d.t(20, 614, "TLD 가 권한 서버를 바로 모르고 중간 서버를 한 단계 더 거치면 메시지가 열 개가 됩니다.",
+d.t(20, 614, "TLD 가 권한 서버를 바로 모르고 중간 서버를 한 단계 더 거치면 메시지가 열 개가 됨",
      11, MUTED, KR, "start")
 
-d.legend(H - 28, [("최종 응답", ACC), ("재귀 질의", INFO), ("반복 질의와 응답", MUTED)])
+d.legend(H - 44, [("최종 응답", ACC), ("재귀 질의", INFO), ("반복 질의와 응답", MUTED)])
 d.save("02-03.dns-query-chain.svg")

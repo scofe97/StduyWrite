@@ -12,10 +12,10 @@ d = D(W, H, "SECTION 5.4.3 · ROUTE SELECTION",
 
 BX, BW, BH = 60, 520, 66
 STEPS = [
-    ("1. 로컬 선호도", "관리자가 정책으로 정한 값. 가장 높은 것만 남깁니다", ACC),
-    ("2. AS-PATH 길이", "남은 것 중 AS 홉이 가장 짧은 것만 남깁니다", INFO),
+    ("1. 로컬 선호도", "관리자가 정책으로 정한 값. 가장 높은 것만 남김", ACC),
+    ("2. AS-PATH 길이", "남은 것 중 AS 홉이 가장 짧은 것만 남김", INFO),
     ("3. 뜨거운 감자", "NEXT-HOP 라우터까지 AS 안 비용이 가장 싼 것", MUTED),
-    ("4. BGP 식별자", "그래도 남으면 식별자로 자릅니다", SOFT),
+    ("4. BGP 식별자", "그래도 남으면 식별자로 자름", SOFT),
 ]
 y = 128
 for i, (name, sub, c) in enumerate(STEPS):
@@ -30,7 +30,7 @@ for i, (name, sub, c) in enumerate(STEPS):
 # 규칙 4 에서 결론으로 내려가는 연결 — 루프가 마지막 화살표를 그리지 않는다
 d.path(f"M {BX + BW / 2} {y - 26} L {BX + BW / 2} {y - 6}", ACC, 1.4, m="acc")
 d.tone(BX, y, BW, 52, ACC, 8, "12", 1.5)
-d.t(BX + BW / 2, y + 32, "남은 하나를 전달 표에 넣습니다", 12, ACC, KR, "middle", 600)
+d.t(BX + BW / 2, y + 32, "남은 하나를 전달 표에 설치", 12, ACC, KR, "middle", 600)
 
 # 오른쪽 — Figure 5.10 의 1b 가 겪는 실제 판정
 PX, PW = 620, 340
@@ -46,14 +46,14 @@ for label, path, hop, c in rows:
     d.t(PX + 24, ry + 20, hop, 11, MUTED, MONO, "start")
     ry += 56
 d.t(PX + 24, 314, "감자만 따지면 A 가 이깁니다 (2 < 3)", 11, MUTED, KR, "start")
-d.t(PX + 24, 336, "그러나 규칙 2 가 먼저입니다", 11, INFO, KR, "start")
-d.t(PX + 24, 358, "AS-PATH 가 1 칸인 B 가 남습니다", 11, ACC, KR, "start", 600)
-d.t(PX + 24, 396, "AS2 를 건너뛰는 쪽이 선택됩니다", 11, ACC, KR, "start")
+d.t(PX + 24, 336, "그러나 규칙 2 가 먼저", 11, INFO, KR, "start")
+d.t(PX + 24, 358, "AS-PATH 1 칸인 B 가 남음", 11, ACC, KR, "start", 600)
+d.t(PX + 24, 396, "AS2 를 건너뛰는 쪽이 선택됨", 11, ACC, KR, "start")
 
 d.t(PX, 462, "규칙 2 가 유일한 규칙이라면 BGP 는", 11, MUTED, KR, "start")
-d.t(PX, 482, "AS 홉을 거리로 쓰는 거리 벡터가 됩니다.", 11, MUTED, KR, "start")
+d.t(PX, 482, "AS 홉을 거리로 쓰는 거리 벡터가 됨", 11, MUTED, KR, "start")
 
-d.t(30, 618, "규칙 1 이 맨 앞이라는 사실이 이 알고리즘의 성격을 정합니다. 정책이 최단 경로를 이깁니다.", 11, MUTED, KR, "start")
+d.t(30, 618, "규칙 1 이 맨 앞이라는 사실이 이 알고리즘의 성격을 정함 · 정책이 최단 경로를 이김", 11, MUTED, KR, "start")
 
 d.legend(640, [("정책이 정하는 값", ACC), ("AS 홉 수", INFO), ("AS 안의 비용", MUTED)])
 d.t(960, 688, "KUROSE-ROSS 9E 5.4.3 · RFC 4271", 8, SOFT, MONO, "end")

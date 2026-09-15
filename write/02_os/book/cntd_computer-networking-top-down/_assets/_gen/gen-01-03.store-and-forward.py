@@ -44,7 +44,7 @@ for name, s, e, i, focal in ROWS:
     d.t(x + w / 2, y + 28, f"{s}L/R → {e}L/R" if s else "0 → L/R", 11, ACC if focal else MUTED, MONO)
 
 BOT = Y0 + 6 * ROW_H
-d.t(LX, BOT + 32, "링크 N 개를 지나는 패킷 하나는 N·L/R 이 걸립니다(식 1.1). 패킷 P 개라면 (N + P − 1)·L/R 이고, 여기서는 N=2·P=3 이라 4L/R 입니다",
+d.t(LX, BOT + 32, "링크 N 개를 지나는 패킷 하나는 N·L/R 이 걸립니다(식 1.1). 패킷 P 개라면 (N + P − 1)·L/R 이고, 여기서는 N=2·P=3 이라 4L/R ",
      11, MUTED, KR, "start")
 
 d.legend(H - 60, [("마지막 패킷이 도착하는 구간", ACC), ("나머지 점유 구간", MUTED)])

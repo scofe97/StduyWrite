@@ -46,12 +46,12 @@ def node(j, k, title, sub, shared=False):
     d.t(x + NODE_W / 2, y + 52, sub, 11, MUTED, KR)
 
 ROWS = [
-    [("DSL 모뎀", "전화선 한 가닥", False), ("전용 구간", "내 선입니다", False),
-     ("DSLAM", "여기서 합쳐집니다", True), ("ISP 라우터", "전화 회사가 ISP", False)],
+    [("DSL 모뎀", "전화선 한 가닥", False), ("전용 구간", "내 선", False),
+     ("DSLAM", "여기서 합쳐짐", True), ("ISP 라우터", "전화 회사가 ISP", False)],
     [("케이블 모뎀", "동축", False), ("동네 접점", "500~5,000 가구", True),
      ("CMTS · 헤드엔드", "브로드캐스트", True), ("ISP 라우터", "케이블 회사가 ISP", False)],
     [("ONT", "전용 광섬유", False), ("splitter", "100가구 미만", True),
-     ("OLT", "패킷이 복제됩니다", True), ("ISP 라우터", "전화 회사가 ISP", False)],
+     ("OLT", "패킷이 복제됨", True), ("ISP 라우터", "전화 회사가 ISP", False)],
 ]
 for k, row in enumerate(ROWS):
     for j, (t, s, sh) in enumerate(row):
@@ -62,7 +62,7 @@ for k, row in enumerate(ROWS):
         d.arrow([(x0, lane_mid(k)), (x1 - 4, lane_mid(k))], MUTED, "ar", 1.2)
 
 d.t(LABEL_W, lane_top(3) + 28,
-    "DSL 은 국사까지 내 선이라 공유가 늦게 시작되지만, 대신 국사에서 5~10마일 안에 있어야 합니다",
+    "DSL 은 국사까지 내 선이라 공유가 늦게 시작되지만, 대신 국사에서 5~10마일 안에 있어야 함",
     11, MUTED, KR, "start")
 
 d.legend(H - 62, [("이웃과 나눠 쓰는 구간", ACC), ("나 혼자 쓰는 구간", MUTED)])

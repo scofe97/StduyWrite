@@ -68,8 +68,8 @@ badge(606, 300, 2, MUTED)
 badge(334, 328, 3, ACC)
 badge(274, 300, 4, MUTED)
 
-d.t(24, 456, "경계를 넘는 1·3단계(eBGP)에서만 보낸 쪽이 자기 ASN 을 경로 앞에 붙입니다.", 13, INK, KR, "start")
-d.t(24, 480, "AS 안에 퍼지는 2·4단계(iBGP)에서는 경로가 그대로라, AS-PATH 의 길이는 라우터 홉이 아니라 AS 홉을 셉니다.", 13, MUTED, KR, "start")
+d.t(24, 456, "경계를 넘는 1·3단계(eBGP)에서만 보낸 쪽이 자기 ASN 을 앞에 추가", 13, INK, KR, "start")
+d.t(24, 480, "AS 안의 2·4단계(iBGP)에서는 경로 그대로 — AS-PATH 길이는 라우터 홉이 아니라 AS 홉", 13, MUTED, KR, "start")
 
 d.legend(500, [("eBGP · 경계를 넘는 광고", INFO), ("iBGP · 물리 링크가 아닌 TCP 연결", MUTED), ("경로가 길어진 자리", ACC)])
 d.t(960, 540, "KUROSE-ROSS 9E FIG 5.8 · FIG 5.9 · RFC 4271", 8, SOFT, MONO, "end")

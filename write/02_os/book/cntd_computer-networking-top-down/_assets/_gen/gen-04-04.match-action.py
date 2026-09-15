@@ -4,7 +4,7 @@ import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 from dd import D, PAPER, PAPER2, INK, MUTED, SOFT, RULE, ACC, BAD, KR, MONO
 
-W, H = 960, 600
+W, H = 960, 612
 d = D(W, H, "OPENFLOW 1.0 · MATCH + ACTION",
       "일치는 세 계층에 걸칩니다",
       "OpenFlow 1.0 이 일치에 쓸 수 있는 12개 값을 계층별로 쌓고, 그 아래에 가능한 동작 셋을 둔 층 그림. 계층화 원칙을 의도적으로 거스르는 지점이 한눈에 보인다.",
@@ -52,8 +52,7 @@ for i, (a, sub) in enumerate(acts):
 
 d.path(f"M {BX + BW / 2} {AY - 22} L {BX + BW / 2} {AY - 6}", ACC, 1.4, m="acc")
 
-d.t(BX, AY + BH + 34, "같은 장비가 이더넷 주소로 일치를 걸면 2계층 스위치처럼, "
-                       "IP 주소로 걸면 3계층 라우터처럼 굽니다. 바꾸는 것은 표뿐입니다.",
+d.t(BX, AY + BH + 34, "이더넷 주소로 일치 → 2계층 스위치 · IP 주소로 일치 → 3계층 라우터 · 바뀌는 것은 표뿐",
      11, MUTED, KR, "start")
 
 d.legend(AY + BH + 56, [("동작", ACC), ("일치 대상", MUTED), ("일치에 못 쓰는 필드", BAD)])

@@ -19,7 +19,7 @@ ROWS = [
     ("트랜스포트", "세그먼트 · segment", "TCP · UDP", 3),
     ("네트워크", "데이터그램 · datagram", "IP 하나 + 라우팅 프로토콜", 2),
     ("링크", "프레임 · frame", "이더넷 · WiFi · DOCSIS", 1),
-    ("물리", "비트 · bit", "매체마다 다릅니다", 1),
+    ("물리", "비트 · bit", "매체마다 다름", 1),
 ]
 DEVS = [("호스트", "HOST"), ("라우터", "ROUTER"), ("스위치", "SWITCH")]
 
@@ -41,7 +41,7 @@ for i, (name, pdu, ex, reach) in enumerate(ROWS):
         d.t(DEV_X[j] + DEV_W / 2, y + 38, "구현" if hit else "없음", 11, OK if hit else SOFT, KR)
 
 BOT = Y0 + len(ROWS) * (RH + GAP) - GAP
-d.t(X0, BOT + 26, "라우터는 IP 주소를 보고 링크 계층 스위치는 이더넷 주소만 봅니다 — 스위치가 IP 를 모르는 것은 고장이 아니라 설계입니다",
+d.t(X0, BOT + 26, "라우터는 IP 주소를 보고 링크 계층 스위치는 이더넷 주소만 봅니다 — 스위치가 IP 를 모르는 것은 고장이 아니라 설계",
      11, MUTED, KR, "start")
 
 d.legend(H - 60, [("그 장비가 구현하는 층", OK), ("층마다 패킷을 부르는 이름", ACC)])

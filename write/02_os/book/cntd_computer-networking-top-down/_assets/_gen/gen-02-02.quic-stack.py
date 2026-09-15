@@ -38,13 +38,13 @@ for cx, title, rows, focal in STACKS:
 # 악수 표시
 d.t(LCX, Y0 + 4 * PITCH + 24, "악수 두 번", 13, MUTED, KR, "middle", 600)
 d.t(LCX, Y0 + 4 * PITCH + 46, "TCP 연결 수립 뒤에", 13, SOFT, KR)
-d.t(LCX, Y0 + 4 * PITCH + 66, "TLS 키 교환이 따로 옵니다", 13, SOFT, KR)
+d.t(LCX, Y0 + 4 * PITCH + 66, "TLS 키 교환이 따로 옴", 13, SOFT, KR)
 
 d.t(RCX, Y0 + 4 * PITCH + 24, "악수 한 번", 13, ACC, KR, "middle", 600)
 d.t(RCX, Y0 + 4 * PITCH + 46, "QUIC 이 TLS 1.3 악수를", 13, SOFT, KR)
-d.t(RCX, Y0 + 4 * PITCH + 66, "자기 핸드셰이크에 품습니다", 13, SOFT, KR)
+d.t(RCX, Y0 + 4 * PITCH + 66, "자기 핸드셰이크에 품음", 13, SOFT, KR)
 
-d.t(20, 546, "재접속은 저장해 둔 세션 파라미터를 써서 0-RTT 로 바로 보냅니다.",
+d.t(20, 546, "재접속은 저장해 둔 세션 파라미터를 써서 0-RTT 로 바로 보냄",
      13, MUTED, KR, "start")
 
 d.legend(H - 48, [("악수 둘을 하나로 합치는 층", ACC), ("나머지 층", MUTED)])

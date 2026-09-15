@@ -27,7 +27,7 @@ def node(x, y, w, name, sub, hot=False):
 # 터널 컨테이너 먼저 (노드가 그 위에 그려지도록)
 d.o.append(f'<rect x="336" y="94" width="278" height="206" rx="10" '
            f'fill="{INK}05" stroke="{MUTED}" stroke-width="1.1" stroke-dasharray="5 5"/>')
-d.t(475, 116, "터널 — 이 안은 IPv4 만 압니다", 11, MUTED, KR)
+d.t(475, 116, "터널 — 이 안은 IPv4 만 암", 11, MUTED, KR)
 
 node(30, TOP, 130, "A", "IPv6 호스트")
 node(190, TOP, 130, "B", "터널 입구", hot=True)
@@ -64,8 +64,7 @@ strip(SY + 136, "E 가 꺼낸 것", [("IPv6 헤더 40B", 240, False), ("데이�
 
 d.t(260, SY + 62, "protocol = 41", 11, ACC, MONO)
 
-d.t(30, 552, "IPv4 헤더의 프로토콜 번호 41 이 \"적재량은 IPv6 데이터그램\"이라는 표시입니다. "
-              "바꿔야 하는 장비는 터널 양 끝 둘뿐입니다.", 11, MUTED, KR, "start")
+d.t(30, 552, "IPv4 프로토콜 번호 41 = \"적재량은 IPv6 데이터그램\" · 바꿀 장비는 터널 양 끝 둘뿐", 11, MUTED, KR, "start")
 
 d.legend(576, [("터널 양 끝이 감싸고 벗깁니다", ACC), ("그대로 지나는 구간", MUTED)])
 d.t(920, 598, "KUROSE-ROSS 9E FIG 4.27 · IANA PROTO 41", 8, SOFT, MONO, "end")

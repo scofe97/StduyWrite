@@ -39,7 +39,7 @@ for i, (name, sub, v, focal) in enumerate(BARS):
     d.t(cx, PY1 + 26, name, 12, ACC if focal else INK, KR, "middle", 600)
     d.t(cx, PY1 + 46, sub, 11, MUTED, KR)
 
-d.t(PX0 - 106, 492, "회선 교환은 수요와 무관하게 미리 떼어 두고 남는 시간은 버려집니다. 패킷 교환은 보낼 것이 있는 사용자끼리만 링크를 나눠 씁니다",
+d.t(PX0 - 106, 492, "회선 교환은 수요와 무관하게 미리 떼어 두고 남는 시간은 버려짐 · 패킷 교환은 보낼 것이 있는 사용자끼리만 링크를 나눠 씀",
      11, MUTED, KR, "start")
 
 d.legend(H - 60, [("필요할 때만 나눠 주는 쪽", ACC)])

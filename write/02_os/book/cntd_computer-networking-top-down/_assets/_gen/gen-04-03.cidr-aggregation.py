@@ -77,8 +77,7 @@ for i, (nm, sub, n, y) in enumerate(c3):
     d.t(C3 + 18, y + n * K / 2 - 4, nm, 12, ACC if focal else INK, KR, "start", 600)
     d.t(C3 + 18, y + n * K / 2 + 14, sub, 10, MUTED, MONO, "start")
 
-d.t(40, 512, "조직 1 의 주소는 ISP 블록 안에 있지만 다른 ISP 가 더 구체적인 /23 으로 광고합니다. "
-              "바깥 라우터는 최장 접두어 일치로 그쪽을 고릅니다.", 11, MUTED, KR, "start")
+d.t(40, 512, "조직 1 은 ISP 블록 안 · 다른 ISP 가 더 구체적인 /23 광고 → 최장 접두어 일치로 그쪽 채택", 11, MUTED, KR, "start")
 
 d.legend(534, [("조직 1 의 예외 경로", ACC), ("집약되는 흐름", MUTED)])
 d.t(960, 556, "WIDTH = ADDRESS COUNT · K = 0.0625 PX/ADDR", 8, SOFT, MONO, "end")

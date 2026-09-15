@@ -14,14 +14,14 @@ d = D(W, H, "COMPUTER NETWORKING TOP-DOWN · 02-01 §3",
 C0, C0W = 24, 196          # 항목
 C1, C1W = 232, 180         # TCP
 C2, C2W = 424, 180         # UDP
-C3, C3W = 616, 360         # UDP 에서는 이렇게 됩니다
+C3, C3W = 616, 360         # UDP 에서는 이렇게 됨
 HY, RH, RS = 108, 40, 48
-ROWS = [("핸드셰이킹", "곧장 말을 시작합니다"),
-        ("도착 보장", "닿는다는 보장이 없습니다"),
-        ("순서 보장", "보낸 순서와 다를 수 있습니다"),
-        ("혼잡 제어", "원하는 속도로 밀어 넣습니다")]
+ROWS = [("핸드셰이킹", "곧장 말을 시작함"),
+        ("도착 보장", "닿는다는 보장이 없음"),
+        ("순서 보장", "보낸 순서와 다를 수 있음"),
+        ("혼잡 제어", "원하는 속도로 밀어 넣음")]
 
-for x, w, lab in ((C0, C0W, ""), (C1, C1W, "TCP"), (C2, C2W, "UDP"), (C3, C3W, "UDP 에서는 이렇게 됩니다")):
+for x, w, lab in ((C0, C0W, ""), (C1, C1W, "TCP"), (C2, C2W, "UDP"), (C3, C3W, "UDP 에서는 이렇게 됨")):
     d.box(x, HY, w, RH, PAPER2, RULE, 0.9)
     if lab:
         d.t(x + w / 2, HY + 26, lab, 12, INK, KR, "middle", 600)
@@ -36,19 +36,18 @@ for i, (item, effect) in enumerate(ROWS):
         d.box(C0, y, C0W, RH, PAPER2, RULE, 0.9)
         d.t(C0 + C0W / 2, y + 26, item, 12, INK, KR)
     d.tone(C1, y, C1W, RH, OK, 6, "14", 1.1)
-    d.t(C1 + C1W / 2, y + 26, "있습니다", 12, OK, KR)
+    d.t(C1 + C1W / 2, y + 26, "있음", 12, OK, KR)
     d.tone(C2, y, C2W, RH, BAD, 6, "14", 1.1)
-    d.t(C2 + C2W / 2, y + 26, "없습니다", 12, BAD, KR)
+    d.t(C2 + C2W / 2, y + 26, "없음", 12, BAD, KR)
     d.box(C3, y, C3W, RH, PAPER2, RULE, 0.9)
     d.t(C3 + 16, y + 26, effect, 11, MUTED, KR, "start")
 
 BY = HY + RH + 8 + 4 * RS + 16
 d.line(24, BY, 976, BY, RULE, 0.8)
-d.t(24, BY + 26, "혼잡 제어는 통신하는 프로세스가 아니라 인터넷 전체의 복리를 위한 서비스입니다. "
-                 "그래서 그것을 피하려고 UDP 를 고르는 앱이 생깁니다.", 11, ACC, KR, "start")
-d.t(24, BY + 48, "네 축 가운데 보안은 TCP 도 UDP 도 주지 않아 TLS 를 애플리케이션 층에 얹습니다.", 11, MUTED, KR, "start")
-d.t(24, BY + 70, "처리량 보장과 타이밍 보장은 둘 다 못 주므로 이 표에 행으로 두지 않았습니다.", 11, MUTED, KR, "start")
-d.t(24, BY + 92, "다만 밀어 넣는 속도가 곧 종단 처리량은 아닙니다. 중간 링크의 용량과 혼잡이 그보다 낮출 수 있습니다.",
+d.t(24, BY + 26, "혼잡 제어는 프로세스가 아니라 인터넷 전체를 위한 서비스 · 그래서 그것을 피하려 UDP 를 고르는 앱이 생김", 11, ACC, KR, "start")
+d.t(24, BY + 48, "네 축 가운데 보안은 TCP 도 UDP 도 주지 않아 TLS 를 애플리케이션 층에 얹음", 11, MUTED, KR, "start")
+d.t(24, BY + 70, "처리량 보장·타이밍 보장은 둘 다 못 줌 → 이 표에 행으로 두지 않음", 11, MUTED, KR, "start")
+d.t(24, BY + 92, "다만 밀어 넣는 속도가 곧 종단 처리량은 아님 · 중간 링크의 용량과 혼잡이 그보다 낮출 수 있음",
     11, INFO, KR, "start")
 
 d.legend(H - 44, [("TCP 가 주는 것", OK), ("UDP 에 없는 것", BAD), ("이 절의 논점", ACC), ("단서", INFO)])

@@ -42,12 +42,12 @@ for i in (0, 4, 10, 22, 29):
 
 # 튀는 표본 하나를 짚는다
 d.line(xp(4), yp(212.92), xp(4), yp(212.92) - 30, SOFT, 0.8, "3 3")
-d.t(xp(4) + 8, yp(212.92) - 34, "표본 212.92 — 추정치는 203.87 로만 움직입니다", 11, SOFT, KR, "start")
+d.t(xp(4) + 8, yp(212.92) - 34, "표본 212.92 — 추정치는 203.87 로만 움직", 11, SOFT, KR, "start")
 
 d.box(PX0 - 130, 440, 700, 82, PAPER2, RULE, 0.9, 6)
 d.t(PX0 - 112, 466, "TimeoutInterval = EstimatedRTT + 4 · DevRTT", 12, INK, MONO, "start", 600)
 d.t(PX0 - 112, 490, "607.89 ms (1회) → 208.92 ms (30회) 로 수렴 · DevRTT 는 101.31 → 1.40", 11, ACC, MONO, "start")
-d.t(PX0 - 112, 512, "경로가 안정적일수록 타임아웃이 왕복 시간에 바짝 붙습니다", 11, SOFT, KR, "start")
+d.t(PX0 - 112, 512, "경로가 안정적일수록 타임아웃이 왕복 시간에 바짝 붙음", 11, SOFT, KR, "start")
 
 d.legend(H - 44, [("EstimatedRTT", ACC), ("SampleRTT", MUTED)])
 d.save("03-03.rtt-estimation.svg")

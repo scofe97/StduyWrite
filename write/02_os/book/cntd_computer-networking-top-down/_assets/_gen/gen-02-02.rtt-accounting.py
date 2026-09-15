@@ -59,9 +59,9 @@ for zy, name, s, e, i, col, focal in ROWS:
         d.box(x, y + 12, w, BAR_H, PAPER, col, 1.0, 4)
     d.t(x + w / 2, y + 29, f"{s} → {e}", 13, ACC if focal else col, MONO)
 
-d.t(LX, BOT + 32, "객체당 2 RTT 는 연결 수립 1 회와 요청·응답 1 회입니다. 원문의 객체 11개 예에서는 22 RTT 대 3 RTT 가 됩니다",
+d.t(LX, BOT + 32, "객체당 2 RTT 는 연결 수립 1 회와 요청·응답 1 회 · 원문의 객체 11개 예에서는 22 RTT 대 3 RTT 가 됨",
     13, MUTED, KR, "start")
-d.t(LX, BOT + 56, "마지막 줄이 파이프라이닝입니다 — 앞 답을 기다리지 않고 두 요청을 연달아 보냅니다",
+d.t(LX, BOT + 56, "마지막 줄이 파이프라이닝입니다 — 앞 답을 기다리지 않고 두 요청을 연달아 보냄",
     13, MUTED, KR, "start")
 
 d.legend(H - 48, [("마지막 객체가 도착하는 구간", ACC), ("연결 수립", INFO), ("요청·응답", MUTED)])

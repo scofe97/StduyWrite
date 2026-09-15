@@ -37,7 +37,7 @@ def bar(row_y, s, lab, c, focal=False):
 
 for s, lab in [(0, "1"), (3, "2"), (6, "3"), (9, "4"), (14, "5")]:
     bar(ROWS[1][1], s, lab, MUTED)
-d.t(xp(12) + 8, ROWS[1][1] + 26, "링크가 놉니다", 12, SOFT, KR, "start")
+d.t(xp(12) + 8, ROWS[1][1] + 26, "링크가 놈", 12, SOFT, KR, "start")
 
 for s, lab, hi in [(0, "1", True), (3, "3", True), (6, "2", False), (9, "4", True), (14, "5", False)]:
     bar(ROWS[2][1], s, lab, ACC if hi else MUTED, hi)
@@ -45,11 +45,11 @@ d.t(xp(9) + 4, ROWS[2][1] - 6, "높은 우선순위인 4 가 2 를 끊지 못합
 
 for s, lab, c1 in [(0, "1", True), (3, "3", False), (6, "2", True), (9, "4", True), (14, "5", False)]:
     bar(ROWS[3][1], s, lab, INFO if c1 else OK, True)
-d.t(xp(3) + 4, ROWS[3][1] + 52, "클래스를 번갈아 — 3 이 2 보다 먼저 나갑니다", 12, SOFT, KR, "start")
+d.t(xp(3) + 4, ROWS[3][1] + 52, "클래스를 번갈아 — 3 이 2 보다 먼저 나감", 12, SOFT, KR, "start")
 
-d.t(20, 492, "WFQ 는 라운드 로빈을 일반화해 클래스마다 가중치를 줍니다. 클래스 i 는 최소한 R × w_i / Σw_j 를 받습니다.",
+d.t(20, 492, "WFQ = 라운드 로빈 일반화 + 클래스별 가중치 · 최소 보장 R × w_i / Σw_j",
      11, MUTED, KR, "start")
-d.t(20, 514, "넷 다 일 보존 규율이라 보낼 패킷이 있는 한 링크를 놀리지 않습니다. FIFO 의 빈 구간은 보낼 것이 없어서입니다.",
+d.t(20, 514, "넷 다 일 보존 규율 — 보낼 패킷이 있으면 링크를 놀리지 않음 (FIFO 의 빈 구간은 보낼 것이 없어서)",
      11, MUTED, KR, "start")
 
 d.legend(H - 44, [("높은 우선순위", ACC), ("클래스 1", INFO), ("클래스 2", OK), ("구분 없음", MUTED)])

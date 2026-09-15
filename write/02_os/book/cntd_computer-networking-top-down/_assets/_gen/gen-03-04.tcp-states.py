@@ -21,8 +21,8 @@ def st(cx, cy, name, sub, c=MUTED, focal=False):
     d.t(cx, cy - 2, name, 11, c if focal else INK, MONO, "middle", 600)
     if sub: d.t(cx, cy + 16, sub, 11, SOFT, KR)
 
-d.o.append(f'<circle cx="46" cy="{ROW1}" r="6" fill="{INK}"/>')
-d.path(f"M 54 {ROW1} L {126 - BW/2 - 10} {ROW1}", MUTED, 1.3, m="ar")
+d.o.append(f'<circle cx="28" cy="{ROW1}" r="5" fill="{INK}"/>')
+d.path(f"M 35 {ROW1} L {126 - BW/2 - 4} {ROW1}", MUTED, 1.3, m="ar")
 
 for cx, n, s in TOP: st(cx, ROW1, n, s)
 st(806, ROW2, "FIN_WAIT_2", "상대 FIN 대기")
@@ -36,25 +36,25 @@ TRANS = [
 ]
 for (a, b), y, lab, c in TRANS:
     d.path(f"M {a + BW/2 + 4} {y} L {b - BW/2 - 10} {y}", c, 1.3, m="ar")
-    d.t((a + b) / 2, y - 12, lab, 11, SOFT, KR)
+    d.t((a + b) / 2, y - BH / 2 - 12, lab, 11, SOFT, KR)
 
 d.path(f"M 806 {ROW1 + BH/2 + 4} L 806 {ROW2 - BH/2 - 10}", MUTED, 1.3, m="ar")
 d.t(818, (ROW1 + ROW2) / 2, "ACK 받음", 11, SOFT, KR, "start")
 
 d.path(f"M {806 - BW/2 - 4} {ROW2} L {566 + BW/2 + 10} {ROW2}", ACC, 1.4, m="acc")
-d.t((806 + 566) / 2, ROW2 - 12, "상대 FIN 받음 / ACK 보냄", 11, ACC, KR)
+d.t((806 + 566) / 2, ROW2 - BH / 2 - 12, "상대 FIN 받음 / ACK 보냄", 11, ACC, KR)
 
 d.path(f"M {566 - BW/2 - 4} {ROW2} L {306 + BW/2 + 10} {ROW2}", OK, 1.4, m="ok")
-d.t((566 + 306) / 2, ROW2 - 12, "대기 시간 만료", 11, OK, KR)
+d.t((566 + 306) / 2, ROW2 - BH / 2 - 12, "대기 시간 만료", 11, OK, KR)
 d.o.append(f'<circle cx="{306 - BW/2 - 26}" cy="{ROW2}" r="8" fill="none" stroke="{INK}" stroke-width="1.4"/>')
 d.o.append(f'<circle cx="{306 - BW/2 - 26}" cy="{ROW2}" r="5" fill="{INK}"/>')
 d.path(f"M {306 - BW/2 - 4} {ROW2} L {306 - BW/2 - 16} {ROW2}", MUTED, 1.3, m="ar")
 
-d.t(24, 470, "TIME_WAIT 가 있는 이유는 하나입니다. 마지막 확인 응답이 유실됐을 때 다시 보낼 수 있어야 하기 때문입니다.",
+d.t(24, 470, "TIME_WAIT 가 있는 이유는 하나 · 마지막 확인 응답이 유실됐을 때 다시 보낼 수 있어야 하기 때문",
      11, MUTED, KR, "start")
-d.t(24, 492, "이 대기가 끝나야 포트 번호를 포함한 자원이 풀립니다. 연결을 먼저 닫는 쪽이 이 상태를 떠안습니다.",
+d.t(24, 492, "이 대기가 끝나야 포트 번호를 포함한 자원이 풀림 · 연결을 먼저 닫는 쪽이 이 상태를 떠안음",
      11, MUTED, KR, "start")
-d.t(24, 522, "이 맥에서 sysctl net.inet.tcp.msl 이 15000 ms 이므로 TIME_WAIT 는 2×MSL 인 30초입니다 — 원문이 든 세 값 중 첫 번째와 맞습니다.",
+d.t(24, 522, "이 맥의 net.inet.tcp.msl = 15000 ms → TIME_WAIT 는 2×MSL = 30초 · 원문의 세 값 중 첫째와 일치",
      11, SOFT, KR, "start")
 
 d.legend(H - 44, [("마지막 ACK 재전송 대비", ACC), ("자원이 풀리는 자리", OK), ("나머지 상태", MUTED)])

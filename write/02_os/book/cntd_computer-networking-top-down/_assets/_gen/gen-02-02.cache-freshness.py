@@ -43,23 +43,23 @@ d.t((S2 + S3) / 2, SY - 14, "max-age 만료", 13, MUTED, KR)
 # 자기 전이 — 상태 위로
 d.path(f"M {S2 - 44} {SY - BH / 2 - 2} L {S2 - 44} {SY - BH / 2 - 46} "
        f"L {S2 + 44} {SY - BH / 2 - 46} L {S2 + 44} {SY - BH / 2 - 10}", ACC, 1.4, m="acc")
-d.t(S2 + 60, SY - BH / 2 - 42, "사용자 요청 / 캐시에서 바로 — 서버에 안 묻습니다", 13, ACC, KR, "start")
+d.t(S2 + 60, SY - BH / 2 - 42, "사용자 요청 / 캐시에서 바로 — 서버에 안 묻음", 13, ACC, KR, "start")
 
 # 돌아오는 두 갈래
 d.path(f"M {S3 - 40} {SY + BH / 2 + 2} L {S3 - 40} {SY + BH / 2 + 54} "
        f"L {S2 - 30} {SY + BH / 2 + 54} L {S2 - 30} {SY + BH / 2 + 10}", OK, 1.4, m="ok")
 # 라벨은 가로 구간(+54) 위로 6px 띄운다 — 같은 y 에 두면 선이 글자를 관통한다.
-d.t((S2 + S3) / 2 - 40, SY + BH / 2 + 40, "조건부 GET / 304 — 본문이 오지 않습니다", 13, OK, KR)
+d.t((S2 + S3) / 2 - 40, SY + BH / 2 + 40, "조건부 GET / 304 — 본문이 오지 않음", 13, OK, KR)
 
 d.path(f"M {S3 + 40} {SY + BH / 2 + 2} L {S3 + 40} {SY + BH / 2 + 118} "
        f"L {S2 + 30} {SY + BH / 2 + 118} L {S2 + 30} {SY + BH / 2 + 10}", INFO, 1.4, m="info")
-d.t((S2 + S3) / 2 + 20, SY + BH / 2 + 104, "조건부 GET / 200 OK — 새 본문을 받습니다", 13, INFO, KR)
+d.t((S2 + S3) / 2 + 20, SY + BH / 2 + 104, "조건부 GET / 200 OK — 새 본문을 받음", 13, INFO, KR)
 
 d.t(S1, SY + BH / 2 + 34, "Cache-Control: no-store 면", 13, SOFT, KR)
-d.t(S1, SY + BH / 2 + 54, "이 상태를 벗어나지 않습니다", 13, SOFT, KR)
+d.t(S1, SY + BH / 2 + 54, "이 상태를 벗어나지 않음", 13, SOFT, KR)
 
-d.t(20, 444, "max-age=N 을 받으면 그 시간 동안 신선하고, 지나면 만료를 의심합니다.", 13, MUTED, KR, "start")
-d.t(20, 466, "조건부 GET 은 왕복 한 번을 쓰고 본문 전송 시간을 아낍니다. 객체가 클수록 이득이 큽니다.", 13, MUTED, KR, "start")
+d.t(20, 444, "max-age=N 을 받으면 그 시간 동안 신선하고, 지나면 만료를 의심함", 13, MUTED, KR, "start")
+d.t(20, 466, "조건부 GET 은 왕복 한 번을 쓰고 본문 전송 시간을 아낌 · 객체가 클수록 이득이 큼", 13, MUTED, KR, "start")
 
 d.legend(H - 56, [("왕복이 0 인 자리", ACC), ("본문 없이 끝남", OK), ("본문을 다시 받음", INFO)])
 d.save("02-02.cache-freshness.svg")

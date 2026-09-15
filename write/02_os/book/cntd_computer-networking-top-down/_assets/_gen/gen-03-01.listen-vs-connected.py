@@ -61,7 +61,7 @@ for i, (who, src) in enumerate(conns):
     d.t(LSX + 16, y + 37, f"{src} → *:80", 11.5, INK, MONO, "start")
     d.arrow([(246, y + CH / 2), (LSX - 4, y + CH / 2)], OK, "ok", 1.4)
 
-d.t(44, ZY + ZH - 24, "목적지는 셋 다 :80 으로 같습니다. 갈라 주는 것은 출발지입니다 — 그것이 4튜플입니다.",
+d.t(44, ZY + ZH - 24, "목적지는 셋 다 :80 으로 같음 · 갈라 주는 것은 출발지입니다 — 그것이 4튜플",
     12, MUTED, KR, "start")
 
 # ── UDP — 소켓 하나로 모인다 ────────────────────────────────────
@@ -76,14 +76,14 @@ for i, src in enumerate(("A 57418", "B 49530", "C 51002")):
     # 세 화살표가 x=768 한 줄기로 모였다 내려간다. 대각선은 lint 가 막으므로 직교로 꺾는다.
     d.arrow([(752, y + 20), (768, y + 20), (768, ZY + 205), (USX - 4, ZY + 205)], INFO, "info", 1.3)
 
-d.t(660, ZY + ZH - 44, "출발지가 달라도 같은 소켓입니다.", 12, MUTED, KR, "start")
-d.t(660, ZY + ZH - 24, "그래서 recvfrom() 이 출발지를 함께 줍니다.", 12, MUTED, KR, "start")
+d.t(660, ZY + ZH - 44, "출발지가 달라도 같은 소켓", 12, MUTED, KR, "start")
+d.t(660, ZY + ZH - 24, "그래서 recvfrom() 이 출발지를 함께 줌", 12, MUTED, KR, "start")
 
 BY = ZY + ZH + 22
 d.tone(24, BY, W - 48, 78, ACC)
-d.t(44, BY + 28, "튜플의 개수가 API 를 정합니다", 13, INK, KR, "start", 600)
-d.t(44, BY + 50, "TCP 의 연결된 소켓은 4튜플로 상대를 이미 알아서 recv() 로 충분합니다.", 12, MUTED, KR, "start")
-d.t(44, BY + 70, "UDP 소켓은 2튜플뿐이라 상대를 모릅니다 — 답장하려면 recvfrom() 이 준 출발지를 써야 합니다.",
+d.t(44, BY + 28, "튜플의 개수가 API 를 정함", 13, INK, KR, "start", 600)
+d.t(44, BY + 50, "연결된 소켓은 4튜플로 상대를 이미 앎 → recv() 로 충분", 12, MUTED, KR, "start")
+d.t(44, BY + 70, "UDP 소켓은 2튜플뿐이라 상대를 모름 — 답장하려면 recvfrom() 이 준 출발지를 써야 함",
     12, MUTED, KR, "start")
 
 d.legend(BY + 100, [("데이터를 안 나르는 소켓", ACC), ("연결마다 하나씩", OK), ("전부 한 소켓으로", INFO)])

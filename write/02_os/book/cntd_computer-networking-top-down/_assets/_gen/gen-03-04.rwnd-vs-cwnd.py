@@ -66,7 +66,7 @@ d.t(LEFT + 12, FOOT_Y + 27, "실제로 보낼 수 있는 양", 12, INK, KR, "sta
 FX, FW = col_x(0), col_x(1) + COL_W - col_x(0)
 d.tone(FX, FOOT_Y, FW, FOOT_H, ACC, 4, "14", 1.4)
 d.t(FX + FW / 2, FOOT_Y + 19, "min{cwnd, rwnd}", 13, ACC, MONO, "middle", 600)
-d.t(FX + FW / 2, FOOT_Y + 36, "둘 중 작은 쪽이 한도입니다", 12, ACC, KR, "middle", 400, op="0.85")
+d.t(FX + FW / 2, FOOT_Y + 36, "둘 중 작은 쪽이 한도", 12, ACC, KR, "middle", 400, op="0.85")
 
 d.legend(bottom + 20, [("숫자로 알려 준다", INFO), ("손실·지연으로 추측한다", WARN), ("둘 중 작은 쪽", ACC)])
 d.save("03-04.rwnd-vs-cwnd.svg")

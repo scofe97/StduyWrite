@@ -54,10 +54,10 @@ d.line(X0, Y0 + HH + len(ROWS) * RH, X0 + TW, Y0 + HH + len(ROWS) * RH, RULE, 0.
 for cx in xs[1:]:
     d.line(cx, Y0, cx, Y0 + HH + len(ROWS) * RH, RULE, 0.5)
 
-d.t(X0, 498, "칸의 값은 `D(노드), p(노드)` 입니다 — 지금까지 아는 최소 비용과, 그 경로에서 바로 앞에 오는 전임 노드입니다.", 11, MUTED, KR, "start")
-d.t(X0, 520, "1 회차에 x 가 확정되자 w 가 5 에서 4 로, y 가 무한대에서 2 로 내려갑니다. x 를 거치는 길이 생겼기 때문입니다.", 11, MUTED, KR, "start")
-d.t(X0, 542, "2 회차에는 v 와 y 가 나란히 2 입니다. 동점은 임의로 깨며 원문은 y 를 택합니다.", 11, MUTED, KR, "start")
-d.t(X0, 564, "끝나고 남는 것은 노드마다의 전임 하나입니다. 전임을 거슬러 올라가 첫 홉만 뽑으면 그게 u 의 전달 표입니다.", 11, INFO, KR, "start")
+d.t(X0, 498, "칸의 값 = `D(노드), p(노드)` — 지금까지 아는 최소 비용과 그 경로의 전임 노드", 11, MUTED, KR, "start")
+d.t(X0, 520, "1 회차 — x 확정 → w 5→4 · y ∞→2 (x 를 거치는 길이 생김)", 11, MUTED, KR, "start")
+d.t(X0, 542, "2 회차 — v·y 가 나란히 2 · 동점은 임의로 깨고 원문은 y 채택", 11, MUTED, KR, "start")
+d.t(X0, 564, "남는 것은 노드마다 전임 하나 · 거슬러 올라가 첫 홉만 뽑으면 u 의 전달 표", 11, INFO, KR, "start")
 
 d.legend(600, [("이번 회차에 확정", ACC), ("값이 내려감", ACC), ("그대로", MUTED), ("확정 완료 — 더 안 봄", SOFT)])
 d.t(976, 622, "KUROSE-ROSS 9E TABLE 5.1", 8, SOFT, MONO, "end")
