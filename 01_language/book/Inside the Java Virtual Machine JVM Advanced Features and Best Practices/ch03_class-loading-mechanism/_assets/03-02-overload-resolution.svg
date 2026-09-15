@@ -1,0 +1,88 @@
+<svg viewBox="0 0 900 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>오버로딩 해소 우선순위 — 'a' 하나로 후보를 지워가며 드러나는 순서</title>
+  <desc>리터럴 'a'(정적 타입 char)를 sayHello 오버로딩 7버전에 던지고 버전을 하나씩 지우면, 컴파일러가 char → int → long → Character → Serializable → Object → char...(가변인자) 순으로 후보를 양보한다. 정확히 일치 → 자동 형 변환(widening) → 오토박싱 → 인터페이스 → 상위 클래스 → 가변인자라는 한 원리가 일곱 단계를 관통한다. 변환을 적게 할수록 적합하다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11.5px;fill:rgb(160,155,150)}
+      .node{font-size:12px;font-weight:800;fill:#0d0d0d;font-family:'JetBrains Mono',monospace}
+      .stage{font-size:9px;font-weight:700;fill:#0d0d0d}
+      .why{font-size:10px;fill:#cfd6dd}
+      .whyk{font-size:10px;font-weight:700;fill:#e6c878;font-family:'JetBrains Mono',monospace}
+      .grp{font-size:10px;font-weight:800;fill:#c8ccd0}
+      .note{font-size:10px;fill:#cfd6dd}
+    </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="600" fill="#0d0d0d"/>
+  <text x="28" y="40" class="title">오버로딩 해소 우선순위 — sayHello('a') 하나로 드러나는 순서</text>
+  <text x="28" y="64" class="sub">정확히 일치 → 자동 형 변환(widening) → 오토박싱 → 인터페이스 → 상위 클래스 → 가변인자 · 변환이 적을수록 적합</text>
+
+  <!-- 단계 그룹 라벨 (배경 톤) -->
+  <text x="28" y="100" class="grp">① 정확히 일치</text>
+  <text x="28" y="196" class="grp">② 자동 형 변환 (원시 widening)</text>
+  <text x="28" y="318" class="grp">③ 오토박싱 → 래퍼 상속 계층</text>
+  <text x="28" y="490" class="grp">④ 최후 — 가변인자</text>
+
+  <!-- ① char : 골든앰버 강조 (정확히 일치) -->
+  <rect x="40" y="112" width="220" height="56" rx="10" fill="rgb(212,168,83)"/>
+  <text x="150" y="136" text-anchor="middle" class="node">sayHello(char)</text>
+  <text x="150" y="156" text-anchor="middle" class="stage">변환 0회 — 가장 적합</text>
+
+  <!-- ① → ② -->
+  <path d="M150,168 L150,206" stroke="rgb(212,168,83)" stroke-width="2.5" fill="none" marker-end="url(#ar)"/>
+  <text x="166" y="190" class="why">char 버전을 지우면 →</text>
+
+  <!-- ② int → long (연쇄 widening) : 연베이지 톤 -->
+  <rect x="40" y="208" width="220" height="48" rx="10" fill="#f5edda"/>
+  <text x="150" y="230" text-anchor="middle" class="node">sayHello(int)</text>
+  <text x="150" y="248" text-anchor="middle" class="stage">char → int · widening 1회</text>
+
+  <path d="M260,232 L330,232" stroke="rgb(212,168,83)" stroke-width="2.5" fill="none" marker-end="url(#ar)"/>
+  <text x="338" y="228" class="whyk">char → int → long</text>
+
+  <rect x="470" y="208" width="220" height="48" rx="10" fill="#f5edda"/>
+  <text x="580" y="230" text-anchor="middle" class="node">sayHello(long)</text>
+  <text x="580" y="248" text-anchor="middle" class="stage">연쇄 widening · 멀수록 덜 적합</text>
+
+  <!-- ② → ③ -->
+  <path d="M150,256 L150,330" stroke="rgb(212,168,83)" stroke-width="2.5" fill="none" marker-end="url(#ar)"/>
+  <text x="166" y="300" class="why">넓힐 정수형이 없으면 → 박싱</text>
+
+  <!-- ③ Character → Serializable → Object : 연남색 톤 -->
+  <rect x="40" y="332" width="220" height="48" rx="10" fill="#dceaf7"/>
+  <text x="150" y="354" text-anchor="middle" class="node">sayHello(Character)</text>
+  <text x="150" y="372" text-anchor="middle" class="stage">오토박싱 — char를 래퍼로</text>
+
+  <path d="M260,356 L330,356" stroke="rgb(212,168,83)" stroke-width="2.5" fill="none" marker-end="url(#ar)"/>
+  <text x="338" y="352" class="why">래퍼가 구현한 인터페이스</text>
+
+  <rect x="470" y="332" width="220" height="48" rx="10" fill="#dceaf7"/>
+  <text x="580" y="354" text-anchor="middle" class="node">sayHello(Serializable)</text>
+  <text x="580" y="372" text-anchor="middle" class="stage">Character implements Serializable</text>
+
+  <path d="M580,380 L580,424" stroke="rgb(212,168,83)" stroke-width="2.5" fill="none" marker-end="url(#ar)"/>
+  <text x="596" y="408" class="why">인터페이스도 없으면 → 상위 클래스</text>
+
+  <rect x="470" y="426" width="220" height="48" rx="10" fill="#dceaf7"/>
+  <text x="580" y="448" text-anchor="middle" class="node">sayHello(Object)</text>
+  <text x="580" y="466" text-anchor="middle" class="stage">모든 타입의 조상 · 가장 덜 적합</text>
+
+  <!-- ③ → ④ -->
+  <path d="M150,380 L150,510" stroke="rgb(212,168,83)" stroke-width="2.5" fill="none" marker-end="url(#ar)"/>
+  <text x="166" y="450" class="why">상속 계층까지 모두 지우면 →</text>
+
+  <!-- ④ char... (가변인자) : 옅은 회베이지 + 점선 테두리(최후 수단) + 어두운 글자 -->
+  <rect x="40" y="512" width="220" height="48" rx="10" fill="#e7e4de" stroke="rgb(212,168,83)" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="150" y="534" text-anchor="middle" class="node">sayHello(char...)</text>
+  <text x="150" y="552" text-anchor="middle" class="stage">길이 1 배열로 감쌈 · 최후 수단</text>
+
+  <!-- 하단 핵심 노트 -->
+  <rect x="300" y="500" width="572" height="72" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="316" y="522" class="note">핵심 — 일곱 단계 모두 인자의 정적 타입(char)만으로 컴파일 때 결정됩니다.</text>
+  <text x="316" y="542" class="note">실제 객체를 보지 않으므로, §3 "정적 디스패치는 정적 타입만 본다"가 우선순위로 구체화된 것입니다.</text>
+  <text x="316" y="562" class="note">char → byte·short는 값이 잘려 후보에 끼지 못하고, 인터페이스를 둘 두면 모호성 오류가 납니다.</text>
+</svg>

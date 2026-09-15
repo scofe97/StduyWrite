@@ -1,0 +1,48 @@
+<svg viewBox="0 0 860 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>시스템 콜 모드 전환과 인터럽트 유형</title>
+  <desc>위: 시스템 콜의 실행 모드. 유저 모드의 프로세스가 시스템 콜을 하면 커널 모드로 모드 전환(mode switch)해 syscall 코드를 실행하고, 끝나면 유저 모드로 돌아온다. 모든 syscall은 모드 전환을 하고, 디스크·네트워크 I/O처럼 블로킹되는 syscall은 컨텍스트 전환(context switch)도 해서 다른 스레드가 도는 동안 첫 스레드는 sleep한다. 아래: 인터럽트는 두 종류다. 비동기 인터럽트는 외부 하드웨어가 현재 SW와 무관하게 보낸다(디스크 I/O 완료·패킷 도착·키보드). 동기 인터럽트는 SW 명령이 낸다 — trap(의도적 커널 호출), exception(0으로 나누기), fault(MMU 매핑 없는 메모리 접근). ISR은 빠르게 처리하고, 일이 많으면 top half가 인터럽트를 빠르게 받고 bottom half(tasklet·work queue·softirq)가 나중에 처리한다.</desc>
+
+  <rect x="0" y="0" width="860" height="500" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">시스템 콜 모드 전환과 인터럽트</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">모든 syscall은 모드 전환 · 블로킹 syscall은 컨텍스트 전환도</text>
+
+  <!-- 시스템 콜 모드 전환 -->
+  <text x="32" y="98" fill="rgb(212,168,83)" font-size="15">시스템 콜 — 모드 전환</text>
+
+  <rect x="32" y="112" width="796" height="50" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="48" y="142" fill="#e8e4df" font-size="12">유저 모드 (process)</text>
+
+  <rect x="32" y="200" width="796" height="50" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="6"/>
+  <text x="48" y="230" fill="rgb(212,168,83)" font-size="12">커널 모드 (syscall 코드 · 특권 명령)</text>
+
+  <defs>
+    <marker id="m1" markerWidth="9" markerHeight="9" refX="3" refY="7" orient="auto"><path d="M0,0 L6,0 L3,7 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="m2" markerWidth="9" markerHeight="9" refX="3" refY="2" orient="auto"><path d="M3,0 L6,7 L0,7 Z" fill="#66bb6a"/></marker>
+  </defs>
+  <line x1="240" y1="164" x2="240" y2="198" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#m1)"/>
+  <text x="256" y="186" fill="rgb(212,168,83)" font-size="11">syscall ↓ 모드 전환</text>
+  <line x1="600" y1="248" x2="600" y2="166" stroke="#66bb6a" stroke-width="2" marker-end="url(#m2)"/>
+  <text x="616" y="186" fill="#66bb6a" font-size="11">return ↑</text>
+
+  <text x="48" y="278" fill="rgb(138,133,128)" font-size="11">블로킹 syscall(디스크·네트워크 I/O)은 컨텍스트 전환 → 다른 스레드 실행, 첫 스레드는 sleep</text>
+
+  <!-- 인터럽트 유형 -->
+  <text x="32" y="318" fill="rgb(212,168,83)" font-size="15">인터럽트 — 두 종류</text>
+
+  <rect x="32" y="332" width="388" height="140" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="226" y="356" fill="#e8e4df" font-size="13" text-anchor="middle">비동기 (외부 HW)</text>
+  <text x="226" y="378" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">현재 SW와 무관하게 도착(IRQ)</text>
+  <text x="48" y="402" fill="rgb(138,133,128)" font-size="10">· 디스크 I/O 완료 · 패킷 도착</text>
+  <text x="48" y="420" fill="rgb(138,133,128)" font-size="10">· HW 실패 · 키보드·마우스 입력</text>
+  <text x="226" y="448" fill="#66bb6a" font-size="10" text-anchor="middle">top half(빠르게) → bottom half(softirq)</text>
+  <text x="226" y="464" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">tasklet · work queue로 나중 처리</text>
+
+  <rect x="440" y="332" width="388" height="140" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="634" y="356" fill="#e8e4df" font-size="13" text-anchor="middle">동기 (SW 명령)</text>
+  <text x="634" y="378" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">책임 명령이 아직 CPU에 있음</text>
+  <text x="456" y="402" fill="rgb(138,133,128)" font-size="10">· trap — 의도적 커널 호출(int 명령)</text>
+  <text x="456" y="420" fill="rgb(138,133,128)" font-size="10">· exception — 0으로 나누기 등</text>
+  <text x="456" y="438" fill="rgb(138,133,128)" font-size="10">· fault — MMU 매핑 없는 메모리 접근</text>
+  <text x="634" y="464" fill="#66bb6a" font-size="10" text-anchor="middle">ISR은 빠르게 — 마스킹 시간은 짧게</text>
+</svg>

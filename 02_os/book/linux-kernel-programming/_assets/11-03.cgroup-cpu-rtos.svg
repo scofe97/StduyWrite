@@ -1,0 +1,66 @@
+<svg viewBox="0 0 680 580" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>cgroups CPU 제약과 RTOS — systemd CPUQuota·cpu.max·RTL</title>
+  <desc>cgroups v2로 CPU bandwidth를 두 방식으로 제약한다. systemd 방식은 서비스 유닛에 CPUQuota·AllowedCPUs를 지정해 부팅 시 자동 적용한다(소수 primes 생성으로 효과 검증). 수동 방식은 /sys/fs/cgroup에 디렉토리를 만들어 cgroup 생성, +cpu를 subtree_control에 써 컨트롤러 추가, cpu.max에 $MAX $PERIOD를 써 bandwidth 설정(예: 800000/1000000 = 80%), cgroup.procs에 PID를 써 프로세스 삽입한다. 제약은 CPU가 saturated일 때만 의미가 있다. RTOS는 결정성(낮은 jitter·예측 가능)이 핵심이며, 리눅스는 GPOS지만 RTL(PREEMPT_RT) 패치로 hard RT로 전환한다.</desc>
+  <rect x="0" y="0" width="680" height="580" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">cgroups CPU 제약과 RTOS</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">CPU bandwidth 를 두 방식으로 제약하고, RTL 로 hard real-time 으로 전환합니다</text>
+
+  <!-- systemd 방식 -->
+  <rect x="20" y="74" width="320" height="148" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="96" fill="#66bb6a" font-size="13" font-weight="bold">① systemd 방식 (쉬움)</text>
+  <text x="38" y="116" fill="rgb(138,133,128)" font-size="10">서비스 유닛 [Service] 섹션에 지시어 지정</text>
+
+  <rect x="38" y="126" width="284" height="26" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="143" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">CPUQuota=10%</text>
+  <rect x="38" y="156" width="284" height="26" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="173" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">AllowedCPUs=1</text>
+
+  <text x="38" y="200" fill="rgb(138,133,128)" font-size="10">CPUSchedulingPolicy·Priority·Nice 도 가능</text>
+  <text x="38" y="216" fill="rgb(138,133,128)" font-size="9">검증: 무제약 99,991 vs 10% 31,541 primes</text>
+
+  <!-- 수동 방식 -->
+  <rect x="350" y="74" width="312" height="148" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="368" y="96" fill="rgb(212,168,83)" font-size="13" font-weight="bold">② 수동 방식 — cpu 컨트롤러</text>
+
+  <text x="368" y="116" fill="#e8e4df" font-size="10">1. mkdir /sys/fs/cgroup/test_group</text>
+  <text x="368" y="134" fill="#e8e4df" font-size="10">2. echo +cpu &gt; cgroup.subtree_control</text>
+  <text x="368" y="152" fill="#e8e4df" font-size="10">3. echo "$MAX $PERIOD" &gt; cpu.max</text>
+  <text x="368" y="170" fill="#e8e4df" font-size="10">4. echo PID &gt; cgroup.procs (프로세스 삽입)</text>
+  <text x="368" y="192" fill="rgb(138,133,128)" font-size="10">cpu.max: 800000/1000000 = 0.8s/1s = 80%</text>
+  <text x="368" y="210" fill="rgb(138,133,128)" font-size="9">검증: 80% 41,257 vs 0.1% 659 primes</text>
+
+  <!-- 핵심 포인트 -->
+  <rect x="20" y="234" width="642" height="56" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="256" fill="#e8e4df" font-size="13" font-weight="bold">핵심 — 제약은 자원이 saturated 일 때만 의미</text>
+  <text x="38" y="276" fill="rgb(138,133,128)" font-size="10">CPU 코어가 포화되지 않으면 프로세스는 원하는 만큼 자유롭게 사용. cpu.weight 로 가중치 조정(기본 100)</text>
+
+  <!-- RTOS 결정성 -->
+  <rect x="20" y="302" width="320" height="148" fill="rgba(173,216,230,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="324" fill="#9cc3df" font-size="13" font-weight="bold">RTOS — 결정성이 핵심</text>
+  <text x="38" y="344" fill="#e8e4df" font-size="11">빠름이 아니라 예측 가능·일관성이 관건</text>
+  <text x="38" y="362" fill="rgb(138,133,128)" font-size="10">응답이 느려도 됨 — 단 항상 deadline 보장</text>
+  <text x="38" y="380" fill="rgb(138,133,128)" font-size="10">jitter(변동)를 최소화 · O(1) 알고리즘 지향</text>
+  <text x="38" y="398" fill="#e8e4df" font-size="11">목표: 최악(worst-case) latency 를 낮춤</text>
+  <text x="38" y="416" fill="rgb(138,133,128)" font-size="10">(최소·평균 latency 는 GPOS 보다 나쁠 수 있음)</text>
+  <text x="38" y="436" fill="rgb(138,133,128)" font-size="9">리눅스는 GPOS · soft RT(five-9s) · RTOS 아님</text>
+
+  <!-- RTL 전환 -->
+  <rect x="350" y="302" width="312" height="148" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="368" y="324" fill="rgb(212,168,83)" font-size="13" font-weight="bold">RTL — Linux 를 hard RT 로</text>
+  <text x="368" y="344" fill="rgb(138,133,128)" font-size="10">PREEMPT_RT → RTL (Linux Foundation)</text>
+
+  <text x="368" y="366" fill="#e8e4df" font-size="10">1. RTL 패치 다운로드·적용(out-of-tree)</text>
+  <text x="368" y="384" fill="#e8e4df" font-size="10">2. CONFIG_PREEMPT_RT=y 설정</text>
+  <text x="368" y="402" fill="rgb(138,133,128)" font-size="9">   (Fully Preemptible Kernel · EXPERT 필요)</text>
+  <text x="368" y="420" fill="#e8e4df" font-size="10">3. 빌드·설치·부팅</text>
+  <text x="368" y="438" fill="rgb(138,133,128)" font-size="10">확인: /sys/kernel/realtime = 1 · 대부분 mainline 병합됨</text>
+
+  <!-- 기타 -->
+  <rect x="20" y="462" width="642" height="110" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="484" fill="#e8e4df" font-size="13" font-weight="bold">기타 스케줄러 관련</text>
+  <text x="38" y="504" fill="#e8e4df" font-size="11">커널 헬퍼(include/linux/sched/rt.h): rt_prio() · rt_task() · task_is_realtime()</text>
+  <text x="38" y="522" fill="rgb(138,133,128)" font-size="10">→ 우선순위·정책으로 real-time task 인지 Boolean 반환</text>
+  <text x="38" y="544" fill="#e8e4df" font-size="11">ghOSt (Google) — 유저 공간에 스케줄링 정책 위임</text>
+  <text x="38" y="562" fill="rgb(138,133,128)" font-size="10">커널은 안정적 sched class, 유저 agent 가 정책 결정 · eBPF 가속 · μs latency 목표</text>
+</svg>

@@ -1,0 +1,65 @@
+<svg viewBox="0 0 900 430" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>isInterrupted() vs Thread.interrupted() — 둘 다 읽지만, 읽은 뒤 플래그를 유지하느냐 비우느냐</title>
+  <desc>interrupt() 로 인터럽트 플래그가 true 가 된 상태에서, isInterrupted() 는 읽기만 하고 플래그를 true 로 유지하므로 다시 읽어도 true 다. 반면 Thread.interrupted() 는 읽으면서 플래그를 false 로 초기화하므로 다시 읽으면 false 다. 둘 다 "읽기" 메서드이며, 플래그를 켜는 것은 interrupt() 다.</desc>
+  <rect x="0" y="0" width="900" height="430" fill="#0d0d0d"/>
+
+  <text x="450" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#e8e4df">isInterrupted() vs Thread.interrupted() — 둘 다 "읽기", 차이는 읽은 뒤 플래그</text>
+
+  <!-- 공통 출발: interrupt() 가 플래그를 켠다 -->
+  <rect x="320" y="56" width="260" height="50" rx="9" fill="#fdf3df"/>
+  <text x="450" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="#5a3d0a">t.interrupt() 호출</text>
+  <text x="450" y="96" text-anchor="middle" font-size="11.5" fill="#5a3d0a">인터럽트 플래그 = true (켜짐)</text>
+
+  <!-- 분기 화살표 좌 -->
+  <line x1="380" y1="106" x2="230" y2="146" stroke="#d4a853" stroke-width="2.5"/>
+  <polygon points="226,149 235,142 234,152" fill="#d4a853"/>
+  <!-- 분기 화살표 우 -->
+  <line x1="520" y1="106" x2="670" y2="146" stroke="#d4a853" stroke-width="2.5"/>
+  <polygon points="674,149 666,152 665,142" fill="#d4a853"/>
+
+  <!-- ===== 좌: isInterrupted() — 유지 ===== -->
+  <rect x="40" y="150" width="380" height="232" rx="12" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="2"/>
+  <text x="230" y="176" text-anchor="middle" font-size="15" font-weight="700" fill="#5b9bd5">isInterrupted()  — 읽고 둔다</text>
+
+  <!-- 1차 읽기 -->
+  <rect x="64" y="192" width="332" height="46" rx="9" fill="#dceaf7"/>
+  <text x="80" y="213" font-size="12.5" font-weight="700" fill="#10243a">1차 읽기 → true 반환</text>
+  <text x="80" y="230" font-size="11" fill="#10243a">플래그는 건드리지 않음 (그대로 둠)</text>
+
+  <!-- 플래그 상태 칩 -->
+  <rect x="64" y="248" width="332" height="40" rx="8" fill="#dceaf7"/>
+  <text x="80" y="273" font-size="12" font-weight="700" fill="#10243a">읽은 뒤 플래그 = true  (변화 없음)</text>
+
+  <line x1="230" y1="288" x2="230" y2="312" stroke="#5b9bd5" stroke-width="2.5"/>
+  <polygon points="230,318 225,308 235,308" fill="#5b9bd5"/>
+
+  <!-- 2차 읽기 -->
+  <rect x="64" y="322" width="332" height="46" rx="9" fill="#dceaf7"/>
+  <text x="80" y="343" font-size="12.5" font-weight="700" fill="#10243a">2차 읽기 → 또 true</text>
+  <text x="80" y="360" font-size="11" fill="#10243a">몇 번을 읽어도 계속 true (멱등 조회)</text>
+
+  <!-- ===== 우: Thread.interrupted() — 비움 ===== -->
+  <rect x="480" y="150" width="380" height="232" rx="12" fill="#0d0d0d" stroke="#d4a853" stroke-width="2"/>
+  <text x="670" y="176" text-anchor="middle" font-size="15" font-weight="700" fill="#d4a853">Thread.interrupted()  — 읽고 치운다</text>
+
+  <!-- 1차 읽기 -->
+  <rect x="504" y="192" width="332" height="46" rx="9" fill="#fdf3df"/>
+  <text x="520" y="213" font-size="12.5" font-weight="700" fill="#5a3d0a">1차 읽기 → true 반환</text>
+  <text x="520" y="230" font-size="11" fill="#5a3d0a">반환과 동시에 플래그를 false 로 clear</text>
+
+  <!-- 플래그 상태 칩 -->
+  <rect x="504" y="248" width="332" height="40" rx="8" fill="#f2d4d4"/>
+  <text x="520" y="273" font-size="12" font-weight="700" fill="#7a1f1f">읽은 뒤 플래그 = false  (초기화됨)</text>
+
+  <line x1="670" y1="288" x2="670" y2="312" stroke="#d4a853" stroke-width="2.5"/>
+  <polygon points="670,318 665,308 675,308" fill="#d4a853"/>
+
+  <!-- 2차 읽기 -->
+  <rect x="504" y="322" width="332" height="46" rx="9" fill="#f2d4d4"/>
+  <text x="520" y="343" font-size="12.5" font-weight="700" fill="#7a1f1f">2차 읽기 → 이번엔 false</text>
+  <text x="520" y="360" font-size="11" fill="#7a1f1f">이미 비워서 "인터럽트 없음"으로 보임</text>
+
+  <!-- 하단 못박기 -->
+  <rect x="40" y="392" width="820" height="30" rx="9" fill="#0d0d0d" stroke="#d4a853" stroke-width="1.5"/>
+  <text x="450" y="412" text-anchor="middle" font-size="11.5" fill="#c9c4be">처리를 끝내고 플래그를 안 비우면, 뒤이은 sleep() 이 남은 플래그 탓에 InterruptedException 을 또 던진다 → 끝낼 땐 interrupted() 로 clear</text>
+</svg>

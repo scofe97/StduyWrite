@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 976 472" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">예약과 할당이 갈리는 자리</title><desc id="dd">09-03 이 다루는 여섯 절. malloc 이 성공해도 물리 메모리는 아직 없다. 페이지를 만지는 순간 페이지 폴트를 거쳐 프레임이 붙는다. 그 프레임이 끝내 없으면 OOM killer 가 누군가를 고른다.</desc>
+<rect width="976" height="472" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LINUX KERNEL PROGRAMMING · 09-03</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">예약과 할당이 갈리는 자리</text>
+<text x="12" y="76" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" fill="#8B98A9">회수가 실패한 뒤의 이야기입니다 — 앞 노트(09-02)의 다음 장면</text>
+<rect x="24" y="116" width="176" height="180" rx="8" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4"/>
+<text x="40" y="146" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">§1</text>
+<text x="184" y="146" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">demand paging</text>
+<line x1="40" y1="162" x2="184" y2="162" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="40" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">malloc 성공은</text>
+<text x="40" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">예약일 뿐입니다</text>
+<rect x="43.55" y="249" width="136.9" height="22" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="112.0" y="265" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F08A59">lazy allocation</text>
+<rect x="208" y="116" width="176" height="180" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="224" y="146" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§2</text>
+<text x="368" y="146" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">폴트 흐름</text>
+<line x1="224" y1="162" x2="368" y2="162" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="224" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">만지는 순간 폴트를</text>
+<text x="224" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">거쳐 프레임이 붙습니다</text>
+<rect x="235.61" y="249" width="120.78" height="22" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="296.0" y="265" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#6A95D8">__alloc_pages</text>
+<rect x="392" y="116" width="176" height="180" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="408" y="146" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§3·4</text>
+<text x="552" y="146" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">overcommit</text>
+<line x1="408" y1="162" x2="552" y2="162" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="408" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">어디까지 봐 줄지를</text>
+<text x="408" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">세 정책이 정합니다</text>
+<rect x="419.61" y="249" width="120.78" height="22" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="480.0" y="265" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#6A95D8">vm.overcommit</text>
+<rect x="576" y="116" width="176" height="180" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="592" y="146" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F0616D">§5</text>
+<text x="736" y="146" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">OOM score</text>
+<line x1="592" y1="162" x2="736" y2="162" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="592" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">누구를 죽일지</text>
+<text x="592" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">점수로 고릅니다</text>
+<rect x="603.61" y="249" width="120.78" height="22" rx="4" fill="#0D1117" stroke="#F0616D" stroke-width="0.8"/>
+<text x="664.0" y="265" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F0616D">oom_score_adj</text>
+<rect x="760" y="116" width="176" height="180" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="776" y="146" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">§6</text>
+<text x="920" y="146" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">cgroups</text>
+<line x1="776" y1="162" x2="920" y2="162" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="776" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">애초에 그 상황을</text>
+<text x="776" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">만들지 않는 쪽입니다</text>
+<rect x="795.67" y="249" width="104.66000000000001" height="22" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="848.0" y="265" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#3FB98C">memory.high</text>
+<text x="24" y="325" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">읽는 순서</text>
+<path d="M 96 320 L 936 320" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)" stroke-dasharray="4 6"/>
+<text x="24" y="356" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">§1 의 사실 하나가 나머지를 다 끌고 옵니다 — 예약과 할당이 갈려 있으니 과약속이 가능하고, 과약속했으니 OOM 이 생깁니다.</text>
+<text x="24" y="380" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#5E6B7E">§6 은 그 상황을 사후에 수습하는 대신 미리 가두는 쪽입니다.</text>
+<line x1="12" y1="416" x2="928" y2="416" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="438" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="427" width="14" height="14" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="439" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">이 편의 출발점</text>
+<rect x="268" y="427" width="14" height="14" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="290" y="439" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">메커니즘</text>
+<rect x="376" y="427" width="14" height="14" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="398" y="439" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">누가 죽나</text>
+<rect x="499" y="427" width="14" height="14" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="521" y="439" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">예방</text>
+</svg>

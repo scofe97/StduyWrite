@@ -1,0 +1,70 @@
+<svg viewBox="0 0 900 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>CallSite의 일생 — 최초 1회 부트스트랩, 이후 target 직행, 종류에 따라 재링크</title>
+  <desc>invokedynamic 호출 지점의 CallSite는 최초 실행 때 부트스트랩 메서드가 한 번 호출되어 만들어진다. 이후 같은 호출 지점은 부트스트랩을 다시 호출하지 않고 CallSite의 현재 target MethodHandle로 바로 간다. ConstantCallSite는 target이 고정되어 람다처럼 한 번 정하면 끝인 경우에 쓰이고, MutableCallSite와 VolatileCallSite는 런타임에 target을 교체해 재링크할 수 있어 Ruby의 메서드 재정의처럼 실행 중 대상이 바뀌는 동적 언어에 쓰인다. 단 새 target의 메서드 타입은 기존과 같아야 한다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11px;fill:#b4b0ab}
+      .stage{font-size:11px;font-weight:800;fill:#0d0d0d}
+      .node{font-size:9.5px;font-weight:700;fill:#10243a;font-family:'JetBrains Mono',monospace}
+      .nd2{font-size:8.5px;font-weight:700;fill:#10243a;font-family:'JetBrains Mono',monospace}
+      .key{font-size:9px;font-weight:800;fill:#0d0d0d;font-family:'JetBrains Mono',monospace}
+      .note{font-size:9px;fill:#c8ccd0}
+      .foot{font-size:10.5px;font-weight:800;fill:#0d0d0d}
+          .seclbl{font-size:12px;font-weight:800;fill:#e8e4df}
+    </style>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#d4a853"/></marker>
+    <marker id="ag" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#66bb6a"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="480" fill="#0d0d0d"/>
+  <text x="28" y="34" class="title">CallSite의 일생 — 최초 1회 부트스트랩, 이후 target 직행</text>
+  <text x="28" y="56" class="sub">한 번 정하면 끝이 아니다 · 종류(Constant/Mutable)에 따라 재링크 가능</text>
+
+  <text x="28" y="92" class="seclbl">최초 호출 (1회만)</text>
+  <rect x="28" y="100" width="150" height="48" rx="6" fill="#dceaf7"/>
+  <text x="103" y="120" class="node" text-anchor="middle">invokedynamic</text>
+  <text x="103" y="137" class="nd2" text-anchor="middle">호출 지점 첫 실행</text>
+  <line x1="178" y1="124" x2="214" y2="124" stroke="#d4a853" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="216" y="100" width="180" height="48" rx="6" fill="#f3d9a0"/>
+  <text x="306" y="120" class="node" text-anchor="middle">부트스트랩 메서드</text>
+  <text x="306" y="137" class="nd2" text-anchor="middle">언어가 짠 규칙 1회 실행</text>
+  <line x1="396" y1="124" x2="432" y2="124" stroke="#d4a853" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="434" y="100" width="180" height="48" rx="6" fill="#f3d9a0"/>
+  <text x="524" y="120" class="node" text-anchor="middle">CallSite 생성</text>
+  <text x="524" y="137" class="nd2" text-anchor="middle">target = MethodHandle</text>
+  <line x1="614" y1="124" x2="650" y2="124" stroke="#d4a853" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="652" y="100" width="220" height="48" rx="6" fill="rgb(212,168,83)"/>
+  <rect x="664" y="108" width="196" height="20" rx="3" fill="#fdf3df"/>
+  <text x="762" y="123" class="key" text-anchor="middle">target 메서드 실행</text>
+  <text x="762" y="142" class="nd2" text-anchor="middle">첫 호출 완료</text>
+
+  <text x="28" y="186" class="seclbl">이후 호출 (반복)</text>
+  <rect x="28" y="194" width="150" height="44" rx="6" fill="#dceaf7"/>
+  <text x="103" y="214" class="node" text-anchor="middle">invokedynamic</text>
+  <text x="103" y="230" class="nd2" text-anchor="middle">같은 지점 재실행</text>
+  <path d="M 178 206 L 240 206" stroke="#5a6066" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <rect x="216" y="186" width="180" height="22" rx="4" fill="#0d0d0d" stroke="#9aa0a6" stroke-dasharray="4 3"/>
+  <text x="306" y="201" class="note" text-anchor="middle">부트스트랩 건너뜀 ✕</text>
+  <path d="M 178 224 C 320 246, 520 246, 650 224" fill="none" stroke="#66bb6a" stroke-width="2.5" marker-end="url(#ag)"/>
+  <text x="410" y="252" class="note" text-anchor="middle" fill="#9fd6a6">CallSite 의 현재 target 으로 바로</text>
+  <rect x="652" y="194" width="220" height="44" rx="6" fill="rgb(102,187,106)"/>
+  <rect x="664" y="202" width="196" height="20" rx="3" fill="#e6f7e7"/>
+  <text x="762" y="217" class="key" text-anchor="middle">target 메서드 실행</text>
+  <text x="762" y="233" class="nd2" text-anchor="middle">부트스트랩 재실행 없음</text>
+
+  <text x="28" y="296" class="seclbl">그 target 은 고정인가 바뀔 수 있나 — CallSite 종류</text>
+  <rect x="28" y="308" width="410" height="80" rx="8" fill="#5b9bd5"/>
+  <text x="233" y="330" class="stage" text-anchor="middle">ConstantCallSite — 고정</text>
+  <rect x="44" y="340" width="378" height="20" rx="3" fill="#dff0ff"/>
+  <text x="233" y="355" class="key" text-anchor="middle">target 한 번 정하면 불변</text>
+  <text x="233" y="378" class="nd2" text-anchor="middle">람다처럼 "한 번 정하면 끝"인 경우</text>
+  <rect x="462" y="308" width="410" height="80" rx="8" fill="rgb(212,168,83)"/>
+  <text x="667" y="330" class="stage" text-anchor="middle">Mutable / Volatile — 재링크 가능</text>
+  <rect x="478" y="340" width="378" height="20" rx="3" fill="#fdf3df"/>
+  <text x="667" y="355" class="key" text-anchor="middle">런타임에 target 교체 (메서드 타입은 유지)</text>
+  <text x="667" y="378" class="nd2" text-anchor="middle">Ruby 메서드 재정의처럼 대상이 바뀌는 언어</text>
+
+  <rect x="28" y="406" width="844" height="44" rx="8" fill="#f5edda"/>
+  <text x="450" y="426" class="foot" text-anchor="middle">부트스트랩은 최초 1회 — 이후엔 CallSite 의 target 으로 직행</text>
+  <text x="450" y="443" class="nd2" text-anchor="middle">"한 번 정하면 끝"은 ConstantCallSite 얘기. 동적 언어는 target 을 교체해 호출 지점을 살아있게 관리한다.</text>
+</svg>

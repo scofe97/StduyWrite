@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 620" font-family="Pretendard, sans-serif">
+  <rect width="680" height="620" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">Protocol Buffers와 Avro</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">스키마로 필드명을 빼 압축 · 스키마 진화로 양방향 호환</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- Protocol Buffers -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">Protocol Buffers — field tag</text>
+  <rect x="32" y="124" width="300" height="118" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="48" y="146" fill="#e8e4df" font-size="11">필드명 대신 field tag(숫자 1,2,3) 인코딩</text>
+  <text x="48" y="166" fill="#e8e4df" font-size="11">타입+태그를 1바이트에 · 가변 길이 정수</text>
+  <text x="48" y="186" fill="#66bb6a" font-size="11">33바이트(필드명 없음)</text>
+  <text x="48" y="206" fill="#e8e4df" font-size="10.5">스키마 진화: 새 필드=새 태그, 옛 코드는 모르는 태그 무시(forward)</text>
+  <text x="48" y="228" fill="#e8e4df" font-size="10.5">태그는 못 바꿈 · 필드명은 바꿔도 됨 · 삭제 태그 재사용 금지</text>
+
+  <!-- Avro -->
+  <text x="348" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">Avro — writer/reader 스키마</text>
+  <rect x="348" y="124" width="300" height="118" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="364" y="146" fill="#e8e4df" font-size="11">태그 없음 · 값만 연결(필드 식별 정보 없음)</text>
+  <text x="364" y="166" fill="#e8e4df" font-size="11">스키마 순서대로 읽어 타입 결정</text>
+  <text x="364" y="186" fill="#66bb6a" font-size="11">32바이트 — 가장 압축적</text>
+  <text x="364" y="206" fill="#e8e4df" font-size="10.5">writer 스키마(인코딩) + reader 스키마(기대)</text>
+  <text x="364" y="226" fill="#e8e4df" font-size="10.5">필드명으로 매칭 · 동적 생성 스키마 친화</text>
+
+  <!-- writer/reader 해소 -->
+  <text x="32" y="274" fill="rgb(212,168,83)" font-size="14" font-weight="700">Avro 스키마 해소</text>
+  <rect x="32" y="286" width="180" height="44" rx="5" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="122" y="308" fill="#e8e4df" font-size="11" text-anchor="middle">writer 스키마</text>
+  <text x="122" y="323" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">인코딩에 쓴 것과 동일</text>
+  <line x1="212" y1="308" x2="256" y2="308" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar)"/>
+  <rect x="260" y="286" width="180" height="44" rx="5" fill="#101620" stroke="#7fa8c9"/>
+  <text x="350" y="308" fill="#e8e4df" font-size="11" text-anchor="middle">필드명으로 매칭</text>
+  <text x="350" y="323" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">순서 달라도 OK</text>
+  <line x1="440" y1="308" x2="484" y2="308" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar)"/>
+  <rect x="488" y="286" width="160" height="44" rx="5" fill="#141414" stroke="#9cc3df"/>
+  <text x="568" y="308" fill="#e8e4df" font-size="11" text-anchor="middle">reader 스키마</text>
+  <text x="568" y="323" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">옛/새 버전 가능</text>
+  <text x="48" y="352" fill="rgb(138,133,128)" font-size="10">writer에만 있는 필드=무시 · reader에만 있는 필드=기본값으로 채움</text>
+
+  <!-- 스키마 진화 규칙 -->
+  <text x="32" y="388" fill="rgb(212,168,83)" font-size="14" font-weight="700">Avro 진화 규칙 + writer 스키마 전달</text>
+  <rect x="32" y="400" width="300" height="92" rx="6" fill="#141414" stroke="#66bb6a"/>
+  <text x="48" y="422" fill="#e8e4df" font-size="11">기본값 있는 필드만 추가·삭제 가능</text>
+  <text x="48" y="442" fill="#e8e4df" font-size="10.5">null 허용은 union 타입 필요(null이 첫 분기)</text>
+  <text x="48" y="462" fill="#e8e4df" font-size="10.5">forward=writer가 새 버전, backward=writer가 옛 버전</text>
+  <text x="48" y="482" fill="rgb(138,133,128)" font-size="10">필드명 변경=별칭(backward만) · union 분기 추가(backward만)</text>
+
+  <rect x="348" y="400" width="300" height="92" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="364" y="422" fill="#e8e4df" font-size="11" font-weight="700">writer 스키마를 어떻게 아나</text>
+  <text x="364" y="442" fill="#e8e4df" font-size="10.5">· 큰 파일: 시작에 스키마 1회(object container)</text>
+  <text x="364" y="462" fill="#e8e4df" font-size="10.5">· DB 레코드별: 버전 번호 + 스키마 레지스트리</text>
+  <text x="364" y="482" fill="#e8e4df" font-size="10.5">· 네트워크: 연결 설정 시 협상</text>
+
+  <line x1="32" y1="516" x2="648" y2="516" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="538" fill="rgb(138,133,128)" font-size="11">스키마의 장점: 압축적·문서이자 최신 보장·배포 전 호환성 검사·코드 생성(정적 타입 컴파일 검사)</text>
+  <text x="32" y="558" fill="rgb(138,133,128)" font-size="11">Avro는 태그가 없어 동적 생성 스키마(DB 덤프 → Avro)에 친화적 — protobuf는 태그 수동 할당 필요</text>
+  <text x="32" y="578" fill="rgb(138,133,128)" font-size="11">스키마 진화 = schema-on-read 유연성 + 더 나은 보장·도구. 단 동시 스키마 형식은 최소로</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,68 @@
+<svg viewBox="0 0 640 430" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>나머지 namespace와 호스트 관점 전체 흐름</title>
+  <desc>앞 편에서 다루지 않은 namespace 네 가지를 차례로 봅니다. network namespace는 인터페이스와 라우팅 테이블을 격리하고, user namespace는 컨테이너 안의 root를 호스트의 비특권 사용자로 매핑해 보안상 큰 이점을 줍니다. IPC와 cgroup namespace는 공유 메모리와 cgroup 시야를 각각 가립니다. 마지막으로 호스트에서 컨테이너를 보면 같은 프로세스가 다른 번호로 보이며, 이것이 가상머신과의 근본적 차이입니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10.5px; }
+    .sec { fill: #3a3632; font-size: 10px; font-weight: 700; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .num { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10.5px; }
+    .danger-title { fill: #7a1f1f; font-size: 13px; font-weight: 700; }
+    .danger-detail { fill: #7a1f1f; font-size: 10.5px; }
+  </style>
+
+  <rect width="640" height="430" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="mh" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="num" x="34" y="45">1.</text>
+  <rect class="box" x="54" y="24" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="46">network namespace</text>
+  <text class="box-detail" x="72" y="64">veth 쌍으로 바깥과 잇는다</text>
+  <text class="sec" x="566" y="46" text-anchor="end">§1</text>
+
+  <path class="arrow" d="M320,74 L320,92" marker-end="url(#mh)"/>
+
+  <text class="num" x="34" y="119">2.</text>
+  <rect class="box" x="54" y="98" width="532" height="54" rx="4"/>
+  <text class="box-title" x="72" y="120">user namespace</text>
+  <text class="box-detail" x="72" y="140">컨테이너 root를 호스트 비특권으로</text>
+  <text class="sec" x="566" y="120" text-anchor="end">§2</text>
+
+  <path class="arrow" d="M320,152 L320,170" marker-end="url(#mh)"/>
+
+  <text class="num" x="34" y="197">3.</text>
+  <rect class="box" x="54" y="176" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="198">IPC · cgroup ns</text>
+  <text class="box-detail" x="72" y="216">공유 메모리·cgroup 시야</text>
+  <text class="sec" x="566" y="198" text-anchor="end">§3</text>
+
+  <path class="arrow" d="M320,226 L320,244" marker-end="url(#mh)"/>
+
+  <text class="hint" x="320" y="260" text-anchor="middle">그런데 호스트에서 보면</text>
+
+  <text class="num" x="34" y="299">4.</text>
+  <rect x="54" y="274" width="532" height="56" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="72" y="298">위험 · 호스트에서 다 보인다</text>
+  <text class="danger-detail" x="72" y="318">같은 프로세스가 다른 번호로</text>
+  <text class="sec" x="566" y="298" text-anchor="end">§4</text>
+
+  <path class="arrow" d="M320,330 L320,348" marker-end="url(#mh)"/>
+
+  <text class="num" x="34" y="377">5.</text>
+  <rect class="box" x="54" y="356" width="532" height="52" rx="4"/>
+  <text class="box-title" x="72" y="380">그래서 전용 호스트를 쓴다</text>
+  <text class="box-detail" x="72" y="398">Thin OS · 불변 인프라</text>
+  <text class="sec" x="566" y="380" text-anchor="end">§5</text>
+</svg>

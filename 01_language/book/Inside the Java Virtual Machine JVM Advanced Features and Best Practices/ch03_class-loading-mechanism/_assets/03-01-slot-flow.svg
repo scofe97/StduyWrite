@@ -1,0 +1,122 @@
+<svg viewBox="0 0 900 580" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>스택 프레임 내부 메모리 구성과 slot 재할당 흐름</title>
+  <desc>한 스택 프레임의 내부 메모리를 본다. 프레임은 지역 변수 테이블(slot 배열), 피연산자 스택(LIFO), 동적 링크, 반환 주소로 구성된다. 지역 변수 테이블의 slot은 코드가 진행되며 재할당된다. 진입 직후 slot 0은 this, slot 1은 파라미터 x이고 slot 2는 비어 있다. 블록 안에서 big(64MB)이 slot 2를 차지하고, 블록이 끝난 뒤 y가 같은 slot 2를 재사용한다. 재사용되면서 big 참조가 끊겨 64MB가 회수된다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11px;fill:rgb(150,145,140)}
+      .areah{font-size:10.5px;font-weight:800;fill:rgb(212,168,83)}
+      .step{font-size:10.5px;font-weight:800;fill:rgb(210,205,200)}
+      .slot{font-size:9.5px;font-weight:700;fill:#10243a;font-family:'JetBrains Mono',monospace}
+      .sn{font-size:8px;font-weight:700;fill:#3a3530;font-family:'JetBrains Mono',monospace}
+      .code{font-size:10px;font-weight:700;fill:#e6c878;font-family:'JetBrains Mono',monospace}
+      .note{font-size:9px;fill:rgb(150,145,140)}
+      .tag{font-size:8.5px;font-weight:800;fill:#0d0d0d;font-family:'JetBrains Mono',monospace}
+    </style>
+  </defs>
+  <rect x="0" y="0" width="900" height="580" fill="#0d0d0d"/>
+  <text x="28" y="36" class="title">스택 프레임 내부 — 메모리 구성과 slot 재할당</text>
+
+  <!-- ===== 좌측: 프레임 메모리 레이아웃 (한 프레임 = 세로 스택) ===== -->
+  <text x="150" y="68" class="areah" text-anchor="middle">한 프레임의 메모리</text>
+  <!-- 프레임 외곽 -->
+  <rect x="40" y="78" width="220" height="430" rx="10" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+
+  <!-- 지역 변수 테이블 (slot 배열, 세로) -->
+  <text x="150" y="100" class="areah" text-anchor="middle">① 지역 변수 테이블 (slot 배열)</text>
+  <rect x="56" y="108" width="188" height="28" rx="3" fill="#dceaf7"/>
+  <text x="64" y="126" class="sn">0</text><text x="150" y="126" class="slot" text-anchor="middle">this</text>
+  <rect x="56" y="139" width="188" height="28" rx="3" fill="#dceaf7"/>
+  <text x="64" y="157" class="sn">1</text><text x="150" y="157" class="slot" text-anchor="middle">x (param)</text>
+  <rect x="56" y="170" width="188" height="28" rx="3" fill="#f3d9a0"/>
+  <text x="64" y="188" class="sn">2</text><text x="150" y="188" class="slot" text-anchor="middle">↻ 재사용되는 칸</text>
+
+  <!-- 피연산자 스택 (LIFO, 세로 더미) -->
+  <text x="150" y="232" class="areah" text-anchor="middle">② 피연산자 스택 (LIFO)</text>
+  <rect x="86" y="240" width="128" height="24" rx="3" fill="#f5edda"/>
+  <text x="150" y="257" class="slot" text-anchor="middle" font-size="9">▲ top (push/pop)</text>
+  <rect x="86" y="266" width="128" height="24" rx="3" fill="#f5edda"/>
+  <text x="150" y="283" class="slot" text-anchor="middle" font-size="9">값</text>
+  <rect x="86" y="292" width="128" height="24" rx="3" fill="#f5edda"/>
+  <text x="150" y="309" class="slot" text-anchor="middle" font-size="9">값</text>
+
+  <!-- 동적 링크 -->
+  <rect x="56" y="336" width="188" height="40" rx="5" fill="#5b9bd5"/>
+  <text x="150" y="353" class="slot" text-anchor="middle">③ 동적 링크</text>
+  <text x="150" y="368" class="slot" text-anchor="middle" font-size="8">→ 런타임 상수 풀</text>
+
+  <!-- 반환 주소 -->
+  <rect x="56" y="382" width="188" height="40" rx="5" fill="#5b9bd5"/>
+  <text x="150" y="399" class="slot" text-anchor="middle">④ 반환 주소</text>
+  <text x="150" y="414" class="slot" text-anchor="middle" font-size="8">→ 호출자 PC</text>
+
+  <text x="150" y="444" class="note" text-anchor="middle" fill="#cfd6dd">크기(max_locals·max_stack)는</text>
+  <text x="150" y="458" class="note" text-anchor="middle" fill="#cfd6dd">컴파일 때 Code 속성으로 확정</text>
+  <text x="150" y="490" class="areah" text-anchor="middle" font-size="9">slot 2 의 시간 흐름 →</text>
+
+  <!-- ===== 우측: slot 2 재할당 타임라인 ===== -->
+  <text x="580" y="68" class="areah" text-anchor="middle">slot 2 한 칸이 시간순으로 바뀐다</text>
+
+  <!-- 코드 (간결) -->
+  <rect x="320" y="80" width="540" height="70" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="334" y="100" class="code">int compute(int x) {           // this=slot0, x=slot1</text>
+  <text x="334" y="118" class="code">  { byte[] big = new byte[64MB]; }   // big → slot2</text>
+  <text x="334" y="136" class="code">  int y = x * 2;                // y → slot2 (재사용)</text>
+
+  <!-- 3 스냅샷 (slot 2 칸만 크게) -->
+  <!-- 단계1 -->
+  <text x="400" y="185" class="step" text-anchor="middle">① 진입</text>
+  <rect x="330" y="195" width="140" height="80" rx="8" fill="#0d0d0d" stroke="rgb(150,145,140)" stroke-dasharray="4 3"/>
+  <text x="400" y="232" class="slot" text-anchor="middle" fill="#cfd6dd">slot 2</text>
+  <text x="400" y="252" class="note" text-anchor="middle" fill="#cfd6dd">(빈 칸)</text>
+
+  <!-- 화살표 -->
+  <line x1="478" y1="235" x2="512" y2="235" stroke="rgb(212,168,83)" stroke-width="2.5"/>
+  <polygon points="514,235 504,230 504,240" fill="rgb(212,168,83)"/>
+
+  <!-- 단계2 -->
+  <text x="590" y="185" class="step" text-anchor="middle">② 블록 안</text>
+  <rect x="520" y="195" width="140" height="80" rx="8" fill="#f3d9a0"/>
+  <text x="590" y="222" class="slot" text-anchor="middle">slot 2</text>
+  <rect x="540" y="232" width="100" height="22" rx="4" fill="#fdf3df"/>
+  <text x="590" y="248" class="tag" text-anchor="middle">big → 64MB</text>
+  <text x="590" y="268" class="slot" text-anchor="middle" font-size="8">블록 안에서만 유효</text>
+
+  <!-- 화살표 (재사용) -->
+  <line x1="668" y1="235" x2="702" y2="235" stroke="rgb(212,168,83)" stroke-width="2.5"/>
+  <polygon points="704,235 694,230 694,240" fill="rgb(212,168,83)"/>
+  <text x="686" y="225" class="note" text-anchor="middle" font-size="8">덮어씀</text>
+
+  <!-- 단계3 -->
+  <text x="790" y="185" class="step" text-anchor="middle">③ 블록 후</text>
+  <rect x="720" y="195" width="140" height="80" rx="8" fill="#f5edda"/>
+  <text x="790" y="222" class="slot" text-anchor="middle">slot 2</text>
+  <rect x="740" y="232" width="100" height="22" rx="4" fill="#e6f7e7"/>
+  <text x="790" y="248" class="tag" text-anchor="middle">y (big 자리)</text>
+  <text x="790" y="268" class="slot" text-anchor="middle" font-size="8">재사용 → big 참조 끊김</text>
+
+  <!-- 64MB 회수 흐름 (단계2 big → 끊김 → 회수) -->
+  <text x="590" y="320" class="areah" text-anchor="middle" font-size="10">참조와 GC 흐름</text>
+  <!-- big 객체 (살아있음) -->
+  <rect x="520" y="332" width="140" height="56" rx="8" fill="#f3d9a0"/>
+  <text x="590" y="356" class="slot" text-anchor="middle">64MB 객체</text>
+  <text x="590" y="374" class="slot" text-anchor="middle" font-size="8">②에서 slot2 가 참조</text>
+  <!-- 끊긴 화살표 -->
+  <line x1="668" y1="360" x2="716" y2="360" stroke="rgb(150,145,140)" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="692" y="352" class="note" text-anchor="middle" font-size="11" fill="#e89384" font-weight="800">✕</text>
+  <!-- 회수됨 -->
+  <rect x="720" y="332" width="140" height="56" rx="8" fill="#0d0d0d" stroke="rgb(150,145,140)" stroke-dasharray="5 4"/>
+  <text x="790" y="356" class="note" text-anchor="middle" fill="#cfd6dd">③ 참조 끊김</text>
+  <text x="790" y="374" class="note" text-anchor="middle" fill="#cfd6dd">→ GC 회수</text>
+
+  <!-- 단계3 slot → big 끊김 시각 연결 -->
+  <line x1="790" y1="278" x2="790" y2="330" stroke="rgb(150,145,140)" stroke-width="1.2" stroke-dasharray="3 3"/>
+
+  <!-- 한 줄 요약 (텍스트 최소화) -->
+  <rect x="320" y="416" width="540" height="34" rx="8" fill="#f5edda"/>
+  <text x="340" y="438" class="slot" font-size="10">slot 번호 = 칸 자리. 같은 칸을 시간순으로 다른 변수가 물려받는다(재사용).</text>
+
+  <!-- 좌측 프레임 slot2 → 우측 타임라인 연결 -->
+  <line x1="244" y1="184" x2="330" y2="220" stroke="rgb(212,168,83)" stroke-width="1.2" stroke-dasharray="3 3"/>
+  <polygon points="330,220 320,217 323,227" fill="rgb(212,168,83)"/>
+</svg>

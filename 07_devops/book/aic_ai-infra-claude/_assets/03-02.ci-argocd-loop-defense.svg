@@ -1,0 +1,79 @@
+<svg viewBox="0 0 960 540" width="100%" xmlns="http://www.w3.org/2000/svg" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>CI-ArgoCD 파이프라인과 무한 루프 2중 방어</title>
+  <desc>app 변경 푸시가 CI를 트리거해 이미지 빌드·매니페스트 커밋으로 이어지고 ArgoCD가 배포하는 흐름. CI 봇 커밋이 CI를 다시 트리거하지 못하게 막는 paths 필터와 GITHUB_TOKEN 재귀 방지의 두 방어선</desc>
+  <defs>
+    <marker id="arA" markerWidth="9" markerHeight="9" refX="7.5" refY="3" orient="auto">
+      <path d="M0,0 L7.5,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="arRed" markerWidth="9" markerHeight="9" refX="7.5" refY="3" orient="auto">
+      <path d="M0,0 L7.5,3 L0,6 Z" fill="#f44336"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="540" fill="#0d0d0d"/>
+
+  <!-- 상단: 정상 파이프라인 흐름 -->
+  <text x="30" y="42" fill="#e8e4df" font-size="15" font-weight="700">정상 흐름 — 사람은 코드 수정·푸시만</text>
+
+  <rect x="30" y="60" width="150" height="60" fill="#0d0d0d" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="105" y="86" text-anchor="middle" fill="#e8e4df" font-size="12.5">개발자</text>
+  <text x="105" y="106" text-anchor="middle" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="11">push app/**</text>
+
+  <line x1="182" y1="90" x2="214" y2="90" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#arA)"/>
+
+  <rect x="216" y="52" width="220" height="76" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.5" rx="6"/>
+  <text x="326" y="74" text-anchor="middle" fill="#e8e4df" font-size="12.5" font-weight="700">깃허브 액션 CI</text>
+  <text x="326" y="94" text-anchor="middle" fill="#e8e4df" font-size="11">docker build → AR 푸시</text>
+  <text x="326" y="112" text-anchor="middle" fill="#e8e4df" font-size="11">sed로 태그 갱신 → git commit</text>
+
+  <line x1="438" y1="90" x2="470" y2="90" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#arA)"/>
+  <text x="454" y="80" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">bot push</text>
+
+  <rect x="472" y="60" width="160" height="60" fill="#0d0d0d" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="552" y="86" text-anchor="middle" fill="#e8e4df" font-size="12.5">깃 저장소</text>
+  <text x="552" y="106" text-anchor="middle" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="10.5">deployment.yaml</text>
+
+  <line x1="634" y1="90" x2="666" y2="90" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#arA)"/>
+  <text x="650" y="80" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">감지</text>
+
+  <rect x="668" y="52" width="130" height="76" fill="#0d0d0d" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="733" y="80" text-anchor="middle" fill="#e8e4df" font-size="12.5">ArgoCD</text>
+  <text x="733" y="100" text-anchor="middle" fill="#e8e4df" font-size="11">auto-sync</text>
+
+  <line x1="800" y1="90" x2="832" y2="90" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#arA)"/>
+
+  <rect x="834" y="60" width="100" height="60" fill="#0d0d0d" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="884" y="86" text-anchor="middle" fill="#e8e4df" font-size="12.5">GKE</text>
+  <text x="884" y="106" text-anchor="middle" fill="#66bb6a" font-size="10.5">Rolling Update</text>
+
+  <text x="326" y="150" text-anchor="middle" fill="#66bb6a" font-size="11.5">CI는 깃까지만 — kubectl을 직접 쓰지 않아 모든 배포가 커밋으로 남는다</text>
+
+  <!-- 중단: 위험한 되먹임 고리 -->
+  <line x1="326" y1="128" x2="326" y2="210" stroke="#f44336" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <path d="M 552 120 Q 552 185 340 205" fill="none" stroke="#f44336" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arRed)"/>
+  <text x="620" y="180" fill="#f44336" font-size="11.5" font-weight="700">위험 — bot 커밋이 CI를 또 트리거하면 무한 루프</text>
+
+  <!-- 하단: 2중 방어 -->
+  <rect x="30" y="230" width="904" height="290" fill="#0d0d0d" stroke="rgb(42,37,32)" stroke-width="1.5" stroke-dasharray="6 4" rx="8"/>
+  <text x="482" y="262" text-anchor="middle" fill="#e8e4df" font-size="15" font-weight="700">무한 루프 2중 방어</text>
+
+  <!-- 1차 방어 -->
+  <rect x="60" y="284" width="410" height="210" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5" rx="8"/>
+  <text x="265" y="314" text-anchor="middle" fill="rgb(212,168,83)" font-size="13.5" font-weight="700">1차 — paths 필터</text>
+  <rect x="84" y="332" width="362" height="40" fill="#dceaf7" rx="5"/>
+  <text x="265" y="357" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="12.5" font-weight="700" style="fill:#10243a">paths: ['app/**']</text>
+  <text x="84" y="398" fill="#e8e4df" font-size="12">CI 봇이 커밋하는 파일은</text>
+  <text x="84" y="420" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11.5">k8s/smb/deployment.yaml</text>
+  <text x="84" y="442" fill="#e8e4df" font-size="12">→ app/** 필터에 안 걸림</text>
+  <text x="84" y="470" fill="#66bb6a" font-size="12.5" font-weight="700">고리가 여기서 끊어진다</text>
+
+  <!-- 2차 방어 -->
+  <rect x="494" y="284" width="410" height="210" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5" rx="8"/>
+  <text x="699" y="314" text-anchor="middle" fill="rgb(212,168,83)" font-size="13.5" font-weight="700">2차 — 봇 토큰 재귀 방지</text>
+  <rect x="518" y="332" width="362" height="40" fill="#dceaf7" rx="5"/>
+  <text x="699" y="357" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="12.5" font-weight="700" style="fill:#10243a">GITHUB_TOKEN</text>
+  <text x="518" y="398" fill="#e8e4df" font-size="12">기본 GITHUB_TOKEN으로 푸시한</text>
+  <text x="518" y="420" fill="#e8e4df" font-size="12">커밋은 깃허브가 의도적으로</text>
+  <text x="518" y="442" fill="#e8e4df" font-size="12">워크플로를 다시 트리거하지 않음</text>
+  <text x="518" y="470" fill="#e8e4df" font-size="11.5">재트리거가 필요하면 PAT·App 토큰</text>
+</svg>

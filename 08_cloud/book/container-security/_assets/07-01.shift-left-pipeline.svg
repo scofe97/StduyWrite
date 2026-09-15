@@ -1,0 +1,91 @@
+<svg viewBox="0 0 700 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>파이프라인에서 스캔이 들어갈 네 지점과 왼쪽으로 당기는 이유</title>
+  <desc>파이프라인을 왼쪽 코드 작성에서 오른쪽 운영 배포로 놓고 봅니다. 문제는 왼쪽에서 걷어낼수록 빠르고 쌉니다. 개발자가 자기 데스크톱에서 로컬 빌드를 스캔하면 소스 저장소에 올리기 전에 고칩니다. 빌드 직후 스캔 단계를 넣고 심각도가 기준을 넘으면 빌드를 실패시켜 배포 자체를 막습니다. 레지스트리에 올린 뒤에도 정기적으로 다시 스캔합니다. 한동안 다시 빌드하지 않은 이미지에서 새 취약점이 발견될 수 있기 때문입니다. 마지막으로 어드미션 컨트롤에서 스캔을 통과한 이미지만 배포되게 막습니다. 이 검사가 없으면 스캐너를 우회하기가 쉽습니다. 배포 시점까지 스캔을 미루지 않는 이유는 같은 이미지에서 뜬 수백 개 컨테이너를 매번 다시 보게 되기 때문입니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .stage { fill: #3a3632; font-size: 10px; font-weight: 700; }
+    .scan-title { fill: #0d0d0d; font-size: 11px; font-weight: 700; }
+    .scan-detail { fill: #0d0d0d; font-size: 9.5px; }
+    .axis { stroke: #4a4540; stroke-width: 1; fill: none; }
+  </style>
+
+  <rect width="700" height="400" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="uh7c" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="30">왼쪽일수록 빠르고 쌉니다</text>
+
+  <!-- 파이프라인 축 -->
+  <path class="arrow" d="M40,58 L660,58" marker-end="url(#uh7c)"/>
+  <text class="stage" x="40" y="76">코드 작성</text>
+  <text class="stage" x="205" y="76">이미지 빌드</text>
+  <text class="stage" x="380" y="76">레지스트리</text>
+  <text class="stage" x="560" y="76">운영 배포</text>
+
+  <!-- 스캔 지점 4 -->
+  <rect class="box" x="40" y="92" width="150" height="104" rx="4"/>
+  <text class="scan-title" x="54" y="113">개발자 데스크톱</text>
+  <text class="scan-detail" x="54" y="132">로컬 빌드를 직접 스캔</text>
+  <text class="scan-detail" x="54" y="148">저장소에 올리기 전에</text>
+  <text class="scan-detail" x="54" y="164">스스로 고칠 기회</text>
+  <text class="scan-detail" x="54" y="186">가장 싼 수정 지점</text>
+
+  <rect class="box" x="202" y="92" width="150" height="104" rx="4"/>
+  <text class="scan-title" x="216" y="113">빌드 직후</text>
+  <text class="scan-detail" x="216" y="132">빌드 파이프라인 안에서</text>
+  <text class="scan-detail" x="216" y="148">기준 넘으면 빌드 실패</text>
+  <text class="scan-detail" x="216" y="164">배포 자체를 막는다</text>
+  <text class="scan-detail" x="216" y="186">자동 게이트</text>
+
+  <rect class="box" x="364" y="92" width="150" height="104" rx="4"/>
+  <text class="scan-title" x="378" y="113">레지스트리 정기</text>
+  <text class="scan-detail" x="378" y="132">올린 뒤에도 다시 본다</text>
+  <text class="scan-detail" x="378" y="148">보통 24시간마다</text>
+  <text class="scan-detail" x="378" y="164">코드가 그대로여도</text>
+  <text class="scan-detail" x="378" y="186">새 취약점이 나온다</text>
+
+  <rect class="box" x="526" y="92" width="134" height="104" rx="4"/>
+  <text class="scan-title" x="540" y="113">어드미션 컨트롤</text>
+  <text class="scan-detail" x="540" y="132">스캔 통과분만 배포</text>
+  <text class="scan-detail" x="540" y="148">이 검사가 없으면</text>
+  <text class="scan-detail" x="540" y="164">스캐너 우회가 쉽다</text>
+  <text class="scan-detail" x="540" y="186">6장의 그 관문</text>
+
+  <path class="axis" d="M115,196 L115,214"/>
+  <path class="axis" d="M277,196 L277,214"/>
+  <path class="axis" d="M439,196 L439,214"/>
+  <path class="axis" d="M593,196 L593,214"/>
+
+  <!-- 왜 왼쪽인가 -->
+  <text class="head" x="40" y="244">무엇이 바뀌어 왼쪽이 가능해졌나</text>
+
+  <rect class="box" x="40" y="256" width="300" height="100" rx="4"/>
+  <text class="box-title" x="56" y="277">전통적 호스트 배포에서는</text>
+  <text class="box-detail" x="56" y="296">모든 앱이 같은 패키지를 공유</text>
+  <text class="box-detail" x="56" y="312">보안팀이 오른쪽 끝에서 따로 패치</text>
+  <text class="box-detail" x="56" y="328">앱마다 필요한 버전이 달라 충돌</text>
+  <text class="box-detail" x="56" y="346">개발 주기와 분리돼 있었다</text>
+
+  <rect class="box" x="360" y="256" width="300" height="100" rx="4"/>
+  <text class="box-title" x="376" y="277">컨테이너 배포에서는</text>
+  <text class="box-detail" x="376" y="296">이미지마다 자기 의존성을 품는다</text>
+  <text class="box-detail" x="376" y="312">앱별로 다른 버전을 써도 무방</text>
+  <text class="box-detail" x="376" y="328">개발자가 이미지를 다시 빌드해 고친다</text>
+  <text class="box-detail" x="376" y="346">보안팀의 수작업이 사라진다</text>
+
+  <text class="hint" x="40" y="384">배포 때 스캔하면 같은 일을 수백 번</text>
+</svg>

@@ -1,0 +1,62 @@
+<svg viewBox="0 0 1000 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>veth pair 전송 의미 — veth_xmit이 peer의 RX 경로로 곧장 넘긴다</title>
+  <desc>veth pair는 두 가상 네트워크 인터페이스가 한 쌍으로 묶인 것이다. 한쪽 끝은 Pod 네임스페이스에, 다른 쪽 끝은 root 네임스페이스에 있다. Pod가 eth0으로 패킷을 보내면, 커널 내부에서 veth_xmit 함수가 반대쪽 끝의 RX 경로(NAPI/GRO backlog)로 곧장 넘긴다. 가운데에 케이블이나 qdisc 같은 전송 계층이 없어서, 송신된 패킷이 즉시 반대쪽의 수신 처리로 들어간다. 이 구조 덕분에 veth는 매우 빠르지만, 패킷이 두 번의 softirq를 타며 CPU 캐시 미스가 생길 수 있다. 대량 트래픽에서는 macvlan이나 ipvlan이 대안으로 검토된다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 10.5px; fill: rgb(138,133,128); }
+      .ns     { font-size: 12px; font-weight: 800; }
+      .iface  { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .mono   { font-size: 10px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .darkmono { font-size: 10px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; fill: #0d0d0d; }
+      .desc   { font-size: 10.5px; font-weight: 600; fill: #e8e4df; }
+      .muted  { font-size: 9.5px; fill: rgb(138,133,128); }
+    </style>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 Z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="480" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">veth pair — 케이블이 아니라 커널이 곧장 넘긴다</text>
+  <text x="24" y="52" class="sub">한쪽으로 보낸 패킷이 즉시 반대쪽 수신 처리로. 가운데 qdisc·케이블 없이 veth_xmit이 peer의 RX 경로로 넘긴다.</text>
+
+  <!-- Pod netns -->
+  <rect x="40" y="90" width="360" height="300" rx="12" fill="rgb(24,20,14)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="60" y="116" class="ns" style="fill:rgb(212,168,83)">Pod netns</text>
+
+  <rect x="120" y="150" width="200" height="60" rx="8" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="220" y="176" class="desc" text-anchor="middle">App → socket</text>
+  <text x="220" y="196" class="muted" text-anchor="middle">패킷 생성</text>
+
+  <rect x="120" y="250" width="200" height="70" rx="8" fill="#d4a853"/>
+  <text x="220" y="278" class="iface" text-anchor="middle">eth0 (veth 한쪽)</text>
+  <text x="220" y="300" class="darkmono" text-anchor="middle">veth_xmit() 실행</text>
+  <line x1="220" y1="210" x2="220" y2="248" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- root netns -->
+  <rect x="600" y="90" width="360" height="300" rx="12" fill="rgb(16,20,28)" stroke="#5b9bd5" stroke-width="1.4"/>
+  <text x="620" y="116" class="ns" style="fill:#8fc0ec">root netns</text>
+
+  <rect x="680" y="250" width="200" height="70" rx="8" fill="#5b9bd5"/>
+  <text x="780" y="278" class="iface" text-anchor="middle" style="fill:#e8e4df">veth-host-A</text>
+  <text x="780" y="300" class="mono" text-anchor="middle" style="fill:#e8e4df">peer RX 경로 진입</text>
+
+  <rect x="680" y="150" width="200" height="60" rx="8" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="780" y="176" class="desc" text-anchor="middle" style="fill:#8fc0ec">→ bridge / 라우팅</text>
+  <text x="780" y="196" class="muted" text-anchor="middle">다음 단계로</text>
+  <line x1="780" y1="248" x2="780" y2="212" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- 직접 호출 화살표 -->
+  <line x1="320" y1="285" x2="676" y2="285" stroke="rgb(212,168,83)" stroke-width="2.6" marker-end="url(#ar)"/>
+  <rect x="400" y="256" width="196" height="42" rx="7" fill="rgb(24,20,14)" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="498" y="273" class="mono" text-anchor="middle" style="fill:rgb(212,168,83)">veth_xmit → peer RX (NAPI)</text>
+  <text x="498" y="289" class="muted" text-anchor="middle">qdisc·케이블 없이 곧장</text>
+
+  <!-- 특성 두 줄 -->
+  <rect x="40" y="410" width="450" height="46" rx="8" fill="rgb(20,30,22)" stroke="#66bb6a" stroke-width="1"/>
+  <text x="60" y="431" class="desc" style="fill:#66bb6a">이점 — 케이블 왕복이 없어 매우 빠르다</text>
+  <text x="60" y="449" class="muted">즉시 반대쪽 수신 큐로 들어간다</text>
+
+  <rect x="510" y="410" width="450" height="46" rx="8" fill="rgb(30,20,20)" stroke="#f0b0b0" stroke-width="1"/>
+  <text x="530" y="431" class="desc" style="fill:#f0b0b0">비용 — 두 번의 softirq → CPU 캐시 미스 가능</text>
+  <text x="530" y="449" class="muted" style="fill:#f0b0b0">대량 트래픽엔 macvlan · ipvlan 검토</text>
+</svg>

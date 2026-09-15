@@ -1,0 +1,77 @@
+<svg viewBox="0 0 700 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>일반 구성과 하이퍼바이저와 하드웨어 가상화에서의 권한 링 배치</title>
+  <desc>x86에서 권한 수준은 링으로 조직되며 링 0이 가장 높고 링 3이 가장 낮습니다. 가상머신이 없는 일반 구성에서는 커널이 링 0에서 돌고 유저 공간 코드가 링 3에서 돕니다. 하이퍼바이저를 쓰면 하이퍼바이저가 링 0을 차지하고 게스트 커널은 링 1로 내려가 권한이 낮아집니다. 인텔 VT-x 같은 하드웨어 가상화에서는 하이퍼바이저가 사실상 링 마이너스 1에 해당하는 VMX 루트 모드에서 돌고, 게스트 커널이 원래 자리인 링 0을 되찾습니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .ring { fill: #3a3632; font-size: 10px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .divider { stroke: #b8b3ad; stroke-width: 1.2; stroke-dasharray: 5 4; fill: none; }
+    .caution-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .caution-ring { fill: #0d0d0d; font-size: 10px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+  </style>
+
+  <rect width="700" height="400" fill="#0d0d0d"/>
+
+  <text class="head" x="40" y="30">일반 구성</text>
+  <text class="head" x="255" y="30">하이퍼바이저</text>
+  <text class="head" x="480" y="30">하드웨어 가상화</text>
+
+  <path class="divider" d="M232,40 L232,300"/>
+  <path class="divider" d="M457,40 L457,300"/>
+
+  <!-- 일반 -->
+  <rect class="box" x="40" y="52" width="170" height="46" rx="4"/>
+  <text class="box-title" x="54" y="72">앱 코드</text>
+  <text class="ring" x="54" y="90">Ring 3</text>
+
+  <rect class="box" x="40" y="196" width="170" height="46" rx="4"/>
+  <text class="box-title" x="54" y="216">커널</text>
+  <text class="ring" x="54" y="234">Ring 0</text>
+
+  <text class="hint" x="40" y="268">커널이 자원을</text>
+  <text class="hint" x="40" y="286">직접 관리한다</text>
+
+  <!-- 하이퍼바이저 -->
+  <rect class="box" x="255" y="52" width="180" height="46" rx="4"/>
+  <text class="box-title" x="269" y="72">앱 코드</text>
+  <text class="ring" x="269" y="90">Ring 3</text>
+
+  <rect class="box" x="255" y="124" width="180" height="46" rx="4"/>
+  <text class="box-title" x="269" y="144">게스트 커널</text>
+  <text class="ring" x="269" y="162">Ring 1</text>
+
+  <rect x="255" y="196" width="180" height="46" rx="4" fill="rgb(212,168,83)"/>
+  <text class="caution-title" x="269" y="216">하이퍼바이저</text>
+  <text class="caution-ring" x="269" y="234">Ring 0</text>
+
+  <text class="hint" x="255" y="268">게스트가 한 칸</text>
+  <text class="hint" x="255" y="286">아래로 내려간다</text>
+
+  <!-- VT-x -->
+  <rect class="box" x="480" y="52" width="180" height="46" rx="4"/>
+  <text class="box-title" x="494" y="72">앱 코드</text>
+  <text class="ring" x="494" y="90">Ring 3</text>
+
+  <rect class="box" x="480" y="196" width="180" height="46" rx="4"/>
+  <text class="box-title" x="494" y="216">게스트 커널</text>
+  <text class="ring" x="494" y="234">Ring 0</text>
+
+  <rect x="480" y="252" width="180" height="46" rx="4" fill="rgb(212,168,83)"/>
+  <text class="caution-title" x="494" y="272">하이퍼바이저</text>
+  <text class="caution-ring" x="494" y="290">VMX root · Ring -1</text>
+
+  <text class="hint" x="480" y="322">게스트가 Ring 0을</text>
+  <text class="hint" x="480" y="340">되찾는다</text>
+
+  <text class="hint" x="40" y="322">링 0이 가장 높고</text>
+  <text class="hint" x="40" y="340">링 3이 가장 낮다</text>
+
+  <text class="hint" x="255" y="322">권한이 낮아진 게스트가</text>
+  <text class="hint" x="255" y="340">특권 명령을 쓰면 트랩</text>
+</svg>

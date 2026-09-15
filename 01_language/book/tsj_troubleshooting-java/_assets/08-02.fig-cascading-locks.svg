@@ -1,0 +1,41 @@
+<svg viewBox="0 0 680 340" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>연쇄 차단 — 사슬 끝 스레드가 외부 이벤트를 기다려 나머지가 줄줄이 대기 (원문 Figure 8.10 개념도)</title>
+  <desc>원문 Figure 8.10 의 개념을 도식으로 옮긴 것입니다. 연쇄 차단은 여러 스레드가 서로를 기다리는 사슬로 들어갈 때 나타납니다. 사슬의 마지막 스레드는 데이터 소스 읽기나 엔드포인트 호출 같은 외부 이벤트에 막혀 있습니다. 그 탓에 그 앞의 스레드들이 줄줄이 함께 기다립니다. 데드락과 달리 사슬이 고리로 닫히지 않고 외부 이벤트에서 끝납니다. 연쇄 차단은 보통 멀티스레드 아키텍처 설계가 나쁘다는 신호입니다. 스레드를 여럿 두는 건 동시 처리를 위해서인데 서로를 기다리면 그 목적이 무색해집니다.</desc>
+  <rect x="0" y="0" width="680" height="340" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">연쇄 차단 (cascading locks) — 데드락과 다르다</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 Figure 8.10 개념도 — 고리가 닫히지 않고 외부 이벤트에서 끝남</text>
+
+  <!-- 사슬 -->
+  <rect x="20" y="100" width="120" height="50" fill="rgba(127,168,201,0.12)" stroke="#7fa8c9"/>
+  <text x="80" y="130" fill="#9cc3df" font-size="12" font-weight="bold" text-anchor="middle">스레드 A</text>
+  <rect x="190" y="100" width="120" height="50" fill="rgba(102,187,106,0.12)" stroke="#66bb6a"/>
+  <text x="250" y="130" fill="#66bb6a" font-size="12" font-weight="bold" text-anchor="middle">스레드 B</text>
+  <rect x="360" y="100" width="120" height="50" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)"/>
+  <text x="420" y="130" fill="rgb(212,168,83)" font-size="12" font-weight="bold" text-anchor="middle">스레드 C</text>
+
+  <line x1="140" y1="125" x2="188" y2="125" stroke="#f47f72" stroke-width="1.5"/>
+  <polygon points="140,125 148,121 148,129" fill="#f47f72"/>
+  <text x="164" y="116" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">기다림</text>
+  <line x1="310" y1="125" x2="358" y2="125" stroke="#f47f72" stroke-width="1.5"/>
+  <polygon points="310,125 318,121 318,129" fill="#f47f72"/>
+  <text x="334" y="116" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">기다림</text>
+
+  <!-- 외부 이벤트 -->
+  <line x1="480" y1="125" x2="528" y2="125" stroke="#f47f72" stroke-width="1.5"/>
+  <polygon points="480,125 488,121 488,129" fill="#f47f72"/>
+  <rect x="530" y="92" width="130" height="66" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="595" y="116" fill="#f47f72" font-size="12" font-weight="bold" text-anchor="middle">외부 이벤트</text>
+  <text x="595" y="136" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">DB 읽기·엔드포인트</text>
+  <text x="595" y="150" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">호출 등</text>
+
+  <text x="340" y="180" fill="#f47f72" font-size="11" font-weight="bold" text-anchor="middle">사슬 끝(C)이 외부에 막힘 → A·B 가 줄줄이 대기</text>
+
+  <!-- 데드락과 대비 + 의미 -->
+  <rect x="20" y="200" width="640" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="222" fill="#e8e4df" font-size="12" font-weight="bold">데드락과 무엇이 다른가 + 의미</text>
+  <text x="34" y="246" fill="#e8e4df" font-size="11">• 추적 절차는 데드락과 동일(락 ID 따라가기)</text>
+  <text x="34" y="268" fill="#e8e4df" font-size="11">• 데드락: 사슬 안 스레드끼리 막음(고리 닫힘) / 연쇄: 끝이 외부 이벤트 대기(고리 안 닫힘)</text>
+  <text x="34" y="290" fill="#f47f72" font-size="11" font-weight="bold">• 보통 나쁜 멀티스레드 설계의 신호</text>
+  <text x="34" y="310" fill="rgb(138,133,128)" font-size="10">스레드를 여럿 두는 건 동시 처리를 위해서인데, 서로 기다리면 목적이 무색 → 긴 연쇄는 기대 금지</text>
+</svg>

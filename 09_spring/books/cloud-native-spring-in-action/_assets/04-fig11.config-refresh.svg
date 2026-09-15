@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 360" width="100%" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>런타임 설정 갱신 — Git 변경 후 /actuator/refresh</title>
+  <desc>Config Server를 백킹하는 Git 저장소에서 설정을 바꾼 뒤, 클라이언트 앱에 신호를 보내 설정을 쓰는 부분만 재시작 없이 리로드한다. @ConfigurationProperties 빈이 RefreshScopeRefreshedEvent를 듣는다.</desc>
+  <rect width="840" height="360" fill="#0d0d0d"/>
+  <text x="30" y="38" fill="#e8e4df" font-size="18" font-weight="700">런타임 설정 갱신 (핫 리로드)</text>
+  <text x="30" y="60" fill="rgb(138,133,128)" font-size="12">원서 그림 4.11의 갱신 흐름을 다크 테마로 재구성했습니다 (재시작 없이 설정 반영)</text>
+
+  <!-- step 1: git repo -->
+  <rect x="40" y="96" width="180" height="80" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.4"/>
+  <text x="130" y="124" fill="#e8e4df" font-size="13" font-weight="600" text-anchor="middle">Git 저장소</text>
+  <text x="130" y="146" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">config-repo</text>
+  <text x="130" y="164" fill="rgb(138,133,128)" font-size="10.5" text-anchor="middle">① 값 변경 후 커밋·푸시</text>
+
+  <!-- step 2: config server -->
+  <rect x="330" y="96" width="180" height="80" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="420" y="124" fill="rgb(212,168,83)" font-size="13" font-weight="700" text-anchor="middle">Config Server</text>
+  <text x="420" y="146" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">새 값 제공 가능</text>
+  <text x="420" y="164" fill="rgb(138,133,128)" font-size="10.5" text-anchor="middle">② 변경 감지</text>
+
+  <!-- step 3: client app -->
+  <rect x="620" y="96" width="180" height="80" rx="8" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="710" y="124" fill="#66bb6a" font-size="13" font-weight="700" text-anchor="middle">Catalog Service</text>
+  <text x="710" y="146" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">설정 쓰는 부분만 리로드</text>
+  <text x="710" y="164" fill="rgb(138,133,128)" font-size="10.5" text-anchor="middle">③ 영향받는 빈 갱신</text>
+
+  <!-- arrows -->
+  <line x1="220" y1="136" x2="330" y2="136" stroke="rgb(138,133,128)" stroke-width="1.4"/>
+  <polygon points="330,136 320,131 320,141" fill="rgb(138,133,128)"/>
+  <line x1="510" y1="136" x2="620" y2="136" stroke="rgb(138,133,128)" stroke-width="1.4"/>
+  <polygon points="620,136 610,131 610,141" fill="rgb(138,133,128)"/>
+
+  <!-- refresh signal -->
+  <rect x="40" y="216" width="760" height="56" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="56" y="240" fill="#e8e4df" font-size="13" font-weight="600">갱신 신호: POST /actuator/refresh</text>
+  <text x="56" y="261" fill="rgb(138,133,128)" font-size="11.5" font-family="'JetBrains Mono', monospace">$ http POST :9001/actuator/refresh  →  RefreshScopeRefreshedEvent 발생</text>
+
+  <!-- bean note -->
+  <rect x="40" y="284" width="760" height="56" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+  <text x="56" y="308" fill="#66bb6a" font-size="12" font-weight="600">@ConfigurationProperties 빈은 이 이벤트를 기본으로 듣는다 — 코드 변경 불필요</text>
+  <text x="56" y="329" fill="rgb(138,133,128)" font-size="11.5">PolarProperties 빈이 최신 설정으로 리로드. 재시작·재빌드 없이, 변경 추적성 보장.</text>
+</svg>

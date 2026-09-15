@@ -1,0 +1,97 @@
+<svg viewBox="0 0 900 556" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif">
+  <title>Node Exporter 전체 지도 — 스크레이프 한 번이 값을 만들기까지</title>
+  <desc>이 절 전체를 스크레이프 한 번의 여정으로 이은 지도다. Prometheus 가 Node Exporter 의 metrics 엔드포인트를 두드리는 것이 출발점이고, 그 요청이 네 단계를 지난다. 1단계는 exporter 의 세 부품으로, 메트릭 정의와 collector 와 레지스트리가 맞물린다. 등록 시점에는 Describe 가 메트릭의 형상만 레지스트리에 알리고 값은 아직 없으며, 스크레이프가 방아쇠가 되어 그때 비로소 Collect 가 돌아 최신 값을 채운다. 2단계는 collector 를 병렬로 도는 일로, Node Exporter 는 기본 활성 45개의 collector 를 저마다 별도 고루틴에 띄우므로 개수가 응답 속도를 좌우하지 않고 가장 느린 하나가 전체 시간을 결정한다. 3단계는 데이터 출처로, 대부분의 collector 는 procfs 라이브러리를 거쳐 proc 유사 파일시스템을 읽는다. CPU 는 백분율이 아니라 모드별 누적 초로 나오므로 코어 수로 나눠야 정규화되고, 부하 평균 대신 커널 4.20 이상의 PSI 기반 pressure 를 보는 편이 낫다. textfile collector 만은 예외로 디스크의 prom 파일을 읽어 단명 프로세스를 거둔다. 4단계는 응답으로, 모인 값이 텍스트 노출 형식으로 합쳐져 한 번에 반환된다. 아래쪽에는 트러블슈팅을 따로 뒀다. 스크레이프가 느리면 collector 별 소요 시간을 재는 duration 메트릭으로 범인 하나를 짚고, success 가 0 인 것은 하드웨어가 없을 때도 뜨므로 알림 대상으로 삼지 않는다. 도식에서 색은 오직 경고 띠에만 쓴다. 나머지 상자는 모두 같은 회색이므로 색이 아니라 번호와 화살표가 순서를 만든다.</desc>
+  <rect width="900" height="556" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="na1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text x="450" y="32" text-anchor="middle" font-size="17" font-weight="700" fill="#e8e4df">스크레이프 한 번이 값을 만들기까지</text>
+  <text x="450" y="53" text-anchor="middle" font-size="11.5" fill="#b8b3ad">색은 경고 띠에만 씁니다</text>
+
+  <!-- 입구 -->
+  <rect x="30" y="76" width="176" height="44" rx="4" fill="#e8e4df"/>
+  <text x="118" y="95" text-anchor="middle" font-size="11" font-weight="700" fill="#0d0d0d">Prometheus</text>
+  <text x="118" y="110" text-anchor="middle" font-size="9.5" fill="#3a3632">GET /metrics</text>
+  <line x1="212" y1="98" x2="246" y2="98" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#na1)"/>
+
+  <!-- 1 세 부품 -->
+  <line x1="254" y1="76" x2="254" y2="120" stroke="#b8b3ad" stroke-width="2"/>
+  <text x="270" y="88" font-size="12" font-weight="700" fill="#e8e4df">1. 세 부품</text>
+  <text x="360" y="88" font-size="10.5" fill="#b8b3ad">§2 · 정의·collector·장부</text>
+
+  <rect x="270" y="96" width="292" height="26" rx="4" fill="#e8e4df"/>
+  <text x="416" y="113" text-anchor="middle" font-size="10" font-weight="700" fill="#0d0d0d">Describe · 등록 때 형상만</text>
+
+  <rect x="570" y="96" width="300" height="26" rx="4" fill="#e8e4df"/>
+  <text x="720" y="113" text-anchor="middle" font-size="10" font-weight="700" fill="#0d0d0d">Collect · 스크레이프 때 값</text>
+
+  <line x1="450" y1="130" x2="450" y2="148" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#na1)"/>
+
+  <!-- 2 병렬 -->
+  <line x1="30" y1="158" x2="30" y2="222" stroke="#b8b3ad" stroke-width="2"/>
+  <text x="46" y="170" font-size="12" font-weight="700" fill="#e8e4df">2. 병렬 실행</text>
+  <text x="152" y="170" font-size="10.5" fill="#b8b3ad">§2·§3 · 45개가 각자 고루틴</text>
+
+  <rect x="46" y="180" width="400" height="36" rx="4" fill="#e8e4df"/>
+  <text x="246" y="196" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0d0d0d">개수는 속도를 좌우하지 않습니다</text>
+  <text x="246" y="210" text-anchor="middle" font-size="9.5" fill="#3a3632">다른 exporter 는 보장 없음</text>
+
+  <rect x="454" y="180" width="416" height="36" rx="4" fill="rgb(212,168,83)"/>
+  <text x="662" y="196" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0d0d0d">주의 · 가장 느린 하나가 결정</text>
+  <text x="662" y="210" text-anchor="middle" font-size="9.5" fill="#3a2f10">그 하나가 전체를 볼모로 잡습니다</text>
+
+  <line x1="450" y1="230" x2="450" y2="248" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#na1)"/>
+
+  <!-- 3 출처 -->
+  <line x1="30" y1="258" x2="30" y2="360" stroke="#b8b3ad" stroke-width="2"/>
+  <text x="46" y="270" font-size="12" font-weight="700" fill="#e8e4df">3. 어디서 긷는가</text>
+  <text x="176" y="270" font-size="10.5" fill="#b8b3ad">§3·§4 · procfs 경유</text>
+
+  <rect x="46" y="280" width="824" height="24" rx="4" fill="#e8e4df"/>
+  <text x="458" y="297" text-anchor="middle" font-size="10" font-weight="700" fill="#0d0d0d">/proc — 유사 파일시스템</text>
+
+  <rect x="46" y="312" width="266" height="40" rx="4" fill="#e8e4df"/>
+  <text x="179" y="329" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0d0d0d">cpu — 백분율 아닌 초</text>
+  <text x="179" y="344" text-anchor="middle" font-size="9.5" fill="#3a3632">코어 수로 나눠야 합니다</text>
+
+  <rect x="320" y="312" width="266" height="40" rx="4" fill="#e8e4df"/>
+  <text x="453" y="329" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0d0d0d">pressure — PSI 4.20+</text>
+  <text x="453" y="344" text-anchor="middle" font-size="9.5" fill="#3a3632">loadavg 대신 이쪽</text>
+
+  <rect x="594" y="312" width="276" height="40" rx="4" fill="#e8e4df"/>
+  <text x="732" y="329" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0d0d0d">textfile — .prom 파일</text>
+  <text x="732" y="344" text-anchor="middle" font-size="9.5" fill="#3a3632">단명 프로세스를 거둡니다</text>
+
+  <line x1="450" y1="360" x2="450" y2="378" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#na1)"/>
+
+  <!-- 4 응답 -->
+  <line x1="30" y1="388" x2="30" y2="440" stroke="#b8b3ad" stroke-width="2"/>
+  <text x="46" y="400" font-size="12" font-weight="700" fill="#e8e4df">4. 한 번에 응답</text>
+  <text x="168" y="400" font-size="10.5" fill="#b8b3ad">§2 · 텍스트 노출 형식으로</text>
+
+  <rect x="46" y="410" width="400" height="26" rx="4" fill="#e8e4df"/>
+  <text x="246" y="427" text-anchor="middle" font-size="10" font-weight="700" fill="#0d0d0d">node_ 접두사 메트릭</text>
+
+  <rect x="454" y="410" width="416" height="26" rx="4" fill="#e8e4df"/>
+  <text x="662" y="427" text-anchor="middle" font-size="10" font-weight="700" fill="#0d0d0d">.prom 내용도 함께</text>
+
+  <!-- 트러블슈팅 별도 -->
+  <line x1="30" y1="464" x2="30" y2="528" stroke="#b8b3ad" stroke-width="2"/>
+  <text x="46" y="476" font-size="12" font-weight="700" fill="#e8e4df">트러블슈팅</text>
+  <text x="140" y="476" font-size="10.5" fill="#b8b3ad">§5 · duration 먼저</text>
+
+  <rect x="46" y="486" width="400" height="36" rx="4" fill="#e8e4df"/>
+  <text x="246" y="502" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0d0d0d">duration — 범인 하나</text>
+  <text x="246" y="516" text-anchor="middle" font-size="9.5" fill="#3a3632">topk 로 줄 세웁니다</text>
+
+  <rect x="454" y="486" width="416" height="36" rx="4" fill="#f2d4d4"/>
+  <text x="662" y="502" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7a1f1f">위험 · success 는 부재도 0</text>
+  <text x="662" y="516" text-anchor="middle" font-size="9.5" fill="#7a1f1f">무차별 알림 금지</text>
+</svg>
