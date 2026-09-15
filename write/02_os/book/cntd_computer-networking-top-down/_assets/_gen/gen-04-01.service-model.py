@@ -43,8 +43,8 @@ for i, (item, inet, atm) in enumerate(ROWS):
 
 BY = HY + RH + 8 + 5 * RS + 16
 d.line(24, BY, 976, BY, RULE, 0.8)
-d.t(24, BY + 26, "원문의 말대로 최선 노력은 서비스가 없다는 말의 완곡어법처럼 보입니다. 하나도 배달하지 않는 망도 이 정의를 만족합니다.", 13, MUTED, KR, "start")
-d.t(24, BY + 48, "그런데도 넉넉한 대역폭과 대역폭 적응형 애플리케이션(DASH)을 더하니 쓸 만했다는 것이 원문의 결론입니다.", 13, SOFT, KR, "start")
+d.t(24, BY + 26, "최선 노력 = 서비스 없음의 완곡어법 — 하나도 배달 안 해도 정의를 만족", 13, MUTED, KR, "start")
+d.t(24, BY + 48, "그럼에도 넉넉한 대역폭 + 적응형 앱(DASH) → 쓸 만해짐", 13, SOFT, KR, "start")
 
 d.legend(H - 44, [("인터넷이 고른 것", ACC), ("약속하지 않음", BAD), ("ATM 이 보장한 것", OK)])
 d.save("04-01.service-model.svg")

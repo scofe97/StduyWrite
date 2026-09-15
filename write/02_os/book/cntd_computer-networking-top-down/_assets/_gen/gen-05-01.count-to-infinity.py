@@ -82,12 +82,11 @@ for i, (who, v) in enumerate(log[:8]):
 sx, sy = px(SWITCH + 1), py(CZX)
 d.o.append(f'<circle cx="{sx:.1f}" cy="{sy:.1f}" r="6" fill="none" stroke="{BAD}" stroke-width="1.6"/>')
 d.path(f"M {sx - 96} {sy - 54} L {sx - 10} {sy - 12}", BAD, 1.2, m="bad")
-d.t(sx - 100, sy - 60, "z 가 via-y 를 51 로 계산하고 직통으로 돌아섭니다", 11, BAD, KR, "end")
+d.t(sx - 100, sy - 60, "z 가 via-y 를 51 로 계산하고 직통으로 돌아섬", 11, BAD, KR, "end")
 
 d.t(px(2) + 8, YB - 16, f"루프가 지속된 {SWITCH - 1}개 메시지", 11, ACC, KR, "start")
 
-d.t(30, 520, f"모의하면 메시지는 모두 {NM}개입니다. 링크 변화를 알린 첫 메시지를 빼고 z 가 돌아서기 "
-             f"직전까지 세면 {SWITCH - 1}개이고, 원문이 적은 44 회가 이 셈입니다.", 11, MUTED, KR, "start")
+d.t(30, 520, f"모의 결과 {NM}개 · 첫 메시지를 빼고 z 가 돌아서기 직전까지 {SWITCH - 1}개 = 원문의 44 회", 11, MUTED, KR, "start")
 
 d.legend(546, [("y 가 광고한 x 까지의 비용", ACC), ("z 가 광고한 비용", INFO), ("직통 링크 비용", BAD)])
 d.t(960, 592, "KUROSE-ROSS 9E FIG 5.7(B) · SIMULATED", 8, SOFT, MONO, "end")

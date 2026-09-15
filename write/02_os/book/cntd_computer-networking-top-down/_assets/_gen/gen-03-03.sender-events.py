@@ -21,26 +21,26 @@ d = D(W, H, "COMPUTER NETWORKING TOP-DOWN · 03-03 §5",
 d.tone(70, 176, 300, 96, OK, 8, "10", 1.4)
 d.t(220, 210, "미확인 세그먼트 없음", 13, OK, KR, "middle", 600)
 d.t(220, 234, "SendBase = NextSeqNum", 11, INK, MONO)
-d.t(220, 254, "타이머가 꺼져 있습니다", 11, MUTED, KR)
+d.t(220, 254, "타이머가 꺼져 있음", 11, MUTED, KR)
 
 d.tone(630, 176, 300, 96, WARN, 8, "10", 1.4)
 d.t(780, 210, "미확인 세그먼트 있음", 13, WARN, KR, "middle", 600)
 d.t(780, 234, "SendBase < NextSeqNum", 11, INK, MONO)
-d.t(780, 254, "타이머가 돌고 있습니다", 11, MUTED, KR)
+d.t(780, 254, "타이머가 돌고 있음", 11, MUTED, KR)
 
 d.arrow([(370, 204), (622, 204)], INFO, "info", 1.5)
 d.t(496, 194, "① 위층에서 데이터가 옴", 11, INFO, KR, "middle", 600)
-d.t(496, 172, "세그먼트로 싸서 IP 에 넘기고 타이머를 시작합니다", 11, MUTED, KR)
+d.t(496, 172, "세그먼트로 싸서 IP 에 넘기고 타이머를 시작함", 11, MUTED, KR)
 
 d.arrow([(622, 246), (378, 246)], OK, "ok", 1.5)
 d.t(500, 268, "③ ACK 도착 — 남은 미확인이 없으면", 11, OK, KR, "middle", 600)
 
 d.path("M 930 208 L 966 208 L 966 260 L 930 260", WARN, 1.5, m="warn")
 d.t(830, 300, "② 타임아웃 · ③ ACK 도착(미확인이 남았으면)", 11, WARN, KR, "middle", 600)
-d.t(830, 320, "제자리로 돌아옵니다 — 타이머만 다시 시작합니다", 11, MUTED, KR, "middle")
+d.t(830, 320, "제자리로 돌아옵니다 — 타이머만 다시 시작함", 11, MUTED, KR, "middle")
 
 ROWS = [
-    ("① 위층에서 데이터가 옴", "세그먼트를 만들어 보냅니다", "타이머가 안 돌고 있으면 시작", INFO),
+    ("① 위층에서 데이터가 옴", "세그먼트를 만들어 보냄", "타이머가 안 돌고 있으면 시작", INFO),
     ("② 타임아웃", "타임아웃을 일으킨 세그먼트만 재전송", "타이머를 다시 시작", WARN),
     ("③ ACK 도착 (y > SendBase)", "SendBase 를 y 로 갱신", "미확인이 남았으면 타이머 재시작", OK),
 ]
@@ -52,7 +52,7 @@ for i, (ev, act, timer, c) in enumerate(ROWS):
     d.t(340, y + 28, act, 11, INK, KR, "start")
     d.t(680, y + 28, timer, 11, MUTED, KR, "start")
 
-d.t(24, 566, "재전송이 「타임아웃을 일으킨 것 하나」인 자리가 §6 에서 TCP 를 GBN 이라 부를 수 없게 만듭니다.", 11, ACC, KR, "start")
+d.t(24, 566, "재전송이 「타임아웃을 일으킨 것 하나」인 자리가 §6 에서 TCP 를 GBN 이라 부를 수 없게 만듦", 11, ACC, KR, "start")
 
 d.legend(H - 44, [("보낼 것이 다 확인된 상태", OK), ("기다리는 중", WARN), ("데이터가 들어옴", INFO), ("다음 절로 이어지는 자리", ACC)])
 d.save("03-03.sender-events.svg")

@@ -55,7 +55,7 @@ d = SeqKR(W, H, "COMPUTER NETWORKING TOP-DOWN · 03-05 §4",
           "라우터가 끼는 신호는 IP 헤더의 2비트(ECT→CE)이고 종단끼리 주고받는 신호는 TCP 플래그(ECE·CWR)다. "
           "협상은 종단끼리의 일이라 TCP 플래그로만 하고, 데이터가 흐를 때는 IP 의 도장과 TCP 의 되돌림이 이어진다.",
           "라우터의 도장은 IP 에, 되돌림은 TCP 에 실립니다")
-d.lanes([("송신자", "TCP + IP"), ("라우터", "IP 헤더까지만 봅니다"), ("수신자", "TCP + IP")])
+d.lanes([("송신자", "TCP + IP"), ("라우터", "IP 헤더까지만 봄"), ("수신자", "TCP + IP")])
 d.rails(580)
 
 d.phase(172, "협상 · TCP 플래그 · 연결마다 한 번")
@@ -70,9 +70,9 @@ d.msg("수신자", "송신자", "ACK · TCP: ECE", 460, OK, dash="5 4", sub="「
 d.selfmsg("송신자", "cwnd 절반", 504, MUTED, sub="손실 때와 같은 반응")
 d.msg("송신자", "수신자", "데이터 · TCP: CWR (IP: ECT)", 548, OK, sub="「줄였다」 — 수신자가 ECE 를 그침", lx=-185)
 
-d.t(20, 612, "IP 헤더의 2비트는 네 상태입니다 — Not-ECT(00) · ECT(0)(10) · ECT(1)(01) · CE(11). 호스트는 ECT 를 쓰고 라우터는 CE 를 씁니다.",
+d.t(20, 612, "IP 헤더의 2비트는 네 상태입니다 — Not-ECT(00) · ECT(0)(10) · ECT(1)(01) · CE(11). 호스트는 ECT 를 쓰고 라우터는 CE 를 씀",
     11, MUTED, KR, "start")
-d.t(20, 634, "TCP 헤더의 플래그 둘(ECE·CWR)은 종단끼리 주고받습니다. 라우터가 끼는 표시는 IP 에 있습니다 — 라우터는 망 층까지만 구현합니다.",
+d.t(20, 634, "플래그 둘(ECE·CWR)은 종단끼리 · 라우터가 끼는 표시는 IP 에 · 라우터의 구현은 망 층까지",
     11, MUTED, KR, "start")
 d.legend(H - 52, [("TCP 플래그 · 종단끼리", OK), ("IP: ECT · 호스트가 씀", INFO), ("IP: CE · 라우터가 씀", ACC)])
 d.save("03-05.ecn-two-layers.svg")

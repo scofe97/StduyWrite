@@ -29,7 +29,7 @@ d.t(480, 152, "애플리케이션 계층", 12, INK, KR, "middle", 600)
 d.t(480, 172, "HTTP · SMTP · IMAP · DNS · DASH · BitTorrent · ...", 10, MUTED, MONO)
 d.t(480, 216, "트랜스포트 계층", 12, INK, KR, "middle", 600)
 d.t(480, 236, "TCP · UDP · QUIC", 10, MUTED, MONO)
-d.t(480, 274, "네트워크 계층은 하나뿐입니다", 11, MUTED, KR)
+d.t(480, 274, "네트워크 계층은 하나뿐", 11, MUTED, KR)
 
 d.t(480, 384, "링크 계층", 12, INK, KR, "middle", 600)
 d.t(480, 404, "Ethernet · WiFi · Cellular · PPP · ...", 10, MUTED, MONO)
@@ -37,14 +37,13 @@ d.t(480, 446, "물리 계층", 12, INK, KR, "middle", 600)
 d.t(480, 466, "동축 · 꼬임쌍선 · 광 · 무선", 11, MUTED, KR)
 
 # 좌우 주석
-d.t(LX - 20, 168, "프로토콜이 많습니다", 11, SOFT, KR, "end")
-d.t(LX - 20, 424, "프로토콜이 많습니다", 11, SOFT, KR, "end")
+d.t(LX - 20, 168, "프로토콜 여럿", 11, SOFT, KR, "end")
+d.t(LX - 20, 424, "프로토콜 여럿", 11, SOFT, KR, "end")
 d.path(f"M {RX + 24} 316 L {WR + 12} 316", ACC, 1.3, m="acc")
 d.t(RX + 32, 306, "미들박스가 이 허리를", 11, ACC, KR, "start")
-d.t(RX + 32, 322, "조금씩 굵게 합니다", 11, ACC, KR, "start")
+d.t(RX + 32, 322, "조금씩 굵어짐", 11, ACC, KR, "start")
 
-d.t(60, 534, "IP 만 맞추면 되니 이더넷부터 와이파이·셀룰러·광 전송까지 성질이 다른 망이 모두 인터넷의 일부가 됐습니다. "
-              "Clark 은 이 허리를 걸침 계층이라 부릅니다.", 11, MUTED, KR, "start")
+d.t(60, 534, "IP 만 맞추면 이더넷·와이파이·셀룰러·광 전송까지 모두 인터넷의 일부 — Clark 은 이 허리를 걸침 계층이라 부름", 11, MUTED, KR, "start")
 
 d.legend(552, [("모두가 구현해야 하는 하나", ACC)])
 

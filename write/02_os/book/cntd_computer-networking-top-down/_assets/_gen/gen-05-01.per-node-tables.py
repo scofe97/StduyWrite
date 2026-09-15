@@ -46,7 +46,7 @@ for k,(x,y) in POS.items():
     c = COLOR.get(k, RULE)
     d.box(x-19, y-15, 38, 30, PAPER2, c, 1.3 if k in COLOR else 1.0, 6)
     d.t(x, y+5, k, 12, COLOR.get(k, INK), MONO, "middle", 600)
-d.t(180, 500, "간선 열 개와 비용이 전부 같습니다", 11, MUTED, KR)
+d.t(180, 500, "간선 열 개와 비용이 전부 동일", 11, MUTED, KR)
 
 # ── 오른쪽: 노드마다 다른 전달 표
 XS = [(366, 'u'), (576, 'x'), (786, 'y')]
@@ -68,9 +68,9 @@ for x0, src in XS:
     hops = {h for h,_ in rows.values()}
     d.t(x0+97, 484, f"나가는 링크 {len(hops)} 종류", 11, MUTED, KR)
 
-d.t(20, 556, "u 는 다섯 목적지 중 넷을 x 로 내보내고, x 는 셋을 y 로 내보내며, y 는 목적지마다 다른 이웃으로 내보냅니다.", 11, MUTED, KR, "start")
-d.t(20, 578, "같은 지도에 같은 알고리즘이라 최소 비용 경로 집합은 모두 같지만, 출발점이 다르므로 남는 트리와 표는 노드마다 다릅니다.", 11, MUTED, KR, "start")
-d.t(20, 600, "어느 라우터도 경로 전체를 들고 있지 않습니다. 첫 홉만 알고, 그다음은 그 이웃의 표가 이어받습니다.", 11, INFO, KR, "start")
+d.t(20, 556, "u 는 다섯 목적지 중 넷을 x 로 내보내고, x 는 셋을 y 로 내보내며, y 는 목적지마다 다른 이웃으로 내보냄", 11, MUTED, KR, "start")
+d.t(20, 578, "같은 지도·같은 알고리즘 → 경로 집합 동일 · 출발점이 달라 트리와 표는 노드마다 다름", 11, MUTED, KR, "start")
+d.t(20, 600, "어느 라우터도 경로 전체를 들고 있지 않음 · 첫 홉만 알고, 그다음은 그 이웃의 표가 이어받음", 11, INFO, KR, "start")
 
 d.legend(634, [("u 의 표", ACC), ("x 의 표", INFO), ("y 의 표", OK)])
 d.t(976, 676, "KUROSE-ROSS 9E FIG 5.3", 8, SOFT, MONO, "end")

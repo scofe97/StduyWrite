@@ -10,9 +10,9 @@ W, H = 960, 512
 HDR_W, STEP_X, STEP_Y, INSET_R = 56, 92, 40, 28
 
 LAYERS = [
-    ("링크 층이 붙입니다", "프레임 · frame", "H l", INK),
-    ("네트워크 층이 붙입니다", "데이터그램 · datagram", "H n", INFO),
-    ("트랜스포트 층이 붙입니다", "세그먼트 · segment", "H t", OK),
+    ("링크 층", "프레임 · frame", "H l", INK),
+    ("네트워크 층", "데이터그램 · datagram", "H n", INFO),
+    ("트랜스포트 층", "세그먼트 · segment", "H t", OK),
 ]
 
 d = D(W, H, "COMPUTER NETWORKING TOP-DOWN · 01-01 §4",
@@ -34,7 +34,7 @@ d.tone(x, y, w, h, ACC, 8)
 d.t(x + w / 2, y + h / 2 - 4, "메시지 · message", 12, ACC, MONO, "middle", 600)
 d.t(x + w / 2, y + h / 2 + 18, "애플리케이션이 만든 원본", 11, MUTED, KR)
 
-d.t(24, 428, "호스트는 다섯 층을 다 구현하고 라우터는 3층까지, 링크 계층 스위치는 2층까지만 벗깁니다",
+d.t(24, 428, "호스트는 다섯 층을 다 구현하고 라우터는 3층까지, 링크 계층 스위치는 2층까지만 벗김",
      11, MUTED, KR, "start")
 
 d.legend(H - 60, [("원본 데이터", ACC), ("각 층이 덧붙인 헤더", INFO)])

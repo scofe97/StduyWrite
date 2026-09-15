@@ -30,14 +30,14 @@ def row(y, header, states, trans, hot=()):
 
 
 row(150, "처음 붙을 때 — 네 단계",
-    [("INIT", "주소가 없습니다"), ("SELECTING", "제안을 기다립니다"),
-     ("REQUESTING", "확정을 기다립니다"), ("BOUND", "임대를 씁니다")],
+    [("INIT", "주소 없음"), ("SELECTING", "제안을 기다림"),
+     ("REQUESTING", "확정을 기다림"), ("BOUND", "임대를 씀")],
     [("DISCOVER", "dst 255.255.255.255 · src 0.0.0.0"),
      ("OFFER 뒤 REQUEST", "yiaddr · mask · lease"),
      ("ACK", "xid 0x82035391 · lease 3,599s")])
 
 row(340, "임대를 이어 갈 때 — 타이머 둘",
-    [("BOUND", "임대를 씁니다"), ("RENEWING", "임대해 준 서버에 재요청"),
+    [("BOUND", "임대를 씀"), ("RENEWING", "임대해 준 서버에 재요청"),
      ("REBINDING", "아무 서버에나 재요청"), ("INIT", "주소를 놓고 처음부터")],
     [("T1 에 도달", "0.5 x lease = 1,799s"),
      ("T2 에 도달", "0.875 x lease = 3,149s"),
@@ -49,7 +49,7 @@ d.path("M 632 404 L 632 448 L 124 448 L 124 410", OK, 1.4, m="ok", dash="6 5")
 d.path("M 430 404 L 430 448", OK, 1.4, dash="6 5")
 d.chip(250, 448, "ACK 를 받으면 BOUND 로", OK, 11)
 
-d.t(24, 484, "위아래 두 줄의 BOUND 는 같은 상태입니다. 처음 얻는 길과 이어 가는 길이 여기서 만납니다.",
+d.t(24, 484, "위아래 두 줄의 BOUND 는 같은 상태 · 처음 얻는 길과 이어 가는 길이 여기서 만남",
      11, MUTED, KR, "start")
 
 d.legend(504, [("타이머가 미는 전이", ACC), ("갱신 성공", OK), ("그 밖의 전이", MUTED)])

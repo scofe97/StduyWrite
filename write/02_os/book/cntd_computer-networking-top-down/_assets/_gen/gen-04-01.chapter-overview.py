@@ -35,6 +35,6 @@ for i, (tag, title, sub, c, bullets) in enumerate(CARDS):
     if i < N - 1:
         d.path(f"M {x+CARD_W+2} {CARD_Y+CARD_H/2} L {x+CARD_W+GAP-3} {CARD_Y+CARD_H/2}", MUTED, 1.4, m="ar")
 
-d.t(W / 2, 350, "강조된 칸이 이 편의 축입니다 — 데이터 평면은 나노초, 제어 평면은 초. 그 차이가 나머지 절을 설명합니다.", 12, MUTED)
+d.t(W / 2, 350, "이 편의 축 — 데이터 평면 나노초 · 제어 평면 초", 12, MUTED)
 d.legend(362, [("도입·전개", INFO), ("이 편의 축", ACC), ("다음 편으로", OK)])
 d.save("04-01.chapter-overview.svg")

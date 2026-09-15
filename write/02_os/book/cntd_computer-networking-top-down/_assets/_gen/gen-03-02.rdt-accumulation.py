@@ -46,7 +46,7 @@ for i, (name, chan, devs, note, col) in enumerate(STEPS):
     d.t(CX, y + 52, chan, 11, INK, KR, "start")
     d.line(DX - 18, y + 12, DX - 18, y + RH - 24, RULE, 0.8)
     if not devs:
-        d.t(DX, y + 44, "가진 장치가 없습니다. 되먹임조차 필요 없습니다.", 11, SOFT, KR, "start")
+        d.t(DX, y + 44, "가진 장치가 없음 · 되먹임조차 필요 없음", 11, SOFT, KR, "start")
         continue
     x = DX
     for j, dv in enumerate(devs):
@@ -61,10 +61,10 @@ for i, (name, chan, devs, note, col) in enumerate(STEPS):
         d.t(x + 6, y + 48, f"← {note}", 11, MUTED, KR, "start")
 
 d.t(24, Y0 + 5 * RH + 8,
-    "아래로 내려갈수록 채널을 더 의심하고, 위에서 내려온 장치는 그대로 남습니다. 유일한 제거가 rdt2.2 의 NAK 인데 그것도 삭제가 아니라 대체입니다.",
+    "아래로 내려갈수록 채널을 더 의심하고, 위에서 내려온 장치는 그대로 남음 · 유일한 제거가 rdt2.2 의 NAK 인데 그것도 삭제가 아니라 대체",
     11, MUTED, KR, "start")
 d.t(24, Y0 + 5 * RH + 30,
-    "그래서 rdt3.0 의 타임아웃이 만든 중복 패킷을 rdt2.1 이 넣어 둔 순서 번호가 받아 냅니다. 단계가 서로를 떠받칩니다.",
+    "그래서 rdt3.0 의 타임아웃이 만든 중복 패킷을 rdt2.1 이 넣어 둔 순서 번호가 받아 냄 · 단계가 서로를 떠받침",
     11, SOFT, KR, "start")
 
 d.legend(H - 44, [("rdt3.0 이 마지막으로 더한 것", ACC), ("그 단계에서 새로 붙은 것", OK), ("앞 단계에서 들고 온 것", SOFT)])

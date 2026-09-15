@@ -33,21 +33,21 @@ diamond(CX, 208, 260, 60, "UDP 세그먼트인가")
 # 예 — UDP
 d.path(f"M {CX - 130} 208 L 172 208 L 172 296", MUTED, 1.3, m="ar")
 d.t(CX - 142, 200, "예", 11, MUTED, KR, "end")
-rect(172, 330, 260, 68, "목적지 두 값만 봅니다", "(dst IP, dst port)", INFO, True)
+rect(172, 330, 260, 68, "목적지 두 값만 봄", "(dst IP, dst port)", INFO, True)
 d.path(f"M 172 364 L 172 434", MUTED, 1.3, m="ar")
 rect(172, 468, 280, 68, "출발지가 달라도 같은 소켓", "2-tuple", MUTED)
 
 # 아니오 — TCP
 d.path(f"M {CX + 130} 208 L 660 208 L 660 296", MUTED, 1.3, m="ar")
 d.t(CX + 142, 200, "아니오", 11, MUTED, KR, "start")
-rect(660, 330, 300, 68, "네 값을 모두 봅니다", "(src IP, src port, dst IP, dst port)", ACC, True)
+rect(660, 330, 300, 68, "네 값을 모두 봄", "(src IP, src port, dst IP, dst port)", ACC, True)
 d.path(f"M 660 364 L 660 434", ACC, 1.4, m="acc")
 rect(660, 468, 300, 68, "출발지가 다르면 다른 소켓", "4-tuple", ACC, True)
 
 d.t(972, 330, "최초 연결 요청만", 11, SOFT, KR, "end")
-d.t(972, 350, "환영 소켓으로 갑니다", 11, SOFT, KR, "end")
+d.t(972, 350, "환영 소켓으로 감", 11, SOFT, KR, "end")
 
-d.t(24, 534, "실측 — UDP 서버 소켓 하나가 출발지 포트 57418·49530 을 모두 받았고, TCP 는 56801·56802 에서 연결 소켓이 각각 생겼습니다.",
+d.t(24, 534, "실측 — UDP 서버 소켓 하나가 출발지 포트 57418·49530 을 모두 받았고, TCP 는 56801·56802 에서 연결 소켓이 각각 생겼음",
      11, MUTED, KR, "start")
 
 d.legend(H - 60, [("TCP — 값 넷", ACC), ("UDP — 값 둘", INFO), ("판정", MUTED)])

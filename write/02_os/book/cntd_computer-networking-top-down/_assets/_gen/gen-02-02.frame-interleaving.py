@@ -27,8 +27,8 @@ d.line(PX0, PY0, PX0, PY1, RULE, 1.0)
 d.line(PX0, PY1, PX1, PY1, MUTED, 1.0)
 d.t(20, PY0 - 16, "보내야 하는 프레임 수", 13, SOFT, KR, "start")
 
-BARS = [("인터리빙 없음", "비디오 1000 프레임 뒤에야 차례가 옵니다", 1016, False),
-        ("인터리빙 있음", "비디오 프레임 사이사이에 끼워 보냅니다", 18, True)]
+BARS = [("인터리빙 없음", "비디오 1000 프레임 뒤에야 차례가 옴", 1016, False),
+        ("인터리빙 있음", "비디오 프레임 사이사이에 끼워 보냄", 18, True)]
 BW, PITCH = 230, 380
 for i, (name, sub, v, focal) in enumerate(BARS):
     cx = PX0 + 60 + i * PITCH + BW / 2
@@ -42,9 +42,9 @@ for i, (name, sub, v, focal) in enumerate(BARS):
     d.t(cx, PY1 + 30, name, 13, ACC if focal else INK, KR, "middle", 600)
     d.t(cx, PY1 + 52, sub, 13, MUTED, KR)
 
-d.t(20, 492, "HTTP/2 는 메시지를 작은 프레임으로 쪼개 같은 TCP 연결 위에서 번갈아 끼워 넣습니다.",
+d.t(20, 492, "HTTP/2 는 메시지를 작은 프레임으로 쪼개 같은 TCP 연결 위에서 번갈아 끼워 넣음",
      13, MUTED, KR, "start")
-d.t(20, 514, "원문이 말하는 가장 중요한 단일 개선입니다. 다만 트랜스포트 층의 HOL 블로킹은 남습니다.",
+d.t(20, 514, "원문이 말하는 가장 중요한 단일 개선 · 다만 트랜스포트 층의 HOL 블로킹은 남음",
      13, MUTED, KR, "start")
 
 d.legend(H - 48, [("인터리빙이 만든 값", ACC), ("HTTP/1.1 의 한 연결", MUTED)])

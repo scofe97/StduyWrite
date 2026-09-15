@@ -70,9 +70,9 @@ d.t(PX1 + 8, yp(13) + 4, "cwnd", 11, INFO, MONO, "start")
 d.t(PX1 + 8, yp(8) + 4, "rwnd", 11, OK, MONO, "start")
 d.t(xp(8.5), yp(3) + 18, "min{cwnd, rwnd}", 11, ACC, MONO)
 
-d.t(20, 486, "rwnd 는 받는 쪽이 헤더에 적어 보낸 숫자라 그쪽 앱이 읽기를 멈추면 뚝 떨어지고, cwnd 는 보내는 쪽이 혼자 올리고 중복 ACK 손실 때 반으로 접습니다.",
+d.t(20, 486, "rwnd 는 받는 쪽이 헤더에 적어 보낸 숫자라 그쪽 앱이 읽기를 멈추면 뚝 떨어지고, cwnd 는 보내는 쪽이 혼자 올리고 중복 ACK 손실 때 반으로 접음",
     11, MUTED, KR, "start")
-d.t(20, 508, "보내는 쪽은 매 순간 둘 중 작은 값까지만 내보냅니다. 값은 질적이고, 눈금은 MSS 단위로만 뜻이 있습니다.",
+d.t(20, 508, "보내는 쪽은 매 순간 둘 중 작은 값까지만 · 눈금의 뜻은 MSS 단위로만",
     11, MUTED, KR, "start")
 d.legend(H - 52, [("실제 한도 = min", ACC), ("cwnd — 보내는 쪽의 추측", INFO), ("rwnd — 받는 쪽이 알려 줌", OK)])
 d.save("03-05.rwnd-vs-cwnd.svg")

@@ -80,10 +80,9 @@ for k, (x, y) in POS.items():
     if end:
         d.t(x + NW / 2, y + 45, SUB[k], 13, MUTED, KR)
 
-d.t(12, 524, "간선은 열 개이고 그 위의 숫자가 비용입니다. 다익스트라도 벨만-포드도 "
-             "이 그래프 하나를 입력으로 받습니다.", 13, MUTED, KR, "start")
+d.t(12, 524, "간선 열 개 · 숫자는 비용 — 다익스트라와 벨만-포드가 같은 그래프를 입력으로", 13, MUTED, KR, "start")
 d.t(12, 546, f"u 에서 z 로 가는 단순 경로는 {len(paths)} 개, 그중 최소는 "
-             f"{paths[0][0]} 의 {paths[0][1]} 하나뿐이고 차순위는 {paths[1][1]} 입니다.",
+             f"{paths[0][0]} 의 {paths[0][1]} · 차순위는 {paths[1][1]}",
      13, MUTED, KR, "start")
 
 d.legend(576, [("최소 비용 경로 u-x-y-z", ACC), ("나머지 간선", MUTED), ("출발과 도착", INFO)])

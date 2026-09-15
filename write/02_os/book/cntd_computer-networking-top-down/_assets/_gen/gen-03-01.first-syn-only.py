@@ -69,20 +69,20 @@ d.rails(564)
 FX, FY, FW, FH = 72, 176, 864, 268
 d.fragment("LOOP", "[연결마다 한 번]", FX, FY, FW, FH)
 
-d.selfmsg(A, "connect()", 240, MUTED, sub="출발지 포트는 OS 가 고릅니다")
-d.msg(A, K, "SYN  1.1.1.1:26145 → *:80", 292, MUTED, sub="맞는 4튜플이 없습니다")
-d.msg(K, L, "듣는 소켓으로", 344, INFO, mk="info", sub="목적지 두 값만으로 찾습니다")
+d.selfmsg(A, "connect()", 240, MUTED, sub="출발지 포트는 OS 가 고름")
+d.msg(A, K, "SYN  1.1.1.1:26145 → *:80", 292, MUTED, sub="맞는 4튜플이 없음")
+d.msg(K, L, "듣는 소켓으로", 344, INFO, mk="info", sub="목적지 두 값만으로 찾음")
 d.msg(L, C, "accept()", 396, OK, mk="ok", sub="SYN 의 출발지로 채운 새 소켓")
 d.state(L, "여전히 *:80 LISTEN", 428, INFO)
 d.state(C, "1.1.1.1:26145 → *:80", 428, OK)
 
 # ── 그 뒤의 모든 세그먼트 ─────────────────────────────────
 d.msg(A, K, "데이터  1.1.1.1:26145 → *:80", 492, MUTED, sub="연결된 소켓 A 와 일치")
-d.msg(K, C, "곧장 연결된 소켓으로", 544, ACC, mk="acc", sub="듣는 소켓은 거치지 않습니다", lx=92)
+d.msg(K, C, "곧장 연결된 소켓으로", 544, ACC, mk="acc", sub="듣는 소켓은 거치지 않음", lx=92)
 
-d.t(20, 592, "클라이언트 B 가 오면 LOOP 가 한 번 더 돌아 fd=7 이 생기고, 그 뒤 B 의 세그먼트도 자기 소켓으로 곧장 갑니다.",
+d.t(20, 592, "클라이언트 B 가 오면 LOOP 가 한 번 더 돌아 fd=7 이 생기고, 그 뒤 B 의 세그먼트도 자기 소켓으로 곧장 감",
     12, MUTED, KR, "start")
-d.t(20, 612, "SYN 뒤의 SYN-ACK 과 ACK 은 03-04 의 몫이라 여기서는 생략했습니다.",
+d.t(20, 612, "SYN 뒤의 SYN-ACK 과 ACK 은 03-04 의 몫이라 여기서는 생략했음",
     12, MUTED, KR, "start")
 
 d.legend(H - 44, [("연결마다 한 번뿐인 길", INFO), ("accept() 가 만든 소켓", OK), ("그 뒤 모든 세그먼트의 길", ACC)])

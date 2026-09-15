@@ -41,11 +41,11 @@ for x, y, lab, c in LEAF:
     d.path(f"M {x} {348 + NH/2 + 2} L {x} {y - 26}", c, 1.2, m="acc" if c is ACC else "ok")
 
 d.box(24, 486, 420, 62, PAPER2, RULE, 0.9, 6)
-d.t(40, 510, "…00011000 10101010 은 21비트와 24비트 둘 다에 맞습니다", 12, SOFT, KR, "start")
-d.t(40, 532, "긴 쪽인 24비트가 이겨 인터페이스 1 로 갑니다", 12, ACC, KR, "start")
+d.t(40, 510, "…00011000 10101010 — 21비트·24비트 둘 다 일치", 12, SOFT, KR, "start")
+d.t(40, 532, "긴 쪽인 24비트가 이겨 인터페이스 1 로 감", 12, ACC, KR, "start")
 
 d.t(468, 510, "어느 항목에도 안 맞으면 길이 0 인 기본 항목이 이깁니다 — 인터페이스 3.", 12, MUTED, KR, "start")
-d.t(468, 532, "TCAM 의 '신경 안 씀' 비트가 이 접두 표를 작게 유지하는 열쇠입니다.", 12, MUTED, KR, "start")
+d.t(468, 532, "TCAM 의 '신경 안 씀' 비트 → 접두 표를 작게 유지", 12, MUTED, KR, "start")
 
 d.legend(H - 44, [("가장 긴 접두", ACC), ("더 짧은 접두", OK), ("공통 부분", INFO)])
 d.save("04-01.longest-prefix-match.svg")

@@ -51,7 +51,7 @@ for x, (name, sock) in zip(XS, PROCS):
     d.path(f"M {x} {TY} L {x} {PY + PH + 10}", c, 1.3, m="acc" if c is ACC else "ar")
 d.t(XS[3] + 8, (TY + PY + PH) / 2 + 4, "목적지 포트 51003", 11, ACC, KR, "start")
 
-d.t(24, 518, "다중화는 반대 방향입니다. 여러 소켓의 데이터를 모아 헤더를 붙이고 세그먼트를 만들어 네트워크 층으로 내립니다.",
+d.t(24, 518, "다중화는 반대 방향 — 여러 소켓의 데이터를 모아 헤더를 붙여 네트워크 층으로",
      11, MUTED, KR, "start")
 
 d.legend(H - 44, [("이 세그먼트가 갈 자리", ACC), ("다른 소켓", MUTED)])

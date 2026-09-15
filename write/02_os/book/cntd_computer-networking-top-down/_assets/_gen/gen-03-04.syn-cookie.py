@@ -28,17 +28,17 @@ d.msg("클라이언트", "서버 — 기본", "SYN  seq=client_isn", 182, lx=-40
 d.state("서버 — 기본", "alloc buffers + vars", 220, WARN)
 d.msg("서버 — 기본", "클라이언트", "SYNACK  seq=server_isn  ack=client_isn+1", 268, MUTED, dash="5 4", lx=-40)
 d.msg("클라이언트", "서버 — 기본", "ACK  ack=server_isn+1", 322, OK, mk="ok", lx=-40,
-      sub="여기까지 안 오면 반쯤 열린 연결이 남습니다")
+      sub="여기까지 안 오면 반쯤 열린 연결이 남음")
 
 d.msg("클라이언트", "서버 — SYN 쿠키", "SYN", 396, lx=-90)
 d.state("서버 — SYN 쿠키", "isn = hash(ips, ports, secret)", 434, ACC)
 d.msg("서버 — SYN 쿠키", "클라이언트", "SYNACK  seq=cookie", 470, MUTED, dash="5 4", lx=-90)
 d.msg("클라이언트", "서버 — SYN 쿠키", "ACK  ack=cookie+1", 512, ACC, mk="acc", lx=-90,
-      sub="같은 해시를 다시 계산해 검산한 뒤에야 소켓을 만듭니다")
+      sub="같은 해시를 다시 계산해 검산한 뒤에야 소켓을 만듦")
 
-d.t(20, 566, "서버가 상태를 기억하는 대신 다시 계산할 수 있게 만든 설계입니다. 들고 있어야 할 정보를 상대에게 들려 보내고 돌아올 때 검산합니다.",
+d.t(20, 566, "서버가 상태를 기억하는 대신 다시 계산할 수 있게 만든 설계 · 들고 있어야 할 정보를 상대에게 들려 보내고 돌아올 때 검산함",
      11, MUTED, KR, "start")
-d.t(20, 588, "ACK 가 안 오면 원래의 가짜 SYN 은 아무 해도 끼치지 않습니다 — 자원을 할당한 적이 없기 때문입니다.",
+d.t(20, 588, "ACK 가 안 오면 원래의 가짜 SYN 은 아무 해도 끼치지 않습니다 — 자원을 할당한 적이 없기 때문",
      11, MUTED, KR, "start")
 
 d.legend(H - 44, [("쿠키를 검산하는 자리", ACC), ("공격이 노리는 자리", WARN), ("정상 완료", OK)])
