@@ -6,7 +6,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 652
+W, H = 1000, 600
 d = D(W, H, "CAPTURE VANTAGE · lo0 vs en0",
       "어디서 잡느냐가 어디까지 보이느냐를 정한다",
       "윗줄이 lo0, 아랫줄이 en0. 같은 자리끼리 세로로 맞춰 보면 관측 지점 하나가 무엇을 바꾸는지 갈린다.",
@@ -20,7 +20,7 @@ HEAD_Y = 214
 HEADS = ["보이는 계층", "MTU", "잡음", "어느 절"]
 FOCAL_COL = 0                                                   # 본문이 "둘째 칸"이라 부른 그 열
 
-ddx.band(d, 104, 596, "관측 지점 하나가 계층·분할·잡음을 한꺼번에 바꾼다")
+ddx.band(d, 104, 540, "관측 지점 하나 → 계층 · MTU · 잡음이 함께 바뀜")
 
 for i, h in enumerate(HEADS):
     c = ACC if i == FOCAL_COL else SOFT
@@ -34,10 +34,10 @@ if True:                                                        # 갈림길 열�
 
 for r, (iface, sub, cells, c) in enumerate([
         ("lo0 캡처", "localhost:8080 · 통제된 환경",
-         [("L3 부터 보인다", "MAC · ARP 못 봄"), ("16384", "en0 의 열 배"),
+         [("L3 부터 보임", "MAC · ARP 못 봄"), ("16384", "en0 의 열 배"),
           ("잡음 0", "남의 트래픽 없음"), ("§2", "패킷 12개 세기")], INFO),
         ("en0 캡처", "실제 랜 · 남의 트래픽 섞임",
-         [("L2 부터 보인다", "ARP 관측 가능"), ("1500", "표준 이더넷"),
+         [("L2 부터 보임", "ARP 관측 가능"), ("1500", "표준 이더넷"),
           ("필터 필수", "port · arp 로 좁힘"), ("§3 · §5", "ARP · 대조")], WARN)]):
     cy = ROW_Y[r]
     d.box(24, cy - CH // 2, LBL_W, CH, PAPER2, c, 1.2, 6)
@@ -51,8 +51,7 @@ for r, (iface, sub, cells, c) in enumerate([
             ACC if i == FOCAL_COL else INK, KR, "middle", 600)
         d.t(x + CW // 2, cy + 16, ddx.fit(note, 11, CW - 16, note), 11, MUTED, KR)
 
-d.t(36, 556, "MAC 이 없으면 ARP 도 Ethernet 프레임도 존재하지 않는다 — 01-03 의 Link 계층을 "
-             "루프백에서 확인할 수 없는 이유가 이것이다", 12, MUTED, KR, "start")
-d.legend(612, [("lo0", INFO), ("en0", WARN), ("갈림길", ACC)])
+# 하단 해설(MAC 이 없으면 ARP 도 없다)은 본문 §1 L140 문단이 같은 문장으로 말한다 — 뺐다
+d.legend(560, [("lo0", INFO), ("en0", WARN), ("갈림길", ACC)])
 d.save("01-04.capture-vantage.svg")
 print("ok capture-vantage")

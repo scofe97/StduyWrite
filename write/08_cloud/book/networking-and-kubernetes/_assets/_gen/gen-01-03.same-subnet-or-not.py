@@ -6,7 +6,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 660
+W, H = 1000, 588
 d = D(W, H, "SAME SUBNET OR NOT",
       "같은 서브넷이냐 아니냐가 Pod 대역의 운명을 가른다",
       "아래로 뻗은 상자가 그 장비가 실제로 읽는 부분이다 — 스위치는 겉봉에서 멈추고 라우터는 속의 IP 까지 열어 표를 뒤진다",
@@ -31,36 +31,37 @@ def cell(cx, cy, title, sub, tag, c=None, focal=False, dash=False):
         MONO if all(ord(ch) < 128 for ch in sub) else KR)
     d.t(cx, cy + 26, ddx.fit(tag, 11, BW - 16, tag), 11, SOFT, KR)
 
-ddx.band(d, 104, 572, "같은 줄에 있으면 겉봉만으로 끝나고, 줄이 갈리면 표를 뒤져야 한다")
+ddx.band(d, 104, 528, "같은 줄은 겉봉만 · 갈린 줄은 표 조회")
 
 rx, ry, rw, rh = RING
 d.o.append(f'<rect x="{rx}" y="{ry}" width="{rw}" height="{rh}" rx="8" '
            f'fill="{INFO}06" stroke="{INFO}" stroke-width="1.2" stroke-dasharray="7 6"/>')
-ddx.ring_label(d, rx, ry, "같은 서브넷 192.168.0.0/24 — 한 L2 세그먼트", 11, INFO)
+# 링 라벨 마스크는 테두리와 겹친다 — 경계 바로 위 빈 띠에 쓴다
+d.t(rx, ry - 10, "같은 서브넷 192.168.0.0/24 — 한 L2 세그먼트", 12, INFO, KR, "start", 600)
 
 cell(CX[0], ROW_A, "노드 1", "192.168.0.10", "Pod 10.244.1.0/24")
 cell(CX[1], ROW_A, "스위치", "L2 장비", "MAC 표로 전달", INFO)
 cell(CX[2], ROW_A, "노드 2", "192.168.0.11", "Pod 10.244.2.0/24")
-cell(CX[3], ROW_A, "겉봉에서 멈춘다", "MAC = 노드 2 의 NIC", "속은 열지 않는다", INFO, dash=True)
+cell(CX[3], ROW_A, "겉봉에서 멈춤", "MAC = 노드 2 의 NIC", "속은 미개봉", INFO, dash=True)
 
-d.t(64, 372, "다른 서브넷 — 라우터가 선다", 11, SOFT, KR, "start", 600)
+d.t(64, 372, "다른 서브넷 · 라우터 경유", 12, SOFT, KR, "start", 600)
 cell(CX[0], ROW_B, "노드 1", "192.168.0.10", "다른 서브넷")
 cell(CX[1], ROW_B, "라우터", "L3 장비", "라우팅 표로 전달", WARN)
-cell(CX[2], ROW_B, "폐기", "노드 2 는 못 받는다", "ICMP 로 알린다", BAD)
-cell(CX[3], ROW_B, "속까지 연다", "IP = 10.244.2.7", "표에 그 줄이 없다", focal=True)
+cell(CX[2], ROW_B, "폐기", "노드 2 미수신", "ICMP 로 통지", BAD)
+cell(CX[3], ROW_B, "속까지 개봉", "IP = 10.244.2.7", "표에 그 줄 없음", focal=True)
 
 HB = BW // 2
 for cy, c, mk, labs in [(ROW_A, MUTED, "ar", ["프레임", "통과"]),
-                        (ROW_B, MUTED, "ar", ["패킷", "버린다"])]:
+                        (ROW_B, MUTED, "ar", ["패킷", "폐기"])]:
     for i, lab in enumerate(labs):
         a, b = CX[i], CX[i + 1]
         cc = BAD if (cy == ROW_B and i == 1) else c
         d.path(f"M {a+HB+6} {cy} L {b-HB-10} {cy}", cc, 1.5, m="bad" if cc is BAD else mk)
         d.t((a + b) // 2, cy - 14, ddx.fit(lab, 11, GAP - 4, f"corridor {lab}"), 11, cc, KR)
-    d.line(CX[2] + HB + 6, cy, CX[3] - HB - 6, cy, RULE, 1.0, "4 5")
+    # 주석 칸으로 가는 점선은 경계 바깥(x=rx+rw+4)에서 시작한다 — 경계를 가로지르지 않게
+    d.line(rx + rw + 4 if cy == ROW_A else CX[2] + HB + 6, cy, CX[3] - HB - 6, cy, RULE, 1.0, "4 5")
 
-d.t(36, 544, "노드 대역이 같은 L2 안에 있으면 스위치가 겉봉만 보고 넘기지만, 대역이 갈리면 "
-             "라우터가 속을 열어 표를 뒤지고 그 줄이 없으면 버린다", 12, MUTED, KR, "start")
-d.legend(592, [("겉봉 · L2", INFO), ("속 · L3", WARN), ("폐기", BAD), ("표에 줄이 없다", ACC)])
+# 하단 해설(같은 L2 면 스위치, 갈리면 라우터가 표를 뒤져 버림)은 도식 뒤 본문 문단이 말한다 — 뺐다
+d.legend(548, [("겉봉 · L2", INFO), ("속 · L3", WARN), ("폐기", BAD), ("표에 줄이 없다", ACC)])
 d.save("01-03.same-subnet-or-not.svg")
 print("ok same-subnet")

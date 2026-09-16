@@ -31,19 +31,19 @@ for cx, name, sub in ((LX, "보내는 쪽", "sender"), (RX, "받는 쪽", "recei
 for cx in (LX, RX):
     d.line(cx, 154, cx, 670, RULE, 1.0, "3 6")
 
-d.t(GX + GW / 2, 182, "수신 버퍼 여유", 11, SOFT, MONO)
+d.t(GX + GW / 2, 182, "수신 버퍼 여유", 11, SOFT, KR)   # 한글 머리글은 한글 스택
 
 # 세로는 슬롯 번호가 곧 시간이다. 6번 슬롯만 메시지가 아니라 송신이 멈춘 구간이라
 # 아래에서 슬롯 순서대로 한 번에 그린다 — 시간 축 위의 칸이므로 순서를 건너뛰면 안 된다.
 # (방향, 라벨, 부제, 색, 마커, 굵기, 광고된 win) — win 이 None 이면 게이지를 그리지 않는다
 MSGS = {
     0: (1, "DATA 1000B", None, OK, "ok", 1.5, None),
-    1: (0, "ACK  win=4000", "여유 넉넉 — 계속 보내도 된다", INFO, "info", 1.3, 4000),
+    1: (0, "ACK  win=4000", "여유 넉넉 · 송신 계속", INFO, "info", 1.3, 4000),
     2: (1, "DATA 2000B", None, OK, "ok", 1.5, None),
-    3: (0, "ACK  win=2000", "처리에 밀리기 시작 — 창이 줄었다", WARN, "warn", 1.3, 2000),
+    3: (0, "ACK  win=2000", "처리 지연 · 창 축소", WARN, "warn", 1.3, 2000),
     4: (1, "DATA 2000B", None, OK, "ok", 1.5, None),
-    5: (0, "ACK  win=0", "버퍼가 찼다 — 송신이 멈춘다", BAD, "bad", 1.3, 0),
-    7: (0, "Window Update  win=3000", "앱이 읽어 갔다 — 창이 다시 열린다", ACC, "acc", 1.3, 3000),
+    5: (0, "ACK  win=0", "버퍼 가득 · 송신 정지", BAD, "bad", 1.3, 0),
+    7: (0, "Window Update  win=3000", "앱이 읽어 감 · 창 재개방", ACC, "acc", 1.3, 3000),
     8: (1, "DATA 2000B", None, OK, "ok", 1.5, None),
 }
 STOP_SLOT = 6
@@ -53,7 +53,7 @@ for slot in range(9):
     if slot == STOP_SLOT:
         d.tone(LX - 70, y - 14, 140, 28, BAD, 6, "1A", 1.3)
         d.t(LX, y + 5, "송신 정지", 11, BAD, KR, "middle", 600)
-        d.t(LX + 120, y + 5, "망은 한가한데 데이터가 흐르지 않는다", 11, MUTED, KR, "start")
+        d.t(LX + 120, y + 5, "망은 한가 · 데이터 정체", 11, MUTED, KR, "start")
         continue
     fwd, label, sub, c, mk, sw, win = MSGS[slot]
     if fwd:

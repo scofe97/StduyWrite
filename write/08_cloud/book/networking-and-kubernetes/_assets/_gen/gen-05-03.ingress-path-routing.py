@@ -2,7 +2,7 @@
 # 타입 스펙: type-flowchart.md — 마지막에서 경로로 둘로 갈리므로 체인 셋 + 부채꼴 둘.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
-W, H = 1000, 632
+W, H = 1000, 604
 d = D(W, H, "INGRESS · ONE ENTRY, PATHS SPLIT",
       "같은 진입점으로 들어와 경로만으로 다른 서비스에 닿는다",
       "포트도 호스트도 같다. 갈리는 것은 경로 하나뿐이고, 어디에도 안 걸리면 기본 백엔드로 간다.",
@@ -19,15 +19,15 @@ def box(cx, cy, t, s, tag, c=None, focal=False, w=BW):
     else:
         d.box(x, y, w, BH, PAPER2, c or RULE, 1.1, 6); tc = c or INK
     d.t(cx, cy - 22, ddx.fit(t, 13, w - 18, t), 13, tc, KR, "middle", 600)
-    d.t(cx, cy + 0, ddx.fit(s, 11, w - 16, s), 11, MUTED,
+    d.t(cx, cy + 0, ddx.fit(s, 12, w - 16, s), 12, MUTED,
         MONO if all(ord(ch) < 128 or ch in ':/…-' for ch in s) else KR)
-    d.t(cx, cy + 26, ddx.fit(tag, 11, w - 14, tag), 11, SOFT, KR)
-ddx.band(d, 104, 568, "경로가 어디에도 안 걸리면 기본 백엔드로 간다 — 그것도 규칙의 일부다")
+    d.t(cx, cy + 26, ddx.fit(tag, 12, w - 14, tag), 12, SOFT, KR)
+ddx.band(d, 104, 540, "불일치 경로 → 기본 백엔드 · 규칙의 일부")
 for cx, s in zip(CX + [EP_X], ["1 외부 요청", "2 진입점", "3 규칙 대조", "4 백엔드"]):
     d.t(cx, 196, s, 12, SOFT, KR, "middle", 600)
 box(CX[0], CY, "요청", "curl localhost/…", "같은 진입점 하나", INFO)
 box(CX[1], CY, "LB", "extraPortMappings", "KIND 로컬 80/443")
-box(CX[2], CY, "컨트롤러", "NGINX Pod", "불일치는 기본 백엔드로", ACC)
+box(CX[2], CY, "컨트롤러", "NGINX Pod", "불일치 → 기본 백엔드", ACC)
 box(EP_X, EP_Y[0], "/host", "clusterip-service", "app Pod 들", OK, w=EP_W)
 box(EP_X, EP_Y[1], "/data", "clusterip-service-2", "app2 Pod 들", OK, w=EP_W)
 for i, lab in enumerate(["80 포트", "전달"]):
@@ -41,7 +41,5 @@ d.path(f"M {A_X} {EP_Y[0]} L {B_X} {EP_Y[0]}", OK, 1.5, m="ok")
 d.path(f"M {A_X} {CY+40} L 620 {CY+40} L 620 {EP_Y[1]} L {B_X} {EP_Y[1]}", OK, 1.5, m="ok")
 d.t(B_X, EP_Y[0] - 12, ddx.fit("path /host", 11, B_X - A_X - 4, "path /host"), 11, OK, MONO, "end")
 d.t(B_X, EP_Y[1] + 16, ddx.fit("path /data", 11, B_X - A_X - 4, "path /data"), 11, OK, MONO, "end")
-d.t(36, 540, "규칙을 고르는 것은 컨트롤러 Pod 다 — LB 는 80 포트를 그 Pod 로 넘길 뿐이다",
-     12, MUTED, KR, "start")
-d.legend(584, [("들어오는 요청", INFO), ("규칙을 고르는 자리", ACC), ("백엔드", OK)])
+d.legend(556, [("들어오는 요청", INFO), ("규칙을 고르는 자리", ACC), ("백엔드", OK)])
 d.save("05-03.ingress-path-routing.svg"); print("ok ingress-path-routing")

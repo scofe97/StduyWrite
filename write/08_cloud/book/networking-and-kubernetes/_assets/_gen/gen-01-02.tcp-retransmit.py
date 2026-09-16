@@ -28,14 +28,14 @@ MID = (LX + RX) / 2
 LOST_END, XA, XB = 518.0, 524.0, 540.0
 
 MSGS = [(1, "seq=1  (100B)",    "정상 도착",                            OK,   "ok",   1.5, None),
-        (0, "ACK 101",          "1~100 받았다 · 101부터 기다린다",       INFO, "info", 1.3, "4 4"),
-        (1, "seq=101 (100B)",   "유실 — 도착하지 않는다",                BAD,  None,   1.6, "7 5"),
-        (1, "seq=201 (100B)",   "도착했지만 앞이 비었다",                WARN, "warn", 1.5, None),
-        (0, "ACK 101  (중복 1)", "번호가 바뀌지 않는다",                  INFO, "info", 1.3, "4 4"),
-        (1, "seq=301 (100B)",   "도착했지만 앞이 비었다",                WARN, "warn", 1.5, None),
-        (0, "ACK 101  (중복 2)", "셋째가 쌓이면 즉시 재전송",             INFO, "info", 1.3, "4 4"),
-        (1, "seq=101  재전송",   "타임아웃을 기다리지 않는다 (fast retransmit)", ACC, "acc", 1.6, None),
-        (0, "ACK 401",          "201·301 까지 한꺼번에 확인된다",        OK,   "ok",   1.3, "4 4")]
+        (0, "ACK 101",          "1~100 수신 · 101부터 대기",             INFO, "info", 1.3, "4 4"),
+        (1, "seq=101 (100B)",   "유실 · 미도착",                        BAD,  None,   1.6, "7 5"),
+        (1, "seq=201 (100B)",   "도착 · 앞이 빔",                       WARN, "warn", 1.5, None),
+        (0, "ACK 101  (중복 1)", "번호 그대로",                          INFO, "info", 1.3, "4 4"),
+        (1, "seq=301 (100B)",   "도착 · 앞이 빔",                       WARN, "warn", 1.5, None),
+        (0, "ACK 101  (중복 2)", "셋째 ACK 101 → 즉시 재전송",           INFO, "info", 1.3, "4 4"),
+        (1, "seq=101  재전송",   "타임아웃 대기 없음 (fast retransmit)",   ACC, "acc", 1.6, None),
+        (0, "ACK 401",          "201·301 까지 한꺼번에 확인",            OK,   "ok",   1.3, "4 4")]
 
 for i, (fwd, label, sub, c, mk, sw, dash) in enumerate(MSGS):
     y = Y0 + STRIDE * i
@@ -54,8 +54,9 @@ for i, (fwd, label, sub, c, mk, sw, dash) in enumerate(MSGS):
 HOLD_Y0, HOLD_H = 316, 228
 d.o.append(f'<rect x="{RX+26}" y="{HOLD_Y0}" width="20" height="{HOLD_H}" rx="10" '
            f'fill="{WARN}2E" stroke="{WARN}" stroke-width="1.3"/>')
-d.t(RX + 46, HOLD_Y0 + HOLD_H / 2 - 6, "버퍼에 붙들린 구간", 11, WARN, KR, "start")
-d.t(RX + 46, HOLD_Y0 + HOLD_H / 2 + 10, "앱으로 못 올라간다", 11, MUTED, KR, "start")
+# 막대 오른쪽에 두면 막대에 붙고 캔버스 끝(980)을 넘는다 — 막대 바로 아래에 오른쪽 정렬로 둔다
+d.t(W - 24, HOLD_Y0 + HOLD_H + 20, "버퍼에 붙들린 구간", 11, WARN, KR, "end")
+d.t(W - 24, HOLD_Y0 + HOLD_H + 36, "앱 전달 보류", 11, MUTED, KR, "end")
 
 d.legend(708, [("정상 도착", OK), ("유실", BAD), ("순서 대기", WARN),
                ("중복 ACK", INFO), ("재전송", ACC)])

@@ -8,7 +8,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER2, KR, MONO
 
-W, H = 1000, 576
+W, H = 1000, 572
 d = D(W, H, "IPVS · FORWARDING MODES",
       "세 포워딩 방식은 패킷의 어느 부분을 바꾸는가",
       "NAT 는 IP 를, DR 은 목적지 MAC 만 바꾸고, IP 터널링은 원본을 그대로 둔 채 새 IP 헤더로 감싼다.",
@@ -20,16 +20,16 @@ BANDS = [108, 244, 380]            # 높이 120, 간격 16
 BH = 120
 
 ROWS = [
-    ("NAT", ["주소를 재작성합니다"],
+    ("NAT", ["IP 주소 재작성"],
      [("MAC 헤더", "그대로", INFO, CW),
       ("IP 헤더", "목적지 재작성", WARN, CW),
       ("페이로드", "그대로", INFO, CW)]),
-    ("DR — Direct Routing", ["IP 는 그대로 둔 채 목적지 MAC 만", "바꿔 백엔드로 넘깁니다"],
+    ("DR — Direct Routing", ["IP 그대로 · 목적지 MAC 만 재작성", "백엔드로 전달"],
      [("MAC 헤더", "목적지 재작성", ACC, CW),
       ("IP 헤더", "그대로", INFO, CW),
       ("페이로드", "그대로", INFO, CW)]),
-    ("IP 터널링", ["원본 패킷을 다른 IP 데이터그램으로", "감싸 보냅니다"],
-     [("새 IP 헤더", "바깥에 씌운다", WARN, CW),
+    ("IP 터널링", ["원본 패킷을 다른 IP 데이터그램으로", "감싸 전송"],
+     [("새 IP 헤더", "바깥에 씌움", WARN, CW),
       ("원본 패킷 그대로", "MAC · IP · 페이로드", INFO, CW * 2 + GAP)]),
 ]
 
@@ -50,8 +50,7 @@ for y0, (name, lines, cells) in zip(BANDS, ROWS):
             MONO if all(ord(ch) < 128 or ch in '·' for ch in note) else KR)
         x += w + GAP
 
-d.t(X0 + 12, 524, "책은 DR 을 \"캡슐화\", 터널링을 \"MAC 재작성\"으로 인쇄했지만 둘이 뒤바뀐 것이다",
-    12, MUTED, KR, "start")
-d.legend(536, [("그대로", INFO), ("바뀌는 자리", WARN), ("책이 뒤바꿔 설명한 곳", ACC)])
+# 책이 DR·터널링 설명을 뒤바꿔 인쇄한 정오는 본문 인용 블록이 맡는다
+d.legend(516, [("그대로", INFO), ("바뀌는 자리", WARN), ("책이 뒤바꿔 설명한 곳", ACC)])
 d.save("02-02.ipvs-forwarding-modes.svg")
 print("ok ipvs-forwarding-modes")

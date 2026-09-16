@@ -8,10 +8,10 @@ from dd import D, INK, MUTED, SOFT, RULE, ACC, PAPER, KR, MONO
 
 W, H = 1000, 448
 LX, LW, LH, Y0 = 100, 840, 64, 128
-LAYERS = [("L4", "포트 · Transport", "한 기계 안 어느 프로그램인지 가른다", False),
-          ("L3", "IP 주소 · Network", "라우터가 읽고 다음 망을 고른다", False),
-          ("L2", "MAC 주소 · Link", "스위치가 읽고 옆 기계로 건넨다", True),
-          ("L1", "주소 없음 · Physical", "허브는 가리지 않고 그대로 복사한다", False)]
+LAYERS = [("L4", "포트 · Transport", "기계 안 프로그램 구분", False),
+          ("L3", "IP 주소 · Network", "라우터 · 다음 망 선택", False),
+          ("L2", "MAC 주소 · Link", "스위치 · 옆 기계로 전달", True),
+          ("L1", "주소 없음 · Physical", "허브 · 가리지 않고 복사", False)]
 
 d = D(W, H, "LAYER STACK · ADDRESSES",
       "주소는 층마다 따로 있다",
@@ -32,7 +32,7 @@ for i, (tag, name, who, focal) in enumerate(LAYERS):
     d.t(LX + LW - 20, y + 40, who, 12, ACC if focal else MUTED, KR, "end")
 d.line(LX, Y0 + 4 * LH, LX + LW, Y0 + 4 * LH, RULE, 0.8)
 
-d.t(LX, 396, "MAC 은 이 층에서만 뜻이 있어, 라우터를 하나 넘는 순간 새로 쓰입니다.", 12, MUTED, KR, "start")
+# 하단 해설 문장은 본문(§1 뒤 문단 "MAC 은 구간마다 새로 쓰이고")이 이미 말한다 — 도식에서 뺐다
 d.legend(408, [("주소를 쓰는 층", MUTED), ("MAC 이 뜻을 갖는 층", ACC)])
 d.save("00-03-address-layers.svg")
 print("ok address-layers")

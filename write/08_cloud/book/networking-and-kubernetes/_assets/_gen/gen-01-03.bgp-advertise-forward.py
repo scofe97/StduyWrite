@@ -17,8 +17,8 @@ A1, A2, A3 = LX["AS 100"], LX["AS 200"], LX["AS 300"]
 SEG1, SEG2 = (164, 316), (332, 552)
 Y_RAILS = 580
 
-ddx.band(d, *SEG1, "평소 — 패킷과 무관하게 광고가 오가며 표가 채워진다", focal=True)
-ddx.band(d, *SEG2, "패킷이 올 때 — 채워 둔 표에서 다음 하나만 고른다")
+ddx.band(d, *SEG1, "평소 · 패킷과 무관한 광고로 표 채움", focal=True)
+ddx.band(d, *SEG2, "패킷이 올 때 · 채워 둔 표에서 다음 하나만 선택")
 d.rails(Y_RAILS)
 
 def msg(a, b, y, label, c, mk, dash=None, anchor=None):
@@ -32,13 +32,13 @@ def msg(a, b, y, label, c, mk, dash=None, anchor=None):
         d.t((a + b) // 2, y - 12, label, 12, c, KR, "middle", 600)
 
 # ① 광고 — 목적지 쪽에서 거슬러 올라오며 표를 채운다
-msg(A3, A2, 240, "150.10.0.0/16 은 우리 관할이다", INFO, "info", "6 5")
-msg(A2, A1, 288, "150.10.0.0/16 은 나를 거치면 닿는다", INFO, "info", "6 5")
+msg(A3, A2, 240, "광고 · 150.10.0.0/16 우리 관할", INFO, "info", "6 5")
+msg(A2, A1, 288, "광고 · 150.10.0.0/16 AS 200 경유 도달", INFO, "info", "6 5")
 
 # ② 전달 — 한 홉씩, 전체 경로를 아는 곳은 없다
-msg(A1, A2, 408, "목적지 150.10.2.30 · 전체 경로는 모른 채 넘긴다", INK, "ar")
-msg(A2, A3, 456, "채워 둔 표에서 다음 AS 를 고른다", INK, "ar")
-msg(A3, A1, 520, "도착 — 어느 AS 도 전체 경로를 갖고 있지 않았다", OK, "ok", "6 5", "end")
+msg(A1, A2, 408, "목적지 150.10.2.30 · 전체 경로 모른 채 전달", INK, "ar")
+msg(A2, A3, 456, "채워 둔 표에서 다음 AS 선택", INK, "ar")
+msg(A3, A1, 520, "도착 · 전체 경로를 가진 AS 없음", OK, "ok", "6 5", "end")
 
 d.legend(Y_RAILS + 20, [("평소의 광고", INFO), ("패킷 전달", INK), ("도착", OK)])
 d.save("01-03.bgp-advertise-forward.svg")

@@ -7,7 +7,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 640
+W, H = 1000, 598   # 범례 구분선 아래 56px — 계약 §검증 '범례 아래 여유 30px'
 d = D(W, H, "DIAGNOSTIC LADDER · WHICH RUNG STOPPED",
       "실패 문구가 어느 단에서 멈췄는지 말해 준다",
       "진단은 아래 단부터 올라갑니다. 아래가 깨져 있으면 위는 볼 필요가 없기 때문입니다. "
@@ -44,10 +44,7 @@ d.t(56, (TOP + BOT) // 2 + 14, "단", 11, MUTED, KR, "middle")
 d.t(56, (TOP + BOT) // 2 + 28, "순", 11, MUTED, KR, "middle")
 d.t(56, (TOP + BOT) // 2 + 42, "서", 11, MUTED, KR, "middle")
 
-d.t(40, BOT + 40, "실습에서 아래 두 단을 연달아 맞았습니다. 라우팅 줄이 없어 한 번, br0 주소를 10.0.1.1 로 "
-                  "잘못 적어 ARP 가 실패해 또 한 번입니다.", 12, MUTED, KR, "start")
-d.t(40, BOT + 62, "둘 다 '못 간다'는 말이지만 문구가 달랐고, 그래서 볼 테이블도 달랐습니다.",
-    12, MUTED, KR, "start")
-d.legend(BOT + 78, [("실습에서 건너뛸 뻔한 단", ACC)])
+# 실습에서 두 단을 연달아 맞은 경위는 본문 §4 가 맡는다
+d.legend(BOT + 26, [("실습에서 건너뛸 뻔한 단", ACC)])
 d.save("02-04.diagnostic-ladder.svg")
 print("ok diagnostic-ladder")

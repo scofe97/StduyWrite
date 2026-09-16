@@ -9,7 +9,7 @@
 # 이력: 2026-08-28 신설. 생성기 없이 손으로 만들어진 SVG 였다. 값·좌표를 그대로 옮겼다.
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, PAPER2, KR
 
-W, H = 1000, 620
+W, H = 1000, 502
 X0, X1, GAP = 12, 970, 30       # 오른쪽 여백이 왼쪽보다 넓다 — 원본 좌표를 그대로 옮겼다
 COLW = (X1 - X0 - GAP) / 2      # 갈래 둘이 그 안을 반씩 쓴다
 CX = W / 2
@@ -27,10 +27,10 @@ d.t(CX, 145, "마스크로 대조", 12, ACC, KR, "middle", 600)
 d.t(CX, 166, "목적지가 내 서브넷 안인가?", 11, INK)
 
 BRANCHES = [
-    (LEFT,  OK,   "ok",   "안 — 같은 서브넷", "직접 묻는다",
-     "목적지 기계의 MAC",     "ARP 브로드캐스트가 닿는다"),
+    (LEFT,  OK,   "ok",   "안 — 같은 서브넷", "직접 질의",
+     "목적지 기계의 MAC",     "ARP 브로드캐스트 도달"),
     (RIGHT, WARN, "warn", "밖 — 다른 서브넷", "게이트웨이에게",
-     "기본 게이트웨이의 MAC", "브로드캐스트는 로컬을 못 벗어난다"),
+     "기본 게이트웨이의 MAC", "브로드캐스트는 로컬 안에서만"),
 ]
 
 for x, c, mk, head, how, mac, why in BRANCHES:
@@ -45,7 +45,7 @@ for x, c, mk, head, how, mac, why in BRANCHES:
     d.box(x, 386, COLW, 52, PAPER2, RULE, 0.9)
     d.t(cx, 417, why, 11, MUTED)
 
-d.t(CX, 466, "IP 목적지는 어느 쪽이든 바뀌지 않습니다 — 바뀌는 것은 겉봉의 MAC 뿐입니다.", 11, ACC)
-d.legend(486, [("같은 서브넷 — 직접", OK), ("다른 서브넷 — 게이트웨이", WARN)])
+# 하단 해설(IP 목적지는 안 바뀐다)은 00-03 §1 "IP 는 안 바뀐다는 말은 목적지 IP 에만" 이 말한다 — 뺐다
+d.legend(462, [("같은 서브넷 — 직접", OK), ("다른 서브넷 — 게이트웨이", WARN)])
 d.save("01-03.local-or-gateway.svg")
 print("ok local-or-gateway")

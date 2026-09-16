@@ -12,7 +12,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1000, 616
+W, H = 1000, 456
 LANES = [("브라우저", 104), ("DNS 리졸버", 200), ("서버", 296)]
 LH = 96
 d = D(W, H, "NETWORKING AND KUBERNETES · 01-02 §5",
@@ -24,19 +24,19 @@ d = D(W, H, "NETWORKING AND KUBERNETES · 01-02 §5",
 for i, (name, y) in enumerate(LANES):
     if i % 2 == 0: d.box(24, y, W - 48, LH, "rgba(245,245,245,0.02)", "none", 0, 0)
     d.line(24, y, W - 24, y, RULE, 0.8)
-    d.t(36, y + 20, name, 12, SOFT, MONO, "start")
+    d.t(36, y + 20, name, 12, SOFT, KR, "start")   # 한글 레인 이름은 한글 스택
 d.line(24, LANES[-1][1] + LH, W - 24, LANES[-1][1] + LH, RULE, 0.8)
 
 BW, BH, PITCH, BX0 = 136, 56, 148, 104
 def cx(step): return BX0 + step * PITCH + BW / 2
 def cy(lane): return LANES[lane][1] + LH / 2 + 8
 STEPS = [  # (열, 레인, 제목, 부제, 색)
-    (0, 0, "이름을 주소로 묻는다", "DNS 질의 · 평문", INFO),
-    (1, 1, "주소를 돌려준다", "A 레코드 · 평문", INFO),
+    (0, 0, "이름 → 주소 질의", "DNS 질의 · 평문", INFO),
+    (1, 1, "주소 응답", "A 레코드 · 평문", INFO),
     (2, 0, "ClientHello", "SNI = 이름 · 평문", ACC),
-    (3, 2, "인증서를 고른다", "SNI 의 이름으로", INFO),
+    (3, 2, "인증서 선택", "SNI 의 이름으로", INFO),
     (4, 0, "GET / Host: 이름", "암호문 안", OK),
-    (5, 2, "가상 호스트를 고른다", "Host 의 이름으로", OK),
+    (5, 2, "가상 호스트 선택", "Host 의 이름으로", OK),
 ]
 for col, lane, title, sub, c in STEPS:
     x, y = cx(col) - BW / 2, cy(lane) - BH / 2
@@ -55,16 +55,7 @@ hand((2, 0), (3, 2), ACC, "acc")
 hand((3, 2), (4, 0), INFO, "info", "4 4")
 hand((4, 0), (5, 2), OK, "ok", "4 4")
 
-# 닭과 달걀
-CY = 428
-d.tone(24, CY, W - 48, 72, ACC, 8, "0A", 1.0)
-d.t(44, CY + 28, "Host 헤더는 암호문 안에 있습니다. 읽으려면 복호화해야 하고, 복호화하려면 어느 사이트의 인증서를 쓸지 먼저 정해야 합니다.",
-    12, INK, KR, "start")
-d.t(44, CY + 52, "그래서 핸드셰이크 맨 앞의 ClientHello 에 이름을 평문으로 한 번 더 싣습니다. 그것이 SNI 입니다.",
-    12, INK, KR, "start")
-d.t(24, 528, "같은 이름이 세 번 나오는데 이유가 다릅니다. DNS 는 주소를 찾으려고, SNI 는 인증서를 고르려고, Host 는 가상 호스트를 고르려고 싣습니다.",
-    12, MUTED, KR, "start")
-
-d.legend(H - 44, [("평문으로 건넌다", INFO), ("암호문 안에서 건넌다", OK), ("이름을 평문으로 한 번 더", ACC)])
+# 닭과 달걀 해설 두 문장과 하단 이유 문장은 2026-09-15 본문(이 도식 바로 뒤)으로 옮겼다 — 라벨 자리의 산문이었다
+d.legend(H - 40, [("평문으로 건넌다", INFO), ("암호문 안에서 건넌다", OK), ("이름을 평문으로 한 번 더", ACC)])
 d.save("01-02.name-three-times.svg")
 print("ok 01-02.name-three-times")

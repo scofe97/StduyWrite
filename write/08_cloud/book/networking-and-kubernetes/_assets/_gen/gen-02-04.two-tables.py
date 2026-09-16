@@ -7,7 +7,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 524
+W, H = 1000, 476
 d = D(W, H, "TWO TABLES · WHICH VALUE DIFFERS",
       "목적지가 바뀌면 MAC 이 바뀌고 IP 는 그대로다",
       "같은 인터페이스로 나가는 두 패킷이라도 목적지가 같은 링크에 있느냐에 따라 프레임에 적히는 "
@@ -26,10 +26,7 @@ ROWS = [([("192.168.139.238",),
 
 ddx.matrix(d, 40, COLS, ROWS, hdr_y=192, row_h=88, gap=12, focal_col=2)
 
-d.t(40, 432, "진하게 칠한 세 번째 칸이 두 행에서 갈리는 유일한 자리입니다. 네 번째 칸의 IP 는 두 경우 다 목적지 그대로입니다.",
-    12, MUTED, KR, "start")
-d.t(40, 454, "8.8.8.8 은 같은 링크에 없으므로 ip neigh 에 결코 나타나지 않습니다 — 물어볼 상대가 없습니다.",
-    12, MUTED, KR, "start")
-d.legend(470, [("같은 링크 — 직접", OK), ("다른 네트워크 — 게이트웨이 경유", INFO)])
+# 세 번째 칸만 갈린다는 것과 8.8.8.8 이 ip neigh 에 없는 이유는 본문 §3 표 아래가 맡는다
+d.legend(420, [("같은 링크 — 직접", OK), ("다른 네트워크 — 게이트웨이 경유", INFO)])
 d.save("02-04.two-tables.svg")
 print("ok two-tables")

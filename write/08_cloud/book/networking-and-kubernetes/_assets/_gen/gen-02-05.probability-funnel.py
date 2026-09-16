@@ -9,7 +9,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 728
+W, H = 1000, 556
 d = D(W, H, "PROBABILITY LADDER · MEASURED",
       "앞이 걷어간 만큼 뒤에는 덜 도착한다",
       "100 번을 보내고 규칙의 pkts 카운터를 읽은 값입니다. 트렁크의 폭이 그 단에 도착한 양이고, "
@@ -57,14 +57,9 @@ d.t(CX, TOP + 4 * LH + 26, "남은 것 0 — 합이 정확히 100", 11, MUTED, M
 
 # 축 — 폭이 무엇을 뜻하는지 왼쪽 여백에 한 번만 적는다.
 d.line(60, TOP, 60, TOP + 4 * LH, RULE, 1.0)
-d.t(36, TOP - 12, "도착량이 줄어든다", 11, SOFT, KR, "start")
+d.t(36, TOP - 12, "도착량 감소", 11, SOFT, KR, "start")
 
-d.t(36, 500, "걷어간 27 · 22 · 30 · 21 은 모두 25 언저리입니다. 100 회 시행의 표준편차가", 12, MUTED, KR, "start")
-d.t(36, 522, "약 4.3 이라 이 편차는 1 시그마 안팎이고, 1,000 회면 250 에 훨씬 붙습니다.", 12, MUTED, KR, "start")
-d.t(36, 550, "넷을 다 1/4 로 두었다면 25 · 18.75 · 14 · 10.5 로 뒤로 갈수록 굶었을 것입니다.", 12, MUTED, KR, "start")
-d.t(36, 572, "백엔드가 n 개면 1/n → 1/(n-1) → … → 1/2 → 없음이고, kube-proxy 의 모양입니다.", 12, MUTED, KR, "start")
-d.t(36, 600, "마지막 칸만 성격이 다릅니다. 확률에 당첨된 수가 아니라 앞 셋이 다 빗나가고", 12, MUTED, KR, "start")
-d.t(36, 622, "남은 수라, 여기에 확률을 붙이면 어디에도 안 걸린 패킷이 정책으로 샙니다.", 12, MUTED, KR, "start")
-d.legend(652, [("확률로 걷어간 단", INFO), ("남은 것을 다 받는 단 — 확률 금지", ACC)])
+# 편차의 크기(1 시그마)·1/4 로 두면 굶는 이유·마지막 칸에 확률 금지인 이유는 본문 §3 이 맡는다
+d.legend(500, [("확률로 걷어간 단", INFO), ("남은 것을 다 받는 단 — 확률 금지", ACC)])
 d.save("02-05.probability-funnel.svg")
 print("ok probability-funnel")

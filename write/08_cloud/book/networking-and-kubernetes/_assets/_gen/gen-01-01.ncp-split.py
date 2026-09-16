@@ -8,7 +8,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER2, KR, MONO
 
-W, H = 1000, 500
+W, H = 1000, 444
 d = D(W, H, "1970 → 1981 · RESPONSIBILITY SPLIT",
       "하나가 다 하던 프로토콜이 둘로 갈라진 자리",
       "NCP 는 신뢰성과 주소와 전달을 한 몸에 지녔고, RFC 791 이 IP 를 떼어 내 TCP 의 책임을 덜었다.",
@@ -37,16 +37,15 @@ cell(CX[2], BY, 76, "TCP", ["신뢰성"], INFO)
 cell(CX[2], BY + 92, 76, "IP", ["주소 · 전달"], INFO)
 d.o.append(f'<rect x="{CX[2]-BW//2-12}" y="{BY-12}" width="{BW+24}" height="{BH+24}" rx="8" '
            f'fill="none" stroke="{ACC}" stroke-width="1.4"/>')
-d.t(CX[2], BY + BH + 36, "여기서 책임이 갈렸다", 12, ACC, KR)
+d.t(CX[2], BY + BH + 36, "책임이 갈린 자리", 12, ACC, KR)
 
-for i, lines in enumerate([["네트워크 종류가", "다양해지자 못 버팀"], ["IP 를 떼어 내", "책임을 덜다"]]):
+for i, lines in enumerate([["네트워크 종류", "다양화에 한계"], ["IP 분리", "TCP 책임 경감"]]):
     a, b = CX[i] + BW // 2, CX[i + 1] - BW // 2
     d.path(f"M {a+8} {BY+96} L {b-10} {BY+96}", MUTED, 1.5, m="ar")
     for j, ln in enumerate(lines):
         d.t((a + b) // 2, BY + 56 + j * 20, ddx.fit(ln, 11, b - a, ln), 11, MUTED, KR)
 
-d.t(36, 424, "쪼갠 뒤에야 새 종류의 네트워크가 붙어도 한쪽만 고치면 됐다 — 모듈성이 오른 자리가 여기다",
-    12, MUTED, KR, "start")
-d.legend(436, [("한 몸에 다 지님", WARN), ("나뉜 책임", INFO), ("갈라진 자리", ACC)])
+# 하단 해설(모듈성)은 본문 §1 "이 분리가 네트워크의 모듈성을 높였다" 가 말한다 — 뺐다
+d.legend(404, [("한 몸에 다 지님", WARN), ("나뉜 책임", INFO), ("갈라진 자리", ACC)])
 d.save("01-01.ncp-split.svg")
 print("ok ncp-split")

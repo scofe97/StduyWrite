@@ -11,7 +11,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 808
+W, H = 1000, 792
 d = D(W, H, "CONNTRACK · ONE ENTRY, TWO DIRECTIONS",
       "규칙을 보는 것은 첫 패킷뿐 — 응답은 conntrack 항목 하나를 따라 되돌아온다",
       "위에서 아래로 시간이 흐른다. 1~3 이 요청, 4~6 이 응답이다. "
@@ -63,23 +63,23 @@ ddx.bracket(d, 20, Y0 - 24, Y0 + STRIDE * 2 + 24, "요청", INFO)
 step(1, Y0, INFO)
 msg("cli", "node", "dst 10.96.192.224:8080", Y0, "Service 주소로 보낸 첫 패킷", INFO, mk="info")
 step(2, Y0 + STRIDE, INFO)
-selfmsg("node", "KUBE-SVC 확률 → -j DNAT", Y0 + STRIDE, "이때 conntrack 항목이 만들어진다", INFO)
+selfmsg("node", "KUBE-SVC 확률 → -j DNAT", Y0 + STRIDE, "이때 conntrack 항목 생성", INFO)
 step(3, Y0 + STRIDE * 2, INFO)
-msg("node", "be", "dst 10.244.1.66:8080", Y0 + STRIDE * 2, "바뀐 목적지로 도착한다", INFO, mk="info")
+msg("node", "be", "dst 10.244.1.66:8080", Y0 + STRIDE * 2, "바뀐 목적지로 도착", INFO, mk="info")
 
 # ── 응답 — 규칙을 한 줄도 안 보는 구간 ─────────────────────────────────────
 ddx.bracket(d, 20, Y0 + STRIDE * 3 - 24, Y0 + STRIDE * 5 + 24, "응답", ACC)
 step(4, Y0 + STRIDE * 3)
-msg("be", "node", "src 10.244.1.66:8080", Y0 + STRIDE * 3, "Pod 가 자기 주소로 응답한다")
+msg("be", "node", "src 10.244.1.66:8080", Y0 + STRIDE * 3, "Pod 자기 주소로 응답")
 step(5, Y0 + STRIDE * 4, ACC)
 selfmsg("node", "conntrack 조회 → 역-DNAT", Y0 + STRIDE * 4,
-        "규칙은 한 줄도 안 본다 — 항목이 목적지를 되돌린다", ACC)
+        "규칙 미평가 · 항목으로 역-DNAT", ACC)
 step(6, Y0 + STRIDE * 5, ACC)
 msg("node", "cli", "src 10.96.192.224:8080", Y0 + STRIDE * 5,
-    "보낸 주소에서 온 것으로 보여야 소켓이 받는다", ACC, mk="acc")
+    "보낸 주소에서 온 응답 · 소켓 수신", ACC, mk="acc")
 
 # ── conntrack 항목 하나 ────────────────────────────────────────────────────
-ddx.band(d, 592, 720, "conntrack 항목 하나 — 2 에서 만들어져 5 에서 읽힌다 (kind 실측)")
+ddx.band(d, 592, 720, "conntrack 항목 하나 · 2 에서 생성, 5 에서 조회 (kind 실측)")
 for i, (title, tup, note, c) in enumerate(
         (("원방향 튜플", "src=10.244.1.11:43346  dst=10.96.192.224:8080",
           "클라이언트가 보낸 그대로", MUTED),
@@ -91,8 +91,7 @@ for i, (title, tup, note, c) in enumerate(
     d.t(x + 20, 676, ddx.fit(tup, 11, 408, tup), 11, MUTED, MONO, "start")
     d.t(x + 20, 694, note, 11, SOFT, KR, "start")
 
-d.t(36, 748, "응답이 역방향 기대 튜플과 맞으면 커널이 출발지를 되돌린다 — 확률 규칙은 연결 수명 동안 다시 평가되지 않는다",
-     12, MUTED, KR, "start")
-d.legend(764, [("요청 — 규칙을 보는 구간", INFO), ("응답 — 항목만 따라가는 구간", ACC)])
+# 역방향 튜플이 맞으면 출발지를 되돌린다는 설명은 본문 산문이 맡는다
+d.legend(736, [("요청 — 규칙을 보는 구간", INFO), ("응답 — 항목만 따라가는 구간", ACC)])
 d.save("02-02.conntrack-return-path.svg")
 print("ok conntrack-return-path")

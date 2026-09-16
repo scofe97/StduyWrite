@@ -8,7 +8,7 @@
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 600
+W, H = 1000, 516
 LANE_X, LANE_W, LANE_H = 24, 952, 152
 LANE_Y = [112, 288]
 BW, BH, STRIDE = 264, 72, 296
@@ -44,21 +44,16 @@ def cell(cx, y, addr, verdict, why, c, focal=False):
 
 
 lane(LANE_Y[0], "호스트 스택에서", "ubuntu · 192.168.139.208", INFO)
-cell(CX[0], LANE_Y[0], "172.17.0.4:8080", "200", "docker0 대역 경로가 있다", OK)
-cell(CX[1], LANE_Y[0], "127.0.0.1:80", "200", "docker-proxy 가 듣고 있다", OK)
-cell(CX[2], LANE_Y[0], "127.0.0.1:8080", "exit 7", "호스트에 8080 을 잡은 놈이 없다", BAD)
+cell(CX[0], LANE_Y[0], "172.17.0.4:8080", "200", "docker0 대역 경로 있음", OK)
+cell(CX[1], LANE_Y[0], "127.0.0.1:80", "200", "docker-proxy 가 수신 중", OK)
+cell(CX[2], LANE_Y[0], "127.0.0.1:8080", "exit 7", "호스트에 8080 점유자 없음", BAD)
 
 lane(LANE_Y[1], "다른 컨테이너 스택에서", "dnsutils · nsenter -n", OK)
-cell(CX[0], LANE_Y[1], "172.17.0.4:8080", "200", "같은 브리지 · 직접 간다", OK)
-cell(CX[1], LANE_Y[1], "172.17.0.4:80", "exit 7", "80 은 호스트 경계에만 있다", BAD)
-cell(CX[2], LANE_Y[1], "localhost:8080", "exit 7", "자기 스택 안에는 아무도 없다", BAD, focal=True)
+cell(CX[0], LANE_Y[1], "172.17.0.4:8080", "200", "같은 브리지 · 직접 도달", OK)
+cell(CX[1], LANE_Y[1], "172.17.0.4:80", "exit 7", "80 은 호스트 경계에만", BAD)
+cell(CX[2], LANE_Y[1], "localhost:8080", "exit 7", "자기 스택 안에 수신자 없음", BAD, focal=True)
 
-d.t(24, LANE_Y[1] + LANE_H + 40,
-    "같은 열을 세로로 견주면 규칙이 보입니다. 가운데 열은 위아래가 정반대이고, 그 이유가 포트 매핑이 놓인 자리입니다.",
-    12, MUTED, KR, "start")
-d.t(24, LANE_Y[1] + LANE_H + 64,
-    "오른쪽 아래 칸이 Pod 로 이어집니다. Pod 안 컨테이너들은 네임스페이스를 공유해 이 벽을 일부러 없앤 구조입니다.",
-    12, ACC, KR, "start")
-d.legend(LANE_Y[1] + LANE_H + 88, [("Pod 로 이어지는 자리", ACC), ("성공", OK), ("거부", BAD), ("호스트 스택", INFO)])
+# 열을 세로로 견주는 법은 이미지 뒤 산문이, 오른쪽 아래 칸과 Pod 의 연결은 옮긴 문장이 맡는다
+d.legend(LANE_Y[1] + LANE_H + 20, [("Pod 로 이어지는 자리", ACC), ("성공", OK), ("거부", BAD), ("호스트 스택", INFO)])
 d.save("03-04.six-probes.svg")
 print("ok six-probes")

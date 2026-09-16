@@ -12,12 +12,12 @@
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, OK, BAD, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 624   # 범례 아래 여유 확보 (정본 SVG 는 0px 라 dd-lint margin error)
+W, H = 1000, 596   # 범례 아래 여유 확보 (정본 SVG 는 0px 라 dd-lint margin error)
 d = D(W, H, "CLUSTER DNS · THE SEARCH PATH IS TRIED IN ORDER",
       "같은 규칙인데 클러스터 밖 이름이 훨씬 비싸다",
       "검색 도메인을 앞에서부터 붙여 시도한다. 클러스터 안 이름은 첫 판에 맞고, 밖 이름은 "
       "검색 경로의 실패를 다 소진한 뒤에야 맞는다. 시도마다 A 와 AAAA 두 질의가 나가므로 패킷은 그 두 배다.",
-      lead="검색 도메인을 앞에서부터 붙여 시도한다. 안 이름은 첫 판에 맞고 밖 이름은 실패를 다 소진한 뒤 맞는다")
+      lead="안 이름은 첫 판에 맞고, 밖 이름은 검색 경로를 다 소진한 뒤 맞는다")
 
 def band(x, y, w, h, c):
     d.o.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="8" '
@@ -27,17 +27,17 @@ def step(x, y, w, h, c, sw, no, name, name_c=INK, name_mono=True):
     d.tone(x, y, w, h, c, 6, "12", sw)
     cx = x + w // 2
     d.t(cx, y + 22, no, 11, MUTED, MONO)
-    d.t(cx, y + 42, ddx.fit(name, 11, w - 16, name), 11, name_c, MONO if name_mono else KR)
+    d.t(cx, y + 42, ddx.fit(name, 12, w - 16, name), 12, name_c, MONO if name_mono else KR)
 
 # ── 위 띠: 클러스터 안 이름 — 첫 판에서 끝난다
 band(32, 112, 936, 180, OK)
 d.t(52, 138, "클러스터 안 이름 · web", 12, OK, KR, "start", 600)
 step(52, 152, 200, 56, OK, 1.2, "1차", "web.default.svc…")
-d.t(152, 228, "있다 · 여기서 끝", 11, OK, KR)
+d.t(152, 228, "있음 · 여기서 끝", 12, OK, KR)
 d.line(256, 180, 292, 180, SOFT, 1.0, "3 3")
 d.box(296, 152, 640, 56, PAPER, "rgba(191,192,192,0.14)", 0.9, 6)
-d.t(616, 185, "2차부터는 아예 시도하지 않는다", 11, SOFT, KR)
-d.t(52, 264, "질의 왕복 1회. 이름을 짧게 부르는 편의가 여기서는 값이 거의 없다", 11, MUTED, KR, "start")
+d.t(616, 185, "2차 이후 시도 없음", 12, SOFT, KR)
+d.t(52, 264, "질의 왕복 1회", 12, MUTED, KR, "start")
 
 # ── 아래 띠: 클러스터 밖 이름 — 헛발질 넷을 소진한 뒤에야 맞는다
 band(32, 310, 936, 212, BAD)
@@ -47,18 +47,14 @@ TRIES = [("1차", "…default.svc…", True), ("2차", "…svc.cluster.local", T
 for i, (no, name, mono) in enumerate(TRIES):
     x = 52 + i * 180
     step(x, 350, 168, 56, BAD, 1.1, no, name, INK, mono)
-    d.t(x + 84, 426, "없음", 11, BAD, KR)
+    d.t(x + 84, 426, "없음", 12, BAD, KR)
     d.path(f"M {x + 172} 378 L {x + 176} 378", BAD, 1.4, m="bad")
 step(772, 350, 164, 56, OK, 1.4, "마지막", "이름 그대로", OK, False)
-d.t(854, 426, "있다", 11, OK, KR)
+d.t(854, 426, "있음", 12, OK, KR)
 
 d.box(52, 444, 884, 58, PAPER, RULE, 0.9, 6)
-d.t(72, 468, "헛발질을 다 소진한 뒤에야 정답에 닿는다. 그리고 시도마다 A 와 AAAA 두 질의를 내보내므로",
-    11, MUTED, KR, "start")
-d.t(72, 490, "실제 패킷은 그 두 배다. 이름 하나에 왕복 열 번이 나갈 수 있다", 11, BAD, KR, "start")
+d.t(72, 478, "헛발질 넷 소진 뒤 정답 · 시도마다 A · AAAA 두 질의", 12, MUTED, KR, "start")
 
-d.t(36, 558, "ndots 의 5 는 질의 횟수가 아니다. 점이 5개 미만이면 검색 경로를 먼저 돈다는 임계값이고, "
-             "위 이름은 점이 3개라 걸린다", 12, MUTED, KR, "start")
-d.legend(576, [("헛발질", BAD), ("맞은 시도", OK)])
+d.legend(548, [("헛발질", BAD), ("맞은 시도", OK)])
 d.save("04-03.dns-search-path.svg")
 print("ok dns-search-path")

@@ -9,7 +9,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 784
+W, H = 1000, 772
 d = D(W, H, "WHAT CHANGES WHERE · BEFORE / AFTER NAT",
       "장치마다 바뀌는 필드가 다르고, MASQUERADE 는 한 칸만 더 바꾼다",
       "ns1 에서 옆 노드까지 가는 동안 목적지 MAC 과 TTL 이 각각 다른 자리에서 바뀝니다. "
@@ -19,7 +19,8 @@ d = D(W, H, "WHAT CHANGES WHERE · BEFORE / AFTER NAT",
 BW, BH, GAP, GUT = 118, 88, 12, 140
 CX = [211 + i * (BW + GAP) for i in range(6)]
 NODE_CY = 288
-ROWS = [("dst MAC", 420), ("src IP", 478), ("+ MASQUERADE", 536), ("TTL", 594)]
+# 행 간격 72 — '변경 지점' 라벨(11px)이 위 행 칸 바닥에 닿지 않게 통로를 28px 로 둔다(이전 58 은 14px)
+ROWS = [("dst MAC", 420), ("src IP", 492), ("+ MASQUERADE", 564), ("TTL", 636)]
 CELL_H = 44
 
 NODES = [("ns1 이 보냄", "veth1"), ("br0 통과", "L2 스위치"), ("ubuntu FORWARD", "라우팅 판단"),
@@ -33,8 +34,8 @@ VALS = {
 }
 CHANGED = {("dst MAC", 4), ("+ MASQUERADE", 3), ("TTL", 2)}
 
-ddx.band(d, 104, 656, "브리지 열에는 바뀌는 칸이 하나도 없다 — 스위치는 프레임을 옮길 뿐이다")
-d.o.append(f'<rect x="{CX[1]-BW//2-8}" y="216" width="{BW+16}" height="412" rx="8" '
+ddx.band(d, 104, 700, "브리지 열 · 바뀌는 칸 없음 · 스위치는 프레임만 옮김")
+d.o.append(f'<rect x="{CX[1]-BW//2-8}" y="216" width="{BW+16}" height="452" rx="8" '
            f'fill="none" stroke="{SOFT}" stroke-width="1.0" stroke-dasharray="6 5"/>')
 
 for cx, (l, s) in zip(CX, NODES):
@@ -59,15 +60,12 @@ for key, y in ROWS:
 
 # 마지막 행의 주석을 위에 두면 바로 윗 행에 붙은 것처럼 읽힌다 — 아래로 내린다
 LAST = ROWS[-1][0]
-for key, i in CHANGED:
+for key, i in sorted(CHANGED):              # set 순회는 해시 시드마다 순서가 달라 SVG 가 byte-identical 이 아니었다
     y = dict(ROWS)[key]
     dy = CELL_H // 2 + 18 if key == LAST else -(CELL_H // 2 + 8)
-    d.t(CX[i], y + dy, "여기서 바뀐다", 11, ACC, KR)
+    d.t(CX[i], y + dy, "변경 지점", 11, ACC, KR)
 
-d.t(36, 690, "가운데 두 줄이 같은 경로의 NAT 전후입니다. 위는 사설 주소가 끝까지 가고, 아래는 "
-             "POSTROUTING 에서 노드 주소로 바뀝니다.", 12, MUTED, KR, "start")
-d.t(36, 712, "TTL 은 라우팅이, 목적지 MAC 은 송신 직전 ARP 가 정합니다. IP 헤더의 목적지만 끝까지 손대지 않습니다.",
-    12, MUTED, KR, "start")
-d.legend(726, [("바뀌는 자리", ACC), ("아무것도 안 바뀌는 장치", SOFT)])
+# NAT 전후 두 줄과 필드별 결정 주체는 본문 §3 이 맡는다
+d.legend(716, [("바뀌는 자리", ACC), ("아무것도 안 바뀌는 장치", SOFT)])
 d.save("02-04.what-changes-where.svg")
 print("ok what-changes-where")

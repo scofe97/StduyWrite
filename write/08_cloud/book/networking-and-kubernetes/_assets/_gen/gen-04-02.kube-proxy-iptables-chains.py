@@ -5,7 +5,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 632
+W, H = 1000, 604
 d = D(W, H, "kube-proxy · ClusterIP TO POD",
       "ClusterIP 로 온 패킷이 실제 Pod 주소로 바뀌기까지의 체인",
       "앞의 세 체인은 어디로 갈지만 고르고, 목적지를 실제로 바꾸는 것은 마지막 엔드포인트 체인이다.",
@@ -29,15 +29,17 @@ def box(cx, cy, t, s, tag, c=None, focal=False, w=BW):
         MONO if all(ord(ch) < 128 or ch in ':.…-' for ch in s) else KR)
     d.t(cx, cy + 26, ddx.fit(tag, 11, w - 14, tag), 11, SOFT, KR)
 
-ddx.band(d, 104, 568, "확률 규칙은 서비스 체인에 있고, 주소를 바꾸는 DNAT 는 그 아래에 있다")
+ddx.band(d, 104, 540, "확률은 서비스 체인 · DNAT 는 엔드포인트 체인")
 for cx, s in zip(CX + [EP_X], ["1 도착", "2 진입 체인", "3 서비스 체인", "4 엔드포인트 체인"]):
     d.t(cx, 196, s, 12, SOFT, KR, "middle", 600)
 
 box(CX[0], CY, "패킷", "10.96.0.10:53", "kube-dns ClusterIP", INFO)
-box(CX[1], CY, "진입 체인", "KUBE-SERVICES", "밖 출발지면 MASQ 표시")
+box(CX[1], CY, "진입 체인", "KUBE-SERVICES", "밖 출발지 MASQ 표시")
 box(CX[2], CY, "서비스 체인", "KUBE-SVC-TCOU7…", "확률 규칙이 여기")
-box(EP_X, EP_Y[0], "엔드포인트 A", "DNAT 10.0.1.141:53", "먼저 평가되는 규칙", focal=True, w=EP_W)
-box(EP_X, EP_Y[1], "엔드포인트 B", "DNAT 다른 CoreDNS", "앞에서 안 걸린 나머지", focal=True, w=EP_W)
+# focal 은 한 곳 — 엔드포인트 둘을 한 묶음으로 감싸 "목적지가 바뀌는 자리" 하나로 센다
+d.tone(EP_X - EP_W // 2 - 4, EP_Y[0] - BH // 2 - 12, EP_W + 8, EP_Y[1] - EP_Y[0] + BH + 24, ACC, 8, "0A", 1.4)
+box(EP_X, EP_Y[0], "엔드포인트 A", "DNAT 10.0.1.141:53", "먼저 평가되는 규칙", w=EP_W)
+box(EP_X, EP_Y[1], "엔드포인트 B", "DNAT 다른 CoreDNS", "앞에서 안 걸린 나머지", w=EP_W)
 
 for i, lab in enumerate(["도착", "매칭"]):
     a, b = CX[i] + BW // 2, CX[i + 1] - BW // 2
@@ -53,8 +55,6 @@ d.path(f"M {A_X} {CY+40} L 620 {CY+40} L 620 {EP_Y[1]} L {B_X} {EP_Y[1]}", ACC, 
 d.t(B_X, EP_Y[0] - 12, ddx.fit("확률 0.5", 11, B_X - A_X - 4, "fan 확률 0.5"), 11, ACC, KR, "end")
 d.t(B_X, EP_Y[1] + 16, ddx.fit("나머지 전부", 11, B_X - A_X - 4, "fan 나머지 전부"), 11, ACC, KR, "end")
 
-d.t(36, 540, "확률은 서비스 체인이 고르고, 고른 뒤 목적지를 실제로 바꾸는 것은 엔드포인트 체인의 DNAT 다",
-     12, MUTED, KR, "start")
-d.legend(584, [("들어오는 주소", INFO), ("목적지가 바뀌는 자리", ACC)])
+d.legend(556, [("들어오는 주소", INFO), ("목적지가 바뀌는 자리", ACC)])
 d.save("04-02.kube-proxy-iptables-chains.svg")
 print("ok kube-proxy-iptables-chains")

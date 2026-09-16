@@ -9,7 +9,7 @@
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 580
+W, H = 1000, 504
 RING_Y, RING_H = 116, 312
 HOST = (24, 560)          # x, w
 CTR = (632, 344)
@@ -46,7 +46,7 @@ YV = item(*HOST, 1, "vethe6c0259@if2", "veth 반쪽 · master docker0", ACC)
 item(*HOST, 2, "172.17.0.0/16 dev docker0", "라우팅 항목", INFO)
 item(*HOST, 3, "MASQUERADE  out !docker0", "나갈 때만 출발지 위장", WARN)
 # -p 를 붙인 컨테이너가 있어야 생기는 둘 — 이 시점(§2 busybox)에는 아직 없다
-item(*HOST, 4, "DNAT · docker-proxy", "포트 매핑을 붙이면 여기 생긴다 — §4", SOFT)
+item(*HOST, 4, "DNAT · docker-proxy", "포트 매핑 시 생성 · §4", SOFT)
 
 YE = item(*CTR, 1, "eth0@if4", "172.17.0.2/16", ACC)
 item(*CTR, 2, "default via 172.17.0.1", "기본 경로", OK)
@@ -56,10 +56,8 @@ item(*CTR, 3, "lo", "자기 안에서만", OK)
 d.path(f"M {HOST[0]+HOST[1]-16} {YV+ITEM_H//2} L {CTR[0]+16} {YE+ITEM_H//2}", ACC, 1.6, m="acc")
 d.t((HOST[0] + HOST[1] + CTR[0]) // 2, YV + ITEM_H // 2 - 12, "한 쌍", 11, ACC, KR)
 
-d.t(24, RING_Y + RING_H + 40,
-    "포트 매핑과 NAT 은 전부 왼쪽 링 안에 생깁니다. 그래서 컨테이너끼리 주고받는 트래픽은 그것들을 지나지 않습니다.",
-    12, MUTED, KR, "start")
-d.legend(RING_Y + RING_H + 68,
+# 포트 매핑·NAT 이 호스트 쪽에만 있다는 결론은 본문 §2 가 맡는다(03-03 §2 인용)
+d.legend(RING_Y + RING_H + 20,
          [("두 스택을 잇는 것", ACC), ("호스트 쪽 배선", INFO), ("호스트 쪽 변환", WARN), ("컨테이너 쪽", OK)])
 d.save("03-04.docker-run-leaves.svg")
 print("ok docker-run-leaves")

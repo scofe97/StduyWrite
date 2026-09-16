@@ -4,7 +4,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 616
+W, H = 1000, 596
 d = D(W, H, "CNM · THREE PARTS AND ONE GAP",
       "CNM 세 부품과 CNM 이 제공하지 않는 것",
       "sandbox·endpoint·network 셋은 libnetwork 안에 있다. 여러 호스트를 묶으려면 밖에 KV 저장소를 따로 세워야 한다.",
@@ -29,7 +29,7 @@ def box(cx, cy, t, s, tag, c=None, dash=False, focal=False):
         MONO if all(ord(ch) < 128 or ch in '·' for ch in s) else KR)
     d.t(cx, cy + 26, ddx.fit(tag, 11, BW - 14, tag), 11, SOFT, KR)
 
-ddx.band(d, 104, 552, "부품 셋으로 한 호스트는 되고, 여러 호스트는 밖의 저장소가 있어야 된다")
+ddx.band(d, 104, 524, "부품 셋으로 한 호스트 · 여러 호스트는 밖의 저장소 필요")
 rx, ry, rw, rh = RING
 d.o.append(f'<rect x="{rx}" y="{ry}" width="{rw}" height="{rh}" rx="8" '
            f'fill="{INFO}06" stroke="{INFO}" stroke-width="1.2" stroke-dasharray="7 6"/>')
@@ -51,8 +51,7 @@ d.path(f"M {EPT[0]+BW//2+6} {EPT[1]} L {NET[0]-BW//2-10} {NET[1]}", MUTED, 1.4, 
 d.path(f"M {NET[0]+BW//2+6} {NET[1]} L {KV[0]-BW//2-10} {KV[1]}", ACC, 1.6, m="acc", dash="6 5")
 d.t(KV[0], KV[1] - BH // 2 - 14, "libkv 의존", 11, ACC, KR)
 
-d.t(36, 524, "여러 호스트를 하나의 오버레이로 묶으려면 Consul 같은 저장소를 따로 세워야 한다 — "
-             "그 빈칸이 CNI 와 갈리는 지점 중 하나다", 12, MUTED, KR, "start")
-d.legend(568, [("libnetwork 안", INFO), ("CNM 이 제공하지 않는 것", ACC)])
+# 그 빈칸이 CNI 와 갈리는 지점이라는 설명은 본문 §3 이 맡는다
+d.legend(540, [("libnetwork 안", INFO), ("CNM 이 제공하지 않는 것", ACC)])
 d.save("03-02.cnm-structure.svg")
 print("ok cnm-structure")

@@ -6,7 +6,7 @@
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, KR, MONO
 
-W, H = 1000, 540
+W, H = 1000, 504
 d = D(W, H, "SEQUENCE · DHCP LEASE",
       "주소가 없는 상태에서 주소를 받아 온다",
       "새로 켠 기계와 DHCP 서버 사이의 네 번의 교환을 시간순으로 그린 시퀀스. 앞의 두 번은 출발지 IP 가 "
@@ -18,10 +18,10 @@ for x in LX.values():
     d.line(x, d.lane_top + 4, 444, x if False else 444, RULE, 1.0, "4 4") if False else None
     d.line(x, d.lane_top + 4, x, 444, RULE, 1.0, "4 4")
 
-MSGS = [("새로 켠 기계", "DHCP 서버", "DISCOVER · 브로드캐스트로 서버를 찾는다", 236, MUTED, None),
-        ("DHCP 서버", "새로 켠 기계", "OFFER · 이 주소는 어떠십니까", 292, MUTED, "5 4"),
-        ("새로 켠 기계", "DHCP 서버", "REQUEST · 그것으로 쓰겠습니다", 348, MUTED, None),
-        ("DHCP 서버", "새로 켠 기계", "ACK · 확정 · 임대 시간까지 당신 것", 404, ACC, None)]
+MSGS = [("새로 켠 기계", "DHCP 서버", "DISCOVER · 브로드캐스트로 서버 탐색", 236, MUTED, None),
+        ("DHCP 서버", "새로 켠 기계", "OFFER · 주소 제안", 292, MUTED, "5 4"),
+        ("새로 켠 기계", "DHCP 서버", "REQUEST · 제안받은 주소 요청", 348, MUTED, None),
+        ("DHCP 서버", "새로 켠 기계", "ACK · 확정 · 임대 시간 동안 사용", 404, ACC, None)]
 for a, b, lab, y, c, dash in MSGS:
     x1, x2 = LX[a], LX[b]
     dx = 1 if x2 > x1 else -1
@@ -29,7 +29,7 @@ for a, b, lab, y, c, dash in MSGS:
            m="acc" if c is ACC else "ar", dash=dash)
     d.t((x1 + x2) / 2, y, lab, 12, c, KR)
 
-d.t(100, 456, "받는 것은 IP 하나가 아니라 마스크·게이트웨이·DNS 서버까지 네 가지 묶음입니다.", 12, MUTED, KR, "start")
-d.legend(472, [("브로드캐스트로 오가는 교환", MUTED), ("주소가 확정되는 자리", ACC)])
+# 하단 해설(네 가지 묶음)은 본문 §3 "네 가지가 한 묶음으로 옵니다" 가 말한다 — 뺐다
+d.legend(464, [("브로드캐스트로 오가는 교환", MUTED), ("주소가 확정되는 자리", ACC)])
 d.save("00-03-dhcp-lease.svg")
 print("ok dhcp-lease")

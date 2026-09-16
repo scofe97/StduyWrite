@@ -5,13 +5,13 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 632
+W, H = 1000, 604
 d = D(W, H, "netns WIRING BY HAND · FOUR STEPS",
       "런타임이 대신해 주는 배선을 손으로 — 네 단계와 마지막 함정",
       "격리 공간을 만들고 선을 걸고 주소를 줘도 아직 안 된다. 기본 경로를 넣는 마지막 한 줄에서야 ping 이 통한다.",
       lead="주소까지 줘도 안 된다 — 기본 경로를 넣는 마지막 한 줄에서야 통한다")
 
-ddx.band(d, 104, 568, "새 netns 는 라우팅 테이블이 비어 있다 — 그것이 마지막 함정이다")
+ddx.band(d, 104, 532, "새 netns 라우팅 테이블은 빈 상태 · 마지막 함정")
 CX = ddx.stage_chain(d, 300,
   ["1·2 격리", "3·4 선 걸기", "5~9 주소·브리지", "10 기본 경로"],
   [("격리 공간", "ip netns add net1", "ip_forward=1 선행", None),
@@ -29,8 +29,7 @@ d.t(SKIP[0], SKIP[1] + 28, "새 netns 는 테이블이 빔", 11, BAD, KR)
 d.path(f"M {CX[2]} {300+58+6} L {CX[2]} {SKIP[1]-46-10}", BAD, 1.4, m="bad", dash="6 5")
 d.t(CX[2] + 14, (300 + 58 + SKIP[1] - 46) // 2 + 4, "경로가 없으면", 11, BAD, KR, "start")
 
-d.t(36, 540, "런타임은 이 명령들을 대신 쳐 준다 — 손으로 해 보면 CNI 가 무엇을 자동화하는지가 드러난다",
-     12, MUTED, KR, "start")
-d.legend(584, [("그제야 통하는 한 줄", ACC), ("빠뜨리면 여기", BAD)])
+# 런타임이 이 명령을 대신 친다는 연결은 본문 §5 도입이 맡는다
+d.legend(548, [("그제야 통하는 한 줄", ACC), ("빠뜨리면 여기", BAD)])
 d.save("03-01.netns-wiring-steps.svg")
 print("ok netns-wiring-steps")

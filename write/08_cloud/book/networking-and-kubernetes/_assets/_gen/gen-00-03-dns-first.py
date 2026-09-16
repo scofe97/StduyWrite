@@ -11,11 +11,11 @@
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, PAPER2, KR, MONO
 
-W, H = 1000, 360
-X0, BW, BH, STRIDE, BY = 12, 200, 88, 232, 152
-STEPS = [("01", "이름을 친다", "example.com", False),
-         ("02", "DNS 에 묻는다", "DHCP 가 준 서버", False),
-         ("03", "IP 를 받는다", "93.184.216.34", True),
+W, H = 1000, 288
+X0, BW, BH, STRIDE, BY = 12, 200, 88, 232, 128
+STEPS = [("01", "이름 입력", "example.com", False),
+         ("02", "DNS 조회", "DHCP 가 준 서버", False),
+         ("03", "IP 수신", "93.184.216.34", True),
          ("04", "그제야 연결", "TCP 핸드셰이크", False)]
 
 d = D(W, H, "PROCESS · NAME BEFORE CONNECT",
@@ -36,7 +36,7 @@ for i, (no, title, sub, focal) in enumerate(STEPS):
     if i < 3:
         d.path(f"M {x + BW + 4} {BY + BH // 2} L {x + STRIDE - 8} {BY + BH // 2}", MUTED, 1.4, m="ar")
 
-d.t(X0, 284, "조회가 실패하면 뒤의 모든 것이 시작조차 못 합니다. 연결이 안 될 때 여기부터 보는 이유입니다.", 12, MUTED, KR, "start")
-d.legend(300, [("조회 단계", MUTED), ("주소를 실제로 얻는 자리", ACC)])
+# 하단 해설(조회 실패 시 아무것도 시작 못 함)은 본문 §7 둘째 문단이 말한다 — 뺐다
+d.legend(248, [("조회 단계", MUTED), ("주소를 실제로 얻는 자리", ACC)])
 d.save("00-03-dns-first.svg")
 print("ok dns-first")

@@ -15,7 +15,7 @@
 # 이력: 2026-08-28 신설. 생성기 없이 손으로 만들어진 SVG 였다. 값·좌표를 그대로 옮겼다.
 from dd import D, INK, MUTED, SOFT, RULE, OK, BAD, INFO, KR, MONO
 
-W, H = 1000, 406   # 캔버스 상한 준수 (CARD_W 는 W 에서 파생)
+W, H = 1000, 392   # 캔버스 상한 준수 (CARD_W 는 W 에서 파생)
 X0, GAP, CARD_Y, CARD_H = 12, 26, 132, 196
 CARD_W = (W - 48 - X0 - GAP * 3) / 4
 
@@ -27,9 +27,9 @@ d = D(W, H, "CHAPTER MAP · 01-02",
       lead="무엇이 오가나 → 연결을 세운다 → 비용을 센다 → 값을 낼지 고른다")
 
 CARDS = [("§1·2", "무엇이 오가나",   "HTTP 요청과 TCP 헤더 필드",   INFO,
-          ["· curl -vvv 로 본 L7", "· seq·ack 가 순서를 보증", "· 윈도우가 흐름을 조절"]),
-         ("§3",   "연결을 세운다",    "3-way 로 열고 4-way 로 닫는다", INFO,
-          ["· 번호가 양방향으로", "· 11개 상태를 오간다", "· TIME-WAIT 가 포트를 문다"]),
+          ["· curl -vvv 로 본 L7", "· seq·ack 로 순서 보증", "· 윈도우로 흐름 조절"]),
+         ("§3",   "연결을 세운다",    "3-way 로 열기 · 4-way 로 닫기", INFO,
+          ["· 번호가 양방향으로", "· 11개 상태 전이", "· TIME-WAIT 의 포트 점유"]),
          ("§4",   "비용을 센다",      "12패킷 중 내용은 둘뿐",       BAD,
           ["· 나머지 열은 절차", "· tcpdump 로 실측", "· 이 편의 결론"]),
          ("§5·6", "값을 낼지 고른다", "더 내면 TLS, 안 내면 UDP",    OK,
@@ -49,7 +49,7 @@ for i, (tag, title, sub, c, bullets) in enumerate(CARDS):
         d.path(f"M {x+CARD_W+3} {CARD_Y+CARD_H/2} L {x+CARD_W+GAP-4} {CARD_Y+CARD_H/2}",
                MUTED, 1.6, m="ar")
 
-d.t(W / 2, 350, "붉은 칸이 이 편의 결론입니다 — 마지막 칸에서 길이 갈립니다.", 11, MUTED)
-d.legend(362, [("도입·전개", INFO), ("핵심·결론", BAD), ("다음으로 이어짐", OK)])
+# 하단 해설(붉은 칸이 결론)은 도식 앞 본문 문단이 말한다 — 뺐다
+d.legend(352, [("도입·전개", INFO), ("핵심·결론", BAD), ("다음으로 이어짐", OK)])
 d.save("01-02.chapter-overview.svg")
 print("ok chapter-overview")

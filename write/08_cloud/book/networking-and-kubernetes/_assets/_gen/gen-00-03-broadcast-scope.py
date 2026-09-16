@@ -6,7 +6,7 @@
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, BAD, INFO, PAPER2, KR, MONO
 
-W, H = 1000, 430
+W, H = 1000, 392
 d = D(W, H, "SCOPE · BROADCAST DOMAIN",
       "브로드캐스트는 한 동네를 벗어나지 못한다",
       "스위치에 붙은 호스트 넷을 점선 경계로 묶어 브로드캐스트가 닿는 범위를 보이고, "
@@ -16,7 +16,8 @@ d = D(W, H, "SCOPE · BROADCAST DOMAIN",
 # 브로드캐스트 도메인 경계
 d.o.append(f'<rect x="60" y="132" width="560" height="196" rx="8" fill="none" '
            f'stroke="{ACC}" stroke-width="1.2" stroke-dasharray="6 5"/>')
-ddx.ring_label(d, 60, 132, "브로드캐스트 도메인 · 192.168.0.0/24", 12, ACC, off=24)
+# 라벨을 테두리 위 마스크로 얹으면 마스크 사각형이 테두리와 겹친다 — 경계 안쪽 위에 쓴다
+d.t(80, 160, "브로드캐스트 도메인 · 192.168.0.0/24", 12, ACC, KR, "start", 600)
 
 # 스위치와 그 아래 호스트 넷
 d.box(290, 176, 120, 60, PAPER2, RULE, 1.0, 6)
@@ -35,12 +36,12 @@ for x, ip in HOSTS:
 d.line(620, 206, 656, 206, RULE, 0.8)
 d.box(660, 176, 120, 60, PAPER2, BAD, 1.1, 6)
 d.t(720, 204, "라우터", 13, INK, KR, "middle", 600)
-d.t(720, 222, "여기서 막힌다", 12, BAD, KR)
+d.t(720, 222, "여기서 차단", 12, BAD, KR)
 d.box(838, 176, 120, 60, PAPER2, RULE, 1.0, 6)
 d.t(898, 200, "10.0.5.9", 11, MUTED, MONO)
-d.t(898, 222, "못 듣는다", 12, MUTED, KR)
+d.t(898, 222, "도달 안 함", 12, MUTED, KR)
 
-d.t(60, 356, "그래서 다른 동네 기계의 MAC 은 알아낼 방법이 없고, 대신 게이트웨이의 MAC 을 적습니다.", 12, MUTED, KR, "start")
-d.legend(372, [("도메인 안 호스트", INFO), ("경계", ACC), ("여기서 멈춘다", BAD)])
+# 하단 해설(게이트웨이 MAC 을 적는다)은 본문 §5 "브로드캐스트는 동네를 벗어나지 못합니다" 문단이 말한다 — 뺐다
+d.legend(352, [("도메인 안 호스트", INFO), ("경계", ACC), ("여기서 멈춘다", BAD)])
 d.save("00-03-broadcast-scope.svg")
 print("ok broadcast-scope")

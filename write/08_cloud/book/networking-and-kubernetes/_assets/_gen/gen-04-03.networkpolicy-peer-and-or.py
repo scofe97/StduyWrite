@@ -5,7 +5,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 600
+W, H = 1000, 584
 d = D(W, H, "NetworkPolicy peer · ONE DASH",
       "대시 하나의 위치가 AND 를 OR 로 바꾼다",
       "같은 셀렉터 둘이라도 한 항목에 있으면 교집합, 별개 항목으로 갈리면 합집합이다.",
@@ -28,17 +28,15 @@ def row(r, tag, yaml_lines, meaning, sub, c, focal=False):
     d.t(MX + MW // 2, y + 62, meaning, 17, c, KR, "middle", 600)
     d.t(MX + MW // 2, y + 96, sub, 12, MUTED, KR)
 
-ddx.band(d, 104, 544, "셀렉터가 같아도 대시의 자리가 범위를 뒤집는다")
-d.t(YX + YW // 2, Y0, "쓴 대로의 YAML", 11, SOFT, KR, "middle", 600)
-d.t(MX + MW // 2, Y0, "그래서 누가 통과하나", 11, SOFT, KR, "middle", 600)
+ddx.band(d, 104, 520, "같은 셀렉터 · 대시 위치가 범위를 가름")
+d.t(YX + YW // 2, Y0, "쓴 대로의 YAML", 12, SOFT, KR, "middle", 600)
+d.t(MX + MW // 2, Y0, "그래서 누가 통과하나", 12, SOFT, KR, "middle", 600)
 
 row(0, "AND — 대시 하나", ["- namespaceSelector: {...}", "  podSelector: {...}"],
-    "교집합 — 좁게", "두 조건을 모두 만족해야 통과 · 의도한 최소 권한", OK)
+    "교집합 — 좁게", "두 조건 모두 만족 시 통과 · 의도한 최소 권한", OK)
 row(1, "OR — 대시 둘", ["- namespaceSelector: {...}", "- podSelector: {...}"],
-    "합집합 — 넓게", "둘 중 하나만 만족해도 통과 · 실무 사고 1순위", BAD, focal=True)
+    "합집합 — 넓게", "한 조건 충족 시 통과 · 실무 사고 1순위", BAD, focal=True)
 
-d.t(36, 520, "둘째 줄 맨 앞의 대시 하나가 전부다 — 두 칸 들여쓰면 같은 항목이고, "
-             "대시를 붙이면 별개 항목이 되어 범위가 넓어진다", 12, MUTED, KR, "start")
-d.legend(560, [("교집합 — 의도한 범위", OK), ("합집합 — 넓어진 범위", BAD)])
+d.legend(536, [("교집합 — 의도한 범위", OK), ("합집합 — 넓어진 범위", BAD)])
 d.save("04-03.networkpolicy-peer-and-or.svg")
 print("ok networkpolicy-peer-and-or")

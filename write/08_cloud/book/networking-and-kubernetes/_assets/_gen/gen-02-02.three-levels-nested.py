@@ -2,7 +2,8 @@
 # 본문 요구: "구조는 계층적입니다 — 테이블이 체인을 담고, 체인이 규칙을 담습니다."
 #            + "어느 체인에 규칙을 넣느냐가 곧 그 규칙이 언제 평가되는지를 정합니다."
 #            + §2 "규칙은 매치 조건과 액션(타깃)의 조합입니다."
-#            + §2 "ACCEPT 와 RETURN 은 지금 있는 체인의 평가만 멈춥니다."
+#            + §2 "ACCEPT는 서브체인에서 걸려도 부모 체인의 남은 규칙까지 건너뛰고 그 테이블을 빠져나갑니다."
+#              (2026-09-16 정정 — 이전 인용 "ACCEPT 와 RETURN 은 지금 있는 체인의 평가만 멈춥니다" 는 틀린 서술이었다)
 # 타입 스펙: type-nested.md — "hierarchy through containment. Outer = broader, inner = more specific."
 #           바깥 링이 체인(자리), 가운데가 테이블(하는 일), 안쪽이 규칙(조건과 동작)이다.
 #           링 라벨은 스펙대로 paper 마스크를 테두리 위에 얹는다(ddx.ring_label).
@@ -14,7 +15,7 @@
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, PAPER2, OK, BAD, INFO, KR, MONO
 
-W, H = 960, 744
+W, H = 960, 736
 
 # 링 셋 — 인셋 28 / 36 을 세 겹 모두 같은 값으로 쓴다(불규칙 인셋은 type-nested 안티패턴)
 R1 = (24, 136, 912, 496)
@@ -68,8 +69,8 @@ for (cx0, cw), lab in zip(COL, ["매치 — 조건이 맞는가", "타깃 — �
     d.t(cx0 + 16, 240, ddx.fit(lab, 13, cw - 24, lab), 13, SOFT, KR, "start", 600)
 
 rules = [
-    ("-m state --state ESTABLISHED", "-j ACCEPT",      "이 체인은 여기서 끝",  OK),
-    ("-p tcp --dport 22",            "-j incoming-ssh", "서브체인 갔다 돌아옴", INFO),
+    ("-m state --state ESTABLISHED", "-j ACCEPT",      "이 테이블 순회 끝",    OK),
+    ("-p tcp --dport 22",            "-j incoming-ssh", "판정 없으면 복귀",     INFO),
     ("-s 10.0.0.0/8",                "-j LOG",          "기록만 · 계속 평가",   INFO),
     ("-p tcp --dport 80",            "-j REJECT",       "차단 · 사유 회신",     BAD),
     ("(아무 규칙에도 안 걸림)",       "policy DROP",     "기본 정책으로 차단",   BAD),
@@ -90,14 +91,13 @@ for i, (match, target, effect, c) in enumerate(rules):
 d.path(f"M 92 {ROW_Y0 - 4} L 92 {ROW_Y0 + 4 * ROW_STRIDE + ROW_H + 4}", MUTED, 1.4, m="ar")
 
 # ── 바깥 두 링의 아래 띠 — 그 겹에 대해 한 줄씩 ──────────────
-d.t(R2[0] + 24, 584, "흐린 둘은 INPUT 에 없다 — Raw 는 PREROUTING·OUTPUT 뿐이고 Security 는 SELinux 전용이다.",
-    13, MUTED, KR, "start")
-d.t(R1[0] + 24, 620, "같은 세 겹이 나머지 네 체인에도 그대로 있다. 달라지는 것은 그 체인이 어느 테이블을 갖느냐뿐이다.",
-    13, MUTED, KR, "start")
+# 해설 문장 셋을 칩형 라벨로 줄였다 — 02-02 본문은 2026-09-16 사실 정정 중이라 산문을 옮기지 않았다
+d.t(R2[0] + 24, 584, "흐린 둘 · INPUT 에 없음 · Raw 는 PREROUTING·OUTPUT · Security 는 SELinux 전용",
+    12, MUTED, KR, "start")
+d.t(R1[0] + 24, 620, "나머지 네 체인도 같은 세 겹 · 차이는 가진 테이블", 12, MUTED, KR, "start")
 
-d.t(24, 664, "규칙은 위에서 아래로 평가되고 처음 걸리는 하나에서 멈춘다. 어느 규칙에도 안 걸리면 그 체인의 기본 정책을 따른다.",
-    13, MUTED, KR, "start")
-d.legend(688, [("이 체인 종결", OK), ("종결 아님 · 계속", INFO), ("차단", BAD),
+d.t(24, 656, "위에서 아래로 · 첫 매치에서 멈춤 · 안 걸리면 기본 정책", 12, MUTED, KR, "start")
+d.legend(680, [("이 테이블 순회 끝", OK), ("종결 아님 · 계속", INFO), ("차단", BAD),
                ("여는 항목", INK), ("지금 연 겹", ACC)])
 d.save("02-02.three-levels-nested.svg")
 print("ok three-levels-nested")

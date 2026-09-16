@@ -29,8 +29,9 @@ d = D(W, H, "ENCAPSULATION · 01-01 OSI",
       "나르는 비트가 어느 계층의 것인지 알지 못한다.",
       lead="각 계층은 자기가 붙인 헤더만 읽습니다 — 위아래가 무엇을 담았는지는 몰라도 됩니다.")
 
-d.t(TCX, 112, "송신 호스트 — 감싼다 (encapsulate)", 11, SOFT, MONO)
-d.t(RCX, 112, "수신 호스트 — 벗긴다 (decapsulate)", 11, SOFT, MONO)
+# 한글 머리글을 mono 로 찍으면 자간이 벌어진다(스타일 계약) — 한글 스택으로 바꿨다
+d.t(TCX, 112, "송신 호스트 · 감싸기 (encapsulate)", 12, SOFT, KR)
+d.t(RCX, 112, "수신 호스트 · 벗기기 (decapsulate)", 12, SOFT, KR)
 
 # (계층, PDU, 색, 이 계층에서 새로 붙는 헤더) — 헤더가 None 이면 앞 줄 것을 그대로 물려받는다
 ROWS = [("Application",  "Data",    INFO, None),
@@ -64,7 +65,7 @@ for i, (name, pdu, c, new_hdr) in enumerate(ROWS):
 
 BOT = ROW_Y + STRIDE * 6 + ROW_H + 2
 d.path(f"M {TCX} {BOT} L {TCX} {BOT+24} L {RCX} {BOT+24}", BAD, 1.5, m="bad")
-d.t(MID, 592, "물리 매체 — 나르는 비트가 어느 계층 것인지 모른다", 11, SOFT)
+d.t(MID, 592, "물리 매체 · 계층을 모르는 비트 운반", 12, SOFT)
 
 d.legend(608, [("payload", INFO), ("+Transport", OK), ("+Network", WARN), ("+Link", ACC)])
 d.save("01-01.encapsulation-roundtrip.svg")

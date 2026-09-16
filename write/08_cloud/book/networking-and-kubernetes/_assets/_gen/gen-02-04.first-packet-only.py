@@ -7,7 +7,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 692
+W, H = 1000, 676   # 범례 구분선 아래 56px — 계약 §검증 '범례 아래 여유 30px'
 d = D(W, H, "NAT RULE · FIRST PACKET ONLY",
       "둘째 패킷은 nat 규칙을 아예 거치지 않는다",
       "연결의 첫 패킷만 nat 규칙을 훑고, 그때 만들어진 conntrack 엔트리가 이후 패킷을 대신 변환합니다. "
@@ -26,21 +26,24 @@ def msg(a, b, label, sub, y, c=MUTED, dash=None):
     x1, x2 = LX[a], LX[b]; dr = 1 if x2 > x1 else -1
     d.path(f"M {x1+10*dr} {y} L {x2-12*dr} {y}", c, 1.5, m="acc" if c is ACC else "ar", dash=dash)
     mx = (x1 + x2) // 2
+    # 가운데 레인을 건너뛰는 메시지의 라벨이 nat 레일(둘째 패킷 구간은 accent 레일) 위에 앉지 않게 오른쪽 반으로 옮긴다
+    if {a, b} == {"커널", "conntrack"}:
+        mx = (LX["nat 규칙"] + LX["conntrack"]) // 2
     d.t(mx, y - 10, label, 12, c if c is ACC else (MUTED if dash else INK), MONO, "middle", 600)
     d.t(mx, y + 18, sub, 12, c if c is ACC else MUTED, KR)
 
 # 첫 패킷 — 규칙을 훑는다
 d.t(36, 176, "첫 패킷", 12, SOFT, KR, "start", 600)
 msg("커널", "conntrack", "lookup", "아는 연결인가", Y[0])
-msg("conntrack", "커널", "miss", "모른다", Y[1], dash="5 4")
-msg("커널", "nat 규칙", "traverse", "규칙을 훑는다 — 카운터 +1", Y[2])
-msg("nat 규칙", "커널", "MASQUERADE", "출발지를 바꾸라", Y[3], dash="5 4")
-msg("커널", "conntrack", "create", "튜플 두 줄을 적는다", Y[4], INFO)
+msg("conntrack", "커널", "miss", "모름", Y[1], dash="5 4")
+msg("커널", "nat 규칙", "traverse", "규칙 순회 · 카운터 +1", Y[2])
+msg("nat 규칙", "커널", "MASQUERADE", "출발지 변경 지시", Y[3], dash="5 4")
+msg("커널", "conntrack", "create", "튜플 두 줄 기록", Y[4], INFO)
 
 d.line(36, 448, W - 48, 448, RULE, 1.0, "4 5")
 d.t(36, 476, "둘째 패킷", 12, SOFT, KR, "start", 600)
 msg("커널", "conntrack", "lookup", "아는 연결인가", Y[5])
-msg("conntrack", "커널", "hit", "이 튜플로 변환하라", Y[6], ACC, dash="5 4")
+msg("conntrack", "커널", "hit", "이 튜플로 변환", Y[6], ACC, dash="5 4")
 
 # 논점은 '아무것도 지나지 않는다'가 아니라 'nat 규칙에 닿는 화살표가 없다'는 것이다.
 # 상자로 감싸면 지나가는 메시지를 가둔 것처럼 읽혀 반대 뜻이 된다 — 레인 자체를 강조한다.
@@ -48,10 +51,9 @@ msg("conntrack", "커널", "hit", "이 튜플로 변환하라", Y[6], ACC, dash=
 # 브래킷을 세우면 'hit' 과 '이 튜플로 변환하라'를 관통한다. 레일 아래로 뺀다.
 NX = LX["nat 규칙"]
 d.line(NX, 470, NX, RAIL_BOT, ACC, 2.0, "3 6")
-d.t(NX, 604, "이 레인에 닿는 화살표가 없다", 12, ACC, KR, "end")
+d.t(NX, 604, "닿는 화살표 없음", 12, ACC, KR, "end")
 
-d.t(36, 626, "규칙 카운터가 ping 두 번에 1 만 오른 이유가 이 빈칸입니다. "
-             "kube-proxy 의 확률 사다리도 첫 패킷에서만 백엔드를 고릅니다.", 12, MUTED, KR, "start")
-d.legend(642, [("엔트리 생성", INFO), ("저장된 튜플이 규칙을 대신한다", ACC)])
+# 카운터가 1 만 오르는 이유는 본문 §5 '규칙은 첫 패킷에만 발화합니다' 가 맡는다
+d.legend(620, [("엔트리 생성", INFO), ("저장된 튜플이 규칙을 대신한다", ACC)])
 d.save("02-04.first-packet-only.svg")
 print("ok first-packet-only")

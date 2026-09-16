@@ -6,7 +6,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 568
+W, H = 1000, 540
 d = D(W, H, "CONNTRACK ENTRY · ANATOMY",
       "한 줄에 튜플이 둘 — 어디까지가 원본이고 어디부터가 응답인가",
       "conntrack -L 의 한 줄은 프로토콜과 수명, 원본 방향 튜플, 응답 방향 튜플로 나뉩니다. "
@@ -55,8 +55,7 @@ for cx, txt, c in L3:
     d.box(cx - L3W // 2, L3_CY - L3H // 2, L3W, L3H, PAPER, c, 0.8, 6)
     d.t(cx, L3_CY + 5, ddx.fit(txt, 11, L3W - 12, txt), 11, MUTED, MONO)
 
-d.t(36, 482, "NAT 를 걸면 오른쪽 가지만 달라집니다. 왼쪽 원본 방향은 패킷이 도착했을 때의 값 그대로 "
-             "남아, 응답을 되돌릴 때 복원표로 쓰입니다.", 12, MUTED, KR, "start")
-d.legend(500, [("원본 방향 — 변하지 않는다", INFO), ("응답 방향 — NAT 가 여기를 바꾼다", ACC)])
+# NAT 를 걸면 응답 방향만 달라진다는 설명은 본문 §5 가 맡는다
+d.legend(472, [("원본 방향 — 변하지 않는다", INFO), ("응답 방향 — NAT 가 여기를 바꾼다", ACC)])
 d.save("02-04.entry-anatomy.svg")
 print("ok entry-anatomy")

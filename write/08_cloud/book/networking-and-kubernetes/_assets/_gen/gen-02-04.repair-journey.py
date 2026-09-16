@@ -7,7 +7,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 620
+W, H = 1000, 564
 d = D(W, H, "REPAIR JOURNEY · THREE ROUNDS",
       "커널이 문구를 던지고 내가 고치기를 세 번 반복했다",
       "실패할 때마다 커널이 다른 문구를 냈고, 문구마다 볼 테이블이 달랐습니다. "
@@ -52,12 +52,9 @@ for i in range(3):
 for i in range(3):
     box(CX[i], TOP_CY, *TOP[i], c=INFO)
     box(CX[i], BOT_CY, *BOT[i])
-box(CX[3], TOP_CY, "통했다", "엔트리 1건 · TTL 63", focal=True)
+box(CX[3], TOP_CY, "통신 성공", "엔트리 1건 · TTL 63", focal=True)
 
-d.t(36, 524, "세 문구가 각각 다른 테이블을 가리켰습니다 — 라우팅 테이블, 이웃 테이블, 그리고 규칙 목록입니다.",
-    12, MUTED, KR, "start")
-d.t(36, 546, "아래 사다리가 그 대응을 정리한 지도이고, 이 그림은 실제로 밟은 순서입니다.",
-    12, MUTED, KR, "start")
-d.legend(560, [("커널이 낸 문구", INFO), ("마지막 관측", ACC)])
+# 세 문구가 가리킨 세 테이블은 본문 §4 가 맡는다
+d.legend(508, [("커널이 낸 문구", INFO), ("마지막 관측", ACC)])
 d.save("02-04.repair-journey.svg")
 print("ok repair-journey")

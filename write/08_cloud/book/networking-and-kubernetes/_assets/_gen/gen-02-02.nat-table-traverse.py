@@ -16,7 +16,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 844
+W, H = 1000, 832
 d = D(W, H, "nat TABLE · TWO HOOKS, ONE JUMP STACK",
       "한 요청이 nat 을 지나는 자리 — 훅은 둘이고 그 안은 점프로 겹겹이다",
       "위 레인이 라우팅 판단 전의 PREROUTING, 아래가 나가기 직전의 POSTROUTING 이다. "
@@ -50,11 +50,11 @@ def state(cy, txt, val, c=MUTED):
 ddx.band(d, 120, 472, "PREROUTING · nat   —   훅 NF_IP_PRE_ROUTING · 라우팅 판단 전")
 
 X0, Y0 = 120, 164
-cell(X0, Y0, "KUBE-SERVICES", "-d 10.96.192.224/32", "ClusterIP 에 해당하는 서비스 체인을 고른다")
+cell(X0, Y0, "KUBE-SERVICES", "-d 10.96.192.224/32", "ClusterIP 의 서비스 체인 선택")
 cell(X0 + STEP_X, Y0 + STEP_Y, "KUBE-SVC-LOLE4…", "! -s 10.244.0.0/16  →  불일치",
-     "Pod 출발지라 마킹을 건너뛴다 · 이어서 확률 0.33333")
+     "Pod 출발지 · 마킹 건너뜀 · 다음 확률 0.33333")
 cell(X0 + STEP_X * 2, Y0 + STEP_Y * 2, "KUBE-SEP-2MJG…", "-j DNAT",
-     "여기서 목적지가 실제로 바뀐다", focal=True)
+     "실제 목적지 교체 자리", focal=True)
 
 for i in range(2):                                  # 계단 — 점프해 한 겹 들어간다
     xa, ya = X0 + STEP_X * i + 44, Y0 + STEP_Y * i + BH
@@ -63,9 +63,9 @@ for i in range(2):                                  # 계단 — 점프해 한 �
     d.path(f"M {xa} {ya} L {xa} {mid} L {xb} {mid} L {xb} {yb-4}", MUTED, 1.5, m="ar")
     d.chip((xa + xb) // 2, mid, "-j", INFO)         # 칩 배경이 선을 끊어 점프임을 드러낸다
 
-state(Y0 + 34, "헤더는 그대로", "체인만 갈아탄다")
-state(Y0 + STEP_Y + 34, "마크가 안 붙는다", "mark 0x0 유지")
-state(Y0 + STEP_Y * 2 + 34, "목적지가 바뀐다", "dst → 10.244.1.66:8080", ACC)
+state(Y0 + 34, "헤더 그대로", "체인만 교체")
+state(Y0 + STEP_Y + 34, "마크 없음", "mark 0x0 유지")
+state(Y0 + STEP_Y * 2 + 34, "목적지 교체", "dst → 10.244.1.66:8080", ACC)
 
 # ── 레인을 갈아타는 자리 ───────────────────────────────────────────────────
 d.path(f"M {X0 + STEP_X * 2 + 44} {Y0 + STEP_Y * 2 + BH} L {X0 + STEP_X * 2 + 44} 492 "
@@ -73,15 +73,15 @@ d.path(f"M {X0 + STEP_X * 2 + 44} {Y0 + STEP_Y * 2 + BH} L {X0 + STEP_X * 2 + 44
 d.o.append(f'<rect x="24" y="514" width="952" height="52" rx="8" '
            f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
 d.t(44, 536, "라우팅 판단", 12, ACC, KR, "start", 600)
-d.t(44, 554, "바뀐 목적지로 경로를 다시 정한다 — 여기부터는 다른 훅이다", 11, MUTED, KR, "start")
-d.t(956, 536, "두 훅을 잇는 것은 mark 0x4000 하나뿐", 11, WARN, KR, "end")
-d.t(956, 554, "이 예에서는 붙지 않았다", 11, MUTED, KR, "end")
+d.t(44, 554, "바뀐 목적지로 경로 재결정 · 여기부터 다른 훅", 12, MUTED, KR, "start")
+d.t(956, 536, "두 훅의 연결 고리 · mark 0x4000", 12, WARN, KR, "end")
+d.t(956, 554, "이 예에서는 미부착", 12, MUTED, KR, "end")
 d.path("M 500 566 L 500 588", ACC, 1.6, m="acc")
 
 # ── 레인 2 — POSTROUTING · nat ─────────────────────────────────────────────
 ddx.band(d, 588, 760, "POSTROUTING · nat   —   훅 NF_IP_POST_ROUTING · 인터페이스로 나가기 직전")
 
-cell(X0, 630, "KUBE-POSTROUTING", "! --mark 0x4000 검사", "마크가 붙었는지만 본다", w=300)
+cell(X0, 630, "KUBE-POSTROUTING", "! --mark 0x4000 검사", "마크 부착 여부만 검사", w=300)
 for i, (title, sub, c) in enumerate((("-j RETURN", "마크 없음 — Pod 가 부른 경우 · src 그대로", MUTED),
                                      ("MASQUERADE --random-fully", "마크 있음 — 노드가 부른 경우 · src → 10.244.1.1:39387", WARN))):
     y = 620 + i * 72
@@ -90,9 +90,8 @@ for i, (title, sub, c) in enumerate((("-j RETURN", "마크 없음 — Pod 가 �
     d.t(540, y + 42, ddx.fit(sub, 11, 416, sub), 11, MUTED, KR, "start")
     d.path(f"M 428 664 L 452 664 L 452 {y + 28} L 510 {y + 28}", c, 1.4, m="ar" if i == 0 else "warn")
 
-d.t(36, 788, "체인을 몇 번 갈아타도 헤더는 그대로다 — 실제로 바뀌는 자리는 위 레인의 DNAT 한 번과 "
-             "아래 레인의 조건부 MASQUERADE 한 번뿐이다", 12, MUTED, KR, "start")
-d.legend(800, [("지나는 체인", INFO), ("바뀌는 자리 · 레인을 갈아타는 자리", ACC),
+# '헤더가 실제로 바뀌는 자리는 DNAT 한 번과 조건부 MASQUERADE 한 번뿐'은 본문 산문으로 옮겼다
+d.legend(776, [("지나는 체인", INFO), ("바뀌는 자리 · 레인을 갈아타는 자리", ACC),
                ("노드에서 온 요청일 때만", WARN)])
 d.save("02-02.nat-table-traverse.svg")
 print("ok nat-table-traverse")

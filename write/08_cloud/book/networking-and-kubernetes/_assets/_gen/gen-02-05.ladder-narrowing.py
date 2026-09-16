@@ -9,7 +9,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 632
+W, H = 1000, 512
 d = D(W, H, "LADDER · SUSPECT RANGE NARROWS",
       "네 단을 밟자 원인이 한 칸으로 줄었다",
       "단마다 무엇을 물었고 실제로 무엇이 돌아왔는지, 그래서 남은 용의자가 어디까지 줄었는지를 "
@@ -46,10 +46,7 @@ for i, (cx, r) in enumerate(zip(CX, RATIO)):
         d.box(cx - w / 2, BAR_Y, w, BAR_H, PAPER2, RULE, 1.0, 4)
     d.t(cx, BAR_Y + 17, LABEL[i], 11, ACC if i == 3 else (SOFT if r == 0 else MUTED), KR)
 
-d.t(36, 470, "네 번째 단에서 원인이 확정됐으므로 다섯 번째는 확인일 뿐입니다.", 12, MUTED, KR, "start")
-d.t(36, 492, "아래가 깨져 있으면 위는 볼 필요가 없다 — 사다리의 원칙 그대로입니다.", 12, MUTED, KR, "start")
-d.t(36, 520, "실무 순서는 아래부터 오르는 것이 아니라 curl 로 위에서 한 번 찔러 보고", 12, MUTED, KR, "start")
-d.t(36, 542, "멈춘 지점부터 아래로 파는 것입니다. 사다리는 어디를 팔지 정하는 지도입니다.", 12, MUTED, KR, "start")
-d.legend(572, [("원인이 확정된 단", ACC)])
+# 네 번째 단에서 원인이 확정된 경위와 '위에서 찔러 보고 아래로 판다'는 실무 순서는 본문 §2 가 맡는다
+d.legend(456, [("원인이 확정된 단", ACC)])
 d.save("02-05.ladder-narrowing.svg")
 print("ok ladder-narrowing")

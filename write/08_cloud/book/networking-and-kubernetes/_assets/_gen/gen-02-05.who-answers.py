@@ -9,8 +9,42 @@
 import dd, ddx
 from dd import Seq, INK, MUTED, SOFT, RULE, ACC, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 848
-d = Seq(W, H, "BLOCKED · WHO ANSWERS",
+
+def _kr(txt):
+    return KR if any("가" <= c <= "힣" for c in str(txt)) else MONO
+
+
+class SeqKR(Seq):
+    """계약 §프리미티브가 한글을 mono 로 내보내는 자리 — lanes·msg·state 의 한글만 한글 스택으로."""
+    def lanes(s, names, y0=104, lane_w=210):
+        s.LX = {}; n = len(names)
+        span = (s.w - 48 - 24) - lane_w
+        for i, (nm, sub) in enumerate(names):
+            x = 24 + lane_w / 2 + (span * i / (n - 1) if n > 1 else 0)
+            s.LX[nm] = x
+            s.box(x - lane_w / 2, y0, lane_w, 44, PAPER2, RULE, 1.0)
+            s.t(x, y0 + 20, nm, 12, INK, KR, "middle", 600)
+            s.t(x, y0 + 37, sub, 11, MUTED, _kr(sub))
+        s.lane_top = y0 + 44
+        return s.LX
+
+    def msg(s, a, b, label, y, c=MUTED, mk="ar", dash=None, sub=None):
+        x1, x2 = s.LX[a], s.LX[b]; dr = 1 if x2 > x1 else -1
+        s.path(f"M {x1+10*dr} {y} L {x2-12*dr} {y}", c, 1.5, m=mk, dash=dash)
+        mx = (x1 + x2) / 2
+        s.t(mx, y - 9, label, 11, c, _kr(label), "middle", 600)
+        if sub: s.t(mx, y + 17, sub, 11, MUTED, _kr(sub))
+
+    def state(s, a, txt, y, c):
+        x = s.LX[a]
+        w = sum(11 if "가" <= ch <= "힣" else 7.0 for ch in txt) + 18
+        # 반투명 칩 아래에 종이색 판을 깐다 — 레일(특히 ubuntu2 의 굵은 점선)이 글자를 관통하지 않게
+        s.o.append(f'<rect x="{x-w/2}" y="{y-10}" width="{w}" height="20" rx="4" fill="{PAPER}"/>')
+        s.o.append(f'<rect x="{x-w/2}" y="{y-10}" width="{w}" height="20" rx="4" fill="{c}22" stroke="{c}" stroke-width="1.1"/>')
+        s.t(x, y + 4, txt, 11, c, _kr(txt))
+
+W, H = 1000, 784
+d = SeqKR(W, H, "BLOCKED · WHO ANSWERS",
       "거절을 지어낸 쪽은 목적지가 아니다",
       "규칙이 없으면 목적지 커널이 RST 를 보냅니다. 중간에 규칙이 있으면 그 자리가 답을 지어내고, "
       "DROP 이면 아무것도 안 지어내 상대가 한도까지 기다립니다.",
@@ -34,9 +68,9 @@ def baseline(a, b, label, sub, y, c, dash=None):
     d.t(LBL_X, y - 9, label, 11, c, MONO, "middle", 600)
     d.t(LBL_X, y + 15, sub, 11, MUTED)
 
-baseline("ns1", "ubuntu2", "SYN", "중계는 그냥 넘긴다", 214, MUTED)
-baseline("ubuntu2", "ns1", "RST", "그 포트에 소켓이 없다 — 커널의 기본 동작", 262, INFO, dash="5 4")
-d.t(36, 300, "출발지가 목적지 IP — 도달에는 성공했다는 뜻", 11, MUTED, KR, "start")
+baseline("ns1", "ubuntu2", "SYN", "중계는 통과만", 214, MUTED)
+baseline("ubuntu2", "ns1", "RST", "그 포트에 소켓 없음 · 커널 기본 동작", 262, INFO, dash="5 4")
+d.t(36, 300, "출발지 = 목적지 IP · 도달 성공의 증거", 11, MUTED, KR, "start")
 
 d.line(36, 320, W - 48, 320, RULE, 1.0, "4 5")
 
@@ -50,7 +84,7 @@ d.t(FX0 + 22, FY0 + 12, "ALT", 11, MUTED, MONO)
 
 d.t(FX0 + 12, FY0 + 38, "[-j DROP]", 11, MUTED, MONO, "start")
 d.msg("ns1", "br0 · 중계", "SYN", 420, MUTED, sub="10.10.1.11 → 192.168.139.238:9000")
-d.state("br0 · 중계", "버린다 · 답을 안 만든다", 468, MUTED)
+d.state("br0 · 중계", "폐기 · 응답 없음", 468, MUTED)
 d.state("ns1", "5.062 s timed out", 512, MUTED)
 
 d.line(FX0 + 8, 540, FX1 - 8, 540, "rgba(245,245,245,0.20)", 1.0, "4 3")
@@ -58,7 +92,7 @@ d.line(FX0 + 8, 540, FX1 - 8, 540, "rgba(245,245,245,0.20)", 1.0, "4 3")
 d.t(FX0 + 12, 566, "[-j REJECT]", 11, MUTED, MONO, "start")
 d.msg("ns1", "br0 · 중계", "SYN", 604, MUTED)
 d.msg("br0 · 중계", "ns1", "ICMP port unreachable", 646, ACC, dash="5 4",
-      sub="출발지 10.10.1.1 — br0 이 지어냈다")
+      sub="출발지 10.10.1.1 · br0 이 생성")
 d.state("ns1", "0.036 s refused", 686, ACC)
 
 # 목적지 레인은 두 갈래 내내 비어 있다 — 그것이 §1 의 논점이다.
@@ -66,12 +100,9 @@ d.state("ns1", "0.036 s refused", 686, ACC)
 # 굵게 덧그어 두 영역 모두에 걸친다는 것을 폭으로 말한다.
 UX = LX["ubuntu2"]
 d.line(UX, FY0, UX, FY1, SOFT, 2.0, "3 6")
-d.state("ubuntu2", "이 연결을 본 적 없다", (FY0 + FY1) / 2, SOFT)
+d.state("ubuntu2", "이 연결 미관측", (FY0 + FY1) / 2, SOFT)
 
-d.t(36, 744, "출발지 IP 는 '중간이냐 끝이냐'만 가르고, '규칙이냐 소켓 없음이냐'는 프로토콜이 가릅니다.",
-     12, MUTED, KR, "start")
-d.t(36, 766, "--reject-with tcp-reset 을 쓰면 방화벽이 낸 거절인데 소켓 없음처럼 보이게 위장할 수도 있습니다.",
-     12, MUTED, KR, "start")
-d.legend(786, [("커널 기본 동작 — RST", INFO), ("규칙이 지어낸 거절 — ICMP", ACC)])
+# 출발지 IP 와 프로토콜이 가르는 것·tcp-reset 위장은 본문 §1 이 맡는다
+d.legend(728, [("커널 기본 동작 — RST", INFO), ("규칙이 지어낸 거절 — ICMP", ACC)])
 d.save("02-05.who-answers.svg")
 print("ok who-answers")

@@ -11,10 +11,11 @@
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 600
-HW, HY, HH = 396, 150, 290
-LX, RX = 24, 580
-LC, RC = LX + HW // 2, RX + HW // 2        # 222 · 778
+W, H = 1000, 540
+# 호스트 폭 396→380 — 두 호스트 사이 틈을 192px 로 넓혀 가운데 focal 태그(176px)가 양쪽 점선 경계에 닿지 않게 한다
+HW, HY, HH = 380, 150, 290
+LX, RX = 24, 596
+LC, RC = LX + HW // 2, RX + HW // 2        # 214 · 786
 CT_Y, BR_Y, VT_Y = 196, 286, 376
 CT_W, BR_W = 164, 356
 
@@ -52,8 +53,8 @@ for x, lab, sub, c1, c2 in ((LX, "호스트 1", "192.168.1.20", "컨테이너 A"
     host(x, lab, sub)
     box(x + 102, CT_Y, CT_W, 48, c1, "자기 netns", OK)
     box(x + 294, CT_Y, CT_W, 48, c2, "자기 netns", OK)
-    box(c, BR_Y, BR_W, 48, "브리지", "컨테이너들이 여기 매달린다", INFO)
-    box(c, VT_Y, BR_W, 52, "VTEP", "겉봉을 씌우고 벗긴다", focal=True)
+    box(c, BR_Y, BR_W, 48, "브리지", "컨테이너가 매달리는 자리", INFO)
+    box(c, VT_Y, BR_W, 52, "VTEP", "겉봉 씌우기 · 벗기기", focal=True)
     for cx in (x + 102, x + 294):
         d.path(f"M {cx} {CT_Y+24} L {cx} {BR_Y-24-6}", MUTED, 1.4, m="ar")
     d.path(f"M {c} {BR_Y+24} L {c} {VT_Y-26-6}", MUTED, 1.4, m="ar")
@@ -64,13 +65,10 @@ d.path(f"M {LC+BR_W//2+8} {VT_Y} L {RC-BR_W//2-10} {VT_Y}", ACC, 1.8, m="acc")
 d.path(f"M {RC-BR_W//2-8} {VT_Y+16} L {LC+BR_W//2+10} {VT_Y+16}", ACC, 1.4, m="acc", dash="5 5")
 # 칩은 두 VTEP 상자 사이 빈 통로에만 둔다 — 상자 폭(…400 / 600…) 밖으로 176px 을 잡는다
 ddx.focal_tag(d, 500, VT_Y - 52, "겉봉 4겹 + 원본", 176)
-d.t(500, VT_Y + 40, "물리망은 겉봉만 읽는다", 11, MUTED, KR)
+d.t(500, VT_Y + 40, "물리망은 겉봉만 읽음", 12, MUTED, KR)
 
-d.t(24, 484, "겉봉이 붙어 있는 구간은 두 VTEP 사이뿐입니다. 컨테이너도 브리지도 원본 프레임만 보므로 "
-             "오버레이가 있다는 사실조차 모릅니다.", 12, MUTED, KR, "start")
-d.t(24, 508, "겉봉은 약 50바이트라 안쪽에 쓸 수 있는 MTU 가 그만큼 줄어듭니다. 이 값을 안 맞추면 "
-             "큰 패킷만 조용히 사라집니다.", 12, WARN, KR, "start")
-d.legend(532, [("겉봉을 다루는 주체", ACC), ("컨테이너 · 자기 netns", OK),
-               ("호스트 경계와 브리지", INFO), ("MTU 주의", WARN)])
+# 오버레이를 모르는 컨테이너와 MTU 50바이트 대가는 본문 §4 산문이 맡는다
+d.legend(472, [("겉봉을 다루는 주체", ACC), ("컨테이너 · 자기 netns", OK),
+               ("호스트 경계와 브리지", INFO)])
 d.save("03-02.vxlan-encapsulation.svg")
 print("ok vxlan-encapsulation")

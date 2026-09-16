@@ -7,15 +7,15 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 696
+W, H = 1000, 664
 d = D(W, H, "kube-proxy · WHY TWO CHAINS",
       "확률은 한 줄에서 한 번만 굴러간다",
       "합친 설계는 같은 확률을 두 번 굴려 표시한 백엔드와 보낸 백엔드가 어긋난다.",
       lead="뽑은 뒤 할 일이 두 줄이라 점프가 필요하다 — 그 갈 곳이 엔드포인트 체인이다")
 
 COLW, CX = 464, (256, 744)
-HDR = [("합쳤다면", "확률 줄 두 개 · 각자 따로 굴린다", BAD),
-       ("실제 설계", "확률 줄 하나 · 뽑은 뒤 점프한다", ACC)]
+HDR = [("합쳤다면", "확률 줄 두 개 · 각자 굴림", BAD),
+       ("실제 설계", "확률 줄 하나 · 뽑은 뒤 점프", ACC)]
 HY, HH = 100, 44
 for i, (lab, sub, col) in enumerate(HDR):
     x = 24 + i * (COLW + 24)
@@ -49,7 +49,7 @@ def down(cx, y1, y2, label=None, c=SOFT):
 
 # 왼쪽 — 합쳤다면
 L = CX[0]
-oval(L, 186, "ClusterIP 로 패킷이 온다")
+oval(L, 186, "ClusterIP 로 패킷 도착")
 down(L, 208, 234)
 diamond(L, 262, "확률 0.33 굴림 · 1회차")
 down(L, 296, 314, "A")
@@ -59,27 +59,23 @@ diamond(L, 414, "확률 0.33 굴림 · 2회차")
 down(L, 448, 466, "B")
 step(L, 490, "DNAT", "--to-destination 10.244.2.4:80")
 down(L, 516, 542)
-oval(L, 566, "A 를 표시하고 B 로 보낸다", BAD)
+oval(L, 566, "A 표시 · B 로 전송", BAD)
 
 # 오른쪽 — 실제
 R = CX[1]
-oval(R, 186, "ClusterIP 로 패킷이 온다")
+oval(R, 186, "ClusterIP 로 패킷 도착")
 down(R, 208, 234)
 diamond(R, 262, "확률 0.33 굴림 · 한 번뿐")
 down(R, 296, 314, "A", ACC)
 step(R, 338, "KUBE-SEP-A 로 점프", "-j KUBE-SEP-BN57OJOGDZOVVFD3", ACC, ACC)
 down(R, 364, 390, None, ACC)
 d.tone(R - NW / 2, 390, NW, 80, ACC, 6, "0E", 1.3)
-d.t(R, 412, "그 체인 안 두 줄 — 조건이 없다", 11, ACC, KR)
+d.t(R, 412, "그 체인 안 두 줄 · 조건 없음", 12, ACC, KR)
 d.t(R, 434, "KUBE-MARK-MASQ", 11, INK, MONO)
 d.t(R, 454, "DNAT --to 10.244.1.35:80", 11, INK, MONO)
 down(R, 470, 542, None, ACC)
-oval(R, 566, "둘 다 A 에 걸린다", ACC)
-
-d.t(24, 606, "확률을 두 줄에 각각 적으면 statistic 매치가 줄마다 따로 굴러간다. 앞줄이 A 를 뽑아도 뒷줄은 B 를 뽑을 수 있다.",
-    12, MUTED, KR, "start")
-d.t(24, 626, "한 번의 판정을 여러 동작으로 잇는 방법은 점프뿐이고, 그래서 엔드포인트 체인이 따로 존재한다.",
-    12, MUTED, KR, "start")
-d.legend(646, [("확률을 굴리는 자리", WARN), ("한 번 뽑아 그대로 잇는 길", ACC), ("어긋난 결과", BAD)])
+oval(R, 566, "표시 · 전송 모두 A", ACC)
+# 두 줄이 따로 굴러가는 이유와 점프가 필요한 이유는 본문 산문이 맡는다
+d.legend(608, [("확률을 굴리는 자리", WARN), ("한 번 뽑아 그대로 잇는 길", ACC), ("어긋난 결과", BAD)])
 d.save("02-02.why-two-chains.svg")
 print("ok why-two-chains")

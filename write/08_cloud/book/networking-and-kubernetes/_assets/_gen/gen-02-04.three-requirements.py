@@ -7,7 +7,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 632
+W, H = 1000, 604   # 범례 구분선 아래 56px — 계약 §검증 '범례 아래 여유 30px'
 d = D(W, H, "THREE REQUIREMENTS · ONE PATH",
       "네임스페이스를 밖으로 내보내려면 세 곳에 하나씩 필요하다",
       "나갈 길은 네임스페이스에, 중계 허가는 중계 호스트에, 돌아올 길은 상대 호스트에 있습니다. "
@@ -38,11 +38,11 @@ def step(cx, cy, title, sub, focal=False):
     d.t(cx, cy - 8, ddx.fit(title, 13, NW - 16, title), 13, tc, KR, "middle", 600)
     d.t(cx, cy + 16, ddx.fit(sub, 11, NW - 14, sub), 11, MUTED, KR)
 
-C1, C2, C3 = 396, 632, 864
-step(C1, 200, "default 에 걸림", "10.10.1.0/24 밖이다")
+C1, C2, C3 = 396, 632, 836            # C3 오른끝(836+106=942)이 레인 오른끝(960) 안에 들게 — 이전 864 는 10px 삐져나갔다
+step(C1, 200, "default 에 걸림", "10.10.1.0/24 밖")
 step(C1, 336, "br0 로 받음", "홉이 아니라 TTL 그대로")
 step(C2, 336, "FORWARD 통과", "ip_forward 검사 · TTL 1 감소", focal=True)
-step(C3, 472, "받는다", "출발지는 10.10.1.11")
+step(C3, 472, "수신", "출발지는 10.10.1.11")
 
 d.path(f"M {C1} {200+NH//2} L {C1} {336-NH//2-8}", MUTED, 1.5, m="ar")
 d.path(f"M {C1+NW//2} 336 L {C2-NW//2-8} 336", MUTED, 1.5, m="ar")
@@ -51,9 +51,8 @@ d.path(f"M {C1+NW//2} 336 L {C2-NW//2-8} 336", MUTED, 1.5, m="ar")
 MID = 404
 d.path(f"M {C2} {336+NH//2} L {C2} {MID} L {C3} {MID} L {C3} {472-NH//2-8}", MUTED, 1.5, m="ar")
 
-d.t(40, 556, "TTL 이 64 에서 63 으로 준 것이 중계를 지났다는 증거입니다. "
-             "같은 호스트 안 ns1 에서 ns2 로 갈 때는 64 그대로였습니다.", 12, MUTED, KR, "start")
 # 구분선을 566 에 두면 556 의 산문을 관통한다 — 아래로 내린다
-d.legend(580, [("갖춰야 할 것", INFO), ("중계 허가가 없으면 여기서 버려진다", ACC)])
+# TTL 64→63 이 중계의 증거라는 설명은 본문 §3 이 맡는다
+d.legend(548, [("갖춰야 할 것", INFO), ("중계 허가가 없으면 여기서 버려진다", ACC)])
 d.save("02-04.three-requirements.svg")
 print("ok three-requirements")

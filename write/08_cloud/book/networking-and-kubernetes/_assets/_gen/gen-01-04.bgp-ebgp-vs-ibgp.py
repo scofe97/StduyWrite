@@ -7,7 +7,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 596
+W, H = 1000, 528
 d = D(W, H, "eBGP vs iBGP · SAME PROTOCOL",
       "상대가 남이냐 식구냐가 출력을 가른다",
       "윗줄이 eBGP(AS 65001↔65002), 아랫줄이 iBGP(AS 65001 안). 같은 자리끼리 세로로 맞춰 본다.",
@@ -33,11 +33,11 @@ if True:
 
 for r, (kind, sub, cells, c) in enumerate([
         ("eBGP", "r1 ↔ r3 · 다른 AS",
-         [("65002 가 붙는다", "AS 를 건널 때마다"), ("external", "밖에서 배운 경로"),
-          ("없다", "AS 밖으로 안 나감"), ("한다", "금지 대상 아님")], WARN),
+         [("65002 추가", "AS 를 건널 때마다"), ("external", "밖에서 배운 경로"),
+          ("없음", "AS 밖으로 안 나감"), ("함", "금지 대상 아님")], WARN),
         ("iBGP", "r1 ↔ r2 · 같은 AS",
-         [("비어 있다", "vtysh 는 Local 로"), ("internal", "안에서 배운 경로"),
-          ("100", "내부 선호도"), ("안 한다", "루프를 막을 길이 없어서")], INFO)]):
+         [("비어 있음", "vtysh 표시는 Local"), ("internal", "안에서 배운 경로"),
+          ("100", "내부 선호도"), ("안 함", "루프 차단 수단 없음")], INFO)]):
     cy = ROW_Y[r]
     d.box(24, cy - CH // 2, LBL_W, CH, PAPER2, c, 1.2, 6)
     d.t(24 + LBL_W // 2, cy - 8, kind, 13, c, MONO, "middle", 600)
@@ -50,8 +50,7 @@ for r, (kind, sub, cells, c) in enumerate([
             ACC if i == FOCAL_COL else INK, KR, "middle", 600)
         d.t(x + CW // 2, cy + 16, ddx.fit(note, 11, CW - 16, note), 11, MUTED, KR)
 
-d.t(36, 500, "금지되는 것은 iBGP 로 배운 것을 다시 iBGP 로 넘기는 경우뿐이다 — "
-             "eBGP 로 배운 경로는 iBGP 이웃에게 넘어간다", 12, MUTED, KR, "start")
-d.legend(556, [("eBGP", WARN), ("iBGP", INFO), ("갈림길", ACC)])
+# 하단 해설(금지는 iBGP→iBGP 재전달 하나뿐)은 본문 §6 출력 해석 문단(굵은 문장)이 말한다 — 뺐다
+d.legend(488, [("eBGP", WARN), ("iBGP", INFO), ("갈림길", ACC)])
 d.save("01-04.bgp-ebgp-vs-ibgp.svg")
 print("ok bgp-ebgp-vs-ibgp")

@@ -5,7 +5,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 680
+W, H = 1000, 672
 d = D(W, H, "KUBE-SVC · PROBABILITY FANOUT",
       "KUBE-SVC 체인을 위에서부터 — 마킹 규칙이 먼저이고 확률은 그 다음이다",
       "확률은 0.333 · 0.5 · 무조건으로 다르지만 최종 몫은 셋 다 1/3 이다. 앞 규칙이 빗나간 만큼만 남기 때문이다.",
@@ -33,9 +33,9 @@ def bx(cx, cy, w, h, t, s, tag, c=None, focal=False):
     d.t(x + w - 16, cy + 4, ddx.fit(tag, 11, w // 2 - 20, tag), 11, SOFT,
         MONO if all(ord(ch) < 128 or ch in '·-' for ch in tag) else KR, "end")
 
-ddx.band(d, 104, 616, "확률이 다른 이유는 앞 규칙이 걸러 간 뒤의 남은 몫을 나누기 때문이다")
+ddx.band(d, 104, 600, "확률이 다른 이유 · 앞 규칙이 거른 뒤 남은 몫을 나눔")
 for (rx, ry, rw, rh), lab, c in [(LEFT, "KUBE-SVC-LOLE4ISW44XBNF3G — 위에서부터 평가", INFO),
-                                 (RIGHT, "KUBE-SEP 체인 — 여기서 목적지가 바뀐다", ACC)]:
+                                 (RIGHT, "KUBE-SEP 체인 · 목적지 교체", ACC)]:
     d.o.append(f'<rect x="{rx}" y="{ry}" width="{rw}" height="{rh}" rx="8" '
                f'fill="{c}06" stroke="{c}" stroke-width="1.2" stroke-dasharray="7 6"/>')
     ddx.ring_label(d, rx, ry, lab, 11, c, off=16)
@@ -58,8 +58,7 @@ for lcy, rcy, lab in zip(LCY[1:], RCY, ["1/3 적중", "남은 절반", "마지�
     # '마지막 하나' 처럼 긴 라벨이 오른쪽 경계에 2px 까지 붙는다.
     d.t((LEFT[0] + LEFT[2] + RIGHT[0]) // 2, lcy - 14, lab, 11, MUTED, KR)
 
-d.t(36, 592, "1/3 이 빗나가면 2/3 이 남고, 그 절반이 다시 1/3 이다 — 마지막은 조건 없이 나머지 전부를 받는다",
-     12, MUTED, KR, "start")
-d.legend(632, [("평가 순서", INFO), ("목적지가 바뀌는 자리", ACC)])
+# 몫이 1/3 씩 같아지는 계산은 본문 산문이 맡는다
+d.legend(616, [("평가 순서", INFO), ("목적지가 바뀌는 자리", ACC)])
 d.save("02-02.probability-fanout.svg")
 print("ok probability-fanout")

@@ -12,7 +12,7 @@
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, OK, BAD, INFO, PAPER2, KR, MONO
 
-W, H = 1000, 532   # 캔버스 상한 준수 — 배치(왼쪽 세대 / 오른쪽 찾는 법·비용)는 본문이 지목하므로 유지하고 폭만 줄였다
+W, H = 1000, 480   # 캔버스 상한 준수 — 배치(왼쪽 세대 / 오른쪽 찾는 법·비용)는 본문이 지목하므로 유지하고 폭만 줄였다
 X0, GAP, HDR_Y, ROW_H = 16, 8, 108, 84
 COLS = [(140, "세대"), (112, "자료구조"), (188, "목적지를 찾는 법"),
         (128, "비용"), (208, "확인 명령"), (136, "할 수 있게 된 일")]
@@ -58,9 +58,8 @@ for r, (rc, cells) in enumerate(ROWS):
             d.t(cx0 + 14, y + 58, ddx.fit(sub, 11, cw - 28, sub), 11, MUTED,
                 MONO if all(ord(ch) < 128 for ch in sub) else KR, "start")
 
-d.t(X0, 448, "리스트는 규칙이 늘수록 대조 횟수가 함께 늘고, 해시는 규칙 수와 무관하다. "
-             "세대가 바꾼 것은 결국 목적지를 찾는 방법 하나다.", 12, MUTED, KR, "start")
-d.legend(468, [("규칙 수에 비례 · 이 편의 병목", BAD),
+# 리스트와 해시의 비용 차이는 본문 산문이 맡는다
+d.legend(424, [("규칙 수에 비례 · 이 편의 병목", BAD),
                ("해시 조회로 상수시간", INFO),
                ("커널 안에서 처리 · L7 까지", OK)])
 d.save("02-02.kube-proxy-three-generations.svg")

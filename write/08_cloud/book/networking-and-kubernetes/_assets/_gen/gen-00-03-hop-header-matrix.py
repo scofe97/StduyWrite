@@ -5,7 +5,7 @@
 # 이력: 2026-08-28 신설. 생성기 없이 손으로 만들어진 SVG 였다. 값·좌표를 그대로 옮겼다.
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, INFO, PAPER2, KR, MONO
 
-W, H = 1000, 588
+W, H = 1000, 516
 X0, XW, ROW_H, Y0 = 60, 908, 68, 152
 COLS = [276, 512, 748]
 HEADS = ["구간 1 · 노트북 → 공유기", "구간 2 · 공유기 → ISP 라우터", "구간 3 · 라우터 → 웹 서버"]
@@ -38,8 +38,7 @@ for r, (name, c, focal, cells) in enumerate(ROWS):
         d.t(cx, y + 30, val, 11, c, MONO, "start")
         d.t(cx, y + 52, who, 12, MUTED, KR, "start")
 
-d.t(X0, 496, "바뀌는 것은 겉봉(MAC)이고, 어디로 가는지(목적지 IP)는 처음 적힌 값이 끝까지 갑니다.",
-    12, MUTED, KR, "start")
-d.legend(516, [("구간마다 새로 쓰인다", INFO), ("NAT 지점에서 한 번 바뀐다", WARN), ("끝까지 그대로다", OK)])
+# 하단 해설은 도식 뒤 본문 문단("네 줄 중 목적지 IP 한 줄만")이 말한다 — 뺐다
+d.legend(476, [("구간마다 새로 쓰인다", INFO), ("NAT 지점에서 한 번 바뀐다", WARN), ("끝까지 그대로다", OK)])
 d.save("00-03-hop-header-matrix.svg")
 print("ok hop-header-matrix")

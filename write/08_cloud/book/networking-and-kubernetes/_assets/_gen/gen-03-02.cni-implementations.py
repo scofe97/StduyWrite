@@ -9,26 +9,26 @@
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
 
-W, H = 1000, 676
+W, H = 1000, 604
 X0, GAP, ROW_H, HDR_Y = 24, 12, 80, 140
 COLS = [(176, "구현체"), (232, "접근"), (216, "오버레이를 쓰나"), (292, "상태와 정책")]
 
 ROWS = [
     ([("Flannel", "단순 L3 패브릭"),
-      ("네트워킹에만 집중", "정책은 다루지 않는다"),
-      ("쓴다", "VXLAN 으로 감싼다"),
-      ("클러스터의 기존 etcd 재사용", "저장소를 새로 안 세운다")], WARN),
+      ("네트워킹에만 집중", "정책은 다루지 않음"),
+      ("씀", "VXLAN 으로 감쌈"),
+      ("클러스터의 기존 etcd 재사용", "저장소 신설 없음")], WARN),
     ([("Calico", "BGP 라우팅"),
       ("경로를 광고해 L3 로 전달", "책이 드는 기본 지향"),
-      ("기본은 안 쓴다", "VXLAN·IP-in-IP 모드도 있다"),
+      ("기본은 안 씀", "VXLAN·IP-in-IP 모드도 있음"),
       ("네트워크 정책 완전 지원", "Istio 통합")], OK),
     ([("Cilium", "eBPF"),
-      ("커널에 프로그램을 심는다", "L7·HTTP 를 인지한다"),
+      ("커널에 프로그램 탑재", "L7·HTTP 인지"),
       ("선택", "주소가 아닌 identity 로 판단"),
-      ("L3~L7 정책 강제", "주소가 바뀌어도 정책이 산다")], INFO),
+      ("L3~L7 정책 강제", "주소가 바뀌어도 정책 유지")], INFO),
     ([("AWS VPC CNI", "네이티브 VPC"),
-      ("VPC 주소를 직접 받는다", "AWS 망 위에 그대로"),
-      ("안 쓴다", "감쌀 이유가 없다"),
+      ("VPC 주소를 직접 할당", "AWS 망 위에 그대로"),
+      ("안 씀", "감쌀 이유 없음"),
       ("VPC flow logs · 보안 그룹", "기존 AWS 관행 그대로")], BAD),
 ]
 
@@ -41,11 +41,8 @@ d = D(W, H, "CNI IMPLEMENTATIONS · WHAT ACTUALLY DIFFERS",
 ddx.matrix(d, X0, COLS, ROWS, HDR_Y, row_h=ROW_H, gap=GAP, focal_col=2)
 
 BOTTOM = HDR_Y + 24 + len(ROWS) * (ROW_H + GAP)
-d.t(X0, BOTTOM + 32, "감싸면 물리망에 손대지 않아도 되고, 안 감싸면 오버헤드가 없는 대신 물리망이 "
-                     "Pod 대역을 알아야 합니다.", 12, MUTED, KR, "start")
-d.t(X0, BOTTOM + 56, "Calico 행의 \"안 쓴다\"는 기본 지향이지 절대 조건이 아닙니다 — 서브넷 경계를 넘을 때만 "
-                     "감싸는 CrossSubnet 모드가 있습니다.", 12, ACC, KR, "start")
-d.legend(BOTTOM + 80, [("절대 조건이 아닌 자리", ACC), ("오버레이 없이 라우팅", OK),
+# 감쌈의 대가와 Calico CrossSubnet 단서는 본문 §5 산문이 맡는다
+d.legend(BOTTOM + 12, [("오버레이 없이 라우팅", OK),
                        ("오버레이로 감쌈", WARN), ("커널 프로그램", INFO), ("클라우드 네이티브", BAD)])
 d.save("03-02.cni-implementations.svg")
 print("ok cni-implementations")
