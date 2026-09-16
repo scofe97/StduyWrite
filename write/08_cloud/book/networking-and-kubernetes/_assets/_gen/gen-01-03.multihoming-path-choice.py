@@ -25,14 +25,14 @@ def node(cx, cy, title, sub, tag, c=None, dash=False):
     d.t(cx, cy + 2, ddx.fit(sub, 11, BW - 18, sub), 11, MUTED, KR)
     d.t(cx, cy + 26, ddx.fit(tag, 11, BW - 14, tag), 11, SOFT, KR)
 
-ddx.band(d, 104, 628, "같은 대역이 두 길로 들어와도 표에는 한 줄만 남는다")
-ddx.focal_tag(d, 500, 152, "화살표는 광고 방향 — 패킷은 반대로 흐른다", 320)
+ddx.band(d, 104, 628, "같은 대역 두 길 · 표에는 한 줄만")
+ddx.focal_tag(d, 500, 152, "화살표 = 광고 방향 · 패킷은 반대", 320)
 
 node(*DST,  "목적지 망", "8.8.8.0/24 주인", "AS 500 · 광고 시작", OK)
 node(*TOPA, "상위 A", "AS 200 · 앞에 붙임", "AS_PATH 200 500", INFO)
 node(*MID,  "중간 사업자", "AS 400 · 앞에 붙임", "AS_PATH 400 500")
 node(*TOPB, "상위 B", "AS 300 · 다시 붙임", "AS_PATH 300 400 500")
-node(*US,   "우리 ISP", "AS 100 · 둘 다 받는다", "표엔 한 줄만 적는다", INFO)
+node(*US,   "우리 ISP", "AS 100 · 둘 다 수신", "표엔 한 줄만", INFO)
 node(*PICK, "고르는 순서", "1. Local Pref · 정책", "2. AS_PATH 길이", ACC, dash=True)
 
 HB, HH = BW // 2, BH // 2
@@ -53,8 +53,7 @@ d.path(f"M {TOPB[0]-HB-8} {TOPB[1]} L 268 {TOPB[1]} L 268 {US[1]+20} "
 d.chip(550, 484, "3 홉", MUTED, 12)
 d.path(f"M {US[0]} {US[1]+HH+6} L {US[0]} {PICK[1]-HH-10}", ACC, 1.6, m="acc")
 
-d.t(36, 600, "고르는 규칙은 하나이고 표도 하나여서, 어느 쪽으로 배웠든 같은 표에 섞인 뒤 "
-             "정책이 같다면 목록이 짧은 쪽이 이긴다", 12, MUTED, KR, "start")
+# 하단 해설(정책이 같으면 짧은 목록이 이긴다)은 도식 뒤 본문 두 문단이 말한다 — 뺐다
 d.legend(644, [("짧은 길", INFO), ("광고 시작", OK), ("고르는 자리", ACC)])
 d.save("01-03.multihoming-path-choice.svg")
 print("ok multihoming")

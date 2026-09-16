@@ -8,7 +8,7 @@
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
 
-W, H = 1000, 540
+W, H = 1000, 440
 BW, BH, MID = 176, 76, 232
 COL = [40, 264, 512, 760]     # stride 224·248 — 분기 뒤 라벨 자리를 넓게 둔다
 ARM = 88
@@ -55,12 +55,7 @@ d.t(BR + 8, MID + 4, "두 번째 FROM", 11, ACC, KR, "start")
 box(CX[3], MID - ARM, "1.08GB", "FROM golang:1.15", "베이스를 그대로 둔 판", BAD)
 box(CX[3], MID + ARM, "23.8MB", "FROM alpine:3.20", "베이스만 갈아 끼운 판", None, focal=True)
 
-d.t(40, MID + ARM + 96,
-    "빌드 스테이지도 바이너리도 두 갈래가 똑같습니다. 달라진 것은 두 번째 FROM 한 줄뿐이고, 거기서 45배가 갈립니다.",
-    12, MUTED, KR, "start")
-d.t(40, MID + ARM + 120,
-    "캐시는 COPY 부터 깨집니다. COPY 만 파일 내용을 캐시 키에 넣기 때문에, 소스를 고치면 그 아래가 전부 다시 돕니다.",
-    12, MUTED, KR, "start")
-d.legend(MID + ARM + 144, [("두 갈래가 공유", ACC), ("빌드에만 필요", INFO), ("안 줄어든 판", BAD)])
+# 두 번째 FROM 한 줄이 45배를 가른다는 것과 COPY 캐시 규칙은 본문 §3 이 맡는다
+d.legend(MID + ARM + 64, [("두 갈래가 공유", ACC), ("빌드에만 필요", INFO), ("안 줄어든 판", BAD)])
 d.save("03-04.build-stage-choice.svg")
 print("ok build-stage-choice")

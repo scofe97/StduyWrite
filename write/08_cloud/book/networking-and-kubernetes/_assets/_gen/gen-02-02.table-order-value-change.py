@@ -17,7 +17,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 862
+W, H = 1000, 796
 d = D(W, H, "ONE CHAIN · MANGLE → NAT → FILTER",
       "한 체인 안에서 값이 어떻게 바뀌는가",
       "노드의 프로세스가 ClusterIP 로 보낸 패킷이 OUTPUT 체인을 지나는 동안입니다. "
@@ -60,9 +60,9 @@ for i in (0, 1, 2):
 
 # 전이 셋 — 테이블 이름 · 규칙 전문 · 그 자리가 하는 일
 TRANS = [
-    ("mangle  OUTPUT", "-j MARK --set-mark 0x1", "표식만 붙는다 — 주소는 그대로다", INFO, 267),
-    ("nat  OUTPUT", "-j DNAT --to-destination 10.244.1.66:80", "목적지가 갈린다 — 여기가 값이 바뀌는 자리다", INFO, 429),
-    ("filter  OUTPUT", "-d 10.244.1.66 -j ACCEPT", "바뀐 목적지를 보고 판정한다", ACC, 591),
+    ("mangle  OUTPUT", "-j MARK --set-mark 0x1", "표식만 부착 · 주소 그대로", INFO, 267),
+    ("nat  OUTPUT", "-j DNAT --to-destination 10.244.1.66:80", "목적지 교체 · 값이 바뀌는 자리", INFO, 429),
+    ("filter  OUTPUT", "-d 10.244.1.66 -j ACCEPT", "바뀐 목적지로 판정", ACC, 591),
 ]
 for title, rule, why, c, y in TRANS:
     d.t(LX, y - 24, title, 11, c, MONO, "start", 600)
@@ -71,10 +71,7 @@ for title, rule, why, c, y in TRANS:
     d.path(f"M {SX+SW+10} {y-4} L {LX-10} {y-4}", c if c is ACC else RULE,
            1.2 if c is ACC else 1.0, dash="4 4")
 
-d.t(36, 752, "순서가 뒤집혔다면 filter 는 10.96.192.224 를 보고 판정합니다 — Pod IP 로 쓴 규칙은 발화하지 않습니다.",
-    12, ACC, KR, "start", 600)
-d.t(36, 776, "앞에 Raw 가 한 칸 더 있습니다. 연결 추적을 켤지 정할 뿐 위 값들은 건드리지 않아 뺐습니다.", 12, MUTED, KR, "start")
-d.t(36, 798, "mangle 규칙은 순서를 보이려고 든 예이며 kube-proxy 가 넣는 것은 아닙니다.", 12, MUTED, KR, "start")
-d.legend(820, [("값이 바뀐 자리", INFO), ("바뀐 값으로 판정", ACC)])
+# 순서가 뒤집혔을 때의 결과·Raw 를 뺀 이유·mangle 예시의 출처는 본문 산문이 맡는다(뒤 둘은 옮겼다)
+d.legend(740, [("값이 바뀐 자리", INFO), ("바뀐 값으로 판정", ACC)])
 d.save("02-02.table-order-value-change.svg")
 print("ok table-order-value-change")

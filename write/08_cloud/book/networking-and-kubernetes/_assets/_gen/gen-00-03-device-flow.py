@@ -6,14 +6,14 @@
 # 이력: 2026-08-28 신설. 생성기 없이 손으로 만들어진 SVG 였다. 값·좌표를 그대로 옮겼다.
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, BAD, PAPER2, KR, MONO
 
-W, H = 1000, 620
+W, H = 1000, 596
 IN_X, IN_W, DEV_X, DEV_W, OUT_X, OUT_W = 60, 140, 260, 180, 560, 380
-ROWS = [(164, "L1", "허브", "아무것도 안 읽는다", BAD, False,
+ROWS = [(164, "L1", "허브", "읽는 것 없음", BAD, False,
          [(OK, "포트 2 · 받을 대상"), (BAD, "포트 3 · 남의 것이라 버림"), (BAD, "포트 4 · 남의 것이라 버림")]),
-        (324, "L2", "스위치", "겉봉 MAC 만 읽는다", MUTED, False,
-         [(OK, "포트 2 에게만 · MAC 표에서 찾았다")]),
-        (464, "L3", "라우터", "속의 IP 까지 읽는다", ACC, True,
-         [(ACC, "다른 망으로 · 겉봉 MAC 을 새로 쓴다")])]
+        (324, "L2", "스위치", "겉봉 MAC 까지", MUTED, False,
+         [(OK, "포트 2 에게만 · MAC 표 조회")]),
+        (464, "L3", "라우터", "속의 IP 까지", ACC, True,
+         [(ACC, "다른 망으로 · 겉봉 MAC 재작성")])]
 
 d = D(W, H, "FLOW COMPARISON · WHAT EACH DEVICE READS",
       "같은 프레임이 들어와도 나가는 모습이 다르다",
@@ -44,8 +44,7 @@ for y, layer, name, depth, dc, focal, outs in ROWS:
     d.path(f"M {DEV_X + DEV_W + 6} {y + 28} L {OUT_X - 10} {y + 28}",
            ACC if focal else MUTED, 1.4, m="acc" if focal else "ar")
 
-d.t(IN_X, 556, "세 줄의 차이는 성능이 아니라 여는 깊이입니다. 겉봉을 고쳐 쓰는 것은 라우터뿐입니다.",
-    12, MUTED, KR, "start")
-d.legend(572, [("받을 대상", OK), ("버린다", BAD), ("겉봉을 새로 쓴다", ACC)])
+# 하단 해설(여는 깊이 · 겉봉은 라우터만)은 본문 도식 뒤 문단이 말한다 — 뺐다
+d.legend(556, [("받을 대상", OK), ("버린다", BAD), ("겉봉을 새로 쓴다", ACC)])
 d.save("00-03-device-flow.svg")
 print("ok device-flow")

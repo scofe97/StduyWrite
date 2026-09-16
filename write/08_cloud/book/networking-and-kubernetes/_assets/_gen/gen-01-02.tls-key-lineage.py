@@ -28,12 +28,12 @@ d = D(W, H, "KEY LINEAGE · 01-02 TLS",
       "master secret과 세션 키에는 화살표가 들어오기만 하고 나가지 않는다.",
       lead="화살표가 들어오기만 하고 나가지 않는 칸이 곧 망을 건너지 않는 값입니다.")
 
-d.t(12, 102, "재료 셋 — 망을 건넌다", 11, SOFT, MONO, "start")
+d.t(12, 102, "재료 셋 · 망을 건넘", 12, SOFT, KR, "start")   # 한글 머리글은 한글 스택
 
 # (x, 이름, 누가·무엇, 어떻게 건넜나, 색, 노출 칩, 합류점 x)
-SRCS = [(12,  "client random",    "클라이언트 난수",   "평문으로 그냥 건넜다",   INFO, "노출", 332.0),
-        (316, "server random",    "서버 난수",        "평문으로 그냥 건넜다",   INFO, "노출", MID_X),
-        (620, "premaster secret", "클라이언트가 생성", "공개키로 봉해져 건넜다", ACC,  "봉인", 612.0)]
+SRCS = [(12,  "client random",    "클라이언트 난수",   "평문으로 건넘",         INFO, "노출", 332.0),
+        (316, "server random",    "서버 난수",        "평문으로 건넘",         INFO, "노출", MID_X),
+        (620, "premaster secret", "클라이언트가 생성", "공개키로 봉해져 건넘",   ACC,  "봉인", 612.0)]
 
 for x, name, who, how, c, seal, join in SRCS:
     cx = x + SRC_W / 2
@@ -46,7 +46,7 @@ for x, name, who, how, c, seal, join in SRCS:
     d.arrow([(cx, SRC_Y + 98), (cx, 248), (join, 248), (join, 275)],
             c, "acc" if c is ACC else "info", 1.5)
 
-DERIVED = [(192.0, 278, 560, OK,  "master secret", "셋이 합쳐진 값 — 양쪽이 각자 계산한다", 1.5, "14", 508),
+DERIVED = [(192.0, 278, 560, OK,  "master secret", "셋이 합쳐진 값 · 양쪽이 각자 계산", 1.5, "14", 508),
            (242.0, 412, 460, ACC, "session key",   "실제 암·복호에 쓰는 키",              1.7, "16", 408)]
 
 for i, (x, y, w, c, name, sub, sw, op, chip_dx) in enumerate(DERIVED):
@@ -57,8 +57,7 @@ for i, (x, y, w, c, name, sub, sw, op, chip_dx) in enumerate(DERIVED):
     if i == 0:
         d.arrow([(MID_X, y + 78), (MID_X, 409)], c, "ok", 1.6)
 
-d.t(W - 54, 320.0, "도청자가 위 셋을 다 주워도", 11, BAD, KR, "end")
-d.t(W - 54, 336.0, "봉인 하나를 못 열면 여기 못 온다", 11, BAD, KR, "end")
+# 오른쪽 도청자 문장 두 줄은 도식 뒤 본문 문단("도청자가 위 세 칸을 전부 주워도")이 말한다 — 뺐다
 d.legend(514, [("평문으로 건넘", INFO), ("공개키로 봉해져 건넘", ACC), ("망을 건너지 않음", OK)])
 d.save("01-02.tls-key-lineage.svg")
 print("ok tls-key-lineage")

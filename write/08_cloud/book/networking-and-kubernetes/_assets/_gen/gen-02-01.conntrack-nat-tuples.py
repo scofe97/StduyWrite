@@ -12,7 +12,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 896
+W, H = 1000, 832
 d = D(W, H, "CONNTRACK × NAT · ENTRY SHAPE",
       "conntrack 엔트리 한 줄에 튜플이 둘 — NAT 뒤에서는 응답 줄이 뒤집기가 아니다",
       "요청이 DNAT·MASQUERADE 를 거치는 순간 conntrack 은 원본 방향과 응답 방향 튜플을 함께 적는다. "
@@ -46,14 +46,14 @@ def selfmsg(a, label, sub, y, c=MUTED):
 msg("클라이언트", "노드 커널", "SYN", "dst = 노드 IP:30080", Y[0])
 selfmsg("노드 커널", "PRE_ROUTING 에서 DNAT", "목적지를 Pod IP 로 바꾼다", Y[1])
 selfmsg("노드 커널", "POST_ROUTING 에서 MASQUERADE", "출발지를 노드 IP 로 바꾼다", Y[2])
-selfmsg("노드 커널", "conntrack 엔트리 생성", "튜플 두 줄이 여기서 정해진다", Y[3], INFO)
+selfmsg("노드 커널", "conntrack 엔트리 생성", "튜플 두 줄 확정", Y[3], INFO)
 msg("노드 커널", "Pod", "SYN", "src = 노드 IP · dst = Pod IP", Y[4])
 msg("Pod", "노드 커널", "SYN-ACK", "src = Pod IP · dst = 노드 IP", Y[5], dash="5 4")
 selfmsg("노드 커널", "응답 방향 튜플로 조회", "두 변환을 한 번에 되돌린다", Y[6])
 msg("노드 커널", "클라이언트", "SYN-ACK", "src = 노드 IP:30080", Y[7], dash="5 4")
 
 # ── 엔트리의 실제 모양 — 뒤집기라면 어땠을지를 가운데 줄로 끼워 대조한다 ──
-PX0, PX1, PY0, PY1 = 40, 960, 600, 784
+PX0, PX1, PY0, PY1 = 40, 960, 600, 760
 d.box(PX0, PY0, PX1 - PX0, PY1 - PY0, PAPER2, RULE, 1.0, 8)
 d.t(PX0 + 24, PY0 + 22, "conntrack 엔트리 하나 — 위 '엔트리 생성' 단계에서 채워지는 항목", 12, SOFT, KR, "start")
 ROWS = [(632, "원본 방향", "src=203.0.113.9:51000", "dst=노드 IP:30080", INFO, False),
@@ -67,13 +67,7 @@ for y0, lab, src, dst, c, ghost in ROWS:
     d.t(PX0 + 40, y0 + 21, lab, 12, c, KR, "start", 600)
     d.t(PX0 + 168, y0 + 21, ddx.fit(src, 12, 300, src), 12, tc, MONO, "start")
     d.t(PX0 + 488, y0 + 21, ddx.fit(dst, 12, 300, dst), 12, tc, MONO, "start")
-d.t(PX0 + 168, 766, "두 필드가 모두 어긋난다 — DNAT 가 응답의 src 를, MASQUERADE 가 응답의 dst 를 정했다",
-    12, ACC, KR, "start")
-
-# 한 줄로 두면 1018px 로 viewBox 를 넘는다 — 문장 경계에서 끊는다
-d.t(36, 808, "NAT 가 없을 때만 아래 줄이 위 줄을 그대로 뒤집은 값이 된다.", 12, MUTED, KR, "start")
-d.t(36, 828, "로드밸런서가 연결을 한 백엔드에 고정하는 것도 이 두 번째 줄 덕분이다 — 규칙을 다시 고르지 않는다.",
-    12, MUTED, KR, "start")
-d.legend(844, [("원본 방향", INFO), ("실제 응답 방향 — 뒤집기가 아니다", ACC)])
+# 두 필드가 어긋나는 이유(DNAT → src, MASQUERADE → dst)는 본문 산문이 맡는다
+d.legend(776, [("원본 방향", INFO), ("실제 응답 방향 — 뒤집기가 아니다", ACC)])
 d.save("02-01.conntrack-nat-tuples.svg")
 print("ok conntrack-nat-tuples")

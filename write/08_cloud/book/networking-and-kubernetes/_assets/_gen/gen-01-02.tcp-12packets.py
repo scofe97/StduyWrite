@@ -25,13 +25,13 @@ d.rails(728)
 MID = (LX[C] + LX[S]) / 2
 
 # (방향, 라벨, 부제, 색, 마커, 굵기, 점선, 라벨 굵기)
-PKTS = [(1, "SYN",              "클라 ISN 을 고른다",          WARN, "warn", 1.3, None,  400),
+PKTS = [(1, "SYN",              "클라 ISN 선택",              WARN, "warn", 1.3, None,  400),
         (0, "SYN-ACK",          "서버도 자기 ISN",             WARN, "warn", 1.3, None,  400),
-        (1, "ACK",              "여기서 연결이 선다",           WARN, "warn", 1.3, None,  400),
+        (1, "ACK",              "연결 수립",                   WARN, "warn", 1.3, None,  400),
         (0, "ACK",              "수립 직후 한 번 더",           INFO, "info", 1.3, "4 4", 400),
         (1, "HTTP GET  (78B)",  "실제 내용 — 1~78 바이트",      OK,   "ok",   2.2, None,  600),
-        (0, "ACK 79",           "78 까지 받았다",              INFO, "info", 1.3, "4 4", 400),
-        (0, "HTTP 200  (121B)", "실제 내용 — 서버는 자기 번호로", OK,  "ok",   2.2, None,  600),
+        (0, "ACK 79",           "78 까지 수신",                INFO, "info", 1.3, "4 4", 400),
+        (0, "HTTP 200  (121B)", "실제 내용 · 서버 자기 번호",    OK,  "ok",   2.2, None,  600),
         (1, "ACK 122",          None,                        INFO, "info", 1.3, "4 4", 400),
         (1, "FIN-ACK",          "닫기 시작",                   BAD,  "bad",  1.3, None,  400),
         (0, "ACK",              None,                        BAD,  "bad",  1.3, None,  400),

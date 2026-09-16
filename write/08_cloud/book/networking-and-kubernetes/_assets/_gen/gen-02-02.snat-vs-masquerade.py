@@ -16,7 +16,7 @@
 #           분기는 여기서 다시 그리지 않는다.
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, PAPER2, KR, MONO
 
-W, H = 1000, 608
+W, H = 1000, 564
 X0, X1, GAP = 12, 972, 32
 COLW = (X1 - X0 - GAP) / 2      # 464 — 갈래 둘이 반씩 쓴다
 CX = W / 2
@@ -36,13 +36,13 @@ d.t(CX, 139, "규칙을 쓰는 시점에", 12, ACC, KR, "middle", 600)
 d.t(CX, 160, "넣을 주소를 아는가?", 11, INK)
 
 BRANCHES = [
-    (LEFT,  OK,   "ok",   "안다", "주소가 고정이다",
+    (LEFT,  OK,   "ok",   "안다", "주소 고정",
      "값을 적는다",       "-j SNAT --to-source <주소>",
-     "규칙을 쓸 때",      "값이 규칙 안에 박힌다",
-     "값이 고정일 때",    "인터페이스를 조회하지 않아 약간 빠르다"),
+     "규칙을 쓸 때",      "값이 규칙 안에 박힘",
+     "값이 고정일 때",    "인터페이스 조회 없음 · 약간 빠름"),
     (RIGHT, WARN, "warn", "모른다", "DHCP 회선 · 뜰 때마다 IP 가 달라지는 클라우드",
      "자리를 가리킨다",   "-j MASQUERADE",
-     "패킷이 나갈 때",    "커널이 그 인터페이스에서 읽어 채운다",
+     "패킷이 나갈 때",    "커널이 그 인터페이스에서 읽어 채움",
      "값이 바뀔 때",      "POSTROUTING 체인 전용"),
 ]
 
@@ -64,8 +64,7 @@ for x, c, mk, head, sub, *cells in BRANCHES:
         d.t(cx, y + 44, val, 11 if not mono else 11, INK if not mono else MUTED,
             KR if not mono else MONO)
 
-d.t(CX, 524, "POSTROUTING 전용인 것도 같은 이유입니다 — 나가는 인터페이스가 정해진 뒤라야 그 주소를 알 수 있습니다.",
-    11, ACC)
-d.legend(544, [("SNAT — 값을 적는다", OK), ("MASQUERADE — 자리를 가리킨다", WARN)])
+# POSTROUTING 전용인 이유는 본문 산문이 맡는다
+d.legend(508, [("SNAT — 값을 적는다", OK), ("MASQUERADE — 자리를 가리킨다", WARN)])
 d.save("02-02.snat-vs-masquerade.svg")
 print("ok snat-vs-masquerade")

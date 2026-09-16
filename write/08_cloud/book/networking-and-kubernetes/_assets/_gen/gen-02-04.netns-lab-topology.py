@@ -10,7 +10,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 656
+W, H = 1000, 632   # 범례 구분선 아래 56px — 계약 §검증 '범례 아래 여유 30px'
 d = D(W, H, "NETNS LAB · TOPOLOGY",
       "실습으로 지은 배선 — 네임스페이스 둘을 브리지 하나로 잇는다",
       "네트워크 네임스페이스 둘에 veth 쌍의 안쪽 끝을 하나씩 넣고, 바깥쪽 끝 둘을 브리지에 물린다. "
@@ -58,8 +58,7 @@ node(RX, BASE_Y, "veth2-br", "@if7", "바깥쪽 끝 · index 6")
 node(MX, BASE_Y, "br0", "10.10.1.1/24", "브리지 — L2 스위치", focal=True)
 node(MX, ETH_Y, "eth0", "192.168.139.208/24", "바깥 · ubuntu2 방향")
 
-d.t(36, 592, "브리지에 물리는 것은 바깥쪽 끝 하나뿐이라 bridge link 에 두 줄만 나온다. "
-             "안쪽 끝은 경계 안에 남아 기본 네임스페이스의 ip link 에 보이지 않는다.", 12, MUTED, KR, "start")
-d.legend(608, [("네임스페이스 경계", INFO), ("브리지 — 프레임이 여기서 갈린다", ACC)])
+# bridge link 두 줄·안쪽 끝이 안 보이는 이유는 본문 §2 가 맡는다
+d.legend(576, [("네임스페이스 경계", INFO), ("브리지 — 프레임이 여기서 갈린다", ACC)])
 d.save("02-04.netns-lab-topology.svg")
 print("ok netns-lab-topology")

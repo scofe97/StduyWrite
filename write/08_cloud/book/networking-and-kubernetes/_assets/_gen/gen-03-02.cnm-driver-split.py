@@ -10,9 +10,9 @@
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 516
+W, H = 1000, 468
 BW, BH, MID = 188, 80, 244
-CX = [116, 352, 616, 856]
+CX = [124, 352, 616, 856]                                        # 첫 칸 왼끝(30)이 CNM 링(x=24) 안에 들게 — 이전 116 은 링을 2px 넘었다
 ARM = 84
 
 d = D(W, H, "CNM DRIVERS · WHERE THE MODEL STOPS",
@@ -44,8 +44,8 @@ d.o.append(f'<rect x="24" y="104" width="712" height="288" rx="10" '
            f'fill="{INFO}06" stroke="{INFO}" stroke-width="1.2" stroke-dasharray="7 6"/>')
 ddx.ring_label(d, 24, 104, "CNM · libnetwork 가 제공하는 범위", 11, INFO, off=16)
 
-box(CX[0], MID, "네트워크를 만든다", "docker network create", "드라이버를 고른다", INFO)
-box(CX[1], MID, "노드 간 조율이 필요한가", "옆 노드의 대역을 알아야 하나", "이 물음이 가른다", WARN, w=220)
+box(CX[0], MID, "네트워크를 만든다", "docker network create", "드라이버 선택", INFO)
+box(CX[1], MID, "노드 간 조율이 필요한가", "옆 노드의 대역을 알아야 하나", "이 물음이 가름", WARN, w=220)
 
 d.path(f"M {CX[0]+BW//2+8} {MID} L {CX[1]-BW//2-10} {MID}", MUTED, 1.5, m="ar")
 
@@ -57,16 +57,15 @@ d.path(f"M {BR} {MID} L {BR} {MID+ARM} L {CX[2]-BW//2-10} {MID+ARM}", BAD, 1.5, 
 d.t(BR, MID - ARM - 16, "아니오", 11, OK, KR, "middle")
 d.t(BR, MID + ARM + 24, "예", 11, BAD, KR, "middle")
 
-box(CX[2], MID - ARM, "local 드라이버", "bridge · host · none", "한 호스트에서 끝난다", OK)
-box(CX[2], MID + ARM, "global 드라이버", "overlay", "libkv 추상화에 기댄다", BAD)
+box(CX[2], MID - ARM, "local 드라이버", "bridge · host · none", "한 호스트에서 끝남", OK)
+box(CX[2], MID + ARM, "global 드라이버", "overlay", "libkv 추상화에 의존", BAD)
 
 d.path(f"M {CX[2]+BW//2+8} {MID+ARM} L {CX[3]-BW//2-10} {MID+ARM}", ACC, 1.6, m="acc")
-box(CX[3], MID + ARM, "키-값 저장소", "Consul · etcd · Zookeeper", "CNM 이 주지 않는다", focal=True)
-d.t(CX[3], MID - ARM, "밖에서 가져올 것이 없다", 12, OK, KR)
+box(CX[3], MID + ARM, "키-값 저장소", "Consul · etcd · Zookeeper", "CNM 이 주지 않음", focal=True)
+d.t(CX[3], MID - ARM, "밖에서 가져올 것 없음", 12, OK, KR)
 
-d.t(24, 436, "오버레이 하나를 쓰려고 분산 저장소를 따로 세워 운영해야 한다는 뜻입니다. "
-             "이미 etcd 로 도는 Kubernetes 에게는 순수한 중복이었습니다.", 12, MUTED, KR, "start")
-d.legend(460, [("CNM 밖에서 가져올 것", ACC), ("자족한다", OK), ("밖을 요구한다", BAD),
+# 저장소를 따로 세우는 부담이 Kubernetes 에게 중복이었다는 설명은 본문으로 옮겼다
+d.legend(412, [("CNM 밖에서 가져올 것", ACC), ("자족한다", OK), ("밖을 요구한다", BAD),
                ("가르는 물음", WARN), ("CNM 경계 안", INFO)])
 d.save("03-02.cnm-driver-split.svg")
 print("ok cnm-driver-split")

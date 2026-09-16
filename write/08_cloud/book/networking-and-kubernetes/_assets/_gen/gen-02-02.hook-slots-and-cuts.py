@@ -6,7 +6,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 540
+W, H = 1000, 500
 d = D(W, H, "iptables · TABLE x HOOK",
       "어느 테이블이 어느 훅에 붙는가",
       "빈칸은 규칙을 안 넣어서가 아니라 그 시점에 그 일을 할 수 없어서 비어 있다.",
@@ -49,7 +49,8 @@ for r, (tbl, rule, cells) in enumerate(ROWS):
                 ddx.fit(val, 11, CW - 24, f"cell {tbl}/{val}"),
                 11, col, MONO if latin else KR)
         else:
-            col = ACC if focal else SOFT
+            # 두 빈칸이 같은 물음(붙지 않는다)이라 accent 두 곳이 되던 것을 상태색 warn 한 축으로 묶는다
+            col = WARN if focal else SOFT
             d.o.append(f'<rect x="{x+8}" y="{y+10}" width="{CW-16}" height="{RH-20}" rx="6" '
                        f'fill="none" stroke="{col}" stroke-width="{1.4 if focal else 0.9}" '
                        f'stroke-dasharray="4 4"/>')
@@ -59,12 +60,7 @@ for r, (tbl, rule, cells) in enumerate(ROWS):
     if r < len(ROWS) - 1:
         d.line(24, y + RH + RG / 2, W - 48, y + RH + RG / 2, RULE, 0.8)
 
-d.t(24, 452,
-    "nat 은 주소를 바꾸면 라우팅이 달라지므로 결정 전이거나 나가기 직전이라야 하고,",
-    12, MUTED, KR, "start")
-d.t(24, 472,
-    "filter 는 통과 여부를 정하므로 이 패킷의 운명이 정해진 뒤라야 뜻이 선다.",
-    12, MUTED, KR, "start")
-d.legend(492, [("붙는다", INFO), ("붙지 않는다 — 이 편의 물음", ACC)])
+# nat·filter 빈칸의 이유는 본문 산문이 맡는다
+d.legend(444, [("붙는다", INFO), ("붙지 않는다 — 이 편의 물음", WARN)])
 d.save("02-02.hook-slots-and-cuts.svg")
 print("ok hook-slots-and-cuts")

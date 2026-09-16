@@ -10,10 +10,10 @@
 # 이력: 2026-08-28 신설. 생성기 없이 손으로 만들어진 SVG 였다. 값·좌표를 그대로 옮겼다.
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, INFO, PAPER2, KR, MONO
 
-W, H = 1000, 596
+W, H = 1000, 552
 DEV_Y, DEV_W, DEV_H, DEV_STRIDE = 132, 170, 76, 240
 SEG_X0, SEG_W, SEG_Y, SEG_H, SEG_STRIDE = 165, 200, 256, 232, 240
-DEVICES = [("내 노트북", "192.168.0.15"), ("집 공유기", "NAT 이 여기서"),
+DEVICES = [("내 노트북", "192.168.0.15"), ("집 공유기", "NAT 지점"),
            ("ISP 라우터", "중간 홉"), ("웹 서버", "93.184.216.34")]
 # 구간마다 같은 슬롯 셋 — (값, 주인, 색). 가운데 구간만 focal.
 SEGMENTS = [
@@ -56,9 +56,8 @@ for i, (focal, slots) in enumerate(SEGMENTS):
         d.t(x + 16, y + 20, val, 11, vc, MONO, "start")
         d.t(x + 16, y + 42, who, 12, wc, KR, "start")
 
-d.t(60, 512, "구간이 바뀔 때마다 겉봉은 새로 쓰이지만, 어디로 가는지는 처음 적힌 값이 그대로 갑니다.",
-    12, MUTED, KR, "start")
-d.legend(528, [("MAC · 구간마다 새로", INFO), ("출발지 IP · NAT 에서 한 번", WARN),
+# 하단 해설(겉봉은 새로, 목적지는 그대로)은 도식 앞 본문 문단이 말한다 — 뺐다
+d.legend(512, [("MAC · 구간마다 새로", INFO), ("출발지 IP · NAT 에서 한 번", WARN),
                ("목적지 IP · 끝까지 그대로", OK)])
 d.save("00-03-hop-flow.svg")
 print("ok hop-flow")

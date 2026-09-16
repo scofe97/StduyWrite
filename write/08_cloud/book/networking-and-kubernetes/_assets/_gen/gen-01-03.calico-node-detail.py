@@ -7,7 +7,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 644
+W, H = 1000, 600
 d = D(W, H, "CALICO · INSIDE THE NODE",
       "노드 안을 열어 보면 — Pod 에서 나가 Pod 로 들어가기까지",
       "Pod 는 끝점이고 라우팅을 하는 것은 노드의 커널이다. 광고로 표에 줄이 생겼으므로 가운데를 지나는 동안 겉은 한 겹뿐이다.",
@@ -33,19 +33,20 @@ def cell(cx, cy, title, sub, tag, c=None, focal=False):
         MONO if all(ord(ch) < 128 or ch in "→" for ch in sub) else KR)
     d.t(cx, cy + 25, ddx.fit(tag, 11, BW - 12, tag), 11, SOFT, KR)
 
-ddx.band(d, 104, 588, "Pod = 호스트 · 노드 = 라우터 · 클러스터 = AS 하나")
+ddx.band(d, 104, 540, "Pod = 호스트 · 노드 = 라우터 · 클러스터 = AS 하나")
 
+# 링 라벨 마스크는 테두리와 겹친다 — 각 링 바로 위 빈 띠에 쓴다
 for (rx, ry, rw, rh), lab in [(RING1, "노드 1 의 커널 안"), (RING2, "노드 2 의 커널 안")]:
     d.o.append(f'<rect x="{rx}" y="{ry}" width="{rw}" height="{rh}" rx="8" '
                f'fill="{INFO}06" stroke="{INFO}" stroke-width="1.2" stroke-dasharray="7 6"/>')
-    ddx.ring_label(d, rx, ry, lab, 11, INFO)
+    d.t(rx + 16, ry - 10, lab, 12, INFO, KR, "start", 600)
 
 cell(CX[0], OUT, "Pod A", "10.244.1.5", "끝점 · 라우팅 안 함", OK)
 cell(CX[1], OUT, "veth 쌍", "cali 인터페이스", "Pod 와 커널 사이")
 cell(CX[2], OUT, "라우팅 표", "-> 192.168.0.11", "BGP 로 배운 줄", focal=True)
-cell(CX[3], OUT, "물리 NIC", "192.168.0.10", "여기로 나간다")
+cell(CX[3], OUT, "물리 NIC", "192.168.0.10", "나가는 문")
 
-cell(CX[3], IN, "물리 NIC", "192.168.0.11", "여기로 들어온다")
+cell(CX[3], IN, "물리 NIC", "192.168.0.11", "들어오는 문")
 cell(CX[2], IN, "라우팅 표", "-> cali 인터페이스", "직접 연결")
 cell(CX[1], IN, "veth 쌍", "cali 인터페이스", "커널과 Pod 사이")
 cell(CX[0], IN, "Pod B", "10.244.2.7", "끝점 · 라우팅 안 함", OK)
@@ -64,8 +65,7 @@ d.t(nx, ny + 28, "겉이 한 겹뿐", 11, SOFT, KR)
 d.path(f"M {CX[3]+HB+6} {OUT} L {nx} {OUT} L {nx} {ny-nh//2-10}", MUTED, 1.5, m="ar")
 d.path(f"M {nx} {ny+nh//2+6} L {nx} {IN} L {CX[3]+HB+10} {IN}", MUTED, 1.5, m="ar")
 
-d.t(36, 556, "Pod 와 커널은 veth 쌍 한 켤레로 이어지고, 한쪽 끝이 Pod 안의 eth0, "
-             "다른 쪽 끝이 노드 쪽 cali 인터페이스다", 12, MUTED, KR, "start")
-d.legend(604, [("커널 경계", INFO), ("끝점", OK), ("라우팅하는 자리", ACC)])
+# 하단 해설(veth 쌍의 두 끝)은 도식 뒤 본문 목록이 말한다 — 뺐다
+d.legend(560, [("커널 경계", INFO), ("끝점", OK), ("라우팅하는 자리", ACC)])
 d.save("01-03.calico-node-detail.svg")
 print("ok calico")

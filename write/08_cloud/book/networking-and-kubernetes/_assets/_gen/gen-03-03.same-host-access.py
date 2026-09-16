@@ -6,7 +6,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 620
+W, H = 1000, 612
 d = D(W, H, "SAME HOST · SEPARATE STACKS",
       "같은 호스트 안 — 컨테이너마다 자기 스택을 따로 가진다",
       "매핑은 호스트 스택에만 있다. 컨테이너 안에서는 컨테이너 포트만 열려 있고, 자기 lo 는 자기 것이라 서로 닿지 않는다.",
@@ -24,24 +24,26 @@ def box(cx, cy, t, s, tag, c=None, w=BW):
         MONO if all(ord(ch) < 128 or ch in ':.' for ch in s) else KR)
     d.t(cx, cy + 26, ddx.fit(tag, 11, w - 14, tag), 11, SOFT, KR)
 
-ddx.band(d, 104, 556, "밖에서 두드릴 때 쓰는 포트와 안에서 열려 있는 포트가 다르다")
+ddx.band(d, 104, 540, "밖에서 두드리는 포트 ≠ 안에서 열린 포트")
 rx, ry, rw, rh = RING
 d.o.append(f'<rect x="{rx}" y="{ry}" width="{rw}" height="{rh}" rx="8" '
            f'fill="{INFO}06" stroke="{INFO}" stroke-width="1.2" stroke-dasharray="7 6"/>')
 ddx.ring_label(d, rx, ry, "컨테이너 네트워크 172.17.0.0/16 — 안에서는 컨테이너 포트만", 11, INFO, off=16)
 
-box(*HOST, "호스트 스택", "127.0.0.1:80", "매핑은 여기에만 있다", WARN)
+box(*HOST, "호스트 스택", "127.0.0.1:80", "매핑은 여기에만", WARN)
 box(*D0, "docker0", "172.17.0.1", "매핑 80 → 8080")
 box(*WEB, "go-web", "172.17.0.2:8080", "8080 은 여기서만 열림", OK)
 box(*DNS, "dnsutils", "dnsutils:1.3 이미지", "자기 lo 는 자기 것")
 
 d.path(f"M {HOST[0]+BW//2+6} {HOST[1]} L {D0[0]-BW//2-10} {D0[1]}", MUTED, 1.5, m="ar")
-d.t((HOST[0] + D0[0]) // 2, HOST[1] - 16, "호스트 포트 80", 11, MUTED, KR)
+# 호스트 칸(오른끝 250)과 링(x=300) 사이 50px 안에 들도록 짧게 — 이전 "호스트 포트 80" 은 링 테두리를 가로질렀다
+d.t(276, HOST[1] - 16, "포트 80", 12, MUTED, KR)
 # 부채꼴이지만 통로 한가운데(y=346)는 아래의 '안 통한다' 라벨 자리다. 그래서 줄기를
 # 세우지 않고 docker0 의 오른쪽 변 두 지점(310 / 382)에서 각각 나가 x=600 에서 꺾는다.
 # 세로 구간이 276~310 · 382~416 으로 갈려, 그 사이 342~353 의 라벨과 닿지 않는다.
 for t, sy in ((WEB, 310), (DNS, 382)):
-    d.path(f"M {D0[0]+BW//2+6} {sy} L 600 {sy} L 600 {t[1]} L {t[0]-BW//2-10} {t[1]}",
+    # 줄기 x 600→576 — 가운데 'lo 로는 불통' 라벨(≈590~652)이 줄기를 가로지르지 않게
+    d.path(f"M {D0[0]+BW//2+6} {sy} L 576 {sy} L 576 {t[1]} L {t[0]-BW//2-10} {t[1]}",
            MUTED, 1.4, m="ar")
 
 # 두 컨테이너는 서로의 lo 에 닿지 않는다 — 이 도식의 focal
@@ -52,10 +54,9 @@ d.o.append(f'<line x1="{WEB[0]-14}" y1="{BY-12}" x2="{WEB[0]+14}" y2="{BY+12}" '
            f'stroke="{BAD}" stroke-width="2.4"/>')
 d.o.append(f'<line x1="{WEB[0]-14}" y1="{BY+12}" x2="{WEB[0]+14}" y2="{BY-12}" '
            f'stroke="{BAD}" stroke-width="2.4"/>')
-d.t(WEB[0] - BW // 2 - 12, BY + 4, "lo 로는 안 통한다", 11, BAD, KR, "end")
+d.t(WEB[0] - BW // 2 - 12, BY + 4, "lo 로는 불통", 11, BAD, KR, "end")
 
-d.t(36, 528, "각자 별개 스택이라 127.0.0.1 이 서로 다른 곳을 가리킨다 — 한 묶음으로 묶어야 "
-             "그 주소를 공유하게 되고, 그것이 Pod 다", 12, MUTED, KR, "start")
-d.legend(572, [("호스트 쪽", WARN), ("컨테이너 네트워크", INFO), ("서로 안 통한다", BAD)])
+# 127.0.0.1 이 서로 다른 곳을 가리키는 이유와 Pod 로의 연결은 본문 §2 가 맡는다
+d.legend(556, [("호스트 쪽", WARN), ("컨테이너 네트워크", INFO), ("서로 안 통한다", BAD)])
 d.save("03-03.same-host-access.svg")
 print("ok same-host-access")

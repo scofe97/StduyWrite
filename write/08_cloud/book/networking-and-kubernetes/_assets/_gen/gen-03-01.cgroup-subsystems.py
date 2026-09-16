@@ -8,27 +8,27 @@
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
 
-W, H = 1000, 664
+W, H = 1000, 620
 X0, GAP, ROW_H, HDR_Y = 32, 12, 84, 140
 COLS = [(180, "자원"), (264, "무엇을 정하는가"), (224, "cgroup v1 — 책 기준"), (224, "cgroup v2 — 현재 기본")]
 
 ROWS = [
     ([("CPU", "프로세서 시간"),
-      ("최소 지분을 보장한다", "몰릴 때 나눠 갖는 비율"),
+      ("최소 지분 보장", "몰릴 때 나눠 갖는 비율"),
       ("cpu + cpuacct", "제한과 계량이 따로"),
-      ("cpu", "둘이 하나로 합쳐졌다")], INFO),
+      ("cpu", "둘이 하나로 통합")], INFO),
     ([("Memory", "메모리"),
-      ("상한을 넘기면 커널이 죽인다", "K8s limits.memory 가 내려오는 자리"),
+      ("상한 초과 → 커널이 종료", "K8s limits.memory 가 내려오는 자리"),
       ("memory", "이름 그대로"),
       ("memory", "역할도 그대로")], OK),
     ([("Disk I/O", "블록 장치"),
-      ("읽기·쓰기 대역폭을 나눈다", "devices 와 헷갈리기 쉽다"),
+      ("읽기·쓰기 대역폭 분배", "devices 와 혼동 주의"),
       ("blkio", "장치 노드 제어는 devices"),
-      ("io", "이름이 바뀌었다")], WARN),
+      ("io", "이름 변경")], WARN),
     ([("Network", "나가는 패킷"),
-      ("패킷에 표시를 남긴다", "실제 제한은 tc 가 그 표시로"),
+      ("패킷에 표시 부착", "실제 제한은 tc 가 그 표시로"),
       ("net_cls · net_prio", "마킹과 우선순위"),
-      ("없다 — eBPF 가 대신", "v2 로 옮겨오지 않았다")], BAD),
+      ("없음 · eBPF 가 대신", "v2 로 옮겨지지 않음")], BAD),
 ]
 
 d = D(W, H, "CGROUP SUBSYSTEMS · V1 - V2",
@@ -40,8 +40,7 @@ d = D(W, H, "CGROUP SUBSYSTEMS · V1 - V2",
 ddx.matrix(d, X0, COLS, ROWS, HDR_Y, row_h=ROW_H, gap=GAP, focal_col=3)
 
 BOTTOM = HDR_Y + 24 + len(ROWS) * (ROW_H + GAP)
-d.t(X0, BOTTOM + 32, "책의 목록은 v1 기준입니다. 지금 배포판 기본은 v2 라, 같은 이름을 찾다 "
-                     "없어서 헤매는 자리가 마지막 행입니다.", 12, MUTED, KR, "start")
-d.legend(BOTTOM + 64, [("통합됨", INFO), ("그대로", OK), ("이름 바뀜", WARN), ("v2 에 없음", BAD)])
+# 책 목록이 v1 기준이라는 경고는 본문 §3 목록이 맡는다
+d.legend(BOTTOM + 16, [("통합됨", INFO), ("그대로", OK), ("이름 바뀜", WARN), ("v2 에 없음", BAD)])
 d.save("03-01.cgroup-subsystems.svg")
 print("ok cgroup-subsystems")

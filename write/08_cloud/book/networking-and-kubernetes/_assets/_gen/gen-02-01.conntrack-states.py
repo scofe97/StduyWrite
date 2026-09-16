@@ -10,7 +10,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 608
+W, H = 1000, 568
 d = D(W, H, "CONNTRACK · MAIN PATH",
       "conntrack 엔트리가 밟는 주 경로 — 플래그 둘은 한 전이가 아니라 두 단계다",
       "conntrack flow 의 주 경로는 NEW 에서 ESTABLISHED 로 간다. [UNREPLIED] 는 반대 방향 패킷이 "
@@ -42,7 +42,7 @@ def trans(x0, x1, main, sub, c=MUTED, mk="ar"):
 # 시작 — 채운 점
 d.o.append(f'<circle cx="{DOT_X}" cy="{CY}" r="6" fill="{INK}"/>')
 trans(DOT_X + 8, NEW_CX - NEW_W // 2, "첫 패킷", "TCP SYN")
-state(NEW_CX, NEW_W, "NEW", "응답이 아직 없다", "120초", "[UNREPLIED]", WARN)
+state(NEW_CX, NEW_W, "NEW", "응답 없음", "120초", "[UNREPLIED]", WARN)
 trans(NEW_CX + NEW_W // 2, EST_CX - EST_W // 2, "반대 방향 패킷 관측", "[UNREPLIED] 해제")
 state(EST_CX, EST_W, "ESTABLISHED", "양방향으로 패킷 관측", "432000초 · 닷새", "[ASSURED]", OK)
 trans(EST_CX + EST_W // 2, END_X - 12, "수명 만료", "테이블에서 삭제")
@@ -54,19 +54,18 @@ d.o.append(f'<circle cx="{END_X}" cy="{CY}" r="5" fill="{MUTED}"/>')
 # 자기 루프 — 두 번째 단계. focal 은 이 한 곳이다.
 LX, RX, TOP = EST_CX - 48, EST_CX + 48, 196
 d.path(f"M {LX} {CY-BH//2} C {LX} {TOP}, {RX} {TOP}, {RX} {CY-BH//2-8}", ACC, 1.6, m="acc")
-d.t(EST_CX, TOP - 26, "양방향으로 데이터가 오간 뒤", 12, ACC, KR)
+d.t(EST_CX, TOP - 26, "양방향 데이터 교환 뒤", 12, ACC, KR)
 d.t(EST_CX, TOP - 8, "[ASSURED] 부착", 11, ACC, MONO)
 
 # 곁가지 — 상태마다 그리지 않고 한 줄로 모은다
-ddx.band(d, 416, 496, "곁가지 — 주 경로의 다음 단계가 아니다")
+ddx.band(d, 416, 496, "곁가지 — 주 경로 밖")
 for x, name, desc in ((120, "RELATED", "부모 연결에 종속"),
                       (420, "INVALID", "즉시 폐기"),
                       (700, "UNTRACKED", "raw 에서 NOTRACK")):
     d.t(x, 466, name, 12, MUTED, MONO, "start", 600)
     d.t(x, 484, desc, 12, SOFT, KR, "start")
 
-d.t(36, 536, "두 단계를 가르는 이유가 여기 있다 — 테이블이 꽉 차면 커널은 [ASSURED] 가 붙지 않은 항목부터 버린다. "
-             "conntrack 의 상태는 TCP 의 상태와 별개다.", 12, MUTED, KR, "start")
-d.legend(552, [("응답 대기", WARN), ("수립됨", OK), ("두 번째 단계", ACC)])
+# 두 단계를 가르는 이유(테이블이 차면 [ASSURED] 없는 항목부터 폐기)는 본문 산문이 맡는다
+d.legend(512, [("응답 대기", WARN), ("수립됨", OK), ("두 번째 단계", ACC)])
 d.save("02-01.conntrack-states.svg")
 print("ok conntrack-states")

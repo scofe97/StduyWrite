@@ -7,7 +7,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 664
+W, H = 1000, 648   # 범례 구분선 아래 56px — 계약 §검증 '범례 아래 여유 30px'
 d = D(W, H, "FORWARD CHAIN · TWO TRACES",
       "같은 세 줄인데 패킷에 따라 도착지가 다르다",
       "정책을 DROP 으로 뒤집고 두 줄만 허용하면 방향성 있는 방화벽이 됩니다. "
@@ -46,7 +46,7 @@ oval(RCX, 268, "ACCEPT", OK)
 note(RCX, 324, "밖에서 온 응답", OK)
 
 d.path(f"M {LCX} {268+DH//2} L {LCX} {420-DH//2-8}", MUTED, 1.5, m="ar")
-d.t(LCX + 14, 356, "아니오", 11, SOFT, KR, )
+d.t(LCX + 18, 356, "아니오", 11, SOFT, KR, "start")
 diamond(LCX, 420, "출발지가 10.10.1.0/24 인가?", "-s 10.10.1.0/24")
 d.path(f"M {LCX+DW//2} 420 L {RCX-100-8} 420", MUTED, 1.5, m="ar")
 d.t((LCX + DW // 2 + RCX - 100) // 2, 408, "예", 11, SOFT, KR)
@@ -58,8 +58,7 @@ d.t(LCX + 14, 508, "아니오 — 어느 줄에도 안 걸림", 11, ACC, KR, "st
 oval(LCX, 540, "정책 DROP", focal=True)
 note(RCX, 540, "밖에서 온 새 연결", ACC)
 
-d.t(36, 604, "규칙을 다 훑고도 안 걸리면 체인의 기본 정책이 적용됩니다. "
-             "정책이 ACCEPT 인 채로 두면 이 세 줄은 아무것도 막지 못합니다.", 12, MUTED, KR, "start")
-d.legend(620, [("통과", OK), ("어디에도 안 걸려 정책을 맞는다", ACC)])
+# 정책이 ACCEPT 면 세 줄이 아무것도 막지 못한다는 설명은 본문 §5 가 맡는다
+d.legend(592, [("통과", OK), ("어디에도 안 걸려 정책을 맞는다", ACC)])
 d.save("02-04.firewall-two-traces.svg")
 print("ok firewall-two-traces")

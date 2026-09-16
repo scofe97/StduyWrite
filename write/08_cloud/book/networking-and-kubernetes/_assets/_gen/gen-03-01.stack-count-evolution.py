@@ -6,7 +6,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER2, KR, MONO
 
-W, H = 1000, 560
+W, H = 1000, 540
 d = D(W, H, "BARE METAL → VM → CONTAINER",
       "세대마다 TCP/IP 스택이 몇 개였나",
       "스택이 하나뿐이라 포트를 나눠 쓰던 시절에서, 게스트 OS 없이 컨테이너마다 스택을 갖는 데까지의 변화.",
@@ -20,7 +20,7 @@ CELLS = [
     ["호스트 OS 하나", "게스트 OS 여러 개", "게스트 OS 없음"],
     ["1개", "게스트마다 1개", "컨테이너마다 1개"],
     ["앱 하나만 차지", "A팀도 B팀도 8080", "컨테이너마다 따로"],
-    ["라이브러리 · 배포", "라이브러리 · 배포", "이 자리를 겨냥한다"],
+    ["라이브러리 · 배포", "라이브러리 · 배포", "이 자리를 겨냥"],
 ]
 FOCAL = (1, 2)   # 스택 행 × 컨테이너 열 — 절 제목이 묻는 값
 
@@ -39,8 +39,7 @@ for r, (y, axis) in enumerate(zip(ROWS_Y, AXES)):
             d.box(cx, y, CW, RH, PAPER2, RULE, 0.9, 6)
         d.t(cx + CW // 2, y + 38, ddx.fit(txt, 12, CW - 24, txt), 12, col, KR)
 
-d.t(LX + 4, 484, "컨테이너는 스택을 여럿 갖는 이점은 남기고 게스트 OS 라는 값은 치르지 않는다 — 그 자리가 이 절의 결론이다",
-    12, MUTED, KR, "start")
-d.legend(496, [("사실", INFO), ("충돌이 나던 자리", WARN), ("절 제목이 묻는 값", ACC)])
+# 컨테이너가 두 이점을 함께 취한다는 결론은 본문 §1 이 맡는다
+d.legend(476, [("사실", INFO), ("충돌이 나던 자리", WARN), ("절 제목이 묻는 값", ACC)])
 d.save("03-01.stack-count-evolution.svg")
 print("ok stack-count-evolution")

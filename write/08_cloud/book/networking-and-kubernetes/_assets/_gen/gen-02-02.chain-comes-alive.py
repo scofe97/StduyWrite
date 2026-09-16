@@ -7,7 +7,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 616
+W, H = 1000, 568
 d = D(W, H, "iptables · BUILT-IN vs USER CHAIN",
       "체인은 어떻게 존재하게 되는가",
       "내장 체인은 커널이 부르지만 사용자 체인은 선언·규칙·호출 세 줄이 다 있어야 실행된다.",
@@ -16,21 +16,20 @@ d = D(W, H, "iptables · BUILT-IN vs USER CHAIN",
 # 상단 대조 띠 — 콜론 줄의 정책 자리가 둘을 가른다
 BY, BH, HALFW = 98, 74, 464
 for i, (lab, dump, note, col) in enumerate([
-        ("내장 체인 다섯", ":PREROUTING ACCEPT [93:5148]", "정책이 있다 · 커널이 직접 부른다", INFO),
-        ("사용자 체인", ":KUBE-SERVICES - [0:0]", "정책 자리가 - · 끝나면 부른 자리로 돌아간다", MUTED)]):
+        ("내장 체인 다섯", ":PREROUTING ACCEPT [93:5148]", "정책 있음 · 커널이 직접 호출", INFO),
+        ("사용자 체인", ":KUBE-SERVICES - [0:0]", "정책 자리가 - · 끝나면 부른 자리로 복귀", MUTED)]):
     x = 24 + i * (HALFW + 24)
     d.box(x, BY, HALFW, BH, PAPER2, RULE, 1.0)
     d.t(x + 16, BY + 24, ddx.fit(lab, 12, 200, f"band {lab}"), 12, col, KR, "start", 600)
     d.t(x + 16, BY + 46, ddx.fit(dump, 11, HALFW - 32, f"dump {dump}"), 11, INK, MONO, "start")
     d.t(x + 16, BY + 64, ddx.fit(note, 11, HALFW - 32, f"note {note}"), 11, MUTED, KR, "start")
 
-d.t(24, BY + BH + 26, "오른쪽은 저절로 생기지 않는다. 아래 세 줄이 모두 있어야 한다.",
-    12, SOFT, KR, "start")
+d.t(24, BY + BH + 26, "사용자 체인에 필요한 세 줄", 12, SOFT, KR, "start")
 
 STAGES = [
-    ("선언", "이름만 있는 빈 체인", "-N KUBE-SERVICES", "규칙을 넣을 곳이 없다", False),
-    ("규칙", "그 체인 안에 넣는 줄", "-A KUBE-SERVICES -d ... -j SVC", "들어와도 할 일이 없다", False),
-    ("호출", "내장 체인에서 점프", "-A PREROUTING -j KUBE-SERVICES", "죽은 코드 — 패킷이 안 온다", True),
+    ("선언", "이름만 있는 빈 체인", "-N KUBE-SERVICES", "규칙을 넣을 곳 없음", False),
+    ("규칙", "그 체인 안에 넣는 줄", "-A KUBE-SERVICES -d ... -j SVC", "들어와도 할 일 없음", False),
+    ("호출", "내장 체인에서 점프", "-A PREROUTING -j KUBE-SERVICES", "죽은 코드 · 패킷 도달 없음", True),
 ]
 SLOTS = ["MAKES", "IPTABLES", "IF MISSING"]
 SX0, SW, SGAP, SY, SH = 24, 300, 26, 214, 282
@@ -53,10 +52,7 @@ for i, (title, makes, line, miss, focal) in enumerate(STAGES):
     if i < len(STAGES) - 1:
         d.path(f"M {x+SW+4} {SY+SH/2} L {x+SW+SGAP-6} {SY+SH/2}", SOFT, 1.5, m="soft")
 
-d.t(24, 530, "세 줄은 순서대로 필요하지만 셋 다 있어야 비로소 한 줄이 평가된다. 가장 자주 빠지는 것이 호출이다.",
-    12, MUTED, KR, "start")
-d.t(24, 550, "커널이 아는 것은 훅 다섯뿐이고, 사용자 체인은 그 다섯에서 누가 불러 줄 때만 실행된다.",
-    12, MUTED, KR, "start")
-d.legend(568, [("내장 체인 — 커널이 부른다", INFO), ("여기가 빠지면 죽은 코드", ACC)])
+# 세 줄이 다 필요한 이유와 '가장 자주 빠지는 것이 호출'은 본문 산문이 맡는다
+d.legend(512, [("내장 체인 — 커널이 부른다", INFO), ("여기가 빠지면 죽은 코드", ACC)])
 d.save("02-02.chain-comes-alive.svg")
 print("ok chain-comes-alive")

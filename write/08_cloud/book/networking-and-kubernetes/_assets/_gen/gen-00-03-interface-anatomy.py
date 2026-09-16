@@ -7,12 +7,12 @@
 # 이력: 2026-08-28 신설. 생성기 없이 손으로 만들어진 SVG 였다. 출력 문자열을 그대로 옮겼다.
 from dd import D, INK, MUTED, SOFT, RULE, ACC, INFO, PAPER2, KR, MONO
 
-W, H = 1000, 460
+W, H = 1000, 448
 BX, BY, BW, BH, TX, NX = 48, 128, 512, 256, 68, 644
 # (y, 출력 줄, 색, 오른쪽 주석, 주석 색)
 LINES = [(160, "$ ip addr show", SOFT, None, None),
          (196, "1: lo: <LOOPBACK,UP> mtu 65536", INK, None, None),
-         (218, "    inet 127.0.0.1/8 scope host lo", MUTED, "루프백 · 선을 타지 않는다", MUTED),
+         (218, "    inet 127.0.0.1/8 scope host lo", MUTED, "루프백 · 물리 선 없음", MUTED),
          (254, "2: eth0: <BROADCAST,MULTICAST,UP> mtu 1500", INK, "인터페이스 이름", MUTED),
          (276, "    link/ether 2a:4f:1b:8c:d2:e0", ACC, "MAC · L2 주소", ACC),
          (298, "    inet 192.168.0.15/24 scope global eth0", INFO, "IP · L3 주소와 마스크", INFO),
@@ -34,7 +34,7 @@ for y, line, c, note, nc in LINES:
         d.line(BX + BW + 12, y - 4, NX - 12, y - 4, RULE, 0.8, "3 5")
         d.t(NX, y, note, 12, nc, KR, "start")
 
-d.t(BX, 404, "MAC 은 커널이 만들어 붙인 값이라, 인터페이스가 사라지면 함께 사라집니다.", 12, MUTED, KR, "start")
-d.legend(420, [("MAC · L2", ACC), ("IP · L3", INFO)])
+# 하단 해설(가상 인터페이스 MAC 의 수명)은 본문 §2 "가상 인터페이스도 MAC을 갖습니다" 가 말한다 — 뺐다
+d.legend(408, [("MAC · L2", ACC), ("IP · L3", INFO)])
 d.save("00-03-interface-anatomy.svg")
 print("ok interface-anatomy")

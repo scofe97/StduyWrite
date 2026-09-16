@@ -6,7 +6,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 552
+W, H = 1000, 508
 d = D(W, H, "ONE REQUEST · 12 PACKETS",
       "요청 하나가 12패킷 — 그중 실제 데이터는 2개뿐이다",
       "lo0 캡처에서 세는 12개를 시간 순서로 묶은 것. 가운데 한 칸만 데이터이고 나머지 열 개가 신뢰성에 드는 값이다.",
@@ -15,14 +15,14 @@ d = D(W, H, "ONE REQUEST · 12 PACKETS",
 SEGS = [("수립", 3, "SYN·SYN-ACK·ACK", "[S] [S.] [.]"),
         ("서버 ACK", 1, "수립 직후", "[.]"),
         ("데이터", 2, "요청 · 응답", "[P.]"),
-        ("데이터 ACK", 2, "각각 잘 받았다", "[.]"),
+        ("데이터 ACK", 2, "각각 수신 확인", "[.]"),
         ("종료", 4, "양쪽이 FIN·ACK", "[F.] [.]")]
 TOTAL = sum(s[1] for s in SEGS)                                  # 12
 X0, X1, BY, BH = 60, 940, 268, 84
 UNIT = (X1 - X0) / TOTAL                                         # 칸 하나의 폭 = 73.33
 FOCAL = 2                                                        # 실제로 나른 칸
 
-ddx.band(d, 104, 488, "열 개는 두 개를 안전하게 나르기 위해 드는 값이다")
+ddx.band(d, 104, 448, "열 개는 두 개를 안전하게 나르는 비용")
 
 x = X0
 edges = []
@@ -46,11 +46,12 @@ for i, (name, n, note, flags) in enumerate(SEGS):
     x += w
 
 fx, fw = edges[FOCAL]
-d.o.append(f'<rect x="{fx-6:.1f}" y="{BY-14}" width="{fw+12:.1f}" height="{BH+28}" rx="8" '
+# 강조 테두리를 좌우로 6px 넓히면 이웃 칸을 파고든다 — 가로는 칸 폭 그대로, 세로로만 키운다
+d.o.append(f'<rect x="{fx:.1f}" y="{BY-14}" width="{fw:.1f}" height="{BH+28}" rx="8" '
            f'fill="none" stroke="{ACC}" stroke-width="1.4" stroke-dasharray="7 6"/>')
-d.t(fx + fw / 2, BY - 24, "실어 나른 것", 11, ACC, KR)
+d.t(fx + fw / 2, BY - 24, "실어 나른 것", 12, ACC, KR)
 
-d.t(500, 448, "12 개 중 2 개 — 나머지 열 개는 연결을 세우고 확인하고 닫는 데 든다", 12, MUTED, KR)
-d.legend(504, [("연결 관리", INFO), ("실제 데이터", ACC)])
+# 하단 해설(12 개 중 2 개)은 도식 뒤 본문 문단이 말한다 — 뺐다
+d.legend(468, [("연결 관리", INFO), ("실제 데이터", ACC)])
 d.save("01-04.twelve-packets.svg")
 print("ok twelve-packets")

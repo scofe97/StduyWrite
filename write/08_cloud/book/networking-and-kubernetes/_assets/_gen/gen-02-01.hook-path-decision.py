@@ -9,7 +9,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 920
+W, H = 1000, 888
 d = D(W, H, "NETFILTER HOOKS · WHICH COMBINATION",
       "훅 조합을 정하는 두 질문 — 출발지가 나인가, 목적지가 나인가",
       "패킷이 지나는 Netfilter 훅 조합은 출발지와 목적지가 이 호스트인지 두 질문으로 정해진다. "
@@ -45,8 +45,8 @@ def down(cx, y0, y1, c=MUTED):
 oval(500, OVAL_CY, "패킷 하나")
 down(500, OVAL_CY + 22, Q1_CY - DH // 2)
 diamond(500, Q1_CY, "이 호스트가 만든 패킷인가?")
-for sx, qx, lab in ((500 - DW // 2, Q2X[0], "아니오 — 밖에서 왔다"),
-                    (500 + DW // 2, Q2X[1], "예 — 내가 만들었다")):
+for sx, qx, lab in ((500 - DW // 2, Q2X[0], "아니오 — 외부 발신"),
+                    (500 + DW // 2, Q2X[1], "예 — 이 호스트 발신")):
     d.path(f"M {sx} {Q1_CY} L {qx} {Q1_CY} L {qx} {Q2_CY-DH//2-8}", MUTED, 1.5, m="ar")
     d.t(qx, Q1_CY - 12, lab, 11, SOFT, KR)
 for qx in Q2X:
@@ -99,7 +99,7 @@ hook(cx, ROW0 + STRIDE, "POST_ROUTING", None, None)
 # 눈대중으로 두면 위 상자에 3px 까지 붙는다 — 통로를 반으로 나눠 위아래 여유를 같게 준다.
 REENTER_CY = ROW0 + STRIDE + BH // 2 + STRIDE // 2
 d.path(f"M {cx} {ROW0+STRIDE+BH//2} L {cx} {REENTER_CY-13}", ACC, 1.6)
-ddx.tag(d, cx, REENTER_CY, "lo 로 나갔다 다시 들어온다", ACC, 196)
+ddx.tag(d, cx, REENTER_CY, "lo 로 나갔다 재진입", ACC, 196)
 d.path(f"M {cx} {REENTER_CY+13} L {cx} {ROW0+2*STRIDE+BH//2-8}", ACC, 1.6, m="acc")
 hook(cx, ROW0 + 2 * STRIDE + BH, "PRE_ROUTING", "다시 지난다", None, dim=True)
 down(cx, ROW0 + 2 * STRIDE + BH + BH // 2, ROW0 + 3 * STRIDE + BH - BH // 2)
@@ -107,8 +107,7 @@ hook(cx, ROW0 + 3 * STRIDE + BH, "LOCAL_IN", "dst = 내 IP", INFO)
 down(cx, ROW0 + 3 * STRIDE + BH + BH // 2, ROW0 + 4 * STRIDE + BH - 22)
 oval(cx, ROW0 + 4 * STRIDE + BH, "로컬 소켓으로")
 
-d.t(36, 856, "LOCAL_ 이 붙은 두 훅만 주소 한쪽이 고정된다 — LOCAL_IN 은 목적지가, LOCAL_OUT 은 출발지가 이 호스트다. "
-             "두 번째 질문에 답하는 것은 라우팅 판단이다.", 12, MUTED, KR, "start")
-d.legend(870, [("주소 한쪽이 이 호스트로 고정", INFO), ("나갔다 다시 들어온다", ACC)])
+# LOCAL_ 훅의 주소 고정과 '두 번째 질문 = 라우팅 판단'은 본문 산문이 맡는다
+d.legend(832, [("주소 한쪽이 이 호스트로 고정", INFO), ("나갔다 다시 들어온다", ACC)])
 d.save("02-01.hook-path-decision.svg")
 print("ok hook-path-decision")

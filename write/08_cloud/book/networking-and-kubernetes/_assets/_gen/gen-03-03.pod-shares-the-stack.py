@@ -8,7 +8,7 @@
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 592
+W, H = 1000, 532
 PW, PY, RH = 464, 184, 224
 LP, RP = 24, 512
 
@@ -34,11 +34,11 @@ def box(cx, cy, w, h, t, sub, c=None):
 
 
 d.t(LP + 8, 152, "기본값 — 컨테이너 둘", 13, INK, KR, "start", 600)
-d.t(RP + 8, 152, "Pod — 네임스페이스를 공유한다", 13, ACC, KR, "start", 600)
+d.t(RP + 8, 152, "Pod — 네임스페이스 공유", 13, ACC, KR, "start", 600)
 
 # 왼쪽 — 링이 둘
-for i, (nm, ip, port) in enumerate((("컨테이너 A", "172.17.0.2", "8080 을 잡고 있다"),
-                                    ("컨테이너 B", "172.17.0.3", "여기엔 아무도 없다"))):
+for i, (nm, ip, port) in enumerate((("컨테이너 A", "172.17.0.2", "8080 점유"),
+                                    ("컨테이너 B", "172.17.0.3", "여기엔 아무도 없음"))):
     x = LP + 16 + i * 220
     ring(x, 204, PY, RH, nm, f"netns #{i+1}", OK)
     box(x + 102, PY + 72, 172, 52, "eth0", ip, INFO)
@@ -46,22 +46,19 @@ for i, (nm, ip, port) in enumerate((("컨테이너 A", "172.17.0.2", "8080 을 �
 
 d.path(f"M {LP+346} {PY+156+34} L {LP+346} {PY+RH+24} L {LP+126} {PY+RH+24} L {LP+126} {PY+156+34}",
        BAD, 1.4, m="bad", dash="5 5")
-d.t(LP + 236, PY + RH + 44, "B 가 localhost:8080 을 불러도 A 에 닿지 않는다", 11, BAD, KR)
+d.t(LP + 236, PY + RH + 44, "B 의 localhost:8080 → A 에 닿지 않음", 11, BAD, KR)
 
 # 오른쪽 — 링이 하나
 ring(RP + 16, 432, PY, RH, "Pod", "netns 하나", ACC, dash="none")
-box(RP + 128, PY + 72, 180, 52, "앱 컨테이너", "8080 을 잡고 있다", INFO)
+box(RP + 128, PY + 72, 180, 52, "앱 컨테이너", "8080 점유", INFO)
 box(RP + 336, PY + 72, 180, 52, "사이드카", "프록시 · 수집기", INFO)
-box(RP + 232, PY + 156, 388, 52, "lo", "둘이 같은 것을 본다", ACC)
+box(RP + 232, PY + 156, 388, 52, "lo", "둘이 같은 lo", ACC)
 d.path(f"M {RP+128} {PY+98} L {RP+128} {PY+130}", MUTED, 1.3, m="ar")
 d.path(f"M {RP+336} {PY+98} L {RP+336} {PY+130}", MUTED, 1.3, m="ar")
-d.t(RP + 232, PY + RH + 24, "localhost:8080 으로 부른다", 11, ACC, KR)
+d.t(RP + 232, PY + RH + 24, "localhost:8080 으로 호출", 11, ACC, KR)
 
-d.t(24, 480, "왼쪽에서 안 되던 그 통신이 오른쪽에서는 됩니다. 컨테이너가 달라진 게 아니라 "
-             "네임스페이스를 몇 개 만들었는지가 달라졌을 뿐입니다.", 12, MUTED, KR, "start")
-d.t(24, 504, "그래서 사이드카 패턴이 성립합니다. 프록시가 앱을 localhost 로 부를 수 있으니 "
-             "앱은 자기가 프록시 뒤에 있다는 사실도 모릅니다.", 12, ACC, KR, "start")
-d.legend(528, [("Pod 가 공유하는 것", ACC), ("컨테이너 경계", OK),
+# 달라진 것이 네임스페이스 개수라는 것과 사이드카 패턴의 근거는 본문 §2 가 맡는다
+d.legend(476, [("Pod 가 공유하는 것", ACC), ("컨테이너 경계", OK),
                ("인터페이스", INFO), ("닿지 않는 호출", BAD)])
 d.save("03-03.pod-shares-the-stack.svg")
 print("ok pod-shares-the-stack")

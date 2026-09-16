@@ -6,7 +6,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
 
-W, H = 1000, 624
+W, H = 1000, 588
 d = D(W, H, "CALICO · iBGP FULL MESH",
       "안쪽은 iBGP 풀메시, 밖으로 나가는 자리만 eBGP",
       "화살표는 한 방향으로 그렸지만 이웃 관계는 쌍방이다 — 점선 상자 하나가 AS 하나다",
@@ -25,14 +25,15 @@ def node(cx, cy, title, sub, tag, c=None):
         MONO if all(ord(ch) < 128 or ch == '/' for ch in sub) else KR)
     d.t(cx, cy + 26, ddx.fit(tag, 11, BW - 14, tag), 11, SOFT, KR)
 
-ddx.band(d, 104, 560, "중계가 없으니 모두가 모두와 직접 맺어야 한다")
+ddx.band(d, 104, 528, "중계 없음 → 모두가 모두와 직접 연결")
 rx, ry, rw, rh = RING
 d.o.append(f'<rect x="{rx}" y="{ry}" width="{rw}" height="{rh}" rx="8" '
            f'fill="{INFO}06" stroke="{INFO}" stroke-width="1.2" stroke-dasharray="7 6"/>')
-ddx.ring_label(d, rx, ry, "AS 64512 — 클러스터 전체가 덩어리 하나", 11, INFO)
+# 링 라벨 마스크는 테두리와 겹친다 — 링 바로 위 빈 띠에 쓴다
+d.t(rx, ry - 10, "AS 64512 — 클러스터 전체가 덩어리 하나", 12, INFO, KR, "start", 600)
 
 node(*EXT, "회사 라우터", "AS 65001", "남의 조직")
-node(*N1, "노드 1", "10.244.1.0/24", "경계 · eBGP 도 한다", INFO)
+node(*N1, "노드 1", "10.244.1.0/24", "경계 · eBGP 도 담당", INFO)
 node(*N2, "노드 2", "10.244.2.0/24", "iBGP 이웃")
 node(*N3, "노드 3", "10.244.3.0/24", "iBGP 이웃")
 
@@ -46,11 +47,11 @@ for (ax, ay), (bx, by) in [(N1, N2), (N1, N3), (N2, N3)]:
 d.chip(624, 246, "iBGP · 세 쌍 모두", OK, 12)
 
 d.path(ddx.elbow(EXT[0]+BW//2+8, EXT[1], N1[0]-BW//2-10, N1[1]+22), ACC, 1.8, m="acc")
-d.t(286, 282, "eBGP", 12, ACC, MONO, "middle", 600)
-d.t(286, 336, "밖으로 나가는 자리", 11, ACC, KR, "end")
+# 두 라벨이 AS 경계(x=296)와 회사 라우터 상자(≤216)를 가로질렀다 — 둘 사이 홈통(216~296)에 넣는다
+d.t(252, 290, "eBGP", 12, ACC, MONO, "middle", 600)
+d.t(256, 324, "나가는 자리", 11, ACC, KR, "middle")
 
-d.t(36, 534, "안에서는 번호가 같아 목록이 자라지 않으니 고리를 알아볼 수 없다 — 그래서 재전달을 "
-             "아예 금지하고, 중계가 없으니 풀메시가 된다", 12, MUTED, KR, "start")
-d.legend(576, [("AS 경계", INFO), ("iBGP 풀메시", OK), ("밖으로 나가는 한 줄", ACC)])
+# 하단 해설(목록이 안 자라 재전달 금지 → 풀메시)은 도식 뒤 본문 L508 문단이 말한다 — 뺐다
+d.legend(548, [("AS 경계", INFO), ("iBGP 풀메시", OK), ("밖으로 나가는 한 줄", ACC)])
 d.save("01-03.ibgp-full-mesh.svg")
 print("ok ibgp-full-mesh")

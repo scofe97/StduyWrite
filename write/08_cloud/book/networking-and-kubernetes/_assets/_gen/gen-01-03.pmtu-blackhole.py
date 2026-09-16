@@ -5,9 +5,11 @@
 # 타입 스펙: type-sequence.md — 세로가 시간, 가로가 주체. 위 묶음은 ICMP 가 돌아오고 아래 묶음은
 #           같은 자리에 화살표가 없다. 그 빈자리가 이 그림의 논지다.
 # 좌표: Layout conventions 타입이라 공식이 없다. 메시지 stride 52 하나, 묶음 사이만 +16.
+# 이력: 2026-09-15 하단 해설 세 문장(본문 도식 뒤 세 문단과 같은 말)을 뺐다. Seq.state·selfmsg 가
+#       한글 라벨을 mono 로 찍고 칩 폭을 글자당 7px 로 잡아 한글이 넘치던 것을 아래 kr_state 로 바꿨다.
 from dd import Seq, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, KR, MONO
 
-W, H = 1000, 668
+W, H = 1000, 584
 Y0, STRIDE, RAIL_BOT = 176, 52, 512
 
 d = Seq(W, H, "PATH MTU DISCOVERY · AND ITS BLACK HOLE",
@@ -20,29 +22,36 @@ d.lanes([("송신 호스트", "MTU 1500"), ("중간 라우터", "다음 링크 M
 A, R, B = "송신 호스트", "중간 라우터", "목적지"
 d.rails(RAIL_BOT)
 
+
+def kr_state(lane, txt, y, c):
+    """Seq.state 와 같은 칩이되 한글은 한글 스택·1em 폭으로 잰다(계약 §프리미티브가 한글을 mono 로)."""
+    x = d.LX[lane]
+    w = sum(12 if "가" <= ch <= "힣" else 7 for ch in txt) + 20
+    d.o.append(f'<rect x="{x-w/2}" y="{y-11}" width="{w}" height="22" rx="4" fill="{c}22" stroke="{c}" stroke-width="1.1"/>')
+    d.t(x, y + 4, txt, 12, c, KR)
+
+
 y = Y0
-d.msg(A, R, "1500B  DF=1", y, INFO, sub="쪼개지 말라는 표시를 세워 보낸다")
+d.msg(A, R, "1500B  DF=1", y, INFO, sub="쪼개지 말라는 표시(DF)")
 y += STRIDE
-d.state(R, "1450 을 넘는다 — 버린다", y, WARN)
+kr_state(R, "1450 초과 → 폐기", y, WARN)
 y += STRIDE
-d.msg(R, A, "ICMP  Frag Needed  MTU=1450", y, OK, dash="4 4", sub="버렸다 + 이만큼으로 줄여라")
+d.msg(R, A, "ICMP  Frag Needed  MTU=1450", y, OK, dash="4 4", sub="폐기 알림 + 줄일 크기")
 y += STRIDE
-d.msg(A, B, "1450B  DF=1", y, OK, sub="줄여서 다시 — 통과한다")
+d.msg(A, B, "1450B  DF=1", y, OK, sub="줄여서 재전송 · 통과")
 
 y += STRIDE + 16
 d.msg(A, R, "1500B  DF=1", y, INFO, sub="같은 패킷, 같은 표시")
 y += STRIDE
-d.state(R, "버린다 — 그런데 ICMP 가 차단돼 있다", y, BAD)
+kr_state(R, "폐기 · ICMP 차단됨", y, BAD)
 y += STRIDE
-d.selfmsg(A, "재전송 · 재전송 · 재전송", y, BAD, sub="줄이라는 말을 못 들었으니 크기를 안 바꾼다")
+x = d.LX[A]
+d.path(f"M {x+10} {y-10} L {x+58} {y-10} L {x+58} {y+10} L {x+13} {y+10}", BAD, 1.4, m="bad")
+d.t(x + 68, y - 4, "같은 크기로 재전송 반복", 12, BAD, KR, "start")
+d.t(x + 68, y + 13, "알림 없음 → 크기 그대로", 11, MUTED, KR, "start")
 
-d.t(24, RAIL_BOT + 44, "위 묶음은 라우터가 두 번 말합니다 — 버렸다는 사실과 얼마로 줄이라는 값을 함께 보냅니다. "
-                       "그래서 통신이 이어집니다.", 12, MUTED, KR, "start")
-d.t(24, RAIL_BOT + 68, "아래 묶음에는 그 말이 없습니다. 송신은 왜 안 가는지 모른 채 같은 크기로 재전송하다 멈춥니다. "
-                       "이것이 PMTU 블랙홀입니다.", 12, BAD, KR, "start")
-d.t(24, RAIL_BOT + 92, "작은 요청은 잘 되고 응답이 큰 것만 멈추므로 \"네트워크가 안 된다\"가 아니라 "
-                       "\"어떤 API 만 가끔 멈춘다\"로 나타납니다.", 12, MUTED, KR, "start")
-d.legend(RAIL_BOT + 116, [("알림이 돌아온다", OK), ("보낸 패킷", INFO),
-                          ("버리는 판단", WARN), ("알림이 없다", BAD)])
+# 하단 해설 세 문장(라우터가 두 번 말함 · 블랙홀 · 큰 응답만 멈춤)은 도식 뒤 본문 세 문단이 말한다 — 뺐다
+d.legend(RAIL_BOT + 32, [("알림이 돌아온다", OK), ("보낸 패킷", INFO),
+                         ("버리는 판단", WARN), ("알림이 없다", BAD)])
 d.save("01-03.pmtu-blackhole.svg")
 print("ok pmtu-blackhole")

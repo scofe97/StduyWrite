@@ -35,15 +35,15 @@ for y0, h, label, c in ((198, 190, "1단계 — 전부 평문", INFO),
 
 # (방향, 이름, 부제, 색, 마커, 선 굵기, 라벨 굵기, 점선, 노출 상태)
 MSGS = [(1, "ClientHello",       "cipher 목록 + 난수",              INFO, "info", 1.4, 400, None,  "평문"),
-        (0, "ServerHello",       "cipher 하나를 고른다",             INFO, "info", 1.4, 400, None,  "평문"),
+        (0, "ServerHello",       "cipher 하나 선택",                INFO, "info", 1.4, 400, None,  "평문"),
         (0, "Certificate",       "공개키가 담긴 여권",               INFO, "info", 1.4, 400, None,  "평문"),
-        (0, "ServerHelloDone",   "보낼 것 다 보냈다 — 내용 없음",     SOFT, "soft", 1.4, 400, "5 5", "선언"),
+        (0, "ServerHelloDone",   "송신 끝 선언 · 내용 없음",          SOFT, "soft", 1.4, 400, "5 5", "선언"),
         (1, "ClientKeyExchange", "premaster — 이 그림의 유일한 비밀", OK,   "ok",   2.6, 600, None,  "봉인"),
-        (1, "ChangeCipherSpec",  "이제부터 암호화한다",              SOFT, "soft", 1.4, 400, "5 5", "선언"),
+        (1, "ChangeCipherSpec",  "이후 암호화 전환",                 SOFT, "soft", 1.4, 400, "5 5", "선언"),
         (1, "Finished",          None,                            ACC,  "acc",  1.4, 400, None,  "암호문"),
         (0, "ChangeCipherSpec",  None,                            SOFT, "soft", 1.4, 400, "5 5", "선언"),
         (0, "Finished",          None,                            ACC,  "acc",  1.4, 400, None,  "암호문"),
-        (1, "HTTP 요청 본문",     "아홉 개를 지나서야 내용이 나간다",   ACC,  "acc",  1.4, 400, None,  "암호문")]
+        (1, "HTTP 요청 본문",     "아홉 개 뒤에야 내용 전송",          ACC,  "acc",  1.4, 400, None,  "암호문")]
 
 for i, (fwd, name, sub, c, mk, sw, weight, dash, seal) in enumerate(MSGS):
     y = Y0 + STRIDE * i
@@ -57,7 +57,7 @@ for i, (fwd, name, sub, c, mk, sw, weight, dash, seal) in enumerate(MSGS):
         d.t(MID, y + 13, sub, 11, MUTED)
     d.chip(CHIP_X, y, seal, c, 11)
 
-d.t(W - 68, 440, "이 하나를 못 열면 아래는 통째로 못 읽는다", 11, BAD, KR, "end")
+# 오른쪽 경고 문장(봉인을 못 열면 3단계 전체를 못 읽음)은 리드와 본문 §5 둘째 항목이 말한다 — 뺐다
 d.legend(712, [("평문 — 다 보인다", INFO), ("봉인 — 유일한 비밀", OK),
                ("암호문", ACC), ("선언 — 내용 없음", SOFT)])
 d.save("01-02.tls-handshake.svg")

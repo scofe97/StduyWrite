@@ -25,12 +25,12 @@ for i, ln in enumerate(["네트워킹 비활성화", "네트워크가 필요 없
     d.t(120, BY + 80 + i * 26, ddx.fit(ln, 12, 144, ln), 12, MUTED, KR)
 
 # 가운데 — 순서를 주장하지 않는 구간
-ddx.band(d, BY, BY + BH, "그 사이 — 연결 방식이 갈린다", x=232, w=536)
-MID = [("Bridge", "기본값 — 사설망에서 돌고 밖으로는 NAT"),
-       ("Custom", "용도별 브리지 — 예를 들면 DB 전용"),
-       ("Macvlan", "물리망에 직접 매핑 — 대부분의 클라우드가 차단"),
-       ("IPvlan", "MAC 은 부모 것을 공유하고 IP 만 분리"),
-       ("Overlay", "여러 호스트에 같은 네트워크를 확장")]
+ddx.band(d, BY, BY + BH, "그 사이 · 연결 방식이 갈림", x=232, w=536)
+MID = [("Bridge", "기본값 · 사설망 + 밖으로는 NAT"),
+       ("Custom", "용도별 브리지 · 예: DB 전용"),
+       ("Macvlan", "물리망에 직접 매핑 · 대부분의 클라우드가 차단"),
+       ("IPvlan", "MAC 은 부모 것 공유 · IP 만 분리"),
+       ("Overlay", "여러 호스트에 같은 네트워크 확장")]
 for i, (nm, desc) in enumerate(MID):
     y = BY + 52 + i * 36
     d.t(248, y, nm, 12, INFO, MONO, "start", 600)
@@ -42,9 +42,8 @@ d.t(880, BY + 44, "Host", 14, ACC, MONO, "middle", 600)
 for i, ln in enumerate(["호스트와 IP 를", "네임스페이스째 공유", "포트 관리는", "배포자 몫"]):
     d.t(880, BY + 80 + i * 26, ddx.fit(ln, 12, 144, ln), 12, ACC if i < 2 else MUTED, KR)
 
-d.t(36, 448, "Host 만 격리를 내주는 대신 호스트 네트워크 자원에 직접 닿는다 — 나머지 여섯은 격리를 유지한 채 연결 방식만 고른다",
-    12, MUTED, KR, "start")
-d.t(36, 474, "Host 모드는 Linux 호스트에서만 동작한다 (책 시점 기준)", 12, WARN, KR, "start")
-d.legend(488, [("격리를 유지하는 모드", INFO), ("환경 제약", WARN), ("격리를 내주는 끝", ACC)])
+# Host 만 격리를 내주는 끝이라는 설명은 본문 §1 이 맡는다
+d.t(36, 452, "Host 모드 · Linux 호스트 전용 (책 시점 기준)", 12, WARN, KR, "start")
+d.legend(476, [("격리를 유지하는 모드", INFO), ("환경 제약", WARN), ("격리를 내주는 끝", ACC)])
 d.save("03-02.isolation-spectrum.svg")
 print("ok isolation-spectrum")

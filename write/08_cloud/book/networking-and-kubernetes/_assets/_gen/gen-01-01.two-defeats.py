@@ -8,7 +8,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER2, KR, MONO
 
-W, H = 1000, 504
+W, H = 1000, 460
 d = D(W, H, "NCP vs OSI · TWO DIFFERENT DEFEATS",
       "무너진 이유가 서로 다른 두 사건",
       "NCP 는 쪼개지 않아서 무너졌고, OSI 는 쪼갠 방식과 구현 속도에서 밀렸다. 남은 것도 다르다.",
@@ -19,11 +19,11 @@ HEAD = ["설계", "진 이유", "지금 남은 것"]
 ROWS = [
     (172, "NCP", "1970 · ARPANET", WARN,
      [(["하나가 전부 떠맡음"], INFO),
-      (["네트워크 종류가", "다양해지자 못 버팀"], INFO),
-      (["없다 — TCP/IP 로 대체"], SOFT)]),
+      (["네트워크 종류", "다양화에 한계"], INFO),
+      (["없음 · TCP/IP 로 대체"], SOFT)]),
     (292, "OSI", "1984 · ISO 7498", INFO,
      [(["일곱 계층으로 쪼갬"], INFO),
-      (["구현이 복잡하고 비효율적", "먼저 돌아간 쪽에 밀림"], INFO),
+      (["구현 복잡 · 비효율", "먼저 돌아간 쪽에 밀림"], INFO),
       (["계층 용어 L3 · L7"], ACC)]),
 ]
 RH = 104
@@ -44,8 +44,7 @@ for y, name, sub, nc, cells in ROWS:
         for i, ln in enumerate(lines):
             d.t(cx + CW // 2, base + i * 24, ddx.fit(ln, 12, CW - 24, ln), 12, c, KR)
 
-d.t(LX + 4, 436, "쪼갰느냐가 아니라 몇 조각으로 어떻게 쪼갰느냐, 그리고 그 조각을 누가 먼저 돌아가게 만들었느냐가 갈랐다",
-    12, MUTED, KR, "start")
-d.legend(448, [("사실", INFO), ("사라진 것", SOFT), ("살아남은 것", ACC)])
+# 하단 해설(몇 조각으로 어떻게 쪼갰느냐)은 본문 §3 문단이 그대로 말한다 — 뺐다
+d.legend(420, [("사실", INFO), ("사라진 것", SOFT), ("살아남은 것", ACC)])
 d.save("01-01.two-defeats.svg")
 print("ok two-defeats")

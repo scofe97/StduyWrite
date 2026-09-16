@@ -6,7 +6,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 560
+W, H = 1000, 504
 d = D(W, H, "TRACKING · THREE OBSERVED STATES",
       "규칙을 하나씩 얹을 때마다 conntrack 테이블이 달라진다",
       "연결 추적은 요구가 있을 때만 켜지고, NAT 규칙을 얹으면 같은 연결의 응답 튜플이 달라집니다. "
@@ -14,9 +14,9 @@ d = D(W, H, "TRACKING · THREE OBSERVED STATES",
       lead="추적은 규칙이 요구할 때 켜지고, NAT 는 응답 튜플을 바꾼다")
 
 CY, BH = 288, 116
-S = [(216, 192, "추적 꺼짐", "규칙이 하나도 없다", "conntrack -L → 0건", RULE),
-     (520, 224, "추적 켜짐", "NAT 는 아직 없다", "응답 = 원본을 뒤집은 값", OK),
-     (840, 224, "SNAT 적용", "MASQUERADE 를 걸었다", "응답 dst 만 어긋난다", ACC)]
+S = [(216, 192, "추적 꺼짐", "규칙 없음", "conntrack -L → 0건", RULE),
+     (520, 224, "추적 켜짐", "NAT 아직 없음", "응답 = 원본을 뒤집은 값", OK),
+     (840, 224, "SNAT 적용", "MASQUERADE 적용", "응답 dst 만 어긋남", ACC)]
 
 def state(cx, w, name, desc, obs, c, focal=False):
     x, y = cx - w // 2, CY - BH // 2
@@ -46,10 +46,7 @@ d.path(f"M {LXX} {CY-BH//2} C {LXX} {TOP}, {RXX} {TOP}, {RXX} {CY-BH//2-8}", MUT
 d.t(S[2][0], TOP - 24, "수명 만료", 12, MUTED, KR)
 d.t(S[2][0], TOP - 6, "엔트리 삭제", 11, SOFT, KR)
 
-d.t(36, 452, "추적은 공짜가 아니라 커널이 요구가 있을 때만 훅을 등록합니다. 첫 상태에서 통신은 되는데 "
-             "테이블만 비어 있던 것이 그래서입니다.", 12, MUTED, KR, "start")
-d.t(36, 474, "세 상태 모두 ping 은 통합니다. 달라지는 것은 테이블에 무엇이 적히느냐뿐입니다.",
-    12, MUTED, KR, "start")
-d.legend(490, [("추적 켜짐 · NAT 없음", OK), ("SNAT 적용 — 응답 줄이 어긋난다", ACC)])
+# 추적이 요구될 때만 켜진다는 설명은 본문 §5 가 맡는다
+d.legend(436, [("추적 켜짐 · NAT 없음", OK), ("SNAT 적용 — 응답 줄이 어긋난다", ACC)])
 d.save("02-04.tracking-states.svg")
 print("ok tracking-states")

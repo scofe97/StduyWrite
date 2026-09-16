@@ -8,7 +8,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 620
+W, H = 1000, 576
 d = D(W, H, "curl localhost:8080 · COMPONENT PATH",
       "요청 하나가 지나는 실제 구성 요소 — lo0 에서 접혀 되돌아온다",
       "계층 이름 대신 실제로 존재하는 구성 요소로 같은 여정을 놓으면 가운데가 접힌다",
@@ -31,7 +31,7 @@ def comp(cx, cy, label, sub, tag, c=None, focal=False, w=BW):
     d.t(cx, cy + 8,  ddx.fit(sub, 11, w - 20, sub), 11, sc, KR)
     d.t(cx, cy + 30, tag, 9, tc, MONO)
 
-ddx.band(d, 104, 544, "같은 커널이 송신 경로에서 헤더를 붙이고 수신 경로에서 그것을 벗긴다")
+ddx.band(d, 104, 516, "같은 커널 · 송신 경로 캡슐화 · 수신 경로 역캡슐화")
 
 for cx, (l, s, t) in zip(TOP_CX, [("cURL 프로세스", "사용자 공간", "REQUEST START"),
                                   ("클라이언트 소켓", "임시 포트", "LOGICAL ENDPOINT"),
@@ -51,10 +51,9 @@ for a, b in zip(BOT_CX, BOT_CX[1:]):                       # 아래: 오→왼
 # 접히는 자리 — 오른쪽으로 나갔다가 그대로 되돌아온다
 d.path(f"M {TOP_CX[2]+E+8} {CY_T} L {FOLD[0]} {CY_T} L {FOLD[0]} {FOLD[1]-BH//2-10}", ACC, 1.6, m="acc")
 d.path(f"M {FOLD[0]} {FOLD[1]+BH//2+8} L {FOLD[0]} {CY_B} L {BOT_CX[0]+E+10} {CY_B}", ACC, 1.6, m="acc")
-d.t(FOLD[0] - 16, 250, "물리 케이블로 나가지 않는다", 11, ACC, KR, "end")
+d.t(FOLD[0] - 16, 250, "물리 케이블 미사용", 12, ACC, KR, "end")
 
-d.t(24 + 12, 514, "tcpdump -i lo0 이 잡은 자리가 바로 이 접히는 지점이다 — 나가는 프레임과 "
-                  "돌아오는 프레임이 같은 인터페이스에서 관측된다", 12, MUTED, KR, "start")
-d.legend(564, [("캡슐화·역캡슐화", INFO), ("응답 생성", OK), ("되돌아오는 자리", ACC)])
+# 하단 해설(tcpdump -i lo0 이 잡는 자리)은 도식 뒤 본문 문단이 말한다 — 뺐다
+d.legend(536, [("캡슐화·역캡슐화", INFO), ("응답 생성", OK), ("되돌아오는 자리", ACC)])
 d.save("01-03.request-components.svg")
 print("ok request-components")

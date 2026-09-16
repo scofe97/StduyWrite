@@ -44,21 +44,21 @@ LX = d.lanes([("요청 컴퓨터", "10.0.0.5"),
               ("대상 서버",   "10.0.0.1")], y0=LANE_Y, lane_w=212)
 B, O, S = LX["요청 컴퓨터"], LX["다른 호스트"], LX["대상 서버"]
 
-band(*SEG1, "ARP 캐시에 없을 때만 — 있으면 이 구간을 통째로 건너뛴다")
-band(*SEG2, "MAC 을 알았으니 이제 프레임을 보낸다")
+band(*SEG1, "ARP 캐시 미스 구간 · 캐시에 있으면 통째로 생략")
+band(*SEG2, "MAC 확보 뒤 프레임 전송")
 d.rails(Y_RAILS)
 
 # ── ① ARP 요청: 한 줄이 세 레인을 관통한다 ─────────────────
 d.path(f"M {B+10} {Y_REQ} L {S-12} {Y_REQ}", INFO, 1.6, m="info")
 d.t(B + 18, Y_REQ - 12, "ARP 요청 — 목적지 MAC = FF:FF:FF:FF:FF:FF", 12, INFO, KR, "start", 600)
-d.t(B + 18, Y_REQ + 22, "같은 프레임이 브로드캐스트 도메인 전체에 닿는다", 12, MUTED, KR, "start")
+d.t(B + 18, Y_REQ + 22, "같은 프레임이 브로드캐스트 도메인 전체에 도달", 12, MUTED, KR, "start")
 d.o.append(f'<circle cx="{O}" cy="{Y_REQ}" r="4.5" fill="{INFO}"/>')
 d.line(O, Y_REQ + 8, O, Y_DROP - 16, INFO, 1.0, "3 4")
-focal(O, Y_DROP, "내 IP 가 아니다 → 받고 버린다", 232)
+focal(O, Y_DROP, "내 IP 아님 → 수신 후 폐기", 232)
 
 # ── ② ARP 응답: 되돌아오는 길이라 dashed + filled ──────────
 d.path(f"M {S-10} {Y_RESP} L {B+12} {Y_RESP}", OK, 1.6, m="ok", dash="6 5")
-d.t(S - 18, Y_RESP - 12, "ARP 응답 — 10.0.0.1 의 MAC 은 나다", 12, OK, KR, "end", 600)
+d.t(S - 18, Y_RESP - 12, "ARP 응답 — 10.0.0.1 의 MAC 알림", 12, OK, KR, "end", 600)
 d.t(S - 18, Y_RESP + 22, "그 한 대에게만 · 유니캐스트", 12, MUTED, KR, "end")
 
 # ── ③ 알아낸 MAC 으로 실제 프레임 ──────────────────────────

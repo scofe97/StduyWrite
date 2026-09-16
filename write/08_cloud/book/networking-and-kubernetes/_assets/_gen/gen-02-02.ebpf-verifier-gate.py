@@ -12,7 +12,7 @@
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, PAPER, PAPER2, INFO, BAD, KR, MONO
 
-W, H = 1000, 792
+W, H = 1000, 740
 BW, BH = 160, 72
 CX = [272 + i * 208 for i in range(4)]              # 272 480 688 896
 LANE_X, LANE_W, LANE_H = 24, 952, 120
@@ -43,12 +43,12 @@ def cell(cx, cy, title, sub, kind="has"):
     d.t(cx, cy + 16, ddx.fit(sub, 12, BW - 12, sub), 12, sc, KR)
 
 
-lane(U_Y, "유저스페이스", "여기서 만들고 읽는다")
+lane(U_Y, "유저스페이스", "작성 · 결과 읽기")
 lane(K_Y, "커널", "검사·컴파일·실행이 여기서")
 
 # 유저스페이스 — 만드는 쪽과 읽는 쪽
 cell(CX[0], U_Y + 60, "1 작성·컴파일", "C → eBPF 바이트코드")
-cell(CX[3], U_Y + 60, "맵 읽기", "결과 데이터만 올라온다")
+cell(CX[3], U_Y + 60, "맵 읽기", "결과 데이터만 전달")
 
 # 커널 — 관문·번역·실행
 cell(CX[1], K_Y + 60, "2 verifier", "로드 시점 정적 검사", "focal")
@@ -89,10 +89,7 @@ for cx, (nm, sub) in zip([116 + i * 184 for i in range(5)],
     d.t(cx, 632, nm, 13, INFO, MONO, "middle", 600)
     d.t(cx, 652, ddx.fit(sub, 12, 168, sub), 12, MUTED, KR)
 
-d.t(24, 700, "verifier 는 성능을 주지 않습니다. 성능은 경계를 안 넘는 것과 해시 조회에서 나옵니다.",
-    13, MUTED, KR, "start")
-d.t(24, 722, "verifier 가 푸는 것은 신뢰입니다 — 커널을 못 죽인다는 보장이 로드 시점에 서므로 재부팅 없이 기능을 넣습니다.",
-    13, MUTED, KR, "start")
-d.legend(744, [("관문 — 통과해야 붙는다", ACC), ("경계를 넘는 데이터", INFO), ("통과 못 한 경우", BAD)])
+# verifier 가 주는 것(성능이 아니라 신뢰)은 본문 산문이 맡는다
+d.legend(684, [("관문 — 통과해야 붙는다", ACC), ("경계를 넘는 데이터", INFO), ("통과 못 한 경우", BAD)])
 d.save("02-02.ebpf-verifier-gate.svg")
 print("ok ebpf-verifier-gate")

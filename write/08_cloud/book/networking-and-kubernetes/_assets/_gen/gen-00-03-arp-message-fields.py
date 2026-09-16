@@ -6,15 +6,15 @@
 # 이력: 2026-08-28 신설. 생성기 없이 손으로 만들어진 SVG 였다. 값·좌표를 그대로 옮겼다.
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, INFO, PAPER2, KR, MONO
 
-W, H = 1000, 640
+W, H = 1000, 560
 FX, FW, FH, VX, NX = 120, 820, 36, 420, 920
 REQ = [("보내는 쪽 IP", "10.0.0.5", "내 주소", None, False),
-       ("보내는 쪽 MAC", "2a:4f:1b:8c:d2:e0", "랜카드에 이미 있다", None, False),
-       ("찾는 쪽 IP", "10.0.0.1", "입력 — 이걸로 묻는다", INFO, True),
-       ("찾는 쪽 MAC", "00:00:00:00:00:00", "비워 둔다 — 모르는 칸", ACC, True)]
+       ("보내는 쪽 MAC", "2a:4f:1b:8c:d2:e0", "랜카드 고유값", None, False),
+       ("찾는 쪽 IP", "10.0.0.1", "입력 · 묻는 값", INFO, True),
+       ("찾는 쪽 MAC", "00:00:00:00:00:00", "빈칸 · 모르는 값", ACC, True)]
 RES = [("보내는 쪽 IP", "10.0.0.1", "아까 찾던 그 주소", None, False),
-       ("보내는 쪽 MAC", "b8:27:eb:14:aa:03", "출력 — 비었던 값이 여기 담긴다", OK, True),
-       ("찾는 쪽 IP · MAC", "10.0.0.5 · 2a:4f:1b:8c:d2:e0", "요청 프레임에서 이미 알았다", None, False)]
+       ("보내는 쪽 MAC", "b8:27:eb:14:aa:03", "출력 · 채워진 값", OK, True),
+       ("찾는 쪽 IP · MAC", "10.0.0.5 · 2a:4f:1b:8c:d2:e0", "요청 프레임에서 읽은 값", None, False)]
 
 d = D(W, H, "ARP MESSAGE FIELDS",
       "빈 칸 하나가 채워져 돌아온다",
@@ -35,12 +35,11 @@ def block(y0, title, tc, who, rows):
         d.t(VX, y + 24, val, 13, c or INK, MONO, "start", 600 if bold and c else 400)
         d.t(NX, y + 24, note, 11, c or SOFT, KR, "end", 600 if bold and c else 400)
 
-block(156, "요청 — 브로드캐스트로 나간다", INFO, "보내는 쪽: 10.0.0.5", REQ)
-d.t(530, 360, "10.0.0.1 이 받아서 자리를 바꿔 답한다", 13, MUTED, KR)
-block(408, "응답 — 그 한 대에게만 유니캐스트", OK, "보내는 쪽: 10.0.0.1", RES)
+block(116, "요청 · 브로드캐스트", INFO, "보내는 쪽: 10.0.0.5", REQ)
+d.t(530, 320, "10.0.0.1 응답 · 보내는 쪽 ↔ 찾는 쪽 교환", 13, MUTED, KR)
+block(360, "응답 · 그 한 대에게만 유니캐스트", OK, "보내는 쪽: 10.0.0.1", RES)
 
-d.t(FX - 20, 572, "입력은 IP, 출력은 MAC 입니다. 응답의 마지막 줄이 채워져 있어 양쪽이 한 번에 서로를 알게 됩니다.",
-    12, MUTED, KR, "start")
-d.legend(588, [("입력 — 묻는 값", INFO), ("비어 있는 칸", ACC), ("출력 — 채워진 값", OK)])
+# 하단 해설 문장(입력 IP · 출력 MAC · 한 번에 서로를 앎)은 본문 바로 뒤 두 문단이 이미 말한다 — 뺐다
+d.legend(520, [("입력 — 묻는 값", INFO), ("비어 있는 칸", ACC), ("출력 — 채워진 값", OK)])
 d.save("00-03-arp-message-fields.svg")
 print("ok arp-message-fields")

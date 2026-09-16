@@ -6,12 +6,12 @@
 # 이력: 2026-08-28 신설. 생성기 없이 손으로 만들어진 SVG 였다. 값·좌표를 그대로 옮겼다.
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, BAD, PAPER, KR, MONO
 
-W, H = 1000, 528
+W, H = 1000, 492
 RX, RW, RH, Y0 = 100, 840, 132, 164
 CARDS = [420, 564, 708]                      # 2·3·4 번 랜카드 열
-ROWS = [("유니캐스트", "2a:4f:1b:8c:d2:e0", "2 번 랜카드의 MAC 을 적었습니다",
+ROWS = [("유니캐스트", "2a:4f:1b:8c:d2:e0", "2 번 랜카드의 MAC",
          [(OK, "처리"), (BAD, "버림"), (BAD, "버림")], "1 / 3"),
-        ("브로드캐스트", "ff:ff:ff:ff:ff:ff", "예약된 값이라 전원이 자기 것으로 봅니다",
+        ("브로드캐스트", "ff:ff:ff:ff:ff:ff", "예약값 · 전원이 자기 것으로 취급",
          [(OK, "처리"), (OK, "처리"), (OK, "처리")], "3 / 3")]
 
 d = D(W, H, "FRAME COMPARISON · ONE FIELD",
@@ -38,14 +38,12 @@ for r, (kind, mac, note, cells, tally) in enumerate(ROWS):
     d.t(120, y + 112, note, 12, MUTED, KR, "start")
     for cx, (c, verb) in zip(CARDS, cells):
         d.tone(cx, y + 32, 112, 64, c, 6, "12", 1.2)
-        d.t(cx + 56, y + 60, "받아서", 13, c, KR, "middle", 600)
+        d.t(cx + 56, y + 60, "도착", 13, c, KR, "middle", 600)
         d.t(cx + 56, y + 82, verb, 13, c, KR, "middle", 600)
     d.t(RX + RW - 20, y + 70, tally, 18, INK, MONO, "end", 600)
 d.line(RX, Y0 + 2 * RH, RX + RW, Y0 + 2 * RH, RULE, 0.8)
 
-# 원본과 같이 두 줄로 나눈다 — 한 줄로 두면 오른쪽 여백을 넘는다
-d.t(RX, 448, "허브는 아무것도 읽지 않아 두 경우 모두 세 대에 그대로 도착합니다.", 12, MUTED, KR, "start")
-d.t(RX, 468, "갈리는 것은 받은 쪽이 처리하는가 버리는가뿐이고, 그 판정은 받는 랜카드가 합니다.", 12, MUTED, KR, "start")
-d.legend(484, [("값이 갈리는 칸", ACC), ("처리", OK), ("버림", BAD)])
+# 하단 해설 두 줄(허브는 세 대 모두 도착 · 판정은 랜카드)은 도식 뒤 본문 문단이 말한다 — 뺐다
+d.legend(452, [("값이 갈리는 칸", ACC), ("처리", OK), ("버림", BAD)])
 d.save("00-03-unicast-vs-broadcast.svg")
 print("ok unicast-vs-broadcast")

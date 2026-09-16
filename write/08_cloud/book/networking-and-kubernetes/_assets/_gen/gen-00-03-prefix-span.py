@@ -7,7 +7,7 @@
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, KR, MONO
 
-W, H = 1000, 452
+W, H = 1000, 424
 X0, BAR_X, BAR_H, STRIDE, Y0 = 12, 128, 28, 60, 152
 ROWS = [("/8", 700, "16,777,216 개", False), ("/16", 440, "65,536 개", False),
         ("/24", 220, "256 개", True), ("/32", 56, "1 개", False)]
@@ -27,7 +27,7 @@ for i, (name, w, count, focal) in enumerate(ROWS):
     d.t(X0 + 48, y + 22, name, 14, INK, MONO, "start", 600)
     d.t(BAR_X + w + 16, y + 20, count, 12, c, KR, "start")
 
-d.t(X0, 396, "앞 24 비트가 네트워크부라는 뜻이고, 남은 8 비트가 그 동네의 주소 수를 정합니다.", 12, MUTED, KR, "start")
-d.legend(412, [("대소 비교용 막대", MUTED), ("이 편의 기준", ACC)])
+# 하단 해설(/24 의 뜻)은 도식 뒤 본문 두 문단이 말한다 — 뺐다
+d.legend(384, [("대소 비교용 막대", MUTED), ("이 편의 기준", ACC)])
 d.save("00-03-prefix-span.svg")
 print("ok prefix-span")
