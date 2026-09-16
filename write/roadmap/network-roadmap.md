@@ -14,7 +14,7 @@ related:
   - ../02_os/networking/README.md
   - ../02_os/book/network-fundamentals-lab/README.md
   - ../08_cloud/kubernetes/04_networking/README.md
-updated: 2026-09-14
+updated: 2026-09-15
 ---
 
 # 네트워크 학습 로드맵
@@ -35,12 +35,12 @@ updated: 2026-09-14
 | 1 · 연결 | TCP 운영 | TIME_WAIT · SYN cookies · Nagle · delayed ACK · keepalive |
 | 1 · 연결 | 이름 | DNS 질의 · 레코드 유형 · 위임 · TTL · negative caching |
 | 1 · 연결 | 응용 프로토콜 | HTTP/1.1 · HTTP/2 · 멀티플렉싱 · QUIC · HTTP/3 · WebSocket · HTTP Upgrade |
-| 1 · 연결 | 보안 전송 | TLS 핸드셰이크 · TLS 1.3 · 0-RTT · ALPN · SNI · ECH · 인증서 체인 · SAN 호스트명 검증 · 유효 기간 · OS CA bundle · truststore |
+| 1 · 연결 | 보안 전송 | TLS 핸드셰이크 · TLS 1.3 · 0-RTT · session resumption · ALPN · SNI · ECH · 인증서 체인 · SAN 호스트명 검증 · 유효 기간 · OS CA bundle · truststore |
 | 1 · 연결 | 중계 | reverse proxy · TLS passthrough 대 TLS 종료 · SNI 라우팅 · Forwarded · X-Forwarded-For 신뢰 경계 · PROXY protocol · half-close · 배압 |
 | 1 · 연결 | 큐와 UDP | listen 큐 · accept 큐 · ephemeral 포트 고갈 · UDP · 단편화 |
 | 2 · Linux 경로 | 주소와 이웃 | interface · MAC · ARP · NDP · neighbor 테이블 포화 · IP 주소 · 서브네팅 · CIDR · IPv6 주소 · SLAAC |
 | 2 · Linux 경로 | L2 분할과 묶음 | VLAN · 802.1Q · STP · bonding · LACP |
-| 2 · Linux 경로 | 경로 결정 | 라우팅 테이블 · next hop · IP 포워딩 · ICMP · traceroute · 비대칭 경로 · `rp_filter` · policy routing · `ip rule` · VRF · 동적 라우팅 · OSPF · BGP |
+| 2 · Linux 경로 | 경로 결정 | 라우팅 테이블 · next hop · IP 포워딩 · data plane 과 control plane · ICMP · traceroute · 비대칭 경로 · `rp_filter` · policy routing · `ip rule` · VRF · 동적 라우팅 · OSPF · BGP |
 | 2 · Linux 경로 | 흐름 식별 | 5-tuple · ECMP 해시 · 포트가 없어 흐름과 갈라지는 ICMP |
 | 2 · Linux 경로 | 가상 인터페이스 | network namespace · veth · bridge · 컨테이너 네트워킹 모드 · 포트 매핑 |
 | 2 · Linux 경로 | 패킷 변형 | netfilter hook · iptables · nftables · NAT · SNAT · DNAT · MASQUERADE · conntrack |
@@ -79,22 +79,22 @@ updated: 2026-09-14
 | 7 · 운영 경계 | 복원력 | retry · timeout · circuit breaking · outlier detection · 재시도 증폭 |
 | 7 · 운영 경계 | 신원과 기본값 | mTLS · 기본값 닫아 가기 · SPIFFE · SVID · Zero Trust 전제 · ambient · ztunnel · waypoint |
 | 8 · 오버레이와 신뢰 | 진입 | bootstrap · reseed · 최초 접점 · trust anchor · stale data |
-| 8 · 오버레이와 신뢰 | 발견 | peer discovery · DHT · Kademlia · gossip · membership · peer store · lease · TTL 갱신 |
-| 8 · 오버레이와 신뢰 | 식별 | node ID · signed descriptor · 공개키 신원 · key rotation · replay · freshness |
-| 8 · 오버레이와 신뢰 | 신뢰 | Sybil · eclipse · poisoning · identity 와 trust 의 차이 · 인증과 인가의 차이 · behavior score · keyless TLS · trusted edge |
+| 8 · 오버레이와 신뢰 | 발견 | peer discovery · DHT · Kademlia · 역할이 나뉜 피어 · gossip · membership · peer store · lease · TTL 갱신 |
+| 8 · 오버레이와 신뢰 | 식별 | node ID · signed descriptor · 공개키 신원 · 키에서 나온 주소 · key rotation · replay · freshness |
+| 8 · 오버레이와 신뢰 | 신뢰 | Sybil · eclipse · poisoning · identity 와 trust 의 차이 · 인증과 인가의 차이 · capability · behavior score · keyless TLS · trusted edge |
 | 8 · 오버레이와 신뢰 | 관측 가능성 | traffic correlation · metadata · timing side-channel · 암호화가 숨기지 않는 것 |
 | 8 · 오버레이와 신뢰 | 오버레이 | 물리와 논리의 분리 · 터널링 · 가상 토폴로지 · relay · hole punching · reachability · reverse tunnel · outbound-only relay |
-| 9 · 터널과 경로 | 구성 | 터널 구성 · 피어 발견과의 차이 · 멀티홉 · 홉 수의 대가 · inbound 와 outbound 의 분리 · RX 와 TX |
+| 9 · 터널과 경로 | 구성 | 터널 구성 · 피어 발견과의 차이 · 멀티홉 · 홉별 계층 암호화 · 홉 수의 대가 · inbound 와 outbound 의 분리 · RX 와 TX |
 | 9 · 터널과 경로 | 선택 | path selection · latency · 가용성 · subnet · ASN diversity · 비용 함수 · selection bias · 클라이언트가 정하는 경로 |
 | 9 · 터널과 경로 | 확률 | 종단 성공 확률 · 곱으로 쌓이는 실패 · 기하분포 · 평균 시도 횟수 |
-| 9 · 터널과 경로 | 재시도 | 재시도 · 타임아웃 · 감지 시간 · exponential backoff · jitter · retry budget |
-| 9 · 터널과 경로 | 자원 | 터널 풀 · 미리 열어 두기 · 예비 터널 · 준비 비용 · 전환 시간 · 자원 사용량 |
+| 9 · 터널과 경로 | 재시도 | 재시도 · 타임아웃 · heartbeat · 감지 시간 · exponential backoff · jitter · retry budget |
+| 9 · 터널과 경로 | 자원 | 터널 풀 · 미리 열어 두기 · 예비 터널 · 터널 수명과 교체 · 준비 비용 · 전환 시간 · 자원 사용량 |
 
 
 
 ## 책 읽기 흐름
 
-> 위 단계를 어떤 자료로 배우는지 모았습니다. 책 스물한 권이 각각 어느 단계의 무엇을 다루는지와 읽을 장을 적습니다.
+> 위 단계를 어떤 자료로 배우는지 모았습니다. 책 스물두 권이 각각 어느 단계의 무엇을 다루는지와 읽을 장을 적습니다.
 
 ![네트워크 책 읽기 흐름 — 우선순위와 읽을 장](_assets/network-books.svg)
 
@@ -118,7 +118,8 @@ updated: 2026-09-14
 | Learning eBPF | 3·5~8장 | 추천 | 6단계 |
 | [Istio in Action](../08_cloud/book/istio-in-action/README.md) | 1 · 3~6 · 9·10·12장 · 부록 C | 추천 | 7단계 |
 | Zero Trust Networks | 1·2·4·6·8장 | 추천 | 7·8단계 |
-| Real-World Cryptography | 3 · 7~10장 | 추천 | 8단계 |
+| Real-World Cryptography | 2·3 · 7~10장 | 추천 | 8단계 |
+| API Security in Action | 9장 | 선택 | 8단계 |
 | Patterns of Distributed Systems | 7·26·28장 | 추천 | 8·9단계 |
 | Database Internals | 9·12장 | 추천 | 8·9단계 |
 | High Performance Browser Networking | 2·4·11·12·17장 | 대체 | 1단계 — HTTP/2 in Action 자리 |
@@ -135,7 +136,7 @@ updated: 2026-09-14
 |---|---|---|
 | Gateway API · CNI · 클러스터 DNS | Kubernetes in Action 13장과 Cilium 7장이 다루지만 스펙이 계속 바뀝니다 | [Gateway API 가이드](https://gateway-api.sigs.k8s.io/guides/) · [CNI 규격](https://github.com/containernetworking/cni/blob/main/SPEC.md) · [CoreDNS Manual](https://coredns.io/manual/toc/) · [Kubernetes 서비스·네트워킹 문서](https://kubernetes.io/ko/docs/concepts/services-networking/) |
 | BBR | 2016년에 나온 알고리즘이라 2011년판 TCP/IP Illustrated 에 없습니다 | [TCP Congestion Control: A Systems Approach](https://tcpcc.systemsapproach.org/) 5장 — Vegas 와 나란히 읽습니다 |
-| 8·9단계 오버레이와 터널 | 소장본에 맞는 장이 없습니다 | [Tor 설계 논문](https://www.usenix.org/conference/13th-usenix-security-symposium/tor-second-generation-onion-router) — traffic correlation 의 한계 · I2P [Tunnel Routing](https://i2p.net/en/docs/overview/tunnel-routing/) · [Peer Selection](https://i2p.net/en/docs/overview/peer-selection/) — 터널 풀과 경로 선택 |
+| 8·9단계 오버레이와 터널 | 소장본에 맞는 장이 없습니다 | [Tor 설계 논문](https://www.usenix.org/conference/13th-usenix-security-symposium/tor-second-generation-onion-router) — traffic correlation 의 한계 · 4.2·9절 회로 교체와 그 대가 · I2P [Tunnel Routing](https://i2p.net/en/docs/overview/tunnel-routing/) · [Peer Selection](https://i2p.net/en/docs/overview/peer-selection/) — 터널 풀과 경로 선택 · [Garlic Routing](https://i2p.net/en/docs/overview/garlic-routing/) — 홉별 계층 암호화 · [Network Database](https://i2p.net/en/docs/overview/network-database/) — floodfill 역할 · libp2p [Kademlia DHT](https://github.com/libp2p/specs/blob/master/kad-dht/README.md) — 서버 모드와 클라이언트 모드 |
 | LLM 트래픽 | 아직 책이 없습니다 | [Gateway API Inference Extension](https://gateway-api-inference-extension.sigs.k8s.io/guides/) |
 
 
@@ -160,7 +161,7 @@ updated: 2026-09-14
 | HTTP/1.1 · HTTP/2 · 멀티플렉싱 | 필수 | [02-02](../02_os/book/cntd_computer-networking-top-down/02-02.%EC%9B%B9%EC%9D%80%20%EC%96%B4%EB%96%BB%EA%B2%8C%20%EC%A3%BC%EA%B3%A0%EB%B0%9B%EB%8A%94%EA%B0%80.md) · [01-02](../08_cloud/book/networking-and-kubernetes/01-02.HTTP%EC%97%90%EC%84%9C%20TCP%C2%B7TLS%C2%B7UDP%EA%B9%8C%EC%A7%80%20%E2%80%94%20Transport%20%EA%B3%84%EC%B8%B5%20%ED%95%B4%EB%B6%80.md) | HTTP/2 in Action 4·8장 |
 | TLS 핸드셰이크 · SNI · ECH | 필수 | [04-01](../02_os/book/paw_packet-analysis-wireshark/04-01.TLS%20%ED%95%B8%EB%93%9C%EC%85%B0%EC%9D%B4%ED%81%AC%20%EC%9D%BD%EA%B8%B0.md) · [08-03](../02_os/book/cntd_computer-networking-top-down/08-03.%EC%82%B4%EC%95%84%20%EC%9E%88%EB%8A%94%20%EC%83%81%EB%8C%80%EB%A5%BC%20%ED%99%95%EC%9D%B8%ED%95%98%EA%B3%A0%20%EB%A9%94%EC%9D%BC%EA%B3%BC%20TCP%20%EC%97%90%20%EB%B6%99%EC%9E%85%EB%8B%88%EB%8B%A4.md) | HPBN 4장 · Real-World Cryptography 9장 |
 | 인증서 체인 · SAN 호스트명 검증 · 유효 기간 | 필수 |  | HPBN 4장 |
-| TLS 1.3 · 0-RTT · ALPN | 추천 |  | Real-World Cryptography 9장 · HPBN 4장 |
+| TLS 1.3 · 0-RTT · session resumption · ALPN | 추천 |  | Real-World Cryptography 9장 · HPBN 4장 |
 | QUIC · HTTP/3 | 추천 | | HTTP/2 in Action 9장 |
 | HTTP 성능 축 | 대체 | | High Performance Browser Networking 11·12장 |
 | WebSocket · HTTP Upgrade | 선택 | [03-01](../09_spring/03_network/realtime/03-01.WebSocket%20%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C%EA%B3%BC%20%ED%95%B8%EB%93%9C%EC%85%B0%EC%9D%B4%ED%81%AC.md) | High Performance Browser Networking 17장 |
@@ -183,6 +184,7 @@ updated: 2026-09-14
 | IP 주소 체계 · 서브네팅 · CIDR | 필수 | [랩 01-01](../02_os/book/network-fundamentals-lab/01-01.%EC%A3%BC%EC%86%8C%EB%A5%BC%20%EC%9D%BD%EA%B3%A0%20%EB%8F%84%EA%B5%AC%20%EC%85%8B%EC%9D%84%20%EB%93%A0%EB%8B%A4.md) · [01-04](../02_os/networking/01-04.%EC%84%9C%EB%B8%8C%EB%84%A4%ED%8C%85%EA%B3%BC%20CIDR%20%E2%80%94%20%EC%A3%BC%EC%86%8C%20%EA%B3%B5%EA%B0%84%EC%9D%84%20%EC%9E%90%EB%A5%B4%EB%8A%94%20%EB%B2%95.md) | TCP/IP Illustrated 2·5장 |
 | IPv6 주소 · SLAAC | 추천 | [04-04](../02_os/book/cntd_computer-networking-top-down/04-04.IPv6%20%EC%99%80%20%EC%9D%BC%EB%B0%98%ED%99%94%20%ED%8F%AC%EC%9B%8C%EB%94%A9.md) | TCP/IP Illustrated 2·6장 |
 | 라우팅 테이블 · next hop · IP 포워딩 | 필수 | [랩 03-01](../02_os/book/network-fundamentals-lab/03-01.%EC%84%B8%EA%B7%B8%EB%A8%BC%ED%8A%B8%EB%A5%BC%20%EB%84%98%EC%9C%BC%EB%A9%B4%20%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%B4%20%EC%A0%84%EB%B6%80%EB%8B%A4.md) · [01-03](../08_cloud/book/networking-and-kubernetes/01-03.IP%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85%C2%B7Ethernet%20%E2%80%94%20%ED%8C%A8%ED%82%B7%EC%9D%B4%20%EA%B8%B8%EC%9D%84%20%EC%B0%BE%EB%8A%94%20%EB%B2%95.md) | TCP/IP Illustrated 5장 |
+| data plane 과 control plane — 포워딩과 라우팅의 갈림 | 필수 | [04-01](../02_os/book/cntd_computer-networking-top-down/04-01.%EB%9D%BC%EC%9A%B0%ED%84%B0%EB%8A%94%20%EC%95%88%EC%97%90%EC%84%9C%20%EB%AC%B4%EC%97%87%EC%9D%84%20%ED%95%98%EB%8A%94%EA%B0%80.md) · [05-03](../02_os/book/cntd_computer-networking-top-down/05-03.%EC%A0%9C%EC%96%B4%EB%A5%BC%20%EB%B0%96%EC%9C%BC%EB%A1%9C%20%EB%B9%BC%EA%B3%A0%20%EB%A7%9D%EC%9D%84%20%EB%93%A4%EC%97%AC%EB%8B%A4%EB%B4%85%EB%8B%88%EB%8B%A4.md) | Computer Networking 4·5장 |
 | 비대칭 경로 · `rp_filter` | 추천 |  |  |
 | 5-tuple · ECMP 해시 · 포트가 없어 흐름과 갈라지는 ICMP | 추천 | [진단 개념](../troubleshooting/_concepts/%ED%9D%90%EB%A6%84%EC%9D%84-%EA%B0%80%EB%A5%B4%EB%8A%94-%EB%8B%A4%EC%84%AF-%EA%B0%92.md) · [사례](../troubleshooting/os/2026-09-14_%EB%AA%87%EB%AA%87%20%EC%82%AC%EC%9A%A9%EC%9E%90%EB%A7%8C%20%EB%93%A4%EC%96%B4%EC%98%A4%EC%A7%80%20%EB%AA%BB%ED%95%98%EB%8A%94%20%EC%82%AC%EC%9D%B4%ED%8A%B8.md) |  |
 | network namespace · veth · bridge | 필수 | [01-01](../02_os/networking/01-01.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9%20%EA%B8%B0%EC%B4%88.md) · [02-04](../08_cloud/book/networking-and-kubernetes/02-04.%EC%BB%A4%EB%84%90%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9%20%EC%8B%A4%EC%8A%B5%20%E2%80%94%20veth%C2%B7%EB%B8%8C%EB%A6%AC%EC%A7%80%C2%B7%ED%8F%AC%EC%9B%8C%EB%94%A9%EC%9D%84%20%EC%86%90%EC%9C%BC%EB%A1%9C%20%EC%A7%93%EA%B8%B0.md) | Networking and Kubernetes 2장 |
@@ -328,13 +330,15 @@ updated: 2026-09-14
 | bootstrap · reseed · 최초 접점 · trust anchor | 추천 | | |
 | peer discovery · DHT · Kademlia · gossip · membership | 추천 |  | Patterns of Distributed Systems 7·28장 · Database Internals 12장 |
 | lease · TTL 갱신 | 추천 |  | Patterns of Distributed Systems 26장 |
-| signed descriptor · 공개키 신원 · 무결성 | 추천 | | Real-World Cryptography 7장 |
+| signed descriptor · 공개키 신원 · 키에서 나온 주소 · 무결성 | 추천 | | Real-World Cryptography 2·7장 |
 | key rotation · replay 방지 · freshness | 추천 |  | Real-World Cryptography 3·8·9장 |
 | Sybil · eclipse · poisoning · behavior score | 추천 |  |  |
 | 오버레이 — 물리와 논리의 분리 · 터널링 · 가상 토폴로지 | 추천 | | |
 | reverse tunnel · outbound-only relay | 추천 |  |  |
 | relay · hole punching · reachability | 선택 |  | TCP/IP Illustrated 7장 |
 | keyless TLS · trusted edge — 서명 권한이 곧 신뢰 | 선택 |  |  |
+| capability — 신원 대신 권한을 건네는 토큰 | 선택 |  | API Security in Action 9장 |
+| 역할이 나뉜 피어 — DHT 서버 모드와 floodfill | 선택 |  |  |
 
 **같은 질문이 이름만 바꿔 되풀이됩니다.** 아직 아무도 모르는 노드가 처음 네트워크에 어떻게 들어오는가는 Kubernetes node discovery, etcd cluster join, Kafka broker discovery, VPN mesh에서 같은 형태로 나옵니다. 그래서 이 단계를 마지막에 두되 특정 제품을 학습 대상으로 두지 않습니다.
 
@@ -346,6 +350,7 @@ updated: 2026-09-14
 |---|:---:|---|---|
 | 피어 발견 성공과 터널 구성 성공은 다르다 | 필수 | | |
 | 멀티홉 — 홉 수가 지연 · 성공률 · 프라이버시에 미치는 값 | 필수 | | |
+| 홉별 계층 암호화 — 각 홉은 앞뒤만 안다 | 추천 | | |
 | path selection · latency · 가용성 · 다양성 · 비용 함수 | 필수 | | |
 | subnet · ASN · operator diversity · selection bias | 추천 | | |
 | inbound 와 outbound — 단방향 터널을 조합한 양방향 통신 | 추천 | | |
@@ -353,10 +358,11 @@ updated: 2026-09-14
 | 클라이언트가 경로를 정하고 서버는 목록만 준다 | 추천 | | |
 | 종단 성공 확률 — 단계별 실패가 곱으로 쌓인다 | 필수 | | |
 | 기하분포 — 최초 성공까지의 평균 시도 횟수 | 추천 | | |
-| 재시도와 타임아웃 — 확률만큼 감지 시간도 값이다 | 필수 |  | Patterns of Distributed Systems 7장 · Database Internals 9장 |
+| 재시도와 타임아웃 · heartbeat — 확률만큼 감지 시간도 값이다 | 필수 |  | Patterns of Distributed Systems 7장 · Database Internals 9장 |
 | exponential backoff · jitter · retry budget | 필수 | [01-03](../09_spring/03_network/resilience/01-03.Retry%20%E2%80%94%20exponential%20backoff%C2%B7jitter%C2%B7%EC%9E%AC%EC%8B%9C%EB%8F%84%20%ED%8F%AD%EC%A3%BC%20%EB%B0%A9%EC%A7%80.md) · [사례](../troubleshooting/kubernetes/2026-09-08_%ED%95%9C%20%ED%95%98%EC%9C%84%20%EC%84%9C%EB%B9%84%EC%8A%A4%EC%97%90%EC%84%9C%20%EC%8B%9C%EC%9E%91%EB%90%9C%20%EC%A0%84%EB%A9%B4%20%EC%98%A4%EB%A5%98.md) |  |
 | 터널 풀 — 연결마다 새로 여는 방식과의 갈림 | 추천 | | |
 | 예비 터널 — 준비 비용 · 전환 시간 · 자원 사용량 | 추천 | | |
+| 터널 수명과 교체 — 자주 바꾸면 비싸고 드물게 바꾸면 트래픽이 묶인다 | 추천 | | |
 
 
 
