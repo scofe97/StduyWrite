@@ -4,6 +4,7 @@
 #           칸 사이를 건너가는 것은 세그먼트다.
 #           축약: §2 공식의 label_col_w 140 · right_pad 28 은 그대로, step_slot_w 는 112→184,
 #           lane_h 는 80→108 로 올린다(한글 3줄 노드). 헤더 띠는 제목 블록 아래에서 시작한다.
+#           창이 다시 열리는 경로와 Zero-Window Probing 은 같은 절의 03-02.zero-window-probe.svg 가 맡는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, OK, BAD, WARN, INFO, PAPER, PAPER2, RULE, KR, MONO
 
@@ -17,7 +18,7 @@ W = LABEL_W + len(STEPS) * SLOT_W + RIGHT_PAD
 H = HEADER_TOP + HEADER_H + len(LANES) * LANE_H + LEGEND_H
 d = D(W, H, "PACKET ANALYSIS WITH WIRESHARK · 03-02 §5",
       "ZeroWindow 가 생기는 자리",
-      "세그먼트가 수신 버퍼에 쌓이는 속도가 애플리케이션이 읽어 가는 속도보다 빠르면 버퍼가 찬다. 그때 수신자가 윈도우 0 을 광고하고 송신자는 멈춘다.",
+      "세그먼트가 수신 버퍼에 쌓이는 속도가 애플리케이션이 읽어 가는 속도보다 빠르면 버퍼가 찬다. 그때 수신자가 윈도우 0 을 광고하고 송신자는 멈춘다. 선이 느려서가 아니라 읽어 가는 쪽이 못 따라가서 생기는 신호이므로, 볼 곳은 경로가 아니라 수신 측 애플리케이션이다.",
       "막힌 곳은 네트워크가 아니라 수신자의 읽기 속도입니다")
 
 def step_cx(j): return LABEL_W + 10 + j * SLOT_W + NODE_W / 2
@@ -62,12 +63,12 @@ d.arrow([(step_cx(2) + NODE_W / 2, lane_mid(2)), (step_cx(3) - NODE_W / 2 - 4, l
 # 윈도우 0 광고가 거슬러 올라가 송신을 멈춘다
 d.arrow([(step_cx(2), lane_mid(2) - NODE_H / 2), (step_cx(2), lane_mid(0) + 8),
          (step_cx(0) + NODE_W / 2 + 4, lane_mid(0) + 8)], BAD, "bad", 1.4, dash="4,3")
-d.t(step_cx(1) + 20, lane_mid(0) - 4, "win=0 광고 · 송신이 멈춥니다", 11, BAD, KR)
+d.t(step_cx(1) + 20, lane_mid(0) + 24, "ACK · win=0 광고 · 송신 멈춤", 11, BAD, KR)
 
 node(0, 0, "세그먼트 송신", "윈도우가 허락하는 만큼", "tcp.len > 0")
-node(1, 1, "선을 지나감", "여기는 대개 병목이 아닙니다", "RTT")
-node(2, 2, "수신 버퍼", "쓰기가 읽기보다 빠르면 찹니다", "window_size=0", focal=True)
-node(3, 2, "애플리케이션이 읽음", "이 속도가 상한을 정합니다", "read()", c=WARN)
+node(1, 1, "선을 지나감", "대개 병목 아님", "RTT")
+node(2, 2, "수신 버퍼", "쓰기가 읽기보다 빠를 때", "window_size=0", focal=True)
+node(3, 2, "애플리케이션이 읽음", "이 속도가 상한", "read()", c=WARN)
 
 d.legend(H - LEGEND_H + 24,
          [("버퍼가 차는 지점", ACC), ("실제 상한을 정하는 쪽", WARN), ("송신을 멈추는 신호", BAD)])
