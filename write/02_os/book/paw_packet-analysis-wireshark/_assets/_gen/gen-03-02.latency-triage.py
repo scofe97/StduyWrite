@@ -31,21 +31,23 @@ def diamond(cx, y, hw, hh, txt, focal=False):
 
 Y_S, Y_D1, Y_R1, Y_D2, Y_R2, Y_END = 100, 168, 174, 316, 322, 596
 Y_MID = 464
+RX, RW = 712, 320          # 오른쪽 결과 칸의 중심과 너비
+R_LEFT = RX - RW / 2       # 화살촉은 이 왼쪽 변에서 멈춘다 — 안으로 파고들지 않게
 
 d.arrow([(CX, Y_S + 40), (CX, Y_D1 - 4)], MUTED, "ar", 1.4)
-d.arrow([(CX + 144, Y_D1 + 40), (592, Y_R1 + 34)], WARN, "warn", 1.4)
+d.arrow([(CX + 144, Y_D1 + 40), (R_LEFT - 4, Y_R1 + 34)], WARN, "warn", 1.4)
 d.arrow([(CX, Y_D1 + 80), (CX, Y_D2 - 4)], MUTED, "ar", 1.4)
-d.arrow([(CX + 144, Y_D2 + 40), (592, Y_R2 + 34)], ACC, "acc", 1.4)
+d.arrow([(CX + 144, Y_D2 + 40), (R_LEFT - 4, Y_R2 + 34)], ACC, "acc", 1.4)
 d.arrow([(CX, Y_D2 + 80), (CX, Y_MID - 4)], MUTED, "ar", 1.4)
 d.arrow([(CX, Y_MID + 68), (CX, Y_END - 4)], MUTED, "ar", 1.4)
-d.arrow([(712, Y_R2 + 68), (712, Y_END + 20), (CX + 156, Y_END + 20)], ACC, "acc", 1.4)
+d.arrow([(RX, Y_R2 + 68), (RX, Y_END + 20), (CX + 154, Y_END + 20)], ACC, "acc", 1.4)
 
 oval(CX, Y_S, 240, 40, "응답이 느리다")
 diamond(CX, Y_D1, 144, 40, "선 자체가 느린가?", )
-step(712, Y_R1, 320, 68, "네트워크 쪽입니다", "ping RTT · traceroute 홉 수 · 지터", c=WARN)
+step(RX, Y_R1, RW, 68, "네트워크 쪽", "ping RTT · traceroute 홉 수 · 지터", c=WARN)
 diamond(CX, Y_D2, 144, 40, "윈도우가 작은가?", focal=True)
-step(712, Y_R2, 320, 68, "수신 측 처리 쪽입니다", "sysctl 버퍼 튜닝 · 프로세스 수 · 메모리", c=ACC)
-step(CX, Y_MID, 320, 68, "재전송·중복 ACK 를 봅니다", "tcp.analysis.flags 로 판정을 모읍니다")
+step(RX, Y_R2, RW, 68, "수신 측 처리 쪽", "sysctl 버퍼 튜닝 · 프로세스 수 · 메모리", c=ACC)
+step(CX, Y_MID, 320, 68, "재전송·중복 ACK 확인", "tcp.analysis.flags 로 판정 모으기")
 oval(CX, Y_END, 300, 40, "§5 시퀀스 분석으로", OK)
 
 d.t(CX + 200, Y_D1 + 26, "예", 11, WARN, KR, "middle", 600)
@@ -54,5 +56,5 @@ d.t(CX + 200, Y_D2 + 26, "예", 11, ACC, KR, "middle", 600)
 d.t(CX + 16, Y_D2 + 100, "아니오", 11, MUTED, KR, "start", 600)
 d.t(CX + 260, Y_END + 8, "튜닝 후 재측정", 11, ACC, KR, "start")
 
-d.legend(H - 60, [("원문 예제가 걸린 갈래", ACC), ("경로 쪽 원인", WARN), ("다음 편으로", OK)])
+d.legend(H - 60, [("원문 예제가 걸린 갈래", ACC), ("경로 쪽 원인", WARN), ("다음 절로", OK)])
 d.save("03-02.latency-triage.svg")

@@ -13,11 +13,12 @@ BRANCHES = [
              ("수신 측이 느린가", "§4 · window_size")]),
     ("전송이 이상함", [("같은 세그먼트가 반복", "§5 · 재전송"),
                    ("윈도우가 0 이 됨", "§5 · ZeroWindow"),
+                   ("ZeroWindow 뒤 1바이트", "§5 · ZeroWindowProbe"),
                    ("같은 ACK 가 반복", "§5 · 중복 ACK")]),
 ]
 
 LEAF_STRIDE, LEAF_H = 48, 40
-ROOT_W, BR_W, LEAF_W = 176, 176, 344
+ROOT_W, BR_W, LEAF_W = 176, 176, 400
 X_ROOT, X_BR, X_LEAF = 24, 244, 456
 Y0 = 112
 n = sum(len(v) for _, v in BRANCHES)
