@@ -14,6 +14,11 @@ class SeqKR(Seq):
         mx = (x1 + x2) / 2
         s.t(mx, y - 9, label, 11, c, _kr(label), "middle", 600)
         if sub: s.t(mx, y + 17, sub, 11, MUTED, KR)
+    def state(s, a, txt, y, c):
+        # 레일 점선이 반투명 칩의 글자를 관통하지 않게, 같은 자리에 불투명 바탕을 먼저 깐다
+        x = s.LX[a]; w = len(txt) * 7.0 + 18
+        s.o.append(f'<rect x="{x - w / 2}" y="{y - 10}" width="{w}" height="20" rx="4" fill="{PAPER}"/>')
+        super().state(a, txt, y, c)
 
 W, H = 920, 512
 d = SeqKR(W, H, "PACKET ANALYSIS WITH WIRESHARK · 03-01 §3",
