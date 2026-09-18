@@ -14,10 +14,14 @@ d = D(W, H, "CVE-2020-8558 · 127.0.0.1 IS NOT A FENCE",
       "점선 안이 '로컬 전용'이라 믿는 구간이다. 노드 설정 하나가 그 안으로 들어가는 길을 열어 줬다.",
       lead="점선 안이 '로컬 전용'이라 믿는 구간 · 설정 하나가 그 안으로 들어가는 길을 열었다")
 
-BW, BH, GAP = 164, 104, 24
-CX = [42 + BW // 2 + i * (BW + GAP) for i in range(5)]           # 124 312 500 688 876
+# 2026-09-18 통로 24 → 48px. 폭을 넓히면 본문에서 글자가 작아지므로(스타일 계약 §캔버스 폭)
+#            카드 폭을 164 → 152 로 줄여 통로를 얻는다. 카드 두 줄(부제·꼬리표)은 11px 이라
+#            안쪽 여백을 10px 로 맞춘다 — 가장 긴 부제가 141px 이라 12px 여백으로는 넘친다.
+BW, BH, GAP = 152, 104, 48
+CX = [24 + BW // 2 + i * (BW + GAP) for i in range(5)]           # 100 300 500 700 900
 CY = 300
-RING = (CX[3] - BW // 2 - 22, 212, (CX[4] + BW // 2 + 22) - (CX[3] - BW // 2 - 22), 176)
+# 링 왼쪽 테두리는 셋째·넷째 카드 사이 통로의 한가운데(600)를 지난다 — 카드를 자르지 않는다.
+RING = (600, 212, (CX[4] + BW // 2 + 12) - 600, 176)
 NODES = [("인접 호스트", "같은 네트워크의 옆 기계", "노드 밖", INFO, False),
          ("노드 NIC", "평범한 패킷 도착", "여기까진 정상", None, False),
          ("노드 설정", "로컬 주소로 가는 길 허용", "CVE-2020-8558", None, True),
@@ -26,7 +30,7 @@ NODES = [("인접 호스트", "같은 네트워크의 옆 기계", "노드 밖",
 # 링 경계(x=584)가 세 번째 통로 한가운데를 지난다 — 그 통로 위아래 라벨은 테두리를 가로지르므로 비운다
 EDGE = ["도착", "판단", "", ""]
 
-ddx.band(d, 104, 440, "로컬 주소 ≠ 밖에서 못 닿음")
+ddx.band(d, 104, 440, "로컬 주소 ≠ 밖에서 못 닿음", x=12, w=980)
 rx, ry, rw, rh = RING
 d.o.append(f'<rect x="{rx}" y="{ry}" width="{rw}" height="{rh}" rx="8" '
            f'fill="{INFO}06" stroke="{INFO}" stroke-width="1.2" stroke-dasharray="7 6"/>')
@@ -40,7 +44,7 @@ for cx, (l, s, t, c, focal) in zip(CX, NODES):
     else:
         d.box(x, y, BW, BH, PAPER2, c or RULE, 1.1, 6); tc = c or INK
     d.t(cx, CY - 22, ddx.fit(l, 12, BW - 14, l), 12, tc, KR, "middle", 600)
-    d.t(cx, CY + 0, ddx.fit(s, 11, BW - 12, s), 11, MUTED, KR)
+    d.t(cx, CY + 0, ddx.fit(s, 11, BW - 10, s), 11, MUTED, KR)
     d.t(cx, CY + 26, ddx.fit(t, 11, BW - 10, t), 11, ACC if focal else SOFT, KR)
 
 for i, lab in enumerate(EDGE):
