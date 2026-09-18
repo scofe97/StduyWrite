@@ -74,6 +74,7 @@ write/_review/
 | 1 | 2026-09-14 | 4 (Computer Networking Top-Down `05-01`~`05-04`, 5장 전체 — 즉석 모드) | 2.0 | 2.33 | 0 |
 | 2 | 2026-09-15 | 4 (Computer Networking Top-Down `05-01`~`05-04`, 5장 전체 — 막힌 자리 재출제 + 드릴 공백. 2연속 q2 로 재학습 등록) | 2.0 | 2.33 | 0 |
 | 1 | 2026-09-16 | 5 (Computer Networking Top-Down `03-01`~`03-05`, 3장 전체 — 큐의 `대기` 를 연 첫 회차. 원문은 채점 직전에 해당 절만 읽는 방식으로 진행) | 2.57 | 2.67 | 0 |
+| 1 | 2026-09-17 | 5 (Networking and Kubernetes `02-01`~`02-05`, 2장 전체 — 챕터 단위 시트 `nak_ch02.review.md` 한 장) | 2.86 | 2.33 | 0 |
 
 회차 5 에서 *졸업 수 / 대상 편수 ≥ 80%* 면 본 시스템이 잘 작동하는 것.
 
@@ -84,7 +85,7 @@ write/_review/
 | 폴더 | 편수 | 대상 |
 |------|-----|------|
 | `2026-08-26/` | 2 | Networking and Kubernetes `00-03`·`01-03` |
-| `2026-08-31/` | 5 | Networking and Kubernetes `02-01`~`02-05` (2장 전체). `01-01`·`01-02` 는 2026-09-06 완료 |
+| ~~`2026-08-31/`~~ | ~~5~~ | ~~Networking and Kubernetes `02-01`~`02-05`~~ → **해소**. 편 단위 시트 5장은 커밋 `74cbd440a`(2026-09-12, 「편 단위 복습 시트를 걷어내고 챕터 단위 큐로 명부를 옮긴다」)에서 걷혔고, 2026-09-17 에 챕터 단위 `nak_ch02.review.md` 한 장으로 다시 서서 q3 로 완료됐다. `01-01`·`01-02` 는 2026-09-06 완료 |
 | `2026-09-09/` | 5 | Computer Networking Top-Down `03-01`~`03-05` (3장 Transport 전체) |
 | `2026-09-09/` | 8 | **Kubernetes in Action `11-01`~`13-03`** — Service 3편 · Ingress 2편 · Gateway API 3편 |
 | `2026-09-10/` | 8 | **Kubernetes in Action `14-01`~`16-03`** — ReplicaSet 2편 · Deployment 3편 · StatefulSet 3편 |
