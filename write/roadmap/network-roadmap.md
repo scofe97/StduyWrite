@@ -35,7 +35,10 @@ updated: 2026-09-15
 | 1 · 연결 | TCP 운영 | TIME_WAIT · SYN cookies · Nagle · delayed ACK · keepalive |
 | 1 · 연결 | 이름 | DNS 질의 · 레코드 유형 · 위임 · TTL · negative caching |
 | 1 · 연결 | 응용 프로토콜 | HTTP/1.1 · HTTP/2 · 멀티플렉싱 · QUIC · HTTP/3 · WebSocket · HTTP Upgrade |
-| 1 · 연결 | 보안 전송 | TLS 핸드셰이크 · TLS 1.3 · 0-RTT · session resumption · ALPN · SNI · ECH · 인증서 체인 · SAN 호스트명 검증 · 유효 기간 · OS CA bundle · truststore |
+| 1 · 연결 | 보안 전송 | TLS 핸드셰이크 · ClientHello · ServerHello · 확장 협상 · TLS 1.3 · session resumption · ALPN |
+| 1 · 연결 | 키 교환과 암호 | key_share · supported_groups · HelloRetryRequest · ECDHE · X25519 · forward secrecy · HKDF · AEAD · AES-GCM · ChaCha20-Poly1305 |
+| 1 · 연결 | 이름 숨기기 | SNI · ECH · ClientHelloOuter · HPKE |
+| 1 · 연결 | 신원 | 인증서 체인 · SAN 호스트명 검증 · 유효 기간 · OS CA bundle · truststore |
 | 1 · 연결 | 중계 | reverse proxy · TLS passthrough 대 TLS 종료 · SNI 라우팅 · Forwarded · X-Forwarded-For 신뢰 경계 · PROXY protocol · half-close · 배압 |
 | 1 · 연결 | 큐와 UDP | listen 큐 · accept 큐 · ephemeral 포트 고갈 · UDP · 단편화 |
 | 2 · Linux 경로 | 주소와 이웃 | interface · MAC · ARP · NDP · neighbor 테이블 포화 · IP 주소 · 서브네팅 · CIDR · IPv6 주소 · SLAAC |
@@ -118,7 +121,7 @@ updated: 2026-09-15
 | Learning eBPF | 3·5~8장 | 추천 | 6단계 |
 | [Istio in Action](../08_cloud/book/istio-in-action/README.md) | 1 · 3~6 · 9·10·12장 · 부록 C | 추천 | 7단계 |
 | Zero Trust Networks | 1·2·4·6·8장 | 추천 | 7·8단계 |
-| Real-World Cryptography | 2·3 · 7~10장 | 추천 | 8단계 |
+| Real-World Cryptography | 2~5 · 7~10 · 13장 | 추천 | 1 · 8단계 |
 | API Security in Action | 9장 | 선택 | 8단계 |
 | Patterns of Distributed Systems | 7·26·28장 | 추천 | 8·9단계 |
 | Database Internals | 9·12장 | 추천 | 8·9단계 |
@@ -135,6 +138,7 @@ updated: 2026-09-15
 | 자리 | 책만으로 부족한 이유 | 기준 문서 |
 |---|---|---|
 | Gateway API · CNI · 클러스터 DNS | Kubernetes in Action 13장과 Cilium 7장이 다루지만 스펙이 계속 바뀝니다 | [Gateway API 가이드](https://gateway-api.sigs.k8s.io/guides/) · [CNI 규격](https://github.com/containernetworking/cni/blob/main/SPEC.md) · [CoreDNS Manual](https://coredns.io/manual/toc/) · [Kubernetes 서비스·네트워킹 문서](https://kubernetes.io/ko/docs/concepts/services-networking/) |
+| TLS 1.3 세부와 ECH | Real-World Cryptography 9장이 개념을 주지만 확장 협상과 ECH 는 규격이 계속 바뀝니다 | [RFC 8446](https://www.rfc-editor.org/rfc/rfc8446) 4.1.4절 — HelloRetryRequest · [RFC 9180](https://www.rfc-editor.org/rfc/rfc9180) — HPKE · [draft-ietf-tls-esni](https://datatracker.ietf.org/doc/draft-ietf-tls-esni/) — ECH · [RFC 9460](https://www.rfc-editor.org/rfc/rfc9460) — SVCB·HTTPS RR |
 | BBR | 2016년에 나온 알고리즘이라 2011년판 TCP/IP Illustrated 에 없습니다 | [TCP Congestion Control: A Systems Approach](https://tcpcc.systemsapproach.org/) 5장 — Vegas 와 나란히 읽습니다 |
 | 8·9단계 오버레이와 터널 | 소장본에 맞는 장이 없습니다 | [Tor 설계 논문](https://www.usenix.org/conference/13th-usenix-security-symposium/tor-second-generation-onion-router) — traffic correlation 의 한계 · 4.2·9절 회로 교체와 그 대가 · I2P [Tunnel Routing](https://i2p.net/en/docs/overview/tunnel-routing/) · [Peer Selection](https://i2p.net/en/docs/overview/peer-selection/) — 터널 풀과 경로 선택 · [Garlic Routing](https://i2p.net/en/docs/overview/garlic-routing/) — 홉별 계층 암호화 · [Network Database](https://i2p.net/en/docs/overview/network-database/) — floodfill 역할 · libp2p [Kademlia DHT](https://github.com/libp2p/specs/blob/master/kad-dht/README.md) — 서버 모드와 클라이언트 모드 |
 | LLM 트래픽 | 아직 책이 없습니다 | [Gateway API Inference Extension](https://gateway-api-inference-extension.sigs.k8s.io/guides/) |
@@ -159,9 +163,17 @@ updated: 2026-09-15
 | DNS 질의 · 이름 해석 | 필수 | [02-03](../02_os/book/cntd_computer-networking-top-down/02-03.%EB%A9%94%EC%9D%BC%EA%B3%BC%20%EC%9D%B4%EB%A6%84%EC%9D%80%20%EC%96%B4%EB%96%BB%EA%B2%8C%20%EC%B0%BE%EC%95%84%EA%B0%80%EB%8A%94%EA%B0%80.md) | TCP/IP Illustrated 11장 |
 | DNS 레코드 유형 · 위임 · TTL · negative caching | 필수 | [02-01](../08_cloud/book/learning-coredns/02-01.%EC%9C%84%EC%9E%84%EC%9D%B4%20%EA%B7%B8%EC%9D%80%20%EA%B2%BD%EA%B3%84%EA%B0%80%20%EC%A7%88%EC%9D%98%20%EA%B2%BD%EB%A1%9C%EB%A5%BC%20%EC%A0%95%ED%95%9C%EB%8B%A4.md) · [02-02](../08_cloud/book/learning-coredns/02-02.%EB%A0%88%EC%BD%94%EB%93%9C%20%ED%95%9C%20%EC%A4%84%EC%9D%84%20%EC%9D%BD%EC%9C%BC%EB%A9%B4%20%EC%A1%B4%20%ED%8C%8C%EC%9D%BC%EC%9D%B4%20%EC%9D%BD%ED%9E%8C%EB%8B%A4.md) | Learning CoreDNS 2장 · TCP/IP Illustrated 11장 |
 | HTTP/1.1 · HTTP/2 · 멀티플렉싱 | 필수 | [02-02](../02_os/book/cntd_computer-networking-top-down/02-02.%EC%9B%B9%EC%9D%80%20%EC%96%B4%EB%96%BB%EA%B2%8C%20%EC%A3%BC%EA%B3%A0%EB%B0%9B%EB%8A%94%EA%B0%80.md) · [01-02](../08_cloud/book/networking-and-kubernetes/01-02.HTTP%EC%97%90%EC%84%9C%20TCP%C2%B7TLS%C2%B7UDP%EA%B9%8C%EC%A7%80%20%E2%80%94%20Transport%20%EA%B3%84%EC%B8%B5%20%ED%95%B4%EB%B6%80.md) | HTTP/2 in Action 4·8장 |
-| TLS 핸드셰이크 · SNI · ECH | 필수 | [04-01](../02_os/book/paw_packet-analysis-wireshark/04-01.TLS%20%ED%95%B8%EB%93%9C%EC%85%B0%EC%9D%B4%ED%81%AC%20%EC%9D%BD%EA%B8%B0.md) · [08-03](../02_os/book/cntd_computer-networking-top-down/08-03.%EC%82%B4%EC%95%84%20%EC%9E%88%EB%8A%94%20%EC%83%81%EB%8C%80%EB%A5%BC%20%ED%99%95%EC%9D%B8%ED%95%98%EA%B3%A0%20%EB%A9%94%EC%9D%BC%EA%B3%BC%20TCP%20%EC%97%90%20%EB%B6%99%EC%9E%85%EB%8B%88%EB%8B%A4.md) | HPBN 4장 · Real-World Cryptography 9장 |
+| TLS 핸드셰이크 · SNI | 필수 | [04-01](../02_os/book/paw_packet-analysis-wireshark/04-01.TLS%20%ED%95%B8%EB%93%9C%EC%85%B0%EC%9D%B4%ED%81%AC%20%EC%9D%BD%EA%B8%B0.md) · [08-03](../02_os/book/cntd_computer-networking-top-down/08-03.%EC%82%B4%EC%95%84%20%EC%9E%88%EB%8A%94%20%EC%83%81%EB%8C%80%EB%A5%BC%20%ED%99%95%EC%9D%B8%ED%95%98%EA%B3%A0%20%EB%A9%94%EC%9D%BC%EA%B3%BC%20TCP%20%EC%97%90%20%EB%B6%99%EC%9E%85%EB%8B%88%EB%8B%A4.md) | HPBN 4장 · Real-World Cryptography 9장 |
 | 인증서 체인 · SAN 호스트명 검증 · 유효 기간 | 필수 |  | HPBN 4장 |
-| TLS 1.3 · 0-RTT · session resumption · ALPN | 추천 |  | Real-World Cryptography 9장 · HPBN 4장 |
+| ClientHello · ServerHello · 확장 협상 | 필수 |  | Real-World Cryptography 9장 · HPBN 4장 |
+| key_share · supported_groups · HelloRetryRequest | 추천 |  | Real-World Cryptography 5·9장 |
+| ECDHE · X25519 · secp256r1 · forward secrecy | 필수 |  | Real-World Cryptography 5장 |
+| HKDF · 키 스케줄 · 트래픽 비밀 분리 | 추천 |  | Real-World Cryptography 3장 |
+| AEAD · AES-GCM · ChaCha20-Poly1305 · cipher suite | 필수 |  | Real-World Cryptography 4장 |
+| 0-RTT 재전송 위험 — 멱등 요청만 | 추천 |  | Real-World Cryptography 9장 |
+| ECH · ClientHelloOuter · HPKE | 추천 |  | RFC 9180 · draft-ietf-tls-esni |
+| SNI 가 남기는 것 — ECH 와 DNS 암호화는 함께 간다 | 추천 |  | Real-World Cryptography 9장 |
+| session resumption · PSK · ALPN | 추천 |  | Real-World Cryptography 9장 · HPBN 4장 |
 | QUIC · HTTP/3 | 추천 | | HTTP/2 in Action 9장 |
 | HTTP 성능 축 | 대체 | | High Performance Browser Networking 11·12장 |
 | WebSocket · HTTP Upgrade | 선택 | [03-01](../09_spring/03_network/realtime/03-01.WebSocket%20%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C%EA%B3%BC%20%ED%95%B8%EB%93%9C%EC%85%B0%EC%9D%B4%ED%81%AC.md) | High Performance Browser Networking 17장 |
@@ -217,6 +229,7 @@ updated: 2026-09-15
 | 계층 순서 진단 — `ss` · `ip` · `ethtool` · `conntrack -L` | 필수 | [02-03](../08_cloud/book/networking-and-kubernetes/02-03.Linux%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%EC%A7%84%EB%8B%A8%20%EB%8F%84%EA%B5%AC%20%E2%80%94%20%EA%B3%84%EC%B8%B5%20%EC%88%9C%EC%84%9C%EB%8C%80%EB%A1%9C%20%EC%88%98%EC%82%AC%ED%95%98%EA%B8%B0.md) | Networking and Kubernetes 2장 |
 | `nstat` · tcpretrans · tcplife | 추천 | [10-04](../02_os/book/systems-performance/10-04.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%284%29%20%E2%80%94%20%EA%B4%80%EC%B8%A1%20%EB%8F%84%EA%B5%AC.md) | Systems Performance 10장 |
 | `resolv.conf` · search domain · `ndots` · NXDOMAIN | 필수 | [랩 07-01](../02_os/book/network-fundamentals-lab/07-01.%EA%B8%B8%EC%9D%80%20%EB%A9%80%EC%A9%A1%ED%95%9C%EB%8D%B0%20%EC%95%88%20%ED%86%B5%ED%95%A0%20%EB%95%8C.md) · [01-03](../02_os/networking/01-03.DNS%20%ED%95%84%ED%84%B0%EB%A7%81%20%EC%B0%A8%EB%8B%A8%20%E2%80%94%20NXDOMAIN%C2%B7DoH%C2%B7%EC%9A%B0%ED%9A%8C%20%EB%A7%88%EC%B0%B0.md) | |
+| DoH · DoT · DNS HTTPS RR — ECH 공개키가 오는 길 | 추천 |  | Learning CoreDNS 7장 · RFC 9460 |
 | EDNS(0) · TC 비트 · TCP fallback | 추천 |  | TCP/IP Illustrated 11장 |
 | Corefile · 플러그인 체인 | 추천 | [03-01](../08_cloud/book/learning-coredns/03-01.Corefile%EC%9D%80%20%EB%9D%BC%EB%B2%A8%EB%A1%9C%20%EC%84%9C%EB%B2%84%EB%A5%BC%20%EA%B0%80%EB%A5%B8%EB%8B%A4.md) · [03-02](../08_cloud/book/learning-coredns/03-02.%ED%94%8C%EB%9F%AC%EA%B7%B8%EC%9D%B8%20%EC%9D%BC%EA%B3%B1%EC%9D%B4%EB%A9%B4%20%EC%84%9C%EB%B2%84%20%ED%95%98%EB%82%98%EA%B0%80%20%EC%84%A0%EB%8B%A4.md) | Learning CoreDNS 3장 |
 | 질문과 답의 불일치 | 추천 | [07-01](../08_cloud/book/learning-coredns/07-01.%EC%A7%88%EB%AC%B8%EA%B3%BC%20%EB%8B%B5%EC%9D%B4%20%EC%96%B4%EA%B8%8B%EB%82%98%EB%A9%B4%20%ED%81%B4%EB%9D%BC%EC%9D%B4%EC%96%B8%ED%8A%B8%EA%B0%80%20%EB%B2%84%EB%A6%B0%EB%8B%A4.md) | Learning CoreDNS 7장 |

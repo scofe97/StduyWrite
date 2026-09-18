@@ -46,12 +46,14 @@ updated: 2026-09-13
 | 4 · 성능 분석 | 메모리 | virtual memory · RSS · VSS · PSS · page cache · swap · overcommit |
 | 4 · 성능 분석 | 저장 I/O | block I/O · IOPS · queue depth · `fsync` · 파일 시스템 캐시 · blk-cgroup · `io.max` |
 | 4 · 성능 분석 | 사용자 공간 allocator | malloc · free list · arena · 단편화 · 대체 allocator |
+| 4 · 성능 분석 | CPU 명령어 확장 | SIMD · 벡터화 · SSE · AVX · AVX2 · AVX-512 · ARM NEON · AES-NI · PCLMULQDQ · CPUID · `lscpu` |
 | 4 · 성능 분석 | 측정의 함정 | throughput · tail latency · P99 · P99.9 · coordinated omission · flame graph · CPU·heap·block·mutex 프로파일 · 워밍업 · steal time · noisy neighbor · CPU quota |
 | 5 · 관측과 보안 | 관측 도구 | procfs · sysfs · `sar` · 도구 커버리지 · 관측 소스 |
 | 5 · 관측과 보안 | 커널 인터페이스 | `/proc/stat` · `meminfo` · `PID/stat` · `diskstats` · `net/snmp` · `/proc/pressure` · some 과 full |
 | 5 · 관측과 보안 | 추적 | perf · Ftrace · tracepoint · kprobe · uprobe · BCC · bpftrace · verifier · CO-RE · BTF |
 | 5 · 관측과 보안 | 실행 권한 | capability · seccomp · `no-new-privileges` · AppArmor · SELinux · Landlock |
 | 5 · 관측과 보안 | 격리 강화 | 샌드박싱 세 갈래 · 설정 하나로 무너지는 경계 |
+| 5 · 관측과 보안 | 비밀 위생 | 비밀의 수명 · zeroing · `explicit_bzero` · dead store elimination · `mlock` · core dump 유출 · 상수 시간 코드 · 사이드 채널 |
 | 6 · 커널 내부 | 메모리 관리 | VM split · 주소 변환 · page table · KASLR · NUMA · 페이지 할당자 · GFP 플래그 · slab · `kmalloc` · `vmalloc` · demand paging · 가용 공간 관리 |
 | 6 · 커널 내부 | 스케줄러 | 스케줄링 클래스 · CFS 구현 · 선점 · 진입점 · CPU affinity |
 | 6 · 커널 내부 | 동기화 | 임계 구역 · data race · mutex · spinlock · atomic · refcount · lock-free · lockdep · memory barrier |
@@ -77,6 +79,7 @@ updated: 2026-09-13
 | OSTEP (무료 공개판) | 가상화 · 병행성 · 지속성 | 필수 | 2·4·6단계 |
 | Linux Kernel Docs (공식) | proc · cgroup-v2 · psi | 필수 | 3~5단계 |
 | Operating System Concepts | 1~9 · 13~16장 | 추천 | 2·4·6단계 |
+| Real-World Cryptography | 8 · 13 · 16장 | 추천 | 4·5단계 |
 | Learning eBPF | 3 · 5~7 · 9장 | 추천 | 5단계 |
 | [Linux Kernel Programming](../02_os/book/linux-kernel-programming/README.md) | 6~13장 | 추천 | 2·6단계 |
 | Virtualization Essentials | 1~3 · 7·8장 | 선택 | 6단계 |
@@ -167,6 +170,11 @@ updated: 2026-09-13
 | coordinated omission — 측정이 놓치는 지연 | 필수 | | |
 | flame graph · CPU·heap·block·mutex 프로파일 | 추천 | [06-04](../02_os/book/systems-performance/06-04.CPU%20%284%29%20%E2%80%94%20%EA%B4%80%EC%B8%A1%20%EB%8F%84%EA%B5%AC%C2%B7%EC%8B%9C%EA%B0%81%ED%99%94.md) | Systems Performance 6장 |
 | malloc · free list · arena · 단편화 · 대체 allocator | 추천 | | |
+| SIMD · 벡터화 — 한 명령이 여러 데이터를 | 추천 | | Real-World Cryptography 13장 |
+| SSE · AVX · AVX2 · AVX-512 · ARM NEON | 선택 | | |
+| CPUID · CPU feature detection · `lscpu` · `/proc/cpuinfo` | 추천 | | Systems Performance 6장 |
+| AES-NI · PCLMULQDQ · SHA 확장 | 추천 | | Real-World Cryptography 13장 |
+| 가상화·컨테이너에서 CPU feature 노출 | 선택 | | Systems Performance 11장 |
 | steal time · noisy neighbor · CPU quota · 워밍업 | 추천 | [11-02](../02_os/book/systems-performance/11-02.%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C%20%EC%BB%B4%ED%93%A8%ED%8C%85%20%282%29%20%E2%80%94%20%ED%95%98%EB%93%9C%EC%9B%A8%EC%96%B4%20%EA%B0%80%EC%83%81%ED%99%94.md) | Systems Performance 11장 |
 | blk-cgroup · `io.max` | 선택 | | |
 | IRQ affinity · `irqbalance` | 선택 | | |
@@ -182,6 +190,11 @@ updated: 2026-09-13
 | `/proc/pressure` — some 과 full · avg10 | 필수 | | Linux Kernel Docs — psi |
 | perf — 샘플링과 이벤트 소스 | 필수 | [13-01](../02_os/book/systems-performance/13-01.perf%20%281%29%20%E2%80%94%20%EA%B0%9C%EC%9A%94%C2%B7%EC%84%9C%EB%B8%8C%EC%BB%A4%EB%A7%A8%EB%93%9C%C2%B7%EC%9B%90%EB%9D%BC%EC%9D%B4%EB%84%88.md) ~ [13-03](../02_os/book/systems-performance/13-03.perf%20%283%29%20%E2%80%94%20%EB%AA%85%EB%A0%B9.md) | |
 | capability · seccomp | 필수 | [02-01](../08_cloud/book/container-security/02-01.Linux%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%BD%9C%C2%B7%EA%B6%8C%ED%95%9C%C2%B7capability%20%E2%80%94%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%B3%B4%EC%95%88%EC%9D%98%20%EB%B0%94%EB%8B%A5.md) | Container Security 2장 |
+| 비밀의 수명 — 생성·사용·파기 | 필수 | | Real-World Cryptography 8장 |
+| zeroing · `explicit_bzero` · `OPENSSL_cleanse` | 필수 | | Real-World Cryptography 8장 |
+| dead store elimination — `memset` 이 지워지는 이유 | 추천 | | |
+| `mlock` · swap · core dump 로 새는 비밀 | 추천 | | Systems Performance 7장 |
+| 상수 시간 코드 · 사이드 채널 · 캐시 타이밍 | 선택 | | Real-World Cryptography 13·16장 |
 | Ftrace — tracefs · 트레이서 | 추천 | [14-01](../02_os/book/systems-performance/14-01.Ftrace%20%281%29%20%E2%80%94%20%EA%B0%9C%EC%9A%94%C2%B7tracefs%C2%B7%ED%94%84%EB%A1%9C%ED%8C%8C%EC%9D%BC%EB%9F%AC.md) ~ [14-03](../02_os/book/systems-performance/14-03.Ftrace%20%283%29%20%E2%80%94%20%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C.md) | |
 | eBPF · BCC · bpftrace | 추천 | [15-01](../02_os/book/systems-performance/15-01.BPF%20%281%29%20%E2%80%94%20%EA%B0%9C%EC%9A%94%C2%B7BCC%20vs%20bpftrace%C2%B7BCC.md) ~ [15-03](../02_os/book/systems-performance/15-03.BPF%20%283%29%20%E2%80%94%20bpftrace%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%C2%B7%EB%A0%88%ED%8D%BC%EB%9F%B0%EC%8A%A4.md) | Learning eBPF 3장 |
 | verifier · CO-RE · BTF | 추천 | | Learning eBPF 5·6·7장 |
@@ -249,6 +262,8 @@ updated: 2026-09-13
 | The Linux Programming Interface | 정독용이 아니라 사전입니다. 시스템 콜과 API 가 왜 그 모양인지 궁금할 때만 펴 봅니다 |
 | BPF Performance Tools | 5단계 다음의 tracing 심화입니다. `/proc` · cgroup · PSI · perf 를 지난 뒤에 엽니다 |
 | Below · OpenMetrics · exporter | Below 는 위 인터페이스를 프로그램이 어떻게 수집하는지 보는 코드입니다. 수집한 뒤 시각화는 [관측 가능성 로드맵](observability-roadmap.md)이 맡습니다 |
+| AVX-512 · ARM SVE 명령어 개별 규격 | 소장본에 장이 없습니다. 어떤 확장이 있는지까지만 알고, 개별 명령은 필요할 때 [Intel Intrinsics Guide](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html)에서 찾습니다 |
+| dead store elimination 의 컴파일러 구현 | 소장본에 장이 없습니다. `memset` 이 지워진다는 사실과 `explicit_bzero` 로 막는다는 대응까지가 이 로드맵의 몫이고, 최적화 패스 자체는 컴파일러 축입니다 |
 
 
 
