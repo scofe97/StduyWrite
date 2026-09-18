@@ -57,7 +57,9 @@ for cx, (name, sub) in zip(CX, T1):
 # ── 2단 — 커널 객체 셋 ───────────────────────────────────────────
 T2 = [("파일 디스크립터 (fd)", "연결을 파일로 다루는 번호표", "0·1·2 다음 번호"),
       ("포트 8080 예약", "와일드카드 주소에 묶임", "v4·v6 함께 수신"),
-      ("accept 큐", "수립됐지만 아직 안 받은 연결", "칸 수 = somaxconn")]
+      ("accept 큐", "수립됐지만 아직 안 받은 연결", "칸 수 = min(listen, somaxconn)")]
+# 2026-09-18 정정 — 칸 수는 somaxconn 이 아니라 listen 두 번째 인자와 net.core.somaxconn 중 작은 값이다.
+#            Go 가 somaxconn 을 그대로 넘기므로 실측이 somaxconn 과 같아 보였을 뿐이다([^somaxconn]).
 for cx, (name, sub, tag) in zip(CX, T2):
     d.box(cx - NW // 2, T2_Y, NW, T2_H, PAPER2, RULE, 1.1, 6)
     d.t(cx, T2_Y + 22, ddx.fit(name, 13, NW - 20, name), 13, INK, KR, "middle", 600)

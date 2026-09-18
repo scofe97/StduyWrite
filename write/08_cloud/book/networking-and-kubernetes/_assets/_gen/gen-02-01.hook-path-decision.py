@@ -9,16 +9,19 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 888
+# 2026-09-18 세로 통로가 16px 뿐이라 사슬이 한 덩어리로 뭉쳐 보였다. 가로 폭은 글자 크기를
+#            정하므로(스타일 계약 §캔버스 폭) 건드리지 않고, stride 를 72 → 104 로 올려
+#            통로 48px 을 만든 뒤 늘어난 만큼을 높이로 받는다. 시작 타원·마름모 사이도 같은 48px.
+W, H = 1000, 1088
 d = D(W, H, "NETFILTER HOOKS · WHICH COMBINATION",
       "훅 조합을 정하는 두 질문 — 출발지가 나인가, 목적지가 나인가",
       "패킷이 지나는 Netfilter 훅 조합은 출발지와 목적지가 이 호스트인지 두 질문으로 정해진다. "
       "네 조합과 훅 다섯 개가 모두 나오며, 로컬에서 로컬로 가는 경우만 훅을 넷 지난다.",
       lead="두 질문이 네 갈래를 만들고, 갈래마다 지나는 훅이 다르다")
 
-BW, BH, STRIDE = 136, 56, 72
+BW, BH, STRIDE = 136, 56, 104        # 통로 = STRIDE - BH = 48px
 COL = [140, 380, 620, 860]
-OVAL_CY, Q1_CY, Q2_CY, ROW0 = 160, 244, 340, 440
+OVAL_CY, Q1_CY, Q2_CY, ROW0 = 160, 268, 392, 508
 DW, DH = 232, 76                                   # 마름모
 Q2X = [260, 740]
 
@@ -53,7 +56,7 @@ for qx in Q2X:
     diamond(qx, Q2_CY, "목적지가 이 호스트인가?")
 
 # ── 각 질문에서 두 열로 ────────────────────────────────────────
-TRUNK = 392
+TRUNK = 456            # 두 번째 마름모 아래끝(430)과 첫 행 위끝(480) 사이 통로의 한가운데
 for qi, qx in enumerate(Q2X):
     for side, lab in ((0, "예"), (1, "아니오")):
         cx = COL[qi * 2 + side]
@@ -108,6 +111,6 @@ down(cx, ROW0 + 3 * STRIDE + BH + BH // 2, ROW0 + 4 * STRIDE + BH - 22)
 oval(cx, ROW0 + 4 * STRIDE + BH, "로컬 소켓으로")
 
 # LOCAL_ 훅의 주소 고정과 '두 번째 질문 = 라우팅 판단'은 본문 산문이 맡는다
-d.legend(832, [("주소 한쪽이 이 호스트로 고정", INFO), ("나갔다 다시 들어온다", ACC)])
+d.legend(1032, [("주소 한쪽이 이 호스트로 고정", INFO), ("나갔다 다시 들어온다", ACC)])
 d.save("02-01.hook-path-decision.svg")
 print("ok hook-path-decision")
