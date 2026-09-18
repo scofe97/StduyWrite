@@ -27,6 +27,7 @@ updated: 2026-09-13
 |---|---|---|
 | 1 · 데이터 시스템의 축 | 갈래 | 운영 시스템과 분석 시스템 · 분산과 단일 노드 · 클라우드와 셀프 호스팅 |
 | 1 · 데이터 시스템의 축 | 비기능 | 응답 시간 · 처리량 · 꼬리 지연 · 신뢰성 · 내결함성 · 확장성 · 유지보수성 |
+| 1 · 데이터 시스템의 축 | 수명과 파기 | 저장 시 암호화 · DEK · KEK · envelope encryption · crypto-shredding · 삭제권 · 보존 기간 |
 | 2 · 데이터 모델 | 표현 | 관계형 · 문서 · 그래프 · 정규화 · 비정규화 · 조인 횟수 · 스키마 유연성 |
 | 2 · 데이터 모델 | 분석용 | 별 스키마 · 눈송이 · OBT · 이벤트 소싱 · CQRS · DataFrame |
 | 3 · 저장 엔진과 인덱스 | 자료구조 | OLTP 저장 · B-tree 기초와 변형 · LSM · 로그 구조 저장 · 페이지 분할 |
@@ -62,8 +63,9 @@ updated: 2026-09-13
 | Database Internals | 1~7 · 9~14장 | 추천 | 3 · 5~8단계 |
 | Patterns of Distributed Systems | 3~7 · 10~12 · 17~29장 | 추천 | 3 · 5 · 7·8단계 |
 | Elasticsearch in Action, 2판 | 3·4 · 7~13장 | 선택 | 3단계 |
+| Real-World Cryptography | 8장 | 선택 | 1단계 |
 
-공식 자료가 빈칸을 메웁니다. [Raft](https://raft.github.io/)가 8단계, [Jepsen 의 일관성 모델 지도](https://jepsen.io/consistency)가 7·8단계, [DDIA 2판 참조 모음](https://github.com/ept/ddia2-references)이 전 단계를 받칩니다.
+공식 자료가 빈칸을 메웁니다. [Raft](https://raft.github.io/)가 8단계, [Jepsen 의 일관성 모델 지도](https://jepsen.io/consistency)가 7·8단계, [DDIA 2판 참조 모음](https://github.com/ept/ddia2-references)이 전 단계를 받칩니다. 소장본에 장이 없는 crypto-shredding 은 [NIST SP 800-88 Rev.1](https://csrc.nist.gov/pubs/sp/800/88/r1/final) 의 Cryptographic Erase 절이 기준입니다.
 
 **자료를 책과 정독 노트로 한정했습니다.** `05_data` 의 자체 노트 여든다섯 편은 SQL·JDBC·JPA·QueryDSL 을 익힌 기록이라 순서의 근거로 쓰지 않습니다. 그 축은 [05_data MOC](../05_data/README.md)와 [Spring 로드맵](spring-roadmap.md)이 맡습니다.
 
@@ -85,6 +87,9 @@ updated: 2026-09-13
 | 확장성과 유지보수성 | 필수 | [02-04](../05_data/book/designing-data-intensive-applications/02-04.%ED%99%95%EC%9E%A5%EC%84%B1.md) · [02-05](../05_data/book/designing-data-intensive-applications/02-05.%EC%9C%A0%EC%A7%80%EB%B3%B4%EC%88%98%EC%84%B1.md) | DDIA 2장 |
 | 사례로 보는 설계 선택 | 추천 | [02-01](../05_data/book/designing-data-intensive-applications/02-01.%EC%82%AC%EB%A1%80%20%EC%97%B0%EA%B5%AC%20%E2%80%94%20%EC%86%8C%EC%85%9C%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%ED%99%88%20%ED%83%80%EC%9E%84%EB%9D%BC%EC%9D%B8.md) | DDIA 2장 |
 | 데이터와 법 · 사회 | 선택 | [01-05](../05_data/book/designing-data-intensive-applications/01-05.%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%8B%9C%EC%8A%A4%ED%85%9C%C2%B7%EB%B2%95%C2%B7%EC%82%AC%ED%9A%8C.md) | DDIA 1·14장 |
+| 저장 시 암호화 · DEK · KEK · envelope encryption | 추천 | | Real-World Cryptography 8장 |
+| crypto-shredding — 데이터 대신 키를 파기한다 | 추천 | | |
+| 삭제권과 보존 기간 — 백업까지 지워지는가 | 추천 | | DDIA 1·14장 |
 | 용어를 먼저 고정하기 | 추천 | [00-01](../05_data/book/designing-data-intensive-applications/00-01.%EC%9A%A9%EC%96%B4%EC%A7%91%20%E2%80%94%20DDIA%202%ED%8C%90%20%ED%95%B5%EC%8B%AC%20%EC%9A%A9%EC%96%B4%2050%EC%84%A0.md) | DDIA 서문 |
 
 ### 2단계 · 데이터 모델

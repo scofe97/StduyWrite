@@ -61,7 +61,7 @@ rows = [
         ("Sidecar-less Istio Explained", "7단계", "1~3장", ["ambient 모드 구조", "ztunnel 과 waypoint"], "대체"),
     ]),
     ("8–9", "신뢰와 경로", [
-        ("Real-World Cryptography", "8단계", "2·3·7~10장", ["해시·MAC·서명·난수", "안전한 전송과 종단 암호화"], "추천"),
+        ("Real-World Cryptography", "1 · 8단계", "2~5 · 7~10 · 13장", ["키 교환·AEAD·해시·MAC", "안전한 전송과 ECH"], "추천"),
         ("API Security in Action", "8단계", "9장", ["capability 기반 보안", "macaroon 과 권한 위임"], "선택"),
         ("Patterns of Distributed Systems", "8·9단계", "7·26·28장", ["HeartBeat 와 실패 감지 시간", "Lease 와 gossip 전파"], "추천"),
         ("Database Internals", "8·9단계", "9·12장", ["실패 감지와 heartbeat", "anti-entropy 와 gossip"], "추천"),
