@@ -403,22 +403,6 @@ updated: 2026-09-15
 
 **reverse tunnel 은 실제 구현을 돌려 봅니다.** [portal-tunnel](https://github.com/gosuda/portal-tunnel)은 MIT 라이선스로 공개된 Go reverse tunnel 이고 relay 를 직접 띄울 수 있습니다. 1단계의 SNI 라우팅과 8·9단계의 lease · keyless TLS · relay 선택이 한 저장소에 모여 있습니다. 코드를 따라 짜는 일은 Go 로드맵 몫입니다.
 
-**장애를 주입해 확인할 목록을 따로 둡니다.** 실습 자료가 없는 자리도 증상은 만들 수 있습니다.
-
-| 주입할 장애 | 겉으로 보이는 증상 | 확인할 증거 |
-|---|---|---|
-| 잘못된 Service selector | ClusterIP 접속 실패 | EndpointSlice 가 비어 있음 |
-| readiness 실패 | 일부 endpoint 제외 | Pod condition 과 EndpointSlice readiness |
-| CoreDNS 정지 | 이름 접근만 실패 | DNS timeout · SERVFAIL |
-| 높은 `ndots` | 첫 요청 지연 | DNS query 순서 |
-| NetworkPolicy default deny | TCP timeout | policy verdict 와 drop |
-| MTU mismatch | 작은 요청만 성공 | fragmentation · ICMP PTB |
-| conntrack 포화 | 간헐적 신규 연결 실패 | conntrack count · max |
-| stale Endpoint | 특정 목적지만 reset | EndpointSlice 와 Pod lifecycle |
-| 인증서 만료 | TCP 는 되고 TLS 만 실패 | TLS alert · 인증서 날짜 |
-
-위 목록 중 **conntrack 포화**와 **MTU mismatch** 는 [network-fundamentals-lab](../02_os/book/network-fundamentals-lab/README.md) 의 09·12·13편이 이미 랩으로 재현합니다. 주입할 것을 새로 만들기 전에 그쪽을 먼저 돌립니다.
-
 
 
 ## 로드맵에 넣지 않은 것
