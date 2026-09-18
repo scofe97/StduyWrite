@@ -37,7 +37,7 @@ def step(cx, cy, txt, sub=None, col=RULE, tc=INK, h=52):
     else:
         d.t(cx, cy + 5, ddx.fit(txt, 12, NW - 28, f"step {txt}"), 12, tc, KR)
 
-def diamond(cx, cy, txt, hw=112, hh=34):
+def diamond(cx, cy, txt, hw=112, hh=30):   # 세로 반지름 34 → 30 · 연결선이 20px 는 되게
     d.o.append(f'<path d="M {cx} {cy-hh} L {cx+hw} {cy} L {cx} {cy+hh} L {cx-hw} {cy} z" '
                f'fill="{WARN}12" stroke="{WARN}" stroke-width="1.3"/>')
     d.t(cx, cy + 4, ddx.fit(txt, 11, hw * 1.4, f"dia {txt}"), 11, WARN, KR)
@@ -50,13 +50,14 @@ def down(cx, y1, y2, label=None, c=SOFT):
 # 왼쪽 — 합쳤다면
 L = CX[0]
 oval(L, 186, "ClusterIP 로 패킷 도착")
-down(L, 208, 234)
+# 화살촉은 다음 도형의 변에서 멈춘다 — 마름모는 위 꼭짓점(cy-30), 사각은 윗변(cy-26)
+down(L, 208, 232)
 diamond(L, 262, "확률 0.33 굴림 · 1회차")
-down(L, 296, 314, "A")
+down(L, 292, 312, "A")
 step(L, 338, "KUBE-MARK-MASQ", "-s 10.244.1.35 기준으로 표시")
-down(L, 364, 386)
+down(L, 364, 384)
 diamond(L, 414, "확률 0.33 굴림 · 2회차")
-down(L, 448, 466, "B")
+down(L, 444, 464, "B")
 step(L, 490, "DNAT", "--to-destination 10.244.2.4:80")
 down(L, 516, 542)
 oval(L, 566, "A 표시 · B 로 전송", BAD)
@@ -64,9 +65,9 @@ oval(L, 566, "A 표시 · B 로 전송", BAD)
 # 오른쪽 — 실제
 R = CX[1]
 oval(R, 186, "ClusterIP 로 패킷 도착")
-down(R, 208, 234)
+down(R, 208, 232)
 diamond(R, 262, "확률 0.33 굴림 · 한 번뿐")
-down(R, 296, 314, "A", ACC)
+down(R, 292, 312, "A", ACC)
 step(R, 338, "KUBE-SEP-A 로 점프", "-j KUBE-SEP-BN57OJOGDZOVVFD3", ACC, ACC)
 down(R, 364, 390, None, ACC)
 d.tone(R - NW / 2, 390, NW, 80, ACC, 6, "0E", 1.3)
