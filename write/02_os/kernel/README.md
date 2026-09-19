@@ -3,19 +3,18 @@ title: 02_os/kernel — 커널과 컨테이너
 tags: [moc, linux, kernel, syscall, namespace, cgroup, proc, runtime]
 status: final
 related:
-  - ../roadmap.md
-  - roadmap.md
+  - ../../roadmap/os-roadmap.md
   - ../README.md
   - ../networking/README.md
   - ../../08_cloud/kubernetes/README.md
-updated: 2026-07-15
+updated: 2026-09-12
 ---
 
 # 02_os/kernel
 ---
 > Linux 커널이 컨테이너 동작에서 맡는 책임을 정리한다. 유저/커널 스페이스 분리, 시스템 콜, 커널 코어 영역, namespace·cgroup, /proc, K8s 노드 필수 커널 파라미터까지 — 네트워크 영역은 별도 `networking/`에서 다루고 본 폴더는 그 외 커널 일반 메커니즘에 집중한다.
 
-> OS Kernel 딥다이브 로드맵의 **섹션별 키워드 전체**(Process/Thread·System Call·CPU Scheduling·Memory·OOM Killer·Cgroup·Namespace·FD·VFS/OverlayFS·Disk I/O·Socket·Futex·Kernel Security·관측 14주제)는 [roadmap.md](roadmap.md)에 원문 그대로 정리해 두었다. 아래 "문서"가 *이미 작성된 본문*이라면, roadmap.md는 *다뤄야 할 전체 범위*의 SSOT다 — 중심은 Linux Kernel 원리, Kubernetes는 그 위에서 보이는 OOMKilled·CPU throttling·FD 고갈 같은 현상을 해석하는 적용처로만 연결한다.
+> 프로세스·시스템 콜·스케줄링·메모리·cgroup·namespace·파일시스템·보안·관측의 읽기 순서는 [OS 로드맵](../../roadmap/os-roadmap.md)에 정리했습니다.
 
 
 
@@ -35,7 +34,7 @@ updated: 2026-07-15
 
 ## 상위·이웃·활용처
 
-- 통합 경로: [02_os 통합 학습 로드맵](../roadmap.md) — 자원·격리 단계의 진입점
+- 통합 경로: [OS 학습 로드맵](../../roadmap/os-roadmap.md) — 자원·격리 단계의 진입점
 - 상위: [02_os/ MOC](../README.md)
 - 이웃: [02_os/networking/](../networking/README.md) — netns·veth·bridge·netfilter·conntrack·TC·eBPF 깊이
 - 활용처: [08_cloud/kubernetes/](../../08_cloud/kubernetes/README.md) — Pod·자원 관리·보안 운영

@@ -16,6 +16,8 @@ updated: 2026-09-05
 ---
 > 인프라 추상화와 오케스트레이션 관점의 지식 저장소. Kubernetes, Service Mesh, Helm, GitOps 같은 "클러스터 내부 구조"를 다룬다. 여기에 더해, 그 클러스터가 딛고 선 아래층인 IaaS(오픈스택)까지 조망 범위에 둔다.
 
+Kubernetes 를 어떤 순서로 읽을지는 [k8s-roadmap.md](../roadmap/k8s-roadmap.md) 가 정한다. 이 README 는 자료가 *어디에* 있는지를 맡고, 로드맵은 *무엇부터* 열지를 맡는다. 네트워크 데이터패스는 [`network-roadmap.md`](../roadmap/network-roadmap.md) 가 따로 가져간다.
+
 ## 구성
 
 | 서브카테고리 | 범위 | 문서 |

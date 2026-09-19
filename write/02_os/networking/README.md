@@ -3,36 +3,37 @@ title: 02_os/networking — Linux 네트워킹
 tags: [moc, linux, networking, namespace, netfilter, ebpf, conntrack]
 status: final
 related:
-  - ../roadmap.md
-  - roadmap.md
+  - ../../roadmap/network-roadmap.md
   - ../README.md
   - ../kernel/README.md
   - ../../08_cloud/kubernetes/README.md
-updated: 2026-07-15
+updated: 2026-09-12
 ---
 
 # 02_os/networking
 ---
-> Linux 커널이 제공하는 네트워크 자료구조와 hook 중 Kubernetes·컨테이너·서비스 메시에서 반복 등장하는 것들을 한 곳에 정리한다. K8s 카테고리에서 다루기에는 깊고, OS 일반 지식으로 두기에는 K8s 디버깅에 직접 쓰이는 주제만 추린다.
 
-> OS 네트워크 딥다이브 로드맵의 **섹션별 키워드 전체**(socket·TCP state·routing·netfilter·conntrack·namespace·veth·bridge·NAT·packet capture 등 20주제)는 [roadmap.md](roadmap.md)에 원문 그대로 정리해 두었다. 아래 "문서"가 *이미 작성된 본문*이라면, roadmap.md는 *다뤄야 할 전체 범위*의 SSOT다 — 중심은 Linux OS 네트워크 원리, Kubernetes는 적용 사례·디버깅 대상으로만 연결한다.
-
-
+> Linux 네트워크 원리와 Kubernetes 패킷 경로를 다룹니다. 전체 학습 순서와 실습은 [통합 네트워크 로드맵](../../roadmap/network-roadmap.md)에서 확인합니다.
 
 ## 문서
 
+> netns·veth·routing·netfilter·conntrack에서 DNS와 주소 설계까지 연결합니다.
+
 | Ch | 제목 | 핵심 질문 |
-|----|------|----------|
-| 01-01 | [네트워킹 기초](./01-01.네트워킹%20기초.md) | netns·veth·bridge·라우팅·netfilter·conntrack·TC·eBPF는 K8s 추상 아래에서 어떻게 협력하는가? |
-| 01-02 | [K8s 패킷 여정 — netfilter·conntrack·라우팅](./01-02.K8s%20패킷%20여정%20—%20netfilter·conntrack·라우팅.md) | Pod에서 나간 패킷이 Service·NAT·conntrack을 거쳐 목적지에 닿기까지 커널을 어떻게 통과하는가? |
-| 01-03 | [DNS 필터링 차단 — NXDOMAIN·DoH·우회 마찰](./01-03.DNS%20필터링%20차단%20—%20NXDOMAIN·DoH·우회%20마찰.md) | DNS 차단은 어느 계층에서 일어나고 NXDOMAIN·DoH는 그 차단과 우회에 어떻게 작용하는가? |
-| 01-04 | [서브네팅과 CIDR — 주소 공간을 자르는 법](./01-04.서브네팅과%20CIDR%20—%20주소%20공간을%20자르는%20법.md) | prefix 길이 하나가 정하는 것은 무엇이고, 그 감각이 없으면 왜 VPC·Pod·Service 대역이 겹쳐 터지는가? |
+|---|---|---|
+| 01-01 | [네트워킹 기초](./01-01.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9%20%EA%B8%B0%EC%B4%88.md) | netns·veth·bridge·routing·netfilter·conntrack·TC·eBPF는 어떻게 협력합니까? |
+| 01-02 | [K8s 패킷 여정](./01-02.K8s%20%ED%8C%A8%ED%82%B7%20%EC%97%AC%EC%A0%95%20%E2%80%94%20netfilter%C2%B7conntrack%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85.md) | Pod에서 Service까지 패킷이 커널을 어떻게 통과합니까? |
+| 01-03 | [DNS 필터링 차단](./01-03.DNS%20%ED%95%84%ED%84%B0%EB%A7%81%20%EC%B0%A8%EB%8B%A8%20%E2%80%94%20NXDOMAIN%C2%B7DoH%C2%B7%EC%9A%B0%ED%9A%8C%20%EB%A7%88%EC%B0%B0.md) | NXDOMAIN·DoH는 DNS 차단과 우회에 어떻게 작용합니까? |
+| 01-04 | [서브네팅과 CIDR](./01-04.%EC%84%9C%EB%B8%8C%EB%84%A4%ED%8C%85%EA%B3%BC%20CIDR%20%E2%80%94%20%EC%A3%BC%EC%86%8C%20%EA%B3%B5%EA%B0%84%EC%9D%84%20%EC%9E%90%EB%A5%B4%EB%8A%94%20%EB%B2%95.md) | VPC·Pod·Service 대역은 왜 겹치면 안 됩니까? |
 
 
 
-## 상위·이웃·활용처
+## 이어서 읽기
 
-- 통합 경로: [02_os 통합 학습 로드맵](../roadmap.md) — 네트워크 경로 단계의 진입점
-- 상위: [02_os/ MOC](../README.md)
-- 이웃: [02_os/kernel/](../kernel/README.md) — 커널 일반 메커니즘(시스템 콜·namespace·cgroup·/proc)
-- 활용처: [08_cloud/kubernetes/](../../08_cloud/kubernetes/README.md), `08_cloud/service-mesh/` <!-- 링크 끊김(2026-08): ../../08_cloud/service-mesh/README.md -->
+> 커널 일반 메커니즘과 Kubernetes 구현을 양쪽에서 확장합니다.
+
+| 방향 | 문서 |
+|---|---|
+| 커널 | [02_os/kernel](../kernel/README.md) |
+| Kubernetes | [08_cloud/kubernetes](../../08_cloud/kubernetes/README.md) |
+| 전체 순서 | [네트워크 학습 로드맵](../../roadmap/network-roadmap.md) |

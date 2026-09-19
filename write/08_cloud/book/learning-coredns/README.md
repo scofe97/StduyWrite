@@ -39,7 +39,7 @@ DNS 를 다루는 책을 어디에 둘지는 자명하지 않습니다. 이 저�
 
 같은 폴더의 형제 책들과는 보는 층이 다릅니다. [『Kubernetes in Action』](../kubernetes-in-action/README.md)이 오브젝트 중심이고 [『Networking and Kubernetes』](../networking-and-kubernetes/README.md)가 패킷 중심이라면, 이 책은 **서비스 하나**를 끝까지 파고듭니다. 그 서비스가 클러스터의 모든 이름 해석을 떠받치기 때문에, 좁게 파도 닿는 범위가 넓습니다.
 
-DNS를 다루는 기존 노트와는 편을 나눠 가집니다. 질의를 **보내는 쪽**, 곧 `resolv.conf`와 ndots와 search domain은 [02_os OS 네트워크 로드맵 §6](../../../02_os/networking/roadmap.md)이 SSOT입니다. 질의를 **받는 쪽**, 곧 Corefile과 플러그인과 존 데이터는 이 폴더가 맡습니다. 쿠버네티스 공식문서 기준의 운영 관점은 [DNS와 CoreDNS](../../kubernetes/04_networking/04-05.DNS%EC%99%80%20CoreDNS.md)가 이미 SSOT이므로, 겹치는 자리는 링크로 위임하고 여기에는 **책에서 새로 얻는 것만** 남깁니다.
+DNS를 다루는 기존 노트와는 편을 나눠 가집니다. 질의를 **보내는 쪽**, 곧 `resolv.conf`와 ndots와 search domain은 [네트워크 로드맵 1단계](../../../roadmap/network-roadmap.md#%ED%95%99%EC%8A%B5-%EC%88%9C%EC%84%9C)가 SSOT입니다. 질의를 **받는 쪽**, 곧 Corefile과 플러그인과 존 데이터는 이 폴더가 맡습니다. 쿠버네티스 공식문서 기준의 운영 관점은 [DNS와 CoreDNS](../../kubernetes/04_networking/04-05.DNS%EC%99%80%20CoreDNS.md)가 이미 SSOT이므로, 겹치는 자리는 링크로 위임하고 여기에는 **책에서 새로 얻는 것만** 남깁니다.
 
 
 

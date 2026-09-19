@@ -6,18 +6,20 @@ source:
   - ../../../poc/03_CloudNative/02-kubernetes/README.md@8ac9e97
   - https://kubernetes.io/docs/concepts/
 related:
-  - roadmap.md
+  - ../../roadmap/k8s-roadmap.md
   - ../README.md
   - ../argocd/README.md
   - ../book/kubernetes-in-action/README.md
-updated: 2026-07-12
+updated: 2026-09-12
 ---
 
 # 08_cloud/kubernetes
 ---
-> Kubernetes를 개념 축으로 정리한 딥다이브 노트입니다. 공식 문서(kubernetes.io/docs/concepts)의 대분류를 뼈대로 삼되, 폴더 번호는 "무엇을 먼저 배우는가"라는 학습 흐름을 따릅니다. 워크로드에서 시작해 설정·저장소·네트워크로 넓히고, 스케줄링·내부 구조·보안·확장을 거쳐 Day-2 운영까지 한 지도로 잇습니다.
+> Kubernetes를 개념 축으로 정리한 딥다이브 노트입니다. 워크로드에서 시작해 설정·저장소·네트워크·스케줄링·내부 구조·보안·확장·Day-2 운영까지 잇습니다.
 
-이 카테고리는 "클러스터 안에서 어떻게 선언되고, 배치되고, 연결되고, 운영되는가"를 기본 범위로 둡니다. Service Mesh처럼 서비스 간 L7 정책·mTLS·세밀한 트래픽 제어가 본격적으로 필요해지는 지점부터는 별도 `service-mesh` <!-- 링크 끊김(2026-08): ../service-mesh/README.md --> 카테고리로 넘깁니다. ArgoCD는 여기서 입문 수준으로만 소개하고, App of Apps·ApplicationSet·Image Updater 같은 상세 운영은 별도 [`argocd`](../argocd/README.md) 카테고리가 맡습니다.
+공식 문서의 concepts 대분류를 뼈대로 삼고, 폴더 번호로 학습 흐름을 표시합니다. 이 카테고리는 클러스터 안에서 리소스가 선언되고 배치되고 연결되고 운영되는 과정을 다룹니다.
+
+서비스 간 L7 정책·mTLS·세밀한 트래픽 제어는 `service-mesh` <!-- 링크 끊김(2026-08): ../service-mesh/README.md --> 카테고리가 맡습니다. App of Apps·ApplicationSet·Image Updater 운영은 [`argocd`](../argocd/README.md) 카테고리에서 다룹니다.
 
 책 한 권을 저자 순서대로 따라가는 정독본은 [`book/kubernetes-in-action`](../book/kubernetes-in-action/README.md)에 따로 있습니다. 이 개념 노트는 주제로 검색해 펼쳐 보는 참조용이고, 정독본은 저자가 개념을 쌓아 올린 순서를 보존하는 학습용이라 역할이 다릅니다. 개념이 겹치면 서로 링크로만 잇고 통째 병합하지 않습니다.
 
@@ -25,26 +27,18 @@ updated: 2026-07-12
 
 ## 폴더 구조
 
-> 공식 concepts 대분류를 대주제 폴더로 두고, 각 폴더 안에 문서를 채웁니다. 폴더 번호(`NN_`)가 학습 순서이고, 파일 번호(`NN-MM`)가 그 폴더 안의 읽기 순서입니다. 각 폴더의 `README.md`가 그 폴더의 진입 안내(MOC) 역할을 합니다.
+> 공식 concepts 대분류를 대주제 폴더로 둡니다. 폴더 번호(`NN_`)와 파일 번호(`NN-MM`)가 읽기 순서를 나타냅니다.
 
-폴더를 개념 축으로 나눈 이유는 확장성 때문입니다. 새 주제(예: Admission Webhook 전용편, Probe/Health 전용편)가 생기면 그 개념이 속한 대주제 폴더에 파일 번호만 늘려 넣으면 됩니다. 아직 문서가 없는 공식 대분류는 `_containers/`·`_policies/`처럼 언더스코어 stub으로 남겨, 나중에 문서가 쌓이면 정식 번호 폴더로 승격합니다.
+각 폴더의 `README.md`는 해당 대주제의 진입 안내 역할을 합니다. 새 문서는 대응하는 대주제에 바로 배치합니다.
 
 | 폴더 | 공식 concepts | 한 줄 요약 |
 |------|--------------|-----------|
-| [`00_overview/`](00_overview/README.md) | Overview | 클러스터란 무엇이고 어떻게 띄우는가 — 입문·설치 |
-| [`01_workloads/`](01_workloads/README.md) | Workloads | Pod·Deployment·컨트롤러·Job/CronJob/DaemonSet |
-| [`02_configuration/`](02_configuration/README.md) | Configuration | ConfigMap·Secret·자원 요청/제한·설정 주입 |
-| [`03_storage/`](03_storage/README.md) | Storage | Volume·PV·PVC·StorageClass·상태 관리 |
 | [`04_networking/`](04_networking/README.md) | Services·Networking | Pod 통신 → Service·DNS → 외부 진입 → 정책·운영 제약 |
 | [`05_scheduling/`](05_scheduling/README.md) | Scheduling·Eviction | 노드 배치·토폴로지 분산·오토스케일링 |
 | [`06_architecture/`](06_architecture/README.md) | Cluster Architecture | Control Plane·etcd·API 보안·업그레이드 |
-| [`07_security/`](07_security/README.md) | Security | RBAC·ServiceAccount·인증·Admission |
-| [`08_extending/`](08_extending/README.md) | Extending Kubernetes | CRD·Operator 패턴·DB/메시징 Operator |
 | [`09_operations/`](09_operations/README.md) | Cluster Administration | 관측·트러블슈팅·kubectl 고급·CKA |
 | [`10_packaging/`](10_packaging/README.md) | (비공식) | Helm·Kustomize 패키징 도구 |
 | [`11_devtools/`](11_devtools/README.md) | (비공식) | K8s 위 CI/CD·GitOps·레지스트리 도구 |
-| [`_containers/`](_containers/README.md) | Containers | 이미지·런타임·lifecycle hook (작성 예정) |
-| [`_policies/`](_policies/README.md) | Policies | LimitRange·ResourceQuota (작성 예정) |
 
 `10_packaging`과 `11_devtools`는 공식 concepts에는 없는 주제입니다. Helm·Kustomize는 매니페스트를 다루는 패키징 도구이고, Jenkins·SonarQube·ArgoCD·Harbor는 K8s 위에 올려 쓰는 CI/CD·GitOps·레지스트리 도구라, 순정 개념과 섞이지 않도록 별도 대주제로 분리했습니다.
 
@@ -155,22 +149,11 @@ Jenkins·SonarQube·ArgoCD·Harbor를 K8s 위에 올려 개발 생산성과 배�
 
 
 
-## 딥다이브 전체 지도
+## 학습 로드맵
 
-> 위 절이 *무엇이 어디 있고 무엇을 다루나*를 답한다면, 이 절은 *Kubernetes 본질을 어디까지 깊게 파야 하는가*를 답합니다. 딥다이브 로드맵의 섹션별 키워드 전체는 [roadmap.md](roadmap.md)에 원문 그대로 옮겨 두었습니다. 아래는 그 24개 대주제를 6개 학습 단계로 묶어, 우리 폴더·미작성 갭과 연결한 네비게이션입니다.
+> [Kubernetes 학습 로드맵](../../roadmap/k8s-roadmap.md)은 이 폴더의 문서를 오브젝트, 워크로드, 연결, 자원과 저장, 내부 구조, 보안과 확장, 운영 순서로 연결합니다.
 
-한 문장으로 줄이면, 사용자는 원하는 상태를 API Server에 선언하고, Control Plane은 현재 상태와 원하는 상태를 비교하며, Scheduler는 Pod를 Node에 배치하고, kubelet은 컨테이너 런타임을 통해 Pod를 실행하며, Service와 CNI는 네트워크를 이어주고, Controller는 계속 상태를 맞춥니다.
-
-| 단계 | 대주제 묶음 | 진입 폴더 | 갭(미작성) |
-|------|-----------|----------|-----------|
-| 1 기본 리소스 | Pod·Deployment·Service·ConfigMap·Secret·Namespace | [`01_workloads`](01_workloads/README.md)·[`02_configuration`](02_configuration/README.md)·[`03_storage`](03_storage/README.md) | — |
-| 2 운영 배포 | Probe·Requests/Limits·RollingUpdate·HPA·PDB·SecurityContext | [`02_configuration`](02_configuration/README.md)·[`05_scheduling`](05_scheduling/README.md) | Probe/Health 전용편, RollingUpdate/Rollback 전용편 |
-| 3 네트워크 | Service·EndpointSlice·CoreDNS·Ingress·Gateway·NetworkPolicy·CNI | [`04_networking`](04_networking/README.md)·[`07_security`](07_security/README.md) | — |
-| 4 내부 구조 | API Server·etcd·Scheduler·Controller Manager·kubelet·runtime·kube-proxy | [`06_architecture`](06_architecture/README.md)·[`04_networking`](04_networking/README.md) | Control Plane 흐름 전용편 |
-| 5 확장 | Admission Webhook·CRD·Controller·Operator·Finalizer·OwnerReference | [`08_extending`](08_extending/README.md)·[`07_security`](07_security/README.md) | Mini Operator 직접 작성 실습편 |
-| 6 운영·장애 | Observability·Troubleshooting·Backup·Upgrade·Security | [`09_operations`](09_operations/README.md)·[`06_architecture`](06_architecture/README.md) | 분산 트레이싱(Tempo/OTel) 전용편 |
-
-각 단계의 핵심 키워드 전체와 심화 실습 후보는 [roadmap.md](roadmap.md)에 정리돼 있습니다. 미작성 갭은 위 표의 "갭" 열에 모았습니다 — Probe/Health·RollingUpdate/Rollback 전용편, Control Plane 흐름 전용편, Mini Operator 실습편, 분산 트레이싱 전용편. 이 갭들은 각각 `01_workloads`·`06_architecture`·`08_extending`·`09_operations`에 파일 번호를 늘려 채웁니다.
+로드맵의 단계별 표에서 키워드에 대응하는 현재 문서와 완료 기준을 함께 확인합니다.
 
 
 
@@ -178,7 +161,11 @@ Jenkins·SonarQube·ArgoCD·Harbor를 K8s 위에 올려 개발 생산성과 배�
 
 > 점검 질문은 별도 문서가 아니라 각 본문 끝의 한 절로 들어 있습니다.
 
-각 본문은 마지막 콘텐츠 절 뒤에 `## N. 점검 질문` 절을 두어, 그 장에서 짚어야 할 심화 Q&A를 개념 설명과 같은 문서에서 이어 읽게 합니다(예: `01_workloads/01-02.배치 워크로드.md`의 `## 8. 점검 질문`). 예전에는 `{제목} 점검.md`를 짝 파일로 분리했지만, 복습할 때 파일을 오가는 비용이 커서 본문 안으로 흡수했습니다. hands-on 실습이 필요하면 각 본문의 `실습 환경` 서술을 GCP K8s 클러스터 위에서 수행합니다. 다만 `00_overview`의 로컬 클러스터 구성, `01_workloads/01-01.핵심 워크로드`, `03_storage/03-01.스토리지와 상태`처럼 원래 점검 질문이 없던 일부 입문 편은 점검 절 없이 본문만 있습니다.
+각 본문은 마지막 콘텐츠 절 뒤에 `## N. 점검 질문`을 둡니다. 해당 장의 심화 Q&A를 개념 설명과 같은 문서에서 이어 읽습니다. 예를 들어 `01_workloads/01-02.배치 워크로드.md`에는 `## 8. 점검 질문`이 있습니다.
+
+기존의 `{제목} 점검.md` 짝 파일은 복습할 때 파일을 오가는 비용을 줄이기 위해 본문에 흡수했습니다. 실습은 각 본문의 `실습 환경`에 따라 GCP K8s 클러스터에서 수행합니다.
+
+`00_overview`의 로컬 클러스터 구성, `01_workloads/01-01.핵심 워크로드`, `03_storage/03-01.스토리지와 상태`처럼 원래 점검 질문이 없던 입문 편은 본문만 있습니다.
 
 `04_networking`은 이 전역 규약의 의도적 예외로 점검 문서를 별도 짝으로 두는 폴더입니다. 04-04~04-10은 이 예외에 따라 본문과 `점검.md`를 두고, 04-01도 기존 별도 점검 짝을 유지하며, 04-02·04-03은 기존 본문 내 점검 절을 유지합니다. 이 분리는 본문을 이해한 뒤 정답을 가린 채 스스로 설명하는 인출 구조를 위한 의도적 선택입니다.
 
@@ -192,21 +179,11 @@ Jenkins·SonarQube·ArgoCD·Harbor를 K8s 위에 올려 개발 생산성과 배�
 
 
 
-## 예정 주제 — OpenShift / OKD (TBD)
-
-> 순정 Kubernetes 딥다이브를 어느 정도 훑은 다음, 그 위에 기업용 기능을 얹은 *배포판*을 봅니다. 순정 K8s가 "엔진"이라면 OpenShift는 웹 콘솔·인증·이미지 빌드까지 조립한 "완제품"입니다.
-
-- **OpenShift / OKD** — Red Hat이 K8s에 웹 콘솔·OAuth 로그인·이미지 빌드(S2I/BuildConfig)·Route(내장 Ingress 추상화)를 통합한 배포판. 조작 CLI는 `kubectl` 상위호환인 `oc`. **OKD**는 그 무료 오픈소스판(RHEL↔CentOS/Fedora 관계와 같다). 순정 K8s를 아는 사람이 "그래서 순정과 뭐가 다른가"를 Route·S2I·OAuth provider 중심으로 익히는 편입니다. (실환경 예시: 미래에셋 3.0.3 환경이 OKD로 구축돼 `oc get nodes`·웹 콘솔로 운영됩니다.)
-
-경계: Pod·Deployment·Service 같은 순정 K8s 리소스는 이 카테고리 본문이 다룹니다. 여기 예정 범위는 **OpenShift 고유 추상화**(Route·BuildConfig·DeploymentConfig·oc)만입니다. GitOps 배포는 [`argocd`](../argocd/README.md)로 갑니다.
-
-
-
 ## 관련 문서
 
-> service-mesh·argocd·devops 카테고리로 이어지는 선후 관계와, 같은 책을 정독한 노트를 함께 봅니다.
+> Kubernetes와 연결되는 네트워크·배포·정독 문서를 함께 봅니다.
 
-- `service-mesh MOC` <!-- 링크 끊김(2026-08): ../service-mesh/README.md --> — 본 카테고리의 다음 단계. Pod 간 트래픽 제어·mTLS·관측성을 메시 계층에서 해결합니다
+- `service-mesh MOC` <!-- 링크 끊김(2026-08): ../service-mesh/README.md --> — Pod 간 트래픽 제어·mTLS·관측성을 메시 계층에서 다룹니다
 - [argocd MOC](../argocd/README.md) — ArgoCD 상세 시리즈. AppProject·App of Apps·ApplicationSet·Image Updater 운영을 별도로 다룬다
 - [Kubernetes in Action 정독본](../book/kubernetes-in-action/README.md) — 같은 개념을 저자 순서대로 쌓아 올린 책-종속 노트. 개념이 겹치면 이 개념 노트로 링크를 건다
 - [devops MOC](../../07_devops/README.md) — CI/CD 파이프라인 자체 설계는 이곳
