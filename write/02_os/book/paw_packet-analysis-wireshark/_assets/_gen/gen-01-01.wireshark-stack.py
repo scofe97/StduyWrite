@@ -20,7 +20,8 @@ def node(x, y, w, h, title, sub, focal=False, c=None):
         d.box(x, y, w, h, PAPER2, RULE, 1.0, 8)
     col = ACC if focal else (c if c else INK)
     d.t(x + w / 2, y + 26, title, 14, col, KR, "middle", 600)
-    d.t(x + w / 2, y + 46, sub, 12, MUTED, MONO)
+    # 한글이 섞인 서브라벨을 mono 로 찍으면 자간이 벌어진다(스타일 계약 안티패턴) — 한글 여부로 갈라 쓴다
+    d.t(x + w / 2, y + 46, sub, 12, MUTED, KR if any("가" <= c <= "힣" for c in sub) else MONO)
 
 CX, BW, BH = 280, 280, 60                 # 본 열: 중심 280, 폭 280 → x 140..420
 BX = CX - BW / 2
@@ -35,14 +36,16 @@ d.path(f"M {TX + TW / 2} {Y_GUI + BH} V {Y_DUMP - 32} H {CX + 80} V {Y_DUMP - 4}
 d.arrow([(CX, Y_DUMP + BH), (CX, Y_PCAP - 4)], MUTED, "ar", 1.4)
 d.arrow([(CX, Y_PCAP + BH), (CX, Y_KERN - 4)], MUTED, "ar", 1.4)
 d.arrow([(BX + BW, Y_DUMP + BH / 2), (FX - 4, Y_DUMP + BH / 2)], MUTED, "ar", 1.4)
-d.path(f"M {FX + FW / 2} {Y_DUMP} V 104 H {CX} V {Y_GUI - 4}",
-       INFO, 1.0, m="info", dash="4,3")
+# 오프라인 경로는 tshark 상자(x 500..700)를 관통하지 않게 파일 오른쪽으로 나가 위로 돈다
+OY = Y_DUMP + BH // 2
+d.arrow([(FX + FW, OY), (FX + FW + 32, OY), (FX + FW + 32, 104), (CX, 104), (CX, Y_GUI - 4)],
+        INFO, "info", 1.0, dash="4,3")
 
 node(BX, Y_GUI, BW, BH, "Wireshark GUI", "표시 · 분석 · 통계")
 node(TX, Y_GUI, TW, BH, "tshark", "CLI · 원격 터미널")
 node(BX, Y_DUMP, BW, BH, "dumpcap", "캡처 엔진 · 단독 실행 가능", focal=True)
 node(BX, Y_PCAP, BW, BH, "libpcap · Npcap", "캡처 라이브러리")
-node(BX, Y_KERN, BW, BH, "커널 패킷 소켓 · NIC", "en0 · eth0")
+node(BX, Y_KERN, BW, BH, "커널 패킷 소켓 · BPF", "en0 · eth0")
 node(FX, Y_DUMP, FW, BH, "pcapng 파일", "저장 · 재분석", c=INFO)
 
 d.t(CX + 92, Y_DUMP - 40, "캡처 위임", 11, MUTED, KR, "start")
