@@ -1,0 +1,122 @@
+<svg viewBox="0 0 900 620" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>알림 시스템 — 개선된 아키텍처와 안정성 고려사항</title>
+  <desc>여러 서비스가 알림 서버를 호출하면 채널별(iOS·Android·SMS·Email) 메시지 큐로 분리하고 워커가 외부 서비스(APNS·FCM·Twilio·Sendgrid)로 보내 디바이스에 전달하는 개선된 알림 시스템 아키텍처와, 데이터 손실 방지·중복 제거·재시도·rate limiting 같은 안정성 고려사항을 한 장에 정리한 종합도.</desc>
+
+  <rect x="0" y="0" width="900" height="620" fill="#0d0d0d"/>
+
+  <text x="30" y="40" fill="rgb(212,168,83)" font-size="20" font-weight="bold">알림 시스템 (Notification System)</text>
+  <text x="30" y="62" fill="rgb(138,133,128)" font-size="12">3채널(푸시·SMS·이메일)로 일 1천만+ 알림. 채널별 큐로 분리해 한 외부 장애가 전체로 안 번지게 한다.</text>
+
+  <defs>
+    <marker id="na" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/>
+    </marker>
+  </defs>
+
+  <!-- 좌: 서비스 -->
+  <rect x="30" y="100" width="110" height="50" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="85" y="122" fill="#e8e4df" font-size="11" text-anchor="middle">Service 1..N</text>
+  <text x="85" y="138" fill="rgb(138,133,128)" font-size="8.5" text-anchor="middle">결제·배송 등 알림 발생</text>
+
+  <!-- 알림 서버 -->
+  <rect x="180" y="92" width="150" height="66" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="255" y="112" fill="#e8e4df" font-size="11.5" text-anchor="middle" font-weight="bold">알림 서버</text>
+  <text x="255" y="128" fill="rgb(138,133,128)" font-size="8.5" text-anchor="middle">인증 · rate limit</text>
+  <text x="255" y="142" fill="rgb(138,133,128)" font-size="8.5" text-anchor="middle">검증 · 메타데이터 조회</text>
+  <line x1="140" y1="125" x2="180" y2="125" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#na)"/>
+
+  <!-- DB/Cache 아래 -->
+  <rect x="180" y="178" width="150" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="255" y="202" fill="#e8e4df" font-size="10.5" text-anchor="middle">Cache · DB (user/device)</text>
+  <line x1="255" y1="158" x2="255" y2="178" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#na)"/>
+
+  <!-- 채널별 큐 4갈래 + 워커 + 3rd party + 디바이스 -->
+  <!-- 행 좌표 -->
+  <!-- iOS -->
+  <g>
+    <rect x="380" y="92" width="90" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+    <text x="425" y="113" fill="#e8e4df" font-size="10" text-anchor="middle">iOS PN 큐</text>
+    <rect x="500" y="92" width="74" height="34" fill="rgba(102,187,106,0.15)" stroke="#66bb6a"/>
+    <text x="537" y="113" fill="#e8e4df" font-size="10" text-anchor="middle">Worker</text>
+    <rect x="604" y="92" width="80" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+    <text x="644" y="113" fill="#e8e4df" font-size="10" text-anchor="middle">APNS</text>
+    <rect x="714" y="92" width="74" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+    <text x="751" y="113" fill="#e8e4df" font-size="10" text-anchor="middle">iOS</text>
+  </g>
+  <!-- Android -->
+  <g>
+    <rect x="380" y="138" width="90" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+    <text x="425" y="159" fill="#e8e4df" font-size="10" text-anchor="middle">Android 큐</text>
+    <rect x="500" y="138" width="74" height="34" fill="rgba(102,187,106,0.15)" stroke="#66bb6a"/>
+    <text x="537" y="159" fill="#e8e4df" font-size="10" text-anchor="middle">Worker</text>
+    <rect x="604" y="138" width="80" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+    <text x="644" y="159" fill="#e8e4df" font-size="10" text-anchor="middle">FCM</text>
+    <rect x="714" y="138" width="74" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+    <text x="751" y="159" fill="#e8e4df" font-size="10" text-anchor="middle">Android</text>
+  </g>
+  <!-- SMS -->
+  <g>
+    <rect x="380" y="184" width="90" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+    <text x="425" y="205" fill="#e8e4df" font-size="10" text-anchor="middle">SMS 큐</text>
+    <rect x="500" y="184" width="74" height="34" fill="rgba(102,187,106,0.15)" stroke="#66bb6a"/>
+    <text x="537" y="205" fill="#e8e4df" font-size="10" text-anchor="middle">Worker</text>
+    <rect x="604" y="184" width="80" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+    <text x="644" y="205" fill="#e8e4df" font-size="10" text-anchor="middle">Twilio</text>
+    <rect x="714" y="184" width="74" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+    <text x="751" y="205" fill="#e8e4df" font-size="10" text-anchor="middle">SMS</text>
+  </g>
+  <!-- Email -->
+  <g>
+    <rect x="380" y="230" width="90" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+    <text x="425" y="251" fill="#e8e4df" font-size="10" text-anchor="middle">Email 큐</text>
+    <rect x="500" y="230" width="74" height="34" fill="rgba(102,187,106,0.15)" stroke="#66bb6a"/>
+    <text x="537" y="251" fill="#e8e4df" font-size="10" text-anchor="middle">Worker</text>
+    <rect x="604" y="230" width="80" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+    <text x="644" y="251" fill="#e8e4df" font-size="10" text-anchor="middle">Sendgrid</text>
+    <rect x="714" y="230" width="74" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+    <text x="751" y="251" fill="#e8e4df" font-size="10" text-anchor="middle">Email</text>
+  </g>
+
+  <!-- 알림서버 → 4큐 분기 -->
+  <line x1="330" y1="120" x2="380" y2="109" stroke="rgb(138,133,128)" stroke-width="1.2" marker-end="url(#na)"/>
+  <line x1="330" y1="125" x2="380" y2="155" stroke="rgb(138,133,128)" stroke-width="1.2" marker-end="url(#na)"/>
+  <line x1="330" y1="130" x2="380" y2="201" stroke="rgb(138,133,128)" stroke-width="1.2" marker-end="url(#na)"/>
+  <line x1="330" y1="135" x2="380" y2="247" stroke="rgb(138,133,128)" stroke-width="1.2" marker-end="url(#na)"/>
+  <!-- 각 행 내부 화살표 -->
+  <line x1="470" y1="109" x2="500" y2="109" stroke="rgb(138,133,128)" stroke-width="1.2" marker-end="url(#na)"/>
+  <line x1="574" y1="109" x2="604" y2="109" stroke="rgb(138,133,128)" stroke-width="1.2" marker-end="url(#na)"/>
+  <line x1="684" y1="109" x2="714" y2="109" stroke="rgb(138,133,128)" stroke-width="1.2" marker-end="url(#na)"/>
+  <line x1="470" y1="155" x2="500" y2="155" stroke="rgb(138,133,128)" stroke-width="1.2" marker-end="url(#na)"/>
+  <line x1="574" y1="155" x2="604" y2="155" stroke="rgb(138,133,128)" stroke-width="1.2" marker-end="url(#na)"/>
+  <line x1="684" y1="155" x2="714" y2="155" stroke="rgb(138,133,128)" stroke-width="1.2" marker-end="url(#na)"/>
+  <line x1="470" y1="201" x2="500" y2="201" stroke="rgb(138,133,128)" stroke-width="1.2" marker-end="url(#na)"/>
+  <line x1="574" y1="201" x2="604" y2="201" stroke="rgb(138,133,128)" stroke-width="1.2" marker-end="url(#na)"/>
+  <line x1="684" y1="201" x2="714" y2="201" stroke="rgb(138,133,128)" stroke-width="1.2" marker-end="url(#na)"/>
+  <line x1="470" y1="247" x2="500" y2="247" stroke="rgb(138,133,128)" stroke-width="1.2" marker-end="url(#na)"/>
+  <line x1="574" y1="247" x2="604" y2="247" stroke="rgb(138,133,128)" stroke-width="1.2" marker-end="url(#na)"/>
+  <line x1="684" y1="247" x2="714" y2="247" stroke="rgb(138,133,128)" stroke-width="1.2" marker-end="url(#na)"/>
+
+  <text x="380" y="290" fill="rgb(138,133,128)" font-size="9.5">큐 분리: 한 외부 서비스(예: FCM) 장애가 다른 채널에 영향 주지 않음</text>
+
+  <!-- 안정성 고려 -->
+  <text x="30" y="332" fill="#e8e4df" font-size="14" font-weight="bold">안정성·추가 컴포넌트</text>
+  <rect x="30" y="344" width="410" height="120" fill="rgba(212,168,83,0.06)" stroke="rgb(42,37,32)"/>
+  <text x="46" y="368" fill="rgb(212,168,83)" font-size="11.5" font-weight="bold">데이터 손실 방지</text>
+  <text x="46" y="388" fill="#e8e4df" font-size="10.5">알림 로그 DB 에 영속 + 재시도. "지연·재정렬은 OK,</text>
+  <text x="46" y="404" fill="#e8e4df" font-size="10.5">손실은 불가". 실패 시 큐에 재투입, 지속되면 알림.</text>
+  <text x="46" y="428" fill="rgb(212,168,83)" font-size="11.5" font-weight="bold">정확히 한 번? → 아니오</text>
+  <text x="46" y="448" fill="#e8e4df" font-size="10.5">분산 특성상 중복 가능 → event ID 로 dedupe(본 적 있으면 버림)</text>
+
+  <rect x="460" y="344" width="410" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="476" y="368" fill="rgb(212,168,83)" font-size="11.5" font-weight="bold">추가 컴포넌트</text>
+  <text x="476" y="390" fill="#e8e4df" font-size="10.5">· 템플릿: 매번 새로 안 만들고 재사용(일관성·실수↓)</text>
+  <text x="476" y="408" fill="#e8e4df" font-size="10.5">· 알림 설정: opt-in 확인 후 발송(user_id·channel·opt_in)</text>
+  <text x="476" y="426" fill="#e8e4df" font-size="10.5">· rate limiting: 과다 발송 방지(끄지 않게)</text>
+  <text x="476" y="444" fill="#e8e4df" font-size="10.5">· 보안: appKey/appSecret 인증 · 모니터링 · 이벤트 추적</text>
+
+  <!-- 이벤트 추적 상태 흐름 -->
+  <text x="30" y="500" fill="#e8e4df" font-size="14" font-weight="bold">이벤트 추적 상태</text>
+  <text x="46" y="528" fill="#e8e4df" font-size="11" font-family="'JetBrains Mono',monospace">start → pending → sent → deliver → click / unsubscribe</text>
+  <text x="46" y="548" fill="#f44336" font-size="11" font-family="'JetBrains Mono',monospace">                  ↘ error (pending·sent 단계에서)</text>
+  <text x="46" y="572" fill="rgb(138,133,128)" font-size="10.5">open rate·click rate·engagement 을 분석 서비스로 추적해 고객 행동을 이해한다.</text>
+</svg>

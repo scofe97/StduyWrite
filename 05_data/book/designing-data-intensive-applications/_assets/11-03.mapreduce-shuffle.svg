@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 660" font-family="Pretendard, sans-serif">
+  <rect width="680" height="660" fill="#0d0d0d"/>
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">분산 잡 오케스트레이션과 MapReduce</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">오케스트레이터 구조 · 스케줄링 · 셔플 알고리즘 · Sort-Merge Join</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">잡 오케스트레이터 3요소</text>
+  <rect x="32" y="124" width="185" height="88" rx="6" fill="#141414" stroke="#7fa8c9"/>
+  <text x="125" y="144" fill="#7fa8c9" font-size="10.5" font-weight="700" text-anchor="middle">태스크 실행기</text>
+  <text x="48" y="162" fill="#e8e4df" font-size="10">각 노드에서 태스크 실행</text>
+  <text x="48" y="178" fill="#e8e4df" font-size="10">하트비트 · cgroups 격리</text>
+  <text x="48" y="196" fill="rgb(138,133,128)" font-size="9.5">YARN=NodeManager / K8s=kubelet</text>
+
+  <rect x="231" y="124" width="185" height="88" rx="6" fill="#141414" stroke="rgb(212,168,83)"/>
+  <text x="324" y="144" fill="rgb(212,168,83)" font-size="10.5" font-weight="700" text-anchor="middle">리소스 매니저</text>
+  <text x="247" y="162" fill="#e8e4df" font-size="10">클러스터 전역 상태 관리</text>
+  <text x="247" y="178" fill="#e8e4df" font-size="10">CPU/메모리/GPU/디스크</text>
+  <text x="247" y="196" fill="rgb(138,133,128)" font-size="9.5">YARN=ZooKeeper / K8s=etcd</text>
+
+  <rect x="430" y="124" width="218" height="88" rx="6" fill="#141414" stroke="#66bb6a"/>
+  <text x="539" y="144" fill="#66bb6a" font-size="10.5" font-weight="700" text-anchor="middle">스케줄러</text>
+  <text x="446" y="162" fill="#e8e4df" font-size="10">잡 요청 수신 · 태스크 배치</text>
+  <text x="446" y="178" fill="#e8e4df" font-size="10">NP-hard → 휴리스틱(DRF/FIFO)</text>
+  <text x="446" y="196" fill="rgb(138,133,128)" font-size="9.5">spot 선점 · 스타베이션 방지</text>
+
+  <text x="32" y="240" fill="rgb(212,168,83)" font-size="14" font-weight="700">MapReduce 셔플 알고리즘</text>
+  <rect x="32" y="252" width="180" height="176" rx="6" fill="#141414" stroke="#7fa8c9"/>
+  <text x="122" y="272" fill="#7fa8c9" font-size="10.5" font-weight="700" text-anchor="middle">매퍼 (Map)</text>
+  <text x="48" y="292" fill="#e8e4df" font-size="10">입력 레코드 1개씩 처리</text>
+  <text x="48" y="310" fill="#e8e4df" font-size="10">키-값 쌍 추출 (상태 없음)</text>
+  <text x="48" y="328" fill="#e8e4df" font-size="10">리듀서별 파일 생성</text>
+  <text x="48" y="346" fill="#e8e4df" font-size="10">파일 내 정렬 (세그먼트+병합)</text>
+  <text x="48" y="364" fill="rgb(138,133,128)" font-size="9.5">m1-r1, m1-r2, m1-r3 ...</text>
+  <text x="48" y="420" fill="rgb(138,133,128)" font-size="9.5">키 해시로 리듀서 결정</text>
+
+  <text x="252" y="272" fill="rgb(212,168,83)" font-size="10.5" font-weight="700">셔플</text>
+  <text x="252" y="292" fill="rgb(138,133,128)" font-size="10">리듀서가 모든 매퍼에서</text>
+  <text x="252" y="308" fill="rgb(138,133,128)" font-size="10">자신 몫 파일 복사</text>
+  <text x="252" y="324" fill="rgb(138,133,128)" font-size="10">Mergesort로 병합</text>
+  <text x="252" y="340" fill="rgb(138,133,128)" font-size="10">같은 키 연속 배치</text>
+  <line x1="245" y1="252" x2="245" y2="428" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <rect x="378" y="252" width="270" height="176" rx="6" fill="#141414" stroke="rgb(212,168,83)"/>
+  <text x="513" y="272" fill="rgb(212,168,83)" font-size="10.5" font-weight="700" text-anchor="middle">리듀서 (Reduce)</text>
+  <text x="394" y="292" fill="#e8e4df" font-size="10">키 당 1회 호출 (이터레이터)</text>
+  <text x="394" y="310" fill="#e8e4df" font-size="10">동일 키 값 모두 처리</text>
+  <text x="394" y="328" fill="#e8e4df" font-size="10">출력 파일 → DFS 저장</text>
+  <text x="394" y="346" fill="#e8e4df" font-size="10">서로 다른 키 병렬 실행</text>
+  <text x="394" y="364" fill="rgb(138,133,128)" font-size="9.5">결함 시: DFS 중간 파일로 재실행</text>
+
+  <text x="32" y="460" fill="rgb(212,168,83)" font-size="14" font-weight="700">Sort-Merge Join</text>
+  <rect x="32" y="472" width="616" height="80" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="48" y="492" fill="#e8e4df" font-size="10.5">매퍼1: 사용자 활동 로그 → user_id=키, URL=값</text>
+  <text x="48" y="510" fill="#e8e4df" font-size="10.5">매퍼2: 사용자 DB → user_id=키, 생년월일=값</text>
+  <text x="48" y="528" fill="#e8e4df" font-size="10.5">셔플: 동일 user_id를 같은 리듀서로. Secondary sort로 DB 레코드를 활동 이벤트보다 먼저 배치합니다.</text>
+  <text x="48" y="544" fill="rgb(138,133,128)" font-size="10">리듀서: DB 레코드 1개 + 활동 이벤트 목록 → 네트워크 요청 없이 메모리 내 조인</text>
+
+  <text x="32" y="584" fill="rgb(212,168,83)" font-size="14" font-weight="700">워크플로우 스케줄러 vs 잡 스케줄러</text>
+  <rect x="32" y="596" width="616" height="48" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="616" fill="#7fa8c9" font-size="10.5">YARN/K8s 스케줄러: 잡 단위 자원 할당. DAG 의존성 모름.</text>
+  <text x="48" y="634" fill="rgb(212,168,83)" font-size="10.5">Airflow/Dagster/Prefect: 잡 간 의존성(DAG) 관리, 재시도·알림·모니터링.</text>
+</svg>

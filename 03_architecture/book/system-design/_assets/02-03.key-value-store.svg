@@ -1,0 +1,95 @@
+<svg viewBox="0 0 900 660" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>분산 키-값 저장소 — 핵심 빌딩 블록 종합도</title>
+  <desc>CAP 정리, 안정 해시 파티션, N·W·R 정족수 복제, 일관성 모델, 벡터 시계 버전 충돌 해결, gossip 장애 감지, sloppy quorum·hinted handoff·Merkle tree 장애 처리, commit log·memtable·SSTable·bloom filter 쓰기/읽기 경로를 한 장에 정리한 종합도.</desc>
+
+  <rect x="0" y="0" width="900" height="660" fill="#0d0d0d"/>
+
+  <text x="30" y="40" fill="rgb(212,168,83)" font-size="20" font-weight="bold">분산 키-값 저장소 (Key-Value Store)</text>
+  <text x="30" y="62" fill="rgb(138,133,128)" font-size="12">Dynamo·Cassandra·BigTable 기반. 가용성·확장성·튜닝 가능한 일관성을 목표로 한다.</text>
+
+  <!-- CAP -->
+  <rect x="30" y="82" width="270" height="116" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)"/>
+  <text x="46" y="106" fill="rgb(212,168,83)" font-size="13" font-weight="bold">① CAP 정리</text>
+  <text x="46" y="128" fill="#e8e4df" font-size="11">셋 중 둘만 동시 보장 가능</text>
+  <text x="46" y="148" fill="#e8e4df" font-size="11">· CP: 일관성+분할내성 (은행)</text>
+  <text x="46" y="166" fill="#e8e4df" font-size="11">· AP: 가용성+분할내성 (본 설계)</text>
+  <text x="46" y="184" fill="rgb(138,133,128)" font-size="10.5">네트워크 분할은 불가피 → P 필수</text>
+
+  <!-- 파티션 -->
+  <rect x="315" y="82" width="270" height="116" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="331" y="106" fill="#e8e4df" font-size="13" font-weight="bold">② 데이터 파티션</text>
+  <text x="331" y="128" fill="#e8e4df" font-size="11">안정 해시로 서버에 분산.</text>
+  <text x="331" y="148" fill="rgb(138,133,128)" font-size="10.5">+ 자동 확장 (부하 따라 추가·제거)</text>
+  <text x="331" y="166" fill="rgb(138,133,128)" font-size="10.5">+ 이질성 (용량 큰 서버 = 가상노드↑)</text>
+  <text x="331" y="184" fill="rgb(138,133,128)" font-size="10.5">→ CH5 안정 해시 재사용</text>
+
+  <!-- 복제 -->
+  <rect x="600" y="82" width="270" height="116" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="616" y="106" fill="#e8e4df" font-size="13" font-weight="bold">③ 복제 + 정족수</text>
+  <text x="616" y="128" fill="#e8e4df" font-size="11">키를 시계방향 N개 서버에 복제</text>
+  <text x="616" y="148" fill="#e8e4df" font-size="11" font-family="'JetBrains Mono',monospace">N=복제수 W=쓰기 R=읽기 정족수</text>
+  <text x="616" y="168" fill="#66bb6a" font-size="11" font-family="'JetBrains Mono',monospace">W + R &gt; N → 강한 일관성</text>
+  <text x="616" y="186" fill="rgb(138,133,128)" font-size="10.5">보통 N=3, W=R=2 / 다른 DC에 분산</text>
+
+  <!-- 일관성 모델 -->
+  <rect x="30" y="212" width="270" height="116" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="46" y="236" fill="#e8e4df" font-size="13" font-weight="bold">④ 일관성 모델</text>
+  <text x="46" y="258" fill="#e8e4df" font-size="11">· 강한 일관성: 항상 최신값</text>
+  <text x="46" y="278" fill="#e8e4df" font-size="11">· 약한 일관성: 최신 아닐 수 있음</text>
+  <text x="46" y="298" fill="#e8e4df" font-size="11">· 최종 일관성: 시간 지나면 수렴</text>
+  <text x="46" y="318" fill="rgb(212,168,83)" font-size="10.5">본 설계 = 최종 일관성 (Dynamo)</text>
+
+  <!-- 버전 충돌 -->
+  <rect x="315" y="212" width="270" height="116" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="331" y="236" fill="#e8e4df" font-size="13" font-weight="bold">⑤ 버전 충돌 해결</text>
+  <text x="331" y="258" fill="#e8e4df" font-size="11">벡터 시계 [서버, 버전] 쌍으로</text>
+  <text x="331" y="278" fill="#e8e4df" font-size="11">선후·충돌 관계 판별.</text>
+  <text x="331" y="298" fill="rgb(138,133,128)" font-size="10.5">충돌 시 클라이언트가 화해(reconcile)</text>
+  <text x="331" y="316" fill="#f44336" font-size="10.5">− 클라 복잡 · 쌍 무한 증가 위험</text>
+
+  <!-- 장애 처리 -->
+  <rect x="600" y="212" width="270" height="116" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="616" y="236" fill="#e8e4df" font-size="13" font-weight="bold">⑥ 장애 감지·처리</text>
+  <text x="616" y="258" fill="#e8e4df" font-size="11">· 감지: gossip 프로토콜 (heartbeat)</text>
+  <text x="616" y="278" fill="#e8e4df" font-size="11">· 임시: sloppy quorum + hinted</text>
+  <text x="616" y="294" fill="#e8e4df" font-size="11">  handoff (대신 처리 후 반환)</text>
+  <text x="616" y="314" fill="#e8e4df" font-size="11">· 영구: anti-entropy + Merkle tree</text>
+
+  <!-- 쓰기 경로 -->
+  <text x="30" y="364" fill="#e8e4df" font-size="14" font-weight="bold">⑦ 쓰기 경로 (write path)</text>
+  <rect x="30" y="376" width="410" height="120" fill="rgba(102,187,106,0.06)" stroke="rgb(42,37,32)"/>
+
+  <rect x="46" y="396" width="110" height="36" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="101" y="419" fill="#e8e4df" font-size="11" text-anchor="middle">① Commit log</text>
+  <rect x="46" y="446" width="110" height="36" fill="rgba(102,187,106,0.2)" stroke="#66bb6a"/>
+  <text x="101" y="469" fill="#e8e4df" font-size="11" text-anchor="middle">② Memtable</text>
+  <rect x="296" y="421" width="128" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="360" y="445" fill="#e8e4df" font-size="11" text-anchor="middle">③ SSTable 디스크</text>
+
+  <line x1="156" y1="464" x2="300" y2="445" stroke="rgb(138,133,128)" stroke-width="1.5"/>
+  <text x="200" y="448" fill="rgb(138,133,128)" font-size="10">flush</text>
+  <text x="46" y="492" fill="rgb(138,133,128)" font-size="10">로그 영속 → 메모리 저장 → 차면 디스크로 flush</text>
+
+  <!-- 읽기 경로 -->
+  <text x="460" y="364" fill="#e8e4df" font-size="14" font-weight="bold">⑧ 읽기 경로 (read path)</text>
+  <rect x="460" y="376" width="410" height="120" fill="rgba(212,168,83,0.06)" stroke="rgb(42,37,32)"/>
+
+  <rect x="476" y="406" width="100" height="36" fill="rgba(102,187,106,0.2)" stroke="#66bb6a"/>
+  <text x="526" y="429" fill="#e8e4df" font-size="11" text-anchor="middle">Memtable</text>
+  <rect x="612" y="406" width="100" height="36" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="662" y="429" fill="#e8e4df" font-size="11" text-anchor="middle">Bloom filter</text>
+  <rect x="748" y="406" width="106" height="36" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="801" y="429" fill="#e8e4df" font-size="11" text-anchor="middle">SSTable</text>
+
+  <line x1="576" y1="424" x2="612" y2="424" stroke="rgb(138,133,128)" stroke-width="1.5"/>
+  <line x1="712" y1="424" x2="748" y2="424" stroke="rgb(138,133,128)" stroke-width="1.5"/>
+  <text x="476" y="468" fill="rgb(138,133,128)" font-size="10">메모리에 있으면 즉시 반환, 없으면 bloom filter 로</text>
+  <text x="476" y="484" fill="rgb(138,133,128)" font-size="10">어느 SSTable 인지 좁혀 디스크에서 읽는다</text>
+
+  <!-- 아키텍처 결론 -->
+  <text x="30" y="534" fill="#e8e4df" font-size="14" font-weight="bold">탈중앙 아키텍처</text>
+  <rect x="30" y="546" width="840" height="90" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="46" y="570" fill="#e8e4df" font-size="11">모든 노드가 같은 책임(클라 API·장애 감지·충돌 해결·복제·저장 엔진)을 가져 단일 장애점이 없다.</text>
+  <text x="46" y="592" fill="#e8e4df" font-size="11">코디네이터 노드가 클라이언트와 저장소 사이 프록시 역할. 노드는 안정 해시 링 위에 분산된다.</text>
+  <text x="46" y="618" fill="rgb(212,168,83)" font-size="11">API: get(key) · put(key, value)</text>
+</svg>

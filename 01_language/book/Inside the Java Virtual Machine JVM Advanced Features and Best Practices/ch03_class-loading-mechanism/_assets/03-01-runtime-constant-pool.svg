@@ -1,0 +1,76 @@
+<svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>런타임 상수 풀은 어디 있나 — 메서드 영역(공유) 안의 per-class 상수 풀</title>
+  <desc>JVM 런타임 데이터 영역은 스레드별 영역(가상 머신 스택·PC 레지스터·네이티브 메서드 스택)과 모든 스레드가 공유하는 영역(힙·메서드 영역)으로 나뉜다. 런타임 상수 풀은 클래스/인터페이스마다 하나씩 메서드 영역에 할당된다. 메서드 영역은 논리적으로 힙의 일부지만 HotSpot은 Java 8부터 Metaspace(네이티브 메모리)로 구현한다. 스택 프레임의 동적 링크는 그 프레임이 속한 메서드의 런타임 상수 풀 참조를 가리킨다. 출처: JVM Spec 2.5.4, 2.5.5.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11px;fill:rgb(160,155,150)}
+      .areah{font-size:11.5px;font-weight:800;fill:rgb(212,168,83)}
+      .lab{font-size:10px;font-weight:700;fill:#10243a;font-family:'JetBrains Mono',monospace}
+      .labs{font-size:8.5px;font-weight:700;fill:#10243a;font-family:'JetBrains Mono',monospace}
+      .note{font-size:9px;fill:#cfd6dd}
+      .src{font-size:8.5px;fill:rgb(170,165,160)}
+    </style>
+  </defs>
+  <rect x="0" y="0" width="900" height="560" fill="#0d0d0d"/>
+  <text x="28" y="36" class="title">런타임 상수 풀은 어디 있나 — 메서드 영역(공유)</text>
+  <text x="28" y="58" class="sub">스레드별 영역 vs 모든 스레드 공유 영역 · 런타임 상수 풀 = 클래스마다 하나, 메서드 영역에</text>
+
+  <!-- ===== 스레드별 영역 ===== -->
+  <text x="240" y="92" class="areah" text-anchor="middle">스레드마다 따로 (thread-private)</text>
+  <rect x="28" y="102" width="424" height="190" rx="10" fill="#0d0d0d" stroke="rgb(150,145,140)"/>
+  <!-- 가상 머신 스택 -->
+  <rect x="44" y="118" width="180" height="158" rx="6" fill="#dceaf7"/>
+  <text x="134" y="138" class="lab" text-anchor="middle">가상 머신 스택</text>
+  <!-- frame with dynamic link -->
+  <rect x="58" y="148" width="152" height="48" rx="4" fill="#f5edda"/>
+  <text x="134" y="166" class="labs" text-anchor="middle">스택 프레임</text>
+  <rect x="68" y="172" width="132" height="18" rx="3" fill="#f3d9a0"/>
+  <text x="134" y="185" class="labs" text-anchor="middle">동적 링크 ●</text>
+  <rect x="58" y="202" width="152" height="28" rx="4" fill="#f5edda"/>
+  <text x="134" y="220" class="labs" text-anchor="middle">스택 프레임 …</text>
+  <text x="134" y="252" class="labs" text-anchor="middle">메서드 호출마다 프레임</text>
+  <text x="134" y="266" class="labs" text-anchor="middle">push / pop</text>
+  <!-- PC + native -->
+  <rect x="232" y="118" width="100" height="158" rx="6" fill="#dceaf7"/>
+  <text x="282" y="190" class="labs" text-anchor="middle">PC</text>
+  <text x="282" y="206" class="labs" text-anchor="middle">레지스터</text>
+  <rect x="340" y="118" width="100" height="158" rx="6" fill="#dceaf7"/>
+  <text x="390" y="183" class="labs" text-anchor="middle">네이티브</text>
+  <text x="390" y="199" class="labs" text-anchor="middle">메서드</text>
+  <text x="390" y="215" class="labs" text-anchor="middle">스택</text>
+
+  <!-- ===== 공유 영역 ===== -->
+  <text x="676" y="92" class="areah" text-anchor="middle">모든 스레드 공유 (shared)</text>
+  <rect x="468" y="102" width="404" height="190" rx="10" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <!-- 힙 -->
+  <rect x="484" y="118" width="160" height="158" rx="6" fill="#5b9bd5"/>
+  <text x="564" y="190" class="lab" text-anchor="middle">힙 (Heap)</text>
+  <text x="564" y="208" class="labs" text-anchor="middle">객체 인스턴스</text>
+  <!-- 메서드 영역 -->
+  <rect x="652" y="118" width="204" height="158" rx="6" fill="#dceaf7"/>
+  <text x="754" y="138" class="lab" text-anchor="middle">메서드 영역</text>
+  <text x="754" y="153" class="labs" text-anchor="middle">(HotSpot: Metaspace)</text>
+  <!-- per-class run-time constant pool -->
+  <rect x="664" y="162" width="180" height="44" rx="4" fill="#f3d9a0"/>
+  <text x="754" y="180" class="labs" text-anchor="middle">런타임 상수 풀 ●</text>
+  <text x="754" y="196" class="labs" text-anchor="middle">(클래스마다 하나)</text>
+  <rect x="664" y="212" width="180" height="22" rx="4" fill="#f5edda"/>
+  <text x="754" y="227" class="labs" text-anchor="middle">메서드 코드 · 필드 데이터</text>
+  <text x="754" y="256" class="labs" text-anchor="middle">논리적으론 힙의 일부지만</text>
+  <text x="754" y="270" class="labs" text-anchor="middle">HotSpot은 네이티브 메모리</text>
+
+  <!-- 동적 링크 → 런타임 상수 풀 화살표 (박스 아래 빈 공간으로 우회) -->
+  <path d="M 134 196 C 134 304, 754 304, 754 208" fill="none" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <polygon points="754,210 749,220 759,220" fill="rgb(212,168,83)"/>
+  <text x="444" y="300" class="areah" text-anchor="middle" font-size="10">동적 링크 ● ─가 가리킴→ 런타임 상수 풀 ●</text>
+
+  <!-- 하단 핵심 -->
+  <rect x="28" y="316" width="844" height="92" rx="8" fill="#f5edda"/>
+  <text x="48" y="340" class="lab" font-size="11" font-weight="800">핵심 — 런타임 상수 풀은 객체가 사는 힙이 아니라 메서드 영역에 있다</text>
+  <text x="48" y="362" class="lab" font-size="10">· 클래스/인터페이스마다 하나씩, 클래스 로딩 때 .class의 constant_pool로부터 만들어집니다.</text>
+  <text x="48" y="382" class="lab" font-size="10">· 메서드 영역은 모든 스레드가 공유합니다. 스펙상 논리적으로는 힙의 일부지만, HotSpot은 Java 8부터 Metaspace(네이티브 메모리)로 둡니다.</text>
+  <text x="48" y="400" class="lab" font-size="10">· 스택 프레임의 동적 링크(●)가 이 상수 풀의 메서드 참조(●)를 가리켜, 심볼 참조를 실제 메서드로 잇습니다.</text>
+
+  <text x="28" y="436" class="src">출처: JVM Specification (Java SE 21) §2.5.4 Method Area · §2.5.5 Run-Time Constant Pool</text>
+</svg>

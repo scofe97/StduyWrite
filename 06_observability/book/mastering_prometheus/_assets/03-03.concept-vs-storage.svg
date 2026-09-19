@@ -1,0 +1,78 @@
+<svg viewBox="0 0 860 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>개념 3층이 디스크에 앉는 자리</title>
+  <desc>왼쪽의 개념 3층과 오른쪽의 저장 구조가 일대일로 대응하지 않는다. 개념의 메트릭은 저장소에 독립된 실체가 없고 __name__ 이라는 라벨 하나로 녹아들어 시리즈 인덱스 항목 안에 들어간다. 개념의 시계열은 시리즈 인덱스 항목 하나로 앉으며 라벨 셋과 chunk 참조를 담는다. 개념의 샘플은 시계열 항목 옆이 아니라 chunks 디렉토리의 세그먼트 파일 안에 델타와 XOR 로 압축되어 따로 눕고, 인덱스 항목은 8바이트 chunk 참조로 그 위치만 가리킨다. 그래서 저장 층에서는 시계열만 실재하고 메트릭은 이름표로 남는다.</desc>
+
+  <defs>
+    <marker id="cs-arrow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="860" height="400" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="15">개념 3층이 디스크에 앉는 자리</text>
+
+  <text x="24" y="66" fill="#b8b3ad" font-size="10.5">개념</text>
+  <text x="352" y="66" fill="#b8b3ad" font-size="10.5">디스크</text>
+
+  <line x1="316" y1="76" x2="316" y2="364" stroke="rgb(92,84,74)" stroke-dasharray="5 4"/>
+
+  <!-- ===== 개념 3층 ===== -->
+  <rect x="24" y="78" width="248" height="54" fill="#0d0d0d" stroke="rgb(92,84,74)" stroke-dasharray="5 4"/>
+  <text x="40" y="100" fill="#b8b3ad" font-size="12">메트릭</text>
+  <text x="40" y="120" fill="#b8b3ad" font-size="9" font-family="'JetBrains Mono', monospace">node_cpu_seconds_total</text>
+  <text x="256" y="100" fill="#b8b3ad" font-size="8.5" text-anchor="end">실체 없음</text>
+
+  <rect x="24" y="170" width="248" height="54" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="40" y="192" fill="#e8e4df" font-size="12">시계열</text>
+  <text x="40" y="212" fill="#b8b3ad" font-size="9" font-family="'JetBrains Mono', monospace">{cpu="0", job="node"}</text>
+
+  <rect x="24" y="262" width="248" height="54" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="40" y="284" fill="#e8e4df" font-size="12">샘플</text>
+  <text x="40" y="304" fill="#b8b3ad" font-size="9" font-family="'JetBrains Mono', monospace">(t0,v0) (t1,v1) …</text>
+
+  <!-- ===== 디스크 ===== -->
+  <!-- index 파일 -->
+  <rect x="352" y="78" width="484" height="146" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)"/>
+  <text x="368" y="100" fill="rgb(212,168,83)" font-size="10.5" font-family="'JetBrains Mono', monospace">index</text>
+  <text x="820" y="100" fill="#b8b3ad" font-size="9.5" text-anchor="end">시리즈 인덱스 항목 하나</text>
+
+  <rect x="368" y="112" width="452" height="46" fill="rgba(212,168,83,0.20)" stroke="rgb(212,168,83)"/>
+  <text x="382" y="131" fill="#e8e4df" font-size="9.5" font-family="'JetBrains Mono', monospace">__name__="node_cpu_seconds_total"</text>
+  <text x="382" y="149" fill="#e8e4df" font-size="9.5" font-family="'JetBrains Mono', monospace">cpu="0"  job="node"  env="production"</text>
+
+  <rect x="368" y="172" width="452" height="34" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="382" y="193" fill="#e8e4df" font-size="9.5" font-family="'JetBrains Mono', monospace">chunk 참조 uint64 × N</text>
+  <text x="806" y="193" fill="#b8b3ad" font-size="9.5" text-anchor="end">위치만</text>
+
+  <!-- chunks 파일 -->
+  <rect x="352" y="262" width="484" height="82" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="368" y="284" fill="#e8e4df" font-size="10.5" font-family="'JetBrains Mono', monospace">chunks/000001</text>
+  <text x="820" y="284" fill="#b8b3ad" font-size="9.5" text-anchor="end">따로 눕습니다</text>
+
+  <rect x="368" y="296" width="230" height="30" fill="rgba(212,168,83,0.30)" stroke="rgb(212,168,83)"/>
+  <text x="483" y="316" fill="#e8e4df" font-size="9" text-anchor="middle">델타 · XOR 로 압축</text>
+
+  <rect x="606" y="296" width="60" height="30" fill="rgba(102,187,106,0.25)" stroke="rgb(102,187,106)"/>
+  <text x="636" y="316" fill="#e8e4df" font-size="8.5" text-anchor="middle">chunk</text>
+  <rect x="672" y="296" width="60" height="30" fill="rgba(170,145,215,0.25)" stroke="rgb(170,145,215)"/>
+  <text x="702" y="316" fill="#e8e4df" font-size="8.5" text-anchor="middle">chunk</text>
+  <text x="756" y="316" fill="#b8b3ad" font-size="9">…</text>
+
+  <!-- ===== 대응 화살표 ===== -->
+  <line x1="278" y1="105" x2="362" y2="132" stroke="rgb(212,168,83)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#cs-arrow)"/>
+  <text x="318" y="88" fill="rgb(212,168,83)" font-size="9" text-anchor="middle">라벨 한 칸으로</text>
+
+  <line x1="278" y1="196" x2="362" y2="140" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#cs-arrow)"/>
+  <text x="322" y="212" fill="rgb(212,168,83)" font-size="9" text-anchor="middle">항목 하나로</text>
+
+  <line x1="278" y1="288" x2="362" y2="305" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#cs-arrow)"/>
+  <text x="318" y="272" fill="rgb(212,168,83)" font-size="9" text-anchor="middle">chunk 안으로</text>
+
+  <!-- index → chunks 참조 -->
+  <line x1="440" y1="208" x2="440" y2="256" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#cs-arrow)"/>
+  <text x="452" y="238" fill="rgb(212,168,83)" font-size="9.5">8바이트로 찾아감</text>
+
+  <!-- 하단 정리 -->
+  <line x1="24" y1="364" x2="836" y2="364" stroke="rgb(92,84,74)"/>
+  <text x="24" y="386" fill="#b8b3ad" font-size="10">메트릭은 이름표 · 시계열만 실재</text>
+</svg>

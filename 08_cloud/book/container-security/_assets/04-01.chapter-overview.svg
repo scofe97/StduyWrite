@@ -1,0 +1,68 @@
+<svg viewBox="0 0 640 430" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>namespace와 루트 디렉토리로 격리를 만드는 흐름</title>
+  <desc>cgroup이 쓸 수 있는 양을 정한다면 namespace는 볼 수 있는 것을 정합니다. 먼저 namespace가 무엇이고 어떤 종류가 있는지 봅니다. 다음으로 호스트명을 격리하는 UTS namespace를 실습하고, 이어서 프로세스 ID를 격리합니다. 그런데 PID namespace만으로는 ps 출력이 격리되지 않는데, ps가 proc 디렉토리를 읽기 때문입니다. 그래서 루트 디렉토리를 바꿔 자기만의 proc을 갖게 하고, 마지막으로 mount namespace까지 결합해야 온전한 격리가 됩니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10.5px; }
+    .sec { fill: #3a3632; font-size: 10px; font-weight: 700; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .num { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10.5px; }
+    .caution-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .caution-detail { fill: #0d0d0d; font-size: 10.5px; }
+  </style>
+
+  <rect width="640" height="430" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="jh" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="num" x="34" y="45">1.</text>
+  <rect class="box" x="54" y="24" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="46">namespace란 무엇인가</text>
+  <text class="box-detail" x="72" y="64">cgroup은 양 · ns는 시야</text>
+  <text class="sec" x="566" y="46" text-anchor="end">§1</text>
+
+  <path class="arrow" d="M320,74 L320,92" marker-end="url(#jh)"/>
+
+  <text class="num" x="34" y="119">2.</text>
+  <rect class="box" x="54" y="98" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="120">호스트명 격리 — UTS</text>
+  <text class="box-detail" x="72" y="138">unshare --uts 로 확인</text>
+  <text class="sec" x="566" y="120" text-anchor="end">§2</text>
+
+  <path class="arrow" d="M320,148 L320,166" marker-end="url(#jh)"/>
+
+  <text class="num" x="34" y="193">3.</text>
+  <rect x="54" y="172" width="532" height="54" rx="4" fill="rgb(212,168,83)"/>
+  <text class="caution-title" x="72" y="194">주의 · PID 격리만으론 부족</text>
+  <text class="caution-detail" x="72" y="214">ps는 /proc을 읽는다</text>
+  <text class="sec" x="566" y="194" text-anchor="end">§3</text>
+
+  <path class="arrow" d="M320,226 L320,244" marker-end="url(#jh)"/>
+
+  <text class="hint" x="320" y="260" text-anchor="middle">그래서 루트를 바꿔야 한다</text>
+
+  <text class="num" x="34" y="299">4.</text>
+  <rect class="box" x="54" y="274" width="532" height="52" rx="4"/>
+  <text class="box-title" x="72" y="298">루트 디렉토리 변경</text>
+  <text class="box-detail" x="72" y="316">chroot · pivot_root</text>
+  <text class="sec" x="566" y="298" text-anchor="end">§4</text>
+
+  <path class="arrow" d="M320,326 L320,344" marker-end="url(#jh)"/>
+
+  <text class="num" x="34" y="373">5.</text>
+  <rect class="box" x="54" y="352" width="532" height="52" rx="4"/>
+  <text class="box-title" x="72" y="376">셋을 결합해야 격리</text>
+  <text class="box-detail" x="72" y="394">PID + 루트 + proc 마운트</text>
+  <text class="sec" x="566" y="376" text-anchor="end">§5</text>
+</svg>

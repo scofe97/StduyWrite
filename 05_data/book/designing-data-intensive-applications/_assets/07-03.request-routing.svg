@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 660" font-family="Pretendard, sans-serif">
+  <rect width="680" height="660" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">요청 라우팅과 리밸런싱</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">어느 노드로 요청을 보낼지 · ZooKeeper/Raft 조율 · 자동 vs 수동 리밸런싱</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- 요청 라우팅 3방식 -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">요청 라우팅 3가지 방식</text>
+
+  <rect x="32" y="124" width="190" height="100" rx="6" fill="#141414" stroke="#7fa8c9"/>
+  <text x="48" y="146" fill="#7fa8c9" font-size="11" font-weight="700">① 임의 노드 접속</text>
+  <text x="48" y="164" fill="#e8e4df" font-size="10">클라이언트 → 아무 노드</text>
+  <text x="48" y="180" fill="#e8e4df" font-size="10">해당 노드가 책임지면 처리</text>
+  <text x="48" y="196" fill="#e8e4df" font-size="10">아니면 올바른 노드로 포워드</text>
+  <text x="48" y="212" fill="rgb(138,133,128)" font-size="9">Riak, Cassandra</text>
+
+  <rect x="244" y="124" width="190" height="100" rx="6" fill="#141414" stroke="rgb(212,168,83)"/>
+  <text x="260" y="146" fill="rgb(212,168,83)" font-size="11" font-weight="700">② 라우팅 티어</text>
+  <text x="260" y="164" fill="#e8e4df" font-size="10">클라이언트 → 라우팅 티어</text>
+  <text x="260" y="180" fill="#e8e4df" font-size="10">티어가 올바른 노드로 포워드</text>
+  <text x="260" y="196" fill="#e8e4df" font-size="10">직접 요청 처리는 안 함</text>
+  <text x="260" y="212" fill="rgb(138,133,128)" font-size="9">MongoDB mongos</text>
+
+  <rect x="456" y="124" width="190" height="100" rx="6" fill="#141414" stroke="#66bb6a"/>
+  <text x="472" y="146" fill="#66bb6a" font-size="11" font-weight="700">③ 클라이언트 인지</text>
+  <text x="472" y="164" fill="#e8e4df" font-size="10">클라이언트가 샤드 매핑 보유</text>
+  <text x="472" y="180" fill="#e8e4df" font-size="10">직접 올바른 노드로 접속</text>
+  <text x="472" y="196" fill="#e8e4df" font-size="10">중간 단계 없음</text>
+  <text x="472" y="212" fill="rgb(138,133,128)" font-size="9">Cassandra 드라이버</text>
+
+  <!-- ZooKeeper/etcd 조율 -->
+  <text x="32" y="262" fill="rgb(212,168,83)" font-size="14" font-weight="700">ZooKeeper / etcd — 샤드 매핑 조율</text>
+  <rect x="32" y="274" width="616" height="80" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="48" y="296" fill="#e8e4df" font-size="11">각 노드가 자신을 등록 · ZooKeeper/etcd가 샤드→노드 권위 매핑 보관 · 합의 알고리즘으로 split-brain 방지</text>
+  <text x="48" y="316" fill="#e8e4df" font-size="10.5">라우팅 티어·클라이언트가 변경 사항 구독 → 샤드 이전·노드 추가/제거 시 즉시 업데이트</text>
+  <text x="48" y="336" fill="rgb(138,133,128)" font-size="10">HBase·SolrCloud=ZooKeeper · Kubernetes=etcd · Kafka·YugabyteDB·TiDB·ScyllaDB=내장 Raft</text>
+
+  <!-- Gossip vs 합의 -->
+  <rect x="32" y="378" width="296" height="76" rx="6" fill="#141414" stroke="#66bb6a"/>
+  <text x="48" y="400" fill="#66bb6a" font-size="12" font-weight="700">Gossip 프로토콜 (Riak)</text>
+  <text x="48" y="418" fill="#e8e4df" font-size="10.5">노드 간 상태 전파 · 합의보다 약함</text>
+  <text x="48" y="436" fill="#f47f72" font-size="10">split-brain 가능 · 리더리스 DB에 적합</text>
+
+  <rect x="352" y="378" width="296" height="76" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="368" y="400" fill="#7fa8c9" font-size="12" font-weight="700">합의 기반 (ZooKeeper·Raft)</text>
+  <text x="368" y="418" fill="#e8e4df" font-size="10.5">강한 일관성 · 장애 시 자동 failover</text>
+  <text x="368" y="436" fill="#66bb6a" font-size="10">split-brain 차단 · 단일 권위 조율자</text>
+
+  <!-- 자동 vs 수동 리밸런싱 -->
+  <text x="32" y="494" fill="rgb(212,168,83)" font-size="14" font-weight="700">자동 vs 수동 리밸런싱</text>
+
+  <rect x="32" y="506" width="296" height="96" rx="6" fill="#141414" stroke="rgb(212,168,83)"/>
+  <text x="48" y="528" fill="rgb(212,168,83)" font-size="12" font-weight="700">자동 리밸런싱</text>
+  <text x="48" y="548" fill="#66bb6a" font-size="10.5">+ 운영 부담 적음 · 자동 오토스케일</text>
+  <text x="48" y="566" fill="#f47f72" font-size="10.5">− 예측 불가 · 리밸런싱 중 네트워크·노드 과부하</text>
+  <text x="48" y="584" fill="#f47f72" font-size="10">− 느린 노드를 죽었다 판단 → 연쇄 과부하 위험</text>
+  <text x="48" y="598" fill="rgb(138,133,128)" font-size="9">DynamoDB 수분 내 자동 적응</text>
+
+  <rect x="352" y="506" width="296" height="96" rx="6" fill="#141414" stroke="#7fa8c9"/>
+  <text x="368" y="528" fill="#7fa8c9" font-size="12" font-weight="700">수동 리밸런싱</text>
+  <text x="368" y="548" fill="#66bb6a" font-size="10.5">+ 예측 가능 · 인간이 위험 판단</text>
+  <text x="368" y="566" fill="#e8e4df" font-size="10.5">트래픽 급증 예상(월드컵·블랙프라이데이) 시</text>
+  <text x="368" y="584" fill="#e8e4df" font-size="10.5">선제적 리밸런싱으로 안전하게 대비</text>
+  <text x="368" y="598" fill="rgb(138,133,128)" font-size="9">Couchbase·Riak=제안 자동, 커밋은 수동</text>
+
+  <!-- 멀티테넌시 -->
+  <text x="32" y="634" fill="rgb(212,168,83)" font-size="12" font-weight="700">멀티테넌시 샤딩 — 셀 기반 아키텍처</text>
+  <rect x="32" y="642" width="616" height="18" rx="4" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="655" fill="#e8e4df" font-size="9.5">테넌트별 샤드 분리 → 리소스/권한 격리 · GDPR 데이터 삭제 단순화 · 리전별 데이터 레지던시 · 점진적 스키마 롤아웃 가능</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,60 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>GC 알고리즘 선택 — serial·throughput·G1·CMS</title>
+  <desc>OpenJDK는 여러 GC 알고리즘을 제공한다. serial GC는 가장 단순하고 단일 스레드로 힙을 처리하며, 단일 CPU나 client 머신에서 기본이다. UseSerialGC로 켠다. throughput(parallel) GC는 여러 스레드로 young과 old를 수집해 minor GC가 훨씬 빠르고, JDK 8의 멀티 CPU 기본이다. UseParallelGC로 켠다. 둘 다 minor와 full GC에서 모든 스레드를 멈추고 full GC에서 old를 완전 compaction한다. G1 GC는 concurrent 전략으로 최소 pause로 힙을 수집하며, JDK 11의 멀티 CPU 기본이다. 힙을 region으로 나누되 여전히 두 세대로 본다. old는 백그라운드 스레드가 애플리케이션을 안 멈추고 처리하며, region 간 복사로 부분 compaction한다. 대가는 백그라운드 스레드의 CPU다. UseG1GC로 켠다. CMS는 첫 concurrent collector였으나 백그라운드 중 compaction을 못 해 단편화 시 STW compaction이 필요하다. JDK 11에서 deprecated다. System.gc()는 항상 full GC를 일으켜 거의 항상 나쁜 생각이다. RMI는 시간마다 호출한다. DisableExplicitGC로 막는다. CPU가 GC 동안 100%로 튀는 sawtooth 패턴을 모니터링 알림이 오인하지 않게 한다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">GC 알고리즘 선택 — 4 컬렉터</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">JDK 11은 대체로 G1 GC가 낫고, JDK 8은 애플리케이션에 따라 갈립니다</text>
+
+  <!-- 4 컬렉터 -->
+  <rect x="20" y="74" width="320" height="106" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="96" fill="#9cc3df" font-size="13" font-weight="bold">serial GC</text>
+  <text x="38" y="116" fill="#e8e4df" font-size="11">단일 스레드로 힙 처리 (가장 단순)</text>
+  <text x="38" y="134" fill="rgb(138,133,128)" font-size="10">기본: 단일 CPU·client 머신</text>
+  <text x="38" y="152" fill="rgb(138,133,128)" font-size="10">minor·full 모두 STW, full에 old 완전 compaction</text>
+  <text x="38" y="170" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="9">-XX:+UseSerialGC</text>
+
+  <rect x="350" y="74" width="312" height="106" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="368" y="96" fill="#66bb6a" font-size="13" font-weight="bold">throughput (parallel) GC</text>
+  <text x="368" y="116" fill="#e8e4df" font-size="11">여러 스레드로 young·old 수집 → minor 빠름</text>
+  <text x="368" y="134" fill="rgb(138,133,128)" font-size="10">기본: JDK 8 멀티 CPU(64bit·2+ CPU)</text>
+  <text x="368" y="152" fill="rgb(138,133,128)" font-size="10">minor·full 모두 STW, full에 old 완전 compaction</text>
+  <text x="368" y="170" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="9">-XX:+UseParallelGC</text>
+
+  <rect x="20" y="188" width="320" height="120" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="210" fill="rgb(212,168,83)" font-size="13" font-weight="bold">G1 GC (garbage first)</text>
+  <text x="38" y="230" fill="#e8e4df" font-size="11">concurrent 전략, 최소 pause</text>
+  <text x="38" y="248" fill="#66bb6a" font-size="10">기본: JDK 11+ 멀티 CPU(64bit·2+ CPU)</text>
+  <text x="38" y="266" fill="rgb(138,133,128)" font-size="10">힙을 region으로, 여전히 2세대로 봄</text>
+  <text x="38" y="284" fill="rgb(138,133,128)" font-size="10">old는 백그라운드 스레드, region 복사로 부분 compaction</text>
+  <text x="38" y="300" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="9">-XX:+UseG1GC · 대가: 백그라운드 CPU</text>
+
+  <rect x="350" y="188" width="312" height="120" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="368" y="210" fill="#f47f72" font-size="13" font-weight="bold">CMS (deprecated)</text>
+  <text x="368" y="230" fill="#e8e4df" font-size="11">첫 concurrent collector</text>
+  <text x="368" y="248" fill="#f47f72" font-size="10">치명적 결함: 백그라운드 중 compaction 불가</text>
+  <text x="368" y="266" fill="rgb(138,133,128)" font-size="10">단편화 시 STW compaction → concurrent 목적 무력화</text>
+  <text x="368" y="284" fill="rgb(138,133,128)" font-size="10">JDK 11에서 deprecated, G1으로 대체</text>
+  <text x="368" y="300" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="9">-XX:+UseConcMarkSweepGC</text>
+
+  <!-- System.gc -->
+  <rect x="20" y="316" width="642" height="78" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="338" fill="#e8e4df" font-size="13" font-weight="bold">명시적 GC — System.gc()는 거의 항상 나쁜 생각</text>
+  <text x="38" y="358" fill="#f47f72" font-size="11">항상 full GC를 일으킴(G1·CMS여도) → 스레드 장기 정지, 효율도 안 좋아짐(시점만 당김)</text>
+  <text x="38" y="376" fill="rgb(138,133,128)" font-size="10">예외: 벤치마크 warm-up 후·힙 덤프 전 · RMI는 1시간마다 호출(gcInterval로 조정)</text>
+  <text x="38" y="388" fill="rgb(138,133,128)" font-size="9">서드파티의 잘못된 호출은 -XX:+DisableExplicitGC 로 차단</text>
+
+  <!-- sawtooth -->
+  <rect x="20" y="402" width="642" height="100" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="424" fill="#9cc3df" font-size="13" font-weight="bold">평균 CPU의 함정 — sawtooth 패턴</text>
+  <text x="38" y="444" fill="#e8e4df" font-size="11">throughput: 앱 스레드만 50%, GC 시 100%로 튐 → 톱니 모양(평균은 직선으로 보고됨)</text>
+  <text x="38" y="464" fill="#e8e4df" font-size="11">G1: 백그라운드 스레드가 CPU 1개 더 점유 → 50%에서 75%로, 끝나면 50%로</text>
+  <text x="38" y="484" fill="#f47f72" font-size="11">CPU 알림이 이 GC 스파이크를 오인하지 않게 주의 — Java에선 정상 현상</text>
+
+  <!-- 선택 요약 -->
+  <rect x="20" y="510" width="642" height="74" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="532" fill="#66bb6a" font-size="13" font-weight="bold">선택 요약</text>
+  <text x="90" y="532" fill="rgb(138,133,128)" font-size="11">대부분 G1 GC · 단일 CPU(하이퍼스레딩 포함) CPU bound → serial</text>
+  <text x="38" y="552" fill="rgb(138,133,128)" font-size="11">멀티 CPU CPU bound → throughput(full GC 적거나 old가 꽉 찰 때 유리) · 응답시간 outlier 중요 → G1</text>
+  <text x="38" y="572" fill="rgb(212,168,83)" font-size="11">G1의 핵심 조건: 백그라운드 스레드가 쓸 여분 CPU가 있어야 함</text>
+</svg>

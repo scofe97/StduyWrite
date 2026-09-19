@@ -1,0 +1,65 @@
+<svg viewBox="0 0 860 520" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>I/O 스택과 캐시 층</title>
+  <desc>왼쪽: 스토리지 기반 파일시스템의 I/O 스택. 위에서 아래로 애플리케이션, 시스템 콜, VFS(파일시스템 유형 추상화), 파일시스템, 블록 장치 인터페이스, 스토리지 장치 순이다. VFS는 여러 파일시스템 유형이 공존하게 하고 전역 네임스페이스를 제공한다. 파일시스템을 우회해 블록 장치로 바로 가는 경로도 있어 관리 도구나 DB가 가끔 쓴다. 오른쪽: 디스크 I/O를 피하는 캐시 층이 점검되는 순서대로 쌓인다. 클라이언트·앱·웹서버·캐싱 서버·DB 캐시, 디렉토리(dcache)·메타데이터(inode) 캐시, OS 버퍼 캐시·파일시스템 1차 캐시(page cache·ZFS ARC), 2차 캐시(L2ARC)·장치 캐시, 블록·디스크 컨트롤러·스토리지 어레이·온디스크 캐시. 요청 데이터가 캐시에 있으면 디스크 I/O의 높은 지연을 피해 즉시 제공한다.</desc>
+
+  <rect x="0" y="0" width="860" height="520" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">I/O 스택과 캐시 층</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">유저 SW부터 스토리지까지 — 여러 캐시가 디스크 I/O를 피한다</text>
+
+  <!-- I/O 스택 -->
+  <text x="32" y="98" fill="rgb(212,168,83)" font-size="15">I/O 스택</text>
+
+  <rect x="32" y="112" width="340" height="40" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="5"/>
+  <text x="202" y="137" fill="#e8e4df" font-size="12" text-anchor="middle">애플리케이션</text>
+  <rect x="32" y="158" width="340" height="36" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/>
+  <text x="202" y="181" fill="#e8e4df" font-size="11" text-anchor="middle">시스템 콜</text>
+  <rect x="32" y="200" width="340" height="36" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/>
+  <text x="202" y="223" fill="#e8e4df" font-size="11" text-anchor="middle">VFS (파일시스템 유형 추상화)</text>
+  <rect x="32" y="242" width="340" height="36" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/>
+  <text x="202" y="265" fill="#e8e4df" font-size="11" text-anchor="middle">파일시스템</text>
+  <rect x="32" y="284" width="340" height="36" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/>
+  <text x="202" y="307" fill="#e8e4df" font-size="11" text-anchor="middle">블록 장치 인터페이스</text>
+  <rect x="32" y="326" width="340" height="40" fill="rgb(42,37,32)" rx="5"/>
+  <text x="202" y="351" fill="#e8e4df" font-size="12" text-anchor="middle">스토리지 장치 (디스크)</text>
+
+  <!-- 우회 경로 -->
+  <path d="M 372 180 Q 405 250 372 305" fill="none" stroke="rgb(138,133,128)" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="380" y="250" fill="rgb(138,133,128)" font-size="9">우회</text>
+
+  <text x="32" y="390" fill="rgb(138,133,128)" font-size="10">파일시스템 우회 경로 — 관리 도구·DB가 가끔 블록 장치로 바로</text>
+
+  <!-- 캐시 층 -->
+  <text x="440" y="98" fill="rgb(212,168,83)" font-size="15">캐시 층 (점검 순서)</text>
+
+  <rect x="440" y="112" width="388" height="38" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/>
+  <text x="450" y="130" fill="#e8e4df" font-size="11">1~5 클라이언트·앱·웹서버·캐싱·DB</text>
+  <text x="450" y="145" fill="rgb(138,133,128)" font-size="9">브라우저·Apache·memcached·MySQL 버퍼</text>
+
+  <rect x="440" y="156" width="388" height="38" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/>
+  <text x="450" y="174" fill="#e8e4df" font-size="11">6~7 디렉토리·메타데이터 캐시</text>
+  <text x="450" y="189" fill="rgb(138,133,128)" font-size="9">dcache · inode 캐시</text>
+
+  <rect x="440" y="200" width="388" height="38" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="5"/>
+  <text x="450" y="218" fill="rgb(212,168,83)" font-size="11">8~9 OS 버퍼·파일시스템 1차 캐시</text>
+  <text x="450" y="233" fill="rgb(138,133,128)" font-size="9">buffer cache · page cache · ZFS ARC</text>
+
+  <rect x="440" y="244" width="388" height="38" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/>
+  <text x="450" y="262" fill="#e8e4df" font-size="11">10~11 파일시스템 2차·장치 캐시</text>
+  <text x="450" y="277" fill="rgb(138,133,128)" font-size="9">ZFS L2ARC · ZFS vdev</text>
+
+  <rect x="440" y="288" width="388" height="38" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/>
+  <text x="450" y="306" fill="#e8e4df" font-size="11">12~13 블록·디스크 컨트롤러 캐시</text>
+  <text x="450" y="321" fill="rgb(138,133,128)" font-size="9">buffer cache · RAID 카드 캐시</text>
+
+  <rect x="440" y="332" width="388" height="34" fill="rgb(42,37,32)" rx="5"/>
+  <text x="450" y="354" fill="#e8e4df" font-size="11">14~15 스토리지 어레이·온디스크 캐시</text>
+
+  <text x="634" y="392" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">요청 데이터가 캐시에 있으면 디스크 지연을 피해 즉시 제공</text>
+
+  <!-- 결론 -->
+  <rect x="32" y="410" width="796" height="44" fill="#66bb6a" fill-opacity="0.10" stroke="#66bb6a" rx="8"/>
+  <text x="430" y="438" fill="#e8e4df" font-size="12" text-anchor="middle">VFS가 유형을 추상화 · 캐시가 위에서부터 디스크 I/O를 차례로 흡수</text>
+
+  <text x="32" y="484" fill="rgb(138,133,128)" font-size="11">스택 위쪽 캐시일수록 적중 오버헤드↓ — 캐시 튜닝은 일에 가까운 위쪽부터(02-02 §8)</text>
+</svg>

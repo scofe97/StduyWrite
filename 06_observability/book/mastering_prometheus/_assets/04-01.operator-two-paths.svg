@@ -1,0 +1,89 @@
+<svg viewBox="0 0 900 560" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif">
+  <title>Operator 환경에서 SD 설정이 들어가는 두 경로</title>
+  <desc>Prometheus Operator 환경에서 스크레이프 설정은 두 경로로 최종 설정 파일에 들어간다. 왼쪽 경로는 ServiceMonitor, PodMonitor, Probe 커스텀 리소스이며 Operator 가 이것을 읽어 kubernetes_sd_configs 절과 relabel_configs 를 대신 생성한다. 오른쪽 경로는 Prometheus CRD 의 additionalScrapeConfigs 필드로, Secret 에 담긴 스크레이프 잡 YAML 을 그대로 이어붙인다. 두 경로의 결과가 하나의 prometheus.yaml 로 합쳐져 Secret 에 저장되고, config-reloader 사이드카가 이를 Prometheus 에 재적재한다. Kubernetes 에서 오지 않는 서비스 디스커버리는 왼쪽 경로를 쓸 수 없으므로 오른쪽 경로로만 들어간다.</desc>
+  <rect width="900" height="560" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="oa1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#b8b3ad"/>
+    </marker>
+    <marker id="oa2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <text x="450" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#e8e4df">SD 설정이 들어가는 두 경로</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#b8b3ad">번역이냐 그대로냐</text>
+
+  <!-- 왼쪽 경로: CRD -->
+  <rect x="36" y="76" width="380" height="150" rx="9" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.6"/>
+  <text x="56" y="99" font-size="12.5" font-weight="700" fill="#8fdc93">경로 1. Kubernetes SD</text>
+  <text x="56" y="118" font-size="11" fill="#b8b3ad">사용자는 CR 만 씁니다</text>
+
+  <rect x="56" y="128" width="112" height="24" rx="4" fill="#e6f7e7"/>
+  <text x="112" y="145" text-anchor="middle" font-size="10.5" font-weight="700" fill="#14521d">ServiceMonitor</text>
+  <rect x="176" y="128" width="96" height="24" rx="4" fill="#e6f7e7"/>
+  <text x="224" y="145" text-anchor="middle" font-size="10.5" font-weight="700" fill="#14521d">PodMonitor</text>
+  <rect x="280" y="128" width="72" height="24" rx="4" fill="#e6f7e7"/>
+  <text x="316" y="145" text-anchor="middle" font-size="10.5" font-weight="700" fill="#14521d">Probe</text>
+
+  <text x="56" y="176" font-size="11" fill="#b8b3ad">selector 로 대상을 고르고</text>
+  <text x="56" y="194" font-size="11" fill="#b8b3ad">port 이름으로 엔드포인트를 지정</text>
+  <text x="56" y="214" font-size="10.5" fill="#8fdc93">SD 문법을 몰라도 됩니다</text>
+
+  <!-- 오른쪽 경로: additionalScrapeConfigs -->
+  <rect x="484" y="76" width="380" height="150" rx="9" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.6"/>
+  <text x="504" y="99" font-size="12.5" font-weight="700" fill="rgb(212,168,83)">경로 2. 그 밖의 모든 SD</text>
+  <text x="504" y="118" font-size="11" fill="#b8b3ad">사용자가 잡을 직접 적습니다</text>
+
+  <rect x="504" y="128" width="200" height="24" rx="4" fill="#fdf3df"/>
+  <text x="604" y="145" text-anchor="middle" font-size="10.5" font-weight="700" fill="#3a2f10">additionalScrapeConfigs</text>
+  <rect x="712" y="128" width="132" height="24" rx="4" fill="#fdf3df"/>
+  <text x="778" y="145" text-anchor="middle" font-size="10.5" font-weight="700" fill="#3a2f10">Secret 의 키 참조</text>
+
+  <text x="504" y="176" font-size="11" fill="#b8b3ad">ec2 · consul · http_sd</text>
+  <text x="504" y="194" font-size="11" fill="#b8b3ad">Secret 안은 평범한 YAML</text>
+  <text x="504" y="214" font-size="10.5" fill="rgb(212,168,83)">SD 문법을 직접 씁니다</text>
+
+  <!-- 화살표 -->
+  <line x1="226" y1="234" x2="226" y2="272" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#oa1)"/>
+  <line x1="674" y1="234" x2="674" y2="330" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#oa2)"/>
+
+  <!-- Operator 번역 -->
+  <rect x="36" y="280" width="380" height="106" rx="9" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.6"/>
+  <text x="56" y="303" font-size="12.5" font-weight="700" fill="#8ab6e0">Operator 가 번역</text>
+  <rect x="56" y="314" width="164" height="22" rx="4" fill="#dceaf7"/>
+  <text x="138" y="330" text-anchor="middle" font-size="10.5" font-weight="700" fill="#10243a">kubernetes_sd_configs</text>
+  <rect x="228" y="314" width="124" height="22" rx="4" fill="#dceaf7"/>
+  <text x="290" y="330" text-anchor="middle" font-size="10.5" font-weight="700" fill="#10243a">relabel_configs</text>
+  <text x="56" y="356" font-size="11" fill="#b8b3ad">selector 가 keep 규칙으로</text>
+  <text x="56" y="376" font-size="10.5" fill="#8ab6e0">잡 이름도 여기서 지어집니다</text>
+
+  <!-- 그대로 통과 라벨 -->
+  <rect x="484" y="280" width="380" height="52" rx="9" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1.3"/>
+  <text x="504" y="303" font-size="11.5" font-weight="700" fill="#e8e4df">번역 단계가 없습니다</text>
+  <text x="504" y="322" font-size="10.5" fill="#b8b3ad">적은 YAML 이 그대로 이어붙습니다</text>
+
+  <line x1="226" y1="394" x2="226" y2="428" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#oa1)"/>
+
+  <!-- 합류 -->
+  <rect x="36" y="436" width="828" height="58" rx="9" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1.3"/>
+  <text x="56" y="459" font-size="12.5" font-weight="700" fill="#e8e4df">합쳐진 prometheus.yaml</text>
+  <rect x="252" y="446" width="150" height="22" rx="4" fill="#f4f9fd"/>
+  <text x="327" y="462" text-anchor="middle" font-size="10.5" font-weight="700" fill="#10243a">Secret 에 저장</text>
+  <rect x="412" y="446" width="164" height="22" rx="4" fill="#f4f9fd"/>
+  <text x="494" y="462" text-anchor="middle" font-size="10.5" font-weight="700" fill="#10243a">config-reloader 감지</text>
+  <rect x="586" y="446" width="150" height="22" rx="4" fill="#f4f9fd"/>
+  <text x="661" y="462" text-anchor="middle" font-size="10.5" font-weight="700" fill="#10243a">Prometheus 재적재</text>
+  <text x="56" y="484" font-size="10.5" fill="#b8b3ad">두 경로가 여기서 만납니다</text>
+
+  <!-- 갈림 이유 -->
+  <rect x="36" y="504" width="828" height="42" rx="9" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.3"/>
+  <rect x="56" y="512" width="360" height="24" rx="4" fill="#e6f7e7"/>
+  <text x="236" y="529" text-anchor="middle" font-size="10.5" font-weight="700" fill="#14521d">클러스터 안 = 경로 1</text>
+  <rect x="484" y="512" width="360" height="24" rx="4" fill="#fdf3df"/>
+  <text x="664" y="529" text-anchor="middle" font-size="10.5" font-weight="700" fill="#3a2f10">클러스터 밖 = 경로 2</text>
+</svg>

@@ -1,0 +1,99 @@
+<svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>스레드별 런타임 데이터 영역 — PC 레지스터·Java 스택·네이티브 메서드 스택은 스레드마다 따로</title>
+  <desc>JVM 런타임 데이터 영역 중 PC 레지스터, 가상 머신 스택(Java 스택), 네이티브 메서드 스택은 스레드마다 하나씩 따로 존재한다. 각 스레드의 Java 스택에는 메서드 호출마다 스택 프레임이 push되어 쌓이고, 메서드가 끝나면 pop된다. 맨 위 프레임이 현재 프레임이다. 네이티브 메서드를 호출하면 네이티브 메서드 스택을 쓴다. 스레드끼리 이 영역을 공유하지 않으므로 스레드 안전 문제에서 자유롭다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11.5px;fill:rgb(150,145,140)}
+      .areahead{font-size:12px;font-weight:800;fill:rgb(212,168,83)}
+      .thr{font-size:10.5px;font-weight:800;font-style:italic;fill:rgb(200,195,190)}
+      .frame{font-size:9.5px;font-weight:700;fill:#10243a;font-family:'JetBrains Mono',monospace}
+      .pcv{font-size:9px;font-weight:700;fill:#10243a;font-family:'JetBrains Mono',monospace}
+      .note{font-size:9.5px;fill:rgb(150,145,140)}
+      .cur{font-size:9px;font-weight:800;fill:#e89384}
+    </style>
+  </defs>
+  <rect x="0" y="0" width="900" height="560" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">스레드별 런타임 데이터 영역 — 스택은 스레드마다 따로</text>
+  <text x="28" y="60" class="sub">PC 레지스터 · 가상 머신 스택(Java 스택) · 네이티브 메서드 스택은 스레드 하나당 하나씩 — 공유하지 않음</text>
+
+  <!-- ===== PC 레지스터 영역 ===== -->
+  <rect x="28" y="84" width="150" height="392" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="103" y="106" class="areahead" text-anchor="middle">PC 레지스터</text>
+  <!-- thread 1 -->
+  <text x="103" y="134" class="thr" text-anchor="middle">thread 1</text>
+  <rect x="48" y="142" width="110" height="26" rx="4" fill="#dceaf7"/>
+  <text x="103" y="159" class="pcv" text-anchor="middle">현재 명령 주소</text>
+  <!-- thread 2 -->
+  <text x="103" y="196" class="thr" text-anchor="middle">thread 2</text>
+  <rect x="48" y="204" width="110" height="26" rx="4" fill="#dceaf7"/>
+  <text x="103" y="221" class="pcv" text-anchor="middle">현재 명령 주소</text>
+  <!-- thread 3 -->
+  <text x="103" y="258" class="thr" text-anchor="middle">thread 3</text>
+  <rect x="48" y="266" width="110" height="26" rx="4" fill="#dceaf7"/>
+  <text x="103" y="283" class="pcv" text-anchor="middle">현재 명령 주소</text>
+  <text x="103" y="462" class="note" text-anchor="middle">스레드마다 1칸</text>
+
+  <!-- ===== Java 스택 영역 ===== -->
+  <rect x="200" y="84" width="468" height="392" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="434" y="106" class="areahead" text-anchor="middle">Java 스택 (가상 머신 스택)</text>
+
+  <!-- thread 1 스택 -->
+  <text x="270" y="134" class="thr" text-anchor="middle">thread 1</text>
+  <rect x="216" y="142" width="108" height="34" rx="4" fill="#f5edda"/>
+  <text x="270" y="163" class="frame" text-anchor="middle">stack frame</text>
+  <rect x="216" y="180" width="108" height="34" rx="4" fill="#f5edda"/>
+  <text x="270" y="201" class="frame" text-anchor="middle">stack frame</text>
+  <rect x="216" y="218" width="108" height="34" rx="4" fill="#f5edda"/>
+  <text x="270" y="239" class="frame" text-anchor="middle">stack frame</text>
+  <rect x="216" y="256" width="108" height="34" rx="4" fill="#f3d9a0"/>
+  <text x="270" y="273" class="frame" text-anchor="middle">stack frame</text>
+  <text x="270" y="286" class="cur" text-anchor="middle">← 현재 프레임</text>
+
+  <!-- thread 2 스택 -->
+  <text x="382" y="134" class="thr" text-anchor="middle">thread 2</text>
+  <rect x="328" y="142" width="108" height="34" rx="4" fill="#f5edda"/>
+  <text x="382" y="163" class="frame" text-anchor="middle">stack frame</text>
+  <rect x="328" y="180" width="108" height="34" rx="4" fill="#f5edda"/>
+  <text x="382" y="201" class="frame" text-anchor="middle">stack frame</text>
+  <rect x="328" y="218" width="108" height="34" rx="4" fill="#f3d9a0"/>
+  <text x="382" y="235" class="frame" text-anchor="middle">stack frame</text>
+  <text x="382" y="248" class="cur" text-anchor="middle">← 현재 프레임</text>
+
+  <!-- thread 3 스택 -->
+  <text x="500" y="134" class="thr" text-anchor="middle">thread 3</text>
+  <rect x="446" y="142" width="108" height="34" rx="4" fill="#f5edda"/>
+  <text x="500" y="163" class="frame" text-anchor="middle">stack frame</text>
+  <rect x="446" y="180" width="108" height="34" rx="4" fill="#f3d9a0"/>
+  <text x="500" y="197" class="frame" text-anchor="middle">stack frame</text>
+  <text x="500" y="210" class="cur" text-anchor="middle">← 현재 프레임</text>
+
+  <!-- push/pop 방향 표시 (thread 1 옆) -->
+  <line x1="600" y1="170" x2="600" y2="280" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <polygon points="600,160 595,172 605,172" fill="rgb(212,168,83)"/>
+  <polygon points="600,290 595,278 605,278" fill="rgb(150,145,140)"/>
+  <text x="612" y="178" class="note">push</text>
+  <text x="612" y="200" class="note">(호출)</text>
+  <text x="612" y="278" class="note">pop</text>
+  <text x="612" y="296" class="note">(반환)</text>
+
+  <text x="434" y="462" class="note" text-anchor="middle">메서드 호출마다 프레임 push → 맨 위가 현재 프레임 → 끝나면 pop</text>
+
+  <!-- ===== 네이티브 메서드 스택 영역 ===== -->
+  <rect x="690" y="84" width="182" height="392" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="781" y="106" class="areahead" text-anchor="middle">네이티브 메서드 스택</text>
+  <text x="781" y="200" class="thr" text-anchor="middle">thread 3</text>
+  <rect x="708" y="210" width="146" height="150" rx="6" fill="#5b9bd5"/>
+  <text x="781" y="280" class="frame" text-anchor="middle" fill="#10243a">native call</text>
+  <text x="781" y="300" class="pcv" text-anchor="middle" fill="#10243a">(JNI 등)</text>
+  <text x="781" y="462" class="note" text-anchor="middle">네이티브 호출 시 사용</text>
+
+  <!-- thread3 Java스택 → 네이티브 연결 -->
+  <line x1="554" y1="159" x2="708" y2="220" stroke="rgb(150,145,140)" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <polygon points="708,220 698,216 702,226" fill="rgb(150,145,140)"/>
+
+  <!-- 하단 요약 -->
+  <rect x="28" y="494" width="844" height="48" rx="8" fill="#f5edda"/>
+  <text x="48" y="516" class="frame" font-size="10.5">이 세 영역은 스레드마다 따로 존재해 공유하지 않습니다 — 그래서 지역 변수·프레임은 스레드 안전 문제에서 자유롭습니다.</text>
+  <text x="48" y="534" class="frame" font-size="10.5">반대로 힙과 메서드 영역은 모든 스레드가 공유합니다 (이 그림에는 없음).</text>
+</svg>

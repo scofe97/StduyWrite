@@ -1,0 +1,70 @@
+<svg viewBox="0 0 640 420" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>cgroup 학습 전체 지도</title>
+  <desc>자원 종류마다 계층이 있고 각 계층을 컨트롤러가 관리한다는 구조에서 출발합니다. 그 계층은 sys fs cgroup 아래의 의사 파일시스템으로 드러나므로, 디렉토리를 만드는 것이 곧 cgroup을 만드는 일이 됩니다. 한도는 파일에 값을 쓰는 것으로 정하고, 프로세스 배정도 파일에 PID를 쓰는 것으로 끝납니다. Docker는 이 과정을 명령 한 줄로 감싸 줍니다. 마지막으로 v2가 무엇을 바꾸는지 봅니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10.5px; }
+    .sec { fill: #3a3632; font-size: 10px; font-weight: 700; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .num { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10.5px; }
+  </style>
+
+  <rect width="640" height="420" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="fh" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="num" x="34" y="45">1.</text>
+  <rect class="box" x="54" y="24" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="46">계층과 컨트롤러</text>
+  <text class="box-detail" x="72" y="64">자원 종류마다 계층이 하나씩</text>
+  <text class="sec" x="566" y="46" text-anchor="end">§1</text>
+
+  <path class="arrow" d="M320,74 L320,92" marker-end="url(#fh)"/>
+
+  <text class="num" x="34" y="119">2.</text>
+  <rect class="box" x="54" y="98" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="120">cgroup 만들기</text>
+  <text class="box-detail" x="72" y="138">디렉토리를 만들면 커널이 채운다</text>
+  <text class="sec" x="566" y="120" text-anchor="end">§2</text>
+
+  <path class="arrow" d="M320,148 L320,166" marker-end="url(#fh)"/>
+
+  <text class="hint" x="320" y="182" text-anchor="middle">전부 파일에 쓰는 일이다</text>
+
+  <path class="arrow" d="M320,188 L320,200 L180,200 L180,218" marker-end="url(#fh)"/>
+  <path class="arrow" d="M320,188 L320,200 L460,200 L460,218" marker-end="url(#fh)"/>
+
+  <text class="num" x="34" y="247">3.</text>
+  <rect class="box" x="54" y="224" width="252" height="56" rx="4"/>
+  <text class="box-title" x="72" y="246">한도 정하기</text>
+  <text class="box-detail" x="72" y="264">limit_in_bytes에 쓴다</text>
+  <text class="sec" x="288" y="246" text-anchor="end">§3</text>
+
+  <text class="num" x="345" y="247">4.</text>
+  <rect class="box" x="364" y="224" width="222" height="56" rx="4"/>
+  <text class="box-title" x="382" y="246">프로세스 배정</text>
+  <text class="box-detail" x="382" y="264">cgroup.procs에 PID를</text>
+  <text class="sec" x="566" y="246" text-anchor="end">§4</text>
+
+  <path class="arrow" d="M180,280 L180,296 L320,296 L320,314" marker-end="url(#fh)"/>
+  <path class="arrow" d="M460,280 L460,296 L320,296"/>
+
+  <text class="num" x="34" y="345">5.</text>
+  <rect class="box" x="54" y="320" width="532" height="52" rx="4"/>
+  <text class="box-title" x="72" y="342">Docker가 감싸 준다</text>
+  <text class="box-detail" x="72" y="360">--memory 한 줄이면 끝</text>
+  <text class="sec" x="566" y="342" text-anchor="end">§5</text>
+
+  <text class="hint" x="72" y="398">v2는 구조를 바꾼다 · §6</text>
+</svg>

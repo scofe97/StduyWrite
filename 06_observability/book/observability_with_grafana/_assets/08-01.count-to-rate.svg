@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 380" width="100%" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>요청 카운트를 비율로 바꾸고 범례와 제목을 고치는 개선 흐름</title>
+  <desc>누적 카운트는 계속 증가하기만 해 속도를 알려주지 않습니다. 쿼리 빌더가 파란 상자로 보여주는 rate 힌트를 클릭하거나 Operations 에서 Rate 를 골라 범위를 rate_interval 로 두면 초당 요청 수가 됩니다. 범례는 커스텀 라벨 식별자로 바꾸고 제목도 비율을 반영하게 고치며 설명을 더하면 패널에 i 아이콘이 생깁니다.</desc>
+
+  <style>
+    .code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 10.5px; }
+  </style>
+
+  <rect width="880" height="380" fill="#0d0d0d"/>
+
+  <text x="30" y="34" fill="#e8e4df" font-size="17" font-weight="700">카운트에서 비율로</text>
+  <text x="30" y="55" fill="#b8b3ad" font-size="12">무엇을 보여줄지가 먼저다</text>
+
+  <!-- before -->
+  <rect x="30" y="76" width="380" height="112" rx="8" fill="#0d0d0d" stroke="#f44336" stroke-width="1.8"/>
+  <rect x="30" y="76" width="380" height="30" rx="8" fill="#f2b8b5"/>
+  <rect x="30" y="98" width="380" height="8" fill="#f2b8b5"/>
+  <text x="48" y="97" fill="#5c1414" font-size="13" font-weight="700">전 — 누적 카운트</text>
+
+  <rect x="48" y="118" width="344" height="22" rx="3" fill="#f2d4d4"/>
+  <text class="code" x="58" y="133" fill="#7a1f1f">app_frontend_requests_total</text>
+  <text x="48" y="160" fill="#e8e4df" font-size="11.5">계속 증가하기만 한다</text>
+  <text x="48" y="180" fill="#b8b3ad" font-size="11">지금 어떤 속도인지 알 수 없다</text>
+
+  <!-- arrow -->
+  <path d="M414 132 L462 132" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#a)"/>
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <!-- after -->
+  <rect x="470" y="76" width="380" height="112" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.8"/>
+  <rect x="470" y="76" width="380" height="30" rx="8" fill="#66bb6a"/>
+  <rect x="470" y="98" width="380" height="8" fill="#66bb6a"/>
+  <text x="488" y="97" fill="#0d0d0d" font-size="13" font-weight="700">후 — 초당 비율</text>
+
+  <rect x="488" y="118" width="344" height="22" rx="3" fill="#e6f7e7"/>
+  <text class="code" x="498" y="133" fill="#14521d">rate(...[$__rate_interval])</text>
+  <text x="488" y="160" fill="#e8e4df" font-size="11.5">초당 GET·POST 요청 수</text>
+  <text x="488" y="180" fill="#b8b3ad" font-size="11">평소와 다른 속도인지 보인다</text>
+
+  <!-- how -->
+  <rect x="30" y="204" width="820" height="66" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="50" y="226" fill="rgb(212,168,83)" font-size="12.5" font-weight="700">rate 를 붙이는 두 길</text>
+  <rect x="50" y="236" width="380" height="22" rx="3" fill="#fdf3df"/>
+  <text x="60" y="251" fill="#5c4410" font-size="11">쿼리 빌더의 파란 상자 힌트를 클릭</text>
+  <rect x="446" y="236" width="386" height="22" rx="3" fill="#fdf3df"/>
+  <text class="code" x="456" y="251" fill="#5c4410">Operations → Rate</text>
+  <text x="580" y="251" fill="#5c4410" font-size="11">범위는</text>
+  <text class="code" x="622" y="251" fill="#5c4410">$__rate_interval</text>
+
+  <!-- remaining fixes -->
+  <rect x="30" y="286" width="820" height="76" rx="8" fill="#0d0d0d" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+  <text x="50" y="308" fill="#e8e4df" font-size="12.5" font-weight="700">남은 손질 둘</text>
+
+  <text x="50" y="332" fill="#b8b3ad" font-size="11">범례</text>
+  <rect x="100" y="318" width="180" height="20" rx="3" fill="#dceaf7"/>
+  <text class="code" x="110" y="332" fill="#10243a">{{method}}</text>
+  <text x="292" y="332" fill="#b8b3ad" font-size="11">method 라벨 값이 범례로</text>
+
+  <text x="50" y="354" fill="#b8b3ad" font-size="11">제목·설명</text>
+  <text x="128" y="354" fill="#b8b3ad" font-size="11">비율 반영 · 설명은 i 로</text>
+</svg>

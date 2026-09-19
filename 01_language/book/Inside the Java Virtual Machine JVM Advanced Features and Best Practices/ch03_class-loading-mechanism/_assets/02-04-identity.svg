@@ -1,0 +1,52 @@
+<svg viewBox="0 0 900 520" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>클래스 동일성 — 이름 + 로더의 쌍</title>
+  <desc>JVM에서 두 클래스가 같은가는 클래스 이름만이 아니라 그것을 로딩한 클래스 로더까지 같아야 같다. 같은 .class 파일이라도 다른 두 로더가 각각 로딩하면 JVM은 별개의 클래스로 보아 instanceof가 false다. 위임과 로딩은 다르다. java.lang.Object는 부트스트랩이 가지고 있어 어느 로더로 요청해도 부트스트랩이 로딩해 통일되지만 애플리케이션 클래스는 위임이 위로 올라갔다 실패하고 결국 요청한 로더가 직접 로딩하므로 로더마다 갈린다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11.5px;fill:rgb(150,145,140)}
+      .head{font-size:12.5px;font-weight:800;fill:rgb(212,168,83)}
+      .body{font-size:10.5px;fill:rgb(200,195,190)}
+      .lab{font-size:11.5px;font-weight:800;fill:#0d0d0d}
+      .ok{font-size:11px;font-weight:800;fill:#81c784}
+      .bad{font-size:11px;font-weight:800;fill:#e57373}
+      .note{font-size:9.5px;fill:rgb(150,145,140)}
+    </style>
+  </defs>
+  <rect x="0" y="0" width="900" height="520" fill="#0d0d0d"/>
+  <text x="28" y="40" class="title">클래스 동일성 = 이름 + 로더 — 같은 .class라도 로더 다르면 별개</text>
+  <text x="28" y="64" class="sub">두 클래스가 같으려면 정규화된 이름뿐 아니라 로딩한 로더까지 같아야 한다</text>
+
+  <!-- 같은 .class -->
+  <rect x="350" y="92" width="200" height="40" rx="8" fill="#dceaf7"/>
+  <text x="450" y="118" font-size="10" font-family="'JetBrains Mono',monospace" font-weight="700" fill="#10243a" text-anchor="middle">Foo.class (같은 바이트)</text>
+  <line x1="410" y1="132" x2="260" y2="176" stroke="rgb(150,145,140)" stroke-width="1.6"/>
+  <line x1="490" y1="132" x2="640" y2="176" stroke="rgb(150,145,140)" stroke-width="1.6"/>
+
+  <!-- 로더 A -->
+  <rect x="70" y="180" width="330" height="96" rx="10" fill="#5b9bd5"/>
+  <text x="92" y="210" class="lab">로더 A 가 로딩</text>
+  <rect x="90" y="224" width="290" height="36" rx="6" fill="#0c1a28"/>
+  <text x="106" y="248" font-size="10.5" font-family="'JetBrains Mono',monospace" font-weight="700" fill="#9ecbf0">Foo  (네임스페이스 A)</text>
+  <!-- 로더 B -->
+  <rect x="500" y="180" width="330" height="96" rx="10" fill="#66bb6a"/>
+  <text x="522" y="210" class="lab">로더 B 가 로딩</text>
+  <rect x="520" y="224" width="290" height="36" rx="6" fill="#0c1f12"/>
+  <text x="536" y="248" font-size="10.5" font-family="'JetBrains Mono',monospace" font-weight="700" fill="#a6e0aa">Foo  (네임스페이스 B)</text>
+
+  <!-- instanceof 결과 -->
+  <rect x="290" y="300" width="320" height="56" rx="9" fill="#2a1414" stroke="#e57373"/>
+  <text x="450" y="324" font-size="10.5" font-family="'JetBrains Mono',monospace" font-weight="700" fill="#e8e4df" text-anchor="middle">a instanceof B.Foo</text>
+  <text x="450" y="344" class="bad" text-anchor="middle">→ false  (이름 같아도 로더 달라 별개)</text>
+
+  <!-- 위임 != 로딩 -->
+  <rect x="40" y="380" width="820" height="84" rx="10" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-dasharray="6 5"/>
+  <text x="60" y="406" class="head">왜 갈리나 — 위임(요청 위로) ≠ 로딩(처리 가능한 로더가)</text>
+  <text x="60" y="432" class="body">java.lang.Object: 부트스트랩이 가짐 → 어느 로더로 요청해도 부트스트랩이 로딩 →</text>
+  <text x="560" y="432" class="ok">모두 같은 Object (통일)</text>
+  <text x="60" y="454" class="body">com.myapp.Foo: 위로 위임했다 다 실패 → 요청한 로더가 직접 로딩 →</text>
+  <text x="560" y="454" class="bad">로더마다 갈림 (별개)</text>
+
+  <text x="28" y="492" class="sub">이 갈림이 모듈 격리·핫 디플로이·톰캣 웹앱 격리의 기반 — 로더를 갈아치우면 같은 이름 클래스를 새 버전으로 교체</text>
+  <text x="28" y="510" class="note">핵심 클래스(java.*)는 부트스트랩이 로딩해 항상 유일, 애플리케이션 클래스만 로더별로 갈린다</text>
+</svg>
