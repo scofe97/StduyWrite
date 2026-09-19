@@ -135,7 +135,7 @@ updated: 2026-08-23
 
 > 개념이 겹치면 여기서 다시 설명하지 않고 `../../kubernetes/`의 개념 노트로 링크를 겁니다.
 
-RBAC처럼 이미 여러 문서가 다룬 주제는 축을 나눠 씁니다. 클러스터 보안 전체에서의 위치는 개념 노트 [07-01.RBAC과 보안](../../kubernetes/07_security/07-01.RBAC%EA%B3%BC%20%EB%B3%B4%EC%95%88.md)이, 권한 설계 판단은 [Kubernetes Patterns 26-01.Access Control](../kubernetes-patterns/26-01.Access%20Control%20%E2%80%94%20RBAC%EC%9C%BC%EB%A1%9C%20%EB%88%84%EA%B0%80%20%EB%AC%B4%EC%97%87%EC%9D%84%20%ED%95%A0%20%EC%88%98%20%EC%9E%88%EB%8A%94%EC%A7%80.md)이 맡고, 이 폴더는 **만든 권한을 검증·버전관리·복구하는 운영 축**을 맡습니다. 같은 판단을 다른 장에도 적용합니다.
+RBAC처럼 이미 여러 문서가 다룬 주제는 축을 나눠 씁니다. 권한 설계 판단은 [Kubernetes Patterns 26-01.Access Control](../kubernetes-patterns/26-01.Access%20Control%20%E2%80%94%20RBAC%EC%9C%BC%EB%A1%9C%20%EB%88%84%EA%B0%80%20%EB%AC%B4%EC%97%87%EC%9D%84%20%ED%95%A0%20%EC%88%98%20%EC%9E%88%EB%8A%94%EC%A7%80.md)이 맡고, 이 폴더는 **만든 권한을 검증·버전관리·복구하는 운영 축**을 맡습니다. 같은 판단을 다른 장에도 적용합니다.
 
 
 
