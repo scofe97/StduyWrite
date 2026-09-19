@@ -7,7 +7,7 @@ source:
   - "../../02_os/book/cntd_computer-networking-top-down/05-01.길은 어떻게 계산되는가.md"
   - "../../02_os/book/cntd_computer-networking-top-down/05-02.AS 안과 AS 사이.md"
   - "../../02_os/book/cntd_computer-networking-top-down/05-03.제어를 밖으로 빼고 망을 들여다봅니다.md"
-  - "../../02_os/book/cntd_computer-networking-top-down/05-04.5장 실습 — traceroute·ICMP·흐름 표를 손으로 확인합니다.md"
+  - "../../02_os/book/cntd_computer-networking-top-down/05-04.실습 - traceroute·ICMP·흐름 표를 손으로 확인합니다.md"
 round: 1
 round_date: 2026-09-14
 prev_round_date: null
