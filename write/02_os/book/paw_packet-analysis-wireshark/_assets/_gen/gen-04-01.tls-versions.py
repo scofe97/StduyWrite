@@ -9,7 +9,7 @@ W, H = 1000, 432
 d = D(W, H, "PACKET ANALYSIS WITH WIRESHARK · 04-01 §1",
       "SSL/TLS 버전의 연대",
       "원문 표의 연도와 RFC 를 시간축 위에 놓은 것. 원문 시점(2015)에 폐기된 것은 SSL 둘뿐이었고, 그 뒤 TLS 1.0·1.1 도 폐기됐으며 TLS 1.3 은 초안에서 RFC 8446 으로 확정됐다.",
-      "왼쪽 네 개가 지금은 모두 폐기됐습니다 — 쓸 수 있는 것은 오른쪽 둘뿐입니다")
+      "SSL 2.0·3.0 과 TLS 1.0·1.1 은 폐기됐습니다. 이 편은 TLS 1.2 중심으로 읽습니다")
 
 Y = 216
 X0, X1 = 80, 900
@@ -26,8 +26,8 @@ EVENTS = [
     (1996, "SSL 3.0",  "RFC 6101",     "폐기 · RFC 7568", BAD,  False),
     (1999, "TLS 1.0",  "RFC 2246",     "폐기 · RFC 8996", WARN, True),
     (2006, "TLS 1.1",  "RFC 4346",     "폐기 · RFC 8996", WARN, False),
-    (2008, "TLS 1.2",  "RFC 5246",     "현행",            OK,   True),
-    (2018, "TLS 1.3",  "RFC 8446",     "현행 · 원문은 DRAFT", ACC, False),
+    (2008, "TLS 1.2",  "RFC 5246",     "이 편의 중심",     OK,   True),
+    (2018, "TLS 1.3",  "RFC 8446",     "2018 표준 확정",   ACC, False),
 ]
 
 for yr, name, rfc, note, c, above in EVENTS:
@@ -45,5 +45,5 @@ for yr, name, rfc, note, c, above in EVENTS:
     d.t(cx, ly + 40, rfc, 11, MUTED, MONO)
     d.t(cx, ly + 58, note, 11, c, KR)
 
-d.legend(H - 64, [("원문 이후 확정", ACC), ("현행", OK), ("원문 이후 폐기", WARN), ("원문 시점에 이미 폐기", BAD)])
+d.legend(H - 64, [("원문 이후 확정", ACC), ("학습 중심 버전", OK), ("원문 이후 폐기", WARN), ("원문 시점에 이미 폐기", BAD)])
 d.save("04-01.tls-versions.svg")

@@ -11,15 +11,15 @@ from dd import D, ACC, MUTED, SOFT, INK, OK, BAD, INFO, PAPER, PAPER2, RULE, KR,
 W, H = 960, 344
 d = D(W, H, "PACKET ANALYSIS WITH WIRESHARK · 04-01 §5",
       "레코드 계층이 하는 일",
-      "핸드셰이크가 끝나면 애플리케이션 데이터가 레코드 계층을 지난다. 원문이 적는 순서는 조각내기·압축·암호화 셋이며, TLS 1.3 은 이 중 압축을 없앴다.",
+      "TLS 1.2 애플리케이션 데이터는 조각내기, 선택된 압축 처리, 암호화와 무결성 보호를 거친다. 압축은 보통 null이며 TLS 1.3에서는 제거됐다.",
       "Wireshark 가 보는 것은 마지막 칸의 결과입니다 — 그 안은 키가 있어야 열립니다")
 
 CW, CH, GAP, X0, Y = 208, 108, 24, 24, 128     # stride = 232
 cards = [
     ("00", "애플리케이션 데이터", "HTTP 요청·응답 그대로", None),
-    ("01", "조각내기", "레코드 크기로 자릅니다", None),
-    ("02", "압축", "TLS 1.3 에서 없어졌습니다", BAD),
-    ("03", "암호화", "content_type == 23 로 나갑니다", ACC),
+    ("01", "조각내기", "레코드 크기로 자르기", None),
+    ("02", "압축: 보통 null", "TLS 1.3 에서 제거", BAD),
+    ("03", "암호화·무결성 보호", "content_type == 23", ACC),
 ]
 
 for i, (n, title, sub, c) in enumerate(cards):
