@@ -48,7 +48,7 @@ for k, (label, sub, causes, focal) in enumerate(BONES, start=1):
 
 d.tone(HEAD, CY - 32, 200, 64, ACC, 8)
 d.t(HEAD + 100, CY - 4, "서버가 더 이상", 12, ACC, KR, "middle", 600)
-d.t(HEAD + 100, CY + 16, "요청을 받지 못합니다", 12, ACC, KR, "middle", 600)
+d.t(HEAD + 100, CY + 16, "요청을 받지 못함", 12, ACC, KR, "middle", 600)
 
 d.legend(H - 60, [("원문 캡처가 확인한 갈래", ACC), ("장이 함께 다루는 갈래", MUTED)])
 d.save("07-01.dos-families.svg")

@@ -26,9 +26,9 @@ for i in range(3):
     d.arrow([(X[i] + SW, Y + SH / 2), (X[i + 1] - 4, Y + SH / 2)],
             BAD if i == 1 else MUTED, "bad" if i == 1 else "ar", 1.4)
 
-labels = [("주소를 몰라 물어봄", "응답을 검증할 절차가 없습니다"),
+labels = [("주소를 몰라 물어봄", "응답을 검증할 절차 없음"),
           ("위조 ARP 응답 수신", "10.0.0.7 is at fa:16:3e:bf:22:d0"),
-          ("보내는 프레임의 목적지가 바뀜", "Wireshark 가 Warn 을 답니다")]
+          ("보내는 프레임의 목적지가 바뀜", "Wireshark 가 Warn 표시")]
 for i, (lab, sub) in enumerate(labels):
     mx = (X[i] + SW + X[i + 1]) / 2
     d.t(mx, Y - 20, lab, 11, BAD if i == 1 else MUTED, KR)

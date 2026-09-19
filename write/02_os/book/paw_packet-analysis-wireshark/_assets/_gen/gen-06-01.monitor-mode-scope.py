@@ -12,7 +12,7 @@ d = D(W, H, "PACKET ANALYSIS WITH WIRESHARK · 06-01 §1",
 
 # 좌우 32 · 위 48 · 아래 24 씩 일정하게 들여쓴다 (라벨이 상단에만 있어 대칭이면 아래가 빈다)
 RINGS = [
-    ("CHANNEL", "채널 전체 트래픽", "monitor 모드가 어댑터에서 올려 줍니다", 24, 104, 832, 272),
+    ("CHANNEL", "채널 전체 트래픽", "monitor 모드가 어댑터에서 올려 줌", 24, 104, 832, 272),
     ("MGMT · CTRL", "관리·제어 프레임", "beacon · probe · auth · RTS/CTS · ACK", 56, 152, 768, 200),
     ("BROADCAST", "브로드캐스트·멀티캐스트", "AP 가 뿌리는 것", 88, 200, 704, 128),
     ("MY UNICAST", "내 유니캐스트 데이터", "일반 모드가 보는 전부", 120, 248, 640, 56),
@@ -27,11 +27,10 @@ for i, (tag, name, sub, x, y, w, h) in enumerate(RINGS):
         d.o.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="8" '
                    f'fill="{PAPER2}" fill-opacity="{0.25 + i * 0.2}" '
                    f'stroke="{RULE}" stroke-opacity="{op}" stroke-width="1.1"/>')
-    lw = len(tag) * 6 + 16
-    d.o.append(f'<rect x="{x + 16}" y="{y - 7}" width="{lw}" height="14" fill="{PAPER}"/>')
-    d.t(x + 24, y + 4, tag, 8, ACC if last else SOFT, MONO, "start")
-    d.t(x + 24, y + 30, name, 14, ACC if last else INK, KR, "start", 600)
-    d.t(x + w - 24, y + 30, sub, 12, MUTED, KR, "end")
+    # 태그는 테두리 위에 종이 조각을 덧대지 않고 고리 안쪽 첫 줄에 둔다 — 덧댄 조각이 안쪽 고리와 겹쳤다
+    d.t(x + 24, y + 14, tag, 8, ACC if last else SOFT, MONO, "start")
+    d.t(x + 24, y + 34, name, 14, ACC if last else INK, KR, "start", 600)
+    d.t(x + w - 24, y + 34, sub, 12, MUTED, KR, "end")
 
 d.legend(408, [("일반 모드가 보는 범위", ACC)])
 d.save("06-01.monitor-mode-scope.svg")

@@ -49,9 +49,9 @@ def node(j, k, title, l1, l2, c=None):
     d.t(x + NODE_W / 2, y + 62, l2, 11, MUTED, KR)
     return x, y
 
-node(0, 0, "작은 요청을 보냅니다", "src = 피해자 IP", "출발지만 바꿔 씁니다")
-node(1, 1, "규격대로 답합니다", "dst = src = 피해자 IP", "서버는 속은 줄 모릅니다", ACC)
-node(2, 2, "증폭된 응답이 몰립니다", "NTP 556.9x · DNS 28~54x", "보낸 적 없는 답만 쌓입니다", BAD)
+node(0, 0, "작은 요청 전송", "src = 피해자 IP", "출발지만 바꿔 씀")
+node(1, 1, "규격대로 응답", "dst = src = 피해자 IP", "서버는 속은 줄 모름", ACC)
+node(2, 2, "증폭된 응답이 몰림", "NTP 556.9x · DNS 28~54x", "보낸 적 없는 답만 쌓임", BAD)
 
 def hop(j0, k0, j1, k1, c, m):
     x0, y0 = step_cx(j0) + NODE_W / 2, lane_mid(k0)
@@ -63,7 +63,7 @@ hop(0, 0, 1, 1, MUTED, "ar")
 hop(1, 1, 2, 2, BAD, "bad")
 
 d.t(LABEL_W, lane_top(3) + 28,
-    "증폭 배수는 US-CERT TA14-017A 의 값입니다 — BitTorrent 3.8x 까지 같은 목록에 올라 있습니다",
+    "증폭 배수 출처 US-CERT TA14-017A · 같은 목록에 BitTorrent 3.8x 까지",
     11, MUTED, KR, "start")
 
 d.legend(H - 62, [("속은 채 규격대로 답하는 쪽", ACC), ("증폭된 응답이 닿는 쪽", BAD)])

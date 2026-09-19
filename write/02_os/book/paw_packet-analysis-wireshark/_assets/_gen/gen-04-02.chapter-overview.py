@@ -9,7 +9,7 @@ d = D(W, H, "PACKET ANALYSIS WITH WIRESHARK · 04-02",
 CW, CH, GAP, Y0 = 256, 136, 32, 156
 cards = [
     ("§1", "버전·키 교환", "TLS 1.2: suite의 키 교환", "TLS 1.3: 별도 협상", False),
-    ("§2", "복호화 재료", "RSA 개인키: 조건 확인", "세션 비밀값: 양쪽 종단", True),
+    ("§2", "복호화 재료", "RSA 개인키: 조건 확인", "비밀값: 클라이언트 또는 서버", True),
     ("§3", "실패 단계·방향", "마지막 메시지 · Alert 송신자", "협상 조건 · 인증서 신뢰", False),
 ]
 for i, (num, title, sub, hint, focal) in enumerate(cards):

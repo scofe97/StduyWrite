@@ -54,7 +54,7 @@ for i, (n, p, c, col) in enumerate(UDP_KIDS):
 for i, (n, p, c, col) in enumerate(TCP_KIDS):
     elbow(tcp, node(4, LEAF_Y[5 + i], n, p, c, col))
 
-d.t(24, 452, "UDP 의 절반 가까이가 한 줄에 몰려 있고 그 아래에 Malformed Packet 2.80% 가 딸려 있습니다 — 해석기가 잘못 짚었는지부터 확인합니다",
+d.t(24, 452, "UDP 의 절반 가까이가 한 줄에 몰림 · 그 아래 Malformed Packet 2.80% · 해석기가 잘못 짚었는지부터 확인",
      11, MUTED, KR, "start")
 
 d.legend(H - 60, [("먼저 확인할 줄", ACC)])

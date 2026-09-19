@@ -6,7 +6,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
 BRANCHES = [
-    ("Management · type 0", [("beacon frame", "0x08 · AP 가 자기를 알립니다"),
+    ("Management · type 0", [("beacon frame", "0x08 · AP 가 자기를 알림"),
                              ("probe request/response", "0x04 / 0x05"),
                              ("authentication", "0x0b"),
                              ("association request/response", "0x00 / 0x01"),
@@ -14,7 +14,7 @@ BRANCHES = [
     ("Control · type 1", [("request/clear to send", "0x1b / 0x1c"),
                           ("acknowledgement", "0x1d"),
                           ("block ack request/ack", "0x18 / 0x19")]),
-    ("Data · type 2", [("data", "0x20 · 페이로드를 나릅니다"),
+    ("Data · type 2", [("data", "0x20 · 페이로드 운반"),
                        ("qos data", "0x28"),
                        ("null function", "0x24")]),
     ("Extension · type 3", [("확장 프레임", "wlan_ext 로 표시")]),

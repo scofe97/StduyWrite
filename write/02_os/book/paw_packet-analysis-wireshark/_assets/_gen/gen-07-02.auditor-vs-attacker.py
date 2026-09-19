@@ -20,16 +20,19 @@ d.t(320, 130, "SECURITY AUDITOR", 9, SOFT, MONO)
 d.t(648, 112, "공격자", 14, BAD, KR, "middle", 600)
 d.t(648, 130, "ATTACKER", 9, SOFT, MONO)
 
-for i, line in enumerate(["허가를 받고 합니다", "약한 스위트를 찾아", "제거하려고 봅니다"]):
+for i, line in enumerate(["허가를 받고", "약한 스위트를 찾아", "제거하려는 목적"]):
     d.t(320, 268 + i * 26, line, 11, MUTED, KR)
-for i, line in enumerate(["허가 없이 합니다", "열린 DB 포트를 찾아", "이용하려고 봅니다"]):
+for i, line in enumerate(["허가 없이", "열린 DB 포트를 찾아", "이용하려는 목적"]):
     d.t(648, 268 + i * 26, line, 11, MUTED, KR)
 
 d.t(480, 216, "같은 것", 12, ACC, KR, "middle", 600)
-for i, line in enumerate(["nmap -T4 -A -v", "ssl-cert,ssl-enum-ciphers", "포트마다 SYN 하나", "Win 값이 뒤섞인 탐침"]):
-    d.t(480, 250 + i * 26, line, 11, ACC, KR if any("가" <= c <= "힣" for c in line) else MONO)
+# 교집합 렌즈의 최대 폭은 160px 이다. 한 줄로 두면 165px 라 양쪽 원 둘레를 3~4px 씩
+# 넘어 걸친다(2026-09-18 실측). 스크립트 이름을 두 줄로 나눠 렌즈 안에 넣는다.
+for i, line in enumerate(["nmap -T4 -A -v", "--script ssl-cert,", "ssl-enum-ciphers",
+                          "포트마다 SYN 하나", "Win 값이 뒤섞인 탐침"]):
+    d.t(480, 244 + i * 24, line, 11, ACC, KR if any("가" <= c <= "힣" for c in line) else MONO)
 
-d.t(24, 486, "그래서 판정은 캡처가 아니라 사전 통보와 작업 창으로 합니다 — 같은 스캔이 감사이기도 하고 공격이기도 합니다",
+d.t(24, 486, "판정 근거는 캡처가 아니라 사전 통보와 작업 창 · 같은 스캔이 감사도 공격도 될 수 있음",
      11, MUTED, KR, "start")
 
 d.legend(H - 60, [("두 쪽이 함께 쓰는 것", ACC), ("감사자 쪽", OK), ("공격자 쪽", BAD)])

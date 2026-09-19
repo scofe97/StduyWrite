@@ -34,11 +34,11 @@ d.msg("서버 · 취약한 OpenSSL", "클라이언트 · 요청하는 쪽",
 
 d.tone(24, 386, 420, 44, ACC, 6)
 d.t(36, 404, "144 − 112 = 32", 12, ACC, MONO, "start", 600)
-d.t(36, 421, "요청하지 않은 32바이트가 딸려 나왔습니다", 11, MUTED, KR, "start")
+d.t(36, 421, "요청하지 않은 32바이트가 딸려 나옴", 11, MUTED, KR, "start")
 
 d.box(468, 386, 468, 44, PAPER2, RULE, 1.0, 6)
 d.t(480, 404, "5 + 112 = 117 · 5 + 144 = 149", 12, INK, MONO, "start", 600)
-d.t(480, 421, "레코드 헤더 5바이트를 더하면 TCP 길이와 맞습니다", 11, MUTED, KR, "start")
+d.t(480, 421, "레코드 헤더 5바이트 더해 TCP 길이와 일치", 11, MUTED, KR, "start")
 
 d.legend(H - 60, [("유출이 실린 응답", BAD), ("길이 차이", ACC)])
 d.save("07-02.heartbleed-lengths.svg")

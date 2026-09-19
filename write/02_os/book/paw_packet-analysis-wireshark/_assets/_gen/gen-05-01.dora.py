@@ -27,13 +27,13 @@ d.msg("클라이언트", "서버", "DISCOVER", 200, INFO, "info",
 d.msg("서버", "클라이언트", "OFFER", 264, INFO, "info",
       sub="option.dhcp==2 · yiaddr 10.0.0.106 · 옵션 54 서버 식별자")
 d.msg("클라이언트", "서버", "REQUEST", 328, MUTED, "ar",
-      sub="option.dhcp==3 · 다시 브로드캐스트 · 옵션 54 로 서버를 지목합니다")
+      sub="option.dhcp==3 · 다시 브로드캐스트 · 옵션 54 로 서버 지목")
 d.msg("서버", "클라이언트", "ACK", 392, ACC, "acc",
-      sub="option.dhcp==5 · yiaddr 10.0.0.106 확정 · 바인딩을 저장합니다")
+      sub="option.dhcp==5 · yiaddr 10.0.0.106 확정 · 바인딩 저장")
 
 d.state("클라이언트", "ARP 로 중복 확인", 432, OK)
 d.selfmsg("클라이언트", "이미 쓰이는 주소면 DECLINE", 480, WARN,
-          sub="설정 과정을 처음부터 다시 시작합니다")
+          sub="설정 과정을 처음부터 다시 시작")
 
 d.legend(H - 52, [("주소가 확정되는 지점", ACC), ("주소를 찾는 구간", INFO), ("충돌 시 되돌아가는 경로", WARN)])
 d.save("05-01.dora.svg")

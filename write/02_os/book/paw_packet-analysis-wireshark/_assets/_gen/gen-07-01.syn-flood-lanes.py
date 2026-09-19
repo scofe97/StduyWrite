@@ -53,7 +53,7 @@ hand(2, 0, 3, 1)
 hand(3, 2, 4, 1, ACC, "acc")
 
 d.t(LX, lane_top(3) + 28,
-    "백로그 크기는 tcp_max_syn_backlog · 기다리는 횟수는 tcp_synack_retries · 자리를 아예 안 잡는 길이 tcp_syncookies 입니다",
+    "백로그 크기 tcp_max_syn_backlog · 기다리는 횟수 tcp_synack_retries · 자리를 아예 안 잡는 길 tcp_syncookies",
     11, MUTED, KR, "start")
 
 d.legend(H - 60, [("정상 사용자가 밀려나는 자리", ACC), ("레인을 건너는 인계", MUTED)])

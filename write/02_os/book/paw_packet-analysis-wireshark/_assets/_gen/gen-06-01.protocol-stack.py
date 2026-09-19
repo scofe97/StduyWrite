@@ -12,10 +12,10 @@ d = D(W, H, "PACKET ANALYSIS WITH WIRESHARK · 06-01 §4",
 
 LX, LW, LH, Y0 = 96, 852, 64, 108
 layers = [
-    ("L7", "응용 프로토콜",      "HTTP · DNS — 유선과 같습니다", False),
-    ("L4", "TCP 또는 UDP",      "유선과 같습니다", False),
-    ("L3", "IPv4 또는 IPv6",     "유선과 같습니다", False),
-    ("L2b", "LLC",              "802.11 프레임 뒤에 따라옵니다", False),
+    ("L7", "응용 프로토콜",      "HTTP · DNS · 유선과 같음", False),
+    ("L4", "TCP 또는 UDP",      "유선과 같음", False),
+    ("L3", "IPv4 또는 IPv6",     "유선과 같음", False),
+    ("L2b", "LLC",              "802.11 프레임 뒤에 이어짐", False),
     ("L2a", "802.11 MAC",       "이더넷이 있던 자리 · wlan", True),
     ("L1", "802.11 PHY",        "802.11a/b/… · radiotap 헤더", False),
 ]

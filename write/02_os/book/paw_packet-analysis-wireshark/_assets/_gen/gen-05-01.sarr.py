@@ -28,13 +28,13 @@ d.msg("클라이언트", "서버", "SOLICIT", 200, INFO, "info",
 d.msg("서버", "클라이언트", "ADVERTISE", 264, INFO, "info",
       sub="msgtype==2 · 서버 식별자(DUID) · 이름 서버 옵션 23")
 d.msg("클라이언트", "서버", "REQUEST", 328, MUTED, "ar",
-      sub="msgtype==3 · 새 xid 0x3ec03e · 고른 서버의 식별자를 담습니다")
+      sub="msgtype==3 · 새 xid 0x3ec03e · 고른 서버의 식별자 포함")
 d.msg("서버", "클라이언트", "REPLY", 392, ACC, "acc",
-      sub="msgtype==7 · 같은 xid 0x3ec03e · 바인딩을 기록하고 주소를 확정합니다")
+      sub="msgtype==7 · 같은 xid 0x3ec03e · 바인딩 기록 · 주소 확정")
 
 d.state("클라이언트", "IPv6 주소 확보", 432, OK)
 d.selfmsg("클라이언트", "rapid commit 옵션", 480, WARN,
-          sub="SOLICIT 에 넣으면 두 메시지로 줄어듭니다")
+          sub="SOLICIT 에 넣으면 두 메시지로 단축")
 
 d.legend(H - 56, [("주소가 확정되는 지점", ACC), ("서버를 찾는 구간", INFO), ("두 메시지로 줄이는 옵션", WARN)])
 d.save("05-01.sarr.svg")
