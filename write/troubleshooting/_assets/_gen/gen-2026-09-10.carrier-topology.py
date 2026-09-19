@@ -10,7 +10,7 @@ d = D(W, H, "TROUBLESHOOTING DRILL · 2026-09-10 E",
       "요청 하나가 도는 자리",
       "JDK 21 로 올리며 요청 처리를 가상 스레드로 바꿨다. 요청마다 가상 스레드가 하나 생기고, "
       "그것이 실제로 돌려면 아래층의 캐리어 스레드에 올라타야 한다.",
-      lead="위층은 수만 개까지 늘지만 아래층은 코어 수만큼입니다")
+      lead="위층은 수만 개까지 늘지만 아래층은 CPU 수만큼입니다")
 
 d.box(48, 118, 704, 92, PAPER2, RULE, 1.0, 8)
 d.t(62, 140, "가상 스레드 — 요청 하나에 하나", 12, SOFT, KR, "start", 600)
@@ -25,7 +25,7 @@ for i in range(4):
 d.t(W // 2, 232, "올라타야 실제로 돕니다", 12, MUTED, KR, "middle")
 
 d.box(48, 250, 704, 92, PAPER2, RULE, 1.0, 8)
-d.t(62, 272, "캐리어 스레드 — 코어 수만큼 · ForkJoinPool", 12, SOFT, KR, "start", 600)
+d.t(62, 272, "캐리어 스레드 — CPU 수만큼 · ForkJoinPool", 12, SOFT, KR, "start", 600)
 for i in range(4):
     x = 88 + i * 168
     d.tone(x, 286, 140, 40, ACC, 5)
