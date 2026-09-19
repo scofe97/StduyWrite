@@ -13,11 +13,11 @@ d = D(W, H, "PACKET ANALYSIS WITH WIRESHARK · 07-01 §4",
       "원문의 구체적인 손잡이는 거의 전부 커널 층에 있습니다")
 
 ROWS = [
-    ("데이터센터 엣지 · 라우터", "네트워크 ACL · rate limit · DoS 보호 장비", "여기서 끊으면 안쪽은 아무것도 못 봅니다", None),
-    ("로드밸런서", "연결을 대신 받아 냅니다", "공격은 LB 에서 끝나고 VM 은 남습니다", None),
-    ("호스트 방화벽 · netfilter", "iptables -A INPUT ... -j DROP", "Wireshark 의 Firewall ACL Rules 가 만들어 줍니다", None),
-    ("커널 TCP/IP 스택 · sysctl", "tcp_syncookies · tcp_synack_retries · icmp_echo_ignore_all", "원문의 손잡이가 모여 있는 층입니다", ACC),
-    ("애플리케이션", "타임아웃 · 동시 접속 상한", "여기까지 왔다면 이미 늦습니다", BAD),
+    ("데이터센터 엣지 · 라우터", "네트워크 ACL · rate limit · DoS 보호 장비", "여기서 끊으면 안쪽은 아무것도 못 봄", None),
+    ("로드밸런서", "연결을 대신 받아 냄", "공격은 LB 에서 끝나고 VM 은 남음", None),
+    ("호스트 방화벽 · netfilter", "iptables -A INPUT ... -j DROP", "Wireshark 의 Firewall ACL Rules 가 생성", None),
+    ("커널 TCP/IP 스택 · sysctl", "tcp_syncookies · tcp_synack_retries · icmp_echo_ignore_all", "원문의 손잡이가 모인 층", ACC),
+    ("애플리케이션", "타임아웃 · 동시 접속 상한", "여기까지 왔다면 이미 늦음", BAD),
 ]
 
 for i, (name, knob, note, c) in enumerate(ROWS):
@@ -34,7 +34,7 @@ d.t(180, Y0 + 20, "바깥", 11, MUTED, KR, "end")
 d.t(180, BOT - 8, "안쪽", 11, MUTED, KR, "end")
 d.t(24, (Y0 + BOT) / 2, "막는 자리가", 11, SOFT, KR, "start")
 d.t(24, (Y0 + BOT) / 2 + 16, "아래로 갈수록", 11, SOFT, KR, "start")
-d.t(24, (Y0 + BOT) / 2 + 32, "쓰는 자원이 늡니다", 11, SOFT, KR, "start")
+d.t(24, (Y0 + BOT) / 2 + 32, "쓰는 자원 증가", 11, SOFT, KR, "start")
 
 d.legend(H - 60, [("원문의 손잡이가 있는 층", ACC), ("이미 늦은 층", BAD)])
 d.save("07-01.mitigation-layers.svg")

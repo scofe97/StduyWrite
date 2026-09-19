@@ -32,17 +32,17 @@ for i in (1, 2, 3):
     d.arrow([(CX, Y[i] + 68), (CX, Y[i + 1] - 4)], MUTED, "ar", 1.4)
 
 oval(CX, Y[0], 300, 40, "응답이 느린 요청을 찾는다")
-step(CX, Y[1], 440, 68, "TCP 재조립을 끕니다",
+step(CX, Y[1], 440, 68, "TCP 재조립 끄기",
      "Preferences | Protocols | TCP · Allow subdissector 해제", focal=True)
-step(CX, Y[2], 440, 68, "http.time 을 열로 올립니다",
-     "http.response.code == 200 패킷에서 가져옵니다")
-step(CX, Y[3], 440, 68, "내림차순으로 정렬합니다",
-     "맨 위 줄에서 요청 프레임 링크를 따라갑니다")
+step(CX, Y[2], 440, 68, "http.time 을 열로 올리기",
+     "http.response.code == 200 패킷에서 가져옴")
+step(CX, Y[3], 440, 68, "내림차순 정렬",
+     "맨 위 줄에서 요청 프레임 링크 따라가기")
 oval(CX, Y[4], 440, 40, "세그먼트 수가 곧 튜닝의 근거", OK)
 
 d.t(CX + 260, Y[1] + 34, "재조립을 켜 두면", 11, MUTED, KR, "start")
 d.t(CX + 260, Y[1] + 52, "continuation 이 합쳐져", 11, MUTED, KR, "start")
-d.t(CX + 260, Y[1] + 70, "개수를 못 셉니다", 11, MUTED, KR, "start")
+d.t(CX + 260, Y[1] + 70, "개수를 못 셈", 11, MUTED, KR, "start")
 
 d.legend(H - 60, [("결과를 바꾸는 설정", ACC), ("얻는 것", OK)])
 d.save("05-02.http-response-time.svg")

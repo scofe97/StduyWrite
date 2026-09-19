@@ -43,7 +43,7 @@ state(3, "결합됨", "데이터 프레임 가능", focal=True)
 d.path(f"M {X[3] + SW / 2} {Y + SH} V 300 H {X[0] + SW / 2} V {Y + SH + 4}", WARN, 1.4, m="warn")
 d.t((X[0] + X[3]) / 2 + SW / 2, 292, "deauthentication 0x0c · 어느 상태에서든 처음으로", 11, WARN, KR)
 
-d.t(40, 340, "WPA 라면 결합 뒤에 EAPOL 네 메시지가 이어집니다 — 필터는 eapol 이고, 802.11 복호화에 이 네 개가 필요합니다",
+d.t(40, 340, "WPA 라면 결합 뒤 EAPOL 네 메시지 · 필터 eapol · 802.11 복호화에 네 개 모두 필요",
      11, MUTED, KR, "start")
 
 d.legend(H - 60, [("데이터가 오갈 수 있는 상태", ACC), ("처음으로 되돌리는 프레임", WARN)])

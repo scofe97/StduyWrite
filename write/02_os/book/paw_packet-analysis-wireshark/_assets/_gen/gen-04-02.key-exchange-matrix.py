@@ -44,7 +44,7 @@ for i, (name, hint, cells) in enumerate(ROWS):
             d.o.append(f'<rect x="{x}" y="{y}" width="{COL_W - 12}" height="{ROW_H - 12}" rx="6" '
                        f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
             d.t(x + (COL_W - 12) / 2, y + 26, val, 13, ACC, KR, "middle", 600)
-            d.t(x + (COL_W - 12) / 2, y + 44, "키 일치 · 전체 handshake", 12, MUTED, KR)
+            d.t(x + (COL_W - 12) / 2, y + 44, "키 일치 · 원래 전체 협상", 12, MUTED, KR)
         elif c is MUTED:
             d.box(x, y, COL_W - 12, ROW_H - 12, PAPER, RULE, 0.8, 6)
             d.t(x + (COL_W - 12) / 2, y + 36, val, 12, MUTED, KR, "middle")
