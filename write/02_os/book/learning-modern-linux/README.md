@@ -31,7 +31,7 @@ updated: 2026-09-07
 
 같은 폴더의 다른 두 책과는 깊이와 시점이 다릅니다. [linux-kernel-programming](../linux-kernel-programming/README.md)은 커널 개발자의 시선으로 모듈을 짜고 커널을 빌드하는 책입니다. [systems-performance](../systems-performance/README.md)는 성능 분석가의 시선으로 방법론과 도구를 다룹니다. 이 책은 그 둘보다 얕은 대신 넓으며, 무엇보다 **컨테이너 환경을 전제로** 각 주제를 고릅니다.
 
-읽는 이유는 하나 더 있습니다. [Kubernetes 네트워크 학습 로드맵](../../../network-roadmap.md)의 0단계가 이 책 7장 Networking 을 지정합니다. 그 7장을 읽으려면 네임스페이스와 커널의 어휘가 먼저 서 있어야 하고, 1장과 2장이 그 어휘를 만듭니다.
+읽는 이유는 하나 더 있습니다. [Kubernetes 네트워크 학습 로드맵](../../../roadmap/network-roadmap.md)의 0단계가 이 책 7장 Networking 을 지정합니다. 그 7장을 읽으려면 네임스페이스와 커널의 어휘가 먼저 서 있어야 하고, 1장과 2장이 그 어휘를 만듭니다.
 
 
 
@@ -127,4 +127,4 @@ updated: 2026-09-07
 - [02_os — OS 공통 기반](../../README.md) — 이 카테고리의 MOC
 - [systems-performance](../systems-performance/README.md) — 같은 주제를 성능 분석 관점에서 깊게
 - [linux-kernel-programming](../linux-kernel-programming/README.md) — 같은 주제를 커널 개발자 관점에서 깊게
-- [Kubernetes 네트워크 학습 로드맵](../../../network-roadmap.md) — 이 책 7장이 0단계로 지정된 자리
+- [Kubernetes 네트워크 학습 로드맵](../../../roadmap/network-roadmap.md) — 이 책 7장이 0단계로 지정된 자리
