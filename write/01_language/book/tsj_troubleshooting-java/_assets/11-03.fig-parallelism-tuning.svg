@@ -1,47 +1,49 @@
-<svg viewBox="0 0 680 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>GC 병렬성 튜닝 — 워커 과소(8 중 2)는 늘리고 과다(16)는 CPU 경합이라 줄임 (원문 로그 예시 개념도)</title>
-  <desc>원문 §11.4.4 로그 예시의 개념을 도식으로 옮긴 것입니다. GC 병렬성은 두 방향으로 잘못될 수 있습니다. 과소 활용은 가용 8개 중 2개 워커만 써 멈춤이 115ms 로 길어지는 경우로 CPU 를 과소 활용합니다. 이때는 ParallelGCThreads 를 늘려 워크로드를 CPU 코어에 더 분산합니다. ParallelGCThreads 는 STW 단계의 스레드 수를 ConcGCThreads 는 백그라운드 non-STW 단계의 스레드 수를 조절합니다. 과다는 16개 워커를 써 멈춤이 310ms 로 길어지는 경우로 너무 많은 스레드가 CPU 시간을 두고 다투는 CPU 경합입니다. 이때는 ParallelGCThreads 를 줄여 경합을 낮춥니다. 원칙은 작게 시작해 관찰하고 조정하고 반복하는 것입니다.</desc>
-  <rect x="0" y="0" width="680" height="360" fill="#0d0d0d"/>
-
-  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">GC 병렬성 튜닝 — 과소와 과다 사이</text>
-  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 §11.4.4 로그 예시 개념도 · ParallelGCThreads / ConcGCThreads</text>
-
-  <!-- 과소 -->
-  <rect x="20" y="80" width="312" height="180" fill="rgba(127,168,201,0.05)" stroke="#7fa8c9" stroke-width="2"/>
-  <text x="176" y="102" fill="#9cc3df" font-size="13" font-weight="bold" text-anchor="middle">과소 — 8 중 2 워커</text>
-  <text x="176" y="122" fill="rgb(138,133,128)" font-size="9.5" text-anchor="middle">멈춤 115ms (Workers: 2 of 8)</text>
-  <!-- 코어 8개, 2개만 활성 -->
-  <g>
-    <rect x="44" y="138" width="26" height="26" fill="rgba(127,168,201,0.5)" stroke="#7fa8c9"/>
-    <rect x="76" y="138" width="26" height="26" fill="rgba(127,168,201,0.5)" stroke="#7fa8c9"/>
-    <rect x="108" y="138" width="26" height="26" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
-    <rect x="140" y="138" width="26" height="26" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
-    <rect x="172" y="138" width="26" height="26" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
-    <rect x="204" y="138" width="26" height="26" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
-    <rect x="236" y="138" width="26" height="26" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
-    <rect x="268" y="138" width="26" height="26" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
-  </g>
-  <text x="176" y="186" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">코어 8개 중 2개만 일함 (CPU 과소 활용)</text>
-  <rect x="44" y="200" width="244" height="30" fill="rgba(102,187,106,0.1)" stroke="#66bb6a"/>
-  <text x="166" y="220" fill="#66bb6a" font-size="11" font-weight="bold" text-anchor="middle">→ ParallelGCThreads 늘림</text>
-  <text x="176" y="248" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">워크로드를 코어에 더 분산 → 멈춤↓</text>
-
-  <!-- 과다 -->
-  <rect x="348" y="80" width="312" height="180" fill="rgba(244,127,114,0.05)" stroke="#f47f72" stroke-width="2"/>
-  <text x="504" y="102" fill="#f47f72" font-size="13" font-weight="bold" text-anchor="middle">과다 — 16 워커</text>
-  <text x="504" y="122" fill="rgb(138,133,128)" font-size="9.5" text-anchor="middle">멈춤 310ms (workers: 16)</text>
-  <!-- 많은 스레드가 CPU 두고 다툼 -->
-  <g fill="rgba(244,127,114,0.5)" stroke="#f47f72">
-    <rect x="372" y="138" width="16" height="26"/><rect x="392" y="138" width="16" height="26"/><rect x="412" y="138" width="16" height="26"/><rect x="432" y="138" width="16" height="26"/><rect x="452" y="138" width="16" height="26"/><rect x="472" y="138" width="16" height="26"/><rect x="492" y="138" width="16" height="26"/><rect x="512" y="138" width="16" height="26"/><rect x="532" y="138" width="16" height="26"/><rect x="552" y="138" width="16" height="26"/><rect x="572" y="138" width="16" height="26"/><rect x="592" y="138" width="16" height="26"/><rect x="612" y="138" width="16" height="26"/><rect x="632" y="138" width="16" height="26"/>
-  </g>
-  <text x="504" y="186" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">너무 많은 스레드가 CPU 시간을 두고 다툼</text>
-  <rect x="372" y="200" width="256" height="30" fill="rgba(244,127,114,0.12)" stroke="#f47f72"/>
-  <text x="500" y="220" fill="#f47f72" font-size="11" font-weight="bold" text-anchor="middle">CPU 경합 → ParallelGCThreads 줄임</text>
-  <text x="504" y="248" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">race condition 과 비슷(CPU 시간을 두고)</text>
-
-  <!-- 하단 -->
-  <rect x="20" y="276" width="640" height="68" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
-  <text x="34" y="298" fill="#e8e4df" font-size="11" font-weight="bold">두 플래그 + 원칙</text>
-  <text x="34" y="318" fill="rgb(138,133,128)" font-size="10">ParallelGCThreads = STW 단계(young evacuation) · ConcGCThreads = 백그라운드 non-STW(마킹·회수)</text>
-  <text x="34" y="338" fill="rgb(212,168,83)" font-size="10.5" font-weight="bold">원칙: 작게 시작 → 관찰 → 조정 → 반복 (커피 내리듯)</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 512" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">워커 수는 단서이지 결론이 아닙니다</title><desc id="dd">GC 병렬성 판단 흐름도. 로그의 Using N workers of M for evacuation 한 줄은 관측일 뿐이다. G1 은 힙 상태와 처리할 region 양에 따라 상한 안에서 필요한 만큼만 적응적으로 고르므로, 8개 중 2개를 썼다는 것은 그만큼이면 충분했다는 뜻일 수 있다. 과소 할당을 단정하려면 멈춤 시간의 추세와 빈도와 코어 수를 함께 놓아야 한다. 8코어에서 ParallelGCThreads=6 은 상한을 8에서 6으로 낮추므로 늘리려던 의도와 반대로 작동한다.</desc>
+<rect width="800" height="512" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">TROUBLESHOOTING JAVA · 11-03 §4</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">워커 수는 단서이지 결론이 아닙니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">G1 은 상한 안에서 적응적으로 고릅니다 — 적게 썼다고 모자란 것이 아닙니다</text>
+<rect x="44" y="108" width="712" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="64" y="128" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">관측</text>
+<text x="64" y="144" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">[gc,task] GC(0) Using 6 workers of 8 for evacuation</text>
+<text x="736" y="136" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">gc*=info 로 켜면 나옵니다</text>
+<path d="M 400 152 L 400 176" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<rect x="200" y="180" width="400" height="52" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.2"/>
+<text x="400" y="202" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">이 한 줄로는 결론이 안 납니다</text>
+<text x="400" y="222" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">G1 은 필요한 만큼만 씁니다</text>
+<path d="M 400 232 L 400 264" fill="none" stroke="#F08A59" stroke-width="1.3" marker-end="url(#acc)"/>
+<text x="412" y="254" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">함께 놓고 봅니다</text>
+<rect x="44.0" y="268" width="224" height="56" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="156.0" y="292" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">멈춤 시간 추세</text>
+<text x="156.0" y="312" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">늘고 있는가</text>
+<rect x="288.0" y="268" width="224" height="56" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="400.0" y="292" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">GC 빈도</text>
+<text x="400.0" y="312" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">잦아지고 있는가</text>
+<rect x="532.0" y="268" width="224" height="56" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="644.0" y="292" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">코어 수</text>
+<text x="644.0" y="312" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">16 워커도 16코어면 정상</text>
+<rect x="44" y="356" width="712" height="60" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<line x1="400" y1="366" x2="400" y2="406" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="64" y="382" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">-XX:ParallelGCThreads</text>
+<text x="64" y="402" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">STW 단계 워커 상한 — 기본은 코어 수</text>
+<text x="420" y="382" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">-XX:ConcGCThreads</text>
+<text x="420" y="402" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">동시(백그라운드) 단계 워커 수</text>
+<rect x="44" y="428" width="712" height="40" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.2"/>
+<text x="64" y="453" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F0616D">8코어에서 ParallelGCThreads=6 은 상한을 8에서 6으로 낮춥니다 — 늘리려던 의도와 반대입니다</text>
+<line x1="12" y1="472" x2="752" y2="472" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="494" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="484" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="494" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">결론으로 곧장 가지 못하게 막는 자리</text>
+<rect x="404" y="484" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="426" y="494" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">원서 처방이 뒤집히는 자리</text>
 </svg>

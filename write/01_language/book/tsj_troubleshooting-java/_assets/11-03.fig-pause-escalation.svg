@@ -1,58 +1,55 @@
-<svg viewBox="0 0 680 340" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>GC 멈춤 에스컬레이션 — 25ms 정상에서 250ms 악화를 거쳐 2.5초·5.3초 full GC로 (원문 로그 예시 개념도)</title>
-  <desc>원문 §11.4.1 로그 예시의 개념을 도식으로 옮긴 것입니다. 처음 몇 GC 이벤트는 25에서 27ms 로 정상 범위입니다. 그런데 한 시점에 멈춤이 110ms 로 뛰며 성능 저하의 초기 경고가 나타나고, 이어 250ms 로 악화되며 메모리 압박이 커집니다. 그 다음 2.5초짜리 full GC 라는 큰 적신호가 앱 응답성을 심각하게 해치고, 마지막에 또 5.3초 full GC 가 나타나 즉각적 주의가 필요한 심각한 메모리 관리 문제를 알립니다. 50ms 를 넘는 멈춤이 잦고 일관되게 높으면 메모리 압박을 뜻합니다.</desc>
-  <rect x="0" y="0" width="680" height="340" fill="#0d0d0d"/>
-
-  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">GC 멈춤 에스컬레이션 — 정상에서 심각으로</text>
-  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 §11.4.1 로그 예시 개념도 — 50ms 기준선 넘어 악화</text>
-
-  <!-- 기준선 -->
-  <line x1="40" y1="200" x2="660" y2="200" stroke="rgb(60,55,50)" stroke-width="1" stroke-dasharray="4 3"/>
-  <text x="40" y="195" fill="rgb(138,133,128)" font-size="9">50ms 기준선 (이하 정상)</text>
-
-  <!-- 막대들 (높이로 멈춤 시간 표현) -->
-  <!-- 25ms 정상 -->
-  <rect x="60" y="194" width="40" height="6" fill="rgba(102,187,106,0.5)" stroke="#66bb6a"/>
-  <text x="80" y="218" fill="#66bb6a" font-size="9" text-anchor="middle">25ms</text>
-  <rect x="112" y="194" width="40" height="6" fill="rgba(102,187,106,0.5)" stroke="#66bb6a"/>
-  <text x="132" y="218" fill="#66bb6a" font-size="9" text-anchor="middle">27ms</text>
-  <rect x="164" y="194" width="40" height="6" fill="rgba(102,187,106,0.5)" stroke="#66bb6a"/>
-  <text x="184" y="218" fill="#66bb6a" font-size="9" text-anchor="middle">26ms</text>
-  <!-- 110ms 경고 -->
-  <rect x="216" y="178" width="40" height="22" fill="rgba(212,168,83,0.5)" stroke="rgb(212,168,83)"/>
-  <text x="236" y="172" fill="rgb(212,168,83)" font-size="9" text-anchor="middle">110ms</text>
-  <text x="236" y="230" fill="rgb(212,168,83)" font-size="8" text-anchor="middle">초기 경고</text>
-  <!-- 250ms 악화 -->
-  <rect x="268" y="150" width="40" height="50" fill="rgba(212,168,83,0.6)" stroke="rgb(212,168,83)"/>
-  <text x="288" y="144" fill="rgb(212,168,83)" font-size="9" text-anchor="middle">250ms</text>
-  <text x="288" y="230" fill="rgb(212,168,83)" font-size="8" text-anchor="middle">악화(압박↑)</text>
-  <!-- 2.5s full -->
-  <rect x="320" y="90" width="40" height="110" fill="rgba(244,127,114,0.6)" stroke="#f47f72"/>
-  <text x="340" y="84" fill="#f47f72" font-size="9" text-anchor="middle">2.5s</text>
-  <text x="340" y="230" fill="#f47f72" font-size="8" text-anchor="middle">Full GC</text>
-  <!-- 5.3s full -->
-  <rect x="372" y="76" width="40" height="124" fill="rgba(244,127,114,0.8)" stroke="#f47f72"/>
-  <text x="392" y="70" fill="#f47f72" font-size="9" text-anchor="middle">5.3s</text>
-  <text x="392" y="230" fill="#f47f72" font-size="8" text-anchor="middle">Full GC 심각</text>
-
-  <!-- 시간축 화살표 -->
-  <line x1="60" y1="244" x2="430" y2="244" stroke="rgb(138,133,128)" stroke-width="1"/>
-  <polygon points="430,244 422,240 422,248" fill="rgb(138,133,128)"/>
-  <text x="245" y="258" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">시간 →</text>
-
-  <!-- 해석 -->
-  <rect x="450" y="76" width="210" height="180" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
-  <text x="464" y="98" fill="#e8e4df" font-size="11" font-weight="bold">읽는 법</text>
-  <text x="464" y="120" fill="#66bb6a" font-size="10">25~27ms = 정상</text>
-  <text x="464" y="142" fill="rgb(212,168,83)" font-size="10">110ms = 초기 경고</text>
-  <text x="464" y="164" fill="rgb(212,168,83)" font-size="10">250ms = 메모리 압박↑</text>
-  <text x="464" y="186" fill="#f47f72" font-size="10">2.5s full GC = 적신호</text>
-  <text x="464" y="208" fill="#f47f72" font-size="10">5.3s full GC = 심각</text>
-  <text x="464" y="234" fill="rgb(138,133,128)" font-size="9">50ms 초과가 잦고</text>
-  <text x="464" y="248" fill="rgb(138,133,128)" font-size="9">일관되면 = 메모리 압박</text>
-
-  <!-- 하단 -->
-  <rect x="20" y="276" width="640" height="50" fill="rgb(20,20,20)" stroke="rgb(60,55,50)"/>
-  <text x="34" y="298" fill="#e8e4df" font-size="11" font-weight="bold">조정안</text>
-  <text x="34" y="318" fill="rgb(138,133,128)" font-size="10">GC 알고리즘 실험(G1·ZGC·Shenandoah) · 힙 크기(-Xms/-Xmx) · Eden/Survivor/Old · 객체 재사용 · 저지연=ZGC/Shenandoah</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 576" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">멈춤이 길어지는 흐름과, 거기 끼어든 다른 원인</title><desc id="dd">GC 멈춤 에스컬레이션 막대 그림. 괄호 안은 GC 를 부른 이유이고 이것이 원인 범주를 가른다. Allocation Failure 계열은 할당할 자리가 없어 JVM 이 트리거한 것이라 25ms 에서 110ms, 250ms, 5.32초로 길어지는 흐름이 메모리 압박의 근거가 된다. 반면 System.gc() 는 코드가 명시적으로 부른 것이라 이 흐름에 속하지 않는다. 처방도 힙 튜닝이 아니라 그 호출을 없애거나 -XX:+DisableExplicitGC 로 막는 것이다.</desc>
+<rect width="800" height="576" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">TROUBLESHOOTING JAVA · 11-03 §1</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">멈춤이 길어지는 흐름과, 거기 끼어든 다른 원인</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">괄호 안이 원인 범주입니다 — System.gc() 는 압박의 증거가 아닙니다</text>
+<text x="44" y="134" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">메모리 압박의 근거 — JVM 이 트리거한 수집</text>
+<text x="44" y="168" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">GC(45)</text>
+<text x="150" y="168" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">Allocation Failure</text>
+<rect x="300" y="152" width="24.40188481880072" height="24" rx="3" fill="#3FB98C1C" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="336.40188481880074" y="169" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">0.025s</text>
+<text x="44" y="214" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">GC(46)</text>
+<text x="150" y="214" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">Allocation Failure</text>
+<rect x="300" y="198" width="25.359182583963904" height="24" rx="3" fill="#3FB98C1C" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="337.3591825839639" y="215" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">0.027s</text>
+<text x="44" y="260" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">GC(48)</text>
+<text x="150" y="260" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#E3B341">Allocation Failure</text>
+<rect x="300" y="244" width="51.18582541997417" height="24" rx="3" fill="#E3B3411C" stroke="#E3B341" stroke-width="1.0"/>
+<text x="363.18582541997415" y="261" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#E3B341">0.110s</text>
+<text x="44" y="306" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">GC(49)</text>
+<text x="150" y="306" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#E3B341">Allocation Failure</text>
+<rect x="300" y="290" width="77.16553522849543" height="24" rx="3" fill="#E3B3411C" stroke="#E3B341" stroke-width="1.0"/>
+<text x="389.1655352284954" y="307" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#E3B341">0.250s</text>
+<text x="44" y="352" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">GC(52)</text>
+<text x="150" y="352" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F08A59">Allocation Failure</text>
+<rect x="300" y="336" width="356.0" height="24" rx="3" fill="#F08A592A" stroke="#F08A59" stroke-width="1.4"/>
+<text x="668.0" y="353" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">5.321s</text>
+<path d="M 738 164 L 738 352" fill="none" stroke="#F08A59" stroke-width="1.3" marker-end="url(#acc)"/>
+<text x="748" y="255.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">길어지는</text>
+<text x="748" y="271.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">추세</text>
+<line x1="44" y1="384" x2="756" y2="384" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="44" y="408" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">원인 범주가 다름 — 코드가 명시적으로 부른 수집</text>
+<text x="44" y="442" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">GC(50)</text>
+<text x="150" y="442" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">System.gc()</text>
+<rect x="300" y="426" width="247.26708148207788" height="24" rx="3" fill="#6A95D81C" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="559.2670814820779" y="443" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">2.567s</text>
+<text x="44" y="470" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#6A95D8">처방이 갈립니다 — 힙 튜닝이 아니라 호출 제거 또는 -XX:+DisableExplicitGC</text>
+<text x="44" y="492" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">라이브러리가 이 호출을 숨기고 있을 수 있어 코드 검색만으로는 안 나옵니다</text>
+<text x="44" y="516" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">막대 길이는 제곱근 축척 · 50ms 는 휴리스틱 · G1 기본 목표는 MaxGCPauseMillis=200</text>
+<line x1="12" y1="536" x2="752" y2="536" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="558" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="548" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="558" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">압박 계열의 끝 — 심각</text>
+<rect x="313" y="548" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="335" y="558" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">다른 원인 범주</text>
 </svg>
