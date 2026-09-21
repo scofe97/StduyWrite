@@ -12,16 +12,16 @@ import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
 W, H = 1000, 560
 d = D(W, H, "05-01 · MATERIALS OF A SERVICE",
-      "서비스가 쓰는 재료 셋 — 이름, 주소 목록, 그리고 그 목록을 쪼갠 이유",
-      "이름과 순서가 있고, 준비된 주소만 모이고, 그 목록이 커지면 쪼갠다. 쪼갠 이유가 이 편의 결론이다.",
-      lead="이름과 순서 → 준비된 주소 → 커지면 병목 → 그래서 쪼갠다")
-ddx.band(d, 104, 496, "쪼갠 이유 → EndpointSlice 가 기본값이 된 까닭")
+      "안정된 이름과 서비스의 실제 대상 목록 — 두 역할과 그 목록이 쪼개진 이유",
+      "이름을 고정하는 쪽과 대상 주소를 표현하는 쪽은 서로 다른 일을 한다. 그 목록이 커지면서 갱신 단위가 쪼개졌다.",
+      lead="이름을 고정한다 · 대상을 표현한다 · 커지면 갱신 단위를 쪼갠다")
+ddx.band(d, 104, 496, "두 역할 · 그리고 목록이 쪼개진 이유")
 ddx.stage_chain(d, 316,
-  ["§1 StatefulSet", "§2 Endpoints", "§3 병목", "§3 EndpointSlice"],
-  [("이름·순서", "StatefulSet", "Pod 마다 DNS 레코드", None),
-   ("준비된 주소", "Endpoints", "ready 만 트래픽", None),
+  ["§1 StatefulSet", "§2 EndpointSlice", "§3 병목", "§3 분할"],
+  [("안정된 이름", "StatefulSet", "재생성을 넘는 정체성", None),
+   ("대상 주소·상태", "EndpointSlice", "addresses · ready", None),
    ("규모의 병목", "객체 전체 재전송", "노드 수천 × 변경 빈도", BAD),
-   ("쪼개기", "EndpointSlice", "바뀐 slice 만", ACC)],
-  ["누가 준비됐나", "커지면", "그래서"], bw=172, gap=84, x0=24, sizes=(14, 12, 12))
+   ("갱신 범위 축소", "부분집합 분할", "바뀐 slice 만", ACC)],
+  ["다른 역할", "커지면", "그래서"], bw=172, gap=84, x0=24, sizes=(14, 12, 12))
 d.legend(512, [("규모의 병목", BAD), ("그래서 나온 것", ACC)])
 d.save("05-01.chapter-overview.svg"); print("ok 05-01.chapter-overview")
