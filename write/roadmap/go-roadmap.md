@@ -199,8 +199,10 @@ updated: 2026-09-13
 |---|:---:|---|
 | TCP echo server | 6 | Listener · 연결 소켓 · goroutine · deadline · 끊기는 모든 경로에서 FD 회수 |
 | TCP reverse proxy | 6 | 양방향 `io.Copy` · half-close · 취소 · 배압 |
-| L4 로드밸런서 | 6 | health check · round-robin · least connections · 재시도 안전성 · connection draining |
-| reverse tunnel | 6 | control plane 과 data plane 분리 · 멀티플렉싱 · 재접속 · 인증 · NAT traversal |
+| L4 로드밸런서 | 6 | health check · round-robin · least connections · 재시도 안전성 · connection draining · connection pool 과 포화 |
+| reverse tunnel | 6 | control plane 과 data plane 분리 · 멀티플렉싱 · 재접속 · 인증 · NAT traversal · 동시 등록 충돌 |
+| keyless TLS signer | 6 | `crypto.Signer` 추상화 · 원격 서명 경계 · mTLS 클라이언트 인증 · signer 타임아웃과 fail-close · transcript 재계산 |
+| length-prefixed 로그 서버 | 6 | framing · partial read · 백프레셔 · append-only 세그먼트 |
 | 네트워크 관측 에이전트 | 5·6 | 소켓과 프로세스 매핑 · netlink · 지표 노출 |
 | 동시성 미로 풀이 | 4 | goroutine 조율 · 채널로 결과 모으기 |
 | gRPC 습관 추적기 | 6 | 프로토콜 정의 · 스트리밍 · 클라이언트 생성 |

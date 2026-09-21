@@ -36,7 +36,7 @@ updated: 2026-09-15
 | 1 · 연결 | 이름 | DNS 질의 · 레코드 유형 · 위임 · TTL · negative caching |
 | 1 · 연결 | 응용 프로토콜 | HTTP/1.1 · HTTP/2 · 멀티플렉싱 · QUIC · HTTP/3 · WebSocket · HTTP Upgrade |
 | 1 · 연결 | 보안 전송 | TLS 핸드셰이크 · ClientHello · ServerHello · 확장 협상 · TLS 1.3 · session resumption · ALPN |
-| 1 · 연결 | 키 교환과 암호 | key_share · supported_groups · HelloRetryRequest · ECDHE · X25519 · forward secrecy · HKDF · AEAD · AES-GCM · ChaCha20-Poly1305 |
+| 1 · 연결 | 키 교환과 암호 | key_share · supported_groups · HelloRetryRequest · ECDHE · X25519 · forward secrecy · HKDF · AEAD · AES-GCM · ChaCha20-Poly1305 · Noise Protocol Framework |
 | 1 · 연결 | 이름 숨기기 | SNI · ECH · ClientHelloOuter · HPKE |
 | 1 · 연결 | 신원 | 인증서 체인 · SAN 호스트명 검증 · 유효 기간 · OS CA bundle · truststore |
 | 1 · 연결 | 중계 | reverse proxy · TLS passthrough 대 TLS 종료 · SNI 라우팅 · Forwarded · X-Forwarded-For 신뢰 경계 · PROXY protocol · half-close · 배압 |
@@ -78,19 +78,19 @@ updated: 2026-09-15
 | 6 · 데이터패스 | 암호화와 관측 | 투명 암호화 · WireGuard · Hubble · egress 게이트웨이 · 클러스터 access |
 | 7 · 운영 경계 | 주소와 배치 | dual-stack · `ipFamilyPolicy` · topology-aware routing · EndpointSlice hint |
 | 7 · 운영 경계 | 혼합 환경 | Windows HNS · HCS · Windows CNI · 멀티클러스터 메시 |
-| 7 · 운영 경계 | 메시 데이터 플레인 | 서비스 메시가 인프라로 밀어낸 것 · Envoy · Gateway · VirtualService · DestinationRule · `istioctl proxy-config` |
+| 7 · 운영 경계 | 메시 데이터 플레인 | 서비스 메시가 인프라로 밀어낸 것 · Envoy · Gateway · VirtualService · DestinationRule · xDS · listener · filter chain · cluster · `istioctl proxy-config` |
 | 7 · 운영 경계 | 복원력 | retry · timeout · circuit breaking · outlier detection · 재시도 증폭 |
 | 7 · 운영 경계 | 신원과 기본값 | mTLS · 기본값 닫아 가기 · SPIFFE · SVID · Zero Trust 전제 · ambient · ztunnel · waypoint |
 | 8 · 오버레이와 신뢰 | 진입 | bootstrap · reseed · 최초 접점 · trust anchor · stale data |
 | 8 · 오버레이와 신뢰 | 발견 | peer discovery · DHT · Kademlia · 역할이 나뉜 피어 · gossip · membership · peer store · lease · TTL 갱신 |
 | 8 · 오버레이와 신뢰 | 식별 | node ID · signed descriptor · 공개키 신원 · 키에서 나온 주소 · key rotation · replay · freshness |
-| 8 · 오버레이와 신뢰 | 신뢰 | Sybil · eclipse · poisoning · identity 와 trust 의 차이 · 인증과 인가의 차이 · capability · behavior score · keyless TLS · trusted edge |
+| 8 · 오버레이와 신뢰 | 신뢰 | Sybil · eclipse · poisoning · identity 와 trust 의 차이 · 인증과 인가의 차이 · capability · behavior score · 키 소유권 분리 · CertificateVerify · transcript 바인딩 · keyless TLS · trusted edge |
 | 8 · 오버레이와 신뢰 | 관측 가능성 | traffic correlation · metadata · timing side-channel · 암호화가 숨기지 않는 것 |
 | 8 · 오버레이와 신뢰 | 오버레이 | 물리와 논리의 분리 · 터널링 · 가상 토폴로지 · relay · hole punching · reachability · reverse tunnel · outbound-only relay |
 | 9 · 터널과 경로 | 구성 | 터널 구성 · 피어 발견과의 차이 · 멀티홉 · 홉별 계층 암호화 · 홉 수의 대가 · inbound 와 outbound 의 분리 · RX 와 TX |
 | 9 · 터널과 경로 | 선택 | path selection · latency · 가용성 · subnet · ASN diversity · 비용 함수 · selection bias · 클라이언트가 정하는 경로 |
 | 9 · 터널과 경로 | 확률 | 종단 성공 확률 · 곱으로 쌓이는 실패 · 기하분포 · 평균 시도 횟수 |
-| 9 · 터널과 경로 | 재시도 | 재시도 · 타임아웃 · heartbeat · 감지 시간 · exponential backoff · jitter · retry budget |
+| 9 · 터널과 경로 | 재시도 | 재시도 · 타임아웃 · heartbeat · 감지 시간 · exponential backoff · jitter · retry budget · 원격 서명 latency · fail-open 과 fail-close |
 | 9 · 터널과 경로 | 자원 | 터널 풀 · 미리 열어 두기 · 예비 터널 · 터널 수명과 교체 · 준비 비용 · 전환 시간 · 자원 사용량 |
 
 
@@ -168,6 +168,7 @@ updated: 2026-09-15
 | ClientHello · ServerHello · 확장 협상 | 필수 |  | Real-World Cryptography 9장 · HPBN 4장 |
 | key_share · supported_groups · HelloRetryRequest | 추천 |  | Real-World Cryptography 5·9장 |
 | ECDHE · X25519 · secp256r1 · forward secrecy | 필수 |  | Real-World Cryptography 5장 |
+| Noise Protocol Framework — TLS 밖의 handshake 패턴 | 선택 |  | Real-World Cryptography 5·9장 |
 | HKDF · 키 스케줄 · 트래픽 비밀 분리 | 추천 |  | Real-World Cryptography 3장 |
 | AEAD · AES-GCM · ChaCha20-Poly1305 · cipher suite | 필수 |  | Real-World Cryptography 4장 |
 | 0-RTT 재전송 위험 — 멱등 요청만 | 추천 |  | Real-World Cryptography 9장 |
@@ -225,7 +226,7 @@ updated: 2026-09-15
 | 패킷이 사라지는 네 자리 — 드롭 카운터 | 필수 | [진단 개념](../troubleshooting/_concepts/%ED%8C%A8%ED%82%B7%EC%9D%B4-%EC%82%AC%EB%9D%BC%EC%A7%80%EB%8A%94-%EB%84%A4-%EC%9E%90%EB%A6%AC.md) | |
 | conntrack 경합 · `insert_failed` | 필수 | [사례](../troubleshooting/kubernetes/2026-09-12_%EC%A0%95%ED%99%95%ED%9E%88%201%EC%B4%88%EC%94%A9%20%EB%8A%A6%EB%8A%94%20%EC%9A%94%EC%B2%AD.md) |  |
 | TCP 이상 판독 · RST · 재전송 · 중복 ACK | 필수 | [03-01](../02_os/book/paw_packet-analysis-wireshark/03-01.TCP%20%EC%97%B0%EA%B2%B0%EC%9D%98%20%EC%83%9D%EC%95%A0.md) · [03-02](../02_os/book/paw_packet-analysis-wireshark/03-02.TCP%EA%B0%80%20%EC%96%B4%EA%B8%8B%EB%82%A0%20%EB%95%8C.md) | Packet Analysis 3장 |
-| TLS 핸드셰이크 판독 · 실패 원인 | 필수 | [04-01](../02_os/book/paw_packet-analysis-wireshark/04-01.TLS%20%ED%95%B8%EB%93%9C%EC%85%B0%EC%9D%B4%ED%81%AC%20%EC%9D%BD%EA%B8%B0.md) · [04-02](../02_os/book/paw_packet-analysis-wireshark/04-02.%EC%97%B4%EC%87%A0%EC%99%80%20%EC%8B%A4%ED%8C%A8.md) | Packet Analysis 4장 |
+| TLS 핸드셰이크 판독 · 실패 원인 | 필수 | [04-01](../02_os/book/paw_packet-analysis-wireshark/04-01.TLS%20%ED%95%B8%EB%93%9C%EC%85%B0%EC%9D%B4%ED%81%AC%20%EC%9D%BD%EA%B8%B0.md) · [04-03](../02_os/book/paw_packet-analysis-wireshark/04-03.%EC%97%B4%EC%87%A0%EC%99%80%20%EC%8B%A4%ED%8C%A8.md) | Packet Analysis 4장 |
 | 계층 순서 진단 — `ss` · `ip` · `ethtool` · `conntrack -L` | 필수 | [02-03](../08_cloud/book/networking-and-kubernetes/02-03.Linux%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%EC%A7%84%EB%8B%A8%20%EB%8F%84%EA%B5%AC%20%E2%80%94%20%EA%B3%84%EC%B8%B5%20%EC%88%9C%EC%84%9C%EB%8C%80%EB%A1%9C%20%EC%88%98%EC%82%AC%ED%95%98%EA%B8%B0.md) | Networking and Kubernetes 2장 |
 | `nstat` · tcpretrans · tcplife | 추천 | [10-04](../02_os/book/systems-performance/10-04.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%284%29%20%E2%80%94%20%EA%B4%80%EC%B8%A1%20%EB%8F%84%EA%B5%AC.md) | Systems Performance 10장 |
 | `resolv.conf` · search domain · `ndots` · NXDOMAIN | 필수 | [랩 07-01](../02_os/book/network-fundamentals-lab/07-01.%EA%B8%B8%EC%9D%80%20%EB%A9%80%EC%A9%A1%ED%95%9C%EB%8D%B0%20%EC%95%88%20%ED%86%B5%ED%95%A0%20%EB%95%8C.md) · [01-03](../02_os/networking/01-03.DNS%20%ED%95%84%ED%84%B0%EB%A7%81%20%EC%B0%A8%EB%8B%A8%20%E2%80%94%20NXDOMAIN%C2%B7DoH%C2%B7%EC%9A%B0%ED%9A%8C%20%EB%A7%88%EC%B0%B0.md) | |
@@ -323,6 +324,8 @@ updated: 2026-09-15
 | topology-aware routing · EndpointSlice hint | 추천 | [04-09](../08_cloud/kubernetes/04_networking/04-09.%ED%86%A0%ED%8F%B4%EB%A1%9C%EC%A7%80%20%EC%9D%B8%EC%A7%80%20%EB%9D%BC%EC%9A%B0%ED%8C%85.md) | |
 | 서비스 메시가 인프라로 밀어낸 것 | 추천 | [01-01](../08_cloud/book/istio-in-action/01-01.%EC%84%9C%EB%B9%84%EC%8A%A4%20%EB%A9%94%EC%8B%9C%EB%8A%94%20%EB%AC%B4%EC%97%87%EC%9D%84%20%EC%9D%B8%ED%94%84%EB%9D%BC%EB%A1%9C%20%EB%B0%80%EC%96%B4%EB%83%88%EB%8A%94%EA%B0%80.md) | Istio in Action 1장 |
 | Envoy · Gateway · VirtualService · DestinationRule | 추천 | [03-01](../08_cloud/book/istio-in-action/03-01.Envoy%EA%B0%80%20%EB%A7%A1%EB%8A%94%20%EC%9D%BC%EA%B3%BC%20Istio%EA%B0%80%20%EB%B3%B4%ED%83%9C%EB%8A%94%20%EC%9D%BC.md) · [04-01](../08_cloud/book/istio-in-action/04-01.%EB%AC%B8%EC%9D%84%20%EC%97%AC%EB%8A%94%20%EC%9D%BC%EA%B3%BC%20%EA%B8%B8%EC%9D%84%20%EB%82%B4%EB%8A%94%20%EC%9D%BC%EC%9D%84%20%EA%B0%80%EB%A5%B8%EB%8B%A4.md) · [05-01](../08_cloud/book/istio-in-action/05-01.%EC%9C%84%ED%97%98%EC%97%90%20%EB%85%B8%EC%B6%9C%EB%90%98%EB%8A%94%20%ED%8A%B8%EB%9E%98%ED%94%BD%EC%9D%84%20%EC%A4%84%EC%97%AC%20%EA%B0%80%EB%8A%94%20%EC%88%9C%EC%84%9C.md) | Istio in Action 3·4·5장 |
+| xDS — 컨트롤 플레인이 데이터 플레인을 갱신하는 모델 · 설정 일관성 | 추천 |  |  |
+| listener · filter chain · cluster — 요청 경로와 설정 경로의 분리 | 선택 |  |  |
 | mTLS · 기본값 닫아 가기 | 추천 | [09-01](../08_cloud/book/istio-in-action/09-01.%EA%B1%B0%EC%9D%98%20%EC%95%88%EC%A0%84%ED%95%9C%20%EA%B8%B0%EB%B3%B8%EA%B0%92%EC%9D%84%20%EB%8B%AB%EC%95%84%20%EA%B0%80%EB%8A%94%20%EC%88%9C%EC%84%9C.md) | Istio in Action 4·9장 |
 | retry · timeout · circuit breaking · outlier detection · 재시도 증폭 | 필수 | [06-01](../08_cloud/book/istio-in-action/06-01.%EC%8B%A4%ED%8C%A8%EB%A5%BC%20%EA%B2%AC%EB%94%94%EB%8A%94%20%EC%9D%BC%EC%9D%84%20%ED%94%84%EB%A1%9D%EC%8B%9C%EB%A1%9C%20%EC%98%AE%EA%B2%BC%EC%9D%84%20%EB%95%8C.md) · [사례](../troubleshooting/mesh/2026-09-07_%ED%8A%B8%EB%9E%98%ED%94%BD%EC%9D%B4%20%EB%8A%98%20%EB%95%8C%EB%A7%8C%20%EC%84%9E%EC%97%AC%20%EB%82%98%EC%98%A4%EB%8A%94%20503.md) | Istio in Action 6장 |
 | SPIFFE · SVID — 워크로드 신원 | 추천 | [a0-03](../08_cloud/book/istio-in-action/a0-03.%EB%B6%80%EB%A1%9D%20%E2%80%94%20%EC%8B%A0%EC%9B%90%EC%9D%84%20%EB%AC%B8%EC%84%9C%EB%A1%9C%20%EB%A7%8C%EB%93%9C%EB%8A%94%20%EB%84%A4%20%EA%B7%9C%EA%B2%A9.md) | Istio in Action 부록 C · Zero Trust Networks 6장 |
@@ -350,6 +353,9 @@ updated: 2026-09-15
 | 오버레이 — 물리와 논리의 분리 · 터널링 · 가상 토폴로지 | 추천 | | |
 | reverse tunnel · outbound-only relay | 추천 |  |  |
 | relay · hole punching · reachability | 선택 |  | TCP/IP Illustrated 7장 |
+| 키 소유권 분리 — 서명 권한만 위임하고 세션 키는 넘기지 않는다 | 추천 |  | Zero Trust Networks 6장 |
+| CertificateVerify — 키 소유 증명과 키 합의는 다른 단계다 | 추천 |  | Real-World Cryptography 7장 |
+| transcript 바인딩 — 임의 digest 서명 API 가 위험한 이유 | 추천 |  | Real-World Cryptography 2·7장 |
 | keyless TLS · trusted edge — 서명 권한이 곧 신뢰 | 선택 |  |  |
 | capability — 신원 대신 권한을 건네는 토큰 | 선택 |  | API Security in Action 9장 |
 | 역할이 나뉜 피어 — DHT 서버 모드와 floodfill | 선택 |  |  |
@@ -371,9 +377,11 @@ updated: 2026-09-15
 | RX 와 TX 경로를 나누는 이유 | 추천 | | |
 | 클라이언트가 경로를 정하고 서버는 목록만 준다 | 추천 | | |
 | 종단 성공 확률 — 단계별 실패가 곱으로 쌓인다 | 필수 | | |
+| 동기 의존이 핸드셰이크 지연에 더해지는 값 — 원격 서명 latency | 추천 | | |
 | 기하분포 — 최초 성공까지의 평균 시도 횟수 | 추천 | | |
 | 재시도와 타임아웃 · heartbeat — 확률만큼 감지 시간도 값이다 | 필수 |  | Patterns of Distributed Systems 7장 · Database Internals 9장 |
 | exponential backoff · jitter · retry budget | 필수 | [01-03](../09_spring/03_network/resilience/01-03.Retry%20%E2%80%94%20exponential%20backoff%C2%B7jitter%C2%B7%EC%9E%AC%EC%8B%9C%EB%8F%84%20%ED%8F%AD%EC%A3%BC%20%EB%B0%A9%EC%A7%80.md) · [사례](../troubleshooting/kubernetes/2026-09-08_%ED%95%9C%20%ED%95%98%EC%9C%84%20%EC%84%9C%EB%B9%84%EC%8A%A4%EC%97%90%EC%84%9C%20%EC%8B%9C%EC%9E%91%EB%90%9C%20%EC%A0%84%EB%A9%B4%20%EC%98%A4%EB%A5%98.md) |  |
+| fail-open 과 fail-close 의 갈림 — 보안 경계에서는 열 수 없다 | 추천 | | |
 | 터널 풀 — 연결마다 새로 여는 방식과의 갈림 | 추천 | | |
 | 예비 터널 — 준비 비용 · 전환 시간 · 자원 사용량 | 추천 | | |
 | 터널 수명과 교체 — 자주 바꾸면 비싸고 드물게 바꾸면 트래픽이 묶인다 | 추천 | | |
@@ -401,7 +409,7 @@ updated: 2026-09-15
 
 **노트 밖의 실습 경로가 둘 있습니다.** [LFS146 Introduction to Cilium](https://training.linuxfoundation.org/training/introduction-to-cilium-lfs146/)은 무료 26시간 과정으로 NetworkPolicy · Hubble · 투명 암호화 · kube-proxy replacement · Cluster Mesh 를 6·7단계 범위에서 손으로 밟게 합니다. [Isovalent Universe](https://labs.isovalent.com/)는 설치 없이 브라우저에서 도는 랩이라 클러스터를 세울 수 없을 때 씁니다.
 
-**reverse tunnel 은 실제 구현을 돌려 봅니다.** [portal-tunnel](https://github.com/gosuda/portal-tunnel)은 MIT 라이선스로 공개된 Go reverse tunnel 이고 relay 를 직접 띄울 수 있습니다. 1단계의 SNI 라우팅과 8·9단계의 lease · keyless TLS · relay 선택이 한 저장소에 모여 있습니다. 코드를 따라 짜는 일은 Go 로드맵 몫입니다.
+**reverse tunnel 은 실제 구현을 돌려 봅니다.** [portal-tunnel](https://github.com/gosuda/portal-tunnel)은 MIT 라이선스로 공개된 Go reverse tunnel 이고 relay 를 직접 띄울 수 있습니다. 1단계의 SNI 라우팅과 8·9단계의 lease · keyless TLS · relay 선택이 한 저장소에 모여 있습니다. 코드를 따라 짜는 일은 Go 로드맵 몫입니다. TLS 안쪽이 궁금해지는 시점에는 [keyless_tls](https://github.com/gosuda/keyless_tls)로 넘어갑니다. 터널이 handshake 와 트래픽 암호화를 쥔 채 CertificateVerify 서명만 원격에 맡기는 구조라, 8단계의 키 소유권 분리가 코드로 어떻게 서는지 봅니다.
 
 
 

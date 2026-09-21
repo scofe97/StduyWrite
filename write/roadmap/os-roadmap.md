@@ -38,7 +38,7 @@ updated: 2026-09-13
 | 2 · 실행 모델 | 파일 디스크립터 | FD · `ulimit` · `epoll` · 논블로킹 I/O · event loop · readiness 모델 · 배압 · 자원별 관측 창 |
 | 2 · 실행 모델 | 동시성의 문제 | 동기화 · 교착 · 조건 변수 · `prctl` · `PR_SET_PDEATHSIG` · `vfork` · `clone3` |
 | 3 · 컨테이너 기반 | 격리 | namespace 여덟 · `unshare` · shared kernel · cgroup namespace · user namespace · rootless |
-| 3 · 컨테이너 기반 | 자원 제한 | cgroup v2 · controller · `cpu.max` · `cpu.stat` · throttling · `memory.max` · `memory.events` · PSI · OOM Killer |
+| 3 · 컨테이너 기반 | 자원 제한 | cgroup v2 · controller · `cpu.max` · `cpu.stat` · throttling · `memory.max` · `memory.events` · PSI · OOM Killer · cgroup 경로와 컨테이너 신원 |
 | 3 · 컨테이너 기반 | 파일시스템 | mount propagation · OverlayFS · copy-on-write · hugetlbfs |
 | 3 · 컨테이너 기반 | 보안의 바닥 | capability · 권한 · 시스템 콜 표면 |
 | 4 · 성능 분석 | 방법론 | USE · RED · 드릴다운 · 지연 분석 · 사용률 · 포화 · 오류 · 모델링 · 용량계획 |
@@ -49,7 +49,7 @@ updated: 2026-09-13
 | 4 · 성능 분석 | CPU 명령어 확장 | SIMD · 벡터화 · SSE · AVX · AVX2 · AVX-512 · ARM NEON · AES-NI · PCLMULQDQ · CPUID · `lscpu` |
 | 4 · 성능 분석 | 측정의 함정 | throughput · tail latency · P99 · P99.9 · coordinated omission · flame graph · CPU·heap·block·mutex 프로파일 · 워밍업 · steal time · noisy neighbor · CPU quota |
 | 5 · 관측과 보안 | 관측 도구 | procfs · sysfs · `sar` · 도구 커버리지 · 관측 소스 |
-| 5 · 관측과 보안 | 커널 인터페이스 | `/proc/stat` · `meminfo` · `PID/stat` · `diskstats` · `net/snmp` · `/proc/pressure` · some 과 full |
+| 5 · 관측과 보안 | 커널 인터페이스 | `/proc/stat` · `meminfo` · `PID/stat` · `diskstats` · `net/snmp` · `net/tcp` · socket inode · `/proc/pressure` · some 과 full |
 | 5 · 관측과 보안 | 추적 | perf · Ftrace · tracepoint · kprobe · uprobe · BCC · bpftrace · verifier · CO-RE · BTF |
 | 5 · 관측과 보안 | 실행 권한 | capability · seccomp · `no-new-privileges` · AppArmor · SELinux · Landlock |
 | 5 · 관측과 보안 | 격리 강화 | 샌드박싱 세 갈래 · 설정 하나로 무너지는 경계 |
@@ -135,6 +135,7 @@ updated: 2026-09-13
 |---|:---:|---|---|
 | namespace 여덟 가지 · `unshare` | 필수 | [namespace 실습](../02_os/kernel/01-05.namespace%20%EC%8B%A4%EC%8A%B5%20%E2%80%94%208%EA%B0%80%EC%A7%80%20%EA%B2%A9%EB%A6%AC%EC%99%80%20unshare.md) | Container Security 4장 |
 | cgroup v2 — controller · PSI | 필수 | [cgroup v2 깊이](../02_os/kernel/01-02.cgroup%20v2%20%EA%B9%8A%EC%9D%B4.md) | Container Security 3장 |
+| cgroup 경로와 컨테이너 · Pod 신원의 연결 | 추천 | | Container Security 3장 |
 | 한도는 어디서 오는가 — 사람 · 기계 · 상속 | 필수 | [진단 개념](../troubleshooting/_concepts/%ED%95%9C%EB%8F%84%EB%8A%94-%EC%96%B4%EB%94%94%EC%84%9C-%EC%98%A4%EB%8A%94%EA%B0%80.md) | Linux Kernel Docs — cgroup v2 |
 | `memory.max` · `memory.events` · OOM Killer | 필수 | [cgroup 파일시스템 실습](../02_os/kernel/01-04.cgroup%20%ED%8C%8C%EC%9D%BC%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%8B%A4%EC%8A%B5.md) · [Endowus OOMKilled](../02_os/kernel/01-06.cgroup%20%EC%82%AC%EB%A1%80%20%E2%80%94%20Endowus%20OOMKilled.md) | |
 | `cpu.max` · `cpu.stat` · throttling | 필수 | [cgroup v2 깊이](../02_os/kernel/01-02.cgroup%20v2%20%EA%B9%8A%EC%9D%B4.md) | |
@@ -187,6 +188,7 @@ updated: 2026-09-13
 | `/proc/stat` · `/proc/meminfo` 읽기 | 필수 | | Linux Kernel Docs — proc |
 | `/proc/PID/stat` · `status` · `statm` | 필수 | | Linux Kernel Docs — proc |
 | `/proc/diskstats` · `/proc/net/snmp` | 추천 | | Linux Kernel Docs — proc |
+| `/proc/net/tcp` 와 socket inode — 포트에서 프로세스로 거슬러 가기 | 추천 | | Linux Kernel Docs — proc |
 | `/proc/pressure` — some 과 full · avg10 | 필수 | | Linux Kernel Docs — psi |
 | perf — 샘플링과 이벤트 소스 | 필수 | [13-01](../02_os/book/systems-performance/13-01.perf%20%281%29%20%E2%80%94%20%EA%B0%9C%EC%9A%94%C2%B7%EC%84%9C%EB%B8%8C%EC%BB%A4%EB%A7%A8%EB%93%9C%C2%B7%EC%9B%90%EB%9D%BC%EC%9D%B4%EB%84%88.md) ~ [13-03](../02_os/book/systems-performance/13-03.perf%20%283%29%20%E2%80%94%20%EB%AA%85%EB%A0%B9.md) | |
 | capability · seccomp | 필수 | [02-01](../08_cloud/book/container-security/02-01.Linux%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%BD%9C%C2%B7%EA%B6%8C%ED%95%9C%C2%B7capability%20%E2%80%94%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%B3%B4%EC%95%88%EC%9D%98%20%EB%B0%94%EB%8B%A5.md) | Container Security 2장 |

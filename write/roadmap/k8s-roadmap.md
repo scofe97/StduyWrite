@@ -59,7 +59,7 @@ updated: 2026-09-13
 | 7 · 운영 | 자원 장애 | OOMKilled · exit code 137 · CPU throttling · node pressure · eviction |
 | 7 · 운영 | 종료와 복구 | SIGTERM · PID 1 · PreStop · `terminationGracePeriodSeconds` · PDB · NodeNotReady |
 | 7 · 운영 | 배포 도구 | Helm · Kustomize · GitOps · ArgoCD · App of Apps · ApplicationSet |
-| 7 · 운영 | 확대 | 멀티테넌시 · 멀티클러스터 세 모델 · 서비스 메시를 쓸 것인가 |
+| 7 · 운영 | 확대 | 멀티테넌시 · 가상 컨트롤 플레인 · 이름 변환과 충돌 회피 · status back-sync · 멀티클러스터 세 모델 · 서비스 메시를 쓸 것인가 |
 
 
 
@@ -212,6 +212,8 @@ updated: 2026-09-13
 | Helm · Kustomize | 추천 | [10-01](../08_cloud/kubernetes/10_packaging/10-01.Helm%20%EA%B8%B0%EC%B4%88.md) ~ [10-03](../08_cloud/kubernetes/10_packaging/10-03.Kustomize.md) | |
 | GitOps · ArgoCD · App of Apps · ApplicationSet | 추천 | [11-03](../08_cloud/kubernetes/11_devtools/11-03.ArgoCD%EC%99%80%20GitOps.md) · [ArgoCD 노트](../08_cloud/argocd/README.md) | Kubernetes Best Practices 18장 |
 | 멀티테넌시 | 추천 | | Production Kubernetes 12장 |
+| 가상 컨트롤 플레인 — tenant 와 host 를 잇는 sync 방향 | 선택 | | Production Kubernetes 12장 |
+| 이름 변환과 충돌 회피 · status back-sync | 선택 | | |
 | 멀티클러스터 세 모델 | 추천 | [21-01](../08_cloud/book/kubernetes-up-and-running/21-01.Multicluster%20%E2%80%94%20%EB%8A%98%EB%A6%AC%EA%B8%B0%20%EC%A0%84%EC%97%90%20%EA%B0%96%EC%B6%9C%20%EA%B2%83%EA%B3%BC%20%EB%8A%98%EB%A6%B0%20%EB%92%A4%20%EA%B0%88%EB%A6%AC%EB%8A%94%20%EC%84%B8%20%EB%AA%A8%EB%8D%B8.md) | Kubernetes Up and Running 21장 |
 | 서비스 메시를 쓸 것인가 | 선택 | [15-01](../08_cloud/book/kubernetes-up-and-running/15-01.Service%20Meshes%20%E2%80%94%20%EC%93%B8%20%EA%B2%83%EC%9D%B8%EA%B0%80%EB%A5%BC%20%EB%A8%BC%EC%A0%80%20%EB%94%B0%EC%A7%84%EB%8B%A4.md) · [네트워크 로드맵](network-roadmap.md) | Kubernetes Up and Running 15장 |
 | 클러스터 안 CI 도구 — Jenkins · SonarQube · Harbor | 선택 | [11-01](../08_cloud/kubernetes/11_devtools/11-01.Jenkins%20on%20K8s.md) · [11-04](../08_cloud/kubernetes/11_devtools/11-04.Harbor.md) | |
