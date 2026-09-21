@@ -41,7 +41,14 @@ for (rx, ry, rw, rh), lab, c in [(LEFT, "KUBE-SVC-LOLE4ISW44XBNF3G — 위에서
                                  (RIGHT, "KUBE-SEP 체인 · 목적지 교체", ACC)]:
     d.o.append(f'<rect x="{rx}" y="{ry}" width="{rw}" height="{rh}" rx="8" '
                f'fill="{c}06" stroke="{c}" stroke-width="1.2" stroke-dasharray="7 6"/>')
-    ddx.ring_label(d, rx, ry, lab, 11, c, off=16)
+    # 라벨 마스크를 경계 안쪽에 완전히 넣는다. ring_label 기본값은 마스크를 테두리에
+    # 걸터앉히는데(y-9, h 18), 이 도식은 라벨이 267px·166px 로 길어 그 걸침이
+    # dd-prose-check 의 shape-overlap error 로 잡혔다(2026-09-20). 형제 도식
+    # three-levels-nested 는 라벨이 짧아 같은 헬퍼로도 안 걸린다.
+    # 마스크를 안쪽으로 내리면 "포함"으로 판정돼 면제되고, 테두리를 덮는 효과는 같다.
+    lw = ddx.textw_tight(lab, 11) + 20
+    d.o.append(f'<rect x="{rx+16}" y="{ry+1}" width="{lw:.0f}" height="18" fill="{PAPER}"/>')
+    d.t(rx + 26, ry + 14, lab, 11, c, KR, "start", 600)
 
 bx(LX, LCY[0], LW, LH, "첫 규칙은 마킹", "! -s 10.244.0.0/16", "-j KUBE-MARK-MASQ", focal=True)
 for cy, (t, s, tag) in zip(LCY[1:], [("규칙 1", "--probability 0.33333333349", "-j KUBE-SEP-2MJG…"),

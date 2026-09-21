@@ -1,5 +1,11 @@
-# 02-02.kube-proxy-three-generations — 세 세대를 다섯 축으로 나란히 놓는다
-# 본문 요구: "세 세대가 무엇을 바꿨는지는 결국 '어떻게 찾는가'로 요약됩니다.
+# 02-02.kube-proxy-three-generations — 세 구현을 다섯 축으로 나란히 놓는다
+# 2026-09-20 프레이밍 정정: "세대"(1세대·2세대…)를 걷어냈다. 셋은 진화 단계가 아니라
+#   나란히 살아 있는 선택지이고, 심지어 같은 줄에 서지도 않는다 — iptables·IPVS 는
+#   kube-proxy 의 모드이고 eBPF 구현은 kube-proxy 를 대체하는 쪽이다(KEP-3866 이
+#   eBPF 프록시를 대안으로 검토 후 기각). IPVS 는 v1.35 deprecated 라 그 사실을 행에 실었다.
+#   비용 열의 "규칙 수와 무관 O(1)" 단정도 완화했다 — BPF 맵은 타입(hash·array·LPM trie)마다
+#   조회 비용이 다르다(docs.kernel.org/bpf/maps.html). 파일명은 참조가 걸려 있어 유지한다.
+# 본문 요구: "셋이 무엇을 다르게 하는지는 결국 '어떻게 찾는가'로 요약됩니다.
 #            왼쪽이 세대와 그 세대가 쓰는 자료구조이고, 오른쪽이 목적지를 찾는 방법과 그 비용입니다.
 #            각 세대를 눈으로 확인하는 명령도 함께 적었습니다."
 #            "리스트는 규칙이 늘수록 대조 횟수가 함께 늘지만 해시는 규칙 수와 무관합니다."
@@ -14,26 +20,26 @@ from dd import D, INK, MUTED, SOFT, RULE, OK, BAD, INFO, PAPER2, KR, MONO
 
 W, H = 1000, 480   # 캔버스 상한 준수 — 배치(왼쪽 세대 / 오른쪽 찾는 법·비용)는 본문이 지목하므로 유지하고 폭만 줄였다
 X0, GAP, HDR_Y, ROW_H = 16, 8, 108, 84
-COLS = [(140, "세대"), (112, "자료구조"), (188, "목적지를 찾는 법"),
+COLS = [(140, "구현"), (112, "자료구조"), (188, "목적지를 찾는 법"),
         (128, "비용"), (208, "확인 명령"), (136, "할 수 있게 된 일")]
 COST_COL = 3                                       # 본문의 논점이 서는 열
 
-d = D(W, H, "COMPARISON MATRIX · 02-02 KUBE-PROXY",
-      "서비스 조회의 세 세대 — 바뀐 것은 찾는 방법이다",
-      "kube-proxy 세 세대(iptables·IPVS·eBPF)를 자료구조·조회 방법·비용·확인 명령·"
-      "새로 가능해진 일 다섯 축으로 비교한 행렬. 리스트 순회에서 해시 조회로 바뀌며 비용이 규칙 수와 무관해진다.",
-      lead="리스트는 규칙이 늘수록 대조가 늘지만, 해시는 규칙 수와 무관합니다 — 16만 규칙 5시간이 여기서 나옵니다.")
+d = D(W, H, "COMPARISON MATRIX · 02-02 SERVICE LOOKUP",
+      "서비스 조회의 세 구현 — 다른 것은 찾는 방법이다",
+      "iptables·IPVS·eBPF 를 자료구조·조회 방법·조회 비용·확인 명령·"
+      "새로 가능해진 일 다섯 축으로 비교한 행렬. 리스트 순회에서 맵 조회로 가며 비용이 규칙 수에 덜 끌려간다.",
+      lead="리스트는 규칙이 늘수록 대조가 늘고, 맵 조회는 그 길이에 끌려가지 않는다 — 우열이 아니라 전제가 다른 선택지")
 
 ROWS = [
-    (BAD, [("iptables", "kube-proxy 1세대"), ("규칙 리스트", None),
+    (BAD, [("iptables", "kube-proxy 모드"), ("규칙 리스트", None),
            ("첫 줄부터 순차 대조", None), ("규칙 수에 비례", "O(n)"),
            ("iptables -t nat -S", None), ("랜덤 분배만", None)]),
-    (INFO, [("IPVS", "커널 L4 LB"), ("해시 테이블", None),
-            ("해시 조회", None), ("규칙 수와 무관", "O(1)"),
+    (INFO, [("IPVS", "모드 · deprecated"), ("해시 테이블", None),
+            ("해시 조회", None), ("길이에 안 끌림", "~O(1)"),
             ("ipvsadm -Ln", None), ("밸런싱 모드 선택", None)]),
-    (OK, [("eBPF", "Cilium 등"), ("BPF 맵", "해시"),
-          ("맵 조회 · 커널 내 처리", None), ("규칙 수와 무관", "O(1)"),
-          ("cilium-dbg bpf lb list", None), ("L7 정책 · 관측", None)]),
+    (OK, [("eBPF", "kube-proxy 대체"), ("BPF 맵", "타입마다"),
+          ("맵 조회 · 커널 내 처리", None), ("맵 타입에 달림", "해시면 ~O(1)"),
+          ("cilium-dbg bpf lb list", None), ("L7 정책 · 관측", "L7 은 Envoy")]),
 ]
 
 XS, x = [], X0
@@ -60,7 +66,7 @@ for r, (rc, cells) in enumerate(ROWS):
 
 # 리스트와 해시의 비용 차이는 본문 산문이 맡는다
 d.legend(424, [("규칙 수에 비례 · 이 편의 병목", BAD),
-               ("해시 조회로 상수시간", INFO),
-               ("커널 안에서 처리 · L7 까지", OK)])
+               ("해시 조회 · 길이에 안 끌림", INFO),
+               ("L3/L4 는 커널 · L7 은 Envoy", OK)])
 d.save("02-02.kube-proxy-three-generations.svg")
 print("ok kube-proxy-three-generations")
