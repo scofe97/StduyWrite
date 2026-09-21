@@ -1,0 +1,72 @@
+# 02-03.kube-proxy-three-generations — 세 구현을 다섯 축으로 나란히 놓는다
+# 2026-09-20 프레이밍 정정: "세대"(1세대·2세대…)를 걷어냈다. 셋은 진화 단계가 아니라
+#   나란히 살아 있는 선택지이고, 심지어 같은 줄에 서지도 않는다 — iptables·IPVS 는
+#   kube-proxy 의 모드이고 eBPF 구현은 kube-proxy 를 대체하는 쪽이다(KEP-3866 이
+#   eBPF 프록시를 대안으로 검토 후 기각). IPVS 는 v1.35 deprecated 라 그 사실을 행에 실었다.
+#   비용 열의 "규칙 수와 무관 O(1)" 단정도 완화했다 — BPF 맵은 타입(hash·array·LPM trie)마다
+#   조회 비용이 다르다(docs.kernel.org/bpf/maps.html). 파일명은 참조가 걸려 있어 유지한다.
+# 본문 요구: "셋이 무엇을 다르게 하는지는 결국 '어떻게 찾는가'로 요약됩니다.
+#            왼쪽이 세대와 그 세대가 쓰는 자료구조이고, 오른쪽이 목적지를 찾는 방법과 그 비용입니다.
+#            각 세대를 눈으로 확인하는 명령도 함께 적었습니다."
+#            "리스트는 규칙이 늘수록 대조 횟수가 함께 늘지만 해시는 규칙 수와 무관합니다."
+# 타입 스펙: type-dp-security-matrix.md 의 행 대조 — 행이 세대, 열이 다섯 축.
+#           평가 대상이 role×component 가 아니라 세대×축이라 열 폭만 이 내용에 맞춰 잡는다.
+#           비용 열을 행 색으로 칠해 O(n) 과 O(1) 의 대비가 한 열에서 읽히게 한다.
+# 이력: 2026-08-28 신설. 이 SVG 는 생성기 없이 손으로 만들어져 있어 타입 선택 단계를 건너뛴
+#       자산이었다(러너 "생성기가 없는 SVG 는 만들지 않는다"). 값은 기존 SVG 에서 그대로 옮겼다.
+# 좌표: stride 없이 열마다 내용 폭이 달라 열 폭을 개별로 두되 전부 4의 배수, gap 12 고정.
+import ddx
+from dd import D, INK, MUTED, SOFT, RULE, OK, BAD, INFO, PAPER2, KR, MONO
+
+W, H = 1000, 480   # 캔버스 상한 준수 — 배치(왼쪽 세대 / 오른쪽 찾는 법·비용)는 본문이 지목하므로 유지하고 폭만 줄였다
+X0, GAP, HDR_Y, ROW_H = 16, 8, 108, 84
+COLS = [(140, "구현"), (112, "자료구조"), (188, "목적지를 찾는 법"),
+        (128, "비용"), (208, "확인 명령"), (136, "할 수 있게 된 일")]
+COST_COL = 3                                       # 본문의 논점이 서는 열
+
+d = D(W, H, "COMPARISON MATRIX · 02-03 SERVICE LOOKUP",
+      "서비스 조회의 세 구현 — 다른 것은 찾는 방법이다",
+      "iptables·IPVS·eBPF 를 자료구조·조회 방법·조회 비용·확인 명령·"
+      "새로 가능해진 일 다섯 축으로 비교한 행렬. 리스트 순회에서 맵 조회로 가며 비용이 규칙 수에 덜 끌려간다.",
+      lead="리스트는 규칙이 늘수록 대조가 늘고, 맵 조회는 그 길이에 끌려가지 않는다 — 우열이 아니라 전제가 다른 선택지")
+
+ROWS = [
+    (BAD, [("iptables", "kube-proxy 모드"), ("규칙 리스트", None),
+           ("첫 줄부터 순차 대조", None), ("규칙 수에 비례", "O(n)"),
+           ("iptables -t nat -S", None), ("랜덤 분배만", None)]),
+    (INFO, [("IPVS", "모드 · deprecated"), ("해시 테이블", None),
+            ("해시 조회", None), ("길이에 안 끌림", "~O(1)"),
+            ("ipvsadm -Ln", None), ("밸런싱 모드 선택", None)]),
+    (OK, [("eBPF", "kube-proxy 대체"), ("BPF 맵", "타입마다"),
+          ("맵 조회 · 커널 내 처리", None), ("맵 타입에 달림", "해시면 ~O(1)"),
+          ("cilium-dbg bpf lb list", None), ("L7 정책 · 관측", "L7 은 Envoy")]),
+]
+
+XS, x = [], X0
+for w, name in COLS:
+    XS.append((x, w))
+    d.t(x + w // 2, HDR_Y, name, 11, SOFT, KR, "middle", 600)
+    x += w + GAP
+
+for r, (rc, cells) in enumerate(ROWS):
+    y = HDR_Y + 24 + r * (ROW_H + GAP)
+    for i, ((cx0, cw), (main, sub)) in enumerate(zip(XS, cells)):
+        hit = (i == COST_COL)
+        if hit:
+            d.tone(cx0, y, cw, ROW_H, rc, 6, "12", 1.4)
+        else:
+            d.box(cx0, y, cw, ROW_H, PAPER2, RULE, 1.1, 6)
+        mono = all(ord(ch) < 128 for ch in main)
+        my = y + (ROW_H // 2 + 5 if sub is None else 34)
+        d.t(cx0 + 14, my, ddx.fit(main, 13, cw - 28, main), 13,
+            rc if (hit or i == 0) else INK, MONO if mono else KR, "start", 600)
+        if sub:
+            d.t(cx0 + 14, y + 58, ddx.fit(sub, 11, cw - 28, sub), 11, MUTED,
+                MONO if all(ord(ch) < 128 for ch in sub) else KR, "start")
+
+# 리스트와 해시의 비용 차이는 본문 산문이 맡는다
+d.legend(424, [("규칙 수에 비례 · 이 편의 병목", BAD),
+               ("해시 조회 · 길이에 안 끌림", INFO),
+               ("L3/L4 는 커널 · L7 은 Envoy", OK)])
+d.save("02-03.kube-proxy-three-generations.svg")
+print("ok kube-proxy-three-generations")

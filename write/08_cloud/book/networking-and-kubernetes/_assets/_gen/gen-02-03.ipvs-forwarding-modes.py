@@ -1,0 +1,56 @@
+# 02-03.ipvs-forwarding-modes — 세 포워딩 방식이 패킷의 어느 부분을 바꾸는가
+# 본문 요구: "NAT 는 주소 재작성 / DR 은 IP 그대로 목적지 MAC 만 / IP 터널링은 원본을
+#           다른 IP 데이터그램으로 감쌈" — 셋이 건드리는 자리가 다르다는 것이 논점.
+#           책이 DR 과 터널링 설명을 뒤바꿔 인쇄했으므로 focal 은 DR 의 MAC 셀에 건다.
+# 타입 스펙: type-dp-security-matrix.md 의 행 대조 — 행이 포워딩 방식, 열이 패킷의 구성부.
+#           계약이 "'비교 행렬' 처럼 스펙에 없는 이름을 쓰지 말라"고 못박은 자리라 스펙명으로 고쳤다.
+#           평가 대상이 role×component 가 아니라 방식×구성부라 열 폭만 이 내용에 맞춰 stride 로 잡는다.
+import dd, ddx
+from dd import D, INK, MUTED, SOFT, RULE, ACC, WARN, INFO, PAPER2, KR, MONO
+
+W, H = 1000, 572
+d = D(W, H, "IPVS · FORWARDING MODES",
+      "세 포워딩 방식은 패킷의 어느 부분을 바꾸는가",
+      "NAT 는 IP 를, DR 은 목적지 MAC 만 바꾸고, IP 터널링은 원본을 그대로 둔 채 새 IP 헤더로 감싼다.",
+      lead="바꾸는 자리가 다르다 — NAT 는 L3, DR 은 L2, 터널링은 겉을 한 겹 더 씌운다")
+
+X0, TXTX, CELLX = 24, 48, 380      # stride 4 배수
+CW, GAP, CH = 176, 16, 56
+BANDS = [108, 244, 380]            # 높이 120, 간격 16
+BH = 120
+
+ROWS = [
+    ("NAT", ["IP 주소 재작성"],
+     [("MAC 헤더", "그대로", INFO, CW),
+      ("IP 헤더", "목적지 재작성", WARN, CW),
+      ("페이로드", "그대로", INFO, CW)]),
+    ("DR — Direct Routing", ["IP 그대로 · 목적지 MAC 만 재작성", "백엔드로 전달"],
+     [("MAC 헤더", "목적지 재작성", ACC, CW),
+      ("IP 헤더", "그대로", INFO, CW),
+      ("페이로드", "그대로", INFO, CW)]),
+    ("IP 터널링", ["원본 패킷을 다른 IP 데이터그램으로", "감싸 전송"],
+     [("새 IP 헤더", "바깥에 씌움", WARN, CW),
+      ("원본 패킷 그대로", "MAC · IP · 페이로드", INFO, CW * 2 + GAP)]),
+]
+
+for y0, (name, lines, cells) in zip(BANDS, ROWS):
+    ddx.band(d, y0, y0 + BH, name, x=X0, w=W - 2 * X0, focal=False)
+    for i, ln in enumerate(lines):
+        d.t(TXTX, y0 + 68 + i * 22, ddx.fit(ln, 12, CELLX - TXTX - 24, ln), 12, MUTED, KR, "start")
+    x = CELLX
+    for label, note, c, w in cells:
+        y = y0 + 44
+        if c is ACC:
+            d.tone(x, y, w, CH, ACC, 6, "12", 1.4)
+        else:
+            d.box(x, y, w, CH, PAPER2, c, 1.1, 6)
+        d.t(x + w // 2, y + 24, ddx.fit(label, 12, w - 20, label), 12, c, KR, "middle", 600)
+        d.t(x + w // 2, y + 43, ddx.fit(note, 11, w - 20, note), 11,
+            MUTED if c is not ACC else ACC,
+            MONO if all(ord(ch) < 128 or ch in '·' for ch in note) else KR)
+        x += w + GAP
+
+# 책이 DR·터널링 설명을 뒤바꿔 인쇄한 정오는 본문 인용 블록이 맡는다
+d.legend(516, [("그대로", INFO), ("바뀌는 자리", WARN), ("책이 뒤바꿔 설명한 곳", ACC)])
+d.save("02-03.ipvs-forwarding-modes.svg")
+print("ok ipvs-forwarding-modes")
