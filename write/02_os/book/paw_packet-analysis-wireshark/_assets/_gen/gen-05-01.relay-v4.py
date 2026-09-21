@@ -36,10 +36,10 @@ d.lanes([("클라이언트", "세그먼트 A"), ("릴레이 에이전트", "라�
 d.rails(492)
 
 d.msg("클라이언트", "릴레이 에이전트", "DISCOVER", 200, INFO, "info", sub="255.255.255.255")
-d.state("릴레이 에이전트", "giaddr ← 받은 인터페이스 주소", 244, SOFT)
+d.state("릴레이 에이전트", "giaddr ← 받은 인터페이스 주소 · hops +1", 244, SOFT)
 d.msg("릴레이 에이전트", "서버", "DISCOVER", 292, ACC, "acc", sub="유니캐스트 · 설정된 서버 주소")
-d.msg("서버", "릴레이 에이전트", "OFFER", 348, INFO, "info", sub="giaddr 로 응답")
-d.msg("릴레이 에이전트", "클라이언트", "OFFER", 404, INFO, "info", sub="세그먼트 A 로 전달")
+d.msg("서버", "릴레이 에이전트", "OFFER", 348, INFO, "info", sub="giaddr 의 67번 포트로 응답")
+d.msg("릴레이 에이전트", "클라이언트", "OFFER", 404, INFO, "info", sub="BROADCAST 플래그대로 세그먼트 A 에 전달")
 d.state("릴레이 에이전트", "REQUEST · ACK 도 같은 길", 452, SOFT)
 
 d.legend(H - 56, [("세그먼트를 넘는 유니캐스트", ACC), ("세그먼트 안의 메시지", INFO)])

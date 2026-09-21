@@ -21,7 +21,7 @@ class SeqKR(Seq):
 
 W, H = 940, 688
 d = SeqKR(W, H, "PACKET ANALYSIS WITH WIRESHARK · 05-01 §3",
-          "rapid commit — 네 걸음을 두 걸음으로",
+          "rapid commit — SARR 네 걸음을 두 걸음으로",
           "같은 두 주체 사이에서 경로가 갈린다. 위는 SARR 네 메시지, 아래는 rapid commit 옵션이 붙어 "
           "두 메시지로 끝나는 경우다. 건너뛰어지는 것은 ADVERTISE 하나이고, REQUEST 도 함께 사라진다. "
           "캡처에 메시지가 둘만 보이는 것이 실패가 아니라 정상일 수 있다.",
@@ -31,7 +31,7 @@ d.lanes([("클라이언트", "UDP 546"), ("서버", "UDP 547")], y0=104, lane_w=
 d.rails(560)
 
 # 위 컷 — SARR 네 걸음 (대비용이라 흐리게)
-d.t(24, 176, "기본 · 네 메시지", 11, SOFT, KR, "start", 600)
+d.t(24, 176, "SARR 기본 · 네 메시지", 11, SOFT, KR, "start", 600)
 d.msg("클라이언트", "서버", "SOLICIT", 204, MUTED, "ar", sub="msgtype==1 · 서버 탐색")
 d.msg("서버", "클라이언트", "ADVERTISE", 256, MUTED, "ar", sub="msgtype==2 · 가용성 통지")
 d.msg("클라이언트", "서버", "REQUEST", 308, MUTED, "ar", sub="msgtype==3 · 서버 하나 선택")
@@ -40,7 +40,7 @@ d.msg("서버", "클라이언트", "REPLY", 360, MUTED, "ar", sub="msgtype==7 ·
 d.line(24, 400, W - 48, 400, RULE, 0.8, "4 6")
 
 # 아래 컷 — rapid commit 두 걸음
-d.t(24, 436, "rapid commit · 두 메시지", 11, ACC, KR, "start", 600)
+d.t(24, 436, "SARR + rapid commit · 두 메시지", 11, ACC, KR, "start", 600)
 d.msg("클라이언트", "서버", "SOLICIT", 464, INFO, "info",
       sub="msgtype==1 · rapid commit 옵션 동봉")
 d.msg("서버", "클라이언트", "REPLY", 524, ACC, "acc",
