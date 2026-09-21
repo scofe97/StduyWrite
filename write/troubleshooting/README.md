@@ -8,7 +8,7 @@ related:
   - ../README.md
   - ./_drill/README.md
   - ./_drill/candidates.md
-updated: 2026-09-16
+updated: 2026-09-21
 ---
 
 # troubleshooting
@@ -37,7 +37,7 @@ updated: 2026-09-16
 | [kubernetes/](./kubernetes/) | B | 클러스터 안 — Pod 네트워크·Service·CoreDNS·CNI·NetworkPolicy·스케줄링 |6 |
 | [mesh/](./mesh/) | C | 서비스 메시 — Envoy 사이드카·mTLS·xDS·서킷 브레이커 | 1 |
 | [cloud/](./cloud/) | D | 클러스터 바깥 — VPC·보안 그룹·NAT·로드밸런서·리전 간 | 1 |
-| [runtime/](./runtime/) | E | JVM 과 애플리케이션 — GC·OOM·스레드·커넥션 누수·트랜잭션 | 2 |
+| [runtime/](./runtime/) | E | JVM 과 애플리케이션 — GC·OOM·스레드·커넥션 누수·트랜잭션 |3 |
 
 A 부터 D 까지가 "패킷이 어디서 사라지나"를 묻는 네트워크 축이고, E 는 "프로세스가 왜 멈추거나 느려지나"를 묻습니다.
 
