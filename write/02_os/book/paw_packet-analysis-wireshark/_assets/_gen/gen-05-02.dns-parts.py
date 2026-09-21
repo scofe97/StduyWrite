@@ -34,15 +34,15 @@ for i, (tag, name, sub, col, focal) in enumerate(LAYERS):
         d.tone(LX, y, LW, LH, col, 8, op="0A", sw=1.1)
     d.t(LX - 16, y + 40, tag, 9, SOFT, MONO, "end", 600)
     d.t(LX + 24, y + 30, name, 15, col, KR, "start", 600)
-    d.t(LX + 24, y + 52, sub, 10, MUTED, KR, "start")
+    d.t(LX + 24, y + 52, sub, 12, MUTED, KR, "start")
 
-d.t(44, Y0 + 20, "질의 ↑", 9, SOFT, MONO, "start")
+d.t(44, Y0 + 20, "질의 ↑", 12, SOFT, KR, "start")
 d.line(60, Y0 + 32, 60, Y0 + 2 * STRIDE + LH, RULE, 1.0, "3 6")
-d.t(44, Y0 + 2 * STRIDE + LH + 4, "범위 ↓", 9, SOFT, MONO, "start")
+d.t(44, Y0 + 2 * STRIDE + LH + 4, "범위 ↓", 12, SOFT, KR, "start")
 
 d.t(24, 412, "질의 섹션 — 레코드 타입 · 호스트명 · 클래스 IN", 12, SOFT, KR, "start")
 d.t(24, 436, "응답 섹션 — 줄이 여럿이면 CNAME 체인이거나 주소가 여럿", 11, MUTED, KR, "start")
-d.t(24, 458, "TCP 로 넘어가는 조건 — 존 전송(AXFR) · EDNS(0) 이전의 512바이트 초과",
+d.t(24, 458, "TCP 로 넘어가는 조건 — 존 전송(AXFR) · 응답이 한계 초과(OPT 크기, 없으면 512)",
      11, MUTED, KR, "start")
 
 d.legend(H - 44, [("원문이 못박은 범위", ACC), ("질의를 받는 쪽", INFO)])

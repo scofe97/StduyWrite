@@ -6,13 +6,13 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
 BRANCHES = [
-    ("주소를 묻는다", [("A", "IPv4 주소 · dns.qry.type == 1"),
+    ("주소는 무엇인가", [("A", "IPv4 주소 · dns.qry.type == 1"),
                    ("AAAA", "IPv6 주소 · dns.qry.type == 28")]),
-    ("이름을 잇는다", [("CNAME", "별칭을 실제 이름으로"),
+    ("어떤 이름과 잇나", [("CNAME", "별칭을 실제 이름으로"),
                    ("PTR", "주소를 이름으로 · 역방향 조회")]),
-    ("권한을 묻는다", [("NS", "이 존의 이름 서버 · dns.qry.type == 2"),
+    ("누가 맡고 있나", [("NS", "이 존의 이름 서버 · dns.qry.type == 2"),
                    ("SOA", "권한 정보 · 이름 서버와 메일")]),
-    ("부가 정보", [("MX", "메일 교환 · dns.qry.type == 15"),
+    ("그 밖에 무엇이 있나", [("MX", "메일 교환 · dns.qry.type == 15"),
                 ("TXT", "텍스트 레코드"),
                 ("ANY", "모든 종류 · dns.qry.type == 255"),
                 ("AXFR", "존 파일 전송 · 주에서 보조로")]),

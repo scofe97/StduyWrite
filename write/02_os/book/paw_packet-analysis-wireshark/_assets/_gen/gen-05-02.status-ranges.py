@@ -45,7 +45,7 @@ for i, (tag, rng, name, col, examples, nextstep, focal) in enumerate(BANDS):
     d.t(AX - 12, y + 38, rng, 9, SOFT, MONO, "end")
     d.t(BX + 24, y + 28, name, 14, col, KR, "start", 600)
     d.t(BX + 24, y + 50, examples, 10, MUTED, MONO, "start")
-    d.chip(BX + BW - 130, y + 30, nextstep, col if focal else SOFT, 10, 8)
+    d.chip(BX + BW - 148, y + 30, nextstep, col if focal else SOFT, 12, 8)
 
 d.t(24, 620, "부류로 거르기 — http.response.code >= 400 && http.response.code < 500",
      12, SOFT, KR, "start")
