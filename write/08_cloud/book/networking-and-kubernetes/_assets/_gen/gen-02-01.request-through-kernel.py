@@ -1,4 +1,9 @@
 # 02-01.request-through-kernel — 가로 체인 + 커널 경계 (경계를 두 번 넘는다)
+# 2026-09-20 수정: Conntrack 을 PRE_ROUTING 다음 칸으로 그려 두 단계가 순차인 것처럼 읽혔다.
+#            실제로는 같은 훅에 등록된 콜백이다 — 커널 헤더 nf_ip_hook_priorities 기준
+#            raw(-300) · conntrack(-200) · mangle(-150) · dstnat(-100) 이 모두 PRE_ROUTING 안에서
+#            숫자 순으로 불린다. 본문 §4 의 우선순위 표와 어긋나 있었으므로, 훅 칸 안에 우선순위
+#            순서를 적고 Conntrack 을 별도 칸에서 뺀다.
 # 본문: "점선 안이 커널 공간. 왼쪽 두 칸은 그 밖(하드웨어와 유저 공간)이고,
 #        패킷은 경계를 두 번 넘는다."
 # 타입 스펙: type-process.md 의 단계 열 + type-nested.md 의 경계 링.
@@ -18,8 +23,8 @@ from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER
 W, H = 1000, 672
 d = D(W, H, "ONE REQUEST · THROUGH THE KERNEL",
       "요청 하나가 커널을 관통하는 순서 — 네 절이 실제로 이어지는 자리",
-      "점선 안이 커널 공간. 양 끝 두 칸은 그 밖(하드웨어와 유저 공간)이고, 패킷은 경계를 두 번 넘는다.",
-      lead="양 끝 두 칸은 커널 밖 · 패킷은 경계를 두 번 넘는다")
+      "점선 안이 커널 공간. 앞 두 칸은 PRE_ROUTING 훅 하나를 우선순위 순으로 펼친 것이고, Conntrack 은 그 훅에 등록된 콜백이지 뒤따르는 별도 단계가 아니다.",
+      lead="앞 두 칸은 같은 훅의 앞뒤 자리 · 양 끝은 커널 밖")
 
 OW, BW, BH, GAP = 88, 180, 104, 48                   # 커널 밖 카드는 좁게
 IN_X = [258, 486, 714]                               # 커널 칸 세 열 — 168~348 · 396~576 · 624~804
@@ -30,10 +35,10 @@ BSTEP_X, BSTEP_Y, BX1 = 600, 392, 824                # 계단이 꺾이는 자�
 WRAP_Y = 372                                         # 접히는 화살표가 지나는 높이 (계단보다 위 = 커널 안)
 
 ROW1_NODES = [("NIC 도착", "8080 행 SYN", "하드웨어", INFO, OW, OUT_L),
-              ("PRE_ROUTING", "Raw·Mangle·NAT", "§4 훅", None, BW, IN_X[0]),
-              ("Conntrack", "5-tuple 조회", "§5 없으면 NEW", None, BW, IN_X[1]),
-              ("라우팅 판단", "목적지가 내 IP", "§6 구체성 우선", None, BW, IN_X[2])]
-ROW2_NODES = [("LOCAL_IN", "Mangle·NAT·Filter", "§4 INPUT", None, BW, IN_X[0]),
+              ("PRE_ROUTING 앞자리", "raw · conntrack", "§4·§5 우선순위 -300·-200", None, BW, IN_X[0]),
+              ("PRE_ROUTING 뒷자리", "mangle · DNAT", "§4 우선순위 -150·-100", None, BW, IN_X[1]),
+              ("라우팅 판단", "바뀐 목적지로", "§6 로컬이냐 전달이냐", None, BW, IN_X[2])]
+ROW2_NODES = [("LOCAL_IN", "mangle · filter", "§4 목적지가 나일 때", None, BW, IN_X[0]),
               ("소켓 큐", "포트로 소켓 선택", "§1 fd 로 전달", None, BW, IN_X[1]),
               ("Go 서버", "epoll 깨어남", "유저 공간", OK, OW, OUT_R)]
 
@@ -64,8 +69,8 @@ def step(cy, a, aw, b, bw, lab, crossing=False):
     if lab: d.t((x1 + x2) // 2, cy - BH // 2 - 12, ddx.fit(lab, 11, GAP + 22, lab), 11, c, KR)
 
 step(ROW1, OUT_L, OW, IN_X[0], BW, "", crossing=True)          # 경계를 넘는 첫 걸음
-step(ROW1, IN_X[0], BW, IN_X[1], BW, "조회")
-step(ROW1, IN_X[1], BW, IN_X[2], BW, "질의")
+step(ROW1, IN_X[0], BW, IN_X[1], BW, "같은 훅 안")
+step(ROW1, IN_X[1], BW, IN_X[2], BW, "훅 끝")
 step(ROW2, IN_X[0], BW, IN_X[1], BW, "통과")
 step(ROW2, IN_X[1], BW, OUT_R, OW, "", crossing=True)          # 경계를 넘는 두 번째 걸음
 
