@@ -1,4 +1,4 @@
-# 04-02 §2 — 잡아 둔 TLS 트래픽을 복호화할 수 있는지, 있다면 무엇이 필요한지 가르는 순서.
+# 04-03 §2 — 잡아 둔 TLS 트래픽을 복호화할 수 있는지, 있다면 무엇이 필요한지 가르는 순서.
 # 원문의 RSA 경로와 DHE/ECDHE 불가 판정, 그리고 원문 뒤에 바뀐 TLS 1.3 조건을 함께 놓는다.
 # 타입 스펙: type-flowchart — 조건에 따라 갈라지는 판단 논리. 도형이 종류를 나르고,
 #           focal 은 실패 갈림길이 아니라 실제로 자주 쓰이는 경로 하나(세션 키 로그).
@@ -8,7 +8,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, OK, BAD, WARN, PAPER2, RULE, KR, MONO
 
 W, H = 1000, 700
-d = D(W, H, "PACKET ANALYSIS WITH WIRESHARK · 04-02 §2",
+d = D(W, H, "PACKET ANALYSIS WITH WIRESHARK · 04-03 §2",
       "복호화가 되는 경우와 안 되는 경우",
       "인증서 기반 연결의 복호화 경로. TLS 1.2 RSA 키 교환은 일치하는 서버 개인키와 원래 전체 핸드셰이크가 필요하다. DHE·ECDHE와 TLS 1.3은 종단에서 제공하는 세션 비밀값을 사용할 수 있다.",
       "버전을 먼저 확인하고, 해당 세션의 복호화 재료를 선택합니다")
@@ -74,4 +74,4 @@ d.t(CX + 16, Y_D2 + 100, "아니오", 12, MUTED, KR, "start", 600)
 d.t(RX, Y_R2 + 96, "조건 충족 → RSA Keys에 등록", 12, OK, KR)
 
 d.legend(H - 60, [("실무에서 실제로 쓰는 경로", ACC), ("RSA 조건부 경로", OK), ("장기 개인키 불가", BAD)])
-d.save("04-02.decrypt-path.svg")
+d.save("04-03.decrypt-path.svg")

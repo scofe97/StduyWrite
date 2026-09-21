@@ -23,7 +23,7 @@ X0, Y0 = 24, 152
 W = X0 + LABEL_W + len(COLS) * COL_W + 24
 H = Y0 + 40 + len(ROWS) * ROW_H + 120
 
-d = D(W, H, "PACKET ANALYSIS WITH WIRESHARK · 04-02 §1",
+d = D(W, H, "PACKET ANALYSIS WITH WIRESHARK · 04-03 §1",
       "키 교환 방식이 정하는 것",
       "TLS 1.2 전체 핸드셰이크의 키 교환 비교. RSA 개인키 복호화에는 일치하는 키와 원래의 전체 핸드셰이크가 필요하다. DHE와 ECDHE도 해당 세션 비밀값으로 복호화할 수 있다.",
       "TLS 1.2 전체 핸드셰이크 기준 · 세션 비밀값을 이용한 복호화는 별도 경로입니다")
@@ -56,4 +56,4 @@ d.t(X0 + 8, Y0 + 40 + len(ROWS) * ROW_H + 6,
     "DHE·ECDHE: 세션 비밀값으로 복호화 가능 · DH_anon: 서버 인증 없음",
     12, WARN, KR, "start")
 d.legend(H - 72, [("RSA 복호화 조건", ACC), ("있음·옵니다", OK), ("없음·불가", BAD)])
-d.save("04-02.key-exchange-matrix.svg")
+d.save("04-03.key-exchange-matrix.svg")
