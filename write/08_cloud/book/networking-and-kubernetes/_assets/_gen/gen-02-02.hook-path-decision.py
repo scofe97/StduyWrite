@@ -1,11 +1,11 @@
-# 02-01.hook-path-decision — 훅 조합을 정하는 두 질문
+# 02-02.hook-path-decision — 훅 조합을 정하는 두 질문
 # 본문 요구: "어떤 패킷이 어느 훅을 지나는지는 두 가지 질문으로 정해집니다 —
 #            출발지가 이 호스트인가, 목적지가 이 호스트인가."
 #            표 4행(출발지×목적지 → 훅 순서)이 그림으로 없었다. 기존 netfilter-hooks-flow 는
 #            네 조합 중 '외부→외부' 하나만 담아 LOCAL_IN·LOCAL_OUT 이 한 번도 안 나온다.
 # 타입 스펙: type-flowchart.md — 두 질문이 곧 판단 분기다. 모양이 종류를 나른다
 #           (마름모=판단, 사각=훅, 타원=시작·끝). 색은 종류가 아니라 '주소 한쪽이 고정된다'는
-#           성질에만 쓴다. §4 기존 도식이 이미 dp-security-matrix 라 같은 절에 같은 문법을 두 번 두지 않는다.
+#           성질에만 쓴다. §1 기존 도식이 이미 dp-security-matrix 라 같은 절에 같은 문법을 두 번 두지 않는다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, INFO, PAPER, PAPER2, KR, MONO
 
@@ -112,5 +112,5 @@ oval(cx, ROW0 + 4 * STRIDE + BH, "로컬 소켓으로")
 
 # LOCAL_ 훅의 주소 고정과 '두 번째 질문 = 라우팅 판단'은 본문 산문이 맡는다
 d.legend(1032, [("주소 한쪽이 이 호스트로 고정", INFO), ("나갔다 다시 들어온다", ACC)])
-d.save("02-01.hook-path-decision.svg")
+d.save("02-02.hook-path-decision.svg")
 print("ok hook-path-decision")

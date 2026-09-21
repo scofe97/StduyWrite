@@ -1,4 +1,4 @@
-# 02-01.verdict-vs-target — 반환값과 타깃은 층이 둘이다
+# 02-02.verdict-vs-target — 반환값과 타깃은 층이 둘이다
 # 본문 요구: "아래 표는 커널이 받는 반환값이고, 우리가 iptables 에 적는 ACCEPT·DROP 은 타깃입니다.
 #            이름이 겹쳐 같아 보이지만 같은 층이 아닙니다. 타깃 쪽에는 반환값에 짝이 없는 것도 있어서,
 #            RETURN 은 체인을 빠져나오라는 흐름 제어이고 REJECT 는 동작 여러 개를 묶은 것입니다."
@@ -61,5 +61,5 @@ d.t((BOT[3] + BOT[4]) // 2, BOT_Y + BH_ // 2 + 26, "이 둘은 위층에 적을 
 
 d.legend(H - 48, [("짝이 1:1 이 아닌 타깃", ACC), ("아래층으로 안 내려가는 타깃", INFO),
                   ("통과", OK), ("폐기", BAD)])
-d.save("02-01.verdict-vs-target.svg")
+d.save("02-02.verdict-vs-target.svg")
 print("ok verdict-vs-target")

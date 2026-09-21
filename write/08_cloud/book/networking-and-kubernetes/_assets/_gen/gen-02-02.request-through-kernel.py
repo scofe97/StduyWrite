@@ -1,8 +1,8 @@
-# 02-01.request-through-kernel — 가로 체인 + 커널 경계 (경계를 두 번 넘는다)
+# 02-02.request-through-kernel — 가로 체인 + 커널 경계 (경계를 두 번 넘는다)
 # 2026-09-20 수정: Conntrack 을 PRE_ROUTING 다음 칸으로 그려 두 단계가 순차인 것처럼 읽혔다.
 #            실제로는 같은 훅에 등록된 콜백이다 — 커널 헤더 nf_ip_hook_priorities 기준
 #            raw(-300) · conntrack(-200) · mangle(-150) · dstnat(-100) 이 모두 PRE_ROUTING 안에서
-#            숫자 순으로 불린다. 본문 §4 의 우선순위 표와 어긋나 있었으므로, 훅 칸 안에 우선순위
+#            숫자 순으로 불린다. 본문 §1 의 우선순위 표와 어긋나 있었으므로, 훅 칸 안에 우선순위
 #            순서를 적고 Conntrack 을 별도 칸에서 뺀다.
 # 본문: "점선 안이 커널 공간. 왼쪽 두 칸은 그 밖(하드웨어와 유저 공간)이고,
 #        패킷은 경계를 두 번 넘는다."
@@ -35,11 +35,11 @@ BSTEP_X, BSTEP_Y, BX1 = 600, 392, 824                # 계단이 꺾이는 자�
 WRAP_Y = 372                                         # 접히는 화살표가 지나는 높이 (계단보다 위 = 커널 안)
 
 ROW1_NODES = [("NIC 도착", "8080 행 SYN", "하드웨어", INFO, OW, OUT_L),
-              ("PRE_ROUTING 앞자리", "raw · conntrack", "§4·§5 우선순위 -300·-200", None, BW, IN_X[0]),
-              ("PRE_ROUTING 뒷자리", "mangle · DNAT", "§4 우선순위 -150·-100", None, BW, IN_X[1]),
-              ("라우팅 판단", "바뀐 목적지로", "§6 로컬이냐 전달이냐", None, BW, IN_X[2])]
-ROW2_NODES = [("LOCAL_IN", "mangle · filter", "§4 목적지가 나일 때", None, BW, IN_X[0]),
-              ("소켓 큐", "포트로 소켓 선택", "§1 fd 로 전달", None, BW, IN_X[1]),
+              ("PRE_ROUTING 앞자리", "raw · conntrack", "§1·§2 우선순위 -300·-200", None, BW, IN_X[0]),
+              ("PRE_ROUTING 뒷자리", "mangle · DNAT", "§1 우선순위 -150·-100", None, BW, IN_X[1]),
+              ("라우팅 판단", "바뀐 목적지로", "§3 로컬이냐 전달이냐", None, BW, IN_X[2])]
+ROW2_NODES = [("LOCAL_IN", "mangle · filter", "§1 목적지가 나일 때", None, BW, IN_X[0]),
+              ("소켓 큐", "포트로 소켓 선택", "02-01 §1 fd 로 전달", None, BW, IN_X[1]),
               ("Go 서버", "epoll 깨어남", "유저 공간", OK, OW, OUT_R)]
 
 ddx.band(d, 104, 600, "네 절이 이어지는 자리 · 훅 · 연결 추적 · 라우팅 · 소켓", x=16, w=968)
@@ -81,5 +81,5 @@ d.path(f"M {IN_X[2]} {ROW1+BH//2+4} L {IN_X[2]} {WRAP_Y} L {IN_X[0]} {WRAP_Y} "
 d.t(OUT_L, ROW1 + BH // 2 + 24, "경계 진입", 12, ACC, KR)
 d.t(OUT_R, ROW2 + BH // 2 + 24, "경계 이탈", 12, ACC, KR)
 d.legend(616, [("커널 밖", INFO), ("도착", OK), ("경계를 넘는 걸음", ACC)])
-d.save("02-01.request-through-kernel.svg")
+d.save("02-02.request-through-kernel.svg")
 print("ok request-through-kernel")

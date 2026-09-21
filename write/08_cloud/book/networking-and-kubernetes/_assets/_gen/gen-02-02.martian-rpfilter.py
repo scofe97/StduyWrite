@@ -1,4 +1,4 @@
-# 02-01.martian-rpfilter — 규칙 목록 밖에서 버려지는 자리
+# 02-02.martian-rpfilter — 규칙 목록 밖에서 버려지는 자리
 # 본문 요구: "둘 다 Netfilter 훅이 아니라 라우팅 코드에서 발화합니다. iptables -L 로는 보이지
 #            않는다는 뜻이라, 규칙을 아무리 뒤져도 원인이 안 나오는 종류의 차단입니다."
 #            2026-09-17 복습 1회차에서 이 내용이 1점이었고 오답 노트가 짚은 원인이
@@ -87,5 +87,5 @@ d.t(SINK_X, SINK_Y + 32, "iptables -L 에 남는 자국 없음", 11, SOFT, KR)
 d.legend(572, [("iptables -L 에 안 보이는 자리", ACC),
                ("스위치로 켜고 끄는 검사", INFO),
                ("조용히 폐기", BAD)])
-d.save("02-01.martian-rpfilter.svg")
+d.save("02-02.martian-rpfilter.svg")
 print("ok martian-rpfilter")

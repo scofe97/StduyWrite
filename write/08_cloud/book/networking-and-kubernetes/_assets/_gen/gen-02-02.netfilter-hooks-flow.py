@@ -1,4 +1,4 @@
-# 02-01.netfilter-hooks-flow — 훅마다 바뀌는 필드 (DNAT 가 라우팅보다 먼저인 이유)
+# 02-02.netfilter-hooks-flow — 훅마다 바뀌는 필드 (DNAT 가 라우팅보다 먼저인 이유)
 # 본문 요구: 어느 훅에서 어느 필드가 바뀌는지 · 라우팅 이전에는 목적지를, 이후에는 출발지만
 # 장면: 클러스터 밖 → NodePort 30080. 외부에서 ClusterIP 로 직접 보내는 조합은 성립하지 않아
 #      (ClusterIP 는 클러스터 밖에서 라우팅되지 않는다) 2026-08-28 NodePort 로 교정했다.
@@ -95,5 +95,5 @@ for i, cx in enumerate(CX):
 
 # DNAT 가 라우팅 판단 앞(PRE_ROUTING)에 있어야 하는 이유는 본문 산문이 맡는다
 d.legend(560, [("바뀌는 자리", ACC), ("라우팅 이전", WARN), ("라우팅 이후", INFO)])
-d.save("02-01.netfilter-hooks-flow.svg")
+d.save("02-02.netfilter-hooks-flow.svg")
 print("ok netfilter-hooks-flow")

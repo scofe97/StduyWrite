@@ -1,4 +1,4 @@
-# 02-01.conntrack-states — 엔트리 하나가 생겨서 사라지기까지 · 상태 축과 플래그 축은 따로다
+# 02-02.conntrack-states — 엔트리 하나가 생겨서 사라지기까지 · 상태 축과 플래그 축은 따로다
 # 본문 요구: "[UNREPLIED] 와 [ASSURED] 는 한 번의 전이가 아니라 두 단계다.
 #            [UNREPLIED] 는 반대 방향 패킷이 관측되면 그 시점에 떨어지고, [ASSURED] 는 그보다 뒤에
 #            붙는다(TCP 라면 양방향으로 데이터가 실제로 오간 뒤). 테이블이 꽉 찼을 때 커널은
@@ -115,5 +115,5 @@ d.t(620, 560, "테이블 포화 · [ASSURED] 없는 항목 먼저 축출", 12, B
 
 d.legend(600, [("응답 대기", WARN), ("수립됨", OK), ("폐기 · 축출", BAD),
                ("딸림 연결", INFO), ("[ASSURED] 는 뒤에", ACC)])
-d.save("02-01.conntrack-states.svg")
+d.save("02-02.conntrack-states.svg")
 print("ok conntrack-states")

@@ -1,7 +1,7 @@
-# 02-01.conntrack-nat-tuples — NAT 가 걸리면 응답 튜플이 뒤집기가 아니다
+# 02-02.conntrack-nat-tuples — NAT 가 걸리면 응답 튜플이 뒤집기가 아니다
 # 본문 요구: "flow 항목에는 기대 응답 패킷의 튜플이 함께 실리는데, 보통은 출발·목적지가 뒤집힌
 #            형태지만 NAT 뒤에서는 다를 수 있습니다." + "NAT 는 아예 Conntrack 위에서 동작한다"
-#            §5 본문 절반이 NAT 인데 이 절의 도식에 NAT 가 한 글자도 없었다.
+#            §2 본문 절반이 NAT 인데 이 절의 도식에 NAT 가 한 글자도 없었다.
 # 장면: netfilter-hooks-flow 와 같은 장면(클러스터 밖 → NodePort 30080)을 쓴다. 한 절 건너
 #      두 도식이 다른 장면이면 독자가 값을 이어 읽지 못한다. 그래서 DNAT 만이 아니라
 #      MASQUERADE 까지 그린다 — 그래야 응답 튜플의 두 필드가 왜 둘 다 어긋나는지 설명된다.
@@ -69,5 +69,5 @@ for y0, lab, src, dst, c, ghost in ROWS:
     d.t(PX0 + 488, y0 + 21, ddx.fit(dst, 12, 300, dst), 12, tc, MONO, "start")
 # 두 필드가 어긋나는 이유(DNAT → src, MASQUERADE → dst)는 본문 산문이 맡는다
 d.legend(776, [("원본 방향", INFO), ("실제 응답 방향 — 뒤집기가 아니다", ACC)])
-d.save("02-01.conntrack-nat-tuples.svg")
+d.save("02-02.conntrack-nat-tuples.svg")
 print("ok conntrack-nat-tuples")
