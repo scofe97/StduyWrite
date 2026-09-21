@@ -113,6 +113,8 @@ EDA 4개 절(기초·처리 모델·워크플로우·운영) 을 독립 시리�
 
 → [`book/system-design/`](book/system-design/) — Alex Xu 『가상 면접 사례로 배우는 대규모 시스템 설계 기초』 16편. 챕터별 핵심을 면접에서 바로 말할 수 있는 수준으로 재구성한 시리즈다.
 
+→ [`book/sdp_system-design-primer/`](book/sdp_system-design-primer/) — Donne Martin 의 The System Design Primer 정독 인덱스. 로드 밸런서·캐시·복제 같은 부품 개념을 primer 순서로 따라가며, 지금은 기존 문서로 가는 매핑 표와 공백 목록만 둔다. 사례 중심인 위 Alex Xu 시리즈와 짝을 이룬다.
+
 → [`book/bmf_building-micro-frontends/`](book/bmf_building-micro-frontends/) — Luca Mezzalira 『Building Micro-Frontends, 2nd Edition』(O'Reilly) 정독 노트. 프론트엔드를 소재로 삼지만 다루는 것은 경계를 어디에 긋고 누가 소유하느냐이므로 이 카테고리에 둔다.
 
 
