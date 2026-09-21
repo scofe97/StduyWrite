@@ -199,7 +199,7 @@ updated: 2026-08-12
 - **자기 답**: 11-01 복습에서 세 지점이 같은 뿌리로 막혔습니다. (1) `quiz`가 ClusterIP로 풀리는 과정에서 `/etc/resolv.conf`를 **누가** 채우는지 몰라 kube-proxy를 DNS 자리에 놓았습니다. (2) 네 컴포넌트 역할 분리(§3)에서 스케줄러만 정확했고, CNI가 `resolv.conf`를 채운다고 잘못 답했으며 kube-proxy는 "흐리게만 안다"고 했습니다. (3) 요청 한 번이 파드에 닿는 전 구간에서 "Service 오브젝트가 패킷을 받아 넘긴다", "라운드로빈으로 분산"이라 답했고 **주소가 두 번 바뀐다는 걸 못 떠올렸습니다.**
 - **정답**: `quiz` → 파드IP까지 주소가 **두 번** 바뀝니다. **① 이름 해석(DNS)**: `quiz`를 CoreDNS가 ClusterIP(`10.96.136.190`)로 풀어줌 — `/etc/resolv.conf`는 **kubelet**이 파드 생성 시 씀(search 접미사 + ndots:5로 짧은 이름 판정). **② 주소 변환(DNAT)**: ClusterIP는 어느 인터페이스에도 안 붙은 **가상 IP**라, **보내는 쪽 노드 커널**이 목적지를 실제 파드IP(`10.244.2.9`)로 바꿔치기함. Service는 패킷을 받는 실체가 아님 — 받는 주체가 없고, kube-proxy가 심어둔 규칙을 근거로 커널이 변환. 파드 선택은 라운드로빈이 아니라 iptables random 모듈의 **확률적 선택**(실측 13/10/7). 네 컴포넌트: **스케줄러=노드 배정 / CNI=파드IP 발급(넷 중 IP를 유일하게 *만드는* 것) / EndpointSlice 컨트롤러=ready 파드IP를 명단에 옮겨 적기 / kube-proxy=명단으로 커널에 DNAT 규칙 심는 컨트롤러(패킷을 직접 나르지 않음)**.
 - **원인 추정**: "이름→IP"와 "IP→IP"를 한 덩어리로 뭉뚱그려, 두 변환의 주체(CoreDNS vs 노드 커널)와 위치(DNS 단계 vs DNAT 단계)를 구분하지 못했습니다. kube-proxy를 DNS 자리에 놓은 것, Service가 패킷을 받아 넘긴다고 본 것이 전부 이 하나에서 나왔습니다. 2026-07-20 오답 노트의 공통 뿌리 "자동으로 채워지는 것의 내부 기전"과 같은 결입니다. A-1(expose selector)만 통과한 건 그게 라벨 매칭 문제라 이 축과 무관했기 때문입니다.
-- **참고 챕터**: 11-01 §5(cluster DNS·NAT가 끼는 곳)·§3(네 컴포넌트 역할 분리). 깊은 기전은 `04-05.DNS와 CoreDNS`·`01-02.K8s 패킷 여정`. "이름→ClusterIP는 CoreDNS(DNS), ClusterIP→파드IP는 노드 커널(DNAT), 주소가 두 번 바뀐다" 한 줄. (보강 TODO는 `_todo-11-01-보강.md`)
+- **참고 챕터**: 11-01 §5(cluster DNS·NAT가 끼는 곳)·§3(네 컴포넌트 역할 분리). 깊은 기전은 `04-05.DNS와 CoreDNS`·`N&K 02-01`(DNAT·conntrack). "이름→ClusterIP는 CoreDNS(DNS), ClusterIP→파드IP는 노드 커널(DNAT), 주소가 두 번 바뀐다" 한 줄. (보강 TODO는 `_todo-11-01-보강.md`)
 - **재방문 트리거**: 다음 복습에서 (1) `quiz → ClusterIP → 파드IP` 두 화살표를 그리고 각 화살표의 주체(CoreDNS / 노드 커널)를 손으로 적기, (2) 네 컴포넌트를 "노드 배정·IP 발급·명단·길"로 나눠 문서 안 보고 나열.
 
 ## 2026-07-20 — externalTrafficPolicy Local: SNAT 정체 + "노드는 균등, 파드는 불균등"
@@ -207,7 +207,7 @@ updated: 2026-08-12
 - **자기 답**: 11-02 Phase 4 Q2에서 "Cluster는 ClusterIP로 치환한다"고 답해 *목적지(DNAT)와 출발지(SNAT)를 혼동*했습니다. Q5(Local의 두 번째 대가 = 불균등 분산 + healthCheckNodePort)는 "그게 있나?"로 막혀 설명이 필요했습니다.
 - **정답**: 노드가 받은 요청을 다른 노드 파드로 넘길 때 두 NAT이 겹칩니다. **DNAT**(목적지 `노드IP:30080`→`파드IP:8080`)는 두 정책 다 함. **SNAT/masquerade**(출발지 `클라이언트IP`→`받은 노드IP`)는 **Cluster만** 함 — 응답이 반드시 받은 노드로 되돌아오게(비대칭 경로 방지) 출발지를 위조하는 대가로 파드가 보는 Client IP가 노드 IP가 됨. **Local은 SNAT을 안 해** 원본 IP 보존, 대신 "로컬 파드로만 라우팅"이라 파드 없는 노드는 타임아웃. 불균등: LB는 **노드 단위**로 균등 분배하는데 노드마다 파드 수가 달라(A:3, B:1) 파드당 부하가 어긋남(A 파드 11% vs B 파드 33%). 타임아웃 우회는 **healthCheckNodePort**(로컬 파드 있으면 200, 없으면 503) + LB 헬스체크로 파드 없는 노드를 분배에서 제외.
 - **원인 추정**: (1) NAT을 "IP를 바꾸는 것" 하나로 뭉뚱그려 목적지/출발지 방향 구분을 안 세움. (2) Local의 대가를 "타임아웃" 하나만 알고 "불균등 분산"은 노드/파드 분배 단위가 다르다는 데서 나온다는 걸 못 떠올림. 오늘 3세션 공통 약점 "자동으로 채워지는 것의 내부 기전"과 같은 결(kube-proxy가 심는 SNAT 규칙).
-- **참고 챕터**: 11-02 §3(externalTrafficPolicy). 뿌리는 `02_os/networking/01-02.K8s 패킷 여정` §1.2(POSTROUTING=SNAT)·§2(kube-proxy). "Cluster=SNAT함(Client IP=노드 IP), Local=SNAT안함(원본 보존)+로컬 파드만+healthCheckNodePort로 죽은 노드 제외" 한 줄.
+- **참고 챕터**: 11-02 §3(externalTrafficPolicy). 뿌리는 `N&K 02-01` §4(POSTROUTING=SNAT)·`N&K 04-02` §4(kube-proxy)·`N&K 05-02` §3(클라이언트 IP). "Cluster=SNAT함(Client IP=노드 IP), Local=SNAT안함(원본 보존)+로컬 파드만+healthCheckNodePort로 죽은 노드 제외" 한 줄.
 - **재방문 트리거**: 다음 복습에서 (1) 한 요청이 다른 노드 파드로 갈 때 DNAT·SNAT이 각각 무엇을 바꾸는지 화살표로 그리기, (2) Local에서 노드별 파드 수를 임의로 주고 파드당 트래픽 비율을 계산.
 
 ## 2026-07-20 — DNS 짧은 이름 resolve: /etc/resolv.conf의 search와 ndots

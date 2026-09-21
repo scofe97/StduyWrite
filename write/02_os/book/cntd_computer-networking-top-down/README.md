@@ -68,11 +68,11 @@ updated: 2026-09-09
 
 > 이 책은 OS 책이 아니라 네트워크 개론서입니다. 저장소에서 네트워크의 *이론* 축을 맡는 자리가 따로 없어 `02_os/book/` 에 둡니다.
 
-`02_os` 안의 네트워크 문서는 지금까지 둘로 나뉘어 있었습니다. [`networking/`](../../networking/README.md) 이 커널이 패킷을 *어떻게 나르는가*(netns·veth·netfilter·conntrack)를 맡고, [`paw_packet-analysis-wireshark/`](../paw_packet-analysis-wireshark/README.md) 가 그 패킷을 *어떻게 들여다보는가*를 맡습니다. 둘 다 리눅스 위에서 벌어지는 일입니다.
+리눅스 쪽 네트워크 문서는 지금까지 둘로 나뉘어 있었습니다. [N&K 정독본](../../../08_cloud/book/networking-and-kubernetes/README.md) 이 커널이 패킷을 *어떻게 나르는가*(netns·veth·netfilter·conntrack)를 맡고, [`paw_packet-analysis-wireshark/`](../paw_packet-analysis-wireshark/README.md) 가 그 패킷을 *어떻게 들여다보는가*를 맡습니다. 둘 다 리눅스 위에서 벌어지는 일입니다.
 
 이 책은 그 아래를 채웁니다. **왜 그런 모양인가**를 다룹니다. conntrack 이 왜 연결 상태를 들고 있어야 하는지는 TCP 가 상태를 가진 프로토콜이기 때문이고, MTU 가 왜 문제가 되는지는 링크 계층이 프레임 크기 상한을 정하기 때문입니다. 앞의 두 폴더가 "무엇이 일어나는가"를 다룬다면 이 책은 그 일이 일어나는 **규격과 원리**를 다룹니다.
 
-경계를 한 문장으로 그으면 이렇습니다. **`networking/` 은 커널의 구현을, Wireshark 책은 관측을, 이 책은 규격과 원리를 맡습니다.** 같은 TCP 를 세 각도에서 보게 되므로 겹치는 자리에는 교차 참조를 답니다.
+경계를 한 문장으로 그으면 이렇습니다. **N&K 정독본은 커널의 구현을, Wireshark 책은 관측을, 이 책은 규격과 원리를 맡습니다.** 같은 TCP 를 세 각도에서 보게 되므로 겹치는 자리에는 교차 참조를 답니다.
 
 읽는 순서를 정하는 일은 이 문서가 하지 않습니다. Kubernetes 를 향한 책 순서는 [`write/network-roadmap.md`](../../../roadmap/network-roadmap.md) 가 맡고, 이 폴더는 그 로드맵 밖의 이론 축입니다.
 
@@ -204,4 +204,4 @@ updated: 2026-09-09
 - **이 책은 표와 그림이 조판 2단입니다.** `pdftotext` 가 목차와 표에서 열을 섞으므로, 표·그림·수식은 텍스트 추출본이 아니라 페이지 이미지로 판독합니다.
 - **9판은 2025년 책이라 현행과 가깝습니다.** 그래도 RFC 개정이나 배포 현황이 바뀐 자리는 공식 문서로 확인하고 `> **지금은 다릅니다**` 블록으로 병기합니다. 확인은 RFC·IANA·공식 명세로만 하고 블로그는 근거로 쓰지 않습니다.
 - **원문의 오류는 조용히 고치지 않습니다.** `> **원문 정오**:` 로 병기해 학습자가 책을 다시 폈을 때 대응되게 합니다. 저자가 *틀리게 적은 것*만 정오이고, *안 적은 것*은 "노트의 읽기"로 표시합니다.
-- **겹치는 자리는 위임합니다.** TCP 의 상태와 이상 신호는 [Wireshark 책 03-01·03-02](../paw_packet-analysis-wireshark/README.md) 가, 커널의 패킷 경로는 [`networking/`](../../networking/README.md) 이 이미 맡고 있습니다. 같은 내용을 다시 쓰지 않고 이 책이 더한 것만 적은 뒤 링크로 넘깁니다.
+- **겹치는 자리는 위임합니다.** TCP 의 상태와 이상 신호는 [Wireshark 책 03-01·03-02](../paw_packet-analysis-wireshark/README.md) 가, 커널의 패킷 경로는 [N&K 정독본](../../../08_cloud/book/networking-and-kubernetes/README.md) 이 이미 맡고 있습니다. 같은 내용을 다시 쓰지 않고 이 책이 더한 것만 적은 뒤 링크로 넘깁니다.

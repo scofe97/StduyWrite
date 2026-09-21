@@ -38,9 +38,9 @@ updated: 2026-09-13
 
 ## 이 폴더를 여기 두는 이유
 
-> `02_os` 안에서 `networking/` 이 패킷이 지나가는 길을 맡는다면, 이 폴더는 그 길을 **고장 내서 확인하는 쪽**을 맡습니다.
+> [N&K 정독본](../../../08_cloud/book/networking-and-kubernetes/README.md) 이 패킷이 지나가는 길을 맡는다면, 이 폴더는 그 길을 **고장 내서 확인하는 쪽**을 맡습니다.
 
-`02_os` 는 언어가 아닌 실행 환경, 곧 커널과 그 위의 자원·네트워크 메커니즘을 모으는 카테고리입니다. 그 안에서 [`networking/`](../../networking/README.md) 이 커널이 패킷을 *어떻게 나르는가*(netns·veth·netfilter·conntrack)의 SSOT 이고, 이 폴더는 같은 메커니즘을 **깨진 상태에서 출발해** 증상으로 되짚습니다. 원리 자체는 `networking/` 을 교차참조하고 여기서 다시 정의하지 않습니다.
+`02_os` 는 언어가 아닌 실행 환경, 곧 커널과 그 위의 자원·네트워크 메커니즘을 모으는 카테고리입니다. 커널이 패킷을 *어떻게 나르는가*(netns·veth·netfilter·conntrack)의 SSOT 는 `08_cloud` 의 [N&K 정독본](../../../08_cloud/book/networking-and-kubernetes/README.md) 이고, 이 폴더는 같은 메커니즘을 **깨진 상태에서 출발해** 증상으로 되짚습니다. 원리 자체는 N&K 정독본을 교차참조하고 여기서 다시 정의하지 않습니다.
 
 같은 카테고리의 두 책과도 축이 갈립니다. [`cntd_computer-networking-top-down/`](../cntd_computer-networking-top-down/README.md) 은 프로토콜을 규격으로 배우는 자리입니다. [`paw_packet-analysis-wireshark/`](../paw_packet-analysis-wireshark/README.md) 는 그것을 캡처로 읽는 법을 맡습니다. 셋 다 TCP·IP·DNS·NAT 를 다룹니다. 다른 것은 출발점입니다 — **이 폴더만 "이미 망가진 상태"에서 시작합니다.** 규격을 알아도 증상에서 계층을 좁히는 일은 따로 훈련해야 하기 때문입니다.
 
@@ -174,7 +174,7 @@ docker exec clab-09-conntrack-nat sysctl -w net.netfilter.nf_conntrack_tcp_timeo
 
 > 겹치는 주제가 많아 경계를 적어 둡니다. 이것이 없으면 같은 내용이 네 곳에 흩어집니다.
 
-- **메커니즘의 원리**: netns·veth·netfilter·conntrack 자체는 [`02_os/networking/`](../../networking/README.md) 이 SSOT 입니다. 이 폴더는 그 메커니즘이 깨졌을 때의 증상을 맡습니다
+- **메커니즘의 원리**: netns·veth·netfilter·conntrack 자체는 [N&K 정독본](../../../08_cloud/book/networking-and-kubernetes/README.md) 이 SSOT 입니다. 이 폴더는 그 메커니즘이 깨졌을 때의 증상을 맡습니다
 - **프로토콜 규격**: TCP 혼잡 제어, DNS 레코드 종류 같은 규격은 [`cntd`](../cntd_computer-networking-top-down/README.md) 가, 캡처 필터와 프로토콜 해독은 [`paw`](../paw_packet-analysis-wireshark/README.md) 가 맡습니다
 - **체크포인트 CP-1·CP-2**: 노트로 만들지 않습니다. 증상만 보고 푸는 것이라 답을 적는 순간 문항이 죽습니다. 풀고 나면 [`troubleshooting/`](../../../troubleshooting/README.md) 의 드릴 규약대로 `{계층}/YYYY-MM-DD_증상.md` 로 승격합니다
 - **실습 절차의 전재**: 저장소 README 가 지시서이고 이 노트는 개념 축입니다. 명령은 관전 포인트에 필요한 것만 옮깁니다

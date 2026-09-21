@@ -12,7 +12,7 @@ updated: 2026-09-12
 
 # 02_os/kernel
 ---
-> Linux 커널이 컨테이너 동작에서 맡는 책임을 정리한다. 유저/커널 스페이스 분리, 시스템 콜, 커널 코어 영역, namespace·cgroup, /proc, K8s 노드 필수 커널 파라미터까지 — 네트워크 영역은 별도 `networking/`에서 다루고 본 폴더는 그 외 커널 일반 메커니즘에 집중한다.
+> Linux 커널이 컨테이너 동작에서 맡는 책임을 정리한다. 유저/커널 스페이스 분리, 시스템 콜, 커널 코어 영역, namespace·cgroup, /proc, K8s 노드 필수 커널 파라미터까지 — 네트워크 영역은 `08_cloud/book/networking-and-kubernetes/` 정독본에서 다루고 본 폴더는 그 외 커널 일반 메커니즘에 집중한다.
 
 > 프로세스·시스템 콜·스케줄링·메모리·cgroup·namespace·파일시스템·보안·관측의 읽기 순서는 [OS 로드맵](../../roadmap/os-roadmap.md)에 정리했습니다.
 
