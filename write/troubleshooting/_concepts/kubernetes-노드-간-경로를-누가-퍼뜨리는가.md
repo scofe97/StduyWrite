@@ -154,4 +154,4 @@ journalctl -u kubelet
 - [오버레이와 노드 간 트래픽](../../08_cloud/kubernetes/04_networking/04-03.%EC%98%A4%EB%B2%84%EB%A0%88%EC%9D%B4%EC%99%80%20%EB%85%B8%EB%93%9C%20%EA%B0%84%20%ED%8A%B8%EB%9E%98%ED%94%BD.md) — CNI가 Pod 대역을 광고하는 구성
 - [AS 안과 AS 사이](../../02_os/book/cntd_computer-networking-top-down/05-02.AS%20%EC%95%88%EA%B3%BC%20AS%20%EC%82%AC%EC%9D%B4.md) — 풀메시의 비용, 되비추기 규칙, `ORIGINATOR_ID` 와 `CLUSTER_LIST` 의 정본
 - [IP·라우팅·Ethernet](../../08_cloud/book/networking-and-kubernetes/01-03.IP%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85%C2%B7Ethernet%20%E2%80%94%20%ED%8C%A8%ED%82%B7%EC%9D%B4%20%EA%B8%B8%EC%9D%84%20%EC%B0%BE%EB%8A%94%20%EB%B2%95.md) — Calico 가 노드를 작은 라우터로 만드는 구성
-- [무엇을 보려면 무엇을 치는가](./%EB%AC%B4%EC%97%87%EC%9D%84-%EB%B3%B4%EB%A0%A4%EB%A9%B4-%EB%AC%B4%EC%97%87%EC%9D%84-%EC%B9%98%EB%8A%94%EA%B0%80.md) — 알고 싶은 단위가 도구를 정한다
+- [무엇을 보려면 무엇을 치는가](./common-%EB%AC%B4%EC%97%87%EC%9D%84-%EB%B3%B4%EB%A0%A4%EB%A9%B4-%EB%AC%B4%EC%97%87%EC%9D%84-%EC%B9%98%EB%8A%94%EA%B0%80.md) — 알고 싶은 단위가 도구를 정한다

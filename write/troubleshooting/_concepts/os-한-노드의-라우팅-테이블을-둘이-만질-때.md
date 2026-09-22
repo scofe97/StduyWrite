@@ -7,8 +7,8 @@ source:
 related:
   - ./README.md
   - ../os/2026-09-21_배포하지 않은 아침에 끊긴 리전 다섯 곳.md
-  - ./파이프라인-밖에서-노드를-바꾸는-장치.md
-  - ./노드-간-경로를-누가-퍼뜨리는가.md
+  - ./os-파이프라인-밖에서-노드를-바꾸는-장치.md
+  - ./kubernetes-노드-간-경로를-누가-퍼뜨리는가.md
 updated: 2026-09-22
 ---
 
@@ -43,7 +43,7 @@ updated: 2026-09-22
 | CNI | Pod 대역으로 가는 경로 | Pod 가 붙을 때, 다른 노드의 대역을 배울 때 |
 | 사람 | 그때그때 필요한 경로 | `ip route add` 를 칠 때 |
 
-CNI 플러그인이 하는 일은 손으로 veth 를 만들고 경로를 넣던 실습과 같습니다. 네임스페이스를 정하고 인터페이스를 만들고 주소와 기본 경로를 넣습니다. 그 호출 한 번에 무엇이 넘어가는지는 [CNI와 kube-proxy §1](../../08_cloud/book/networking-and-kubernetes/04-02.CNI%EC%99%80%20kube-proxy%20%E2%80%94%20Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%9D%98%20%EB%B0%B0%EC%84%A0%EA%B3%B5%EA%B3%BC%20%EB%A1%9C%EB%93%9C%EB%B0%B8%EB%9F%B0%EC%84%9C.md) 이 적어 둡니다. 다른 노드의 Pod 대역을 어디서 배워 와 같은 표에 넣는지는 [노드 간 경로를 누가 퍼뜨리는가](./%EB%85%B8%EB%93%9C-%EA%B0%84-%EA%B2%BD%EB%A1%9C%EB%A5%BC-%EB%88%84%EA%B0%80-%ED%8D%BC%EB%9C%A8%EB%A6%AC%EB%8A%94%EA%B0%80.md) 가 따로 다룹니다.
+CNI 플러그인이 하는 일은 손으로 veth 를 만들고 경로를 넣던 실습과 같습니다. 네임스페이스를 정하고 인터페이스를 만들고 주소와 기본 경로를 넣습니다. 그 호출 한 번에 무엇이 넘어가는지는 [CNI와 kube-proxy §1](../../08_cloud/book/networking-and-kubernetes/04-02.CNI%EC%99%80%20kube-proxy%20%E2%80%94%20Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%9D%98%20%EB%B0%B0%EC%84%A0%EA%B3%B5%EA%B3%BC%20%EB%A1%9C%EB%93%9C%EB%B0%B8%EB%9F%B0%EC%84%9C.md) 이 적어 둡니다. 다른 노드의 Pod 대역을 어디서 배워 와 같은 표에 넣는지는 [노드 간 경로를 누가 퍼뜨리는가](./kubernetes-%EB%85%B8%EB%93%9C-%EA%B0%84-%EA%B2%BD%EB%A1%9C%EB%A5%BC-%EB%88%84%EA%B0%80-%ED%8D%BC%EB%9C%A8%EB%A6%AC%EB%8A%94%EA%B0%80.md) 가 따로 다룹니다.
 
 
 
@@ -114,7 +114,7 @@ networkd 가 표를 훑는 시점에는 지울 남의 줄이 아직 없습니다
 
 넣는 쪽이 다시 맞춰 넣게 하는 것은 복원력의 문제입니다. 2025년 Heroku 는 자기 사고의 원인을 네트워크 서비스에서 찾았습니다. 그 서비스가 첫 부팅 때만 올바른 경로를 적용하는 예전 스크립트에 기대고 있어 재시작 뒤 경로가 다시 깔리지 않았다는 것입니다. 원리상 한 번 넣고 끝나는 쪽은 누가 지우면 그대로 비고, 표를 계속 원하는 상태로 맞추는 쪽은 지워져도 돌아옵니다.
 
-재시작을 부르는 쪽을 막는 것은 한 층 위의 해법입니다. 이 사고의 재시작은 사람이 아니라 자동 보안 업데이트가 불렀고, 그 장치는 [파이프라인 밖에서 노드를 바꾸는 장치](./%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8-%EB%B0%96%EC%97%90%EC%84%9C-%EB%85%B8%EB%93%9C%EB%A5%BC-%EB%B0%94%EA%BE%B8%EB%8A%94-%EC%9E%A5%EC%B9%98.md) 가 다룹니다. Datadog 과 Heroku 모두 그쪽을 첫 조치로 적었습니다.
+재시작을 부르는 쪽을 막는 것은 한 층 위의 해법입니다. 이 사고의 재시작은 사람이 아니라 자동 보안 업데이트가 불렀고, 그 장치는 [파이프라인 밖에서 노드를 바꾸는 장치](./os-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8-%EB%B0%96%EC%97%90%EC%84%9C-%EB%85%B8%EB%93%9C%EB%A5%BC-%EB%B0%94%EA%BE%B8%EB%8A%94-%EC%9E%A5%EC%B9%98.md) 가 다룹니다. Datadog 과 Heroku 모두 그쪽을 첫 조치로 적었습니다.
 
 
 
@@ -137,7 +137,7 @@ systemd-analyze cat-config systemd/networkd.conf
 journalctl -u systemd-networkd
 ```
 
-첫 줄로 끊긴 노드와 멀쩡한 노드를 비교하면 빠진 줄의 `proto` 가 보입니다. 그 값이 networkd 의 예외 목록에 없으면 지운 쪽을 networkd 로 좁힐 수 있습니다. 설정에 `ManageForeignRoutes=` 가 없으면 기본값 `yes` 가 살아 있는 것이고, 저널의 재시작 시각이 증상 시작과 맞물리면 갈림이 끝납니다. 알고 싶은 단위가 도구를 정한다는 원칙은 [무엇을 보려면 무엇을 치는가](./%EB%AC%B4%EC%97%87%EC%9D%84-%EB%B3%B4%EB%A0%A4%EB%A9%B4-%EB%AC%B4%EC%97%87%EC%9D%84-%EC%B9%98%EB%8A%94%EA%B0%80.md) 에 모아 두었습니다.
+첫 줄로 끊긴 노드와 멀쩡한 노드를 비교하면 빠진 줄의 `proto` 가 보입니다. 그 값이 networkd 의 예외 목록에 없으면 지운 쪽을 networkd 로 좁힐 수 있습니다. 설정에 `ManageForeignRoutes=` 가 없으면 기본값 `yes` 가 살아 있는 것이고, 저널의 재시작 시각이 증상 시작과 맞물리면 갈림이 끝납니다. 알고 싶은 단위가 도구를 정한다는 원칙은 [무엇을 보려면 무엇을 치는가](./common-%EB%AC%B4%EC%97%87%EC%9D%84-%EB%B3%B4%EB%A0%A4%EB%A9%B4-%EB%AC%B4%EC%97%87%EC%9D%84-%EC%B9%98%EB%8A%94%EA%B0%80.md) 에 모아 두었습니다.
 
 
 
@@ -167,8 +167,8 @@ journalctl -u systemd-networkd
 ## 관련 문서
 
 - [개념 노트 지도](./README.md) — 무엇이 여기 오고 무엇이 문항에 남나
-- [파이프라인 밖에서 노드를 바꾸는 장치](./%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8-%EB%B0%96%EC%97%90%EC%84%9C-%EB%85%B8%EB%93%9C%EB%A5%BC-%EB%B0%94%EA%BE%B8%EB%8A%94-%EC%9E%A5%EC%B9%98.md) — 이 재시작을 부른 쪽
-- [노드 간 경로를 누가 퍼뜨리는가](./%EB%85%B8%EB%93%9C-%EA%B0%84-%EA%B2%BD%EB%A1%9C%EB%A5%BC-%EB%88%84%EA%B0%80-%ED%8D%BC%EB%9C%A8%EB%A6%AC%EB%8A%94%EA%B0%80.md) — 다른 노드의 Pod 대역 줄이 어디서 오는가
+- [파이프라인 밖에서 노드를 바꾸는 장치](./os-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8-%EB%B0%96%EC%97%90%EC%84%9C-%EB%85%B8%EB%93%9C%EB%A5%BC-%EB%B0%94%EA%BE%B8%EB%8A%94-%EC%9E%A5%EC%B9%98.md) — 이 재시작을 부른 쪽
+- [노드 간 경로를 누가 퍼뜨리는가](./kubernetes-%EB%85%B8%EB%93%9C-%EA%B0%84-%EA%B2%BD%EB%A1%9C%EB%A5%BC-%EB%88%84%EA%B0%80-%ED%8D%BC%EB%9C%A8%EB%A6%AC%EB%8A%94%EA%B0%80.md) — 다른 노드의 Pod 대역 줄이 어디서 오는가
 - [결국은 선과 공기를 타고 다니는 비트다 §8](../../02_os/book/learning-modern-linux/07-01.%EA%B2%B0%EA%B5%AD%EC%9D%80%20%EC%84%A0%EA%B3%BC%20%EA%B3%B5%EA%B8%B0%EB%A5%BC%20%ED%83%80%EA%B3%A0%20%EB%8B%A4%EB%8B%88%EB%8A%94%20%EB%B9%84%ED%8A%B8%EB%8B%A4.md) — 라우팅 테이블이 다음 걸음을 정한다, `ip route`
 - [먼저 켜지는 것 하나가 나머지 전부를 켠다](../../02_os/book/learning-modern-linux/06-01.%EB%A8%BC%EC%A0%80%20%EC%BC%9C%EC%A7%80%EB%8A%94%20%EA%B2%83%20%ED%95%98%EB%82%98%EA%B0%80%20%EB%82%98%EB%A8%B8%EC%A7%80%20%EC%A0%84%EB%B6%80%EB%A5%BC%20%EC%BC%A0%EB%8B%A4.md) — 부팅 다섯 단계, PID 1, 유닛
 - [CNI와 kube-proxy §1](../../08_cloud/book/networking-and-kubernetes/04-02.CNI%EC%99%80%20kube-proxy%20%E2%80%94%20Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%9D%98%20%EB%B0%B0%EC%84%A0%EA%B3%B5%EA%B3%BC%20%EB%A1%9C%EB%93%9C%EB%B0%B8%EB%9F%B0%EC%84%9C.md) — CNI 호출 한 번에 넘어가는 것

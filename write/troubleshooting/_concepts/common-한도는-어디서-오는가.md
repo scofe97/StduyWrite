@@ -6,7 +6,7 @@ source:
   - https://docs.kernel.org/networking/nf_conntrack-sysctl.html
 related:
   - ./README.md
-  - ./패킷이-사라지는-네-자리.md
+  - ./os-패킷이-사라지는-네-자리.md
 updated: 2026-09-09
 ---
 
@@ -82,5 +82,5 @@ A 문항의 `nf_conntrack_max` 는 커널이 총 메모리에서 유도한 값�
 ## 관련 문서
 
 - [개념 노트 목록](./README.md)
-- [패킷이 사라지는 네 자리](./패킷이-사라지는-네-자리.md) — 자리별 한도와 진단 명령
+- [패킷이 사라지는 네 자리](./os-패킷이-사라지는-네-자리.md) — 자리별 한도와 진단 명령
 - [오답 노트](../_drill/_mistakes.md) — 이 노트를 쓰게 만든 반복 패턴

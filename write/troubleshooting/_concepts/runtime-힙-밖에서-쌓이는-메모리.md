@@ -174,4 +174,4 @@ MALLOC_ARENA_MAX=4       # 코어 수에서 유도되지 않게 개수 상한을
 - [cgroup v2 깊이](../../02_os/kernel/01-02.cgroup%20v2%20%EA%B9%8A%EC%9D%B4.md) — CPU 한도가 시간의 몫으로 잘리는 방식과 메모리 한도의 계정
 - [OOMKilled 사례 분석](../../08_cloud/kubernetes/09_operations/09-02.OOMKilled%20%EC%82%AC%EB%A1%80%20%EB%B6%84%EC%84%9D.md) — 쿠버네티스 쪽에서 같은 증상을 읽는 순서
 - [바이트 버퍼](../../09_spring/03_network/reactive-net/01-05.%EB%B0%94%EC%9D%B4%ED%8A%B8%20%EB%B2%84%ED%8D%BC.md) — Netty 가 힙 바깥 버퍼를 다루는 방식
-- [무엇을 보려면 무엇을 치는가](./%EB%AC%B4%EC%97%87%EC%9D%84-%EB%B3%B4%EB%A0%A4%EB%A9%B4-%EB%AC%B4%EC%97%87%EC%9D%84-%EC%B9%98%EB%8A%94%EA%B0%80.md) — 알고 싶은 단위가 도구를 정한다
+- [무엇을 보려면 무엇을 치는가](./common-%EB%AC%B4%EC%97%87%EC%9D%84-%EB%B3%B4%EB%A0%A4%EB%A9%B4-%EB%AC%B4%EC%97%87%EC%9D%84-%EC%B9%98%EB%8A%94%EA%B0%80.md) — 알고 싶은 단위가 도구를 정한다

@@ -11,8 +11,8 @@ source:
   - https://docs.kernel.org/networking/ip-sysctl.html
 related:
   - ./README.md
-  - ./무엇을-보려면-무엇을-치는가.md
-  - ./패킷이-사라지는-네-자리.md
+  - ./common-무엇을-보려면-무엇을-치는가.md
+  - ./os-패킷이-사라지는-네-자리.md
   - ../os/2026-09-14_몇몇 사용자만 들어오지 못하는 사이트.md
   - ../kubernetes/2026-09-12_정확히 1초씩 늦는 요청.md
 updated: 2026-09-14
@@ -172,7 +172,7 @@ sysctl net.ipv4.fib_multipath_hash_policy net.ipv6.fib_multipath_hash_policy
 
 "포트가 없어서 연결을 못 찾는다"는 말은 둘로 나눠야 정확합니다. 알림을 엉뚱한 서버로 보낸 것은 바깥 헤더만 보는 **라우터의 해시**입니다. 서버는 인용을 열어 포트까지 읽을 수 있고, 서버 1 이 못 찾은 까닭은 그 연결이 거기 없어서입니다.
 
-겉으로 보이는 증상은 경로 중간 방화벽이 ICMP 를 막는 블랙홀과 같습니다. 알림이 데이터센터까지 오는지, 온다면 어느 서버에서 `Icmp6InPktTooBigs` 가 오르는지를 서버마다 견줘야 둘이 갈립니다. 서버별로 치는 명령은 [무엇을 보려면 무엇을 치는가](./%EB%AC%B4%EC%97%87%EC%9D%84-%EB%B3%B4%EB%A0%A4%EB%A9%B4-%EB%AC%B4%EC%97%87%EC%9D%84-%EC%B9%98%EB%8A%94%EA%B0%80.md) 에 있습니다.
+겉으로 보이는 증상은 경로 중간 방화벽이 ICMP 를 막는 블랙홀과 같습니다. 알림이 데이터센터까지 오는지, 온다면 어느 서버에서 `Icmp6InPktTooBigs` 가 오르는지를 서버마다 견줘야 둘이 갈립니다. 서버별로 치는 명령은 [무엇을 보려면 무엇을 치는가](./common-%EB%AC%B4%EC%97%87%EC%9D%84-%EB%B3%B4%EB%A0%A4%EB%A9%B4-%EB%AC%B4%EC%97%87%EC%9D%84-%EC%B9%98%EB%8A%94%EA%B0%80.md) 에 있습니다.
 
 교과서 쪽 사정도 적어 둡니다. 《Computer Networking: A Top-Down Approach》 9판은 ECMP 를 흐름 단위의 무작위 다음 홉 선택까지만 적습니다. ICMP 오류가 어떻게 해시되는지는 다루지 않습니다. 책의 흐름에서 이 자리에 가장 가까운 곳은 [데이터센터와 웹 페이지 하나의 하루](../../02_os/book/cntd_computer-networking-top-down/06-05.%EB%8D%B0%EC%9D%B4%ED%84%B0%EC%84%BC%ED%84%B0%EC%99%80%20%EC%9B%B9%20%ED%8E%98%EC%9D%B4%EC%A7%80%20%ED%95%98%EB%82%98%EC%9D%98%20%ED%95%98%EB%A3%A8.md) §3 이고, 알림이 끝내 오지 않을 때의 블랙홀은 [IPv6 와 일반화 포워딩](../../02_os/book/cntd_computer-networking-top-down/04-04.IPv6%20%EC%99%80%20%EC%9D%BC%EB%B0%98%ED%99%94%20%ED%8F%AC%EC%9B%8C%EB%94%A9.md) §3 입니다.
 
@@ -218,7 +218,7 @@ sysctl net.ipv4.fib_multipath_hash_policy net.ipv6.fib_multipath_hash_policy
 ## 관련 문서
 
 - [개념 노트 목록](./README.md) — 다른 주제
-- [무엇을 보려면 무엇을 치는가](./%EB%AC%B4%EC%97%87%EC%9D%84-%EB%B3%B4%EB%A0%A4%EB%A9%B4-%EB%AC%B4%EC%97%87%EC%9D%84-%EC%B9%98%EB%8A%94%EA%B0%80.md) — `conntrack -S` 와 알림 카운터를 치는 자리
-- [패킷이 사라지는 네 자리](./%ED%8C%A8%ED%82%B7%EC%9D%B4-%EC%82%AC%EB%9D%BC%EC%A7%80%EB%8A%94-%EB%84%A4-%EC%9E%90%EB%A6%AC.md) — conntrack 의 조회와 등록 두 시점
+- [무엇을 보려면 무엇을 치는가](./common-%EB%AC%B4%EC%97%87%EC%9D%84-%EB%B3%B4%EB%A0%A4%EB%A9%B4-%EB%AC%B4%EC%97%87%EC%9D%84-%EC%B9%98%EB%8A%94%EA%B0%80.md) — `conntrack -S` 와 알림 카운터를 치는 자리
+- [패킷이 사라지는 네 자리](./os-%ED%8C%A8%ED%82%B7%EC%9D%B4-%EC%82%AC%EB%9D%BC%EC%A7%80%EB%8A%94-%EB%84%A4-%EC%9E%90%EB%A6%AC.md) — conntrack 의 조회와 등록 두 시점
 - [데이터센터와 웹 페이지 하나의 하루](../../02_os/book/cntd_computer-networking-top-down/06-05.%EB%8D%B0%EC%9D%B4%ED%84%B0%EC%84%BC%ED%84%B0%EC%99%80%20%EC%9B%B9%20%ED%8E%98%EC%9D%B4%EC%A7%80%20%ED%95%98%EB%82%98%EC%9D%98%20%ED%95%98%EB%A3%A8.md) — §3 흐름 단위 ECMP 를 책의 흐름에서 푼 자리
 - [IPv6 와 일반화 포워딩](../../02_os/book/cntd_computer-networking-top-down/04-04.IPv6%20%EC%99%80%20%EC%9D%BC%EB%B0%98%ED%99%94%20%ED%8F%AC%EC%9B%8C%EB%94%A9.md) — 알림이 닿지 않을 때의 블랙홀 연결
