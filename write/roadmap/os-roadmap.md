@@ -11,7 +11,7 @@ related:
   - network-roadmap.md
   - k8s-roadmap.md
   - ../02_os/README.md
-updated: 2026-09-13
+updated: 2026-09-21
 ---
 
 # OS 학습 로드맵
@@ -202,7 +202,7 @@ updated: 2026-09-13
 | verifier · CO-RE · BTF | 추천 | | Learning eBPF 5·6·7장 |
 | 샌드박싱 세 갈래 | 추천 | [08-01](../08_cloud/book/container-security/08-01.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EA%B2%A9%EB%A6%AC%20%EA%B0%95%ED%99%94%20%E2%80%94%20%EC%83%8C%EB%93%9C%EB%B0%95%EC%8B%B1%EC%9D%98%20%EC%84%B8%20%EA%B0%88%EB%9E%98.md) | Container Security 8장 |
 | 설정 하나로 무너지는 경계 | 추천 | [09-01](../08_cloud/book/container-security/09-01.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EA%B2%A9%EB%A6%AC%20%EA%B9%A8%EB%9C%A8%EB%A6%AC%EA%B8%B0%20%E2%80%94%20%EC%84%A4%EC%A0%95%20%ED%95%98%EB%82%98%EB%A1%9C%20%EB%AC%B4%EB%84%88%EC%A7%80%EB%8A%94%20%EA%B2%BD%EA%B3%84.md) | Container Security 9장 |
-| AppArmor · SELinux · 보호와 보안 | 선택 | | Operating System Concepts 14·15장 |
+| AppArmor · SELinux · 보호와 보안 | 선택 | [08-01](../08_cloud/book/container-security/08-01.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EA%B2%A9%EB%A6%AC%20%EA%B0%95%ED%99%94%20%E2%80%94%20%EC%83%8C%EB%93%9C%EB%B0%95%EC%8B%B1%EC%9D%98%20%EC%84%B8%20%EA%B0%88%EB%9E%98.md) | Operating System Concepts 14·15장 |
 | eBPF 보안 활용 | 선택 | | Learning eBPF 9장 |
 | Landlock | 선택 | | |
 

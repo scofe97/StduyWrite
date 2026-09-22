@@ -92,33 +92,42 @@ stages = [
      [("RBAC · Role · ServiceAccount", "K8s Up and Running 14장", "필수"),
       ("내가 볼 수 있는가 — AccessReview", "", "추천"),
       ("SecurityContext · seccomp", "K8s Patterns 23장", "필수"),
-      ("Pod Security Admission", "CKS Study Guide 3장", "필수"),
+      ("AppArmor 프로파일", "CKS Study Guide 4장", "추천"),
+      ("PSS 세 등급 · PSA", "CKS Study Guide 5장", "필수"),
       ("NetworkPolicy · 네트워크 분할", "K8s Patterns 24장", "추천"),
-      ("Secret 관리 · 외부 저장소", "Production Kubernetes 7장", "추천")],
-     [("Discovery API · Unstructured", "Programming Kubernetes 3장", "추천"),
+      ("Secret 관리 · 외부 저장소", "Production Kubernetes 7장", "추천"),
+      ("저장 암호화 · KMS", "Production Kubernetes 7장", "추천"),
+      ("IRSA · EKS Pod Identity", "Production Kubernetes 10장", "추천"),
+      ("위협 모델 · 횡적 이동", "Container Security 1장", "추천")],
+     [("CIS · kube-bench 점검", "CKS Study Guide 2장", "추천"),
+      ("감사 로그 · audit policy", "CKS Study Guide 7장", "추천"),
+      ("Falco · Tetragon 탐지", "CKS Study Guide 7장", "추천"),
+      ("공급망 보안 · 이미지 서명", "CKS Study Guide 6장", "추천"),
+      ("어드미션 웹훅 · Gatekeeper", "Policy as Code 7·8장", "추천"),
+      ("Discovery API · Unstructured", "Programming Kubernetes 3장", "추천"),
       ("CRD · custom resource", "Programming Kubernetes 4장", "추천"),
       ("Operator · finalizer", "Programming Kubernetes 6장", "추천"),
-      ("status subresource · 코드 생성", "Programming Kubernetes 5·9장", "선택"),
-      ("어드미션 웹훅 · Gatekeeper", "Policy as Code 7·8장", "추천"),
-      ("공급망 보안 · 이미지 서명", "CKS Study Guide 6장", "선택")]),
+      ("status subresource · 코드 생성", "Programming Kubernetes 5·9장", "선택")]),
 
     ("7 · 운영", "무엇이 잘못됐는지 어떻게 좁히는가",
      [("이벤트 · 로그 · 지표를 한 시간축에", "", "필수"),
       ("kubectl 고급 조회 · JSONPath", "", "필수"),
       ("OOMKilled · CPU throttling", "", "필수"),
       ("종료 지연 · SIGTERM · PreStop", "", "필수"),
-      ("멀티테넌시", "Production Kubernetes 12장", "추천")],
+      ("멀티테넌시", "Production Kubernetes 12장", "추천"),
+      ("CKA 대비와 문제 풀이", "", "선택")],
      [("Helm · Kustomize", "", "추천"),
       ("GitOps · ArgoCD", "K8s Best Practices 18장", "추천"),
+      ("IaC · 불변 인프라", "Terraform Up and Running 1장", "추천"),
+      ("Terraform state · module", "Terraform Up and Running 3·4장", "추천"),
       ("멀티클러스터 세 모델", "K8s Up and Running 21장", "추천"),
-      ("서비스 메시를 쓸 것인가", "K8s Up and Running 15장", "선택"),
-      ("CKA 대비와 문제 풀이", "", "선택")]),
+      ("서비스 메시를 쓸 것인가", "K8s Up and Running 15장", "선택")]),
 ]
 
 CUT_AFTER = 3          # 4단계 뒤에 "쓰는 쪽" ↔ "만드는 쪽" 절단선
 NOTES = {
     3: "1~4단계는 클러스터를 쓰는 쪽이고 5단계부터는 클러스터를 만들고 지키는 쪽이다.",
-    6: "패킷이 실제로 어떤 경로로 가는지는 network-roadmap 이 여덟 단계로 맡는다.",
+    6: "패킷이 실제로 어떤 경로로 가는지는 network-roadmap 이 아홉 단계로 맡는다.",
 }
 
 
@@ -139,8 +148,8 @@ H = y + 84
 
 d = D(W, H, "WRITE · KUBERNETES ROADMAP",
       "Kubernetes 학습 로드맵",
-      "애플리케이션이 여는 socket 에서 커널 패킷 경로로 내려간 뒤 Kubernetes 데이터패스로 다시 "
-      "올라간다. 척추에 단계 여덟을 걸고 개념을 좌우로 뻗었다. 노드의 주인공은 개념이고 아래 줄은 "
+      "오브젝트를 선언하는 데서 시작해 워크로드·연결·자원으로 넓힌 뒤 클러스터 내부 구조와 보안·운영으로 "
+      "들어간다. 척추에 단계 일곱을 걸고 개념을 좌우로 뻗었다. 노드의 주인공은 개념이고 아래 줄은 "
       "그 개념을 다루는 책의 장이다. 점 색이 우선순위이고, 책 줄이 비면 아직 자료가 없는 자리다.",
       "노드는 개념, 아래 줄은 그 개념을 다루는 책의 장입니다")
 

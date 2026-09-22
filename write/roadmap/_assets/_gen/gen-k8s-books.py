@@ -1,5 +1,5 @@
 # write/roadmap/k8s-roadmap.md §책 읽기 흐름.
-# 이 로드맵이 쓰는 책 열하나를 단계 순으로 걸고, 각 책에서 "읽을 장"만 적는다.
+# 이 로드맵이 쓰는 책 열두 권을 단계 순으로 걸고, 각 책에서 "읽을 장"만 적는다.
 # 색이 뜻하는 것은 우선순위다 — 필수·추천·선택·대체.
 #   모든 책을 같은 무게로 늘어놓으면 무엇부터 펴야 하는지가 사라진다.
 # 정독 노트 유무는 적지 않는다. 노트 링크는 본문 단계 표가 맡는다.
@@ -20,16 +20,20 @@ rows = [
     ("3", "연결 보강", [
         ("Networking and Kubernetes", "3단계", "4·5장", ["CNI·kube-proxy·정책·DNS", "Service·EndpointSlice·Ingress"], "추천"),
     ]),
-    ("4·5 · 7", "자원·내부 구조", [
-        ("Production Kubernetes", "4·5·7단계", "3~9 · 12~13장", ["런타임·저장·라우팅·어드미션", "관측·멀티테넌시·오토스케일"], "추천"),
+    ("4–7", "자원·내부 구조", [
+        ("Production Kubernetes", "4~7단계", "3~10 · 12~13장", ["런타임·저장·라우팅·어드미션", "관측·신원·멀티테넌시"], "추천"),
     ]),
     ("5·6", "확장", [
         ("Programming Kubernetes", "5·6단계", "1~6 · 9장", ["client-go·CRD·코드 생성", "Operator 와 고급 커스텀 리소스"], "추천"),
-        ("Policy as Code", "6단계", "4·5 · 7·8장", ["OPA 와 Kubernetes", "Gatekeeper 와 Kyverno"], "선택"),
     ]),
     ("6", "보안", [
-        ("Container Security", "6단계", "2~4 · 8·9 · 13장", ["capability·cgroup·namespace", "샌드박싱·경계 파괴·런타임"], "추천"),
-        ("CKS Study Guide", "6단계", "2~7장", ["클러스터·시스템 하드닝", "공급망·런타임 보안"], "선택"),
+        ("Container Security", "6단계", "1~4 · 8·9 · 13장", ["위협 모델·capability·격리", "샌드박싱·경계 파괴·런타임"], "추천"),
+        ("CKS Study Guide", "6단계", "2~7장", ["클러스터·시스템 하드닝·PSS", "공급망·감사 로그·Falco"], "추천"),
+        ("Learning eBPF", "6단계", "9장", ["eBPF 보안 활용", "Tetragon·BPF LSM"], "선택"),
+    ]),
+    ("6·7", "정책과 코드화", [
+        ("Policy as Code", "6·7단계", "4·5 · 7·8 · 11·12 · 14장", ["OPA·Gatekeeper·Kyverno", "Terraform·공급망 정책"], "선택"),
+        ("Terraform Up and Running", "7단계", "1·3·4·6장", ["IaC·불변 인프라", "state·module·비밀"], "추천"),
     ]),
     ("6–7", "운영 관례", [
         ("Kubernetes Best Practices", "6·7단계", "3·4 · 8~12 · 17·18장", ["모니터링·RBAC·자원 관리", "정책·멀티클러스터·GitOps"], "추천"),
@@ -66,7 +70,7 @@ d = D(
     H,
     "WRITE · KUBERNETES BOOK FLOW",
     "Kubernetes 책 읽기 흐름",
-    "이 로드맵이 쓰는 책 열을 단계 순으로 걸고 각 책에서 읽을 장만 적었다. 통독하는 책은 "
+    "이 로드맵이 쓰는 책 열두 권을 단계 순으로 걸고 각 책에서 읽을 장만 적었다. 통독하는 책은 "
     "Kubernetes in Action 하나이고 나머지는 부분 독서다. 테두리 색이 우선순위다.",
     "위에서 아래로 진행하고, 같은 행의 책은 병행합니다. 칩은 그 책이 걸치는 단계입니다",
 )
