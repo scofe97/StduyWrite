@@ -13,9 +13,9 @@ from dd import ACC, INFO, INK, KR, MONO, MUTED, OK, PAPER, PAPER2, RULE, SOFT, D
 MARK = {"필수": INFO, "추천": OK, "선택": SOFT, "대체": ACC}
 
 rows = [
-    ("1–4 · 6", "오브젝트·워크로드·연결", [
-        ("Kubernetes in Action", "1~4단계", "1~18장", ["Pod·컨트롤러·볼륨", "Service·Ingress·Gateway API"], "필수"),
-        ("Kubernetes Patterns", "1·2·4·6단계", "2~9 · 12 · 15~24장", ["예측 가능한 요구·배포·probe", "구조 패턴과 격리 패턴"], "추천"),
+    ("1–6", "오브젝트·워크로드·연결", [
+        ("Kubernetes in Action", "1~5단계", "1·2 · 4~18장", ["Pod·컨트롤러·볼륨", "Service·Ingress·Gateway API"], "필수"),
+        ("Kubernetes Patterns", "1~4 · 6단계", "2~9 · 12·13 · 15~24장", ["예측 가능한 요구·배포·probe", "구조 패턴과 격리 패턴"], "추천"),
     ]),
     ("3", "연결 보강", [
         ("Networking and Kubernetes", "3단계", "4·5장", ["CNI·kube-proxy·정책·DNS", "Service·EndpointSlice·Ingress"], "추천"),
@@ -38,8 +38,8 @@ rows = [
     ("6–7", "운영 관례", [
         ("Kubernetes Best Practices", "6·7단계", "3·4 · 8~12 · 17·18장", ["모니터링·RBAC·자원 관리", "정책·멀티클러스터·GitOps"], "추천"),
     ]),
-    ("7", "고급 주제", [
-        ("Kubernetes Up and Running", "3·6·7단계", "7 · 14~21장", ["Service Discovery·RBAC", "확장·정책·멀티클러스터"], "추천"),
+    ("1 · 3–7", "여러 단계 보강", [
+        ("Kubernetes Up and Running", "1 · 3~7단계", "4 · 7 · 14~21장", ["kubectl·Service Discovery·RBAC", "저장·확장·정책·멀티클러스터"], "추천"),
     ]),
 ]
 
@@ -70,8 +70,8 @@ d = D(
     H,
     "WRITE · KUBERNETES BOOK FLOW",
     "Kubernetes 책 읽기 흐름",
-    "이 로드맵이 쓰는 책 열두 권을 단계 순으로 걸고 각 책에서 읽을 장만 적었다. 통독하는 책은 "
-    "Kubernetes in Action 하나이고 나머지는 부분 독서다. 테두리 색이 우선순위다.",
+    "이 로드맵이 쓰는 책을 단계 순으로 걸고 각 책에서 읽을 장만 적었다. Kubernetes in Action 은 "
+    "3장만 빼고 통독하고 나머지는 부분 독서다. 테두리 색이 우선순위다.",
     "위에서 아래로 진행하고, 같은 행의 책은 병행합니다. 칩은 그 책이 걸치는 단계입니다",
 )
 d.line(126, row_y[0] + 38, 126, row_y[-1] + 38, RULE, 1.4)

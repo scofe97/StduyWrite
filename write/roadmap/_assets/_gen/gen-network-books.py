@@ -31,15 +31,16 @@ rows = [
     ("1·2", "연결과 웹 프로토콜", [
         ("Computer Networking", "1·2·5단계", "1~6 · 8장", ["응용·전송·네트워크·링크 계층", "라우팅과 보안 프로토콜"], "필수"),
         ("TCP/IP Illustrated", "1·2단계", "2~8 · 10~17장", ["주소·ARP·IP·NAT·ICMP", "TCP 연결·재전송·혼잡"], "필수"),
-        ("HTTP/2 in Action", "1단계", "4·8·9장", ["프레임·HPACK", "TCP·QUIC·HTTP/3"], "추천"),
-        ("High Performance Browser Networking", "1단계", "2·4·11·12·17장", ["TCP 구성 요소·TLS", "HTTP/2 와 WebSocket"], "대체"),
+        ("HTTP/2 in Action", "1단계", "2·4·9장", ["HTTP/1.1 의 한계·프레임", "TCP·QUIC·HTTP/3"], "추천"),
+        ("High Performance Browser Networking", "1단계", "4장", ["TLS·인증서 체인", "session resumption·ALPN"], "추천"),
         ("Container Security", "1단계", "11장", ["키·인증서·CA 의 역할", "컴포넌트 사이 TLS"], "선택"),
+        ("Real-World Cryptography", "1 · 8단계", "2~5 · 9장", ["키 교환·AEAD·HKDF", "TLS 1.3 핸드셰이크"], "추천"),
     ]),
-    ("2–6", "계층 종주", [
-        ("Networking and Kubernetes", "2~6단계", "전독 · 6장이 클라우드 축", ["OSI 부터 EKS 까지 한 축", "실습 다섯 편 포함"], "필수"),
+    ("1–6", "계층 종주", [
+        ("Networking and Kubernetes", "1~6단계", "전독 · 6장이 클라우드 축", ["OSI 부터 EKS 까지 한 축", "실습 다섯 편 포함"], "필수"),
     ]),
-    ("3·4", "관측", [
-        ("Packet Analysis with Wireshark", "3단계", "1~5장", ["캡처·필터·TCP·TLS", "DHCP 와 이름 질의"], "필수"),
+    ("1–4", "관측", [
+        ("Packet Analysis with Wireshark", "2·3단계", "1~5장", ["캡처·필터·TCP·TLS", "DHCP 와 이름 질의"], "필수"),
         ("Systems Performance", "1·3단계", "10장", ["큐·버퍼·오프로드", "nstat·tcpretrans·tc"], "추천"),
         ("Learning CoreDNS", "1·3·4단계", "2·3·6·7장", ["위임·레코드와 Corefile", "Kubernetes 레코드"], "추천"),
     ]),
@@ -50,9 +51,10 @@ rows = [
     ("4·5", "underlay·클라우드", [
         ("Cloud Native Data Center Networking", "4·5단계", "2·6·7·14장", ["Clos 토폴로지·네트워크 가상화", "컨테이너 네트워킹·BGP"], "추천"),
         ("System Design on AWS", "5단계", "9장", ["VPN·Direct Connect·TGW", "PrivateLink·Route 53"], "추천"),
+        ("Computer Networking", "1·2·5단계", "8장", ["망 계층 보안·IPsec", "VPN 과 사이트 간 연결"], "필수"),
     ]),
     ("4–7", "데이터패스", [
-        ("Cilium Up and Running", "4~7단계", "1~16장", ["왜 Cilium 인가·CNI 비교·IPAM", "정책·BGP·Egress·암호화·Hubble"], "필수"),
+        ("Cilium Up and Running", "4~7단계", "전독", ["왜 Cilium 인가·CNI 비교·IPAM", "정책·BGP·Egress·암호화·Hubble"], "필수"),
         ("Learning eBPF", "6단계", "3·5~8장", ["프로그램 구조·CO-RE·BTF", "verifier·네트워킹"], "추천"),
     ]),
     ("7·8", "운영 경계", [
@@ -61,7 +63,7 @@ rows = [
         ("Sidecar-less Istio Explained", "7단계", "1~3장", ["ambient 모드 구조", "ztunnel 과 waypoint"], "대체"),
     ]),
     ("8–9", "신뢰와 경로", [
-        ("Real-World Cryptography", "1 · 8단계", "2~5 · 7~10 · 13장", ["키 교환·AEAD·해시·MAC", "안전한 전송과 ECH"], "추천"),
+        ("Real-World Cryptography", "1 · 8단계", "2·3 · 7~10 · 13장", ["해시·MAC·서명·키 순환", "안전한 전송과 ECH"], "추천"),
         ("API Security in Action", "8단계", "9장", ["capability 기반 보안", "macaroon 과 권한 위임"], "선택"),
         ("Patterns of Distributed Systems", "8·9단계", "7·26·28장", ["HeartBeat 와 실패 감지 시간", "Lease 와 gossip 전파"], "추천"),
         ("Database Internals", "8·9단계", "9·12장", ["실패 감지와 heartbeat", "anti-entropy 와 gossip"], "추천"),
@@ -96,8 +98,8 @@ d = D(
     H,
     "WRITE · NETWORK BOOK FLOW",
     "네트워크 책 읽기 흐름",
-    "이 로드맵이 쓰는 자료 스물셋을 단계 순으로 걸고 각 자료에서 읽을 장만 적었다. 통독하는 책은 셋이고 "
-    "나머지는 부분 독서다. 맨 위 한 줄만 책이 아니라 손으로 밟는 랩이다. "
+    "이 로드맵이 쓰는 자료를 단계 순으로 걸고 각 자료에서 읽을 장만 적었다. 통독하는 책은 Networking and Kubernetes 와 "
+    "Cilium Up and Running 이고 나머지는 부분 독서다. 맨 위 한 줄만 책이 아니라 손으로 밟는 랩이다. "
     "테두리 색이 우선순위이고, 대체는 같은 자리를 다른 자료가 대신 채우는 경우다.",
     "한 주제의 자료는 권수 제한 없이 병행합니다. 단계는 자료마다 달라 카드마다 칩으로 적었습니다",
 )

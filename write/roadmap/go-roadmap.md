@@ -6,7 +6,7 @@ related:
   - README.md
   - os-roadmap.md
   - network-roadmap.md
-updated: 2026-09-13
+updated: 2026-09-23
 ---
 
 # Go 학습 로드맵
@@ -41,7 +41,8 @@ updated: 2026-09-13
 | 5 · 테스트와 성능 | 런타임 | escape analysis · 할당 줄이기 · GC · `GOGC` · `GOMEMLIMIT` |
 | 6 · 서비스 | 전송 계층 | 주소 해석 · 라우팅 · TCP 스트림 · 데이터 전송 · UDP · 신뢰성 보강 · Unix domain socket |
 | 6 · 서비스 | HTTP | 클라이언트 타임아웃 · 서버 라우팅 · 미들웨어 · graceful shutdown |
-| 6 · 서비스 | 운영 요소 | TLS · 직렬화 · `log/slog` · 지표 · 복원력 · 느슨한 결합 · 관측성 · 보안 |
+| 6 · 서비스 | 운영 요소 | TLS · 직렬화 · `log/slog` · 지표 |
+| 6 · 서비스 | 클라우드 네이티브 설계 | 복원력 · 느슨한 결합 · 관측성 · 보안 |
 | 6 · 서비스 | 산출물 | `go:embed` · distroless · 멀티스테이지 이미지 · `syscall/js` 와 Wasm 경계 |
 | 7 · 터미널과 세션 | SSH | 전송 · 사용자 인증 · 연결 3계층 · `pty-req` · `window-change` · 세션 채널의 경계 |
 | 7 · 터미널과 세션 | 화면 | ANSI CSI · 화면 직접 그리기 · rune 과 grapheme · 터미널 셀 폭 |
@@ -51,19 +52,23 @@ updated: 2026-09-13
 
 ## 책 읽기 흐름
 
-> 위 단계를 무엇으로 배우는가입니다. 이 로드맵은 보유 노트가 0편이라 책이 자료의 전부입니다.
+> 위 단계를 무엇으로 배우는가입니다. 정독 노트가 없어 책과 공식 문서가 자료의 전부입니다.
 
 ![Go 책 읽기 흐름 — 우선순위와 읽을 장](_assets/go-books.svg)
 
-`write/` 어디에도 Go 카테고리가 없습니다. 아래 단계별 표의 `노트` 열이 모두 비어 있는 이유이고, 노트를 쓰기 시작하면 그 칸부터 채웁니다.
-
 | 책 | 읽을 장 | 우선순위 | 자리 |
 |---|---|:---:|---|
-| Learning Go | 1~11 · 13~16장 | 필수 | 1~3 · 5단계 |
+| Learning Go | 1~15장 | 필수 | 1~5단계 |
 | Learn Concurrent Programming with Go | 1~12장 | 필수 | 4단계 |
 | Network Programming with Go | 1~9 · 11~13장 | 필수 | 6단계 |
 | Cloud Native Go | 4~13장 | 추천 | 6단계 |
-| Learn Go with Pocket-Sized Projects | 2~11장 · 부록 D·F | 대체 | 1·2·5·6단계 — Learning Go 의 실습 축 |
+| Learn Go with Pocket-Sized Projects | 2~11장 · 부록 D·F | 선택 | 1·2·5·6단계 — Learning Go 의 실습 축 |
+
+**보완 참조** — 단계 표의 노트나 책 칸이 가리키지만 읽기 흐름에는 넣지 않은 장입니다. 그 개념에 닿았을 때만 엽니다.
+
+| 책 | 장 | 받치는 자리 |
+|---|---|---|
+| Learning Go | 16장 | 3단계 reflect · unsafe · cgo |
 
 공식 문서는 책과 같은 무게로 씁니다. [A Tour of Go](https://go.dev/tour/)와 [Effective Go](https://go.dev/doc/effective_go)가 1·3단계, [The Go Memory Model](https://go.dev/ref/mem)이 4단계, [Go Diagnostics](https://go.dev/doc/diagnostics)와 [Go GC Guide](https://go.dev/doc/gc-guide)가 5단계의 빈칸을 메웁니다.
 
@@ -84,7 +89,7 @@ updated: 2026-09-13
 | `if` · `for` · `switch` · 블록 · 섀도잉 | 필수 | | Learning Go 4장 |
 | 함수 · 다중 반환 · `defer` | 필수 | | Learning Go 5장 |
 | 포인터와 값 의미론 — 무엇이 복사되는가 | 필수 | | Learning Go 6장 |
-| 작은 프로젝트로 손에 익히기 | 대체 | | Pocket-Sized Projects 2~5장 |
+| 작은 프로젝트로 손에 익히기 | 선택 | | Pocket-Sized Projects 2~5장 |
 
 ### 2단계 · 타입 설계
 
@@ -126,13 +131,13 @@ updated: 2026-09-13
 | 메모리 공유와 경쟁 상태 | 필수 | | Learn Concurrent Programming with Go 3장 |
 | mutex · RWMutex | 필수 | | Learn Concurrent Programming with Go 4장 |
 | WaitGroup · barrier | 필수 | | Learn Concurrent Programming with Go 6장 |
-| channel · buffered channel · `select` | 필수 | | Learning Go 12장 · Learn Concurrent Go 8장 |
+| channel · buffered channel · `select` | 필수 | | Learning Go 12장 · Learn Concurrent Programming with Go 8장 |
 | message passing · 채널 프로그래밍 | 필수 | | Learn Concurrent Programming with Go 7·9장 |
 | happens-before · `go test -race` | 필수 | | [The Go Memory Model](https://go.dev/ref/mem) |
 | 조건 변수 · 세마포어 | 추천 | | Learn Concurrent Programming with Go 5장 |
 | pipeline · fan-in · fan-out · errgroup | 추천 | | Learn Concurrent Programming with Go 10장 |
 | deadlock 회피 | 추천 | | Learn Concurrent Programming with Go 11장 |
-| 채널 소유권 — 닫기는 한 곳에서만 | 필수 | | Learn Concurrent Go 7장 |
+| 채널 소유권 — 닫기는 한 곳에서만 | 필수 | | Learn Concurrent Programming with Go 7장 |
 | `sync.Once` — 중복 close 막기 | 추천 | | |
 | atomic · spin lock · futex | 추천 | | Learn Concurrent Programming with Go 12장 |
 
@@ -173,7 +178,9 @@ updated: 2026-09-13
 
 ### 7단계 · 터미널과 세션
 
-> 사람이 붙어 있는 연결은 요청·응답과 다릅니다. 화면과 세션과 신원을 함께 다뤄야 합니다.
+> SSH 로 붙는 서버나 터미널 UI 를 만들 때 들어오는 특화 구간입니다. 4단계 동시성과 6단계 TCP 스트림을 지난 뒤 엽니다.
+
+여기의 `필수` 는 이 구간을 만들 때 빠지면 막힌다는 뜻이고, Go 로 서비스만 만드는 사람에게는 필수가 아닙니다. 사람이 붙어 있는 연결은 요청·응답과 달라 화면과 세션과 신원을 함께 다뤄야 합니다.
 
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
@@ -182,12 +189,12 @@ updated: 2026-09-13
 | 세션 채널과 애플리케이션의 경계 | 필수 | | |
 | ANSI CSI 로 화면 직접 그리기 | 추천 | | |
 | rune 과 grapheme 과 터미널 셀 폭 | 필수 | | |
-| 논블로킹 알림과 신호 병합 | 필수 | | Learn Concurrent Go 7장 |
+| 논블로킹 알림과 신호 병합 | 필수 | | Learn Concurrent Programming with Go 7장 |
 | 인증과 인가는 다른 문제다 | 필수 | | Cloud Native Go 12장 |
 | 슬라이딩 윈도우 속도 제한 | 추천 | | |
 | 세션 정리와 자원 상한 | 추천 | | |
 
-**여기는 노트가 없는 단계입니다.** SSH 애플리케이션 서버와 손으로 만든 TUI 는 소장 책이 다루지 않아 `노트` 와 `책` 칸이 대부분 비어 있습니다. `gliderlabs/ssh` 문서와 [RFC 4254](https://www.rfc-editor.org/info/rfc4254)의 `pty-req` · `window-change` 정의가 그 자리를 받습니다.
+**소장 책이 다루지 않는 구간입니다.** SSH 애플리케이션 서버와 손으로 만든 TUI 는 `책` 칸이 대부분 비어 있고, `gliderlabs/ssh` 문서와 [RFC 4254](https://www.rfc-editor.org/info/rfc4254)의 `pty-req` · `window-change` 정의가 그 자리를 받습니다.
 
 
 
@@ -220,7 +227,6 @@ updated: 2026-09-13
 | TCP · TLS · HTTP 의 프로토콜 동작 | [네트워크 로드맵](network-roadmap.md) 1단계가 맡습니다. 여기는 Go 로 다루는 법입니다 |
 | epoll · 스케줄러 · 프로파일 방법론 | [OS 로드맵](os-roadmap.md) 2·4단계가 맡습니다 |
 | Cloud Native Go 1~3장 | 클라우드 네이티브 개론과 Go 소개입니다. 순서에 넣을 축이 아닙니다 |
-| Learning Go 16장 | reflect · unsafe · cgo 입니다. 필요가 생겼을 때 엽니다 |
 | P2P · 익명 오버레이 구현 | [네트워크 로드맵](network-roadmap.md) 8·9단계가 개념을 맡습니다 |
 
 
@@ -231,6 +237,6 @@ updated: 2026-09-13
 
 이 문서는 **Go 언어와 Go 로 만드는 서비스의 개념 순서**를 정합니다. 프로토콜 자체와 커널 메커니즘은 다른 로드맵이 맡습니다.
 
-**보유 노트가 0편인 유일한 로드맵입니다.** 다른 편은 `노트` 열이 자료의 중심이지만 여기는 책과 공식 문서가 전부입니다. 노트를 쓰기 시작하면 `write/` 에 Go 카테고리를 만들고 이 표의 `노트` 열부터 채웁니다.
+**정독 노트가 없는 유일한 로드맵입니다.** 다른 편은 `노트` 열이 자료의 중심이지만 여기는 책과 공식 문서가 전부입니다.
 
 맞닿는 문서가 둘입니다. 6단계의 프로토콜 축은 [네트워크 로드맵](network-roadmap.md)이, 5단계의 성능 방법론은 [OS 로드맵](os-roadmap.md)이 맡습니다.

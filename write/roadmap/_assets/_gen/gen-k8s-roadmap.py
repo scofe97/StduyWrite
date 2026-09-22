@@ -80,7 +80,6 @@ stages = [
       ("List·Watch 와 resourceVersion", "Programming Kubernetes 3장", "필수"),
       ("level-driven 과 edge-driven", "Programming Kubernetes 1장", "필수"),
       ("GVK · Scheme · TypeMeta", "Programming Kubernetes 2·3장", "추천"),
-      ("controller-runtime 으로 감싸기", "Programming Kubernetes 6장", "추천"),
       ("Reflector · DeltaFIFO · Indexer", "Programming Kubernetes 3장", "추천"),
       ("SharedInformer 와 resync", "Programming Kubernetes 3장", "추천")],
      [("authn · authz · admission", "Production Kubernetes 8장", "필수"),
@@ -107,6 +106,7 @@ stages = [
       ("Discovery API · Unstructured", "Programming Kubernetes 3장", "추천"),
       ("CRD · custom resource", "Programming Kubernetes 4장", "추천"),
       ("Operator · finalizer", "Programming Kubernetes 6장", "추천"),
+      ("controller-runtime", "Programming Kubernetes 6장", "추천"),
       ("status subresource · 코드 생성", "Programming Kubernetes 5·9장", "선택")]),
 
     ("7 · 운영", "무엇이 잘못됐는지 어떻게 좁히는가",
@@ -127,7 +127,7 @@ stages = [
 CUT_AFTER = 3          # 4단계 뒤에 "쓰는 쪽" ↔ "만드는 쪽" 절단선
 NOTES = {
     3: "1~4단계는 클러스터를 쓰는 쪽이고 5단계부터는 클러스터를 만들고 지키는 쪽이다.",
-    6: "패킷이 실제로 어떤 경로로 가는지는 network-roadmap 이 아홉 단계로 맡는다.",
+    6: "패킷이 실제로 어떤 경로로 가는지는 network-roadmap 이 맡는다.",
 }
 
 

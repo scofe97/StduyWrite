@@ -13,8 +13,8 @@ MARK = {"필수": INFO, "추천": OK, "선택": SOFT, "대체": ACC}
 
 rows = [
     ("1·2 · 7", "관점과 계측", [
-        ("Observability Engineering", "1·2 · 7단계", "1 · 3 · 5~9장", ["관측 가능성과 구조화 이벤트", "OpenTelemetry 계측·분석"], "필수"),
-        ("Observability with Grafana", "1·2 · 4 · 7단계", "1·2장", ["LGTM 스택과 페르소나", "로그·메트릭·트레이스 계측"], "추천"),
+        ("Observability Engineering", "1·2 · 7단계", "1 · 3 · 5~10장", ["관측 가능성과 구조화 이벤트", "OpenTelemetry 계측·분석"], "필수"),
+        ("Observability with Grafana", "1·2 · 4·5 · 7단계", "1·2장", ["LGTM 스택과 페르소나", "로그·메트릭·트레이스 계측"], "추천"),
     ]),
     ("2 · 4", "트레이싱", [
         ("Distributed Tracing in Practice", "2 · 4단계", "2~6 · 8·9장", ["계측 온톨로지·전파·모범 사례", "배포·오버헤드·샘플링"], "추천"),
@@ -25,8 +25,8 @@ rows = [
     ("1 · 3 · 5–7", "Prometheus 운영", [
         ("Mastering Prometheus", "1 · 3 · 5~7단계", "1~15장", ["데이터 모델·TSDB·SD·알림", "샤딩·Thanos·믹스인·SLO"], "필수"),
     ]),
-    ("4 · 7", "Grafana 스택", [
-        ("Observability with Grafana", "1·2 · 4 · 7단계", "4 · 6~12장", ["Loki·Tempo·대시보드", "IaC·플랫폼·RUM"], "필수"),
+    ("4·5 · 7", "Grafana 스택", [
+        ("Observability with Grafana", "1·2 · 4·5 · 7단계", "4 · 6~12장", ["Loki·Tempo·대시보드", "IaC·플랫폼·RUM"], "필수"),
     ]),
     ("1 · 5", "운영 판단", [
         ("Site Reliability Engineering", "1 · 5단계", "7~10장", ["SLO 와 에러 버짓", "사고 관리·온콜·포스트모템"], "필수"),
@@ -63,7 +63,7 @@ d = D(
     H,
     "WRITE · OBSERVABILITY BOOK FLOW",
     "관측 가능성 책 읽기 흐름",
-    "자료를 정독 노트 50편과 소장 책 여섯 권, 공식 문서로 한정했다. 같은 책이 여러 단계에 나뉘어 "
+    "자료를 정독 노트와 소장 책, 공식 문서로 한정했다. 같은 책이 여러 단계에 나뉘어 "
     "걸리므로 행이 단계가 아니라 책의 역할로 묶인다. 테두리 색이 우선순위다.",
     "왼쪽 번호는 그 묶음을 읽는 자리이고, 칩은 그 책이 걸치는 단계입니다",
 )
