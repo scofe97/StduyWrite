@@ -182,7 +182,7 @@ updated: 2026-09-15
 | reverse proxy · half-close · 배압 | 추천 | | |
 | TLS passthrough 대 TLS 종료 · SNI 라우팅 | 추천 | [13-03](../08_cloud/book/kubernetes-in-action/13-03.TLS%C2%B7%EA%B8%B0%ED%83%80%20%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C%C2%B7%ED%81%AC%EB%A1%9C%EC%8A%A4%20%EB%84%A4%EC%9E%84%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4%C2%B7mesh.md) | Kubernetes in Action 13장 |
 | Forwarded · X-Forwarded-For 신뢰 경계 · PROXY protocol | 추천 |  |  |
-| listen 큐 · accept 큐 · ephemeral 포트 고갈 | 추천 | [10-02](../02_os/book/systems-performance/10-02.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%282%29%20%E2%80%94%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98.md) · [사례](../troubleshooting/os/2026-09-07_%EC%8B%A4%ED%8C%A8%EC%9C%A8%200.3%25%EA%B0%80%20%EC%82%AC%EB%9D%BC%EC%A7%80%EC%A7%80%20%EC%95%8A%EB%8A%94%20%EC%84%9C%EB%B2%84.md) | TCP/IP Illustrated 13장 · Systems Performance 10장 |
+| listen 큐 · accept 큐 · ephemeral 포트 고갈 | 추천 | [10-02](../02_os/book/systems-performance/10-02.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%E2%80%94%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98.md) · [사례](../troubleshooting/os/2026-09-07_%EC%8B%A4%ED%8C%A8%EC%9C%A8%200.3%25%EA%B0%80%20%EC%82%AC%EB%9D%BC%EC%A7%80%EC%A7%80%20%EC%95%8A%EB%8A%94%20%EC%84%9C%EB%B2%84.md) | TCP/IP Illustrated 13장 · Systems Performance 10장 |
 | TIME_WAIT · SYN cookies | 추천 |  | TCP/IP Illustrated 13장 |
 | OS CA bundle · truststore | 선택 | [11-01](../08_cloud/book/container-security/11-01.TLS%EB%A1%9C%20%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8%20%EC%95%88%EC%A0%84%ED%95%98%EA%B2%8C%20%EC%97%B0%EA%B2%B0%ED%95%98%EA%B8%B0%20%E2%80%94%20%ED%82%A4%C2%B7%EC%9D%B8%EC%A6%9D%EC%84%9C%C2%B7CA%EC%9D%98%20%EC%97%AD%ED%95%A0.md) | Container Security 11장 |
 | TCP keepalive | 선택 | | TCP/IP Illustrated 17장 |
@@ -221,23 +221,23 @@ updated: 2026-09-15
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
 | 캡처 위치 · 캡처 필터 · 디스플레이 필터 | 필수 | [02-01](../02_os/book/paw_packet-analysis-wireshark/02-01.%ED%8C%A8%ED%82%B7%EC%9D%84%20%EC%9E%A1%EB%8A%94%20%EB%B2%95.md) · [02-02](../02_os/book/paw_packet-analysis-wireshark/02-02.%EC%9E%A1%EC%9D%80%20%ED%8C%A8%ED%82%B7%EC%9D%84%20%EC%9D%BD%EB%8A%94%20%EB%B2%95.md) | Packet Analysis 2장 |
-| tcpdump · tshark | 필수 | [02-01](../02_os/book/paw_packet-analysis-wireshark/02-01.%ED%8C%A8%ED%82%B7%EC%9D%84%20%EC%9E%A1%EB%8A%94%20%EB%B2%95.md) · [10-04](../02_os/book/systems-performance/10-04.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%284%29%20%E2%80%94%20%EA%B4%80%EC%B8%A1%20%EB%8F%84%EA%B5%AC.md) | Packet Analysis 2장 · Systems Performance 10장 |
+| tcpdump · tshark | 필수 | [02-01](../02_os/book/paw_packet-analysis-wireshark/02-01.%ED%8C%A8%ED%82%B7%EC%9D%84%20%EC%9E%A1%EB%8A%94%20%EB%B2%95.md) · [10-04](../02_os/book/systems-performance/10-04.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%E2%80%94%20%EA%B4%80%EC%B8%A1%20%EB%8F%84%EA%B5%AC.md) | Packet Analysis 2장 · Systems Performance 10장 |
 | 무엇을 보려면 무엇을 치는가 — 도구와 단위 | 필수 | [진단 개념](../troubleshooting/_concepts/%EB%AC%B4%EC%97%87%EC%9D%84-%EB%B3%B4%EB%A0%A4%EB%A9%B4-%EB%AC%B4%EC%97%87%EC%9D%84-%EC%B9%98%EB%8A%94%EA%B0%80.md) | |
 | 패킷이 사라지는 네 자리 — 드롭 카운터 | 필수 | [진단 개념](../troubleshooting/_concepts/%ED%8C%A8%ED%82%B7%EC%9D%B4-%EC%82%AC%EB%9D%BC%EC%A7%80%EB%8A%94-%EB%84%A4-%EC%9E%90%EB%A6%AC.md) | |
 | conntrack 경합 · `insert_failed` | 필수 | [사례](../troubleshooting/kubernetes/2026-09-12_%EC%A0%95%ED%99%95%ED%9E%88%201%EC%B4%88%EC%94%A9%20%EB%8A%A6%EB%8A%94%20%EC%9A%94%EC%B2%AD.md) |  |
 | TCP 이상 판독 · RST · 재전송 · 중복 ACK | 필수 | [03-01](../02_os/book/paw_packet-analysis-wireshark/03-01.TCP%20%EC%97%B0%EA%B2%B0%EC%9D%98%20%EC%83%9D%EC%95%A0.md) · [03-02](../02_os/book/paw_packet-analysis-wireshark/03-02.TCP%EA%B0%80%20%EC%96%B4%EA%B8%8B%EB%82%A0%20%EB%95%8C.md) | Packet Analysis 3장 |
 | TLS 핸드셰이크 판독 · 실패 원인 | 필수 | [04-01](../02_os/book/paw_packet-analysis-wireshark/04-01.TLS%20%ED%95%B8%EB%93%9C%EC%85%B0%EC%9D%B4%ED%81%AC%20%EC%9D%BD%EA%B8%B0.md) · [04-03](../02_os/book/paw_packet-analysis-wireshark/04-03.%EC%97%B4%EC%87%A0%EC%99%80%20%EC%8B%A4%ED%8C%A8.md) | Packet Analysis 4장 |
 | 계층 순서 진단 — `ss` · `ip` · `ethtool` · `conntrack -L` | 필수 | [02-04](../08_cloud/book/networking-and-kubernetes/02-04.Linux%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%EC%A7%84%EB%8B%A8%20%EB%8F%84%EA%B5%AC%20%E2%80%94%20%EA%B3%84%EC%B8%B5%20%EC%88%9C%EC%84%9C%EB%8C%80%EB%A1%9C%20%EC%88%98%EC%82%AC%ED%95%98%EA%B8%B0.md) | Networking and Kubernetes 2장 |
-| `nstat` · tcpretrans · tcplife | 추천 | [10-04](../02_os/book/systems-performance/10-04.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%284%29%20%E2%80%94%20%EA%B4%80%EC%B8%A1%20%EB%8F%84%EA%B5%AC.md) | Systems Performance 10장 |
+| `nstat` · tcpretrans · tcplife | 추천 | [10-04](../02_os/book/systems-performance/10-04.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%E2%80%94%20%EA%B4%80%EC%B8%A1%20%EB%8F%84%EA%B5%AC.md) | Systems Performance 10장 |
 | `resolv.conf` · search domain · `ndots` · NXDOMAIN | 필수 | [랩 07-01](../02_os/book/network-fundamentals-lab/07-01.%EA%B8%B8%EC%9D%80%20%EB%A9%80%EC%A9%A1%ED%95%9C%EB%8D%B0%20%EC%95%88%20%ED%86%B5%ED%95%A0%20%EB%95%8C.md) · [01-03](../02_os/networking/01-03.DNS%20%ED%95%84%ED%84%B0%EB%A7%81%20%EC%B0%A8%EB%8B%A8%20%E2%80%94%20NXDOMAIN%C2%B7DoH%C2%B7%EC%9A%B0%ED%9A%8C%20%EB%A7%88%EC%B0%B0.md) | |
 | DoH · DoT · DNS HTTPS RR — ECH 공개키가 오는 길 | 추천 |  | Learning CoreDNS 7장 · RFC 9460 |
 | EDNS(0) · TC 비트 · TCP fallback | 추천 |  | TCP/IP Illustrated 11장 |
 | Corefile · 플러그인 체인 | 추천 | [03-01](../08_cloud/book/learning-coredns/03-01.Corefile%EC%9D%80%20%EB%9D%BC%EB%B2%A8%EB%A1%9C%20%EC%84%9C%EB%B2%84%EB%A5%BC%20%EA%B0%80%EB%A5%B8%EB%8B%A4.md) · [03-02](../08_cloud/book/learning-coredns/03-02.%ED%94%8C%EB%9F%AC%EA%B7%B8%EC%9D%B8%20%EC%9D%BC%EA%B3%B1%EC%9D%B4%EB%A9%B4%20%EC%84%9C%EB%B2%84%20%ED%95%98%EB%82%98%EA%B0%80%20%EC%84%A0%EB%8B%A4.md) | Learning CoreDNS 3장 |
 | 질문과 답의 불일치 | 추천 | [07-01](../08_cloud/book/learning-coredns/07-01.%EC%A7%88%EB%AC%B8%EA%B3%BC%20%EB%8B%B5%EC%9D%B4%20%EC%96%B4%EA%B8%8B%EB%82%98%EB%A9%B4%20%ED%81%B4%EB%9D%BC%EC%9D%B4%EC%96%B8%ED%8A%B8%EA%B0%80%20%EB%B2%84%EB%A6%B0%EB%8B%A4.md) | Learning CoreDNS 7장 |
-| 연결 지연 분포 · P99 · 측정 오차 | 선택 | [10-02](../02_os/book/systems-performance/10-02.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%282%29%20%E2%80%94%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98.md) | Systems Performance 10장 |
-| GRO · GSO · TSO 오프로딩 | 선택 | [10-02](../02_os/book/systems-performance/10-02.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%282%29%20%E2%80%94%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98.md) | Systems Performance 10장 |
-| RSS · RPS · XPS · ring buffer | 선택 | [10-02](../02_os/book/systems-performance/10-02.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%282%29%20%E2%80%94%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98.md) | Systems Performance 10장 |
-| `tc qdisc` · `netem` | 선택 | [10-03](../02_os/book/systems-performance/10-03.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%283%29%20%E2%80%94%20%EB%B0%A9%EB%B2%95%EB%A1%A0%C2%B7%EC%8B%A4%ED%97%98%C2%B7%ED%8A%9C%EB%8B%9D.md) | Systems Performance 10장 |
+| 연결 지연 분포 · P99 · 측정 오차 | 선택 | [10-02](../02_os/book/systems-performance/10-02.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%E2%80%94%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98.md) | Systems Performance 10장 |
+| GRO · GSO · TSO 오프로딩 | 선택 | [10-02](../02_os/book/systems-performance/10-02.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%E2%80%94%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98.md) | Systems Performance 10장 |
+| RSS · RPS · XPS · ring buffer | 선택 | [10-02](../02_os/book/systems-performance/10-02.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%E2%80%94%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98.md) | Systems Performance 10장 |
+| `tc qdisc` · `netem` | 선택 | [10-03](../02_os/book/systems-performance/10-03.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%E2%80%94%20%EB%B0%A9%EB%B2%95%EB%A1%A0%C2%B7%EC%8B%A4%ED%97%98%C2%B7%ED%8A%9C%EB%8B%9D.md) | Systems Performance 10장 |
 
 
 

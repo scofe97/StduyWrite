@@ -55,10 +55,10 @@ updated: 2026-09-12
 | 09-02 | [디스크 (2) — 아키텍처](./09-02.디스크%20(2)%20—%20아키텍처.md) | HDD 탐색·회전·SMR·sloth? SSD 비대칭·FTL·웨어레벨링? SCSI/SAS/SATA/FC/NVMe? RAID 레벨별 성능·read-modify-write? Linux 병합·I/O 스케줄러·blk-mq? (Ch 9.4) |
 | 09-03 | [디스크 (3) — 방법론·시각화·실험·튜닝](./09-03.디스크%20(3)%20—%20방법론·시각화·실험·튜닝.md) | USE·워크로드 특성화·지연 분석·스케일링은? 라인·스캐터·히트맵으로 다봉·이상치를 어떻게 보나? dd/ioping/fio·ionice·cgroup blkio·튜너블은? (Ch 9.5·9.7~9.9) |
 | 09-04 | [디스크 (4) — 관측 도구](./09-04.디스크%20(4)%20—%20관측%20도구.md) | iostat(await·%util·읽기쓰기 분리)·sar·PSI·pidstat(iodelay)·perf·biolatency(이봉)·biosnoop·biotop·biostacks·blktrace(D2C·I2D)·bpftrace·smartctl은? (Ch 9.6) |
-| 10-01 | [네트워크 (1) — 배경·모델·핵심 개념](./10-01.네트워크%20(1)%20—%20배경·모델·핵심%20개념.md) | 인터페이스·컨트롤러·프로토콜 스택은? 캡슐화·MTU(점보 프레임)·지연 6종(ping vs TTFB)·버퍼링·버퍼블로트·백로그·혼잡 회피·사용률·로컬 연결은? (Ch 10.1~10.3) |
-| 10-02 | [네트워크 (2) — 아키텍처](./10-02.네트워크%20(2)%20—%20아키텍처.md) | TCP 성능 기능·혼잡 제어(CUBIC·BBR)·TIME_WAIT·UDP·QUIC? 인터페이스·컨트롤러·스위치·방화벽? Linux 스택·연결 큐·GSO/TSO·NAPI·RSS/RPS·커널 바이패스? (Ch 10.4) |
-| 10-03 | [네트워크 (3) — 방법론·실험·튜닝](./10-03.네트워크%20(3)%20—%20방법론·실험·튜닝.md) | USE(방향별)·워크로드 특성화·지연 분석·TCP 분석(포트 고갈)·패킷 스니핑은? ping·traceroute·iperf·tc netem은? sysctl·소켓 옵션(TCP_NODELAY) 튜닝은? (Ch 10.5·10.7·10.8) |
-| 10-04 | [네트워크 (4) — 관측 도구](./10-04.네트워크%20(4)%20—%20관측%20도구.md) | ss(limited 플래그)·ip·nstat·sar·nicstat(USE)·ethtool·tcplife·tcptop·tcpretrans·bpftrace(소켓 층)·tcpdump·Wireshark는 어느 층을 보나? (Ch 10.6) |
+| 10-01 | [네트워크 — 배경·모델·핵심 개념](./10-01.네트워크%20—%20배경·모델·핵심%20개념.md) | 인터페이스·컨트롤러·프로토콜 스택은? 캡슐화·MTU(점보 프레임)·지연 6종(ping vs TTFB)·버퍼링·버퍼블로트·백로그·혼잡 회피·사용률·로컬 연결은? (Ch 10.1~10.3) |
+| 10-02 | [네트워크 — 아키텍처](./10-02.네트워크%20—%20아키텍처.md) | TCP 성능 기능·혼잡 제어(CUBIC·BBR)·TIME_WAIT·UDP·QUIC? 인터페이스·컨트롤러·스위치·방화벽? Linux 스택·연결 큐·GSO/TSO·NAPI·RSS/RPS·커널 바이패스? (Ch 10.4) |
+| 10-03 | [네트워크 — 방법론·실험·튜닝](./10-03.네트워크%20—%20방법론·실험·튜닝.md) | USE(방향별)·워크로드 특성화·지연 분석·TCP 분석(포트 고갈)·패킷 스니핑은? ping·traceroute·iperf·tc netem은? sysctl·소켓 옵션(TCP_NODELAY) 튜닝은? (Ch 10.5·10.7·10.8) |
+| 10-04 | [네트워크 — 관측 도구](./10-04.네트워크%20—%20관측%20도구.md) | ss(limited 플래그)·ip·nstat·sar·nicstat(USE)·ethtool·tcplife·tcptop·tcpretrans·bpftrace(소켓 층)·tcpdump·Wireshark는 어느 층을 보나? (Ch 10.6) |
 | 11-01 | [클라우드 컴퓨팅 (1) — 배경](./11-01.클라우드%20컴퓨팅%20(1)%20—%20배경.md) | 인스턴스 유형(튜너블화)·수평 확장·자동 스케일링(과잉 프로비저닝·bursting)·스토리지(휘발성 vs 영속)·멀티테넌시(noisy neighbor)·Kubernetes는? (Ch 11.1) |
 | 11-02 | [클라우드 컴퓨팅 (2) — 하드웨어 가상화](./11-02.클라우드%20컴퓨팅%20(2)%20—%20하드웨어%20가상화.md) | Xen·KVM·Nitro? guest exit가 왜 CPU 오버헤드인가? EPT/NPT·SR-IOV·balloon 드라이버? 호스트(자원)와 게스트(자체 커널·BPF) 관측 차이는? (Ch 11.2) |
 | 11-03 | [클라우드 컴퓨팅 (3) — OS 가상화](./11-03.클라우드%20컴퓨팅%20(3)%20—%20OS%20가상화.md) | 컨테이너 = namespace(격리) + cgroup(제한)? 단일 커널의 장단점? CPU shares·bandwidth·bursting 함정? idle 컨테이너 iostat이 바쁜 까닭은? (Ch 11.3) |
