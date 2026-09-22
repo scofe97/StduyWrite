@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 898 552" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">묶음 C — 이름과 요청</title><desc id="dd">이름 실패와 연결 실패를 캡처에서 가르고, 질의 타입과 CNAME 체인을 읽고, 큰 응답이 TCP 로 넘어가는 순간을 EDNS(0) 로 없애고, 연결 하나에 실린 요청들의 http.time 을 재고, 재조립을 껐다 켜고, 평문 POST 와 CONNECT 터널 안의 ClientHello 를 본 뒤, DoT 와 mDNS 로 넓힌다.</desc>
+<rect width="898" height="552" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">PACKET ANALYSIS WITH WIRESHARK · 05-03 묶음 C</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">묶음 C — 이름과 요청</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">dns.conf 의 lab.test 존과 www/server.py 하나로 여덟 단계를 돕니다</text>
+<rect x="24" y="104" width="196" height="118" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="38" y="128" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">C1</text>
+<text x="122.0" y="156" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">이름 실패 · 연결 실패</text>
+<text x="122.0" y="182" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">nope.lab.test · 닫힌 81</text>
+<text x="122.0" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">NXDOMAIN 뒤 SYN 없음 / RST</text>
+<rect x="24" y="232" width="196" height="46" rx="6" fill="#E3B34110" stroke="#E3B341" stroke-width="1.0"/>
+<text x="36" y="249" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">겨누는 축</text>
+<text x="122.0" y="268" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">SYN 이 보이나</text>
+<path d="M 224 163.0 L 238 163.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="242" y="104" width="196" height="118" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="256" y="128" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">C2</text>
+<text x="340.0" y="156" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">질의 타입 · CNAME</text>
+<text x="340.0" y="182" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">dig A·AAAA·CNAME·MX·TXT</text>
+<text x="340.0" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">www → web 두 줄</text>
+<rect x="242" y="232" width="196" height="46" rx="6" fill="#E3B34110" stroke="#E3B341" stroke-width="1.0"/>
+<text x="254" y="249" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">겨누는 축</text>
+<text x="340.0" y="268" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">네 갈래 · 답 두 줄</text>
+<path d="M 442 163.0 L 456 163.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="460" y="104" width="196" height="118" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="474" y="128" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">C3</text>
+<text x="558.0" y="156" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">TCP 전환 · EDNS(0)</text>
+<text x="558.0" y="182" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">big.lab.test TXT 891바이트</text>
+<text x="558.0" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">+noedns 는 TC 뒤 TCP</text>
+<rect x="460" y="232" width="196" height="46" rx="6" fill="#E3B34110" stroke="#E3B341" stroke-width="1.0"/>
+<text x="472" y="249" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">겨누는 축</text>
+<text x="558.0" y="268" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">TCP 로 가는 조건</text>
+<path d="M 660 163.0 L 674 163.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="678" y="104" width="196" height="118" rx="8" fill="#161B22" stroke="#F08A59" stroke-width="1.4"/>
+<text x="692" y="128" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">C4</text>
+<text x="776.0" y="156" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">http.time</text>
+<text x="776.0" y="182" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">/fast /slow /fast 한 연결</text>
+<text x="776.0" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">SYN 한 번 · 응답마다 시간</text>
+<rect x="678" y="232" width="196" height="46" rx="6" fill="#F08A5910" stroke="#F08A59" stroke-width="1.0"/>
+<text x="690" y="249" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">겨누는 축</text>
+<text x="776.0" y="268" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">SYN·ACK 간격으로 잰다</text>
+<path d="M 776.0 282 L 776.0 294 L 122.0 294 L 122.0 304" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="24" y="308" width="196" height="118" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="38" y="332" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">C5</text>
+<text x="122.0" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">재조립 켬 · 끔</text>
+<text x="122.0" y="386" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">/big 2MB</text>
+<text x="122.0" y="408" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">세그먼트 수가 드러남</text>
+<rect x="24" y="436" width="196" height="46" rx="6" fill="#E3B34110" stroke="#E3B341" stroke-width="1.0"/>
+<text x="36" y="453" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">겨누는 축</text>
+<text x="122.0" y="472" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">조각 수의 쓸모</text>
+<path d="M 224 367.0 L 238 367.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="242" y="308" width="196" height="118" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="256" y="332" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">C6</text>
+<text x="340.0" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">평문 · CONNECT 터널</text>
+<text x="340.0" y="386" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">POST 비밀번호 · 프록시 8888</text>
+<text x="340.0" y="408" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">CONNECT 뒤 SNI 평문</text>
+<rect x="242" y="436" width="196" height="46" rx="6" fill="#E3B34110" stroke="#E3B341" stroke-width="1.0"/>
+<text x="254" y="453" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">겨누는 축</text>
+<text x="340.0" y="472" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">터널이 암호화하나</text>
+<path d="M 442 367.0 L 456 367.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="460" y="308" width="196" height="118" rx="8" fill="#161B22" stroke="#6A95D8" stroke-width="1"/>
+<text x="474" y="332" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">C7</text>
+<text x="642" y="332" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">책 밖</text>
+<text x="558.0" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#6A95D8">DoT</text>
+<text x="558.0" y="386" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">dig +tls @1.1.1.1</text>
+<text x="558.0" y="408" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">dns 필터 0줄 · 853 TLS</text>
+<rect x="460" y="436" width="196" height="46" rx="6" fill="#E3B34110" stroke="#E3B341" stroke-width="1.0"/>
+<text x="472" y="453" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">겨누는 축</text>
+<text x="558.0" y="472" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">전송과 암호화는 다른 축</text>
+<path d="M 660 367.0 L 674 367.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="678" y="308" width="196" height="118" rx="8" fill="#161B22" stroke="#6A95D8" stroke-width="1"/>
+<text x="692" y="332" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">C8</text>
+<text x="860" y="332" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">책 밖</text>
+<text x="776.0" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#6A95D8">mDNS</text>
+<text x="776.0" y="386" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">avahi-resolve · .local</text>
+<text x="776.0" y="408" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">224.0.0.251 · 제3자에도</text>
+<rect x="678" y="436" width="196" height="46" rx="6" fill="#E3B34110" stroke="#E3B341" stroke-width="1.0"/>
+<text x="690" y="453" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">겨누는 축</text>
+<text x="776.0" y="472" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">주소 찾기와 같은 방식</text>
+<line x1="12" y1="512" x2="850" y2="512" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="534" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="524" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="534" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">잘못 알던 인과를 겨눔</text>
+<rect x="300" y="524" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="322" y="534" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">몰랐던 사실을 겨눔</text>
+<rect x="474" y="524" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="496" y="534" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">책 밖 확장</text>
+</svg>
