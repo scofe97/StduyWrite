@@ -5,7 +5,7 @@
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
-W, H = 1000, 632   # 범례 구분선 아래 56px — 계약 §검증 '범례 아래 여유 30px'
+W, H = 1000, 548   # 범례 구분선 아래 56px — 계약 §검증 '범례 아래 여유 30px'
 d = D(W, H, "NETNS · veth PAIR · BRIDGE",
       "veth 는 두 네임스페이스에 양 끝을 걸친 한 장치다",
       "왼쪽 링과 오른쪽 링을 잇는 굵은 선 하나가 장치 하나다. 두 장치가 연결된 것이 아니라 한 장치의 두 끝이다.",
@@ -16,10 +16,11 @@ d = D(W, H, "NETNS · veth PAIR · BRIDGE",
 # 2026-09-18 2차 — 카드끼리는 48 이 됐지만 링 둘 사이가 44, 호스트 링과 아래 '다른 노드' 카드가
 #            32 로 남아 있었다. Pod 링을 4px 줄여 링 사이를 48 로, 아래 카드를 16px 내려 48 로 벌린다.
 BW, BH = 152, 100
-POD = (40, 236, 296, 152)                   # 40~336 · 호스트 링(384)과 48px
-HOST = (384, 236, 584, 152)                 # 384~968 · 안쪽 여백 16px
-V1, V2, BR, NIC = (190, 312), (476, 312), (676, 312), (876, 312)
-OUT = (876, 486)                            # 호스트 링 아랫변(388)과 48px
+# 2026-09-21 띠 라벨과 링 사이가 112px 비어 있었다. 링과 그 아래를 84px 올려 띠 라벨(124) 바로 밑에 둔다.
+POD = (40, 152, 296, 152)                   # 40~336 · 호스트 링(384)과 48px
+HOST = (384, 152, 584, 152)                 # 384~968 · 안쪽 여백 16px
+V1, V2, BR, NIC = (190, 228), (476, 228), (676, 228), (876, 228)
+OUT = (876, 402)                            # 호스트 링 아랫변(304)과 48px
 
 def box(cx, cy, t, s, tag, c=None, w=BW):
     d.box(cx - w // 2, cy - BH // 2, w, BH, PAPER2, c or RULE, 1.1, 6)
@@ -28,7 +29,7 @@ def box(cx, cy, t, s, tag, c=None, w=BW):
     d.t(cx, cy + 2, ddx.fit(s, 11, w - 14, s), 11, MUTED, KR)
     d.t(cx, cy + 26, ddx.fit(tag, 11, w - 12, tag), 11, SOFT, KR)
 
-ddx.band(d, 104, 560, "Pod 하나당 veth 하나 · 브리지에 붙음")
+ddx.band(d, 104, 476, "Pod 하나당 veth 하나 · 브리지에 붙음")
 for (rx, ry, rw, rh), lab, c in [(POD, "Pod 네트워크 네임스페이스 — 자기 스택 한 벌", INFO),
                                  (HOST, "호스트 네트워크 네임스페이스", WARN)]:
     d.o.append(f'<rect x="{rx}" y="{ry}" width="{rw}" height="{rh}" rx="8" '
@@ -43,7 +44,7 @@ box(*OUT, "다른 노드", "같은 클러스터의 이웃", "Pod 간 통신 상�
 
 # 링 둘을 관통하는 한 장치
 # 링 사이 좁은 틈에 라벨을 두면 양쪽 박스를 덮는다 — 두 링 아래로 감싸 내린다
-UY = 428
+UY = 344
 d.path(f"M 250 {V1[1]+BH//2+4} L 250 {UY} L 430 {UY} L 430 {V2[1]+BH//2+4}", ACC, 2.6)
 d.t(340, UY + 24, "한 장치의 두 끝 · 이름만 둘", 12, ACC, KR, "middle", 600)
 for a, b in [(V2, BR), (BR, NIC)]:
@@ -53,6 +54,6 @@ d.path(f"M {NIC[0]} {NIC[1]+BH//2+6} L {OUT[0]} {OUT[1]-BH//2-10}", MUTED, 1.5, 
 d.t(NIC[0] + 14, HOST[1] + HOST[3] + 20, "송신", 11, MUTED, KR, "start")
 
 
-d.legend(576, [("Pod 네임스페이스", INFO), ("호스트 네임스페이스", WARN), ("한 장치", ACC)])
+d.legend(492, [("Pod 네임스페이스", INFO), ("호스트 네임스페이스", WARN), ("한 장치", ACC)])
 d.save("02-01.netns-veth-bridge.svg")
 print("ok netns-veth-bridge")

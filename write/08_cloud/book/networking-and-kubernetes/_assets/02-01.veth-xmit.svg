@@ -1,62 +1,59 @@
-<svg viewBox="0 0 1000 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>veth pair 전송 의미 — veth_xmit이 peer의 RX 경로로 곧장 넘긴다</title>
-  <desc>veth pair는 두 가상 네트워크 인터페이스가 한 쌍으로 묶인 것이다. 한쪽 끝은 Pod 네임스페이스에, 다른 쪽 끝은 root 네임스페이스에 있다. Pod가 eth0으로 패킷을 보내면, 커널 내부에서 veth_xmit 함수가 반대쪽 끝의 RX 경로(NAPI/GRO backlog)로 곧장 넘긴다. 가운데에 케이블이나 qdisc 같은 전송 계층이 없어서, 송신된 패킷이 즉시 반대쪽의 수신 처리로 들어간다. 이 구조 덕분에 veth는 매우 빠르지만, 패킷이 두 번의 softirq를 타며 CPU 캐시 미스가 생길 수 있다. 대량 트래픽에서는 macvlan이나 ipvlan이 대안으로 검토된다.</desc>
-  <defs>
-    <style>
-      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
-      .sub    { font-size: 10.5px; fill: rgb(138,133,128); }
-      .ns     { font-size: 12px; font-weight: 800; }
-      .iface  { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
-      .mono   { font-size: 10px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
-      .darkmono { font-size: 10px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; fill: #0d0d0d; }
-      .desc   { font-size: 10.5px; font-weight: 600; fill: #e8e4df; }
-      .muted  { font-size: 9.5px; fill: rgb(138,133,128); }
-    </style>
-    <marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 Z" fill="rgb(212,168,83)"/></marker>
-  </defs>
-
-  <rect x="0" y="0" width="1000" height="480" fill="#0d0d0d"/>
-  <text x="24" y="32" class="title">veth pair — 케이블이 아니라 커널이 곧장 넘긴다</text>
-  <text x="24" y="52" class="sub">한쪽으로 보낸 패킷이 즉시 반대쪽 수신 처리로. 가운데 qdisc·케이블 없이 veth_xmit이 peer의 RX 경로로 넘긴다.</text>
-
-  <!-- Pod netns -->
-  <rect x="40" y="90" width="360" height="300" rx="12" fill="rgb(24,20,14)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
-  <text x="60" y="116" class="ns" style="fill:rgb(212,168,83)">Pod netns</text>
-
-  <rect x="120" y="150" width="200" height="60" rx="8" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
-  <text x="220" y="176" class="desc" text-anchor="middle">App → socket</text>
-  <text x="220" y="196" class="muted" text-anchor="middle">패킷 생성</text>
-
-  <rect x="120" y="250" width="200" height="70" rx="8" fill="#d4a853"/>
-  <text x="220" y="278" class="iface" text-anchor="middle">eth0 (veth 한쪽)</text>
-  <text x="220" y="300" class="darkmono" text-anchor="middle">veth_xmit() 실행</text>
-  <line x1="220" y1="210" x2="220" y2="248" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
-
-  <!-- root netns -->
-  <rect x="600" y="90" width="360" height="300" rx="12" fill="rgb(16,20,28)" stroke="#5b9bd5" stroke-width="1.4"/>
-  <text x="620" y="116" class="ns" style="fill:#8fc0ec">root netns</text>
-
-  <rect x="680" y="250" width="200" height="70" rx="8" fill="#5b9bd5"/>
-  <text x="780" y="278" class="iface" text-anchor="middle" style="fill:#e8e4df">veth-host-A</text>
-  <text x="780" y="300" class="mono" text-anchor="middle" style="fill:#e8e4df">peer RX 경로 진입</text>
-
-  <rect x="680" y="150" width="200" height="60" rx="8" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
-  <text x="780" y="176" class="desc" text-anchor="middle" style="fill:#8fc0ec">→ bridge / 라우팅</text>
-  <text x="780" y="196" class="muted" text-anchor="middle">다음 단계로</text>
-  <line x1="780" y1="248" x2="780" y2="212" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
-
-  <!-- 직접 호출 화살표 -->
-  <line x1="320" y1="285" x2="676" y2="285" stroke="rgb(212,168,83)" stroke-width="2.6" marker-end="url(#ar)"/>
-  <rect x="400" y="256" width="196" height="42" rx="7" fill="rgb(24,20,14)" stroke="rgb(212,168,83)" stroke-width="1.2"/>
-  <text x="498" y="273" class="mono" text-anchor="middle" style="fill:rgb(212,168,83)">veth_xmit → peer RX (NAPI)</text>
-  <text x="498" y="289" class="muted" text-anchor="middle">qdisc·케이블 없이 곧장</text>
-
-  <!-- 특성 두 줄 -->
-  <rect x="40" y="410" width="450" height="46" rx="8" fill="rgb(20,30,22)" stroke="#66bb6a" stroke-width="1"/>
-  <text x="60" y="431" class="desc" style="fill:#66bb6a">이점 — 케이블 왕복이 없어 매우 빠르다</text>
-  <text x="60" y="449" class="muted">즉시 반대쪽 수신 큐로 들어간다</text>
-
-  <rect x="510" y="410" width="450" height="46" rx="8" fill="rgb(30,20,20)" stroke="#f0b0b0" stroke-width="1"/>
-  <text x="530" y="431" class="desc" style="fill:#f0b0b0">비용 — 두 번의 softirq → CPU 캐시 미스 가능</text>
-  <text x="530" y="449" class="muted" style="fill:#f0b0b0">대량 트래픽엔 macvlan · ipvlan 검토</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">veth 는 송신을 반대쪽 끝의 수신으로 곧장 넘긴다</title><desc id="dd">위 레인은 비교 기준인 물리 NIC 두 장 사이 경로로 송신 스택, qdisc, NIC 드라이버, 케이블, 받는 NIC 순이다. 아래 레인은 veth 쌍 사이 경로로 Pod 쪽 끝의 송신 스택에서 veth_xmit 를 거쳐 호스트 쪽 끝의 수신 처리로 바로 간다. qdisc 열과 케이블 자리가 비어 있다.</desc>
+<rect width="1000" height="480" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">veth PAIR · veth_xmit</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">veth 는 송신을 반대쪽 끝의 수신으로 곧장 넘긴다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">물리 NIC 경로와 열을 맞추면 빈 자리가 qdisc 와 케이블이다</text>
+<rect x="40" y="112" width="920" height="120" rx="8" fill="#8B98A906" stroke="#8B98A9" stroke-width="1.2" stroke-dasharray="7 6"/>
+<rect x="56" y="103" width="178" height="18" fill="#0D1117"/>
+<text x="66" y="116" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#8B98A9">물리 NIC 두 장 사이 · 비교 기준</text>
+<rect x="64" y="136" width="176" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="152" y="168" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">보내는 쪽</text>
+<text x="152" y="190" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">송신 스택</text>
+<rect x="296" y="136" width="176" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="384" y="168" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">qdisc</text>
+<text x="384" y="190" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">송신 큐</text>
+<rect x="528" y="136" width="176" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="616" y="168" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">NIC 드라이버</text>
+<text x="616" y="190" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">물리 전송</text>
+<rect x="760" y="136" width="176" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="848" y="168" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">받는 NIC</text>
+<text x="848" y="190" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">수신 처리</text>
+<path d="M 246 172 L 286 172" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 478 172 L 518 172" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 710 172 L 750 172" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="732" y="162" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">케이블</text>
+<rect x="40" y="272" width="920" height="120" rx="8" fill="#6A95D806" stroke="#6A95D8" stroke-width="1.2" stroke-dasharray="7 6"/>
+<rect x="56" y="263" width="84" height="18" fill="#0D1117"/>
+<text x="66" y="276" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">veth 쌍 사이</text>
+<rect x="64" y="296" width="176" height="72" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="152" y="328" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">Pod 쪽 끝</text>
+<text x="152" y="350" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">eth0 · 송신 스택</text>
+<rect x="528" y="296" width="176" height="72" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4"/>
+<text x="616" y="328" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">veth_xmit</text>
+<text x="616" y="350" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">피어 수신으로 넘김</text>
+<rect x="760" y="296" width="176" height="72" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="848" y="328" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">호스트 쪽 끝</text>
+<text x="848" y="350" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">수신 · backlog</text>
+<path d="M 246 332 L 518 332" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<text x="384" y="322" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">qdisc 없음</text>
+<path d="M 710 332 L 750 332" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<text x="732" y="322" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">곧장</text>
+<line x1="12" y1="424" x2="952" y2="424" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="446" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="436" width="14" height="12" rx="2" fill="#8B98A922" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="122" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">물리 NIC 경로 · 비교 기준</text>
+<rect x="365" y="436" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="387" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">veth 경로</text>
+<rect x="500" y="436" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="522" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">반대쪽 수신으로 넘기는 함수</text>
 </svg>

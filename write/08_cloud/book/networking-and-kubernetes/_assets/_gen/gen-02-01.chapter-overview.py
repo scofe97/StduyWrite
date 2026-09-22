@@ -2,6 +2,7 @@
 # 2026-09-21 옛 02-01 을 둘로 나누며 다시 그렸다. 그림은 커널이 맡는 네 갈래 전체를 그대로 두고,
 #            이 편(소켓·배선) 두 칸만 점선으로 감싼다. 아래 두 칸은 02-02 의 번호를 달고 흐리게 둔다.
 #            주제 배치도이지 시간순이 아니다 — 시간순은 02-02 §3 끝의 request-through-kernel 이 맡는다.
+# 2026-09-21 2차 — 본문 §3 을 네임스페이스(§3)와 veth·브리지(§4)로 나눠 둘째 칸 이름과 번호를 바꿨다.
 # 타입 스펙: type-layers.md — 위·아래가 의미를 갖는 축이므로 가로로 눕히지 않는다.
 #           경계 링은 type-nested.md 관례. 링 밖 두 칸이 '이 편이 다루지 않는 곳'이다.
 import dd, ddx
@@ -24,7 +25,7 @@ BX, BW, BH = 180, 640, 64
 RING = (156, 232, 688, 224)                                    # 링 라벨 마스크가 첫 행에 닿지 않게 위로
 APP_CY, NIC_CY = 180, 756
 STEPS = [(296, "소켓 · fd", "앱과 커널의 분업", "§1 · §2", True),   # stride 112 — 통로 48px
-         (408, "veth · 브리지", "네임스페이스 배선", "§3", True),
+         (408, "네임스페이스 · veth · 브리지", "격리와 배선", "§3 · §4", True),
          (520, "훅 · 연결 추적", "버릴지 고칠지", "02-02 §1 · §2", False),
          (632, "라우팅", "어디로 넘길지", "02-02 §3", False)]
 
@@ -41,7 +42,7 @@ ddx.band(d, 104, 824, "부르는 쪽과 물리 네트워크 사이 · 커널이 
 rx, ry, rw, rh = RING
 d.o.append(f'<rect x="{rx}" y="{ry}" width="{rw}" height="{rh}" rx="8" '
            f'fill="{ACC}0A" stroke="{ACC}" stroke-width="1.4" stroke-dasharray="7 6"/>')
-ddx.ring_label(d, rx, ry, "이 편 — 소켓 · 배선", 11, ACC)
+ddx.ring_label(d, rx, ry, "이 편 — 소켓 · 격리 · 배선", 11, ACC)
 
 row(APP_CY, "애플리케이션", "socket() 을 부른다", "유저 공간", INFO, 72, dash=True)
 for cy, l, s, tag, mine in STEPS: row(cy, l, s, tag, muted=not mine)   # 다른 편 칸은 테두리는 그대로, 제목만 흐리게
