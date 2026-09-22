@@ -6,21 +6,21 @@ import sys; sys.path.insert(0, ".")
 from ddk import DK
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 952, 460
+W, H = 952, 416
 CW, CH, GAP, X0, Y = 264, 148, 44, 40, 128
 
 d = DK(W, H, "SYSTEMS PERFORMANCE · 10-02 §4",
        "연결 큐가 둘인 까닭",
-       "SYN 백로그는 핸드셰이크가 끝나지 않은 연결의 대기소이고, listen 백로그는 수립됐지만 accept 를 기다리는 줄이다. 둘로 나눈 덕에 가짜 연결이 진짜 연결의 자리를 차지하지 않는다.",
+       "SYN 큐는 핸드셰이크가 끝나지 않은 요청의 대기소이고, accept 큐는 수립됐지만 accept 를 기다리는 줄이다. 둘로 나눈 덕에 가짜 연결이 진짜 연결의 자리를 차지하지 않는다.",
        "첫 큐는 가짜일 수 있는 연결의 대기소, 둘째 큐는 수립된 연결의 줄입니다")
 
 STEPS = [
-    ("01", "SYN 백로그", "핸드셰이크 미완", INFO,
-     ["SYN 이 도착하면 여기 들어갑니다.", "가짜(SYN 플러드)일 수 있어", "아직 승격하지 않습니다"]),
-    ("02", "listen 백로그", "수립 · accept 대기", ACC,
-     ["핸드셰이크가 끝난 연결만", "여기로 옮겨집니다.", "차면 SYN 이 드롭됩니다"]),
+    ("01", "SYN 큐", "원서: SYN 백로그", INFO,
+     ["핸드셰이크 전 · SYN_RECV", "넘치면 SYN cookies(기본)", "쿠키 끄면 드롭 · ReqQFull"]),
+    ("02", "accept 큐", "원서: listen 백로그", ACC,
+     ["핸드셰이크가 끝난 연결", "넘치면 SYN·마지막 ACK 드롭", "ListenOverflows · Recv-Q"]),
     ("03", "accept()", "유저 프로세스", OK,
-     ["애플리케이션이 꺼내 갑니다.", "느리게 꺼내면 둘째 큐가", "차서 연결 지연이 됩니다"]),
+     ["앱이 꺼내 감", "느리면 accept 큐가 참", "→ 클라이언트 연결 지연"]),
 ]
 
 for i, (n, name, tag, c, body) in enumerate(STEPS):
@@ -37,9 +37,8 @@ for i, (n, name, tag, c, body) in enumerate(STEPS):
         d.arrow([(x + CW, Y + CH / 2), (x + CW + GAP - 8, Y + CH / 2)], MUTED, "ar", 1.3)
 
 YB = Y + CH + 40
-d.t(X0, YB, "SYN cookies 는 첫 큐를 우회합니다 — 쿠키가 클라이언트의 인증을 대신 보여 주기 때문입니다", 13, WARN, KR, "start")
-d.t(X0, YB + 24, "첫 큐를 길게 잡으면 SYN 플러드를 흡수하고, 둘째 큐가 차면 그건 애플리케이션이 accept 를 못 따라간다는 신호입니다",
-    13, MUTED, KR, "start")
+d.t(X0, YB, "SYN cookies · 첫 큐에 저장 없음 · 보증 범위: SYN-ACK 수신까지(신원 인증 아님)", 13, WARN, KR, "start")
+d.t(X0, YB + 24, "두 큐 공통 한도: min(backlog, somaxconn)", 13, MUTED, KR, "start")
 
-d.legend(YB + 48, [("차면 연결 지연이 되는 큐", ACC), ("가짜가 섞이는 대기소", INFO), ("유저 공간", OK), ("첫 큐를 우회하는 경로", WARN)])
+d.legend(YB + 48, [("넘치면 연결 지연이 되는 큐", ACC), ("가짜가 섞이는 대기소", INFO), ("유저 공간", OK), ("SYN cookies", WARN)])
 d.save("10-02.connection-queues.svg")

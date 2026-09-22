@@ -5,7 +5,7 @@ import sys; sys.path.insert(0, ".")
 from ddk import DK
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 928, 560
+W, H = 928, 544
 BX, BW, BH, Y0, STRIDE = 96, 736, 64, 108, 72
 
 d = DK(W, H, "SYSTEMS PERFORMANCE · 10-03",
@@ -14,11 +14,11 @@ d = DK(W, H, "SYSTEMS PERFORMANCE · 10-03",
        "10-01·10-02 가 개념과 구조였다면 이 편은 행동입니다")
 
 BANDS = [
-    ("§1", "방법론 10종", "USE · 워크로드 특성화 · 정적 튜닝", "무엇부터 볼지 정한다", None),
-    ("§2", "지연 분석 · TCP 분석", "버퍼 · 백로그 · 혼잡 윈도 · TIME_WAIT", "원천을 좁힌다", None),
-    ("§3", "패킷 스니핑", "커널 BPF 필터로 오버헤드를 줄인다", "마지막 수단의 정밀 도구", None),
+    ("§1", "방법론 10종", "증상별 선택 · USE · 원인 후보와 확정", "무엇부터 볼지 정한다", None),
+    ("§2", "지연 분석 · TCP 분석", "버퍼 · 백로그 · 두 윈도 · 포트 고갈", "원천을 좁힌다", None),
+    ("§3", "패킷 스니핑", "커널 BPF 필터 · 짧게", "마지막 수단의 정밀 도구", None),
     ("§4", "실험", "ping · traceroute · iperf · tc", "능동으로 재 네트워크를 가린다", ACC),
-    ("§5", "튜닝", "sysctl · setsockopt · 설정", "마지막에 손잡이를 돌린다", None),
+    ("§5", "튜닝", "근거 관측 · 대가 · 전역과 소켓별 범위", "마지막에 손잡이를 돌린다", None),
 ]
 
 for i, (tag, name, sub, role, c) in enumerate(BANDS):
@@ -34,7 +34,5 @@ d.t(BX - 60, Y0 + 4, "관찰", 13, SOFT, KR, "middle")
 d.arrow([(BX - 60, Y0 + 16), (BX - 60, Y0 + 4 * STRIDE + BH - 8)], SOFT, "soft", 1.2, "4 6")
 d.t(BX - 60, Y0 + 4 * STRIDE + BH + 16, "변경", 13, SOFT, KR, "middle")
 
-d.t(BX, Y0 + 5 * STRIDE + 18, "권장 시작 순서는 성능 모니터링 → USE → 정적 성능 튜닝 → 워크로드 특성화입니다", 13, MUTED, KR, "start")
-
-d.legend(Y0 + 5 * STRIDE + 44, [("네트워크를 가리는 절", ACC), ("나머지 절", MUTED)])
+d.legend(Y0 + 5 * STRIDE + 24, [("네트워크를 가리는 절", ACC), ("나머지 절", MUTED)])
 d.save("10-03.chapter-overview.svg")

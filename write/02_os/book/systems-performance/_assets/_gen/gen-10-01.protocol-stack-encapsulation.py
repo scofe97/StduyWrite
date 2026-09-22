@@ -28,19 +28,17 @@ for i, (tag, name, proto, unit, c) in enumerate(LAYERS):
     else: d.box(BX, y, BW, BH, PAPER2, RULE, 1.0, 8)
     d.t(BX - 20, y + 36, tag, 12, c if c else SOFT, MONO, "end", 600)
     d.t(BX + 20, y + 26, name, 14, c if c else INK, KR, "start", 600)
-    d.t(BX + 20, y + 46, proto, 12, MUTED, MONO, "start")
-    d.t(BX + BW - 20, y + 36, unit, 12, c if c else MUTED, KR, "end")
+    d.t(BX + 20, y + 46, proto, 13, MUTED, MONO, "start")
+    d.t(BX + BW - 20, y + 36, unit, 13, c if c else MUTED, KR, "end")
 
 # 양방향 — 캡슐화는 내려가고 역캡슐화는 올라간다
 d.arrow([(BX + BW + 44, Y0 + 8), (BX + BW + 44, Y0 + 3 * STRIDE + BH - 4)], MUTED, "ar", 1.3)
-d.t(BX + BW + 60, Y0 + 72, "헤더를", 13, MUTED, KR, "start")
-d.t(BX + BW + 60, Y0 + 88, "붙인다", 13, MUTED, KR, "start")
+d.t(BX + BW + 60, Y0 + 80, "캡슐화", 13, MUTED, KR, "start")
 d.arrow([(BX - 76, Y0 + 3 * STRIDE + BH - 4), (BX - 76, Y0 + 8)], SOFT, "soft", 1.3)
-d.t(BX - 140, Y0 + 72, "헤더를", 13, SOFT, KR, "start")
-d.t(BX - 140, Y0 + 88, "벗긴다", 13, SOFT, KR, "start")
+d.t(BX - 140, Y0 + 80, "역캡슐화", 13, SOFT, KR, "start")
 
-d.t(BX, Y0 + 4 * STRIDE + 12, "이더넷 + IP + TCP 헤더만 54바이트 이상입니다 — 페이로드는 그대로인데 총 크기가 커지는 만큼이 전송 오버헤드입니다",
+d.t(BX, Y0 + 4 * STRIDE + 12, "헤더 54바이트 이상 = 이더넷 14 + IP 20 + TCP 20",
     13, MUTED, KR, "start")
 
-d.legend(Y0 + 4 * STRIDE + 40, [("tcpdump 가 '패킷' 이라 부르는 층", ACC), ("나머지 층", MUTED)])
+d.legend(Y0 + 4 * STRIDE + 40, [("메시지를 '패킷' 이라 부르는 층", ACC), ("나머지 층", MUTED)])
 d.save("10-01.protocol-stack-encapsulation.svg")

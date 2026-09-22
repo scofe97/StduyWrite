@@ -14,11 +14,11 @@ d = DK(W, H, "SYSTEMS PERFORMANCE · 10-02 §4",
        "패킷은 struct sk_buff 로 이 컴포넌트들을 통과합니다")
 
 BANDS = [
-    ("01", "애플리케이션", "send() · sendmsg()", "자체 버퍼로 모아 보냅니다", None),
-    ("02", "소켓 · TCP 송신 버퍼", "tcp_wmem 으로 동적 조정", "작은 전송의 오버헤드를 줄입니다", None),
-    ("03", "GSO", "최대 64KB 슈퍼 패킷", "스택 통과 횟수를 줄입니다", ACC),
-    ("04", "qdisc", "fq_codel 이 흔한 기본", "분류 · 스케줄링 · 셰이핑", None),
-    ("05", "드라이버 · NIC (TSO)", "쪼개기를 하드웨어에 맡김", "CPU 대신 NIC 가 자릅니다", None),
+    ("01", "애플리케이션", "send() · sendmsg()", "앱 버퍼로 모아 보냄", None),
+    ("02", "소켓 · TCP 송신 버퍼", "tcp_wmem 으로 동적 조정", "작은 전송 오버헤드 감소", None),
+    ("03", "GSO", "최대 64KB 슈퍼 패킷", "스택 통과 횟수 감소", ACC),
+    ("04", "qdisc", "기본 pfifo_fast · systemd fq_codel · veth noqueue", "분류 · 스케줄링 · 셰이핑", None),
+    ("05", "드라이버 · NIC (TSO)", "쪼개기를 하드웨어에", "MSS 크기로 쪼갬", None),
 ]
 
 for i, (n, name, sub, role, c) in enumerate(BANDS):
@@ -33,8 +33,8 @@ for i, (n, name, sub, role, c) in enumerate(BANDS):
 d.arrow([(BX + BW + 40, Y0 + 8), (BX + BW + 40, Y0 + 4 * STRIDE + BH - 4)], MUTED, "ar", 1.3)
 d.t(BX - 92, Y0 + 140, "송신", 13, SOFT, KR, "start")
 
-YB = Y0 + 5 * STRIDE + 8
-d.t(BX - 116, YB, "수신 쪽에서는 GRO 가 GSO 의 짝으로, 작은 패킷을 모아 스택에 한 번에 올립니다", 13, MUTED, KR, "start")
+YB = Y0 + 5 * STRIDE + 24   # 마지막 띠 아래로 충분히 띄운다 — 8 이면 테두리에 붙는다
+d.t(BX - 116, YB, "수신 쪽 짝: GRO (작은 패킷 병합 후 한 번에 전달)", 13, MUTED, KR, "start")
 
 d.legend(YB + 28, [("스택 오버헤드를 줄이는 자리", ACC), ("나머지 단계", MUTED)])
 d.save("10-02.linux-network-stack.svg")

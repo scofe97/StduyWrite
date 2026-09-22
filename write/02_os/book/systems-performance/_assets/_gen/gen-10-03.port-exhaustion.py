@@ -6,8 +6,8 @@ import sys; sys.path.insert(0, ".")
 from ddk import DK
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 928, 512
-CW, CH, GAP, X0, Y = 208, 116, 24, 24, 124
+W, H = 928, 488
+CW, CH, GAP, X0, Y = 200, 116, 24, 24, 124   # 네 카드 끝 = 24 + 3×224 + 200 = 896 — 캔버스 928 안쪽 32
 
 d = DK(W, H, "SYSTEMS PERFORMANCE · 10-03 §2",
        "포트 고갈 — 남는 것이 하나뿐일 때",
@@ -32,11 +32,11 @@ for i, (name, sub, c) in enumerate(TUPLE):
 YB = Y + CH + 44
 d.box(X0, YB - 24, 880, 96, PAPER2, RULE, 1.0, 8)
 d.t(X0 + 20, YB, "바닥나는 조건", 14, WARN, KR, "start", 600)
-d.t(X0 + 20, YB + 26, "이론상 16비트 65,536개지만 Linux 기본 범위는 32768~60999 로 약 28,000개입니다.", 13, MUTED, KR, "start")
-d.t(X0 + 20, YB + 48, "TIME_WAIT 가 60초쯤 잡고 있어, 그 사이 이 수를 넘는 연결율이면 충돌합니다.", 13, MUTED, KR, "start")
+d.t(X0 + 20, YB + 26, "포트 범위 32768~60999 = 28,232개 (이론상 65,536)", 13, MUTED, KR, "start")
+d.t(X0 + 20, YB + 48, "TIME_WAIT 60초 · 먼저 닫은 쪽에 남음 → 28,232 ÷ 60 ≈ 초당 470개가 한계", 13, MUTED, KR, "start")
 
-d.t(X0, YB + 104, "TIME_WAIT 중인 포트로 SYN 을 보내면 옛 연결의 일부로 오인돼 거부될 수 있습니다. 다중 IP 나 SO_LINGER 가 해법입니다.",
-    13, MUTED, KR, "start")
+d.t(X0, YB + 104, "대책 순서: 연결 재사용 → 출발지 IP 추가 · 포트 범위 확장 → tcp_tw_reuse(주의)", 13, MUTED, KR, "start")
+d.t(X0, YB + 128, "SO_LINGER 0초: RST 로 끊음 · 일반 해법 아님", 13, WARN, KR, "start")
 
-d.legend(YB + 128, [("연결을 구분하는 유일한 축", ACC), ("고정되는 축", MUTED), ("고갈 조건", WARN)])
+d.legend(YB + 152, [("연결을 구분하는 유일한 축", ACC), ("고정되는 축", MUTED), ("고갈 조건", WARN)])
 d.save("10-03.port-exhaustion.svg")

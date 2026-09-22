@@ -2,11 +2,12 @@
 # 타입 스펙: type-process — 분석 단계가 차례로 이어지고 화살표가 순서를 나른다.
 #           축약: 주체(lane)가 없는 단계 지도라 §1 lanes 와 §2 공식을 쓰지 않고 카드 stride 로 놓는다
 #           (visual-diagram-selection §알려진 공백 "주체 없는 단계 지도" 관례).
+# ⚠ 2026-09-22 도식 검증: 01 단계 괄호를 "설정 점검(정적 성능 튜닝)"으로 뒤집어 적었다가 본문 표기(원서 이름 앞, 풀이는 괄호)로 맞췄다.
 import sys; sys.path.insert(0, ".")
 from ddk import DK
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 952, 452
+W, H = 952, 392
 CW, CH, GAP, X0, Y = 204, 148, 28, 32, 128
 
 d = DK(W, H, "SYSTEMS PERFORMANCE · 10-03 §4",
@@ -15,10 +16,10 @@ d = DK(W, H, "SYSTEMS PERFORMANCE · 10-03 §4",
        "실험의 자리는 애플리케이션 디버깅 앞입니다 — 네트워크를 먼저 가립니다")
 
 STEPS = [
-    ("01", "내 호스트 확인", ["USE 로 에러·사용률·포화,", "정적 튜닝으로 설정을", "먼저 봅니다"], None),
-    ("02", "원천 좁히기", ["지연 분석으로 어디서", "시간을 쓰는지,", "TCP 분석으로 무엇이 막는지"], None),
-    ("03", "실험으로 가리기", ["iperf 로 호스트 사이가", "기대치를 내는지 봅니다.", "애플리케이션보다 단순합니다"], ACC),
-    ("04", "튜닝", ["워크로드를 이해한 뒤", "sysctl·setsockopt 를", "손댑니다"], None),
+    ("01", "내 호스트 확인", ["USE: 에러·사용률·포화", "정적 성능 튜닝(설정 점검)", "인터페이스·방향별"], None),
+    ("02", "원천 좁히기", ["지연 분석: 어느 구간", "TCP 분석: 무엇이 막나", "증상 → 후보 → 확정"], None),
+    ("03", "실험으로 가리기", ["iperf: 대량 전송 한도", "앱보다 단순", "앱에 옮길 조건 확인"], ACC),
+    ("04", "튜닝", ["근거 관측이 있을 때", "대가 확인 후 변경", "sysctl · setsockopt"], None),
 ]
 
 for i, (n, name, body, c) in enumerate(STEPS):
@@ -35,9 +36,7 @@ for i, (n, name, body, c) in enumerate(STEPS):
         d.arrow([(x + CW, Y + CH / 2), (x + CW + GAP - 6, Y + CH / 2)], MUTED, "ar", 1.3)
 
 YB = Y + CH + 40
-d.t(X0, YB, "패킷 스니핑은 이 흐름 어디에서든 꺼낼 수 있지만 비용이 커 마지막 수단입니다", 13, WARN, KR, "start")
-d.t(X0, YB + 24, "네트워크가 기대 속도를 내는 것을 확인한 뒤 애플리케이션으로 돌아갑니다 — 그것이 10-01 의 면죄 문제와 이어집니다",
-    13, MUTED, KR, "start")
+d.t(X0, YB, "패킷 스니핑 · 어느 단계에서든 · 짧게 · 마지막 수단", 13, WARN, KR, "start")
 
-d.legend(YB + 48, [("네트워크를 가리는 단계", ACC), ("나머지 단계", MUTED), ("마지막 수단", WARN)])
+d.legend(YB + 24, [("네트워크를 가리는 단계", ACC), ("나머지 단계", MUTED), ("마지막 수단", WARN)])
 d.save("10-03.network-methodology-flow.svg")

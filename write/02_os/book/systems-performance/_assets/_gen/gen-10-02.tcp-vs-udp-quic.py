@@ -7,24 +7,24 @@ import sys; sys.path.insert(0, ".")
 from ddk import DK
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 928, 512
+W, H = 928, 420
 CW, CH, GAP, X0, Y = 280, 220, 24, 24, 116
 
 d = DK(W, H, "SYSTEMS PERFORMANCE · 10-02 §2",
        "TCP · UDP · QUIC — 무엇을 주고 무엇을 포기하나",
-       "세 전송 프로토콜의 성능 맞교환. UDP 가 버린 것을 QUIC 이 유저 공간에서 다시 구현했다.",
-       "QUIC 은 TCP 의 기능을 UDP 의 유연성 위에 다시 올린 것입니다")
+       "세 전송 프로토콜의 성능 맞교환. UDP 가 버린 신뢰성·혼잡 제어를 QUIC 이 UDP 위에서 다시 구현했다.",
+       "QUIC 은 신뢰성·혼잡 제어·암호화를 UDP 위에 다시 올린 표준 전송입니다")
 
 CARDS = [
     ("TCP", "신뢰성 있는 연결의 표준", OK,
-     ["슬라이딩 윈도로 높은 RTT 에서도", "처리량을 냅니다.", "혼잡 제어로 안정적입니다"],
-     ["포기: 핸드셰이크 지연", "커널에 박혀 진화가 느림"]),
-    ("UDP", "메시지를 그냥 보낸다", INFO,
-     ["작은 헤더 · 무상태 · 무재전송.", "연결 오버헤드가 낮고", "TCP 의 큰 지연을 피합니다"],
-     ["포기: 신뢰성 · 순서", "혼잡 회피가 없음"]),
+     ["슬라이딩 윈도 · 버퍼링", "높은 RTT 에서도 처리량", "혼잡 제어로 안정"],
+     ["대가: 핸드셰이크 지연", "손실 시 재전송 대기"]),
+    ("UDP", "메시지를 그대로 보냄", INFO,
+     ["작은 헤더 · 무상태", "무재전송 · 연결 비용 낮음", "주 용도: DNS"],
+     ["포기: 신뢰성 · 순서", "혼잡 회피 없음"]),
     ("QUIC", "UDP 위에 다시 올린 기능", ACC,
-     ["한 연결에 여러 스트림,", "0-RTT 핸드셰이크,", "주소가 바뀌어도 연결 유지"],
-     ["얻음: 유저 공간이라", "빠르게 개선됨"]),
+     ["한 연결에 여러 스트림", "0-RTT(사전 통신 있을 때)", "주소가 바뀌어도 연결 ID 로 유지"],
+     ["표준: RFC 9000 (2021)", "비신뢰 전송: 확장 RFC 9221"]),
 ]
 
 for i, (name, tag, c, body, foot) in enumerate(CARDS):
@@ -39,11 +39,6 @@ for i, (name, tag, c, body, foot) in enumerate(CARDS):
     for j, line in enumerate(foot):
         d.t(x + 16, Y + CH - 40 + j * 18, line, 13, c, KR, "start")
 
-YB = Y + CH + 40
-d.t(X0, YB, "UDP 는 혼잡 제어가 없고 방화벽에 잘 막히지 않습니다. 그 위에 자체 신뢰성·혼잡 제어를 얹은 것이 QUIC 입니다",
-    13, MUTED, KR, "start")
-d.t(X0, YB + 24, "TCP 는 커널에 있어 배포가 느리지만, QUIC 은 애플리케이션과 함께 나가므로 개선 주기가 짧습니다",
-    13, SOFT, KR, "start")
-
-d.legend(YB + 48, [("유저 공간에서 진화하는 대안", ACC), ("신뢰성을 주는 쪽", OK), ("단순함을 주는 쪽", INFO)])
+YB = Y + CH + 32
+d.legend(YB, [("UDP 위에 다시 올린 대안", ACC), ("신뢰성을 주는 쪽", OK), ("단순함을 주는 쪽", INFO)])
 d.save("10-02.tcp-vs-udp-quic.svg")

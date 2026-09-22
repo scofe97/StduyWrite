@@ -6,7 +6,7 @@ import sys; sys.path.insert(0, ".")
 from ddk import DK
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 928, 464
+W, H = 928, 412
 CW, CH, GAP, X0, Y = 280, 200, 24, 24, 124
 
 d = DK(W, H, "SYSTEMS PERFORMANCE · 10-03 §1",
@@ -17,13 +17,13 @@ d = DK(W, H, "SYSTEMS PERFORMANCE · 10-03 §1",
 CARDS = [
     ("01", "에러", "먼저 본다", OK,
      ["errors · dropped · overruns", "carrier · collisions"],
-     "해석이 명확해 가장 싸게 걸러집니다"),
+     "해석이 명확 · 빨리 걸러짐"),
     ("02", "사용률", "계산해야 한다", ACC,
-     ["현재 처리량 ÷ 협상 속도.", "방향별(TX/RX)로 따로"],
-     "OS 도구가 직접 안 주는 경우가 많습니다"),
+     ["현재 처리량 ÷ 협상 속도", "방향별(TX/RX)로 따로"],
+     "sar %ifutil: 속도를 알 때만"),
     ("03", "포화", "재기 어렵다", WARN,
-     ["직접 지표가 마땅치 않습니다.", "TCP 재전송을 대리 지표로"],
-     "재전송이 네트워크 포화의 신호가 됩니다"),
+     ["직접 지표 드묾", "overruns · 송신 블로킹 시간"],
+     "재전송: 대리 지표 · 어느 홉이든"),
 ]
 
 for i, (n, name, tag, c, body, foot) in enumerate(CARDS):
@@ -41,8 +41,5 @@ for i, (n, name, tag, c, body, foot) in enumerate(CARDS):
     d.t(x + 16, Y + CH - 22, foot, 13, c, KR, "start")
 
 YB = Y + CH + 36
-d.t(X0, YB, "인터페이스별로, 그리고 방향별로 봅니다 — 합쳐 평균 내면 포화된 방향이 여유 있는 방향에 가려집니다",
-    13, MUTED, KR, "start")
-
-d.legend(YB + 24, [("계산이 필요한 축", ACC), ("가장 먼저 보는 축", OK), ("대리 지표를 쓰는 축", WARN)])
+d.legend(YB, [("계산이 필요한 축", ACC), ("가장 먼저 보는 축", OK), ("대리 지표를 쓰는 축", WARN)])
 d.save("10-03.use-method-network.svg")

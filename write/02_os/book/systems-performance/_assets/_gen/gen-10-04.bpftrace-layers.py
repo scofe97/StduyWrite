@@ -1,11 +1,12 @@
 # 10-04 §4 — 어느 층에 프로브를 걸 것인가. 층마다 얻는 것과 잃는 것이 다르다.
 # 타입 스펙: type-layers — 애플리케이션에서 드라이버까지 추적 지점이 내려가는 층 지도다.
 #           축약: OSI 층이 아니라 추적 지점이라 인덱스 태그를 층 이름으로 쓰지 않고 번호로 채운다.
+# ⚠ 2026-09-22 도식 검증: 05 층을 "skb · net tracepoint" 로만 적어 본문 L230 의 kprobe·qdisc tracepoint 가 빠져 있었다.
 import sys; sys.path.insert(0, ".")
 from ddk import DK
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 952, 552
+W, H = 952, 520
 BX, BW, BH, Y0, STRIDE = 132, 700, 60, 116, 68
 
 d = DK(W, H, "SYSTEMS PERFORMANCE · 10-04 §4",
@@ -18,7 +19,7 @@ BANDS = [
     ("02", "소켓", "syscall tracepoint", "책임 프로세스가 on-CPU", ACC),
     ("03", "TCP", "tcp tracepoint · kprobe", "프로토콜 내부가 보임", None),
     ("04", "UDP · IP", "kprobe", "프로세스 식별이 약함", None),
-    ("05", "패킷 · qdisc · 드라이버", "skb · net tracepoint", "소켓 없는 이벤트도 보임", None),
+    ("05", "패킷 · qdisc · 드라이버", "skb · qdisc · net tracepoint · kprobe", "소켓 없는 이벤트도 보임", None),
 ]
 
 for i, (n, name, src, note, c) in enumerate(BANDS):
@@ -34,9 +35,6 @@ d.t(BX - 100, Y0 + 4, "프로세스", 13, SOFT, KR, "start")
 d.arrow([(BX - 76, Y0 + 16), (BX - 76, Y0 + 4 * STRIDE + BH - 28)], SOFT, "soft", 1.2, "4 6")
 d.t(BX - 108, Y0 + 4 * STRIDE + BH - 4, "프로토콜", 13, SOFT, KR, "start")
 
-YB = Y0 + 5 * STRIDE + 20
-d.t(BX - 108, YB, "깊은 kprobe 는 프로세스 엔드포인트가 on-CPU 가 아닐 수 있어 pid·comm 이 무관할 수 있습니다",
-    13, MUTED, KR, "start")
-
-d.legend(YB + 28, [("누가 했는지가 분명한 층", ACC), ("나머지 층", MUTED)])
+YB = Y0 + 4 * STRIDE + BH + 20
+d.legend(YB, [("누가 했는지가 분명한 층", ACC), ("나머지 층", MUTED)])
 d.save("10-04.bpftrace-layers.svg")
