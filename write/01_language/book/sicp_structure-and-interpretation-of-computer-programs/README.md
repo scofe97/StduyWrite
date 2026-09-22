@@ -10,6 +10,7 @@ related:
   - ../five-lines-of-code/README.md
   - ../Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/README.md
   - ../../README.md
+  - ../../../roadmap/jvm-roadmap.md
 updated: 2026-09-23
 ---
 
@@ -82,6 +83,25 @@ Scheme판에는 3판이 없습니다. JavaScript판은 새 판이 아니라 번�
 | 5 | 5.1 Designing Register Machines · 5.2 A Register-Machine Simulator · 5.3 Storage Allocation and Garbage Collection · 5.4 The Explicit-Control Evaluator · 5.5 Compilation | — | ◻ |
 
 빈 노트를 미리 만들지 않는 이유는 분할이 분량에 달려 있기 때문입니다. 1장은 2만 7천 단어이고 2~4장은 4만 2천~4만 4천 단어라서, 같은 밀도로 쓰면 편 수가 장마다 크게 달라집니다.
+
+
+
+## 로드맵과 닿는 자리
+
+> 이 책은 로드맵 한 편에 속하지 않지만, 4·5장이 만드는 부품이 [JVM 로드맵](../../../roadmap/jvm-roadmap.md)의 실제 구현과 짝을 이룹니다. 원리를 여기서 손으로 만들고, 실물은 그 단계에서 봅니다.
+
+JVM 을 공부하다가 "왜 이렇게 만들었나"에서 막히면 이 책의 해당 절로 내려오고, 반대로 여기서 만든 장난감 부품이 실제로 어떻게 커졌는지는 JVM 로드맵의 해당 단계로 올라갑니다.
+
+| SICP 절 | 이 절에서 만드는 것 | JVM 로드맵에서 닿는 자리 |
+|---|---|---|
+| 3.4 Concurrency: Time Is of the Essence | 공유 상태의 경합과 serializer | 5단계 안전성 — 동기화 · 락 |
+| 4.1 The Metacircular Evaluator | 평가기를 같은 언어로 짠 인터프리터 | 3단계 JIT — 인터프리터 |
+| 5.1 Designing Register Machines | 레지스터와 스택으로 계산을 내린 기계 | 1단계 객체와 프레임 — 스택 프레임 · 피연산자 스택 · PC 레지스터 |
+| 5.3 Storage Allocation and Garbage Collection | 리스트 메모리 표현과 stop-and-copy GC, 대안으로 mark-sweep | 4단계 알고리즘 — 복사 · 마크-스윕 |
+| 5.4 The Explicit-Control Evaluator | 꼬리 재귀가 스택을 늘리지 않는 평가기 | 1단계 객체와 프레임 — 스택 프레임 |
+| 5.5 Compilation | 평가기 대신 목적 코드를 내는 컴파일러, lexical addressing, open coding | 3단계 프런트엔드 · 최적화 — `javac` · 메서드 인라인 |
+
+JVM 은 스택 기계이고 5장의 기계는 레지스터 기계입니다. 같은 계산을 두 방식으로 내리는 차이가 1단계 피연산자 스택을 읽을 때 대조점이 됩니다.
 
 
 

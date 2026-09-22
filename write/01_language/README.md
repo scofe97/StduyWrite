@@ -14,6 +14,7 @@ updated: 2026-04-19
 
 - [java/](java/) — Java 언어·표준 라이브러리·JVM·빌드
   - [book/five-lines-of-code/](book/five-lines-of-code/) — 언어중립 코드 작성·리팩토링 원칙(클린 코드·Five Lines of Code)
+  - [book/sicp_structure-and-interpretation-of-computer-programs/](book/sicp_structure-and-interpretation-of-computer-programs/) — 언어중립 프로그래밍 원리서(SICP JavaScript판) — 추상화·인터프리터·레지스터 머신·GC
   - `01_Core`, `02_TypeSystem`, `03_Collections`, `04_Lambda`, `05_Concurrency`, `06_Modern`, `07_DesignPatterns`, `08_Testing`, **`09_jvm`** (JVM·GC·바이트코드), `10_IO`, `11_Build`
 
 ## 경계 기준
