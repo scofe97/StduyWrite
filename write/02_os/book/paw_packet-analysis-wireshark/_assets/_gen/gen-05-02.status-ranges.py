@@ -22,11 +22,11 @@ BH, STRIDE = 76, 92
 Y0 = 128
 
 BANDS = [
-    ("1xx", "100 ~ 101", "중간 응답", MUTED,
+    ("1xx", "—", "중간 응답", MUTED,
      "100 Continue · 101 Switching protocol", "본 응답이 뒤에 따로 옴", False),
     ("2xx", "200 ~ 206", "성공", ACC,
      "200 OK · 201 Created", "http.time 으로 느린 것 추림", True),
-    ("3xx", "300 ~ 308", "재지정", INFO,
+    ("3xx", "300 ~ 307 +308", "재지정", INFO,
      "300 Multiple choices · 301 Moved permanently", "다음 요청의 목적지 확인", False),
     ("4xx", "400 ~ 417", "클라이언트 오류", WARN,
      "400 Bad Request · 401 Unauthorized", "요청 헤더 · 인증 정보", False),
@@ -47,6 +47,7 @@ for i, (tag, rng, name, col, examples, nextstep, focal) in enumerate(BANDS):
     d.t(BX + 24, y + 50, examples, 10, MUTED, MONO, "start")
     d.chip(BX + BW - 148, y + 30, nextstep, col if focal else SOFT, 12, 8)
 
+d.t(24, 596, "범위는 원문 표 기준 · 이후 308 등 여러 코드가 더해짐", 11, MUTED, KR, "start")
 d.t(24, 620, "부류로 거르기 — http.response.code >= 400 && http.response.code < 500",
      12, SOFT, KR, "start")
 d.t(24, 644, "성능 조사의 실제 대상 — http.response.code == 200 && http.time > 1",

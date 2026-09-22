@@ -3,7 +3,7 @@
 #            두 메시지만 보이는 것이 실패가 아니라 정상일 수 있다는 뜻이라, 메시지 수만 세고
 #            판단하면 안 됩니다."
 #            같은 두 주체 사이에서 경로가 갈리므로 두 컷을 위아래로 쌓아 대비시킨다.
-#            위 컷은 SARR 네 걸음, 아래 컷은 두 걸음이고, 건너뛰어지는 것은 ADVERTISE 하나다.
+#            위 컷은 SARR 네 걸음, 아래 컷은 두 걸음이고, 건너뛰어지는 것은 ADVERTISE 와 REQUEST 두 메시지다.
 # 타입 스펙: type-sequence — 주체 둘 사이의 시간순 메시지. headline(accent)은 ADVERTISE 없이
 #           바로 오는 REPLY 하나. 프리미티브의 Seq.msg 가 한글을 MONO 로 하드코딩하므로
 #           gen-05-01.sarr.py 와 같은 SeqKR 계약으로 감싼다.
@@ -23,7 +23,7 @@ W, H = 940, 688
 d = SeqKR(W, H, "PACKET ANALYSIS WITH WIRESHARK · 05-01 §3",
           "rapid commit — SARR 네 걸음을 두 걸음으로",
           "같은 두 주체 사이에서 경로가 갈린다. 위는 SARR 네 메시지, 아래는 rapid commit 옵션이 붙어 "
-          "두 메시지로 끝나는 경우다. 건너뛰어지는 것은 ADVERTISE 하나이고, REQUEST 도 함께 사라진다. "
+          "두 메시지로 끝나는 경우다. 건너뛰어지는 것은 ADVERTISE 와 REQUEST 두 메시지다. "
           "캡처에 메시지가 둘만 보이는 것이 실패가 아니라 정상일 수 있다.",
           "메시지 수만 세면 rapid commit 을 실패로 오독합니다")
 

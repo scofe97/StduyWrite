@@ -40,11 +40,11 @@ def result(cy, title, sub, c, focal=False):
 
 STEPS = [  # (판단, 오른쪽으로 빠지는 답, 결론 제목, 결론 부제, 색, focal)
     ("DHCP 교환이 보이나?",      "아니오", "정적 설정 · SLAAC",   "icmpv6.type == 134",           INFO, False),
-    ("서버가 답했나?",           "아니오", "서버 무응답",          "기동 · 릴레이 · 세그먼트 · 주소 풀", WARN, False),
-    ("첫 답이 REPLY 인가?",      "예",    "rapid commit",        "정상 · 실패 아님",               OK,   False),
-    ("REQUEST 를 보냈나?",       "아니오", "클라이언트가 못 고름",   "클라이언트 로그 · 서버 충돌",       WARN, False),
+    ("서버가 답했나?",           "아니오", "서버 무응답",          "기동 · 릴레이 · 세그먼트 · v4 는 주소 풀", WARN, False),
+    ("첫 답이 REPLY 인가?",      "예",    "rapid commit",        "NoAddrsAvail 없으면 정상",               OK,   False),
+    ("REQUEST 를 보냈나?",       "아니오", "제안이 안 닿음 · 못 고름",   "캡처 위치 · 플래그 · v6 NoAddrsAvail",       WARN, False),
     ("REQUEST 뒤 답이 왔나?",    "아니오", "확정 못 함",           "옵션 54 의 서버 · §5 예약 아님",   ACC,  True),
-    ("NAK · NoAddrsAvail 인가?", "예",    "서버가 거절",          "주소 풀 · 먼저 확정된 주소",        BAD,  False),
+    ("NAK · NoAddrsAvail 인가?", "예",    "서버가 거절",          "v4 NAK 무효·먼저 확정 · v6 주소 풀",        BAD,  False),
     ("DECLINE 이 보이나?",       "예",    "주소 충돌",            "ARP 로 그 주소의 장비 찾기",        BAD,  False),
 ]
 
