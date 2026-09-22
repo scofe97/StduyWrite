@@ -1,4 +1,4 @@
-# write/roadmap/network-roadmap.md §책 읽기 흐름.
+# write/roadmap/network-roadmap.md §자료 읽기 흐름.
 # 이 로드맵이 쓰는 자료 스물셋을 단계 순으로 걸고, 각 자료에서 "읽을 장"만 적는다.
 # 마지막 한 줄만 책이 아니다 — network-fundamentals-lab 은 containerlab 토폴로지가 원자료이고,
 #   읽는 자리가 아니라 고장을 배포해 증상으로 되짚는 자리다. 같은 표에 두는 이유는
@@ -35,6 +35,9 @@ rows = [
         ("High Performance Browser Networking", "1단계", "4장", ["TLS·인증서 체인", "session resumption·ALPN"], "추천"),
         ("Container Security", "1단계", "11장", ["키·인증서·CA 의 역할", "컴포넌트 사이 TLS"], "선택"),
         ("Real-World Cryptography", "1 · 8단계", "2~5 · 9장", ["키 교환·AEAD·HKDF", "TLS 1.3 핸드셰이크"], "추천"),
+        ("TCP Congestion Control", "1단계", "책 · 5장", ["Vegas 와 BBR", "지연 기반 혼잡 제어"], "추천"),
+        ("RFC 8446", "1단계", "문서 · 4.1.4절 · 부록 A", ["HelloRetryRequest", "핸드셰이크 상태 기계"], "추천"),
+        ("ECH 규격 묶음", "1단계", "문서 · RFC 9180 · 9460", ["HPKE 와 ECH 초안", "HTTPS RR 로 오는 공개키"], "추천"),
     ]),
     ("1–6", "계층 종주", [
         ("Networking and Kubernetes", "1~6단계", "전독 · 6장이 클라우드 축", ["OSI 부터 EKS 까지 한 축", "실습 다섯 편 포함"], "필수"),
@@ -47,6 +50,11 @@ rows = [
     ("1·4", "Service 와 진입", [
         ("Kubernetes in Action", "1·4단계", "11~13 · 16·17장", ["Service·트래픽 정책·readiness", "Ingress·Gateway API"], "추천"),
         ("Production Kubernetes", "4단계", "5장", ["Pod 네트워킹", "CNI 구현체와 IPAM"], "선택"),
+        ("Kubernetes 서비스·네트워킹 문서", "4단계", "문서 · 개념 전편", ["Service·EndpointSlice·DNS", "NetworkPolicy"], "추천"),
+        ("Gateway API 가이드", "4단계", "문서 · Guides", ["HTTPRoute 와 필터", "크로스 네임스페이스"], "추천"),
+        ("CNI 규격", "4단계", "문서 · SPEC.md", ["ADD·DEL·CHECK 계약", "플러그인 체인"], "추천"),
+        ("CoreDNS Manual", "4단계", "문서 · 설정·플러그인", ["Corefile 구성", "플러그인 순서"], "선택"),
+        ("Gateway API Inference Extension", "4단계", "문서 · Guides", ["InferencePool", "Endpoint Picker"], "선택"),
     ]),
     ("4·5", "underlay·클라우드", [
         ("Cloud Native Data Center Networking", "4·5단계", "2·6·7·14장", ["Clos 토폴로지·네트워크 가상화", "컨테이너 네트워킹·BGP"], "추천"),
@@ -56,6 +64,7 @@ rows = [
     ("4–7", "데이터패스", [
         ("Cilium Up and Running", "4~7단계", "전독", ["왜 Cilium 인가·CNI 비교·IPAM", "정책·BGP·Egress·암호화·Hubble"], "필수"),
         ("Learning eBPF", "6단계", "3·5~8장", ["프로그램 구조·CO-RE·BTF", "verifier·네트워킹"], "추천"),
+        ("LFS146 Introduction to Cilium", "6·7단계", "강의 · 26시간", ["정책·Hubble·암호화", "kube-proxy 대체·Cluster Mesh"], "선택"),
     ]),
     ("7·8", "운영 경계", [
         ("Istio in Action", "7단계", "1·3~6·9·10·12장·부록 C", ["Envoy·Gateway·복원력·mTLS", "기본값 닫기·SPIFFE"], "추천"),
@@ -67,6 +76,8 @@ rows = [
         ("API Security in Action", "8단계", "9장", ["capability 기반 보안", "macaroon 과 권한 위임"], "선택"),
         ("Patterns of Distributed Systems", "8·9단계", "7·26·28장", ["HeartBeat 와 실패 감지 시간", "Lease 와 gossip 전파"], "추천"),
         ("Database Internals", "8·9단계", "9·12장", ["실패 감지와 heartbeat", "anti-entropy 와 gossip"], "추천"),
+        ("Tor 설계 논문", "8·9단계", "문서 · 4.2·9절", ["traffic correlation 의 한계", "회로 교체와 그 대가"], "추천"),
+        ("I2P 기술 문서", "8·9단계", "문서 · 네 편", ["Tunnel·Peer Selection", "Garlic·Network Database"], "추천"),
     ]),
 ]
 
@@ -96,10 +107,10 @@ H = _acc + 72
 d = D(
     W,
     H,
-    "WRITE · NETWORK BOOK FLOW",
-    "네트워크 책 읽기 흐름",
-    "이 로드맵이 쓰는 자료를 단계 순으로 걸고 각 자료에서 읽을 장만 적었다. 통독하는 책은 Networking and Kubernetes 와 "
-    "Cilium Up and Running 이고 나머지는 부분 독서다. 맨 위 한 줄만 책이 아니라 손으로 밟는 랩이다. "
+    "WRITE · NETWORK SOURCE FLOW",
+    "네트워크 자료 읽기 흐름",
+    "책·문서·강의·랩을 단계 순으로 걸고 각 자료에서 읽을 범위만 적었다. 통독하는 책은 Networking and Kubernetes 와 "
+    "Cilium Up and Running 이고 나머지는 부분 독서다. 책이 아닌 자료는 범위 칸 앞에 종류를 적었다. "
     "테두리 색이 우선순위이고, 대체는 같은 자리를 다른 자료가 대신 채우는 경우다.",
     "한 주제의 자료는 권수 제한 없이 병행합니다. 단계는 자료마다 달라 카드마다 칩으로 적었습니다",
 )

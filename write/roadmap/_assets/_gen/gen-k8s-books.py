@@ -1,4 +1,4 @@
-# write/roadmap/k8s-roadmap.md §책 읽기 흐름.
+# write/roadmap/k8s-roadmap.md §자료 읽기 흐름.
 # 이 로드맵이 쓰는 책 열두 권을 단계 순으로 걸고, 각 책에서 "읽을 장"만 적는다.
 # 색이 뜻하는 것은 우선순위다 — 필수·추천·선택·대체.
 #   모든 책을 같은 무게로 늘어놓으면 무엇부터 펴야 하는지가 사라진다.
@@ -30,6 +30,11 @@ rows = [
         ("Container Security", "6단계", "1~4 · 8·9 · 13장", ["위협 모델·capability·격리", "샌드박싱·경계 파괴·런타임"], "추천"),
         ("CKS Study Guide", "6단계", "2~7장", ["클러스터·시스템 하드닝·PSS", "공급망·감사 로그·Falco"], "추천"),
         ("Learning eBPF", "6단계", "9장", ["eBPF 보안 활용", "Tetragon·BPF LSM"], "선택"),
+        ("Kubernetes 보안 문서 묶음", "6단계", "문서 · 네 편", ["PSS·Security Checklist", "Auditing·저장 암호화"], "추천"),
+        ("CIS Kubernetes Benchmark", "6단계", "문서 · kube-bench", ["Control Plane·Worker 항목", "자동 점검 도구"], "추천"),
+        ("KISA 클라우드 취약점 점검 가이드", "6단계", "문서 · 2.26~2.28절", ["Docker·Master·Worker 절", "진단 기준과 조치"], "선택"),
+        ("런타임 탐지 문서", "6단계", "문서 · Falco·Tetragon", ["규칙 기반 탐지", "eBPF 강제와 탐지"], "선택"),
+        ("EKS Best Practices for Security", "6단계", "문서 · 가이드 전편", ["IRSA·Pod Identity", "봉투 암호화·제어부 로그"], "추천"),
     ]),
     ("6·7", "정책과 코드화", [
         ("Policy as Code", "6·7단계", "4·5 · 7·8 · 11·12 · 14장", ["OPA·Gatekeeper·Kyverno", "Terraform·공급망 정책"], "선택"),
@@ -68,11 +73,11 @@ H = _acc + 72
 d = D(
     W,
     H,
-    "WRITE · KUBERNETES BOOK FLOW",
-    "Kubernetes 책 읽기 흐름",
-    "이 로드맵이 쓰는 책을 단계 순으로 걸고 각 책에서 읽을 장만 적었다. Kubernetes in Action 은 "
-    "3장만 빼고 통독하고 나머지는 부분 독서다. 테두리 색이 우선순위다.",
-    "위에서 아래로 진행하고, 같은 행의 책은 병행합니다. 칩은 그 책이 걸치는 단계입니다",
+    "WRITE · KUBERNETES SOURCE FLOW",
+    "Kubernetes 자료 읽기 흐름",
+    "이 로드맵이 쓰는 책과 문서를 단계 순으로 걸고 각 자료에서 읽을 범위만 적었다. Kubernetes in Action 은 "
+    "3장만 빼고 통독하고 나머지는 부분 독서다. 책이 아닌 자료는 범위 앞에 종류를 적었다. 테두리 색이 우선순위다.",
+    "위에서 아래로 진행하고, 같은 행의 자료는 병행합니다. 칩은 그 자료가 걸치는 단계입니다",
 )
 d.line(126, row_y[0] + 38, 126, row_y[-1] + 38, RULE, 1.4)
 for i, (number, phase, cards) in enumerate(rows):

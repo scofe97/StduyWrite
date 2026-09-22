@@ -72,28 +72,33 @@ updated: 2026-09-23
 
 
 
-## 책 읽기 흐름
+## 자료 읽기 흐름
 
-> 위 단계를 무엇으로 배우는가입니다. 책마다 어느 단계의 무엇을 다루는지와 읽을 장을 적습니다.
+> 위 단계를 무엇으로 배우는가입니다. 책과 문서를 한 표에 두고, 자료마다 어느 단계에 쓰이는지와 읽을 범위를 적습니다.
 
-![Kubernetes 책 읽기 흐름 — 우선순위와 읽을 장](_assets/k8s-books.svg)
+![Kubernetes 자료 읽기 흐름 — 우선순위와 읽을 범위](_assets/k8s-books.svg)
 
-《Kubernetes in Action》 은 클러스터를 띄우는 3장만 빼고 통독하고, 나머지는 표의 `읽을 장`만 봅니다.
+《Kubernetes in Action》 은 클러스터를 띄우는 3장만 빼고 통독하고, 나머지는 표의 `읽을 범위`만 봅니다. 문서는 6단계 보안과 EKS 처럼 소장본에 장이 없거나 규격이 계속 바뀌는 자리를 맡습니다.
 
-| 책 | 읽을 장 | 우선순위 | 자리 |
-|---|---|:---:|---|
-| [Kubernetes in Action](../08_cloud/book/kubernetes-in-action/README.md) | 1·2 · 4~18장 | 필수 | 1~5단계 |
-| [Kubernetes Patterns](../08_cloud/book/kubernetes-patterns/README.md) | 2~9 · 12·13 · 15~24장 | 추천 | 1~4 · 6단계 |
-| [Networking and Kubernetes](../08_cloud/book/networking-and-kubernetes/README.md) | 4·5장 | 추천 | 3단계 |
-| Production Kubernetes | 3~10 · 12·13장 | 추천 | 4~7단계 |
-| Programming Kubernetes | 1~6 · 9장 | 추천 | 5·6단계 |
-| [Container Security](../08_cloud/book/container-security/README.md) | 1~4 · 8·9 · 13장 | 추천 | 6단계 |
-| CKS Study Guide | 2~7장 | 추천 | 6단계 |
-| Kubernetes Best Practices | 3·4 · 8~12 · 17·18장 | 추천 | 6·7단계 |
-| [Kubernetes: Up and Running](../08_cloud/book/kubernetes-up-and-running/README.md) | 4 · 7 · 14~21장 | 추천 | 1 · 3~7단계 |
-| Terraform Up and Running | 1·3·4·6장 | 추천 | 7단계 |
-| Policy as Code | 4·5 · 7·8 · 11·12 · 14장 | 선택 | 6·7단계 |
-| Learning eBPF | 9장 | 선택 | 6단계 |
+| 자료 | 종류 | 읽을 범위 | 우선순위 | 자리 |
+|---|:---:|---|:---:|---|
+| [Kubernetes in Action](../08_cloud/book/kubernetes-in-action/README.md) | 책 | 1·2 · 4~18장 | 필수 | 1~5단계 |
+| [Kubernetes Patterns](../08_cloud/book/kubernetes-patterns/README.md) | 책 | 2~9 · 12·13 · 15~24장 | 추천 | 1~4 · 6단계 |
+| [Networking and Kubernetes](../08_cloud/book/networking-and-kubernetes/README.md) | 책 | 4·5장 | 추천 | 3단계 |
+| Production Kubernetes | 책 | 3~10 · 12·13장 | 추천 | 4~7단계 |
+| Programming Kubernetes | 책 | 1~6 · 9장 | 추천 | 5·6단계 |
+| [Container Security](../08_cloud/book/container-security/README.md) | 책 | 1~4 · 8·9 · 13장 | 추천 | 6단계 |
+| CKS Study Guide | 책 | 2~7장 | 추천 | 6단계 |
+| Kubernetes Best Practices | 책 | 3·4 · 8~12 · 17·18장 | 추천 | 6·7단계 |
+| [Kubernetes: Up and Running](../08_cloud/book/kubernetes-up-and-running/README.md) | 책 | 4 · 7 · 14~21장 | 추천 | 1 · 3~7단계 |
+| Terraform Up and Running | 책 | 1·3·4·6장 | 추천 | 7단계 |
+| Policy as Code | 책 | 4·5 · 7·8 · 11·12 · 14장 | 선택 | 6·7단계 |
+| Learning eBPF | 책 | 9장 | 선택 | 6단계 |
+| Kubernetes 보안 문서 묶음 | 문서 | [Pod Security Standards](https://kubernetes.io/docs/concepts/security/pod-security-standards/) · [Security Checklist](https://kubernetes.io/docs/concepts/security/security-checklist/) · [Auditing](https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/) · [Encrypting Confidential Data at Rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/) | 추천 | 6단계 |
+| [CIS Kubernetes Benchmark](https://www.cisecurity.org/benchmark/kubernetes) | 문서 | Control Plane · Worker 항목 · 점검 도구 [kube-bench](https://github.com/aquasecurity/kube-bench) | 추천 | 6단계 |
+| KISA 클라우드 취약점 점검 가이드 | 문서 | 2024년 6월판 2.26 Docker · 2.27 Master · 2.28 Worker 절 | 선택 | 6단계 |
+| 런타임 탐지 문서 | 문서 | [Falco](https://falco.org/docs/) · [Tetragon](https://tetragon.io/docs/) | 선택 | 6단계 |
+| [EKS Best Practices for Security](https://docs.aws.amazon.com/eks/latest/best-practices/security.html) | 문서 | 가이드 전편 · [IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html) · [EKS Pod Identity](https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html) · [envelope encryption](https://docs.aws.amazon.com/eks/latest/userguide/envelope-encryption.html) · [control plane logs](https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html) | 추천 | 6단계 |
 
 **보완 참조** — 단계 표의 노트나 책 칸이 가리키지만 읽기 흐름에는 넣지 않은 장입니다. 그 개념에 닿았을 때만 엽니다.
 
@@ -104,17 +109,6 @@ updated: 2026-09-23
 | Container Security | 6·7 · 14장 | 6단계 공급망 보안 · CIS Benchmark 의 노트 |
 | Infrastructure as Code | 11·21장 | 7단계 Immutable Infrastructure · IaC 정책 검사 |
 | Operating OpenShift | 2·3장 | 7단계 OpenShift — 설치 방식 · Route · SCC |
-
-**책만으로 안 되는 자리는 아래 문서를 기준으로 삼습니다.** 6단계 보안과 EKS 는 소장본에 장이 없거나 규격이 계속 바뀝니다.
-
-| 자리 | 기준 문서 |
-|---|---|
-| 6단계 실행 권한 · 점검 기준 | [Pod Security Standards](https://kubernetes.io/docs/concepts/security/pod-security-standards/) · [Security Checklist](https://kubernetes.io/docs/concepts/security/security-checklist/) |
-| 6단계 감사 로그 · 저장 암호화 | [Auditing](https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/) · [Encrypting Confidential Data at Rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/) |
-| 6단계 점검 도구 | [kube-bench](https://github.com/aquasecurity/kube-bench) · [CIS Kubernetes Benchmark](https://www.cisecurity.org/benchmark/kubernetes) |
-| 6단계 국내 점검 기준 | KISA 「클라우드 취약점 점검 가이드」 2024년 6월판 — 2.27 Master · 2.28 Worker 절, 컨테이너 런타임은 2.26 Docker 절 |
-| 6단계 런타임 탐지 | [Falco](https://falco.org/docs/) · [Tetragon](https://tetragon.io/docs/) |
-| EKS 클라우드 경계 | [EKS Best Practices for Security](https://docs.aws.amazon.com/eks/latest/best-practices/security.html) 가 지도 · [IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html) · [EKS Pod Identity](https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html) · [envelope encryption](https://docs.aws.amazon.com/eks/latest/userguide/envelope-encryption.html) · [control plane logs](https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html) |
 
 KISA 가이드는 API server 비인증 접근 차단, etcd 암호화, kubelet 인증 같은 항목을 진단 기준과 조치 방법으로 적어 CIS Benchmark 와 같은 자리를 채웁니다.
 

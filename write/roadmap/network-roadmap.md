@@ -110,39 +110,50 @@ updated: 2026-09-23
 
 
 
-## 책 읽기 흐름
+## 자료 읽기 흐름
 
-> 위 단계를 어떤 자료로 배우는지 모았습니다. 책마다 어느 단계의 무엇을 다루는지와 읽을 장을 적습니다.
+> 위 단계를 어떤 자료로 배우는지 모았습니다. 책·문서·강의·랩을 한 표에 두고, 자료마다 어느 단계에 쓰이는지와 읽을 범위를 적습니다.
 
-![네트워크 책 읽기 흐름 — 우선순위와 읽을 장](_assets/network-books.svg)
+![네트워크 자료 읽기 흐름 — 우선순위와 읽을 범위](_assets/network-books.svg)
 
-통독하는 책은 Networking and Kubernetes 와 Cilium Up and Running 이고, 나머지는 표의 `읽을 장`만 봅니다.
+통독하는 책은 Networking and Kubernetes 와 Cilium Up and Running 이고, 나머지는 표의 `읽을 범위`만 봅니다. 흐름 표에는 한 자리를 통째로 맡는 자료만 올립니다. man 페이지나 RFC 한 편처럼 행 하나만 받치는 링크는 단계 표의 `책` 칸에 둡니다.
 
-| 책 | 읽을 장 | 우선순위 | 자리 |
-|---|---|:---:|---|
-| [Computer Networking](../02_os/book/cntd_computer-networking-top-down/README.md) | 1~6 · 8장 | 필수 | 1·2·5단계 |
-| TCP/IP Illustrated | 2~8 · 10~17장 | 필수 | 1·2단계 |
-| [Networking and Kubernetes](../08_cloud/book/networking-and-kubernetes/README.md) | 전독 | 필수 | 1~6단계 |
-| [Packet Analysis with Wireshark](../02_os/book/paw_packet-analysis-wireshark/README.md) | 1~5장 | 필수 | 2·3단계 |
-| [Systems Performance](../02_os/book/systems-performance/README.md) | 10장 | 추천 | 1·3단계 |
-| HTTP/2 in Action | 2·4·9장 | 추천 | 1단계 |
-| [Container Security](../08_cloud/book/container-security/README.md) | 11장 | 선택 | 1단계 |
-| [Learning CoreDNS](../08_cloud/book/learning-coredns/README.md) | 2·3·6·7장 | 추천 | 1·3·4단계 |
-| [Kubernetes in Action](../08_cloud/book/kubernetes-in-action/README.md) | 11~13 · 16·17장 | 추천 | 1·4단계 |
-| Production Kubernetes | 5장 | 선택 | 4단계 |
-| Cloud Native Data Center Networking | 2·6·7·14장 | 추천 | 4·5단계 |
-| System Design on AWS | 9장 | 추천 | 5단계 |
-| Cilium Up and Running | 전독 | 필수 | 4~7단계 |
-| Learning eBPF | 3·5~8장 | 추천 | 6단계 |
-| [Istio in Action](../08_cloud/book/istio-in-action/README.md) | 1 · 3~6 · 9·10·12장 · 부록 C | 추천 | 7단계 |
-| Zero Trust Networks | 1·2·4·6·8장 | 추천 | 7·8단계 |
-| Real-World Cryptography | 2~5 · 7~10 · 13장 | 추천 | 1 · 8단계 |
-| API Security in Action | 9장 | 선택 | 8단계 |
-| Patterns of Distributed Systems | 7·26·28장 | 추천 | 8·9단계 |
-| Database Internals | 9·12장 | 추천 | 8·9단계 |
-| High Performance Browser Networking | 4장 | 추천 | 1단계 |
-| Sidecar-less Istio Explained | 1~3장 | 대체 | 7단계 — Istio in Action 12장 자리 |
-| [network-fundamentals-lab](../02_os/book/network-fundamentals-lab/README.md) | 00~17편 중 코어 10편 | 필수 | 1~4단계 — 유일한 랩 저장소 |
+| 자료 | 종류 | 읽을 범위 | 우선순위 | 자리 |
+|---|:---:|---|:---:|---|
+| [Computer Networking](../02_os/book/cntd_computer-networking-top-down/README.md) | 책 | 1~6 · 8장 | 필수 | 1·2·5단계 |
+| TCP/IP Illustrated | 책 | 2~8 · 10~17장 | 필수 | 1·2단계 |
+| [Networking and Kubernetes](../08_cloud/book/networking-and-kubernetes/README.md) | 책 | 전독 | 필수 | 1~6단계 |
+| [Packet Analysis with Wireshark](../02_os/book/paw_packet-analysis-wireshark/README.md) | 책 | 1~5장 | 필수 | 2·3단계 |
+| [Systems Performance](../02_os/book/systems-performance/README.md) | 책 | 10장 | 추천 | 1·3단계 |
+| HTTP/2 in Action | 책 | 2·4·9장 | 추천 | 1단계 |
+| [Container Security](../08_cloud/book/container-security/README.md) | 책 | 11장 | 선택 | 1단계 |
+| [Learning CoreDNS](../08_cloud/book/learning-coredns/README.md) | 책 | 2·3·6·7장 | 추천 | 1·3·4단계 |
+| [Kubernetes in Action](../08_cloud/book/kubernetes-in-action/README.md) | 책 | 11~13 · 16·17장 | 추천 | 1·4단계 |
+| Production Kubernetes | 책 | 5장 | 선택 | 4단계 |
+| Cloud Native Data Center Networking | 책 | 2·6·7·14장 | 추천 | 4·5단계 |
+| System Design on AWS | 책 | 9장 | 추천 | 5단계 |
+| Cilium Up and Running | 책 | 전독 | 필수 | 4~7단계 |
+| Learning eBPF | 책 | 3·5~8장 | 추천 | 6단계 |
+| [Istio in Action](../08_cloud/book/istio-in-action/README.md) | 책 | 1 · 3~6 · 9·10·12장 · 부록 C | 추천 | 7단계 |
+| Zero Trust Networks | 책 | 1·2·4·6·8장 | 추천 | 7·8단계 |
+| Real-World Cryptography | 책 | 2~5 · 7~10 · 13장 | 추천 | 1 · 8단계 |
+| API Security in Action | 책 | 9장 | 선택 | 8단계 |
+| Patterns of Distributed Systems | 책 | 7·26·28장 | 추천 | 8·9단계 |
+| Database Internals | 책 | 9·12장 | 추천 | 8·9단계 |
+| High Performance Browser Networking | 책 | 4장 | 추천 | 1단계 |
+| Sidecar-less Istio Explained | 책 | 1~3장 | 대체 | 7단계 — Istio in Action 12장 자리 |
+| [TCP Congestion Control: A Systems Approach](https://tcpcc.systemsapproach.org/) | 책 | 5장 — Vegas 와 BBR | 추천 | 1단계 |
+| [RFC 8446](https://www.rfc-editor.org/rfc/rfc8446) | 문서 | 4.1.4절 HelloRetryRequest · 부록 A 상태 기계 | 추천 | 1단계 |
+| ECH 규격 묶음 | 문서 | [RFC 9180](https://www.rfc-editor.org/rfc/rfc9180) HPKE · [draft-ietf-tls-esni](https://datatracker.ietf.org/doc/draft-ietf-tls-esni/) · [RFC 9460](https://www.rfc-editor.org/rfc/rfc9460) HTTPS RR | 추천 | 1단계 |
+| [Kubernetes 서비스·네트워킹 문서](https://kubernetes.io/ko/docs/concepts/services-networking/) | 문서 | Service · EndpointSlice · DNS · NetworkPolicy | 추천 | 4단계 |
+| [Gateway API 가이드](https://gateway-api.sigs.k8s.io/guides/) | 문서 | Guides 전편 | 추천 | 4단계 |
+| [CNI 규격](https://github.com/containernetworking/cni/blob/main/SPEC.md) | 문서 | SPEC.md — ADD · DEL · CHECK | 추천 | 4단계 |
+| [CoreDNS Manual](https://coredns.io/manual/toc/) | 문서 | 설정 · 플러그인 | 선택 | 4단계 |
+| [Gateway API Inference Extension](https://gateway-api-inference-extension.sigs.k8s.io/guides/) | 문서 | Guides | 선택 | 4단계 |
+| [LFS146 Introduction to Cilium](https://training.linuxfoundation.org/training/introduction-to-cilium-lfs146/) | 강의 | 전 과정 26시간 | 선택 | 6·7단계 |
+| [Tor 설계 논문](https://www.usenix.org/conference/13th-usenix-security-symposium/tor-second-generation-onion-router) | 문서 | traffic correlation 의 한계 · 4.2·9절 회로 교체 | 추천 | 8·9단계 |
+| I2P 기술 문서 | 문서 | [Tunnel Routing](https://i2p.net/en/docs/overview/tunnel-routing/) · [Peer Selection](https://i2p.net/en/docs/overview/peer-selection/) · [Garlic Routing](https://i2p.net/en/docs/overview/garlic-routing/) · [Network Database](https://i2p.net/en/docs/overview/network-database/) | 추천 | 8·9단계 |
+| [network-fundamentals-lab](../02_os/book/network-fundamentals-lab/README.md) | 랩 | 00~17편 중 코어 10편 | 필수 | 1~4단계 |
 
 **보완 참조** — 단계 표의 책 칸이 가리키지만 읽기 흐름에는 넣지 않은 장입니다. 그 개념에 닿았을 때만 엽니다.
 
@@ -159,17 +170,8 @@ updated: 2026-09-23
 | System Design on AWS | 5장 | 4단계 L4 로드밸런싱 |
 | Kubernetes Best Practices | 9장 | 6단계 NetworkPolicy · 7단계 서비스 메시 |
 
-**표의 마지막 줄만 책이 아닙니다.** [network-fundamentals-lab](../02_os/book/network-fundamentals-lab/README.md)은 containerlab 토폴로지가 원자료이고, 배포하면 고장이 장전된 채로 뜹니다. 다른 자료가 규격과 원리를 위에서 아래로 설명한다면 이쪽은 증상에서 계층을 좁히는 순서를 훈련시킵니다. 그래서 아래 단계별 표에서 이 자료는 `책` 열이 아니라 `노트` 열에 `랩` 을 붙여 둡니다 — 읽는 자리가 아니라 손으로 밟는 자리이기 때문입니다.
+**랩은 읽는 자리가 아니라 손으로 밟는 자리입니다.** [network-fundamentals-lab](../02_os/book/network-fundamentals-lab/README.md)은 containerlab 토폴로지가 원자료이고, 배포하면 고장이 장전된 채로 뜹니다. 다른 자료가 규격과 원리를 위에서 아래로 설명한다면 이쪽은 증상에서 계층을 좁히는 순서를 훈련시킵니다. 그래서 단계별 표에서는 `책` 열이 아니라 `노트` 열에 `랩` 을 붙여 둡니다.
 
-**책만으로 안 되는 자리는 아래 문서를 기준으로 삼습니다.** 소장본이 없거나 규격이 계속 바뀌는 자리입니다.
-
-| 자리 | 책만으로 부족한 이유 | 기준 문서 |
-|---|---|---|
-| Gateway API · CNI · 클러스터 DNS | Kubernetes in Action 13장과 Cilium 7장이 다루지만 스펙이 계속 바뀝니다 | [Gateway API 가이드](https://gateway-api.sigs.k8s.io/guides/) · [CNI 규격](https://github.com/containernetworking/cni/blob/main/SPEC.md) · [CoreDNS Manual](https://coredns.io/manual/toc/) · [Kubernetes 서비스·네트워킹 문서](https://kubernetes.io/ko/docs/concepts/services-networking/) |
-| TLS 1.3 세부와 ECH | Real-World Cryptography 9장이 개념을 주지만 확장 협상과 ECH 는 규격이 계속 바뀝니다 | [RFC 8446](https://www.rfc-editor.org/rfc/rfc8446) 4.1.4절 — HelloRetryRequest · [RFC 9180](https://www.rfc-editor.org/rfc/rfc9180) — HPKE · [draft-ietf-tls-esni](https://datatracker.ietf.org/doc/draft-ietf-tls-esni/) — ECH · [RFC 9460](https://www.rfc-editor.org/rfc/rfc9460) — SVCB·HTTPS RR |
-| BBR | 2016년에 나온 알고리즘이라 2011년판 TCP/IP Illustrated 에 없습니다 | [TCP Congestion Control: A Systems Approach](https://tcpcc.systemsapproach.org/) 5장 — Vegas 와 나란히 읽습니다 |
-| 8·9단계 오버레이와 터널 | 소장본에 맞는 장이 없습니다 | [Tor 설계 논문](https://www.usenix.org/conference/13th-usenix-security-symposium/tor-second-generation-onion-router) — traffic correlation 의 한계 · 4.2·9절 회로 교체와 그 대가 · I2P [Tunnel Routing](https://i2p.net/en/docs/overview/tunnel-routing/) · [Peer Selection](https://i2p.net/en/docs/overview/peer-selection/) — 터널 풀과 경로 선택 · [Garlic Routing](https://i2p.net/en/docs/overview/garlic-routing/) — 홉별 계층 암호화 · [Network Database](https://i2p.net/en/docs/overview/network-database/) — floodfill 역할 · libp2p [Kademlia DHT](https://github.com/libp2p/specs/blob/master/kad-dht/README.md) — 서버 모드와 클라이언트 모드 |
-| LLM 트래픽 | 아직 책이 없습니다 | [Gateway API Inference Extension](https://gateway-api-inference-extension.sigs.k8s.io/guides/) |
 
 
 
@@ -462,7 +464,7 @@ updated: 2026-09-23
 
 5·8·9단계 자리는 비어 있습니다. 클라우드 축은 계정과 과금이 걸리고, 8·9단계는 아래 portal-tunnel 이 노트 밖에서 받습니다. 7단계는 서비스 메시 컨트롤 플레인이 서야 재현되므로 장애 기록으로만 받습니다.
 
-**노트 밖의 실습 경로가 둘 있습니다.** [LFS146 Introduction to Cilium](https://training.linuxfoundation.org/training/introduction-to-cilium-lfs146/)은 무료 26시간 과정으로 NetworkPolicy · Hubble · 투명 암호화 · kube-proxy replacement · Cluster Mesh 를 6·7단계 범위에서 손으로 밟게 합니다. [Isovalent Universe](https://labs.isovalent.com/)는 설치 없이 브라우저에서 도는 랩이라 클러스터를 세울 수 없을 때 씁니다.
+**브라우저에서 도는 랩도 있습니다.** 위 흐름 표의 LFS146 강의는 NetworkPolicy · Hubble · 투명 암호화 · kube-proxy replacement · Cluster Mesh 를 6·7단계 범위에서 손으로 밟게 합니다. [Isovalent Universe](https://labs.isovalent.com/)는 설치 없이 브라우저에서 도는 랩이라 클러스터를 세울 수 없을 때 씁니다.
 
 **reverse tunnel 은 실제 구현을 돌려 봅니다.** [portal-tunnel](https://github.com/gosuda/portal-tunnel)은 MIT 라이선스로 공개된 Go reverse tunnel 이고 relay 를 직접 띄울 수 있습니다. 1단계의 SNI 라우팅과 8·9단계의 lease · keyless TLS · relay 선택이 한 저장소에 모여 있습니다. 코드를 따라 짜는 일은 Go 로드맵 몫입니다. TLS 안쪽이 궁금해지는 시점에는 [keyless_tls](https://github.com/gosuda/keyless_tls)로 넘어갑니다. 터널이 handshake 와 트래픽 암호화를 쥔 채 CertificateVerify 서명만 원격에 맡기는 구조라, 8단계의 키 소유권 분리가 코드로 어떻게 서는지 봅니다.
 

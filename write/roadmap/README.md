@@ -49,8 +49,8 @@ updated: 2026-09-23
 | 로드맵 | SVG | 생성기 |
 |---|---|---|
 | OS | [학습 순서](_assets/os-roadmap.svg) · [책 읽기 흐름](_assets/os-books.svg) | [학습 순서](_assets/_gen/gen-os-roadmap.py) · [책 흐름](_assets/_gen/gen-os-books.py) |
-| 네트워크 | [학습 순서](_assets/network-roadmap.svg) · [책 읽기 흐름](_assets/network-books.svg) | [학습 순서](_assets/_gen/gen-network-roadmap.py) · [책 흐름](_assets/_gen/gen-network-books.py) |
-| Kubernetes | [학습 순서](_assets/k8s-roadmap.svg) · [책 읽기 흐름](_assets/k8s-books.svg) | [학습 순서](_assets/_gen/gen-k8s-roadmap.py) · [책 흐름](_assets/_gen/gen-k8s-books.py) |
+| 네트워크 | [학습 순서](_assets/network-roadmap.svg) · [자료 읽기 흐름](_assets/network-books.svg) | [학습 순서](_assets/_gen/gen-network-roadmap.py) · [책 흐름](_assets/_gen/gen-network-books.py) |
+| Kubernetes | [학습 순서](_assets/k8s-roadmap.svg) · [자료 읽기 흐름](_assets/k8s-books.svg) | [학습 순서](_assets/_gen/gen-k8s-roadmap.py) · [책 흐름](_assets/_gen/gen-k8s-books.py) |
 | Go | [학습 순서](_assets/go-roadmap.svg) · [책 읽기 흐름](_assets/go-books.svg) | [학습 순서](_assets/_gen/gen-go-roadmap.py) · [책 흐름](_assets/_gen/gen-go-books.py) |
 | 데이터 | [학습 순서](_assets/data-roadmap.svg) · [책 읽기 흐름](_assets/data-books.svg) | [학습 순서](_assets/_gen/gen-data-roadmap.py) · [책 흐름](_assets/_gen/gen-data-books.py) |
 | JVM | [학습 순서](_assets/jvm-roadmap.svg) · [책 읽기 흐름](_assets/jvm-books.svg) | [학습 순서](_assets/_gen/gen-jvm-roadmap.py) · [책 흐름](_assets/_gen/gen-jvm-books.py) |
