@@ -38,9 +38,9 @@ d.t(576, 232, "받는 쪽이 secondary, 준 쪽이 그 master", 12, MUTED, KR, "
 d.arrow([(376, 296), (436, 296)], MUTED, "ar", 1.4)
 d.arrow([(668, 296), (692, 296)], MUTED, "ar", 1.4)
 
-d.t(20, 396, "두 서버 모두 이 존에 대해 authoritative — 존 안의 어떤 이름이든 확정적으로 답한다", 14, INK, KR, "start", 600)
-d.t(20, 420, "마스터가 불가용이어도 보조 서버는 자기가 가진 존 데이터로 답한다", 13, MUTED, KR, "start")
-d.t(20, 442, "캐시를 들고 있는 다른 서버의 답은 최신일 수도 아닐 수도 있다는 점이 이것과 갈린다", 13, MUTED, KR, "start")
+d.t(20, 396, "두 서버 모두 authoritative · 존 안 어떤 이름이든 확정 응답", 14, INK, KR, "start", 600)
+d.t(20, 420, "마스터 불가용에도 보조 서버 응답 · SOA expire 기간까지", 13, MUTED, KR, "start")
+d.t(20, 442, "캐시로 답하는 다른 서버와의 차이 · 최신 보장 없음", 13, MUTED, KR, "start")
 
 d.legend(462, [("레인을 건너는 전달", ACC)])
 d.save("02-01.primary-secondary.svg")

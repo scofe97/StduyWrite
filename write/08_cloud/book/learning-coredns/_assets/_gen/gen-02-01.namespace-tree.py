@@ -47,7 +47,7 @@ d.t(12, T4_Y + 30, "3단계", 12, SOFT, KR, "start")
 
 d.path("M 856 404 L 892 404 L 892 118 L 566 118", ACC, 1.2, m="acc", dash="5 4")
 d.t(470, 460, "www . baz . example", 16, ACC, MONO, "middle", 600)
-d.t(470, 482, "아래에서 위로 읽어 점으로 잇는다", 13, MUTED, KR)
+d.t(470, 482, "아래에서 위로 읽어 점으로 연결", 13, MUTED, KR)
 
 d.legend(512, [("이름을 물은 노드", ACC)])
 d.save("02-01.namespace-tree.svg")

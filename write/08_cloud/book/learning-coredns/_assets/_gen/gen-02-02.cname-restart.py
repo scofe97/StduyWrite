@@ -73,8 +73,8 @@ chip("재귀 DNS 서버", "질의를 다시 시작한다", 304, BAD)
 d.msg("재귀 DNS 서버", "foo.example 권한 서버", "AAAA 질의", 356, MUTED, sub="canonicalname.foo.example")
 d.msg("foo.example 권한 서버", "재귀 DNS 서버", "AAAA 응답", 408, ACC, mk="acc")
 
-d.t(20, 462, "별칭에 AAAA 를 직접 붙이는 것이 허용된다면 alias.foo.example 의 AAAA 조회 결과가 모호해진다", 13, MUTED, KR, "start")
-d.t(20, 484, "그래서 별칭인 도메인 이름에는 다른 타입의 레코드를 붙일 수 없다", 13, MUTED, KR, "start")
+d.t(20, 462, "별칭에 AAAA 까지 붙어 있다면 · 답 후보 둘 · 조회 결과 모호", 13, MUTED, KR, "start")
+d.t(20, 484, "그래서 별칭 이름에는 다른 타입 금지", 13, MUTED, KR, "start")
 
 d.legend(504, [("재시작을 부르는 지점", BAD), ("최종 응답", ACC)])
 d.save("02-02.cname-restart.svg")

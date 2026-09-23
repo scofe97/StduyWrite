@@ -41,7 +41,7 @@ for i, (nm, sub, start, span, color) in enumerate(rows):
     d.tone(x, ry + 14, w, 34, color, 4, "16", 1.2)
     d.t(x + w / 2, ry + 36, f"{span}단계", 13, color, KR)
 
-d.t(LX, 388, "TTL 이 남아 있는 동안만 짧아진다 — 루트 서버 열세 대가 버티는 이유가 이 절약이다", 13, MUTED, KR, "start")
+d.t(LX, 388, "지름길은 TTL 이 남은 동안만 · 루트 서버 부하 절감", 13, MUTED, KR, "start")
 
 d.legend(412, [("캐시가 빈 첫 질의", ACC), ("캐시가 만든 지름길", INFO)])
 d.save("02-01.cache-ladder.svg")

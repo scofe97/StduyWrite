@@ -42,18 +42,18 @@ bar(X2, TOP, 240)
 bar(X3, TOP, 160)
 bar(X3, TOP + 176, 80)
 
-d.t(X1 - 16, TOP + 124, "클라이언트 전체", 12, INK, KR, "end", 600)
+d.t(X1 - 16, TOP + 124, "가중치 합", 12, INK, KR, "end", 600)
 d.t(X1 - 16, TOP + 142, "300", 9, MUTED, MONO, "end")
 
 d.t(X2, TOP - 30, "우선순위 100 후보군", 12, INK, KR, "middle", 600)
 d.t(X2, TOP - 14, "300", 9, MUTED, MONO)
 
 d.t(X3 + 16, TOP + 74, "api1.bar.example", 12, ACC, MONO, "start", 600)
-d.t(X3 + 16, TOP + 92, "가중치 200 · 2/3", 12, MUTED, KR, "start")
+d.t(X3 + 16, TOP + 92, "가중치 200 · 기대 몫 2/3", 12, MUTED, KR, "start")
 d.t(X3 + 16, TOP + 210, "api2.bar.example", 12, INK, MONO, "start", 600)
-d.t(X3 + 16, TOP + 228, "가중치 100 · 1/3", 12, MUTED, KR, "start")
+d.t(X3 + 16, TOP + 228, "가중치 100 · 기대 몫 1/3", 12, MUTED, KR, "start")
 
-d.t(20, 464, "우선순위 200 의 api1.foo.example 은 평상시 몫이 없다 — 앞의 둘이 모두 실패해야 후보가 된다", 13, MUTED, KR, "start")
+d.t(20, 464, "우선순위 200 api1.foo.example · 평상시 몫 0 · 앞의 둘 모두 실패 시 후보", 13, MUTED, KR, "start")
 
 d.legend(488, [("가중치가 큰 쪽이 받는 몫", ACC)])
 d.save("02-02.srv-weight.svg")

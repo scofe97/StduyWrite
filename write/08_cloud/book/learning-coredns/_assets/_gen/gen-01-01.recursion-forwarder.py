@@ -69,7 +69,7 @@ d.lanes([("클라이언트", "stub resolver"),
 d.rails(584)
 
 d.msg("클라이언트", "CoreDNS", "질의", 196, MUTED, sub="www.example.com A")
-chip("CoreDNS", "루트부터 따라갈 수 없다", 248, BAD)
+chip("CoreDNS", "루트부터 따라가기 불가", 248, BAD)
 d.msg("CoreDNS", "포워더", "질의 전달", 300, MUTED, sub="포워딩 플러그인")
 d.msg("포워더", "루트 · 상위 서버", "루트부터 질의", 352, MUTED)
 d.msg("루트 · 상위 서버", "포워더", "referral", 396, MUTED, dash="5 4")
@@ -78,5 +78,5 @@ d.msg("권한 서버", "포워더", "응답", 484, MUTED, dash="5 4")
 d.msg("포워더", "CoreDNS", "응답", 528, MUTED, dash="5 4")
 d.msg("CoreDNS", "클라이언트", "응답", 572, ACC, mk="acc")
 
-d.legend(608, [("CoreDNS 가 스스로 못 하는 구간", BAD), ("클라이언트가 받는 답", ACC)])
+d.legend(608, [("CoreDNS 가 스스로 못 하는 일", BAD), ("클라이언트가 받는 답", ACC)])
 d.save("01-01.recursion-forwarder.svg")

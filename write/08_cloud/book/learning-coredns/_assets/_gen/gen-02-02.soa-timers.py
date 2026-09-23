@@ -50,8 +50,8 @@ d.o.append(f'<circle cx="904" cy="332" r="8" fill="none" stroke="{ACC}" stroke-w
 d.o.append(f'<circle cx="904" cy="332" r="5" fill="{ACC}"/>')
 d.path("M 872 332 L 894 332", ACC, 1.4)
 
-d.t(20, 420, "refresh 는 한 시간 안팎이 무난하고, retry 는 그 절반이나 4분의 1, expire 는 적어도 일주일을 둔다", 13, MUTED, KR, "start")
-d.t(20, 442, "NOTIFY 가 생긴 뒤로 refresh 의 비중은 줄었지만, 확인 한 번의 비용이 질의 하나라 여전히 값싸다", 13, MUTED, KR, "start")
+d.t(20, 420, "refresh 1시간 이하 · retry 그 1/2~1/4 · expire 최소 1주", 13, MUTED, KR, "start")
+d.t(20, 442, "NOTIFY 이후 refresh 비중 감소 · 확인 비용은 질의 하나", 13, MUTED, KR, "start")
 
 d.legend(462, [("존 질의가 실패하기 시작하는 상태", ACC)])
 d.save("02-02.soa-timers.svg")

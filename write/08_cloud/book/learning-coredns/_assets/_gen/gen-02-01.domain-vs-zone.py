@@ -5,38 +5,40 @@
 #             and the zone cs.berkeley.edu are effectively the same",
 #            edu 도메인은 EDUCAUSE 가 운영하며 berkeley.edu·umich.edu 를 위임하고 edu 존을 직접 관리한다.
 # 타입 스펙: type-nested — 포함으로 계층을 보이고, 링 사이의 띠 하나가 곧 그 층의 존이다.
+# 2026-09-23 개정: 존을 글로 설명하던 하단 문장을 걷고, berkeley.edu 존인 띠 자체를 칠해 보이게 했다.
+#                  테두리 위 라벨 knockout 사각형이 shape-overlap 을 내서 라벨을 상자 안으로 옮겼다.
 import sys; sys.path.insert(0, ".")
-from dd import D, ACC, MUTED, SOFT, INK, PAPER, RULE, KR, MONO
+from dd import D, ACC, INFO, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 880, 588
+W, H = 880, 520
 d = D(W, H, "LEARNING COREDNS · 02-01 §2",
       "도메인은 통째, 존은 위임하고 남은 만큼",
       "바깥 사각형이 도메인이고, 링과 링 사이의 띠 하나가 그 도메인의 존이다. "
-      "위임할 때마다 안쪽 사각형이 하나 생기고 그만큼이 바깥 존에서 빠져나간다.",
-      "띠 하나가 관리 주체 하나에 대응합니다")
+      "berkeley.edu 도메인은 cs.berkeley.edu 를 품지만 berkeley.edu 존은 그 안쪽을 품지 않는다. "
+      "위임한 쪽 존에는 cs.berkeley.edu 를 어디서 찾는지 알려 주는 NS 와, 필요하면 그 서버 주소인 글루만 남는다.",
+      "칠한 띠만큼이 berkeley.edu 존입니다")
 
-rings = [
-    (40, 96, 800, 344, "edu 도메인", "edu 존 · EDUCAUSE 가 직접 관리", MUTED),
-    (72, 132, 736, 272, "berkeley.edu 도메인", "berkeley.edu 존 · Berkeley IT 부서", MUTED),
-    (104, 168, 672, 200, "cs.berkeley.edu 도메인", "", ACC),
-]
-for i, (x, y, w, h, label, band, color) in enumerate(rings):
-    if color is ACC:
-        d.tone(x, y, w, h, ACC, 8, "0A", 1.4)
-    else:
-        d.box(x, y, w, h, PAPER, RULE, 0.9 + i * 0.2, 8)
-    d.o.append(f'<rect x="{x + 14}" y="{y - 8}" width="{len(label) * 8 + 20}" height="16" fill="{PAPER}"/>')
-    d.t(x + 20, y + 4, label, 12, ACC if color is ACC else SOFT, MONO, "start", 600)
-    if band:
-        d.t(x + w - 20, y + 26, band, 13, MUTED, KR, "end")
+# 링 stride — 바깥에서 안으로 좌우 32px, 위 48px(라벨 두 줄 자리), 아래 32px 씩 줄인다
+EDU = (40, 96, 800, 344)
+BERK = (72, 144, 736, 264)
+CS = (104, 240, 672, 136)
 
-d.t(440, 236, "위임이 없으면 도메인과 존이 같다", 15, ACC, KR, "middle", 600)
-d.t(440, 262, "cs.berkeley.edu 아래로 더 위임하지 않는 한", 13, MUTED)
-d.t(440, 300, "CS 학과가 이 안의 노드를 직접 관리하고", 13, MUTED)
-d.t(440, 324, "Berkeley IT 는 더 이상 관여하지 않는다", 13, MUTED)
+# edu 도메인 — 무채색 링
+d.box(*EDU, PAPER, RULE, 0.9, 8)
+d.t(EDU[0] + 18, EDU[1] + 22, "edu 도메인", 12, SOFT, MONO, "start", 600)
+d.t(EDU[0] + EDU[2] - 18, EDU[1] + 22, "edu 존 · EDUCAUSE 관리", 12, MUTED, KR, "end")
 
-d.t(440, 476, "berkeley.edu 도메인은 cs.berkeley.edu 를 품지만, berkeley.edu 존은 품지 않는다", 14, INK, KR, "middle", 600)
-d.t(440, 500, "위임한 쪽에는 \"어디로 가면 찾을 수 있는지\"만 남는다", 13, MUTED)
+# berkeley.edu 도메인 — 칠한 부분이 곧 berkeley.edu 존
+d.tone(*BERK, ACC, 8, "14", 1.4)
+d.t(BERK[0] + 18, BERK[1] + 24, "berkeley.edu 도메인", 12, ACC, MONO, "start", 600)
+d.t(BERK[0] + 18, BERK[1] + 48, "berkeley.edu 존 · Berkeley IT 관리", 14, ACC, KR, "start", 600)
+d.chip(BERK[0] + BERK[2] - 130, BERK[1] + 64, "cs 로 가는 NS · 글루만 남음", ACC)
 
-d.legend(524, [("위임받아 따로 관리되는 도메인", ACC)])
+# cs.berkeley.edu — 위임받아 따로 관리. 하위 위임이 없으니 도메인 = 존
+d.box(*CS, PAPER2, INFO, 1.4, 8)
+d.t(CS[0] + 18, CS[1] + 24, "cs.berkeley.edu 도메인 = 존", 12, INFO, MONO, "start", 600)
+d.t(CS[0] + CS[2] / 2, CS[1] + 72, "CS 학과 관리 · 하위 위임 없음", 14, INK, KR, "middle", 600)
+d.t(CS[0] + CS[2] / 2, CS[1] + 98, "Berkeley IT 관여 없음", 12, MUTED)
+
+d.legend(460, [("berkeley.edu 존 · 위임하고 남은 띠", ACC), ("위임받은 존", INFO)])
 d.save("02-01.domain-vs-zone.svg")

@@ -30,11 +30,11 @@ d.t(468, ROOT_Y + 26, "Caddy", 16, ACC, MONO, "middle", 600)
 d.t(468, ROOT_Y + 46, "Go 웹 서버", 13, MUTED)
 
 mids = [("단순한 설정 문법", "BIND 설정과 대비"),
-        ("플러그인 아키텍처", "기능을 플러그인이 낸다"),
+        ("플러그인 아키텍처", "기능 단위 = 플러그인"),
         ("Go 기반", "메모리 안전한 언어")]
-leaves = [("Corefile", "몇 줄로 끝난다"),
-          ("선택한 것만 실행", "안 켠 코드는 안 돈다"),
-          ("메모리 접근 오류 없음", "버퍼 오버플로 차단")]
+leaves = [("Corefile", "몇 줄짜리 설정"),
+          ("선택한 것만 실행", "미설정 플러그인 미실행"),
+          ("메모리 접근 오류 보호", "버퍼 오버플로 · dangling pointer")]
 for i, cx in enumerate(CX):
     nm, sub = mids[i]
     d.box(cx - NW / 2, MID_Y, NW, NH, PAPER2, RULE, 1.0)
