@@ -13,7 +13,7 @@ W, H = 880, 620
 d = D(W, H, "LEARNING COREDNS · 03-02 §7",
       "fallthrough 는 대답을 다음 플러그인에 넘긴다",
       "존에 권한을 받은 플러그인은 그 존의 질의에 무엇이든 답을 내놓는다. 이름이 없으면 NXDOMAIN, "
-      "이름은 있고 타입이 없으면 빈 응답이다. fallthrough 는 그 두 자리에서 대답을 넘길 기회를 만든다.",
+      "이름은 있고 타입이 없으면 빈 응답이다. fallthrough 는 대답을 넘길 기회를 만든다. 원서는 두 응답 가운데 어느 쪽에서 넘기는지 가르지 않는다.",
       "색이 붙은 갈래만 다른 플러그인에 닿습니다")
 
 CX = 300
@@ -45,13 +45,13 @@ d.t(CX + 14, 296, "아니오", 12, SOFT, KR, "start")
 diamond(362, "fallthrough 가 있나", focal=True)
 d.arrow([(CX, 408), (CX, 460)], MUTED, "ar", 1.4)
 d.t(CX + 14, 440, "아니오", 12, SOFT, KR, "start")
-box(CX - 160, 490, 320, "NXDOMAIN 또는 빈 응답", "이름이 없으면 앞, 타입이 없으면 뒤", INFO)
+box(CX - 160, 490, 320, "NXDOMAIN 또는 빈 응답", "이름 없음 · NXDOMAIN · 타입 없음 · 빈 응답", INFO)
 
 d.path("M 452 362 L 588 362", ACC, 1.6, m="acc")
 d.t(520, 350, "예", 12, ACC, KR)
 box(596, 362, 260, "다음 플러그인에 넘긴다", "그쪽이 답할 기회를 얻는다", ACC)
 
-d.t(20, 552, "빈 응답을 NODATA 라 부르기도 하지만 저자는 그것이 실제 응답 코드는 아니라고 못 박습니다", 13, MUTED, KR, "start")
+d.t(20, 552, "빈 응답의 별칭 NODATA · 실제 응답 코드는 아님", 13, MUTED, KR, "start")
 
 d.legend(572, [("대답을 넘기는 갈래", ACC), ("여기서 끝나는 응답", OK), ("없다고 답하는 응답", INFO)])
 d.save("03-02.fallthrough.svg")

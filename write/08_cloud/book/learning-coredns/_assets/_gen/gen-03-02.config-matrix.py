@@ -60,7 +60,7 @@ for k, (nm, hint) in enumerate(plugins):
         if lvl == "focal":
             d.o.append(f'<rect x="{x}" y="{y}" width="{ROLE_COL_W}" height="{ROW_H}" rx="4" fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
             d.t(x + ROLE_COL_W / 2, y + 17, val, 12, ACC, KR, "middle", 600)
-            d.t(x + ROLE_COL_W / 2, y + 31, "본문은 필요하다고 적는다", 11, ACC, KR)
+            d.t(x + ROLE_COL_W / 2, y + 31, "transfer from 은 필수", 11, ACC, KR)
         elif lvl == "full":
             d.o.append(f'<rect x="{x}" y="{y}" width="{ROLE_COL_W}" height="{ROW_H}" rx="4" fill="{INK}14" stroke="{RULE}" stroke-width="0.6"/>')
             d.t(x + ROLE_COL_W / 2, y + 23, val, 12, INK, KR, "middle", 600)

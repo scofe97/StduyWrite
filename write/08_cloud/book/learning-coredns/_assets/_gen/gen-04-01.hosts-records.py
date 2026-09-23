@@ -52,8 +52,8 @@ for i, cx in enumerate(CX):
 d.t(12, MID_Y + 30, "무엇이 생기나", 12, SOFT, KR, "start")
 d.t(12, LEAF_Y + 30, "누구를 가리키나", 12, SOFT, KR, "start")
 
-d.t(20, 416, "no_reverse 를 주면 PTR 을 만들지 않고, ttl 기본값은 3600초다 — 단위 없이 정수로만 적는다", 13, MUTED, KR, "start")
-d.t(20, 438, "이렇게 만든 존에는 SOA 가 없어 다른 서버로 전송할 수 없다 — 존 전체가 아니라 이름 몇 개를 싣는 용도다", 13, MUTED, KR, "start")
+d.t(20, 416, "no_reverse · PTR 생략 · ttl 기본 3600 · 단위 없는 정수", 13, MUTED, KR, "start")
+d.t(20, 438, "SOA 없음 · 전송 불가 · 낱개 이름을 싣는 용도", 13, MUTED, KR, "start")
 
 d.legend(458, [("별칭 처리가 갈리는 자리", ACC)])
 d.save("04-01.hosts-records.svg")
