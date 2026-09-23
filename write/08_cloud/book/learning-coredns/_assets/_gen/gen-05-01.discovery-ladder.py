@@ -40,8 +40,8 @@ d.t(20, Y0 + 5 * LH + 12, "간접이", 12, SOFT, KR, "start")
 d.t(20, Y0 + 5 * LH + 30, "쌓인다", 12, SOFT, KR, "start")
 
 BOT = Y0 + 5 * LH
-d.t(LX, BOT + 40, "1칸에서 2칸으로 갈 때 이름이 생기고, 2칸에서 3칸으로 갈 때 그 이름이 중앙으로 간다", 13, MUTED, KR, "start")
-d.t(LX, BOT + 64, "4칸이 포트를 얹고, 5칸이 등록을 API 로 바꾼다 — 그래도 조회는 여전히 당겨 오는 쪽이다", 13, MUTED, KR, "start")
+d.t(LX, BOT + 40, "1→2칸 · 이름의 등장 · 2→3칸 · 이름의 중앙화", 13, MUTED, KR, "start")
+d.t(LX, BOT + 64, "4칸 · 포트 추가 · 5칸 · API 등록 · 조회는 여전히 당겨 오기", 13, MUTED, KR, "start")
 
 d.legend(BOT + 92, [("간접이 처음 중앙으로 간 칸", ACC)])
 d.save("05-01.discovery-ladder.svg")

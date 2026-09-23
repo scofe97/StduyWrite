@@ -32,7 +32,7 @@ rows = [
     ("파드 IP", 0, 2, INFO, "10.5.109.14"),
 ]
 extra = [
-    (0, 2, 2, BAD, "headless-<다른 해시>-<무작위>"),
+    (0, 2, 2, BAD, "headless-<같은 해시>-<새 무작위>"),
     (1, 2, 2, INFO, "새 주소"),
     (3, 2, 2, INFO, "10.5.109.15"),
 ]
@@ -67,8 +67,8 @@ for k, start, span, color, label in extra:
     bar(row_y(k), start, span, color, label)
 
 d.t(TX + PITCH * 2, 412, "삭제와 재생성 — 여기서 무엇이 끊기는가", 13, ACC, KR)
-d.t(LX, 448, "Deployment 는 새 파드 이름을 만들어 낸다. IP 는 어느 쪽이든 바뀐다", 13, MUTED, KR, "start")
-d.t(LX, 472, "그래서 이름으로 상대를 고정해야 하는 워크로드는 StatefulSet 을 골라야 한다", 13, MUTED, KR, "start")
+d.t(LX, 448, "Deployment · 새 파드 이름 · IP 는 양쪽 모두 변경", 13, MUTED, KR, "start")
+d.t(LX, 472, "이름으로 상대를 고정할 워크로드 · StatefulSet", 13, MUTED, KR, "start")
 
 d.legend(500, [("끊기고 새로 생긴다", BAD), ("어차피 바뀐다", INFO), ("유일하게 이어진다", ACC)])
 d.save("06-01.name-lifespan.svg")

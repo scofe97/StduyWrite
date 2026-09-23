@@ -53,8 +53,8 @@ for k, (nm, start, span, color, dash, note) in enumerate(rows):
     else:
         d.tone(x + 8, ry + 6, w - 16, 28, color, 4, "16", 1.2)
 
-d.t(TX + PITCH * 3, 428, "1.5.0 — resyncperiod 가 \"기본 5분\" 에서 \"하지 않음\" 으로 바뀐다", 13, ACC, KR)
-d.t(LX, 460, "셋이 사라진 정확한 릴리스는 확인하지 못했고, master 문법 블록에 없다는 것만 확인했다", 13, MUTED, KR, "start")
+d.t(TX + PITCH * 3, 428, "1.5.0 · resyncperiod 기본 5분 → 하지 않음", 13, ACC, KR)
+d.t(LX, 460, "transfer to · 1.8.0 에서 제거 · 나머지 둘의 릴리스는 미확인", 13, MUTED, KR, "start")
 
 d.legend(488, [("지금 문법에 없다", BAD), ("그대로 남았다", OK), ("원서 이후 추가", INFO), ("원서가 적은 경계", ACC)])
 d.save("06-04.option-lifespan.svg")

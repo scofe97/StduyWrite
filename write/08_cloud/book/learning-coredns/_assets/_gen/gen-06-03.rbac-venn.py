@@ -36,9 +36,9 @@ d.t(440, 380, "namespaces", 15, OK, MONO, "middle", 600)
 d.t(440, 408, "레코드를 만드는 데 실제로 쓴다", 12, MUTED, KR)
 
 # 설명 줄은 두 원 바깥에 둔다. 원 안에 두면 그 집합의 속성으로 읽힌다.
-d.t(20, 604, "nodes 만 동사가 get 이고 나머지 넷은 list · watch 다 — 다섯 어디에도 쓰기 동사가 없다", 13, MUTED, KR, "start")
-d.t(20, 628, "네임스페이스는 NXDOMAIN 을 줄지 정하는 데 쓰이고 와일드카드 질의에도 필요하다", 13, MUTED, KR, "start")
-d.t(20, 652, "파드는 pods verified 를 켤 때만 감시가 필요하고, 안 켜면 그 권한을 남길 이유가 없다", 13, MUTED, KR, "start")
+d.t(20, 604, "원서 · nodes 만 get · 나머지 list·watch · 쓰기 동사 없음", 13, MUTED, KR, "start")
+d.t(20, 628, "지금 kubeadm · nodes 대신 endpointslices · 동사 list·watch", 13, MUTED, KR, "start")
+d.t(20, 652, "파드 권한 · pods verified 를 켤 때만 필요", 13, MUTED, KR, "start")
 
 d.legend(680, [("지워도 되는 권한", ACC), ("기본 설정이 쓰는 집합", OK)])
 d.save("06-03.rbac-venn.svg")

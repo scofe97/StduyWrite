@@ -62,8 +62,8 @@ for k, (nm, start, span, color, dash) in enumerate(rows):
     else:
         d.tone(x + 8, ry + 6, w - 16, 24, color, 4, "16", 1.2)
 
-d.t(TX + PITCH * 2, 628, "1.4.0 — stubzones 가 끝나고 credentials 가 시작한다", 13, ACC, KR)
-d.t(LX, 660, "원서 이후 붙은 셋은 master 문법에 있다는 것만 확인했고 도입 버전은 확인하지 못했다", 13, MUTED, KR, "start")
+d.t(TX + PITCH * 2, 628, "1.4.0 · stubzones 끝 · credentials 시작", 13, ACC, KR)
+d.t(LX, 660, "원서 이후 셋 · master 문법에서 확인 · 도입 버전 미확인", 13, MUTED, KR, "start")
 
 d.legend(684, [("지금 문법에 없다", BAD), ("그대로 남았다", OK), ("원서 이후 추가", INFO), ("원서가 적은 경계", ACC)])
 d.save("05-01.option-lifespan.svg")

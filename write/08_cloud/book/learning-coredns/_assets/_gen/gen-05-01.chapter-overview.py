@@ -49,8 +49,8 @@ for i, (n, title, q) in enumerate(cards):
     d.t(x + 18, y + 56, title, 16, ACC if focal else INK, KR, "start", 600)
     d.t(x + 18, y + 84, q, 13, MUTED, KR, "start")
 
-d.t(20, 648, "1절부터 3절까지가 \"왜 존 파일로는 안 되는가\"이고, 4절부터가 \"그래서 무엇을 하는가\"다", 13, MUTED, KR, "start")
-d.t(20, 672, "7절은 etcd 가 유일한 답이 아니라는 것을 확인하고 6장으로 넘긴다", 13, MUTED, KR, "start")
+d.t(20, 648, "1~3절 · 왜 존 파일로는 안 되는가 · 4~6절 · 그래서 무엇을 하는가", 13, MUTED, KR, "start")
+d.t(20, 672, "7절 · etcd 밖의 대안 · 6장으로 연결", 13, MUTED, KR, "start")
 
 d.legend(704, [("이 장의 답이 서는 절", ACC)])
 d.save("05-01.chapter-overview.svg")

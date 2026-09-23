@@ -53,8 +53,8 @@ d.arrow([(LX + 200, 314), (LX + 260, 314)], MUTED, "ar", 1.4)
 d.arrow([(LX + 464, 314), (LX + 524, 314)], MUTED, "ar", 1.4)
 
 d.tone(20, 396, 840, 56, ACC, 6, "0E", 1.4)
-d.t(440, 420, "대가 — 클라이언트 네임스페이스를 출발지 IP 로 알아내야 해서 pods verified 가 필요하다", 13, ACC, KR)
-d.t(440, 440, "그 모드는 2절에서 본 대로 메모리를 두 배 안팎 더 쓴다", 12, MUTED, KR)
+d.t(440, 420, "대가 · 출발지 IP → 네임스페이스 · pods verified 필요", 13, ACC, KR)
+d.t(440, 440, "그 모드의 메모리 · 두 배 안팎", 12, MUTED, KR)
 
 d.legend(476, [("옮겨 간 반복", ACC), ("없앤 왕복", BAD), ("남은 왕복 하나", OK)])
 d.save("06-04.autopath-move.svg")

@@ -49,8 +49,8 @@ for i, (c1, c2, verified, other) in enumerate(CATS):
     d.t(cx, PY1 + 26, c1, 13, INK, KR, "middle", 600)
     d.t(cx, PY1 + 46, c2, 12, MUTED, KR)
 
-d.t(20, 500, "두 점을 이으면 verified 는 객체 1,000개당 약 4 MiB, 나머지는 1 MiB 다 — 한계 비용이 네 배다", 13, MUTED, KR, "start")
-d.t(20, 524, "나머지 두 모드의 선은 앞 편의 추정식 (파드 + 서비스) / 1000 + 54 와 정확히 같다", 13, MUTED, KR, "start")
+d.t(20, 500, "기울기 · verified 1,000개당 약 4 MiB · 나머지 1 MiB", 13, MUTED, KR, "start")
+d.t(20, 524, "나머지 두 모드 = 앞 편 식 (파드 + 서비스) / 1000 + 54", 13, MUTED, KR, "start")
 
 d.legend(548, [("pods verified", ACC), ("insecure · disabled", INFO)])
 d.save("06-04.pods-memory.svg")

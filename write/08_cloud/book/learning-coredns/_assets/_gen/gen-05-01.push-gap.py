@@ -73,8 +73,8 @@ d.msg("레지스트리와 DNS", "클라이언트", "밀어 줄 경로가 없다"
 chip("클라이언트", "옛 주소를 계속 쓴다", 372, BAD)
 d.msg("클라이언트", "레지스트리와 DNS", "TTL 만료 후 재질의", 428, ACC, mk="acc")
 
-d.t(20, 492, "이 공백을 없애려고 Consul 같은 제품은 DNS 밖에 별도 프로토콜을 얹는다", 13, MUTED, KR, "start")
-d.t(20, 516, "CoreDNS 는 gRPC 의 푸시로 같은 것을 실험했지만 현재 버전에는 그 기능이 없다", 13, MUTED, KR, "start")
+d.t(20, 492, "공백 메우기 · Consul 류는 DNS 밖 별도 프로토콜", 13, MUTED, KR, "start")
+d.t(20, 516, "CoreDNS 의 gRPC 푸시 실험 · 현재 버전엔 없음", 13, MUTED, KR, "start")
 
 d.legend(544, [("레지스트리가 아는 시점", OK), ("DNS 에 없는 경로", BAD), ("클라이언트가 아는 시점", ACC)])
 d.save("05-01.push-gap.svg")

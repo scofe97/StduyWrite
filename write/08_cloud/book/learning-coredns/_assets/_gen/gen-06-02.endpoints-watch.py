@@ -78,8 +78,8 @@ d.msg("백엔드 파드 하나", "Endpoints 컨트롤러", "다른 파드가 또
       sub="백엔드가 많을수록 이 일이 잦다")
 chip("CoreDNS", "메모리와 CPU 를 더 쓴다", 424, BAD)
 
-d.t(20, 488, "객체가 커지는 축과 자주 바뀌는 축이 같은 방향으로 나빠져서 큰 서비스일수록 비용이 겹쳐 는다", 13, MUTED, KR, "start")
-d.t(20, 512, "헤드리스를 아무도 안 쓰면 noendpoints 로 이 watch 자체를 끌 수 있다", 13, MUTED, KR, "start")
+d.t(20, 488, "객체 크기 · 변경 빈도 · 두 축이 함께 커짐 · 지금은 EndpointSlice 로 완화", 13, MUTED, KR, "start")
+d.t(20, 512, "헤드리스 미사용 · noendpoints 로 watch 끄기", 13, MUTED, KR, "start")
 
 d.legend(540, [("컨트롤러가 다시 쓰는 지점", WARN), ("전체가 전송되는 경로", BAD)])
 d.save("06-02.endpoints-watch.svg")

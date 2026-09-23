@@ -18,14 +18,13 @@ d = D(W, H, "LEARNING COREDNS · 06-02 §1",
 d.box(20, 132, 200, 96, PAPER2, RULE, 1.0)
 d.t(120, 170, "API 서버", 15, INFO, KR, "middle", 600)
 d.t(120, 194, "Services · Endpoints", 12, MUTED, MONO)
-d.t(120, 214, "etcd 가 뒤를 받친다", 12, MUTED, KR)
 
 ZX, ZY, ZW, ZH = 296, 108, 388, 232
 d.o.append(f'<rect x="{ZX}" y="{ZY}" width="{ZW}" height="{ZH}" rx="8" fill="{PAPER}" '
            f'stroke="{RULE}" stroke-width="1.0" stroke-dasharray="4 4"/>')
 ZL = "COREDNS PROCESS"
-d.o.append(f'<rect x="{ZX + 14}" y="{ZY - 8}" width="{len(ZL) * 6 + 16}" height="16" fill="{PAPER}"/>')
-d.t(ZX + 22, ZY + 4, ZL, 9, SOFT, MONO, "start", 600)
+# 테두리 위 knockout 사각형이 shape-overlap 을 내서 라벨을 상자 안쪽 위에 둔다(2026-09-23)
+d.t(ZX + 16, ZY + 18, ZL, 9, SOFT, MONO, "start", 600)
 
 d.box(ZX + 28, 140, 332, 76, PAPER2, RULE, 1.0)
 d.t(ZX + 194, 172, "인메모리 자원 캐시", 15, INK, KR, "middle", 600)
@@ -52,9 +51,9 @@ d.t(700, 266, "질의", 12, MUTED, KR)
 d.path(f"M {ZX + 364} 300 L 800 300 L 800 236", ACC, 1.4, m="acc")
 d.t(714, 322, "응답", 12, ACC, KR)
 
-d.t(20, 396, "쿠버네티스 자원이 이미 메모리에 있어 레코드를 만드는 일이 아주 빠르다", 13, MUTED, KR, "start")
-d.t(20, 420, "그래서 DNS 질의에 답하려고 API 서버를 부를 일이 전혀 없다", 13, MUTED, KR, "start")
-d.t(20, 444, "이 사실이 2절의 \"캐시가 아낄 것이 없다\" 로 곧장 이어진다", 13, MUTED, KR, "start")
+d.t(20, 396, "자원이 이미 메모리에 · 레코드 생성이 빠름", 13, MUTED, KR, "start")
+d.t(20, 420, "DNS 응답에 API 서버 호출 없음", 13, MUTED, KR, "start")
+d.t(20, 444, "→ 2절 · 캐시가 아낄 것이 없음", 13, MUTED, KR, "start")
 
 d.legend(480, [("저장되지 않는 자리", ACC), ("클러스터 상태를 읽는 경로", INFO), ("컨트롤러에는 있고 여기엔 없는 경로", BAD)])
 d.save("06-02.plugin-flow.svg")

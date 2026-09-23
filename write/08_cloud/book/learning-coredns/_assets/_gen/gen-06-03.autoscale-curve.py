@@ -55,8 +55,8 @@ for cores, color, label in SERIES:
 d.line(PX0, py(2), PX1, py(2), MUTED, 1.0, "5 4")
 d.t(PX1 - 6, py(2) - 10, "최소 2 — 작은 클러스터는 여기 붙어 있다", 12, MUTED, KR, "end")
 
-d.t(20, 508, "노드당 32코어면 256코어 규칙이 8노드마다 하나를 요구해 16노드 규칙보다 먼저 이긴다", 13, MUTED, KR, "start")
-d.t(20, 532, "실제 필요는 워크로드가 정하므로 이 곡선은 출발점이지 답이 아니다", 13, MUTED, KR, "start")
+d.t(20, 508, "노드당 32코어 · 256코어 규칙이 8노드마다 하나 · 16노드 규칙보다 먼저", 13, MUTED, KR, "start")
+d.t(20, 532, "실제 필요는 워크로드 · 이 곡선은 출발점", 13, MUTED, KR, "start")
 
 d.legend(560, [("노드당 32코어", ACC), ("노드당 8코어", INFO)])
 d.save("06-03.autoscale-curve.svg")

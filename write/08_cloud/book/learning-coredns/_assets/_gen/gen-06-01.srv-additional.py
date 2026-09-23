@@ -75,8 +75,8 @@ d.msg("파드 안 클라이언트", "클러스터 DNS", "없었다면 A 질의 �
 
 chip("파드 안 클라이언트", "추가 조회 없이 접속", 452, OK)
 
-d.t(20, 496, "SRV 는 대상 이름만 주므로 원래대로면 이름마다 A 를 한 번 더 물어야 한다", 13, MUTED, KR, "start")
-d.t(20, 520, "ADDITIONAL 이 그 답을 미리 실어 보내 왕복이 하나로 끝난다", 13, MUTED, KR, "start")
+d.t(20, 496, "SRV 만으로는 대상 이름뿐 · 이름마다 A 추가 질의", 13, MUTED, KR, "start")
+d.t(20, 520, "ADDITIONAL 에 A 동봉 · 왕복 하나", 13, MUTED, KR, "start")
 
 d.legend(544, [("같은 응답에 실려 오는 것", ACC), ("이 설계가 없앤 왕복", BAD), ("클라이언트가 도달한 상태", OK)])
 d.save("06-01.srv-additional.svg")

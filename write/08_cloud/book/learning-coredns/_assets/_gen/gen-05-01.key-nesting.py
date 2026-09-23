@@ -17,7 +17,7 @@ d = D(W, H, "LEARNING COREDNS · 05-01 §5",
       "가장 안쪽 링이 서비스 하나입니다")
 
 rings = [
-    (40, 104, 800, 280, "/skydns", "뿌리 · path 옵션으로 바꾼다", False),
+    (40, 104, 800, 280, "/skydns", "뿌리 · path 옵션으로 변경", False),
     (76, 128, 728, 232, "com", "", False),
     (112, 152, 656, 184, "example", "", False),
     (148, 176, 584, 136, "services", "", False),
@@ -28,24 +28,24 @@ for x, y, w, h, label, band, focal in rings:
         d.tone(x, y, w, h, ACC, 8, "0E", 1.4)
     else:
         d.box(x, y, w, h, PAPER, RULE, 1.0, 8)
-    d.o.append(f'<rect x="{x + 14}" y="{y - 8}" width="{len(label) * 9 + 20}" height="16" fill="{PAPER}"/>')
-    d.t(x + 22, y + 4, label, 12, ACC if focal else SOFT, MONO, "start", 600)
+    # 테두리 위 knockout 사각형이 shape-overlap 을 내서 라벨을 상자 안쪽 위에 둔다(2026-09-23)
+    d.t(x + 16, y + 17, label, 12, ACC if focal else SOFT, MONO, "start", 600)
     if band:
         d.t(x + w - 20, y + h - 12, band, 12, MUTED, KR, "end")
 
 d.t(440, 236, "{\"host\": \"192.0.2.10\", \"port\": 20020,", 13, INK, MONO)
 d.t(440, 258, "\"priority\": 10, \"weight\": 20}", 13, INK, MONO)
-d.t(440, 278, "SkyDNS 메시지 하나가 여기 놓인다", 12, MUTED, KR)
+d.t(440, 278, "SkyDNS 메시지 하나", 12, MUTED, KR)
 
 d.path("M 40 412 L 840 412", SOFT, 1.0, m="soft")
 d.t(40, 402, "바깥에서 안으로", 12, SOFT, KR, "start")
 d.t(440, 444, "/skydns / com / example / services / users", 16, ACC, MONO, "middle", 600)
-d.t(440, 466, "etcd 키 — 링을 바깥부터 세면 이 순서다", 13, MUTED, KR)
+d.t(440, 466, "etcd 키 · 링을 바깥부터", 13, MUTED, KR)
 
 d.path("M 840 496 L 40 496", SOFT, 1.0, m="soft")
 d.t(840, 486, "안에서 바깥으로", 12, SOFT, KR, "end")
 d.t(440, 528, "users . services . example . com", 16, INK, MONO, "middle", 600)
-d.t(440, 550, "도메인 이름 — 같은 링을 안부터 세면 이 순서다", 13, MUTED, KR)
+d.t(440, 550, "도메인 이름 · 같은 링을 안부터", 13, MUTED, KR)
 
 d.legend(574, [("서비스 하나가 놓이는 링", ACC)])
 d.save("05-01.key-nesting.svg")

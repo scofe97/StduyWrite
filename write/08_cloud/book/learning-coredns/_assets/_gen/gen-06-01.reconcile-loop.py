@@ -88,8 +88,8 @@ d.t(CX, CY - 12, "API 서버", 16, INFO, KR, "middle", 600)
 d.t(CX, CY + 10, "etcd 가 뒤를 받친다", 12, MUTED, KR)
 d.t(CX, CY + 32, "Spec · Status", 12, MUTED, MONO)
 
-d.t(20, 636, "폴링으로도 돌지만 간격을 줄이면 API 서버 부하가 늘고 늘리면 반응이 굼떠진다", 13, MUTED, KR, "start")
-d.t(20, 660, "watch 는 지속 연결로 갱신을 밀어 주어 그 맞바꿈 자체를 없앤다", 13, MUTED, KR, "start")
+d.t(20, 636, "폴링 · 짧으면 API 서버 부하 · 길면 반응 지연", 13, MUTED, KR, "start")
+d.t(20, 660, "watch · 지속 연결로 갱신 푸시 · 맞바꿈 해소", 13, MUTED, KR, "start")
 
 d.legend(684, [("갱신이 밀려 들어오는 지점", ACC), ("상태가 쌓이는 허브", INFO)])
 d.save("06-01.reconcile-loop.svg")

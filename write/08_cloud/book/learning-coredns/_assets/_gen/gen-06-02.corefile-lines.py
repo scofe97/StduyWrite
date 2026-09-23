@@ -21,7 +21,7 @@ lines = [
     ("health", "kubelet 이 부른다", ("프로브가 이 엔드포인트를 본다", "keep"), ("지우지 않는다", "keep")),
     ("kubernetes …", "클러스터 존에 권한", ("이 플러그인이 이 편의 주인공", "keep"), ("지우면 클러스터 DNS 가 아니다", "keep")),
     ("pods insecure", "kube-dns 하위 호환", ("폐기된 명세 부분을 켠다", "legacy"), ("파드 레코드가 필요 없으면", "drop")),
-    ("upstream", "CNAME 되질의", ("1.4 이후 기본 동작", "legacy"), ("1.4 이상이면 지운다", "drop")),
+    ("upstream", "CNAME 되질의", ("1.4 이후 기본 동작", "legacy"), ("반드시 지운다 · 지금은 기동 오류", "drop")),
     ("fallthrough …", "모르는 PTR 을 넘김", ("CIDR 을 다 못 적었을 때 안전장치", "keep"), ("CIDR 을 전부 열거했으면", "cond")),
     ("prometheus :9153", "메트릭을 연다", ("기본은 localhost 만 듣는다", "keep"), ("긁어 가지 않으면", "cond")),
     ("forward . …", "나머지를 상류로", ("앞선 플러그인이 안 잡은 질의", "keep"), ("외부 해석이 필요 없으면", "cond")),

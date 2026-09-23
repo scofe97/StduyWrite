@@ -15,7 +15,7 @@ W, H = 880, 620
 d = D(W, H, "LEARNING COREDNS · 06-03 §4",
       "Deployment 한 장을 다섯 겹으로 읽는다",
       "위에서 아래로 갈수록 안쪽 겹이다. 각 겹이 정하는 것과 그 값이 어디서 왔는지가 다르고, "
-      "넷째 겹의 두 값이 이 편 제목의 숫자다.",
+      "첫째 겹의 복제본 2 와 넷째 겹의 170Mi 가 이 편 제목의 숫자다. 본문은 다섯 겹을 바깥·가운데·안쪽 세 소절로 묶어 읽는다.",
       "주황 겹이 kube-dns 에서 그대로 가져온 값입니다")
 
 LX, LW, LH, Y0 = 100, 740, 68, 112
@@ -42,9 +42,9 @@ d.t(20, Y0 - 8, "바깥에서", 12, SOFT, KR, "start")
 d.t(20, Y0 + 5 * LH + 20, "안으로", 12, SOFT, KR, "start")
 
 BOT = Y0 + 5 * LH
-d.t(LX, BOT + 44, "2겹의 Default 는 파드의 기본값이 아니다 — 파드 기본은 ClusterFirst 이고 그것은 클러스터 DNS 를 본다", 13, MUTED, KR, "start")
-d.t(LX, BOT + 68, "4겹의 CPU 는 상한이 없고 메모리만 있다. 메모리를 넘기면 커널이 죽이지만 CPU 는 느려질 뿐이다", 13, MUTED, KR, "start")
-d.t(LX, BOT + 92, "170Mi 는 성능 계산이 아니라 kube-dns 와 같은 값이어야 해서 정해졌다", 13, MUTED, KR, "start")
+d.t(LX, BOT + 44, "2겹 · dnsPolicy Default = 노드 설정 · 파드 기본은 ClusterFirst", 13, MUTED, KR, "start")
+d.t(LX, BOT + 68, "4겹 · CPU 상한 없음 · 메모리 상한만 · 초과 시 커널이 종료", 13, MUTED, KR, "start")
+d.t(LX, BOT + 92, "170Mi · 성능이 아닌 kube-dns 호환에서 온 값", 13, MUTED, KR, "start")
 
 d.legend(BOT + 120, [("호환에서 나온 값", ACC)])
 d.save("06-03.deployment-layers.svg")

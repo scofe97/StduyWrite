@@ -62,9 +62,9 @@ for i, (name, color, result) in enumerate(tries):
     d.msg("파드 안 클라이언트", "클러스터 DNS", name, y, color,
           mk="acc" if color is ACC else "bad", sub=result)
 
-d.t(20, 560, "원서의 검색 경로 목록은 넷인데 넷째가 호스트 도메인 둘로 풀려 접미사는 다섯이 된다", 13, MUTED, KR, "start")
-d.t(20, 584, "짧은 이름을 쓰게 해 주는 설정의 값을 바깥 이름을 부를 때 치르는 구조다", 13, MUTED, KR, "start")
-d.t(20, 608, "외부 조회가 잦은 워크로드라면 이것만으로 CoreDNS 부하가 극적으로 는다", 13, MUTED, KR, "start")
+d.t(20, 560, "검색 경로 네 항목 · 넷째가 호스트 도메인 둘 · 접미사 다섯", 13, MUTED, KR, "start")
+d.t(20, 584, "짧은 이름의 편의 · 바깥 이름이 값을 치름", 13, MUTED, KR, "start")
+d.t(20, 608, "외부 조회가 잦은 워크로드 · CoreDNS 부하 급증", 13, MUTED, KR, "start")
 
 d.legend(636, [("헛도는 다섯", BAD), ("성공하는 여섯째", ACC)])
 d.save("06-04.ndots-fanout.svg")

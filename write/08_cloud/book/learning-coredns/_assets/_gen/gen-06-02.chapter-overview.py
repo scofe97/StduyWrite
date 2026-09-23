@@ -48,8 +48,8 @@ for i, (n, title, q) in enumerate(cards):
     d.t(x + 18, y + 56, title, 16, ACC if focal else INK, KR, "start", 600)
     d.t(x + 18, y + 84, q, 13, MUTED, KR, "start")
 
-d.t(20, 504, "\"레코드를 쌓아 두지 않는다\" 는 1절의 사실이 2절의 캐시 무용론과 4절의 cache 30 비판을 함께 만든다", 13, MUTED, KR, "start")
-d.t(20, 528, "5절과 6절은 기본 Corefile 밖으로 밀려 있던 변수 둘을 마저 본다", 13, MUTED, KR, "start")
+d.t(20, 504, "1절 · 레코드를 쌓아 두지 않음 → 2절 캐시 무용론 · 4절 cache 30 비판", 13, MUTED, KR, "start")
+d.t(20, 528, "5·6절 · 기본 Corefile 밖의 변수 둘", 13, MUTED, KR, "start")
 
 d.legend(556, [("나머지를 설명하는 절", ACC)])
 d.save("06-02.chapter-overview.svg")
