@@ -13,6 +13,7 @@ related:
   - ./book/paw_packet-analysis-wireshark/README.md
   - ./book/cntd_computer-networking-top-down/README.md
   - ./book/network-fundamentals-lab/README.md
+  - ./book/netpath-lab/README.md
   - ../08_cloud/book/container-security/README.md
   - ../08_cloud/book/networking-and-kubernetes/README.md
   - ../08_cloud/book/learning-coredns/README.md
@@ -45,6 +46,7 @@ updated: 2026-09-21
 | [paw_packet-analysis-wireshark/](./book/paw_packet-analysis-wireshark/README.md) | 선 위의 프레임을 떠서 프로토콜별로 읽는 법 — Wireshark 캡처·필터·TCP·TLS·응용 프로토콜·WLAN·보안 분석 (책 기반) |
 | [cntd_computer-networking-top-down/](./book/cntd_computer-networking-top-down/README.md) | 프로토콜을 위에서 아래로 훑는 규격 축 — 응용·트랜스포트·네트워크 계층의 원리와 라우팅·SDN·망 관리. `paw_` 가 캡처로 확인하는 것을 여기서 규격으로 배운다 (책 기반) |
 | [network-fundamentals-lab/](./book/network-fundamentals-lab/README.md) | 고장이 장전된 채로 뜨는 containerlab 토폴로지 18편 — 증상에서 계층을 좁히는 훈련. N&K 정독본이 맡는 메커니즘을 깨뜨려 확인하는 축이다 (랩 저장소 기반) |
+| [netpath-lab/](./book/netpath-lab/README.md) | 직접 만든 요청 경로 진단 도구로 실패 상황을 물리고 판정 코드를 역추적하는 실습 — refused·timeout·unreachable 이 errno 에서 Go 에러 값을 거쳐 이름표가 되는 경로와 Go 문법을 함께 본다 (랩 저장소 기반) |
 
 
 
