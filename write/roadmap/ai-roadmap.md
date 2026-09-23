@@ -27,7 +27,7 @@ updated: 2026-09-23
 |---|---|---|
 | 1 · 모델을 도구로 쓰기 | 모델 고르기 | 추론 모델 · 코딩 모델 · 임베딩 모델 · 작고 빠른 모델 · 선택 기준 |
 | 1 · 모델을 도구로 쓰기 | 출력 다루기 | 구조화 출력 · JSON Schema · 추론 노력 조절 · 거부와 폴백 · 모델 캐스케이드 |
-| 1 · 모델을 도구로 쓰기 | 비용 셈법 | 입력 토큰 · 출력 토큰 · 추론 토큰 · 캐시 토큰 · 지연과 단가 |
+| 1 · 모델을 도구로 쓰기 | 비용 셈법 | 입력 토큰 · 출력 토큰 · 추론 토큰 · 캐시 토큰 · 지연과 단가 · 토크나이저 · BPE |
 | 2 · 프롬프트와 컨텍스트 | 지시 | 시스템 · 개발자 · 사용자 3계층 · 역할 · 제약 · 출력 형식 · 예시 |
 | 2 · 프롬프트와 컨텍스트 | 컨텍스트 | 컨텍스트 윈도우 · 작업 기억과 장기 기억 · 압축 · 우선순위 · 축출 |
 | 2 · 프롬프트와 컨텍스트 | 토큰 줄이기 | 프롬프트 캐싱 · 접두 일치 · 컨텍스트 격리 · 토큰 예산 · 컨텍스트 부패 |
@@ -51,10 +51,10 @@ updated: 2026-09-23
 | 6 · GitAIOps | 앱 묶음 | App of Apps · Sync Wave · 멀티테넌시 |
 | 6 · GitAIOps | AI 협업 산출물 | 행동 규칙 · 메모리 컨텍스트 · 아키텍처 결정 기록 · 권한 분리 · 명령 가드레일 |
 | 7 · 평가와 가드레일 | 채점 | 골든 데이터셋 · 회귀 시험 · groundedness · 과업 성공률 · 심판 모델 · confidence 보정과 임계값 |
-| 7 · 평가와 가드레일 | 게이트 | CI 게이트 · 프롬프트 버전 · 비교 기준선 |
+| 7 · 평가와 가드레일 | 게이트 | CI 게이트 · 프롬프트 버전 · 비교 기준선 · 공개 벤치마크 · reward hacking |
 | 7 · 평가와 가드레일 | 방어 | 프롬프트 주입 · 도구 주입 · 데이터 유출 · 외부 데이터 격리 |
 | 7 · 평가와 가드레일 | 한도 | 최소 권한 · 샌드박스 · 시크릿 가리기 · 개인정보 마스킹 · 예산 한도 |
-| 8 · 운영 | 지표 | 도구 실패율 · 지연 · 토큰 사용량 · 과업당 비용 · 감사 로그 |
+| 8 · 운영 | 지표 | 도구 실패율 · 지연 · 토큰 사용량 · 과업당 비용 · 감사 로그 · 공급자 실패 구분 · BYOK |
 | 8 · 운영 | 되먹임 | 프로덕션 모니터링 · 개선 루프 · 사람과의 협업 |
 | 8 · 운영 | 모델 운영 | 프로덕션 준비 · 배포 · 모니터링과 되먹임 · 모델 거버넌스 |
 | 8 · 운영 | 서빙 | 추론 최적화의 인프라 절반 · 배치와 캐시 · 아키텍처와 사용자 피드백 |
@@ -96,6 +96,7 @@ updated: 2026-09-23
 | 구조화 출력과 JSON Schema | 필수 | [LLM 모델 활용](../10_AI/02-01.LLM%20%EB%AA%A8%EB%8D%B8%EC%9D%98%20%ED%8A%B9%EC%84%B1%EA%B3%BC%20%ED%99%9C%EC%9A%A9%20%E2%80%94%20%EC%84%A0%ED%83%9D%C2%B7%EC%82%AC%EA%B3%A0%C2%B7%EA%B5%AC%EC%A1%B0%ED%99%94%C2%B7%EB%A7%88%EC%9D%B4%EA%B7%B8%EB%A0%88%EC%9D%B4%EC%85%98.md) | |
 | 토큰 넷 — 입력 · 출력 · 추론 · 캐시 | 필수 | [Token Optimization](../10_AI/02-03.Token%20Optimization%20%E2%80%94%20%EB%B9%84%EC%9A%A9%C2%B7%EC%A7%80%EC%97%B0%C2%B7context%20rot%EB%A5%BC%20%EC%A4%84%EC%9D%B4%EB%8A%94%20%EB%B2%95.md) | AI Engineering 1장 |
 | 비용과 지연의 셈법 | 필수 | [Token Optimization](../10_AI/02-03.Token%20Optimization%20%E2%80%94%20%EB%B9%84%EC%9A%A9%C2%B7%EC%A7%80%EC%97%B0%C2%B7context%20rot%EB%A5%BC%20%EC%A4%84%EC%9D%B4%EB%8A%94%20%EB%B2%95.md) | |
+| 토크나이저 — BPE · 언어마다 토큰 수가 다른 이유 | 선택 | | |
 | 모델 교체와 거부 · 폴백 | 추천 | [LLM 모델 활용](../10_AI/02-01.LLM%20%EB%AA%A8%EB%8D%B8%EC%9D%98%20%ED%8A%B9%EC%84%B1%EA%B3%BC%20%ED%99%9C%EC%9A%A9%20%E2%80%94%20%EC%84%A0%ED%83%9D%C2%B7%EC%82%AC%EA%B3%A0%C2%B7%EA%B5%AC%EC%A1%B0%ED%99%94%C2%B7%EB%A7%88%EC%9D%B4%EA%B7%B8%EB%A0%88%EC%9D%B4%EC%85%98.md) | |
 | 모델 캐스케이드 — 값싼 분류기로 거르고 필요할 때만 큰 모델 | 추천 | | |
 | 세대별로 무엇이 달라지는가 | 선택 | [Opus 4.8 변화](../10_AI/01-01.Claude%20Opus%204.8%20%E2%80%94%204.7%EC%97%90%EC%84%9C%20%EB%AC%B4%EC%97%87%EC%9D%B4%20%EB%8B%AC%EB%9D%BC%EC%A1%8C%EB%82%98.md) | |
@@ -189,6 +190,7 @@ updated: 2026-09-23
 | confidence 보정과 임계값 설계 — false positive 와 negative 의 교환 | 추천 | | |
 | 무엇을 잴 것인가 | 필수 | [Evaluation](../10_AI/02-09.Evaluation%20%C2%B7%20Test%20Harness%20%E2%80%94%20%EB%B9%84%EA%B2%B0%EC%A0%95%EC%A0%81%20%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%9D%84%20%EC%B1%84%EC%A0%90%ED%95%98%EA%B8%B0.md) | AI Engineering 4장 |
 | 심판 모델과 그 한계 | 추천 | [Evaluation](../10_AI/02-09.Evaluation%20%C2%B7%20Test%20Harness%20%E2%80%94%20%EB%B9%84%EA%B2%B0%EC%A0%95%EC%A0%81%20%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%9D%84%20%EC%B1%84%EC%A0%90%ED%95%98%EA%B8%B0.md) | AI Agents 9장 |
+| 공개 벤치마크와 reward hacking — 점수가 오르는데 좋아지지 않을 때 | 선택 | | [SWE-bench](https://www.swebench.com/) |
 | CI 게이트로 굳히기 | 필수 | [Evaluation](../10_AI/02-09.Evaluation%20%C2%B7%20Test%20Harness%20%E2%80%94%20%EB%B9%84%EA%B2%B0%EC%A0%95%EC%A0%81%20%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%9D%84%20%EC%B1%84%EC%A0%90%ED%95%98%EA%B8%B0.md) | |
 | 주입 3종 — 프롬프트 · 도구 · 유출 | 필수 | [Guardrail](../10_AI/02-10.Guardrail%20%C2%B7%20Safety%20%26%20Observability%20%E2%80%94%20%EA%B6%8C%ED%95%9C%C2%B7%EB%B0%A9%EC%96%B4%C2%B7%EA%B4%80%EC%B8%A1.md) | AI Agents 12장 |
 | 외부 데이터를 지시로 읽지 않기 | 필수 | [MCP 설계](../10_AI/02-04.MCP%20%EC%84%A4%EA%B3%84%20%E2%80%94%20%EC%99%B8%EB%B6%80%20%EB%8F%84%EA%B5%AC%C2%B7%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC%20%ED%91%9C%EC%A4%80%EC%9C%BC%EB%A1%9C%20%EC%97%B0%EA%B2%B0%ED%95%98%EA%B8%B0.md) | AI Agents 12장 |
@@ -202,6 +204,7 @@ updated: 2026-09-23
 |---|:---:|---|---|
 | 에이전트 지표와 감사 로그 | 필수 | [Guardrail](../10_AI/02-10.Guardrail%20%C2%B7%20Safety%20%26%20Observability%20%E2%80%94%20%EA%B6%8C%ED%95%9C%C2%B7%EB%B0%A9%EC%96%B4%C2%B7%EA%B4%80%EC%B8%A1.md) | AI Agents 10장 |
 | 과업당 비용과 병목 | 필수 | [Token Optimization](../10_AI/02-03.Token%20Optimization%20%E2%80%94%20%EB%B9%84%EC%9A%A9%C2%B7%EC%A7%80%EC%97%B0%C2%B7context%20rot%EB%A5%BC%20%EC%A4%84%EC%9D%B4%EB%8A%94%20%EB%B2%95.md) | AI Agents 10장 |
+| 모델 공급자 실패 구분 — 401 · 403 · 429 · 쿼터 · BYOK 키 만료와 교체 | 선택 | | |
 | 개선 루프 | 추천 | | AI Agents 11장 |
 | 사람과 에이전트의 협업 | 추천 | | AI Agents 13장 |
 | 프로덕션 준비와 배포 | 추천 | | Introducing MLOps 5·6장 |

@@ -31,17 +31,18 @@ updated: 2026-09-23
 | 3 · 관용구와 도구 | 패키지 설계 | 패키지 경계 · 네이밍 · 인터페이스를 쓰는 쪽에 두기 |
 | 3 · 관용구와 도구 | 모듈과 검사 | module · MVS · workspace · `go build` · `go vet` · staticcheck |
 | 3 · 관용구와 도구 | 취소 전파 | `context` · 취소 · 값 전달 · deadline |
-| 3 · 관용구와 도구 | 흔한 실수 | slice aliasing · interface nil · goroutine leak · loop variable · context 오용 |
-| 4 · 동시성 | 실행 단위 | goroutine · `GOMAXPROCS` · 스케줄러 · 스레드와의 차이 |
+| 3 · 관용구와 도구 | 흔한 실수 | slice aliasing · interface nil · goroutine leak · loop variable · context 오용 · `go generate` · cgo 메모리 소유권 |
+| 4 · 동시성 | 실행 단위 | goroutine · `GOMAXPROCS` · 스케줄러 · 스레드와의 차이 · netpoller |
 | 4 · 동시성 | 메모리 공유 | 경쟁 상태 · mutex · RWMutex · 조건 변수 · 세마포어 · WaitGroup · barrier |
 | 4 · 동시성 | 메시지 전달 | channel · buffered channel · `select` · 채널 패턴 · pipeline · fan-in · fan-out |
 | 4 · 동시성 | 정확성 | happens-before · race detector · deadlock 회피 · atomic · spin lock · futex |
 | 5 · 테스트와 성능 | 테스트 | table-driven test · test double · coverage · golden file · benchmark · fuzzing |
-| 5 · 테스트와 성능 | 프로파일 | pprof — CPU · heap · block · mutex · `runtime/trace` · 스케줄러 추적 |
+| 5 · 테스트와 성능 | 프로파일 | pprof — CPU · heap · block · mutex · goroutine · `runtime/trace` · 스케줄러 추적 |
 | 5 · 테스트와 성능 | 런타임 | escape analysis · 할당 줄이기 · GC · `GOGC` · `GOMEMLIMIT` |
 | 6 · 서비스 | 전송 계층 | 주소 해석 · 라우팅 · TCP 스트림 · 데이터 전송 · UDP · 신뢰성 보강 · Unix domain socket |
 | 6 · 서비스 | HTTP | 클라이언트 타임아웃 · 서버 라우팅 · 미들웨어 · graceful shutdown |
 | 6 · 서비스 | 운영 요소 | TLS · 직렬화 · `log/slog` · 지표 |
+| 6 · 서비스 | 프로토콜 설계 | 바이트 파싱 · `encoding/binary` · 엔디언 · framing · 메시지 타입 · 핸드셰이크 · 버전 협상 · 상태 머신 |
 | 6 · 서비스 | 클라우드 네이티브 설계 | 복원력 · 느슨한 결합 · 관측성 · 보안 |
 | 6 · 서비스 | 산출물 | `go:embed` · distroless · 멀티스테이지 이미지 · `syscall/js` 와 Wasm 경계 |
 | 7 · 터미널과 세션 | SSH | 전송 · 사용자 인증 · 연결 3계층 · `pty-req` · `window-change` · 세션 채널의 경계 |
@@ -116,6 +117,8 @@ updated: 2026-09-23
 | slice aliasing · interface nil | 추천 | | |
 | goroutine leak · loop variable · context 오용 | 추천 | | |
 | reflect · unsafe · cgo | 선택 | | Learning Go 16장 |
+| cgo 경계의 메모리 소유권 — ABI · FFI · 누가 free 하는가 | 선택 | | |
+| `go generate` 와 코드 생성 — proto · OpenAPI 스키마에서 코드로 | 선택 | | |
 
 
 
@@ -140,6 +143,7 @@ updated: 2026-09-23
 | 채널 소유권 — 닫기는 한 곳에서만 | 필수 | | Learn Concurrent Programming with Go 7장 |
 | `sync.Once` — 중복 close 막기 | 추천 | | |
 | atomic · spin lock · futex | 추천 | | Learn Concurrent Programming with Go 12장 |
+| netpoller — 블로킹처럼 쓰는 I/O 가 epoll 위에서 도는 법 | 추천 | [OS 로드맵](os-roadmap.md) | |
 
 ### 5단계 · 테스트와 성능
 
@@ -149,6 +153,7 @@ updated: 2026-09-23
 | coverage · golden file | 추천 | | Learning Go 15장 |
 | benchmark · fuzzing | 추천 | | Pocket-Sized Projects 부록 D·F |
 | pprof — CPU · heap · block · mutex profile | 필수 | | [Go Diagnostics](https://go.dev/doc/diagnostics) |
+| goroutine profile 로 leak 찾기 — `runtime.NumGoroutine` · `/debug/pprof/goroutine` | 추천 | | [Go Diagnostics](https://go.dev/doc/diagnostics) |
 | `runtime/trace` · 스케줄러 추적 | 추천 | | [Go Diagnostics](https://go.dev/doc/diagnostics) |
 | escape analysis · 할당 줄이기 | 추천 | | |
 | GC · `GOGC` · `GOMEMLIMIT` | 추천 | | [Go GC Guide](https://go.dev/doc/gc-guide) |
@@ -165,6 +170,8 @@ updated: 2026-09-23
 | UDP · 신뢰성 보강 | 추천 | | Network Programming with Go 5·6장 |
 | TLS 로 통신 지키기 | 추천 | | Network Programming with Go 11장 |
 | 직렬화 · `log/slog` · 지표 | 추천 | | Network Programming with Go 12·13장 |
+| 바이트 파싱 — `[]byte` · `encoding/binary` · 엔디언 · 경계 검사 | 추천 | | |
+| 와이어 프로토콜 설계 — framing · 메시지 타입 · 핸드셰이크 · 버전 협상 · 상태 머신 | 추천 | | |
 | SSE — 서버가 미는 스트리밍 HTTP | 추천 | | |
 | 폴링과 이벤트 구동의 갈림 | 추천 | | |
 | 복원력 · 느슨한 결합 · 확장성 | 추천 | | Cloud Native Go 7~9장 |
@@ -207,6 +214,7 @@ updated: 2026-09-23
 | TCP echo server | 6 | Listener · 연결 소켓 · goroutine · deadline · 끊기는 모든 경로에서 FD 회수 |
 | TCP reverse proxy | 6 | 양방향 `io.Copy` · half-close · 취소 · 배압 |
 | L4 로드밸런서 | 6 | health check · round-robin · least connections · 재시도 안전성 · connection draining · connection pool 과 포화 |
+| 스트림 멀티플렉서 — yamux 축소판 | 6 | TCP 연결 하나 위 framing · stream ID · 스트림별 window · 느린 스트림 하나가 나머지를 막는지 · 모든 종료 경로에서 goroutine 회수 · QUIC 스트림과 비교 |
 | reverse tunnel | 6 | control plane 과 data plane 분리 · 멀티플렉싱 · 재접속 · 인증 · NAT traversal · 동시 등록 충돌 |
 | keyless TLS signer | 6 | `crypto.Signer` 추상화 · 원격 서명 경계 · mTLS 클라이언트 인증 · signer 타임아웃과 fail-close · transcript 재계산 |
 | length-prefixed 로그 서버 | 6 | framing · partial read · 백프레셔 · append-only 세그먼트 |
@@ -228,6 +236,7 @@ updated: 2026-09-23
 | epoll · 스케줄러 · 프로파일 방법론 | [OS 로드맵](os-roadmap.md) 2·4단계가 맡습니다 |
 | Cloud Native Go 1~3장 | 클라우드 네이티브 개론과 Go 소개입니다. 순서에 넣을 축이 아닙니다 |
 | P2P · 익명 오버레이 구현 | [네트워크 로드맵](network-roadmap.md) 8·9단계가 개념을 맡습니다 |
+| lexer · parser · AST 로 DSL 만들기 | 컴파일러 축입니다. 코드 생성은 3단계 `go generate` 까지만 봅니다 |
 
 
 

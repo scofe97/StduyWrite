@@ -46,7 +46,7 @@ updated: 2026-09-23
 | 3 · 컨테이너 기반 | 메모리 한도 | `memory.max` · `memory.events` · OOM Killer |
 | 3 · 컨테이너 기반 | 파일시스템 | mount propagation · OverlayFS · copy-on-write · hugetlbfs |
 | 4 · 성능 분석 | 방법론 | USE · RED · 드릴다운 · 지연 분석 · 사용률 · 포화 · 오류 · 모델링 · 용량계획 |
-| 4 · 성능 분석 | CPU | run queue · CFS · context switch · load average · softirq · IRQ affinity · `irqbalance` |
+| 4 · 성능 분석 | CPU | run queue · CFS · context switch · load average · softirq · CPU 캐시 · cache line · 캐시 일관성 · IRQ affinity · `irqbalance` |
 | 4 · 성능 분석 | 메모리 | virtual memory · RSS · VSS · PSS · page cache · swap · overcommit · THP |
 | 4 · 성능 분석 | 저장 I/O | block I/O · IOPS · queue depth · I/O 스케줄러 · `fsync` · 파일 시스템 캐시 · blk-cgroup · `io.max` |
 | 4 · 성능 분석 | 사용자 공간 allocator | malloc · free list · arena · 단편화 · 대체 allocator |
@@ -191,6 +191,7 @@ updated: 2026-09-23
 | I/O 스케줄러 — mq-deadline · BFQ · kyber | 추천 | | Systems Performance 9장 |
 | 파일 시스템 캐시 · 유형 · 튜닝 | 추천 | [파일 시스템 개념](../02_os/book/systems-performance/08-01.%ED%8C%8C%EC%9D%BC%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%E2%80%94%20%EB%B0%B0%EA%B2%BD%C2%B7%ED%95%B5%EC%8B%AC%20%EA%B0%9C%EB%85%90.md) ~ [파일 시스템 관측 도구](../02_os/book/systems-performance/08-04.%ED%8C%8C%EC%9D%BC%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%E2%80%94%20%EA%B4%80%EC%B8%A1%20%EB%8F%84%EA%B5%AC.md) | Operating System Concepts 11·12장 |
 | load average · softirq | 추천 | [CPU 아키텍처·스케줄러](../02_os/book/systems-performance/06-02.CPU%20%E2%80%94%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98%C2%B7%EC%8A%A4%EC%BC%80%EC%A4%84%EB%9F%AC.md) | |
+| CPU 캐시 계층 · cache line · 캐시 일관성 — 연산보다 데이터 이동이 병목일 때 | 추천 | [CPU 아키텍처·스케줄러](../02_os/book/systems-performance/06-02.CPU%20%E2%80%94%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98%C2%B7%EC%8A%A4%EC%BC%80%EC%A4%84%EB%9F%AC.md) | Systems Performance 6·7장 |
 | swap · overcommit | 추천 | [메모리 방법론·튜닝](../02_os/book/systems-performance/07-03.%EB%A9%94%EB%AA%A8%EB%A6%AC%20%E2%80%94%20%EB%B0%A9%EB%B2%95%EB%A1%A0%C2%B7%ED%8A%9C%EB%8B%9D.md) | |
 | THP — Transparent Huge Pages | 선택 | | [Transparent Hugepage](https://docs.kernel.org/admin-guide/mm/transhuge.html) |
 | 관측 지점 — 재는 것은 바깥, 알고 싶은 것은 안 | 추천 | [바깥과 안](../02_os/book/learning-modern-linux/08-01.%EC%9E%AC%EB%8A%94%20%EA%B2%83%EC%9D%80%20%EB%B0%94%EA%B9%A5%EC%9D%B4%EA%B3%A0%20%EC%95%8C%EA%B3%A0%20%EC%8B%B6%EC%9D%80%20%EA%B2%83%EC%9D%80%20%EC%95%88%EC%9D%B4%EB%8B%A4.md) |  |
@@ -300,6 +301,7 @@ updated: 2026-09-23
 | Below · OpenMetrics · exporter | Below 는 위 인터페이스를 프로그램이 어떻게 수집하는지 보는 코드입니다. 수집한 뒤 시각화는 [관측 가능성 로드맵](observability-roadmap.md)이 맡습니다 |
 | AVX-512 · ARM SVE 명령어 개별 규격 | 소장본에 장이 없습니다. 어떤 확장이 있는지까지만 알고, 개별 명령은 필요할 때 [Intel Intrinsics Guide](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html)에서 찾습니다 |
 | dead store elimination 의 컴파일러 구현 | 소장본에 장이 없습니다. `memset` 이 지워진다는 사실과 `explicit_bzero` 로 막는다는 대응까지가 이 로드맵의 몫이고, 최적화 패스 자체는 컴파일러 축입니다 |
+| HBM · CoWoS 같은 메모리 패키징 | 하드웨어 설계 축입니다. 연산보다 데이터 이동이 병목이라는 memory wall 개념까지가 4단계의 몫입니다 |
 
 
 

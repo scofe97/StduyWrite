@@ -39,6 +39,7 @@ updated: 2026-09-23
 | 컨테이너가 OOMKilled 로 죽는 이유 | [OS](os-roadmap.md) 2단계 종료 신호 · 3단계 `memory.max` 와 OOM Killer, [Kubernetes](k8s-roadmap.md) 7단계 자원 장애, [JVM](jvm-roadmap.md) 1단계 컨테이너 네이티브 메모리 |
 | Service 로 부르면 실패하는 호출 | [Kubernetes](k8s-roadmap.md) 3단계 Service · EndpointSlice, [네트워크](network-roadmap.md) 4단계 kube-proxy · 2단계 conntrack · MTU |
 | 응답이 느려졌을 때 층 가르기 | [관측 가능성](observability-roadmap.md) 5단계 SLO, [OS](os-roadmap.md) 4단계 USE · run queue, [Kubernetes](k8s-roadmap.md) 7단계 CPU throttling, [네트워크](network-roadmap.md) 3단계 재전송 판독, [JVM](jvm-roadmap.md) 7단계 GC 로그 |
+| reverse tunnel 을 직접 만들 때 | [네트워크](network-roadmap.md) 1단계 스트림 멀티플렉싱과 HOL 블로킹 · TLS passthrough, [Go](go-roadmap.md) 4단계 채널 소유권 · 실습 스트림 멀티플렉서 · reverse tunnel, [네트워크](network-roadmap.md) 8단계 인증서 소유와 relay 신뢰 · 9단계 path selection |
 
 
 

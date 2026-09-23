@@ -101,6 +101,7 @@ stages = [
      [("필터 체인이 먼저다", "Spring Security 5장", "필수"),
       ("인증과 사용자 · 비밀번호", "Spring Security 3·4·6장", "필수"),
       ("엔드포인트 인가", "Spring Security 7·8장", "필수"),
+      ("게이트웨이 인가 · 도메인 인가", "", "추천"),
       ("CSRF 와 CORS", "Spring Security 9·10장", "추천")],
      [("메서드 수준 보안", "Spring Security 11·12장", "추천"),
       ("OAuth 2 와 OIDC", "Spring Security 13~16장", "추천"),

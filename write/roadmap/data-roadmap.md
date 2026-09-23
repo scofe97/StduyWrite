@@ -37,10 +37,10 @@ updated: 2026-09-23
 | 4 · 인코딩과 데이터플로우 | 형식 | 인코딩 호환성 · JSON · XML · 이진 변형 · Protocol Buffers · Avro · 스키마 진화 |
 | 4 · 인코딩과 데이터플로우 | 전달 | DB 경유 · REST · RPC · 메시지 · durable execution · 이벤트 기반 아키텍처 |
 | 5 · 복제와 샤딩 | 복제 | 단일 리더 · 복제 로그 · 복제 지연 · 읽기 후 쓰기 · 다중 리더 · 쓰기 충돌 · 리더리스 · 정족수 |
-| 5 · 복제와 샤딩 | 샤딩 | 키 범위 샤딩 · 해시 샤딩 · 일관 해싱 · 요청 라우팅 · 리밸런싱 · 샤딩과 보조 인덱스 |
+| 5 · 복제와 샤딩 | 샤딩 | 키 범위 샤딩 · 해시 샤딩 · 일관 해싱 · rendezvous 해싱 · 요청 라우팅 · 리밸런싱 · 샤딩과 보조 인덱스 |
 | 6 · 트랜잭션과 격리 | 격리 | ACID · 약한 격리 수준 · 스냅샷 격리 · Write Skew · 직렬화 가능성 |
 | 6 · 트랜잭션과 격리 | 복구와 분산 | 트랜잭션 처리 · 복구 · 분산 트랜잭션 · 2PC · 코디네이터 장애 |
-| 7 · 분산의 문제 | 믿을 수 없는 것 | 부분 실패 · 비신뢰 네트워크 · 불신뢰 시계 · 진실과 거짓 · 시스템 모델 · 검증 |
+| 7 · 분산의 문제 | 믿을 수 없는 것 | 부분 실패 · 비신뢰 네트워크 · 불신뢰 시계 · 진실과 거짓 · 비잔틴 결함 · 시스템 모델 · 검증 |
 | 7 · 분산의 문제 | 살아 있음 판정 | 장애 감지 · HeartBeat · 리더 선출 · 임차 · 상태 감시 · 가십 전파 |
 | 8 · 일관성과 합의 | 일관성 | 선형성 · 선형성의 비용 · CAP · ID 생성기 · 논리 시계 · 하이브리드 시계 |
 | 8 · 일관성과 합의 | 합의 | 합의 알고리즘 · 코디네이션 서비스 · Paxos · Replicated Log · 일관 코어 · 버전 벡터 |
@@ -149,6 +149,7 @@ updated: 2026-09-23
 | 리더리스 복제와 정족수 | 필수 | [리더리스 복제](../05_data/book/designing-data-intensive-applications/06-06.%EB%A6%AC%EB%8D%94%EB%A6%AC%EC%8A%A4%20%EB%B3%B5%EC%A0%9C%EC%99%80%206%EC%9E%A5%20%EC%A2%85%ED%95%A9.md) | DDIA 6장 |
 | 키 범위 샤딩 | 필수 | [샤딩 개요와 키 범위 샤딩](../05_data/book/designing-data-intensive-applications/07-01.%EC%83%A4%EB%94%A9%20%EA%B0%9C%EC%9A%94%EC%99%80%20%ED%82%A4%20%EB%B2%94%EC%9C%84%20%EC%83%A4%EB%94%A9.md) | DDIA 7장 · PoDS 20장 |
 | 해시 샤딩과 일관 해싱 | 필수 | [해시 샤딩과 일관 해싱](../05_data/book/designing-data-intensive-applications/07-02.%ED%95%B4%EC%8B%9C%20%EC%83%A4%EB%94%A9%EA%B3%BC%20%EC%9D%BC%EA%B4%80%20%ED%95%B4%EC%8B%B1.md) | DDIA 7장 |
+| rendezvous 해싱(HRW) · 가중치 — 건강한 후보를 먼저 거르고 해싱한다 | 추천 | | [Thaler·Ravishankar 1998](https://doi.org/10.1109/90.663936) |
 | 요청 라우팅과 리밸런싱 | 필수 | [요청 라우팅과 리밸런싱](../05_data/book/designing-data-intensive-applications/07-03.%EC%9A%94%EC%B2%AD%20%EB%9D%BC%EC%9A%B0%ED%8C%85%EA%B3%BC%20%EB%A6%AC%EB%B0%B8%EB%9F%B0%EC%8B%B1.md) | DDIA 7장 · PoDS 19장 |
 | 샤딩과 보조 인덱스 | 추천 | [샤딩과 보조 인덱스](../05_data/book/designing-data-intensive-applications/07-04.%EB%B3%B4%EC%A1%B0%20%EC%9D%B8%EB%8D%B1%EC%8A%A4%EC%99%80%207%EC%9E%A5%20%EC%A2%85%ED%95%A9.md) | DDIA 7장 |
 | 복제 일관성의 구현 | 추천 | | Database Internals 11·12장 |

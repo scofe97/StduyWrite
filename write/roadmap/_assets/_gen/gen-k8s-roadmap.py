@@ -85,7 +85,8 @@ stages = [
      [("authn · authz · admission", "Production Kubernetes 8장", "필수"),
       ("TLS · PKI · 인증서 수명", "", "필수"),
       ("etcd quorum · Raft · 백업 · 복구", "", "필수"),
-      ("클러스터 업그레이드", "", "추천")]),
+      ("클러스터 업그레이드", "", "추천"),
+      ("Server-Side Apply · 필드 소유", "SSA 공식 문서", "추천")]),
 
     ("6 · 보안과 확장", "누가 무엇을 할 수 있는가",
      [("RBAC · Role · ServiceAccount", "K8s Up and Running 14장", "필수"),

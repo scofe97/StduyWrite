@@ -49,7 +49,7 @@ updated: 2026-09-23
 | 7 · 비동기와 실시간 | 밀어 보내기 | SSE · WebSocket 핸드셰이크 · STOMP · 재연결 · 메시지 동기화 |
 | 7 · 비동기와 실시간 | 일괄 처리 | 잡 · 스텝 · `JobRepository` · 리더 · 프로세서 · 라이터 · 스케일링 |
 | 8 · 보안과 운영 | 인증 | 필터 체인 · `UserDetailsService` · 비밀번호 인코더 · 인증 제공자 |
-| 8 · 보안과 운영 | 인가 | 엔드포인트 인가 · 메서드 수준 보안 · CSRF · CORS |
+| 8 · 보안과 운영 | 인가 | 엔드포인트 인가 · 게이트웨이 인가와 도메인 인가 · PEP · PDP · RBAC · ABAC · 메서드 수준 보안 · CSRF · CORS |
 | 8 · 보안과 운영 | 위임 인증 | OAuth 2 · OIDC |
 | 8 · 보안과 운영 | 운영 | 액츄에이터 엔드포인트 · Micrometer · Counter · Gauge · Timer · JMX |
 | 9 · 테스트와 배포 | 층 | 테스트 피라미드 · 단위 · 슬라이스 · `@SpringBootTest` · `ApplicationContextRunner` |
@@ -206,6 +206,7 @@ updated: 2026-09-23
 | 필터 체인이 먼저다 | 필수 | | Spring Security 5장 |
 | 인증과 사용자 · 비밀번호 | 필수 | | Spring Security 3·4·6장 |
 | 엔드포인트 인가 | 필수 | | Spring Security 7·8장 |
+| 인가를 어디서 하는가 — 게이트웨이의 거친 인가와 도메인 인가 · PEP · PDP · RBAC · ABAC | 추천 | | |
 | CSRF 와 CORS | 추천 | | Spring Security 9·10장 |
 | 메서드 수준 보안 | 추천 | | Spring Security 11·12장 |
 | OAuth 2 와 OIDC | 추천 | | Spring Security 13~16장 |

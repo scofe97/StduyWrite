@@ -33,9 +33,9 @@ updated: 2026-09-23
 |---|---|---|
 | 1 · 연결 | 소켓과 연결 | socket · `bind` · `listen` · `accept` · `connect` · 4-tuple · 듣는 소켓과 연결 소켓 |
 | 1 · 연결 | TCP 동작 | 상태 · 3-way handshake · 재전송 · 타임아웃 · RTT · 흐름 제어 · cwnd · in-flight · 혼잡 제어 · CUBIC · BBR |
-| 1 · 연결 | TCP 운영 | TIME_WAIT · SYN cookies · Nagle · delayed ACK · keepalive |
+| 1 · 연결 | TCP 운영 | TIME_WAIT · SYN cookies · Nagle · delayed ACK · keepalive · EPIPE · SIGPIPE |
 | 1 · 연결 | 이름 | DNS 질의 · 레코드 유형 · 위임 · TTL · negative caching · DNSSEC |
-| 1 · 연결 | 응용 프로토콜 | HTTP/1.1 · HTTP/2 · 멀티플렉싱 · QUIC · HTTP/3 · WebSocket · HTTP Upgrade |
+| 1 · 연결 | 응용 프로토콜 | HTTP/1.1 · HTTP/2 · 멀티플렉싱 · HOL 블로킹 · yamux · QUIC · HTTP/3 · WebSocket · HTTP Upgrade |
 | 1 · 연결 | 보안 전송 | TLS 핸드셰이크 · ClientHello · ServerHello · 확장 협상 · TLS 1.3 · session resumption · ALPN |
 | 1 · 연결 | 키 교환 | key_share · supported_groups · HelloRetryRequest · ECDHE · X25519 · forward secrecy · HKDF · Noise Protocol Framework |
 | 1 · 연결 | 대칭 암호 | AEAD · AES-GCM · ChaCha20-Poly1305 |
@@ -97,8 +97,8 @@ updated: 2026-09-23
 | 8 · 오버레이와 신뢰 | 멤버십 | membership · peer store · lease · TTL 갱신 |
 | 8 · 오버레이와 신뢰 | 식별 | node ID · signed descriptor · 공개키 신원 · 키에서 나온 주소 · key rotation · replay · freshness |
 | 8 · 오버레이와 신뢰 | 권한 토큰 | capability |
-| 8 · 오버레이와 신뢰 | 공격 | Sybil · eclipse · poisoning · behavior score |
-| 8 · 오버레이와 신뢰 | 서명 위임 | 키 소유권 분리 · CertificateVerify · transcript 바인딩 · keyless TLS · trusted edge |
+| 8 · 오버레이와 신뢰 | 공격 | Sybil · eclipse · poisoning · behavior score · Sybil 저항 · 자원 증명 · 오라클 문제 |
+| 8 · 오버레이와 신뢰 | 서명 위임 | 키 소유권 분리 · CertificateVerify · transcript 바인딩 · keyless TLS · trusted edge · 인증서 소유와 relay 신뢰 · ACME |
 | 8 · 오버레이와 신뢰 | 관측 가능성 | traffic correlation · metadata · timing side-channel · 암호화가 숨기지 않는 것 |
 | 8 · 오버레이와 신뢰 | 오버레이 | 물리와 논리의 분리 · 터널링 · 가상 토폴로지 · relay · hole punching · reachability · reverse tunnel · outbound-only relay |
 | 9 · 터널과 경로 | 구성 | 터널 구성 · 피어 발견 대 터널 구성 · 멀티홉 · 홉별 계층 암호화 · 홉 수의 대가 · inbound 와 outbound 의 분리 · RX 와 TX |
@@ -209,6 +209,7 @@ updated: 2026-09-23
 | SNI 가 남기는 것 — ECH 와 DNS 암호화는 함께 간다 | 추천 |  | Real-World Cryptography 9장 |
 | session resumption · PSK · ALPN | 추천 |  | Real-World Cryptography 9장 · High Performance Browser Networking 4장 |
 | QUIC · HTTP/3 | 추천 | | HTTP/2 in Action 9장 |
+| 스트림 멀티플렉싱과 HOL 블로킹 — HTTP/2 · QUIC · yamux 가 연결 하나를 나누는 방식 | 추천 |  | [yamux spec](https://github.com/hashicorp/yamux/blob/master/spec.md) · [RFC 9000](https://www.rfc-editor.org/rfc/rfc9000) |
 | HTTP 성능 축 | 선택 | | High Performance Browser Networking 11·12장 |
 | WebSocket · HTTP Upgrade | 선택 | [WebSocket 핸드셰이크](../09_spring/03_network/realtime/03-01.WebSocket%20%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C%EA%B3%BC%20%ED%95%B8%EB%93%9C%EC%85%B0%EC%9D%B4%ED%81%AC.md) | High Performance Browser Networking 17장 |
 | UDP · 단편화 | 추천 | [트랜스포트 계층](../02_os/book/cntd_computer-networking-top-down/03-01.%ED%8A%B8%EB%9E%9C%EC%8A%A4%ED%8F%AC%ED%8A%B8%EB%8A%94%20%EB%AC%B4%EC%97%87%EC%9D%84%20%EB%8D%94%ED%95%98%EB%8A%94%EA%B0%80.md) | TCP/IP Illustrated 10장 |
@@ -217,6 +218,7 @@ updated: 2026-09-23
 | Forwarded · X-Forwarded-For 신뢰 경계 · PROXY protocol | 추천 |  | [RFC 7239](https://www.rfc-editor.org/rfc/rfc7239) · [PROXY protocol](https://www.haproxy.org/download/2.8/doc/proxy-protocol.txt) |
 | listen 큐 · accept 큐 · ephemeral 포트 고갈 | 추천 | [네트워크 아키텍처](../02_os/book/systems-performance/10-02.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%E2%80%94%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98.md) · [사례](../troubleshooting/os/2026-09-07_%EC%8B%A4%ED%8C%A8%EC%9C%A8%200.3%25%EA%B0%80%20%EC%82%AC%EB%9D%BC%EC%A7%80%EC%A7%80%20%EC%95%8A%EB%8A%94%20%EC%84%9C%EB%B2%84.md) | TCP/IP Illustrated 13장 · Systems Performance 10장 |
 | TIME_WAIT · SYN cookies | 추천 |  | TCP/IP Illustrated 13장 |
+| 닫힌 연결에 쓰기 — EPIPE · SIGPIPE · RST | 추천 |  | TCP/IP Illustrated 13장 |
 | OS CA bundle · truststore | 선택 | [컴포넌트 TLS](../08_cloud/book/container-security/11-01.TLS%EB%A1%9C%20%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8%20%EC%95%88%EC%A0%84%ED%95%98%EA%B2%8C%20%EC%97%B0%EA%B2%B0%ED%95%98%EA%B8%B0%20%E2%80%94%20%ED%82%A4%C2%B7%EC%9D%B8%EC%A6%9D%EC%84%9C%C2%B7CA%EC%9D%98%20%EC%97%AD%ED%95%A0.md) | Container Security 11장 |
 | TCP keepalive | 선택 | | TCP/IP Illustrated 17장 |
 | Nagle · delayed ACK | 선택 |  | TCP/IP Illustrated 15장 |
@@ -402,6 +404,8 @@ updated: 2026-09-23
 | signed descriptor · 공개키 신원 · 키에서 나온 주소 · 무결성 | 추천 | | Real-World Cryptography 2·7장 |
 | key rotation · replay 방지 · freshness | 추천 |  | Real-World Cryptography 3·8·9장 |
 | Sybil · eclipse · poisoning · behavior score | 추천 |  | [I2P Network Database](https://i2p.net/en/docs/overview/network-database/) |
+| Sybil 저항 — 자원 증명(PoW · proof of storage · proof of replication)과 검증 비용 | 선택 |  |  |
+| 남의 노드가 일을 했다는 증명 — challenge-response · remote attestation · 오라클 문제 | 선택 |  |  |
 | 오버레이 — 물리와 논리의 분리 · 터널링 · 가상 토폴로지 | 추천 |  | [I2P Tunnel Routing](https://i2p.net/en/docs/overview/tunnel-routing/) |
 | reverse tunnel · outbound-only relay | 추천 |  | [portal-tunnel](https://github.com/gosuda/portal-tunnel) |
 | relay · hole punching · reachability | 선택 |  | TCP/IP Illustrated 7장 |
@@ -409,6 +413,7 @@ updated: 2026-09-23
 | CertificateVerify — 키 소유 증명과 키 합의는 다른 단계다 | 추천 |  | Real-World Cryptography 7장 |
 | transcript 바인딩 — 임의 digest 서명 API 가 위험한 이유 | 추천 |  | Real-World Cryptography 2·7장 |
 | keyless TLS · trusted edge — 서명 권한이 곧 신뢰 | 선택 |  | [keyless_tls](https://github.com/gosuda/keyless_tls) |
+| 인증서 소유와 relay 신뢰 — relay 가 TLS 를 끝내면 평문을 본다 · agent 쪽 ACME 발급 | 추천 |  | [RFC 8555](https://www.rfc-editor.org/rfc/rfc8555) |
 | capability — 신원 대신 권한을 건네는 토큰 | 선택 |  | API Security in Action 9장 |
 | 역할이 나뉜 피어 — DHT 서버 모드와 floodfill | 선택 |  | [I2P Network Database](https://i2p.net/en/docs/overview/network-database/) |
 
