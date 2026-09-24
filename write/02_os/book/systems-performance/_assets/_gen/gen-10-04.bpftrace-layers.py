@@ -1,6 +1,8 @@
 # 10-04 §4 — 어느 층에 프로브를 걸 것인가. 층마다 얻는 것과 잃는 것이 다르다.
 # 타입 스펙: type-layers — 애플리케이션에서 드라이버까지 추적 지점이 내려가는 층 지도다.
 #           축약: OSI 층이 아니라 추적 지점이라 인덱스 태그를 층 이름으로 쓰지 않고 번호로 채운다.
+# ⚠ 2026-09-23 적대적 검증: 원서 10.6.12 는 소켓 없는 이벤트(포트 스캔)를 TCP 층의 이점으로 든다. 05 층에 붙였던 그 칸을 03 으로 옮기고,
+#   04 층의 식별 약함은 본문의 "깊은 kprobe 는 pid·comm 이 무관할 수 있다" 로 맞췄다.
 # ⚠ 2026-09-22 도식 검증: 05 층을 "skb · net tracepoint" 로만 적어 본문 L230 의 kprobe·qdisc tracepoint 가 빠져 있었다.
 import sys; sys.path.insert(0, ".")
 from ddk import DK
@@ -17,9 +19,9 @@ d = DK(W, H, "SYSTEMS PERFORMANCE · 10-04 §4",
 BANDS = [
     ("01", "애플리케이션 프로토콜", "uprobes", "누가 했는지 분명", None),
     ("02", "소켓", "syscall tracepoint", "책임 프로세스가 on-CPU", ACC),
-    ("03", "TCP", "tcp tracepoint · kprobe", "프로토콜 내부가 보임", None),
-    ("04", "UDP · IP", "kprobe", "프로세스 식별이 약함", None),
-    ("05", "패킷 · qdisc · 드라이버", "skb · qdisc · net tracepoint · kprobe", "소켓 없는 이벤트도 보임", None),
+    ("03", "TCP", "tcp tracepoint · kprobe", "프로토콜 내부 · 포트 스캔 같은 소켓 없는 이벤트", None),
+    ("04", "UDP · IP", "kprobe", "깊은 kprobe · pid·comm 이 무관할 수 있음", None),
+    ("05", "패킷 · qdisc · 드라이버", "skb · qdisc · net tracepoint · kprobe", "패킷마다 발생 · 빈도 높음", None),
 ]
 
 for i, (n, name, src, note, c) in enumerate(BANDS):

@@ -16,10 +16,10 @@ d = DK(W, H, "SYSTEMS PERFORMANCE · 11-03 §2",
 
 CARDS = [
     ("namespace", "격리 — 무엇이 보이는가", INFO,
-     ["시스템 뷰를 필터링해 자기 자원만", "보게 합니다.", "", "pid · net · mnt · ipc · uts", "user · cgroup · time"],
-     "컨테이너마다 PID 1 이 따로 있습니다"),
+     ["시스템 뷰 필터링", "자기 자원만 표시", "", "pid · net · mnt · ipc · uts", "user · cgroup · time"],
+     "컨테이너마다 별도 PID 1"),
     ("cgroup", "제한 — 얼마나 쓰는가", ACC,
-     ["자원 사용량에 한계를 겁니다.", "", "cpu · cpuset · memory", "blkio · pids", "net_cls · net_prio"],
+     ["자원 사용량 상한", "", "cpu · cpuset · memory", "blkio · pids", "net_cls · net_prio"],
      "하드 한계와 공유 기반 소프트 한계"),
 ]
 
@@ -37,8 +37,8 @@ for i, (name, tag, c, body, foot) in enumerate(CARDS):
     d.t(x + 16, Y + CH - 18, foot, 13, c, KR, "start")
 
 YB = Y + CH + 40
-d.t(X0, YB, "유저 공간 소프트웨어(Docker 등)가 이 둘을 조합해 컨테이너를 만듭니다", 13, MUTED, KR, "start")
-d.t(X0, YB + 24, "Kubernetes 는 여러 컨테이너가 같은 namespace 를 공유하는 Pod 로 묶어 localhost 통신을 가능하게 합니다",
+d.t(X0, YB, "조립 주체 · 유저 공간 소프트웨어(Docker 등)", 13, MUTED, KR, "start")
+d.t(X0, YB + 24, "Kubernetes Pod · 여러 컨테이너의 namespace 공유 → 빠른 통신",
     13, SOFT, KR, "start")
 
 d.legend(YB + 48, [("쓸 수 있는 양을 막는 쪽", ACC), ("보이는 것을 가리는 쪽", INFO)])

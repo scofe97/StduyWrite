@@ -16,7 +16,7 @@ d = DK(W, H, "SYSTEMS PERFORMANCE · 10-03 §1",
 
 CARDS = [
     ("01", "에러", "먼저 본다", OK,
-     ["errors · dropped · overruns", "carrier · collisions"],
+     ["RX: 체크섬 불량", "RX: 너무 짧거나 긴 프레임 · 충돌", "TX: 늦은 충돌"],
      "해석이 명확 · 빨리 걸러짐"),
     ("02", "사용률", "계산해야 한다", ACC,
      ["현재 처리량 ÷ 협상 속도", "방향별(TX/RX)로 따로"],

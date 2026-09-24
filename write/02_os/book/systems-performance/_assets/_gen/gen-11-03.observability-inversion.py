@@ -33,7 +33,7 @@ for r, (label, cells) in enumerate(ROWS):
         d.t(x + 16, y + 62, txt, 13, MUTED, KR, "start")
 
 YB = Y0 + 2 * (ROW_H + 16) + 24
-d.t(X0 - 152, YB, "완전히 idle 한 컨테이너에서 iostat 을 돌려도 CPU·디스크가 바쁘게 나옵니다 — 호스트 통계이기 때문입니다",
+d.t(X0 - 152, YB, "예 · idle 컨테이너의 iostat → CPU·디스크 바쁨 표시 (호스트 통계)",
     13, MUTED, KR, "start")
 
 d.legend(YB + 28, [("호스트 통계가 새어 드는 자리", ACC), ("다 보이는 자리", OK), ("제한되는 자리", WARN)])

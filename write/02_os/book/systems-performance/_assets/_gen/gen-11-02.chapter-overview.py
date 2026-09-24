@@ -14,11 +14,11 @@ d = DK(W, H, "SYSTEMS PERFORMANCE · 11-02",
        "언제 오버헤드가 생기고 언제 안 생기는지를 아는 것이 이 편의 목표입니다")
 
 BANDS = [
-    ("§1", "구현", "VMware · Xen · KVM · Nitro", "I/O 경로의 단계 수가 갈린다", None),
-    ("§2", "CPU 오버헤드", "guest exit 가 핵심", "빠져나간 시간이 곧 오버헤드", ACC),
-    ("§3", "메모리 · I/O 오버헤드", "EPT/NPT · SR-IOV", "하드웨어가 단계를 없앤다", None),
-    ("§4", "자원 제어", "vCPU · balloon · cgroup", "호스트 제어를 함께 쓴다", None),
-    ("§5", "관측", "호스트는 자원 · 게스트는 커널", "보이는 것이 자리마다 다르다", None),
+    ("§1", "구현", "VMware · Xen · KVM · Nitro", "I/O 경로의 단계 수", None),
+    ("§2", "CPU 오버헤드", "guest exit 가 핵심", "빠져나간 시간 = 오버헤드", ACC),
+    ("§3", "메모리 · I/O 오버헤드", "EPT/NPT · SR-IOV", "하드웨어가 없애는 단계", None),
+    ("§4", "자원 제어", "vCPU · balloon · cgroup", "호스트 제어 병용", None),
+    ("§5", "관측", "호스트는 자원 · 게스트는 커널", "자리마다 다른 가시성", None),
 ]
 
 for i, (tag, name, sub, role, c) in enumerate(BANDS):
@@ -34,7 +34,7 @@ d.t(BX - 60, Y0 + 4, "구조", 13, SOFT, KR, "middle")
 d.arrow([(BX - 60, Y0 + 16), (BX - 60, Y0 + 4 * STRIDE + BH - 8)], SOFT, "soft", 1.2, "4 6")
 d.t(BX - 60, Y0 + 4 * STRIDE + BH + 16, "분석", 13, SOFT, KR, "middle")
 
-d.t(BX, Y0 + 5 * STRIDE + 18, "게스트마다 자체 커널이 있어, 게스트 안에서는 커널 추적 도구가 다 동작합니다", 13, MUTED, KR, "start")
+d.t(BX, Y0 + 5 * STRIDE + 18, "게스트마다 자체 커널 → 게스트 안 커널 추적 도구 전부 동작", 13, MUTED, KR, "start")
 
 d.legend(Y0 + 5 * STRIDE + 44, [("CPU 오버헤드의 정체", ACC), ("나머지 절", MUTED)])
 d.save("11-02.chapter-overview.svg")

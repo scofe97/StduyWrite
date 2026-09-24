@@ -20,7 +20,7 @@ T = {"start": 132, "syn": 244, "est": 372, "byte": 468, "close": 560}
 
 d = DK(W, H, "SYSTEMS PERFORMANCE · 10-01 §3",
       "지연 여섯 가지 — 어디서 무엇을 재는가",
-      "클라이언트가 서버에 연결할 때의 지연. 여섯은 서로 다른 구간을 재고, 그중 첫 바이트 지연만 서버의 think time 을 품는다.",
+      "클라이언트가 서버에 연결할 때의 지연. 여섯은 서로 다른 구간을 잰다. 서버의 think time 을 따로 드러내는 것은 연결 수립부터 첫 바이트까지를 재는 첫 바이트 지연이고, 연결 수명은 그 뒤 요청 처리까지 모두 담는다.",
       "여럿을 같이 재야 네트워크와 서버 중 어디를 먼저 볼지 정해집니다")
 
 # 눈금선
@@ -37,7 +37,7 @@ BARS = [
     ("이름 해석", "start", "syn", "DNS 조회 · 타임아웃이면 수십 초", None),
     ("연결", "syn", "est", "TCP 핸드셰이크 · SYN 드롭 시 재전송 1초+", None),
     ("첫 바이트 (TTFB)", "est", "byte", "서버 think time 포함", ACC),
-    ("연결 수명", "start", "close", "수립~종료 · keep-alive 로 연장", None),
+    ("연결 수명", "est", "close", "수립~종료 · keep-alive 로 연장", None),
 ]
 
 for i, (name, a, b, note, c) in enumerate(BARS):

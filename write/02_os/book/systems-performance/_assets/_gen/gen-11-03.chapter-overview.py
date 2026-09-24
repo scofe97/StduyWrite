@@ -15,10 +15,10 @@ d = DK(W, H, "SYSTEMS PERFORMANCE · 11-03",
 
 BANDS = [
     ("§1", "장단점", "빠른 공유와 잃는 격리", "커널이 하나라서", ACC),
-    ("§2", "구현", "namespace(격리) + cgroup(제한)", "커널엔 컨테이너가 없다", None),
-    ("§3", "오버헤드", "가벼운 실행 · 멀티테넌트 경합", "경합이 진짜 문제", None),
-    ("§4", "자원 제어", "shares · bandwidth · bursting", "우선순위와 한계", None),
-    ("§5", "관측", "호스트는 다 보고 게스트는 헷갈린다", "호스트 통계가 새어 나온다", None),
+    ("§2", "구현", "namespace(격리) + cgroup(제한)", "커널엔 컨테이너 개념 없음", None),
+    ("§3", "오버헤드", "가벼운 실행 · 멀티테넌트 경합", "핵심은 경합", None),
+    ("§4", "자원 제어", "shares · bandwidth · bursting · memory", "우선순위와 한계", None),
+    ("§5", "관측", "호스트 전체 가시성 · 게스트 혼동 · throttle 판별", "호스트 통계 누출", None),
 ]
 
 for i, (tag, name, sub, role, c) in enumerate(BANDS):
@@ -34,7 +34,7 @@ d.t(BX - 60, Y0 + 4, "전제", 13, SOFT, KR, "middle")
 d.arrow([(BX - 60, Y0 + 16), (BX - 60, Y0 + 4 * STRIDE + BH - 8)], SOFT, "soft", 1.2, "4 6")
 d.t(BX - 60, Y0 + 4 * STRIDE + BH + 16, "귀결", 13, SOFT, KR, "middle")
 
-d.t(BX, Y0 + 5 * STRIDE + 18, "게스트는 커널 경합을 더 만나면서 동시에 그것을 분석할 능력을 잃습니다", 13, MUTED, KR, "start")
+d.t(BX, Y0 + 5 * STRIDE + 18, "게스트 쪽 귀결 · 커널 경합 증가 + 분석 능력 상실", 13, MUTED, KR, "start")
 
 d.legend(Y0 + 5 * STRIDE + 44, [("나머지를 규정하는 절", ACC), ("나머지 절", MUTED)])
 d.save("11-03.chapter-overview.svg")

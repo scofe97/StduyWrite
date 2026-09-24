@@ -14,10 +14,10 @@ d = DK(W, H, "SYSTEMS PERFORMANCE · 11-04 §3",
        "엔드유저가 전통 성능 도구를 쓸 수 있는 범위가 위로 갈수록 줄어듭니다")
 
 BANDS = [
-    ("01", "서버 · VM · 컨테이너", "로그인해 도구를 돌립니다", "엔드유저가 분석", OK),
-    ("02", "FaaS", "서버가 없어 CLI 도구를 못 씁니다", "앱 타임스탬프에 의존", None),
-    ("03", "SaaS", "설정할 서버도 앱도 없습니다", "운영자만 분석", None),
-    ("04", "Unikernel", "OS 가 없어 /proc 도 없습니다", "커스텀 도구 · 하이퍼바이저", ACC),
+    ("01", "서버 · VM · 컨테이너", "로그인 후 도구 실행", "엔드유저가 분석", OK),
+    ("02", "FaaS", "서버 없음 · CLI 도구 불가", "앱 타임스탬프에 의존", None),
+    ("03", "SaaS", "설정할 서버·앱 없음", "운영자만 분석", None),
+    ("04", "Unikernel", "OS 없음 · /proc 없음", "커스텀 도구 · 하이퍼바이저", ACC),
 ]
 
 for i, (n, name, sub, who, c) in enumerate(BANDS):
@@ -35,7 +35,7 @@ d.arrow([(BX - 76, Y0 + 16), (BX - 76, Y0 + 3 * STRIDE + BH - 28)], SOFT, "soft"
 d.t(BX - 132, Y0 + 3 * STRIDE + BH - 4, "남에게 의존", 13, SOFT, KR, "start")
 
 YB = Y0 + 4 * STRIDE + 24
-d.t(BX - 132, YB, "Unikernel 은 명령 text 를 줄여 CPU 캐시 오염을 낮추지만, 그 대가로 관측 도구를 둘 자리를 없앱니다",
+d.t(BX - 132, YB, "Unikernel 맞교환 · 명령 text 축소(CPU 캐시 오염↓) ↔ 관측 도구 자리 소실",
     13, MUTED, KR, "start")
 
 d.legend(YB + 28, [("관측이 가장 어려운 자리", ACC), ("도구를 다 쓸 수 있는 자리", OK), ("중간 단계", MUTED)])

@@ -15,9 +15,9 @@ d = DK(W, H, "SYSTEMS PERFORMANCE · 11-03 §4",
        "shares 가 보장하는 것은 최소치이지, 테스트에서 본 그 성능이 아닙니다")
 
 STEPS = [
-    ("01", "혼자 쓸 때", OK, ["idle 시스템에서 테스트합니다.", "유휴 CPU 를 다 빌려", "100% 를 얻습니다"], "여기서 만족합니다"),
-    ("02", "이웃이 들어옴", WARN, ["다른 컨테이너가 배치됩니다.", "빌려 쓰던 CPU 가", "제 주인에게 돌아갑니다"], "성능이 내려갑니다"),
-    ("03", "최소치만 남음", ACC, ["shares 가 보장하는 몫,", "예를 들어 10% 만 남습니다.", "10배 느려진 셈입니다"], "사용자는 장애로 오해합니다"),
+    ("01", "혼자 쓸 때", OK, ["idle 시스템에서 테스트", "유휴 CPU 전부 차용", "CPU 100%"], "사용자 만족"),
+    ("02", "이웃 입주", WARN, ["다른 컨테이너 배치", "빌린 CPU 반환", "busy shares 합 증가"], "성능 하락"),
+    ("03", "최소치만 남음", ACC, ["shares 10 / 전체 100", "보장 몫 10%", "처음보다 10배 느림"], "시스템 장애로 오해"),
 ]
 
 for i, (n, name, c, body, foot) in enumerate(STEPS):
@@ -34,8 +34,8 @@ for i, (n, name, c, body, foot) in enumerate(STEPS):
         d.arrow([(x + CW, Y + CH / 2), (x + CW + GAP - 8, Y + CH / 2)], MUTED, "ar", 1.3)
 
 YB = Y + CH + 44
-d.t(X0, YB, "bandwidth 로 bursting 을 미리 제한해 두면(예: 10~20% 범위) 이 급락이 덜 심합니다", 13, INFO, KR, "start")
-d.t(X0, YB + 24, "모니터링이 bursting 통계를 보여 주지 않으면 사용자는 잘못된 기대를 갖게 됩니다", 13, MUTED, KR, "start")
+d.t(X0, YB, "완화 · bandwidth 상한 20% → 운영 범위 10~20% (shares 최소 10% ~ bandwidth 상한 20%)", 13, INFO, KR, "start")
+d.t(X0, YB + 24, "전제 · 컨테이너마다 바쁜 스레드 충분 · 모니터링에 bursting 통계 노출 필요", 13, MUTED, KR, "start")
 
 d.legend(YB + 48, [("사용자가 오해하는 지점", ACC), ("빌려 쓰던 국면", OK), ("반환이 시작되는 국면", WARN), ("완화책", INFO)])
 d.save("11-03.bursting-trap.svg")

@@ -5,8 +5,8 @@ import sys; sys.path.insert(0, ".")
 from ddk import DK
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 976, 572
-CW, RH, X0, Y0, GAP = 240, 60, 220, 152, 16
+W, H = 976, 636
+CW, RH, X0, Y0, GAP = 224, 60, 220, 152, 16
 
 d = DK(W, H, "SYSTEMS PERFORMANCE · 11-04 §4",
        "세 기술은 관측성에서 갈린다",
@@ -22,6 +22,7 @@ ROWS = [
     ("메모리 할당", [("고정", WARN), ("유연", OK), ("고정", WARN)]),
     ("호스트 관측성", [("중간", WARN), ("높음", OK), ("중간", WARN)]),
     ("게스트 관측성", [("높음", OK), ("중간", WARN), ("높음", OK)]),
+    ("하이퍼바이저 복잡도", [("가장 높음", WARN), ("중간(OS)", OK), ("높음", WARN)]),
     ("관측이 유리한 쪽", [("엔드유저", ACC), ("호스트 운영자", ACC), ("엔드유저", ACC)]),
 ]
 
@@ -34,8 +35,8 @@ for r, (label, cells) in enumerate(ROWS):
         else: d.box(x, y, CW, RH, PAPER2, RULE, 1.0, 6)
         d.t(x + CW / 2, y + RH / 2 + 5, txt, 13, c, KR, "middle", 600)
 
-YB = Y0 + 5 * (RH + 4) + 24
-d.t(X0 - 196, YB, "관측은 불필요한 일을 찾아 없애게 해 줍니다 — 그 이득이 하이퍼바이저 사이의 성능 차보다 큽니다",
+YB = Y0 + len(ROWS) * (RH + 4) + 24
+d.t(X0 - 196, YB, "관측의 이득 · 불필요한 일 제거 > 하이퍼바이저 간 성능 차",
     13, MUTED, KR, "start")
 
 d.legend(YB + 28, [("선택을 가르는 축", ACC), ("유리", OK), ("제한", WARN)])

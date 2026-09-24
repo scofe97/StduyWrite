@@ -14,10 +14,10 @@ d = DK(W, H, "SYSTEMS PERFORMANCE · 11-04",
        "마지막 절이 11장 전체의 결론입니다 — 관측성이 선택을 가릅니다")
 
 BANDS = [
-    ("§1", "경량 가상화", "Firecracker · Kata · gVisor", "양쪽의 장점을 노린다", None),
-    ("§2", "관측", "VM 처럼 게스트가 자체 커널을 본다", "컨테이너와 다르다", None),
-    ("§3", "기타 유형", "FaaS · SaaS · Unikernel", "로그인할 OS 가 없다", None),
-    ("§4", "세 기술 비교", "관측성이 선택을 가른다", "누가 분석하는가로 갈린다", ACC),
+    ("§1", "경량 가상화", "Firecracker · Kata · gVisor", "양쪽 장점 겨냥", None),
+    ("§2", "관측", "VM 처럼 게스트 자체 커널", "컨테이너와 반대", None),
+    ("§3", "기타 유형", "FaaS · SaaS · Unikernel", "로그인할 OS 없음", None),
+    ("§4", "세 기술 비교", "관측성 · 복잡도 · 제3 선택지", "누가 분석하는가", ACC),
 ]
 
 for i, (tag, name, sub, role, c) in enumerate(BANDS):
@@ -33,7 +33,7 @@ d.t(BX - 60, Y0 + 4, "기술", 13, SOFT, KR, "middle")
 d.arrow([(BX - 60, Y0 + 16), (BX - 60, Y0 + 3 * STRIDE + BH - 8)], SOFT, "soft", 1.2, "4 6")
 d.t(BX - 60, Y0 + 3 * STRIDE + BH + 16, "판단", 13, SOFT, KR, "middle")
 
-d.t(BX, Y0 + 4 * STRIDE + 12, "경량 VM 은 컨테이너의 단점을 풀되 통합 캐시 같은 일부 장점을 대가로 냅니다", 13, MUTED, KR, "start")
+d.t(BX, Y0 + 4 * STRIDE + 12, "경량 VM · 컨테이너 단점 해소 ↔ 일부 장점 상실 (항목은 비교표 기준 추론)", 13, MUTED, KR, "start")
 
 d.legend(Y0 + 4 * STRIDE + 36, [("11장 전체의 결론", ACC), ("나머지 절", MUTED)])
 d.save("11-04.chapter-overview.svg")
