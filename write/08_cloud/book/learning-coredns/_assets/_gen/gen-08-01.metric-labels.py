@@ -49,8 +49,8 @@ d.t(416, 234, "}", 11, MUTED, MONO, "start")
 d.t(416, 268, "라벨 여섯이 각각 가지는 값의 곱만큼 생긴다", 12, MUTED, KR, "start")
 
 d.tone(400, 320, 450, 128, ACC, 6, "0E", 1.3)
-d.t(416, 346, "지표의 손잡이는 이 라벨 축이다", 13, ACC, KR, "start", 600)
-d.t(416, 372, "존이 많고 질의 유형이 다양하면 시계열이 곱셈으로 늘어난다", 12, MUTED, KR, "start")
+d.t(416, 346, "값이 늘어나는 축은 라벨이다", 13, ACC, KR, "start", 600)
+d.t(416, 372, "존 수 × 유형 수 × … 만큼 시계열이 생긴다", 12, MUTED, KR, "start")
 d.t(416, 396, "원서 표 8-1 의 라벨은 넷이었다", 12, MUTED, KR, "start")
 d.t(416, 420, "server · zone · proto · family", 11, MUTED, MONO, "start")
 

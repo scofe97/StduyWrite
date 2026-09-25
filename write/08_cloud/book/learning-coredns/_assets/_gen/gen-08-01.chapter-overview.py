@@ -50,7 +50,7 @@ for i, (n, title, q) in enumerate(cards):
     d.t(x + 18, y + 84, q, 13, MUTED, KR, "start")
 
 d.t(20, 620, "도구를 고르는 일이 곧 그 값을 깎을 손잡이를 고르는 일이다", 13, MUTED, KR, "start")
-d.t(20, 644, "원서 표 8-1 의 CoreDNS 지표 이름은 지금 거의 다 다른 이름이다", 13, MUTED, KR, "start")
+d.t(20, 644, "원서 표 8-1 의 카운터 이름 다섯은 지금 없다 — 넷은 개명, 하나는 라벨로 흡수", 13, MUTED, KR, "start")
 
 d.legend(672, [("손잡이가 없는 도구", ACC)])
 d.save("08-01.chapter-overview.svg")

@@ -21,9 +21,9 @@ d = D(W, H, "LEARNING COREDNS · 09-02 §7",
 
 BX, BW = 250, 520
 BARS = [
-    ("metrics", "지표 내보내기", 520, "OnStartup 에서 MustRegister · 이름·라벨 규약을 지킨다", ACC),
+    ("metrics", "지표 내보내기", 520, "원서: OnStartup 에서 등록 · 1.7.1 이후 promauto · 이름·라벨 규약", ACC),
     ("metadata", "값 공급하기", 240, "Metadata 함수 하나 · 값이 아니라 값 함수를 넣는다", MUTED),
-    ("trace", "추적 붙이기", 150, "대개 아무것도 안 한다 · NextOrFailure 가 알아서 한다", OK),
+    ("trace", "추적 붙이기", 150, "대개 할 일 없음 · NextOrFailure 가 스팬 생성", OK),
 ]
 
 for i, (name, what, w, note, c) in enumerate(BARS):

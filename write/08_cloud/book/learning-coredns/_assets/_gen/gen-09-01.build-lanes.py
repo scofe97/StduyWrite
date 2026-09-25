@@ -41,15 +41,15 @@ step(XS[2], 148, "매번 다시 받는다", "반복이 느리다", ACC, ACC)
 
 step(XS[0], 304, "Go 를 /usr/local 에", "1.12 이상 · 예제는 1.12.4")
 step(XS[1], 304, "아무 데나 clone", "go modules · GOPATH 무관")
-step(XS[2], 304, "캐시가 남는다", "반복이 빠르다", OK, OK)
+step(XS[2], 304, "받은 패키지가 남는다", "반복이 빠르다", OK, OK)
 
 for row_y in (184, 340):
     d.arrow([(XS[0] + SW, row_y), (XS[1] - 2, row_y)], MUTED, "ar", 1.4)
     d.arrow([(XS[1] + SW, row_y), (XS[2] - 2, row_y)], MUTED, "ar", 1.4)
 
 d.box(20, 426, 840, 62, PAPER, RULE, 0.8)
-d.t(36, 450, "나오는 바이너리는 같다 — 둘 다 손대지 않은 표준 바이너리다", 12, INK, KR, "start", 600)
-d.t(36, 472, "Docker 로 빌드하면 맥에서 돌려도 리눅스 바이너리가 나온다 · 빌드하는 컨테이너가 리눅스이기 때문이다",
+d.t(36, 450, "나오는 것은 같은 표준 구성의 바이너리", 12, INK, KR, "start", 600)
+d.t(36, 472, "Docker 빌드의 결과는 늘 리눅스 바이너리 (컨테이너가 리눅스)",
      11, MUTED, KR, "start")
 
 d.legend(508, [("반복에서 드는 값", ACC), ("반복에서 아끼는 값", OK)])

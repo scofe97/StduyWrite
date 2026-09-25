@@ -66,7 +66,7 @@ d.box(20, 480, 840, 84, PAPER, RULE, 0.8)
 d.t(36, 504, "Corefile 은 두 경우에 완전히 같다", 12, INK, KR, "start", 600)
 d.t(36, 528, "바뀐 것은 plugin.cfg 의 줄 하나 위치뿐이고, 그것을 바꾸려면 다시 빌드해야 한다",
      11, MUTED, KR, "start")
-d.t(36, 550, "저자들의 결론 — 이렇게 빌드하면 any 는 사실상 쓸모가 없다", 11, BAD, KR, "start")
+d.t(36, 550, "저자들의 결론: forward 뒤의 any 는 사실상 쓸모없음", 11, BAD, KR, "start")
 
 d.legend(578, [("any 가 답하는 경우", OK), ("any 가 못 보는 경우", BAD)])
 d.save("09-01.any-order.svg")

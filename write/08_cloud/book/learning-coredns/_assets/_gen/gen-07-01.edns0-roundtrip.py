@@ -38,10 +38,10 @@ def step(x, y, t1, t2, c=INK, tone=None):
 
 
 step(XS[0], 150, "클라이언트 질의를 받는다", "example.com A")
-step(XS[1], 150, "옵션을 실어 붙인다", "rewrite edns0 local set", ACC, ACC)
+step(XS[1], 150, "옵션을 실어 붙인다", "local set 0xffed {client_ip}", ACC, ACC)
 step(XS[2], 150, "암호화해 넘긴다", "forward · DNS over TLS")
 
-step(XS[0], 310, "옵션이 붙은 질의 도착", "0xffed · 0xffee")
+step(XS[0], 310, "옵션이 붙은 질의 도착", "0xffed = 클라이언트 주소")
 step(XS[1], 310, "풀어서 발행한다", "metadata_edns0", ACC, ACC)
 step(XS[2], 310, "다른 플러그인이 쓴다", "log · rewrite")
 
