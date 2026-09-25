@@ -12,7 +12,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, OK, BAD, WARN, INFO, PAPER2, RULE, KR, MONO
 
-W, H = 960, 470
+W, H = 960, 492
 d = D(W, H, "PACKET ANALYSIS WITH WIRESHARK · 04-01 §3",
       "공개값만 건너가고 비밀값은 남습니다",
       "양쪽이 각자 고른 비밀값은 자기 쪽에 머물고, 선을 건너는 것은 공개값 둘뿐이다. "
@@ -72,6 +72,6 @@ d.t(MIDX, y + 27, "5^x mod p = 8 의 x 를 찾아야 함", 11, BAD, KR)
 
 d.t(LX, 424, "선을 지나간 값 · p · g · 8 · 19", 12, MUTED, KR, "start")
 
-d.legend(H - 26, [("레인 안에 머무는 비밀값", WARN), ("선을 건너는 공개값", INFO),
+d.legend(H - 48, [("레인 안에 머무는 비밀값", WARN), ("선을 건너는 공개값", INFO),
                   ("양쪽이 도달한 같은 값", ACC), ("도청자에게 남는 것", BAD)])
 d.save("04-01.key-exchange-idea.svg")
