@@ -132,7 +132,7 @@ def row_h(left, right):
     return max(NODE_H, n * CH_H + (n - 1) * CH_GAP) + 28
 
 
-ROOT_Y = 116 + 190
+ROOT_Y = 116 + 224
 y = ROOT_Y + 52 + PHASE_GAP
 for i, (_t, _s, left, right) in enumerate(stages):
     y += row_h(left, right) + ROW_GAP
@@ -149,7 +149,7 @@ d = D(W, H, "WRITE · GO ROADMAP",
       "그 개념을 다루는 책의 장이다. 점 색이 우선순위이고, 책 줄이 비면 아직 자료가 없는 자리다.",
       "노드는 개념, 아래 줄은 그 개념을 다루는 책의 장입니다")
 
-LX, LY, LW, LH = 40, 96, 380, 190
+LX, LY, LW, LH = 40, 96, 380, 224
 d.box(LX, LY, LW, LH, PAPER2, RULE, 1.0)
 d.t(LX + 16, LY + 24, "읽는 법", 13, INK, KR, "start", 600)
 for i, (lab, txt) in enumerate([("필수", "빼면 뒤가 막힙니다"),
@@ -161,9 +161,9 @@ for i, (lab, txt) in enumerate([("필수", "빼면 뒤가 막힙니다"),
     d.o.append(f'<circle cx="{LX + 24}" cy="{cy}" r="5" fill="{c}"/>')
     d.t(LX + 40, cy + 4, lab, 12, c, KR, "start", 600)
     d.t(LX + 78, cy + 4, txt, 12, MUTED, KR, "start")
-d.t(LX + 16, LY + 172, "책 줄이 비면 아직 자료가 없는 자리 — 개념이 먼저입니다", 12, SOFT, KR, "start")
+d.t(LX + 16, LY + LH - 18, "책 줄이 비면 아직 자료가 없는 자리 — 개념이 먼저입니다", 12, SOFT, KR, "start")
 
-RX, RY, RW, RH = 580, 96, 380, 190
+RX, RY, RW, RH = 580, 96, 380, 224
 d.box(RX, RY, RW, RH, PAPER, RULE, 0.9)
 d.o.append(f'<rect x="{RX}" y="{RY}" width="{RW}" height="{RH}" rx="6" fill="none" '
            f'stroke="{SOFT}" stroke-width="0.9" stroke-dasharray="4 4"/>')
@@ -172,7 +172,8 @@ for i, (who, what) in enumerate([
         ("network-roadmap", "TCP · TLS · HTTP 의 프로토콜 축"),
         ("os-roadmap", "epoll · 스케줄러 · 프로파일 방법론"),
         ("Learning Go 16장", "reflect · unsafe · cgo — 필요할 때만"),
-        ("Cloud Native Go 1~3장", "클라우드 네이티브 개론과 Go 소개")]):
+        ("Cloud Native Go 1~3장", "클라우드 네이티브 개론과 Go 소개"),
+        ("lexer · parser · AST", "DSL 만들기 — 컴파일러 축")]):
     cy = RY + 56 + i * 33
     d.t(RX + 16, cy, who, 13, MUTED, KR, "start", 600)
     d.t(RX + 16, cy + 16, what, 12, SOFT, KR, "start")
