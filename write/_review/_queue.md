@@ -55,7 +55,7 @@ updated: 2026-09-14
 
 ## 큐
 
-> `책` 은 slug 다 — kia(kubernetes-in-action) · cntd(computer-networking-top-down) · lml(learning-modern-linux) · nak(networking-and-kubernetes) · paw(packet-analysis-wireshark) · bmf(building-micro-frontends) · istio(istio-in-action) · coredns(learning-coredns).
+> `책` 은 slug 다 — kia(kubernetes-in-action) · cntd(computer-networking-top-down) · lml(learning-modern-linux) · nak(networking-and-kubernetes) · paw(packet-analysis-wireshark) · bmf(building-micro-frontends) · istio(istio-in-action) · coredns(learning-coredns) · sp(systems-performance).
 
 | 책 | 챕터 | 노트 | 상태 | 회차 | 다음 | 비고 |
 |---|---|---|---|---|---|---|
@@ -139,3 +139,4 @@ updated: 2026-09-14
 | coredns | ch07 | 1 | 학습중 | - | - | Phase 4 자답 미실시 |
 | coredns | ch08 | 1 | 학습중 | - | - | Phase 4 자답 미실시 |
 | coredns | ch09 | 2 | 학습중 | - | - | Phase 4 자답 미실시 |
+| sp | ch10 | 4 | 학습중 | - | - | 노트 4편만 있고 Phase 1~4 미실시. 2026-09-26 계획 수립 — 책 README 「10장 학습 계획」 |
