@@ -15,7 +15,7 @@ related:
   - ./06-01.%EC%9E%91%EC%9D%80%20%EA%B2%83%EC%9D%80%20%EB%90%98%EA%B3%A0%20%ED%81%B0%20%EA%B2%83%EB%A7%8C%20%EB%A9%8E%EB%8A%94%EB%8B%A4.md
   - ./07-01.%EA%B8%B8%EC%9D%80%20%EB%A9%80%EC%A9%A1%ED%95%9C%EB%8D%B0%20%EC%95%88%20%ED%86%B5%ED%95%A0%20%EB%95%8C.md
   - ../../README.md
-  - ../../networking/README.md
+  - ../../../08_cloud/book/networking-and-kubernetes/README.md
   - ../../book/cntd_computer-networking-top-down/README.md
   - ../../book/paw_packet-analysis-wireshark/README.md
   - ../../../troubleshooting/README.md
@@ -149,7 +149,7 @@ docker exec clab-09-conntrack-nat sysctl -w net.netfilter.nf_conntrack_tcp_timeo
 
 | 항목 | 값 | 근거 |
 |---|---|---|
-| 난이도 레벨 | 기본 | `02_os/networking/` 4편과 `cntd` 정독으로 L2~L4 어휘는 이미 있습니다. 처음 보는 것은 개념이 아니라 containerlab 조작과 증상 판별입니다 |
+| 난이도 레벨 | 기본 | N&K 정독본 1·2장과 `cntd` 정독으로 L2~L4 어휘는 이미 있습니다. 처음 보는 것은 개념이 아니라 containerlab 조작과 증상 판별입니다 |
 | 막힌 지점 | 없음 | Phase 1 미실시. 노트 8편은 자료 추출로 먼저 세웠습니다 |
 | 최근 검증 결과 | 없음 | Phase 4 자답 회차 미실시. `last_verified` 를 작성일로 대신 채우지 않았습니다 |
 | 복습 회차 | 없음 | `_review/_queue.md` 등록은 Phase 4 이후입니다 |

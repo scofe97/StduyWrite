@@ -43,7 +43,7 @@ related:
   - ./08-04.%EB%A7%9D%20%EA%B3%84%EC%B8%B5%EC%97%90%20%ED%86%B5%EC%A7%B8%EB%A1%9C%20%EC%94%8C%EC%9A%B0%EA%B3%A0%20%EB%AC%B4%EC%84%A0%EC%97%90%20%EB%B6%99%EC%9E%85%EB%8B%88%EB%8B%A4.md
   - ./08-05.%ED%86%B5%EC%8B%A0%EC%9D%84%20%EC%A7%80%ED%82%A4%EB%8A%94%20%EA%B2%83%EA%B3%BC%20%EB%A7%9D%EC%9D%84%20%EC%A7%80%ED%82%A4%EB%8A%94%20%EA%B2%83%EC%9D%80%20%EB%8B%A4%EB%A6%85%EB%8B%88%EB%8B%A4.md
   - ./../paw_packet-analysis-wireshark/README.md
-  - ./../../networking/README.md
+  - ../../../08_cloud/book/networking-and-kubernetes/README.md
   - ./../../README.md
   - ./../../../network-roadmap.md
 learning:

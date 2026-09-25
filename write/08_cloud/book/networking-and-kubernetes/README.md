@@ -165,6 +165,32 @@ updated: 2026-09-17
 
 
 
+## 질문별 정본
+
+> 리눅스·Kubernetes 네트워킹 질문이 떠오르면 왼쪽에서 찾아 오른쪽 편의 해당 절로 갑니다. 이 책 밖의 편도 섞여 있습니다.
+
+이 표는 원래 `02_os/networking/README.md` 에 있던 라우팅표입니다. 그 폴더의 본문이 2026-09-21·23 에 모두 이 정독본과 이웃 정독본으로 옮겨 와 표만 남았고, 표가 가리키는 편 대부분이 이 폴더에 있어 2026-09-26 에 표를 여기로 옮기고 폴더를 걷어냈습니다.
+
+| 질문 | 정본 |
+|---|---|
+| 네트워크 네임스페이스는 커널에서 무엇이고, 왜 포트가 겹쳐도 되는가 | [N&K 02-01](02-01.%EC%BB%A4%EB%84%90%EC%9D%B4%20%ED%8C%A8%ED%82%B7%EC%9D%84%20%EC%A3%BC%EA%B3%A0%EB%B0%9B%EB%8A%94%20%EC%9E%90%EB%A6%AC%20%E2%80%94%20%EC%86%8C%EC%BC%93%C2%B7%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%C2%B7veth%C2%B7%EB%B8%8C%EB%A6%AC%EC%A7%80.md) §3 |
+| veth 는 패킷을 어떻게 넘기고, 브리지는 MAC 을 어떻게 배우는가 | [N&K 02-01](02-01.%EC%BB%A4%EB%84%90%EC%9D%B4%20%ED%8C%A8%ED%82%B7%EC%9D%84%20%EC%A3%BC%EA%B3%A0%EB%B0%9B%EB%8A%94%20%EC%9E%90%EB%A6%AC%20%E2%80%94%20%EC%86%8C%EC%BC%93%C2%B7%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%C2%B7veth%C2%B7%EB%B8%8C%EB%A6%AC%EC%A7%80.md) §4 |
+| netns·veth·브리지를 손으로 지어 보려면 | [N&K 02-05](02-05.%EC%BB%A4%EB%84%90%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9%20%EC%8B%A4%EC%8A%B5%20%E2%80%94%20veth%C2%B7%EB%B8%8C%EB%A6%AC%EC%A7%80%C2%B7%ED%8F%AC%EC%9B%8C%EB%94%A9%EC%9D%84%20%EC%86%90%EC%9C%BC%EB%A1%9C%20%EC%A7%93%EA%B8%B0.md) |
+| 라우팅 테이블은 어떻게 고르고, 다음 홉의 MAC 은 어디서 오는가(NUD) | [N&K 02-02](02-02.%EC%BB%A4%EB%84%90%EC%9D%B4%20%ED%8C%A8%ED%82%B7%EC%9D%84%20%ED%8C%90%EC%A0%95%ED%95%98%EB%8A%94%20%EC%B8%B5%20%E2%80%94%20Netfilter%C2%B7Conntrack%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85.md) §3 |
+| netfilter 다섯 훅과 iptables 테이블·체인은 어떻게 맞물리는가 | [N&K 02-02](02-02.%EC%BB%A4%EB%84%90%EC%9D%B4%20%ED%8C%A8%ED%82%B7%EC%9D%84%20%ED%8C%90%EC%A0%95%ED%95%98%EB%8A%94%20%EC%B8%B5%20%E2%80%94%20Netfilter%C2%B7Conntrack%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85.md) §1 · [02-03](02-03.iptables%C2%B7IPVS%C2%B7eBPF%20%E2%80%94%20kube-proxy%EB%A5%BC%20%EC%9D%B4%ED%95%B4%ED%95%98%EB%8A%94%20%EC%84%B8%20%EA%B8%B0%EC%88%A0.md) §1~2 |
+| DNAT·SNAT·MASQUERADE 는 무엇을 바꾸는가 | [N&K 02-03](02-03.iptables%C2%B7IPVS%C2%B7eBPF%20%E2%80%94%20kube-proxy%EB%A5%BC%20%EC%9D%B4%ED%95%B4%ED%95%98%EB%8A%94%20%EC%84%B8%20%EA%B8%B0%EC%88%A0.md) §3 |
+| conntrack 은 무엇을 적고, UDP 는 왜 테이블을 먼저 채우는가 | [N&K 02-02](02-02.%EC%BB%A4%EB%84%90%EC%9D%B4%20%ED%8C%A8%ED%82%B7%EC%9D%84%20%ED%8C%90%EC%A0%95%ED%95%98%EB%8A%94%20%EC%B8%B5%20%E2%80%94%20Netfilter%C2%B7Conntrack%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85.md) §2 |
+| TC·qdisc 와 eBPF 어태치 지점은 성능을 어떻게 가르는가 | [N&K 02-03](02-03.iptables%C2%B7IPVS%C2%B7eBPF%20%E2%80%94%20kube-proxy%EB%A5%BC%20%EC%9D%B4%ED%95%B4%ED%95%98%EB%8A%94%20%EC%84%B8%20%EA%B8%B0%EC%88%A0.md) §5 |
+| kube-proxy 모드는 무엇이 다른가 | [N&K 04-02](04-02.CNI%EC%99%80%20kube-proxy%20%E2%80%94%20Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%9D%98%20%EB%B0%B0%EC%84%A0%EA%B3%B5%EA%B3%BC%20%EB%A1%9C%EB%93%9C%EB%B0%B8%EB%9F%B0%EC%84%9C.md) §4 |
+| CNI 는 Pod 에 무엇을 배선하고, Calico 노드에서는 무엇부터 보는가 | [N&K 04-02](04-02.CNI%EC%99%80%20kube-proxy%20%E2%80%94%20Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%9D%98%20%EB%B0%B0%EC%84%A0%EA%B3%B5%EA%B3%BC%20%EB%A1%9C%EB%93%9C%EB%B0%B8%EB%9F%B0%EC%84%9C.md) §1~5 |
+| NodePort 로 들어온 클라이언트 IP 는 왜 사라지는가 | [N&K 05-02](05-02.Service%205%EC%9C%A0%ED%98%95%20%E2%80%94%20ClusterIP%EC%97%90%EC%84%9C%20LoadBalancer%EA%B9%8C%EC%A7%80.md) §3 |
+| 패킷이 안 갈 때 커널 안 어디서 멈췄는지 좁히려면 | [N&K 02-04](02-04.Linux%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%EC%A7%84%EB%8B%A8%20%EB%8F%84%EA%B5%AC%20%E2%80%94%20%EA%B3%84%EC%B8%B5%20%EC%88%9C%EC%84%9C%EB%8C%80%EB%A1%9C%20%EC%88%98%EC%82%AC%ED%95%98%EA%B8%B0.md) §6 |
+| 서브네팅·CIDR·VLSM 을 손으로 계산하려면 | [N&K 01-03](01-03.IP%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85%C2%B7Ethernet%20%E2%80%94%20%ED%8C%A8%ED%82%B7%EC%9D%B4%20%EA%B8%B8%EC%9D%84%20%EC%B0%BE%EB%8A%94%20%EB%B2%95.md) §2 · [cntd 04-03](../../../02_os/book/cntd_computer-networking-top-down/04-03.IP%20%E2%80%94%20%EB%8D%B0%EC%9D%B4%ED%84%B0%EA%B7%B8%EB%9E%A8%EA%B3%BC%20%EC%A3%BC%EC%86%8C.md) |
+| VPC·Pod·Service 대역은 왜 겹치면 안 되는가 | [N&K 04-01](04-01.Kubernetes%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9%20%EB%AA%A8%EB%8D%B8%20%E2%80%94%20Pod%20IP%C2%B7%EB%A0%88%EC%9D%B4%EC%95%84%EC%9B%83%C2%B7Probe.md) §3 |
+| DNS 로 사이트를 어떻게 막고, 브라우저 DoH 는 왜 그 차단을 건너뛰는가 | [Learning CoreDNS 07-01](../learning-coredns/07-01.%EC%A7%88%EB%AC%B8%EA%B3%BC%20%EB%8B%B5%EC%9D%B4%20%EC%96%B4%EA%B8%8B%EB%82%98%EB%A9%B4%20%ED%81%B4%EB%9D%BC%EC%9D%B4%EC%96%B8%ED%8A%B8%EA%B0%80%20%EB%B2%84%EB%A6%B0%EB%8B%A4.md) §9 · [패킷 분석 05-02](../../../02_os/book/paw_packet-analysis-wireshark/05-02.%EC%9D%B4%EB%A6%84%EA%B3%BC%20%EC%9A%94%EC%B2%AD.md) §1 |
+
+
+
 ## 번호 체계와 작성 규약
 
 > 파일명·번호·작성 규약을 한곳에 모읍니다. 새 편을 더하기 전에 여기를 먼저 봅니다.

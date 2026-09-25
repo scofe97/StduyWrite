@@ -27,7 +27,6 @@ related:
   - ./07-01.%EC%84%9C%EB%B9%84%EC%8A%A4%EB%A5%BC%20%EB%AC%B4%EB%84%88%EB%9C%A8%EB%A6%AC%EB%8A%94%20%EA%B3%B5%EA%B2%A9.md
   - ./07-02.%ED%9B%94%EC%B3%90%EB%B3%B4%EA%B3%A0%20%EB%81%BC%EC%96%B4%EB%93%9C%EB%8A%94%20%EA%B3%B5%EA%B2%A9.md
   - ../../README.md
-  - ../../networking/README.md
   - ../systems-performance/README.md
   - ../../../08_cloud/book/networking-and-kubernetes/README.md
 learning:

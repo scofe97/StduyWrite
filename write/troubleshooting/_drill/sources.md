@@ -98,7 +98,6 @@ ls troubleshooting/*/[0-9]*.md | wc -l                     # 승격
 
 | 배운 주제 | 근거 폴더 | 편수 |
 |----------|----------|------|
-| 라우팅, DNS 해석, 서브네팅, netfilter 와 conntrack | [02_os/networking/](../../02_os/networking/) | 4 |
 | namespace, cgroup, OverlayFS, 컨테이너 격리 | [02_os/kernel/](../../02_os/kernel/) | 7 |
 | 디스크, 프로세스, 서비스 기동, 로그, 포트와 소켓 | [후보 풀 A 계층](./candidates.md) | 41 |
 | 셸, 파일 추상화, systemd, 관측, 네트워킹 기초 | [02_os/book/learning-modern-linux/](../../02_os/book/learning-modern-linux/) | 17 |

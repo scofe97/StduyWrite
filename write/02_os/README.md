@@ -5,7 +5,6 @@ status: final
 related:
   - ../README.md
   - ../roadmap/os-roadmap.md
-  - ./networking/README.md
   - ./kernel/README.md
   - ./book/learning-modern-linux/README.md
   - ./book/linux-kernel-programming/README.md
@@ -35,7 +34,6 @@ updated: 2026-09-21
 | 경로 | 범위 |
 |------|------|
 | [OS 로드맵](../roadmap/os-roadmap.md) | 백엔드·Kubernetes 운영자가 OS 문제를 해석하는 학습 순서 |
-| [networking/](./networking/README.md) | 리눅스·K8s 네트워킹 질문을 정본 편으로 보내는 라우팅표와 DNS 필터링 1편. 메커니즘 본문은 2026-09-21 N&K 정독본으로 합쳤다 |
 | [networking-and-kubernetes/](../08_cloud/book/networking-and-kubernetes/README.md) | 커널 네트워크 메커니즘의 정본 — netns·veth·bridge·netfilter·conntrack·TC·eBPF·kube-proxy·CNI (책 기반, `08_cloud` 소재) |
 | [kernel/](./kernel/README.md) | 유저/커널 스페이스, 시스템 콜, 커널 코어 영역, namespace·cgroup, /proc, K8s 노드 필수 커널 파라미터 |
 | [learning-modern-linux/](./book/learning-modern-linux/README.md) | 클라우드 네이티브 환경을 전제로 리눅스를 한 바퀴 도는 개론 — 커널·셸·접근 제어·파일시스템·네트워크·관측 (책 기반) |
@@ -53,7 +51,7 @@ updated: 2026-09-21
 ## 카테고리 결정 원칙
 
 - 출간된 책을 읽고 정리한 정독본은 `book/` 에 둔다. 남의 랩 저장소를 따라 하거나 직접 만든 도구로 배운 기록은 책이 아니므로 `project/` 에 둔다
-- 커널 네트워크 자료구조(netns, veth, conntrack, netfilter) → `08_cloud/book/networking-and-kubernetes/` 정독본. `networking/` 은 질문을 그 편으로 보내는 라우팅표만 둔다 — 새 메커니즘 본문을 여기에 쓰지 않는다
+- 커널 네트워크 자료구조(netns, veth, conntrack, netfilter) → `08_cloud/book/networking-and-kubernetes/` 정독본. 질문을 그 편으로 보내는 라우팅표는 그 README 의 「질문별 정본」 절에 있다 — 02_os 에 네트워크 메커니즘 본문을 새로 쓰지 않는다
 - 컨테이너 런타임 격리·자원 제한(namespace, cgroup, seccomp) → `kernel/`
 - 시스템 콜 인터페이스, /proc, VFS, 메모리 관리 → `kernel/` (K8s 운영자 관점) 또는 `linux-kernel-programming/` (커널 모듈 작성자 관점)
 - 커널 모듈(LKM) 개발, 커널 소스 빌드, 메모리 할당 API, 스케줄러·동기화 내부 → `linux-kernel-programming/`

@@ -4,7 +4,7 @@ tags: [moc, security, network, l2, arp, mtls]
 status: draft
 related:
   - ../README.md
-  - ../../../02_os/networking/README.md
+  - ../../../08_cloud/book/networking-and-kubernetes/README.md
 updated: 2026-08-23
 ---
 
@@ -45,4 +45,4 @@ updated: 2026-08-23
 ## 관련 문서
 
 - [99_ETC/security MOC](../README.md) — 상위 카테고리와 경계 가이드
-- [02_os/networking/](../../../02_os/networking/README.md) — 같은 프로토콜을 커널 동작과 진단 관점으로 다루는 곳
+- [N&K 질문별 정본](../../../08_cloud/book/networking-and-kubernetes/README.md#%EC%A7%88%EB%AC%B8%EB%B3%84-%EC%A0%95%EB%B3%B8) — 같은 프로토콜을 커널 동작과 진단 관점으로 다루는 곳

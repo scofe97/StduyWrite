@@ -7,7 +7,7 @@ related:
   - ../../README.md
   - ../linux-kernel-programming/README.md
   - ../../kernel/README.md
-  - ../../networking/README.md
+  - ../../../08_cloud/book/networking-and-kubernetes/README.md
 updated: 2026-09-12
 ---
 
@@ -114,5 +114,5 @@ updated: 2026-09-12
 - 상위: [02_os/ MOC](../../README.md)
 - 이웃: [02_os/linux-kernel-programming/](../linux-kernel-programming/README.md) — 커널 개발자 관점의 리눅스 내부. 본서 3·6·7장(커널·CPU·메모리)과 메커니즘이 겹칩니다
 - 이웃: [02_os/kernel/](../../kernel/README.md) — K8s 운영 관점의 커널 메커니즘(namespace·cgroup). 본서 11장(컨테이너)과 맞닿습니다
-- 이웃: [02_os/networking/](../../networking/README.md) — Linux 네트워크 자료구조. 본서 10장(네트워크)과 주제가 겹칩니다
+- 이웃: [N&K 질문별 정본](../../../08_cloud/book/networking-and-kubernetes/README.md#%EC%A7%88%EB%AC%B8%EB%B3%84-%EC%A0%95%EB%B3%B8) — Linux 네트워크 자료구조. 본서 10장(네트워크)과 주제가 겹칩니다
 - cross-link: [06_observability/](../../../06_observability/README.md) — Grafana LGTM 스택·SLO 운영 관점. 본서가 *커널 레벨 성능 분석*(perf·Ftrace·BPF)이라면 06은 *앱·인프라 관측 운영*이라 시선이 다릅니다

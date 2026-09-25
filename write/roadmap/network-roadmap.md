@@ -3,7 +3,6 @@ title: 네트워크 학습 로드맵
 tags: [roadmap, linux, networking, kubernetes, cloud, ebpf, cilium, dns, security]
 status: final
 source:
-  - ../02_os/networking/README.md
   - ../02_os/project/network-fundamentals-lab/README.md
   - ../08_cloud/kubernetes/04_networking/README.md
   - ../08_cloud/book/networking-and-kubernetes/README.md
@@ -12,7 +11,6 @@ related:
   - os-roadmap.md
   - k8s-roadmap.md
   - observability-roadmap.md
-  - ../02_os/networking/README.md
   - ../02_os/project/network-fundamentals-lab/README.md
   - ../08_cloud/kubernetes/04_networking/README.md
 updated: 2026-09-23
