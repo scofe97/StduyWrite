@@ -25,7 +25,7 @@ def bundle(fname, eyebrow, title, desc, lead, steps, legend, per_row=4):
         d.t(x + CW / 2, y + 100, l2, 12, MUTED, kr(l2))
         # 아래 줄: 이 단계가 겨누는 Phase 1 의 어긋난 축
         d.tone(x, y + CH + 10, CW, TAG_H, ACC if focal else WARN, 6, "10", 1.0)
-        d.t(x + 12, y + CH + 27, "겨누는 축", 10, SOFT, MONO, "start")
+        d.t(x + 12, y + CH + 27, "겨누는 축", 11, SOFT, KR, "start")
         d.t(x + CW / 2, y + CH + 46, axis, 12, ACC if focal else WARN, kr(axis), "middle", 600)
         if c < per_row - 1 and i < len(steps) - 1:
             d.arrow([(x + CW + 4, y + CH / 2), (x + CW + GAP - 4, y + CH / 2)], MUTED, "ar", 1.4)
