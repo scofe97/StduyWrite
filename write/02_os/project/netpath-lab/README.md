@@ -8,7 +8,7 @@ related:
   - ./01-01.%EC%8B%A4%EC%8A%B5%20-%20%ED%8F%AC%ED%8A%B8%EC%97%90%20%EC%95%84%EB%AC%B4%EB%8F%84%20%EC%97%86%EC%9D%84%20%EB%95%8C.md
   - ../../README.md
   - ../network-fundamentals-lab/README.md
-  - ../cntd_computer-networking-top-down/README.md
+  - ../../book/cntd_computer-networking-top-down/README.md
   - ../../../roadmap/go-roadmap.md
   - ../../../roadmap/network-roadmap.md
 learning:

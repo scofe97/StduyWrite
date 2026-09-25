@@ -103,7 +103,7 @@ sysctl net.ipv4.fib_multipath_hash_policy net.ipv6.fib_multipath_hash_policy
 
 ### IP 비선두 조각에는 포트가 없습니다
 
-패킷이 조각나면 전송 계층 헤더는 첫 조각에만 실립니다. [RFC 2991](https://www.rfc-editor.org/rfc/rfc2991.txt) §3 은 이 때문에 다음 홉 선택에 전송 계층 정보를 넣는 것이 문제가 될 수 있다고 적고, [RFC 6438](https://www.rfc-editor.org/rfc/rfc6438.txt) §1.1 도 IP 조각과 암호화된 트래픽을 같은 예로 듭니다. 두 번째 조각에 포트도 VXLAN 표식도 없는 캡처는 [작은 것은 되고 큰 것만 멎는다](../../02_os/book/network-fundamentals-lab/06-01.%EC%9E%91%EC%9D%80%20%EA%B2%83%EC%9D%80%20%EB%90%98%EA%B3%A0%20%ED%81%B0%20%EA%B2%83%EB%A7%8C%20%EB%A9%8E%EB%8A%94%EB%8B%A4.md) §4 에 있습니다.
+패킷이 조각나면 전송 계층 헤더는 첫 조각에만 실립니다. [RFC 2991](https://www.rfc-editor.org/rfc/rfc2991.txt) §3 은 이 때문에 다음 홉 선택에 전송 계층 정보를 넣는 것이 문제가 될 수 있다고 적고, [RFC 6438](https://www.rfc-editor.org/rfc/rfc6438.txt) §1.1 도 IP 조각과 암호화된 트래픽을 같은 예로 듭니다. 두 번째 조각에 포트도 VXLAN 표식도 없는 캡처는 [작은 것은 되고 큰 것만 멎는다](../../02_os/project/network-fundamentals-lab/06-01.%EC%9E%91%EC%9D%80%20%EA%B2%83%EC%9D%80%20%EB%90%98%EA%B3%A0%20%ED%81%B0%20%EA%B2%83%EB%A7%8C%20%EB%A9%8E%EB%8A%94%EB%8B%A4.md) §4 에 있습니다.
 
 다섯 값으로 해시하는 장비가 첫 조각과 나머지 조각을 어떻게 한 흐름으로 묶는지는 *(미정)* 입니다. 구현마다 다를 것으로 보이고, 1차 자료로 확인한 장비가 아직 없습니다.
 

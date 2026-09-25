@@ -104,7 +104,7 @@ write/troubleshooting/
 | stale Endpoint | 특정 목적지만 reset | EndpointSlice 와 Pod lifecycle |
 | 인증서 만료 | TCP 는 되고 TLS 만 실패 | TLS alert · 인증서 날짜 |
 
-conntrack 포화와 MTU mismatch 는 [network-fundamentals-lab](../../02_os/book/network-fundamentals-lab/README.md) 의 09·12·13편이 이미 랩으로 재현합니다. 새로 만들기 전에 그쪽을 먼저 돌립니다.
+conntrack 포화와 MTU mismatch 는 [network-fundamentals-lab](../../02_os/project/network-fundamentals-lab/README.md) 의 09·12·13편이 이미 랩으로 재현합니다. 새로 만들기 전에 그쪽을 먼저 돌립니다.
 
 이 표는 **확인할 증거까지 적혀 있으므로 푸는 쪽으로 앉을 때는 열지 않습니다.** 재현할 것을 고르는 자리입니다.
 

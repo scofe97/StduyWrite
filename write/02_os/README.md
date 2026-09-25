@@ -12,8 +12,8 @@ related:
   - ./book/systems-performance/README.md
   - ./book/paw_packet-analysis-wireshark/README.md
   - ./book/cntd_computer-networking-top-down/README.md
-  - ./book/network-fundamentals-lab/README.md
-  - ./book/netpath-lab/README.md
+  - ./project/network-fundamentals-lab/README.md
+  - ./project/netpath-lab/README.md
   - ../08_cloud/book/container-security/README.md
   - ../08_cloud/book/networking-and-kubernetes/README.md
   - ../08_cloud/book/learning-coredns/README.md
@@ -45,13 +45,14 @@ updated: 2026-09-21
 | [systems-performance/](./book/systems-performance/README.md) | 성능 분석가 관점의 시스템 성능 — 방법론·CPU·메모리·디스크·네트워크·클라우드·고급 추적(perf·Ftrace·BPF) (책 기반) |
 | [paw_packet-analysis-wireshark/](./book/paw_packet-analysis-wireshark/README.md) | 선 위의 프레임을 떠서 프로토콜별로 읽는 법 — Wireshark 캡처·필터·TCP·TLS·응용 프로토콜·WLAN·보안 분석 (책 기반) |
 | [cntd_computer-networking-top-down/](./book/cntd_computer-networking-top-down/README.md) | 프로토콜을 위에서 아래로 훑는 규격 축 — 응용·트랜스포트·네트워크 계층의 원리와 라우팅·SDN·망 관리. `paw_` 가 캡처로 확인하는 것을 여기서 규격으로 배운다 (책 기반) |
-| [network-fundamentals-lab/](./book/network-fundamentals-lab/README.md) | 고장이 장전된 채로 뜨는 containerlab 토폴로지 18편 — 증상에서 계층을 좁히는 훈련. N&K 정독본이 맡는 메커니즘을 깨뜨려 확인하는 축이다 (랩 저장소 기반) |
-| [netpath-lab/](./book/netpath-lab/README.md) | 직접 만든 요청 경로 진단 도구로 실패 상황을 물리고 판정 코드를 역추적하는 실습 — refused·timeout·unreachable 이 errno 에서 Go 에러 값을 거쳐 이름표가 되는 경로와 Go 문법을 함께 본다 (랩 저장소 기반) |
+| [network-fundamentals-lab/](./project/network-fundamentals-lab/README.md) | 고장이 장전된 채로 뜨는 containerlab 토폴로지 18편 — 증상에서 계층을 좁히는 훈련. N&K 정독본이 맡는 메커니즘을 깨뜨려 확인하는 축이다 (랩 저장소 기반) |
+| [netpath-lab/](./project/netpath-lab/README.md) | 직접 만든 요청 경로 진단 도구로 실패 상황을 물리고 판정 코드를 역추적하는 실습 — refused·timeout·unreachable 이 errno 에서 Go 에러 값을 거쳐 이름표가 되는 경로와 Go 문법을 함께 본다 (랩 저장소 기반) |
 
 
 
 ## 카테고리 결정 원칙
 
+- 출간된 책을 읽고 정리한 정독본은 `book/` 에 둔다. 남의 랩 저장소를 따라 하거나 직접 만든 도구로 배운 기록은 책이 아니므로 `project/` 에 둔다
 - 커널 네트워크 자료구조(netns, veth, conntrack, netfilter) → `08_cloud/book/networking-and-kubernetes/` 정독본. `networking/` 은 질문을 그 편으로 보내는 라우팅표만 둔다 — 새 메커니즘 본문을 여기에 쓰지 않는다
 - 컨테이너 런타임 격리·자원 제한(namespace, cgroup, seccomp) → `kernel/`
 - 시스템 콜 인터페이스, /proc, VFS, 메모리 관리 → `kernel/` (K8s 운영자 관점) 또는 `linux-kernel-programming/` (커널 모듈 작성자 관점)
