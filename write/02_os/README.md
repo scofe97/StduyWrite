@@ -13,10 +13,11 @@ related:
   - ./book/cntd_computer-networking-top-down/README.md
   - ./project/network-fundamentals-lab/README.md
   - ./project/netpath-lab/README.md
+  - ./project/gonet-lab/README.md
   - ../08_cloud/book/container-security/README.md
   - ../08_cloud/book/networking-and-kubernetes/README.md
   - ../08_cloud/book/learning-coredns/README.md
-updated: 2026-09-21
+updated: 2026-09-26
 ---
 
 # 02_os
@@ -45,6 +46,7 @@ updated: 2026-09-21
 | [cntd_computer-networking-top-down/](./book/cntd_computer-networking-top-down/README.md) | 프로토콜을 위에서 아래로 훑는 규격 축 — 응용·트랜스포트·네트워크 계층의 원리와 라우팅·SDN·망 관리. `paw_` 가 캡처로 확인하는 것을 여기서 규격으로 배운다 (책 기반) |
 | [network-fundamentals-lab/](./project/network-fundamentals-lab/README.md) | 고장이 장전된 채로 뜨는 containerlab 토폴로지 18편 — 증상에서 계층을 좁히는 훈련. N&K 정독본이 맡는 메커니즘을 깨뜨려 확인하는 축이다 (랩 저장소 기반) |
 | [netpath-lab/](./project/netpath-lab/README.md) | 직접 만든 요청 경로 진단 도구로 실패 상황을 물리고 판정 코드를 역추적하는 실습 — refused·timeout·unreachable 이 errno 에서 Go 에러 값을 거쳐 이름표가 되는 경로와 Go 문법을 함께 본다 (랩 저장소 기반) |
+| [gonet-lab/](./project/gonet-lab/README.md) | Go 로 소켓·프록시·터널·오버레이를 직접 짜고 깨뜨려 커널 쪽에서 관측하는 실습 — `net.Listen` 한 줄에서 FD·epoll·eBPF 까지 내려가며 장애마다 볼 계층을 고르는 법을 익힌다 (랩 저장소 기반) |
 
 
 
