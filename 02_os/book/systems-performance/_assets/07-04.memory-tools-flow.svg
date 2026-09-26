@@ -1,0 +1,41 @@
+<svg viewBox="0 0 860 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>메모리 관측 도구 — 범위별 흐름</title>
+  <desc>메모리 관측 도구는 범위에 따라 세 단계로 깊어진다. 첫째 system-wide 포화 단계는 vmstat으로 free와 si/so 페이징을, PSI로 메모리 포화의 시간 변화를, swapon으로 swap 장치 사용을 본다. 둘째 상세 통계 단계는 sar로 페이징과 메모리 사용률 이력을, slabtop으로 커널 slab 캐시를, numastat으로 NUMA 노드별 hit/miss를, ps와 top과 pmap으로 프로세스별 RSS와 PSS를 본다. 셋째 할당 추적 단계는 perf로 page fault를 스택과 함께 표집해 페이지 폴트 플레임 그래프를 만들고, drsnoop으로 direct reclaim 지연을, wss로 working set size를, bpftrace로 malloc과 kmem 할당을 추적한다. 흐름은 포화를 빠르게 보고 누수 의심 시 할당 call path로 내려간다.</desc>
+
+  <rect x="0" y="0" width="860" height="440" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">메모리 관측 도구 — 범위별 흐름</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">포화를 빠르게 → 상세 통계 → 할당 call path</text>
+
+  <defs>
+    <marker id="md" markerWidth="10" markerHeight="10" refX="3" refY="7" orient="auto"><path d="M0,0 L6,0 L3,7 Z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+
+  <!-- 1단계 -->
+  <rect x="32" y="86" width="796" height="84" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="8"/>
+  <text x="48" y="110" fill="rgb(212,168,83)" font-size="14">① system-wide 포화</text>
+  <rect x="48" y="120" width="240" height="38" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/><text x="168" y="138" fill="#e8e4df" font-size="11" text-anchor="middle">vmstat</text><text x="168" y="152" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">free·si/so 페이징</text>
+  <rect x="300" y="120" width="240" height="38" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/><text x="420" y="138" fill="#e8e4df" font-size="11" text-anchor="middle">PSI</text><text x="420" y="152" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">포화 시간 변화</text>
+  <rect x="552" y="120" width="260" height="38" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/><text x="682" y="138" fill="#e8e4df" font-size="11" text-anchor="middle">swapon</text><text x="682" y="152" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">swap 장치 사용</text>
+
+  <line x1="430" y1="170" x2="430" y2="186" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#md)"/>
+
+  <!-- 2단계 -->
+  <rect x="32" y="190" width="796" height="84" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="48" y="214" fill="rgb(212,168,83)" font-size="14">② 상세 통계</text>
+  <rect x="48" y="224" width="180" height="38" fill="rgb(42,37,32)" rx="5"/><text x="138" y="242" fill="#e8e4df" font-size="11" text-anchor="middle">sar</text><text x="138" y="256" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">페이징·사용률 이력</text>
+  <rect x="240" y="224" width="180" height="38" fill="rgb(42,37,32)" rx="5"/><text x="330" y="242" fill="#e8e4df" font-size="11" text-anchor="middle">slabtop·numastat</text><text x="330" y="256" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">slab·NUMA hit/miss</text>
+  <rect x="432" y="224" width="180" height="38" fill="rgb(42,37,32)" rx="5"/><text x="522" y="242" fill="#e8e4df" font-size="11" text-anchor="middle">ps·top</text><text x="522" y="256" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">프로세스별 RSS·%MEM</text>
+  <rect x="624" y="224" width="188" height="38" fill="rgb(42,37,32)" rx="5"/><text x="718" y="242" fill="#e8e4df" font-size="11" text-anchor="middle">pmap</text><text x="718" y="256" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">매핑·PSS(현실적 값)</text>
+
+  <line x1="430" y1="274" x2="430" y2="290" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#md)"/>
+
+  <!-- 3단계 -->
+  <rect x="32" y="294" width="796" height="84" fill="#66bb6a" fill-opacity="0.10" stroke="#66bb6a" rx="8"/>
+  <text x="48" y="318" fill="#66bb6a" font-size="14">③ 할당 추적 (누수 의심 시)</text>
+  <rect x="48" y="328" width="240" height="38" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/><text x="168" y="346" fill="#e8e4df" font-size="11" text-anchor="middle">perf page-faults</text><text x="168" y="360" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">RSS 증가 원인·플레임 그래프</text>
+  <rect x="300" y="328" width="240" height="38" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/><text x="420" y="346" fill="#e8e4df" font-size="11" text-anchor="middle">drsnoop·wss</text><text x="420" y="360" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">reclaim 지연·WSS</text>
+  <rect x="552" y="328" width="260" height="38" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="5"/><text x="682" y="346" fill="#e8e4df" font-size="11" text-anchor="middle">bpftrace</text><text x="682" y="360" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">malloc·kmem(오버헤드 주의)</text>
+
+  <text x="32" y="408" fill="rgb(138,133,128)" font-size="11">페이지 폴트 플레임 그래프는 메모리용 → 초록 배경으로 CPU(노랑)와 구분 · malloc 추적은 드물게(2배+ 둔화)</text>
+</svg>

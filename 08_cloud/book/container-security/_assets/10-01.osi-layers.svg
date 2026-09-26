@@ -1,0 +1,80 @@
+<svg viewBox="0 0 700 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>OSI 계층별 컨테이너 네트워크 보안 수단의 작동 지점</title>
+  <desc>1984년 발표된 OSI 모델은 지금도 자주 참조되지만 일곱 계층이 IP 기반 네트워크에 모두 대응하지는 않습니다. 7계층은 애플리케이션 계층으로 웹 요청이나 REST API 요청이 여기서 일어나고 URL 의 도메인 이름이 DNS 를 통해 IP 주소로 매핑됩니다. 4계층은 전송 계층으로 TCP 나 UDP 패킷이 오가며 포트 번호가 적용되는 계층입니다. 3계층은 IP 패킷이 이동하고 라우터가 동작하는 계층으로 컨테이너가 네트워크에 참여하면 이 계층의 주소를 하나 받습니다. 2계층에서는 물리적 또는 가상 인터페이스에 연결된 종단으로 데이터 패킷이 전달되며 MAC 주소로 지정됩니다. 1계층은 물리 계층이지만 컨테이너 인터페이스는 대개 가상입니다. 네트워크 정책은 3계층과 4계층에서 동작하고 서비스 메시는 5계층에서 7계층 사이에서 동작합니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .code { fill: #0d0d0d; font-size: 9.5px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .chip { fill: #f5edda; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .num { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .span-mesh { stroke: #b8b3ad; stroke-width: 2; fill: none; }
+    .span-policy { stroke: rgb(212,168,83); stroke-width: 2; fill: none; }
+    .mesh-label { fill: #b8b3ad; font-size: 10px; font-weight: 700; }
+    .policy-label { fill: rgb(212,168,83); font-size: 10px; font-weight: 700; }
+  </style>
+
+  <rect width="700" height="400" fill="#0d0d0d"/>
+
+  <text class="head" x="40" y="30">어느 계층에서 무엇이 막는가</text>
+
+  <!-- 7 -->
+  <text class="num" x="40" y="68">L7</text>
+  <rect class="box" x="72" y="52" width="380" height="42" rx="4"/>
+  <text class="box-title" x="88" y="70">애플리케이션</text>
+  <text class="box-detail" x="200" y="70">웹 요청 · REST API</text>
+  <text class="box-detail" x="88" y="86">URL 이 DNS 로 IP 가 된다</text>
+
+  <!-- 5-6 생략 표시 -->
+  <text class="num" x="40" y="118">L5·6</text>
+  <rect class="box" x="72" y="102" width="380" height="30" rx="4"/>
+  <text class="box-detail" x="88" y="121">IP 기반 대응이 뚜렷하지 않다</text>
+
+  <!-- 4 -->
+  <text class="num" x="40" y="158">L4</text>
+  <rect class="box" x="72" y="140" width="380" height="42" rx="4"/>
+  <text class="box-title" x="88" y="158">전송</text>
+  <text class="box-detail" x="200" y="158">TCP · UDP</text>
+  <text class="box-detail" x="88" y="174">포트 번호가 적용되는 계층</text>
+
+  <!-- 3 -->
+  <text class="num" x="40" y="206">L3</text>
+  <rect class="box" x="72" y="190" width="380" height="42" rx="4"/>
+  <text class="box-title" x="88" y="208">네트워크</text>
+  <text class="box-detail" x="200" y="208">IP 패킷 · 라우터</text>
+  <text class="box-detail" x="88" y="224">컨테이너가 IP 주소를 받는 곳</text>
+
+  <!-- 2 -->
+  <text class="num" x="40" y="254">L2</text>
+  <rect class="box" x="72" y="238" width="380" height="42" rx="4"/>
+  <text class="box-title" x="88" y="256">데이터 링크</text>
+  <text class="box-detail" x="200" y="256">이더넷 · MAC 주소</text>
+  <text class="box-detail" x="88" y="272">브리지가 여기서 전달합니다</text>
+
+  <!-- 1 -->
+  <text class="num" x="40" y="302">L1</text>
+  <rect class="box" x="72" y="286" width="380" height="42" rx="4"/>
+  <text class="box-title" x="88" y="304">물리</text>
+  <text class="box-detail" x="200" y="304">인터페이스</text>
+  <text class="box-detail" x="88" y="320">컨테이너는 대개 가상입니다</text>
+
+  <!-- 범위 표시 -->
+  <path class="span-mesh" d="M470,58 L470,126"/>
+  <text class="mesh-label" x="482" y="82">서비스 메시</text>
+  <text class="mesh-label" x="482" y="100">L5 ~ L7</text>
+  <text class="mesh-label" x="482" y="118">mTLS · 정책</text>
+
+  <path class="span-policy" d="M470,146 L470,226"/>
+  <text class="policy-label" x="482" y="172">네트워크 정책</text>
+  <text class="policy-label" x="482" y="190">L3 · L4</text>
+  <text class="policy-label" x="482" y="208">netfilter 규칙</text>
+
+  <text class="hint" x="40" y="360">둘은 겹치지 않아 관심사가 분리됩니다</text>
+  <text class="hint" x="40" y="380">함께 쓰는 것이 심층 방어입니다</text>
+</svg>

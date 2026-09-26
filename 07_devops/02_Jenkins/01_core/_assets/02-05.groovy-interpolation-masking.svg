@@ -1,0 +1,58 @@
+<svg viewBox="0 0 760 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>환경변수 전달 vs Groovy 보간 — 마스킹이 갈리는 시점</title>
+  <desc>작은따옴표 환경변수 sh '...$TOKEN'은 토큰이 셸 실행 시점에 풀려 마스킹 경로에 남는다. 큰따옴표 Groovy 보간 sh "...${TOKEN}"은 sh 실행 전에 Groovy가 토큰을 평문 문자열로 박아넣어, 셸에 넘어갈 때 이미 평문이라 마스킹이 가릴 변수가 사라진다.</desc>
+
+  <defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="760" height="420" fill="#0d0d0d"/>
+
+  <!-- ===== 왼쪽: 환경변수 (안전) ===== -->
+  <rect x="24" y="24" width="346" height="372" rx="6" fill="rgba(102,187,106,0.05)" stroke="#66bb6a"/>
+  <text x="44" y="50" fill="#66bb6a" font-size="13">안전 — 환경변수 (작은따옴표)</text>
+  <text x="44" y="72" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11.5">sh 'curl -H "$TOKEN" ...'</text>
+
+  <rect x="44" y="92" width="306" height="48" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="60" y="113" fill="rgb(138,133,128)" font-size="11">① Groovy: 문자열 그대로 셸에 넘김</text>
+  <text x="60" y="131" fill="rgb(138,133,128)" font-size="11"><tspan font-family="'JetBrains Mono',monospace">$TOKEN</tspan> 은 안 풀린 채 통과</text>
+  <line x1="197" y1="140" x2="197" y2="162" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar)"/>
+
+  <rect x="44" y="164" width="306" height="48" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="60" y="185" fill="rgb(138,133,128)" font-size="11">② 셸: 실행 시점에 환경에서 풂</text>
+  <text x="60" y="203" fill="rgb(138,133,128)" font-size="11">토큰이 셸 안에서만 머묾</text>
+  <line x1="197" y1="212" x2="197" y2="234" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar)"/>
+
+  <rect x="44" y="236" width="306" height="60" rx="4" fill="rgba(102,187,106,0.10)" stroke="#66bb6a"/>
+  <text x="60" y="259" fill="#66bb6a" font-size="12">③ 마스킹 보존 ●</text>
+  <text x="60" y="280" fill="rgb(138,133,128)" font-size="11">마스킹이 환경변수 경로를 추적해 가림</text>
+
+  <text x="44" y="328" fill="rgb(138,133,128)" font-size="11">로그 출력:</text>
+  <rect x="44" y="338" width="306" height="40" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="60" y="363" fill="#66bb6a" font-family="'JetBrains Mono',monospace" font-size="11.5">curl -H "****" ...</text>
+
+  <!-- ===== 오른쪽: Groovy 보간 (우회) ===== -->
+  <rect x="390" y="24" width="346" height="372" rx="6" fill="rgba(244,67,54,0.06)" stroke="#f44336"/>
+  <text x="410" y="50" fill="#f44336" font-size="13">우회 — Groovy 보간 (큰따옴표)</text>
+  <text x="410" y="72" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11.5">sh "curl -H \"${TOKEN}\" ..."</text>
+
+  <rect x="410" y="92" width="306" height="48" rx="4" fill="rgba(244,67,54,0.10)" stroke="#f44336"/>
+  <text x="426" y="113" fill="#f44336" font-size="11">① Groovy: 실행 전 문자열 완성</text>
+  <text x="426" y="131" fill="rgb(138,133,128)" font-size="11"><tspan font-family="'JetBrains Mono',monospace">${TOKEN}</tspan> 을 평문으로 박제</text>
+  <line x1="563" y1="140" x2="563" y2="162" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar)"/>
+
+  <rect x="410" y="164" width="306" height="48" rx="4" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="426" y="185" fill="rgb(138,133,128)" font-size="11">② 셸: 이미 평문인 문자열 받음</text>
+  <text x="426" y="203" fill="rgb(138,133,128)" font-size="11">풀 변수가 없음 (이미 값임)</text>
+  <line x1="563" y1="212" x2="563" y2="234" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar)"/>
+
+  <rect x="410" y="236" width="306" height="60" rx="4" fill="rgba(244,67,54,0.10)" stroke="#f44336"/>
+  <text x="426" y="259" fill="#f44336" font-size="12">③ 마스킹 우회 ✕</text>
+  <text x="426" y="280" fill="rgb(138,133,128)" font-size="11">가릴 변수가 사라져 평문 그대로 노출</text>
+
+  <text x="410" y="328" fill="rgb(138,133,128)" font-size="11">로그 출력:</text>
+  <rect x="410" y="338" width="306" height="40" rx="4" fill="rgb(26,26,26)" stroke="#f44336"/>
+  <text x="426" y="363" fill="#f44336" font-family="'JetBrains Mono',monospace" font-size="11.5">curl -H "ghp_실제토큰값" ...</text>
+</svg>

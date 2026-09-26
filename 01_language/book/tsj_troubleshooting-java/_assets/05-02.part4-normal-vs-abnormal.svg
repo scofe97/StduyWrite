@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="380" viewBox="0 0 900 380" font-family="-apple-system, 'Helvetica Neue', 'Noto Sans KR', sans-serif">
+  <rect x="0" y="0" width="900" height="380" fill="#0d0d0d"/>
+
+  <text x="30" y="40" font-size="19" font-weight="700" style="fill:#e8e4df">④ 정상 앱과 비교 — synchronized로 고친 da-ch5-ex2</text>
+  <text x="30" y="64" font-size="13" style="fill:#8a8580">list를 모니터로 한 synchronized 블록이 접근을 직렬화 → race가 사라진다</text>
+
+  <!-- 비정상 컬럼 -->
+  <rect x="30" y="90" width="400" height="218" rx="10" fill="#0d0d0d" stroke="#a04038" stroke-width="2"/>
+  <text x="50" y="118" font-size="15" font-weight="700" style="fill:#f47f72">비정상 — da-ch5-ex1 (동기화 없음)</text>
+
+  <rect x="50" y="132" width="360" height="34" rx="6" fill="#f2d4d4" stroke="#a04038"/>
+  <text x="66" y="154" font-size="12.5" style="fill:#1a1a1a">CPU 살아만 있음 · GC 0% · 스레드 일부 사망</text>
+
+  <rect x="50" y="174" width="360" height="34" rx="6" fill="#f2d4d4" stroke="#a04038"/>
+  <text x="66" y="196" font-size="12.5" font-weight="700" style="fill:#5a1410">Heap: 평평하거나 완만한 우상향 (GC 안 돎)</text>
+
+  <text x="66" y="234" font-size="12.5" style="fill:#e8e4df">콘솔 로그: 곧 멈춤</text>
+  <text x="66" y="258" font-size="12.5" style="fill:#e8e4df">남은 스레드: RUNNABLE로 헛돎 (좀비)</text>
+  <text x="66" y="288" font-size="12" style="fill:#8a8580">일은 0인데 CPU만 태운다</text>
+
+  <!-- 정상 컬럼 -->
+  <rect x="470" y="90" width="400" height="218" rx="10" fill="#0d0d0d" stroke="#3f7a43" stroke-width="2"/>
+  <text x="490" y="118" font-size="15" font-weight="700" style="fill:#66bb6a">정상 — da-ch5-ex2 (synchronized)</text>
+
+  <rect x="490" y="132" width="360" height="34" rx="6" fill="#cdeccf" stroke="#3f7a43"/>
+  <text x="506" y="154" font-size="12.5" style="fill:#1a1a1a">CPU 더 낮음 · 메모리 일부 사용 · 4개 다 생존</text>
+
+  <rect x="490" y="174" width="360" height="34" rx="6" fill="#cdeccf" stroke="#3f7a43"/>
+  <text x="506" y="196" font-size="12.5" font-weight="700" style="fill:#14401a">Heap: 톱니(valleys) — 찼다 GC로 뚝 떨어짐</text>
+
+  <text x="506" y="234" font-size="12.5" style="fill:#e8e4df">콘솔 로그: 계속 출력</text>
+  <text x="506" y="258" font-size="12.5" style="fill:#e8e4df">스레드: 모니터가 한 번에 하나만 통과</text>
+  <text x="506" y="288" font-size="12" style="fill:#8a8580">대기 중인 스레드는 CPU를 안 쓴다</text>
+
+  <!-- 핵심 한 줄 -->
+  <rect x="30" y="320" width="840" height="48" rx="10" fill="#f5edda" stroke="#9a7320" stroke-width="1.5"/>
+  <text x="450" y="343" text-anchor="middle" font-size="13.5" font-weight="700" style="fill:#5a3d0a">함정: 두 앱 모두 GC activity가 0.0%로 같게 보일 수 있다</text>
+  <text x="450" y="361" text-anchor="middle" font-size="12.5" style="fill:#1a1a1a">숫자가 아니라 Heap 그래프 *모양*(평평 vs 톱니)이 정상·비정상을 가른다</text>
+</svg>

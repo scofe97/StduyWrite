@@ -1,0 +1,87 @@
+<svg viewBox="0 0 900 640" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Elastic Scale — 부하에 맞춰 세 차원으로 자동 확장</title>
+  <desc>Kubernetes Patterns 29장. Elastic Scale은 여러 차원에서 애플리케이션을 확장하는 패턴입니다 — 수평 확장(Pod replica 수 조정), 수직 확장(Pod 리소스 요구량 조정), 클러스터 확장(노드 수 조정). 수동으로도 가능하지만 이 장은 부하 기반 자동 확장을 다룹니다. 수평 자동 확장 세 방식 — HPA(내장, CPU/메모리 같은 리소스 사용률, scale-to-zero 불가, pull), Knative(HTTP 동시 요청 기반, scale-to-zero 가능, push, KPA 알고리즘, Activator/Queue proxy/Autoscaler 3컴포넌트), KEDA(외부 메트릭 기반 예 Kafka 큐 백로그, scale-to-zero 가능, pull, ScaledObject CRD, 0↔1은 KEDA operator가 1↔n은 HPA가). Knative와 KEDA는 대안이 아니라 상호보완이라 함께 씁니다. 수직 확장 VPA — 실제 사용량으로 requests/limits를 자동 조정, updateMode Off(추천만)·Initial(신규 Pod에만)·Recreate/Auto(Pod 축출·재시작, 파괴적), recommender/admission/updater 3컴포넌트. Pod가 불변이라 수직 확장은 Pod 삭제·재생성이 필요해 방해가 큽니다. VPA와 HPA는 서로를 몰라 같은 메트릭 쓰면 이중 확장 위험. 클러스터 자동 확장 CA — 클라우드 provider와 연동해 노드를 추가(unschedulable Pod 발생 시)·제거(50% 미만 사용 등 조건). 확장 레벨 — 애플리케이션 튜닝(가장 granular, JVM 스레드풀·힙 right-sizing) → VPA(수직) → HPA/Knative/KEDA(수평) → CA(클러스터). 부하 아래서 더 강해지는 antifragile.</desc>
+
+  <rect x="0" y="0" width="900" height="640" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="16">Elastic Scale — 부하에 맞춰 세 차원으로 자동 확장</text>
+  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">부하 아래서 무너지지 않고 <tspan fill="#e8e4df">더 커지고 강해지는</tspan> antifragile. 수평·수직·클러스터 세 축을 조합한다.</text>
+
+  <!-- three dimensions -->
+  <rect x="24" y="72" width="276" height="46" fill="#dceaf7"/>
+  <text x="36" y="91" fill="#10243a" font-size="10" font-weight="700">수평 (Horizontal)</text>
+  <text x="36" y="109" fill="#10243a" font-size="8.5">Pod replica 수 조정 — 덜 파괴적, 선호</text>
+  <rect x="312" y="72" width="276" height="46" fill="#f5edda"/>
+  <text x="324" y="91" fill="#0d0d0d" font-size="10" font-weight="700">수직 (Vertical)</text>
+  <text x="324" y="109" fill="#0d0d0d" font-size="8.5">Pod 리소스(requests/limits) 조정</text>
+  <rect x="600" y="72" width="276" height="46" fill="#cdeccf"/>
+  <text x="612" y="91" fill="#14521d" font-size="10" font-weight="700">클러스터 (Cluster)</text>
+  <text x="612" y="109" fill="#14521d" font-size="8.5">노드 수 조정 — 용량 자체를 늘림</text>
+
+  <!-- horizontal autoscalers comparison -->
+  <text x="24" y="142" fill="#e8e4df" font-size="12">수평 자동 확장 세 방식 — Knative·KEDA는 대안이 아니라 상호보완</text>
+  <rect x="24" y="152" width="276" height="118" fill="#dceaf7"/>
+  <text x="36" y="172" fill="#10243a" font-size="10" font-weight="700">HPA (내장)</text>
+  <text x="36" y="190" fill="#10243a" font-size="8.5">메트릭: CPU/메모리 리소스 사용률.</text>
+  <text x="36" y="204" fill="#10243a" font-size="8.5">requests에 CPU limit 선언 + metrics server 필요.</text>
+  <text x="36" y="218" fill="#10243a" font-size="8.5">공식: 원하는replicas = 현재 × 현재값/목표값.</text>
+  <text x="36" y="232" fill="#7a1f1f" font-size="8.5">scale-to-zero 불가 · pull.</text>
+  <text x="36" y="248" fill="#10243a" font-size="8">thrashing 방지(스무딩)·behavior로 속도 튜닝.</text>
+  <text x="36" y="262" fill="#10243a" font-size="8">Deployment에 걸어야(ReplicaSet은 롤아웃 시 유실).</text>
+
+  <rect x="312" y="152" width="276" height="118" fill="#cdeccf"/>
+  <text x="324" y="172" fill="#14521d" font-size="10" font-weight="700">Knative</text>
+  <text x="324" y="190" fill="#14521d" font-size="8.5">메트릭: HTTP 동시 요청(concurrent).</text>
+  <text x="324" y="204" fill="#14521d" font-size="8.5">CPU보다 지연시간과 상관 높음.</text>
+  <text x="324" y="218" fill="#14521d" font-size="8.5" font-weight="700">scale-to-zero 가능 · push · KPA.</text>
+  <text x="324" y="234" fill="#14521d" font-size="8">Activator(0일 때 요청 버퍼) ·</text>
+  <text x="324" y="247" fill="#14521d" font-size="8">Queue proxy(ambassador 사이드카 18장) ·</text>
+  <text x="324" y="260" fill="#14521d" font-size="8">Autoscaler(replica 결정). stateless HTTP.</text>
+
+  <rect x="600" y="152" width="276" height="118" fill="#f5edda"/>
+  <text x="612" y="172" fill="#0d0d0d" font-size="10" font-weight="700">KEDA</text>
+  <text x="612" y="190" fill="#0d0d0d" font-size="8.5">메트릭: 외부 시스템(Kafka 큐 백로그 등).</text>
+  <text x="612" y="204" fill="#0d0d0d" font-size="8.5" font-weight="700">scale-to-zero 가능 · pull.</text>
+  <text x="612" y="220" fill="#0d0d0d" font-size="8.5">ScaledObject CRD로 설정.</text>
+  <text x="612" y="234" fill="#0d0d0d" font-size="8">0↔1: KEDA operator가 직접 ·</text>
+  <text x="612" y="247" fill="#0d0d0d" font-size="8">1↔n: HPA가 외부 메트릭으로 인계.</text>
+  <text x="612" y="260" fill="#0d0d0d" font-size="8">메시지 구동 마이크로서비스. ScaledJob도.</text>
+
+  <!-- VPA -->
+  <text x="24" y="294" fill="#e8e4df" font-size="12">수직 자동 확장 (VPA) — 실제 사용량으로 requests/limits 조정</text>
+  <rect x="24" y="304" width="418" height="96" fill="#f5edda"/>
+  <text x="36" y="324" fill="#0d0d0d" font-size="9.5" font-weight="700">updateMode 3단계 (덜 파괴적 → 파괴적)</text>
+  <text x="36" y="342" fill="#0d0d0d" font-size="8.5"><tspan font-weight="700">Off</tspan> — 추천만 status에 기록(dry run, 무중단).</text>
+  <text x="36" y="356" fill="#0d0d0d" font-size="8.5"><tspan font-weight="700">Initial</tspan> — 신규 생성 Pod에만 적용(admission webhook).</text>
+  <text x="36" y="370" fill="#7a1f1f" font-size="8.5"><tspan font-weight="700">Recreate/Auto</tspan> — Pod 축출·재시작(파괴적).</text>
+  <text x="36" y="388" fill="#0d0d0d" font-size="8">recommender(Borg 영감, 8일 히스토그램)·admission·updater 3컴포넌트.</text>
+
+  <rect x="458" y="304" width="418" height="96" fill="#f2d4d4"/>
+  <text x="470" y="324" fill="#7a1f1f" font-size="9.5" font-weight="700">불변 Pod의 대가 + HPA 충돌</text>
+  <text x="470" y="342" fill="#7a1f1f" font-size="8.5">Pod spec이 불변 → 수직 확장은 Pod 삭제·재생성 필요.</text>
+  <text x="470" y="356" fill="#7a1f1f" font-size="8.5">재스케줄로 다른 노드 이동·미스케줄 위험.</text>
+  <text x="470" y="373" fill="#7a1f1f" font-size="8.5">VPA와 HPA는 서로를 모름 — 같은 메트릭(CPU/메모리) 쓰면</text>
+  <text x="470" y="386" fill="#7a1f1f" font-size="8.5">이중 확장(double scaling). VPA는 아직 실험적.</text>
+
+  <!-- CA -->
+  <text x="24" y="424" fill="#e8e4df" font-size="12">클러스터 자동 확장 (CA) — 클라우드 provider와 연동해 노드 조정</text>
+  <rect x="24" y="434" width="418" height="70" fill="#cdeccf"/>
+  <text x="36" y="454" fill="#14521d" font-size="9.5" font-weight="700">노드 추가 (scale-up)</text>
+  <text x="36" y="472" fill="#14521d" font-size="8.5">용량 부족으로 Pod가 unschedulable로 대기하면,</text>
+  <text x="36" y="486" fill="#14521d" font-size="8.5">노드 추가가 도움 되는지 판단해 node group에서 provision.</text>
+  <text x="36" y="499" fill="#14521d" font-size="8">expander 전략(최소비용·최소낭비 등)으로 선택.</text>
+
+  <rect x="458" y="434" width="418" height="70" fill="#dceaf7"/>
+  <text x="470" y="454" fill="#10243a" font-size="9.5" font-weight="700">노드 제거 (scale-down)</text>
+  <text x="470" y="472" fill="#10243a" font-size="8.5">50% 미만 사용 + 모든 이동 가능 Pod가 다른 노드에 배치 가능</text>
+  <text x="470" y="486" fill="#10243a" font-size="8.5">+ 이동 불가 Pod 없음(PDB·local storage 등) → 10분 후 삭제.</text>
+  <text x="470" y="499" fill="#10243a" font-size="8">Cluster API가 provider별 잠금을 표준화하려는 시도.</text>
+
+  <!-- scaling levels -->
+  <text x="24" y="528" fill="#e8e4df" font-size="12">확장 레벨 — granular → coarse (아래로 갈수록 넓은 범위)</text>
+  <rect x="24" y="538" width="852" height="94" fill="#f5edda"/>
+  <text x="36" y="558" fill="#0d0d0d" font-size="9">① <tspan font-weight="700">애플리케이션 튜닝</tspan> — 컨테이너 자원을 잘 쓰게. JVM은 스레드풀·힙/비힙/스택을 <tspan font-weight="700">할당 자원 기준</tspan>으로 right-sizing(노드 전체 기준 X).</text>
+  <text x="36" y="577" fill="#0d0d0d" font-size="9">② <tspan font-weight="700">VPA(수직)</tspan> — 앱이 자원을 잘 쓴다는 전제 위에 올바른 requests/limits를 실사용으로 자동 발견.</text>
+  <text x="36" y="596" fill="#0d0d0d" font-size="9">③ <tspan font-weight="700">HPA/Knative/KEDA(수평)</tspan> — Pod spec은 안 건드리고 개수를 바꿈. 회귀·중단 위험 낮고 자동화 쉬움.</text>
+  <text x="36" y="615" fill="#0d0d0d" font-size="9">④ <tspan font-weight="700">CA(클러스터)</tspan> — 위 셋이 클러스터 용량 안에서만 동작하므로, 용량 자체가 부족하면 CA가 노드를 늘려 받쳐준다.</text>
+  <text x="36" y="628" fill="#0d0d0d" font-size="7.5">①은 자원 소비 방식을 바꾸므로 다른 모든 확장의 효과를 좌우 — 최소 한 번은 반드시 수행.</text>
+</svg>

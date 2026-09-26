@@ -1,0 +1,68 @@
+<svg viewBox="0 0 920 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>안전 영역 생명주기 — 대기 스레드가 GC에 협력하는 흐름</title>
+  <desc>sleep/wait/IO로 멈춘 스레드는 안전 지점 폴링을 못 한다. 안전 영역에 진입하며 플래그를 켜면 GC는 그 스레드를 이미 멈춘 것으로 간주해 진행한다. 스레드가 깨어날 때 GC가 진행 중이면 끝날 때까지 대기한 뒤 안전 영역을 빠져나간다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 16px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .step   { font-size: 12px; font-weight: 700; }
+      .note   { font-size: 10px; fill: rgb(160,155,150); }
+      .lbl    { font-size: 10.5px; fill: rgb(180,175,170); }
+      .badge  { font-size: 10px; font-weight: 800; }
+    </style>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="6" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L10,5 L0,10 z" fill="#4ab080"/></marker>
+    <marker id="aw" markerWidth="10" markerHeight="10" refX="6" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L10,5 L0,10 z" fill="#d4a853"/></marker>
+  </defs>
+  <rect x="0" y="0" width="920" height="400" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">안전 영역(Safe Region) 생명주기 — 멈춘 스레드도 GC에 협력한다</text>
+  <text x="24" y="52" class="sub">sleep / wait / I/O로 멈춘 스레드는 명령을 안 도니 안전 지점 폴링을 못 한다 → "여긴 언제 멈춰도 안전"이라 미리 선언</text>
+
+  <!-- 안전 영역 구간 음영 -->
+  <rect x="232" y="80" width="456" height="220" rx="10" fill="#10210f" stroke="#4ab080" stroke-width="1.4" stroke-dasharray="6,4"/>
+  <text x="460" y="104" class="badge" text-anchor="middle" fill="#81c784">◀ 안전 영역 안 — GC가 "이미 멈춤"으로 간주 ▶</text>
+
+  <!-- ① 진입 전: 실행 -->
+  <rect x="24" y="140" width="180" height="70" rx="8" fill="#1e3a4a" stroke="#4a8ab0" stroke-width="1.4"/>
+  <text x="114" y="168" class="step" text-anchor="middle" fill="#dceaf7">자바 코드 실행 중</text>
+  <text x="114" y="188" class="note" text-anchor="middle">안전 지점 폴링으로</text>
+  <text x="114" y="202" class="note" text-anchor="middle">GC에 협력 가능</text>
+
+  <!-- ② 진입 -->
+  <rect x="256" y="120" width="190" height="70" rx="8" fill="#1e2a1e" stroke="#4ab080" stroke-width="1.4"/>
+  <text x="351" y="146" class="step" text-anchor="middle" fill="#cdeccf">① 안전 영역 진입</text>
+  <text x="351" y="166" class="note" text-anchor="middle">sleep() / wait() / I/O 블로킹</text>
+  <text x="351" y="180" class="note" text-anchor="middle">진입 시 플래그 ON</text>
+
+  <!-- ③ 안전 영역 안 = 멈춘 것으로 간주 -->
+  <rect x="476" y="120" width="190" height="70" rx="8" fill="#15300f" stroke="#66bb6a" stroke-width="1.6"/>
+  <text x="571" y="146" class="step" text-anchor="middle" fill="#81c784">② GC는 "멈춤"으로 간주</text>
+  <text x="571" y="166" class="note" text-anchor="middle">스레드가 명령 안 도는 동안</text>
+  <text x="571" y="180" class="note" text-anchor="middle">GC는 신경 안 쓰고 자기 일 수행</text>
+
+  <!-- ④ 깨어나는 시점: GC 확인 -->
+  <rect x="296" y="218" width="310" height="64" rx="8" fill="#2a1f0a" stroke="#d4a853" stroke-width="1.6"/>
+  <text x="451" y="244" class="step" text-anchor="middle" fill="#f5d76e">③ 깨어나는 시점 — "GC 끝났나?" 확인</text>
+  <text x="451" y="264" class="note" text-anchor="middle">진행 중이면 끝날 때까지 대기 · 끝났으면 통과</text>
+
+  <!-- ⑤ 탈출 후 재개 -->
+  <rect x="712" y="140" width="184" height="70" rx="8" fill="#1e3a4a" stroke="#4a8ab0" stroke-width="1.4"/>
+  <text x="804" y="168" class="step" text-anchor="middle" fill="#dceaf7">④ 안전 영역 탈출 · 재개</text>
+  <text x="804" y="188" class="note" text-anchor="middle">플래그 OFF</text>
+  <text x="804" y="202" class="note" text-anchor="middle">다시 자바 코드 실행</text>
+
+  <!-- 화살표들 -->
+  <line x1="204" y1="160" x2="254" y2="155" stroke="#4ab080" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="228" y="142" class="note" text-anchor="middle">진입</text>
+  <line x1="446" y1="155" x2="474" y2="155" stroke="#4ab080" stroke-width="2" marker-end="url(#ar)"/>
+  <!-- ②/③ 박스에서 깨어남 박스로 (아래로) -->
+  <line x1="571" y1="190" x2="500" y2="216" stroke="#d4a853" stroke-width="2" marker-end="url(#aw)"/>
+  <text x="560" y="210" class="note">깨어남</text>
+  <!-- 깨어남 → 탈출 -->
+  <line x1="606" y1="248" x2="680" y2="200" stroke="#4ab080" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="660" y="238" class="note" text-anchor="middle">GC 끝난 뒤</text>
+
+  <!-- 하단 핵심 -->
+  <rect x="24" y="320" width="872" height="62" rx="8" fill="#141414" stroke="#3a3a3a"/>
+  <text x="42" y="344" class="lbl"><tspan font-weight="800" fill="#81c784">왜 필요한가</tspan> — 안전 지점은 *명령을 도는* 스레드만 멈출 수 있다. sleep/wait/IO 스레드는 폴링을 못 하니,</text>
+  <text x="42" y="364" class="lbl">"안전 영역에 있다"고 미리 선언해 GC가 *기다리지 않고* 진행하게 한다. 깨어날 때만 GC와 동기화하면 충분하다 → STW 지연을 줄인다.</text>
+</svg>

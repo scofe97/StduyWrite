@@ -1,0 +1,78 @@
+<svg viewBox="0 0 880 450" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>그룹핑은 2층 — 메일 통수를 정하는 것은 줄이 아니라 상자입니다</title>
+  <desc>알림 그룹핑의 구조가 두 층이라는 것을 보여 준다. 위쪽은 group_by 를 alertname 하나로 두었을 때다. 알림 50건이 모두 같은 alertname 을 가지므로 상자는 하나로 묶이고, 그 상자 안에 줄 50개가 들어간다. 화면에는 여전히 50줄이 보이지만 사람이 받는 메일은 한 통이고 제목에 FIRING 콜론 50 이 붙는다. 아래쪽은 group_by 에 instance 를 더했을 때다. instance 가 서버마다 다르므로 상자가 50개로 갈리고 각 상자에 줄이 하나씩 들어가며, 메일은 50통이 된다. 같은 50건인데 group_by 한 줄로 1통과 50통이 갈린다. 오른쪽에는 판단 기준을 두었다. 클러스터 전체 장애로 다룰 것이면 alertname 만 쓰고, 서버별로 따로 대응해야 하면 instance 를 더한다. 아래 못박기 줄은 화면의 줄 수를 세면 헷갈린다는 것과, 세어야 할 것은 상자 수라는 것을 적는다.</desc>
+  <defs>
+    <style>
+      .h1   { font-size: 15px; font-weight: 800; fill: #e8e4df; }
+      .sub  { font-size: 11px; fill: rgb(138,133,128); }
+      .lyr  { font-size: 10.5px; font-weight: 800; fill: rgb(138,133,128); }
+      .box  { font-size: 11.5px; fill: #e8e4df; }
+      .note { font-size: 10px; fill: rgb(138,133,128); }
+      .amb  { font-size: 11px; font-weight: 700; fill: rgb(212,168,83); }
+      .mono { font-size: 10.5px; font-weight: 700; fill: #0d0d0d; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .monoa{ font-size: 11px; font-weight: 700; fill: rgb(212,168,83); font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .cnt  { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+    </style>
+    <marker id="gbA" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="gbP" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(240,150,190)"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="880" height="450" fill="#0d0d0d"/>
+
+  <text x="30" y="34" class="h1">묶은 뒤에도 50줄은 그대로 보입니다 — 세어야 할 것은 상자입니다</text>
+  <text x="30" y="54" class="sub">알림 50건은 같은데, group_by 한 줄이 메일을 1통으로도 50통으로도 만듭니다.</text>
+
+  <line x1="30" y1="68" x2="850" y2="68" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- ══ 위: alertname 만 ══ -->
+  <text x="30" y="94" class="lyr">① group_by 에 alertname 만 적었을 때</text>
+  <rect x="30" y="102" width="150" height="22" fill="#f5edda"/>
+  <text x="40" y="118" class="mono">group_by: [alertname]</text>
+
+  <rect x="30" y="134" width="440" height="92" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="46" y="154" class="amb">상자 1개 — alertname=NodeDown</text>
+  <text x="46" y="176" class="note">· node-01  · node-02  · node-03  …  · node-50</text>
+  <text x="46" y="196" class="box">안에 든 줄 50개 — 화면에는 그대로 보입니다</text>
+  <text x="46" y="216" class="note">묶였다고 줄이 사라지지 않습니다</text>
+
+  <line x1="476" y1="180" x2="516" y2="180" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#gbA)"/>
+
+  <rect x="522" y="152" width="150" height="56" fill="rgb(212,168,83)"/>
+  <text x="597" y="176" class="cnt" text-anchor="middle">메일 1통</text>
+  <text x="597" y="196" class="mono" text-anchor="middle">[FIRING:50]</text>
+
+  <text x="688" y="176" class="box">상자를 세면 1</text>
+  <text x="688" y="196" class="note">줄을 세면 50</text>
+
+  <!-- ══ 아래: alertname + instance ══ -->
+  <text x="30" y="264" class="lyr">② group_by 에 instance 를 더했을 때</text>
+  <rect x="30" y="272" width="212" height="22" fill="#f5edda"/>
+  <text x="40" y="288" class="mono">group_by: [alertname, instance]</text>
+
+  <rect x="30" y="304" width="140" height="46" fill="#0d0d0d" stroke="rgb(240,150,190)"/>
+  <text x="44" y="322" class="box" style="font-size:10.5px">상자 — node-01</text>
+  <text x="44" y="340" class="note">· 줄 1개</text>
+
+  <rect x="180" y="304" width="140" height="46" fill="#0d0d0d" stroke="rgb(240,150,190)"/>
+  <text x="194" y="322" class="box" style="font-size:10.5px">상자 — node-02</text>
+  <text x="194" y="340" class="note">· 줄 1개</text>
+
+  <rect x="330" y="304" width="140" height="46" fill="#0d0d0d" stroke="rgb(240,150,190)"/>
+  <text x="344" y="322" class="box" style="font-size:10.5px">상자 — node-03</text>
+  <text x="344" y="340" class="note">· 줄 1개</text>
+
+  <text x="496" y="299" class="note" text-anchor="middle">… 50개</text>
+
+  <line x1="476" y1="327" x2="516" y2="327" stroke="rgb(240,150,190)" stroke-width="2" marker-end="url(#gbP)"/>
+  <rect x="522" y="304" width="150" height="46" fill="#f2d4d4"/>
+  <text x="597" y="333" class="cnt" text-anchor="middle">메일 50통</text>
+
+  <text x="688" y="322" class="box">상자를 세면 50</text>
+  <text x="688" y="342" class="note">줄도 50 — 같아집니다</text>
+
+  <!-- ══ 하단 못박기 ══ -->
+  <rect x="30" y="380" width="820" height="52" fill="#0d0d0d" stroke="rgb(138,133,128)" stroke-dasharray="4 3"/>
+  <text x="46" y="400" class="amb">핵심</text>
+  <text x="90" y="400" class="box">라벨이 다르다고 상자가 갈리지 않습니다 — <tspan class="monoa">group_by</tspan> 에 적힌 라벨만 기준입니다.</text>
+  <text x="46" y="422" class="note">클러스터 전체 장애로 다룰 것이면 alertname 만, 서버별로 따로 대응해야 하면 instance 를 더합니다. 이 한 줄이 알림 피로를 만들기도 막기도 합니다.</text>
+</svg>

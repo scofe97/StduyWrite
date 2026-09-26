@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 560" font-family="-apple-system, 'Segoe UI', Roboto, sans-serif">
+  <rect width="860" height="560" fill="#0d0d0d"/>
+
+  <!-- title -->
+  <text x="430" y="38" text-anchor="middle" fill="#e8e4df" font-size="21" font-weight="700">도달성 분석 — GC Root에서 닿으면 살고, 끊긴 섬은 죽는다</text>
+  <text x="430" y="64" text-anchor="middle" fill="#8a8580" font-size="13">GC Root(스택·static·상수·JNI)에서 참조를 따라가 닿는 객체만 생존. 도달 못 하면 — 서로 참조해도 — garbage</text>
+
+  <!-- ===== GC ROOTS column ===== -->
+  <text x="120" y="108" text-anchor="middle" fill="#5b9bd5" font-size="15" font-weight="700">GC ROOTS</text>
+  <text x="120" y="128" text-anchor="middle" fill="#8a8580" font-size="11">힙 밖에서 직접 쥔 출발점</text>
+
+  <!-- stack frame box -->
+  <rect x="60" y="150" width="120" height="300" rx="6" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="2"/>
+  <text x="120" y="172" text-anchor="middle" fill="#8a8580" font-size="11">JVM 스택</text>
+  <!-- slots -->
+  <rect x="72" y="186" width="96" height="34" rx="3" fill="#dceaf7" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="120" y="208" text-anchor="middle" fill="#10243a" font-size="12" font-weight="700">지역변수 f</text>
+  <rect x="72" y="226" width="96" height="30" rx="3" fill="#0d0d0d" stroke="#3a4450" stroke-width="1"/>
+  <rect x="72" y="262" width="96" height="34" rx="3" fill="#dceaf7" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="120" y="284" text-anchor="middle" fill="#10243a" font-size="12" font-weight="700">인자 arg</text>
+  <rect x="72" y="302" width="96" height="30" rx="3" fill="#0d0d0d" stroke="#3a4450" stroke-width="1"/>
+  <rect x="72" y="338" width="96" height="30" rx="3" fill="#0d0d0d" stroke="#3a4450" stroke-width="1"/>
+  <!-- static root -->
+  <rect x="72" y="386" width="96" height="46" rx="3" fill="#f5edda" stroke="#d4a853" stroke-width="1.5"/>
+  <text x="120" y="406" text-anchor="middle" fill="#1a1a1a" font-size="11" font-weight="700">static 변수</text>
+  <text x="120" y="422" text-anchor="middle" fill="#7a6a30" font-size="10">메서드 영역</text>
+
+  <!-- ===== HEAP region ===== -->
+  <rect x="240" y="92" width="580" height="360" rx="10" fill="#0d0d0d" stroke="#3a4450" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="260" y="114" fill="#8a8580" font-size="13" font-weight="700">자바 힙 (객체가 사는 곳 · 판정 대상)</text>
+
+  <!-- Accessible band -->
+  <text x="260" y="150" fill="#66bb6a" font-size="13" font-weight="700">● 살아 있음 (Reachable)</text>
+
+  <!-- live objects (green) -->
+  <circle cx="340" cy="210" r="26" fill="#66bb6a" stroke="#2e7d32" stroke-width="2"/>
+  <text x="340" y="215" text-anchor="middle" fill="#0d3010" font-size="13" font-weight="700">A</text>
+  <circle cx="470" cy="190" r="26" fill="#66bb6a" stroke="#2e7d32" stroke-width="2"/>
+  <text x="470" y="195" text-anchor="middle" fill="#0d3010" font-size="13" font-weight="700">B</text>
+  <circle cx="470" cy="280" r="26" fill="#66bb6a" stroke="#2e7d32" stroke-width="2"/>
+  <text x="470" y="285" text-anchor="middle" fill="#0d3010" font-size="13" font-weight="700">C</text>
+  <circle cx="620" cy="210" r="26" fill="#66bb6a" stroke="#2e7d32" stroke-width="2"/>
+  <text x="620" y="215" text-anchor="middle" fill="#0d3010" font-size="13" font-weight="700">D</text>
+
+  <!-- Root -> object arrows (blue, alive) -->
+  <defs>
+    <marker id="blue" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#5b9bd5"/></marker>
+    <marker id="green" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#66bb6a"/></marker>
+    <marker id="red" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#e06666"/></marker>
+  </defs>
+  <!-- f -> A -->
+  <line x1="168" y1="203" x2="312" y2="208" stroke="#5b9bd5" stroke-width="2.5" marker-end="url(#blue)"/>
+  <!-- arg -> B -->
+  <line x1="168" y1="279" x2="446" y2="198" stroke="#5b9bd5" stroke-width="2.5" marker-end="url(#blue)"/>
+  <!-- static -> D -->
+  <line x1="168" y1="405" x2="596" y2="222" stroke="#5b9bd5" stroke-width="2.5" marker-end="url(#blue)"/>
+  <!-- A -> C (transitive) -->
+  <line x1="362" y1="226" x2="446" y2="270" stroke="#66bb6a" stroke-width="2" marker-end="url(#green)"/>
+  <!-- B -> C -->
+  <line x1="470" y1="216" x2="470" y2="252" stroke="#66bb6a" stroke-width="2" marker-end="url(#green)"/>
+
+  <text x="250" y="350" fill="#8a8580" font-size="11">Root → (참조 따라) → 닿는 객체 전부 생존. A가 C를 참조하면 C도 따라 산다(전이 도달).</text>
+
+  <!-- Garbage band -->
+  <line x1="252" y1="368" x2="808" y2="368" stroke="#3a4450" stroke-width="1" stroke-dasharray="4 4"/>
+  <text x="260" y="392" fill="#e06666" font-size="13" font-weight="700">● 회수 대상 (Garbage · Root에서 도달 불가)</text>
+
+  <!-- cycle island (red) -->
+  <circle cx="470" cy="420" r="24" fill="#f2d4d4" stroke="#e06666" stroke-width="2"/>
+  <text x="470" y="425" text-anchor="middle" fill="#7a1f1f" font-size="13" font-weight="700">E</text>
+  <circle cx="600" cy="420" r="24" fill="#f2d4d4" stroke="#e06666" stroke-width="2"/>
+  <text x="600" y="425" text-anchor="middle" fill="#7a1f1f" font-size="13" font-weight="700">F</text>
+  <!-- E <-> F mutual reference -->
+  <line x1="494" y1="414" x2="576" y2="414" stroke="#e06666" stroke-width="2" marker-end="url(#red)"/>
+  <line x1="576" y1="428" x2="494" y2="428" stroke="#e06666" stroke-width="2" marker-end="url(#red)"/>
+  <text x="648" y="416" fill="#e06666" font-size="11" font-weight="700">E ⇄ F 서로 참조</text>
+  <text x="648" y="432" fill="#8a8580" font-size="10">인용 카운팅이면 둘 다 카운터 1</text>
+  <text x="648" y="446" fill="#8a8580" font-size="10">→ 못 버림. 도달성은 섬째 회수.</text>
+
+  <!-- bottom takeaway -->
+  <rect x="60" y="478" width="740" height="62" rx="8" fill="#15300f" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="76" y="502" fill="#cdeccf" font-size="12.5" font-weight="700">핵심 — "참조 개수"가 아니라 "Root와 연결됐는가"로 판정한다.</text>
+  <text x="76" y="523" fill="#a8c8aa" font-size="11.5">그래서 순환 참조(E⇄F)도 Root에서 끊기면 함께 회수된다. 인용 카운팅이 순환을 못 버리는 약점을 도달성 분석이 구조적으로 해결한다.</text>
+</svg>

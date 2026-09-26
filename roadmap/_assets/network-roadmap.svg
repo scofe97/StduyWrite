@@ -1,0 +1,891 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 5376" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">네트워크 학습 로드맵</title><desc id="dd">애플리케이션이 여는 socket 에서 커널 패킷 경로로 내려간 뒤 Kubernetes 데이터패스로 다시 올라간다. 척추에 단계 아홉을 걸고 개념을 좌우로 뻗었다. 노드의 주인공은 개념이고 아래 줄은 그 개념을 다루는 책의 장이다. 점 색이 우선순위이고, 책 줄이 비면 아직 자료가 없는 자리다.</desc>
+<rect width="1000" height="5376" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">WRITE · NETWORK ROADMAP</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">네트워크 학습 로드맵</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">노드는 개념, 아래 줄은 그 개념을 다루는 책의 장입니다</text>
+<rect x="40" y="96" width="380" height="190" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="56" y="120" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">읽는 법</text>
+<circle cx="64" cy="150" r="5" fill="#6A95D8"/>
+<text x="80" y="154" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">필수</text>
+<text x="118" y="154" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">빼면 뒤가 막힙니다</text>
+<circle cx="64" cy="176" r="5" fill="#3FB98C"/>
+<text x="80" y="180" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">추천</text>
+<text x="118" y="180" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">빼도 되지만 손해가 큽니다</text>
+<circle cx="64" cy="202" r="5" fill="#5E6B7E"/>
+<text x="80" y="206" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">선택</text>
+<text x="118" y="206" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">목표가 생겼을 때만</text>
+<circle cx="64" cy="228" r="5" fill="#F08A59"/>
+<text x="80" y="232" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">대체</text>
+<text x="118" y="232" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">같은 자리 — 하나만 고릅니다</text>
+<text x="56" y="268" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">책 줄이 비면 아직 자료가 없는 자리 — 개념이 먼저입니다</text>
+<rect x="580" y="96" width="380" height="190" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="580" y="96" width="380" height="190" rx="6" fill="none" stroke="#5E6B7E" stroke-width="0.9" stroke-dasharray="4 4"/>
+<text x="596" y="120" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">여기서 다루지 않는 것</text>
+<text x="596" y="152" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">k8s-roadmap</text>
+<text x="596" y="168" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">오브젝트 배포와 클러스터 운영</text>
+<text x="596" y="185" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">os-roadmap</text>
+<text x="596" y="201" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">socket 과 파일 디스크립터의 커널 쪽</text>
+<text x="596" y="218" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">Computer Networking 7장</text>
+<text x="596" y="234" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">무선과 이동성</text>
+<text x="596" y="251" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">06_observability</text>
+<text x="596" y="267" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">앱이 내보내는 지표와 트레이스</text>
+<rect x="370" y="306" width="260" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="500" y="338" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">여기서 시작합니다</text>
+<line x1="500" y1="358" x2="500" y2="5256" stroke="rgba(191,192,192,0.22)" stroke-width="1.4"/>
+<line x1="340.0" y1="827.0" x2="316" y2="827.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="827.0" x2="316" y2="575.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="575.0" x2="302" y2="575.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="552.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="567.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="571.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">socket · bind · listen · accept</text>
+<text x="62" y="589.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 12·13장</text>
+<line x1="316" y1="827.0" x2="316" y2="631.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="631.0" x2="302" y2="631.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="608.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="623.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="627.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">4-tuple · 듣는 소켓과 연결 소켓</text>
+<text x="62" y="645.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 12장</text>
+<line x1="316" y1="827.0" x2="316" y2="687.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="687.0" x2="302" y2="687.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="664.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="679.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="683.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">TCP 상태 · 3-way handshake</text>
+<text x="62" y="701.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 13장</text>
+<line x1="316" y1="827.0" x2="316" y2="743.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="743.0" x2="302" y2="743.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="720.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="735.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="739.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">재전송 · 타임아웃 · RTT</text>
+<text x="62" y="757.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 14장</text>
+<line x1="316" y1="827.0" x2="316" y2="799.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="799.0" x2="302" y2="799.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="776.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="791.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="795.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">흐름 제어 · cwnd · in-flight</text>
+<text x="62" y="813.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 15장</text>
+<line x1="316" y1="827.0" x2="316" y2="855.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="855.0" x2="302" y2="855.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="832.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="847.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="851.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">혼잡 제어 · CUBIC · Vegas</text>
+<text x="62" y="869.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 16장</text>
+<line x1="316" y1="827.0" x2="316" y2="911.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="911.0" x2="302" y2="911.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="888.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="903.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="907.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">스트림 멀티플렉싱 · HOL 블로킹</text>
+<text x="62" y="925.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">yamux spec · RFC 9000</text>
+<line x1="316" y1="827.0" x2="316" y2="967.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="967.0" x2="302" y2="967.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="944.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="959.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="963.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">UDP · 단편화</text>
+<text x="62" y="981.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 10장</text>
+<line x1="316" y1="827.0" x2="316" y2="1023.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1023.0" x2="302" y2="1023.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1000.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1015.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="1019.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">EPIPE · SIGPIPE · RST</text>
+<text x="62" y="1037.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 13장</text>
+<line x1="316" y1="827.0" x2="316" y2="1079.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1079.0" x2="302" y2="1079.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1056.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1071.0" r="4.5" fill="#5E6B7E"/>
+<text x="62" y="1075.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">TCP keepalive</text>
+<text x="62" y="1093.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 17장</text>
+<line x1="660.0" y1="827.0" x2="684" y2="827.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="827.0" x2="684" y2="435.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="435.0" x2="698" y2="435.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="412.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="427.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="431.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">DNS 질의 · 이름 해석</text>
+<text x="726" y="449.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 11장</text>
+<line x1="684" y1="827.0" x2="684" y2="491.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="491.0" x2="698" y2="491.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="468.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="483.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="487.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">DNS 레코드 · 위임 · TTL</text>
+<text x="726" y="505.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Learning CoreDNS 2장</text>
+<line x1="684" y1="827.0" x2="684" y2="547.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="547.0" x2="698" y2="547.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="524.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="539.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="543.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">HTTP/1.1 · HTTP/2</text>
+<text x="726" y="561.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">HTTP/2 in Action 2·4장</text>
+<line x1="684" y1="827.0" x2="684" y2="603.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="603.0" x2="698" y2="603.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="580.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="595.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="599.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">QUIC · HTTP/3</text>
+<text x="726" y="617.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">HTTP/2 in Action 9장</text>
+<line x1="684" y1="827.0" x2="684" y2="659.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="659.0" x2="698" y2="659.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="636.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="651.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="655.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">HTTP 성능 축</text>
+<text x="726" y="673.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">HPBN 11·12장</text>
+<line x1="684" y1="827.0" x2="684" y2="715.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="715.0" x2="698" y2="715.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="692.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="707.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="711.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">TLS 핸드셰이크 · SNI</text>
+<text x="726" y="729.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">HPBN 4장 · Real-World Crypto 9장</text>
+<line x1="684" y1="827.0" x2="684" y2="771.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="771.0" x2="698" y2="771.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="748.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="763.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="767.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">ClientHello · 확장 협상</text>
+<text x="726" y="785.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Real-World Crypto 9장</text>
+<line x1="684" y1="827.0" x2="684" y2="827.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="827.0" x2="698" y2="827.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="804.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="819.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="823.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">key_share · HelloRetryRequest</text>
+<text x="726" y="841.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Real-World Crypto 5·9장</text>
+<line x1="684" y1="827.0" x2="684" y2="883.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="883.0" x2="698" y2="883.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="860.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="875.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="879.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">ECDHE · X25519 · forward secrecy</text>
+<text x="726" y="897.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Real-World Crypto 5장</text>
+<line x1="684" y1="827.0" x2="684" y2="939.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="939.0" x2="698" y2="939.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="916.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="931.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="935.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">AEAD · AES-GCM · ChaCha20</text>
+<text x="726" y="953.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Real-World Crypto 4장</text>
+<line x1="684" y1="827.0" x2="684" y2="995.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="995.0" x2="698" y2="995.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="972.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="987.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="991.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">ECH · HPKE</text>
+<text x="726" y="1009.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">RFC 9180 · tls-esni</text>
+<line x1="684" y1="827.0" x2="684" y2="1051.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1051.0" x2="698" y2="1051.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1028.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1043.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="1047.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">인증서 체인 · SAN 검증</text>
+<text x="726" y="1065.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">HPBN 4장</text>
+<line x1="684" y1="827.0" x2="684" y2="1107.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1107.0" x2="698" y2="1107.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1084.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1099.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="1103.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">reverse proxy · half-close · 배압</text>
+<text x="726" y="1121.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">책 없음 — 채울 자리</text>
+<line x1="684" y1="827.0" x2="684" y2="1163.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1163.0" x2="698" y2="1163.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1140.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1155.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="1159.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">listen 큐 · accept 큐 · 포트 고갈</text>
+<text x="726" y="1177.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 13장</text>
+<line x1="684" y1="827.0" x2="684" y2="1219.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1219.0" x2="698" y2="1219.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1196.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1211.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="1215.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">OS CA bundle · truststore</text>
+<text x="726" y="1233.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Container Security 11장</text>
+<rect x="340.0" y="801.0" width="320" height="52" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="500" y="823.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">1 · 연결</text>
+<text x="500" y="843.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">응용과 전송 — 연결이 무엇인가</text>
+<line x1="340.0" y1="1561.0" x2="316" y2="1561.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1561.0" x2="316" y2="1337.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1337.0" x2="302" y2="1337.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1314.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1329.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="1333.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">interface · MAC · ARP · NDP</text>
+<text x="62" y="1351.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 3·4장</text>
+<line x1="316" y1="1561.0" x2="316" y2="1393.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1393.0" x2="302" y2="1393.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1370.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1385.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="1389.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">IP 주소 · 서브네팅 · CIDR</text>
+<text x="62" y="1407.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 2·5장</text>
+<line x1="316" y1="1561.0" x2="316" y2="1449.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1449.0" x2="302" y2="1449.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1426.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1441.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="1445.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">라우팅 테이블 · next hop · 포워딩</text>
+<text x="62" y="1463.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 5장 · 랩 04~06편</text>
+<line x1="316" y1="1561.0" x2="316" y2="1505.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1505.0" x2="302" y2="1505.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1482.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1497.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="1501.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">data plane · control plane</text>
+<text x="62" y="1519.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Computer Networking 4·5장</text>
+<line x1="316" y1="1561.0" x2="316" y2="1561.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1561.0" x2="302" y2="1561.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1538.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1553.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="1557.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">netns · veth · bridge</text>
+<text x="62" y="1575.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Networking and K8s 2장</text>
+<line x1="316" y1="1561.0" x2="316" y2="1617.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1617.0" x2="302" y2="1617.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1594.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1609.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="1613.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">netfilter · iptables · nftables</text>
+<text x="62" y="1631.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 7장</text>
+<line x1="316" y1="1561.0" x2="316" y2="1673.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1673.0" x2="302" y2="1673.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1650.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1665.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="1669.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">NAT · SNAT · DNAT · MASQUERADE</text>
+<text x="62" y="1687.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 7장</text>
+<line x1="316" y1="1561.0" x2="316" y2="1729.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1729.0" x2="302" y2="1729.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1706.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1721.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="1725.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">conntrack · 상태 테이블 포화</text>
+<text x="62" y="1743.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Networking and K8s 2장 · 랩 09편</text>
+<line x1="316" y1="1561.0" x2="316" y2="1785.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1785.0" x2="302" y2="1785.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1762.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1777.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="1781.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">VLAN · 802.1Q · STP</text>
+<text x="62" y="1799.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 3장</text>
+<line x1="660.0" y1="1561.0" x2="684" y2="1561.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1561.0" x2="684" y2="1365.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1365.0" x2="698" y2="1365.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1342.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1357.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="1361.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">MTU · MSS · PMTUD</text>
+<text x="726" y="1379.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 10장 · 랩 12·13편</text>
+<line x1="684" y1="1561.0" x2="684" y2="1421.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1421.0" x2="698" y2="1421.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1398.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1413.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="1417.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">ICMP · traceroute</text>
+<text x="726" y="1435.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 8장</text>
+<line x1="684" y1="1561.0" x2="684" y2="1477.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1477.0" x2="698" y2="1477.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1454.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1469.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="1473.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">컨테이너 네트워킹 모드 · 포트 매핑</text>
+<text x="726" y="1491.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Networking and K8s 3장</text>
+<line x1="684" y1="1561.0" x2="684" y2="1533.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1533.0" x2="698" y2="1533.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1510.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1525.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="1529.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">DHCP · 자동 구성</text>
+<text x="726" y="1547.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 6장</text>
+<line x1="684" y1="1561.0" x2="684" y2="1589.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1589.0" x2="698" y2="1589.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1566.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1581.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="1585.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">NAT traversal · STUN · ICE</text>
+<text x="726" y="1603.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 7장</text>
+<line x1="684" y1="1561.0" x2="684" y2="1645.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1645.0" x2="698" y2="1645.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1622.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1637.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="1641.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">bonding · LACP</text>
+<text x="726" y="1659.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">TCP/IP Illustrated 3장</text>
+<line x1="684" y1="1561.0" x2="684" y2="1701.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1701.0" x2="698" y2="1701.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1678.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1693.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="1697.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">policy routing · ip rule · VRF</text>
+<text x="726" y="1715.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">책 없음 — 채울 자리</text>
+<line x1="684" y1="1561.0" x2="684" y2="1757.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1757.0" x2="698" y2="1757.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1734.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1749.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="1753.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">동적 라우팅 · OSPF · BGP</text>
+<text x="726" y="1771.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">network-fundamentals-lab 17편</text>
+<rect x="340.0" y="1535.0" width="320" height="52" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="500" y="1557.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">2 · Linux 경로</text>
+<text x="500" y="1577.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">커널 안에서 패킷이 지나는 길</text>
+<line x1="340.0" y1="2071.0" x2="316" y2="2071.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2071.0" x2="316" y2="1903.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1903.0" x2="302" y2="1903.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1880.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1895.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="1899.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">캡처 위치 · 디스플레이 필터</text>
+<text x="62" y="1917.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Packet Analysis 2장</text>
+<line x1="316" y1="2071.0" x2="316" y2="1959.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="1959.0" x2="302" y2="1959.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1936.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="1951.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="1955.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">tcpdump · tshark</text>
+<text x="62" y="1973.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Packet Analysis 2장</text>
+<line x1="316" y1="2071.0" x2="316" y2="2015.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2015.0" x2="302" y2="2015.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="1992.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2007.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="2011.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">TCP 이상 판독 · RST · 재전송</text>
+<text x="62" y="2029.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Packet Analysis 3장</text>
+<line x1="316" y1="2071.0" x2="316" y2="2071.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2071.0" x2="302" y2="2071.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2048.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2063.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="2067.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">TLS 핸드셰이크 판독</text>
+<text x="62" y="2085.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Packet Analysis 4장</text>
+<line x1="316" y1="2071.0" x2="316" y2="2127.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2127.0" x2="302" y2="2127.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2104.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2119.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="2123.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">계층 순서 진단 — ss · ip · ethtool</text>
+<text x="62" y="2141.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Networking and K8s 2장</text>
+<line x1="316" y1="2071.0" x2="316" y2="2183.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2183.0" x2="302" y2="2183.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2160.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2175.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="2179.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">resolv.conf · ndots · NXDOMAIN</text>
+<text x="62" y="2197.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">책 없음 — 채울 자리</text>
+<line x1="316" y1="2071.0" x2="316" y2="2239.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2239.0" x2="302" y2="2239.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2216.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2231.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="2235.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">conntrack 경합 · insert_failed</text>
+<text x="62" y="2253.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">책 없음 — 채울 자리</text>
+<line x1="660.0" y1="2071.0" x2="684" y2="2071.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2071.0" x2="684" y2="1959.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="1959.0" x2="698" y2="1959.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1936.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="1951.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="1955.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">Corefile · 플러그인 체인</text>
+<text x="726" y="1973.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Learning CoreDNS 3장</text>
+<line x1="684" y1="2071.0" x2="684" y2="2015.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2015.0" x2="698" y2="2015.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="1992.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2007.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="2011.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">질문과 답의 불일치</text>
+<text x="726" y="2029.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Learning CoreDNS 7장</text>
+<line x1="684" y1="2071.0" x2="684" y2="2071.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2071.0" x2="698" y2="2071.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2048.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2063.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="2067.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">연결 지연 분포 · P99 · 측정 오차</text>
+<text x="726" y="2085.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Systems Performance 10장</text>
+<line x1="684" y1="2071.0" x2="684" y2="2127.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2127.0" x2="698" y2="2127.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2104.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2119.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="2123.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">GRO · GSO · TSO 오프로딩</text>
+<text x="726" y="2141.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Systems Performance 10장</text>
+<line x1="684" y1="2071.0" x2="684" y2="2183.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2183.0" x2="698" y2="2183.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2160.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2175.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="2179.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">tc qdisc · netem</text>
+<text x="726" y="2197.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Systems Performance 10장</text>
+<rect x="340.0" y="2045.0" width="320" height="52" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="500" y="2067.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">3 · 관측</text>
+<text x="500" y="2087.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">정말 그 길로 갔는지 눈으로 본다</text>
+<rect x="110" y="2320" width="780" height="64" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="2 4"/>
+<text x="130" y="2346" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">메모</text>
+<text x="130" y="2366" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">Kubernetes 네트워크 장애의 상당수가 4단계가 아니라 2단계에서 풀린다. conntrack 과 MTU 가 먼저다.</text>
+<line x1="40" y1="2408" x2="960" y2="2408" stroke="#E3B341" stroke-width="1.4" stroke-dasharray="6 5"/>
+<rect x="265" y="2396" width="470" height="22" rx="4" fill="#0D1117"/>
+<text x="500" y="2413" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#E3B341">1~3단계는 노드 한 대 · 4단계부터 클러스터</text>
+<line x1="340.0" y1="2713.0" x2="316" y2="2713.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2713.0" x2="316" y2="2489.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2489.0" x2="302" y2="2489.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2466.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2481.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="2485.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">Pod IP · Pod CIDR · Node CIDR</text>
+<text x="62" y="2503.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Networking and K8s 4장</text>
+<line x1="316" y1="2713.0" x2="316" y2="2545.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2545.0" x2="302" y2="2545.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2522.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2537.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="2541.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">CNI</text>
+<text x="62" y="2559.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Cilium 2장</text>
+<line x1="316" y1="2713.0" x2="316" y2="2601.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2601.0" x2="302" y2="2601.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2578.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2593.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="2597.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">CNI 구현체 비교 — 무엇이 다른가</text>
+<text x="62" y="2615.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Cilium 1~3장</text>
+<line x1="316" y1="2713.0" x2="316" y2="2657.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2657.0" x2="302" y2="2657.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2634.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2649.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="2653.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">CNI 계약 — ADD · DEL · CHECK</text>
+<text x="62" y="2671.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Networking and K8s 4장</text>
+<line x1="316" y1="2713.0" x2="316" y2="2713.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2713.0" x2="302" y2="2713.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2690.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2705.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="2709.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">오버레이 · VXLAN</text>
+<text x="62" y="2727.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Cilium 5장</text>
+<line x1="316" y1="2713.0" x2="316" y2="2769.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2769.0" x2="302" y2="2769.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2746.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2761.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="2765.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">underlay 와 overlay 의 갈림</text>
+<text x="62" y="2783.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Cloud Native DC Net 6장</text>
+<line x1="316" y1="2713.0" x2="316" y2="2825.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2825.0" x2="302" y2="2825.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2802.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2817.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="2821.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">Service · EndpointSlice</text>
+<text x="62" y="2839.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Networking and K8s 5장</text>
+<line x1="316" y1="2713.0" x2="316" y2="2881.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2881.0" x2="302" y2="2881.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2858.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2873.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="2877.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">kube-proxy — iptables · IPVS</text>
+<text x="62" y="2895.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Networking and K8s 2장</text>
+<line x1="316" y1="2713.0" x2="316" y2="2937.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="2937.0" x2="302" y2="2937.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="2914.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="2929.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="2933.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">readiness · stale Endpoint</text>
+<text x="62" y="2951.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Kubernetes in Action 11장</text>
+<line x1="660.0" y1="2713.0" x2="684" y2="2713.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2713.0" x2="684" y2="2517.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2517.0" x2="698" y2="2517.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2494.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2509.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="2513.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">클러스터 DNS · Service FQDN</text>
+<text x="726" y="2531.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Learning CoreDNS 6장</text>
+<line x1="684" y1="2713.0" x2="684" y2="2573.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2573.0" x2="698" y2="2573.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2550.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2565.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="2569.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">IPAM · Pod IP 고갈</text>
+<text x="726" y="2587.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Cilium 4장</text>
+<line x1="684" y1="2713.0" x2="684" y2="2629.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2629.0" x2="698" y2="2629.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2606.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2621.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="2625.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">service discovery · east-west</text>
+<text x="726" y="2643.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">책 없음 — 채울 자리</text>
+<line x1="684" y1="2713.0" x2="684" y2="2685.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2685.0" x2="698" y2="2685.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2662.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2677.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="2681.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">Ingress</text>
+<text x="726" y="2699.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Networking and K8s 5장</text>
+<line x1="684" y1="2713.0" x2="684" y2="2741.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2741.0" x2="698" y2="2741.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2718.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2733.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="2737.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">Gateway API · HTTPRoute</text>
+<text x="726" y="2755.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">K8s in Action 13장 · Cilium 7장</text>
+<line x1="684" y1="2713.0" x2="684" y2="2797.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2797.0" x2="698" y2="2797.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2774.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2789.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="2793.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">L4 로드밸런싱 · health check</text>
+<text x="726" y="2811.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">System Design on AWS 5장</text>
+<line x1="684" y1="2713.0" x2="684" y2="2853.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2853.0" x2="698" y2="2853.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2830.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2845.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="2849.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">인증서 만료와 TLS 실패 구분</text>
+<text x="726" y="2867.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">책 없음 — 채울 자리</text>
+<line x1="684" y1="2713.0" x2="684" y2="2909.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="2909.0" x2="698" y2="2909.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="2886.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="2901.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="2905.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">externalTrafficPolicy · 소스 IP</text>
+<text x="726" y="2923.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Kubernetes in Action 11장</text>
+<rect x="340.0" y="2687.0" width="320" height="52" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="500" y="2709.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">4 · Kubernetes</text>
+<text x="500" y="2729.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">같은 커널 경로 위에 얹힌 이름과 정책</text>
+<line x1="340.0" y1="3139.0" x2="316" y2="3139.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="3139.0" x2="316" y2="3055.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="3055.0" x2="302" y2="3055.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="3032.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="3047.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="3051.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">VPC · 서브넷 · 라우트 테이블</text>
+<text x="62" y="3069.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Networking and K8s 6장</text>
+<line x1="316" y1="3139.0" x2="316" y2="3111.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="3111.0" x2="302" y2="3111.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="3088.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="3103.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="3107.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">Security Group · NACL</text>
+<text x="62" y="3125.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Networking and K8s 6장</text>
+<line x1="316" y1="3139.0" x2="316" y2="3167.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="3167.0" x2="302" y2="3167.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="3144.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="3159.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="3163.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">클라우드 로드밸런서 — L4 · L7</text>
+<text x="62" y="3181.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Networking and K8s 6장</text>
+<line x1="316" y1="3139.0" x2="316" y2="3223.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="3223.0" x2="302" y2="3223.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="3200.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="3215.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="3219.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">3사 기본값의 갈림</text>
+<text x="62" y="3237.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Networking and K8s 6장</text>
+<line x1="660.0" y1="3139.0" x2="684" y2="3139.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="3139.0" x2="684" y2="3083.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="3083.0" x2="698" y2="3083.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="3060.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="3075.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="3079.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">VPN · 사이트 간 연결</text>
+<text x="726" y="3097.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">System Design on AWS 9장</text>
+<line x1="684" y1="3139.0" x2="684" y2="3139.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="3139.0" x2="698" y2="3139.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="3116.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="3131.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="3135.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">AWS Direct Connect · 전용선</text>
+<text x="726" y="3153.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">System Design on AWS 9장</text>
+<line x1="684" y1="3139.0" x2="684" y2="3195.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="3195.0" x2="698" y2="3195.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="3172.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="3187.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="3191.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">Clos 토폴로지 · BGP · ECMP</text>
+<text x="726" y="3209.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Cloud Native DC Net 2·14장</text>
+<rect x="340.0" y="3113.0" width="320" height="52" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="500" y="3135.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">5 · 클라우드 네트워크</text>
+<text x="500" y="3155.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">클러스터가 서 있는 underlay</text>
+<rect x="110" y="3304" width="780" height="64" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="2 4"/>
+<text x="130" y="3330" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">메모</text>
+<text x="130" y="3350" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">클라우드 축은 Networking and K8s 6장과 System Design on AWS 9장이 맡는다. AWS 밖은 공식 문서로 메운다.</text>
+<line x1="340.0" y1="3613.0" x2="316" y2="3613.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="3613.0" x2="316" y2="3445.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="3445.0" x2="302" y2="3445.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="3422.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="3437.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="3441.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">NetworkPolicy · default deny</text>
+<text x="62" y="3459.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Cilium 12장</text>
+<line x1="316" y1="3613.0" x2="316" y2="3501.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="3501.0" x2="302" y2="3501.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="3478.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="3493.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="3497.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">L7 · FQDN 정책</text>
+<text x="62" y="3515.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Cilium 13장</text>
+<line x1="316" y1="3613.0" x2="316" y2="3557.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="3557.0" x2="302" y2="3557.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="3534.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="3549.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="3553.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">identity-aware policy</text>
+<text x="62" y="3571.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Cilium 12장</text>
+<line x1="316" y1="3613.0" x2="316" y2="3613.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="3613.0" x2="302" y2="3613.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="3590.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="3605.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="3609.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">eBPF 프로그램 유형 · hook</text>
+<text x="62" y="3627.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Learning eBPF 3·7장</text>
+<line x1="316" y1="3613.0" x2="316" y2="3669.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="3669.0" x2="302" y2="3669.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="3646.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="3661.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="3665.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">XDP · TC hook</text>
+<text x="62" y="3683.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Learning eBPF 7·8장</text>
+<line x1="316" y1="3613.0" x2="316" y2="3725.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="3725.0" x2="302" y2="3725.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="3702.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="3717.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="3721.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">eBPF map · helper</text>
+<text x="62" y="3739.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Learning eBPF 3장</text>
+<line x1="316" y1="3613.0" x2="316" y2="3781.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="3781.0" x2="302" y2="3781.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="3758.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="3773.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="3777.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">verifier · CO-RE · BTF</text>
+<text x="62" y="3795.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Learning eBPF 5·6장</text>
+<line x1="660.0" y1="3613.0" x2="684" y2="3613.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="3613.0" x2="684" y2="3417.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="3417.0" x2="698" y2="3417.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="3394.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="3409.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="3413.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">eBPF 네트워킹</text>
+<text x="726" y="3431.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Learning eBPF 8장</text>
+<line x1="684" y1="3613.0" x2="684" y2="3473.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="3473.0" x2="698" y2="3473.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="3450.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="3465.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="3469.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">Cilium 데이터패스 · IPAM</text>
+<text x="726" y="3487.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Cilium 4·5장</text>
+<line x1="684" y1="3613.0" x2="684" y2="3529.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="3529.0" x2="698" y2="3529.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="3506.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="3521.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="3525.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">Hubble 관측</text>
+<text x="726" y="3543.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Cilium 15장</text>
+<line x1="684" y1="3613.0" x2="684" y2="3585.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="3585.0" x2="698" y2="3585.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="3562.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="3577.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="3581.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">L4 와 L7 텔레메트리의 갈림</text>
+<text x="726" y="3599.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">책 없음 — 채울 자리</text>
+<line x1="684" y1="3613.0" x2="684" y2="3641.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="3641.0" x2="698" y2="3641.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="3618.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="3633.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="3637.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">Beyla · Caretta — 자동 계측</text>
+<text x="726" y="3655.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Beyla · Caretta 문서</text>
+<line x1="684" y1="3613.0" x2="684" y2="3697.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="3697.0" x2="698" y2="3697.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="3674.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="3689.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="3693.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">투명 암호화 · WireGuard</text>
+<text x="726" y="3711.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Cilium 14장</text>
+<line x1="684" y1="3613.0" x2="684" y2="3753.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="3753.0" x2="698" y2="3753.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="3730.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="3745.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="3749.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">egress 게이트웨이 · 클러스터 access</text>
+<text x="726" y="3767.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Cilium 10·11장</text>
+<line x1="684" y1="3613.0" x2="684" y2="3809.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="3809.0" x2="698" y2="3809.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="3786.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="3801.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="3805.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">eBPF host routing · netkit</text>
+<text x="726" y="3823.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Cilium 8장</text>
+<rect x="340.0" y="3587.0" width="320" height="52" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="500" y="3609.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">6 · 데이터패스와 정책</text>
+<text x="500" y="3629.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">같은 일을 다른 데이터패스로</text>
+<line x1="340.0" y1="4067.0" x2="316" y2="4067.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="4067.0" x2="316" y2="3927.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="3927.0" x2="302" y2="3927.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="3904.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="3919.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="3923.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">dual-stack · ipFamilyPolicy</text>
+<text x="62" y="3941.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">책 없음 — 채울 자리</text>
+<line x1="316" y1="4067.0" x2="316" y2="3983.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="3983.0" x2="302" y2="3983.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="3960.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="3975.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="3979.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">topology-aware routing</text>
+<text x="62" y="3997.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">책 없음 — 채울 자리</text>
+<line x1="316" y1="4067.0" x2="316" y2="4039.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="4039.0" x2="302" y2="4039.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="4016.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="4031.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="4035.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">서비스 메시가 옮긴 것</text>
+<text x="62" y="4053.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Istio in Action 1장</text>
+<line x1="316" y1="4067.0" x2="316" y2="4095.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="4095.0" x2="302" y2="4095.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="4072.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="4087.0" r="4.5" fill="#5E6B7E"/>
+<text x="62" y="4091.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">Windows HNS · HCS</text>
+<text x="62" y="4109.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">책 없음 — 채울 자리</text>
+<line x1="316" y1="4067.0" x2="316" y2="4151.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="4151.0" x2="302" y2="4151.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="4128.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="4143.0" r="4.5" fill="#5E6B7E"/>
+<text x="62" y="4147.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">멀티클러스터 메시</text>
+<text x="62" y="4165.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Cilium 9장</text>
+<line x1="316" y1="4067.0" x2="316" y2="4207.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="4207.0" x2="302" y2="4207.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="4184.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="4199.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="4203.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">retry · circuit breaking</text>
+<text x="62" y="4221.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Istio in Action 6장</text>
+<line x1="660.0" y1="4067.0" x2="684" y2="4067.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="4067.0" x2="684" y2="3955.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="3955.0" x2="698" y2="3955.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="3932.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="3947.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="3951.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">Envoy · VirtualService · DR</text>
+<text x="726" y="3969.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Istio in Action 3·4·5장</text>
+<line x1="684" y1="4067.0" x2="684" y2="4011.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="4011.0" x2="698" y2="4011.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="3988.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="4003.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="4007.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">identity 와 trust 의 차이</text>
+<text x="726" y="4025.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Zero Trust Networks 2·4·6장</text>
+<line x1="684" y1="4067.0" x2="684" y2="4067.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="4067.0" x2="698" y2="4067.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="4044.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="4059.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="4063.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">mTLS · 기본값 닫아 가기</text>
+<text x="726" y="4081.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Istio in Action 4·9장</text>
+<line x1="684" y1="4067.0" x2="684" y2="4123.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="4123.0" x2="698" y2="4123.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="4100.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="4115.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="4119.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">Zero Trust 전제</text>
+<text x="726" y="4137.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Zero Trust Networks 1·2장</text>
+<line x1="684" y1="4067.0" x2="684" y2="4179.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="4179.0" x2="698" y2="4179.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="4156.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="4171.0" r="4.5" fill="#F08A59"/>
+<text x="726" y="4175.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">ambient · ztunnel · waypoint</text>
+<text x="726" y="4193.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Sidecar-less Istio 1~3장</text>
+<rect x="340.0" y="4041.0" width="320" height="52" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="500" y="4063.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">7 · 운영 경계</text>
+<text x="500" y="4083.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">클러스터가 한 종류가 아닐 때</text>
+<rect x="110" y="4288" width="780" height="64" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="2 4"/>
+<text x="130" y="4314" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">메모</text>
+<text x="130" y="4334" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">책 줄이 빈 노드는 아직 자료가 없는 자리다. 소장 목록이 늘면 그 줄만 채운다.</text>
+<line x1="340.0" y1="4541.0" x2="316" y2="4541.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="4541.0" x2="316" y2="4401.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="4401.0" x2="302" y2="4401.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="4378.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="4393.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="4397.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">bootstrap · trust anchor</text>
+<text x="62" y="4415.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">I2P Network Database</text>
+<line x1="316" y1="4541.0" x2="316" y2="4457.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="4457.0" x2="302" y2="4457.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="4434.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="4449.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="4453.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">peer discovery · DHT · gossip</text>
+<text x="62" y="4471.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Patterns of Distributed Sys 28장</text>
+<line x1="316" y1="4541.0" x2="316" y2="4513.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="4513.0" x2="302" y2="4513.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="4490.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="4505.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="4509.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">signed descriptor · 공개키 신원</text>
+<text x="62" y="4527.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Real-World Crypto 7장</text>
+<line x1="316" y1="4541.0" x2="316" y2="4569.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="4569.0" x2="302" y2="4569.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="4546.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="4561.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="4565.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">key rotation · replay 방지</text>
+<text x="62" y="4583.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Real-World Crypto 3·8·9장</text>
+<line x1="316" y1="4541.0" x2="316" y2="4625.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="4625.0" x2="302" y2="4625.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="4602.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="4617.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="4621.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">Sybil · eclipse · poisoning</text>
+<text x="62" y="4639.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">I2P Network Database</text>
+<line x1="316" y1="4541.0" x2="316" y2="4681.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="4681.0" x2="302" y2="4681.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="4658.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="4673.0" r="4.5" fill="#5E6B7E"/>
+<text x="62" y="4677.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">Sybil 저항 — 자원 증명</text>
+<text x="62" y="4695.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">책 없음 — 채울 자리</text>
+<line x1="660.0" y1="4541.0" x2="684" y2="4541.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="4541.0" x2="684" y2="4401.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="4401.0" x2="698" y2="4401.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="4378.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="4393.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="4397.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">traffic correlation</text>
+<text x="726" y="4415.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Tor 설계 논문</text>
+<line x1="684" y1="4541.0" x2="684" y2="4457.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="4457.0" x2="698" y2="4457.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="4434.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="4449.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="4453.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">암호화가 숨기지 않는 것</text>
+<text x="726" y="4471.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Real-World Crypto 9·10장</text>
+<line x1="684" y1="4541.0" x2="684" y2="4513.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="4513.0" x2="698" y2="4513.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="4490.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="4505.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="4509.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">오버레이 · 터널링 · relay</text>
+<text x="726" y="4527.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">I2P Tunnel Routing</text>
+<line x1="684" y1="4541.0" x2="684" y2="4569.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="4569.0" x2="698" y2="4569.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="4546.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="4561.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="4565.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">인증서 소유와 relay 신뢰</text>
+<text x="726" y="4583.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">RFC 8555 — ACME</text>
+<line x1="684" y1="4541.0" x2="684" y2="4625.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="4625.0" x2="698" y2="4625.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="4602.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="4617.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="4621.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">capability — 권한 토큰</text>
+<text x="726" y="4639.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">API Security in Action 9장</text>
+<line x1="684" y1="4541.0" x2="684" y2="4681.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="4681.0" x2="698" y2="4681.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="4658.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="4673.0" r="4.5" fill="#5E6B7E"/>
+<text x="726" y="4677.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">challenge-response · 오라클 문제</text>
+<text x="726" y="4695.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">책 없음 — 채울 자리</text>
+<rect x="340.0" y="4515.0" width="320" height="52" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="500" y="4537.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">8 · 오버레이와 신뢰</text>
+<text x="500" y="4557.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">분산 네트워크가 되풀이하는 문제들</text>
+<rect x="110" y="4762" width="780" height="64" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="2 4"/>
+<text x="130" y="4788" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">메모</text>
+<text x="130" y="4808" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">8·9단계는 기술 이름이 아니라 문제를 배우는 자리다. Tor·I2P·libp2p 는 그 문제의 답 중 하나다.</text>
+<line x1="340.0" y1="5043.0" x2="316" y2="5043.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="5043.0" x2="316" y2="4903.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="4903.0" x2="302" y2="4903.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="4880.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="4895.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="4899.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">피어 발견 대 터널 구성</text>
+<text x="62" y="4917.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">I2P Tunnel Routing</text>
+<line x1="316" y1="5043.0" x2="316" y2="4959.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="4959.0" x2="302" y2="4959.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="4936.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="4951.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="4955.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">멀티홉 — 홉 수의 대가</text>
+<text x="62" y="4973.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">I2P Tunnel Routing</text>
+<line x1="316" y1="5043.0" x2="316" y2="5015.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="5015.0" x2="302" y2="5015.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="4992.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="5007.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="5011.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">홉별 계층 암호화</text>
+<text x="62" y="5029.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">I2P Garlic Routing</text>
+<line x1="316" y1="5043.0" x2="316" y2="5071.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="5071.0" x2="302" y2="5071.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="5048.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="5063.0" r="4.5" fill="#6A95D8"/>
+<text x="62" y="5067.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">path selection · 경로 다양성</text>
+<text x="62" y="5085.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">I2P Peer Selection</text>
+<line x1="316" y1="5043.0" x2="316" y2="5127.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="5127.0" x2="302" y2="5127.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="5104.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="5119.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="5123.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">inbound 와 outbound 의 분리</text>
+<text x="62" y="5141.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">I2P Tunnel Routing</text>
+<line x1="316" y1="5043.0" x2="316" y2="5183.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="316" y1="5183.0" x2="302" y2="5183.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="34" y="5160.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="49" cy="5175.0" r="4.5" fill="#3FB98C"/>
+<text x="62" y="5179.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">소스 라우팅</text>
+<text x="62" y="5197.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">I2P Tunnel Routing</text>
+<line x1="660.0" y1="5043.0" x2="684" y2="5043.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="5043.0" x2="684" y2="4875.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="4875.0" x2="698" y2="4875.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="4852.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="4867.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="4871.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">종단 성공 확률 — 곱으로 쌓인다</text>
+<text x="726" y="4889.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">책 없음 — 채울 자리</text>
+<line x1="684" y1="5043.0" x2="684" y2="4931.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="4931.0" x2="698" y2="4931.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="4908.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="4923.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="4927.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">기하분포와 평균 시도 횟수</text>
+<text x="726" y="4945.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">책 없음 — 채울 자리</text>
+<line x1="684" y1="5043.0" x2="684" y2="4987.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="4987.0" x2="698" y2="4987.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="4964.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="4979.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="4983.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">재시도 · heartbeat · 감지 시간</text>
+<text x="726" y="5001.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">Patterns of Distributed Sys 7장</text>
+<line x1="684" y1="5043.0" x2="684" y2="5043.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="5043.0" x2="698" y2="5043.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="5020.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="5035.0" r="4.5" fill="#6A95D8"/>
+<text x="726" y="5039.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">backoff · jitter · retry budget</text>
+<text x="726" y="5057.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">책 없음 — 채울 자리</text>
+<line x1="684" y1="5043.0" x2="684" y2="5099.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="5099.0" x2="698" y2="5099.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="5076.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="5091.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="5095.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">터널 풀 — 미리 열어 두기</text>
+<text x="726" y="5113.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">I2P Tunnel Routing</text>
+<line x1="684" y1="5043.0" x2="684" y2="5155.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="5155.0" x2="698" y2="5155.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="5132.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="5147.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="5151.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">예비 터널 — 준비 비용과 전환 시간</text>
+<text x="726" y="5169.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">I2P Tunnel Routing</text>
+<line x1="684" y1="5043.0" x2="684" y2="5211.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="684" y1="5211.0" x2="698" y2="5211.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="698" y="5188.0" width="268" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<circle cx="713" cy="5203.0" r="4.5" fill="#3FB98C"/>
+<text x="726" y="5207.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">터널 수명과 교체</text>
+<text x="726" y="5225.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#5E6B7E">I2P Tunnel Routing</text>
+<rect x="340.0" y="5017.0" width="320" height="52" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="500" y="5039.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">9 · 터널과 경로</text>
+<text x="500" y="5059.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">고른 노드로 실제 길을 내는 일</text>
+<line x1="12" y1="5316" x2="952" y2="5316" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="5338" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="5328" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="5338" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">필수</text>
+<rect x="170" y="5328" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="192" y="5338" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">추천</text>
+<rect x="240" y="5328" width="14" height="12" rx="2" fill="#5E6B7E22" stroke="#5E6B7E" stroke-width="1.1"/>
+<text x="262" y="5338" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">선택</text>
+<rect x="310" y="5328" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="332" y="5338" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">대체 선택지</text>
+<rect x="432" y="5328" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="454" y="5338" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">노드 한 대와 클러스터의 경계</text>
+</svg>

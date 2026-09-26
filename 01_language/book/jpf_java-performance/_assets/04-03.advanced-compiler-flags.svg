@@ -1,0 +1,63 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>고급 컴파일러 플래그 — threshold·threads·inlining·escape analysis·AVX</title>
+  <desc>고급 컴파일러 플래그는 대부분 바꾸지 말아야 하지만 컴파일러 동작을 이해하는 데 도움이 된다. compilation threshold는 메서드 호출 횟수와 루프 back-edge 횟수의 합으로 정해진다. tiered가 꺼지면 CompileThreshold 기본 10,000이지만, tiered가 켜지면(보통) 이 플래그는 아무 일도 하지 않는다. counter는 시간이 지나며 감소하므로 자주 안 쓰이는 lukewarm 메서드는 C2 컴파일이 안 될 수 있었으나, 지금은 tiered 덕에 컴파일된다. compilation threads는 백그라운드에서 큐를 처리하며 핫 메서드 우선이다. CPU 수 기반으로 스레드 수가 정해지고 CICompilerCount로 조정한다. 옛 JDK 8 Docker에서 자동 튜닝이 어긋날 수 있다. inlining은 가장 유익한 최적화다. 자주 호출되는 메서드는 325바이트 미만이면 인라인되고(MaxFreqInlineSize), 그 외는 35바이트 미만이면 인라인된다(MaxInlineSize). 인라인을 끄면 성능이 50% 넘게 떨어진다. escape analysis는 가장 정교한 최적화로, 루프 안에서만 참조되는 객체의 락을 없애고 필드를 레지스터에 두고 객체 할당 자체를 생략한다. CPU별 코드는 UseAVX로 Intel AVX 명령을 선택한다. JDK 11은 AVX-512를 지원하나 11.0.6부터 기본 비활성이다. javac는 성능에 거의 영향이 없으나 JDK 11 문자열 연결만 재컴파일이 필요하다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">고급 컴파일러 플래그</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">대부분 바꾸지 말 것 — 컴파일러 동작을 이해하기 위한 항목입니다</text>
+
+  <!-- threshold -->
+  <rect x="20" y="74" width="320" height="120" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="96" fill="#9cc3df" font-size="13" font-weight="bold">compilation threshold</text>
+  <text x="38" y="116" fill="#e8e4df" font-size="11">메서드 호출 + 루프 back-edge 합</text>
+  <text x="38" y="134" fill="rgb(138,133,128)" font-size="10">tiered OFF: CompileThreshold 기본 10,000</text>
+  <text x="38" y="152" fill="#f47f72" font-size="10">tiered ON(보통): 이 플래그 무효</text>
+  <text x="38" y="170" fill="rgb(138,133,128)" font-size="10">counter는 safepoint마다 감소</text>
+  <text x="38" y="188" fill="rgb(138,133,128)" font-size="9">→ lukewarm 메서드(지금은 컴파일됨)</text>
+
+  <!-- threads -->
+  <rect x="350" y="74" width="312" height="120" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="368" y="96" fill="#66bb6a" font-size="13" font-weight="bold">compilation threads</text>
+  <text x="368" y="116" fill="#e8e4df" font-size="11">백그라운드 큐 처리, 핫 메서드 우선</text>
+  <text x="368" y="134" fill="rgb(138,133,128)" font-size="10">CPU 수 기반 (C1·C2 큐 분리)</text>
+  <text x="368" y="152" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="9">-XX:CICompilerCount=N</text>
+  <text x="368" y="170" fill="#f47f72" font-size="10">옛 JDK 8 Docker서 자동 튜닝 어긋남</text>
+  <text x="368" y="188" fill="rgb(138,133,128)" font-size="9">BackgroundCompilation=false면 대기</text>
+
+  <!-- inlining -->
+  <rect x="20" y="206" width="642" height="116" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="228" fill="rgb(212,168,83)" font-size="14" font-weight="bold">inlining — 가장 유익한 최적화</text>
+  <text x="38" y="248" fill="#e8e4df" font-size="11">getter/setter 같은 작은 메서드 호출 오버헤드를 제거 (p.setX(p.getX()*2) → p.x = p.x*2)</text>
+  <rect x="38" y="260" width="300" height="36" fill="rgba(102,187,106,0.10)" stroke="#66bb6a"/>
+  <text x="50" y="278" fill="#66bb6a" font-size="10" font-weight="bold">자주 호출 + 325바이트 미만 → 인라인</text>
+  <text x="50" y="291" fill="rgb(138,133,128)" font-size="9">-XX:MaxFreqInlineSize (기본 325)</text>
+  <rect x="350" y="260" width="312" height="36" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9"/>
+  <text x="362" y="278" fill="#9cc3df" font-size="10" font-weight="bold">그 외 + 35바이트 미만 → 인라인</text>
+  <text x="362" y="291" fill="rgb(138,133,128)" font-size="9">-XX:MaxInlineSize (기본 35)</text>
+  <text x="38" y="314" fill="#f47f72" font-size="10">인라인 끄면(-XX:-Inline) 성능 50%+ 하락 → 절대 끄지 말 것. 플래그 튜닝도 거의 불필요</text>
+
+  <!-- escape analysis -->
+  <rect x="20" y="334" width="642" height="106" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="356" fill="#66bb6a" font-size="14" font-weight="bold">escape analysis — 가장 정교한 최적화</text>
+  <text x="38" y="376" fill="#e8e4df" font-size="11">루프 안에서만 참조되는 객체(다른 코드가 접근 못 함)에 대해:</text>
+  <text x="38" y="396" fill="rgb(138,133,128)" font-size="10">① synchronized 락을 안 잡음  ② 필드를 메인 메모리 대신 레지스터에</text>
+  <text x="38" y="414" fill="rgb(138,133,128)" font-size="10">③ 객체 할당 자체를 생략 (개별 필드만 추적)</text>
+  <text x="38" y="432" fill="rgb(212,168,83)" font-size="10">기본 ON(-XX:+DoEscapeAnalysis) · 마이크로벤치마크가 빗나가는 흔한 원인</text>
+
+  <!-- AVX / javac -->
+  <rect x="20" y="452" width="320" height="132" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="474" fill="#e8e4df" font-size="13" font-weight="bold">CPU별 코드 — UseAVX</text>
+  <text x="38" y="494" fill="rgb(138,133,128)" font-size="10">JIT가 CPU 감지해 명령 세트 선택</text>
+  <text x="38" y="512" fill="rgb(138,133,128)" font-size="10">0 없음 · 1 Sandy Bridge · 2 Haswell</text>
+  <text x="38" y="528" fill="rgb(138,133,128)" font-size="10">3 AVX-512 (Knights Landing+)</text>
+  <text x="38" y="546" fill="#f47f72" font-size="10">JDK 11.0.6부터 AVX-512 기본 비활성</text>
+  <text x="38" y="566" fill="rgb(138,133,128)" font-size="9">구 버전 신 CPU면 -XX:UseAVX=2 시도</text>
+
+  <rect x="350" y="452" width="312" height="132" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="368" y="474" fill="#e8e4df" font-size="13" font-weight="bold">javac · tiered 트레이드오프</text>
+  <text x="368" y="494" fill="rgb(138,133,128)" font-size="10">javac는 성능에 거의 영향 없음</text>
+  <text x="368" y="512" fill="rgb(138,133,128)" font-size="10">-g·final·재컴파일 모두 무관</text>
+  <text x="368" y="530" fill="rgb(212,168,83)" font-size="10">예외: JDK 11 문자열 연결은 재컴파일 필요</text>
+  <text x="368" y="550" fill="rgb(138,133,128)" font-size="10">tiered OFF: 메모리 절약(code cache↓)</text>
+  <text x="368" y="568" fill="#f47f72" font-size="9">대신 시작 느림 — 메모리 제약 환경만</text>
+</svg>

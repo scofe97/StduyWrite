@@ -1,0 +1,87 @@
+<svg viewBox="0 0 700 450" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>위층에서 파일을 지워도 아래층에는 그대로 남는다</title>
+  <desc>Dockerfile의 각 줄은 하나의 층을 만듭니다. 한 층에서 비밀 파일을 만들고 다음 층에서 그것을 지우면, 컨테이너를 실행했을 때는 파일이 보이지 않습니다. 그러나 층은 각각 따로 저장되므로 파일을 만든 아래층은 그대로 남아 있습니다. 이미지를 tar로 내보내 풀면 그 층의 내용에서 지웠던 파일을 그대로 꺼낼 수 있습니다. 게다가 이미지 설정에는 빌드에 쓰인 명령 이력이 남아, 비밀 값이 명령줄에 있었다면 그것까지 드러납니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 12.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10px; }
+    .cmd { fill: #0d0d0d; font-size: 10px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .chip { fill: #f5edda; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .danger-title { fill: #7a1f1f; font-size: 12.5px; font-weight: 700; }
+    .danger-cmd { fill: #7a1f1f; font-size: 10px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .danger-detail { fill: #7a1f1f; font-size: 10px; }
+  </style>
+
+  <rect width="700" height="450" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="rh" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="30">Dockerfile 한 줄이 한 층</text>
+
+  <!-- 층 스택 -->
+  <rect class="box" x="40" y="42" width="300" height="42" rx="4"/>
+  <rect class="chip" x="54" y="52" width="180" height="18" rx="3"/>
+  <text class="cmd" x="60" y="65">RUN rm /password.txt</text>
+  <text class="box-detail" x="54" y="79">3층 · 삭제 표시만 남긴다</text>
+
+  <rect class="box" x="40" y="92" width="300" height="42" rx="4"/>
+  <rect class="chip" x="54" y="102" width="250" height="18" rx="3"/>
+  <text class="cmd" x="60" y="115">RUN echo "top-secret" &gt; /password.txt</text>
+  <text class="box-detail" x="54" y="129">2층 · 여기에 값이 들어간다</text>
+
+  <rect class="box" x="40" y="142" width="300" height="42" rx="4"/>
+  <rect class="chip" x="54" y="152" width="110" height="18" rx="3"/>
+  <text class="cmd" x="60" y="165">FROM alpine</text>
+  <text class="box-detail" x="54" y="179">1층 · 베이스 이미지</text>
+
+  <!-- 실행 시 -->
+  <text class="head" x="380" y="30">컨테이너를 실행하면</text>
+
+  <rect class="box" x="380" y="42" width="280" height="66" rx="4"/>
+  <text class="box-title" x="396" y="64">파일이 안 보인다</text>
+  <rect class="chip" x="396" y="74" width="240" height="18" rx="3"/>
+  <text class="cmd" x="402" y="87">ls: /password.txt: No such file</text>
+  <text class="box-detail" x="396" y="102">여기서 안심하면 안 됩니다</text>
+
+  <path class="arrow" d="M520,108 L520,130" marker-end="url(#rh)"/>
+
+  <!-- 그런데 tar로 풀면 -->
+  <rect class="box" x="380" y="136" width="280" height="72" rx="4"/>
+  <text class="box-title" x="396" y="158">그런데 tar로 풀어 보면</text>
+  <rect class="chip" x="396" y="168" width="200" height="18" rx="3"/>
+  <text class="cmd" x="402" y="181">docker save sensitive &gt; s.tar</text>
+  <text class="box-detail" x="396" y="202">층마다 layer.tar 가 있다</text>
+
+  <path class="arrow" d="M340,163 L380,163"/>
+
+  <!-- 결과: 위험 -->
+  <rect x="40" y="228" width="620" height="76" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="56" y="250">위험 · 2층에서 꺼낼 수 있다</text>
+  <rect class="chip" x="56" y="260" width="190" height="18" rx="3"/>
+  <text class="danger-cmd" x="62" y="273">tar -xf 55*/layer.tar</text>
+  <rect class="chip" x="256" y="260" width="130" height="18" rx="3"/>
+  <text class="danger-cmd" x="262" y="273">cat password.txt</text>
+  <text class="danger-detail" x="56" y="294">존재했던 파일은 다 복원된다</text>
+
+  <!-- 이력까지 -->
+  <rect x="40" y="316" width="620" height="66" rx="4" fill="rgb(212,168,83)"/>
+  <text class="box-title" x="56" y="338">주의 · 명령 이력까지 남는다</text>
+  <rect class="chip" x="56" y="348" width="300" height="18" rx="3"/>
+  <text class="cmd" x="62" y="361">"created_by": "... echo \"top-secret\" ..."</text>
+  <text class="box-detail" x="56" y="376">history 에 빌드 명령이 남는다</text>
+
+  <text class="hint" x="40" y="410">보여도 되는 것만 넣는다</text>
+  <text class="hint" x="40" y="430">시크릿 전달은 12장에서</text>
+</svg>

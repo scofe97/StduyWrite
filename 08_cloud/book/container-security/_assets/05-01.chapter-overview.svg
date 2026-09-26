@@ -1,0 +1,68 @@
+<svg viewBox="0 0 640 430" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>가상머신 이해와 컨테이너 격리 대비 전체 흐름</title>
+  <desc>먼저 평범한 머신이 부팅되는 과정과 권한 링 구조를 봅니다. 그 위에 가상머신 모니터가 들어오면 자원을 나눠 게스트마다 커널을 주는 구조가 됩니다. 모니터의 두 유형과 그 사이의 KVM을 구분한 뒤, 가상화를 실현하는 기법인 트랩앤에뮬레이트와 x86의 난점을 봅니다. 마지막으로 왜 하이퍼바이저 격리가 커널 격리보다 강하다고 평가되는지 코드 규모로 설명하고, 컨테이너와의 대비로 마무리합니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10.5px; }
+    .sec { fill: #3a3632; font-size: 10px; font-weight: 700; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .num { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10.5px; }
+  </style>
+
+  <rect width="640" height="430" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="ph" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="num" x="34" y="45">1.</text>
+  <rect class="box" x="54" y="24" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="46">부팅과 권한 링</text>
+  <text class="box-detail" x="72" y="64">커널 Ring 0 · 앱 Ring 3</text>
+  <text class="sec" x="566" y="46" text-anchor="end">§1</text>
+
+  <path class="arrow" d="M320,74 L320,92" marker-end="url(#ph)"/>
+
+  <text class="num" x="34" y="119">2.</text>
+  <rect class="box" x="54" y="98" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="120">VMM이 자원을 나눈다</text>
+  <text class="box-detail" x="72" y="138">게스트마다 커널을 하나씩</text>
+  <text class="sec" x="566" y="120" text-anchor="end">§2</text>
+
+  <path class="arrow" d="M320,148 L320,166" marker-end="url(#ph)"/>
+
+  <text class="num" x="34" y="193">3.</text>
+  <rect class="box" x="54" y="172" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="194">VMM 세 가지 배치</text>
+  <text class="box-detail" x="72" y="212">경계는 생각보다 흐리다</text>
+  <text class="sec" x="566" y="194" text-anchor="end">§3</text>
+
+  <path class="arrow" d="M320,222 L320,240" marker-end="url(#ph)"/>
+
+  <text class="num" x="34" y="267">4.</text>
+  <rect class="box" x="54" y="246" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="268">트랩앤에뮬레이트</text>
+  <text class="box-detail" x="72" y="286">x86에는 가상화 불가 명령이 있다</text>
+  <text class="sec" x="566" y="268" text-anchor="end">§4</text>
+
+  <path class="arrow" d="M320,296 L320,314" marker-end="url(#ph)"/>
+
+  <text class="num" x="34" y="341">5.</text>
+  <rect class="box" x="54" y="320" width="532" height="50" rx="4"/>
+  <text class="box-title" x="72" y="342">왜 VM 격리가 강한가</text>
+  <text class="box-detail" x="72" y="360">하이퍼바이저는 훨씬 단순하다</text>
+  <text class="sec" x="566" y="342" text-anchor="end">§5</text>
+
+  <path class="arrow" d="M320,370 L320,386" marker-end="url(#ph)"/>
+
+  <text class="hint" x="320" y="410" text-anchor="middle">그래도 컨테이너를 쓰는 이유는 §6</text>
+</svg>

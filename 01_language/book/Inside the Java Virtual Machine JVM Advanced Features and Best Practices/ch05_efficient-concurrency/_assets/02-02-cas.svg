@@ -1,0 +1,46 @@
+<svg viewBox="0 0 900 380" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>CAS 동작 — 예상값 비교 후 교체, 실패하면 재시도</title>
+  <desc>CAS 는 현재 값을 읽고, 그 값이 예상값과 같으면 새 값으로 교체하고, 다르면 교체하지 않고 다시 읽어 재시도한다. 비교와 교체가 CPU 단일 명령으로 원자적으로 일어나 다른 스레드가 끼어들 수 없다.</desc>
+  <rect x="0" y="0" width="900" height="380" fill="#0d0d0d"/>
+
+  <text x="450" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#e8e4df">CAS — "예상값이면 바꾸고, 아니면 다시" (CPU 단일 명령)</text>
+
+  <!-- (1) 읽기 -->
+  <rect x="40" y="80" width="180" height="56" rx="9" fill="#dceaf7"/>
+  <text x="130" y="104" text-anchor="middle" font-size="13" font-weight="700" fill="#10243a">(1) 현재 값 읽기</text>
+  <text x="130" y="123" text-anchor="middle" font-size="11.5" fill="#10243a">v = get()  (예: 5)</text>
+
+  <line x1="220" y1="108" x2="282" y2="108" stroke="#d4a853" stroke-width="2.5"/>
+  <polygon points="288,108 278,103 278,113" fill="#d4a853"/>
+
+  <!-- (2) 비교 (다이아몬드 대신 박스) -->
+  <rect x="290" y="80" width="220" height="56" rx="9" fill="#fdf3df"/>
+  <text x="400" y="104" text-anchor="middle" font-size="13" font-weight="700" fill="#5a3d0a">(2) 지금도 v(=5) 인가?</text>
+  <text x="400" y="123" text-anchor="middle" font-size="11.5" fill="#5a3d0a">compareAndSet(v, v+1)</text>
+
+  <!-- 성공 분기 -->
+  <line x1="510" y1="100" x2="600" y2="100" stroke="#66bb6a" stroke-width="2.5"/>
+  <polygon points="606,100 596,95 596,105" fill="#66bb6a"/>
+  <text x="558" y="92" text-anchor="middle" font-size="11" fill="#66bb6a">같음(성공)</text>
+  <rect x="610" y="78" width="250" height="56" rx="9" fill="#66bb6a"/>
+  <text x="735" y="102" text-anchor="middle" font-size="13" font-weight="700" fill="#0d0d0d">6으로 교체 완료 ✓</text>
+  <text x="735" y="121" text-anchor="middle" font-size="11.5" fill="#0d0d0d">한 번의 증가도 안 사라짐</text>
+
+  <!-- 실패 분기 (재시도 루프) -->
+  <line x1="400" y1="136" x2="400" y2="180" stroke="#c0504d" stroke-width="2.5"/>
+  <polygon points="400,186 395,176 405,176" fill="#c0504d"/>
+  <text x="470" y="166" text-anchor="middle" font-size="11" fill="#e08a87">다름 = 그 사이 누가 바꿈 (실패)</text>
+  <rect x="290" y="188" width="220" height="50" rx="9" fill="#f2d4d4"/>
+  <text x="400" y="210" text-anchor="middle" font-size="12.5" font-weight="700" fill="#7a1f1f">교체 안 함 → 재시도</text>
+  <text x="400" y="228" text-anchor="middle" font-size="11" fill="#7a1f1f">(예외 아님, 다시 읽음)</text>
+  <!-- 루프백 화살표 -->
+  <path d="M 290 213 L 130 213 L 130 140" fill="none" stroke="#c0504d" stroke-width="2.5"/>
+  <polygon points="130,136 125,146 135,146" fill="#c0504d"/>
+  <text x="180" y="232" text-anchor="middle" font-size="11" fill="#e08a87">(1)로 되돌아가 재시도</text>
+
+  <!-- 하드웨어 못박기 -->
+  <rect x="40" y="276" width="820" height="78" rx="12" fill="#0d0d0d" stroke="#d4a853" stroke-width="2"/>
+  <text x="60" y="302" font-size="13.5" font-weight="700" fill="#d4a853">왜 락 없이 안전한가 — (1)~(2)가 CPU 명령 하나(CMPXCHG)</text>
+  <text x="60" y="324" font-size="12" fill="#c9c4be">"읽고·비교하고·쓰기"가 단일 원자 명령이라 그 사이 다른 코어가 못 끼어든다. count++ 가 세 바이트코드라 깨진 것과 반대.</text>
+  <text x="60" y="344" font-size="12" fill="#c9c4be">하드웨어가 캐시 라인을 아주 짧게 잠금 = "변수 하나에 거는 초경량 락". 스레드를 안 재워 락 없이처럼 보인다.</text>
+</svg>

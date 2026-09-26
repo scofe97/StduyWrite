@@ -1,0 +1,68 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>조사 기법의 네 시나리오와 AI 활용 (Ch.1 §1.2~§1.4)</title>
+  <desc>저자는 코드 조사 상황을 네 가지 전형으로 나눕니다. 첫째 예상 밖 출력은 단순하면 디버거로 중단점을 찍어 따라가고, 어디서 시작할지 모르면 프로파일러로 실행 중인 코드를 찾고, 멀티스레드면 디버거 간섭으로 동작이 바뀌는 Heisenbug 탓에 로그나 단일 스레드 축소로 우회하며, 잘못된 호출을 보내면 상대를 제어 가능한 스텁으로 바꿔 위치를 짚습니다. 출력은 콘솔 텍스트뿐 아니라 DB 변경, 외부 HTTP 요청과 응답까지 포함합니다. 둘째 외부 라이브러리 학습은 Spring Security와 Hibernate처럼 복잡한 프레임워크를 디버깅으로 파고들어 익힙니다. 셋째 느림은 성능 문제의 한 종류일 뿐이며, 프로파일러가 명령별 소요 시간을 보여 주고 흔히 I/O 호출이 원인이며 좀비 스레드도 문제입니다. 넷째 크래시는 완전히 멈추면 OutOfMemoryError에 힙 덤프로 메모리 스냅샷을, 돌지만 응답만 안 하면 스레드 덤프로 스레드 상태를 봅니다. AI는 어디서 시작할지 짚어 주는 조수이지만 비즈니스 규칙과 설계 결정을 모르므로 증거 해석과 결정은 개발자의 몫입니다. 프롬프트는 자세히 쓰고, 민감 정보를 빼고, 맹신하지 않고 교차 검증하며, 여러 번 이어 갑니다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">증상이 기법을 고른다 — 네 시나리오</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">예상 밖 출력 · 라이브러리 학습 · 느림 · 크래시 (Ch.1 §1.2~§1.4)</text>
+
+  <!-- 시나리오 1: 예상 밖 출력 -->
+  <rect x="20" y="74" width="640" height="128" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="96" fill="#9cc3df" font-size="13" font-weight="bold">① 예상 밖 출력 — 출력 = 콘솔·DB 변경·외부 HTTP 요청·응답</text>
+  <rect x="38" y="106" width="148" height="80" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="46" y="124" fill="#e8e4df" font-size="10" font-weight="bold">단순한 경우</text>
+  <text x="46" y="142" fill="rgb(138,133,128)" font-size="9">디버거 + 중단점</text>
+  <text x="46" y="158" fill="rgb(138,133,128)" font-size="9">한 줄씩 값 관찰</text>
+  <text x="46" y="176" fill="#66bb6a" font-size="9">2~3장</text>
+  <rect x="194" y="106" width="148" height="80" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="202" y="124" fill="#e8e4df" font-size="10" font-weight="bold">시작점 모름</text>
+  <text x="202" y="142" fill="rgb(138,133,128)" font-size="9">프로파일러로</text>
+  <text x="202" y="158" fill="rgb(138,133,128)" font-size="9">실행 코드 식별</text>
+  <text x="202" y="176" fill="#66bb6a" font-size="9">5~8장</text>
+  <rect x="350" y="106" width="148" height="80" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="358" y="124" fill="#e8e4df" font-size="10" font-weight="bold">멀티스레드</text>
+  <text x="358" y="142" fill="#f47f72" font-size="9">Heisenbug 주의</text>
+  <text x="358" y="158" fill="rgb(138,133,128)" font-size="9">로그·스레드 1개로</text>
+  <text x="358" y="176" fill="#66bb6a" font-size="9">4장</text>
+  <rect x="506" y="106" width="146" height="80" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="514" y="124" fill="#e8e4df" font-size="10" font-weight="bold">잘못된 호출</text>
+  <text x="514" y="142" fill="rgb(212,168,83)" font-size="9">stub으로 대체</text>
+  <text x="514" y="158" fill="rgb(138,133,128)" font-size="9">제어 가능한 가짜</text>
+  <text x="514" y="176" fill="rgb(138,133,128)" font-size="9">위치 짚기·검증</text>
+
+  <!-- 시나리오 2: 라이브러리 학습 -->
+  <rect x="20" y="214" width="315" height="78" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="236" fill="#66bb6a" font-size="13" font-weight="bold">② 외부 라이브러리 학습</text>
+  <text x="38" y="256" fill="#e8e4df" font-size="11">복잡한 프레임워크는 디버깅으로 익힌다</text>
+  <text x="38" y="276" fill="rgb(138,133,128)" font-size="10">예: Spring Security · Hibernate</text>
+
+  <!-- 시나리오 3: 느림 -->
+  <rect x="345" y="214" width="315" height="78" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="363" y="236" fill="rgb(212,168,83)" font-size="13" font-weight="bold">③ 느림 — 성능 문제의 한 종류</text>
+  <text x="363" y="256" fill="#e8e4df" font-size="11">프로파일러가 명령별 소요 시간 표시</text>
+  <text x="363" y="276" fill="rgb(138,133,128)" font-size="10">흔히 I/O 호출 · 좀비 스레드</text>
+
+  <!-- 시나리오 4: 크래시 -->
+  <rect x="20" y="304" width="640" height="118" fill="rgba(244,127,114,0.07)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="326" fill="#f47f72" font-size="13" font-weight="bold">④ 크래시 — 먼저 재현 가능한 환경을 만든다</text>
+  <rect x="38" y="336" width="300" height="74" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="48" y="356" fill="#e8e4df" font-size="11" font-weight="bold">완전히 멈춤 (OutOfMemoryError)</text>
+  <text x="48" y="376" fill="rgb(138,133,128)" font-size="10">→ 힙 덤프 = 메모리 스냅샷</text>
+  <text x="48" y="396" fill="rgb(138,133,128)" font-size="10">어떤 객체가 힙을 채웠는지 본다 (10장)</text>
+  <rect x="350" y="336" width="302" height="74" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="360" y="356" fill="#e8e4df" font-size="11" font-weight="bold">돌지만 응답 안 함</text>
+  <text x="360" y="376" fill="rgb(138,133,128)" font-size="10">→ 스레드 덤프 = 스레드 상태·스택</text>
+  <text x="360" y="396" fill="rgb(138,133,128)" font-size="10">무엇에 막혔는지 본다 (8장)</text>
+
+  <!-- AI -->
+  <rect x="20" y="434" width="640" height="150" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="456" fill="#e8e4df" font-size="13" font-weight="bold">AI를 트러블슈팅에 — 조수이되 주인은 당신 (puppeteer, not puppet)</text>
+  <text x="38" y="476" fill="rgb(138,133,128)" font-size="10">어디서 시작할지 짚고 로그를 요약하지만, 비즈니스 규칙·이력·설계 결정은 모른다 → 해석·결정은 개발자</text>
+  <text x="38" y="494" fill="rgb(212,168,83)" font-size="10">탐정과 조수의 비유: AI는 증거를 처리하고 단서를 제안하는 파트너, 탐정은 당신</text>
+  <text x="38" y="516" fill="#e8e4df" font-size="11" font-weight="bold">프롬프트 네 원칙</text>
+  <rect x="38" y="526" width="148" height="22" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/><text x="112" y="541" fill="#66bb6a" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle">최대한 자세히</text>
+  <rect x="194" y="526" width="148" height="22" fill="rgba(244,127,114,0.13)" stroke="#f47f72"/><text x="268" y="541" fill="#f47f72" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle">민감 정보 제외</text>
+  <rect x="350" y="526" width="148" height="22" fill="rgba(244,127,114,0.13)" stroke="#f47f72"/><text x="424" y="541" fill="#f47f72" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle">맹신 금지·교차검증</text>
+  <rect x="506" y="526" width="146" height="22" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/><text x="579" y="541" fill="#66bb6a" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle">여러 프롬프트로</text>
+  <text x="38" y="570" fill="rgb(138,133,128)" font-size="10">❌ "이 코드 뭐 해?" → ✅ "이 코드를 한 단계씩 설명해 주세요" (결과가 아니라 이해가 목적)</text>
+</svg>

@@ -1,0 +1,99 @@
+<svg viewBox="0 0 700 470" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>컨테이너 생애주기와 공격 벡터 9종</title>
+  <desc>개발자가 코드를 쓰고, 그 코드가 이미지로 빌드되고, 이미지가 레지스트리에 저장됐다가, 호스트에서 컨테이너로 실행되는 네 단계를 가로축으로 둡니다. 각 단계마다 그 시점에 성립하는 공격 벡터를 아래에 붙였고, 벡터마다 책의 어느 장에서 다루는지를 함께 적었습니다. 마지막 컨테이너 이스케이프는 격리 자체가 뚫리는 경우라 위험 색으로 구분했습니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 12px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10px; }
+    .stage { fill: #e8e4df; font-size: 12.5px; font-weight: 700; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .tick { stroke: #b8b3ad; stroke-width: 1; fill: none; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .ch { fill: #3a3632; font-size: 9.5px; font-weight: 700; }
+    .danger-title { fill: #7a1f1f; font-size: 12px; font-weight: 700; }
+    .danger-detail { fill: #7a1f1f; font-size: 10px; }
+    .danger-ch { fill: #7a1f1f; font-size: 9.5px; font-weight: 700; }
+  </style>
+
+  <rect width="700" height="470" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="ah2" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <!-- 생애주기 축 -->
+  <text class="stage" x="60" y="38">코드</text>
+  <text class="stage" x="222" y="38">이미지 빌드</text>
+  <text class="stage" x="400" y="38">레지스트리</text>
+  <text class="stage" x="560" y="38">실행 · 호스트</text>
+
+  <path class="arrow" d="M40,52 L660,52" marker-end="url(#ah2)"/>
+  <path class="tick" d="M60,48 L60,62"/>
+  <path class="tick" d="M240,48 L240,62"/>
+  <path class="tick" d="M420,48 L420,62"/>
+  <path class="tick" d="M580,48 L580,62"/>
+
+  <!-- 1. 취약한 앱 코드 -->
+  <rect class="box" x="30" y="80" width="180" height="52" rx="4"/>
+  <text class="box-title" x="44" y="102">취약한 앱 코드</text>
+  <text class="box-detail" x="44" y="120">의존성의 공개 취약점</text>
+  <text class="ch" x="196" y="102" text-anchor="end">7장</text>
+
+  <!-- 2. 잘못 설정된 이미지 -->
+  <rect class="box" x="230" y="80" width="180" height="52" rx="4"/>
+  <text class="box-title" x="244" y="102">잘못 설정된 이미지</text>
+  <text class="box-detail" x="244" y="120">root 실행 · 과도한 권한</text>
+  <text class="ch" x="396" y="102" text-anchor="end">6장</text>
+
+  <!-- 3. 빌드 머신 공격 -->
+  <rect class="box" x="230" y="146" width="180" height="52" rx="4"/>
+  <text class="box-title" x="244" y="168">빌드 머신 공격</text>
+  <text class="box-detail" x="244" y="186">빌드에 악성 코드 주입</text>
+  <text class="ch" x="396" y="168" text-anchor="end">6장</text>
+
+  <!-- 4. 공급망 공격 -->
+  <rect class="box" x="430" y="80" width="180" height="52" rx="4"/>
+  <text class="box-title" x="444" y="102">공급망 공격</text>
+  <text class="box-detail" x="444" y="120">푸시한 것과 다른 이미지</text>
+  <text class="ch" x="596" y="102" text-anchor="end">6장</text>
+
+  <!-- 5. 잘못 설정된 컨테이너 -->
+  <rect class="box" x="430" y="146" width="180" height="52" rx="4"/>
+  <text class="box-title" x="444" y="168">잘못 설정된 컨테이너</text>
+  <text class="box-detail" x="444" y="186">불필요한 권한 부여</text>
+  <text class="ch" x="596" y="168" text-anchor="end">9장</text>
+
+  <!-- 6. 취약한 호스트 -->
+  <rect class="box" x="430" y="212" width="180" height="52" rx="4"/>
+  <text class="box-title" x="444" y="234">취약한 호스트</text>
+  <text class="box-detail" x="444" y="252">구버전 오케스트레이터</text>
+  <text class="ch" x="596" y="234" text-anchor="end">4장</text>
+
+  <!-- 7. 노출된 시크릿 -->
+  <rect class="box" x="430" y="278" width="180" height="52" rx="4"/>
+  <text class="box-title" x="444" y="300">노출된 시크릿</text>
+  <text class="box-detail" x="444" y="318">자격증명 전달 방식</text>
+  <text class="ch" x="596" y="300" text-anchor="end">12장</text>
+
+  <!-- 8. 안전하지 않은 네트워킹 -->
+  <rect class="box" x="430" y="344" width="180" height="52" rx="4"/>
+  <text class="box-title" x="444" y="366">안전하지 않은 네트워킹</text>
+  <text class="box-detail" x="444" y="384">컨테이너 간 통신 노출</text>
+  <text class="ch" x="596" y="366" text-anchor="end">10 · 11장</text>
+
+  <!-- 9. 컨테이너 이스케이프 — 위험 -->
+  <rect x="430" y="410" width="180" height="52" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="444" y="432">컨테이너 이스케이프</text>
+  <text class="danger-detail" x="444" y="450">격리를 뚫고 호스트로</text>
+  <text class="danger-ch" x="596" y="432" text-anchor="end">4 · 8장</text>
+
+  <text class="hint" x="30" y="440">벡터는 단계마다 쌓인다</text>
+  <text class="hint" x="30" y="456">실행 단계에 가장 많다</text>
+</svg>

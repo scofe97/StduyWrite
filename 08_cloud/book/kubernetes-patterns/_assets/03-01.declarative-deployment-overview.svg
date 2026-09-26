@@ -1,0 +1,88 @@
+<svg viewBox="0 0 900 430" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>배포 전략과 릴리스 전략을 가르는 자동화 경계</title>
+  <desc>이 장 전체의 구조를 한 장으로 요약합니다. 출발점은 개발자가 Deployment 선언을 갱신하는 것이고 실행은 서버 사이드에서 일어납니다. 여기서 두 층으로 갈라집니다. 위층은 배포 전략으로 낡은 컨테이너를 새것으로 교체하는 방식을 다루며 Kubernetes가 완전히 자동화합니다. RollingUpdate는 기본값이고 무중단이지만 전환 중 두 버전이 함께 돌며 maxSurge와 maxUnavailable과 minReadySeconds로 속도를 조절합니다. Recreate는 maxUnavailable을 replica 수로 설정한 효과로 전부 죽인 뒤 전부 띄우므로 다운타임이 생기지만 한 번에 한 버전만 돕니다. 아래층은 릴리스 전략으로 새 버전이 소비자에게 노출되는 방식을 다루며 전환 트리거가 사람의 판단이라 완전 자동이 아닙니다. Blue-Green은 두 번째 Deployment를 띄워 두고 Service 셀렉터를 바꿔 전환하므로 용량이 두 배 필요합니다. Canary는 작은 replica 수로 소수에게 먼저 노출한 뒤 확신이 서면 새 ReplicaSet을 올리고 낡은 것을 0으로 내립니다. 이 아래층을 선언적으로 자동화하려면 Operator 패턴 기반의 Flagger와 Argo Rollouts와 Knative 같은 상위 도구가 필요합니다. 전체의 전제는 컨테이너가 SIGTERM을 존중하고 readiness 엔드포인트를 제공하는 것입니다.</desc>
+
+  <rect width="900" height="430" fill="#0d0d0d"/>
+
+  <text x="24" y="30" fill="#e8e4df" font-size="15" font-weight="700">교체는 자동, 노출은 사람 판단</text>
+
+  <!-- source -->
+  <rect x="24" y="52" width="176" height="52" fill="rgb(212,168,83)"/>
+  <text x="112" y="74" text-anchor="middle" fill="#0d0d0d" font-size="12" font-weight="700">Deployment 선언</text>
+  <text x="112" y="92" text-anchor="middle" fill="#0d0d0d" font-size="10">서버 사이드로 실행</text>
+
+  <!-- connectors to two layers -->
+  <path d="M 204 78 L 240 78" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#am)"/>
+  <line x1="112" y1="104" x2="112" y2="252" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <line x1="112" y1="252" x2="204" y2="252" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <path d="M 204 252 L 240 252" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#am)"/>
+
+  <!-- ===== layer 1 : deployment strategy (automated) ===== -->
+  <rect x="244" y="46" width="190" height="30" fill="#cdeccf"/>
+  <text x="339" y="66" text-anchor="middle" fill="#14521d" font-size="11" font-weight="700">배포 전략 · 완전 자동</text>
+
+  <rect x="244" y="80" width="190" height="46" fill="#0d0d0d" stroke="#cdeccf"/>
+  <text x="339" y="98" text-anchor="middle" fill="#cdeccf" font-size="10" font-weight="700">RollingUpdate</text>
+  <text x="339" y="115" text-anchor="middle" fill="#cdeccf" font-size="9">기본값 · 무중단</text>
+
+  <rect x="244" y="132" width="190" height="46" fill="#0d0d0d" stroke="#cdeccf"/>
+  <text x="339" y="150" text-anchor="middle" fill="#cdeccf" font-size="10" font-weight="700">Recreate</text>
+  <text x="339" y="167" text-anchor="middle" fill="#cdeccf" font-size="9">전부 죽이고 전부 띄움</text>
+
+  <path d="M 438 103 L 474 103" stroke="#66bb6a" stroke-width="2" marker-end="url(#gm)"/>
+  <rect x="478" y="86" width="398" height="34" fill="#cdeccf"/>
+  <text x="498" y="108" fill="#14521d" font-size="11" font-weight="700">두 버전이 잠깐 함께 돕니다</text>
+
+  <path d="M 438 155 L 474 155" stroke="#f44336" stroke-width="2" marker-end="url(#rm)"/>
+  <rect x="478" y="138" width="398" height="34" fill="#f2d4d4"/>
+  <text x="498" y="160" fill="#7a1f1f" font-size="11" font-weight="700">다운타임 · 한 버전만</text>
+
+  <!-- tuning knobs -->
+  <rect x="244" y="188" width="632" height="30" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="264" y="207" fill="#b8b3ad" font-size="9" font-family="'JetBrains Mono', monospace">maxSurge · maxUnavailable · minReadySeconds</text>
+  <text x="700" y="207" fill="#b8b3ad" font-size="9" font-weight="700">교체 속도를 조절합니다</text>
+
+  <line x1="24" y1="234" x2="876" y2="234" stroke="#4a4640"/>
+
+  <!-- ===== layer 2 : release strategy (human) ===== -->
+  <rect x="244" y="238" width="190" height="30" fill="#ddd4f0"/>
+  <text x="339" y="258" text-anchor="middle" fill="#2d1f52" font-size="11" font-weight="700">릴리스 전략 · 사람 판단</text>
+
+  <rect x="244" y="272" width="190" height="46" fill="#0d0d0d" stroke="#ddd4f0"/>
+  <text x="339" y="290" text-anchor="middle" fill="#ddd4f0" font-size="10" font-weight="700">Blue-Green</text>
+  <text x="339" y="307" text-anchor="middle" fill="#ddd4f0" font-size="9">셀렉터를 바꿔 전환</text>
+
+  <rect x="244" y="324" width="190" height="46" fill="#0d0d0d" stroke="#ddd4f0"/>
+  <text x="339" y="342" text-anchor="middle" fill="#ddd4f0" font-size="10" font-weight="700">Canary</text>
+  <text x="339" y="359" text-anchor="middle" fill="#ddd4f0" font-size="9">소수에게 먼저 노출</text>
+
+  <path d="M 438 295 L 474 295" stroke="#9a86c4" stroke-width="2" marker-end="url(#pm)"/>
+  <rect x="478" y="278" width="398" height="34" fill="#ddd4f0"/>
+  <text x="498" y="300" fill="#2d1f52" font-size="11" font-weight="700">용량이 두 배 필요합니다</text>
+
+  <path d="M 438 347 L 474 347" stroke="#9a86c4" stroke-width="2" marker-end="url(#pm)"/>
+  <rect x="478" y="330" width="398" height="34" fill="#ddd4f0"/>
+  <text x="498" y="352" fill="#2d1f52" font-size="11" font-weight="700">확신이 서면 확대합니다</text>
+
+  <!-- higher level tools -->
+  <rect x="24" y="382" width="852" height="30" fill="rgb(212,168,83)"/>
+  <text x="450" y="401" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">아래층 자동화는 상위 도구가 맡습니다</text>
+
+  <defs>
+    <marker id="am" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="gm" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#66bb6a"/>
+    </marker>
+    <marker id="rm" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#f44336"/>
+    </marker>
+    <marker id="pm" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#9a86c4"/>
+    </marker>
+  </defs>
+</svg>
