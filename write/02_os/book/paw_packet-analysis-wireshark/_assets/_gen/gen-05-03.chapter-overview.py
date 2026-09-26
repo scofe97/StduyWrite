@@ -4,7 +4,7 @@ from dd import D, ACC, MUTED, SOFT, INK, INFO, WARN, PAPER2, RULE, KR, MONO
 W, H = 880, 500
 d = D(W, H, "PACKET ANALYSIS WITH WIRESHARK · 05-03",
       "실습 편 — 세 묶음이 옮기는 것",
-      "묶음 A 는 05-01 의 네 걸음을, 묶음 B 는 05-01 의 어긋남·확인·릴레이를, 묶음 C 는 05-02 의 이름과 요청을 컨테이너에서 다시 잡는다. 한 세션에 한 묶음이다.",
+      "묶음 A 는 05-01 의 네 걸음을, 묶음 B 는 05-01 의 어긋남·확인·릴레이를, 묶음 C 는 05-02 의 이름과 요청을 05-04 에서 컨테이너로 다시 잡는다. 한 세션에 한 묶음이다.",
       "위 줄이 노트의 절, 아래 줄이 그 절을 옮긴 묶음입니다")
 CW, CH, GAP, X0 = 256, 92, 32, 24
 notes = [("05-01 §1~§4", "네 걸음 · 두 걸음", "SARR · DORA · rapid commit"),
@@ -12,7 +12,7 @@ notes = [("05-01 §1~§4", "네 걸음 · 두 걸음", "SARR · DORA · rapid co
          ("05-02 §1~§4", "이름과 요청", "DNS · http.time · 재조립 · CONNECT")]
 bund = [("묶음 A", "주소를 받는 네 걸음", "A1~A5", False),
         ("묶음 B", "어긋나는 경우들", "B1~B5", True),
-        ("묶음 C", "이름과 요청", "C1~C8", False)]
+        ("묶음 C", "이름과 요청", "C1~C8 · 05-04", False)]
 Y1, Y2 = 112, 292
 for i, ((sec, t, sub), (b, bt, rng, focal)) in enumerate(zip(notes, bund)):
     x = X0 + i * (CW + GAP)

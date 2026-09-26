@@ -1,9 +1,9 @@
-# 05-03 묶음 C — 이름과 요청(05-02). C4 는 "느린 요청은 SYN·ACK 간격"(잘못 알던 인과)을 겨눈다. C7·C8 은 학습자 요청으로 넣은 책 밖 확장.
+# 05-04 묶음 C — 이름과 요청(05-02). C4 는 "느린 요청은 SYN·ACK 간격"(잘못 알던 인과)을 겨눈다. C7·C8 은 학습자 요청으로 넣은 책 밖 확장.
 # 타입 스펙: type-flowchart — 단계를 실행 순서대로 잇는 절차 흐름. focal 은 잘못 알던 인과를 겨누는 단계.
 import sys; sys.path.insert(0, "."); sys.path.insert(0, "_gen")
 from _bundle_flow import bundle
 from dd import ACC, WARN, INFO
-bundle("05-03.bundle-c.svg", "PACKET ANALYSIS WITH WIRESHARK · 05-03 BUNDLE C",
+bundle("05-04.bundle-c.svg", "PACKET ANALYSIS WITH WIRESHARK · 05-04 BUNDLE C",
        "묶음 C — 이름과 요청",
        "이름 실패와 연결 실패를 캡처에서 가르고, 질의 타입과 CNAME 체인을 읽고, 큰 응답이 TCP 로 넘어가는 순간을 EDNS(0) 로 없애고, 연결 하나에 실린 요청들의 http.time 을 재고, 재조립을 껐다 켜고, 평문 POST 와 CONNECT 터널 안의 ClientHello 를 본 뒤, DoT 와 mDNS 로 넓힌다.",
        "dns.conf 의 lab.test 존과 www/server.py 하나로 여덟 단계를 돕니다",
