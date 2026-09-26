@@ -6,6 +6,9 @@ source:
   - 《Learning Go, 2nd Edition》(Jon Bodner, O'Reilly) — 본문 16장, 장별 PDF 16개 · 약 138,000단어(pdftotext 추출 기준)
   - 원본 PDF — GoogleDrive/내 드라이브/book/Learning Go, 2nd Edition/
 related:
+  - ./05-01.Go%20%ED%95%A8%EC%88%98%EB%8A%94%20%EC%97%AC%EB%9F%AC%20%EA%B0%92%EC%9D%84%20%EB%8F%8C%EB%A0%A4%EC%A3%BC%EA%B3%A0%20%EC%98%A4%EB%A5%98%EB%8A%94%20%EB%A7%88%EC%A7%80%EB%A7%89%20%EA%B0%92%EC%9E%85%EB%8B%88%EB%8B%A4.md
+  - ./05-02.%ED%95%A8%EC%88%98%EB%8A%94%20%EA%B0%92%EC%9D%B4%EA%B3%A0%20%ED%81%B4%EB%A1%9C%EC%A0%80%EB%8A%94%20%EB%B0%94%EA%B9%A5%20%EB%B3%80%EC%88%98%EB%A5%BC%20%EB%B6%99%EC%9E%A1%EC%8A%B5%EB%8B%88%EB%8B%A4.md
+  - ./05-03.defer%20%EB%8A%94%20%ED%95%A8%EC%88%98%EA%B0%80%20%EB%81%9D%EB%82%A0%20%EB%95%8C%20%EC%A0%95%EB%A6%AC%ED%95%98%EA%B3%A0%20%EC%9D%B8%EC%9E%90%EB%8A%94%20%EB%8A%98%20%EB%B3%B5%EC%82%AC%EB%90%A9%EB%8B%88%EB%8B%A4.md
   - ./04-01.%EC%95%88%EC%AA%BD%20%EB%B8%94%EB%A1%9D%EC%9D%98%20%EA%B0%99%EC%9D%80%20%EC%9D%B4%EB%A6%84%EC%9D%80%20%EB%B0%94%EA%B9%A5%20%EB%B3%80%EC%88%98%EB%A5%BC%20%EA%B0%80%EB%A6%BD%EB%8B%88%EB%8B%A4.md
   - ./04-02.for%20%ED%95%98%EB%82%98%EB%A1%9C%20%EB%84%A4%20%EA%B0%80%EC%A7%80%20%EB%B0%98%EB%B3%B5%EC%9D%84%20%EC%94%81%EB%8B%88%EB%8B%A4.md
   - ./04-03.switch%20%EB%8A%94%20%EA%B8%B0%EB%B3%B8%EC%9C%BC%EB%A1%9C%20%EB%B9%A0%EC%A0%B8%EB%82%98%EA%B0%80%EA%B3%A0%20break%20%EB%8A%94%20%EB%9D%BC%EB%B2%A8%EB%A1%9C%20%EA%B3%A0%EB%A6%85%EB%8B%88%EB%8B%A4.md
@@ -25,7 +28,7 @@ learning:
   level: 입문
   last_verified: null   # 아직 Phase 4 자답·복습 회차 없음
   blocked_count: null   # 검증 전이라 막힌 문항 수가 없음
-  next_lesson: "1~4장 학습 세션(설명 → 회상 → 실습) — 노트는 작성됨. 이어서 5장 노트 작성"
+  next_lesson: "1~6장 학습 세션(설명 → 회상 → 실습) — 노트는 작성됨. 이어서 7장 노트 작성"
 updated: 2026-09-27
 ---
 
@@ -78,7 +81,7 @@ Go 를 쓰는 기존 문서는 모두 `02_os/project/` 의 실습 랩에 있습�
 
 ## 작성된 정독 노트
 
-> 1~4장 노트 아홉 편을 썼습니다. 한 세션에 한 장씩 이어서 씁니다.
+> 1~6장 노트 열다섯 편을 썼습니다. 한 세션에 한 장씩 이어서 씁니다.
 
 진척 표시는 ◻ 미착수, ⏳ 진행 중, ✅ 완료입니다. 한 장을 몇 편으로 나눌지는 그 장 원문을 읽은 뒤 분할안을 먼저 정하고, 빈 노트를 미리 만들어 두지 않습니다.
 
@@ -88,7 +91,9 @@ Go 를 쓰는 기존 문서는 모두 `02_os/project/` 의 실습 랩에 있습�
 | 2 | [02-01.타입은 자동으로 섞이지 않고 리터럴만 유연합니다](./02-01.%ED%83%80%EC%9E%85%EC%9D%80%20%EC%9E%90%EB%8F%99%EC%9C%BC%EB%A1%9C%20%EC%84%9E%EC%9D%B4%EC%A7%80%20%EC%95%8A%EA%B3%A0%20%EB%A6%AC%ED%84%B0%EB%9F%B4%EB%A7%8C%20%EC%9C%A0%EC%97%B0%ED%95%A9%EB%8B%88%EB%8B%A4.md), [02-02.var 와 짧은 선언은 의도를 드러내는 선택입니다](./02-02.var%20%EC%99%80%20%EC%A7%A7%EC%9D%80%20%EC%84%A0%EC%96%B8%EC%9D%80%20%EC%9D%98%EB%8F%84%EB%A5%BC%20%EB%93%9C%EB%9F%AC%EB%82%B4%EB%8A%94%20%EC%84%A0%ED%83%9D%EC%9E%85%EB%8B%88%EB%8B%A4.md) | ✅ 2편: 02-01 제로 값 · 리터럴 · 정수·부동소수점·복소수 · 문자열과 rune · 명시적 변환과 truthy 없음 · 타입 없는 리터럴, 02-02 var 와 := · const · 타입 있는/없는 상수 · 쓰지 않는 변수 · 이름 짓기, 연습 문제 1~3 |
 | 3 | [03-01.slice 는 배열을 나눠 쓰는 창입니다](./03-01.slice%20%EB%8A%94%20%EB%B0%B0%EC%97%B4%EC%9D%84%20%EB%82%98%EB%88%A0%20%EC%93%B0%EB%8A%94%20%EC%B0%BD%EC%9E%85%EB%8B%88%EB%8B%A4.md), [03-02.문자열은 바이트이고 map 은 없는 키에 제로 값을 돌려줍니다](./03-02.%EB%AC%B8%EC%9E%90%EC%97%B4%EC%9D%80%20%EB%B0%94%EC%9D%B4%ED%8A%B8%EC%9D%B4%EA%B3%A0%20map%20%EC%9D%80%20%EC%97%86%EB%8A%94%20%ED%82%A4%EC%97%90%20%EC%A0%9C%EB%A1%9C%20%EA%B0%92%EC%9D%84%20%EB%8F%8C%EB%A0%A4%EC%A4%8D%EB%8B%88%EB%8B%A4.md), [03-03.struct 는 타입이 다른 값을 이름으로 묶습니다](./03-03.struct%20%EB%8A%94%20%ED%83%80%EC%9E%85%EC%9D%B4%20%EB%8B%A4%EB%A5%B8%20%EA%B0%92%EC%9D%84%20%EC%9D%B4%EB%A6%84%EC%9C%BC%EB%A1%9C%20%EB%AC%B6%EC%8A%B5%EB%8B%88%EB%8B%A4.md) | ✅ 3편: 03-01 배열 · slice · append 와 용량 증가 · make · slice 의 slice 와 완전 slice 식 · copy · 배열↔slice 변환, 03-02 문자열은 바이트 · 룬·바이트 변환 · UTF-8 · map · comma ok · delete·clear · 집합, 03-03 struct · 리터럴 · 익명 struct · 비교와 변환, 연습 문제 1~3. 원문 정오 1건(03-03 채널 필드 비교) |
 | 4 | [04-01.안쪽 블록의 같은 이름은 바깥 변수를 가립니다](./04-01.%EC%95%88%EC%AA%BD%20%EB%B8%94%EB%A1%9D%EC%9D%98%20%EA%B0%99%EC%9D%80%20%EC%9D%B4%EB%A6%84%EC%9D%80%20%EB%B0%94%EA%B9%A5%20%EB%B3%80%EC%88%98%EB%A5%BC%20%EA%B0%80%EB%A6%BD%EB%8B%88%EB%8B%A4.md), [04-02.for 하나로 네 가지 반복을 씁니다](./04-02.for%20%ED%95%98%EB%82%98%EB%A1%9C%20%EB%84%A4%20%EA%B0%80%EC%A7%80%20%EB%B0%98%EB%B3%B5%EC%9D%84%20%EC%94%81%EB%8B%88%EB%8B%A4.md), [04-03.switch 는 기본으로 빠져나가고 break 는 라벨로 고릅니다](./04-03.switch%20%EB%8A%94%20%EA%B8%B0%EB%B3%B8%EC%9C%BC%EB%A1%9C%20%EB%B9%A0%EC%A0%B8%EB%82%98%EA%B0%80%EA%B3%A0%20break%20%EB%8A%94%20%EB%9D%BC%EB%B2%A8%EB%A1%9C%20%EA%B3%A0%EB%A6%85%EB%8B%88%EB%8B%A4.md) | ✅ 3편: 04-01 블록 · universe 블록 · 섀도잉(:= · 패키지 이름 · true) · if 초기화 선언, 04-02 for 네 형태 · break·continue · for-range(map 순서 · 문자열 룬 · 값 사본 · Go 1.22 루프 변수) · 라벨 · 형태 고르기, 04-03 switch · fallthrough · switch 안 break 와 라벨 · 빈 switch · if 대 switch · goto, 연습 문제 1~3. 원문 정오 3건(04-02 오타 둘 · 04-03 채널 비교) |
-| 5~16 | — | ◻ |
+| 5 | [05-01.Go 함수는 여러 값을 돌려주고 오류는 마지막 값입니다](./05-01.Go%20%ED%95%A8%EC%88%98%EB%8A%94%20%EC%97%AC%EB%9F%AC%20%EA%B0%92%EC%9D%84%20%EB%8F%8C%EB%A0%A4%EC%A3%BC%EA%B3%A0%20%EC%98%A4%EB%A5%98%EB%8A%94%20%EB%A7%88%EC%A7%80%EB%A7%89%20%EA%B0%92%EC%9E%85%EB%8B%88%EB%8B%A4.md), [05-02.함수는 값이고 클로저는 바깥 변수를 붙잡습니다](./05-02.%ED%95%A8%EC%88%98%EB%8A%94%20%EA%B0%92%EC%9D%B4%EA%B3%A0%20%ED%81%B4%EB%A1%9C%EC%A0%80%EB%8A%94%20%EB%B0%94%EA%B9%A5%20%EB%B3%80%EC%88%98%EB%A5%BC%20%EB%B6%99%EC%9E%A1%EC%8A%B5%EB%8B%88%EB%8B%A4.md), [05-03.defer 는 함수가 끝날 때 정리하고 인자는 늘 복사됩니다](./05-03.defer%20%EB%8A%94%20%ED%95%A8%EC%88%98%EA%B0%80%20%EB%81%9D%EB%82%A0%20%EB%95%8C%20%EC%A0%95%EB%A6%AC%ED%95%98%EA%B3%A0%20%EC%9D%B8%EC%9E%90%EB%8A%94%20%EB%8A%98%20%EB%B3%B5%EC%82%AC%EB%90%A9%EB%8B%88%EB%8B%A4.md) | ✅ 3편: 05-01 함수 선언 · struct 로 이름 붙은·선택 인자 · 가변 인자 · 여러 값 반환과 오류 · 이름 붙은 반환 값 · 빈 return, 05-02 함수 값·시그니처 · 계산기 · 함수 타입 · 익명 함수 · 클로저 · sort.Slice · makeMult, 05-03 defer(LIFO · 인자 평가 · 결과 변수 수정 · 정리 클로저) · 값에 의한 호출 · 연습 문제 1~3. 원문 정오 1건(05-03 SQL VALUES 괄호) |
+| 6 | [06-01.포인터는 값이 놓인 주소를 담고 객체 변수도 사실 포인터입니다](./06-01.%ED%8F%AC%EC%9D%B8%ED%84%B0%EB%8A%94%20%EA%B0%92%EC%9D%B4%20%EB%86%93%EC%9D%B8%20%EC%A3%BC%EC%86%8C%EB%A5%BC%20%EB%8B%B4%EA%B3%A0%20%EA%B0%9D%EC%B2%B4%20%EB%B3%80%EC%88%98%EB%8F%84%20%EC%82%AC%EC%8B%A4%20%ED%8F%AC%EC%9D%B8%ED%84%B0%EC%9E%85%EB%8B%88%EB%8B%A4.md), [06-02.포인터 매개변수는 바꿔도 된다는 표시이고 slice 는 길이까지 복사됩니다](./06-02.%ED%8F%AC%EC%9D%B8%ED%84%B0%20%EB%A7%A4%EA%B0%9C%EB%B3%80%EC%88%98%EB%8A%94%20%EB%B0%94%EA%BF%94%EB%8F%84%20%EB%90%9C%EB%8B%A4%EB%8A%94%20%ED%91%9C%EC%8B%9C%EC%9D%B4%EA%B3%A0%20slice%20%EB%8A%94%20%EA%B8%B8%EC%9D%B4%EA%B9%8C%EC%A7%80%20%EB%B3%B5%EC%82%AC%EB%90%A9%EB%8B%88%EB%8B%A4.md), [06-03.값을 스택에 두면 가비지가 줄고 GOGC 와 GOMEMLIMIT 가 힙을 조절합니다](./06-03.%EA%B0%92%EC%9D%84%20%EC%8A%A4%ED%83%9D%EC%97%90%20%EB%91%90%EB%A9%B4%20%EA%B0%80%EB%B9%84%EC%A7%80%EA%B0%80%20%EC%A4%84%EA%B3%A0%20GOGC%20%EC%99%80%20GOMEMLIMIT%20%EA%B0%80%20%ED%9E%99%EC%9D%84%20%EC%A1%B0%EC%A0%88%ED%95%A9%EB%8B%88%EB%8B%A4.md) | ✅ 3편: 06-01 주소와 포인터 · nil · & 와 * · new · 상수에 주소 없음과 makePointer · 다른 언어의 객체 변수와 값에 의한 전달, 06-02 포인터 매개변수와 불변성 · nil 포인터 갱신 실패 · 포인터는 마지막 수단(json.Unmarshal) · 전달 성능 · 제로 값과 값 없음 · map 과 slice 헤더 · slice 버퍼, 06-03 가비지 · 스택과 힙 · 탈출 분석 · 기계적 공감과 Java 비교 · GOGC · GOMEMLIMIT, 연습 문제 1~3. 원문 정오 1건(06-02 go test 명령의 말줄임표) |
+| 7~16 | — | ◻ |
 
 
 
@@ -112,6 +117,6 @@ Go 를 쓰는 기존 문서는 모두 `02_os/project/` 의 실습 랩에 있습�
 |---|---|
 | 난이도 레벨 | 입문 — Go 를 처음 제대로 배우는 단계입니다 |
 | 막힌 지점 | 아직 없음 — Phase 4 자답 전입니다 |
-| 다음 레슨 후보 | 1~4장 학습 세션, 이어서 5장 노트 작성 |
+| 다음 레슨 후보 | 1~6장 학습 세션, 이어서 7장 노트 작성 |
 | 최근 검증 결과 | 없음 |
 | 복습 회차 | 없음 |
