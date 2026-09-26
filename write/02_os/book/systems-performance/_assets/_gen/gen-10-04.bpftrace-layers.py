@@ -8,19 +8,19 @@ import sys; sys.path.insert(0, ".")
 from ddk import DK
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 952, 520
+W, H = 952, 560
 BX, BW, BH, Y0, STRIDE = 132, 700, 60, 116, 68
 
 d = DK(W, H, "SYSTEMS PERFORMANCE · 10-04 §4",
        "어느 층에 프로브를 걸 것인가",
-       "층마다 이벤트 소스가 다르고, 프로세스를 짚을 수 있는 정도도 다르다. 소켓 층은 책임 프로세스가 아직 on-CPU 라 누가 했는지가 분명하다.",
+       "층마다 이벤트 소스가 다르고, 프로세스를 짚을 수 있는 정도도 다르다. 소켓 층은 책임 프로세스가 아직 on-CPU 라 애플리케이션과 코드 경로를 짚기 쉽다.",
        "가능하면 tracepoint 를 씁니다 — kprobe 는 커널 버전에 따라 함수명이 바뀝니다")
 
 BANDS = [
-    ("01", "애플리케이션 프로토콜", "uprobes", "누가 했는지 분명", None),
+    ("01", "애플리케이션 프로토콜", "uprobes", "유저 함수에 동적으로 건다", None),
     ("02", "소켓", "syscall tracepoint", "책임 프로세스가 on-CPU", ACC),
     ("03", "TCP", "tcp tracepoint · kprobe", "프로토콜 내부 · 포트 스캔 같은 소켓 없는 이벤트", None),
-    ("04", "UDP · IP", "kprobe", "깊은 kprobe · pid·comm 이 무관할 수 있음", None),
+    ("04", "UDP · IP", "kprobe", "IP 는 패킷마다 발생 · 비용 큼", None),
     ("05", "패킷 · qdisc · 드라이버", "skb · qdisc · net tracepoint · kprobe", "패킷마다 발생 · 빈도 높음", None),
 ]
 
@@ -38,5 +38,6 @@ d.arrow([(BX - 76, Y0 + 16), (BX - 76, Y0 + 4 * STRIDE + BH - 28)], SOFT, "soft"
 d.t(BX - 108, Y0 + 4 * STRIDE + BH - 4, "프로토콜", 13, SOFT, KR, "start")
 
 YB = Y0 + 4 * STRIDE + BH + 20
-d.legend(YB, [("누가 했는지가 분명한 층", ACC), ("나머지 층", MUTED)])
+d.t(BX - 108, YB + 12, "sock_sendmsg 같은 커널 안쪽 kprobe 는 프로세스가 on-CPU 가 아닐 수 있어 pid · comm 이 무관할 수 있다", 13, MUTED, KR, "start")
+d.legend(YB + 40, [("추적이 특히 유리한 층(원서: 소켓)", ACC), ("나머지 층", MUTED)])
 d.save("10-04.bpftrace-layers.svg")

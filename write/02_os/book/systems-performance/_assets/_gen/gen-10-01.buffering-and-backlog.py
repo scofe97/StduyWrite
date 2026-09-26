@@ -25,7 +25,7 @@ CARDS = [
      "높은 RTT 흡수", INFO),
     ("02", "백로그 — 연결 요청의 줄", "커널 — SYN 큐 · accept 큐",
      ["핸드셰이크 전: SYN 큐", "accept 대기: accept 큐", "accept 큐가 차면 SYN 드롭",
-      "SYN 큐가 차면 기본은 SYN cookies", "→ 드롭된 SYN 은 클라이언트가 재전송(1초+)"],
+      "SYN cookies 를 끄면 SYN 큐가 찰 때도 드롭", "→ 드롭된 SYN 은 클라이언트가 재전송(1초+)"],
      "연결 폭주 흡수", ACC),
 ]
 
@@ -44,12 +44,12 @@ for i, (n, name, where, body, role, c) in enumerate(CARDS):
 
 # 과하면 — 두 갈래
 YB = Y + CH + 36
-d.t(X0, YB, "과하면", 13, SOFT, KR, "start", 600)
+d.t(X0, YB, "증상", 13, SOFT, KR, "start", 600)
 d.box(X0 + 64, YB - 20, CW - 64, 60, PAPER2, RULE, 1.0, 6)
-d.t(X0 + 80, YB + 2, "버퍼블로트", 13, WARN, KR, "start", 600)
+d.t(X0 + 80, YB + 2, "과하면: 버퍼블로트", 13, WARN, KR, "start", 600)
 d.t(X0 + 80, YB + 24, "중간 노드(스위치·라우터)의 과버퍼 → 긴 큐 대기", 13, MUTED, KR, "start")
 d.box(X0 + CW + GAP, YB - 20, CW, 60, PAPER2, RULE, 1.0, 6)
-d.t(X0 + CW + GAP + 16, YB + 2, "SYN 드롭 · 재전송", 13, WARN, KR, "start", 600)
+d.t(X0 + CW + GAP + 16, YB + 2, "차면: SYN 드롭 · 재전송", 13, WARN, KR, "start", 600)
 d.t(X0 + CW + GAP + 16, YB + 24, "과부하 후보 · 서버 큐 카운터로 확인", 13, MUTED, KR, "start")
 
 d.legend(YB + 64, [("연결 폭주를 흡수하는 자리", ACC), ("처리량을 떠받치는 자리", INFO), ("과하거나 찰 때의 증상", WARN)])

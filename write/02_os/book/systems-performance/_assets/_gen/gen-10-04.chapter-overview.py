@@ -17,7 +17,7 @@ d = DK(W, H, "SYSTEMS PERFORMANCE · 10-04",
 BANDS = [
     ("§1", "ss · ip · nstat", "소켓 · 인터페이스 · 스택 통계", "분석의 출발점", None),
     ("§2", "sar · nicstat · ethtool", "시계열 · 사용률 · 드라이버", "추세와 USE 지표", None),
-    ("§3", "tcplife · tcptop · tcpretrans", "연결 수명 · top · 재전송", "BPF 로 싸게 본다", ACC),
+    ("§3", "tcplife · tcptop · tcpretrans", "연결 수명 · top · 재전송", "이벤트를 세어 본다", ACC),
     ("§4", "bpftrace", "소켓 · TCP · 패킷 층 추적", "질문을 직접 짠다", None),
     ("§5", "tcpdump · Wireshark", "패킷 캡처와 그래픽 검사", "마지막 수단", WARN),
     ("§6", "사례 — 연결이 1초씩 늦을 때", "connect 시간 → nstat → bpftrace → ss · nstat(서버)", "원인 후보를 좁힌다", INFO),
@@ -36,5 +36,5 @@ d.t(BX - 60, Y0 + 4, "통계", 13, SOFT, KR, "middle")
 d.arrow([(BX - 60, Y0 + 16), (BX - 60, Y0 + 4 * STRIDE + BH - 8)], SOFT, "soft", 1.2, "4 6")
 d.t(BX - 60, Y0 + 4 * STRIDE + BH + 16, "패킷", 13, SOFT, KR, "middle")
 
-d.legend(Y0 + 6 * STRIDE + 36, [("커널 안 집계로 싼 절", ACC), ("마지막 수단", WARN), ("도구를 잇는 사례", INFO), ("전통 통계", MUTED)])
+d.legend(Y0 + 6 * STRIDE + 36, [("완성된 BPF 도구로 이벤트를 세는 절", ACC), ("마지막 수단", WARN), ("도구를 잇는 사례", INFO), ("전통 통계", MUTED)])
 d.save("10-04.chapter-overview.svg")

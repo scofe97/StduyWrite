@@ -5,7 +5,7 @@ import sys; sys.path.insert(0, ".")
 from ddk import DK
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 928, 568
+W, H = 928, 592
 BX, BW, BH, Y0, STRIDE = 140, 664, 60, 116, 68
 
 d = DK(W, H, "SYSTEMS PERFORMANCE · 10-02 §4",
@@ -14,8 +14,8 @@ d = DK(W, H, "SYSTEMS PERFORMANCE · 10-02 §4",
        "패킷은 struct sk_buff 로 이 컴포넌트들을 통과합니다")
 
 BANDS = [
-    ("01", "애플리케이션", "send() · sendmsg()", "앱 버퍼로 모아 보냄", None),
-    ("02", "소켓 · TCP 송신 버퍼", "tcp_wmem 으로 동적 조정", "작은 전송 오버헤드 감소", None),
+    ("01", "애플리케이션", "send() · sendmsg()", "커널에 데이터를 넘김", None),
+    ("02", "소켓 · TCP 송신 버퍼", "tcp_wmem 으로 동적 조정", "크면 처리량↑ · 연결당 메모리↑", None),
     ("03", "GSO", "최대 64KB 슈퍼 패킷", "스택 통과 횟수 감소", ACC),
     ("04", "qdisc", "기본 pfifo_fast · systemd fq_codel · veth noqueue", "분류 · 스케줄링 · 셰이핑", None),
     ("05", "드라이버 · NIC (TSO)", "쪼개기를 하드웨어에", "MSS 크기로 쪼갬", None),
@@ -36,5 +36,6 @@ d.t(BX - 92, Y0 + 140, "송신", 13, SOFT, KR, "start")
 YB = Y0 + 5 * STRIDE + 24   # 마지막 띠 아래로 충분히 띄운다 — 8 이면 테두리에 붙는다
 d.t(BX - 116, YB, "수신 쪽 짝: GRO (작은 패킷 병합 후 한 번에 전달)", 13, MUTED, KR, "start")
 
-d.legend(YB + 28, [("스택 오버헤드를 줄이는 자리", ACC), ("나머지 단계", MUTED)])
+d.t(BX - 116, YB + 24, "송신 알고리즘(pacing · TSQ · BQL · EDT)은 §5 끝 소절", 13, MUTED, KR, "start")
+d.legend(YB + 52, [("스택 오버헤드를 줄이는 자리", ACC), ("나머지 단계", MUTED)])
 d.save("10-02.linux-network-stack.svg")

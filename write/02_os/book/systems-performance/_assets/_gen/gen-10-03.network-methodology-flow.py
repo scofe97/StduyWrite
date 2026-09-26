@@ -17,7 +17,7 @@ d = DK(W, H, "SYSTEMS PERFORMANCE · 10-03 §4",
 
 STEPS = [
     ("01", "내 호스트 확인", ["모니터링 · USE", "정적 성능 튜닝(설정 점검)", "워크로드 특성화"], None),
-    ("02", "원천 좁히기", ["지연 분석: 어느 구간", "TCP 분석: 무엇이 막나", "증상 → 후보 → 확정"], None),
+    ("02", "원천 좁히기", ["지연 분석: 어느 구간", "TCP 분석: 무엇이 막나", "포트 고갈 조건 계산"], None),
     ("03", "실험으로 가리기", ["iperf: 대량 전송 한도", "앱보다 단순", "앱에 옮길 조건 확인"], ACC),
     ("04", "튜닝", ["근거 관측이 있을 때", "대가 확인 후 변경", "sysctl · setsockopt"], None),
 ]
@@ -36,7 +36,7 @@ for i, (n, name, body, c) in enumerate(STEPS):
         d.arrow([(x + CW, Y + CH / 2), (x + CW + GAP - 6, Y + CH / 2)], MUTED, "ar", 1.3)
 
 YB = Y + CH + 40
-d.t(X0, YB, "패킷 스니핑 · 어느 단계에서든 · 짧게 · 마지막 수단", 13, WARN, KR, "start")
+d.t(X0, YB, "패킷 스니핑 · 카운터·지연 측정으로 답이 안 날 때 · 짧게 · 마지막 수단", 13, WARN, KR, "start")
 
 d.legend(YB + 24, [("네트워크를 가리는 단계", ACC), ("나머지 단계", MUTED), ("마지막 수단", WARN)])
 d.save("10-03.network-methodology-flow.svg")
