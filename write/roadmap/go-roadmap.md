@@ -6,7 +6,7 @@ related:
   - README.md
   - os-roadmap.md
   - network-roadmap.md
-updated: 2026-09-23
+updated: 2026-09-27
 ---
 
 # Go 학습 로드맵
@@ -53,13 +53,13 @@ updated: 2026-09-23
 
 ## 책 읽기 흐름
 
-> 위 단계를 무엇으로 배우는가입니다. 정독 노트가 없어 책과 공식 문서가 자료의 전부입니다.
+> 위 단계를 무엇으로 배우는가입니다. Learning Go 는 [정독 인덱스](../01_language/book/lgo_learning-go/README.md)를 세우고 1장부터 노트를 쓰는 중이며, 나머지 책은 아직 정독 노트가 없습니다.
 
 ![Go 책 읽기 흐름 — 우선순위와 읽을 장](_assets/go-books.svg)
 
 | 책 | 읽을 장 | 우선순위 | 자리 |
 |---|---|:---:|---|
-| Learning Go | 1~15장 | 필수 | 1~5단계 |
+| [Learning Go](../01_language/book/lgo_learning-go/README.md) | 1~15장 | 필수 | 1~5단계 |
 | Learn Concurrent Programming with Go | 1~12장 | 필수 | 4단계 |
 | Network Programming with Go | 1~9 · 11~13장 | 필수 | 6단계 |
 | Cloud Native Go | 4~13장 | 추천 | 6단계 |
