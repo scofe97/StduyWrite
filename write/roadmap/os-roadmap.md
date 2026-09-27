@@ -40,7 +40,7 @@ updated: 2026-09-23
 | 2 · 실행 모델 | 프로세스 간 통신 | IPC · pipe · 공유 메모리 · 메시지 전달 |
 | 2 · 실행 모델 | 동시성의 문제 | 동기화 · 교착 · 조건 변수 |
 | 2 · 실행 모델 | 프로세스 생성 | `fork` · `exec` · `vfork` · `clone3` · `prctl` · `PR_SET_PDEATHSIG` |
-| 3 · 컨테이너 기반 | 격리 | namespace 여덟 · `unshare` · shared kernel · cgroup namespace · user namespace · rootless |
+| 3 · 컨테이너 기반 | 격리 | VM 대 컨테이너 · namespace 여덟 · `unshare` · shared kernel · cgroup namespace · user namespace · rootless |
 | 3 · 컨테이너 기반 | cgroup | cgroup v2 · controller · PSI · cgroup 경로와 컨테이너 신원 |
 | 3 · 컨테이너 기반 | CPU 한도 | `cpu.max` · `cpu.stat` · throttling |
 | 3 · 컨테이너 기반 | 메모리 한도 | `memory.max` · `memory.events` · OOM Killer |
@@ -53,7 +53,7 @@ updated: 2026-09-23
 | 4 · 성능 분석 | 벡터 명령 | SIMD · 벡터화 · SSE · AVX · AVX2 · AVX-512 · ARM NEON |
 | 4 · 성능 분석 | 특수 명령과 확인 | AES-NI · PCLMULQDQ · CPUID · `lscpu` |
 | 4 · 성능 분석 | 측정의 함정 | throughput · tail latency · P99 · P99.9 · coordinated omission · 워밍업 |
-| 4 · 성능 분석 | 프로파일 | flame graph · CPU·heap·block·mutex 프로파일 |
+| 4 · 성능 분석 | 프로파일 | flame graph · CPU·heap·block·mutex 프로파일 · off-CPU · 애플리케이션 프로파일링 · 성능 사례 |
 | 4 · 성능 분석 | 가상화 환경의 CPU | steal time · noisy neighbor · CPU quota |
 | 5 · 관측과 보안 | 관측 도구 | procfs · sysfs · `sar` · 도구 커버리지 · 관측 소스 |
 | 5 · 관측과 보안 | 커널 인터페이스 | `/proc/stat` · `meminfo` · `PID/stat` · `diskstats` · `net/snmp` · `net/tcp` · socket inode · `/proc/pressure` · some 과 full |
@@ -101,9 +101,12 @@ updated: 2026-09-23
 
 | 책 | 장 | 받치는 자리 |
 |---|---|---|
-| Systems Performance | 3·5장 | 2단계 시스템 콜 · `epoll` 의 노트 |
+| Systems Performance | 3·5장 | 2단계 시스템 콜 · `epoll` 의 노트 · 4단계 애플리케이션 프로파일링 |
+| Systems Performance | 1·16장 | 4단계 60초 체크리스트 · 성능 사례 |
+| Container Security | 5장 | 3단계 VM 대 컨테이너 |
 | Systems Performance | 11장 | 4단계 steal time · 가상화에서 CPU feature 노출 |
 | Learning Modern Linux | 8장 | 2단계 관측 창 · 4단계 바깥과 안의 노트 |
+| Learning Modern Linux | 9장 | 2단계 IPC — 시그널 · 네임드 파이프 · 유닉스 도메인 소켓 |
 
 **두 자료는 책이 아니라 문서입니다.** [OSTEP](https://pages.cs.wisc.edu/~remzi/OSTEP/)은 왜 OS 가 그렇게 동작하는지를 맡습니다. Linux 공식 문서 셋인 [proc](https://docs.kernel.org/filesystems/proc.html)과 [cgroup v2](https://docs.kernel.org/admin-guide/cgroup-v2.html), [PSI](https://docs.kernel.org/accounting/psi.html)는 Linux 가 실제로 내주는 인터페이스를 맡습니다. Systems Performance 가 그 사이에서 무엇을 재고 어떻게 좁힐지를 잇습니다.
 
@@ -145,7 +148,7 @@ updated: 2026-09-23
 | file descriptor · `ulimit` · 관측 창 | 필수 | [모든 것이 파일](../02_os/book/learning-modern-linux/05-01.%EB%AA%A8%EB%93%A0%20%EA%B2%83%EC%9D%B4%20%ED%8C%8C%EC%9D%BC%EC%9D%B4%EB%9D%BC%EB%8A%94%20%EB%A7%90%EC%9D%80%20%EC%86%90%EC%9E%A1%EC%9D%B4%EA%B0%80%20%ED%95%98%EB%82%98%EB%9D%BC%EB%8A%94%20%EB%9C%BB%EC%9D%B4%EB%8B%A4.md) · [자원별 관측 창](../02_os/book/learning-modern-linux/08-02.%EC%9E%90%EC%9B%90%EB%A7%88%EB%8B%A4%20%EC%B0%BD%EC%9D%B4%20%EB%94%B0%EB%A1%9C%20%EB%82%98%20%EC%9E%88%EC%96%B4%20%EC%96%B4%EB%8A%90%20%EC%B0%BD%EC%9D%84%20%EC%97%AC%EB%8A%90%EB%83%90%EA%B0%80%20%EA%B3%A7%20%EC%A7%84%EB%8B%A8%EC%9D%B4%EB%8B%A4.md) | |
 | 주소 공간 · heap · stack · 프로세스 메모리 배치 | 필수 |  | Operating System Concepts 3장 |
 | `mmap` · 공유 메모리 · copy-on-write · zero-fill | 추천 | | Operating System Concepts 9장 |
-| IPC — pipe · 공유 메모리 · 메시지 전달 | 추천 | | Operating System Concepts 3장 |
+| IPC — pipe · 공유 메모리 · 메시지 전달 | 추천 | [필요해지는 조건](../02_os/book/learning-modern-linux/09-01.%EC%9D%B4%20%EC%9E%A5%EC%9D%84%20%EB%AC%B6%EB%8A%94%20%EA%B2%83%EC%9D%80%20%EC%A3%BC%EC%A0%9C%EA%B0%80%20%EC%95%84%EB%8B%88%EB%9D%BC%20%ED%95%84%EC%9A%94%ED%95%B4%EC%A7%80%EB%8A%94%20%EC%A1%B0%EA%B1%B4%EC%9D%B4%EB%8B%A4.md) | Operating System Concepts 3장 |
 | event loop · readiness 모델 · 배압 | 추천 |  | [epoll(7)](https://man7.org/linux/man-pages/man7/epoll.7.html) |
 | `epoll` · 논블로킹 I/O | 추천 | [커널 구현·BPF](../02_os/book/systems-performance/03-03.%EC%9A%B4%EC%98%81%EC%B2%B4%EC%A0%9C%20%E2%80%94%20%EC%BB%A4%EB%84%90%20%EA%B5%AC%ED%98%84%C2%B7Linux%20%EB%B0%9C%EC%A0%84%EC%82%AC%C2%B7BPF.md) · [애플리케이션 성능](../02_os/book/systems-performance/05-01.%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98%20%E2%80%94%20%EA%B8%B0%EC%B4%88%EC%99%80%20%EC%84%B1%EB%8A%A5%20%EA%B8%B0%EB%B2%95.md) | Operating System Concepts 13장 |
 | 동기화 · 교착 · 조건 변수 | 추천 | | Operating System Concepts 5·7장 |
@@ -158,15 +161,16 @@ updated: 2026-09-23
 
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
-| namespace 여덟 가지 · `unshare` | 필수 | [namespace 실습](../02_os/kernel/01-05.namespace%20%EC%8B%A4%EC%8A%B5%20%E2%80%94%208%EA%B0%80%EC%A7%80%20%EA%B2%A9%EB%A6%AC%EC%99%80%20unshare.md) | Container Security 4장 |
-| cgroup v2 — controller · PSI | 필수 | [cgroup v2 깊이](../02_os/kernel/01-02.cgroup%20v2%20%EA%B9%8A%EC%9D%B4.md) | Container Security 3장 |
+| namespace 여덟 가지 · `unshare` | 필수 | [namespace 실습](../02_os/kernel/01-05.namespace%20%EC%8B%A4%EC%8A%B5%20%E2%80%94%208%EA%B0%80%EC%A7%80%20%EA%B2%A9%EB%A6%AC%EC%99%80%20unshare.md) · [namespace와 루트](../08_cloud/book/container-security/04-01.namespace%EC%99%80%20%EB%A3%A8%ED%8A%B8%20%EB%94%94%EB%A0%89%ED%86%A0%EB%A6%AC%20%E2%80%94%20%EA%B2%A9%EB%A6%AC%EB%A5%BC%20%EB%A7%8C%EB%93%9C%EB%8A%94%20%EB%91%90%20%EC%9E%A5%EC%B9%98.md) | Container Security 4장 |
+| cgroup v2 — controller · PSI | 필수 | [cgroup v2 깊이](../02_os/kernel/01-02.cgroup%20v2%20%EA%B9%8A%EC%9D%B4.md) · [Control Group](../08_cloud/book/container-security/03-01.Control%20Group%20%E2%80%94%20%EC%9E%90%EC%9B%90%EC%9D%84%20%EC%A0%9C%ED%95%9C%ED%95%B4%20%EA%B5%B6%EA%B8%B0%EA%B8%B0%EB%A5%BC%20%EB%A7%89%EB%8B%A4.md) | Container Security 3장 |
 | cgroup 경로와 컨테이너 · Pod 신원의 연결 | 추천 | | Container Security 3장 |
 | 한도의 출처 — 사람이 정한 값 · 기계가 유도한 값 · 상속된 값 | 필수 | [진단 개념](../troubleshooting/_concepts/common-%ED%95%9C%EB%8F%84%EB%8A%94-%EC%96%B4%EB%94%94%EC%84%9C-%EC%98%A4%EB%8A%94%EA%B0%80.md) | Linux Kernel Docs — cgroup v2 |
 | `memory.max` · `memory.events` · OOM Killer | 필수 | [cgroup 파일시스템 실습](../02_os/kernel/01-04.cgroup%20%ED%8C%8C%EC%9D%BC%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%8B%A4%EC%8A%B5.md) · [Endowus OOMKilled](../02_os/kernel/01-06.cgroup%20%EC%82%AC%EB%A1%80%20%E2%80%94%20Endowus%20OOMKilled.md) | |
 | `cpu.max` · `cpu.stat` · throttling | 필수 | [cgroup v2 깊이](../02_os/kernel/01-02.cgroup%20v2%20%EA%B9%8A%EC%9D%B4.md) | |
 | mount propagation 네 가지 | 필수 | [마운트 네임스페이스와 propagation](../02_os/kernel/01-03.%EB%A7%88%EC%9A%B4%ED%8A%B8%20%EB%84%A4%EC%9E%84%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4%EC%99%80%20propagation.md) | |
 | OverlayFS · copy-on-write | 필수 | [OverlayFS와 user namespace](../02_os/kernel/01-07.OverlayFS%EC%99%80%20user%20namespace%20%E2%80%94%20Netflix%20UID%20%EA%B2%A9%EB%A6%AC.md) | |
-| user namespace · rootless | 추천 | [OverlayFS와 user namespace](../02_os/kernel/01-07.OverlayFS%EC%99%80%20user%20namespace%20%E2%80%94%20Netflix%20UID%20%EA%B2%A9%EB%A6%AC.md) | Container Security 4장 |
+| user namespace · rootless | 추천 | [OverlayFS와 user namespace](../02_os/kernel/01-07.OverlayFS%EC%99%80%20user%20namespace%20%E2%80%94%20Netflix%20UID%20%EA%B2%A9%EB%A6%AC.md) · [나머지 namespace](../08_cloud/book/container-security/04-02.%EB%82%98%EB%A8%B8%EC%A7%80%20namespace%EC%99%80%20%ED%98%B8%EC%8A%A4%ED%8A%B8%EC%97%90%EC%84%9C%20%EB%B3%B8%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88.md) | Container Security 4장 |
+| VM 대 컨테이너 — 격리 강도의 차이 | 추천 | [가상머신 격리](../08_cloud/book/container-security/05-01.%EA%B0%80%EC%83%81%EB%A8%B8%EC%8B%A0%20%E2%80%94%20%EC%99%9C%20VM%20%EA%B2%A9%EB%A6%AC%EA%B0%80%20%EB%8D%94%20%EA%B0%95%ED%95%98%EB%8B%A4%EA%B3%A0%20%ED%95%98%EB%8A%94%EA%B0%80.md) | Container Security 5장 |
 | 컨테이너 = namespace · cgroup · 파일시스템 — 재료가 아니라 조합 | 추천 | [컨테이너는 조합](../02_os/book/learning-modern-linux/06-02.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%EC%9D%98%20%EC%83%88%EB%A1%9C%EC%9B%80%EC%9D%80%20%EC%9E%AC%EB%A3%8C%EA%B0%80%20%EC%95%84%EB%8B%88%EB%9D%BC%20%EC%A1%B0%ED%95%A9%EC%97%90%20%EC%9E%88%EB%8B%A4.md) |  |
 | cgroup namespace | 선택 |  | [cgroup_namespaces(7)](https://man7.org/linux/man-pages/man7/cgroup_namespaces.7.html) |
 | hugetlbfs | 선택 |  | [HugeTLB Pages](https://docs.kernel.org/admin-guide/mm/hugetlbpage.html) |
@@ -183,7 +187,7 @@ updated: 2026-09-23
 
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
-| USE · RED · 드릴다운 · 지연 분석 | 필수 | [방법론 용어·모델](../02_os/book/systems-performance/02-01.%EB%B0%A9%EB%B2%95%EB%A1%A0%20%E2%80%94%20%EC%9A%A9%EC%96%B4%C2%B7%EB%AA%A8%EB%8D%B8%C2%B7%ED%95%B5%EC%8B%AC%20%EA%B0%9C%EB%85%90.md) · [방법론 분석 방법론 20종](../02_os/book/systems-performance/02-02.%EB%B0%A9%EB%B2%95%EB%A1%A0%20%E2%80%94%20%EB%B6%84%EC%84%9D%20%EB%B0%A9%EB%B2%95%EB%A1%A0%2020%EC%A2%85.md) | |
+| USE · RED · 드릴다운 · 지연 분석 | 필수 | [방법론 용어·모델](../02_os/book/systems-performance/02-01.%EB%B0%A9%EB%B2%95%EB%A1%A0%20%E2%80%94%20%EC%9A%A9%EC%96%B4%C2%B7%EB%AA%A8%EB%8D%B8%C2%B7%ED%95%B5%EC%8B%AC%20%EA%B0%9C%EB%85%90.md) · [방법론 분석 방법론 20종](../02_os/book/systems-performance/02-02.%EB%B0%A9%EB%B2%95%EB%A1%A0%20%E2%80%94%20%EB%B6%84%EC%84%9D%20%EB%B0%A9%EB%B2%95%EB%A1%A0%2020%EC%A2%85.md) · [관측·실험·60초 체크리스트](../02_os/book/systems-performance/01-02.%EC%84%9C%EB%A1%A0%20%E2%80%94%20%EA%B4%80%EC%B8%A1%C2%B7%EC%8B%A4%ED%97%98%C2%B7%EB%B0%A9%EB%B2%95%EB%A1%A0%C2%B7%EC%BC%80%EC%9D%B4%EC%8A%A4.md) |  |
 | 활용률 대 압력 — PSI 가 답하는 질문 | 필수 |  | Linux Kernel Docs — psi |
 | run queue · CFS · context switch | 필수 | [CPU 용어·모델](../02_os/book/systems-performance/06-01.CPU%20%E2%80%94%20%EC%9A%A9%EC%96%B4%C2%B7%EB%AA%A8%EB%8D%B8%C2%B7%ED%95%B5%EC%8B%AC%20%EA%B0%9C%EB%85%90.md) ~ [CPU 관측 도구](../02_os/book/systems-performance/06-04.CPU%20%E2%80%94%20%EA%B4%80%EC%B8%A1%20%EB%8F%84%EA%B5%AC%C2%B7%EC%8B%9C%EA%B0%81%ED%99%94.md) | Operating System Concepts 6장 |
 | RSS · VSS · PSS · page cache | 필수 | [메모리 용어](../02_os/book/systems-performance/07-01.%EB%A9%94%EB%AA%A8%EB%A6%AC%20%E2%80%94%20%EC%9A%A9%EC%96%B4%C2%B7%ED%95%B5%EC%8B%AC%20%EA%B0%9C%EB%85%90.md) ~ [메모리 관측 도구](../02_os/book/systems-performance/07-04.%EB%A9%94%EB%AA%A8%EB%A6%AC%20%E2%80%94%20%EA%B4%80%EC%B8%A1%20%EB%8F%84%EA%B5%AC.md) | Operating System Concepts 8·9장 |
@@ -199,6 +203,8 @@ updated: 2026-09-23
 | throughput · tail latency · P99 · P99.9 | 필수 | [방법론 용어·모델](../02_os/book/systems-performance/02-01.%EB%B0%A9%EB%B2%95%EB%A1%A0%20%E2%80%94%20%EC%9A%A9%EC%96%B4%C2%B7%EB%AA%A8%EB%8D%B8%C2%B7%ED%95%B5%EC%8B%AC%20%EA%B0%9C%EB%85%90.md) | Systems Performance 2장 |
 | coordinated omission — 측정이 놓치는 지연 | 필수 |  | [wrk2 README](https://github.com/giltene/wrk2) |
 | flame graph · CPU·heap·block·mutex 프로파일 | 추천 | [CPU 관측 도구](../02_os/book/systems-performance/06-04.CPU%20%E2%80%94%20%EA%B4%80%EC%B8%A1%20%EB%8F%84%EA%B5%AC%C2%B7%EC%8B%9C%EA%B0%81%ED%99%94.md) | Systems Performance 6장 |
+| 애플리케이션 프로파일링 — off-CPU · 스레드 상태 · 심볼·스택 누락 | 추천 | [언어·방법론](../02_os/book/systems-performance/05-02.%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98%20%E2%80%94%20%EC%96%B8%EC%96%B4%C2%B7%EB%B0%A9%EB%B2%95%EB%A1%A0.md) · [관측 도구·gotchas](../02_os/book/systems-performance/05-03.%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98%20%E2%80%94%20%EA%B4%80%EC%B8%A1%20%EB%8F%84%EA%B5%AC%C2%B7gotchas.md) | Systems Performance 5장 |
+| 성능 사례 — 컨테이너가 3~4배 빨라진 이유 | 선택 | [케이스 스터디](../02_os/book/systems-performance/16-01.%EC%BC%80%EC%9D%B4%EC%8A%A4%20%EC%8A%A4%ED%84%B0%EB%94%94%20%E2%80%94%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%EA%B0%80%203-4%EB%B0%B0%20%EB%B9%A0%EB%A5%B8%20%EC%9D%B4%EC%9C%A0.md) | Systems Performance 16장 |
 | malloc · free list · arena · 단편화 · 대체 allocator | 추천 | [힙 밖에서 쌓이는 메모리](../troubleshooting/_concepts/runtime-%ED%9E%99-%EB%B0%96%EC%97%90%EC%84%9C-%EC%8C%93%EC%9D%B4%EB%8A%94-%EB%A9%94%EB%AA%A8%EB%A6%AC.md) |  |
 | SIMD · 벡터화 — 한 명령이 여러 데이터를 | 추천 | | Real-World Cryptography 13장 |
 | SSE · AVX · AVX2 · AVX-512 · ARM NEON | 선택 |  | [Intel Intrinsics Guide](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html) |
@@ -222,7 +228,7 @@ updated: 2026-09-23
 | `/proc/net/tcp` 와 socket inode — 포트에서 프로세스로 거슬러 가기 | 추천 | | Linux Kernel Docs — proc |
 | `/proc/pressure` — some 과 full · avg10 | 필수 | | Linux Kernel Docs — psi |
 | perf — 샘플링과 이벤트 소스 | 필수 | [perf 개요](../02_os/book/systems-performance/13-01.perf%20%E2%80%94%20%EA%B0%9C%EC%9A%94%C2%B7%EC%84%9C%EB%B8%8C%EC%BB%A4%EB%A7%A8%EB%93%9C%C2%B7%EC%9B%90%EB%9D%BC%EC%9D%B4%EB%84%88.md) ~ [perf 명령](../02_os/book/systems-performance/13-03.perf%20%E2%80%94%20%EB%AA%85%EB%A0%B9.md) | |
-| capability · seccomp | 필수 | [시스템 콜·capability](../08_cloud/book/container-security/02-01.Linux%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%BD%9C%C2%B7%EA%B6%8C%ED%95%9C%C2%B7capability%20%E2%80%94%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%B3%B4%EC%95%88%EC%9D%98%20%EB%B0%94%EB%8B%A5.md) | Container Security 2장 |
+| capability · seccomp | 필수 | [시스템 콜·capability](../08_cloud/book/container-security/02-01.Linux%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%BD%9C%C2%B7%EA%B6%8C%ED%95%9C%C2%B7capability%20%E2%80%94%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%B3%B4%EC%95%88%EC%9D%98%20%EB%B0%94%EB%8B%A5.md) · [잘게 쪼개는 접근 제어](../02_os/book/learning-modern-linux/04-01.%EC%A0%84%EB%B6%80%20%EC%95%84%EB%8B%88%EB%A9%B4%20%EC%A0%84%EB%AC%B4%EC%97%90%EC%84%9C%20%EC%9E%98%EA%B2%8C%20%EC%AA%BC%EA%B0%9C%EB%8A%94%20%EC%AA%BD%EC%9C%BC%EB%A1%9C.md) | Container Security 2장 |
 | 비밀의 수명 — 생성·사용·파기 | 필수 | | Real-World Cryptography 8장 |
 | zeroing · `explicit_bzero` · `OPENSSL_cleanse` | 필수 | | Real-World Cryptography 8장 |
 | dead store elimination — `memset` 이 지워지는 이유 | 추천 | | [CWE-14](https://cwe.mitre.org/data/definitions/14.html) |
