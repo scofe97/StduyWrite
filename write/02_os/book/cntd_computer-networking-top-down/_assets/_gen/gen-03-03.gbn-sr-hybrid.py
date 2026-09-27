@@ -10,7 +10,7 @@ LX, RX = 386, 614
 
 d = D(W, H, "COMPUTER NETWORKING TOP-DOWN · 03-03 §6",
       "TCP 는 어느 쪽도 아닙니다",
-      "누적 확인 응답과 단일 타이머는 GBN 쪽이고, 순서 밖 버퍼링과 선택적 재전송은 SR 쪽이다. TCP 는 둘의 혼종이다.",
+      "누적 확인 응답과 순서 밖 개별 확인 없음은 GBN 쪽이고, 순서 밖 버퍼링과 선택적 재전송은 SR 쪽이다. TCP 는 둘의 혼종이다.",
       "원문이 절을 닫으며 스스로 던지는 물음에 대한 답입니다")
 
 for cx, c in ((LX, INFO), (RX, OK)):
@@ -32,7 +32,7 @@ d.t((LX + RX) / 2, CY - 2, "원문의 결론", 11, SOFT, KR)
 d.t((LX + RX) / 2, CY + 24, "GBN 과 SR 의", 11, ACC, KR)
 d.t((LX + RX) / 2, CY + 44, "혼종", 11, ACC, KR)
 
-d.t(20, 528, "ACK n 하나만 잃어버렸을 때 GBN 은 n 부터 N 까지 전부 다시 보내고, TCP 는 많아야 n 하나만 보냄 · n+1 의 ACK 가 먼저 오면 그것조차 안 보냄",
+d.t(20, 528, "ACK n 하나만 잃고 n 의 타이머가 먼저 만료되면 GBN 은 n 부터 N 까지 전부, TCP 는 n 하나만 다시 보냄 · n+1 의 ACK 가 먼저 오면 둘 다 안 보냄",
      11, MUTED, KR, "start")
 
 d.legend(H - 52, [("두 쪽의 성질을 함께 가짐", ACC), ("GBN 쪽 성질", INFO), ("SR 쪽 성질", OK)])

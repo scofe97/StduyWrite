@@ -27,7 +27,7 @@ d.t(44, 292, "MSS ", 11, ACC, KR, "start", 600)
 d.arrow([(296, 230), (322, 230)], INFO, "info", 1.4)
 
 LAYERS = [
-    (330, 150, "링크 층 프레임 · MTU 1,500바이트", None, "1,500바이트", WARN),
+    (330, 150, "링크 층 프레임이 실을 수 있는 양 · MTU", None, "1,500바이트", WARN),
     (390, 230, "IP 데이터그램", "IP 헤더 20", "1,480바이트", MUTED),
     (450, 310, "TCP 세그먼트", "TCP 헤더 20", "1,460바이트 = MSS", ACC),
 ]
@@ -41,7 +41,7 @@ for x, y, name, hdr, size, col in LAYERS:
         d.t(x + 28, y + 44, "20", 11, WARN, MONO)
         d.t((x + 56 + 976) / 2, y + 36, f"페이로드 {size}", 12, INK, KR)
     else:
-        d.t((x + 976) / 2, y + 36, f"여기 다 들어가야 함 · {size}", 12, INK, KR)
+        d.t((x + 976) / 2, y + 36, f"IP 데이터그램이 다 들어가야 함 · {size}", 12, INK, KR)
 
 d.t(450, 396, "이 칸의 크기가 곧 MSS  — 애플리케이션 데이터만 셈", 11, ACC, KR, "start")
 
