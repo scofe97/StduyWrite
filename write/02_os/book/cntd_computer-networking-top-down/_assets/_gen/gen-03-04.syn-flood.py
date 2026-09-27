@@ -95,7 +95,7 @@ d.lanes([(ATK, "가짜 SYN 대량"), (SRV, "SYN 마다 할당"), (CLI, "connect(
 d.rails(566)
 SX = d.LX[SRV]
 
-d.burst(ATK, SRV, "가짜 SYN", 200, BAD, "bad", sub="출발지를 속인 연결 요청이 대량으로")
+d.burst(ATK, SRV, "가짜 SYN", 200, BAD, "bad", sub="세 번째 단계를 끝내지 않을 연결 요청이 대량으로")
 d.state(SRV, "SYN 마다 연결 변수 + 버퍼 할당", 266, ACC, op="12", sw=1.4)
 d.msg(SRV, ATK, "SYNACK", 312, MUTED, "ar", dash="5 4", sub="서버가 ACK 를 기다림")
 d.absent(ATK, SRV, "ACK 안 옴 · 3 단계 미완성", 374, BAD)

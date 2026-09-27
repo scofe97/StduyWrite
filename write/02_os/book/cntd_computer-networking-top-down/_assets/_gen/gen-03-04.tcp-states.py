@@ -50,7 +50,7 @@ d.o.append(f'<circle cx="{306 - BW/2 - 26}" cy="{ROW2}" r="8" fill="none" stroke
 d.o.append(f'<circle cx="{306 - BW/2 - 26}" cy="{ROW2}" r="5" fill="{INK}"/>')
 d.path(f"M {306 - BW/2 - 4} {ROW2} L {306 - BW/2 - 16} {ROW2}", MUTED, 1.3, m="ar")
 
-d.t(24, 470, "TIME_WAIT 가 있는 이유는 하나 · 마지막 확인 응답이 유실됐을 때 다시 보낼 수 있어야 하기 때문",
+d.t(24, 470, "TIME_WAIT 의 이유 · 원서는 마지막 확인 응답의 재전송을 들고, RFC 9293 은 옛 세그먼트 차단을 더 듦",
      11, MUTED, KR, "start")
 d.t(24, 492, "이 대기가 끝나야 포트 번호를 포함한 자원이 풀림 · 연결을 먼저 닫는 쪽이 이 상태를 떠안음",
      11, MUTED, KR, "start")

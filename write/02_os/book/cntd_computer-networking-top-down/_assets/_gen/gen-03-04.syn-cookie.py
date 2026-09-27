@@ -88,7 +88,7 @@ W, H = 1000, 652
 d = SeqKR(W, H, "COMPUTER NETWORKING TOP-DOWN · 03-04 §3",
           "검산한 뒤에야 자원을 잡습니다",
           "서버는 SYN 을 받아도 반쯤 열린 연결을 만들지 않는다. 출발지·목적지 IP 와 포트 번호, 서버만 "
-          "아는 비밀 수로 해시를 계산해 초기 순서 번호로 삼고 SYNACK 에 실어 보낸다. 쿠키도 그 밖의 "
+          "아는 비밀 수로 해시를 계산해 초기 순서 번호로 삼고 SYNACK 에 실어 보낸다(RFC 4987 구현은 시각 비트와 MSS 2비트도 넣는다). 쿠키도 그 밖의 "
           "어떤 상태도 기억하지 않는다. ACK 가 오면 같은 해시를 다시 계산해 검산한 뒤에야 연결과 "
           "소켓을 만들고, ACK 가 오지 않으면 쓴 자원이 없다.",
           "기본 경로가 SYN 을 받자마자 잡던 자원을 여기서는 검산 뒤에 잡습니다")
@@ -100,7 +100,7 @@ KX = d.LX[SRV]
 
 d.burst(ATK, SRV, "가짜 SYN", 200, BAD, "bad", sub="앞 도식과 똑같은 공격 입력")
 d.state(SRV, "반쯤 열린 연결을 안 만듦 · 할당 0", 266, ACC, op="12", sw=1.4)
-d.railtext(KX, 296, "isn = hash(출발지·목적지 IP·포트, 서버 비밀 수)", 13, ACC)
+d.railtext(KX, 296, "isn = hash(IP·포트·서버 비밀 수·시각) · MSS 2비트", 13, ACC)
 d.msg(SRV, ATK, "SYNACK · seq = 쿠키", 342, MUTED, "ar", dash="5 4",
       sub="쿠키도 그 밖의 어떤 상태도 기억 안 함")
 d.absent(ATK, SRV, "ACK 안 옴 · 쓴 자원 0", 404, OK)
