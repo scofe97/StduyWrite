@@ -24,7 +24,7 @@ d.t(24, 176, "정지 후 대기", 12, WARN, KR, "start", 600)
 d.t(24, 194, "U = 0.00027", 11, SOFT, MONO, "start")
 d.msg("송신자", "수신자", "pkt 0", 206, WARN, sub="t = 0 에 시작해 0.008 ms 에 다 밀어 넣음")
 d.msg("수신자", "송신자", "ACK 0", 256, WARN, sub="마지막 비트 도착 t = 15.008 ms")
-d.selfmsg("송신자", "wait", 306, SOFT, sub="이 29.992 ms 동안 링크는 비어 있음")
+d.selfmsg("송신자", "wait", 306, SOFT, sub="0.008 ms 부터 30.008 ms 까지 30 ms 동안 링크는 비어 있음")
 d.msg("송신자", "수신자", "pkt 1", 356, WARN, sub="t = 30.008 ms 에야 다음 패킷을 시작함")
 
 d.line(24, 386, W - 24, 386, RULE, 0.8, "4 6")

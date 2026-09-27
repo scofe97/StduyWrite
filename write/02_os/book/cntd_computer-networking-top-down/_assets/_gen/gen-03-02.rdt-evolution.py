@@ -5,8 +5,9 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, OK, WARN, INFO, PAPER, PAPER2, RULE, KR, MONO
 
 W, H = 1000, 600
-BW, BH, BY = 178, 250, 148
-XS = [116, 314, 512, 710, 896]
+# stride: 본문 폭 W-48=952 를 다섯 칸으로 — 칸 172, 간격 23, 첫 칸 중심 24+86
+BW, BH, BY = 172, 250, 148
+XS = [110 + i * 195 for i in range(5)]
 
 d = D(W, H, "COMPUTER NETWORKING TOP-DOWN · 03-02 §1",
       "채널을 의심할수록 장치가 붙습니다",
@@ -16,7 +17,7 @@ d = D(W, H, "COMPUTER NETWORKING TOP-DOWN · 03-02 §1",
 STEPS = [
     ("rdt1.0", "채널이 완벽하다", "없음", "되먹임조차 필요 없음", MUTED, False),
     ("rdt2.0", "비트가 뒤집힌다", "체크섬 · ACK · NAK\n재전송", "ACK 가 깨지면?", WARN, False),
-    ("rdt2.1", "ACK·NAK 도 깨진다", "1비트 순서 번호", "NAK 이 꼭 필요한가", MUTED, False),
+    ("rdt2.1", "ACK·NAK 도 깨진다", "ACK·NAK 체크섬\n1비트 순서 번호", "NAK 이 꼭 필요한가", MUTED, False),
     ("rdt2.2", "같음", "NAK 제거\n번호를 담은 ACK", "패킷을 잃으면?", MUTED, False),
     ("rdt3.0", "패킷을 잃는다", "카운트다운 타이머", "맞지만 너무 느림", ACC, True),
 ]
@@ -39,9 +40,9 @@ for x, (name, chan, add, left, c, focal) in zip(XS, STEPS):
 for i in range(4):
     d.path(f"M {XS[i] + BW / 2 + 3} {BY + BH / 2} L {XS[i+1] - BW / 2 - 9} {BY + BH / 2}", MUTED, 1.2, m="ar")
 
-d.t(24, 448, "TCP 는 이 다섯 단계에서 나온 장치를 거의 다 씁니다 — 체크섬·순서 번호·타이머·누적 ACK·중복 ACK 가 그것",
+d.t(24, 448, "TCP 는 이 편에서 나온 장치를 거의 다 씁니다 — 체크섬·순서 번호·타이머·누적 ACK·중복 ACK 가 그것",
      11, MUTED, KR, "start")
-d.t(24, 470, "다만 순서 번호가 패킷이 아니라 바이트를 세고, 창이 흐름 제어와 혼잡 제어 둘 다에 묶",
+d.t(24, 470, "다만 순서 번호가 패킷이 아니라 바이트를 세고, 창이 흐름 제어와 혼잡 제어 둘 다에 묶임",
      11, MUTED, KR, "start")
 d.t(24, 500, "rdt3.0 의 수신자 FSM 을 원문은 숙제로 남기는데, 답은 rdt2.2 의 수신자와 같음 · 손실 처리의 부담을 전부 송신자에게 지웠기 때문",
      11, SOFT, KR, "start")
