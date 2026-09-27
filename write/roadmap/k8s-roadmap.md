@@ -11,7 +11,7 @@ related:
   - network-roadmap.md
   - observability-roadmap.md
   - ../08_cloud/kubernetes/README.md
-updated: 2026-09-23
+updated: 2026-09-28
 ---
 
 # Kubernetes 학습 로드맵
@@ -45,13 +45,14 @@ updated: 2026-09-23
 | 4 · 자원과 저장 | 배치와 중단 | taint · toleration · affinity · 토폴로지 분산 · PDB · PriorityClass · eviction |
 | 4 · 자원과 저장 | 볼륨 | Volume · emptyDir · hostPath · projected · PV · PVC · StorageClass · 동적 프로비저닝 |
 | 4 · 자원과 저장 | 저장 운영 | CSI · access mode · reclaim policy · 리사이즈 · 스냅샷 · ephemeral volume |
-| 4 · 자원과 저장 | 확장 | HPA · VPA · Cluster Autoscaler · KEDA · metrics-server · custom metric |
+| 4 · 자원과 저장 | 확장 | HPA · VPA · Cluster Autoscaler · KEDA · metrics-server · custom metric · Karpenter |
 | 5 · 내부 구조 | Control Plane | API Server · etcd · Scheduler · Controller Manager · kubelet |
 | 5 · 내부 구조 | 노드 인터페이스 | CRI · CNI · CSI · containerd · 조정 루프 · watch · informer |
 | 5 · 내부 구조 | 컨트롤러 | List·Watch · resourceVersion · 410 Gone · level-driven 과 edge-driven · GVK · Scheme · upsert 의미 · Server-Side Apply · field manager |
 | 5 · 내부 구조 | 감시 부품 | Reflector · DeltaFIFO · Indexer · Lister · SharedInformer · resync · 캐시 웜업 · 페이지네이션 |
 | 5 · 내부 구조 | 접근 통제 | authentication · authorization · admission · TLS · PKI · 인증서 수명 |
 | 5 · 내부 구조 | 상태 저장소 | etcd quorum · Raft · 백업 · 복구 · 클러스터 업그레이드 |
+| 5 · 내부 구조 | 클러스터 세우기 | kubeadm · static pod · kubeconfig · 부트스트랩 토큰 · 로컬 클러스터 kind · minikube · k3s |
 | 6 · 보안과 확장 | 권한 | RBAC · Role · ClusterRole · RoleBinding · ServiceAccount · SelfSubjectAccessReview · 권한 기반 기능 노출 |
 | 6 · 보안과 확장 | API 접근 하드닝 | anonymous 인증 · SA 토큰 자동 마운트 |
 | 6 · 보안과 확장 | 실행 권한 | SecurityContext · capability · seccomp · AppArmor · Pod Security Standards 세 등급 · Pod Security Admission |
@@ -61,14 +62,15 @@ updated: 2026-09-23
 | 6 · 보안과 확장 | 위협과 점검 | 위협 모델 · 공격 체인 · 횡적 이동 · CIS Benchmark · kube-bench · KISA 클라우드 취약점 점검 가이드 |
 | 6 · 보안과 확장 | 감시와 탐지 | 감사 로그 · audit policy · Falco · Tetragon · 탐지와 강제의 차이 |
 | 6 · 보안과 확장 | 확장 지점 | CRD · custom resource · controller · Operator · finalizer · OwnerReference · controller-runtime · status subresource |
+| 6 · 보안과 확장 | 스케줄러 확장 | scheduling framework · 스케줄러 프로파일 · custom scheduler · scheduler extender · descheduler |
 | 6 · 보안과 확장 | 정책 | 어드미션 웹훅 · OPA · Gatekeeper · Kyverno · ValidatingAdmissionPolicy |
 | 7 · 운영 | 증상 좁히기 | 이벤트 · 로그 · 지표를 한 시간축에 · kubectl 고급 조회 · JSONPath · ephemeral container · `kubectl debug` |
 | 7 · 운영 | 자원 장애 | OOMKilled · exit code 137 · CPU throttling · node pressure · eviction |
-| 7 · 운영 | 종료와 복구 | SIGTERM · PID 1 · PreStop · `terminationGracePeriodSeconds` · PDB · NodeNotReady · OS 자동 업데이트 |
-| 7 · 운영 | 배포 도구 | Helm · Kustomize · GitOps · ArgoCD · App of Apps · ApplicationSet |
-| 7 · 운영 | 클러스터를 코드로 | IaC · Immutable Infrastructure · Terraform state · module · 비밀 관리 · IaC 정책 검사 |
+| 7 · 운영 | 종료와 복구 | SIGTERM · PID 1 · PreStop · `terminationGracePeriodSeconds` · PDB · NodeNotReady · OS 자동 업데이트 · 노드 추가·제거 · cordon · drain |
+| 7 · 운영 | 배포 도구 | Helm · Kustomize · GitOps · ArgoCD · App of Apps · ApplicationSet · 점진 배포 · canary · blue-green · Argo Rollouts |
+| 7 · 운영 | 클러스터를 코드로 | IaC · Immutable Infrastructure · Terraform state · module · 비밀 관리 · IaC 정책 검사 · Cluster API · Crossplane |
 | 7 · 운영 | 멀티테넌시 | 멀티테넌시 · 가상 컨트롤 플레인 · 이름 변환과 충돌 회피 · status back-sync |
-| 7 · 운영 | 멀티클러스터 | 멀티클러스터 세 모델 · 서비스 메시를 쓸 것인가 · OpenShift |
+| 7 · 운영 | 멀티클러스터 | 멀티클러스터 세 모델 · 서비스 메시를 쓸 것인가 · OpenShift · 관리형 대 자체 운영 · EKS · GKE · AKS |
 
 
 
@@ -85,7 +87,7 @@ updated: 2026-09-23
 | [Kubernetes in Action](../08_cloud/book/kubernetes-in-action/README.md) | 책 | 1·2 · 4~18장 | 필수 | 1~5단계 |
 | [Kubernetes Patterns](../08_cloud/book/kubernetes-patterns/README.md) | 책 | 2~9 · 12·13 · 15~24장 | 추천 | 1~4 · 6단계 |
 | [Networking and Kubernetes](../08_cloud/book/networking-and-kubernetes/README.md) | 책 | 4·5장 | 추천 | 3단계 |
-| Production Kubernetes | 책 | 3~10 · 12·13장 | 추천 | 4~7단계 |
+| Production Kubernetes | 책 | 2~10 · 12·13장 | 추천 | 4~7단계 |
 | Programming Kubernetes | 책 | 1~6 · 9장 | 추천 | 5·6단계 |
 | [Container Security](../08_cloud/book/container-security/README.md) | 책 | 1~4 · 8·9 · 13장 | 추천 | 6단계 |
 | CKS Study Guide | 책 | 2~7장 | 추천 | 6단계 |
@@ -107,6 +109,7 @@ updated: 2026-09-23
 | Kubernetes Patterns | 10·11 · 14 · 29장 | 2단계 Singleton·Stateless Service · 4단계 Self Awareness · HPA 의 노트 |
 | Kubernetes Patterns | 25~28 · 30장 | 6단계 Secret · 저장 암호화 · RBAC · Controller·Operator 의 노트 · 이미지 빌드 |
 | Container Security | 6·7 · 14장 | 6단계 공급망 보안 · CIS Benchmark 의 노트 |
+| Container Security | 10·12장 | 6단계 NetworkPolicy · Secret 관리 의 노트 |
 | Infrastructure as Code | 11·21장 | 7단계 Immutable Infrastructure · IaC 정책 검사 |
 | Operating OpenShift | 2·3장 | 7단계 OpenShift — 설치 방식 · Route · SCC |
 
@@ -132,9 +135,9 @@ KISA 가이드는 API server 비인증 접근 차단, etcd 암호화, kubelet �
 | namespace · label · label selector | 필수 | [namespace](../08_cloud/book/kubernetes-in-action/07-01.namespace%EB%A1%9C%20%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%EB%A5%BC%20%EA%B0%80%EC%83%81%20%EB%B6%84%ED%95%A0%ED%95%98%EA%B8%B0.md) · [label·selector](../08_cloud/book/kubernetes-in-action/07-02.label%EA%B3%BC%20label%20selector%EB%A1%9C%20%EC%98%A4%EB%B8%8C%EC%A0%9D%ED%8A%B8%20%EC%A1%B0%EC%A7%81%ED%95%98%EA%B8%B0.md) | Kubernetes in Action 7장 |
 | field selector · annotation | 추천 | [field selector·annotation](../08_cloud/book/kubernetes-in-action/07-03.field%20selector%EC%99%80%20annotation.md) | Kubernetes in Action 7장 |
 | `command` · `args` · 환경변수 | 필수 | [command·args](../08_cloud/book/kubernetes-in-action/08-01.command%C2%B7args%EC%99%80%20%ED%99%98%EA%B2%BD%EB%B3%80%EC%88%98.md) · [EnvVar Configuration](../08_cloud/book/kubernetes-patterns/19-01.EnvVar%20Configuration%20%E2%80%94%20%ED%99%98%EA%B2%BD%EB%B3%80%EC%88%98%EB%A1%9C%20%EC%84%A4%EC%A0%95%EC%9D%84%20%EC%99%B8%EB%B6%80%ED%99%94%ED%95%98%EA%B8%B0.md) | Kubernetes Patterns 19장 |
-| ConfigMap · Secret · Downward API | 필수 | [ConfigMap](../08_cloud/book/kubernetes-in-action/08-02.ConfigMap%EC%9C%BC%EB%A1%9C%20%EC%84%A4%EC%A0%95%20%EB%B6%84%EB%A6%AC%ED%95%98%EA%B8%B0.md) · [Secret과 Downward API](../08_cloud/book/kubernetes-in-action/08-03.Secret%EA%B3%BC%20Downward%20API.md) · [Configuration Resource](../08_cloud/book/kubernetes-patterns/20-01.Configuration%20Resource%20%E2%80%94%20ConfigMap%EA%B3%BC%20Secret%EC%9C%BC%EB%A1%9C%20%EC%84%A4%EC%A0%95%20%EB%B6%84%EB%A6%AC.md) | Kubernetes Patterns 20~22장 |
+| ConfigMap · Secret · Downward API | 필수 | [ConfigMap](../08_cloud/book/kubernetes-in-action/08-02.ConfigMap%EC%9C%BC%EB%A1%9C%20%EC%84%A4%EC%A0%95%20%EB%B6%84%EB%A6%AC%ED%95%98%EA%B8%B0.md) · [Secret과 Downward API](../08_cloud/book/kubernetes-in-action/08-03.Secret%EA%B3%BC%20Downward%20API.md) · [Configuration Resource](../08_cloud/book/kubernetes-patterns/20-01.Configuration%20Resource%20%E2%80%94%20ConfigMap%EA%B3%BC%20Secret%EC%9C%BC%EB%A1%9C%20%EC%84%A4%EC%A0%95%20%EB%B6%84%EB%A6%AC.md) · [Immutable Configuration](../08_cloud/book/kubernetes-patterns/21-01.Immutable%20Configuration%20%E2%80%94%20%EC%84%A4%EC%A0%95%EC%9D%84%20%EB%B6%88%EB%B3%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%A1%9C.md) · [Configuration Template](../08_cloud/book/kubernetes-patterns/22-01.Configuration%20Template%20%E2%80%94%20%ED%81%B0%20%EC%84%A4%EC%A0%95%EC%9D%84%20%EC%8B%9C%EC%9E%91%20%EC%8B%9C%20%ED%85%9C%ED%94%8C%EB%A6%BF%EC%9C%BC%EB%A1%9C%20%EC%83%9D%EC%84%B1.md) | Kubernetes Patterns 20~22장 |
 | kubectl 기본 조회 | 필수 | | Kubernetes: Up and Running 4장 |
-| 컨테이너 격리 — namespace · cgroup | 추천 | [namespace·cgroup 격리](../08_cloud/book/kubernetes-in-action/02-03.%EB%84%A4%EC%9E%84%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4%EC%99%80%20cgroup%EC%9C%BC%EB%A1%9C%20%EB%B3%B4%EB%8A%94%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EA%B2%A9%EB%A6%AC.md) · [OS 로드맵](os-roadmap.md) | Kubernetes in Action 2장 |
+| 컨테이너 격리 — namespace · cgroup | 추천 | [namespace·cgroup 격리](../08_cloud/book/kubernetes-in-action/02-03.%EB%84%A4%EC%9E%84%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4%EC%99%80%20cgroup%EC%9C%BC%EB%A1%9C%20%EB%B3%B4%EB%8A%94%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EA%B2%A9%EB%A6%AC.md) · [OS 로드맵](os-roadmap.md) · [컨테이너와 가상머신](../08_cloud/book/kubernetes-in-action/02-01.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%EC%99%80%20%EA%B0%80%EC%83%81%EB%A8%B8%EC%8B%A0.md) | Kubernetes in Action 2장 |
 
 ### 2단계 · 워크로드
 
@@ -148,7 +151,7 @@ KISA 가이드는 API server 비인증 접근 차단, etcd 암호화, kubelet �
 | rollout 제어 · pause · rollback · 배포 전략 다섯 | 필수 | [rollout 제어](../08_cloud/book/kubernetes-in-action/15-03.rollout%20%EC%A0%9C%EC%96%B4%EC%99%80%20%EB%B0%B0%ED%8F%AC%20%EC%A0%84%EB%9E%B5%20%E2%80%94%20pause%C2%B7faulty%C2%B7rollback%C2%B7%EC%A0%84%EB%9E%B5%205%EC%A2%85.md) | Kubernetes in Action 15장 |
 | StatefulSet · ordinal · headless Service · retention | 필수 | [StatefulSet 기초](../08_cloud/book/kubernetes-in-action/16-01.StatefulSet%20%EA%B8%B0%EC%B4%88%20%E2%80%94%20Pets%20vs%20Cattle%C2%B7ordinal%C2%B7headless%20Service.md) · [StatefulSet 동작](../08_cloud/book/kubernetes-in-action/16-02.StatefulSet%20%EB%8F%99%EC%9E%91%20%E2%80%94%20%EB%AF%B8%EC%8B%B1%20%ED%8C%8C%EB%93%9C%C2%B7%EB%85%B8%EB%93%9C%20%EC%9E%A5%EC%95%A0%C2%B7%EC%8A%A4%EC%BC%80%EC%9D%BC%C2%B7retention.md) · [Stateful Service](../08_cloud/book/kubernetes-patterns/12-01.Stateful%20Service%20%E2%80%94%20StatefulSet%EC%9C%BC%EB%A1%9C%20%EC%83%81%ED%83%9C%EB%A5%BC%20first-class%EB%A1%9C.md) | Kubernetes Patterns 12장 |
 | DaemonSet · hostNetwork · hostPort | 필수 | [DaemonSet 기초](../08_cloud/book/kubernetes-in-action/17-01.DaemonSet%20%EA%B8%B0%EC%B4%88%20%E2%80%94%20%EB%85%B8%EB%93%9C%EB%A7%88%EB%8B%A4%20%ED%95%98%EB%82%98%C2%B7node%20selector%C2%B7%EC%97%85%EB%8D%B0%EC%9D%B4%ED%8A%B8.md) · [노드 에이전트 기능](../08_cloud/book/kubernetes-in-action/17-02.%EB%85%B8%EB%93%9C%20%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8%20%ED%8A%B9%EC%88%98%20%EA%B8%B0%EB%8A%A5%20%E2%80%94%20privileged%C2%B7hostPath%C2%B7hostNetwork%C2%B7PriorityClass.md) · [Daemon Service](../08_cloud/book/kubernetes-patterns/09-01.Daemon%20Service%20%E2%80%94%20%EB%85%B8%EB%93%9C%EB%A7%88%EB%8B%A4%20%EB%8F%84%EB%8A%94%20%EC%9D%B8%ED%94%84%EB%9D%BC%20Pod.md) | Kubernetes Patterns 9장 |
-| Job · CronJob · 병렬 · 완료 모드 · work queue | 추천 | [Job 기초](../08_cloud/book/kubernetes-in-action/18-01.Job%20%EA%B8%B0%EC%B4%88%20%E2%80%94%20%EC%8B%A4%ED%96%89%C2%B7%EC%83%81%ED%83%9C%C2%B7suspend%C2%B7%EC%9E%90%EB%8F%99%EC%82%AD%EC%A0%9C.md) ~ [work queue·CronJob](../08_cloud/book/kubernetes-in-action/18-03.work%20queue%C2%B7pod%20%ED%86%B5%EC%8B%A0%C2%B7sidecar%C2%B7CronJob.md) · [Batch Job](../08_cloud/book/kubernetes-patterns/07-01.Batch%20Job%20%E2%80%94%20%EC%9C%A0%ED%95%9C%ED%95%9C%20%EC%9E%91%EC%97%85%EC%9D%84%20%EC%99%84%EB%A3%8C%EA%B9%8C%EC%A7%80%20%EC%95%88%EC%A0%95%EC%A0%81%EC%9C%BC%EB%A1%9C.md) | Kubernetes Patterns 7·8장 |
+| Job · CronJob · 병렬 · 완료 모드 · work queue | 추천 | [Job 기초](../08_cloud/book/kubernetes-in-action/18-01.Job%20%EA%B8%B0%EC%B4%88%20%E2%80%94%20%EC%8B%A4%ED%96%89%C2%B7%EC%83%81%ED%83%9C%C2%B7suspend%C2%B7%EC%9E%90%EB%8F%99%EC%82%AD%EC%A0%9C.md) ~ [work queue·CronJob](../08_cloud/book/kubernetes-in-action/18-03.work%20queue%C2%B7pod%20%ED%86%B5%EC%8B%A0%C2%B7sidecar%C2%B7CronJob.md) · [Batch Job](../08_cloud/book/kubernetes-patterns/07-01.Batch%20Job%20%E2%80%94%20%EC%9C%A0%ED%95%9C%ED%95%9C%20%EC%9E%91%EC%97%85%EC%9D%84%20%EC%99%84%EB%A3%8C%EA%B9%8C%EC%A7%80%20%EC%95%88%EC%A0%95%EC%A0%81%EC%9C%BC%EB%A1%9C.md) · [Periodic Job](../08_cloud/book/kubernetes-patterns/08-01.Periodic%20Job%20%E2%80%94%20CronJob%EC%9C%BC%EB%A1%9C%20%EC%8B%9C%EA%B0%84%20%EC%B6%95%EC%9D%84%20%EB%8D%94%ED%95%98%EB%8B%A4.md) | Kubernetes Patterns 7·8장 |
 | init container · sidecar | 추천 | [Init Container](../08_cloud/book/kubernetes-patterns/15-01.Init%20Container%20%E2%80%94%20%EC%B4%88%EA%B8%B0%ED%99%94%EB%A5%BC%20%EC%95%B1%EA%B3%BC%20%EB%B6%84%EB%A6%AC%ED%95%B4%20%EB%B3%84%EB%8F%84%20%EC%83%9D%EC%95%A0%EC%A3%BC%EA%B8%B0%EB%A1%9C.md) · [Sidecar](../08_cloud/book/kubernetes-patterns/16-01.Sidecar%20%E2%80%94%20%EA%B8%B0%EC%A1%B4%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%EB%A5%BC%20%EB%B0%94%EA%BE%B8%EC%A7%80%20%EC%95%8A%EA%B3%A0%20%ED%99%95%EC%9E%A5.md) | Kubernetes Patterns 15·16장 |
 | adapter · ambassador | 선택 | [Adapter](../08_cloud/book/kubernetes-patterns/17-01.Adapter%20%E2%80%94%20%EC%9D%B4%EC%A7%88%EC%A0%81%20%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%9D%84%20%ED%86%B5%EC%9D%BC%20%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%EB%A1%9C.md) · [Ambassador](../08_cloud/book/kubernetes-patterns/18-01.Ambassador%20%E2%80%94%20%EB%B0%94%EA%B9%A5%EC%84%B8%EC%83%81%EC%9C%BC%EB%A1%9C%EC%9D%98%20smart%20proxy.md) | Kubernetes Patterns 17·18장 |
 | Singleton Service · Stateless Service | 선택 | [Singleton Service](../08_cloud/book/kubernetes-patterns/10-01.Singleton%20Service%20%E2%80%94%20%ED%95%9C%20%EB%B2%88%EC%97%90%20%ED%95%98%EB%82%98%EB%A7%8C%20%ED%99%9C%EC%84%B1%EC%9D%B4%EB%90%98%20%EA%B3%A0%EA%B0%80%EC%9A%A9.md) · [Stateless Service](../08_cloud/book/kubernetes-patterns/11-01.Stateless%20Service%20%E2%80%94%20%EB%8F%99%EC%9D%BC%C2%B7%EA%B5%90%EC%B2%B4%20%EA%B0%80%EB%8A%A5%ED%95%9C%20replica%EB%A1%9C%20%EC%88%98%ED%8F%89%20%ED%99%95%EC%9E%A5.md) | Kubernetes Patterns 10·11장 |
@@ -187,6 +190,7 @@ KISA 가이드는 API server 비인증 접근 차단, etcd 암호화, kubelet �
 | CSI · access mode · reclaim policy · 스냅샷 · ephemeral | 추천 | [PV 관리](../08_cloud/book/kubernetes-in-action/10-03.PV%20%EA%B4%80%EB%A6%AC%20%E2%80%94%20%EB%A6%AC%EC%82%AC%EC%9D%B4%EC%A6%88%C2%B7%EC%8A%A4%EB%83%85%EC%83%B7%C2%B7ephemeral.md) | Production Kubernetes 4장 |
 | 외부 저장소 통합 · 복제하지 않는 선택지 | 선택 | [저장소 통합 랩](../08_cloud/book/kubernetes-up-and-running/16-01.Integrating%20Storage%20%E2%80%94%20%EB%B3%B5%EC%A0%9C%ED%95%98%EC%A7%80%20%EC%95%8A%EB%8A%94%20%EC%84%A0%ED%83%9D%EC%A7%80%EC%99%80%20MySQL%20%EC%8B%B1%EA%B8%80%ED%84%B4%20%EB%9E%A9.md) | Kubernetes: Up and Running 16장 |
 | HPA · VPA · Cluster Autoscaler · KEDA | 추천 | [오토스케일링](../08_cloud/kubernetes/05_scheduling/05-03.%EC%98%A4%ED%86%A0%EC%8A%A4%EC%BC%80%EC%9D%BC%EB%A7%81.md) · [Elastic Scale](../08_cloud/book/kubernetes-patterns/29-01.Elastic%20Scale%20%E2%80%94%20%EB%B6%80%ED%95%98%EC%97%90%20%EB%A7%9E%EC%B6%B0%20%EC%84%B8%20%EC%B0%A8%EC%9B%90%EC%9C%BC%EB%A1%9C%20%EC%9E%90%EB%8F%99%20%ED%99%95%EC%9E%A5.md) | Production Kubernetes 13장 |
+| 노드 오토스케일링 두 방식 — Cluster Autoscaler 와 Karpenter | 선택 | | [Karpenter](https://karpenter.sh/docs/) |
 | Self Awareness — 자기 메타데이터 | 선택 | [Self Awareness](../08_cloud/book/kubernetes-patterns/14-01.Self%20Awareness%20%E2%80%94%20downward%20API%EB%A1%9C%20%EC%9E%90%EA%B8%B0%20%EB%A9%94%ED%83%80%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%96%BB%EA%B8%B0.md) | Kubernetes Patterns 14장 |
 
 
@@ -215,6 +219,8 @@ KISA 가이드는 API server 비인증 접근 차단, etcd 암호화, kubelet �
 | TLS · PKI · 인증서 수명 | 필수 | [TLS와 API 접근 보안](../08_cloud/kubernetes/06_architecture/06-02.TLS%EC%99%80%20API%20%EC%A0%91%EA%B7%BC%20%EB%B3%B4%EC%95%88.md) | |
 | etcd quorum · Raft · 백업 · 복구 | 필수 | [업그레이드·etcd 백업](../08_cloud/kubernetes/06_architecture/06-01.%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C%EC%99%80%20ETCD%20%EB%B0%B1%EC%97%85%C2%B7%EB%B3%B5%EA%B5%AC.md) | |
 | 클러스터 업그레이드 | 추천 | [업그레이드·etcd 백업](../08_cloud/kubernetes/06_architecture/06-01.%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C%EC%99%80%20ETCD%20%EB%B0%B1%EC%97%85%C2%B7%EB%B3%B5%EA%B5%AC.md) | |
+| 클러스터 세우기 — kubeadm · static pod · kubeconfig · 부트스트랩 토큰 | 추천 | | Production Kubernetes 2장 · [kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm/) |
+| 로컬 클러스터 — kind · minikube · k3s | 선택 | | [kind](https://kind.sigs.k8s.io/) · [k3s](https://docs.k3s.io/) |
 | kubectl 뒤의 HTTP — 클라이언트가 감추는 요청 | 선택 | [클라이언트와 HTTP](../08_cloud/book/kubernetes-up-and-running/18-01.Accessing%20Kubernetes%20%E2%80%94%20%ED%81%B4%EB%9D%BC%EC%9D%B4%EC%96%B8%ED%8A%B8%EA%B0%80%20%EA%B0%90%EC%B6%94%EB%8A%94%20HTTP%EC%99%80%20%EC%9B%90%EC%84%9C%20%EC%BD%94%EB%93%9C%20%EC%8B%A4%EC%A6%9D%20%EB%9E%A9.md) | Kubernetes: Up and Running 18장 |
 
 ### 6단계 · 보안과 확장
@@ -230,8 +236,8 @@ KISA 가이드는 API server 비인증 접근 차단, etcd 암호화, kubelet �
 | SecurityContext · capability · seccomp · 최소 권한 | 필수 | [Process Containment](../08_cloud/book/kubernetes-patterns/23-01.Process%20Containment%20%E2%80%94%20%EC%B5%9C%EC%86%8C%20%EA%B6%8C%ED%95%9C%EC%9C%BC%EB%A1%9C%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%EB%A5%BC%20%EA%B0%80%EB%91%90%EA%B8%B0.md) · [시스템 콜·capability](../08_cloud/book/container-security/02-01.Linux%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%BD%9C%C2%B7%EA%B6%8C%ED%95%9C%C2%B7capability%20%E2%80%94%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%B3%B4%EC%95%88%EC%9D%98%20%EB%B0%94%EB%8B%A5.md) | Kubernetes Patterns 23장 |
 | AppArmor 프로파일 · `appArmorProfile` 필드 | 추천 | [컨테이너 격리 강화](../08_cloud/book/container-security/08-01.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EA%B2%A9%EB%A6%AC%20%EA%B0%95%ED%99%94%20%E2%80%94%20%EC%83%8C%EB%93%9C%EB%B0%95%EC%8B%B1%EC%9D%98%20%EC%84%B8%20%EA%B0%88%EB%9E%98.md) · [보안 컨텍스트 랩](../08_cloud/book/kubernetes-up-and-running/19-01.Securing%20Applications%20%E2%80%94%20%EC%A3%BD%EC%9D%80%20%EC%8B%A4%EC%8A%B5%20%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%99%80%20proc%20%EB%A1%9C%20%EB%8B%A4%EC%8B%9C%20%EC%84%B8%EC%9A%B4%20%EB%9E%A9.md) | CKS Study Guide 4장 |
 | Pod Security Admission · PSS 세 등급 — Privileged · Baseline · Restricted | 필수 | [보안 컨텍스트 랩](../08_cloud/book/kubernetes-up-and-running/19-01.Securing%20Applications%20%E2%80%94%20%EC%A3%BD%EC%9D%80%20%EC%8B%A4%EC%8A%B5%20%EC%9D%B4%EB%AF%B8%EC%A7%80%EC%99%80%20proc%20%EB%A1%9C%20%EB%8B%A4%EC%8B%9C%20%EC%84%B8%EC%9A%B4%20%EB%9E%A9.md) | CKS Study Guide 5장 |
-| NetworkPolicy · 네트워크 분할 | 추천 | [NetworkPolicy](../08_cloud/kubernetes/04_networking/04-07.NetworkPolicy.md) · [Network Segmentation](../08_cloud/book/kubernetes-patterns/24-01.Network%20Segmentation%20%E2%80%94%20%ED%86%B5%EC%8B%A0%EC%9D%84%20%ED%95%84%EC%9A%94%ED%95%9C%20%EA%B2%BD%EB%A1%9C%EB%A7%8C%20%EB%82%A8%EA%B8%B0%EA%B8%B0.md) | Kubernetes Patterns 24장 |
-| Secret 관리 · 외부 저장소 · 안전한 설정 | 추천 | [Secure Configuration](../08_cloud/book/kubernetes-patterns/25-01.Secure%20Configuration%20%E2%80%94%20%EB%AF%BC%EA%B0%90%ED%95%9C%20%EC%84%A4%EC%A0%95%EC%9D%84%20%EC%95%88%EC%A0%84%ED%95%98%EA%B2%8C%20%EB%8B%A4%EB%A3%A8%EA%B8%B0.md) | Production Kubernetes 7장 |
+| NetworkPolicy · 네트워크 분할 | 추천 | [NetworkPolicy](../08_cloud/kubernetes/04_networking/04-07.NetworkPolicy.md) · [Network Segmentation](../08_cloud/book/kubernetes-patterns/24-01.Network%20Segmentation%20%E2%80%94%20%ED%86%B5%EC%8B%A0%EC%9D%84%20%ED%95%84%EC%9A%94%ED%95%9C%20%EA%B2%BD%EB%A1%9C%EB%A7%8C%20%EB%82%A8%EA%B8%B0%EA%B8%B0.md) · [컨테이너 네트워크 보안](../08_cloud/book/container-security/10-01.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%EB%B3%B4%EC%95%88%20%E2%80%94%20%EA%B3%84%EC%B8%B5%EB%B3%84%EB%A1%9C%20%EB%82%98%EB%88%A0%20%EB%A7%89%EA%B8%B0.md) | Kubernetes Patterns 24장 |
+| Secret 관리 · 외부 저장소 · 안전한 설정 | 추천 | [Secure Configuration](../08_cloud/book/kubernetes-patterns/25-01.Secure%20Configuration%20%E2%80%94%20%EB%AF%BC%EA%B0%90%ED%95%9C%20%EC%84%A4%EC%A0%95%EC%9D%84%20%EC%95%88%EC%A0%84%ED%95%98%EA%B2%8C%20%EB%8B%A4%EB%A3%A8%EA%B8%B0.md) · [시크릿 전달](../08_cloud/book/container-security/12-01.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%EC%97%90%20%EC%8B%9C%ED%81%AC%EB%A6%BF%20%EC%A0%84%EB%8B%AC%ED%95%98%EA%B8%B0%20%E2%80%94%20%EB%8B%A4%EC%84%AF%20%EA%B2%BD%EB%A1%9C%EC%99%80%20root%EB%9D%BC%EB%8A%94%20%EC%B2%9C%EC%9E%A5.md) | Production Kubernetes 7장 |
 | 저장 암호화 — EncryptionConfiguration · KMS provider | 추천 | [Secure Configuration](../08_cloud/book/kubernetes-patterns/25-01.Secure%20Configuration%20%E2%80%94%20%EB%AF%BC%EA%B0%90%ED%95%9C%20%EC%84%A4%EC%A0%95%EC%9D%84%20%EC%95%88%EC%A0%84%ED%95%98%EA%B2%8C%20%EB%8B%A4%EB%A3%A8%EA%B8%B0.md) | Production Kubernetes 7장 |
 | 격리 강화 · 경계 파괴 · 런타임 보호 | 추천 | [컨테이너 격리 강화](../08_cloud/book/container-security/08-01.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EA%B2%A9%EB%A6%AC%20%EA%B0%95%ED%99%94%20%E2%80%94%20%EC%83%8C%EB%93%9C%EB%B0%95%EC%8B%B1%EC%9D%98%20%EC%84%B8%20%EA%B0%88%EB%9E%98.md) · [컨테이너 격리 깨뜨리기](../08_cloud/book/container-security/09-01.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EA%B2%A9%EB%A6%AC%20%EA%B9%A8%EB%9C%A8%EB%A6%AC%EA%B8%B0%20%E2%80%94%20%EC%84%A4%EC%A0%95%20%ED%95%98%EB%82%98%EB%A1%9C%20%EB%AC%B4%EB%84%88%EC%A7%80%EB%8A%94%20%EA%B2%BD%EA%B3%84.md) | Container Security 8·9·13장 |
 | EKS 워크로드 신원 — IRSA | 추천 | | Production Kubernetes 10장 |
@@ -246,6 +252,8 @@ KISA 가이드는 API server 비인증 접근 차단, etcd 암호화, kubelet �
 | Controller · Operator · finalizer · OwnerReference | 추천 | [Controller](../08_cloud/book/kubernetes-patterns/27-01.Controller%20%E2%80%94%20Observe-Analyze-Act%EB%A1%9C%20%EC%83%81%ED%83%9C%EB%A5%BC%20%EC%A1%B0%EC%A0%95%ED%95%98%EA%B8%B0.md) · [Operator](../08_cloud/book/kubernetes-patterns/28-01.Operator%20%E2%80%94%20CRD%EB%A1%9C%20%EB%8F%84%EB%A9%94%EC%9D%B8%20%EC%A7%80%EC%8B%9D%EC%9D%84%20%EC%9E%90%EB%8F%99%ED%99%94%ED%95%98%EA%B8%B0.md) | Programming Kubernetes 6장 |
 | controller-runtime 으로 감싸기 | 추천 | | Programming Kubernetes 6장 |
 | status subresource · 코드 생성 | 선택 | | Programming Kubernetes 5·9장 |
+| 스케줄러 확장 — scheduling framework · 스케줄러 프로파일 · custom scheduler · scheduler extender | 선택 | | [Scheduling Framework](https://kubernetes.io/docs/concepts/scheduling-eviction/scheduling-framework/) |
+| 배치 다시 고르기 — descheduler | 선택 | | [descheduler](https://github.com/kubernetes-sigs/descheduler) |
 | 어드미션 웹훅 · OPA · Gatekeeper · Kyverno | 추천 | [Gatekeeper 정책](../08_cloud/book/kubernetes-up-and-running/20-01.Policy%20and%20Governance%20%E2%80%94%20Gatekeeper%20%EB%A1%9C%20%EB%A7%8C%EB%93%A4%EA%B8%B0%20%EC%A0%84%EC%97%90%20%EB%A7%89%EA%B3%A0%20%EB%A7%8C%EB%93%A0%20%EB%92%A4%EC%97%90%20%EC%84%B8%EB%8A%94%20%EB%B2%95.md) | Policy as Code 7·8장 |
 | ValidatingAdmissionPolicy — 웹훅 없는 CEL 정책 | 선택 | | [Validating Admission Policy](https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/) |
 | 공급망 보안 · SBOM · 이미지 서명 · 취약점 스캔 | 추천 | [이미지 공급망 보안](../08_cloud/book/container-security/06-02.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EA%B3%B5%EA%B8%89%EB%A7%9D%20%EB%B3%B4%EC%95%88%20%E2%80%94%20%EB%B9%8C%EB%93%9C%EB%B6%80%ED%84%B0%20%EB%B0%B0%ED%8F%AC%EA%B9%8C%EC%A7%80.md) · [이미지 취약점](../08_cloud/book/container-security/07-01.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EC%86%8D%20%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4%20%EC%B7%A8%EC%95%BD%EC%A0%90%20%E2%80%94%20CVE%EB%B6%80%ED%84%B0%20%EC%8A%A4%EC%BA%94%20%EC%9A%B4%EC%98%81%EA%B9%8C%EC%A7%80.md) | CKS Study Guide 6장 · Policy as Code 14장 |
@@ -263,16 +271,20 @@ KISA 가이드는 API server 비인증 접근 차단, etcd 암호화, kubelet �
 | OOMKilled · exit code 137 · CPU throttling | 필수 | [OOMKilled 사례 분석](../08_cloud/kubernetes/09_operations/09-02.OOMKilled%20%EC%82%AC%EB%A1%80%20%EB%B6%84%EC%84%9D.md) · [OS 로드맵](os-roadmap.md) | |
 | SIGTERM · PID 1 · PreStop · `terminationGracePeriodSeconds` | 필수 | [Kubernetes 장애 기록](../troubleshooting/kubernetes/README.md) | |
 | node pressure · eviction · NodeNotReady | 추천 | [Kubernetes 장애 기록](../troubleshooting/kubernetes/README.md) | |
+| 노드 추가·제거 — cordon · drain · PDB 와의 맞물림 | 필수 | | [Safely Drain a Node](https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/) |
 | OS 자동 업데이트 — 파이프라인 밖에서 노드를 바꾸는 장치 | 선택 | [진단 개념](../troubleshooting/_concepts/os-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8-%EB%B0%96%EC%97%90%EC%84%9C-%EB%85%B8%EB%93%9C%EB%A5%BC-%EB%B0%94%EA%BE%B8%EB%8A%94-%EC%9E%A5%EC%B9%98.md) |  |
 | Helm · Kustomize | 추천 | [Helm 기초](../08_cloud/kubernetes/10_packaging/10-01.Helm%20%EA%B8%B0%EC%B4%88.md) ~ [Kustomize](../08_cloud/kubernetes/10_packaging/10-03.Kustomize.md) | |
 | GitOps · ArgoCD · App of Apps · ApplicationSet | 추천 | [ArgoCD와 GitOps](../08_cloud/kubernetes/11_devtools/11-03.ArgoCD%EC%99%80%20GitOps.md) · [ArgoCD 노트](../08_cloud/argocd/README.md) | Kubernetes Best Practices 18장 |
+| 점진 배포 — canary · blue-green · Argo Rollouts · progressive delivery | 추천 | | [Argo Rollouts](https://argo-rollouts.readthedocs.io/) |
 | IaC 와 Immutable Infrastructure — 고치지 않고 다시 만든다 | 추천 | [IaC 관리](../07_devops/book/fdsd_fundamentals-devops/02-01.How%20to%20Manage%20Your%20Infrastructure%20as%20Code.md) | Terraform Up and Running 1장 · Infrastructure as Code 11장 |
 | Terraform state · module · 비밀 관리 | 추천 | | Terraform Up and Running 3·4·6장 |
+| 클러스터를 오브젝트로 선언 — Cluster API · Crossplane | 선택 | | Production Kubernetes 2장 · [Cluster API](https://cluster-api.sigs.k8s.io/) |
 | IaC 정책 검사 — Security as Code | 선택 |  | Policy as Code 11·12장 · Infrastructure as Code 21장 |
 | 멀티테넌시 | 추천 | | Production Kubernetes 12장 |
 | 가상 컨트롤 플레인 — tenant 와 host 를 잇는 sync 방향 | 선택 | | Production Kubernetes 12장 |
 | 이름 변환과 충돌 회피 · status back-sync | 선택 |  | [vcluster](https://www.vcluster.com/docs) |
 | 멀티클러스터 세 모델 | 추천 | [멀티클러스터 세 모델](../08_cloud/book/kubernetes-up-and-running/21-01.Multicluster%20%E2%80%94%20%EB%8A%98%EB%A6%AC%EA%B8%B0%20%EC%A0%84%EC%97%90%20%EA%B0%96%EC%B6%9C%20%EA%B2%83%EA%B3%BC%20%EB%8A%98%EB%A6%B0%20%EB%92%A4%20%EA%B0%88%EB%A6%AC%EB%8A%94%20%EC%84%B8%20%EB%AA%A8%EB%8D%B8.md) | Kubernetes: Up and Running 21장 |
+| 관리형 대 자체 운영 — EKS · GKE · AKS 를 고르는 기준 | 추천 | | Production Kubernetes 2장 |
 | OpenShift — Route · SCC · 설치 방식 | 선택 | | Operating OpenShift 2·3장 |
 | 서비스 메시를 쓸 것인가 | 선택 | [서비스 메시 판단](../08_cloud/book/kubernetes-up-and-running/15-01.Service%20Meshes%20%E2%80%94%20%EC%93%B8%20%EA%B2%83%EC%9D%B8%EA%B0%80%EB%A5%BC%20%EB%A8%BC%EC%A0%80%20%EB%94%B0%EC%A7%84%EB%8B%A4.md) · [네트워크 로드맵](network-roadmap.md) | Kubernetes: Up and Running 15장 |
 | 클러스터 안 CI 도구 — Jenkins · SonarQube · Harbor | 선택 | [Jenkins on K8s](../08_cloud/kubernetes/11_devtools/11-01.Jenkins%20on%20K8s.md) · [Harbor](../08_cloud/kubernetes/11_devtools/11-04.Harbor.md) | |
@@ -286,6 +298,8 @@ KISA 가이드는 API server 비인증 접근 차단, etcd 암호화, kubelet �
 
 | 출처 | 단계 | 무엇 |
 |---|:---:|---|
+| [Pod 생성과 상호작용](../08_cloud/book/kubernetes-in-action/05-02.Pod%20%EC%83%9D%EC%84%B1%EA%B3%BC%20%EC%83%81%ED%98%B8%EC%9E%91%EC%9A%A9.md) | 1 | exec · 임시 클라이언트 Pod · port-forward · API 서버로 Pod 에 붙어 Client IP 가 어떻게 달라지는지 보기 |
+| [Jobs — work queue 랩](../08_cloud/book/kubernetes-up-and-running/12-01.Jobs%20%E2%80%94%20%EB%81%9D%EB%82%98%EB%8A%94%20%EC%9D%BC%EA%B3%BC%20work%20queue%20%EB%9E%A9.md) | 2 | 큐 데몬에 일감 100건을 넣고 Job 으로 처리하며 restartPolicy 차이 확인 |
 | [Node와 Event 오브젝트로 보는 필드 실습](../08_cloud/book/kubernetes-in-action/04-02.Node%EC%99%80%20Event%20%EC%98%A4%EB%B8%8C%EC%A0%9D%ED%8A%B8%EB%A1%9C%20%EB%B3%B4%EB%8A%94%20%ED%95%84%EB%93%9C%20%EC%8B%A4%EC%8A%B5.md) | 1 | 매니페스트 필드를 실제 오브젝트에서 확인 |
 | [네임스페이스와 cgroup으로 보는 컨테이너 격리](../08_cloud/book/kubernetes-in-action/02-03.%EB%84%A4%EC%9E%84%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4%EC%99%80%20cgroup%EC%9C%BC%EB%A1%9C%20%EB%B3%B4%EB%8A%94%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EA%B2%A9%EB%A6%AC.md) | 1 | Pod 안 컨테이너가 무엇을 공유하는지 |
 | [Extending Kubernetes](../08_cloud/book/kubernetes-up-and-running/17-01.Extending%20Kubernetes%20%E2%80%94%20%EC%96%B4%EB%93%9C%EB%AF%B8%EC%85%98%C2%B7%EC%BB%A4%EC%8A%A4%ED%85%80%20%EB%A6%AC%EC%86%8C%EC%8A%A4%EC%99%80%20%EC%9D%B8%EC%A6%9D%EC%84%9C%20%EC%97%86%EB%8A%94%20%EA%B2%80%EC%A6%9D%20%EB%9E%A9.md) | 6 | 인증서 없이 어드미션 웹훅 검증 |
@@ -311,6 +325,7 @@ KISA 가이드는 API server 비인증 접근 차단, etcd 암호화, kubelet �
 | Istio 의 트래픽 관리와 mTLS | [네트워크 로드맵](network-roadmap.md) 7단계가 맡습니다. 여기는 "쓸 것인가"까지입니다 |
 | VPC · Security Group · 클라우드 네트워크 경계 | [네트워크 로드맵](network-roadmap.md) 5단계가 맡습니다 |
 | Kubernetes in Action 3장 | 클러스터를 띄우는 절차입니다. 순서가 아니라 준비 단계입니다 |
+| Kubernetes 대안 — Nomad · ECS · Cloud Run | 오케스트레이터를 고르는 축입니다. 이 로드맵은 Kubernetes 를 쓰기로 한 뒤의 순서입니다 |
 
 
 

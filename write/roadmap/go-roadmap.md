@@ -22,31 +22,38 @@ updated: 2026-09-27
 
 | 단계 | 묶음 | 배우는 개념 |
 |---|---|---|
-| 1 · 문법 | 환경과 선언 | `go` 명령 · 모듈 초기화 · 변수 · 상수 · 타입 선언 |
-| 1 · 문법 | 제어와 함수 | `if` · `for` · `switch` · 블록 · 섀도잉 · 함수 · 다중 반환 · `defer` |
-| 1 · 문법 | 값 의미론 | array · slice · capacity · `append` · map · struct · 포인터 · zero value · 무엇이 복사되고 무엇이 공유되는가 |
+| 1 · 문법 | 환경과 선언 | `go` 명령 · 모듈 초기화 · 변수 · 상수 · 타입 선언 · `const` 와 `iota` · 타입 변환 · 타입 추론 |
+| 1 · 문법 | 제어와 함수 | `if` · `for` · `switch` · 블록 · 섀도잉 · 함수 · 다중 반환 · `defer` · 익명 함수 · 클로저 · 가변 인자 |
+| 1 · 문법 | 값 의미론 | array · slice · capacity · `append` · map · struct · 포인터 · zero value · 무엇이 복사되고 무엇이 공유되는가 · 문자열 · byte · rune · raw string literal · comma-ok |
 | 2 · 타입 설계 | 메서드와 인터페이스 | receiver · method set · 암묵 구현 · 인터페이스 배치 · embedding · 조합 · type assertion · type switch |
-| 2 · 타입 설계 | 에러 | error value · wrapping · sentinel error · `errors.Is` · `errors.As` |
+| 2 · 타입 설계 | 에러 | error value · wrapping · sentinel error · `errors.Is` · `errors.As` · `panic` · `recover` · stack trace |
 | 2 · 타입 설계 | 제네릭 | 타입 파라미터 · 제약 · 언제 쓰고 언제 안 쓰는가 |
 | 3 · 관용구와 도구 | 패키지 설계 | 패키지 경계 · 네이밍 · 인터페이스를 쓰는 쪽에 두기 |
-| 3 · 관용구와 도구 | 모듈과 검사 | module · MVS · workspace · `go build` · `go vet` · staticcheck |
+| 3 · 관용구와 도구 | 모듈과 검사 | module · MVS · workspace · `go build` · `go vet` · staticcheck · `go mod tidy` · vendor · 모듈 배포와 semver · `go install` · goimports · golangci-lint · govulncheck |
+| 3 · 관용구와 도구 | 빌드 | build tag · build constraint · 크로스 컴파일 `GOOS` · `GOARCH` · `-ldflags` 로 버전 주입 |
+| 3 · 관용구와 도구 | 표준 라이브러리 | `io.Reader` · `bufio` · `os` · `time` · `encoding/json` · struct tag · `regexp` · `flag` |
 | 3 · 관용구와 도구 | 취소 전파 | `context` · 취소 · 값 전달 · deadline |
 | 3 · 관용구와 도구 | 흔한 실수 | slice aliasing · interface nil · goroutine leak · loop variable · context 오용 · `go generate` · cgo 메모리 소유권 |
 | 4 · 동시성 | 실행 단위 | goroutine · `GOMAXPROCS` · 스케줄러 · 스레드와의 차이 · netpoller |
-| 4 · 동시성 | 메모리 공유 | 경쟁 상태 · mutex · RWMutex · 조건 변수 · 세마포어 · WaitGroup · barrier |
-| 4 · 동시성 | 메시지 전달 | channel · buffered channel · `select` · 채널 패턴 · pipeline · fan-in · fan-out |
+| 4 · 동시성 | 메모리 공유 | 경쟁 상태 · mutex · RWMutex · 조건 변수 · 세마포어 · WaitGroup · barrier · `sync.Map` · `sync.Pool` |
+| 4 · 동시성 | 메시지 전달 | channel · buffered channel · `select` · 채널 패턴 · pipeline · fan-in · fan-out · worker pool |
 | 4 · 동시성 | 정확성 | happens-before · race detector · deadlock 회피 · atomic · spin lock · futex |
-| 5 · 테스트와 성능 | 테스트 | table-driven test · test double · coverage · golden file · benchmark · fuzzing |
+| 5 · 테스트와 성능 | 테스트 | table-driven test · test double · coverage · golden file · benchmark · fuzzing · `httptest` · mock 과 stub |
 | 5 · 테스트와 성능 | 프로파일 | pprof — CPU · heap · block · mutex · goroutine · `runtime/trace` · 스케줄러 추적 |
 | 5 · 테스트와 성능 | 런타임 | escape analysis · 할당 줄이기 · GC · `GOGC` · `GOMEMLIMIT` |
+| 5 · 테스트와 성능 | 디버깅 | stack trace 읽기 · Delve (`dlv`) |
 | 6 · 서비스 | 전송 계층 | 주소 해석 · 라우팅 · TCP 스트림 · 데이터 전송 · UDP · 신뢰성 보강 · Unix domain socket |
 | 6 · 서비스 | HTTP | 클라이언트 타임아웃 · 서버 라우팅 · 미들웨어 · graceful shutdown |
-| 6 · 서비스 | 운영 요소 | TLS · 직렬화 · `log/slog` · 지표 |
+| 6 · 서비스 | 웹 프레임워크 | `net/http` 표준 라우터와 프레임워크의 갈림 · chi · Gin · Echo · Fiber |
+| 6 · 서비스 | DB 접근 | `database/sql` · 커넥션 풀 · pgx · sqlc · GORM |
+| 6 · 서비스 | 실시간 | WebSocket |
+| 6 · 서비스 | 운영 요소 | TLS · 직렬화 · `log/slog` · 지표 · zap · zerolog · gRPC · Protocol Buffers |
 | 6 · 서비스 | 프로토콜 설계 | 바이트 파싱 · `encoding/binary` · 엔디언 · framing · 메시지 타입 · 핸드셰이크 · 버전 협상 · 상태 머신 |
 | 6 · 서비스 | 클라우드 네이티브 설계 | 복원력 · 느슨한 결합 · 관측성 · 보안 |
 | 6 · 서비스 | 산출물 | `go:embed` · distroless · 멀티스테이지 이미지 · `syscall/js` 와 Wasm 경계 |
+| 6 · 서비스 | CLI | `flag` · cobra · urfave/cli · 설정 우선순위 |
 | 7 · 터미널과 세션 | SSH | 전송 · 사용자 인증 · 연결 3계층 · `pty-req` · `window-change` · 세션 채널의 경계 |
-| 7 · 터미널과 세션 | 화면 | ANSI CSI · 화면 직접 그리기 · rune 과 grapheme · 터미널 셀 폭 |
+| 7 · 터미널과 세션 | 화면 | ANSI CSI · 화면 직접 그리기 · rune 과 grapheme · 터미널 셀 폭 · Bubble Tea |
 | 7 · 터미널과 세션 | 세션 관리 | 논블로킹 알림 · 신호 병합 · 슬라이딩 윈도우 속도 제한 · 자원 상한 · 인증과 인가의 차이 |
 
 
@@ -70,6 +77,7 @@ updated: 2026-09-27
 | 책 | 장 | 받치는 자리 |
 |---|---|---|
 | Learning Go | 16장 | 3단계 reflect · unsafe · cgo |
+| Learn Go with Pocket-Sized Projects | 12장 · 부록 G | 3단계 크로스 컴파일, 6단계 DB 접근 |
 
 공식 문서는 책과 같은 무게로 씁니다. [A Tour of Go](https://go.dev/tour/)와 [Effective Go](https://go.dev/doc/effective_go)가 1·3단계, [The Go Memory Model](https://go.dev/ref/mem)이 4단계, [Go Diagnostics](https://go.dev/doc/diagnostics)와 [Go GC Guide](https://go.dev/doc/gc-guide)가 5단계의 빈칸을 메웁니다.
 
@@ -85,10 +93,14 @@ updated: 2026-09-27
 |---|:---:|---|---|
 | 개발 환경 · `go` 명령 · 모듈 초기화 | 필수 | | Learning Go 1장 |
 | 변수 · 상수 · 타입 선언 | 필수 | | Learning Go 2장 |
+| `const` 와 `iota` · 타입 변환 · 타입 추론 | 필수 | | Learning Go 2장 |
 | array · slice · capacity · `append` | 필수 | | Learning Go 3장 |
 | map · struct · zero value | 필수 | | Learning Go 3장 |
+| 문자열 · byte · rune · raw string literal | 필수 | | Learning Go 2·3장 |
+| comma-ok 관용구 — map 조회 · type assertion · channel 수신 | 추천 | | Learning Go 3장 |
 | `if` · `for` · `switch` · 블록 · 섀도잉 | 필수 | | Learning Go 4장 |
 | 함수 · 다중 반환 · `defer` | 필수 | | Learning Go 5장 |
+| 익명 함수 · 클로저 · 가변 인자 · 함수를 값으로 | 필수 | | Learning Go 5장 |
 | 포인터와 값 의미론 — 무엇이 복사되는가 | 필수 | | Learning Go 6장 |
 | 작은 프로젝트로 손에 익히기 | 선택 | | Pocket-Sized Projects 2~5장 |
 
@@ -102,6 +114,7 @@ updated: 2026-09-27
 | type assertion · type switch | 추천 | | Learning Go 7장 |
 | error value · wrapping · sentinel error | 필수 | | Learning Go 9장 |
 | `errors.Is` · `errors.As` · 실패 맥락 보존 | 필수 | | Learning Go 9장 |
+| `panic` · `recover` — 언제 쓰고 언제 안 쓰는가 · stack trace | 추천 | | Learning Go 9장 |
 | 제네릭 · 타입 파라미터 · 제약 | 추천 | | Learning Go 8장 |
 | 제네릭으로 캐시 만들기 | 선택 | | Pocket-Sized Projects 7장 |
 
@@ -112,8 +125,12 @@ updated: 2026-09-27
 | 패키지 경계 · 네이밍 · import 규약 | 필수 | | Learning Go 10장 |
 | module · MVS · workspace | 필수 | | Learning Go 10장 |
 | `go build` · `go vet` · staticcheck · `gofmt` | 필수 | | Learning Go 11장 |
+| `go mod tidy` · vendor · 모듈 배포 · semver · retract | 추천 | | Learning Go 10장 |
+| `go install` · goimports · golangci-lint · revive · govulncheck | 추천 | | Learning Go 11장 |
+| build tag · 크로스 컴파일 `GOOS` · `GOARCH` · `-ldflags` | 추천 | | Learning Go 11장 · Pocket-Sized Projects 12장 |
 | `context` — 취소 · 값 전달 · deadline | 필수 | | Learning Go 14장 |
 | 표준 라이브러리 지도 | 추천 | | Learning Go 13장 |
+| `io.Reader` · `bufio` · `time` · `encoding/json` · struct tag | 필수 | | Learning Go 13장 |
 | slice aliasing · interface nil | 추천 | | |
 | goroutine leak · loop variable · context 오용 | 추천 | | |
 | reflect · unsafe · cgo | 선택 | | Learning Go 16장 |
@@ -139,9 +156,11 @@ updated: 2026-09-27
 | happens-before · `go test -race` | 필수 | | [The Go Memory Model](https://go.dev/ref/mem) |
 | 조건 변수 · 세마포어 | 추천 | | Learn Concurrent Programming with Go 5장 |
 | pipeline · fan-in · fan-out · errgroup | 추천 | | Learn Concurrent Programming with Go 10장 |
+| worker pool — goroutine 수에 상한 두기 | 추천 | | Learn Concurrent Programming with Go 10장 |
 | deadlock 회피 | 추천 | | Learn Concurrent Programming with Go 11장 |
 | 채널 소유권 — 닫기는 한 곳에서만 | 필수 | | Learn Concurrent Programming with Go 7장 |
 | `sync.Once` — 중복 close 막기 | 추천 | | |
+| `sync.Map` · `sync.Pool` — 언제 map 과 mutex 보다 나은가 | 선택 | | [sync](https://pkg.go.dev/sync) |
 | atomic · spin lock · futex | 추천 | | Learn Concurrent Programming with Go 12장 |
 | netpoller — 블로킹처럼 쓰는 I/O 가 epoll 위에서 도는 법 | 추천 | [OS 로드맵](os-roadmap.md) | |
 
@@ -150,6 +169,7 @@ updated: 2026-09-27
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
 | table-driven test · test double | 필수 | | Learning Go 15장 |
+| `httptest` · mock 과 stub | 추천 | | Learning Go 15장 |
 | coverage · golden file | 추천 | | Learning Go 15장 |
 | benchmark · fuzzing | 추천 | | Pocket-Sized Projects 부록 D·F |
 | pprof — CPU · heap · block · mutex profile | 필수 | | [Go Diagnostics](https://go.dev/doc/diagnostics) |
@@ -157,6 +177,7 @@ updated: 2026-09-27
 | `runtime/trace` · 스케줄러 추적 | 추천 | | [Go Diagnostics](https://go.dev/doc/diagnostics) |
 | escape analysis · 할당 줄이기 | 추천 | | |
 | GC · `GOGC` · `GOMEMLIMIT` | 추천 | | [Go GC Guide](https://go.dev/doc/gc-guide) |
+| 디버거 — Delve (`dlv`) · goroutine 별 stack | 선택 | | [Delve](https://github.com/go-delve/delve/tree/master/Documentation) |
 | 측정의 함정 — 워밍업 · noisy neighbor | 추천 | [OS 로드맵](os-roadmap.md) | |
 
 ### 6단계 · 서비스
@@ -167,9 +188,13 @@ updated: 2026-09-27
 | TCP 스트림 · 데이터 전송 · half-close | 필수 | | Network Programming with Go 3·4장 |
 | HTTP 클라이언트 · 타임아웃 · 재시도 경계 | 필수 | | Network Programming with Go 8장 |
 | HTTP 서비스 · 라우팅 · graceful shutdown | 필수 | | Network Programming with Go 9장 |
+| 표준 `net/http` 와 웹 프레임워크 — chi · Gin · Echo · Fiber | 선택 | | Cloud Native Go 5장 |
+| DB 접근 — `database/sql` · 커넥션 풀 · pgx · sqlc · GORM | 추천 | | Pocket-Sized Projects 부록 G · [database/sql](https://go.dev/doc/database/) |
+| WebSocket — 양방향 실시간 연결 | 선택 | | [RFC 6455](https://www.rfc-editor.org/rfc/rfc6455) |
 | UDP · 신뢰성 보강 | 추천 | | Network Programming with Go 5·6장 |
 | TLS 로 통신 지키기 | 추천 | | Network Programming with Go 11장 |
 | 직렬화 · `log/slog` · 지표 | 추천 | | Network Programming with Go 12·13장 |
+| 구조화 로깅 라이브러리 — zap · zerolog 와 slog 의 갈림 | 선택 | | [slog](https://pkg.go.dev/log/slog) |
 | 바이트 파싱 — `[]byte` · `encoding/binary` · 엔디언 · 경계 검사 | 추천 | | |
 | 와이어 프로토콜 설계 — framing · 메시지 타입 · 핸드셰이크 · 버전 협상 · 상태 머신 | 추천 | | |
 | SSE — 서버가 미는 스트리밍 HTTP | 추천 | | |
@@ -181,6 +206,7 @@ updated: 2026-09-27
 | distroless · 멀티스테이지 이미지 | 추천 | | |
 | syscall/js — Wasm 이라는 경계 | 선택 | | |
 | gRPC 서비스 만들기 | 선택 | | Pocket-Sized Projects 10·11장 |
+| CLI 만들기 — `flag` · cobra · urfave/cli · 설정 우선순위 | 추천 | | Pocket-Sized Projects 6장 · [cobra](https://cobra.dev/) |
 
 
 ### 7단계 · 터미널과 세션
@@ -195,6 +221,7 @@ updated: 2026-09-27
 | `pty-req` 와 `window-change` | 필수 | | |
 | 세션 채널과 애플리케이션의 경계 | 필수 | | |
 | ANSI CSI 로 화면 직접 그리기 | 추천 | | |
+| TUI 프레임워크 — Bubble Tea 의 Elm 아키텍처 | 선택 | | [Bubble Tea](https://github.com/charmbracelet/bubbletea) |
 | rune 과 grapheme 과 터미널 셀 폭 | 필수 | | |
 | 논블로킹 알림과 신호 병합 | 필수 | | Learn Concurrent Programming with Go 7장 |
 | 인증과 인가는 다른 문제다 | 필수 | | Cloud Native Go 12장 |
@@ -237,6 +264,8 @@ updated: 2026-09-27
 | Cloud Native Go 1~3장 | 클라우드 네이티브 개론과 Go 소개입니다. 순서에 넣을 축이 아닙니다 |
 | P2P · 익명 오버레이 구현 | [네트워크 로드맵](network-roadmap.md) 8·9단계가 개념을 맡습니다 |
 | lexer · parser · AST 로 DSL 만들기 | 컴파일러 축입니다. 코드 생성은 3단계 `go generate` 까지만 봅니다 |
+| plugin 동적 로딩 · `goto` | 쓸 자리가 드뭅니다. `plugin` 은 플랫폼 제약이 커서 별도 프로세스와 RPC 로 대신합니다 |
+| Beego · Centrifugo · Melody 같은 개별 프레임워크 | 제품 사용법입니다. 6단계는 `net/http` 와 프레임워크의 갈림까지 봅니다 |
 
 
 

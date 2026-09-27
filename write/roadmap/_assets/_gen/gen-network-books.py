@@ -29,6 +29,7 @@ rows = [
         ("network-fundamentals-lab", "1~4단계", "코어 10편 (전 18편)", ["ARP·라우팅·NAT·conntrack", "MTU·DNS 를 깨뜨려 진단"], "필수"),
     ]),
     ("1·2", "연결과 웹 프로토콜", [
+        ("Learning Modern Linux", "1·2단계", "7장", ["층·ARP·IP·포트·DNS", "curl·dig·SSH 로 확인"], "추천"),
         ("Computer Networking", "1·2·5단계", "1~6 · 8장", ["응용·전송·네트워크·링크 계층", "라우팅과 보안 프로토콜"], "필수"),
         ("TCP/IP Illustrated", "1·2단계", "2~8 · 10~17장", ["주소·ARP·IP·NAT·ICMP", "TCP 연결·재전송·혼잡"], "필수"),
         ("HTTP/2 in Action", "1단계", "2·4·9장", ["HTTP/1.1 의 한계·프레임", "TCP·QUIC·HTTP/3"], "추천"),
@@ -45,7 +46,7 @@ rows = [
     ("1–4", "관측", [
         ("Packet Analysis with Wireshark", "2·3단계", "1~5장", ["캡처·필터·TCP·TLS", "DHCP 와 이름 질의"], "필수"),
         ("Systems Performance", "1·3단계", "10장", ["큐·버퍼·오프로드", "nstat·tcpretrans·tc"], "추천"),
-        ("Learning CoreDNS", "1·3·4단계", "2·3·6·7장", ["위임·레코드와 Corefile", "Kubernetes 레코드"], "추천"),
+        ("Learning CoreDNS", "1·3·4단계", "1~8장", ["위임·레코드와 Corefile", "Kubernetes 레코드"], "추천"),
     ]),
     ("1·4", "Service 와 진입", [
         ("Kubernetes in Action", "1·4단계", "11~13 · 16·17장", ["Service·트래픽 정책·readiness", "Ingress·Gateway API"], "추천"),
@@ -67,9 +68,10 @@ rows = [
         ("LFS146 Introduction to Cilium", "6·7단계", "강의 · 26시간", ["정책·Hubble·암호화", "kube-proxy 대체·Cluster Mesh"], "선택"),
     ]),
     ("7·8", "운영 경계", [
-        ("Istio in Action", "7단계", "1·3~6·9·10·12장·부록 C", ["Envoy·Gateway·복원력·mTLS", "기본값 닫기·SPIFFE"], "추천"),
+        ("Istio in Action", "7단계", "1~6·9·10·12장·부록 C", ["Envoy·Gateway·복원력·mTLS", "기본값 닫기·SPIFFE"], "추천"),
         ("Zero Trust Networks", "7·8단계", "1·2·4·6·8장", ["신뢰 관리와 identity", "인가 결정·트래픽 신뢰"], "추천"),
         ("Sidecar-less Istio Explained", "7단계", "1~3장", ["ambient 모드 구조", "ztunnel 과 waypoint"], "대체"),
+        ("Network Programmability and Automation", "7단계", "8·10·12장", ["NETCONF·RESTCONF·gNMI", "YANG·Ansible·NAPALM"], "선택"),
     ]),
     ("8–9", "신뢰와 경로", [
         ("Real-World Cryptography", "1 · 8단계", "2·3 · 7~10 · 13장", ["해시·MAC·서명·키 순환", "안전한 전송과 ECH"], "추천"),

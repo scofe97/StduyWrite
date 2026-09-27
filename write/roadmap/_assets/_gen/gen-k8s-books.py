@@ -21,7 +21,7 @@ rows = [
         ("Networking and Kubernetes", "3단계", "4·5장", ["CNI·kube-proxy·정책·DNS", "Service·EndpointSlice·Ingress"], "추천"),
     ]),
     ("4–7", "자원·내부 구조", [
-        ("Production Kubernetes", "4~7단계", "3~10 · 12~13장", ["런타임·저장·라우팅·어드미션", "관측·신원·멀티테넌시"], "추천"),
+        ("Production Kubernetes", "4~7단계", "2~10 · 12~13장", ["배포 모델·런타임·저장·라우팅", "어드미션·관측·신원·테넌시"], "추천"),
     ]),
     ("5·6", "확장", [
         ("Programming Kubernetes", "5·6단계", "1~6 · 9장", ["client-go·CRD·코드 생성", "Operator 와 고급 커스텀 리소스"], "추천"),

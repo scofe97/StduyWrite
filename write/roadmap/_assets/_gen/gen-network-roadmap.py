@@ -56,6 +56,7 @@ stages = [
     ("2 · Linux 경로", "커널 안에서 패킷이 지나는 길",
      [("interface · MAC · ARP · NDP", "TCP/IP Illustrated 3·4장", "필수"),
       ("IP 주소 · 서브네팅 · CIDR", "TCP/IP Illustrated 2·5장", "필수"),
+      ("VLSM · supernetting", "CompTIA Network+ 8장", "추천"),
       ("라우팅 테이블 · next hop · 포워딩", "TCP/IP Illustrated 5장 · 랩 04~06편", "필수"),
       ("data plane · control plane", "Computer Networking 4·5장", "필수"),
       ("netns · veth · bridge", "Networking and K8s 2장", "필수"),
@@ -69,6 +70,8 @@ stages = [
       ("DHCP · 자동 구성", "TCP/IP Illustrated 6장", "선택"),
       ("NAT traversal · STUN · ICE", "TCP/IP Illustrated 7장", "선택"),
       ("bonding · LACP", "TCP/IP Illustrated 3장", "선택"),
+      ("VRRP · keepalived · 가상 IP", "CompTIA Network+ 16장", "추천"),
+      ("NTP · chrony — 시계 동기화", "CompTIA Network+ 5장", "추천"),
       ("policy routing · ip rule · VRF", "", "선택"),
       ("동적 라우팅 · OSPF · BGP", "network-fundamentals-lab 17편", "선택")]),
 
@@ -79,12 +82,15 @@ stages = [
       ("TLS 핸드셰이크 판독", "Packet Analysis 4장", "필수"),
       ("계층 순서 진단 — ss · ip · ethtool", "Networking and K8s 2장", "필수"),
       ("resolv.conf · ndots · NXDOMAIN", "", "필수"),
-      ("conntrack 경합 · insert_failed", "", "필수")],
+      ("conntrack 경합 · insert_failed", "", "필수"),
+      ("nmap — 열린 포트 확인", "CompTIA Network+ 19장", "추천")],
      [("Corefile · 플러그인 체인", "Learning CoreDNS 3장", "추천"),
       ("질문과 답의 불일치", "Learning CoreDNS 7장", "추천"),
       ("연결 지연 분포 · P99 · 측정 오차", "Systems Performance 10장", "선택"),
       ("GRO · GSO · TSO 오프로딩", "Systems Performance 10장", "선택"),
-      ("tc qdisc · netem", "Systems Performance 10장", "선택")]),
+      ("tc qdisc · netem", "Systems Performance 10장", "선택"),
+      ("NetFlow · sFlow · IPFIX", "CompTIA Network+ 14장", "선택"),
+      ("QoS · DSCP · shaping", "tc(8)", "선택")]),
 
     ("4 · Kubernetes", "같은 커널 경로 위에 얹힌 이름과 정책",
      [("Pod IP · Pod CIDR · Node CIDR", "Networking and K8s 4장", "필수"),
@@ -108,11 +114,17 @@ stages = [
     ("5 · 클라우드 네트워크", "클러스터가 서 있는 underlay",
      [("VPC · 서브넷 · 라우트 테이블", "Networking and K8s 6장", "필수"),
       ("Security Group · NACL", "Networking and K8s 6장", "필수"),
+      ("방화벽 유형 · WAF", "CompTIA Network+ 5장", "추천"),
+      ("IDS · IPS · DDoS 완화", "CompTIA Network+ 5·21장", "추천"),
       ("클라우드 로드밸런서 — L4 · L7", "Networking and K8s 6장", "필수"),
       ("3사 기본값의 갈림", "Networking and K8s 6장", "추천")],
      [("VPN · 사이트 간 연결", "System Design on AWS 9장", "추천"),
       ("AWS Direct Connect · 전용선", "System Design on AWS 9장", "추천"),
-      ("Clos 토폴로지 · BGP · ECMP", "Cloud Native DC Net 2·14장", "선택")]),
+      ("Clos 토폴로지 · BGP · ECMP", "Cloud Native DC Net 2·14장", "선택"),
+      ("3-tier 와 spine-leaf", "Cloud Native DC Net 2장", "선택"),
+      ("GRE · remote-access VPN", "CompTIA Network+ 13장", "선택"),
+      ("anycast", "RFC 4786", "선택"),
+      ("MPLS · SD-WAN", "CompTIA Network+ 17장", "선택")]),
 
     ("6 · 데이터패스와 정책", "같은 일을 다른 데이터패스로",
      [("NetworkPolicy · default deny", "Cilium 12장", "필수"),
@@ -133,6 +145,7 @@ stages = [
 
     ("7 · 운영 경계", "클러스터가 한 종류가 아닐 때",
      [("dual-stack · ipFamilyPolicy", "", "추천"),
+      ("NAT64 · DNS64", "RFC 6146 · 6147", "선택"),
       ("topology-aware routing", "", "추천"),
       ("서비스 메시가 옮긴 것", "Istio in Action 1장", "추천"),
       ("Windows HNS · HCS", "", "선택"),
@@ -142,7 +155,9 @@ stages = [
       ("identity 와 trust 의 차이", "Zero Trust Networks 2·4·6장", "필수"),
       ("mTLS · 기본값 닫아 가기", "Istio in Action 4·9장", "추천"),
       ("Zero Trust 전제", "Zero Trust Networks 1·2장", "선택"),
-      ("ambient · ztunnel · waypoint", "Sidecar-less Istio 1~3장", "대체")]),
+      ("ambient · ztunnel · waypoint", "Sidecar-less Istio 1~3장", "대체"),
+      ("NETCONF · RESTCONF · gNMI", "Net Prog & Automation 10장", "선택"),
+      ("YANG · Ansible · NAPALM", "Net Prog & Automation 8·12장", "선택")]),
 
     ("8 · 오버레이와 신뢰", "분산 네트워크가 되풀이하는 문제들",
      [("bootstrap · trust anchor", "I2P Network Database", "추천"),
@@ -227,7 +242,7 @@ d.t(RX + 16, RY + 24, "여기서 다루지 않는 것", 13, INK, KR, "start", 60
 for i, (who, what) in enumerate([
         ("k8s-roadmap", "오브젝트 배포와 클러스터 운영"),
         ("os-roadmap", "socket 과 파일 디스크립터의 커널 쪽"),
-        ("Computer Networking 7장", "무선과 이동성"),
+        ("무선 · 캠퍼스 망", "Wi-Fi · EIGRP · HSRP · 자격증"),
         ("06_observability", "앱이 내보내는 지표와 트레이스")]):
     cy = RY + 56 + i * 33
     d.t(RX + 16, cy, who, 13, MUTED, KR, "start", 600)
