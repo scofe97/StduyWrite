@@ -1,4 +1,4 @@
-# 03-01 §4 — 첫 SYN 만 듣는 소켓으로 간다. 그 뒤의 세그먼트는 연결된 소켓으로 곧장 간다.
+# 03-01 §4 — 연결 요청만 듣는 소켓으로 간다. 그 뒤의 세그먼트는 연결된 소켓으로 곧장 간다.
 # 원문 3.2: "the Web server has a different socket for each connection" · 최초 연결 요청 세그먼트만
 #       환영 소켓으로 가고, 그 뒤로 만들어진 연결 소켓이 4튜플로 식별된다.
 #   accept(2): "extracts the first connection request on the queue of pending connections for the
@@ -55,9 +55,9 @@ class SeqKR(Seq):
 
 W, H = 1000, 684
 d = SeqKR(W, H, "COMPUTER NETWORKING TOP-DOWN · 03-01 §4",
-          "첫 SYN 만 듣는 소켓으로 갑니다",
+          "연결 요청만 듣는 소켓으로 갑니다",
           "커널은 도착한 세그먼트의 4튜플로 연결된 소켓을 먼저 찾고, 없을 때만 듣는 소켓으로 보낸다. "
-          "그 일은 연결마다 첫 SYN 한 번뿐이다.",
+          "그 일은 연결마다 핸드셰이크 동안뿐이다.",
           "체인이 아니라 갈림길입니다")
 
 A, K, L, C = "클라이언트 A", "서버 커널", "듣는 소켓", "연결된 소켓 A"
@@ -70,19 +70,19 @@ FX, FY, FW, FH = 72, 176, 864, 268
 d.fragment("LOOP", "[연결마다 한 번]", FX, FY, FW, FH)
 
 d.selfmsg(A, "connect()", 240, MUTED, sub="출발지 포트는 OS 가 고름")
-d.msg(A, K, "SYN  1.1.1.1:26145 → *:80", 292, MUTED, sub="맞는 4튜플이 없음")
+d.msg(A, K, "SYN  1.1.1.1:26145 → 서버:80", 292, MUTED, sub="맞는 4튜플이 없음")
 d.msg(K, L, "듣는 소켓으로", 344, INFO, mk="info", sub="목적지 두 값만으로 찾음")
 d.msg(L, C, "accept()", 396, OK, mk="ok", sub="SYN 의 출발지로 채운 새 소켓")
 d.state(L, "여전히 *:80 LISTEN", 428, INFO)
-d.state(C, "1.1.1.1:26145 → *:80", 428, OK)
+d.state(C, "1.1.1.1:26145 → 서버:80", 428, OK)
 
 # ── 그 뒤의 모든 세그먼트 ─────────────────────────────────
-d.msg(A, K, "데이터  1.1.1.1:26145 → *:80", 492, MUTED, sub="연결된 소켓 A 와 일치")
+d.msg(A, K, "데이터  1.1.1.1:26145 → 서버:80", 492, MUTED, sub="연결된 소켓 A 와 일치")
 d.msg(K, C, "곧장 연결된 소켓으로", 544, ACC, mk="acc", sub="듣는 소켓은 거치지 않음", lx=92)
 
 d.t(20, 592, "클라이언트 B 가 오면 LOOP 가 한 번 더 돌아 fd=7 이 생기고, 그 뒤 B 의 세그먼트도 자기 소켓으로 곧장 감",
     12, MUTED, KR, "start")
-d.t(20, 612, "SYN 뒤의 SYN-ACK 과 ACK 은 03-04 의 몫이라 여기서는 생략했음",
+d.t(20, 612, "SYN 뒤의 SYN-ACK 과 ACK 도 듣는 소켓 쪽이 맡지만, 그 순서는 03-04 의 몫이라 여기서는 생략했음",
     12, MUTED, KR, "start")
 
 d.legend(H - 44, [("연결마다 한 번뿐인 길", INFO), ("accept() 가 만든 소켓", OK), ("그 뒤 모든 세그먼트의 길", ACC)])

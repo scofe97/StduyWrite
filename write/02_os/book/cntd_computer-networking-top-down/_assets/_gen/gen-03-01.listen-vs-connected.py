@@ -58,7 +58,7 @@ for i, (who, src) in enumerate(conns):
     d.box(LSX, y, LSW, CH, PAPER2, OK, 1.2, 6)
     d.t(LSX + 16, y + 20, "연결된 소켓", 11.5, OK, KR, "start", 600)
     d.t(LSX + LSW - 16, y + 20, f"fd={5 + i * 2}", 11, MUTED, MONO, "end")
-    d.t(LSX + 16, y + 37, f"{src} → *:80", 11.5, INK, MONO, "start")
+    d.t(LSX + 16, y + 37, f"{src} → 서버:80", 11.5, INK, KR, "start")
     d.arrow([(246, y + CH / 2), (LSX - 4, y + CH / 2)], OK, "ok", 1.4)
 
 d.t(44, ZY + ZH - 24, "목적지는 셋 다 :80 으로 같음 · 갈라 주는 것은 출발지입니다 — 그것이 4튜플",
@@ -81,7 +81,7 @@ d.t(660, ZY + ZH - 24, "그래서 recvfrom() 이 출발지를 함께 줌", 12, M
 
 BY = ZY + ZH + 22
 d.tone(24, BY, W - 48, 78, ACC)
-d.t(44, BY + 28, "튜플의 개수가 API 를 정함", 13, INK, KR, "start", 600)
+d.t(44, BY + 28, "상대를 아느냐가 API 를 정함", 13, INK, KR, "start", 600)
 d.t(44, BY + 50, "연결된 소켓은 4튜플로 상대를 이미 앎 → recv() 로 충분", 12, MUTED, KR, "start")
 d.t(44, BY + 70, "UDP 소켓은 2튜플뿐이라 상대를 모름 — 답장하려면 recvfrom() 이 준 출발지를 써야 함",
     12, MUTED, KR, "start")
