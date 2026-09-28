@@ -1,4 +1,4 @@
-# 03-01 §4 — 연결 요청만 듣는 소켓으로 간다. 그 뒤의 세그먼트는 연결된 소켓으로 곧장 간다.
+# 03-01 §4 — 연결을 세우는 동안(SYN 과 핸드셰이크 마지막 ACK)만 듣는 소켓으로 간다. 그 뒤의 세그먼트는 연결된 소켓으로 곧장 간다.
 # 원문 3.2: "the Web server has a different socket for each connection" · 최초 연결 요청 세그먼트만
 #       환영 소켓으로 가고, 그 뒤로 만들어진 연결 소켓이 4튜플로 식별된다.
 #   accept(2): "extracts the first connection request on the queue of pending connections for the
