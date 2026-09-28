@@ -1,5 +1,8 @@
 # 타입 스펙: type-data-flow — TTL 을 하나씩 올린 데이터그램이 어디서 죽고 무엇이 돌아오는지의 흐름.
-# 출처: 《Computer Networking A Top-Down Approach》 9판 §5.6 + 2026-09-06 이 기계에서 tcpdump 로 잡은 실제 패킷
+# 출처: 《Computer Networking A Top-Down Approach》 9판 §5.6 + 이 기계에서 tcpdump 로 잡은 실제 패킷
+# 2026-09-29: 캡처 세 줄을 원시 로그 1-6 (가) 380~382행 그대로로 바꿨다(나간 패킷 줄은 로그에 없어 뺐다).
+#   종전 세 줄은 출발 포트 47535 와 47699 가 달라 서로 다른 회차를 이어 붙인 것이었다.
+#   시간 초과 라벨: RFC 792 형식에 이름 칸이 없다. 주소는 IP 출발지, 이름은 traceroute 의 역방향 DNS.
 import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 from dd import D, PAPER, PAPER2, INK, MUTED, SOFT, RULE, ACC, INFO, BAD, OK, KR, MONO
@@ -12,7 +15,7 @@ d = D(W, H, "SECTION 5.6 · TRACEROUTE OVER ICMP",
 
 d.box(24, 120, 150, 66, PAPER2, ACC, 1.4, 7)
 d.t(99, 148, "출발지", 12, ACC, KR, "middle", 600)
-d.t(99, 168, "타이머를 것", 11, MUTED, KR)
+d.t(99, 168, "타이머를 켬", 11, MUTED, KR)
 
 # 홉 2·3 은 이 회선의 ISP 라우터라 주소를 적지 않는다. 공개 저장소로 나가는 문서다
 HOPS = [("라우터 1", "TTL 1 이 여기서 0", "집 안 게이트웨이"),
@@ -40,20 +43,20 @@ for i in range(4):
 
 d.path("M 904 186 L 904 320 L 99 320 L 99 190", OK, 1.5, m="ok", dash="5 4")
 d.t(500, 336, "type 3 code 3 · 포트 도달 불가 — 여기서 멈춤", 11, OK, KR)
-d.t(500, 296, "type 11 code 0 · 시간 초과 — 라우터 이름과 주소가 실려 옴", 11, BAD, KR)
+d.t(500, 296, "type 11 code 0 · 시간 초과 — 라우터 주소는 출발지로 옴 · 이름은 역조회", 11, BAD, KR)
 
 # 실측한 패킷
 d.box(24, 366, 952, 132, PAPER2, RULE, 1.0, 8)
-d.t(44, 392, "이 기계에서 잡은 실제 패킷", 12, INK, KR, "start", 600)
+d.t(44, 392, "이 기계에서 잡은 실제 패킷 · 시간 초과 한 통과 그 안에 인용된 원본", 12, INK, KR, "start", 600)
 for i, line in enumerate([
-        "IP 192.168.0.124.47535 > 1.1.1.1.33435: UDP, length 12",
-        "IP (proto ICMP (1), length 68) 192.168.0.1 > 192.168.0.124: ICMP time exceeded in-transit, length 48",
-        "    IP (ttl 1, proto UDP (17), length 40) 192.168.0.124.47699 > 1.1.1.1.33435: UDP, length 12"]):
-    d.t(44, 418 + i * 24, line, 10, MUTED if i != 2 else SOFT, MONO, "start")
+        "192.168.0.1 > 192.168.0.184: ICMP time exceeded in-transit, length 48",
+        "    IP (tos 0x0, ttl 1, id 47845, offset 0, flags [none], proto UDP (17), length 40)",
+        "    192.168.0.184.47844 > 1.1.1.1.33435: UDP, length 12"]):
+    d.t(44, 418 + i * 24, line, 10, MUTED if i == 0 else SOFT, MONO, "start")
 d.t(44, 488, "ICMP 48 = 헤더 8 + 인용된 원본 40 · 원본 데이터그램 통째로", 11, ACC, KR, "start")
 
-d.t(30, 546, "원문은 ICMP 메시지가 문제의 데이터그램의 헤더와 앞 8바이트를 담는다고 적음 · 그것은 RFC 792 의 최소치이고,", 11, MUTED, KR, "start")
-d.t(30, 566, "이 라우터는 40바이트 전부를 돌려보냄 · 최소치를 규칙으로 읽으면 어긋남", 11, MUTED, KR, "start")
+d.t(30, 546, "원문은 ICMP 메시지가 문제의 데이터그램의 헤더와 앞 8바이트를 담는다고 적음 · 그것은 RFC 792 가 정한 범위이고", 11, MUTED, KR, "start")
+d.t(30, 566, "RFC 1122 이후로는 최소치 · 이 라우터는 40바이트 전부를 돌려보냄", 11, MUTED, KR, "start")
 
 d.legend(590, [("나가는 데이터그램", ACC), ("시간 초과 응답", BAD), ("멈춤 신호", OK)])
 

@@ -13,7 +13,7 @@ d = D(W, H, "RFC 4456 §8 · LOOP AVOIDANCE",
       "AS 안에서는 AS-PATH 가 길어지지 않아 다른 표식이 필요합니다",
       "iBGP 로 도는 동안 AS-PATH 는 그대로이므로 되비춘 경로가 돌아와도 자기 번호로는 알아볼 수 없습니다. "
       "리플렉터는 되비출 때 경로를 처음 낸 라우터의 식별자를 ORIGINATOR_ID 로 붙이고 자기 CLUSTER_ID 를 CLUSTER_LIST 앞에 더합니다. "
-      "받는 쪽은 그 두 값에서 자기 것을 발견하면 그 광고를 버립니다.",
+      "받은 라우터는 ORIGINATOR_ID 에서, 받은 리플렉터는 CLUSTER_LIST 에서 자기 것을 발견하면 그 광고를 버립니다.",
       lead="되비출 때 표식을 붙이고, 받을 때 그 표식에서 자기 것을 찾습니다")
 
 X, BW, BH, STRIDE, Y0 = 72, 448, 76, 104, 116
@@ -24,7 +24,7 @@ STEPS = [
      INFO, "경로를 처음 낸 라우터", "그 라우터의 BGP Identifier"),
     ("ORIGINATOR_ID 검사", "받은 값이 내 BGP Identifier", ACC, KR,
      BAD, "일치하면 무시", "내가 낸 경로가 돌아온 것"),
-    ("CLUSTER_LIST 검사", "되비출 때 CLUSTER_ID 를 앞에 더함", ACC, KR,
+    ("CLUSTER_LIST 검사 · 리플렉터", "되비출 때 CLUSTER_ID 를 앞에 더함", ACC, KR,
      BAD, "내 CLUSTER_ID 가 목록에 있으면 무시", "같은 클러스터로 돌아온 것"),
     ("남은 경로를 표에 올린다", "동점이면 CLUSTER_LIST 가 짧은 쪽", OK, KR,
      None, None, None),

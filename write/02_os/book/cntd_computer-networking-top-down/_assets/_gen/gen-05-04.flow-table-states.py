@@ -9,7 +9,7 @@ from dd import D, ACC, MUTED, SOFT, INK, OK, BAD, WARN, INFO, PAPER2, RULE, KR, 
 
 W, H = 880, 604
 
-d = D(W, H, "SECTION 5.3 LAB · FLOW TABLE STATES",
+d = D(W, H, "05-04 §3 LAB · FLOW TABLE STATES",
       "표를 한 줄 바꿀 때마다 패킷의 운명이 바뀝니다",
       "같은 경로(ns1 → br0 → ns2)에 같은 패킷을 여섯 번 흘려보내고, 흐름 표만 한 줄씩 바꾼다. br0 에 깔린 줄이 무엇이냐에 따라 패킷은 끝까지 가기도 하고, 다리에서 버려지기도 하고, 세어지기만 하기도 한다.",
       "왼쪽이 표에 든 줄, 오른쪽이 그 패킷이 어디까지 갔는가")
@@ -21,7 +21,7 @@ PW, PH = 22, 16
 # (회차, 표에 든 줄, 부연, br0 에서의 결말, 끝까지 가는가, 결말색)
 ROWS = [
     ("1", "priority=0 actions=NORMAL", "fail_mode 기본값이 깔아 둔 줄", None, True, OK, "도착 — 옛 L2 경로"),
-    ("2", "(비어 있음)", "del-flows 로 비운 뒤", "폐기", False, BAD, "폐기 — 올려보낼 컨트롤러 없음"),
+    ("2", "(비어 있음)", "del-flows 로 비운 뒤", "폐기", False, BAD, "폐기 — 컨트롤러 없는 상태"),
     ("3", "in_port=1 → output:2", "한 방향만 넣었을 때", "응답 폐기", False, BAD, "ARP 응답이 죽어 시작 못 함"),
     ("4", "arp,in_port=2 → drop", "돌아오는 ARP 만 세어 버림", "세고 버림", False, WARN, "84 바이트 세어짐 — 답은 옴"),
     ("5", "in_port=1 → CONTROLLER", "Packet-in 으로 올려보냄", "올라감 · 답 없음", False, INFO, "올라가지만 답이 없어 끝"),

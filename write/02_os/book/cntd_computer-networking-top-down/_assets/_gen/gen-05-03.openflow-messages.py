@@ -25,7 +25,7 @@ for i, (name, sub) in enumerate(DOWN):
     d.path(f"M {x + 112} 244 L {x + 112} 268", ACC, 1.3, m="acc")
 
 d.box(24, 274, 952, 46, PAPER, RULE, 1.2, 8)
-d.t(500, 302, "OpenFlow 위에서 도는 TCP 연결 · 기본 포트 6653", 12, INK, KR, "middle", 600)
+d.t(500, 302, "TCP 위에서 도는 OpenFlow · 기본 포트 6653", 12, INK, KR, "middle", 600)
 
 UP = [("Flow-Removed", "표 항목이 사라졌음을 알림"),
       ("Port-status", "포트 상태가 바뀌었음을 알림"),
