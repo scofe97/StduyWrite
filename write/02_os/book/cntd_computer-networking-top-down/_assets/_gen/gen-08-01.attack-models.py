@@ -28,9 +28,9 @@ d.t(264, 470, "침입자가 쥔 것이 늘어나는 방향", 11, SOFT, KR)
 # 설명은 오른쪽에 색으로 잇는다
 PX, PW = 540, 436
 ROWS = [
-    (INFO, "가로챈 암호문만 있고 평문 내용은 모릅니다.", "앞 절의 통계 분석이 여기서 쓰입니다."),
-    (WARN, "평문과 암호문의 대응 일부를 압니다.", "bob 과 alice 가 있다는 짐작이 맞은 경우입니다."),
-    (ACC, "평문을 골라 그 암호문을 얻습니다.", "the quick brown fox … 를 보내게 하면 됩니다."),
+    (INFO, "가로챈 암호문만 보유, 평문 내용 모름", "앞 절 통계 분석 적용"),
+    (WARN, "평문·암호문 대응 일부 확보", "예 — bob·alice 존재 추정이 적중한 경우"),
+    (ACC, "평문 선택 후 해당 암호문 획득", "예 — the quick brown fox … 송신 유도"),
 ]
 RY, RH, RS = 144, 76, 88
 for i, (c, l1, l2) in enumerate(ROWS):
@@ -44,7 +44,7 @@ NY = RY + 3 * RS + 8
 d.box(PX, NY, PW, 84, PAPER2, RULE, 1.0)
 d.t(PX + 20, NY + 28, "원문이 남긴 단서", 12, INK, KR, "start", 600)
 d.t(PX + 20, NY + 54, "더 정교한 기법에서는 선택 평문 공격이 가능하다는 것이", 11, ACC, KR, "start")
-d.t(PX + 20, NY + 72, "곧 깨진다는 뜻은 아닙니다. 블록 암호로 넘어가는 다리입니다.", 11, ACC, KR, "start")
+d.t(PX + 20, NY + 72, "곧 깨진다는 뜻은 아님 — 블록 암호로 가는 다리", 11, ACC, KR, "start")
 
 d.legend(504, [("암호문만", INFO), ("대응 일부까지", WARN), ("평문을 고를 수 있음", ACC)])
 out = pathlib.Path(__file__).resolve().parent.parent / "08-01.attack-models.svg"

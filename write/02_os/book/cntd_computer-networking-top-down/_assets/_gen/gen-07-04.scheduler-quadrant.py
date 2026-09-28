@@ -54,9 +54,9 @@ for name, c, lines in ROWS:
 
 NY = 500
 d.box(24, NY, 880, 62, PAPER2, RULE, 1.0)
-d.t(44, NY + 24, "표준은 스케줄링 알고리즘을 정하지 않습니다", 12, INK, KR, "start", 600)
+d.t(44, NY + 24, "표준은 스케줄링 알고리즘 미지정", 12, INK, KR, "start", 600)
 d.t(44, NY + 46,
-    "3GPP 도 WiFi 표준도 이것을 규정하지 않아서, 사업자와 장비 회사가 서로를 가르는 비법으로 씁니다.",
+    "3GPP·WiFi 표준 모두 미규정 → 사업자·장비 회사의 차별화 비법으로 활용",
     11, MUTED, KR, "start")
 
 d.legend(576, [("채널 무관", INFO), ("총량 우선", BAD), ("공평 우선", OK), ("균형", ACC)])

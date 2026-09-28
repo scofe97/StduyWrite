@@ -14,7 +14,7 @@ d = D(W, H, "SECTION 8.3.3 · PUBLIC KEY CERTIFICATION",
 RX, RW = 352, 296
 d.tone(RX, 140, RW, 72, ACC, 8, "18", 1.4)
 d.t(RX + RW / 2, 168, "인증기관 (CA)", 13, ACC, KR, "middle", 600)
-d.t(RX + RW / 2, 190, "신원을 확인하고 인증서에 서명합니다", 11, MUTED, KR)
+d.t(RX + RW / 2, 190, "신원 확인 후 인증서 서명", 11, MUTED, KR)
 
 KIDS = [(56, "밥의 인증서", "공개키 + 신원", OK), (368, "앨리스의 인증서", "공개키 + 신원", OK),
         (680, "다른 개체의 인증서", "공개키 + 신원", OK)]
@@ -30,16 +30,16 @@ PY = 400
 d.box(24, PY, 470, 108, PAPER2, RULE, 1.0)
 d.t(44, PY + 28, "CA 가 하는 일 둘", 12, INK, KR, "start", 600)
 d.line(44, PY + 40, 474, PY + 40, RULE, 0.8)
-for i, ln in enumerate(["1. 그 개체가 자기 말대로인지 확인합니다.",
-                        "2. 공개키와 신원을 묶은 인증서를 만들어 서명합니다."]):
+for i, ln in enumerate(["1. 그 개체가 자기 말대로인지 확인",
+                        "2. 공개키·신원을 묶은 인증서 작성 후 서명"]):
     d.t(44, PY + 66 + i * 22, ln, 11, MUTED, KR, "start")
 
 d.tone(514, PY, 462, 108, BAD, 8, "14", 1.3)
-d.t(534, PY + 28, "확인 절차는 표준으로 정해져 있지 않습니다", 12, BAD, KR, "start", 600)
+d.t(534, PY + 28, "확인 절차는 표준 미지정", 12, BAD, KR, "start", 600)
 d.t(534, PY + 56, "트루디가 아무 CA 에 걸어 들어가 \"나는 앨리스다\" 라고", 11, MUTED, KR, "start")
-d.t(534, PY + 78, "말하고 인증서를 받는다면 그 CA 는 믿을 것이 못 됩니다.", 11, MUTED, KR, "start")
+d.t(534, PY + 78, "말하고 인증서를 받는다면 그 CA 는 신뢰 불가", 11, MUTED, KR, "start")
 
-d.t(24, 540, "표준은 ITU X.509 와 RFC 1422 입니다. RFC 1422 는 X.509 와 호환되면서 열쇠 관리 절차를 더 얹습니다.",
+d.t(24, 540, "표준 — ITU X.509·RFC 1422 (RFC 1422 는 X.509 호환 + 열쇠 관리 절차 추가)",
     11, SOFT, KR, "start")
 d.legend(556, [("신뢰의 뿌리", ACC), ("발급된 인증서", OK), ("뿌리가 약할 때", BAD)])
 out = pathlib.Path(__file__).resolve().parent.parent / "08-02.certification.svg"

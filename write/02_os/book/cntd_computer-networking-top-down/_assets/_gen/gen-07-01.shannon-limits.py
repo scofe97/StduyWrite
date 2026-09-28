@@ -58,15 +58,15 @@ for r, lab, lx, ly, anc in ((100.0, "비 100 · 133 Mbps", 12, YB - 28, "start")
     x = BX0 + (BX1 - BX0) * r / SPAN_B
     y = fy(20.0 * math.log2(1.0 + r))
     d.line(x, y, x, YB, ACC, 0.9, "3 5")
-    d.t(x + lx, ly, lab, 10, ACC, KR, anc)
-d.t(BX0 + 16, fy(268), "비를 열 배 올려도 용량은 1.5 배가 안 됩니다", 11, ACC, KR, "start", 600)
+    d.t(x + lx, ly, lab, 11, ACC, KR, anc)
+d.t(BX0 + 16, fy(268), "비를 열 배 올려도 용량은 1.5 배가 안 됨", 11, ACC, KR, "start", 600)
 
 d.t(AX0 + 16, fy(240), "B 를 두 배 하면 C 도 두 배", 11, INFO, KR, "start", 600)
 
 PY = 418
 d.box(24, PY, 880, 80, PAPER2, RULE, 1.0)
 d.t(44, PY + 26, "C = B · log₂(1 + 수신 신호 전력 / 잡음 전력)", 13, INK, MONO, "start", 600)
-d.t(44, PY + 52, "이 값은 상한입니다. 아무리 영리하게 부호화하고 변조해도 이보다 많이 받을 수 없습니다.",
+d.t(44, PY + 52, "이 값은 상한 — 아무리 영리하게 부호화하고 변조해도 이보다 많이 받을 수 없음",
     11, MUTED, KR, "start")
 d.t(44, PY + 70, "원문이 든 실무 최소 SNR — WiFi 는 20 dB 안팎, LTE 는 변조 방식에 따라 −5 에서 18 dB.",
     11, OK, KR, "start")

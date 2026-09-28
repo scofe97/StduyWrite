@@ -40,32 +40,32 @@ d.lanes([("무선 기기", "user device"), ("기지국", "base station")], y0=10
 d.rails(420)
 
 d.msg("기지국", "무선 기기", "PSS", 164, INFO, "info",
-      sub="5 msec 마다 · 채널 중앙 127 부반송파 · 시계를 맞춥니다")
-d.msg("기지국", "무선 기기", "SSS", 216, INFO, "info", sub="초기 망 식별자를 줍니다")
+      sub="5 msec 마다 · 채널 중앙 127 부반송파 · 시계 동기화")
+d.msg("기지국", "무선 기기", "SSS", 216, INFO, "info", sub="초기 망 식별자 제공")
 d.msg("기지국", "무선 기기", "MIB", 262, INFO, "info", sub="부반송파 간격과 접속 개방 여부")
 d.msg("기지국", "무선 기기", "SIB1", 312, ACC, "acc",
       sub="80 ms 마다 · 사업자 코드 · 기지국 식별자 · 최소 수신 레벨")
 d.msg("무선 기기", "기지국", "RRC setup request", 362, OK, "ok",
-      sub="상향 임의 접속 채널로 보냅니다")
+      sub="상향 임의 접속 채널로 송신")
 d.msg("기지국", "무선 기기", "RRC setup response", 412, OK, "ok")
-d.state("무선 기기", "아직 5G 망에 가입한 것은 아닙니다", 452, WARN)
+d.state("무선 기기", "아직 5G 망 미가입", 452, WARN)
 
 NY = 490
 d.box(24, NY, 430, 108, PAPER2, RULE, 1.0)
-d.t(44, NY + 26, "WiFi 는 세 걸음입니다", 12, INK, KR, "start", 600)
+d.t(44, NY + 26, "WiFi — 세 걸음", 12, INK, KR, "start", 600)
 for i, ln in enumerate([
-    "비콘을 수동으로 훑어 AP 를 고릅니다.",
-    "연관 요청과 응답을 주고받습니다.",
-    "DHCP 로 서브넷의 IP 주소를 받습니다.",
+    "비콘 수동 스캔 후 AP 선택",
+    "연관 요청·응답 교환",
+    "DHCP 로 서브넷 IP 주소 수신",
 ]):
     d.t(44, NY + 52 + i * 20, "·  " + ln, 11, MUTED, KR, "start")
 
 d.box(474, NY, 430, 108, PAPER2, RULE, 1.0)
-d.t(494, NY + 26, "5G 는 여기서 끝이 아닙니다", 12, INK, KR, "start", 600)
+d.t(494, NY + 26, "5G — 여기서 끝 아님", 12, INK, KR, "start", 600)
 for i, ln in enumerate([
     "아직 신원을 밝히지도 인증하지도 않았고,",
-    "IP 주소도 없습니다.",
-    "코어망과의 등록이 남아 있습니다.",
+    "IP 주소 없음",
+    "코어망 등록 필요",
 ]):
     d.t(494, NY + 52 + i * 20, "·  " + ln, 11, MUTED, KR, "start")
 

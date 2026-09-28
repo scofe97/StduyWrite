@@ -37,7 +37,7 @@ for gi, (text, rows, c, note) in enumerate(MSGS):
 PY = 528
 d.box(24, PY, 952, 60, PAPER2, RULE, 1.0)
 d.t(44, PY + 26, "암호 해시 함수가 더 요구하는 것", 12, INK, KR, "start", 600)
-d.t(44, PY + 48, "H(x) = H(y) 인 서로 다른 x 와 y 를 찾는 것이 계산상 불가능해야 합니다. 위 체크섬은 이 요구를 어깁니다.",
+d.t(44, PY + 48, "H(x)=H(y) 인 서로 다른 x·y 탐색이 계산상 불가능해야 함 — 위 체크섬은 이 요구 위반",
     11, MUTED, KR, "start")
 
 d.legend(600, [("원본", OK), ("위조본", BAD), ("같아진 체크섬", ACC)])

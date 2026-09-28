@@ -26,10 +26,12 @@ for x, w, name, sub, c in FIELDS:
 
 IX = 512
 # 채움은 "none" 을 인자로 넘긴다. replace 로 fill 을 덧붙이면 속성이 둘이 되어 앞의 값이 이긴다.
-d.box(IX - 8, OY + 44, 952 - (IX - 8) - 16, 88, "none", ACC, 1.3, 6)
+# 너비는 OX+OW(오른쪽 끝)를 기준으로 잡는다 — 상수 952만 빼면 HMAC 필드 오른쪽 8px가
+# 이 표시 상자 밖으로 나가 shape-overlap(부분 겹침)이 된다.
+d.box(IX - 8, OY + 44, OX + OW - (IX - 8) - 16, 88, "none", ACC, 1.3, 6)
 d.o[-1] = d.o[-1].replace('stroke-width="1.3"', 'stroke-width="1.3" stroke-dasharray="6 5"')
-d.t(IX + 216, OY + 146, "이 안쪽만 암호화됩니다", 11, ACC, KR)
-d.t(200, OY + 146, "앞의 셋은 평문으로 나갑니다", 11, WARN, KR)
+d.t(IX + 216, OY + 146, "이 안쪽만 암호화 대상", 11, ACC, KR)
+d.t(200, OY + 146, "앞의 셋은 평문 그대로 전송", 11, WARN, KR)
 
 PY = 336
 d.box(24, PY, 470, 172, PAPER2, RULE, 1.0)
@@ -37,10 +39,10 @@ d.t(44, PY + 28, "레코드마다 검사해도 남는 구멍", 12, INK, KR, "sta
 d.line(44, PY + 40, 474, PY + 40, RULE, 0.8)
 for i, ln in enumerate([
     "트루디가 세그먼트 둘의 순서를 뒤집고",
-    "암호화되지 않은 TCP 순서 번호를 맞춥니다.",
+    "암호화되지 않은 TCP 순서 번호에 맞춰 조작",
     "",
     "레코드 하나하나는 HMAC 검사를 통과하는데",
-    "전체 바이트 흐름의 순서가 틀립니다.",
+    "전체 바이트 흐름의 순서 어긋남",
 ]):
     if ln:
         d.t(44, PY + 66 + i * 22, ln, 11, MUTED if i < 3 else BAD, KR, "start")
@@ -49,17 +51,17 @@ d.tone(514, PY, 462, 172, OK, 8, "14", 1.3)
 d.t(534, PY + 28, "순서 번호를 레코드가 아니라 HMAC 에", 12, OK, KR, "start", 600)
 d.line(534, PY + 40, 956, PY + 40, RULE, 0.8)
 for i, ln in enumerate([
-    "레코드 안에 담으면 공격자가 그것도 바꿉니다.",
-    "그래서 HMAC 계산에만 넣습니다.",
+    "레코드 안에 담으면 공격자가 그것도 변조 가능",
+    "그래서 HMAC 계산에만 포함",
     "",
     "HMAC = 해시(데이터 + M_B + 현재 순서 번호)",
-    "어긋나면 검사에서 걸립니다.",
+    "어긋나면 검사 실패",
 ]):
     if ln:
         d.t(534, PY + 66 + i * 22, ln, 11, OK if i == 3 else MUTED,
             MONO if i == 3 else KR, "start")
 
-d.t(24, 532, "연결 종료도 타입 필드로 알립니다. 종료 레코드보다 TCP FIN 이 먼저 오면 절단 공격을 의심할 수 있습니다.",
+d.t(24, 532, "연결 종료도 타입 필드로 표시 — 종료 레코드보다 TCP FIN 이 먼저 오면 절단 공격 의심 가능",
     11, SOFT, KR, "start")
 d.legend(552, [("평문으로 남는 필드", WARN), ("응용 데이터", OK), ("무결성 검사", ACC), ("남는 구멍", BAD)])
 out = pathlib.Path(__file__).resolve().parent.parent / "08-03.tls-record.svg"

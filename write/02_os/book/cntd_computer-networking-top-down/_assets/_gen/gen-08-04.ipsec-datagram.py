@@ -13,7 +13,7 @@ d = D(W, H, "SECTION 8.7.4 · THE IPSEC DATAGRAM (TUNNEL MODE)",
       "필드 구성과 주소와 프로토콜 번호 50 은 원문 Figure 8.29 의 것입니다")
 
 d.tone(24, 144, 952, 208, WARN, 10, "08", 1.3)
-d.t(44, 172, "새 IP 헤더 — 평문으로 나갑니다", 12, WARN, KR, "start", 600)
+d.t(44, 172, "새 IP 헤더 — 평문 전송", 12, WARN, KR, "start", 600)
 d.t(44, 196, "200.168.1.100 → 193.68.2.23 · 프로토콜 번호 50", 11, MUTED, MONO, "start")
 
 d.tone(56, 216, 888, 120, INFO, 8, "10", 1.2)
@@ -29,7 +29,7 @@ for x, w, name, sub, c, enc in INNER:
     d.t(x + w / 2, 308, sub, 10, MUTED, MONO if any(ch.isdigit() for ch in sub) else KR)
 d.box(224, 256, 584, 72, "none", ACC, 1.3, 6)
 d.o[-1] = d.o[-1].replace('stroke-width="1.3"', 'stroke-width="1.3" stroke-dasharray="6 5"')
-d.t(516, 344, "이 안쪽만 암호화됩니다", 11, ACC, KR)
+d.t(516, 344, "이 안쪽만 암호화 대상", 11, ACC, KR)
 
 PY = 376
 d.box(24, PY, 470, 180, PAPER2, RULE, 1.0)
@@ -41,12 +41,12 @@ for i, ln in enumerate(["1. 원래 데이터그램 뒤에 ESP 트레일러", "2.
     d.t(44, PY + 62 + i * 18, ln, 11, MUTED, KR, "start")
 
 d.tone(514, PY, 462, 180, BAD, 8, "12", 1.3)
-d.t(534, PY + 28, "트루디가 아는 것은 이것뿐입니다", 12, BAD, KR, "start", 600)
+d.t(534, PY + 28, "트루디가 아는 것은 이것뿐", 12, BAD, KR, "start", 600)
 d.line(534, PY + 40, 956, PY + 40, RULE, 0.8)
 for i, ln in enumerate(["200.168.1.100 에서 193.68.2.23 으로 간다는 것.",
-                        "", "TCP 인지 UDP 인지 ICMP 인지 모릅니다.",
-                        "HTTP 인지 SMTP 인지도 모릅니다.", "",
-                        "이 기밀성이 TLS 보다 훨씬 멀리 갑니다."]):
+                        "", "TCP·UDP·ICMP 여부 모름",
+                        "HTTP·SMTP 여부도 모름", "",
+                        "이 기밀성은 TLS 보다 훨씬 넓은 범위"]):
     if ln:
         d.t(534, PY + 62 + i * 18, ln, 11, BAD if i == 5 else MUTED, KR, "start")
 

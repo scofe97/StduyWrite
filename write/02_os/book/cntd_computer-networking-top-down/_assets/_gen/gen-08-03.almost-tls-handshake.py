@@ -29,10 +29,10 @@ d = SeqKR(W, H, "SECTION 8.6.1 · THE ALMOST-TLS HANDSHAKE",
 d.lanes([("밥 (클라이언트)", "client"), ("앨리스 (서버)", "server")], y0=120, lane_w=280)
 d.rails(440)
 
-d.msg("밥 (클라이언트)", "앨리스 (서버)", "TCP 연결", 196, SOFT, sub="먼저 세웁니다")
+d.msg("밥 (클라이언트)", "앨리스 (서버)", "TCP 연결", 196, SOFT, sub="먼저 수립")
 d.msg("밥 (클라이언트)", "앨리스 (서버)", "hello", 252, INFO)
 d.msg("앨리스 (서버)", "밥 (클라이언트)", "인증서", 300, OK, sub="CA 가 서명한 공개키")
-d.state("밥 (클라이언트)", "MS 를 만듭니다", 348, ACC)
+d.state("밥 (클라이언트)", "MS 생성", 348, ACC)
 d.msg("밥 (클라이언트)", "앨리스 (서버)", "EMS = K_A+(MS)", 396, ACC)
 d.state("앨리스 (서버)", "개인키로 MS 복호", 430, ACC)
 

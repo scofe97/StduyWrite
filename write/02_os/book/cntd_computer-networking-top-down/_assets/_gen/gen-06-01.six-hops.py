@@ -29,7 +29,7 @@ for i in range(6):
     x1, x2 = cx[i] + BW / 2 + 4, cx[i + 1] - BW / 2 - 6
     d.arrow([(x1, NY + 24), (x2, NY + 24)], LINK_C[i], "ar", 1.5)
     mid = (cx[i] + cx[i + 1]) / 2
-    d.t(mid, NY + 76, f"링크 {i + 1}", 10, SOFT, MONO)
+    d.t(mid, NY + 76, f"링크 {i + 1}", 11, SOFT, MONO)
     d.t(mid, NY + 94, LINKS[i], 11, LINK_C[i], KR, "middle", 600)
     d.line(mid, NY + 30, mid, NY + 62, RULE, 0.8, "3 5")
 
@@ -45,7 +45,7 @@ for i, (lab, proto) in enumerate([("WiFi 프레임", "802.11"), ("이더넷 프�
     d.t(x + 12, FY + 20, lab, 11, INK, KR, "start", 600)
     d.t(x + FW - 12, FY + 20, proto, 10, MUTED, MONO, "end")
     d.tone(x + 12, FY + 28, FW - 24, 16, ACC, 3, "14", 1.0)
-    d.t(x + FW / 2, FY + 40, "같은 데이터그램", 10, ACC, KR)
+    d.t(x + FW / 2, FY + 40, "같은 데이터그램", 11, ACC, KR)
     if i < 2:
         d.arrow([(x + FW + 4, FY + 26), (x + 240, FY + 26)], MUTED, "ar", 1.3)
 
@@ -53,8 +53,8 @@ d.box(768, FY, 208, FH, PAPER2, f"{ACC}55", 1.4, 6)
 d.t(872, FY + 22, "헤더는 매번 새로 붙고", 11, MUTED, KR)
 d.t(872, FY + 40, "안의 데이터그램은 그대로", 11, ACC, KR, "middle", 600)
 
-d.t(24, 372, "링크 3 과 링크 4 는 원문이 프로토콜을 밝히지 않습니다. "
-             "\"a link between the link-layer switch and the router, a link between the two routers\" 라고만 적습니다.",
+d.t(24, 372, "링크 3 과 링크 4 는 원문이 프로토콜을 밝히지 않음 — "
+             "\"a link between the link-layer switch and the router, a link between the two routers\" 라고만 적음",
      11, MUTED, KR, "start")
 
 d.legend(388, [("칸을 건너도 그대로인 것", ACC), ("무선 링크", WARN), ("유선 이더넷", INFO), ("원문 미지정", MUTED)])

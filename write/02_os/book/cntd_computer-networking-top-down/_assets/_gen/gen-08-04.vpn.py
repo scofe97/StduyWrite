@@ -21,12 +21,12 @@ for x, y, w, h, name, sub, c in SITES:
     if name != "공용 인터넷":
         d.t(x + w / 2, y + 100, "안에서는 평범한 IPv4", 11, OK, KR)
     else:
-        d.t(x + w / 2, y + 100, "IPsec 인 줄 모르고 전달합니다", 11, SOFT, KR)
+        d.t(x + w / 2, y + 100, "IPsec 인 줄 모르고 전달", 11, SOFT, KR)
 
 d.tone(368, 320, 264, 96, ACC, 8, "18", 1.4)
 d.t(500, 352, "출장 영업 사원", 12, ACC, KR, "middle", 600)
-d.t(500, 376, "호텔에서 접속합니다", 11, MUTED, KR)
-d.t(500, 398, "노트북 OS 가 복호합니다", 11, MUTED, KR)
+d.t(500, 376, "호텔에서 접속", 11, MUTED, KR)
+d.t(500, 398, "노트북 OS 가 복호", 11, MUTED, KR)
 
 for a, b, lab in ((288, 364, "IPsec"), (636, 708, "IPsec")):
     d.arrow([(a + 4, 214), (b - 4, 214)], ACC, "acc", 1.6)
@@ -37,7 +37,7 @@ d.t(316, 300, "IPsec", 11, ACC, MONO, "middle", 600)
 PY = 448
 d.box(24, PY, 952, 76, PAPER2, RULE, 1.0)
 d.t(44, PY + 28, "게이트웨이가 하는 일", 12, INK, KR, "start", 600)
-d.t(44, PY + 56, "평범한 IPv4 데이터그램을 IPsec 데이터그램으로 바꿔 인터넷에 내보냅니다. 바깥 헤더는 진짜 IPv4 라 중간 라우터는 평범한 데이터그램으로 처리합니다.",
+d.t(44, PY + 56, "평범한 IPv4 데이터그램을 IPsec 데이터그램으로 변환 후 송출 — 바깥 헤더는 진짜 IPv4 라 중간 라우터는 평범하게 처리",
     11, MUTED, KR, "start")
 
 d.legend(544, [("기관 내부", INFO), ("암호화 없이", OK), ("암호화 구간", ACC), ("공용 구간", MUTED)])

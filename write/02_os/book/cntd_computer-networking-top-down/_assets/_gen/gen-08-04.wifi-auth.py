@@ -42,7 +42,7 @@ for i, ln in enumerate(["1. 클라이언트 커밋 — element1 과 논스",
                         "2. AP 커밋 — element2 와 논스",
                         "3. 클라이언트 확인 — 앞선 값들의 해시",
                         "4. AP 확인 — 받은 해시 검사 후 자기 해시",
-                        "공유 비밀을 망으로 보내지 않고 서로를 확인합니다."]):
+                        "공유 비밀을 망으로 보내지 않고 상호 확인"]):
     d.t(44, SY + 64 + i * 22, ln, 11, ACC if i == 4 else MUTED, KR, "start")
 
 d.box(514, SY, 462, 180, PAPER2, RULE, 1.0)
@@ -53,7 +53,7 @@ HOPS = [("EAP", "기기 ↔ 인증 서버 종단 간", OK), ("EAPoL", "무선 �
 for i, (k, v, c) in enumerate(HOPS):
     d.t(534, SY + 68 + i * 26, k, 11, c, MONO, "start", 600)
     d.t(624, SY + 68 + i * 26, v, 11, MUTED, KR, "start")
-d.t(534, SY + 146, "카페 비밀번호는 모두가 공유합니다. 모르는 사람만 막힙니다.", 11, WARN, KR, "start")
+d.t(534, SY + 146, "카페 비밀번호는 모두 공유 — 모르는 사람만 차단", 11, WARN, KR, "start")
 
 d.legend(608, [("개인용", ACC), ("기업용", INFO), ("종단 간", OK), ("주의할 점", WARN)])
 out = pathlib.Path(__file__).resolve().parent.parent / "08-04.wifi-auth.svg"

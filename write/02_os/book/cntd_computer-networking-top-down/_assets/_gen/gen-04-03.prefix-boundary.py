@@ -1,10 +1,10 @@
-# 타입 스펙: type-comparison — 같은 주소 공간을 두 프리픽스로 갈랐을 때 경계가 어디로 옮겨 가는가.
+# 타입 스펙: type-dp-security-matrix — 같은 주소 공간을 두 프리픽스로 갈랐을 때 경계가 어디로 옮겨 가는가.
 # 출처: RFC 1812 §4.2.2.11 (호스트 자리 전부 0/1 금지) + 이 기계 en0 실측 (회사망 172.16.1.240/23, 2026-09-18)
 import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 from dd import D, PAPER, PAPER2, INK, MUTED, SOFT, RULE, ACC, BAD, OK, KR, MONO
 
-W, H = 940, 560
+W, H = 940, 580
 d = D(W, H, "RFC 1812 · PREFIX BOUNDARY",
       "프리픽스가 바뀌면 예약된 두 자리도 옮겨 갑니다",
       "같은 주소 172.16.0.255 와 172.16.1.0 을 /24 와 /23 두 기준으로 나란히 판정한 그림. "
@@ -28,10 +28,10 @@ def panel(x, title, mask, hostbits, rows, note):
         c = {"bad": BAD, "ok": OK, "": MUTED}[mark]
         d.box(x + 18, iy, PW - 36, 34, PAPER, f"{c}55", 1.3 if mark else 0.9, 5)
         d.t(x + 30, iy + 15, addr, 12, c if mark else INK, MONO, "start", 600)
-        d.t(x + 30, iy + 29, bits, 9.5, SOFT, MONO, "start")
-        d.t(x + PW - 30, iy + 22, label, 10.5, c, KR, "end")
+        d.t(x + 30, iy + 29, bits, 11, SOFT, MONO, "start")
+        d.t(x + PW - 30, iy + 22, label, 11, c, KR, "end")
         iy += 40
-    d.t(x + 18, PY + PH - 14, note, 10.5, MUTED, KR, "start")
+    d.t(x + 18, PY + PH - 14, note, 11, MUTED, KR, "start")
 
 # 호스트 비트 표기: 세 번째 옥텟 마지막 1비트 | 네 번째 옥텟 8비트
 panel(PX[0], "172.16.0.0/24", "255.255.255.0", "호스트 자리 8비트 — 네 번째 옥텟만", [
@@ -51,13 +51,13 @@ panel(PX[1], "172.16.0.0/23", "255.255.254.0", "호스트 자리 9비트 — 세
 # ── 같은 주소가 판정이 뒤집히는 자리 ──────────────────────────
 d.tone(40, PY + PH + 26, 870, 84, ACC, 8, "10", 1.2)
 d.t(58, PY + PH + 50, "같은 주소, 뒤집힌 판정", 12, ACC, KR, "start", 600)
-d.t(58, PY + PH + 72, "172.16.0.255 — /24 에서는 브로드캐스트라 못 쓰고, /23 에서는 호스트 비트에 0 이 섞여 있어 쓸 수 있습니다.",
+d.t(58, PY + PH + 72, "172.16.0.255 — /24 는 브로드캐스트라 못 씀, /23 은 호스트 비트에 0 섞여 사용 가능",
     11, INK, KR, "start")
-d.t(58, PY + PH + 92, "172.16.1.0 — /24 에서는 아예 다른 서브넷이고, /23 에서는 같은 서브넷 안의 호스트입니다.",
+d.t(58, PY + PH + 92, "172.16.1.0 — /24 는 다른 서브넷, /23 은 같은 서브넷의 호스트",
     11, INK, KR, "start")
 
 # ── 실측 근거 ────────────────────────────────────────────────
-d.t(40, 480, "확인 — ifconfig 의 broadcast 필드가 계산 결과를 직접 알려 줍니다",
+d.t(40, 480, "확인 — ifconfig broadcast 필드가 계산 결과를 바로 알려 줌",
     11, MUTED, KR, "start")
 d.box(40, 490, 870, 30, PAPER2, RULE, 0.9, 5)
 d.t(56, 509, "$ ifconfig en0 | grep 'inet '     →     inet 172.16.1.240  netmask 0xfffffe00  broadcast 172.16.1.255",

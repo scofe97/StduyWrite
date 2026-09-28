@@ -27,10 +27,10 @@ for x, title, sub1, sub2, c in BOXES:
 LINKS = [(196, 260, "무선 채널"), (432, 496, "백홀"), (668, 732, "게이트웨이")]
 for x1, x2, label in LINKS:
     d.arrow([(x1 + 6, BY + BH / 2), (x2 - 6, BY + BH / 2)], MUTED, "ar", 1.4)
-    d.t((x1 + x2) / 2, BY + BH / 2 - 14, label, 10, SOFT, KR)
+    d.t((x1 + x2) / 2, BY + BH / 2 - 14, label, 11, SOFT, KR)
 
 TY = 244
-d.t(24, TY, "같은 자리를 두 기술이 다르게 부릅니다", 12, INK, KR, "start", 600)
+d.t(24, TY, "같은 자리를 두 기술이 다르게 부름", 12, INK, KR, "start", 600)
 d.box(24, TY + 14, 880, 104, PAPER2, RULE, 1.0)
 COLS = [188, 396, 604, 806]
 for label, x in zip(["무선 기기", "기지국", "코어망", ""], COLS):
@@ -53,11 +53,11 @@ for i, (name, cells, c) in enumerate(ROWS):
 MY = 386
 MODES = [
     (24, "인프라 모드", INK,
-     ["주소 배정 · 신원 · 라우팅을 망이 줍니다.",
-      "이 장은 WiFi 를 인프라 모드로 가정합니다."]),
+     ["주소 배정 · 신원 · 라우팅을 망이 줌",
+      "이 장은 WiFi 를 인프라 모드로 가정함"]),
     (496, "애드혹 모드", INK,
-     ["그런 인프라가 없어 기기끼리 스스로 합니다.",
-      "블루투스가 순수 애드혹의 예입니다."]),
+     ["그런 인프라가 없어 기기끼리 스스로 함",
+      "블루투스가 순수 애드혹의 예"]),
 ]
 for x, title, c, lines in MODES:
     d.box(x, MY, 408, 74, PAPER2, RULE, 1.0)

@@ -14,7 +14,7 @@ d = D(W, H, "SECTION 8.2.2 · RSA KEY GENERATION",
 BW, BH, BY = 176, 148, 148
 XS = [24, 216, 408, 600, 792]
 STEPS = [
-    ("1", "큰 소수 둘", "p, q 를 고릅니다", "p = 5\nq = 7", INFO),
+    ("1", "큰 소수 둘", "p, q 선택", "p = 5\nq = 7", INFO),
     ("2", "곱과 z", "n = pq\nz = (p−1)(q−1)", "n = 35\nz = 24", INFO),
     ("3", "e 고르기", "n 보다 작고\nz 와 서로소", "e = 5", INFO),
     ("4", "d 찾기", "ed mod z = 1", "d = 29\n5·29−1 = 144", INFO),
@@ -37,12 +37,12 @@ for a, b in zip(XS, XS[1:]):
 
 EY = 336
 d.box(24, EY, 952, 108, PAPER2, RULE, 1.0)
-d.t(44, EY + 28, "쓰는 법은 거듭제곱 하나씩입니다", 12, INK, KR, "start", 600)
+d.t(44, EY + 28, "쓰는 법은 거듭제곱 한 번씩", 12, INK, KR, "start", 600)
 d.line(44, EY + 40, 956, EY + 40, RULE, 0.8)
 d.t(44, EY + 68, "c = m^e mod n", 13, OK, MONO, "start", 600)
 d.t(216, EY + 68, "앨리스가 암호화합니다 (m < n)", 11, MUTED, KR, "start")
 d.t(44, EY + 92, "m = c^d mod n", 13, ACC, MONO, "start", 600)
-d.t(216, EY + 92, "밥이 개인키로 복호합니다", 11, MUTED, KR, "start")
+d.t(216, EY + 92, "밥이 개인키로 복호", 11, MUTED, KR, "start")
 d.t(596, EY + 68, "l → 12 → 17 → 12", 11, SOFT, MONO, "start")
 d.t(596, EY + 92, "e →  5 → 10 →  5", 11, SOFT, MONO, "start")
 

@@ -36,7 +36,7 @@ d.chip(244, 214, "8", INFO, 10)
 d.chip(564, 182, "6", INFO, 10)
 d.chip(482, 244, "6", INFO, 10)
 d.chip(560, 98, "9", OK, 10)
-d.t(84, 268, "보통 IP 라우터", 10, SOFT, KR)
+d.t(84, 268, "보통 IP 라우터", 11, SOFT, KR)
 
 TABLES = [
     (24, "R4 의 표", [("—", "10", "A", "0"), ("—", "12", "D", "0"), ("—", "8", "A", "1")], ACC),
@@ -50,16 +50,16 @@ for x, title, rows, c in TABLES:
     d.t(x + 14, TY + 24, title, 11, c, KR, "start", 600)
     d.line(x + 14, TY + 34, x + TW - 14, TY + 34, RULE, 0.8)
     for j, head in enumerate(["들어온", "나가는", "목적지", "포트"]):
-        d.t(x + 14 + j * 54, TY + 54, head, 10, SOFT, KR, "start")
+        d.t(x + 14 + j * 54, TY + 54, head, 11, SOFT, KR, "start")
     for i, row in enumerate(rows):
         y = TY + 78 + i * 22
         for j, v in enumerate(row):
             d.t(x + 14 + j * 54, y, v, 11, INK if j < 2 else MUTED, MONO, "start")
 
 d.line(24, 452, W - 48, 452, RULE, 0.8)
-d.t(24, 472, "R4 는 A 로 가는 길을 둘 갖습니다. 포트 0 으로 라벨 10 을 달아 R3 을 거치거나, 포트 1 로 라벨 8 을 달아 R2 를 거칩니다.",
+d.t(24, 472, "R4 는 A 로 가는 길을 둘 가짐 — 포트 0 으로 라벨 10 을 달아 R3 을 거치거나, 포트 1 로 라벨 8 을 달아 R2 를 거침",
      11, MUTED, KR, "start")
-d.t(24, 490, "IP 라우팅이었다면 최소 비용 경로 하나만 썼을 자리입니다. 이 갈림이 MPLS 트래픽 엔지니어링의 출발점입니다.",
+d.t(24, 490, "IP 라우팅이었다면 최소 비용 경로 하나만 썼을 자리 — 이 갈림이 MPLS 트래픽 엔지니어링의 출발점",
      11, MUTED, KR, "start")
 
 d.legend(508, [("경로가 둘인 자리", ACC), ("MPLS 라우터", INFO), ("목적지", OK), ("보통 IP 라우터", MUTED)])

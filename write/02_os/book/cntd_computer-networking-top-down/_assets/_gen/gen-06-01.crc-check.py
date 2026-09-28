@@ -33,9 +33,9 @@ d = Dg(W, H, "SECTION 6.2.3 · CYCLIC REDUNDANCY CHECK",
 
 FX, FW = 40, 300
 for y, title, sub in [
-    (110, "송신이 D 와 생성기 G 를 정합니다", f"D = {DATA} · G = {GEN}"),
-    (186, "D 를 r 비트 밀고 G 로 나눕니다", f"{DATA}{'0' * R} ÷ {GEN}"),
-    (262, "나머지 R 을 뒤에 붙여 보냅니다", f"보내는 비트 = {SENT}"),
+    (110, "송신이 D 와 생성기 G 정함", f"D = {DATA} · G = {GEN}"),
+    (186, "D 를 r 비트 밀고 G 로 나눔", f"{DATA}{'0' * R} ÷ {GEN}"),
+    (262, "나머지 R 을 뒤에 붙여 보냄", f"보내는 비트 = {SENT}"),
 ]:
     d.box(FX, y, FW, 56, PAPER2, RULE, 0.9)
     d.t(FX + FW / 2, y + 24, title, 11, INK, KR, "middle", 600)
@@ -54,11 +54,11 @@ d.path(f"M {CXD} {CYD + HHD} L {CXD} 452 L 265 452 L 265 466", BAD, 1.3, m="bad"
 d.t(96, 446, "예", 11, OK, KR, "end", 600)
 d.t(284, 446, "아니오", 11, BAD, KR, "start", 600)
 d.tone(40, 466, 150, 52, OK, 6, "14", 1.2)
-d.t(115, 490, "받아들입니다", 11, OK, KR, "middle", 600)
-d.t(115, 508, "네트워크 계층으로", 10, MUTED, KR)
+d.t(115, 490, "받아들임", 11, OK, KR, "middle", 600)
+d.t(115, 508, "네트워크 계층으로", 11, MUTED, KR)
 d.tone(190, 466, 150, 52, BAD, 6, "14", 1.2)
-d.t(265, 490, "오류를 검출했습니다", 11, BAD, KR, "middle", 600)
-d.t(265, 508, "프레임을 버립니다", 10, MUTED, KR)
+d.t(265, 490, "오류 검출함", 11, BAD, KR, "middle", 600)
+d.t(265, 508, "프레임을 버림", 11, MUTED, KR)
 
 PX, PW = 396, 520
 def card(y, h, title, c, rows, mono_first=True):
@@ -75,7 +75,7 @@ card(104, 156, "이 예의 값", INFO, [
     ("생성기 G — 맨 앞은 반드시 1", GEN),
     ("덧붙이는 비트 수 r", str(R)),
     ("나눗셈의 몫", QUOT),
-    ("나머지 R — 이것이 CRC 입니다", REM),
+    ("나머지 R — 이것이 CRC", REM),
 ])
 card(276, 100, "검산", INFO, [
     (f"{QUOT} 곱하기 {GEN} XOR {REM}", DATA + "0" * R),
@@ -85,9 +85,9 @@ d.box(PX, 392, PW, 126, PAPER2, RULE, 1.0, 7)
 d.t(PX + 20, 416, "이 방식이 보장하는 것", 11, INK, KR, "start", 600)
 d.line(PX + 20, 426, PX + PW - 20, 426, RULE, 0.8)
 for i, line in enumerate([
-    "연속한 r 비트 이하의 버스트 오류는 전부 검출합니다.",
-    "r + 1 비트를 넘는 버스트는 1 - 0.5^r 확률로 검출합니다.",
-    "수신이 하는 일은 나눗셈 한 번이라 하드웨어로 빠릅니다.",
+    "연속한 r 비트 이하의 버스트 오류는 전부 검출",
+    "r + 1 비트를 넘는 버스트는 1 - 0.5^r 확률로 검출",
+    "수신이 하는 일은 나눗셈 한 번이라 하드웨어로 빠름",
 ]):
     d.t(PX + 20, 448 + i * 22, "·  " + line, 11, MUTED, KR, "start")
 

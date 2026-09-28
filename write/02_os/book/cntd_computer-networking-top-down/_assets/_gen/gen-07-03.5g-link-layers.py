@@ -40,15 +40,14 @@ d.box(RX, LY0, RW, len(LAYERS) * STRIDE - (STRIDE - LH), PAPER2, RULE, 1.0)
 d.t(RX + 20, LY0 + 26, "RRC 가 다른 넷과 다른 점", 12, INK, KR, "start", 600)
 d.line(RX + 20, LY0 + 38, RX + RW - 20, LY0 + 38, RULE, 0.8)
 for j, ln in enumerate([
-    "나머지 넷은 프레임을 실어",
-    "나르는 일을 나눠 맡습니다.",
+    "나머지 넷은 프레임 전달을",
+    "나눠 맡음",
     "",
-    "RRC 는 그 넷과 물리 계층의",
-    "상태를 설정하는 방식으로",
-    "자기 일을 해냅니다.",
+    "RRC 는 넷·물리 계층의",
+    "상태 설정으로 역할 수행",
     "",
-    "기지국과 기기가 RRC 메시지를",
-    "주고받으며 그 설정을 맞춥니다.",
+    "기지국·기기가 RRC 메시지로",
+    "설정을 맞춤",
 ]):
     if ln:
         d.t(RX + 20, LY0 + 64 + j * 22, ln, 11, MUTED, KR, "start")
@@ -56,7 +55,7 @@ d.arrow([(LX + LW + 6, LY0 + 25), (RX - 6, LY0 + 25)], ACC, "acc", 1.3, "5 5")
 
 PY = PHY_Y + LH + 24
 d.box(24, PY, 880, 92, PAPER2, RULE, 1.0)
-d.t(44, PY + 26, "5G 부터는 기지국 자체도 셋으로 쪼갭니다", 12, INK, KR, "start", 600)
+d.t(44, PY + 26, "5G 부터 기지국 자체도 셋으로 분할", 12, INK, KR, "start", 600)
 SPLIT = [("RU", "무선 유닛"), ("DU", "분산 유닛"), ("CU", "중앙 유닛")]
 for i, (nm, ko) in enumerate(SPLIT):
     x = 60 + i * 168
@@ -65,8 +64,8 @@ for i, (nm, ko) in enumerate(SPLIT):
     d.t(x + 72, PY + 73, ko, 10, MUTED, KR)
     if i < 2:
         d.arrow([(x + 148, PY + 59), (x + 164, PY + 59)], MUTED, "ar", 1.2)
-d.t(596, PY + 52, "표준 인터페이스로 이어서 여러 회사가", 11, MUTED, KR, "start")
-d.t(596, PY + 72, "부분마다 경쟁 구현을 낼 수 있게 했습니다.", 11, MUTED, KR, "start")
+d.t(596, PY + 52, "표준 인터페이스로 여러 회사의", 11, MUTED, KR, "start")
+d.t(596, PY + 72, "부분별 경쟁 구현 가능", 11, MUTED, KR, "start")
 
 d.legend(PY + 112, [("제어 평면 부계층", ACC), ("사용자 평면 부계층", OK), ("부계층이 아닌 것", INFO)])
 

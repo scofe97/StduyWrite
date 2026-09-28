@@ -31,19 +31,19 @@ d = SeqKR(W, H, "SECTION 8.2.2 · DIFFIE-HELLMAN",
 d.lanes([("앨리스", "secret SA"), ("밥", "secret SB")], y0=120, lane_w=280)
 d.rails(468)
 
-d.t(470, 200, "p 와 g 를 골라 공개합니다 — 공격자도 압니다", 11, SOFT, KR)
+d.t(470, 200, "p·g 선택 후 공개 — 공격자도 인지", 11, SOFT, KR)
 d.state("앨리스", "K_A+ = g^SA mod p", 240, INFO)
 d.state("밥", "K_B+ = g^SB mod p", 240, OK)
 d.msg("앨리스", "밥", "K_A+", 292, INFO)
 d.msg("밥", "앨리스", "K_B+", 336, OK)
 d.state("앨리스", "(K_B+)^SA mod p", 392, ACC)
 d.state("밥", "(K_A+)^SB mod p", 392, ACC)
-d.t(470, 440, "둘 다 g^(SA·SB) mod p 에 도달합니다", 12, ACC, KR, "middle", 600)
+d.t(470, 440, "둘 다 g^(SA·SB) mod p 로 수렴", 12, ACC, KR, "middle", 600)
 
 PY = 484
 d.box(24, PY, 892, 60, PAPER2, RULE, 1.0)
 d.t(44, PY + 26, "안전이 기대는 곳", 12, INK, KR, "start", 600)
-d.t(44, PY + 48, "K_A+ 와 g 와 p 를 알아도 SA 를 알아내기가 극도로 어렵습니다. RSA 에서 n 을 인수분해하는 것만큼 어렵습니다.",
+d.t(44, PY + 48, "K_A+·g·p 알아도 SA 역산 극난 — RSA n 인수분해와 동급 난이도",
     11, MUTED, KR, "start")
 
 d.legend(556, [("앨리스가 만든 것", INFO), ("밥이 만든 것", OK), ("둘이 만나는 자리", ACC)])

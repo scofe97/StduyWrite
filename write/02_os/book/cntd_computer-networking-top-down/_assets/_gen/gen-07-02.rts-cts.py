@@ -41,9 +41,9 @@ d.lanes([("보내려는 기기", "sender"), ("AP", "access point"), ("AP 반대�
 d.rails(388)
 
 d.msg("보내려는 기기", "AP", "RTS", 168, INFO, "info",
-      sub="보낼 DATA 와 ACK 에 필요한 시간을 담습니다")
+      sub="DATA·ACK 소요 시간 포함")
 d.msg("AP", "AP 반대편 기기들", "CTS", 220, ACC, "acc",
-      sub="들리는 범위의 모두에게 나갑니다")
+      sub="가청 범위 전체 브로드캐스트")
 d.msg("AP", "보내려는 기기", "CTS", 262, ACC, "acc", sub="보내도 좋다는 허락")
 d.state("AP 반대편 기기들", "지정된 시간 동안 송신 보류", 306, WARN)
 d.msg("보내려는 기기", "AP", "DATA", 344, OK, "ok")
@@ -53,16 +53,16 @@ PY = 412
 d.box(24, PY, 430, 100, PAPER2, RULE, 1.0)
 d.t(44, PY + 26, "얻는 것 둘", 12, INK, KR, "start", 600)
 for i, ln in enumerate([
-    "숨은 단말이 CTS 를 듣고 물러납니다.",
-    "충돌이 나도 짧은 RTS·CTS 만 날립니다.",
+    "숨은 단말, CTS 청취 후 대기",
+    "충돌 시에도 짧은 RTS·CTS 만 손실",
 ]):
     d.t(44, PY + 52 + i * 22, "·  " + ln, 11, MUTED, KR, "start")
 
 d.box(474, PY, 430, 100, PAPER2, RULE, 1.0)
-d.t(494, PY + 26, "그래서 항상 쓰지는 않습니다", 12, INK, KR, "start", 600)
+d.t(494, PY + 26, "상시 사용은 아님", 12, INK, KR, "start", 600)
 for i, ln in enumerate([
-    "RTS·CTS 자체가 지연과 채널을 씁니다.",
-    "긴 DATA 프레임을 예약할 때만 씁니다.",
+    "RTS·CTS 자체가 지연·채널 자원 소모",
+    "긴 DATA 프레임 예약 시에만 사용",
 ]):
     d.t(494, PY + 52 + i * 22, "·  " + ln, 11, MUTED, KR, "start")
 

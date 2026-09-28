@@ -28,8 +28,8 @@ d.t(X0 + NCOL * CW / 2, GB + 26, "시간 미니슬롯 7 개", 11, SOFT, KR)
 
 CY = GB + 56
 for i, (c, txt) in enumerate([
-    (INFO, "파란 칸 하나가 자원 요소입니다. 심볼 하나가 실립니다."),
-    (ACC, "격자 전체가 한 번에 배정하는 덩어리입니다. 4G 에서는 심볼 84 개입니다."),
+    (INFO, "파란 칸 = 자원 요소 하나, 심볼 하나 탑재"),
+    (ACC, "격자 전체 = 배정 단위 덩어리, 4G 기준 심볼 84 개"),
 ]):
     y = CY + i * 26
     d.o.append(f'<rect x="24" y="{y - 11}" width="14" height="12" rx="2" '
@@ -38,7 +38,7 @@ for i, (c, txt) in enumerate([
 
 PX, PW = 552, 352
 d.box(PX, Y0, PW, 236, PAPER2, RULE, 1.0)
-d.t(PX + 20, Y0 + 28, "같은 격자를 두 기술이 다르게 자릅니다", 12, INK, KR, "start", 600)
+d.t(PX + 20, Y0 + 28, "같은 격자, 기술마다 다른 절단", 12, INK, KR, "start", 600)
 d.line(PX + 20, Y0 + 40, PX + PW - 20, Y0 + 40, RULE, 0.8)
 BLOCKS = [
     ("4G · 5G", OK, ["부반송파 15 kHz · 미니슬롯 66.6 µs",
@@ -46,7 +46,7 @@ BLOCKS = [
                      "12 × 7 로 묶어 심볼 84 개"]),
     ("WiFi OFDMA", INFO, ["부반송파 78 kHz · 미니슬롯 12.8 µs",
                           "묶음 이름은 resource unit (RU)",
-                          "묶는 크기가 4G 와 다릅니다"]),
+                          "묶음 크기 4G 와 상이"]),
 ]
 by = Y0 + 66
 for name, c, lines in BLOCKS:
@@ -57,13 +57,13 @@ for name, c, lines in BLOCKS:
     by += 100
 
 NY = CY + 46
-d.t(24, NY, "5G 는 30 kHz 부터 960 kHz 까지 더 넓은 부반송파도 정의하고, 그만큼 미니슬롯을 짧게 잡습니다.",
+d.t(24, NY, "5G — 부반송파 30~960 kHz 확장, 미니슬롯은 그만큼 단축",
     11, SOFT, KR, "start")
 
 BY = NY + 22
 d.box(24, BY, 880, 62, PAPER2, RULE, 1.0)
-d.t(44, BY + 24, "칸을 하나씩 쓰지는 않습니다", 12, INK, KR, "start", 600)
-d.t(44, BY + 46, "이웃한 칸을 묶어 같은 변조 방식과 같은 출력으로 함께 보냅니다. 배정도 그 덩어리 단위로 합니다.",
+d.t(44, BY + 24, "칸 단위 개별 사용 없음", 12, INK, KR, "start", 600)
+d.t(44, BY + 46, "이웃 칸 묶음 → 동일 변조·출력으로 전송, 배정도 덩어리 단위",
     11, MUTED, KR, "start")
 
 d.legend(BY + 82, [("자원 요소 하나", INFO), ("한 번에 배정하는 덩어리", ACC), ("4G · 5G 수치", OK)])

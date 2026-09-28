@@ -45,9 +45,9 @@ d.t(CX0 + len(SLOTS) * CW / 2, 490, "시간", 10, SOFT, KR)
 
 PY = 506
 d.box(24, PY, 880, 56, PAPER2, RULE, 1.0)
-d.t(44, PY + 22, "MU-RTS 는 OFDM 으로 모두에게 나갑니다", 12, INK, KR, "start", 600)
+d.t(44, PY + 22, "MU-RTS — OFDM 으로 전체 브로드캐스트", 12, INK, KR, "start", 600)
 d.t(44, PY + 42,
-    "OFDM 만 아는 기기는 보통 CTS 로 답하고, OFDMA 를 아는 기기는 자기에게 배정된 주파수로만 CTS 를 냅니다.",
+    "OFDM 전용 기기는 보통 CTS 응답, OFDMA 기기는 배정 주파수로만 CTS 응답",
     11, MUTED, KR, "start")
 
 d.legend(PY + 74, [("레거시 OFDM", INFO), ("OFDMA", OK), ("AP 의 예약", ACC)])

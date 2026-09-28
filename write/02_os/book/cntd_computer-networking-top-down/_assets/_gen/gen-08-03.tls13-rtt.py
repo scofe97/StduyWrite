@@ -15,8 +15,8 @@ d = D(W, H, "SECTION 8.6.2 · ROUND TRIPS BEFORE DATA",
 # 막대는 3 으로 그리되 라벨에 "이상" 을 붙여 단언하지 않는다.
 ROWS = [("이전 판 TLS (TCP 위)", 3, "핸드셰이크에 둘 이상 + TCP 하나", WARN, True),
         ("TLS 1.3 (TCP 위)", 2, "TCP 연결 하나 + TLS 핸드셰이크 하나", INFO, False),
-        ("TLS 1.3 (QUIC 안)", 1, "Client Hello 가 QUIC 연결 설정에 실립니다", OK, False),
-        ("TLS 1.3 (QUIC · 재방문)", 0, "앞서 합의한 파라미터를 다시 씁니다", ACC, False)]
+        ("TLS 1.3 (QUIC 안)", 1, "Client Hello 가 QUIC 연결 설정에 포함", OK, False),
+        ("TLS 1.3 (QUIC · 재방문)", 0, "앞서 합의한 파라미터 재사용", ACC, False)]
 X0, UNIT, BH, STRIDE = 300, 168, 52, 76
 Y0 = 176
 for i, (name, n, note, c, atleast) in enumerate(ROWS):
@@ -42,7 +42,7 @@ d.t(X0 + UNIT * 1.5, AY + 42, "데이터를 보내기까지의 왕복 수", 11, 
 PY = AY + 62
 d.box(24, PY, 952, 76, PAPER2, RULE, 1.0)
 d.t(44, PY + 28, "1 RTT 가 가능한 이유", 12, INK, KR, "start", 600)
-d.t(44, PY + 56, "Client Hello 가 이미 클라이언트의 DH 공개값을 싣고 갑니다. 서버가 인사와 동시에 마스터 비밀을 만들 수 있어 왕복이 하나로 줄었습니다.",
+d.t(44, PY + 56, "Client Hello 가 이미 클라이언트의 DH 공개값 포함 — 서버가 인사와 동시에 마스터 비밀 생성 가능해 왕복 하나로 감소",
     11, MUTED, KR, "start")
 
 d.legend(PY + 96, [("이전 판", WARN), ("TCP 위", INFO), ("QUIC 안", OK), ("재방문", ACC)])

@@ -19,12 +19,12 @@ for (x, w), head in zip(COLS, HEADS):
 ROWS = [
     (128, "공간 다이버시티", INFO, 1, 2,
      ["안테나 하나로", "정보 x 를 한 번"],
-     ["위상을 맞춰 더하거나", "SNR 이 큰 쪽을 고릅니다"],
-     ["같은 x 를 더 확실하게.", "다중경로 페이딩에 강해집니다.", "속도는 그대로입니다."]),
+     ["위상을 맞춰 더하거나", "SNR 이 큰 쪽을 고름"],
+     ["같은 x 를 더 확실하게.", "다중경로 페이딩에 강해짐", "속도는 그대로"]),
     (300, "공간 다중화", OK, 2, 2,
      ["안테나 둘로", "다른 정보 x₁·x₂ 를 함께"],
      ["식 둘 · 미지수 둘을", "풀어 x₁ 과 x₂ 를 분리"],
-     ["한 번에 두 줄기가 흐릅니다.", "링크 속도 자체가 늘어납니다.", "경로가 서로 달라야 풉니다."]),
+     ["한 번에 두 줄기가 흐름", "링크 속도 자체가 늘어남", "경로가 서로 달라야 풂"]),
 ]
 RH = 152
 for ry, name, c, ntx, nrx, left, mid, right in ROWS:
@@ -45,9 +45,9 @@ for ry, name, c, ntx, nrx, left, mid, right in ROWS:
         d.o.append(f'<circle cx="{cx0}" cy="{ya}" r="5" fill="{c}"/>')
     for yb in rxy:
         d.o.append(f'<circle cx="{cx1}" cy="{yb}" r="5" fill="{c}"/>')
-    d.t(cx0, ry + RH - 12, "송신", 10, SOFT, KR)
-    d.t(cx1, ry + RH - 12, "수신", 10, SOFT, KR)
-    d.t(COLS[1][0] + 88, ry + 24, "H 가 진폭과 위상을 바꿉니다", 10, SOFT, KR)
+    d.t(cx0, ry + RH - 12, "송신", 11, SOFT, KR)
+    d.t(cx1, ry + RH - 12, "수신", 11, SOFT, KR)
+    d.t(COLS[1][0] + 88, ry + 24, "H 가 진폭과 위상을 바꿈", 11, SOFT, KR)
 
     for j, ln in enumerate(mid):
         d.t(COLS[2][0] + 16, ry + 60 + j * 20, ln, 11, MUTED, KR, "start")
@@ -60,7 +60,7 @@ for ry, *_ in ROWS:
         x1 = COLS[i][0] + COLS[i][1]
         d.arrow([(x1 + 8, ry + RH / 2), (COLS[i + 1][0] - 8, ry + RH / 2)], MUTED, "ar", 1.3)
 
-d.t(24, 490, "수신 안테나를 N 개 두면 받는 총 전력이 대략 N 배가 되는 이득은 두 방식에 공통입니다.",
+d.t(24, 490, "수신 안테나를 N 개 두면 받는 총 전력이 대략 N 배가 되는 이득은 두 방식에 공통",
     11, MUTED, KR, "start")
 
 d.legend(510, [("공간 다이버시티", INFO), ("공간 다중화", OK), ("속도가 늘어나는 쪽", ACC)])

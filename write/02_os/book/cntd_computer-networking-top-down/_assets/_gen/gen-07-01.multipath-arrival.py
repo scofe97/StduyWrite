@@ -35,17 +35,17 @@ d.lanes(LANES, y0=106, lane_w=196)
 d.rails(322)
 
 d.msg("송신기", "수신기", "line of sight", 176, OK, "ok",
-      sub="가장 짧은 거리라 가장 먼저 닿습니다")
+      sub="가장 짧은 거리라 가장 먼저 닿음")
 d.msg("송신기", "가까운 건물", "reflect", 222, WARN, "warn")
 d.msg("가까운 건물", "수신기", "delayed copy 1", 252, WARN, "warn")
 d.msg("송신기", "먼 건물", "reflect", 282, INFO, "info")
 d.msg("먼 건물", "수신기", "delayed copy 2", 312, INFO, "info")
 
 AY = 360
-d.t(24, AY - 12, "수신기가 보는 것 — 한 번의 송신이 시간 위로 퍼집니다", 12, INK, KR, "start", 600)
+d.t(24, AY - 12, "수신기가 보는 것 — 한 번의 송신이 시간 위로 퍼짐", 12, INK, KR, "start", 600)
 X0, X1 = 176, 852
 d.line(X0, AY + 76, X1, AY + 76, RULE, 1.0)
-d.t(X1 + 16, AY + 80, "시각", 10, SOFT, KR, "start")
+d.t(X1 + 16, AY + 80, "시각", 11, SOFT, KR, "start")
 PULSES = [(0.06, OK, "직진파"), (0.22, WARN, "반사파 1"), (0.40, INFO, "반사파 2")]
 for frac, c, lab in PULSES:
     x = X0 + (X1 - X0) * frac
@@ -57,11 +57,11 @@ XB = X0 + (X1 - X0) * 0.40
 d.line(XA, AY + 96, XB, AY + 96, ACC, 1.6)
 d.line(XA, AY + 88, XA, AY + 104, ACC, 1.6)
 d.line(XB, AY + 88, XB, AY + 104, ACC, 1.6)
-d.t((XA + XB) / 2, AY + 124, "coherence time — 다음 펄스는 이 폭이 지난 뒤에야 보낼 수 있습니다",
+d.t((XA + XB) / 2, AY + 124, "coherence time — 다음 펄스는 이 폭이 지난 뒤에야 보낼 수 있음",
     11, ACC, KR, "middle", 600)
 
 d.t(24, AY + 156,
-    "더 촘촘히 보내면 앞 펄스의 반사가 뒤 펄스와 섞여 수신기가 둘을 갈라내지 못합니다.", 11, MUTED, KR, "start")
+    "더 촘촘히 보내면 앞 펄스의 반사가 뒤 펄스와 섞여 수신기가 둘을 갈라내지 못함", 11, MUTED, KR, "start")
 
 d.legend(AY + 176, [("직진파", OK), ("반사파", WARN), ("더 늦은 반사파", INFO), ("송신 간격의 하한", ACC)])
 

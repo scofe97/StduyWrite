@@ -23,7 +23,7 @@ def panel(px, title, flip):
     d.t(px + 152, 116, title, 12, INK, KR, "middle", 600)
     for j in range(5):
         d.t(px + 60 + j * CW + CW / 2, GY - 8, str(j + 1), 10, SOFT, MONO)
-    d.t(px + 240 + PW / 2, GY - 8, "행 패리티", 10, SOFT, KR)
+    d.t(px + 240 + PW / 2, GY - 8, "행 패리티", 11, SOFT, KR)
 
     for i in range(3):
         y = GY + i * RH
@@ -45,7 +45,7 @@ def panel(px, title, flip):
         d.t(x + PW / 2, y + 21, str(ROWP[i]), 12, BAD if bad else MUTED, MONO, "middle", 600 if bad else 400)
 
     y = GY + 3 * RH + 8
-    d.t(px + 52, y + 21, "열 패리티", 10, SOFT, KR, "end")
+    d.t(px + 52, y + 21, "열 패리티", 11, SOFT, KR, "end")
     for j in range(5):
         x = px + 60 + j * CW
         bad = flip and j == 1
@@ -59,14 +59,14 @@ def panel(px, title, flip):
 bot = panel(64, "오류가 없을 때 — 모든 행과 열이 짝수", False)
 panel(524, "(2,2) 의 1 이 0 으로 뒤집혔을 때", True)
 
-d.t(64, bot + 30, "다섯 열과 세 행이 모두 1의 개수가 짝수입니다.", 11, MUTED, KR, "start")
-d.t(524, bot + 30, "행 2 와 열 2 가 함께 어긋납니다. 교차점이 뒤집힌 비트입니다.", 11, MUTED, KR, "start")
-d.t(524, bot + 48, "패리티 비트 자체가 뒤집혀도 같은 방식으로 잡힙니다.", 11, MUTED, KR, "start")
+d.t(64, bot + 30, "다섯 열과 세 행이 모두 1의 개수가 짝수", 11, MUTED, KR, "start")
+d.t(524, bot + 30, "행 2 와 열 2 가 함께 어긋남 — 교차점이 뒤집힌 비트", 11, MUTED, KR, "start")
+d.t(524, bot + 48, "패리티 비트 자체가 뒤집혀도 같은 방식으로 잡힘", 11, MUTED, KR, "start")
 
 d.line(24, 344, W - 48, 344, RULE, 0.8)
-d.t(24, 366, "데이터를 i 행 j 열로 나누면 패리티는 i + j + 1 비트입니다. 여기서는 3 행 5 열이라 9 비트입니다.",
+d.t(24, 366, "데이터를 i 행 j 열로 나누면 패리티는 i + j + 1 비트 — 여기서는 3 행 5 열이라 9 비트",
      11, MUTED, KR, "start")
-d.t(24, 384, "한 비트 오류는 검출하고 정정합니다. 두 비트 오류는 어떤 조합이든 검출하지만 정정하지는 못합니다.",
+d.t(24, 384, "한 비트 오류는 검출하고 정정함 — 두 비트 오류는 어떤 조합이든 검출되나 정정은 못함",
      11, MUTED, KR, "start")
 
 d.legend(404, [("패리티가 어긋난 행과 열", BAD), ("교차점 — 뒤집힌 비트", ACC)])

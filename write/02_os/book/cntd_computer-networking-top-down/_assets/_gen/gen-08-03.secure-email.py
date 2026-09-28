@@ -21,7 +21,7 @@ for a in (200, 392):
     d.arrow([(a + 2, 180), (a + 14, 180)], MUTED, "ar", 1.2)
 d.tone(624, 144, 352, 72, INFO, 7, "16", 1.3)
 d.t(800, 174, "원문 + 서명 = 예비 봉투", 12, INFO, KR, "middle", 600)
-d.t(800, 196, "여기까지가 발신자 인증과 무결성입니다", 11, MUTED, KR)
+d.t(800, 196, "여기까지 — 발신자 인증과 무결성", 11, MUTED, KR)
 d.arrow([(588, 180), (620, 180)], INFO, "info", 1.4)
 
 d.line(24, 252, 976, 252, RULE, 0.8)
@@ -40,12 +40,12 @@ for a in (200, 392):
     d.arrow([(a + 2, 344), (a + 14, 344)], MUTED, "ar", 1.2)
 d.tone(624, 308, 352, 72, ACC, 7, "16", 1.3)
 d.t(800, 338, "암호문 + 암호화된 세션 키", 12, ACC, KR, "middle", 600)
-d.t(800, 360, "이것이 밥에게 갑니다", 11, MUTED, KR)
+d.t(800, 360, "이것이 밥에게 전송", 11, MUTED, KR)
 d.arrow([(588, 344), (620, 344)], ACC, "acc", 1.4)
 
 PY = 412
 d.box(24, PY, 470, 104, PAPER2, RULE, 1.0)
-d.t(44, PY + 28, "공개키를 두 번 씁니다", 12, INK, KR, "start", 600)
+d.t(44, PY + 28, "공개키를 두 번 사용", 12, INK, KR, "start", 600)
 d.line(44, PY + 40, 474, PY + 40, RULE, 0.8)
 d.t(44, PY + 64, "앨리스: 자기 개인키로 한 번, 밥의 공개키로 한 번", 11, MUTED, KR, "start")
 d.t(44, PY + 86, "밥: 자기 개인키로 한 번, 앨리스의 공개키로 한 번", 11, MUTED, KR, "start")
@@ -54,7 +54,7 @@ d.box(514, PY, 462, 104, PAPER2, RULE, 1.0)
 d.t(534, PY + 28, "남는 문제", 12, INK, KR, "start", 600)
 d.line(534, PY + 40, 956, PY + 40, RULE, 0.8)
 d.t(534, PY + 64, "서로의 공개키를 어떻게 얻습니까. 트루디가 밥인 척하고", 11, MUTED, KR, "start")
-d.t(534, PY + 86, "자기 공개키를 내밀 수 있습니다. 답은 CA 인증입니다.", 11, MUTED, KR, "start")
+d.t(534, PY + 86, "자기 공개키를 내밀 수 있음 — 답은 CA 인증", 11, MUTED, KR, "start")
 
 d.legend(536, [("문서", INK), ("서명 쪽", INFO), ("대칭 암호화 쪽", OK), ("공개키가 나르는 것", ACC)])
 out = pathlib.Path(__file__).resolve().parent.parent / "08-03.secure-email.svg"

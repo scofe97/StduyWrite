@@ -39,12 +39,12 @@ for x, w, key, who in ((232, 200, "K_A", "앨리스의 열쇠"), (688, 200, "K_B
 
 TY = 96
 d.tone(472, TY, 176, 48, BAD, 6, "16", 1.3)
-d.t(560, TY + 30, "트루디가 듣습니다", 11, BAD, KR)
+d.t(560, TY + 30, "트루디 도청", 11, BAD, KR)
 d.arrow([(560, TY + 52), (560, BY - 6)], BAD, "bad", 1.3, "5 5")
 
 NY = KY + 84
-d.t(24, NY, "밥은 K_B(K_A(m)) = m 을 계산해 원래 평문을 얻습니다.", 12, INK, KR, "start", 600)
-d.t(24, NY + 24, "대칭키 체계에서는 두 열쇠가 같고 둘 다 비밀입니다. 공개키 체계에서는 한쪽을 온 세상이 압니다.",
+d.t(24, NY, "밥 — K_B(K_A(m)) = m 계산으로 평문 복원", 12, INK, KR, "start", 600)
+d.t(24, NY + 24, "대칭키 — 두 열쇠 동일·둘 다 비밀 / 공개키 — 한쪽은 공개",
     11, MUTED, KR, "start")
 d.legend(NY + 44, [("암호문", ACC), ("공개된 알고리즘", INFO), ("비밀인 열쇠", OK), ("침입자", BAD)])
 out = pathlib.Path(__file__).resolve().parent.parent / "08-01.crypto-components.svg"

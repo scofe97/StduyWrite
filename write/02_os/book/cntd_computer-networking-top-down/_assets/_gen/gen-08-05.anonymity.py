@@ -14,7 +14,7 @@ d = D(W, H, "SECTION 8.9.1 · ANONYMITY AND PRIVACY",
 WY = 144
 WANT = [(24, "사이트에 내 IP 를 안 드러내기", BAD), (348, "ISP 가 방문을 모르게", BAD),
         (672, "ISP 가 데이터를 못 보게", OK)]
-d.t(24, WY - 12, "TLS 만 썼을 때 — 셋 중 둘이 실패합니다", 12, INK, KR, "start", 600)
+d.t(24, WY - 12, "TLS 만 썼을 때 — 셋 중 둘 실패", 12, INK, KR, "start", 600)
 for x, want, c in WANT:
     d.tone(x, WY, 304, 60, c, 6, "16", 1.2)
     d.t(x + 152, WY + 28, want, 11, c, KR)
@@ -32,7 +32,7 @@ for x, name, sub, c in CHAIN:
 for a in (176, 368):
     d.arrow([(a + 2, PY + 32), (a + 36, PY + 32)], MUTED, "ar", 1.3)
 d.tone(608, PY, 368, 64, WARN, 7, "14", 1.3)
-d.t(792, PY + 28, "프록시는 전부 압니다", 12, WARN, KR, "middle", 600)
+d.t(792, PY + 28, "프록시는 전부 인지", 12, WARN, KR, "middle", 600)
 d.t(792, PY + 50, "내 IP · 사이트 IP · 오가는 평문", 11, MUTED, KR)
 
 TY = 368
@@ -47,8 +47,8 @@ for x, name, c in NODES:
     d.t(x + 68, TY + 34, name, 12, c, KR, "middle", 600)
 for a in (160, 336, 512, 688):
     d.arrow([(a + 2, TY + 28), (a + 36, TY + 28)], ACC, "acc", 1.3)
-d.t(24, TY + 84, "담합하지 않는다면 내 IP 와 목적지 사이에 통신이 있었다는 것을 아무도 모릅니다.", 11, MUTED, KR, "start")
-d.t(24, TY + 106, "마지막 프록시와 서버 사이는 평문이지만, 그 프록시는 평문을 주고받는 IP 가 누구인지 모릅니다.",
+d.t(24, TY + 84, "담합 없다면 내 IP·목적지 간 통신 사실 자체를 아무도 모름", 11, MUTED, KR, "start")
+d.t(24, TY + 106, "마지막 프록시·서버 구간은 평문이나, 그 프록시는 상대 IP 를 모름",
     11, MUTED, KR, "start")
 
 d.legend(516, [("실패하는 요구", BAD), ("되는 요구", OK), ("프록시 하나의 한계", WARN), ("사슬", ACC)])

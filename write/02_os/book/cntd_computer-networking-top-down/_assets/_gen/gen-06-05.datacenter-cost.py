@@ -16,7 +16,7 @@ HOST_W = 252
 d.tone(TX, TY, HOST_W - 4, TH, ACC, 6, "1E", 1.5)
 d.t(TX + (HOST_W - 4) / 2, TY + TH / 2 - 20, "호스트", 14, ACC, KR, "middle", 600)
 d.t(TX + (HOST_W - 4) / 2, TY + TH / 2 + 8, "45 %", 22, ACC, MONO, "middle", 600)
-d.t(TX + (HOST_W - 4) / 2, TY + TH / 2 + 34, "3 ~ 4 년마다 교체합니다", 11, MUTED, KR)
+d.t(TX + (HOST_W - 4) / 2, TY + TH / 2 + 34, "3 ~ 4 년마다 교체함", 11, MUTED, KR)
 
 RX, RW = TX + HOST_W, TW - HOST_W
 for name, pct, h, sub, c in [("인프라", "25 %", 128, "변압기 · UPS · 발전기 · 냉각", INFO),
@@ -26,29 +26,29 @@ for name, pct, h, sub, c in [("인프라", "25 %", 128, "변압기 · UPS · 발
     d.tone(RX, y, RW, h - 4, c, 6, "14", 1.1)
     d.t(RX + RW / 2, y + 26, name, 12, c, KR, "middle", 600)
     d.t(RX + RW / 2, y + 48, pct, 16, c, MONO, "middle", 600)
-    d.t(RX + RW / 2, y + 68, sub, 10, MUTED, KR)
+    d.t(RX + RW / 2, y + 68, sub, 11, MUTED, KR)
 
 AX, AW = 624, 292
 d.box(AX, 116, AW, 132, PAPER2, RULE, 1.0)
-d.t(AX + 16, 140, "일벌은 호스트입니다", 11, INK, KR, "start", 600)
+d.t(AX + 16, 140, "일벌은 호스트", 11, INK, KR, "start", 600)
 d.line(AX + 16, 150, AX + AW - 16, 150, RULE, 0.8)
-for i, s in enumerate(["피자 상자를 닮은 블레이드입니다",
-                       "랙 하나에 보통 20 ~ 40 대를 쌓습니다",
-                       "CPU · 메모리 · 디스크를 갖습니다"]):
+for i, s in enumerate(["피자 상자를 닮은 블레이드",
+                       "랙 하나에 보통 20 ~ 40 대를 쌓음",
+                       "CPU · 메모리 · 디스크를 가짐"]):
     d.t(AX + 16, 174 + i * 22, "·  " + s, 11, MUTED, KR, "start")
 
 d.box(AX, 264, AW, 132, PAPER2, RULE, 1.0)
 d.t(AX + 16, 288, "랙 꼭대기에 TOR 스위치", 11, INK, KR, "start", 600)
 d.line(AX + 16, 298, AX + AW - 16, 298, RULE, 0.8)
-for i, s in enumerate(["랙 안 호스트와 다른 스위치를 잇습니다",
-                       "호스트는 40 또는 100 Gbps 로 붙습니다",
-                       "호스트마다 내부 IP 주소를 받습니다"]):
+for i, s in enumerate(["랙 안 호스트와 다른 스위치를 이음",
+                       "호스트는 40 또는 100 Gbps 로 붙음",
+                       "호스트마다 내부 IP 주소를 받음"]):
     d.t(AX + 16, 322 + i * 22, "·  " + s, 11, MUTED, KR, "start")
 
 d.line(24, 424, W - 48, 424, RULE, 0.8)
-d.t(24, 446, "데이터센터 설계는 기업 기밀입니다. 2024 년 기준 대규모 데이터센터 건설 비용은 수억 달러에서 10 억 달러를 넘습니다.",
+d.t(24, 446, "데이터센터 설계는 기업 기밀 — 2024 년 기준 대규모 데이터센터 건설 비용은 수억 달러에서 10 억 달러를 넘음",
      11, MUTED, KR, "start")
-d.t(24, 464, "장비 비용은 일회성 구매와 전력 같은 운영비를 같은 잣대로 보려고 상각한 값입니다.", 11, MUTED, KR, "start")
+d.t(24, 464, "장비 비용은 일회성 구매와 전력 같은 운영비를 같은 잣대로 보려고 상각한 값", 11, MUTED, KR, "start")
 
 d.legend(484, [("가장 큰 몫", ACC), ("설비", INFO), ("성능의 열쇠", OK), ("전력", MUTED)])
 

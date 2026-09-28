@@ -13,7 +13,7 @@ d = D(W, H, "SECTION 8.2.1 · CIPHER BLOCK CHAINING",
       "평문과 IV 와 세 암호문 블록은 원문 예제의 값입니다")
 
 BAD_Y, OK_Y = 152, 320
-d.t(24, BAD_Y - 18, "독립 암호화 — 같은 평문이 같은 암호문이 됩니다", 12, BAD, KR, "start", 600)
+d.t(24, BAD_Y - 18, "독립 암호화 — 같은 평문 → 같은 암호문", 12, BAD, KR, "start", 600)
 X0, CW, GAP = 172, 132, 56
 for i, (m, c) in enumerate((("010", "101"), ("010", "101"), ("010", "101"))):
     x = X0 + i * (CW + GAP)
@@ -24,15 +24,15 @@ for i, (m, c) in enumerate((("010", "101"), ("010", "101"), ("010", "101"))):
     d.t(x + CW / 2, BAD_Y + 112, c, 12, BAD, MONO)
 d.t(24, BAD_Y + 30, "평문", 11, SOFT, KR, "start")
 d.t(24, BAD_Y + 112, "암호문", 11, SOFT, KR, "start")
-d.t(X0 + 3 * (CW + GAP) + 8, BAD_Y + 112, "반복이 그대로 보입니다", 11, BAD, KR, "start")
+d.t(X0 + 3 * (CW + GAP) + 8, BAD_Y + 112, "반복 패턴 노출", 11, BAD, KR, "start")
 
 d.line(24, 272, 976, 272, RULE, 0.8)
-d.t(24, OK_Y - 18, "CBC — 직전 암호문을 섞어 넣습니다", 12, OK, KR, "start", 600)
+d.t(24, OK_Y - 18, "CBC — 직전 암호문 혼합", 12, OK, KR, "start", 600)
 IVX = 24
 d.tone(IVX, OK_Y, 116, 48, ACC, 6, "20", 1.4)
 d.t(IVX + 58, OK_Y + 22, "IV = c(0)", 11, ACC, MONO)
 d.t(IVX + 58, OK_Y + 40, "001", 12, ACC, MONO, "middle", 600)
-d.t(IVX + 58, OK_Y + 70, "평문으로 보냅니다", 11, SOFT, KR)
+d.t(IVX + 58, OK_Y + 70, "평문으로 송신", 11, SOFT, KR)
 
 CHAIN = [("m(1)=010", "011", "c(1)=100"), ("m(2)=010", "110", "c(2)=000"), ("m(3)=010", "010", "c(3)=101")]
 CX0, CCW, CGAP = 196, 220, 32
@@ -53,9 +53,9 @@ for i, (m, xor, c) in enumerate(CHAIN):
                f"L {x + CCW + 16} {OK_Y + 24} L {nx - 6} {OK_Y + 24}", OK, 1.4, m="ok")
 
 NY = OK_Y + 196
-d.t(24, NY, "받는 쪽은 c(i) 를 복호해 m(i) ⊕ c(i−1) 을 얻고, 이미 아는 c(i−1) 을 다시 걷어 평문을 복원합니다.",
+d.t(24, NY, "수신측 — c(i) 복호로 m(i) ⊕ c(i−1) 획득, 기지의 c(i−1) 로 평문 복원",
     11, MUTED, KR, "start")
-d.t(24, NY + 22, "IV 가 평문으로 나가도 열쇠 K_S 를 모르면 복호할 수 없고, 추가로 나가는 것은 이 한 블록뿐입니다.",
+d.t(24, NY + 22, "IV 는 평문 전송돼도 K_S 없이 복호 불가 — 추가 노출은 이 한 블록뿐",
     11, MUTED, KR, "start")
 
 d.legend(NY + 44, [("반복이 드러남", BAD), ("연쇄 뒤 암호문", OK), ("한 번만 보내는 IV", ACC), ("열쇠로 하는 일", INFO)])

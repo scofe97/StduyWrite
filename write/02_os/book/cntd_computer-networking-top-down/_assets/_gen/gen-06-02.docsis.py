@@ -23,28 +23,28 @@ d.t(RX + 78, 172, "수천 대", 11, MUTED, KR)
 d.tone(LX, 212, W - 72, 76, INFO, 6, "0E", 1.0)
 d.t(LX + 16, 236, "하향 채널 i", 11, INFO, KR, "start", 600)
 d.t(LX + 16, 256, "24 ~ 192 MHz · 최대 약 1.6 Gbps", 11, MUTED, MONO, "start")
-d.t(LX + 16, 276, "CMTS 하나만 보내므로 다중 접속 문제가 없습니다", 11, MUTED, KR, "start")
+d.t(LX + 16, 276, "CMTS 하나만 보냄 — 다중 접속 문제 없음", 11, MUTED, KR, "start")
 d.arrow([(500, 250), (RX - 8, 250)], INFO, "info", 1.6)
 d.chip(626, 250, "MAP 메시지", INFO, 11)
 
 d.tone(LX, 300, W - 72, 76, OK, 6, "0E", 1.0)
 d.t(LX + 16, 324, "상향 채널 j", 11, OK, KR, "start", 600)
 d.t(LX + 16, 344, "6.4 ~ 96 MHz · 최대 약 1 Gbps", 11, MUTED, MONO, "start")
-d.t(LX + 16, 364, "여러 모뎀이 같은 주파수를 나눠 써서 충돌이 날 수 있습니다", 11, MUTED, KR, "start")
+d.t(LX + 16, 364, "여러 모뎀이 같은 주파수를 나눠 써서 충돌 가능", 11, MUTED, KR, "start")
 d.arrow([(RX - 8, 338), (500, 338)], OK, "ok", 1.6)
 d.chip(626, 338, "데이터와 요청", OK, 11)
 
-d.t(24, 410, "상향 구간 t1 부터 t2 까지는 이렇게 나뉩니다", 12, INK, KR, "start", 600)
+d.t(24, 410, "상향 구간 t1 부터 t2 까지는 이렇게 나뉨", 12, INK, KR, "start", 600)
 MY, MH, REQ_W, ASG_W = 424, 44, 320, 560
 d.tone(24, MY, REQ_W - 4, MH, ACC, 6, "1E", 1.5)
 d.t(24 + (REQ_W - 4) / 2, MY + 20, "요청용 미니슬롯", 11, ACC, KR, "middle", 600)
-d.t(24 + (REQ_W - 4) / 2, MY + 36, "랜덤 접속 · 충돌 가능", 10, ACC, KR)
+d.t(24 + (REQ_W - 4) / 2, MY + 36, "랜덤 접속 · 충돌 가능", 11, ACC, KR)
 d.tone(24 + REQ_W, MY, ASG_W, MH, OK, 6, "14", 1.1)
 d.t(24 + REQ_W + ASG_W / 2, MY + 20, "배정된 미니슬롯 — 데이터 프레임", 11, OK, KR, "middle", 600)
-d.t(24 + REQ_W + ASG_W / 2, MY + 36, "CMTS 가 명시적으로 허가해 충돌이 없습니다", 10, MUTED, KR)
+d.t(24 + REQ_W + ASG_W / 2, MY + 36, "CMTS 가 명시적으로 허가해 충돌 없음", 11, MUTED, KR)
 
 d.line(24, 490, W - 48, 490, RULE, 0.8)
-d.t(24, 510, "모뎀은 상향이 바쁜지도 충돌이 났는지도 감지하지 못합니다. 다음 하향 제어 메시지에 배정이 없으면 충돌로 추론해 백오프합니다.",
+d.t(24, 510, "모뎀은 상향이 바쁜지도 충돌이 났는지도 감지하지 못함 — 다음 하향 제어 메시지에 배정이 없으면 충돌로 추론해 백오프함",
      11, MUTED, KR, "start")
 
 d.legend(528, [("랜덤 접속이 남은 자리", ACC), ("하향", INFO), ("상향", OK)])

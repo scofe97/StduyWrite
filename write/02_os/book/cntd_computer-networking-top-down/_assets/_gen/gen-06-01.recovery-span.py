@@ -23,25 +23,25 @@ for i in range(6):
     x = slot_x(i)
     d.box(x, 108, SLOT - 4, 40, PAPER2, RULE, 0.9)
     d.t(x + (SLOT - 4) / 2, 124, f"링크 {i + 1}", 11, INK, KR, "middle", 600)
-    d.t(x + (SLOT - 4) / 2, 140, NAMES[i], 10, MUTED, MONO)
+    d.t(x + (SLOT - 4) / 2, 140, NAMES[i], 11, MUTED, MONO)
 
 # zone — 무선 한 칸과 유선 다섯 칸
 d.line(TX, 96, TX + 6 * SLOT - 4, 96, RULE, 0.8)
-d.t(slot_x(0) + 54, 90, "오류율 높음", 10, SOFT, KR)
-d.t(slot_x(1) + (5 * SLOT - 4) / 2, 90, "오류율 낮음 — 광 · 동축 · 트위스티드페어", 10, SOFT, KR)
+d.t(slot_x(0) + 54, 90, "오류율 높음", 11, SOFT, KR)
+d.t(slot_x(1) + (5 * SLOT - 4) / 2, 90, "오류율 낮음 — 광 · 동축 · 트위스티드페어", 11, SOFT, KR)
 
 # 오류 발생 지점
-d.chip(slot_x(0) + 54, 176, "비트가 여기서 뒤집혔습니다", BAD, 10)
+d.chip(slot_x(0) + 54, 176, "비트가 여기서 뒤집힘", BAD, 11)
 d.t(LX, 180, "무엇이 일어났나", 11, MUTED, KR, "start")
 
 ROWS = [
-    ("링크 계층이 고칩니다", "ARQ 로 그 링크에서 재전송", 1, ACC, True, "한 칸"),
-    ("트랜스포트가 고칩니다", "TCP 가 종단에서 재전송", 6, INFO, False, "여섯 칸"),
+    ("링크 계층이 고침", "ARQ 로 그 링크에서 재전송", 1, ACC, True, "한 칸"),
+    ("트랜스포트가 고침", "TCP 가 종단에서 재전송", 6, INFO, False, "여섯 칸"),
 ]
 y = 212
 for label, sub, span, color, hot, span_txt in ROWS:
     d.t(LX, y + 16, label, 12, color if hot else INK, KR, "start", 600)
-    d.t(LX, y + 34, sub, 10, MUTED, MONO, "start")
+    d.t(LX, y + 34, sub, 11, MUTED, MONO, "start")
     bw = span * SLOT - 4
     if hot:
         d.tone(slot_x(0), y, bw, 44, color, 6, "1E", 1.6)
@@ -51,8 +51,8 @@ for label, sub, span, color, hot, span_txt in ROWS:
     y += 72
 
 d.line(24, 336, W - 48, 336, RULE, 0.8)
-d.t(24, 358, "그래서 무선 링크는 신뢰 전달을 두고, 광·동축·트위스티드페어 같은 저오류 링크는 두지 않습니다. "
-             "저오류 링크에서는 그 기능이 불필요한 오버헤드가 됩니다.", 11, MUTED, KR, "start")
+d.t(24, 358, "그래서 무선 링크는 신뢰 전달을 두고, 광·동축·트위스티드페어 같은 저오류 링크는 두지 않음 — "
+             "저오류 링크에서는 그 기능이 불필요한 오버헤드가 됨", 11, MUTED, KR, "start")
 
 d.legend(376, [("링크에서 국소 복구", ACC), ("종단 간 복구", INFO), ("오류 발생", BAD)])
 

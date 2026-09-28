@@ -18,7 +18,7 @@ for x, name, ip in ((24, "R1", "200.168.1.100"), (760, "R2", "193.68.2.23")):
 d.arrow([(248, 172), (752, 172)], ACC, "acc", 1.6)
 d.t(500, 160, "SA 하나 — 단방향", 11, ACC, KR, "middle", 600)
 d.arrow([(752, 208), (248, 208)], SOFT, "soft", 1.4, "5 4")
-d.t(500, 228, "돌아오려면 SA 를 하나 더 세웁니다", 11, SOFT, KR)
+d.t(500, 228, "돌아오는 방향은 SA 추가 필요", 11, SOFT, KR)
 
 SX, SW = 24, 470
 d.box(SX, 268, SW, 216, PAPER2, RULE, 1.0)
@@ -35,15 +35,15 @@ for i, (k, v) in enumerate(ITEMS):
 DX, DW = 530, 446
 d.tone(DX, 268, DW, 100, WARN, 8, "14", 1.3)
 d.t(DX + 20, 296, "SAD — 어떻게 할지", 12, WARN, KR, "start", 600)
-d.t(DX + 20, 322, "모든 SA 의 상태를 담습니다.", 11, MUTED, KR, "start")
-d.t(DX + 20, 344, "커널 안의 자료구조입니다.", 11, MUTED, KR, "start")
+d.t(DX + 20, 322, "모든 SA 의 상태 저장", 11, MUTED, KR, "start")
+d.t(DX + 20, 344, "커널 안의 자료구조", 11, MUTED, KR, "start")
 
 d.tone(DX, 384, DW, 100, ACC, 8, "18", 1.4)
 d.t(DX + 20, 412, "SPD — 무엇을 할지", 12, ACC, KR, "start", 600)
 d.t(DX + 20, 438, "어떤 데이터그램을 IPsec 처리할지,", 11, MUTED, KR, "start")
-d.t(DX + 20, 460, "그렇다면 어느 SA 를 쓸지 지정합니다.", 11, MUTED, KR, "start")
+d.t(DX + 20, 460, "해당 시 사용할 SA 지정", 11, MUTED, KR, "start")
 
-d.t(24, 516, "본사·지사 사이 둘 + 영업 사원마다 둘 = 2 + 2n 개. 다만 게이트웨이는 평범한 IPv4 도 함께 내보냅니다.",
+d.t(24, 516, "본사·지사 사이 둘 + 영업 사원마다 둘 = 2 + 2n 개 (게이트웨이는 평범한 IPv4 도 함께 송출)",
     11, SOFT, KR, "start")
 d.legend(536, [("IPsec 개체", INFO), ("SA 하나", ACC), ("상태 항목", OK), ("담는 자리", WARN)])
 out = pathlib.Path(__file__).resolve().parent.parent / "08-04.security-association.svg"

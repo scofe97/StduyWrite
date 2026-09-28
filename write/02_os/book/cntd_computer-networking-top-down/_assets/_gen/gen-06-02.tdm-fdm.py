@@ -24,7 +24,7 @@ def panel(y, h, title, lines):
 
 
 # TDM — 네 칸이 한 프레임, 세 프레임 반복
-d.t(24, 116, "TDM — 시간을 자릅니다", 12, INK, KR, "start", 600)
+d.t(24, 116, "TDM — 시간을 자름", 12, INK, KR, "start", 600)
 SX, SW, SY, SH = 24, 48, 132, 46
 for f in range(3):
     for s in range(4):
@@ -34,19 +34,19 @@ for f in range(3):
         d.t(x + (SW - 4) / 2, SY + 29, str(s + 1), 13, NODE_C[s], MONO, "middle", 600)
 
 d.line(SX, 188, SX + SW - 4, 188, MUTED, 1.1)
-d.t(SX + (SW - 4) / 2, 204, "슬롯", 10, MUTED, KR)
+d.t(SX + (SW - 4) / 2, 204, "슬롯", 11, MUTED, KR)
 d.line(SX, 218, SX + 4 * SW - 4, 218, MUTED, 1.1)
-d.t(SX + (4 * SW - 4) / 2, 234, "프레임 — 네 슬롯이 한 바퀴", 10, MUTED, KR)
-d.t(SX + 4 * SW + 24, 234, "이 패턴이 계속 돕니다", 10, SOFT, KR, "start")
+d.t(SX + (4 * SW - 4) / 2, 234, "프레임 — 네 슬롯이 한 바퀴", 11, MUTED, KR)
+d.t(SX + 4 * SW + 24, 234, "이 패턴이 계속 돎", 11, SOFT, KR, "start")
 
 panel(132, 112, "TDM 이 얻는 것과 잃는 것", [
-    (ACC, "2 번 슬롯은 한 송수신 쌍에 고정입니다"),
-    (OK, "충돌이 없고 완벽히 공정합니다"),
-    (MUTED, "혼자 보내도 R/4 를 넘지 못합니다"),
+    (ACC, "2 번 슬롯은 한 송수신 쌍에 고정"),
+    (OK, "충돌 없고 완벽히 공정함"),
+    (MUTED, "혼자 보내도 R/4 를 넘지 못함"),
 ])
 
 # FDM — 대역을 자릅니다
-d.t(24, 274, "FDM — 주파수를 자릅니다", 12, INK, KR, "start", 600)
+d.t(24, 274, "FDM — 주파수를 자름", 12, INK, KR, "start", 600)
 FY, FH, FW = 290, 28, 480
 for i in range(4):
     y = FY + i * (FH + 6)
@@ -57,13 +57,13 @@ d.line(520, FY, 520, FBOT, RULE, 1.2)
 d.t(532, (FY + FBOT) / 2 + 4, "한 링크", 11, MUTED, KR, "start")
 
 panel(290, 112, "FDM 이 하는 일", [
-    (INFO, "R bps 하나를 R/4 짜리 넷으로 나눕니다"),
-    (MUTED, "장점도 단점도 TDM 과 같습니다"),
-    (MUTED, "셀룰러·WiFi·블루투스·위성에 쓰입니다"),
+    (INFO, "R bps 하나를 R/4 짜리 넷으로 나눔"),
+    (MUTED, "장점도 단점도 TDM 과 같음"),
+    (MUTED, "셀룰러·WiFi·블루투스·위성에 쓰임"),
 ])
 
 d.line(24, 440, W - 48, 440, RULE, 0.8)
-d.t(24, 462, "CDMA 는 시간도 주파수도 아닌 코드를 나눠 줍니다. 3G 셀룰러의 기반 기술이었으나 4G·5G 에서는 다른 기술로 바뀌었습니다.",
+d.t(24, 462, "CDMA 는 시간도 주파수도 아닌 코드를 나눠 줌 — 3G 셀룰러의 기반 기술이었으나 4G·5G 에서는 다른 기술로 바뀜",
      11, MUTED, KR, "start")
 
 d.legend(484, [("추적하는 몫 — 노드 2", ACC), ("노드 1", INFO), ("노드 3", OK), ("노드 4", MUTED)])

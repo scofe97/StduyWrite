@@ -49,9 +49,9 @@ d.t(X1, AY + 42, "GHz", 10, SOFT, MONO, "end")
 
 PY = AY + 58
 d.box(24, PY, 880, 96, PAPER2, RULE, 1.0)
-d.t(44, PY + 26, "Hz 로 재는 대역폭과 bps 로 재는 전송률은 다른 말입니다", 12, INK, KR, "start", 600)
+d.t(44, PY + 26, "Hz 로 재는 대역폭과 bps 로 재는 전송률은 다른 말", 12, INK, KR, "start", 600)
 LINES = [
-    "폭이 넓을수록 초당 보낼 수 있는 비트가 늘지만, 둘의 관계는 단순 비례가 아닙니다.",
+    "폭이 넓을수록 초당 보낼 수 있는 비트가 늘지만, 둘의 관계는 단순 비례가 아님",
     "원문의 예 — 20 MHz 폭 802.11n 채널은 최대 72.2 Mbps, 40 MHz 폭은 최대 150 Mbps.",
 ]
 for j, ln in enumerate(LINES):

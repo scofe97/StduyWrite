@@ -50,8 +50,8 @@ for i, ln in enumerate(["무작위 논스 · 인증 토큰(순서 번호 포함)
 
 d.tone(514, PY, 462, 96, ACC, 8, "16", 1.3)
 d.t(534, PY + 26, "앵커 열쇠", 12, ACC, KR, "start", 600)
-d.t(534, PY + 52, "인증이 끝나면 방문 망에 한 번짜리 대칭 열쇠를 넘깁니다.", 11, MUTED, KR, "start")
-d.t(534, PY + 74, "기기도 같은 값을 스스로 계산합니다 — WiFi 의 PMK 와 같은 자리입니다.", 11, MUTED, KR, "start")
+d.t(534, PY + 52, "인증 완료 후 방문 망에 1회성 대칭 열쇠 전달", 11, MUTED, KR, "start")
+d.t(534, PY + 74, "기기도 같은 값을 자체 계산 — WiFi PMK 와 동일한 위치", 11, MUTED, KR, "start")
 
 d.legend(616, [("기기가 여는 것", INFO), ("보호 통로", OK), ("고향 망이 만든 것", WARN), ("판정과 열쇠", ACC)])
 out = pathlib.Path(__file__).resolve().parent.parent / "08-04.5g-aka.svg"
