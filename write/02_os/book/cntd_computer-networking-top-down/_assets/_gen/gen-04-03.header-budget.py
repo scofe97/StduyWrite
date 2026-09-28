@@ -7,7 +7,7 @@ from dd import D, PAPER, PAPER2, INK, MUTED, SOFT, RULE, ACC, WARN, KR, MONO, es
 W, H = 940, 560
 d = D(W, H, "IPV4 HEADER · 20 BYTES",
       "헤더 20바이트를 무엇이 차지하나",
-      "IPv4 헤더 20바이트를 필드 묶음별 면적으로 나눈 트리맵. 주소 두 개가 8바이트로 40%를 차지하고, 포워딩이 실제로 읽는 것은 목적지 4바이트다.",
+      "IPv4 헤더 20바이트를 필드 묶음별 면적으로 나눈 트리맵. 주소 두 개가 8바이트로 40%를 차지하고, 포워딩 표 조회에 쓰는 것은 목적지 4바이트다.",
       "면적 = 바이트 수 · 주소 두 개가 8바이트로 헤더의 40%를 차지합니다")
 
 # 플롯: x 40→900 (860), y 100→444 (344). 두 행, 4px 거터.
@@ -19,8 +19,8 @@ W2 = (860 - 3 * G) / 4                     # 212
 
 # (이름, 바이트, 참값 share, 부제, 누가 만지나, 잉크 농도)
 row1 = [
-    ("목적지 주소", 4, 20.0, "16-19", "포워딩이 읽는 유일한 필드", "fwd"),
-    ("출발지 주소", 4, 20.0, "12-15", "출발지가 적고 끝까지 그대로", "fix"),
+    ("목적지 주소", 4, 20.0, "16-19", "포워딩 표 조회에 쓰는 유일한 필드", "fwd"),
+    ("출발지 주소", 4, 20.0, "12-15", "출발지가 적음 · NAT 를 지날 때 바뀜", "fix"),
     ("식별자·플래그·오프셋", 4, 20.0, "4-7", "단편화용. IPv6 가 버린 자리", "fix"),
 ]
 row2 = [
@@ -53,7 +53,7 @@ for i, (nm, nb, sh, off, note, op) in enumerate(row1):
 for i, (nm, nb, sh, off, note, op) in enumerate(row2):
     cell(X0 + i * (W2 + G), R2_Y, W2, R2_H, nm, nb, sh, off, note, op)
 
-d.legend(478, [("포워딩이 읽는 필드", ACC), ("홉마다 바뀌는 필드", WARN), ("출발지가 적고 그대로 가는 필드", INK)])
+d.legend(478, [("포워딩 표 조회에 쓰는 필드", ACC), ("홉마다 바뀌는 필드", WARN), ("출발지가 적는 필드", INK)])
 d.t(900, 500, "AREA = HEADER BYTES · RFC 791 · 20B, NO OPTIONS", 8, SOFT, MONO, "end")
 
 out = pathlib.Path(__file__).resolve().parent.parent / "04-03.header-budget.svg"

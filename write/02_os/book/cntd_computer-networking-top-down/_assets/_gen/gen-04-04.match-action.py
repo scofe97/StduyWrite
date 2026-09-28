@@ -1,5 +1,6 @@
 # 타입 스펙: type-layers — 일치 대상이 어느 계층에 걸쳐 있는지를 층으로 쌓는다.
 # 출처: 《Computer Networking A Top-Down Approach》 9판 §4.4.1 Figure 4.29 (OpenFlow 1.0) + §4.4.2
+#       재작성 필드 수는 OpenFlow 1.0.0 규격 ofp_action_type(SET_VLAN_VID·PCP, SET_DL_SRC·DST, SET_NW_SRC·DST·TOS, SET_TP_SRC·DST = 9개, 이더넷 타입 없음). 원문 10개는 정오.
 import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 from dd import D, PAPER, PAPER2, INK, MUTED, SOFT, RULE, ACC, BAD, KR, MONO
@@ -42,7 +43,7 @@ d.t(BX - 14, AY + 26, "동작", 11, ACC, KR, "end", 600)
 d.t(BX - 14, AY + 44, "3종", 11, MUTED, KR, "end")
 acts = [("전달", "포트 하나 · 여러 포트 · 컨트롤러"),
         ("폐기", "동작이 없는 항목이 곧 폐기"),
-        ("필드 재작성", "2·3·4계층 필드 10개")]
+        ("필드 재작성", "2·3·4계층 필드 9개 · 원문은 10개")]
 cw = (BW - 24 - 2 * 10) / 3
 for i, (a, sub) in enumerate(acts):
     cx = BX + 12 + i * (cw + 10)

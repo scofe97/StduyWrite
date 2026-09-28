@@ -3,6 +3,8 @@
 # 2026-09-14 재구성: 5.12 ns 를 도식 아래 별도 사각형으로 띄워 두면 패킷 흐름과 끊긴다는 지적을 받아
 #   (1) 입력 링크 위의 패킷 간격으로 5.12 ns 를 보이고 (2) 그 간격 안에서 입력 포트가 도는 단계를 시간축으로 펼쳤다.
 # 타입 스펙: type-architecture — 구성 요소와 그 사이 관계. zone 으로 평면을 묶고 관계에 시간 척도를 단다.
+# 2026-09-28 정정: "합 > 5.12 ns 면 밀림" 캡션이 본문 §3 의 파이프라인 설명과 부딪친다는 적대적 검증 지적을 받아,
+#   예산을 처리 간격(5.12 ns 마다 하나)으로 적고 단계 합은 더 길어도 된다고 고쳤다. 원문 314행은 처리율 예산이다.
 #   축약: 아래 확대 패널의 세 단계 칸 너비는 균등 분할이다. 원문이 단계별 소요 시간을 주지 않으므로
 #         너비가 비율로 읽히지 않게 캡션에 그 사실을 적었다.
 import sys; sys.path.insert(0, ".")
@@ -14,7 +16,7 @@ d = D(W, H, "COMPUTER NETWORKING TOP-DOWN · 04-01 §3",
       "라우터의 네 부분",
       "원문 Figure 4.4. 입력 포트·스위칭 패브릭·출력 포트는 하드웨어이고 라우팅 프로세서만 소프트웨어다. "
       "입력 링크의 패킷 간격이 곧 입력 포트가 쓸 수 있는 시간 예산이다.",
-      "패킷은 5.12 ns 마다 들어오고, 판단은 그 사이에 끝나야 합니다")
+      "패킷은 5.12 ns 마다 들어오고, 판단도 5.12 ns 마다 하나씩 나와야 합니다")
 
 # ── 제어 평면 ──
 d.o.append(f'<rect x="24" y="100" width="928" height="76" rx="8" fill="{INFO}08" '
@@ -64,37 +66,45 @@ d.o.append(f'<rect x="908" y="285" width="32" height="22" rx="3" '
 d.path("M 344 338 L 344 432", ACC, 1.2, m="acc", dash="5 4")
 d.t(356, 388, "이 안을 시간으로 펼치면", 12, ACC, KR, "start")
 
-# ── 확대 — 입력 포트 안의 5.12 ns ──
+# ── 확대 — 입력 포트 안의 파이프라인 ──
+# 2026-09-28 재검증 정정: 단계 1~3 을 0~5.12 ns 한 구간에 이어 그리면 "단계 합이 5.12 ns 안에 든다"로 읽혔다.
+#   단계를 행, 5.12 ns 간격을 열로 두고 패킷이 한 칸씩 비껴 가게 그려, 겹쳐서 5.12 ns 마다 하나씩 나감을 보였다.
+#   축약: 단계 하나가 간격 하나에 든다고 가정했다. 원문은 단계별 소요 시간을 말하지 않는다.
 d.o.append(f'<rect x="24" y="440" width="928" height="264" rx="8" fill="{ACC}06" '
            f'stroke="{ACC}" stroke-width="1" stroke-dasharray="4 4"/>')
-d.t(36, 434, "입력 포트 안 — 다음 데이터그램이 오기 전에 끝나야 하는 일", 12, ACC, KR, "start")
+d.t(36, 434, "입력 포트 안 — 단계가 겹쳐 5.12 ns 마다 한 패킷씩 나감", 12, ACC, KR, "start")
 
-SEG = [("1", "물리 층 종단", "링크 층 처리", False),
-       ("2", "헤더 검사", "버전 · 체크섬 · TTL", False),
-       ("3", "포워딩 테이블 조회", "최장 접두 일치", True)]
-SX, SW = 88, 264
-for i, (num, l1, l2, focal) in enumerate(SEG):
-    x = SX + i * SW
-    if focal:
-        d.tone(x, 496, SW, 72, ACC, 6, "14", 1.4)
-    else:
-        d.box(x, 496, SW, 72, PAPER2, RULE, 1.0, 6)
-    c = ACC if focal else INK
-    d.t(x + SW / 2, 518, num, 11, SOFT, MONO)
-    d.t(x + SW / 2, 540, l1, 13, c, KR, "middle", 600)
-    d.t(x + SW / 2, 560, l2, 12, SOFT, KR)
+SEG = [("1  종단 · 링크 층", False), ("2  헤더 검사", False), ("3  조회 · 최장 접두", True)]
+GX, CW, RH = 232, 168, 36
+PK = "ABCD"
+for r, (lab, focal) in enumerate(SEG):
+    y = 460 + r * (RH + 8)
+    d.t(44, y + 23, lab, 12, ACC if focal else INK, KR, "start", 600 if focal else 400)
+    for col in range(4):
+        x = GX + col * CW
+        p = col - r
+        if p < 0:
+            d.box(x + 4, y, CW - 8, RH, PAPER2, RULE, 0.6, 4)
+            continue
+        if focal:
+            d.tone(x + 4, y, CW - 8, RH, ACC, 4, "18", 1.2)
+        else:
+            d.box(x + 4, y, CW - 8, RH, PAPER2, RULE, 1.0, 4)
+        d.t(x + CW / 2, y + 23, f"패킷 {PK[p]}", 12, ACC if focal else INK, KR, "middle", 600 if focal else 400)
 
-d.line(88, 592, 880, 592, MUTED, 1.0)
-d.line(88, 584, 88, 600, MUTED, 1.0)
-d.line(880, 584, 880, 600, MUTED, 1.0)
-d.t(88, 616, "0 ns", 12, SOFT, MONO)
-d.t(880, 616, "5.12 ns", 12, ACC, MONO)
-d.line(880, 476, 880, 584, ACC, 1.4, "4 4")
-d.t(872, 470, "다음 데이터그램 도착", 12, ACC, KR, "end")
+AY = 600
+d.line(GX, AY, GX + 4 * CW, AY, MUTED, 1.0)
+for k, lab in enumerate(["0", "5.12", "10.24", "15.36", "20.48 ns"]):
+    x = GX + k * CW
+    d.line(x, AY - 6, x, AY + 6, MUTED, 1.0)
+    d.t(x, AY + 22, lab, 12, SOFT, MONO)
+d.line(GX + 3 * CW, AY - 6, GX + 3 * CW, AY + 6, ACC, 1.4)
+d.line(GX + 4 * CW, AY - 6, GX + 4 * CW, AY + 6, ACC, 1.4)
+d.t(44, AY + 4, "시간", 12, SOFT, KR, "start")
 
-d.t(88, 646, "칸 너비는 균등 분할 — 원문은 단계별 비용을 말하지 않음", 13, MUTED, KR, "start")
-d.t(88, 668, "합 > 5.12 ns → 뒤 패킷이 입력에서 밀림 · 포트 N 개면 파이프라인도 N 배", 13, MUTED, KR, "start")
-d.t(88, 690, "셋 다 하드웨어 · 제어 평면만 소프트웨어 (밀리초~초)", 13, INK, KR, "start")
+d.t(44, 648, "패킷 A 는 15.36 ns 에 조회를 마치고, B 는 5.12 ns 뒤에 이어 나감 — 간격이 곧 처리 속도", 13, ACC, KR, "start")
+d.t(44, 670, "단계 하나 = 간격 하나는 가정 — 원문은 단계별 소요 시간을 말하지 않음 · 포트 N 개면 N 배 빨라야 함", 12, MUTED, KR, "start")
+d.t(44, 692, "셋 다 하드웨어 · 제어 평면만 소프트웨어 (밀리초~초)", 12, INK, KR, "start")
 
 d.legend(H - 44, [("5.12 ns 예산과 조회", ACC), ("제어 평면 — 초", INFO), ("데이터 평면 — 나노초", MUTED)])
 d.save("04-01.router-anatomy.svg")

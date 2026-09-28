@@ -23,7 +23,7 @@ src_top = 184                                   # 4096 → 256px, 184..440
 c2 = [("Organization 0", "200.23.16.0/23 · 512", 512, 140),
       ("조직 2~7 여섯 곳", "6 x /23 · 3,072", 3072, 216),
       ("Organization 1", "200.23.18.0/23 · 512", 512, 452)]
-c3 = [("Fly-By-Night 가 광고", "200.23.16.0/20 · 3,584", 3584, 168),
+c3 = [("Fly-By-Night 가 광고", "200.23.16.0/20 · 실효 3,584", 3584, 168),
       ("ISPs-R-Us 가 광고", "200.23.18.0/23 · 512", 512, 424)]
 
 
@@ -75,7 +75,7 @@ for i, (nm, sub, n, y) in enumerate(c3):
     focal = i == 1
     bar(C3, y, n, focal=focal)
     d.t(C3 + 18, y + n * K / 2 - 4, nm, 12, ACC if focal else INK, KR, "start", 600)
-    d.t(C3 + 18, y + n * K / 2 + 14, sub, 10, MUTED, MONO, "start")
+    d.t(C3 + 18, y + n * K / 2 + 14, sub, 11, MUTED, MONO, "start")  # 한글 "실효" 가 들어가 11px
 
 d.t(40, 512, "조직 1 은 ISP 블록 안 · 다른 ISP 가 더 구체적인 /23 광고 → 최장 접두어 일치로 그쪽 채택", 11, MUTED, KR, "start")
 

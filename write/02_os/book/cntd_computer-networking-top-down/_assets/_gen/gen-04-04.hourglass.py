@@ -28,7 +28,7 @@ d.t(480, 322, "IP", 18, ACC, MONO, "middle", 600)
 d.t(480, 152, "애플리케이션 계층", 12, INK, KR, "middle", 600)
 d.t(480, 172, "HTTP · SMTP · IMAP · DNS · DASH · BitTorrent · ...", 10, MUTED, MONO)
 d.t(480, 216, "트랜스포트 계층", 12, INK, KR, "middle", 600)
-d.t(480, 236, "TCP · UDP · QUIC", 10, MUTED, MONO)
+d.t(480, 236, "TCP · UDP", 10, MUTED, MONO)
 d.t(480, 274, "네트워크 계층은 하나뿐", 11, MUTED, KR)
 
 d.t(480, 384, "링크 계층", 12, INK, KR, "middle", 600)
