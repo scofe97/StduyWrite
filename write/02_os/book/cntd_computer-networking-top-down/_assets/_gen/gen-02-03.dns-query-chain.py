@@ -42,7 +42,7 @@ d.msg("dns.umass.edu", "dns.nyu.edu", "gaia 의 IP 주소", 484, MUTED, dash="5 
 
 d.msg("dns.nyu.edu", "cse.nyu.edu", "answer", 538, ACC, mk="acc", dash="5 4")
 
-d.t(20, 592, "가운데 여섯 개가 반복 질의입니다 — 루트도 TLD 도 답을 대신 구해다 주지 않고 다음 단계의 주소만 돌려줌",
+d.t(20, 592, "가운데 여섯 메시지는 반복 질의 셋과 그 응답 — 루트도 TLD 도 답을 대신 구해다 주지 않고 다음 단계의 주소만 돌려줌",
      11, MUTED, KR, "start")
 d.t(20, 614, "TLD 가 권한 서버를 바로 모르고 중간 서버를 한 단계 더 거치면 메시지가 열 개가 됨",
      11, MUTED, KR, "start")

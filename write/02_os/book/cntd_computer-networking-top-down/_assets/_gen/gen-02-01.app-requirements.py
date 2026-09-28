@@ -11,14 +11,14 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 1000, 648
+W, H = 1000, 696
 CX, CY = 500, 320
 XL, XR, YT, YB = 150, 850, 140, 500
 
 d = D(W, H, "COMPUTER NETWORKING TOP-DOWN · 02-01 §3",
       "앱이 트랜스포트에 요구하는 것",
       "원문 Figure 2.4 를 손실 축과 시간 축의 사분면으로 다시 놓은 그림. 오른쪽 아래 칸에는 원문 표의 어떤 앱도 놓이지 않는다.",
-      "손실을 견디는 앱은 전부 시간이 촉박한 앱입니다 — 시간이 있으면 다시 보내면 되기 때문입니다")
+      "원문 표에 고른 앱 안에서는 손실을 견디는 앱이 모두 시간에 민감함 — 빈 칸은 법칙이 아니라 고른 결과")
 
 # 축 — 중심에서 네 방향으로
 for x2, y2 in ((XR, CY), (XL, CY), (CX, YT), (CX, YB)):
@@ -56,7 +56,9 @@ d.t(713, 410, "여기에 놓이는 앱이 없음", 11, SOFT, KR)
 d.t(713, 432, "손실은 견디는데 시간은 여유로운", 11, SOFT, KR)
 d.t(713, 450, "조합이 원문 표에 없음", 11, SOFT, KR)
 
-d.t(12, 556, "손실 불가 쪽은 전부 TCP 를 고름 · 손실 내성 쪽은 지연을 못 견뎌 UDP 를 고르지만, 방화벽이 UDP 를 막으면 TCP 를 예비로 둠",
+d.t(12, 556, "손실 불가 쪽은 전부 TCP 를 고름", 11, MUTED, KR, "start")
+d.t(12, 578, "화상 회의는 UDP 선호 · 이유는 최소 속도 · UDP 차단 시 TCP 예비", 11, MUTED, KR, "start")
+d.t(12, 600, "저장 비디오 스트리밍 — 손실 내성 · 수 초 여유 · TCP(HTTP·DASH) 위에서 재전송을 받음",
      11, MUTED, KR, "start")
 
 d.legend(H - 76, [("UDP 를 부르는 자리", ACC), ("나머지", MUTED)])

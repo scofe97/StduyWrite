@@ -33,7 +33,7 @@ for zi, (zname, zy, cluster_i) in enumerate(ZONES):
             d.t(x, ny + 46, "CDN 클러스터", 11, ACC, KR)
         if i < len(XS) - 1:
             d.path(f"M {x + NW / 2 + 4} {ny + NH / 2} L {XS[i + 1] - NW / 2 - 10} {ny + NH / 2}", MUTED, 1.2, m="ar")
-    tail = "사용자와 서버 사이 링크·라우터가 가장 적음" if zi == 0 else "운영할 곳이 적은 대신 지연이 더 큼"
+    tail = "사용자와 서버 사이 링크·라우터가 가장 적음" if zi == 0 else "운영할 곳이 적은 대신 지연이 더 클 수 있음"
     d.t(32, zy + 136, tail, 11, SOFT, KR, "start")
 
 d.t(20, 526, "같은 목표에 분산의 정도만 다르게 고른 둘 · 깊이 들어갈수록 병목 링크는 줄고 유지·관리는 어려워짐",

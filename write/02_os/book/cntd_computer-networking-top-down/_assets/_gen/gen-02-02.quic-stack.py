@@ -1,6 +1,7 @@
 # 02-02 §7 — 원문 Figure 2.11 의 두 스택. a. 전통적 보안 HTTP, b. QUIC 기반 HTTP/3.
 # 위 두 칸을 애플리케이션 층으로 묶은 것은 원문의 주장 그대로다 — 원문은 TLS 도 QUIC 도
 # 트랜스포트 프로토콜이 아니라 애플리케이션 층의 하위 층으로 놓는다.
+# 표준(RFC 9000 초록 "the core of the QUIC transport protocol")은 QUIC 을 트랜스포트로 규정하므로 부제에 함께 적는다.
 # 타입 스펙: type-layers — 위에서 아래로 애플리케이션에서 아래층까지. 두 스택을 나란히 둬 대비한다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, PAPER, PAPER2, RULE, KR, MONO
@@ -13,7 +14,7 @@ Y0 = 168
 d = D(W, H, "COMPUTER NETWORKING TOP-DOWN · 02-02 §7",
       "악수가 두 번이냐 한 번이냐",
       "원문 Figure 2.11 의 두 프로토콜 스택. 왼쪽은 TCP 위에 TLS 를 얹은 https, 오른쪽은 UDP 위의 QUIC 이다.",
-      "원문은 TLS 도 QUIC 도 트랜스포트가 아니라 애플리케이션 층의 하위 층으로 놓습니다")
+      "원문의 틀 — TLS 도 QUIC 도 애플리케이션 층의 하위 층 · RFC 9000 은 QUIC 을 트랜스포트로 규정")
 
 STACKS = [
     (LCX, "a. 전통적 보안 HTTP", ["HTTP/1.1 · HTTP/2", "TLS", "TCP", "IP"], False),
