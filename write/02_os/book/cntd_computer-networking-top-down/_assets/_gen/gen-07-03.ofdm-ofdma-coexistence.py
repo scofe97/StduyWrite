@@ -15,11 +15,11 @@ LX, LW = 24, 168
 CX0, CW = 208, 136
 SLOTS = ["t0", "t1", "t2", "t3", "t4"]
 LANES = [
-    (136, "레거시 802.11g 기기", "OFDM 만 압니다", INFO,
+    (136, "레거시 802.11g 기기", "OFDM 만 인식", INFO,
      ["기기 a|채널 전체", "기기 b|채널 전체", "", "기기 b|채널 전체", ""]),
-    (248, "WiFi 6 기기", "OFDMA 를 압니다", OK,
+    (248, "WiFi 6 기기", "OFDMA 인식", OK,
      ["", "", "기기 1·2·4·5|RU 를 나눠 씀", "", "기기 1·2·3|RU 를 나눠 씀"]),
-    (360, "AP", "누가 언제 쓸지 정합니다", ACC,
+    (360, "AP", "누가 언제 쓸지 결정", ACC,
      ["", "", "MU-RTS 로|채널 예약", "", "MU-RTS 로|채널 예약"]),
 ]
 LH = 96
@@ -28,7 +28,7 @@ for i, s in enumerate(SLOTS):
 for ly, name, sub, c, cells in LANES:
     d.tone(LX, ly, LW, LH, c, 6, "12", 1.2)
     d.t(LX + LW / 2, ly + 38, name, 12, c, KR, "middle", 600)
-    d.t(LX + LW / 2, ly + 60, sub, 10, MUTED, KR)
+    d.t(LX + LW / 2, ly + 60, sub, 11, MUTED, KR)
     for i, txt in enumerate(cells):
         x = CX0 + i * CW
         if txt:
@@ -41,7 +41,7 @@ for ly, name, sub, c, cells in LANES:
             d.box(x + 4, ly + 12, CW - 8, LH - 24, PAPER, RULE, 0.7, 4)
 d.line(CX0, 128, CX0 + len(SLOTS) * CW, 128, RULE, 0.8)
 d.arrow([(CX0, 470), (CX0 + len(SLOTS) * CW, 470)], SOFT, "soft", 1.2)
-d.t(CX0 + len(SLOTS) * CW / 2, 490, "시간", 10, SOFT, KR)
+d.t(CX0 + len(SLOTS) * CW / 2, 490, "시간", 11, SOFT, KR)
 
 PY = 506
 d.box(24, PY, 880, 56, PAPER2, RULE, 1.0)

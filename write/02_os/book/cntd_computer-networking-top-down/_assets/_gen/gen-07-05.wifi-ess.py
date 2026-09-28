@@ -13,28 +13,28 @@ d = D(W, H, "SECTION 7.5.2 · MOBILITY IN A WIFI NETWORK",
 
 d.tone(56, 148, 552, 228, ACC, 10, "08", 1.4)
 d.t(76, 176, "확장 서비스 집합 (ESS)", 12, ACC, KR, "start", 600)
-d.t(76, 196, "AP 들이 같은 SSID 를 쓰면 하나의 WLAN 으로 보입니다", 10, MUTED, KR, "start")
+d.t(76, 196, "AP 들이 같은 SSID 를 쓰면 하나의 WLAN 으로 보임", 11, MUTED, KR, "start")
 
 BSS = [(96, 220, "BSS 2", "AP2", INFO), (356, 220, "BSS 3", "AP3", INFO)]
 for x, y, name, ap, c in BSS:
     d.tone(x, y, 220, 104, c, 8, "12", 1.2)
     d.t(x + 110, y + 30, name, 12, c, KR, "middle", 600)
     d.t(x + 110, y + 52, ap, 11, MUTED, MONO)
-    d.t(x + 110, y + 76, "여기 붙은 기기들", 10, SOFT, KR)
+    d.t(x + 110, y + 76, "여기 붙은 기기들", 11, SOFT, KR)
 
 d.arrow([(206, 350), (316, 350)], OK, "ok", 1.6)
-d.t(261, 342, "기기가 옮겨 갑니다", 10, OK, KR)
+d.t(261, 342, "기기 이동", 11, OK, KR)
 
 d.box(660, 148, 244, 92, PAPER2, RULE, 1.0)
 d.t(782, 180, "스위치 또는 라우터", 12, INK, KR, "middle", 600)
-d.t(782, 204, "두 AP 가 같은 서브넷에 붙습니다", 10, MUTED, KR)
-d.t(782, 224, "그래서 3 계층 주소가 안 바뀝니다", 10, MUTED, KR)
+d.t(782, 204, "두 AP 가 같은 서브넷에 소속", 11, MUTED, KR)
+d.t(782, 224, "그래서 3 계층 주소 불변", 11, MUTED, KR)
 d.arrow([(608, 194), (656, 194)], MUTED, "ar", 1.3)
 
 d.tone(660, 264, 244, 100, OK, 8, "12", 1.2)
 d.t(782, 292, "망 계층이 보기에는", 12, OK, KR, "middle", 600)
 d.t(782, 316, "이 기기는 이동 없음으로 관측", 11, OK, KR)
-d.t(782, 340, "서브넷을 떠난 적이 없기 때문입니다", 10, MUTED, KR)
+d.t(782, 340, "서브넷을 떠난 적이 없기 때문", 11, MUTED, KR)
 
 PY = 396
 d.box(24, PY, 430, 90, PAPER2, RULE, 1.0)

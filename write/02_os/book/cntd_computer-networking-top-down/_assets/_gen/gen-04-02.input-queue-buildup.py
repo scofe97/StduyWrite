@@ -3,7 +3,7 @@
 # 타입 스펙: type-data-flow — semantic-patterns 의 "Fan-in queue / bottleneck".
 #           출발지 여럿 · 보이는 큐 슬롯 · 병목 하나 · 슬롯마다 누적되는 잔량.
 import sys; sys.path.insert(0, "."); sys.path.insert(0, "_gen")
-from dd import OK, WARN, MUTED, SOFT, ACC
+from dd import MUTED, SOFT, ACC
 from _cc_04_02_slots import frame, slot, out_arrow, LEGEND_Y
 
 d = frame("패브릭이 회선만큼만 빠르면 줄이 쌓입니다",
@@ -16,5 +16,5 @@ slot(d, 1, crossed=1, left=4)
 slot(d, 2, crossed=1, left=6, focal=True)
 out_arrow(d, 2)
 
-d.legend(LEGEND_Y, [("패브릭을 건너 나감", OK), ("입력 큐에 남음", WARN), ("멈추지 않는 누적", ACC)])
+d.legend(LEGEND_Y, [("멈추지 않는 누적", ACC)])
 d.save("04-02.input-queue-buildup.svg")

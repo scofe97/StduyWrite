@@ -51,7 +51,7 @@ for jx, jy in JITTER:
     d.o.append(f'<circle cx="{tx + jx}" cy="{ty + jy}" r="3" fill="{ACC}" opacity="0.85"/>')
 d.o.append(f'<circle cx="{tx - 26}" cy="{ty + 4}" r="5.5" fill="none" stroke="{BAD}" stroke-width="1.8"/>')
 d.line(tx - 33.3, ty, tx - 26, ty + 4, BAD, 0.9, "2 3")
-d.t(ncx, PY + 52, "잡음에 의한 수신점 산포", 10, ACC, KR)
+d.t(ncx, PY + 52, "잡음에 의한 수신점 산포", 11, ACC, KR)
 
 BY = PY + PH + 26
 d.box(24, BY, 880, 92, PAPER2, RULE, 1.0)

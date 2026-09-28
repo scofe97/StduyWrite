@@ -23,12 +23,12 @@ for x, want, c in WANT:
 PY = 252
 d.t(24, PY - 12, "프록시 하나 + TLS", 12, INFO, KR, "start", 600)
 CHAIN = [(24, "나", "", INK), (216, "프록시", "TLS 로 감쌈", INFO),
-         (408, "사이트", "프록시 IP 만 봅니다", OK)]
+         (408, "사이트", "프록시 IP 만 인지", OK)]
 for x, name, sub, c in CHAIN:
     d.box(x, PY, 152, 64, PAPER2, RULE, 1.0, 7)
     d.t(x + 76, PY + (38 if not sub else 28), name, 12, c, KR, "middle", 600)
     if sub:
-        d.t(x + 76, PY + 50, sub, 10, MUTED, KR)
+        d.t(x + 76, PY + 50, sub, 11, MUTED, KR)
 for a in (176, 368):
     d.arrow([(a + 2, PY + 32), (a + 36, PY + 32)], MUTED, "ar", 1.3)
 d.tone(608, PY, 368, 64, WARN, 7, "14", 1.3)

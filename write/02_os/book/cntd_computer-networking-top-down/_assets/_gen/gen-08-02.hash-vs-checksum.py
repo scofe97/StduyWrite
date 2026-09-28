@@ -24,9 +24,9 @@ for gi, (text, rows, c, note) in enumerate(MSGS):
             x, y = X0 + ci * CW, gy + ri * 34
             d.box(x, y, CW - 8, 30, PAPER2, RULE, 0.9, 4)
             d.t(x + (CW - 8) / 2, y + 20, b, 11, INK, MONO)
-    d.t(X0 - 16, gy + 20, "묶음 1", 10, SOFT, KR, "end")
-    d.t(X0 - 16, gy + 54, "묶음 2", 10, SOFT, KR, "end")
-    d.t(X0 - 16, gy + 88, "묶음 3", 10, SOFT, KR, "end")
+    d.t(X0 - 16, gy + 20, "묶음 1", 11, SOFT, KR, "end")
+    d.t(X0 - 16, gy + 54, "묶음 2", 11, SOFT, KR, "end")
+    d.t(X0 - 16, gy + 88, "묶음 3", 11, SOFT, KR, "end")
     d.line(X0, gy + 106, X0 + 4 * CW - 8, gy + 106, RULE, 1.0)
     for ci, b in enumerate("B2 C1 D2 AC".split()):
         x = X0 + ci * CW

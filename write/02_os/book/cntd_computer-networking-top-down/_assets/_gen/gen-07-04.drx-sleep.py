@@ -46,7 +46,7 @@ for t, lab, desc in EVENTS:
 for i, (t, lab, desc) in enumerate(EVENTS):
     col = i % 2
     row = i // 2
-    d.t(24 + col * 460, AY + 34 + row * 20, f"{lab}  {desc}", 10, MUTED, KR, "start")
+    d.t(24 + col * 460, AY + 34 + row * 20, f"{lab}  {desc}", 11, MUTED, KR, "start")
 
 LY = AY + 100
 d.line(fx(62), LY, fx(94), LY, WARN, 1.8)

@@ -17,7 +17,7 @@ STEPS = [
     ("ap1.0", "이름만 제시", "\"나는 앨리스다\"", "트루디도 똑같이\n전송 가능", BAD),
     ("ap2.0", "출발지 IP 확인", "알려진 주소와 대조", "IP 스푸핑으로\n주소 위조", BAD),
     ("ap3.0", "비밀번호 전송", "공유 비밀", "엿들으면\n그대로 노출", BAD),
-    ("ap3.1", "비밀번호를 암호화", "K_A-B 로 잠급니다", "녹음해서 다시 틀면\n통과 (재생 공격)", WARN),
+    ("ap3.1", "비밀번호를 암호화", "K_A-B 로 잠금", "녹음해서 다시 틀면\n통과 (재생 공격)", WARN),
     ("ap4.0", "논스를 반사", "K_A-B(R)", "신원·생존성을\n함께 증명", ACC),
 ]
 for x, (name, what, how, fail, c) in zip(XS, STEPS):
@@ -27,10 +27,10 @@ for x, (name, what, how, fail, c) in zip(XS, STEPS):
         d.box(x, BY, BW, BH, PAPER2, RULE, 1.0, 7)
     d.t(x + BW / 2, BY + 30, name, 13, c, MONO, "middle", 600)
     d.line(x + 16, BY + 44, x + BW - 16, BY + 44, RULE, 0.8)
-    d.t(x + BW / 2, BY + 70, "하는 일", 10, SOFT, KR)
+    d.t(x + BW / 2, BY + 70, "하는 일", 11, SOFT, KR)
     d.t(x + BW / 2, BY + 92, what, 11, INK, KR)
-    d.t(x + BW / 2, BY + 114, how, 10, MUTED, MONO)
-    d.t(x + BW / 2, BY + 150, "남은 구멍" if c is not ACC else "얻는 것", 10, SOFT, KR)
+    d.t(x + BW / 2, BY + 114, how, 11, MUTED, MONO)
+    d.t(x + BW / 2, BY + 150, "남은 구멍" if c is not ACC else "얻는 것", 11, SOFT, KR)
     for i, ln in enumerate(fail.split("\n")):
         d.t(x + BW / 2, BY + 172 + i * 18, ln, 11, c, KR)
 for a, b in zip(XS, XS[1:]):

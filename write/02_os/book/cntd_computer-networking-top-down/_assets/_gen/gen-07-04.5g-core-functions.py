@@ -19,10 +19,10 @@ for x, y, name, sub, c in EDGE:
 
 d.tone(232, 148, 188, 64, ACC, 6, "16", 1.4)
 d.t(326, 176, "AMF", 13, ACC, MONO, "middle", 600)
-d.t(326, 196, "제어 평면의 중심", 10, MUTED, KR)
+d.t(326, 196, "제어 평면의 중심", 11, MUTED, KR)
 d.tone(232, 252, 188, 64, OK, 6, "16", 1.4)
 d.t(326, 280, "UPF", 13, OK, MONO, "middle", 600)
-d.t(326, 300, "데이터 평면 유일", 10, MUTED, KR)
+d.t(326, 300, "데이터 평면 유일", 11, MUTED, KR)
 d.box(232, 352, 188, 52, PAPER2, RULE, 1.0)
 d.t(326, 383, "바깥 인터넷", 12, MUTED, KR)
 
@@ -32,7 +32,7 @@ d.t(212, 236, "N2", 10, SOFT, MONO, "start")
 d.arrow([(180, 296), (232, 296)], OK, "ok", 1.3)
 d.t(206, 288, "N3", 10, SOFT, MONO)
 d.arrow([(102, 148), (102, 120), (326, 120), (326, 148)], ACC, "acc", 1.3, "5 5")
-d.t(214, 112, "N1 — AMF 만 기기와 직접 제어 메시지를 주고받습니다", 10, ACC, KR)
+d.t(214, 112, "N1 — AMF 만 기기와 직접 제어 메시지 교환", 11, ACC, KR)
 d.arrow([(326, 316), (326, 352)], OK, "ok", 1.3)
 
 GX, GW, GH = 472, 136, 56
@@ -46,7 +46,7 @@ for i, (nm, desc) in enumerate(NFS):
     y = 148 + (i // 3) * (GH + 12)
     d.box(x, y, GW, GH, PAPER2, RULE, 0.9)
     d.t(x + GW / 2, y + 24, nm, 11, INK, MONO, "middle", 600)
-    d.t(x + GW / 2, y + 42, desc, 10, MUTED, KR)
+    d.t(x + GW / 2, y + 42, desc, 11, MUTED, KR)
 d.arrow([(420, 180), (GX - 8, 180)], ACC, "acc", 1.3)
 d.t(GX + (GW * 3 + 24) / 2, 360, "요청·응답 또는 구독·통지 방식", 11, SOFT, KR)
 

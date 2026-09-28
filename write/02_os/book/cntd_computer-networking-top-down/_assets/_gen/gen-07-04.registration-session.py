@@ -35,7 +35,7 @@ for ly, name, c, cells in LANES:
         else:
             d.box(x + 6, ly + 14, CW - 12, LH - 28, PAPER, RULE, 0.7, 4)
 d.arrow([(CX0, 546), (CX0 + len(STAGES) * CW, 546)], SOFT, "soft", 1.2)
-d.t(CX0 + len(STAGES) * CW / 2, 566, "시간", 10, SOFT, KR)
+d.t(CX0 + len(STAGES) * CW / 2, 566, "시간", 11, SOFT, KR)
 
 d.legend(588, [("기기와 기지국", INFO), ("조율하는 기능", ACC), ("나머지 코어 기능", OK)])
 

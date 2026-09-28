@@ -35,7 +35,7 @@ for x, name, sub, c in B:
     else:
         d.box(x, 308, 176, 72, PAPER2, RULE, 1.0, 7)
     d.t(x + 88, 338, name, 12, c, MONO if "(" in name else KR, "middle", 600)
-    d.t(x + 88, 360, sub, 10, MUTED, KR)
+    d.t(x + 88, 360, sub, 11, MUTED, KR)
 for a in (200, 392):
     d.arrow([(a + 2, 344), (a + 14, 344)], MUTED, "ar", 1.2)
 d.tone(624, 308, 352, 72, ACC, 7, "16", 1.3)

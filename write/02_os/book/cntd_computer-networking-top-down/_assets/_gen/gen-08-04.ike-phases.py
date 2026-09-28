@@ -32,7 +32,7 @@ for x, (name, what, out_, note, c) in zip(XS, STEPS):
     d.t(x + BW / 2, BY + 30, name, 12, c, KR, "middle", 600)
     d.line(x + 16, BY + 44, x + BW - 16, BY + 44, RULE, 0.8)
     d.t(x + BW / 2, BY + 68, what, 11, INK, KR)
-    d.t(x + BW / 2, BY + 96, "세워지는 것", 10, SOFT, KR)
+    d.t(x + BW / 2, BY + 96, "세워지는 것", 11, SOFT, KR)
     for i, ln in enumerate(out_.split("\n")):
         d.t(x + BW / 2, BY + 118 + i * 18, ln, 11, OK, KR)
     for i, ln in enumerate(note.split("\n")):

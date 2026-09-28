@@ -39,7 +39,7 @@ for k in range(5):
     d.line(x, AY, x, AY + 6, RULE, 1.0)
     d.t(x, AY + 22, f"{g:.2f}", 10, SOFT, MONO)
 d.t(X1, AY + 42, "GHz", 10, SOFT, MONO, "end")
-d.t(112, BY - 14, "채널 번호", 10, SOFT, KR, "end")
+d.t(112, BY - 14, "채널 번호", 11, SOFT, KR, "end")
 
 PY = AY + 58
 d.box(24, PY, 430, 118, PAPER2, RULE, 1.0)

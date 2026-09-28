@@ -15,10 +15,10 @@ LX, LW = 24, 512
 LY0, LH, STRIDE = 122, 56, 64
 LAYERS = [
     ("응용", "이어폰 · 키보드 · 센서", OK, False),
-    ("네트워크 계층", "없습니다 — 단일 홉이라 라우팅이 필요 없습니다", BAD, True),
-    ("전통적 트랜스포트 계층", "없습니다 — 그 서비스는 아래 층이 대신합니다", BAD, True),
+    ("네트워크 계층", "없음 — 단일 홉이라 라우팅 불필요", BAD, True),
+    ("전통적 트랜스포트 계층", "없음 — 그 서비스는 아래 층이 대신함", BAD, True),
     ("L2CAP", "신뢰 전송 · 흐름 제어 · 분할 · 연결형과 비연결형 · 상위 API", ACC, False),
-    ("베이스밴드와 무선", "TDM 과 FDM 을 겹쳐 쓰고 주파수를 도약합니다", INFO, False),
+    ("베이스밴드와 무선", "TDM 과 FDM 을 겹쳐 쓰고 주파수 도약", INFO, False),
 ]
 for i, (name, desc, c, missing) in enumerate(LAYERS):
     y = LY0 + i * STRIDE
@@ -28,7 +28,7 @@ for i, (name, desc, c, missing) in enumerate(LAYERS):
     else:
         d.tone(LX, y, LW, LH, c, 6, "12", 1.2)
     d.t(LX + 20, y + 26, name, 12, c, KR, "start", 600)
-    d.t(LX + 20, y + 44, desc, 10, MUTED, KR, "start")
+    d.t(LX + 20, y + 44, desc, 11, MUTED, KR, "start")
 
 PX, PW = 572, 332
 d.box(PX, LY0, PW, 5 * STRIDE - (STRIDE - LH), PAPER2, RULE, 1.0)

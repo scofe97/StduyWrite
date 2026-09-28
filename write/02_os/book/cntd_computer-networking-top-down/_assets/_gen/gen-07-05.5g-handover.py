@@ -33,13 +33,13 @@ for ly, name, c, cells in LANES:
             d.tone(x + 6, ly + 14, CW - 12, LH - 28, c, 4, "22", 1.2)
             words = txt.split()
             mid = (len(words) + 1) // 2
-            d.t(x + CW / 2, ly + 42, " ".join(words[:mid]), 10, c, KR)
+            d.t(x + CW / 2, ly + 42, " ".join(words[:mid]), 11, c, KR)
             if words[mid:]:
-                d.t(x + CW / 2, ly + 60, " ".join(words[mid:]), 10, c, KR)
+                d.t(x + CW / 2, ly + 60, " ".join(words[mid:]), 11, c, KR)
         else:
             d.box(x + 6, ly + 14, CW - 12, LH - 28, PAPER, RULE, 0.7, 4)
 d.arrow([(CX0, 542), (CX0 + len(STAGES) * CW, 542)], SOFT, "soft", 1.2)
-d.t(CX0 + len(STAGES) * CW / 2, 562, "시간", 10, SOFT, KR)
+d.t(CX0 + len(STAGES) * CW / 2, 562, "시간", 11, SOFT, KR)
 
 d.legend(582, [("기기", INFO), ("옛 기지국", ACC), ("새 기지국", OK), ("코어", MUTED)])
 

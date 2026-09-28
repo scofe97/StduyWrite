@@ -17,10 +17,10 @@ d.line(X0, Y0, X1 + 12, Y0, RULE, 1.0)
 d.line(X0, (Y0 + Y1) / 2, X1, (Y0 + Y1) / 2, RULE, 0.8, "4 6")
 d.line((X0 + X1) / 2, Y0, (X0 + X1) / 2, Y1, RULE, 0.8, "4 6")
 d.t((X0 + X1) / 2, Y0 + 26, "채널 상태를 보는 정도", 11, MUTED, KR)
-d.t(X0 - 10, Y0 + 4, "낮음", 10, SOFT, KR, "end")
+d.t(X0 - 10, Y0 + 4, "낮음", 11, SOFT, KR, "end")
 d.t(X1, Y0 + 4, "", 10, SOFT, KR)
 d.t(X0 - 96, (Y0 + Y1) / 2 - 8, "처리량 공평성", 11, MUTED, KR, "start")
-d.t(X0 - 96, (Y0 + Y1) / 2 + 12, "위쪽이 더 고름", 10, SOFT, KR, "start")
+d.t(X0 - 96, (Y0 + Y1) / 2 + 12, "위쪽이 더 고름", 11, SOFT, KR, "start")
 
 POINTS = [
     ("RR", 0.14, 0.42, INFO, "순번은 고르지만"),
@@ -33,23 +33,23 @@ for name, fx, fy, c, note in POINTS:
     y = Y0 + (Y1 - Y0) * fy
     d.o.append(f'<circle cx="{x}" cy="{y}" r="9" fill="{c}44" stroke="{c}" stroke-width="1.6"/>')
     d.t(x, y - 24, name, 13, c, MONO, "middle", 600)
-    d.t(x, y + 28, note, 10, MUTED, KR)
+    d.t(x, y + 28, note, 11, MUTED, KR)
 
 PX, PW = 620, 284
 d.box(PX, 122, PW, 330, PAPER2, RULE, 1.0)
 d.t(PX + 20, 148, "무엇을 최대로 만드는가", 12, INK, KR, "start", 600)
 d.line(PX + 20, 160, PX + PW - 20, 160, RULE, 0.8)
 ROWS = [
-    ("RR", INFO, ["기기마다 같은 수의 자원 블록", "채널도 QoS 도 안 봅니다"]),
-    ("MT", BAD, ["보고된 채널 품질이 가장 좋은 기기", "한 기기가 다 가져갈 수 있습니다"]),
-    ("BET", OK, ["평균 처리량이 가장 낮은 기기", "지수 가중 이동 평균을 씁니다"]),
-    ("PF", ACC, ["기대 처리량을 평균 처리량으로 나눈 값", "높은 쪽에 자원 블록을 줍니다"]),
+    ("RR", INFO, ["기기마다 같은 수의 자원 블록", "채널도 QoS 도 미고려"]),
+    ("MT", BAD, ["보고된 채널 품질이 가장 좋은 기기", "한 기기가 독점 가능"]),
+    ("BET", OK, ["평균 처리량이 가장 낮은 기기", "지수 가중 이동 평균 사용"]),
+    ("PF", ACC, ["기대 처리량을 평균 처리량으로 나눈 값", "높은 쪽에 자원 블록 배정"]),
 ]
 ry = 184
 for name, c, lines in ROWS:
     d.t(PX + 20, ry, name, 11, c, MONO, "start", 600)
     for j, ln in enumerate(lines):
-        d.t(PX + 20, ry + 20 + j * 18, ln, 10, MUTED, KR, "start")
+        d.t(PX + 20, ry + 20 + j * 18, ln, 11, MUTED, KR, "start")
     ry += 66
 
 NY = 500

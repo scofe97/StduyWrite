@@ -14,12 +14,12 @@ d = D(W, H, "SECTION 7.6.2 · GEO AND LEO SATELLITES",
 BANDS = [
     (128, "지구 정지 궤도 (GEO)", "약 35,000 km", "왕복 지연 약 800 ms · 하늘에 고정", ACC),
     (216, "저궤도 (LEO)", "500 에서 1,200 km", "왕복 지연 약 30 ms · 초속 7.5 km 로 지나감", OK),
-    (304, "지상", "지상국과 사용자 단말", "게이트웨이가 지상 인터넷과 잇습니다", INFO),
+    (304, "지상", "지상국과 사용자 단말", "게이트웨이가 지상 인터넷과 연결", INFO),
 ]
 for y, name, alt, note, c in BANDS:
     d.tone(24, y, 512, 72, c, 6, "12", 1.2)
     d.t(44, y + 28, name, 12, c, KR, "start", 600)
-    d.t(44, y + 50, note, 10, MUTED, KR, "start")
+    d.t(44, y + 50, note, 11, MUTED, KR, "start")
     d.t(516, y + 34, alt, 11, c, MONO, "end", 600)
 
 d.t(24, 400, "GEO — 60년 넘게 방송·관측·오지 인터넷에 사용, 최근 10년 변화는 LEO 쪽",
@@ -32,14 +32,14 @@ d.box(PX, 128, PW, 248, PAPER2, RULE, 1.0)
 d.t(PX + 20, 154, "하늘에 링크인가, 하늘에 망인가", 12, INK, KR, "start", 600)
 d.line(PX + 20, 166, PX + PW - 20, 166, RULE, 0.8)
 MODES = [
-    ("굽은 파이프", INK, ["위성 하나를 링크 하나로 봅니다.", "홉마다 지상으로 내려옵니다."]),
-    ("하늘의 망", INK, ["위성끼리 광 링크로 잇습니다.", "여러 홉을 하늘에서 지납니다.", "서로 움직여 라우팅이 어렵습니다."]),
+    ("굽은 파이프", INK, ["위성 하나를 링크 하나로 봄", "홉마다 지상으로 내려옴"]),
+    ("하늘의 망", INK, ["위성끼리 광 링크로 연결", "여러 홉을 하늘에서 통과", "서로 움직여 라우팅 어려움"]),
 ]
 my = 190
 for name, c, lines in MODES:
     d.t(PX + 20, my, name, 11, c, KR, "start", 600)
     for j, ln in enumerate(lines):
-        d.t(PX + 20, my + 20 + j * 18, "·  " + ln, 10, MUTED, KR, "start")
+        d.t(PX + 20, my + 20 + j * 18, "·  " + ln, 11, MUTED, KR, "start")
     my += 20 + len(lines) * 18 + 18
 
 WY = 452

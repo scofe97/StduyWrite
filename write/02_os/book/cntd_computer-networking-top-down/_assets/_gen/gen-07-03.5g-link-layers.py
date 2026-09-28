@@ -25,15 +25,15 @@ for i, (name, desc, c) in enumerate(LAYERS):
     y = LY0 + i * STRIDE
     d.tone(LX, y, LW, LH, c, 6, "12", 1.2)
     d.t(LX + 20, y + 22, name, 12, c, KR, "start", 600)
-    d.t(LX + 20, y + 40, desc, 10, MUTED, KR, "start")
+    d.t(LX + 20, y + 40, desc, 11, MUTED, KR, "start")
     d.t(LX + LW - 16, y + 22, f"{i + 1}", 9, SOFT, MONO, "end")
 
 PHY_Y = LY0 + len(LAYERS) * STRIDE + 6
 d.box(LX, PHY_Y, LW, LH, PAPER, INFO, 1.2, 6)
 d.o[-1] = d.o[-1].replace('stroke-width="1.2"', 'stroke-width="1.2" stroke-dasharray="6 5"')
 d.t(LX + 20, PHY_Y + 22, "물리 계층", 12, INFO, KR, "start", 600)
-d.t(LX + 20, PHY_Y + 40, "심볼을 자원 블록에 실어 내보냅니다 — 원문은 이것을 링크 부계층으로 세지 않습니다",
-    10, MUTED, KR, "start")
+d.t(LX + 20, PHY_Y + 40, "심볼을 자원 블록에 실어 내보냄 — 원문은 이것을 링크 부계층으로 세지 않음",
+    11, MUTED, KR, "start")
 
 RX, RW = 644, 260
 d.box(RX, LY0, RW, len(LAYERS) * STRIDE - (STRIDE - LH), PAPER2, RULE, 1.0)
@@ -61,7 +61,7 @@ for i, (nm, ko) in enumerate(SPLIT):
     x = 60 + i * 168
     d.tone(x, PY + 40, 144, 38, INFO, 6, "16", 1.2)
     d.t(x + 72, PY + 58, nm, 12, INFO, MONO, "middle", 600)
-    d.t(x + 72, PY + 73, ko, 10, MUTED, KR)
+    d.t(x + 72, PY + 73, ko, 11, MUTED, KR)
     if i < 2:
         d.arrow([(x + 148, PY + 59), (x + 164, PY + 59)], MUTED, "ar", 1.2)
 d.t(596, PY + 52, "표준 인터페이스로 여러 회사의", 11, MUTED, KR, "start")

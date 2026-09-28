@@ -14,13 +14,13 @@ d = D(W, H, "SECTION 7.4.2 · GTP TUNNELING",
 LEVELS = [
     (24, 118, 496, 300, "바깥 IP 데이터그램", "출발지 UPF · 목적지 기지국", ACC),
     (56, 168, 432, 212, "UDP 세그먼트", "백홀 라우터가 보는 것은 여기까지", INFO),
-    (88, 218, 368, 122, "GTP 헤더", "어느 기기의 터널인지 식별합니다", INFO),
+    (88, 218, 368, 122, "GTP 헤더", "어느 기기의 터널인지 식별", INFO),
     (120, 272, 304, 56, "원래 IP 데이터그램", "출발지 외부 호스트 · 목적지 무선 기기", OK),
 ]
 for x, y, w, h, name, sub, c in LEVELS:
     d.tone(x, y, w, h, c, 8, "10", 1.3)
     d.t(x + 16, y + 24, name, 12, c, KR, "start", 600)
-    d.t(x + 16, y + 42, sub, 10, MUTED, KR, "start")
+    d.t(x + 16, y + 42, sub, 11, MUTED, KR, "start")
 
 PX, PW = 556, 348
 d.box(PX, 118, PW, 300, PAPER2, RULE, 1.0)

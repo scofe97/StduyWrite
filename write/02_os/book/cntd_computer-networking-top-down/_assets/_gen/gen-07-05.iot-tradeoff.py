@@ -48,12 +48,12 @@ DETAIL = [
                             "BLE · Zigbee — 802.15.4 위에서 저속"]),
     (OK, "넓은 지역 · 저에너지", ["LoRaWAN — 채널당 0.3~50 kbit/s,", "902~928 MHz, 별의 별 위상",
                           "NB-IoT — 200 kHz 채널, 약 250 kbps"]),
-    (ACC, "넓은 지역 · 고속", ["LTE-M — NB-IoT 의 다섯 배 채널 폭,", "기지국 간 이동성을 받칩니다"]),
+    (ACC, "넓은 지역 · 고속", ["LTE-M — NB-IoT 의 다섯 배 채널 폭,", "기지국 간 이동성 지원"]),
 ]
 for c, name, lines in DETAIL:
     d.t(PX + 20, gy, name, 11, c, KR, "start", 600)
     for j, ln in enumerate(lines):
-        d.t(PX + 20, gy + 18 + j * 17, ln, 10, MUTED, KR, "start")
+        d.t(PX + 20, gy + 18 + j * 17, ln, 11, MUTED, KR, "start")
     gy += 18 + len(lines) * 17 + 14
 
 NY = 436

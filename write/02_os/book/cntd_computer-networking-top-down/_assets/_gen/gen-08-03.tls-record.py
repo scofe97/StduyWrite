@@ -22,7 +22,7 @@ FIELDS = [(64, 128, "타입", "record type", WARN),
 for x, w, name, sub, c in FIELDS:
     d.tone(x, OY + 52, w, 72, c, 6, "20" if c is ACC else "14", 1.4 if c is ACC else 1.2)
     d.t(x + w / 2, OY + 84, name, 12, c, KR, "middle", 600)
-    d.t(x + w / 2, OY + 106, sub, 10, MUTED, KR if any("가" <= ch <= "힣" for ch in sub) else MONO)
+    d.t(x + w / 2, OY + 106, sub, 11, MUTED, KR if any("가" <= ch <= "힣" for ch in sub) else MONO)
 
 IX = 512
 # 채움은 "none" 을 인자로 넘긴다. replace 로 fill 을 덧붙이면 속성이 둘이 되어 앞의 값이 이긴다.

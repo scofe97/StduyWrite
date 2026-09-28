@@ -26,7 +26,7 @@ INNER = [(88, 128, "ESP 헤더", "SPI · 순서 번호", OK, False),
 for x, w, name, sub, c, enc in INNER:
     d.tone(x, 264, w, 56, c, 6, "22" if enc else "16", 1.4 if enc else 1.2)
     d.t(x + w / 2, 288, name, 11, c, KR, "middle", 600)
-    d.t(x + w / 2, 308, sub, 10, MUTED, MONO if any(ch.isdigit() for ch in sub) else KR)
+    d.t(x + w / 2, 308, sub, 11, MUTED, MONO if any(ch.isdigit() for ch in sub) else KR)
 d.box(224, 256, 584, 72, "none", ACC, 1.3, 6)
 d.o[-1] = d.o[-1].replace('stroke-width="1.3"', 'stroke-width="1.3" stroke-dasharray="6 5"')
 d.t(516, 344, "이 안쪽만 암호화 대상", 11, ACC, KR)

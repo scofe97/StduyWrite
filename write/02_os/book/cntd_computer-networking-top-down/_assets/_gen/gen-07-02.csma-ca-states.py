@@ -20,12 +20,12 @@ NODES = {
     "ACK": (576, TOP, "ACK 대기", "SIFS 뒤 응답이 옴", INFO),
     "완료": (760, TOP, "완료", "다음 프레임으로", OK),
     "백오프": (208, BOT, "백오프 값 선택", "이진 지수 백오프", MUTED),
-    "카운트": (392, BOT, "카운트다운", "바쁘면 값을 얼립니다", MUTED),
+    "카운트": (392, BOT, "카운트다운", "바쁘면 값 동결", MUTED),
 }
 for x, y, title, sub, c in NODES.values():
     d.tone(x, y, BW, BH, c, 8, "12", 1.2)
     d.t(x + BW / 2, y + 32, title, 12, c, KR, "middle", 600)
-    d.t(x + BW / 2, y + 54, sub, 10, MUTED, KR)
+    d.t(x + BW / 2, y + 54, sub, 11, MUTED, KR)
 
 
 def cx(k):
@@ -42,16 +42,16 @@ for a, b, lab in HREL:
     ya = NODES[a][1] + BH / 2
     d.arrow([(rx(a) + 4, ya), (NODES[b][0] - 4, ya)], MUTED, "ar", 1.3)
     if lab:
-        d.t((rx(a) + NODES[b][0]) / 2, ya - 12, lab, 10, SOFT, KR)
+        d.t((rx(a) + NODES[b][0]) / 2, ya - 12, lab, 11, SOFT, KR)
 
 d.arrow([(rx("DIFS") + 4, TOP + BH / 2), (NODES["전송"][0] - 4, TOP + BH / 2)], MUTED, "ar", 1.3)
 
 d.arrow([(cx("감지"), TOP + BH + 4), (cx("감지"), BOT + BH / 2), (NODES["백오프"][0] - 4, BOT + BH / 2)],
         MUTED, "ar", 1.3)
-d.t(cx("감지") + 8, BOT + BH / 2 - 12, "바빴음", 10, SOFT, KR, "start")
+d.t(cx("감지") + 8, BOT + BH / 2 - 12, "바빴음", 11, SOFT, KR, "start")
 
 d.arrow([(cx("카운트"), BOT - 4), (cx("카운트"), TOP + BH + 4)], OK, "ok", 1.4)
-d.t(cx("카운트") + 10, (TOP + BH + BOT) / 2 + 4, "0 이 되면", 10, OK, KR, "start")
+d.t(cx("카운트") + 10, (TOP + BH + BOT) / 2 + 4, "0 이 되면", 11, OK, KR, "start")
 
 RY = BOT + BH + 46
 d.arrow([(cx("ACK"), TOP + BH + 4), (cx("ACK"), RY), (cx("백오프"), RY), (cx("백오프"), BOT + BH + 4)],

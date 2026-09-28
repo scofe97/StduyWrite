@@ -12,15 +12,15 @@ d = D(W, H, "SECTION 7.3.3 · BANDS, CHANNELS, SUBCARRIERS",
       "채널 폭 목록과 RB 개수는 원문 §7.3.3 의 값입니다")
 
 LEVELS = [
-    (24, 116, 496, 300, "대역", "국가가 배정하고 사업자가 경매로 받습니다", ACC),
+    (24, 116, 496, 300, "대역", "국가 배정 · 사업자 경매 획득", ACC),
     (56, 158, 432, 216, "채널", "4G 는 1.4 · 3 · 5 · 10 · 15 · 20 MHz", INFO),
-    (88, 200, 368, 132, "부반송파", "채널을 다시 자릅니다 · 4G 는 15 kHz", INFO),
+    (88, 200, 368, 132, "부반송파", "채널을 다시 자름 · 4G 는 15 kHz", INFO),
     (120, 242, 304, 48, "자원 블록", "부반송파 12 개 × 미니슬롯 7 개", OK),
 ]
 for x, y, w, h, name, sub, c in LEVELS:
     d.tone(x, y, w, h, c, 8, "10", 1.3)
     d.t(x + 16, y + 22, name, 12, c, KR, "start", 600)
-    d.t(x + 16, y + 40, sub, 10, MUTED, KR, "start")
+    d.t(x + 16, y + 40, sub, 11, MUTED, KR, "start")
 
 d.t(24, 442, "10 MHz 폭 채널 하나 = 서로 다른 부반송파의 자원 블록 50 개",
     11, MUTED, KR, "start")
@@ -49,7 +49,7 @@ for title, c, items in GROUPS:
     for j, (nm, desc) in enumerate(items):
         y = gy + 22 + j * 20
         d.t(PX + 20, y, nm, 11, SOFT, MONO, "start")
-        d.t(PX + PW - 20, y, desc, 10, MUTED, KR, "end")
+        d.t(PX + PW - 20, y, desc, 11, MUTED, KR, "end")
     gy += 108
 
 NY = 494

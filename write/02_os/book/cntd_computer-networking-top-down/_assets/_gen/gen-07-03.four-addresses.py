@@ -11,13 +11,13 @@ d = D(W, H, "SECTION 7.3.2 · 802.11 ADDRESS FIELDS",
       "AP 는 3 계층을 모르는 링크 계층 장치다. 그래서 프레임 자체가 라우터 인터페이스의 주소를 들고 다녀야 한다.",
       "주소 정의와 예시는 원문 Figure 7.27 의 것입니다")
 
-NODES = [(100, "라우터 인터페이스 R1", "IP 를 압니다"),
-         (470, "AP", "링크 계층만 압니다"),
-         (840, "무선 기기 H1", "IP 를 압니다")]
+NODES = [(100, "라우터 인터페이스 R1", "IP 인식"),
+         (470, "AP", "링크 계층만 인식"),
+         (840, "무선 기기 H1", "IP 인식")]
 for x, name, sub in NODES:
     d.tone(x - 84, 100, 168, 54, INFO, 6, "12", 1.2)
     d.t(x, 122, name, 11, INFO, KR, "middle", 600)
-    d.t(x, 142, sub, 10, MUTED, KR)
+    d.t(x, 142, sub, 11, MUTED, KR)
 
 FW, FH = 264, 104
 ROWS = [
@@ -38,14 +38,14 @@ for ry, label, c, cards, _ in ROWS:
         d.line(cx - FW / 2 + 16, ry + 34, cx + FW / 2 - 16, ry + 34, RULE, 0.8)
         for j, (k, v) in enumerate(fields):
             y = ry + 56 + j * 20
-            d.t(cx - FW / 2 + 20, y, k, 10, SOFT, KR, "start")
+            d.t(cx - FW / 2 + 20, y, k, 11, SOFT, KR, "start")
             d.t(cx + FW / 2 - 20, y, v, 11, INK if k == "주소 3" else MUTED, MONO, "end",
                 600 if k == "주소 3" else 400)
 
 d.arrow([(285, 168), (655, 168)], ACC, "acc", 1.4)
-d.t(470, 160, "AP 가 802.11 로 바꿉니다", 10, ACC, KR)
+d.t(470, 160, "AP 의 802.11 변환", 11, ACC, KR)
 d.arrow([(655, 304), (285, 304)], OK, "ok", 1.4)
-d.t(470, 296, "AP 가 이더넷으로 바꿉니다", 10, OK, KR)
+d.t(470, 296, "AP 의 이더넷 변환", 11, OK, KR)
 
 PY = 440
 d.box(24, PY, 880, 80, PAPER2, RULE, 1.0)

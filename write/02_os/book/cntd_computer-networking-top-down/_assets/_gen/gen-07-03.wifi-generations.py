@@ -38,8 +38,8 @@ for i, (std, gen, yr, rate, band, phy, c) in enumerate(ROWS):
     d.t(cx + CW / 2, cy + 24, std, 12, c, KR, "middle", 600)
     d.t(cx + CW / 2, cy + 44, f"{yr}" + (f" · {gen}" if gen else ""), 10, SOFT, MONO)
     d.t(cx + CW / 2, cy + 64, rate, 11, INK, KR)
-    d.t(cx + CW / 2, cy + 82, band, 10, MUTED, KR)
-    d.t(cx + CW / 2, cy + 98, phy, 10, MUTED, KR)
+    d.t(cx + CW / 2, cy + 82, band, 11, MUTED, KR)
+    d.t(cx + CW / 2, cy + 98, phy, 11, MUTED, KR)
     stem_a = cy + CH if above else cy
     d.line(mx, stem_a, mx, AXIS_Y, c, 1.2, "3 4")
     d.o.append(f'<circle cx="{mx}" cy="{AXIS_Y}" r="4.5" fill="{c}"/>')
