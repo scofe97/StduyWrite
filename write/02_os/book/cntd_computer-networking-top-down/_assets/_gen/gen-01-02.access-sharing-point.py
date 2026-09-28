@@ -1,4 +1,4 @@
-# 01-02 §2 — 접속망을 가르는 실질 기준은 속도가 아니라 내 선이 어디서부터 남과 합쳐지는가다.
+# 01-02 §2 — 노트의 읽기: 접속망을 가르는 실질 기준은 속도가 아니라 내 선이 어디서부터 남과 합쳐지는가다.
 # 타입 스펙: type-data-flow — 단계마다 *누가* 무엇을 하는지. 레인은 접속 방식이고
 #           칸 사이를 건너가는 것은 내 패킷이다. 강조 칸이 공유가 시작되는 자리다.
 #           축약: §2 공식의 label_col_w 140 · right_pad 28 은 그대로, step_slot_w 는 200,
@@ -18,7 +18,7 @@ H = HEADER_TOP + HEADER_H + len(LANES) * LANE_H + LEGEND_H
 d = D(W, H, "COMPUTER NETWORKING TOP-DOWN · 01-02 §2",
       "공유가 시작되는 자리",
       "세 접속망이 집에서 인터넷까지 지나는 구간. 광고 속도가 같아도 체감이 갈리는 이유는 내 선이 어디서부터 이웃과 합쳐지는가에 있다.",
-      "강조한 칸부터는 이웃과 나눠 씁니다 — 저녁에 느려지는지가 여기서 갈립니다")
+      "강조한 칸부터는 이웃과 나눠 씁니다 — 저녁 체감이 여기서 갈린다는 것은 노트의 읽기")
 
 def step_cx(j): return LABEL_W + 16 + j * SLOT_W + NODE_W / 2
 def lane_top(k): return HEADER_TOP + HEADER_H + k * LANE_H
@@ -48,10 +48,10 @@ def node(j, k, title, sub, shared=False):
 ROWS = [
     [("DSL 모뎀", "전화선 한 가닥", False), ("전용 구간", "내 선", False),
      ("DSLAM", "여기서 합쳐짐", True), ("ISP 라우터", "전화 회사가 ISP", False)],
-    [("케이블 모뎀", "동축", False), ("동네 접점", "500~5,000 가구", True),
+    [("케이블 모뎀", "동축으로 동네에 이어짐", False), ("동네 접점", "500~5,000 가구", True),
      ("CMTS · 헤드엔드", "브로드캐스트", True), ("ISP 라우터", "케이블 회사가 ISP", False)],
-    [("ONT", "전용 광섬유", False), ("splitter", "100가구 미만", True),
-     ("OLT", "패킷이 복제됨", True), ("ISP 라우터", "전화 회사가 ISP", False)],
+    [("ONT", "전용 광섬유", False), ("splitter", "복제 · 100가구 미만", True),
+     ("OLT", "광↔전기 변환", True), ("ISP 라우터", "전화 회사가 ISP", False)],
 ]
 for k, row in enumerate(ROWS):
     for j, (t, s, sh) in enumerate(row):
@@ -62,7 +62,7 @@ for k, row in enumerate(ROWS):
         d.arrow([(x0, lane_mid(k)), (x1 - 4, lane_mid(k))], MUTED, "ar", 1.2)
 
 d.t(LABEL_W, lane_top(3) + 28,
-    "DSL 은 국사까지 내 선이라 공유가 늦게 시작되지만, 대신 국사에서 5~10마일 안에 있어야 함",
+    "DSL 은 국사 DSLAM 부터 공유가 시작되고, 집이 국사에서 5~10마일 안에 있어야 함",
     11, MUTED, KR, "start")
 
 d.legend(H - 62, [("이웃과 나눠 쓰는 구간", ACC), ("나 혼자 쓰는 구간", MUTED)])
