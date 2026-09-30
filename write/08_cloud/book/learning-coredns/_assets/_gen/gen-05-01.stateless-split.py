@@ -11,7 +11,7 @@ from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, INFO, KR, MONO
 W, H = 880, 664
 d = D(W, H, "LEARNING COREDNS · 05-01 §4",
       "상태는 아래에 모으고 위는 몇 대든 늘린다",
-      "윗단의 CoreDNS 는 자기 상태를 갖지 않아 하나가 죽어도 잃을 정보가 없고 몇 대든 더 띄울 수 있다. "
+      "윗단의 CoreDNS 는 영속 상태를 갖지 않아 하나가 죽어도 등록 정보를 잃지 않고 몇 대든 더 띄울 수 있다. "
       "영속 상태는 전부 아랫단의 etcd 에 있고, 쿼럼만 살아 있으면 하나를 잃어도 계속 돈다.",
       "주황 테두리가 잃으면 안 되는 자리입니다")
 
@@ -39,7 +39,8 @@ def badge(xr, y, txt, c=MUTED):
 def chip(x, y, w, name, ver):
     d.o.append(f'<rect x="{x}" y="{y}" width="{w}" height="24" rx="4" fill="{PAPER2}" stroke="{MUTED}" stroke-width="0.8"/>')
     d.t(x + 10, y + 17, name, 12, INK, MONO, "start")
-    d.t(x + w - 10, y + 17, ver, 9, MUTED, MONO, "end")
+    korean = any(ord(c) > 127 for c in ver)
+    d.t(x + w - 10, y + 17, ver, 11 if korean else 9, MUTED, KR if korean else MONO, "end")
 
 
 zone(184, 108, 656, 208, "STATELESS · QUERY")
@@ -58,7 +59,7 @@ d.box(512, 148, 300, 140, PAPER2, RULE, 1.0)
 tag(524, 156, "PROCESS")
 badge(800, 156, "x N")
 d.t(662, 198, "CoreDNS 인스턴스", 15, INK, KR, "middle", 600)
-d.t(662, 220, "고유한 상태 없음", 12, MUTED, KR)
+d.t(662, 220, "고유한 영속 상태 없음", 12, MUTED, KR)
 chip(536, 240, 252, "coredns", "etcd 플러그인")
 
 d.tone(212, 412, 600, 96, ACC, 6, "0E", 1.4)
@@ -75,7 +76,7 @@ d.path("M 662 292 L 662 408", ACC, 1.4, m="acc")
 d.t(676, 344, "etcdv3 · 2379", 12, ACC, MONO, "start")
 
 d.t(20, 560, "쿼럼 · 절반 초과 · 셋 중 하나 손실에도 읽기·쓰기 지속", 13, MUTED, KR, "start")
-d.t(20, 584, "윗단 인스턴스 · 잃을 정보 없음 · 다시 띄우면 끝", 13, MUTED, KR, "start")
+d.t(20, 584, "윗단 인스턴스 · 영속 정보 없음 · 다시 띄우면 끝", 13, MUTED, KR, "start")
 
 d.legend(620, [("상태를 쥔 자리와 그 경로", ACC), ("클라이언트가 들어오는 경로", INFO)])
 d.save("05-01.stateless-split.svg")

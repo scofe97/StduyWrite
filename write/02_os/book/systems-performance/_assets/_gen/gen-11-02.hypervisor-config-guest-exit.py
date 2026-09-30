@@ -42,7 +42,7 @@ for k, (tt, lab, c) in enumerate(STEPS):
     if k < 2:
         d.arrow([(sx + SW + 4, SY + SH / 2), (sx + SW + SG - 6, SY + SH / 2)], ACC, "acc", 1.3)
 
-d.t(X0 + 20, YE + 118, "exit 횟수 중 HLT 비중 큼 → idle 에 가까운 게스트", 13, MUTED, KR, "start")
+d.t(X0 + 20, YE + 118, "exit 수가 적고 그중 HLT 비중 큼 → idle 에 가까운 게스트", 13, MUTED, KR, "start")
 d.t(X0 + 20, YE + 142, "I/O 명령 · 인터럽트 주입 많음 → 가상 NIC · 디스크 I/O 중", 13, MUTED, KR, "start")
 
 d.legend(YE + 188, [("오버헤드가 생기는 자리", ACC), ("하이퍼바이저 구성", MUTED)])

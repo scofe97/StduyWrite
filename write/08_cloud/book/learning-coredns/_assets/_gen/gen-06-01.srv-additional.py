@@ -1,4 +1,4 @@
-# 06-01 §6 — SRV 응답의 ADDITIONAL 구간이 뒤따를 A 조회를 없앤다.
+# 06-01 §6 — 원서 SRV 응답에 ADDITIONAL 이 있어 뒤따를 A 조회를 아낀 예.
 # 원문 근거: "The ADDITIONAL SECTION of the result from the SRV query contains the A records referred
 #            to by the SRV record's targets. This allows them to be used immediately without any
 #            additional lookups for those names." / 원서 Example 6-5 의 엔드포인트는 넷이다.
@@ -44,10 +44,10 @@ class SeqKR(Seq):
 
 W, H = 880, 600
 d = SeqKR(W, H, "LEARNING COREDNS · 06-01 §6",
-          "SRV 한 번이 A 조회까지 끝낸다",
-          "SRV 응답의 ADDITIONAL 구간이 대상 이름의 A 레코드를 함께 싣는다. "
-          "엔드포인트가 넷이면 뒤따랐을 A 질의 넷이 통째로 사라진다.",
-          "붉은 점선이 이 설계가 없앤 왕복입니다")
+          "원서 SRV 응답은 A 도 함께 준다",
+          "원서 예제에서는 ADDITIONAL 구간에 대상의 A 레코드가 실린다. "
+          "명세상 이 구간은 선택적이며, 없으면 대상 이름을 추가로 조회해야 한다.",
+          "붉은 점선은 ADDITIONAL 이 없을 때 필요한 조회입니다")
 
 
 # dd.state 는 상자 폭을 ASCII 기준(len*7px)으로 잡아 한글(11px)이 상자를 넘치고,
@@ -69,14 +69,14 @@ d.msg("파드 안 클라이언트", "클러스터 DNS", "SRV 질의 한 번", 19
       sub="_http._tcp.headless.default.svc.cluster.local")
 d.msg("클러스터 DNS", "파드 안 클라이언트", "응답 한 통 · ANSWER 구간", 252, MUTED,
       sub="SRV 넷 — 0 25 80 <대상 이름>")
-d.msg("클러스터 DNS", "파드 안 클라이언트", "같은 응답 · ADDITIONAL 구간", 316, ACC, mk="acc",
+d.msg("클러스터 DNS", "파드 안 클라이언트", "원서 응답 · ADDITIONAL 구간", 316, ACC, mk="acc",
       sub="A 넷 — 대상 이름의 주소")
-d.msg("파드 안 클라이언트", "클러스터 DNS", "없었다면 A 질의 넷", 384, BAD, mk="bad", dash="5 4")
+d.msg("파드 안 클라이언트", "클러스터 DNS", "없다면 A 질의 넷", 384, BAD, mk="bad", dash="5 4")
 
-chip("파드 안 클라이언트", "추가 조회 없이 접속", 452, OK)
+chip("파드 안 클라이언트", "이 예제는 바로 접속", 452, OK)
 
-d.t(20, 496, "SRV 만으로는 대상 이름뿐 · 이름마다 A 추가 질의", 13, MUTED, KR, "start")
-d.t(20, 520, "ADDITIONAL 에 A 동봉 · 왕복 하나", 13, MUTED, KR, "start")
+d.t(20, 496, "ADDITIONAL 은 선택 · 없으면 대상마다 A/AAAA 조회", 13, MUTED, KR, "start")
+d.t(20, 520, "원서 출력은 A 동봉 · 추가 왕복 절약", 13, MUTED, KR, "start")
 
-d.legend(544, [("같은 응답에 실려 오는 것", ACC), ("이 설계가 없앤 왕복", BAD), ("클라이언트가 도달한 상태", OK)])
+d.legend(544, [("같은 응답에 실려 오는 것", ACC), ("없으면 필요한 조회", BAD), ("클라이언트가 도달한 상태", OK)])
 d.save("06-01.srv-additional.svg")

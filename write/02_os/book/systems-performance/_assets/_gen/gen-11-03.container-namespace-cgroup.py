@@ -19,7 +19,7 @@ CARDS = [
      ["시스템 뷰 필터링", "자기 자원만 표시", "", "pid · net · mnt · ipc · uts", "user · cgroup · time"],
      "컨테이너마다 별도 PID 1"),
     ("cgroup", "제한 — 얼마나 쓰는가", ACC,
-     ["자원 사용량 상한", "", "cpu · cpuset · memory", "blkio · pids", "net_cls · net_prio"],
+     ["자원 사용량 제한 · 계측", "", "cpu · cpuset · memory", "blkio · pids", "net_cls · net_prio"],
      "하드 한계와 공유 기반 소프트 한계"),
 ]
 

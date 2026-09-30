@@ -18,9 +18,9 @@ d.t(X0, Y - 32, "인스턴스 증가", 14, INK, KR, "start", 600)
 d.t(X0 + 116, Y - 32, "→  원인 후보 셋", 13, MUTED, KR, "start")
 
 CARDS = [
-    ("정상 수요", OK, ["실제 사용자 증가", "늘린 만큼의 값어치"], "조치 불필요"),
+    ("정상 수요", OK, ["실제 사용자 증가", "늘린 만큼의 값어치"], "타당한 증가"),
     ("DoS 공격", ACC, ["부하처럼 보이는 공격 트래픽", "공격에 반응한 인스턴스 증가"], "비용 누수"),
-    ("성능 회귀", WARN, ["같은 부하 · 더 많은 인스턴스", "느려진 코드"], "원인 — 배포"),
+    ("성능 회귀", WARN, ["같은 부하 · 더 많은 인스턴스", "느려진 코드"], "과잉 프로비저닝"),
 ]
 
 for i, (name, c, body, foot) in enumerate(CARDS):
@@ -34,8 +34,8 @@ for i, (name, c, body, foot) in enumerate(CARDS):
     d.t(x + 16, Y + CH - 20, foot, 13, c, KR, "start")
 
 YB = Y + CH + 40
-d.t(X0, YB, "bursting (OS 가상화) — 유휴 CPU 즉시 대여 · 부하 지속 여부 확인 시간 확보", 13, INFO, KR, "start")
+d.t(X0, YB, "bursting (OS 가상화) — 유휴 CPU 를 그 자리에서 더 내줌 · 부하 지속 여부 확인 시간 확보", 13, INFO, KR, "start")
 d.t(X0, YB + 24, "Netflix — 일일 streams-per-second 패턴 · 매일 수만 인스턴스 증감", 13, MUTED, KR, "start")
 
-d.legend(YB + 48, [("과잉 프로비저닝을 부르는 원인", ACC), ("정상", OK), ("코드에 원인이 있는 경우", WARN), ("완충 장치", INFO)])
+d.legend(YB + 48, [("공격이 부른 증가", ACC), ("정상", OK), ("코드에 원인이 있는 경우", WARN), ("완충 장치", INFO)])
 d.save("11-01.autoscaling-trap.svg")

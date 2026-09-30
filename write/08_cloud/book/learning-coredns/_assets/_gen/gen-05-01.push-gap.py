@@ -1,7 +1,8 @@
-# 05-01 §3 — 등록은 API 로 즉시 끝나지만 클라이언트는 TTL 이 만료될 때까지 옛 주소를 쓴다.
+# 05-01 §3 — 일반 DNS 질의·캐시 경로에서는 등록 후에도 클라이언트가 TTL 만료까지 옛 주소를 쓴다.
 # 원문 근거: "Even with this dynamic, API-based registration, clients do not find out about service
 #            location changes. They must still rely on a TTL and requery the service discovery to find
-#            out whether a service has moved" / "DNS does not provide any push-based functionality today."
+#            out whether a service has moved" / 2019년 원서의 일반 질의·응답 경로 설명.
+# 현행 구분: RFC 8765(2020)는 구독형 DNS Push Notifications를 정의한다. 이 그림은 그 구독 경로가 아니다.
 # 타입 스펙: type-sequence — 주체 셋 사이의 시간순 왕복이고, 가운데의 빈 구간이 논지다.
 #           프리미티브의 mono 하드코딩을 SeqKR 로 덮는다(계약 §프리미티브가 한글을 mono 로 내보내는 자리).
 import sys; sys.path.insert(0, ".")
@@ -46,9 +47,9 @@ class SeqKR(Seq):
 W, H = 880, 616
 d = SeqKR(W, H, "LEARNING COREDNS · 05-01 §3",
           "등록은 즉시, 조회는 TTL 이 끝나야",
-          "새 인스턴스는 API 한 번으로 레지스트리에 실린다. 그 사실이 클라이언트에 닿는 경로가 없어서, "
+          "새 인스턴스는 API 한 번으로 레지스트리에 실린다. 일반 질의·캐시 경로에서는 변경 알림이 없어서, "
           "클라이언트는 캐시의 TTL 이 만료될 때까지 옛 주소를 계속 쓴다.",
-          "붉은 점선이 DNS 에 없는 경로입니다")
+          "붉은 점선이 일반 질의 경로의 빈 구간입니다")
 
 
 # dd.state 는 상자 폭을 ASCII 기준(len*7px)으로 잡아 한글(11px)이 상자를 넘치고,
@@ -69,12 +70,12 @@ d.rails(452)
 
 d.msg("서비스 인스턴스", "레지스트리와 DNS", "등록 API 호출", 196, MUTED, sub="자기 이름과 위치를 알린다")
 chip("레지스트리와 DNS", "새 주소를 안다", 252, OK)
-d.msg("레지스트리와 DNS", "클라이언트", "밀어 줄 경로가 없다", 312, BAD, mk="bad", dash="5 4")
+d.msg("레지스트리와 DNS", "클라이언트", "일반 질의에 푸시 없음", 312, BAD, mk="bad", dash="5 4")
 chip("클라이언트", "옛 주소를 계속 쓴다", 372, BAD)
 d.msg("클라이언트", "레지스트리와 DNS", "TTL 만료 후 재질의", 428, ACC, mk="acc")
 
 d.t(20, 492, "공백 메우기 · Consul 류는 DNS 밖 별도 프로토콜", 13, MUTED, KR, "start")
 d.t(20, 516, "CoreDNS 의 gRPC 푸시 실험 · 현재 버전엔 없음", 13, MUTED, KR, "start")
 
-d.legend(544, [("레지스트리가 아는 시점", OK), ("DNS 에 없는 경로", BAD), ("클라이언트가 아는 시점", ACC)])
+d.legend(544, [("레지스트리가 아는 시점", OK), ("일반 질의의 빈 구간", BAD), ("클라이언트가 아는 시점", ACC)])
 d.save("05-01.push-gap.svg")

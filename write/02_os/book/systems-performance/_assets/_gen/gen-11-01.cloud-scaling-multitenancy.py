@@ -35,7 +35,7 @@ for i, (tag, name, c, body, foot) in enumerate(CARDS):
     d.t(x + 16, Y + CH - 20, foot, 13, c, KR, "start")
 
 YB = Y + CH + 40
-d.t(X0, YB, "이웃 탓 판별의 두 축 — 자원 제어 · 관측성", 13, MUTED, KR, "start")
+d.t(X0, YB, "클라우드 성능 분석의 두 축 — 자원 제어 · 관측성", 13, MUTED, KR, "start")
 d.t(X0, YB + 24, "가상화 유형별 관측성 차이 → 11-02~11-04", 13, SOFT, KR, "start")
 
 d.legend(YB + 48, [("공유가 부르는 문제", ACC), ("공유가 주는 이득", OK)])

@@ -55,7 +55,7 @@ updated: 2026-09-14
 
 ## 큐
 
-> `책` 은 slug 다 — kia(kubernetes-in-action) · cntd(computer-networking-top-down) · lml(learning-modern-linux) · nak(networking-and-kubernetes) · paw(packet-analysis-wireshark) · bmf(building-micro-frontends) · istio(istio-in-action) · coredns(learning-coredns) · sp(systems-performance).
+> `책` 은 slug 다 — kia(kubernetes-in-action) · cntd(computer-networking-top-down) · lml(learning-modern-linux) · nak(networking-and-kubernetes) · paw(packet-analysis-wireshark) · bmf(building-micro-frontends) · istio(istio-in-action) · coredns(learning-coredns) · gonet(gonet-lab 프로젝트, 챕터 = 랩 Phase) · sp(systems-performance).
 
 | 책 | 챕터 | 노트 | 상태 | 회차 | 다음 | 비고 |
 |---|---|---|---|---|---|---|
@@ -140,3 +140,5 @@ updated: 2026-09-14
 | coredns | ch08 | 1 | 학습중 | - | - | Phase 4 자답 미실시 |
 | coredns | ch09 | 2 | 학습중 | - | - | Phase 4 자답 미실시 |
 | sp | ch10 | 4 | 학습중 | - | - | 노트 4편만 있고 Phase 1~4 미실시. 2026-09-26 계획 수립 — 책 README 「10장 학습 계획」 |
+| gonet | ph0 | 3 | 대기 | - | - | Phase 4 자답 2026-09-28 — 기록 위치 `02_os/project/gonet-lab/STATE.md`. 5문항 중 첫 자답 통과 3(FD 번호는 프로세스별, CLOSE-WAIT vs TIME-WAIT, local·remote), 부분 2. 막힌 축: (문항2) kill -9 때 소켓을 닫는 주체 — '닫히지 않는다' → 힌트 뒤 '강제 반납', 커널이 정리하고 strace 에 안 찍히는 이유는 설명으로 채움(init 이 정리한다고 오해). (문항3) 멈춤 사슬 — 결론·wg.Done 대기·io.Copy 정지는 힌트 뒤 도달, io.Copy 가 끝나지 않는 이유(연결 소켓을 안 닫음·EOF 없음)는 설명. 복습 출제 축: 종료 정리 주체, 사슬의 마지막 고리 |
+| gonet | ph1 | 1 | 대기 | - | - | Phase 4 자답 2026-09-28 — 기록 위치 `02_os/project/gonet-lab/STATE.md`. 6문항 모두 핵심은 첫 자답 또는 힌트 뒤 도달, 설명으로 채운 축 3: [syscall] 이름표의 예(stdin 읽기), accept 대기열의 연결도 ESTABLISHED(‘closed’ 로 답함), FD 누수 판별은 /proc fd 소켓 수와 ss -p 연결 수의 비교. 재발 오해: net.ErrClosed 를 ‘상대가 닫음’으로 읽음(힌트로 교정). 복습 출제 축: 위 셋과 ErrClosed |

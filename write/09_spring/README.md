@@ -8,7 +8,7 @@ related:
   - ../03_architecture/README.md
   - ../04_messaging/README.md
   - ../05_data/README.md
-updated: 2026-06-28
+updated: 2026-09-26
 ---
 
 # Spring 학습 통합 MOC
@@ -38,6 +38,15 @@ updated: 2026-06-28
 > 편수는 2026-06-25 실측. 폴더별 신설·재편 이력(통합·분할·이관 날짜)은 `STUDY_INDEX.md` 이관 표와 각 폴더 README 에서 관리한다.
 
 > Boot 자체(auto-config/Properties/Profile)는 [`07_autoconfig/`](07_autoconfig/), 내장 톰캣은 [`01_core/02-02`](01_core/), 액츄에이터·메트릭은 [`06_observability/05_SpringActuator/`](../06_observability/05_SpringActuator/) 에 정식 문서로 작성됐다(2026-05-25, 김영한 스프링 부트 강의 기반). 노션 import raw 는 `_notion_import/` <!-- 링크 끊김(2026-08): _notion_import/ --> 에 있으며, 재작성이 끝난 묶음부터 위 표에 행을 추가한다.
+
+### 랩 프로젝트 (`project/`)
+
+코드 저장소를 따로 두고 단계별로 지으며 배우는 랩이다. 코드와 로드맵은 각 저장소에, 여기에는 Phase 별 학습 문서와 학습 상태만 둔다.
+
+| 랩 | 코드 | 배우는 것 |
+|----|------|----------|
+| [gateway-lab/](project/gateway-lab/README.md) | `~/study/gateway-lab` | raw Netty 로 리버스 프록시에서 API 게이트웨이까지 — 이벤트 루프·버퍼 수명·라우팅·실패 처리 |
+| [hub-lab/](project/hub-lab/README.md) | `~/study/hub-lab` | Spring Boot 위 연동 허브 — 포트와 어댑터·외부 API 클라이언트·다중 데이터소스·Outbox·분산 락·설정 정책·인증 위임 |
 
 ### 예정 카테고리
 

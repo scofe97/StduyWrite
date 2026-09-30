@@ -15,7 +15,7 @@ HEADER_H, ROW_H, ROW_STRIDE = 52, 36, 40
 HEADER_Y = 104
 
 configs = [("캐싱 전용", "3-37"), ("주 서버", "3-38"), ("보조 서버", "3-39")]
-plugins = [("root", "작업 디렉터리"), ("file", "주 서버로"), ("secondary", "보조 서버로"),
+plugins = [("root", "파일 기준 경로"), ("file", "주 서버로"), ("secondary", "보조 서버로"),
            ("forward", "포워더로"), ("cache", "응답 캐시"), ("errors", "오류 로그"), ("log", "질의 로그")]
 cells = {
     (0, 1): ("쓴다", "full"), (0, 2): ("쓴다", "full"),
