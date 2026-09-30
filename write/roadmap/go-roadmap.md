@@ -48,7 +48,7 @@ updated: 2026-09-27
 | 6 · 서비스 | DB 접근 | `database/sql` · 커넥션 풀 · pgx · sqlc · GORM |
 | 6 · 서비스 | 실시간 | WebSocket |
 | 6 · 서비스 | 운영 요소 | TLS · 직렬화 · `log/slog` · 지표 · zap · zerolog · gRPC · Protocol Buffers |
-| 6 · 서비스 | 프로토콜 설계 | 바이트 파싱 · `encoding/binary` · 엔디언 · framing · 메시지 타입 · 핸드셰이크 · 버전 협상 · 상태 머신 |
+| 6 · 서비스 | 프로토콜 설계 | 바이트 파싱 · `encoding/binary` · 엔디언 · 부분 읽기 · framing — 구분자와 길이 접두 · 체크섬 · 메시지 타입 · 잘못된 메시지 거절 · 핸드셰이크 · 버전 협상 · 상태 머신 · 애플리케이션 heartbeat |
 | 6 · 서비스 | 클라우드 네이티브 설계 | 복원력 · 느슨한 결합 · 관측성 · 보안 |
 | 6 · 서비스 | 산출물 | `go:embed` · distroless · 멀티스테이지 이미지 · `syscall/js` 와 Wasm 경계 |
 | 6 · 서비스 | CLI | `flag` · cobra · urfave/cli · 설정 우선순위 |
@@ -191,12 +191,15 @@ updated: 2026-09-27
 | 표준 `net/http` 와 웹 프레임워크 — chi · Gin · Echo · Fiber | 선택 | | Cloud Native Go 5장 |
 | DB 접근 — `database/sql` · 커넥션 풀 · pgx · sqlc · GORM | 추천 | | Pocket-Sized Projects 부록 G · [database/sql](https://go.dev/doc/database/) |
 | WebSocket — 양방향 실시간 연결 | 선택 | | [RFC 6455](https://www.rfc-editor.org/rfc/rfc6455) |
-| UDP · 신뢰성 보강 | 추천 | | Network Programming with Go 5·6장 |
+| UDP · 신뢰성 보강 — 순서 번호 · ACK · 재전송 타이머 · 세션 만료 | 추천 | | Network Programming with Go 5·6장 |
 | TLS 로 통신 지키기 | 추천 | | Network Programming with Go 11장 |
 | 직렬화 · `log/slog` · 지표 | 추천 | | Network Programming with Go 12·13장 |
 | 구조화 로깅 라이브러리 — zap · zerolog 와 slog 의 갈림 | 선택 | | [slog](https://pkg.go.dev/log/slog) |
-| 바이트 파싱 — `[]byte` · `encoding/binary` · 엔디언 · 경계 검사 | 추천 | | |
+| 바이트 파싱 — `[]byte` · `encoding/binary` · 엔디언 · 경계 검사 · `io.ReadFull` 부분 읽기 | 추천 | | |
 | 와이어 프로토콜 설계 — framing · 메시지 타입 · 핸드셰이크 · 버전 협상 · 상태 머신 | 추천 | | |
+| framing 의 갈림 — 구분자 대 길이 접두 · 체크섬 · 잘못된 메시지 거절 | 추천 | | |
+| 애플리케이션 heartbeat — 클라이언트가 정한 주기로 보내는 타이머 | 추천 | | |
+| 명세 없는 프로토콜 복원 — 참조 구현에 요청을 보내 보며 기록하기 | 선택 | | |
 | SSE — 서버가 미는 스트리밍 HTTP | 추천 | | |
 | 폴링과 이벤트 구동의 갈림 | 추천 | | |
 | 복원력 · 느슨한 결합 · 확장성 | 추천 | | Cloud Native Go 7~9장 |
@@ -245,9 +248,14 @@ updated: 2026-09-27
 | reverse tunnel | 6 | control plane 과 data plane 분리 · 멀티플렉싱 · 재접속 · 인증 · NAT traversal · 동시 등록 충돌 |
 | keyless TLS signer | 6 | `crypto.Signer` 추상화 · 원격 서명 경계 · mTLS 클라이언트 인증 · signer 타임아웃과 fail-close · transcript 재계산 |
 | length-prefixed 로그 서버 | 6 | framing · partial read · 백프레셔 · append-only 세그먼트 |
+| 채팅 서버 | 4·6 | 연결 등록과 해제 · 브로드캐스트 · 느린 클라이언트 하나가 방 전체를 막는지 · 연결 수명과 공유 상태 정리 |
+| 우선순위 작업 큐 서버 | 4·6 | `container/heap` · 작업이 생길 때까지 대기 요청 붙잡기 · 연결이 끊기면 가져간 작업 반환 |
+| UDP 위 신뢰 스트림 | 6 | 세션 ID · 위치 기반 ACK · 재전송 타이머 · 세션 만료 · 한 소켓 위 세션 분리 · 이스케이프 |
 | 네트워크 관측 에이전트 | 5·6 | 소켓과 프로세스 매핑 · netlink · 지표 노출 |
 | 동시성 미로 풀이 | 4 | goroutine 조율 · 채널로 결과 모으기 |
 | gRPC 습관 추적기 | 6 | 프로토콜 정의 · 스트리밍 · 클라이언트 생성 |
+
+TCP echo server · TCP reverse proxy · 채팅 서버 · 우선순위 작업 큐 서버 · UDP 위 신뢰 스트림은 [Protohackers](https://protohackers.com/problems) 0·5·3·9·7번 채점기로 외부에서 검증할 수 있습니다. 채점기는 공인 주소로 접속하므로 공인 IP 가 있는 서버에 올려야 합니다.
 
 **완료 기준은 도는 것이 아니라 회수되는 것입니다.** echo server 는 echo 가 되는 것이 아니라 연결이 끊기는 모든 경로에서 goroutine 과 FD 가 회수되는 것이 기준입니다.
 
