@@ -13,7 +13,7 @@ from dd import D, ACC, MUTED, SOFT, INK, PAPER, RULE, OK, BAD, INFO, KR, MONO
 W, H = 1000, 748
 d = D(W, H, "LEARNING COREDNS · 05-01 §6",
       "원서의 일곱 항목이 지금 어디까지 유효한가",
-      "가로축은 날짜가 아니라 CoreDNS 버전 구간이다. 막대가 끊긴 자리가 그 옵션이 문법에서 사라진 지점이고, "
+      "가로축은 날짜가 아니라 CoreDNS 버전 구간이다. 막대가 끊긴 자리가 그 옵션이 문서에서 사라진 지점이고(파서는 오류 없이 무시한다), "
       "막대가 늦게 시작하는 자리가 새로 생긴 지점이다.",
       "1.4.0 경계에서 하나가 끝나고 하나가 시작합니다")
 
@@ -61,9 +61,11 @@ for k, (nm, start, span, color, dash) in enumerate(rows):
                    f'fill="{color}16" stroke="{color}" stroke-width="1.2" stroke-dasharray="{dash}"/>')
     else:
         d.tone(x + 8, ry + 6, w - 16, 24, color, 4, "16", 1.2)
+    if dash:
+        d.t(x + w / 2, ry + 23, "master 에 있음", 12, INFO, KR)
 
 d.t(TX + PITCH * 2, 628, "1.4.0 · stubzones 끝 · credentials 시작", 13, ACC, KR)
-d.t(LX, 660, "원서 이후 셋 · master 문법에서 확인 · 도입 버전 미확인", 13, MUTED, KR, "start")
+d.t(LX, 660, "원서 이후 셋 · master 에서 확인 · 도입 버전 미확인 · 막대 시작점은 버전이 아님", 13, MUTED, KR, "start")
 
-d.legend(684, [("지금 문법에 없다", BAD), ("그대로 남았다", OK), ("원서 이후 추가", INFO), ("원서가 적은 경계", ACC)])
+d.legend(684, [("README 에 없음 · 파서는 무시", BAD), ("그대로 남았다", OK), ("원서 이후 추가", INFO), ("원서가 적은 경계", ACC)])
 d.save("05-01.option-lifespan.svg")

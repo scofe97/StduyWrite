@@ -31,7 +31,7 @@ for x, y, w, h, label, band, focal in rings:
     # 테두리 위 knockout 사각형이 shape-overlap 을 내서 라벨을 상자 안쪽 위에 둔다(2026-09-23)
     d.t(x + 16, y + 17, label, 12, ACC if focal else SOFT, MONO, "start", 600)
     if band:
-        d.t(x + w - 20, y + h - 12, band, 12, MUTED, KR, "end")
+        d.t(x + w - 20, y + 17, band, 12, MUTED, KR, "end")
 
 d.t(440, 236, "{\"host\": \"192.0.2.10\", \"port\": 20020,", 13, INK, MONO)
 d.t(440, 258, "\"priority\": 10, \"weight\": 20}", 13, INK, MONO)
@@ -42,8 +42,9 @@ d.t(40, 402, "바깥에서 안으로", 12, SOFT, KR, "start")
 d.t(440, 444, "/skydns / com / example / services / users", 16, ACC, MONO, "middle", 600)
 d.t(440, 466, "etcd 키 · 링을 바깥부터", 13, MUTED, KR)
 
-d.path("M 840 496 L 40 496", SOFT, 1.0, m="soft")
-d.t(840, 486, "안에서 바깥으로", 12, SOFT, KR, "end")
+# 도메인 이름은 왼쪽에서 오른쪽으로 읽을 때 안쪽 링(users)에서 바깥 링(com)으로 간다 — 화살표도 오른쪽(2026-10-03 방향 정정)
+d.path("M 40 496 L 840 496", SOFT, 1.0, m="soft")
+d.t(40, 486, "안에서 바깥으로", 12, SOFT, KR, "start")
 d.t(440, 528, "users . services . example . com", 16, INK, MONO, "middle", 600)
 d.t(440, 550, "도메인 이름 · 같은 링을 안부터", 13, MUTED, KR)
 

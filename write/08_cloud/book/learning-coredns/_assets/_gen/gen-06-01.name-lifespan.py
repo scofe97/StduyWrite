@@ -43,14 +43,16 @@ def row_y(k):
 
 
 d.box(224, 156, 752, 108, PAPER, RULE, 0.8, 6)
-d.t(232, 176, "Deployment", 9, SOFT, MONO, "start", 600)
+d.t(LX, 162, "Deployment", 12, SOFT, MONO, "start", 600)   # 막대와 겹치지 않게 왼쪽 열로(2026-10-03)
 d.box(224, 272, 752, 108, PAPER, RULE, 0.8, 6)
-d.t(232, 292, "StatefulSet", 9, SOFT, MONO, "start", 600)
+d.t(LX, 278, "StatefulSet", 12, SOFT, MONO, "start", 600)
 
 
 def bar(ry, start, span, color, label):
     x = TX + PITCH * start
     w = PITCH * span
+    # 반투명 채움 아래로 구간 점선이 비쳐 글자를 가르므로 불투명 바탕을 먼저 깐다
+    d.box(x + 6, ry + 4, w - 12, 26, PAPER, "none", 0, 4)
     d.tone(x + 6, ry + 4, w - 12, 26, color, 4, "16", 1.2)
     d.t(x + w / 2, ry + 22, label, 12, color, KR if any("가" <= c <= "힣" for c in label) else MONO)
 

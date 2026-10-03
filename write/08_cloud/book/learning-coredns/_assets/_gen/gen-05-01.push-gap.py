@@ -44,12 +44,12 @@ class SeqKR(Seq):
         s.t(x, y + 5, txt, 13, c, _kr(txt))
 
 
-W, H = 880, 616
+W, H = 880, 660
 d = SeqKR(W, H, "LEARNING COREDNS · 05-01 §3",
           "등록은 즉시, 조회는 TTL 이 끝나야",
           "새 인스턴스는 API 한 번으로 레지스트리에 실린다. 일반 질의·캐시 경로에서는 변경 알림이 없어서, "
           "클라이언트는 캐시의 TTL 이 만료될 때까지 옛 주소를 계속 쓴다.",
-          "붉은 점선이 일반 질의 경로의 빈 구간입니다")
+          "붉은 점선은 아무것도 오지 않는 구간입니다")
 
 
 # dd.state 는 상자 폭을 ASCII 기준(len*7px)으로 잡아 한글(11px)이 상자를 넘치고,
@@ -66,16 +66,20 @@ def chip(a, txt, y, c):
 d.lanes([("서비스 인스턴스", "self-register"),
          ("레지스트리와 DNS", "registry · dns"),
          ("클라이언트", "resolver cache")], y0=104, lane_w=248)
-d.rails(452)
+d.rails(500)
 
 d.msg("서비스 인스턴스", "레지스트리와 DNS", "등록 API 호출", 196, MUTED, sub="자기 이름과 위치를 알린다")
 chip("레지스트리와 DNS", "새 주소를 안다", 252, OK)
-d.msg("레지스트리와 DNS", "클라이언트", "일반 질의에 푸시 없음", 312, BAD, mk="bad", dash="5 4")
+# 일어나지 않는 전달이라 화살촉을 달지 않는다 — 화살표는 무언가 간다는 뜻으로 읽힌다(2026-10-03)
+x1, x2 = d.LX["레지스트리와 DNS"], d.LX["클라이언트"]
+d.path(f"M {x1 + 10} 312 L {x2 - 12} 312", BAD, 1.5, dash="5 4")
+d.t((x1 + x2) / 2, 302, "변경 알림 없음 · 일반 질의 경로", 13, BAD, KR, "middle", 600)
 chip("클라이언트", "옛 주소를 계속 쓴다", 372, BAD)
-d.msg("클라이언트", "레지스트리와 DNS", "TTL 만료 후 재질의", 428, ACC, mk="acc")
+d.msg("클라이언트", "레지스트리와 DNS", "TTL 만료 후 재질의", 428, MUTED)
+d.msg("레지스트리와 DNS", "클라이언트", "새 주소 응답", 476, ACC, mk="acc")
 
-d.t(20, 492, "공백 메우기 · Consul 류는 DNS 밖 별도 프로토콜", 13, MUTED, KR, "start")
-d.t(20, 516, "CoreDNS 의 gRPC 푸시 실험 · 현재 버전엔 없음", 13, MUTED, KR, "start")
+d.t(20, 540, "공백 메우기 · Consul 류는 DNS 밖 별도 프로토콜", 13, MUTED, KR, "start")
+d.t(20, 564, "CoreDNS 의 gRPC 푸시 실험 · 현재 버전엔 없음", 13, MUTED, KR, "start")
 
-d.legend(544, [("레지스트리가 아는 시점", OK), ("일반 질의의 빈 구간", BAD), ("클라이언트가 아는 시점", ACC)])
+d.legend(592, [("레지스트리가 아는 시점", OK), ("일반 질의의 빈 구간", BAD), ("클라이언트가 아는 시점", ACC)])
 d.save("05-01.push-gap.svg")

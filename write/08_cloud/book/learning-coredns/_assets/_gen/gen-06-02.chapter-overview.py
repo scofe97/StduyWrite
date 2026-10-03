@@ -1,55 +1,60 @@
-# 06-02 학습 목표 뒤 전체 지도 — 절 여섯을 읽는 순서로 잇는다.
-# 타입 스펙: type-process — 절마다 같은 의미 슬롯(번호 · 이름 · 한 줄)이 반복되고 화살표가 읽는 순서를 나른다.
-#           축약: 주체(lane)가 없는 단계 지도라 카드 격자 stride 로 놓는다(같은 폴더 관례).
+# 06-02 학습 목표 뒤 전체 지도 — 질의 여섯 종류가 기본 Corefile 의 어느 줄에서 어떻게 끝나는가.
+# 본문 근거: 이 노트 §1(kubernetes 플러그인이 메모리에서 즉석 생성) · §2(cache 이득) · §3(Endpoints · noendpoints NXDOMAIN)
+#            · §4(역방향 CIDR · fallthrough · forward) · §5(최장 일치로 corp.example.com:53 블록, 10.0.0.10).
+# 타입 스펙: type-dp-security-matrix — 질의(행) × 받는 줄·결과(열) 격자가 논지다.
+#           2026-10-03 절 제목을 이은 노드 사슬에서 실제 이름이 든 격자로 다시 그렸다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 880, 616
+W, H = 880, 640
 d = D(W, H, "LEARNING COREDNS · 06-02",
-      "기본 Corefile 의 줄마다 이유가 있다",
-      "6장 중반부의 절 여섯을 읽는 순서로 이은 지도. 1~3절이 플러그인의 동작이고, "
-      "4~6절이 그 동작 위에 얹힌 설정이다.",
-      "1절의 사실 하나가 2절과 4절을 함께 설명합니다")
+      "질의 하나가 기본 Corefile 의 어느 줄에서 끝나는가",
+      "클러스터 안 이름, 헤드리스, 서비스 IP 와 외부 IP 의 PTR, 외부 이름, 사내 이름을 기본 Corefile 에 차례로 물었을 때 "
+      "처음 받는 줄과 결과를 적었다. 이 편의 절은 이 여섯 줄을 하나씩 설명한다.",
+      "주황 행이 나머지를 설명하는 사실입니다")
 
-CW, CH, GAP, X0 = 400, 104, 20, 20
-ROWS = [104, 232, 360]
-cards = [
-    ("§1", "되쓰지 않는 컨트롤러", "watch 로 받고 질의 때 만든다"),
-    ("§2", "두 캐시는 다른 것이다", "이미 메모리에 있는 것을 또 담는다"),
-    ("§3", "Endpoints 감시가 비싼 이유", "하나 바뀌면 객체가 통째로 온다"),
-    ("§4", "기본 Corefile 열두 줄", "줄마다 왜 있는지가 다르다"),
-    ("§5", "스텁 도메인은 블록이 된다", "최장 일치 규칙 하나로 끝난다"),
-    ("§6", "페더레이션은 남은 유산이다", "지금은 옵션 자체가 없다"),
+
+def fam(txt):
+    return KR if any("가" <= c <= "힣" for c in txt) else MONO
+
+
+COLS = [(20, 300, "질의"), (330, 170, "받는 줄"), (510, 260, "결과"), (780, 80, "절")]
+rows = [
+    (("orders.default.svc.cluster.local", "A · 서비스"), ("kubernetes", "Services 메모리"), ("즉석에서 만든 응답", "cache 30 의 이득은 작음"), "§1 · §2"),
+    (("web-0.nginx.default.svc.cluster.local", "A · 헤드리스"), ("kubernetes", "Endpoints watch"), ("파드 IP 여럿", "noendpoints 면 NXDOMAIN"), "§3"),
+    (("10.7.240.10 의 PTR", "서비스 CIDR 안"), ("kubernetes", "역방향 존"), ("서비스 이름", ""), "§4"),
+    (("8.8.8.8 의 PTR", "클러스터와 무관"), ("forward", "fallthrough 로 넘어옴"), ("상류의 PTR 응답", "fallthrough 없으면 NXDOMAIN"), "§4"),
+    (("www.example.org", "A · 외부 이름"), ("forward", "/etc/resolv.conf"), ("상류 응답", "cache 30 이 실제로 일함"), "§2 · §4"),
+    (("host.corp.example.com", "A · 사내 이름"), ("corp.example.com:53", "최장 일치 블록"), ("10.0.0.10 의 응답", ""), "§5"),
 ]
+FOCAL = 0
+Y0, PITCH, RH = 132, 64, 56
 
+for x, w, head in COLS:
+    d.t(x + 12, 118, head, 12, SOFT, KR, "start", 600)
 
-def pos(i):
-    return X0 + (i % 2) * (CW + GAP), ROWS[i // 2]
+for i, cells in enumerate(rows):
+    y = Y0 + i * PITCH
+    if i == FOCAL:
+        d.tone(16, y - 2, 848, RH + 4, ACC, 8, "12", 1.4)
+    for k, (x, w, _) in enumerate(COLS):
+        if i != FOCAL:
+            d.box(x, y, w, RH, PAPER2, RULE, 1.0, 6)
+        cell = cells[k]
+        if k == 3:
+            d.t(x + w / 2, y + 34, cell, 13, ACC if i == FOCAL else MUTED, KR)
+            continue
+        main, sub = cell
+        size = 12 if (k == 0 and fam(main) == MONO) else 13 if fam(main) == MONO else 14
+        col = ACC if (i == FOCAL and k == 0) else INK
+        if sub:
+            d.t(x + 12, y + 24, main, size, col, fam(main), "start", 600)
+            d.t(x + 12, y + 44, sub, 12, MUTED, fam(sub) if not sub.startswith("/") else MONO, "start")
+        else:
+            d.t(x + 12, y + 34, main, size, col, fam(main), "start", 600)
 
+d.t(20, 544, "1~3절 · 플러그인이 메모리에서 답하는 방식 · 4절 · 열두 줄이 질의를 나누는 자리", 13, MUTED, KR, "start")
+d.t(20, 568, "5절 · 서버 블록을 하나 더 · 6절 · 지금은 없는 federation", 13, MUTED, KR, "start")
 
-for i in range(len(cards) - 1):
-    x1, y1 = pos(i)
-    x2, y2 = pos(i + 1)
-    if y1 == y2:
-        d.arrow([(x1 + CW, y1 + CH / 2), (x2 - 2, y2 + CH / 2)], MUTED, "ar", 1.4)
-    else:
-        bus = y1 + CH + 12
-        d.path(f"M {x1 + CW / 2} {y1 + CH} L {x1 + CW / 2} {bus} L {x2 + CW / 2} {bus} L {x2 + CW / 2} {y2 - 2}",
-               MUTED, 1.4, m="ar")
-
-for i, (n, title, q) in enumerate(cards):
-    x, y = pos(i)
-    focal = (i == 0)
-    if focal:
-        d.tone(x, y, CW, CH, ACC, 8, "12", 1.4)
-    else:
-        d.box(x, y, CW, CH, PAPER2, RULE, 1.0, 8)
-    d.t(x + 18, y + 26, n, 12, ACC if focal else SOFT, MONO, "start", 600)
-    d.t(x + 18, y + 56, title, 16, ACC if focal else INK, KR, "start", 600)
-    d.t(x + 18, y + 84, q, 13, MUTED, KR, "start")
-
-d.t(20, 504, "1절 · 레코드를 쌓아 두지 않음 → 2절 캐시 무용론 · 4절 cache 30 비판", 13, MUTED, KR, "start")
-d.t(20, 528, "5·6절 · 기본 Corefile 밖의 변수 둘", 13, MUTED, KR, "start")
-
-d.legend(556, [("나머지를 설명하는 절", ACC)])
+d.legend(592, [("레코드를 쌓아 두지 않는다", ACC)])
 d.save("06-02.chapter-overview.svg")

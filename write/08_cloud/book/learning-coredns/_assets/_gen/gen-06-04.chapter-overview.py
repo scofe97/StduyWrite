@@ -1,56 +1,51 @@
-# 06-04 학습 목표 뒤 전체 지도 — 절 일곱을 읽는 순서로 잇는다.
-# 타입 스펙: type-process — 절마다 같은 의미 슬롯(번호 · 이름 · 한 줄)이 반복되고 화살표가 읽는 순서를 나른다.
-#           축약: 주체(lane)가 없는 단계 지도라 카드 격자 stride 로 놓는다(같은 폴더 관례).
+# 06-04 학습 목표 뒤 전체 지도 — 명세 밖 기능마다 얻는 것·내주는 대가·지금 상태를 한 격자에 놓는다.
+# 본문 근거: 이 노트 결정 치트시트와 §2~§7 본문. 1.9.0 와일드카드 제거·1.8.0 transfer 플러그인은 릴리스 노트로 확인.
+# 타입 스펙: type-dp-security-matrix — 기능(행) × 얻는 것·대가·지금(열) 격자가 논지다.
+#           2026-10-03 절 제목을 이은 노드 사슬(focal 둘)에서 실제 값이 든 격자(focal 하나)로 다시 그렸다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 880, 744
+W, H = 880, 620
 d = D(W, H, "LEARNING COREDNS · 06-04",
-      "명세 밖으로 나가면 이식성을 내준다",
-      "6장 마지막 구간의 절 일곱을 읽는 순서로 이은 지도. 1~2절이 플러그인 문법이고, "
-      "3~7절이 명세 밖 기능들이다.",
-      "4절과 5절이 한 이야기의 문제와 답입니다")
+      "명세 밖 기능은 무엇을 주고 무엇을 받아 가는가",
+      "kubernetes 플러그인의 명세 밖 기능을 행으로 놓고 얻는 것, 그 대가, 지금 상태를 견준다. "
+      "대가는 이식성이거나 메모리·API 서버 부하이거나 둘 다이다.",
+      "주황 행이 4절과 5절을 잇는 거래입니다")
 
-CW, CH, GAP, X0 = 400, 104, 20, 20
-ROWS = [104, 232, 360, 488]
-cards = [
-    ("§1", "문법 전체와 지금 남은 것", "셋이 사라졌고 예고는 하나였다"),
-    ("§2", "파드 옵션이 메모리를 가른다", "가장 안전한 모드가 가장 비싸다"),
-    ("§3", "와일드카드 · 명세 밖 편의", "1.9.0 에서 제거 · 지금은 역사"),
-    ("§4", "점 다섯이 질의를 여섯으로", "짧은 이름의 값을 바깥 이름이 치른다"),
-    ("§5", "autopath 가 반복을 옮긴다", "네트워크에서 서버 안으로"),
-    ("§6", "존 전송과 바깥 노출", "AXFR 의 한계 넷과 k8s_external"),
-    ("§7", "레코드를 좁히는 옵션들", "명세에서 가장 멀리 나간다"),
+COLS = [(20, 170, "명세 밖 기능"), (200, 180, "얻는 것"), (390, 210, "내주는 대가"),
+        (610, 150, "지금"), (770, 90, "절")]
+rows = [
+    ("pods verified", "파드 신원 확인", "메모리 2배 안팎 · API 부하", "기본은 disabled", "§2"),
+    ("와일드카드 질의", "ClusterIP 엔드포인트", "명세 밖 · 이름 불일치", "1.9.0 제거", "§3"),
+    ("ndots:5 검색 경로", "짧은 이름", "외부 이름 질의 여섯 번", "kubelet 기본", "§4"),
+    ("autopath", "질의 여섯 번을 한 번으로", "pods verified 메모리", "쓸 수 있음", "§5"),
+    ("존 전송", "레코드를 한 번에 조망", "IXFR 없음 · BIND 비호환", "transfer 플러그인", "§6"),
+    ("k8s_external", "외부 IP 를 이름으로", "클러스터 DNS 를 바깥에 노출", "쓸 수 있음", "§6"),
+    ("레코드 좁히기", "테넌트 격리 · 클러스터 넘김", "명세에서 가장 멀다", "namespace_labels 추가", "§7"),
 ]
+FOCAL = 3
+Y0, PITCH, RH = 132, 54, 46
 
+for x, w, head in COLS:
+    d.t(x + 12, 118, head, 12, SOFT, KR, "start", 600)
 
-def pos(i):
-    return X0 + (i % 2) * (CW + GAP), ROWS[i // 2]
+for i, cells in enumerate(rows):
+    y = Y0 + i * PITCH
+    if i == FOCAL:
+        d.tone(16, y - 2, 848, RH + 4, ACC, 8, "12", 1.4)
+    for k, (x, w, _) in enumerate(COLS):
+        if i != FOCAL:
+            d.box(x, y, w, RH, PAPER2, RULE, 1.0, 6)
+        txt = cells[k]
+        if k == 4:
+            d.t(x + w / 2, y + 28, txt, 13, ACC if i == FOCAL else MUTED, KR)
+        elif k == 0:
+            d.t(x + 12, y + 28, txt, 13, ACC if i == FOCAL else INK, KR, "start", 600)
+        else:
+            d.t(x + 12, y + 28, txt, 13, INK if k == 1 else MUTED, KR, "start")
 
+d.t(20, 536, "§1 · 원서 문법 열넷 가운데 셋은 원서 이후 제거 · 1.6.0 · 1.7.0 · 1.8.0", 13, MUTED, KR, "start")
+d.t(20, 560, "대가 · 이식성 · 메모리와 API 서버 · 또는 둘 다", 13, MUTED, KR, "start")
 
-for i in range(len(cards) - 1):
-    x1, y1 = pos(i)
-    x2, y2 = pos(i + 1)
-    if y1 == y2:
-        d.arrow([(x1 + CW, y1 + CH / 2), (x2 - 2, y2 + CH / 2)], MUTED, "ar", 1.4)
-    else:
-        bus = y1 + CH + 12
-        d.path(f"M {x1 + CW / 2} {y1 + CH} L {x1 + CW / 2} {bus} L {x2 + CW / 2} {bus} L {x2 + CW / 2} {y2 - 2}",
-               MUTED, 1.4, m="ar")
-
-for i, (n, title, q) in enumerate(cards):
-    x, y = pos(i)
-    focal = (i in (3, 4))
-    if focal:
-        d.tone(x, y, CW, CH, ACC, 8, "12", 1.4)
-    else:
-        d.box(x, y, CW, CH, PAPER2, RULE, 1.0, 8)
-    d.t(x + 18, y + 26, n, 12, ACC if focal else SOFT, MONO, "start", 600)
-    d.t(x + 18, y + 56, title, 16, ACC if focal else INK, KR, "start", 600)
-    d.t(x + 18, y + 84, q, 13, MUTED, KR, "start")
-
-d.t(20, 632, "기능마다 값을 두 번 센다 — 무엇을 얻는가, 그 대가로 무엇을 내주는가", 13, MUTED, KR, "start")
-d.t(20, 656, "대가 · 이식성 · 메모리 · 또는 둘 다", 13, MUTED, KR, "start")
-
-d.legend(684, [("한 이야기로 이어지는 두 절", ACC)])
+d.legend(578, [("한 이야기로 이어지는 거래", ACC)])
 d.save("06-04.chapter-overview.svg")

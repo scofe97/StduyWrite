@@ -41,7 +41,8 @@ d.t(790, 214, "resolver", 12, MUTED, MONO)
 
 d.arrow([(224, 164), (ZX + 24, 164)], INFO, "info", 1.4)
 d.t(258, 152, "watch", 12, INFO, MONO)
-d.path(f"M {ZX + 24} 200 L 224 200", BAD, 1.2, m="bad", dash="5 4")
+# 일어나지 않는 경로라 화살촉을 달지 않는다 — 화살표는 무언가 간다는 뜻으로 읽힌다(2026-10-03)
+d.path(f"M {ZX + 24} 200 L 224 200", BAD, 1.2, dash="5 4")
 d.t(258, 222, "되쓰기 없음", 12, BAD, KR)
 
 d.path(f"M {ZX + 194} 216 L {ZX + 194} 236", MUTED, 1.4, m="ar")
@@ -53,7 +54,7 @@ d.t(714, 322, "응답", 12, ACC, KR)
 
 d.t(20, 396, "자원이 이미 메모리에 · 레코드 생성이 빠름", 13, MUTED, KR, "start")
 d.t(20, 420, "DNS 응답에 API 서버 호출 없음", 13, MUTED, KR, "start")
-d.t(20, 444, "→ 2절 · 캐시가 아낄 것이 없음", 13, MUTED, KR, "start")
+d.t(20, 444, "2절 · 응답 캐시가 아끼는 몫이 작은 이유", 13, MUTED, KR, "start")
 
 d.legend(480, [("저장되지 않는 자리", ACC), ("클러스터 상태를 읽는 경로", INFO), ("컨트롤러에는 있고 여기엔 없는 경로", BAD)])
 d.save("06-02.plugin-flow.svg")

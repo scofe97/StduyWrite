@@ -46,7 +46,7 @@ node(LX, L4_Y, "<service>", "여기서 레코드가 나온다")
 node(RX, L4_Y, "a-b-c-d", "존재 확인을 하지 않는다")
 
 d.t(LX, 512, "A · SRV", 15, ACC, MONO, "middle", 600)
-d.t(LX, 534, "clusterIP 면 A 하나, None 이면 엔드포인트 수만큼", 12, MUTED, KR)
+d.t(LX, 534, "clusterIP 면 A 하나, None 이면 Ready 엔드포인트 수만큼", 12, MUTED, KR)
 d.t(LX, 556, "_포트이름._프로토콜 을 앞에 붙이면 SRV", 12, MUTED, KR)
 d.t(RX, 512, "A 만", 15, BAD, MONO, "middle", 600)
 d.t(RX, 534, "와일드카드 인증서용이었지만", 12, MUTED, KR)

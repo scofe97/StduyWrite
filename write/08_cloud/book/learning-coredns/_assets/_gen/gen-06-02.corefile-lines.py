@@ -4,6 +4,8 @@
 #            upstream 은 "unnecessary in versions 1.4 and later of CoreDNS" / cache 는 "The use of
 #            the cache here is not ideal" / loop 은 "prevents intermittent, very-difficult-to-debug
 #            DNS failures" / loadbalance 는 "randomly shuffles A/AAAA records in the response".
+# 2026-10-03 정정: errors 는 응답 코드를 바꾸지 않으므로 "SERVFAIL" 라벨을 로그 흔적으로, cache 는 본문의
+#            "적중하면 조금 빠르다"에 맞춰 단정을 낮추고, upstream 제거(1.7.0)·loadbalance MX(현행 README)를 반영했다.
 # 타입 스펙: type-dp-security-matrix — 행×열 격자에서 어느 조합이 되고 안 되는가가 논지다.
 #           좌표는 스펙 §2 Layout formulas 를 쓰되 이 저장소 D() 머리글만큼 32 내린다. 색은 다크 스킨 계약.
 import sys; sys.path.insert(0, ".")
@@ -17,18 +19,18 @@ HEADER_Y = 104
 
 cols = [("왜 거기 있나", "줄의 사연"), ("지울 수 있는 조건", "없으면 무엇이 깨지나")]
 lines = [
-    ("errors", "오류를 로그로", ("없으면 SERVFAIL 만 남는다", "keep"), ("지우지 않는다", "keep")),
+    ("errors", "오류를 로그로", ("없으면 오류 흔적이 안 남는다", "keep"), ("지우지 않는다", "keep")),
     ("health", "kubelet 이 부른다", ("프로브가 이 엔드포인트를 본다", "keep"), ("지우지 않는다", "keep")),
     ("kubernetes …", "클러스터 존에 권한", ("이 플러그인이 이 편의 주인공", "keep"), ("지우면 클러스터 DNS 가 아니다", "keep")),
     ("pods insecure", "kube-dns 하위 호환", ("폐기된 명세 부분을 켠다", "legacy"), ("파드 레코드가 필요 없으면", "drop")),
-    ("upstream", "CNAME 되질의", ("1.4 이후 기본 동작", "legacy"), ("반드시 지운다 · 지금은 기동 오류", "drop")),
+    ("upstream", "CNAME 되질의", ("1.4 기본 동작 · 1.7 제거", "legacy"), ("반드시 지운다 · 지금은 기동 오류", "drop")),
     ("fallthrough …", "모르는 PTR 을 넘김", ("CIDR 을 다 못 적었을 때 안전장치", "keep"), ("CIDR 을 전부 열거했으면", "cond")),
     ("prometheus :9153", "메트릭을 연다", ("기본은 localhost 만 듣는다", "keep"), ("긁어 가지 않으면", "cond")),
     ("forward . …", "나머지를 상류로", ("앞선 플러그인이 안 잡은 질의", "keep"), ("외부 해석이 필요 없으면", "cond")),
-    ("cache 30", "응답을 메모리에", ("클러스터 안에는 아낄 것이 없다", "waste"), ("클러스터 밖 질의가 없으면", "drop")),
+    ("cache 30", "응답을 메모리에", ("클러스터 안에선 아끼는 몫이 작다", "waste"), ("클러스터 밖 질의가 없으면", "drop")),
     ("loop", "질의 루프 탐지", ("디버깅 불가능한 실패를 막는다", "keep"), ("지우지 않는다", "keep")),
     ("reload", "Corefile 재적재", ("원서 MD5 · 현행 SHA512", "keep"), ("남기되 문법을 조심한다", "keep")),
-    ("loadbalance", "A/AAAA 를 섞는다", ("첫 IP 만 쓰는 클라이언트를 위해", "keep"), ("헤드리스를 안 쓰면 이득이 적다", "cond")),
+    ("loadbalance", "A·AAAA·MX 섞음", ("첫 IP 만 쓰는 클라이언트를 위해", "keep"), ("헤드리스를 안 쓰면 이득이 적다", "cond")),
 ]
 
 n_cols, n_rows = len(cols), len(lines)

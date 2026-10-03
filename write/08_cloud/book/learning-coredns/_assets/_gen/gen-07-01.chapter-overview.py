@@ -1,57 +1,63 @@
-# 07-01 학습 목표 뒤 전체 지도 — 절 여덟을 읽는 순서로 잇는다.
-# 타입 스펙: type-process — 절마다 같은 의미 슬롯(번호 · 이름 · 한 줄)이 반복되고 화살표가 읽는 순서를 나른다.
-#           축약: 주체(lane)가 없는 단계 지도라 카드 격자 stride 로 놓는다(같은 폴더 관례).
+# 07-01 학습 목표 뒤 전체 지도 — 도구마다 요청에서 무엇을 바꾸고 질문↔답의 대응이 어떻게 되는지를 놓는다.
+# 본문 근거: 이 노트 §1(template 은 {{ .Name }} 으로 답을 지음), §3(정확 일치는 Answer 이름 자동 복구, regex 는 answer name),
+#            §4(class 응답을 되돌리는 옵션 없음), §5(EDNS0 옵션), §6·§7(서명), §8·§9(사례).
+# 2026-10-03 셋째 열 제목을 "요청에서 바꾸는 것"에서 "무엇을 바꾸나"로 — dnssec·차단은 응답 쪽 변경이라 열 제목과 어긋났다(라벨 검증).
+# 타입 스펙: type-dp-security-matrix — 도구(행) × 바꾸는 것·대응·되돌리는 법(열) 격자가 논지다.
+#           2026-10-03 절 제목을 이은 노드 사슬에서 실제 값이 든 격자로 다시 그렸다. §9 를 넣고 focal 을 하나로 줄였다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 880, 744
+W, H = 880, 680
 d = D(W, H, "LEARNING COREDNS · 07-01",
-      "질문과 답이 어긋나면 클라이언트가 버린다",
-      "이 노트가 나눈 절 여덟을 읽는 순서로 이은 지도(원서의 상위 절은 다섯). 1~5절이 요청과 응답을 고치는 이야기이고, "
-      "6~7절이 서명, 8절이 둘을 합친 서비스다.",
-      "3절과 4절이 이 장의 논지가 드러나는 자리입니다")
+      "고치는 자리마다 질문과 답의 대응이 달라진다",
+      "이 장의 도구를 요청에서 무엇을 바꾸는지, 그 뒤 질문과 답의 대응이 어떻게 되는지, 어긋나면 무엇으로 되돌리는지로 나란히 놓았다. "
+      "이름은 되돌릴 수 있고 클래스는 되돌릴 수 없다.",
+      "주황 행이 되돌릴 길이 없는 자리입니다")
 
-CW, CH, GAP, X0 = 400, 104, 20, 20
-ROWS = [104, 232, 360, 488]
-cards = [
-    ("§1", "존 파일 없이 답을 짓는다", "답의 첫 칸이 질문 이름 그대로다"),
-    ("§2", "인증서 하나로 안팎을 쓰려면", "외부 이름을 부르면 나갔다 온다"),
-    ("§3", "정규식은 답의 이름을 안 돌려준다", "answer name 을 빠뜨리면 버려진다"),
-    ("§4", "class 에는 되돌릴 길이 없다", "일곱 해가 지나도 그대로다"),
-    ("§5", "요청에 싣고 상류에서 푼다", "rewrite edns0 와 metadata"),
-    ("§6", "키를 둘로 나누는 이유", "부모 존이 아는 키는 하나뿐"),
-    ("§7", "합성 레코드에는 파일이 없다", "그래서 요청 때 서명한다"),
-    ("§8", "사례 — 신원을 실어 보낸다", "앞 절들을 그대로 이어 붙였다"),
+COLS = [(20, 60, "절"), (90, 170, "도구"), (270, 180, "무엇을 바꾸나"),
+        (460, 220, "질문과 답의 대응"), (690, 170, "되돌리는 법")]
+rows = [
+    ("§1", ("template", ""), ("바꾸지 않음", "질문으로 답을 지음"), ("저절로 지켜짐", "{{ .Name }} 이 질문 이름"), ("필요 없음", "")),
+    ("§2·§3", ("rewrite name", "정확 일치"), ("질문 이름", ""), ("자동 복구", "Answer 이름을 되돌림"), ("자동", "")),
+    ("§3", ("rewrite name", "regex"), ("질문 이름", ""), ("어긋남", "Answer 에 바뀐 이름"), ("answer name", "직접 적는다")),
+    ("§4", ("rewrite class", ""), ("질문 클래스", "CH 를 IN 으로"), ("어긋남", "답의 클래스가 다름"), ("없음", "관대한 클라이언트만")),
+    ("§5", ("rewrite edns0", "metadata"), ("EDNS0 옵션", "싣고 상류에서 푼다"), ("영향 없음", ""), ("해당 없음", "")),
+    ("§6·§7", ("dnssec", "sign · signzone"), ("답에 서명을 더함", ""), ("다른 문제", "답의 출처를 증명"), ("해당 없음", "")),
+    ("§8·§9", ("사례 둘", "B1TD · 가정 필터"), ("요청에 신원 싣기", "차단은 답을 지음"), ("CNAME 으로 지킴", "Safe Search · 9절"), ("—", "")),
 ]
+FOCAL = 3
+Y0, PITCH, RH = 132, 62, 54
 
 
-def pos(i):
-    return X0 + (i % 2) * (CW + GAP), ROWS[i // 2]
+def fam(t):
+    return KR if any("가" <= c <= "힣" for c in t) or t in ("—",) else MONO
 
 
-for i in range(len(cards) - 1):
-    x1, y1 = pos(i)
-    x2, y2 = pos(i + 1)
-    if y1 == y2:
-        d.arrow([(x1 + CW, y1 + CH / 2), (x2 - 2, y2 + CH / 2)], MUTED, "ar", 1.4)
-    else:
-        bus = y1 + CH + 12
-        d.path(f"M {x1 + CW / 2} {y1 + CH} L {x1 + CW / 2} {bus} L {x2 + CW / 2} {bus} L {x2 + CW / 2} {y2 - 2}",
-               MUTED, 1.4, m="ar")
+for x, w, head in COLS:
+    d.t(x + 10, 118, head, 12, SOFT, KR, "start", 600)
 
-for i, (n, title, q) in enumerate(cards):
-    x, y = pos(i)
-    focal = (i in (2, 3))
-    if focal:
-        d.tone(x, y, CW, CH, ACC, 8, "12", 1.4)
-    else:
-        d.box(x, y, CW, CH, PAPER2, RULE, 1.0, 8)
-    d.t(x + 18, y + 26, n, 12, ACC if focal else SOFT, MONO, "start", 600)
-    d.t(x + 18, y + 56, title, 16, ACC if focal else INK, KR, "start", 600)
-    d.t(x + 18, y + 84, q, 13, MUTED, KR, "start")
+for i, (sec, *cells) in enumerate(rows):
+    y = Y0 + i * PITCH
+    foc = i == FOCAL
+    if foc:
+        d.tone(16, y - 3, 848, RH + 6, ACC, 8, "12", 1.4)
+    x0, w0, _ = COLS[0]
+    if not foc:
+        d.box(x0, y, w0, RH, PAPER2, RULE, 1.0, 6)
+    d.t(x0 + w0 / 2, y + 32, sec, 12, ACC if foc else MUTED, KR)
+    for k, (main, sub) in enumerate(cells, start=1):
+        x, w, _ = COLS[k]
+        if not foc:
+            d.box(x, y, w, RH, PAPER2, RULE, 1.0, 6)
+        col = ACC if (foc and k in (1, 4)) else INK
+        if sub:
+            d.t(x + 10, y + 23, main, 13, col, fam(main), "start", 600)
+            d.t(x + 10, y + 42, sub, 12, MUTED, fam(sub) if k != 3 else KR, "start")
+        else:
+            d.t(x + 10, y + 32, main, 13, col, fam(main), "start", 600)
 
-d.t(20, 632, "요청을 고치면 응답도 같이 고쳐야 한다 — 대응을 검사하는 쪽은 서버가 아니라 클라이언트다", 13, MUTED, KR, "start")
-d.t(20, 656, "이름은 되돌릴 수 있고 클래스는 되돌릴 수 없다", 13, MUTED, KR, "start")
+d.t(20, 588, "1~5절 · 요청과 응답을 고친다 · 6~7절 · 답에 서명한다 · 8~9절 · 둘을 이은 사례", 13, MUTED, KR, "start")
+d.t(20, 612, "대응을 검사하는 쪽은 서버가 아니라 클라이언트다", 13, MUTED, KR, "start")
 
-d.legend(684, [("대응이 깨지는 자리", ACC)])
+d.legend(630, [("되돌릴 길이 없는 자리", ACC)])
 d.save("07-01.chapter-overview.svg")

@@ -6,6 +6,7 @@
 #            대가: "For each zone listed at the front of the server block, CoreDNS will create an
 #            independent plug-in chain. This means that the Kubernetes caches will be duplicated
 #            within the CoreDNS instance, increasing the memory consumption."
+# 2026-10-03: 첫 블록 라벨의 ready 는 2단계에만 있어 1단계 실제 줄(forward)로 바로잡았다.
 # 타입 스펙: type-flowchart — 조건 하나로 갈리는 라우팅이고 분기마다 라벨을 단다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, OK, WARN, INFO, KR, MONO
@@ -38,16 +39,16 @@ DW, DH = 320, 84
 DY = 188
 d.path(f"M 440 152 L 440 {DY - 2}", MUTED, 1.4, m="ar")
 d.o.append(f'<path d="M 440 {DY} L {440 + DW / 2} {DY + DH / 2} L 440 {DY + DH} L {440 - DW / 2} {DY + DH / 2} Z" '
-           f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
-d.t(440, DY + 38, "블록 앞에 적어 둔", 14, ACC, KR, "middle", 600)
-d.t(440, DY + 58, "클러스터 존인가", 14, ACC, KR, "middle", 600)
+           f'fill="{PAPER2}" stroke="{MUTED}" stroke-width="1.2"/>')  # focal 은 아래 대가 한 곳(2026-10-03)
+d.t(440, DY + 38, "블록 앞에 적어 둔", 14, INK, KR, "middle", 600)
+d.t(440, DY + 58, "클러스터 존인가", 14, INK, KR, "middle", 600)
 
 d.path(f"M {440 - DW / 2} {DY + DH / 2} L {LX} {DY + DH / 2} L {LX} 316", MUTED, 1.4, m="ar")
 d.t(LX + 12, DY + 30, "그렇다", 13, MUTED, KR, "start")
 d.path(f"M {440 + DW / 2} {DY + DH / 2} L {RX} {DY + DH / 2} L {RX} 316", MUTED, 1.4, m="ar")
 d.t(RX - 12, DY + 30, "아니다", 13, MUTED, KR, "end")
 
-step(LX, 318, "첫 블록", "kubernetes · ready · loadbalance")
+step(LX, 318, "첫 블록", "kubernetes · forward · loadbalance")
 step(RX, 318, "둘째 블록", "forward · cache")
 d.path(f"M {LX} 382 L {LX} 408", MUTED, 1.4, m="ar")
 d.path(f"M {RX} 382 L {RX} 408", MUTED, 1.4, m="ar")

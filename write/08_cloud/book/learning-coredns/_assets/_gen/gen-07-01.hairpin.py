@@ -20,8 +20,9 @@ d = D(W, H, "LEARNING COREDNS · 07-01 §2",
 d.box(20, 150, 520, 300, PAPER, "rgba(245,245,245,0.20)", 0.8, 8)
 d.box(34, 154, 150, 14, PAPER, PAPER, 0)
 d.t(38, 165, "KUBERNETES CLUSTER", 8, SOFT, MONO, "start")
-d.box(700, 154, 108, 14, PAPER, PAPER, 0)
-d.t(704, 165, "OUTSIDE", 8, SOFT, MONO, "start")
+# 헤어핀 선(x=720)이 글자를 가르지 않게 OUTSIDE 라벨을 선 오른쪽으로 옮긴다(2026-10-03)
+d.box(736, 154, 70, 14, PAPER, PAPER, 0)
+d.t(740, 165, "OUTSIDE", 8, SOFT, MONO, "start")
 
 # 경로 — 상자보다 먼저 그린다
 # 헤어핀: 파드 위로 나가 경계를 넘어 LB 로
@@ -29,7 +30,8 @@ d.path("M 170 200 L 170 120 L 720 120 L 720 196", BAD, 1.6, m="bad")
 d.t(430, 110, "클러스터를 나간다", 11, BAD, KR)
 # LB 에서 NodePort 로 되돌아 들어온다
 d.path("M 620 228 L 454 228", BAD, 1.6, m="bad")
-d.t(586, 218, "다시 들어온다", 11, BAD, KR)
+# 클러스터 경계(x=540)와 LB(x=620) 사이 빈칸에 둔다
+d.t(580, 218, "다시 들어온다", 11, BAD, KR)
 # NodePort 에서 대상 파드로
 d.path("M 375 256 L 375 376", BAD, 1.6, m="bad")
 d.t(390, 320, "홉이 하나 더", 11, BAD, KR, "start")

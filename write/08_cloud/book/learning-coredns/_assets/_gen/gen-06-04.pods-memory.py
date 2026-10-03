@@ -34,7 +34,7 @@ d.t(PX0 - 14, py(280) - 20, "MiB", 12, SOFT, MONO, "end")
 d.line(PX0, PY0, PX0, PY1, RULE, 1.0)
 
 for i, (c1, c2, verified, other) in enumerate(CATS):
-    cx = PX0 + 120 + i * PITCH
+    cx = PX0 + 160 + i * PITCH   # 첫 막대가 세로축(PX0) 왼쪽으로 넘던 것을 바로잡음(2026-10-03)
     for j, (val, color, label) in enumerate(((verified, ACC, "verified"), (other, INFO, "insecure · disabled"))):
         x = cx - BW - GAP / 2 + j * (BW + GAP)
         y = py(val)

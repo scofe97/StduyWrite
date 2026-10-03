@@ -2,7 +2,7 @@
 # 원문 근거: "errors also allows you to consolidate multiple error messages that match the same
 #            regular expression. That way, if CoreDNS is experiencing continuous errors when
 #            forwarding queries, for example, you won't be inundated with error messages."
-#            / 접힌 출력: "5 errors like '^.* network is unreachable$' occurred in last 10m"
+#            / 접힌 출력: "5 errors like '^.* network is unreachable$' occurred in last 10m" (원서). 실제 출력은 10m0s.
 #            / "You should also take care not to consolidate too much"
 # 타입 스펙: type-timeline — 시간 축 위의 사건들과 그것을 덮는 창 하나가 논지다.
 #           창의 폭(DURATION)과 사건 간격의 관계는 축이 있어야만 보인다.
@@ -40,7 +40,8 @@ d.t(440, 266, "창 길이와 건수는 원서 값이고, 도착 시각은 원서
 d.path(f"M 440 280 L 440 312", ACC, 1.5, m="acc")
 d.tone(180, 314, 520, 56, ACC, 6, "14", 1.5)
 d.t(440, 338, "5 errors like '^.* network is unreachable$'", 12, ACC, MONO)
-d.t(440, 358, "occurred in last 10m", 12, ACC, MONO)
+# 기간은 time.Duration 의 String() 이라 10m 이 아니라 10m0s 로 찍힌다(errors.go:54 의 %s, go run 확인 2026-10-03)
+d.t(440, 358, "occurred in last 10m0s", 12, ACC, MONO)
 
 d.box(20, 386, 840, 40, PAPER, RULE, 0.8)
 d.t(36, 411, "너무 넓게 접으면 접힌 줄에 정규식만 남아 원래 오류가 무엇에 대한 것이었는지 알 수 없다",

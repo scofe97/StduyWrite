@@ -34,7 +34,9 @@ def step(x, y, t1, t2, c=INK, tone=None):
     else:
         d.box(x, y, SW2, 70, PAPER2, RULE, 1.0)
     d.t(x + SW2 / 2, y + 28, t1, 13, c, KR, "middle", 600)
-    d.t(x + SW2 / 2, y + 49, t2, 10, MUTED, MONO)
+    # 한글이 섞인 보조 라벨은 10px mono 에서 하한(11px) 아래로 뭉개진다 — 한글이면 KR 12px(2026-10-03)
+    kr = any("가" <= ch <= "힣" for ch in t2)
+    d.t(x + SW2 / 2, y + 49, t2, 12 if kr else 10, MUTED, KR if kr else MONO)
 
 
 step(XS[0], 150, "클라이언트 질의를 받는다", "example.com A")

@@ -13,7 +13,7 @@ W, H = 880, 560
 d = D(W, H, "LEARNING COREDNS · 08-01 §4",
       "log 와 dnstap 이 같은 질의를 다르게 남긴다",
       "질의 하나가 두 도구에서 서로 다른 산출물이 된다. log 는 사람이 읽는 한 줄을, "
-      "dnstap 은 기계가 읽는 이진 프레임을 남기고 소켓 밖으로 넘긴다.",
+      "dnstap 은 protobuf 메시지를 Frame Streams 로 묶어 소켓 밖으로 넘기고, full 일 때만 DNS 메시지 원문을 싣는다.",
       "주황이 full 을 붙였을 때만 실리는 것입니다")
 
 LX, LW, LH = 150, 710, 132
@@ -40,8 +40,9 @@ step(XS[0], 148, "질의마다 한 줄", "텍스트 · 부하가 붙는다")
 step(XS[1], 148, "응답 정보는 적다", "rcode · rflags · rsize")
 step(XS[2], 148, "표준 출력으로", "사람이 눈으로 읽는다")
 
-step(XS[0], 304, "와이어 형식 프레임", "이진 · 값이 낮다")
-step(XS[1], 304, "응답 전체가 실린다", "full 을 붙였을 때", ACC, ACC)
+# dnstap 자체 형식(protobuf · Frame Streams)과 그 안에 싣는 DNS 와이어 형식 메시지를 섞지 않는다(setup.go IncludeRawMessage)
+step(XS[0], 304, "protobuf 프레임", "주소 · 시각 · 유형")
+step(XS[1], 304, "DNS 메시지 원문", "full 일 때 · 와이어 형식", ACC, ACC)
 step(XS[2], 304, "소켓 밖으로", "CoreDNS 가 만들지 않는다")
 
 for row_y in (184, 340):

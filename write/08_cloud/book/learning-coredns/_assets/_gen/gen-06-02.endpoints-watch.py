@@ -9,7 +9,7 @@
 # 타입 스펙: type-sequence — 세 주체 사이의 시간순 전달이고, 되풀이되는 전체 전송이 논지다.
 #           프리미티브의 mono 하드코딩을 SeqKR 로 덮는다(계약 §프리미티브가 한글을 mono 로 내보내는 자리).
 import sys; sys.path.insert(0, ".")
-from dd import Seq, ACC, MUTED, BAD, WARN, INK, PAPER2, RULE, KR, MONO, PAPER
+from dd import Seq, ACC, MUTED, SOFT, BAD, WARN, INK, PAPER2, RULE, KR, MONO, PAPER
 
 
 def _kr(txt):
@@ -46,7 +46,7 @@ class SeqKR(Seq):
         s.t(x, y + 5, txt, 13, c, _kr(txt))
 
 
-W, H = 880, 620
+W, H = 880, 644
 d = SeqKR(W, H, "LEARNING COREDNS · 06-02 §3",
           "하나가 바뀌면 객체가 통째로 온다",
           "Endpoints 자원 하나가 서비스 하나의 주소를 준비 여부와 무관하게 전부 담는다. "
@@ -80,6 +80,8 @@ chip("CoreDNS", "메모리와 CPU 를 더 쓴다", 424, BAD)
 
 d.t(20, 488, "객체 크기 · 변경 빈도 · 두 축이 함께 커짐 · 지금은 EndpointSlice 로 완화", 13, MUTED, KR, "start")
 d.t(20, 512, "헤드리스 미사용 · noendpoints 로 watch 끄기", 13, MUTED, KR, "start")
+# 현행 쿠버네티스는 Endpoints 를 1000 개에서 자른다(service.md Over-capacity endpoints) — 원서의 "수천" 은 그 전 이야기(2026-10-03)
+d.t(20, 536, "현행 Endpoints · 1000 개에서 잘림 · 원서의 수천은 상한 이전", 13, SOFT, KR, "start")
 
-d.legend(540, [("컨트롤러가 다시 쓰는 지점", WARN), ("전체가 전송되는 경로", BAD)])
+d.legend(564, [("컨트롤러가 다시 쓰는 지점", WARN), ("전체가 전송되는 경로", BAD)])
 d.save("06-02.endpoints-watch.svg")

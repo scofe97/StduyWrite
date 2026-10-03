@@ -1,56 +1,59 @@
-# 08-01 학습 목표 뒤 전체 지도 — 절 일곱을 읽는 순서로 잇는다.
-# 타입 스펙: type-process — 절마다 같은 의미 슬롯(번호 · 이름 · 한 줄)이 반복되고 화살표가 읽는 순서를 나른다.
-#           축약: 주체(lane)가 없는 단계 지도라 카드 격자 stride 로 놓는다(같은 폴더 관례).
+# 08-01 학습 목표 뒤 전체 지도 — 도구 여섯이 무엇을 보고, 기본으로 무엇을 남기며, 어디서 값을 깎는가.
+# 본문 근거: 이 노트 §1~§7 과 결정 치트시트. 소스 근거: plugin/trace/setup.go(every 기본 1), plugin/dnstap(버퍼 1만),
+#            1.7.0 릴리스 노트(카운터 다섯 개명·흡수), log README "JSON Output", errors README(LEVEL·show_first·stacktrace).
+# 타입 스펙: type-dp-security-matrix — 도구(행) × 보는 것·기본값·손잡이·원서 이후(열) 격자가 논지다.
+#           2026-10-03 절 제목을 이은 노드 사슬에서 실제 값이 든 격자로 다시 그렸다. 옛 범례 "손잡이가 없어 금지" 는
+#           본문(금지 이유는 복구를 끄기 때문)과 모순이라 없앴다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 880, 734
+W, H = 880, 630
 d = D(W, H, "LEARNING COREDNS · 08-01",
-      "무엇을 볼지 좁히는 손잡이가 도구마다 다르다",
-      "8장의 절 일곱을 읽는 순서로 이은 지도. 1~4절이 정상 흐름을 보는 도구이고, "
-      "5~7절이 잘못됐을 때 쓰는 도구다.",
-      "주황이 손잡이가 없어 운영에서 금지된 자리입니다")
+      "도구마다 무엇을 남기고 어디서 깎는가",
+      "관측 도구 여섯을 보는 것, 아무것도 적지 않았을 때 남는 것, 값을 깎는 손잡이, 원서 이후 바뀐 것으로 나란히 놓았다. "
+      "손잡이 열을 따라 읽으면 도구를 고르는 일이 곧 손잡이를 고르는 일이라는 이 노트의 축이 보인다.",
+      "주황 열이 값을 깎는 손잡이입니다")
 
-CW, CH, GAP, X0 = 400, 104, 20, 20
-ROWS = [104, 232, 360, 488]
-cards = [
-    ("§1", "세는 것과 적는 것", "지표는 사건이 아니라 사건의 수"),
-    ("§2", "로그 한 줄을 가른다", "큰따옴표 안이 요청, 밖이 응답"),
-    ("§3", "좁히는 손잡이 셋", "이름 · 응답 종류 · 형식 문자열"),
-    ("§4", "응답까지 보려면", "dnstap 은 형식을 바꿔 값을 낮춘다"),
-    ("§5", "같은 오류가 쏟아질 때", "접되 너무 넓게 접지 않는다"),
-    ("§6", "추적은 비싸다", "만 건에 한 건 · 시계를 의심한다"),
-    ("§7", "손잡이가 없는 하나", "debug 는 운영 금지"),
+COLS = [(20, 110, "도구"), (140, 130, "보는 것"), (280, 170, "기본으로 남는 것"),
+        (460, 170, "손잡이"), (640, 170, "원서 이후"), (820, 44, "절")]
+rows = [
+    ("prometheus", ("몇 건 · 얼마나", ""), ("라벨 조합마다", "시계열 하나"), ("CoreDNS 에 없음", "수집 규칙에서 거름"), ("넷 개명 · 하나 흡수", "1.7.0 · view 라벨"), "§1"),
+    ("log", ("어느 질의였나", ""), ("질의마다 한 줄", "텍스트"), ("NAMES · class", "형식 문자열"), ("JSON 출력 모드", "time 필드 포함"), "§2·3"),
+    ("dnstap", ("응답까지", ""), ("주소 · 시각 · 유형", "버퍼 1만 개"), ("full", "메시지 원문을 실을지"), ("listen · extra", "tls 스킴"), "§4"),
+    ("errors", ("처리 중 오류", ""), ("오류마다 한 줄", ""), ("consolidate", "기간 · 정규식"), ("LEVEL · show_first", "stacktrace"), "§5"),
+    ("trace", ("어디서 시간을", ""), ("모든 요청 추적", "every 기본 1"), ("every", "표본율"), ("zipkin · datadog 만", ""), "§6"),
+    ("debug", ("panic 의 스택", ""), ("복구가 꺼짐", "panic 이 프로세스를 끝냄"), ("없음", "켜고 끄기뿐"), ("errors stacktrace", "복구를 둔 채 스택"), "§7"),
 ]
+Y0, PITCH, RH = 132, 64, 56
 
+for k, (x, w, head) in enumerate(COLS):
+    d.t(x + 10, 118, head, 12, ACC if k == 3 else SOFT, KR, "start", 600)
 
-def pos(i):
-    return X0 + (i % 2) * (CW + GAP), ROWS[i // 2]
+fx, _, _ = COLS[3]
+d.tone(fx - 4, Y0 - 4, COLS[3][1] + 8, PITCH * 5 + RH + 8, ACC, 8, "12", 1.4)
 
+for i, (tool, *cells) in enumerate(rows):
+    y = Y0 + i * PITCH
+    x0, w0, _ = COLS[0]
+    d.box(x0, y, w0, RH, PAPER2, RULE, 1.0, 6)
+    d.t(x0 + 10, y + 34, tool, 13, INK, MONO, "start", 600)
+    for k, cell in enumerate(cells, start=1):
+        x, w, _ = COLS[k]
+        if k != 3:
+            d.box(x, y, w, RH, PAPER2, RULE, 1.0, 6)
+        if k == 5:
+            d.t(x + w / 2, y + 34, cell, 12, MUTED, KR)
+            continue
+        main, sub = cell
+        col = ACC if k == 3 else INK
+        if sub:
+            d.t(x + 10, y + 24, main, 13, col, KR, "start", 600)
+            d.t(x + 10, y + 44, sub, 12, MUTED, KR, "start")
+        else:
+            d.t(x + 10, y + 34, main, 13, col, KR, "start", 600)
 
-for i in range(len(cards) - 1):
-    x1, y1 = pos(i)
-    x2, y2 = pos(i + 1)
-    if y1 == y2:
-        d.arrow([(x1 + CW, y1 + CH / 2), (x2 - 2, y2 + CH / 2)], MUTED, "ar", 1.4)
-    else:
-        bus = y1 + CH + 12
-        d.path(f"M {x1 + CW / 2} {y1 + CH} L {x1 + CW / 2} {bus} L {x2 + CW / 2} {bus} L {x2 + CW / 2} {y2 - 2}",
-               MUTED, 1.4, m="ar")
+d.t(20, 540, "1~4절 · 정상 흐름을 보는 도구 · 5~7절 · 잘못됐을 때 쓰는 도구", 13, MUTED, KR, "start")
+d.t(20, 564, "debug 금지 이유 · 손잡이가 없어서가 아니라 복구를 끄기 때문", 13, MUTED, KR, "start")
 
-for i, (n, title, q) in enumerate(cards):
-    x, y = pos(i)
-    focal = (i == 6)
-    if focal:
-        d.tone(x, y, CW, CH, ACC, 8, "12", 1.4)
-    else:
-        d.box(x, y, CW, CH, PAPER2, RULE, 1.0, 8)
-    d.t(x + 18, y + 26, n, 12, ACC if focal else SOFT, MONO, "start", 600)
-    d.t(x + 18, y + 56, title, 16, ACC if focal else INK, KR, "start", 600)
-    d.t(x + 18, y + 84, q, 13, MUTED, KR, "start")
-
-d.t(20, 620, "도구를 고르는 일이 곧 그 값을 깎을 손잡이를 고르는 일이다", 13, MUTED, KR, "start")
-d.t(20, 644, "원서 표 8-1 의 카운터 이름 다섯은 지금 없다 — 넷은 개명, 하나는 라벨로 흡수", 13, MUTED, KR, "start")
-
-d.legend(672, [("손잡이가 없는 도구", ACC)])
+d.legend(584, [("값을 깎는 손잡이", ACC)])
 d.save("08-01.chapter-overview.svg")

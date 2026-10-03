@@ -1,55 +1,48 @@
-# 06-03 학습 목표 뒤 전체 지도 — 절 여섯을 읽는 순서로 잇는다.
-# 타입 스펙: type-process — 절마다 같은 의미 슬롯(번호 · 이름 · 한 줄)이 반복되고 화살표가 읽는 순서를 나른다.
-#           축약: 주체(lane)가 없는 단계 지도라 카드 격자 stride 로 놓는다(같은 폴더 관례).
+# 06-03 학습 목표 뒤 전체 지도 — 기본 매니페스트에 박힌 값마다 출처(호환·동작·편의)와 이유를 놓는다.
+# 본문 근거: 이 노트 핵심 요약과 §2~§6, 결정 치트시트. replicas 의 kubeadm/애드온 차이는
+#            kubeadm dns.go `coreDNSReplicas = 2` 와 coredns.yaml.sed `# replicas: not specified here:` 로 확인(2026-10-03).
+# 타입 스펙: type-dp-security-matrix — 값(행) × 출처·이유(열) 격자에서 출처 열이 논지다.
+#           2026-10-03 절 제목을 이은 노드 사슬에서 실제 값이 든 격자로 다시 그렸다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 880, 616
+W, H = 880, 668
 d = D(W, H, "LEARNING COREDNS · 06-03",
-      "복제본 둘과 170Mi 는 어디서 온 값인가",
-      "6장 후반부의 절 여섯을 읽는 순서로 이은 지도. 1~4절이 배포 자원이고, "
-      "5절과 6절이 그 위에서 조정하는 일이다.",
-      "4절이 이 편 제목의 두 숫자를 품고 있습니다")
+      "기본 매니페스트의 값은 어디서 왔나",
+      "설명 없이 박힌 값마다 출처를 셋으로 갈랐다. 호환은 kube-dns 에서 무중단으로 넘어오려고 정한 값, "
+      "동작상 필요는 CoreDNS 가 제대로 돌려면 그래야 하는 값, 배포 편의는 나중에 고치지 않으려고 미리 넣은 값이다.",
+      "주황 열이 그 값의 출처입니다")
 
-CW, CH, GAP, X0 = 400, 104, 20, 20
-ROWS = [104, 232, 360]
-cards = [
-    ("§1", "네 범주가 있어야 뜬다", "Corefile 하나로는 아무것도 안 뜬다"),
-    ("§2", "접근권은 필요보다 넓다", "쓰지도 않는 권한이 둘 있다"),
-    ("§3", "이름이 kube-dns 인 이유", "이름과 클러스터 IP 는 불변이다"),
-    ("§4", "Deployment 의 판단들", "170Mi 도 호환에서 나온 값이다"),
-    ("§5", "복제본을 늘리는 두 갈래", "노드 수로 재거나 CPU 로 재거나"),
-    ("§6", "더 나은 Corefile", "옵션이 아니라 블록을 나눠 고친다"),
+COLS = [(20, 210, "값"), (240, 150, "출처"), (400, 360, "이유"), (770, 90, "절")]
+rows = [
+    (("Service 이름", "kube-dns"), "호환", "불변 필드 · 바꾸면 끊긴다", "§3"),
+    (("clusterIP", "10.7.240.10"), "동작상 필요", "kubelet 이 resolv.conf 에 쓴다", "§3"),
+    (("ClusterRole", "pods · nodes"), "배포 편의", "pods 는 verified 때만 · nodes 는 federation 용", "§2"),
+    (("replicas", "2"), "작은 클러스터 기준", "kubeadm 만 2 · 애드온은 비움", "§4 · §5"),
+    (("memory limit", "170Mi"), "호환", "kube-dns 와 같은 값 · 식으로 116,000 개", "§4"),
+    (("dnsPolicy", "Default"), "동작상 필요", "노드의 상류로 외부 이름을 푼다", "§4"),
+    (("cache 30", "한 블록"), "개선 대상", "클러스터 이름에는 중복 · 블록 분리", "§6"),
 ]
+Y0, PITCH, RH = 132, 60, 52
 
+for k, (x, w, head) in enumerate(COLS):
+    d.t(x + 12, 118, head, 12, ACC if k == 1 else SOFT, KR, "start", 600)
 
-def pos(i):
-    return X0 + (i % 2) * (CW + GAP), ROWS[i // 2]
+d.tone(236, Y0 - 4, 158, PITCH * (len(rows) - 1) + RH + 8, ACC, 8, "12", 1.4)
 
+for i, ((vm, vs), src, why, sec) in enumerate(rows):
+    y = Y0 + i * PITCH
+    for k, (x, w, _) in enumerate(COLS):
+        if k != 1:
+            d.box(x, y, w, RH, PAPER2, RULE, 1.0, 6)
+    d.t(32, y + 22, vm, 14, INK, KR, "start", 600)
+    d.t(32, y + 42, vs, 12, MUTED, KR if any("가" <= c <= "힣" for c in vs) else MONO, "start")
+    d.t(252, y + 31, src, 13, ACC, KR, "start", 600)
+    d.t(412, y + 31, why, 13, INK, KR, "start")
+    d.t(815, y + 31, sec, 13, MUTED, KR)
 
-for i in range(len(cards) - 1):
-    x1, y1 = pos(i)
-    x2, y2 = pos(i + 1)
-    if y1 == y2:
-        d.arrow([(x1 + CW, y1 + CH / 2), (x2 - 2, y2 + CH / 2)], MUTED, "ar", 1.4)
-    else:
-        bus = y1 + CH + 12
-        d.path(f"M {x1 + CW / 2} {y1 + CH} L {x1 + CW / 2} {bus} L {x2 + CW / 2} {bus} L {x2 + CW / 2} {y2 - 2}",
-               MUTED, 1.4, m="ar")
+d.t(20, 576, "1~4절 · 값이 왜 그 값인가 · 5~6절 · 클러스터에 맞춰 다시 고른다", 13, MUTED, KR, "start")
+d.t(20, 600, "10.7.240.10 은 원서 예제 값 · 클러스터마다 다르다", 12, SOFT, KR, "start")
 
-for i, (n, title, q) in enumerate(cards):
-    x, y = pos(i)
-    focal = (i == 3)
-    if focal:
-        d.tone(x, y, CW, CH, ACC, 8, "12", 1.4)
-    else:
-        d.box(x, y, CW, CH, PAPER2, RULE, 1.0, 8)
-    d.t(x + 18, y + 26, n, 12, ACC if focal else SOFT, MONO, "start", 600)
-    d.t(x + 18, y + 56, title, 16, ACC if focal else INK, KR, "start", 600)
-    d.t(x + 18, y + 84, q, 13, MUTED, KR, "start")
-
-d.t(20, 504, "2절부터 4절까지가 \"왜 이 값인가\" 이고, 5절과 6절이 \"그래서 무엇을 고치나\" 다", 13, MUTED, KR, "start")
-d.t(20, 528, "6절의 두 단계가 앞 편이 남긴 지적을 저자들이 직접 거두는 자리다", 13, MUTED, KR, "start")
-
-d.legend(556, [("제목의 두 숫자가 있는 절", ACC)])
+d.legend(620, [("값의 출처", ACC)])
 d.save("06-03.chapter-overview.svg")
