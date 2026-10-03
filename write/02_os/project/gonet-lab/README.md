@@ -6,16 +6,20 @@ source:
   - ~/study/gonet-lab  # 직접 만드는 네트워크 primitive 실습 저장소 — Phase 0 구현 시점
   - https://github.com/scofe97/ai-context/blob/1a8b9d7/project/go-network-lab.md  # 원본 로드맵 (비공개)
   - https://github.com/projectdiscovery/naabu  # Phase 4 Port Scanner 비교 구현 — 2026-10-01 README 확인
-  - https://github.com/grpc/grpc-go  # Phase 7·9·10·13·14 비교 구현
+  - https://github.com/grpc/grpc-go  # Phase 7·9·10·14·15 비교 구현
+  - https://spec.torproject.org/tor-spec/  # Phase 11 비교 — 서킷·onion 암호화
+  - https://git.zx2c4.com/wireguard-go/  # Phase 13 비교 — tun 패키지
   - https://protohackers.com/problems  # Phase 별 외부 채점 과제
 related:
   - ./STATE.md
   - ../../README.md
   - ../netpath-lab/README.md
   - ../network-fundamentals-lab/README.md
+  - ../../../09_spring/project/gateway-lab/README.md
+  - ../../../09_spring/project/hub-lab/README.md
   - ../../../roadmap/go-roadmap.md
   - ../../../roadmap/network-roadmap.md
-updated: 2026-10-02
+updated: 2026-10-03
 ---
 
 # gonet-lab — 프로젝트 인덱스
@@ -54,7 +58,16 @@ Linux 에서만 되는 관측(`strace`·`ss`·`tc netem`·eBPF)은 OrbStack `ubu
 
 ## Phase 와 문서
 
-> 열여섯 Phase 는 소켓 하나에서 출발해 프록시, 터널, 오버레이를 거쳐 커널 관측까지 내려갑니다. Phase 8 Reverse Tunnel 이 첫 핵심 이정표입니다.
+> 열일곱 Phase 는 접속 하나의 일생에서 출발해 중계와 분산을 거쳐 IP 계층과 운영으로 내려오는 네 묶음입니다. Phase 8 Reverse Tunnel 이 첫 핵심 이정표입니다.
+
+묶음이 바뀌는 지점에서 질문의 단위도 바뀝니다. 앞의 두 묶음은 "이 접속이 어떻게 살고 죽는가"를 묻습니다. 분산 묶음은 "누가 어디 있는지 모를 때 어떻게 찾아가는가"를 묻습니다. 마지막 묶음은 오버레이를 IP 계층에 내린 뒤, 앞에서 만든 것을 깨뜨리고 앱 안과 커널에서 다시 봅니다.
+
+| 묶음 | Phase | 묶음 질문 |
+|---|---|---|
+| 하부 | 0~4 | Go 코드 한 줄 아래에서 소켓·FD·패킷은 어떻게 움직이는가 |
+| 중계 | 5~9 | 두 접속 사이에 끼어든 프로그램은 수명·프로토콜·방향·다중화를 어떻게 책임지는가 |
+| 분산 | 10~12 | 고정 주소 없이 이웃을 찾은 뒤 닿지 않는 peer 에게 어떻게 돌아가는가 |
+| IP 계층과 운영 | 13~16 | IP 계층에 내린 오버레이와 앞의 구현을 깨뜨려 앱 안과 커널에서 관측하면 무엇이 보이는가 |
 
 | Phase | 학습 질문 | 문서 | 상태 |
 |---|---|---|---|
@@ -62,20 +75,44 @@ Linux 에서만 되는 관측(`strace`·`ss`·`tc netem`·eBPF)은 OrbStack `ubu
 | 1 TCP Echo / Chat | blocking Read 를 부른 goroutine 은 OS 스레드도 붙잡는가, 접속 1,000 개에서 먼저 바닥나는 자원은 무엇인가 | [01-01](./01-01.%EC%A1%B0%EC%9A%A9%ED%95%9C%20%EC%97%B0%EA%B2%B0%EC%9D%B4%20%EC%84%9C%EB%B2%84%EB%A5%BC%20%EB%A9%88%EC%B6%98%EB%8B%A4%20-%20goroutine%C2%B7FD%C2%B7idle%20timeout.md) | 4-Phase 4 완료 2026-09-28 (문서 draft) |
 | 2 UDP | 패킷 손실과 순서 뒤바뀜이 TCP 와 UDP 에서 각각 어떻게 드러나는가 | [02-01](./02-01.%EA%B2%BD%EA%B3%84%EB%A5%BC%20%EC%A7%80%ED%82%A4%EB%8A%94%20UDP,%20%EB%8C%80%EC%8B%A0%20%EB%96%A0%EC%95%88%EB%8A%94%20%EA%B2%83%20-%20%EB%8D%B0%EC%9D%B4%ED%84%B0%EA%B7%B8%EB%9E%A8%C2%B7%EC%86%90%EC%8B%A4%C2%B7%EC%88%9C%EC%84%9C.md)  · [02-02](./02-02.TCP%20%EB%8A%94%20%EC%86%90%EC%8B%A4%EC%9D%84%20%EC%96%B4%EB%96%BB%EA%B2%8C%20%ED%8C%90%EC%A0%95%ED%95%98%EB%82%98%20-%20%EC%A4%91%EB%B3%B5%20ACK%20%EB%AC%B8%ED%84%B1%C2%B7RACK%C2%B7TLP.md) · [02-03](./02-03.UDP%20%EC%8B%A4%EC%8A%B5%20%EA%B8%B0%EB%A1%9D%20-%20%EA%B2%BD%EA%B3%84%C2%B7%EC%9E%98%EB%A6%BC%C2%B7%EC%86%8C%EC%BC%93%C2%B7netem%20%EC%86%90%EC%8B%A4%EA%B3%BC%20%EC%88%9C%EC%84%9C.md) | 4-Phase 3 통과, Phase 4 대기 (문서 draft) |
 | 3 DNS Client | 라이브러리 없이 DNS 질의를 바이트로 짜면 무엇을 직접 정해야 하는가 | [03-01](./03-01.DNS%20%EC%A7%88%EC%9D%98%20%ED%95%9C%20%EC%9E%A5%EC%9D%84%20%EB%B0%94%EC%9D%B4%ED%8A%B8%EB%A1%9C%20-%20%ED%97%A4%EB%8D%94%C2%B7%EB%9D%BC%EB%B2%A8%C2%B7%EC%95%95%EC%B6%95%20%ED%8F%AC%EC%9D%B8%ED%84%B0%C2%B7TC.md) (draft) | 4-Phase 2 통과, Phase 3 실습 대기 |
-| 4 Port Scanner | 같은 포트를 CONNECT·SYN·UDP 로 물었을 때 커널은 무엇을 대신 해 주고 무엇을 숨기는가, 무응답은 닫힘인가 필터인가 손실인가 | | |
+| 4 Port Scanner | 같은 포트를 CONNECT·SYN·UDP 로 물었을 때 커널은 무엇을 대신 해 주고 무엇을 숨기는가, 무응답은 닫힘인가 필터인가 손실인가 | [04-01](./04-01.%EB%AC%B4%EC%9D%91%EB%8B%B5%EC%9D%80%20%EC%A6%9D%EA%B1%B0%EA%B0%80%20%EC%95%84%EB%8B%88%EB%8B%A4%20-%20CONNECT%C2%B7SYN%C2%B7UDP%20%ED%8F%AC%ED%8A%B8%20%EC%8A%A4%EC%BA%94.md) (draft) | 4-Phase 1 통과, Phase 2 문서 작성·검증 완료(메타인지 대기) |
 | 5 TCP Proxy | 한쪽이 EOF 일 때 반대쪽을 닫을지 half-close 를 허용할지, 접속 수명의 주인은 누구인가 | | |
 | 6 SOCKS5 Proxy | 단순 전달이 프로토콜을 아는 프록시가 되면 상태 기계가 어떻게 생기는가 | | |
 | 7 HTTP CONNECT | TLS 를 풀지 않고 전달만 하는 프록시는 무엇을 알고 무엇을 모르는가 | | |
 | 8 Reverse Tunnel | 바깥에서 들어올 수 없는 사설망 서비스를 밖으로 나가는 접속 하나로 어떻게 노출하는가 | | |
 | 9 Stream Multiplexing | 물리 접속 하나 위의 논리 스트림 여럿에서 느린 스트림 하나가 나머지를 막는가 | | |
 | 10 Discovery | 고정 주소 없이 이웃 노드를 찾고, 사라진 노드를 언제 죽었다고 판정하는가 | | |
-| 11 P2P Overlay | 노드의 정체와 네트워크 위치를 떼어 놓으면 도달 불가능한 peer 를 어떻게 우회하는가 | | |
+| 11 P2P Overlay | 노드의 정체와 네트워크 위치를 떼어 놓으면 도달 불가능한 peer 를 어떻게 우회하는가, NAT 에 구멍을 뚫을 수 없을 때만 relay 로 물러나려면 무엇이 필요한가 | | |
 | 12 Mini DHT | 전체 peer 목록 없이 XOR 거리만으로 값을 어떻게 찾아가는가 | | |
-| 13 Failure / Chaos | 지연이 큐 증가, 타임아웃, 재시도, 재시도 폭주로 번지는 사슬을 어디서 끊는가 | | |
-| 14 Observability | packet·connection·stream·tunnel·peer 를 서로 다른 관측 단위로 어떻게 나누는가 | | |
-| 15 eBPF Observer | 애플리케이션 밖, 커널에서 같은 네트워크 동작을 보면 무엇이 더 보이는가 | | |
+| 13 IP Overlay (TUN) | 오버레이를 모르는 일반 프로그램의 트래픽을 커널 라우팅만으로 오버레이에 태우려면 무엇이 필요한가, 캡슐화는 MTU 와 재전송에 무엇을 남기는가 | | |
+| 14 Failure / Chaos | 지연이 큐 증가, 타임아웃, 재시도, 재시도 폭주로 번지는 사슬을 어디서 끊는가 | | |
+| 15 Observability | packet·connection·stream·tunnel·peer 를 서로 다른 관측 단위로 어떻게 나누는가 | | |
+| 16 eBPF Observer | 애플리케이션 밖, 커널에서 같은 네트워크 동작을 보면 무엇이 더 보이는가 | | |
 
 문서 칸은 학습 문서를 쓰면 채우고, 상태 칸의 세부 진행은 [STATE.md](./STATE.md) 가 맡습니다.
+
+Phase 13 은 2026-10-03 에 넣었습니다. Phase 11 의 오버레이는 TCP 스트림을 옮기는 애플리케이션 수준이라, 로드맵의 최종 연결 `overlay → routing/NAT → Linux kernel → eBPF` 에서 routing/NAT 를 직접 다루는 Phase 가 없었기 때문입니다. TUN 장치로 IP 패킷을 옮겨 보면 WireGuard 와 K8s CNI 오버레이가 사는 계층을 손으로 지나게 됩니다. 그러면 Phase 16 eBPF 가 관측할 대상도 생깁니다.
+
+
+
+## 다 하면 무엇을 할 수 있나
+
+> 이 랩의 목표는 제품이 아니라 설명할 수 있는 능력입니다. 그 능력이 쓰이는 자리는 네 곳입니다.
+
+가장 직접 쓰이는 곳은 게이트웨이와 연동 허브입니다. [gateway-lab](../../../09_spring/project/gateway-lab/README.md) 은 raw Netty 로 리버스 프록시를 짓습니다. 그 Phase 1 고정 프록시와 Phase 4 장애 처리가 이 랩의 Phase 5 TCP Proxy·Phase 14 Failure 와 같은 질문을 던집니다. "upstream 타임아웃은 누가 정하는가", "클라이언트가 끊기면 upstream 접속도 닫히는가", "재시도는 언제 폭주로 번지는가"가 그 질문입니다. 이 랩에서는 같은 질문에 직접 짠 코드와 `ss` 출력으로 답합니다.
+
+[hub-lab](../../../09_spring/project/hub-lab/README.md) 과는 Phase 2 외부 API 클라이언트의 타임아웃·오류 분류가 이 랩의 Phase 14 재시도·backoff 와 맞닿는 정도로만 이어집니다.
+
+| 쓰는 자리 | 주로 쓰는 Phase | 할 수 있게 되는 일 |
+|---|---|---|
+| 게이트웨이·연동 허브 | 5, 14 | 타임아웃 주인, half-close, keepalive·backoff 설정의 근거를 코드와 관측으로 댄다 |
+| 서비스·K8s 장애 진단 | 1, 5, 14, 15 | 연결 누수, FD 고갈, CLOSE_WAIT 누적, 재시도 폭주를 `ss`·`strace`·metric 으로 계층을 골라 확인한다 |
+| K8s 네트워크 읽기 | 13, 16 | CNI 오버레이와 Cilium·Hubble 을 "직접 짜 본 것의 운영급 버전"으로 읽는다 |
+| 개인 도구의 구조 이해 | 6, 8, 13 | ngrok 같은 터널, SOCKS5 점프 프록시, 두 머신을 잇는 VPN 이 안에서 무엇을 하는지 설명하고 작은 판을 직접 돌려 본다 |
+
+이 랩의 프록시·터널·VPN 은 학습용이라 암호화와 인증이 없습니다. Phase 6 SOCKS5 를 Phase 8 터널로 밖에 노출하면 누구나 쓰는 공개 프록시가 되므로, 공인망에는 띄우지 않고 OrbStack 안이나 채점처럼 짧게 확인할 때만 엽니다.
+
+마지막으로 이 랩은 면접에서 쓸 수 있는 근거가 됩니다. 프록시와 터널을 직접 짜고 장애를 주입해 커널에서 관측했다는 이야기를 Phase 문서와 protohackers 채점 통과 기록이 뒷받침합니다.
 
 
 
@@ -98,12 +135,15 @@ grpc-go 는 뒤쪽 Phase 에서 직접 짤 primitive 를 운영급으로 완성�
 | 3 DNS Client | | 1 Prime Time, 2 Means to an End, 10 Voracious Code Storage (후순위) |
 | 4 Port Scanner | naabu `pkg/scan`·`pkg/runner` — SYN 응답의 짝 맞추기, rate 제어 위치 | |
 | 5 TCP Proxy | | 5 Mob in the Middle, 11 Pest Control |
+| 6 SOCKS5 Proxy | golang.org/x/net `proxy` — 같은 프로토콜의 클라이언트 쪽 구현, Tor `SOCKSPort` | |
 | 7 HTTP CONNECT | grpc-go `Documentation/proxy.md` — CONNECT 터널 위에 HTTP/2 싣기 | |
 | 8 Reverse Tunnel | frp·gost·portal-tunnel | 이 터널로 위 채점을 받는 것 자체가 검증 (UDP 문제는 UDP 포워딩 필요) |
 | 9 Stream Multiplexing | grpc-go `internal/transport` — 스트림 윈도, WINDOW_UPDATE, 5바이트 메시지 접두 | 8 Insecure Sockets Layer |
 | 10 Discovery | grpc-go `resolver`·`balancer` — 이름 해석과 연결 선택의 분리 | |
-| 13 Failure / Chaos | grpc-go `keepalive`·`backoff`·연결 상태 기계 | 6 Speed Daemon, 9 Job Centre |
-| 14 Observability | grpc-go `channelz`, 상태 코드 | |
+| 11 P2P Overlay | Tor `tor-spec` — 서킷 확장과 홉별 onion 암호화, 각 relay 가 무엇을 아는가. hole punching 은 RFC 5128 | |
+| 13 IP Overlay (TUN) | wireguard-go `tun`, Flannel VXLAN — 캡슐화를 유저 공간과 커널 중 어디서 하는가 | |
+| 14 Failure / Chaos | grpc-go `keepalive`·`backoff`·연결 상태 기계 | 6 Speed Daemon, 9 Job Centre |
+| 15 Observability | grpc-go `channelz`, 상태 코드 | |
 
 표에 없는 Phase 는 아직 붙일 짝을 찾지 못한 것입니다. 표 칸에는 이름만 적었고, 각 칸에서 무엇을 비교할지 묻는 질문은 로드맵의 해당 Phase 절 `### Reference` 와 `### 외부 채점 과제 (선택)` 에 있습니다.
 
@@ -119,7 +159,8 @@ Phase 2 의 7번 Line Reversal 은 따로 짚어 둘 만합니다. UDP 위에 �
 |---|---|---|
 | [netpath-lab](../netpath-lab/README.md) | TCP·DNS 실패를 errno 에서 Go 에러 값까지 따라가는 축 | netpath 는 클라이언트 쪽에서 요청 경로를 잽니다. gonet 은 서버·프록시·터널을 직접 짭니다 |
 | [network-fundamentals-lab](../network-fundamentals-lab/README.md) | 3-way handshake, conntrack, NAT, MTU | 그쪽은 장전된 토폴로지를 진단하고, 이쪽은 그 위에서 도는 프로그램을 만듭니다 |
-| [networking-and-kubernetes](../../../08_cloud/book/networking-and-kubernetes/README.md) | netns, veth, conntrack, CNI | 커널 메커니즘 설명은 이 정독본이 정본입니다. Phase 15 에서 그 README 의 「질문별 정본」 절로 보냅니다 |
+| [networking-and-kubernetes](../../../08_cloud/book/networking-and-kubernetes/README.md) | netns, veth, conntrack, CNI | 커널 메커니즘 설명은 이 정독본이 정본입니다. Phase 13·16 에서 그 README 의 「질문별 정본」 절로 보냅니다 |
+| [gateway-lab](../../../09_spring/project/gateway-lab/README.md) · [hub-lab](../../../09_spring/project/hub-lab/README.md) | 프록시, upstream 타임아웃, 재시도 | gateway-lab 은 raw Netty 위의 HTTP 게이트웨이(Phase 1·4 가 이 랩의 5·14 와 대응), hub-lab 은 Spring 연동 허브(Phase 2 타임아웃이 이 랩의 14 와 대응)입니다. 이쪽은 그 아래 접속 수명과 바이트 중계를 직접 짭니다 |
 | [paw_packet-analysis-wireshark](../../book/paw_packet-analysis-wireshark/README.md) | tcpdump·Wireshark 로 FIN·RST 읽기 | 캡처를 읽는 법은 그쪽, 무엇을 캡처할지는 이쪽입니다 |
 | [systems-performance](../../book/systems-performance/README.md) | `strace`, `perf`, BPF 추적 | 도구 사용법과 방법론은 그쪽을 참조합니다 |
 | [go-roadmap](../../../roadmap/go-roadmap.md) 「손으로 확인하는 실습」 | TCP echo, reverse proxy, 멀티플렉서, reverse tunnel | 그 표의 네 항목이 이 랩의 Phase 1·5·9·8 과 같은 과제입니다. 같은 절이 protohackers 0·5·3·9·7번을 외부 검증으로 드는데, 위 「비교 구현과 외부 채점」 표의 배치와 같습니다. 학습 순서는 로드맵이 정합니다 |
@@ -133,8 +174,10 @@ Phase 2 의 7번 Line Reversal 은 따로 짚어 둘 만합니다. UDP 위에 �
 - 코드와 규칙: `~/study/gonet-lab` 의 `README.md`, `AGENTS.md`
 - 로드맵 전사본: `~/study/gonet-lab/docs/01-01.gonet-lab-roadmap.md` (원본은 비공개 저장소 `scofe97/ai-context` 의 `project/go-network-lab.md`)
 - 원격 저장소: `scofe97/gonet-lab` (private, 2026-10-01 생성)
-- 로드맵 로컬 변경(2026-10-01): Phase 4 Port Scanner 추가, 기존 4~14 를 5~15 로 이동, grpc-go Reference 와 외부 채점 과제 추가. 원본을 다시 가져오면 이 세 변경을 다시 합칩니다. 이력은 로드맵 첫 줄 주석에 있습니다
+- 로드맵 로컬 변경(2026-10-01): Phase 4 Port Scanner 추가, 기존 4~14 를 5~15 로 이동, grpc-go Reference 와 외부 채점 과제 추가
+- 로드맵 로컬 변경(2026-10-03): Phase 13 IP Overlay (TUN) 추가, 기존 13~15 를 14~16 으로 이동, Phase 6·11 Reference(x/net/proxy, Tor)와 Phase 11 hole punching 선택 실험 추가
+- 원본을 다시 가져오면 두 날짜의 변경을 다시 합칩니다. 이력은 로드맵 첫 줄 주석에 있습니다
 - Phase 0 범위와 완료 조건: `~/study/gonet-lab/docs/03-01.gonet-lab-phase0-plan.md`
 - Phase 4 범위·실험·배울 개념·naabu 플래그 대응표: `~/study/gonet-lab/docs/03-02.gonet-lab-phase4-plan.md`
-- 비교 구현: [projectdiscovery/naabu](https://github.com/projectdiscovery/naabu), [grpc/grpc-go](https://github.com/grpc/grpc-go)
+- 비교 구현: [projectdiscovery/naabu](https://github.com/projectdiscovery/naabu), [grpc/grpc-go](https://github.com/grpc/grpc-go), [Tor 명세](https://spec.torproject.org/tor-spec/), [wireguard-go](https://git.zx2c4.com/wireguard-go/)
 - 외부 채점: [protohackers.com/problems](https://protohackers.com/problems)

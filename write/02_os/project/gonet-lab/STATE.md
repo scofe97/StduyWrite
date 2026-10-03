@@ -4,8 +4,8 @@ scope: durable
 level: 기본
 last_verified: 2026-09-28
 blocked_count: 3
-next_lesson: "(1) 랩 Phase 2 UDP 의 Phase 4 복습 문답(9/30 예정에서 밀림, 02-01~02-03 — 표적: RACK 조건 1 의 역할·재정렬 창 크기, SEQ=바이트, ReadFrom 한 데이터그램, A·B·C 는 요청 셋) (2) 랩 Phase 3 DNS 의 Phase 3 실습(인코더·디코더, dig 질의와 바이트 대조, 바이트 순서 뒤집기, TXT 로 TC 재현 — 바이트 해독은 AI 가 보여 줌)"
-updated: 2026-10-02
+next_lesson: "(0) 랩 Phase 4 Port Scanner 의 Phase 2 메타인지(04-01 읽고 가장 자신 없는 절) → Phase 3 실습 (1) 랩 Phase 2 UDP 의 Phase 4 복습 문답(9/30 예정에서 밀림, 02-01~02-03 — 표적: RACK 조건 1 의 역할·재정렬 창 크기, SEQ=바이트, ReadFrom 한 데이터그램, A·B·C 는 요청 셋) (2) 랩 Phase 3 DNS 의 Phase 3 실습(인코더·디코더, dig 질의와 바이트 대조, 바이트 순서 뒤집기, TXT 로 TC 재현 — 바이트 해독은 AI 가 보여 줌)"
+updated: 2026-10-03
 ---
 
 # gonet-lab 학습 상태
@@ -24,7 +24,7 @@ updated: 2026-10-02
 | 1 TCP Echo / Chat | [01-01](./01-01.%EC%A1%B0%EC%9A%A9%ED%95%9C%20%EC%97%B0%EA%B2%B0%EC%9D%B4%20%EC%84%9C%EB%B2%84%EB%A5%BC%20%EB%A9%88%EC%B6%98%EB%8B%A4%20-%20goroutine%C2%B7FD%C2%B7idle%20timeout.md) (draft) | Phase 1 통과 2026-09-27, Phase 2 통과 2026-09-27(메타인지 자기 평가), Phase 3 통과 2026-09-28(실험 1~5, deadline 한 번 vs 매번 비교는 사용자 선택으로 미실행), 01-01 반영 완료 2026-09-28, Phase 4 2026-09-28(설명 3) | |
 | 2 UDP | [02-01](./02-01.%EA%B2%BD%EA%B3%84%EB%A5%BC%20%EC%A7%80%ED%82%A4%EB%8A%94%20UDP%2C%20%EB%8C%80%EC%8B%A0%20%EB%96%A0%EC%95%88%EB%8A%94%20%EA%B2%83%20-%20%EB%8D%B0%EC%9D%B4%ED%84%B0%EA%B7%B8%EB%9E%A8%C2%B7%EC%86%90%EC%8B%A4%C2%B7%EC%88%9C%EC%84%9C.md) (draft) | Phase 1 통과 2026-09-28(소크라테스 Q1~Q5-2), Phase 2 통과 2026-09-29(메타인지: "RACK 이 가장 어려움, 나머지는 괜찮음"), Phase 3 통과 2026-09-29(실험 1~5), 02-01 실측 반영 + 02-02(손실 판정)·02-03(실습 기록) 신규 2026-09-29, Phase 4 는 사용자 요청으로 2026-09-30 로 연기 | |
 | 3 DNS Client | [03-01](./03-01.DNS%20%EC%A7%88%EC%9D%98%20%ED%95%9C%20%EC%9E%A5%EC%9D%84%20%EB%B0%94%EC%9D%B4%ED%8A%B8%EB%A1%9C%20-%20%ED%97%A4%EB%8D%94%C2%B7%EB%9D%BC%EB%B2%A8%C2%B7%EC%95%95%EC%B6%95%20%ED%8F%AC%EC%9D%B8%ED%84%B0%C2%B7TC.md) (draft) | Phase 1 통과 2026-09-29(소크라테스 Q1~Q9), Phase 2 통과 2026-10-02(메타인지 첫 답 "모르겠다" → §1~§4 함께 다시 읽기 → "전체적으로 이해, TCP·UDP 경계 차이만 다시" → 설명 후 03-01 보강) | |
-| 4 Port Scanner | | | |
+| 4 Port Scanner | [04-01](./04-01.%EB%AC%B4%EC%9D%91%EB%8B%B5%EC%9D%80%20%EC%A6%9D%EA%B1%B0%EA%B0%80%20%EC%95%84%EB%8B%88%EB%8B%A4%20-%20CONNECT%C2%B7SYN%C2%B7UDP%20%ED%8F%AC%ED%8A%B8%20%EC%8A%A4%EC%BA%94.md) (draft) | Phase 1 통과 2026-10-03(소크라테스 Q1~Q8), Phase 2 문서 작성·검증 2026-10-03(메타인지 대기) | |
 | 5 TCP Proxy | | | |
 | 6 SOCKS5 Proxy | | | |
 | 7 HTTP CONNECT | | | |
@@ -33,9 +33,10 @@ updated: 2026-10-02
 | 10 Discovery | | | |
 | 11 P2P Overlay | | | |
 | 12 Mini DHT | | | |
-| 13 Failure / Chaos | | | |
-| 14 Observability | | | |
-| 15 eBPF Observer | | | |
+| 13 IP Overlay (TUN) | | | |
+| 14 Failure / Chaos | | | |
+| 15 Observability | | | |
+| 16 eBPF Observer | | | |
 
 ## 현재 난이도 레벨
 
@@ -52,6 +53,8 @@ updated: 2026-10-02
 - 2026-10-02 랩 Phase 3 DNS Phase 2 메타인지 체크(학습자 자기 평가): "문서를 읽어도 잘 모르겠다" — 미통과, 특정 절을 짚지 못함. 학습자 요청으로 03-01 을 §1 부터 함께 한 단계씩 다시 진행(진행 기록은 아래 이어서)
 - 2026-10-02 03-01 함께 다시 읽기(평가 아님). 독립: 덤프에서 ID·이름·타입 줄 찾기(ID 는 힌트 뒤), 07 = 글자 수, 라벨 길이 + 00 끝 표시 둘 다 쓴다, 개수를 미리 알면 읽을 범위가 정해짐(Q2), 바이트 순서 실수는 "없다"로 끝나 알아채기 어렵다(Q3 재질문), 압축 포인터 = 용량 절약(Q4), 길이 값이 포인터 표시 범위와 겹치면 안 됨(Q5, 0xbf 를 188 로 계산 → 191 교정), TCP 만 길이 접두가 필요한 이유 = 바이트 흐름(Q6, UDP 단위를 "세그먼트"로 부름 → 데이터그램 교정), 응답 없으면 타임아웃(Q7). 설명(도움받은 응답): 헤더 칸 역할 표(학습자 질문), 빅엔디언(Phase 1 미다룸 개념을 AI 가 설명 없이 물음 → "모르겠음" → 날짜 03/04 비유로 설명), "12번째 바이트" = 메시지 앞에서 센 자리(0 부터, 헤더 0~11), 라벨 0~63·예약 64~191·포인터 192~255. 학습자 요청: 바이트 해독·글자 세기는 질문하지 말 것(메모리 feedback_quiz_concepts_not_byte_decoding). 복습 표적: 빅엔디언, 오프셋(자리 번호), 압축 포인터 따라가기. 마지막 메타인지 답: "전체적으로 모두 이해했다, TCP 와 UDP 에서 왜 하나는 끊기고 하나는 덩어리인지 한 번 더" → 바이트 번호·송신 버퍼 이어 붙임·데이터그램 단위 큐로 설명(도움받은 응답), 03-01 §4 에 비교 표와 02-01 map-2 삽입. Phase 4 표적에 추가: TCP·UDP 경계 차이의 원인
 - 2026-10-02 03-01 검증 두 갈래(별도 서브에이전트). 사실 검증: 명백한 오류 3건(포인터 순환 설명이 "앞의 포인터"로 거꾸로 됨, map-1 ID 칸 "무작위로 고름" ↔ 본문 고정값, 복습 표적 절 번호) + 출처·표현 보강 8건(Kaminsky·RFC 2181·클래스·NXDOMAIN·예약 범위·"막음"→"크게 어렵게"·수백 바이트 근거) 반영. 학습성 검토(REVISE): 오프셋 정의를 §1 로 당김, 빅엔디언에 "CPU 가 다를 수 있어 하나로 정함" 이유, TCP·UDP 길이 차이 결론 먼저, 16진 뺄셈·비트 문자열 제거, §1·§3 요약을 문제로 시작, 리졸버·NOERROR·RDATA·선로 첫 등장 정의, 512 의 통설(RFC 791 576) 추가, 도식 6장 개정. AI 실수 기록: 대화에서 "타입 256 은 없는 타입"이라 설명 → 256 은 URI(RFC 7553) 배정, 정정 필요(문서에는 없음)
+- 2026-10-03 랩 Phase 4 Port Scanner Phase 1 (소크라테스 Q1~Q8, 평가 아님 — last_verified 미이동). 첫 답 "CLOSED 를 던져 준다"(상태 이름과 플래그 혼동) → 힌트 2회 뒤에도 FIN-WAIT-2 실험 기억 못 함 → RST 이름은 AI 가 줌(도움받은 응답). 독립: DROP 이면 timeout·명시적 거부 아님(Q2), timeout 만으로 filtered 단정 불가·가는 길/오는 길 유실(Q3), 재시도(Q4), UDP 응답은 앱이 정함(Q6), raw 소켓 특권 = 커널 규칙을 벗어날 수 있음(Q8, 위조·RST 주입·상태 우회는 AI 가 구체화). 힌트 뒤: 재시도의 대가 = 시간(Q4 → "정확히 알 방법은?" 질문 → 무응답으로는 끝내 확정 불가, worker pool·rate limit·retry/timeout 조절로 설명). Q5 SYN-ACK 뒤 RST 는 "커널이 보낸다"까지 스스로, "closed 로 나간다"로 이유 어긋남 → raw SYN 은 커널 기록이 없어 모르는 세그먼트로 보고 RST(설명). Q7 무응답 판정 "open·closed 둘 다" → open|filtered 는 설명, closed 가능성(ICMP 유실·rate limit)은 학습자가 먼저 짚음. 학습자 질문으로 설명한 것: 워커 풀이 기다림을 겹침, 빨리 물으면 대기열이 넘쳐 손실, 일반 소켓은 마지막 ACK 를 커널이 자동 송신, TCP 닫힌 포트는 RST·iptables REJECT 기본값은 TCP 에도 ICMP port unreachable. 학습자 요청: 워커 풀·rate·ACK 자동 송신·커널 RST 네 가지를 04-01 에서 도식과 함께 자세히. 미다룸(문서·실습으로): TCP 헤더·pseudo-header 체크섬, half-open·SYN cookie·SYN-RECV, ephemeral port·TIME-WAIT 고갈, connected UDP 의 ECONNREFUSED
+- 2026-10-03 04-01 작성·검증(별도 서브에이전트 둘). 사실 검증 확정 오류 3건 반영: SYN 재전송은 6 이 아니라 10번(tcp_syn_retries 6 + tcp_syn_linear_timeouts 4, VM 실측 132.5s), ICMP 제한은 전역 1000/50 이 아니라 대상별 버스트 6 뒤 초당 1개(icmp_ratelimit·XRLIM_BURST_FACTOR, loopback 면제, upstream 전역 기본 10000), naabu `-c 25` 는 탐침 worker 가 아님(동시성·속도 모두 `-rate`) — 계획 문서 03-02 대응표·ICMP 실험 행도 고침. 학습성 검토(REVISE) 반영: 플래그 넷 표·상태와 플래그 구분, TCP 가 ICMP 대신 RST 를 쓰는 이유, 스캐너 커널 RST 의 방향·의미 표, handshake 도식을 순서 번호 대신 뜻 라벨로, map-1 화살표 제거(flowk link=False 추가), 몰아서 vs 고르게 ICMP 버스트 도식 신설, rate·tick 정의를 코드 앞으로. Phase 3 주의: lo 로는 ICMP 대상별 제한이 재현되지 않음 → netns·veth 경로 필요. 대화 중 AI 실수: "Phase 2 Recv-Q 가 차면 데이터그램이 버려지던 것"(02-01 은 TCP 흐름 제어라 버리지 않음) — 문서에서는 바로잡음
 
 ## 막힌 지점
 - 2026-09-28~29 랩 Phase 2 UDP Phase 3 (실험 1~5, 코드 internal/udp·cmd udp-listen/udp-send·experiments/phase2-loss 는 AI 작성, 실행은 학습자). 예측 제출 방식: 실험 1·2·4(재)·5 는 예측을 결과와 함께 제출, 실험 2 는 실행 전 예측, 실험 3·4(첫) 은 예측 없음

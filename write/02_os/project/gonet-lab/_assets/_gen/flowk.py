@@ -11,10 +11,11 @@ def _w(txt, size=12):
     return sum(size * (1.0 if "가" <= ch <= "힣" else 0.62) for ch in str(txt)) + 16
 
 
-def flow_grid(out, eyebrow, title, desc, lead, stages, lanes, arrows=None, legend=None, lane_h=112, W=960):
+def flow_grid(out, eyebrow, title, desc, lead, stages, lanes, arrows=None, legend=None, lane_h=112, W=960, link=True):
     """stages: [(열 제목, 부제)]
     lanes: [(행 이름, 행 부제, [칸마다 (items, 주석, 주석색)])]  items: [(글자, 색 또는 None)]
-    arrows: 열 사이 화살표 라벨 [str] (len = 열 수 - 1)"""
+    arrows: 열 사이 화살표 라벨 [str] (len = 열 수 - 1)
+    link: False 면 열 사이 화살표를 그리지 않는다 (열이 단계가 아니라 경우 구분일 때)"""
     n = len(stages)
     cw = (W - X0 * 2 - LABEL_W - GAP * (n - 1)) / n
     top = HEAD_Y + 40
@@ -52,7 +53,7 @@ def flow_grid(out, eyebrow, title, desc, lead, stages, lanes, arrows=None, legen
             if note:
                 ny = y + box_h - 8 if items else y + box_h / 2 + 4
                 d.t(x + cw / 2, ny, note, 11, note_c or MUTED, KR, "middle")
-            if k < n - 1:
+            if link and k < n - 1:
                 harrow(d, x + cw + 3, x + cw + GAP - 3, y + box_h / 2)
     if legend:
         d.legend(H - 40, legend)
