@@ -4,8 +4,8 @@ scope: durable
 level: 기본
 last_verified: 2026-09-28
 blocked_count: 3
-next_lesson: "(1) 랩 Phase 2 UDP 의 Phase 4 복습 문답(2026-09-30 예정, 02-01~02-03 — 표적: RACK 조건 1 의 역할·재정렬 창 크기, SEQ=바이트, ReadFrom 한 데이터그램, A·B·C 는 요청 셋) (2) 랩 Phase 3 DNS Client 의 Phase 2 메타인지(03-01 읽고 가장 자신 없는 절) → Phase 3 실습(인코더·디코더, tcpdump -X 대조, 바이트 순서 뒤집기, TXT 로 TC 재현) (3) 문서 잔여: 00-02 시그널 표, 00-03 Go 문법 lgo 링크"
-updated: 2026-09-29
+next_lesson: "(1) 랩 Phase 2 UDP 의 Phase 4 복습 문답(9/30 예정에서 밀림, 02-01~02-03 — 표적: RACK 조건 1 의 역할·재정렬 창 크기, SEQ=바이트, ReadFrom 한 데이터그램, A·B·C 는 요청 셋) (2) 랩 Phase 3 DNS 의 Phase 3 실습(인코더·디코더, dig 질의와 바이트 대조, 바이트 순서 뒤집기, TXT 로 TC 재현 — 바이트 해독은 AI 가 보여 줌)"
+updated: 2026-10-02
 ---
 
 # gonet-lab 학습 상태
@@ -23,7 +23,7 @@ updated: 2026-09-29
 | 0 Network CLI | [00-01](./00-01.listener%20%EC%86%8C%EC%BC%93%EA%B3%BC%20%EC%97%B0%EA%B2%B0%20%EC%86%8C%EC%BC%93.md) · [00-02](./00-02.strace%20%EC%99%80%20proc%20%EB%A1%9C%20%EC%9D%BD%EC%9D%80%20%EA%B2%83%20-%20%EC%8B%A4%EC%8A%B5%EC%97%90%EC%84%9C%20%EB%A7%8C%EB%82%9C%20syscall%C2%B7FD%C2%B7TCP%20%EC%83%81%ED%83%9C.md) · [00-03](./00-03.Go%20%EB%AC%B8%EB%B2%95%20-%20goroutine%C2%B7io.Copy%C2%B7context%C2%B7WaitGroup.md) (draft) | Phase 1·2 통과 2026-09-26, Phase 3 통과 2026-09-27, Phase 4 2026-09-28(부분 2) | |
 | 1 TCP Echo / Chat | [01-01](./01-01.%EC%A1%B0%EC%9A%A9%ED%95%9C%20%EC%97%B0%EA%B2%B0%EC%9D%B4%20%EC%84%9C%EB%B2%84%EB%A5%BC%20%EB%A9%88%EC%B6%98%EB%8B%A4%20-%20goroutine%C2%B7FD%C2%B7idle%20timeout.md) (draft) | Phase 1 통과 2026-09-27, Phase 2 통과 2026-09-27(메타인지 자기 평가), Phase 3 통과 2026-09-28(실험 1~5, deadline 한 번 vs 매번 비교는 사용자 선택으로 미실행), 01-01 반영 완료 2026-09-28, Phase 4 2026-09-28(설명 3) | |
 | 2 UDP | [02-01](./02-01.%EA%B2%BD%EA%B3%84%EB%A5%BC%20%EC%A7%80%ED%82%A4%EB%8A%94%20UDP%2C%20%EB%8C%80%EC%8B%A0%20%EB%96%A0%EC%95%88%EB%8A%94%20%EA%B2%83%20-%20%EB%8D%B0%EC%9D%B4%ED%84%B0%EA%B7%B8%EB%9E%A8%C2%B7%EC%86%90%EC%8B%A4%C2%B7%EC%88%9C%EC%84%9C.md) (draft) | Phase 1 통과 2026-09-28(소크라테스 Q1~Q5-2), Phase 2 통과 2026-09-29(메타인지: "RACK 이 가장 어려움, 나머지는 괜찮음"), Phase 3 통과 2026-09-29(실험 1~5), 02-01 실측 반영 + 02-02(손실 판정)·02-03(실습 기록) 신규 2026-09-29, Phase 4 는 사용자 요청으로 2026-09-30 로 연기 | |
-| 3 DNS Client | [03-01](./03-01.DNS%20%EC%A7%88%EC%9D%98%20%ED%95%9C%20%EC%9E%A5%EC%9D%84%20%EB%B0%94%EC%9D%B4%ED%8A%B8%EB%A1%9C%20-%20%ED%97%A4%EB%8D%94%C2%B7%EB%9D%BC%EB%B2%A8%C2%B7%EC%95%95%EC%B6%95%20%ED%8F%AC%EC%9D%B8%ED%84%B0%C2%B7TC.md) (draft) | Phase 1 통과 2026-09-29(소크라테스 Q1~Q9), Phase 2 문서 작성 2026-09-29 · 메타인지 대기 | |
+| 3 DNS Client | [03-01](./03-01.DNS%20%EC%A7%88%EC%9D%98%20%ED%95%9C%20%EC%9E%A5%EC%9D%84%20%EB%B0%94%EC%9D%B4%ED%8A%B8%EB%A1%9C%20-%20%ED%97%A4%EB%8D%94%C2%B7%EB%9D%BC%EB%B2%A8%C2%B7%EC%95%95%EC%B6%95%20%ED%8F%AC%EC%9D%B8%ED%84%B0%C2%B7TC.md) (draft) | Phase 1 통과 2026-09-29(소크라테스 Q1~Q9), Phase 2 통과 2026-10-02(메타인지 첫 답 "모르겠다" → §1~§4 함께 다시 읽기 → "전체적으로 이해, TCP·UDP 경계 차이만 다시" → 설명 후 03-01 보강) | |
 | 4 Port Scanner | | | |
 | 5 TCP Proxy | | | |
 | 6 SOCKS5 Proxy | | | |
@@ -49,6 +49,9 @@ updated: 2026-09-29
   - 설명(도움) 받음: `listen()` 의 역할·accept queue·backlog (Q4), `bind()` 의 역할·EADDRINUSE, remote 가 handshake 중 채워지는 시점, FD 는 `socket()` 과 `accept()` 두 곳에서 생김 (Q9), `ss` 출력 읽기
   - AI 가 덧붙인 내용(학습자 도출 아님): accept queue 에는 FD 없는 소켓이 줄 선다, UDP 는 연결 상태를 앱이 든다, LISTEN 줄의 Recv-Q/Send-Q = 대기열 길이/backlog
 - 2026-09-29 랩 Phase 3 DNS Client Phase 1 (소크라테스 Q1~Q9, 평가 아님 — last_verified 미이동). 독립 응답: 구분값 방식의 문제 = 이름 안에 구분값이 섞이면 끊김(Q2·Q2 힌트), 고정 길이 필드는 길이 접두사가 필요 없음(Q5), 짝을 맞추려면 페이로드에 식별 정보가 필요·응답에 질문(도메인)을 담고 클라이언트가 기억(Q6·Q7), RD 는 플래그(Q9). 힌트 뒤 도달: 질의에 담을 두 조각 = 이름·타입(Q1, 첫 답은 서버 쪽 재귀 동작), 타입은 목록 번호(Q4, "플래그"라 부름 → 코드와 구분 교정). 설명(도움받은 응답): 길이 접두사 값 세기(9 → 10 → 11, 두 번 틀림), 타입 코드 A=1·MX=15·AAAA=28 2바이트, 체크섬은 위조 방지가 아님·DTLS/DoQ/DoT/DoH/DNSSEC, 무작위 ID 16비트 + 무작위 출발지 포트(RFC 5452)로 경로 밖 위조를 막음(Q8 "모르겠음"), 경로 위·밖 구분(엽서 비유 뒤 재진술 맞음), RD 는 1비트·서버가 직접 끝까지 물어 옴("다시 쏴 준다"로 오해). 재진술: 대조할 값 = ID(스스로) + 질문(상기 뒤). 미다룸(Phase 2 문서·Phase 3 실측으로): 실제 이름 인코딩(라벨 단위 길이 + 0), 헤더 12바이트(플래그·개수 필드), class IN, 네트워크 바이트 순서(빅엔디언), 응답의 이름 압축 포인터
+- 2026-10-02 랩 Phase 3 DNS Phase 2 메타인지 체크(학습자 자기 평가): "문서를 읽어도 잘 모르겠다" — 미통과, 특정 절을 짚지 못함. 학습자 요청으로 03-01 을 §1 부터 함께 한 단계씩 다시 진행(진행 기록은 아래 이어서)
+- 2026-10-02 03-01 함께 다시 읽기(평가 아님). 독립: 덤프에서 ID·이름·타입 줄 찾기(ID 는 힌트 뒤), 07 = 글자 수, 라벨 길이 + 00 끝 표시 둘 다 쓴다, 개수를 미리 알면 읽을 범위가 정해짐(Q2), 바이트 순서 실수는 "없다"로 끝나 알아채기 어렵다(Q3 재질문), 압축 포인터 = 용량 절약(Q4), 길이 값이 포인터 표시 범위와 겹치면 안 됨(Q5, 0xbf 를 188 로 계산 → 191 교정), TCP 만 길이 접두가 필요한 이유 = 바이트 흐름(Q6, UDP 단위를 "세그먼트"로 부름 → 데이터그램 교정), 응답 없으면 타임아웃(Q7). 설명(도움받은 응답): 헤더 칸 역할 표(학습자 질문), 빅엔디언(Phase 1 미다룸 개념을 AI 가 설명 없이 물음 → "모르겠음" → 날짜 03/04 비유로 설명), "12번째 바이트" = 메시지 앞에서 센 자리(0 부터, 헤더 0~11), 라벨 0~63·예약 64~191·포인터 192~255. 학습자 요청: 바이트 해독·글자 세기는 질문하지 말 것(메모리 feedback_quiz_concepts_not_byte_decoding). 복습 표적: 빅엔디언, 오프셋(자리 번호), 압축 포인터 따라가기. 마지막 메타인지 답: "전체적으로 모두 이해했다, TCP 와 UDP 에서 왜 하나는 끊기고 하나는 덩어리인지 한 번 더" → 바이트 번호·송신 버퍼 이어 붙임·데이터그램 단위 큐로 설명(도움받은 응답), 03-01 §4 에 비교 표와 02-01 map-2 삽입. Phase 4 표적에 추가: TCP·UDP 경계 차이의 원인
+- 2026-10-02 03-01 검증 두 갈래(별도 서브에이전트). 사실 검증: 명백한 오류 3건(포인터 순환 설명이 "앞의 포인터"로 거꾸로 됨, map-1 ID 칸 "무작위로 고름" ↔ 본문 고정값, 복습 표적 절 번호) + 출처·표현 보강 8건(Kaminsky·RFC 2181·클래스·NXDOMAIN·예약 범위·"막음"→"크게 어렵게"·수백 바이트 근거) 반영. 학습성 검토(REVISE): 오프셋 정의를 §1 로 당김, 빅엔디언에 "CPU 가 다를 수 있어 하나로 정함" 이유, TCP·UDP 길이 차이 결론 먼저, 16진 뺄셈·비트 문자열 제거, §1·§3 요약을 문제로 시작, 리졸버·NOERROR·RDATA·선로 첫 등장 정의, 512 의 통설(RFC 791 576) 추가, 도식 6장 개정. AI 실수 기록: 대화에서 "타입 256 은 없는 타입"이라 설명 → 256 은 URI(RFC 7553) 배정, 정정 필요(문서에는 없음)
 
 ## 막힌 지점
 - 2026-09-28~29 랩 Phase 2 UDP Phase 3 (실험 1~5, 코드 internal/udp·cmd udp-listen/udp-send·experiments/phase2-loss 는 AI 작성, 실행은 학습자). 예측 제출 방식: 실험 1·2·4(재)·5 는 예측을 결과와 함께 제출, 실험 2 는 실행 전 예측, 실험 3·4(첫) 은 예측 없음
@@ -93,10 +96,10 @@ updated: 2026-09-29
 
 - 실험 4 미니 실험에서 몇 시간 방치된 CLOSE-WAIT 클라이언트가 첫 write 에 곧바로 EPIPE 를 냈다. Go Dialer 기본 TCP keepalive 가 먼저 상대 부재를 알아챘다는 추정(AI 추정, 미확인). Phase 1 에서 확인.
 - ~~서버 프로세스 FD 8·9·11·12 의 pipe 두 쌍은 누가 만드는가~~ — 해결(2026-09-28 실험 2): echo 핸들러 io.Copy(conn, conn) 의 splice 가 연결마다 pipe 하나(FD 2)를 EOF 까지 쥔다. go1.25.1 internal/poll/splice_linux.go Splice·getPipe. strace 로 pipe2 는 아직 미확인
-- (2026-09-28 01-01 에 반영 완료, 남은 것은 00-02 시그널 표와 00-03 lgo 링크) 01-01 보강 목록: 연결당 FD 3→1(splice 유무), 두 차선·pipe 유무 도식, splice vs 버퍼 복사 표, accept 에러 종류 표·재시도 범위 트레이드오프, G·M·P 한 줄, CLOSED≠close()·FD 누수 판별(/proc fd vs ss -p), FIN-WAIT-2→keepalive→RST, 00-03·01-01 Go 문법을 lgo 12~14장 링크로, 시그널 표(00-02)
+- (2026-09-28 01-01 에 반영 완료. 2026-10-02 확인: 00-02 §4 에 신호 표·"종료 때 FD 정리는 커널, strace 에 안 찍힘, init 무관" 문장 있음, 00-03 은 lgo 12-01·12-02·12-03·13-01·14-02 로 링크됨 — 잔여 없음) 01-01 보강 목록: 연결당 FD 3→1(splice 유무), 두 차선·pipe 유무 도식, splice vs 버퍼 복사 표, accept 에러 종류 표·재시도 범위 트레이드오프, G·M·P 한 줄, CLOSED≠close()·FD 누수 판별(/proc fd vs ss -p), FIN-WAIT-2→keepalive→RST, 00-03·01-01 Go 문법을 lgo 12~14장 링크로, 시그널 표(00-02)
 - Phase 0 미해결 "CLOSE-WAIT 클라이언트의 즉시 EPIPE" — 실험 5 관찰(서버 FIN-WAIT-2 60s 만료 뒤 keepalive 에 RST)로 뒷받침, 패킷 캡처는 미실행
 
-- OrbStack 커널(7.0.14-orbstack)이 eBPF kprobe·tracepoint·BTF 를 어디까지 지원하는가. Phase 15 직전에 `bpftool feature` 로 확인한다.
+- ~~OrbStack 커널(7.0.14-orbstack)이 eBPF kprobe·tracepoint·BTF 를 어디까지 지원하는가~~ → 해결 2026-10-02: Ubuntu 26.04 arm64 머신에 bpftool v7.7.0 설치(apt update 뒤). `CONFIG_BPF_SYSCALL·BPF_JIT·KPROBES·KPROBE_EVENTS·UPROBE_EVENTS·BPF_EVENTS·DEBUG_INFO_BTF=y`, `/sys/kernel/btf/vmlinux` 있음, `bpftool feature probe kernel` 에서 program_type kprobe·tracepoint·raw_tracepoint·tracing·sched_cls·xdp·cgroup_skb·sock_ops·perf_event 와 map_type hash·array·perf_event_array·ringbuf 가 available(available 71, NOT 1). tcp tracepoint(tcp_retransmit_skb·tcp_send_reset·tcp_destroy_sock 등)도 있음. tracefs 는 sudo 필요. bpftrace 는 미설치(후보 0.25.0)
 - ~~`tc netem` 을 OrbStack 머신의 `lo` 에 걸 수 있는가~~ → 해결 2026-09-28: 커널 7.0.14-orbstack, `CONFIG_NET_SCH_NETEM=m`, sch_netem 로드됨, `tc` 있음(실제 qdisc 적용은 Phase 3 에서)
 
 ## 다음 레슨 후보 + 고른 이유
