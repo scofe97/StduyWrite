@@ -1,0 +1,100 @@
+<svg viewBox="0 0 900 430" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>ReplicaSet의 cattle 모델과 StatefulSet의 pet 모델 대비</title>
+  <desc>같은 replicas=2 선언에서 ReplicaSet과 StatefulSet이 만들어내는 구조를 나란히 비교합니다. ReplicaSet은 랜덤 접미사 이름을 가진 교체 가능한 Pod 둘을 만들고 두 Pod가 persistentVolumeClaim이 가리키는 하나의 PersistentVolume을 공유하며 Service가 로드밸런싱합니다. StatefulSet은 rg-0과 rg-1이라는 순서 인덱스 이름을 가진 Pod를 만들고 volumeClaimTemplates가 Pod마다 전용 PVC와 PV를 즉석 생성하며 clusterIP가 None인 headless Service가 Pod마다 개별 A 레코드 DNS를 부여합니다. 아래쪽에는 ReplicaSet의 At-Least-X 보장과 StatefulSet의 At-Most-One 보장이 서로 반대 방향임을 표시합니다.</desc>
+
+  <rect width="900" height="430" fill="#0d0d0d"/>
+
+  <text x="24" y="30" fill="#e8e4df" font-size="15" font-weight="700">replicas: 2 의 두 결과</text>
+
+  <!-- ================= LEFT: ReplicaSet ================= -->
+  <rect x="24" y="46" width="410" height="252" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1"/>
+  <text x="40" y="70" fill="#b8b3ad" font-size="13" font-weight="700">ReplicaSet = cattle</text>
+  <text x="40" y="88" fill="#b8b3ad" font-size="10">교체 가능 · 랜덤 이름</text>
+
+  <!-- Service -->
+  <rect x="40" y="100" width="378" height="30" fill="#dceaf7"/>
+  <text x="229" y="120" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">Service</text>
+  <text x="229" y="146" text-anchor="middle" fill="#b8b3ad" font-size="10">로드밸런싱 · 어느 Pod든 무관</text>
+
+  <!-- arrows to pods -->
+  <path d="M 140 152 L 140 172" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#gray)"/>
+  <path d="M 318 152 L 318 172" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#gray)"/>
+
+  <!-- pods -->
+  <rect x="60" y="176" width="160" height="38" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="140" y="200" text-anchor="middle" fill="#e8e4df" font-size="11" font-family="'JetBrains Mono', monospace">rg-x9k2</text>
+  <rect x="238" y="176" width="160" height="38" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="318" y="200" text-anchor="middle" fill="#e8e4df" font-size="11" font-family="'JetBrains Mono', monospace">rg-mq7f</text>
+
+  <!-- shared PVC arrows -->
+  <path d="M 140 218 L 200 244" stroke="#f44336" stroke-width="1.5" marker-end="url(#red)"/>
+  <path d="M 318 218 L 258 244" stroke="#f44336" stroke-width="1.5" marker-end="url(#red)"/>
+
+  <rect x="128" y="248" width="202" height="38" fill="#f2d4d4"/>
+  <text x="229" y="264" text-anchor="middle" fill="#7a1f1f" font-size="10" font-weight="700">PVC 1개 → PV 1개</text>
+  <text x="229" y="279" text-anchor="middle" fill="#7a1f1f" font-size="10">공유 — 동시 쓰기 위험</text>
+
+  <!-- ================= RIGHT: StatefulSet ================= -->
+  <rect x="466" y="46" width="410" height="252" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1"/>
+  <text x="482" y="70" fill="rgb(212,168,83)" font-size="13" font-weight="700">StatefulSet = pet</text>
+  <text x="482" y="88" fill="#e8e4df" font-size="10">고유 · 순서 인덱스 이름</text>
+
+  <!-- headless Service -->
+  <rect x="482" y="100" width="378" height="30" fill="rgb(212,168,83)"/>
+  <text x="560" y="120" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700">headless Service</text>
+  <rect x="648" y="105" width="126" height="20" fill="#fdf3df"/>
+  <text x="711" y="119" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700" font-family="'JetBrains Mono', monospace">clusterIP: None</text>
+  <text x="671" y="146" text-anchor="middle" fill="#b8b3ad" font-size="10">Pod마다 A 레코드</text>
+
+  <path d="M 562 152 L 562 172" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#amber)"/>
+  <path d="M 780 152 L 780 172" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#amber)"/>
+
+  <!-- pods -->
+  <rect x="482" y="176" width="160" height="38" fill="#f5edda"/>
+  <text x="562" y="200" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700" font-family="'JetBrains Mono', monospace">rg-0</text>
+  <rect x="700" y="176" width="160" height="38" fill="#f5edda"/>
+  <text x="780" y="200" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700" font-family="'JetBrains Mono', monospace">rg-1</text>
+
+  <path d="M 562 218 L 562 244" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#green)"/>
+  <path d="M 780 218 L 780 244" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#green)"/>
+
+  <rect x="482" y="248" width="160" height="38" fill="#cdeccf"/>
+  <text x="562" y="264" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">logs-rg-0</text>
+  <text x="562" y="279" text-anchor="middle" fill="#14521d" font-size="10">전용 PVC → PV</text>
+
+  <rect x="700" y="248" width="160" height="38" fill="#cdeccf"/>
+  <text x="780" y="264" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">logs-rg-1</text>
+  <text x="780" y="279" text-anchor="middle" fill="#14521d" font-size="10">전용 PVC → PV</text>
+
+  <text x="671" y="309" text-anchor="middle" fill="#b8b3ad" font-size="10" font-family="'JetBrains Mono', monospace">volumeClaimTemplates</text>
+
+  <!-- ================= BOTTOM: guarantees ================= -->
+  <line x1="24" y1="330" x2="876" y2="330" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="24" y="352" fill="#e8e4df" font-size="12" font-weight="700">보장의 방향이 반대</text>
+
+  <rect x="24" y="364" width="410" height="46" fill="#f2d4d4"/>
+  <text x="40" y="383" fill="#7a1f1f" font-size="11" font-weight="700">At-Least-X — 최소 X개</text>
+  <text x="40" y="400" fill="#7a1f1f" font-size="10">가용성 우선 · 일시적 초과 허용</text>
+
+  <rect x="466" y="364" width="410" height="46" fill="#cdeccf"/>
+  <text x="482" y="383" fill="#14521d" font-size="11" font-weight="700">At-Most-One — 최대 1개</text>
+  <text x="482" y="400" fill="#14521d" font-size="10">일관성 우선 · 중복 절대 금지</text>
+
+  <defs>
+    <marker id="gray" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#b8b3ad"/>
+    </marker>
+    <marker id="amber" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="red" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#f44336"/>
+    </marker>
+    <marker id="green" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#66bb6a"/>
+    </marker>
+  </defs>
+</svg>

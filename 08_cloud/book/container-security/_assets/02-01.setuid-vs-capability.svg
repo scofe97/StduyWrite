@@ -1,0 +1,76 @@
+<svg viewBox="0 0 680 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>같은 ping을 돌리는 두 가지 방법 — setuid와 capability</title>
+  <desc>일반 사용자가 복사한 ping은 raw 소켓을 열지 못해 실패합니다. 이를 해결하는 길이 둘입니다. 왼쪽은 파일 소유자를 root로 바꾸고 setuid 비트를 켜는 오래된 방법으로, 프로세스가 root의 모든 권한을 물려받습니다. 오른쪽은 setcap으로 CAP_NET_RAW 하나만 파일에 붙이는 방법으로, 필요한 권한만 얻고 나머지는 얻지 않습니다. 최소 권한 원칙에서는 오른쪽이 낫습니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 12.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10px; }
+    .mono { font-family: 'Menlo', 'Consolas', monospace; }
+    .cmd { fill: #0d0d0d; font-size: 10.5px; font-weight: 700; }
+    .chip { fill: #f5edda; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .danger-title { fill: #7a1f1f; font-size: 12.5px; font-weight: 700; }
+    .danger-detail { fill: #7a1f1f; font-size: 10px; }
+    .caution-title { fill: #0d0d0d; font-size: 12.5px; font-weight: 700; }
+    .caution-detail { fill: #0d0d0d; font-size: 10px; }
+  </style>
+
+  <rect width="680" height="400" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="dh" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <!-- 출발 상태 — 위험 -->
+  <rect x="170" y="24" width="340" height="56" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="186" y="46">복사한 myping은 실패</text>
+  <text class="mono danger-detail" x="186" y="66">ping: socket: Operation not permitted</text>
+
+  <path class="arrow" d="M340,80 L340,96"/>
+  <path class="arrow" d="M340,96 L170,96 L170,120" marker-end="url(#dh)"/>
+  <path class="arrow" d="M340,96 L510,96 L510,120" marker-end="url(#dh)"/>
+
+  <text class="head" x="40" y="140">방법 A · 오래된 길</text>
+  <text class="head" x="380" y="140">방법 B · 조각으로</text>
+
+  <!-- A: setuid — 주의 -->
+  <rect x="40" y="152" width="290" height="76" rx="4" fill="rgb(212,168,83)"/>
+  <text class="caution-title" x="56" y="176">주의 · setuid 비트</text>
+  <text class="caution-detail" x="56" y="196">소유자 root + s 비트</text>
+  <rect class="chip" x="56" y="204" width="180" height="18" rx="3"/>
+  <text class="mono cmd" x="62" y="217">sudo chmod +s ./myping</text>
+
+  <!-- B: capability -->
+  <rect class="box" x="380" y="152" width="260" height="76" rx="4"/>
+  <text class="box-title" x="396" y="176">setcap으로 한 조각만</text>
+  <text class="box-detail" x="396" y="196">파일에 직접 붙인다</text>
+  <rect class="chip" x="396" y="204" width="228" height="18" rx="3"/>
+  <text class="mono cmd" x="402" y="217">sudo setcap 'cap_net_raw+p' ./myping</text>
+
+  <path class="arrow" d="M170,228 L170,254" marker-end="url(#dh)"/>
+  <path class="arrow" d="M510,228 L510,254" marker-end="url(#dh)"/>
+
+  <!-- 결과 A -->
+  <rect class="box" x="40" y="262" width="290" height="70" rx="4"/>
+  <text class="box-title" x="56" y="284">얻는 것 — root 권한 전부</text>
+  <text class="box-detail" x="56" y="302">raw 소켓 외의 권한까지 함께</text>
+  <text class="box-detail" x="56" y="320">스캐너가 신고 대상으로 본다</text>
+
+  <!-- 결과 B -->
+  <rect class="box" x="380" y="262" width="260" height="70" rx="4"/>
+  <text class="box-title" x="396" y="284">얻는 것 — 딱 하나</text>
+  <text class="box-detail" x="396" y="302">raw 소켓을 여는 권한만</text>
+  <text class="box-detail" x="396" y="320">getcap으로 확인</text>
+
+  <text class="hint" x="40" y="366">최소 권한은 오른쪽</text>
+  <text class="hint" x="40" y="384">ping은 uid를 되돌린다</text>
+</svg>

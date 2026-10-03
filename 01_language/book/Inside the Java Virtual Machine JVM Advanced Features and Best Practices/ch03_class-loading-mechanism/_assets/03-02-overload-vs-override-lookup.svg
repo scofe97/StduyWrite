@@ -1,0 +1,94 @@
+<svg viewBox="0 0 900 540" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>오버로딩 선택 vs 오버라이딩 탐색 — 두 흐름</title>
+  <desc>같은 Human man = new Man() 에서 두 메커니즘의 흐름이 다르다. 오버로딩은 컴파일 때 컴파일러가 man의 선언 타입 Human만 믿고 후보 시그니처와 한 번 매칭해 sayHello(Human)을 박는다(상속 탐색 없음). 오버라이딩은 실행 때 invokevirtual이 수신자의 실제 타입 Man에서 시작해 메서드를 찾고 없으면 부모로 올라가는 상속 사슬 탐색을 한다. 선택(컴파일러·1회 매칭)과 탐색(JVM·사슬 따라가기)은 다르다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .lane{font-size:12px;font-weight:800;fill:#0d0d0d}
+      .node{font-size:10px;font-weight:700;fill:#10243a;font-family:'JetBrains Mono',monospace}
+      .nd2{font-size:8.5px;font-weight:700;fill:#10243a;font-family:'JetBrains Mono',monospace}
+      .albl{font-size:9px;font-weight:800;fill:#d4a853}
+      .result{font-size:10px;font-weight:800;fill:#0d0d0d;font-family:'JetBrains Mono',monospace}
+      .foot{font-size:10.5px;font-weight:800;fill:#0d0d0d}
+      .x{font-size:9px;font-weight:800;fill:#9aa0a6;font-family:'JetBrains Mono',monospace}
+          .xb{font-size:8.5px;font-weight:700;fill:#5a6066;font-family:'JetBrains Mono',monospace}
+    </style>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#d4a853"/></marker>
+    <marker id="arb" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#5b9bd5"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="540" fill="#0d0d0d"/>
+  <text x="28" y="36" class="title">오버로딩 "선택" vs 오버라이딩 "탐색" — 같은 코드, 두 흐름</text>
+
+  <!-- 공통 출발 -->
+  <rect x="330" y="56" width="240" height="34" rx="6" fill="#dceaf7"/>
+  <text x="450" y="78" class="node" text-anchor="middle">Human man = new Man();</text>
+
+  <!-- ===== 레인 1: 오버로딩 (컴파일 때) ===== -->
+  <rect x="28" y="118" width="180" height="30" rx="6" fill="#5b9bd5"/>
+  <text x="118" y="138" class="lane" text-anchor="middle">오버로딩 · 컴파일 때</text>
+  <!-- 흐름: man → 선언타입 Human → 후보매칭 → 선택 -->
+  <rect x="28" y="166" width="150" height="52" rx="6" fill="#dceaf7"/>
+  <text x="103" y="188" class="node" text-anchor="middle">sayHello(man)</text>
+  <text x="103" y="206" class="nd2" text-anchor="middle">컴파일러가 본다</text>
+
+  <line x1="178" y1="192" x2="214" y2="192" stroke="#5b9bd5" stroke-width="2.5" marker-end="url(#arb)"/>
+
+  <rect x="216" y="160" width="170" height="64" rx="6" fill="#f3d9a0"/>
+  <text x="301" y="182" class="node" text-anchor="middle">man 의 선언 타입</text>
+  <text x="301" y="200" class="result" text-anchor="middle">= Human</text>
+  <text x="301" y="216" class="nd2" text-anchor="middle">(실제 Man은 안 봄)</text>
+
+  <line x1="386" y1="192" x2="422" y2="192" stroke="#5b9bd5" stroke-width="2.5" marker-end="url(#arb)"/>
+
+  <!-- 후보 매칭 -->
+  <rect x="424" y="156" width="210" height="72" rx="6" fill="#dceaf7"/>
+  <text x="529" y="174" class="nd2" text-anchor="middle">후보 시그니처와 1회 매칭</text>
+  <text x="529" y="191" class="nd2" text-anchor="middle">sayHello(Human) ← 일치</text>
+  <text x="529" y="206" class="xb" text-anchor="middle">sayHello(Man) ✕  sayHello(Woman) ✕</text>
+  <text x="529" y="221" class="nd2" text-anchor="middle">상속 사슬 탐색 없음</text>
+
+  <line x1="634" y1="192" x2="670" y2="192" stroke="#5b9bd5" stroke-width="2.5" marker-end="url(#arb)"/>
+
+  <rect x="672" y="166" width="200" height="52" rx="6" fill="#f3d9a0"/>
+  <rect x="684" y="174" width="176" height="20" rx="3" fill="#fdf3df"/>
+  <text x="772" y="189" class="result" text-anchor="middle">sayHello(Human) 박음</text>
+  <text x="772" y="211" class="nd2" text-anchor="middle">컴파일 때 확정</text>
+
+  <!-- ===== 레인 2: 오버라이딩 (실행 때) ===== -->
+  <rect x="28" y="290" width="180" height="30" rx="6" fill="rgb(212,168,83)"/>
+  <text x="118" y="310" class="lane" text-anchor="middle">오버라이딩 · 실행 때</text>
+
+  <rect x="28" y="338" width="150" height="52" rx="6" fill="#f5edda"/>
+  <text x="103" y="360" class="node" text-anchor="middle">man.sayHello()</text>
+  <text x="103" y="378" class="nd2" text-anchor="middle">invokevirtual</text>
+
+  <line x1="178" y1="364" x2="214" y2="364" stroke="#d4a853" stroke-width="2.5" marker-end="url(#ar)"/>
+
+  <rect x="216" y="332" width="170" height="64" rx="6" fill="#f3d9a0"/>
+  <text x="301" y="354" class="node" text-anchor="middle">수신자 실제 타입</text>
+  <text x="301" y="372" class="result" text-anchor="middle">= Man</text>
+  <text x="301" y="388" class="nd2" text-anchor="middle">(선언 타입은 안 봄)</text>
+
+  <line x1="386" y1="364" x2="422" y2="364" stroke="#d4a853" stroke-width="2.5" marker-end="url(#ar)"/>
+
+  <!-- 상속 사슬 탐색: Man에서 찾기 -->
+  <rect x="424" y="338" width="150" height="52" rx="6" fill="#f5edda"/>
+  <text x="499" y="358" class="node" text-anchor="middle">Man 에서 찾기 ✓</text>
+  <text x="499" y="378" class="nd2" text-anchor="middle">상속 사슬 탐색</text>
+  <!-- 없으면 부모로 (위쪽으로 분기, 메인선과 분리) -->
+  <path d="M 499 338 L 499 318 L 640 318" stroke="#9aa0a6" stroke-width="1.5" stroke-dasharray="4 3" fill="none"/>
+  <rect x="640" y="302" width="150" height="28" rx="5" fill="#0d0d0d" stroke="#9aa0a6" stroke-dasharray="4 3"/>
+  <text x="715" y="321" class="x" text-anchor="middle">없으면 ↑ Human 으로</text>
+
+  <!-- 메인 흐름: 찾음 → 실행 -->
+  <line x1="574" y1="364" x2="668" y2="364" stroke="#d4a853" stroke-width="2.5" marker-end="url(#ar)"/>
+
+  <rect x="672" y="338" width="200" height="52" rx="6" fill="rgb(212,168,83)"/>
+  <rect x="684" y="346" width="176" height="20" rx="3" fill="#fdf3df"/>
+  <text x="772" y="361" class="result" text-anchor="middle">Man.sayHello() 실행</text>
+  <text x="772" y="383" class="nd2" text-anchor="middle">실행 중 결정</text>
+
+  <!-- 하단 한 줄 -->
+  <rect x="28" y="430" width="844" height="40" rx="8" fill="#f5edda"/>
+  <text x="450" y="455" class="foot" text-anchor="middle">선택(컴파일러·1회 매칭, 선언 타입) ≠ 탐색(JVM·상속 사슬 따라가기, 실제 타입)</text>
+</svg>

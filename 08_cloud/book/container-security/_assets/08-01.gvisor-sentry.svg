@@ -1,0 +1,96 @@
+<svg viewBox="0 0 700 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>gVisor 의 Sentry 와 Gofer 가 시스템 콜을 가로채는 구조</title>
+  <desc>gVisor 는 하이퍼바이저가 게스트 가상머신의 시스템 콜을 가로채는 것과 비슷한 방식으로 컨테이너를 샌드박싱합니다. Sentry 라는 구성 요소가 애플리케이션의 시스템 콜을 가로챕니다. Sentry 자체도 seccomp 로 강하게 샌드박싱되어 있어서 파일시스템 자원에 직접 접근하지 못합니다. 파일 접근과 관련된 시스템 콜이 필요하면 Gofer 라는 완전히 별개의 프로세스로 넘깁니다. 파일시스템과 무관한 시스템 콜도 호스트 커널로 그냥 통과시키지 않고 Sentry 안에서 다시 구현합니다. 사실상 사용자 공간에서 도는 게스트 커널입니다. 그 결과 호스트에서 ps 로 보면 컨테이너 안의 프로세스가 보이지 않고 runsc 실행 파일만 보입니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .code { fill: #0d0d0d; font-size: 9.5px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .chip { fill: #f5edda; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .blocked { stroke: #7a1f1f; stroke-width: 1.5; fill: none; stroke-dasharray: 4 3; }
+    .block-label { fill: #7a1f1f; font-size: 9.5px; font-weight: 700; }
+    .zone { fill: none; stroke: #4a4540; stroke-width: 1; stroke-dasharray: 3 3; }
+    .zone-label { fill: #b8b3ad; font-size: 9.5px; font-weight: 700; }
+  </style>
+
+  <rect width="700" height="400" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="uh8d" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+    <marker id="rd8" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#7a1f1f"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="28">사용자 공간에서 커널을 재구현</text>
+
+  <!-- 사용자 공간 존 -->
+  <rect class="zone" x="34" y="40" width="500" height="212" rx="4"/>
+  <text class="zone-label" x="44" y="58">사용자 공간</text>
+
+  <!-- 앱 -->
+  <rect class="box" x="56" y="68" width="168" height="66" rx="4"/>
+  <text class="box-title" x="72" y="90">컨테이너 앱</text>
+  <text class="box-detail" x="72" y="108">syscall 을 부른다</text>
+  <text class="box-detail" x="72" y="124">호스트로 안 간다</text>
+
+  <path class="arrow" d="M224,101 L262,101" marker-end="url(#uh8d)"/>
+
+  <!-- Sentry -->
+  <rect class="box" x="266" y="68" width="240" height="112" rx="4"/>
+  <text class="box-title" x="282" y="90">Sentry — 사용자 공간 커널</text>
+  <text class="box-detail" x="282" y="109">syscall 을 가로채 직접 구현</text>
+  <text class="box-detail" x="282" y="125">자신도 seccomp 로 갇혀 있다</text>
+  <text class="box-detail" x="282" y="141">파일시스템에 직접 접근 못 함</text>
+  <rect class="chip" x="282" y="150" width="130" height="15" rx="3"/>
+  <text class="code" x="286" y="161">runsc-sandbox</text>
+
+  <!-- Gofer -->
+  <path class="arrow" d="M386,180 L386,200" marker-end="url(#uh8d)"/>
+  <text class="box-detail" x="394" y="195">파일 관련은 넘긴다</text>
+
+  <rect class="box" x="266" y="204" width="240" height="40" rx="4"/>
+  <text class="box-title" x="282" y="222">Gofer — 별개 프로세스</text>
+  <rect class="chip" x="282" y="226" width="110" height="14" rx="3"/>
+  <text class="code" x="286" y="237">runsc-gofer</text>
+
+  <!-- 호스트 커널 -->
+  <rect class="box" x="556" y="68" width="104" height="176" rx="4"/>
+  <text class="box-title" x="570" y="90">호스트 커널</text>
+  <text class="box-detail" x="570" y="110">앱의 syscall 이</text>
+  <text class="box-detail" x="570" y="126">직접 닿지 않는다</text>
+  <text class="box-detail" x="570" y="150">namespace 와</text>
+  <text class="box-detail" x="570" y="166">cgroup 은</text>
+  <text class="box-detail" x="570" y="182">그대로 쓰인다</text>
+
+  <path class="blocked" d="M506,112 L552,112" marker-end="url(#rd8)"/>
+  <text class="block-label" x="512" y="105">차단</text>
+  <path class="arrow" d="M506,224 L552,224 L552,200" marker-end="url(#uh8d)"/>
+
+  <!-- 관찰 결과 -->
+  <text class="head" x="40" y="284">호스트에서 본 결과</text>
+
+  <rect class="box" x="40" y="296" width="300" height="80" rx="4"/>
+  <text class="box-title" x="56" y="317">프로세스가 안 보입니다</text>
+  <text class="box-detail" x="56" y="336">안의 sleep 을 호스트에서 못 봄</text>
+  <text class="box-detail" x="56" y="352">보이는 건 전부 runsc</text>
+  <text class="box-detail" x="56" y="368">컨테이너보다 VM 에 가깝다</text>
+
+  <rect class="box" x="360" y="296" width="300" height="80" rx="4"/>
+  <text class="box-title" x="376" y="317">그래도 뚫리는 통로</text>
+  <rect class="chip" x="376" y="325" width="140" height="15" rx="3"/>
+  <text class="code" x="380" y="336">runsc exec</text>
+  <text class="box-detail" x="376" y="354">호스트 root 면 안에서 실행</text>
+  <text class="box-detail" x="376" y="370">경계가 절대적이지는 않습니다</text>
+</svg>

@@ -1,0 +1,56 @@
+<svg viewBox="0 0 900 620" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>공간 보장과 Promotion Failure 흐름</title>
+  <desc>Minor GC 전에 Old 영역이 최악의 승격량을 받을 수 있는지 확인하고, 부족하면 Full GC를 먼저 시도한다. 그래도 승격할 공간이 없으면 Promotion Failure가 발생할 수 있다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}.sub{font-size:11px;fill:rgb(138,133,128)}.head{font-size:13px;font-weight:800;fill:rgb(212,168,83)}.label{font-size:11px;font-weight:750;fill:#e8e4df}.body{font-size:10px;fill:rgb(180,175,170)}.note{font-size:9.5px;fill:rgb(138,133,128)}.code{font-size:10px;font-weight:700;fill:rgb(212,168,83);font-family:'JetBrains Mono',monospace}.ok{font-size:10px;font-weight:750;fill:#81c784}.bad{font-size:10px;font-weight:750;fill:#e57373}
+    </style>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgb(212,168,83)"/></marker>
+    <marker id="arrRed" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#e57373"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="620" fill="#0d0d0d"/>
+  <text x="26" y="36" class="title">공간 보장 — Minor GC 전에 Old 여유를 먼저 본다</text>
+  <text x="26" y="56" class="sub">Minor GC를 시작하기 전에는 실제 생존량을 모르므로, 최악의 승격 상황을 가정한다.</text>
+
+  <rect x="46" y="94" width="180" height="64" rx="8" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="136" y="119" class="label" text-anchor="middle">Minor GC 직전</text>
+  <text x="136" y="138" class="body" text-anchor="middle">Eden이 부족해 GC 필요</text>
+  <line x1="226" y1="126" x2="296" y2="126" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="298" y="84" width="256" height="84" rx="8" fill="#2a2a1a" stroke="rgb(212,168,83)"/>
+  <text x="426" y="110" class="head" text-anchor="middle">공간 보장 검사</text>
+  <text x="426" y="131" class="body" text-anchor="middle">Young 생존 객체가 모두 Old로 가도</text>
+  <text x="426" y="150" class="body" text-anchor="middle">받을 공간이 있는가?</text>
+
+  <line x1="554" y1="110" x2="660" y2="110" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="662" y="80" width="190" height="60" rx="8" fill="#1e2a1e" stroke="#4ab080"/>
+  <text x="757" y="104" class="ok" text-anchor="middle">충분함</text>
+  <text x="757" y="123" class="body" text-anchor="middle">Minor GC 진행</text>
+
+  <line x1="426" y1="168" x2="426" y2="232" stroke="#e57373" stroke-width="2" marker-end="url(#arrRed)"/>
+  <rect x="300" y="234" width="252" height="74" rx="8" fill="#2a1414" stroke="#e57373"/>
+  <text x="426" y="260" class="bad" text-anchor="middle">부족할 위험</text>
+  <text x="426" y="280" class="body" text-anchor="middle">Old를 먼저 정리해야 함</text>
+  <line x1="426" y1="308" x2="426" y2="370" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="300" y="372" width="252" height="74" rx="8" fill="#2a2a1a" stroke="rgb(212,168,83)"/>
+  <text x="426" y="398" class="head" text-anchor="middle">Full GC 먼저 시도</text>
+  <text x="426" y="418" class="body" text-anchor="middle">Old의 죽은 객체를 회수해 공간 확보</text>
+
+  <line x1="552" y1="409" x2="660" y2="409" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="662" y="379" width="190" height="60" rx="8" fill="#1e2a1e" stroke="#4ab080"/>
+  <text x="757" y="403" class="ok" text-anchor="middle">공간 확보</text>
+  <text x="757" y="422" class="body" text-anchor="middle">Minor GC 재개</text>
+
+  <line x1="426" y1="446" x2="426" y2="500" stroke="#e57373" stroke-width="2" marker-end="url(#arrRed)"/>
+  <rect x="300" y="502" width="252" height="64" rx="8" fill="#2a1414" stroke="#e57373"/>
+  <text x="426" y="527" class="bad" text-anchor="middle">Promotion Failure</text>
+  <text x="426" y="546" class="body" text-anchor="middle">승격할 Old 공간이 없음</text>
+
+  <rect x="46" y="510" width="190" height="56" rx="8" fill="#111" stroke="#333"/>
+  <text x="141" y="533" class="code" text-anchor="middle">주의</text>
+  <text x="141" y="552" class="body" text-anchor="middle">조기 승격과 승격 실패는 다르다</text>
+  <rect x="594" y="510" width="258" height="56" rx="8" fill="#111" stroke="#333"/>
+  <text x="723" y="533" class="note" text-anchor="middle">항상 Young 전체가 Old로 간다는 뜻이 아니라</text>
+  <text x="723" y="552" class="note" text-anchor="middle">최악의 경우를 보수적으로 가정한다는 뜻이다</text>
+</svg>

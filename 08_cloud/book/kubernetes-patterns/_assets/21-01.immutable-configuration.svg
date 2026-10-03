@@ -1,0 +1,67 @@
+<svg viewBox="0 0 900 540" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Immutable Configuration — 설정을 불변·버전 관리되는 데이터 이미지로</title>
+  <desc>Kubernetes Patterns 21장. Immutable Configuration은 설정 데이터를 불변으로 만들어 늘 알려진 상태를 보장하고, 환경변수·ConfigMap의 크기 제한(1MB)을 넘습니다. 가장 단순한 선택은 immutable ConfigMap/Secret이지만, 큰 설정(사전 계산된 ML 모델 등)은 담을 수 없습니다. 이때 환경별 설정을 하나의 수동 데이터 이미지에 담아 일반 컨테이너 이미지처럼 배포하고, 런타임에 앱과 링크해 설정을 추출합니다. Docker에서는 VOLUME 지시어로 config 컨테이너의 디렉토리를 공유하고 --volumes-from으로 앱 컨테이너에 링크합니다. Kubernetes는 컨테이너 볼륨을 지원하지 않으므로 Init Container(15장)로 빈 공유 볼륨(emptyDir)에 설정을 복사합니다 — busybox 베이스에 cp로 복사하는 ENTRYPOINT를 두고, 개발→운영 전환은 init 이미지만 교체합니다. OpenShift Template로 이미지를 파라미터화할 수 있습니다. 장점 — 환경별 설정이 컨테이너에 봉인·버전 관리·레지스트리 배포·임의 크기. 단점 — 복잡성 증가, 보안 미해결, 이미지 볼륨 미지원(2023 CSI 실험적), 환경마다 다른 Deployment 관리.</desc>
+
+  <rect x="0" y="0" width="900" height="540" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="16">Immutable Configuration — 설정을 데이터 이미지로 봉인</text>
+  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">불변 = 시작 후 못 바꿈 → 늘 정의된 상태. <tspan fill="#e8e4df">버전 관리·변경 통제</tspan> 가능. ConfigMap 1MB 한계도 넘음.</text>
+
+  <!-- decision -->
+  <rect x="24" y="76" width="852" height="30" fill="#cdeccf"/>
+  <text x="36" y="95" fill="#14521d" font-size="9.5" font-weight="700">1순위는 immutable ConfigMap/Secret(20장). 담기면 그걸로. 아래 데이터 컨테이너는 그것이 부적합할 때만(큰 설정).</text>
+
+  <!-- docker approach -->
+  <text x="24" y="130" fill="#e8e4df" font-size="12">방법 A — Docker 볼륨 (vanilla)</text>
+  <rect x="24" y="140" width="418" height="96" fill="#dceaf7"/>
+  <text x="36" y="160" fill="#10243a" font-size="10" font-weight="700">config 컨테이너 → 앱 컨테이너 링크</text>
+  <text x="36" y="178" fill="#10243a" font-size="8.5">FROM scratch (OS 없는 빈 이미지)</text>
+  <text x="36" y="192" fill="#10243a" font-size="8.5">ADD app-dev.properties /config/app.properties</text>
+  <text x="36" y="206" fill="#10243a" font-size="8.5">VOLUME /config</text>
+  <text x="36" y="223" fill="#10243a" font-size="8.5">docker run --volumes-from config-dev 앱이미지</text>
+
+  <!-- k8s init container approach -->
+  <text x="458" y="130" fill="#e8e4df" font-size="12">방법 B — Kubernetes Init Container (15장)</text>
+  <rect x="458" y="140" width="418" height="96" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="470" y="160" fill="rgb(212,168,83)" font-size="10" font-weight="700">K8s는 컨테이너 볼륨 미지원 → init로 복사</text>
+  <text x="470" y="178" fill="#e8e4df" font-size="8.5">FROM busybox (scratch 대신 — cp가 필요)</text>
+  <text x="470" y="192" fill="#e8e4df" font-size="8.5">ENTRYPOINT cp /config-src/* $1</text>
+  <text x="470" y="206" fill="#e8e4df" font-size="8.5">init가 emptyDir 공유 볼륨에 설정 복사.</text>
+  <text x="470" y="223" fill="#e8e4df" font-size="8.5">앱 컨테이너가 그 볼륨을 마운트해 읽음.</text>
+
+  <!-- flow -->
+  <rect x="24" y="248" width="852" height="52" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <rect x="40" y="260" width="180" height="28" fill="#dceaf7"/>
+  <text x="130" y="278" fill="#10243a" font-size="9" text-anchor="middle" font-weight="700">init: config-dev 이미지</text>
+  <text x="228" y="278" fill="rgb(212,168,83)" font-size="13">→</text>
+  <rect x="248" y="260" width="180" height="28" fill="#f5edda"/>
+  <text x="338" y="278" fill="#0d0d0d" font-size="9" text-anchor="middle" font-weight="700">emptyDir 공유 볼륨</text>
+  <text x="436" y="278" fill="rgb(212,168,83)" font-size="13">→</text>
+  <rect x="456" y="260" width="180" height="28" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="546" y="278" fill="rgb(212,168,83)" font-size="9" text-anchor="middle" font-weight="700">app 컨테이너가 읽음</text>
+  <text x="656" y="278" fill="rgb(138,133,128)" font-size="8.5">개발→운영: init 이미지만 교체</text>
+
+  <!-- openshift template note -->
+  <rect x="24" y="312" width="852" height="26" fill="#f5edda"/>
+  <text x="36" y="329" fill="#0d0d0d" font-size="9">OpenShift Template — 리소스 서술자를 파라미터화(${CONFIG_IMAGE})해 환경마다 YAML을 편집하지 않아도 됨. oc new-app -p CONFIG_IMAGE=... 로 인스턴스화.</text>
+
+  <!-- pros / cons -->
+  <rect x="24" y="350" width="418" height="112" fill="#cdeccf"/>
+  <text x="36" y="370" fill="#14521d" font-size="11" font-weight="700">장점</text>
+  <text x="36" y="389" fill="#14521d" font-size="8.5">• 환경별 설정이 컨테이너에 봉인 → 이미지처럼 버전 관리.</text>
+  <text x="36" y="404" fill="#14521d" font-size="8.5">• 레지스트리로 배포, 클러스터 없이도 검사 가능.</text>
+  <text x="36" y="419" fill="#14521d" font-size="8.5">• 불변 — 변경엔 버전 업+새 이미지.</text>
+  <text x="36" y="434" fill="#14521d" font-size="8.5">• 임의 크기 설정 가능(ConfigMap 1MB 한계 없음).</text>
+  <text x="36" y="452" fill="#14521d" font-size="8.5">ML 사전학습 모델 같은 큰 데이터에 적합.</text>
+
+  <rect x="458" y="350" width="418" height="112" fill="#f2d4d4"/>
+  <text x="470" y="370" fill="#7a1f1f" font-size="11" font-weight="700">단점</text>
+  <text x="470" y="389" fill="#7a1f1f" font-size="8.5">• 복잡성 증가 — 추가 이미지 빌드·배포.</text>
+  <text x="470" y="404" fill="#7a1f1f" font-size="8.5">• 민감 데이터 보안은 해결 안 함.</text>
+  <text x="470" y="419" fill="#7a1f1f" font-size="8.5">• 이미지 볼륨 미지원(2023 CSI 실험적) → init 복사 오버헤드.</text>
+  <text x="470" y="434" fill="#7a1f1f" font-size="8.5">• 환경마다 다른 Deployment 오브젝트 관리.</text>
+  <text x="470" y="452" fill="#7a1f1f" font-size="8.5">이런 개입이 정말 필요한지 신중히 평가할 것.</text>
+
+  <!-- bottom -->
+  <rect x="24" y="474" width="852" height="28" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="36" y="492" fill="#e8e4df" font-size="9.5">환경마다 조금만 다른 큰 설정 파일은 다음 장 <tspan fill="rgb(212,168,83)" font-weight="700">Configuration Template(22장)</tspan>이 더 나은 대안.</text>
+</svg>

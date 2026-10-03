@@ -1,0 +1,41 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>프레임워크가 만든 SQL과 criteria 함정 — Spring Data JPA N+1·Hibernate 최적화·criteria cross join</title>
+  <desc>이 편의 요약입니다. Spring Data JPA 리포지토리는 인터페이스뿐이라 SQL 이 코드에 없지만 프로파일러가 드라이버 직전에서 가로채 실제 쿼리를 보여 줍니다. da-ch6-ex3 의 /products 는 쿼리 2개를 보내고, 로직이 같아 메서드를 10번 불러도 두 번째 쿼리는 Hibernate 가 최적화해 1번만 실행됩니다. 프레임워크의 흔한 문제는 느린 쿼리, N+1, 긴 트랜잭션 커밋입니다. 로그는 어느 쿼리가 문제인지 짚기 어렵고 파라미터가 분리돼 있으며 출처를 안 보여 줘 프로파일러가 낫습니다. da-ch6-ex4 의 criteria query 는 from 을 두 번 불러 product 와 자기 자신을 cross join 하는 실수를 담고, product Root 를 재사용하면 사라집니다. 다만 같은 쿼리를 N번 반복하는 문제는 별건으로 남습니다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="38" fill="#e8e4df" font-size="18" font-weight="bold">프레임워크가 만든 SQL과 criteria 함정</text>
+  <text x="20" y="60" fill="rgb(138,133,128)" font-size="11">Troubleshooting Java · §6.3.2~§6.3.3 · da-ch6-ex3 · da-ch6-ex4</text>
+
+  <!-- 코드에 쿼리 없어도 가로챈다 -->
+  <rect x="20" y="78" width="640" height="86" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="100" fill="rgb(212,168,83)" font-size="13" font-weight="bold">da-ch6-ex3 — 코드에 SQL 이 없어도 본다</text>
+  <text x="34" y="124" fill="#e8e4df" font-size="11">Spring Data JPA 리포지토리 = 인터페이스뿐 (메서드 이름·JPQL 로 생성)</text>
+  <text x="34" y="146" fill="#e8e4df" font-size="11">→ 프로파일러가 드라이버 직전에서 가로챔. 생성 쿼리라 별칭 이름이 이상함</text>
+
+  <!-- Hibernate 최적화 -->
+  <rect x="20" y="178" width="640" height="86" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="1.5"/>
+  <text x="34" y="200" fill="#9cc3df" font-size="13" font-weight="bold">Hibernate 최적화 — 메서드 10회, 두 번째 쿼리 1회</text>
+  <text x="34" y="224" fill="#e8e4df" font-size="11">로직이 같아 리포지토리 메서드를 10번 불러도, 두 번째 쿼리는 1번만 실행</text>
+  <text x="34" y="246" fill="rgb(138,133,128)" font-size="10.5">똑똑하지만 복잡성을 더함 → 기대대로인지 프로파일러로 점검</text>
+
+  <!-- 프레임워크 3대 문제 -->
+  <rect x="20" y="278" width="640" height="92" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="300" fill="#e8e4df" font-size="13" font-weight="bold">프레임워크에서 자주 조사하는 세 문제</text>
+  <text x="34" y="324" fill="#e8e4df" font-size="11">• 느린 쿼리로 인한 지연 → 실행 시간으로 짚음</text>
+  <text x="34" y="345" fill="#e8e4df" font-size="11">• 불필요한 다중 쿼리(N+1) → 실행 횟수로 짚음   (초기 1 + N개)</text>
+  <text x="34" y="364" fill="#e8e4df" font-size="11">• 긴 트랜잭션 커밋 → CPU 프로파일링으로 짚음</text>
+
+  <!-- 왜 로그가 아니라 프로파일러 -->
+  <rect x="20" y="384" width="640" height="70" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="406" fill="rgb(212,168,83)" font-size="12" font-weight="bold">왜 로그가 아니라 프로파일러인가</text>
+  <text x="34" y="428" fill="#e8e4df" font-size="10.5">로그: 어느 쿼리가 문제인지 짚기 어렵고, 파라미터가 분리돼 돌리기 까다롭고, 출처 안 보임</text>
+  <text x="34" y="447" fill="#e8e4df" font-size="10.5">프로파일러: 쿼리·시간·횟수·스택 트레이스를 목록으로 → 거의 즉시 진단 (로그 정돈은 AI 보조)</text>
+
+  <!-- criteria cross join -->
+  <rect x="20" y="468" width="640" height="116" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="34" y="490" fill="#f47f72" font-size="13" font-weight="bold">da-ch6-ex4 — criteria query 의 cross join 함정</text>
+  <text x="34" y="514" fill="#e8e4df" font-size="11">from() 두 번 호출 → product 와 자기 자신을 cross join (레코드 많으면 큰 지연·중복 행)</text>
+  <text x="34" y="536" fill="rgb(212,168,83)" font-size="11" font-weight="bold">수정 → 두 번째 from() 대신 이미 만든 product Root 재사용</text>
+  <text x="34" y="558" fill="#e8e4df" font-size="11">"투명한 쿼리 생성 = 장점이자 오류에 취약" → 개발 중 프로파일링으로 감사</text>
+  <text x="34" y="578" fill="rgb(138,133,128)" font-size="10">cross join 제거 ≠ 끝. 같은 쿼리 N회 반복은 별건 → 알고리즘을 한 쿼리로 리팩토링</text>
+</svg>

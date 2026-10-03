@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 360" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif" role="img" aria-label="prototype을 singleton에 주입할 때의 함정과 올바른 해법 도식">
+  <title>prototype을 singleton에 직접 주입하면 효과가 사라집니다</title>
+  <desc>singleton인 CommentService에 prototype인 CommentProcessor를 필드로 직접 주입하면, singleton은 한 번만 생성되며 의존성도 그때 한 번만 주입되어 CommentProcessor 인스턴스가 하나로 고정된다. 그래서 매 호출이 같은 인스턴스를 써 prototype 효과가 사라지고 race condition으로 돌아간다. 올바른 해법은 sendComment 메서드 안에서 ApplicationContext.getBean으로 호출마다 새 인스턴스를 꺼내는 것이다</desc>
+  <rect x="0" y="0" width="760" height="360" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="16" font-weight="bold">prototype을 singleton 필드에 직접 주입하면 함정에 빠집니다</text>
+  <text x="24" y="56" fill="rgb(138,133,128)" font-size="12">singleton은 한 번만 주입받으므로 prototype이 하나로 고정됩니다 — 메서드 안에서 매번 꺼내야 합니다</text>
+
+  <!-- 왼쪽: 잘못된 방법 -->
+  <text x="40" y="92" fill="#f44336" font-size="13" font-weight="bold">✗ 필드 직접 주입</text>
+  <rect x="40" y="106" width="320" height="200" rx="10" fill="rgba(244,67,54,0.08)" stroke="#f44336" stroke-width="1.5"/>
+  <rect x="60" y="126" width="280" height="40" rx="5" fill="#0d0d0d" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+  <text x="200" y="151" fill="#e8e4df" font-size="11" text-anchor="middle">@Service CommentService (singleton)</text>
+  <text x="60" y="188" fill="rgb(230,115,107)" font-size="10">@Autowired CommentProcessor p;</text>
+  <text x="60" y="206" fill="rgb(138,133,128)" font-size="10">→ 생성 시 단 1회 주입</text>
+  <rect x="110" y="220" width="180" height="40" rx="5" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="200" y="245" fill="#e8e4df" font-size="11" text-anchor="middle">CommentProcessor 1개 고정</text>
+  <text x="60" y="284" fill="#f44336" font-size="11">매 호출이 같은 인스턴스 → prototype 무의미</text>
+  <text x="60" y="300" fill="#f44336" font-size="11">→ race condition 회귀</text>
+
+  <!-- 오른쪽: 올바른 방법 -->
+  <text x="400" y="92" fill="#66bb6a" font-size="13" font-weight="bold">✓ 메서드 안에서 getBean</text>
+  <rect x="400" y="106" width="336" height="200" rx="10" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="1.5"/>
+  <rect x="420" y="126" width="296" height="40" rx="5" fill="#0d0d0d" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+  <text x="568" y="151" fill="#e8e4df" font-size="11" text-anchor="middle">@Autowired ApplicationContext context;</text>
+  <text x="420" y="188" fill="#e8e4df" font-size="10">void sendComment(...) {</text>
+  <text x="432" y="206" fill="rgb(138,133,128)" font-size="10">context.getBean(CommentProcessor.class)</text>
+  <text x="420" y="224" fill="#e8e4df" font-size="10">}</text>
+  <rect x="440" y="238" width="256" height="40" rx="5" fill="rgba(102,187,106,0.15)" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="568" y="263" fill="#e8e4df" font-size="11" text-anchor="middle">호출마다 새 CommentProcessor</text>
+  <text x="420" y="298" fill="#66bb6a" font-size="11">스레드마다 다른 인스턴스 → 안전</text>
+
+  <text x="24" y="334" fill="rgb(138,133,128)" font-size="11">함정의 뿌리: singleton은 "한 번 생성 · 한 번 주입" — 매번 새것이 필요하면 요청을 메서드 안에 둡니다</text>
+</svg>

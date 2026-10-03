@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 928 472" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">VAS 를 실제로 들여다봅니다</title><desc id="dd">07-02 가 다루는 네 절. 앞 노트가 세운 VM split 개념 위에서, 유저 VAS 를 procfs 로 읽고 커널 VAS 를 매크로와 LKM 으로 읽는다. 마지막 절은 그렇게 읽은 주소가 왜 실행마다 달라지는지를 다룬다.</desc>
+<rect width="928" height="472" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LINUX KERNEL PROGRAMMING · 07-02</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">VAS 를 실제로 들여다봅니다</text>
+<text x="12" y="76" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" fill="#8B98A9">읽는 도구가 유저 쪽과 커널 쪽에서 갈립니다 — procfs 는 유저 VAS 만 보여줍니다</text>
+<rect x="24" y="116" width="192" height="180" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="40" y="146" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§1</text>
+<text x="200" y="146" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">maps</text>
+<line x1="40" y1="162" x2="200" y2="162" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="40" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">한 줄이 매핑 하나이고</text>
+<text x="40" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">필드는 일곱입니다</text>
+<rect x="55.58" y="249" width="128.84" height="22" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="120.0" y="265" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#6A95D8">/proc/PID/maps</text>
+<rect x="252" y="116" width="192" height="180" rx="8" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4"/>
+<text x="268" y="146" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">§2</text>
+<text x="428" y="146" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">procmap · VMA</text>
+<line x1="268" y1="162" x2="428" y2="162" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="268" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">커널이 매핑마다</text>
+<text x="268" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">VMA 객체 하나를 둡니다</text>
+<rect x="283.58" y="249" width="128.84" height="22" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="348.0" y="265" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F08A59">vm_area_struct</text>
+<rect x="480" y="116" width="192" height="180" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="496" y="146" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§3</text>
+<text x="656" y="146" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">커널 VAS</text>
+<line x1="496" y1="162" x2="656" y2="162" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="496" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">영역 경계가 매크로이고</text>
+<text x="496" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">LKM 으로 조회합니다</text>
+<rect x="523.67" y="249" width="104.66000000000001" height="22" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="576.0" y="265" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#6A95D8">PAGE_OFFSET</text>
+<rect x="708" y="116" width="192" height="180" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="724" y="146" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§4</text>
+<text x="884" y="146" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">[K]ASLR</text>
+<line x1="724" y1="162" x2="884" y2="162" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="724" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">그 주소들은 실행마다</text>
+<text x="724" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">랜덤 오프셋으로 옮겨집니다</text>
+<rect x="723.46" y="249" width="161.08" height="22" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="804.0" y="265" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#6A95D8">randomize_va_space</text>
+<text x="24" y="325" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">읽는 순서</text>
+<path d="M 96 320 L 900 320" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)" stroke-dasharray="4 6"/>
+<text x="24" y="356" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">§1 이 보여주는 한 줄은 §2 의 VMA 메타데이터에서 나옵니다 — 그래서 VMA 가 이 편의 중심입니다.</text>
+<text x="24" y="380" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#5E6B7E">§3 은 procfs 로는 못 보는 커널 쪽을 LKM 으로 열고, §4 는 §1~§3 의 주소가 고정값이 아님을 밝힙니다.</text>
+<line x1="12" y1="416" x2="880" y2="416" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="438" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="427" width="14" height="14" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="439" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">이 편의 중심</text>
+<rect x="253" y="427" width="14" height="14" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="275" y="439" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">나머지 절</text>
+</svg>

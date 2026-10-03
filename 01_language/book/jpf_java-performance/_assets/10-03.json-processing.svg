@@ -1,0 +1,68 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>JSON 처리 — 파싱 vs 마샬링과 객체 모델</title>
+  <desc>JSON 문자열을 Java 데이터로 바꾸는 건 마샬링 또는 파싱이다. 출력이 Java 객체면 마샬링, 읽으며 처리하면 파싱이다. 역방향은 unmarshaling이다. 세 기법이 있다. pull parser는 토큰을 당겨 온다. document model은 generic 문서 객체로 변환한다. object representation은 미리 정의된 클래스로 POJO를 만든다. 빠른 순서지만 기능 차이가 더 중요하다. 파서는 스캔만 하고, 마샬러는 파서를 써 구조를 제공한다. 한 번 단순 통과면 파서, 형식 보존이면 document, 유연성이면 object model이다. JSON 객체는 generic JsonObject와 JSON-B POJO 두 표현이 있다. 마샬 성능은 JSON object가 2318, JSON-B가 7071, Jackson mapper가 1549 마이크로초다. ObjectMapper는 단일 인스턴스만 둔다. 여럿 만들면 메모리 압박이다. 파싱은 메모리를 아끼고 필터링에 유리하다. factory는 재사용하고 parser는 비재사용이다. 10 item만 파싱하면 90퍼센트 빨라진다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">JSON 처리 — 파싱 vs 마샬링</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">출력이 Java 객체면 마샬링, 읽으며 처리하면 파싱 — 기능 차이가 성능보다 중요합니다</text>
+
+  <!-- 세 기법 -->
+  <rect x="20" y="74" width="642" height="138" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="96" fill="#e8e4df" font-size="13" font-weight="bold">세 기법 (빠른 → 느린 순, 단 기능 차이가 핵심)</text>
+  <rect x="38" y="106" width="200" height="96" fill="rgba(102,187,106,0.08)" stroke="#66bb6a"/>
+  <text x="50" y="126" fill="#66bb6a" font-size="11" font-weight="bold">① pull parser</text>
+  <text x="50" y="144" fill="rgb(138,133,128)" font-size="10">토큰을 당겨 옴</text>
+  <text x="50" y="162" fill="rgb(138,133,128)" font-size="10">스캔만 — 랜덤·재접근 부적합</text>
+  <text x="50" y="180" fill="rgb(138,133,128)" font-size="10">단순 1회 통과·필터링에 적합</text>
+  <text x="50" y="196" fill="#66bb6a" font-size="9">= 파서 (앱이 직접 처리)</text>
+  <rect x="246" y="106" width="200" height="96" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9"/>
+  <text x="258" y="126" fill="#9cc3df" font-size="11" font-weight="bold">② document model</text>
+  <text x="258" y="144" fill="rgb(138,133,128)" font-size="10">generic 문서 객체로 변환</text>
+  <text x="258" y="162" fill="rgb(138,133,128)" font-size="10">형식 보존이 중요할 때</text>
+  <text x="258" y="180" fill="rgb(138,133,128)" font-size="10">읽기→수정→새 스트림 쓰기</text>
+  <text x="258" y="196" fill="#9cc3df" font-size="9">= 마샬러 (구조 제공)</text>
+  <rect x="454" y="106" width="200" height="96" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)"/>
+  <text x="466" y="126" fill="rgb(212,168,83)" font-size="11" font-weight="bold">③ object (POJO)</text>
+  <text x="466" y="144" fill="rgb(138,133,128)" font-size="10">미리 정의된 클래스로 변환</text>
+  <text x="466" y="162" fill="rgb(138,133,128)" font-size="10">객체·속성으로 다룸(유연)</text>
+  <text x="466" y="180" fill="rgb(138,133,128)" font-size="10">생산성↑ 약간 느림·메모리↑</text>
+  <text x="466" y="196" fill="rgb(212,168,83)" font-size="9">= 마샬러 (구조 제공)</text>
+
+  <!-- 마샬 성능 -->
+  <rect x="20" y="220" width="320" height="130" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="242" fill="rgb(212,168,83)" font-size="12" font-weight="bold">마샬 성능 (객체 모델)</text>
+  <text x="38" y="264" fill="rgb(138,133,128)" font-size="11">JSON object (generic)</text>
+  <text x="250" y="264" fill="#66bb6a" font-size="11">2,318 μs</text>
+  <text x="38" y="286" fill="rgb(138,133,128)" font-size="11">JSON-B classes</text>
+  <text x="250" y="286" fill="#f47f72" font-size="11">7,071 μs</text>
+  <text x="38" y="308" fill="rgb(138,133,128)" font-size="11">Jackson mapper</text>
+  <text x="250" y="308" fill="#66bb6a" font-size="11">1,549 μs</text>
+  <text x="38" y="332" fill="rgb(138,133,128)" font-size="10">generic이 custom 클래스보다 빠름</text>
+  <text x="38" y="346" fill="#9cc3df" font-size="10">단 클래스가 다루기 쉬움</text>
+
+  <!-- 파서 성능 -->
+  <rect x="350" y="220" width="312" height="130" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="368" y="242" fill="#66bb6a" font-size="12" font-weight="bold">파서 성능 (필터링)</text>
+  <text x="368" y="264" fill="rgb(138,133,128)" font-size="11">10 item: Default 159 / Jackson 86 μs</text>
+  <text x="368" y="286" fill="rgb(138,133,128)" font-size="11">100 item: Default 1662 / Jackson 770 μs</text>
+  <text x="368" y="308" fill="#66bb6a" font-size="11">90% 적게 파싱 → 90% 빨라짐</text>
+  <text x="368" y="330" fill="#9cc3df" font-size="10">Jackson이 가장 빠름 · 객체 읽기보다 훨씬 빠름</text>
+
+  <!-- ObjectMapper 함정 -->
+  <rect x="20" y="358" width="642" height="92" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="380" fill="#f47f72" font-size="13" font-weight="bold">ObjectMapper 함정 — 단일 인스턴스</text>
+  <text x="38" y="402" fill="rgb(138,133,128)" font-size="11">마샬 시 proxy 클래스를 많이 생성 → 첫 사용이 다소 느림</text>
+  <text x="38" y="422" fill="#f47f72" font-size="11">흔한 실수: mapper를 많이 만듦(클래스당 static) → 메모리 압박·과도 GC·OOM</text>
+  <text x="38" y="442" fill="#66bb6a" font-size="11">애플리케이션에 ObjectMapper 1개면 충분 — CPU·메모리 모두 이득</text>
+
+  <!-- factory/parser 재사용 -->
+  <rect x="20" y="458" width="642" height="64" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9"/>
+  <text x="38" y="480" fill="#9cc3df" font-size="12" font-weight="bold">factory 재사용, parser 비재사용</text>
+  <text x="38" y="502" fill="rgb(138,133,128)" font-size="11">JSON parser factory는 생성 비쌈 + thread-safe → 전역 static으로 재사용</text>
+  <text x="38" y="518" fill="rgb(138,133,128)" font-size="10">parser는 재사용 불가·thread-safe 아님 → on-demand 생성</text>
+
+  <!-- 핵심 -->
+  <rect x="20" y="530" width="642" height="52" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="552" fill="rgb(212,168,83)" font-size="12" font-weight="bold">선택</text>
+  <text x="38" y="572" fill="#e8e4df" font-size="11">POJO는 다루기 쉬우나 크면 GC 이슈 · 직접 파싱은 필터링·성능 이득 · Jackson 우선</text>
+</svg>

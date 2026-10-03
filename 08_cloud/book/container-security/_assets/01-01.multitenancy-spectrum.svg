@@ -1,0 +1,66 @@
+<svg viewBox="0 0 700 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>공유 단위에 따른 격리 강도 스펙트럼</title>
+  <desc>왼쪽으로 갈수록 공유하는 것이 많아 격리가 약하고, 오른쪽으로 갈수록 전용 자원이라 격리가 강합니다. 한 Linux 머신을 여러 사용자가 나눠 쓰는 공유 머신이 가장 약하고, 같은 커널을 공유하는 컨테이너가 그다음이며, 커널까지 각자 갖는 가상머신이 그다음, 물리 머신을 통째로 쓰는 전용 인스턴스와 베어메탈이 가장 강합니다. 컨테이너와 가상머신 사이의 선이 이 책이 반복해서 따지는 경계입니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 12.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10px; }
+    .axis { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .hint { fill: #b8b3ad; font-size: 10.5px; }
+    .share { fill: #b8b3ad; font-size: 10px; }
+    .keyline { stroke: #b8b3ad; stroke-width: 1.2; stroke-dasharray: 5 4; fill: none; }
+    .caution-title { fill: #0d0d0d; font-size: 12.5px; font-weight: 700; }
+    .caution-detail { fill: #0d0d0d; font-size: 10px; }
+  </style>
+
+  <rect width="700" height="400" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="ah4" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="hint" x="40" y="34">격리 약함</text>
+  <text class="hint" x="660" y="34" text-anchor="end">격리 강함</text>
+  <path class="axis" d="M40,44 L660,44" marker-end="url(#ah4)"/>
+
+  <!-- 1. 공유 머신 — 주의 -->
+  <rect x="40" y="70" width="290" height="58" rx="4" fill="rgb(212,168,83)"/>
+  <text class="caution-title" x="56" y="94">주의 · 공유 Linux 머신</text>
+  <text class="caution-detail" x="56" y="112">docker 명령 = root 권한</text>
+  <text class="share" x="56" y="146">공유: 커널 · 파일시스템</text>
+
+  <!-- 2. 컨테이너 -->
+  <rect class="box" x="40" y="170" width="290" height="58" rx="4"/>
+  <text class="box-title" x="56" y="194">컨테이너 멀티테넌시</text>
+  <text class="box-detail" x="56" y="212">namespace로 시야만 분리</text>
+  <text class="share" x="56" y="246">공유: 커널</text>
+
+  <!-- 경계선 -->
+  <path class="keyline" d="M350,60 L350,340"/>
+  <text class="hint" x="350" y="360" text-anchor="middle">이 책이 따지는 경계</text>
+
+  <!-- 3. 가상머신 -->
+  <rect class="box" x="370" y="70" width="290" height="58" rx="4"/>
+  <text class="box-title" x="386" y="94">가상머신</text>
+  <text class="box-detail" x="386" y="112">커널까지 각자 소유</text>
+  <text class="share" x="386" y="146">공유: 물리 하드웨어</text>
+
+  <!-- 4. 전용 인스턴스 · 베어메탈 -->
+  <rect class="box" x="370" y="170" width="290" height="58" rx="4"/>
+  <text class="box-title" x="386" y="194">전용 인스턴스 · 베어메탈</text>
+  <text class="box-detail" x="386" y="212">물리 머신에 나 혼자</text>
+  <text class="share" x="386" y="246">공유: 없음</text>
+
+  <text class="hint" x="40" y="300">왼쪽일수록 이웃의 영향을 받는다</text>
+  <text class="hint" x="40" y="320">시끄러운 이웃 · 이스케이프</text>
+
+  <text class="hint" x="370" y="300">오른쪽일수록 비용이 오른다</text>
+  <text class="hint" x="370" y="320">전용 자원 · 낮은 집적도</text>
+</svg>

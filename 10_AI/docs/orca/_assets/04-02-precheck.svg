@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 320" role="img" aria-labelledby="u1 v1">
+<title id="u1">출력이 비어도 성공으로 끝나는 명령과 종료 코드를 바꿔 준 명령의 대비</title>
+<desc id="v1">git log 단독은 변경이 없어도 종료 코드 0으로 끝나 조건이 항상 통과하고, grep -q 를 이어 붙이면 변경이 없을 때 1을 돌려줘 걸러진다는 대비표입니다. 항상 통과하는 쪽만 강조돼 있습니다.</desc>
+<style>
+svg{--paper:#0D1117;--paper2:#161B22;--ink:#F5F5F3;--muted:#8B98A9;--soft:#5E6B7E;--rule:rgba(191,192,192,0.22);--accent:#F08A59;--accent12:rgba(240,138,89,0.12);--ok:#3FB98C;--bad:#F0616D}
+.kr{font-family:'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif}
+.mn{font-family:'Geist Mono','Noto Sans Mono CJK KR',monospace}
+.eyebrow{fill:var(--soft);font-size:9px;letter-spacing:.14em}
+.h1{fill:var(--ink);font-size:20px;font-weight:600}
+.sub{fill:var(--muted);font-size:11px}
+.col{fill:var(--soft);font-size:10px;letter-spacing:.08em}
+.cmd{fill:var(--ink);font-size:11px}
+.ok{fill:var(--ok);font-size:12px}
+.bad{fill:var(--bad);font-size:12px}
+.note{fill:var(--muted);font-size:10px}
+.hair{stroke:var(--rule);stroke-width:1}
+</style>
+<rect width="1000" height="320" fill="var(--paper)"/>
+<text class="mn eyebrow" x="64" y="44">EXIT CODE, NOT OUTPUT</text>
+<text class="kr h1" x="64" y="76">비어 있어도 성공은 성공입니다</text>
+<text class="kr sub" x="64" y="98">사전 검사는 출력이 아니라 종료 코드로 판정합니다. 여기서 대부분 걸립니다.</text>
+
+<line class="hair" x1="64" y1="128" x2="936" y2="128"/>
+<text class="kr col" x="64" y="148">precheck 명령</text>
+<text class="kr col" x="592" y="148">변경 있을 때</text>
+<text class="kr col" x="776" y="148">변경 없을 때</text>
+<line class="hair" x1="64" y1="164" x2="936" y2="164"/>
+
+<rect x="56" y="176" width="888" height="52" rx="4" fill="var(--accent12)" stroke="var(--accent)" stroke-width="1.4"/>
+<text class="mn cmd" x="64" y="198">git log --since=midnight --oneline</text>
+<text class="kr ok" x="592" y="198">0 · 통과</text>
+<text class="kr bad" x="776" y="198">0 · 통과</text>
+<text class="kr note" x="64" y="218">조건이 항상 통과해 아무것도 걸러내지 못합니다</text>
+
+<text class="mn cmd" x="64" y="264">git log --since=midnight --oneline | grep -q .</text>
+<text class="kr ok" x="592" y="264">0 · 통과</text>
+<text class="kr ok" x="776" y="264">1 · 건너뜀</text>
+<text class="kr note" x="64" y="284">Windows 는 findstr . &gt;nul 이 같은 역할</text>
+
+<line class="hair" x1="64" y1="300" x2="936" y2="300"/>
+<text class="kr note" x="64" y="316">즉시 실행은 사전 검사를 건너뜁니다. 셸에서 echo $? 로 먼저 확인하세요.</text>
+</svg>

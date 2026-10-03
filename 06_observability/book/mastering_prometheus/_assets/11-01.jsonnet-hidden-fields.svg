@@ -1,0 +1,64 @@
+<svg viewBox="0 0 880 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Jsonnet 의 숨은 필드와 병합 연산자</title>
+  <desc>콜론 두 개로 선언한 필드는 출력 JSON 에서 사라지지만 같은 프로그램 안에서는 참조할 수 있다. 그래서 설정값을 객체 안에 넣어두고 결과에는 남기지 않을 수 있다. 필드를 덮어쓸 때 콜론 하나는 값을 통째로 갈아치우고, 더하기 콜론은 기존 값과 병합한다. 이 병합 규칙이 믹스인을 설정 가능하게 만든다.</desc>
+
+  <defs>
+    <marker id="ha" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="hg" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(138,133,128)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="880" height="500" fill="#0d0d0d"/>
+  <text x="20" y="30" fill="#e8e4df" font-size="15">숨은 필드는 사라지지만, 사라지기 전까지 일을 합니다</text>
+  <text x="20" y="54" fill="rgb(138,133,128)" font-size="10.5">콜론 두 개(<tspan font-family="'JetBrains Mono', monospace" fill="#e8e4df">::</tspan>)로 선언하면 출력에서 빠집니다. 값을 못 쓴다는 뜻이 아니라, 결과에 안 실린다는 뜻입니다.</text>
+
+  <!-- LEFT: source -->
+  <text x="20" y="90" fill="rgb(138,133,128)" font-size="11.5">쓴 것</text>
+  <rect x="20" y="102" width="376" height="150" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="36" y="126" fill="rgb(138,133,128)" font-size="10" font-family="'JetBrains Mono', monospace">{</text>
+  <text x="50" y="148" fill="rgb(212,168,83)" font-size="10" font-family="'JetBrains Mono', monospace">_config:: { forDuration: '5m' },</text>
+  <text x="50" y="170" fill="#e8e4df" font-size="10" font-family="'JetBrains Mono', monospace">groups: [{</text>
+  <text x="64" y="192" fill="#e8e4df" font-size="10" font-family="'JetBrains Mono', monospace">"for": $._config.forDuration,</text>
+  <text x="50" y="214" fill="#e8e4df" font-size="10" font-family="'JetBrains Mono', monospace">}],</text>
+  <text x="36" y="236" fill="rgb(138,133,128)" font-size="10" font-family="'JetBrains Mono', monospace">}</text>
+
+  <line x1="404" y1="177" x2="452" y2="177" stroke="rgb(212,168,83)" stroke-width="1.6" marker-end="url(#ha)"/>
+  <text x="428" y="168" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">jsonnet</text>
+
+  <!-- RIGHT: output -->
+  <text x="460" y="90" fill="rgb(138,133,128)" font-size="11.5">나온 것</text>
+  <rect x="460" y="102" width="400" height="150" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="476" y="126" fill="rgb(138,133,128)" font-size="10" font-family="'JetBrains Mono', monospace">{</text>
+  <text x="490" y="148" fill="#e8e4df" font-size="10" font-family="'JetBrains Mono', monospace">"groups": [{</text>
+  <text x="504" y="170" fill="#e8e4df" font-size="10" font-family="'JetBrains Mono', monospace">"for": "5m"</text>
+  <text x="490" y="192" fill="#e8e4df" font-size="10" font-family="'JetBrains Mono', monospace">}]</text>
+  <text x="476" y="214" fill="rgb(138,133,128)" font-size="10" font-family="'JetBrains Mono', monospace">}</text>
+  <rect x="640" y="228" width="204" height="18" fill="#f5edda"/>
+  <text x="742" y="241" fill="#0d0d0d" font-size="9" text-anchor="middle" font-weight="700">_config 은 흔적도 없습니다</text>
+
+  <line x1="20" y1="276" x2="860" y2="276" stroke="rgb(42,37,32)"/>
+
+  <!-- merge semantics -->
+  <text x="20" y="302" fill="#e8e4df" font-size="12">덮어쓸 때 콜론 하나와 <tspan fill="rgb(212,168,83)">더하기 콜론</tspan>은 전혀 다릅니다</text>
+  <text x="20" y="324" fill="rgb(138,133,128)" font-size="10">바탕 객체가 <tspan font-family="'JetBrains Mono', monospace" fill="#e8e4df">{ stack: ["prometheus"] }</tspan> 일 때</text>
+
+  <rect x="20" y="340" width="410" height="90" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="36" y="362" fill="#e8e4df" font-size="10" font-family="'JetBrains Mono', monospace">base { stack: ["thanos"] }</text>
+  <text x="36" y="384" fill="rgb(138,133,128)" font-size="9.5">값을 통째로 갈아치웁니다</text>
+  <rect x="36" y="394" width="180" height="22" fill="#f2d4d4"/>
+  <text x="126" y="409" fill="#7a1f1f" font-size="9" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono', monospace">["thanos"]</text>
+  <text x="230" y="409" fill="rgb(138,133,128)" font-size="9">prometheus 가 사라졌습니다</text>
+
+  <rect x="450" y="340" width="410" height="90" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="466" y="362" fill="#e8e4df" font-size="10" font-family="'JetBrains Mono', monospace">base { stack+: ["thanos"] }</text>
+  <text x="466" y="384" fill="rgb(138,133,128)" font-size="9.5">기존 값 뒤에 이어 붙입니다</text>
+  <rect x="466" y="394" width="240" height="22" fill="#cdeccf"/>
+  <text x="586" y="409" fill="#14521d" font-size="9" text-anchor="middle" font-weight="700" font-family="'JetBrains Mono', monospace">["prometheus", "thanos"]</text>
+  <text x="720" y="409" fill="rgb(138,133,128)" font-size="9">둘 다 남습니다</text>
+
+  <text x="20" y="456" fill="rgb(138,133,128)" font-size="10">숨은 필드에도 같은 규칙이 붙어 <tspan font-family="'JetBrains Mono', monospace" fill="rgb(212,168,83)">+::</tspan> 가 됩니다 — 병합하되 계속 숨긴다는 뜻입니다.</text>
+  <text x="20" y="478" fill="rgb(138,133,128)" font-size="10">믹스인이 <tspan font-family="'JetBrains Mono', monospace" fill="#e8e4df">_config+::</tspan> 로 설정을 여는 이유가 여기 있습니다. 쓰는 쪽은 필요한 값만 얹고, 나머지 기본값은 그대로 물려받습니다.</text>
+</svg>

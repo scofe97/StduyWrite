@@ -1,0 +1,65 @@
+<svg viewBox="0 0 900 720" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>GC 선택 의사결정 트리</title>
+  <desc>워크로드 성격, 힙 크기, SLO를 기준으로 G1 기본값을 유지할지 Parallel, ZGC, Serial을 검토할지 결정하는 흐름이다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}.sub{font-size:11px;fill:rgb(138,133,128)}.head{font-size:13px;font-weight:800;fill:rgb(212,168,83)}.label{font-size:11px;font-weight:750;fill:#e8e4df}.body{font-size:10px;fill:rgb(180,175,170)}.note{font-size:9.5px;fill:rgb(138,133,128)}.code{font-size:10px;font-weight:700;fill:rgb(212,168,83);font-family:'JetBrains Mono',monospace}.ok{font-size:10px;font-weight:750;fill:#81c784}.bad{font-size:10px;font-weight:750;fill:#e57373}
+    </style>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="720" fill="#0d0d0d"/>
+  <text x="26" y="36" class="title">GC 선택 의사결정 트리</text>
+  <text x="26" y="56" class="sub">운영에서는 먼저 워크로드 성격을 잡고, 힙 크기와 SLO로 후보를 좁힌다.</text>
+
+  <rect x="350" y="84" width="200" height="56" rx="8" fill="#2a1414" stroke="#e57373"/>
+  <text x="450" y="108" class="label" text-anchor="middle">시작: G1 기본값</text>
+  <text x="450" y="127" class="body" text-anchor="middle">측정 전 변경하지 않음</text>
+
+  <line x1="450" y1="140" x2="450" y2="182" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="318" y="184" width="264" height="62" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)"/>
+  <text x="450" y="210" class="head" text-anchor="middle">1. 워크로드 성격</text>
+  <text x="450" y="229" class="body" text-anchor="middle">처리량 / 지연시간 / 풋프린트 중 무엇이 우선인가?</text>
+
+  <line x1="318" y1="216" x2="156" y2="306" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="450" y1="246" x2="450" y2="306" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="582" y1="216" x2="744" y2="306" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="56" y="308" width="200" height="70" rx="8" fill="#1e2a1e" stroke="#4ab080"/>
+  <text x="156" y="333" class="ok" text-anchor="middle">처리량 우선</text>
+  <text x="156" y="352" class="body" text-anchor="middle">배치, ETL, 대량 처리</text>
+  <text x="156" y="370" class="code" text-anchor="middle">Parallel 후보</text>
+
+  <rect x="350" y="308" width="200" height="70" rx="8" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="450" y="333" class="label" text-anchor="middle">균형형 서비스</text>
+  <text x="450" y="352" class="body" text-anchor="middle">일반 REST API</text>
+  <text x="450" y="370" class="code" text-anchor="middle">G1 유지</text>
+
+  <rect x="644" y="308" width="200" height="70" rx="8" fill="#2a2a1a" stroke="rgb(212,168,83)"/>
+  <text x="744" y="333" class="label" text-anchor="middle">강한 지연 요구</text>
+  <text x="744" y="352" class="body" text-anchor="middle">p99/p999 SLO 엄격</text>
+  <text x="744" y="370" class="code" text-anchor="middle">ZGC 후보</text>
+
+  <line x1="156" y1="378" x2="156" y2="426" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="450" y1="378" x2="450" y2="426" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="744" y1="378" x2="744" y2="426" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="56" y="428" width="200" height="92" rx="8" fill="#111" stroke="#333"/>
+  <text x="156" y="454" class="head" text-anchor="middle">2. 힙 크기 확인</text>
+  <text x="156" y="476" class="body" text-anchor="middle">작은 힙이면 병렬화 이득 작음</text>
+  <text x="156" y="495" class="body" text-anchor="middle">큰 힙이면 pause 위험 증가</text>
+
+  <rect x="350" y="428" width="200" height="92" rx="8" fill="#111" stroke="#333"/>
+  <text x="450" y="454" class="head" text-anchor="middle">2. SLO 확인</text>
+  <text x="450" y="476" class="body" text-anchor="middle">G1 pause가 SLO 안이면 유지</text>
+  <text x="450" y="495" class="body" text-anchor="middle">목표 초과 시 ZGC 검토</text>
+
+  <rect x="644" y="428" width="200" height="92" rx="8" fill="#111" stroke="#333"/>
+  <text x="744" y="454" class="head" text-anchor="middle">2. 비용 확인</text>
+  <text x="744" y="476" class="body" text-anchor="middle">barrier 비용 감수 가능?</text>
+  <text x="744" y="495" class="body" text-anchor="middle">CPU 여유가 필요</text>
+
+  <rect x="56" y="560" width="788" height="92" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)"/>
+  <text x="80" y="590" class="head">3. 예외: 작은 컨테이너와 풋프린트</text>
+  <text x="100" y="616" class="body">힙이 작고 메모리 limit이 빡빡하면 Serial 또는 기본 G1이 더 낫다. 저지연 GC의 barrier/metadata 비용이 이득보다 클 수 있다.</text>
+  <text x="100" y="636" class="body">반대로 힙이 크고 최악 pause가 SLO를 깨면 ZGC를 검토한다. 같은 큰 힙이라도 배치라면 Parallel이 후보가 될 수 있다.</text>
+</svg>

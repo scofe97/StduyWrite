@@ -1,0 +1,92 @@
+<svg viewBox="0 0 900 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Image Builder — 클러스터 안에서 컨테이너 이미지를 빌드</title>
+  <desc>Kubernetes Patterns 30장. Image Builder는 컨테이너 이미지를 클러스터 밖이 아니라 Kubernetes 클러스터 안에서 빌드하는 패턴입니다. 클러스터 하나로 빌드와 실행을 함께 하면 유지비·용량 계획이 단순해지고, Kubernetes의 정교한 스케줄러가 빌드 잡의 자원 배치에 딱 맞습니다. CD로 가면 빌드와 실행이 같은 인프라를 공유해, 예컨대 base 이미지 취약점 수정 시 클러스터가 빌드와 배포를 둘 다 알아 자동 재배포할 수 있습니다. in-cluster 빌드의 핵심 전제는 rootless 빌드(권한 없이 빌드)로 공격 표면을 줄이는 것입니다 — Docker 데몬은 root 권한이 필요해 위험합니다. 빌드 도구는 두 계층으로 나뉩니다. 컨테이너 이미지 빌더 — Dockerfile 기반(Buildah/Podman, Kaniko는 Pod는 비특권이나 UID 0, BuildKit은 LLB), 다언어 빌더(Cloud Native Buildpacks는 detect/build/export 3단계로 소스를 감지해 이미지 생성, OpenShift S2I), 특화 빌더(Jib은 Java Maven/Gradle 레이어 최적화, ko는 Go, Apko는 Alpine apk). 빌드 오케스트레이터 — Tekton·Argo CD·Flux 같은 CI/CD, OpenShift builds, kbld, Kubernetes Job. Build Pod 예시는 init container(15장)로 순차 실행 — git-sync로 소스 체크아웃 → Kaniko로 비특권 빌드(레지스트리 push, 자격증명은 Secret 20장) → kubectl patch로 Deployment 이미지 갱신(build-pod ServiceAccount는 26장). OpenShift Build는 S2I(assemble/run 스크립트 builder 이미지)·Docker·Pipeline·Custom 전략을 지원하고, ImageStream/ImageStreamTag과 trigger(imageChange)로 chained build(S2I 컴파일 + Docker 슬림 런타임)와 자동 재배포를 엮습니다.</desc>
+
+  <rect x="0" y="0" width="900" height="600" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="16">Image Builder — 클러스터 안에서 컨테이너 이미지를 빌드</text>
+  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">빌드와 실행을 <tspan fill="#e8e4df">한 클러스터에서</tspan> — 스케줄러 활용·유지비 절감. base 취약점 수정 시 자동 재배포까지.</text>
+
+  <!-- why in-cluster + rootless -->
+  <rect x="24" y="72" width="418" height="52" fill="#dceaf7"/>
+  <text x="36" y="91" fill="#10243a" font-size="10" font-weight="700">왜 클러스터 안에서</text>
+  <text x="36" y="108" fill="#10243a" font-size="8.5">스케줄러가 빌드 잡 자원 배치에 적합 · 빌드↔배포 인프라 공유.</text>
+  <text x="36" y="120" fill="#10243a" font-size="8">base 이미지 갱신 → 의존 앱 재빌드·재배포를 클러스터가 자동 연결.</text>
+
+  <rect x="458" y="72" width="418" height="52" fill="#f2d4d4"/>
+  <text x="470" y="91" fill="#7a1f1f" font-size="10" font-weight="700">핵심 전제 — rootless 빌드</text>
+  <text x="470" y="108" fill="#7a1f1f" font-size="8.5">Docker 데몬은 root 권한 필요 → 컨테이너 탈출·호스트 장악 위험.</text>
+  <text x="470" y="120" fill="#7a1f1f" font-size="8">비특권 빌드로 공격 표면 축소(잠긴 클러스터에 유용).</text>
+
+  <!-- container image builders -->
+  <text x="24" y="148" fill="#e8e4df" font-size="12">① 컨테이너 이미지 빌더 — 이미지만 만든다(재배포는 신경 X)</text>
+  <rect x="24" y="158" width="276" height="104" fill="#f5edda"/>
+  <text x="36" y="178" fill="#0d0d0d" font-size="9.5" font-weight="700">Dockerfile 기반</text>
+  <text x="36" y="196" fill="#0d0d0d" font-size="8.5"><tspan font-weight="700">Buildah/Podman</tspan> — 데몬 없이 OCI 이미지.</text>
+  <text x="36" y="212" fill="#0d0d0d" font-size="8.5"><tspan font-weight="700">Kaniko</tspan> — Pod는 비특권(UID 0이라 OpenShift엔</text>
+  <text x="36" y="224" fill="#0d0d0d" font-size="8.5">제약). Google Cloud Build 근간.</text>
+  <text x="36" y="242" fill="#0d0d0d" font-size="8.5"><tspan font-weight="700">BuildKit</tspan> — Docker 빌드 엔진 분리. LLB로</text>
+  <text x="36" y="254" fill="#0d0d0d" font-size="8.5">복잡한 빌드 그래프.</text>
+
+  <rect x="312" y="158" width="276" height="104" fill="#cdeccf"/>
+  <text x="324" y="178" fill="#14521d" font-size="9.5" font-weight="700">다언어 빌더 (Dockerfile 없이)</text>
+  <text x="324" y="196" fill="#14521d" font-size="8.5"><tspan font-weight="700">Cloud Native Buildpacks(CNB)</tspan></text>
+  <text x="324" y="211" fill="#14521d" font-size="8.5">프로젝트 감지 → opinionated 빌드.</text>
+  <text x="324" y="225" fill="#14521d" font-size="8.5">3단계: detect(pom.xml 발견?) →</text>
+  <text x="324" y="238" fill="#14521d" font-size="8.5">build(npm install 등) → export(OCI).</text>
+  <text x="324" y="254" fill="#14521d" font-size="8.5">pack CLI · kpack(Operator·CRD). OpenShift S2I도.</text>
+
+  <rect x="600" y="158" width="276" height="104" fill="#dceaf7"/>
+  <text x="612" y="178" fill="#10243a" font-size="9.5" font-weight="700">특화 빌더 (rootless, RUN 없이)</text>
+  <text x="612" y="196" fill="#10243a" font-size="8.5"><tspan font-weight="700">Jib</tspan> — 순수 Java 라이브러리(Maven/Gradle).</text>
+  <text x="612" y="210" fill="#10243a" font-size="8.5">아티팩트·의존성·정적자원을 별도 레이어로</text>
+  <text x="612" y="222" fill="#10243a" font-size="8.5">→ 재빌드 시간 최적화. 레지스트리에 직접 push.</text>
+  <text x="612" y="240" fill="#10243a" font-size="8.5"><tspan font-weight="700">ko</tspan> — Go 소스. <tspan font-weight="700">Apko</tspan> — Alpine apk 블록.</text>
+  <text x="612" y="254" fill="#10243a" font-size="8">좁은 범위·강한 의견 → 빠른 빌드·작은 이미지.</text>
+
+  <!-- build orchestrators -->
+  <text x="24" y="286" fill="#e8e4df" font-size="12">② 빌드 오케스트레이터 — 한 단계 위. 빌더를 호출 + 배포 descriptor 갱신</text>
+  <rect x="24" y="296" width="852" height="42" fill="#f5edda"/>
+  <text x="36" y="315" fill="#0d0d0d" font-size="9">범용 CI/CD: <tspan font-weight="700">Tekton</tspan>(구 Knative Build, CRD 기반) · Argo CD · Flux. 특화: <tspan font-weight="700">OpenShift builds</tspan> · <tspan font-weight="700">kbld</tspan>(Carvel, YAML image 필드 갱신) · <tspan font-weight="700">Kubernetes Job</tspan>(7장).</text>
+  <text x="36" y="331" fill="#0d0d0d" font-size="8">빌드에 그치지 않고 테스트·릴리스·배포·보안 스캔까지 앱 생애주기 전체를 자동화.</text>
+
+  <!-- build Pod flow -->
+  <text x="24" y="360" fill="#e8e4df" font-size="12">Build Pod 예시 — init container(15장)로 순차 실행</text>
+  <rect x="24" y="370" width="200" height="58" fill="#dceaf7"/>
+  <text x="36" y="389" fill="#10243a" font-size="9" font-weight="700">git-sync (init)</text>
+  <text x="36" y="406" fill="#10243a" font-size="8">원격 Git에서 소스 체크아웃</text>
+  <text x="36" y="419" fill="#10243a" font-size="8">→ 공유 emptyDir에 저장.</text>
+  <text x="230" y="403" fill="rgb(212,168,83)" font-size="16">→</text>
+  <rect x="250" y="370" width="200" height="58" fill="#cdeccf"/>
+  <text x="262" y="389" fill="#14521d" font-size="9" font-weight="700">Kaniko build (init)</text>
+  <text x="262" y="406" fill="#14521d" font-size="8">비특권 빌드 → 레지스트리 push.</text>
+  <text x="262" y="419" fill="#14521d" font-size="8">자격증명은 Secret(20·25장).</text>
+  <text x="456" y="403" fill="rgb(212,168,83)" font-size="16">→</text>
+  <rect x="476" y="370" width="200" height="58" fill="#f5edda"/>
+  <text x="488" y="389" fill="#0d0d0d" font-size="9" font-weight="700">image-update</text>
+  <text x="488" y="406" fill="#0d0d0d" font-size="8">kubectl patch로 Deployment</text>
+  <text x="488" y="419" fill="#0d0d0d" font-size="8">이미지 갱신 → 롤아웃(3장).</text>
+  <rect x="688" y="370" width="188" height="58" fill="#f2d4d4"/>
+  <text x="700" y="389" fill="#7a1f1f" font-size="9" font-weight="700">권한</text>
+  <text x="700" y="406" fill="#7a1f1f" font-size="8">build-pod ServiceAccount가</text>
+  <text x="700" y="419" fill="#7a1f1f" font-size="8">Deployment patch 허용(26장).</text>
+
+  <!-- OpenShift Build -->
+  <text x="24" y="452" fill="#e8e4df" font-size="12">OpenShift Build — 가장 오래되고 성숙한 in-cluster 빌드</text>
+  <rect x="24" y="462" width="418" height="88" fill="#f5edda"/>
+  <text x="36" y="482" fill="#0d0d0d" font-size="9.5" font-weight="700">전략 넷 + S2I</text>
+  <text x="36" y="500" fill="#0d0d0d" font-size="8.5">S2I(assemble/run 스크립트 builder 이미지) · Docker ·</text>
+  <text x="36" y="514" fill="#0d0d0d" font-size="8.5">Pipeline(Tekton) · Custom. BuildConfig 리소스로 정의.</text>
+  <text x="36" y="531" fill="#0d0d0d" font-size="8.5">S2I는 Docker보다 안전(신뢰된 builder 통제)하나,</text>
+  <text x="36" y="544" fill="#7a1f1f" font-size="8">빌드 환경까지 이미지에 포함 → 크기·공격면 ↑ (chained로 해소).</text>
+
+  <rect x="458" y="462" width="418" height="88" fill="#dceaf7"/>
+  <text x="470" y="482" fill="#10243a" font-size="9.5" font-weight="700">ImageStream + trigger = 자동 연결</text>
+  <text x="470" y="500" fill="#10243a" font-size="8.5">ImageStream(리포)이 ImageStreamTag(태그 이미지)를 참조.</text>
+  <text x="470" y="514" fill="#10243a" font-size="8.5">이미지 갱신 시 이벤트 발행 → trigger(imageChange)가 반응.</text>
+  <text x="470" y="531" fill="#10243a" font-size="8.5" font-weight="700">chained build</text>
+  <text x="470" y="544" fill="#10243a" font-size="8">S2I로 컴파일 → Docker로 슬림 런타임 이미지. 빌드↔배포 연결이 CD의 성배.</text>
+
+  <!-- bottom -->
+  <rect x="24" y="560" width="852" height="34" fill="#cdeccf"/>
+  <text x="36" y="580" fill="#14521d" font-size="9">2023 기준 in-cluster 빌드 도구는 풍부하고 겹친다. 통합·신규 등장이 이어질 영역 — <tspan font-weight="700">"이미지도 클러스터가 만든다"</tspan>가 이 패턴의 요지.</text>
+</svg>

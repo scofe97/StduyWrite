@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 330" width="100%" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>exemplar 로 집계된 메트릭에서 단일 요청 트레이스로 건너뛰는 경로</title>
+  <desc>메트릭은 집계된 관점을 보여주는데 exemplar 는 그 값에서 단일 요청의 트레이스로 건너뛰게 해 줍니다. 다만 exemplar 는 수집 계층에서 설정되어 저장 계층으로 전송되고 있어야 하며 쿼리 시점에 켜는 것이 아닙니다. Grafana 에서는 Options 의 Exemplars 슬라이더를 켜면 차트에 별 모양으로 나타나고, 마우스를 올리면 프로세스 런타임 이름과 버전과 span_id 가 보이며, Query with Tempo 버튼으로 트레이스로 이동합니다.</desc>
+
+  <style>
+    .code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 10.5px; }
+  </style>
+
+  <rect width="880" height="330" fill="#0d0d0d"/>
+
+  <text x="30" y="34" fill="#e8e4df" font-size="17" font-weight="700">집계에서 단일 요청으로</text>
+  <text x="30" y="55" fill="#b8b3ad" font-size="12">미리 실어 보내고 있어야 한다</text>
+
+  <!-- precondition -->
+  <rect x="30" y="76" width="820" height="58" rx="8" fill="#0d0d0d" stroke="#f44336" stroke-width="1.5"/>
+  <text x="50" y="100" fill="#f44336" font-size="12.5" font-weight="700">선행 조건</text>
+  <text x="50" y="121" fill="#e8e4df" font-size="12">수집 계층에서 이미 보내고 있어야</text>
+
+  <!-- metric side -->
+  <rect x="30" y="152" width="330" height="150" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.8"/>
+  <rect x="30" y="152" width="330" height="30" rx="8" fill="rgb(212,168,83)"/>
+  <rect x="30" y="174" width="330" height="8" fill="rgb(212,168,83)"/>
+  <text x="48" y="173" fill="#0d0d0d" font-size="13" font-weight="700">메트릭 — 집계된 관점</text>
+
+  <text x="48" y="202" fill="#e8e4df" font-size="12">차트 위의 별 모양이 exemplar</text>
+  <rect x="48" y="214" width="294" height="30" rx="4" fill="#fdf3df"/>
+  <text x="58" y="234" fill="#5c4410" font-size="11.5" font-weight="700">Options → Exemplars</text>
+
+  <text x="48" y="266" fill="#b8b3ad" font-size="11.5">값이 이상할 때 표본 하나를 꺼낸다</text>
+  <text x="48" y="286" fill="#b8b3ad" font-size="11.5">순수 메트릭 뷰엔 없던 값이 보인다</text>
+
+  <!-- hop arrow -->
+  <path d="M368 227 L512 227" stroke="#66bb6a" stroke-width="2.5" marker-end="url(#g)"/>
+  <defs>
+    <marker id="g" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L10,3 z" fill="#66bb6a"/>
+    </marker>
+  </defs>
+  <rect x="374" y="192" width="132" height="26" rx="4" fill="#e6f7e7"/>
+  <text x="384" y="210" fill="#14521d" font-size="11" font-weight="700">Query with Tempo</text>
+
+  <!-- trace side -->
+  <rect x="520" y="152" width="330" height="150" rx="8" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.8"/>
+  <rect x="520" y="152" width="330" height="30" rx="8" fill="#5b9bd5"/>
+  <rect x="520" y="174" width="330" height="8" fill="#5b9bd5"/>
+  <text x="538" y="173" fill="#e8e4df" font-size="13" font-weight="700">트레이스 — 단일 요청</text>
+
+  <text x="538" y="202" fill="#e8e4df" font-size="12">exemplar 에 실려 오는 값</text>
+  <rect x="538" y="214" width="294" height="22" rx="3" fill="#dceaf7"/>
+  <text class="code" x="548" y="229" fill="#10243a">span_id</text>
+  <rect x="538" y="242" width="294" height="22" rx="3" fill="#dceaf7"/>
+  <text x="548" y="257" fill="#10243a" font-size="11">프로세스 런타임 이름 · 버전</text>
+
+  <text x="538" y="286" fill="#b8b3ad" font-size="11.5">메트릭 뷰 안에서 펼쳐 본다</text>
+
+</svg>

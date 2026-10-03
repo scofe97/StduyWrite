@@ -1,0 +1,59 @@
+<svg viewBox="0 0 820 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>OCI 세 스펙 위의 Docker와 Kaniko 위치</title>
+  <desc>OCI 표준은 runtime-spec(컨테이너 실행), image-spec(이미지 포맷), distribution-spec(레지스트리 push/pull) 세 스펙으로 나뉜다. Docker(BuildKit)와 Kaniko 모두 image-spec 호환 이미지를 만들어 distribution-spec으로 push하므로 산출물은 같다. 근본 차이는 runtime-spec 계층이다. Docker는 빌드 중 RUN 단계를 runc 컨테이너로 띄워 실행해 권한이 필요한 대신 단계 격리를 얻고, Kaniko는 그 계층을 우회해 executor 프로세스가 직접 실행하므로 권한이 불필요한 대신 단계 격리가 없다.</desc>
+
+  <rect x="0" y="0" width="820" height="440" fill="#0d0d0d"/>
+  <text x="20" y="34" fill="#e8e4df" font-size="16">OCI 세 스펙 위의 Docker와 Kaniko — 산출물은 같다, 빌드 모델이 다르다</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="11">차이는 image-spec(결과물)이 아니라 runtime-spec(빌드 중 RUN 실행) 계층에서 난다</text>
+
+  <text x="36" y="88" fill="rgb(138,133,128)" font-size="12">OCI 스펙</text>
+  <text x="286" y="88" fill="#e8e4df" font-size="12">Docker (BuildKit)</text>
+  <text x="566" y="88" fill="#e8e4df" font-size="12">Kaniko</text>
+
+  <!-- Row 1: runtime-spec (갈리는 칸) -->
+  <rect x="20" y="100" width="230" height="58" rx="6" fill="rgba(212,168,83,0.07)" stroke="rgb(212,168,83)"/>
+  <text x="36" y="124" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="11">runtime-spec</text>
+  <text x="36" y="144" fill="rgb(138,133,128)" font-size="10">컨테이너 실행 규격 — runc가 참조 구현</text>
+
+  <rect x="270" y="100" width="260" height="58" rx="6" fill="rgba(212,168,83,0.07)" stroke="rgb(212,168,83)"/>
+  <text x="286" y="124" fill="#e8e4df" font-size="11">✓ RUN을 runc 컨테이너로 실행</text>
+  <text x="286" y="144" fill="rgb(138,133,128)" font-size="10">daemon·권한 필요, 단계 격리 확보</text>
+
+  <rect x="550" y="100" width="250" height="58" rx="6" fill="rgba(244,67,54,0.05)" stroke="#f44336"/>
+  <text x="566" y="124" fill="#f44336" font-size="11">✕ 우회 — executor가 직접 실행</text>
+  <text x="566" y="144" fill="rgb(138,133,128)" font-size="10">권한 불필요, 단계 격리 없음</text>
+
+  <!-- Row 2: image-spec -->
+  <rect x="20" y="170" width="230" height="58" rx="6" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="36" y="194" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11">image-spec</text>
+  <text x="36" y="214" fill="rgb(138,133,128)" font-size="10">이미지 포맷(manifest·레이어)</text>
+
+  <rect x="270" y="170" width="260" height="58" rx="6" fill="rgba(102,187,106,0.06)" stroke="#66bb6a"/>
+  <text x="286" y="194" fill="#66bb6a" font-size="11">✓ OCI/Docker 이미지 생성</text>
+  <text x="286" y="214" fill="rgb(138,133,128)" font-size="10">OCI tarball 등 익스포터 다양</text>
+
+  <rect x="550" y="170" width="250" height="58" rx="6" fill="rgba(102,187,106,0.06)" stroke="#66bb6a"/>
+  <text x="566" y="194" fill="#66bb6a" font-size="11">✓ OCI 또는 Docker v2 manifest</text>
+  <text x="566" y="214" fill="rgb(138,133,128)" font-size="10">--oci-layout-path 지원</text>
+
+  <!-- Row 3: distribution-spec -->
+  <rect x="20" y="240" width="230" height="58" rx="6" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="36" y="264" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11">distribution-spec</text>
+  <text x="36" y="284" fill="rgb(138,133,128)" font-size="10">레지스트리 push/pull API</text>
+
+  <rect x="270" y="240" width="260" height="58" rx="6" fill="rgba(102,187,106,0.06)" stroke="#66bb6a"/>
+  <text x="286" y="264" fill="#66bb6a" font-size="11">✓ push는 별도 단계</text>
+  <text x="286" y="284" fill="rgb(138,133,128)" font-size="10">docker push / buildx --push</text>
+
+  <rect x="550" y="240" width="250" height="58" rx="6" fill="rgba(102,187,106,0.06)" stroke="#66bb6a"/>
+  <text x="566" y="264" fill="#66bb6a" font-size="11">✓ --destination 빌드=푸시 일체</text>
+  <text x="566" y="284" fill="rgb(138,133,128)" font-size="10">push 없이는 --no-push/--tar-path</text>
+
+  <!-- 결론 스트립 -->
+  <rect x="20" y="316" width="780" height="44" rx="6" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)"/>
+  <text x="38" y="343" fill="rgb(212,168,83)" font-size="12">근본 차이는 runtime-spec 한 칸 — Docker는 빌드 중에도 컨테이너를 띄우고, Kaniko는 그 계층을 비워 둔 채 이미지를 조립</text>
+
+  <!-- 주석 -->
+  <text x="20" y="388" fill="rgb(138,133,128)" font-size="11">※ 그래서 Kaniko는 privileged가 필요 없고(런타임 안 씀), 같은 이유로 빌드 단계 격리도 없다 — §8 캐비엇과 같은 설계의 양면</text>
+  <text x="20" y="410" fill="rgb(138,133,128)" font-size="11">※ 출처: opencontainers.org · moby/buildkit README(OCI runc 워커) · kaniko README(media type)</text>
+</svg>

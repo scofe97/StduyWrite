@@ -1,0 +1,54 @@
+<svg viewBox="0 0 900 540" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>톰캣의 웹앱 격리 — 웹앱마다 별도 로더로 같은 라이브러리 다른 버전 공존</title>
+  <desc>톰캣은 한 JVM 안에 여러 웹앱(WAR)을 띄운다. appA가 commons-lang 2.0을 appB가 3.0을 써도 충돌하지 않는다. 톰캣이 웹앱마다 별도 WebappClassLoader를 두어 appA의 StringUtils는 로더 A가 appB의 StringUtils는 로더 B가 로딩하므로 JVM에게는 서로 다른 클래스가 되어 공존한다. WebappClassLoader는 부모 위임을 비틀어 웹앱 자신의 클래스를 먼저 찾고 없을 때만 부모로 올라간다. 단 java.* 핵심 클래스는 여전히 위임으로 부트스트랩에 맡겨 유일성을 지킨다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11.5px;fill:rgb(150,145,140)}
+      .nm{font-size:12px;font-weight:800;fill:#0d0d0d}
+      .body{font-size:10.5px;fill:#0d0d0d}
+      .note{font-size:9.5px;fill:rgb(150,145,140)}
+      .jvm{font-size:11px;font-weight:800;fill:rgb(150,145,140)}
+    </style>
+    <marker id="at" markerWidth="10" markerHeight="10" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="540" fill="#0d0d0d"/>
+  <text x="28" y="40" class="title">톰캣 웹앱 격리 — 한 JVM, 여러 WAR, 라이브러리 버전 충돌 없음</text>
+  <text x="28" y="64" class="sub">웹앱마다 별도 WebappClassLoader → 같은 이름 클래스가 로더별로 갈려 공존 (§1 동일성 활용)</text>
+
+  <!-- JVM 외곽 -->
+  <rect x="40" y="88" width="820" height="340" rx="12" fill="none" stroke="rgb(150,145,140)" stroke-width="1.4" stroke-dasharray="7 5"/>
+  <text x="60" y="112" class="jvm">JVM 하나 (톰캣 프로세스)</text>
+
+  <!-- 공통 부모 로더 -->
+  <rect x="290" y="128" width="320" height="62" rx="10" fill="rgb(212,168,83)"/>
+  <text x="450" y="154" class="nm" text-anchor="middle">공통 로더 (Common) → 부트스트랩</text>
+  <text x="450" y="176" font-size="10" font-family="'JetBrains Mono',monospace" font-weight="700" fill="#0d0d0d" text-anchor="middle">java.* 핵심은 여기로 위임 (유일성 유지)</text>
+
+  <!-- 위임 화살표 (위로) -->
+  <line x1="250" y1="232" x2="370" y2="192" stroke="rgb(212,168,83)" stroke-width="1.8" marker-end="url(#at)"/>
+  <line x1="650" y1="232" x2="530" y2="192" stroke="rgb(212,168,83)" stroke-width="1.8" marker-end="url(#at)"/>
+  <text x="450" y="212" class="note" text-anchor="middle">java.* 만 위로 위임</text>
+
+  <!-- 웹앱 A -->
+  <rect x="80" y="232" width="330" height="172" rx="11" fill="#5b9bd5"/>
+  <text x="100" y="260" class="nm">appA.war — WebappClassLoader A</text>
+  <rect x="98" y="274" width="294" height="38" rx="6" fill="#dceaf7"/>
+  <text x="112" y="298" font-size="10.5" font-family="'JetBrains Mono',monospace" font-weight="800" fill="#10243a">StringUtils  ·  commons-lang 2.0</text>
+  <text x="100" y="336" class="body">자기 WAR 안 클래스를 먼저 찾음</text>
+  <text x="100" y="360" class="body">(delegate=false — 위임을 비틂)</text>
+  <text x="100" y="386" font-size="9.5" fill="#11304d">없을 때만 부모(공통)로 올라감</text>
+
+  <!-- 웹앱 B -->
+  <rect x="490" y="232" width="330" height="172" rx="11" fill="#66bb6a"/>
+  <text x="510" y="260" class="nm">appB.war — WebappClassLoader B</text>
+  <rect x="508" y="274" width="294" height="38" rx="6" fill="#dcf2de"/>
+  <text x="522" y="298" font-size="10.5" font-family="'JetBrains Mono',monospace" font-weight="800" fill="#134a1a">StringUtils  ·  commons-lang 3.0</text>
+  <text x="510" y="336" class="body">같은 이름·다른 버전인데</text>
+  <text x="510" y="360" class="body">로더가 달라 JVM엔 별개 클래스</text>
+  <text x="510" y="386" font-size="9.5" fill="#0e3014">→ 충돌 없이 공존</text>
+
+  <text x="28" y="458" class="sub">표준 위임은 부모 먼저, WebappClassLoader는 웹앱 먼저 — 그래야 각 WAR가 자기 버전 라이브러리를 씀</text>
+  <text x="28" y="482" class="sub">위반은 애플리케이션 클래스에 한정 · java.* 핵심은 여전히 부트스트랩에 위임해 유일성 유지</text>
+  <text x="28" y="510" class="note">"위임은 권장일 뿐"의 실무 사례 — OSGi 네트워크형 위임과 같은 결</text>
+</svg>

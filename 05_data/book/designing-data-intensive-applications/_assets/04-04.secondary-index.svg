@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 580" font-family="Pretendard, sans-serif">
+  <rect width="680" height="580" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">보조 인덱스와 인메모리 저장</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">기본키 외 컬럼 검색 · 값을 어디에 두나 · RAM에 다 담기</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- 기본키 vs 보조 인덱스 -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">기본키 vs 보조 인덱스</text>
+  <rect x="32" y="124" width="300" height="80" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="48" y="146" fill="rgb(212,168,83)" font-size="12" font-weight="700">기본키 인덱스</text>
+  <text x="48" y="166" fill="#e8e4df" font-size="11">행/문서/정점을 유일 식별</text>
+  <text x="48" y="186" fill="rgb(138,133,128)" font-size="10.5">값이 유일 · 참조 해소에 사용</text>
+
+  <rect x="348" y="124" width="300" height="80" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="364" y="146" fill="#7fa8c9" font-size="12" font-weight="700">보조 인덱스(CREATE INDEX)</text>
+  <text x="364" y="166" fill="#e8e4df" font-size="11">기본키 외 컬럼으로 검색</text>
+  <text x="364" y="186" fill="rgb(138,133,128)" font-size="10.5">값이 유일하지 않음 → postings list 또는 행ID 덧붙임</text>
+
+  <!-- 값을 어디에 두나 -->
+  <text x="32" y="244" fill="rgb(212,168,83)" font-size="14" font-weight="700">인덱스에 값을 어떻게 두나</text>
+  <rect x="32" y="256" width="200" height="96" rx="6" fill="#141414" stroke="#66bb6a"/>
+  <text x="48" y="278" fill="#66bb6a" font-size="12" font-weight="700">clustered</text>
+  <text x="48" y="298" fill="#e8e4df" font-size="10.5">실제 행을 인덱스 안에 저장</text>
+  <text x="48" y="316" fill="#e8e4df" font-size="10.5">InnoDB 기본키</text>
+  <text x="48" y="336" fill="rgb(138,133,128)" font-size="10">읽기 빠름 · 중복 주의</text>
+
+  <rect x="240" y="256" width="200" height="96" rx="6" fill="#141414" stroke="#7fa8c9"/>
+  <text x="256" y="278" fill="#7fa8c9" font-size="12" font-weight="700">nonclustered</text>
+  <text x="256" y="298" fill="#e8e4df" font-size="10.5">값=참조(기본키 또는 위치)</text>
+  <text x="256" y="316" fill="#e8e4df" font-size="10.5">heap file: 순서 없는 행 저장소</text>
+  <text x="256" y="336" fill="rgb(138,133,128)" font-size="10">Postgres가 heap 방식</text>
+
+  <rect x="448" y="256" width="200" height="96" rx="6" fill="#141414" stroke="rgb(212,168,83)"/>
+  <text x="464" y="278" fill="rgb(212,168,83)" font-size="12" font-weight="700">covering(included)</text>
+  <text x="464" y="298" fill="#e8e4df" font-size="10.5">일부 컬럼을 인덱스에 포함</text>
+  <text x="464" y="316" fill="#e8e4df" font-size="10.5">인덱스만으로 쿼리 응답</text>
+  <text x="464" y="336" fill="rgb(138,133,128)" font-size="10">읽기↑ · 공간↑·쓰기↓</text>
+
+  <text x="32" y="378" fill="rgb(138,133,128)" font-size="10.5">heap 갱신: 새 값이 더 크면 새 위치로 이동 → 인덱스 갱신 또는 forwarding pointer</text>
+
+  <!-- 인메모리 -->
+  <text x="32" y="412" fill="rgb(212,168,83)" font-size="14" font-weight="700">인메모리 데이터베이스</text>
+  <rect x="32" y="424" width="616" height="120" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="48" y="446" fill="#e8e4df" font-size="11">RAM이 싸지며 작은 데이터셋은 전부 메모리에 → 인메모리 DB</text>
+  <text x="48" y="466" fill="#e8e4df" font-size="11">· 캐시 전용(Memcached) — 재시작 시 손실 OK</text>
+  <text x="48" y="484" fill="#e8e4df" font-size="11">· 내구성 목표(VoltDB·Redis·RAMCloud) — 디스크에 변경 로그·스냅샷·복제로 상태 재적재</text>
+  <text x="48" y="506" fill="#66bb6a" font-size="11">빠른 진짜 이유: 디스크를 안 읽어서가 아니라(OS가 캐시함), 디스크용 인코딩 오버헤드를 피해서</text>
+  <text x="48" y="526" fill="rgb(138,133,128)" font-size="10.5">또 다른 가치: 디스크 인덱스로 어려운 자료 구조(Redis의 우선순위 큐·집합) 제공</text>
+
+  <line x1="32" y1="556" x2="648" y2="556" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="572" fill="rgb(138,133,128)" font-size="11">디스크는 내구성·저비용/GB가 장점 · 인메모리는 디스크를 append-only 로그로만 쓰고 읽기는 메모리에서</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>

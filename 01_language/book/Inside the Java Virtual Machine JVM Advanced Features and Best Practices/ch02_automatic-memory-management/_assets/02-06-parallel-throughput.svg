@@ -1,0 +1,27 @@
+<svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>Parallel Scavenge와 Parallel Old — throughput 우선으로 Young과 Old를 모두 병렬화</title>
+  <desc>Parallel Scavenge는 신세대 마크-카피를 병렬화하고, Parallel Old는 구세대 마크-컴팩트를 병렬화한다. 목표는 한 번의 일시 정지 최소화가 아니라 전체 실행 시간 중 GC 시간 비율을 낮추고 처리량을 높이는 것이다.</desc>
+  <defs><style>.title{font-size:17px;font-weight:800;fill:#e8e4df}.sub{font-size:11px;fill:rgb(138,133,128)}.head{font-size:13px;font-weight:800;fill:rgb(212,168,83)}.label{font-size:11px;font-weight:750;fill:#e8e4df}.body{font-size:10px;fill:rgb(180,175,170)}.note{font-size:9.5px;fill:rgb(138,133,128)}.code{font-size:10px;font-weight:700;fill:rgb(212,168,83);font-family:'JetBrains Mono',monospace}.ok{font-size:10px;font-weight:750;fill:#81c784}.bad{font-size:10px;font-weight:750;fill:#e57373}</style><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgb(212,168,83)"/></marker></defs>
+  <rect x="0" y="0" width="900" height="560" fill="#0d0d0d"/>
+  <text x="26" y="36" class="title">Parallel Scavenge / Parallel Old — throughput 우선 조합</text>
+  <text x="26" y="55" class="sub">pause 하나를 가장 짧게 만드는 것보다, 전체 시간 중 GC 비율을 낮춰 애플리케이션 처리량을 높이는 것이 목표다</text>
+  <rect x="24" y="84" width="852" height="170" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="46" y="112" class="head">① Young과 Old를 모두 병렬화</text>
+  <rect x="58" y="142" width="230" height="64" rx="6" fill="#1e3a4a" stroke="#4a8ab0"/><text x="173" y="166" class="label" text-anchor="middle">Parallel Scavenge</text><text x="173" y="185" class="body" text-anchor="middle">Young · 병렬 마크-카피</text>
+  <line x1="288" y1="174" x2="348" y2="174" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="350" y="142" width="230" height="64" rx="6" fill="#2a2a1a" stroke="rgb(212,168,83)"/><text x="465" y="166" class="label" text-anchor="middle">Parallel Old</text><text x="465" y="185" class="body" text-anchor="middle">Old · 병렬 마크-컴팩트</text>
+  <line x1="580" y1="174" x2="640" y2="174" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="642" y="142" width="180" height="64" rx="6" fill="#1e2a1e" stroke="#4ab080"/><text x="732" y="166" class="ok" text-anchor="middle">throughput 확보</text><text x="732" y="185" class="body" text-anchor="middle">총 GC 시간 비율을 낮춤</text>
+  <rect x="24" y="284" width="408" height="150" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="46" y="312" class="head">② 목표 함수</text>
+  <text x="58" y="344" class="code">-XX:GCTimeRatio=99</text><text x="220" y="344" class="body">GC 시간을 전체의 약 1% 이하로 유도</text>
+  <text x="58" y="374" class="code">UseAdaptiveSizePolicy</text><text x="220" y="374" class="body">Eden/Survivor 크기와 비율 자동 조정</text>
+  <text x="58" y="404" class="note">GC 빈도만 줄이는 것이 아니라, 총 실행 시간 대비 GC 비용을 낮추는 철학이다.</text>
+  <rect x="468" y="284" width="408" height="150" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="490" y="312" class="head">③ ParNew와 다른 점</text>
+  <text x="502" y="344" class="body">ParNew는 CMS와 맞춘 latency 우선 신세대 짝이다.</text>
+  <text x="502" y="374" class="body">Parallel Scavenge는 pause 개별 최단보다 throughput을 본다.</text>
+  <text x="502" y="404" class="body">그래서 구세대도 같은 철학의 Parallel Old와 묶인다.</text>
+  <rect x="24" y="464" width="852" height="44" rx="6" fill="#111" stroke="#333"/>
+  <text x="46" y="490" class="code">한 줄</text><text x="98" y="490" class="body">Parallel 계열은 “더 많은 GC 스레드로 Young/Old를 모두 병렬 처리해 전체 처리량을 높이는” 조합이다.</text>
+</svg>

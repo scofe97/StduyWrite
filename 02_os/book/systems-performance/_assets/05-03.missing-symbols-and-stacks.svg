@@ -1,0 +1,53 @@
+<svg viewBox="0 0 860 460" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>심볼 누락과 스택 누락 — 원인과 해결</title>
+  <desc>플레임 그래프에서 함수명과 스택이 빠지는 두 문제. 위 왼쪽 심볼 누락은 프로파일러가 명령 주소를 함수명으로 못 풀어 16진수나 unknown으로 찍는 것이다. ELF 바이너리(C·C++)는 strip으로 심볼이 제거된 경우로, 스트립을 안 하거나 debuginfo·BTF를 쓴다. JIT 런타임(Java·Node.js)은 심볼 테이블이 런타임에 바뀌어 바이너리에 없는 경우로, 런타임이 생성하는 보조 심볼 파일 /tmp/perf-PID.map을 쓴다. 위 오른쪽 스택 누락은 스택이 한두 프레임으로 짧게 끊기는 것으로, 두 요인의 합이다. 도구가 frame pointer 기반으로 스택을 읽는데, 대상 바이너리가 frame pointer 레지스터를 예약하지 않고 범용 레지스터로 재사용하기 때문이다. libc는 보통 frame pointer 없이 컴파일돼 그것을 지나는 스택이 흔히 깨진다. 아래: 해결은 frame pointer 복구로, C/C++는 -fno-omit-frame-pointer, Java는 -XX:+PreserveFramePointer를 쓴다. 성능 비용은 흔히 1% 미만이라 스택으로 성능 이득을 찾는 가치가 그 비용을 압도한다.</desc>
+
+  <rect x="0" y="0" width="860" height="460" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">심볼 누락과 스택 누락</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">플레임 그래프에서 함수명·스택이 빠지는 두 문제</text>
+
+  <!-- 심볼 누락 -->
+  <rect x="32" y="84" width="388" height="200" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="226" y="108" fill="rgb(212,168,83)" font-size="14" text-anchor="middle">심볼 누락 (missing symbols)</text>
+  <text x="226" y="130" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">주소 → 함수명 변환 실패 (16진수·[unknown])</text>
+
+  <rect x="56" y="146" width="340" height="58" fill="rgb(42,37,32)" rx="5"/>
+  <text x="226" y="167" fill="#e8e4df" font-size="12" text-anchor="middle">ELF 바이너리 (C·C++)</text>
+  <text x="226" y="187" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">strip으로 심볼 제거</text>
+  <text x="226" y="200" fill="#66bb6a" font-size="10" text-anchor="middle">→ 스트립 안 함 · debuginfo · BTF</text>
+
+  <rect x="56" y="212" width="340" height="58" fill="rgb(42,37,32)" rx="5"/>
+  <text x="226" y="233" fill="#e8e4df" font-size="12" text-anchor="middle">JIT 런타임 (Java·Node.js)</text>
+  <text x="226" y="253" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">심볼 테이블이 런타임에 변함</text>
+  <text x="226" y="266" fill="#66bb6a" font-size="10" text-anchor="middle">→ /tmp/perf-PID.map · jmaps</text>
+
+  <!-- 스택 누락 -->
+  <rect x="440" y="84" width="388" height="200" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="634" y="108" fill="rgb(212,168,83)" font-size="14" text-anchor="middle">스택 누락 (missing stacks)</text>
+  <text x="634" y="130" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">한두 프레임으로 끊김 ("grass")</text>
+
+  <text x="634" y="156" fill="#e8e4df" font-size="12" text-anchor="middle">두 요인의 합</text>
+  <rect x="464" y="166" width="340" height="44" fill="rgb(42,37,32)" rx="5"/>
+  <text x="634" y="184" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">(1) 도구가 frame pointer 기반으로 스택 읽음</text>
+  <text x="634" y="200" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">(2) 바이너리가 그 레지스터를 범용으로 재사용</text>
+
+  <rect x="464" y="218" width="340" height="52" fill="rgb(42,37,32)" rx="5"/>
+  <text x="634" y="238" fill="#f44336" font-size="10" text-anchor="middle">→ 아무 값을 심볼로 풀어 [unknown]이나 틀린 함수명</text>
+  <text x="634" y="258" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">libc는 frame pointer 없이 컴파일 → 흔히 깨짐</text>
+
+  <!-- 해결 -->
+  <line x1="32" y1="300" x2="828" y2="300" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="326" fill="rgb(212,168,83)" font-size="14">해결 — frame pointer 복구</text>
+
+  <rect x="32" y="340" width="388" height="60" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="6"/>
+  <text x="226" y="364" fill="#e8e4df" font-size="12" text-anchor="middle">C / C++</text>
+  <text x="226" y="386" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">-fno-omit-frame-pointer 재컴파일</text>
+
+  <rect x="440" y="340" width="388" height="60" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="6"/>
+  <text x="634" y="364" fill="#e8e4df" font-size="12" text-anchor="middle">Java</text>
+  <text x="634" y="386" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">-XX:+PreserveFramePointer</text>
+
+  <rect x="32" y="408" width="796" height="40" fill="#66bb6a" fill-opacity="0.10" stroke="#66bb6a" rx="8"/>
+  <text x="430" y="433" fill="#e8e4df" font-size="12" text-anchor="middle">성능 비용 흔히 1% 미만 — 스택으로 찾는 성능 이득이 그 비용을 압도</text>
+</svg>

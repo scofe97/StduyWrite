@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 660" font-family="Pretendard, sans-serif">
+  <rect width="680" height="660" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">Write Skew와 직렬화 가능성</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">쓰기 스큐 구조 · 팬텀 · 직렬 실행 · 2PL · SSI 비교</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- 쓰기 스큐 구조 -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">쓰기 스큐(Write Skew) 패턴</text>
+  <rect x="32" y="124" width="616" height="80" rx="6" fill="#1a1410" stroke="#f47f72"/>
+  <text x="48" y="146" fill="#f47f72" font-size="12" font-weight="700">SELECT 조건 확인 → 조건 충족 시 쓰기 결정 → 커밋 후 전제 조건 무너짐</text>
+  <text x="48" y="166" fill="#e8e4df" font-size="10.5">병원 당직: 두 의사가 동시에 "당직 2명 이상 확인 → 자신 제거" → 결과 0명</text>
+  <text x="48" y="184" fill="#e8e4df" font-size="10.5">스냅샷 격리에서 발생 · 갱신 손실의 일반화 · 서로 다른 행을 수정 → 잠금으로 잡기 어려움</text>
+  <text x="48" y="198" fill="rgb(138,133,128)" font-size="9.5">유사 패턴: 회의실 이중 예약 · 잔액 초과 지출 · 중복 사용자명 · 멀티플레이어 위치 충돌</text>
+
+  <!-- 팬텀 -->
+  <text x="32" y="242" fill="rgb(212,168,83)" font-size="14" font-weight="700">팬텀(Phantom) — 없는 행에 잠금 불가</text>
+  <rect x="32" y="254" width="616" height="56" rx="6" fill="#141414" stroke="#f47f72"/>
+  <text x="48" y="276" fill="#e8e4df" font-size="10.5">SELECT 조건이 "행 없음"을 확인 → INSERT로 새 행 추가 → 다른 트랜잭션의 SELECT 결과가 바뀜</text>
+  <text x="48" y="296" fill="#f47f72" font-size="10.5">SELECT FOR UPDATE는 존재하는 행만 잠금 가능 → 존재하지 않는 행 패턴에는 무효</text>
+  <text x="48" y="308" fill="rgb(138,133,128)" font-size="9">해결: 직렬화 격리 | 충돌 구체화(materializing conflicts — 가상 잠금 행 미리 삽입, 최후 수단)</text>
+
+  <!-- 직렬화 3가지 구현 -->
+  <text x="32" y="352" fill="rgb(212,168,83)" font-size="14" font-weight="700">직렬화 구현 세 가지</text>
+
+  <rect x="32" y="364" width="190" height="116" rx="6" fill="#141414" stroke="#66bb6a"/>
+  <text x="48" y="386" fill="#66bb6a" font-size="11" font-weight="700">① 직렬 실행</text>
+  <text x="48" y="404" fill="#e8e4df" font-size="10">단일 스레드 순차 실행</text>
+  <text x="48" y="420" fill="#e8e4df" font-size="10">메모리 상주 + 저장 프로시저</text>
+  <text x="48" y="436" fill="#66bb6a" font-size="10">동시성 문제 원천 차단</text>
+  <text x="48" y="452" fill="#f47f72" font-size="10">단일 CPU 코어 제한</text>
+  <text x="48" y="468" fill="rgb(138,133,128)" font-size="9">VoltDB · Redis · Datomic</text>
+
+  <rect x="244" y="364" width="190" height="116" rx="6" fill="#141414" stroke="rgb(212,168,83)"/>
+  <text x="260" y="386" fill="rgb(212,168,83)" font-size="11" font-weight="700">② 2PL</text>
+  <text x="260" y="404" fill="#e8e4df" font-size="10">공유·독점 잠금</text>
+  <text x="260" y="420" fill="#e8e4df" font-size="10">읽기가 쓰기를 막음(역도)</text>
+  <text x="260" y="436" fill="#e8e4df" font-size="10">서술/인덱스 범위 잠금</text>
+  <text x="260" y="452" fill="#f47f72" font-size="10">높은 지연 · 잦은 데드락</text>
+  <text x="260" y="468" fill="rgb(138,133,128)" font-size="9">MySQL InnoDB · SQL Server</text>
+
+  <rect x="456" y="364" width="192" height="116" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="472" y="386" fill="#7fa8c9" font-size="11" font-weight="700">③ SSI</text>
+  <text x="472" y="404" fill="#e8e4df" font-size="10">낙관적 — 잠금 없이 진행</text>
+  <text x="472" y="420" fill="#e8e4df" font-size="10">커밋 시 직렬화 위반 검사</text>
+  <text x="472" y="436" fill="#66bb6a" font-size="10">읽기가 쓰기 안 막음</text>
+  <text x="472" y="452" fill="#f47f72" font-size="10">높은 경합 시 중단 多</text>
+  <text x="472" y="468" fill="rgb(138,133,128)" font-size="9">PostgreSQL · CockroachDB · FDB</text>
+
+  <!-- SSI 감지 메커니즘 -->
+  <text x="32" y="522" fill="rgb(212,168,83)" font-size="13" font-weight="700">SSI 충돌 감지 두 가지</text>
+  <rect x="32" y="534" width="296" height="76" rx="6" fill="#141414" stroke="#7fa8c9"/>
+  <text x="48" y="556" fill="#7fa8c9" font-size="11" font-weight="700">낡은 MVCC 읽기 감지</text>
+  <text x="48" y="574" fill="#e8e4df" font-size="10.5">무시한 미커밋 쓰기가 이미 커밋됨</text>
+  <text x="48" y="592" fill="#e8e4df" font-size="10.5">→ 내 읽기 시점의 전제가 무너짐 → 중단</text>
+
+  <rect x="352" y="534" width="296" height="76" rx="6" fill="#141414" stroke="#7fa8c9"/>
+  <text x="368" y="556" fill="#7fa8c9" font-size="11" font-weight="700">이전 읽기에 영향 주는 쓰기 감지</text>
+  <text x="368" y="574" fill="#e8e4df" font-size="10.5">내가 읽은 행을 다른 트랜잭션이 수정</text>
+  <text x="368" y="592" fill="#e8e4df" font-size="10.5">→ 인덱스 tripwire로 알림 → 먼저 커밋한 쪽 생존</text>
+
+  <!-- 비교 요약 -->
+  <rect x="32" y="626" width="616" height="24" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="642" fill="#e8e4df" font-size="10.5">직렬 실행=단순·저처리량 | 2PL=강력·느림·데드락 | SSI=빠름·경합 낮을 때 최선 · 세 방법 모두 직렬화 보장</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>

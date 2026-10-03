@@ -1,0 +1,71 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>프로파일러는 어디에 유용한가 (Ch.5 도입~§5.1)</title>
+  <desc>프로파일러는 실행 중인 JVM 프로세스를 가로채 세 가지를 보여 줍니다. CPU 와 메모리 같은 리소스 소비와, 실행 중인 스레드와 그 상태와, 실행 코드와 그 코드가 쓴 리소스 곧 메서드별 실행 시간입니다. 프로파일러가 쓰이는 세 상황은 리소스를 독식하는 코드 잡기와, 일하는 코드와 노는 코드를 가려내는 게으른 코드 찾기와, 느린 앱의 멈춘 지점을 짚는 느린 앱 고치기이며 셋 다 코드만 읽어서는 모를 때가 전제입니다. 비정상 리소스 사용은 두 범주로 좁혀집니다. 동기화 결함에서 오는 스레드 문제와, 안 쓰는 참조를 못 버려 GC 가 회수 못 하는 메모리 누수입니다. GC 가 있어도 참조 제거는 개발자 책임입니다. 실행 코드 찾기는 샘플링으로 실행 중인 코드를 몰래 들여다보는 것이라 스파게티 코드를 위한 X-ray 라 부르며 어디서부터 디버깅할지 모를 때 시작점을 짚어 줍니다. 느림은 흔히 I/O 를 의심하지만 늘 원인은 아니며 프로파일러로 각 부분의 리소스 사용을 재 병목을 가립니다. 예제 도구는 VisualVM 이고 대안은 Java Mission Control 과 JProfiler 입니다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">프로파일러는 어디에 유용한가</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">실행 중인 JVM 을 가로채는 빛 — 다른 불이 다 꺼졌을 때 (Ch.5 §5.1)</text>
+
+  <!-- 프로파일러가 보여주는 3가지 -->
+  <text x="20" y="84" fill="#e8e4df" font-size="13" font-weight="bold">① 프로파일러가 보여 주는 세 가지</text>
+  <rect x="20" y="94" width="210" height="62" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="116" fill="#9cc3df" font-size="12" font-weight="bold">리소스 소비</text>
+  <text x="38" y="136" fill="#e8e4df" font-size="10">CPU · 메모리</text>
+  <text x="38" y="151" fill="rgb(138,133,128)" font-size="9">얼마나 쓰는가</text>
+
+  <rect x="236" y="94" width="210" height="62" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="254" y="116" fill="rgb(212,168,83)" font-size="12" font-weight="bold">스레드와 상태</text>
+  <text x="254" y="136" fill="#e8e4df" font-size="10">실행 중 스레드</text>
+  <text x="254" y="151" fill="rgb(138,133,128)" font-size="9">running · blocked 등</text>
+
+  <rect x="452" y="94" width="208" height="62" fill="rgba(102,187,106,0.09)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="470" y="116" fill="#66bb6a" font-size="12" font-weight="bold">실행 코드+소요</text>
+  <text x="470" y="136" fill="#e8e4df" font-size="10">메서드별 실행 시간</text>
+  <text x="470" y="151" fill="rgb(138,133,128)" font-size="9">무엇이 도는가</text>
+
+  <!-- 세 용도 -->
+  <text x="20" y="184" fill="#e8e4df" font-size="13" font-weight="bold">② 하루를 구하는 세 상황 (공통 전제 — 코드만 읽어선 모를 때)</text>
+  <rect x="20" y="194" width="210" height="54" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="214" fill="#e8e4df" font-size="11" font-weight="bold">리소스 독식 잡기</text>
+  <text x="38" y="232" fill="rgb(138,133,128)" font-size="10">CPU·메모리 과소비 코드</text>
+
+  <rect x="236" y="194" width="210" height="54" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="254" y="214" fill="#e8e4df" font-size="11" font-weight="bold">게으른 코드 찾기</text>
+  <text x="254" y="232" fill="rgb(138,133,128)" font-size="10">일하는 코드 vs 노는 코드</text>
+
+  <rect x="452" y="194" width="208" height="54" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="470" y="214" fill="#e8e4df" font-size="11" font-weight="bold">느린 앱 고치기</text>
+  <text x="470" y="232" fill="rgb(138,133,128)" font-size="10">어디서 막혔는지 짚기</text>
+
+  <!-- §5.1 세 시나리오 -->
+  <text x="20" y="276" fill="#e8e4df" font-size="13" font-weight="bold">③ §5.1 세 시나리오</text>
+
+  <!-- 5.1.1 비정상 리소스 -->
+  <rect x="20" y="288" width="640" height="118" fill="rgba(244,127,114,0.07)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="310" fill="#f47f72" font-size="12" font-weight="bold">§5.1.1 비정상 리소스 사용 → 두 범주</text>
+  <rect x="38" y="320" width="290" height="34" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)"/>
+  <text x="52" y="341" fill="rgb(212,168,83)" font-size="11">스레드 문제 — 동기화 결함(동시성)</text>
+  <rect x="344" y="320" width="300" height="34" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9"/>
+  <text x="358" y="341" fill="#9cc3df" font-size="11">메모리 누수 — 안 쓰는 참조 잔존</text>
+  <text x="38" y="374" fill="#e8e4df" font-size="10">GC 가 있어도 참조 제거는 개발자 책임 — 참조 붙들면 GC 가 못 치움</text>
+  <text x="38" y="394" fill="rgb(138,133,128)" font-size="10">→ 스레드 덤프(8장) · 힙 덤프(10장)로 근본 원인 추적. 모바일 배터리 사례</text>
+
+  <!-- 5.1.2 실행 코드 -->
+  <rect x="20" y="414" width="316" height="96" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="436" fill="#66bb6a" font-size="12" font-weight="bold">§5.1.2 실행 코드 찾기</text>
+  <text x="38" y="458" fill="#e8e4df" font-size="11">샘플링 = 실행 코드 몰래 엿보기</text>
+  <text x="38" y="478" fill="rgb(212,168,83)" font-size="11" font-weight="bold">"스파게티 코드를 위한 X-ray"</text>
+  <text x="38" y="498" fill="rgb(138,133,128)" font-size="10">어디서 디버깅 시작할지 모를 때 → 디버거(2~3장)</text>
+
+  <!-- 5.1.3 느림 -->
+  <rect x="344" y="414" width="316" height="96" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="362" y="436" fill="#9cc3df" font-size="12" font-weight="bold">§5.1.3 느림 식별</text>
+  <text x="362" y="458" fill="#e8e4df" font-size="11">흔히 I/O 의심 (웹·DB·파일)</text>
+  <text x="362" y="478" fill="#f47f72" font-size="11">늘 원인은 아니다</text>
+  <text x="362" y="498" fill="rgb(138,133,128)" font-size="10">프로파일러로 부분별 리소스 재 병목 짚기 (6장)</text>
+
+  <!-- 도구 -->
+  <rect x="20" y="524" width="640" height="56" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="546" fill="#e8e4df" font-size="12" font-weight="bold">예제 도구 — VisualVM (무료)</text>
+  <text x="38" y="566" fill="rgb(138,133,128)" font-size="10">대안: Java Mission Control · JProfiler  /  설치·사용은 다음 편(05-02)</text>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="342" viewBox="0 0 960 342" role="img" aria-labelledby="title desc">
+  <title id="title">Service와 Label selector가 Pod를 연결하는 흐름</title>
+  <desc id="desc">호출자가 안정적인 Service 이름으로 요청하고 Service selector가 일치하는 여러 Pod endpoint를 선택하는 흐름</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#d4a853"/></marker></defs>
+  <rect width="960" height="342" fill="#0d0d0d"/>
+  <text x="48" y="54" fill="#e8e4df" font-family="Pretendard, Arial, sans-serif" font-size="26" font-weight="700">Service는 이름을 고정하고 대상은 바꿉니다</text>
+  <text x="48" y="82" fill="#8a8580" font-family="Pretendard, Arial, sans-serif" font-size="15">호출자는 Pod IP가 아니라 Service DNS를 알고, selector가 현재 대상 집합을 찾습니다.</text>
+  <g font-family="Pretendard, Arial, sans-serif">
+    <rect x="48" y="145" width="166" height="84" rx="12" fill="#171614" stroke="#2a2520" stroke-width="2"/><text x="73" y="180" fill="#e8e4df" font-size="18" font-weight="700">caller</text><text x="73" y="207" fill="#8a8580" font-size="14">payments client</text>
+    <path d="M234 187H329" stroke="#d4a853" stroke-width="3" marker-end="url(#arrow)"/><text x="250" y="169" fill="#d4a853" font-size="14">DNS 요청</text>
+    <rect x="350" y="127" width="226" height="120" rx="13" fill="#24211b" stroke="#d4a853" stroke-width="2"/><text x="375" y="164" fill="#d4a853" font-size="15" font-weight="700">SERVICE</text><text x="375" y="194" fill="#e8e4df" font-size="19" font-weight="700">payments-api</text><text x="375" y="220" fill="#8a8580" font-size="14">selector: app=payments</text>
+    <path d="M596 187H662" stroke="#d4a853" stroke-width="3" marker-end="url(#arrow)"/><text x="604" y="169" fill="#d4a853" font-size="14">선택</text>
+    <rect x="684" y="112" width="228" height="150" rx="14" fill="#151817" stroke="#2a2520" stroke-width="2"/><text x="706" y="143" fill="#8a8580" font-size="14" font-weight="700">READY ENDPOINTS</text>
+    <rect x="706" y="158" width="184" height="34" rx="7" fill="#25372a"/><text x="722" y="181" fill="#e8e4df" font-size="15">Pod A · app=payments</text>
+    <rect x="706" y="204" width="184" height="34" rx="7" fill="#25372a"/><text x="722" y="227" fill="#e8e4df" font-size="15">Pod B · app=payments</text>
+  </g>
+  <text x="48" y="302" fill="#8a8580" font-family="Pretendard, Arial, sans-serif" font-size="14">Pod 교체·추가·제거 시 바뀌는 것은 Endpoint 집합이며, Service 이름은 유지됩니다.</text>
+</svg>

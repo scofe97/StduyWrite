@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 640" font-family="Pretendard, sans-serif">
+  <rect width="680" height="640" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">불신뢰 시계</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">단조 vs 벽시계 · NTP 한계 · 클럭 스큐 · 신뢰 구간 · 프로세스 중단</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- 두 종류의 시계 -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">두 종류의 시계</text>
+  <rect x="32" y="124" width="296" height="100" rx="6" fill="#141414" stroke="#66bb6a"/>
+  <text x="48" y="144" fill="#66bb6a" font-size="11" font-weight="700">단조 시계 (Monotonic)</text>
+  <text x="48" y="162" fill="#e8e4df" font-size="10">항상 앞으로만 진행 · 절댓값 무의미</text>
+  <text x="48" y="178" fill="#e8e4df" font-size="10">경과 시간 측정에 사용 (타임아웃, 응답 시간)</text>
+  <text x="48" y="194" fill="#e8e4df" font-size="10">System.nanoTime(), CLOCK_MONOTONIC</text>
+  <text x="48" y="210" fill="#66bb6a" font-size="9.5">다른 머신과 비교 불가 · NTP가 속도만 미세 조정</text>
+
+  <rect x="352" y="124" width="296" height="100" rx="6" fill="#141414" stroke="#f47f72"/>
+  <text x="368" y="144" fill="#f47f72" font-size="11" font-weight="700">벽시계 (Time-of-Day)</text>
+  <text x="368" y="162" fill="#e8e4df" font-size="10">달력 시각 반환 · NTP와 동기화</text>
+  <text x="368" y="178" fill="#e8e4df" font-size="10">NTP 서버보다 앞서면 강제로 뒤로 점프</text>
+  <text x="368" y="194" fill="#e8e4df" font-size="10">System.currentTimeMillis(), CLOCK_REALTIME</text>
+  <text x="368" y="210" fill="#f47f72" font-size="9.5">경과 시간 측정에 사용 금지 · 불연속 점프 발생</text>
+
+  <!-- NTP 한계 -->
+  <text x="32" y="252" fill="rgb(212,168,83)" font-size="14" font-weight="700">NTP 동기화의 한계</text>
+  <rect x="32" y="264" width="616" height="88" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="48" y="284" fill="#e8e4df" font-size="10.5">쿼츠 드리프트 최대 200 ppm → 30초마다 동기화해도 6 ms 오차 / 하루 1회면 17초 오차</text>
+  <text x="48" y="302" fill="#e8e4df" font-size="10.5">인터넷 NTP 최솟값 35 ms 오차 실측 · 혼잡 시 1초 이상 스파이크</text>
+  <text x="48" y="320" fill="#f47f72" font-size="10.5">방화벽 차단 시 오차 조용히 누적 · NTP 서버 자체가 수 시간 틀릴 수도 있음</text>
+  <text x="48" y="338" fill="rgb(138,133,128)" font-size="9.5">VM: 다른 VM에 CPU 양보 시 수십 ms 정지 → 재개 시 시계 급등 · NTP 클라이언트가 정지를 인지 못함</text>
+
+  <!-- 클럭 스큐 문제 -->
+  <text x="32" y="382" fill="rgb(212,168,83)" font-size="14" font-weight="700">클럭 스큐가 만드는 이벤트 순서 역전</text>
+  <rect x="32" y="394" width="616" height="72" rx="6" fill="#141414" stroke="#f47f72"/>
+  <text x="48" y="414" fill="#f47f72" font-size="11" font-weight="700">LWW + 벽시계 타임스탬프의 위험</text>
+  <text x="48" y="432" fill="#e8e4df" font-size="10.5">클라이언트 B의 쓰기가 인과적으로 나중임에도 타임스탬프가 1 ms 작으면 A가 최신으로 선택됨</text>
+  <text x="48" y="450" fill="#f47f72" font-size="10.5">결과: 쓰기 조용히 유실 · 오류 메시지 없음 — 해법: 논리 시계(벡터 클럭, Lamport 타임스탬프)</text>
+
+  <!-- TrueTime -->
+  <text x="32" y="494" fill="rgb(212,168,83)" font-size="13" font-weight="700">신뢰 구간으로서의 시계 — TrueTime / ClockBound</text>
+  <rect x="32" y="506" width="616" height="60" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="48" y="526" fill="#7fa8c9" font-size="11" font-weight="700">시각 = [earliest, latest] 구간 · 실제 시각이 구간 안에 있음을 보장</text>
+  <text x="48" y="544" fill="#e8e4df" font-size="10.5">구간이 겹치지 않으면 선후 확실 · Spanner는 커밋 전 구간 길이만큼 대기해 인과성 보장</text>
+  <text x="48" y="558" fill="rgb(138,133,128)" font-size="9">Google: 각 DC에 GPS·원자시계 배치 → 구간 너비 약 7 ms 유지</text>
+
+  <!-- 프로세스 중단 원인 -->
+  <text x="32" y="592" fill="rgb(212,168,83)" font-size="13" font-weight="700">프로세스 일시 중단 원인</text>
+  <rect x="32" y="604" width="616" height="24" rx="4" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="620" fill="#e8e4df" font-size="10">GC stop-the-world · VM 라이브 마이그레이션 · OS 컨텍스트 스위치 · 동기 I/O · 메모리 스왑 · SIGSTOP</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>

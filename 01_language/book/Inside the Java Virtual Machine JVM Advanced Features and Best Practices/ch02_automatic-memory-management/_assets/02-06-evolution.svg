@@ -1,0 +1,38 @@
+<svg viewBox="0 0 900 520" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>클래식 GC의 진화 — 단순함, 병렬 처리, 동시성, Region 기반 목표 시간으로 이동</title>
+  <desc>Serial은 단순한 단일 스레드 STW 기본형이고, Parallel은 GC 작업을 병렬화해 처리량을 높인다. CMS는 동시 마크와 동시 스윕으로 STW를 줄이려 했지만 단편화와 CPU 비용이 있었다. G1은 Region 단위로 회수 가치가 큰 영역을 골라 pause 목표와 단편화를 함께 다룬다.</desc>
+  <defs><style>.title{font-size:17px;font-weight:800;fill:#e8e4df}.sub{font-size:11px;fill:rgb(138,133,128)}.head{font-size:13px;font-weight:800;fill:rgb(212,168,83)}.label{font-size:11px;font-weight:750;fill:#e8e4df}.body{font-size:10px;fill:rgb(180,175,170)}.note{font-size:9.5px;fill:rgb(138,133,128)}.code{font-size:10px;font-weight:700;fill:rgb(212,168,83);font-family:'JetBrains Mono',monospace}.ok{font-size:10px;font-weight:750;fill:#81c784}.bad{font-size:10px;font-weight:750;fill:#e57373}</style><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgb(212,168,83)"/></marker></defs>
+  <rect x="0" y="0" width="900" height="520" fill="#0d0d0d"/>
+  <text x="26" y="36" class="title">클래식 GC의 진화 — 어떤 문제를 순서대로 풀었나</text>
+  <text x="26" y="55" class="sub">단순함 → 병렬 처리 → 동시성 → Region 기반 목표 시간으로 이동한다</text>
+  <rect x="24" y="92" width="852" height="250" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <rect x="54" y="146" width="150" height="86" rx="6" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="129" y="174" class="label" text-anchor="middle">Serial</text>
+  <text x="129" y="196" class="body" text-anchor="middle">단순함</text>
+  <text x="129" y="214" class="body" text-anchor="middle">단일 스레드 STW</text>
+  <line x1="204" y1="189" x2="276" y2="189" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="240" y="176" class="note" text-anchor="middle">GC 병렬화</text>
+  <rect x="278" y="146" width="150" height="86" rx="6" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="353" y="174" class="label" text-anchor="middle">Parallel</text>
+  <text x="353" y="196" class="body" text-anchor="middle">throughput</text>
+  <text x="353" y="214" class="body" text-anchor="middle">Young/Old 병렬</text>
+  <line x1="428" y1="189" x2="500" y2="189" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="464" y="176" class="note" text-anchor="middle">긴 STW 축소</text>
+  <rect x="502" y="146" width="150" height="86" rx="6" fill="#2a2a1a" stroke="rgb(212,168,83)"/>
+  <text x="577" y="174" class="label" text-anchor="middle">CMS</text>
+  <text x="577" y="196" class="body" text-anchor="middle">latency</text>
+  <text x="577" y="214" class="body" text-anchor="middle">동시 마크·스윕</text>
+  <line x1="652" y1="189" x2="724" y2="189" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="688" y="176" class="note" text-anchor="middle">단편화 대응</text>
+  <rect x="726" y="146" width="120" height="86" rx="6" fill="#1e2a1e" stroke="#4ab080"/>
+  <text x="786" y="174" class="ok" text-anchor="middle">G1</text>
+  <text x="786" y="196" class="body" text-anchor="middle">Region</text>
+  <text x="786" y="214" class="body" text-anchor="middle">pause 목표</text>
+  <rect x="54" y="272" width="792" height="42" rx="6" fill="#111" stroke="#333"/>
+  <text x="76" y="298" class="code">핵심 흐름</text>
+  <text x="164" y="298" class="body">GC 시간을 줄이는 방식이 “한 스레드로 단순하게”에서 “병렬화·동시화·선별 회수”로 이동한다.</text>
+  <rect x="24" y="374" width="852" height="82" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="46" y="402" class="head">다음 단계로 이어지는 문제</text>
+  <text x="58" y="430" class="body">CMS는 동시 마크·스윕으로 STW를 줄였지만 객체 이동을 피한 대가로 단편화가 남았다.</text>
+  <text x="58" y="450" class="body">G1은 Region 단위 복사로 단편화를 줄였지만 선별 회수는 여전히 STW다. 이 다음이 ZGC·Shenandoah의 동시 이동이다.</text>
+</svg>

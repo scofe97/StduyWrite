@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="620" viewBox="0 0 980 620" role="img" aria-labelledby="title desc">
+  <title id="title">Code 속성 구조</title>
+  <desc id="desc">method_info 안의 Code 속성 드릴다운. Code 속성은 max_stack, max_locals, code[], exception_table[], 중첩 attributes[]를 담습니다.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#D08A00"/>
+    </marker>
+    <style>
+      .bg   { fill: #0F172A; }
+      .panel{ fill: #111827; stroke: #334155; stroke-width: 1.5; }
+      .slot { fill: #1F2937; stroke: #64748B; stroke-width: 1.2; }
+      .code { fill: #14532D; stroke: #4ADE80; stroke-width: 1.5; }
+      .exc  { fill: #4C1D24; stroke: #FB7185; stroke-width: 1.5; }
+      .nest { fill: #1E1B4B; stroke: #818CF8; stroke-width: 1.4; }
+      .hi   { fill: #78350F; stroke: #F59E0B; stroke-width: 1.4; }
+      .text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #F8FAFC; }
+      .sub  { font-size: 14px; fill: #CBD5E1; }
+      .lbl  { font-size: 16px; font-weight: 700; }
+      .small{ font-size: 13px; fill: #94A3B8; }
+      .mono { font-family: "SFMono-Regular", Consolas, monospace; font-size: 13px; fill: #F8FAFC; }
+      .mono-g { font-family: "SFMono-Regular", Consolas, monospace; font-size: 13px; fill: #86EFAC; }
+      .mono-r { font-family: "SFMono-Regular", Consolas, monospace; font-size: 13px; fill: #FDA4AF; }
+      .mono-v { font-family: "SFMono-Regular", Consolas, monospace; font-size: 13px; fill: #A5B4FC; }
+      .arrow{ stroke: #D08A00; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+      .brace{ stroke: #64748B; stroke-width: 1.5; fill: none; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="980" height="620"/>
+
+  <!-- 제목 -->
+  <text x="36" y="42" class="text lbl">Code 속성 — method_info 드릴다운</text>
+  <text x="36" y="66" class="text sub">컴파일러는 메서드의 바이트코드와 실행 환경 정보를 Code 속성 하나에 모아 넣습니다.</text>
+
+  <!-- ===== 좌측 패널: method_info 계층 ===== -->
+  <rect x="36" y="92" width="310" height="496" rx="8" class="panel"/>
+  <text x="58" y="122" class="text lbl">method_info</text>
+  <text x="58" y="144" class="text small">메서드 시그니처 + 속성 목록</text>
+
+  <!-- access_flags -->
+  <rect x="64" y="160" width="254" height="36" rx="5" class="slot"/>
+  <text x="82" y="183" class="mono">access_flags</text>
+  <text x="230" y="183" class="text small">public·static…</text>
+
+  <!-- name_index -->
+  <rect x="64" y="206" width="254" height="36" rx="5" class="slot"/>
+  <text x="82" y="229" class="mono">name_index</text>
+  <text x="208" y="229" class="text small">→ 상수 풀 #n</text>
+
+  <!-- descriptor_index -->
+  <rect x="64" y="252" width="254" height="36" rx="5" class="slot"/>
+  <text x="82" y="275" class="mono">descriptor_index</text>
+  <text x="232" y="275" class="text small">→ #m</text>
+
+  <!-- attributes_count -->
+  <rect x="64" y="298" width="254" height="36" rx="5" class="slot"/>
+  <text x="82" y="321" class="mono">attributes_count</text>
+
+  <!-- Code 속성 강조 박스 -->
+  <rect x="64" y="344" width="254" height="204" rx="5" class="hi"/>
+  <text x="82" y="368" class="mono" style="fill:#FCD34D;font-weight:700;">attributes[0]: Code</text>
+
+  <!-- Code 내부 항목들 (좌측 패널 안) -->
+  <text x="98" y="398" class="mono">attribute_name_index</text>
+  <text x="98" y="422" class="mono">attribute_length</text>
+  <text x="98" y="446" class="mono-g">max_stack</text>
+  <text x="98" y="470" class="mono-g">max_locals</text>
+  <text x="98" y="494" class="mono-g">code[]</text>
+  <text x="98" y="518" class="mono-r">exception_table[]</text>
+  <text x="98" y="542" class="mono-v">attributes[]</text>
+
+  <!-- 화살표: Code 속성 → 우측 패널 -->
+  <path d="M 318 446 C 380 446 390 260 432 260" class="arrow"/>
+
+  <!-- ===== 우측 패널: Code 속성 확대 ===== -->
+  <rect x="432" y="92" width="512" height="496" rx="8" class="panel"/>
+  <text x="456" y="122" class="text lbl">Code_attribute 내부 구조</text>
+  <text x="456" y="144" class="text small">JVM Spec §4.7.3</text>
+
+  <!-- attribute_name_index -->
+  <rect x="460" y="160" width="456" height="36" rx="5" class="slot"/>
+  <text x="478" y="183" class="mono">u2  attribute_name_index</text>
+  <text x="720" y="183" class="text small">"Code" → 상수 풀 #index</text>
+
+  <!-- attribute_length -->
+  <rect x="460" y="206" width="456" height="36" rx="5" class="slot"/>
+  <text x="478" y="229" class="mono">u4  attribute_length</text>
+  <text x="720" y="229" class="text small">이하 바이트 수 (헤더 6바이트 제외)</text>
+
+  <!-- max_stack -->
+  <rect x="460" y="252" width="456" height="36" rx="5" class="code"/>
+  <text x="478" y="275" class="mono-g">u2  max_stack</text>
+  <text x="620" y="275" class="text small" style="fill:#86EFAC;">피연산자 스택 최대 깊이 — 컴파일 타임 확정</text>
+
+  <!-- max_locals -->
+  <rect x="460" y="298" width="456" height="36" rx="5" class="code"/>
+  <text x="478" y="321" class="mono-g">u2  max_locals</text>
+  <text x="620" y="321" class="text small" style="fill:#86EFAC;">지역 변수 슬롯 수 (this·매개변수 포함)</text>
+
+  <!-- code_length + code[] -->
+  <rect x="460" y="344" width="456" height="56" rx="5" class="code"/>
+  <text x="478" y="367" class="mono-g">u4  code_length</text>
+  <text x="478" y="391" class="mono-g">u1  code[code_length]</text>
+  <text x="700" y="391" class="text small" style="fill:#86EFAC;">바이트코드 명령어 스트림</text>
+
+  <!-- exception_table -->
+  <rect x="460" y="410" width="456" height="76" rx="5" class="exc"/>
+  <text x="478" y="433" class="mono-r">exception_table[]</text>
+  <text x="478" y="453" class="mono" style="font-size:12px;fill:#FCA5A5;">  { start_pc, end_pc, handler_pc, catch_type }</text>
+  <text x="478" y="475" class="text small" style="fill:#FDA4AF;">try-catch 범위를 바이트코드 오프셋으로 기록</text>
+
+  <!-- 중첩 attributes -->
+  <rect x="460" y="496" width="456" height="76" rx="5" class="nest"/>
+  <text x="478" y="519" class="mono-v">attributes[]  (중첩 속성)</text>
+  <text x="478" y="539" class="mono" style="font-size:12px;fill:#C7D2FE;">  LineNumberTable · LocalVariableTable</text>
+  <text x="478" y="559" class="mono" style="font-size:12px;fill:#C7D2FE;">  StackMapTable · LocalVariableTypeTable</text>
+
+  <!-- ===== 하단 범례 ===== -->
+  <rect x="36" y="606" width="18" height="10" rx="2" class="code"/>
+  <text x="60" y="616" class="text small" style="fill:#86EFAC;">실행 환경 (컴파일 타임 정적 분석)</text>
+  <rect x="260" y="606" width="18" height="10" rx="2" class="exc"/>
+  <text x="284" y="616" class="text small" style="fill:#FDA4AF;">예외 처리</text>
+  <rect x="380" y="606" width="18" height="10" rx="2" class="nest"/>
+  <text x="404" y="616" class="text small" style="fill:#A5B4FC;">디버그·검증 정보 (JVM 선택적 처리)</text>
+</svg>

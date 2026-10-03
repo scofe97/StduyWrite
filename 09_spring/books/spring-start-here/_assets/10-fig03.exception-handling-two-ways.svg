@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 400" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif" role="img" aria-label="REST 예외 처리 두 방식 대비 도식">
+  <title>예외 처리 — 컨트롤러 안 try-catch vs 어드바이스로 분리</title>
+  <desc>REST 엔드포인트의 예외 처리 두 방식을 대비한다. 첫 방식은 컨트롤러 액션 안에서 try-catch로 예외를 잡아 ResponseEntity로 응답하는 것으로, 예외 로직이 컨트롤러에 섞이고 여러 엔드포인트에서 중복된다. 둘째 방식은 RestControllerAdvice로 예외 처리를 분리해, 컨트롤러는 정상 흐름만 다루고 어드바이스가 ExceptionHandler로 예외를 한곳에 모아 처리한다</desc>
+  <rect x="0" y="0" width="760" height="400" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="16" font-weight="bold">예외 처리 — 컨트롤러 안에서 vs 어드바이스로 분리</text>
+  <text x="24" y="56" fill="rgb(138,133,128)" font-size="12">같은 예외를 여러 엔드포인트가 처리하면 첫 방식은 중복 · 둘째 방식은 한곳에 모임</text>
+
+  <!-- 좌: try-catch -->
+  <text x="40" y="92" fill="#f44336" font-size="13" font-weight="bold">① 컨트롤러 안 try-catch</text>
+  <rect x="40" y="106" width="320" height="266" rx="10" fill="rgba(244,67,54,0.07)" stroke="#f44336" stroke-width="1.5"/>
+  <rect x="64" y="132" width="272" height="130" rx="6" fill="#0d0d0d" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+  <text x="80" y="156" fill="rgb(212,168,83)" font-size="11" font-weight="bold">PaymentController</text>
+  <text x="80" y="180" fill="#e8e4df" font-size="10" font-family="monospace">try {</text>
+  <text x="92" y="197" fill="rgb(138,133,128)" font-size="10" font-family="monospace">processPayment()</text>
+  <text x="80" y="214" fill="#e8e4df" font-size="10" font-family="monospace">} catch (예외) {</text>
+  <text x="92" y="231" fill="rgb(230,115,107)" font-size="10" font-family="monospace">ErrorDetails 응답</text>
+  <text x="80" y="248" fill="#e8e4df" font-size="10" font-family="monospace">}</text>
+
+  <text x="64" y="292" fill="#f44336" font-size="11" font-weight="bold">정상 흐름 + 예외 처리가 한 메서드에</text>
+  <text x="64" y="312" fill="rgb(138,133,128)" font-size="11">같은 예외를 여러 엔드포인트에서</text>
+  <text x="64" y="330" fill="rgb(138,133,128)" font-size="11">처리하면 코드가 중복됩니다</text>
+  <text x="64" y="358" fill="rgb(138,133,128)" font-size="11">간단한 경우엔 이 방식도 흔합니다</text>
+
+  <!-- 우: advice -->
+  <text x="420" y="92" fill="#66bb6a" font-size="13" font-weight="bold">② @RestControllerAdvice 분리</text>
+  <rect x="420" y="106" width="316" height="266" rx="10" fill="rgba(102,187,106,0.07)" stroke="#66bb6a" stroke-width="1.5"/>
+
+  <rect x="444" y="132" width="272" height="56" rx="6" fill="#0d0d0d" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+  <text x="460" y="156" fill="rgb(212,168,83)" font-size="11" font-weight="bold">PaymentController</text>
+  <text x="460" y="176" fill="#66bb6a" font-size="10" font-family="monospace">정상 흐름(happy flow)만</text>
+
+  <line x1="580" y1="188" x2="580" y2="208" stroke="#f44336" stroke-width="1.4" marker-end="url(#a10)"/>
+  <text x="592" y="203" fill="#f44336" font-size="10">예외 던짐</text>
+
+  <rect x="444" y="212" width="272" height="60" rx="6" fill="rgba(102,187,106,0.12)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="460" y="236" fill="#66bb6a" font-size="11" font-weight="bold">ExceptionControllerAdvice</text>
+  <text x="460" y="257" fill="#e8e4df" font-size="10" font-family="monospace">@ExceptionHandler → 응답</text>
+
+  <text x="444" y="300" fill="#66bb6a" font-size="11" font-weight="bold">컨트롤러는 정상 흐름만 담당</text>
+  <text x="444" y="320" fill="rgb(138,133,128)" font-size="11">예외 처리는 어드바이스 한곳에 모임</text>
+  <text x="444" y="340" fill="rgb(138,133,128)" font-size="11">여러 엔드포인트가 같은 처리를 재사용</text>
+  <text x="444" y="360" fill="rgb(138,133,128)" font-size="11">복잡한 앱에 유리 (저자 선호)</text>
+
+  <defs>
+    <marker id="a10" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#f44336"/></marker>
+  </defs>
+</svg>

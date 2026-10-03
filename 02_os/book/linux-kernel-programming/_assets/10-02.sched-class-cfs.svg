@@ -1,0 +1,77 @@
+<svg viewBox="0 0 680 580" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>모듈식 스케줄링 클래스와 CFS — 5개 클래스·runqueue·vruntime rb-tree</title>
+  <desc>코어 스케줄러 __schedule()는 5개 모듈식 스케줄링 클래스를 우선순위 순으로 순회하며 각 클래스에 pick_next_task()를 묻는다. 클래스는 stop-sched(최고)·deadline·RT(FIFO/RR)·fair(CFS·기본)·idle(최저) 순이다. runqueue는 CPU 코어당·스케줄 클래스당 하나씩 존재한다(6코어×5클래스=30 runqueue). CFS는 vruntime(나노초 가상 실행시간, nice로 가중)을 키로 rb-tree에 스레드를 정렬하고, 가장 왼쪽 leaf(vruntime 최소)를 다음에 실행한다. 스케줄링 period = min_granularity_ns × nr_running으로 dynamic timeslice를 계산한다.</desc>
+  <rect x="0" y="0" width="680" height="580" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">모듈식 스케줄링 클래스와 CFS</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">코어 스케줄러는 5개 클래스를 우선순위 순으로 순회하며 다음 task 를 묻습니다</text>
+
+  <!-- 5개 클래스 -->
+  <rect x="20" y="74" width="320" height="234" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="96" fill="rgb(212,168,83)" font-size="13" font-weight="bold">5개 클래스 — 높은 우선순위부터</text>
+
+  <rect x="38" y="108" width="284" height="32" fill="rgba(244,67,54,0.15)" stroke="#f44336"/>
+  <text x="52" y="124" fill="#f47f72" font-size="11">① stop-sched — 최고 · 선점 불가</text>
+  <text x="52" y="136" fill="rgb(138,133,128)" font-size="9">ftrace·라이브 패치 · 모든 코어 멈춤</text>
+
+  <rect x="38" y="146" width="284" height="30" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="165" fill="#e8e4df" font-size="11">② deadline (SCHED_DEADLINE) — EDF</text>
+
+  <rect x="38" y="182" width="284" height="30" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="201" fill="#e8e4df" font-size="11">③ RT (SCHED_FIFO/RR)</text>
+
+  <rect x="38" y="218" width="284" height="36" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/>
+  <text x="52" y="236" fill="#66bb6a" font-size="11">④ fair / CFS (SCHED_OTHER) — 기본</text>
+  <text x="52" y="249" fill="rgb(138,133,128)" font-size="9">대부분의 스레드가 여기 · 보통 경쟁은 이 안에서</text>
+
+  <rect x="38" y="260" width="284" height="30" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="279" fill="#e8e4df" font-size="11">⑤ idle (SCHED_IDLE) — 최저 · 항상 yes</text>
+
+  <text x="38" y="304" fill="rgb(138,133,128)" font-size="9">sched_class 구조 linked list · for_each_class 순회</text>
+
+  <!-- runqueue -->
+  <rect x="350" y="74" width="312" height="234" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="368" y="96" fill="#e8e4df" font-size="13" font-weight="bold">runqueue — 코어당·클래스당 1개</text>
+  <text x="368" y="116" fill="rgb(138,133,128)" font-size="10">6 코어 × 5 클래스 = 30 runqueue</text>
+
+  <rect x="368" y="128" width="276" height="28" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="382" y="146" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">schedule → __schedule</text>
+  <defs>
+    <marker id="ar102" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <line x1="506" y1="156" x2="506" y2="172" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar102)"/>
+  <rect x="368" y="174" width="276" height="28" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="382" y="192" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">pick_next_task → for_each_class</text>
+
+  <text x="368" y="222" fill="#e8e4df" font-size="11">각 클래스에 class-&gt;pick_next_task(rq) 호출</text>
+  <text x="368" y="240" fill="rgb(138,133,128)" font-size="10">반환 non-NULL 이면 그 task 로 context switch</text>
+  <text x="368" y="258" fill="rgb(138,133,128)" font-size="10">NULL 이면 다음(하위) 클래스에 물음</text>
+  <text x="368" y="276" fill="rgb(138,133,128)" font-size="10">idle 클래스는 항상 후보 반환(idle 스레드)</text>
+  <text x="368" y="296" fill="rgb(138,133,128)" font-size="9">RT=배열+linked list · CFS=rb-tree (클래스마다 다름)</text>
+
+  <!-- CFS vruntime rb-tree -->
+  <rect x="20" y="324" width="642" height="148" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="346" fill="#66bb6a" font-size="13" font-weight="bold">CFS — vruntime rb-tree (weighted fair queuing)</text>
+  <text x="38" y="366" fill="#e8e4df" font-size="11">vruntime = CPU 누적 실행시간(ns) · nice 로 가중(저 nice→scaled down→더 왼쪽)</text>
+
+  <rect x="38" y="378" width="150" height="32" fill="rgba(102,187,106,0.20)" stroke="#66bb6a"/>
+  <text x="113" y="398" fill="#66bb6a" font-size="11" text-anchor="middle">최좌측 leaf (vruntime 최소)</text>
+  <line x1="188" y1="394" x2="214" y2="394" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar102)"/>
+  <text x="201" y="386" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">pick</text>
+  <rect x="218" y="378" width="180" height="32" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="308" y="398" fill="#e8e4df" font-size="11" text-anchor="middle">가장 적게 실행된 스레드</text>
+  <text x="408" y="398" fill="rgb(138,133,128)" font-size="10">오른쪽일수록 많이 실행(페널티)</text>
+
+  <text x="38" y="430" fill="rgb(138,133,128)" font-size="10">트리 순회 O(log n)이나 최좌측 leaf 캐싱으로 사실상 O(1)</text>
+  <text x="38" y="448" fill="rgb(138,133,128)" font-size="10">IO-bound→vruntime 작음→왼쪽 / CPU-bound→큼→오른쪽 (dynamic timeslice)</text>
+  <text x="38" y="464" fill="rgb(138,133,128)" font-size="9">6.6 부터 EEVDF 가 fair 클래스의 CFS 대체 (가상 deadline 기반, 낮은 latency)</text>
+
+  <!-- timeslice 공식 -->
+  <rect x="20" y="488" width="642" height="84" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="510" fill="#e8e4df" font-size="13" font-weight="bold">dynamic timeslice — period = min_granularity_ns × nr_running</text>
+  <text x="38" y="530" fill="#e8e4df" font-size="11">latency_ns(period, 기본 24ms) · min_granularity_ns(최소 timeslice, 3ms)</text>
+  <text x="38" y="548" fill="rgb(138,133,128)" font-size="10">effective timeslice = period / nr_running · 너무 작으면 period 재계산</text>
+  <text x="38" y="564" fill="rgb(138,133,128)" font-size="10">통계: /proc/schedstat · /proc/PID/sched(vruntime) · /sys/kernel/debug/sched/*</text>
+</svg>

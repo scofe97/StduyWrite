@@ -1,0 +1,82 @@
+<svg viewBox="0 0 700 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>이상 동작을 막을 것인가 알릴 것인가 — 경보 처리의 딜레마</title>
+  <desc>런타임 보호 도구를 무엇으로 쓰든 마지막에 고려할 것이 하나 있습니다. 이상 동작을 발견했을 때 도구가 어떤 조치를 취하기를 원하는가입니다. 이상적으로는 애초에 일어나지 못하게 막는 것이고, 네트워크 정책과 seccomp 나 SELinux 나 AppArmor 프로파일을 적용할 때 그런 일이 일어납니다. 막지 못하는 도구를 쓰면 경보를 받게 되는데, 그 경보를 어떻게 처리할지는 복잡한 질문입니다. 경보가 뜰 때 컨테이너를 자동 삭제하면 사용자 서비스에 영향이 가고 포렌식에 쓸 증거도 지웁니다. 문제를 일으킨 프로세스만 종료할 수도 있지만 그것이 인젝션 공격으로 조종당한 좋은 프로세스라면 어떻게 합니까. 오케스트레이터가 새 인스턴스를 띄우게 두면 같은 공격을 다시 받아 컨테이너가 뜨고 죽는 악순환에 빠질 수 있습니다. 사람의 개입에 의존하면 반응까지 상당한 지연이 생기고 그 지연이 공격에 충분한 시간일 수 있습니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .ok-title { fill: #14521d; font-size: 11.5px; font-weight: 700; }
+    .ok-detail { fill: #14521d; font-size: 9.5px; }
+    .danger-title { fill: #7a1f1f; font-size: 11.5px; font-weight: 700; }
+    .danger-detail { fill: #7a1f1f; font-size: 9.5px; }
+    .q { fill: #7a1f1f; font-size: 9.5px; font-weight: 700; }
+    .cycle { stroke: #7a1f1f; stroke-width: 1.5; fill: none; stroke-dasharray: 4 3; }
+  </style>
+
+  <rect width="700" height="400" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="rd13" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#7a1f1f"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="30">이상 동작을 발견했을 때</text>
+
+  <rect x="40" y="42" width="300" height="98" rx="4" fill="#cdeccf"/>
+  <text class="ok-title" x="56" y="63">막는다 — 예방</text>
+  <text class="ok-detail" x="56" y="82">프로파일 밖은 아예 못 돈다</text>
+  <text class="ok-detail" x="56" y="100">좋은 프로세스는 그대로 돌아간다</text>
+  <text class="ok-detail" x="56" y="118">채굴기만 막히고 서비스는 산다</text>
+  <text class="ok-detail" x="56" y="134">네트워크 정책과 LSM 이 이 방식</text>
+
+  <rect x="360" y="42" width="300" height="98" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="376" y="63">알린다 — 탐지</text>
+  <text class="danger-detail" x="376" y="82">이미 일어난 뒤에 통보받는다</text>
+  <text class="danger-detail" x="376" y="100">그다음 무엇을 할지가 문제</text>
+  <text class="danger-detail" x="376" y="118">아래 다섯 질문이 전부 열린다</text>
+  <text class="danger-detail" x="376" y="134">답이 하나로 정해지지 않습니다</text>
+
+  <!-- 경보 처리 딜레마 -->
+  <text class="head" x="40" y="176">경보를 받으면 무엇을 합니까</text>
+
+  <rect class="box" x="40" y="188" width="200" height="82" rx="4"/>
+  <text class="box-title" x="56" y="209">컨테이너를 지운다</text>
+  <text class="q" x="56" y="228">서비스가 끊기지 않나</text>
+  <text class="q" x="56" y="246">포렌식 증거도 사라진다</text>
+  <text class="box-detail" x="56" y="264">되돌릴 수 없습니다</text>
+
+  <rect class="box" x="252" y="188" width="200" height="82" rx="4"/>
+  <text class="box-title" x="268" y="209">프로세스만 죽인다</text>
+  <text class="q" x="268" y="228">그게 좋은 프로세스면</text>
+  <text class="q" x="268" y="246">인젝션에 조종당한 거라면</text>
+  <text class="box-detail" x="268" y="264">멀쩡한 기능이 죽습니다</text>
+
+  <rect class="box" x="464" y="188" width="196" height="82" rx="4"/>
+  <text class="box-title" x="480" y="209">사람이 판단한다</text>
+  <text class="q" x="480" y="228">반응까지 지연이 생긴다</text>
+  <text class="q" x="480" y="246">그사이 공격이 끝난다</text>
+  <text class="box-detail" x="480" y="264">가장 느린 선택지</text>
+
+  <!-- 악순환 -->
+  <rect x="40" y="288" width="380" height="70" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="56" y="309">오케스트레이터가 만드는 악순환</text>
+  <text class="danger-detail" x="56" y="328">뜬다 → 탐지 → 도구가 죽인다</text>
+  <text class="danger-detail" x="56" y="346">→ 다시 뜬다 → 같은 공격 반복</text>
+
+
+  <rect x="440" y="288" width="220" height="70" rx="4" fill="#cdeccf"/>
+  <text class="ok-title" x="456" y="309">최선의 조합</text>
+  <text class="ok-detail" x="456" y="328">막되 경보와 로그도 남긴다</text>
+  <text class="ok-detail" x="456" y="346">조사하고 다음을 정할 수 있게</text>
+
+  <text class="hint" x="40" y="386">치료보다 예방이 훨씬 낫습니다</text>
+</svg>

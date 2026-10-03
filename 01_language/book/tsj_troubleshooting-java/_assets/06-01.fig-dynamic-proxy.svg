@@ -1,0 +1,46 @@
+<svg viewBox="0 0 680 380" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>동적 프록시 — 추상화의 구현을 프레임워크가 런타임에 분리·제공 (원문 Figure 6.7 개념도)</title>
+  <desc>원문 Figure 6.7 의 개념을 도식으로 옮긴 것입니다. 프레임워크는 추상화에 대한 구현을 분리해 두고 실행 중에 동적으로 제공합니다. 앱 기능이 동적 프록시를 쓰면 인터페이스가 선언한 메서드를 호출하면서도 어떤 구현이 런타임에 주어질지 모른 채 부를 수 있습니다. da-ch6-ex1 에서는 DemoProxy 인터페이스가 OpenFeign 의 @FeignClient 로 선언돼 있고, 실제 HTTP 전송 구현은 프레임워크가 런타임에 동적 프록시로 끼워 넣습니다. 그래서 코드만 읽어서는 실제 실행 경로를 짚기 어렵고, 프로파일러가 그 경로를 드러냅니다.</desc>
+  <rect x="0" y="0" width="680" height="380" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">동적 프록시 — 런타임에 구현이 끼워진다</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 Figure 6.7 개념도 — 코드만으론 안 보이는 실행 경로 (OpenFeign)</text>
+
+  <!-- 컴파일 타임: 인터페이스 -->
+  <rect x="20" y="78" width="300" height="120" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="100" fill="#9cc3df" font-size="12" font-weight="bold">개발자가 보는 것 — 인터페이스(추상화)</text>
+  <rect x="34" y="112" width="272" height="72" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9"/>
+  <text x="46" y="132" fill="#9cc3df" font-size="10" font-family="monospace">@FeignClient(name="httpBin")</text>
+  <text x="46" y="150" fill="#e8e4df" font-size="10" font-family="monospace">interface DemoProxy {</text>
+  <text x="46" y="168" fill="#e8e4df" font-size="10" font-family="monospace">  void delay(int n);</text>
+  <text x="46" y="184" fill="#e8e4df" font-size="10" font-family="monospace">}</text>
+
+  <!-- 프레임워크가 분리 보관 -->
+  <rect x="360" y="78" width="300" height="120" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="374" y="100" fill="rgb(212,168,83)" font-size="12" font-weight="bold">프레임워크가 분리 보관한 구현</text>
+  <rect x="374" y="112" width="272" height="32" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)"/>
+  <text x="386" y="133" fill="#e8e4df" font-size="10">실제 HTTP 전송 코드 (HttpURLConnection 등)</text>
+  <text x="374" y="166" fill="rgb(138,133,128)" font-size="10">추상화와 구현을 떼어 두고(decouple),</text>
+  <text x="374" y="184" fill="rgb(138,133,128)" font-size="10">실행 시점에 동적으로 연결합니다.</text>
+
+  <!-- 런타임 연결 화살표 -->
+  <text x="340" y="230" fill="rgb(212,168,83)" font-size="11" text-anchor="middle" font-weight="bold">런타임에 동적 프록시가 구현을 끼워 넣음</text>
+  <line x1="170" y1="198" x2="170" y2="250" stroke="rgb(212,168,83)" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <line x1="510" y1="198" x2="510" y2="250" stroke="rgb(212,168,83)" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <line x1="170" y1="250" x2="510" y2="250" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <polygon points="340,250 332,246 332,254" fill="rgb(212,168,83)"/>
+  <polygon points="340,250 348,246 348,254" fill="rgb(212,168,83)"/>
+
+  <!-- 결과 박스 -->
+  <rect x="20" y="266" width="316" height="96" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="1.5"/>
+  <text x="34" y="288" fill="#f47f72" font-size="12" font-weight="bold">단점 — 어디를 조사할지 모른다</text>
+  <text x="34" y="312" fill="#e8e4df" font-size="10.5">delay()를 호출하지만 실제 구현은</text>
+  <text x="34" y="330" fill="#e8e4df" font-size="10.5">런타임에 정해져 코드에 안 보임</text>
+  <text x="34" y="350" fill="rgb(138,133,128)" font-size="10">→ 편하지만 디버그 지점을 못 짚음</text>
+
+  <rect x="348" y="266" width="312" height="96" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="362" y="288" fill="rgb(212,168,83)" font-size="12" font-weight="bold">해법 — 프로파일러가 경로를 드러냄</text>
+  <text x="362" y="312" fill="#e8e4df" font-size="10.5">스택 트레이스에 feign·Spring 패키지가</text>
+  <text x="362" y="330" fill="#e8e4df" font-size="10.5">앱 코드와 함께 나타남</text>
+  <text x="362" y="350" fill="rgb(138,133,128)" font-size="10">→ 실제 실행 경로를 눈으로 확인</text>
+</svg>
