@@ -11,7 +11,7 @@ related:
   - network-roadmap.md
   - k8s-roadmap.md
   - ../02_os/README.md
-updated: 2026-09-23
+updated: 2026-09-28
 ---
 
 # OS 학습 로드맵
