@@ -3,7 +3,7 @@ title: 01_language MOC
 tags: [moc, language]
 status: final
 related: []
-updated: 2026-09-27
+updated: 2026-10-06
 ---
 
 # 01_language
@@ -18,6 +18,7 @@ updated: 2026-09-27
   - `01_Core`, `02_TypeSystem`, `03_Collections`, `04_Lambda`, `05_Concurrency`, `06_Modern`, `07_DesignPatterns`, `08_Testing`, **`09_jvm`** (JVM·GC·바이트코드), `10_IO`, `11_Build`
 - Go
   - [book/lgo_learning-go/](book/lgo_learning-go/README.md) — Go 문법 정독(Learning Go 2판) — 타입·slice·인터페이스·에러·제네릭·모듈·동시성·테스트
+  - [docs/go/](docs/README.md) — Go 표준 라이브러리 공식문서 정독(pkg.go.dev + go1.25.1 소스) — net · net/http
   - 주제별 전용 폴더는 아직 없습니다. [`../02_os/project/netpath-lab/`](../02_os/project/netpath-lab/README.md) 실습 편의 `Go` 절에서 다루고, 독립 문서감이 다섯 편쯤 쌓이면 `go/` 로 분리합니다
 
 ## 경계 기준

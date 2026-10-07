@@ -6,7 +6,7 @@ related:
   - README.md
   - os-roadmap.md
   - network-roadmap.md
-updated: 2026-10-04
+updated: 2026-10-07
 ---
 
 # Go 학습 로드맵
@@ -185,13 +185,13 @@ updated: 2026-10-04
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
 | 네트워크 개요 · 주소 해석 · 라우팅 | 필수 | [네트워크 로드맵](network-roadmap.md) | Network Programming with Go 1·2장 |
-| TCP 스트림 · 데이터 전송 · half-close | 필수 | | Network Programming with Go 3·4장 |
-| HTTP 클라이언트 · 타임아웃 · 재시도 경계 | 필수 | [net/http](../01_language/book/lgo_learning-go/13-04.net-http%20%EB%8A%94%20%ED%83%80%EC%9E%84%EC%95%84%EC%9B%83%EC%9D%84%20%EC%A7%81%EC%A0%91%20%EC%A0%95%ED%95%98%EA%B3%A0%20%EB%AF%B8%EB%93%A4%EC%9B%A8%EC%96%B4%EB%8A%94%20Handler%20%EB%A5%BC%20%EA%B0%90%EC%8B%B8%EB%A9%B0%20slog%20%EB%A1%9C%20%EA%B5%AC%EC%A1%B0%ED%99%94%20%EB%A1%9C%EA%B7%B8%EB%A5%BC%20%EB%82%A8%EA%B9%81%EB%8B%88%EB%8B%A4.md) | Network Programming with Go 8장 |
-| HTTP 서비스 · 라우팅 · graceful shutdown | 필수 | [net/http](../01_language/book/lgo_learning-go/13-04.net-http%20%EB%8A%94%20%ED%83%80%EC%9E%84%EC%95%84%EC%9B%83%EC%9D%84%20%EC%A7%81%EC%A0%91%20%EC%A0%95%ED%95%98%EA%B3%A0%20%EB%AF%B8%EB%93%A4%EC%9B%A8%EC%96%B4%EB%8A%94%20Handler%20%EB%A5%BC%20%EA%B0%90%EC%8B%B8%EB%A9%B0%20slog%20%EB%A1%9C%20%EA%B5%AC%EC%A1%B0%ED%99%94%20%EB%A1%9C%EA%B7%B8%EB%A5%BC%20%EB%82%A8%EA%B9%81%EB%8B%88%EB%8B%A4.md) | Network Programming with Go 9장 |
+| TCP 스트림 · 데이터 전송 · half-close | 필수 | [net](../01_language/docs/go/net/README.md) | Network Programming with Go 3·4장 |
+| HTTP 클라이언트 · 타임아웃 · 재시도 경계 | 필수 | [net/http](../01_language/book/lgo_learning-go/13-04.net-http%20%EB%8A%94%20%ED%83%80%EC%9E%84%EC%95%84%EC%9B%83%EC%9D%84%20%EC%A7%81%EC%A0%91%20%EC%A0%95%ED%95%98%EA%B3%A0%20%EB%AF%B8%EB%93%A4%EC%9B%A8%EC%96%B4%EB%8A%94%20Handler%20%EB%A5%BC%20%EA%B0%90%EC%8B%B8%EB%A9%B0%20slog%20%EB%A1%9C%20%EA%B5%AC%EC%A1%B0%ED%99%94%20%EB%A1%9C%EA%B7%B8%EB%A5%BC%20%EB%82%A8%EA%B9%81%EB%8B%88%EB%8B%A4.md) · [net/http 클라이언트](../01_language/docs/go/net-http/02-01.Client%C2%B7Transport.md) | Network Programming with Go 8장 |
+| HTTP 서비스 · 라우팅 · graceful shutdown | 필수 | [net/http](../01_language/book/lgo_learning-go/13-04.net-http%20%EB%8A%94%20%ED%83%80%EC%9E%84%EC%95%84%EC%9B%83%EC%9D%84%20%EC%A7%81%EC%A0%91%20%EC%A0%95%ED%95%98%EA%B3%A0%20%EB%AF%B8%EB%93%A4%EC%9B%A8%EC%96%B4%EB%8A%94%20Handler%20%EB%A5%BC%20%EA%B0%90%EC%8B%B8%EB%A9%B0%20slog%20%EB%A1%9C%20%EA%B5%AC%EC%A1%B0%ED%99%94%20%EB%A1%9C%EA%B7%B8%EB%A5%BC%20%EB%82%A8%EA%B9%81%EB%8B%88%EB%8B%A4.md) · [net/http 서버](../01_language/docs/go/net-http/03-01.Server%C2%B7ServeMux%C2%B7Handler.md) | Network Programming with Go 9장 |
 | 표준 `net/http` 와 웹 프레임워크 — chi · Gin · Echo · Fiber | 선택 | | Cloud Native Go 5장 |
 | DB 접근 — `database/sql` · 커넥션 풀 · pgx · sqlc · GORM | 추천 | | Pocket-Sized Projects 부록 G · [database/sql](https://go.dev/doc/database/) |
 | WebSocket — 양방향 실시간 연결 | 선택 | | [RFC 6455](https://www.rfc-editor.org/rfc/rfc6455) |
-| UDP · 신뢰성 보강 — 순서 번호 · ACK · 재전송 타이머 · 세션 만료 | 추천 | | Network Programming with Go 5·6장 |
+| UDP · 신뢰성 보강 — 순서 번호 · ACK · 재전송 타이머 · 세션 만료 | 추천 | [UDPConn](../01_language/docs/go/net/04-02.UDPConn%C2%B7ListenPacket.md) | Network Programming with Go 5·6장 |
 | TLS 로 통신 지키기 | 추천 | | Network Programming with Go 11장 |
 | 직렬화 · `log/slog` · 지표 | 추천 | [JSON](../01_language/book/lgo_learning-go/13-03.encoding-json%20%EC%9D%80%20%EA%B5%AC%EC%A1%B0%EC%B2%B4%20%ED%83%9C%EA%B7%B8%EB%A1%9C%20%EC%9D%B4%EB%A6%84%EC%9D%84%20%EC%A0%95%ED%95%98%EA%B3%A0%20Decoder%20%EC%99%80%20Encoder%20%EB%A1%9C%20%EC%8A%A4%ED%8A%B8%EB%A6%BC%EC%9D%84%20%EB%8B%A4%EB%A3%B9%EB%8B%88%EB%8B%A4.md) · [slog](../01_language/book/lgo_learning-go/13-04.net-http%20%EB%8A%94%20%ED%83%80%EC%9E%84%EC%95%84%EC%9B%83%EC%9D%84%20%EC%A7%81%EC%A0%91%20%EC%A0%95%ED%95%98%EA%B3%A0%20%EB%AF%B8%EB%93%A4%EC%9B%A8%EC%96%B4%EB%8A%94%20Handler%20%EB%A5%BC%20%EA%B0%90%EC%8B%B8%EB%A9%B0%20slog%20%EB%A1%9C%20%EA%B5%AC%EC%A1%B0%ED%99%94%20%EB%A1%9C%EA%B7%B8%EB%A5%BC%20%EB%82%A8%EA%B9%81%EB%8B%88%EB%8B%A4.md) | Network Programming with Go 12·13장 |
 | 구조화 로깅 라이브러리 — zap · zerolog 와 slog 의 갈림 | 선택 | | [slog](https://pkg.go.dev/log/slog) |
