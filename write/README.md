@@ -5,7 +5,7 @@ status: final
 related:
   - roadmap/README.md
   - 08_cloud/kubernetes/04_networking/README.md
-updated: 2026-09-12
+updated: 2026-10-06
 ---
 
 # write — 학습 문서 지도(MOC)
@@ -36,6 +36,10 @@ updated: 2026-09-12
 | 11 | [`11_career/`](11_career/) | 커리어·성장 기록 |
 | — | [`troubleshooting/`](troubleshooting/) | 장애 사례와 진단 훈련. 주제를 가로지르는 형식이라 번호 없음 |
 | 99 | [`99_ETC/`](99_ETC/) | 분류 보류. 일정 기간 체류한 뒤 재배치하거나 아카이브 |
+
+`01`부터 `10`까지의 주제 폴더 안은 출처에 따라 세 갈래로 나눕니다. 책 한 권의 정독 노트는 `book/`에, 직접 만든 실습 프로젝트의 학습 문서는 `project/`에, 공식문서·가이드·블로그·강의·세미나 정리와 여러 출처를 합친 개념 노트는 `docs/`에 둡니다. 예를 들어 TCP/IP Illustrated 노트는 `02_os/book/`에, gonet-lab 실습 문서는 `02_os/project/`에 있습니다.
+
+이 규칙보다 먼저 만든 번호 폴더(`03_architecture/01_foundation/` 등)와 주제 루트의 낱장 문서는 아직 옮기지 않았습니다. 자세한 기준은 writing-method 스킬의 파일 배치 규약 §4.2.1 에 있습니다.
 
 
 
