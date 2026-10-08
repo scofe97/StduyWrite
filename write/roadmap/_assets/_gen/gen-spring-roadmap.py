@@ -95,7 +95,8 @@ stages = [
      [("Reactor 와 백프레셔", "Spring in Action 11장", "추천"),
       ("WebFlux 두 모델", "Spring in Action 12장", "추천"),
       ("Netty 파이프라인", "", "선택"),
-      ("SSE · WebSocket · STOMP", "", "추천")]),
+      ("SSE · WebSocket · STOMP", "", "추천"),
+      ("Web Push · PWA", "RFC 8030 · RFC 8292", "선택")]),
 
     ("8 · 보안과 운영", "누가 들어오고 무엇이 보이는가",
      [("필터 체인이 먼저다", "Spring Security 5장", "필수"),

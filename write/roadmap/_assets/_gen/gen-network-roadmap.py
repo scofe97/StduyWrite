@@ -170,6 +170,7 @@ stages = [
       ("암호화가 숨기지 않는 것", "Real-World Crypto 9·10장", "필수"),
       ("오버레이 · 터널링 · relay", "I2P Tunnel Routing", "추천"),
       ("인증서 소유와 relay 신뢰", "RFC 8555 — ACME", "추천"),
+      ("DNS-01 · CT 공개 로그", "RFC 8555 8.4절 · RFC 6962", "선택"),
       ("capability — 권한 토큰", "API Security in Action 9장", "선택"),
       ("challenge-response · 오라클 문제", "", "선택")]),
 

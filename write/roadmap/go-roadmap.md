@@ -6,7 +6,7 @@ related:
   - README.md
   - os-roadmap.md
   - network-roadmap.md
-updated: 2026-10-07
+updated: 2026-10-08
 ---
 
 # Go 학습 로드맵
@@ -53,7 +53,7 @@ updated: 2026-10-07
 | 6 · 서비스 | 산출물 | `go:embed` · distroless · 멀티스테이지 이미지 · `syscall/js` 와 Wasm 경계 |
 | 6 · 서비스 | CLI | `flag` · cobra · urfave/cli · 설정 우선순위 |
 | 7 · 터미널과 세션 | SSH | 전송 · 사용자 인증 · 연결 3계층 · `pty-req` · `window-change` · 세션 채널의 경계 |
-| 7 · 터미널과 세션 | 화면 | ANSI CSI · 화면 직접 그리기 · rune 과 grapheme · 터미널 셀 폭 · Bubble Tea |
+| 7 · 터미널과 세션 | 화면 | ANSI CSI · 화면 직접 그리기 · 터미널 에뮬레이터 · rune 과 grapheme · 터미널 셀 폭 · Bubble Tea |
 | 7 · 터미널과 세션 | 세션 관리 | 논블로킹 알림 · 신호 병합 · 슬라이딩 윈도우 속도 제한 · 자원 상한 · 인증과 인가의 차이 |
 
 
@@ -224,6 +224,7 @@ updated: 2026-10-07
 | `pty-req` 와 `window-change` | 필수 | | |
 | 세션 채널과 애플리케이션의 경계 | 필수 | | |
 | ANSI CSI 로 화면 직접 그리기 | 추천 | | |
+| 터미널 에뮬레이터 — 받은 바이트를 해석해 셀 격자로 그리는 쪽 · 브라우저 안 터미널 | 선택 | | [XTerm Control Sequences](https://invisible-island.net/xterm/ctlseqs/ctlseqs.html) · [xterm.js](https://github.com/xtermjs/xterm.js) |
 | TUI 프레임워크 — Bubble Tea 의 Elm 아키텍처 | 선택 | | [Bubble Tea](https://github.com/charmbracelet/bubbletea) |
 | rune 과 grapheme 과 터미널 셀 폭 | 필수 | | |
 | 논블로킹 알림과 신호 병합 | 필수 | | Learn Concurrent Programming with Go 7장 |

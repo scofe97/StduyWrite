@@ -13,7 +13,7 @@ related:
   - observability-roadmap.md
   - ../02_os/project/network-fundamentals-lab/README.md
   - ../08_cloud/kubernetes/04_networking/README.md
-updated: 2026-09-28
+updated: 2026-10-08
 ---
 
 # 네트워크 학습 로드맵
@@ -103,7 +103,7 @@ updated: 2026-09-28
 | 8 · 오버레이와 신뢰 | 식별 | node ID · signed descriptor · 공개키 신원 · 키에서 나온 주소 · key rotation · replay · freshness |
 | 8 · 오버레이와 신뢰 | 권한 토큰 | capability |
 | 8 · 오버레이와 신뢰 | 공격 | Sybil · eclipse · poisoning · behavior score · Sybil 저항 · 자원 증명 · 오라클 문제 |
-| 8 · 오버레이와 신뢰 | 서명 위임 | 키 소유권 분리 · CertificateVerify · transcript 바인딩 · keyless TLS · trusted edge · 인증서 소유와 relay 신뢰 · ACME |
+| 8 · 오버레이와 신뢰 | 서명 위임 | 키 소유권 분리 · CertificateVerify · transcript 바인딩 · keyless TLS · trusted edge · 인증서 소유와 relay 신뢰 · ACME · DNS-01 · Certificate Transparency |
 | 8 · 오버레이와 신뢰 | 관측 가능성 | traffic correlation · metadata · timing side-channel · 암호화가 숨기지 않는 것 |
 | 8 · 오버레이와 신뢰 | 오버레이 | 물리와 논리의 분리 · 터널링 · 가상 토폴로지 · relay · hole punching · reachability · reverse tunnel · outbound-only relay |
 | 9 · 터널과 경로 | 구성 | 터널 구성 · 피어 발견 대 터널 구성 · 멀티홉 · 홉별 계층 암호화 · 홉 수의 대가 · inbound 와 outbound 의 분리 · RX 와 TX |
@@ -447,6 +447,8 @@ updated: 2026-09-28
 | transcript 바인딩 — 임의 digest 서명 API 가 위험한 이유 | 추천 |  | Real-World Cryptography 2·7장 |
 | keyless TLS · trusted edge — 서명 권한이 곧 신뢰 | 선택 |  | [keyless_tls](https://github.com/gosuda/keyless_tls) |
 | 인증서 소유와 relay 신뢰 — relay 가 TLS 를 끝내면 평문을 본다 · agent 쪽 ACME 발급 | 추천 |  | [RFC 8555](https://www.rfc-editor.org/rfc/rfc8555) |
+| DNS-01 — 밖에서 닿지 않는 노드가 DNS TXT 레코드로 도메인 소유를 증명해 공인 인증서를 받는다 | 선택 |  | [RFC 8555](https://www.rfc-editor.org/rfc/rfc8555) 8.4절 |
+| Certificate Transparency — 발급한 인증서가 공개 로그에 남아 사설 호스트 이름도 드러난다 | 선택 |  | [RFC 6962](https://www.rfc-editor.org/rfc/rfc6962) |
 | capability — 신원 대신 권한을 건네는 토큰 | 선택 |  | API Security in Action 9장 |
 | 역할이 나뉜 피어 — DHT 서버 모드와 floodfill | 선택 |  | [I2P Network Database](https://i2p.net/en/docs/overview/network-database/) |
 

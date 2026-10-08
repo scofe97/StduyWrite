@@ -10,7 +10,7 @@ related:
   - jvm-roadmap.md
   - data-roadmap.md
   - observability-roadmap.md
-updated: 2026-09-23
+updated: 2026-10-08
 ---
 
 # Spring 학습 로드맵
@@ -46,7 +46,7 @@ updated: 2026-09-23
 | 6 · 외부 통신과 회복탄력성 | 방어 | 서킷 브레이커 · 슬라이딩 윈도우 · 재시도 · 백오프 · 지터 · 격벽 · 속도 제한 |
 | 7 · 비동기와 실시간 | 요청 밖 | `@Async` · 스레드 풀 · `@Scheduled` · Quartz · 캐시 추상화 · `@Retryable` |
 | 7 · 비동기와 실시간 | 리액티브 | Reactor · 백프레셔 · WebFlux 두 모델 · Netty 채널 파이프라인 · 바이트 버퍼 |
-| 7 · 비동기와 실시간 | 밀어 보내기 | SSE · WebSocket 핸드셰이크 · STOMP · 재연결 · 메시지 동기화 |
+| 7 · 비동기와 실시간 | 밀어 보내기 | SSE · WebSocket 핸드셰이크 · STOMP · 재연결 · 메시지 동기화 · Web Push · PWA |
 | 7 · 비동기와 실시간 | 일괄 처리 | 잡 · 스텝 · `JobRepository` · 리더 · 프로세서 · 라이터 · 스케일링 |
 | 8 · 보안과 운영 | 인증 | 필터 체인 · `UserDetailsService` · 비밀번호 인코더 · 인증 제공자 |
 | 8 · 보안과 운영 | 인가 | 엔드포인트 인가 · 게이트웨이 인가와 도메인 인가 · PEP · PDP · RBAC · ABAC · 메서드 수준 보안 · CSRF · CORS |
@@ -196,6 +196,8 @@ updated: 2026-09-23
 | SSE 와 신뢰성 | 추천 | [SSE](../09_spring/03_network/realtime/02-01.SSE%20%EC%9B%90%EB%A6%AC%EC%99%80%20Spring%20%EA%B5%AC%ED%98%84.md) | |
 | WebSocket 과 STOMP | 추천 | [WebSocket vs STOMP](../09_spring/03_network/realtime/03-03.WebSocket%20vs%20STOMP.md) | |
 | 연결 관리와 재연결 | 추천 | [재연결 전략](../09_spring/03_network/realtime/04-01.%EC%97%B0%EA%B2%B0%20%EA%B4%80%EB%A6%AC%EC%99%80%20%EC%9E%AC%EC%97%B0%EA%B2%B0%20%EC%A0%84%EB%9E%B5.md) | |
+| Web Push — 연결이 끊긴 브라우저에 푸시 서비스를 거쳐 알림을 보낸다 · VAPID · 페이로드 암호화 · Service Worker | 선택 | | [RFC 8030](https://www.rfc-editor.org/rfc/rfc8030) · [RFC 8292](https://www.rfc-editor.org/rfc/rfc8292) · [RFC 8291](https://www.rfc-editor.org/rfc/rfc8291) |
+| PWA — 설치 가능한 웹앱 · Web App Manifest · 보안 컨텍스트에서만 열리는 기능 | 선택 | | [Web App Manifest](https://www.w3.org/TR/appmanifest/) · [Secure Contexts](https://www.w3.org/TR/secure-contexts/) |
 | 배치 — 잡과 스텝 | 선택 | | Spring Batch 2~4장 |
 | 배치 — 리더 · 프로세서 · 라이터 | 선택 | | Spring Batch 7~9장 |
 

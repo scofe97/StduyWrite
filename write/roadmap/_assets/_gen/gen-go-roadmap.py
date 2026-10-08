@@ -133,6 +133,7 @@ stages = [
       ("pty-req 와 window-change", "", "필수"),
       ("세션 채널과 애플리케이션 경계", "", "필수"),
       ("ANSI CSI 로 화면 직접 그리기", "", "추천"),
+      ("터미널 에뮬레이터", "XTerm Control Sequences", "선택"),
       ("Bubble Tea TUI", "Bubble Tea 문서", "선택")],
      [("rune · grapheme · 터미널 셀 폭", "", "필수"),
       ("논블로킹 알림과 신호 병합", "", "필수"),
