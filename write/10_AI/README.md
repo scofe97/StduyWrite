@@ -37,7 +37,7 @@ updated: 2026-06-25
 
 | 폴더 | 편수 | 다루는 범위 |
 |------|------|------------|
-| [`docs/`](docs/) | 12편 | 도구 하나를 설치본 기준으로 파고든 노트. 현재 [`docs/orca/`](docs/orca/) — ADE(Agentic Development Environment) ORCA를 격리·관측·조율 세 축으로 |
+| [`docs/`](docs/) | 13편 | 도구 하나를 설치본 기준으로 파고든 노트. [`docs/orca/`](docs/orca/) — ADE(Agentic Development Environment) ORCA를 격리·관측·조율 세 축으로, [`docs/claude-code/`](docs/claude-code/) — Claude Code CLI 옵션 실측 |
 | [`hermes/`](hermes/) | 1편 | Hermes 에이전트 하네스 사례 — 자기개선 로컬 에이전트의 루프와 메모리 구조 |
 
 위 "등록된 절"이 개념 본문이라면 이 셋은 제품 사례와 자가 점검입니다. 본문 개정 시 함께 보지 않아도 되도록 분리해 둡니다.

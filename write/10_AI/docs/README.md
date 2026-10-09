@@ -4,7 +4,7 @@ tags: [moc, ai, ade, docs]
 status: draft
 related:
   - ../README.md
-updated: 2026-08-26
+updated: 2026-10-10
 ---
 
 # 10_AI/docs
@@ -26,6 +26,7 @@ updated: 2026-08-26
 | 폴더 | 편수 | 다루는 범위 |
 |------|------|------------|
 | [`orca/`](orca/) | 본문 10편 + 부록 2편 | ADE(Agentic Development Environment) ORCA — 워크트리 격리, 터미널 관측, 멀티 에이전트 조율, 브라우저·데스크톱 자동화, 운영과 실패 복구 |
+| [`claude-code/`](claude-code/) | 1편 | Claude Code CLI 옵션 — 다른 폴더에서 띄울 때의 `--add-dir`·`--settings`·신뢰 질문, 계정 분리, `--advisor`·`--effort`, 비대화 실행 |
 
 ## 경계 기준
 
