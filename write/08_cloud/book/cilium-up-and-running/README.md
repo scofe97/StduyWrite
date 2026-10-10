@@ -9,6 +9,9 @@ source:
 related:
   - ./01-01.Cilium%20은%20eBPF%20데이터패스로%20iptables%20기반%20CNI%20의%20한계를%20넘는다.md
   - ./02-01.Cilium%20은%20에이전트·CNI%20플러그인·오퍼레이터로%20나눠%20노드와%20클러스터를%20맡는다.md
+  - ./03-01.Cilium%20은%20kind%20클러스터에%20Helm%20으로%20설치하고%20정책과%20Hubble%20로%20동작을%20확인한다.md
+  - ./04-01.Cilium%20IPAM%20모드는%20Pod%20대역을%20누가%20나눠%20주는지로%20갈린다.md
+  - ./05-01.Cilium%20데이터패스는%20같은%20노드는%20eBPF%20로%20바로%20넘기고%20다른%20노드는%20라우팅이나%20터널로%20잇는다.md
   - ../networking-and-kubernetes/README.md
   - ../istio-in-action/README.md
   - ../../README.md
@@ -18,7 +21,7 @@ learning:
   level: 기본
   last_verified:            # Phase 4 자답·_review 회차 미실시 — 원문 대조일로 대신 채우지 않는다
   blocked_count:
-  next_lesson: "03-01 Getting Started with Cilium — 3장 원문에서 절 범위를 정한다"
+  next_lesson: "06-01 Service Networking — 6장 원문에서 절 범위를 정한다"
 updated: 2026-10-10
 ---
 
@@ -26,7 +29,7 @@ updated: 2026-10-10
 
 ---
 
-> 이 폴더는 『Cilium: Up and Running』(Vibert · Nikolic · Laverack, O'Reilly)을 장 단위로 정독하며 정리하는 책-종속 학습노트입니다. 16장 가운데 1·2장을 먼저 썼습니다.
+> 이 폴더는 『Cilium: Up and Running』(Vibert · Nikolic · Laverack, O'Reilly)을 장 단위로 정독하며 정리하는 책-종속 학습노트입니다. 16장 가운데 1~5장을 썼습니다.
 
 ## 이 책을 여기 두는 이유
 
@@ -48,10 +51,10 @@ updated: 2026-10-10
 |---|---|---|
 | 1 | Why Cilium? | 작성 |
 | 2 | Inside Cilium | 작성 |
-| 3 | Getting Started with Cilium | 다음 |
-| 4 | IP Address Management | — |
-| 5 | The Cilium Datapath | — |
-| 6 | Service Networking | — |
+| 3 | Getting Started with Cilium | 작성 |
+| 4 | IP Address Management | 작성 |
+| 5 | The Cilium Datapath | 작성 |
+| 6 | Service Networking | 다음 |
 | 7 | Ingress and Gateway API | — |
 | 8 | Performance Networking and Traffic Optimization | — |
 | 9 | Multicluster Networking | — |
@@ -75,6 +78,9 @@ updated: 2026-10-10
 |---|---|---|
 | [01-01 Cilium 은 eBPF 데이터패스로 iptables 기반 CNI 의 한계를 넘는다](./01-01.Cilium%20은%20eBPF%20데이터패스로%20iptables%20기반%20CNI%20의%20한계를%20넘는다.md) | 1장 | eBPF 맵 조회가 iptables 규칙의 선형 탐색을 대신하고, CNI 하나가 서비스·Ingress·정책·암호화·관측까지 맡게 된 흐름 |
 | [02-01 Cilium 은 에이전트·CNI 플러그인·오퍼레이터로 나눠 노드와 클러스터를 맡는다](./02-01.Cilium%20은%20에이전트·CNI%20플러그인·오퍼레이터로%20나눠%20노드와%20클러스터를%20맡는다.md) | 2장 | 패킷 처리가 필요한 노드 영역(에이전트·CNI 플러그인·Envoy·DNS 프록시)과 전역 일관성이 필요한 클러스터 영역(오퍼레이터·Hubble Relay)을 나눈 구성 |
+| [03-01 Cilium 은 kind 클러스터에 Helm 으로 설치하고 정책과 Hubble 로 동작을 확인한다](./03-01.Cilium%20은%20kind%20클러스터에%20Helm%20으로%20설치하고%20정책과%20Hubble%20로%20동작을%20확인한다.md) | 3장 | kind 클러스터에 기본 CNI 를 끄고 Helm 으로 Cilium 을 설치한 뒤, 라벨 기반 정책과 L7 규칙을 걸고 Hubble 로 판정을 흐름 단위로 보는 실습 |
+| [04-01 Cilium IPAM 모드는 Pod 대역을 누가 나눠 주는지로 갈린다](./04-01.Cilium%20IPAM%20모드는%20Pod%20대역을%20누가%20나눠%20주는지로%20갈린다.md) | 4장 | Pod 대역을 쿠버네티스(Host Scope)·오퍼레이터(Cluster Scope)·풀 CRD(Multi-Pool)·AWS ENI 중 누가 나눠 주는지에 따라 갈리는 IPAM 모드와 듀얼 스택·IPv6 전용 |
+| [05-01 Cilium 데이터패스는 같은 노드는 eBPF 로 바로 넘기고 다른 노드는 라우팅이나 터널로 잇는다](./05-01.Cilium%20데이터패스는%20같은%20노드는%20eBPF%20로%20바로%20넘기고%20다른%20노드는%20라우팅이나%20터널로%20잇는다.md) | 5장 | 같은 노드는 veth 의 eBPF 프로그램이 바로 넘기고, 다른 노드는 PodCIDR 경로를 알리는 native routing 이나 VXLAN·Geneve 터널로 잇는 데이터패스 |
 
 
 
@@ -84,11 +90,11 @@ updated: 2026-10-10
 
 | 항목 | 현재 값 |
 |------|--------|
-| 진행률 | 1~2장 완료 (장마다 1편) |
+| 진행률 | 1~5장 완료 (장마다 1편) |
 | 난이도 레벨 | 기본. 학습자 자답 전이라 조정 근거는 아직 없습니다 |
 | 막힌 지점 | 아직 없음 |
-| 다음 레슨 후보 | 03-01 — 3장 설치. 절 범위는 원문을 읽고 정합니다 |
-| 최근 검증 결과 | 2026-10-10 2편 작성. 원문·docs.cilium.io·소스와 대조하는 적대적 검증에서 1차 오류 16건과 의심 16건이 나왔습니다. Hubble Relay 포트, Envoy DaemonSet 기본값 전환 버전, ipcache 맵 이름과 종류 등을 고쳤고, 재검증과 최종 검증 뒤 미해결 0입니다. 게이트 실패 0, 도식 11장 글자 예산 통과 |
+| 다음 레슨 후보 | 06-01 — 6장 서비스 네트워킹. 절 범위는 원문을 읽고 정합니다 |
+| 최근 검증 결과 | 2026-10-10 2편 작성. 원문·docs.cilium.io·소스와 대조하는 적대적 검증에서 1차 오류 16건과 의심 16건이 나왔습니다. Hubble Relay 포트, Envoy DaemonSet 기본값 전환 버전, ipcache 맵 이름과 종류 등을 고쳤고, 재검증과 최종 검증 뒤 미해결 0입니다. 게이트 실패 0, 도식 11장 글자 예산 통과. 같은 날 3~5장 3편(도식 18장) 추가. agy 두 계정이 할당량을 다 써서 Claude Sonnet 창이 썼고, 1차 검증에서 오류 8건·의심 26건(kind 서비스 대역 /12→/16 퇴행 수정, ENI 는 EKS 전용이 아님, prefix delegation 기본 꺼짐, VXLAN 포트 출처 경로, 책 장 번호 지칭 등)을 고쳤습니다. 최종 검증에서 미해결 1건과 새 오류 1건(ENI 상한 라벨의 PD 조건, 링크 위치)도 고쳐 미해결 0, 3편 게이트 실패 0 |
 | 복습 회차 | 없음 |
 
 

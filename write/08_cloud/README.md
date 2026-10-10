@@ -31,7 +31,7 @@ Kubernetes 를 어떤 순서로 읽을지는 [k8s-roadmap.md](../roadmap/k8s-roa
 | [book/networking-and-kubernetes/](./book/networking-and-kubernetes/README.md) | 《Networking and Kubernetes》 정독 — OSI/TCP-IP, Linux 네트워킹, 컨테이너·K8s 네트워킹, Service 추상화, AWS/GCP/Azure | 정독 노트 17편 + 용어집·결정 치트시트 |
 | [book/container-security/](./book/container-security/README.md) | 《Container Security》(Liz Rice, 1판) 정독 — 위협 모델, syscall·capability·cgroup·namespace가 세우는 격리 경계, 이미지·공급망 보안, 취약점 스캐닝, 샌드박싱과 격리 파괴 | 정독 노트 17편 (본문 14/14 + 부록 완독) |
 | [book/learning-coredns/](./book/learning-coredns/README.md) | 《Learning CoreDNS》(Belamaric·Liu) 정독 — 컨테이너 환경의 서비스 디스커버리를 떠받치는 DNS 서버 편. Corefile·플러그인 체인, 존 데이터, 쿠버네티스 연동, 완전 재귀를 포기한 교환 | 정독 노트 1편 / 9장 |
-| [book/cilium-up-and-running/](./book/cilium-up-and-running/README.md) | 《Cilium: Up and Running》(Vibert·Nikolic·Laverack) 정독 — eBPF 데이터패스로 CNI·서비스 부하 분산·정책·관측을 맡는 Cilium 의 설계와 구성 요소 | 정독 노트 2편 / 16장 |
+| [book/cilium-up-and-running/](./book/cilium-up-and-running/README.md) | 《Cilium: Up and Running》(Vibert·Nikolic·Laverack) 정독 — eBPF 데이터패스로 CNI·서비스 부하 분산·정책·관측을 맡는 Cilium 의 설계와 구성 요소 | 정독 노트 5편 / 16장 |
 
 ## 예정 주제 — Spring Cloud 스택 (TBD)
 
