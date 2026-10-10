@@ -1,0 +1,42 @@
+<svg viewBox="0 0 680 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>프로파일링으로 범인 찾기 — 샘플링→프로파일링 전환·FQN 표현식·live/total/세대·스택 트레이스·힙 덤프 예고</title>
+  <desc>이 편의 요약입니다. 샘플링이 어느 타입이 메모리를 채우는지는 보여 줘도 누가 그 객체를 만드는지는 못 줄 때 프로파일링으로 전환합니다. 프로파일링은 무거워 느려지고 데이터가 넘치므로 무엇을 프로파일할지 알기 전엔 프로파일하지 않는다는 규칙을 지키고 늘 샘플링으로 먼저 좁힙니다. 09-01 에서 Product 가 범인임을 좁혔으니 FQN 표현식으로 Product 만 프로파일합니다. 엄격한 타입은 완전한 이름, 별표 하나는 한 패키지, 별표 둘은 패키지와 서브패키지입니다. 프로파일링은 살아 있는 인스턴스 live 에 더해 생성된 총 인스턴스 total 과 GC 를 몇 번 살아남았는지 세대를 줍니다. 가장 유용한 건 인스턴스가 생성된 위치로 줄 왼쪽 더하기 버튼을 누르면 스택 트레이스가 펼쳐져 근본 원인으로 데려갑니다. 프로파일러조차 못 붙는 크래시나 운영 환경에서는 10장의 힙 덤프로 메모리 상태 전체를 스냅숏으로 찍습니다.</desc>
+  <rect x="0" y="0" width="680" height="560" fill="#0d0d0d"/>
+
+  <text x="20" y="38" fill="#e8e4df" font-size="18" font-weight="bold">프로파일링으로 범인 찾기</text>
+  <text x="20" y="60" fill="rgb(138,133,128)" font-size="11">Troubleshooting Java · §9.2 · da-ch9-ex1</text>
+
+  <!-- 전환 -->
+  <rect x="20" y="78" width="640" height="80" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="100" fill="rgb(212,168,83)" font-size="13" font-weight="bold">샘플링 → 프로파일링 전환</text>
+  <text x="34" y="124" fill="#e8e4df" font-size="11">샘플링: "어느 타입이 채우나"(O) · "누가 만드나"(X) → 프로파일링으로 전환</text>
+  <text x="34" y="146" fill="#f47f72" font-size="11" font-weight="bold">규칙: 무엇을 프로파일할지 알기 전엔 프로파일하지 않는다 (늘 샘플링 먼저)</text>
+
+  <!-- FQN -->
+  <rect x="20" y="172" width="640" height="116" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="194" fill="#e8e4df" font-size="13" font-weight="bold">FQN 표현식으로 Product 만 좁히기</text>
+  <text x="34" y="218" fill="#9cc3df" font-size="11" font-family="monospace">com.example.model.Product</text>
+  <text x="320" y="218" fill="rgb(138,133,128)" font-size="10.5">→ 그 타입만</text>
+  <text x="34" y="242" fill="#9cc3df" font-size="11" font-family="monospace">com.example.model.*</text>
+  <text x="320" y="242" fill="rgb(138,133,128)" font-size="10.5">→ 그 패키지만 (서브 제외)</text>
+  <text x="34" y="266" fill="#9cc3df" font-size="11" font-family="monospace">com.example.**</text>
+  <text x="320" y="266" fill="rgb(138,133,128)" font-size="10.5">→ 패키지 + 모든 서브패키지</text>
+
+  <!-- 주는 것 -->
+  <rect x="20" y="300" width="640" height="80" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="1.5"/>
+  <text x="34" y="322" fill="#9cc3df" font-size="13" font-weight="bold">프로파일링이 주는 것 (샘플링보다 더)</text>
+  <text x="34" y="346" fill="#e8e4df" font-size="11">live(현재 살아 있는) + total(생성된 총수) + GC 세대(몇 번 살아남았나)</text>
+  <text x="34" y="368" fill="rgb(138,133,128)" font-size="10.5">total·세대는 프로파일링만 줌 · 11장 GC 로그와 엮어 활용</text>
+
+  <!-- 핵심 -->
+  <rect x="20" y="392" width="640" height="76" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="34" y="414" fill="rgb(212,168,83)" font-size="13" font-weight="bold">핵심 — 스택 트레이스로 생성 지점</text>
+  <text x="34" y="438" fill="#e8e4df" font-size="11">타입마다 인스턴스 생성 위치 표시 → 줄 왼쪽 (+) 클릭 → 생성 코드 스택 트레이스</text>
+  <text x="34" y="460" fill="#e8e4df" font-size="11">→ 문제의 근본 원인으로 곧장 데려감</text>
+
+  <!-- 힙 덤프 예고 -->
+  <rect x="20" y="480" width="640" height="62" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="1.5"/>
+  <text x="34" y="502" fill="#f47f72" font-size="13" font-weight="bold">프로파일러도 못 붙을 때 → 힙 덤프(10장)</text>
+  <text x="34" y="524" fill="#e8e4df" font-size="11">크래시·운영 환경 → 메모리 상태 전체를 스냅숏으로 (객체·참조 분석)</text>
+  <text x="34" y="538" fill="rgb(138,133,128)" font-size="9.5">역참조 안 되고 쌓이면 GC 못 비움 → 힙 가득 참 → OutOfMemoryError</text>
+</svg>

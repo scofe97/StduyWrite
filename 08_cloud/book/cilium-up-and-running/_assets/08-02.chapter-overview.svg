@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 424" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">DSR · Maglev · netkit 의 비용 절감과 조건</title><desc id="dd">응답 경로 우회·일관 해시 백엔드 선택·Pod veth 네임스페이스 전환 비용을 줄인다</desc>
+<rect width="920" height="424" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">CILIUM UP AND RUNNING · 08-02</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">DSR · Maglev · netkit 의 비용 절감과 조건</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">각 기능이 줄이는 병목과 활성화 옵션 및 커널·모드 전제 조건</text>
+<rect x="12" y="96" width="180" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="102.0" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">최적화 기능</text>
+<text x="102.0" y="138" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">feature</text>
+<rect x="204" y="96" width="224" height="52" rx="6" fill="#161B22" stroke="#5E6B7E" stroke-width="1.0"/>
+<text x="316.0" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">줄이는 비용</text>
+<text x="316.0" y="138" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">cost reduced</text>
+<rect x="442" y="96" width="224" height="52" rx="6" fill="#161B22" stroke="#5E6B7E" stroke-width="1.0"/>
+<text x="554.0" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">켜는 옵션</text>
+<text x="554.0" y="138" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">helm option</text>
+<rect x="680" y="96" width="224" height="52" rx="6" fill="#161B22" stroke="#5E6B7E" stroke-width="1.0"/>
+<text x="792.0" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">전제 조건</text>
+<text x="792.0" y="138" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">prerequisites</text>
+<rect x="12" y="168" width="180" height="52" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="26" y="191" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">DSR</text>
+<text x="26" y="209" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">Direct Server Return</text>
+<rect x="204" y="168" width="224" height="52" rx="4" fill="#3FB98C10" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="316.0" y="190" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">역방향 경유 홉 제거</text>
+<text x="316.0" y="209" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">출발지 클라이언트 IP 보존</text>
+<rect x="442" y="168" width="224" height="52" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="554.0" y="190" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">loadBalancer.mode: dsr</text>
+<text x="554.0" y="209" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">kubeProxyReplacement: true</text>
+<rect x="680" y="168" width="224" height="52" rx="4" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<text x="792.0" y="190" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">KPR 필수 · opt 는 native 전용</text>
+<text x="792.0" y="209" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Geneve 는 dsrDispatch=geneve</text>
+<rect x="12" y="228" width="180" height="52" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="26" y="251" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">Maglev</text>
+<text x="26" y="269" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">Consistent Hashing</text>
+<rect x="204" y="228" width="224" height="52" rx="4" fill="#3FB98C10" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="316.0" y="250" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">경로 분기 시 TCP 리셋 방지</text>
+<text x="316.0" y="269" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">노드 간 상태 동기화 없음</text>
+<rect x="442" y="228" width="224" height="52" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="554.0" y="250" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">loadBalancer.algorithm: maglev</text>
+<text x="554.0" y="269" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">기본 tableSize 16381</text>
+<rect x="680" y="228" width="224" height="52" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="792.0" y="250" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">KPR 필수 · 5-튜플 유지</text>
+<text x="792.0" y="269" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">소수 룩업 테이블 크기</text>
+<rect x="12" y="288" width="180" height="52" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="26" y="311" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">netkit</text>
+<text x="26" y="329" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">BPF Network Device</text>
+<rect x="204" y="288" width="224" height="52" rx="4" fill="#3FB98C10" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="316.0" y="310" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">네임스페이스 전환 비용 감소</text>
+<text x="316.0" y="329" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">per-CPU 백로그 큐 비용 감소</text>
+<rect x="442" y="288" width="224" height="52" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="554.0" y="310" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">bpf.datapathMode: netkit</text>
+<text x="554.0" y="329" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">기본 L3 모드 (L2 지원)</text>
+<rect x="680" y="288" width="224" height="52" rx="4" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<text x="792.0" y="310" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">커널 6.8+ · eBPF Host-Routing</text>
+<text x="792.0" y="329" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">기존 Pod 인플레이스 불가</text>
+<line x1="12" y1="364" x2="872" y2="364" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="386" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="376" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="386" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">비용 절감 효과</text>
+<rect x="248" y="376" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="270" y="386" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">주요 전제 조건 제약</text>
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 460" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>파일 시스템 관측 도구 — I/O 스택을 따라 깊어지는 흐름</title>
+  <desc>정적 통계(mount·free·sar)에서 시작해 syscall 추적(strace·fatrace), BPF 이벤트 추적(opensnoop·filetop), 적중률·분포·꼬리 측정(cachestat·ext4dist·ext4slower), bpftrace 커스텀으로 내려가는 도구 흐름.</desc>
+  <defs>
+    <marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <rect width="760" height="460" fill="#0d0d0d"/>
+  <text x="30" y="40" fill="#e8e4df" font-size="20" font-weight="700">파일 시스템 관측 도구 흐름</text>
+  <text x="30" y="64" fill="rgb(138,133,128)" font-size="13">정적 통계 → syscall 추적 → BPF 이벤트 → 적중률·분포·꼬리 → 커스텀</text>
+
+  <!-- L1 -->
+  <rect x="40" y="90" width="680" height="58" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+  <text x="60" y="114" fill="rgb(212,168,83)" font-size="13" font-weight="700">① 정적 통계 — 큰 그림·설정 점검</text>
+  <text x="60" y="136" fill="#e8e4df" font-size="12">mount (옵션) · free (buff/cache) · top·vmstat · sar (-v inode·dentry 시계열)</text>
+
+  <!-- L2 -->
+  <rect x="40" y="166" width="680" height="58" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+  <text x="60" y="190" fill="rgb(212,168,83)" font-size="13" font-weight="700">② syscall 층 추적 — 애플리케이션 체감</text>
+  <text x="60" y="212" fill="#e8e4df" font-size="12">strace (한 프로세스 심층 · 오버헤드 큼) · fatrace (전체 조망)</text>
+
+  <!-- L3 -->
+  <rect x="40" y="242" width="680" height="58" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+  <text x="60" y="266" fill="rgb(212,168,83)" font-size="13" font-weight="700">③ BPF 이벤트 추적 — 저오버헤드·이벤트 단위</text>
+  <text x="60" y="288" fill="#e8e4df" font-size="12">opensnoop (열리는 파일) · filetop (바쁜 파일) · latencytop (지연 원인)</text>
+
+  <!-- L4 highlight -->
+  <rect x="40" y="318" width="680" height="64" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="60" y="342" fill="rgb(212,168,83)" font-size="13" font-weight="700">④ 적중률·분포·꼬리 — 핵심 무기</text>
+  <text x="60" y="364" fill="#e8e4df" font-size="12">cachestat (적중률) · ext4dist (지연 분포·다봉) · ext4slower (느린 요청 꼬리)</text>
+  <text x="60" y="379" fill="rgb(138,133,128)" font-size="11">평균이 못 잡는 다봉·꼬리를 짚어 "평균은 1ms인데 사용자는 느리다"의 원인을 드러낸다</text>
+
+  <!-- L5 -->
+  <rect x="40" y="400" width="680" height="46" rx="8" fill="none" stroke="rgb(138,133,128)" stroke-width="1.3"/>
+  <text x="60" y="422" fill="#e8e4df" font-size="13" font-weight="700">⑤ bpftrace — 기성 도구가 못 답하는 질문만 (VFS 층에 걸면 전 FS 한자리)</text>
+  <text x="60" y="438" fill="rgb(138,133,128)" font-size="11">마지막 수단 · 15장에서 깊어짐 · kprobe는 불안정 API라 tracepoint·VFS 우선</text>
+
+  <!-- down arrows -->
+  <line x1="730" y1="148" x2="730" y2="164" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#arr4)"/>
+  <line x1="730" y1="224" x2="730" y2="240" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#arr4)"/>
+  <line x1="730" y1="300" x2="730" y2="316" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#arr4)"/>
+  <line x1="730" y1="382" x2="730" y2="398" stroke="rgb(212,168,83)" stroke-width="1.4" marker-end="url(#arr4)"/>
+</svg>

@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 700" font-family="Pretendard, sans-serif">
+  <rect width="680" height="700" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">선형성(Linearizability)</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">단일 복사본 착각 · 원자적 flip · CAS · 복제 방법별 선형화 가능성</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- 선형성 위반 시나리오 -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">선형성 위반 — Aaliyah가 보고 Bryce에게 말했는데 Bryce 화면은 구 값</text>
+  <rect x="32" y="124" width="616" height="72" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="48" y="146" fill="#e8e4df" font-size="10.5">Aaliyah: 읽기 → 새 값(1) 반환 후 Bryce에게 "업데이트됐어"라고 알림</text>
+  <text x="48" y="164" fill="#f47f72" font-size="10.5">Bryce: 읽기 → 구 값(0) 반환 — 선형성 위반. Aaliyah 이후의 읽기는 반드시 새 값을 반환해야 합니다</text>
+  <text x="48" y="182" fill="rgb(138,133,128)" font-size="9.5">핵심: 어떤 읽기가 새 값을 반환하면 그 이후 모든 읽기도 새 값을 반환해야 합니다 (recency guarantee)</text>
+
+  <!-- 원자적 flip 타임라인 -->
+  <text x="32" y="222" fill="rgb(212,168,83)" font-size="14" font-weight="700">원자적 flip — 선형화 포인트</text>
+
+  <!-- 타임라인 축 -->
+  <line x1="48" y1="290" x2="640" y2="290" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="48" y="308" fill="rgb(138,133,128)" font-size="9">시간 →</text>
+
+  <!-- Write(0→1) 막대 -->
+  <rect x="80" y="258" width="180" height="24" rx="4" fill="rgb(212,168,83)" fill-opacity="0.2" stroke="rgb(212,168,83)"/>
+  <text x="170" y="274" fill="rgb(212,168,83)" font-size="9.5" text-anchor="middle">Write(x=1)</text>
+  <!-- 선형화 포인트 수직선 -->
+  <line x1="260" y1="234" x2="260" y2="310" stroke="#66bb6a" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="262" y="230" fill="#66bb6a" font-size="9">flip 시점</text>
+
+  <!-- Read 반환 0 -->
+  <rect x="80" y="318" width="100" height="22" rx="4" fill="#141414" stroke="rgb(138,133,128)"/>
+  <text x="130" y="333" fill="#e8e4df" font-size="9.5" text-anchor="middle">Read → 0</text>
+  <!-- Read 반환 0 or 1 -->
+  <rect x="200" y="318" width="100" height="22" rx="4" fill="#141414" stroke="rgb(212,168,83)"/>
+  <text x="250" y="333" fill="rgb(212,168,83)" font-size="9.5" text-anchor="middle">Read → 0 또는 1</text>
+  <!-- Read 반환 1 -->
+  <rect x="320" y="318" width="100" height="22" rx="4" fill="#141414" stroke="#66bb6a"/>
+  <text x="370" y="333" fill="#66bb6a" font-size="9.5" text-anchor="middle">Read → 반드시 1</text>
+  <!-- Read 반환 1 -->
+  <rect x="440" y="318" width="100" height="22" rx="4" fill="#141414" stroke="#66bb6a"/>
+  <text x="490" y="333" fill="#66bb6a" font-size="9.5" text-anchor="middle">Read → 반드시 1</text>
+
+  <text x="48" y="360" fill="rgb(138,133,128)" font-size="9">flip 이전: 구 값 가능 · flip 동시 진행 중: 구/신 모두 가능 · flip 이후: 신 값만 반환 (역전 없음)</text>
+
+  <!-- CAS -->
+  <text x="32" y="392" fill="rgb(212,168,83)" font-size="14" font-weight="700">CAS(Compare-And-Swap) — 원자적 조건부 쓰기</text>
+  <rect x="32" y="404" width="296" height="80" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="48" y="424" fill="#7fa8c9" font-size="10.5" font-weight="700">CAS(x, old=0, new=1)</text>
+  <text x="48" y="442" fill="#e8e4df" font-size="9.5">x == 0 이면 x = 1 로 변경 → 200 OK</text>
+  <text x="48" y="458" fill="#f47f72" font-size="9.5">x != 0 이면 변경 거부 → 409 Conflict</text>
+  <text x="48" y="474" fill="rgb(138,133,128)" font-size="9">선형화 포인트에서 원자적으로 실행됩니다</text>
+
+  <rect x="352" y="404" width="296" height="80" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="368" y="424" fill="rgb(138,133,128)" font-size="10.5" font-weight="700">활용 사례</text>
+  <text x="368" y="442" fill="#e8e4df" font-size="9.5">분산 락 · 리더 선출 (etcd/ZooKeeper)</text>
+  <text x="368" y="458" fill="#e8e4df" font-size="9.5">유일성 제약 (사용자명, 좌석 예약)</text>
+  <text x="368" y="474" fill="#e8e4df" font-size="9.5">교차 채널 타이밍 의존 시나리오</text>
+
+  <!-- 복제 방법별 선형화 가능성 -->
+  <text x="32" y="514" fill="rgb(212,168,83)" font-size="14" font-weight="700">복제 방법별 선형화 가능성</text>
+
+  <rect x="32" y="526" width="140" height="68" rx="4" fill="#141414" stroke="#66bb6a"/>
+  <text x="102" y="544" fill="#66bb6a" font-size="9.5" font-weight="700" text-anchor="middle">합의 알고리즘</text>
+  <text x="102" y="560" fill="#e8e4df" font-size="8.5" text-anchor="middle">Raft · Zab</text>
+  <text x="102" y="574" fill="#66bb6a" font-size="8" text-anchor="middle">선형화 가능</text>
+  <text x="102" y="586" fill="rgb(138,133,128)" font-size="7.5" text-anchor="middle">리더 확인 필수</text>
+
+  <rect x="188" y="526" width="140" height="68" rx="4" fill="#141414" stroke="rgb(212,168,83)"/>
+  <text x="258" y="544" fill="rgb(212,168,83)" font-size="9.5" font-weight="700" text-anchor="middle">단일 리더</text>
+  <text x="258" y="560" fill="#e8e4df" font-size="8.5" text-anchor="middle">리더 읽기/쓰기만</text>
+  <text x="258" y="574" fill="rgb(212,168,83)" font-size="8" text-anchor="middle">잠재적 선형화 가능</text>
+  <text x="258" y="586" fill="rgb(138,133,128)" font-size="7.5" text-anchor="middle">좀비 리더 위험</text>
+
+  <rect x="344" y="526" width="140" height="68" rx="4" fill="#141414" stroke="#f47f72"/>
+  <text x="414" y="544" fill="#f47f72" font-size="9.5" font-weight="700" text-anchor="middle">다중 리더</text>
+  <text x="414" y="560" fill="#e8e4df" font-size="8.5" text-anchor="middle">충돌 쓰기 허용</text>
+  <text x="414" y="574" fill="#f47f72" font-size="8" text-anchor="middle">선형화 불가</text>
+  <text x="414" y="586" fill="rgb(138,133,128)" font-size="7.5" text-anchor="middle">동시 쓰기 충돌</text>
+
+  <rect x="500" y="526" width="148" height="68" rx="4" fill="#141414" stroke="#f47f72"/>
+  <text x="574" y="544" fill="#f47f72" font-size="9.5" font-weight="700" text-anchor="middle">리더리스</text>
+  <text x="574" y="560" fill="#e8e4df" font-size="8.5" text-anchor="middle">LWW · 쿼럼</text>
+  <text x="574" y="574" fill="#f47f72" font-size="8" text-anchor="middle">선형화 불가 가능성 높음</text>
+  <text x="574" y="586" fill="rgb(138,133,128)" font-size="7.5" text-anchor="middle">클럭 스큐 · 쿼럼도 위험</text>
+
+  <!-- 선형성 vs 직렬화 -->
+  <text x="32" y="626" fill="rgb(212,168,83)" font-size="14" font-weight="700">선형성 vs 직렬화 가능성</text>
+  <rect x="32" y="638" width="616" height="48" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="48" y="657" fill="#e8e4df" font-size="10">직렬화: 트랜잭션 격리 수준 · 여러 객체 · 실행 순서는 임의  |  선형성: 단일 객체의 최신성 · 트랜잭션 아님</text>
+  <text x="48" y="675" fill="rgb(138,133,128)" font-size="9.5">엄격한 직렬화(strict serializability) = 선형성 + 직렬화 동시 보장 — Spanner · FoundationDB 구현</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,68 @@
+<svg viewBox="0 0 920 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>리플렉션과 클래스 로딩의 결합 — 문자열 클래스명에서 메서드 호출까지</title>
+  <desc>컴파일 타임에 타입을 모를 때, 클래스명 문자열을 Class.forName 으로 넘기면 그 클래스가 로딩·초기화되고 Class 객체가 나온다. getMethod 로 Method 객체를 얻고 invoke 로 실제 인스턴스에서 메서드를 호출한다. JDBC 드라이버 로딩이 이 패턴을 쓴다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 12px; fill: rgb(138,133,128); }
+      .box   { font-size: 13px; font-weight: 800; fill: #0d0d0d; font-family: 'SFMono-Regular', Consolas, monospace; }
+      .bsub  { font-size: 10px; fill: rgba(13,13,13,0.74); }
+      .step  { font-size: 11px; font-weight: 700; fill: rgb(212,168,83); }
+      .note  { font-size: 11px; fill: rgb(138,133,128); }
+      .warn  { font-size: 11.5px; fill: #f0a868; }
+    </style>
+    <marker id="ar4" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="920" height="400" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">컴파일 타임에 모르는 타입을 런타임 문자열로 부르기</text>
+  <text x="28" y="60" class="sub">리플렉션은 클래스명 문자열만으로 로딩·초기화를 트리거하고, 그 클래스의 메서드를 동적으로 호출합니다</text>
+
+  <!-- 1. 문자열 -->
+  <rect x="28" y="110" width="150" height="62" rx="9" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="103" y="138" class="step" text-anchor="middle">클래스명 문자열</text>
+  <text x="103" y="158" class="box" fill="#e8e4df" text-anchor="middle" style="fill:#e8e4df">"com.app.Job"</text>
+
+  <line x1="178" y1="141" x2="214" y2="141" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar4)"/>
+
+  <!-- 2. Class.forName -->
+  <rect x="218" y="106" width="160" height="70" rx="9" fill="#5b9bd5"/>
+  <text x="298" y="134" class="box" text-anchor="middle">Class.forName</text>
+  <text x="298" y="152" class="bsub" text-anchor="middle">로딩 + 초기화 트리거</text>
+  <text x="298" y="166" class="bsub" text-anchor="middle">(능동 사용 ②)</text>
+
+  <line x1="378" y1="141" x2="414" y2="141" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar4)"/>
+
+  <!-- 3. Class 객체 -->
+  <rect x="418" y="110" width="138" height="62" rx="9" fill="rgb(212,168,83)"/>
+  <text x="487" y="138" class="box" text-anchor="middle">Class&lt;?&gt;</text>
+  <text x="487" y="158" class="bsub" text-anchor="middle">메타데이터 핸들</text>
+
+  <line x1="556" y1="141" x2="592" y2="141" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar4)"/>
+
+  <!-- 4. getMethod -->
+  <rect x="596" y="110" width="138" height="62" rx="9" fill="rgb(212,168,83)"/>
+  <text x="665" y="138" class="box" text-anchor="middle">getMethod</text>
+  <text x="665" y="158" class="bsub" text-anchor="middle">Method 객체</text>
+
+  <line x1="734" y1="141" x2="770" y2="141" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar4)"/>
+
+  <!-- 5. invoke -->
+  <rect x="774" y="106" width="120" height="70" rx="9" fill="#66bb6a"/>
+  <text x="834" y="134" class="box" text-anchor="middle">invoke</text>
+  <text x="834" y="152" class="bsub" text-anchor="middle">실제 호출</text>
+  <text x="834" y="166" class="bsub" text-anchor="middle">→ 결과</text>
+
+  <!-- 컴파일 vs 런타임 분리선 -->
+  <line x1="28" y1="210" x2="892" y2="210" stroke="rgb(70,70,70)" stroke-width="1" stroke-dasharray="3 4"/>
+  <text x="28" y="232" class="note">컴파일 타임 : 코드에는 "com.app.Job" 이라는 문자열뿐 — 타입 Job 은 어디에도 import 되지 않습니다.</text>
+  <text x="28" y="252" class="note">런타임 : 그 문자열이 비로소 클래스를 가리키고, JVM 이 로딩·초기화한 뒤 메서드를 찾아 호출합니다.</text>
+
+  <!-- 실무 연결 + 대가 -->
+  <rect x="28" y="278" width="864" height="96" rx="10" fill="rgba(91,155,213,0.08)" stroke="#5b9bd5" stroke-width="1.3"/>
+  <text x="44" y="302" class="step" fill="#5b9bd5" style="fill:#5b9bd5">실무에서 이 흐름</text>
+  <text x="44" y="322" class="note">JDBC 가 Class.forName("...Driver") 로 드라이버를 로딩하고, 스프링이 빈 클래스를 리플렉션으로 인스턴스화합니다.</text>
+  <text x="44" y="348" class="warn">대가 : 매 호출 메서드 탐색·접근성 체크로 느리고, setAccessible(true) 는 캡슐화를 깨며, 모듈 시스템에선 opens 가 있어야 뚫립니다.</text>
+</svg>

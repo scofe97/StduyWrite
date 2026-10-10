@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 500" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Go HTTP 서버 구조와 요청 처리 흐름</title><desc id="dd">Listing 9-1 의 서버 구성과 Listing 9-2 의 세 가지 테스트 요청 처리 경로</desc>
+<rect width="880" height="500" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">NPG CH.9 — SERVER ANATOMY</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Go HTTP 서버 구조와 요청 처리 흐름</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">멀티플렉서 없이 TimeoutHandler 미들웨어가 DefaultHandler 를 직접 감싸는 구조</text>
+<rect x="20" y="100" width="276" height="330" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="32" y="122" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="600" fill="#5E6B7E">CLIENT TIER (Listing 9-2·9-3)</text>
+<rect x="360" y="100" width="500" height="330" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="376" y="122" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="600" fill="#5E6B7E">HTTP SERVER (Listing 9-1: 127.0.0.1:8081)</text>
+<line x1="288" y1="170" x2="366" y2="170" stroke="#6A95D8" stroke-width="1.4"/>
+<path d="M 358 166 L 366 170 L 358 174 Z" fill="none" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="328" y="158" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#6A95D8">요청 전달</text>
+<line x1="474" y1="170" x2="486" y2="170" stroke="#6A95D8" stroke-width="1.4"/>
+<path d="M 480 166 L 488 170 L 480 174 Z" fill="none" stroke="#6A95D8" stroke-width="1.0"/>
+<line x1="594" y1="170" x2="606" y2="170" stroke="#6A95D8" stroke-width="1.4"/>
+<path d="M 600 166 L 608 170 L 600 174 Z" fill="none" stroke="#6A95D8" stroke-width="1.0"/>
+<line x1="726" y1="170" x2="738" y2="170" stroke="#6A95D8" stroke-width="1.4"/>
+<path d="M 732 166 L 740 170 L 732 174 Z" fill="none" stroke="#6A95D8" stroke-width="1.0"/>
+<path d="M 794 204 V 282 Q 794 290 786 290 H 734" fill="none" stroke="#3FB98C" stroke-width="1.4"/>
+<path d="M 740 286 L 732 290 L 740 294 Z" fill="none" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="758" y="278" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#3FB98C">w.Write()</text>
+<line x1="610" y1="290" x2="598" y2="290" stroke="#3FB98C" stroke-width="1.4"/>
+<path d="M 604 286 L 596 290 L 604 294 Z" fill="none" stroke="#3FB98C" stroke-width="1.0"/>
+<line x1="490" y1="290" x2="294" y2="290" stroke="#3FB98C" stroke-width="1.4"/>
+<path d="M 302 286 L 294 290 L 302 294 Z" fill="none" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="328" y="278" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">응답 반환</text>
+<rect x="30" y="136" width="258" height="46" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="159" y="156" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">http.Client</text>
+<text x="159" y="172" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">client.Do(r)</text>
+<rect x="30" y="194" width="258" height="66" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="38" y="214" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">Case 1: GET /</text>
+<text x="38" y="234" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">200 OK · "Hello, friend!"</text>
+<text x="38" y="250" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">기본 본문 반환 검증</text>
+<rect x="30" y="270" width="258" height="66" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="38" y="290" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">Case 2: POST / ("&lt;world&gt;")</text>
+<text x="38" y="310" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">200 OK · "Hello, &amp;lt;world&amp;gt;!"</text>
+<text x="38" y="326" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">HTML 이스케이프 검증</text>
+<rect x="30" y="346" width="258" height="66" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.0"/>
+<text x="38" y="366" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#E3B341">Case 3: HEAD /</text>
+<text x="38" y="386" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#E3B341">405 Method Not Allowed</text>
+<text x="38" y="402" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">미지원 메서드 빈 본문 검증</text>
+<rect x="370" y="136" width="104" height="68" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="422" y="161" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">net.Listener</text>
+<text x="422" y="183" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">8081 포트 수신</text>
+<rect x="490" y="136" width="104" height="68" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="542" y="161" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">srv.Serve(l)</text>
+<text x="542" y="183" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">고루틴 서빙 루프</text>
+<rect x="610" y="136" width="116" height="68" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="668" y="161" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">TimeoutHandler</text>
+<text x="668" y="183" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">미들웨어 (2분)</text>
+<rect x="742" y="136" width="104" height="68" rx="6" fill="#F08A5920" stroke="#F08A59" stroke-width="1.4"/>
+<text x="794" y="161" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F08A59">DefaultHandler</text>
+<text x="794" y="183" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">ServeHTTP</text>
+<rect x="610" y="256" width="116" height="68" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="668" y="281" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">ResponseWriter</text>
+<text x="668" y="303" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">응답 스트림 작성</text>
+<rect x="490" y="256" width="104" height="68" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="542" y="281" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">HTTP Response</text>
+<text x="542" y="303" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">상태·헤더·본문</text>
+<line x1="12" y1="455" x2="832" y2="455" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="477" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="467" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="477" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">핵심 핸들러</text>
+<rect x="222" y="467" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="244" y="477" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">테스트 요청</text>
+<rect x="344" y="467" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="366" y="477" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 응답 (200)</text>
+<rect x="531" y="467" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="553" y="477" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">미지원 거부 (405)</text>
+</svg>

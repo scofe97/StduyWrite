@@ -1,0 +1,88 @@
+<svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>클래스 요청 한 개의 추적 — 격리 라이브러리는 WEB-INF, 공통 API는 Common</title>
+  <desc>웹앱 A가 두 가지 클래스를 요청하는 흐름을 추적한다. 첫째, com.google.gson.Gson 처럼 웹앱 전용 라이브러리는 WebApp 로더 A 가 자기 WEB-INF/lib 를 먼저 뒤져 거기 있는 gson 2.8 을 직접 로딩한다. 같은 시각 웹앱 B 는 자기 WEB-INF 의 gson 2.10 을 따로 로딩하므로, 같은 이름이라도 로더가 달라 서로 다른 타입으로 격리된다. 둘째, jakarta.servlet.http.HttpServletRequest 같은 공통 API 는 WEB-INF 에 없으므로 부모 Common 로더로 위임되고, 모든 웹앱이 같은 한 벌을 공유한다. 결론은 같은 요청 메커니즘이 어디서 클래스를 찾느냐에 따라 격리와 공유로 갈린다는 것이다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: rgb(138,133,128); }
+      .box   { font-size: 12.5px; font-weight: 800; fill: #0d0d0d; }
+      .boxs  { font-size: 9.5px; fill: rgba(13,13,13,0.78); }
+      .req   { font-size: 12px; font-weight: 800; fill: #e8e4df; }
+      .reqs  { font-size: 9.5px; fill: rgb(150,145,140); }
+      .edge  { font-size: 10.5px; font-weight: 700; fill: rgb(212,168,83); }
+      .tag   { font-size: 10px; font-weight: 800; fill: #0d0d0d; }
+      .note  { font-size: 10px; fill: rgb(138,133,128); }
+      .pathlab { font-size: 10.5px; font-weight: 700; fill: #e8e4df; }
+      .inote { font-size: 10px; fill: #cfcac4; }
+    </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="560" fill="#0d0d0d"/>
+  <text x="28" y="36" class="title">클래스 요청 한 개의 추적 — 같은 메커니즘, 다른 결과</text>
+  <text x="28" y="56" class="sub">WebApp 로더는 WEB-INF 를 먼저 본다 · 거기 있으면 격리 로딩, 없으면 부모(Common)로 위임해 공유</text>
+
+  <!-- 요청 주체: 웹앱 A -->
+  <rect x="40" y="84" width="200" height="58" rx="9" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.6"/>
+  <text x="140" y="110" class="req" text-anchor="middle">웹앱 A 코드가</text>
+  <text x="140" y="128" class="reqs" text-anchor="middle">클래스 2개를 요청</text>
+
+  <!-- 분기 라벨 -->
+  <line x1="240" y1="100" x2="300" y2="100" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="270" y="92" class="edge" text-anchor="middle">①</text>
+  <line x1="240" y1="126" x2="300" y2="320" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="262" y="240" class="edge" text-anchor="middle">②</text>
+
+  <!-- ===== ① 격리 경로 (위) ===== -->
+  <text x="312" y="92" class="pathlab">① 웹앱 전용 라이브러리 — com.google.gson.Gson</text>
+
+  <!-- WebApp 로더 A: WEB-INF 먼저 -->
+  <rect x="312" y="100" width="220" height="56" rx="9" fill="#66bb6a"/>
+  <text x="422" y="124" class="box" text-anchor="middle">WebApp 로더 A</text>
+  <text x="422" y="140" class="boxs" text-anchor="middle">WEB-INF/lib 를 먼저 뒤짐</text>
+
+  <line x1="532" y1="128" x2="588" y2="128" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="560" y="120" class="edge" text-anchor="middle">있음</text>
+
+  <!-- 결과: gson 2.8 직접 로딩 -->
+  <rect x="590" y="100" width="278" height="56" rx="9" fill="rgb(212,168,83)"/>
+  <text x="729" y="124" class="box" text-anchor="middle">A 가 gson 2.8 직접 로딩 → 격리</text>
+  <text x="729" y="140" class="boxs" text-anchor="middle">부모로 위임 안 함</text>
+
+  <!-- 대비: 웹앱 B는 자기 gson 2.10 -->
+  <rect x="590" y="172" width="278" height="58" rx="9" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="1.4"/>
+  <text x="729" y="194" class="inote" text-anchor="middle">웹앱 B 는 같은 시각 WEB-INF 의</text>
+  <text x="729" y="210" class="inote" text-anchor="middle">gson 2.10 을 따로 로딩 — 로더가 달라</text>
+  <text x="729" y="224" class="inote" text-anchor="middle">같은 이름도 다른 타입(버전 충돌 없음)</text>
+  <line x1="729" y1="156" x2="729" y2="172" stroke="rgb(120,116,112)" stroke-width="1.4" stroke-dasharray="4 3"/>
+
+  <!-- ===== ② 공유 경로 (아래) ===== -->
+  <text x="312" y="300" class="pathlab">② 공통 API — jakarta.servlet.http.HttpServletRequest</text>
+
+  <!-- WebApp 로더 A: WEB-INF에 없음 -->
+  <rect x="312" y="308" width="220" height="56" rx="9" fill="#66bb6a"/>
+  <text x="422" y="332" class="box" text-anchor="middle">WebApp 로더 A</text>
+  <text x="422" y="348" class="boxs" text-anchor="middle">WEB-INF 에 없음</text>
+
+  <line x1="532" y1="336" x2="588" y2="336" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="560" y="328" class="edge" text-anchor="middle">없음→위임</text>
+
+  <!-- 부모 Common 로더 -->
+  <rect x="590" y="308" width="278" height="56" rx="9" fill="#5b9bd5"/>
+  <text x="729" y="332" class="box" text-anchor="middle" style="fill:#e8e4df">Common 로더가 로딩 → 공유</text>
+  <text x="729" y="348" class="boxs" text-anchor="middle" style="fill:#e8e4df">lib/ 의 한 벌을 모든 웹앱이 같이 씀</text>
+
+  <!-- 공유 강조: 웹앱 B도 같은 타입 -->
+  <rect x="590" y="380" width="278" height="44" rx="9" fill="rgba(91,155,213,0.12)" stroke="#5b9bd5" stroke-width="1.4"/>
+  <text x="729" y="400" class="inote" text-anchor="middle">웹앱 B 도 같은 Common 의 타입을 받으므로</text>
+  <text x="729" y="415" class="inote" text-anchor="middle">톰캣이 만든 request 객체를 그대로 주고받음</text>
+  <line x1="729" y1="364" x2="729" y2="380" stroke="rgb(120,116,112)" stroke-width="1.4" stroke-dasharray="4 3"/>
+
+  <!-- 하단 요약 -->
+  <rect x="40" y="460" width="828" height="74" rx="10" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.3"/>
+  <text x="56" y="484" class="edge">한 줄</text>
+  <text x="56" y="506" class="note">요청 메커니즘은 같지만, <tspan fill="rgb(212,168,83)" font-weight="800">WEB-INF 에 있으면</tspan> 그 웹앱 로더가 직접 잡아 <tspan fill="#66bb6a" font-weight="800">격리</tspan>되고,</text>
+  <text x="56" y="524" class="note"><tspan fill="rgb(212,168,83)" font-weight="800">없으면</tspan> 부모 <tspan fill="#5b9bd5" font-weight="800">Common</tspan> 으로 위임돼 <tspan fill="#5b9bd5" font-weight="800">공유</tspan>된다 — "어디서 찾느냐"가 격리와 공유를 가른다.</text>
+</svg>

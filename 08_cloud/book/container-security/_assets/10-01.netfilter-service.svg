@@ -1,0 +1,85 @@
+<svg viewBox="0 0 700 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Kubernetes Service 가 iptables 규칙으로 구현되는 방식</title>
+  <desc>Kubernetes Service 는 그 자체로 자원이며 자기 IP 주소를 받습니다. 다만 그것은 IP 주소일 뿐이고 서비스에는 인터페이스가 없으며 실제로 트래픽을 듣거나 보내지 않습니다. 주소는 라우팅 목적으로만 쓰입니다. 서비스는 실제 일을 하는 여러 파드와 연결되어 있어서 서비스 IP 주소로 보낸 패킷은 그중 한 파드로 전달돼야 합니다. kube-proxy 가 iptables 규칙으로 이 부하 분산을 처리합니다. 서비스 IP 주소로 향하는 패킷이 도착하면 목적지 주소를 일치시키는 규칙이 그 주소를 해당 파드 중 하나의 주소로 바꿔치기합니다. 서비스 뒤의 파드 집합이 바뀌면 각 호스트의 규칙이 그에 맞게 다시 쓰입니다. 규칙이 많아지면 성능이 떨어지는 문제가 있어서 지금은 해시 테이블에 전달 규칙을 저장하는 IPVS 를 쓸 수 있습니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .code { fill: #0d0d0d; font-size: 9.5px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .chip { fill: #f5edda; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .warn-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .warn-detail { fill: #0d0d0d; font-size: 9.5px; }
+  </style>
+
+  <rect width="700" height="400" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="uh10b" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="30">Service 는 주소일 뿐입니다</text>
+
+  <!-- 패킷 -->
+  <rect class="box" x="40" y="46" width="160" height="70" rx="4"/>
+  <text class="box-title" x="56" y="67">서비스로 향하는 패킷</text>
+  <rect class="chip" x="56" y="76" width="128" height="15" rx="3"/>
+  <text class="code" x="60" y="87">10.100.132.10</text>
+  <text class="box-detail" x="56" y="107">인터페이스가 없는 주소</text>
+
+  <path class="arrow" d="M200,81 L232,81" marker-end="url(#uh10b)"/>
+
+  <!-- KUBE-SERVICES -->
+  <rect class="box" x="236" y="46" width="190" height="70" rx="4"/>
+  <text class="box-title" x="252" y="67">KUBE-SERVICES 체인</text>
+  <text class="box-detail" x="252" y="86">목적지 주소를 일치시킨다</text>
+  <text class="box-detail" x="252" y="104">대상 체인으로 넘긴다</text>
+
+  <path class="arrow" d="M426,81 L458,81" marker-end="url(#uh10b)"/>
+
+  <!-- KUBE-SVC -->
+  <rect class="box" x="462" y="46" width="198" height="70" rx="4"/>
+  <text class="box-title" x="478" y="67">KUBE-SVC 체인</text>
+  <text class="box-detail" x="478" y="86">확률 0.5 로 갈라진다</text>
+  <text class="box-detail" x="478" y="104">이것이 부하 분산입니다</text>
+
+  <!-- 분기 -->
+  <path class="arrow" d="M520,116 L520,140 L340,140 L340,164" marker-end="url(#uh10b)"/>
+  <path class="arrow" d="M600,116 L600,140 L560,140 L560,164" marker-end="url(#uh10b)"/>
+
+  <rect class="box" x="248" y="168" width="184" height="70" rx="4"/>
+  <text class="box-title" x="264" y="189">KUBE-SEP — 파드 A</text>
+  <rect class="chip" x="264" y="198" width="110" height="15" rx="3"/>
+  <text class="code" x="268" y="209">DNAT 10.32.0.3</text>
+  <text class="box-detail" x="264" y="229">목적지를 바꿔치기</text>
+
+  <rect class="box" x="468" y="168" width="184" height="70" rx="4"/>
+  <text class="box-title" x="484" y="189">KUBE-SEP — 파드 B</text>
+  <rect class="chip" x="484" y="198" width="110" height="15" rx="3"/>
+  <text class="code" x="488" y="209">DNAT 10.32.0.4</text>
+  <text class="box-detail" x="484" y="229">파드 집합이 바뀌면 재작성</text>
+
+  <!-- 성능 문제 -->
+  <rect x="40" y="258" width="300" height="86" rx="4" fill="rgb(212,168,83)"/>
+  <text class="warn-title" x="56" y="279">규칙이 쌓이면 느려집니다</text>
+  <text class="warn-detail" x="56" y="298">서비스 2,000 · 파드 10 이면</text>
+  <text class="warn-detail" x="56" y="316">노드마다 규칙 2만 개가 더 붙는다</text>
+  <text class="warn-detail" x="56" y="334">규모가 커지면 병목이 됩니다</text>
+
+  <rect class="box" x="360" y="258" width="300" height="86" rx="4"/>
+  <text class="box-title" x="376" y="279">그래서 IPVS</text>
+  <text class="box-detail" x="376" y="298">전달 규칙을 해시 테이블에 둔다</text>
+  <text class="box-detail" x="376" y="316">4계층 부하 분산에 최적화</text>
+  <text class="box-detail" x="376" y="334">정책 성능까지 보장하진 않습니다</text>
+
+  <text class="hint" x="40" y="376">규칙은 커널 안 — 호스트 수준입니다</text>
+</svg>

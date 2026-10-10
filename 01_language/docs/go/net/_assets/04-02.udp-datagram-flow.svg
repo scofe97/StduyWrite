@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">UDP 수신 버퍼와 데이터그램 경계 보존·잘림 메커니즘</title><desc id="dd">데이터그램 셋이 커널 수신 큐를 거쳐 ReadFrom 마다 하나씩 꺼내지며 버퍼보다 크면 초과분이 버려진다</desc>
+<rect width="960" height="520" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">UDP DATAGRAM RECVFLOW &amp; BUFFER TRUNCATION</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">UDP 수신 버퍼와 데이터그램 경계 보존·잘림 메커니즘</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">스트림과 달리 패킷 경계가 유지되므로 작은 버퍼로 읽을 때 남은 바이트는 다음 호출로 이어지지 않는다</text>
+<rect x="36" y="96" width="200" height="32" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="136" y="117" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">1. 네트워크 도착 패킷</text>
+<rect x="352" y="96" width="200" height="32" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="452" y="117" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">2. 커널 수신 큐</text>
+<rect x="720" y="96" width="204" height="32" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="822" y="117" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">3. ReadFrom 수신 버퍼</text>
+<rect x="36" y="152" width="200" height="80" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="52" y="180" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">데이터그램 #1</text>
+<text x="52" y="204" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">크기: 100 바이트</text>
+<path d="M 236 192 L 352 192" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="352" y="152" width="200" height="80" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="368" y="180" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">큐 헤드 대기</text>
+<text x="368" y="204" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">경계 보존 (100B 유지)</text>
+<path d="M 552 192 L 720 192" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="579.5" y="168" width="113.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="636" y="182" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#3FB98C">1차 ReadFrom</text>
+<rect x="720" y="152" width="204" height="80" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="736" y="180" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">n = 100 복사 완료</text>
+<text x="736" y="204" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">버퍼 여유 28B · 에러 없음</text>
+<rect x="36" y="252" width="200" height="92" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.0"/>
+<text x="52" y="280" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">데이터그램 #2</text>
+<text x="52" y="304" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">크기: 200 바이트</text>
+<path d="M 236 298 L 352 298" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="352" y="252" width="200" height="92" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="368" y="280" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">큐 중간 대기</text>
+<text x="368" y="304" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">경계 보존 (200B 유지)</text>
+<path d="M 552 298 L 720 298" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="579.5" y="274" width="113.0" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="636" y="288" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#F08A59">2차 ReadFrom</text>
+<rect x="720" y="252" width="204" height="92" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.4"/>
+<text x="736" y="278" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">n = 128 수신 (잘림 발생)</text>
+<text x="736" y="300" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F0616D">초과 72B 커널 즉시 폐기</text>
+<text x="736" y="322" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">에러 반환 없음 (err == nil)</text>
+<rect x="36" y="364" width="200" height="80" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="52" y="392" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">데이터그램 #3</text>
+<text x="52" y="416" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">크기: 50 바이트</text>
+<path d="M 236 404 L 352 404" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="352" y="364" width="200" height="80" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="368" y="392" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">큐 테일 대기</text>
+<text x="368" y="416" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">경계 보존 (50B 유지)</text>
+<path d="M 552 404 L 720 404" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="579.5" y="380" width="113.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="636" y="394" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#3FB98C">3차 ReadFrom</text>
+<rect x="720" y="364" width="204" height="80" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="736" y="392" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">n = 50 복사 완료</text>
+<text x="736" y="416" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">D2 잔여 72B 가 아닌 D3 수신</text>
+<line x1="12" y1="474" x2="912" y2="474" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="496" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="486" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 수신</text>
+<rect x="209" y="486" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="231" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">버퍼 초과 (대용량)</text>
+<rect x="396" y="486" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="418" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">잘림 발생 (focal)</text>
+<rect x="609" y="486" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="631" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">데이터 유실</text>
+</svg>

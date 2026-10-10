@@ -1,0 +1,71 @@
+<svg viewBox="0 0 680 410" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>OpenSearch 검색 앱 조립도 — autocomplete·fuzzy·filter·faceted에서 UI까지</title>
+  <desc>사용자 입력이 opensearch-py API 를 거쳐 autocomplete·fuzzy·filter·faceted 네 검색 기능으로 처리되고, Streamlit UI 로 돌아오는 영화 검색 앱의 조립 구조.</desc>
+
+  <rect x="0" y="0" width="680" height="410" fill="#0d0d0d"/>
+  <text x="24" y="32" fill="#e8e4df" font-size="15" font-weight="600">검색 앱 조립 — 배운 쿼리를 사용자 친화 기능으로</text>
+
+  <defs>
+    <marker id="sa" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+      <path d="M0,0 L8,3.5 L0,7 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <!-- 사용자 + API -->
+  <rect x="24" y="56" width="130" height="60" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="89" y="80" fill="#e8e4df" font-size="11" text-anchor="middle" font-weight="600">사용자 입력</text>
+  <text x="89" y="98" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">타이핑·필터 선택</text>
+  <text x="89" y="110" fill="rgb(138,133,128)" font-size="8.5" text-anchor="middle">(Streamlit)</text>
+  <line x1="154" y1="86" x2="178" y2="86" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#sa)"/>
+
+  <rect x="182" y="56" width="140" height="60" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="252" y="80" fill="rgb(212,168,83)" font-size="11" text-anchor="middle" font-weight="600">opensearch-py</text>
+  <text x="252" y="98" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">_search API</text>
+  <text x="252" y="110" fill="rgb(138,133,128)" font-size="8.5" text-anchor="middle">client.search(body)</text>
+  <line x1="322" y1="86" x2="346" y2="86" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#sa)"/>
+
+  <rect x="350" y="56" width="306" height="60" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="503" y="80" fill="#e8e4df" font-size="11" text-anchor="middle" font-weight="600">OpenSearch (movies 인덱스)</text>
+  <text x="503" y="98" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">5장에서 색인 · full-text·관련도·확장성</text>
+  <text x="503" y="110" fill="rgb(138,133,128)" font-size="8.5" text-anchor="middle">RDB LIKE 의 한계를 메움</text>
+
+  <!-- 네 검색 기능 -->
+  <text x="24" y="146" fill="#e8e4df" font-size="12" font-weight="600">네 검색 기능 — 사용자가 실수해도 빨리 찾게</text>
+
+  <rect x="24" y="158" width="156" height="72" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="102" y="178" fill="rgb(212,168,83)" font-size="10.5" text-anchor="middle" font-weight="600">autocomplete</text>
+  <text x="102" y="196" fill="rgb(138,133,128)" font-size="8.5" text-anchor="middle">match_phrase_prefix</text>
+  <text x="102" y="209" fill="rgb(138,133,128)" font-size="8.5" text-anchor="middle">/ completion suggester</text>
+  <text x="102" y="222" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">다 치기 전에 제안</text>
+
+  <rect x="188" y="158" width="156" height="72" fill="rgba(212,168,83,0.08)" stroke="rgb(42,37,32)"/>
+  <text x="266" y="178" fill="rgb(212,168,83)" font-size="10.5" text-anchor="middle" font-weight="600">fuzzy</text>
+  <text x="266" y="196" fill="rgb(138,133,128)" font-size="8.5" text-anchor="middle">fuzziness: AUTO</text>
+  <text x="266" y="209" fill="rgb(138,133,128)" font-size="8.5" text-anchor="middle">3~5자=1편집·긴 단어=2</text>
+  <text x="266" y="222" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">틀리게 쳐도 교정</text>
+
+  <rect x="352" y="158" width="146" height="72" fill="rgba(102,187,106,0.10)" stroke="rgb(102,187,106)"/>
+  <text x="425" y="178" fill="rgb(102,187,106)" font-size="10.5" text-anchor="middle" font-weight="600">filter</text>
+  <text x="425" y="196" fill="rgb(138,133,128)" font-size="8.5" text-anchor="middle">bool.filter</text>
+  <text x="425" y="209" fill="rgb(138,133,128)" font-size="8.5" text-anchor="middle">term·range (AND)</text>
+  <text x="425" y="222" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">점수 미기여·캐시</text>
+
+  <rect x="506" y="158" width="150" height="72" fill="rgba(102,187,106,0.10)" stroke="rgb(102,187,106)"/>
+  <text x="581" y="178" fill="rgb(102,187,106)" font-size="10.5" text-anchor="middle" font-weight="600">faceted</text>
+  <text x="581" y="196" fill="rgb(138,133,128)" font-size="8.5" text-anchor="middle">terms 집계</text>
+  <text x="581" y="209" fill="rgb(138,133,128)" font-size="8.5" text-anchor="middle">Sci-Fi 120 · Drama 95</text>
+  <text x="581" y="222" fill="rgb(138,133,128)" font-size="8" text-anchor="middle">고르기 전 개수 표시</text>
+
+  <!-- 결합 -->
+  <rect x="24" y="248" width="632" height="34" fill="rgba(212,168,83,0.06)" stroke="rgb(42,37,32)"/>
+  <text x="40" y="269" fill="rgb(138,133,128)" font-size="9.5">결합: bool should [ match_phrase_prefix, match+fuzziness ] → 하나만 맞아도 반환, 둘 다 맞으면 점수↑</text>
+
+  <!-- UI 로 회귀 -->
+  <line x1="340" y1="282" x2="340" y2="304" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#sa)"/>
+  <rect x="24" y="312" width="632" height="52" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="40" y="333" fill="#e8e4df" font-size="11" font-weight="600">Streamlit UI 로 조립</text>
+  <text x="180" y="333" fill="rgb(138,133,128)" font-size="9.5">text_input(검색) · button · selectbox(장르) · slider(연도) · 실시간 결과</text>
+  <text x="40" y="352" fill="rgb(138,133,128)" font-size="9">streamlit run app.py → 웹 UI 완성 (Iva 의 영화 검색 앱)</text>
+
+  <text x="24" y="392" fill="rgb(138,133,128)" font-size="10">앰버=사용자 친화 검색 · 초록=결과 좁히기 · 프로덕션은 use_ssl=True + FGAC 최소 권한 역할</text>
+</svg>

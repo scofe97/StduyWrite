@@ -1,0 +1,43 @@
+<svg viewBox="0 0 680 540" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>로그가 일으키는 세 가지 문제 (Ch.4 §4.2.3)</title>
+  <desc>로그는 필수지만 잘못 다루면 해가 됩니다. 첫째 보안과 프라이버시 문제입니다. 로그는 접근할 수 있는 누구에게나 세부를 드러내므로 비밀번호나 토큰 서명용 비밀키를 평문으로 남기면 사칭에 쓰일 수 있어 secrets vault 에 보관하고 로그엔 남기지 않습니다. 전화번호 같은 개인정보는 EU 의 GDPR 규제 대상이라 사용자의 조회와 삭제 요청 대상이 되므로 로그에 두면 위반이 됩니다. 발견 시 즉시 보고하고 삭제하거나 가립니다. 둘째 성능 문제입니다. 로그 한 줄도 I O 스트림으로 앱 밖에 내보내는 시간이 드는 명령이라 느린 네트워크 전송과 많은 항목을 도는 대형 루프가 겹치면 작은 변경이 운영 정지를 부릅니다. 모기를 코끼리로 키운 사례입니다. 루프 안 로그를 피하고 레벨로 양을 제한하고 재시작 없이 켜고 끕니다. 셋째 유지보수성 문제입니다. 모든 명령마다 로그를 달면 메서드 로직이 가려져 읽기 어려워지므로 핵심 세부만 남기고 메서드를 작게 유지하고 Spring aspect 로 메서드 실행 결과를 분리해 로그합니다.</desc>
+  <rect x="0" y="0" width="680" height="540" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">로그가 일으키는 세 가지 문제</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">로그도 데이터를 다루는 기능 — 잘못 구현하면 해가 된다 (Ch.4 §4.2.3)</text>
+
+  <!-- 보안/프라이버시 -->
+  <rect x="20" y="74" width="640" height="128" fill="rgba(244,127,114,0.07)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="96" fill="#f47f72" font-size="13" font-weight="bold">① 보안·프라이버시 — 로그는 접근 가능한 누구에게나 보인다</text>
+  <rect x="38" y="106" width="604" height="22" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="48" y="121" fill="#f47f72" font-family="'JetBrains Mono',monospace" font-size="10">❌ "User bob logged in with password RwjBaWIs66"  ❌ phone +1233...</text>
+  <text x="38" y="148" fill="#e8e4df" font-size="11">비밀번호·비밀키 평문 금지 → 사칭 가능 → secrets vault 에 보관, 로그엔 안 남김</text>
+  <text x="38" y="168" fill="#e8e4df" font-size="11">전화번호 등 개인정보 → GDPR(2018.5) 위반 → 조회·삭제 요청 대상이라 흩어지면 처리 곤란</text>
+  <text x="38" y="190" fill="rgb(212,168,83)" font-size="10">조사 중 발견하면 즉시 보고 + 이미 저장된 민감 데이터 삭제·가림 판단</text>
+
+  <!-- 성능 -->
+  <rect x="20" y="214" width="640" height="118" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="236" fill="rgb(212,168,83)" font-size="13" font-weight="bold">② 성능 — 모기를 코끼리로 만든 로그</text>
+  <text x="38" y="256" fill="#e8e4df" font-size="11">로그 한 줄도 I/O 스트림으로 앱 밖에 내보내는 "시간이 드는 명령"</text>
+  <text x="38" y="276" fill="#f47f72" font-size="11">사례: 느린 네트워크 전송 + 대형 루프 안 로그 → 응답 불가 → 생산 정지</text>
+  <text x="38" y="298" fill="rgb(138,133,128)" font-size="10">교훈: ① 배포마다 로그 설정 다름 이해   ② 루프 안 로그 금지(필요 시 조건으로 좁힘)</text>
+  <text x="38" y="316" fill="rgb(138,133,128)" font-size="10">③ 레벨로 양 제한   ④ 재시작 없이 켜고 끄기 → 필요할 때만 세밀 레벨로</text>
+
+  <!-- 유지보수성 -->
+  <rect x="20" y="344" width="640" height="118" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="366" fill="#9cc3df" font-size="13" font-weight="bold">③ 유지보수성 — 로그가 로직을 가린다</text>
+  <rect x="38" y="376" width="290" height="56" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="48" y="394" fill="#66bb6a" font-size="10" font-weight="bold">listing 4.7 — 로그 없음</text>
+  <text x="48" y="412" fill="rgb(138,133,128)" font-size="10">로직이 한눈에 읽힘</text>
+  <text x="48" y="428" fill="rgb(138,133,128)" font-size="9">extractDigits 본질만</text>
+  <rect x="340" y="376" width="302" height="56" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="350" y="394" fill="#f47f72" font-size="10" font-weight="bold">listing 4.8 — 로그 잔뜩</text>
+  <text x="350" y="412" fill="rgb(138,133,128)" font-size="10">명령마다 log.info → 로직 가림</text>
+  <text x="350" y="428" fill="rgb(138,133,128)" font-size="9">같은 로직인데 읽기 어려움</text>
+  <text x="38" y="452" fill="rgb(212,168,83)" font-size="10">회피: 핵심 세부만 / 작은 메서드(파라미터·반환만) / Spring aspect 로 분리</text>
+
+  <!-- 한 줄 결론 -->
+  <rect x="20" y="474" width="640" height="48" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="496" fill="#e8e4df" font-size="12" font-weight="bold">공통 원리 — 최소한의 로그가 보안·성능·가독성을 모두 지킨다</text>
+  <text x="38" y="514" fill="rgb(138,133,128)" font-size="10">"정말 필요한 것만, 필요할 때만" — 레벨·조건·분리로 통제</text>
+</svg>

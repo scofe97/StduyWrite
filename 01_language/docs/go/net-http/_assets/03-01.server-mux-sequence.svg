@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 680" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Server 연결 수락과 ServeMux 라우팅 시퀀스</title><desc id="dd">Server.Serve 의 Accept 루프부터 conn.serve 고루틴 스폰, 패턴 매칭, Keep-Alive 재사용 흐름</desc>
+<rect width="960" height="680" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">HTTP SERVER DISPATCH AND SERVEMUX ROUTING</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Server 연결 수락과 ServeMux 라우팅 시퀀스</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">Server 는 연결마다 고루틴을 띄우고 conn.serve 는 동일 TCP 소켓으로 후속 요청을 이어 처리합니다</text>
+<rect x="24.0" y="96" width="150" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="99.0" y="116" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">클라이언트</text>
+<text x="99.0" y="133" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">HTTP Client</text>
+<rect x="208.5" y="96" width="150" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="283.5" y="116" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">Server (Listener)</text>
+<text x="283.5" y="133" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">server.go:Serve</text>
+<rect x="393.0" y="96" width="150" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="468.0" y="116" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">conn.serve</text>
+<text x="468.0" y="133" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">server.go:1930</text>
+<rect x="577.5" y="96" width="150" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="652.5" y="116" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">ServeMux</text>
+<text x="652.5" y="133" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">routing_tree.go</text>
+<rect x="762.0" y="96" width="150" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="837.0" y="116" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">Handler</text>
+<text x="837.0" y="133" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">ServeHTTP</text>
+<line x1="99.0" y1="146" x2="99.0" y2="590" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="283.5" y1="146" x2="283.5" y2="590" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="468.0" y1="146" x2="468.0" y2="590" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="652.5" y1="146" x2="652.5" y2="590" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="837.0" y1="146" x2="837.0" y2="590" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<text x="48" y="155" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="600" fill="#6A95D8">1. 연결 수락 및 고루틴 생성</text>
+<path d="M 109.0 175 L 271.5 175" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="191.25" y="167" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">TCP Connect</text>
+<path d="M 293.5 205 L 456.0 205" fill="none" stroke="#F08A59" stroke-width="1.5" marker-end="url(#acc)"/>
+<text x="375.75" y="197" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F08A59">go c.serve(ctx)</text>
+<text x="375.75" y="220" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">Accept 후 전용 고루틴 스폰</text>
+<text x="48" y="245" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="600" fill="#3FB98C">2. 첫 번째 요청 디스패치 (패턴 매칭)</text>
+<path d="M 109.0 265 L 456.0 265" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="283.5" y="257" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">GET /items/42</text>
+<path d="M 478.0 295 L 640.5 295" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="560.25" y="287" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">ServeHTTP(w, req)</text>
+<path d="M 662.5 325 L 825.0 325" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<text x="744.75" y="317" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">ServeHTTP(w, req)</text>
+<text x="744.75" y="340" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">PathValue("id")="42" 바인딩</text>
+<path d="M 827.0 355 L 480.0 355" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)" stroke-dasharray="4 3"/>
+<text x="652.5" y="347" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">WriteHeader(200) · Write()</text>
+<path d="M 458.0 385 L 111.0 385" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)" stroke-dasharray="4 3"/>
+<text x="283.5" y="377" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">HTTP/1.1 200 OK (Keep-Alive)</text>
+<text x="48" y="425" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="600" fill="#E3B341">3. 유휴 대기 및 동일 연결 재사용</text>
+<path d="M 478.0 435 L 526.0 435 L 526.0 455 L 481.0 455" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="536.0" y="441" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#E3B341">bufr.Peek(4) 대기</text>
+<text x="536.0" y="458" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Keep-Alive 유휴 대기</text>
+<path d="M 109.0 480 L 456.0 480" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="283.5" y="472" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">GET /health</text>
+<text x="283.5" y="495" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">동일 TCP 소켓 재사용</text>
+<path d="M 478.0 510 L 640.5 510" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="560.25" y="502" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">ServeHTTP(w, req)</text>
+<path d="M 662.5 535 L 825.0 535" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<text x="744.75" y="527" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">healthHandler.ServeHTTP()</text>
+<path d="M 458.0 565 L 111.0 565" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)" stroke-dasharray="4 3"/>
+<text x="283.5" y="557" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">HTTP/1.1 200 OK</text>
+<line x1="12" y1="610" x2="912" y2="610" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="632" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="622" width="14" height="12" rx="2" fill="#8B98A922" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="122" y="632" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">네트워크 I/O 메시지</text>
+<rect x="300" y="622" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="322" y="632" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">고루틴 스폰 (focal)</text>
+<rect x="526" y="622" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="548" y="632" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">라우팅 및 핸들러 처리</text>
+<rect x="726" y="622" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="748" y="632" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Keep-Alive 유휴 대기</text>
+<rect x="978" y="622" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="1000" y="632" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">응답 반환</text>
+</svg>

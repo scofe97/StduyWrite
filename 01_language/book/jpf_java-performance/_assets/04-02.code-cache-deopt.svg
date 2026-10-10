@@ -1,0 +1,58 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>code cache와 컴파일 관찰 — PrintCompilation·tiered 5레벨·deoptimization</title>
+  <desc>JVM은 컴파일한 어셈블리 명령을 code cache에 담는다. code cache는 고정 크기라 가득 차면 더 컴파일하지 못하고, 그러면 핫 메서드 일부만 컴파일되고 나머지는 느린 인터프리트로 돈다. 가득 차면 CodeCache is full 경고가 나온다. 최대 크기는 ReservedCodeCacheSize 플래그로 정하고 기본 최대는 240MB, 초기는 2,496KB다. Java 11은 code cache를 nonmethod·profiled·nonprofiled 세 부분으로 나눈다. PrintCompilation 플래그는 컴파일 과정을 보여준다. 로그 한 줄은 timestamp, compilation_id, attributes 5자(% OSR, s synchronized, ! 예외 핸들러, b 블로킹, n 네이티브), tiered_level, method_name, size, deopt 메시지로 구성된다. jstat의 -compiler와 -printcompilation으로도 본다. tiered compilation은 5레벨이다. 0 인터프리트, 1 단순 C1, 2 제한 C1, 3 풀 C1, 4 C2다. 전형적 경로는 0에서 3을 거쳐 4로 간다. deoptimization은 이전 컴파일을 되돌리는 것이다. not entrant는 타입 가정이 깨지거나 C2가 C1 코드를 교체할 때, zombie는 not entrant 코드를 회수할 때다. deopt는 성능을 거의 해치지 않는다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">code cache · 컴파일 관찰 · deoptimization</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">컴파일된 코드는 고정 크기 code cache에 담기고, PrintCompilation으로 과정을 봅니다</text>
+
+  <!-- code cache -->
+  <rect x="20" y="74" width="320" height="130" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="96" fill="#9cc3df" font-size="13" font-weight="bold">code cache — 고정 크기</text>
+  <text x="38" y="116" fill="#e8e4df" font-size="11">컴파일된 어셈블리를 담음</text>
+  <text x="38" y="134" fill="#f47f72" font-size="10">가득 차면 컴파일 중단 → 느린 인터프리트</text>
+  <text x="38" y="152" fill="rgb(138,133,128)" font-size="10">초기 2,496KB · 최대 기본 240MB</text>
+  <text x="38" y="170" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="9">-XX:ReservedCodeCacheSize=N</text>
+  <text x="38" y="188" fill="rgb(138,133,128)" font-size="9">Java 11: nonmethod·profiled·nonprofiled 3분할</text>
+
+  <!-- tiered 5레벨 -->
+  <rect x="350" y="74" width="312" height="130" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="368" y="96" fill="rgb(212,168,83)" font-size="13" font-weight="bold">tiered 5레벨</text>
+  <text x="368" y="115" fill="rgb(138,133,128)" font-size="10">0 — 인터프리트</text>
+  <text x="368" y="132" fill="rgb(138,133,128)" font-size="10">1 — 단순 C1</text>
+  <text x="368" y="149" fill="rgb(138,133,128)" font-size="10">2 — 제한 C1 (counter만, profile 없음)</text>
+  <text x="368" y="166" fill="#66bb6a" font-size="10">3 — 풀 C1 (대부분 여기서 시작)</text>
+  <text x="368" y="183" fill="rgb(212,168,83)" font-size="10">4 — C2</text>
+  <text x="368" y="199" fill="#e8e4df" font-size="9">전형 경로: 0 → 3 → 4</text>
+
+  <!-- PrintCompilation 로그 형식 -->
+  <rect x="20" y="216" width="642" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="238" fill="#e8e4df" font-size="13" font-weight="bold">PrintCompilation 로그 한 줄</text>
+  <text x="38" y="258" fill="#9cc3df" font-family="'JetBrains Mono',monospace" font-size="10">timestamp  id  attributes  (tier)  method  size  deopt</text>
+  <text x="38" y="280" fill="#e8e4df" font-size="12" font-weight="bold">attributes 5자 (해당 안 되면 공백)</text>
+  <text x="38" y="300" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="10">%</text><text x="60" y="300" fill="rgb(138,133,128)" font-size="10">OSR (on-stack replacement, 실행 중 루프 교체)</text>
+  <text x="38" y="318" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="10">s</text><text x="60" y="318" fill="rgb(138,133,128)" font-size="10">synchronized ·</text>
+  <text x="180" y="318" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="10">!</text><text x="195" y="318" fill="rgb(138,133,128)" font-size="10">예외 핸들러 ·</text>
+  <text x="310" y="318" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="10">b</text><text x="325" y="318" fill="rgb(138,133,128)" font-size="10">블로킹 ·</text>
+  <text x="410" y="318" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="10">n</text><text x="425" y="318" fill="rgb(138,133,128)" font-size="10">네이티브 래퍼</text>
+
+  <!-- jstat -->
+  <rect x="20" y="348" width="642" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="372" fill="rgb(138,133,128)" font-size="11">PrintCompilation 없이 시작했으면: jstat -compiler(요약) · jstat -printcompilation(최근 메서드, 반복)</text>
+
+  <!-- deoptimization -->
+  <rect x="20" y="400" width="642" height="184" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="422" fill="#f47f72" font-size="14" font-weight="bold">deoptimization — 이전 컴파일을 되돌림</text>
+  <text x="38" y="442" fill="#e8e4df" font-size="11">두 상태: made not entrant, made zombie</text>
+  <rect x="38" y="454" width="300" height="60" fill="rgba(244,127,114,0.10)" stroke="#f47f72"/>
+  <text x="50" y="474" fill="#f47f72" font-size="11" font-weight="bold">not entrant</text>
+  <text x="50" y="492" fill="rgb(138,133,128)" font-size="10">① 타입 가정이 깨짐(인터페이스 구현 바뀜)</text>
+  <text x="50" y="508" fill="rgb(138,133,128)" font-size="10">② C2가 C1 코드를 교체 (정상·더 빨라짐)</text>
+  <rect x="350" y="454" width="312" height="60" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)"/>
+  <text x="362" y="474" fill="rgb(212,168,83)" font-size="11" font-weight="bold">zombie</text>
+  <text x="362" y="492" fill="rgb(138,133,128)" font-size="10">not entrant 코드를 회수(객체 GC된 후)</text>
+  <text x="362" y="508" fill="rgb(138,133,128)" font-size="10">code cache 공간 확보 → 좋은 일</text>
+  <text x="38" y="534" fill="#66bb6a" font-size="11">성능 영향 거의 없음: 표준 24.4 OPS, deopt 후에도 24.4, 혼합 24.3 OPS</text>
+  <text x="38" y="554" fill="rgb(138,133,128)" font-size="10">tiered에서 C2가 C1을 교체하며 not entrant가 쏟아지는 건 정상 — 더 빨라지는 중입니다</text>
+  <text x="38" y="574" fill="rgb(138,133,128)" font-size="10">zombie 코드가 다시 쓰이면 재컴파일 필요하나, 대부분 앱에서 측정 가능한 영향 없음</text>
+</svg>

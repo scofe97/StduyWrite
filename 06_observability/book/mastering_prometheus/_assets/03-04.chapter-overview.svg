@@ -1,0 +1,99 @@
+<svg viewBox="0 0 900 596" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif">
+  <title>PromQL 기초 전체 지도 — 한 점이냐 기간이냐가 모든 갈림길을 만듭니다</title>
+  <desc>이 절 전체를 하나의 축으로 이은 지도다. PromQL 의 거의 모든 혼란은 지금 한 점이냐 기간 전체냐라는 한 가지 구분에서 갈라져 나온다. 그 구분이 세 층에서 되풀이된다. 셀렉터 층에서는 대괄호가 없으면 순간 벡터로 시계열마다 값 하나를, 대괄호가 있으면 범위 벡터로 기간에 걸친 값 여럿을 돌려준다. API 층에서는 슬래시 query 가 둘 다 받지만 슬래시 query_range 는 순간 벡터만 받으므로, 그래프를 그리려면 범위 벡터를 rate 같은 함수로 감싸 값 하나로 접어야 한다. 함수 층에서는 rate 가 범위 안 모든 점을 쓰고 irate 가 최근 두 점만 쓴다. 그 위에 결합 도구가 셋 얹힌다. 집계는 by 와 without 으로 차원을 접는데 by 는 남길 것을 적는 닫힌 목록이고 without 은 버릴 것을 적는 열린 목록이라 라벨이 나중에 추가될 때 갈린다. 벡터 매칭은 on 과 group_left 로 서로 다른 메트릭의 라벨을 이어 붙이며 값이 항상 1 인 _info 메트릭을 곱셈으로 안전하게 조인한다. 집합 연산은 and 와 or 와 unless 로 벡터를 결합하고 unless 는 알림 소음을 죽이는 데 쓰인다. 마지막으로 그래프에 난 구멍은 대개 문법이 아니라 staleness 탓이며 기본 lookback 이 5분이라 그 안에 샘플이 없으면 시계열이 사라져 보인다. 값이 0 이어도 같은 메트릭을 계속 내보내야 0건과 앱이 죽은 상태가 화면에서 갈린다.</desc>
+  <rect width="900" height="596" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="ov3" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text x="450" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#e8e4df">지금 한 점이냐, 기간 전체냐</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#b8b3ad">이 구분이 세 층에서 되풀이</text>
+
+  <!-- 층 1 셀렉터 -->
+  <rect x="30" y="72" width="840" height="76" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="54" y="94" font-size="12" font-weight="700" fill="rgb(212,168,83)">셀렉터 §1·§2</text>
+  <text x="164" y="94" font-size="10" fill="#b8b3ad">대괄호가 경계입니다</text>
+
+  <rect x="54" y="106" width="392" height="30" rx="4" fill="#fdf3df"/>
+  <text x="250" y="119" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">순간 벡터 · 값 하나</text>
+  <text x="250" y="131" text-anchor="middle" font-size="9" font-weight="700" fill="#3a2f10">http_requests_total</text>
+
+  <rect x="458" y="106" width="388" height="30" rx="4" fill="#dceaf7"/>
+  <text x="652" y="119" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">범위 벡터 · 값 여럿</text>
+  <text x="652" y="131" text-anchor="middle" font-size="9" font-weight="700" fill="#10243a">http_requests_total[5m]</text>
+
+  <line x1="450" y1="154" x2="450" y2="174" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#ov3)"/>
+
+  <!-- 층 2 API -->
+  <rect x="30" y="182" width="840" height="76" rx="8" fill="rgb(212,168,83)"/>
+  <text x="54" y="204" font-size="12" font-weight="700" fill="#0d0d0d">API §3</text>
+  <text x="122" y="204" font-size="10" font-weight="700" fill="#1a1a1a">가장 자주 물리는 지점입니다</text>
+
+  <rect x="54" y="216" width="392" height="30" rx="4" fill="#fdf3df"/>
+  <text x="250" y="229" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">/query · 둘 다 받음</text>
+  <text x="250" y="241" text-anchor="middle" font-size="9" font-weight="700" fill="#3a2f10">한 번 평가</text>
+
+  <rect x="458" y="216" width="388" height="30" rx="4" fill="#f2d4d4"/>
+  <text x="652" y="229" text-anchor="middle" font-size="10" font-weight="700" fill="#7a1f1f">/query_range · 순간만</text>
+  <text x="652" y="241" text-anchor="middle" font-size="9" font-weight="700" fill="#7a1f1f">그래프는 함수로 감싸야</text>
+
+  <line x1="450" y1="264" x2="450" y2="284" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#ov3)"/>
+
+  <!-- 층 3 함수 -->
+  <rect x="30" y="292" width="840" height="76" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="54" y="314" font-size="12" font-weight="700" fill="rgb(212,168,83)">함수 §9</text>
+  <text x="122" y="314" font-size="10" fill="#b8b3ad">고르는 기준은 메트릭 타입입니다</text>
+
+  <rect x="54" y="326" width="256" height="30" rx="4" fill="#fdf3df"/>
+  <text x="182" y="339" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">rate · 범위 안 모든 점</text>
+  <text x="182" y="351" text-anchor="middle" font-size="9" font-weight="700" fill="#3a2f10">irate 는 최근 두 점</text>
+
+  <rect x="322" y="326" width="256" height="30" rx="4" fill="#fdf3df"/>
+  <text x="450" y="339" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">increase · 증가분</text>
+  <text x="450" y="351" text-anchor="middle" font-size="9" font-weight="700" fill="#3a2f10">카운터 전용</text>
+
+  <rect x="590" y="326" width="256" height="30" rx="4" fill="#f2d4d4"/>
+  <text x="718" y="339" text-anchor="middle" font-size="10" font-weight="700" fill="#7a1f1f">게이지엔 delta · changes</text>
+  <text x="718" y="351" text-anchor="middle" font-size="9" font-weight="700" fill="#7a1f1f">rate 쓰면 부풀려짐</text>
+
+  <!-- 결합 도구 셋 -->
+  <text x="450" y="396" text-anchor="middle" font-size="12" font-weight="700" fill="#e8e4df">그 위에 결합 도구가 셋 얹힙니다</text>
+
+  <rect x="30" y="410" width="270" height="82" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="54" y="432" font-size="11.5" font-weight="700" fill="#8fd694">집계 §6</text>
+  <rect x="48" y="442" width="234" height="20" rx="4" fill="#e6f7e7"/>
+  <text x="165" y="457" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">by · 닫힌 목록</text>
+  <rect x="48" y="466" width="234" height="20" rx="4" fill="#e6f7e7"/>
+  <text x="165" y="481" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">without · 열린 목록</text>
+
+  <rect x="315" y="410" width="270" height="82" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="339" y="432" font-size="11.5" font-weight="700" fill="#8fd694">벡터 매칭 §7</text>
+  <rect x="333" y="442" width="234" height="20" rx="4" fill="#e6f7e7"/>
+  <text x="450" y="457" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">on · group_left</text>
+  <rect x="333" y="466" width="234" height="20" rx="4" fill="#e6f7e7"/>
+  <text x="450" y="481" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">_info 값은 항상 1</text>
+
+  <rect x="600" y="410" width="270" height="82" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="624" y="432" font-size="11.5" font-weight="700" fill="#8fd694">집합 연산 §8</text>
+  <rect x="618" y="442" width="234" height="20" rx="4" fill="#e6f7e7"/>
+  <text x="735" y="457" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">and · or · unless</text>
+  <rect x="618" y="466" width="234" height="20" rx="4" fill="#e6f7e7"/>
+  <text x="735" y="481" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">unless 로 알림 소음 억제</text>
+
+  <!-- staleness 별도 -->
+  <rect x="30" y="506" width="840" height="66" rx="8" fill="#0d0d0d" stroke="#f44336" stroke-width="1.6"/>
+  <text x="54" y="528" font-size="12" font-weight="700" fill="#ef8880">staleness §5</text>
+  <text x="164" y="528" font-size="10" fill="#b8b3ad">그래프의 구멍은 대개 문법이 아닙니다</text>
+  <rect x="54" y="538" width="256" height="22" rx="4" fill="#f2d4d4"/>
+  <text x="182" y="553" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">lookback 기본 5분</text>
+  <rect x="322" y="538" width="256" height="22" rx="4" fill="#f2d4d4"/>
+  <text x="450" y="553" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">5분 안에 샘플 없으면 사라짐</text>
+  <rect x="590" y="538" width="256" height="22" rx="4" fill="#dceaf7"/>
+  <text x="718" y="553" text-anchor="middle" font-size="9.5" font-weight="700" fill="#10243a">0 이어도 계속 내보낼 것</text>
+</svg>

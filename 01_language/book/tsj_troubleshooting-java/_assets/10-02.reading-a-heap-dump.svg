@@ -1,0 +1,49 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>힙 덤프 읽기 — Objects 뷰·정렬·Product·referees vs referrers·static 리스트 누수</title>
+  <desc>이 편의 요약입니다. 힙 덤프는 스레드 덤프와 달리 평문으로 못 읽고 VisualVM 으로 봐야 합니다. 열면 요약 뷰로 파일 크기와 클래스 인스턴스 총수를 보고 올바른 덤프인지 먼저 확인합니다. 조사는 Objects 뷰에서 시작하며 인스턴스 수와 차지 메모리로 내림차순 정렬하고 프리미티브 문자열 배열은 건너뛰어 내 코드의 첫 타입 Product 를 찾습니다. 더하기 버튼으로 인스턴스를 펼쳐 무엇이 그것을 참조하는지 referrer 를 좇습니다. GC 는 referrer 가 없어야 회수하므로 백만 참조를 쥔 static ArrayList 가 Main 클래스의 static 변수로 남아 GC 를 막는 누수임을 드러냅니다. 실무 힙 덤프는 4GB 이상으로 커서 AI 에 통째로 못 맡기고 VisualVM 으로 먼저 정렬 조사한 뒤 필요한 일부만 추출해 묻습니다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="38" fill="#e8e4df" font-size="18" font-weight="bold">힙 덤프 읽기 — referrers와 누수</text>
+  <text x="20" y="60" fill="rgb(138,133,128)" font-size="11">Troubleshooting Java · §10.2 · da-ch10-ex1</text>
+
+  <!-- 평문 못 읽음 -->
+  <rect x="20" y="78" width="640" height="58" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="1.5"/>
+  <text x="34" y="100" fill="#9cc3df" font-size="13" font-weight="bold">스레드 덤프와 다르다 — 평문으로 못 읽음</text>
+  <text x="34" y="124" fill="#e8e4df" font-size="11">힙 덤프는 VisualVM 같은 도구로만 분석 · 요약 뷰로 올바른 덤프인지 먼저 확인(크기·OS·Java 버전)</text>
+
+  <!-- 읽기 워크플로 -->
+  <rect x="20" y="150" width="640" height="110" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="172" fill="rgb(212,168,83)" font-size="13" font-weight="bold">읽기 워크플로 (Objects 뷰)</text>
+  <text x="40" y="200" fill="#e8e4df" font-size="11">요약 확인</text>
+  <text x="124" y="200" fill="rgb(138,133,128)" font-size="14">→</text>
+  <text x="146" y="200" fill="#e8e4df" font-size="11">Objects 뷰</text>
+  <text x="240" y="200" fill="rgb(138,133,128)" font-size="14">→</text>
+  <text x="262" y="200" fill="#e8e4df" font-size="11">수·크기로 정렬</text>
+  <text x="384" y="200" fill="rgb(138,133,128)" font-size="14">→</text>
+  <text x="406" y="200" fill="#e8e4df" font-size="11">내 코드 첫 타입</text>
+  <text x="34" y="226" fill="rgb(138,133,128)" font-size="10.5">프리미티브·문자열·배열은 건너뜀(수만 많고 단서 없음)</text>
+  <text x="34" y="248" fill="#f47f72" font-size="11" font-weight="bold">→ Product (수·크기 모두 맨 위) · (+) 버튼으로 인스턴스 펼침</text>
+
+  <!-- referees vs referrers -->
+  <rect x="20" y="276" width="640" height="100" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="298" fill="#e8e4df" font-size="13" font-weight="bold">referee vs referrer — GC 가 못 치우는 이유</text>
+  <rect x="34" y="310" width="300" height="56" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9"/>
+  <text x="48" y="330" fill="#9cc3df" font-size="11" font-weight="bold">referee (이게 참조하는 것)</text>
+  <text x="48" y="350" fill="rgb(138,133,128)" font-size="10">Product → String(이름)</text>
+  <rect x="346" y="310" width="300" height="56" fill="rgba(244,127,114,0.08)" stroke="#f47f72"/>
+  <text x="360" y="330" fill="#f47f72" font-size="11" font-weight="bold">referrer (이걸 참조하는 것)</text>
+  <text x="360" y="350" fill="rgb(138,133,128)" font-size="10">ArrayList → Product (GC 차단)</text>
+
+  <!-- 누수 정체 -->
+  <rect x="20" y="392" width="640" height="92" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="34" y="414" fill="#f47f72" font-size="13" font-weight="bold">누수의 정체 — static ArrayList</text>
+  <text x="34" y="438" fill="#e8e4df" font-size="11">ArrayList 가 백만+ 참조 보유 → GC 는 referrer 있는 객체 회수 불가</text>
+  <text x="34" y="460" fill="#e8e4df" font-size="11">프로파일러가 위치를 짚음: Main 클래스의 static 변수 (앱 내내 살아 있음)</text>
+  <text x="34" y="478" fill="rgb(138,133,128)" font-size="9.5">어느 경우(누수 vs 미최적화)인지는 2~4장 디버깅·로깅으로 코드 확인</text>
+
+  <!-- AI 한계 -->
+  <rect x="20" y="500" width="640" height="84" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="522" fill="#9cc3df" font-size="13" font-weight="bold">힙 덤프와 AI — 통째로 안 맡긴다</text>
+  <text x="34" y="546" fill="#e8e4df" font-size="11">실무 덤프는 큼(여기 100MB, 실제 4GB+) → AI 에 전체 파일 비현실적</text>
+  <text x="34" y="568" fill="#e8e4df" font-size="11">VisualVM 으로 먼저 정렬·조사 → 필요한 일부만 추출해 AI 에 막힌 지점 질문 (큰 덤프는 OQL)</text>
+</svg>

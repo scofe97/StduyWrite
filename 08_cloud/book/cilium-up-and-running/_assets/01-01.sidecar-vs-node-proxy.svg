@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 520" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">서비스 메시 아키텍처: 사이드카 vs 노드 프록시</title><desc id="dd">노드 내 Pod 3개 배포 시 사이드카 주입 방식의 자원 중복과 Cilium 노드 프록시 일원화 비교</desc>
+<rect width="920" height="520" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">CILIUM UP AND RUNNING · 01-01 §4</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">서비스 메시 아키텍처: 사이드카 vs 노드 프록시</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">eBPF 가 L3/L4 를 직접 처리하고 L7 프록시를 노드당 하나로 공유합니다</text>
+<rect x="30" y="108" width="414" height="344" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="42" y="120" width="184" height="24" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="1.0"/>
+<text x="134" y="136" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">사이드카 모델 (Envoy × 3)</text>
+<text x="430" y="136" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Pod마다 프록시 주입</text>
+<rect x="42" y="156" width="390" height="74" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="54" y="174" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#5E6B7E">Pod 1 (Frontend)</text>
+<rect x="54" y="182" width="170" height="36" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="139" y="205" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">애플리케이션 컨테이너</text>
+<rect x="234" y="182" width="186" height="36" rx="4" fill="#E3B34118" stroke="#E3B341" stroke-width="1.0"/>
+<text x="327" y="205" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">Envoy 사이드카 프록시</text>
+<rect x="42" y="240" width="390" height="74" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="54" y="258" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#5E6B7E">Pod 2 (Payments)</text>
+<rect x="54" y="266" width="170" height="36" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="139" y="289" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">애플리케이션 컨테이너</text>
+<rect x="234" y="266" width="186" height="36" rx="4" fill="#E3B34118" stroke="#E3B341" stroke-width="1.0"/>
+<text x="327" y="289" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">Envoy 사이드카 프록시</text>
+<rect x="42" y="324" width="390" height="74" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="54" y="342" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#5E6B7E">Pod 3 (Orders)</text>
+<rect x="54" y="350" width="170" height="36" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="139" y="373" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">애플리케이션 컨테이너</text>
+<rect x="234" y="350" width="186" height="36" rx="4" fill="#E3B34118" stroke="#E3B341" stroke-width="1.0"/>
+<text x="327" y="373" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">Envoy 사이드카 프록시</text>
+<text x="237.0" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">프록시 자원 N배 복제 · 운영 복잡성 증가</text>
+<rect x="476" y="108" width="414" height="344" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="488" y="120" width="184" height="24" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="580" y="136" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">노드 프록시 모델 (Envoy × 1)</text>
+<text x="876" y="136" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">사이드카 주입 제거</text>
+<rect x="488" y="156" width="390" height="60" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="500" y="174" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#5E6B7E">Pod 1 (Frontend)</text>
+<rect x="500" y="182" width="366" height="26" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="683" y="199" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">애플리케이션 컨테이너 (단독)</text>
+<rect x="488" y="226" width="390" height="60" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="500" y="244" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#5E6B7E">Pod 2 (Payments)</text>
+<rect x="500" y="252" width="366" height="26" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="683" y="269" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">애플리케이션 컨테이너 (단독)</text>
+<rect x="488" y="296" width="390" height="60" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="500" y="314" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#5E6B7E">Pod 3 (Orders)</text>
+<rect x="500" y="322" width="366" height="26" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="683" y="339" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">애플리케이션 컨테이너 (단독)</text>
+<rect x="488" y="366" width="200" height="48" rx="4" fill="#F08A5918" stroke="#F08A59" stroke-width="1.2"/>
+<text x="588" y="386" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">eBPF 커널 데이터패스</text>
+<text x="588" y="402" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">L3/L4 포워딩 · 커널 처리</text>
+<rect x="698" y="366" width="180" height="48" rx="4" fill="#3FB98C18" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="788" y="386" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">호스트 공유 Envoy (1대)</text>
+<text x="788" y="402" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">L7 정책 처리 시에만 위임</text>
+<text x="683.0" y="434" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">노드당 고정 메모리 · 커널 레벨 패킷 처리</text>
+<line x1="12" y1="474" x2="872" y2="474" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="496" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="486" width="14" height="12" rx="2" fill="#F5F5F322" stroke="#F5F5F3" stroke-width="1.1"/>
+<text x="122" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">애플리케이션</text>
+<rect x="222" y="486" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="244" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">주입된 사이드카 (N개)</text>
+<rect x="435" y="486" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="457" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">eBPF 데이터패스</text>
+<rect x="609" y="486" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="631" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">공유 노드 프록시 (1대)</text>
+</svg>

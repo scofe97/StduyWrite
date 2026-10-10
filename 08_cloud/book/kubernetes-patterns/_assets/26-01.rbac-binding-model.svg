@@ -1,0 +1,49 @@
+<svg viewBox="0 0 860 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Subject·Role·RoleBinding의 M대N 관계</title>
+  <desc>Kubernetes Patterns 그림 26-3의 재현입니다. RoleBinding이 subject 목록과 하나의 Role을 연결합니다. subject는 사람 사용자, 그룹, ServiceAccount 세 종류이며 ServiceAccount만 namespace 필드를 가질 수 있어 다른 namespace의 Pod에도 권한을 줄 수 있습니다. Role은 리소스와 그에 허용된 동작의 목록을 담습니다. subject와 Role 사이는 다대다 관계입니다. 하나의 subject가 여러 Role을 가질 수 있고 하나의 Role이 여러 subject에 적용될 수 있으며, 그 연결을 만드는 것이 RoleBinding입니다. Role과 RoleBinding은 모두 특정 namespace에 묶이며 그 namespace의 리소스에만 적용됩니다.</desc>
+
+  <defs>
+    <marker id="ba" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect width="860" height="400" fill="#0d0d0d"/>
+  <text x="24" y="30" fill="#e8e4df" font-size="15">RBAC 연결 모델</text>
+
+  <!-- namespace boundary -->
+  <rect x="24" y="52" width="812" height="286" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1.5"/>
+  <text x="812" y="74" text-anchor="end" fill="#b8b3ad" font-size="10" font-weight="700">범위: Namespace</text>
+
+  <!-- RoleBinding -->
+  <rect x="330" y="92" width="200" height="56" fill="#dceaf7"/>
+  <text x="430" y="116" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">RoleBinding</text>
+  <text x="430" y="134" text-anchor="middle" fill="#10243a" font-size="9">subjects + roleRef</text>
+
+  <!-- Subject -->
+  <rect x="60" y="234" width="220" height="82" fill="#dceaf7"/>
+  <text x="170" y="258" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">Subject</text>
+  <text x="170" y="278" text-anchor="middle" fill="#10243a" font-size="9">User · Group</text>
+  <text x="170" y="294" text-anchor="middle" fill="#10243a" font-size="9">ServiceAccount</text>
+  <text x="170" y="308" text-anchor="middle" fill="#10243a" font-size="9">SA만 namespace 지정</text>
+
+  <!-- Role (stacked) -->
+  <rect x="596" y="248" width="200" height="74" fill="#dceaf7"/>
+  <rect x="588" y="240" width="200" height="74" fill="#dceaf7"/>
+  <rect x="580" y="232" width="200" height="74" fill="#dceaf7"/>
+  <text x="680" y="256" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">Role</text>
+  <text x="680" y="276" text-anchor="middle" fill="#10243a" font-size="9">apiGroups·resources</text>
+  <text x="680" y="292" text-anchor="middle" fill="#10243a" font-size="9">verbs</text>
+  <text x="680" y="306" text-anchor="middle" fill="#10243a" font-size="9">허용 규칙만</text>
+
+  <!-- binding arrows -->
+  <path d="M370 148 L200 228" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ba)"/>
+  <path d="M492 148 L646 226" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ba)"/>
+  <text x="252" y="182" fill="rgb(212,168,83)" font-size="9">subjects</text>
+  <text x="560" y="182" fill="rgb(212,168,83)" font-size="9">roleRef</text>
+
+  <!-- M:N relation -->
+  <line x1="286" y1="274" x2="574" y2="274" stroke="#b8b3ad" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <rect x="386" y="258" width="90" height="32" fill="#0d0d0d"/>
+  <text x="431" y="279" text-anchor="middle" fill="#e8e4df" font-size="11" font-weight="700">M 대 N</text>
+</svg>

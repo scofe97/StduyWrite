@@ -1,0 +1,79 @@
+<svg viewBox="0 0 700 360" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>NVD 목록만 보면 오탐이 나는 이유 — 배포판 백포트</title>
+  <desc>ShellShock 는 GNU bash 를 덮친 치명적 취약점이고 NVD 는 1.14.0 부터 4.3 까지를 취약 버전으로 올려 두었습니다. Ubuntu 12.04 에 설치된 bash 4.2-2ubuntu2.2 는 4.2 기반이므로 NVD 목록만 보면 취약해 보입니다. 그러나 Ubuntu 관리자는 모두에게 새 마이너 버전으로 올리라고 요구하는 대신 패치만 따로 적용한 버전을 배포했습니다. 그래서 이 버전은 안전합니다. 서버가 실제로 취약한지 알려면 NVD 뿐 아니라 자기 배포판의 보안 권고까지 함께 봐야 합니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 12px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .code { fill: #0d0d0d; font-size: 10px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .chip { fill: #f5edda; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .wrong-title { fill: #7a1f1f; font-size: 11.5px; font-weight: 700; }
+    .wrong-detail { fill: #7a1f1f; font-size: 9.5px; }
+    .ok-title { fill: #14521d; font-size: 11.5px; font-weight: 700; }
+    .ok-detail { fill: #14521d; font-size: 9.5px; }
+  </style>
+
+  <rect width="700" height="360" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="uh7b" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="30">두 자료가 다르게 말합니다</text>
+
+  <!-- 설치된 실물 -->
+  <rect class="box" x="40" y="42" width="200" height="94" rx="4"/>
+  <text class="box-title" x="56" y="63">서버에 깔린 것</text>
+  <rect class="chip" x="56" y="72" width="168" height="17" rx="3"/>
+  <text class="code" x="60" y="85">bash 4.2-2ubuntu2.2</text>
+  <text class="box-detail" x="56" y="106">Ubuntu 12.04</text>
+  <text class="box-detail" x="56" y="122">이게 취약한가</text>
+
+  <path class="arrow" d="M240,89 L263,89 L263,74 L286,74" marker-end="url(#uh7b)"/>
+  <path class="arrow" d="M263,89 L263,150 L472,150 L472,110 L486,110" marker-end="url(#uh7b)"/>
+
+  <!-- NVD 판정 -->
+  <rect x="290" y="42" width="182" height="94" rx="4" fill="#f2d4d4"/>
+  <text class="wrong-title" x="306" y="63">NVD 만 보면</text>
+  <text class="wrong-detail" x="306" y="82">취약 목록 1.14.0 ~ 4.3</text>
+  <text class="wrong-detail" x="306" y="98">4.2 기반이니 해당</text>
+  <text class="wrong-detail" x="306" y="114">취약하다고 판정</text>
+  <text class="wrong-detail" x="306" y="130">그런데 이건 오탐입니다</text>
+
+  <!-- 배포판 권고 -->
+  <rect x="490" y="42" width="170" height="94" rx="4" fill="#cdeccf"/>
+  <text class="ok-title" x="506" y="63">배포판 권고를 보면</text>
+  <text class="ok-detail" x="506" y="82">이 버전엔 패치 적용됨</text>
+  <text class="ok-detail" x="506" y="98">안전하다고 판정</text>
+  <text class="ok-detail" x="506" y="114">이쪽이 사실입니다</text>
+
+  <!-- 왜 갈리는가 -->
+  <text class="head" x="40" y="176">왜 갈리는가 — 백포트</text>
+
+  <rect class="box" x="40" y="188" width="300" height="94" rx="4"/>
+  <text class="box-title" x="56" y="209">배포판 관리자의 선택</text>
+  <text class="box-detail" x="56" y="228">새 마이너 버전으로 올리라고 하면</text>
+  <text class="box-detail" x="56" y="244">쓰던 사람 전부가 이사를 해야 한다</text>
+  <text class="box-detail" x="56" y="262">그래서 버전은 그대로 두고</text>
+  <text class="box-detail" x="56" y="278">패치만 얹어 다시 배포한다</text>
+
+  <rect class="box" x="360" y="188" width="300" height="94" rx="4"/>
+  <text class="box-title" x="376" y="209">그래서 규칙이 이렇게 됩니다</text>
+  <text class="box-detail" x="376" y="228">버전 번호만으로 판정하지 않는다</text>
+  <text class="box-detail" x="376" y="244">NVD 와 배포판 권고를 함께 본다</text>
+  <text class="box-detail" x="376" y="262">스캐너가 내 배포판 피드를 읽는지</text>
+  <text class="box-detail" x="376" y="278">고를 때 반드시 확인한다</text>
+
+  <text class="hint" x="40" y="316">배포판 피드를 안 읽는 스캐너는</text>
+  <text class="hint" x="40" y="336">그 배포판 이미지에서 오탐을 냅니다</text>
+</svg>

@@ -1,0 +1,59 @@
+<svg viewBox="0 0 600 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>OpenSearch 데이터 계층 — 클러스터·노드·인덱스·샤드·세그먼트</title>
+  <desc>클러스터는 여러 노드로, 인덱스는 primary·replica 샤드로 쪼개져 노드에 분산되고, 각 샤드는 다시 세그먼트로 이뤄진다.</desc>
+
+  <rect x="0" y="0" width="600" height="440" fill="#0d0d0d"/>
+  <text x="24" y="32" fill="#e8e4df" font-size="15" font-weight="600">OpenSearch 데이터 계층 — 쪼개서 흩뿌린다</text>
+
+  <!-- 클러스터 프레임 -->
+  <rect x="24" y="52" width="552" height="228" fill="none" stroke="rgb(212,168,83)" stroke-dasharray="5 3"/>
+  <text x="40" y="72" fill="rgb(212,168,83)" font-size="12">클러스터 (노드 2개 · 인덱스 1개를 분산)</text>
+
+  <!-- 노드 A -->
+  <rect x="44" y="86" width="248" height="176" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="60" y="106" fill="#e8e4df" font-size="12">데이터 노드 A</text>
+
+  <!-- 노드 B -->
+  <rect x="308" y="86" width="248" height="176" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="324" y="106" fill="#e8e4df" font-size="12">데이터 노드 B</text>
+
+  <!-- primary 샤드 P1 (노드 A) with segments -->
+  <rect x="60" y="118" width="100" height="128" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="110" y="136" fill="#e8e4df" font-size="11" text-anchor="middle">primary P1</text>
+  <rect x="72" y="148" width="76" height="20" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="110" y="162" fill="rgb(138,133,128)" font-size="9" text-anchor="middle" font-family="'JetBrains Mono',monospace">segment</text>
+  <rect x="72" y="174" width="76" height="20" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="110" y="188" fill="rgb(138,133,128)" font-size="9" text-anchor="middle" font-family="'JetBrains Mono',monospace">segment</text>
+  <rect x="72" y="200" width="76" height="20" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="110" y="214" fill="rgb(138,133,128)" font-size="9" text-anchor="middle" font-family="'JetBrains Mono',monospace">segment</text>
+  <text x="110" y="238" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">└ 세그먼트로 구성</text>
+
+  <!-- replica 샤드 R2 (노드 A) -->
+  <rect x="176" y="118" width="100" height="128" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="226" y="136" fill="#e8e4df" font-size="11" text-anchor="middle">replica R2</text>
+  <text x="226" y="188" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">P2의 복사본</text>
+
+  <!-- primary 샤드 P2 (노드 B) -->
+  <rect x="324" y="118" width="100" height="128" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="374" y="136" fill="#e8e4df" font-size="11" text-anchor="middle">primary P2</text>
+  <text x="374" y="188" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">데이터의 절반</text>
+
+  <!-- replica 샤드 R1 (노드 B) -->
+  <rect x="440" y="118" width="100" height="128" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="490" y="136" fill="#e8e4df" font-size="11" text-anchor="middle">replica R1</text>
+  <text x="490" y="188" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">P1의 복사본</text>
+
+  <!-- 안전장치 설명: P1과 R1이 다른 노드에 -->
+  <text x="40" y="272" fill="rgb(138,133,128)" font-size="9">primary와 그 replica는 서로 다른 노드에 둔다 → 노드 하나가 죽어도 데이터가 살아남는다</text>
+
+  <!-- 하단: 인덱스 = 샤드 합 -->
+  <rect x="24" y="300" width="552" height="60" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="40" y="322" fill="#e8e4df" font-size="12">인덱스 products = primary P1 + P2 (해싱으로 각 50% 배정)</text>
+  <text x="40" y="344" fill="rgb(138,133,128)" font-size="10">검색은 모든 primary에 병렬로 뿌려 결과를 합친다 → 병렬 처리 · 수평 확장</text>
+
+  <!-- 범례 -->
+  <rect x="24" y="380" width="16" height="12" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="46" y="390" fill="rgb(138,133,128)" font-size="10">primary 샤드 (원본)</text>
+  <rect x="200" y="380" width="16" height="12" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="222" y="390" fill="rgb(138,133,128)" font-size="10">replica 샤드 (복사본) · 세그먼트</text>
+</svg>

@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="620" viewBox="0 0 980 620" role="img" aria-labelledby="title desc">
+  <title id="title">JVM 런타임 데이터 영역</title>
+  <desc id="desc">JVM 런타임 데이터 영역을 스레드 전용(PC·JVM스택·네이티브스택)과 전체 공유(힙·메서드영역·런타임상수풀·다이렉트메모리·Off-heap)으로 나눠 표시합니다.</desc>
+  <defs>
+    <style>
+      .bg    { fill: #0F172A; }
+      .panel { fill: #111827; stroke: #334155; stroke-width: 1.5; }
+      .thread{ fill: #1C1917; stroke: #D97706; stroke-width: 1.8; stroke-dasharray: 6 3; }
+      .shared{ fill: #0C1A2E; stroke: #3B82F6; stroke-width: 1.8; }
+      .offhp { fill: #0C1F0C; stroke: #22C55E; stroke-width: 1.8; }
+      .slot-t{ fill: #292524; stroke: #F59E0B; stroke-width: 1.2; }
+      .slot-h{ fill: #1E3A5F; stroke: #60A5FA; stroke-width: 1.2; }
+      .slot-m{ fill: #1E3A5F; stroke: #818CF8; stroke-width: 1.2; }
+      .slot-c{ fill: #1E2F4A; stroke: #93C5FD; stroke-width: 1.0; stroke-dasharray: 4 2; }
+      .slot-d{ fill: #14532D; stroke: #4ADE80; stroke-width: 1.2; }
+      .slot-cc{ fill: #1A2E1A; stroke: #86EFAC; stroke-width: 1.0; }
+      .text  { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #F8FAFC; }
+      .lbl   { font-size: 15px; font-weight: 700; }
+      .sub   { font-size: 12px; fill: #CBD5E1; }
+      .mono  { font-family: "SFMono-Regular", Consolas, monospace; font-size: 12px; fill: #F8FAFC; }
+      .tag   { font-size: 11px; }
+      .err-t { fill: #FCD34D; }
+      .err-h { fill: #93C5FD; }
+      .err-g { fill: #86EFAC; }
+      .err-v { fill: #C4B5FD; }
+      .sec-lbl{ font-size: 13px; font-weight: 700; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="980" height="620"/>
+
+  <!-- 제목 -->
+  <text x="36" y="38" class="text lbl" style="font-size:17px;">JVM 런타임 데이터 영역</text>
+  <text x="36" y="58" class="text sub">수명: 스레드(베이지) vs 가상 머신(파랑·초록) / 공유: 스레드 전용 vs 전체 공유</text>
+
+  <!-- ===== 스레드 전용 패널 ===== -->
+  <rect x="36" y="74" width="280" height="510" rx="10" class="thread"/>
+  <text x="176" y="100" class="text sec-lbl" style="fill:#FCD34D;text-anchor:middle;">스레드 전용</text>
+  <text x="176" y="118" class="text sub" style="text-anchor:middle;">수명 = 스레드 라이프사이클</text>
+
+  <!-- PC 카운터 -->
+  <rect x="56" y="132" width="240" height="120" rx="7" class="slot-t"/>
+  <text x="176" y="156" class="text lbl" style="text-anchor:middle;fill:#FCD34D;">PC 카운터</text>
+  <text x="176" y="176" class="text sub" style="text-anchor:middle;">현재 실행 중인 바이트코드 주소</text>
+  <text x="176" y="196" class="text sub" style="text-anchor:middle;">스레드마다 독립 보유</text>
+  <text x="176" y="218" class="mono err-t" style="text-anchor:middle;font-size:11px;">OOM 명세 없음 (유일)</text>
+  <text x="176" y="238" class="text sub" style="text-anchor:middle;font-size:11px;">네이티브 실행 시 Undefined</text>
+
+  <!-- JVM 스택 -->
+  <rect x="56" y="266" width="240" height="148" rx="7" class="slot-t"/>
+  <text x="176" y="290" class="text lbl" style="text-anchor:middle;fill:#FCD34D;">자바 가상 머신 스택</text>
+  <text x="176" y="310" class="text sub" style="text-anchor:middle;">메서드 호출마다 스택 프레임 push</text>
+  <rect x="70" y="320" width="212" height="22" rx="3" style="fill:#3D3320;stroke:#F59E0B;stroke-width:0.8;"/>
+  <text x="176" y="336" class="mono" style="text-anchor:middle;font-size:11px;">[ 지역변수 | 오퍼랜드스택 | 반환주소 ]</text>
+  <text x="176" y="360" class="text sub" style="text-anchor:middle;">깊이: -Xss (깊이 vs 스레드 수 트레이드오프)</text>
+  <text x="72" y="385" class="mono err-t" style="font-size:11px;">StackOverflowError  (깊이 초과)</text>
+  <text x="72" y="402" class="mono err-t" style="font-size:11px;">OutOfMemoryError    (스레드 수 초과)</text>
+
+  <!-- 네이티브 메서드 스택 -->
+  <rect x="56" y="428" width="240" height="96" rx="7" class="slot-t"/>
+  <text x="176" y="452" class="text lbl" style="text-anchor:middle;fill:#FCD34D;">네이티브 메서드 스택</text>
+  <text x="176" y="472" class="text sub" style="text-anchor:middle;">JNI / C·C++ 네이티브 코드 호출 정보</text>
+  <text x="176" y="492" class="text sub" style="text-anchor:middle;">HotSpot은 JVM 스택과 통합</text>
+  <text x="72" y="514" class="mono err-t" style="font-size:11px;">SOF / OOM  (JVM 스택과 동일)</text>
+
+  <!-- ===== 전체 공유 On-heap 패널 ===== -->
+  <rect x="340" y="74" width="300" height="510" rx="10" class="shared"/>
+  <text x="490" y="100" class="text sec-lbl" style="fill:#93C5FD;text-anchor:middle;">전체 공유 — On-heap</text>
+  <text x="490" y="118" class="text sub" style="text-anchor:middle;">수명 = 가상 머신 프로세스</text>
+
+  <!-- 자바 힙 -->
+  <rect x="360" y="132" width="260" height="200" rx="7" class="slot-h"/>
+  <text x="490" y="156" class="text lbl" style="text-anchor:middle;fill:#93C5FD;">자바 힙</text>
+  <text x="490" y="175" class="text sub" style="text-anchor:middle;">거의 모든 객체 인스턴스가 생성</text>
+  <!-- Young/Old 분할 -->
+  <rect x="374" y="185" width="100" height="50" rx="4" style="fill:#1A3A5C;stroke:#60A5FA;stroke-width:1;"/>
+  <text x="424" y="208" class="text sub" style="text-anchor:middle;font-size:12px;">Young Gen</text>
+  <text x="424" y="225" class="mono" style="text-anchor:middle;font-size:10px;">Eden + Survivor</text>
+  <rect x="482" y="185" width="124" height="50" rx="4" style="fill:#1A3A5C;stroke:#60A5FA;stroke-width:1;"/>
+  <text x="544" y="208" class="text sub" style="text-anchor:middle;font-size:12px;">Old Gen</text>
+  <text x="544" y="225" class="mono" style="text-anchor:middle;font-size:10px;">장기 생존 객체</text>
+  <text x="490" y="260" class="text sub" style="text-anchor:middle;">-Xms(시작) / -Xmx(최대)</text>
+  <text x="490" y="278" class="text sub" style="text-anchor:middle;">물리적 불연속 가능, 논리적 연속</text>
+  <text x="364" y="320" class="mono err-h" style="font-size:11px;">OutOfMemoryError: Java heap space</text>
+
+  <!-- 메서드 영역 -->
+  <rect x="360" y="348" width="260" height="130" rx="7" class="slot-m"/>
+  <text x="490" y="372" class="text lbl" style="text-anchor:middle;fill:#C4B5FD;">메서드 영역 (Metaspace)</text>
+  <text x="490" y="391" class="text sub" style="text-anchor:middle;">클래스 메타데이터 · 정적 변수</text>
+  <!-- 런타임 상수 풀 내포 -->
+  <rect x="374" y="400" width="232" height="40" rx="4" class="slot-c"/>
+  <text x="490" y="418" class="mono" style="text-anchor:middle;font-size:11px;fill:#93C5FD;">런타임 상수 풀</text>
+  <text x="490" y="433" class="text sub" style="text-anchor:middle;font-size:10px;">리터럴 · 심벌 참조 (동적 추가 가능)</text>
+  <text x="364" y="462" class="mono err-v" style="font-size:11px;">OutOfMemoryError: Metaspace</text>
+  <text x="364" y="476" class="text sub" style="font-size:10px;">JDK 7: PermGen(힙 내) → JDK 8+: Native Memory</text>
+  <text x="364" y="490" class="mono" style="font-size:10px;fill:#94A3B8;">-XX:MaxMetaspaceSize</text>
+
+  <!-- ===== 전체 공유 Off-heap 패널 ===== -->
+  <rect x="664" y="74" width="280" height="510" rx="10" class="offhp"/>
+  <text x="804" y="100" class="text sec-lbl" style="fill:#4ADE80;text-anchor:middle;">전체 공유 — Off-heap</text>
+  <text x="804" y="118" class="text sub" style="text-anchor:middle;">네이티브 메모리 / GC 비관리 영역</text>
+
+  <!-- Direct Memory -->
+  <rect x="684" y="132" width="240" height="148" rx="7" class="slot-d"/>
+  <text x="804" y="156" class="text lbl" style="text-anchor:middle;fill:#4ADE80;">다이렉트 메모리</text>
+  <text x="804" y="175" class="text sub" style="text-anchor:middle;">ByteBuffer.allocateDirect()</text>
+  <rect x="698" y="183" width="212" height="28" rx="3" style="fill:#0D3320;stroke:#4ADE80;stroke-width:0.8;"/>
+  <text x="804" y="197" class="mono" style="text-anchor:middle;font-size:11px;">힙: DirectByteBuffer(참조만)</text>
+  <text x="804" y="208" class="mono err-g" style="text-anchor:middle;font-size:11px;">OS: 실제 데이터 버퍼</text>
+  <text x="804" y="230" class="text sub" style="text-anchor:middle;">Zero-Copy IO — 힙 복사 1회 생략</text>
+  <text x="804" y="248" class="text sub" style="text-anchor:middle;">힙 덤프에 잡히지 않음</text>
+  <text x="684" y="268" class="mono err-g" style="font-size:11px;">OOM: Direct buffer memory</text>
+  <text x="684" y="282" class="mono" style="font-size:10px;fill:#94A3B8;">-XX:MaxDirectMemorySize</text>
+
+  <!-- Code Cache -->
+  <rect x="684" y="294" width="240" height="96" rx="7" class="slot-cc"/>
+  <text x="804" y="318" class="text lbl" style="text-anchor:middle;fill:#86EFAC;">Code Cache</text>
+  <text x="804" y="338" class="text sub" style="text-anchor:middle;">JIT 컴파일된 기계어 코드 저장</text>
+  <text x="804" y="358" class="text sub" style="text-anchor:middle;">가득 차면 JIT 컴파일 중단</text>
+  <text x="684" y="378" class="mono" style="font-size:10px;fill:#94A3B8;">-XX:ReservedCodeCacheSize</text>
+
+  <!-- JNI / Native -->
+  <rect x="684" y="404" width="240" height="80" rx="7" class="slot-cc"/>
+  <text x="804" y="428" class="text lbl" style="text-anchor:middle;fill:#86EFAC;">JNI / 네이티브 라이브러리</text>
+  <text x="804" y="448" class="text sub" style="text-anchor:middle;">Netty · Kafka · RocksDB 등</text>
+  <text x="804" y="466" class="text sub" style="text-anchor:middle;">OS OOM Killer 대상</text>
+
+  <!-- Off-heap 진단 -->
+  <rect x="684" y="498" width="240" height="60" rx="7" style="fill:#0A1A0A;stroke:#4ADE80;stroke-width:1;stroke-dasharray:4 2;"/>
+  <text x="804" y="518" class="text sub" style="text-anchor:middle;font-size:11px;fill:#4ADE80;">진단: RSS - Xmx 차이 확인</text>
+  <text x="804" y="534" class="mono" style="text-anchor:middle;font-size:10px;fill:#86EFAC;">jcmd &lt;pid&gt; VM.native_memory summary</text>
+  <text x="804" y="548" class="mono" style="text-anchor:middle;font-size:10px;fill:#86EFAC;">-XX:NativeMemoryTracking=summary</text>
+
+  <!-- ===== 하단 범례 ===== -->
+  <rect x="36" y="598" width="14" height="10" rx="2" style="fill:#292524;stroke:#F59E0B;stroke-width:1;"/>
+  <text x="56" y="608" class="text sub" style="fill:#FCD34D;">스레드 전용</text>
+  <rect x="180" y="598" width="14" height="10" rx="2" style="fill:#1E3A5F;stroke:#60A5FA;stroke-width:1;"/>
+  <text x="200" y="608" class="text sub" style="fill:#93C5FD;">On-heap 공유</text>
+  <rect x="340" y="598" width="14" height="10" rx="2" style="fill:#14532D;stroke:#4ADE80;stroke-width:1;"/>
+  <text x="360" y="608" class="text sub" style="fill:#4ADE80;">Off-heap (GC 비관리)</text>
+  <rect x="550" y="598" width="14" height="10" rx="2" class="slot-c"/>
+  <text x="570" y="608" class="text sub" style="fill:#93C5FD;">메서드 영역 내포</text>
+</svg>

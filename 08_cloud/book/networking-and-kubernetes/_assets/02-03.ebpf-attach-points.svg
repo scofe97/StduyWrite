@@ -1,0 +1,81 @@
+<svg viewBox="0 0 1000 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>eBPF 어태치 지점 — 수신 패킷이 지나는 순서 위에서 XDP·TC·netfilter·socket이 어디에 끼는가</title>
+  <desc>수신 패킷은 NIC 드라이버에서 시작해 소켓까지 정해진 순서로 올라간다. eBPF는 이 경로의 여러 지점에 프로그램을 붙일 수 있다. XDP는 가장 먼저, NIC 드라이버 직후 skb가 만들어지기도 전에 실행되어 DDoS 차단처럼 가장 빠른 처리를 한다. XDP에서 버려진 패킷은 conntrack을 아예 건드리지 않는다. 다음으로 TC ingress가 skb가 만들어진 뒤 실행되며, 이것이 Cilium의 주된 데이터플레인이다. TC ingress는 iptables PREROUTING이나 nftables ingress보다 앞서 돌기 때문에 Cilium은 iptables를 우회할 수 있다. 그 뒤에 netfilter와 conntrack이 오고, 마지막으로 소켓 계층에서 cgroup connect나 sendmsg에 붙는 socket-BPF가 Service VIP를 소켓 수준에서 로드밸런싱한다. kprobe와 tracepoint는 커널 함수 호출에 붙어 Hubble의 관측에 쓰인다. eBPF 프로그램은 verifier의 정적 검증을 거쳐 JIT 컴파일되고, 커널과 유저스페이스가 공유하는 맵에서 O(1) 해시로 서비스 테이블과 conntrack 정보를 조회한다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 10.5px; fill: rgb(138,133,128); }
+      .stage  { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .stagemono { font-size: 9px; font-weight: 700; font-family: 'JetBrains Mono', ui-monospace, monospace; fill: #0d0d0d; }
+      .bpf    { font-size: 11px; font-weight: 800; }
+      .desc   { font-size: 10px; font-weight: 600; fill: #e8e4df; }
+      .muted  { font-size: 9px; fill: rgb(138,133,128); }
+      .mono   { font-size: 9px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    </style>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#f44336"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="600" fill="#0d0d0d"/>
+  <text x="24" y="32" class="title">eBPF 어태치 지점 — 수신 패킷 경로 위 어디에 끼는가</text>
+  <text x="24" y="52" class="sub">RX 순서: NIC → XDP → TC ingress → netfilter/conntrack → socket. eBPF는 이 여러 지점에 붙는다.</text>
+
+  <!-- 경로 스테이지 (세로) -->
+  <!-- NIC -->
+  <rect x="60" y="80" width="240" height="52" rx="8" fill="rgb(20,22,26)" stroke="#8fc0ec" stroke-width="1.2"/>
+  <text x="180" y="103" class="desc" text-anchor="middle" style="fill:#8fc0ec">NIC 드라이버 (패킷 수신)</text>
+  <text x="180" y="121" class="muted" text-anchor="middle">아직 skb 없음</text>
+
+  <!-- XDP -->
+  <rect x="60" y="156" width="240" height="60" rx="8" fill="#66bb6a"/>
+  <text x="180" y="180" class="stage" text-anchor="middle">① XDP</text>
+  <text x="180" y="200" class="stagemono" text-anchor="middle">드라이버 직후 · skb 이전</text>
+  <line x1="180" y1="132" x2="180" y2="154" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#ar)"/>
+
+  <!-- TC ingress -->
+  <rect x="60" y="240" width="240" height="60" rx="8" fill="#d4a853"/>
+  <text x="180" y="264" class="stage" text-anchor="middle">② TC ingress</text>
+  <text x="180" y="284" class="stagemono" text-anchor="middle">skb 생성 후 · Cilium 주력</text>
+  <line x1="180" y1="216" x2="180" y2="238" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#ar)"/>
+
+  <!-- netfilter -->
+  <rect x="60" y="324" width="240" height="60" rx="8" fill="rgb(20,22,26)" stroke="#f0b0b0" stroke-width="1.2"/>
+  <text x="180" y="348" class="desc" text-anchor="middle" style="fill:#f0b0b0">③ netfilter / conntrack</text>
+  <text x="180" y="368" class="muted" text-anchor="middle">PREROUTING 등 (TC보다 뒤)</text>
+  <line x1="180" y1="300" x2="180" y2="322" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#ar)"/>
+
+  <!-- socket -->
+  <rect x="60" y="408" width="240" height="60" rx="8" fill="#5b9bd5"/>
+  <text x="180" y="432" class="stage" text-anchor="middle" style="fill:#e8e4df">④ socket 계층</text>
+  <text x="180" y="452" class="stagemono" text-anchor="middle" style="fill:#e8e4df">cgroup connect / sendmsg</text>
+  <line x1="180" y1="384" x2="180" y2="406" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#ar)"/>
+
+  <!-- 어태치 설명 (오른쪽) -->
+  <rect x="360" y="156" width="600" height="60" rx="8" fill="rgb(20,30,22)" stroke="#66bb6a" stroke-width="1.1"/>
+  <text x="380" y="180" class="bpf" style="fill:#66bb6a">XDP — 가장 빠른 처리, DDoS 차단</text>
+  <text x="380" y="200" class="muted">여기서 버린 패킷은 conntrack을 아예 안 거친다. 커널 최전방.</text>
+  <line x1="300" y1="186" x2="356" y2="186" stroke="#66bb6a" stroke-width="1.4" stroke-dasharray="3 2"/>
+
+  <rect x="360" y="240" width="600" height="60" rx="8" fill="rgb(24,20,14)" stroke="rgb(212,168,83)" stroke-width="1.1"/>
+  <text x="380" y="264" class="bpf" style="fill:rgb(212,168,83)">TC ingress — Cilium의 주된 dataplane</text>
+  <text x="380" y="284" class="muted">iptables PREROUTING·nftables ingress보다 앞서 돈다 → iptables 우회 가능</text>
+  <line x1="300" y1="270" x2="356" y2="270" stroke="rgb(212,168,83)" stroke-width="1.4" stroke-dasharray="3 2"/>
+
+  <rect x="360" y="324" width="600" height="60" rx="8" fill="rgb(30,20,20)" stroke="#f0b0b0" stroke-width="1.1"/>
+  <text x="380" y="348" class="bpf" style="fill:#f0b0b0">netfilter / conntrack — 전통 경로</text>
+  <text x="380" y="368" class="muted">Cilium은 TC에서 이미 처리해 이 계층을 건너뛰는 게 성능 이점의 핵심</text>
+  <line x1="300" y1="354" x2="356" y2="354" stroke="#f0b0b0" stroke-width="1.4" stroke-dasharray="3 2"/>
+
+  <rect x="360" y="408" width="600" height="60" rx="8" fill="rgb(16,20,28)" stroke="#5b9bd5" stroke-width="1.1"/>
+  <text x="380" y="432" class="bpf" style="fill:#8fc0ec">socket-BPF — Service VIP를 소켓 수준에서 LB</text>
+  <text x="380" y="452" class="muted">qdisc hook이 아니라 소켓 syscall에 붙는다 (연결 시점 주소 재작성)</text>
+  <line x1="300" y1="438" x2="356" y2="438" stroke="#5b9bd5" stroke-width="1.4" stroke-dasharray="3 2"/>
+
+  <!-- kprobe 별도 -->
+  <rect x="60" y="492" width="900" height="40" rx="7" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="80" y="517" class="desc">kprobe / tracepoint — 경로가 아니라 커널 함수 호출에 붙는다. Hubble이 L7 관측 정보를 여기서 수집한다.</text>
+
+  <!-- 하단 맵 설명 -->
+  <rect x="60" y="544" width="900" height="40" rx="7" fill="rgb(16,20,17)" stroke="#66bb6a" stroke-width="1"/>
+  <text x="80" y="569" class="desc" style="fill:#66bb6a">공통 — verifier 정적 검증 → JIT 컴파일. eBPF 맵(커널·유저스페이스 공유)에서 서비스 테이블·conntrack을 O(1) 해시로 조회한다.</text>
+</svg>

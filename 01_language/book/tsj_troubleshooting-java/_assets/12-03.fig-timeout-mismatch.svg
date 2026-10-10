@@ -1,0 +1,42 @@
+<svg viewBox="0 0 680 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Timeout mismatch — client 2초 타임아웃 vs server 3초 완료, P95/P99가 임계선 넘음 (원문 Figure 12.8·12.9 개념도)</title>
+  <desc>원문 Figure 12.8 과 12.9 의 개념을 도식으로 옮긴 것입니다. checkout 서비스가 2초 타임아웃으로 요청을 중단하는데 order 서비스는 3초 만에 작업을 끝냅니다. 이 불일치는 하류 서비스가 제대로 동작하는데도 실패한 요청을 만듭니다. 분산 추적에서 client span 은 2초에 에러나 타임아웃으로 끝나는데 server span 은 계속 돌아 성공으로 끝나지만 들을 사람이 없습니다. 평균 지연은 멀쩡해 보여도 백분위로 보면 다릅니다. 2000ms 타임아웃 임계선에서 P95 는 1900ms 로 근접하고 P99 는 2400ms 로 넘어서 일부 요청이 타임아웃으로 실패합니다. 평균은 소수의 극단을 숨기므로 P95 와 P99 로 가려야 합니다.</desc>
+  <rect x="0" y="0" width="680" height="360" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">Timeout mismatch — 클라이언트가 먼저 포기</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 Figure 12.8·12.9 개념도 — 평균 말고 P95/P99</text>
+
+  <!-- span 대비 -->
+  <text x="34" y="92" fill="#e8e4df" font-size="11" font-weight="bold">span 소요 대비</text>
+  <text x="34" y="116" fill="#f47f72" font-size="10">client</text>
+  <rect x="90" y="106" width="220" height="16" fill="rgba(244,127,114,0.4)" stroke="#f47f72"/>
+  <text x="320" y="118" fill="#f47f72" font-size="10">2초 [X] 타임아웃 종료</text>
+  <text x="34" y="142" fill="#66bb6a" font-size="10">server</text>
+  <rect x="90" y="132" width="330" height="16" fill="rgba(102,187,106,0.4)" stroke="#66bb6a"/>
+  <text x="430" y="144" fill="#66bb6a" font-size="10">3초 성공(들을 사람 없음)</text>
+  <line x1="310" y1="100" x2="310" y2="154" stroke="rgb(138,133,128)" stroke-width="1" stroke-dasharray="3 2"/>
+
+  <!-- P95/P99 차트 -->
+  <text x="34" y="184" fill="#e8e4df" font-size="11" font-weight="bold">지연 분포 — 2000ms 타임아웃 임계선</text>
+  <line x1="60" y1="300" x2="600" y2="300" stroke="rgb(60,55,50)"/>
+  <!-- 임계선 -->
+  <line x1="60" y1="230" x2="600" y2="230" stroke="#f47f72" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="606" y="234" fill="#f47f72" font-size="9">2000ms</text>
+  <!-- 막대들 -->
+  <rect x="100" y="270" width="70" height="30" fill="rgba(102,187,106,0.5)" stroke="#66bb6a"/>
+  <text x="135" y="316" fill="#66bb6a" font-size="9" text-anchor="middle">평균</text>
+  <text x="135" y="264" fill="#66bb6a" font-size="8" text-anchor="middle">~900ms</text>
+  <rect x="220" y="258" width="70" height="42" fill="rgba(102,187,106,0.5)" stroke="#66bb6a"/>
+  <text x="255" y="316" fill="#66bb6a" font-size="9" text-anchor="middle">P90</text>
+  <text x="255" y="252" fill="#66bb6a" font-size="8" text-anchor="middle">~1500ms</text>
+  <rect x="340" y="236" width="70" height="64" fill="rgba(212,168,83,0.5)" stroke="rgb(212,168,83)"/>
+  <text x="375" y="316" fill="rgb(212,168,83)" font-size="9" text-anchor="middle">P95</text>
+  <text x="375" y="230" fill="rgb(212,168,83)" font-size="8" text-anchor="middle">1900ms(근접)</text>
+  <rect x="460" y="210" width="70" height="90" fill="rgba(244,127,114,0.6)" stroke="#f47f72"/>
+  <text x="495" y="316" fill="#f47f72" font-size="9" text-anchor="middle">P99</text>
+  <text x="495" y="204" fill="#f47f72" font-size="8" text-anchor="middle">2400ms(초과)</text>
+
+  <!-- 해석 -->
+  <rect x="20" y="326" width="640" height="0" fill="none"/>
+  <text x="20" y="344" fill="rgb(138,133,128)" font-size="10">평균은 멀쩡 → 평균이 소수 극단을 숨김 · P95 근접·P99 초과 = 일부 요청 확정 실패 · 중복 요청 ID 동반</text>
+</svg>

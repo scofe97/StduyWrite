@@ -1,0 +1,87 @@
+<svg viewBox="0 0 700 420" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Dockerfile 보안 모범 사례 여덟 가지</title>
+  <desc>베이스 이미지는 신뢰할 수 있는 레지스트리에서 가져오고 작을수록 좋습니다. 멀티스테이지 빌드로 런타임에 필요 없는 컴파일러와 도구를 최종 이미지에서 걷어냅니다. USER 명령으로 기본 사용자를 비root로 지정합니다. RUN 은 임의 명령을 실행하므로 Dockerfile 편집 권한을 신뢰하는 사람으로 제한합니다. 민감한 호스트 디렉토리를 볼륨으로 마운트하지 않고, 자격증명을 이미지에 넣지 않으며, setuid 바이너리를 피하고, 불필요한 코드를 줄이되 앱에 필요한 것은 빌드 시점에 모두 포함해 불변 이미지를 만듭니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .code { fill: #0d0d0d; font-size: 9.5px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .chip { fill: #f5edda; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .caution-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .caution-detail { fill: #0d0d0d; font-size: 9.5px; }
+  </style>
+
+  <rect width="700" height="420" fill="#0d0d0d"/>
+
+  <text class="head" x="40" y="30">공격 표면을 줄이는 쪽으로</text>
+
+  <!-- 1행 -->
+  <rect class="box" x="40" y="42" width="200" height="76" rx="4"/>
+  <text class="box-title" x="56" y="62">베이스 이미지</text>
+  <text class="box-detail" x="56" y="80">신뢰할 레지스트리에서</text>
+  <text class="box-detail" x="56" y="96">작을수록 좋다</text>
+  <rect class="chip" x="56" y="102" width="130" height="14" rx="3"/>
+  <text class="code" x="60" y="113">scratch · distroless</text>
+
+  <rect class="box" x="250" y="42" width="200" height="76" rx="4"/>
+  <text class="box-title" x="266" y="62">멀티스테이지 빌드</text>
+  <text class="box-detail" x="266" y="80">컴파일러는 최종본에서 제외</text>
+  <text class="box-detail" x="266" y="96">이미지가 작아져 pull 도 빠르다</text>
+
+  <rect class="box" x="460" y="42" width="200" height="76" rx="4"/>
+  <text class="box-title" x="476" y="62">비root USER</text>
+  <text class="box-detail" x="476" y="80">기본 사용자를 지정한다</text>
+  <rect class="chip" x="476" y="88" width="90" height="14" rx="3"/>
+  <text class="code" x="480" y="99">USER app</text>
+  <text class="box-detail" x="476" y="112">모든 Dockerfile 에</text>
+
+  <!-- 2행 — RUN 주의 -->
+  <rect x="40" y="128" width="200" height="76" rx="4" fill="rgb(212,168,83)"/>
+  <text class="caution-title" x="56" y="148">주의 · RUN 명령</text>
+  <text class="caution-detail" x="56" y="166">임의 명령을 실행한다</text>
+  <text class="caution-detail" x="56" y="182">편집 권한 = 원격 코드 실행</text>
+  <text class="caution-detail" x="56" y="198">변경은 코드 리뷰로</text>
+
+  <rect class="box" x="250" y="128" width="200" height="76" rx="4"/>
+  <text class="box-title" x="266" y="148">볼륨 마운트 점검</text>
+  <text class="box-detail" x="266" y="166">민감 디렉토리를 넣지 않는다</text>
+  <rect class="chip" x="266" y="174" width="90" height="14" rx="3"/>
+  <text class="code" x="270" y="185">/etc · /bin</text>
+  <text class="box-detail" x="266" y="198">9장에서 자세히</text>
+
+  <rect class="box" x="460" y="128" width="200" height="76" rx="4"/>
+  <text class="box-title" x="476" y="148">민감 데이터 금지</text>
+  <text class="box-detail" x="476" y="166">자격증명·비밀번호</text>
+  <text class="box-detail" x="476" y="182">이미지에 넣지 않는다</text>
+  <text class="box-detail" x="476" y="198">12장에서 전달 방법을</text>
+
+  <!-- 3행 -->
+  <rect class="box" x="40" y="214" width="200" height="72" rx="4"/>
+  <text class="box-title" x="56" y="234">setuid 회피</text>
+  <text class="box-detail" x="56" y="252">권한 상승 통로가 된다</text>
+  <text class="box-detail" x="56" y="268">2장에서 본 그 비트</text>
+
+  <rect class="box" x="250" y="214" width="200" height="72" rx="4"/>
+  <text class="box-title" x="266" y="234">불필요한 코드 제거</text>
+  <text class="box-detail" x="266" y="252">패키지·라이브러리 최소화</text>
+  <text class="box-detail" x="266" y="268">코드가 적을수록 표면이 작다</text>
+
+  <rect class="box" x="460" y="214" width="200" height="72" rx="4"/>
+  <text class="box-title" x="476" y="234">필요한 것은 다 넣는다</text>
+  <text class="box-detail" x="476" y="252">런타임 설치를 피한다</text>
+  <text class="box-detail" x="476" y="268">불변 이미지를 만든다</text>
+
+  <!-- 하단 논리 -->
+  <rect class="box" x="40" y="302" width="620" height="66" rx="4"/>
+  <text class="box-title" x="56" y="324">앞의 둘은 짝을 이룹니다</text>
+  <text class="box-detail" x="56" y="344">빼되 필요한 건 다 넣는다</text>
+  <text class="box-detail" x="56" y="360">런타임 설치는 검증이 안 된다</text>
+
+  <text class="hint" x="40" y="396">베이스 참조 방식도 판단 대상</text>
+</svg>

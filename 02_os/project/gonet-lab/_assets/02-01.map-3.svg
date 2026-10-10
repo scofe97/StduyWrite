@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 472" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">클라이언트 셋이 보낸 것이 서버에 닿는 길</title><desc id="dd">TCP 에서는 A, B, C 가 보낸 세그먼트가 4-tuple 에 따라 연결 소켓 셋으로 갈라지고 연결마다 goroutine 이 붙으며, 떠날 때는 FIN 이 EOF 로 알려 준다. UDP 에서는 셋의 데이터그램이 소켓 하나의 대기열에 주소를 달고 줄 서고, ReadFrom 이 주소와 함께 꺼내며, 떠났다는 신호가 없어 앱이 타이머로 지운다.</desc>
+<rect width="960" height="472" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">FLOW · 02-01 §3</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">클라이언트 셋이 보낸 것이 서버에 닿는 길</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">TCP 는 상대마다 갈래가 생기고, UDP 는 한 줄로 모였다가 주소로만 구분됩니다.</text>
+<text x="211.0" y="116" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">클라이언트</text>
+<text x="375.0" y="116" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">보낸 패킷</text>
+<text x="375.0" y="132" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">목적지</text>
+<text x="539.0" y="116" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">서버 커널</text>
+<text x="539.0" y="132" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">소켓</text>
+<text x="703.0" y="116" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">서버 앱</text>
+<text x="867.0" y="116" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">떠난 뒤</text>
+<text x="24" y="178" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">TCP</text>
+<text x="24" y="196" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">:9000</text>
+<rect x="142.0" y="144" width="138.0" height="98" rx="6" fill="#11161D" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="199.28" y="156.0" width="23.439999999999998" height="22" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="211.0" y="171.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">A</text>
+<rect x="199.28" y="182.0" width="23.439999999999998" height="22" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="211.0" y="197.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">B</text>
+<rect x="199.28" y="208.0" width="23.439999999999998" height="22" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="211.0" y="223.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">C</text>
+<path d="M 283.0 193.0 L 303.0 193.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="306.0" y="144" width="138.0" height="98" rx="6" fill="#11161D" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="333.52" y="156.0" width="82.96" height="22" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="375.0" y="171.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">A → :9000</text>
+<rect x="333.52" y="182.0" width="82.96" height="22" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="375.0" y="197.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">B → :9000</text>
+<rect x="333.52" y="208.0" width="82.96" height="22" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="375.0" y="223.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">C → :9000</text>
+<path d="M 447.0 193.0 L 467.0 193.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="470.0" y="144" width="138.0" height="98" rx="6" fill="#11161D" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="511.56" y="149.0" width="54.879999999999995" height="22" rx="4" fill="#F08A5914" stroke="#F08A59" stroke-width="1.1"/>
+<text x="539.0" y="164.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">소켓 A</text>
+<rect x="511.56" y="175.0" width="54.879999999999995" height="22" rx="4" fill="#F08A5914" stroke="#F08A59" stroke-width="1.1"/>
+<text x="539.0" y="190.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">소켓 B</text>
+<rect x="511.56" y="201.0" width="54.879999999999995" height="22" rx="4" fill="#F08A5914" stroke="#F08A59" stroke-width="1.1"/>
+<text x="539.0" y="216.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">소켓 C</text>
+<text x="539.0" y="234" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">연결마다 FD</text>
+<path d="M 611.0 193.0 L 631.0 193.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="634.0" y="144" width="138.0" height="98" rx="6" fill="#11161D" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="650.36" y="175.0" width="105.28" height="22" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="703.0" y="190.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">goroutine ×3</text>
+<text x="703.0" y="234" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Read · 주소 없음</text>
+<path d="M 775.0 193.0 L 795.0 193.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="798.0" y="144" width="138.0" height="98" rx="6" fill="#11161D" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="825.52" y="175.0" width="82.96" height="22" rx="4" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="867.0" y="190.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">FIN → EOF</text>
+<text x="867.0" y="234" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">떠남을 앎</text>
+<text x="24" y="310" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">UDP</text>
+<text x="24" y="328" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">:8080</text>
+<rect x="142.0" y="276" width="138.0" height="98" rx="6" fill="#11161D" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="199.28" y="288.0" width="23.439999999999998" height="22" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="211.0" y="303.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">A</text>
+<rect x="199.28" y="314.0" width="23.439999999999998" height="22" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="211.0" y="329.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">B</text>
+<rect x="199.28" y="340.0" width="23.439999999999998" height="22" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="211.0" y="355.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">C</text>
+<path d="M 283.0 325.0 L 303.0 325.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="306.0" y="276" width="138.0" height="98" rx="6" fill="#11161D" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="333.52" y="288.0" width="82.96" height="22" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="375.0" y="303.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">A → :8080</text>
+<rect x="333.52" y="314.0" width="82.96" height="22" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="375.0" y="329.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">B → :8080</text>
+<rect x="333.52" y="340.0" width="82.96" height="22" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="375.0" y="355.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">C → :8080</text>
+<path d="M 447.0 325.0 L 467.0 325.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="470.0" y="276" width="138.0" height="98" rx="6" fill="#11161D" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="512.4" y="281.0" width="53.199999999999996" height="22" rx="4" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="539.0" y="296.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">A: hi</text>
+<rect x="512.4" y="307.0" width="53.199999999999996" height="22" rx="4" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="539.0" y="322.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">B: hi</text>
+<rect x="512.4" y="333.0" width="53.199999999999996" height="22" rx="4" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="539.0" y="348.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">C: hi</text>
+<text x="539.0" y="366" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">소켓 1 · 한 줄</text>
+<path d="M 611.0 325.0 L 631.0 325.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="634.0" y="276" width="138.0" height="98" rx="6" fill="#11161D" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="672.68" y="281.0" width="60.64" height="22" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="703.0" y="296.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">from=A</text>
+<rect x="672.68" y="307.0" width="60.64" height="22" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="703.0" y="322.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">from=B</text>
+<rect x="672.68" y="333.0" width="60.64" height="22" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="703.0" y="348.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">from=C</text>
+<text x="703.0" y="366" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">ReadFrom 주소</text>
+<path d="M 775.0 325.0 L 795.0 325.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="798.0" y="276" width="138.0" height="98" rx="6" fill="#11161D" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="831.28" y="307.0" width="71.44" height="22" rx="4" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="867.0" y="322.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F0616D">신호 없음</text>
+<text x="867.0" y="366" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">타이머로 삭제</text>
+<line x1="12" y1="432" x2="912" y2="432" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="454" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="444" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">상대마다 생기는 자원</text>
+<rect x="287" y="444" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="309" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">모두가 함께 쓰는 소켓</text>
+<rect x="487" y="444" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="509" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">앱이 떠안는 일</text>
+</svg>

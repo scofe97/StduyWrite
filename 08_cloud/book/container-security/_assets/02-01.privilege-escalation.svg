@@ -1,0 +1,77 @@
+<svg viewBox="0 0 680 380" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>전통적 리눅스 머신과 컨테이너에서의 권한 상승 경로 비교</title>
+  <desc>전통적인 머신에서 공격자는 비특권 사용자로 시작해 root로 도는 소프트웨어의 취약점을 노려 권한을 올려야 합니다. 컨테이너는 기본이 root라 그 단계가 이미 끝나 있습니다. 공격자는 컨테이너를 탈출하기만 하면 호스트에서 곧바로 root이고, 더 올릴 권한이 남지 않습니다. 컨테이너를 비root로 돌려도 이미지 안의 setuid 바이너리나 추가로 부여된 capability가 남아 있으면 여전히 권한 상승의 여지가 있습니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 12.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10px; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .danger-title { fill: #7a1f1f; font-size: 12.5px; font-weight: 700; }
+    .danger-detail { fill: #7a1f1f; font-size: 10px; }
+    .caution-title { fill: #0d0d0d; font-size: 12px; font-weight: 700; }
+    .caution-detail { fill: #0d0d0d; font-size: 10px; }
+  </style>
+
+  <rect width="680" height="380" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="eh" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="32">전통적 머신</text>
+  <text class="head" x="380" y="32">컨테이너 — 기본이 root</text>
+
+  <!-- 좌: 전통 -->
+  <rect class="box" x="40" y="44" width="260" height="52" rx="4"/>
+  <text class="box-title" x="56" y="66">비특권 사용자로 침투</text>
+  <text class="box-detail" x="56" y="84">코드 실행 확보</text>
+
+  <path class="arrow" d="M170,96 L170,116" marker-end="url(#eh)"/>
+
+  <rect class="box" x="40" y="124" width="260" height="52" rx="4"/>
+  <text class="box-title" x="56" y="146">root로 도는 앱을 찾는다</text>
+  <text class="box-detail" x="56" y="164">알려진 취약점 이용</text>
+
+  <path class="arrow" d="M170,176 L170,196" marker-end="url(#eh)"/>
+
+  <rect class="box" x="40" y="204" width="260" height="52" rx="4"/>
+  <text class="box-title" x="56" y="226">권한 상승 성공</text>
+  <text class="box-detail" x="56" y="244">여기까지 두 단계 필요</text>
+
+  <!-- 우: 컨테이너 -->
+  <rect class="box" x="380" y="44" width="260" height="52" rx="4"/>
+  <text class="box-title" x="396" y="66">컨테이너 안에서 코드 실행</text>
+  <text class="box-detail" x="396" y="84">이미 root로 돌고 있다</text>
+
+  <path class="arrow" d="M510,96 L510,116" marker-end="url(#eh)"/>
+
+  <rect x="380" y="124" width="260" height="52" rx="4" fill="rgb(212,168,83)"/>
+  <text class="caution-title" x="396" y="146">주의 · 탈출만 하면 된다</text>
+  <text class="caution-detail" x="396" y="164">권한을 올릴 단계가 없다</text>
+
+  <path class="arrow" d="M510,176 L510,196" marker-end="url(#eh)"/>
+
+  <rect x="380" y="204" width="260" height="52" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="396" y="226">호스트에서 곧바로 root</text>
+  <text class="danger-detail" x="396" y="244">추가 상승이 불필요</text>
+
+  <!-- 하단: 비root여도 남는 경로 -->
+  <text class="head" x="40" y="292">비root여도 남는 두 경로</text>
+
+  <rect class="box" x="40" y="304" width="290" height="46" rx="4"/>
+  <text class="box-title" x="56" y="326">이미지 속 setuid 바이너리</text>
+  <text class="box-detail" x="56" y="342">스캐너가 탐지한다</text>
+
+  <rect class="box" x="350" y="304" width="290" height="46" rx="4"/>
+  <text class="box-title" x="366" y="326">추가로 부여된 capability</text>
+  <text class="box-detail" x="366" y="342">필요한 것만 남기고 덜어낸다</text>
+</svg>

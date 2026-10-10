@@ -1,0 +1,75 @@
+<svg viewBox="0 0 900 580" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>invokevirtual의 수신자 탐색 — 실제 타입에서 시작해 부모로 올라간다</title>
+  <desc>invokevirtual은 피연산자 스택 맨 위의 수신자 객체에서 실제 타입 C를 얻고, C에서부터 메서드를 찾는다. C에 일치하는 메서드가 있고 접근 권한이 맞으면 그 직접 참조를 반환한다. 없으면 C의 부모 클래스로 올라가며 같은 탐색을 반복하고, 끝까지 못 찾으면 AbstractMethodError를 던진다. Human h = new Man() 예시에서 Man이 오버라이딩했으면 Man.sayHello를, 오버라이딩 안 했으면 부모 Human.sayHello를 찾는다. 자식부터 찾기 때문에 오버라이딩한 버전이 우선 호출된다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11px;fill:rgb(160,155,150)}
+      .areah{font-size:11.5px;font-weight:800;fill:rgb(212,168,83)}
+      .step{font-size:10.5px;font-weight:800;fill:rgb(210,205,200)}
+      .lab{font-size:10px;font-weight:700;fill:#10243a;font-family:'JetBrains Mono',monospace}
+      .labs{font-size:8.5px;font-weight:700;fill:#10243a;font-family:'JetBrains Mono',monospace}
+      .code{font-size:10px;font-weight:700;fill:#e6c878;font-family:'JetBrains Mono',monospace}
+      .note{font-size:9px;fill:#cfd6dd}
+      .found{font-size:8.5px;font-weight:800;fill:#0d0d0d;font-family:'JetBrains Mono',monospace}
+      .err{font-size:9px;font-weight:800;fill:#e89384}
+    </style>
+  </defs>
+  <rect x="0" y="0" width="900" height="580" fill="#0d0d0d"/>
+  <text x="28" y="36" class="title">invokevirtual의 수신자 탐색 — 실제 타입에서 부모로</text>
+  <text x="28" y="58" class="sub">수신자 실제 타입 C에서 시작 → 없으면 부모로 → 끝까지 없으면 AbstractMethodError</text>
+
+  <!-- 코드 -->
+  <rect x="28" y="74" width="844" height="40" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="44" y="99" class="code">Human h = new Man();   h.sayHello();        // invokevirtual sayHello()</text>
+
+  <!-- 1단계: 피연산자 스택에서 실제 타입 C -->
+  <text x="28" y="146" class="areah">① 피연산자 스택 맨 위 객체에서 실제 타입 C를 얻는다</text>
+  <rect x="28" y="156" width="240" height="56" rx="6" fill="#f5edda"/>
+  <text x="148" y="178" class="lab" text-anchor="middle">피연산자 스택 top = Man 객체</text>
+  <text x="148" y="196" class="labs" text-anchor="middle">→ C = Man (실제 타입)</text>
+  <text x="288" y="188" class="note">정적 타입은 Human이지만, 탐색 기준은 실제 타입 Man</text>
+
+  <!-- 2단계: 두 경우 대조 -->
+  <text x="28" y="246" class="areah">② C에서 sayHello를 찾는다 — 없으면 부모로 (자식 → 부모)</text>
+
+  <!-- Case A: Man이 오버라이딩함 -->
+  <text x="218" y="276" class="step" text-anchor="middle">경우 A — Man이 오버라이딩함</text>
+  <!-- Man (found) -->
+  <rect x="118" y="288" width="200" height="48" rx="6" fill="#f3d9a0"/>
+  <text x="218" y="308" class="lab" text-anchor="middle">class Man</text>
+  <rect x="134" y="314" width="168" height="18" rx="3" fill="#fdf3df"/>
+  <text x="218" y="327" class="found" text-anchor="middle">sayHello() 있음 → 호출 ✓</text>
+  <!-- 부모는 탐색 안 함 -->
+  <rect x="118" y="348" width="200" height="40" rx="6" fill="#0d0d0d" stroke="rgb(120,116,112)" stroke-dasharray="4 3"/>
+  <text x="218" y="366" class="note" text-anchor="middle">class Human (부모)</text>
+  <text x="218" y="380" class="note" text-anchor="middle">— 올라갈 필요 없음 —</text>
+  <text x="218" y="406" class="note" text-anchor="middle">자식에서 바로 찾음</text>
+
+  <!-- Case B: Man이 오버라이딩 안 함 -->
+  <text x="624" y="276" class="step" text-anchor="middle">경우 B — Man이 오버라이딩 안 함</text>
+  <!-- Man (not found) -->
+  <rect x="524" y="288" width="200" height="48" rx="6" fill="#f5edda"/>
+  <text x="624" y="308" class="lab" text-anchor="middle">class Man</text>
+  <rect x="540" y="314" width="168" height="18" rx="3" fill="#f2d4d4"/>
+  <text x="624" y="327" class="found" text-anchor="middle">sayHello() 없음 → 부모로 ↑</text>
+  <!-- 화살표 위로 -->
+  <line x1="624" y1="348" x2="624" y2="338" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <polygon points="624,336 619,346 629,346" fill="rgb(212,168,83)"/>
+  <!-- Human (found) -->
+  <rect x="524" y="350" width="200" height="48" rx="6" fill="#f3d9a0"/>
+  <text x="624" y="370" class="lab" text-anchor="middle">class Human (부모)</text>
+  <rect x="540" y="376" width="168" height="18" rx="3" fill="#fdf3df"/>
+  <text x="624" y="389" class="found" text-anchor="middle">sayHello() 있음 → 호출 ✓</text>
+  <text x="624" y="414" class="note" text-anchor="middle">상속받은 부모 버전 호출</text>
+
+  <!-- 3단계: 끝까지 없으면 -->
+  <text x="28" y="452" class="areah">③ 부모 사슬 끝(Object)까지 없으면 — AbstractMethodError</text>
+  <rect x="28" y="462" width="844" height="34" rx="6" fill="#0d0d0d" stroke="#e89384" stroke-dasharray="5 4"/>
+  <text x="44" y="484" class="err">Man → Human → … → Object 까지 일치 메서드 없음 → AbstractMethodError 던짐</text>
+
+  <!-- 핵심 -->
+  <rect x="28" y="510" width="844" height="48" rx="8" fill="#f5edda"/>
+  <text x="48" y="532" class="lab" font-weight="800">핵심 — 자식부터 위로 찾기 때문에 오버라이딩한 버전이 우선 호출된다 (런타임 다형성의 토대)</text>
+  <text x="48" y="550" class="lab" font-size="9.5">컴파일러는 어느 버전이 불릴지 미리 모른다. 탐색이 실행 시점에 수신자의 실제 타입을 보고 일어나기 때문이다.</text>
+</svg>
