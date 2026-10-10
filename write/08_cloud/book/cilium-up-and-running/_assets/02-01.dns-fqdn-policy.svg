@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 526" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">DNS 질의 가로채기와 FQDN 정책 반영</title><desc id="dd">DNS 프록시가 해석한 도메인 응답 IP 를 eBPF 맵에 등록해 L4 연결을 허용하는 과정</desc>
+<rect width="920" height="526" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">CILIUM UP AND RUNNING · 02-01 §6</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">DNS 질의 가로채기와 FQDN 정책 반영</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">도메인 질의 응답 IP 를 동적으로 BPF 맵에 매핑해 L4 연결을 커널에서 허용합니다</text>
+<rect x="24.0" y="104" width="190" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="119.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">애플리케이션 Pod</text>
+<text x="119.0" y="141" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">클라이언트 워크로드</text>
+<rect x="243.33333333333337" y="104" width="190" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="338.33333333333337" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">eBPF 데이터패스</text>
+<text x="338.33333333333337" y="141" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">tc / 소켓 계층</text>
+<rect x="462.66666666666674" y="104" width="190" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="557.6666666666667" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">DNS 프록시</text>
+<text x="557.6666666666667" y="141" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">에이전트 내장</text>
+<rect x="682.0" y="104" width="190" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="777.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">CoreDNS</text>
+<text x="777.0" y="141" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">클러스터 DNS :53</text>
+<line x1="119.0" y1="154" x2="119.0" y2="454" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="338.33333333333337" y1="154" x2="338.33333333333337" y2="454" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="557.6666666666667" y1="154" x2="557.6666666666667" y2="454" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="777.0" y1="154" x2="777.0" y2="454" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<path d="M 129.0 168 L 326.33333333333337 168" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<text x="228.66666666666669" y="159" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">1. DNS 질의 전송 (UDP 53)</text>
+<text x="228.66666666666669" y="185" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">api.example.com 주소 확인 요청</text>
+<path d="M 348.33333333333337 212 L 545.6666666666667 212" fill="none" stroke="#F08A59" stroke-width="1.5" marker-end="url(#acc)"/>
+<text x="448.00000000000006" y="203" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F08A59">2. 소켓 가로채기 (TPROXY)</text>
+<text x="448.00000000000006" y="229" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">로컬 DNS 프록시로 투명 리다이렉트</text>
+<path d="M 567.6666666666667 256 L 765.0 256" fill="none" stroke="#E3B341" stroke-width="1.5" marker-end="url(#warn)"/>
+<text x="667.3333333333334" y="247" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#E3B341">3. 업스트림 질의 중계</text>
+<text x="667.3333333333334" y="273" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">CoreDNS 로 원본 패킷 전달</text>
+<path d="M 767.0 300 L 569.6666666666667 300" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)" stroke-dasharray="3 3"/>
+<text x="667.3333333333334" y="291" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">4. DNS 응답 수신</text>
+<text x="667.3333333333334" y="317" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">IP: 93.184.216.34 (A 레코드)</text>
+<path d="M 547.6666666666667 344 L 350.33333333333337 344" fill="none" stroke="#F08A59" stroke-width="1.5" marker-end="url(#acc)"/>
+<text x="448.00000000000006" y="335" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F08A59">5. BPF 맵 원자적 갱신</text>
+<text x="448.00000000000006" y="361" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">ipcache_v2 신원 매핑 · 정책 맵 허용</text>
+<path d="M 547.6666666666667 388 L 131.0 388" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)" stroke-dasharray="3 3"/>
+<text x="228.66666666666669" y="379" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">6. 최종 DNS 응답 전달</text>
+<text x="228.66666666666669" y="405" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Pod 로 해석된 IP 주소 반환</text>
+<path d="M 129.0 432 L 326.33333333333337 432" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<text x="228.66666666666669" y="423" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">7. 목적지 HTTPS 통신</text>
+<text x="228.66666666666669" y="449" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">ipcache_v2(LPM 트라이) 및 정책 검증</text>
+<line x1="12" y1="476" x2="872" y2="476" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="498" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="488" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="498" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">DNS 질의·응답</text>
+<rect x="261" y="488" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="283" y="498" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">eBPF 가로채기·맵 반영 (핵심)</text>
+<rect x="552" y="488" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="574" y="498" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">업스트림 중계</text>
+<rect x="687" y="488" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="709" y="498" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">인증된 데이터패스 통과</text>
+</svg>
