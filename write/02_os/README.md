@@ -9,6 +9,7 @@ related:
   - ./book/learning-modern-linux/README.md
   - ./book/linux-kernel-programming/README.md
   - ./book/systems-performance/README.md
+  - ./book/learning-ebpf/README.md
   - ./book/paw_packet-analysis-wireshark/README.md
   - ./book/cntd_computer-networking-top-down/README.md
   - ./project/network-fundamentals-lab/README.md
@@ -42,6 +43,7 @@ updated: 2026-09-26
 | [container-security/](../08_cloud/book/container-security/README.md) | 보안 관점의 컨테이너 — 커널 기초(namespace·cgroup·root 변경) 위의 이미지·공급망·런타임·통신 보안 (책 기반) |
 | [learning-coredns/](../08_cloud/book/learning-coredns/README.md) | 이름 해석의 *서버* 편 — Corefile·플러그인 체인·존 데이터·쿠버네티스 연동. resolver 클라이언트 측(네트워크 로드맵 1단계·N&K 04-03 §5)과 편을 나눠 가진다 (책 기반) |
 | [systems-performance/](./book/systems-performance/README.md) | 성능 분석가 관점의 시스템 성능 — 방법론·CPU·메모리·디스크·네트워크·클라우드·고급 추적(perf·Ftrace·BPF) (책 기반) |
+| [learning-ebpf/](./book/learning-ebpf/README.md) | eBPF 프로그램 자체의 구조 — 맵·헬퍼·`bpf()` 시스템 콜·verifier·BTF·CO-RE·부착 유형과 네트워킹·보안 활용. `systems-performance/` 가 도구로 쓰는 BCC·bpftrace 의 아래층 (책 기반) |
 | [paw_packet-analysis-wireshark/](./book/paw_packet-analysis-wireshark/README.md) | 선 위의 프레임을 떠서 프로토콜별로 읽는 법 — Wireshark 캡처·필터·TCP·TLS·응용 프로토콜·WLAN·보안 분석 (책 기반) |
 | [cntd_computer-networking-top-down/](./book/cntd_computer-networking-top-down/README.md) | 프로토콜을 위에서 아래로 훑는 규격 축 — 응용·트랜스포트·네트워크 계층의 원리와 라우팅·SDN·망 관리. `paw_` 가 캡처로 확인하는 것을 여기서 규격으로 배운다 (책 기반) |
 | [network-fundamentals-lab/](./project/network-fundamentals-lab/README.md) | 고장이 장전된 채로 뜨는 containerlab 토폴로지 18편 — 증상에서 계층을 좁히는 훈련. N&K 정독본이 맡는 메커니즘을 깨뜨려 확인하는 축이다 (랩 저장소 기반) |
