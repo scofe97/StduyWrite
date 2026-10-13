@@ -111,7 +111,9 @@ EDA 4개 절(기초·처리 모델·워크플로우·운영) 을 독립 시리�
 
 ### 단행본 정독 (`book/`)
 
-→ [`book/system-design/`](book/system-design/) — Alex Xu 『가상 면접 사례로 배우는 대규모 시스템 설계 기초』 16편. 챕터별 핵심을 면접에서 바로 말할 수 있는 수준으로 재구성한 시리즈다.
+→ [`book/system-design/`](book/system-design/) — Alex Xu 『System Design Interview – An Insider's Guide』(2판, Volume 1, 국내판 『가상 면접 사례로 배우는 대규모 시스템 설계 기초』) 정독 노트 19편. 1~15장을 장 단위로 쓰고 긴 장 넷은 두 편으로 나눴으며, 참고 자료 목록인 16장은 인덱스에서만 다룬다.
+
+→ [`book/bytebytego-system-design/`](book/bytebytego-system-design/) — ByteByteGo 「System Design」 그림 해설 모음을 주제별로 묶은 정독 노트. 데이터베이스·캐시·네트워크·API 보안·저장소·메시징·클라우드·결제·사례 설계를 짧은 글 여러 편씩 묶어 한 편으로 쓰고, 책 목록 같은 목록형 글은 인덱스에서만 다룬다.
 
 → [`book/sdp_system-design-primer/`](book/sdp_system-design-primer/) — Donne Martin 의 The System Design Primer 정독 인덱스. 로드 밸런서·캐시·복제 같은 부품 개념을 primer 순서로 따라가며, 지금은 기존 문서로 가는 매핑 표와 공백 목록만 둔다. 사례 중심인 위 Alex Xu 시리즈와 짝을 이룬다.
 

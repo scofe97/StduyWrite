@@ -61,8 +61,8 @@ primer 는 이 막연함을 네 단계로 자르고, 규모는 외워 둔 수치
 
 참고 문서
 
-- [Alex Xu · 면접 4단계 프레임워크](../system-design/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%84%A4%EA%B3%84%20%EB%A9%B4%EC%A0%91%204%EB%8B%A8%EA%B3%84%20%ED%94%84%EB%A0%88%EC%9E%84%EC%9B%8C%ED%81%AC.md)
-- [Alex Xu · 개략적 규모 추정](../system-design/%EA%B0%9C%EB%9E%B5%EC%A0%81%20%EA%B7%9C%EB%AA%A8%20%EC%B6%94%EC%A0%95.md)
+- [Alex Xu · 면접 4단계 프레임워크](../system-design/03-01.%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%84%A4%EA%B3%84%20%EB%A9%B4%EC%A0%91%EC%9D%80%20%EB%B2%94%EC%9C%84%20%ED%99%95%EC%A0%95%C2%B7%EA%B0%9C%EB%9E%B5%20%EC%84%A4%EA%B3%84%C2%B7%EC%83%81%EC%84%B8%20%EC%84%A4%EA%B3%84%C2%B7%EB%A7%88%EB%AC%B4%EB%A6%AC%20%EB%84%A4%20%EB%8B%A8%EA%B3%84%EB%A1%9C%20%EC%A7%84%ED%96%89%ED%95%9C%EB%8B%A4.md)
+- [Alex Xu · 개략적 규모 추정](../system-design/02-01.%EA%B0%9C%EB%9E%B5%EC%A0%81%20%EA%B7%9C%EB%AA%A8%20%EC%B6%94%EC%A0%95%EC%9D%80%202%EC%9D%98%20%EA%B1%B0%EB%93%AD%EC%A0%9C%EA%B3%B1%C2%B7%EC%A7%80%EC%97%B0%20%EC%8B%9C%EA%B0%84%C2%B7%EA%B0%80%EC%9A%A9%EC%84%B1%20%EC%88%98%EC%B9%98%EB%A1%9C%20QPS%20%EC%99%80%20%EC%A0%80%EC%9E%A5%20%EC%9A%A9%EB%9F%89%EC%9D%84%20%EC%96%B4%EB%A6%BC%ED%95%9C%EB%8B%A4.md)
 
 ### 02장 · 트레이드오프 — 다 가질 수 없을 때 무엇을 내줄지 정한다
 
@@ -119,7 +119,7 @@ primer 는 이 막연함을 네 단계로 자르고, 규모는 외워 둔 수치
 - [cntd 02-03 DNS](../../../02_os/book/cntd_computer-networking-top-down/02-03.%EB%A9%94%EC%9D%BC%EA%B3%BC%20%EC%9D%B4%EB%A6%84%EC%9D%80%20%EC%96%B4%EB%96%BB%EA%B2%8C%20%EC%B0%BE%EC%95%84%EA%B0%80%EB%8A%94%EA%B0%80.md)
 - [cntd 02-04 CDN](../../../02_os/book/cntd_computer-networking-top-down/02-04.%EC%98%81%EC%83%81%EC%9D%80%20%EC%96%B4%EB%96%BB%EA%B2%8C%20%EB%81%8A%EA%B8%B0%EC%A7%80%20%EC%95%8A%EB%8A%94%EA%B0%80.md)
 - [Networking and Kubernetes 05-02 Service 5유형](../../../08_cloud/book/networking-and-kubernetes/05-02.Service%205%EC%9C%A0%ED%98%95%20%E2%80%94%20ClusterIP%EC%97%90%EC%84%9C%20LoadBalancer%EA%B9%8C%EC%A7%80.md)
-- [Alex Xu · 0부터 수백만 사용자까지](../system-design/0%EB%B6%80%ED%84%B0%20%EC%88%98%EB%B0%B1%EB%A7%8C%20%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B9%8C%EC%A7%80%20%ED%99%95%EC%9E%A5.md)
+- [Alex Xu · 0부터 수백만 사용자까지](../system-design/01-01.%EB%8B%A8%EC%9D%BC%20%EC%84%9C%EB%B2%84%EC%97%90%EC%84%9C%20%EC%B6%9C%EB%B0%9C%ED%95%9C%20%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%9D%80%20DB%20%EB%B6%84%EB%A6%AC%C2%B7%EB%A1%9C%EB%93%9C%EB%B0%B8%EB%9F%B0%EC%84%9C%C2%B7DB%20%EB%B3%B5%EC%A0%9C%EB%A1%9C%20%EC%B2%AB%20%EB%B3%91%EB%AA%A9%EC%9D%84%20%EB%84%98%EB%8A%94%EB%8B%A4.md)
 
 ### 04장 · 애플리케이션 계층 — 웹 계층과 떼어 내 따로 키운다
 
@@ -169,7 +169,7 @@ RDBMS 를 키우는 기법을 비용이 낮은 순서로 배우고, 그다음에
 - [DDIA 06-04 다중 리더 복제](../../../05_data/book/designing-data-intensive-applications/06-04.%EB%8B%A4%EC%A4%91%20%EB%A6%AC%EB%8D%94%20%EB%B3%B5%EC%A0%9C.md)
 - [DDIA 07-01 샤딩 개요](../../../05_data/book/designing-data-intensive-applications/07-01.%EC%83%A4%EB%94%A9%20%EA%B0%9C%EC%9A%94%EC%99%80%20%ED%82%A4%20%EB%B2%94%EC%9C%84%20%EC%83%A4%EB%94%A9.md)
 - [DDIA 03-02 정규화·비정규화·조인](../../../05_data/book/designing-data-intensive-applications/03-02.%EC%A0%95%EA%B7%9C%ED%99%94%C2%B7%EB%B9%84%EC%A0%95%EA%B7%9C%ED%99%94%C2%B7%EC%A1%B0%EC%9D%B8.md)
-- [Alex Xu · 키-값 저장소 설계](../system-design/%ED%82%A4-%EA%B0%92%20%EC%A0%80%EC%9E%A5%EC%86%8C%20%EC%84%A4%EA%B3%84.md)
+- [Alex Xu · 키-값 저장소 설계](../system-design/06-01.%ED%82%A4-%EA%B0%92%20%EC%A0%80%EC%9E%A5%EC%86%8C%EB%8A%94%20CAP%20%EC%84%A0%ED%83%9D%20%EC%95%84%EB%9E%98%20%EC%95%88%EC%A0%95%20%ED%95%B4%EC%8B%9C%EB%A1%9C%20%EB%82%98%EB%88%84%EA%B3%A0%20N%C2%B7W%C2%B7R%20%EC%A0%95%EC%A1%B1%EC%88%98%EB%A1%9C%20%EB%B3%B5%EC%A0%9C%20%EC%9D%BC%EA%B4%80%EC%84%B1%EC%9D%84%20%EA%B3%A0%EB%A5%B8%EB%8B%A4.md)
 
 ### 06장 · 캐시 — 같은 읽기를 반복하지 않고, 언제 갱신할지를 정한다
 
@@ -192,8 +192,8 @@ RDBMS 를 키우는 기법을 비용이 낮은 순서로 배우고, 그다음에
 
 참고 문서
 
-- [Alex Xu · 0부터 수백만 사용자까지 (캐시 절)](../system-design/0%EB%B6%80%ED%84%B0%20%EC%88%98%EB%B0%B1%EB%A7%8C%20%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B9%8C%EC%A7%80%20%ED%99%95%EC%9E%A5.md)
-- [Alex Xu · 뉴스 피드 시스템 설계 (5계층 캐시)](../system-design/%EB%89%B4%EC%8A%A4%20%ED%94%BC%EB%93%9C%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%84%A4%EA%B3%84.md)
+- [Alex Xu · 0부터 수백만 사용자까지 (캐시 절)](../system-design/01-02.%EC%BA%90%EC%8B%9C%C2%B7CDN%C2%B7%EB%AC%B4%EC%83%81%ED%83%9C%20%EC%9B%B9%20%EA%B3%84%EC%B8%B5%C2%B7%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%84%BC%ED%84%B0%C2%B7%EB%A9%94%EC%8B%9C%EC%A7%80%20%ED%81%90%C2%B7%EC%83%A4%EB%94%A9%EC%9D%B4%20%EC%88%98%EB%B0%B1%EB%A7%8C%20%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B9%8C%EC%A7%80%20%EA%B7%9C%EB%AA%A8%EB%A5%BC%20%EB%8A%98%EB%A6%B0%EB%8B%A4.md)
+- [Alex Xu · 뉴스 피드 시스템 설계 (5계층 캐시)](../system-design/11-01.%EB%89%B4%EC%8A%A4%20%ED%94%BC%EB%93%9C%EB%8A%94%20%EC%93%B8%20%EB%95%8C%20%EB%B0%80%EC%96%B4%20%EB%84%A3%EB%8A%94%20%ED%8C%AC%EC%95%84%EC%9B%83%EA%B3%BC%20%EC%9D%BD%EC%9D%84%20%EB%95%8C%20%EB%8B%B9%EA%B8%B0%EB%8A%94%20%ED%8C%AC%EC%95%84%EC%9B%83%EC%9D%84%20%EC%84%9E%EA%B3%A0%20%EC%BA%90%EC%8B%9C%EB%A5%BC%20%EB%8B%A4%EC%84%AF%20%EC%B8%B5%EC%9C%BC%EB%A1%9C%20%EB%82%98%EB%88%88%EB%8B%A4.md)
 
 ### 07장 · 비동기 — 오래 걸리는 일을 요청 경로에서 빼내고, 밀릴 때는 거절한다
 
@@ -213,7 +213,7 @@ RDBMS 를 키우는 기법을 비용이 낮은 순서로 배우고, 그다음에
 
 - [DDIA 12-01 메시지 브로커와 로그 기반 브로커](../../../05_data/book/designing-data-intensive-applications/12-01.%EC%8A%A4%ED%8A%B8%EB%A6%BC%20%EC%A0%84%EC%86%A1%20%E2%80%94%20%EB%A9%94%EC%8B%9C%EC%A7%80%20%EB%B8%8C%EB%A1%9C%EC%BB%A4%EC%99%80%20%EB%A1%9C%EA%B7%B8%20%EA%B8%B0%EB%B0%98%20%EB%B8%8C%EB%A1%9C%EC%BB%A4.md)
 - [DDIA 02-02 성능 (과부하와 백프레셔)](../../../05_data/book/designing-data-intensive-applications/02-02.%EC%84%B1%EB%8A%A5%20%E2%80%94%20%EC%9D%91%EB%8B%B5%20%EC%8B%9C%EA%B0%84%EA%B3%BC%20%EC%B2%98%EB%A6%AC%EB%9F%89.md)
-- [Alex Xu · 알림 시스템 설계](../system-design/%EC%95%8C%EB%A6%BC%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%84%A4%EA%B3%84.md)
+- [Alex Xu · 알림 시스템 설계](../system-design/10-01.%EC%95%8C%EB%A6%BC%20%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%9D%80%20%EC%A0%9C3%EC%9E%90%20%ED%91%B8%EC%8B%9C%C2%B7SMS%C2%B7%EC%9D%B4%EB%A9%94%EC%9D%BC%20%EC%84%9C%EB%B9%84%EC%8A%A4%20%EC%95%9E%EC%97%90%20%EB%A9%94%EC%8B%9C%EC%A7%80%20%ED%81%90%EC%99%80%20%EC%9E%91%EC%97%85%20%EC%84%9C%EB%B2%84%EB%A5%BC%20%EB%91%90%EC%96%B4%20%EC%9E%AC%EC%8B%9C%EB%8F%84%EC%99%80%20%EC%A4%91%EB%B3%B5%EC%9D%84%20%EB%8B%A4%EB%A3%AC%EB%8B%A4.md)
 
 ### 08장 · 통신 — 부품 사이를 무엇으로 이을지 고른다
 
@@ -276,9 +276,9 @@ primer 의 보안 절은 짧고, 저자도 보강이 필요하다고 적어 두�
 
 참고 문서
 
-- [Alex Xu · URL 단축기 설계](../system-design/URL%20%EB%8B%A8%EC%B6%95%EA%B8%B0%20%EC%84%A4%EA%B3%84.md)
-- [Alex Xu · 뉴스 피드 시스템 설계](../system-design/%EB%89%B4%EC%8A%A4%20%ED%94%BC%EB%93%9C%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%84%A4%EA%B3%84.md)
-- [Alex Xu · 웹 크롤러 설계](../system-design/%EC%9B%B9%20%ED%81%AC%EB%A1%A4%EB%9F%AC%20%EC%84%A4%EA%B3%84.md)
+- [Alex Xu · URL 단축기 설계](../system-design/08-01.URL%20%EB%8B%A8%EC%B6%95%EA%B8%B0%EB%8A%94%20301%C2%B7302%20%EB%A6%AC%EB%94%94%EB%A0%89%EC%85%98%EA%B3%BC%20%ED%95%B4%EC%8B%9C%20%EC%B6%A9%EB%8F%8C%20%ED%95%B4%EC%86%8C%20%EB%98%90%EB%8A%94%20base62%20%EB%B3%80%ED%99%98%EC%9C%BC%EB%A1%9C%20%EC%A7%A7%EC%9D%80%20%ED%82%A4%EB%A5%BC%20%EB%A7%8C%EB%93%A0%EB%8B%A4.md)
+- [Alex Xu · 뉴스 피드 시스템 설계](../system-design/11-01.%EB%89%B4%EC%8A%A4%20%ED%94%BC%EB%93%9C%EB%8A%94%20%EC%93%B8%20%EB%95%8C%20%EB%B0%80%EC%96%B4%20%EB%84%A3%EB%8A%94%20%ED%8C%AC%EC%95%84%EC%9B%83%EA%B3%BC%20%EC%9D%BD%EC%9D%84%20%EB%95%8C%20%EB%8B%B9%EA%B8%B0%EB%8A%94%20%ED%8C%AC%EC%95%84%EC%9B%83%EC%9D%84%20%EC%84%9E%EA%B3%A0%20%EC%BA%90%EC%8B%9C%EB%A5%BC%20%EB%8B%A4%EC%84%AF%20%EC%B8%B5%EC%9C%BC%EB%A1%9C%20%EB%82%98%EB%88%88%EB%8B%A4.md)
+- [Alex Xu · 웹 크롤러 설계](../system-design/09-01.%EC%9B%B9%20%ED%81%AC%EB%A1%A4%EB%9F%AC%EB%8A%94%20URL%20%ED%94%84%EB%A1%A0%ED%8B%B0%EC%96%B4%EA%B0%80%20%EC%9A%B0%EC%84%A0%EC%88%9C%EC%9C%84%EC%99%80%20%EC%98%88%EC%9D%98%EB%A5%BC%20%EC%A7%80%ED%82%A4%EB%A9%B0%20BFS%20%EB%A1%9C%20%EB%82%B4%EB%A0%A4%EB%B0%9B%EA%B3%A0%20%EC%A4%91%EB%B3%B5%EA%B3%BC%20%ED%95%A8%EC%A0%95%EC%9D%84%20%EA%B1%B8%EB%9F%AC%20%EB%82%B8%EB%8B%A4.md)
 - [DDIA 02-01 사례 연구 · 홈 타임라인](../../../05_data/book/designing-data-intensive-applications/02-01.%EC%82%AC%EB%A1%80%20%EC%97%B0%EA%B5%AC%20%E2%80%94%20%EC%86%8C%EC%85%9C%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%ED%99%88%20%ED%83%80%EC%9E%84%EB%9D%BC%EC%9D%B8.md)
 
 
