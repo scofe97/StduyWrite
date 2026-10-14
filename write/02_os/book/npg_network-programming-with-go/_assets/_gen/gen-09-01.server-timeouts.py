@@ -9,7 +9,7 @@ W, H = 880, 450
 d = D(W, H, "NPG CH.9 — SERVER TIMEOUTS",
       "HTTP 서버 연결 시간축과 타임아웃 적용 구간",
       "요청 헤더·본문·핸들러·응답·유휴 각 구간에 대응하는 http.Server 타임아웃 필드",
-      "Listing 9-1 의 ReadHeaderTimeout(1분)과 IdleTimeout(5분) 설정 기준")
+      "예제 서버의 ReadHeaderTimeout(1분)과 IdleTimeout(5분) 설정 기준")
 
 # Timeline boundaries
 # Left column: x=24..200
@@ -41,7 +41,7 @@ y1 = 145
 d.t(24, y1 + 12, "권장 설정", 12, ACC, KR, "start", 600)
 d.t(24, y1 + 27, "ReadHeaderTimeout", 11, INK, MONO, "start", 600)
 d.tone(210, y1 + 5, 120, 24, ACC, op="22", sw=1.3)
-d.t(270, y1 + 21, "1m (Listing 9-1)", 10, ACC, MONO, "middle", 600)
+d.t(270, y1 + 21, "1m", 10, ACC, MONO, "middle", 600)
 
 # Row 2: ReadTimeout (INFO) - 중복 설명 제거하고 API 이름 단독 배치
 y2 = 195
@@ -60,14 +60,14 @@ y4 = 295
 d.t(24, y4 + 12, "권장 설정", 12, OK, KR, "start", 600)
 d.t(24, y4 + 27, "IdleTimeout", 11, INK, MONO, "start", 600)
 d.tone(720, y4 + 5, 130, 24, OK, op="22", sw=1.3)
-d.t(785, y4 + 21, "5m (Listing 9-1)", 10, OK, MONO, "middle", 600)
+d.t(785, y4 + 21, "5m", 10, OK, MONO, "middle", 600)
 
 # Bottom border of rows
 d.line(24, 340, 850, 340, c=RULE, sw=0.8)
 
 # 3. Legend
 d.legend(375, [
-    ("원문 권장 (1분)", ACC),
+    ("권장 (1분)", ACC),
     ("유휴 관리 (5분)", OK),
     ("전체 요청 읽기", INFO),
     ("응답 쓰기 제한", WARN),

@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from dd import D, PAPER, PAPER2, INK, MUTED, SOFT, RULE, OK, WARN, BAD, INFO, ACC, KR, MONO
 
 W, H = 880, 480
-d = D(W, H, "LISTING 4-1 FRAMING",
+d = D(W, H, "FRAMING",
       "세 가지 메시지 프레이밍",
       "경계 없는 TCP 바이트 스트림을 고정 버퍼, 구분자 스캐너, TLV 로 자르는 세 가지 방식",
       "스트림 절단 경계와 복원 방식")

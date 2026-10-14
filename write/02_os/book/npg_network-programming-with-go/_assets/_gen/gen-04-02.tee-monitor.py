@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from dd import D, PAPER, PAPER2, INK, MUTED, SOFT, RULE, OK, WARN, BAD, INFO, ACC, KR, MONO
 
 W, H = 880, 500
-d = D(W, H, "LISTING 4-19 TEE-MONITOR",
+d = D(W, H, "TEE-MONITOR",
       "트래픽 관측 파이프라인",
       "TeeReader 와 MultiWriter 의 투명한 바이트 복제 및 모니터링",
       "연결 변경 없는 입출력 스트림 복제")

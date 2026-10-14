@@ -8,7 +8,7 @@ from dd import D, PAPER, PAPER2, INK, MUTED, SOFT, RULE, OK, WARN, BAD, INFO, AC
 W, H = 880, 460
 d = D(W, H, "NPG CH.6 — TFTP SERVER STATE MACHINE",
       "TFTP 서버 handle 루프 상태 전이",
-      "Listing 6-10 블록 전송·ACK 대기·재전송 및 종료 상태 기계",
+      "handle 의 블록 전송·ACK 대기·재전송 및 종료 상태 기계",
       "블록 전송 후 ACK 확인·타임아웃 재전송·완료 분기")
 
 def draw_state(x, y, w, h, name, sub=None, c=MUTED, focal=False):

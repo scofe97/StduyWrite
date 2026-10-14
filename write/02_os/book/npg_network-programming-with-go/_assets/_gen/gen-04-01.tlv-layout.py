@@ -6,9 +6,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from dd import D, PAPER, PAPER2, INK, MUTED, SOFT, RULE, OK, WARN, BAD, INFO, ACC, KR, MONO
 
 W, H = 880, 520
-d = D(W, H, "LISTING 4-4 TLV DECODING",
+d = D(W, H, "TLV DECODING",
       "TLV 디코딩과 바이트 소비",
-      "Listing 4-9 디코딩 분기와 단계별 바이트 스트림 소비 흐름",
+      "decode 의 타입 분기와 단계별 바이트 스트림 소비 흐름",
       "헤더 판독·크기 검증·페이로드 수신")
 
 def draw_ribbon(x, y, t_col, l_col, v_col):

@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from dd import D, PAPER, PAPER2, INK, MUTED, SOFT, RULE, OK, WARN, BAD, INFO, ACC, KR, MONO
 
 W, H = 880, 540
-d = D(W, H, "LISTING 4-14 PROXY HALF-CLOSE",
+d = D(W, H, "PROXY HALF-CLOSE",
       "양방향 프록시와 half-close",
       "io.Copy 양방향 중계와 CloseWrite 를 통한 단방향 FIN 전달",
       "EOF 감지와 CloseWrite 단방향 종료 전달")

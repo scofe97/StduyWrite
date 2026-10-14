@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from dd import D, PAPER, PAPER2, INK, MUTED, SOFT, RULE, OK, WARN, BAD, INFO, ACC, KR, MONO
 
 W, H = 880, 480
-d = D(W, H, "LISTING 4-26 ZERO WINDOW",
+d = D(W, H, "ZERO WINDOW",
       "수신 버퍼 포화와 제로 윈도",
       "애플리케이션 처리 지연과 제로 윈도 전개 과정",
       "앱 읽기 중단 시 윈도 축소 및 송신 차단")

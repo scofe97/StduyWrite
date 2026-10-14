@@ -8,17 +8,17 @@ from dd import D, PAPER2, INK, MUTED, SOFT, RULE, OK, WARN, BAD, INFO, ACC, KR, 
 W, H = 880, 500
 d = D(W, H, "NPG CH.9 — SERVER ANATOMY",
       "Go HTTP 서버 구조와 요청 처리 흐름",
-      "Listing 9-1 의 서버 구성과 Listing 9-2 의 세 가지 테스트 요청 처리 경로",
+      "예제 서버 구성과 세 가지 테스트 요청 처리 경로",
       "멀티플렉서 없이 TimeoutHandler 미들웨어가 DefaultHandler 를 직접 감싸는 구조")
 
 # 1. Background Zones
 # Zone 1: Client Tier (x=20..296)
 d.box(20, 100, 276, 330, fill=PAPER2, stroke=RULE, sw=0.8, r=8)
-d.t(32, 122, "CLIENT TIER (Listing 9-2·9-3)", 8, SOFT, MONO, "start", 600)
+d.t(32, 122, "CLIENT TIER", 8, SOFT, MONO, "start", 600)
 
 # Zone 2: HTTP Server (x=360..860)
 d.box(360, 100, 500, 330, fill=PAPER2, stroke=RULE, sw=0.8, r=8)
-d.t(376, 122, "HTTP SERVER (Listing 9-1: 127.0.0.1:8081)", 8, SOFT, MONO, "start", 600)
+d.t(376, 122, "HTTP SERVER (127.0.0.1:8081)", 8, SOFT, MONO, "start", 600)
 
 # 2. Arrows (Drawn before boxes for z-order)
 # (1) Client -> net.Listener in gap x=288..370

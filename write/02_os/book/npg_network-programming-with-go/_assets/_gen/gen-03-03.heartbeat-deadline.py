@@ -8,7 +8,7 @@ from dd import D, PAPER, PAPER2, INK, MUTED, SOFT, RULE, OK, WARN, BAD, INFO, AC
 W, H = 840, 510
 d = D(W, H, "NPG CHAPTER 3 — DEADLINE SAWTOOTH LINE",
       "남은 데드라인 시간의 톱니 추이",
-      "Listing 3-12 의 실제 시각 기준 데드라인 연장 꺾은선",
+      "측정 테스트의 실제 시각 기준 데드라인 연장 꺾은선",
       "PONG 수신 시 5초 재설정, 9초에 세션 최종 만료")
 
 # Plot boundaries

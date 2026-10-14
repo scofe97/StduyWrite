@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from dd import D, PAPER, PAPER2, INK, MUTED, SOFT, RULE, OK, WARN, BAD, INFO, ACC, KR, MONO
 
 W, H = 880, 460
-d = D(W, H, "LISTING 4-27 CLOSE_WAIT TRAP",
+d = D(W, H, "CLOSE_WAIT TRAP",
       "CLOSE_WAIT 전이와 누수 함정",
       "상대 FIN 수신 후 Close 호출 누락에 따른 CLOSE_WAIT 상태 고착",
       "Close() 누락 시 CLOSE_WAIT 탈출 불가")

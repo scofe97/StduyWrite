@@ -8,7 +8,7 @@ from dd import D, PAPER, PAPER2, INK, MUTED, SOFT, RULE, OK, WARN, BAD, INFO, AC
 W, H = 840, 540
 d = D(W, H, "NPG CH.7 — PEER CREDENTIALS AUTH",
       "피어 자격 증명 기반 프로세스 인증 흐름",
-      "Listing 7-13 및 7-16의 접속 수락부터 자격 증명 조회, 그룹 대조, 응대 및 차단 분기")
+      "접속 수락부터 자격 증명 조회, 그룹 대조, 응대 및 차단 분기")
 
 # 1. 시작 노드 (s.AcceptUnix)
 d.box(340, 96, 160, 44, fill=PAPER2, stroke=INFO, sw=1.2, r=22)

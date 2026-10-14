@@ -8,7 +8,7 @@ from dd import Seq, PAPER, PAPER2, INK, MUTED, SOFT, RULE, OK, WARN, BAD, INFO, 
 W, H = 840, 580
 d = Seq(W, H, "NPG CH.6 — STOP AND WAIT ARQ",
         "TFTP 전송과 정지-대기 재전송",
-        "Figure 6-3 블록별 ACK 확인과 타임아웃 재전송 흐름",
+        "블록별 ACK 확인과 타임아웃 재전송 흐름",
         "블록마다 ACK 를 확인하고 타임아웃 시 재전송")
 
 # 레인 2개

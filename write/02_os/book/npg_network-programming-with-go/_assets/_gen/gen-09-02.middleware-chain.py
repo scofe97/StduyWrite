@@ -21,7 +21,7 @@ d.arrow([(54, 292), (54, 154)], c=OK, m="ok")
 # Stack 1: 라우터 래핑 스택 (Listing 9-15)
 x1, y0, sw, lh = 76, 120, 396, 56
 
-d.t(x1 + sw / 2, y0 - 14, "Mux 라우팅 파이프라인 (Listing 9-15)", 13, INK, KR, "middle", 600)
+d.t(x1 + sw / 2, y0 - 14, "Mux 라우팅 파이프라인", 13, INK, KR, "middle", 600)
 
 # L1: drainAndClose (ACC)
 d.tone(x1, y0, sw, lh, ACC, op="18", sw=1.2)
@@ -50,7 +50,7 @@ d.t(x1 + 46, y_h + 44, "204 NoContent / 200 OK 응답 본문 작성", 11, MUTED,
 # Stack 2: 정적 파일 보호 스택 (Listing 9-14)
 x2 = 508
 
-d.t(x2 + sw / 2, y0 - 14, "정적 파일 보호 파이프라인 (Listing 9-14)", 13, INK, KR, "middle", 600)
+d.t(x2 + sw / 2, y0 - 14, "정적 파일 보호 파이프라인", 13, INK, KR, "middle", 600)
 
 # L1: http.StripPrefix (INFO)
 d.tone(x2, y0, sw, lh, INFO, op="16", sw=1.0)
