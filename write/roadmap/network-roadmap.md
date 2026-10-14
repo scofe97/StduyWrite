@@ -13,7 +13,7 @@ related:
   - observability-roadmap.md
   - ../02_os/project/network-fundamentals-lab/README.md
   - ../08_cloud/kubernetes/04_networking/README.md
-updated: 2026-10-08
+updated: 2026-10-15
 ---
 
 # 네트워크 학습 로드맵
@@ -41,6 +41,7 @@ updated: 2026-10-08
 | 1 · 연결 | 암호 기초 | 대칭키 · 공개키 · RSA |
 | 1 · 연결 | 이름 숨기기 | SNI · ECH · ClientHelloOuter · HPKE |
 | 1 · 연결 | 신원 | 인증서 체인 · SAN 호스트명 검증 · 유효 기간 · OS CA bundle · truststore |
+| 1 · 연결 | 메일 | SMTP · 봉투와 헤더 · MX · 제출과 중계 · 반송 · STARTTLS · MTA-STS · SPF · DKIM · DMARC · POP3 · IMAP |
 | 1 · 연결 | 중계 | reverse proxy · TLS passthrough 대 TLS 종료 · SNI 라우팅 · Forwarded · X-Forwarded-For 신뢰 경계 · PROXY protocol · half-close · 배압 |
 | 1 · 연결 | 큐와 UDP | listen 큐 · accept 큐 · ephemeral 포트 고갈 · UDP · 단편화 |
 | 2 · Linux 경로 | 이웃 | interface · MAC · ARP · NDP · neighbor 테이블 포화 · 링크 계층 서비스 · 다중 접근 |
@@ -225,6 +226,11 @@ updated: 2026-10-08
 | HTTP 성능 축 | 선택 | | High Performance Browser Networking 11·12장 |
 | WebSocket · HTTP Upgrade | 선택 | [WebSocket 핸드셰이크](../09_spring/03_network/realtime/03-01.WebSocket%20%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C%EA%B3%BC%20%ED%95%B8%EB%93%9C%EC%85%B0%EC%9D%B4%ED%81%AC.md) | High Performance Browser Networking 17장 |
 | UDP · 단편화 | 추천 | [트랜스포트 계층](../02_os/book/cntd_computer-networking-top-down/03-01.%ED%8A%B8%EB%9E%9C%EC%8A%A4%ED%8F%AC%ED%8A%B8%EB%8A%94%20%EB%AC%B4%EC%97%87%EC%9D%84%20%EB%8D%94%ED%95%98%EB%8A%94%EA%B0%80.md) · [포트와 이름](../02_os/book/learning-modern-linux/07-02.%ED%8F%AC%ED%8A%B8%EA%B0%80%20%EC%9E%88%EC%96%B4%EC%95%BC%20%EC%84%9C%EB%B9%84%EC%8A%A4%EB%A5%BC%20%EA%B0%80%EB%A6%AC%ED%82%AC%20%EC%88%98%20%EC%9E%88%EA%B3%A0%20%EC%9D%B4%EB%A6%84%EC%9D%B4%20%EC%9E%88%EC%96%B4%EC%95%BC%20%EC%82%AC%EB%9E%8C%EC%9D%B4%20%EA%B8%B0%EC%96%B5%ED%95%9C%EB%8B%A4.md) | TCP/IP Illustrated 10장 · Learning Modern Linux 7장 |
+| SMTP 대화 · 봉투와 헤더 · 응답 코드 | 추천 | [메일과 이름](../02_os/book/cntd_computer-networking-top-down/02-03.%EB%A9%94%EC%9D%BC%EA%B3%BC%20%EC%9D%B4%EB%A6%84%EC%9D%80%20%EC%96%B4%EB%96%BB%EA%B2%8C%20%EC%B0%BE%EC%95%84%EA%B0%80%EB%8A%94%EA%B0%80.md) | Computer Networking 2장 · [RFC 5321](https://www.rfc-editor.org/rfc/rfc5321) · [RFC 5322](https://www.rfc-editor.org/rfc/rfc5322) |
+| MX · 제출(587)과 중계 · 큐와 반송 | 추천 |  | [RFC 6409](https://www.rfc-editor.org/rfc/rfc6409) · [RFC 5598](https://www.rfc-editor.org/rfc/rfc5598) · [RFC 3464](https://www.rfc-editor.org/rfc/rfc3464) |
+| SPF · DKIM · DMARC — 보낸 도메인을 믿는 법 | 추천 |  | [RFC 7208](https://www.rfc-editor.org/rfc/rfc7208) · [RFC 6376](https://www.rfc-editor.org/rfc/rfc6376) · [RFC 7489](https://www.rfc-editor.org/rfc/rfc7489) |
+| STARTTLS · SMTPS(465) · MTA-STS — 메일 구간 암호화 | 선택 |  | [RFC 3207](https://www.rfc-editor.org/rfc/rfc3207) · [RFC 8314](https://www.rfc-editor.org/rfc/rfc8314) · [RFC 8461](https://www.rfc-editor.org/rfc/rfc8461) |
+| POP3 · IMAP — 메일함 접근 | 선택 | [Gmail 의 보내기와 받기](../03_architecture/book/bytebytego-system-design/08-02.Gmail%20%EC%9D%80%20SMTP%20%EB%A1%9C%20%EB%B3%B4%EB%82%B4%EA%B3%A0%20IMAP%C2%B7POP%20%EC%9C%BC%EB%A1%9C%20%EB%B0%9B%EC%9C%BC%EB%A9%B0%20Google%20Maps%20%EB%8A%94%20%ED%83%80%EC%9D%BC%EC%9D%84%20%EC%A4%8C%20%EB%A0%88%EB%B2%A8%EB%B3%84%EB%A1%9C%20%EB%AF%B8%EB%A6%AC%20%EA%B7%B8%EB%A0%A4%20%EB%82%B4%EB%A0%A4%EC%A4%80%EB%8B%A4.md) | [RFC 1939](https://www.rfc-editor.org/rfc/rfc1939) · [RFC 9051](https://www.rfc-editor.org/rfc/rfc9051) |
 | reverse proxy · half-close · 배압 | 추천 |  | TCP/IP Illustrated 13장 · Network Programming with Go 10장 |
 | TLS passthrough 대 TLS 종료 · SNI 라우팅 | 추천 | [크로스 네임스페이스·mesh](../08_cloud/book/kubernetes-in-action/13-03.TLS%C2%B7%EA%B8%B0%ED%83%80%20%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C%C2%B7%ED%81%AC%EB%A1%9C%EC%8A%A4%20%EB%84%A4%EC%9E%84%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4%C2%B7mesh.md) | Kubernetes in Action 13장 |
 | Forwarded · X-Forwarded-For 신뢰 경계 · PROXY protocol | 추천 |  | [RFC 7239](https://www.rfc-editor.org/rfc/rfc7239) · [PROXY protocol](https://www.haproxy.org/download/2.8/doc/proxy-protocol.txt) |
@@ -529,7 +535,7 @@ updated: 2026-10-08
 | 캠퍼스·벤더 라우팅 — EIGRP · RIP · HSRP · GLBP | 벤더 전용이거나 옛 프로토콜입니다. 표준 쪽 OSPF · BGP · VRRP 만 2단계에 걸었습니다 |
 | 자격증 — CCNA · CCNP · Network+ | 순서가 아니라 시험입니다. CompTIA Network+ 는 보완 참조로만 씁니다 |
 | 시뮬레이터 — GNS3 · EVE-NG · Packet Tracer | 랩 도구는 containerlab 하나로 둡니다 |
-| FTP · SMTP · IMAP | 응용 프로토콜 개별 동작입니다. 1단계 HTTP · DNS · TLS 가 축입니다 |
+| FTP | 응용 프로토콜 개별 동작입니다. 1단계 HTTP · DNS · TLS 와 메일이 축입니다 |
 | 상용 관측 SaaS — Datadog · Dynatrace | 제품 사용법입니다. 관측 원리는 [관측 가능성 로드맵](observability-roadmap.md)이 맡습니다 |
 
 
