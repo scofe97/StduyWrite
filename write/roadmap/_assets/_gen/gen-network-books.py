@@ -35,10 +35,11 @@ rows = [
         ("HTTP/2 in Action", "1단계", "2·4·9장", ["HTTP/1.1 의 한계·프레임", "TCP·QUIC·HTTP/3"], "추천"),
         ("High Performance Browser Networking", "1단계", "4장", ["TLS·인증서 체인", "session resumption·ALPN"], "추천"),
         ("Container Security", "1단계", "11장", ["키·인증서·CA 의 역할", "컴포넌트 사이 TLS"], "선택"),
-        ("Real-World Cryptography", "1 · 8단계", "2~5 · 9장", ["키 교환·AEAD·HKDF", "TLS 1.3 핸드셰이크"], "추천"),
+        ("Real-World Cryptography", "1 · 8단계", "2~5 · 9 · 14장", ["키 교환·AEAD·HKDF", "TLS 1.3·양자 내성 키 교환"], "추천"),
         ("TCP Congestion Control", "1단계", "책 · 5장", ["Vegas 와 BBR", "지연 기반 혼잡 제어"], "추천"),
         ("RFC 8446", "1단계", "문서 · 4.1.4절 · 부록 A", ["HelloRetryRequest", "핸드셰이크 상태 기계"], "추천"),
         ("ECH 규격 묶음", "1단계", "문서 · RFC 9180 · 9460", ["HPKE 와 ECH 초안", "HTTPS RR 로 오는 공개키"], "추천"),
+        ("Cloudflare 학습 센터", "1·2·5단계", "문서 · DNS · SSL", ["DNS 서버 계층·캐시 포이즈닝", "HTTPS·양자 내성 암호"], "추천"),
     ]),
     ("1–6", "계층 종주", [
         ("Networking and Kubernetes", "1~6단계", "전독 · 6장이 클라우드 축", ["OSI 부터 EKS 까지 한 축", "실습 다섯 편 포함"], "필수"),
@@ -61,6 +62,7 @@ rows = [
         ("Cloud Native Data Center Networking", "4·5단계", "2·6·7·14장", ["Clos 토폴로지·네트워크 가상화", "컨테이너 네트워킹·BGP"], "추천"),
         ("System Design on AWS", "5단계", "9장", ["VPN·Direct Connect·TGW", "PrivateLink·Route 53"], "추천"),
         ("Computer Networking", "1·2·5단계", "8장", ["망 계층 보안·IPsec", "VPN 과 사이트 간 연결"], "필수"),
+        ("Cloudflare 학습 센터", "1·2·5단계", "문서 · CDN · DDoS · 네트워크 계층", ["CDN·GSLB·인터넷 구조", "DDoS 유형·증폭·완화"], "추천"),
     ]),
     ("4–7", "데이터패스", [
         ("Cilium Up and Running", "4~7단계", "전독", ["왜 Cilium 인가·CNI 비교·IPAM", "정책·BGP·Egress·암호화·Hubble"], "필수"),
