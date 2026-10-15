@@ -10,11 +10,11 @@ d = D(W, H, "NPG CH.10 — CADDY EDGE ARCHITECTURE",
       "클라이언트와 백엔드 사이에서 TLS 종단과 인증서 자동 발급·갱신을 전담합니다",
       "공개 인터넷과 내부 사설망 경계에서 네트워크 토폴로지를 은닉하는 구조")
 
-# 1. ACME CA (상단 중앙: Let's Encrypt / ZeroSSL)
+# 1. ACME CA (상단 중앙: 기본 발급자 Let's Encrypt)
 ca_x, ca_y, ca_w, ca_h = 345, 96, 270, 52
 d.box(ca_x, ca_y, ca_w, ca_h, fill=PAPER2, stroke=INFO, sw=1.2, r=6)
-d.t(ca_x + ca_w / 2, ca_y + 20, "Let's Encrypt / ZeroSSL", 12, INFO, MONO, "middle", 600)
-d.t(ca_x + ca_w / 2, ca_y + 38, "공개 ACME 인증 기관 (CA)", 11, MUTED, KR, "middle")
+d.t(ca_x + ca_w / 2, ca_y + 20, "Let's Encrypt", 12, INFO, MONO, "middle", 600)
+d.t(ca_x + ca_w / 2, ca_y + 38, "기본 공개 ACME 인증 기관 (CA)", 11, MUTED, KR, "middle")
 
 # ACME CA <-> Caddy 수직 연결선
 d.line(475, ca_y + ca_h, 475, 178, c=INFO, sw=1.4)

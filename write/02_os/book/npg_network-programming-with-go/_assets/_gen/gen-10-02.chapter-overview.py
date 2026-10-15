@@ -80,7 +80,7 @@ harrow(2, 1, "소켓 주소로 덮어씀", OK, "ok")
 
 # §4 자동 HTTPS 는 도메인과 열린 포트를 조건으로 인증서를 받아 온다
 node(3, 0, "host 매처", "도메인 지정 · 80/443", INFO)
-node(3, 1, "ACME 프로토콜", "Let's Encrypt · ZeroSSL", INFO)
+node(3, 1, "ACME 프로토콜", "기본 CA · Let's Encrypt", INFO)
 node(3, 2, "TLS 인증서", "로컬 캐시 · 443 장착 · 308 승격", OK)
 harrow(3, 0, "도메인 감지 즉시", INFO, "info")
 harrow(3, 1, "HTTP-01 검증 통과", OK, "ok")

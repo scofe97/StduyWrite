@@ -29,7 +29,7 @@ d.t(cx, y0 + 34, "포트 80 / 443", 11, MUTED, MONO, "middle")
 
 d.box(sx - lane_w / 2, y0, lane_w, 44, PAPER2, RULE, 1.0)
 d.t(sx, y0 + 18, "ACME CA", 13, INK, KR, "middle", 600)
-d.t(sx, y0 + 34, "Let's Encrypt · ZeroSSL", 11, MUTED, MONO, "middle")
+d.t(sx, y0 + 34, "Let's Encrypt", 11, MUTED, MONO, "middle")
 
 d.lane_top = y0 + 44
 y_bot = 484
