@@ -52,7 +52,7 @@ for lab, sub, c, mk, ret in rows:
     d.chip(660, y, ret, c, 13)
     y += 64
 # 다음 편으로 — 점선
-d.msg("로더", "커널", "kprobe 부착 · perf 이벤트", y, WARN, "warn", dash="5 4", sub="다음 편")
+d.msg("로더", "커널", "perf 버퍼 설정 · map_fd=4 × 4", y, WARN, "warn", dash="5 4", sub="다음 편")
 
 d.legend(H - 56, [("BTF 적재", INFO), ("맵 생성", OK), ("프로그램 적재", ACC), ("맵 갱신", MUTED), ("다음 편", WARN)])
 d.save("04-01.chapter-overview.svg")
