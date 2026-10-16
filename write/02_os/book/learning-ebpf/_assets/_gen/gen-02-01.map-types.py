@@ -12,7 +12,7 @@ d = D(W, H, "LEARNING EBPF · 02-01 §3", "맵 종류는 키가 무엇이고 무
 
 COLS = [
     ("배열 계열", "키는 4바이트 인덱스", [("ARRAY", "인덱스 → 값", None), ("PERCPU_ARRAY", "CPU 별 값", INFO)]),
-    ("해시 계열", "키는 임의 타입", [("HASH", "키 → 값", ACC), ("PERCPU_HASH", "CPU 별 값", INFO), ("LRU_HASH", "오래된 것 제거", None), ("LRU_PERCPU_HASH", "CPU 별 값", INFO)]),
+    ("해시 계열", "키는 임의 타입", [("HASH", "키 → 값", ACC), ("PERCPU_HASH", "CPU 별 값", INFO), ("LRU_HASH", "오래 안 쓴 것 제거", None), ("LRU_PERCPU_HASH", "CPU 별 값", INFO)]),
     ("특수 목적", "연산에 맞춘 구조", [("QUEUE", "FIFO", None), ("STACK", "LIFO", None), ("LPM_TRIE", "최장 접두사", None), ("BLOOM_FILTER", "있는지 검사", None)]),
     ("객체 참조", "객체 정보를 보관", [("SOCKMAP", "소켓", None), ("DEVMAP", "네트워크 장치", None), ("PROG_ARRAY", "프로그램", None), ("ARRAY_OF_MAPS", "맵 속의 맵", None), ("HASH_OF_MAPS", "맵 속의 맵", None)]),
 ]
