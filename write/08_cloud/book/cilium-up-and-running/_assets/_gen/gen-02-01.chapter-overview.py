@@ -24,9 +24,9 @@ d.t(X_NODE + W_NODE - 14, Y_TOP + 28, "DaemonSet 배포", 11, MUTED, KR, "end")
 d.box(X_NODE + 14, Y_TOP + 44, 478, 190, PAPER, RULE, sw=0.8, r=6)
 d.t(X_NODE + 26, Y_TOP + 62, "사용자 공간 (User Space)", 11, SOFT, KR, "start", 600)
 
-# cilium-agent 파드 (데몬셋) - 내장 컴포넌트 포함
+# cilium-agent Pod (데몬셋) - 내장 컴포넌트 포함
 d.tone(X_NODE + 20, Y_TOP + 70, 260, 154, ACC, r=6, op="12", sw=1.1)
-d.t(X_NODE + 32, Y_TOP + 88, "cilium-agent 파드", 11, ACC, KR, "start", 600)
+d.t(X_NODE + 32, Y_TOP + 88, "cilium-agent Pod", 11, ACC, KR, "start", 600)
 
 # cilium-agent 코어
 d.box(X_NODE + 28, Y_TOP + 96, 244, 54, PAPER, RULE, sw=0.8, r=4)
@@ -52,7 +52,7 @@ d.t(X_NODE + 386, Y_TOP + 122, "호스트 런타임 호출", 11, SOFT, KR, "midd
 
 # 독립 프록시: cilium-envoy
 d.tone(X_NODE + 290, Y_TOP + 142, 192, 82, WARN, r=4, op="18", sw=1.1)
-d.t(X_NODE + 386, Y_TOP + 162, "cilium-envoy 파드", 11, WARN, KR, "middle", 600)
+d.t(X_NODE + 386, Y_TOP + 162, "cilium-envoy Pod", 11, WARN, KR, "middle", 600)
 d.t(X_NODE + 386, Y_TOP + 182, "독립 데몬셋 (1.16+ 기본)", 11, INK, KR, "middle")
 d.t(X_NODE + 386, Y_TOP + 200, "L7 정책 · xDS 연동", 11, MUTED, KR, "middle")
 
