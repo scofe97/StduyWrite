@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 682" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">syscall 이 물리 CPU 까지 몇 겹을 지나는가</title><desc id="dd">VM 의 syscall 은 게스트 커널과 하이퍼바이저를 지나 물리 CPU 에 닿고, 컨테이너의 syscall 은 호스트 커널 하나만 지난다. 이 겹 수 차이가 그대로 오버헤드 차이다.</desc>
+<rect width="1000" height="682" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">KUBERNETES IN ACTION · 02-01</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">syscall 이 물리 CPU 까지 몇 겹을 지나는가</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">대신 VM 은 그 겹 덕분에 격리가 더 강하다 — 겹이 값이자 비용이다</text>
+<rect x="24" y="104" width="952" height="522" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="38" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">겹이 많을수록 오버헤드가 크고 격리가 강하다 — 둘은 같은 축의 양끝이다</text>
+<text x="270" y="190" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">VM — 세 겹을 지난다</text>
+<rect x="80" y="212" width="380" height="68" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="96" y="239" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">APP</text>
+<text x="270" y="240" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#6A95D8">App (VM 안)</text>
+<text x="270" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">syscall 을 낸다</text>
+<rect x="80" y="290" width="380" height="68" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.1"/>
+<text x="96" y="317" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">L1</text>
+<text x="270" y="318" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F0616D">게스트 커널</text>
+<text x="270" y="340" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">가상 CPU 명령으로 바꾼다</text>
+<rect x="80" y="368" width="380" height="68" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.1"/>
+<text x="96" y="395" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">L2</text>
+<text x="270" y="396" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F0616D">하이퍼바이저</text>
+<text x="270" y="418" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">가상 → 물리로 중개한다</text>
+<rect x="80" y="446" width="380" height="68" rx="6" fill="#8B98A912" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="96" y="473" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">HW</text>
+<text x="270" y="474" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#8B98A9">물리 CPU</text>
+<text x="270" y="496" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">여기서 실제로 실행된다</text>
+<rect x="224.5" y="529" width="91.0" height="18" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="270" y="542" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">지나는 겹 3</text>
+<text x="700" y="190" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">컨테이너 — 한 겹만 지난다</text>
+<rect x="510" y="212" width="380" height="68" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="526" y="239" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">APP</text>
+<text x="700" y="240" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#6A95D8">App (컨테이너 안)</text>
+<text x="700" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">격리돼 있지만 그냥 프로세스다</text>
+<rect x="510" y="290" width="380" height="68" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="526" y="317" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">L1</text>
+<text x="700" y="318" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#3FB98C">호스트 커널 (공유)</text>
+<text x="700" y="340" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">물리 CPU 에서 바로 실행된다</text>
+<rect x="510" y="368" width="380" height="68" rx="6" fill="#8B98A912" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="526" y="395" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">HW</text>
+<text x="700" y="396" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#8B98A9">물리 CPU</text>
+<text x="700" y="418" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">여기서 실제로 실행된다</text>
+<rect x="654.5" y="451" width="91.0" height="18" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="700" y="464" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">지나는 겹 1</text>
+<path d="M 270 282 L 270 288" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 270 360 L 270 366" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 270 438 L 270 444" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 700 282 L 700 288" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 700 360 L 700 366" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="36" y="578" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">CPU 가상화가 없다는 것이 컨테이너가 가벼운 이유이고, CPU 가상화가 있다는 것이 VM 이 강하게 격리되는 이유다.</text>
+<text x="36" y="602" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">같은 사실의 양면이라 한쪽만 골라 가질 수 없다.</text>
+<line x1="12" y1="642" x2="952" y2="642" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="664" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="654" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="664" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">앱</text>
+<rect x="157" y="654" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="179" y="664" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">VM 이 더 지나는 겹</text>
+<rect x="357" y="654" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="379" y="664" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">컨테이너가 공유하는 커널</text>
+</svg>

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 484" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Google Drive 를 아홉 절로 읽는다</title><desc id="dd">규모를 어림하고 단일 서버를 S3 로 옮긴 뒤, 충돌·블록·일관성을 거쳐 올리기와 내려받기 흐름, 알림, 절약과 장애로 이어 간다.</desc>
+<rect width="1000" height="484" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">SYSTEM DESIGN INTERVIEW · 15-01</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Google Drive 를 아홉 절로 읽는다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">추정 → API → 저장소 → 충돌 → 블록 → 일관성 → 흐름 → 알림 → 절약</text>
+<rect x="24" y="104" width="176" height="124" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="38" y="132" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§1</text>
+<text x="38" y="168" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="16" font-weight="600" fill="#F5F5F3">요구와 추정</text>
+<text x="38" y="204" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">10 TB · 480 QPS</text>
+<rect x="216" y="104" width="176" height="124" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="230" y="132" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§2</text>
+<text x="230" y="168" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="16" font-weight="600" fill="#F5F5F3">API</text>
+<text x="230" y="204" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">재개 가능 업로드</text>
+<rect x="408" y="104" width="176" height="124" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="422" y="132" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§3</text>
+<text x="422" y="168" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="16" font-weight="600" fill="#F5F5F3">S3 로 이주</text>
+<text x="422" y="204" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">샤딩 → 복제</text>
+<rect x="600" y="104" width="176" height="124" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="614" y="132" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§4</text>
+<text x="614" y="168" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="16" font-weight="600" fill="#F5F5F3">동기화 충돌</text>
+<text x="614" y="204" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">먼저 온 쪽이 승</text>
+<rect x="792" y="104" width="176" height="124" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4"/>
+<text x="806" y="132" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">§5</text>
+<text x="806" y="168" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="16" font-weight="600" fill="#F5F5F3">블록 서버</text>
+<text x="806" y="204" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">4 MB · 2·5 만</text>
+<rect x="24" y="276" width="176" height="124" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="38" y="304" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§6</text>
+<text x="38" y="340" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="16" font-weight="600" fill="#F5F5F3">강한 일관성</text>
+<text x="38" y="376" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">ACID · 여섯 표</text>
+<rect x="216" y="276" width="176" height="124" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="230" y="304" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§7</text>
+<text x="230" y="340" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="16" font-weight="600" fill="#F5F5F3">올리기·내려받기</text>
+<text x="230" y="376" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">pending → uploaded</text>
+<rect x="408" y="276" width="176" height="124" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="422" y="304" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§8</text>
+<text x="422" y="340" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="16" font-weight="600" fill="#F5F5F3">롱 폴링</text>
+<text x="422" y="376" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">30 s · changes</text>
+<rect x="600" y="276" width="176" height="124" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="614" y="304" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">§9</text>
+<text x="614" y="340" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="16" font-weight="600" fill="#F5F5F3">절약과 장애</text>
+<text x="614" y="376" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">해시 · 콜드</text>
+<path d="M 202 166 L 210 166" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 394 166 L 402 166" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 586 166 L 594 166" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 778 166 L 786 166" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 202 338 L 210 338" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 394 338 L 402 338" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 586 338 L 594 338" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 880 232 L 880 252 L 112 252 L 112 272" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<line x1="12" y1="428" x2="952" y2="428" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="450" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="440" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">절</text>
+<rect x="157" y="440" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="179" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">가장 중심인 절</text>
+</svg>

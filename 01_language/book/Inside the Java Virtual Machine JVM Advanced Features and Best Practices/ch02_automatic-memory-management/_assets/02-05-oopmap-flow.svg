@@ -1,0 +1,97 @@
+<svg viewBox="0 0 884 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>OopMap — 자바 코드의 슬롯이 OopMap을 거쳐 GC Root가 되기까지</title>
+  <desc>foo(int a, Object b) 메서드의 지역 변수 슬롯(int/ref 혼재)을, 컴파일 시점에 만든 OopMap 레코드가 어느 슬롯이 참조인지 표로 박아 둔다. GC는 그 표만 보고 참조 슬롯만 Root로 뽑고, 숫자 슬롯은 주소처럼 보여도 무시한다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 15px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .shead  { font-size: 12.5px; font-weight: 800; fill: rgb(212,168,83); }
+      .mono   { font-size: 11.5px; font-weight: 700; font-family: 'JetBrains Mono', monospace; fill: #e8e4df; }
+      .slot   { font-size: 11px; font-weight: 700; }
+      .lbl    { font-size: 10.5px; fill: rgb(180,175,170); }
+      .note   { font-size: 10px; fill: rgb(138,133,128); }
+      .good   { font-size: 11px; font-weight: 700; fill: #81c784; }
+      .bad    { font-size: 11px; font-weight: 700; fill: #e57373; }
+    </style>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="5" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L9,4.5 L0,9 z" fill="rgb(212,168,83)"/></marker>
+    <marker id="ag" markerWidth="9" markerHeight="9" refX="5" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L9,4.5 L0,9 z" fill="#81c784"/></marker>
+    <marker id="ax" markerWidth="9" markerHeight="9" refX="5" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L9,4.5 L0,9 z" fill="#e57373"/></marker>
+  </defs>
+  <rect x="0" y="0" width="884" height="600" fill="#0d0d0d"/>
+  <text x="22" y="32" class="title">OopMap — 자바 코드의 슬롯이 GC Root가 되기까지</text>
+  <text x="22" y="52" class="sub">컴파일러가 "어느 슬롯이 참조인지" 미리 표로 박아 둔다 → GC는 추측 없이 그 표만 읽는다</text>
+
+  <!-- ===== ① 자바 코드 + 슬롯 ===== -->
+  <text x="22" y="84" class="shead">① 자바 메서드 → 지역 변수 슬롯 (int·참조가 섞임)</text>
+  <rect x="22" y="96" width="330" height="120" rx="6" fill="#141414" stroke="#3a3a3a"/>
+  <text x="38" y="120" class="mono">Object foo(int a, Object b) {</text>
+  <text x="52" y="140" class="mono">int    c = a + 1;</text>
+  <text x="52" y="160" class="mono">Object d = b;</text>
+  <text x="52" y="182" class="note">← 이 줄에서 GC가 돈다면?</text>
+  <text x="38" y="204" class="mono">}</text>
+
+  <text x="392" y="112" class="lbl">스택 프레임 · 지역 변수 테이블</text>
+  <rect x="392" y="120" width="118" height="40" rx="4" fill="#222" stroke="#555"/>
+  <text x="402" y="137" class="slot" fill="#8a8580">slot 0 · a</text>
+  <text x="402" y="153" class="mono" font-size="10" fill="#8a8580">int 10  (숫자)</text>
+  <rect x="518" y="120" width="118" height="40" rx="4" fill="#1e3a4a" stroke="#4a8ab0" stroke-width="1.6"/>
+  <text x="528" y="137" class="slot" fill="#dceaf7">slot 1 · b</text>
+  <text x="528" y="153" class="mono" font-size="10" fill="#dceaf7">0x8585F30 (참조)</text>
+  <rect x="392" y="166" width="118" height="40" rx="4" fill="#222" stroke="#555"/>
+  <text x="402" y="183" class="slot" fill="#8a8580">slot 2 · c</text>
+  <text x="402" y="199" class="mono" font-size="10" fill="#8a8580">int 11  (숫자)</text>
+  <rect x="518" y="166" width="118" height="40" rx="4" fill="#1e3a4a" stroke="#4a8ab0" stroke-width="1.6"/>
+  <text x="528" y="183" class="slot" fill="#dceaf7">slot 3 · d</text>
+  <text x="528" y="199" class="mono" font-size="10" fill="#dceaf7">0x85861A0 (참조)</text>
+
+  <text x="654" y="140" class="bad">⚠ 메모리에선</text>
+  <text x="654" y="156" class="note">숫자도 주소도</text>
+  <text x="654" y="170" class="note">똑같은 비트 패턴</text>
+  <text x="654" y="184" class="note">→ 슬롯만 봐선</text>
+  <text x="654" y="198" class="note">구분 불가</text>
+
+  <!-- ===== ② OopMap 레코드 ===== -->
+  <text x="22" y="252" class="shead">② 컴파일 시점 — 그 위치의 OopMap 레코드 생성 (컴파일러는 타입을 이미 안다)</text>
+  <rect x="22" y="262" width="840" height="88" rx="6" fill="#15300f" stroke="#66bb6a" stroke-width="1.4"/>
+  <text x="40" y="288" class="mono" font-size="13" fill="#cdeccf">OopMap @ off=142 :  [slot 1]=Oop,  [slot 3]=Oop,  ebx=Oop</text>
+  <text x="40" y="312" class="note">읽는 법 — "기계어 off=142 위치에서 slot1·slot3 과 ebx 레지스터가 객체 참조(Oop). 나머지 slot0·slot2 는 primitive."</text>
+  <text x="40" y="334" class="note">Oop = ordinary object pointer(객체 참조) · off = 이 맵이 유효한 기계어 위치 · 런타임이 아니라 컴파일 때 미리 만들어진다</text>
+
+  <!-- ===== ③ GC가 OopMap으로 Root 추출 ===== -->
+  <text x="22" y="374" class="shead">③ GC 시점 — OopMap만 보고 참조 슬롯만 Root로 뽑는다 (추측 없음)</text>
+
+  <rect x="22" y="388" width="104" height="36" rx="4" fill="#222" stroke="#555"/>
+  <text x="74" y="410" class="slot" text-anchor="middle" fill="#8a8580">slot 0 (int)</text>
+  <rect x="22" y="430" width="104" height="36" rx="4" fill="#1e3a4a" stroke="#4a8ab0" stroke-width="1.6"/>
+  <text x="74" y="452" class="slot" text-anchor="middle" fill="#dceaf7">slot 1 (b)</text>
+  <rect x="22" y="472" width="104" height="36" rx="4" fill="#222" stroke="#555"/>
+  <text x="74" y="494" class="slot" text-anchor="middle" fill="#8a8580">slot 2 (int)</text>
+  <rect x="22" y="514" width="104" height="36" rx="4" fill="#1e3a4a" stroke="#4a8ab0" stroke-width="1.6"/>
+  <text x="74" y="536" class="slot" text-anchor="middle" fill="#dceaf7">slot 3 (d)</text>
+
+  <rect x="190" y="430" width="150" height="78" rx="6" fill="#2a1f0a" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="265" y="458" class="shead" text-anchor="middle" font-size="11.5">OopMap 조회</text>
+  <text x="265" y="478" class="lbl" text-anchor="middle" font-size="10">"slot1·slot3 만</text>
+  <text x="265" y="492" class="lbl" text-anchor="middle" font-size="10">참조" 라고 적힘</text>
+
+  <line x1="126" y1="448" x2="188" y2="455" stroke="#81c784" stroke-width="2" marker-end="url(#ag)"/>
+  <line x1="126" y1="532" x2="188" y2="485" stroke="#81c784" stroke-width="2" marker-end="url(#ag)"/>
+  <line x1="126" y1="406" x2="180" y2="406" stroke="#e57373" stroke-width="1.6" stroke-dasharray="4,3" marker-end="url(#ax)"/>
+  <text x="150" y="398" class="bad" font-size="9.5">✗ 무시</text>
+  <line x1="126" y1="490" x2="180" y2="490" stroke="#e57373" stroke-width="1.6" stroke-dasharray="4,3" marker-end="url(#ax)"/>
+  <text x="148" y="510" class="note" font-size="9">주소처럼 보여도 무시</text>
+
+  <rect x="396" y="430" width="150" height="78" rx="6" fill="#1a2a3a" stroke="#5b9bd5" stroke-width="1.4"/>
+  <text x="471" y="458" class="shead" text-anchor="middle" font-size="11.5" fill="#5b9bd5">GC Roots</text>
+  <text x="471" y="478" class="mono" text-anchor="middle" font-size="10" fill="#dceaf7">b → 객체 X</text>
+  <text x="471" y="494" class="mono" text-anchor="middle" font-size="10" fill="#dceaf7">d → 객체 Y</text>
+  <line x1="340" y1="469" x2="394" y2="469" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+
+  <rect x="600" y="430" width="262" height="78" rx="6" fill="#15300f" stroke="#66bb6a" stroke-width="1.4"/>
+  <text x="731" y="458" class="shead" text-anchor="middle" font-size="11.5" fill="#81c784">도달성 분석</text>
+  <text x="731" y="478" class="lbl" text-anchor="middle" font-size="10">X → … · Y → … 힙 필드 따라 탐색</text>
+  <text x="731" y="494" class="note" text-anchor="middle" font-size="9.5">OopMap=출발점 찾기 / 도달성=그래프 탐색</text>
+  <line x1="546" y1="469" x2="598" y2="469" stroke="#81c784" stroke-width="2" marker-end="url(#ag)"/>
+
+  <text x="22" y="576" class="good">핵심 — OopMap은 컴파일러가 "어느 슬롯이 참조인지" 미리 박아 둔 표. GC는 추측을 "조회"로 바꿔, 참조 슬롯만 정확히 Root로 집어낸다.</text>
+</svg>

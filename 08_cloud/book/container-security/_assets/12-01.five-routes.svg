@@ -1,0 +1,71 @@
+<svg viewBox="0 0 700 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>컨테이너에 정보를 넣는 다섯 경로와 시크릿 적합성</title>
+  <desc>컨테이너는 의도적으로 격리된 대상이므로 실행 중인 컨테이너에 정보를 넣는 방법은 제한적입니다. 첫째 이미지 루트 파일시스템의 파일로 이미지 안에 포함시킬 수 있습니다. 둘째 이미지에 딸린 설정의 일부로 환경 변수를 정의할 수 있습니다. 이 둘은 빌드 시점에 시크릿을 하드코딩해야 해서 시크릿에 부적합합니다. 소스 코드를 볼 수 있는 누구나 시크릿을 보게 되고, 이미지를 다시 빌드하지 않으면 시크릿을 바꿀 수 없습니다. 셋째 네트워크 인터페이스로 정보를 받을 수 있지만 애플리케이션 코드가 적절한 네트워크 호출을 해야 해서 실제로는 가장 드물게 보입니다. 넷째 컨테이너를 실행하는 시점에 환경 변수를 정의하거나 덮어쓸 수 있는데, 크래시 덤프와 inspect 명령으로 새기 때문에 권장되지 않습니다. 다섯째 호스트의 볼륨을 마운트해 파일로 읽는 방법이 선호되는 선택지입니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .danger-title { fill: #7a1f1f; font-size: 11px; font-weight: 700; }
+    .danger-detail { fill: #7a1f1f; font-size: 9.5px; }
+    .ok-title { fill: #14521d; font-size: 11px; font-weight: 700; }
+    .ok-detail { fill: #14521d; font-size: 9.5px; }
+    .tag { fill: #7a1f1f; font-size: 9.5px; font-weight: 700; }
+    .warn-title { fill: #0d0d0d; font-size: 11px; font-weight: 700; }
+    .warn-detail { fill: #0d0d0d; font-size: 9.5px; }
+  </style>
+
+  <rect width="700" height="400" fill="#0d0d0d"/>
+
+  <text class="head" x="40" y="28">빌드 시점에 넣는 둘 — 부적합</text>
+
+  <rect x="40" y="40" width="300" height="82" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="56" y="61">1. 이미지 안의 파일</text>
+  <text class="danger-detail" x="56" y="80">소스를 보는 누구나 본다</text>
+  <text class="danger-detail" x="56" y="98">암호화해도 그 키를 또 넣어야 한다</text>
+  <text class="tag" x="56" y="116">빌드 시점 하드코딩</text>
+
+  <rect x="360" y="40" width="300" height="82" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="376" y="61">2. 이미지 설정의 환경 변수</text>
+  <text class="danger-detail" x="376" y="80">다시 빌드해야 바뀐다</text>
+  <text class="danger-detail" x="376" y="98">Vault 가 생애주기를 못 잡는다</text>
+  <text class="tag" x="376" y="116">빌드 시점 하드코딩</text>
+
+  <text class="head" x="40" y="152">실행 시점에 넣는 셋</text>
+
+  <rect class="box" x="40" y="164" width="196" height="96" rx="4"/>
+  <text class="box-title" x="56" y="185">3. 네트워크로 받기</text>
+  <text class="box-detail" x="56" y="204">앱이 직접 호출해야 한다</text>
+  <text class="box-detail" x="56" y="222">그 트래픽도 암호화 필요</text>
+  <text class="box-detail" x="56" y="240">X.509 인증서가 또 필요</text>
+  <text class="box-detail" x="56" y="256">실제로 가장 드뭅니다</text>
+
+  <rect x="252" y="164" width="196" height="96" rx="4" fill="rgb(212,168,83)"/>
+  <text class="warn-title" x="268" y="185">4. 실행 시 환경 변수</text>
+  <text class="warn-detail" x="268" y="204">크래시 덤프에 딸려 나간다</text>
+  <text class="warn-detail" x="268" y="222">inspect 로 그냥 보인다</text>
+  <text class="warn-detail" x="268" y="240">생성 시 한 번만 설정된다</text>
+  <text class="warn-detail" x="268" y="256">밖에서 순환시킬 수 없다</text>
+
+  <rect x="464" y="164" width="196" height="96" rx="4" fill="#cdeccf"/>
+  <text class="ok-title" x="480" y="185">5. 파일 마운트</text>
+  <text class="ok-detail" x="480" y="204">선호되는 선택지입니다</text>
+  <text class="ok-detail" x="480" y="222">메모리 임시 디렉토리로</text>
+  <text class="ok-detail" x="480" y="240">호스트에서 언제든 갱신</text>
+  <text class="ok-detail" x="480" y="256">재시작 없이 순환 가능</text>
+
+  <!-- root 경고 -->
+  <rect x="40" y="278" width="620" height="82" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="56" y="299">호스트 root 는 결국 읽습니다</text>
+  <text class="danger-detail" x="56" y="318">파일은 tmpfs 에서</text>
+  <text class="danger-detail" x="200" y="318">환경 변수는 environ 에서</text>
+  <text class="danger-detail" x="56" y="336">암호화해도 복호화 키 문제로 회귀</text>
+  <text class="danger-detail" x="56" y="354">컨테이너 root 실행이 위험한 이유</text>
+
+  <text class="hint" x="40" y="388">4번을 기대하는 서드파티가 있습니다</text>
+</svg>

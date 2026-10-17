@@ -1,0 +1,46 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>대기 스레드와 wait·notify 함정 — 락 vs 대기·wait/notify로 9초→50초·측정의 교훈</title>
+  <desc>이 편의 요약입니다. 락된 스레드는 synchronized 블록 입구에서 막힌 것으로 앞 스레드가 끝나면 자연히 풀리고, 대기 스레드는 모니터가 명시적으로 멈춰 세운 것으로 같은 모니터의 notify 가 와야 깨어납니다. da-ch7-ex2 는 consumer 가 리스트가 비면 wait 하고 값을 제거하면 notifyAll 하며, producer 는 리스트가 가득 차면 wait 하고 값을 더하면 notifyAll 합니다. 좋아 보이는 개선이지만 샘플링하면 실행이 약 9초에서 약 50초로 느려집니다. wait 메서드가 대기 시간 대부분을 차지하고, 락은 줄었지만 대기 시간이 길어졌습니다. JVM 이 wait/notify 방식에서는 synchronized 모니터로 자연스럽게 락 언락될 때보다 스레드 전환을 더 느리게 하기 때문입니다. 교훈은 들어맞아 보이는 최적화도 반드시 측정해 확인하라는 것입니다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="38" fill="#e8e4df" font-size="18" font-weight="bold">대기 스레드와 wait·notify 함정</text>
+  <text x="20" y="60" fill="rgb(138,133,128)" font-size="11">Troubleshooting Java · §7.3 · da-ch7-ex2</text>
+
+  <!-- 락 vs 대기 -->
+  <rect x="20" y="78" width="640" height="120" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="100" fill="#e8e4df" font-size="13" font-weight="bold">락된 스레드 vs 대기 스레드 (경찰관과 자동차)</text>
+  <rect x="34" y="112" width="300" height="76" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9"/>
+  <text x="48" y="134" fill="#9cc3df" font-size="12" font-weight="bold">락됨 (locked)</text>
+  <text x="48" y="156" fill="#e8e4df" font-size="10.5">synchronized 블록 입구에서 막힘</text>
+  <text x="48" y="176" fill="rgb(138,133,128)" font-size="10">앞 스레드 끝나면 자연히 풀림 (notify 불필요)</text>
+  <rect x="346" y="112" width="300" height="76" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)"/>
+  <text x="360" y="134" fill="rgb(212,168,83)" font-size="12" font-weight="bold">대기 (waiting)</text>
+  <text x="360" y="156" fill="#e8e4df" font-size="10.5">모니터가 블록 안에서 명시적으로 멈춤</text>
+  <text x="360" y="176" fill="rgb(138,133,128)" font-size="10">같은 모니터의 notify 가 와야 깨어남</text>
+
+  <!-- wait/notify 구현 -->
+  <rect x="20" y="214" width="640" height="92" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="236" fill="#e8e4df" font-size="13" font-weight="bold">da-ch7-ex2 — wait()/notifyAll() 도입</text>
+  <text x="34" y="260" fill="#9cc3df" font-size="11">consumer: 리스트 비면 wait() · 값 제거 후 notifyAll()</text>
+  <text x="34" y="282" fill="#66bb6a" font-size="11">producer: 리스트 가득(100) 차면 wait() · 값 추가 후 notifyAll()</text>
+  <text x="34" y="300" fill="rgb(138,133,128)" font-size="10">발상: 헛도는 스레드를 재워 효율을 올리자 (겉보기엔 영리한 수)</text>
+
+  <!-- 측정 결과 -->
+  <rect x="20" y="322" width="640" height="130" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="34" y="344" fill="#f47f72" font-size="13" font-weight="bold">측정 결과 — 오히려 느려졌다</text>
+  <text x="40" y="378" fill="#66bb6a" font-size="13" font-weight="bold">약 9초</text>
+  <text x="120" y="378" fill="rgb(212,168,83)" font-size="18">→</text>
+  <text x="150" y="378" fill="#f47f72" font-size="13" font-weight="bold">약 50초</text>
+  <text x="250" y="378" fill="rgb(138,133,128)" font-size="11">(엄청난 차이)</text>
+  <text x="34" y="404" fill="#e8e4df" font-size="11">• wait() 가 대기 시간 대부분 차지 · self ≈ CPU (오래 락되진 않음)</text>
+  <text x="34" y="426" fill="#e8e4df" font-size="11">• 락은 줄었지만 대기 시간이 늘어 → 대기를 한쪽→다른 쪽으로 옮겼을 뿐</text>
+  <text x="34" y="446" fill="#f47f72" font-size="10.5">JVM 은 wait/notify 전환이 모니터 자연 락/언락보다 느리다</text>
+
+  <!-- 교훈 -->
+  <rect x="20" y="468" width="640" height="116" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="34" y="490" fill="rgb(212,168,83)" font-size="13" font-weight="bold">교훈 — 들어맞아 보여도 반드시 측정하라</text>
+  <text x="34" y="514" fill="#e8e4df" font-size="11">이론상 좋아 보이는 아이디어가 실제로는 성능 악몽이 될 수 있다</text>
+  <text x="34" y="536" fill="#e8e4df" font-size="11">성공을 선언하기 전에 실험 → 측정 → 분석. 프로파일러는 직감 대신 데이터를 준다</text>
+  <text x="34" y="558" fill="#e8e4df" font-size="11">멀티스레드 앱을 바꿀 때마다 프로파일러로 실행 변화를 분석할 것</text>
+  <text x="34" y="578" fill="rgb(138,133,128)" font-size="9.5">데이터가 벅차면 AI 도구가 해석·병목 식별·대안 제안을 거든다</text>
+</svg>

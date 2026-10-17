@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">persistConn 생명주기와 연결 풀 상태 전이</title><desc id="dd">연결 생성부터 활성 I/O, Body 소비 완료 후 유휴 풀 보관 및 재사용/만료 폐기</desc>
+<rect width="960" height="480" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">PERSISTCONN LIFECYCLE AND STATE TRANSITIONS</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">persistConn 생명주기와 연결 풀 상태 전이</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">Body 를 EOF 까지 읽고 닫아야 유휴 풀로 회수되며 그렇지 않으면 연결이 폐기됩니다</text>
+<circle cx="36" cy="210" r="5" fill="#F5F5F3"/>
+<path d="M 42 210 L 56 210" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="48" y="200" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">getConn()</text>
+<rect x="60" y="169" width="160" height="82" rx="8" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="140" y="190" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">DIAL</text>
+<text x="140" y="207" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">소켓 생성·루프 기동</text>
+<line x1="70" y1="218" x2="210" y2="218" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="140" y="233" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">readLoop·writeLoop</text>
+<path d="M 222 210 L 296 210" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="260" y="198" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#F5F5F3">핸드셰이크 완료</text>
+<rect x="300" y="169" width="160" height="82" rx="8" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="380" y="190" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">ACTIVE</text>
+<text x="380" y="207" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">요청/응답 스트림</text>
+<line x1="310" y1="218" x2="450" y2="218" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="380" y="233" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">RoundTrip I/O</text>
+<path d="M 462 210 L 546 210" fill="none" stroke="#F08A59" stroke-width="1.3" marker-end="url(#acc)"/>
+<text x="505" y="192" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="600" fill="#F08A59">Body EOF + Close()</text>
+<text x="505" y="204" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">tryPutIdleConn()</text>
+<rect x="550" y="169" width="160" height="82" rx="8" fill="#F08A591A" stroke="#F08A59" stroke-width="1.4"/>
+<text x="630" y="190" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">IDLE</text>
+<text x="630" y="207" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">유휴 풀 보관</text>
+<line x1="560" y1="218" x2="700" y2="218" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="630" y="233" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#F08A59">idleLRU 대기</text>
+<path d="M 630 167 C 630 100, 380 100, 380 163" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
+<text x="505" y="88" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="600" fill="#3FB98C">후속 요청 매칭 (queueForIdleConn)</text>
+<path d="M 712 210 L 776 210" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="745" y="196" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#E3B341">IdleConnTimeout 만료</text>
+<text x="745" y="208" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#5E6B7E">또는 서버 FIN</text>
+<rect x="800" y="169" width="120" height="82" rx="8" fill="#161B22" stroke="#F0616D" stroke-width="1.0"/>
+<text x="860" y="190" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F0616D">CLOSED</text>
+<text x="860" y="207" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">소켓 닫힘</text>
+<line x1="810" y1="218" x2="910" y2="218" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="860" y="233" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#5E6B7E">고루틴 종료</text>
+<path d="M 380 253 C 380 340, 860 340, 860 257" fill="none" stroke="#F0616D" stroke-width="1.2" marker-end="url(#bad)" stroke-dasharray="4 3"/>
+<text x="620" y="354" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#F0616D">Body 조기 종료 (earlyCloseFn) · 미종료 누수 폐기</text>
+<path d="M 922 210 L 924 210" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<circle cx="934" cy="210" r="7" fill="none" stroke="#F0616D" stroke-width="1.3"/>
+<circle cx="934" cy="210" r="3.5" fill="#F0616D"/>
+<rect x="36" y="394" width="888" height="36" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="52" y="417" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">재사용 핵심 조건:</text>
+<text x="166" y="417" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">① Response.Body 를 io.EOF 까지 읽음</text>
+<text x="406" y="417" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">② Body.Close() 호출 완료</text>
+<text x="596" y="417" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">③ MaxIdleConnsPerHost 여유 슬롯 존재</text>
+<line x1="12" y1="450" x2="912" y2="450" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="472" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="462" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="472" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">생성 및 대기</text>
+<rect x="235" y="462" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="257" y="472" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">스트림 통신 중</text>
+<rect x="383" y="462" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="405" y="472" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">유휴 풀 보관 (focal)</text>
+<rect x="622" y="462" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="644" y="472" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">만료 경고</text>
+<rect x="731" y="462" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="753" y="472" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">소켓 폐기 · 연결 단절</text>
+</svg>

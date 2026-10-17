@@ -1,0 +1,87 @@
+<svg viewBox="0 0 700 380" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>컨테이너 방화벽이 전통적 방화벽보다 세밀한 이유</title>
+  <desc>컨테이너는 마이크로서비스 아키텍처와 함께 가는 경우가 많습니다. 애플리케이션이 서로 독립적으로 배포되는 작은 구성 요소로 쪼개지면 보안 관점에서 실질적 이점이 생깁니다. 작은 구성 요소에서는 정상 동작이 무엇인지 정의하기가 훨씬 쉽기 때문입니다. 어떤 컨테이너든 통신해야 할 상대는 제한된 집합뿐이고 바깥 세상과 접촉해야 하는 컨테이너는 일부에 불과합니다. 전자상거래 애플리케이션을 예로 들면 상품 검색 요청을 처리하는 마이크로서비스는 최종 사용자의 검색 요청을 받아 상품 데이터베이스에서 조회합니다. 이 서비스를 이루는 컨테이너가 결제 게이트웨이와 통신할 이유는 없습니다. 컨테이너 방화벽은 이런 트래픽을 승인된 목적지로만 흐르게 제한하고 규칙 밖의 연결 시도를 보고해 공격 조사에 쓸 근거를 남깁니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .blocked { stroke: #7a1f1f; stroke-width: 1.5; fill: none; stroke-dasharray: 4 3; }
+    .block-label { fill: #7a1f1f; font-size: 9.5px; font-weight: 700; }
+    .ok-label { fill: #14521d; font-size: 9.5px; font-weight: 700; }
+    .allow { stroke: #14521d; stroke-width: 1.5; fill: none; }
+  </style>
+
+  <rect width="700" height="380" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="uh10" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+    <marker id="gn10" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#14521d"/>
+    </marker>
+    <marker id="rd10" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#7a1f1f"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="30">작을수록 정상을 정의하기 쉽습니다</text>
+
+  <!-- 사용자 -->
+  <rect class="box" x="40" y="52" width="130" height="52" rx="4"/>
+  <text class="box-title" x="56" y="74">최종 사용자</text>
+  <text class="box-detail" x="56" y="92">검색 요청을 보낸다</text>
+
+  <path class="allow" d="M170,78 L212,78" marker-end="url(#gn10)"/>
+
+  <!-- 검색 서비스 -->
+  <rect class="box" x="216" y="52" width="150" height="52" rx="4"/>
+  <text class="box-title" x="232" y="74">상품 검색 서비스</text>
+  <text class="box-detail" x="232" y="92">질의를 받아 조회한다</text>
+
+  <path class="allow" d="M366,78 L408,78" marker-end="url(#gn10)"/>
+  <text class="ok-label" x="370" y="70">허용</text>
+
+  <!-- 상품 DB -->
+  <rect class="box" x="412" y="52" width="150" height="52" rx="4"/>
+  <text class="box-title" x="428" y="74">상품 데이터베이스</text>
+  <text class="box-detail" x="428" y="92">검색 결과를 돌려준다</text>
+
+  <!-- 결제 게이트웨이 -->
+  <rect class="box" x="216" y="160" width="150" height="52" rx="4"/>
+  <text class="box-title" x="232" y="182">결제 게이트웨이</text>
+  <text class="box-detail" x="232" y="200">돈이 오가는 경로</text>
+
+  <path class="blocked" d="M291,104 L291,156" marker-end="url(#rd10)"/>
+  <text class="block-label" x="300" y="134">통신할 이유가 없다</text>
+
+  <!-- 원칙 -->
+  <text class="head" x="40" y="252">함께 쓰는 전통적 수단</text>
+
+  <rect class="box" x="40" y="264" width="196" height="76" rx="4"/>
+  <text class="box-title" x="56" y="285">VPC</text>
+  <text class="box-detail" x="56" y="304">호스트를 바깥 세상과</text>
+  <text class="box-detail" x="56" y="322">분리해 둡니다</text>
+
+  <rect class="box" x="252" y="264" width="196" height="76" rx="4"/>
+  <text class="box-title" x="268" y="285">클러스터 방화벽</text>
+  <text class="box-detail" x="268" y="304">클러스터 전체를 감싸</text>
+  <text class="box-detail" x="268" y="322">드나드는 트래픽을 통제</text>
+
+  <rect class="box" x="464" y="264" width="196" height="76" rx="4"/>
+  <text class="box-title" x="480" y="285">API 방화벽 · WAF</text>
+  <text class="box-detail" x="480" y="304">7계층에서 제한한다</text>
+  <text class="box-detail" x="480" y="322">새로운 기술은 아닙니다</text>
+
+  <text class="hint" x="40" y="368">컨테이너 인지 보안과 겹쳐 씁니다</text>
+</svg>

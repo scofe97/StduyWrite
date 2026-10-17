@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 800" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">sys_enter 하나가 항목에 따라 갈라진다</title><desc id="dd">hello() 가 opcode 로 syscall 배열을 조회해 tail call 하고, 항목이 없을 때만 호출자가 계속 실행되어 Another syscall 을 찍는다.</desc>
+<rect width="960" height="800" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING EBPF · 02-02 §4</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">sys_enter 하나가 항목에 따라 갈라진다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">항목이 있으면 돌아오지 않고, 없으면 다음 줄로 내려갑니다</text>
+<rect x="280" y="108" width="200" height="40" rx="20" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="380" y="133" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">sys_enter</text>
+<rect x="260" y="168" width="240" height="56" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="380" y="192" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">hello()</text>
+<text x="380" y="212" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">opcode = ctx-&gt;args[1]</text>
+<rect x="260" y="244" width="240" height="56" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.2"/>
+<text x="380" y="268" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">syscall.call(ctx, opcode)</text>
+<text x="380" y="288" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">→ bpf_tail_call</text>
+<path d="M 380 150 L 380 166" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 380 226 L 380 242" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 380 302 L 380 336" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<polygon points="380,340 468,376 380,412 292,376" fill="#F5F5F322" stroke="#F5F5F3" stroke-width="1.2"/>
+<text x="380" y="381" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">항목 있음?</text>
+<path d="M 470 376 L 590 376" fill="none" stroke="#F0616D" stroke-width="1.5" marker-end="url(#bad)"/>
+<rect x="501.0" y="348" width="38.0" height="20" rx="4" fill="#0D1117" stroke="#F0616D" stroke-width="0.8"/>
+<text x="520" y="362" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F0616D">없음</text>
+<rect x="590" y="348" width="220" height="56" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.2"/>
+<text x="700" y="372" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">tail call 실패</text>
+<text x="700" y="392" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">index ≥ 500 · 호출자 계속</text>
+<rect x="590" y="452" width="220" height="48" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="700" y="472" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#E3B341">Another syscall: N</text>
+<text x="700" y="492" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">bpf_trace_printk</text>
+<path d="M 700 406 L 700 450" fill="none" stroke="#F0616D" stroke-width="1.5" marker-end="url(#bad)"/>
+<path d="M 380 414 L 380 500" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<rect x="401.0" y="428" width="38.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="420" y="442" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">있음</text>
+<polygon points="380,504 468,540 380,576 292,540" fill="#F5F5F322" stroke="#F5F5F3" stroke-width="1.2"/>
+<text x="380" y="545" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">항목이 가리킨 프로그램</text>
+<path d="M 290 540 L 180 540" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<rect x="188.08" y="512" width="95.83999999999999" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="236" y="526" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">59 · execve</text>
+<rect x="20" y="504" width="160" height="72" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="100" y="532" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">hello_exec</text>
+<text x="100" y="554" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Executing a program</text>
+<path d="M 470 540 L 590 540" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="459.0" y="512" width="122.0" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="520" y="526" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">그 밖 0~499</text>
+<rect x="590" y="512" width="220" height="56" rx="6" fill="#8B98A912" stroke="#8B98A9" stroke-width="1.2"/>
+<text x="700" y="536" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">ignore_opcode</text>
+<text x="700" y="556" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">출력 없음</text>
+<path d="M 380 578 L 380 624" fill="none" stroke="#E3B341" stroke-width="1.5" marker-end="url(#warn)"/>
+<rect x="398.96" y="588" width="66.08" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="432" y="602" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#E3B341">222~226</text>
+<rect x="220" y="628" width="320" height="88" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="380" y="650" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#E3B341">hello_timer</text>
+<text x="380" y="670" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">222 timer_create → Creating a timer</text>
+<text x="380" y="688" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">226 timer_delete → Deleting a timer</text>
+<text x="380" y="706" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">223~225 → Some other timer operation</text>
+<line x1="12" y1="744" x2="912" y2="744" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="766" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="756" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="766" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">진입·호출</text>
+<rect x="209" y="756" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="231" y="766" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">프로그램</text>
+<rect x="305" y="756" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="327" y="766" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">tail call</text>
+<rect x="466" y="756" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="488" y="766" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">출력</text>
+<rect x="536" y="756" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="558" y="766" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">실패</text>
+</svg>

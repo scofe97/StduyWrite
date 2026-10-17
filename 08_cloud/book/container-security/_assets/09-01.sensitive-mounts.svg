@@ -1,0 +1,69 @@
+<svg viewBox="0 0 700 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>호스트 디렉토리 마운트가 격리를 뚫는 다섯 경로</title>
+  <desc>v 옵션으로 호스트 디렉토리를 컨테이너에 마운트할 수 있고 호스트의 루트 디렉토리를 마운트하는 것도 막지 않습니다. 이 컨테이너를 침해한 공격자는 호스트에서 root 이며 호스트 파일시스템 전체에 접근합니다. 전체를 마운트하는 것은 극단적인 예이고 더 미묘한 사례가 여럿 있습니다. etc 를 마운트하면 컨테이너 안에서 호스트의 passwd 파일을 고치거나 cron 작업과 init 과 systemd 를 건드릴 수 있습니다. bin 이나 usr bin 같은 디렉토리를 마운트하면 호스트 디렉토리에 실행 파일을 쓸 수 있고 기존 실행 파일을 덮어쓸 수도 있습니다. 호스트 로그 디렉토리를 마운트하면 공격자가 자기 흔적을 지울 수 있습니다. Kubernetes 에서 var log 를 마운트하면 kubectl logs 를 쓸 수 있는 누구에게나 호스트 파일시스템 전체 접근을 줄 수 있습니다. 컨테이너 로그 파일이 심볼릭 링크인데 컨테이너가 그 링크를 다른 파일로 돌리는 것을 막을 방법이 없기 때문입니다. Docker 소켓에 쓸 수 있는 주체는 데몬에 명령을 보낼 수 있고 데몬은 root 로 돌기 때문에 소켓 접근은 사실상 호스트 root 접근과 같습니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 11px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .code { fill: #0d0d0d; font-size: 9.5px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .chip { fill: #f5edda; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .danger-title { fill: #7a1f1f; font-size: 11px; font-weight: 700; }
+    .danger-detail { fill: #7a1f1f; font-size: 9.5px; }
+  </style>
+
+  <rect width="700" height="400" fill="#0d0d0d"/>
+
+  <text class="head" x="40" y="30">극단적인 예부터</text>
+
+  <rect x="40" y="42" width="620" height="60" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="56" y="63">호스트 루트를 통째로</text>
+  <rect class="chip" x="56" y="71" width="230" height="16" rx="3"/>
+  <text class="code" x="60" y="83">docker run -v /:/hostroot ubuntu</text>
+  <text class="danger-detail" x="300" y="83">침해되면 전체가 열립니다</text>
+
+  <text class="head" x="40" y="130">더 미묘한 것들</text>
+
+  <rect class="box" x="40" y="142" width="204" height="92" rx="4"/>
+  <rect class="chip" x="56" y="152" width="60" height="16" rx="3"/>
+  <text class="code" x="60" y="164">/etc</text>
+  <text class="box-detail" x="56" y="186">passwd 파일 수정</text>
+  <text class="box-detail" x="56" y="204">cron 작업 손대기</text>
+  <text class="box-detail" x="56" y="222">init · systemd</text>
+
+  <rect class="box" x="256" y="142" width="204" height="92" rx="4"/>
+  <rect class="chip" x="272" y="152" width="130" height="16" rx="3"/>
+  <text class="code" x="276" y="164">/bin · /usr/bin</text>
+  <text class="box-detail" x="272" y="186">실행 파일을 써 넣는다</text>
+  <text class="box-detail" x="272" y="204">기존 것을 덮어쓸 수도</text>
+  <text class="box-detail" x="272" y="222">호스트가 그걸 실행한다</text>
+
+  <rect class="box" x="472" y="142" width="188" height="92" rx="4"/>
+  <text class="box-title" x="488" y="164">호스트 로그 경로</text>
+  <text class="box-detail" x="488" y="186">로그를 고칠 수 있다</text>
+  <text class="box-detail" x="488" y="204">침입 흔적을 지운다</text>
+  <text class="box-detail" x="488" y="222">사후 추적이 막힌다</text>
+
+  <!-- var/log 특수 케이스 -->
+  <rect x="40" y="248" width="300" height="86" rx="4" fill="rgb(212,168,83)"/>
+  <text class="box-title" x="56" y="269">Kubernetes 의 특수 경로</text>
+  <rect class="chip" x="56" y="277" width="80" height="16" rx="3"/>
+  <text class="code" x="60" y="289">/var/log</text>
+  <text class="box-detail" x="56" y="310" style="fill:#0d0d0d">로그 파일이 심볼릭 링크다</text>
+  <text class="box-detail" x="56" y="326" style="fill:#0d0d0d">링크를 다른 파일로 돌릴 수 있다</text>
+
+  <rect x="360" y="248" width="300" height="86" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="376" y="269">Docker 소켓</text>
+  <rect class="chip" x="376" y="277" width="180" height="16" rx="3"/>
+  <text class="code" x="380" y="289">/var/run/docker.sock</text>
+  <text class="danger-detail" x="376" y="310">쓸 수 있으면 데몬에 명령을 보낸다</text>
+  <text class="danger-detail" x="376" y="326">데몬이 root — 곧 호스트</text>
+
+  <text class="hint" x="40" y="368">kubectl logs 만으로 닿음</text>
+  <text class="hint" x="40" y="388">운영에서 소켓 마운트 CI 는 금물</text>
+</svg>

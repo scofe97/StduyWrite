@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 600" font-family="Pretendard, sans-serif" role="img">
+  <title>모델 선택과 스키마 유연성</title>
+  <desc>문서 모델의 schema-on-read 와 관계형의 schema-on-write 를 대비하고, 각각이 동적 타입 체크와 정적 타입 체크에 대응함을 보입니다. 문서 저장의 locality 이점이 어디까지 유효한지도 함께 나타냅니다.</desc>
+  <rect width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">모델 선택과 스키마 유연성</text>
+  <text x="32" y="68" fill="#e8e4df" font-size="13">읽을 때 해석 vs 쓸 때 강제</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- schema-on-read vs write -->
+  <rect x="32" y="104" width="300" height="166" rx="6" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="48" y="126" fill="rgb(212,168,83)" font-size="14" font-weight="700">schema-on-read (문서)</text>
+  <text x="48" y="146" fill="#e8e4df" font-size="11">구조는 암묵적, 읽을 때만 해석</text>
+  <text x="48" y="164" fill="#e8e4df" font-size="11">동적 타입 체크와 유사</text>
+  <text x="48" y="186" fill="#bfe3c0" font-size="11">이질적 데이터에 유리</text>
+  <text x="48" y="204" fill="#e8e4df" font-size="10.5">· 객체 유형이 많아 테이블 불가</text>
+  <text x="48" y="222" fill="#e8e4df" font-size="10.5">· 외부 시스템이 구조 결정(변동)</text>
+  <text x="48" y="244" fill="#e8e4df" font-size="10">형식 변경: 새 필드로 쓰고 읽을 때 분기</text>
+  <text x="48" y="262" fill="#e8e4df" font-size="10">"schemaless"는 오해 — 암묵 스키마 있음</text>
+
+  <rect x="348" y="104" width="300" height="166" rx="6" fill="#0d0d0d" stroke="#7fa8c9"/>
+  <text x="364" y="126" fill="#7fa8c9" font-size="14" font-weight="700">schema-on-write (관계형)</text>
+  <text x="364" y="146" fill="#e8e4df" font-size="11">구조는 명시적, 쓸 때 DB가 강제</text>
+  <text x="364" y="164" fill="#e8e4df" font-size="11">정적 타입 체크와 유사</text>
+  <text x="364" y="186" fill="#bfe3c0" font-size="11">모두 같은 구조면 문서·강제에 유리</text>
+  <text x="364" y="208" fill="#e8e4df" font-size="10.5">형식 변경: ALTER + UPDATE 마이그레이션</text>
+  <text x="364" y="226" fill="#f47f72" font-size="10.5">큰 테이블 UPDATE는 느림(전 행 재작성)</text>
+  <text x="364" y="248" fill="#e8e4df" font-size="10">기본값 NULL 컬럼 추가는 빠름</text>
+  <text x="364" y="266" fill="#e8e4df" font-size="10">→ 읽을 때 채우면 문서처럼 회피</text>
+
+  <!-- locality -->
+  <text x="32" y="304" fill="rgb(212,168,83)" font-size="14" font-weight="700">locality(지역성) — 문서만의 것이 아님</text>
+  <rect x="32" y="316" width="616" height="80" rx="6" fill="#0d0d0d" stroke="rgb(42,37,32)"/>
+  <text x="48" y="338" fill="#e8e4df" font-size="11">문서는 연속 문자열(JSON·BSON) → 전체를 한꺼번에 쓰면 빠름</text>
+  <text x="48" y="358" fill="#f47f72" font-size="11">단, 문서는 작게 유지해야 함</text>
+  <text x="48" y="380" fill="#bfe3c0" font-size="11">관계형도 locality 를 얻을 수 있음</text>
+
+  <!-- 수렴 -->
+  <text x="32" y="430" fill="rgb(212,168,83)" font-size="14" font-weight="700">문서·관계형의 수렴</text>
+  <rect x="32" y="442" width="300" height="86" rx="6" fill="#0d0d0d" stroke="#7fa8c9"/>
+  <text x="48" y="464" fill="#7fa8c9" font-size="11.5" font-weight="700">관계형이 흡수</text>
+  <text x="48" y="484" fill="#e8e4df" font-size="10.5">JSON 타입·연산자·문서 내 인덱스</text>
+  <text x="48" y="504" fill="#e8e4df" font-size="10">코드의 nonsimple domains(1970)와 닮음</text>
+  <text x="48" y="520" fill="#e8e4df" font-size="10">→ 30년 뒤 JSON·XML로 실현</text>
+
+  <rect x="348" y="442" width="300" height="86" rx="6" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="364" y="464" fill="rgb(212,168,83)" font-size="11.5" font-weight="700">문서가 흡수</text>
+  <text x="364" y="484" fill="#e8e4df" font-size="10.5">조인·보조 인덱스·선언형 쿼리</text>
+  <text x="364" y="504" fill="#e8e4df" font-size="10.5">MongoDB·Couchbase·RethinkDB</text>
+  <text x="364" y="520" fill="#bfe3c0" font-size="10">→ 관계형-문서 하이브리드가 강력</text>
+
+  <line x1="32" y1="548" x2="648" y2="548" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="570" fill="#e8e4df" font-size="12">재정렬 리스트는 문서가 자연스러움</text>
+  <text x="32" y="590" fill="#e8e4df" font-size="12">문서 쿼리 지원 범위는 셋으로 갈림</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="#e8e4df" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>

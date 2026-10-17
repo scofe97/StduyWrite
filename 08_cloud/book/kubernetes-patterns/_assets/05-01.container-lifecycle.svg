@@ -1,0 +1,92 @@
+<svg viewBox="0 0 900 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>컨테이너 기동부터 강제 종료까지의 이벤트 순서</title>
+  <desc>컨테이너 생애주기에서 플랫폼이 보내는 이벤트와 앱이 반응하는 지점을 시간 순서로 보입니다. 기동 구간에서는 컨테이너가 생성된 뒤 postStart 훅과 주 프로세스가 비동기로 함께 시작하며, postStart가 블로킹 호출이라 그것이 끝날 때까지 컨테이너는 Waiting 상태이고 Pod는 Pending 상태에 머뭅니다. postStart가 nonzero 종료 코드를 반환하면 Kubernetes가 주 컨테이너 프로세스를 죽입니다. 두 단계가 모두 끝나면 컨테이너가 Running 상태로 들어갑니다. 종료 구간에서는 먼저 preStop 훅이 블로킹으로 실행되고 그것이 완료된 뒤에야 컨테이너 삭제 호출이 런타임에 전달되어 SIGTERM이 발행됩니다. 앱은 진행 중 요청을 마치고 연결을 닫을 시간을 얻는데, 기본 30초인 terminationGracePeriodSeconds 안에 종료하지 못하면 SIGKILL로 강제 종료됩니다.</desc>
+
+  <rect width="900" height="400" fill="#0d0d0d"/>
+
+  <text x="24" y="30" fill="#e8e4df" font-size="15" font-weight="700">기동에서 종료까지의 이벤트 순서</text>
+
+  <!-- ============ STARTUP ============ -->
+  <text x="24" y="60" fill="#66bb6a" font-size="12" font-weight="700">기동</text>
+
+  <rect x="24" y="72" width="150" height="44" fill="#cdeccf"/>
+  <text x="99" y="99" text-anchor="middle" fill="#14521d" font-size="11" font-weight="700">컨테이너 생성</text>
+
+  <path d="M 178 82 L 232 82" stroke="#66bb6a" stroke-width="2" marker-end="url(#g)"/>
+  <path d="M 178 106 L 232 106" stroke="#66bb6a" stroke-width="2" marker-end="url(#g)"/>
+  <text x="205" y="76" text-anchor="middle" fill="#b8b3ad" font-size="9">비동기</text>
+
+  <rect x="236" y="60" width="184" height="30" fill="rgb(212,168,83)"/>
+  <text x="328" y="80" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">postStart 훅</text>
+
+  <rect x="236" y="96" width="184" height="30" fill="#dceaf7"/>
+  <text x="328" y="116" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">주 프로세스 ENTRYPOINT</text>
+
+  <path d="M 424 93 L 478 93" stroke="#66bb6a" stroke-width="2" marker-end="url(#g)"/>
+
+  <rect x="482" y="72" width="150" height="44" fill="#cdeccf"/>
+  <text x="557" y="99" text-anchor="middle" fill="#14521d" font-size="11" font-weight="700">Running</text>
+
+  <rect x="656" y="60" width="220" height="82" fill="#f5edda"/>
+  <text x="676" y="80" fill="#0d0d0d" font-size="10" font-weight="700">postStart 완료 전까지</text>
+  <text x="676" y="99" fill="#0d0d0d" font-size="10">컨테이너 Waiting</text>
+  <text x="676" y="115" fill="#0d0d0d" font-size="10">Pod Pending</text>
+  <text x="676" y="133" fill="#7a1f1f" font-size="10" font-weight="700">nonzero exit 이면 kill</text>
+
+  <line x1="24" y1="152" x2="876" y2="152" stroke="#2a2a2a"/>
+
+  <!-- ============ SHUTDOWN ============ -->
+  <text x="24" y="180" fill="rgb(212,168,83)" font-size="12" font-weight="700">종료</text>
+
+  <rect x="24" y="192" width="140" height="44" fill="rgb(212,168,83)"/>
+  <text x="94" y="212" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700">preStop 훅</text>
+  <text x="94" y="229" text-anchor="middle" fill="#0d0d0d" font-size="9">블로킹</text>
+
+  <path d="M 168 214 L 218 214" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#am)"/>
+  <text x="193" y="206" text-anchor="middle" fill="#b8b3ad" font-size="9">완료 후</text>
+
+  <rect x="222" y="192" width="140" height="44" fill="#dceaf7"/>
+  <text x="292" y="212" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">SIGTERM</text>
+  <text x="292" y="229" text-anchor="middle" fill="#10243a" font-size="9">깔끔히 내려가라</text>
+
+  <path d="M 366 214 L 416 214" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#am)"/>
+
+  <rect x="420" y="192" width="230" height="44" fill="#f5edda"/>
+  <text x="535" y="212" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700">유예 · 기본 30초</text>
+  <text x="535" y="229" text-anchor="middle" fill="#0d0d0d" font-size="9" font-family="'JetBrains Mono', monospace">terminationGracePeriodSeconds</text>
+
+  <path d="M 654 214 L 704 214" stroke="#f44336" stroke-width="2" marker-end="url(#r)"/>
+  <text x="679" y="206" text-anchor="middle" fill="#f44336" font-size="9" font-weight="700">초과 시</text>
+
+  <rect x="708" y="192" width="168" height="44" fill="#f2d4d4"/>
+  <text x="792" y="212" text-anchor="middle" fill="#7a1f1f" font-size="11" font-weight="700">SIGKILL</text>
+  <text x="792" y="229" text-anchor="middle" fill="#7a1f1f" font-size="9">강제 종료</text>
+
+  <!-- app's job during grace -->
+  <rect x="420" y="250" width="230" height="60" fill="#cdeccf"/>
+  <text x="440" y="270" fill="#14521d" font-size="10" font-weight="700">이 구간에 앱이 할 일</text>
+  <text x="440" y="288" fill="#14521d" font-size="10">진행 중 요청 완료 · 연결 해제</text>
+  <text x="440" y="304" fill="#14521d" font-size="10">임시 파일 정리</text>
+
+  <path d="M 535 244 L 535 246" stroke="#66bb6a" stroke-width="1.5"/>
+
+  <!-- bottom note -->
+  <rect x="24" y="334" width="852" height="46" fill="#f2d4d4"/>
+  <text x="44" y="354" fill="#7a1f1f" font-size="11" font-weight="700">preStop 은 종료를 못 막습니다</text>
+  <text x="44" y="372" fill="#7a1f1f" font-size="10">실패를 반환해도 삭제됩니다</text>
+
+  <defs>
+    <marker id="g" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#66bb6a"/>
+    </marker>
+    <marker id="am" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="r" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#f44336"/>
+    </marker>
+  </defs>
+</svg>

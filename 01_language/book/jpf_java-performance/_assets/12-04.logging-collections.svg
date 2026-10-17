@@ -1,0 +1,41 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Logging과 Collections</title>
+  <desc>로깅은 세 원칙이 있다. 첫째 데이터와 로그 레벨의 균형이다. INFO 이상 세 레벨이 기본 출력이라 INFO를 흐름 추적에 쓰면 성능이 나빠진다. 낮은 레벨을 두려워 말라. 둘째 fine-grained 로거다. 클래스나 작은 모듈당 로거를 둬 작은 부분만 켤 수 있게 한다. 셋째 의도치 않은 side effect를 조심한다. 로그 인자가 메서드 호출이나 문자열 결합이면 isLoggable로 먼저 검사한다. GC 로그는 오버헤드가 낮아 항상 켠다. HTTP 접근 로그는 숫자로 기록한다. collections는 알고리즘에 맞는 클래스를 고른다. 대부분 unsynchronized이고 Vector Hashtable만 synchronized다. 비경쟁 접근의 oversynchronize 페널티는 5에서 8나노초로 작다. collection sizing이 중요하다. ArrayList는 1.5배로 리사이즈하고 StringBuilder는 2배로 한다. 리사이즈는 배열 복사와 메모리 낭비를 부른다. 생성 시 크기를 추정해 지정한다. Java 8부터 ArrayList HashMap은 lazy backing store라 첫 추가 때 할당한다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">Logging과 Collections — API 위생</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">로깅은 레벨·isLoggable, collection은 알맞은 타입·크기가 핵심입니다</text>
+
+  <!-- 로깅 3원칙 -->
+  <rect x="20" y="74" width="642" height="148" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="96" fill="#9cc3df" font-size="13" font-weight="bold">로깅 — 세 원칙 (기본은 다 꺼라)</text>
+  <text x="38" y="118" fill="rgb(138,133,128)" font-size="11">① 데이터 ↔ 레벨 균형 — INFO 이상 3레벨이 기본 출력. INFO를 흐름 추적에 쓰면 성능↓</text>
+  <text x="56" y="136" fill="rgb(138,133,128)" font-size="10">낮은 레벨(FINE·FINER·FINEST)을 두려워 말 것</text>
+  <text x="38" y="156" fill="rgb(138,133,128)" font-size="11">② fine-grained 로거 — 클래스/작은 모듈당 로거로 작은 부분만 켤 수 있게</text>
+  <text x="38" y="176" fill="#f47f72" font-size="11">③ side effect 조심 — 인자가 메서드 호출·문자열 결합이면 isLoggable()로 먼저 검사</text>
+  <text x="38" y="196" fill="#66bb6a" font-size="10">GC 로그는 오버헤드 낮아 항상 on · HTTP 접근 로그는 숫자로(IP·timestamp)</text>
+  <text x="38" y="214" fill="rgb(138,133,128)" font-size="10">변환은 후처리로 — 로그 시점엔 변환 최소화</text>
+
+  <!-- synchronized vs unsynchronized -->
+  <rect x="20" y="230" width="642" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="252" fill="#e8e4df" font-size="13" font-weight="bold">synchronized vs unsynchronized</text>
+  <text x="38" y="274" fill="rgb(138,133,128)" font-size="11">대부분 unsynchronized (Vector·Hashtable만 synchronized — 역사적)</text>
+  <text x="38" y="296" fill="rgb(138,133,128)" font-size="11">단일 스레드 oversynchronize 페널티(10,000 접근):</text>
+  <text x="38" y="316" fill="#f47f72" font-size="11">CAS 209μs · synchronized 179μs · unsynchronized 104μs (차이 5~8ns)</text>
+  <text x="38" y="336" fill="#66bb6a" font-size="10">미래에 멀티스레드 가능성 있으면 지금 synchronized가 안전 — 설계 선택</text>
+
+  <!-- collection sizing -->
+  <rect x="20" y="358" width="642" height="124" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="380" fill="rgb(212,168,83)" font-size="13" font-weight="bold">collection sizing — 배열 백킹 클래스</text>
+  <text x="38" y="402" fill="rgb(138,133,128)" font-size="11">생성자에 초기 크기 인자가 있으면 내부 배열 사용 → 정확한 초기 크기 지정 중요</text>
+  <text x="38" y="422" fill="rgb(138,133,128)" font-size="11">ArrayList: 10→15→22→33 (약 1.5배) · StringBuilder/ByteArrayOutputStream: 2배(평균 25% 여분)</text>
+  <text x="38" y="442" fill="#f47f72" font-size="11">리사이즈 = 새 배열 할당 + 복사 + 메모리 낭비(GC 영향) → 최종 크기 추정해 지정</text>
+  <text x="38" y="462" fill="#66bb6a" font-size="11">Java 8+: 크기 미지정 ArrayList·HashMap은 lazy backing store (첫 추가 때 할당)</text>
+
+  <!-- 핵심 -->
+  <rect x="20" y="490" width="642" height="92" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="512" fill="#66bb6a" font-size="13" font-weight="bold">알고리즘에 맞는 collection 선택</text>
+  <text x="38" y="534" fill="#e8e4df" font-size="11">검색=HashMap · 정렬 유지=TreeMap · 인덱스 접근=ArrayList · 중간 삽입 잦으면 LinkedList</text>
+  <text x="38" y="556" fill="rgb(138,133,128)" font-size="11">키 하나면 HashMap은 과함 → 객체 참조가 메모리·GC에 유리. 작은 배열은 insertion sort</text>
+  <text x="38" y="576" fill="rgb(138,133,128)" font-size="10">희소 collection(1~2 요소)이 많으면 메모리 낭비 — 정말 collection이 필요한지 따짐</text>
+</svg>

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 640" font-family="Pretendard, sans-serif">
+  <rect width="680" height="640" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">분석용 컬럼 지향 저장</text>
+  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">행이 아니라 컬럼별로 저장 → 필요한 컬럼만 읽고 잘 압축</text>
+  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- 행 vs 컬럼 -->
+  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">행 지향 vs 컬럼 지향</text>
+  <rect x="32" y="124" width="300" height="92" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="48" y="146" fill="#7fa8c9" font-size="12" font-weight="700">행 지향 (OLTP)</text>
+  <text x="48" y="166" fill="#e8e4df" font-size="10.5">한 행의 모든 값을 나란히 저장</text>
+  <text x="48" y="186" fill="#f47f72" font-size="10.5">분석 쿼리: 100+컬럼 행 전체 로드</text>
+  <text x="48" y="204" fill="rgb(138,133,128)" font-size="10">필요 없는 컬럼까지 읽음</text>
+
+  <rect x="348" y="124" width="300" height="92" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
+  <text x="364" y="146" fill="rgb(212,168,83)" font-size="12" font-weight="700">컬럼 지향 (OLAP)</text>
+  <text x="364" y="166" fill="#e8e4df" font-size="10.5">각 컬럼의 모든 값을 함께 저장</text>
+  <text x="364" y="186" fill="#66bb6a" font-size="10.5">쿼리가 쓰는 컬럼만 읽고 파싱</text>
+  <text x="364" y="204" fill="rgb(138,133,128)" font-size="10">모든 컬럼이 같은 행 순서 유지 → 재조립</text>
+
+  <!-- bitmap 압축 -->
+  <text x="32" y="246" fill="rgb(212,168,83)" font-size="14" font-weight="700">bitmap 인코딩 압축</text>
+  <rect x="32" y="258" width="616" height="80" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
+  <text x="48" y="280" fill="#e8e4df" font-size="11">distinct 값 적음(상품 10만 vs 거래 수십억) → 값마다 bitmap 1개(행당 1비트)</text>
+  <text x="48" y="300" fill="#e8e4df" font-size="11">sparse하면 run-length 인코딩(연속 0·1 개수 저장) · roaring bitmap이 둘을 전환</text>
+  <text x="48" y="320" fill="#66bb6a" font-size="11">WHERE product_sk IN (31,68,69) → 세 bitmap의 OR · AND도 효율적(같은 행 순서)</text>
+
+  <!-- sort order + 쓰기 -->
+  <text x="32" y="364" fill="rgb(212,168,83)" font-size="14" font-weight="700">정렬 순서 + 쓰기</text>
+  <rect x="32" y="376" width="300" height="82" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="48" y="398" fill="#e8e4df" font-size="11">행 전체 단위로 정렬(컬럼별 따로 X)</text>
+  <text x="48" y="416" fill="#e8e4df" font-size="11">첫 정렬 키가 압축 효과 최대(긴 반복)</text>
+  <text x="48" y="434" fill="rgb(138,133,128)" font-size="10">관리자가 흔한 쿼리 보고 정렬 컬럼 선택</text>
+  <text x="48" y="450" fill="rgb(138,133,128)" font-size="10">예: date_key 첫 키 → 최근 달만 스캔</text>
+
+  <rect x="348" y="376" width="300" height="82" rx="6" fill="#141414" stroke="#66bb6a"/>
+  <text x="364" y="398" fill="#66bb6a" font-size="11.5" font-weight="700">쓰기 = 대량 적재(ETL)</text>
+  <text x="364" y="416" fill="#e8e4df" font-size="10.5">행 하나 중간 삽입은 비효율(전부 재작성)</text>
+  <text x="364" y="434" fill="#e8e4df" font-size="10.5">log-structured: 인메모리 행 저장 → 모아서</text>
+  <text x="364" y="450" fill="#e8e4df" font-size="10.5">컬럼 파일로 일괄 병합(불변 → 오브젝트 스토어)</text>
+
+  <!-- 쿼리 실행 + materialized -->
+  <text x="32" y="484" fill="rgb(212,168,83)" font-size="14" font-weight="700">쿼리 실행 + materialized</text>
+  <rect x="32" y="496" width="300" height="92" rx="6" fill="#141414" stroke="rgb(212,168,83)"/>
+  <text x="48" y="518" fill="rgb(212,168,83)" font-size="11.5" font-weight="700">CPU 효율 두 방식</text>
+  <text x="48" y="538" fill="#e8e4df" font-size="10.5">· 쿼리 컴파일: SQL→기계어 코드 생성(JIT)</text>
+  <text x="48" y="556" fill="#e8e4df" font-size="10.5">· 벡터화: 컬럼 값을 배치로 처리(SIMD)</text>
+  <text x="48" y="576" fill="rgb(138,133,128)" font-size="10">순차 접근·압축 데이터 직접 연산</text>
+
+  <rect x="348" y="496" width="300" height="92" rx="6" fill="#101620" stroke="#7fa8c9"/>
+  <text x="364" y="518" fill="#7fa8c9" font-size="11.5" font-weight="700">materialized view / data cube</text>
+  <text x="364" y="538" fill="#e8e4df" font-size="10.5">쿼리 결과를 디스크에 실제 복사(virtual view와 대비)</text>
+  <text x="364" y="556" fill="#e8e4df" font-size="10.5">data cube: 차원별 집계 격자 미리 계산</text>
+  <text x="364" y="574" fill="rgb(138,133,128)" font-size="10">읽기↑·쓰기 더 일함·유연성↓ → 보조 수단</text>
+
+  <line x1="32" y1="604" x2="648" y2="604" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="624" fill="rgb(138,133,128)" font-size="11">클라우드 웨어하우스(BigQuery·Snowflake·Redshift): 저장(오브젝트)·연산 분리로 탄력적 · 컴포넌트 분해</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+</svg>

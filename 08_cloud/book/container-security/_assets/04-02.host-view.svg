@@ -1,0 +1,56 @@
+<svg viewBox="0 0 680 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>같은 프로세스가 컨테이너와 호스트에서 다른 번호로 보인다</title>
+  <desc>컨테이너 안에서 sleep 명령을 돌리고 컨테이너 안에서 프로세스 목록을 보면 낮은 번호가 붙습니다. 자기만의 프로세스 아이디 namespace를 갖기 때문입니다. 같은 순간 호스트에서 같은 프로세스를 찾으면 훨씬 큰 번호로 보입니다. 번호는 둘이지만 프로세스는 하나입니다. 컨테이너 프로세스가 호스트에서 보인다는 이 사실이 컨테이너와 가상머신의 근본적 차이이며, 호스트를 장악한 공격자가 그 위의 모든 컨테이너를 관찰하고 영향을 줄 수 있다는 뜻이기도 합니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 12.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10px; }
+    .id { fill: #0d0d0d; font-size: 11px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .chip { fill: #f5edda; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .link { stroke: #b8b3ad; stroke-width: 2; stroke-dasharray: 4 3; fill: none; }
+    .danger-title { fill: #7a1f1f; font-size: 12.5px; font-weight: 700; }
+    .danger-detail { fill: #7a1f1f; font-size: 10px; }
+  </style>
+
+  <rect width="680" height="400" fill="#0d0d0d"/>
+
+  <text class="head" x="40" y="32">컨테이너 안에서 본 것</text>
+  <text class="head" x="640" y="32" text-anchor="end">호스트에서 본 것</text>
+
+  <rect class="box" x="40" y="44" width="270" height="80" rx="4"/>
+  <text class="box-title" x="56" y="66">ps 출력</text>
+  <rect class="chip" x="56" y="76" width="200" height="18" rx="3"/>
+  <text class="id" x="62" y="89">PID 10  sleep 1000</text>
+  <text class="box-detail" x="56" y="112">자기 PID ns라 낮다</text>
+
+  <rect class="box" x="370" y="44" width="270" height="80" rx="4"/>
+  <text class="box-title" x="386" y="66">ps -C sleep 출력</text>
+  <rect class="chip" x="386" y="76" width="210" height="18" rx="3"/>
+  <text class="id" x="392" y="89">PID 30591  sleep 1000</text>
+  <text class="box-detail" x="386" y="112">호스트 전체 번호 체계라 크다</text>
+
+  <!-- 같은 프로세스 연결 -->
+  <path class="link" d="M310,84 L370,84"/>
+  <text class="hint" x="340" y="146" text-anchor="middle">번호는 둘</text>
+  <text class="hint" x="340" y="164" text-anchor="middle">프로세스는 하나</text>
+
+  <rect class="box" x="40" y="186" width="600" height="52" rx="4"/>
+  <text class="box-title" x="56" y="208">사실은 컨테이너화된 프로세스</text>
+  <text class="box-detail" x="56" y="226">호스트 커널이 실행한다</text>
+
+  <!-- 위험 -->
+  <rect x="40" y="252" width="600" height="66" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="56" y="274">위험 · 호스트를 잡으면 전부 잡힌다</text>
+  <text class="danger-detail" x="56" y="294">그 위 컨테이너가 전부 노출</text>
+  <text class="danger-detail" x="56" y="310">가상머신과 갈리는 근본적 차이입니다</text>
+
+  <text class="hint" x="40" y="346">전용 호스트를 권한다</text>
+  <text class="hint" x="40" y="366">Thin OS 로 공격 표면을 줄이고</text>
+  <text class="hint" x="40" y="386">호스트를 불변으로 다룹니다</text>
+</svg>

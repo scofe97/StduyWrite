@@ -1,0 +1,52 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>footprint — committed vs reserved와 측정·최소화</title>
+  <desc>JVM의 total footprint는 heap과 native 메모리의 합이다. OS 관점에서 이 합이 성능의 열쇠다. 물리 메모리에 다 안 들어가면 성능이 나빠질 수 있다. committed와 reserved를 구분해야 한다. Xms512m Xmx2048m이면 JVM은 OS에 2GB를 reserved로 약속받지만 초기 committed는 512MB뿐이다. reserved는 가상 크기로, 너무 많이 잡아도 성능 문제는 없다. 단 32비트는 프로세스 4GB 한계라 over-reserve가 문제고, 64비트는 머신 가상 메모리에 묶인다. code cache와 metaspace도 초기에서 최대까지 자란다. thread stack은 예외로 생성 즉시 전량 할당된다. Unix는 RSS, 최신 Linux는 PSS, Windows는 working set으로 footprint를 잰다. RSS가 committed보다 작으면 OS가 JVM을 물리 메모리에 못 맞춘다는 신호다. footprint 최소화는 heap, thread stack, code cache, native library 네 영역을 줄인다. heap은 전체의 50~60%뿐일 수 있다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">footprint — committed vs reserved</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">total footprint = heap + native, OS 관점에서 이 합이 성능의 열쇠입니다</text>
+
+  <!-- committed vs reserved -->
+  <rect x="20" y="74" width="642" height="128" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="96" fill="#e8e4df" font-size="13" font-weight="bold">예: -Xms512m -Xmx2048m</text>
+  <rect x="38" y="108" width="606" height="32" fill="rgba(127,168,201,0.12)" stroke="#7fa8c9"/>
+  <text x="50" y="128" fill="#9cc3df" font-size="11" font-weight="bold">reserved 2048MB</text>
+  <text x="300" y="128" fill="rgb(138,133,128)" font-size="10">OS가 약속한 가상 크기 — 성능 무관(너무 잡아도 OK)</text>
+  <rect x="38" y="144" width="152" height="32" fill="rgba(102,187,106,0.15)" stroke="#66bb6a"/>
+  <text x="50" y="164" fill="#66bb6a" font-size="11" font-weight="bold">committed 512MB</text>
+  <text x="200" y="164" fill="rgb(138,133,128)" font-size="10">실제 할당 = 실제 사용 메모리 (heap 리사이즈로 변동)</text>
+  <text x="38" y="194" fill="rgb(212,168,83)" font-size="10">성능엔 committed만 중요 — reserved를 너무 많이 잡아 생기는 성능 문제는 없음</text>
+
+  <!-- over-reserve caution -->
+  <rect x="20" y="210" width="320" height="92" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="232" fill="#f47f72" font-size="12" font-weight="bold">32비트 — over-reserve 문제</text>
+  <text x="38" y="252" fill="rgb(138,133,128)" font-size="10">프로세스 4GB 한계</text>
+  <text x="38" y="270" fill="rgb(138,133,128)" font-size="10">heap 3.5GB reserve → native 0.5GB만</text>
+  <text x="38" y="288" fill="#f47f72" font-size="10">commit 1GB여도 reserve가 묶음</text>
+
+  <rect x="350" y="210" width="312" height="92" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="368" y="232" fill="rgb(212,168,83)" font-size="12" font-weight="bold">64비트 — 가상 메모리 한계</text>
+  <text x="368" y="252" fill="rgb(138,133,128)" font-size="10">프로세스 크기 제약 없음</text>
+  <text x="368" y="270" fill="rgb(138,133,128)" font-size="10">머신 총 가상 메모리에 묶임</text>
+  <text x="368" y="288" fill="rgb(212,168,83)" font-size="10">10GB 가상에 6GB reserve → 둘째 JVM 4GB 미만</text>
+
+  <!-- thread stack 예외 -->
+  <rect x="20" y="310" width="642" height="56" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9"/>
+  <text x="38" y="332" fill="#9cc3df" font-size="12" font-weight="bold">thread stack은 예외</text>
+  <text x="38" y="352" fill="rgb(138,133,128)" font-size="10">heap·code cache·metaspace는 초기→최대로 점진 commit. thread stack은 생성 즉시 전량 할당</text>
+
+  <!-- 측정: RSS/PSS/working set -->
+  <rect x="20" y="374" width="642" height="86" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="396" fill="#66bb6a" font-size="13" font-weight="bold">측정 — committed를 추정</text>
+  <text x="38" y="418" fill="rgb(138,133,128)" font-size="11">Unix RSS (top·ps) · 최신 Linux PSS(공유분 제거) · Windows working set(작업관리자)</text>
+  <text x="38" y="438" fill="rgb(138,133,128)" font-size="11">reserved(virtual) 말고 committed(allocated)를 본다</text>
+  <text x="38" y="454" fill="#f47f72" font-size="10">RSS &lt; committed면 OS가 JVM을 물리 메모리에 못 맞추는 신호</text>
+
+  <!-- 최소화 4영역 -->
+  <rect x="20" y="468" width="642" height="114" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="490" fill="rgb(212,168,83)" font-size="13" font-weight="bold">footprint 최소화 — 네 영역</text>
+  <text x="38" y="512" fill="#e8e4df" font-size="11">① heap — 가장 크지만 전체의 50~60%뿐일 수 있음 (최대 힙↓ 또는 미확장 튜닝)</text>
+  <text x="38" y="532" fill="#e8e4df" font-size="11">② thread stack — 64비트에서 큼 (9장에서 제한 방법)</text>
+  <text x="38" y="552" fill="#e8e4df" font-size="11">③ code cache — 컴파일 코드 보관 (4장에서 튜닝, 단 다 못 담으면 성능↓)</text>
+  <text x="38" y="572" fill="#e8e4df" font-size="11">④ native library 할당 — 자체 메모리 할당, 때로 큼</text>
+</svg>

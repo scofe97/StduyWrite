@@ -1,0 +1,52 @@
+<svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>클래식 GC 컬렉터 분류 좌표 — 세대별 짝과 G1의 예외</title>
+  <desc>신세대 컬렉터와 구세대 컬렉터의 짝을 보여 준다. Serial은 Serial Old와, ParNew는 CMS와, Parallel Scavenge는 Parallel Old와 주로 짝을 이룬다. G1은 신세대와 구세대를 한 컬렉터가 Region 기반으로 모두 다루는 예외다.</desc>
+  <defs>
+    <style>
+      .title{font-size:17px;font-weight:800;fill:#e8e4df}.sub{font-size:11px;fill:rgb(138,133,128)}.head{font-size:13px;font-weight:800;fill:rgb(212,168,83)}.label{font-size:11px;font-weight:750;fill:#e8e4df}.body{font-size:10px;fill:rgb(180,175,170)}.note{font-size:9.5px;fill:rgb(138,133,128)}.code{font-size:10px;font-weight:700;fill:rgb(212,168,83);font-family:'JetBrains Mono',monospace}.ok{font-size:10px;font-weight:750;fill:#81c784}.bad{font-size:10px;font-weight:750;fill:#e57373}
+    </style>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,4 L0,8 z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="560" fill="#0d0d0d"/>
+  <text x="26" y="36" class="title">클래식 GC 컬렉터 분류 좌표 — 세대별 짝과 G1의 예외</text>
+  <text x="26" y="55" class="sub">컬렉터는 어느 세대를 맡는가, STW/병렬/동시 중 어떤 관계로 앱과 동작하는가로 먼저 분류한다</text>
+
+  <rect x="24" y="84" width="400" height="310" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="46" y="112" class="head">① 신세대 컬렉터</text>
+  <rect x="56" y="142" width="318" height="54" rx="6" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="215" y="164" class="label" text-anchor="middle">Serial</text>
+  <text x="215" y="182" class="body" text-anchor="middle">단일 스레드 STW · 마크-카피</text>
+  <rect x="56" y="218" width="318" height="54" rx="6" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="215" y="240" class="label" text-anchor="middle">ParNew</text>
+  <text x="215" y="258" class="body" text-anchor="middle">다중 스레드 STW · CMS 짝 · latency 우선</text>
+  <rect x="56" y="294" width="318" height="54" rx="6" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="215" y="316" class="label" text-anchor="middle">Parallel Scavenge</text>
+  <text x="215" y="334" class="body" text-anchor="middle">다중 스레드 STW · throughput 우선</text>
+
+  <rect x="476" y="84" width="400" height="310" rx="8" fill="#1a1a1a" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="498" y="112" class="head">② 구세대 컬렉터</text>
+  <rect x="526" y="142" width="300" height="54" rx="6" fill="#2a2a1a" stroke="rgb(212,168,83)"/>
+  <text x="676" y="164" class="label" text-anchor="middle">Serial Old</text>
+  <text x="676" y="182" class="body" text-anchor="middle">단일 스레드 STW · 마크-컴팩트</text>
+  <rect x="526" y="218" width="300" height="54" rx="6" fill="#2a2a1a" stroke="rgb(212,168,83)"/>
+  <text x="676" y="240" class="label" text-anchor="middle">CMS</text>
+  <text x="676" y="258" class="body" text-anchor="middle">동시 마크-스윕 · latency 우선 · 제거됨</text>
+  <rect x="526" y="294" width="300" height="54" rx="6" fill="#2a2a1a" stroke="rgb(212,168,83)"/>
+  <text x="676" y="316" class="label" text-anchor="middle">Parallel Old</text>
+  <text x="676" y="334" class="body" text-anchor="middle">다중 스레드 STW · 마크-컴팩트</text>
+
+  <line x1="374" y1="169" x2="526" y2="169" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="428" y="148" width="44" height="16" rx="8" fill="#0d0d0d"/>
+  <text x="450" y="159" class="note" text-anchor="middle">기본형</text>
+  <line x1="374" y1="245" x2="526" y2="245" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="422" y="224" width="56" height="16" rx="8" fill="#0d0d0d"/>
+  <text x="450" y="235" class="note" text-anchor="middle">지연시간</text>
+  <line x1="374" y1="321" x2="526" y2="321" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="424" y="300" width="52" height="16" rx="8" fill="#0d0d0d"/>
+  <text x="450" y="311" class="note" text-anchor="middle">처리량</text>
+
+  <rect x="24" y="424" width="852" height="76" rx="8" fill="#1e2a1e" stroke="#4ab080"/>
+  <text x="48" y="452" class="head">③ G1은 좌표 밖의 예외</text>
+  <text x="48" y="474" class="body">G1은 Young/Old 역할을 모두 다루지만, 연속된 Young/Old 공간이 아니라 여러 Region에 역할을 배치한다.</text>
+  <text x="48" y="492" class="body">회수 가치가 큰 Region을 pause 목표 안에서 골라 복사·정리하므로, 기존 세대별 짝 조합과 다른 축에 놓인다.</text>
+</svg>

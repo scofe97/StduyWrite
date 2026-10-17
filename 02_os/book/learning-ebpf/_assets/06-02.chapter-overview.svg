@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">헬퍼 호출 · 메모리 접근 · 루프가 통과하기까지의 검사</title><desc id="dd">검사 칸마다 한 가지가 거부되며, 모든 칸을 지난 호출만 통과한다.</desc>
+<rect width="960" height="600" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING EBPF · 06-02</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">헬퍼 호출 · 메모리 접근 · 루프가 통과하기까지의 검사</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">줄 = 증명할 대상 · 칸 = 검사 · 아래 = 거부 메시지</text>
+<rect x="24" y="108" width="152" height="48" rx="6" fill="#F08A5918" stroke="#F08A59" stroke-width="1.4"/>
+<text x="100" y="138" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">헬퍼 호출</text>
+<rect x="85.56" y="166" width="28.88" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="100" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">§1</text>
+<rect x="216" y="108" width="176" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="304.0" y="138" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">유형 허용?</text>
+<path d="M 176 132.0 L 216 132.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 304.0 156 L 304.0 176" fill="none" stroke="#F0616D" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="216" y="176" width="176" height="48" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.1"/>
+<text x="304.0" y="206" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F0616D">cannot use helper</text>
+<rect x="424" y="108" width="176" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="512.0" y="138" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">gpl_only?</text>
+<path d="M 392 132.0 L 424 132.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 512.0 156 L 512.0 176" fill="none" stroke="#F0616D" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="424" y="176" width="176" height="48" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.1"/>
+<text x="512.0" y="206" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F0616D">GPL-restricted</text>
+<rect x="632" y="108" width="176" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="720.0" y="138" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">arg1_type?</text>
+<path d="M 600 132.0 L 632 132.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 720.0 156 L 720.0 176" fill="none" stroke="#F0616D" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="632" y="176" width="176" height="48" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.1"/>
+<text x="720.0" y="206" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F0616D">expected=map_ptr</text>
+<path d="M 808 132.0 L 840 132.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="840" y="108" width="96" height="48" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="888" y="138" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">통과</text>
+<rect x="24" y="252" width="152" height="48" rx="6" fill="#F08A5918" stroke="#F08A59" stroke-width="1.4"/>
+<text x="100" y="282" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">메모리 접근</text>
+<rect x="85.56" y="310" width="28.88" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="100" y="324" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">§2</text>
+<rect x="216" y="252" width="176" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="304.0" y="282" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">범위 증명?</text>
+<path d="M 176 276.0 L 216 276.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 304.0 300 L 304.0 320" fill="none" stroke="#F0616D" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="216" y="320" width="176" height="48" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.1"/>
+<text x="304.0" y="342" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F0616D">value_size=16</text>
+<text x="304.0" y="360" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F0616D">off=16 size=1</text>
+<rect x="424" y="252" width="176" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="512.0" y="282" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">null 검사?</text>
+<path d="M 392 276.0 L 424 276.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 512.0 300 L 512.0 320" fill="none" stroke="#F0616D" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="424" y="320" width="176" height="48" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.1"/>
+<text x="512.0" y="350" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F0616D">map_value_or_null</text>
+<rect x="632" y="252" width="176" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="720.0" y="282" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">컨텍스트 필드?</text>
+<path d="M 600 276.0 L 632 276.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 720.0 300 L 720.0 320" fill="none" stroke="#F0616D" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="632" y="320" width="176" height="48" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.1"/>
+<text x="720.0" y="342" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F0616D">invalid bpf_context</text>
+<text x="720.0" y="360" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F0616D">access</text>
+<path d="M 808 276.0 L 840 276.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="840" y="252" width="96" height="48" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="888" y="282" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">통과</text>
+<rect x="24" y="396" width="152" height="48" rx="6" fill="#F08A5918" stroke="#F08A59" stroke-width="1.4"/>
+<text x="100" y="426" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">루프 · 종료</text>
+<rect x="85.56" y="454" width="28.88" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="100" y="468" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">§3</text>
+<rect x="216" y="396" width="176" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="304.0" y="426" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">상한 있음?</text>
+<path d="M 176 420.0 L 216 420.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 304.0 444 L 304.0 464" fill="none" stroke="#F0616D" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="216" y="464" width="176" height="48" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.1"/>
+<text x="304.0" y="494" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F0616D">i &lt; c → 1,000,000</text>
+<rect x="424" y="396" width="176" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="512.0" y="426" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">R0 초기화?</text>
+<path d="M 392 420.0 L 424 420.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 512.0 444 L 512.0 464" fill="none" stroke="#F0616D" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="424" y="464" width="176" height="48" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.1"/>
+<text x="512.0" y="494" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F0616D">R0 !read_ok</text>
+<rect x="632" y="396" width="176" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="720.0" y="426" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">도달 가능?</text>
+<path d="M 600 420.0 L 632 420.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 720.0 444 L 720.0 464" fill="none" stroke="#F0616D" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="632" y="464" width="176" height="48" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.1"/>
+<text x="720.0" y="494" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F0616D">unreachable insn</text>
+<path d="M 808 420.0 L 840 420.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="840" y="396" width="96" height="48" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="888" y="426" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">통과</text>
+<line x1="12" y1="544" x2="912" y2="544" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="566" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="556" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="566" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">증명할 대상</text>
+<rect x="222" y="556" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="244" y="566" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">거부</text>
+<rect x="292" y="556" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="314" y="566" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">통과</text>
+</svg>

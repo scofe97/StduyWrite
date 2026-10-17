@@ -1,0 +1,90 @@
+<svg viewBox="0 0 700 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>이미지 공급망의 약한 고리와 각 단계의 방어</title>
+  <desc>이미지 보안의 핵심 관심사는 무결성입니다. 의도한 이미지가 실제로 쓰이도록 보장하는 것인데, 빌드에서 저장을 거쳐 실행에 이르는 사슬에 여러 약한 고리가 있습니다. 빌드 시점에는 Dockerfile 자체와 빌드 머신이 위험 지점이고, 저장 시점에는 레지스트리 접근과 저장 매체가, 배포 시점에는 어떤 이미지가 실제로 당겨지는지와 배포 정의 파일이 위험 지점입니다. 각 단계마다 대응하는 방어 수단이 있습니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 12px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 9.5px; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .danger-title { fill: #7a1f1f; font-size: 11.5px; font-weight: 700; }
+    .danger-detail { fill: #7a1f1f; font-size: 9.5px; }
+  </style>
+
+  <rect width="700" height="400" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="uh" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="30">이미지가 지나는 사슬</text>
+
+  <!-- 단계 축 -->
+  <rect class="box" x="40" y="42" width="190" height="34" rx="4"/>
+  <text class="box-title" x="56" y="64">빌드</text>
+
+  <rect class="box" x="255" y="42" width="190" height="34" rx="4"/>
+  <text class="box-title" x="271" y="64">저장</text>
+
+  <rect class="box" x="470" y="42" width="190" height="34" rx="4"/>
+  <text class="box-title" x="486" y="64">배포·실행</text>
+
+  <path class="arrow" d="M230,59 L255,59" marker-end="url(#uh)"/>
+  <path class="arrow" d="M445,59 L470,59" marker-end="url(#uh)"/>
+
+  <!-- 위험 -->
+  <text class="head" x="40" y="106">약한 고리</text>
+
+  <rect x="40" y="118" width="190" height="76" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="56" y="138">Dockerfile 변조</text>
+  <text class="danger-detail" x="56" y="156">악성코드·채굴기 삽입</text>
+  <text class="danger-detail" x="56" y="172">빌드 머신 침해</text>
+  <text class="danger-detail" x="56" y="188">RUN 은 임의 코드 실행</text>
+
+  <rect x="255" y="118" width="190" height="76" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="271" y="138">이미지 교체</text>
+  <text class="danger-detail" x="271" y="156">레지스트리 주소 스푸핑</text>
+  <text class="danger-detail" x="271" y="172">저장 매체 직접 접근</text>
+  <text class="danger-detail" x="271" y="188">푸시 권한 남용</text>
+
+  <rect x="470" y="118" width="190" height="76" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="486" y="138">엉뚱한 이미지 실행</text>
+  <text class="danger-detail" x="486" y="156">태그가 옮겨 간 경우</text>
+  <text class="danger-detail" x="486" y="172">배포 YAML 변조</text>
+  <text class="danger-detail" x="486" y="188">한 글자 바꾼 레지스트리</text>
+
+  <!-- 방어 -->
+  <text class="head" x="40" y="226">대응</text>
+
+  <rect class="box" x="40" y="238" width="190" height="92" rx="4"/>
+  <text class="box-title" x="56" y="258">Dockerfile 모범사례</text>
+  <text class="box-detail" x="56" y="276">최소 베이스 · 멀티스테이지</text>
+  <text class="box-detail" x="56" y="292">비root USER</text>
+  <text class="box-detail" x="56" y="308">데몬리스 빌드</text>
+  <text class="box-detail" x="56" y="324">빌드 머신 분리</text>
+
+  <rect class="box" x="255" y="238" width="190" height="92" rx="4"/>
+  <text class="box-title" x="271" y="258">레지스트리 통제</text>
+  <text class="box-detail" x="271" y="276">자체 레지스트리 운영</text>
+  <text class="box-detail" x="271" y="292">VPC 안에 두기</text>
+  <text class="box-detail" x="271" y="308">저장 매체 권한 제한</text>
+  <text class="box-detail" x="271" y="324">이미지 서명</text>
+
+  <rect class="box" x="470" y="238" width="190" height="92" rx="4"/>
+  <text class="box-title" x="486" y="258">배포 검증</text>
+  <text class="box-detail" x="486" y="276">다이제스트로 지목</text>
+  <text class="box-detail" x="486" y="292">배포 정의 출처 확인</text>
+  <text class="box-detail" x="486" y="308">어드미션 컨트롤</text>
+  <text class="box-detail" x="486" y="324">GitOps</text>
+
+  <text class="hint" x="40" y="360">의도치 않은 이미지가 돌면</text>
+  <text class="hint" x="40" y="380">원하는 어떤 코드든 돌릴 수 있습니다</text>
+</svg>

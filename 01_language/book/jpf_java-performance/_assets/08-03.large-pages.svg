@@ -1,0 +1,58 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>large pages — TLB와 OS별 huge page 설정</title>
+  <desc>page는 OS가 물리 메모리를 관리하는 최소 단위다. 1바이트만 할당해도 OS는 한 page 전체를 할당한다. page 매핑은 전역 page table에 있고, 자주 쓰는 매핑은 빠른 캐시인 TLB에 있다. TLB로 접근하면 page table보다 훨씬 빠르다. 머신의 TLB 엔트리 수가 제한적이라 hit rate를 높이는 게 중요하다. page 크기를 키우면 같은 메모리를 더 적은 엔트리로 덮어 TLB에서 찾을 확률이 올라간다. UseLargePages 플래그로 켠다. Linux huge page는 nr_hugepages로 전역 설정하고 limits.conf memlock을 편집한다. 전통 huge page는 swap 안 되고 부팅 시 예약돼 항상 있다. transparent huge page는 swap 가능하고 on-demand 할당이라 GC pause가 길어질 수 있다. always madvise never 셋으로 설정한다. always면 Java 설정 불필요, madvise면 UseTransparentHugePages 플래그가 필요하다. Windows는 서버판만 지원하고 MMC에서 Lock pages in memory 권한을 준다. 긴 실행 JVM은 큰 힙일수록 large page로 이득을 본다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">large pages — TLB hit rate를 높인다</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">page를 키우면 더 적은 TLB 엔트리로 같은 메모리를 덮어 적중률이 오릅니다</text>
+
+  <!-- page / TLB / page table -->
+  <rect x="20" y="74" width="642" height="110" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="96" fill="#e8e4df" font-size="13" font-weight="bold">page 매핑 — TLB vs page table</text>
+  <rect x="38" y="108" width="290" height="64" fill="rgba(102,187,106,0.10)" stroke="#66bb6a"/>
+  <text x="50" y="128" fill="#66bb6a" font-size="11" font-weight="bold">TLB (빠른 캐시)</text>
+  <text x="50" y="146" fill="rgb(138,133,128)" font-size="10">자주 쓰는 매핑 (LRU)</text>
+  <text x="50" y="164" fill="rgb(138,133,128)" font-size="10">엔트리 수 제한 → hit rate 중요</text>
+  <rect x="346" y="108" width="298" height="64" fill="rgba(244,127,114,0.10)" stroke="#f47f72"/>
+  <text x="358" y="128" fill="#f47f72" font-size="11" font-weight="bold">page table (전역·느림)</text>
+  <text x="358" y="146" fill="rgb(138,133,128)" font-size="10">모든 매핑 보관, 스캔으로 탐색</text>
+  <text x="358" y="164" fill="rgb(138,133,128)" font-size="10">page 크기↑ → 엔트리 적게 → TLB 적중↑</text>
+
+  <!-- UseLargePages -->
+  <rect x="20" y="192" width="642" height="44" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)"/>
+  <text x="38" y="214" fill="rgb(212,168,83)" font-size="12" font-weight="bold">-XX:+UseLargePages</text>
+  <text x="260" y="214" fill="rgb(138,133,128)" font-size="10">기본 false · Java와 OS 양쪽에서 활성화 · 미지원 시 regular page로 폴백</text>
+
+  <!-- 전통 huge vs transparent -->
+  <rect x="20" y="244" width="320" height="150" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="266" fill="#66bb6a" font-size="12" font-weight="bold">Linux 전통 huge page</text>
+  <text x="38" y="286" fill="rgb(138,133,128)" font-size="10">swap 안 됨 (Java에 유리)</text>
+  <text x="38" y="304" fill="rgb(138,133,128)" font-size="10">부팅 시 예약 → 항상 있음</text>
+  <text x="38" y="324" fill="rgb(138,133,128)" font-size="10">nr_hugepages 전역 설정(+10%)</text>
+  <text x="38" y="342" fill="rgb(138,133,128)" font-size="10">limits.conf memlock 편집</text>
+  <text x="38" y="362" fill="rgb(138,133,128)" font-size="10">2MB×2048 = 4GB 힙</text>
+  <text x="38" y="382" fill="#66bb6a" font-size="10">설정 실패 시 경고 출력</text>
+
+  <rect x="350" y="244" width="312" height="150" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="368" y="266" fill="#f47f72" font-size="12" font-weight="bold">transparent huge page</text>
+  <text x="368" y="286" fill="rgb(138,133,128)" font-size="10">swap 가능 (성능 불리)</text>
+  <text x="368" y="304" fill="rgb(138,133,128)" font-size="10">on-demand 할당 → 연속 공간 탐색</text>
+  <text x="368" y="324" fill="#f47f72" font-size="10">할당 지연이 GC pause를 키울 수 있음</text>
+  <text x="368" y="344" fill="rgb(138,133,128)" font-size="10">always: 모든 프로그램 huge page</text>
+  <text x="368" y="362" fill="rgb(138,133,128)" font-size="10">madvise: UseTransparentHugePages 필요</text>
+  <text x="368" y="380" fill="rgb(138,133,128)" font-size="10">never: 어떤 인자로도 불가</text>
+
+  <!-- Windows -->
+  <rect x="20" y="402" width="642" height="60" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9"/>
+  <text x="38" y="424" fill="#9cc3df" font-size="12" font-weight="bold">Windows large page</text>
+  <text x="38" y="444" fill="rgb(138,133,128)" font-size="10">서버판만 지원 · MMC → Local Policies → Lock pages in memory 권한 부여 · 재부팅</text>
+  <text x="38" y="460" fill="rgb(138,133,128)" font-size="9">미지원판(home)은 에러 없이 UseLargePages를 false로 되돌림</text>
+
+  <!-- 권장 -->
+  <rect x="20" y="470" width="642" height="112" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="492" fill="rgb(212,168,83)" font-size="13" font-weight="bold">정리</text>
+  <text x="38" y="514" fill="#e8e4df" font-size="11">large page는 보통 측정 가능하게 빨라짐 — 긴 실행·큰 힙 JVM일수록 이득</text>
+  <text x="38" y="534" fill="rgb(138,133,128)" font-size="11">transparent huge page는 swap·할당 지연으로 pause 스파이크 위험 → Java엔 흔히 비권장</text>
+  <text x="38" y="554" fill="#66bb6a" font-size="11">가장 매끄러운 성능: 시스템을 madvise로 두고 전통 huge page를 JVM에 구성</text>
+  <text x="38" y="574" fill="rgb(138,133,128)" font-size="10">단 기본 always인 시스템(CentOS 등)에선 설정 없이도 대체로 이득을 봄</text>
+</svg>

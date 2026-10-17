@@ -1,0 +1,68 @@
+<svg viewBox="0 0 960 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>ArgoCD 컴포넌트 구성도</title>
+  <desc>argocd 네임스페이스의 Pod 7개 역할과 깃 저장소·클러스터 관계. application-controller가 깃과 클러스터를 비교·동기화하는 핵심 컴포넌트</desc>
+  <defs>
+    <marker id="arrowAmber2" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="560" fill="#0d0d0d"/>
+
+  <!-- 운영자 -->
+  <rect x="30" y="70" width="160" height="44" fill="#0d0d0d" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="110" y="97" text-anchor="middle" fill="#e8e4df" font-size="12.5">운영자 브라우저</text>
+  <line x1="192" y1="92" x2="264" y2="100" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#arrowAmber2)"/>
+
+  <!-- 깃 저장소 -->
+  <rect x="30" y="200" width="160" height="80" fill="#0d0d0d" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="110" y="232" text-anchor="middle" fill="#e8e4df" font-size="13">깃 저장소</text>
+  <text x="110" y="256" text-anchor="middle" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="11">k8s/smb</text>
+  <line x1="266" y1="162" x2="196" y2="218" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#arrowAmber2)"/>
+  <text x="150" y="172" fill="#e8e4df" font-size="10.5">YAML 가져옴</text>
+
+  <!-- argocd 네임스페이스 프레임 -->
+  <rect x="250" y="40" width="430" height="472" fill="#0d0d0d" stroke="rgb(42,37,32)" stroke-width="1.5" stroke-dasharray="6 4" rx="8"/>
+  <text x="465" y="64" text-anchor="middle" fill="#e8e4df" font-size="13" font-weight="700">argocd 네임스페이스 — Pod 7개</text>
+
+  <!-- Pod 1: server -->
+  <rect x="270" y="80" width="390" height="48" fill="#0d0d0d" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="286" y="100" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="12">argocd-server</text>
+  <text x="286" y="118" fill="#e8e4df" font-size="11">Web UI · API — 운영자가 보는 화면</text>
+
+  <!-- Pod 2: repo-server -->
+  <rect x="270" y="138" width="390" height="48" fill="#0d0d0d" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="286" y="158" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="12">argocd-repo-server</text>
+  <text x="286" y="176" fill="#e8e4df" font-size="11">깃에서 YAML을 가져옴</text>
+
+  <!-- Pod 3: application-controller (핵심) -->
+  <rect x="270" y="196" width="390" height="64" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.5" rx="6"/>
+  <text x="286" y="220" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="12" font-weight="700">argocd-application-controller</text>
+  <text x="286" y="244" fill="#e8e4df" font-size="11">핵심 — 깃과 클러스터 상태를 비교·동기화 (Reconciliation Loop)</text>
+  <rect x="530" y="204" width="110" height="24" fill="#fdf3df" rx="4"/>
+  <text x="585" y="220" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10.5" font-weight="700" style="fill:#0d0d0d">StatefulSet</text>
+
+  <!-- Pod 4~7 -->
+  <rect x="270" y="270" width="390" height="48" fill="#0d0d0d" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="286" y="290" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="12">argocd-applicationset-controller</text>
+  <text x="286" y="308" fill="#e8e4df" font-size="11">여러 앱을 한꺼번에 관리 (7장)</text>
+
+  <rect x="270" y="328" width="390" height="48" fill="#0d0d0d" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="286" y="348" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="12">argocd-dex-server</text>
+  <text x="286" y="366" fill="#e8e4df" font-size="11">SSO 로그인</text>
+
+  <rect x="270" y="386" width="390" height="48" fill="#0d0d0d" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="286" y="406" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="12">argocd-redis</text>
+  <text x="286" y="424" fill="#e8e4df" font-size="11">캐시</text>
+
+  <rect x="270" y="444" width="390" height="48" fill="#0d0d0d" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="286" y="464" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="12">argocd-notifications-controller</text>
+  <text x="286" y="482" fill="#e8e4df" font-size="11">슬랙 알림</text>
+
+  <!-- 클러스터 -->
+  <rect x="740" y="196" width="190" height="90" fill="#0d0d0d" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="835" y="230" text-anchor="middle" fill="#e8e4df" font-size="13">클러스터</text>
+  <text x="835" y="256" text-anchor="middle" fill="#e8e4df" font-size="11.5">notiflex 네임스페이스</text>
+  <line x1="682" y1="228" x2="738" y2="228" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#arrowAmber2)"/>
+  <text x="710" y="214" text-anchor="middle" fill="rgb(212,168,83)" font-size="10.5">비교·동기화</text>
+</svg>

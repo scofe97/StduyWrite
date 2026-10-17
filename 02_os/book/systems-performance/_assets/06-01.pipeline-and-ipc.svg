@@ -1,0 +1,64 @@
+<svg viewBox="0 0 860 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>명령 파이프라인과 IPC</title>
+  <desc>위: 명령 파이프라인은 서로 다른 명령의 다른 단계를 동시에 실행한다. 명령은 fetch·decode·execute·메모리 접근·write-back 다섯 단계를 거치는데, 파이프라인 없이는 한 명령에 5사이클이 들고 각 단계에 functional unit 하나만 활성이다. 파이프라이닝으로 여러 unit이 동시에 다른 명령을 처리해 이상적으로 사이클마다 한 명령을 완료한다. superscalar는 같은 단계의 unit을 여럿 둬 사이클당 여러 명령을 완료한다. 아래: IPC(instructions per cycle)는 CPU가 사이클을 어떻게 쓰는지 보여 주는 핵심 지표다. 낮은 IPC(예: 0.2 이하)는 자주 stall이며 보통 메모리 접근 때문이다. 높은 IPC(예: 1.0 초과)는 자주 안 stall이며 높은 명령 처리량이다. 메모리 접근은 수십 사이클이 들어 그동안 명령 실행이 stall한다. 이것이 CPU 캐싱이 중요한 이유다.</desc>
+
+  <rect x="0" y="0" width="860" height="480" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">명령 파이프라인과 IPC</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">파이프라인은 다른 명령의 다른 단계를 동시에 — IPC가 사이클 효율을 보임</text>
+
+  <!-- 파이프라인 -->
+  <text x="32" y="96" fill="rgb(212,168,83)" font-size="14">파이프라인 — 조립 라인처럼 단계 병렬</text>
+
+  <text x="32" y="120" fill="rgb(138,133,128)" font-size="10">5단계: fetch · decode · execute · memory · write-back</text>
+
+  <!-- 사이클 헤더 -->
+  <text x="180" y="142" fill="rgb(138,133,128)" font-size="10">cyc1</text>
+  <text x="270" y="142" fill="rgb(138,133,128)" font-size="10">cyc2</text>
+  <text x="360" y="142" fill="rgb(138,133,128)" font-size="10">cyc3</text>
+  <text x="450" y="142" fill="rgb(138,133,128)" font-size="10">cyc4</text>
+  <text x="540" y="142" fill="rgb(138,133,128)" font-size="10">cyc5</text>
+
+  <!-- 명령 1 -->
+  <text x="40" y="164" fill="#e8e4df" font-size="10">명령1</text>
+  <rect x="160" y="152" width="80" height="16" fill="rgba(212,168,83,0.7)"/><text x="200" y="164" fill="#0d0d0d" font-size="8" text-anchor="middle">F</text>
+  <rect x="250" y="152" width="80" height="16" fill="rgba(212,168,83,0.6)"/><text x="290" y="164" fill="#0d0d0d" font-size="8" text-anchor="middle">D</text>
+  <rect x="340" y="152" width="80" height="16" fill="rgba(212,168,83,0.5)"/><text x="380" y="164" fill="#0d0d0d" font-size="8" text-anchor="middle">E</text>
+  <rect x="430" y="152" width="80" height="16" fill="rgba(212,168,83,0.4)"/><text x="470" y="164" fill="#0d0d0d" font-size="8" text-anchor="middle">M</text>
+  <rect x="520" y="152" width="80" height="16" fill="rgba(212,168,83,0.3)"/><text x="560" y="164" fill="#0d0d0d" font-size="8" text-anchor="middle">W</text>
+
+  <!-- 명령 2 -->
+  <text x="40" y="186" fill="#e8e4df" font-size="10">명령2</text>
+  <rect x="250" y="174" width="80" height="16" fill="rgba(212,168,83,0.7)"/><text x="290" y="186" fill="#0d0d0d" font-size="8" text-anchor="middle">F</text>
+  <rect x="340" y="174" width="80" height="16" fill="rgba(212,168,83,0.6)"/><text x="380" y="186" fill="#0d0d0d" font-size="8" text-anchor="middle">D</text>
+  <rect x="430" y="174" width="80" height="16" fill="rgba(212,168,83,0.5)"/><text x="470" y="186" fill="#0d0d0d" font-size="8" text-anchor="middle">E</text>
+  <rect x="520" y="174" width="80" height="16" fill="rgba(212,168,83,0.4)"/><text x="560" y="186" fill="#0d0d0d" font-size="8" text-anchor="middle">M</text>
+
+  <!-- 명령 3 -->
+  <text x="40" y="208" fill="#e8e4df" font-size="10">명령3</text>
+  <rect x="340" y="196" width="80" height="16" fill="rgba(212,168,83,0.7)"/><text x="380" y="208" fill="#0d0d0d" font-size="8" text-anchor="middle">F</text>
+  <rect x="430" y="196" width="80" height="16" fill="rgba(212,168,83,0.6)"/><text x="470" y="208" fill="#0d0d0d" font-size="8" text-anchor="middle">D</text>
+  <rect x="520" y="196" width="80" height="16" fill="rgba(212,168,83,0.5)"/><text x="560" y="208" fill="#0d0d0d" font-size="8" text-anchor="middle">E</text>
+
+  <text x="620" y="180" fill="#66bb6a" font-size="11">→ 이상적으로</text>
+  <text x="620" y="196" fill="#66bb6a" font-size="11">사이클마다 1 명령</text>
+
+  <text x="32" y="240" fill="rgb(138,133,128)" font-size="10">superscalar: 같은 단계 unit 여럿 → 사이클당 여러 명령(3-wide·4-wide)</text>
+
+  <!-- IPC -->
+  <line x1="32" y1="258" x2="828" y2="258" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="284" fill="rgb(212,168,83)" font-size="14">IPC — instructions per cycle (사이클 효율)</text>
+
+  <rect x="32" y="298" width="388" height="84" fill="#f44336" fill-opacity="0.10" stroke="#f44336" rx="8"/>
+  <text x="226" y="322" fill="#e8e4df" font-size="13" text-anchor="middle">낮은 IPC (예: 0.2 이하)</text>
+  <text x="226" y="344" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">자주 stall — 보통 메모리 접근</text>
+  <text x="226" y="366" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">→ 빠른 메모리·지역성·I/O 감소</text>
+
+  <rect x="440" y="298" width="388" height="84" fill="#66bb6a" fill-opacity="0.10" stroke="#66bb6a" rx="8"/>
+  <text x="634" y="322" fill="#e8e4df" font-size="13" text-anchor="middle">높은 IPC (예: 1.0 초과)</text>
+  <text x="634" y="344" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">자주 안 stall — 높은 명령 처리량</text>
+  <text x="634" y="366" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">→ 코드의 명령 수 감소</text>
+
+  <rect x="32" y="396" width="796" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="430" y="420" fill="#e8e4df" font-size="12" text-anchor="middle">메모리 접근은 수십 사이클 stall → CPU 캐싱이 중요 (Netflix 클라우드 IPC 0.2~1.5)</text>
+</svg>

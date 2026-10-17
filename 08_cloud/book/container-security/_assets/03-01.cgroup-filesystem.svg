@@ -1,0 +1,89 @@
+<svg viewBox="0 0 680 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>sys fs cgroup 아래의 의사 파일시스템 구조</title>
+  <desc>커널은 cgroup 정보를 의사 파일시스템으로 노출하며 보통 sys fs cgroup 아래에 있습니다. 그 디렉토리를 나열하면 자원 종류별 계층이 보입니다. memory 계층 안에 하위 디렉토리를 만들면 그것이 새 cgroup이 되고, 커널이 그 안을 파라미터 파일과 통계 파일로 자동으로 채웁니다. 파일 중 일부는 우리가 값을 써 넣는 설정이고 일부는 커널이 상태를 적어 주는 정보인데, 이름만으로는 구분되지 않아 문서를 봐야 합니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 12.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10px; }
+    .mono { font-family: 'Menlo', 'Consolas', monospace; }
+    .path { fill: #0d0d0d; font-size: 11px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .file { fill: #3a3632; font-size: 10px; font-family: 'Menlo', 'Consolas', monospace; }
+    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .tree { stroke: #b8b3ad; stroke-width: 1.2; fill: none; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .chip { fill: #f5edda; }
+    .chip-text { fill: #0d0d0d; font-size: 10px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+  </style>
+
+  <rect width="680" height="400" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="gh" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <text class="head" x="40" y="32">자원 종류별 계층</text>
+
+  <!-- 루트 -->
+  <rect class="box" x="40" y="44" width="600" height="40" rx="4"/>
+  <text class="path" x="56" y="69">/sys/fs/cgroup</text>
+
+  <!-- 계층 목록 -->
+  <path class="tree" d="M70,84 L70,104 L640,104"/>
+  <path class="tree" d="M120,104 L120,118"/>
+  <path class="tree" d="M240,104 L240,118"/>
+  <path class="tree" d="M360,104 L360,118"/>
+  <path class="tree" d="M480,104 L480,118"/>
+  <path class="tree" d="M600,104 L600,118"/>
+
+  <rect class="box" x="70" y="122" width="100" height="34" rx="4"/>
+  <text class="file" x="120" y="143" text-anchor="middle">memory</text>
+
+  <rect class="box" x="190" y="122" width="100" height="34" rx="4"/>
+  <text class="file" x="240" y="143" text-anchor="middle">cpu</text>
+
+  <rect class="box" x="310" y="122" width="100" height="34" rx="4"/>
+  <text class="file" x="360" y="143" text-anchor="middle">pids</text>
+
+  <rect class="box" x="430" y="122" width="100" height="34" rx="4"/>
+  <text class="file" x="480" y="143" text-anchor="middle">blkio</text>
+
+  <rect class="box" x="550" y="122" width="100" height="34" rx="4"/>
+  <text class="file" x="600" y="143" text-anchor="middle">devices</text>
+
+  <path class="arrow" d="M120,156 L120,182" marker-end="url(#gh)"/>
+  <text class="hint" x="140" y="176">여기에 디렉토리를 만들면</text>
+
+  <!-- 새 cgroup -->
+  <rect class="box" x="40" y="190" width="600" height="40" rx="4"/>
+  <text class="path" x="56" y="215">/sys/fs/cgroup/memory/liz</text>
+
+  <path class="arrow" d="M340,230 L340,252" marker-end="url(#gh)"/>
+  <text class="hint" x="356" y="246">커널이 자동으로 채운다</text>
+
+  <!-- 파일 두 종류 -->
+  <text class="head" x="40" y="278">쓰는 파일 — 파라미터</text>
+  <rect class="box" x="40" y="288" width="290" height="72" rx="4"/>
+  <rect class="chip" x="56" y="300" width="200" height="18" rx="3"/>
+  <text class="chip-text" x="62" y="313">memory.limit_in_bytes</text>
+  <rect class="chip" x="56" y="324" width="120" height="18" rx="3"/>
+  <text class="chip-text" x="62" y="337">cgroup.procs</text>
+  <text class="box-detail" x="56" y="354">값을 써서 통제한다</text>
+
+  <text class="head" x="350" y="278">읽는 파일 — 통계</text>
+  <rect class="box" x="350" y="288" width="290" height="72" rx="4"/>
+  <rect class="chip" x="366" y="300" width="204" height="18" rx="3"/>
+  <text class="chip-text" x="372" y="313">memory.usage_in_bytes</text>
+  <rect class="chip" x="366" y="324" width="240" height="18" rx="3"/>
+  <text class="chip-text" x="372" y="337">memory.max_usage_in_bytes</text>
+  <text class="box-detail" x="366" y="354">커널이 상태를 적는다</text>
+
+  <text class="hint" x="40" y="384">이름만으론 구분되지 않는다</text>
+</svg>

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 620" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">HTTP 커넥션 재사용과 본문 소진 루프</title><desc id="dd">응답 본문을 끝까지 읽고 닫아야 TCP 연결이 유휴 풀로 돌아와 다음 요청에 재사용됩니다. 본문을 읽지 않고 닫으면 세션을 재사용하지 못할 수 있어 다음 요청은 새 핸드셰이크를 거쳐야 합니다.</desc>
+<rect width="880" height="620" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">NPG CHAPTER 8 · HTTP CLIENTS</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">HTTP 커넥션 재사용과 본문 소진 루프</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">녹색 고리가 세션 재사용 경로이고 붉은 갈래가 재사용 실패 위험 경로입니다</text>
+<path d="M 355.0 165.2 A 172 172 0 0 1 433.3 242.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 449.7 292.0 A 172 172 0 0 1 408.5 434.4" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 331.8 484.0 A 172 172 0 0 1 230.3 484.6" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<path d="M 153.0 436.0 A 172 172 0 0 1 110.0 294.2" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<path d="M 125.7 244.0 A 172 172 0 0 1 203.0 166.2" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<rect x="206.0" y="284.0" width="148" height="72" rx="8" fill="#0D1117" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="280" y="306" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#6A95D8">Transport 유휴 풀</text>
+<text x="280" y="328" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">net/http keep-alive</text>
+<text x="280" y="346" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">유휴 커넥션 캐시</text>
+<path d="M 191 276 L 204 295" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)" stroke-dasharray="5 4"/>
+<path d="M 280 284 L 280 175" fill="none" stroke="#6A95D8" stroke-width="1.2" marker-end="url(#info)" stroke-dasharray="5 4"/>
+<rect x="205.0" y="124.0" width="150" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="280" y="142" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">요청 전송</text>
+<text x="280" y="162" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">http.Client.Do</text>
+<rect x="369.0" y="244.0" width="150" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="444" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">응답 수신</text>
+<text x="444" y="282" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">상태 코드 · 헤더 파싱</text>
+<rect x="305.0" y="436.0" width="150" height="48" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.4"/>
+<text x="380" y="454" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">본문 전체 소진</text>
+<text x="380" y="474" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">io.Copy(io.Discard)</text>
+<rect x="105.0" y="436.0" width="150" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="180" y="454" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">응답 본문 닫기</text>
+<text x="180" y="474" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">resp.Body.Close()</text>
+<rect x="41.0" y="244.0" width="150" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="116" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">유휴 풀 반환</text>
+<text x="116" y="282" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">TCP 세션 유휴 풀 보관</text>
+<path d="M 519.0 268 L 606.0 268" fill="none" stroke="#F0616D" stroke-width="1.3" marker-end="url(#bad)" stroke-dasharray="4 4"/>
+<text x="563.5" y="258" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F0616D">미소진 닫기</text>
+<rect x="608.0" y="241.0" width="216" height="54" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.2"/>
+<text x="716" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">재사용 못 할 수 있음</text>
+<text x="716" y="282" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">다음 요청은 새 연결·핸드셰이크</text>
+<line x1="12" y1="566" x2="832" y2="566" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="588" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="578" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="588" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 소진 (세션 재사용)</text>
+<rect x="326" y="578" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="348" y="588" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">유휴 풀 연결 흐름</text>
+<rect x="500" y="578" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="522" y="588" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">미소진 종료 (재사용 불가 위험)</text>
+</svg>

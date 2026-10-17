@@ -1,0 +1,69 @@
+<svg viewBox="0 0 900 400" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>배치를 유도할 때 밟아 올라가는 순서</title>
+  <desc>배치에 개입할 때 책이 권하는 순서를 단계로 보입니다. 출발점은 자원 프로파일 선언이며 대부분의 단순한 경우 이것만으로 스케줄러가 알맞은 노드를 찾습니다. 그것으로 부족하면 먼저 Pod와 노드 사이의 의존을 표현하는데, nodeName은 노드 이름을 하드와이어하는 가장 강한 방식이지만 모범 사례가 아니라 예외로만 쓰고, nodeSelector는 노드 라벨을 매칭하는 가장 단순한 권장 수단이며, node affinity는 연산자와 소프트 하드 구분으로 세밀한 제어를 주고, taints와 tolerations는 반대로 노드가 Pod를 거르게 합니다. 그다음 Pod 사이의 의존을 표현하는데, Pod affinity는 저지연을 위해 밀집시키고 anti-affinity는 단일 실패점을 피해 분산시키며 topology spread constraints는 maxSkew로 고른 분산을 조절합니다. 그래도 부족하면 스케줄러 자체를 튜닝하거나 커스텀 스케줄러를 만듭니다. 아래로 갈수록 개입이 커지므로 최소 개입을 지향합니다.</desc>
+
+  <rect width="900" height="400" fill="#0d0d0d"/>
+
+  <text x="24" y="30" fill="#e8e4df" font-size="15" font-weight="700">개입은 위에서 아래로, 최소한만</text>
+
+  <!-- step 0 -->
+  <rect x="24" y="48" width="852" height="44" fill="#cdeccf"/>
+  <text x="44" y="68" fill="#14521d" font-size="12" font-weight="700">출발점 · 자원 프로파일 선언</text>
+  <text x="44" y="85" fill="#14521d" font-size="10">대개 이것만으로 충분합니다</text>
+
+  <path d="M 450 96 L 450 112" stroke="#b8b3ad" stroke-width="2" marker-end="url(#a)"/>
+  <text x="466" y="108" fill="#b8b3ad" font-size="9">부족하면</text>
+
+  <!-- step 1: pod to node -->
+  <rect x="24" y="118" width="852" height="96" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="44" y="140" fill="rgb(212,168,83)" font-size="12" font-weight="700">1단계 · Pod 와 노드 사이</text>
+
+  <rect x="44" y="150" width="196" height="50" fill="#f2d4d4"/>
+  <text x="142" y="170" text-anchor="middle" fill="#7a1f1f" font-size="10" font-weight="700" font-family="'JetBrains Mono', monospace">nodeName</text>
+  <text x="142" y="189" text-anchor="middle" fill="#7a1f1f" font-size="9">예외로만 · 하드와이어</text>
+
+  <rect x="252" y="150" width="196" height="50" fill="#f5edda"/>
+  <text x="350" y="170" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700" font-family="'JetBrains Mono', monospace">nodeSelector</text>
+  <text x="350" y="189" text-anchor="middle" fill="#0d0d0d" font-size="9">가장 단순한 권장 수단</text>
+
+  <rect x="460" y="150" width="196" height="50" fill="#f5edda"/>
+  <text x="558" y="170" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">node affinity</text>
+  <text x="558" y="189" text-anchor="middle" fill="#0d0d0d" font-size="9">연산자 · 소프트와 하드</text>
+
+  <rect x="668" y="150" width="192" height="50" fill="#dceaf7"/>
+  <text x="764" y="170" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">taints · tolerations</text>
+  <text x="764" y="189" text-anchor="middle" fill="#10243a" font-size="9">노드가 Pod 를 거릅니다</text>
+
+  <path d="M 450 218 L 450 234" stroke="#b8b3ad" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- step 2: pod to pod -->
+  <rect x="24" y="240" width="852" height="96" fill="#0d0d0d" stroke="#66bb6a"/>
+  <text x="44" y="262" fill="#66bb6a" font-size="12" font-weight="700">2단계 · Pod 와 Pod 사이</text>
+
+  <rect x="44" y="272" width="268" height="50" fill="#cdeccf"/>
+  <text x="178" y="292" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">Pod affinity</text>
+  <text x="178" y="311" text-anchor="middle" fill="#14521d" font-size="9">밀집 · 저지연과 데이터 지역성</text>
+
+  <rect x="324" y="272" width="268" height="50" fill="#cdeccf"/>
+  <text x="458" y="292" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">Pod anti-affinity</text>
+  <text x="458" y="311" text-anchor="middle" fill="#14521d" font-size="9">분산 · 단일 실패점 회피</text>
+
+  <rect x="604" y="272" width="256" height="50" fill="#cdeccf"/>
+  <text x="732" y="292" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">topology spread</text>
+  <text x="732" y="311" text-anchor="middle" fill="#14521d" font-size="9">maxSkew 로 고른 분산</text>
+
+  <path d="M 450 340 L 450 354" stroke="#b8b3ad" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- step 3 -->
+  <rect x="24" y="360" width="852" height="34" fill="#f2d4d4"/>
+  <text x="44" y="382" fill="#7a1f1f" font-size="11" font-weight="700">3단계 · 스케줄러 튜닝과 커스텀</text>
+
+  <defs>
+    <marker id="a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+</svg>

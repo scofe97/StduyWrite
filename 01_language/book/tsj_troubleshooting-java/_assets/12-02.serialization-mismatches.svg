@@ -1,0 +1,45 @@
+<svg viewBox="0 0 680 580" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>직렬화·버전 불일치 — Protobuf/gRPC·enum drift·payload 로깅·스키마 검증 파이프라인</title>
+  <desc>이 편의 요약입니다. 두 서비스가 데이터를 주고받으려면 프로토콜뿐 아니라 데이터를 구조화하고 해석하는 방식도 같아야 합니다. 직렬화는 조용히 어긋나기 쉬운 지점이라 필드 추가나 enum 이름 변경이나 타입 변경이 드롭된 데이터나 기본값이나 특정 상황에서만 나는 역직렬화 에러를 일으킵니다. Protobuf 는 .proto 로 구조를 정의해 자바 클래스를 자동 생성하는 언어 중립 포맷으로 JSON 보다 빠르고 작고 엄격하며 gRPC 와 함께 쓰입니다. 서비스가 독립 진화할 때 한쪽이 변경하고 다른 쪽이 모르면 불일치가 납니다. raw 페이로드 로깅은 문제를 드러내지만 로그 폭주와 민감정보 노출 위험이 있어 디코딩된 페이로드만 샘플링 마스킹 크기 제한 구조화 로깅으로 균형을 잡습니다. 스키마 검증은 CI 에서 현재와 이전 스키마를 Buf 로 비교해 깨는 변경을 잡고 런타임에선 Confluent Schema Registry 에 등록해 검증합니다. optional 필드 추가는 안전하고 이름 변경 제거 타입 변경은 깨는 변경입니다.</desc>
+  <rect x="0" y="0" width="680" height="580" fill="#0d0d0d"/>
+
+  <text x="20" y="38" fill="#e8e4df" font-size="18" font-weight="bold">직렬화·버전 불일치</text>
+  <text x="20" y="60" fill="rgb(138,133,128)" font-size="11">Troubleshooting Java · §12.2</text>
+
+  <!-- 조용히 어긋남 -->
+  <rect x="20" y="78" width="640" height="72" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="34" y="100" fill="#f47f72" font-size="13" font-weight="bold">직렬화는 조용히 어긋난다</text>
+  <text x="34" y="122" fill="#e8e4df" font-size="11">프로토콜뿐 아니라 데이터 구조화·해석 방식도 같아야 함</text>
+  <text x="34" y="142" fill="#e8e4df" font-size="11">명백한 실패 X → 드롭된 데이터·기본값·특정 상황에서만 나는 역직렬화 에러</text>
+
+  <!-- Protobuf -->
+  <rect x="20" y="164" width="640" height="92" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="186" fill="rgb(212,168,83)" font-size="13" font-weight="bold">Protobuf + gRPC — 강한 계약의 양날</text>
+  <text x="34" y="208" fill="#e8e4df" font-size="10.5">.proto → 자바 클래스 자동 생성 · 언어 중립 · JSON 보다 빠르고 작고 엄격</text>
+  <text x="34" y="230" fill="#e8e4df" font-size="10.5">강점=효율·강한 계약 / 함정=독립 진화 시 한쪽 변경을 다른 쪽이 모르면 불일치</text>
+  <text x="34" y="250" fill="rgb(138,133,128)" font-size="9.5">→ 버전 규율·호환 보장이 결정적 (자바는 엄격한 타입으로 작은 변경이 큰 문제)</text>
+
+  <!-- 페이로드 로깅 -->
+  <rect x="20" y="270" width="640" height="92" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="292" fill="#e8e4df" font-size="13" font-weight="bold">페이로드 로깅 — 가시성 vs 안전</text>
+  <text x="34" y="314" fill="#e8e4df" font-size="10.5">raw 로깅이 누락·기본값·인코딩 불일치·예기치 못한 enum 드러냄</text>
+  <text x="34" y="336" fill="#f47f72" font-size="10.5">위험: 로그 폭주(바이너리) · 민감정보 노출(토큰·결제)</text>
+  <text x="34" y="356" fill="rgb(138,133,128)" font-size="9.5">대처: 디코딩만·샘플링·민감필드 마스킹·크기 제한·구조화 로깅·trace ID 태깅</text>
+
+  <!-- 스키마 검증 -->
+  <rect x="20" y="376" width="640" height="128" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="34" y="398" fill="rgb(212,168,83)" font-size="13" font-weight="bold">스키마 검증 — 운영에 닿기 전에 잡는다</text>
+  <text x="34" y="420" fill="#e8e4df" font-size="11">CI: 현재 vs 이전 스키마 비교(Buf·avro-tools) → 깨는 변경이면 잡 실패</text>
+  <text x="34" y="442" fill="#e8e4df" font-size="11">런타임: Confluent Schema Registry 에 등록 → 발행/소비 때 검증</text>
+  <rect x="34" y="454" width="200" height="40" fill="rgba(102,187,106,0.1)" stroke="#66bb6a"/>
+  <text x="44" y="472" fill="#66bb6a" font-size="10">optional 필드 추가</text>
+  <text x="44" y="488" fill="rgb(138,133,128)" font-size="9">안전(옛 클라가 무시)</text>
+  <rect x="244" y="454" width="402" height="40" fill="rgba(244,127,114,0.08)" stroke="#f47f72"/>
+  <text x="254" y="472" fill="#f47f72" font-size="10">이름 변경·제거 · 타입 변경(string→int)</text>
+  <text x="254" y="488" fill="rgb(138,133,128)" font-size="9">깨는 변경 → 기존 소비자 깨짐</text>
+
+  <!-- 도구 -->
+  <rect x="20" y="518" width="640" height="44" fill="rgb(20,20,20)" stroke="rgb(60,55,50)"/>
+  <text x="34" y="540" fill="#e8e4df" font-size="11" font-weight="bold">앱 밖 메시지 검사</text>
+  <text x="34" y="557" fill="rgb(138,133,128)" font-size="10">protoc · grpcurl · jq 로 코드와 무관하게 실제 주고받은 데이터 확인</text>
+</svg>

@@ -1,0 +1,61 @@
+<svg viewBox="0 0 900 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>코드가 컴파일 단계를 지나며 변하는 흐름 — desugar 추적</title>
+  <desc>같은 소스 코드가 javac의 세 단계를 거치며 변해간다. 파싱 단계는 소스를 추상 구문 트리(AST)로 만들 뿐, 향상된 for와 static 대입을 작성한 모습 그대로 남긴다. 의미 분석의 desugar 단계가 향상된 for를 인덱스 루프로 펼친다. 바이트코드 생성(Gen) 단계가 static 대입을 clinit 메서드로 모으고, 상수식 1 더하기 2를 3으로 미리 접는다. 세 변환 모두 표현을 단순하게 바꿀 뿐 동작은 그대로다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: rgb(138,133,128); }
+      .stage { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .does  { font-size: 11px; fill: #0d0d0d; }
+      .note  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .flow  { font-size: 10px; font-weight: 700; fill: #e8e4df; }
+    </style>
+    <marker id="t1" markerWidth="11" markerHeight="11" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="470" fill="#0d0d0d"/>
+  <text x="28" y="36" class="title">코드가 단계를 지나며 변하는 흐름 — desugar 추적</text>
+  <text x="28" y="56" class="sub" style="fill:#e8e4df">각 단계의 실제 코드는 본문 코드 블록 참고 · 여기서는 단계마다 무슨 일이 일어나는지만 본다</text>
+
+  <!-- ① 파싱 -->
+  <rect x="28" y="88" width="252" height="150" rx="10" fill="#5b9bd5"/>
+  <text x="44" y="116" class="stage" style="fill:#e8e4df">① 파싱 + 심볼 테이블</text>
+  <text x="44" y="142" class="does" style="fill:#e8e4df">소스를 트리(AST)로 조립</text>
+  <text x="44" y="164" class="does" style="fill:#e8e4df">이름(클래스·변수)을 등록</text>
+  <text x="44" y="186" class="does" style="fill:#e8e4df">형태만 잡음 · 의미 검증 전</text>
+  <text x="44" y="218" class="note" style="fill:#e8e4df">향상된 for·static 대입이</text>
+  <text x="44" y="232" class="note" style="fill:#e8e4df">작성한 모습 그대로 남는다</text>
+
+  <!-- ② desugar -->
+  <rect x="324" y="88" width="252" height="150" rx="10" fill="rgb(212,168,83)"/>
+  <text x="340" y="116" class="stage">② 의미 분석 — desugar</text>
+  <text x="340" y="142" class="does">타입·흐름 검사 후</text>
+  <text x="340" y="164" class="does">구문 설탕을 펼침</text>
+  <text x="340" y="186" class="does">향상된 for → 인덱스 루프</text>
+  <text x="340" y="218" class="note" style="fill:#3a2c0a">개발자는 편하게 쓰고</text>
+  <text x="340" y="232" class="note" style="fill:#3a2c0a">JVM은 단순한 루프만 본다</text>
+
+  <!-- ③ Gen -->
+  <rect x="620" y="88" width="252" height="150" rx="10" fill="#66bb6a"/>
+  <text x="636" y="116" class="stage">③ 바이트코드 생성(Gen)</text>
+  <text x="636" y="142" class="does">트리를 바이트코드로 옮김</text>
+  <text x="636" y="164" class="does">static 대입을 &lt;clinit&gt;로 모음</text>
+  <text x="636" y="186" class="does">상수식 1+2를 3으로 접음</text>
+  <text x="636" y="218" class="note" style="fill:#14521d">&lt;init&gt;(기본 생성자)도</text>
+  <text x="636" y="232" class="note" style="fill:#14521d">이 단계에서 자동 삽입</text>
+
+  <!-- 화살표 + 흐름 라벨 -->
+  <line x1="280" y1="163" x2="322" y2="163" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#t1)"/>
+  <line x1="576" y1="163" x2="618" y2="163" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#t1)"/>
+
+  <!-- 하단 핵심 -->
+  <rect x="28" y="270" width="844" height="172" rx="10" fill="rgba(91,155,213,0.07)" stroke="#5b9bd5" stroke-width="1.2"/>
+  <text x="48" y="296" class="sub" font-weight="800" style="fill:#e8e4df">핵심 — 펼쳐도 의미는 같다</text>
+  <text x="48" y="322" class="note" style="fill:#e8e4df">· 파싱은 형태만 잡는다. 향상된 for·static 대입이 우리가 쓴 모습 그대로 트리에 남는다.</text>
+  <text x="48" y="346" class="note" style="fill:#e8e4df">· desugar가 향상된 for를 인덱스 루프로 펼친다 — 같은 동작을 더 단순한 형태로 옮길 뿐이다.</text>
+  <text x="48" y="370" class="note" style="fill:#e8e4df">· Gen이 static 대입을 &lt;clinit&gt;로 모으고, 1+2 같은 상수식을 컴파일 때 3으로 접는다(상수 접기).</text>
+  <text x="48" y="394" class="note" style="fill:#e8e4df">· 이 변환들은 표현을 정리하는 일이지 실행 속도를 끌어올리는 백엔드 최적화가 아니다.</text>
+  <text x="48" y="418" class="note" style="fill:#e8e4df">· &lt;clinit&gt;는 여기서 만들어지고, 나중에 클래스 로딩의 초기화 단계(ch03)에서 실행된다.</text>
+</svg>

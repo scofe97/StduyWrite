@@ -1,0 +1,172 @@
+<svg viewBox="0 0 900 580" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>GC 시점에 힙 레이아웃이 재배치되는 흐름 — 세 단계 요약</title>
+  <desc>세 패널로 GC 재배치를 before→after로 보여준다. ① Minor GC(마크-카피): Eden과 사용 중 Survivor의 생존 객체만 빈 Survivor로 복사하고 age를 1 올린다. ② 승격: age가 임계값 15에 도달한 객체를 구세대로 옮긴다. ③ Major GC(마크-컴팩트): 단편화된 구세대의 생존 객체를 한쪽 끝으로 압축해 연속 빈 공간을 만든다. 살아 있는 객체는 초록, 회수 대상은 빨강, 이동 중은 골든 앰버, 빈칸은 점선이다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 17px; font-weight: 800; fill: #e8e4df; }
+      .sub     { font-size: 11px; fill: rgb(138,133,128); }
+      .panelt  { font-size: 12.5px; font-weight: 800; fill: #e8e4df; }
+      .zlabel  { font-size: 10.5px; font-weight: 700; fill: #e8e4df; }
+      .mt      { font-size: 9.5px; fill: rgb(138,133,128); }
+      .algo    { font-size: 9px; font-weight: 700; fill: rgb(212,168,83); font-family: 'JetBrains Mono', monospace; }
+      .age     { font-size: 9px; font-weight: 800; fill: #0d0d0d; font-family: 'JetBrains Mono', monospace; }
+      .cap     { font-size: 10px; fill: rgb(138,133,128); }
+      .small   { font-size: 9px; fill: rgb(138,133,128); }
+    </style>
+    <marker id="dn" markerWidth="10" markerHeight="10" refX="4" refY="7" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,0 L4,7 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="580" fill="#0d0d0d"/>
+  <text x="26" y="34" class="title">GC 시점에 힙 레이아웃이 재배치되는 흐름 — 세 단계 요약</text>
+  <text x="26" y="53" class="sub">생존(초록 ●)은 옮겨 모으고, 회수 대상(빨강 ✕)은 회수, 빈칸(점선)은 끝으로 밀려 연속 공간이 된다 · 단계별 추적은 인터랙티브 HTML 참조</text>
+
+  <!-- 범례 (색 + 라벨 병행: 색맹 대비) -->
+  <rect x="556" y="22" width="13" height="13" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+  <text x="574" y="33" class="small">● 생존</text>
+  <rect x="625" y="22" width="13" height="13" rx="3" fill="rgba(244,67,54,0.22)" stroke="#f44336"/>
+  <text x="643" y="33" class="small">✕ 회수</text>
+  <rect x="690" y="22" width="13" height="13" rx="3" fill="rgba(212,168,83,0.25)" stroke="rgb(212,168,83)"/>
+  <text x="708" y="33" class="small">▸ 이동</text>
+  <rect x="755" y="22" width="13" height="13" rx="3" fill="none" stroke="rgb(80,75,68)" stroke-dasharray="2 2"/>
+  <text x="773" y="33" class="small">빈칸</text>
+
+  <!-- ============================================================= -->
+  <!-- 패널 1: Minor GC — 마크-카피 -->
+  <!-- ============================================================= -->
+  <g transform="translate(26, 70)">
+    <rect x="0" y="0" width="270" height="466" rx="10" fill="rgb(20,20,20)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+    <text x="14" y="25" class="panelt">① Minor GC · 마크-카피</text>
+    <text x="14" y="42" class="mt">신세대는 자주 빠르게 — 생존율 낮음</text>
+
+    <!-- GC 전 -->
+    <rect x="14" y="54" width="242" height="150" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1.1"/>
+    <text x="34" y="78" class="zlabel">GC 전 — Eden(80%) + 사용 중 Survivor</text>
+    <text x="34" y="92" class="mt">Eden</text>
+    <rect x="26"  y="98" width="20" height="20" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <rect x="50"  y="98" width="20" height="20" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <rect x="74"  y="98" width="20" height="20" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <rect x="98"  y="98" width="20" height="20" rx="3" fill="rgba(244,67,54,0.22)" stroke="#f44336"/>
+    <text x="108" y="112" class="small" text-anchor="middle" fill="#f44336">✕</text>
+    <rect x="122" y="98" width="20" height="20" rx="3" fill="rgba(244,67,54,0.22)" stroke="#f44336"/>
+    <text x="132" y="112" class="small" text-anchor="middle" fill="#f44336">✕</text>
+    <rect x="146" y="98" width="20" height="20" rx="3" fill="rgba(244,67,54,0.22)" stroke="#f44336"/>
+    <text x="156" y="112" class="small" text-anchor="middle" fill="#f44336">✕</text>
+    <rect x="170" y="98" width="20" height="20" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <rect x="194" y="98" width="20" height="20" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <text x="34" y="138" class="mt">Survivor S0 (age=1) · S1 (비어 있음)</text>
+    <rect x="26" y="144" width="20" height="20" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <text x="36" y="158" class="age" text-anchor="middle" fill="#66bb6a">1</text>
+    <rect x="50" y="144" width="92" height="20" rx="3" fill="none" stroke="rgb(80,75,68)" stroke-dasharray="3 3"/>
+    <rect x="148" y="144" width="92" height="20" rx="3" fill="none" stroke="rgb(80,75,68)" stroke-dasharray="3 3"/>
+    <text x="148" y="182" class="mt">S1 ↑ (복사 도착지)</text>
+
+    <!-- 화살표 -->
+    <line x1="135" y1="210" x2="135" y2="238" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#dn)"/>
+    <text x="145" y="228" class="algo">생존만 S1로 복사 · age+1</text>
+
+    <!-- GC 후 -->
+    <rect x="14" y="248" width="242" height="138" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1.1"/>
+    <text x="34" y="272" class="zlabel">GC 후 — S1에 모음 · Eden·S0 비움</text>
+    <text x="34" y="286" class="mt">Survivor S1 (현재 사용)</text>
+    <rect x="26"  y="292" width="20" height="20" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <text x="36" y="306" class="age" text-anchor="middle" fill="#66bb6a">1</text>
+    <rect x="50"  y="292" width="20" height="20" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <text x="60" y="306" class="age" text-anchor="middle" fill="#66bb6a">1</text>
+    <rect x="74"  y="292" width="20" height="20" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <text x="84" y="306" class="age" text-anchor="middle" fill="#66bb6a">1</text>
+    <rect x="98"  y="292" width="20" height="20" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <text x="108" y="306" class="age" text-anchor="middle" fill="#66bb6a">1</text>
+    <rect x="122" y="292" width="20" height="20" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <text x="132" y="306" class="age" text-anchor="middle" fill="#66bb6a">1</text>
+    <rect x="146" y="292" width="20" height="20" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <text x="156" y="306" class="age" text-anchor="middle" fill="#66bb6a">2</text>
+    <text x="34" y="334" class="mt">Eden·S0 통째로 비움</text>
+    <rect x="26" y="340" width="214" height="18" rx="3" fill="none" stroke="rgb(80,75,68)" stroke-dasharray="3 3"/>
+    <text x="34" y="376" class="cap">생존 10%만 복사 → 단편화 없음 · 사용률 ~90%</text>
+  </g>
+
+  <!-- ============================================================= -->
+  <!-- 패널 2: 승격 -->
+  <!-- ============================================================= -->
+  <g transform="translate(315, 70)">
+    <rect x="0" y="0" width="270" height="466" rx="10" fill="rgb(20,20,20)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+    <text x="14" y="25" class="panelt">② 승격 · Survivor → Old</text>
+    <text x="14" y="42" class="mt">오래 버틴 객체는 구세대로 이사</text>
+
+    <!-- GC 전 -->
+    <rect x="14" y="54" width="242" height="150" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1.1"/>
+    <text x="34" y="78" class="zlabel">GC 전 — Survivor에서 age 누적</text>
+    <text x="34" y="96" class="mt">Minor GC마다 age += 1 (S0↔S1 왕복)</text>
+    <rect x="40"  y="106" width="28" height="28" rx="5" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <text x="54"  y="124" class="age" text-anchor="middle" fill="#66bb6a">15</text>
+    <rect x="86"  y="106" width="28" height="28" rx="5" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <text x="100" y="124" class="age" text-anchor="middle" fill="#66bb6a">15</text>
+    <rect x="132" y="106" width="28" height="28" rx="5" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <text x="146" y="124" class="age" text-anchor="middle" fill="#66bb6a">15</text>
+    <text x="34" y="160" class="algo">age ≥ -XX:MaxTenuringThreshold (기본 15)</text>
+    <text x="34" y="178" class="mt">→ 임계 도달 → 다음 GC에 승격</text>
+
+    <!-- 화살표 -->
+    <line x1="135" y1="210" x2="135" y2="238" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#dn)"/>
+    <text x="145" y="228" class="algo">age 15 도달 → 승격</text>
+
+    <!-- GC 후 -->
+    <rect x="14" y="248" width="242" height="138" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1.1"/>
+    <text x="34" y="272" class="zlabel">GC 후 — 구세대(Old)에 도착</text>
+    <text x="34" y="286" class="mt">살아남은 객체가 더 오래 산다는 가설</text>
+    <rect x="40"  y="296" width="28" height="28" rx="5" fill="#2e7d32" stroke="#66bb6a"/>
+    <text x="54"  y="314" class="age" text-anchor="middle" fill="#e8f5e9">15</text>
+    <rect x="86"  y="296" width="28" height="28" rx="5" fill="#2e7d32" stroke="#66bb6a"/>
+    <text x="100" y="314" class="age" text-anchor="middle" fill="#e8f5e9">15</text>
+    <rect x="132" y="296" width="28" height="28" rx="5" fill="#2e7d32" stroke="#66bb6a"/>
+    <text x="146" y="314" class="age" text-anchor="middle" fill="#e8f5e9">15</text>
+    <text x="34" y="350" class="mt">큰 객체는 Eden 안 거치고 곧장 Old로</text>
+    <text x="34" y="364" class="small">(-XX:PretenureSizeThreshold 초과 시)</text>
+    <text x="34" y="380" class="cap">나이로 정책을 가른다 → 신세대 GC 비용 절감</text>
+  </g>
+
+  <!-- ============================================================= -->
+  <!-- 패널 3: Major GC — 마크-컴팩트 -->
+  <!-- ============================================================= -->
+  <g transform="translate(604, 70)">
+    <rect x="0" y="0" width="270" height="466" rx="10" fill="rgb(20,20,20)" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+    <text x="14" y="25" class="panelt">③ Major GC · 마크-컴팩트</text>
+    <text x="14" y="42" class="mt">구세대는 드물게 길게 — 생존율 높음</text>
+
+    <!-- GC 전 -->
+    <rect x="14" y="54" width="242" height="150" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1.1"/>
+    <text x="34" y="78" class="zlabel">GC 전 — 단편화 (빈칸 듬성듬성)</text>
+    <rect x="26"  y="92" width="22" height="22" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <rect x="52"  y="92" width="22" height="22" rx="3" fill="none" stroke="rgb(80,75,68)" stroke-dasharray="3 3"/>
+    <rect x="78"  y="92" width="22" height="22" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <rect x="104" y="92" width="22" height="22" rx="3" fill="none" stroke="rgb(80,75,68)" stroke-dasharray="3 3"/>
+    <rect x="130" y="92" width="22" height="22" rx="3" fill="none" stroke="rgb(80,75,68)" stroke-dasharray="3 3"/>
+    <rect x="156" y="92" width="22" height="22" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <rect x="182" y="92" width="22" height="22" rx="3" fill="none" stroke="rgb(80,75,68)" stroke-dasharray="3 3"/>
+    <rect x="208" y="92" width="22" height="22" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <text x="34" y="140" class="mt">빈칸 총합은 크지만 *연속*이 아니다</text>
+    <text x="34" y="158" class="mt">→ 큰 객체 할당이 연속 공간을 못 찾음</text>
+    <text x="34" y="180" class="algo">마크 후 한 방향으로 압축</text>
+
+    <!-- 화살표 -->
+    <line x1="135" y1="210" x2="135" y2="238" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#dn)"/>
+    <text x="145" y="228" class="algo">생존 객체를 끝으로 압축</text>
+
+    <!-- GC 후 -->
+    <rect x="14" y="248" width="242" height="138" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" stroke-width="1.1"/>
+    <text x="34" y="272" class="zlabel">GC 후 — 압축 완료 (빈칸 끝에 연속)</text>
+    <rect x="26"  y="284" width="22" height="22" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <rect x="52"  y="284" width="22" height="22" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <rect x="78"  y="284" width="22" height="22" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <rect x="104" y="284" width="22" height="22" rx="3" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+    <rect x="132" y="284" width="98" height="22" rx="3" fill="none" stroke="rgb(80,75,68)" stroke-dasharray="3 3"/>
+    <text x="181" y="299" class="small" text-anchor="middle">연속 빈 공간</text>
+    <text x="34" y="334" class="mt">bump-the-pointer로 다음 할당이 다시 싸짐</text>
+    <text x="34" y="376" class="cap">단편화 0 · 낭비 0 — 대신 이동 비용을 치름</text>
+  </g>
+
+  <!-- 하단 한 줄 -->
+  <text x="26" y="558" class="cap">한 줄: <tspan font-weight="800" fill="#e8e4df">어느 하나도 단독으로 우수하지 않다</tspan> — 신세대 마크-카피(낭비지만 깔끔) + 구세대 마크-컴팩트(완벽하지만 느림)로 *세대를 나눠 섞어 쓴다* · 알고리즘 상세는 §1.2~1.3, 승격은 §2.1</text>
+</svg>

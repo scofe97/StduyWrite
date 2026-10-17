@@ -1,0 +1,98 @@
+<svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif">
+  <title>스크레이프 실패가 for 상태를 지우는 다섯 단계</title>
+  <desc>왼쪽은 스크레이프가 성공하는 평상시다. 샘플이 저장되고 조회 시점에 값이 없어도 최대 5분까지 거슬러 올라가 마지막 샘플을 끌어온다. 비교 연산자는 조건을 만족한 시계열을 남기므로 결과가 비어 있지 않고, Prometheus 는 조건이 참이라고 판정해 pending 을 유지한다. 오른쪽은 스크레이프가 한 번 실패한 경우다. 이전에 있던 시계열의 샘플이 오지 않으면 Prometheus 는 stale 마커를 찍는다. 마커가 찍히면 그 시점 이후의 조회는 값을 돌려주지 않으므로 5분 lookback 이 막힌다. 조회 결과에 시계열이 없으니 비교 연산자가 걸러낼 대상 자체가 없어 결과가 비어 버린다. Prometheus 는 비교 결과가 비어 있으면 조건이 거짓이라고 판정하므로 pending 이 해제되고 그때까지 쌓아 온 for 시간이 사라진다. 아래는 이 설계의 의도와 부작용이다. stale 마커는 죽은 서버가 5분간 살아 있는 것처럼 보이는 일을 막으려는 정확성 장치인데, 긴 for 를 쓸 때는 그 정확성이 쌓아 온 시간을 지우는 부작용으로 돌아온다. 해법은 last_over_time 처럼 범위를 명시적으로 요구해 결측 하나를 견디는 것이다.</desc>
+  <rect width="900" height="560" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="sg" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/>
+    </marker>
+    <marker id="sr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#f44336"/>
+    </marker>
+  </defs>
+
+  <text x="450" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#e8e4df">스크레이프 한 번 실패가 25분을 지우는 경로</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#e8e4df">lookback 이 있는데도 빈 결과가 나오는 이유는 stale 마커입니다</text>
+
+  <!-- 왼쪽: 평상시 -->
+  <rect x="24" y="72" width="416" height="376" rx="10" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.6"/>
+  <rect x="44" y="84" width="150" height="24" rx="4" fill="#e6f7e7"/>
+  <text x="119" y="101" text-anchor="middle" font-size="11.5" font-weight="700" fill="#14521d">평상시</text>
+  <text x="206" y="101" font-size="10.5" fill="#e8e4df">스크레이프 성공</text>
+
+  <rect x="44" y="122" width="376" height="46" rx="6" fill="#e6f7e7"/>
+  <text x="60" y="140" font-size="11" font-weight="700" fill="#14521d">1. 샘플이 저장됩니다</text>
+  <text x="60" y="158" font-size="10" font-weight="700" fill="#14521d">타깃을 긁어 값을 기록합니다</text>
+
+  <line x1="232" y1="172" x2="232" y2="190" stroke="#66bb6a" stroke-width="1.6" marker-end="url(#sg)"/>
+
+  <rect x="44" y="196" width="376" height="46" rx="6" fill="#e6f7e7"/>
+  <text x="60" y="214" font-size="11" font-weight="700" fill="#14521d">2. lookback 이 빈 시점을 메웁니다</text>
+  <text x="60" y="232" font-size="10" font-weight="700" fill="#14521d">최대 5분까지 거슬러 마지막 샘플을 끌어옵니다</text>
+
+  <line x1="232" y1="246" x2="232" y2="264" stroke="#66bb6a" stroke-width="1.6" marker-end="url(#sg)"/>
+
+  <rect x="44" y="270" width="376" height="46" rx="6" fill="#e6f7e7"/>
+  <text x="60" y="288" font-size="11" font-weight="700" fill="#14521d">3. 비교 연산이 시계열을 남깁니다</text>
+  <text x="60" y="306" font-size="10" font-weight="700" fill="#14521d">조건을 만족한 시계열이 결과에 있습니다</text>
+
+  <line x1="232" y1="320" x2="232" y2="338" stroke="#66bb6a" stroke-width="1.6" marker-end="url(#sg)"/>
+
+  <rect x="44" y="344" width="376" height="46" rx="6" fill="#e6f7e7"/>
+  <text x="60" y="362" font-size="11" font-weight="700" fill="#14521d">4. 결과가 비어 있지 않습니다</text>
+  <text x="60" y="380" font-size="10" font-weight="700" fill="#14521d">Prometheus 는 조건이 참이라고 판정합니다</text>
+
+  <line x1="232" y1="394" x2="232" y2="410" stroke="#66bb6a" stroke-width="1.6" marker-end="url(#sg)"/>
+
+  <rect x="44" y="416" width="376" height="24" rx="5" fill="#66bb6a"/>
+  <text x="232" y="433" text-anchor="middle" font-size="11" font-weight="700" fill="#0d0d0d">pending 유지 · 쌓아 온 시간 보존</text>
+
+  <!-- 오른쪽: 실패 -->
+  <rect x="460" y="72" width="416" height="376" rx="10" fill="#0d0d0d" stroke="#f44336" stroke-width="1.6"/>
+  <rect x="480" y="84" width="196" height="24" rx="4" fill="#f2d4d4"/>
+  <text x="578" y="101" text-anchor="middle" font-size="11.5" font-weight="700" fill="#7a1f1f">스크레이프 한 번 실패</text>
+
+  <rect x="480" y="122" width="376" height="46" rx="6" fill="#f2d4d4"/>
+  <text x="496" y="140" font-size="11" font-weight="700" fill="#7a1f1f">1. stale 마커가 찍힙니다</text>
+  <text x="496" y="158" font-size="10" font-weight="700" fill="#7a1f1f">있던 시계열의 샘플이 오지 않으면 표시를 남깁니다</text>
+
+  <line x1="668" y1="172" x2="668" y2="190" stroke="#f44336" stroke-width="1.6" marker-end="url(#sr)"/>
+
+  <rect x="480" y="196" width="376" height="46" rx="6" fill="#f2d4d4"/>
+  <text x="496" y="214" font-size="11" font-weight="700" fill="#7a1f1f">2. lookback 이 막힙니다</text>
+  <text x="496" y="232" font-size="10" font-weight="700" fill="#7a1f1f">마커 이후의 조회는 값을 돌려주지 않습니다</text>
+
+  <line x1="668" y1="246" x2="668" y2="264" stroke="#f44336" stroke-width="1.6" marker-end="url(#sr)"/>
+
+  <rect x="480" y="270" width="376" height="46" rx="6" fill="#f2d4d4"/>
+  <text x="496" y="288" font-size="11" font-weight="700" fill="#7a1f1f">3. 걸러낼 시계열 자체가 없습니다</text>
+  <text x="496" y="306" font-size="10" font-weight="700" fill="#7a1f1f">비교 연산은 값이 아니라 시계열을 거릅니다</text>
+
+  <line x1="668" y1="320" x2="668" y2="338" stroke="#f44336" stroke-width="1.6" marker-end="url(#sr)"/>
+
+  <rect x="480" y="344" width="376" height="46" rx="6" fill="#f2d4d4"/>
+  <text x="496" y="362" font-size="11" font-weight="700" fill="#7a1f1f">4. 결과가 비어 있습니다</text>
+  <text x="496" y="380" font-size="10" font-weight="700" fill="#7a1f1f">Prometheus 는 조건이 거짓이라고 판정합니다</text>
+
+  <line x1="668" y1="394" x2="668" y2="410" stroke="#f44336" stroke-width="1.6" marker-end="url(#sr)"/>
+
+  <rect x="480" y="416" width="376" height="24" rx="5" fill="#ef9a9a"/>
+  <text x="668" y="433" text-anchor="middle" font-size="11" font-weight="700" fill="#0d0d0d">pending 해제 · 25분이 사라짐</text>
+
+  <!-- 하단: 의도와 부작용 -->
+  <rect x="24" y="464" width="852" height="84" rx="9" fill="#0d0d0d" stroke="#5c544a" stroke-width="1.3"/>
+  <text x="44" y="488" font-size="12" font-weight="700" fill="#e8e4df">정확성을 위한 설계가 긴 for 에서는 부작용이 됩니다</text>
+
+  <rect x="44" y="500" width="266" height="36" rx="6" fill="#dceaf7"/>
+  <text x="177" y="515" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">의도 — 죽은 서버를</text>
+  <text x="177" y="529" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">5분간 살아 있다고 하지 않기</text>
+
+  <rect x="322" y="500" width="266" height="36" rx="6" fill="#f2d4d4"/>
+  <text x="455" y="515" text-anchor="middle" font-size="10" font-weight="700" fill="#7a1f1f">부작용 — 그 끊김이</text>
+  <text x="455" y="529" text-anchor="middle" font-size="10" font-weight="700" fill="#7a1f1f">쌓아 온 for 시간까지 지움</text>
+
+  <rect x="600" y="500" width="256" height="36" rx="6" fill="#e6f7e7"/>
+  <text x="728" y="515" text-anchor="middle" font-size="10" font-weight="700" fill="#14521d">해법 — last_over_time 으로</text>
+  <text x="728" y="529" text-anchor="middle" font-size="10" font-weight="700" fill="#14521d">범위를 명시해 결측을 견딤</text>
+</svg>

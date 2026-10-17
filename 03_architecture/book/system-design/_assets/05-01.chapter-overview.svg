@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 484" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">안정 해시를 여섯 절로 읽는다</title><desc id="dd">서버 번호로 나누는 방식이 무너지는 값에서 출발해 링 조회·이동 범위·가상 노드를 거쳐 쓰이는 곳까지 간다.</desc>
+<rect width="960" height="484" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">SYSTEM DESIGN INTERVIEW · 05-01</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">안정 해시를 여섯 절로 읽는다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">키 8개는 나머지 연산에서, 키 4개는 링 위에서 어디로 가는지</text>
+<rect x="24" y="104" width="288" height="124" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="38" y="132" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">§1</text>
+<text x="38" y="168" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="16" font-weight="600" fill="#F5F5F3">나머지 연산</text>
+<text x="38" y="204" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">% 4 → % 3 · 8 중 5 이동</text>
+<rect x="336" y="104" width="288" height="124" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="350" y="132" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">§2</text>
+<text x="350" y="168" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="16" font-weight="600" fill="#F5F5F3">해시 링</text>
+<text x="350" y="204" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">0 ~ 2^160 − 1 · 시계 방향</text>
+<rect x="648" y="104" width="288" height="124" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4"/>
+<text x="662" y="132" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">§3</text>
+<text x="662" y="168" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="16" font-weight="600" fill="#F5F5F3">추가와 제거</text>
+<text x="662" y="204" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">k0 → s4 · k1 → s2</text>
+<rect x="24" y="276" width="288" height="124" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="38" y="304" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">§4</text>
+<text x="38" y="340" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="16" font-weight="600" fill="#F5F5F3">가상 노드</text>
+<text x="38" y="376" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">구간 25·50·25 → 33·35·32</text>
+<rect x="336" y="276" width="288" height="124" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="350" y="304" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">§5</text>
+<text x="350" y="340" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="16" font-weight="600" fill="#F5F5F3">영향 범위</text>
+<text x="350" y="376" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">(90, 10] · 20</text>
+<rect x="648" y="276" width="288" height="124" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="662" y="304" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">§6</text>
+<text x="662" y="340" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="16" font-weight="600" fill="#F5F5F3">쓰이는 곳</text>
+<text x="662" y="376" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">Dynamo · Cassandra · Maglev</text>
+<path d="M 314 166 L 330 166" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 626 166 L 642 166" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 314 338 L 330 338" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 626 338 L 642 338" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 792 232 L 792 252 L 168 252 L 168 272" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<line x1="12" y1="440" x2="912" y2="440" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="462" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="452" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="462" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">절</text>
+<rect x="157" y="452" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="179" y="462" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">가장 중심인 절</text>
+</svg>

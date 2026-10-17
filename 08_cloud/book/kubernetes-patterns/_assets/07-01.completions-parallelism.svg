@@ -1,0 +1,83 @@
+<svg viewBox="0 0 900 380" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>completions 5와 parallelism 2를 지정한 Job이 처리되는 순서</title>
+  <desc>책의 Figure 7-1이 보이는 실행 흐름입니다. completions를 5로 parallelism을 2로 지정한 Job에서 Pod가 시간에 따라 어떻게 실행되는지를 보입니다. Job 컨트롤러는 한 번에 최대 두 Pod만 띄우므로 처음에 Pod 1과 Pod 2가 동시에 시작합니다. 둘 중 하나가 성공 종료하면 빈 자리에 다음 Pod가 채워지는 식으로 진행되어, 다섯 번째 Pod까지 성공 완료하면 Job 전체가 완료로 표시되고 더 이상 Pod를 만들지 않습니다. 아래쪽에는 Job과 ReplicaSet의 결정적 차이를 표시합니다. ReplicaSet은 기본값이 Always인 restartPolicy로 프로세스를 계속 돌리지만, Job에서는 Always가 허용되지 않고 OnFailure나 Never만 쓸 수 있습니다. 끝나야 할 작업에 Always는 모순이기 때문입니다.</desc>
+
+  <rect width="900" height="380" fill="#0d0d0d"/>
+
+  <text x="24" y="30" fill="#e8e4df" font-size="15" font-weight="700">다섯 완료 · 둘씩 병렬</text>
+
+  <text x="24" y="56" fill="#b8b3ad" font-size="10">끝나면 다음 Pod 가 채웁니다</text>
+
+  <!-- time axis -->
+  <path d="M 24 84 L 790 84" stroke="#b8b3ad" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="800" y="88" fill="#b8b3ad" font-size="10">시간</text>
+
+  <!-- slot 1 -->
+  <text x="24" y="118" fill="#b8b3ad" font-size="10" font-weight="700">자리 1</text>
+  <rect x="90" y="102" width="180" height="30" fill="#cdeccf"/>
+  <text x="180" y="122" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">Pod 1 · 성공</text>
+
+  <path d="M 274 117 L 292 117" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#g)"/>
+
+  <rect x="296" y="102" width="180" height="30" fill="#cdeccf"/>
+  <text x="386" y="122" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">Pod 3 · 성공</text>
+
+  <path d="M 480 117 L 498 117" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#g)"/>
+
+  <rect x="502" y="102" width="180" height="30" fill="#cdeccf"/>
+  <text x="592" y="122" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">Pod 5 · 성공</text>
+
+  <!-- slot 2 -->
+  <text x="24" y="164" fill="#b8b3ad" font-size="10" font-weight="700">자리 2</text>
+  <rect x="90" y="148" width="230" height="30" fill="#cdeccf"/>
+  <text x="205" y="168" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">Pod 2 · 성공</text>
+
+  <path d="M 324 163 L 342 163" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#g)"/>
+
+  <rect x="346" y="148" width="230" height="30" fill="#cdeccf"/>
+  <text x="461" y="168" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">Pod 4 · 성공</text>
+
+  <!-- completion -->
+  <path d="M 686 117 L 716 117" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#am)"/>
+
+  <rect x="720" y="96" width="156" height="86" fill="rgb(212,168,83)"/>
+  <text x="798" y="124" text-anchor="middle" fill="#0d0d0d" font-size="12" font-weight="700">Job 완료</text>
+  <text x="798" y="145" text-anchor="middle" fill="#0d0d0d" font-size="10">5개 모두 성공</text>
+  <text x="798" y="165" text-anchor="middle" fill="#0d0d0d" font-size="10">더 만들지 않습니다</text>
+
+  <line x1="24" y1="212" x2="876" y2="212" stroke="#2a2a2a"/>
+
+  <!-- restartPolicy contrast -->
+  <text x="24" y="238" fill="#e8e4df" font-size="12" font-weight="700">ReplicaSet 과 갈리는 지점</text>
+
+  <rect x="24" y="250" width="410" height="76" fill="#dceaf7"/>
+  <text x="44" y="272" fill="#10243a" font-size="11" font-weight="700">ReplicaSet</text>
+  <rect x="44" y="282" width="370" height="20" fill="#f7fbff"/>
+  <text x="229" y="296" text-anchor="middle" fill="#10243a" font-size="9" font-weight="700" font-family="'JetBrains Mono', monospace">restartPolicy: Always</text>
+  <text x="44" y="318" fill="#10243a" font-size="10">계속 도는 프로세스에 맞습니다</text>
+
+  <rect x="466" y="250" width="410" height="76" fill="#cdeccf"/>
+  <text x="486" y="272" fill="#14521d" font-size="11" font-weight="700">Job</text>
+  <rect x="486" y="282" width="370" height="20" fill="#e6f7e7"/>
+  <text x="671" y="296" text-anchor="middle" fill="#14521d" font-size="9" font-weight="700" font-family="'JetBrains Mono', monospace">OnFailure · Never</text>
+  <text x="486" y="318" fill="#14521d" font-size="10">Always 는 허용되지 않습니다</text>
+
+  <!-- bottom -->
+  <rect x="24" y="338" width="852" height="34" fill="#f5edda"/>
+  <text x="44" y="360" fill="#0d0d0d" font-size="10" font-weight="700">실제 병렬 수는 더 적을 수 있습니다</text>
+
+  <defs>
+    <marker id="a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#b8b3ad"/>
+    </marker>
+    <marker id="g" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#66bb6a"/>
+    </marker>
+    <marker id="am" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+</svg>

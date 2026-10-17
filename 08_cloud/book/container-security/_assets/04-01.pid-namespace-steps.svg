@@ -1,0 +1,73 @@
+<svg viewBox="0 0 680 470" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>PID namespace가 온전히 동작하기까지의 세 단계</title>
+  <desc>첫 시도는 unshare에 pid 옵션만 준 경우로, 첫 명령 뒤부터 fork가 안 돼 아무것도 못 합니다. 셸이 unshare의 자식이 아니라 sudo의 자식이기 때문입니다. 두 번째 시도에서 fork 옵션을 더하면 명령을 여러 개 돌릴 수 있게 되지만, ps는 여전히 호스트의 모든 프로세스를 보여 줍니다. ps가 proc 디렉토리의 가상 파일을 읽기 때문입니다. 세 번째로 루트 디렉토리를 바꾸고 그 안에 proc을 새로 마운트해야 비로소 ps가 격리된 프로세스만 보여 줍니다.</desc>
+
+  <style>
+    .box { fill: #e8e4df; }
+    .box-title { fill: #0d0d0d; font-size: 12.5px; font-weight: 700; }
+    .box-detail { fill: #3a3632; font-size: 10px; }
+    .cmd { fill: #0d0d0d; font-size: 10px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .chip { fill: #f5edda; }
+    .num { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
+    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
+    .hint { fill: #b8b3ad; font-size: 10px; }
+    .head { fill: #b8b3ad; font-size: 10.5px; font-weight: 700; }
+    .danger-title { fill: #7a1f1f; font-size: 12.5px; font-weight: 700; }
+    .danger-cmd { fill: #7a1f1f; font-size: 10px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
+    .caution-title { fill: #0d0d0d; font-size: 12.5px; font-weight: 700; }
+    .caution-detail { fill: #0d0d0d; font-size: 10px; }
+  </style>
+
+  <rect width="680" height="470" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="kh" markerWidth="9" markerHeight="9" refX="7" refY="3"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
+    </marker>
+  </defs>
+
+  <!-- 1차 시도 — 실패 -->
+  <text class="num" x="34" y="48">1.</text>
+  <rect x="54" y="24" width="586" height="86" rx="4" fill="#f2d4d4"/>
+  <text class="danger-title" x="70" y="46">실패 · 첫 명령 뒤로 막힌다</text>
+  <rect class="chip" x="70" y="56" width="200" height="18" rx="3"/>
+  <text class="cmd" x="76" y="69">sudo unshare --pid sh</text>
+  <rect class="chip" x="70" y="80" width="200" height="18" rx="3"/>
+  <text class="danger-cmd" x="76" y="93">sh: 2: Cannot fork</text>
+  <text class="danger-title" x="290" y="70" font-size="11">셸이 unshare의 자식이 아니라</text>
+  <text class="danger-title" x="290" y="88" font-size="11">sudo의 자식이라서</text>
+
+  <path class="arrow" d="M337,110 L337,128" marker-end="url(#kh)"/>
+  <text class="head" x="352" y="124">--fork 를 더한다</text>
+
+  <!-- 2차 시도 — 부분 성공 -->
+  <text class="num" x="34" y="160">2.</text>
+  <rect x="54" y="136" width="586" height="86" rx="4" fill="rgb(212,168,83)"/>
+  <text class="caution-title" x="70" y="158">주의 · 명령은 되지만 ps가 샌다</text>
+  <rect class="chip" x="70" y="168" width="250" height="18" rx="3"/>
+  <text class="cmd" x="76" y="181">sudo unshare --pid --fork sh</text>
+  <text class="caution-detail" x="70" y="204">ps가 호스트까지 보여 준다</text>
+  <text class="caution-title" x="340" y="182" font-size="11">ps는 /proc의</text>
+  <text class="caution-title" x="340" y="200" font-size="11">가상 파일을 읽는다</text>
+
+  <path class="arrow" d="M337,222 L337,240" marker-end="url(#kh)"/>
+  <text class="head" x="352" y="236">루트를 바꾸고 proc을 새로 마운트</text>
+
+  <!-- 3차 시도 — 성공 -->
+  <text class="num" x="34" y="272">3.</text>
+  <rect class="box" x="54" y="248" width="586" height="104" rx="4"/>
+  <text class="box-title" x="70" y="270">성공 · 자기 프로세스만 보인다</text>
+  <rect class="chip" x="70" y="280" width="330" height="18" rx="3"/>
+  <text class="cmd" x="76" y="293">sudo unshare --pid --fork chroot alpine sh</text>
+  <rect class="chip" x="70" y="304" width="200" height="18" rx="3"/>
+  <text class="cmd" x="76" y="317">mount -t proc proc /proc</text>
+  <text class="box-detail" x="70" y="340">PID ns + 새 루트 + proc</text>
+
+  <text class="hint" x="54" y="384">셋이 모여야 컨테이너다</text>
+  <text class="hint" x="54" y="404">ns 하나로는 부족하다</text>
+  <text class="hint" x="54" y="424">UTS가 쉬웠던 것과 대비</text>
+</svg>
