@@ -6,7 +6,7 @@ from dd import D, ACC, OK, INFO, SOFT, MUTED, INK, PAPER, PAPER2, RULE, KR, MONO
 
 W, H = 920, 500
 d = D(W, H, "CILIUM UP AND RUNNING · 08-02 §2", "ECMP 분기 환경의 Maglev 일관 해시 흐름",
-      "FRR ECMP 로 진입 노드가 갈려도 동일한 5-튜플은 같은 백엔드 파드를 선택한다",
+      "FRR ECMP 로 진입 노드가 갈려도 동일한 5-튜플은 같은 백엔드 Pod 를 선택한다",
       "노드 간 동기화 없이 소수 크기 룩업 테이블로 동일 백엔드를 산출해 TCP 리셋을 줄입니다")
 
 # 1. 외부 BGP / FRR 라우터 (좌측)
@@ -38,7 +38,7 @@ d.tone(NX + 14, NY2 + 42, NW - 28, 52, INFO, r=4, op="10", sw=0.9)
 d.t(NX + NW / 2, NY2 + 64, "Maglev 해시 룩업 (크기 16381)", 12, INFO, KR, "middle", 600)
 d.t(NX + NW / 2, NY2 + 84, "동일 테이블 · 동일 해시 알고리즘", 12, MUTED, KR)
 
-# 3. 우측: 백엔드 파드
+# 3. 우측: 백엔드 Pod
 BX, BW, BH = 616, 272, 92
 BY1, BY2 = 130, 286
 
