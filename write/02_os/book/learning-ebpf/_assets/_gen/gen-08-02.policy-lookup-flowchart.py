@@ -9,14 +9,14 @@ from dd import D, ACC, OK, WARN, BAD, INFO, MUTED, INK, PAPER, PAPER2, RULE, SOF
 
 W, H = 960, 520
 d = D(W, H, "LEARNING EBPF · 08-02 §3",
-      "받는 Pod 로 가는 패킷은 조회 두 번으로 전달·프록시·폐기가 갈린다",
+      "받는 Pod 로 가는 패킷은 두 단계 조회로 전달·프록시·폐기가 갈린다",
       "출발지 10.0.0.68 은 IP cache 에서 identity 22727 로 풀린다. Pod A 의 정책 맵에 (22727, Ingress, TCP, 8080) 항목이 있으면 전달하고 TCP 9113 은 항목이 없어 TC_ACT_SHOT 으로 폐기한다. Pod B 의 항목에 rules.http 가 있으면 프록시로 보낸다.",
-      "IP 를 identity 로 한 번 풀고 정책 맵에서 한 번 찾습니다")
+      "IP 를 identity 로 풀고 정책 맵에서 그 identity 와 묶은 identity 로 찾습니다")
 
 def kr(t): return KR if any("가" <= c <= "힣" for c in str(t)) else MONO
 
 # 열 머리
-for x, w, lab in ((24, 176, "패킷"), (232, 176, "조회 1"), (440, 208, "조회 2"), (676, 136, "항목?"), (840, 104, "동작")):
+for x, w, lab in ((24, 176, "패킷"), (232, 176, "1단계"), (440, 208, "2단계"), (676, 136, "항목?"), (840, 104, "동작")):
     d.t(x + w // 2, 116, lab, 13, SOFT, KR, "middle", 600)
 
 ROWS = [

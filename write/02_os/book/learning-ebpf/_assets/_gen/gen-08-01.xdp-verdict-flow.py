@@ -7,7 +7,7 @@ from dd import D, ACC, OK, WARN, BAD, INFO, MUTED, INK, PAPER, PAPER2, RULE, SOF
 
 W, H = 1000, 436
 d = D(W, H, "LEARNING EBPF · 08-01 §1", "XDP 프로그램은 검사 끝에 반환 코드 하나로 패킷의 운명을 정한다",
-      "XDP 프로그램이 data 와 data_end 사이의 경계를 검사한다. 경계 밖이면 XDP_ABORTED 0, 버릴 패킷이면 XDP_DROP 1, 스택에 맡기면 XDP_PASS 2, 같은 장치로 되돌리면 XDP_TX 3, 다른 장치로 보내면 XDP_REDIRECT 4 를 돌려준다.",
+      "XDP 프로그램이 data 와 data_end 사이의 경계를 검사한다. 경계 밖이면 §3 로드밸런서처럼 XDP_ABORTED 0 을, 버릴 패킷이면 XDP_DROP 1, 스택에 맡기면 XDP_PASS 2, 같은 장치로 되돌리면 XDP_TX 3, 다른 장치로 보내면 XDP_REDIRECT 4 를 돌려준다.",
       "반환 코드가 곧 판정입니다")
 
 def oval(x, y, w, h, c, op="12", sw=1.2):
