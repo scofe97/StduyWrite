@@ -30,8 +30,8 @@ rows = [
     ("C", "Clang -target bpf · GCC 10+", [("y", "Clang · GCC 10+"), ("y", "런타임 없음"), ("y", "주류")]),
     ("Rust", "bpfel-unknown-none", [("y", "bpfel-unknown-none"), ("y", "no_std"), ("y", "사용")]),
     ("Go", "GC 런타임", [("x", "런타임 탓"), ("n", "GC · 스레드"), ("n", "쓰이지 않음")]),
-    ("Java", "JVM", [("x", "런타임 탓"), ("n", "JVM"), ("n", "쓰이지 않음")]),
-    ("Lua", "XDPLua · 커널 안 Lua", [("n", "eBPF 아님"), ("n", "Lua 실행기"), ("p", "XDP 에 연결")]),
+    ("Java", "JVM", [("x", "런타임 탓"), ("n", "JVM"), ("p", "C 로 번역")]),
+    ("Lua", "XDPLua · 커널 안 Lua", [("n", "eBPF 아님"), ("n", "Lua 실행기"), ("p", "헬퍼로 호출")]),
 ]
 for i, (lang, sub, cells) in enumerate(rows):
     y = 148 + i * 64

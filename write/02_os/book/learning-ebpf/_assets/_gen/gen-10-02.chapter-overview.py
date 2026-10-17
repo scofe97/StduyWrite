@@ -19,7 +19,7 @@ LEAVES = [
     ("libbpfgo", "libbpf + CGo", "커널 C", OK),
     ("libbpf-rs", "libbpf", "커널 C", OK),
     ("Aya", "bpf() 직접", "커널 Rust", ACC),
-    ("redbpf", "bitcode 변환", "커널 Rust", BAD),
+    ("redbpf", "libbpf", "커널 Rust", BAD),
     ("rust-bcc", "BCC", "커널 C 문자열", BAD),
 ]
 cx = [LX0 + i * ST + LW // 2 for i in range(7)]
