@@ -37,7 +37,7 @@ rows = [
      "자체 etcd 관리", False),
     ("clustermesh-apiserver-remote-cert", "클라이언트",
      "remote-${cluster.name}", "CN · authMode: cluster",
-     "API Server → 원격 etcd", "원격 동기화",
+     "KVStoreMesh → 원격 etcd", "원격 동기화",
      "원격 etcd 상태 동기화", True),
     ("clustermesh-apiserver-local-cert", "클라이언트",
      "local-${cluster.name}", "Common Name",
