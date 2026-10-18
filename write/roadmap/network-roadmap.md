@@ -216,7 +216,7 @@ updated: 2026-10-15
 | HTTP/1.1 · HTTP/2 · 멀티플렉싱 | 필수 | [웹 프로토콜](../02_os/book/cntd_computer-networking-top-down/02-02.%EC%9B%B9%EC%9D%80%20%EC%96%B4%EB%96%BB%EA%B2%8C%20%EC%A3%BC%EA%B3%A0%EB%B0%9B%EB%8A%94%EA%B0%80.md) · [Transport 계층](../08_cloud/book/networking-and-kubernetes/01-02.HTTP%EC%97%90%EC%84%9C%20TCP%C2%B7TLS%C2%B7UDP%EA%B9%8C%EC%A7%80%20%E2%80%94%20Transport%20%EA%B3%84%EC%B8%B5%20%ED%95%B4%EB%B6%80.md) · [주고받는 명령](../02_os/book/learning-modern-linux/07-03.%EC%A3%BC%EA%B3%A0%EB%B0%9B%EB%8A%94%20%EC%9D%BC%EC%9D%80%20%EA%B2%B0%EA%B5%AD%20%EB%AA%87%20%EA%B0%9C%EC%9D%98%20%EB%AA%85%EB%A0%B9%EC%9C%BC%EB%A1%9C%20%EC%A4%84%EC%96%B4%EB%93%A0%EB%8B%A4.md) | HTTP/2 in Action 2·4장 · Learning Modern Linux 7장 |
 | HTTP 캐시 — Cache-Control · ETag · 조건부 요청 · Vary | 추천 |  | [RFC 9111](https://www.rfc-editor.org/rfc/rfc9111) |
 | HSTS · mixed content — HTTPS 를 강제하는 법 | 선택 |  | [RFC 6797](https://www.rfc-editor.org/rfc/rfc6797) |
-| TLS 핸드셰이크 · SNI | 필수 | [TLS 핸드셰이크 읽기](../02_os/book/paw_packet-analysis-wireshark/04-01.TLS%20%ED%95%B8%EB%93%9C%EC%85%B0%EC%9D%B4%ED%81%AC%20%EC%9D%BD%EA%B8%B0.md) · [TLS와 인증](../02_os/book/cntd_computer-networking-top-down/08-03.%EC%82%B4%EC%95%84%20%EC%9E%88%EB%8A%94%20%EC%83%81%EB%8C%80%EB%A5%BC%20%ED%99%95%EC%9D%B8%ED%95%98%EA%B3%A0%20%EB%A9%94%EC%9D%BC%EA%B3%BC%20TCP%20%EC%97%90%20%EB%B6%99%EC%9E%85%EB%8B%88%EB%8B%A4.md) | High Performance Browser Networking 4장 · Real-World Cryptography 9장 |
+| TLS 핸드셰이크 · SNI | 필수 | [TLS 핸드셰이크 읽기](../02_os/book/paw_packet-analysis-wireshark/04-01.TLS%20%ED%95%B8%EB%93%9C%EC%85%B0%EC%9D%B4%ED%81%AC%20%EC%9D%BD%EA%B8%B0.md) · [TLS와 인증](../02_os/book/cntd_computer-networking-top-down/08-03.%EC%82%B4%EC%95%84%20%EC%9E%88%EB%8A%94%20%EC%83%81%EB%8C%80%EB%A5%BC%20%ED%99%95%EC%9D%B8%ED%95%98%EA%B3%A0%20%EB%A9%94%EC%9D%BC%EA%B3%BC%20TCP%20%EC%97%90%20%EB%B6%99%EC%9E%85%EB%8B%88%EB%8B%A4.md) · [portal 02-01 TLS 1.3](../02_os/project/portal-tunnel/02-01.TLS%201.3%20handshake%C2%B7SNI%C2%B7ECDHE.md) | High Performance Browser Networking 4장 · Real-World Cryptography 9장 |
 | 인증서 체인 · SAN 호스트명 검증 · 유효 기간 | 필수 | [인증서와 두 서명](../02_os/book/paw_packet-analysis-wireshark/04-02.%EC%9D%B8%EC%A6%9D%EC%84%9C%EC%99%80%20%EB%91%90%20%EC%84%9C%EB%AA%85.md) | High Performance Browser Networking 4장 |
 | ClientHello · ServerHello · 확장 협상 | 필수 |  | Real-World Cryptography 9장 · High Performance Browser Networking 4장 |
 | key_share · supported_groups · HelloRetryRequest | 추천 |  | Real-World Cryptography 5·9장 |
@@ -230,10 +230,10 @@ updated: 2026-10-15
 | ECH · ClientHelloOuter · HPKE | 추천 |  | RFC 9180 · draft-ietf-tls-esni |
 | SNI 가 남기는 것 — ECH 와 DNS 암호화는 함께 간다 | 추천 |  | Real-World Cryptography 9장 |
 | session resumption · PSK · ALPN | 추천 |  | Real-World Cryptography 9장 · High Performance Browser Networking 4장 |
-| QUIC · HTTP/3 | 추천 | | HTTP/2 in Action 9장 |
-| 스트림 멀티플렉싱과 HOL 블로킹 — HTTP/2 · QUIC · yamux 가 연결 하나를 나누는 방식 | 추천 |  | [yamux spec](https://github.com/hashicorp/yamux/blob/master/spec.md) · [RFC 9000](https://www.rfc-editor.org/rfc/rfc9000) |
+| QUIC · HTTP/3 | 추천 | [portal 01-02 stream mux](../02_os/project/portal-tunnel/01-02.Stream%20multiplexing%C2%B7HTTP%20Upgrade%C2%B7QUIC.md) | HTTP/2 in Action 9장 |
+| 스트림 멀티플렉싱과 HOL 블로킹 — HTTP/2 · QUIC · yamux 가 연결 하나를 나누는 방식 | 추천 | [portal 01-02 stream mux](../02_os/project/portal-tunnel/01-02.Stream%20multiplexing%C2%B7HTTP%20Upgrade%C2%B7QUIC.md) · [portal 01-05 yamux](../02_os/project/portal-tunnel/01-05.stream_mux%C2%B7yamux.md) | [yamux spec](https://github.com/hashicorp/yamux/blob/master/spec.md) · [RFC 9000](https://www.rfc-editor.org/rfc/rfc9000) |
 | HTTP 성능 축 | 선택 | | High Performance Browser Networking 11·12장 |
-| WebSocket · HTTP Upgrade | 선택 | [WebSocket 핸드셰이크](../09_spring/03_network/realtime/03-01.WebSocket%20%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C%EA%B3%BC%20%ED%95%B8%EB%93%9C%EC%85%B0%EC%9D%B4%ED%81%AC.md) | High Performance Browser Networking 17장 |
+| WebSocket · HTTP Upgrade | 선택 | [WebSocket 핸드셰이크](../09_spring/03_network/realtime/03-01.WebSocket%20%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C%EA%B3%BC%20%ED%95%B8%EB%93%9C%EC%85%B0%EC%9D%B4%ED%81%AC.md) · [portal 01-02 stream mux](../02_os/project/portal-tunnel/01-02.Stream%20multiplexing%C2%B7HTTP%20Upgrade%C2%B7QUIC.md) | High Performance Browser Networking 17장 |
 | UDP · 단편화 | 추천 | [트랜스포트 계층](../02_os/book/cntd_computer-networking-top-down/03-01.%ED%8A%B8%EB%9E%9C%EC%8A%A4%ED%8F%AC%ED%8A%B8%EB%8A%94%20%EB%AC%B4%EC%97%87%EC%9D%84%20%EB%8D%94%ED%95%98%EB%8A%94%EA%B0%80.md) · [포트와 이름](../02_os/book/learning-modern-linux/07-02.%ED%8F%AC%ED%8A%B8%EA%B0%80%20%EC%9E%88%EC%96%B4%EC%95%BC%20%EC%84%9C%EB%B9%84%EC%8A%A4%EB%A5%BC%20%EA%B0%80%EB%A6%AC%ED%82%AC%20%EC%88%98%20%EC%9E%88%EA%B3%A0%20%EC%9D%B4%EB%A6%84%EC%9D%B4%20%EC%9E%88%EC%96%B4%EC%95%BC%20%EC%82%AC%EB%9E%8C%EC%9D%B4%20%EA%B8%B0%EC%96%B5%ED%95%9C%EB%8B%A4.md) | TCP/IP Illustrated 10장 · Learning Modern Linux 7장 |
 | SMTP 대화 · 봉투와 헤더 · 응답 코드 | 추천 | [메일과 이름](../02_os/book/cntd_computer-networking-top-down/02-03.%EB%A9%94%EC%9D%BC%EA%B3%BC%20%EC%9D%B4%EB%A6%84%EC%9D%80%20%EC%96%B4%EB%96%BB%EA%B2%8C%20%EC%B0%BE%EC%95%84%EA%B0%80%EB%8A%94%EA%B0%80.md) | Computer Networking 2장 · [RFC 5321](https://www.rfc-editor.org/rfc/rfc5321) · [RFC 5322](https://www.rfc-editor.org/rfc/rfc5322) |
 | MX · 제출(587)과 중계 · 큐와 반송 | 추천 |  | [RFC 6409](https://www.rfc-editor.org/rfc/rfc6409) · [RFC 5598](https://www.rfc-editor.org/rfc/rfc5598) · [RFC 3464](https://www.rfc-editor.org/rfc/rfc3464) |
@@ -281,7 +281,7 @@ updated: 2026-10-15
 | IGMP · MLD · 멀티캐스트 | 선택 | | TCP/IP Illustrated 9장 |
 | DHCP · 자동 구성 | 선택 | [DHCP](../02_os/book/paw_packet-analysis-wireshark/05-01.%EC%A3%BC%EC%86%8C%EB%A5%BC%20%EB%B0%9B%EC%95%84%20%EC%98%A4%EB%8A%94%20%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C.md) | TCP/IP Illustrated 6장 |
 | NTP · chrony — 시계가 어긋나면 인증서 검증과 로그 시간축이 깨진다 | 추천 | | CompTIA Network+ 5장 · [chrony](https://chrony-project.org/documentation.html) |
-| NAT traversal · STUN · TURN · ICE | 선택 |  | TCP/IP Illustrated 7장 |
+| NAT traversal · STUN · TURN · ICE | 선택 | [portal 01-01 NAT·conntrack](../02_os/project/portal-tunnel/01-01.NAT%C2%B7conntrack%C2%B7outbound%20connection.md) | TCP/IP Illustrated 7장 |
 | bonding · LACP | 선택 |  | TCP/IP Illustrated 3장 |
 | 게이트웨이 이중화 — VRRP · keepalived · 가상 IP · gratuitous ARP | 추천 | | CompTIA Network+ 16장 · [keepalived](https://keepalived.readthedocs.io/) |
 | policy routing · `ip rule` · VRF | 선택 |  | [ip-rule(8)](https://man7.org/linux/man-pages/man8/ip-rule.8.html) · [VRF](https://docs.kernel.org/networking/vrf.html) |
@@ -457,24 +457,24 @@ updated: 2026-10-15
 | traffic correlation · metadata · timing side-channel | 필수 |  | [Tor 설계 논문](https://www.usenix.org/conference/13th-usenix-security-symposium/tor-second-generation-onion-router) |
 | 암호화가 숨기는 것과 숨기지 않는 것 | 필수 | | Real-World Cryptography 9·10장 |
 | bootstrap · reseed · 최초 접점 · trust anchor | 추천 |  | [I2P Network Database](https://i2p.net/en/docs/overview/network-database/) |
-| peer discovery · DHT · Kademlia · gossip · membership | 추천 |  | Patterns of Distributed Systems 7·28장 · Database Internals 12장 |
-| lease · TTL 갱신 | 추천 |  | Patterns of Distributed Systems 26장 |
-| signed descriptor · 공개키 신원 · 키에서 나온 주소 · 무결성 | 추천 | | Real-World Cryptography 2·7장 |
-| key rotation · replay 방지 · freshness | 추천 |  | Real-World Cryptography 3·8·9장 |
-| Sybil · eclipse · poisoning · behavior score | 추천 |  | [I2P Network Database](https://i2p.net/en/docs/overview/network-database/) |
+| peer discovery · DHT · Kademlia · gossip · membership | 추천 | [portal 03-04 discovery·overlay](../02_os/project/portal-tunnel/03-04.discovery%C2%B7overlay.md) | Patterns of Distributed Systems 7·28장 · Database Internals 12장 |
+| lease · TTL 갱신 | 추천 | [portal 01-06 lease](../02_os/project/portal-tunnel/01-06.lease%C2%B7record.md) | Patterns of Distributed Systems 26장 |
+| signed descriptor · 공개키 신원 · 키에서 나온 주소 · 무결성 | 추천 | [portal 03-01 digital signature](../02_os/project/portal-tunnel/03-01.Digital%20signature%C2%B7secp256k1%C2%B7JWT.md) · [portal 03-04 discovery·overlay](../02_os/project/portal-tunnel/03-04.discovery%C2%B7overlay.md) | Real-World Cryptography 2·7장 |
+| key rotation · replay 방지 · freshness | 추천 | [portal 03-02 identity·lease token](../02_os/project/portal-tunnel/03-02.identity%C2%B7SIWE%C2%B7lease%20token.md) | Real-World Cryptography 3·8·9장 |
+| Sybil · eclipse · poisoning · behavior score | 추천 | [portal 03-03 relay policy](../02_os/project/portal-tunnel/03-03.relay%20policy.md) | [I2P Network Database](https://i2p.net/en/docs/overview/network-database/) |
 | Sybil 저항 — 자원 증명(PoW · proof of storage · proof of replication)과 검증 비용 | 선택 |  |  |
 | 남의 노드가 일을 했다는 증명 — challenge-response · remote attestation · 오라클 문제 | 선택 |  |  |
 | 오버레이 — 물리와 논리의 분리 · 터널링 · 가상 토폴로지 | 추천 |  | [I2P Tunnel Routing](https://i2p.net/en/docs/overview/tunnel-routing/) |
-| reverse tunnel · outbound-only relay | 추천 |  | [portal-tunnel](https://github.com/gosuda/portal-tunnel) |
-| relay · hole punching · reachability | 선택 |  | TCP/IP Illustrated 7장 |
-| 키 소유권 분리 — 서명 권한만 위임하고 세션 키는 넘기지 않는다 | 추천 |  | Zero Trust Networks 6장 |
-| CertificateVerify — 키 소유 증명과 키 합의는 다른 단계다 | 추천 |  | Real-World Cryptography 7장 |
-| transcript 바인딩 — 임의 digest 서명 API 가 위험한 이유 | 추천 |  | Real-World Cryptography 2·7장 |
-| keyless TLS · trusted edge — 서명 권한이 곧 신뢰 | 선택 |  | [keyless_tls](https://github.com/gosuda/keyless_tls) |
-| 인증서 소유와 relay 신뢰 — relay 가 TLS 를 끝내면 평문을 본다 · agent 쪽 ACME 발급 | 추천 |  | [RFC 8555](https://www.rfc-editor.org/rfc/rfc8555) |
-| DNS-01 — 밖에서 닿지 않는 노드가 DNS TXT 레코드로 도메인 소유를 증명해 공인 인증서를 받는다 | 선택 |  | [RFC 8555](https://www.rfc-editor.org/rfc/rfc8555) 8.4절 |
-| Certificate Transparency — 발급한 인증서가 공개 로그에 남아 사설 호스트 이름도 드러난다 | 선택 |  | [RFC 6962](https://www.rfc-editor.org/rfc/rfc6962) |
-| capability — 신원 대신 권한을 건네는 토큰 | 선택 |  | API Security in Action 9장 |
+| reverse tunnel · outbound-only relay | 추천 | [portal 01-01 NAT·conntrack](../02_os/project/portal-tunnel/01-01.NAT%C2%B7conntrack%C2%B7outbound%20connection.md) · [portal 01-03 control plane](../02_os/project/portal-tunnel/01-03.Control%20Plane%20Flow.md) · [portal 01-04 reverse pool](../02_os/project/portal-tunnel/01-04.reverse_pool%C2%B7reverse_framing.md) | [portal-tunnel](https://github.com/gosuda/portal-tunnel) |
+| relay · hole punching · reachability | 선택 | [portal 01-01 NAT·conntrack](../02_os/project/portal-tunnel/01-01.NAT%C2%B7conntrack%C2%B7outbound%20connection.md) | TCP/IP Illustrated 7장 |
+| 키 소유권 분리 — 서명 권한만 위임하고 세션 키는 넘기지 않는다 | 추천 | [portal 02-03 keyless TLS](../02_os/project/portal-tunnel/02-03.keyless%20TLS.md) | Zero Trust Networks 6장 |
+| CertificateVerify — 키 소유 증명과 키 합의는 다른 단계다 | 추천 | [portal 02-01 TLS 1.3](../02_os/project/portal-tunnel/02-01.TLS%201.3%20handshake%C2%B7SNI%C2%B7ECDHE.md) · [portal 02-03 keyless TLS](../02_os/project/portal-tunnel/02-03.keyless%20TLS.md) | Real-World Cryptography 7장 |
+| transcript 바인딩 — 임의 digest 서명 API 가 위험한 이유 | 추천 | [portal 02-03 keyless TLS](../02_os/project/portal-tunnel/02-03.keyless%20TLS.md) | Real-World Cryptography 2·7장 |
+| keyless TLS · trusted edge — 서명 권한이 곧 신뢰 | 선택 | [portal 02-03 keyless TLS](../02_os/project/portal-tunnel/02-03.keyless%20TLS.md) | [keyless_tls](https://github.com/gosuda/keyless_tls) |
+| 인증서 소유와 relay 신뢰 — relay 가 TLS 를 끝내면 평문을 본다 · agent 쪽 ACME 발급 | 추천 | [portal 02-03 keyless TLS](../02_os/project/portal-tunnel/02-03.keyless%20TLS.md) · [portal 02-05 ACME·DNS-01](../02_os/project/portal-tunnel/02-05.ACME%C2%B7DNS-01%C2%B7ENS.md) | [RFC 8555](https://www.rfc-editor.org/rfc/rfc8555) |
+| DNS-01 — 밖에서 닿지 않는 노드가 DNS TXT 레코드로 도메인 소유를 증명해 공인 인증서를 받는다 | 선택 | [portal 02-05 ACME·DNS-01](../02_os/project/portal-tunnel/02-05.ACME%C2%B7DNS-01%C2%B7ENS.md) | [RFC 8555](https://www.rfc-editor.org/rfc/rfc8555) 8.4절 |
+| Certificate Transparency — 발급한 인증서가 공개 로그에 남아 사설 호스트 이름도 드러난다 | 선택 | [portal 02-05 ACME·DNS-01](../02_os/project/portal-tunnel/02-05.ACME%C2%B7DNS-01%C2%B7ENS.md) | [RFC 6962](https://www.rfc-editor.org/rfc/rfc6962) |
+| capability — 신원 대신 권한을 건네는 토큰 | 선택 | [portal 03-02 identity·lease token](../02_os/project/portal-tunnel/03-02.identity%C2%B7SIWE%C2%B7lease%20token.md) | API Security in Action 9장 |
 | 역할이 나뉜 피어 — DHT 서버 모드와 floodfill | 선택 |  | [I2P Network Database](https://i2p.net/en/docs/overview/network-database/) |
 
 **같은 질문이 이름만 바꿔 되풀이됩니다.** 아직 아무도 모르는 노드가 처음 네트워크에 어떻게 들어오는가는 Kubernetes node discovery, etcd cluster join, Kafka broker discovery, VPN mesh에서 같은 형태로 나옵니다. 그래서 이 단계를 마지막에 두되 특정 제품을 학습 대상으로 두지 않습니다.
@@ -496,12 +496,12 @@ updated: 2026-10-15
 | RX 와 TX 경로를 나누는 이유 | 추천 |  | [I2P Tunnel Routing](https://i2p.net/en/docs/overview/tunnel-routing/) |
 | 소스 라우팅 — 클라이언트가 경로를 정하고 서버는 목록만 준다 | 추천 |  | [I2P Tunnel Routing](https://i2p.net/en/docs/overview/tunnel-routing/) |
 | 종단 성공 확률 — 단계별 실패가 곱으로 쌓인다 | 필수 |  | Site Reliability Engineering 2판 부록 E |
-| 동기 의존이 핸드셰이크 지연에 더해지는 값 — 원격 서명 latency | 추천 |  | [Keyless SSL 기술 세부](https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details/) |
+| 동기 의존이 핸드셰이크 지연에 더해지는 값 — 원격 서명 latency | 추천 | [portal 02-03 keyless TLS](../02_os/project/portal-tunnel/02-03.keyless%20TLS.md) | [Keyless SSL 기술 세부](https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details/) |
 | 기하분포 — 최초 성공까지의 평균 시도 횟수 | 추천 |  | [Geometric distribution](https://en.wikipedia.org/wiki/Geometric_distribution) |
-| 재시도와 타임아웃 · heartbeat — 확률만큼 감지 시간도 값이다 | 필수 |  | Patterns of Distributed Systems 7장 · Database Internals 9장 |
+| 재시도와 타임아웃 · heartbeat — 확률만큼 감지 시간도 값이다 | 필수 | [portal 01-04 reverse pool](../02_os/project/portal-tunnel/01-04.reverse_pool%C2%B7reverse_framing.md) | Patterns of Distributed Systems 7장 · Database Internals 9장 |
 | exponential backoff · jitter · retry budget | 필수 | [Retry](../09_spring/03_network/resilience/01-03.Retry%20%E2%80%94%20exponential%20backoff%C2%B7jitter%C2%B7%EC%9E%AC%EC%8B%9C%EB%8F%84%20%ED%8F%AD%EC%A3%BC%20%EB%B0%A9%EC%A7%80.md) · [사례](../troubleshooting/kubernetes/2026-09-08_%ED%95%9C%20%ED%95%98%EC%9C%84%20%EC%84%9C%EB%B9%84%EC%8A%A4%EC%97%90%EC%84%9C%20%EC%8B%9C%EC%9E%91%EB%90%9C%20%EC%A0%84%EB%A9%B4%20%EC%98%A4%EB%A5%98.md) |  |
 | fail-open 과 fail-close 의 갈림 — 보안 경계에서는 열 수 없다 | 추천 |  | [OWASP Fail securely](https://owasp.org/www-community/Fail_securely) |
-| 터널 풀 — 연결마다 새로 여는 방식과의 갈림 | 추천 |  | [I2P Tunnel Routing](https://i2p.net/en/docs/overview/tunnel-routing/) |
+| 터널 풀 — 연결마다 새로 여는 방식과의 갈림 | 추천 | [portal 01-04 reverse pool](../02_os/project/portal-tunnel/01-04.reverse_pool%C2%B7reverse_framing.md) | [I2P Tunnel Routing](https://i2p.net/en/docs/overview/tunnel-routing/) |
 | 예비 터널 — 준비 비용 · 전환 시간 · 자원 사용량 | 추천 |  | [I2P Tunnel Routing](https://i2p.net/en/docs/overview/tunnel-routing/) |
 | 터널 수명과 교체 — 자주 바꾸면 비싸고 드물게 바꾸면 트래픽이 묶인다 | 추천 |  | [I2P Tunnel Routing](https://i2p.net/en/docs/overview/tunnel-routing/) · [Tor 설계 논문](https://www.usenix.org/conference/13th-usenix-security-symposium/tor-second-generation-onion-router) |
 

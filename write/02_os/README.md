@@ -16,6 +16,7 @@ related:
   - ./project/netpath-lab/README.md
   - ./project/gonet-lab/README.md
   - ../08_cloud/book/container-security/README.md
+  - ./project/portal-tunnel/README.md
   - ../08_cloud/book/networking-and-kubernetes/README.md
   - ../08_cloud/book/learning-coredns/README.md
 updated: 2026-09-26
@@ -51,12 +52,14 @@ updated: 2026-09-26
 | [gonet-lab/](./project/gonet-lab/README.md) | Go 로 소켓·프록시·터널·오버레이를 직접 짜고 깨뜨려 커널 쪽에서 관측하는 실습 — `net.Listen` 한 줄에서 FD·epoll·eBPF 까지 내려가며 장애마다 볼 계층을 고르는 법을 익힌다 (랩 저장소 기반) |
 
 
+| [portal-tunnel/](./project/portal-tunnel/README.md) | 오픈소스 Go reverse tunnel 을 빌드해 띄우고 코드를 읽으며 기여까지 가는 시리즈 — 기초 개념·transport·TLS 신뢰 경계·identity 정책·SDK·코드 리뷰 (외부 저장소 기반) |
 
 ## 카테고리 결정 원칙
 
 - 출간된 책을 읽고 정리한 정독본은 `book/` 에 둔다. 남의 랩 저장소를 따라 하거나 직접 만든 도구로 배운 기록은 책이 아니므로 `project/` 에 둔다
 - 커널 네트워크 자료구조(netns, veth, conntrack, netfilter) → `08_cloud/book/networking-and-kubernetes/` 정독본. 질문을 그 편으로 보내는 라우팅표는 그 README 의 「질문별 정본」 절에 있다 — 02_os 에 네트워크 메커니즘 본문을 새로 쓰지 않는다
 - 컨테이너 런타임 격리·자원 제한(namespace, cgroup, seccomp) → `kernel/`
+- GitHub 에 저장소가 있고 실제로 돌려 볼 수 있는 프로젝트는 남의 오픈소스여도 `project/` 다(예: `portal-tunnel/`). 공식문서처럼 개념만 정리한 노트는 `docs/` 에 둔다
 - 시스템 콜 인터페이스, /proc, VFS, 메모리 관리 → `kernel/` (K8s 운영자 관점) 또는 `linux-kernel-programming/` (커널 모듈 작성자 관점)
 - 커널 모듈(LKM) 개발, 커널 소스 빌드, 메모리 할당 API, 스케줄러·동기화 내부 → `linux-kernel-programming/`
 - 컨테이너 이미지 포맷·OCI 표준 같은 빌드 측면은 `07_devops/`에 둔다 (런타임 측면이 아니므로 본 카테고리 아님)
