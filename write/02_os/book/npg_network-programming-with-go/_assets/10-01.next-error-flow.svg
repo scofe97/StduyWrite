@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 1120" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Caddy 미들웨어의 next 호출과 error 전달 흐름</title><desc id="dd">요청 경로에 따른 next 호출 분기와 error 반환 시 handle_errors 전환 절차</desc>
+<rect width="960" height="1120" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">NPG CH.10 — CADDY MIDDLEWARE NEXT &amp; ERROR FLOW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Caddy 미들웨어의 next 호출과 error 전달 흐름</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">매 요청마다 Handler 가 직접 전달되며, error 반환 시 즉시 중단되어 오류 처리 체인으로 제어를 위임합니다</text>
+<rect x="35.0" y="100" width="160" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="115" y="119" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">Caddy HTTP 서버</text>
+<text x="115" y="135" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">라우트</text>
+<rect x="225.0" y="100" width="190" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="320" y="119" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">restrict_prefix</text>
+<text x="320" y="135" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">RestrictPrefix.ServeHTTP</text>
+<rect x="580.0" y="100" width="160" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="660" y="119" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">next</text>
+<text x="660" y="135" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">다음 핸들러</text>
+<rect x="775.0" y="100" width="170" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="860" y="119" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">handle_errors</text>
+<text x="860" y="135" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">오류 처리 경로</text>
+<line x1="115" y1="150" x2="115" y2="1024" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="320" y1="150" x2="320" y2="1024" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="660" y1="150" x2="660" y2="1024" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="860" y1="150" x2="860" y2="1024" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<rect x="111" y="224" width="8" height="228" rx="2" fill="#8B98A9" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="111" y="550" width="8" height="120" rx="2" fill="#8B98A9" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="111" y="768" width="8" height="228" rx="2" fill="#8B98A9" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="316" y="224" width="8" height="228" rx="2" fill="#8B98A9" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="316" y="550" width="8" height="120" rx="2" fill="#8B98A9" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="316" y="768" width="8" height="174" rx="2" fill="#8B98A9" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="656" y="332" width="8" height="66" rx="2" fill="#8B98A9" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="656" y="822" width="8" height="66" rx="2" fill="#8B98A9" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="856" y="984" width="8" height="34" rx="2" fill="#8B98A9" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="40" y="164" width="880" height="28" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="52" y="182" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">구역 1 · 정상 통과 (GET /index.html)</text>
+<path d="M 125 230 L 308 230" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<text x="217.5" y="210" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">ServeHTTP(w, r, next)</text>
+<text x="217.5" y="223" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">GET /index.html 전달</text>
+<path d="M 328 274 L 356 274 L 356 294 L 331 294" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="366" y="281" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#8B98A9">경로 세그먼트 검사</text>
+<text x="366" y="301" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">접두사 '.' 없음</text>
+<path d="M 330 338 L 648 338" fill="none" stroke="#F08A59" stroke-width="1.6" marker-end="url(#acc)"/>
+<text x="490.0" y="318" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F08A59">next.ServeHTTP(w, r)</text>
+<text x="490.0" y="331" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">인자로 받은 next 호출</text>
+<path d="M 650 392 L 332 392" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)" stroke-dasharray="4 3"/>
+<text x="490.0" y="372" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">nil 반환</text>
+<text x="490.0" y="385" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">응답 본문 작성</text>
+<path d="M 310 446 L 127 446" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)" stroke-dasharray="4 3"/>
+<text x="217.5" y="426" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">nil 반환</text>
+<text x="217.5" y="439" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">return next.ServeHTTP(w, r)</text>
+<rect x="40" y="490" width="880" height="28" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="52" y="508" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">구역 2 · 숨김 파일 차단 (GET /.secret)</text>
+<path d="M 125 556 L 308 556" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<text x="217.5" y="536" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">ServeHTTP(w, r, next)</text>
+<text x="217.5" y="549" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">GET /.secret 전달</text>
+<path d="M 328 596 L 356 596 L 356 616 L 331 616" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#bad)"/>
+<text x="366" y="603" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F0616D">http.Error(w, "Not Found", 404)</text>
+<text x="366" y="623" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">접두사 '.' 발견 즉시 차단</text>
+<rect x="598.0" y="638" width="124.0" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="660" y="652" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">호출 없음 (단락)</text>
+<path d="M 310 668 L 127 668" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)" stroke-dasharray="4 3"/>
+<text x="217.5" y="648" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">nil 반환</text>
+<text x="217.5" y="661" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">return nil (단락)</text>
+<rect x="40" y="708" width="880" height="28" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="52" y="726" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">구역 3 · next 오류 시 handle_errors 위임</text>
+<path d="M 125 774 L 308 774" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<text x="217.5" y="754" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">ServeHTTP(w, r, next)</text>
+<text x="217.5" y="767" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">요청 전달</text>
+<path d="M 330 828 L 648 828" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="490.0" y="808" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">next.ServeHTTP(w, r)</text>
+<text x="490.0" y="821" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">다음 핸들러 호출</text>
+<path d="M 650 882 L 332 882" fill="none" stroke="#F0616D" stroke-width="1.5" marker-end="url(#bad)" stroke-dasharray="4 3"/>
+<text x="490.0" y="862" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F0616D">error 반환</text>
+<text x="490.0" y="875" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">next 가 error 반환</text>
+<path d="M 310 936 L 127 936" fill="none" stroke="#F0616D" stroke-width="1.5" marker-end="url(#bad)" stroke-dasharray="4 3"/>
+<text x="217.5" y="916" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F0616D">error 반환</text>
+<text x="217.5" y="929" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">return next.ServeHTTP(w, r)</text>
+<path d="M 125 990 L 848 990" fill="none" stroke="#E3B341" stroke-width="1.5" marker-end="url(#warn)"/>
+<text x="487.5" y="970" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">handle_errors 실행</text>
+<text x="487.5" y="983" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 처리 중단 · 오류 핸들러 위임</text>
+<line x1="12" y1="1056" x2="912" y2="1056" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="1078" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="96" y="1068" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="118" y="1078" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">요청 전달</text>
+<rect x="187" y="1068" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="209" y="1078" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">next 호출</text>
+<rect x="283" y="1068" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="305" y="1078" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 반환 (nil)</text>
+<rect x="416" y="1068" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="438" y="1078" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">차단 및 오류 (error)</text>
+<rect x="581" y="1068" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="603" y="1078" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">오류 체인 위임</text>
+</svg>
