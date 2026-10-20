@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 520" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">zap.Logger 의 내부 구조와 zapcore.Core 3요소</title><desc id="dd">zap.Logger 는 편의 메서드와 옵션을 감싸는 래퍼이고, 실제 로그 처리는 zapcore.Core 안의 인코더·출력 싱커·레벨 활성화기가 전담합니다.</desc>
+<rect width="880" height="520" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">ZAP CORE HIERARCHY · NESTED ARCHITECTURE</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">zap.Logger 의 내부 구조와 zapcore.Core 3요소</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">Core 는 Encoder, WriteSyncer, LevelEnabler 세 컴포넌트로 구성됩니다.</text>
+<rect x="36" y="110" width="808" height="370" rx="8" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="56" y="138" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#6A95D8">zap.Logger</text>
+<text x="156" y="138" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">외곽 래퍼 인터페이스 (API 계층)</text>
+<rect x="56" y="154" width="768" height="48" rx="4" fill="#6A95D80a" stroke="#6A95D8" stroke-width="0.9"/>
+<text x="68" y="176" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">부가 옵션 (Options)</text>
+<text x="68" y="194" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">zap.AddCaller()  zap.Fields(version)  zl.Named("example")</text>
+<rect x="56" y="216" width="768" height="244" rx="6" fill="#F08A5910" stroke="#F08A59" stroke-width="1.2"/>
+<text x="76" y="242" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">zapcore.Core</text>
+<text x="186" y="242" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">로그 처리 엔진 인터페이스</text>
+<rect x="76" y="262" width="232" height="180" rx="6" fill="#0D1117" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="192.0" y="286" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">1. Encoder</text>
+<text x="192.0" y="306" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">바이트 직렬화</text>
+<line x1="88" y1="318" x2="296" y2="318" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="92" y="340" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">EncoderConfig</text>
+<text x="92" y="360" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">MessageKey / LevelKey</text>
+<text x="92" y="380" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">CallerKey / TimeKey</text>
+<text x="92" y="402" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">구현체:</text>
+<text x="92" y="420" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">JSONEncoder / Console</text>
+<rect x="328" y="262" width="232" height="180" rx="6" fill="#0D1117" stroke="#E3B341" stroke-width="1.1"/>
+<text x="444.0" y="286" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#E3B341">2. WriteSyncer</text>
+<text x="444.0" y="306" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">출력 및 플러시</text>
+<line x1="340" y1="318" x2="548" y2="318" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="344" y="340" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">인터페이스 정의</text>
+<text x="344" y="360" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">io.Writer + Sync()</text>
+<text x="344" y="380" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">동시성 및 어댑터</text>
+<text x="344" y="400" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">zapcore.Lock() 락 보호</text>
+<text x="344" y="420" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#E3B341">zapcore.AddSync() 변환</text>
+<rect x="580" y="262" width="232" height="180" rx="6" fill="#0D1117" stroke="#F08A59" stroke-width="1.1"/>
+<text x="696.0" y="286" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">3. LevelEnabler</text>
+<text x="696.0" y="306" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">로그 레벨 필터링</text>
+<line x1="592" y1="318" x2="800" y2="318" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="596" y="340" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">최소 심각도 판별</text>
+<text x="596" y="360" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">Enabled(Level) bool</text>
+<text x="596" y="380" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">지원 7단계 레벨</text>
+<text x="596" y="400" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10.5" font-weight="400" fill="#5E6B7E">Debug &lt; Info &lt; Warn</text>
+<text x="596" y="420" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10.5" font-weight="400" fill="#F08A59">Error &lt; DPanic &lt; Panic &lt; Fatal</text>
+</svg>
