@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">메시징 장애 복원력을 여섯 절로 읽는다</title><desc id="dd">확인 응답과 영속화 사이의 틈을 방어하고 Redis 와 Kafka 장애를 대체 저장소로 흡수하는 여섯 단계 구조.</desc>
+<rect width="960" height="480" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">SYSTEM DESIGN COURSE · 02-01</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">메시징 장애 복원력을 여섯 절로 읽는다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">유실 지점 3곳 → DB 선영속 → ISR 리더 선출 → 로컬 Outbox → Cassandra 업서트 → 잔여 한계</text>
+<rect x="24" y="112" width="280" height="132" rx="6" fill="#6A95D808" stroke="#6A95D8" stroke-width="1.0"/>
+<rect x="46.56" y="128" width="26.88" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="60" y="142" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">§1</text>
+<text x="92" y="142" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#F5F5F3">정상 경로와 유실 지점</text>
+<line x1="40" y1="166" x2="288" y2="166" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="44" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">전송 확인 · 비동기 틈</text>
+<text x="44" y="220" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">유실 지점 세 곳</text>
+<rect x="340" y="112" width="280" height="132" rx="6" fill="#6A95D808" stroke="#6A95D8" stroke-width="1.0"/>
+<rect x="362.56" y="128" width="26.88" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="376" y="142" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">§2</text>
+<text x="408" y="142" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#F5F5F3">수신함 DB 선영속</text>
+<line x1="356" y1="166" x2="604" y2="166" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="360" y="192" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">delivered IS NULL</text>
+<text x="360" y="220" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Redis 장애 시 DB 폴백</text>
+<rect x="656" y="112" width="280" height="132" rx="6" fill="#6A95D808" stroke="#6A95D8" stroke-width="1.0"/>
+<rect x="678.56" y="128" width="26.88" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="692" y="142" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">§3</text>
+<text x="724" y="142" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#F5F5F3">Kafka ISR 리더 선출</text>
+<line x1="672" y1="166" x2="920" y2="166" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="676" y="192" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">RF=3 · min.isr=2</text>
+<text x="676" y="220" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">acks=all 무유실 보장</text>
+<rect x="24" y="280" width="280" height="132" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<rect x="46.56" y="296" width="26.88" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="60" y="310" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F08A59">§4</text>
+<text x="92" y="310" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#F5F5F3">로컬 Outbox WAL</text>
+<line x1="40" y1="334" x2="288" y2="334" stroke="#F08A59" stroke-width="0.8"/>
+<text x="44" y="360" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">상한 100,000건</text>
+<text x="44" y="388" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">SSD fsync 로 브로커 격리</text>
+<rect x="340" y="280" width="280" height="132" rx="6" fill="#6A95D808" stroke="#6A95D8" stroke-width="1.0"/>
+<rect x="362.56" y="296" width="26.88" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="376" y="310" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">§5</text>
+<text x="408" y="310" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#F5F5F3">Cassandra 멱등 업서트</text>
+<line x1="356" y1="334" x2="604" y2="334" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="360" y="360" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">메시지 1001 · 50ms</text>
+<text x="360" y="388" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">단일 파티션 묶음 쓰기</text>
+<rect x="656" y="280" width="280" height="132" rx="6" fill="#6A95D808" stroke="#6A95D8" stroke-width="1.0"/>
+<rect x="678.56" y="296" width="26.88" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="692" y="310" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">§6</text>
+<text x="724" y="310" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#F5F5F3">비용과 잔여 유실 한계</text>
+<line x1="672" y1="334" x2="920" y2="334" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="676" y="360" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">2회 쓰기 · 지연 증가</text>
+<text x="676" y="388" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">디스크 고갈 · 물리 파손</text>
+<path d="M 308 178 L 336 178" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 624 178 L 652 178" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 796 248 L 796 262 L 164 262 L 164 276" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 308 346 L 336 346" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 624 346 L 652 346" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<line x1="12" y1="436" x2="912" y2="436" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="458" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="448" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="458" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">절</text>
+<rect x="157" y="448" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="179" y="458" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">가장 중심인 절 (Outbox)</text>
+</svg>
