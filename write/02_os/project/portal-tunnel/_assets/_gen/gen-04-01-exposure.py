@@ -1,4 +1,4 @@
-# 사실 출처: gosuda/portal-tunnel 0a3b9c06 · sdk/expose.go:90,125,254,285,999,1247 · sdk/listener.go:37,178,256,564,636,979 · sdk/proxy.go:21,30,41,135 · sdk/http.go:23,24,25,34
+# 사실 출처: gosuda/portal-tunnel 129b6de5 · sdk/expose.go:90,125,254,285,999,1247 · sdk/listener.go:37,178,256,564,642,989 · sdk/proxy.go:21,30,41,135 · sdk/http.go:24,25,26,35
 # 타입 스펙: type-data-flow
 import sys
 from pathlib import Path

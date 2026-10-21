@@ -1,6 +1,6 @@
 # 타입 스펙: type-data-flow
 # 사실 출처: registry.json:1-12, portal/discovery/relay_descriptor.go:22,62,164,
-#   portal/api_server.go:222, portal/discovery/relayset.go:162,255,270-284,
+#   portal/api_server.go:222, portal/discovery/relayset.go:164,257,272-288,
 #   portal/discovery/mols.go:1-25,239,352,387, portal/discovery/controller.go:21,73,174,186.
 import pathlib
 import sys

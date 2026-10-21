@@ -3,13 +3,13 @@ title: portal-tunnel — 시리즈 인덱스
 tags: [moc, portal-tunnel, networking, reverse-tunnel, go]
 status: draft
 source:
-  - https://github.com/gosuda/portal-tunnel/tree/0a3b9c06  # 2026-10-14, v2.6.4
+  - https://github.com/gosuda/portal-tunnel/tree/129b6de5  # 2026-10-20, v2.6.4+5
 related:
   - ../../project/gonet-lab/README.md
   - ../../project/network-fundamentals-lab/05-01.연결은 양 끝만의 일이 아니다.md
   - ../../../roadmap/network-roadmap.md
   - ../../../roadmap/go-roadmap.md
-updated: 2026-10-18
+updated: 2026-10-21
 ---
 
 # portal-tunnel — 시리즈 인덱스
@@ -28,7 +28,16 @@ updated: 2026-10-18
 
 HTTP, TCP, Go 기본 문법을 이해하고 소켓 프로그래밍을 경험해 본 개발자를 독자로 삼습니다. 같은 저장소의 [gonet-lab](../../project/gonet-lab/README.md)에서 TCP echo 서버, UDP 데이터그램, DNS 클라이언트, 포트 스캐너를 직접 구현해 보았다고 가정합니다. 반면 역방향 터널의 핵심 기법인 역방향 연결 풀링, SNI 라우팅, keyless TLS, yamux 스트림 다중화, SIWE(Sign-In with Ethereum) 신원 증명은 처음 접하는 개념이라고 보고 첫 등장마다 배경과 원리를 함께 설명합니다.
 
-기준 커밋은 0a3b9c06 (2026-10-14, release v2.6.4)입니다.
+기준 커밋은 129b6de5 (2026-10-20, v2.6.4 이후 5커밋)입니다.
+
+처음 쓴 기준은 release v2.6.4 인 0a3b9c06 (2026-10-14)이었습니다. 2026-10-21 에 그 뒤 커밋 5개를 반영했고, 바뀐 내용은 다음 넷입니다.
+
+- #647: 임대마다 도는 MITM 백그라운드 프로브 (02-04 편, 짧게 00-01·00-02·02-01·02-03 편)
+- #648: 같은 시각 서명 descriptor 충돌 거부와 relay 행동 카탈로그 (03-04 편)
+- #656: credential subject 허용 목록과 신원 헤더 제거 (03-02·04-01·04-02 편)
+- #658: 집 안 서비스 원격 접속 안내 (04-02 편)
+
+e2e 하네스 변경은 04-03 편, 이슈 상태 변화는 05-01 편에 반영했습니다.
 
 
 
@@ -68,7 +77,7 @@ HTTP, TCP, Go 기본 문법을 이해하고 소켓 프로그래밍을 경험해 
 | 04 표면(SDK·CLI·기여) | [04-01.sdk.Expose·Listener.md](04-01.sdk.Expose%C2%B7Listener.md) | Go 애플리케이션 임베딩을 위한 net.Listener 구현과 sdk.Expose, 프록시 파이프라인 구조 | draft |
 | 04 표면(SDK·CLI·기여) | [04-02.CLI·Agent.md](04-02.CLI%C2%B7Agent.md) | portal expose 명령 런타임 조립, portal agent 다중 터널 구조, 로컬 제어 API와 OS 서비스 등록·설치 | draft |
 | 04 표면(SDK·CLI·기여) | [04-03.AGENTS.md·e2e 하네스.md](04-03.AGENTS.md%C2%B7e2e%20%ED%95%98%EB%84%A4%EC%8A%A4.md) | Portal 저장소 엔지니어링 원칙, 테스트 구조, e2e 하네스 격리 원리와 CI 파이프라인 및 기여 진입 경로 | draft |
-| 05 리뷰 | [05-01.코드 리뷰.md](05-01.%EC%BD%94%EB%93%9C%20%EB%A6%AC%EB%B7%B0.md) | 기준 커밋 0a3b9c06 종합 평가, 6대 품질 속성과 핵심 불변식 검증, 실측 마찰 기반 단계별 기여 로드맵 | draft |
+| 05 리뷰 | [05-01.코드 리뷰.md](05-01.%EC%BD%94%EB%93%9C%20%EB%A6%AC%EB%B7%B0.md) | 기준 커밋 129b6de5 종합 평가, 6대 품질 속성과 핵심 불변식 검증, 실측 마찰 기반 단계별 기여 로드맵 | draft |
 
 
 

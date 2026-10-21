@@ -1,4 +1,4 @@
-# 사실 출처: gosuda/portal-tunnel 0a3b9c06 · portal/transport/reverse_framing.go:14-19,23,64,74 · portal/server.go:37,680,1037,1045 · sdk/listener.go:636,670 · portal/lease.go:33
+# 사실 출처: gosuda/portal-tunnel 129b6de5 · portal/transport/reverse_framing.go:14-19,23,64,74 · portal/server.go:37,680,1037,1045 · sdk/listener.go:642,680 · portal/lease.go:33
 # 타입 스펙: type-sequence
 import sys
 from pathlib import Path

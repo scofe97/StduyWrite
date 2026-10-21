@@ -1,5 +1,5 @@
 # 타입 스펙: type-process
-# 사실 출처: cmd/portal-tunnel/main.go:137, cmd/portal-tunnel/agent/manager.go:378, portal/identity/client_identity.go:41, cmd/portal-tunnel/tunnel/runtime.go:75,166,218,245, sdk/expose.go:657
+# 사실 출처: cmd/portal-tunnel/main.go:137, cmd/portal-tunnel/agent/manager.go:378, portal/identity/client_identity.go:41, cmd/portal-tunnel/tunnel/runtime.go:75,162,214,241, sdk/expose.go:657
 import os
 import sys
 
@@ -90,9 +90,9 @@ nodes = [
     # 2. Identity LoadOrCreate
     (2, 2, "신원 로드·생성", "secp256k1 키", "client_identity.go:41", "TB", "ID", False, None),
     # 3. SDK Expose
-    (3, 3, "sdk.Expose", "릴레이 연결·임대", "runtime.go:218", "ID", "LS", False, None),
+    (3, 3, "sdk.Expose", "릴레이 연결·임대", "runtime.go:214", "ID", "LS", False, None),
     # 4. Proxy / HTTP routes
-    (4, 2, "핸들러 라우팅", "Proxy / RunHTTP", "runtime.go:245", "LS", "WB", False, None),
+    (4, 2, "핸들러 라우팅", "Proxy / RunHTTP", "runtime.go:241", "LS", "WB", False, None),
     # 5. Ready Log
     (5, 3, "service ready", "public_url 알림", "expose.go:657", "WB", None, False, OK),
 ]

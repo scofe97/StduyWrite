@@ -1,5 +1,5 @@
 # 타입 스펙: type-sequence
-# 사실 출처: sdk/mitm.go:25-65,125-231,348-449,
+# 사실 출처: sdk/mitm.go:28-71,125-237,363-464,
 #   docs/src/routes/security-model/+page.md §MITM Self-Probe,
 #   RFC 5705, RFC 8446 §7.5.
 import pathlib

@@ -1,4 +1,4 @@
-# 사실 출처: gosuda/portal-tunnel 0a3b9c06 · sdk/listener.go:37,636 · sdk/reverse_transport.go:53 · portal/api_server.go:564 · portal/transport/reverse_pool.go:16,52,112,186 · portal/lease.go:33-34 · portal/server.go:37,1037
+# 사실 출처: gosuda/portal-tunnel 129b6de5 · sdk/listener.go:37,642 · sdk/reverse_transport.go:53 · portal/api_server.go:564 · portal/transport/reverse_pool.go:16,52,112,186 · portal/lease.go:33-34 · portal/server.go:37,1037
 # 타입 스펙: type-data-flow
 import sys
 from pathlib import Path

@@ -1,4 +1,4 @@
-# 사실 출처: portal/identity/secp256k1.go:107,125,152 · portal/identity/siwe.go:29,76 · portal/identity/register_challenge.go:16-18,35,75,91 · portal/identity/lease_token.go:17-18,28,74,80,84,128,133 · portal/lease.go:29-31,803 · types/paths.go:30 · docs/maintainer/architecture.md:71-87
+# 사실 출처: portal/identity/secp256k1.go:107,125,152 · portal/identity/siwe.go:29,76 · portal/identity/register_challenge.go:16-18,35,75,91 · portal/identity/lease_token.go:17-18,28,74,80,84,128,133 · portal/lease.go:29-31,803 · types/paths.go:30 · docs/maintainer/architecture.md:73-89
 # 타입 스펙: type-data-flow
 import os
 import sys

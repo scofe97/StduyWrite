@@ -4,7 +4,7 @@
 #   cmd/relay-server/policy/preauth.go:9-14,
 #   cmd/relay-server/policy/ingress.go:21-29,
 #   cmd/relay-server/policy/access.go:57-73,
-#   docs/maintainer/architecture.md:89-136,
+#   docs/maintainer/architecture.md:91-138,
 #   portal/identity/register_challenge.go:75-80,
 #   portal/server.go:44-45,
 #   portal/lease.go:35, 136-148.

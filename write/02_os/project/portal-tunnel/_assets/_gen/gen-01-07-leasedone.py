@@ -1,7 +1,7 @@
 # 타입 스펙: type-sequence — 참여자 넷(Relay 백홀 · DatagramSession · udpFlowManager · 로컬 서비스), 동일 임대 재연결 시 LeaseDone 유지와 임대 교체 시 이전 LeaseDone 프레임 폐기 시퀀스.
 # 사실 출처: docs/maintainer/architecture.md UDP resource ownership,
 #   portal/transport/datagram_session.go:43,80,104,116,148,187,
-#   sdk/proxy.go:443,489,521, sdk/listener.go:782,1184.
+#   sdk/proxy.go:443,489,521, sdk/listener.go:792,1194.
 import pathlib
 import sys
 

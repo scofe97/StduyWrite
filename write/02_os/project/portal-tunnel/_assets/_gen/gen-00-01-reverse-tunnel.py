@@ -1,4 +1,4 @@
-# 사실 출처: gosuda/portal-tunnel 0a3b9c06 · sdk/listener.go:37(defaultReadyTarget=2) · portal/server.go:968-1014(InspectClientHello, bridgeLeaseConn) · 로컬 실측(2026-10-17, README 「직접 띄워 보기」)
+# 사실 출처: gosuda/portal-tunnel 129b6de5 · sdk/listener.go:37(defaultReadyTarget=2) · portal/server.go:968-1014(InspectClientHello, bridgeLeaseConn) · 로컬 실측(2026-10-17, README 「직접 띄워 보기」)
 # 타입 스펙: type-architecture
 import sys
 from pathlib import Path
