@@ -17,8 +17,8 @@ TX = 210
 TW = 710
 
 # 6개 구간 상대 비율 (총 710px)
-# 0: DNS(70) 1: TCP(90) 2: TLS(100) 3: Req(100) 4: Wait(140) 5: Body(210)
-phase_widths = [70, 90, 100, 100, 140, 210]
+# 0: DNS(70) 1: TCP(90) 2: TLS(110) 3: Req(90) 4: Wait(140) 5: Body(210)
+phase_widths = [70, 90, 110, 90, 140, 210]
 phase_x = [TX]
 for w in phase_widths:
     phase_x.append(phase_x[-1] + w)
@@ -26,10 +26,10 @@ for w in phase_widths:
 phases = [
     ("DNS 조회", "DNSStart"),
     ("TCP 연결", "ConnectStart"),
-    ("TLS 핸드셰이크", "TLSHandshake"),
+    ("TLS 핸드셰이크", "TLSHandshakeStart"),
     ("요청 쓰기", "WroteRequest"),
-    ("첫 바이트 대기", "GotFirstByte"),
-    ("본문 스트림 읽기", "Body.Close"),
+    ("첫 바이트 대기", "GotFirstResponseByte"),
+    ("본문 스트림 읽기", "PutIdleConn"),
 ]
 
 # 상단 단계 헤더 (Y = 104)
@@ -50,7 +50,7 @@ d.line(phase_x[-1], 100, phase_x[-1], 400, RULE, 0.7, "2 3")
 bars = [
     ("Dialer.Timeout", "net.Dialer", 0, 2, INFO, False),
     ("TLSHandshakeTimeout", "Transport", 2, 3, WARN, False),
-    ("ResponseHeaderTimeout", "Transport", 3, 5, BAD, False),
+    ("ResponseHeaderTimeout", "Transport", 4, 5, BAD, False),
     ("Client.Timeout", "전체 요청 한도", 0, 6, ACC, True),
 ]
 
@@ -61,7 +61,7 @@ for r, (title, owner, s_idx, e_idx, col, focal) in enumerate(bars):
     y = y_start + r * row_h
     # 좌측 식별 라벨
     d.t(LX, y + 20, title, 12, col if focal else INK, fam=MONO, anchor="start", weight=600 if focal else 400)
-    d.t(LX, y + 36, owner, 10, SOFT, fam=KR, anchor="start")
+    d.t(LX, y + 36, owner, 11, SOFT, fam=KR, anchor="start")
 
     # 간트 바
     bx1 = phase_x[s_idx] + 2
@@ -69,6 +69,8 @@ for r, (title, owner, s_idx, e_idx, col, focal) in enumerate(bars):
     bw = bx2 - bx1
     fill = f"{col}22" if focal else f"{col}14"
     sw = 1.4 if focal else 1.0
+    # 불투명 밑판 — 단계 구분 점선이 바 안 글자를 관통하지 않게 가린다
+    d.box(bx1, y + 6, bw, 32, fill=PAPER, stroke=PAPER, sw=0, r=5)
     d.box(bx1, y + 6, bw, 32, fill=fill, stroke=col, sw=sw, r=5)
 
     # 바 내부 텍스트
@@ -76,15 +78,15 @@ for r, (title, owner, s_idx, e_idx, col, focal) in enumerate(bars):
     if focal:
         d.t(center_x, y + 26, "DNS 연결부터 Response.Body 소비 완료까지 전체 제한 (focal)", 11, ACC, fam=KR, weight=600)
     elif r == 0:
-        d.t(center_x, y + 26, "이름 해석 + 소켓 핸드셰이크", 10, INFO, fam=KR)
+        d.t(center_x, y + 26, "이름 해석 + 소켓 핸드셰이크", 11, INFO, fam=KR)
     elif r == 1:
-        d.t(center_x, y + 26, "TLS 암호화 협상", 10, WARN, fam=KR)
+        d.t(center_x, y + 26, "TLS 암호화 협상", 11, WARN, fam=KR)
     elif r == 2:
-        d.t(center_x, y + 26, "요청 완료 후 응답 헤더 도착 대기", 10, BAD, fam=KR)
+        d.t(center_x, y + 26, "쓰기 완료 후 헤더 대기", 11, BAD, fam=KR)
 
 # 유휴 연결 보조 칩 (IdleConnTimeout 은 트랜잭션 바깥)
-d.box(TX + TW - 280, 384, 280, 28, fill=PAPER2, stroke=MUTED, sw=0.8, r=4)
-d.t(TX + TW - 140, 402, "IdleConnTimeout: Body 종료 후 풀 보관 시간", 10, MUTED, fam=KR)
+d.box(TX + TW - 280, 384, 280, 28, fill=PAPER, stroke=MUTED, sw=0.8, r=4)
+d.t(TX + TW - 140, 402, "IdleConnTimeout: Body 종료 후 풀 보관 시간", 11, MUTED, fam=KR)
 
 # 범례
 d.legend(430, [
