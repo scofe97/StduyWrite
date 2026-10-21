@@ -64,7 +64,7 @@ d.chip(d.LX["커널 소켓"], 345, "패킷 도착 (소켓 버퍼)", OK, size=11)
 d.msg("커널 소켓", "netpoller", "5. epoll_wait / kevent 준비 완료", 385, OK, "ok")
 
 # 8. netpoller -> 고루틴: 깨움 (runnable 전환)
-d.msg("netpoller", "고루틴 (G)", "6. netpollready() → _Grunnable", 420, OK, "ok", dash="4 3")
+d.msg("netpoller", "고루틴 (G)", "6. netpollready → injectglist (_Grunnable)", 420, OK, "ok", dash="4 3")
 
 # 9. poll.FD -> 커널 소켓: syscall.Read 재시도 (focal)
 d.msg("poll.FD", "커널 소켓", "7. syscall.Read(fd, p) 재시도", 460, ACC, "acc")
@@ -83,4 +83,6 @@ d.legend(575, [
     ("재시도 성공 (focal)", ACC)
 ])
 
-d.save("01-02.netpoller-read-sequence.svg")
+out_name = "01-02.netpoller-read-sequence.svg"
+out_path = os.path.join(os.path.dirname(__file__), "..", out_name)
+d.save(out_path if os.path.exists(os.path.dirname(out_path)) else out_name)

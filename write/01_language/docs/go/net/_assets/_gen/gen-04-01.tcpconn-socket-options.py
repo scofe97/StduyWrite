@@ -23,7 +23,7 @@ groups = [
     (96, "연결 유지",
      ["SetKeepAlive()", "SetKeepAlivePeriod()", "SetKeepAliveConfig()"],
      "SOL_SOCKET · IPPROTO_TCP",
-     ["SO_KEEPALIVE (프로브)", "TCP_KEEPIDLE (유휴 주기)", "TCP_KEEPINTVL · KEEPCNT"],
+     ["SO_KEEPALIVE (프로브)", "TCP_KEEPIDLE (macOS 는 TCP_KEEPALIVE)", "TCP_KEEPINTVL · KEEPCNT"],
      INFO, False),
 
     (204, "버퍼 & 전송 지연",
@@ -35,13 +35,13 @@ groups = [
     (312, "종료 & Linger 제어",
      ["CloseRead() · CloseWrite()", "SetLinger(sec > 0)", "SetLinger(sec == 0)"],
      "시스템 콜 · SOL_SOCKET",
-     ["SHUT_RD · SHUT_WR (FIN)", "SO_LINGER (배경 전송)", "SO_LINGER (RST 강제 종료)"],
+     ["SHUT_RD · SHUT_WR (FIN 송신)", "SO_LINGER (배경 전송)", "SO_LINGER (RST 강제 종료)"],
      ACC, True),
 
     (420, "제로카피 & MPTCP",
      ["ReadFrom() · WriteTo()", "ReadFrom(*os.File)", "MultipathTCP()"],
      "커널 전송 · 프로토콜 질의",
-     ["splice(2) (파이프)", "sendfile(2) (파일)", "MPTCP 활성 여부 조회"],
+     ["splice(2) (Linux, TCP·Unix 스트림 사이)", "sendfile(2) (파일)", "MPTCP 활성 여부 조회"],
      WARN, False),
 ]
 
@@ -68,7 +68,7 @@ for y, gtitle, methods, opt_level, opts, col, is_focal in groups:
     d.box(544, y, 380, 88, fill=PAPER2, stroke=col, sw=1.2 if is_focal else 1.0)
     d.t(556, y + 20, opt_level, 11, col, fam=MONO, anchor="start", weight=600)
     for o_idx, o_name in enumerate(opts):
-        d.t(556, y + 38 + o_idx * 16, o_name, 10, MUTED, fam=KR, anchor="start")
+        d.t(556, y + 38 + o_idx * 16, o_name, 11, MUTED, fam=KR, anchor="start")
 
 # 범례 (y = 536)
 d.legend(536, [

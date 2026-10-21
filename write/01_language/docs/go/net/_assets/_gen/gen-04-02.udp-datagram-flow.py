@@ -49,7 +49,7 @@ d.t(C2_X + 16, Y1 + 52, "경계 보존 (100B 유지)", 11, MUTED, fam=KR, anchor
 
 # C2 -> C3 화살표
 d.arrow([(C2_X + CW, Y1 + H1 // 2), (C3_X, Y1 + H1 // 2)], OK, "ar", 1.2)
-d.chip((C2_X + CW + C3_X) // 2, Y1 + H1 // 2 - 14, "1차 ReadFrom", OK, 9)
+d.chip((C2_X + CW + C3_X) // 2, Y1 + H1 // 2 - 14, "1차 ReadFrom", OK, 11)
 
 # C3
 d.box(C3_X, Y1, C3W, H1, fill=PAPER2, stroke=OK, sw=1.2)
@@ -74,13 +74,13 @@ d.t(C2_X + 16, Y2 + 52, "경계 보존 (200B 유지)", 11, MUTED, fam=KR, anchor
 
 # C2 -> C3 화살표
 d.arrow([(C2_X + CW, Y2 + H2 // 2), (C3_X, Y2 + H2 // 2)], ACC, "ar", 1.4)
-d.chip((C2_X + CW + C3_X) // 2, Y2 + H2 // 2 - 14, "2차 ReadFrom", ACC, 9)
+d.chip((C2_X + CW + C3_X) // 2, Y2 + H2 // 2 - 14, "2차 ReadFrom", ACC, 11)
 
 # C3 (FOCAL)
 d.box(C3_X, Y2, C3W, H2, fill=PAPER2, stroke=ACC, sw=1.4)
 d.t(C3_X + 16, Y2 + 26, "n = 128 수신 (잘림 발생)", 12, ACC, fam=KR, anchor="start", weight=600)
 d.t(C3_X + 16, Y2 + 48, "초과 72B 커널 즉시 폐기", 11, BAD, fam=KR, anchor="start", weight=600)
-d.t(C3_X + 16, Y2 + 70, "에러 반환 없음 (err == nil)", 10, MUTED, fam=KR, anchor="start")
+d.t(C3_X + 16, Y2 + 70, "Unix 는 에러 없음 (err == nil)", 11, MUTED, fam=KR, anchor="start")
 
 # 행 3: D3 (50B) - 다음 패킷 수신
 Y3 = 364
@@ -100,7 +100,7 @@ d.t(C2_X + 16, Y3 + 52, "경계 보존 (50B 유지)", 11, MUTED, fam=KR, anchor=
 
 # C2 -> C3 화살표
 d.arrow([(C2_X + CW, Y3 + H3 // 2), (C3_X, Y3 + H3 // 2)], OK, "ar", 1.2)
-d.chip((C2_X + CW + C3_X) // 2, Y3 + H3 // 2 - 14, "3차 ReadFrom", OK, 9)
+d.chip((C2_X + CW + C3_X) // 2, Y3 + H3 // 2 - 14, "3차 ReadFrom", OK, 11)
 
 # C3
 d.box(C3_X, Y3, C3W, H3, fill=PAPER2, stroke=OK, sw=1.2)

@@ -14,7 +14,8 @@ d = D(W, H,
 
 # defs 에 uml hollow triangle 마커 추가
 d.o.insert(3, '<marker id="uml-realize" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><polygon points="1,1 9,5 1,9" fill="#0D1117" stroke="#8B98A9" stroke-width="1.2"/></marker>')
-d.o.insert(4, '<marker id="uml-realize-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><polygon points="1,1 9,5 1,9" fill="#0D1117" stroke="#F08A59" stroke-width="1.2"/></marker>')
+d.o.insert(4, '<marker id="uml-realize-info" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><polygon points="1,1 9,5 1,9" fill="#0D1117" stroke="#6A95D8" stroke-width="1.2"/></marker>')
+d.o.insert(5, '<marker id="uml-realize-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><polygon points="1,1 9,5 1,9" fill="#0D1117" stroke="#F08A59" stroke-width="1.2"/></marker>')
 
 # ── 1. 인터페이스 행 (y = 96) ──
 # net.Conn (focal interface)
@@ -90,23 +91,23 @@ d.t(730, 414, "+ SetReadBuffer()", 10, INK, fam=MONO, anchor="start")
 d.t(730, 432, "+ SetWriteBuffer()", 10, INK, fam=MONO, anchor="start")
 
 # ── 3. 관계선 (implements: dashed line + hollow triangle) ──
-# TCPConn -> Conn (직선)
-d.path("M 148 312 L 148 236", ACC, 1.2, m="uml-realize-acc", dash="5 4")
+# 공유 대상 표기(UML shared target): 같은 인터페이스로 가는 선은 한 버스로 모아 삼각형 하나로 닿는다.
+# Conn 버스(회색, y=280)와 PacketConn 버스(파랑, y=264)를 색으로 갈라, 교차해도 어느 선이 어디로 가는지 읽힌다.
+# 삼각형 끝은 인터페이스 상자 아래 변(y=232)에 닿는다.
+# TCPConn -> Conn (직선, focal)
+d.path("M 148 312 L 148 232", ACC, 1.2, m="uml-realize-acc", dash="5 4")
 
-# UDPConn -> Conn (직교 ㄷ자)
-d.path("M 330 312 L 330 272 L 240 272 L 240 236", MUTED, 1.0, m="uml-realize", dash="5 4")
+# UDPConn·UnixConn·IPConn -> Conn : 각 상자 왼쪽에서 올라와 y=280 버스로 모인다
+for x in (300, 520, 740):
+    d.path(f"M {x} 312 L {x} 280", MUTED, 1.0, dash="5 4")
+d.path("M 740 280 L 220 280", MUTED, 1.0, dash="5 4")
+d.path("M 220 280 L 220 232", MUTED, 1.0, m="uml-realize", dash="5 4")
 
-# UDPConn -> PacketConn (직선)
-d.path("M 410 312 L 410 236", INFO, 1.0, m="uml-realize", dash="5 4")
-
-# UnixConn -> Conn (직교 ㄷ자)
-d.path("M 540 312 L 540 284 L 280 284 L 280 236", MUTED, 1.0, m="uml-realize", dash="5 4")
-
-# UnixConn -> PacketConn (직교 ㄷ자)
-d.path("M 600 312 L 600 264 L 520 264 L 520 236", MUTED, 1.0, m="uml-realize", dash="5 4")
-
-# IPConn -> PacketConn (직교 ㄷ자)
-d.path("M 780 312 L 780 272 L 580 272 L 580 236", MUTED, 1.0, m="uml-realize", dash="5 4")
+# UDPConn·UnixConn·IPConn -> PacketConn : 각 상자 오른쪽에서 올라와 y=264 버스로 모인다
+for x in (440, 660, 880):
+    d.path(f"M {x} 312 L {x} 264", INFO, 1.0, dash="5 4")
+d.path("M 880 264 L 440 264", INFO, 1.0, dash="5 4")
+d.path("M 560 264 L 560 232", INFO, 1.0, m="uml-realize-info", dash="5 4")
 
 # 범례
 d.legend(496, [
@@ -115,4 +116,6 @@ d.legend(496, [
     ("패킷·데이터그램 지원", INFO)
 ])
 
-d.save("01-01.interface-and-types.svg")
+out_name = "01-01.interface-and-types.svg"
+out_path = os.path.join(os.path.dirname(__file__), "..", out_name)
+d.save(out_path if os.path.exists(os.path.dirname(out_path)) else out_name)

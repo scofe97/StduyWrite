@@ -1,4 +1,4 @@
-# 사실 출처: go1.25.1 src/net/net.go:183, src/net/tcpsock.go:112, src/net/fd_posix.go:17, src/internal/poll/fd_unix.go:18
+# 사실 출처: go1.25.1 src/net/net.go:183, src/net/tcpsock.go:112, src/net/fd_posix.go:17, src/internal/poll/fd_unix.go:19
 # 타입 스펙: type-layers
 import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -44,7 +44,8 @@ for i, (tag, name, role, note, fill, stroke, text_col) in enumerate(layers):
     d.t(LX + 64, y + 35, name, 14, text_col, fam=MONO, anchor="start", weight=600)
 
     # 역할 칩
-    d.chip(LX + 320, y + 30, role, stroke if is_focal else MUTED, size=11)
+    # 칩은 가장 긴 계층 이름(L4 poll.FD (internal/poll), 오른쪽 끝 약 x=353) 뒤로 60px 띄운다
+    d.chip(LX + 380, y + 30, role, stroke if is_focal else MUTED, size=11)
 
     # 설명 노트
     d.t(LX + LW - 20, y + 35, note, 11, MUTED if not is_focal else INK, fam=KR, anchor="end")
@@ -53,7 +54,8 @@ for i, (tag, name, role, note, fill, stroke, text_col) in enumerate(layers):
 d.legend(464, [
     ("표준 계층", MUTED),
     ("핵심 폴러 계층 (focal)", ACC),
-    ("OS 경계", RULE)
 ])
 
-d.save("01-01.socket-abstraction-layers.svg")
+out_name = "01-01.socket-abstraction-layers.svg"
+out_path = os.path.join(os.path.dirname(__file__), "..", out_name)
+d.save(out_path if os.path.exists(os.path.dirname(out_path)) else out_name)

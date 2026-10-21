@@ -30,7 +30,7 @@ d.box(24, Y1 - 20, 156, 92, fill=PAPER2, stroke=BAD, sw=1.2)
 d.t(102, Y1, "1회만 설정", 13, BAD, fam=KR, anchor="middle", weight=600)
 d.t(102, Y1 + 20, "SetReadDeadline(t0+200ms)", 10, MUTED, fam=MONO, anchor="middle")
 d.t(102, Y1 + 40, "1초간 19,936,237회 호출", 11, BAD, fam=KR, anchor="middle", weight=600)
-d.t(102, Y1 + 58, "CPU 100% 바쁜 루프", 10, MUTED, fam=KR, anchor="middle")
+d.t(102, Y1 + 58, "대기 없는 바쁜 루프", 11, MUTED, fam=KR, anchor="middle")
 
 # 0 ~ 200ms: 정상 블로킹 구간
 d.tone(tx(0), Y1, tx(200) - tx(0), 48, OK, r=4, op="22", sw=1.2)
@@ -38,7 +38,7 @@ d.t(tx(100), Y1 + 28, "Read 대기 200ms", 11, OK, fam=KR, anchor="middle", weig
 
 # 200ms: 마감 시각 도달 핀
 d.line(tx(200), Y1 - 12, tx(200), Y1 + 60, ACC, 1.4)
-d.chip(tx(200), Y1 - 16, "마감 시각 t0+200ms", ACC, 10)
+d.chip(tx(200), Y1 - 16, "마감 시각 t0+200ms", ACC, 11)
 
 # 200 ~ 1000ms: 마감 경과 후 즉시 실패 구간 (바쁜 루프)
 d.tone(tx(200), Y1, tx(1000) - tx(200), 48, BAD, r=4, op="20", sw=1.4)
@@ -51,7 +51,7 @@ d.box(24, Y2 - 20, 156, 92, fill=PAPER2, stroke=OK, sw=1.2)
 d.t(102, Y2, "매 Read 직전 갱신", 13, OK, fam=KR, anchor="middle", weight=600)
 d.t(102, Y2 + 20, "conn.SetReadDeadline()", 10, MUTED, fam=MONO, anchor="middle")
 d.t(102, Y2 + 40, "1초간 5회 호출", 11, OK, fam=KR, anchor="middle", weight=600)
-d.t(102, Y2 + 58, "CPU 유휴 보존 (idle 200ms)", 10, MUTED, fam=KR, anchor="middle")
+d.t(102, Y2 + 58, "CPU 유휴 보존 (idle 200ms)", 11, MUTED, fam=KR, anchor="middle")
 
 # 5개 구간 반복 (0~200, 200~400, 400~600, 600~800, 800~1000)
 for i in range(5):
@@ -62,7 +62,7 @@ for i in range(5):
     w_slot = x_e - x_s
     d.tone(x_s + 2, Y2, w_slot - 4, 48, INFO, r=4, op="18", sw=1.0)
     d.t(x_s + w_slot // 2, Y2 + 22, f"#{i+1} 대기 (200ms)", 11, INK, fam=KR, anchor="middle", weight=600)
-    d.t(x_s + w_slot // 2, Y2 + 38, "타임아웃 감지", 10, MUTED, fam=KR, anchor="middle")
+    d.t(x_s + w_slot // 2, Y2 + 38, "타임아웃 감지", 11, MUTED, fam=KR, anchor="middle")
     # 갱신 핀
     d.line(x_s, Y2 - 8, x_s, Y2 + 52, OK, 1.2)
 
