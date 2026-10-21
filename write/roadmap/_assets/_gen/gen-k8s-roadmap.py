@@ -84,6 +84,7 @@ stages = [
       ("Reflector · DeltaFIFO · Indexer", "Programming Kubernetes 3장", "추천"),
       ("SharedInformer 와 resync", "Programming Kubernetes 3장", "추천")],
      [("authn · authz · admission", "Production Kubernetes 8장", "필수"),
+      ("OIDC 사용자 인증", "Production Kubernetes 10장", "추천"),
       ("TLS · PKI · 인증서 수명", "", "필수"),
       ("etcd quorum · Raft · 백업 · 복구", "", "필수"),
       ("클러스터 업그레이드", "", "추천"),

@@ -50,7 +50,7 @@ updated: 2026-09-28
 | 5 · 내부 구조 | 노드 인터페이스 | CRI · CNI · CSI · containerd · 조정 루프 · watch · informer |
 | 5 · 내부 구조 | 컨트롤러 | List·Watch · resourceVersion · 410 Gone · level-driven 과 edge-driven · GVK · Scheme · upsert 의미 · Server-Side Apply · field manager |
 | 5 · 내부 구조 | 감시 부품 | Reflector · DeltaFIFO · Indexer · Lister · SharedInformer · resync · 캐시 웜업 · 페이지네이션 |
-| 5 · 내부 구조 | 접근 통제 | authentication · authorization · admission · TLS · PKI · 인증서 수명 |
+| 5 · 내부 구조 | 접근 통제 | authentication · OIDC 사용자 인증 · authorization · admission · TLS · PKI · 인증서 수명 |
 | 5 · 내부 구조 | 상태 저장소 | etcd quorum · Raft · 백업 · 복구 · 클러스터 업그레이드 |
 | 5 · 내부 구조 | 클러스터 세우기 | kubeadm · static pod · kubeconfig · 부트스트랩 토큰 · 로컬 클러스터 kind · minikube · k3s |
 | 6 · 보안과 확장 | 권한 | RBAC · Role · ClusterRole · RoleBinding · ServiceAccount · SelfSubjectAccessReview · 권한 기반 기능 노출 |
@@ -201,7 +201,7 @@ KISA 가이드는 API server 비인증 접근 차단, etcd 암호화, kubelet �
 
 ### 5단계 · 내부 구조
 
-> 먼저: 이 문서 1~4단계 · [네트워크 로드맵](network-roadmap.md) 1단계 TLS 핸드셰이크
+> 먼저: 이 문서 1~4단계 · [네트워크 로드맵](network-roadmap.md) 1단계 TLS 핸드셰이크 · 7단계 OAuth 2.0 과 OIDC
 
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
@@ -216,6 +216,7 @@ KISA 가이드는 API server 비인증 접근 차단, etcd 암호화, kubelet �
 | 이벤트 병합과 upsert — 감사 로그가 아니다 | 추천 | | Programming Kubernetes 1장 |
 | 여러 주체가 한 필드를 다툴 때 — Server-Side Apply · field manager · 충돌 | 추천 | | [Server-Side Apply](https://kubernetes.io/docs/reference/using-api/server-side-apply/) |
 | authentication · authorization · admission | 필수 | [TLS와 API 접근 보안](../08_cloud/kubernetes/06_architecture/06-02.TLS%EC%99%80%20API%20%EC%A0%91%EA%B7%BC%20%EB%B3%B4%EC%95%88.md) | Production Kubernetes 8장 |
+| OIDC 사용자 인증 — API server 가 IdP 토큰을 검증 · Dex 로 여러 IdP 묶기 | 추천 | [Access Control](../08_cloud/book/kubernetes-patterns/26-01.Access%20Control%20%E2%80%94%20RBAC%EC%9C%BC%EB%A1%9C%20%EB%88%84%EA%B0%80%20%EB%AC%B4%EC%97%87%EC%9D%84%20%ED%95%A0%20%EC%88%98%20%EC%9E%88%EB%8A%94%EC%A7%80.md) | Production Kubernetes 10장 · [Authenticating](https://kubernetes.io/docs/reference/access-authn-authz/authentication/) |
 | TLS · PKI · 인증서 수명 | 필수 | [TLS와 API 접근 보안](../08_cloud/kubernetes/06_architecture/06-02.TLS%EC%99%80%20API%20%EC%A0%91%EA%B7%BC%20%EB%B3%B4%EC%95%88.md) | |
 | etcd quorum · Raft · 백업 · 복구 | 필수 | [업그레이드·etcd 백업](../08_cloud/kubernetes/06_architecture/06-01.%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C%EC%99%80%20ETCD%20%EB%B0%B1%EC%97%85%C2%B7%EB%B3%B5%EA%B5%AC.md) | |
 | 클러스터 업그레이드 | 추천 | [업그레이드·etcd 백업](../08_cloud/kubernetes/06_architecture/06-01.%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C%EC%99%80%20ETCD%20%EB%B0%B1%EC%97%85%C2%B7%EB%B3%B5%EA%B5%AC.md) | |

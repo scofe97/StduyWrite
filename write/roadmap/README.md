@@ -40,6 +40,7 @@ updated: 2026-09-23
 | Service 로 부르면 실패하는 호출 | [Kubernetes](k8s-roadmap.md) 3단계 Service · EndpointSlice, [네트워크](network-roadmap.md) 4단계 kube-proxy · 2단계 conntrack · MTU |
 | 응답이 느려졌을 때 층 가르기 | [관측 가능성](observability-roadmap.md) 5단계 SLO, [OS](os-roadmap.md) 4단계 USE · run queue, [Kubernetes](k8s-roadmap.md) 7단계 CPU throttling, [네트워크](network-roadmap.md) 3단계 재전송 판독, [JVM](jvm-roadmap.md) 7단계 GC 로그 |
 | reverse tunnel 을 직접 만들 때 | [네트워크](network-roadmap.md) 1단계 스트림 멀티플렉싱과 HOL 블로킹 · TLS passthrough, [Go](go-roadmap.md) 4단계 채널 소유권 · 실습 스트림 멀티플렉서 · reverse tunnel, [네트워크](network-roadmap.md) 8단계 인증서 소유와 relay 신뢰 · 9단계 path selection |
+| 사내 SSO · 클러스터에 OIDC 붙이기 | [네트워크](network-roadmap.md) 7단계 인증과 인가의 차이 · OAuth 2.0 과 OIDC · Authorization Code Flow · JWT · JWKS 검증 · OAuth2 Proxy, [Kubernetes](k8s-roadmap.md) 5단계 OIDC 사용자 인증 · 6단계 RBAC, [네트워크](network-roadmap.md) 7단계 Workload Identity · SPIFFE |
 
 
 

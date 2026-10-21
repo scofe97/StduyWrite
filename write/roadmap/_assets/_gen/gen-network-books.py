@@ -72,6 +72,8 @@ rows = [
     ("7·8", "운영 경계", [
         ("Istio in Action", "7단계", "1~6·9·10·12장·부록 C", ["Envoy·Gateway·복원력·mTLS", "기본값 닫기·SPIFFE"], "추천"),
         ("Zero Trust Networks", "7·8단계", "1·2·4·6·8장", ["신뢰 관리와 identity", "인가 결정·트래픽 신뢰"], "추천"),
+        ("Solving Identity Management", "7단계", "5·6·11장", ["OAuth 2·OIDC 흐름과 토큰", "SSO 와 세션"], "추천"),
+        ("Cloud Native Data Security with OAuth", "7단계", "5·8·10장", ["JWT 검증·프록시·게이트웨이", "워크로드 신원"], "추천"),
         ("Sidecar-less Istio Explained", "7단계", "1~3장", ["ambient 모드 구조", "ztunnel 과 waypoint"], "대체"),
         ("Network Programmability and Automation", "7단계", "8·10·12장", ["NETCONF·RESTCONF·gNMI", "YANG·Ansible·NAPALM"], "선택"),
     ]),

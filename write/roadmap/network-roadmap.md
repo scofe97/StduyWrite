@@ -97,6 +97,9 @@ updated: 2026-10-15
 | 7 · 운영 경계 | Envoy 설정 모델 | xDS · listener · filter chain · cluster · `istioctl proxy-config` |
 | 7 · 운영 경계 | 복원력 | retry · timeout · circuit breaking · outlier detection · 재시도 증폭 |
 | 7 · 운영 경계 | 신원과 기본값 | identity 와 trust 의 차이 · 인증과 인가의 차이 · mTLS · 기본값 닫아 가기 · SPIFFE · SVID · Zero Trust 전제 |
+| 7 · 운영 경계 | 사용자 신원 위임 | OAuth 2.0 · OIDC · IdP · Relying Party · SSO · Authorization Code Flow · PKCE · Redirect URI · state · nonce · Discovery |
+| 7 · 운영 경계 | 토큰 검증 | ID Token · Access Token · Refresh Token · JWT · JWS · JWKS · claim 검증 · Token Introspection |
+| 7 · 운영 경계 | 앞단 인증 | OAuth2 Proxy · API Gateway 토큰 검증 · `RequestAuthentication` · Workload Identity |
 | 7 · 운영 경계 | 릴리스와 확장 | 배포와 릴리스의 분리 · istiod 성능 · VM 워크로드 편입 · Envoy 확장 |
 | 7 · 운영 경계 | 사이드카 없는 메시 | ambient · ztunnel · waypoint |
 | 7 · 운영 경계 | 설정 자동화 | NETCONF · RESTCONF · YANG · gNMI · Ansible · Netmiko · NAPALM |
@@ -145,6 +148,8 @@ updated: 2026-10-15
 | [Learning eBPF](../02_os/book/learning-ebpf/README.md) | 책 | 3·5~8장 | 추천 | 6단계 |
 | [Istio in Action](../08_cloud/book/istio-in-action/README.md) | 책 | 1~6 · 9·10·12장 · 부록 C | 추천 | 7단계 |
 | Zero Trust Networks | 책 | 1·2·4·6·8장 | 추천 | 7·8단계 |
+| Solving Identity Management in Modern Applications | 책 | 5·6·11장 | 추천 | 7단계 |
+| Cloud Native Data Security with OAuth | 책 | 5·8·10장 | 추천 | 7단계 |
 | Network Programmability and Automation | 책 | 8·10·12장 | 선택 | 7단계 |
 | Real-World Cryptography | 책 | 2~5 · 7~10 · 13·14장 | 추천 | 1 · 8단계 |
 | API Security in Action | 책 | 9장 | 선택 | 8단계 |
@@ -182,6 +187,7 @@ updated: 2026-10-15
 | System Design on AWS | 5장 | 4단계 L4 로드밸런싱 |
 | Kubernetes Best Practices | 9장 | 6단계 NetworkPolicy · 7단계 서비스 메시 |
 | Istio in Action | 11·13·14장 | 7단계 istiod 성능 · VM 워크로드 편입 · Envoy 확장 |
+| Cloud Native Data Security with OAuth | 7장 | 7단계 Token Introspection |
 
 **랩은 읽는 자리가 아니라 손으로 밟는 자리입니다.** [network-fundamentals-lab](../02_os/project/network-fundamentals-lab/README.md)은 containerlab 토폴로지가 원자료이고, 배포하면 고장이 장전된 채로 뜹니다. 다른 자료가 규격과 원리를 위에서 아래로 설명한다면 이쪽은 증상에서 계층을 좁히는 순서를 훈련시킵니다. 그래서 단계별 표에서는 `책` 열이 아니라 `노트` 열에 `랩` 을 붙여 둡니다.
 
@@ -432,6 +438,14 @@ updated: 2026-10-15
 | retry · timeout · circuit breaking · outlier detection · 재시도 증폭 | 필수 | [복원력을 프록시로](../08_cloud/book/istio-in-action/06-01.%EC%8B%A4%ED%8C%A8%EB%A5%BC%20%EA%B2%AC%EB%94%94%EB%8A%94%20%EC%9D%BC%EC%9D%84%20%ED%94%84%EB%A1%9D%EC%8B%9C%EB%A1%9C%20%EC%98%AE%EA%B2%BC%EC%9D%84%20%EB%95%8C.md) · [사례](../troubleshooting/mesh/2026-09-07_%ED%8A%B8%EB%9E%98%ED%94%BD%EC%9D%B4%20%EB%8A%98%20%EB%95%8C%EB%A7%8C%20%EC%84%9E%EC%97%AC%20%EB%82%98%EC%98%A4%EB%8A%94%20503.md) | Istio in Action 6장 |
 | identity 와 trust 의 차이 · 인증과 인가의 차이 | 필수 |  | Zero Trust Networks 2·4·6장 |
 | SPIFFE · SVID — 워크로드 신원 | 추천 | [신원 규격 부록](../08_cloud/book/istio-in-action/a0-03.%EB%B6%80%EB%A1%9D%20%E2%80%94%20%EC%8B%A0%EC%9B%90%EC%9D%84%20%EB%AC%B8%EC%84%9C%EB%A1%9C%20%EB%A7%8C%EB%93%9C%EB%8A%94%20%EB%84%A4%20%EA%B7%9C%EA%B2%A9.md) | Istio in Action 부록 C · Zero Trust Networks 6장 |
+| OAuth 2.0 과 OIDC — 권한 위임과 그 위의 로그인 · IdP · Relying Party · SSO | 필수 | [OAuth2와 OIDC](../99_ETC/security/01_concepts/2026-05-29_OAuth2%EC%99%80%20OIDC%20%E2%80%94%20%EC%9C%84%EC%9E%84%20%EC%9D%B8%EA%B0%80%EC%99%80%20%EA%B7%B8%20%EC%9C%84%EC%9D%98%20%EC%9D%B8%EC%A6%9D.md) | Solving Identity Management 5·6·11장 |
+| Authorization Code Flow · PKCE · Redirect URI · state · nonce | 필수 | [OAuth2와 OIDC](../99_ETC/security/01_concepts/2026-05-29_OAuth2%EC%99%80%20OIDC%20%E2%80%94%20%EC%9C%84%EC%9E%84%20%EC%9D%B8%EA%B0%80%EC%99%80%20%EA%B7%B8%20%EC%9C%84%EC%9D%98%20%EC%9D%B8%EC%A6%9D.md) | Solving Identity Management 5·6장 |
+| ID Token · Access Token · Refresh Token — 목적이 다른 세 토큰 | 필수 | [OAuth2와 OIDC](../99_ETC/security/01_concepts/2026-05-29_OAuth2%EC%99%80%20OIDC%20%E2%80%94%20%EC%9C%84%EC%9E%84%20%EC%9D%B8%EA%B0%80%EC%99%80%20%EA%B7%B8%20%EC%9C%84%EC%9D%98%20%EC%9D%B8%EC%A6%9D.md) | Solving Identity Management 6장 |
+| JWT · JWS · JWKS — 서명 검증과 `iss` · `aud` · `exp` 확인 | 필수 | [JWT 설계](../99_ETC/security/01_concepts/2026-05-29_JWT%20%EC%84%A4%EA%B3%84%20%E2%80%94%20%EA%B5%AC%EC%A1%B0%C2%B7%EC%84%9C%EB%AA%85%C2%B7%EC%A0%80%EC%9E%A5%EA%B3%BC%20%ED%8F%90%EA%B8%B0%EC%9D%98%20%EB%94%9C%EB%A0%88%EB%A7%88.md) | Cloud Native Data Security with OAuth 5장 |
+| Discovery · Token Introspection | 선택 | | Cloud Native Data Security with OAuth 7장 · [OIDC Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html) · [RFC 7662](https://www.rfc-editor.org/rfc/rfc7662) |
+| OAuth2 Proxy · API Gateway — 앞단에서 인증을 대행하고 토큰을 검증 | 추천 | | Cloud Native Data Security with OAuth 8장 · [OAuth2 Proxy](https://oauth2-proxy.github.io/oauth2-proxy/) |
+| `RequestAuthentication` — 인그레스에서 최종 사용자 JWT 검증 | 추천 | [mTLS 기본값](../08_cloud/book/istio-in-action/09-01.%EA%B1%B0%EC%9D%98%20%EC%95%88%EC%A0%84%ED%95%9C%20%EA%B8%B0%EB%B3%B8%EA%B0%92%EC%9D%84%20%EB%8B%AB%EC%95%84%20%EA%B0%80%EB%8A%94%20%EC%88%9C%EC%84%9C.md) | Istio in Action 9장 |
+| Workload Identity — 사용자 신원과 워크로드 신원의 갈림 | 추천 | [신원 규격 부록](../08_cloud/book/istio-in-action/a0-03.%EB%B6%80%EB%A1%9D%20%E2%80%94%20%EC%8B%A0%EC%9B%90%EC%9D%84%20%EB%AC%B8%EC%84%9C%EB%A1%9C%20%EB%A7%8C%EB%93%9C%EB%8A%94%20%EB%84%A4%20%EA%B7%9C%EA%B2%A9.md) | Cloud Native Data Security with OAuth 10장 |
 | Windows HNS · HCS · Windows CNI | 선택 | [Windows 네트워킹](../08_cloud/kubernetes/04_networking/04-10.Windows%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9.md) | |
 | 데이터 플레인 진단 · `istioctl proxy-config` | 선택 | [proxy-config 진단](../08_cloud/book/istio-in-action/10-01.%ED%94%84%EB%A1%9D%EC%8B%9C%EB%8A%94%20%EB%8B%A4%20%EC%95%8C%EA%B3%A0%20%EC%9E%88%EA%B3%A0%20%EC%82%AC%EB%9E%8C%EC%9D%80%20%EB%AA%BB%20%EC%9D%BD%EB%8A%94%EB%8B%A4.md) | Istio in Action 10장 |
 | istiod 성능 — 설정 전파 · debounce · 낡은 설정의 수명 | 선택 | [컨트롤 플레인 성능](../08_cloud/book/istio-in-action/11-01.%EC%BB%A8%ED%8A%B8%EB%A1%A4%20%ED%94%8C%EB%A0%88%EC%9D%B8%EC%9D%98%20%EC%84%B1%EB%8A%A5%EC%9D%80%20%EB%82%A1%EC%9D%80%20%EC%84%A4%EC%A0%95%EC%9D%98%20%EC%88%98%EB%AA%85%EC%9D%B4%EB%8B%A4.md) | Istio in Action 11장 |
@@ -530,6 +544,8 @@ updated: 2026-10-15
 
 5·8·9단계 자리는 비어 있습니다. 클라우드 축은 계정과 과금이 걸리고, 8·9단계는 아래 portal-tunnel 이 노트 밖에서 받습니다. 7단계는 서비스 메시 컨트롤 플레인이 서야 재현되므로 장애 기록으로만 받습니다.
 
+7단계 OIDC 실습은 Keycloak 을 IdP 로 세우고 OAuth2 Proxy 를 앞에 두는 구성이 자리입니다. 아직 노트가 없습니다.
+
 **브라우저에서 도는 랩도 있습니다.** 위 흐름 표의 LFS146 강의는 NetworkPolicy · Hubble · 투명 암호화 · kube-proxy replacement · Cluster Mesh 를 6·7단계 범위에서 손으로 밟게 합니다. [Isovalent Universe](https://labs.isovalent.com/)는 설치 없이 브라우저에서 도는 랩이라 클러스터를 세울 수 없을 때 씁니다.
 
 **reverse tunnel 은 실제 구현을 돌려 봅니다.** [portal-tunnel](https://github.com/gosuda/portal-tunnel)은 MIT 라이선스로 공개된 Go reverse tunnel 이고 relay 를 직접 띄울 수 있습니다. 1단계의 SNI 라우팅과 8·9단계의 lease · keyless TLS · relay 선택이 한 저장소에 모여 있습니다. 코드를 따라 짜는 일은 Go 로드맵 몫입니다. TLS 안쪽이 궁금해지는 시점에는 [keyless_tls](https://github.com/gosuda/keyless_tls)로 넘어갑니다. 터널이 handshake 와 트래픽 암호화를 쥔 채 CertificateVerify 서명만 원격에 맡기는 구조라, 8단계의 키 소유권 분리가 코드로 어떻게 서는지 봅니다.
@@ -555,7 +571,7 @@ updated: 2026-10-15
 | 자격증 — CCNA · CCNP · Network+ | 순서가 아니라 시험입니다. CompTIA Network+ 는 보완 참조로만 씁니다 |
 | 시뮬레이터 — GNS3 · EVE-NG · Packet Tracer | 랩 도구는 containerlab 하나로 둡니다 |
 | FTP | 응용 프로토콜 개별 동작입니다. 1단계 HTTP · DNS · TLS 와 메일이 축입니다 |
-| 웹 응용 보안 — OWASP Top 10 · XSS · SQL injection · 봇 관리 · 피싱 | 응용 계층 보안입니다. CSRF · OAuth 는 [Spring 로드맵](spring-roadmap.md)이 맡습니다 |
+| 웹 응용 보안 — OWASP Top 10 · XSS · SQL injection · 봇 관리 · 피싱 | 응용 계층 보안입니다. CSRF 와 Spring Security 로 OAuth 클라이언트를 짜는 일은 [Spring 로드맵](spring-roadmap.md)이 맡습니다. OIDC 규격과 앞단 인증은 7단계에 있습니다 |
 | 영상 전송 HLS · DASH · 서버리스 · 프라이버시 규제 · AI | 이 로드맵의 축 밖입니다. AI 는 [AI 로드맵](ai-roadmap.md)이 맡습니다 |
 | 상용 관측 SaaS — Datadog · Dynatrace | 제품 사용법입니다. 관측 원리는 [관측 가능성 로드맵](observability-roadmap.md)이 맡습니다 |
 
