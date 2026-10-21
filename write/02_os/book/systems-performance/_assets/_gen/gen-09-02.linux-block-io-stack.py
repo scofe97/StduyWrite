@@ -33,7 +33,7 @@ for i, (n, name, sub, role, c) in enumerate(BANDS):
 d.arrow([(BX - 76, Y0 + 16), (BX - 76, Y0 + 5 * STRIDE + BH - 8)], SOFT, "soft", 1.2, "4 6")
 
 YB = Y0 + 6 * STRIDE + 12
-d.t(BX - 116, YB, "blk-mq 는 단일 큐의 락 경합을 없애 SSD·NVMe 의 높은 IOPS 를 받아냅니다", 13, MUTED, KR, "start")
+d.t(BX - 116, YB, "blk-mq: 단일 큐의 락 경합 제거 → SSD·NVMe 의 높은 IOPS 수용", 13, MUTED, KR, "start")
 
 d.legend(YB + 28, [("I/O 수를 바꾸는 자리", ACC), ("나머지 단계", MUTED)])
 d.save("09-02.linux-block-io-stack.svg")

@@ -35,7 +35,7 @@ d.arrow([(BX - 76, Y0 + 16), (BX - 76, Y0 + 5 * STRIDE + BH - 28)], SOFT, "soft"
 d.t(BX - 128, Y0 + 5 * STRIDE + BH - 4, "비싸다 · 자세", 13, SOFT, KR, "start")
 
 YB = Y0 + 6 * STRIDE + 24
-d.t(BX - 128, YB, "RAID 컨트롤러 뒤나 디스크 펌웨어 안에서 벌어지는 일은 OS 통계에 잡히지 않아 별도 도구가 필요합니다", 13, MUTED, KR, "start")
+d.t(BX - 128, YB, "RAID 컨트롤러 뒤 · 디스크 펌웨어 안: OS 통계에 안 잡힘 → 별도 도구 필요", 13, MUTED, KR, "start")
 
 d.legend(YB + 28, [("평균이 가린 것을 보는 층", ACC), ("OS 밖", WARN), ("전통 통계", MUTED)])
 d.save("09-04.disk-tools-flow.svg")

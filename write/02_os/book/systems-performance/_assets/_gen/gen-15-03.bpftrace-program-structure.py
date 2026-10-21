@@ -16,11 +16,11 @@ d = DK(W, H, "SYSTEMS PERFORMANCE · 15-03 §1",
 
 STEPS = [
     ("01", "시작 프로브", INFO, ["k:vfs_read { ", "  @start[tid] = nsecs;", "}"],
-     "스레드별로 시각을 남깁니다"),
+     "스레드별 시각 기록"),
     ("02", "종료 프로브 · 필터", ACC, ["kr:vfs_read", "  /@start[tid]/ {", "  ...", "}"],
      "시작을 본 스레드만 통과"),
     ("03", "집계 · 정리", OK, ["@ns = hist(nsecs", "      - @start[tid]);", "delete(@start[tid]);"],
-     "차이를 모으고 지웁니다"),
+     "차이 집계 · 키 삭제"),
 ]
 for i, (n, name, c, code, foot) in enumerate(STEPS):
     x = X0 + i * (CW + GAP)
@@ -36,8 +36,8 @@ for i, (n, name, c, code, foot) in enumerate(STEPS):
         d.arrow([(x + CW, Y + CH / 2), (x + CW + GAP - 8, Y + CH / 2)], MUTED, "ar", 1.3)
 
 YB = Y + CH + 44
-d.t(X0, YB, "추적 시작 전부터 진행 중이던 I/O 는 끝만 보입니다 — 델타가 now - 0 이 되어 터무니없이 커집니다", 13, MUTED, KR, "start")
-d.t(X0, YB + 24, "delete 를 빼면 맵이 계속 자라 커널 메모리를 먹습니다", 13, WARN, KR, "start")
+d.t(X0, YB, "추적 전부터 진행 중이던 I/O: 끝만 보임 → 델타 now - 0 으로 터무니없이 커짐", 13, MUTED, KR, "start")
+d.t(X0, YB + 24, "delete 누락: 맵이 계속 자라 커널 메모리 소모", 13, WARN, KR, "start")
 
 d.legend(YB + 48, [("시작을 본 것만 거르는 자리", ACC), ("시각을 남기는 자리", INFO), ("모으는 자리", OK), ("빠뜨리기 쉬운 것", WARN)])
 d.save("15-03.bpftrace-program-structure.svg")

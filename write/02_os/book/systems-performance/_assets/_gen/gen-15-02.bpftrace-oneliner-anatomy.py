@@ -36,7 +36,7 @@ for i, (n, name, code, desc, c) in enumerate(PARTS):
     d.t(X0 + 20, y + 48, desc, 13, MUTED, KR, "start")
 
 YB = Y + 76 + 4 * STRIDE + 16
-d.t(X0, YB, "커널 안에서 집계해 요약만 유저 공간으로 올리기 때문에, 이벤트마다 내보내는 방식보다 훨씬 쌉니다", 13, MUTED, KR, "start")
+d.t(X0, YB, "커널 안 집계 → 요약만 유저 공간으로 → 이벤트별 전송보다 훨씬 저렴", 13, MUTED, KR, "start")
 
 d.legend(YB + 24, [("커널 안에서 모으는 자리", ACC), ("잡는 자리", INFO), ("나머지 조각", MUTED)])
 d.save("15-02.bpftrace-oneliner-anatomy.svg")

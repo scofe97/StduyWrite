@@ -16,11 +16,11 @@ d = DK(W, H, "SYSTEMS PERFORMANCE · 15-01 §1",
 
 CARDS = [
     ("BCC", "완성된 도구 모음", INFO,
-     ["Python 으로 프론트엔드를 짜고", "복잡한 인자·출력을 다룹니다.", "opensnoop · execsnoop 처럼", "단일 목적 도구가 수십 개입니다"],
-     "남이 만든 것을 가져다 씁니다"),
+     ["프론트엔드는 Python", "복잡한 인자·출력 처리", "opensnoop · execsnoop 같은", "단일 목적 도구 수십 개"],
+     "남이 만든 것을 가져다 씀"),
     ("bpftrace", "추적의 awk", ACC,
-     ["한 줄로 프로브·필터·액션을", "적어 바로 돌립니다.", "기성 도구로 답이 안 나올 때", "질문을 직접 짭니다"],
-     "내가 그 자리에서 만듭니다"),
+     ["한 줄로 프로브·필터·액션 작성", "바로 실행", "기성 도구로 답이 안 나올 때", "질문을 직접 작성"],
+     "내가 그 자리에서 작성"),
 ]
 for i, (name, tag, c, body, foot) in enumerate(CARDS):
     x = X0 + i * (CW + GAP)
@@ -34,7 +34,7 @@ for i, (name, tag, c, body, foot) in enumerate(CARDS):
     d.t(x + 16, Y + CH - 18, foot, 13, c, KR, "start")
 
 YB = Y + CH + 40
-d.t(X0, YB, "둘은 경쟁 관계가 아니라 층이 다릅니다 — bpftrace 로 답을 찾은 뒤 반복해 쓸 것을 BCC 도구로 옮기기도 합니다", 13, MUTED, KR, "start")
+d.t(X0, YB, "경쟁이 아닌 층 차이: bpftrace 로 찾은 답 중 반복해 쓸 것을 BCC 도구로 이전", 13, MUTED, KR, "start")
 
 d.legend(YB + 24, [("즉석에서 질문을 짜는 쪽", ACC), ("완성품을 가져다 쓰는 쪽", INFO)])
 d.save("15-01.bcc-vs-bpftrace.svg")

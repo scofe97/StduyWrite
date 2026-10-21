@@ -45,9 +45,9 @@ d.tone(mid, y, T["done"] - mid, BAR_H, OK, 6)
 d.t(mid + 12, y + 21, "실제 처리", 13, OK, KR, "start")
 
 YB = y + STRIDE + 20
-d.t(132 - 12, YB, "온디스크 큐와 실제 처리를 더한 것이 곧 블록 I/O 서비스 시간입니다 — 같은 구간을 양쪽이 다른 이름으로 부릅니다", 13, MUTED, KR, "start")
-d.t(132 - 12, YB + 24, "지금 디스크는 자체 큐를 가져, OS 가 보는 서비스 시간에 커널 큐 대기가 섞입니다", 13, MUTED, KR, "start")
-d.t(132 - 12, YB + 48, "그래서 옛 iostat 의 svctm 은 부정확해져 최신판에서 빠졌습니다", 13, SOFT, KR, "start")
+d.t(132 - 12, YB, "온디스크 큐 + 실제 처리 = 블록 I/O 서비스 시간 — 같은 구간, 이름 둘", 13, MUTED, KR, "start")
+d.t(132 - 12, YB + 24, "디스크 자체 큐 → OS 서비스 시간에 커널 큐 대기 혼입", 13, MUTED, KR, "start")
+d.t(132 - 12, YB + 48, "옛 iostat 의 svctm: 부정확, 최신판에서 제거", 13, SOFT, KR, "start")
 
 d.legend(YB + 72, [("커널과 디스크가 겹쳐 보는 구간", ACC), ("디스크 큐 대기", INFO), ("디스크가 실제로 처리", OK)])
 d.save("09-01.io-time-terminology.svg")
