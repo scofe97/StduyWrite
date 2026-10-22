@@ -1,90 +1,70 @@
-<svg viewBox="0 0 700 400" width="100%"
-     xmlns="http://www.w3.org/2000/svg"
-     role="img"
-     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>이미지 공급망의 약한 고리와 각 단계의 방어</title>
-  <desc>이미지 보안의 핵심 관심사는 무결성입니다. 의도한 이미지가 실제로 쓰이도록 보장하는 것인데, 빌드에서 저장을 거쳐 실행에 이르는 사슬에 여러 약한 고리가 있습니다. 빌드 시점에는 Dockerfile 자체와 빌드 머신이 위험 지점이고, 저장 시점에는 레지스트리 접근과 저장 매체가, 배포 시점에는 어떤 이미지가 실제로 당겨지는지와 배포 정의 파일이 위험 지점입니다. 각 단계마다 대응하는 방어 수단이 있습니다.</desc>
-
-  <style>
-    .box { fill: #e8e4df; }
-    .box-title { fill: #0d0d0d; font-size: 12px; font-weight: 700; }
-    .box-detail { fill: #3a3632; font-size: 9.5px; }
-    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
-    .hint { fill: #b8b3ad; font-size: 10px; }
-    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
-    .danger-title { fill: #7a1f1f; font-size: 11.5px; font-weight: 700; }
-    .danger-detail { fill: #7a1f1f; font-size: 9.5px; }
-  </style>
-
-  <rect width="700" height="400" fill="#0d0d0d"/>
-
-  <defs>
-    <marker id="uh" markerWidth="9" markerHeight="9" refX="7" refY="3"
-            orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
-    </marker>
-  </defs>
-
-  <text class="head" x="40" y="30">이미지가 지나는 사슬</text>
-
-  <!-- 단계 축 -->
-  <rect class="box" x="40" y="42" width="190" height="34" rx="4"/>
-  <text class="box-title" x="56" y="64">빌드</text>
-
-  <rect class="box" x="255" y="42" width="190" height="34" rx="4"/>
-  <text class="box-title" x="271" y="64">저장</text>
-
-  <rect class="box" x="470" y="42" width="190" height="34" rx="4"/>
-  <text class="box-title" x="486" y="64">배포·실행</text>
-
-  <path class="arrow" d="M230,59 L255,59" marker-end="url(#uh)"/>
-  <path class="arrow" d="M445,59 L470,59" marker-end="url(#uh)"/>
-
-  <!-- 위험 -->
-  <text class="head" x="40" y="106">약한 고리</text>
-
-  <rect x="40" y="118" width="190" height="76" rx="4" fill="#f2d4d4"/>
-  <text class="danger-title" x="56" y="138">Dockerfile 변조</text>
-  <text class="danger-detail" x="56" y="156">악성코드·채굴기 삽입</text>
-  <text class="danger-detail" x="56" y="172">빌드 머신 침해</text>
-  <text class="danger-detail" x="56" y="188">RUN 은 임의 코드 실행</text>
-
-  <rect x="255" y="118" width="190" height="76" rx="4" fill="#f2d4d4"/>
-  <text class="danger-title" x="271" y="138">이미지 교체</text>
-  <text class="danger-detail" x="271" y="156">레지스트리 주소 스푸핑</text>
-  <text class="danger-detail" x="271" y="172">저장 매체 직접 접근</text>
-  <text class="danger-detail" x="271" y="188">푸시 권한 남용</text>
-
-  <rect x="470" y="118" width="190" height="76" rx="4" fill="#f2d4d4"/>
-  <text class="danger-title" x="486" y="138">엉뚱한 이미지 실행</text>
-  <text class="danger-detail" x="486" y="156">태그가 옮겨 간 경우</text>
-  <text class="danger-detail" x="486" y="172">배포 YAML 변조</text>
-  <text class="danger-detail" x="486" y="188">한 글자 바꾼 레지스트리</text>
-
-  <!-- 방어 -->
-  <text class="head" x="40" y="226">대응</text>
-
-  <rect class="box" x="40" y="238" width="190" height="92" rx="4"/>
-  <text class="box-title" x="56" y="258">Dockerfile 모범사례</text>
-  <text class="box-detail" x="56" y="276">최소 베이스 · 멀티스테이지</text>
-  <text class="box-detail" x="56" y="292">비root USER</text>
-  <text class="box-detail" x="56" y="308">데몬리스 빌드</text>
-  <text class="box-detail" x="56" y="324">빌드 머신 분리</text>
-
-  <rect class="box" x="255" y="238" width="190" height="92" rx="4"/>
-  <text class="box-title" x="271" y="258">레지스트리 통제</text>
-  <text class="box-detail" x="271" y="276">자체 레지스트리 운영</text>
-  <text class="box-detail" x="271" y="292">VPC 안에 두기</text>
-  <text class="box-detail" x="271" y="308">저장 매체 권한 제한</text>
-  <text class="box-detail" x="271" y="324">이미지 서명</text>
-
-  <rect class="box" x="470" y="238" width="190" height="92" rx="4"/>
-  <text class="box-title" x="486" y="258">배포 검증</text>
-  <text class="box-detail" x="486" y="276">다이제스트로 지목</text>
-  <text class="box-detail" x="486" y="292">배포 정의 출처 확인</text>
-  <text class="box-detail" x="486" y="308">어드미션 컨트롤</text>
-  <text class="box-detail" x="486" y="324">GitOps</text>
-
-  <text class="hint" x="40" y="360">의도치 않은 이미지가 돌면</text>
-  <text class="hint" x="40" y="380">원하는 어떤 코드든 돌릴 수 있습니다</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 984 500" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">빌드 · 저장 · 배포 세 고리마다 약한 고리와 대응이 있습니다</title><desc id="dd">이미지는 빌드 머신에서 레지스트리를 거쳐 클러스터로 흐르고, 세 단계 모두에 약한 고리가 있으며 단계마다 짝지은 대응이 붙는다.</desc>
+<rect width="984" height="500" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">CONTAINER SECURITY · 06-02 OVERVIEW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">빌드 · 저장 · 배포 세 고리마다 약한 고리와 대응이 있습니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">이미지 무결성은 세 단계가 모두 지켜질 때만 성립합니다.</text>
+<rect x="20" y="100" width="288" height="328" rx="8" fill="#F5F5F308" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="6 5"/>
+<text x="36" y="122" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">빌드</text>
+<rect x="36" y="140" width="256" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="164.0" y="166" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">빌드 머신</text>
+<text x="164.0" y="188" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Dockerfile → 이미지</text>
+<line x1="164.0" y1="204" x2="164.0" y2="228" stroke="#5E6B7E" stroke-width="1.0"/>
+<rect x="36" y="228" width="256" height="36" rx="6" fill="#F08A591F" stroke="#F08A59" stroke-width="1.4"/>
+<text x="164.0" y="251" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">RUN 편집 = 원격 코드 실행</text>
+<rect x="36" y="272" width="256" height="36" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="164.0" y="295" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#3FB98C">편집 권한 제한 + 코드 리뷰</text>
+<rect x="36" y="324" width="256" height="36" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="164.0" y="347" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">빌드 머신 침해 → 백도어</text>
+<rect x="36" y="368" width="256" height="36" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="164.0" y="391" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#3FB98C">프로덕션과 분리된 빌드 머신</text>
+<rect x="348" y="100" width="288" height="328" rx="8" fill="#F5F5F308" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="6 5"/>
+<text x="364" y="122" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">저장</text>
+<rect x="364" y="140" width="256" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="492.0" y="166" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">레지스트리</text>
+<text x="492.0" y="188" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">이미지 저장</text>
+<line x1="492.0" y1="204" x2="492.0" y2="228" stroke="#5E6B7E" stroke-width="1.0"/>
+<rect x="364" y="228" width="256" height="36" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="492.0" y="251" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">이미지 교체 · 수정</text>
+<rect x="364" y="272" width="256" height="36" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="492.0" y="295" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#3FB98C">이미지 서명 · in-toto</text>
+<rect x="364" y="324" width="256" height="36" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="492.0" y="347" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">레지스트리 주소 DNS 스푸핑</text>
+<rect x="364" y="368" width="256" height="36" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="492.0" y="391" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#3FB98C">자체 · 관리형 레지스트리 (VPC 안)</text>
+<rect x="676" y="100" width="288" height="328" rx="8" fill="#F5F5F308" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="6 5"/>
+<text x="692" y="122" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">배포</text>
+<rect x="692" y="140" width="256" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="820.0" y="166" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">클러스터</text>
+<text x="820.0" y="188" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">배포 YAML → 컨테이너 실행</text>
+<line x1="820.0" y1="204" x2="820.0" y2="228" stroke="#5E6B7E" stroke-width="1.0"/>
+<rect x="692" y="228" width="256" height="36" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="820.0" y="251" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">태그는 불변이 아님</text>
+<rect x="692" y="272" width="256" height="36" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="820.0" y="295" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#3FB98C">태그 대신 다이제스트 참조</text>
+<rect x="692" y="324" width="256" height="36" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="820.0" y="347" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">레지스트리 URL 한 글자 변형</text>
+<rect x="692" y="368" width="256" height="36" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="820.0" y="391" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#3FB98C">어드미션 컨트롤</text>
+<path d="M 294 172 L 360 172" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="327.0" y="163" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">push</text>
+<path d="M 622 172 L 688 172" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="655.0" y="163" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">pull</text>
+<line x1="12" y1="452" x2="936" y2="452" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="474" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="464" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="122" y="474" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">약한 고리</text>
+<rect x="209" y="464" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="231" y="474" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">대응</text>
+<rect x="279" y="464" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="301" y="474" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">가장 날카로운 경고</text>
 </svg>

@@ -1,89 +1,72 @@
-<svg viewBox="0 0 680 400" width="100%"
-     xmlns="http://www.w3.org/2000/svg"
-     role="img"
-     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>sys fs cgroup 아래의 의사 파일시스템 구조</title>
-  <desc>커널은 cgroup 정보를 의사 파일시스템으로 노출하며 보통 sys fs cgroup 아래에 있습니다. 그 디렉토리를 나열하면 자원 종류별 계층이 보입니다. memory 계층 안에 하위 디렉토리를 만들면 그것이 새 cgroup이 되고, 커널이 그 안을 파라미터 파일과 통계 파일로 자동으로 채웁니다. 파일 중 일부는 우리가 값을 써 넣는 설정이고 일부는 커널이 상태를 적어 주는 정보인데, 이름만으로는 구분되지 않아 문서를 봐야 합니다.</desc>
-
-  <style>
-    .box { fill: #e8e4df; }
-    .box-title { fill: #0d0d0d; font-size: 12.5px; font-weight: 700; }
-    .box-detail { fill: #3a3632; font-size: 10px; }
-    .mono { font-family: 'Menlo', 'Consolas', monospace; }
-    .path { fill: #0d0d0d; font-size: 11px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
-    .file { fill: #3a3632; font-size: 10px; font-family: 'Menlo', 'Consolas', monospace; }
-    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
-    .hint { fill: #b8b3ad; font-size: 10px; }
-    .tree { stroke: #b8b3ad; stroke-width: 1.2; fill: none; }
-    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
-    .chip { fill: #f5edda; }
-    .chip-text { fill: #0d0d0d; font-size: 10px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
-  </style>
-
-  <rect width="680" height="400" fill="#0d0d0d"/>
-
-  <defs>
-    <marker id="gh" markerWidth="9" markerHeight="9" refX="7" refY="3"
-            orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
-    </marker>
-  </defs>
-
-  <text class="head" x="40" y="32">자원 종류별 계층</text>
-
-  <!-- 루트 -->
-  <rect class="box" x="40" y="44" width="600" height="40" rx="4"/>
-  <text class="path" x="56" y="69">/sys/fs/cgroup</text>
-
-  <!-- 계층 목록 -->
-  <path class="tree" d="M70,84 L70,104 L640,104"/>
-  <path class="tree" d="M120,104 L120,118"/>
-  <path class="tree" d="M240,104 L240,118"/>
-  <path class="tree" d="M360,104 L360,118"/>
-  <path class="tree" d="M480,104 L480,118"/>
-  <path class="tree" d="M600,104 L600,118"/>
-
-  <rect class="box" x="70" y="122" width="100" height="34" rx="4"/>
-  <text class="file" x="120" y="143" text-anchor="middle">memory</text>
-
-  <rect class="box" x="190" y="122" width="100" height="34" rx="4"/>
-  <text class="file" x="240" y="143" text-anchor="middle">cpu</text>
-
-  <rect class="box" x="310" y="122" width="100" height="34" rx="4"/>
-  <text class="file" x="360" y="143" text-anchor="middle">pids</text>
-
-  <rect class="box" x="430" y="122" width="100" height="34" rx="4"/>
-  <text class="file" x="480" y="143" text-anchor="middle">blkio</text>
-
-  <rect class="box" x="550" y="122" width="100" height="34" rx="4"/>
-  <text class="file" x="600" y="143" text-anchor="middle">devices</text>
-
-  <path class="arrow" d="M120,156 L120,182" marker-end="url(#gh)"/>
-  <text class="hint" x="140" y="176">여기에 디렉토리를 만들면</text>
-
-  <!-- 새 cgroup -->
-  <rect class="box" x="40" y="190" width="600" height="40" rx="4"/>
-  <text class="path" x="56" y="215">/sys/fs/cgroup/memory/liz</text>
-
-  <path class="arrow" d="M340,230 L340,252" marker-end="url(#gh)"/>
-  <text class="hint" x="356" y="246">커널이 자동으로 채운다</text>
-
-  <!-- 파일 두 종류 -->
-  <text class="head" x="40" y="278">쓰는 파일 — 파라미터</text>
-  <rect class="box" x="40" y="288" width="290" height="72" rx="4"/>
-  <rect class="chip" x="56" y="300" width="200" height="18" rx="3"/>
-  <text class="chip-text" x="62" y="313">memory.limit_in_bytes</text>
-  <rect class="chip" x="56" y="324" width="120" height="18" rx="3"/>
-  <text class="chip-text" x="62" y="337">cgroup.procs</text>
-  <text class="box-detail" x="56" y="354">값을 써서 통제한다</text>
-
-  <text class="head" x="350" y="278">읽는 파일 — 통계</text>
-  <rect class="box" x="350" y="288" width="290" height="72" rx="4"/>
-  <rect class="chip" x="366" y="300" width="204" height="18" rx="3"/>
-  <text class="chip-text" x="372" y="313">memory.usage_in_bytes</text>
-  <rect class="chip" x="366" y="324" width="240" height="18" rx="3"/>
-  <text class="chip-text" x="372" y="337">memory.max_usage_in_bytes</text>
-  <text class="box-detail" x="366" y="354">커널이 상태를 적는다</text>
-
-  <text class="hint" x="40" y="384">이름만으론 구분되지 않는다</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 984 476" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">디렉토리를 만들면 커널이 그 안을 cgroup 파일로 채웁니다</title><desc id="dd">/sys/fs/cgroup 아래에 자원 종류마다 계층이 있고, memory 계층에서 mkdir memory/liz 로 cgroup liz 를 만들면 커널이 memory.limit_in_bytes · cgroup.procs 같은 쓰기 파일과 memory.usage_in_bytes · memory.max_usage_in_bytes 같은 읽기 통계 파일을 채운다. 컨테이너를 시작하면 런타임이 docker 아래에 컨테이너 ID 이름의 cgroup 을 만든다.</desc>
+<rect width="984" height="476" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">TREE · 03-01 §2~3</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">디렉토리를 만들면 커널이 그 안을 cgroup 파일로 채웁니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">디렉토리 하나가 cgroup 하나이고, 값을 쓰는 파일이 곧 조작 수단입니다.</text>
+<text x="256" y="104" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">자원 종류마다 계층</text>
+<text x="476" y="104" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">cgroup = 디렉토리</text>
+<text x="696" y="104" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">커널이 채운 파일</text>
+<line x1="204" y1="256" x2="228" y2="256" stroke="#5E6B7E" stroke-width="1.2"/>
+<line x1="228" y1="154" x2="228" y2="358" stroke="#5E6B7E" stroke-width="1.2"/>
+<path d="M 228 154 L 252 154" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)"/>
+<path d="M 228 256 L 252 256" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)"/>
+<path d="M 228 358 L 252 358" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)"/>
+<line x1="424" y1="256" x2="448" y2="256" stroke="#5E6B7E" stroke-width="1.2"/>
+<line x1="448" y1="256" x2="448" y2="358" stroke="#5E6B7E" stroke-width="1.2"/>
+<path d="M 448 256 L 472 256" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)"/>
+<path d="M 448 358 L 472 358" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)"/>
+<line x1="644" y1="256" x2="668" y2="256" stroke="#5E6B7E" stroke-width="1.2"/>
+<line x1="668" y1="154" x2="668" y2="358" stroke="#5E6B7E" stroke-width="1.2"/>
+<path d="M 668 154 L 692 154" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)"/>
+<path d="M 668 222 L 692 222" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)"/>
+<path d="M 668 290 L 692 290" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)"/>
+<path d="M 668 358 L 692 358" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)"/>
+<rect x="36" y="230" width="168" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="120.0" y="252" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">/sys/fs/cgroup</text>
+<text x="120.0" y="270" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">의사 파일시스템</text>
+<rect x="256" y="128" width="168" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="340.0" y="150" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">pids</text>
+<text x="340.0" y="168" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">프로세스 개수 제한</text>
+<rect x="256" y="230" width="168" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="340.0" y="252" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">memory</text>
+<text x="340.0" y="270" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">계층의 최상위</text>
+<rect x="256" y="332" width="168" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="340.0" y="354" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">cpu · blkio …</text>
+<text x="340.0" y="372" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">그 밖의 종류별 계층</text>
+<rect x="476" y="230" width="168" height="52" rx="6" fill="#F08A591F" stroke="#F08A59" stroke-width="1.6"/>
+<text x="560.0" y="252" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">liz/</text>
+<text x="560.0" y="270" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">mkdir memory/liz</text>
+<rect x="476" y="332" width="168" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="560.0" y="354" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">docker/</text>
+<text x="560.0" y="372" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">&lt;컨테이너 ID&gt;/ 가 생김</text>
+<rect x="696" y="128" width="252" height="52" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="822.0" y="150" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">memory.limit_in_bytes</text>
+<text x="822.0" y="168" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">쓰기 · 최대 메모리 한도</text>
+<rect x="696" y="196" width="252" height="52" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="822.0" y="218" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">cgroup.procs</text>
+<text x="822.0" y="236" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">쓰기 · PID 배정</text>
+<rect x="696" y="264" width="252" height="52" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="822.0" y="286" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">memory.usage_in_bytes</text>
+<text x="822.0" y="304" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">읽기 · 지금 쓰는 양</text>
+<rect x="696" y="332" width="252" height="52" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="822.0" y="354" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">memory.max_usage_in_bytes</text>
+<text x="822.0" y="372" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">읽기 · 기록된 최고점</text>
+<line x1="12" y1="412" x2="936" y2="412" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="434" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="424" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="434" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">mkdir 로 만든 cgroup</text>
+<rect x="365" y="424" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="387" y="434" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">쓰기 · 한도와 배정</text>
+<rect x="552" y="424" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="574" y="434" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">읽기 · 커널이 적는 통계</text>
 </svg>

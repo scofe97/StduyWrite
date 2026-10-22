@@ -1,68 +1,92 @@
-<svg viewBox="0 0 640 430" width="100%"
-     xmlns="http://www.w3.org/2000/svg"
-     role="img"
-     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>나머지 namespace와 호스트 관점 전체 흐름</title>
-  <desc>앞 편에서 다루지 않은 namespace 네 가지를 차례로 봅니다. network namespace는 인터페이스와 라우팅 테이블을 격리하고, user namespace는 컨테이너 안의 root를 호스트의 비특권 사용자로 매핑해 보안상 큰 이점을 줍니다. IPC와 cgroup namespace는 공유 메모리와 cgroup 시야를 각각 가립니다. 마지막으로 호스트에서 컨테이너를 보면 같은 프로세스가 다른 번호로 보이며, 이것이 가상머신과의 근본적 차이입니다.</desc>
-
-  <style>
-    .box { fill: #e8e4df; }
-    .box-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
-    .box-detail { fill: #3a3632; font-size: 10.5px; }
-    .sec { fill: #3a3632; font-size: 10px; font-weight: 700; }
-    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
-    .num { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
-    .hint { fill: #b8b3ad; font-size: 10.5px; }
-    .danger-title { fill: #7a1f1f; font-size: 13px; font-weight: 700; }
-    .danger-detail { fill: #7a1f1f; font-size: 10.5px; }
-  </style>
-
-  <rect width="640" height="430" fill="#0d0d0d"/>
-
-  <defs>
-    <marker id="mh" markerWidth="9" markerHeight="9" refX="7" refY="3"
-            orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
-    </marker>
-  </defs>
-
-  <text class="num" x="34" y="45">1.</text>
-  <rect class="box" x="54" y="24" width="532" height="50" rx="4"/>
-  <text class="box-title" x="72" y="46">network namespace</text>
-  <text class="box-detail" x="72" y="64">veth 쌍으로 바깥과 잇는다</text>
-  <text class="sec" x="566" y="46" text-anchor="end">§1</text>
-
-  <path class="arrow" d="M320,74 L320,92" marker-end="url(#mh)"/>
-
-  <text class="num" x="34" y="119">2.</text>
-  <rect class="box" x="54" y="98" width="532" height="54" rx="4"/>
-  <text class="box-title" x="72" y="120">user namespace</text>
-  <text class="box-detail" x="72" y="140">컨테이너 root를 호스트 비특권으로</text>
-  <text class="sec" x="566" y="120" text-anchor="end">§2</text>
-
-  <path class="arrow" d="M320,152 L320,170" marker-end="url(#mh)"/>
-
-  <text class="num" x="34" y="197">3.</text>
-  <rect class="box" x="54" y="176" width="532" height="50" rx="4"/>
-  <text class="box-title" x="72" y="198">IPC · cgroup ns</text>
-  <text class="box-detail" x="72" y="216">공유 메모리·cgroup 시야</text>
-  <text class="sec" x="566" y="198" text-anchor="end">§3</text>
-
-  <path class="arrow" d="M320,226 L320,244" marker-end="url(#mh)"/>
-
-  <text class="hint" x="320" y="260" text-anchor="middle">그런데 호스트에서 보면</text>
-
-  <text class="num" x="34" y="299">4.</text>
-  <rect x="54" y="274" width="532" height="56" rx="4" fill="#f2d4d4"/>
-  <text class="danger-title" x="72" y="298">위험 · 호스트에서 다 보인다</text>
-  <text class="danger-detail" x="72" y="318">같은 프로세스가 다른 번호로</text>
-  <text class="sec" x="566" y="298" text-anchor="end">§4</text>
-
-  <path class="arrow" d="M320,330 L320,348" marker-end="url(#mh)"/>
-
-  <text class="num" x="34" y="377">5.</text>
-  <rect class="box" x="54" y="356" width="532" height="52" rx="4"/>
-  <text class="box-title" x="72" y="380">그래서 전용 호스트를 쓴다</text>
-  <text class="box-detail" x="72" y="398">Thin OS · 불변 인프라</text>
-  <text class="sec" x="566" y="380" text-anchor="end">§5</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 984 664" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">user namespace 가 컨테이너 안의 root 를 호스트의 비특권 사용자로 바꿉니다</title><desc id="dd">04-02 의 키워드 개념도. 첫 줄은 network namespace 가 lo 하나로 시작해 veth 쌍으로 바깥과 이어지는 흐름이다. 둘째 줄은 user namespace 가 uid_map 의 0 1000 1 로 컨테이너 root 를 호스트의 비특권 사용자에 대응시켜 rootless 컨테이너를 가능하게 하는 흐름이다. 셋째 줄은 IPC namespace 를 ipcs 로 확인하고 커널 4.6 에서 추가된 cgroup namespace 로 이어지는 흐름이다. 넷째 줄은 컨테이너 안 PID 10 이 호스트에서 PID 30591 로 보이고, 그래서 컨테이너 전용 호스트를 권하는 흐름이다.</desc>
+<rect width="984" height="664" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">ARCHITECTURE · 04-02 OVERVIEW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">user namespace 가 컨테이너 안의 root 를 호스트의 비특권 사용자로 바꿉니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">화살표 위 글자는 두 키워드의 관계, 왼쪽 칩은 그 줄을 다루는 절입니다.</text>
+<rect x="23.18" y="130.0" width="21.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="144.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">§1</text>
+<rect x="23.18" y="258.0" width="21.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="272.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">§2</text>
+<rect x="23.18" y="386.0" width="21.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="400.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">§3</text>
+<rect x="16.36" y="514.0" width="35.28" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="528.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">§4~5</text>
+<rect x="60" y="112" width="216" height="64" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="168.0" y="139" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">network namespace</text>
+<text x="168.0" y="160" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">인터페이스·라우팅 격리</text>
+<rect x="400" y="112" width="216" height="64" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="508.0" y="139" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">lo 하나</text>
+<text x="508.0" y="160" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">그마저 DOWN</text>
+<rect x="740" y="112" width="216" height="64" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="848.0" y="139" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">veth 쌍</text>
+<text x="848.0" y="160" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">ve1 · ve2</text>
+<path d="M 278 144.0 L 396 144.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="338.0" y="135.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">시작 상태</text>
+<path d="M 618 144.0 L 736 144.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="678.0" y="135.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">케이블 연결</text>
+<path d="M 848.0 178 L 848.0 208 L 168.0 208 L 168.0 236" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="508.0" y="201" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">ID 시야로 넘어감</text>
+<rect x="60" y="240" width="216" height="64" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<text x="168.0" y="267" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">user namespace</text>
+<text x="168.0" y="288" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">컨테이너 root → 비특권</text>
+<rect x="400" y="240" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="508.0" y="267" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">uid_map</text>
+<text x="508.0" y="288" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">0 1000 1</text>
+<rect x="740" y="240" width="216" height="64" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="848.0" y="267" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">rootless 컨테이너</text>
+<text x="848.0" y="288" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">탈출해도 비특권</text>
+<path d="M 278 272.0 L 396 272.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="338.0" y="263.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">매핑 파일</text>
+<path d="M 618 272.0 L 736 272.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="678.0" y="263.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">결과</text>
+<path d="M 848.0 306 L 848.0 336 L 168.0 336 L 168.0 364" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="508.0" y="329" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">나머지 두 namespace</text>
+<rect x="60" y="368" width="216" height="64" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="168.0" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">IPC namespace</text>
+<text x="168.0" y="416" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">공유 메모리·메시지 큐</text>
+<rect x="400" y="368" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="508.0" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">ipcs</text>
+<text x="508.0" y="416" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">자기 IPC 객체만 보임</text>
+<rect x="740" y="368" width="216" height="64" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="848.0" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">cgroup namespace</text>
+<text x="848.0" y="416" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">커널 4.6 부터</text>
+<path d="M 278 400.0 L 396 400.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="338.0" y="391.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">확인</text>
+<path d="M 618 400.0 L 736 400.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="678.0" y="391.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">다음 namespace</text>
+<path d="M 848.0 434 L 848.0 464 L 168.0 464 L 168.0 492" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="508.0" y="457" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">시선을 호스트로</text>
+<rect x="60" y="496" width="216" height="64" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="168.0" y="523" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">PID 10 = 30591</text>
+<text x="168.0" y="544" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">안과 밖의 번호</text>
+<rect x="400" y="496" width="216" height="64" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="508.0" y="523" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">VM 과 다른 가시성</text>
+<text x="508.0" y="544" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">호스트 접근 = 전체 노출</text>
+<rect x="740" y="496" width="216" height="64" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="848.0" y="523" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">전용 호스트</text>
+<text x="848.0" y="544" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Thin OS · 불변 운영</text>
+<path d="M 278 528.0 L 396 528.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="338.0" y="519.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">호스트에서 보임</text>
+<path d="M 618 528.0 L 736 528.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="678.0" y="519.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">그래서</text>
+<line x1="12" y1="600" x2="936" y2="600" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="622" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="612" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">격리 조각</text>
+<rect x="209" y="612" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="231" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">한계·위험</text>
+<rect x="318" y="612" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="340" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">핵심 접점</text>
+<rect x="427" y="612" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="449" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">해결</text>
 </svg>

@@ -1,80 +1,73 @@
-<svg viewBox="0 0 700 380" width="100%"
-     xmlns="http://www.w3.org/2000/svg"
-     role="img"
-     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>격리 강화 수단의 스펙트럼 — 일반 컨테이너에서 가상머신까지</title>
-  <desc>두 워크로드가 서로 간섭하지 못하게 하는 접근은 둘입니다. 하나는 서로를 인식하지 못하도록 격리하는 것이고, 다른 하나는 인식하더라도 취할 수 있는 행동을 제한하는 것입니다. 후자를 샌드박싱이라 부릅니다. 이 장의 수단들은 왼쪽에서 오른쪽으로 갈수록 커널 공유가 줄어듭니다. seccomp 와 AppArmor 와 SELinux 는 일반 컨테이너 위에 보안 장치를 덧대며 커널을 그대로 공유합니다. gVisor 는 시스템 콜을 가로채 사용자 공간에서 다시 구현해 컨테이너와 가상머신 사이에 놓입니다. Kata Containers 와 Firecracker 와 Unikernel 은 하이퍼바이저 격리를 써서 커널을 공유하지 않습니다.</desc>
-
-  <style>
-    .box { fill: #e8e4df; }
-    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
-    .box-detail { fill: #3a3632; font-size: 9.5px; }
-    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
-    .hint { fill: #b8b3ad; font-size: 10px; }
-    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
-    .axis { stroke: #4a4540; stroke-width: 1; fill: none; }
-    .warn-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
-    .warn-detail { fill: #0d0d0d; font-size: 9.5px; }
-  </style>
-
-  <rect width="700" height="380" fill="#0d0d0d"/>
-
-  <defs>
-    <marker id="uh8" markerWidth="9" markerHeight="9" refX="7" refY="3"
-            orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
-    </marker>
-  </defs>
-
-  <text class="head" x="40" y="30">오른쪽일수록 커널 공유가 준다</text>
-
-  <path class="arrow" d="M40,48 L660,48" marker-end="url(#uh8)"/>
-
-  <!-- 1군 -->
-  <rect class="box" x="40" y="62" width="196" height="116" rx="4"/>
-  <text class="box-title" x="56" y="83">컨테이너 + 보안 장치</text>
-  <text class="box-detail" x="56" y="102">seccomp · AppArmor</text>
-  <text class="box-detail" x="56" y="118">SELinux</text>
-  <text class="box-detail" x="56" y="136">커널은 그대로 공유</text>
-  <text class="box-detail" x="56" y="154">검증됐지만 관리가 어렵다</text>
-  <text class="box-detail" x="56" y="172">저수준 행동을 단속</text>
-
-  <!-- 2군 -->
-  <rect class="box" x="252" y="62" width="196" height="116" rx="4"/>
-  <text class="box-title" x="268" y="83">중간 — gVisor</text>
-  <text class="box-detail" x="268" y="102">syscall 을 가로채 재구현</text>
-  <text class="box-detail" x="268" y="120">사용자 공간 커널</text>
-  <text class="box-detail" x="268" y="138">호스트에서 프로세스가 안 보인다</text>
-  <text class="box-detail" x="268" y="156">미구현 syscall 이 남는다</text>
-  <text class="box-detail" x="268" y="172">syscall 많으면 성능 영향</text>
-
-  <!-- 3군 -->
-  <rect class="box" x="464" y="62" width="196" height="116" rx="4"/>
-  <text class="box-title" x="480" y="83">가상머신 격리</text>
-  <text class="box-detail" x="480" y="102">Kata · Firecracker</text>
-  <text class="box-detail" x="480" y="118">Unikernel</text>
-  <text class="box-detail" x="480" y="136">커널을 공유하지 않는다</text>
-  <text class="box-detail" x="480" y="154">하이퍼바이저가 경계</text>
-  <text class="box-detail" x="480" y="172">Firecracker 는 100ms</text>
-
-  <path class="axis" d="M138,178 L138,196"/>
-  <path class="axis" d="M350,178 L350,196"/>
-  <path class="axis" d="M562,178 L562,196"/>
-
-  <!-- 공유 커널 경고 -->
-  <rect x="40" y="208" width="408" height="80" rx="4" fill="rgb(212,168,83)"/>
-  <text class="warn-title" x="56" y="230">앞의 둘이 못 막는 것</text>
-  <text class="warn-detail" x="56" y="250">사용자 공간 앱의 행동은 제한하지만</text>
-  <text class="warn-detail" x="56" y="268">커널은 여전히 공유됩니다</text>
-  <text class="warn-detail" x="56" y="284">Dirty COW 는 못 막는다</text>
-
-  <rect class="box" x="464" y="208" width="196" height="80" rx="4"/>
-  <text class="box-title" x="480" y="230">샌드박싱이란</text>
-  <text class="box-detail" x="480" y="250">자원 접근을 제한해</text>
-  <text class="box-detail" x="480" y="268">앱을 가두는 것</text>
-  <text class="box-detail" x="480" y="284">컨테이너가 좋은 단위</text>
-
-  <text class="hint" x="40" y="322">리스크 프로파일에 달렸습니다</text>
-  <text class="hint" x="40" y="342">클라우드가 주는 선택지도 변수입니다</text>
-  <text class="hint" x="40" y="362">어느 쪽이든 9장에서 깨집니다</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 984 596" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">격리 강화 수단은 시스템 콜이 호스트 커널에 닿는 길로 나뉩니다</title><desc id="dd">왼쪽에서 오른쪽으로 일반 컨테이너와 보안 장치, gVisor, VM 격리 세 열. 보안 장치는 시스템 콜이 호스트 커널로 곧장 가고, gVisor 는 Sentry 를 거쳐 호스트 커널로 가며, Kata·Firecracker·Unikernel 은 게스트 OS 를 거쳐 하이퍼바이저로 간다. 아래 축은 호스트 커널 공유에서 비공유로 이어진다.</desc>
+<rect width="984" height="596" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">ARCHITECTURE · 08-01 INTRO</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">격리 강화 수단은 시스템 콜이 호스트 커널에 닿는 길로 나뉩니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">seccomp·AppArmor·SELinux 는 커널을 그대로 공유하고, VM 격리는 커널을 공유하지 않으며, gVisor 가 그 사이에 놓입니다.</text>
+<rect x="60" y="96" width="272" height="372" rx="8" fill="none" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="6 5"/>
+<rect x="356" y="96" width="272" height="372" rx="8" fill="none" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="6 5"/>
+<rect x="652" y="96" width="272" height="372" rx="8" fill="none" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="6 5"/>
+<text x="196.0" y="120" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">seccomp · AppArmor · SELinux</text>
+<text x="196.0" y="140" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">일반 컨테이너 + 보안 장치</text>
+<path d="M 196.0 222 L 196.0 256" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="208.0" y="245" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">syscall</text>
+<path d="M 196.0 342 L 196.0 376" fill="none" stroke="#F08A59" stroke-width="1.8" marker-end="url(#acc)"/>
+<rect x="76" y="168" width="240" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="196.0" y="199" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">컨테이너 안 앱</text>
+<rect x="76" y="260" width="240" height="80" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="196.0" y="287" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">프로파일 단속</text>
+<text x="196.0" y="307" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">syscall · capability</text>
+<text x="196.0" y="325" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">파일 접근</text>
+<rect x="76" y="380" width="240" height="72" rx="6" fill="#F08A591F" stroke="#F08A59" stroke-width="1.6"/>
+<text x="196.0" y="403" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">호스트 커널</text>
+<text x="196.0" y="423" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">컨테이너와 공유</text>
+<text x="196.0" y="441" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Dirty COW 못 막음</text>
+<text x="492.0" y="120" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">gVisor</text>
+<text x="492.0" y="140" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">컨테이너와 VM 사이</text>
+<path d="M 492.0 222 L 492.0 256" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="504.0" y="245" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">syscall</text>
+<path d="M 492.0 342 L 492.0 376" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="372" y="168" width="240" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="492.0" y="199" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">컨테이너 안 앱</text>
+<rect x="372" y="260" width="240" height="80" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="492.0" y="287" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">Sentry</text>
+<text x="492.0" y="307" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">syscall 가로채 재구현</text>
+<text x="492.0" y="325" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">사용자 공간 커널</text>
+<rect x="372" y="380" width="240" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="492.0" y="412" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">호스트 커널</text>
+<text x="492.0" y="432" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Sentry 도 seccomp 로 샌드박싱</text>
+<text x="788.0" y="120" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">Kata · Firecracker · Unikernel</text>
+<text x="788.0" y="140" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">가상머신 격리</text>
+<path d="M 788.0 222 L 788.0 256" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="800.0" y="245" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">syscall</text>
+<path d="M 788.0 342 L 788.0 376" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="668" y="168" width="240" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="788.0" y="199" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">VM 안의 앱</text>
+<rect x="668" y="260" width="240" height="80" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="788.0" y="287" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">게스트 OS</text>
+<text x="788.0" y="307" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Kata: QEMU 가상머신</text>
+<text x="788.0" y="325" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Firecracker: KVM 기반</text>
+<rect x="668" y="380" width="240" height="72" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="788.0" y="412" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">하이퍼바이저</text>
+<text x="788.0" y="432" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">호스트 커널과 비공유</text>
+<path d="M 60 512 L 924 512" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="60" y="498" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">호스트 커널 공유</text>
+<text x="924" y="498" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">호스트 커널 비공유</text>
+<line x1="12" y1="552" x2="936" y2="552" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="574" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="564" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="574" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">공유하는 호스트 커널</text>
+<rect x="287" y="564" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="309" y="574" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">사용자 공간 커널</text>
+<rect x="448" y="564" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="470" y="574" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">커널 비공유</text>
 </svg>

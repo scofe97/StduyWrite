@@ -1,91 +1,75 @@
-<svg viewBox="0 0 700 400" width="100%"
-     xmlns="http://www.w3.org/2000/svg"
-     role="img"
-     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>seccomp 의 두 세대와 BPF 필터가 시스템 콜을 판정하는 방식</title>
-  <desc>2005년 커널에 처음 들어간 seccomp 는 이 모드로 전환한 프로세스가 오직 네 가지 시스템 콜만 쓸 수 있게 했습니다. 시그널 핸들러에서 돌아오는 sigreturn, 프로세스를 끝내는 exit, 그리고 전환 전에 이미 열려 있던 파일 디스크립터에 한해서만 쓸 수 있는 read 와 write 입니다. 신뢰할 수 없는 코드를 여기서 돌리면 악의적인 일을 할 수 없었지만 부작용으로 쓸모 있는 일도 거의 할 수 없었습니다. 샌드박스가 지나치게 좁았습니다. 2012년에 seccomp-bpf 가 추가되면서 프로세스마다 프로파일을 가질 수 있게 됐습니다. BPF 필터가 시스템 콜 opcode 와 인자를 보고 프로파일이 그 호출을 허용하는지 판정합니다. 실제로는 오류 반환, 프로세스 종료, 트레이서 호출 같은 동작을 지정하지만 컨테이너 세계에서는 대개 허용 아니면 오류 반환이라 화이트리스트나 블랙리스트로 생각하면 됩니다.</desc>
-
-  <style>
-    .box { fill: #e8e4df; }
-    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
-    .box-detail { fill: #3a3632; font-size: 9.5px; }
-    .code { fill: #0d0d0d; font-size: 9.5px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
-    .chip { fill: #f5edda; }
-    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
-    .hint { fill: #b8b3ad; font-size: 10px; }
-    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
-    .year { fill: #b8b3ad; font-size: 10px; font-weight: 700; }
-    .block-title { fill: #7a1f1f; font-size: 11px; font-weight: 700; }
-    .block-detail { fill: #7a1f1f; font-size: 9.5px; }
-    .ok-detail { fill: #14521d; font-size: 9.5px; }
-  </style>
-
-  <rect width="700" height="400" fill="#0d0d0d"/>
-
-  <defs>
-    <marker id="uh8b" markerWidth="9" markerHeight="9" refX="7" refY="3"
-            orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
-    </marker>
-  </defs>
-
-  <text class="head" x="40" y="30">1세대는 너무 좁았습니다</text>
-
-  <text class="year" x="40" y="52">2005 — seccomp</text>
-  <rect class="box" x="40" y="60" width="270" height="96" rx="4"/>
-  <text class="box-title" x="56" y="80">허용되는 syscall 이 넷뿐</text>
-  <rect class="chip" x="56" y="88" width="70" height="15" rx="3"/>
-  <text class="code" x="60" y="99">sigreturn</text>
-  <rect class="chip" x="132" y="88" width="44" height="15" rx="3"/>
-  <text class="code" x="136" y="99">exit</text>
-  <rect class="chip" x="56" y="108" width="100" height="15" rx="3"/>
-  <text class="code" x="60" y="119">read · write</text>
-  <text class="box-detail" x="162" y="119">이미 열린 fd 에만</text>
-  <text class="box-detail" x="56" y="138">악의적인 일도 못 하지만</text>
-  <text class="box-detail" x="56" y="152">쓸모 있는 일도 못 했습니다</text>
-
-  <path class="arrow" d="M310,108 L340,108" marker-end="url(#uh8b)"/>
-
-  <text class="year" x="348" y="52">2012 — seccomp-bpf</text>
-  <rect class="box" x="348" y="60" width="312" height="96" rx="4"/>
-  <text class="box-title" x="364" y="80">프로세스마다 프로파일</text>
-  <text class="box-detail" x="364" y="99">BPF 로 허용 여부를 판정</text>
-  <text class="box-detail" x="364" y="115">opcode 와 인자를 함께 본다</text>
-  <text class="box-detail" x="364" y="131">동작은 오류·종료·트레이서 호출</text>
-  <text class="box-detail" x="364" y="147">컨테이너에선 사실상 허용 아니면 오류</text>
-
-  <!-- Docker 기본 프로파일 -->
-  <text class="head" x="40" y="188">Docker 기본 프로파일이 막는 것</text>
-
-  <rect class="box" x="40" y="200" width="204" height="106" rx="4"/>
-  <text class="box-title" x="56" y="220">호스트 시계 변경</text>
-  <rect class="chip" x="56" y="228" width="120" height="15" rx="3"/>
-  <text class="code" x="60" y="239">clock_adjtime</text>
-  <rect class="chip" x="56" y="248" width="120" height="15" rx="3"/>
-  <text class="code" x="60" y="259">clock_settime</text>
-  <text class="box-detail" x="56" y="280">컨테이너가 호스트 시계를</text>
-  <text class="box-detail" x="56" y="296">건드릴 이유가 없습니다</text>
-
-  <rect class="box" x="256" y="200" width="204" height="106" rx="4"/>
-  <text class="box-title" x="272" y="220">커널 모듈 조작</text>
-  <rect class="chip" x="272" y="228" width="120" height="15" rx="3"/>
-  <text class="code" x="276" y="239">create_module</text>
-  <rect class="chip" x="272" y="248" width="120" height="15" rx="3"/>
-  <text class="code" x="276" y="259">delete_module</text>
-  <rect class="chip" x="272" y="268" width="120" height="15" rx="3"/>
-  <text class="code" x="276" y="279">init_module</text>
-  <text class="box-detail" x="272" y="298">모듈을 바꿀 일이 없습니다</text>
-
-  <rect class="box" x="472" y="200" width="188" height="106" rx="4"/>
-  <text class="box-title" x="488" y="220">커널 키링</text>
-  <rect class="chip" x="488" y="228" width="100" height="15" rx="3"/>
-  <text class="code" x="492" y="239">request_key</text>
-  <rect class="chip" x="488" y="248" width="70" height="15" rx="3"/>
-  <text class="code" x="492" y="259">keyctl</text>
-  <text class="box-detail" x="488" y="280">키링은 namespace 로</text>
-  <text class="box-detail" x="488" y="296">격리되지 않습니다</text>
-
-  <text class="hint" x="40" y="336">300여 개 중 40여 개를 막습니다</text>
-  <text class="hint" x="40" y="356">이유 없다면 기본을 쓰는 게 낫습니다</text>
-  <text class="hint" x="40" y="376">더 좁히려면 앱별 프로파일이 필요</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 984 724" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">1세대는 허용 목록이 고정이고, seccomp-bpf 는 프로세스마다 프로파일로 판정합니다</title><desc id="dd">시스템 콜이 어느 세대 seccomp 에 걸리는지에서 갈라지는 흐름. 1세대(2005)는 sigreturn, exit, read, write 네 개만 허용해 쓸모 있는 일을 거의 못 한다. seccomp-bpf(2012)는 프로세스마다 BPF 프로파일이 시스템 콜 opcode 와 인자를 보고 허용, 오류 반환, 프로세스 종료, 트레이서 호출 중 하나로 판정한다. 아래 띠는 Docker 기본 프로파일이 막는 호스트 시계, 커널 모듈, 커널 키링 시스템 콜이다.</desc>
+<rect width="984" height="724" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">FLOWCHART · 08-01 §2</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">1세대는 허용 목록이 고정이고, seccomp-bpf 는 프로세스마다 프로파일로 판정합니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">세대가 바뀌며 달라진 것은 판정 단위가 고정 목록에서 프로세스별 프로파일로 옮겨 갔다는 점입니다.</text>
+<rect x="382" y="96" width="220" height="36" rx="18" fill="#161B22" stroke="#BFC0C038" stroke-width="0.9"/>
+<text x="492" y="119" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">프로세스의 시스템 콜</text>
+<path d="M 492 134 L 492 160" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<polygon points="492,164 592,212 492,260 392,212" fill="#F08A591F" stroke="#F08A59" stroke-width="1.6"/>
+<text x="492" y="210" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">seccomp</text>
+<text x="492" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">어느 세대인가</text>
+<path d="M 390 212 L 200 212 L 200 296" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="295.0" y="202" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">1세대 · 2005</text>
+<path d="M 200 374 L 200 400" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="48" y="300" width="304" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="200.0" y="323" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">허용 syscall 4개</text>
+<text x="200.0" y="343" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">sigreturn · exit</text>
+<text x="200.0" y="361" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">read · write — 열려 있던 fd 만</text>
+<rect x="48" y="404" width="304" height="72" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.2"/>
+<text x="200.0" y="436" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">쓸모 있는 일도 거의 불가</text>
+<text x="200.0" y="456" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">지나치게 좁은 샌드박스</text>
+<path d="M 594 212 L 668 212 L 668 296" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="631.0" y="202" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">seccomp-bpf · 2012</text>
+<rect x="400" y="300" width="536" height="72" rx="6" fill="#F08A591F" stroke="#F08A59" stroke-width="1.6"/>
+<text x="668.0" y="332" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">BPF 필터 — 프로세스마다 프로파일</text>
+<text x="668.0" y="352" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">판정 입력: syscall opcode + 호출 인자</text>
+<line x1="668" y1="374" x2="668" y2="396" stroke="#5E6B7E" stroke-width="1.3"/>
+<line x1="484.0" y1="396" x2="852.0" y2="396" stroke="#5E6B7E" stroke-width="1.3"/>
+<path d="M 484.0 396 L 484.0 416" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<path d="M 668.0 396 L 668.0 416" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<path d="M 852.0 396 L 852.0 416" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="400" y="420" width="168" height="64" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="484.0" y="448" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">허용</text>
+<text x="484.0" y="468" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">컨테이너의 주된 동작</text>
+<rect x="584" y="420" width="168" height="64" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.2"/>
+<text x="668.0" y="448" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">오류 반환</text>
+<text x="668.0" y="468" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">컨테이너의 주된 동작</text>
+<rect x="768" y="420" width="168" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="852.0" y="448" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">종료 · 트레이서 호출</text>
+<text x="852.0" y="468" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">컨테이너에선 드묾</text>
+<path d="M 668.0 486 L 668.0 516" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#bad)"/>
+<rect x="48" y="520" width="888" height="152" rx="8" fill="none" stroke="#BFC0C038" stroke-width="0.9" stroke-dasharray="6 5"/>
+<text x="64" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">Docker 기본 프로파일</text>
+<text x="920" y="546" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">syscall 300개+ 중 40개+ 차단</text>
+<rect x="64" y="564" width="274" height="92" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.0"/>
+<text x="201.0" y="590" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">호스트 시계 변경</text>
+<text x="201.0" y="614" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">clock_adjtime</text>
+<text x="201.0" y="634" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">clock_settime</text>
+<rect x="354" y="564" width="274" height="92" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.0"/>
+<text x="491.0" y="590" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">커널 모듈 조작</text>
+<text x="491.0" y="614" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">create_module · delete_module</text>
+<text x="491.0" y="634" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">init_module</text>
+<rect x="644" y="564" width="274" height="92" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.0"/>
+<text x="781.0" y="590" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">커널 키링 접근</text>
+<text x="781.0" y="614" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">request_key · keyctl</text>
+<text x="781.0" y="634" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">namespace 로 격리 안 됨</text>
+<line x1="12" y1="680" x2="936" y2="680" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="702" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="692" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="702" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">갈림 · 판정 필터</text>
+<rect x="274" y="692" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="296" y="702" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">허용</text>
+<rect x="344" y="692" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="366" y="702" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">차단</text>
 </svg>

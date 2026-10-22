@@ -1,68 +1,94 @@
-<svg viewBox="0 0 640 430" width="100%"
-     xmlns="http://www.w3.org/2000/svg"
-     role="img"
-     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>namespace와 루트 디렉토리로 격리를 만드는 흐름</title>
-  <desc>cgroup이 쓸 수 있는 양을 정한다면 namespace는 볼 수 있는 것을 정합니다. 먼저 namespace가 무엇이고 어떤 종류가 있는지 봅니다. 다음으로 호스트명을 격리하는 UTS namespace를 실습하고, 이어서 프로세스 ID를 격리합니다. 그런데 PID namespace만으로는 ps 출력이 격리되지 않는데, ps가 proc 디렉토리를 읽기 때문입니다. 그래서 루트 디렉토리를 바꿔 자기만의 proc을 갖게 하고, 마지막으로 mount namespace까지 결합해야 온전한 격리가 됩니다.</desc>
-
-  <style>
-    .box { fill: #e8e4df; }
-    .box-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
-    .box-detail { fill: #3a3632; font-size: 10.5px; }
-    .sec { fill: #3a3632; font-size: 10px; font-weight: 700; }
-    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
-    .num { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
-    .hint { fill: #b8b3ad; font-size: 10.5px; }
-    .caution-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
-    .caution-detail { fill: #0d0d0d; font-size: 10.5px; }
-  </style>
-
-  <rect width="640" height="430" fill="#0d0d0d"/>
-
-  <defs>
-    <marker id="jh" markerWidth="9" markerHeight="9" refX="7" refY="3"
-            orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
-    </marker>
-  </defs>
-
-  <text class="num" x="34" y="45">1.</text>
-  <rect class="box" x="54" y="24" width="532" height="50" rx="4"/>
-  <text class="box-title" x="72" y="46">namespace란 무엇인가</text>
-  <text class="box-detail" x="72" y="64">cgroup은 양 · ns는 시야</text>
-  <text class="sec" x="566" y="46" text-anchor="end">§1</text>
-
-  <path class="arrow" d="M320,74 L320,92" marker-end="url(#jh)"/>
-
-  <text class="num" x="34" y="119">2.</text>
-  <rect class="box" x="54" y="98" width="532" height="50" rx="4"/>
-  <text class="box-title" x="72" y="120">호스트명 격리 — UTS</text>
-  <text class="box-detail" x="72" y="138">unshare --uts 로 확인</text>
-  <text class="sec" x="566" y="120" text-anchor="end">§2</text>
-
-  <path class="arrow" d="M320,148 L320,166" marker-end="url(#jh)"/>
-
-  <text class="num" x="34" y="193">3.</text>
-  <rect x="54" y="172" width="532" height="54" rx="4" fill="rgb(212,168,83)"/>
-  <text class="caution-title" x="72" y="194">주의 · PID 격리만으론 부족</text>
-  <text class="caution-detail" x="72" y="214">ps는 /proc을 읽는다</text>
-  <text class="sec" x="566" y="194" text-anchor="end">§3</text>
-
-  <path class="arrow" d="M320,226 L320,244" marker-end="url(#jh)"/>
-
-  <text class="hint" x="320" y="260" text-anchor="middle">그래서 루트를 바꿔야 한다</text>
-
-  <text class="num" x="34" y="299">4.</text>
-  <rect class="box" x="54" y="274" width="532" height="52" rx="4"/>
-  <text class="box-title" x="72" y="298">루트 디렉토리 변경</text>
-  <text class="box-detail" x="72" y="316">chroot · pivot_root</text>
-  <text class="sec" x="566" y="298" text-anchor="end">§4</text>
-
-  <path class="arrow" d="M320,326 L320,344" marker-end="url(#jh)"/>
-
-  <text class="num" x="34" y="373">5.</text>
-  <rect class="box" x="54" y="352" width="532" height="52" rx="4"/>
-  <text class="box-title" x="72" y="376">셋을 결합해야 격리</text>
-  <text class="box-detail" x="72" y="394">PID + 루트 + proc 마운트</text>
-  <text class="sec" x="566" y="376" text-anchor="end">§5</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 984 664" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">ps 를 격리하려면 PID namespace 에 새 루트와 proc 마운트를 겹쳐야 합니다</title><desc id="dd">04-01 의 키워드 개념도. 첫 줄은 namespace 종류 중 UTS 를 unshare --uts sh 로 만들어 호스트명을 바꾸는 흐름이다. 둘째 줄은 unshare --pid 의 Cannot fork 와 --fork 뒤에도 호스트 프로세스가 보이는 ps 가 /proc 으로 이어지는 흐름이다. 셋째 줄은 chroot alpine 으로 루트를 바꾼 뒤 mount -t proc proc /proc 를 하면 ps 가 자기 프로세스만 보여 주는 흐름이다. 넷째 줄은 같은 구조가 mount namespace 의 bind 마운트에도 되풀이되는 흐름이다.</desc>
+<rect width="984" height="664" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">ARCHITECTURE · 04-01 OVERVIEW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">ps 를 격리하려면 PID namespace 에 새 루트와 proc 마운트를 겹쳐야 합니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">화살표 위 글자는 두 키워드의 관계, 왼쪽 칩은 그 줄을 다루는 절입니다.</text>
+<rect x="16.36" y="130.0" width="35.28" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="144.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">§1~2</text>
+<rect x="23.18" y="258.0" width="21.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="272.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">§3</text>
+<rect x="16.36" y="386.0" width="35.28" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="400.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">§4~5</text>
+<rect x="23.18" y="514.0" width="21.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="528.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">§5</text>
+<rect x="60" y="112" width="216" height="64" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="168.0" y="139" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">namespace 일곱 종류</text>
+<text x="168.0" y="160" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">볼 수 있는 것을 통제</text>
+<rect x="400" y="112" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="508.0" y="139" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">UTS namespace</text>
+<text x="508.0" y="160" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">unshare --uts sh</text>
+<rect x="740" y="112" width="216" height="64" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="848.0" y="139" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">호스트명 격리</text>
+<text x="848.0" y="160" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">hostname experiment</text>
+<path d="M 278 144.0 L 396 144.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="338.0" y="135.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">종류 하나</text>
+<path d="M 618 144.0 L 736 144.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="678.0" y="135.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">이름 변경</text>
+<path d="M 848.0 178 L 848.0 208 L 168.0 208 L 168.0 236" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="508.0" y="201" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">프로세스 격리로 넘어감</text>
+<rect x="60" y="240" width="216" height="64" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="168.0" y="267" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F0616D">unshare --pid</text>
+<text x="168.0" y="288" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Cannot fork</text>
+<rect x="400" y="240" width="216" height="64" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.1"/>
+<text x="508.0" y="267" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#E3B341">unshare --pid --fork</text>
+<text x="508.0" y="288" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">ps 가 호스트 전체 출력</text>
+<rect x="740" y="240" width="216" height="64" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<text x="848.0" y="267" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">/proc</text>
+<text x="848.0" y="288" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">ps 가 읽는 가상 파일</text>
+<path d="M 278 272.0 L 396 272.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="338.0" y="263.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">--fork 추가</text>
+<path d="M 618 272.0 L 736 272.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="678.0" y="263.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">원인 추적</text>
+<path d="M 848.0 306 L 848.0 336 L 168.0 336 L 168.0 364" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="508.0" y="329" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">루트를 바꿔 /proc 교체</text>
+<rect x="60" y="368" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="168.0" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">chroot alpine</text>
+<text x="168.0" y="416" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">새 루트 · pivot_root 가 안전</text>
+<rect x="400" y="368" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="508.0" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">mount -t proc proc /proc</text>
+<text x="508.0" y="416" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">새 루트의 /proc 채움</text>
+<rect x="740" y="368" width="216" height="64" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="848.0" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">ps</text>
+<text x="848.0" y="416" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">자기 PID namespace 만</text>
+<path d="M 278 400.0 L 396 400.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="338.0" y="391.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">루트 변경 후</text>
+<path d="M 618 400.0 L 736 400.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="678.0" y="391.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">결과</text>
+<path d="M 848.0 434 L 848.0 464 L 168.0 464 L 168.0 492" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="508.0" y="457" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">mount 도 같은 구조</text>
+<rect x="60" y="496" width="216" height="64" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="168.0" y="523" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">unshare --mount sh</text>
+<text x="168.0" y="544" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">mount namespace</text>
+<rect x="400" y="496" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="508.0" y="523" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">mount --bind</text>
+<text x="508.0" y="544" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">source 를 target 에</text>
+<rect x="740" y="496" width="216" height="64" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="848.0" y="523" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">호스트에 안 보임</text>
+<text x="848.0" y="544" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">docker run -v 도 같은 원리</text>
+<path d="M 278 528.0 L 396 528.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="338.0" y="519.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">bind 마운트</text>
+<path d="M 618 528.0 L 736 528.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="678.0" y="519.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">결과</text>
+<line x1="12" y1="600" x2="936" y2="600" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="622" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="612" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="122" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">실패</text>
+<rect x="170" y="612" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="192" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">누수</text>
+<rect x="240" y="612" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="262" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">핵심 접점</text>
+<rect x="349" y="612" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="371" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">격리 성공</text>
+<rect x="458" y="612" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="480" y="622" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">namespace</text>
 </svg>

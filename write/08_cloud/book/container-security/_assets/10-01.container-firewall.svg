@@ -1,87 +1,53 @@
-<svg viewBox="0 0 700 380" width="100%"
-     xmlns="http://www.w3.org/2000/svg"
-     role="img"
-     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>컨테이너 방화벽이 전통적 방화벽보다 세밀한 이유</title>
-  <desc>컨테이너는 마이크로서비스 아키텍처와 함께 가는 경우가 많습니다. 애플리케이션이 서로 독립적으로 배포되는 작은 구성 요소로 쪼개지면 보안 관점에서 실질적 이점이 생깁니다. 작은 구성 요소에서는 정상 동작이 무엇인지 정의하기가 훨씬 쉽기 때문입니다. 어떤 컨테이너든 통신해야 할 상대는 제한된 집합뿐이고 바깥 세상과 접촉해야 하는 컨테이너는 일부에 불과합니다. 전자상거래 애플리케이션을 예로 들면 상품 검색 요청을 처리하는 마이크로서비스는 최종 사용자의 검색 요청을 받아 상품 데이터베이스에서 조회합니다. 이 서비스를 이루는 컨테이너가 결제 게이트웨이와 통신할 이유는 없습니다. 컨테이너 방화벽은 이런 트래픽을 승인된 목적지로만 흐르게 제한하고 규칙 밖의 연결 시도를 보고해 공격 조사에 쓸 근거를 남깁니다.</desc>
-
-  <style>
-    .box { fill: #e8e4df; }
-    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
-    .box-detail { fill: #3a3632; font-size: 9.5px; }
-    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
-    .hint { fill: #b8b3ad; font-size: 10px; }
-    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
-    .blocked { stroke: #7a1f1f; stroke-width: 1.5; fill: none; stroke-dasharray: 4 3; }
-    .block-label { fill: #7a1f1f; font-size: 9.5px; font-weight: 700; }
-    .ok-label { fill: #14521d; font-size: 9.5px; font-weight: 700; }
-    .allow { stroke: #14521d; stroke-width: 1.5; fill: none; }
-  </style>
-
-  <rect width="700" height="380" fill="#0d0d0d"/>
-
-  <defs>
-    <marker id="uh10" markerWidth="9" markerHeight="9" refX="7" refY="3"
-            orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
-    </marker>
-    <marker id="gn10" markerWidth="9" markerHeight="9" refX="7" refY="3"
-            orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L7,3 z" fill="#14521d"/>
-    </marker>
-    <marker id="rd10" markerWidth="9" markerHeight="9" refX="7" refY="3"
-            orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L7,3 z" fill="#7a1f1f"/>
-    </marker>
-  </defs>
-
-  <text class="head" x="40" y="30">작을수록 정상을 정의하기 쉽습니다</text>
-
-  <!-- 사용자 -->
-  <rect class="box" x="40" y="52" width="130" height="52" rx="4"/>
-  <text class="box-title" x="56" y="74">최종 사용자</text>
-  <text class="box-detail" x="56" y="92">검색 요청을 보낸다</text>
-
-  <path class="allow" d="M170,78 L212,78" marker-end="url(#gn10)"/>
-
-  <!-- 검색 서비스 -->
-  <rect class="box" x="216" y="52" width="150" height="52" rx="4"/>
-  <text class="box-title" x="232" y="74">상품 검색 서비스</text>
-  <text class="box-detail" x="232" y="92">질의를 받아 조회한다</text>
-
-  <path class="allow" d="M366,78 L408,78" marker-end="url(#gn10)"/>
-  <text class="ok-label" x="370" y="70">허용</text>
-
-  <!-- 상품 DB -->
-  <rect class="box" x="412" y="52" width="150" height="52" rx="4"/>
-  <text class="box-title" x="428" y="74">상품 데이터베이스</text>
-  <text class="box-detail" x="428" y="92">검색 결과를 돌려준다</text>
-
-  <!-- 결제 게이트웨이 -->
-  <rect class="box" x="216" y="160" width="150" height="52" rx="4"/>
-  <text class="box-title" x="232" y="182">결제 게이트웨이</text>
-  <text class="box-detail" x="232" y="200">돈이 오가는 경로</text>
-
-  <path class="blocked" d="M291,104 L291,156" marker-end="url(#rd10)"/>
-  <text class="block-label" x="300" y="134">통신할 이유가 없다</text>
-
-  <!-- 원칙 -->
-  <text class="head" x="40" y="252">함께 쓰는 전통적 수단</text>
-
-  <rect class="box" x="40" y="264" width="196" height="76" rx="4"/>
-  <text class="box-title" x="56" y="285">VPC</text>
-  <text class="box-detail" x="56" y="304">호스트를 바깥 세상과</text>
-  <text class="box-detail" x="56" y="322">분리해 둡니다</text>
-
-  <rect class="box" x="252" y="264" width="196" height="76" rx="4"/>
-  <text class="box-title" x="268" y="285">클러스터 방화벽</text>
-  <text class="box-detail" x="268" y="304">클러스터 전체를 감싸</text>
-  <text class="box-detail" x="268" y="322">드나드는 트래픽을 통제</text>
-
-  <rect class="box" x="464" y="264" width="196" height="76" rx="4"/>
-  <text class="box-title" x="480" y="285">API 방화벽 · WAF</text>
-  <text class="box-detail" x="480" y="304">7계층에서 제한한다</text>
-  <text class="box-detail" x="480" y="322">새로운 기술은 아닙니다</text>
-
-  <text class="hint" x="40" y="368">컨테이너 인지 보안과 겹쳐 씁니다</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 496" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">상품 검색 컨테이너가 말할 상대는 둘뿐이고, 나머지는 이유 없음이 곧 규칙입니다</title><desc id="dd">최종 사용자의 검색 요청이 상품 검색 컨테이너로 들어가고, 검색 컨테이너는 상품 데이터베이스를 조회한다. 검색 컨테이너에서 결제 게이트웨이로 향하는 경로는 컨테이너 방화벽이 차단하고, 규칙 밖 연결 시도는 보고된다.</desc>
+<rect width="960" height="496" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">ARCHITECTURE · 10-01 §1</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">상품 검색 컨테이너가 말할 상대는 둘뿐이고, 나머지는 이유 없음이 곧 규칙입니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">컨테이너 방화벽은 승인된 목적지로만 트래픽이 흐르게 제한합니다.</text>
+<rect x="336" y="100" width="288" height="200" rx="8" fill="none" stroke="rgba(191,192,192,0.22)" stroke-width="1" stroke-dasharray="5 5"/>
+<text x="352" y="126" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">컨테이너 방화벽</text>
+<text x="352" y="144" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">네트워크 정책</text>
+<path d="M 232 200 L 364 200" fill="none" stroke="#3FB98C" stroke-width="1.6" marker-end="url(#ok)"/>
+<path d="M 592 200 L 724 200" fill="none" stroke="#3FB98C" stroke-width="1.6" marker-end="url(#ok)"/>
+<text x="298" y="188" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">검색 요청</text>
+<text x="658" y="188" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">조회</text>
+<path d="M 480 240 L 480 336" fill="none" stroke="#F0616D" stroke-width="1.8" marker-end="url(#bad)" stroke-dasharray="5 4"/>
+<path d="M 504 316 L 816 316 L 816 340" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)" stroke-dasharray="5 4"/>
+<text x="496" y="284" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">통신할 이유 없음</text>
+<rect x="56" y="164" width="176" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="144.0" y="196.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">최종 사용자</text>
+<text x="144.0" y="216.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">검색 요청 발신</text>
+<rect x="368" y="164" width="224" height="72" rx="6" fill="#F08A591F" stroke="#F08A59" stroke-width="1.6"/>
+<text x="480.0" y="196.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">상품 검색 컨테이너</text>
+<text x="480.0" y="216.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">마이크로서비스 하나</text>
+<rect x="728" y="164" width="176" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="816.0" y="196.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">상품 데이터베이스</text>
+<text x="816.0" y="216.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">조회 대상</text>
+<rect x="368" y="340" width="224" height="64" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="480.0" y="368.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F0616D">결제 게이트웨이</text>
+<text x="480.0" y="388.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">통신 이유 없음</text>
+<rect x="728" y="340" width="176" height="64" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="816.0" y="368.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#E3B341">연결 시도 보고</text>
+<text x="816.0" y="388.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">조사 근거로 남음</text>
+<rect x="460.0" y="306" width="40.0" height="20" rx="4" fill="#0D1117" stroke="#F0616D" stroke-width="0.8"/>
+<text x="480" y="320" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#F0616D">차단</text>
+<line x1="12" y1="448" x2="912" y2="448" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="470" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="460" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="470" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">허용 경로</text>
+<rect x="209" y="460" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="231" y="470" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">차단 경로</text>
+<rect x="318" y="460" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="340" y="470" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">보고</text>
+<rect x="388" y="460" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="410" y="470" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 동작을 정의한 단위</text>
 </svg>

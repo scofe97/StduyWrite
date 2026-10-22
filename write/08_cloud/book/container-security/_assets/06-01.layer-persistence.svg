@@ -1,87 +1,46 @@
-<svg viewBox="0 0 700 450" width="100%"
-     xmlns="http://www.w3.org/2000/svg"
-     role="img"
-     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>위층에서 파일을 지워도 아래층에는 그대로 남는다</title>
-  <desc>Dockerfile의 각 줄은 하나의 층을 만듭니다. 한 층에서 비밀 파일을 만들고 다음 층에서 그것을 지우면, 컨테이너를 실행했을 때는 파일이 보이지 않습니다. 그러나 층은 각각 따로 저장되므로 파일을 만든 아래층은 그대로 남아 있습니다. 이미지를 tar로 내보내 풀면 그 층의 내용에서 지웠던 파일을 그대로 꺼낼 수 있습니다. 게다가 이미지 설정에는 빌드에 쓰인 명령 이력이 남아, 비밀 값이 명령줄에 있었다면 그것까지 드러납니다.</desc>
-
-  <style>
-    .box { fill: #e8e4df; }
-    .box-title { fill: #0d0d0d; font-size: 12.5px; font-weight: 700; }
-    .box-detail { fill: #3a3632; font-size: 10px; }
-    .cmd { fill: #0d0d0d; font-size: 10px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
-    .chip { fill: #f5edda; }
-    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
-    .hint { fill: #b8b3ad; font-size: 10px; }
-    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
-    .danger-title { fill: #7a1f1f; font-size: 12.5px; font-weight: 700; }
-    .danger-cmd { fill: #7a1f1f; font-size: 10px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
-    .danger-detail { fill: #7a1f1f; font-size: 10px; }
-  </style>
-
-  <rect width="700" height="450" fill="#0d0d0d"/>
-
-  <defs>
-    <marker id="rh" markerWidth="9" markerHeight="9" refX="7" refY="3"
-            orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
-    </marker>
-  </defs>
-
-  <text class="head" x="40" y="30">Dockerfile 한 줄이 한 층</text>
-
-  <!-- 층 스택 -->
-  <rect class="box" x="40" y="42" width="300" height="42" rx="4"/>
-  <rect class="chip" x="54" y="52" width="180" height="18" rx="3"/>
-  <text class="cmd" x="60" y="65">RUN rm /password.txt</text>
-  <text class="box-detail" x="54" y="79">3층 · 삭제 표시만 남긴다</text>
-
-  <rect class="box" x="40" y="92" width="300" height="42" rx="4"/>
-  <rect class="chip" x="54" y="102" width="250" height="18" rx="3"/>
-  <text class="cmd" x="60" y="115">RUN echo "top-secret" &gt; /password.txt</text>
-  <text class="box-detail" x="54" y="129">2층 · 여기에 값이 들어간다</text>
-
-  <rect class="box" x="40" y="142" width="300" height="42" rx="4"/>
-  <rect class="chip" x="54" y="152" width="110" height="18" rx="3"/>
-  <text class="cmd" x="60" y="165">FROM alpine</text>
-  <text class="box-detail" x="54" y="179">1층 · 베이스 이미지</text>
-
-  <!-- 실행 시 -->
-  <text class="head" x="380" y="30">컨테이너를 실행하면</text>
-
-  <rect class="box" x="380" y="42" width="280" height="66" rx="4"/>
-  <text class="box-title" x="396" y="64">파일이 안 보인다</text>
-  <rect class="chip" x="396" y="74" width="240" height="18" rx="3"/>
-  <text class="cmd" x="402" y="87">ls: /password.txt: No such file</text>
-  <text class="box-detail" x="396" y="102">여기서 안심하면 안 됩니다</text>
-
-  <path class="arrow" d="M520,108 L520,130" marker-end="url(#rh)"/>
-
-  <!-- 그런데 tar로 풀면 -->
-  <rect class="box" x="380" y="136" width="280" height="72" rx="4"/>
-  <text class="box-title" x="396" y="158">그런데 tar로 풀어 보면</text>
-  <rect class="chip" x="396" y="168" width="200" height="18" rx="3"/>
-  <text class="cmd" x="402" y="181">docker save sensitive &gt; s.tar</text>
-  <text class="box-detail" x="396" y="202">층마다 layer.tar 가 있다</text>
-
-  <path class="arrow" d="M340,163 L380,163"/>
-
-  <!-- 결과: 위험 -->
-  <rect x="40" y="228" width="620" height="76" rx="4" fill="#f2d4d4"/>
-  <text class="danger-title" x="56" y="250">위험 · 2층에서 꺼낼 수 있다</text>
-  <rect class="chip" x="56" y="260" width="190" height="18" rx="3"/>
-  <text class="danger-cmd" x="62" y="273">tar -xf 55*/layer.tar</text>
-  <rect class="chip" x="256" y="260" width="130" height="18" rx="3"/>
-  <text class="danger-cmd" x="262" y="273">cat password.txt</text>
-  <text class="danger-detail" x="56" y="294">존재했던 파일은 다 복원된다</text>
-
-  <!-- 이력까지 -->
-  <rect x="40" y="316" width="620" height="66" rx="4" fill="rgb(212,168,83)"/>
-  <text class="box-title" x="56" y="338">주의 · 명령 이력까지 남는다</text>
-  <rect class="chip" x="56" y="348" width="300" height="18" rx="3"/>
-  <text class="cmd" x="62" y="361">"created_by": "... echo \"top-secret\" ..."</text>
-  <text class="box-detail" x="56" y="376">history 에 빌드 명령이 남는다</text>
-
-  <text class="hint" x="40" y="410">보여도 되는 것만 넣는다</text>
-  <text class="hint" x="40" y="430">시크릿 전달은 12장에서</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 984 484" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">위층에서 지워도 아래층의 password.txt 는 layer.tar 에 그대로 있습니다</title><desc id="dd">Dockerfile 세 줄이 층 세 개가 된다. 층 2 가 password.txt 를 만들고 층 3 이 rm 으로 지우면, 실행한 컨테이너에서는 ls 가 No such file 을 내지만 docker save 로 꺼낸 55*/layer.tar 에는 top-secret 이 남아 있다.</desc>
+<rect width="984" height="484" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">CONTAINER SECURITY · 06-01 §4</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">위층에서 지워도 아래층의 password.txt 는 layer.tar 에 그대로 있습니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">층은 각각 따로 저장되므로 한 층의 삭제 표시가 다른 층의 내용을 지우지 못합니다.</text>
+<rect x="48" y="120" width="500" height="72" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.1"/>
+<text x="64" y="140" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">층 3</text>
+<text x="64" y="162" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#E3B341">RUN rm /password.txt</text>
+<text x="64" y="182" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">/password.txt 삭제 표시</text>
+<rect x="48" y="216" width="500" height="72" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<text x="64" y="236" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">층 2</text>
+<text x="64" y="258" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">RUN echo "top-secret" &gt; /password.txt</text>
+<text x="64" y="278" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">/password.txt 파일 생성</text>
+<rect x="48" y="312" width="500" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="64" y="332" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">층 1</text>
+<text x="64" y="354" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">FROM alpine</text>
+<text x="64" y="374" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">alpine 루트 파일시스템</text>
+<rect x="656" y="120" width="288" height="72" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.1"/>
+<text x="668" y="148" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">docker run ... ls /password.txt</text>
+<text x="668" y="172" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#E3B341">No such file or directory</text>
+<path d="M 552 156.0 L 652 156.0" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<text x="602.0" y="147.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">합쳐 본 결과</text>
+<rect x="656" y="216" width="288" height="72" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="668" y="244" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">docker save → tar -xf 55*/layer.tar</text>
+<text x="668" y="268" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F0616D">cat password.txt → top-secret</text>
+<path d="M 552 252.0 L 652 252.0" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#bad)"/>
+<text x="602.0" y="243.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">층째로 꺼냄</text>
+<line x1="12" y1="412" x2="936" y2="412" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="434" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="424" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="122" y="434" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">삭제 표시</text>
+<rect x="209" y="424" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="231" y="434" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">파일이 남은 층</text>
+<rect x="357" y="424" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="379" y="434" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">꺼낸 결과</text>
 </svg>

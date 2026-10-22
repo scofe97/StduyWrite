@@ -1,99 +1,79 @@
-<svg viewBox="0 0 700 470" width="100%"
-     xmlns="http://www.w3.org/2000/svg"
-     role="img"
-     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>컨테이너 생애주기와 공격 벡터 9종</title>
-  <desc>개발자가 코드를 쓰고, 그 코드가 이미지로 빌드되고, 이미지가 레지스트리에 저장됐다가, 호스트에서 컨테이너로 실행되는 네 단계를 가로축으로 둡니다. 각 단계마다 그 시점에 성립하는 공격 벡터를 아래에 붙였고, 벡터마다 책의 어느 장에서 다루는지를 함께 적었습니다. 마지막 컨테이너 이스케이프는 격리 자체가 뚫리는 경우라 위험 색으로 구분했습니다.</desc>
-
-  <style>
-    .box { fill: #e8e4df; }
-    .box-title { fill: #0d0d0d; font-size: 12px; font-weight: 700; }
-    .box-detail { fill: #3a3632; font-size: 10px; }
-    .stage { fill: #e8e4df; font-size: 12.5px; font-weight: 700; }
-    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
-    .tick { stroke: #b8b3ad; stroke-width: 1; fill: none; }
-    .hint { fill: #b8b3ad; font-size: 10px; }
-    .ch { fill: #3a3632; font-size: 9.5px; font-weight: 700; }
-    .danger-title { fill: #7a1f1f; font-size: 12px; font-weight: 700; }
-    .danger-detail { fill: #7a1f1f; font-size: 10px; }
-    .danger-ch { fill: #7a1f1f; font-size: 9.5px; font-weight: 700; }
-  </style>
-
-  <rect width="700" height="470" fill="#0d0d0d"/>
-
-  <defs>
-    <marker id="ah2" markerWidth="9" markerHeight="9" refX="7" refY="3"
-            orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
-    </marker>
-  </defs>
-
-  <!-- 생애주기 축 -->
-  <text class="stage" x="60" y="38">코드</text>
-  <text class="stage" x="222" y="38">이미지 빌드</text>
-  <text class="stage" x="400" y="38">레지스트리</text>
-  <text class="stage" x="560" y="38">실행 · 호스트</text>
-
-  <path class="arrow" d="M40,52 L660,52" marker-end="url(#ah2)"/>
-  <path class="tick" d="M60,48 L60,62"/>
-  <path class="tick" d="M240,48 L240,62"/>
-  <path class="tick" d="M420,48 L420,62"/>
-  <path class="tick" d="M580,48 L580,62"/>
-
-  <!-- 1. 취약한 앱 코드 -->
-  <rect class="box" x="30" y="80" width="180" height="52" rx="4"/>
-  <text class="box-title" x="44" y="102">취약한 앱 코드</text>
-  <text class="box-detail" x="44" y="120">의존성의 공개 취약점</text>
-  <text class="ch" x="196" y="102" text-anchor="end">7장</text>
-
-  <!-- 2. 잘못 설정된 이미지 -->
-  <rect class="box" x="230" y="80" width="180" height="52" rx="4"/>
-  <text class="box-title" x="244" y="102">잘못 설정된 이미지</text>
-  <text class="box-detail" x="244" y="120">root 실행 · 과도한 권한</text>
-  <text class="ch" x="396" y="102" text-anchor="end">6장</text>
-
-  <!-- 3. 빌드 머신 공격 -->
-  <rect class="box" x="230" y="146" width="180" height="52" rx="4"/>
-  <text class="box-title" x="244" y="168">빌드 머신 공격</text>
-  <text class="box-detail" x="244" y="186">빌드에 악성 코드 주입</text>
-  <text class="ch" x="396" y="168" text-anchor="end">6장</text>
-
-  <!-- 4. 공급망 공격 -->
-  <rect class="box" x="430" y="80" width="180" height="52" rx="4"/>
-  <text class="box-title" x="444" y="102">공급망 공격</text>
-  <text class="box-detail" x="444" y="120">푸시한 것과 다른 이미지</text>
-  <text class="ch" x="596" y="102" text-anchor="end">6장</text>
-
-  <!-- 5. 잘못 설정된 컨테이너 -->
-  <rect class="box" x="430" y="146" width="180" height="52" rx="4"/>
-  <text class="box-title" x="444" y="168">잘못 설정된 컨테이너</text>
-  <text class="box-detail" x="444" y="186">불필요한 권한 부여</text>
-  <text class="ch" x="596" y="168" text-anchor="end">9장</text>
-
-  <!-- 6. 취약한 호스트 -->
-  <rect class="box" x="430" y="212" width="180" height="52" rx="4"/>
-  <text class="box-title" x="444" y="234">취약한 호스트</text>
-  <text class="box-detail" x="444" y="252">구버전 오케스트레이터</text>
-  <text class="ch" x="596" y="234" text-anchor="end">4장</text>
-
-  <!-- 7. 노출된 시크릿 -->
-  <rect class="box" x="430" y="278" width="180" height="52" rx="4"/>
-  <text class="box-title" x="444" y="300">노출된 시크릿</text>
-  <text class="box-detail" x="444" y="318">자격증명 전달 방식</text>
-  <text class="ch" x="596" y="300" text-anchor="end">12장</text>
-
-  <!-- 8. 안전하지 않은 네트워킹 -->
-  <rect class="box" x="430" y="344" width="180" height="52" rx="4"/>
-  <text class="box-title" x="444" y="366">안전하지 않은 네트워킹</text>
-  <text class="box-detail" x="444" y="384">컨테이너 간 통신 노출</text>
-  <text class="ch" x="596" y="366" text-anchor="end">10 · 11장</text>
-
-  <!-- 9. 컨테이너 이스케이프 — 위험 -->
-  <rect x="430" y="410" width="180" height="52" rx="4" fill="#f2d4d4"/>
-  <text class="danger-title" x="444" y="432">컨테이너 이스케이프</text>
-  <text class="danger-detail" x="444" y="450">격리를 뚫고 호스트로</text>
-  <text class="danger-ch" x="596" y="432" text-anchor="end">4 · 8장</text>
-
-  <text class="hint" x="30" y="440">벡터는 단계마다 쌓인다</text>
-  <text class="hint" x="30" y="456">실행 단계에 가장 많다</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 984 556" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">공격 벡터 9종은 생애주기 네 단계에 걸치고 실행 단계에 가장 몰립니다</title><desc id="dd">컨테이너 생애주기는 코드, 이미지 빌드, 레지스트리 보관, 실행의 네 단계다. 코드에 1번, 빌드에 2·3번, 레지스트리에 4번 공급망 공격이 있고, 실행 단계에는 설정·호스트·시크릿·네트워킹·이스케이프 다섯이 몰린다. 카드 끝의 장 번호는 책이 그 주제를 다루는 곳이다.</desc>
+<rect width="984" height="556" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">PROCESS · 01-01 §2</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">공격 벡터 9종은 생애주기 네 단계에 걸치고 실행 단계에 가장 몰립니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">카드의 번호는 책이 부르는 벡터 순서, 장 번호는 그 주제를 본격적으로 다루는 장입니다.</text>
+<rect x="36" y="108" width="204" height="56" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="52" y="130" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">단계 1</text>
+<text x="138.0" y="134" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">코드</text>
+<text x="138.0" y="154" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">개발자가 씀</text>
+<path d="M 242 136 L 268 136" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="36" y="188" width="204" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="52" y="208" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">1</text>
+<text x="70" y="208" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">취약한 애플리케이션 코드</text>
+<text x="70" y="226" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">이미지 스캐닝 · 7장</text>
+<rect x="272" y="108" width="204" height="56" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="288" y="130" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">단계 2</text>
+<text x="374.0" y="134" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">빌드</text>
+<text x="374.0" y="154" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">이미지로 만듦</text>
+<path d="M 478 136 L 504 136" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="272" y="188" width="204" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="288" y="208" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">2</text>
+<text x="306" y="208" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">잘못 설정된 이미지</text>
+<text x="306" y="226" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">root 로 실행 설정 · 6장</text>
+<rect x="272" y="248" width="204" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="288" y="268" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">3</text>
+<text x="306" y="268" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">빌드 머신 공격</text>
+<text x="306" y="286" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">빌드 과정 조작 · 6장</text>
+<rect x="508" y="108" width="204" height="56" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="524" y="130" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">단계 3</text>
+<text x="610.0" y="134" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">레지스트리</text>
+<text x="610.0" y="154" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">저장 후 당겨옴</text>
+<path d="M 714 136 L 740 136" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="508" y="188" width="204" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="524" y="208" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">4</text>
+<text x="542" y="208" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">공급망 공격</text>
+<text x="542" y="226" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">바꿔치기 · 변조 · 6장</text>
+<rect x="744" y="108" width="204" height="56" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.2"/>
+<text x="760" y="130" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">단계 4</text>
+<text x="846.0" y="134" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">실행</text>
+<text x="846.0" y="154" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">호스트에서 가동</text>
+<rect x="744" y="188" width="204" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="760" y="208" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#E3B341">5</text>
+<text x="778" y="208" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">잘못 설정된 컨테이너</text>
+<text x="778" y="226" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">불필요한 권한 · 9장</text>
+<rect x="744" y="248" width="204" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="760" y="268" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#E3B341">6</text>
+<text x="778" y="268" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">취약한 호스트</text>
+<text x="778" y="286" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">구버전 컴포넌트 · 4장</text>
+<rect x="744" y="308" width="204" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="760" y="328" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#E3B341">7</text>
+<text x="778" y="328" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">노출된 시크릿</text>
+<text x="778" y="346" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">자격증명 · 토큰 · 12장</text>
+<rect x="744" y="368" width="204" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="760" y="388" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#E3B341">8</text>
+<text x="778" y="388" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">안전하지 않은 네트워킹</text>
+<text x="778" y="406" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">네트워킹 10장 · 11장</text>
+<rect x="744" y="428" width="204" height="48" rx="6" fill="#F08A591F" stroke="#F08A59" stroke-width="1.6"/>
+<text x="760" y="448" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">9</text>
+<text x="778" y="448" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">컨테이너 이스케이프</text>
+<text x="778" y="466" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">격리 4장 · 강화 8장</text>
+<line x1="12" y1="500" x2="936" y2="500" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="522" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="512" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="522" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">코드·빌드·보관 중</text>
+<rect x="274" y="512" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="296" y="522" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">실행 중</text>
+<rect x="370" y="512" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="392" y="522" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">이스케이프</text>
 </svg>

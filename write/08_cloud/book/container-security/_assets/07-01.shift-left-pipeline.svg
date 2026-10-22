@@ -1,91 +1,85 @@
-<svg viewBox="0 0 700 400" width="100%"
-     xmlns="http://www.w3.org/2000/svg"
-     role="img"
-     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>파이프라인에서 스캔이 들어갈 네 지점과 왼쪽으로 당기는 이유</title>
-  <desc>파이프라인을 왼쪽 코드 작성에서 오른쪽 운영 배포로 놓고 봅니다. 문제는 왼쪽에서 걷어낼수록 빠르고 쌉니다. 개발자가 자기 데스크톱에서 로컬 빌드를 스캔하면 소스 저장소에 올리기 전에 고칩니다. 빌드 직후 스캔 단계를 넣고 심각도가 기준을 넘으면 빌드를 실패시켜 배포 자체를 막습니다. 레지스트리에 올린 뒤에도 정기적으로 다시 스캔합니다. 한동안 다시 빌드하지 않은 이미지에서 새 취약점이 발견될 수 있기 때문입니다. 마지막으로 어드미션 컨트롤에서 스캔을 통과한 이미지만 배포되게 막습니다. 이 검사가 없으면 스캐너를 우회하기가 쉽습니다. 배포 시점까지 스캔을 미루지 않는 이유는 같은 이미지에서 뜬 수백 개 컨테이너를 매번 다시 보게 되기 때문입니다.</desc>
-
-  <style>
-    .box { fill: #e8e4df; }
-    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
-    .box-detail { fill: #3a3632; font-size: 9.5px; }
-    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
-    .hint { fill: #b8b3ad; font-size: 10px; }
-    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
-    .stage { fill: #3a3632; font-size: 10px; font-weight: 700; }
-    .scan-title { fill: #0d0d0d; font-size: 11px; font-weight: 700; }
-    .scan-detail { fill: #0d0d0d; font-size: 9.5px; }
-    .axis { stroke: #4a4540; stroke-width: 1; fill: none; }
-  </style>
-
-  <rect width="700" height="400" fill="#0d0d0d"/>
-
-  <defs>
-    <marker id="uh7c" markerWidth="9" markerHeight="9" refX="7" refY="3"
-            orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
-    </marker>
-  </defs>
-
-  <text class="head" x="40" y="30">왼쪽일수록 빠르고 쌉니다</text>
-
-  <!-- 파이프라인 축 -->
-  <path class="arrow" d="M40,58 L660,58" marker-end="url(#uh7c)"/>
-  <text class="stage" x="40" y="76">코드 작성</text>
-  <text class="stage" x="205" y="76">이미지 빌드</text>
-  <text class="stage" x="380" y="76">레지스트리</text>
-  <text class="stage" x="560" y="76">운영 배포</text>
-
-  <!-- 스캔 지점 4 -->
-  <rect class="box" x="40" y="92" width="150" height="104" rx="4"/>
-  <text class="scan-title" x="54" y="113">개발자 데스크톱</text>
-  <text class="scan-detail" x="54" y="132">로컬 빌드를 직접 스캔</text>
-  <text class="scan-detail" x="54" y="148">저장소에 올리기 전에</text>
-  <text class="scan-detail" x="54" y="164">스스로 고칠 기회</text>
-  <text class="scan-detail" x="54" y="186">가장 싼 수정 지점</text>
-
-  <rect class="box" x="202" y="92" width="150" height="104" rx="4"/>
-  <text class="scan-title" x="216" y="113">빌드 직후</text>
-  <text class="scan-detail" x="216" y="132">빌드 파이프라인 안에서</text>
-  <text class="scan-detail" x="216" y="148">기준 넘으면 빌드 실패</text>
-  <text class="scan-detail" x="216" y="164">배포 자체를 막는다</text>
-  <text class="scan-detail" x="216" y="186">자동 게이트</text>
-
-  <rect class="box" x="364" y="92" width="150" height="104" rx="4"/>
-  <text class="scan-title" x="378" y="113">레지스트리 정기</text>
-  <text class="scan-detail" x="378" y="132">올린 뒤에도 다시 본다</text>
-  <text class="scan-detail" x="378" y="148">보통 24시간마다</text>
-  <text class="scan-detail" x="378" y="164">코드가 그대로여도</text>
-  <text class="scan-detail" x="378" y="186">새 취약점이 나온다</text>
-
-  <rect class="box" x="526" y="92" width="134" height="104" rx="4"/>
-  <text class="scan-title" x="540" y="113">어드미션 컨트롤</text>
-  <text class="scan-detail" x="540" y="132">스캔 통과분만 배포</text>
-  <text class="scan-detail" x="540" y="148">이 검사가 없으면</text>
-  <text class="scan-detail" x="540" y="164">스캐너 우회가 쉽다</text>
-  <text class="scan-detail" x="540" y="186">6장의 그 관문</text>
-
-  <path class="axis" d="M115,196 L115,214"/>
-  <path class="axis" d="M277,196 L277,214"/>
-  <path class="axis" d="M439,196 L439,214"/>
-  <path class="axis" d="M593,196 L593,214"/>
-
-  <!-- 왜 왼쪽인가 -->
-  <text class="head" x="40" y="244">무엇이 바뀌어 왼쪽이 가능해졌나</text>
-
-  <rect class="box" x="40" y="256" width="300" height="100" rx="4"/>
-  <text class="box-title" x="56" y="277">전통적 호스트 배포에서는</text>
-  <text class="box-detail" x="56" y="296">모든 앱이 같은 패키지를 공유</text>
-  <text class="box-detail" x="56" y="312">보안팀이 오른쪽 끝에서 따로 패치</text>
-  <text class="box-detail" x="56" y="328">앱마다 필요한 버전이 달라 충돌</text>
-  <text class="box-detail" x="56" y="346">개발 주기와 분리돼 있었다</text>
-
-  <rect class="box" x="360" y="256" width="300" height="100" rx="4"/>
-  <text class="box-title" x="376" y="277">컨테이너 배포에서는</text>
-  <text class="box-detail" x="376" y="296">이미지마다 자기 의존성을 품는다</text>
-  <text class="box-detail" x="376" y="312">앱별로 다른 버전을 써도 무방</text>
-  <text class="box-detail" x="376" y="328">개발자가 이미지를 다시 빌드해 고친다</text>
-  <text class="box-detail" x="376" y="346">보안팀의 수작업이 사라진다</text>
-
-  <text class="hint" x="40" y="384">배포 때 스캔하면 같은 일을 수백 번</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 536" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">스캔은 빌드 직후 게이트부터 걸고, 걸린 취약점은 개발자가 재빌드해 고칩니다</title><desc id="dd">이미지가 개발자 데스크톱, 빌드 직후, 레지스트리, 어드미션 컨트롤 네 지점을 지나며 각 지점에서 스캔한다. 빌드 직후에는 심각도가 기준을 넘으면 빌드가 실패하고, 어드미션 컨트롤은 스캔 안 된 이미지의 배포를 거부한다. 취약점이 나오면 개발자가 패치된 버전으로 이미지를 다시 빌드한다.</desc>
+<rect width="960" height="536" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">CONTAINER SECURITY · 07-01 §5</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">스캔은 빌드 직후 게이트부터 걸고, 걸린 취약점은 개발자가 재빌드해 고칩니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">왼쪽에서 걷어낼수록 수정이 빠르고 쌉니다.</text>
+<path d="M 28 112 L 932 112" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="28" y="96" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">코드 작성</text>
+<text x="932" y="96" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">운영 배포</text>
+<rect x="395.0" y="102" width="170.0" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="480" y="116" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">늦을수록 수정 비용 증가</text>
+<rect x="91.0" y="102" width="170.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="176" y="116" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">컨테이너: 개발자 재빌드</text>
+<rect x="747.0" y="102" width="146.0" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="820" y="116" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">전통: 보안팀 수작업</text>
+<rect x="28" y="136" width="200" height="148" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="44" y="166" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">개발자 데스크톱</text>
+<text x="44" y="190" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">로컬 빌드를 직접 스캔</text>
+<line x1="44" y1="208" x2="212" y2="208" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="44" y="234" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">푸시하기 전에</text>
+<text x="44" y="256" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">스스로 고칠 기회</text>
+<path d="M 230 188 L 260 188" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="264" y="136" width="200" height="148" rx="6" fill="#F08A591F" stroke="#F08A59" stroke-width="1.4"/>
+<text x="280" y="166" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">빌드 직후</text>
+<text x="280" y="190" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">이미지 빌드 직후 스캔 단계</text>
+<line x1="280" y1="208" x2="448" y2="208" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="280" y="234" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">심각도가 기준을 넘으면</text>
+<text x="280" y="256" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">빌드를 실패시킴</text>
+<path d="M 466 188 L 496 188" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="500" y="136" width="200" height="148" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="516" y="166" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">레지스트리</text>
+<text x="516" y="190" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">푸시된 이미지 재스캔</text>
+<line x1="516" y1="208" x2="684" y2="208" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="516" y="234" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">재빌드 없이 묵은 이미지의</text>
+<text x="516" y="256" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">새 취약점 (24시간 주기)</text>
+<path d="M 702 188 L 732 188" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="736" y="136" width="200" height="148" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="752" y="166" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">어드미션 컨트롤</text>
+<text x="752" y="190" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">스캔 통과 이미지만 배포</text>
+<line x1="752" y1="208" x2="920" y2="208" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="752" y="234" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">이 검사가 없으면</text>
+<text x="752" y="256" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">스캐너 우회가 쉬움</text>
+<rect x="28" y="316" width="200" height="48" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<path d="M 128.0 286 L 128.0 312" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<text x="128.0" y="345" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">소스 저장소에 푸시</text>
+<rect x="264" y="316" width="200" height="48" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<path d="M 364.0 286 L 364.0 312" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#bad)"/>
+<text x="364.0" y="336" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">빌드 실패</text>
+<text x="364.0" y="354" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">배포 자체를 막음</text>
+<rect x="500" y="316" width="200" height="48" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.1"/>
+<path d="M 600.0 286 L 600.0 312" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<text x="600.0" y="336" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">새 취약점 발견</text>
+<text x="600.0" y="354" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">정기 재스캔</text>
+<rect x="736" y="316" width="200" height="48" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<path d="M 836.0 286 L 836.0 312" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#bad)"/>
+<text x="836.0" y="336" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">배포 거부</text>
+<text x="836.0" y="354" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">스캔 안 된 이미지</text>
+<rect x="28" y="404" width="908" height="48" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="480" y="434" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#3FB98C">취약점 발견 → 개발자가 의존성을 올려 이미지 재빌드</text>
+<path d="M 364.0 366 L 364.0 400" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 600.0 366 L 600.0 400" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 836.0 366 L 836.0 400" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 28 428 L 12 428 L 12 210 L 24 210" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<line x1="12" y1="476" x2="912" y2="476" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="498" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="488" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="498" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">소스 푸시</text>
+<rect x="209" y="488" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="231" y="498" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">차단</text>
+<rect x="279" y="488" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="301" y="498" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">재스캔 결과</text>
+<rect x="401" y="488" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="423" y="498" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">재빌드</text>
+<rect x="484" y="488" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="506" y="498" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">빌드 직후 게이트</text>
 </svg>

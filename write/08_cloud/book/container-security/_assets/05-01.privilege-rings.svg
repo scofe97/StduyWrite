@@ -1,77 +1,73 @@
-<svg viewBox="0 0 700 400" width="100%"
-     xmlns="http://www.w3.org/2000/svg"
-     role="img"
-     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>일반 구성과 하이퍼바이저와 하드웨어 가상화에서의 권한 링 배치</title>
-  <desc>x86에서 권한 수준은 링으로 조직되며 링 0이 가장 높고 링 3이 가장 낮습니다. 가상머신이 없는 일반 구성에서는 커널이 링 0에서 돌고 유저 공간 코드가 링 3에서 돕니다. 하이퍼바이저를 쓰면 하이퍼바이저가 링 0을 차지하고 게스트 커널은 링 1로 내려가 권한이 낮아집니다. 인텔 VT-x 같은 하드웨어 가상화에서는 하이퍼바이저가 사실상 링 마이너스 1에 해당하는 VMX 루트 모드에서 돌고, 게스트 커널이 원래 자리인 링 0을 되찾습니다.</desc>
-
-  <style>
-    .box { fill: #e8e4df; }
-    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
-    .ring { fill: #3a3632; font-size: 10px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
-    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
-    .hint { fill: #b8b3ad; font-size: 10px; }
-    .divider { stroke: #b8b3ad; stroke-width: 1.2; stroke-dasharray: 5 4; fill: none; }
-    .caution-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
-    .caution-ring { fill: #0d0d0d; font-size: 10px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
-  </style>
-
-  <rect width="700" height="400" fill="#0d0d0d"/>
-
-  <text class="head" x="40" y="30">일반 구성</text>
-  <text class="head" x="255" y="30">하이퍼바이저</text>
-  <text class="head" x="480" y="30">하드웨어 가상화</text>
-
-  <path class="divider" d="M232,40 L232,300"/>
-  <path class="divider" d="M457,40 L457,300"/>
-
-  <!-- 일반 -->
-  <rect class="box" x="40" y="52" width="170" height="46" rx="4"/>
-  <text class="box-title" x="54" y="72">앱 코드</text>
-  <text class="ring" x="54" y="90">Ring 3</text>
-
-  <rect class="box" x="40" y="196" width="170" height="46" rx="4"/>
-  <text class="box-title" x="54" y="216">커널</text>
-  <text class="ring" x="54" y="234">Ring 0</text>
-
-  <text class="hint" x="40" y="268">커널이 자원을</text>
-  <text class="hint" x="40" y="286">직접 관리한다</text>
-
-  <!-- 하이퍼바이저 -->
-  <rect class="box" x="255" y="52" width="180" height="46" rx="4"/>
-  <text class="box-title" x="269" y="72">앱 코드</text>
-  <text class="ring" x="269" y="90">Ring 3</text>
-
-  <rect class="box" x="255" y="124" width="180" height="46" rx="4"/>
-  <text class="box-title" x="269" y="144">게스트 커널</text>
-  <text class="ring" x="269" y="162">Ring 1</text>
-
-  <rect x="255" y="196" width="180" height="46" rx="4" fill="rgb(212,168,83)"/>
-  <text class="caution-title" x="269" y="216">하이퍼바이저</text>
-  <text class="caution-ring" x="269" y="234">Ring 0</text>
-
-  <text class="hint" x="255" y="268">게스트가 한 칸</text>
-  <text class="hint" x="255" y="286">아래로 내려간다</text>
-
-  <!-- VT-x -->
-  <rect class="box" x="480" y="52" width="180" height="46" rx="4"/>
-  <text class="box-title" x="494" y="72">앱 코드</text>
-  <text class="ring" x="494" y="90">Ring 3</text>
-
-  <rect class="box" x="480" y="196" width="180" height="46" rx="4"/>
-  <text class="box-title" x="494" y="216">게스트 커널</text>
-  <text class="ring" x="494" y="234">Ring 0</text>
-
-  <rect x="480" y="252" width="180" height="46" rx="4" fill="rgb(212,168,83)"/>
-  <text class="caution-title" x="494" y="272">하이퍼바이저</text>
-  <text class="caution-ring" x="494" y="290">VMX root · Ring -1</text>
-
-  <text class="hint" x="480" y="322">게스트가 Ring 0을</text>
-  <text class="hint" x="480" y="340">되찾는다</text>
-
-  <text class="hint" x="40" y="322">링 0이 가장 높고</text>
-  <text class="hint" x="40" y="340">링 3이 가장 낮다</text>
-
-  <text class="hint" x="255" y="322">권한이 낮아진 게스트가</text>
-  <text class="hint" x="255" y="340">특권 명령을 쓰면 트랩</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 936 472" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">하이퍼바이저가 들어오면 커널은 Ring 1 로 내려가고, VT-x 가 Ring 0 을 돌려줍니다</title><desc id="dd">권한 링 넷(Ring -1, 0, 1, 3) 과 구성 셋(일반 구성, 하이퍼바이저, 하드웨어 가상화) 의 격자. 일반 구성에서 커널은 Ring 0 이고 유저 공간은 Ring 3 이다. 하이퍼바이저가 Ring 0 을 차지하면 게스트 커널은 Ring 1 로 내려간다. VT-x 는 하이퍼바이저를 Ring -1 인 VMX root mode 로 올려 게스트 커널이 Ring 0 을 되찾게 한다.</desc>
+<rect width="936" height="472" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">MATRIX · 05-01 §1 · §3 · §4</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">하이퍼바이저가 들어오면 커널은 Ring 1 로 내려가고, VT-x 가 Ring 0 을 돌려줍니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">같은 커널이 구성에 따라 Ring 0, Ring 1, Ring 0 으로 옮겨 앉고, 하이퍼바이저는 Ring 0 에서 Ring -1 로 올라갑니다.</text>
+<rect x="36" y="96" width="160" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="116.0" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">권한 수준</text>
+<text x="116.0" y="138" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">링</text>
+<rect x="208" y="96" width="220" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="318.0" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">일반 구성</text>
+<text x="318.0" y="138" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">VM 없음</text>
+<rect x="444" y="96" width="220" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="554.0" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">하이퍼바이저</text>
+<text x="554.0" y="138" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Type 1</text>
+<rect x="680" y="96" width="220" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="790.0" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">하드웨어 가상화</text>
+<text x="790.0" y="138" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Intel VT-x</text>
+<rect x="36" y="164" width="160" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="48" y="186" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">Ring -1</text>
+<text x="48" y="204" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">VMX root mode</text>
+<rect x="36" y="224" width="160" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="48" y="246" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">Ring 0</text>
+<text x="48" y="264" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">특권 명령 실행</text>
+<rect x="36" y="284" width="160" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="48" y="315" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">Ring 1</text>
+<rect x="36" y="344" width="160" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="48" y="366" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">Ring 3</text>
+<text x="48" y="384" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">가장 낮음</text>
+<rect x="208" y="164" width="220" height="52" rx="6" fill="none" stroke="rgba(191,192,192,0.22)" stroke-width="1" stroke-dasharray="6 5"/>
+<text x="318.0" y="195" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#5E6B7E">—</text>
+<rect x="444" y="164" width="220" height="52" rx="6" fill="none" stroke="rgba(191,192,192,0.22)" stroke-width="1" stroke-dasharray="6 5"/>
+<text x="554.0" y="195" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#5E6B7E">—</text>
+<rect x="680" y="164" width="220" height="52" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.1"/>
+<text x="790.0" y="195" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">하이퍼바이저</text>
+<rect x="208" y="224" width="220" height="52" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="318.0" y="255" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">커널</text>
+<rect x="444" y="224" width="220" height="52" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.1"/>
+<text x="554.0" y="255" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">하이퍼바이저</text>
+<rect x="680" y="224" width="220" height="52" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="790.0" y="246" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">게스트 커널</text>
+<text x="790.0" y="264" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Ring 0 를 되찾음</text>
+<rect x="208" y="284" width="220" height="52" rx="6" fill="none" stroke="rgba(191,192,192,0.22)" stroke-width="1" stroke-dasharray="6 5"/>
+<text x="318.0" y="315" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#5E6B7E">—</text>
+<rect x="444" y="284" width="220" height="52" rx="6" fill="#F08A591F" stroke="#F08A59" stroke-width="1.6"/>
+<text x="554.0" y="306" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">게스트 커널</text>
+<text x="554.0" y="324" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">하이퍼바이저보다 낮은 권한</text>
+<rect x="680" y="284" width="220" height="52" rx="6" fill="none" stroke="rgba(191,192,192,0.22)" stroke-width="1" stroke-dasharray="6 5"/>
+<text x="790.0" y="315" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#5E6B7E">—</text>
+<rect x="208" y="344" width="220" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="318.0" y="375" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">유저 공간 코드</text>
+<rect x="444" y="344" width="220" height="52" rx="6" fill="none" stroke="rgba(191,192,192,0.22)" stroke-width="1" stroke-dasharray="6 5"/>
+<text x="554.0" y="375" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#5E6B7E">—</text>
+<rect x="680" y="344" width="220" height="52" rx="6" fill="none" stroke="rgba(191,192,192,0.22)" stroke-width="1" stroke-dasharray="6 5"/>
+<text x="790.0" y="375" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#5E6B7E">—</text>
+<line x1="12" y1="428" x2="888" y2="428" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="450" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="440" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">커널</text>
+<rect x="170" y="440" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="192" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">하이퍼바이저</text>
+<rect x="292" y="440" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="314" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">권한이 낮아진 커널</text>
 </svg>

@@ -1,68 +1,111 @@
-<svg viewBox="0 0 640 430" width="100%"
-     xmlns="http://www.w3.org/2000/svg"
-     role="img"
-     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>컨테이너 이미지 해부 전체 흐름</title>
-  <desc>이미지는 루트 파일시스템과 설정 정보라는 두 부분으로 이뤄집니다. 이 구조를 표준으로 못 박은 것이 OCI 명세이며, 런타임은 이미지를 번들로 풀어 컨테이너를 만듭니다. 이미지를 만드는 과정에서는 Docker 데몬이 root로 도는 문제가 있어 데몬 없는 빌드 도구들이 나왔습니다. 이미지 내부는 층으로 쌓이는데, 위층에서 파일을 지워도 아래층에 그대로 남는다는 점이 보안상 중요합니다. 마지막으로 이미지를 레지스트리에 저장하고 태그나 다이제스트로 식별하는 방식을 봅니다.</desc>
-
-  <style>
-    .box { fill: #e8e4df; }
-    .box-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
-    .box-detail { fill: #3a3632; font-size: 10.5px; }
-    .sec { fill: #3a3632; font-size: 10px; font-weight: 700; }
-    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
-    .num { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
-    .hint { fill: #b8b3ad; font-size: 10.5px; }
-    .danger-title { fill: #7a1f1f; font-size: 13px; font-weight: 700; }
-    .danger-detail { fill: #7a1f1f; font-size: 10.5px; }
-  </style>
-
-  <rect width="640" height="430" fill="#0d0d0d"/>
-
-  <defs>
-    <marker id="qh" markerWidth="9" markerHeight="9" refX="7" refY="3"
-            orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
-    </marker>
-  </defs>
-
-  <text class="num" x="34" y="45">1.</text>
-  <rect class="box" x="54" y="24" width="532" height="50" rx="4"/>
-  <text class="box-title" x="72" y="46">이미지는 두 부분이다</text>
-  <text class="box-detail" x="72" y="64">루트 파일시스템 + 설정</text>
-  <text class="sec" x="566" y="46" text-anchor="end">§1</text>
-
-  <path class="arrow" d="M320,74 L320,92" marker-end="url(#qh)"/>
-
-  <text class="num" x="34" y="119">2.</text>
-  <rect class="box" x="54" y="98" width="532" height="50" rx="4"/>
-  <text class="box-title" x="72" y="120">OCI 표준</text>
-  <text class="box-detail" x="72" y="138">런타임이 번들로 풀어 쓴다</text>
-  <text class="sec" x="566" y="120" text-anchor="end">§2</text>
-
-  <path class="arrow" d="M320,148 L320,166" marker-end="url(#qh)"/>
-
-  <text class="num" x="34" y="193">3.</text>
-  <rect class="box" x="54" y="172" width="532" height="50" rx="4"/>
-  <text class="box-title" x="72" y="194">빌드와 데몬 문제</text>
-  <text class="box-detail" x="72" y="212">데몬이 root라 위험하다</text>
-  <text class="sec" x="566" y="194" text-anchor="end">§3</text>
-
-  <path class="arrow" d="M320,222 L320,240" marker-end="url(#qh)"/>
-
-  <text class="num" x="34" y="267">4.</text>
-  <rect x="54" y="246" width="532" height="54" rx="4" fill="#f2d4d4"/>
-  <text class="danger-title" x="72" y="268">위험 · 지워도 층에 남는다</text>
-  <text class="danger-detail" x="72" y="288">아래층은 그대로 보존된다</text>
-  <text class="sec" x="566" y="268" text-anchor="end">§4</text>
-
-  <path class="arrow" d="M320,300 L320,318" marker-end="url(#qh)"/>
-
-  <text class="num" x="34" y="345">5.</text>
-  <rect class="box" x="54" y="324" width="532" height="52" rx="4"/>
-  <text class="box-title" x="72" y="348">저장과 식별</text>
-  <text class="box-detail" x="72" y="366">태그는 움직이고 다이제스트는 고정</text>
-  <text class="sec" x="566" y="348" text-anchor="end">§5</text>
-
-  <text class="hint" x="72" y="404">보안 관점은 06-02 로</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 984 764" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">층에 넣은 것은 지워도 남고, 다이제스트만 내용에 묶입니다</title><desc id="dd">06-01 의 키워드 개념도. 첫 줄은 이미지의 루트 파일시스템과 설정 정보, 그리고 실행 시점의 덮어쓰기다. 둘째 줄은 OCI 이미지를 umoci 로 풀어 rootfs 와 config.json 번들로 만드는 흐름이다. 셋째 줄은 docker build 가 소켓으로 root 데몬에 닿는 위험과 데몬 없는 빌드 도구다. 넷째 줄은 RUN rm 으로 지운 password.txt 가 docker save 로 꺼내면 layer.tar 에 남는 흐름이다. 다섯째 줄은 층 blob 에서 매니페스트와 다이제스트가 나오고 태그는 사람이 읽는 이름으로 옮겨 다니는 흐름이다.</desc>
+<rect width="984" height="764" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">CONTAINER SECURITY · 06-01 OVERVIEW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">층에 넣은 것은 지워도 남고, 다이제스트만 내용에 묶입니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">화살표 위 글자는 두 키워드의 관계, 왼쪽 칩은 그 줄을 다루는 절입니다.</text>
+<rect x="23.18" y="130.0" width="21.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="144.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">§1</text>
+<rect x="23.18" y="258.0" width="21.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="272.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">§2</text>
+<rect x="23.18" y="386.0" width="21.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="400.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">§3</text>
+<rect x="23.18" y="514.0" width="21.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="528.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">§4</text>
+<rect x="23.18" y="642.0" width="21.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="656.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">§5</text>
+<rect x="60" y="112" width="216" height="64" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="168.0" y="139" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">루트 파일시스템</text>
+<text x="168.0" y="160" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">FROM·ADD·COPY·RUN</text>
+<rect x="400" y="112" width="216" height="64" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="508.0" y="139" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">설정 정보</text>
+<text x="508.0" y="160" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">USER·PORT·ENV</text>
+<rect x="740" y="112" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="848.0" y="139" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">docker run -e</text>
+<text x="848.0" y="160" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">실행 시점에 덮어쓰기</text>
+<path d="M 278 144.0 L 396 144.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="338.0" y="135.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">나란히 저장</text>
+<path d="M 618 144.0 L 736 144.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="678.0" y="135.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">값 교체</text>
+<path d="M 848.0 178 L 848.0 208 L 168.0 208 L 168.0 236" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="508.0" y="201" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">런타임이 쓰려면</text>
+<rect x="60" y="240" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="168.0" y="267" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">OCI 이미지</text>
+<text x="168.0" y="288" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">skopeo copy ... oci:</text>
+<rect x="400" y="240" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="508.0" y="267" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">umoci unpack</text>
+<text x="508.0" y="288" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">런타임 파일시스템 번들</text>
+<rect x="740" y="240" width="216" height="64" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="848.0" y="267" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">rootfs/ + config.json</text>
+<text x="848.0" y="288" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">runc 가 읽는 번들</text>
+<path d="M 278 272.0 L 396 272.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="338.0" y="263.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">그대로는 못 씀</text>
+<path d="M 618 272.0 L 736 272.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="678.0" y="263.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">풀면</text>
+<path d="M 848.0 306 L 848.0 336 L 168.0 336 L 168.0 364" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="508.0" y="329" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">이미지를 만드는 도구</text>
+<rect x="60" y="368" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="168.0" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">docker build</text>
+<text x="168.0" y="416" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">CLI → Docker 소켓</text>
+<rect x="400" y="368" width="216" height="64" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="508.0" y="395" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">Docker 데몬</text>
+<text x="508.0" y="416" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">root · 빌드 이상의 능력</text>
+<rect x="740" y="368" width="216" height="64" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="848.0" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">BuildKit · Kaniko</text>
+<text x="848.0" y="416" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">데몬 없이 빌드</text>
+<path d="M 278 400.0 L 396 400.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="338.0" y="391.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">API 요청</text>
+<path d="M 618 400.0 L 736 400.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="678.0" y="391.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">대안</text>
+<path d="M 848.0 434 L 848.0 464 L 168.0 464 L 168.0 492" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="508.0" y="457" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">빌드가 만든 층</text>
+<rect x="60" y="496" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="168.0" y="523" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">echo &gt; /password.txt</text>
+<text x="168.0" y="544" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">RUN 한 줄 = 층 하나</text>
+<rect x="400" y="496" width="216" height="64" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.1"/>
+<text x="508.0" y="523" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#E3B341">RUN rm /password.txt</text>
+<text x="508.0" y="544" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">위층의 삭제 표시일 뿐</text>
+<rect x="740" y="496" width="216" height="64" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<text x="848.0" y="523" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">docker save</text>
+<text x="848.0" y="544" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">55*/layer.tar 에 남음</text>
+<path d="M 278 528.0 L 396 528.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="338.0" y="519.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">다음 줄에서</text>
+<path d="M 618 528.0 L 736 528.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="678.0" y="519.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">꺼내 보면</text>
+<path d="M 848.0 562 L 848.0 592 L 168.0 592 L 168.0 620" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="508.0" y="585" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">층을 저장하면</text>
+<rect x="60" y="624" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="168.0" y="651" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">이미지 매니페스트</text>
+<text x="168.0" y="672" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">층 blob 의 집합</text>
+<rect x="400" y="624" width="216" height="64" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="508.0" y="651" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">다이제스트</text>
+<text x="508.0" y="672" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">내용에 묶인 식별자</text>
+<rect x="740" y="624" width="216" height="64" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.1"/>
+<text x="848.0" y="651" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">태그</text>
+<text x="848.0" y="672" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">옮겨 다니는 라벨</text>
+<path d="M 278 656.0 L 396 656.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="338.0" y="647.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">해시를 취하면</text>
+<path d="M 618 656.0 L 736 656.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="678.0" y="647.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">다른 참조 방식</text>
+<line x1="12" y1="704" x2="936" y2="704" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="726" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="716" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="726" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">구조</text>
+<rect x="170" y="716" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="192" y="726" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">위험</text>
+<rect x="240" y="716" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="262" y="726" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">조건부</text>
+<rect x="323" y="716" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="345" y="726" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">안전·대안</text>
+<rect x="432" y="716" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="454" y="726" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">핵심 접점</text>
 </svg>

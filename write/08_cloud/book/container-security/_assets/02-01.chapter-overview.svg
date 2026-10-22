@@ -1,70 +1,74 @@
-<svg viewBox="0 0 640 420" width="100%"
-     xmlns="http://www.w3.org/2000/svg"
-     role="img"
-     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>Linux 시스템 콜과 권한과 capability 전체 지도</title>
-  <desc>유저 공간의 앱이 커널에 일을 시키는 통로인 시스템 콜에서 출발합니다. 그다음 파일 권한이 누가 무엇을 할 수 있는지 정하는 방식을 보고, setuid 비트가 그 권한을 넘겨주는 오래된 장치임을 확인합니다. 커널 2.2가 도입한 capability는 그 통짜 권한을 잘게 쪼갠 후계자입니다. 마지막으로 이 장치들이 어긋났을 때 벌어지는 권한 상승을 봅니다.</desc>
-
-  <style>
-    .box { fill: #e8e4df; }
-    .box-title { fill: #0d0d0d; font-size: 13px; font-weight: 700; }
-    .box-detail { fill: #3a3632; font-size: 10.5px; }
-    .sec { fill: #3a3632; font-size: 10px; font-weight: 700; }
-    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
-    .num { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
-    .hint { fill: #b8b3ad; font-size: 10.5px; }
-    .danger-title { fill: #7a1f1f; font-size: 13px; font-weight: 700; }
-    .danger-detail { fill: #7a1f1f; font-size: 10.5px; }
-  </style>
-
-  <rect width="640" height="420" fill="#0d0d0d"/>
-
-  <defs>
-    <marker id="bh" markerWidth="9" markerHeight="9" refX="7" refY="3"
-            orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
-    </marker>
-  </defs>
-
-  <text class="num" x="34" y="45">1.</text>
-  <rect class="box" x="54" y="24" width="532" height="50" rx="4"/>
-  <text class="box-title" x="72" y="46">시스템 콜</text>
-  <text class="box-detail" x="72" y="64">유저 공간이 커널에 요청하는 통로</text>
-  <text class="sec" x="566" y="46" text-anchor="end">§1</text>
-
-  <path class="arrow" d="M320,74 L320,92" marker-end="url(#bh)"/>
-
-  <text class="num" x="34" y="119">2.</text>
-  <rect class="box" x="54" y="98" width="532" height="50" rx="4"/>
-  <text class="box-title" x="72" y="120">파일 권한 — DAC</text>
-  <text class="box-detail" x="72" y="138">소유자 · 그룹 · 그 외 각 rwx</text>
-  <text class="sec" x="566" y="120" text-anchor="end">§2</text>
-
-  <path class="arrow" d="M320,148 L320,166" marker-end="url(#bh)"/>
-
-  <text class="hint" x="320" y="182" text-anchor="middle">권한을 넘겨주는 두 장치</text>
-
-  <path class="arrow" d="M320,188 L320,200 L180,200 L180,218" marker-end="url(#bh)"/>
-  <path class="arrow" d="M320,188 L320,200 L460,200 L460,218" marker-end="url(#bh)"/>
-
-  <text class="num" x="34" y="247">3.</text>
-  <rect class="box" x="54" y="224" width="252" height="56" rx="4"/>
-  <text class="box-title" x="72" y="246">setuid — 통짜</text>
-  <text class="box-detail" x="72" y="264">root 권한을 통째로</text>
-  <text class="sec" x="288" y="246" text-anchor="end">§3</text>
-
-  <text class="num" x="345" y="247">4.</text>
-  <rect class="box" x="364" y="224" width="222" height="56" rx="4"/>
-  <text class="box-title" x="382" y="246">capability — 조각</text>
-  <text class="box-detail" x="382" y="264">필요한 것만 · 커널 2.2</text>
-  <text class="sec" x="566" y="246" text-anchor="end">§4</text>
-
-  <path class="arrow" d="M180,280 L180,296 L320,296 L320,314" marker-end="url(#bh)"/>
-  <path class="arrow" d="M460,280 L460,296 L320,296"/>
-
-  <text class="num" x="34" y="349">5.</text>
-  <rect x="54" y="320" width="532" height="58" rx="4" fill="#f2d4d4"/>
-  <text class="danger-title" x="72" y="344">위험 · 권한 상승</text>
-  <text class="danger-detail" x="72" y="364">컨테이너는 기본이 root</text>
-  <text class="sec" x="566" y="344" text-anchor="end">§5</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 984 500" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">시스템 콜과 파일 권한 위에 setuid 와 capability 가 얹히고, 어긋나면 권한 상승입니다</title><desc id="dd">02-01 의 키워드 개념도. 윗줄은 시스템 콜, 파일 권한 DAC, s 비트가 켜지는 setuid 가 이어지는 모습이다. 가운데 줄은 setuid 를 잘게 쪼갠 capability, 필요 이상 부여하면 닿는 권한 상승, 컨테이너가 기본 root 라 경로가 짧아지는 모습이다. 아랫줄은 권한 상승을 막는 setcap, no-new-privileges, 비root 실행 세 가지다.</desc>
+<rect width="984" height="500" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">ARCHITECTURE · 02-01 OVERVIEW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">시스템 콜과 파일 권한 위에 setuid 와 capability 가 얹히고, 어긋나면 권한 상승입니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">화살표 위 글자는 두 키워드의 관계, 왼쪽 칩은 그 줄을 다루는 절입니다.</text>
+<rect x="16.36" y="130.0" width="35.28" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="144.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">§1~3</text>
+<rect x="16.36" y="250.0" width="35.28" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="264.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">§4~5</text>
+<rect x="19.0" y="370.0" width="30.0" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="34" y="384.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">해법</text>
+<rect x="60" y="112" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="168.0" y="139" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">시스템 콜</text>
+<text x="168.0" y="160" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">300여 종 · 커널 하나</text>
+<rect x="400" y="112" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="508.0" y="139" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">파일 권한 · DAC</text>
+<text x="508.0" y="160" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">rwx 세 묶음</text>
+<rect x="740" y="112" width="216" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="848.0" y="139" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">setuid 비트</text>
+<text x="848.0" y="160" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">chmod +s · 소유자의 uid</text>
+<path d="M 278 144.0 L 396 144.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="338.0" y="135.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">똑같이 필요</text>
+<path d="M 618 144.0 L 736 144.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="678.0" y="135.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">추가 권한</text>
+<path d="M 848.0 178 L 848.0 204 L 168.0 204 L 168.0 228" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="508.0" y="197" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">잘게 쪼갠 후계자</text>
+<rect x="60" y="232" width="216" height="64" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="168.0" y="259" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">capability</text>
+<text x="168.0" y="280" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">setcap cap_net_raw+p</text>
+<rect x="400" y="232" width="216" height="64" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<text x="508.0" y="259" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">권한 상승</text>
+<text x="508.0" y="280" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">원래 권한을 넘어섬</text>
+<rect x="740" y="232" width="216" height="64" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="848.0" y="259" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">컨테이너는 기본 root</text>
+<text x="848.0" y="280" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">탈출하면 호스트 root</text>
+<path d="M 278 264.0 L 396 264.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="338.0" y="255.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">과다 부여</text>
+<path d="M 738 264.0 L 620 264.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="678.0" y="255.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">경로를 짧게</text>
+<line x1="168.0" y1="324" x2="848.0" y2="324" stroke="#5E6B7E" stroke-width="1.3"/>
+<path d="M 508.0 298 L 508.0 348" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<path d="M 168.0 324 L 168.0 348" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<path d="M 848.0 324 L 848.0 348" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<text x="520.0" y="317" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">막는 방법</text>
+<rect x="60" y="352" width="216" height="64" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="168.0" y="379" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">setcap 한 조각만</text>
+<text x="168.0" y="400" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">setuid 대신</text>
+<rect x="400" y="352" width="216" height="64" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="508.0" y="379" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">no-new-privileges</text>
+<text x="508.0" y="400" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">--security-opt</text>
+<rect x="740" y="352" width="216" height="64" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="848.0" y="379" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">비root 로 실행</text>
+<text x="848.0" y="400" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">탈출해도 곧바로 root 아님</text>
+<line x1="12" y1="456" x2="936" y2="456" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="478" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="468" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="478" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">권한 상승</text>
+<rect x="209" y="468" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="231" y="478" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">위험</text>
+<rect x="279" y="468" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="301" y="478" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">해법</text>
+<rect x="349" y="468" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="371" y="478" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">capability</text>
 </svg>

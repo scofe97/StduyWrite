@@ -1,65 +1,77 @@
-<svg viewBox="0 0 700 380" width="100%"
-     xmlns="http://www.w3.org/2000/svg"
-     role="img"
-     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>운영 배포에서 남겨야 할 컨테이너 이벤트 일곱 가지</title>
-  <desc>OWASP 사이트는 침해가 식별되기까지 평균 거의 200일이 걸린다는 무서운 통계를 공유합니다. 충분한 관찰과 예상치 못한 동작에 대한 경보를 결합하면 그 기간을 극적으로 줄일 수 있어야 합니다. 어떤 운영 배포에서든 남겨야 할 컨테이너 이벤트가 있습니다. 컨테이너 시작과 종료 이벤트는 이미지의 신원과 호출한 사용자를 포함해 기록합니다. 시크릿에 대한 접근을 기록합니다. 권한의 변경을 기록합니다. 컨테이너 페이로드의 변경은 코드 주입을 시사할 수 있으므로 기록합니다. 인바운드와 아웃바운드 네트워크 연결을 기록합니다. 볼륨 마운트는 나중에 민감한 것으로 드러날 마운트를 분석하기 위해 기록합니다. 네트워크 연결 시도나 파일 쓰기나 사용자 권한 변경 시도가 실패한 것도 기록하는데, 공격자가 시스템을 정찰하고 있다는 신호일 수 있기 때문입니다.</desc>
-
-  <style>
-    .box { fill: #e8e4df; }
-    .box-title { fill: #0d0d0d; font-size: 11px; font-weight: 700; }
-    .box-detail { fill: #3a3632; font-size: 9.5px; }
-    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
-    .hint { fill: #b8b3ad; font-size: 10px; }
-    .warn-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
-    .warn-detail { fill: #0d0d0d; font-size: 9.5px; }
-    .ok-detail { fill: #14521d; font-size: 9.5px; font-weight: 700; }
-    .ch { fill: #3a3632; font-size: 9px; font-weight: 700; }
-  </style>
-
-  <rect width="700" height="380" fill="#0d0d0d"/>
-
-  <!-- 200일 통계 -->
-  <rect x="40" y="30" width="620" height="56" rx="4" fill="rgb(212,168,83)"/>
-  <text class="warn-title" x="56" y="51">침해 발견까지 평균 200일 가까이</text>
-  <text class="warn-detail" x="56" y="72">관찰과 경보로 크게 줄일 수 있다</text>
-
-  <text class="head" x="40" y="112">남겨야 할 이벤트</text>
-
-  <rect class="box" x="40" y="124" width="200" height="70" rx="4"/>
-  <text class="box-title" x="56" y="145">컨테이너 시작·종료</text>
-  <text class="box-detail" x="56" y="164">이미지의 신원과</text>
-  <text class="box-detail" x="56" y="182">호출한 사용자까지</text>
-
-  <rect class="box" x="252" y="124" width="200" height="70" rx="4"/>
-  <text class="box-title" x="268" y="145">시크릿 접근</text>
-  <text class="box-detail" x="268" y="164">누가 무엇을 읽었는지</text>
-  <text class="box-detail" x="268" y="182">12장의 그 시크릿</text>
-
-  <rect class="box" x="464" y="124" width="196" height="70" rx="4"/>
-  <text class="box-title" x="480" y="145">권한 변경</text>
-  <text class="box-detail" x="480" y="164">모든 권한 수정</text>
-  <text class="box-detail" x="480" y="182">권한 상승의 신호</text>
-
-  <rect class="box" x="40" y="206" width="200" height="70" rx="4"/>
-  <text class="box-title" x="56" y="227">페이로드 변경</text>
-  <text class="box-detail" x="56" y="246">코드 주입을 시사한다</text>
-  <text class="box-detail" x="56" y="264">13장 드리프트 방지</text>
-
-  <rect class="box" x="252" y="206" width="200" height="70" rx="4"/>
-  <text class="box-title" x="268" y="227">네트워크 연결</text>
-  <text class="box-detail" x="268" y="246">인바운드와 아웃바운드</text>
-  <text class="box-detail" x="268" y="264">10장의 그 트래픽</text>
-
-  <rect class="box" x="464" y="206" width="196" height="70" rx="4"/>
-  <text class="box-title" x="480" y="227">볼륨 마운트</text>
-  <text class="box-detail" x="480" y="246">나중에 민감한 것으로</text>
-  <text class="box-detail" x="480" y="264">드러날 수 있어서</text>
-
-  <!-- 실패 기록 -->
-  <rect class="box" x="40" y="288" width="620" height="56" rx="4"/>
-  <text class="box-title" x="56" y="309">실패한 시도도 남깁니다</text>
-  <text class="box-detail" x="56" y="330">실패는 정찰의 신호일 수 있습니다</text>
-
-  <text class="hint" x="40" y="366">사후 보고보다 사전 차단이 낫습니다</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 592" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">남겨야 할 컨테이너 이벤트 일곱은 SIEM 으로 모여 경보와 차단이 된다</title><desc id="dd">마지막 이벤트인 실패한 동작이 공격자의 정찰 신호다. 성공한 일만 기록하면 그 단계를 통째로 놓친다.</desc>
+<rect width="960" height="592" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">CONTAINER SECURITY · 14-01 §3</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">남겨야 할 컨테이너 이벤트 일곱은 SIEM 으로 모여 경보와 차단이 된다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">컨테이너 이벤트 일곱이 SIEM 으로 모여 경보와 차단으로 이어지는 흐름</text>
+<rect x="40" y="116" width="340" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="52" y="136" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">컨테이너 시작·종료</text>
+<text x="52" y="154" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">이미지 신원 · 호출한 사용자</text>
+<line x1="380" y1="140" x2="412" y2="140" stroke="#8B98A9" stroke-width="1.2"/>
+<rect x="40" y="172" width="340" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="52" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">시크릿 접근</text>
+<text x="52" y="210" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">누가 무엇을 읽었는가</text>
+<line x1="380" y1="196" x2="412" y2="196" stroke="#8B98A9" stroke-width="1.2"/>
+<rect x="40" y="228" width="340" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="52" y="248" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">권한 변경</text>
+<text x="52" y="266" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">권한 상승의 신호</text>
+<line x1="380" y1="252" x2="412" y2="252" stroke="#8B98A9" stroke-width="1.2"/>
+<rect x="40" y="284" width="340" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="52" y="304" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">컨테이너 페이로드 변경</text>
+<text x="52" y="322" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">코드 주입 신호 · 13장 드리프트</text>
+<line x1="380" y1="308" x2="412" y2="308" stroke="#8B98A9" stroke-width="1.2"/>
+<rect x="40" y="340" width="340" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="52" y="360" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">인바운드·아웃바운드 연결</text>
+<text x="52" y="378" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">트래픽의 흐름</text>
+<line x1="380" y1="364" x2="412" y2="364" stroke="#8B98A9" stroke-width="1.2"/>
+<rect x="40" y="396" width="340" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="52" y="416" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">볼륨 마운트</text>
+<text x="52" y="434" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">나중에 민감한 마운트 분석</text>
+<line x1="380" y1="420" x2="412" y2="420" stroke="#8B98A9" stroke-width="1.2"/>
+<rect x="40" y="452" width="340" height="48" rx="6" fill="#F08A591F" stroke="#F08A59" stroke-width="1.6"/>
+<text x="52" y="472" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">실패한 동작</text>
+<text x="52" y="490" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#F08A59">연결 시도 · 파일 쓰기 · 권한 변경의 실패</text>
+<line x1="380" y1="476" x2="412" y2="476" stroke="#F08A59" stroke-width="1.6"/>
+<line x1="412" y1="140" x2="412" y2="476" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="412" y1="308" x2="412" y2="476" stroke="#F08A59" stroke-width="1.6"/>
+<path d="M 412 308 L 456 308" fill="none" stroke="#8B98A9" stroke-width="1.6" marker-end="url(#ar)"/>
+<rect x="456" y="268" width="148" height="80" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="530" y="304" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="16" font-weight="600" fill="#F5F5F3">SIEM</text>
+<text x="530" y="326" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">중앙 인사이트</text>
+<path d="M 604 308 L 636 308" fill="none" stroke="#8B98A9" stroke-width="1.6" marker-end="url(#ar)"/>
+<rect x="636" y="280" width="120" height="56" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.2"/>
+<text x="696" y="313" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">경보</text>
+<path d="M 756 308 L 788 308" fill="none" stroke="#8B98A9" stroke-width="1.6" marker-end="url(#ar)"/>
+<rect x="788" y="280" width="132" height="56" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="854" y="306" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">사전 차단</text>
+<text x="854" y="324" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">13장 프로파일</text>
+<rect x="456" y="116" width="464" height="48" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.2"/>
+<text x="468" y="136" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">침해 식별까지 평균 거의 200일</text>
+<text x="468" y="154" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">관찰 + 경보로 단축</text>
+<rect x="456" y="452" width="464" height="48" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.2"/>
+<text x="468" y="472" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">실패 기록 없음</text>
+<text x="468" y="490" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">정찰 단계 통째 누락</text>
+<line x1="12" y1="536" x2="912" y2="536" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="558" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="548" width="14" height="12" rx="2" fill="#8B98A922" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="122" y="558" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">이벤트</text>
+<rect x="183" y="548" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="205" y="558" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">수집</text>
+<rect x="253" y="548" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="275" y="558" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">경보</text>
+<rect x="323" y="548" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="345" y="558" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">차단</text>
+<rect x="393" y="548" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="415" y="558" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정찰 신호</text>
+<rect x="502" y="548" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="524" y="558" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">놓치는 것</text>
 </svg>

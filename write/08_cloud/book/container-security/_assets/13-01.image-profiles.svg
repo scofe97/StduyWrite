@@ -1,88 +1,96 @@
-<svg viewBox="0 0 700 400" width="100%"
-     xmlns="http://www.w3.org/2000/svg"
-     role="img"
-     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>이미지 단위 런타임 프로파일의 다섯 축</title>
-  <desc>어떤 컨테이너 이미지가 애플리케이션 마이크로서비스의 코드를 담고 그 마이크로서비스가 작은 기능 하나를 한다면, 그것이 무엇을 해야 하는지 추론하기가 비교적 쉽습니다. 마이크로서비스 코드는 컨테이너 이미지에 빌드되므로 그 이미지에 대응하는 런타임 프로파일을 만들어 무엇을 할 수 있어야 하는지 정의할 수 있습니다. 주어진 이미지에서 뜬 모든 컨테이너는 같은 방식으로 동작해야 하므로, 기대 동작의 프로파일을 이미지에 대해 정의하고 그 이미지 기반의 모든 컨테이너를 단속하는 데 쓰는 것이 이치에 맞습니다. 프로파일로 만들 수 있는 축은 네트워크 트래픽, 실행 파일, 파일 접근, 사용자 ID, 그리고 더 낮은 수준의 시스템 콜과 capability 입니다.</desc>
-
-  <style>
-    .box { fill: #e8e4df; }
-    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
-    .box-detail { fill: #3a3632; font-size: 9.5px; }
-    .code { fill: #0d0d0d; font-size: 9.5px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
-    .chip { fill: #f5edda; }
-    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
-    .hint { fill: #b8b3ad; font-size: 10px; }
-    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
-  </style>
-
-  <rect width="700" height="400" fill="#0d0d0d"/>
-
-  <defs>
-    <marker id="uh13" markerWidth="9" markerHeight="9" refX="7" refY="3"
-            orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L7,3 z" fill="#b8b3ad"/>
-    </marker>
-  </defs>
-
-  <text class="head" x="40" y="30">작을수록 정상을 정의하기 쉽다</text>
-
-  <rect class="box" x="40" y="42" width="200" height="62" rx="4"/>
-  <text class="box-title" x="56" y="63">이미지 하나</text>
-  <text class="box-detail" x="56" y="82">기능 하나를 하는 코드</text>
-  <text class="box-detail" x="56" y="98">무엇을 할지 추론 가능</text>
-
-  <path class="arrow" d="M240,73 L280,73" marker-end="url(#uh13)"/>
-
-  <rect class="box" x="284" y="42" width="200" height="62" rx="4"/>
-  <text class="box-title" x="300" y="63">런타임 프로파일</text>
-  <text class="box-detail" x="300" y="82">기대 동작을 정의한다</text>
-  <text class="box-detail" x="300" y="98">이미지 단위로 만든다</text>
-
-  <path class="arrow" d="M484,73 L524,73" marker-end="url(#uh13)"/>
-
-  <rect class="box" x="528" y="42" width="132" height="62" rx="4"/>
-  <text class="box-title" x="544" y="63">모든 컨테이너</text>
-  <text class="box-detail" x="544" y="82">같은 이미지에서 뜬</text>
-  <text class="box-detail" x="544" y="98">전부를 단속한다</text>
-
-  <!-- 다섯 축 -->
-  <text class="head" x="40" y="142">프로파일로 만들 수 있는 축</text>
-
-  <rect class="box" x="40" y="154" width="200" height="96" rx="4"/>
-  <text class="box-title" x="56" y="175">네트워크 트래픽</text>
-  <text class="box-detail" x="56" y="194">인그레스에서 요청을 받고</text>
-  <text class="box-detail" x="56" y="212">상품 DB 에 연결한다</text>
-  <text class="box-detail" x="56" y="230">그 밖엔 이유가 없다</text>
-  <text class="box-detail" x="56" y="248">10장의 정책으로 변환</text>
-
-  <rect class="box" x="252" y="154" width="200" height="96" rx="4"/>
-  <text class="box-title" x="268" y="175">실행 파일</text>
-  <text class="box-detail" x="268" y="194">Go 바이너리 하나뿐이면</text>
-  <rect class="chip" x="268" y="202" width="110" height="15" rx="3"/>
-  <text class="code" x="272" y="213">productsearch</text>
-  <text class="box-detail" x="268" y="230">그 밖의 것은 이상 징후</text>
-  <text class="box-detail" x="268" y="248">셸이 보이면 경보</text>
-
-  <rect class="box" x="464" y="154" width="196" height="96" rx="4"/>
-  <text class="box-title" x="480" y="175">파일 접근</text>
-  <text class="box-detail" x="480" y="194">여는 파일 집합도 제한적</text>
-  <rect class="chip" x="480" y="202" width="80" height="15" rx="3"/>
-  <text class="code" x="484" y="213">openat</text>
-  <text class="box-detail" x="480" y="230">손으로 적으면 빠뜨린다</text>
-  <text class="box-detail" x="480" y="248">도구로 뽑아냅니다</text>
-
-  <rect class="box" x="40" y="262" width="308" height="86" rx="4"/>
-  <text class="box-title" x="56" y="283">사용자 ID</text>
-  <text class="box-detail" x="56" y="302">일 하나면 신원도 하나면 충분하다</text>
-  <text class="box-detail" x="56" y="320">다른 신원이 보이면 적신호</text>
-  <text class="box-detail" x="56" y="338">root 로 뜨면 권한 상승 신호</text>
-
-  <rect class="box" x="360" y="262" width="300" height="86" rx="4"/>
-  <text class="box-title" x="376" y="283">시스템 콜과 capability</text>
-  <text class="box-detail" x="376" y="302">더 낮은 수준까지 좁힌다</text>
-  <text class="box-detail" x="376" y="320">맞춤 seccomp 프로파일</text>
-  <text class="box-detail" x="376" y="338">8장에서 본 그 수단</text>
-
-  <text class="hint" x="40" y="384">경로가 적어 마이크로서비스가 쉽다</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 576" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">이미지 프로파일 하나가 다섯 축으로 모든 컨테이너를 단속합니다</title><desc id="dd">같은 이미지에서 뜬 컨테이너는 같게 동작한다. 그래서 이미지에 프로파일을 붙이고, 축마다 정상 값을 정해 벗어나면 이상 신호로 본다. 축은 네트워크 트래픽, 실행 파일, 파일 접근, 사용자 ID, 시스템 콜과 capability다.</desc>
+<rect width="960" height="576" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">CONTAINER SECURITY · 13-01 §1</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">이미지 프로파일 하나가 다섯 축으로 모든 컨테이너를 단속합니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">정상 값은 상품 검색 서비스를 예로 들었습니다.</text>
+<text x="244" y="112" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">프로파일 축</text>
+<text x="496" y="112" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">정상 값</text>
+<text x="776" y="112" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F0616D">벗어나면</text>
+<line x1="180" y1="312" x2="216" y2="312" stroke="#5E6B7E" stroke-width="1.3"/>
+<line x1="216" y1="160" x2="216" y2="464" stroke="#5E6B7E" stroke-width="1.3"/>
+<path d="M 216 160 L 240 160" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<path d="M 458 160 L 492 160" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 738 160 L 772 160" fill="none" stroke="#F0616D" stroke-width="1.3" marker-end="url(#bad)"/>
+<path d="M 216 236 L 240 236" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<path d="M 458 236 L 492 236" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 738 236 L 772 236" fill="none" stroke="#F0616D" stroke-width="1.3" marker-end="url(#bad)"/>
+<path d="M 216 312 L 240 312" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<path d="M 458 312 L 492 312" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 738 312 L 772 312" fill="none" stroke="#F0616D" stroke-width="1.3" marker-end="url(#bad)"/>
+<path d="M 216 388 L 240 388" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<path d="M 458 388 L 492 388" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 738 388 L 772 388" fill="none" stroke="#F0616D" stroke-width="1.3" marker-end="url(#bad)"/>
+<path d="M 216 464 L 240 464" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<path d="M 458 464 L 492 464" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 738 464 L 772 464" fill="none" stroke="#F0616D" stroke-width="1.3" marker-end="url(#bad)"/>
+<rect x="244" y="128" width="212" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="260" y="165" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">네트워크 트래픽</text>
+<rect x="496" y="128" width="240" height="64" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="512" y="156" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">인그레스 · 로드 밸런서 웹 요청</text>
+<text x="512" y="176" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">상품 DB로 연결 시작</text>
+<rect x="776" y="128" width="156" height="64" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.1"/>
+<text x="792" y="166" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">그 밖의 트래픽</text>
+<rect x="244" y="204" width="212" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="260" y="241" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">실행 파일</text>
+<rect x="496" y="204" width="240" height="64" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="512" y="232" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">productsearch</text>
+<text x="512" y="252" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Go 실행 파일 하나</text>
+<rect x="776" y="204" width="156" height="64" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.1"/>
+<text x="792" y="232" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">bash · sh · zsh</text>
+<text x="792" y="252" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F0616D">셸 실행 → 경보</text>
+<rect x="244" y="280" width="212" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="260" y="317" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">파일 접근</text>
+<rect x="496" y="280" width="240" height="64" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="512" y="308" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">제한된 파일 위치 집합</text>
+<text x="512" y="328" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">nginx 예 openat 20개+</text>
+<rect x="776" y="280" width="156" height="64" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.1"/>
+<text x="792" y="318" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">집합 밖 파일 접근</text>
+<rect x="244" y="356" width="212" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="260" y="393" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">사용자 ID</text>
+<rect x="496" y="356" width="240" height="64" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="512" y="384" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">신원 하나</text>
+<text x="512" y="404" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">컨테이너 하나, 일 하나</text>
+<rect x="776" y="356" width="156" height="64" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.1"/>
+<text x="792" y="384" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">다른 신원</text>
+<text x="792" y="404" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F0616D">예상 밖 root</text>
+<rect x="244" y="432" width="212" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="260" y="469" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">시스템 콜 · capability</text>
+<rect x="496" y="432" width="240" height="64" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="512" y="460" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">필요한 집합 (nginx 예 7개)</text>
+<text x="512" y="480" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">→ seccomp · AppArmor</text>
+<rect x="776" y="432" width="156" height="64" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.1"/>
+<text x="792" y="470" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">집합 밖 호출</text>
+<rect x="28" y="148" width="152" height="72" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="44" y="176" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">이미지</text>
+<text x="44" y="198" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">productsearch</text>
+<rect x="28" y="280" width="152" height="64" rx="6" fill="#F08A591F" stroke="#F08A59" stroke-width="1.4"/>
+<text x="44" y="308" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">이미지 프로파일</text>
+<text x="44" y="328" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">기대 동작 정의</text>
+<rect x="28" y="392" width="152" height="72" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="44" y="420" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">컨테이너 × N</text>
+<text x="44" y="442" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">전부 같은 동작</text>
+<path d="M 104 222 L 104 276" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<text x="116" y="254" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">정의</text>
+<path d="M 104 346 L 104 388" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<text x="116" y="372" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">단속</text>
+<line x1="12" y1="516" x2="912" y2="516" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="538" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="528" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">이미지 · 컨테이너</text>
+<rect x="274" y="528" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="296" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">이미지 프로파일</text>
+<rect x="422" y="528" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="444" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 값</text>
+<rect x="518" y="528" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="540" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">이상 신호</text>
 </svg>

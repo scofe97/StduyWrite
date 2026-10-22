@@ -1,86 +1,77 @@
-<svg viewBox="0 0 700 380" width="100%"
-     xmlns="http://www.w3.org/2000/svg"
-     role="img"
-     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
-  <title>namespace 공유 — 같은 장치가 위험도 되고 사이드카도 됩니다</title>
-  <desc>호스트와 같은 namespace 를 컨테이너가 쓰게 할 이유가 가끔 있습니다. Docker 에서는 pid 를 host 로 지정해 요청합니다. 컨테이너화된 프로세스는 모두 호스트에서 보이므로 프로세스 namespace 를 컨테이너에 공유하면 그 컨테이너가 다른 컨테이너의 프로세스까지 보게 됩니다. 한 컨테이너에서 오래 도는 sleep 을 띄우고 다른 컨테이너를 pid host 로 시작하면 그 프로세스가 보이고, 더 나아가 두 번째 컨테이너에서 kill 을 보내 첫 번째 컨테이너의 프로세스를 죽일 수 있습니다. 반면 사이드카 컨테이너는 애플리케이션 컨테이너의 namespace 에 일부러 접근 권한을 받아 기능을 대신 떠맡습니다. 서비스 메시 사이드카는 네트워킹을 대신해 상호 TLS 를 보장하고, 관측 사이드카는 로깅과 추적과 메트릭 수집을 설정하며, 보안 사이드카는 허용되는 실행 파일과 네트워크 연결을 단속합니다.</desc>
-
-  <style>
-    .box { fill: #e8e4df; }
-    .box-title { fill: #0d0d0d; font-size: 11.5px; font-weight: 700; }
-    .box-detail { fill: #3a3632; font-size: 9.5px; }
-    .code { fill: #0d0d0d; font-size: 9.5px; font-weight: 700; font-family: 'Menlo', 'Consolas', monospace; }
-    .chip { fill: #f5edda; }
-    .head { fill: #b8b3ad; font-size: 11px; font-weight: 700; }
-    .hint { fill: #b8b3ad; font-size: 10px; }
-    .arrow { stroke: #b8b3ad; stroke-width: 1.5; fill: none; }
-    .danger-title { fill: #7a1f1f; font-size: 11.5px; font-weight: 700; }
-    .danger-detail { fill: #7a1f1f; font-size: 9.5px; }
-    .kill { stroke: #7a1f1f; stroke-width: 1.5; fill: none; stroke-dasharray: 4 3; }
-    .ok-title { fill: #14521d; font-size: 11.5px; font-weight: 700; }
-    .ok-detail { fill: #14521d; font-size: 9.5px; }
-  </style>
-
-  <rect width="700" height="380" fill="#0d0d0d"/>
-
-  <defs>
-    <marker id="rd9" markerWidth="9" markerHeight="9" refX="7" refY="3"
-            orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L7,3 z" fill="#7a1f1f"/>
-    </marker>
-  </defs>
-
-  <text class="head" x="40" y="30">같은 공유가 두 얼굴을 갖습니다</text>
-
-  <!-- 위험 쪽 -->
-  <rect class="box" x="40" y="42" width="180" height="84" rx="4"/>
-  <text class="box-title" x="56" y="63">컨테이너 A</text>
-  <rect class="chip" x="56" y="72" width="120" height="15" rx="3"/>
-  <text class="code" x="60" y="83">sleep 1000</text>
-  <text class="box-detail" x="56" y="102">평범하게 돌고 있다</text>
-  <text class="box-detail" x="56" y="118">자기 namespace 안에서</text>
-
-  <rect x="286" y="42" width="200" height="84" rx="4" fill="#f2d4d4"/>
-  <text class="danger-title" x="302" y="63">컨테이너 B</text>
-  <rect class="chip" x="302" y="72" width="140" height="15" rx="3"/>
-  <text class="code" x="306" y="83">--pid=host</text>
-  <text class="danger-detail" x="302" y="102">A 의 프로세스가 보인다</text>
-  <text class="danger-detail" x="302" y="118">다른 컨테이너까지 전부</text>
-
-  <path class="kill" d="M286,84 L224,84" marker-end="url(#rd9)"/>
-  <text class="danger-detail" x="228" y="76">kill -9</text>
-
-  <rect x="506" y="42" width="154" height="84" rx="4" fill="#f2d4d4"/>
-  <text class="danger-title" x="522" y="63">결과</text>
-  <text class="danger-detail" x="522" y="82">A 의 프로세스를</text>
-  <text class="danger-detail" x="522" y="100">B 에서 죽일 수 있다</text>
-  <text class="danger-detail" x="522" y="118">격리가 사라진다</text>
-
-  <!-- 사이드카 -->
-  <text class="head" x="40" y="166">같은 장치를 의도적으로 — 사이드카</text>
-
-  <rect x="40" y="178" width="196" height="98" rx="4" fill="#cdeccf"/>
-  <text class="ok-title" x="56" y="199">서비스 메시</text>
-  <text class="ok-detail" x="56" y="218">네트워킹을 대신 떠맡는다</text>
-  <text class="ok-detail" x="56" y="236">모든 연결에 상호 TLS</text>
-  <text class="ok-detail" x="56" y="256">앱 팀이 따로 안 짜도 된다</text>
-  <text class="ok-detail" x="56" y="272">10장의 주제입니다</text>
-
-  <rect x="252" y="178" width="196" height="98" rx="4" fill="#cdeccf"/>
-  <text class="ok-title" x="268" y="199">관측</text>
-  <text class="ok-detail" x="268" y="218">로깅·추적·메트릭 수집</text>
-  <text class="ok-detail" x="268" y="236">목적지와 설정을 잡아 준다</text>
-  <text class="ok-detail" x="268" y="256">Prometheus 가 지원</text>
-  <text class="ok-detail" x="268" y="272">OpenTelemetry 도</text>
-
-  <rect x="464" y="178" width="196" height="98" rx="4" fill="#cdeccf"/>
-  <text class="ok-title" x="480" y="199">보안</text>
-  <text class="ok-detail" x="480" y="218">허용 실행 파일을 단속</text>
-  <text class="ok-detail" x="480" y="236">네트워크 연결도 함께</text>
-  <text class="ok-detail" x="480" y="256">앱 컨테이너 안의 행동을</text>
-  <text class="ok-detail" x="480" y="272">밖에서 통제한다</text>
-
-  <text class="hint" x="40" y="312">차이는 기술이 아니라 의도입니다</text>
-  <text class="hint" x="40" y="332">사이드카는 필요한 것만 받습니다</text>
-  <text class="hint" x="40" y="352">멀티테넌트면 특히 경계해야 합니다</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 984 612" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">namespace 공유는 같은 장치이고 범위와 의도가 위험인지 기능인지를 가릅니다</title><desc id="dd">두 레인 모두 컨테이너가 다른 쪽의 namespace 를 받는다. --pid=host 레인은 호스트 PID namespace 를 통째로 받아 sleep 1000 이 보이고 kill -9 로 종료할 수 있다. 사이드카 레인은 앱 컨테이너의 필요한 namespace 만 받아 서비스 메시 · 관측 · 보안 기능을 대신한다.</desc>
+<rect width="984" height="612" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">SWIMLANE · 09-01 §5</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">namespace 공유는 같은 장치이고 범위와 의도가 위험인지 기능인지를 가릅니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">호스트 PID namespace 를 통째로 넘기면 kill 까지 가능하고, 사이드카는 필요한 namespace 만 받아 기능을 대신합니다.</text>
+<rect x="204" y="96" width="232" height="32" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="218" y="117" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">1</text>
+<text x="326.0" y="117" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">공유되는 것</text>
+<rect x="476" y="96" width="184" height="32" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="490" y="117" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">2</text>
+<text x="574.0" y="117" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">받는 컨테이너</text>
+<rect x="700" y="96" width="232" height="32" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="714" y="117" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">3</text>
+<text x="822.0" y="117" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">얻는 능력</text>
+<rect x="36" y="140" width="156" height="148" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="52" y="212.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">--pid=host</text>
+<text x="52" y="234.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">호스트 전체</text>
+<rect x="36" y="300" width="156" height="216" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="52" y="406.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">사이드카</text>
+<text x="52" y="428.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">필요한 것만</text>
+<rect x="204" y="186.0" width="232" height="56" rx="6" fill="#F08A591F" stroke="#F08A59" stroke-width="1.6"/>
+<text x="320.0" y="211.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">호스트 PID namespace</text>
+<text x="320.0" y="229.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">통째로 공유</text>
+<rect x="476" y="186.0" width="184" height="56" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="568.0" y="211.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">alpine</text>
+<text x="568.0" y="229.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">--pid=host</text>
+<rect x="700" y="152" width="232" height="56" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="816.0" y="177.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">다른 컨테이너의 sleep 1000</text>
+<text x="816.0" y="195.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">ps | grep sleep</text>
+<rect x="700" y="220" width="232" height="56" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="816.0" y="245.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">sleep 프로세스 종료</text>
+<text x="816.0" y="263.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">kill -9 &lt;pid&gt;</text>
+<path d="M 438 214.0 L 472 214.0" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<line x1="662" y1="214.0" x2="680" y2="214.0" stroke="#F0616D" stroke-width="1.3"/>
+<line x1="680" y1="180.0" x2="680" y2="248.0" stroke="#F0616D" stroke-width="1.3"/>
+<path d="M 680 180.0 L 696 180.0" fill="none" stroke="#F0616D" stroke-width="1.3" marker-end="url(#bad)"/>
+<path d="M 680 248.0 L 696 248.0" fill="none" stroke="#F0616D" stroke-width="1.3" marker-end="url(#bad)"/>
+<rect x="204" y="380.0" width="232" height="56" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="320.0" y="405.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">앱 컨테이너 namespace</text>
+<text x="320.0" y="423.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">필요한 것만</text>
+<rect x="476" y="380.0" width="184" height="56" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="568.0" y="405.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">사이드카</text>
+<text x="568.0" y="423.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">의도한 공유</text>
+<rect x="700" y="312" width="232" height="56" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="816.0" y="337.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">서비스 메시</text>
+<text x="816.0" y="355.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">네트워킹 · 상호 TLS</text>
+<rect x="700" y="380" width="232" height="56" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="816.0" y="405.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">관측</text>
+<text x="816.0" y="423.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">로깅 · 추적 · 메트릭</text>
+<rect x="700" y="448" width="232" height="56" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="816.0" y="473.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">보안</text>
+<text x="816.0" y="491.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">실행 파일 · 연결 단속</text>
+<path d="M 438 408.0 L 472 408.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<line x1="662" y1="408.0" x2="680" y2="408.0" stroke="#3FB98C" stroke-width="1.3"/>
+<line x1="680" y1="340.0" x2="680" y2="476.0" stroke="#3FB98C" stroke-width="1.3"/>
+<path d="M 680 340.0 L 696 340.0" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
+<path d="M 680 408.0 L 696 408.0" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
+<path d="M 680 476.0 L 696 476.0" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
+<line x1="12" y1="556" x2="936" y2="556" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="578" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="568" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="578" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">통째 공유</text>
+<rect x="209" y="568" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="231" y="578" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">피해</text>
+<rect x="279" y="568" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="301" y="578" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">기능</text>
 </svg>
