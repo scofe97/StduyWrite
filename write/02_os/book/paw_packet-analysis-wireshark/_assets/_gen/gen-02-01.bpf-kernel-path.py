@@ -32,7 +32,7 @@ def draw(out, title, desc, lead, s, legend):
         d.t(16, (top + bot) / 2 + 14, key, 9, SOFT, MONO, "start")
     d.line(0, LANES[-1][3], W - 12, LANES[-1][3], RULE, 0.8)
     d.line(LABEL_W, LANES[0][2], LABEL_W, LANES[-1][3], RULE, 0.8)
-    d.t(W - 12, 456, "보호 경계", 11, SOFT, KR, "end", 600)
+    d.t(W - 40, 456, "보호 경계", 11, SOFT, KR, "end", 600)
 
     def arrow(pts, style, sw=1.4):
         dash = "3,3" if style == "soft" else None

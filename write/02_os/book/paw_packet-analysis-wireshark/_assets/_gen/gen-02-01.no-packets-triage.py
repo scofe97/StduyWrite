@@ -34,7 +34,7 @@ d.arrow([(CX, Y_S + 40), (CX, Y_D - 4)], MUTED, "ar", 1.4)
 d.arrow([(CX, Y_D + 76), (CX, Y_L - 4)], MUTED, "ar", 1.4)            # 목록 있음 → 아래
 d.arrow([(CX + 140, Y_D + 38), (536, Y_D + 38)], MUTED, "ar", 1.4)            # 목록 없음 → 오른쪽
 d.arrow([(CX, Y_L + 68), (CX, Y_R2 - 4)], MUTED, "ar", 1.4)
-d.arrow([(700, Y_D + 76), (700, Y_R2 + 34), (CX + 180, Y_R2 + 34)], MUTED, "ar", 1.4)
+d.arrow([(700, Y_D + 66), (700, Y_R2 + 34), (CX + 180, Y_R2 + 34)], MUTED, "ar", 1.4)
 d.arrow([(CX, Y_R2 + 68), (CX, Y_END - 4)], MUTED, "ar", 1.4)
 
 oval(CX, Y_S, 200, 40, "패킷이 안 보인다")
@@ -43,7 +43,7 @@ step(CX, Y_L, 352, 68, "인터페이스 · 라이브 트래픽 확인",
      "맞는 인터페이스인가 · 라이브 트래픽이 있는가")
 step(CX, Y_R2, 352, 68, "promiscuous 껐다 켜기",
      "자기 것 아닌 프레임을 버리고 있지 않은가")
-step(700, Y_D, 320, 76, "캡처 권한 확인",
+step(700, Y_D + 10, 320, 56, "캡처 권한 확인",
      "Wireshark 가 NIC 을 쓸 권한이 있는가", c=BAD)
 oval(CX, Y_END, 200, 40, "다시 캡처", OK)
 

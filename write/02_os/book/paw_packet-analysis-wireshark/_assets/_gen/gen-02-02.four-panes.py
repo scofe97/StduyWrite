@@ -13,10 +13,10 @@ d = D(W, H, "PACKET ANALYSIS WITH WIRESHARK · 02-02 §1",
 # 안쪽으로 갈수록 좌우 32 · 위 48 · 아래 24 씩 들여쓴다. 레벨마다 같은 값이라 정렬이 유지되고,
 # 위아래를 다르게 준 이유는 라벨이 링 상단에만 있어 대칭 여백이면 아래가 빈 채로 쌓이기 때문이다.
 RINGS = [
-    ("FILTER TOOLBAR", "필터 도구모음", "안쪽 전체를 좁히는 필터", 24, 104, 832, 272),
-    ("PACKET LIST",    "Packet List",   "한 줄에 프레임 하나. 잡힌 것 전부",   56, 152, 768, 200),
-    ("PACKET DETAILS", "Packet Details", "고른 프레임 하나의 계층 트리",        88, 200, 704, 128),
-    ("PACKET BYTES",   "Packet Bytes",  "고른 필드의 16진수 덤프",             120, 248, 640, 56),
+    ("RANGE 1", "필터 도구모음", "안쪽 전체를 좁히는 필터", 24, 104, 832, 272),
+    ("RANGE 2",    "Packet List",   "한 줄이 프레임 하나인 전체 목록",   56, 152, 768, 200),
+    ("RANGE 3", "Packet Details", "고른 프레임 하나의 계층 트리",        88, 200, 704, 128),
+    ("RANGE 4",   "Packet Bytes",  "고른 필드의 16진수 덤프",             120, 248, 640, 56),
 ]
 
 for i, (tag, name, sub, x, y, w, h) in enumerate(RINGS):
