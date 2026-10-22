@@ -70,7 +70,7 @@ for i, sec in enumerate(("§1", "§2", "§3", "§4", "§5")):
     d.chip(34, ny(i) + NH / 2 - 4, sec, MUTED, 11, 4)
 
 node(0, 0, "루트 파일시스템", "FROM·ADD·COPY·RUN", INFO)
-node(0, 1, "설정 정보", "USER·PORT·ENV", INFO)
+node(0, 1, "설정 정보", "USER·EXPOSE·ENV", INFO)
 node(0, 2, "docker run -e", "실행 시점에 덮어쓰기")
 harrow(0, 0, "나란히 저장")
 harrow(0, 1, "값 교체")

@@ -100,7 +100,7 @@ cell(2, 1, "게스트 커널", "하이퍼바이저보다 낮은 권한", focal=T
 empty(2, 2)
 # Ring 3
 cell(3, 0, "유저 공간 코드")
-empty(3, 1)
+cell(3, 1, "유저 공간 코드")  # 원서 그림 5-3: 하이퍼바이저 아래에서도 User space 는 Ring 3
 empty(3, 2)
 
 d.legend(428, [("커널", INFO), ("하이퍼바이저", WARN), ("권한이 낮아진 커널", ACC)])

@@ -22,7 +22,7 @@ def fit(t, size, limit):
 
 d = D(W, H, "CONTAINER SECURITY · 06-01 §1~2",
       "런타임은 이미지를 그대로 쓰지 못하고 rootfs 와 config.json 번들로 풉니다",
-      "Dockerfile 의 FROM·ADD·COPY·RUN 은 루트 파일시스템을, USER·PORT·ENV 는 설정 정보를 바꾼다. "
+      "Dockerfile 의 FROM·ADD·COPY·RUN 은 루트 파일시스템을, USER·EXPOSE·ENV 는 설정 정보를 바꾼다. "
       "두 부분이 나란히 저장된 이미지를 umoci unpack 으로 풀면 rootfs 디렉토리와 config.json 파일의 번들이 되고, runc 가 그 번들로 컨테이너를 만든다. "
       "실행 시점의 docker run -e 나 Pod 의 env 값은 config.json 에 들어간다.",
       lead="왼쪽 칩은 단계, 파랑은 루트 파일시스템 갈래, 노랑은 실행 시점에 덮어쓸 수 있는 설정 갈래입니다.")
@@ -50,7 +50,7 @@ for y, s in zip(ROW_Y, ("명령", "이미지", "번들", "런타임")):
 
 # 1단 — Dockerfile 명령
 node(XL, ROW_Y[0], "FROM·ADD·COPY·RUN", "루트 파일시스템을 바꿈", INFO)
-node(XR, ROW_Y[0], "USER·PORT·ENV", "설정 정보에 영향", WARN)
+node(XR, ROW_Y[0], "USER·EXPOSE·ENV", "설정 정보에 영향", WARN)
 # 2단 — OCI 이미지의 두 부분
 node(XL, ROW_Y[1], "루트 파일시스템", "alpine 과 같은 디렉토리 구조", INFO)
 node(XR, ROW_Y[1], "설정 정보", "docker inspect 로 확인", WARN)
