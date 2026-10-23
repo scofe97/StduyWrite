@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">fexit 프로그램은 인자와 반환값을 함께 받고 kretprobe 는 반환값만 받는다</title><desc id="dd">호출자가 do_unlinkat(dfd, name) 을 부르면 트램펄린이 fentry 프로그램에 dfd·name 을 넘기고 본문을 실행한다. 본문이 ret 을 돌려주면 트램펄린이 fexit 프로그램에 dfd·name·ret 을 넘기고, kretprobe 프로그램은 ret 만 받는다.</desc>
+<rect width="960" height="640" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING EBPF · 07-01 §3</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">fexit 프로그램은 인자와 반환값을 함께 받고 kretprobe 는 반환값만 받는다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">같은 함수 끝에서 받는 값이 다릅니다</text>
+<rect x="20" y="100" width="216" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="128" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">호출자</text>
+<text x="128" y="137" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">사용자 공간 · syscall</text>
+<rect x="260" y="100" width="216" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="368" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">BPF 트램펄린</text>
+<text x="368" y="137" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">fentry · fexit</text>
+<rect x="500" y="100" width="216" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="608" y="120" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">do_unlinkat</text>
+<text x="608" y="137" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">v7.0 부터 filename_unlinkat</text>
+<rect x="740" y="100" width="216" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="848" y="120" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">kretprobe</text>
+<text x="848" y="137" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">대안 경로</text>
+<line x1="128" y1="150" x2="128" y2="560" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="368" y1="150" x2="368" y2="560" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="608" y1="150" x2="608" y2="560" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="848" y1="150" x2="848" y2="560" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<path d="M 138 196 L 356 196" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="160.16000000000003" y="173" width="175.67999999999998" height="18" fill="#0D1117"/>
+<text x="248.0" y="187" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">do_unlinkat(dfd, name)</text>
+<rect x="183.04" y="201" width="129.92000000000002" height="18" fill="#0D1117"/>
+<text x="248.0" y="213" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">함수 앞머리 nop 자리</text>
+<path d="M 378 242 L 426 242 L 426 262 L 381 262" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="436" y="248" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">fentry 프로그램</text>
+<text x="436" y="265" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">dfd · name</text>
+<path d="M 378 316 L 596 316" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="438.56" y="293" width="98.88" height="18" fill="#0D1117"/>
+<text x="488.0" y="307" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">원래 본문 실행</text>
+<path d="M 598 380 L 380 380" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="455.12" y="357" width="65.75999999999999" height="18" fill="#0D1117"/>
+<text x="488.0" y="371" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">ret 반환</text>
+<path d="M 378 430 L 426 430 L 426 450 L 381 450" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="436" y="436" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">fexit 프로그램</text>
+<text x="436" y="453" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">dfd · name · ret</text>
+<path d="M 618 504 L 836 504" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)" stroke-dasharray="6 4"/>
+<rect x="682.28" y="481" width="91.44" height="18" fill="#0D1117"/>
+<text x="728.0" y="495" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">반환 가로채기</text>
+<rect x="637.85" y="509" width="180.3" height="18" fill="#0D1117"/>
+<text x="728.0" y="521" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">kretprobe 프로그램은 ret 만</text>
+<line x1="12" y1="584" x2="912" y2="584" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="606" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="596" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="606" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">fentry 프로그램</text>
+<rect x="287" y="596" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="309" y="606" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">fexit 프로그램</text>
+<rect x="461" y="596" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="483" y="606" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">kretprobe 경로</text>
+</svg>

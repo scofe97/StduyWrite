@@ -1,0 +1,123 @@
+<svg viewBox="0 0 900 660" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif">
+  <title>Alertmanager HA — 가십이 공유하는 것과 로드밸런서가 깨뜨리는 것</title>
+  <desc>위쪽은 올바른 배치다. Prometheus 가 알림 하나를 Alertmanager 세 대 모두에게 똑같이 보낸다. 세 대가 다 그 알림을 갖고 있으므로 어느 하나가 죽어도 나머지가 발송할 수 있다. 세 대는 가십으로 두 가지를 공유한다. 침묵 목록과 어느 알림 그룹에 이미 발송했는지 여부다. 한 대가 발송하면 그 사실을 나머지에게 알리고 나머지는 같은 리시버로 다시 보내지 않는다. 그래서 사람에게는 한 통만 도착한다. 아래쪽은 앞에 로드밸런서를 둔 잘못된 배치다. 로드밸런서가 알림을 한 대에게만 전달하므로 나머지 두 대는 그 알림의 존재 자체를 모른다. 가십은 발송 여부만 공유하고 어떤 알림을 받았는지는 공유하지 않기 때문에 이 구멍은 메워지지 않는다. 알림을 받은 그 한 대가 죽으면 아무도 발송하지 못하고 알림은 사라진다. 고가용성을 위해 세 대를 띄웠는데 실제로는 한 대짜리보다 나을 것이 없는 상태가 된다. 아래 요약은 가십이 공유하는 것과 공유하지 않는 것을 가르고, 합의 알고리듬을 쓰지 않아 정족수가 없으므로 대수보다 가용 영역 분산이 중요하다는 점을 적었다.</desc>
+  <rect width="900" height="660" fill="#0d0d0d"/>
+
+  <defs>
+    <marker id="ha1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/>
+    </marker>
+    <marker id="ha2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#f44336"/>
+    </marker>
+    <marker id="ha3" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <text x="450" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#e8e4df">가십은 "보냈는지" 만 나누고 "받았는지" 는 안 나눕니다</text>
+
+  <!-- ===== 올바른 배치 ===== -->
+  <rect x="24" y="50" width="852" height="248" rx="10" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.6"/>
+  <rect x="44" y="62" width="150" height="24" rx="4" fill="#e6f7e7"/>
+  <text x="119" y="79" text-anchor="middle" font-size="11.5" font-weight="700" fill="#14521d">올바른 배치</text>
+  <text x="208" y="79" font-size="10.5" fill="#b8b3ad">모든 인스턴스로 똑같이 보냅니다</text>
+
+  <rect x="44" y="104" width="128" height="70" rx="7" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.4"/>
+  <text x="108" y="132" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8ab6e0">Prometheus</text>
+  <text x="108" y="152" text-anchor="middle" font-size="10" fill="#b8b3ad">알림 1건</text>
+
+  <line x1="180" y1="118" x2="238" y2="118" stroke="#66bb6a" stroke-width="1.6" marker-end="url(#ha1)"/>
+  <line x1="180" y1="139" x2="238" y2="182" stroke="#66bb6a" stroke-width="1.6" marker-end="url(#ha1)"/>
+  <line x1="180" y1="158" x2="238" y2="246" stroke="#66bb6a" stroke-width="1.6" marker-end="url(#ha1)"/>
+
+  <rect x="246" y="100" width="176" height="40" rx="6" fill="#e6f7e7"/>
+  <text x="334" y="117" text-anchor="middle" font-size="11" font-weight="700" fill="#14521d">Alertmanager A</text>
+  <text x="334" y="132" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">알림 있음</text>
+
+  <rect x="246" y="164" width="176" height="40" rx="6" fill="#e6f7e7"/>
+  <text x="334" y="181" text-anchor="middle" font-size="11" font-weight="700" fill="#14521d">Alertmanager B</text>
+  <text x="334" y="196" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">알림 있음</text>
+
+  <rect x="246" y="228" width="176" height="40" rx="6" fill="#e6f7e7"/>
+  <text x="334" y="245" text-anchor="middle" font-size="11" font-weight="700" fill="#14521d">Alertmanager C</text>
+  <text x="334" y="260" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">알림 있음</text>
+
+  <!-- 가십 -->
+  <path d="M430,120 Q470,184 430,248" fill="none" stroke="rgb(212,168,83)" stroke-width="1.6" marker-end="url(#ha3)"/>
+  <rect x="440" y="150" width="150" height="44" rx="5" fill="#fdf3df"/>
+  <text x="515" y="167" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">가십으로 공유</text>
+  <text x="515" y="184" text-anchor="middle" font-size="9.5" font-weight="700" fill="#3a2f10">침묵 · 발송 여부</text>
+
+  <line x1="600" y1="172" x2="644" y2="172" stroke="#66bb6a" stroke-width="1.6" marker-end="url(#ha1)"/>
+  <rect x="652" y="140" width="200" height="64" rx="7" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.4"/>
+  <text x="752" y="163" text-anchor="middle" font-size="11" font-weight="700" fill="#8fd694">A 가 발송</text>
+  <rect x="668" y="172" width="168" height="22" rx="4" fill="#e6f7e7"/>
+  <text x="752" y="188" text-anchor="middle" font-size="10" font-weight="700" fill="#14521d">사람에게 한 통만</text>
+
+  <rect x="44" y="230" width="176" height="52" rx="6" fill="#dceaf7"/>
+  <text x="132" y="250" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">A 가 죽어도</text>
+  <text x="132" y="267" text-anchor="middle" font-size="10" font-weight="700" fill="#10243a">B · C 가 대신 보냅니다</text>
+
+  <!-- ===== 잘못된 배치 ===== -->
+  <rect x="24" y="314" width="852" height="212" rx="10" fill="#0d0d0d" stroke="#f44336" stroke-width="1.6"/>
+  <rect x="44" y="326" width="196" height="24" rx="4" fill="#f2d4d4"/>
+  <text x="142" y="343" text-anchor="middle" font-size="11.5" font-weight="700" fill="#7a1f1f">로드밸런서를 두면</text>
+  <text x="254" y="343" font-size="10.5" fill="#b8b3ad">한 대만 알림을 받습니다</text>
+
+  <rect x="44" y="368" width="128" height="64" rx="7" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.4"/>
+  <text x="108" y="394" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8ab6e0">Prometheus</text>
+  <text x="108" y="413" text-anchor="middle" font-size="10" fill="#b8b3ad">알림 1건</text>
+
+  <line x1="180" y1="400" x2="222" y2="400" stroke="#f44336" stroke-width="1.6" marker-end="url(#ha2)"/>
+  <rect x="230" y="378" width="104" height="44" rx="6" fill="#f2d4d4"/>
+  <text x="282" y="396" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7a1f1f">로드밸런서</text>
+  <text x="282" y="412" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">한 대만 고름</text>
+
+  <line x1="342" y1="400" x2="384" y2="376" stroke="#f44336" stroke-width="1.6" marker-end="url(#ha2)"/>
+
+  <rect x="392" y="356" width="176" height="38" rx="6" fill="#e6f7e7"/>
+  <text x="480" y="372" text-anchor="middle" font-size="10.5" font-weight="700" fill="#14521d">Alertmanager A</text>
+  <text x="480" y="387" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">알림 있음</text>
+
+  <rect x="392" y="402" width="176" height="38" rx="6" fill="#f2d4d4"/>
+  <text x="480" y="418" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7a1f1f">Alertmanager B</text>
+  <text x="480" y="433" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">알림 모름</text>
+
+  <rect x="392" y="448" width="176" height="38" rx="6" fill="#f2d4d4"/>
+  <text x="480" y="464" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7a1f1f">Alertmanager C</text>
+  <text x="480" y="479" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">알림 모름</text>
+
+  <line x1="576" y1="420" x2="618" y2="420" stroke="#f44336" stroke-width="1.6" marker-end="url(#ha2)"/>
+  <rect x="626" y="366" width="226" height="108" rx="7" fill="#0d0d0d" stroke="#f44336" stroke-width="1.4"/>
+  <text x="739" y="390" text-anchor="middle" font-size="11" font-weight="700" fill="#ef9a9a">A 가 죽으면</text>
+  <rect x="642" y="400" width="194" height="24" rx="4" fill="#f2d4d4"/>
+  <text x="739" y="417" text-anchor="middle" font-size="10" font-weight="700" fill="#7a1f1f">아무도 발송하지 못합니다</text>
+  <rect x="642" y="430" width="194" height="32" rx="4" fill="#f2d4d4"/>
+  <text x="739" y="445" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">B · C 는 알림 자체를 모르니</text>
+  <text x="739" y="457" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">대신 보낼 수 없습니다</text>
+
+  <rect x="44" y="448" width="290" height="60" rx="6" fill="#fdf3df"/>
+  <text x="189" y="468" text-anchor="middle" font-size="10" font-weight="700" fill="#3a2f10">가십이 이 구멍을 못 메웁니다</text>
+  <text x="189" y="485" text-anchor="middle" font-size="9.5" font-weight="700" fill="#3a2f10">"받았는지" 는 공유 대상이 아니므로</text>
+  <text x="189" y="499" text-anchor="middle" font-size="9.5" font-weight="700" fill="#3a2f10">세 대를 띄운 의미가 사라집니다</text>
+
+  <!-- ===== 요약 ===== -->
+  <rect x="24" y="542" width="852" height="98" rx="9" fill="#0d0d0d" stroke="#5c544a" stroke-width="1.3"/>
+  <text x="44" y="566" font-size="12" font-weight="700" fill="#e8e4df">가십이 나누는 것과 나누지 않는 것</text>
+
+  <rect x="44" y="578" width="266" height="48" rx="6" fill="#e6f7e7"/>
+  <text x="177" y="597" text-anchor="middle" font-size="10.5" font-weight="700" fill="#14521d">공유합니다</text>
+  <text x="177" y="614" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14521d">침묵 · 이미 발송했는지 여부</text>
+
+  <rect x="322" y="578" width="266" height="48" rx="6" fill="#f2d4d4"/>
+  <text x="455" y="597" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7a1f1f">공유하지 않습니다</text>
+  <text x="455" y="614" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7a1f1f">어떤 알림을 받았는지</text>
+
+  <rect x="600" y="578" width="252" height="48" rx="6" fill="#dceaf7"/>
+  <text x="726" y="597" text-anchor="middle" font-size="10.5" font-weight="700" fill="#10243a">합의 알고리듬 없음</text>
+  <text x="726" y="614" text-anchor="middle" font-size="9.5" font-weight="700" fill="#10243a">정족수 불필요 · AZ 분산이 중요</text>
+</svg>

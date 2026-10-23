@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 540" width="900" height="540" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif" role="img">
+  <title>LogQL 질의 파이프라인 단계</title>
+  <desc>LogQL 질의가 스트림 선택자로 로그를 고른 뒤 파서·필터·포맷 단계를 거쳐 결과를 만들고, 메트릭 질의로 확장되는 흐름입니다.</desc>
+  <style>
+    .bg { fill: #0d0d0d; }
+    .title { fill: #e8e4df; font-size: 17px; font-weight: 700; }
+    .sub { fill: #b8b3ad; font-size: 12px; }
+    .stage { font-size: 13.5px; font-weight: 700; }
+    .note { font-size: 11.5px; }
+    .mono { font-size: 11.5px; }
+    .code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11px; }
+    .cap { fill: #b8b3ad; font-size: 11.5px; font-weight: 700; }
+  </style>
+  <rect class="bg" x="0" y="0" width="900" height="540"/>
+
+  <text class="title" x="30" y="34">LogQL 파이프라인</text>
+  <text class="sub" x="30" y="55">순서가 성능을 정한다</text>
+
+  <!-- query example -->
+  <rect x="30" y="72" width="840" height="46" rx="6" fill="#0d0d0d" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text class="code" x="46" y="92" fill="#66bb6a">{component=~".+service"}</text>
+  <text class="code" x="252" y="92" fill="#5b9bd5">|= `emailservice`</text>
+  <text class="code" x="420" y="92" fill="rgb(212,168,83)">| json</text>
+  <text class="code" x="500" y="92" fill="#c9a0dc">| restart_count &gt; 0</text>
+  <text class="code" x="676" y="92" fill="#e39b9b">| line_format …</text>
+  <text class="sub" x="46" y="110">한 줄에 다섯 단계</text>
+
+  <!-- Stage 1 -->
+  <rect x="30" y="136" width="840" height="68" rx="8" fill="#66bb6a"/>
+  <text class="stage" x="50" y="160" fill="#0d0d0d">① 스트림 셀렉터 — 인덱스를 탄다</text>
+  <text class="note" x="50" y="181" fill="#1a1a1a">라벨로 청크를 고른다</text>
+  <text class="note" x="50" y="197" fill="#0d0d0d" font-weight="700">빈 값 매칭 실패 (.* 안 됨)</text>
+  <rect x="646" y="150" width="206" height="42" rx="5" fill="#e6f7e7"/>
+  <text class="code" x="660" y="167" fill="#14521d">= != =~ !~</text>
+  <text class="note" x="660" y="184" fill="#14521d">RE2 · 전체 문자열 매칭</text>
+
+  <!-- arrow -->
+  <path d="M 450 204 L 450 222" stroke="#b8b3ad" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+  <defs><marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#b8b3ad"/></marker></defs>
+
+  <!-- Stage 2 -->
+  <rect x="30" y="226" width="840" height="68" rx="8" fill="#5b9bd5"/>
+  <text class="stage" x="50" y="250" fill="#e8e4df">② 라인 필터 — 분산 grep</text>
+  <text class="note" x="50" y="271" fill="#e8e4df">본문을 훑어 줄을 버린다</text>
+  <text class="note" x="50" y="287" fill="#e8e4df" font-weight="700">먼저 두면 대상이 준다</text>
+  <rect x="646" y="240" width="206" height="42" rx="5" fill="#dceaf7"/>
+  <text class="code" x="660" y="257" fill="#10243a">|= != |~ !~</text>
+  <text class="note" x="660" y="274" fill="#10243a">ip() 는 |= != 만</text>
+
+  <path d="M 450 294 L 450 312" stroke="#b8b3ad" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+
+  <!-- Stage 3 -->
+  <rect x="30" y="316" width="840" height="68" rx="8" fill="rgb(212,168,83)"/>
+  <text class="stage" x="50" y="340" fill="#0d0d0d">③ 파서 — 본문에서 라벨을 꺼낸다</text>
+  <text class="note" x="50" y="361" fill="#1a1a1a">형식에 맞는 파서를 고른다</text>
+  <text class="note" x="50" y="377" fill="#0d0d0d" font-weight="700">실패는 __error__ 라벨로</text>
+  <rect x="586" y="330" width="266" height="42" rx="5" fill="#fdf3df"/>
+  <text class="code" x="600" y="347" fill="#0d0d0d">json logfmt pattern</text>
+  <text class="code" x="600" y="364" fill="#0d0d0d">regexp unpack</text>
+
+  <path d="M 450 384 L 450 402" stroke="#b8b3ad" stroke-width="1.6" fill="none" marker-end="url(#a)"/>
+
+  <!-- Stage 4 -->
+  <rect x="30" y="406" width="410" height="112" rx="8" fill="#ddd4f0"/>
+  <text class="stage" x="50" y="430" fill="#2a1f4a">④ 라벨 필터 — 뽑은 값으로 거른다</text>
+  <text class="note" x="50" y="451" fill="#1a1a1a">원래·새 라벨 모두 사용</text>
+  <rect x="50" y="462" width="370" height="44" rx="5" fill="#0d0d0d"/>
+  <text class="code" x="62" y="479" fill="#c9a0dc">String · Duration · Number · Bytes</text>
+  <text class="note" x="62" y="497" fill="#c9a0dc">타입은 입력에서 추론된다</text>
+
+  <!-- Stage 5 -->
+  <rect x="460" y="406" width="410" height="112" rx="8" fill="#f2d4d4"/>
+  <text class="stage" x="480" y="430" fill="#7a1f1f">⑤ 포맷 — 보여줄 모양으로 바꾼다</text>
+  <text class="note" x="480" y="451" fill="#1a1a1a">Go text/template</text>
+  <rect x="480" y="462" width="370" height="44" rx="5" fill="#fbeaea"/>
+  <text class="mono" x="492" y="479" fill="#7a1f1f">line_format — 본문 재작성</text>
+  <text class="mono" x="492" y="497" fill="#7a1f1f">label_format — 이름·추가</text>
+</svg>

@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 700" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">진입 probe 가 buf 를 맵에 맡기고 반환 probe 가 같은 키로 평문을 꺼낸다</title><desc id="dd">SSL_read(s, buf, num) 가 불리면 진입 probe 가 PT_REGS_PARM2 의 buf 를 active_ssl_read_args_map 에 pid_tgid 키로 update 한다. 라이브러리가 복호화해 buf 를 채우고 반환하면 반환 probe 가 같은 키로 lookup 해 process_SSL_data 를 부르고, 평문 data_len 바이트(최대 MAX_DATA_SIZE)를 tls_events 로 perf_submit 한 뒤 delete 한다.</desc>
+<rect width="960" height="700" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING EBPF · 08-02 §1</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">진입 probe 가 buf 를 맵에 맡기고 반환 probe 가 같은 키로 평문을 꺼낸다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">인자는 진입에서만, 평문과 길이는 반환에서만 얻습니다</text>
+<rect x="12" y="100" width="176" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="100" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">앱 · libssl</text>
+<text x="100" y="137" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">SSL_read</text>
+<rect x="196" y="100" width="176" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="284" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">진입 probe</text>
+<text x="284" y="137" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">uprobe</text>
+<rect x="380" y="100" width="176" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="468" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">맵</text>
+<text x="468" y="137" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">active_ssl_read_args_map</text>
+<rect x="564" y="100" width="176" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="652" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">반환 probe</text>
+<text x="652" y="137" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">uretprobe</text>
+<rect x="748" y="100" width="176" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="836" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">perf 버퍼</text>
+<text x="836" y="137" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">tls_events</text>
+<line x1="100" y1="150" x2="100" y2="620" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="284" y1="150" x2="284" y2="620" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="468" y1="150" x2="468" y2="620" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="652" y1="150" x2="652" y2="620" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="836" y1="150" x2="836" y2="620" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<path d="M 110 196 L 272 196" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="107.88000000000001" y="173" width="168.23999999999998" height="18" fill="#0D1117"/>
+<text x="192.0" y="187" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">SSL_read(s, buf, num)</text>
+<path d="M 294 242 L 342 242 L 342 262 L 297 262" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="346" y="232" width="153.35999999999999" height="18" fill="#0D1117"/>
+<text x="352" y="246" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">buf = PT_REGS_PARM2</text>
+<rect x="346" y="252" width="62.82" height="18" fill="#0D1117"/>
+<text x="352" y="264" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">둘째 인자</text>
+<path d="M 294 308 L 456 308" fill="none" stroke="#F08A59" stroke-width="1.5" marker-end="url(#acc)"/>
+<rect x="288.16" y="285" width="175.67999999999998" height="18" fill="#0D1117"/>
+<text x="376.0" y="299" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">update(pid_tgid, &amp;buf)</text>
+<rect x="283.21" y="313" width="185.58" height="18" fill="#0D1117"/>
+<text x="376.0" y="325" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">키 = tgid &lt;&lt; 32 | 스레드 ID</text>
+<path d="M 110 354 L 158 354 L 158 374 L 113 374" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="162" y="344" width="140.64" height="18" fill="#0D1117"/>
+<text x="168" y="358" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">복호화해 buf 를 채움</text>
+<path d="M 110 424 L 640 424" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="287.32" y="401" width="177.35999999999999" height="18" fill="#0D1117"/>
+<text x="376.0" y="415" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">반환 · len = PT_REGS_RC</text>
+<path d="M 642 476 L 480 476" fill="none" stroke="#F08A59" stroke-width="1.5" marker-end="url(#acc)"/>
+<rect x="494.48" y="453" width="131.04" height="18" fill="#0D1117"/>
+<text x="560.0" y="467" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">lookup(pid_tgid)</text>
+<path d="M 478 512 L 640 512" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)" stroke-dasharray="6 4"/>
+<rect x="539.12" y="489" width="41.76" height="18" fill="#0D1117"/>
+<text x="560.0" y="503" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">*buf</text>
+<path d="M 662 568 L 824 568" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<rect x="671.04" y="545" width="145.92" height="18" fill="#0D1117"/>
+<text x="744.0" y="559" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">perf_submit(event)</text>
+<rect x="676.4" y="573" width="135.2" height="18" fill="#0D1117"/>
+<text x="744.0" y="585" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">평문 data_len 바이트</text>
+<path d="M 642 624 L 480 624" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<rect x="494.48" y="601" width="131.04" height="18" fill="#0D1117"/>
+<text x="560.0" y="615" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">delete(pid_tgid)</text>
+<line x1="12" y1="644" x2="912" y2="644" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="666" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="656" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="666" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">맵에 맡김 · 꺼냄</text>
+<rect x="274" y="656" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="296" y="666" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">평문이 올라감</text>
+<rect x="409" y="656" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="431" y="666" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정리</text>
+</svg>

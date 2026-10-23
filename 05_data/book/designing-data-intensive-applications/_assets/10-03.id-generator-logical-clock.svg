@@ -1,0 +1,135 @@
+<svg viewBox="0 0 820 520" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="13">
+
+  <!-- ===== Background ===== -->
+  <rect width="820" height="520" fill="#f9f9fb" rx="10"/>
+
+  <!-- ===== Title ===== -->
+  <text x="410" y="32" text-anchor="middle" font-size="16" font-weight="bold" fill="#222">ID 생성기와 논리 시계 — 개념 지도</text>
+
+  <!-- =========================================================
+       왼쪽 섹션: 분산 ID 생성 방법
+  ========================================================= -->
+  <rect x="20" y="50" width="370" height="200" rx="8" fill="#EEF4FF" stroke="#93B4F0" stroke-width="1.5"/>
+  <text x="205" y="72" text-anchor="middle" font-weight="bold" fill="#2255AA">분산 ID 생성 방법</text>
+
+  <!-- 단일 노드 -->
+  <rect x="35" y="82" width="160" height="36" rx="5" fill="#C6D9FF" stroke="#7099DD"/>
+  <text x="115" y="96" text-anchor="middle" font-size="12" fill="#000">단일 노드 AUTO_INCREMENT</text>
+  <text x="115" y="111" text-anchor="middle" font-size="11" fill="#333">선형화 O, 순서 O — 병목</text>
+
+  <!-- 샤딩 할당 -->
+  <rect x="205" y="82" width="170" height="36" rx="5" fill="#FFE8CC" stroke="#DDAA66"/>
+  <text x="290" y="96" text-anchor="middle" font-size="12" fill="#000">샤딩 ID 할당 (홀짝)</text>
+  <text x="290" y="111" text-anchor="middle" font-size="11" fill="#333">선형화 X, 순서 X</text>
+
+  <!-- 블록 사전 할당 -->
+  <rect x="35" y="128" width="160" height="36" rx="5" fill="#FFE8CC" stroke="#DDAA66"/>
+  <text x="115" y="142" text-anchor="middle" font-size="12" fill="#000">블록 사전 할당</text>
+  <text x="115" y="157" text-anchor="middle" font-size="11" fill="#333">선형화 X, 순서 X</text>
+
+  <!-- 랜덤 UUID -->
+  <rect x="205" y="128" width="170" height="36" rx="5" fill="#FFE8CC" stroke="#DDAA66"/>
+  <text x="290" y="142" text-anchor="middle" font-size="12" fill="#000">랜덤 UUID (128비트)</text>
+  <text x="290" y="157" text-anchor="middle" font-size="11" fill="#333">선형화 X, 순서 X</text>
+
+  <!-- 타임스탬프 기반 -->
+  <rect x="35" y="174" width="340" height="36" rx="5" fill="#FFF6CC" stroke="#CCAA00"/>
+  <text x="205" y="188" text-anchor="middle" font-size="12" fill="#000">벽시계 타임스탬프 기반 (UUID v7, Snowflake, ULID)</text>
+  <text x="205" y="204" text-anchor="middle" font-size="11" fill="#333">대략 정렬 — 클럭 스큐로 비선형화 가능</text>
+
+  <!-- =========================================================
+       오른쪽 섹션: 논리 시계 요건
+  ========================================================= -->
+  <rect x="410" y="50" width="390" height="200" rx="8" fill="#F0FFF0" stroke="#88CC88" stroke-width="1.5"/>
+  <text x="605" y="72" text-anchor="middle" font-weight="bold" fill="#226622">논리 시계 3요건</text>
+
+  <rect x="425" y="82" width="360" height="36" rx="5" fill="#C8EEC8" stroke="#77BB77"/>
+  <text x="605" y="97" text-anchor="middle" font-size="12" fill="#000">① 컴팩트 — 작은 공간(정수 또는 벡터)으로 표현</text>
+  <text x="605" y="112" text-anchor="middle" font-size="11" fill="#333">타임스탬프 한 쌍 또는 카운터 배열</text>
+
+  <rect x="425" y="128" width="360" height="36" rx="5" fill="#C8EEC8" stroke="#77BB77"/>
+  <text x="605" y="143" text-anchor="middle" font-size="12" fill="#000">② 전순서 — 모든 이벤트 쌍을 비교 가능</text>
+  <text x="605" y="158" text-anchor="middle" font-size="11" fill="#333">Lamport: (카운터, 노드ID) 사전 순</text>
+
+  <rect x="425" y="174" width="360" height="36" rx="5" fill="#C8EEC8" stroke="#77BB77"/>
+  <text x="605" y="189" text-anchor="middle" font-size="12" fill="#000">③ 인과성 일관 — A→B 면 ts(A) &lt; ts(B)</text>
+  <text x="605" y="204" text-anchor="middle" font-size="11" fill="#333">Lamport·HLC 보장 / UUID v7 미보장</text>
+
+  <!-- =========================================================
+       중간 섹션: Lamport 클럭 동작
+  ========================================================= -->
+  <rect x="20" y="268" width="370" height="190" rx="8" fill="#FFF4F4" stroke="#EE9999" stroke-width="1.5"/>
+  <text x="205" y="290" text-anchor="middle" font-weight="bold" fill="#AA2222">Lamport 클럭 동작</text>
+
+  <!-- Aaliyah -->
+  <rect x="35" y="300" width="90" height="28" rx="4" fill="#FFCCCC" stroke="#EE8888"/>
+  <text x="80" y="319" text-anchor="middle" font-size="12" fill="#000">Aaliyah (1)</text>
+
+  <!-- Caleb -->
+  <rect x="145" y="300" width="90" height="28" rx="4" fill="#FFCCCC" stroke="#EE8888"/>
+  <text x="190" y="319" text-anchor="middle" font-size="12" fill="#000">Caleb (1)</text>
+
+  <!-- Bryce -->
+  <rect x="255" y="300" width="100" height="28" rx="4" fill="#FFCCCC" stroke="#EE8888"/>
+  <text x="305" y="319" text-anchor="middle" font-size="12" fill="#000">Bryce (2)</text>
+
+  <!-- 화살표: Aaliyah -> Bryce -->
+  <line x1="125" y1="314" x2="253" y2="314" stroke="#AA4444" stroke-width="1.5" marker-end="url(#arr-red)"/>
+  <text x="189" y="308" text-anchor="middle" font-size="10" fill="#AA4444">메시지</text>
+
+  <!-- 규칙 설명 -->
+  <rect x="35" y="338" width="340" height="52" rx="4" fill="#FFE8E8" stroke="#DDAAAA"/>
+  <text x="205" y="354" text-anchor="middle" font-size="12" fill="#000">규칙: 다른 노드의 타임스탬프를 받으면</text>
+  <text x="205" y="370" text-anchor="middle" font-size="12" fill="#000">로컬 카운터를 max(local, received) + 1 로 갱신</text>
+  <text x="205" y="385" text-anchor="middle" font-size="11" fill="#333">비교: 카운터 우선, 같으면 노드 ID 사전 순</text>
+
+  <!-- 한계 -->
+  <rect x="35" y="400" width="340" height="46" rx="4" fill="#FFE0E0" stroke="#DD8888"/>
+  <text x="205" y="418" text-anchor="middle" font-size="12" fill="#AA2222">한계 — 선형성 미보장, 물리 시각 무관</text>
+  <text x="205" y="434" text-anchor="middle" font-size="11" fill="#555">통신 없는 노드 간 카운터 차이 발산 가능</text>
+
+  <!-- =========================================================
+       오른쪽 섹션: HLC & 벡터 클럭
+  ========================================================= -->
+  <rect x="410" y="268" width="390" height="190" rx="8" fill="#FFFBEE" stroke="#DDCC66" stroke-width="1.5"/>
+  <text x="605" y="290" text-anchor="middle" font-weight="bold" fill="#886600">HLC · 벡터 클럭 · 선형화 ID</text>
+
+  <!-- HLC -->
+  <rect x="425" y="300" width="170" height="60" rx="5" fill="#FFF3CC" stroke="#DDAA44"/>
+  <text x="510" y="317" text-anchor="middle" font-size="12" font-weight="bold" fill="#000">하이브리드 논리 시계 (HLC)</text>
+  <text x="510" y="332" text-anchor="middle" font-size="11" fill="#333">물리 시각 ms + Lamport 보장</text>
+  <text x="510" y="347" text-anchor="middle" font-size="11" fill="#333">CockroachDB, MVCC 스냅샷 ID</text>
+
+  <!-- 벡터 클럭 -->
+  <rect x="605" y="300" width="185" height="60" rx="5" fill="#FFF3CC" stroke="#DDAA44"/>
+  <text x="697" y="317" text-anchor="middle" font-size="12" font-weight="bold" fill="#000">벡터 클럭</text>
+  <text x="697" y="332" text-anchor="middle" font-size="11" fill="#333">노드마다 카운터 [N₁, N₂, …]</text>
+  <text x="697" y="347" text-anchor="middle" font-size="11" fill="#333">동시 기록 탐지 가능, 크기 비용</text>
+
+  <!-- 선형화 ID -->
+  <rect x="425" y="372" width="365" height="50" rx="5" fill="#FFEEBB" stroke="#CC9900"/>
+  <text x="607" y="390" text-anchor="middle" font-size="12" font-weight="bold" fill="#000">선형화 가능 ID 생성기</text>
+  <text x="607" y="407" text-anchor="middle" font-size="11" fill="#333">단일 노드 Timestamp Oracle (TiDB, Google Percolator)</text>
+  <text x="607" y="422" text-anchor="middle" font-size="11" fill="#555">배치 최적화: 범위 기록 후 순차 발급 — 크래시 시 일부 스킵</text>
+
+  <!-- 비선형화 위험 경고 -->
+  <rect x="425" y="430" width="365" height="26" rx="4" fill="#FFE0AA" stroke="#CC8800"/>
+  <text x="607" y="448" text-anchor="middle" font-size="11" fill="#773300">비선형화 ID 위험: private 설정 후 사진 업로드 → 스냅샷 순서 역전 → 노출</text>
+
+  <!-- =========================================================
+       화살표 마커
+  ========================================================= -->
+  <defs>
+    <marker id="arr-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#AA4444"/>
+    </marker>
+  </defs>
+
+  <!-- =========================================================
+       하단 흐름 요약
+  ========================================================= -->
+  <rect x="20" y="468" width="780" height="40" rx="6" fill="#E8E8FF" stroke="#9999CC"/>
+  <text x="410" y="484" text-anchor="middle" font-size="12" fill="#000">순서 필요 없음 → UUID / Snowflake   |   인과성 추적 → Lamport · HLC   |   선형화 필요 → Timestamp Oracle + 합의</text>
+  <text x="410" y="501" text-anchor="middle" font-size="11" fill="#444">동시 기록 탐지 → 벡터 클럭   |   다중 리전 선형화 → 합의 알고리즘 (10-04 참조)</text>
+
+</svg>

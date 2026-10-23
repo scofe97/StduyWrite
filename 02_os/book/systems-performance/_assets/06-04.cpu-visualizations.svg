@@ -1,0 +1,57 @@
+<svg viewBox="0 0 860 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>CPU 시각화 네 가지</title>
+  <desc>CPU 성능을 보는 네 시각화. 사용률 히트맵은 CPU 사용률 대 시간으로, 픽셀 농도가 그 사용률과 시간 범위의 CPU 수를 나타내 수천 CPU에도 적합하다. 라인 그래프는 만 개 CPU에서 페인트가 된다. subsecond-offset 히트맵은 초 안 활동을 보여 주며 y축이 subsecond offset이고 농도가 비-idle CPU 수다. 초 단위 평균이 지우는 정보를 드러내며, 흰 칸은 아무 스레드도 on-CPU가 아닌 락 이슈를 드러내기도 한다. 플레임 그래프는 스택 프로파일로, 박스가 스택 프레임이고 y축이 스택 깊이이며 위가 현재 함수다. x축은 표본 비율로 폭이 on-CPU 시간이고 큰 plateau와 tower를 먼저 본다. FlameScope는 둘의 결합으로, subsecond-offset 히트맵에서 범위를 선택하면 그 범위만 플레임 그래프를 보여 작은 perturbation을 드러낸다.</desc>
+
+  <rect x="0" y="0" width="860" height="480" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">CPU 시각화 네 가지</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">CPU 사용률은 흔히 이중모드 — 전체 분포가 필요해 히트맵이 효과적</text>
+
+  <!-- 사용률 히트맵 -->
+  <rect x="32" y="84" width="388" height="170" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="226" y="108" fill="rgb(212,168,83)" font-size="13" text-anchor="middle">사용률 히트맵</text>
+  <text x="226" y="126" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">x=시간 · y=사용률 · 농도=CPU 수</text>
+  <!-- 미니 히트맵 -->
+  <rect x="64" y="216" width="320" height="14" fill="rgba(212,168,83,0.8)"/>
+  <rect x="64" y="200" width="320" height="16" fill="rgba(212,168,83,0.5)"/>
+  <rect x="64" y="184" width="320" height="16" fill="rgba(212,168,83,0.2)"/>
+  <rect x="64" y="142" width="320" height="14" fill="rgba(212,168,83,0.7)"/>
+  <text x="226" y="248" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">바닥=대부분 0~30% · 윗줄=일부 100% (수천 CPU 적합)</text>
+
+  <!-- subsecond-offset 히트맵 -->
+  <rect x="440" y="84" width="388" height="170" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="634" y="108" fill="rgb(212,168,83)" font-size="13" text-anchor="middle">subsecond-offset 히트맵</text>
+  <text x="634" y="126" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">y=subsecond offset · 초 안 활동</text>
+  <!-- 미니: 칼럼들, 흰 칸 하나 -->
+  <rect x="480" y="142" width="30" height="88" fill="rgba(212,168,83,0.6)"/>
+  <rect x="516" y="142" width="30" height="88" fill="rgba(212,168,83,0.6)"/>
+  <rect x="552" y="142" width="30" height="88" fill="#0d0d0d" stroke="#f44336"/>
+  <text x="567" y="190" fill="#f44336" font-size="9" text-anchor="middle">흰</text>
+  <rect x="588" y="142" width="30" height="88" fill="rgba(212,168,83,0.6)"/>
+  <rect x="624" y="142" width="30" height="88" fill="rgba(212,168,83,0.6)"/>
+  <rect x="660" y="142" width="30" height="88" fill="rgba(212,168,83,0.6)"/>
+  <text x="634" y="248" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">흰 칸 = 아무 스레드도 on-CPU 아님 (락 이슈)</text>
+
+  <!-- 플레임 그래프 -->
+  <rect x="32" y="266" width="388" height="170" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="8"/>
+  <text x="226" y="290" fill="rgb(212,168,83)" font-size="13" text-anchor="middle">플레임 그래프</text>
+  <text x="226" y="308" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">스택 프로파일 · 폭=on-CPU 시간</text>
+  <!-- 미니 플레임그래프 -->
+  <rect x="64" y="406" width="320" height="14" fill="rgba(212,168,83,0.25)"/>
+  <rect x="64" y="390" width="200" height="14" fill="rgba(212,168,83,0.45)"/>
+  <rect x="280" y="390" width="104" height="14" fill="rgba(212,168,83,0.4)"/>
+  <rect x="64" y="374" width="130" height="14" fill="rgba(212,168,83,0.65)"/>
+  <rect x="210" y="374" width="54" height="14" fill="rgba(212,168,83,0.6)"/>
+  <rect x="64" y="358" width="80" height="14" fill="rgba(212,168,83,0.8)"/>
+  <text x="226" y="432" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">위=현재 함수·아래=조상 · 큰 plateau/tower 먼저</text>
+
+  <!-- FlameScope -->
+  <rect x="440" y="266" width="388" height="170" fill="#66bb6a" fill-opacity="0.10" stroke="#66bb6a" rx="8"/>
+  <text x="634" y="290" fill="#66bb6a" font-size="13" text-anchor="middle">FlameScope</text>
+  <text x="634" y="308" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">subsecond 히트맵 + 플레임 그래프</text>
+  <text x="634" y="338" fill="#e8e4df" font-size="11" text-anchor="middle">히트맵에서 범위 선택 →</text>
+  <text x="634" y="360" fill="#e8e4df" font-size="11" text-anchor="middle">그 범위만 플레임 그래프</text>
+  <text x="634" y="392" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">작은 perturbation 드러냄</text>
+  <text x="634" y="410" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">(30초 중 100ms = 플레임 폭 0.3%</text>
+  <text x="634" y="426" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">but 히트맵엔 세로 줄무늬)</text>
+</svg>

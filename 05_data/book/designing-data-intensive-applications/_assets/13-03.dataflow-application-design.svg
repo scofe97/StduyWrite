@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 580" font-family="Pretendard, sans-serif">
+  <rect width="680" height="580" fill="#0d0d0d"/>
+
+  <!-- Title -->
+  <text x="340" y="38" text-anchor="middle" fill="#e8e4df" font-size="21" font-weight="700">데이터플로우 중심 애플리케이션 설계</text>
+  <text x="340" y="58" text-anchor="middle" fill="rgb(138,133,128)" font-size="13">쓰기 경로 · 읽기 경로 · 상태를 클라이언트까지</text>
+  <line x1="40" y1="70" x2="640" y2="70" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <defs>
+    <marker id="ar3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="rgb(138,133,128)"/>
+    </marker>
+    <marker id="ar3g" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#66bb6a"/>
+    </marker>
+    <marker id="ar3b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7fa8c9"/>
+    </marker>
+  </defs>
+
+  <!-- Section A: Write path / Read path -->
+  <text x="50" y="93" fill="rgb(212,168,83)" font-size="12" font-weight="700">① 쓰기 경로(Write Path) vs 읽기 경로(Read Path)</text>
+
+  <!-- Write path -->
+  <rect x="50" y="103" width="85" height="34" rx="5" fill="#1a1410" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="92" y="123" text-anchor="middle" fill="#e8e4df" font-size="11">이벤트 수집</text>
+
+  <line x1="135" y1="120" x2="160" y2="120" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#ar3)"/>
+
+  <rect x="160" y="103" width="100" height="34" rx="5" fill="#1a1410" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="210" y="123" text-anchor="middle" fill="#e8e4df" font-size="11">스트림 처리</text>
+
+  <line x1="260" y1="120" x2="285" y2="120" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#ar3)"/>
+
+  <rect x="285" y="103" width="110" height="34" rx="5" fill="#141414" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="340" y="118" text-anchor="middle" fill="rgb(212,168,83)" font-size="11" font-weight="700">파생 데이터셋</text>
+  <text x="340" y="131" text-anchor="middle" fill="rgb(138,133,128)" font-size="9">(인덱스·캐시·MV)</text>
+
+  <line x1="395" y1="120" x2="420" y2="120" stroke="#7fa8c9" stroke-width="1.5" marker-end="url(#ar3b)"/>
+
+  <rect x="420" y="103" width="100" height="34" rx="5" fill="#141414" stroke="#7fa8c9" stroke-width="1.2"/>
+  <text x="470" y="123" text-anchor="middle" fill="#9cc3df" font-size="11">읽기 처리</text>
+
+  <line x1="520" y1="120" x2="545" y2="120" stroke="#7fa8c9" stroke-width="1.5" marker-end="url(#ar3b)"/>
+
+  <rect x="545" y="103" width="90" height="34" rx="5" fill="#141414" stroke="#7fa8c9" stroke-width="1.2"/>
+  <text x="590" y="123" text-anchor="middle" fill="#9cc3df" font-size="11">사용자 응답</text>
+
+  <!-- Labels -->
+  <text x="192" y="150" text-anchor="middle" fill="rgb(212,168,83)" font-size="10">← 쓰기 경로 (Eager / 미리 계산) →</text>
+  <text x="505" y="150" text-anchor="middle" fill="#7fa8c9" font-size="10">← 읽기 경로 (Lazy) →</text>
+
+  <!-- Boundary annotation -->
+  <line x1="340" y1="100" x2="340" y2="155" stroke="rgb(42,37,32)" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="340" y="168" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">경계 이동 → 캐시/인덱스/MV 추가 = 쓰기에 더 투자, 읽기 비용 절감</text>
+
+  <line x1="40" y1="178" x2="640" y2="178" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- Section B: Push state to clients -->
+  <text x="50" y="199" fill="rgb(212,168,83)" font-size="12" font-weight="700">② 상태를 클라이언트까지 밀어 보내기 (Write Path 연장)</text>
+
+  <!-- Server -->
+  <rect x="60" y="210" width="120" height="50" rx="6" fill="#1a1410" stroke="rgb(212,168,83)" stroke-width="1.2"/>
+  <text x="120" y="230" text-anchor="middle" fill="#e8e4df" font-size="11" font-weight="700">서버 / 스트림</text>
+  <text x="120" y="246" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">상태 변경 이벤트</text>
+  <text x="120" y="260" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">생산</text>
+
+  <!-- HTTP polling (old) -->
+  <rect x="240" y="210" width="130" height="50" rx="6" fill="#141414" stroke="#f47f72" stroke-width="1"/>
+  <text x="305" y="228" text-anchor="middle" fill="#f47f72" font-size="11">HTTP 폴링 (구)</text>
+  <text x="305" y="244" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">주기적 요청</text>
+  <text x="305" y="258" text-anchor="middle" fill="#f47f72" font-size="10">빈 응답 낭비</text>
+
+  <!-- SSE/WebSocket (new) -->
+  <rect x="430" y="210" width="180" height="50" rx="6" fill="#141414" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="520" y="228" text-anchor="middle" fill="#66bb6a" font-size="11">SSE / WebSocket (신)</text>
+  <text x="520" y="244" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">서버 → 클라이언트 Push</text>
+  <text x="520" y="258" text-anchor="middle" fill="#66bb6a" font-size="10">재접속 시 놓친 이벤트 따라잡기</text>
+
+  <line x1="180" y1="235" x2="238" y2="235" stroke="#f47f72" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#ar3)"/>
+  <line x1="180" y1="245" x2="428" y2="245" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#ar3g)"/>
+
+  <line x1="40" y1="275" x2="640" y2="275" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- Section C: App code as derivation / state separation -->
+  <text x="50" y="296" fill="rgb(212,168,83)" font-size="12" font-weight="700">③ 앱 코드를 파생 함수로 · 코드와 상태의 분리</text>
+
+  <!-- Boxes -->
+  <rect x="50" y="306" width="150" height="80" rx="5" fill="#141414" stroke="rgb(212,168,83)" stroke-width="1"/>
+  <text x="125" y="325" text-anchor="middle" fill="rgb(212,168,83)" font-size="11" font-weight="700">표준 파생 함수</text>
+  <text x="125" y="342" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">→ DB 내장</text>
+  <text x="125" y="357" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">CREATE INDEX</text>
+  <text x="125" y="372" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">보조 인덱스</text>
+
+  <rect x="265" y="306" width="150" height="80" rx="5" fill="#141414" stroke="#7fa8c9" stroke-width="1"/>
+  <text x="340" y="325" text-anchor="middle" fill="#9cc3df" font-size="11" font-weight="700">도메인 특화 함수</text>
+  <text x="340" y="342" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">→ 커스텀 코드</text>
+  <text x="340" y="357" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">ML 특성 엔지니어링</text>
+  <text x="340" y="372" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">도메인 집계</text>
+
+  <rect x="480" y="306" width="150" height="80" rx="5" fill="#141414" stroke="#66bb6a" stroke-width="1"/>
+  <text x="555" y="325" text-anchor="middle" fill="#66bb6a" font-size="11" font-weight="700">스트림 연산자</text>
+  <text x="555" y="342" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">→ 실행 환경</text>
+  <text x="555" y="357" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">Flink / Kafka Streams</text>
+  <text x="555" y="372" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">Unix 파이프 철학</text>
+
+  <line x1="200" y1="346" x2="263" y2="346" stroke="rgb(138,133,128)" stroke-width="1" marker-end="url(#ar3)"/>
+  <line x1="415" y1="346" x2="478" y2="346" stroke="rgb(138,133,128)" stroke-width="1" marker-end="url(#ar3)"/>
+
+  <line x1="40" y1="400" x2="640" y2="400" stroke="rgb(42,37,32)" stroke-width="1"/>
+
+  <!-- Section D: Reads as events -->
+  <text x="50" y="421" fill="rgb(212,168,83)" font-size="12" font-weight="700">④ 읽기도 이벤트로 — 스트림-테이블 조인</text>
+
+  <!-- Traditional -->
+  <rect x="50" y="431" width="255" height="80" rx="6" fill="#1a1410" stroke="rgb(138,133,128)" stroke-width="1"/>
+  <text x="177" y="450" text-anchor="middle" fill="#e8e4df" font-size="11" font-weight="700">전통 모델</text>
+  <text x="65" y="468" fill="rgb(138,133,128)" font-size="10">쓰기: 이벤트 로그 경유</text>
+  <text x="65" y="484" fill="rgb(138,133,128)" font-size="10">읽기: 스토리지 노드에 직접 요청</text>
+  <text x="65" y="500" fill="rgb(138,133,128)" font-size="10">인과 추적 어려움</text>
+
+  <!-- Reads as events -->
+  <rect x="375" y="431" width="255" height="80" rx="6" fill="#141414" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="502" y="450" text-anchor="middle" fill="#66bb6a" font-size="11" font-weight="700">읽기 = 이벤트 모델</text>
+  <text x="390" y="468" fill="#9cc3df" font-size="10">읽기 이벤트 → 스트림 프로세서</text>
+  <text x="390" y="484" fill="#9cc3df" font-size="10">스트림-테이블 조인으로 처리</text>
+  <text x="390" y="500" fill="#66bb6a" font-size="10">인과 추적 · 멀티 샤드 조인 재사용</text>
+
+  <text x="340" y="480" text-anchor="middle" fill="rgb(212,168,83)" font-size="13" font-weight="700">→</text>
+
+  <!-- Footer -->
+  <line x1="40" y1="524" x2="640" y2="524" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="340" y="544" text-anchor="middle" fill="rgb(138,133,128)" font-size="11">VisiCalc(1979)이 이미 구현한 스프레드시트 자동 갱신 — 전사 인프라 수준에서 실현</text>
+  <text x="340" y="562" text-anchor="middle" fill="rgb(138,133,128)" font-size="10">DDIA 2nd Ed. Ch.13 — Dataflow Application Design · 13-03</text>
+</svg>

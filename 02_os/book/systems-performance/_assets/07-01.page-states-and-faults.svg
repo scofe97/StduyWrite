@@ -1,0 +1,72 @@
+<svg viewBox="0 0 860 480" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>demand paging와 가상 메모리 페이지 네 상태</title>
+  <desc>위: demand paging 흐름. malloc()이 메모리를 할당하고, store 명령이 그 메모리에 쓰면, MMU가 가상에서 물리로 조회를 시도하지만 아직 매핑이 없어 실패한다. 이 실패가 page fault이고, 커널이 on-demand 매핑을 만든다. 나중에 메모리 압박이 생기면 그 페이지를 swap으로 page-out한다. 매핑이 메모리 안 다른 페이지로 충족되면 minor fault, 스토리지 접근이 필요하면 major fault다. 아래: 가상 메모리 페이지는 네 상태 중 하나다. A는 미할당, B는 할당됐으나 미매핑, C는 할당되고 메인 메모리 RAM에 매핑, D는 할당되고 physical swap device 디스크에 매핑이다. B에서 C로의 전환이 page fault이고, 디스크 I/O가 필요하면 major 아니면 minor다. D는 메모리 압박으로 page-out된 상태다. RSS는 C의 크기이고 가상 메모리 크기는 B와 C와 D의 합이다.</desc>
+
+  <rect x="0" y="0" width="860" height="480" fill="#0d0d0d"/>
+
+  <text x="32" y="40" fill="#e8e4df" font-size="20">demand paging와 페이지 네 상태</text>
+  <text x="32" y="62" fill="rgb(138,133,128)" font-size="13">매핑을 요청 시에만 만든다 — page fault가 on-demand 매핑을 트리거</text>
+
+  <!-- demand paging 흐름 -->
+  <text x="32" y="96" fill="rgb(212,168,83)" font-size="14">demand paging 흐름</text>
+
+  <defs>
+    <marker id="pf" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+  </defs>
+
+  <rect x="32" y="110" width="120" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="92" y="130" fill="#e8e4df" font-size="11" text-anchor="middle">① malloc()</text>
+  <text x="92" y="146" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">메모리 할당</text>
+  <line x1="152" y1="132" x2="180" y2="132" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#pf)"/>
+
+  <rect x="184" y="110" width="120" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="244" y="130" fill="#e8e4df" font-size="11" text-anchor="middle">② store 명령</text>
+  <text x="244" y="146" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">메모리에 쓰기</text>
+  <line x1="304" y1="132" x2="332" y2="132" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#pf)"/>
+
+  <rect x="336" y="110" width="120" height="44" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="396" y="130" fill="#e8e4df" font-size="11" text-anchor="middle">③ MMU 조회</text>
+  <text x="396" y="146" fill="#f44336" font-size="9" text-anchor="middle">실패(매핑 없음)</text>
+  <line x1="456" y1="132" x2="484" y2="132" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#pf)"/>
+
+  <rect x="488" y="110" width="120" height="44" fill="#f44336" fill-opacity="0.15" stroke="#f44336" rx="6"/>
+  <text x="548" y="130" fill="#f44336" font-size="11" text-anchor="middle">④ page fault</text>
+  <line x1="608" y1="132" x2="636" y2="132" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#pf)"/>
+
+  <rect x="640" y="110" width="120" height="44" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="6"/>
+  <text x="700" y="130" fill="rgb(212,168,83)" font-size="11" text-anchor="middle">⑤ 커널 매핑</text>
+  <text x="700" y="146" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">on-demand 생성</text>
+
+  <text x="32" y="178" fill="rgb(138,133,128)" font-size="10">minor fault: 메모리 안 다른 페이지로 충족 · major fault: 스토리지 접근 필요</text>
+
+  <!-- 페이지 네 상태 -->
+  <line x1="32" y1="196" x2="828" y2="196" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text x="32" y="222" fill="rgb(212,168,83)" font-size="14">가상 메모리 페이지 네 상태</text>
+
+  <rect x="32" y="236" width="190" height="76" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="127" y="260" fill="#e8e4df" font-size="13" text-anchor="middle">A 미할당</text>
+  <text x="127" y="284" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">unallocated</text>
+
+  <rect x="232" y="236" width="190" height="76" fill="rgb(42,37,32)" rx="6"/>
+  <text x="327" y="260" fill="#e8e4df" font-size="13" text-anchor="middle">B 할당·미매핑</text>
+  <text x="327" y="284" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">미populate·미fault</text>
+
+  <rect x="432" y="236" width="190" height="76" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" rx="6"/>
+  <text x="527" y="260" fill="rgb(212,168,83)" font-size="13" text-anchor="middle">C 메인 메모리(RAM)</text>
+  <text x="527" y="284" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">= RSS</text>
+
+  <rect x="632" y="236" width="196" height="76" fill="rgb(26,26,26)" stroke="rgb(42,37,32)" rx="6"/>
+  <text x="730" y="260" fill="#e8e4df" font-size="13" text-anchor="middle">D swap(disk)</text>
+  <text x="730" y="284" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">메모리 압박으로 page-out</text>
+
+  <line x1="232" y1="324" x2="432" y2="324" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#pf)"/>
+  <text x="332" y="340" fill="rgb(212,168,83)" font-size="11" text-anchor="middle">B→C = page fault</text>
+  <text x="332" y="356" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">디스크 I/O면 major, 아니면 minor</text>
+
+  <line x1="527" y1="324" x2="700" y2="324" stroke="#f44336" stroke-width="2" marker-end="url(#pf)" stroke-dasharray="4,3"/>
+  <text x="640" y="340" fill="#f44336" font-size="11" text-anchor="middle">C→D = page-out</text>
+
+  <rect x="32" y="380" width="796" height="60" fill="#66bb6a" fill-opacity="0.10" stroke="#66bb6a" rx="8"/>
+  <text x="430" y="406" fill="#e8e4df" font-size="13" text-anchor="middle">RSS(resident set size) = C · 가상 메모리 크기 = B + C + D</text>
+  <text x="430" y="428" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">demand paging은 매핑 CPU 비용을 첫 할당이 아니라 실제 접근 때로 미룬다</text>
+</svg>

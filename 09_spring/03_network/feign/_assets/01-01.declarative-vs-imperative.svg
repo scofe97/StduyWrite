@@ -1,0 +1,50 @@
+<svg viewBox="0 0 760 430" width="100%" xmlns="http://www.w3.org/2000/svg" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>OpenFeign 입문 — 선언적 인터페이스 vs 명령형 빌더, 그리고 결정 트리</title>
+  <desc>WebClient 는 빌더로 호출을 조립하는 명령형, OpenFeign 은 인터페이스 시그니처로 호출을 선언하는 선언적 방식이다. 리액티브면 WebClient, MSA 내부 호출이면 OpenFeign, 외부 SaaS 면 RestClient 로 갈린다.</desc>
+
+  <rect x="0" y="0" width="760" height="430" fill="#0d0d0d"/>
+
+  <text x="32" y="44" fill="rgb(212,168,83)" font-size="19" font-weight="bold">OpenFeign 입문 — 호출을 "선언" 한다</text>
+
+  <!-- 왼쪽: 명령형 WebClient -->
+  <rect x="32" y="74" width="340" height="150" rx="8" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="100" fill="#e8e4df" font-size="14" font-weight="bold">명령형 — WebClient</text>
+  <text x="52" y="122" fill="rgb(138,133,128)" font-size="12">빌더로 호출을 조립한다</text>
+  <text x="52" y="150" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="11">webClient.get()</text>
+  <text x="52" y="170" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="11">  .uri("/stores/{id}", id)</text>
+  <text x="52" y="190" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="11">  .retrieve()</text>
+  <text x="52" y="210" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="11">  .bodyToMono(Store.class)</text>
+
+  <!-- 오른쪽: 선언적 OpenFeign -->
+  <rect x="388" y="74" width="340" height="150" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="408" y="100" fill="#e8e4df" font-size="14" font-weight="bold">선언적 — OpenFeign</text>
+  <text x="408" y="122" fill="rgb(138,133,128)" font-size="12">시그니처로 호출을 선언한다</text>
+  <text x="408" y="150" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="11">@FeignClient("stores")</text>
+  <text x="408" y="170" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="11">interface StoreClient {</text>
+  <text x="408" y="190" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="11">  @GetMapping("/stores/{id}")</text>
+  <text x="408" y="210" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="11">  Store getStore(...); }</text>
+
+  <!-- 결정 트리 -->
+  <text x="32" y="262" fill="rgb(212,168,83)" font-size="14" font-weight="bold">어디에 무엇을 쓰는가</text>
+
+  <rect x="32" y="278" width="220" height="120" rx="6" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="142" y="304" fill="#e8e4df" font-size="13" text-anchor="middle">리액티브 스택인가</text>
+  <text x="142" y="332" fill="#66bb6a" font-size="12" text-anchor="middle">예 → WebClient</text>
+  <text x="142" y="354" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">스트리밍 · backpressure</text>
+  <text x="142" y="380" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">아니오 → 오른쪽으로</text>
+
+  <rect x="270" y="278" width="220" height="120" rx="6" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="380" y="304" fill="#e8e4df" font-size="13" text-anchor="middle">MSA 내부 호출인가</text>
+  <text x="380" y="332" fill="rgb(212,168,83)" font-size="12" text-anchor="middle">예 → OpenFeign</text>
+  <text x="380" y="354" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">인터페이스 한 장</text>
+  <text x="380" y="380" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">discovery · 서킷 통합</text>
+
+  <rect x="508" y="278" width="220" height="120" rx="6" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="618" y="304" fill="#e8e4df" font-size="13" text-anchor="middle">외부 SaaS API 인가</text>
+  <text x="618" y="332" fill="#66bb6a" font-size="12" text-anchor="middle">예 → RestClient</text>
+  <text x="618" y="354" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">Spring 6.1+ 동기</text>
+  <text x="618" y="380" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">discovery 전제 없음</text>
+
+  <text x="32" y="420" fill="rgb(138,133,128)" font-size="12">셋은 우열이 아니라 자리가 다르다 — "우리 자리에 어느 게 맞는가" 가 정답.</text>
+</svg>

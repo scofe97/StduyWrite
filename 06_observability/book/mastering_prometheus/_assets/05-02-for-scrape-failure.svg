@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="740" height="400" viewBox="0 0 740 400" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" role="img" aria-label="스크레이프가 한 번 실패하면 쿼리가 빈 결과를 내고 알림이 pending 에서 떨어져 쌓아 온 for 시간이 초기화된다. last_over_time 으로 범위 안의 마지막 값을 쓰면 결측 한 번이 상태를 지우지 못한다">
+  <rect width="740" height="400" fill="#0d0d0d"/>
+  <text x="370" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#e8e4df">스크레이프 한 번 실패가 <tspan font-family="ui-monospace,monospace">for</tspan> 를 지운다</text>
+
+  <!-- CASE A: naive -->
+  <rect x="28" y="50" width="684" height="146" rx="10" fill="#0d0d0d" stroke="#c05a5a" stroke-width="1.4"/>
+  <text x="46" y="74" font-size="13.5" font-weight="700" fill="#e08a8a">① 그냥 쓰면 — probe_success != 1</text>
+
+  <!-- timeline A -->
+  <line x1="60" y1="118" x2="680" y2="118" stroke="#6b6660" stroke-width="1.2"/>
+  <circle cx="110" cy="118" r="6" fill="#c05a5a"/>
+  <circle cx="180" cy="118" r="6" fill="#c05a5a"/>
+  <circle cx="250" cy="118" r="6" fill="#c05a5a"/>
+  <!-- missing scrape -->
+  <circle cx="320" cy="118" r="7" fill="#0d0d0d" stroke="#8a8580" stroke-width="2" stroke-dasharray="3 2"/>
+  <text x="320" y="98" text-anchor="middle" font-size="10.5" font-weight="700" fill="#8a8580">결측</text>
+  <circle cx="390" cy="118" r="6" fill="#c05a5a"/>
+  <circle cx="460" cy="118" r="6" fill="#c05a5a"/>
+  <circle cx="530" cy="118" r="6" fill="#c05a5a"/>
+
+  <!-- pending bar A -->
+  <rect x="104" y="134" width="152" height="20" rx="4" fill="#f5c451"/>
+  <text x="180" y="149" text-anchor="middle" font-size="10.5" font-weight="700" fill="#3a2f10">pending 누적</text>
+  <rect x="300" y="134" width="42" height="20" rx="4" fill="#3a1414"/>
+  <text x="321" y="149" text-anchor="middle" font-size="10" font-weight="700" fill="#f0a0a0">리셋</text>
+  <rect x="384" y="134" width="152" height="20" rx="4" fill="#f5c451"/>
+  <text x="460" y="149" text-anchor="middle" font-size="10.5" font-weight="700" fill="#3a2f10">처음부터 다시</text>
+
+  <text x="46" y="180" font-size="11.5" fill="#c9c4be">쿼리가 빈 결과 → 조건이 참이 아님 → pending 이탈 → <tspan font-weight="700" fill="#e08a8a">쌓아 온 시간이 날아감</tspan></text>
+
+  <!-- CASE B: last_over_time -->
+  <rect x="28" y="212" width="684" height="146" rx="10" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.4"/>
+  <text x="46" y="236" font-size="13.5" font-weight="700" fill="#8fdc93">② last_over_time(probe_success[5m]) != 1</text>
+
+  <line x1="60" y1="280" x2="680" y2="280" stroke="#6b6660" stroke-width="1.2"/>
+  <circle cx="110" cy="280" r="6" fill="#66bb6a"/>
+  <circle cx="180" cy="280" r="6" fill="#66bb6a"/>
+  <circle cx="250" cy="280" r="6" fill="#66bb6a"/>
+  <circle cx="320" cy="280" r="7" fill="#0d0d0d" stroke="#8a8580" stroke-width="2" stroke-dasharray="3 2"/>
+  <text x="320" y="260" text-anchor="middle" font-size="10.5" font-weight="700" fill="#8a8580">결측</text>
+  <circle cx="390" cy="280" r="6" fill="#66bb6a"/>
+  <circle cx="460" cy="280" r="6" fill="#66bb6a"/>
+  <circle cx="530" cy="280" r="6" fill="#66bb6a"/>
+  <!-- lookback window -->
+  <rect x="256" y="268" width="130" height="24" fill="#14330a" opacity="0.8"/>
+  <text x="321" y="306" text-anchor="middle" font-size="10" fill="#8fdc93">[5m] 안의 마지막 값을 씀</text>
+
+  <rect x="104" y="322" width="432" height="20" rx="4" fill="#66bb6a"/>
+  <text x="320" y="337" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0d0d0d">pending 이 끊기지 않고 계속 누적 → 예정대로 발화</text>
+
+  <text x="370" y="382" text-anchor="middle" font-size="11.5" fill="#8a8580">범위는 몇 분보다 길게 잡지 않습니다. max_over_time 을 쓰면 창 길이만큼 발화가 늦어집니다.</text>
+</svg>

@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 404" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">채널 상태마다 읽기·쓰기·닫기가 하는 일</title><desc id="dd">원문 표 12-1 을 go1.25.1 에서 여섯 상태로 나눠 확인한 결과. 버퍼 없는 열린 채널은 읽기·쓰기 모두 상대 고루틴을 기다린다. 닫힌 채널은 읽으면 남은 값을, 다 비면 제로 값과 false 를 돌려주고, 쓰거나 다시 닫으면 panic 이다. 버퍼 있는 열린 채널은 비었을 때 읽기가, 가득 찼을 때 쓰기가 기다린다. nil 채널은 읽기·쓰기가 영원히 멈추고 닫으면 panic 이다.</desc>
+<rect width="980" height="404" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">MATRIX · 12-01 §3</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">채널 상태마다 읽기·쓰기·닫기가 하는 일</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">행은 동작, 열은 채널 상태입니다. 원문 표의 버퍼 있음·열림 열을 빔과 가득으로 나눴습니다.</text>
+<rect x="12" y="96" width="88" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="56.0" y="127" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">동작</text>
+<rect x="112" y="96" width="130" height="52" rx="6" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="177.0" y="119" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">버퍼 없음</text>
+<text x="177.0" y="137" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">열림</text>
+<rect x="250" y="96" width="130" height="52" rx="6" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="315.0" y="119" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">버퍼 없음</text>
+<text x="315.0" y="137" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">닫힘</text>
+<rect x="388" y="96" width="130" height="52" rx="6" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="453.0" y="119" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">버퍼 있음</text>
+<text x="453.0" y="137" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">열림 · 빔</text>
+<rect x="526" y="96" width="130" height="52" rx="6" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="591.0" y="119" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">버퍼 있음</text>
+<text x="591.0" y="137" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">열림 · 가득</text>
+<rect x="664" y="96" width="130" height="52" rx="6" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="729.0" y="119" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">버퍼 있음</text>
+<text x="729.0" y="137" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">닫힘 · 값 남음</text>
+<rect x="802" y="96" width="130" height="52" rx="6" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="867.0" y="119" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">nil</text>
+<text x="867.0" y="137" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">제로 값</text>
+<rect x="12" y="164" width="88" height="52" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="56.0" y="195" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">읽기</text>
+<rect x="112" y="164" width="130" height="52" rx="4" fill="#6A95D816" stroke="#6A95D8" stroke-width="0.9"/>
+<text x="177.0" y="195" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">상대가 쓸 때까지</text>
+<rect x="250" y="164" width="130" height="52" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="315.0" y="195" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">제로 값 · false</text>
+<rect x="388" y="164" width="130" height="52" rx="4" fill="#6A95D816" stroke="#6A95D8" stroke-width="0.9"/>
+<text x="453.0" y="195" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">쓸 때까지</text>
+<rect x="526" y="164" width="130" height="52" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="591.0" y="195" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">값을 읽음</text>
+<rect x="664" y="164" width="130" height="52" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="729.0" y="195" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">남은 값 · true</text>
+<rect x="802" y="164" width="130" height="52" rx="4" fill="#E3B34116" stroke="#E3B341" stroke-width="0.9"/>
+<text x="867.0" y="195" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">영원히 멈춤</text>
+<rect x="12" y="224" width="88" height="52" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="56.0" y="255" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">쓰기</text>
+<rect x="112" y="224" width="130" height="52" rx="4" fill="#6A95D816" stroke="#6A95D8" stroke-width="0.9"/>
+<text x="177.0" y="255" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">상대가 읽을 때까지</text>
+<rect x="250" y="224" width="130" height="52" rx="4" fill="#F0616D16" stroke="#F0616D" stroke-width="0.9"/>
+<text x="315.0" y="255" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">PANIC</text>
+<rect x="388" y="224" width="130" height="52" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="453.0" y="255" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">버퍼에 넣음</text>
+<rect x="526" y="224" width="130" height="52" rx="4" fill="#6A95D816" stroke="#6A95D8" stroke-width="0.9"/>
+<text x="591.0" y="255" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">읽을 때까지</text>
+<rect x="664" y="224" width="130" height="52" rx="4" fill="#F0616D16" stroke="#F0616D" stroke-width="0.9"/>
+<text x="729.0" y="255" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">PANIC</text>
+<rect x="802" y="224" width="130" height="52" rx="4" fill="#E3B34116" stroke="#E3B341" stroke-width="0.9"/>
+<text x="867.0" y="255" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">영원히 멈춤</text>
+<rect x="12" y="284" width="88" height="52" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="56.0" y="315" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">닫기</text>
+<rect x="112" y="284" width="130" height="52" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="177.0" y="315" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">닫힘</text>
+<rect x="250" y="284" width="130" height="52" rx="4" fill="#F0616D16" stroke="#F0616D" stroke-width="0.9"/>
+<text x="315.0" y="315" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">PANIC</text>
+<rect x="388" y="284" width="130" height="52" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="453.0" y="315" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">닫힘</text>
+<rect x="526" y="284" width="130" height="52" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="591.0" y="315" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">닫힘 · 값 남음</text>
+<rect x="664" y="284" width="130" height="52" rx="4" fill="#F0616D16" stroke="#F0616D" stroke-width="0.9"/>
+<text x="729.0" y="315" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">PANIC</text>
+<rect x="802" y="284" width="130" height="52" rx="4" fill="#F0616D16" stroke="#F0616D" stroke-width="0.9"/>
+<text x="867.0" y="315" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">PANIC</text>
+<line x1="12" y1="360" x2="932" y2="360" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="382" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="372" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="382" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">값을 돌려줌 · 동작함</text>
+<rect x="300" y="372" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="322" y="382" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">상대를 기다림</text>
+<rect x="435" y="372" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="457" y="382" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">영원히 멈춤</text>
+<rect x="557" y="372" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="579" y="382" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">panic</text>
+</svg>

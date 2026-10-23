@@ -1,0 +1,36 @@
+<svg viewBox="0 0 900 380" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>synchronized vs ReentrantLock — 같은 상호 배제, 세 기능 차이</title>
+  <desc>synchronized 와 ReentrantLock 은 둘 다 재진입 상호 배제를 제공한다. ReentrantLock 은 인터럽트 가능 대기, 공정 락, 여러 조건 변수 세 기능을 더 주지만 finally 에서 직접 unlock 해야 한다. 평범한 경우는 synchronized 를 기본으로 쓰고, 세 기능이 필요할 때만 ReentrantLock 을 쓴다.</desc>
+  <rect x="0" y="0" width="900" height="380" fill="#0d0d0d"/>
+
+  <text x="450" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#e8e4df">synchronized vs ReentrantLock</text>
+  <text x="450" y="56" text-anchor="middle" font-size="13" fill="#8a857f">공통: 둘 다 재진입 상호 배제 · 차이: ReentrantLock 의 세 기능</text>
+
+  <!-- 공통 띠 -->
+  <rect x="120" y="74" width="660" height="34" rx="7" fill="#dceaf7"/>
+  <text x="450" y="96" text-anchor="middle" font-size="12.5" font-weight="700" fill="#10243a">공통 — 재진입 상호 배제 (한 번에 한 스레드, 같은 락 중첩 가능)</text>
+
+  <!-- synchronized -->
+  <rect x="30" y="124" width="400" height="218" rx="12" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="2"/>
+  <text x="230" y="152" text-anchor="middle" font-size="15" font-weight="700" fill="#5b9bd5">synchronized — 기본 선택</text>
+  <rect x="56" y="166" width="348" height="32" rx="6" fill="#e6f7e7"/>
+  <text x="230" y="187" text-anchor="middle" font-size="12" fill="#14521d">블록 벗어나면 JVM이 자동 해제 ✓</text>
+  <rect x="56" y="204" width="348" height="32" rx="6" fill="#e6f7e7"/>
+  <text x="230" y="225" text-anchor="middle" font-size="12" fill="#14521d">Java 6 이후 최적화로 충분히 빠름 ✓</text>
+  <rect x="56" y="242" width="348" height="32" rx="6" fill="#f2d4d4"/>
+  <text x="230" y="263" text-anchor="middle" font-size="12" fill="#7a1f1f">조건 하나 · 인터럽트 불가 · 비공정만</text>
+  <text x="230" y="306" text-anchor="middle" font-size="12.5" font-weight="700" fill="#5b9bd5">평범한 상호 배제는 이걸로</text>
+
+  <!-- ReentrantLock -->
+  <rect x="470" y="124" width="400" height="218" rx="12" fill="#0d0d0d" stroke="#d4a853" stroke-width="2"/>
+  <text x="670" y="152" text-anchor="middle" font-size="15" font-weight="700" fill="#d4a853">ReentrantLock — 세 기능 더</text>
+  <rect x="496" y="166" width="348" height="32" rx="6" fill="#fdf3df"/>
+  <text x="670" y="187" text-anchor="middle" font-size="12" fill="#5a3d0a">① 인터럽트 가능 대기 (lockInterruptibly)</text>
+  <rect x="496" y="204" width="348" height="32" rx="6" fill="#fdf3df"/>
+  <text x="670" y="225" text-anchor="middle" font-size="12" fill="#5a3d0a">② 공정 락 (new ReentrantLock(true))</text>
+  <rect x="496" y="242" width="348" height="32" rx="6" fill="#fdf3df"/>
+  <text x="670" y="263" text-anchor="middle" font-size="12" fill="#5a3d0a">③ 여러 조건 변수 (newCondition)</text>
+  <rect x="496" y="280" width="348" height="30" rx="6" fill="#f2d4d4"/>
+  <text x="670" y="300" text-anchor="middle" font-size="11.5" fill="#7a1f1f">대신 finally 에서 직접 unlock() 해야</text>
+  <text x="670" y="330" text-anchor="middle" font-size="12" font-weight="700" fill="#d4a853">세 기능이 필요할 때만</text>
+</svg>

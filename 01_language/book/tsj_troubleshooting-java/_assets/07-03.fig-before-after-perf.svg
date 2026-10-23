@@ -1,0 +1,47 @@
+<svg viewBox="0 0 680 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>wait/notify 측정 결과 — 9초→50초, 락은 줄고 대기 시간은 늘다 (원문 Figure 7.16~7.19 개념도)</title>
+  <desc>원문 Figure 7.16 부터 7.19 의 개념을 도식으로 옮긴 것입니다. da-ch7-ex1 의 synchronized 만 쓰는 버전은 전체 실행이 약 9초이고 대기 시간이 0이며 락이 많았습니다(각 스레드 3600 회 넘음). wait/notify 를 더한 da-ch7-ex2 는 실행이 약 50초로 느려지고, 락은 더 적게 잡히지만 대기 시간이 깁니다. wait 메서드가 대기 시간 대부분을 일으키고 self 실행 시간은 CPU 시간과 가까워 오래 락되진 않습니다. JVM 이 wait/notify 방식에서는 synchronized 블록의 모니터로 자연스럽게 락 언락될 때보다 스레드 사이를 더 느리게 전환하기 때문입니다. 결론은 락이 적다고 빠른 게 아니며 들어맞아 보이는 최적화도 반드시 측정해야 한다는 것입니다.</desc>
+  <rect x="0" y="0" width="680" height="360" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">측정 결과 — 락은 줄었지만 더 느려졌다</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 Figure 7.16~7.19 개념도 — synchronized only vs wait/notify</text>
+
+  <!-- 전 (synchronized only) -->
+  <rect x="20" y="76" width="312" height="220" fill="rgba(102,187,106,0.05)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="34" y="98" fill="#66bb6a" font-size="13" font-weight="bold">da-ch7-ex1 — synchronized only</text>
+  <text x="34" y="126" fill="#e8e4df" font-size="11">전체 실행</text>
+  <rect x="120" y="114" width="80" height="18" fill="rgba(102,187,106,0.4)" stroke="#66bb6a"/>
+  <text x="210" y="128" fill="#66bb6a" font-size="12" font-weight="bold">약 9초</text>
+  <text x="34" y="160" fill="#e8e4df" font-size="11">락 횟수</text>
+  <rect x="120" y="148" width="180" height="18" fill="rgba(244,127,114,0.25)" stroke="#f47f72"/>
+  <text x="130" y="162" fill="#e8e4df" font-size="10">많음 (각 3,600회+)</text>
+  <text x="34" y="194" fill="#e8e4df" font-size="11">대기 시간</text>
+  <rect x="120" y="182" width="20" height="18" fill="rgb(30,30,30)" stroke="rgb(60,55,50)"/>
+  <text x="150" y="196" fill="#66bb6a" font-size="11" font-weight="bold">0</text>
+  <text x="34" y="232" fill="rgb(138,133,128)" font-size="10">모니터가 자연스럽게 락/언락</text>
+  <text x="34" y="252" fill="rgb(138,133,128)" font-size="10">→ 스레드 전환이 빠름</text>
+  <text x="34" y="280" fill="#66bb6a" font-size="11" font-weight="bold">기준선</text>
+
+  <!-- 화살표 -->
+  <text x="340" y="190" fill="rgb(212,168,83)" font-size="22" text-anchor="middle">→</text>
+
+  <!-- 후 (wait/notify) -->
+  <rect x="348" y="76" width="312" height="220" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="362" y="98" fill="#f47f72" font-size="13" font-weight="bold">da-ch7-ex2 — wait/notify 추가</text>
+  <text x="362" y="126" fill="#e8e4df" font-size="11">전체 실행</text>
+  <rect x="448" y="114" width="200" height="18" fill="rgba(244,127,114,0.4)" stroke="#f47f72"/>
+  <text x="468" y="128" fill="#fff" font-size="12" font-weight="bold">약 50초 (느려짐)</text>
+  <text x="362" y="160" fill="#e8e4df" font-size="11">락 횟수</text>
+  <rect x="448" y="148" width="80" height="18" fill="rgba(102,187,106,0.25)" stroke="#66bb6a"/>
+  <text x="458" y="162" fill="#e8e4df" font-size="10">적음</text>
+  <text x="362" y="194" fill="#e8e4df" font-size="11">대기 시간</text>
+  <rect x="448" y="182" width="200" height="18" fill="rgba(244,127,114,0.4)" stroke="#f47f72"/>
+  <text x="468" y="196" fill="#fff" font-size="10" font-weight="bold">길다 (wait() 가 대부분)</text>
+  <text x="362" y="232" fill="rgb(138,133,128)" font-size="10">self ≈ CPU (오래 락되진 않음)</text>
+  <text x="362" y="252" fill="#f47f72" font-size="10">JVM 의 wait/notify 전환이 더 느림</text>
+  <text x="362" y="280" fill="#f47f72" font-size="11" font-weight="bold">대기를 옮겼을 뿐, 더 나쁨</text>
+
+  <!-- 결론 -->
+  <rect x="20" y="312" width="640" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="336" fill="#e8e4df" font-size="11">락이 적다 ≠ 빠르다. 들어맞아 보이는 최적화도 반드시 측정 → 프로파일러가 직감 대신 데이터를 준다.</text>
+</svg>

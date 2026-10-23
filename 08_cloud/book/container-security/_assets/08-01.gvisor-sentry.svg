@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 984 676" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">gVisor 에서 시스템 콜은 Sentry 가 받아 안에서 재구현하고, 파일 접근만 Gofer 로 넘어갑니다</title><desc id="dd">컨테이너 안 앱, Sentry, Gofer, 호스트 커널 네 라이프라인의 시퀀스. 앱의 시스템 콜을 Sentry 가 가로챈 뒤 분기한다. 파일과 무관한 시스템 콜은 Sentry 안에서 재구현되어 호스트 커널로 전달되지 않는다. 파일 접근 시스템 콜은 Sentry 가 Gofer 에 위임하고 Gofer 가 호스트 커널에 요청해 결과가 거꾸로 돌아온다.</desc>
+<rect width="984" height="676" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">SEQUENCE · 08-01 §4</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">gVisor 에서 시스템 콜은 Sentry 가 받아 안에서 재구현하고, 파일 접근만 Gofer 로 넘어갑니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">Sentry 는 seccomp 로 샌드박싱되어 파일시스템에 직접 닿지 못하므로, 파일 접근은 별개 프로세스 Gofer 가 맡습니다.</text>
+<line x1="132" y1="150" x2="132" y2="628" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="372" y1="150" x2="372" y2="628" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="612" y1="150" x2="612" y2="628" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="852" y1="150" x2="852" y2="628" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<rect x="300" y="256" width="624" height="308" rx="4" fill="#F5F5F30A" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<rect x="300" y="256" width="44" height="16" rx="2" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="322" y="268" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">ALT</text>
+<text x="384" y="288" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">[파일과 무관한 syscall]</text>
+<line x1="308" y1="360" x2="916" y2="360" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="4 3"/>
+<text x="384" y="380" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">[파일 접근 syscall]</text>
+<rect x="36" y="100" width="192" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="132" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">컨테이너 안 앱</text>
+<text x="132" y="137" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">sleep</text>
+<rect x="276" y="100" width="192" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="372" y="120" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">Sentry</text>
+<text x="372" y="137" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">runsc-sandbox</text>
+<rect x="516" y="100" width="192" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="612" y="120" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">Gofer</text>
+<text x="612" y="137" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">runsc-gofer</text>
+<rect x="756" y="100" width="192" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="852" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">호스트 커널</text>
+<text x="852" y="137" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Linux</text>
+<rect x="53.5" y="170" width="157.0" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="132" y="184" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">호스트 ps 에 안 보임</text>
+<rect x="299.0" y="170" width="146.0" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="372" y="184" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">seccomp 샌드박싱</text>
+<path d="M 138 232 L 364 232" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="252.0" y="223" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">syscall</text>
+<path d="M 378 318 L 428 318 L 428 338 L 382 338" fill="none" stroke="#F08A59" stroke-width="1.8" marker-end="url(#acc)"/>
+<text x="440" y="332" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">Sentry 안에서 재구현</text>
+<path d="M 378 420 L 604 420" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<text x="492.0" y="411" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">파일 요청 위임</text>
+<path d="M 618 460 L 844 460" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<text x="732.0" y="451" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">파일 syscall</text>
+<path d="M 846 500 L 620 500" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)" stroke-dasharray="5 4"/>
+<text x="732.0" y="491" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">결과</text>
+<path d="M 606 540 L 380 540" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)" stroke-dasharray="5 4"/>
+<text x="492.0" y="531" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">결과</text>
+<path d="M 366 604 L 140 604" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)" stroke-dasharray="5 4"/>
+<text x="252.0" y="595" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">결과</text>
+<line x1="12" y1="632" x2="936" y2="632" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="654" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="644" width="14" height="12" rx="2" fill="#8B98A922" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="122" y="654" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">가로챈 syscall</text>
+<rect x="287" y="644" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="309" y="654" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Sentry 안 재구현</text>
+<rect x="487" y="644" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="509" y="654" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">파일 접근 위임</text>
+</svg>

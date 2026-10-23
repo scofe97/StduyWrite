@@ -1,0 +1,50 @@
+<svg viewBox="0 0 900 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>ThreadLocal 함정 — 스레드 풀 재사용 시 remove() 안 하면 값이 샌다</title>
+  <desc>스레드 풀의 한 스레드가 요청 A를 처리하며 ThreadLocal 에 A의 값을 넣고 remove 하지 않으면, 그 스레드가 풀로 돌아갔다 요청 B에 재배정될 때 B가 A의 값을 읽는다. try-finally 로 remove 하면 다음 요청이 깨끗한 상태로 시작한다.</desc>
+  <rect x="0" y="0" width="900" height="400" fill="#0d0d0d"/>
+
+  <text x="450" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#e8e4df">ThreadLocal 함정 — 스레드 풀에서 remove() 누락</text>
+  <text x="450" y="54" text-anchor="middle" font-size="12.5" fill="#8a857f">같은 풀 스레드가 요청 A → (반납) → 요청 B 로 재사용된다</text>
+
+  <!-- ===== 위: remove 안 함 (버그) ===== -->
+  <rect x="30" y="74" width="840" height="138" rx="12" fill="#0d0d0d" stroke="#c0504d" stroke-width="2"/>
+  <text x="50" y="100" font-size="14" font-weight="700" fill="#e08a87">remove() 안 함 — 값이 샌다</text>
+
+  <rect x="58" y="116" width="210" height="64" rx="8" fill="#dceaf7"/>
+  <text x="163" y="140" text-anchor="middle" font-size="12" fill="#10243a">요청 A 처리</text>
+  <text x="163" y="159" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10243a">set(A의 사용자정보)</text>
+  <text x="163" y="174" text-anchor="middle" font-size="11" fill="#7a1f1f">remove 안 함 ✗</text>
+
+  <rect x="300" y="116" width="180" height="64" rx="8" fill="#fdf3df"/>
+  <text x="390" y="143" text-anchor="middle" font-size="12" fill="#5a3d0a">스레드 풀로 반납</text>
+  <text x="390" y="162" text-anchor="middle" font-size="11" fill="#5a3d0a">(값 A가 남은 채)</text>
+
+  <line x1="268" y1="148" x2="296" y2="148" stroke="#c0504d" stroke-width="2.5"/><polygon points="300,148 292,143 292,153" fill="#c0504d"/>
+  <line x1="480" y1="148" x2="508" y2="148" stroke="#c0504d" stroke-width="2.5"/><polygon points="512,148 504,143 504,153" fill="#c0504d"/>
+
+  <rect x="512" y="116" width="330" height="64" rx="8" fill="#f2d4d4"/>
+  <text x="677" y="140" text-anchor="middle" font-size="12" fill="#7a1f1f">요청 B 가 같은 스레드에 재배정</text>
+  <text x="677" y="159" text-anchor="middle" font-size="12" font-weight="700" fill="#7a1f1f">get() → A의 값을 읽음! (정보 유출)</text>
+  <text x="677" y="174" text-anchor="middle" font-size="11" fill="#7a1f1f">+ 값이 안 치워져 메모리 누수</text>
+
+  <!-- ===== 아래: remove 함 (정상) ===== -->
+  <rect x="30" y="226" width="840" height="138" rx="12" fill="#0d0d0d" stroke="#66bb6a" stroke-width="2"/>
+  <text x="50" y="252" font-size="14" font-weight="700" fill="#66bb6a">try-finally 로 remove() — 깨끗</text>
+
+  <rect x="58" y="268" width="210" height="64" rx="8" fill="#dceaf7"/>
+  <text x="163" y="292" text-anchor="middle" font-size="12" fill="#10243a">요청 A 처리</text>
+  <text x="163" y="311" text-anchor="middle" font-size="11.5" font-weight="700" fill="#10243a">set(A) … finally remove()</text>
+  <text x="163" y="326" text-anchor="middle" font-size="11" fill="#14521d">반납 전 비움 ✓</text>
+
+  <rect x="300" y="268" width="180" height="64" rx="8" fill="#e6f7e7"/>
+  <text x="390" y="295" text-anchor="middle" font-size="12" fill="#14521d">스레드 풀로 반납</text>
+  <text x="390" y="314" text-anchor="middle" font-size="11" fill="#14521d">(값 비어 있음)</text>
+
+  <line x1="268" y1="300" x2="296" y2="300" stroke="#66bb6a" stroke-width="2.5"/><polygon points="300,300 292,295 292,305" fill="#66bb6a"/>
+  <line x1="480" y1="300" x2="508" y2="300" stroke="#66bb6a" stroke-width="2.5"/><polygon points="512,300 504,295 504,305" fill="#66bb6a"/>
+
+  <rect x="512" y="268" width="330" height="64" rx="8" fill="#cdeccf"/>
+  <text x="677" y="295" text-anchor="middle" font-size="12" fill="#14521d">요청 B 가 같은 스레드에 재배정</text>
+  <text x="677" y="314" text-anchor="middle" font-size="12" font-weight="700" fill="#14521d">get() → 깨끗한 상태 (안전)</text>
+  <text x="677" y="329" text-anchor="middle" font-size="11" fill="#14521d">누수 없음</text>
+</svg>

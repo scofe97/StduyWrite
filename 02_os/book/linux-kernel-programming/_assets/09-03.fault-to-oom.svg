@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 760" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">폴트에서 OOM 까지는 한 줄기입니다</title><desc id="dd">가상 페이지를 만지면 MMU 가 변환을 시도하고, 매핑이 없으면 페이지 폴트 핸들러로 제어가 넘어간다. 핸들러가 정당한 접근이라 판단하면 페이지 할당자에 프레임 하나를 요청한다. 극심한 압박으로 그 프레임을 끝내 못 얻으면 out_of_memory() 가 불리고 누군가 SIGKILL 된다.</desc>
+<rect width="1000" height="760" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LINUX KERNEL PROGRAMMING · 09-03 §2</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">폴트에서 OOM 까지는 한 줄기입니다</text>
+<text x="12" y="76" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" fill="#8B98A9">커널 로그의 스택을 아래에서 위로 읽으면 이 순서가 그대로 나옵니다</text>
+<rect x="24.0" y="104" width="212" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="130.0" y="125" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">프로세스</text>
+<text x="130.0" y="144" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">current</text>
+<rect x="262.66666666666663" y="104" width="212" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="368.66666666666663" y="125" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">MMU</text>
+<text x="368.66666666666663" y="144" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">silicon</text>
+<rect x="501.33333333333326" y="104" width="212" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="607.3333333333333" y="125" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">폴트 핸들러</text>
+<text x="607.3333333333333" y="144" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">do_page_fault</text>
+<rect x="740.0" y="104" width="212" height="48" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="846.0" y="125" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">페이지 할당자</text>
+<text x="846.0" y="144" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">buddy system</text>
+<path d="M 140.0 196 L 356.66666666666663 196" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="249.33333333333331" y="186" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">가상 페이지 touch</text>
+<text x="249.33333333333331" y="215" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">read · write · execute</text>
+<path d="M 378.66666666666663 240 L 430.66666666666663 240 L 430.66666666666663 264 L 381.66666666666663 264" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="440.66666666666663" y="247" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">page table walk</text>
+<text x="440.66666666666663" y="267" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">PGD → PUD → PMD → PTE</text>
+<path d="M 378.66666666666663 316 L 595.3333333333333 316" fill="none" stroke="#E3B341" stroke-width="1.5" marker-end="url(#warn)"/>
+<text x="487.99999999999994" y="306" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">변환 실패 — fault</text>
+<text x="487.99999999999994" y="335" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">매핑이 없습니다</text>
+<path d="M 617.3333333333333 360 L 669.3333333333333 360 L 669.3333333333333 384 L 620.3333333333333 384" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="679.3333333333333" y="367" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#E3B341">정당한 접근인가</text>
+<text x="679.3333333333333" y="387" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">아니면 SIGSEGV 또는 Oops 입니다</text>
+<path d="M 617.3333333333333 436 L 834.0 436" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="726.6666666666666" y="426" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">__alloc_pages()</text>
+<text x="726.6666666666666" y="455" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">order 0 프레임 하나를 요청합니다</text>
+<rect x="751.5" y="481" width="189.0" height="22" rx="4" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="846.0" y="497" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#F08A59">slowpath · 회수</text>
+<text x="846.0" y="520" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">kswapd 가 거둬 옵니다</text>
+<path d="M 836.0 556 L 619.3333333333333 556" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<text x="726.6666666666666" y="546" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">프레임 하나</text>
+<text x="726.6666666666666" y="575" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">여기서 끝나면 minor fault 입니다</text>
+<path d="M 597.3333333333333 612 L 142.0 612" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<text x="368.66666666666663" y="602" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">매핑하고 재개</text>
+<path d="M 836.0 668 L 142.0 668" fill="none" stroke="#F0616D" stroke-width="1.5" marker-end="url(#bad)" stroke-dasharray="5 5"/>
+<text x="488.0" y="658" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F0616D">out_of_memory() → SIGKILL</text>
+<line x1="130.0" y1="158" x2="130.0" y2="692" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="368.66666666666663" y1="158" x2="368.66666666666663" y2="692" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="607.3333333333333" y1="158" x2="607.3333333333333" y2="692" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="846.0" y1="158" x2="846.0" y2="692" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="12" y1="720" x2="952" y2="720" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="742" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="731" width="14" height="14" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="743" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">정상 경로</text>
+<rect x="223" y="731" width="14" height="14" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="245" y="743" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">분기</text>
+<rect x="301" y="731" width="14" height="14" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="323" y="743" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">회수 시도 — 마지막 기회</text>
+<rect x="559" y="731" width="14" height="14" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="581" y="743" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">성공</text>
+<rect x="637" y="731" width="14" height="14" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="659" y="743" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">실패</text>
+</svg>

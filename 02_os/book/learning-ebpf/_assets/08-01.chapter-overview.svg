@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 580" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">들어오는 패킷 하나가 XDP 와 TC 의 판정을 차례로 거친다</title><desc id="dd">패킷은 NIC 의 오프로드 XDP, 드라이버의 네이티브 XDP, sk_buff 생성, TC ingress, 네트워크 스택 순으로 지난다. XDP 의 판정은 XDP_ABORTED 0, XDP_DROP 1, XDP_PASS 2, XDP_TX 3, XDP_REDIRECT 4 이고 TC 의 판정은 TC_ACT_OK 0, TC_ACT_SHOT 2, TC_ACT_REDIRECT 7 이다. 나가는 쪽은 TC egress 만 있다.</desc>
+<rect width="1000" height="580" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING EBPF · 08-01</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">들어오는 패킷 하나가 XDP 와 TC 의 판정을 차례로 거친다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">판정마다 패킷이 멈추거나 되돌아가는 자리가 다릅니다</text>
+<rect x="32" y="112" width="152" height="72" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="108.0" y="136" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#6A95D8">NIC</text>
+<text x="108.0" y="156" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">오프로드 XDP</text>
+<rect x="228" y="112" width="152" height="72" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="304.0" y="136" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#6A95D8">드라이버</text>
+<text x="304.0" y="156" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">네이티브 XDP</text>
+<text x="304.0" y="174" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">xdp_md</text>
+<rect x="424" y="112" width="152" height="72" rx="6" fill="#8B98A912" stroke="#8B98A9" stroke-width="1.2"/>
+<text x="500.0" y="136" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#8B98A9">sk_buff 생성</text>
+<text x="500.0" y="156" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">XDP 이후</text>
+<text x="500.0" y="174" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">TC 이전</text>
+<rect x="620" y="112" width="152" height="72" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="696.0" y="136" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#6A95D8">TC ingress</text>
+<text x="696.0" y="156" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">분류기 · 동작</text>
+<text x="696.0" y="174" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">__sk_buff</text>
+<rect x="816" y="112" width="152" height="72" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="892.0" y="136" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#3FB98C">네트워크 스택</text>
+<text x="892.0" y="156" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">프로토콜 처리</text>
+<path d="M 186 148 L 222 148" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 382 148 L 418 148" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 578 148 L 614 148" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 774 148 L 810 148" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<line x1="40" y1="184" x2="40" y2="286" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<path d="M 40 234 L 52 234" fill="none" stroke="#F0616D" stroke-width="1.3" marker-end="url(#ar)"/>
+<rect x="56" y="212" width="160" height="44" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.2"/>
+<text x="66" y="230" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">XDP_DROP · 1</text>
+<text x="66" y="247" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">버림 · 호스트 CPU 0</text>
+<path d="M 40 286 L 52 286" fill="none" stroke="#6A95D8" stroke-width="1.3" marker-end="url(#info)"/>
+<rect x="56" y="264" width="160" height="44" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="66" y="282" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">XDP_TX · 3</text>
+<text x="66" y="299" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">같은 포트로</text>
+<line x1="236" y1="184" x2="236" y2="442" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<path d="M 236 234 L 248 234" fill="none" stroke="#E3B341" stroke-width="1.3" marker-end="url(#ar)"/>
+<rect x="252" y="212" width="160" height="44" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="262" y="230" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#E3B341">XDP_ABORTED · 0</text>
+<text x="262" y="247" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">오류로 버림</text>
+<path d="M 236 286 L 248 286" fill="none" stroke="#F0616D" stroke-width="1.3" marker-end="url(#ar)"/>
+<rect x="252" y="264" width="160" height="44" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.2"/>
+<text x="262" y="282" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">XDP_DROP · 1</text>
+<text x="262" y="299" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">버림</text>
+<path d="M 236 338 L 248 338" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ar)"/>
+<rect x="252" y="316" width="160" height="44" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="262" y="334" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">XDP_PASS · 2</text>
+<text x="262" y="351" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">다음 층으로</text>
+<path d="M 236 390 L 248 390" fill="none" stroke="#6A95D8" stroke-width="1.3" marker-end="url(#info)"/>
+<rect x="252" y="368" width="160" height="44" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="262" y="386" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">XDP_TX · 3</text>
+<text x="262" y="403" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">들어온 장치로</text>
+<path d="M 236 442 L 248 442" fill="none" stroke="#6A95D8" stroke-width="1.3" marker-end="url(#info)"/>
+<rect x="252" y="420" width="160" height="44" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="262" y="438" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">XDP_REDIRECT · 4</text>
+<text x="262" y="455" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">다른 장치로</text>
+<line x1="628" y1="184" x2="628" y2="338" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<path d="M 628 234 L 640 234" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ar)"/>
+<rect x="644" y="212" width="160" height="44" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="654" y="230" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">TC_ACT_OK · 0</text>
+<text x="654" y="247" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">다음 층으로</text>
+<path d="M 628 286 L 640 286" fill="none" stroke="#F0616D" stroke-width="1.3" marker-end="url(#ar)"/>
+<rect x="644" y="264" width="160" height="44" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.2"/>
+<text x="654" y="282" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">TC_ACT_SHOT · 2</text>
+<text x="654" y="299" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">버림</text>
+<path d="M 628 338 L 640 338" fill="none" stroke="#6A95D8" stroke-width="1.3" marker-end="url(#info)"/>
+<rect x="644" y="316" width="160" height="44" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="654" y="334" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">TC_ACT_REDIRECT · 7</text>
+<text x="654" y="351" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">다른 장치로</text>
+<path d="M 892.0 186 L 892.0 224" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="816" y="228" width="152" height="72" rx="6" fill="#F08A591F" stroke="#F08A59" stroke-width="1.4"/>
+<text x="892.0" y="256" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">TC egress</text>
+<text x="892.0" y="278" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">__sk_buff</text>
+<rect x="813.5" y="318" width="157.0" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="892.0" y="332" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">XDP 는 들어오는 쪽만</text>
+<line x1="12" y1="524" x2="952" y2="524" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="546" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="536" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="122" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">버림</text>
+<rect x="170" y="536" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="192" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">오류로 버림</text>
+<rect x="292" y="536" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="314" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">다음 층</text>
+<rect x="388" y="536" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="410" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">되돌림·넘김</text>
+<rect x="510" y="536" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="532" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">나가는 쪽</text>
+</svg>

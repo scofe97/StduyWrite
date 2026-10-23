@@ -1,0 +1,35 @@
+<svg viewBox="0 0 680 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>덤프 안 한 스레드 항목의 해부 — 이름·ID·상태·스택·락 (원문 listing 8.3 개념도)</title>
+  <desc>원문 listing 8.3 의 스레드 항목 구조를 라벨로 옮긴 것입니다. 첫 줄에는 스레드 이름 _Producer 와 우선순위 prio, OS 우선순위 os_prio, CPU 시간, 살아 있던 총 시간 elapsed 가 옵니다. 다음에 JVM 이 부여한 스레드 ID tid 와 OS 가 부여한 네이티브 ID nid, 그리고 상태 설명 waiting for monitor entry 가 옵니다. 상태 이름은 BLOCKED on object monitor 입니다. 그 아래 스택 트레이스가 어느 메서드를 실행 중이었는지 보여 주고, waiting to lock 줄은 이 스레드를 막는 락 ID 와 모니터 타입을, locked 줄은 이 스레드가 잡은 락 ID 를 보여 줍니다. 락 ID 는 꺾쇠 안의 값입니다.</desc>
+  <rect x="0" y="0" width="680" height="400" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">한 스레드 항목의 해부 (raw 덤프)</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 listing 8.3 개념도 — 각 줄이 무엇을 말하는가</text>
+
+  <!-- 덤프 텍스트 블록 -->
+  <rect x="20" y="74" width="420" height="200" fill="rgb(18,18,18)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="100" fill="#e8e4df" font-size="11" font-family="monospace">"_Producer" #16 prio=5 os_prio=0</text>
+  <text x="34" y="120" fill="#e8e4df" font-size="11" font-family="monospace">  cpu=46.88ms elapsed=763.96s</text>
+  <text x="34" y="140" fill="#9cc3df" font-size="11" font-family="monospace">tid=0x...690 nid=0xcac</text>
+  <text x="34" y="160" fill="#9cc3df" font-size="11" font-family="monospace">waiting for monitor entry</text>
+  <text x="34" y="184" fill="rgb(212,168,83)" font-size="11" font-family="monospace">State: BLOCKED (on monitor)</text>
+  <text x="34" y="208" fill="#e8e4df" font-size="11" font-family="monospace">  at main.Producer.run(...)</text>
+  <text x="34" y="232" fill="#f47f72" font-size="11" font-family="monospace">  - waiting to lock &lt;0x...3f8&gt;</text>
+  <text x="34" y="256" fill="#66bb6a" font-size="11" font-family="monospace">  - locked &lt;0x...d38&gt;</text>
+
+  <!-- 라벨 (오른쪽) -->
+  <text x="456" y="96" fill="rgb(138,133,128)" font-size="10">← 이름 · 우선순위 · 자원·시간</text>
+  <text x="456" y="140" fill="rgb(138,133,128)" font-size="10">← tid(JVM) · nid(OS)</text>
+  <text x="456" y="160" fill="rgb(138,133,128)" font-size="10">← 상태 설명(입구에서 막힘)</text>
+  <text x="456" y="186" fill="rgb(138,133,128)" font-size="10">← 상태 이름(표준)</text>
+  <text x="456" y="208" fill="rgb(138,133,128)" font-size="10">← 스택 트레이스</text>
+  <text x="456" y="232" fill="#f47f72" font-size="10">← 이 스레드를 막는 락 ID</text>
+  <text x="456" y="256" fill="#66bb6a" font-size="10">← 이 스레드가 잡은 락 ID</text>
+
+  <!-- 하단 핵심 -->
+  <rect x="20" y="290" width="640" height="92" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="312" fill="#e8e4df" font-size="12" font-weight="bold">읽기 요령</text>
+  <text x="34" y="334" fill="#e8e4df" font-size="10.5">• 이름 겹치면 tid 로 식별 (항상 고유) · 뒤의 OS 스레드는 nid 로</text>
+  <text x="34" y="354" fill="#e8e4df" font-size="10.5">• 총 시간 ≫ CPU 시간 + 낮은 우선순위 → 덜 활발한 원인일 수 있음</text>
+  <text x="34" y="374" fill="rgb(138,133,128)" font-size="10">• 락 ID 는 꺾쇠 안의 값. waiting to lock = 기다리는 락, locked = 잡은 락</text>
+</svg>
