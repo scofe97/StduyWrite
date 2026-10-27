@@ -1,5 +1,5 @@
-# 08-01.i1-slow-search — 검색 하나가 백엔드 공유 창구를 채워 단건 조회까지 멈춘 흐름
-# 본문 요구(08-01 I1 slow search starves lookup): 느린 검색이 같은 창구를 쓰는 단건 조회까지 막은 메커니즘을 3개 참여자 레인과 5개 시간 단계로 보인다.
+# 01-01.i1-slow-search — 검색 하나가 백엔드 공유 창구를 채워 단건 조회까지 멈춘 흐름
+# 본문 요구(01-01 I1 slow search starves lookup): 느린 검색이 같은 창구를 쓰는 단건 조회까지 막은 메커니즘을 3개 참여자 레인과 5개 시간 단계로 보인다.
 # 타입 스펙: type-swimlane — 손님·프록시·창구 세 가로 레인 위 5단계 시간 흐름. focal 은 검색 40 > 창구 32 칸.
 # 사실 출처: ch08-slow-search-starves-lookup.md:15·16·26·27·28·29·30·46·47·54·55·57·58
 import sys
@@ -172,4 +172,4 @@ d.t(col_cx(4), box_y(2) + 54, "26204 (취소 무시)", 12, WARN, KR, "middle", 6
 # 4. 범례 (Legend)
 d.legend(428, [("핵심 병목 (focal)", ACC), ("장애 관측값", WARN)])
 
-d.save("08-01-i1-slow-search.svg")
+d.save("01-01-i1-slow-search.svg")

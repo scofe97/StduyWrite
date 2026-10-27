@@ -1,5 +1,5 @@
-# 08-01-i1-observe — I1 장애 관측 신호 6단계와 가설 검증 흐름
-# 본문 요구(08-01 I1 slow search starves lookup): 장애 관측 신호 1~6단계를 거치며 가설을 검증하고, 버린 가설과 남긴 결론을 분기 흐름으로 보인다.
+# 01-01-i1-observe — I1 장애 관측 신호 6단계와 가설 검증 흐름
+# 본문 요구(01-01 I1 slow search starves lookup): 장애 관측 신호 1~6단계를 거치며 가설을 검증하고, 버린 가설과 남긴 결론을 분기 흐름으로 보인다.
 # 타입 스펙: type-flowchart
 # 사실 출처: ch08-slow-search-starves-lookup.md:25-30·57-58
 import sys
@@ -165,4 +165,4 @@ d.legend(LEGEND_Y, [
     ("관측 증상", INFO),
 ])
 
-d.save("08-01-i1-observe.svg")
+d.save("01-01-i1-observe.svg")

@@ -1,5 +1,5 @@
-# 08-01-i1-bottleneck — 손님–프록시–서버의 소켓·고루틴과 정체·제한 위치를 보인 I1 병목 지도
-# 본문 요구(08-01 I1 slow search starves lookup): 클라이언트–프록시–서버 흐름에서 소켓·고루틴 누적과 제한 유무, 핵심 정체 지점을 아키텍처 지도로 보인다.
+# 01-01-i1-bottleneck — 손님–프록시–서버의 소켓·고루틴과 정체·제한 위치를 보인 I1 병목 지도
+# 본문 요구(01-01 I1 slow search starves lookup): 클라이언트–프록시–서버 흐름에서 소켓·고루틴 누적과 제한 유무, 핵심 정체 지점을 아키텍처 지도로 보인다.
 # 타입 스펙: type-architecture
 # 사실 출처: fakeinv/main.go:38-40,153-157,180-189, proxy.go:19, server.go:3493, transport.go:218,230, ch08-slow-search-starves-lookup.md:15-17,26,27,57,67
 import sys
@@ -143,4 +143,4 @@ d.t(856, 414, "26204", 11, WARN, MONO, "middle", 600)
 # 4. 범례 (Legend)
 d.legend(456, [("핵심 병목 (공유 창구)", ACC), ("장애 관측값", WARN), ("제한 기준", OK)])
 
-d.save("08-01-i1-bottleneck.svg")
+d.save("01-01-i1-bottleneck.svg")
