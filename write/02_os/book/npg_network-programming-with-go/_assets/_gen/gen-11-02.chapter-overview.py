@@ -1,91 +1,63 @@
-# 11-02.chapter-overview — 상호 TLS 는 직접 만든 인증서로 클라이언트도 검증하고 서버는 접속 주소를 인증서 이름과 맞춘다
-# 본문 요구(11-02 「학습 목표」 개념도 문단): §1 줄은 ClientAuth 와 ClientCAs 로 서버가 클라이언트에게 인증서를 요구하는 상호 인증 원리,
-#           §2 줄은 x509 템플릿과 P-256 ECDSA 키 쌍으로 자체 서명 인증서와 개인키 PEM 파일을 만드는 과정,
-#           §3 줄은 GetConfigForClient 로 소켓 IP 를 얻고 VerifyPeerCertificate 로 인증서 SAN 이름과 대조하는 서버 검증,
-#           §4 줄은 tls.Dial 이후 첫 I/O 에서 핸드셰이크가 완료되고 상호 인증이 통과하는 시험 검증이다.
-# 타입 스펙: type-architecture — 키워드 개념도. 4행 × 3열 노드 격자(10-02 개념도와 같은 공식: 열 x = 60 + j·340,
-#           노드 216×64, 행 y = 112 + i·128), 행 안은 가로 화살표.
-# 사실 출처: 《Network Programming with Go》 Ch.11 Securing Communications with TLS (Listing 11-12~11-22),
-#           crypto/tls, crypto/x509, RFC 8446.
+# 11-02.chapter-overview — 상호 TLS 는 직접 만든 인증서로 클라이언트를 검증하고 접속 주소를 맞춥니다
+# 본문 요구(11-02 「학습 목표」 개념도 문단): 절 네 개를 가로 한 줄로 잇고, 절 사이로 넘어가는 값을 화살표에 단다.
+#   §1 서버가 RequireAndVerifyClientCert 로 클라이언트 인증서를 요구 → §2 ClientAuth 용도·SAN 을 담은 인증서를 만든다
+#   → §3 서버가 기본 검증(체인·기간·용도)에 접속 주소 ↔ SAN 대조를 더한다 → §4 tls.Dial 은 성공하고 거절은 Read 에서 116·42 경고로 드러난다.
+# 타입 스펙: type-architecture — 노드 4개 가로 한 줄. 노드 x = 20 + j·240, 폭 200, 높이 110, y = 150.
+#           절 사이 화살표는 노드 위를 넘는 아치(오른쪽 노드 위 30px 지점까지), 넘어가는 값은 아치 위 칩.
+# 사실 출처: 노트 11-02 핵심 요약(35~41줄), §1 RequireAndVerifyClientCert, §2 ExtKeyUsage·SAN, §3 기본 검증·주소 대조, §4 Dial·Read 경고.
 import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
-from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, INFO, KR, MONO
+from dd import D, PAPER, INK, MUTED, SOFT, RULE, ACC, OK, BAD, INFO, KR, MONO
 
-COL_X, STRIDE, NW, NH = 60, 340, 216, 64
-ROW_Y, ROW_STRIDE = 112, 128
-W, H = 984, 680
-
-
-def kr(t):
-    return KR if any("가" <= c <= "힣" for c in t) else MONO
+W, H = 960, 340
+X0, STRIDE, NW, NH, NY = 20, 240, 200, 110, 150
+ARCH_Y = NY - 34
 
 
 def nx(j):
-    return COL_X + j * STRIDE
+    return X0 + j * STRIDE
 
 
-def ny(i):
-    return ROW_Y + i * ROW_STRIDE
+def fam(t):
+    return KR if any("가" <= c <= "힣" for c in t) else MONO
 
 
-d = D(W, H, "ARCHITECTURE · 11-02 OVERVIEW",
+d = D(W, H, "NPG CH.11 — 11-02 OVERVIEW",
       "상호 TLS 는 직접 만든 인증서로 클라이언트를 검증하고 접속 주소를 맞춥니다",
-      "11-02 의 키워드 개념도. §1 줄은 ClientAuth 와 ClientCAs 로 서버가 클라이언트에게 인증서를 요구하고 신뢰 체인을 확인하는 상호 인증 원리다. "
-      "§2 줄은 x509.Certificate 템플릿과 P-256 ECDSA 키 쌍을 결합해 자체 서명 인증서와 개인키 PEM 파일을 만드는 과정이다. "
-      "§3 줄은 GetConfigForClient 로 소켓 IP 를 얻고 VerifyPeerCertificate 로 역방향 DNS 및 인증서 SAN 이름을 대조하는 서버 검증이다. "
-      "§4 줄은 tls.Dial 이 클라이언트 쪽 핸드셰이크를 마친 뒤 첫 Write·Read 로 서버의 판정을 받는 시험이다.",
-      lead="화살표 위 글자는 두 키워드의 관계, 왼쪽 칩은 그 줄을 다루는 절입니다.")
+      "서버가 요구한 클라이언트 인증서를 직접 만들고, 서버가 기본 검증에 접속 주소 대조를 더하며, 거절은 클라이언트의 Read 에서 드러납니다",
+      "절 사이 화살표 위 칩은 다음 절로 넘어가는 값입니다")
 
+nodes = [
+    ("§1", "서버가 요구", [("RequireAndVerifyClientCert", MUTED), ("CertificateRequest", MUTED)]),
+    ("§2", "인증서 만들기", [("ExtKeyUsage ClientAuth", MUTED), ("SAN localhost · 127.0.0.1", MUTED)]),
+    ("§3", "서버 검증", [("기본: 체인 · 기간 · 용도", MUTED), ("더함: 접속 주소 ↔ SAN", ACC)]),
+    ("§4", "결과 확인", [("tls.Dial 성공", OK), ("Read 에서 116 · 42 경고", BAD)]),
+]
 
-def node(i, j, title, sub, c=None):
-    x, y = nx(j), ny(i)
-    if c:
-        d.tone(x, y, NW, NH, c, 6, "14", 1.1)
-    else:
-        d.box(x, y, NW, NH)
-    d.t(x + NW / 2, y + 27, title, 14, c or INK, kr(title), "middle", 600)
-    d.t(x + NW / 2, y + 48, sub, 11, MUTED, kr(sub), "middle")
+for j, (sec, title, vals) in enumerate(nodes):
+    x = nx(j)
+    d.box(x, NY, NW, NH, stroke=RULE, sw=0.9, r=8)
+    d.t(x + 14, NY + 22, sec, 10, SOFT, MONO, "start", 600)
+    d.t(x + NW / 2, NY + 40, title, 14, INK, KR, "middle", 600)
+    for k, (v, c) in enumerate(vals):
+        vy = NY + 68 + k * 24
+        if c == ACC:
+            d.o.append(f'<rect x="{x + 10}" y="{vy - 15}" width="{NW - 20}" height="22" rx="4" '
+                       f'fill="{ACC}18" stroke="{ACC}" stroke-width="1.2"/>')
+        d.t(x + NW / 2, vy, v, 11, c, fam(v), "middle", 600 if c in (ACC, OK, BAD) else 400)
 
+arches = ["클라이언트 인증서 필요", "clientCert.pem", "통과 / 경고"]
+for j, lab in enumerate(arches):
+    x1 = nx(j) + NW - 30
+    x2 = nx(j + 1) + 30
+    d.arrow([(x1, NY), (x1, ARCH_Y), (x2, ARCH_Y), (x2, NY - 2)], c=MUTED, m="ar", sw=1.3)
+    cx = (x1 + x2) / 2
+    w = 112 if j != 0 else 128
+    d.o.append(f'<rect x="{cx - w / 2}" y="{ARCH_Y - 11}" width="{w}" height="22" rx="4" '
+               f'fill="{PAPER}" stroke="{MUTED}" stroke-width="0.8"/>')
+    d.t(cx, ARCH_Y + 4, lab, 11, INK, fam(lab), "middle")
 
-def harrow(i, j, label, c=SOFT, m="soft"):
-    y = ny(i) + NH / 2
-    x1, x2 = nx(j) + NW, nx(j + 1)
-    d.arrow([(x1 + 2, y), (x2 - 4, y)], c, m, 1.3)
-    d.t((x1 + x2) / 2, y - 9, label, 11, c if c != SOFT else MUTED, kr(label), "middle", 600)
-
-
-for i, sec in enumerate(("§1", "§2", "§3", "§4")):
-    d.chip(34, ny(i) + NH / 2 - 4, sec, MUTED, 11, 4)
-
-# §1 상호 TLS 는 서버도 클라이언트에게 인증서를 요구한다
-node(0, 0, "ClientAuth 설정", "RequireAndVerify", INFO)
-node(0, 1, "인증서 요청 전송", "CertificateRequest", ACC)
-node(0, 2, "ClientCAs 신뢰 풀", "클라이언트 루트 검증", OK)
-harrow(0, 0, "인증서 제출 강제", ACC, "acc")
-harrow(0, 1, "발급 체인 검증", OK, "ok")
-
-# §2 x509 템플릿으로 인증서와 키 쌍을 직접 만든다
-node(1, 0, "x509.Certificate", "SAN · 키 용도 템플릿", INFO)
-node(1, 1, "P-256 ECDSA", "GenerateKey 비대칭키", INFO)
-node(1, 2, "PEM 파일 생성", "cert.pem · key.pem", OK)
-harrow(1, 0, "자체 서명 바인딩", INFO, "info")
-harrow(1, 1, "DER 블록 인코딩", OK, "ok")
-
-# §3 서버는 클라이언트 인증서를 CA 풀로 검증하고 접속 주소와 인증서 이름을 맞춘다
-node(2, 0, "GetConfigForClient", "hello.Conn 소켓 IP", INFO)
-node(2, 1, "LookupAddr PTR", "역방향 호스트명 조회", INFO)
-node(2, 2, "Peer 인증서 검증", "SAN 호스트명 대조", OK)
-harrow(2, 0, "접속 IP 추출", INFO, "info")
-harrow(2, 1, "opts.DNSName 대조", OK, "ok")
-
-# §4 시험으로 상호 인증 핸드셰이크를 끝까지 확인한다
-node(3, 0, "tls.Dial 반환", "클라이언트 쪽 완료", INFO)
-node(3, 1, "첫 Read", "서버 판정 수신", ACC)
-node(3, 2, "에코 확인", "hello 그대로 수신", OK)
-harrow(3, 0, "Write hello", ACC, "acc")
-harrow(3, 1, "경고 없음", OK, "ok")
-
-d.legend(584, [("설정 및 템플릿", INFO), ("핸드셰이크 트리거", ACC), ("검증 및 완료", OK)])
+d.legend(292, [("이 편이 더한 검증", ACC), ("성공", OK), ("거절 경고", BAD)])
 out_path = pathlib.Path(__file__).resolve().parent.parent / "11-02.chapter-overview.svg"
 d.save(str(out_path))
 print("ok 11-02 overview:", out_path)

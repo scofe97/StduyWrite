@@ -1,93 +1,180 @@
-# 타입 스펙: type-flowchart
-# 사실 출처: NPG Ch.11 Listing 11-17~11-19(opts.Roots = serverPool = caCertPool("clientCert.pem")), crypto/tls.Config.GetConfigForClient, net.SplitHostPort, net.LookupAddr
+# 타입 스펙: type-sequence
+# 사실 출처: NPG Ch.11 §3 Listing 11-17~11-19, §4 실패 시험(attacker.example.com), crypto/tls/handshake_server.go sendAlert(alertBadCertificate)
 import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from dd import D, PAPER, PAPER2, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, KR, MONO
+from dd import Seq, PAPER, PAPER2, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, KR, MONO
 
-W, H = 960, 500
-d = D(W, H, "NPG CH.11 — CLIENT ADDRESS VERIFICATION FLOWCHART",
-      "서버의 접속 주소 추출 및 인증서 SAN 검증 흐름",
-      "GetConfigForClient 로 소켓 주소를 확보하고 VerifyPeerCertificate 로 인증서 이름을 대조합니다",
-      "GetConfigForClient 클로저 · net.SplitHostPort · net.LookupAddr PTR · opts.DNSName 대조")
+def is_kr(txt):
+    return any("가" <= c <= "힣" for c in str(txt))
 
-# 1. ClientHello 수신 상자 (INFO)
-bx1, by1, bw1, bh1 = 30, 140, 180, 230
-d.tone(bx1, by1, bw1, bh1, INFO, op="14", sw=1.0)
-d.t(bx1 + bw1 / 2, by1 + 24, "ClientHello 수신", 12, INFO, KR, "middle", 600)
-d.line(bx1 + 12, by1 + 38, bx1 + bw1 - 12, by1 + 38, RULE, 0.8)
+def fam_of(txt):
+    return KR if is_kr(txt) else MONO
 
-d.chip(bx1 + bw1 / 2, by1 + 68, "GetConfigForClient", INFO, 11)
-d.t(bx1 + bw1 / 2, by1 + 94, "연결별 Config 반환", 11, MUTED, KR, "middle")
+W, H = 960, 1024
+d = Seq(W, H, "NPG CH.11 — CLIENT ADDRESS VERIFICATION SEQUENCE",
+        "서버의 접속 주소 추출 및 인증서 SAN 검증 흐름",
+        "GetConfigForClient 로 소켓 주소를 확보하고 VerifyPeerCertificate 로 인증서 이름을 대조합니다",
+        "GetConfigForClient 클로저 · net.SplitHostPort · net.LookupAddr PTR · opts.DNSName 대조")
 
-d.chip(bx1 + bw1 / 2, by1 + 130, "hello.Conn", INFO, 11)
-d.t(bx1 + bw1 / 2, by1 + 156, "RemoteAddr() 조회", 11, MUTED, KR, "middle")
+# ── 참여자 레인 정의 ──────────────────────────────────────────────────────────
+# 4의 배수 그리드 준수
+x1 = 92    # 클라이언트
+x2 = 336   # 서버 crypto/tls
+x3 = 608   # GetConfigForClient 클로저
+x4 = 868   # 리졸버(PTR)
 
-d.chip(bx1 + bw1 / 2, by1 + 190, "net.SplitHostPort", OK, 11)
-d.t(bx1 + bw1 / 2, by1 + 214, "IPv4·IPv6 주소 분리", 11, MUTED, KR, "middle")
+LX = {
+    "client": x1,
+    "server": x2,
+    "closure": x3,
+    "resolver": x4,
+}
+d.LX = LX
 
-# 화살표 1: GetConfigForClient -> 주소 해석 및 후보 생성
-d.arrow([(210, 255), (268, 255)], c=MUTED, m="ar")
+actors = [
+    ("client", x1, 144, "클라이언트", "tls.Dial"),
+    ("server", x2, 176, "서버 crypto/tls", "handshake_server.go"),
+    ("closure", x3, 208, "GetConfigForClient 클로저", "연결별 tls.Config"),
+    ("resolver", x4, 144, "리졸버(PTR)", "net.LookupAddr"),
+]
 
-# 2. 역방향 DNS 및 후보 목록 구성 상자 (ACC)
-cx1, cy1, cw1, ch1 = 268, 140, 210, 230
-d.tone(cx1, cy1, cw1, ch1, ACC, op="14", sw=1.1)
-d.t(cx1 + cw1 / 2, by1 + 24, "검증 후보군 생성", 12, ACC, KR, "middle", 600)
-d.line(cx1 + 12, cy1 + 38, cx1 + cw1 - 12, cy1 + 38, RULE, 0.8)
+y_box = 104
+h_box = 44
+for _, cx, bw, name, sub in actors:
+    d.box(cx - bw / 2, y_box, bw, h_box, PAPER2, RULE, 1.0)
+    d.t(cx, y_box + 20, name, 12, INK, KR, "middle", 600)
+    d.t(cx, y_box + 36, sub, 11, MUTED, fam_of(sub), "middle")
 
-d.chip(cx1 + cw1 / 2, cy1 + 68, "net.LookupAddr", ACC, 11)
-d.t(cx1 + cw1 / 2, cy1 + 94, "PTR 레코드 역방향 조회", 11, MUTED, KR, "middle")
+# ── 레일 (생명선 점선) ────────────────────────────────────────────────────────
+y_rail_top = y_box + h_box + 6  # 154
+y_rail_bot = 944
+for cx in LX.values():
+    d.line(cx, y_rail_top, cx, y_rail_bot, RULE, 1.0, "3 6")
 
-d.chip(cx1 + cw1 / 2, cy1 + 130, "hostnames 슬라이스", ACC, 11)
-d.t(cx1 + cw1 / 2, cy1 + 156, "PTR 이름 + 클라이언트 IP", 11, MUTED, KR, "middle")
+# ── 활성 막대 (Activation bars: ALT 틀과 분리된 호출 구간) ─────────────────
+# 클로저: GetConfigForClient 실행 구간
+d.box(x3 - 4, 216, 8, 220, fill=PAPER2, stroke=RULE, sw=0.8, r=2)
+# 리졸버: LookupAddr 실행 구간
+d.box(x4 - 4, 304, 8, 44, fill=PAPER2, stroke=RULE, sw=0.8, r=2)
 
-d.t(cx1 + cw1 / 2, cy1 + 190, '["localhost", "127.0.0.1"]', 10, MUTED, MONO, "middle")
-d.t(cx1 + cw1 / 2, cy1 + 212, "후보 목록 클로저 전달", 11, MUTED, KR, "middle")
+# ── 메시지 헬퍼 ───────────────────────────────────────────────────────────────
+def msg_call(a, b, label, y, c=INFO, mk="info", dash=None, sw=1.4):
+    xa, xb = LX[a], LX[b]
+    dr = 1 if xb > xa else -1
+    x_start = xa + 4 * dr
+    x_end = xb - 6 * dr
+    d.path(f"M {x_start} {y} L {x_end} {y}", c, sw, m=mk, dash=dash)
+    mx = (xa + xb) / 2
+    d.t(mx, y - 8, label, 11, c, fam_of(label), "middle", 600)
 
-# 화살표 2: 후보 생성 -> 검증 분기
-d.arrow([(478, 255), (536, 255)], c=MUTED, m="ar")
+def self_loop(actor, y, l1, l2=None, c=MUTED, mk="ar", c_l1=None, c_l2=None):
+    xa = LX[actor]
+    d.path(f"M {xa + 4} {y - 10} L {xa + 28} {y - 10} L {xa + 28} {y + 10} L {xa + 7} {y + 10}", c, 1.3, m=mk)
+    d.t(xa + 36, y - 3 if l2 else y + 4, l1, 11, c_l1 or INK, fam_of(l1), "start", 600 if c_l1 else 400)
+    if l2:
+        d.t(xa + 36, y + 13, l2, 11, c_l2 or MUTED, fam_of(l2), "start")
 
-# 3. VerifyPeerCertificate 루프 상자 (WARN)
-vx1, vy1, vw1, vh1 = 536, 140, 210, 230
-d.tone(vx1, vy1, vw1, vh1, WARN, op="14", sw=1.1)
-d.t(vx1 + vw1 / 2, vy1 + 24, "VerifyPeerCertificate", 12, WARN, KR, "middle", 600)
-d.line(vx1 + 12, vy1 + 38, vx1 + vw1 - 12, vy1 + 38, RULE, 0.8)
+# ── 1. ClientHello ────────────────────────────────────────────────────────────
+msg_call("client", "server", "ClientHello", 180, c=INFO, mk="info")
 
-d.chip(vx1 + vw1 / 2, vy1 + 68, "Roots: serverPool", WARN, 11)
-d.t(vx1 + vw1 / 2, vy1 + 94, "clientCert.pem 을 읽은 풀", 11, MUTED, KR, "middle")
+# ── 2. GetConfigForClient(hello) ──────────────────────────────────────────────
+msg_call("server", "closure", "GetConfigForClient(hello)", 220, c=INFO, mk="info")
 
-d.chip(vx1 + vw1 / 2, vy1 + 130, "opts.DNSName 대조", WARN, 11)
-d.t(vx1 + vw1 / 2, vy1 + 156, "chain[0].Verify(opts)", 10, MUTED, MONO, "middle")
+# ── 3. 소켓 주소 추출 ────────────────────────────────────────────────────────
+self_loop("closure", 264,
+          'RemoteAddr() → net.SplitHostPort',
+          '→ "127.0.0.1"',
+          c=MUTED, mk="ar", c_l1=INK, c_l2=INFO)
 
-d.t(vx1 + vw1 / 2, vy1 + 190, "leaf 인증서 SAN 비교", 11, MUTED, KR, "middle")
-d.t(vx1 + vw1 / 2, vy1 + 212, "후보군 순차 대조", 11, MUTED, KR, "middle")
+# ── 4. PTR 역방향 조회 ────────────────────────────────────────────────────────
+msg_call("closure", "resolver", 'net.LookupAddr("127.0.0.1")', 308, c=MUTED, mk="ar")
 
-# 분기 1: 성공 -> 핸드셰이크 통과 (OK)
-d.arrow([(746, 200), (814, 200)], c=OK, m="ok")
-d.t(780, 190, "일치", 11, OK, KR, "middle", 600)
+# ── 5. 리졸버 응답 ────────────────────────────────────────────────────────────
+msg_call("resolver", "closure", '["localhost"]', 344, c=MUTED, mk="ar", dash="4 3")
 
-ox1, oy1, ow1, oh1 = 814, 155, 120, 90
-d.tone(ox1, oy1, ow1, oh1, OK, op="18", sw=1.2)
-d.t(ox1 + ow1 / 2, oy1 + 28, "검증 통과", 12, OK, KR, "middle", 600)
-d.t(ox1 + ow1 / 2, oy1 + 50, "return nil", 11, OK, MONO, "middle")
-d.t(ox1 + ow1 / 2, oy1 + 72, "핸드셰이크 완료", 11, INK, KR, "middle")
+# ── 6. hostnames 후보 목록 구성 ──────────────────────────────────────────────
+self_loop("closure", 388,
+          'hostnames = ["localhost", "127.0.0.1"]',
+          'append(hostnames, ip) · IP 덧붙임',
+          c=MUTED, mk="ar", c_l1=INK, c_l2=MUTED)
 
-# 분기 2: 실패 -> 핸드셰이크 차단 (BAD)
-d.arrow([(746, 310), (814, 310)], c=BAD, m="bad")
-d.t(780, 300, "불일치", 11, BAD, KR, "middle", 600)
+# ── 포커스: hostnames 보관 브래킷 (6 -> 11) ────────────────────────────────
+# 강조색(ACC) 1곳: 6에서 생성된 hostnames가 11(VerifyPeerCertificate)까지 유지됨
+d.path(f"M {x3 - 6} 392 L {x3 - 16} 392 L {x3 - 16} 596 L {x3 - 6} 596", ACC, 1.5)
+d.t(x3 - 24, 496, "hostnames 보관", 11, ACC, KR, "end", 600)
 
-fx1, fy1, fw1, fh1 = 814, 265, 120, 90
-d.tone(fx1, fy1, fw1, fh1, BAD, op="18", sw=1.2)
-d.t(fx1 + fw1 / 2, fy1 + 28, "검증 실패", 12, BAD, KR, "middle", 600)
-d.t(fx1 + fw1 / 2, fy1 + 50, "bad_certificate", 10, BAD, MONO, "middle")
-d.t(fx1 + fw1 / 2, fy1 + 72, "소켓 즉시 종료", 11, INK, KR, "middle")
+# ── 7. 연결 전용 Config 반환 ─────────────────────────────────────────────────
+msg_call("closure", "server", "이 연결 전용 *tls.Config", 432, c=MUTED, mk="ar", dash="4 3")
 
-# 범례
-d.legend(456, [
-    ("소켓 주소 확보", INFO),
-    ("후보 목록 구성", ACC),
-    ("인증서 SAN 대조", WARN),
-    ("상호 인증 성공", OK),
-    ("인증 실패 차단", BAD),
+# ── 8. CertificateRequest ─────────────────────────────────────────────────────
+msg_call("server", "client", "CertificateRequest", 472, c=INFO, mk="info")
+
+# ── 9. 클라이언트 인증서 제출 ────────────────────────────────────────────────
+# 2줄 라벨 (화살표 바로 위)
+d.path(f"M {x1 + 4} 516 L {x2 - 6} 516", INFO, 1.4, m="info")
+d.t((x1 + x2) / 2, 516 - 20, "Certificate (clientCert.pem)", 11, INK, MONO, "middle")
+d.t((x1 + x2) / 2, 516 - 7, "+ CertificateVerify", 11, INFO, MONO, "middle", 600)
+
+# ── 10. 서버 기본 검증 (체인·기간·용도) ───────────────────────────────────────
+self_loop("server", 560,
+          "기본 검증: ClientCAs 체인",
+          "유효 기간 · ClientAuth 용도",
+          c=MUTED, mk="ar", c_l1=INK, c_l2=MUTED)
+
+# ── 11. VerifyPeerCertificate 호출 ───────────────────────────────────────────
+# 2줄 라벨 (화살표 바로 위)
+d.path(f"M {x2 + 4} 608 L {x3 - 6} 608", INFO, 1.4, m="info")
+d.t((x2 + x3) / 2, 608 - 18, "VerifyPeerCertificate", 11, INFO, MONO, "middle", 600)
+d.t((x2 + x3) / 2, 608 - 6, "(verifiedChains)", 10, MUTED, MONO, "middle")
+
+# ── 12. leaf SAN 후보 대조 루프 ──────────────────────────────────────────────
+self_loop("closure", 648,
+          "chain[0].Verify(DNSName=후보)",
+          "후보 호스트명 순차 대조",
+          c=MUTED, mk="ar", c_l1=INK, c_l2=MUTED)
+
+# ── ALT 결합 프래그먼트 틀 (클라이언트 · 서버 · 클로저 3개 생명선만 포괄) ─────
+fx = 44
+fy = 684
+fw = 612
+fh = 244
+d.box(fx, fy, fw, fh, fill="rgba(245,245,245,0.03)", stroke=RULE, sw=1.0, r=4)
+
+# ALT 연산자 탭
+d.box(fx, fy, 40, 16, fill=PAPER2, stroke=RULE, sw=1.0, r=2)
+d.t(fx + 20, fy + 12, "ALT", 8, SOFT, MONO, "middle", 600)
+
+# ── ALT 분기 1: [SAN 에 후보가 있음] ──────────────────────────────────────────
+d.t(fx + 52, fy + 18, "[SAN 에 후보가 있음]", 11, OK, KR, "start", 600)
+
+# 클로저 -> 서버: return nil
+msg_call("closure", "server", "return nil", 732, c=OK, mk="ok", dash="4 3")
+
+# 서버 -> 클라이언트: 핸드셰이크 완료 (강조색 ACC: headline success)
+msg_call("server", "client", "Application Data · Read 정상", 768, c=ACC, mk="acc", sw=1.8)
+
+# ── ALT 구분선 ────────────────────────────────────────────────────────────────
+y_div = 800
+d.line(fx + 8, y_div, fx + fw - 8, y_div, c=RULE, sw=1.0, dash="4 3")
+
+# ── ALT 분기 2: [SAN 이 attacker.example.com 뿐] ──────────────────────────────
+d.t(fx + 52, y_div + 18, "[SAN 이 attacker.example.com 뿐]", 11, BAD, KR, "start", 600)
+
+# 클로저 -> 서버: client authentication failed
+msg_call("closure", "server", "client authentication failed", 848, c=BAD, mk="bad", dash="4 3")
+
+# 서버 -> 클라이언트: bad_certificate(42) 경고
+msg_call("server", "client", "bad_certificate(42) 경고", 884, c=BAD, mk="bad", sw=1.4)
+
+# 클라이언트 쪽 에러 라벨 (Read 호출 결과)
+d.t(x1 + 10, 908, "Read: remote error: tls: bad certificate", 11, BAD, MONO, "start")
+
+# ── 범례 ─────────────────────────────────────────────────────────────────────
+d.legend(976, [
+    ("기본 핸드셰이크 교환", INFO),
+    ("후보 보관 · 통과", ACC),
+    ("검증 승인 (nil)", OK),
+    ("인증 실패 (Alert)", BAD),
 ])
 
 out_path = os.path.join(os.path.dirname(__file__), "..", "11-02.client-addr-verification.svg")
