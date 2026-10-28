@@ -1,61 +1,50 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 600" font-family="Pretendard, sans-serif" role="img">
-  <title>모델 선택과 스키마 유연성</title>
-  <desc>문서 모델의 schema-on-read 와 관계형의 schema-on-write 를 대비하고, 각각이 동적 타입 체크와 정적 타입 체크에 대응함을 보입니다. 문서 저장의 locality 이점이 어디까지 유효한지도 함께 나타냅니다.</desc>
-  <rect width="680" height="600" fill="#0d0d0d"/>
-
-  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">모델 선택과 스키마 유연성</text>
-  <text x="32" y="68" fill="#e8e4df" font-size="13">읽을 때 해석 vs 쓸 때 강제</text>
-  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
-
-  <!-- schema-on-read vs write -->
-  <rect x="32" y="104" width="300" height="166" rx="6" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
-  <text x="48" y="126" fill="rgb(212,168,83)" font-size="14" font-weight="700">schema-on-read (문서)</text>
-  <text x="48" y="146" fill="#e8e4df" font-size="11">구조는 암묵적, 읽을 때만 해석</text>
-  <text x="48" y="164" fill="#e8e4df" font-size="11">동적 타입 체크와 유사</text>
-  <text x="48" y="186" fill="#bfe3c0" font-size="11">이질적 데이터에 유리</text>
-  <text x="48" y="204" fill="#e8e4df" font-size="10.5">· 객체 유형이 많아 테이블 불가</text>
-  <text x="48" y="222" fill="#e8e4df" font-size="10.5">· 외부 시스템이 구조 결정(변동)</text>
-  <text x="48" y="244" fill="#e8e4df" font-size="10">형식 변경: 새 필드로 쓰고 읽을 때 분기</text>
-  <text x="48" y="262" fill="#e8e4df" font-size="10">"schemaless"는 오해 — 암묵 스키마 있음</text>
-
-  <rect x="348" y="104" width="300" height="166" rx="6" fill="#0d0d0d" stroke="#7fa8c9"/>
-  <text x="364" y="126" fill="#7fa8c9" font-size="14" font-weight="700">schema-on-write (관계형)</text>
-  <text x="364" y="146" fill="#e8e4df" font-size="11">구조는 명시적, 쓸 때 DB가 강제</text>
-  <text x="364" y="164" fill="#e8e4df" font-size="11">정적 타입 체크와 유사</text>
-  <text x="364" y="186" fill="#bfe3c0" font-size="11">모두 같은 구조면 문서·강제에 유리</text>
-  <text x="364" y="208" fill="#e8e4df" font-size="10.5">형식 변경: ALTER + UPDATE 마이그레이션</text>
-  <text x="364" y="226" fill="#f47f72" font-size="10.5">큰 테이블 UPDATE는 느림(전 행 재작성)</text>
-  <text x="364" y="248" fill="#e8e4df" font-size="10">기본값 NULL 컬럼 추가는 빠름</text>
-  <text x="364" y="266" fill="#e8e4df" font-size="10">→ 읽을 때 채우면 문서처럼 회피</text>
-
-  <!-- locality -->
-  <text x="32" y="304" fill="rgb(212,168,83)" font-size="14" font-weight="700">locality(지역성) — 문서만의 것이 아님</text>
-  <rect x="32" y="316" width="616" height="80" rx="6" fill="#0d0d0d" stroke="rgb(42,37,32)"/>
-  <text x="48" y="338" fill="#e8e4df" font-size="11">문서는 연속 문자열(JSON·BSON) → 전체를 한꺼번에 쓰면 빠름</text>
-  <text x="48" y="358" fill="#f47f72" font-size="11">단, 문서는 작게 유지해야 함</text>
-  <text x="48" y="380" fill="#bfe3c0" font-size="11">관계형도 locality 를 얻을 수 있음</text>
-
-  <!-- 수렴 -->
-  <text x="32" y="430" fill="rgb(212,168,83)" font-size="14" font-weight="700">문서·관계형의 수렴</text>
-  <rect x="32" y="442" width="300" height="86" rx="6" fill="#0d0d0d" stroke="#7fa8c9"/>
-  <text x="48" y="464" fill="#7fa8c9" font-size="11.5" font-weight="700">관계형이 흡수</text>
-  <text x="48" y="484" fill="#e8e4df" font-size="10.5">JSON 타입·연산자·문서 내 인덱스</text>
-  <text x="48" y="504" fill="#e8e4df" font-size="10">코드의 nonsimple domains(1970)와 닮음</text>
-  <text x="48" y="520" fill="#e8e4df" font-size="10">→ 30년 뒤 JSON·XML로 실현</text>
-
-  <rect x="348" y="442" width="300" height="86" rx="6" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
-  <text x="364" y="464" fill="rgb(212,168,83)" font-size="11.5" font-weight="700">문서가 흡수</text>
-  <text x="364" y="484" fill="#e8e4df" font-size="10.5">조인·보조 인덱스·선언형 쿼리</text>
-  <text x="364" y="504" fill="#e8e4df" font-size="10.5">MongoDB·Couchbase·RethinkDB</text>
-  <text x="364" y="520" fill="#bfe3c0" font-size="10">→ 관계형-문서 하이브리드가 강력</text>
-
-  <line x1="32" y1="548" x2="648" y2="548" stroke="rgb(42,37,32)" stroke-width="1"/>
-  <text x="32" y="570" fill="#e8e4df" font-size="12">재정렬 리스트는 문서가 자연스러움</text>
-  <text x="32" y="590" fill="#e8e4df" font-size="12">문서 쿼리 지원 범위는 셋으로 갈림</text>
-
-  <defs>
-    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-      <path d="M0,1 L7,4 L0,7" fill="none" stroke="#e8e4df" stroke-width="1.2"/>
-    </marker>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 440" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">구조를 다루는 시점</title><desc id="dd">schema-on-read 는 읽을 때 구조를 해석하고 schema-on-write 는 쓸 때 데이터베이스가 적합성을 보장한다.</desc>
+<rect width="880" height="440" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">03-04 · SCHEMA ON READ VS WRITE</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">구조를 다루는 시점</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">쓰기 · 저장 · 읽기 순서의 비교</text>
+<rect x="16" y="104" width="848" height="116" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="32" y="156" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F5F5F3">schema-on-read</text>
+<text x="32" y="180" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">동적(런타임) 타입 체크와 유사</text>
+<rect x="304" y="128" width="144" height="68" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="376" y="156" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">쓰기</text>
+<text x="376" y="180" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">임의의 키·값 추가</text>
+<rect x="504" y="128" width="144" height="68" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="576" y="156" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">저장</text>
+<text x="576" y="180" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">암묵적 스키마</text>
+<rect x="704" y="128" width="144" height="68" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.6"/>
+<text x="776" y="156" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">읽기</text>
+<text x="776" y="180" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">읽을 때 구조 해석</text>
+<path d="M 452 162 L 500 162" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 652 162 L 700 162" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="16" y="232" width="848" height="116" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="32" y="284" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F5F5F3">schema-on-write</text>
+<text x="32" y="308" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">정적(컴파일 타임) 타입 체크와 유사</text>
+<rect x="304" y="256" width="144" height="68" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.6"/>
+<text x="376" y="284" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">쓰기</text>
+<text x="376" y="308" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">적합성 보장</text>
+<rect x="504" y="256" width="144" height="68" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="576" y="284" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">저장</text>
+<text x="576" y="308" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">명시적 스키마</text>
+<rect x="704" y="256" width="144" height="68" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="776" y="284" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">읽기</text>
+<text x="776" y="308" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">스키마에 맞는 데이터</text>
+<path d="M 452 290 L 500 290" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 652 290 L 700 290" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<line x1="12" y1="384" x2="832" y2="384" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="406" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="396" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="406" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">구조를 다루는 시점</text>
+<rect x="274" y="396" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="296" y="406" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">단계</text>
 </svg>
