@@ -22,7 +22,7 @@ updated: 2026-10-07
 | 장 묶음 | 번호 | 제목 | 한 줄 소개 |
 |---------|------|------|-----------|
 | 01 패키지 구조 | 01-01 | [Client·Transport·Server·Handler](01-01.Client%C2%B7Transport%C2%B7Server%C2%B7Handler.md) | Client·Transport 발신 축과 Server·Handler 수신 축의 역할 분담, 인터페이스 계약과 기본 동작 |
-| 02 클라이언트 | 02-01 | [Client·Transport](02-01.Client%C2%B7Transport.md) | Client 오케스트레이션과 RoundTripper 계약, Transport 의 persistConn 커넥션 풀링과 TCP 연결 재사용 |
+| 02 클라이언트 | 02-01 | [Client·Transport](02-01.Client%C2%B7Transport.md) | Client 오케스트레이션과 RoundTripper 계약, Transport 의 persistConn 커넥션 풀링과 TCP 연결 재사용, DefaultTransport 기본값 읽기(0·-1 의 뜻, 두 KeepAlive, 환경 변수 프록시) |
 | 02 클라이언트 | 02-02 | [Client.Timeout·Transport 타임아웃·httptrace](02-02.Client.Timeout%C2%B7Transport%20%ED%83%80%EC%9E%84%EC%95%84%EC%9B%83%C2%B7httptrace.md) | 전체 트랜잭션을 감싸는 Client.Timeout 과 네트워크 구간별 Transport 타임아웃, httptrace 계측 훅 |
 | 03 서버 | 03-01 | [Server·ServeMux·Handler](03-01.Server%C2%B7ServeMux%C2%B7Handler.md) | Server.Serve 연결 수락 루프, conn.serve 전용 고루틴 디스패치, Go 1.22 ServeMux 패턴 라우팅과 핸들러 격리 |
 | 03 서버 | 03-02 | [Server 타임아웃·Shutdown](03-02.Server%20%ED%83%80%EC%9E%84%EC%95%84%EC%9B%83%C2%B7Shutdown.md) | 헤더·본문·핸들러·유휴 소켓 데드라인 4대 타임아웃과 Graceful Shutdown 의 신규 차단 및 연결 회수 |
