@@ -236,6 +236,6 @@ updated: 2026-09-23
 
 이 문서는 **애플리케이션과 인프라가 스스로 내보내는 신호의 학습 순서**를 정합니다. 바깥에서 들여다보는 관측은 다른 로드맵이 맡습니다.
 
-맞닿는 문서가 넷입니다. 커널 관측은 [OS 로드맵](os-roadmap.md)이, 오브젝트 진단은 [Kubernetes 로드맵](k8s-roadmap.md)이, 흐름 관측은 [네트워크 로드맵](network-roadmap.md)이, JVM 내부 관측은 [JVM 로드맵](jvm-roadmap.md)이 맡습니다.
+맞닿는 문서가 다섯입니다. 커널 관측은 [OS 로드맵](os-roadmap.md)이, 오브젝트 진단은 [Kubernetes 로드맵](k8s-roadmap.md)이, 흐름 관측은 [네트워크 로드맵](network-roadmap.md)이, JVM 내부 관측은 [JVM 로드맵](jvm-roadmap.md)이, Helm·Terraform 같은 배포·IaC 도구 자체는 [DevOps 로드맵](devops-roadmap.md)이 맡습니다.
 
 **같은 증상을 다섯 문서가 다른 층에서 봅니다.** 응답이 느려졌을 때 이 문서는 SLO 와 지표 분포를 보고, OS 로드맵은 run queue 를, 네트워크 로드맵은 재전송을, JVM 로드맵은 GC 정지를, Kubernetes 로드맵은 throttling 을 봅니다.

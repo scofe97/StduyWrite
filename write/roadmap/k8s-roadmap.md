@@ -10,8 +10,9 @@ related:
   - os-roadmap.md
   - network-roadmap.md
   - observability-roadmap.md
+  - devops-roadmap.md
   - ../08_cloud/kubernetes/README.md
-updated: 2026-09-28
+updated: 2026-10-28
 ---
 
 # Kubernetes 학습 로드맵
@@ -67,8 +68,6 @@ updated: 2026-09-28
 | 7 · 운영 | 증상 좁히기 | 이벤트 · 로그 · 지표를 한 시간축에 · kubectl 고급 조회 · JSONPath · ephemeral container · `kubectl debug` |
 | 7 · 운영 | 자원 장애 | OOMKilled · exit code 137 · CPU throttling · node pressure · eviction |
 | 7 · 운영 | 종료와 복구 | SIGTERM · PID 1 · PreStop · `terminationGracePeriodSeconds` · PDB · NodeNotReady · OS 자동 업데이트 · 노드 추가·제거 · cordon · drain |
-| 7 · 운영 | 배포 도구 | Helm · Kustomize · GitOps · ArgoCD · App of Apps · ApplicationSet · 점진 배포 · canary · blue-green · Argo Rollouts |
-| 7 · 운영 | 클러스터를 코드로 | IaC · Immutable Infrastructure · Terraform state · module · 비밀 관리 · IaC 정책 검사 · Cluster API · Crossplane |
 | 7 · 운영 | 멀티테넌시 | 멀티테넌시 · 가상 컨트롤 플레인 · 이름 변환과 충돌 회피 · status back-sync |
 | 7 · 운영 | 멀티클러스터 | 멀티클러스터 세 모델 · 서비스 메시를 쓸 것인가 · OpenShift · 관리형 대 자체 운영 · EKS · GKE · AKS |
 
@@ -91,10 +90,9 @@ updated: 2026-09-28
 | Programming Kubernetes | 책 | 1~6 · 9장 | 추천 | 5·6단계 |
 | [Container Security](../08_cloud/book/container-security/README.md) | 책 | 1~4 · 8·9 · 13장 | 추천 | 6단계 |
 | CKS Study Guide | 책 | 2~7장 | 추천 | 6단계 |
-| Kubernetes Best Practices | 책 | 3·4 · 8~12 · 17·18장 | 추천 | 6·7단계 |
+| Kubernetes Best Practices | 책 | 3·4 · 8~12 · 17장 | 추천 | 6·7단계 |
 | [Kubernetes: Up and Running](../08_cloud/book/kubernetes-up-and-running/README.md) | 책 | 4 · 7 · 14~21장 | 추천 | 1 · 3~7단계 |
-| Terraform Up and Running | 책 | 1·3·4·6장 | 추천 | 7단계 |
-| Policy as Code | 책 | 4·5 · 7·8 · 11·12 · 14장 | 선택 | 6·7단계 |
+| Policy as Code | 책 | 7·8 · 14장 | 선택 | 6단계 |
 | [Learning eBPF](../02_os/book/learning-ebpf/README.md) | 책 | 9장 | 선택 | 6단계 |
 | Kubernetes 보안 문서 묶음 | 문서 | [Pod Security Standards](https://kubernetes.io/docs/concepts/security/pod-security-standards/) · [Security Checklist](https://kubernetes.io/docs/concepts/security/security-checklist/) · [Auditing](https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/) · [Encrypting Confidential Data at Rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/) | 추천 | 6단계 |
 | [CIS Kubernetes Benchmark](https://www.cisecurity.org/benchmark/kubernetes) | 문서 | Control Plane · Worker 항목 · 점검 도구 [kube-bench](https://github.com/aquasecurity/kube-bench) | 추천 | 6단계 |
@@ -110,7 +108,6 @@ updated: 2026-09-28
 | Kubernetes Patterns | 25~28 · 30장 | 6단계 Secret · 저장 암호화 · RBAC · Controller·Operator 의 노트 · 이미지 빌드 |
 | Container Security | 6·7 · 14장 | 6단계 공급망 보안 · CIS Benchmark 의 노트 |
 | Container Security | 10·12장 | 6단계 NetworkPolicy · Secret 관리 의 노트 |
-| Infrastructure as Code | 11·21장 | 7단계 Immutable Infrastructure · IaC 정책 검사 |
 | Operating OpenShift | 2·3장 | 7단계 OpenShift — 설치 방식 · Route · SCC |
 
 KISA 가이드는 API server 비인증 접근 차단, etcd 암호화, kubelet 인증 같은 항목을 진단 기준과 조치 방법으로 적어 CIS Benchmark 와 같은 자리를 채웁니다.
@@ -274,13 +271,6 @@ KISA 가이드는 API server 비인증 접근 차단, etcd 암호화, kubelet �
 | node pressure · eviction · NodeNotReady | 추천 | [Kubernetes 장애 기록](../troubleshooting/kubernetes/README.md) | |
 | 노드 추가·제거 — cordon · drain · PDB 와의 맞물림 | 필수 | | [Safely Drain a Node](https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/) |
 | OS 자동 업데이트 — 파이프라인 밖에서 노드를 바꾸는 장치 | 선택 | [진단 개념](../troubleshooting/_concepts/os-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8-%EB%B0%96%EC%97%90%EC%84%9C-%EB%85%B8%EB%93%9C%EB%A5%BC-%EB%B0%94%EA%BE%B8%EB%8A%94-%EC%9E%A5%EC%B9%98.md) |  |
-| Helm · Kustomize | 추천 | [Helm 기초](../08_cloud/kubernetes/10_packaging/10-01.Helm%20%EA%B8%B0%EC%B4%88.md) ~ [Kustomize](../08_cloud/kubernetes/10_packaging/10-03.Kustomize.md) | |
-| GitOps · ArgoCD · App of Apps · ApplicationSet | 추천 | [ArgoCD와 GitOps](../08_cloud/kubernetes/11_devtools/11-03.ArgoCD%EC%99%80%20GitOps.md) · [ArgoCD 노트](../08_cloud/argocd/README.md) | Kubernetes Best Practices 18장 |
-| 점진 배포 — canary · blue-green · Argo Rollouts · progressive delivery | 추천 | | [Argo Rollouts](https://argo-rollouts.readthedocs.io/) |
-| IaC 와 Immutable Infrastructure — 고치지 않고 다시 만든다 | 추천 | [IaC 관리](../07_devops/book/fdsd_fundamentals-devops/02-01.How%20to%20Manage%20Your%20Infrastructure%20as%20Code.md) | Terraform Up and Running 1장 · Infrastructure as Code 11장 |
-| Terraform state · module · 비밀 관리 | 추천 | | Terraform Up and Running 3·4·6장 |
-| 클러스터를 오브젝트로 선언 — Cluster API · Crossplane | 선택 | | Production Kubernetes 2장 · [Cluster API](https://cluster-api.sigs.k8s.io/) |
-| IaC 정책 검사 — Security as Code | 선택 |  | Policy as Code 11·12장 · Infrastructure as Code 21장 |
 | 멀티테넌시 | 추천 | | Production Kubernetes 12장 |
 | 가상 컨트롤 플레인 — tenant 와 host 를 잇는 sync 방향 | 선택 | | Production Kubernetes 12장 |
 | 이름 변환과 충돌 회피 · status back-sync | 선택 |  | [vcluster](https://www.vcluster.com/docs) |
@@ -288,7 +278,6 @@ KISA 가이드는 API server 비인증 접근 차단, etcd 암호화, kubelet �
 | 관리형 대 자체 운영 — EKS · GKE · AKS 를 고르는 기준 | 추천 | | Production Kubernetes 2장 |
 | OpenShift — Route · SCC · 설치 방식 | 선택 | | Operating OpenShift 2·3장 |
 | 서비스 메시를 쓸 것인가 | 선택 | [서비스 메시 판단](../08_cloud/book/kubernetes-up-and-running/15-01.Service%20Meshes%20%E2%80%94%20%EC%93%B8%20%EA%B2%83%EC%9D%B8%EA%B0%80%EB%A5%BC%20%EB%A8%BC%EC%A0%80%20%EB%94%B0%EC%A7%84%EB%8B%A4.md) · [네트워크 로드맵](network-roadmap.md) | Kubernetes: Up and Running 15장 |
-| 클러스터 안 CI 도구 — Jenkins · SonarQube · Harbor | 선택 | [Jenkins on K8s](../08_cloud/kubernetes/11_devtools/11-01.Jenkins%20on%20K8s.md) · [Harbor](../08_cloud/kubernetes/11_devtools/11-04.Harbor.md) | |
 | CKA 대비와 문제 풀이 | 선택 | [CKA 대비](../08_cloud/kubernetes/09_operations/09-04.CKA%20%EB%8C%80%EB%B9%84%EC%99%80%20%EB%AC%B8%EC%A0%9C%20%ED%92%80%EC%9D%B4%20%EC%A0%84%EB%9E%B5.md) | |
 
 
@@ -322,7 +311,7 @@ KISA 가이드는 API server 비인증 접근 차단, etcd 암호화, kubelet �
 | 패킷 경로 · CNI 데이터패스 · eBPF · Cilium · CNI 구현체 비교 | [네트워크 로드맵](network-roadmap.md)이 맡습니다 |
 | cgroup · namespace 의 커널 구현 | [OS 로드맵](os-roadmap.md) 3단계가 맡습니다 |
 | Prometheus · Grafana · OpenTelemetry | [관측 가능성 로드맵](observability-roadmap.md)이 맡습니다 |
-| 이미지 빌드 · CI 파이프라인 | `07_devops` 소관입니다. 클러스터 안에서 도는 도구만 7단계에 걸었습니다 |
+| 이미지 빌드 · CI 파이프라인 · Helm · GitOps · 점진 배포 · IaC | [DevOps 로드맵](devops-roadmap.md)이 맡습니다 |
 | Istio 의 트래픽 관리와 mTLS | [네트워크 로드맵](network-roadmap.md) 7단계가 맡습니다. 여기는 "쓸 것인가"까지입니다 |
 | VPC · Security Group · 클라우드 네트워크 경계 | [네트워크 로드맵](network-roadmap.md) 5단계가 맡습니다 |
 | Kubernetes in Action 3장 | 클러스터를 띄우는 절차입니다. 순서가 아니라 준비 단계입니다 |
@@ -336,6 +325,6 @@ KISA 가이드는 API server 비인증 접근 차단, etcd 암호화, kubelet �
 
 이 문서는 **오브젝트 축의 개념 순서와 우선순위**를 정합니다. 폴더 경계는 [Kubernetes MOC](../08_cloud/kubernetes/README.md)가 맡습니다.
 
-맞닿는 문서가 셋입니다. 오브젝트가 정상인데 패킷이 안 가는 자리는 [네트워크 로드맵](network-roadmap.md)이, 컨테이너를 만드는 커널 기능은 [OS 로드맵](os-roadmap.md)이, 클러스터에서 지표와 트레이스를 모아 보는 일은 [관측 가능성 로드맵](observability-roadmap.md)이 맡습니다.
+맞닿는 문서가 넷입니다. 오브젝트가 정상인데 패킷이 안 가는 자리는 [네트워크 로드맵](network-roadmap.md)이, 컨테이너를 만드는 커널 기능은 [OS 로드맵](os-roadmap.md)이 맡습니다. 클러스터에서 지표와 트레이스를 모아 보는 일은 [관측 가능성 로드맵](observability-roadmap.md)이, 매니페스트를 패키징해 클러스터에 반영하는 배포 도구와 IaC 는 [DevOps 로드맵](devops-roadmap.md)이 맡습니다.
 
 **같은 증상을 세 문서가 다른 층에서 봅니다.** OOMKilled는 이 문서 7단계가 `kubectl describe` 로, OS 로드맵 3단계가 cgroup 파일로 다룹니다. Service 실패는 이 문서 3단계가 selector와 EndpointSlice로, 네트워크 로드맵이 4단계의 kube-proxy 규칙과 2단계의 conntrack·MTU로 다룹니다.

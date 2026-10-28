@@ -36,12 +36,11 @@ rows = [
         ("런타임 탐지 문서", "6단계", "문서 · Falco·Tetragon", ["규칙 기반 탐지", "eBPF 강제와 탐지"], "선택"),
         ("EKS Best Practices for Security", "6단계", "문서 · 가이드 전편", ["IRSA·Pod Identity", "봉투 암호화·제어부 로그"], "추천"),
     ]),
-    ("6·7", "정책과 코드화", [
-        ("Policy as Code", "6·7단계", "4·5 · 7·8 · 11·12 · 14장", ["OPA·Gatekeeper·Kyverno", "Terraform·공급망 정책"], "선택"),
-        ("Terraform Up and Running", "7단계", "1·3·4·6장", ["IaC·불변 인프라", "state·module·비밀"], "추천"),
+    ("6", "정책과 코드화", [
+        ("Policy as Code", "6단계", "7·8 · 14장", ["OPA·Gatekeeper·Kyverno", "공급망 정책"], "선택"),
     ]),
     ("6–7", "운영 관례", [
-        ("Kubernetes Best Practices", "6·7단계", "3·4 · 8~12 · 17·18장", ["모니터링·RBAC·자원 관리", "정책·멀티클러스터·GitOps"], "추천"),
+        ("Kubernetes Best Practices", "6·7단계", "3·4 · 8~12 · 17장", ["모니터링·RBAC·자원 관리", "정책·멀티클러스터"], "추천"),
     ]),
     ("1 · 3–7", "여러 단계 보강", [
         ("Kubernetes Up and Running", "1 · 3~7단계", "4 · 7 · 14~21장", ["kubectl·Service Discovery·RBAC", "저장·확장·정책·멀티클러스터"], "추천"),

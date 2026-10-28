@@ -120,18 +120,12 @@ stages = [
       ("kubectl 고급 조회 · JSONPath", "", "필수"),
       ("OOMKilled · CPU throttling", "", "필수"),
       ("종료 지연 · SIGTERM · PreStop", "", "필수"),
-      ("노드 교체 · cordon · drain", "Safely Drain a Node 문서", "필수"),
-      ("관리형 대 자체 운영", "Production Kubernetes 2장", "추천"),
-      ("멀티테넌시", "Production Kubernetes 12장", "추천"),
-      ("CKA 대비와 문제 풀이", "", "선택")],
-     [("Helm · Kustomize", "", "추천"),
-      ("GitOps · ArgoCD", "K8s Best Practices 18장", "추천"),
-      ("점진 배포 · Argo Rollouts", "Argo Rollouts 문서", "추천"),
-      ("IaC · 불변 인프라", "Terraform Up and Running 1장", "추천"),
-      ("Terraform state · module", "Terraform Up and Running 3·4장", "추천"),
-      ("Cluster API · Crossplane", "Production Kubernetes 2장", "선택"),
+      ("노드 교체 · cordon · drain", "Safely Drain a Node 문서", "필수")],
+     [("멀티테넌시", "Production Kubernetes 12장", "추천"),
       ("멀티클러스터 세 모델", "K8s Up and Running 21장", "추천"),
-      ("서비스 메시를 쓸 것인가", "K8s Up and Running 15장", "선택")]),
+      ("관리형 대 자체 운영", "Production Kubernetes 2장", "추천"),
+      ("서비스 메시를 쓸 것인가", "K8s Up and Running 15장", "선택"),
+      ("CKA 대비와 문제 풀이", "", "선택")]),
 ]
 
 CUT_AFTER = 3          # 4단계 뒤에 "쓰는 쪽" ↔ "만드는 쪽" 절단선
@@ -186,10 +180,11 @@ for i, (who, what) in enumerate([
         ("network-roadmap", "패킷 경로 · CNI 데이터패스 · eBPF"),
         ("os-roadmap", "cgroup · namespace 의 커널 구현"),
         ("06_observability", "Prometheus · Grafana · OpenTelemetry"),
-        ("07_devops", "이미지 빌드 · CI 파이프라인")]):
-    cy = RY + 56 + i * 33
+        ("07_devops", "이미지 빌드 · CI 파이프라인"),
+        ("devops-roadmap", "배포 도구 · IaC")]):
+    cy = RY + 50 + i * 27
     d.t(RX + 16, cy, who, 13, MUTED, KR, "start", 600)
-    d.t(RX + 16, cy + 16, what, 12, SOFT, KR, "start")
+    d.t(RX + 16, cy + 14, what, 12, SOFT, KR, "start")
 
 d.box(SX - 130, ROOT_Y, 260, 52, PAPER2, RULE, 1.0)
 d.t(SX, ROOT_Y + 32, "여기서 시작합니다", 14, INK, KR, "middle", 600)

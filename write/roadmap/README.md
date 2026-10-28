@@ -4,7 +4,7 @@ tags: [moc, roadmap, index]
 status: final
 related:
   - ../README.md
-updated: 2026-09-23
+updated: 2026-10-28
 ---
 
 # 학습 로드맵
@@ -21,6 +21,7 @@ updated: 2026-09-23
 | [OS](os-roadmap.md) | Linux 사용에서 프로세스·격리·성능·커널 내부까지 |
 | [네트워크](network-roadmap.md) | socket과 Linux 패킷 경로에서 클라우드 underlay와 오버레이 터널까지 |
 | [Kubernetes](k8s-roadmap.md) | 오브젝트 선언에서 클러스터 내부 구조·확장·운영까지 |
+| [DevOps](devops-roadmap.md) | 코드 변경에서 클러스터 반영·인프라 선언까지 |
 | [Go](go-roadmap.md) | 문법과 타입 설계에서 동시성·서비스·터미널 세션까지 |
 | [데이터](data-roadmap.md) | 데이터 시스템의 축에서 저장 엔진·복제·합의·스트림까지 |
 | [관측 가능성](observability-roadmap.md) | 계측과 세 신호에서 SLO·확장·플랫폼까지 |
@@ -53,6 +54,7 @@ updated: 2026-09-23
 | OS | [학습 순서](_assets/os-roadmap.svg) · [책 읽기 흐름](_assets/os-books.svg) | [학습 순서](_assets/_gen/gen-os-roadmap.py) · [책 흐름](_assets/_gen/gen-os-books.py) |
 | 네트워크 | [학습 순서](_assets/network-roadmap.svg) · [자료 읽기 흐름](_assets/network-books.svg) | [학습 순서](_assets/_gen/gen-network-roadmap.py) · [책 흐름](_assets/_gen/gen-network-books.py) |
 | Kubernetes | [학습 순서](_assets/k8s-roadmap.svg) · [자료 읽기 흐름](_assets/k8s-books.svg) | [학습 순서](_assets/_gen/gen-k8s-roadmap.py) · [책 흐름](_assets/_gen/gen-k8s-books.py) |
+| DevOps | [학습 순서](_assets/devops-roadmap.svg) · [자료 읽기 흐름](_assets/devops-books.svg) | [학습 순서](_assets/_gen/gen-devops-roadmap.py) · [책 흐름](_assets/_gen/gen-devops-books.py) |
 | Go | [학습 순서](_assets/go-roadmap.svg) · [책 읽기 흐름](_assets/go-books.svg) | [학습 순서](_assets/_gen/gen-go-roadmap.py) · [책 흐름](_assets/_gen/gen-go-books.py) |
 | 데이터 | [학습 순서](_assets/data-roadmap.svg) · [책 읽기 흐름](_assets/data-books.svg) | [학습 순서](_assets/_gen/gen-data-roadmap.py) · [책 흐름](_assets/_gen/gen-data-books.py) |
 | JVM | [학습 순서](_assets/jvm-roadmap.svg) · [책 읽기 흐름](_assets/jvm-books.svg) | [학습 순서](_assets/_gen/gen-jvm-roadmap.py) · [책 흐름](_assets/_gen/gen-jvm-books.py) |

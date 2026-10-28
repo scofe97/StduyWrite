@@ -257,6 +257,6 @@ updated: 2026-09-23
 
 **6단계가 무게중심입니다.** 1~5단계는 그 자체로도 쓸모가 있지만, 이 로드맵에서는 인프라를 AI 와 함께 선언하고 배포하는 구간에 도달하기 위한 준비로 배치했습니다. 시간이 모자라면 5·6단계를 먼저 읽고 앞으로 돌아오는 순서도 성립합니다. 이때 5단계에는 3단계의 도구 호출 · MCP · 읽기와 쓰기의 분리와 4단계의 완료 검증이, 6단계에는 [Kubernetes 로드맵](k8s-roadmap.md) 2단계의 Deployment 롤아웃과 3단계의 Service · Gateway API, 7단계의 GitOps 가 먼저 필요합니다.
 
-맞닿는 문서가 둘입니다. 쿠버네티스 오브젝트와 내부 구조는 [Kubernetes 로드맵](k8s-roadmap.md)이, 지표와 로그와 트레이스의 일반 이론은 [관측 가능성 로드맵](observability-roadmap.md)이 맡습니다. 6단계에서 ArgoCD 와 Prometheus 가 나오는 것은 그 도구를 배우려는 것이 아니라 AI 와 함께 세우는 흐름을 보려는 것입니다.
+맞닿는 문서가 셋입니다. 쿠버네티스 오브젝트와 내부 구조는 [Kubernetes 로드맵](k8s-roadmap.md)이, 지표와 로그와 트레이스의 일반 이론은 [관측 가능성 로드맵](observability-roadmap.md)이, GitOps 와 ArgoCD 자체의 개념은 [DevOps 로드맵](devops-roadmap.md)이 맡습니다. 6단계에서 ArgoCD 와 Prometheus 가 나오는 것은 그 도구를 배우려는 것이 아니라 AI 와 함께 세우는 흐름을 보려는 것입니다.
 
 **같은 장애를 세 문서가 다른 층에서 봅니다.** 배포 후 오류율이 튀었을 때 이 문서는 에이전트가 만든 매니페스트와 가드레일을 보고, Kubernetes 로드맵은 롤아웃 상태와 probe 를, 관측 가능성 로드맵은 SLO 와 에러 버짓을 봅니다.
