@@ -8,7 +8,7 @@ updated: 2026-06-09
 
 # ddia2 — 《Designing Data-Intensive Applications, 2판》 정독
 ---
-> Martin Kleppmann & Chris Riccomini 의 2판을 장별로 정독한 노트입니다. 장 번호가 바뀐 별개 판본이라 1판 요약([01_foundation](../../01_foundation/README.md))과 분리해, 합니다체 + 핵심 요약 SVG + Mermaid 로 쌓습니다.
+> Martin Kleppmann & Chris Riccomini 의 2판을 장별로 정독한 노트입니다. DDIA 이론의 정본이며(1판 요약은 대부분 지웠고, 2판에 없는 PostgreSQL MVCC 설명이 든 `05_data/01_foundation/01-04` 만 남겼습니다), 합니다체 + 핵심 요약 SVG + Mermaid 로 쌓습니다.
 
 
 

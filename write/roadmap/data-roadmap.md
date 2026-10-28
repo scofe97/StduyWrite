@@ -227,7 +227,6 @@ updated: 2026-09-23
 | JDBC · 커넥션 풀 · JPA · QueryDSL | 도구를 익히는 축입니다. `05_data/03_persistence` 와 [Spring 로드맵](spring-roadmap.md) 4단계가 맡고, 커넥션 풀 고갈은 [JVM 로드맵](jvm-roadmap.md) 7단계가 봅니다 |
 | `@Transactional` 과 전파 · 롤백 규칙 | [Spring 로드맵](spring-roadmap.md) 4단계가 맡습니다. 6단계는 격리 수준까지입니다 |
 | DB 덤프 · 로컬 이관 · 마이그레이션 도구 | `05_data/06_operations` 가 맡습니다. 순서를 말할 대상이 아닙니다 |
-| DDIA 1판 요약 | `05_data/01_foundation` 에 따로 있습니다. 장 번호가 달라 섞으면 찾기 어렵습니다 |
 | Kafka 브로커 설계와 운영 | `04_messaging` 이 정본입니다. 9단계는 로그 기반 브로커의 원리까지입니다 |
 | 검색 애플리케이션 만들기 | Elasticsearch in Action 의 절반은 제품을 만드는 쪽입니다. 3단계는 색인 구조만 봅니다 |
 

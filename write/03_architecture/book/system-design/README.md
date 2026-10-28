@@ -28,8 +28,8 @@ related:
   - ../bytebytego-system-design/README.md
   - ../sdp_system-design-primer/README.md
   - ../../03_distributed/01-01.분산 아키텍처 기초.md
-  - ../../../05_data/01_foundation/02-03.복제.md
-  - ../../../05_data/01_foundation/02-04.샤딩.md
+  - ../../../05_data/book/designing-data-intensive-applications/06-01.복제 개요와 단일 리더.md
+  - ../../../05_data/book/designing-data-intensive-applications/07-01.샤딩 개요와 키 범위 샤딩.md
   - ../../README.md
 learning:
   topic: system-design-interview
@@ -55,7 +55,7 @@ updated: 2026-10-13
 
 [System Design Primer 정독본](../sdp_system-design-primer/README.md)은 캐시·복제·샤딩 같은 구성요소를 주제별로 정리합니다. [ByteByteGo 그림 해설 묶음](../bytebytego-system-design/README.md)은 같은 저자 쪽의 짧은 해설을 주제별로 모았습니다. 이 책은 그 구성요소를 실제 문제에 대입하는 쪽입니다. 처리율 제한기·URL 단축기·채팅·영상 서비스처럼 요구가 다른 시스템마다 무엇부터 정하고 어디서 맞바꾸는지가 이 폴더의 몫입니다.
 
-복제·샤딩의 일반 원리는 [데이터 기초의 복제](../../../05_data/01_foundation/02-03.%EB%B3%B5%EC%A0%9C.md)·[샤딩](../../../05_data/01_foundation/02-04.%EC%83%A4%EB%94%A9.md) 문서가 정본이고, 이 폴더는 사례 안에서 그 선택이 어떻게 쓰이는지만 남깁니다.
+복제·샤딩의 일반 원리는 [복제 개요와 단일 리더](../../../05_data/book/designing-data-intensive-applications/06-01.%EB%B3%B5%EC%A0%9C%20%EA%B0%9C%EC%9A%94%EC%99%80%20%EB%8B%A8%EC%9D%BC%20%EB%A6%AC%EB%8D%94.md)·[샤딩 개요와 키 범위 샤딩](../../../05_data/book/designing-data-intensive-applications/07-01.%EC%83%A4%EB%94%A9%20%EA%B0%9C%EC%9A%94%EC%99%80%20%ED%82%A4%20%EB%B2%94%EC%9C%84%20%EC%83%A4%EB%94%A9.md) 문서가 정본이고, 이 폴더는 사례 안에서 그 선택이 어떻게 쓰이는지만 남깁니다.
 
 
 
