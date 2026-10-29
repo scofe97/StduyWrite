@@ -4,7 +4,6 @@ tags: [moc, index]
 status: final
 related:
   - roadmap/README.md
-  - 08_cloud/kubernetes/04_networking/README.md
 updated: 2026-10-06
 ---
 

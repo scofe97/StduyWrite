@@ -20,7 +20,7 @@ updated: 2026-07-10
 
 핵심 대비는 **"단일 Prometheus 의 한계를 어느 방향으로 푸는가"** 입니다. 이 책은 그 답을 두 갈래로 나눠 보여줍니다. 9장의 원격 저장소(VictoriaMetrics·Mimir)는 메트릭을 *중앙의 큰 저장소로 remote write 해 밀어 넣는* 해법이고, 10장의 Thanos 는 *각 Prometheus 옆에 사이드카를 붙여 오브젝트 스토리지에 블록을 올리고 쿼리 시점에 합치는* 분산형 해법입니다. 이미 정리해 둔 [`02-05.Grafana Mimir`](../../02_LGTMStack/02-05.Grafana%20Mimir.md) 편이 전자에 해당하므로, 10장을 읽을 때 후자와 나란히 놓고 보면 저장·쿼리 비용의 트레이드오프가 선명해집니다.
 
-책의 뒷부분은 기존 노트와 직접 이어집니다. 13장(SLO)은 [`01-04.SLO와 알림 — Error Budget, Burn Rate`](../../01_Foundations/01-04.SLO와%20알림%20—%20Error%20Budget,%20Burn%20Rate.md) 의 개념을 Sloth·Pyrra 라는 실제 도구로 내려보내고, 14장(OpenTelemetry)은 [`03-11.305P OpenTelemetry 도입 고려사항`](../../03_Project/03-11.305P%20OpenTelemetry%20도입%20고려사항.md) 에서 검토한 내용을 Collector 설정 수준에서 다시 짚습니다. 노트를 쓸 때 이 지점마다 교차참조를 남깁니다.
+책의 뒷부분은 기존 노트와 직접 이어집니다. 13장(SLO)은 [`01-04.SLO와 알림 — Error Budget, Burn Rate`](../../01_Foundations/01-04.SLO와%20알림%20—%20Error%20Budget,%20Burn%20Rate.md) 의 개념을 Sloth·Pyrra 라는 실제 도구로 내려보내고, 14장(OpenTelemetry)은 `03-11.305P OpenTelemetry 도입 고려사항` 에서 검토한 내용을 Collector 설정 수준에서 다시 짚습니다. 노트를 쓸 때 이 지점마다 교차참조를 남깁니다.
 
 
 

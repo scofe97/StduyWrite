@@ -223,7 +223,7 @@ updated: 2026-09-23
 
 | 대상 | 이유 |
 |---|---|
-| SQL 문법 · MySQL 실행 계획 · 인덱스 튜닝 | 소장 책에 없습니다. `05_data/02_relational` 의 자체 노트가 맡습니다 |
+| SQL 문법 · MySQL 실행 계획 · 인덱스 튜닝 | 소장 책에 없고, 이 저장소에도 아직 노트가 없습니다 |
 | JDBC · 커넥션 풀 · JPA · QueryDSL | 도구를 익히는 축입니다. `05_data/03_persistence` 와 [Spring 로드맵](spring-roadmap.md) 4단계가 맡고, 커넥션 풀 고갈은 [JVM 로드맵](jvm-roadmap.md) 7단계가 봅니다 |
 | `@Transactional` 과 전파 · 롤백 규칙 | [Spring 로드맵](spring-roadmap.md) 4단계가 맡습니다. 6단계는 격리 수준까지입니다 |
 | DB 덤프 · 로컬 이관 · 마이그레이션 도구 | `05_data/06_operations` 가 맡습니다. 순서를 말할 대상이 아닙니다 |

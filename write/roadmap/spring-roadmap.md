@@ -212,9 +212,9 @@ updated: 2026-10-08
 | CSRF 와 CORS | 추천 | | Spring Security 9·10장 |
 | 메서드 수준 보안 | 추천 | | Spring Security 11·12장 |
 | OAuth 2 와 OIDC | 추천 | | Spring Security 13~16장 |
-| 액츄에이터 엔드포인트 | 필수 | [액츄에이터](../06_observability/05_SpringActuator/01-01.%EC%95%A1%EC%B8%84%EC%97%90%EC%9D%B4%ED%84%B0%20%E2%80%94%20%EC%9A%B4%EC%98%81%20%EC%97%94%EB%93%9C%ED%8F%AC%EC%9D%B8%ED%8A%B8.md) | Spring in Action 15장 |
-| Micrometer 와 메트릭 | 필수 | [마이크로미터와 메트릭](../06_observability/05_SpringActuator/01-02.%EB%A7%88%EC%9D%B4%ED%81%AC%EB%A1%9C%EB%AF%B8%ED%84%B0%EC%99%80%20%EB%A9%94%ED%8A%B8%EB%A6%AD%20%E2%80%94%20Counter%C2%B7Gauge%C2%B7Timer.md) | Spring in Action 16·17장 |
-| Prometheus 연동 | 추천 | [Prometheus 연동](../06_observability/05_SpringActuator/01-03.%ED%94%84%EB%A1%9C%EB%A9%94%ED%85%8C%EC%9A%B0%EC%8A%A4%C2%B7%EA%B7%B8%EB%9D%BC%ED%8C%8C%EB%82%98%20%EC%97%B0%EB%8F%99.md) | Cloud Native Spring 13장 |
+| 액츄에이터 엔드포인트 | 필수 | | Spring in Action 15장 |
+| Micrometer 와 메트릭 | 필수 | | Spring in Action 16·17장 |
+| Prometheus 연동 | 추천 | | Cloud Native Spring 13장 |
 
 ### 9단계 · 테스트와 배포
 
@@ -261,7 +261,7 @@ updated: 2026-10-08
 |---|---|
 | GC · 클래스 로딩 · 힙 덤프 | [JVM 로드맵](jvm-roadmap.md)이 맡습니다. Spring 이 느린 것과 JVM 이 멈춘 것은 다른 층입니다 |
 | 인덱스 자료구조 · 분산 일관성 | [데이터 로드맵](data-roadmap.md)이 맡습니다. 4단계는 트랜잭션 경계까지만 봅니다 |
-| SQL 실행 계획 · 인덱스 튜닝 | 소장 책에 없어 `05_data/02_relational` 의 자체 노트가 맡습니다 |
+| SQL 실행 계획 · 인덱스 튜닝 | 소장 책에 없고, 이 저장소에도 아직 노트가 없습니다 |
 | PromQL · SLO · 알림 설계 | [관측 가능성 로드맵](observability-roadmap.md)이 맡습니다. 8단계는 내보내는 쪽만 봅니다 |
 | 쿠버네티스 오브젝트와 내부 구조 | [Kubernetes 로드맵](k8s-roadmap.md)이 맡습니다. 9단계는 배포 산출물까지입니다 |
 | Kafka 프로듀서 · 컨슈머 설계 | `04_messaging` 이 정본입니다. `@KafkaListener` 는 그 주제 축 안에 둡니다 |

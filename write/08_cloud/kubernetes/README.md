@@ -33,7 +33,6 @@ updated: 2026-09-12
 
 | 폴더 | 공식 concepts | 한 줄 요약 |
 |------|--------------|-----------|
-| [`04_networking/`](04_networking/README.md) | Services·Networking | Pod 통신 → Service·DNS → 외부 진입 → 정책·운영 제약 |
 | [`06_architecture/`](06_architecture/README.md) | Cluster Architecture | Control Plane·etcd·API 보안·업그레이드 |
 | [`09_operations/`](09_operations/README.md) | Cluster Administration | 관측·트러블슈팅·kubectl 고급·CKA |
 | [`10_packaging/`](10_packaging/README.md) | (비공식) | Helm·Kustomize 패키징 도구 |
@@ -72,12 +71,6 @@ updated: 2026-09-12
 파드가 사라져도 데이터를 남기는 스토리지 모델을 봅니다.
 
 - **03-01 스토리지와 상태** — Stateless와 Stateful이 스토리지를 다루는 방식이 어떻게 갈리는지, Volume·PV·PVC로 상태를 어디에 두는지 봅니다.
-
-### 04_networking — 네트워킹
-
-Pod 통신·Service·DNS·Ingress·NetworkPolicy는 book 노트로 옮겨 갔습니다. 이 폴더에는 Windows 노드 네트워킹만 남깁니다.
-
-- **04-10 Windows 네트워킹** — HNS·HCS·Windows CNI를 Linux 네트워킹과 비교해 혼합 OS 클러스터의 제약을 정리합니다.
 
 ### 06_architecture — 클러스터 내부 구조
 

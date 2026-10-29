@@ -61,7 +61,6 @@ updated: 2026-09-04
 
 - 스팬·트레이스의 정의와 전파 헤더 네 형식: `02_LGTMStack/02-04.Grafana Tempo.md` 와 `book/observability_with_grafana/06-01.Tempo 와 TraceQL`
 - 대시보드 JSON 모델과 프로비저닝: `02_LGTMStack/02-01.Grafana Core.md`
-- 트레이스를 뒤져 병목을 찾는 작업 순서: `03_Project/03-08.Tempo 분산 트레이싱 시각화.md`
 
 그래서 8장 노트가 남긴 것은 사이드카가 코드 없이 붙여 주는 헤더, 그럼에도 애플리케이션이 해야 하는 전파, 그 몫을 조절하는 설정 자리, 그리고 메시의 리소스를 아는 화면입니다.
 

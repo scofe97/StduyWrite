@@ -108,7 +108,7 @@ ls troubleshooting/*/[0-9]*.md | wc -l                     # 승격
 
 | 배운 주제 | 근거 폴더 | 편수 |
 |----------|----------|------|
-| Pod 네트워크, 오버레이, Service, DNS, Ingress, NetworkPolicy, 이중 스택, 토폴로지 라우팅 | [08_cloud/kubernetes/04_networking/](../../08_cloud/kubernetes/04_networking/) | 10 |
+| Pod 네트워크, 오버레이, Service, DNS, Ingress, NetworkPolicy, 이중 스택, 토폴로지 라우팅 | 08_cloud/kubernetes/04_networking/ | 10 |
 | 이미지 풀, 자원 한계, 설정 주입, 배치, 볼륨, 권한, CRD, 관측 | [후보 풀 B 계층](./candidates.md) | 38 |
 | 컨테이너 네트워킹, CNI, kube-proxy, EndpointSlice, Service 5유형 | [08_cloud/book/networking-and-kubernetes/](../../08_cloud/book/networking-and-kubernetes/) 3~5장 | 11 |
 | 워크로드와 운영 전반 | [08_cloud/book/kubernetes-in-action/](../../08_cloud/book/kubernetes-in-action/) | 진행 중 |
@@ -142,7 +142,7 @@ ls troubleshooting/*/[0-9]*.md | wc -l                     # 승격
 |----------|----------|------|
 | VPC 부품, 보안 그룹과 NACL, NAT 와 IGW 와 ELB, EKS 두 VPC, 노드당 Pod 수와 ENI 한도, VPC CNI, ALB ingress | [08_cloud/book/networking-and-kubernetes/](../../08_cloud/book/networking-and-kubernetes/) 06-01 | 1 |
 | GCP 글로벌 네트워크, GKE 와 NEG, Azure 라우트, AKS, 3사 비교 | 같은 폴더 06-02 | 1 |
-| 존 간 트래픽과 토폴로지 인지 라우팅 | [08_cloud/kubernetes/04_networking/](../../08_cloud/kubernetes/04_networking/) 04-09 | 1 |
+| 존 간 트래픽과 토폴로지 인지 라우팅 | 08_cloud/kubernetes/04_networking/ 04-09 | 1 |
 
 D 계층은 근거가 셋뿐입니다. 여기서 뽑을 때는 위 세 편이 실제로 덮는 범위 안인지 먼저 확인하고, 벗어나면 다른 계층으로 돌립니다. 노트에 없는 주제로는 출제하지 않습니다.
 

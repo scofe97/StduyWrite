@@ -34,33 +34,6 @@ Alert 룰 설계와 SLO는 본 디렉토리에 속한다. 같은 룰을 CI/CD �
 - [02-06.Grafana Beyla.md](02_LGTMStack/02-06.Grafana%20Beyla.md) — eBPF 기반 자동 계측
 - [02-07.LGTM K8s 통합 배포.md](02_LGTMStack/02-07.LGTM%20K8s%20통합%20배포.md)
 
-## 03. 실전 프로젝트 + 305P 운영 (`03_Project/`)
-
-> LGTM+Spring Boot+Outbox 실전 구축(03-01~07), Tempo 활용 시각화(03-08), 그리고 305P(`dev.trombone-v2.okestro.cloud`) 환경의 실 운영기록·OTel 도입 고려(03-09~11)를 하나의 실전 흐름으로 모은다.
-
-- [03-01.LGTM 통합.md](03_Project/03-01.LGTM%20통합.md)
-- [03-02.Application 적용.md](03_Project/03-02.Application%20적용.md)
-- [03-03.실전 프로젝트 1.md](03_Project/03-03.실전%20프로젝트%201.md)
-- [03-04.실전 프로젝트 2(스프링 상세 설정).md](03_Project/03-04.실전%20프로젝트%202(스프링%20상세%20설정).md)
-- [03-05.실전 프로젝트 3(커넥터 상세 설정).md](03_Project/03-05.실전%20프로젝트%203(커넥터%20상세%20설정).md)
-- [03-06.실전 프로젝트 4(alloy 상세 설정).md](03_Project/03-06.실전%20프로젝트%204(alloy%20상세%20설정).md)
-- [03-07.실전 프로젝트 5(Outbox E2E 트레이스 연결).md](03_Project/03-07.실전%20프로젝트%205(Outbox%20E2E%20트레이스%20연결).md)
-- [03-08.Tempo 분산 트레이싱 시각화.md](03_Project/03-08.Tempo%20분산%20트레이싱%20시각화.md) — Tempo trace를 Grafana에서 시각화·병목 분석 (개념은 02-04 참조)
-- [03-09.305P 관측 운영기록.md](03_Project/03-09.305P%20관측%20운영기록.md) — 클러스터 현황·라벨 카탈로그·LogQL 결정·대시보드 chart·잔여 작업·의사결정 박제
-- [03-10.LGTM·Loki 운영 관점.md](03_Project/03-10.LGTM·Loki%20운영%20관점.md) — label explosion·7일 보존·k8s-sidecar·datasource UID·Alloy 파이프라인·알람 인프라 선택지
-- [03-11.305P OpenTelemetry 도입 고려사항.md](03_Project/03-11.305P%20OpenTelemetry%20도입%20고려사항.md) — 15장 교육 문서, Tail Sampling/Reactor/Retry-Trace 포함. OTel 규격 자체·Prometheus OTLP 수신구는 정독 노트 [14-01](book/mastering_prometheus/14-01.Prometheus%20와%20OpenTelemetry%20통합%20—%20규격·Collector·OTLP%20수신구.md)
-- [03-12.로그 대시보드 설계 — 레벨 구성·분리·레이아웃.md](03_Project/03-12.로그%20대시보드%20설계%20—%20레벨%20구성·분리·레이아웃.md) — 로그 패널 LogQL 구성·파생 라벨(regexp)·전용 vs 통합·레이아웃·transformation (일반 개념은 02-01 참조)
-
-## 05. Spring 관측성 — 앱이 내보내는 쪽 (`05_SpringActuator/`)
-
-> 앞 네 묶음이 *수집·저장·시각화 인프라*(LGTM) 관점이라면, 본 묶음은 *스프링 앱이 자기 운영 정보를 내보내는* 관점이다. 액츄에이터가 노출하고 LGTM이 긁어 간다.
-
-- [05_SpringActuator/01-01.액츄에이터 — 운영 엔드포인트.md](05_SpringActuator/01-01.액츄에이터%20—%20운영%20엔드포인트.md) — 프로덕션 준비 기능·엔드포인트·헬스·노출 제어·보안
-- [05_SpringActuator/01-02.마이크로미터와 메트릭 — Counter·Gauge·Timer.md](05_SpringActuator/01-02.마이크로미터와%20메트릭%20—%20Counter·Gauge·Timer.md) — 측정 추상화·메트릭 세 타입·@Counted/@Timed
-- [05_SpringActuator/01-03.프로메테우스·그라파나 연동.md](05_SpringActuator/01-03.프로메테우스·그라파나%20연동.md) — 노출-수집-시각화 3단 역할·scrape·PromQL
-
-(2026-05-25 김영한 스프링 부트 강의 8·9·10장 기반 3편 작성. 옛 `예정 주제 — Spring 관측성 (TBD)` 를 실현.)
-
 ## 예정 주제 — 관측 저장소 심화 (TBD)
 
 > LGTM 스택(Mimir·Loki)이 메트릭·로그를 저장하는 한 가지 답이라면, 같은 문제를 다른 방식으로 푸는 저장 계층이 현장에 흔하다. Prometheus 원본 생태계의 장기저장(Thanos)과, 역색인 기반 로그 검색(OpenSearch)을 LGTM 대비 관점으로 익힌다.
@@ -73,11 +46,11 @@ Alert 룰 설계와 SLO는 본 디렉토리에 속한다. 같은 룰을 CI/CD �
 
 ## 서브 디렉토리
 
-- `01_Foundations/` · `02_LGTMStack/` · `03_Project/` · `05_SpringActuator/` — 주제 폴더 (2026-05-24 평면 → 폴더 재구성, 2026-05-25 05 추가, 2026-08-05 04_Troubleshooting 정리)
+- `01_Foundations/` · `02_LGTMStack/` — 주제 폴더 (2026-05-24 평면 → 폴더 재구성, 2026-05-25 05 추가, 2026-08-05 04_Troubleshooting 정리)
 - `book/mastering_prometheus/` — *Mastering Prometheus*(Packt) 단행본 정독 노트 20편(15개 장). Prometheus를 *운영·확장·확장(extend)* 관점에서 훑는다. LGTM과 대비되는 저장 계층(Thanos·VictoriaMetrics), CI 검증(promtool·Pint), SLO 도구(Sloth·Pyrra), OTel 통합까지 다룬다. 각 편은 책 사실 대조 + 실측(도구 빌드·실행) + 정오표 검증을 거쳤다. MOC는 [book/mastering_prometheus/README.md](book/mastering_prometheus/README.md).
 - `LGTM/` — LGTM 스택 추가 자료 (TBD)
 - `_practice/` — 코드 실습 자산 (LGTM lab PoC)
 
 > **2026-05-24 재구성**: 24개 평면 파일을 4개 주제 폴더로 이동. 옛 `05. 심화`(Tempo 시각화)와 `06. 305P 운영기록`은 모두 실전 성격이라 `03_Project/`로 흡수(03-08~03-11 재넘버링).
 
-경계: OpenTelemetry 자체 규격·Tempo·Loki·Prometheus 설정은 `02_LGTMStack/`·`03_Project/`에 속한다. Spring Boot가 이들과 *자동 통합*되는 지점은 `05_SpringActuator/` 범위.
+경계: OpenTelemetry 자체 규격·Tempo·Loki·Prometheus 설정은 `02_LGTMStack/`에 속한다.

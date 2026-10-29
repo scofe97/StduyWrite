@@ -5,7 +5,6 @@ status: draft
 related:
   - ../README.md
   - ../roadmap.md
-  - ../02_relational/README.md
 updated: 2026-07-15
 ---
 
@@ -29,5 +28,4 @@ updated: 2026-07-15
 
 ## 관련 문서
 
-- [02_relational](../02_relational/README.md) — SQL·인덱스·MVCC·엔진 관점의 기반
 - [06_operations](../06_operations/README.md) — 개발·테스트 환경에서 DB 의존성을 다루는 방법

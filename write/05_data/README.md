@@ -22,14 +22,13 @@ updated: 2026-07-15
 | 주제군 | 범위 | 진입점 |
 |---|---|---|
 | [01_foundation/](./01_foundation/README.md) | 트랜잭션(PostgreSQL MVCC)·인덱스·NoSQL·캐싱·WAL 처럼 책 장에 매이지 않는 기초 | [README](./01_foundation/README.md) |
-| [02_relational/](./02_relational/README.md) | SQL·MySQL·InnoDB의 관계형 DB 원리·제품 기능 | [README](./02_relational/README.md) |
 | [03_persistence/](./03_persistence/README.md) | JDBC·JPA·Spring Data JPA·MyBatis·QueryDSL의 애플리케이션 영속성 계층 | [README](./03_persistence/README.md) |
 | [06_operations/](./06_operations/README.md) | 덤프·로컬 이관·테스트 DB·테스트 트랜잭션 | [README](./06_operations/README.md) |
 | [book/](./book/designing-data-intensive-applications/README.md) | 책 한 권을 장 단위로 정독한 노트 묶음 | [DDIA 2판](./book/designing-data-intensive-applications/README.md) |
 
 ## 경계 기준
 
-`01_foundation/`은 책 장에 매이지 않는 기초(트랜잭션과 격리 수준·인덱스 이론·NoSQL 비교·캐싱 전략·WAL)를 담당합니다. SQL·인덱스·MVCC 같은 관계형 DB의 동작은 `02_relational/`, 그 DB를 Spring 애플리케이션에서 다루는 방식은 `03_persistence/`에 둡니다.
+`01_foundation/`은 책 장에 매이지 않는 기초(트랜잭션과 격리 수준·인덱스 이론·NoSQL 비교·캐싱 전략·WAL)를 담당합니다. 관계형 DB를 Spring 애플리케이션에서 다루는 방식은 `03_persistence/`에 둡니다.
 
 `book/`은 주제군이 아니라 **출처 단위** 묶음입니다. 번호 폴더가 주제로 자료를 모은다면, `book/`은 책 한 권을 장 순서대로 끝까지 따라간 정독 노트를 그 책 이름 아래 둡니다. DDIA 이론은 2판 정독 노트 `book/designing-data-intensive-applications/`가 정본입니다. 1판 요약 노트는 대부분 주제가 겹쳐 2026-10-28 에 지웠고, 2판에 없는 PostgreSQL MVCC 설명이 든 `01_foundation/01-04` 만 남겼습니다. 같은 구조를 `08_cloud/book/`이 이미 쓰고 있습니다.
 

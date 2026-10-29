@@ -4,7 +4,6 @@ tags: [roadmap, linux, networking, kubernetes, cloud, ebpf, cilium, dns, securit
 status: final
 source:
   - ../02_os/project/network-fundamentals-lab/README.md
-  - ../08_cloud/kubernetes/04_networking/README.md
   - ../08_cloud/book/networking-and-kubernetes/README.md
 related:
   - README.md
@@ -12,7 +11,6 @@ related:
   - k8s-roadmap.md
   - observability-roadmap.md
   - ../02_os/project/network-fundamentals-lab/README.md
-  - ../08_cloud/kubernetes/04_networking/README.md
 updated: 2026-10-28
 ---
 
@@ -446,7 +444,7 @@ updated: 2026-10-28
 | OAuth2 Proxy · API Gateway — 앞단에서 인증을 대행하고 토큰을 검증 | 추천 | | Cloud Native Data Security with OAuth 8장 · [OAuth2 Proxy](https://oauth2-proxy.github.io/oauth2-proxy/) |
 | `RequestAuthentication` — 인그레스에서 최종 사용자 JWT 검증 | 추천 | [mTLS 기본값](../08_cloud/book/istio-in-action/09-01.%EA%B1%B0%EC%9D%98%20%EC%95%88%EC%A0%84%ED%95%9C%20%EA%B8%B0%EB%B3%B8%EA%B0%92%EC%9D%84%20%EB%8B%AB%EC%95%84%20%EA%B0%80%EB%8A%94%20%EC%88%9C%EC%84%9C.md) | Istio in Action 9장 |
 | Workload Identity — 사용자 신원과 워크로드 신원의 갈림 | 추천 | [신원 규격 부록](../08_cloud/book/istio-in-action/a0-03.%EB%B6%80%EB%A1%9D%20%E2%80%94%20%EC%8B%A0%EC%9B%90%EC%9D%84%20%EB%AC%B8%EC%84%9C%EB%A1%9C%20%EB%A7%8C%EB%93%9C%EB%8A%94%20%EB%84%A4%20%EA%B7%9C%EA%B2%A9.md) | Cloud Native Data Security with OAuth 10장 |
-| Windows HNS · HCS · Windows CNI | 선택 | [Windows 네트워킹](../08_cloud/kubernetes/04_networking/04-10.Windows%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9.md) | |
+| Windows HNS · HCS · Windows CNI | 선택 | | |
 | 데이터 플레인 진단 · `istioctl proxy-config` | 선택 | [proxy-config 진단](../08_cloud/book/istio-in-action/10-01.%ED%94%84%EB%A1%9D%EC%8B%9C%EB%8A%94%20%EB%8B%A4%20%EC%95%8C%EA%B3%A0%20%EC%9E%88%EA%B3%A0%20%EC%82%AC%EB%9E%8C%EC%9D%80%20%EB%AA%BB%20%EC%9D%BD%EB%8A%94%EB%8B%A4.md) | Istio in Action 10장 |
 | istiod 성능 — 설정 전파 · debounce · 낡은 설정의 수명 | 선택 | [컨트롤 플레인 성능](../08_cloud/book/istio-in-action/11-01.%EC%BB%A8%ED%8A%B8%EB%A1%A4%20%ED%94%8C%EB%A0%88%EC%9D%B8%EC%9D%98%20%EC%84%B1%EB%8A%A5%EC%9D%80%20%EB%82%A1%EC%9D%80%20%EC%84%A4%EC%A0%95%EC%9D%98%20%EC%88%98%EB%AA%85%EC%9D%B4%EB%8B%A4.md) | Istio in Action 11장 |
 | VM 워크로드 편입 — WorkloadGroup · WorkloadEntry | 선택 | [VM 편입](../08_cloud/book/istio-in-action/13-01.%EC%9E%90%EB%8F%99%EC%9C%BC%EB%A1%9C%20%EB%90%98%EB%8D%98%20%EC%9D%BC%EC%9D%B4%20%EB%AA%A9%EB%A1%9D%EC%9D%B4%20%EB%90%98%EC%96%B4%20%EB%82%98%ED%83%80%EB%82%9C%EB%8B%A4.md) | Istio in Action 13장 |
@@ -581,7 +579,7 @@ updated: 2026-10-28
 
 > 이 문서가 정하는 것과 인접 문서에 넘기는 것입니다.
 
-이 문서는 **개념의 순서와 우선순위**를 정합니다. 폴더 경계는 [02_os MOC](../02_os/README.md)와 [Kubernetes 네트워크 MOC](../08_cloud/kubernetes/04_networking/README.md)가 맡습니다.
+이 문서는 **개념의 순서와 우선순위**를 정합니다. 폴더 경계는 [02_os MOC](../02_os/README.md)와 [Kubernetes 네트워크 MOC](../08_cloud/book/networking-and-kubernetes/README.md)가 맡습니다.
 
 맞닿는 문서가 넷입니다. socket과 파일 디스크립터의 커널 쪽은 [OS 로드맵](os-roadmap.md)이, 오브젝트 수준의 배포와 운영은 [Kubernetes 로드맵](k8s-roadmap.md)이, 프록시와 로드밸런서를 직접 구현하는 일은 [Go 로드맵](go-roadmap.md)이, 패킷 밖에서 지표와 트레이스로 보는 일은 [관측 가능성 로드맵](observability-roadmap.md)이 맡습니다.
 
