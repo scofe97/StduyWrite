@@ -4,13 +4,15 @@ tags: [moc, study-index, lab, networking, go, http, reverse-proxy]
 status: draft
 source:
   - ~/study/npg-lab  # 책 Network Programming with Go 를 따라 만드는 실습 저장소, 8장부터 리버스 프록시 npgproxy
-  - https://github.com/scofe97/npg-lab@73fbcee  # feat/ch08-proxy-upstream (로컬 커밋, push 전)
+  - https://github.com/scofe97/npg-lab@0dbf86f  # main, 태그 v0.8.0
   - docs/adr/0011-reverse-proxy-product.md@73fbcee  # 8장부터 리버스 프록시를 만드는 결정
+  - docs/adr/0012-upstream-deadlines-and-pool.md@0dbf86f  # 업스트림 기한·연결 풀 결정
+  - docs/adr/0013-upstream-retry-and-idempotency.md@0dbf86f  # 재시도·멱등성 결정
 related:
   - ../../book/npg_network-programming-with-go/README.md
   - ../gonet-lab/README.md
   - ./01-01.기본값 리버스 프록시가 겪는 장애 - 느린 검색·포트 고갈·POST 502·회복 지연·중복 등록.md
-updated: "2026-10-26"
+updated: "2026-10-29"
 ---
 
 # npg-lab — 프로젝트 인덱스
@@ -45,7 +47,7 @@ Envoy의 클러스터나 Nginx의 업스트림처럼 백엔드 전달 계층을 
 
 | 장 | 학습 질문 | 문서 | 상태 |
 |---|---|---|---|
-| 8 업스트림 층 | 기본값 그대로 낸 프록시에 실제 운영 장애가 나면 어떤 신호로 원인을 좁히고 무엇을 고치는가 | [01-01](./01-01.기본값%20리버스%20프록시가%20겪는%20장애%20-%20느린%20검색·포트%20고갈·POST%20502·회복%20지연·중복%20등록.md) | draft (I1·I2·I3 진단까지) |
+| 8 업스트림 층 | 기본값 그대로 낸 프록시에 실제 운영 장애가 나면 어떤 신호로 원인을 좁히고 무엇을 고치는가 | [01-01](./01-01.기본값%20리버스%20프록시가%20겪는%20장애%20-%20느린%20검색·포트%20고갈·POST%20502·회복%20지연·중복%20등록.md) | draft (I1·I2·I3 진단·고침, v0.8.0) |
 
 
 
