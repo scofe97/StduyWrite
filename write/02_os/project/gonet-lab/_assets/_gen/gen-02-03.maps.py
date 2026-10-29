@@ -7,7 +7,7 @@ from flowk import flow_grid
 flow_grid("02-03.terminals.svg", "FLOW · 02-03 §1", "터미널 넷이 맡은 일",
           "터미널 A 는 UDP echo 서버를 :8080 에 띄우고 로그를 파일로 남긴다. C 는 TCP echo 서버를 :9000 에 띄운다. B 는 클라이언트 쪽 명령을 "
           "돌려 임시 포트로 서버에 붙고 결과를 표준 출력에 찍는다. D 는 tc 로 lo 에 netem 을 걸고 ss 와 nstat 으로 커널 쪽을 본다.",
-          "모두 OrbStack ubuntu 안에서 /Users/simbohyeon/study/gonet-lab 을 작업 폴더로 씁니다.",
+          "모두 OrbStack ubuntu 안에서 /Users/simbohyeon/study/runners-lab/net/gonet 을 작업 폴더로 씁니다.",
           [("터미널", ""), ("실행하는 것", ""), ("소켓 · 장치", ""), ("남는 기록", "")],
           [("A", "UDP 서버", [
               ([("A", None)], "", None),

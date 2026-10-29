@@ -3,7 +3,7 @@ title: gonet-lab — 프로젝트 인덱스
 tags: [moc, study-index, lab, networking, go, linux]
 status: draft
 source:
-  - ~/study/gonet-lab  # 직접 만드는 네트워크 primitive 실습 저장소 — Phase 0 구현 시점
+  - ~/study/runners-lab/net/gonet  # 직접 만드는 네트워크 primitive 실습 저장소 — Phase 0 구현 시점
   - https://github.com/scofe97/ai-context/blob/1a8b9d7/project/go-network-lab.md  # 원본 로드맵 (비공개)
   - https://github.com/projectdiscovery/naabu  # Phase 4 Port Scanner 비교 구현 — 2026-10-01 README 확인
   - https://github.com/grpc/grpc-go  # Phase 7·9·10·14·15 비교 구현
@@ -26,7 +26,7 @@ updated: 2026-10-03
 
 ---
 
-> Go 로 네트워크 primitive 를 하나씩 직접 짜고, 일부러 깨뜨리고, 커널 쪽에서 관측하는 랩의 학습 문서 모음입니다. 코드와 로드맵은 `~/study/gonet-lab` 에 있고, 여기에는 Phase 별 학습 문서와 학습 상태만 둡니다.
+> Go 로 네트워크 primitive 를 하나씩 직접 짜고, 일부러 깨뜨리고, 커널 쪽에서 관측하는 랩의 학습 문서 모음입니다. 코드와 로드맵은 `~/study/runners-lab/net/gonet` 에 있고, 여기에는 Phase 별 학습 문서와 학습 상태만 둡니다.
 
 ## 왜 이 랩을 하는가
 
@@ -171,13 +171,13 @@ Phase 2 의 7번 Line Reversal 은 따로 짚어 둘 만합니다. UDP 위에 �
 
 ## 참고
 
-- 코드와 규칙: `~/study/gonet-lab` 의 `README.md`, `AGENTS.md`
-- 로드맵 전사본: `~/study/gonet-lab/docs/01-01.gonet-lab-roadmap.md` (원본은 비공개 저장소 `scofe97/ai-context` 의 `project/go-network-lab.md`)
+- 코드와 규칙: `~/study/runners-lab/net/gonet` 의 `README.md`, `AGENTS.md`
+- 로드맵 전사본: `~/study/runners-lab/net/gonet/docs/01-01.gonet-lab-roadmap.md` (원본은 비공개 저장소 `scofe97/ai-context` 의 `project/go-network-lab.md`)
 - 원격 저장소: `scofe97/gonet-lab` (private, 2026-10-01 생성)
 - 로드맵 로컬 변경(2026-10-01): Phase 4 Port Scanner 추가, 기존 4~14 를 5~15 로 이동, grpc-go Reference 와 외부 채점 과제 추가
 - 로드맵 로컬 변경(2026-10-03): Phase 13 IP Overlay (TUN) 추가, 기존 13~15 를 14~16 으로 이동, Phase 6·11 Reference(x/net/proxy, Tor)와 Phase 11 hole punching 선택 실험 추가
 - 원본을 다시 가져오면 두 날짜의 변경을 다시 합칩니다. 이력은 로드맵 첫 줄 주석에 있습니다
-- Phase 0 범위와 완료 조건: `~/study/gonet-lab/docs/03-01.gonet-lab-phase0-plan.md`
-- Phase 4 범위·실험·배울 개념·naabu 플래그 대응표: `~/study/gonet-lab/docs/03-02.gonet-lab-phase4-plan.md`
+- Phase 0 범위와 완료 조건: `~/study/runners-lab/net/gonet/docs/03-01.gonet-lab-phase0-plan.md`
+- Phase 4 범위·실험·배울 개념·naabu 플래그 대응표: `~/study/runners-lab/net/gonet/docs/03-02.gonet-lab-phase4-plan.md`
 - 비교 구현: [projectdiscovery/naabu](https://github.com/projectdiscovery/naabu), [grpc/grpc-go](https://github.com/grpc/grpc-go), [Tor 명세](https://spec.torproject.org/tor-spec/), [wireguard-go](https://git.zx2c4.com/wireguard-go/)
 - 외부 채점: [protohackers.com/problems](https://protohackers.com/problems)

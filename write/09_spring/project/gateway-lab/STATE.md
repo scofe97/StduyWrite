@@ -16,7 +16,7 @@ updated: 2026-09-22
 
 ## 진행 구조
 
-게이트웨이 Phase 하나 = 학습 토픽 하나. 각 Phase 안을 4-Phase(개념 이해 → 학습 문서 → 실습 → 검증)로 돈다. 코드는 `~/study/gateway-lab`, 학습 로드맵은 그 저장소의 `docs/02-lab-plan/01-01.gateway-lab-roadmap.md`(Phase 설명은 02-01·02-02), 범위·결정은 `04-02.gateway-lab-decision-log.md` 가 기준이고, 바로 다음 Phase 의 상세는 `docs/02-lab-plan/03-NN.gateway-lab-phase<N>-plan.md` 다. 이 폴더에는 Phase 별 학습 문서와 이 상태 파일만 둔다.
+게이트웨이 Phase 하나 = 학습 토픽 하나. 각 Phase 안을 4-Phase(개념 이해 → 학습 문서 → 실습 → 검증)로 돈다. 코드는 `~/study/runners-lab/arch/gateway`, 학습 로드맵은 저장소 밖 `~/study/_private/gateway-docs/docs/02-lab-plan/01-01.gateway-lab-roadmap.md`(Phase 설명은 02-01·02-02), 범위·결정은 `04-02.gateway-lab-decision-log.md` 가 기준이고, 바로 다음 Phase 의 상세는 `docs/02-lab-plan/03-NN.gateway-lab-phase<N>-plan.md` 다. 이 폴더에는 Phase 별 학습 문서와 이 상태 파일만 둔다.
 
 | 게이트웨이 Phase | 학습 문서 (Phase 2 산출) | 4-Phase 진행 | 검증일 |
 |---|---|---|---|

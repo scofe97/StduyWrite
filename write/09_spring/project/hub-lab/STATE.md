@@ -16,7 +16,7 @@ updated: 2026-09-26
 
 ## 진행 구조
 
-허브 랩 Phase 하나 = 학습 토픽 하나. 각 Phase 안을 4-Phase(개념 이해 → 학습 문서 → 실습 → 검증)로 돈다. 실습은 늘 재현 실험과 해결 실험이 짝이다. 코드는 `~/study/hub-lab`, 학습 로드맵은 그 저장소의 `docs/01-01.hub-lab-roadmap.md`(Phase 설명은 02-01·02-02), 범위·결정은 `docs/04-01.hub-lab-decision-log.md` 가 기준이고, 바로 다음 Phase 의 상세는 `docs/03-NN.hub-lab-phase<N>-plan.md` 다. 이 폴더에는 Phase 별 학습 문서와 이 상태 파일만 둔다.
+허브 랩 Phase 하나 = 학습 토픽 하나. 각 Phase 안을 4-Phase(개념 이해 → 학습 문서 → 실습 → 검증)로 돈다. 실습은 늘 재현 실험과 해결 실험이 짝이다. 코드는 `~/study/runners-lab/arch/hub`, 학습 로드맵은 저장소 밖 `~/study/_private/hub-docs/docs/01-01.hub-lab-roadmap.md`(Phase 설명은 02-01·02-02), 범위·결정은 `docs/04-01.hub-lab-decision-log.md` 가 기준이고, 바로 다음 Phase 의 상세는 `docs/03-NN.hub-lab-phase<N>-plan.md` 다. 이 폴더에는 Phase 별 학습 문서와 이 상태 파일만 둔다.
 
 | 허브 랩 Phase | 학습 문서 (Phase 2 산출) | 4-Phase 진행 | 검증일 |
 |---|---|---|---|

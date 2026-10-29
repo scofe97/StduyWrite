@@ -5,7 +5,7 @@
 # 전제 1. KUBECONFIG 는 kind 전용 사본을 물린다(운영 클러스터 오발사 방지).
 #   kubectl config view --minify --flatten --context=kind-k8s-lab > /tmp/kind-only.kubeconfig
 # 전제 2. 매니페스트는 실습 저장소에 있다.
-#   ~/study/k8s_in_action/17-daemonset/01-node-selector/daemonset-demo-gpu.yaml
+#   ~/study/runners-lab/k8s/k8s-in-action/17-daemonset/01-node-selector/daemonset-demo-gpu.yaml
 # 전제 3. 시작 상태는 gpu label 없음 + demo 없음.
 #   kubectl label node k8s-lab-worker2 gpu- ; kubectl -n ch17-lab delete ds demo
 
@@ -27,7 +27,7 @@ Set CursorBlink false
 Hide
 Type "export KUBECONFIG=/tmp/kind-only.kubeconfig"
 Enter
-Type "cd ~/study/k8s_in_action/17-daemonset/01-node-selector"
+Type "cd ~/study/runners-lab/k8s/k8s-in-action/17-daemonset/01-node-selector"
 Enter
 Type "kubectl label node k8s-lab-worker2 gpu- >/dev/null 2>&1; kubectl delete ds demo --ignore-not-found >/dev/null 2>&1"
 Enter

@@ -45,8 +45,8 @@ updated: 2026-09-26
 
 | 랩 | 코드 | 배우는 것 |
 |----|------|----------|
-| [gateway-lab/](project/gateway-lab/README.md) | `~/study/gateway-lab` | raw Netty 로 리버스 프록시에서 API 게이트웨이까지 — 이벤트 루프·버퍼 수명·라우팅·실패 처리 |
-| [hub-lab/](project/hub-lab/README.md) | `~/study/hub-lab` | Spring Boot 위 연동 허브 — 포트와 어댑터·외부 API 클라이언트·다중 데이터소스·Outbox·분산 락·설정 정책·인증 위임 |
+| [gateway-lab/](project/gateway-lab/README.md) | `~/study/runners-lab/arch/gateway` | raw Netty 로 리버스 프록시에서 API 게이트웨이까지 — 이벤트 루프·버퍼 수명·라우팅·실패 처리 |
+| [hub-lab/](project/hub-lab/README.md) | `~/study/runners-lab/arch/hub` | Spring Boot 위 연동 허브 — 포트와 어댑터·외부 API 클라이언트·다중 데이터소스·Outbox·분산 락·설정 정책·인증 위임 |
 
 ### 예정 카테고리
 

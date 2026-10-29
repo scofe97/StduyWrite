@@ -3,7 +3,7 @@ title: hub-lab — 연동 허브 학습 인덱스
 tags: [moc, study-index, lab, spring, integration, transaction]
 status: draft
 source:
-  - ~/study/hub-lab  # 코드·로드맵·결정 기록 (로컬)
+  - ~/study/runners-lab/arch/hub  # 코드. 로드맵·결정 기록은 ~/study/_private/hub-docs (로컬)
 related:
   - ./STATE.md
   - ../../README.md
@@ -13,13 +13,13 @@ updated: 2026-09-26
 
 # hub-lab — 연동 허브 학습 인덱스
 
-두 외부 시스템 사이에서 요청을 옮기는 허브를 Spring Boot 위에 단계별로 지으며 경계 설계·연동·트랜잭션·동시성의 실패를 재현하고 고치는 랩의 학습 문서 모음입니다. 코드와 로드맵은 `~/study/hub-lab` 에 있습니다. 여기에는 Phase 별 학습 문서와 학습 상태만 둡니다. 진행은 `/learning-session hub-lab` 으로 엽니다.
+두 외부 시스템 사이에서 요청을 옮기는 허브를 Spring Boot 위에 단계별로 지으며 경계 설계·연동·트랜잭션·동시성의 실패를 재현하고 고치는 랩의 학습 문서 모음입니다. 코드는 `~/study/runners-lab/arch/hub` 에, 로드맵은 `~/study/_private/hub-docs` 에 있습니다. 여기에는 Phase 별 학습 문서와 학습 상태만 둡니다. 진행은 `/learning-session hub-lab` 으로 엽니다.
 
 ## 어떻게 진행하는가
 
 허브 랩 Phase 하나가 학습 토픽 하나입니다. 각 토픽을 4-Phase 로 돕니다. 개념 이해에서 그 Phase 가 막으려는 실패를 자기 말로 세우고 학습 문서에 적습니다. 실습에서는 AI 가 쓴 코드로 재현 실험과 해결 실험을 짝으로 돌립니다. 검증은 독립 자답으로 닫습니다. 완료 기준은 저장소 로드맵의 "빌드·테스트·이해 확인" 세 항목이며, 검증 Phase 가 세 번째 항목입니다.
 
-학습 로드맵은 `~/study/hub-lab/docs/01-01.hub-lab-roadmap.md`, Phase 설명은 같은 폴더의 `02-01`·`02-02` 입니다. 범위와 스택을 정한 이유는 `04-01.hub-lab-decision-log.md` 에 있습니다.
+학습 로드맵은 `~/study/_private/hub-docs/docs/01-01.hub-lab-roadmap.md`, Phase 설명은 같은 폴더의 `02-01`·`02-02` 입니다. 범위와 스택을 정한 이유는 `04-01.hub-lab-decision-log.md` 에 있습니다.
 
 
 

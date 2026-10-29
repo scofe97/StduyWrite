@@ -6,7 +6,7 @@
 #   kubectl config view --minify --flatten --context=kind-k8s-lab > /tmp/kind-only.kubeconfig
 #   사본에 default namespace 가 남아 있으면 지운다 — 없는 namespace 를 가리키면 apply 가 실패한다.
 # 전제 2. 매니페스트는 실습 저장소에 있다.
-#   ~/study/k8s_in_action/17-daemonset/02-auto-toleration/daemonset-demo-plain.yaml
+#   ~/study/runners-lab/k8s/k8s-in-action/17-daemonset/02-auto-toleration/daemonset-demo-plain.yaml
 # 전제 3. 시작 상태는 demo 없음.
 #   kubectl delete ds demo --ignore-not-found
 
@@ -28,7 +28,7 @@ Set CursorBlink false
 Hide
 Type "export KUBECONFIG=/tmp/kind-only.kubeconfig"
 Enter
-Type "cd ~/study/k8s_in_action/17-daemonset/02-auto-toleration"
+Type "cd ~/study/runners-lab/k8s/k8s-in-action/17-daemonset/02-auto-toleration"
 Enter
 Type "kubectl delete ds demo --ignore-not-found --wait=true >/dev/null 2>&1"
 Enter

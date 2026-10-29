@@ -3,7 +3,7 @@ title: gateway-lab — raw Netty 게이트웨이 학습 인덱스
 tags: [moc, study-index, lab, netty, spring, gateway, networking]
 status: draft
 source:
-  - ~/study/gateway-lab  # 코드·작업 지도·조사 문서 (로컬)
+  - ~/study/runners-lab/arch/gateway  # 코드. 작업 지도·조사 문서는 ~/study/_private/gateway-docs (로컬)
 related:
   - ./STATE.md
   - ../../README.md
@@ -14,7 +14,7 @@ updated: 2026-09-22
 
 # gateway-lab — raw Netty 게이트웨이 학습 인덱스
 
-HTTP 리버스 프록시에서 API 게이트웨이까지 raw Netty 로 단계별로 지으면서 이벤트 루프·버퍼 수명·라우팅·실패 처리를 익히는 랩의 학습 문서 모음입니다. 코드와 작업 지도는 `~/study/gateway-lab` 에 있고, 여기에는 Phase 별 학습 문서와 학습 상태만 둡니다. 진행은 `/learning-session gateway-lab` 으로 엽니다.
+HTTP 리버스 프록시에서 API 게이트웨이까지 raw Netty 로 단계별로 지으면서 이벤트 루프·버퍼 수명·라우팅·실패 처리를 익히는 랩의 학습 문서 모음입니다. 코드는 `~/study/runners-lab/arch/gateway` 에, 작업 지도와 조사 문서는 `~/study/_private/gateway-docs` 에 있고, 여기에는 Phase 별 학습 문서와 학습 상태만 둡니다. 진행은 `/learning-session gateway-lab` 으로 엽니다.
 
 ## 어떻게 진행하는가
 

@@ -3,7 +3,7 @@ title: netpath-lab — 프로젝트 인덱스
 tags: [moc, study-index, lab, networking, go]
 status: draft
 source:
-  - ~/study/netpath-lab@2e47490  # 직접 만든 요청 경로 진단 도구 — 1국면(DNS·TCP·HTTP) 완료 시점
+  - ~/study/runners-lab/net/netpath@2e47490  # 직접 만든 요청 경로 진단 도구 — 1국면(DNS·TCP·HTTP) 완료 시점
 related:
   - ./01-01.%EC%8B%A4%EC%8A%B5%20-%20%ED%8F%AC%ED%8A%B8%EC%97%90%20%EC%95%84%EB%AC%B4%EB%8F%84%20%EC%97%86%EC%9D%84%20%EB%95%8C.md
   - ../../README.md
@@ -101,7 +101,7 @@ HTTP         -  실행되지 않음
 
 ## 저장소 구조와 컨벤션
 
-> 코드는 `~/study/netpath-lab` 에 있습니다. 의존은 `types` 에서 `cmd` 쪽으로 한 방향으로만 흐르고, 핵심 규칙 일곱 개는 `AGENTS.md` 에 있습니다.
+> 코드는 `~/study/runners-lab/net/netpath` 에 있습니다. 의존은 `types` 에서 `cmd` 쪽으로 한 방향으로만 흐르고, 핵심 규칙 일곱 개는 `AGENTS.md` 에 있습니다.
 
 ```bash
 netpath-lab/
@@ -127,7 +127,7 @@ netpath-lab/
 | 커밋 전 `make check` | vet·gofmt·코어 경계·`test -race` 를 한 번에 확인 |
 
 ```bash
-cd ~/study/netpath-lab
+cd ~/study/runners-lab/net/netpath
 make build                                  # bin/netpath (CGO_ENABLED=0)
 ./bin/netpath --json http://127.0.0.1:9 | jq
 make check                                  # vet + lint + test -race
