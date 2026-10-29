@@ -33,6 +33,7 @@ updated: 2026-10-28
 | 2 · CI 파이프라인 | 실행 환경과 에이전트 | Jenkins Agent · Docker with Pipeline · Kubernetes Jenkins · 동적 Pod 에이전트 · 실패 대응과 sh 위생 |
 | 2 · CI 파이프라인 | 정적 분석과 품질 게이트 | SonarQube · 정적 분석 결함 · Clean as You Code · Quality Gate · withSonarQubeEnv |
 | 2 · CI 파이프라인 | 파이프라인 운영과 확장 | Multibranch Pipeline · Pipeline 내구성 · 공유 라이브러리 · 파이프라인 디자인 패턴 · Jenkins API · Jenkins 엔진 |
+| 3 · 산출물 | 컨테이너 실행과 점검 | `docker run` · `logs` · `exec` · `inspect` · 포트 · 볼륨 · 네트워크 · Docker Compose |
 | 3 · 산출물 | 이미지 빌드와 최적화 | 빌드 도구 비교와 선택 · 컨테이너 이미지 빌드 · multi-stage build · BuildKit · Kaniko |
 | 3 · 산출물 | 식별과 불변성 | tag 와 digest · sha256 불변 참조 · semantic versioning · 태그 변조 방지 |
 | 3 · 산출물 | 저장소와 레지스트리 | 아티팩트 관리 기초 · hosted · proxy · group · Nexus · Harbor · Artifactory · MinIO |
@@ -140,6 +141,8 @@ updated: 2026-10-28
 
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
+| 컨테이너 실행과 점검 — `docker run` · `logs` · `exec` · `inspect` · 포트 · 볼륨 · 네트워크 | 필수 |  | DevOps Tools for Java Developers 3장 |
+| Docker Compose — 여러 컨테이너를 한 파일로 띄우는 로컬 환경 | 추천 |  | [Compose 공식 문서](https://docs.docker.com/compose/) |
 | 빌드 도구 선택과 컨테이너화 — Gradle · Maven · npm | 필수 | [빌드 도구 비교와 선택](../07_devops/02_Jenkins/03_agent/01-03.%EB%B9%8C%EB%93%9C%20%EB%8F%84%EA%B5%AC%20%EB%B9%84%EA%B5%90%EC%99%80%20%EC%84%A0%ED%83%9D.md) | DevOps Tools for Java Developers 6장 |
 | 컨테이너 이미지 빌드 — multi-stage · BuildKit · Kaniko | 필수 | [컨테이너 이미지 빌드](../07_devops/02_Jenkins/03_agent/01-04.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EB%B9%8C%EB%93%9C.md) | Container Security 6장 · DevOps Tools for Java Developers 3장 |
 | tag 와 digest — 태그 가변성 한계와 sha256 불변 참조 | 필수 | [컨테이너 이미지 빌드](../07_devops/02_Jenkins/03_agent/01-04.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EB%B9%8C%EB%93%9C.md) | Container Security 6장 |

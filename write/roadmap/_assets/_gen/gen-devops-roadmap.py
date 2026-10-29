@@ -48,12 +48,14 @@ stages = [
       ("Quality Gate 임계치 빌드 게이트", "CI/CD Design Patterns 7장", "필수")]),
 
     ("3 · 산출물", "이미지 빌드와 불변 식별",
-     [("빌드 도구 선택과 컨테이너화", "DevOps Tools for Java 6장", "필수"),
+     [("컨테이너 실행 · logs · exec", "DevOps Tools for Java 3장", "필수"),
+      ("빌드 도구 선택과 컨테이너화", "DevOps Tools for Java 6장", "필수"),
       ("multi-stage · BuildKit 빌드", "Container Security 6장", "필수"),
       ("tag 와 sha256 불변 digest", "Container Security 6장", "필수"),
       ("바이너리 격리와 아티팩트 관리", "DevOps Tools for Java 6장", "필수")],
      [("Nexus Docker Registry 사설 운영", "", "추천"),
       ("Harbor 프로젝트 격리와 복제", "", "추천"),
+      ("Docker Compose 로컬 구성", "Compose 공식 문서", "추천"),
       ("Artifactory 와 build-info 추적", "DevOps Tools for Java 6장", "선택"),
       ("MinIO 아티팩트 레지스트리 보관", "", "선택")]),
 

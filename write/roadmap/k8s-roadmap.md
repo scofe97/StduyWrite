@@ -278,7 +278,8 @@ KISA 가이드는 API server 비인증 접근 차단, etcd 암호화, kubelet �
 | 관리형 대 자체 운영 — EKS · GKE · AKS 를 고르는 기준 | 추천 | | Production Kubernetes 2장 |
 | OpenShift — Route · SCC · 설치 방식 | 선택 | | Operating OpenShift 2·3장 |
 | 서비스 메시를 쓸 것인가 | 선택 | [서비스 메시 판단](../08_cloud/book/kubernetes-up-and-running/15-01.Service%20Meshes%20%E2%80%94%20%EC%93%B8%20%EA%B2%83%EC%9D%B8%EA%B0%80%EB%A5%BC%20%EB%A8%BC%EC%A0%80%20%EB%94%B0%EC%A7%84%EB%8B%A4.md) · [네트워크 로드맵](network-roadmap.md) | Kubernetes: Up and Running 15장 |
-| CKA 대비와 문제 풀이 | 선택 | [CKA 대비](../08_cloud/kubernetes/09_operations/09-04.CKA%20%EB%8C%80%EB%B9%84%EC%99%80%20%EB%AC%B8%EC%A0%9C%20%ED%92%80%EC%9D%B4%20%EC%A0%84%EB%9E%B5.md) | |
+| CKA 대비와 문제 풀이 | 추천 | [CKA 대비](../08_cloud/kubernetes/09_operations/09-04.CKA%20%EB%8C%80%EB%B9%84%EC%99%80%20%EB%AC%B8%EC%A0%9C%20%ED%92%80%EC%9D%B4%20%EC%A0%84%EB%9E%B5.md) | |
+| CKAD 대비 — 시험 범위는 1~4단계 워크로드 · 연결 · 저장 | 선택 |  | [CKAD 커리큘럼](https://github.com/cncf/curriculum) |
 
 
 

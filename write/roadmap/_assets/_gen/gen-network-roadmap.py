@@ -165,7 +165,7 @@ stages = [
       ("retry · circuit breaking", "Istio in Action 6장", "필수"),
       ("OAuth 2.0 · OIDC · SSO", "Solving Identity Mgmt 5·6장", "필수"),
       ("Auth Code · PKCE · nonce", "Solving Identity Mgmt 6장", "필수")],
-     [("Envoy · VirtualService · DR", "Istio in Action 3·4·5장", "추천"),
+     [("Envoy · VirtualService · DR", "Istio in Action 3·4·5장", "필수"),
       ("JWT · JWKS 서명 검증", "Cloud Native OAuth 5장", "필수"),
       ("OAuth2 Proxy · 게이트웨이", "Cloud Native OAuth 8장", "추천"),
       ("Workload Identity", "Cloud Native OAuth 10장", "추천"),
