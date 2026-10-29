@@ -54,7 +54,7 @@ d.t(120, 272, "단건 조회 성공", 12, OK, KR, "middle", 600)
 
 # Box 3: POST 502 관측
 d.tone(36, 300, 168, 80, WARN, 6, "12", 1.0)
-d.t(120, 324, "POST 56 / 1,207", 13, WARN, MONO, "middle", 600)
+d.t(120, 324, "POST 56 / 1,206", 13, WARN, MONO, "middle", 600)
 d.t(120, 346, "502 flags=UC", 12, WARN, MONO, "middle", 600)
 d.t(120, 366, "idle 807~973ms", 11, MUTED, MONO, "middle")
 
