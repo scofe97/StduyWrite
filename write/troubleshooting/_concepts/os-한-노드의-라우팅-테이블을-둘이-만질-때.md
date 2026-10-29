@@ -32,7 +32,7 @@ updated: 2026-09-22
 
 > 노드의 표에는 커널, 네트워크 설정 데몬, CNI, 사람이 모두 줄을 넣습니다.
 
-줄이 사라졌을 때 누가 지웠는지를 물으려면 먼저 누가 넣는지부터 셀 수 있어야 합니다. 쿠버네티스 노드도 떼어 놓고 보면 평범한 리눅스 서버입니다. NIC 하나, 라우팅 테이블 하나, netfilter 규칙과 conntrack 이 있고 쿠버네티스는 그 위에 얹힌 추상입니다. [Pod 네트워크와 Linux 기반 §1](../../08_cloud/kubernetes/04_networking/04-02.Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%99%80%20Linux%20%EA%B8%B0%EB%B0%98.md) 이 이 관점에서 출발합니다.
+줄이 사라졌을 때 누가 지웠는지를 물으려면 먼저 누가 넣는지부터 셀 수 있어야 합니다. 쿠버네티스 노드도 떼어 놓고 보면 평범한 리눅스 서버입니다. NIC 하나, 라우팅 테이블 하나, netfilter 규칙과 conntrack 이 있고 쿠버네티스는 그 위에 얹힌 추상입니다. [커널이 패킷을 주고받는 자리](../../08_cloud/book/networking-and-kubernetes/02-01.%EC%BB%A4%EB%84%90%EC%9D%B4%20%ED%8C%A8%ED%82%B7%EC%9D%84%20%EC%A3%BC%EA%B3%A0%EB%B0%9B%EB%8A%94%20%EC%9E%90%EB%A6%AC%20%E2%80%94%20%EC%86%8C%EC%BC%93%C2%B7%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%C2%B7veth%C2%B7%EB%B8%8C%EB%A6%AC%EC%A7%80.md)가 이 관점에서 출발합니다.
 
 그 표 하나에 줄을 넣는 쪽을 꼽으면 이렇습니다.
 

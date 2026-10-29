@@ -15,13 +15,13 @@ updated: 2026-09-12
 
 # 08_cloud/kubernetes
 ---
-> Kubernetes를 개념 축으로 정리한 딥다이브 노트입니다. 워크로드에서 시작해 설정·저장소·네트워크·스케줄링·내부 구조·보안·확장·Day-2 운영까지 잇습니다.
+> Kubernetes를 개념 축으로 정리한 딥다이브 노트입니다. 워크로드에서 시작해 설정·저장소·네트워크·내부 구조·보안·확장·Day-2 운영까지 잇습니다.
 
 공식 문서의 concepts 대분류를 뼈대로 삼고, 폴더 번호로 학습 흐름을 표시합니다. 이 카테고리는 클러스터 안에서 리소스가 선언되고 배치되고 연결되고 운영되는 과정을 다룹니다.
 
 서비스 간 L7 정책·mTLS·세밀한 트래픽 제어는 `service-mesh` <!-- 링크 끊김(2026-08): ../service-mesh/README.md --> 카테고리가 맡습니다. App of Apps·ApplicationSet·Image Updater 운영은 [`argocd`](../argocd/README.md) 카테고리에서 다룹니다.
 
-책 한 권을 저자 순서대로 따라가는 정독본은 [`book/kubernetes-in-action`](../book/kubernetes-in-action/README.md)에 따로 있습니다. 이 개념 노트는 주제로 검색해 펼쳐 보는 참조용이고, 정독본은 저자가 개념을 쌓아 올린 순서를 보존하는 학습용이라 역할이 다릅니다. 개념이 겹치면 서로 링크로만 잇고 통째 병합하지 않습니다.
+책 한 권을 저자 순서대로 따라가는 정독본은 [`book/kubernetes-in-action`](../book/kubernetes-in-action/README.md)에 따로 있습니다. 개념은 book 노트가 정본이고, 이 폴더에는 book 이 다루지 않는 운영·도구 주제만 둡니다(2026-10-29 정리, book 에 옮긴 뒤 12편 삭제).
 
 
 
@@ -34,7 +34,6 @@ updated: 2026-09-12
 | 폴더 | 공식 concepts | 한 줄 요약 |
 |------|--------------|-----------|
 | [`04_networking/`](04_networking/README.md) | Services·Networking | Pod 통신 → Service·DNS → 외부 진입 → 정책·운영 제약 |
-| [`05_scheduling/`](05_scheduling/README.md) | Scheduling·Eviction | 노드 배치·토폴로지 분산·오토스케일링 |
 | [`06_architecture/`](06_architecture/README.md) | Cluster Architecture | Control Plane·etcd·API 보안·업그레이드 |
 | [`09_operations/`](09_operations/README.md) | Cluster Administration | 관측·트러블슈팅·kubectl 고급·CKA |
 | [`10_packaging/`](10_packaging/README.md) | (비공식) | Helm·Kustomize 패키징 도구 |
@@ -76,26 +75,9 @@ updated: 2026-09-12
 
 ### 04_networking — 네트워킹
 
-Pod IP는 바뀐다는 전제에서 출발해, 트래픽이 Linux netns부터 외부 진입까지 어떤 계층을 거쳐 흐르는지 한 단씩 올라갑니다. 파일 번호 순서가 곧 추상화 상승 순서입니다.
+Pod 통신·Service·DNS·Ingress·NetworkPolicy는 book 노트로 옮겨 갔습니다. 이 폴더에는 Windows 노드 네트워킹만 남깁니다.
 
-- **04-01 네트워킹** — 트래픽이 거치는 계층 전체를 조망해 이후 문서의 지도를 그립니다.
-- **04-02 Pod 네트워크와 Linux 기반** — pause·netns·veth·Pod CIDR·CNI·kube-proxy dataplane이 실제로 어떻게 동작하는지 Linux 수준까지 내려가 봅니다. ([인터랙티브 시각화](04_networking/04-02-pod-network.html))
-- **04-03 오버레이와 노드 간 트래픽** — VXLAN·네이티브 라우팅·BGP·ECMP·MetalLB가 노드 간 Pod 트래픽과 외부 LoadBalancer를 어떻게 만드는지 봅니다. ([인터랙티브 시각화](04_networking/04-03-overlay-bgp.html))
-- **04-04 Service와 EndpointSlice** — 변하는 Pod 집합을 안정적인 진입점으로 노출하는 추상화를 EndpointSlice 단위로 봅니다.
-- **04-05 DNS와 CoreDNS** — Service 이름이 어떻게 IP로 해석되는지, CoreDNS가 이름 해석을 어떻게 책임지는지 봅니다.
-- **04-06 Ingress와 Gateway API** — 외부 HTTP 트래픽 라우팅이 Ingress에서 Gateway API로 어떻게 진화하고, cert-manager가 인증서를 어떻게 자동화하는지 봅니다.
-- **04-07 NetworkPolicy** — Pod의 ingress·egress 격리를 따로 평가하고, 여러 정책의 허용을 합집합해 최종 결정하는지 봅니다.
-- **04-08 IPv4와 IPv6 이중 스택** — Pod·Service의 IP family를 선택하고 `ipFamilyPolicy`·`ipFamilies`로 전환할 때의 제약을 봅니다.
-- **04-09 토폴로지 인지 라우팅** — EndpointSlice hint가 zone 내부 트래픽을 선호하고, 조건이 맞지 않을 때 fallback이 어떻게 동작하는지 봅니다.
 - **04-10 Windows 네트워킹** — HNS·HCS·Windows CNI를 Linux 네트워킹과 비교해 혼합 OS 클러스터의 제약을 정리합니다.
-
-### 05_scheduling — 스케줄링
-
-파드를 어느 노드에 둘지, 동시 중단을 얼마나 허용할지, 부하에 따라 어떻게 늘리고 줄일지를 봅니다.
-
-- **05-01 스케줄링과 노드 선택** — kube-scheduler의 Filter·Score와 nodeAffinity·Taint가 어떻게 보완되는지 봅니다.
-- **05-02 토폴로지 분산과 중단 정책** — Topology Spread·PodDisruptionBudget·PriorityClass·Eviction이 가용성을 어떻게 만드는지 봅니다.
-- **05-03 오토스케일링** — HPA·VPA·KEDA가 어떻게 역할을 나누는지 봅니다.
 
 ### 06_architecture — 클러스터 내부 구조
 
@@ -166,8 +148,6 @@ Jenkins·SonarQube·ArgoCD·Harbor를 K8s 위에 올려 개발 생산성과 배�
 기존의 `{제목} 점검.md` 짝 파일은 복습할 때 파일을 오가는 비용을 줄이기 위해 본문에 흡수했습니다. 실습은 각 본문의 `실습 환경`에 따라 GCP K8s 클러스터에서 수행합니다.
 
 `00_overview`의 로컬 클러스터 구성, `01_workloads/01-01.핵심 워크로드`, `03_storage/03-01.스토리지와 상태`처럼 원래 점검 질문이 없던 입문 편은 본문만 있습니다.
-
-`04_networking`은 이 전역 규약의 의도적 예외로 점검 문서를 별도 짝으로 두는 폴더입니다. 04-04~04-10은 이 예외에 따라 본문과 `점검.md`를 두고, 04-01도 기존 별도 점검 짝을 유지하며, 04-02·04-03은 기존 본문 내 점검 절을 유지합니다. 이 분리는 본문을 이해한 뒤 정답을 가린 채 스스로 설명하는 인출 구조를 위한 의도적 선택입니다.
 
 
 

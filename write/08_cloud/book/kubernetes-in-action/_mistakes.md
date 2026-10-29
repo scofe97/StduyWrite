@@ -32,7 +32,7 @@ updated: 2026-08-12
 
 - **⛔ 트레이드오프 결론은 맞고 근거가 틀렸습니다**: arch 혼재 클러스터에서 "그냥 B(multiarch 단일 DaemonSet)가 낫지 않나"는 방향이 맞았지만, 근거로 댄 "**A는 노드 추가될 때마다 매번 작업해야 할 것 같다**"가 틀렸습니다. A에서도 nodeSelector가 arch label을 걸고 있어 노드 추가 시 컨트롤러가 알아서 파드를 만듭니다(Node 오브젝트 감시 → label 변화에 reconciliation). A의 비용은 수작업이 아니라 **매니페스트 두 벌 유지**입니다. 판단 기준은 **아키텍처별로 달라져야 하는 것이 이미지뿐인지** — 이미지만 다르면 B, `resources.requests` 처럼 다른 필드도 달라야 하면 Pod 템플릿이 하나뿐이라 A입니다. Phase 1에서 잡은 "개수가 클러스터 상태에서 파생된다"를 A에도 적용하지 못한 것이 원인입니다.
 
-- **참고 챕터**: 17-01 §1(reconciliation·워크로드 종류)·§2(status는 노드 수·control plane taint·자동 toleration·nodeAffinity)·§4(maxSurge 0·OnDelete). taint/toleration 개념본은 `../../kubernetes/05_scheduling/05-01`.
+- **참고 챕터**: 17-01 §1(reconciliation·워크로드 종류)·§2(status는 노드 수·control plane taint·자동 toleration·nodeAffinity)·§4(maxSurge 0·OnDelete). taint/toleration 은 `../kubernetes-patterns/06-01`.
 - **다음 편 예고로 미룬 것**: DaemonSet과 Service의 관계를 물었습니다. daemon 파드도 label이 있어 Service로 묶을 수는 있지만 노드 에이전트에는 보통 불필요하고(데이터를 내보내는 쪽), node-exporter처럼 긁혀야 하는 경우엔 ClusterIP로 로드밸런싱하면 **어느 노드의 메트릭인지 알 수 없어** 목적이 깨집니다. `hostNetwork`·`hostPort` 로 노드 IP에 직접 노출하는 방식은 **17-02**가 다룹니다.
 - **재방문 트리거**: 다음 복습에서 (1) `DESIRED 2 / CURRENT 3` 출력을 다시 던져 두 숫자의 **단위**로 모순이 아님을 설명, (2) "노드당 하나"를 **주어를 붙여** 말하고 한 워커 노드에 daemon 파드가 여러 개 도는 예를 들기, (3) control plane 회피를 네임스페이스 언급 없이 taint/toleration으로만 설명, (4) arch 혼재에서 A/B 판단 기준을 `resources.requests` 를 근거로 대기. maxSurge·OnDelete·kubelet 순환은 자력 도달했으니 **제외**합니다.
 
@@ -199,7 +199,7 @@ updated: 2026-08-12
 - **자기 답**: 11-01 복습에서 세 지점이 같은 뿌리로 막혔습니다. (1) `quiz`가 ClusterIP로 풀리는 과정에서 `/etc/resolv.conf`를 **누가** 채우는지 몰라 kube-proxy를 DNS 자리에 놓았습니다. (2) 네 컴포넌트 역할 분리(§3)에서 스케줄러만 정확했고, CNI가 `resolv.conf`를 채운다고 잘못 답했으며 kube-proxy는 "흐리게만 안다"고 했습니다. (3) 요청 한 번이 파드에 닿는 전 구간에서 "Service 오브젝트가 패킷을 받아 넘긴다", "라운드로빈으로 분산"이라 답했고 **주소가 두 번 바뀐다는 걸 못 떠올렸습니다.**
 - **정답**: `quiz` → 파드IP까지 주소가 **두 번** 바뀝니다. **① 이름 해석(DNS)**: `quiz`를 CoreDNS가 ClusterIP(`10.96.136.190`)로 풀어줌 — `/etc/resolv.conf`는 **kubelet**이 파드 생성 시 씀(search 접미사 + ndots:5로 짧은 이름 판정). **② 주소 변환(DNAT)**: ClusterIP는 어느 인터페이스에도 안 붙은 **가상 IP**라, **보내는 쪽 노드 커널**이 목적지를 실제 파드IP(`10.244.2.9`)로 바꿔치기함. Service는 패킷을 받는 실체가 아님 — 받는 주체가 없고, kube-proxy가 심어둔 규칙을 근거로 커널이 변환. 파드 선택은 라운드로빈이 아니라 iptables random 모듈의 **확률적 선택**(실측 13/10/7). 네 컴포넌트: **스케줄러=노드 배정 / CNI=파드IP 발급(넷 중 IP를 유일하게 *만드는* 것) / EndpointSlice 컨트롤러=ready 파드IP를 명단에 옮겨 적기 / kube-proxy=명단으로 커널에 DNAT 규칙 심는 컨트롤러(패킷을 직접 나르지 않음)**.
 - **원인 추정**: "이름→IP"와 "IP→IP"를 한 덩어리로 뭉뚱그려, 두 변환의 주체(CoreDNS vs 노드 커널)와 위치(DNS 단계 vs DNAT 단계)를 구분하지 못했습니다. kube-proxy를 DNS 자리에 놓은 것, Service가 패킷을 받아 넘긴다고 본 것이 전부 이 하나에서 나왔습니다. 2026-07-20 오답 노트의 공통 뿌리 "자동으로 채워지는 것의 내부 기전"과 같은 결입니다. A-1(expose selector)만 통과한 건 그게 라벨 매칭 문제라 이 축과 무관했기 때문입니다.
-- **참고 챕터**: 11-01 §5(cluster DNS·NAT가 끼는 곳)·§3(네 컴포넌트 역할 분리). 깊은 기전은 `04-05.DNS와 CoreDNS`·`N&K 02-01`(DNAT·conntrack). "이름→ClusterIP는 CoreDNS(DNS), ClusterIP→파드IP는 노드 커널(DNAT), 주소가 두 번 바뀐다" 한 줄. (보강 TODO는 `_todo-11-01-보강.md`)
+- **참고 챕터**: 11-01 §5(cluster DNS·NAT가 끼는 곳)·§3(네 컴포넌트 역할 분리). 깊은 기전은 `learning-coredns 06-01`·`N&K 02-01`(DNAT·conntrack). "이름→ClusterIP는 CoreDNS(DNS), ClusterIP→파드IP는 노드 커널(DNAT), 주소가 두 번 바뀐다" 한 줄. (보강 TODO는 `_todo-11-01-보강.md`)
 - **재방문 트리거**: 다음 복습에서 (1) `quiz → ClusterIP → 파드IP` 두 화살표를 그리고 각 화살표의 주체(CoreDNS / 노드 커널)를 손으로 적기, (2) 네 컴포넌트를 "노드 배정·IP 발급·명단·길"로 나눠 문서 안 보고 나열.
 
 ## 2026-07-20 — externalTrafficPolicy Local: SNAT 정체 + "노드는 균등, 파드는 불균등"
