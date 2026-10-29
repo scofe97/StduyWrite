@@ -3,8 +3,8 @@ title: npg-lab — 프로젝트 인덱스
 tags: [moc, study-index, lab, networking, go, http, reverse-proxy]
 status: draft
 source:
-  - ~/study/npg-lab  # 책 Network Programming with Go 를 따라 만드는 실습 저장소, 8장부터 리버스 프록시 npgproxy
-  - https://github.com/scofe97/npg-lab@0dbf86f  # main, 태그 v0.8.0
+  - ~/study/runners-lab/net/npg  # 책 Network Programming with Go 를 따라 만드는 실습 저장소, 8장부터 리버스 프록시 npgproxy
+  - https://github.com/scofe97/StudyLab/tree/0873c0f/net/npg  # 옛 npg-lab main 0dbf86f·태그 v0.8.0 와 같은 커밋
   - docs/adr/0011-reverse-proxy-product.md@73fbcee  # 8장부터 리버스 프록시를 만드는 결정
   - docs/adr/0012-upstream-deadlines-and-pool.md@0dbf86f  # 업스트림 기한·연결 풀 결정
   - docs/adr/0013-upstream-retry-and-idempotency.md@0dbf86f  # 재시도·멱등성 결정
@@ -25,7 +25,7 @@ updated: "2026-10-29"
 
 > 책 예제 코드를 따라 치는 실습과 분리하여 아키텍처와 장애 분석을 학습 문서로 정리하는 공간입니다. 책 노트와 중복되는 네트워크 기초 이론은 링크로 대체하고 프록시 구현과 운영 관점의 분석에 집중합니다.
 
-실습 소스코드는 `~/study/npg-lab` 및 GitHub 저장소 `scofe97/npg-lab`에 보관되어 있습니다. 프로젝트는 전달 계층(`internal/proxy/`), 프록시 실행 진입점(`cmd/npgproxy`), 관측 화면(`cmd/npgwatch`), 장애 훈련용 가짜 백엔드(`cmd/fakeinv`), 부하 도구(`cmd/npgload`)로 구성됩니다.
+실습 소스코드는 `~/study/runners-lab/net/npg`(GitHub 모노레포 `scofe97/StudyLab`)에 보관되어 있습니다. 프로젝트는 전달 계층(`internal/proxy/`), 프록시 실행 진입점(`cmd/npgproxy`), 관측 화면(`cmd/npgwatch`), 장애 훈련용 가짜 백엔드(`cmd/fakeinv`), 부하 도구(`cmd/npgload`)로 구성됩니다.
 
 책의 정독 기록은 책 노트 폴더에 별도로 정리되어 있습니다. 따라서 이 폴더의 학습 문서는 책 정독 노트와 겹치는 기초 내용을 반복 서술하지 않고 해당 문서로 연결합니다.
 
