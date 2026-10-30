@@ -19,7 +19,7 @@ def kr(t):
 
 def event(y, title, sub, c):
     d.tone(24, y - 32, 240, 64, c, 6, "12", 1.2)
-    d.t(144, y - 4, title, 13, c, MONO, "middle", 600)
+    d.t(144, y - 4, title, 13, c, kr(title), "middle", 600)
     d.t(144, y + 18, sub, 13, MUTED, kr(sub))
 
 

@@ -7,8 +7,8 @@ from dd import D, ACC, OK, WARN, MUTED, INK, PAPER, PAPER2, RULE, SOFT, INFO, KR
 
 W, H = 960, 464
 d = D(W, H, "LEARNING EBPF · 10-01 §1",
-      "입구 프로그램이 맵에 넣은 파일 이름을 출구 프로그램이 꺼낸다",
-      "openat 한 번이 입구 tracepoint 에서 인자를 맵에 적고, 출구 tracepoint 가 반환값과 맵의 이름을 합쳐 한 줄을 출력한다.",
+      "입구 프로그램이 맵에 넣은 파일 이름 포인터를 출구 프로그램이 꺼낸다",
+      "openat 한 번이 입구 tracepoint 에서 인자를 맵에 적고, 출구 tracepoint 가 맵의 포인터로 이름을 읽어 반환값과 합쳐 한 줄을 출력한다.",
       "값이 바뀌는 자리는 맵 254 와 perf_event_array 255")
 
 
@@ -51,8 +51,8 @@ d.chip(112 + 16 + 44, 216, "tracepoint", MUTED, 11)
 mid = Y + 50
 d.arrow([(24 + BW + 2, mid), (272 - 6, mid)], OK, "ok", 1.6)
 d.chip(24 + BW + 36, mid - 20, "쓰기", OK, 12)
-d.arrow([(272 + BW + 2, mid), (520 - 6, mid)], INFO, "info", 1.6)
-d.chip(272 + BW + 36, mid - 20, "읽기", INFO, 12)
+d.arrow([(272 + BW + 2, mid), (520 - 6, mid)], OK, "ok", 1.6)
+d.chip(272 + BW + 36, mid - 20, "읽기", OK, 12)
 d.arrow([(520 + BW + 2, mid), (768 - 6, mid)], MUTED, "ar", 1.6)
 d.chip(520 + BW + 36, mid - 20, "출력", MUTED, 12)
 # perf 배열 → 화면

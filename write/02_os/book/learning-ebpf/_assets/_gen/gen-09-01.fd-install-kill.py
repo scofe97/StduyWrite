@@ -49,7 +49,7 @@ for key, nm, sub in (("cat", "cat", "root · 사용자 공간"), ("커널", "커
 d.lane_top = 144
 d.rails(H - 80)
 
-d.msg("cat", "커널", "openat", 196, INFO, "info", sub="/etc/shadow")
+d.msg("cat", "커널", "openat", 196, MUTED, "ar", sub="/etc/shadow")
 d.selfmsg("커널", "file 채움", 252, MUTED, "struct file")
 d.selfmsg("커널", "fd_install(3, file)", 316, MUTED, "fd 3 · file")
 d.msg("커널", "프로그램", "kprobe", 380, MUTED, "ar", sub="fd_install")

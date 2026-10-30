@@ -35,8 +35,8 @@ zone(264, 108, 488, 320, "KERNEL")
 zone(776, 108, 160, 320, "OUTCOME")
 
 # 호출 행 — 중심 y = 180, 324
-node(40, 148, 168, 64, "openat", "257 · /etc/shadow", INFO)
-node(40, 292, 168, 64, "fchmodat", "268 · 0777", INFO)
+node(40, 148, 168, 64, "openat", "257 · /etc/shadow", MUTED)
+node(40, 292, 168, 64, "fchmodat", "268 · 0777", MUTED)
 
 # 판정 지점
 d.tone(280, 156, 200, 180, WARN, 6, "12", 1.2)
@@ -55,7 +55,7 @@ node(520, 292, 200, 64, "security_path_chmod", "3 · lsm/path_chmod", ACC, MONO,
 node(776, 148, 160, 48, "SIGKILL", None, BAD)
 node(776, 212, 160, 56, "이벤트", "사용자 공간 · SIEM", INFO, KR)
 node(776, 292, 160, 48, "EPERM", None, BAD)
-node(776, 364, 160, 48, "허용", None, OK, KR)
+node(776, 364, 160, 48, "허용", None, MUTED, KR)
 
 # 화살표
 d.arrow([(208, 180), (274, 180)], MUTED, "ar", 1.4)
@@ -65,7 +65,7 @@ d.arrow([(480, 324), (514, 324)], MUTED, "ar", 1.4)
 d.arrow([(722, 172), (770, 172)], BAD, "bad", 1.5)
 d.arrow([(722, 200), (748, 200), (748, 240), (770, 240)], INFO, "info", 1.5)
 d.arrow([(722, 316), (770, 316)], BAD, "bad", 1.5)
-d.arrow([(722, 340), (748, 340), (748, 388), (770, 388)], OK, "ok", 1.5)
+d.arrow([(722, 340), (748, 340), (748, 388), (770, 388)], MUTED, "ar", 1.5)
 
 d.legend(H - 56, [("인자 복사 전", WARN), ("커널 함수", OK), ("LSM 훅", ACC), ("차단", BAD), ("이벤트", INFO)])
 d.save("09-01.chapter-overview.svg")

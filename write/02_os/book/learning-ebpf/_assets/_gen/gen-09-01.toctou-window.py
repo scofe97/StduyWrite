@@ -29,7 +29,7 @@ def step(i, cy, title, sub, c):
     x = XS[i]
     d.tone(x, cy - SH // 2, SW, SH, c, 6, "12", 1.2)
     d.t(x + SW // 2, cy - 4, title, 13, c, KR if any("가" <= ch <= "힣" for ch in title) else MONO, "middle", 600)
-    d.t(x + SW // 2, cy + 16, sub, 13, MUTED, MONO)
+    d.t(x + SW // 2, cy + 16, sub, 13, MUTED, KR if any("가" <= ch <= "힣" for ch in sub) else MONO)
 
 
 step(0, 238, "openat", 'filename → "/tmp/x"', INFO)

@@ -39,7 +39,7 @@ d = SeqKR(W, H, "LEARNING EBPF · 09-01 §2",
           "관측한 호출이 허용 목록이 되고 나머지는 EPERM 이 됩니다")
 
 d.LX = {"앱": 120, "추적": 360, "훅": 600, "런타임": 840}
-for key, nm, sub in (("앱", "컨테이너 앱", "사용자 공간"), ("추적", "enter_trace", "raw_syscalls:sys_enter"),
+for key, nm, sub in (("앱", "컨테이너 앱", "사용자 공간"), ("추적", "eBPF 프로그램", "커널"),
                      ("훅", "OCI 훅", "Go · gobpf"), ("런타임", "런타임", "OCI 런타임")):
     x = d.LX[key]
     d.box(x - 100, 100, 200, 44, PAPER2, RULE, 1.0)
@@ -51,7 +51,7 @@ d.rails(H - 80)
 d.msg("앱", "추적", "read", 196, INFO, "info", sub="번호 0")
 d.msg("앱", "추적", "write", 260, INFO, "info", sub="번호 1")
 d.msg("앱", "추적", "openat", 324, INFO, "info", sub="번호 257")
-d.msg("추적", "훅", "perf_submit", 388, MUTED, "ar", sub="처음 본 번호만")
+d.msg("추적", "훅", "perf_submit", 388, MUTED, "ar", sub="sys_enter · 처음 본 번호만")
 d.msg("추적", "훅", "stopTracing", 452, MUTED, "ar", sub="sched_process_exit")
 d.msg("훅", "런타임", "defaultAction ERRNO", 516, ACC, "acc", sub="허용 read · write · openat")
 d.msg("런타임", "앱", "seccomp 필터 적재", 580, OK, "ok", sub="다음 시작 때")

@@ -8,7 +8,7 @@ from dd import D, ACC, OK, WARN, INFO, MUTED, INK, PAPER, PAPER2, RULE, SOFT, KR
 
 W, H = 960, 496
 d = D(W, H, "LEARNING EBPF · 10-02 §1",
-      "C 소스가 빌드 때 바이너리에 묻히고 실행 때 맵을 읽는다",
+      "C 소스는 빌드 때 바이트코드로 바이너리에 묻히고, 실행 때 Go 코드가 맵을 읽는다",
       "kprobe.c 의 맵과 프로그램 이름이 go generate 로 Go 파일 두 쌍이 되고, go build 가 바이트코드를 단일 바이너리에 담는다. 실행하면 적재 · 부착 · 읽기를 거쳐 sys_execve 횟수를 찍는다.",
       "위는 빌드 때, 아래는 실행 때")
 
@@ -45,9 +45,9 @@ d.arrow([(XS[3] + 90, 206), (XS[3] + 90, 248), (XS[0] + 90, 248), (XS[0] + 90, 3
 d.chip((XS[0] + XS[3]) // 2 + 90, 248, "바이너리 실행", ACC, 12)
 
 # 실행 띠
-card(XS[0], 312, INFO, [("loadBpfObjects", 13, INK, 600), ("&objs", 12, MUTED, 400), ("bpfObjects", 12, MUTED, 400)])
-card(XS[1], 312, INFO, [("link.Kprobe", 13, INK, 600), ("sys_execve", 12, MUTED, 400), ("KprobeExecve", 12, MUTED, 400)])
-card(XS[2], 312, INFO, [("KprobeMap.Lookup", 13, INK, 600), ("key 0", 12, MUTED, 400), ("1초마다", 12, MUTED, 400)])
+card(XS[0], 312, MUTED, [("loadBpfObjects", 13, INK, 600), ("&objs", 12, MUTED, 400), ("bpfObjects", 12, MUTED, 400)])
+card(XS[1], 312, MUTED, [("link.Kprobe", 13, INK, 600), ("sys_execve", 12, MUTED, 400), ("KprobeExecve", 12, MUTED, 400)])
+card(XS[2], 312, MUTED, [("KprobeMap.Lookup", 13, INK, 600), ("key 0", 12, MUTED, 400), ("1초마다", 12, MUTED, 400)])
 card(XS[3], 312, MUTED, [("log.Printf", 13, INK, 600), ("sys_execve", 12, MUTED, 400), ("called N times", 12, MUTED, 400)])
 for i in range(3):
     d.arrow([(XS[i] + 182, 354), (XS[i + 1] - 6, 354)], MUTED, "ar", 1.5)

@@ -40,14 +40,14 @@ for i in range(3):
 # 윗줄 끝 → 아랫줄 처음 (ㄷ자)
 d.arrow([(836, 206), (836, 324), (128, 324), (128, 356)], ACC, "acc", 1.6)
 # fchmod 는 vfs_fchmod 를 거쳐 chmod_common 으로 들어오는 둘째 입력
-box(XS[1], 224, 208, "vfs_fchmod", "fchmod 91", INFO)
-d.arrow([(470, 256), (600, 256), (600, 208)], INFO, "info", 1.5)
+box(XS[1], 224, 208, "vfs_fchmod", "fchmod 91", MUTED)
+d.arrow([(470, 256), (600, 256), (600, 208)], MUTED, "ar", 1.5)
 
 # 아랫줄 — LSM 목록과 프로그램, 반환값 분기
 box(24, 360, 208, "LSM 목록", "0 아닌 첫 값에서 정지", MUTED)
-box(260, 360, 208, "lsm/path_chmod", "path · mode 판정", INFO)
+box(260, 360, 208, "lsm/path_chmod", "path · mode 판정", ACC)
 d.arrow([(234, 392), (256, 392)], MUTED, "ar", 1.5)
-d.arrow([(470, 392), (502, 392)], INFO, "info", 1.5)
+d.arrow([(470, 392), (502, 392)], ACC, "acc", 1.5)
 
 CX, CY = 600, 392
 d.o.append(f'<polygon points="{CX-92},{CY} {CX},{CY-44} {CX+92},{CY} {CX},{CY+44}" fill="{PAPER2}" stroke="{ACC}" stroke-width="1.2"/>')
