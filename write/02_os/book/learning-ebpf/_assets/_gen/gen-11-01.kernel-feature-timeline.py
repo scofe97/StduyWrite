@@ -26,12 +26,12 @@ for i in range(36):
 # (순번, 버전, [(이름, 색)…], 위(1)·아래(-1), 상자 왼쪽 x, 상자 폭, focal)
 EV = [
     (0, "5.3", [("유한 반복문", INFO)], -1, 20, 80, False),
-    (4, "5.7", [("BPF LSM", INFO)], 1, 124, 64, False),
+    (4, "5.7", [("BPF LSM", WARN)], 1, 124, 64, False),
     (14, "5.17", [("bpf_loop", INFO)], -1, 360, 72, False),
     (16, "5.19", [("kptr", OK), ("BIG TCP IPv6", WARN)], 1, 388, 100, False),
     (19, "6.2", [("bpf_obj_new", OK)], -1, 470, 92, False),
     (20, "6.3", [("HID-BPF", WARN), ("BIG TCP IPv4", WARN)], 1, 496, 100, False),
-    (26, "6.9", [("arena", OK), ("BPF token", OK)], 1, 648, 76, False),
+    (26, "6.9", [("arena", OK), ("BPF token", INFO)], 1, 648, 76, False),
     (29, "6.12", [("sched_ext", WARN)], -1, 718, 76, False),
     (35, "6.18", [("서명 필드", ACC)], 1, 864, 68, True),
 ]
@@ -54,5 +54,6 @@ for idx, ver, names, side, bx, w, focal in EV:
     for k, (nm, c) in enumerate(names):
         d.t(bx + w / 2, top + 36 + 16 * k, nm, 11, INK if len(names) == 1 else c, fam(nm), "middle", 400)
 
-d.legend(H - 56, [("검증기", INFO), ("메모리 · 객체", OK), ("네트워크 · 장치 · 스케줄러", WARN), ("서명", ACC)])
+# 범례는 본문 §3 의 갈래를 따른다: 반복문과 "누가 무엇을 싣게 하나"(token) · 객체 수명 · 훅과 네트워크 · focal 서명.
+d.legend(H - 56, [("반복문 · 적재 권한", INFO), ("메모리 · 객체", OK), ("훅 · 네트워크", WARN), ("서명", ACC)])
 d.save("11-01.kernel-feature-timeline.svg")

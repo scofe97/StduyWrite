@@ -39,36 +39,36 @@ def link(col_a, col_b, y, c="ar", dash=None, col=MUTED):
 
 
 # 네이티브
-band(88, "NATIVE", OK)
+# 색은 카드의 역할 하나로 가른다(입력 · 검증 · 변환 · 실행 컨텍스트 · 서명된 드라이버). 띠는 색을 싣지 않는다.
+band(88, "NATIVE", RULE)
 Y1 = 116
 steps = [("my_program", "ELF", INFO), ("PREVAIL", "검증", OK), ("bpf2c", "C 생성", WARN), ("C 컴파일러", "COFF", WARN),
-         ("링커", "PE", WARN), ("서명", "서명된 PE", WARN), ("my_program", ".sys 드라이버", ACC), ("ebpfcore.sys", "실행 컨텍스트", OK)]
+         ("링커", "PE", WARN), ("서명", "서명된 PE", WARN), ("my_program", ".sys 드라이버", ACC), ("ebpfcore.sys", "실행 컨텍스트", MUTED)]
 for i, (a, b, c) in enumerate(steps):
     card(i, Y1, c, a, b, focal=(i == 6))
 for i in range(7):
     link(i, i + 1, Y1 + 32, "acc" if i == 5 else "ar", None, ACC if i == 5 else MUTED)
 
 # JIT
-band(208, "JIT", INFO)
+band(208, "JIT", RULE)
 Y2 = 236
 card(0, Y2, INFO, "my_program", "ELF")
-card(1, Y2, INFO, "eBPFSvc.exe", "PREVAIL 검증")
+card(1, Y2, OK, "eBPFSvc.exe", "PREVAIL 검증")
 card(2, Y2, WARN, "uBPF", "JIT")
-card(3, Y2, OK, "ebpfcore.sys", "실행 컨텍스트")
+card(3, Y2, MUTED, "ebpfcore.sys", "실행 컨텍스트")
 for i in range(3):
     link(i, i + 1, Y2 + 32)
 d.chip(640, Y2 + 32, "HVCI 환경에서 JIT 불가", BAD, 12)
 
-# 인터프리터
-band(328, "INTERPRETER", MUTED)
+# 인터프리터 — uBPF 인터프리터는 커널 실행 컨텍스트 안에 있다(README L47~49). 그래서 ebpfcore.sys 앞 단계가 아니라 그 카드 안에 적는다.
+band(328, "INTERPRETER", RULE)
 Y3 = 356
-card(0, Y3, MUTED, "my_program", "ELF", dash=True)
-card(1, Y3, MUTED, "eBPFSvc.exe", "PREVAIL 검증", dash=True)
-card(2, Y3, MUTED, "uBPF", "인터프리터", dash=True)
-card(3, Y3, MUTED, "ebpfcore.sys", "실행 컨텍스트", dash=True)
-for i in range(3):
+card(0, Y3, INFO, "my_program", "ELF", dash=True)
+card(1, Y3, OK, "eBPFSvc.exe", "PREVAIL 검증", dash=True)
+card(2, Y3, MUTED, "ebpfcore.sys", "uBPF 인터프리터", dash=True)
+for i in range(2):
     link(i, i + 1, Y3 + 32, "ar", "5 4")
 d.chip(640, Y3 + 32, "디버그 빌드만", MUTED, 12)
 
-d.legend(H - 56, [("입력 ELF", INFO), ("변환 도구", WARN), ("검증", OK), ("서명된 드라이버", ACC), ("HVCI 불가", BAD)])
+d.legend(H - 56, [("입력 ELF", INFO), ("검증", OK), ("변환 도구", WARN), ("실행 컨텍스트", MUTED), ("서명된 드라이버", ACC), ("HVCI 불가", BAD)])
 d.save("11-01.windows-load-paths.svg")

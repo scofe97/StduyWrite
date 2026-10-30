@@ -1,4 +1,4 @@
-# 타입 스펙: type-nested — Linux Foundation ⊃ {eBPF Foundation ⊃ BSC, CNCF ⊃ Cilium·Falco·Pixie}, IETF ⊃ BPF WG → RFC 9669, Linux 커널 ⊃ BPF 서브시스템. BSC → IETF 로 점선 협력선.
+# 타입 스펙: type-nested — Linux Foundation ⊃ {eBPF Foundation ⊃ BSC, CNCF ⊃ Cilium·Falco·Pixie}, IETF ⊃ BPF WG → RFC 9669, Linux 커널 ⊃ BPF 서브시스템. BSC — IETF 사이 점선 협력선(화살촉 없음).
 # 사실 출처: LF 보도자료 2021-08-12(재단은 Linux Foundation 이 호스팅), 헌장 L46~48(BSC 구성·한 회사 최대 2명), IETF BPF WG 헌장(재단 운영위원회와 협력 명시) · RFC 9669,
 #   cncf/landscape landscape.yml(커밋 5ebec81) L3834~3849(Cilium graduated 2023-10-11) · L1432~1444(Falco 2024-02-29) · L12326~12336(Pixie sandbox),
 #   v7.2 MAINTAINERS L4899~4912(BPF [GENERAL], bpf@vger.kernel.org, M: 다섯 줄).
@@ -32,25 +32,26 @@ def item(x, y, w, h, c, l1, l2=None, focal=False):
         d.t(x + w / 2, y + h / 2 + 5, l1, 13, INK, fam(l1), "middle", 600)
 
 
-# 협력선(점선)은 상자보다 먼저
-d.arrow([(172, 212), (172, 124), (612, 124)], INFO, "info", 1.4, "5 4")
+# 협력선(점선)은 상자보다 먼저. 헌장은 두 쪽의 협력을 적을 뿐 방향을 정하지 않으므로 화살촉을 달지 않는다.
+d.path("M172 212 V124 H616", INFO, 1.4, None, "5 4")
 d.chip(400, 124, "협력", INFO, 12)
 
-ring(24, 96, 560, 316, "LINUX FOUNDATION", MUTED)
+# 색은 기관 종류 하나로 가른다: 재단(파랑) · 재단 밖 기관(회색) · CNCF 성숙도(초록 졸업 · 노랑 샌드박스). focal 은 RFC 9669 하나.
+ring(24, 96, 560, 316, "LINUX FOUNDATION", INFO)
 ring(48, 148, 248, 236, "eBPF FOUNDATION", INFO)
-item(72, 212, 200, 84, INFO, "BSC", "회사당 최대 2명", True)
-ring(320, 148, 240, 236, "CNCF", OK)
+item(72, 212, 200, 84, INFO, "BSC", "회사당 최대 2명")
+ring(320, 148, 240, 236, "CNCF", INFO)
 item(340, 180, 200, 52, OK, "Cilium", "졸업 2023-10-11")
 item(340, 244, 200, 52, OK, "Falco", "졸업 2024-02-29")
 item(340, 308, 200, 52, WARN, "Pixie", "샌드박스")
 
-ring(616, 96, 320, 140, "IETF", ACC)
-item(636, 136, 128, 72, ACC, "BPF WG")
+ring(616, 96, 320, 140, "IETF", MUTED)
+item(636, 136, 128, 72, MUTED, "BPF WG")
 item(792, 136, 128, 72, ACC, "RFC 9669", None, True)
 d.arrow([(764, 172), (788, 172)], ACC, "acc", 1.5)
 
-ring(616, 268, 320, 144, "리눅스 커널", OK)
-item(636, 308, 280, 76, OK, "BPF 서브시스템", "bpf@vger.kernel.org · 메인테이너 5명")
+ring(616, 268, 320, 144, "리눅스 커널", MUTED)
+item(636, 308, 280, 76, MUTED, "BPF 서브시스템", "bpf@vger.kernel.org · 메인테이너 5명")
 
-d.legend(H - 56, [("재단 · 위원회", INFO), ("CNCF 프로젝트", OK), ("표준 기관", ACC), ("샌드박스", WARN)])
+d.legend(H - 56, [("재단 · 위원회", INFO), ("CNCF 졸업", OK), ("CNCF 샌드박스", WARN), ("별도 기관", MUTED), ("표준", ACC)])
 d.save("11-01.governance-nested.svg")
