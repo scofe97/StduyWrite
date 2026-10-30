@@ -7,7 +7,7 @@ from dd import D, ACC, OK, WARN, BAD, INFO, MUTED, INK, PAPER, PAPER2, RULE, SOF
 
 W, H = 960, 520
 d = D(W, H, "LEARNING EBPF · 11-01 §4",
-      "사용자는 도구까지만 보고 eBPF 층은 그 아래 가려져 있다",
+      "대부분의 사용자는 도구까지만 보고 eBPF 층은 그 아래 가려져 있다",
       "kubectl 과 대시보드 아래에 Cilium · Falco 같은 도구가 있고, 도구는 verifier · JIT · 맵 · 헬퍼 · kfunc 를 공유하며 XDP · LSM 같은 커널 훅에 붙는다.",
       "위에서 아래로 사용자, 도구, eBPF 플랫폼, 커널 훅")
 

@@ -1,5 +1,5 @@
 # 타입 스펙: type-architecture — 가운데 BPF 명령어 집합(RFC 9669), 왼쪽 위 거버넌스, 아래 두 실행 환경(Windows · Linux), 오른쪽 아래 Linux 새 기능, 오른쪽 위 사용자 도구. focal 은 명령어 집합.
-# 사실 출처: RFC 9669(2024-10) 초록·§1, 재단 헌장 L9~11·L46~48, eBPF for Windows v1.6.0 README L32~50(네이티브·JIT·인터프리터)·docs/GettingStarted.md L153~159(ebpfcore.sys · eBPFSvc),
+# 사실 출처: RFC 9669(2024-10) 초록·§1, 재단 헌장 L9~11·L46~48, eBPF for Windows v1.7.0 README L32~50(네이티브·JIT·인터프리터)·docs/GettingStarted.md L153~159(ebpfcore.sys · eBPFSvc),
 #   Linux v7.2 include/uapi/linux/bpf.h L993(BPF_TOKEN_CREATE)·L1048(BPF_MAP_TYPE_ARENA)·L1663~1671(signature), 버전은 본문 §3 연표와 같다(kptr 5.19 · bpf_obj_new 6.2 · arena 6.9 · token 6.9 · 서명 6.18).
 # Layout conventions: 존 3개(거버넌스 · Windows · Linux, Linux 안에 하위 존 하나). 연결선은 직각, 모든 좌표 4의 배수. 첫 선을 먼저 그린 뒤 상자를 그린다.
 import sys; sys.path.insert(0, ".")

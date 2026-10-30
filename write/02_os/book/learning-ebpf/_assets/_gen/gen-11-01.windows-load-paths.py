@@ -1,5 +1,5 @@
 # 타입 스펙: type-process — 같은 ELF 에서 세 갈래(네이티브 · JIT · 인터프리터). 값이 카드마다 바뀐다: ELF → 검증 → C → COFF → PE → 서명된 .sys → 적재.
-# 사실 출처: ebpf-for-windows v1.6.0 README L32~50(세 방식 · eBPFSvc 가 JIT · 인터프리터는 디버그 빌드만) · L110~126(HVCI 에서 JIT 불가),
+# 사실 출처: ebpf-for-windows v1.7.0 README L32~50(세 방식 · eBPFSvc 가 JIT · 인터프리터는 디버그 빌드만) · L110~126(HVCI 에서 JIT 불가),
 #   docs/NativeCodeGeneration.md L26~31(Convert-BpfToNative.ps1 -FileName my_program → my_program.sys) · L44~78(단계 1~6: ELF · 검증 · C 생성 · COFF · PE 링크 · 서명),
 #   docs/GettingStarted.md L153~159(ebpfcore.sys 실행 컨텍스트 · ebpfsvc.exe 가 검증·JIT).
 # Layout conventions: 카드 w=96·h=64·stride 116(x=20부터), 띠 h=108 · y=88·208·328, 카드 y=띠+28. 모든 좌표 4의 배수.
