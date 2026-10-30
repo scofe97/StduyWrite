@@ -1,74 +1,89 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 640" font-family="Pretendard, sans-serif">
-  <rect width="680" height="640" fill="#0d0d0d"/>
-
-  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">노드 장애 처리 · 복제 로그 구현</text>
-  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">팔로워 복구는 쉽고 리더 failover는 까다롭다 · 로그는 statement/WAL/logical</text>
-  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
-
-  <!-- 팔로워 vs 리더 장애 -->
-  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">두 종류의 장애</text>
-
-  <rect x="32" y="124" width="300" height="78" rx="6" fill="#141414" stroke="#66bb6a"/>
-  <text x="48" y="146" fill="#66bb6a" font-size="12" font-weight="700">팔로워 장애 — catch-up 복구(쉬움)</text>
-  <text x="48" y="166" fill="#e8e4df" font-size="10.5">로컬 로그로 마지막 처리 트랜잭션을 앎</text>
-  <text x="48" y="184" fill="#e8e4df" font-size="10.5">→ 끊긴 동안 변경을 리더에 요청·적용</text>
-  <text x="48" y="200" fill="rgb(138,133,128)" font-size="9.5">단, 오래 끊기면 따라잡기 부하 큼</text>
-
-  <rect x="348" y="124" width="300" height="78" rx="6" fill="#141414" stroke="#f47f72"/>
-  <text x="364" y="146" fill="#f47f72" font-size="12" font-weight="700">리더 장애 — failover(까다로움)</text>
-  <text x="364" y="166" fill="#e8e4df" font-size="10.5">① 장애 판정(보통 타임아웃)</text>
-  <text x="364" y="182" fill="#e8e4df" font-size="10.5">② 새 리더 선출(가장 최신 팔로워)</text>
-  <text x="364" y="198" fill="#e8e4df" font-size="10.5">③ 클라이언트·옛 리더 재구성</text>
-
-  <!-- failover 위험 -->
-  <text x="32" y="240" fill="rgb(212,168,83)" font-size="14" font-weight="700">failover가 어긋나는 4가지</text>
-  <rect x="32" y="252" width="616" height="118" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
-  <text x="48" y="274" fill="#f47f72" font-size="11" font-weight="700">1. 미복제 쓰기 폐기</text>
-  <text x="64" y="290" fill="#e8e4df" font-size="10">비동기 시 새 리더가 못 받은 쓰기 폐기 → 확정 통보된 쓰기가 내구성 잃음</text>
-  <text x="48" y="310" fill="#f47f72" font-size="11" font-weight="700">2. 외부 시스템 불일치</text>
-  <text x="64" y="326" fill="#e8e4df" font-size="10">GitHub 사고: 뒤처진 MySQL 승격 → autoincrement PK 재사용 → Redis와 불일치·정보 유출</text>
-  <text x="48" y="346" fill="#f47f72" font-size="11" font-weight="700">3. split brain(두 리더)</text>
-  <text x="335" y="346" fill="#f47f72" font-size="11" font-weight="700">4. 타임아웃 정하기</text>
-  <text x="64" y="362" fill="#e8e4df" font-size="10">둘 다 쓰기 수용 → 손상</text>
-  <text x="351" y="362" fill="#e8e4df" font-size="10">짧으면 불필요 failover, 길면 복구 지연</text>
-
-  <text x="32" y="392" fill="rgb(138,133,128)" font-size="10.5">fencing(옛 리더 차단)으로 split brain 방어 · 쉬운 해법 없어 수동 failover 선호하기도</text>
-
-  <!-- 복제 로그 3방식 -->
-  <text x="32" y="426" fill="rgb(212,168,83)" font-size="14" font-weight="700">복제 로그 구현 — 3방식</text>
-
-  <rect x="32" y="438" width="196" height="150" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
-  <text x="48" y="460" fill="#e8e4df" font-size="12" font-weight="700">statement 기반</text>
-  <text x="48" y="480" fill="#e8e4df" font-size="10">SQL 문 그대로 전달</text>
-  <text x="48" y="498" fill="#66bb6a" font-size="10">+ 간결</text>
-  <text x="48" y="516" fill="#f47f72" font-size="10">− NOW·RAND 비결정</text>
-  <text x="48" y="532" fill="#f47f72" font-size="10">− autoincrement 순서</text>
-  <text x="48" y="548" fill="#f47f72" font-size="10">− 트리거 부작용</text>
-  <text x="48" y="568" fill="rgb(138,133,128)" font-size="9">MySQL 5.1 이전</text>
-
-  <rect x="242" y="438" width="196" height="150" rx="6" fill="#141414" stroke="#f47f72"/>
-  <text x="258" y="460" fill="#e8e4df" font-size="12" font-weight="700">WAL shipping(물리)</text>
-  <text x="258" y="480" fill="#e8e4df" font-size="10">바이트 단위 디스크 블록</text>
-  <text x="258" y="498" fill="#66bb6a" font-size="10">+ 인덱스·힙 그대로 복원</text>
-  <text x="258" y="516" fill="#f47f72" font-size="10">− 저장 엔진과 강결합</text>
-  <text x="258" y="534" fill="#f47f72" font-size="10">− 버전 불일치 불가</text>
-  <text x="258" y="552" fill="#f47f72" font-size="10">→ 무중단 업그레이드 막힘</text>
-  <text x="258" y="572" fill="rgb(138,133,128)" font-size="9">PostgreSQL·Oracle</text>
-
-  <rect x="452" y="438" width="196" height="150" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
-  <text x="468" y="460" fill="rgb(212,168,83)" font-size="12" font-weight="700">logical(row 기반)</text>
-  <text x="468" y="480" fill="#e8e4df" font-size="10">행 단위 변경 레코드</text>
-  <text x="468" y="498" fill="#66bb6a" font-size="10">+ 저장 엔진과 분리</text>
-  <text x="468" y="516" fill="#66bb6a" font-size="10">+ 버전 다른 leader·follower</text>
-  <text x="468" y="534" fill="#66bb6a" font-size="10">+ 최소 다운타임 업그레이드</text>
-  <text x="468" y="552" fill="#66bb6a" font-size="10">+ 외부 파싱 쉬움 → CDC</text>
-  <text x="468" y="572" fill="rgb(138,133,128)" font-size="9">MySQL binlog·PG 논리복제</text>
-
-  <text x="32" y="612" fill="rgb(138,133,128)" font-size="10">CDC(change data capture) = logical 로그를 외부(데이터 웨어하우스·검색 인덱스)로 흘려보내는 기법(12장)</text>
-
-  <defs>
-    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
-    </marker>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 590" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">리더 failover 세 단계와 네 가지 위험 요소</title><desc id="dd">리더 장애 판정, 새 리더 선출, 시스템 재구성의 failover 3단계와 미복제 쓰기 폐기, 외부 불일치, split brain, 타임아웃 딜레마를 보인다.</desc>
+<rect width="880" height="590" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">06-02 §2 · LEADER FAILOVER &amp; PITFALLS</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">리더 failover 세 단계와 네 가지 위험 요소</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">장애 판정 · 최신 팔로워 승격 · 클라이언트 재구성 · 4대 위험 요소와 펜싱</text>
+<rect x="24" y="104" width="832" height="172" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="51.5" y="114" width="69.0" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="86" y="128" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">절차 단계</text>
+<text x="140" y="128" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">자동 failover 3단계 절차</text>
+<rect x="36" y="142" width="244" height="120" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="158.0" y="164" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">1 · 장애 판정</text>
+<text x="158.0" y="182" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">타임아웃으로 판정</text>
+<line x1="48" y1="190" x2="268" y2="190" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="158.0" y="210" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">노드끼리 메시지 주고받음</text>
+<text x="158.0" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">30초 무응답 시 결함 간주</text>
+<text x="158.0" y="246" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">계획 유지보수는 안전 인계</text>
+<rect x="318" y="142" width="244" height="120" rx="6" fill="#F08A5918" stroke="#F08A59" stroke-width="1.4"/>
+<text x="440.0" y="164" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">2 · 새 리더 선출</text>
+<text x="440.0" y="182" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">최신 레플리카 승격</text>
+<line x1="330" y1="190" x2="550" y2="190" stroke="#F08A59" stroke-width="0.8"/>
+<text x="440.0" y="210" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">과반 선거 또는 컨트롤러 임명</text>
+<text x="440.0" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">최신 LSN 보유 팔로워 선택</text>
+<text x="440.0" y="246" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">데이터 손실 최소화</text>
+<rect x="600" y="142" width="244" height="120" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="722.0" y="164" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">3 · 시스템 재구성</text>
+<text x="722.0" y="182" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">라우팅 전환 및 강등</text>
+<line x1="612" y1="190" x2="832" y2="190" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="722.0" y="210" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">클라이언트 쓰기 라우팅 갱신</text>
+<text x="722.0" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">팔로워 복제 수신처 재설정</text>
+<text x="722.0" y="246" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">옛 리더는 복귀하면 팔로워로</text>
+<path d="M 284 202.0 L 314 202.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<path d="M 566 202.0 L 596 202.0" fill="none" stroke="#5E6B7E" stroke-width="1.3" marker-end="url(#soft)"/>
+<rect x="24" y="292" width="832" height="226" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="53.0" y="302" width="102.0" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="104" y="316" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">4대 위험 요소</text>
+<text x="170" y="316" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">failover 과정에서 어긋나는 네 가지 함정</text>
+<rect x="36" y="336" width="190" height="166" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="131.0" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">1. 미복제 쓰기 폐기</text>
+<rect x="91.0" y="374" width="80.0" height="20" rx="4" fill="#0D1117" stroke="#F0616D" stroke-width="0.8"/>
+<text x="131.0" y="388" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">내구성 상실</text>
+<line x1="48" y1="400" x2="214" y2="400" stroke="#F0616D" stroke-width="0.7"/>
+<text x="131.0" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">비동기 복제 미수신 쓰기</text>
+<text x="131.0" y="446" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F0616D">옛 리더 복귀 시 폐기</text>
+<text x="131.0" y="468" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">확정 통보된 쓰기 유실</text>
+<rect x="242" y="336" width="190" height="166" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.1"/>
+<text x="337.0" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">2. 외부 불일치</text>
+<rect x="280.5" y="374" width="113.0" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="337.0" y="388" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">GitHub 사고</text>
+<line x1="254" y1="400" x2="420" y2="400" stroke="#E3B341" stroke-width="0.7"/>
+<text x="337.0" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">뒤처진 MySQL 승격 사고</text>
+<text x="337.0" y="446" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#E3B341">autoincrement PK 재사용</text>
+<text x="337.0" y="468" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Redis 불일치 · 데이터 노출</text>
+<rect x="448" y="336" width="190" height="166" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="543.0" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">3. split brain</text>
+<rect x="492.0" y="374" width="102.0" height="20" rx="4" fill="#0D1117" stroke="#F0616D" stroke-width="0.8"/>
+<text x="543.0" y="388" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">이중 리더 충돌</text>
+<line x1="460" y1="400" x2="626" y2="400" stroke="#F0616D" stroke-width="0.7"/>
+<text x="543.0" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">두 노드 동시 쓰기 수용</text>
+<text x="543.0" y="446" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F0616D">데이터 손실·손상</text>
+<text x="543.0" y="468" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">펜싱(fencing)으로 차단</text>
+<rect x="654" y="336" width="190" height="166" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.1"/>
+<text x="749.0" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">4. 타임아웃 딜레마</text>
+<rect x="692.5" y="374" width="113.0" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="749.0" y="388" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">시간 트레이드오프</text>
+<line x1="666" y1="400" x2="832" y2="400" stroke="#E3B341" stroke-width="0.7"/>
+<text x="749.0" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">길면 장애 복구 지연</text>
+<text x="749.0" y="446" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#E3B341">짧으면 불필요한 failover</text>
+<text x="749.0" y="468" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">이미 힘든 상황 악화</text>
+<line x1="12" y1="534" x2="832" y2="534" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="556" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="546" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="556" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">핵심 선출 (focal)</text>
+<rect x="313" y="546" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="335" y="556" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 절차</text>
+<rect x="422" y="546" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="444" y="556" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">치명적 손실</text>
+<rect x="544" y="546" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="566" y="556" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">운영 위험</text>
 </svg>

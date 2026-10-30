@@ -1,82 +1,82 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 640" font-family="Pretendard, sans-serif">
-  <rect width="680" height="640" fill="#0d0d0d"/>
-
-  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">단일 리더 복제</text>
-  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">쓰기는 리더로만 · 읽기는 아무 레플리카 · 동기/비동기 선택이 핵심 트레이드오프</text>
-  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
-
-  <!-- 쓰기 흐름 -->
-  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">쓰기 흐름 — 클라이언트는 리더로만 쓴다</text>
-
-  <rect x="32" y="124" width="120" height="44" rx="5" fill="#1a1410" stroke="rgb(212,168,83)"/>
-  <text x="92" y="151" fill="#e8e4df" font-size="11" text-anchor="middle">클라이언트(write)</text>
-
-  <line x1="152" y1="146" x2="206" y2="146" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar)"/>
-
-  <rect x="210" y="124" width="120" height="44" rx="5" fill="#1a1410" stroke="rgb(212,168,83)" stroke-width="2"/>
-  <text x="270" y="146" fill="rgb(212,168,83)" font-size="12" font-weight="700" text-anchor="middle">리더(primary)</text>
-  <text x="270" y="161" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">먼저 로컬 저장</text>
-
-  <line x1="330" y1="138" x2="408" y2="124" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#ag)"/>
-  <line x1="330" y1="154" x2="408" y2="180" stroke="#7fa8c9" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ab)"/>
-
-  <rect x="412" y="106" width="160" height="40" rx="5" fill="#141414" stroke="#66bb6a"/>
-  <text x="492" y="125" fill="#e8e4df" font-size="11" text-anchor="middle">팔로워 1(동기)</text>
-  <text x="492" y="139" fill="#66bb6a" font-size="9" text-anchor="middle">확인 응답을 기다림</text>
-
-  <rect x="412" y="162" width="160" height="40" rx="5" fill="#141414" stroke="#7fa8c9"/>
-  <text x="492" y="181" fill="#e8e4df" font-size="11" text-anchor="middle">팔로워 2(비동기)</text>
-  <text x="492" y="195" fill="#7fa8c9" font-size="9" text-anchor="middle">기다리지 않음(뒤처질 수 있음)</text>
-
-  <text x="412" y="226" fill="rgb(138,133,128)" font-size="10">읽기는 리더·팔로워 어디서나 가능(팔로워 = 읽기 전용 = read replica)</text>
-  <text x="412" y="242" fill="rgb(138,133,128)" font-size="10">리더가 복제 로그(change stream)를 보내고 팔로워가 같은 순서로 적용</text>
-
-  <!-- 동기 vs 비동기 -->
-  <text x="32" y="282" fill="rgb(212,168,83)" font-size="14" font-weight="700">동기 vs 비동기 vs 반동기</text>
-
-  <rect x="32" y="294" width="196" height="120" rx="6" fill="#141414" stroke="#66bb6a"/>
-  <text x="48" y="316" fill="#66bb6a" font-size="12" font-weight="700">동기</text>
-  <text x="48" y="336" fill="#e8e4df" font-size="10.5">+ 팔로워가 최신 사본 보장</text>
-  <text x="48" y="354" fill="#e8e4df" font-size="10.5">+ 리더 죽어도 데이터 안전</text>
-  <text x="48" y="376" fill="#f47f72" font-size="10.5">− 팔로워 무응답 시 쓰기 중단</text>
-  <text x="48" y="394" fill="rgb(138,133,128)" font-size="9.5">모든 팔로워 동기 = 비현실적</text>
-
-  <rect x="242" y="294" width="196" height="120" rx="6" fill="#141414" stroke="#7fa8c9"/>
-  <text x="258" y="316" fill="#7fa8c9" font-size="12" font-weight="700">비동기</text>
-  <text x="258" y="336" fill="#e8e4df" font-size="10.5">+ 팔로워 뒤처져도 리더 진행</text>
-  <text x="258" y="354" fill="#e8e4df" font-size="10.5">+ 다수·지리 분산에 적합</text>
-  <text x="258" y="376" fill="#f47f72" font-size="10.5">− 확정 통보해도 내구성 미보장</text>
-  <text x="258" y="394" fill="rgb(138,133,128)" font-size="9.5">리더 소실 = 미복제 쓰기 손실</text>
-
-  <rect x="452" y="294" width="196" height="120" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
-  <text x="468" y="316" fill="rgb(212,168,83)" font-size="12" font-weight="700">반동기(semisync)</text>
-  <text x="468" y="336" fill="#e8e4df" font-size="10.5">팔로워 1개만 동기,</text>
-  <text x="468" y="354" fill="#e8e4df" font-size="10.5">나머지는 비동기</text>
-  <text x="468" y="376" fill="#e8e4df" font-size="10.5">동기 노드 느려지면</text>
-  <text x="468" y="394" fill="#e8e4df" font-size="10.5">비동기 하나를 동기로 승격</text>
-
-  <!-- 백업 vs 복제 -->
-  <text x="32" y="454" fill="rgb(212,168,83)" font-size="14" font-weight="700">백업 ≠ 복제 (둘 다 필요)</text>
-  <rect x="32" y="466" width="616" height="64" rx="6" fill="#101620" stroke="#7fa8c9"/>
-  <text x="48" y="488" fill="#e8e4df" font-size="11">복제 = 한 노드의 쓰기를 다른 노드에 즉시 반영(시점 동일)</text>
-  <text x="48" y="508" fill="#e8e4df" font-size="11">백업 = 과거 스냅샷 보존(시간 되돌리기) — 실수 삭제는 복제로 못 살림(삭제도 전파됨)</text>
-  <text x="48" y="524" fill="rgb(138,133,128)" font-size="10">상호 보완: 백업은 복제 셋업의 일부, 복제 로그 아카이빙은 백업의 일부</text>
-
-  <!-- 신규 팔로워 -->
-  <text x="32" y="570" fill="rgb(212,168,83)" font-size="14" font-weight="700">신규 팔로워 셋업 — 다운타임 없이</text>
-  <rect x="32" y="582" width="616" height="46" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
-  <text x="48" y="603" fill="#e8e4df" font-size="10.5">① 리더의 일관 스냅샷(잠금 없이) → ② 팔로워로 복사 → ③ 스냅샷 이후 변경분 요청·적용 → ④ 따라잡음(caught up)</text>
-  <text x="48" y="620" fill="rgb(138,133,128)" font-size="9.5">스냅샷은 복제 로그의 정확한 위치와 연결(PostgreSQL=LSN · MySQL=binlog 좌표·GTID)</text>
-
-  <defs>
-    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
-    </marker>
-    <marker id="ag" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-      <path d="M0,1 L7,4 L0,7" fill="none" stroke="#66bb6a" stroke-width="1.2"/>
-    </marker>
-    <marker id="ab" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-      <path d="M0,1 L7,4 L0,7" fill="none" stroke="#7fa8c9" stroke-width="1.2"/>
-    </marker>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 530" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">단일 리더 복제의 쓰기·읽기 경로와 복제 로그</title><desc id="dd">클라이언트는 모든 쓰기를 단일 리더로 보내 로컬 저장소에 선행 기록하고, 리더는 변경 스트림을 모든 팔로워로 전파하며 읽기 질의는 모든 노드가 분담한다.</desc>
+<rect width="880" height="530" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">06-01 · §1 ARCHITECTURE</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">단일 리더 복제의 쓰기·읽기 경로와 복제 로그</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">클라이언트 쓰기 전담 · 로컬 저장소 기록 · 복제 로그 스트림 전파 · 팔로워 읽기 분산 서빙</text>
+<rect x="28" y="104" width="188" height="280" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="71.0" y="112" width="102.0" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="122" y="126" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">클라이언트 계층</text>
+<rect x="42" y="142" width="160" height="96" rx="6" fill="#F08A5918" stroke="#F08A59" stroke-width="1.2"/>
+<text x="122" y="166" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">쓰기 클라이언트</text>
+<text x="122" y="186" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">모든 쓰기는 리더로 집중</text>
+<rect x="48" y="198" width="148" height="26" rx="6" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="122" y="215" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">UPDATE users ...</text>
+<rect x="42" y="258" width="160" height="96" rx="6" fill="#3FB98C18" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="122" y="282" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">읽기 클라이언트</text>
+<text x="122" y="302" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">어느 노드에서나 조회 가능</text>
+<rect x="48" y="314" width="148" height="26" rx="6" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="122" y="331" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">SELECT * FROM ...</text>
+<rect x="268" y="104" width="246" height="280" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.4"/>
+<rect x="301.5" y="112" width="179.0" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="391" y="126" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">리더 노드 (Primary)</text>
+<text x="391" y="144" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">쓰기 전담 및 복제 로그 생성</text>
+<rect x="284" y="156" width="214" height="88" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="391" y="178" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">로컬 DB 저장소</text>
+<text x="391" y="198" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">새 데이터 로컬 디스크 우선 기록</text>
+<rect x="298" y="208" width="186" height="24" rx="4" fill="#6A95D816" stroke="#6A95D8" stroke-width="0.9"/>
+<text x="391" y="224" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">picture_url = 'me-new.jpg'</text>
+<rect x="284" y="272" width="214" height="88" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="391" y="294" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">복제 로그 (Change Stream)</text>
+<text x="391" y="314" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">데이터 변경 · user_id 1234</text>
+<rect x="298" y="324" width="186" height="24" rx="4" fill="#F08A5920" stroke="#F08A59" stroke-width="0.9"/>
+<text x="391" y="340" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">me-old.jpg → me-new.jpg</text>
+<path d="M 391 244 L 391 270" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<rect x="564" y="104" width="288" height="280" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="580.0" y="112" width="256.0" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="708" y="126" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">팔로워 계층 (Read Replicas)</text>
+<text x="708" y="144" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">복제 로그 순차 적용 및 읽기 전용 질의 분담</text>
+<rect x="580" y="156" width="256" height="98" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="597.5" y="164" width="69.0" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="632" y="178" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">팔로워 1</text>
+<text x="742" y="176" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">읽기 전용 (Read-Only)</text>
+<text x="708" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">복제 로그 수신 및 동일 순서 적용</text>
+<rect x="592" y="214" width="232" height="26" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="708" y="231" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">읽기 질의 서빙 가능 (사본 동기화)</text>
+<rect x="580" y="266" width="256" height="98" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="597.5" y="274" width="69.0" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="632" y="288" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">팔로워 2</text>
+<text x="742" y="286" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">읽기 전용 (Read-Only)</text>
+<text x="708" y="310" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">복제 로그 수신 및 동일 순서 적용</text>
+<rect x="592" y="324" width="232" height="26" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="708" y="341" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">읽기 질의 서빙 가능 (사본 동기화)</text>
+<path d="M 202 190 L 282 190" fill="none" stroke="#F08A59" stroke-width="1.5" marker-end="url(#acc)"/>
+<text x="242" y="178" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">쓰기 요청</text>
+<path d="M 498 316 L 538 316 L 538 205 L 578 205" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<path d="M 498 316 L 578 316" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<rect x="512" y="250" width="52" height="22" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="538" y="265" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">복제 로그</text>
+<path d="M 202 306 L 238 306 L 238 398 L 708 398 L 708 366" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="470" y="415" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">읽기 질의 (Read Query)</text>
+<rect x="24" y="422" width="832" height="34" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="0.9"/>
+<text x="440.0" y="443" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="500" fill="#F5F5F3">적용 사례: PostgreSQL · MySQL · Oracle Data Guard · Always On · MongoDB · Kafka · Raft 기반 합의</text>
+<line x1="12" y1="474" x2="832" y2="474" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="496" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="486" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">리더 쓰기 전담 (focal)</text>
+<rect x="352" y="486" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="374" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">복제 로그 스트림</text>
+<rect x="513" y="486" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="535" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">읽기 질의 분산 서빙</text>
+<rect x="700" y="486" width="14" height="12" rx="2" fill="#8B98A922" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="722" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">클라이언트 요청</text>
 </svg>

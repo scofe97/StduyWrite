@@ -1,72 +1,80 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 680" font-family="Pretendard, sans-serif">
-  <rect width="680" height="680" fill="#0d0d0d"/>
-
-  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">리더리스 복제 + 6장 종합</text>
-  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">아무 레플리카나 쓰기 수용 · quorum w+r&gt;n · 6장 정리</text>
-  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
-
-  <!-- quorum -->
-  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">quorum 읽기·쓰기 (Dynamo-style)</text>
-  <rect x="32" y="124" width="616" height="100" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
-  <text x="48" y="148" fill="#e8e4df" font-size="13" font-weight="700">n 레플리카 · 쓰기 w개 확인 · 읽기 r개 질의 · w + r &gt; n 이면 최신 읽기 보장</text>
-  <text x="48" y="170" fill="#e8e4df" font-size="10.5">읽기·쓰기 집합이 한 노드 이상 겹침 → 그 노드가 최신 값 보유 (예: n=3,w=2,r=2 → 1노드 장애 견딤)</text>
-  <text x="48" y="190" fill="#66bb6a" font-size="10.5">w&lt;n: 노드 죽어도 쓰기 가능 · r&lt;n: 노드 죽어도 읽기 가능 · 보통 과반(n/2 초과) 선택</text>
-  <text x="48" y="210" fill="#f47f72" font-size="10">단, 엣지 케이스(복원·rebalancing·동시 읽쓰·부분 실패·시계)로 절대 보장은 아님</text>
-
-  <!-- 따라잡기 -->
-  <text x="32" y="262" fill="rgb(212,168,83)" font-size="14" font-weight="700">놓친 쓰기 따라잡기 — 3기법</text>
-
-  <rect x="32" y="274" width="196" height="86" rx="6" fill="#141414" stroke="#66bb6a"/>
-  <text x="48" y="296" fill="#66bb6a" font-size="11" font-weight="700">read repair</text>
-  <text x="48" y="314" fill="#e8e4df" font-size="10">읽기 시 stale 응답 감지</text>
-  <text x="48" y="330" fill="#e8e4df" font-size="10">→ 최신 값을 되써줌</text>
-  <text x="48" y="348" fill="rgb(138,133,128)" font-size="9">자주 읽는 값에 적합</text>
-
-  <rect x="242" y="274" width="196" height="86" rx="6" fill="#141414" stroke="#7fa8c9"/>
-  <text x="258" y="296" fill="#7fa8c9" font-size="11" font-weight="700">hinted handoff</text>
-  <text x="258" y="314" fill="#e8e4df" font-size="10">대신 hint로 쓰기 보관</text>
-  <text x="258" y="330" fill="#e8e4df" font-size="10">→ 복귀 시 전달·삭제</text>
-  <text x="258" y="348" fill="rgb(138,133,128)" font-size="9">안 읽히는 값도 커버</text>
-
-  <rect x="452" y="274" width="196" height="86" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
-  <text x="468" y="296" fill="#e8e4df" font-size="11" font-weight="700">anti-entropy</text>
-  <text x="468" y="314" fill="#e8e4df" font-size="10">백그라운드 차이 탐지</text>
-  <text x="468" y="330" fill="#e8e4df" font-size="10">→ 누락 데이터 복사</text>
-  <text x="468" y="348" fill="rgb(138,133,128)" font-size="9">순서 없음·지연 큼</text>
-
-  <!-- 동시 쓰기 감지 -->
-  <text x="32" y="398" fill="rgb(212,168,83)" font-size="14" font-weight="700">동시 쓰기 감지 — happens-before · version vector</text>
-  <rect x="32" y="410" width="616" height="80" rx="6" fill="#101620" stroke="#7fa8c9"/>
-  <text x="48" y="432" fill="#e8e4df" font-size="11">happens-before: A가 B의 토대면 A→B(인과) · 어느 쪽도 아니면 동시(concurrent)</text>
-  <text x="48" y="452" fill="#e8e4df" font-size="10.5">버전 번호로 감지: 이전 읽기 버전 포함해 쓰기 → 그 이하 덮어쓰고 더 높은 건 sibling 보존</text>
-  <text x="48" y="472" fill="#66bb6a" font-size="10.5">version vector = 레플리카·키별 버전 번호 모음(다중 레플리카 대응) · Riak causal context</text>
-
-  <!-- 6장 종합 -->
-  <text x="32" y="524" fill="rgb(212,168,83)" font-size="14" font-weight="700">6장 종합 — 세 복제 방식</text>
-
-  <rect x="32" y="536" width="196" height="92" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
-  <text x="48" y="558" fill="rgb(212,168,83)" font-size="12" font-weight="700">단일 리더</text>
-  <text x="48" y="578" fill="#e8e4df" font-size="10">한 리더가 쓰기, 팔로워에</text>
-  <text x="48" y="594" fill="#e8e4df" font-size="10">change stream 전달</text>
-  <text x="48" y="612" fill="#66bb6a" font-size="9.5">이해 쉬움·강한 일관성</text>
-
-  <rect x="242" y="536" width="196" height="92" rx="6" fill="#141414" stroke="#7fa8c9"/>
-  <text x="258" y="558" fill="#7fa8c9" font-size="12" font-weight="700">다중 리더</text>
-  <text x="258" y="578" fill="#e8e4df" font-size="10">여러 리더가 쓰기 수용,</text>
-  <text x="258" y="594" fill="#e8e4df" font-size="10">서로·팔로워에 전달</text>
-  <text x="258" y="612" fill="#66bb6a" font-size="9.5">장애·지연에 견고·충돌 해소</text>
-
-  <rect x="452" y="536" width="196" height="92" rx="6" fill="#141414" stroke="#9cc3df"/>
-  <text x="468" y="558" fill="#9cc3df" font-size="12" font-weight="700">리더리스</text>
-  <text x="468" y="578" fill="#e8e4df" font-size="10">여러 노드에 쓰고 읽어</text>
-  <text x="468" y="594" fill="#e8e4df" font-size="10">stale 감지·보정</text>
-  <text x="468" y="612" fill="#66bb6a" font-size="9.5">failover 없음·약한 일관성</text>
-
-  <text x="32" y="652" fill="rgb(138,133,128)" font-size="10">복제 목적: 고가용성·내구성·단절 작동·지연·확장성 · 다음 장(7장)은 샤딩으로 데이터 분할</text>
-
-  <defs>
-    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
-    </marker>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 580" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">w + r &gt; n 쿼럼 조건과 읽기·쓰기 노드 중첩</title><desc id="dd">쓰기 노드 집합과 읽기 노드 집합이 최소 한 노드에서 겹쳐 최신 쓰기 값을 읽게 되는 구조를 보인다.</desc>
+<rect width="880" height="580" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">06-06 §2 · QUORUM OVERLAP &amp; CONSISTENCY</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">w + r &gt; n 쿼럼 조건과 읽기·쓰기 노드 중첩</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">n = 5 · 쓰기 쿼럼 w = 3 · 읽기 쿼럼 r = 3 · 노드 중첩 · 엣지 케이스</text>
+<rect x="40" y="108" width="480" height="52" rx="4" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="280.0" y="130" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">쓰기 쿼럼 집합 (w = 3)</text>
+<text x="280.0" y="148" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">클라이언트 병렬 쓰기 수락 (v2 최신 값)</text>
+<path d="M 120.0 160 L 120.0 176" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<path d="M 280.0 160 L 280.0 176" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<path d="M 440.0 160 L 440.0 176" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<rect x="48" y="176" width="144" height="68" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="120.0" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">노드 1</text>
+<text x="120.0" y="226" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">v2 최신 보유</text>
+<rect x="208" y="176" width="144" height="68" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="280.0" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">노드 2</text>
+<text x="280.0" y="226" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">v2 최신 보유</text>
+<rect x="368" y="176" width="144" height="68" rx="6" fill="#F08A5922" stroke="#F08A59" stroke-width="1.4"/>
+<text x="440.0" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">노드 3 (중첩)</text>
+<text x="440.0" y="226" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">v2 최신 (중첩 노드)</text>
+<rect x="528" y="176" width="144" height="68" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="600.0" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">노드 4</text>
+<text x="600.0" y="226" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">v1 이전 사본</text>
+<rect x="688" y="176" width="144" height="68" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="760.0" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">노드 5</text>
+<text x="760.0" y="226" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">v1 이전 사본</text>
+<rect x="360" y="260" width="480" height="52" rx="4" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="600.0" y="282" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">읽기 쿼럼 집합 (r = 3)</text>
+<text x="600.0" y="300" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">읽는 노드 중 노드 3이 최신 값(v2) 보유</text>
+<path d="M 440.0 244 L 440.0 260" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<path d="M 600.0 244 L 600.0 260" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<path d="M 760.0 244 L 760.0 260" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<rect x="36" y="336" width="396" height="164" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="234.0" y="362" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">쿼럼 조건 (w + r &gt; n) 절충</text>
+<line x1="48" y1="374" x2="420" y2="374" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="52" y="398" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">•</text>
+<text x="66" y="398" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">과반수 쿼럼 (w, r &gt; n/2)</text>
+<text x="66" y="414" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">읽기·쓰기 집합 중첩 · n/2 노드 장애까지 견딤</text>
+<text x="52" y="434" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">•</text>
+<text x="66" y="434" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">완화 쿼럼 (w + r ≤ n)</text>
+<text x="66" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">stale 읽기 확률 증가 · 지연 감소 및 가용성 향상</text>
+<text x="52" y="470" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">•</text>
+<text x="66" y="470" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">stale 제어 손잡이</text>
+<text x="66" y="486" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">절대 보장이 아닌 stale 확률을 조절하는 매개변수</text>
+<rect x="448" y="336" width="396" height="164" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.0"/>
+<text x="646.0" y="362" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">일관성이 깨지는 4대 엣지 케이스</text>
+<line x1="460" y1="374" x2="832" y2="374" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="464" y="392" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">•</text>
+<text x="478" y="392" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">구버전 복원</text>
+<text x="564" y="392" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">새 값 노드 장애 후 이전 사본 복구로 w 미달</text>
+<text x="464" y="420" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">•</text>
+<text x="478" y="420" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">리밸런싱 불일치</text>
+<text x="564" y="420" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">rebalancing 중 레플리카 견해 엇갈려 중첩 깨짐</text>
+<text x="464" y="448" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">•</text>
+<text x="478" y="448" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">동시 읽기·쓰기</text>
+<text x="564" y="448" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">쓰기 진행 도중 읽기 실행 시 새 값 반영 불확정</text>
+<text x="464" y="476" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">•</text>
+<text x="478" y="476" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">시계 기반 LWW</text>
+<text x="564" y="476" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">노드 시계 오차로 최신 쓰기가 조용히 덮어써짐</text>
+<line x1="12" y1="524" x2="832" y2="524" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="546" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="536" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">중첩 노드 (focal)</text>
+<rect x="313" y="536" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="335" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">쓰기 집합 · v2 보유</text>
+<rect x="526" y="536" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="548" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">읽기 집합 · v1 사본</text>
+<rect x="739" y="536" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="761" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">엣지 케이스 주의</text>
 </svg>

@@ -1,68 +1,79 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 660" font-family="Pretendard, sans-serif">
-  <rect width="680" height="660" fill="#0d0d0d"/>
-
-  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">쓰기 충돌 해소</text>
-  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">동시 쓰기가 충돌 · 회피→LWW→수동→자동(CRDT/OT) 순으로 본다</text>
-  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
-
-  <!-- 충돌 발생 -->
-  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">충돌이란 — 동시(concurrent) 쓰기</text>
-  <rect x="32" y="124" width="616" height="56" rx="6" fill="#141414" stroke="#f47f72"/>
-  <text x="48" y="146" fill="#e8e4df" font-size="11">사용자1: 제목 A→B · 사용자2: 제목 A→C (각자 로컬 리더에 적용) → 비동기 복제 시 충돌</text>
-  <text x="48" y="166" fill="rgb(138,133,128)" font-size="10">동시 = 쓸 때 서로를 몰랐음(물리적 동시 아님) · 단일 리더엔 없는 문제</text>
-
-  <!-- 해소 단계 -->
-  <text x="32" y="218" fill="rgb(212,168,83)" font-size="14" font-weight="700">해소 전략 — 단계별</text>
-
-  <rect x="32" y="230" width="300" height="92" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
-  <text x="48" y="252" fill="rgb(212,168,83)" font-size="12" font-weight="700">① 충돌 회피(avoidance)</text>
-  <text x="48" y="270" fill="#e8e4df" font-size="10.5">한 레코드 쓰기를 항상 같은 리더로</text>
-  <text x="48" y="288" fill="#66bb6a" font-size="10.5">+ 충돌 자체가 안 생김(가장 단순)</text>
-  <text x="48" y="306" fill="#f47f72" font-size="10">− 리더 변경(리전 이동) 중엔 깨짐</text>
-
-  <rect x="348" y="230" width="300" height="92" rx="6" fill="#141414" stroke="#f47f72"/>
-  <text x="364" y="252" fill="#f47f72" font-size="12" font-weight="700">② LWW(last write wins)</text>
-  <text x="364" y="270" fill="#e8e4df" font-size="10.5">타임스탬프 최대값 채택, 나머지 폐기</text>
-  <text x="364" y="288" fill="#f47f72" font-size="10.5">− 동시 쓰기는 "최신"이 무정의(랜덤)</text>
-  <text x="364" y="306" fill="#f47f72" font-size="10">− 데이터 손실 · 시계 동기화 민감</text>
-
-  <rect x="32" y="332" width="300" height="92" rx="6" fill="#101620" stroke="#7fa8c9"/>
-  <text x="48" y="354" fill="#7fa8c9" font-size="12" font-weight="700">③ 수동 해소(siblings)</text>
-  <text x="48" y="372" fill="#e8e4df" font-size="10.5">동시 값을 모두 보존(B와 C)</text>
-  <text x="48" y="390" fill="#e8e4df" font-size="10.5">읽을 때 반환 → 앱·사용자가 병합</text>
-  <text x="48" y="408" fill="#f47f72" font-size="10">− API 복잡 · 장바구니 삭제 항목 부활</text>
-
-  <rect x="348" y="332" width="300" height="92" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
-  <text x="364" y="354" fill="rgb(212,168,83)" font-size="12" font-weight="700">④ 자동 해소(수렴)</text>
-  <text x="364" y="372" fill="#e8e4df" font-size="10.5">모든 레플리카가 같은 상태로 수렴</text>
-  <text x="364" y="390" fill="#66bb6a" font-size="10.5">+ 의도 보존 · 데이터 손실 최소</text>
-  <text x="364" y="408" fill="rgb(138,133,128)" font-size="10">strong eventual consistency</text>
-
-  <!-- CRDT vs OT -->
-  <text x="32" y="456" fill="rgb(212,168,83)" font-size="14" font-weight="700">자동 해소 두 계열 — CRDT vs OT (ice → nice!)</text>
-
-  <rect x="32" y="468" width="300" height="108" rx="6" fill="#101620" stroke="#9cc3df"/>
-  <text x="48" y="490" fill="#9cc3df" font-size="12" font-weight="700">OT(operational transformation)</text>
-  <text x="48" y="510" fill="#e8e4df" font-size="10.5">삽입·삭제 인덱스 기록 → 교환</text>
-  <text x="48" y="528" fill="#e8e4df" font-size="10.5">동시 연산 반영해 인덱스 변환</text>
-  <text x="48" y="546" fill="#e8e4df" font-size="10">! at 3 → 4로 변환(n 삽입 보정)</text>
-  <text x="48" y="566" fill="rgb(138,133,128)" font-size="9.5">Google Docs · ShareDB</text>
-
-  <rect x="348" y="468" width="300" height="108" rx="6" fill="#141414" stroke="rgb(212,168,83)"/>
-  <text x="364" y="490" fill="rgb(212,168,83)" font-size="12" font-weight="700">CRDT(conflict-free replicated datatype)</text>
-  <text x="364" y="510" fill="#e8e4df" font-size="10.5">각 글자에 불변 ID 부여</text>
-  <text x="364" y="528" fill="#e8e4df" font-size="10.5">인덱스 대신 ID로 위치 결정</text>
-  <text x="364" y="546" fill="#e8e4df" font-size="10">변환 없이 수렴 · 동시 삽입은 ID로 정렬</text>
-  <text x="364" y="566" fill="rgb(138,133,128)" font-size="9.5">Riak·Cosmos DB · Automerge·Yjs</text>
-
-  <!-- 충돌 유형 -->
-  <text x="32" y="608" fill="rgb(212,168,83)" font-size="14" font-weight="700">충돌 유형 — 미묘한 충돌</text>
-  <rect x="32" y="620" width="616" height="32" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
-  <text x="48" y="640" fill="#e8e4df" font-size="10.5">명백(같은 필드 다른 값) 외에, 회의실 중복 예약처럼 사전 확인해도 동시 삽입으로 생기는 충돌도 있음</text>
-
-  <defs>
-    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
-    </marker>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 712" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">LWW 동시 쓰기와 조용한 데이터 손실</title><desc id="dd">다중 리더 환경에서 타임스탬프 기반 LWW가 일관 수렴을 달성하는 과정과 조용한 데이터 유실을 보인다.</desc>
+<rect width="880" height="712" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">06-05 · LWW CONCURRENT WRITE &amp; DATA LOSS</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">LWW 동시 쓰기와 조용한 데이터 손실</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">동시 로컬 쓰기 접수 · 비동기 복제 교환 · 최대 타임스탬프 채택과 폐기 · 데이터 손실</text>
+<rect x="24.0" y="104" width="160" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="104.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">사용자 1</text>
+<text x="104.0" y="141" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">클라이언트 1</text>
+<rect x="240.0" y="104" width="160" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="320.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">리더 1</text>
+<text x="320.0" y="141" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">사용자 1의 로컬 리더</text>
+<rect x="456.0" y="104" width="160" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="536.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">리더 2</text>
+<text x="536.0" y="141" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">사용자 2의 로컬 리더</text>
+<rect x="672.0" y="104" width="160" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="752.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">사용자 2</text>
+<text x="752.0" y="141" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">클라이언트 2</text>
+<line x1="104.0" y1="154" x2="104.0" y2="572" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="320.0" y1="154" x2="320.0" y2="572" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="536.0" y1="154" x2="536.0" y2="572" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="752.0" y1="154" x2="752.0" y2="572" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<rect x="24" y="160" width="832" height="26" rx="4" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="440.0" y="177" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">1단계: 동시 쓰기 — 사용자 1과 2가 각자 로컬 리더에 독립적으로 갱신 요청</text>
+<path d="M 114.0 212 L 308.0 212" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="212.0" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">쓰기: title = 'B'</text>
+<text x="212.0" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">타임스탬프가 더 큼</text>
+<path d="M 742.0 212 L 548.0 212" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="644.0" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">쓰기: title = 'C'</text>
+<text x="644.0" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">타임스탬프가 더 작음</text>
+<rect x="270.0" y="241" width="100" height="22" rx="4" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="320.0" y="256" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">title = 'B'</text>
+<rect x="486.0" y="241" width="100" height="22" rx="4" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="536.0" y="256" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">title = 'C'</text>
+<path d="M 310.0 288 L 116.0 288" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ar)" stroke-dasharray="4 4"/>
+<text x="212.0" y="280" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">OK (로컬 리더에 적용)</text>
+<path d="M 546.0 288 L 740.0 288" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ar)" stroke-dasharray="4 4"/>
+<text x="644.0" y="280" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">OK (로컬 리더에 적용)</text>
+<rect x="24" y="328" width="832" height="26" rx="4" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="440.0" y="345" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">2단계: 비동기 복제 — 두 리더 간 복제 로그 교환 및 타임스탬프 비교</text>
+<path d="M 330.0 384 L 524.0 384" fill="none" stroke="#F08A59" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="428.0" y="376" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">복제: title = 'B'</text>
+<text x="428.0" y="400" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">타임스탬프와 함께 전달</text>
+<path d="M 546.0 406 L 588.0 406 L 588.0 426 L 549.0 426" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="596.0" y="412" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">'B' 의 타임스탬프가 더 큼</text>
+<text x="596.0" y="430" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">'B' 가 이김 · 'C' 를 덮어씀</text>
+<rect x="476.0" y="437" width="120" height="22" rx="4" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="536.0" y="452" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">title = 'B' (갱신)</text>
+<path d="M 526.0 484 L 332.0 484" fill="none" stroke="#F0616D" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="428.0" y="476" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F0616D">복제: title = 'C'</text>
+<text x="428.0" y="500" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">타임스탬프와 함께 전달</text>
+<path d="M 310.0 506 L 268.0 506 L 268.0 526 L 307.0 526" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="260.0" y="512" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F0616D">'C' 의 타임스탬프가 더 작음</text>
+<text x="260.0" y="530" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">'C' 를 조용히 버림</text>
+<rect x="260.0" y="537" width="120" height="22" rx="4" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="320.0" y="552" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">title = 'B' (유지)</text>
+<rect x="24" y="588" width="832" height="44" rx="4" fill="#F08A5918" stroke="#F08A59" stroke-width="1.2"/>
+<text x="440.0" y="606" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">결과: 두 리더 모두 title = 'B' 로 일관 상태에 수렴</text>
+<text x="440.0" y="622" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">대가: 사용자 2의 쓰기 'C' 가 조용히 버려지는 데이터 손실</text>
+<line x1="12" y1="656" x2="832" y2="656" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="678" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="668" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="678" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">로컬 쓰기 접수</text>
+<rect x="248" y="668" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="270" y="678" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">타임스탬프 우세 (채택)</text>
+<rect x="461" y="668" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="483" y="678" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">타임스탬프 열세 (폐기)</text>
+<rect x="674" y="668" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="696" y="678" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">데이터 손실 (focal)</text>
 </svg>

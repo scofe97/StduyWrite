@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 580" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">sync engine과 local-first 아키텍처</title><desc id="dd">각 기기·탭이 로컬 DB를 리더로 삼아 즉각 응답하고, sync engine을 통해 비동기 복제하는 구조.</desc>
+<rect width="880" height="580" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">06-04 · SYNC ENGINES &amp; LOCAL-FIRST</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">sync engine과 local-first 아키텍처</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">로컬 DB 리더 동작 · 16ms 즉각 UI 렌더링 · 오프라인 작업 · local-first</text>
+<rect x="24" y="104" width="270" height="330" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="40" y="128" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">사용자 기기 A (Local Leader)</text>
+<rect x="40" y="146" width="238" height="60" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="159.0" y="168" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">사용자 인터페이스 (UI)</text>
+<text x="159.0" y="188" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#6A95D8">16ms 즉각 화면 반영 (네트워크 무대기)</text>
+<path d="M 139.0 208 L 139.0 236" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<path d="M 179.0 236 L 179.0 208" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<rect x="40" y="238" width="238" height="64" rx="6" fill="#F08A5922" stroke="#F08A59" stroke-width="1.2"/>
+<text x="159.0" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">로컬 데이터베이스 (Local DB)</text>
+<text x="159.0" y="282" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">리더 역할 · 로컬 데이터에 읽기·쓰기</text>
+<path d="M 139.0 304 L 139.0 332" fill="none" stroke="#E3B341" stroke-width="1.2" marker-end="url(#warn)"/>
+<path d="M 179.0 332 L 179.0 304" fill="none" stroke="#E3B341" stroke-width="1.2" marker-end="url(#warn)"/>
+<rect x="40" y="334" width="238" height="64" rx="6" fill="#0D1117" stroke="#E3B341" stroke-width="1.1"/>
+<text x="159.0" y="358" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">동기화 엔진 (Sync Engine)</text>
+<text x="159.0" y="378" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#E3B341">오프라인 변경을 로컬에 보관</text>
+<rect x="314" y="104" width="252" height="330" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="440.0" y="128" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">인터넷 (연결이 극히 불안정)</text>
+<rect x="326" y="146" width="228" height="76" rx="4" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="440.0" y="172" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">오프라인 연속 작업</text>
+<text x="440.0" y="192" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">네트워크 단절 중에도 로컬 진행</text>
+<text x="440.0" y="208" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">단절은 극단적 복제 지연과 동일</text>
+<rect x="326" y="238" width="228" height="64" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="440.0" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">기기마다 하나의 리전</text>
+<text x="440.0" y="282" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">복제 지연이 시간·날일 수 있음</text>
+<path d="M 278 366 L 326 366" fill="none" stroke="#E3B341" stroke-width="1.3" marker-end="url(#warn)" stroke-dasharray="4 3"/>
+<path d="M 326 382 L 278 382" fill="none" stroke="#E3B341" stroke-width="1.3" marker-end="url(#warn)" stroke-dasharray="4 3"/>
+<path d="M 554 366 L 586 366" fill="none" stroke="#E3B341" stroke-width="1.3" marker-end="url(#warn)" stroke-dasharray="4 3"/>
+<path d="M 586 382 L 554 382" fill="none" stroke="#E3B341" stroke-width="1.3" marker-end="url(#warn)" stroke-dasharray="4 3"/>
+<text x="440.0" y="352" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">갱신을 비동기로 복제</text>
+<text x="440.0" y="400" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">다음 온라인 때 동기화</text>
+<rect x="586" y="104" width="270" height="330" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="602" y="128" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">사용자 기기 B (Local Leader)</text>
+<rect x="602" y="146" width="238" height="60" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="721.0" y="168" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">사용자 인터페이스 (UI)</text>
+<text x="721.0" y="188" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#6A95D8">반응형 상태 갱신 · 협업자 편집 표시</text>
+<path d="M 701.0 208 L 701.0 236" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<path d="M 741.0 236 L 741.0 208" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<rect x="602" y="238" width="238" height="64" rx="6" fill="#F08A5922" stroke="#F08A59" stroke-width="1.2"/>
+<text x="721.0" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">로컬 데이터베이스 (Local DB)</text>
+<text x="721.0" y="282" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">리더 역할 · 다른 기기의 갱신 반영</text>
+<path d="M 701.0 304 L 701.0 332" fill="none" stroke="#E3B341" stroke-width="1.2" marker-end="url(#warn)"/>
+<path d="M 741.0 332 L 741.0 304" fill="none" stroke="#E3B341" stroke-width="1.2" marker-end="url(#warn)"/>
+<rect x="602" y="334" width="238" height="64" rx="6" fill="#0D1117" stroke="#E3B341" stroke-width="1.1"/>
+<text x="721.0" y="358" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">동기화 엔진 (Sync Engine)</text>
+<text x="721.0" y="378" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#E3B341">협업자 편집을 낮은 지연으로 수신</text>
+<rect x="24" y="450" width="404" height="48" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="40" y="479" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">핵심 장점</text>
+<text x="104" y="479" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">16ms 즉시 UI 반응 · 오프라인 지속 · 단순 모델</text>
+<rect x="452" y="450" width="404" height="48" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.1"/>
+<text x="468" y="479" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">적용 한계</text>
+<text x="532" y="479" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">필요 데이터를 미리 로컬에 · 전체 상품 카탈로그는 무리</text>
+<line x1="12" y1="534" x2="832" y2="534" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="556" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="546" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="556" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">UI 반응성</text>
+<rect x="222" y="546" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="244" y="556" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">로컬 DB (리더)</text>
+<rect x="396" y="546" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="418" y="556" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">sync engine 동기화</text>
+<rect x="635" y="546" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="657" y="556" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">오프라인·local-first</text>
+</svg>
