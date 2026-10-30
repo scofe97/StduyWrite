@@ -1,57 +1,82 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 640" font-family="Pretendard, sans-serif">
-  <rect width="680" height="640" fill="#0d0d0d"/>
-
-  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">durable execution·이벤트 기반 + 5장 종합</text>
-  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">워크플로우의 exactly-once · 메시지 브로커 · 5장 정리</text>
-  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
-
-  <!-- durable execution -->
-  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">durable execution(지속 실행)과 워크플로우</text>
-  <rect x="32" y="124" width="616" height="92" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
-  <text x="48" y="146" fill="#e8e4df" font-size="11">워크플로우 = 태스크 그래프 · 결제 = 사기탐지 → 카드 차감 → 은행 입금(여러 서비스 호출)</text>
-  <text x="48" y="166" fill="#66bb6a" font-size="11">durable execution = exactly-once 의미론: 태스크 실패 시 재실행하되 성공한 RPC·상태변경은 건너뜀</text>
-  <text x="48" y="186" fill="#e8e4df" font-size="10.5">모든 RPC·상태변경을 WAL에 로깅 → 이전 결과 반환(Temporal·Restate)</text>
-  <text x="48" y="206" fill="#f47f72" font-size="10.5">⚠ 외부 서비스는 idempotent API 필요 · 코드 재정렬·비결정 코드 위험(replay)</text>
-
-  <!-- 이벤트 기반 -->
-  <text x="32" y="252" fill="rgb(212,168,83)" font-size="14" font-weight="700">이벤트 기반 아키텍처 — 메시지 브로커</text>
-  <rect x="32" y="264" width="160" height="44" rx="5" fill="#1a1410" stroke="rgb(212,168,83)"/>
-  <text x="112" y="290" fill="#e8e4df" font-size="11" text-anchor="middle">송신자(publish)</text>
-  <line x1="192" y1="286" x2="236" y2="286" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar)"/>
-  <rect x="240" y="264" width="180" height="44" rx="5" fill="#101620" stroke="#7fa8c9"/>
-  <text x="330" y="286" fill="#e8e4df" font-size="11" text-anchor="middle">메시지 브로커(임시 저장)</text>
-  <line x1="420" y1="286" x2="464" y2="286" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar)"/>
-  <rect x="468" y="264" width="180" height="44" rx="5" fill="#141414" stroke="#9cc3df"/>
-  <text x="558" y="286" fill="#e8e4df" font-size="11" text-anchor="middle">수신자(consume)</text>
-
-  <rect x="32" y="320" width="616" height="72" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
-  <text x="48" y="342" fill="#66bb6a" font-size="10.5">장점: 버퍼(과부하 완충)·재전달(손실 방지)·디스커버리 불필요·다중 수신·송수신 분리</text>
-  <text x="48" y="362" fill="#e8e4df" font-size="10.5">비동기: 송신자는 전달을 안 기다림 · 패턴: 큐(1명 수신) vs 토픽(전 구독자 수신)</text>
-  <text x="48" y="380" fill="rgb(138,133,128)" font-size="10">RabbitMQ·NATS·Kafka·Kinesis · 스키마 레지스트리 · 미지 필드 보존 주의</text>
-
-  <!-- actor -->
-  <text x="32" y="424" fill="rgb(212,168,83)" font-size="14" font-weight="700">분산 actor 프레임워크</text>
-  <rect x="32" y="436" width="616" height="56" rx="6" fill="#101620" stroke="#7fa8c9"/>
-  <text x="48" y="458" fill="#e8e4df" font-size="11">actor = 로컬 상태 + 비동기 메시지(스레드 직접 안 다룸) · 같은 머신·다른 머신 동일 메커니즘</text>
-  <text x="48" y="478" fill="rgb(138,133,128)" font-size="10.5">location transparency가 RPC보다 잘 맞음(메시지 손실을 이미 가정) · Akka·Orleans·Erlang/OTP</text>
-
-  <!-- 5장 종합 -->
-  <text x="32" y="524" fill="rgb(212,168,83)" font-size="14" font-weight="700">5장 종합</text>
-  <rect x="32" y="536" width="300" height="80" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
-  <text x="48" y="558" fill="#e8e4df" font-size="11" font-weight="700">인코딩 형식 호환성</text>
-  <text x="48" y="578" fill="#e8e4df" font-size="10.5">언어 내장(호환성 약함) · 텍스트(JSON·XML)</text>
-  <text x="48" y="596" fill="#e8e4df" font-size="10.5">스키마 기반(protobuf·Avro: 압축·명확한 호환)</text>
-  <text x="48" y="610" fill="rgb(138,133,128)" font-size="9.5">backward(새→옛 데이터)·forward(옛→새 데이터)</text>
-
-  <rect x="348" y="536" width="300" height="80" rx="6" fill="#101620" stroke="#7fa8c9"/>
-  <text x="364" y="558" fill="#e8e4df" font-size="11" font-weight="700">데이터플로우 3가지</text>
-  <text x="364" y="578" fill="#e8e4df" font-size="10.5">· DB: 쓰는 쪽 인코딩, 읽는 쪽 디코딩</text>
-  <text x="364" y="596" fill="#e8e4df" font-size="10.5">· RPC/REST: 클라↔서버 요청·응답</text>
-  <text x="364" y="612" fill="#e8e4df" font-size="10.5">· 이벤트: 송신자 인코딩, 수신자 디코딩</text>
-
-  <defs>
-    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
-    </marker>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 568" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">메시지 브로커의 큐와 토픽 분배 패턴</title><desc id="dd">메시지 브로커가 비동기 버퍼로 송수신자를 분리하고, 큐(1:1 경쟁 소비자)와 토픽(1:N 발행·구독) 두 가지 분배 패턴으로 메시지를 전달한다.</desc>
+<rect width="880" height="568" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">05-05 §2 · MESSAGE BROKER PATTERNS</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">메시지 브로커의 큐와 토픽 분배 패턴</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">비동기 버퍼링 · 단일 소비자 큐 패턴 vs 다중 구독자 토픽 패턴</text>
+<rect x="20" y="96" width="840" height="164" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="36" y="120" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">큐 패턴 (Point-to-Point · 경쟁 소비자)</text>
+<rect x="621.0" y="108" width="190.0" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="716" y="122" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">한 메시지를 한 소비자가 수신</text>
+<rect x="36" y="140" width="140" height="96" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="106" y="168" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">생산자 (Producer)</text>
+<text x="106" y="188" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">비동기 발행</text>
+<rect x="71.72" y="204" width="68.56" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="106" y="218" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">Task Msg</text>
+<path d="M 176 188 L 236 188" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="206" y="176" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">전송</text>
+<rect x="240" y="140" width="280" height="96" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="380" y="164" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">브로커 큐 (Queue 버퍼)</text>
+<text x="380" y="184" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">임시 보관 · 과부하 완충 · 자동 재전달</text>
+<rect x="256" y="198" width="70" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="291" y="215" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">Msg 3</text>
+<rect x="334" y="198" width="70" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="369" y="215" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">Msg 2</text>
+<rect x="412" y="198" width="70" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="447" y="215" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">Msg 1</text>
+<path d="M 520 164 L 592 164" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="556" y="152" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">1:1 전달</text>
+<path d="M 520 210 L 592 210" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)" stroke-dasharray="4 3"/>
+<text x="556" y="198" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">대기</text>
+<rect x="596" y="144" width="240" height="42" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="716" y="161" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">소비자 A (메시지 처리)</text>
+<text x="716" y="177" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Msg 1 소비 완료 후 제거</text>
+<rect x="596" y="192" width="240" height="42" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="716" y="209" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">소비자 B (경쟁 소비자)</text>
+<text x="716" y="225" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">다음 메시지 수신 대기</text>
+<rect x="20" y="272" width="840" height="168" rx="6" fill="#F08A590c" stroke="#F08A59" stroke-width="1.2"/>
+<text x="36" y="296" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">토픽 패턴 (Publish-Subscribe · 다중 구독자)</text>
+<rect x="626.5" y="284" width="179.0" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="716" y="298" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">모든 구독자 수신 (팬아웃)</text>
+<rect x="36" y="314" width="140" height="110" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="106" y="346" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">생산자 (Producer)</text>
+<text x="106" y="368" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">이벤트 발행</text>
+<rect x="68.31" y="386" width="75.38" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="106" y="400" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">Event Msg</text>
+<path d="M 176 368 L 236 368" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<text x="206" y="356" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">발행</text>
+<rect x="240" y="314" width="280" height="110" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.2"/>
+<text x="380" y="338" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">브로커 토픽 (Topic 버퍼)</text>
+<text x="380" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">디스크에 써 크래시에 견딤</text>
+<rect x="284.34000000000003" y="382" width="191.32" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="380" y="396" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">Kafka · RabbitMQ · Pub/Sub</text>
+<path d="M 520 368 L 556 368 L 556 330 L 592 330" fill="none" stroke="#F08A59" stroke-width="1.2" marker-end="url(#acc)"/>
+<path d="M 520 368 L 556 368 L 556 368 L 592 368" fill="none" stroke="#F08A59" stroke-width="1.2" marker-end="url(#acc)"/>
+<path d="M 520 368 L 556 368 L 556 406 L 592 406" fill="none" stroke="#F08A59" stroke-width="1.2" marker-end="url(#acc)"/>
+<rect x="596" y="314" width="240" height="34" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="0.9"/>
+<text x="716" y="335" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">구독자 1 · 같은 메시지 수신</text>
+<rect x="596" y="352" width="240" height="34" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="0.9"/>
+<text x="716" y="373" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">구독자 2 · 같은 메시지 수신</text>
+<rect x="596" y="390" width="240" height="34" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="0.9"/>
+<text x="716" y="411" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">구독자 3 · 같은 메시지 수신</text>
+<rect x="20" y="452" width="840" height="44" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="140" y="478" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">스키마 레지스트리 (브로커 옆)</text>
+<text x="490" y="478" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">Protobuf · Avro · JSON 메시지의 호환성 검사 · 다시 발행할 땐 미지 필드 보존</text>
+<line x1="12" y1="512" x2="832" y2="512" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="534" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="524" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="534" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">단일 소비자 전달 (큐 패턴)</text>
+<rect x="352" y="524" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="374" y="534" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">다중 구독자 전달 (토픽 패턴)</text>
+<rect x="617" y="524" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="639" y="534" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">소비 완료 및 스키마 검증</text>
 </svg>

@@ -1,60 +1,76 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 580" font-family="Pretendard, sans-serif">
-  <rect width="680" height="580" fill="#0d0d0d"/>
-
-  <text x="32" y="44" fill="#e8e4df" font-size="21" font-weight="700">인코딩과 호환성 기초</text>
-  <text x="32" y="68" fill="rgb(138,133,128)" font-size="13">롤링 업그레이드로 옛·새 코드가 공존 → 양방향 호환성 필요</text>
-  <line x1="32" y1="84" x2="648" y2="84" stroke="rgb(42,37,32)" stroke-width="1"/>
-
-  <!-- encoding/decoding -->
-  <text x="32" y="112" fill="rgb(212,168,83)" font-size="14" font-weight="700">인코딩과 디코딩</text>
-  <rect x="32" y="124" width="200" height="56" rx="6" fill="#101620" stroke="#7fa8c9"/>
-  <text x="132" y="146" fill="#e8e4df" font-size="11.5" text-anchor="middle" font-weight="700">인메모리 객체</text>
-  <text x="132" y="164" fill="rgb(138,133,128)" font-size="9.5" text-anchor="middle">객체·리스트·트리(포인터)</text>
-  <line x1="232" y1="142" x2="290" y2="142" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#ar)"/>
-  <text x="261" y="135" fill="rgb(212,168,83)" font-size="9" text-anchor="middle">인코딩(직렬화)</text>
-  <line x1="290" y1="162" x2="232" y2="162" stroke="rgb(138,133,128)" stroke-width="1.5" marker-end="url(#arb)"/>
-  <text x="261" y="178" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">디코딩(파싱)</text>
-  <rect x="294" y="124" width="200" height="56" rx="6" fill="#1a1410" stroke="rgb(212,168,83)"/>
-  <text x="394" y="146" fill="#e8e4df" font-size="11.5" text-anchor="middle" font-weight="700">바이트 시퀀스</text>
-  <text x="394" y="164" fill="rgb(138,133,128)" font-size="9.5" text-anchor="middle">파일·네트워크(자족적)</text>
-
-  <!-- 호환성 두 방향 -->
-  <text x="32" y="216" fill="rgb(212,168,83)" font-size="14" font-weight="700">호환성 두 방향</text>
-  <rect x="32" y="228" width="300" height="86" rx="6" fill="#141414" stroke="#66bb6a"/>
-  <text x="48" y="250" fill="#66bb6a" font-size="12.5" font-weight="700">backward(하위) 호환</text>
-  <text x="48" y="272" fill="#e8e4df" font-size="11">새 코드가 옛 코드의 데이터를 읽음</text>
-  <text x="48" y="294" fill="rgb(138,133,128)" font-size="10.5">보통 쉬움(옛 형식을 알고 명시 처리)</text>
-
-  <rect x="348" y="228" width="300" height="86" rx="6" fill="#141414" stroke="#f47f72"/>
-  <text x="364" y="250" fill="#f47f72" font-size="12.5" font-weight="700">forward(상위) 호환</text>
-  <text x="364" y="272" fill="#e8e4df" font-size="11">옛 코드가 새 코드의 데이터를 읽음</text>
-  <text x="364" y="294" fill="rgb(138,133,128)" font-size="10.5">까다로움(옛 코드가 새 추가를 무시·보존해야)</text>
-
-  <!-- forward 함정 -->
-  <text x="32" y="350" fill="rgb(212,168,83)" font-size="14" font-weight="700">forward 호환의 함정 — 미지 필드 보존</text>
-  <rect x="32" y="362" width="616" height="76" rx="6" fill="#141414" stroke="rgb(42,37,32)"/>
-  <text x="48" y="384" fill="#e8e4df" font-size="11">새 코드가 새 필드(photoURL) 포함 레코드 작성 → 옛 코드가 읽고 갱신·재작성</text>
-  <text x="48" y="404" fill="#f47f72" font-size="11">⚠ 옛 코드가 모르는 필드를 모델 객체에 보존 안 하면 photoURL 손실</text>
-  <text x="48" y="424" fill="#66bb6a" font-size="11">→ 미지 필드를 명시적으로 보존하는 인코딩 필요</text>
-
-  <!-- 코드가 점진 배포 -->
-  <text x="32" y="464" fill="rgb(212,168,83)" font-size="14" font-weight="700">왜 공존하나 + language-specific 포맷 회피</text>
-  <rect x="32" y="476" width="300" height="74" rx="6" fill="#101620" stroke="#7fa8c9"/>
-  <text x="48" y="498" fill="#e8e4df" font-size="11">서버: 롤링 업그레이드(노드별 점진 배포)</text>
-  <text x="48" y="516" fill="#e8e4df" font-size="11">클라: 사용자가 업데이트를 미룸</text>
-  <text x="48" y="536" fill="rgb(138,133,128)" font-size="10">→ 옛·새 코드·데이터가 동시 존재</text>
-
-  <rect x="348" y="476" width="300" height="74" rx="6" fill="#141414" stroke="#f47f72"/>
-  <text x="364" y="498" fill="#f47f72" font-size="11">언어 내장 인코딩(pickle·Serializable)</text>
-  <text x="364" y="516" fill="#e8e4df" font-size="10.5">언어 종속·보안 위험·버전·효율 뒷전</text>
-  <text x="364" y="536" fill="rgb(138,133,128)" font-size="10">→ 일시적 용도 외엔 피할 것</text>
-
-  <defs>
-    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
-    </marker>
-    <marker id="arb" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-      <path d="M0,1 L7,4 L0,7" fill="none" stroke="rgb(138,133,128)" stroke-width="1.2"/>
-    </marker>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 844" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">호환성 두 방향과 미지 필드 소실 위험 시퀀스</title><desc id="dd">새 코드가 옛 데이터를 읽는 backward 호환과 옛 코드가 새 데이터를 읽는 forward 호환의 미지 필드 보존 분기.</desc>
+<rect width="880" height="844" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">05-01 · BACKWARD &amp; FORWARD COMPATIBILITY</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">호환성 두 방향과 미지 필드 소실 위험 시퀀스</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">backward 호환 판독 · forward 호환 읽기 · 미지 필드 소실 위험 · 미지 필드 명시 보존</text>
+<rect x="24.0" y="104" width="196" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="122.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">새 코드 (v2)</text>
+<text x="122.0" y="141" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">신규 버전 배포 노드</text>
+<rect x="330.0" y="104" width="196" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="428.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">공용 데이터베이스 (DB)</text>
+<text x="428.0" y="141" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">공유 영속 저장소</text>
+<rect x="636.0" y="104" width="196" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="734.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">옛 코드 (v1)</text>
+<text x="734.0" y="141" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">롤링 업그레이드 대기 노드</text>
+<line x1="122.0" y1="154" x2="122.0" y2="768" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="428.0" y1="154" x2="428.0" y2="768" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="734.0" y1="154" x2="734.0" y2="768" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<rect x="24" y="156" width="260" height="24" rx="4" fill="#3FB98C18" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="154" y="172" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">Phase 1: backward 호환 (하위 호환)</text>
+<path d="M 724.0 208 L 440.0 208" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<text x="581.0" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">옛 레코드 쓰기</text>
+<text x="581.0" y="224" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">기존 형식 데이터 기록</text>
+<path d="M 418.0 252 L 134.0 252" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)" stroke-dasharray="4 3"/>
+<text x="275.0" y="244" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">옛 레코드 읽기</text>
+<text x="275.0" y="268" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">옛 데이터 반환 (신규 필드 부재)</text>
+<path d="M 132.0 286 L 180.0 286 L 180.0 306 L 135.0 306" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="190.0" y="292" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">옛 스키마 명시 처리</text>
+<text x="190.0" y="311" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">새 코드가 옛 형식을 알아 처리</text>
+<rect x="24" y="336" width="328" height="24" rx="4" fill="#F08A5920" stroke="#F08A59" stroke-width="1.2"/>
+<text x="188" y="352" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">Phase 2: forward 호환과 미지 필드 분기</text>
+<path d="M 132.0 388 L 416.0 388" fill="none" stroke="#F08A59" stroke-width="1.5" marker-end="url(#acc)"/>
+<text x="275.0" y="380" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">새 레코드 쓰기 (photoURL 포함)</text>
+<text x="275.0" y="404" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">신규 필드 담긴 레코드 영속화</text>
+<path d="M 438.0 432 L 722.0 432" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)" stroke-dasharray="4 3"/>
+<text x="581.0" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">새 레코드 읽기</text>
+<text x="581.0" y="448" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">신규 photoURL 필드 포함 데이터 수신</text>
+<path d="M 724.0 466 L 676.0 466 L 676.0 486 L 721.0 486" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="666.0" y="472" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">Person 객체 디코딩</text>
+<text x="666.0" y="491" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">옛 코드는 photoURL 필드를 모름</text>
+<rect x="280" y="520" width="580" height="240" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="280" y="520" width="48" height="20" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="304" y="534" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="600" fill="#8B98A9">ALT</text>
+<text x="340" y="535" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F0616D">[미지 필드 미보존 모델: 데이터 손실 위험]</text>
+<path d="M 724.0 568 L 440.0 568" fill="none" stroke="#F0616D" stroke-width="1.5" marker-end="url(#bad)"/>
+<text x="581.0" y="560" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F0616D">favoriteNumber 갱신 재작성</text>
+<text x="581.0" y="584" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">photoURL 필드가 누락된 채 쓰기 실행</text>
+<rect x="312.0" y="596" width="232" height="24" rx="4" fill="#F0616D22" stroke="#F0616D" stroke-width="1.0"/>
+<text x="428.0" y="612" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F0616D">photoURL 값 소실 (데이터 손실)</text>
+<line x1="288" y1="636" x2="852" y2="636" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="4 3"/>
+<text x="296" y="654" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">[미지 필드 명시 보존: 바람직한 동작]</text>
+<path d="M 724.0 688 L 440.0 688" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<text x="581.0" y="680" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">favoriteNumber 갱신 재작성</text>
+<text x="581.0" y="704" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">해석 못 한 photoURL 바이트 그대로 보존</text>
+<rect x="312.0" y="716" width="232" height="24" rx="4" fill="#3FB98C20" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="428.0" y="732" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">photoURL 보존</text>
+<line x1="12" y1="788" x2="832" y2="788" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="810" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="800" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="810" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">신규 필드 기록 (focal)</text>
+<rect x="352" y="800" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="374" y="810" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">데이터 손실 위험</text>
+<rect x="513" y="800" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="535" y="810" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">호환 성공·필드 보존</text>
+<rect x="700" y="800" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="722" y="810" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">저장소 읽기·쓰기</text>
 </svg>
