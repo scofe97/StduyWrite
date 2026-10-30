@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 528" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">OBT의 조인 사전 계산과 비정규화</title><desc id="dd">OBT는 별도의 dimension 테이블 없이 모든 메타데이터를 fact 행에 접어 넣어 조인을 사전 계산하는 단일 넓은 테이블이다.</desc>
+<rect width="880" height="528" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">03-03 · OBT DENORMALIZATION</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">OBT의 조인 사전 계산과 비정규화</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">원천 테이블에서 OBT로의 데이터 흐름</text>
+<rect x="28" y="104" width="216" height="28" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="136.0" y="122" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">1단계 · 원천 테이블 (별 스키마)</text>
+<rect x="308" y="104" width="156" height="28" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="386.0" y="122" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">2단계 · 사전 계산</text>
+<rect x="516" y="104" width="336" height="28" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="684.0" y="122" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">3단계 · One Big Table (focal)</text>
+<rect x="28" y="148" width="216" height="56" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="44" y="170" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">fact_sales (이벤트)</text>
+<text x="44" y="190" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">quantity · net_price</text>
+<rect x="28" y="216" width="216" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="44" y="238" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">dim_product (상품)</text>
+<text x="44" y="258" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">sku · brand · category</text>
+<rect x="28" y="280" width="216" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="44" y="302" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">dim_store (매장)</text>
+<text x="44" y="322" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">state · city</text>
+<rect x="28" y="344" width="216" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="44" y="366" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">dim_date (날짜)</text>
+<text x="44" y="386" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">date_key · is_holiday</text>
+<rect x="308" y="196" width="156" height="160" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="386.0" y="222" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">조인 사전 계산</text>
+<text x="386.0" y="242" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#5E6B7E">Precomputed Join</text>
+<line x1="320" y1="254" x2="452" y2="254" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="324" y="276" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">외래 키(FK) 참조 해소</text>
+<text x="324" y="300" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">dimension 메타 병합</text>
+<text x="324" y="324" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">단일 넓은 행으로 전개</text>
+<text x="324" y="344" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">ETL 이 변환해 적재</text>
+<rect x="516" y="148" width="336" height="248" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<text x="684.0" y="176" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="15" font-weight="600" fill="#F5F5F3">one_big_table (OBT)</text>
+<text x="684.0" y="198" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">단일 넓은 비정규화 테이블</text>
+<line x1="532" y1="210" x2="836" y2="210" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="532" y="222" width="304" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="540" y="240" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">병합 컬럼 구성</text>
+<text x="540" y="256" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">[fact 속성] + [상품 메타] + [매장] + [날짜 정보]</text>
+<rect x="532" y="274" width="304" height="48" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="540" y="292" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">행 예시 · 그림 3-5 첫 판매</text>
+<text x="540" y="310" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">260102 | Fish food | Palo Alto | 1 | 2.49</text>
+<rect x="532" y="332" width="304" height="24" rx="4" fill="#3FB98C18" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="684.0" y="348" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">장점 — 조인 없이 조회 · 때로 더 빠른 쿼리</text>
+<rect x="532" y="362" width="304" height="24" rx="4" fill="#E3B34118" stroke="#E3B341" stroke-width="1.0"/>
+<text x="684.0" y="378" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">비용 — 메타데이터 중복 저장 · 저장 공간 증가</text>
+<line x1="244" y1="176.0" x2="264" y2="176.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="244" y1="242.0" x2="264" y2="242.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="244" y1="306.0" x2="264" y2="306.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="244" y1="370.0" x2="264" y2="370.0" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="264" y1="176" x2="264" y2="370" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<path d="M 264 272 L 304 272" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="286.0" y="262" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#8B98A9">ETL</text>
+<path d="M 464 272 L 512 272" fill="none" stroke="#F08A59" stroke-width="1.6" marker-end="url(#acc)"/>
+<text x="490.0" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">적재</text>
+<rect x="28" y="412" width="824" height="40" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="48" y="436" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">분석 맥락의 정당성</text>
+<text x="172" y="436" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">분석 데이터의 불변 이력 특성 · OLTP와 달리 일관성 및 쓰기 오버헤드 부담 완화</text>
+<line x1="12" y1="472" x2="832" y2="472" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="494" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="484" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="494" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">OBT 비정규화 (focal)</text>
+<rect x="352" y="484" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="374" y="494" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">원천 테이블</text>
+<rect x="474" y="484" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="496" y="494" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">쿼리 속도 이점</text>
+<rect x="622" y="484" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="644" y="494" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">저장 공간 비용</text>
+</svg>

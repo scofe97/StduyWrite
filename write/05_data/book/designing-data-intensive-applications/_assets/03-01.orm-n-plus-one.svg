@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 616" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">ORM의 N+1 쿼리 문제와 조인 fetch</title><desc id="dd">ORM이 댓글 목록을 1회 조회한 뒤 댓글마다 작성자를 따로 조회해 총 N+1 쿼리가 되는 구조를 보인다.</desc>
+<rect width="880" height="616" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">03-01 · ORM IMPEDANCE MISMATCH</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">ORM의 N+1 쿼리 문제와 조인 fetch</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">목록 1회 조회 · 연관 작성자 N회 반복 조회 · 총 1+N 쿼리 · 조인 fetch 해결</text>
+<rect x="24.0" y="104" width="220" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="134.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">애플리케이션</text>
+<text x="134.0" y="141" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">ORM · Hibernate</text>
+<rect x="612.0" y="104" width="220" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="722.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">데이터베이스</text>
+<text x="722.0" y="141" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">RDBMS · SQL</text>
+<line x1="134.0" y1="154" x2="134.0" y2="432" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="722.0" y1="154" x2="722.0" y2="432" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<path d="M 144.0 168 L 710.0 168" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<text x="428.0" y="160" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">SELECT * FROM comments</text>
+<text x="428.0" y="184" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">1단계: 댓글 N개 목록 조회 (1회)</text>
+<path d="M 712.0 220 L 146.0 220" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)" stroke-dasharray="4 3"/>
+<text x="428.0" y="212" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">댓글 N개 반환 (comment_id · user_id)</text>
+<rect x="60.0" y="248" width="736.0" height="184" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.0"/>
+<rect x="60.0" y="248" width="160" height="22" rx="6" fill="#0D1117" stroke="#E3B341" stroke-width="1.0"/>
+<text x="140.0" y="263" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">LOOP · 댓글 N회 반복</text>
+<path d="M 144.0 284 L 710.0 284" fill="none" stroke="#E3B341" stroke-width="1.5" marker-end="url(#warn)"/>
+<text x="428.0" y="276" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#E3B341">SELECT * FROM users WHERE id = c[1].user_id</text>
+<text x="428.0" y="300" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">2단계: 댓글 1 작성자 개별 조회</text>
+<path d="M 712.0 334 L 146.0 334" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)" stroke-dasharray="4 3"/>
+<text x="428.0" y="326" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">user 1 정보 반환</text>
+<text x="428.0" y="362" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">··· 댓글 2부터 N까지 개별 쿼리 반복 ···</text>
+<path d="M 144.0 390 L 710.0 390" fill="none" stroke="#E3B341" stroke-width="1.5" marker-end="url(#warn)"/>
+<text x="428.0" y="382" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#E3B341">SELECT * FROM users WHERE id = c[N].user_id</text>
+<path d="M 712.0 416 L 146.0 416" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)" stroke-dasharray="4 3"/>
+<text x="428.0" y="408" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">user N 정보 반환</text>
+<rect x="278.0" y="448" width="300" height="28" rx="6" fill="#E3B3411C" stroke="#E3B341" stroke-width="1.2"/>
+<text x="428.0" y="466" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">총 1 + N 회 쿼리 · DB 안 조인보다 느림</text>
+<rect x="60.0" y="492" width="736.0" height="48" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="76.0" y="512" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">해법 · 조인 fetch · 쿼리 1회</text>
+<text x="76.0" y="530" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">SELECT * FROM comments JOIN users</text>
+<line x1="12" y1="560" x2="832" y2="560" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="582" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="572" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="122" y="582" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">ORM 반복 쿼리 (N회)</text>
+<rect x="326" y="572" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="348" y="582" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">조인 fetch 해법</text>
+<rect x="513" y="572" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="535" y="582" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">초기 목록 쿼리 (1회)</text>
+<rect x="726" y="572" width="14" height="12" rx="2" fill="#8B98A922" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="748" y="582" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">DB 반환 (응답)</text>
+</svg>

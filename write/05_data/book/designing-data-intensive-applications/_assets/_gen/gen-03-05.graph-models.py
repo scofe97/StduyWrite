@@ -28,7 +28,7 @@ for i, lab in enumerate(["bornIn", "within", "within"]):
     d.chip(x + 42, 166, lab, ACC, 11)
 
 # 트리플 스토어
-d.box(16, 256, 848, 200, PAPER, ACC, 1.4)
+d.box(16, 256, 848, 200, PAPER, RULE, 1.0)
 d.t(32, 280, "트리플 스토어 — (주어, 술어, 목적어)", 14, INK, KR, "start", 600)
 for x, lab in zip(XS, ["주어 · 꼬리 정점", "술어 · 간선", "목적어 · 머리 정점"]):
     d.t(x, 312, lab, 12, MUTED, KR, "start")
@@ -36,7 +36,7 @@ ROWS = [("lucy", "bornIn", "idaho"), ("idaho", "within", "usa"), ("usa", "within
 for i, row in enumerate(ROWS):
     y = 324 + 44 * i
     for j, (x, cell) in enumerate(zip(XS, row)):
-        d.box(x, y, 132, 32, PAPER2, ACC if j == 1 else RULE, 1.2 if j == 1 else 0.9)
+        d.box(x, y, 132, 32, PAPER2, ACC if j == 1 else INFO, 1.2 if j == 1 else 1.0)
         d.t(x + 66, y + 21, cell, 12, INK, MONO)
 
 d.legend(LEG, [("술어 · 간선", ACC), ("정점", INFO)])

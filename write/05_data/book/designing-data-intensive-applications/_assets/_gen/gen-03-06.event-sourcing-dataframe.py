@@ -14,7 +14,7 @@ d = D(W, H, "03-06 · EVENT SOURCING", "이벤트 소싱과 CQRS",
       "쓰기 표현과 읽기 표현의 분리")
 
 d.box(16, PY, 520, PH, PAPER, RULE, 0.9)
-d.box(560, PY, 304, PH, PAPER, ACC, 1.4)
+d.box(560, PY, 304, PH, PAPER, RULE, 0.9)
 d.t(32, 124, "쓰기 최적화 표현", 14, INK, KR, "start", 600)
 d.t(576, 124, "읽기 최적화 표현", 14, INK, KR, "start", 600)
 
