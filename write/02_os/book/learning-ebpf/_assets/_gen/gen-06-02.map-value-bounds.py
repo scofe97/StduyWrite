@@ -21,8 +21,9 @@ d.box(552, 116, 384, 244, "#0D1117", RULE, 0.9, 8)
 # 맵 값 바깥 상자
 d.box(VX - 8, VY - 28, 16 * B + 16, 56 + 40, PAPER2, RULE, 1.0, 6)
 d.t(VX, VY - 8, "맵 값 · value_size=16", 13, MUTED, KR, "start")
-d.tone(VX, VY, 4 * B, 56, INFO, 4, "12", 1.2)
-d.t(VX + 2 * B, VY + 26, "c", 13, INFO, MONO, "middle", 600)
+# c 는 인덱스 값일 뿐 접근 대상이 아니라 중립으로 둔다 (INFO 는 범례에서 패킷 색이다)
+d.box(VX, VY, 4 * B, 56, PAPER2, RULE, 1.0, 4)
+d.t(VX + 2 * B, VY + 26, "c", 13, INK, MONO, "middle", 600)
 d.t(VX + 2 * B, VY + 44, "off 0~3", 12, MUTED, MONO)
 d.tone(VX + 4 * B, VY, 12 * B, 56, ACC, 4, "18", 1.4)
 d.t(VX + 10 * B, VY + 26, "message[12]", 13, ACC, MONO, "middle", 600)
@@ -51,5 +52,5 @@ ex = PX + PW + 8 + B // 2
 d.arrow([(ex, 316), (ex, PY + 56 + 4)], BAD, "bad", 1.6)
 d.t(ex, 336, "data_end++ · pkt_end prohibited", 12, BAD, MONO, "end")
 
-d.legend(H - 56, [("맵 값 안", ACC), ("허용 접근", OK), ("거부 접근", BAD), ("패킷", INFO)])
+d.legend(H - 56, [("인덱스로 읽는 배열", ACC), ("허용 접근", OK), ("거부 접근", BAD), ("패킷", INFO)])
 d.save("06-02.map-value-bounds.svg")

@@ -52,7 +52,10 @@ d.msg("mprotect_audit", "security_file_mprotect", "return -EPERM", 412, ACC, "ac
 d.msg("security_file_mprotect", "do_mprotect_pkey", "error = -EPERM", 484, BAD, "bad", dash="5 4", sub="break")
 d.msg("do_mprotect_pkey", "프로세스", "EPERM", 556, BAD, "bad", dash="5 4", sub="mprotect() 실패")
 
-d.msg("mprotect_audit", "security_file_mprotect", "kprobe 반환값", 628, MUTED, "ar", dash="5 4", sub="이벤트 기록 여부만")
+# kprobe 대조는 이 흐름의 한 단계가 아니므로 화살표가 아니라 레인 밖 비교 메모로 둔다
+d.o.append(f'<rect x="520" y="604" width="400" height="48" rx="6" fill="{PAPER}" stroke="{RULE}" stroke-width="1" stroke-dasharray="4 4"/>')
+d.t(720, 624, "비교 · kprobe 반환값", 12, INK, KR, "middle", 600)
+d.t(720, 642, "이벤트 기록 여부만 · 거부 못 함", 12, MUTED, KR)
 
 d.legend(H - 56, [("시스템 콜", INFO), ("훅 호출", MUTED), ("거부", ACC), ("오류 전파", BAD)])
 d.save("07-02.lsm-mprotect-sequence.svg")

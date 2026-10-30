@@ -35,6 +35,7 @@ for i, (off, ln, sz, rn, rt, c) in enumerate(ROWS):
         d.o.append(f'<rect x="{LXX}" y="{y}" width="{LW}" height="{LH}" rx="6" fill="none" stroke="{RULE}" stroke-width="1" stroke-dasharray="4 4"/>')
         d.t(LXX + 14, y + 26, ln, 12, MUTED, KR, "start")
         d.t(LXX + LW - 14, y + 26, sz, 12, MUTED, KR, "end")
+        d.line(LXX + LW + 2, y + LH / 2, RXX - 2, y + LH / 2, RULE, 1.2, "4 4")
         continue
     if c == ACC:
         d.tone(LXX, y, LW, LH, ACC, 6, "1F", 1.4)
@@ -42,9 +43,11 @@ for i, (off, ln, sz, rn, rt, c) in enumerate(ROWS):
         d.tone(LXX, y, LW, LH, c, 6, "12", 1.2)
     d.t(LXX + 14, y + 26, ln, 12, c, MONO, "start", 600)
     d.t(LXX + LW - 14, y + 26, sz, 12, MUTED, KR, "end")
-    d.box(RXX, y, RW, LH, PAPER2, RULE, 0.9, 6)
-    d.t(RXX + 14, y + 26, rn, 12, INK, MONO, "start", 600)
-    d.t(RXX + RW - 14, y + 26, rt, 12, MUTED, MONO, "end")
+    # long syscall_nr 은 __syscall_nr 4바이트와 뒤 여백 4바이트를 한 칸으로 덮으므로 두 층에 걸친다
+    rh, ty = (ST + LH, y + 50) if rn == "syscall_nr" else (LH, y + 26)
+    d.box(RXX, y, RW, rh, PAPER2, RULE, 0.9, 6)
+    d.t(RXX + 14, ty, rn, 12, INK, MONO, "start", 600)
+    d.t(RXX + RW - 14, ty, rt, 12, MUTED, MONO, "end")
     d.line(LXX + LW + 2, y + LH / 2, RXX - 2, y + LH / 2, RULE, 1.2)
 # 접근 금지 괄호
 by0, by1 = TOP, TOP + 3 * ST + LH

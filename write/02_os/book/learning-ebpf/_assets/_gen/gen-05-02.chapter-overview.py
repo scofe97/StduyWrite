@@ -1,4 +1,4 @@
-# 타입 스펙: type-architecture — hello-buffer-config.bpf.c 의 부품 넷(헤더·전역과 맵·프로그램·라이선스)과 컴파일 세 단계가 .bpf.o 로 모이는 지도. focal 은 프로그램 부품.
+# 타입 스펙: type-architecture — hello-buffer-config.bpf.c 의 부품 넷(헤더·전역과 맵·프로그램·라이선스)과 컴파일 두 단계(clang · llvm-strip)가 .bpf.o 로 모이는 지도. focal 은 프로그램 부품.
 # 사실 출처: 예제 저장소 chapter5/hello-buffer-config.bpf.c·Makefile, 추출본 src/ebpf5.txt 681~689행(헤더 다섯)·783~800행(맵)·837~918행(SEC·프로그램)·1072행(라이선스)·1081~1136행(컴파일 옵션),
 #   libbpf v1.8.0 src/bpf_tracing.h 8~35행(__TARGET_ARCH_*).
 # Layout conventions: 밴드 둘(소스·컴파일), 열 x 는 24·252·476·720, 열 폭 216·212·232·216, 상자 높이 184, 컴파일 상자 x 는 24·464·708. 모든 좌표 4의 배수.
@@ -7,7 +7,7 @@ from dd import D, ACC, OK, WARN, INFO, MUTED, INK, PAPER, PAPER2, RULE, SOFT, KR
 
 W, H = 960, 536
 d = D(W, H, "LEARNING EBPF · 05-02",
-      "소스 한 파일이 부품 넷과 컴파일 세 단계를 거쳐 .bpf.o 가 된다",
+      "소스 한 파일이 부품 넷과 컴파일 두 단계를 거쳐 .bpf.o 가 된다",
       "hello-buffer-config.bpf.c 는 헤더 다섯, 전역 변수와 맵 둘, execve 에 붙는 프로그램, 라이선스 한 줄로 이뤄지고 clang 과 llvm-strip 을 거쳐 오브젝트 파일이 된다.",
       "부품마다 다룬 절 번호를 상자 제목에 붙였습니다")
 

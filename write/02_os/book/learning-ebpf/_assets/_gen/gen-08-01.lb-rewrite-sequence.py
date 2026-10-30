@@ -44,7 +44,7 @@ d.lane_top = 144
 d.rails(H - 80)
 
 d.msg("client", "LB", "TCP · src .4 → dst .5", 196, MUTED, "ar")
-d.selfmsg("LB", "주소 고침 · XDP_TX", 252, ACC, "daddr .2 · h_dest[5]=2")
+d.selfmsg("LB", "주소 고침 · XDP_TX", 252, ACC, "daddr·h_dest[5] = 2/3")
 d.msg("LB", "A", "src .5 → dst .2", 316, OK, "ok", sub="ktime 짝수")
 d.msg("LB", "B", "src .5 → dst .3", 360, INFO, "info", dash="6 4", sub="ktime 홀수")
 d.msg("A", "LB", "응답 src .2 → dst .5", 428, MUTED, "ar")

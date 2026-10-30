@@ -13,7 +13,7 @@ d = D(W, H, "LEARNING EBPF · 08-01 §4", "XDP 는 NIC · 드라이버 · 일반
 
 LX, LW, LH, ST, TOP = 88, 840, 64, 72, 120
 ROWS = [
-    ("—", "네트워크 스택", "프로토콜 처리", INFO, False),
+    ("—", "네트워크 스택", "프로토콜 처리", MUTED, False),
     ("xdpgeneric", "일반 경로", "sk_buff 생성 뒤", ACC, True),
     ("xdpdrv", "드라이버", "sk_buff 생성 전", INFO, False),
     ("xdpoffload", "NIC", "호스트 CPU 0", OK, False),

@@ -36,7 +36,7 @@ ROWS = [
 for k, (a, asub, b, bsub, c, csub, col, foc) in enumerate(ROWS):
     y = TOP + k * LH + (LH - NH) // 2
     cy = y + NH // 2
-    cc = foc or OK
+    cc = foc or INK  # 키 출력은 필드 이름이 아니라 u32 로 푼 숫자라 중립으로 둔다
     # 단계 1 — 호출 인자
     d.tone(COLX[0], y, COLW[0], NH, col, 6, "12", 1.2)
     d.t(COLX[0] + COLW[0] / 2, y + 28, a, 13, col, MONO, "middle", 600)
@@ -46,7 +46,10 @@ for k, (a, asub, b, bsub, c, csub, col, foc) in enumerate(ROWS):
     d.t(COLX[1] + COLW[1] / 2, y + 28, b, 13, OK, MONO, "middle", 600)
     d.t(COLX[1] + COLW[1] / 2, y + 48, bsub, 13, MUTED, KR)
     # 단계 3 — 출력
-    d.tone(COLX[2], y, COLW[2], NH, cc, 6, "1F" if foc else "12", 1.4 if foc else 1.2)
+    if foc:
+        d.tone(COLX[2], y, COLW[2], NH, cc, 6, "1F", 1.4)
+    else:
+        d.box(COLX[2], y, COLW[2], NH, PAPER2, RULE, 1.0)
     d.t(COLX[2] + COLW[2] / 2, y + 28, c, 13, cc, MONO, "middle", 600)
     d.t(COLX[2] + COLW[2] / 2, y + 48, csub, 13, MUTED, KR)
     d.arrow([(COLX[0] + COLW[0] + 2, cy), (COLX[1] - 6, cy)], INFO, "info", 1.5)

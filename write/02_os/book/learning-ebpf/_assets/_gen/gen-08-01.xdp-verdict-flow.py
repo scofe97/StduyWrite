@@ -19,11 +19,11 @@ def diamond(cx, cy, hw, hh, c, label):
 
 YC = 176
 # 시작 · 검사
-oval(24, YC - 22, 96, 44, INFO)
-d.t(72, YC + 4, "XDP 프로그램", 12, INFO, KR, "middle", 600)
+oval(24, YC - 22, 96, 44, MUTED)
+d.t(72, YC + 4, "XDP 프로그램", 12, INK, KR, "middle", 600)
 d.arrow([(122, YC), (164, YC)], MUTED, "ar", 1.5)
-d.tone(168, YC - 24, 96, 48, INFO, 6, "12", 1.2)
-d.t(216, YC - 4, "경계 검사", 12, INFO, KR, "middle", 600)
+d.tone(168, YC - 24, 96, 48, MUTED, 6, "12", 1.2)
+d.t(216, YC - 4, "경계 검사", 12, INK, KR, "middle", 600)
 d.t(216, YC + 14, "data_end", 11, MUTED, MONO)
 d.arrow([(266, YC), (308, YC)], MUTED, "ar", 1.5)
 
@@ -66,5 +66,5 @@ for tx, code, sub, edge in ((792, "XDP_TX", "3 · 들어온 장치로", "예"), 
     d.t(tx, TY + 22, code, 12, INFO, MONO, "middle", 600)
     d.t(tx, TY + 40, sub, 11, MUTED, KR)
 
-d.legend(H - 56, [("검사·시작", INFO), ("버림", ACC), ("오류로 버림", WARN), ("스택으로", OK), ("되돌림·넘김", INFO)])
+d.legend(H - 56, [("버림", ACC), ("오류로 버림", WARN), ("스택으로", OK), ("되돌림·넘김", INFO)])
 d.save("08-01.xdp-verdict-flow.svg")

@@ -32,7 +32,7 @@ d = SeqKR(W, H, "LEARNING EBPF · 07-01 §3", "fexit 프로그램은 인자와 �
           "호출자가 do_unlinkat(dfd, name) 을 부르면 트램펄린이 fentry 프로그램에 dfd·name 을 넘기고 본문을 실행한다. 본문이 ret 을 돌려주면 트램펄린이 fexit 프로그램에 dfd·name·ret 을 넘기고, kretprobe 프로그램은 ret 만 받는다.",
           "같은 함수 끝에서 받는 값이 다릅니다")
 
-NAMES = (("호출자", "사용자 공간 · syscall"), ("BPF 트램펄린", "fentry · fexit"), ("do_unlinkat", "v7.0 부터 filename_unlinkat"), ("kretprobe", "대안 경로"))
+NAMES = (("호출자", "unlinkat syscall 처리"), ("BPF 트램펄린", "fentry · fexit"), ("do_unlinkat", "v7.0 부터 filename_unlinkat"), ("kretprobe", "대안 경로"))
 d.LX = {"호출자": 128, "BPF 트램펄린": 368, "do_unlinkat": 608, "kretprobe": 848}
 for nm, sub in NAMES:
     x = d.LX[nm]

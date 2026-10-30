@@ -9,6 +9,7 @@ from dd import D, ACC, OK, BAD, INFO, MUTED, INK, SOFT, PAPER2, RULE, KR, MONO
 
 W = 960
 Y0, STRIDE, BH = 124, 88, 44
+# 거부 칸은 바퀴 수가 아니라 처리 명령 한도(BPF_COMPLEXITY_LIMIT_INSNS)라 "명령" 을 붙인다. 칸 폭 136 에 맞춰 100만으로 줄여 쓴다.
 X0, BW, GAP = 248, 44, 8
 EX, EW = 800, 136
 LEG_Y = Y0 + 3 * STRIDE
@@ -46,7 +47,7 @@ for k in range(8):
 d.t(X0 + 8 * (BW + GAP) + 28, yB + 28, "· · ·", 13, MUTED, MONO)
 d.arrow([(X0 + 8 * (BW + GAP) + 64, yB + BH / 2), (EX - 4, yB + BH / 2)], BAD, "bad", 1.5)
 d.tone(EX, yB, EW, BH, BAD, 6, "12", 1.2)
-d.t(EX + EW / 2, yB + 28, "1,000,000 · 거부", 13, BAD, KR, "middle", 600)
+d.t(EX + EW / 2, yB + 28, "100만 명령 · 거부", 13, BAD, KR, "middle", 600)
 
 # 줄 C — bpf_loop
 yC = Y0 + 2 * STRIDE

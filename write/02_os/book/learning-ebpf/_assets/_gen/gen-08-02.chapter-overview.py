@@ -9,7 +9,7 @@ from dd import D, ACC, OK, WARN, BAD, INFO, MUTED, INK, PAPER, PAPER2, RULE, SOF
 W, H = 960, 596
 d = D(W, H, "LEARNING EBPF · 08-02",
       "노드 한 대 안에서 uprobe 와 Cilium 프로그램이 붙는 자리",
-      "Pod 네임스페이스의 앱과 libssl 의 SSL_read·SSL_write 에 uprobe·uretprobe 가 붙는다. 호스트 네임스페이스에서는 Pod veth 의 lxc*, cilium_host, cilium_vxlan, 물리 장치에 TC 가, 물리 장치에 XDP 가, 소켓 층에 cgroup connect·sendmsg 프로그램이 붙고, 이 프로그램들은 IP cache·Policy·Service Load Balancer·Connection Tracking 맵과 패킷 메타데이터를 공유한다.",
+      "Pod 네임스페이스의 앱과 libssl 의 SSL_read·SSL_write 에 uprobe·uretprobe 가 붙는다. 호스트 네임스페이스에서는 Pod veth 의 lxc*, cilium_host, cilium_vxlan, 물리 장치에 TC 가, 물리 장치에 XDP 가, 소켓 층에 cgroup connect·sendmsg·recvmsg 프로그램이 붙고, 이 프로그램들은 IP cache·Policy·Service Load Balancer·Connection Tracking 맵과 패킷 메타데이터를 공유한다.",
       "프로그램은 훅마다 따로 돌고 맵으로 상태를 나눕니다")
 
 # 노드 테두리와 존
@@ -41,7 +41,7 @@ d.t(184, 440, "Pod 쪽 veth", 13, MUTED, KR)
 # 호스트 존 — 소켓 층 띠
 d.tone(364, 200, 540, 48, WARN, 6, "12", 1.2)
 d.t(380, 230, "소켓 층 프로그램", 13, WARN, KR, "start", 600)
-d.t(560, 230, "cgroup connect·sendmsg", 12, MUTED, MONO, "start")
+d.t(560, 230, "cgroup connect·sendmsg·recvmsg", 12, MUTED, MONO, "start")
 
 # 장치 상자 넷 — x=364 + 136k
 DEV = [("lxc*", "호스트 쪽 veth", False), ("cilium_host", "호스트", False),

@@ -19,10 +19,10 @@ TOP = 112
 TW, TH, TS = 160, 44, 52
 
 NODES = [
-    ("NIC", "오프로드 XDP", None, INFO),
-    ("드라이버", "네이티브 XDP", "xdp_md", INFO),
+    ("NIC", "오프로드 XDP", None, MUTED),
+    ("드라이버", "네이티브 XDP", "xdp_md", MUTED),
     ("sk_buff 생성", "XDP 이후", "TC 이전", MUTED),
-    ("TC ingress", "분류기 · 동작", "__sk_buff", INFO),
+    ("TC ingress", "분류기 · 동작", "__sk_buff", MUTED),
     ("네트워크 스택", "프로토콜 처리", None, OK),
 ]
 for x, (nm, s1, s2, c) in zip(COLX, NODES):

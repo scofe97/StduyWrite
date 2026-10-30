@@ -31,16 +31,16 @@ for y in cy:
     d.line(224, y, BX, y, MUTED, 1.2)
     d.line(BX + BW_, y, LX, y, RULE, 1.2)
 
-d.tone(RX, RY, RW, RH, INFO, 6, "12", 1.2)
-d.t(RX + RW / 2, RY + 28, "프로그램 유형", 15, INFO, KR, "middle", 600)
+d.box(RX, RY, RW, RH, PAPER2, RULE, 1.0)
+d.t(RX + RW / 2, RY + 28, "프로그램 유형", 15, INK, KR, "middle", 600)
 d.t(RX + RW / 2, RY + 48, "prog_type", 13, MUTED, MONO)
 
 for (title, sub, l1, l2, l3, c), y in zip(BR, YS):
     if c == ACC:
         d.tone(BX, y, BW_, BH, ACC, 6, "1F", 1.4)
     else:
-        d.box(BX, y, BW_, BH, PAPER2, RULE, 1.0)
-    d.t(BX + BW_ / 2, y + 28, title, 12, ACC if c == ACC else INK, MONO, "middle", 600)
+        d.tone(BX, y, BW_, BH, c, 6, "12", 1.2)
+    d.t(BX + BW_ / 2, y + 28, title, 12, c, MONO, "middle", 600)
     d.t(BX + BW_ / 2, y + 50, sub, 13, MUTED, KR if any("가" <= ch <= "힣" for ch in sub) else MONO)
     d.box(LX, y, LW, LH, PAPER, RULE, 0.9, 5)
     d.t(LX + 14, y + 24, l1, 12, INK, KR if any("가" <= ch <= "힣" for ch in l1) else MONO, "start", 600)

@@ -7,9 +7,9 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, INFO, MUTED, INK, PAPER, PAPER2, RULE, SOFT, KR, MONO
 
 W, H = 960, 516
-d = D(W, H, "LEARNING EBPF · 05-01 §2", "BTF 한 벌이 쓰이는 자리는 넷이다",
-      "BTF 는 CO-RE 재배치에 오프셋을 대 주고, 맵 덤프를 필드 이름으로 풀어 찍게 하고, 소스 줄과 함수 이름을 덤프에 끼우게 하고, 스핀 락 필드의 위치를 알려 준다.",
-      "타입 ID 로 적은 배치 하나가 네 가지 일에 씁니다")
+d = D(W, H, "LEARNING EBPF · 05-01 §2", "BTF 가 쓰이는 자리는 넷이다",
+      "BTF 는 CO-RE 재배치에 오프셋을 대 주고, 맵 덤프를 필드 이름으로 풀어 찍게 하고, 소스 줄을 덤프와 verifier 로그에 끼우게 하고, 스핀 락 필드의 위치를 알려 준다.",
+      "타입 ID 로 적은 배치가 네 가지 일에 쓰입니다")
 
 RX, RY, RW, RH = 20, 236, 180, 64
 BX, BW_, BH = 244, 232, 60
@@ -18,7 +18,7 @@ YS = [112, 196, 280, 364]
 BR = [
     ("CO-RE 재배치", "구조체 오프셋 비교", "/sys/kernel/btf/vmlinux · .BTF", ACC),
     ("맵 덤프 출력", "필드 이름으로 풀어 찍기", '"key": 501 · "message": "Hi user 501!"', None),
-    ("줄·함수 정보", "덤프에 소스 줄 끼우기", '; bpf_printk("Hello World %d", counter);', None),
+    ("줄·함수 정보", "덤프·verifier 로그에 소스 줄", '; bpf_printk("Hello World %d", counter);', None),
     ("스핀 락", "값 구조체 안 lock 위치", "struct bpf_spin_lock lock;", None),
 ]
 

@@ -37,5 +37,5 @@ d.t(800, 236, "BPF_MAP_CREATE", 14, INK, MONO, "middle", 600)
 for i, s in enumerate(["map_type = HASH", "key_size = 4", "value_size = 12", "max_entries = 10240"]):
     d.t(800, 264 + 22 * i, s, 12, MUTED, MONO, "middle")
 
-d.legend(H - 56, [("선언 매크로", MUTED), ("펼친 타입", INFO), ("값이 크기에 실림", ACC), ("libbpf 결과", OK)])
+d.legend(H - 56, [("선언 매크로", MUTED), ("펼친 타입", INFO), ("논지: type 의 값 1", ACC), ("libbpf 결과", OK)])
 d.save("05-02.map-definition.svg")

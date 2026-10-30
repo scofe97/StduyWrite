@@ -30,14 +30,14 @@ def step(col, lane, t1, t2, c, mono1=True, focal=False):
     d.t(x + SW / 2, y + 24, t1, 11 if len(t1) > 14 else 12, c, MONO if mono1 else KR, "middle", 600)
     d.t(x + SW / 2, y + 44, t2, 11, MUTED, MONO if any(ch in t2 for ch in ">_(") and not any("가" <= ch <= "힣" for ch in t2) else KR)
 
-step(0, "NIC", "요청 도착", "type 8 · .2 → .1", INFO, False)
+step(0, "NIC", "요청 도착", "type 8 · .2 → .1", MUTED, False)
 step(0, "TC", "ping 요청?", "type == 8", MUTED, False)
 step(0, "ST", "TC_ACT_OK · 0", "ping 이 아닌 패킷", OK)
 step(1, "TC", "주소 맞바꿈", "MAC · IP", INFO, False)
 step(2, "TC", "type 8 → 0", "체크섬 갱신", INFO, True)
 step(3, "TC", "bpf_clone_redirect", "skb->ifindex, 0", ACC, True, focal=True)
 step(3, "ST", "TC_ACT_SHOT · 2", "스택에 닿지 않음", BAD)
-step(4, "NIC", "응답 송신", "type 0 · .1 → .2", OK, False)
+step(4, "NIC", "응답 송신", "type 0 · .1 → .2", MUTED, False)
 
 def mid(col): return CX[col] + SW // 2
 # 요청 → 판정
@@ -64,5 +64,5 @@ d.t(136, 432, "tc_drop_ping", 12, INK, MONO, "start", 600)
 d.chip(404, 428, "type 8 → TC_ACT_SHOT", BAD, 11)
 d.chip(612, 428, "그 밖 → TC_ACT_OK", OK, 11)
 
-d.legend(H - 56, [("판정", MUTED), ("고쳐 쓰기", INFO), ("복제·리다이렉트", ACC), ("버림", BAD), ("스택으로", OK)])
+d.legend(H - 56, [("판정·송수신", MUTED), ("고쳐 쓰기", INFO), ("복제·리다이렉트", ACC), ("버림", BAD), ("스택으로", OK)])
 d.save("08-01.tc-pingpong-lanes.svg")
