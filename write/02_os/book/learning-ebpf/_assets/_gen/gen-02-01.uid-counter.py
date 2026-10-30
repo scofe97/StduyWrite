@@ -58,7 +58,7 @@ for j, rows in enumerate(maps):
 
 x = cx(3) - NW/2; w = cx(4) + NW/2 - x
 d.tone(x, top(2) + 12, w, 60, OK, 6, "14", 1.3)
-d.t(x + w/2, top(2) + 36, "ID 501: 5   ID 0: 2", 14, OK, MONO, "middle", 600)
+d.t(x + w/2, top(2) + 36, "ID 501: 5\u00a0\u00a0\u00a0ID 0: 2", 14, OK, MONO, "middle", 600)
 d.t(x + w/2, top(2) + 58, "2초마다 읽은 결과", 11, MUTED, KR)
 
 d.legend(H - 56, [("root(UID 0) 항목", INFO), ("root 항목이 처음 생김", ACC), ("폴링 결과", OK)])

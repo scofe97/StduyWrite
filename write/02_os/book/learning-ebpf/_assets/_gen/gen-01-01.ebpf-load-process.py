@@ -11,7 +11,7 @@ d = D(W, H, "LEARNING EBPF · 01-01 §4", "eBPF 프로그램 적재부터 실행
 
 Y_TOP, H_CARD, W_CARD, GAP, X0 = 104, 160, 152, 20, 40
 steps = [
-    ("01 적재", "bpf() 시스템 콜", "재부팅 불필요", "한도 4,096 · 1,000,000", INFO),
+    ("01 적재", "bpf() 시스템 콜", "재부팅 불필요", "명령어 4,096 · 100만", INFO),
     ("02 검증", "verifier", "멈춤·끝없는 루프 검사", "통과한 것만 적재", ACC),
     ("03 JIT 컴파일", "JIT 컴파일러", "네이티브 기계어", "CPU 직접 실행", OK),
     ("04 이벤트 부착", "kprobe · XDP", "실행 중 프로세스도", "이벤트마다 실행", OK),
@@ -29,7 +29,7 @@ for i, (num_title, c1, c2, c3, col) in enumerate(steps):
     d.t(cx, Y_TOP + 24, num_title, 13, col, KR, "middle", 600)
     d.line(x + 10, Y_TOP + 36, x + W_CARD - 10, Y_TOP + 36, RULE, 0.6)
 
-    d.t(cx, Y_TOP + 64, c1, 12, col, MONO if "-" in c1 or "." in c1 or "(" in c1 else KR, "middle", 600)
+    d.t(cx, Y_TOP + 64, c1, 12, col, KR if any("가" <= ch <= "힣" for ch in c1) else MONO, "middle", 600)
     d.t(cx, Y_TOP + 90, c2, 12, INK, KR, "middle")
     d.t(cx, Y_TOP + 116, c3, 11, MUTED, KR, "middle")
 

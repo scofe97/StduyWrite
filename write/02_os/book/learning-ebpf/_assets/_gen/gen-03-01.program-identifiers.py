@@ -18,8 +18,8 @@ d.t(RX + RW//2, RY + 36, "type xdp · bpf_prog", 11, MUTED, MONO, "middle")
 # 중간 브랜치 2개 (식별자 묶음, 참조 객체 묶음)
 BX1, BY, BW, BH = 140, 184, 260, 44
 BX2 = 520
-d.tone(BX1, BY, BW, BH, ACC, 6, "15", 1.2)
-d.t(BX1 + BW//2, BY + 20, "네 가지 식별자", 13, ACC, KR, "middle", 600)
+d.box(BX1, BY, BW, BH, PAPER2, RULE, 1.2, 6)
+d.t(BX1 + BW//2, BY + 20, "네 가지 식별자", 13, INK, KR, "middle", 600)
 d.t(BX1 + BW//2, BY + 34, "ID · 이름 · 태그 · 고정 경로", 11, MUTED, KR, "middle")
 
 d.tone(BX2, BY, BW, BH, INFO, 6, "15", 1.2)

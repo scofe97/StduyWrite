@@ -14,14 +14,14 @@ d.line(40, Y_BASE, 880, Y_BASE, RULE, sw=1.2)
 
 events = [
     (70, "1993년", True, "BPF 논문 발표", "BSD 패킷 필터", INFO, False),
-    (168, "1997년", False, "Linux 도입", "tcpdump 캡처", MUTED, False),
+    (168, "1997년", False, "Linux 도입", "tcpdump 캡처", INFO, False),
     (266, "2012년", True, "seccomp-bpf 3.5", "시스템 콜 필터링", WARN, False),
     (364, "2014년", False, "eBPF 3.15·3.18", "64비트·bpf()·맵", ACC, True),
     (462, "2015년", True, "eBPF kprobe 부착", "Linux 4.1", OK, False),
     (560, "2016년", False, "Cilium 프로젝트", "컨테이너 eBPF 망", OK, False),
-    (658, "2017년", True, "Katran 프로덕션", "Meta L4 로드밸런서", INFO, False),
+    (658, "2017년", True, "Katran 프로덕션", "Meta L4 로드밸런서", OK, False),
     (756, "2018년", False, "BTF·독립 서브시스템", "프로그램 이식성", OK, False),
-    (854, "2020년", True, "LSM BPF 도입", "Linux 5.7 보안 제어", ACC, False),
+    (854, "2020년", True, "LSM BPF 도입", "Linux 5.7 보안 제어", OK, False),
 ]
 
 for x, time_str, is_above, title, sub, color, focal in events:
@@ -53,6 +53,6 @@ d.legend(440, [
     ("초기 패킷 필터링", INFO),
     ("시스템 콜 제어", WARN),
     ("eBPF 확장 전환점", ACC),
-    ("추적 및 네트워킹", OK),
+    ("eBPF 생태계 확장", OK),
 ])
 d.save("01-01.bpf-timeline.svg")

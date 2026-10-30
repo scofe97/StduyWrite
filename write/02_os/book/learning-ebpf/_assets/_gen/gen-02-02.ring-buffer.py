@@ -41,7 +41,7 @@ def wrap(y):
 # 행 A — 읽을 항목 3개
 YA = 116
 d.t(24, YA + 24, "읽을 항목 3개", 13, INK, KR, "start", 600)
-d.t(24, YA + 44, "읽기 0 · 쓰기 10", 12, MUTED, MONO, "start")
+d.t(24, YA + 44, "읽기 0 · 쓰기 10", 12, MUTED, KR, "start")
 strip(YA, set(range(0, 10)))
 rec(0, 3, YA, "항목 1 · 3칸", INFO)
 rec(3, 5, YA, "항목 2 · 5칸", INFO)
@@ -53,7 +53,7 @@ wrap(YA)
 # 행 B — 항목 1 을 읽고 항목 4 를 쓴 뒤
 YB = 268
 d.t(24, YB + 24, "항목 4 쓴 뒤", 13, INK, KR, "start", 600)
-d.t(24, YB + 44, "읽기 3 · 쓰기 15", 12, MUTED, MONO, "start")
+d.t(24, YB + 44, "읽기 3 · 쓰기 15", 12, MUTED, KR, "start")
 d.chip(98, YB + 76, "드롭 0 → 1", BAD, 12)
 strip(YB, set(range(0, 15)) | {15})
 rec(3, 5, YB, "항목 2 · 5칸", INFO)

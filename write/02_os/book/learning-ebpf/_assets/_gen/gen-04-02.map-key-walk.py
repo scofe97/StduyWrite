@@ -121,5 +121,5 @@ d.box(CX - HW // 2, CY - HH // 2, HW, HH, INK, INK, 1.2, 6)
 d.t(CX, CY - 4, "직전 키", 14, PAPER, KR, "middle", 600)
 d.t(CX, CY + 18, "NULL → 0 → 501", 12, PAPER2, MONO)
 
-d.legend(H - 56, [("한 바퀴", MUTED), ("커서 갱신", SOFT), ("첫 키 요청", ACC), ("순회 종료", WARN)])
+d.legend(H - 56, [("한 바퀴", MUTED), ("커서 갱신", SOFT), ("다음 키 요청", ACC), ("순회 종료", WARN)])
 d.save("04-02.map-key-walk.svg")

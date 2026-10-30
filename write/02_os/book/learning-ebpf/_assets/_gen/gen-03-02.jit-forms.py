@@ -29,7 +29,7 @@ HH = 232
 for x, (title, sub, c, rows) in zip(SX, STAGES):
     d.tone(x, TOP, SW, HH, c, 6, "12", 1.4 if c == ACC else 1.2)
     d.t(x + SW / 2, TOP + 28, title, 14, c, KR, "middle", 600)
-    d.t(x + SW / 2, TOP + 48, sub, 12, MUTED, MONO)
+    d.t(x + SW / 2, TOP + 48, sub, 12, MUTED, MONO if sub.isascii() else KR)
     for i, r in enumerate(rows):
         y = TOP + 68 + i * 52
         d.box(x + 8, y, SW - 16, 40, PAPER, RULE, 0.9, 4)

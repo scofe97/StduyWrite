@@ -1,7 +1,7 @@
 # 타입 스펙: type-architecture — 사용자 공간(hello.py·hello-map.py)과 커널(kprobe → hello() → 두 출력 통로)을 경계 둘로 나눈 지도.
 # 사실 출처: 예제 저장소 chapter2/hello.py·hello-map.py, 추출본 src/ebpf2.txt 33~146행·311~456행,
 #   커널 v7.2 arch/x86/include/asm/syscall_wrapper.h 15~17행(`__x64_sys_*`), include/uapi/linux/bpf.h 2021~2032행(trace_pipe).
-# Layout conventions: 밴드 둘(사용자 공간·커널), 박스 높이 92, 열 x 는 48·316·548·736. focal 은 hello().
+# Layout conventions: 밴드 둘(사용자 공간·커널), 박스 높이 92, 열 x 는 48·316·548·720. focal 은 hello().
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, INFO, MUTED, INK, PAPER, PAPER2, RULE, SOFT, KR, MONO
 
@@ -31,17 +31,17 @@ d.arrow([(152, 236), (152, 332)], MUTED, "ar", 1.5)
 d.t(168, 282, "bpf() 적재 · kprobe 부착", 12, MUTED, KR, "start")
 d.arrow([(244, 382), (312, 382)], ACC, "acc", 1.5)
 d.arrow([(468, 382), (544, 382)], WARN, "warn", 1.5)
-d.arrow([(392, 432), (392, 460), (816, 460), (816, 432)], OK, "ok", 1.5)
+d.arrow([(392, 432), (392, 460), (798, 460), (798, 432)], OK, "ok", 1.5)
 d.arrow([(622, 332), (622, 240)], WARN, "warn", 1.5)
-d.arrow([(816, 332), (816, 240)], OK, "ok", 1.5)
+d.arrow([(798, 332), (798, 240)], OK, "ok", 1.5)
 
 node(48, UY, 196, "hello.py · hello-map.py", ["BPF(text=) 컴파일", "attach_kprobe 적재 · 부착"], None, MONO, 13)
 node(548, UY, 148, "trace_print()", ["trace_pipe 읽기"], WARN)
-node(736, UY, 160, 'b["counter_table"]', ["2초마다 items()"], OK, MONO, 13)
+node(720, UY, 156, 'b["counter_table"]', ["2초마다 items()"], OK, MONO, 13)
 node(48, KY, 196, "__x64_sys_execve", ["kprobe 가 걸린 곳", "execve 마다 실행"], None, MONO)
 node(316, KY, 152, "hello()", ["eBPF 프로그램"], ACC)
 node(548, KY, 148, "trace_pipe", ["tracefs 버퍼", "문자열 한 줄"], WARN)
-node(736, KY, 160, "counter_table", ["BPF_HASH", "UID → 횟수"], OK)
+node(720, KY, 156, "counter_table", ["BPF_HASH", "UID → 횟수"], OK)
 
 d.legend(H - 40, [("hello() 실행", ACC), ("trace_pipe 길", WARN), ("맵 길", OK)])
 d.save("02-01.chapter-overview.svg")

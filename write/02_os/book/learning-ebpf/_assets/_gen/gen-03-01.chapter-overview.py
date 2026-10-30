@@ -3,7 +3,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, INFO, MUTED, INK, PAPER, PAPER2, RULE, SOFT, KR, MONO
 
-W, H = 960, 380
+W, H = 960, 330
 d = D(W, H, "LEARNING EBPF · 03-01",
       "C 소스부터 커널 적재까지 eBPF 프로그램의 여정",
       "Clang 컴파일러로 바이트코드를 만들고 bpftool 로 커널에 적재하여 식별자를 부여받습니다",
@@ -37,16 +37,16 @@ for i, step in enumerate(STEPS):
 
 # 다음 편 예고 노드 (점선)
 NEXT_X = XS[4] + 156
-d.box(NEXT_X, Y, 130, NH, PAPER, RULE, 1.0, 6)
-d.t(NEXT_X + 65, Y + 22, "다음 편", 11, SOFT, KR, "middle")
-d.t(NEXT_X + 65, Y + 44, "JIT 148B", 12, MUTED, MONO, "middle", 600)
-d.t(NEXT_X + 65, Y + 64, "XDP 부착", 11, MUTED, KR, "middle")
+d.box(NEXT_X, Y, 108, NH, PAPER, WARN, 1.0, 6)
+d.t(NEXT_X + 54, Y + 22, "다음 편", 11, SOFT, KR, "middle")
+d.t(NEXT_X + 54, Y + 44, "JIT 148B", 12, MUTED, MONO, "middle", 600)
+d.t(NEXT_X + 54, Y + 64, "XDP 부착", 11, MUTED, KR, "middle")
 d.arrow([(XS[4] + NW + 2, Y + NH//2), (NEXT_X - 4, Y + NH//2)], WARN, "warn", 1.4, dash="3 3")
 
 d.legend(H - 46, [
     ("소스 및 바이너리", INFO),
-    ("컴파일 및 적재", OK),
-    ("고정 파일시스템", ACC),
+    ("컴파일 · 식별자", OK),
+    ("적재 및 고정", ACC),
     ("후속 과정 예고", WARN),
 ])
 

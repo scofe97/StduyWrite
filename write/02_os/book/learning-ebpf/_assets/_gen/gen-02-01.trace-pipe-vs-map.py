@@ -11,6 +11,7 @@ d = D(W, H, "LEARNING EBPF · 02-01 §2", "trace_pipe 는 하나라 줄이 섞�
       "같은 두 프로그램이라도 통로가 다르면 읽는 쪽이 다릅니다")
 
 def node(x, y, w, h, title, sub, c=None, fam=MONO, size=14):
+    if not title.isascii(): fam = KR
     if c: d.tone(x, y, w, h, c, 6, "14", 1.3)
     else: d.box(x, y, w, h, PAPER2, RULE, 1.0)
     d.t(x + w/2, y + 26, title, size, c or INK, fam, "middle", 600)
@@ -38,7 +39,7 @@ for i, (p, m, r) in enumerate((("A", "counter_table", "A 맵의 값"), ("B", "B 
     d.arrow([(580, y + 30), (656, y + 30)], OK, "ok", 1.5)
     node(40, y, 216, 60, f"프로그램 {p}", "update()")
     node(340, y, 240, 60, m, "프로그램이 만든 맵", OK, MONO if m.isascii() else KR)
-    node(660, y, 232, 60, r, "골라서 읽는다", None, KR)
+    node(660, y, 232, 60, r, "골라 읽기", None, KR)
 
 d.legend(H - 56, [("trace_pipe 길", WARN), ("맵 길", OK)])
 d.save("02-01.trace-pipe-vs-map.svg")

@@ -35,7 +35,7 @@ Y1 = LT1 + 24
 # 줄 1 — 함수 호출
 node(NX[0], Y0, "호출 지점 1", "jump → my_function", INFO)
 node(NX[1], Y0, "호출 지점 2", "jump → my_function", INFO)
-node(NX[2], Y0, "my_function", "본문 1벌", WARN)
+node(NX[2], Y0, "my_function", "본문 1벌", WARN, False)
 node(NX[3], Y0, "return", "호출 지점 다음 줄", OK, False)
 yc0 = Y0 + NH // 2
 d.arrow([(NX[1] + NW + 2, yc0), (NX[2] - 6, yc0)], WARN, "warn", 1.6)

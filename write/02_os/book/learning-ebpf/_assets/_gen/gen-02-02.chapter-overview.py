@@ -30,7 +30,7 @@ def node(x, y, title, sub, c, w=NW, h=NH, mono_title=True):
 
 # 위 줄 — 값을 밀어 주는 갈래
 node(COLS[0], R1, "kprobe", "__x64_sys_execve", INFO)
-node(COLS[1], R1, "hello()", "헬퍼 4개 → data_t", OK)
+node(COLS[1], R1, "hello()", "data_t → perf_submit", OK)
 node(COLS[2], R1, "output", "BPF_PERF_OUTPUT", INFO)
 # 아래 줄 — 프로그램을 갈아 끼우는 갈래
 node(COLS[0], R2, "sys_enter", "raw tracepoint", INFO)
@@ -53,7 +53,7 @@ yc1 = R1 + NH//2
 d.arrow([(COLS[0] + NW + 2, yc1), (COLS[1] - 6, yc1)], MUTED, "ar", 1.5)
 d.arrow([(COLS[1] + NW + 2, yc1), (COLS[2] - 6, yc1)], OK, "ok", 1.5)
 d.arrow([(COLS[2] + NW + 2, yc1), (UX - 6, yc1)], INFO, "info", 1.5)
-d.chip(668, yc1 - 18, "perf_submit", MUTED, 12)
+d.chip(668, yc1 - 18, "항목 → 콜백", MUTED, 12)
 # 화살표 — 아래 줄
 yc2 = R2 + NH//2
 d.arrow([(COLS[0] + NW + 2, yc2), (COLS[1] - 6, yc2)], MUTED, "ar", 1.5)

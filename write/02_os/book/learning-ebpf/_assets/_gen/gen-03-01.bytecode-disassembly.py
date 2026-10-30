@@ -12,9 +12,9 @@ d = D(W, H, "LEARNING EBPF · 03-01 §3",
 # 좌측 C 소스 3개 블록
 SX, SW = 36, 260
 BLOCKS = [
-    ("bpf_printk()", "bpf_printk(\"...%d\", counter);", INFO, 110, 150),
+    ("bpf_printk()", "bpf_printk(\"...%d\", counter);", INFO, 110, 160),
     ("counter++", "counter++;", WARN, 274, 96),
-    ("return", "return XDP_PASS;", OK, 384, 70),
+    ("return", "return XDP_PASS;", OK, 374, 61),
 ]
 
 for title, code, c, y, h in BLOCKS:
@@ -30,12 +30,12 @@ ROWS = [
     ("2:", "61 (LDX_MEM)", "r3 = *(u32 *)(r6 + 0)", "counter 값 역참조", 0, INFO),
     ("3:", "18 (LD_IMM64)", "r1 = 0 ll", "형식 문자열 맵 자리 (2슬롯)", 0, INFO),
     ("5:", "b7 (ALU64_MOV)", "r2 = 15", "문자열 길이 15 바이트", 0, ACC),
-    ("6:", "85 (CALL)", "call 6", "헬퍼 bpf_trace_printk 호출", 0, OK),
+    ("6:", "85 (CALL)", "call 6", "헬퍼 bpf_trace_printk 호출", 0, ACC),
     ("7:", "61 (LDX_MEM)", "r1 = *(u32 *)(r6 + 0)", "counter 값 다시 읽기", 1, WARN),
     ("8:", "07 (ALU64_ADD)", "r1 += 1", "카운터 1 증가", 1, WARN),
     ("9:", "63 (STX_MEM)", "*(u32 *)(r6 + 0) = r1", "증가된 값 메모리 저장", 1, WARN),
     ("10:", "b7 (ALU64_MOV)", "r0 = 2", "XDP_PASS 반환값", 2, OK),
-    ("11:", "95 (EXIT)", "exit", "프로그램 실행 종료", 2, MUTED),
+    ("11:", "95 (EXIT)", "exit", "프로그램 실행 종료", 2, OK),
 ]
 
 RY0 = 110
@@ -50,9 +50,9 @@ for i, (off, op, asm, desc, bidx, c) in enumerate(ROWS):
     d.t(MX + MW - 12, ry + 18, desc, 11, MUTED, KR, "end")
 
 # 소스 블록 -> 디스어셈블리 연결 화살표
-d.arrow([(SX + SW + 2, 110 + 75), (MX - 4, 110 + 75)], INFO, "info", 1.4)
+d.arrow([(SX + SW + 2, 110 + 80), (MX - 4, 110 + 80)], INFO, "info", 1.4)
 d.arrow([(SX + SW + 2, 274 + 48), (MX - 4, 274 + 48)], WARN, "warn", 1.4)
-d.arrow([(SX + SW + 2, 384 + 35), (MX - 4, 384 + 35)], OK, "ok", 1.4)
+d.arrow([(SX + SW + 2, 374 + 30), (MX - 4, 374 + 30)], OK, "ok", 1.4)
 
 d.legend(H - 46, [
     ("출력 함수 호출 묶음", INFO),

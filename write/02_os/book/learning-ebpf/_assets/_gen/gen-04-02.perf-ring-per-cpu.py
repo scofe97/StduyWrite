@@ -30,7 +30,7 @@ for x, w, txt in ((COLS[0], CW[0], "CPU"), (COLS[1], CW[1], "output 맵 · map_f
 
 def node(x, y, w, title, sub, c, op="12"):
     d.tone(x, y, w, NH, c, 6, op, 1.2)
-    d.t(x + w / 2, y + 28, title, 14, c, MONO, "middle", 600)
+    d.t(x + w / 2, y + 28, title, 14, c, KR if any("가" <= ch <= "힣" for ch in title) else MONO, "middle", 600)
     d.t(x + w / 2, y + 48, sub, 13, MUTED, KR if any("가" <= ch <= "힣" for ch in sub) else MONO)
 
 
@@ -54,7 +54,7 @@ d.tone(PX, PY, PW, PH, OK, 6, "12", 1.2)
 d.t(PX + PW / 2, PY + 120, "ppoll", 14, OK, MONO, "middle", 600)
 d.t(PX + PW / 2, PY + 144, "fd 8·9·10·11", 12, MUTED, MONO)
 d.t(PX + PW / 2, PY + 176, "= 1 · revents", 12, ACC, MONO)
-d.t(PX + PW / 2, PY + 196, "fd 8 만 POLLIN", 12, ACC, MONO)
+d.t(PX + PW / 2, PY + 196, "fd 8 만 POLLIN", 12, ACC, KR)
 
 d.legend(H - 56, [("CPU", MUTED), ("output 맵 칸", INFO), ("perf 링 fd", OK), ("깨어난 링", ACC)])
 d.save("04-02.perf-ring-per-cpu.svg")

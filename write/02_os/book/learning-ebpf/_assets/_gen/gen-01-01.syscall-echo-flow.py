@@ -30,7 +30,7 @@ for i, (title, c1, c2, c3, col) in enumerate(steps):
     d.line(x + 10, Y_TOP + 36, x + CW - 10, Y_TOP + 36, RULE, 0.6)
 
     d.t(cx, Y_TOP + 60, c1, 14, col, MONO, "middle", 600)
-    d.t(cx, Y_TOP + 84, c2, 12, INK, KR if "동반" in c2 or "출력" in c2 or "문자열" in c2 else MONO, "middle")
+    d.t(cx, Y_TOP + 84, c2, 12, INK, KR if any("가" <= ch <= "힣" for ch in c2.replace("회", "")) else MONO, "middle")
     d.t(cx, Y_TOP + 110, c3, 11, MUTED, KR, "middle")
 
     if i < len(steps) - 1:

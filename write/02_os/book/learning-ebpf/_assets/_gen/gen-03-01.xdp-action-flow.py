@@ -13,19 +13,19 @@ d = D(W, H, "LEARNING EBPF · 03-01 §2",
 LX, LW = 50, 320
 STEPS = [
     ("패킷 수신", "네트워크 인터페이스(NIC) 도착", PAPER2, RULE, 110),
-    ("hello(struct xdp_md *ctx)", "XDP 훅 진입점 실행", INFO, INFO, 178),
-    ("bpf_printk()", "\"Hello World %d\" 출력", OK, OK, 246),
+    ("hello(struct xdp_md *ctx)", "XDP 훅 진입점 실행", PAPER2, RULE, 178),
+    ("bpf_printk()", "\"Hello World %d\" 출력", PAPER2, RULE, 246),
     ("counter++", "전역 카운터 1 증가", WARN, WARN, 314),
 ]
 
 for title, sub, fill, stroke, y in STEPS:
     if fill == PAPER2:
         d.box(LX, y, LW, 46, PAPER2, RULE, 1.0, 6)
-        d.t(LX + LW//2, y + 20, title, 13, INK, KR, "middle", 600)
+        d.t(LX + LW//2, y + 20, title, 13, INK, MONO if "(" in title else KR, "middle", 600)
         d.t(LX + LW//2, y + 36, sub, 11, MUTED, KR, "middle")
     else:
         d.tone(LX, y, LW, 46, stroke, 6, "12", 1.2)
-        d.t(LX + LW//2, y + 20, title, 13, stroke, MONO if "(" in title else KR, "middle", 600)
+        d.t(LX + LW//2, y + 20, title, 13, stroke, MONO if "(" in title or "++" in title else KR, "middle", 600)
         d.t(LX + LW//2, y + 36, sub, 11, MUTED, KR, "middle")
 
 for i in range(len(STEPS) - 1):
