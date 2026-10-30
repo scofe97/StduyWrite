@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 468" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">비트맵 인코딩 압축과 비트 단위 쿼리 필터링</title><desc id="dd">distinct 값이 적은 컬럼을 값별 1비트 비트맵으로 변환하고 희소 비트맵을 run-length 인코딩으로 압축하며 질의를 비트 연산으로 고속 처리한다.</desc>
+<rect width="880" height="468" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">04-05 · BITMAP ENCODING</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">비트맵 인코딩 압축과 비트 단위 쿼리 필터링</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">컬럼 시퀀스 · distinct 비트맵 분해 · Run-Length 압축 · 비트 OR 질의</text>
+<rect x="24" y="104" width="832" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="40.5" y="114" width="47.0" height="20" rx="4" fill="#0D1117" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="64" y="128" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">1단계</text>
+<text x="108" y="128" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">product_sk 컬럼 값 시퀀스</text>
+<text x="836" y="128" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#5E6B7E">원서 Figure 4-8 앞 8행 (distinct 값 30 · 69 · 74)</text>
+<line x1="36" y1="140" x2="844" y2="140" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="140" y="144" width="52" height="18" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="166.0" y="157" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">r0:69</text>
+<rect x="200" y="144" width="52" height="18" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="226.0" y="157" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">r1:69</text>
+<rect x="260" y="144" width="52" height="18" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="286.0" y="157" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">r2:69</text>
+<rect x="320" y="144" width="52" height="18" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="346.0" y="157" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">r3:69</text>
+<rect x="380" y="144" width="52" height="18" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="406.0" y="157" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">r4:74</text>
+<rect x="440" y="144" width="52" height="18" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="466.0" y="157" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">r5:30</text>
+<rect x="500" y="144" width="52" height="18" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="526.0" y="157" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">r6:30</text>
+<rect x="560" y="144" width="52" height="18" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="586.0" y="157" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">r7:30</text>
+<path d="M 440.0 170 L 440.0 182" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)"/>
+<rect x="24" y="184" width="832" height="126" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.2"/>
+<rect x="40.5" y="194" width="47.0" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="64" y="208" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">2단계</text>
+<text x="108" y="208" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">distinct 값별 비트맵 및 RLE 압축 (행당 1비트)</text>
+<text x="836" y="208" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#5E6B7E">희소 비트맵은 연속 0·1 개수(run-length)로 압축</text>
+<line x1="36" y1="220" x2="844" y2="220" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="88" y="242" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#F5F5F3">val = 30</text>
+<rect x="140" y="228" width="52" height="20" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="166.0" y="242" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#5E6B7E">0</text>
+<rect x="200" y="228" width="52" height="20" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="226.0" y="242" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#5E6B7E">0</text>
+<rect x="260" y="228" width="52" height="20" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="286.0" y="242" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#5E6B7E">0</text>
+<rect x="320" y="228" width="52" height="20" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="346.0" y="242" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#5E6B7E">0</text>
+<rect x="380" y="228" width="52" height="20" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="406.0" y="242" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#5E6B7E">0</text>
+<rect x="440" y="228" width="52" height="20" rx="6" fill="#3FB98C" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="466.0" y="242" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#F5F5F3">1</text>
+<rect x="500" y="228" width="52" height="20" rx="6" fill="#3FB98C" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="526.0" y="242" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#F5F5F3">1</text>
+<rect x="560" y="228" width="52" height="20" rx="6" fill="#3FB98C" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="586.0" y="242" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#F5F5F3">1</text>
+<text x="840" y="242" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">RLE: 0이 5개 · 1이 3개</text>
+<text x="88" y="268" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#F5F5F3">val = 69</text>
+<rect x="140" y="254" width="52" height="20" rx="6" fill="#3FB98C" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="166.0" y="268" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#F5F5F3">1</text>
+<rect x="200" y="254" width="52" height="20" rx="6" fill="#3FB98C" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="226.0" y="268" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#F5F5F3">1</text>
+<rect x="260" y="254" width="52" height="20" rx="6" fill="#3FB98C" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="286.0" y="268" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#F5F5F3">1</text>
+<rect x="320" y="254" width="52" height="20" rx="6" fill="#3FB98C" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="346.0" y="268" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#F5F5F3">1</text>
+<rect x="380" y="254" width="52" height="20" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="406.0" y="268" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#5E6B7E">0</text>
+<rect x="440" y="254" width="52" height="20" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="466.0" y="268" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#5E6B7E">0</text>
+<rect x="500" y="254" width="52" height="20" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="526.0" y="268" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#5E6B7E">0</text>
+<rect x="560" y="254" width="52" height="20" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="586.0" y="268" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#5E6B7E">0</text>
+<text x="840" y="268" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">RLE: 1이 4개 · 0이 4개</text>
+<text x="88" y="294" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#F5F5F3">val = 74</text>
+<rect x="140" y="280" width="52" height="20" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="166.0" y="294" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#5E6B7E">0</text>
+<rect x="200" y="280" width="52" height="20" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="226.0" y="294" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#5E6B7E">0</text>
+<rect x="260" y="280" width="52" height="20" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="286.0" y="294" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#5E6B7E">0</text>
+<rect x="320" y="280" width="52" height="20" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="346.0" y="294" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#5E6B7E">0</text>
+<rect x="380" y="280" width="52" height="20" rx="6" fill="#3FB98C" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="406.0" y="294" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#F5F5F3">1</text>
+<rect x="440" y="280" width="52" height="20" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="466.0" y="294" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#5E6B7E">0</text>
+<rect x="500" y="280" width="52" height="20" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="526.0" y="294" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#5E6B7E">0</text>
+<rect x="560" y="280" width="52" height="20" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="586.0" y="294" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#5E6B7E">0</text>
+<text x="840" y="294" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">RLE: 0이 4개 · 1이 1개 · 0이 3개</text>
+<path d="M 440.0 312 L 440.0 324" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)"/>
+<rect x="24" y="326" width="832" height="76" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.2"/>
+<rect x="40.5" y="336" width="47.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="64" y="350" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">3단계</text>
+<text x="108" y="350" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">질의 실행: WHERE product_sk IN (30, 74)</text>
+<text x="836" y="350" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#3FB98C">두 비트맵 로드 후 비트 단위 OR 계산</text>
+<line x1="36" y1="362" x2="844" y2="362" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="88" y="384" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#3FB98C">결과 비트</text>
+<rect x="140" y="370" width="52" height="22" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<text x="166.0" y="385" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#5E6B7E">0</text>
+<rect x="200" y="370" width="52" height="22" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<text x="226.0" y="385" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#5E6B7E">0</text>
+<rect x="260" y="370" width="52" height="22" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<text x="286.0" y="385" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#5E6B7E">0</text>
+<rect x="320" y="370" width="52" height="22" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<text x="346.0" y="385" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#5E6B7E">0</text>
+<rect x="380" y="370" width="52" height="22" rx="6" fill="#3FB98C" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="406.0" y="385" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">1 (일치)</text>
+<rect x="440" y="370" width="52" height="22" rx="6" fill="#3FB98C" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="466.0" y="385" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">1 (일치)</text>
+<rect x="500" y="370" width="52" height="22" rx="6" fill="#3FB98C" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="526.0" y="385" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">1 (일치)</text>
+<rect x="560" y="370" width="52" height="22" rx="6" fill="#3FB98C" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="586.0" y="385" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">1 (일치)</text>
+<text x="840" y="384" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">행 4 · 5 · 6 · 7 일치</text>
+<line x1="12" y1="412" x2="832" y2="412" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="434" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="424" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="434" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">일치 비트 (1값 매칭)</text>
+<rect x="313" y="424" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="335" y="434" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">RLE 연속 압축 정보</text>
+<rect x="513" y="424" width="14" height="12" rx="2" fill="#5E6B7E22" stroke="#5E6B7E" stroke-width="1.1"/>
+<text x="535" y="434" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">불일치 비트 (0값)</text>
+</svg>
