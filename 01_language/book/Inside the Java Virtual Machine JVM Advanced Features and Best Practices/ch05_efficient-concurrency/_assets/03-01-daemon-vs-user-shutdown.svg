@@ -1,0 +1,52 @@
+<svg viewBox="0 0 900 400" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>데몬 vs user 스레드 — JVM 종료 조건</title>
+  <desc>JVM 은 살아 있는 일반(user) 스레드가 하나도 없으면 종료한다. main 과 worker(둘 다 user) 가 끝나는 순간, 아직 작업 중이던 데몬 스레드는 완료를 기다려 주지 않고 그 자리에서 끊긴다. 시간 축 위에서 user 스레드의 종료가 데몬을 강제로 자르는 인과를 보여준다.</desc>
+  <rect x="0" y="0" width="900" height="400" fill="#0d0d0d"/>
+
+  <text x="450" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#e8e4df">JVM 종료 조건 — "살아 있는 user 스레드가 0이면 끝"</text>
+  <text x="450" y="56" text-anchor="middle" font-size="12.5" fill="#c9c4be">시간 →  (데몬은 user 가 다 끝나는 순간, 작업 중이어도 끊긴다)</text>
+
+  <!-- 시간 축 -->
+  <line x1="180" y1="330" x2="820" y2="330" stroke="#8a857f" stroke-width="1.5"/>
+  <polygon points="826,330 816,325 816,335" fill="#8a857f"/>
+
+  <!-- 종료 시점 세로선 -->
+  <line x1="640" y1="92" x2="640" y2="338" stroke="#d4a853" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="640" y="356" text-anchor="middle" font-size="11.5" font-weight="700" fill="#d4a853">user 스레드 0 → JVM 종료</text>
+
+  <!-- main (user) -->
+  <text x="170" y="118" text-anchor="end" font-size="12.5" font-weight="700" fill="#dceaf7">main (user)</text>
+  <rect x="180" y="100" width="380" height="34" rx="7" fill="#dceaf7"/>
+  <text x="370" y="122" text-anchor="middle" font-size="12" font-weight="700" fill="#10243a">본 작업 실행</text>
+  <text x="568" y="122" font-size="16" fill="#dceaf7">▣ 종료</text>
+
+  <!-- worker (user) -->
+  <text x="170" y="170" text-anchor="end" font-size="12.5" font-weight="700" fill="#dceaf7">worker (user)</text>
+  <rect x="180" y="152" width="450" height="34" rx="7" fill="#dceaf7"/>
+  <text x="405" y="174" text-anchor="middle" font-size="12" font-weight="700" fill="#10243a">요청 처리</text>
+  <text x="636" y="174" font-size="16" fill="#dceaf7">▣ 종료</text>
+
+  <!-- daemon -->
+  <text x="170" y="222" text-anchor="end" font-size="12.5" font-weight="700" fill="#f2d4d4">monitor (daemon)</text>
+  <!-- 데몬이 끝까지 못 가고 640 에서 잘림: 정상 구간(밝은) + 잘림 표시 -->
+  <rect x="180" y="204" width="460" height="34" rx="7" fill="#f5edda"/>
+  <text x="400" y="226" text-anchor="middle" font-size="12" font-weight="700" fill="#5a3d0a">1초마다 헬스 체크 (while true, 안 끝남)</text>
+  <!-- 잘림 번개 표시 -->
+  <text x="654" y="227" font-size="18" font-weight="700" fill="#c0504d">✂</text>
+  <text x="690" y="219" font-size="11" fill="#e08a87">작업 중이어도</text>
+  <text x="690" y="232" font-size="11" fill="#e08a87">강제로 끊김</text>
+
+  <!-- 하단 못박기 -->
+  <rect x="180" y="368" width="640" height="0" fill="none"/>
+  <rect x="40" y="372" width="820" height="0" fill="none"/>
+
+  <!-- 좌하단 규칙 박스 -->
+  <rect x="40" y="276" width="380" height="44" rx="9" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="60" y="297" font-size="12" font-weight="700" fill="#5b9bd5">user 스레드 = JVM 을 살려 두는 닻</text>
+  <text x="60" y="314" font-size="11" fill="#c9c4be">하나라도 살아 있으면 JVM 안 끝남 (데몬은 닻이 아님)</text>
+
+  <!-- 우하단 규칙 박스 -->
+  <rect x="440" y="276" width="380" height="44" rx="9" fill="#0d0d0d" stroke="#c0504d" stroke-width="1.5"/>
+  <text x="460" y="297" font-size="12" font-weight="700" fill="#e08a87">그래서 끊겨도 되는 일만 데몬에</text>
+  <text x="460" y="314" font-size="11" fill="#c9c4be">finally·자원정리 보장 못 받음 → 결제·파일쓰기는 user 로</text>
+</svg>

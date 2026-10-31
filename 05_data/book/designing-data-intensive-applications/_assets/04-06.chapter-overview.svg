@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 490" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">4장 저장과 검색 지형</title><desc id="dd">단일 속성 키-값 저장(B-tree·LSM)과 대량 분석(컬럼 저장)을 넘어 여러 조건을 동시에 검색하는 다차원·전문·벡터 인덱스로 확장된다.</desc>
+<rect width="880" height="490" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">04-06 · CHAPTER OVERVIEW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">4장 저장과 검색 지형</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">단일 키 OLTP → 대량 분석 OLAP → 다중 조건 동시 검색 고급 인덱스</text>
+<rect x="280" y="96" width="320" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<text x="440" y="118" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">4장 저장과 검색 지형</text>
+<text x="440" y="134" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">저장 엔진 철학과 인덱스 발전 · 4장 종합</text>
+<rect x="14" y="174" width="330" height="38" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="179.0" y="192" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">OLTP 단일 키 저장</text>
+<text x="179.0" y="206" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">단일 속성 정렬 매핑 · 04-01 ~ 04-04</text>
+<rect x="362" y="174" width="156" height="38" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="440.0" y="192" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">OLAP 분석용 저장</text>
+<text x="440.0" y="206" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">대량 스캔 · 04-05</text>
+<rect x="536" y="174" width="330" height="38" rx="6" fill="#F08A5918" stroke="#F08A59" stroke-width="1.4"/>
+<text x="701.0" y="192" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">다중 조건 고급 인덱스</text>
+<text x="701.0" y="206" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">여러 조건 동시 쿼리 · 04-06</text>
+<line x1="440" y1="142" x2="440" y2="156" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="179.0" y1="156" x2="701.0" y2="156" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="179.0" y1="156" x2="179.0" y2="174" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="440.0" y1="156" x2="440.0" y2="174" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="701.0" y1="156" x2="701.0" y2="174" stroke="#F08A59" stroke-width="1.4"/>
+<line x1="179.0" y1="212" x2="179.0" y2="226" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="92.0" y1="226" x2="266.0" y2="226" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="92.0" y1="226" x2="92.0" y2="244" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="266.0" y1="226" x2="266.0" y2="244" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="440.0" y1="212" x2="440.0" y2="244" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="701.0" y1="212" x2="701.0" y2="226" stroke="#F08A59" stroke-width="1.4"/>
+<line x1="614.0" y1="226" x2="788.0" y2="226" stroke="#F08A59" stroke-width="1.4"/>
+<line x1="614.0" y1="226" x2="614.0" y2="244" stroke="#F08A59" stroke-width="1.4"/>
+<line x1="788.0" y1="226" x2="788.0" y2="244" stroke="#F08A59" stroke-width="1.4"/>
+<rect x="14" y="244" width="156" height="166" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="92.0" y="268" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">LSM-tree · SSTable</text>
+<rect x="36.64" y="280" width="110.72" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="92.0" y="294" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">04-01 · 04-02</text>
+<line x1="24" y1="304" x2="160" y2="304" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="92.0" y="324" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">append-only 로그</text>
+<text x="92.0" y="346" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">memtable 플러시</text>
+<text x="92.0" y="368" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">백그라운드 병합</text>
+<text x="92.0" y="390" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">높은 쓰기 처리량</text>
+<rect x="188" y="244" width="156" height="166" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="266.0" y="268" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">B-tree</text>
+<rect x="240.4" y="280" width="51.199999999999996" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="266.0" y="294" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">04-03</text>
+<line x1="198" y1="304" x2="334" y2="304" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="266.0" y="324" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">고정 크기 페이지</text>
+<text x="266.0" y="346" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">update-in-place</text>
+<text x="266.0" y="368" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">WAL 크래시 복구</text>
+<text x="266.0" y="390" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">높은 읽기 처리량</text>
+<rect x="362" y="244" width="156" height="166" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="440.0" y="268" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">컬럼 지향 저장</text>
+<rect x="414.4" y="280" width="51.199999999999996" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="440.0" y="294" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">04-05</text>
+<line x1="372" y1="304" x2="508" y2="304" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="440.0" y="324" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">필요 컬럼 선별 I/O</text>
+<text x="440.0" y="346" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">bitmap 압축 인코딩</text>
+<text x="440.0" y="368" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">벡터화 배치 실행</text>
+<text x="440.0" y="390" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">분석 쿼리 최적화</text>
+<rect x="536" y="244" width="156" height="166" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<text x="614.0" y="268" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">다차원 &amp; 전문 인덱스</text>
+<rect x="558.64" y="280" width="110.72" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="614.0" y="294" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F08A59">04-06 §1 · §2</text>
+<line x1="546" y1="304" x2="682" y2="304" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="614.0" y="324" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">R-tree 2D 동시 좁힘</text>
+<text x="614.0" y="346" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">가까운 점 서브트리 묶음</text>
+<text x="614.0" y="368" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">inverted index</text>
+<text x="614.0" y="390" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">bitmap AND 연산</text>
+<rect x="710" y="244" width="156" height="166" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<text x="788.0" y="268" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">벡터 임베딩 &amp; 인덱스</text>
+<rect x="732.64" y="280" width="110.72" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="788.0" y="294" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F08A59">04-06 §3 · §4</text>
+<line x1="720" y1="304" x2="856" y2="304" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="788.0" y="324" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">부동소수 벡터 변환</text>
+<text x="788.0" y="346" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">cosine 의미 유사도</text>
+<text x="788.0" y="368" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">flat 전수 탐색</text>
+<text x="788.0" y="390" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">IVF · HNSW 근사</text>
+<line x1="12" y1="434" x2="832" y2="434" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="456" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="446" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="456" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">OLTP · OLAP 저장 엔진</text>
+<rect x="365" y="446" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="387" y="456" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">다중 조건 고급 인덱스 (04-06 핵심)</text>
+</svg>

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 830" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">고정 경로 맵을 잡고 perf 버퍼 콜백으로 이벤트를 받는다</title><desc id="dd">find-map 은 bpf_obj_get 으로 고정된 맵의 fd 를 받아 이름을 읽고, hello-buffer-config 는 perf_buffer__new 로 CPU 마다 링을 열어 두고 perf_buffer__poll 이 돌려준 레코드를 handle_event 콜백으로 받아 한 줄을 찍는다.</desc>
+<rect width="960" height="830" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING EBPF · 05-03 §4</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">고정 경로 맵을 잡고 perf 버퍼 콜백으로 이벤트를 받는다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">같은 libbpf 호출이 BPF_OBJ_GET 과 CPU 별 링 설정으로 풀린다</text>
+<rect x="20" y="100" width="232" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="136" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">사용자 프로그램</text>
+<text x="136" y="137" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">find-map · hello-buffer-config</text>
+<rect x="428" y="100" width="176" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="516" y="127" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">libbpf</text>
+<rect x="748" y="100" width="176" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="836" y="127" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">커널</text>
+<line x1="136" y1="150" x2="136" y2="750" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="516" y1="150" x2="516" y2="750" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="836" y1="150" x2="836" y2="750" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<path d="M 146 196 L 504 196" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="197.24" y="173" width="257.52" height="18" fill="#0D1117"/>
+<text x="326.0" y="187" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">bpf_obj_get("/sys/fs/bpf/findme")</text>
+<rect x="282.8" y="201" width="86.39999999999999" height="20" fill="#0D1117"/>
+<text x="326.0" y="215" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">find-map.c</text>
+<path d="M 526 248 L 824 248" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="629.08" y="225" width="93.83999999999999" height="18" fill="#0D1117"/>
+<text x="676.0" y="239" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">BPF_OBJ_GET</text>
+<path d="M 826 300 L 528 300" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)" stroke-dasharray="5 4"/>
+<rect x="662.56" y="277" width="26.88" height="18" fill="#0D1117"/>
+<text x="676.0" y="291" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">fd</text>
+<path d="M 146 352 L 504 352" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<rect x="212.12" y="329" width="227.76" height="18" fill="#0D1117"/>
+<text x="326.0" y="343" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">bpf_obj_get_info_by_fd(fd, …)</text>
+<rect x="238.16000000000003" y="357" width="175.67999999999998" height="20" fill="#0D1117"/>
+<text x="326.0" y="371" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">BPF_OBJ_GET_INFO_BY_FD</text>
+<path d="M 146 394 L 194 394 L 194 414 L 149 414" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="204" y="400" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">Name: findme</text>
+<path d="M 146 456 L 504 456" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="208.4" y="433" width="235.2" height="18" fill="#0D1117"/>
+<text x="326.0" y="447" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">perf_buffer__new(map fd, 8, …)</text>
+<rect x="241.88" y="461" width="168.23999999999998" height="20" fill="#0D1117"/>
+<text x="326.0" y="475" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">hello-buffer-config.c</text>
+<path d="M 526 508 L 824 508" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="617.68" y="485" width="116.64" height="18" fill="#0D1117"/>
+<text x="676.0" y="499" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">CPU 마다 링 열기</text>
+<rect x="532.36" y="513" width="287.28" height="20" fill="#0D1117"/>
+<text x="676.0" y="527" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">perf_event_open · bpf_map_update_elem</text>
+<path d="M 146 560 L 504 560" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="223.28" y="537" width="205.44" height="18" fill="#0D1117"/>
+<text x="326.0" y="551" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">perf_buffer__poll(pb, 100)</text>
+<rect x="282.8" y="565" width="86.39999999999999" height="20" fill="#0D1117"/>
+<text x="326.0" y="579" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">epoll_wait</text>
+<path d="M 826 612 L 528 612" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<rect x="636.28" y="589" width="79.44" height="18" fill="#0D1117"/>
+<text x="676.0" y="603" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">링에 레코드</text>
+<rect x="591.88" y="617" width="168.23999999999998" height="20" fill="#0D1117"/>
+<text x="676.0" y="631" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">bpf_perf_event_output</text>
+<path d="M 506 664 L 148 664" fill="none" stroke="#F08A59" stroke-width="1.5" marker-end="url(#acc)"/>
+<rect x="182.36" y="641" width="287.28" height="18" fill="#0D1117"/>
+<text x="326.0" y="655" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">handle_event(ctx, cpu, data, data_sz)</text>
+<path d="M 146 706 L 194 706 L 194 726 L 149 726" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="204" y="712" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">23664 501 bash Hello World</text>
+<line x1="12" y1="774" x2="912" y2="774" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="796" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="786" width="14" height="12" rx="2" fill="#8B98A922" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="122" y="796" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">호출 · 응답</text>
+<rect x="235" y="786" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="257" y="796" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정보 · 이벤트</text>
+<rect x="383" y="786" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="405" y="796" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">화면 출력</text>
+<rect x="492" y="786" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="514" y="796" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">콜백 호출</text>
+</svg>

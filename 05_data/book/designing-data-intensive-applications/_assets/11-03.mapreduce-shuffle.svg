@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 520" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">MapReduce 5단계 셔플과 분산 정렬 데이터 흐름</title><desc id="dd">매퍼가 키 해시 기반으로 로컬 파티션 파일을 생성하고 정렬하면, 리듀서가 네트워크를 통해 복사해 병합 정렬(MergeSort)한 뒤 키별 이터레이터로 집계 결과를 출력한다.</desc>
+<rect width="880" height="520" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">11-03 · §5 MAPREDUCE SHUFFLE ARCHITECTURE</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">MapReduce 5단계 셔플과 분산 정렬 데이터 흐름</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">HDFS 샤드 입력 · 키 해시 파티셔닝과 로컬 정렬 · 클러스터 전역 네트워크 복사(셔플) · MergeSort 병합 · 리듀서 이터레이터 및 DFS 저장</text>
+<rect x="24" y="102" width="832" height="34" rx="4" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="440.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">MapReduce 셔플 5단계: 키 해시 파티셔닝(1) → 네트워크 복사(2) → MergeSort 병합(3) → 리듀서 호출(4) → DFS 저장(5)</text>
+<rect x="24" y="146" width="236" height="316" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="37.5" y="154" width="41.0" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="58" y="168" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">1단계</text>
+<text x="94" y="168" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">매퍼 태스크 (로컬 정렬)</text>
+<line x1="34" y1="180" x2="250" y2="180" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<rect x="34" y="188" width="216" height="80" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="0.9"/>
+<rect x="50.18" y="194" width="19.64" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="60" y="208" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#E3B341">m1</text>
+<text x="136" y="208" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">매퍼 1 (Map Task 1)</text>
+<rect x="38" y="226" width="208" height="34" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="142.0" y="244" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">[m1, r1]  [m1, r2]  [m1, r3]</text>
+<rect x="34" y="276" width="216" height="80" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="0.9"/>
+<rect x="50.18" y="282" width="19.64" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="60" y="296" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#E3B341">m2</text>
+<text x="136" y="296" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">매퍼 2 (Map Task 2)</text>
+<rect x="38" y="314" width="208" height="34" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="142.0" y="332" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">[m2, r1]  [m2, r2]  [m2, r3]</text>
+<rect x="34" y="364" width="216" height="80" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="0.9"/>
+<rect x="50.18" y="370" width="19.64" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="60" y="384" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#E3B341">m3</text>
+<text x="136" y="384" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">매퍼 3 (Map Task 3)</text>
+<rect x="38" y="402" width="208" height="34" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="142.0" y="420" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">[m3, r1]  [m3, r2]  [m3, r3]</text>
+<text x="142.0" y="454" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">키 해시 파티션별 로컬 정렬 파일</text>
+<rect x="274" y="146" width="172" height="34" rx="4" fill="#F08A5914" stroke="#F08A59" stroke-width="1.2"/>
+<text x="360" y="168" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">2단계: 네트워크 복사 (셔플)</text>
+<rect x="460" y="146" width="396" height="316" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="466.5" y="154" width="63.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="498" y="168" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">3~5단계</text>
+<text x="540" y="168" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">리듀서 병합 및 DFS 출력</text>
+<line x1="470" y1="180" x2="846" y2="180" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<rect x="470" y="188" width="376" height="80" rx="6" fill="#0D1117" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="550" y="206" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">리듀서 1 (r1 몫 복사)</text>
+<rect x="476" y="218" width="168" height="40" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="560" y="232" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">[m1,r1] [m2,r1] [m3,r1]</text>
+<text x="560" y="248" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">MergeSort 동일 키 병합</text>
+<path d="M 644 238 L 680 238" fill="none" stroke="#3FB98C" stroke-width="1.2"/>
+<rect x="680" y="218" width="60" height="40" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="710" y="242" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">Reducer</text>
+<path d="M 740 238 L 776 238" fill="none" stroke="#E3B341" stroke-width="1.2"/>
+<rect x="777.54" y="228" width="48.92" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="802" y="242" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#E3B341">DFS r1</text>
+<rect x="470" y="276" width="376" height="80" rx="6" fill="#0D1117" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="550" y="294" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">리듀서 2 (r2 몫 복사)</text>
+<rect x="476" y="306" width="168" height="40" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="560" y="320" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">[m1,r2] [m2,r2] [m3,r2]</text>
+<text x="560" y="336" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">MergeSort 동일 키 병합</text>
+<path d="M 644 326 L 680 326" fill="none" stroke="#3FB98C" stroke-width="1.2"/>
+<rect x="680" y="306" width="60" height="40" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="710" y="330" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">Reducer</text>
+<path d="M 740 326 L 776 326" fill="none" stroke="#E3B341" stroke-width="1.2"/>
+<rect x="777.54" y="316" width="48.92" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="802" y="330" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#E3B341">DFS r2</text>
+<rect x="470" y="364" width="376" height="80" rx="6" fill="#0D1117" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="550" y="382" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">리듀서 3 (r3 몫 복사)</text>
+<rect x="476" y="394" width="168" height="40" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.7"/>
+<text x="560" y="408" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">[m1,r3] [m2,r3] [m3,r3]</text>
+<text x="560" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">MergeSort 동일 키 병합</text>
+<path d="M 644 414 L 680 414" fill="none" stroke="#3FB98C" stroke-width="1.2"/>
+<rect x="680" y="394" width="60" height="40" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="710" y="418" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">Reducer</text>
+<path d="M 740 414 L 776 414" fill="none" stroke="#E3B341" stroke-width="1.2"/>
+<rect x="777.54" y="404" width="48.92" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="802" y="418" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#E3B341">DFS r3</text>
+<text x="658.0" y="454" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">키당 1회 이터레이터 호출 → DFS 출력 기록</text>
+<path d="M 260 230 L 470 230" fill="none" stroke="#F08A59" stroke-width="1.3" marker-end="url(#acc)"/>
+<path d="M 260 242 L 350 242 L 350 318 L 470 318" fill="none" stroke="#F08A59" stroke-width="1.1" marker-end="url(#acc)"/>
+<path d="M 260 250 L 330 250 L 330 406 L 470 406" fill="none" stroke="#F08A59" stroke-width="1.1" marker-end="url(#acc)"/>
+<path d="M 260 318 L 370 318 L 370 238 L 470 238" fill="none" stroke="#F08A59" stroke-width="1.1" marker-end="url(#acc)"/>
+<path d="M 260 326 L 470 326" fill="none" stroke="#F08A59" stroke-width="1.3" marker-end="url(#acc)"/>
+<path d="M 260 338 L 390 338 L 390 414 L 470 414" fill="none" stroke="#F08A59" stroke-width="1.1" marker-end="url(#acc)"/>
+<path d="M 260 406 L 410 406 L 410 246 L 470 246" fill="none" stroke="#F08A59" stroke-width="1.1" marker-end="url(#acc)"/>
+<path d="M 260 418 L 430 418 L 430 334 L 470 334" fill="none" stroke="#F08A59" stroke-width="1.1" marker-end="url(#acc)"/>
+<path d="M 260 426 L 470 426" fill="none" stroke="#F08A59" stroke-width="1.3" marker-end="url(#acc)"/>
+<line x1="12" y1="472" x2="832" y2="472" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="494" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="484" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="494" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">네트워크 셔플 (focal)</text>
+<rect x="339" y="484" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="361" y="494" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">리듀서 병합·실행</text>
+<rect x="500" y="484" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="522" y="494" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">매퍼 파티셔닝·정렬</text>
+<rect x="674" y="484" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="696" y="494" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">HDFS 분할 샤드</text>
+</svg>

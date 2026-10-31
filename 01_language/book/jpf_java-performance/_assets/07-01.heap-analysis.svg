@@ -1,0 +1,55 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>힙 분석 — 히스토그램·힙 덤프·retained 메모리</title>
+  <desc>힙 분석은 어떤 객체가 메모리를 쓰는지 들여다보는 일이다. 대부분 도구는 live 객체만 본다. 히스토그램은 클래스별 인스턴스 수와 바이트를 빠르게 보여 준다. jcmd GC.class_histogram 또는 jmap -histo:live로 얻고, 보통 full GC를 강제해 측정 중에는 쓰지 않는다. 깊은 분석은 힙 덤프가 필요하다. jcmd GC.heap_dump 또는 jmap -dump:live로 hprof 파일을 만들고 mat나 jvisualvm으로 연다. 세 가지 크기 개념이 있다. shallow는 객체 자신만, deep은 참조한 객체까지, retained는 그 객체가 해제되면 같이 풀리는 메모리다. retained가 큰 객체를 dominator라 한다. 공유 객체는 어느 retained set에도 안 잡혀 탐정 작업이 필요하다. GC root로 거슬러 가기보다, 객체 그래프에서 공유가 일어나는 가장 낮은 지점을 back trace로 찾는 편이 낫다. 큰 컬렉션부터 본다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">힙 분석 — 무엇이 메모리를 쓰는가</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">대부분 도구는 live 객체만 보고, full GC를 강제하므로 측정 중엔 쓰지 않습니다</text>
+
+  <!-- histogram vs heap dump -->
+  <rect x="20" y="74" width="320" height="118" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="96" fill="#66bb6a" font-size="13" font-weight="bold">히스토그램 (빠름·작음)</text>
+  <text x="38" y="116" fill="#e8e4df" font-size="11">클래스별 인스턴스 수 + 바이트</text>
+  <text x="38" y="136" fill="rgb(138,133,128)" font-size="10">jcmd PID GC.class_histogram</text>
+  <text x="38" y="152" fill="rgb(138,133,128)" font-size="10">jmap -histo:live PID</text>
+  <text x="38" y="172" fill="#66bb6a" font-size="9">한두 타입 과다 생성 진단에 적합</text>
+
+  <rect x="350" y="74" width="312" height="118" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="368" y="96" fill="#9cc3df" font-size="13" font-weight="bold">힙 덤프 (깊음·느림)</text>
+  <text x="368" y="116" fill="#e8e4df" font-size="11">hprof 파일 → mat / jvisualvm</text>
+  <text x="368" y="136" fill="rgb(138,133,128)" font-size="10">jcmd PID GC.heap_dump file.hprof</text>
+  <text x="368" y="152" fill="rgb(138,133,128)" font-size="10">jmap -dump:live,file=... PID</text>
+  <text x="368" y="172" fill="#9cc3df" font-size="9">누수: 덤프 2개 차이 비교(mat)</text>
+
+  <!-- shallow / retained / deep -->
+  <rect x="20" y="200" width="642" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="222" fill="#e8e4df" font-size="13" font-weight="bold">세 가지 크기 — shallow · retained · deep</text>
+  <rect x="38" y="234" width="200" height="74" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)"/>
+  <text x="50" y="254" fill="rgb(212,168,83)" font-size="11" font-weight="bold">shallow</text>
+  <text x="50" y="274" fill="rgb(138,133,128)" font-size="10">객체 자신 크기만</text>
+  <text x="50" y="292" fill="rgb(138,133,128)" font-size="10">참조는 4/8바이트만 포함</text>
+  <rect x="246" y="234" width="200" height="74" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)"/>
+  <text x="258" y="254" fill="rgb(212,168,83)" font-size="11" font-weight="bold">retained</text>
+  <text x="258" y="274" fill="rgb(138,133,128)" font-size="10">이 객체 해제 시</text>
+  <text x="258" y="292" fill="rgb(138,133,128)" font-size="10">함께 풀리는 메모리</text>
+  <rect x="454" y="234" width="200" height="74" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)"/>
+  <text x="466" y="254" fill="rgb(212,168,83)" font-size="11" font-weight="bold">deep</text>
+  <text x="466" y="274" fill="rgb(138,133,128)" font-size="10">참조한 객체까지 합산</text>
+  <text x="466" y="292" fill="rgb(138,133,128)" font-size="10">공유 객체도 포함(차이점)</text>
+
+  <!-- dominator / back trace -->
+  <rect x="20" y="328" width="642" height="96" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="350" fill="#f47f72" font-size="13" font-weight="bold">공유 객체 추적 — dominator와 back trace</text>
+  <text x="38" y="372" fill="rgb(138,133,128)" font-size="11">retained가 큰 객체 = dominator. 공유 객체는 어느 retained set에도 안 잡힘</text>
+  <text x="38" y="392" fill="rgb(138,133,128)" font-size="11">GC root로 거슬러 가면 분기 폭증 → 그래프에서 공유 일어나는 가장 낮은 지점을 back trace</text>
+  <text x="38" y="412" fill="#f47f72" font-size="10">팁: entry(HashMap$Entry)가 아니라 큰 컬렉션(HashMap) 자체부터 본다</text>
+
+  <!-- key takeaway -->
+  <rect x="20" y="432" width="642" height="150" fill="rgba(102,187,106,0.05)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="456" fill="#66bb6a" font-size="13" font-weight="bold">분석 순서</text>
+  <text x="38" y="480" fill="#e8e4df" font-size="11">① 히스토그램으로 과다 생성 타입 식별 (자동 테스트마다 수집 가능)</text>
+  <text x="38" y="502" fill="#e8e4df" font-size="11">② 깊은 분석은 힙 덤프 — retained 큰 객체부터</text>
+  <text x="38" y="524" fill="#e8e4df" font-size="11">③ 공유로 retained가 안 보이면 히스토그램 집계로 진짜 범인(예: 700만 TreeMap$Entry) 확인</text>
+  <text x="38" y="546" fill="#e8e4df" font-size="11">④ back trace로 그 객체를 잡고 있는 두 referent(세션 캐시·전역 캐시) 식별</text>
+  <text x="38" y="570" fill="rgb(138,133,128)" font-size="10">덤프 분석은 가장 강력하나 인내와 노력이 든다 — 어떤 객체를 줄일지 아는 게 첫걸음</text>
+</svg>

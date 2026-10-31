@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 580" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">net.TCPConn 추출 경로와 제어 손잡이</title><desc id="dd">net.Conn 타입 단언과 TCP 전용 함수(AcceptTCP·DialTCP)를 통한 *net.TCPConn 획득 흐름</desc>
+<rect width="880" height="580" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">TCPCONN RETRIEVAL</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">net.TCPConn 추출 경로와 제어 손잡이</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">타입 단언(ok 검사)과 전용 생성 함수의 두 갈래 및 저수준 소켓 옵션 제어</text>
+<rect x="70" y="96" width="360" height="28" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="250" y="114" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">경로 1: 타입 단언</text>
+<rect x="470" y="96" width="360" height="28" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="650" y="114" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">경로 2: TCP 전용 함수</text>
+<rect x="160" y="136" width="180" height="36" rx="18" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="250" y="154" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">net.Conn 인터페이스</text>
+<text x="250" y="166" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">net.Dial / net.Listen</text>
+<path d="M 250 172 L 250 196" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="145" y="196" width="210" height="42" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="250" y="213" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">conn.(*net.TCPConn)</text>
+<text x="250" y="229" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">구체 타입 단언</text>
+<path d="M 250 238 L 250 260" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<polygon points="250,260 315,284 250,308 185,284" fill="#161B22" stroke="#E3B341" stroke-width="1.2"/>
+<text x="250" y="288" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">단언 성공 (ok)?</text>
+<path d="M 185 284 L 140 284" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#bad)"/>
+<text x="162" y="276" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#F0616D">false</text>
+<rect x="30" y="266" width="100" height="36" rx="6" fill="#161B22" stroke="#F0616D" stroke-width="0.9"/>
+<text x="80" y="282" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F0616D">비-TCP 연결</text>
+<text x="80" y="296" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">에러 처리</text>
+<path d="M 250 308 L 250 332" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="270" y="308" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#3FB98C">true</text>
+<rect x="170" y="332" width="160" height="32" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="250" y="352" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">*net.TCPConn 획득</text>
+<path d="M 250 364 L 250 388" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<rect x="550" y="136" width="200" height="36" rx="18" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="650" y="154" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">net.ResolveTCPAddr</text>
+<text x="650" y="166" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">TCP 주소 해석</text>
+<line x1="650" y1="172" x2="650" y2="184" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="555" y1="184" x2="745" y2="184" stroke="#8B98A9" stroke-width="1.2"/>
+<path d="M 555 184 L 555 196" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<path d="M 745 184 L 745 196" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="475" y="196" width="160" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="555" y="213" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">ListenTCP → AcceptTCP</text>
+<text x="555" y="231" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">서버 수신 소켓</text>
+<rect x="665" y="196" width="160" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="745" y="213" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">net.DialTCP</text>
+<text x="745" y="231" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">클라이언트 연결</text>
+<line x1="555" y1="242" x2="555" y2="262" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="745" y1="242" x2="745" y2="262" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="555" y1="262" x2="745" y2="262" stroke="#8B98A9" stroke-width="1.2"/>
+<circle cx="650" cy="262" r="4" fill="#F5F5F3"/>
+<path d="M 650 262 L 650 332" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<rect x="560" y="332" width="180" height="32" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="650" y="352" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">*net.TCPConn 직접 반환</text>
+<path d="M 650 364 L 650 388" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<rect x="70" y="388" width="760" height="74" rx="8" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<text x="450" y="410" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">*net.TCPConn 저수준 손잡이</text>
+<text x="450" y="430" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">SetKeepAliveConfig() — 유휴 탐침  ·  SetLinger() — 잔여 데이터</text>
+<text x="450" y="448" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">SetReadBuffer() · SetWriteBuffer() — 커널 소켓 버퍼 수동 지정</text>
+<rect x="70" y="474" width="760" height="34" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="0.9"/>
+<text x="450" y="495" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">대가: OS 종속 이식성 저하 · 단위 테스트 시 Mock 대체 불가</text>
+<line x1="12" y1="536" x2="832" y2="536" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="558" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="548" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="558" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">구체 타입 획득 (성공)</text>
+<rect x="313" y="548" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="335" y="558" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">단언 실패 (비-TCP)</text>
+<rect x="526" y="548" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="548" y="558" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">저수준 제어 손잡이</text>
+<rect x="700" y="548" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="722" y="558" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">이식성·테스트 대가</text>
+</svg>

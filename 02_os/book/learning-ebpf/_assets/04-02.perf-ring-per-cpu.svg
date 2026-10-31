@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">CPU 넷에 링 넷, ppoll 하나가 네 fd 를 본다</title><desc id="dd">output 맵은 CPU 번호를 키로 하고 값은 그 CPU 의 perf 링 fd 다. hello() 가 도는 CPU 의 칸을 따라 그 CPU 의 링에 쓰고, 사용자 공간의 ppoll 이 네 fd 를 함께 기다린다.</desc>
+<rect width="960" height="600" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING EBPF · 04-02 §2</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">CPU 넷에 링 넷, ppoll 하나가 네 fd 를 본다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">깨어나는 링 하나</text>
+<rect x="16" y="84" width="696" height="424" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="28" y="104" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">KERNEL</text>
+<rect x="772" y="84" width="172" height="424" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="784" y="104" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">USER SPACE</text>
+<text x="24" y="136" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#8B98A9">CPU</text>
+<text x="244" y="136" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">output 맵 · map_fd=4</text>
+<text x="524" y="136" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#8B98A9">perf_event_open × 4</text>
+<text x="784" y="136" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">대기 호출</text>
+<path d="M 166 180 L 238 180" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 446 180 L 518 180" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 706 180 L 778 180" fill="none" stroke="#F08A59" stroke-width="1.8" marker-end="url(#acc)"/>
+<path d="M 166 272 L 238 272" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 446 272 L 518 272" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 706 272 L 778 272" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 166 364 L 238 364" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 446 364 L 518 364" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 706 364 L 778 364" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 166 456 L 238 456" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 446 456 L 518 456" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M 706 456 L 778 456" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="24" y="148" width="140" height="64" rx="6" fill="#8B98A912" stroke="#8B98A9" stroke-width="1.2"/>
+<text x="94.0" y="176" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#8B98A9">CPU 0</text>
+<text x="94.0" y="196" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">perf_submit</text>
+<rect x="244" y="148" width="200" height="64" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="344.0" y="176" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#6A95D8">output[0]</text>
+<text x="344.0" y="196" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">= fd 8</text>
+<rect x="524" y="148" width="180" height="64" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.2"/>
+<text x="614.0" y="176" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">perf 링 fd 8</text>
+<text x="614.0" y="196" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">CPU 0 전용</text>
+<rect x="24" y="240" width="140" height="64" rx="6" fill="#8B98A912" stroke="#8B98A9" stroke-width="1.2"/>
+<text x="94.0" y="268" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#8B98A9">CPU 1</text>
+<text x="94.0" y="288" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">perf_submit</text>
+<rect x="244" y="240" width="200" height="64" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="344.0" y="268" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#6A95D8">output[1]</text>
+<text x="344.0" y="288" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">= fd 9</text>
+<rect x="524" y="240" width="180" height="64" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="614.0" y="268" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#3FB98C">perf 링 fd 9</text>
+<text x="614.0" y="288" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">CPU 1 전용</text>
+<rect x="24" y="332" width="140" height="64" rx="6" fill="#8B98A912" stroke="#8B98A9" stroke-width="1.2"/>
+<text x="94.0" y="360" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#8B98A9">CPU 2</text>
+<text x="94.0" y="380" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">perf_submit</text>
+<rect x="244" y="332" width="200" height="64" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="344.0" y="360" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#6A95D8">output[2]</text>
+<text x="344.0" y="380" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">= fd 10</text>
+<rect x="524" y="332" width="180" height="64" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="614.0" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#3FB98C">perf 링 fd 10</text>
+<text x="614.0" y="380" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">CPU 2 전용</text>
+<rect x="24" y="424" width="140" height="64" rx="6" fill="#8B98A912" stroke="#8B98A9" stroke-width="1.2"/>
+<text x="94.0" y="452" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#8B98A9">CPU 3</text>
+<text x="94.0" y="472" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">perf_submit</text>
+<rect x="244" y="424" width="200" height="64" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="344.0" y="452" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#6A95D8">output[3]</text>
+<text x="344.0" y="472" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">= fd 11</text>
+<rect x="524" y="424" width="180" height="64" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="614.0" y="452" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#3FB98C">perf 링 fd 11</text>
+<text x="614.0" y="472" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">CPU 3 전용</text>
+<rect x="784" y="148" width="156" height="340" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="862.0" y="268" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#3FB98C">ppoll</text>
+<text x="862.0" y="292" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">fd 8·9·10·11</text>
+<text x="862.0" y="324" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F08A59">= 1 · revents</text>
+<text x="862.0" y="344" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">fd 8 만 POLLIN</text>
+<line x1="12" y1="544" x2="912" y2="544" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="566" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="556" width="14" height="12" rx="2" fill="#8B98A922" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="122" y="566" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">CPU</text>
+<rect x="183" y="556" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="205" y="566" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">output 맵 칸</text>
+<rect x="357" y="556" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="379" y="566" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">perf 링 fd</text>
+<rect x="518" y="556" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="540" y="566" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">깨어난 링</text>
+</svg>

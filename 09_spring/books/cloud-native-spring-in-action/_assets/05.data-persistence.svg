@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 540" width="100%" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>클라우드 데이터 영속화 핵심 요약</title>
+  <desc>클라우드 네이티브 앱은 stateless로 두고 상태는 데이터 서비스로 격리한다. PostgreSQL 컨테이너 위에 Spring Data JDBC로 영속화하고, Testcontainers로 테스트하고, Flyway로 스키마를 버전 관리한다. 환경 동등성이 전체를 관통한다.</desc>
+  <rect width="840" height="540" fill="#0d0d0d"/>
+  <text x="30" y="40" fill="#e8e4df" font-size="19" font-weight="700">클라우드 데이터 영속화와 관리</text>
+  <text x="30" y="62" fill="rgb(138,133,128)" font-size="12">앱은 stateless · 상태는 데이터 서비스로 격리 · 환경 동등성이 전체를 관통</text>
+
+  <!-- top: state principle -->
+  <rect x="40" y="86" width="760" height="56" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="56" y="110" fill="rgb(212,168,83)" font-size="13" font-weight="700">상태(state) = 서비스를 내리고 새 인스턴스를 띄울 때 보존돼야 하는 모든 것</text>
+  <text x="56" y="131" fill="rgb(138,133,128)" font-size="11.5">앱은 stateless라야 동적 인프라에서 수평 확장된다 → 상태는 stateful 데이터 서비스로 몰아 격리</text>
+
+  <!-- 4 stages pipeline -->
+  <rect x="40" y="166" width="178" height="92" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.4"/>
+  <text x="129" y="192" fill="#e8e4df" font-size="13" font-weight="700" text-anchor="middle">① 데이터 서비스</text>
+  <text x="129" y="214" fill="rgb(138,133,128)" font-size="10.5" text-anchor="middle">PostgreSQL 컨테이너</text>
+  <text x="129" y="231" fill="rgb(138,133,128)" font-size="10.5" text-anchor="middle">로컬: Docker</text>
+  <text x="129" y="248" fill="rgb(138,133,128)" font-size="10.5" text-anchor="middle">운영: 매니지드</text>
+
+  <rect x="234" y="166" width="178" height="92" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.4"/>
+  <text x="323" y="192" fill="#e8e4df" font-size="13" font-weight="700" text-anchor="middle">② 영속화</text>
+  <text x="323" y="214" fill="rgb(138,133,128)" font-size="10.5" text-anchor="middle">Spring Data JDBC</text>
+  <text x="323" y="231" fill="rgb(138,133,128)" font-size="10.5" text-anchor="middle">드라이버·엔티티·</text>
+  <text x="323" y="248" fill="rgb(138,133,128)" font-size="10.5" text-anchor="middle">리포지토리</text>
+
+  <rect x="428" y="166" width="178" height="92" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.4"/>
+  <text x="517" y="192" fill="#e8e4df" font-size="13" font-weight="700" text-anchor="middle">③ 테스트</text>
+  <text x="517" y="214" fill="rgb(138,133,128)" font-size="10.5" text-anchor="middle">Testcontainers</text>
+  <text x="517" y="231" fill="rgb(138,133,128)" font-size="10.5" text-anchor="middle">실제 PostgreSQL로</text>
+  <text x="517" y="248" fill="rgb(138,133,128)" font-size="10.5" text-anchor="middle">슬라이스·통합 테스트</text>
+
+  <rect x="622" y="166" width="178" height="92" rx="8" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="711" y="192" fill="#66bb6a" font-size="13" font-weight="700" text-anchor="middle">④ 운영 관리</text>
+  <text x="711" y="214" fill="rgb(138,133,128)" font-size="10.5" text-anchor="middle">Flyway</text>
+  <text x="711" y="231" fill="rgb(138,133,128)" font-size="10.5" text-anchor="middle">스키마 버전 관리</text>
+  <text x="711" y="248" fill="rgb(138,133,128)" font-size="10.5" text-anchor="middle">무중단 진화</text>
+
+  <!-- arrows between stages -->
+  <polygon points="226,212 218,207 218,217" fill="rgb(138,133,128)"/>
+  <polygon points="420,212 412,207 412,217" fill="rgb(138,133,128)"/>
+  <polygon points="614,212 606,207 606,217" fill="rgb(138,133,128)"/>
+
+  <!-- data service criteria -->
+  <rect x="40" y="282" width="760" height="74" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+  <text x="56" y="306" fill="#e8e4df" font-size="13" font-weight="600">데이터 서비스를 고를 때 따지는 네 가지</text>
+  <text x="56" y="330" fill="rgb(138,133,128)" font-size="11.5">확장성 — 안전한 접근 보장하며 워크로드 증감 대응</text>
+  <text x="430" y="330" fill="rgb(138,133,128)" font-size="11.5">복원력 — 복제로 데이터 손실 방지(일관성 비용)</text>
+  <text x="56" y="349" fill="rgb(138,133,128)" font-size="11.5">성능 — I/O·네트워크 지연, 스토리지 위치</text>
+  <text x="430" y="349" fill="rgb(138,133,128)" font-size="11.5">규정 준수 — GDPR·CCPA·HIPAA</text>
+
+  <!-- entity key concepts -->
+  <rect x="40" y="380" width="370" height="68" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+  <text x="56" y="404" fill="rgb(212,168,83)" font-size="12.5" font-weight="600">영속 엔티티 핵심</text>
+  <text x="56" y="426" fill="rgb(138,133,128)" font-size="11">@Id = 기본 키 · @Version = 낙관적 잠금</text>
+  <text x="56" y="443" fill="rgb(138,133,128)" font-size="11">id=null + version=0 → 새 객체로 판정해 삽입</text>
+
+  <rect x="430" y="380" width="370" height="68" rx="8" fill="none" stroke="rgb(42,37,32)" stroke-width="1.3"/>
+  <text x="446" y="404" fill="rgb(212,168,83)" font-size="12.5" font-weight="600">Flyway 마이그레이션</text>
+  <text x="446" y="426" fill="rgb(138,133,128)" font-size="11">버전(한 번)·반복(체크섬 변경 시) 두 종류</text>
+  <text x="446" y="443" fill="rgb(138,133,128)" font-size="11">파일=커밋 · flyway_schema_history=로그</text>
+
+  <!-- bottom: parity principle -->
+  <rect x="40" y="472" width="760" height="48" rx="8" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="56" y="494" fill="#66bb6a" font-size="13" font-weight="700">관통 원칙: 환경 동등성(15-Factor)</text>
+  <text x="56" y="513" fill="rgb(138,133,128)" font-size="11.5">개발·테스트·운영이 같은 DB를 써야 운영에서만 나는 벤더 방언 버그를 미리 잡는다.</text>
+</svg>

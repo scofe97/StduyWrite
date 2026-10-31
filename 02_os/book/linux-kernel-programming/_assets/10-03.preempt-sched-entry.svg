@@ -1,0 +1,72 @@
+<svg viewBox="0 0 680 580" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>선점과 스케줄러 진입점 — chrt 질의·preemptible kernel·TIF_NEED_RESCHED</title>
+  <desc>chrt로 스레드의 스케줄링 정책·우선순위를 질의·설정한다(sched_getattr/setattr 시스템콜). 선점 가능 커널은 CONFIG_PREEMPT로 빌드하며 NONE(서버·throughput)·VOLUNTARY(데스크톱)·FULL(LowLat) 모드가 있고, PREEMPT_DYNAMIC로 부팅 시 preempt= 파라미터로 선택한다. 스케줄러 코드는 별도 스레드가 아니라 current가 직접 실행한다. atomic/인터럽트 컨텍스트에서는 schedule()을 절대 부르지 않는다. TIF_NEED_RESCHED 비트는 타이머 인터럽트 housekeeping이나 task wakeup 때 설정되고, 시스템콜/인터럽트 복귀 등 process context opportunity point에서 확인되어 schedule()을 호출한다.</desc>
+  <rect x="0" y="0" width="680" height="580" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">선점과 스케줄러 진입점</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">스케줄러 코드는 별도 스레드가 아니라 current 가 직접 실행합니다</text>
+
+  <!-- chrt 질의 -->
+  <rect x="20" y="74" width="320" height="100" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="96" fill="rgb(212,168,83)" font-size="13" font-weight="bold">chrt — 정책·우선순위 질의/설정</text>
+  <text x="38" y="116" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">chrt -p 1</text>
+  <text x="38" y="134" fill="rgb(138,133,128)" font-size="10">→ 정책(SCHED_OTHER)·RT prio(0) 표시</text>
+  <text x="38" y="152" fill="rgb(138,133,128)" font-size="10">질의=sched_getattr · 설정=sched_setattr (CAP_SYS_NICE)</text>
+  <text x="38" y="168" fill="rgb(138,133,128)" font-size="9">tuna·schedtool 도 가능 · CPU affinity mask 도 per-thread</text>
+
+  <!-- preemptible kernel -->
+  <rect x="350" y="74" width="312" height="100" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="368" y="96" fill="#e8e4df" font-size="13" font-weight="bold">preemptible kernel 모드</text>
+  <text x="368" y="116" fill="rgb(138,133,128)" font-size="10">유저 선점은 항상 가능, 커널 선점은 설정 필요</text>
+  <text x="368" y="134" fill="#e8e4df" font-size="11">NONE(서버·throughput) · VOLUNTARY(데스크톱)</text>
+  <text x="368" y="152" fill="#e8e4df" font-size="11">FULL=LowLat(거의 전체 선점)</text>
+  <text x="368" y="168" fill="rgb(138,133,128)" font-size="9">PREEMPT_DYNAMIC: 부팅 시 preempt= 로 선택</text>
+
+  <!-- 누가 실행 -->
+  <rect x="20" y="190" width="642" height="76" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="212" fill="#66bb6a" font-size="13" font-weight="bold">누가 스케줄러를 실행하나 — current 자신</text>
+  <text x="38" y="232" fill="#e8e4df" font-size="11">"스케줄러 스레드"는 없음. current 가 schedule() 을 실행해 스스로를 CPU 에서 내림</text>
+  <text x="38" y="250" fill="#f47f72" font-size="11">⚠ 황금률: atomic·인터럽트 컨텍스트에서 schedule() 절대 호출 금지(블로킹 불가)</text>
+
+  <!-- TIF_NEED_RESCHED 설정 -->
+  <rect x="20" y="282" width="320" height="148" fill="rgba(173,216,230,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="304" fill="#9cc3df" font-size="13" font-weight="bold">① 설정 — TIF_NEED_RESCHED</text>
+  <text x="38" y="322" fill="rgb(138,133,128)" font-size="10">thread_info.flags 의 비트 (task_struct 내부)</text>
+
+  <rect x="38" y="332" width="284" height="40" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="350" fill="#e8e4df" font-size="11">타이머 인터럽트 housekeeping</text>
+  <text x="52" y="366" fill="rgb(138,133,128)" font-size="9">scheduler_tick() · timeslice 초과/우선 task 시 set</text>
+
+  <rect x="38" y="378" width="284" height="40" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="52" y="396" fill="#e8e4df" font-size="11">task wakeup</text>
+  <text x="52" y="412" fill="rgb(138,133,128)" font-size="9">runqueue 추가 · current 선점해야 하면 set</text>
+
+  <text x="38" y="430" fill="#f47f72" font-size="9">여기선 비트만 set, schedule() 호출 안 함(인터럽트 컨텍스트)</text>
+
+  <!-- TIF_NEED_RESCHED 확인 -->
+  <rect x="350" y="282" width="312" height="148" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="368" y="304" fill="rgb(212,168,83)" font-size="13" font-weight="bold">② 확인 — opportunity point</text>
+  <text x="368" y="322" fill="rgb(138,133,128)" font-size="10">process context 에서 비트 확인 → schedule()</text>
+
+  <rect x="368" y="332" width="276" height="24" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="382" y="349" fill="#e8e4df" font-size="10">시스템콜 복귀 경로</text>
+  <rect x="368" y="358" width="276" height="24" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="382" y="375" fill="#e8e4df" font-size="10">인터럽트 복귀 경로</text>
+  <rect x="368" y="384" width="276" height="24" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="382" y="401" fill="#e8e4df" font-size="10">비선점→선점 전환 (spinlock unlock 등)</text>
+
+  <text x="368" y="424" fill="rgb(138,133,128)" font-size="9">explicit schedule() · cond_resched*() 도 진입점</text>
+
+  <!-- context switch -->
+  <rect x="20" y="446" width="642" height="126" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="468" fill="#e8e4df" font-size="13" font-weight="bold">context switch — __schedule() 안에서</text>
+  <text x="38" y="488" fill="#e8e4df" font-size="11">prev = rq-&gt;curr (= current) · next = pick_next_task() 가 고른 스레드</text>
+
+  <rect x="38" y="500" width="300" height="32" fill="rgba(173,216,230,0.12)" stroke="#7fa8c9"/>
+  <text x="52" y="519" fill="#9cc3df" font-size="11">① MM switch — CR3/TTBR0 를 next mm 으로</text>
+  <rect x="346" y="500" width="298" height="32" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/>
+  <text x="360" y="519" fill="#66bb6a" font-size="11">② CPU switch — 스택·레지스터 prev→next</text>
+
+  <text x="38" y="552" fill="rgb(138,133,128)" font-size="10">prev 상태 저장 후 next 복원 (switch_to 매크로). next 가 멈췄던 곳에서 재개</text>
+  <text x="38" y="568" fill="rgb(138,133,128)" font-size="10">isolcpus= 로 코어 격리 가능(deprecated → cpuset cgroup v2 권장)</text>
+</svg>

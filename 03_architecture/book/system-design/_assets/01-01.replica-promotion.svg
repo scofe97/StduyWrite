@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 548" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">source 가 멈추면 Replica1 이 승격된다</title><desc id="dd">MySQL 의 장애 전환 예시: 부 서버가 릴레이 로그를 다 읽은 것을 확인하고, Replica1 을 새 source 로 올린 뒤 나머지 둘이 Replica1 을 따라가게 한다.</desc>
+<rect width="1000" height="548" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">SYSTEM DESIGN INTERVIEW · 01-01 §4</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">source 가 멈추면 Replica1 이 승격된다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">같은 네 서버가 단계마다 맡은 역할만 바뀝니다</text>
+<text x="190" y="108" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">평상시</text>
+<text x="362" y="108" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">source 정지</text>
+<text x="534" y="108" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">로그 소진 확인</text>
+<text x="706" y="108" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">승격</text>
+<text x="878" y="108" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">재지정</text>
+<line x1="104" y1="120" x2="964" y2="120" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="24" y="155" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#8B98A9">Source</text>
+<line x1="104" y1="180" x2="964" y2="180" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="24" y="215" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#8B98A9">Replica1</text>
+<line x1="104" y1="240" x2="964" y2="240" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="24" y="275" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#8B98A9">Replica2</text>
+<line x1="104" y1="300" x2="964" y2="300" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="24" y="335" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#8B98A9">Replica3</text>
+<line x1="104" y1="360" x2="964" y2="360" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="24" y="384" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">명령 · 주의</text>
+<rect x="112" y="128" width="156" height="44" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="190" y="155" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">쓰기 수신</text>
+<rect x="284" y="128" width="156" height="44" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.2"/>
+<text x="362" y="155" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">정지</text>
+<rect x="456" y="128" width="156" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="534" y="155" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">정지</text>
+<rect x="628" y="128" width="156" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="706" y="155" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">정지</text>
+<rect x="800" y="128" width="156" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="878" y="155" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">정지</text>
+<rect x="112" y="188" width="156" height="44" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="190" y="215" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">복제 중</text>
+<rect x="284" y="188" width="156" height="44" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="362" y="215" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">중단</text>
+<rect x="456" y="188" width="156" height="44" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="534" y="215" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">로그 소진</text>
+<rect x="628" y="188" width="156" height="44" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4"/>
+<text x="706" y="215" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">새 source</text>
+<rect x="800" y="188" width="156" height="44" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="878" y="215" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">쓰기 수신</text>
+<rect x="112" y="248" width="156" height="44" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="190" y="275" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">복제 중</text>
+<rect x="284" y="248" width="156" height="44" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="362" y="275" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">중단</text>
+<rect x="456" y="248" width="156" height="44" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="534" y="275" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">로그 소진</text>
+<rect x="628" y="248" width="156" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="706" y="275" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">대기</text>
+<rect x="800" y="248" width="156" height="44" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="878" y="275" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">Replica1 복제</text>
+<rect x="112" y="308" width="156" height="44" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="190" y="335" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">복제 중</text>
+<rect x="284" y="308" width="156" height="44" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="362" y="335" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">중단</text>
+<rect x="456" y="308" width="156" height="44" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="534" y="335" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">로그 소진</text>
+<rect x="628" y="308" width="156" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="706" y="335" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">대기</text>
+<rect x="800" y="308" width="156" height="44" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="878" y="335" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">Replica1 복제</text>
+<rect x="283.0" y="370" width="158.0" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="362" y="384" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#E3B341">미복제 커밋 유실 가능</text>
+<text x="534" y="380" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">STOP REPLICA IO_THREAD</text>
+<text x="534" y="400" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Has read all relay log</text>
+<text x="706" y="380" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">STOP REPLICA</text>
+<text x="706" y="400" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">RESET BINARY LOGS</text>
+<text x="706" y="420" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">AND GTIDS</text>
+<text x="878" y="380" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">STOP REPLICA</text>
+<text x="878" y="400" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">CHANGE REPLICATION</text>
+<text x="878" y="420" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">SOURCE TO</text>
+<text x="878" y="440" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">SOURCE_HOST='Replica1'</text>
+<text x="878" y="460" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">START REPLICA</text>
+<line x1="12" y1="492" x2="952" y2="492" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="514" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="504" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="514" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">복제 중</text>
+<rect x="196" y="504" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="218" y="514" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">중단 · 확인</text>
+<rect x="331" y="504" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="353" y="514" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">승격</text>
+<rect x="401" y="504" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="423" y="514" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">쓰기 수신</text>
+<rect x="510" y="504" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="532" y="514" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정지</text>
+</svg>

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 400" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif" role="img" aria-label="정상 흐름과 예외 흐름 테스트 시나리오 비교 도식">
+  <title>정상 흐름은 4단계 모두 성공, 예외 흐름은 조회 실패 뒤 단계가 실행되지 않습니다</title>
+  <desc>송금 유스케이스의 테스트 시나리오 두 가지를 비교한다. 정상 흐름(happy flow)은 보내는 계좌 조회, 받는 계좌 조회, 새 금액 계산, 양쪽 금액 변경 네 단계가 모두 성공한다. 예외 흐름(exception flow)은 보내는 계좌 조회는 성공하지만 받는 계좌 조회가 빈 결과라 AccountNotFoundException이 던져지고, 그 뒤 금액 계산과 changeAmount 변경은 실행되지 않는다. 테스트는 정상 흐름뿐 아니라 이 예외 흐름도 검증해야 한다</desc>
+  <rect x="0" y="0" width="760" height="400" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="16" font-weight="bold">정상 흐름 vs 예외 흐름 — 둘 다 테스트합니다</text>
+  <text x="24" y="56" fill="rgb(138,133,128)" font-size="12">예외가 나면 그 뒤 단계는 실행되면 안 됩니다 — 이것도 검증 대상입니다</text>
+
+  <!-- 좌: happy flow -->
+  <text x="40" y="92" fill="#66bb6a" font-size="13" font-weight="bold">✓ 정상 흐름 (happy flow)</text>
+  <rect x="40" y="104" width="320" height="266" rx="10" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="1.5"/>
+
+  <rect x="60" y="124" width="280" height="46" rx="5" fill="rgba(102,187,106,0.14)" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="80" y="145" fill="#66bb6a" font-size="13" font-weight="bold">✓</text>
+  <text x="100" y="152" fill="#e8e4df" font-size="11">① 보내는 계좌 조회 (findById)</text>
+  <rect x="60" y="178" width="280" height="46" rx="5" fill="rgba(102,187,106,0.14)" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="80" y="199" fill="#66bb6a" font-size="13" font-weight="bold">✓</text>
+  <text x="100" y="206" fill="#e8e4df" font-size="11">② 받는 계좌 조회 (findById)</text>
+  <rect x="60" y="232" width="280" height="46" rx="5" fill="rgba(102,187,106,0.14)" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="80" y="253" fill="#66bb6a" font-size="13" font-weight="bold">✓</text>
+  <text x="100" y="260" fill="#e8e4df" font-size="11">③ 새 금액 계산</text>
+  <rect x="60" y="286" width="280" height="46" rx="5" fill="rgba(102,187,106,0.14)" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="80" y="307" fill="#66bb6a" font-size="13" font-weight="bold">✓</text>
+  <text x="100" y="314" fill="#e8e4df" font-size="11">④ 양쪽 changeAmount</text>
+  <text x="60" y="356" fill="rgb(138,133,128)" font-size="10">verify로 changeAmount(1,900)·(2,1100) 호출 확인</text>
+
+  <!-- 우: exception flow -->
+  <text x="400" y="92" fill="#f44336" font-size="13" font-weight="bold">✗ 예외 흐름 (exception flow)</text>
+  <rect x="400" y="104" width="336" height="266" rx="10" fill="rgba(244,67,54,0.06)" stroke="#f44336" stroke-width="1.5"/>
+
+  <rect x="420" y="124" width="296" height="46" rx="5" fill="rgba(102,187,106,0.14)" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="440" y="145" fill="#66bb6a" font-size="13" font-weight="bold">✓</text>
+  <text x="460" y="152" fill="#e8e4df" font-size="11">① 보내는 계좌 조회 (성공)</text>
+  <rect x="420" y="178" width="296" height="46" rx="5" fill="rgba(244,67,54,0.14)" stroke="#f44336" stroke-width="1.5"/>
+  <text x="440" y="199" fill="#f44336" font-size="13" font-weight="bold">✗</text>
+  <text x="460" y="199" fill="#e8e4df" font-size="11">② 받는 계좌 조회 (빈 Optional)</text>
+  <text x="460" y="215" fill="#f44336" font-size="10">→ AccountNotFoundException 던짐</text>
+
+  <rect x="420" y="232" width="296" height="46" rx="5" fill="#0d0d0d" stroke="rgb(90,85,80)" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <text x="440" y="259" fill="rgb(138,133,128)" font-size="13" font-weight="bold">—</text>
+  <text x="460" y="259" fill="rgb(138,133,128)" font-size="11">③ 새 금액 계산 (실행 안 됨)</text>
+  <rect x="420" y="286" width="296" height="46" rx="5" fill="#0d0d0d" stroke="rgb(90,85,80)" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <text x="440" y="313" fill="rgb(138,133,128)" font-size="13" font-weight="bold">—</text>
+  <text x="460" y="313" fill="rgb(138,133,128)" font-size="11">④ changeAmount (실행 안 됨)</text>
+  <text x="420" y="356" fill="rgb(138,133,128)" font-size="10">assertThrows + verify(never())로 미호출 확인</text>
+
+  <defs></defs>
+</svg>

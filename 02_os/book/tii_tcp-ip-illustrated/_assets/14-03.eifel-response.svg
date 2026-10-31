@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 808" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Eifel 응답 — 오탐 판정 뒤 송신 위치와 RTO 를 고친다</title><desc id="dd">첫 RTO 만료 때 srtt 에 2G 를 더한 값과 rttvar 를 보관하고 탐지 알고리즘을 돌린다. 오탐이 아니면 일반 타임아웃 처리로 간다. 일찍 잡은 오탐(SPUR_TO)이면 다음 송신 위치를 새 데이터 시작점으로 옮기고, 늦게 잡은 오탐(LATE_SPUR_TO)이면 그대로 둔다. 어느 쪽이든 혼잡 제어 상태를 다시 맞춘 뒤, 타임아웃 뒤 보낸 데이터의 첫 정상 ACK 로 얻은 RTT 표본 m 과 보관값 중 큰 쪽으로 추정값을 정한다.</desc>
+<rect width="920" height="808" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">TCP/IP ILLUSTRATED VOL.1 · 14-03 §3</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Eifel 응답 — 오탐 판정 뒤 송신 위치와 RTO 를 고친다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">판정 결과에 따라 갈리는 것은 송신 위치이고, RTO 추정값은 두 오탐 모두 같은 식으로 고칩니다</text>
+<rect x="260.0" y="104" width="400" height="56" rx="20" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="460.0" y="128" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">첫 RTO 만료</text>
+<text x="460.0" y="148" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">다음 타임아웃이 먼저 오면 미적용</text>
+<path d="M 460 164 L 460 176" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="260.0" y="184" width="400" height="56" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="460.0" y="208" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">srtt_prev = srtt + 2G</text>
+<text x="460.0" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">rttvar_prev = rttvar 보관</text>
+<path d="M 460 244 L 460 256" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="260.0" y="264" width="400" height="56" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="460.0" y="288" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">탐지 알고리즘 실행</text>
+<text x="460.0" y="308" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">Eifel · F-RTO · DSACK</text>
+<path d="M 460 324 L 460 336" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<polygon points="460,344 570.0,380.0 460,416 350.0,380.0" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="460" y="385.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">SpuriousRecovery</text>
+<rect x="24" y="464" width="240" height="56" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="144.0" y="488" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">일반 타임아웃 처리</text>
+<text x="144.0" y="508" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">오탐 아님</text>
+<rect x="340" y="464" width="240" height="56" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="460.0" y="488" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">SND.NXT ← SND.MAX</text>
+<text x="460.0" y="508" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">go-back-N 연쇄 차단</text>
+<rect x="656" y="464" width="240" height="56" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="776.0" y="488" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">SND.NXT 유지</text>
+<text x="776.0" y="508" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">재전송의 ACK 이미 도착</text>
+<path d="M 350.0 380.0 L 144.0 380.0 L 144.0 456" fill="none" stroke="#E3B341" stroke-width="1.5" marker-end="url(#warn)"/>
+<path d="M 460 416 L 460 456" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<path d="M 570.0 380.0 L 776.0 380.0 L 776.0 456" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<text x="192.0" y="370.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">아님</text>
+<text x="472" y="444" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">SPUR_TO</text>
+<text x="712.0" y="370.0" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">LATE_SPUR_TO</text>
+<path d="M 460.0 520 L 460.0 544" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<path d="M 776.0 520 L 776.0 544" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<rect x="340" y="552" width="556" height="56" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="618.0" y="576" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">혼잡 제어 상태 조정</text>
+<text x="618.0" y="596" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">16장</text>
+<path d="M 618.0 608 L 618.0 624" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="340" y="632" width="556" height="112" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4"/>
+<text x="618.0" y="654" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">첫 정상 ACK 의 RTT 표본 m</text>
+<text x="618.0" y="682" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">srtt ← max(srtt_prev, m)</text>
+<text x="618.0" y="706" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">rttvar ← max(rttvar_prev, m/2)</text>
+<text x="618.0" y="730" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">RTO = srtt + max(G, 4·rttvar)</text>
+<line x1="12" y1="760" x2="872" y2="760" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="782" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="772" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="782" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">추정값 복원</text>
+<rect x="222" y="772" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="244" y="782" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">오탐 뒤 응답</text>
+<rect x="357" y="772" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="379" y="782" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">오탐 아님</text>
+</svg>

@@ -1,0 +1,69 @@
+<svg viewBox="0 0 680 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>프로세스 VAS 세그먼트와 유저·커널 두 스택</title>
+  <desc>왼쪽: 유저 VAS 세그먼트 — 위에서 아래로 스택(아래로 성장), 라이브러리, 힙(위로 성장), bss, 데이터, 텍스트, null trap. 오른쪽: 모든 유저 스레드는 두 스택을 가진다 — 유저 모드 스택(유저 코드 실행 시)과 커널 모드 스택(시스템 콜로 커널 진입 시). 커널 스레드는 커널 스택 하나만. 각 스레드는 task_struct로 표현된다.</desc>
+  <rect x="0" y="0" width="680" height="560" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">프로세스 VAS 세그먼트와 두 스택</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">모든 주소 가능 메모리는 box(VAS) 안에 — 밖을 볼 수 없습니다 (가상 메모리 규칙)</text>
+
+  <!-- 유저 VAS (왼쪽) -->
+  <text x="20" y="86" fill="#9cc3df" font-size="13" font-weight="bold">유저 VAS (높은 주소 → 낮은 주소)</text>
+
+  <rect x="20" y="98" width="300" height="44" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="36" y="118" fill="rgb(212,168,83)" font-size="12">스택 (아래로 성장)</text>
+  <text x="36" y="135" fill="rgb(138,133,128)" font-size="10">rw- · LIFO · 함수 호출·지역변수·복귀</text>
+
+  <rect x="20" y="146" width="300" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="36" y="166" fill="#e8e4df" font-size="12">라이브러리 매핑 (text·data)</text>
+  <text x="36" y="181" fill="rgb(138,133,128)" font-size="10">r-x / rw- · 다른 스레드 스택도 여기</text>
+
+  <rect x="20" y="190" width="300" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="36" y="210" fill="#e8e4df" font-size="12">힙 (위로 성장)</text>
+  <text x="36" y="225" fill="rgb(138,133,128)" font-size="10">rw- · malloc · program break</text>
+
+  <rect x="20" y="234" width="300" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="36" y="255" fill="#e8e4df" font-size="12">bss (미초기화 데이터)</text>
+
+  <rect x="20" y="272" width="300" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="36" y="293" fill="#e8e4df" font-size="12">데이터 (초기화 데이터) · rw-</text>
+
+  <rect x="20" y="310" width="300" height="34" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="36" y="331" fill="#e8e4df" font-size="12">텍스트 (코드) · r-x</text>
+
+  <rect x="20" y="348" width="300" height="30" fill="rgba(244,67,54,0.10)" stroke="#f44336"/>
+  <text x="36" y="368" fill="#e8e4df" font-size="11">null trap 페이지 (0x0)</text>
+
+  <!-- 두 스택 (오른쪽) -->
+  <text x="350" y="86" fill="#66bb6a" font-size="13" font-weight="bold">스레드당 스택 — 특권 레벨당 하나</text>
+
+  <rect x="350" y="98" width="312" height="120" fill="rgba(173,216,230,0.12)" stroke="#7fa8c9"/>
+  <text x="366" y="120" fill="#9cc3df" font-size="12" font-weight="bold">유저 모드 스레드</text>
+  <text x="366" y="140" fill="#e8e4df" font-size="11">두 스택을 가집니다:</text>
+  <rect x="366" y="150" width="280" height="28" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="382" y="169" fill="#e8e4df" font-size="11">① 유저 모드 스택 — 유저 코드 실행 시</text>
+  <rect x="366" y="182" width="280" height="28" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="382" y="201" fill="#e8e4df" font-size="11">② 커널 모드 스택 — 시스템 콜로 커널 진입 시</text>
+
+  <rect x="350" y="228" width="312" height="78" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/>
+  <text x="366" y="250" fill="#66bb6a" font-size="12" font-weight="bold">커널 스레드 (kthread)</text>
+  <text x="366" y="270" fill="#e8e4df" font-size="11">유저 공간을 못 봄 → 스택 하나만:</text>
+  <rect x="366" y="278" width="280" height="22" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="382" y="293" fill="#e8e4df" font-size="11">커널 모드 스택만</text>
+
+  <rect x="350" y="316" width="312" height="62" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="366" y="338" fill="#e8e4df" font-size="12">커널 모드 스택 특징</text>
+  <text x="366" y="356" fill="rgb(138,133,128)" font-size="10">고정 크기·작음 (64bit 4페이지=16KB) · 오버플로 주의</text>
+  <text x="366" y="372" fill="rgb(138,133,128)" font-size="10">+ per-core IRQ 스택 (인터럽트 핸들러용)</text>
+
+  <!-- 두 컨텍스트 -->
+  <rect x="20" y="392" width="642" height="78" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="414" fill="rgb(212,168,83)" font-size="13" font-weight="bold">커널 코드는 두 컨텍스트 중 하나에서 실행</text>
+  <text x="38" y="436" fill="#e8e4df" font-size="11">프로세스 컨텍스트: 시스템 콜·예외로 진입 — 동기적 · 보통 sleep 가능</text>
+  <text x="38" y="456" fill="#e8e4df" font-size="11">인터럽트 컨텍스트: 하드웨어 인터럽트로 진입 — 비동기·atomic · sleep 절대 금지</text>
+
+  <!-- 핵심 -->
+  <rect x="20" y="480" width="642" height="64" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="502" fill="#e8e4df" font-size="12">핵심: 스레드가 KSE(커널 스케줄 단위)입니다 — 모든 스레드(커널 포함)가 task_struct 로 표현됩니다</text>
+  <text x="38" y="522" fill="rgb(138,133,128)" font-size="11">스레드는 스택 빼고 프로세스 자원 공유 — 유저 VAS·열린 파일·시그널·페이징 테이블</text>
+  <text x="38" y="538" fill="rgb(138,133,128)" font-size="10">monolithic: 시스템 콜 시 그 스레드 자신이 커널 모드로 전환해 커널 코드를 실행 (별도 커널 프로세스 없음)</text>
+</svg>

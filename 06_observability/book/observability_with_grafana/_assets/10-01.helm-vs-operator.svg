@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 430" width="100%" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Helm 직접 설치와 오퍼레이터 GitOps 방식의 방향 차이</title>
+  <desc>Helm 으로 직접 설치하면 설정이 바뀔 때마다 중앙 시스템이 각 클러스터를 알고 접근 자격증명을 가진 채 밀어 넣어야 하므로 병목과 보안 위험이 생깁니다. 오퍼레이터를 GitOps 와 결합하면 방향이 뒤집혀 각 클러스터가 중앙의 버전 관리 저장소에서 원하는 설정을 읽어 갑니다. 다만 메이저와 마이너 버전 업그레이드는 여전히 Helm upgrade 로 해야 합니다.</desc>
+
+  <style>
+    .code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 10.5px; }
+  </style>
+
+  <rect width="880" height="430" fill="#0d0d0d"/>
+
+  <text x="30" y="34" fill="#e8e4df" font-size="17" font-weight="700">누가 누구를 아는가</text>
+  <text x="30" y="55" fill="#b8b3ad" font-size="12">화살표 방향이 뒤집힌다</text>
+
+  <!-- Helm push -->
+  <rect x="30" y="76" width="400" height="180" rx="8" fill="#0d0d0d" stroke="#f44336" stroke-width="1.8"/>
+  <rect x="30" y="76" width="400" height="30" rx="8" fill="#f2b8b5"/>
+  <rect x="30" y="98" width="400" height="8" fill="#f2b8b5"/>
+  <text x="48" y="97" fill="#5c1414" font-size="13" font-weight="700">Helm 직접 설치 — 민다</text>
+
+  <rect x="48" y="120" width="150" height="44" rx="6" fill="#f2d4d4"/>
+  <text x="60" y="139" fill="#7a1f1f" font-size="12" font-weight="700">중앙 시스템</text>
+  <text x="60" y="156" fill="#7a1f1f" font-size="10">자격증명을 쥔다</text>
+
+  <path d="M202 142 L246 142" stroke="#f44336" stroke-width="2.2" marker-end="url(#r)"/>
+  <path d="M202 142 L232 142 L232 190 L246 190" fill="none" stroke="#f44336" stroke-width="2.2" marker-end="url(#r)"/>
+  <path d="M202 142 L232 142 L232 218 L246 218" fill="none" stroke="#f44336" stroke-width="2.2" marker-end="url(#r)"/>
+
+  <rect x="250" y="128" width="164" height="28" rx="4" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1"/>
+  <text x="262" y="147" fill="#e8e4df" font-size="11">클러스터 A</text>
+  <rect x="250" y="176" width="164" height="28" rx="4" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1"/>
+  <text x="262" y="195" fill="#e8e4df" font-size="11">클러스터 B</text>
+  <rect x="250" y="204" width="164" height="28" rx="4" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1"/>
+  <text x="262" y="223" fill="#e8e4df" font-size="11">클러스터 C</text>
+
+  <text x="48" y="244" fill="#f44336" font-size="11" font-weight="700">병목과 보안 위험</text>
+
+  <!-- Operator pull -->
+  <rect x="450" y="76" width="400" height="180" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.8"/>
+  <rect x="450" y="76" width="400" height="30" rx="8" fill="#66bb6a"/>
+  <rect x="450" y="98" width="400" height="8" fill="#66bb6a"/>
+  <text x="468" y="97" fill="#0d0d0d" font-size="13" font-weight="700">오퍼레이터 + GitOps — 읽는다</text>
+
+  <rect x="468" y="120" width="150" height="44" rx="6" fill="#e6f7e7"/>
+  <text x="480" y="139" fill="#14521d" font-size="12" font-weight="700">버전 관리 저장소</text>
+  <text x="480" y="156" fill="#14521d" font-size="10">원하는 설정</text>
+
+  <path d="M666 142 L622 142" stroke="#66bb6a" stroke-width="2.2" marker-end="url(#g)"/>
+  <path d="M666 190 L652 190 L652 142 L622 142" fill="none" stroke="#66bb6a" stroke-width="2.2"/>
+  <path d="M666 218 L652 218 L652 142" fill="none" stroke="#66bb6a" stroke-width="2.2"/>
+
+  <rect x="670" y="128" width="164" height="28" rx="4" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1"/>
+  <text x="682" y="147" fill="#e8e4df" font-size="11">클러스터 A</text>
+  <rect x="670" y="176" width="164" height="28" rx="4" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1"/>
+  <text x="682" y="195" fill="#e8e4df" font-size="11">클러스터 B</text>
+  <rect x="670" y="204" width="164" height="28" rx="4" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1"/>
+  <text x="682" y="223" fill="#e8e4df" font-size="11">클러스터 C</text>
+
+  <text x="468" y="244" fill="#66bb6a" font-size="11" font-weight="700">중앙이 클러스터를 몰라도 된다</text>
+
+  <defs>
+    <marker id="r" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#f44336"/>
+    </marker>
+    <marker id="g" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#66bb6a"/>
+    </marker>
+  </defs>
+
+  <!-- operator gains -->
+  <rect x="30" y="270" width="820" height="66" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="50" y="292" fill="rgb(212,168,83)" font-size="12.5" font-weight="700">오퍼레이터가 더 주는 것</text>
+  <rect x="50" y="302" width="250" height="24" rx="4" fill="#fdf3df"/>
+  <text x="60" y="319" fill="#5c4410" font-size="11">CRD 명세로 CI/CD 에서 검증</text>
+  <rect x="314" y="302" width="250" height="24" rx="4" fill="#fdf3df"/>
+  <text x="324" y="319" fill="#5c4410" font-size="11">애너테이션으로 자동 계측</text>
+  <rect x="578" y="302" width="254" height="24" rx="4" fill="#fdf3df"/>
+  <text x="588" y="319" fill="#5c4410" font-size="11">제한적 자동 업그레이드</text>
+
+  <!-- caveat -->
+  <rect x="30" y="348" width="820" height="56" rx="8" fill="#0d0d0d" stroke="#f44336" stroke-width="1.5"/>
+  <text x="50" y="370" fill="#f44336" font-size="12.5" font-weight="700">그래도 남는 것</text>
+  <text x="152" y="370" fill="#e8e4df" font-size="11.5">메이저·마이너 버전 갱신은 여전히</text>
+  <text class="code" x="378" y="370" fill="#e8e4df">helm upgrade</text>
+  <text x="50" y="392" fill="#b8b3ad" font-size="11">파괴적 변경 가능성 때문이다</text>
+</svg>

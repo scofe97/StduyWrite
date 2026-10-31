@@ -1,0 +1,50 @@
+<svg viewBox="0 0 900 440" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>unmount는 블로킹할 때만 — 가상 스레드(협력적) vs 플랫폼 스레드(선점적) 전환</title>
+  <desc>플랫폼 스레드는 OS가 타임 슬라이스가 끝나면 계산 도중에도 강제로 빼앗는 선점적 전환이다. 가상 스레드는 계산 도중에는 빼앗기지 않고, 스스로 블로킹 지점에 닿았을 때만 unmount하는 협력적 전환이다. 그래서 CPU 바운드 작업은 블로킹이 없어 캐리어를 계속 점유한다.</desc>
+  <rect x="0" y="0" width="900" height="440" fill="#0d0d0d"/>
+
+  <text x="450" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#e8e4df">"번갈아"는 시간으로 쪼개는 게 아니라 블로킹마다 자리를 내주는 것</text>
+
+  <!-- ===== 플랫폼 스레드 (선점적) ===== -->
+  <text x="40" y="80" font-size="15" font-weight="700" fill="#e08a87">플랫폼 스레드 — 선점적 (OS가 도중에 강제로 빼앗음)</text>
+  <!-- 타임라인 바 -->
+  <rect x="40" y="92" width="180" height="34" rx="5" fill="#dceaf7"/>
+  <text x="130" y="114" text-anchor="middle" font-size="12" fill="#10243a">스레드 A 계산</text>
+  <rect x="226" y="92" width="14" height="34" fill="#c0504d"/>
+  <rect x="246" y="92" width="180" height="34" rx="5" fill="#e6f7e7"/>
+  <text x="336" y="114" text-anchor="middle" font-size="12" fill="#14521d">스레드 B 계산</text>
+  <rect x="432" y="92" width="14" height="34" fill="#c0504d"/>
+  <rect x="452" y="92" width="180" height="34" rx="5" fill="#dceaf7"/>
+  <text x="542" y="114" text-anchor="middle" font-size="12" fill="#10243a">스레드 A 계산</text>
+  <!-- 빼앗김 표시 -->
+  <text x="233" y="146" text-anchor="middle" font-size="10.5" fill="#e08a87">⟱ 시간 만료</text>
+  <text x="439" y="146" text-anchor="middle" font-size="10.5" fill="#e08a87">⟱ 시간 만료</text>
+  <text x="660" y="113" font-size="11.5" fill="#8a857f">OS가 계산 도중에도</text>
+  <text x="660" y="129" font-size="11.5" fill="#8a857f">강제로 빼앗음 (커널)</text>
+
+  <!-- ===== 가상 스레드 (협력적) ===== -->
+  <text x="40" y="206" font-size="15" font-weight="700" fill="#66bb6a">가상 스레드 — 협력적 (블로킹할 때만 스스로 내려옴)</text>
+  <rect x="40" y="218" width="150" height="34" rx="5" fill="#dceaf7"/>
+  <text x="115" y="240" text-anchor="middle" font-size="12" fill="#10243a">VT-A 계산</text>
+  <rect x="190" y="218" width="80" height="34" rx="5" fill="#fdf3df"/>
+  <text x="230" y="240" text-anchor="middle" font-size="11" fill="#5a3d0a">블로킹!</text>
+  <text x="230" y="270" text-anchor="middle" font-size="10.5" fill="#66bb6a">⟱ 스스로 unmount</text>
+  <rect x="276" y="218" width="170" height="34" rx="5" fill="#e6f7e7"/>
+  <text x="361" y="240" text-anchor="middle" font-size="12" fill="#14521d">VT-B 가 올라타 계산</text>
+  <rect x="452" y="218" width="80" height="34" rx="5" fill="#fdf3df"/>
+  <text x="492" y="240" text-anchor="middle" font-size="11" fill="#5a3d0a">블로킹!</text>
+  <rect x="538" y="218" width="94" height="34" rx="5" fill="#dceaf7"/>
+  <text x="585" y="240" text-anchor="middle" font-size="11" fill="#10243a">VT-A 재개</text>
+  <text x="660" y="239" font-size="11.5" fill="#8a857f">계산 도중엔 안 뺏김 —</text>
+  <text x="660" y="255" font-size="11.5" fill="#8a857f">블로킹에서만 양보 (JVM)</text>
+
+  <!-- 결론 박스 -->
+  <rect x="40" y="320" width="820" height="96" rx="12" fill="#0d0d0d" stroke="#d4a853" stroke-width="2"/>
+  <text x="60" y="348" font-size="14" font-weight="700" fill="#d4a853">앞 편의 협력적 스케줄링이 가상 스레드 층에서 재현 — 양보 시점이 "블로킹"으로 고정</text>
+  <rect x="60" y="362" width="380" height="42" rx="7" fill="#e6f7e7"/>
+  <text x="250" y="380" text-anchor="middle" font-size="12" fill="#14521d">IO 바운드: 블로킹 잦음 → 자주 양보</text>
+  <text x="250" y="397" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14521d">→ 캐리어 활발히 재활용 (이득 큼)</text>
+  <rect x="460" y="362" width="380" height="42" rx="7" fill="#f2d4d4"/>
+  <text x="650" y="380" text-anchor="middle" font-size="12" fill="#7a1f1f">CPU 바운드: 블로킹 없음 → 양보 안 함</text>
+  <text x="650" y="397" text-anchor="middle" font-size="12.5" font-weight="700" fill="#7a1f1f">→ 캐리어 독점 (이득 없음)</text>
+</svg>

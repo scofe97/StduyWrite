@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 576" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Bloom 필터 키 확인 결정 흐름</title><desc id="dd">해시 함수로 비트 배열을 확인하여 0 비트 발견 시 키 부재를 즉시 확정하고 불필요한 디스크 I/O를 건너뛴다.</desc>
+<rect width="880" height="576" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">04-02 · §3 BLOOM FILTER</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Bloom 필터 키 확인 결정 흐름</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">해시 계산(2·9·4번 비트) → 0 비트 여부 분기 → 부재 확정 또는 디스크 블록 검사</text>
+<rect x="28" y="96" width="824" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="23.0" y="106" width="146.0" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="96" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#6A95D8">Bloom 비트 배열</text>
+<text x="176" y="116" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">키당 10비트 할당 · handbag 해시 인덱스: 2, 4, 9 비트 설정</text>
+<text x="202" y="134" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">bit 0</text>
+<rect x="176" y="138" width="52" height="20" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="202" y="152" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">0</text>
+<text x="262" y="134" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">bit 1</text>
+<rect x="236" y="138" width="52" height="20" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="262" y="152" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">0</text>
+<text x="322" y="134" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F08A59">bit 2</text>
+<rect x="296" y="138" width="52" height="20" rx="3" fill="#161B22" stroke="#F08A59" stroke-width="1.2"/>
+<text x="322" y="152" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">1</text>
+<text x="382" y="134" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">bit 3</text>
+<rect x="356" y="138" width="52" height="20" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="382" y="152" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">0</text>
+<text x="442" y="134" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F08A59">bit 4</text>
+<rect x="416" y="138" width="52" height="20" rx="3" fill="#161B22" stroke="#F08A59" stroke-width="1.2"/>
+<text x="442" y="152" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">1</text>
+<text x="502" y="134" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">bit 5</text>
+<rect x="476" y="138" width="52" height="20" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="502" y="152" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">0</text>
+<text x="562" y="134" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">bit 6</text>
+<rect x="536" y="138" width="52" height="20" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="562" y="152" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">0</text>
+<text x="622" y="134" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">bit 7</text>
+<rect x="596" y="138" width="52" height="20" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="622" y="152" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">0</text>
+<text x="682" y="134" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">bit 8</text>
+<rect x="656" y="138" width="52" height="20" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="682" y="152" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">0</text>
+<text x="742" y="134" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F08A59">bit 9</text>
+<rect x="716" y="138" width="52" height="20" rx="3" fill="#161B22" stroke="#F08A59" stroke-width="1.2"/>
+<text x="742" y="152" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">1</text>
+<rect x="320" y="176" width="240" height="36" rx="18" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="440" y="199" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">키 검색: get(target_key)</text>
+<path d="M 440 212 L 440 244" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="300" y="244" width="280" height="44" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="440" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">해시 함수 k=3 개 계산</text>
+<text x="440" y="278" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">해시 인덱스: (h1, h2, h3) 산출</text>
+<path d="M 440 288 L 440 318" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<path d="M 440 318.0 L 570.0 348 L 440 378.0 L 310.0 348 Z" fill="#161B22" stroke="#F08A59" stroke-width="1.4"/>
+<text x="440" y="344" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">비트 중 하나라도 0인가?</text>
+<text x="440" y="362" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">최소 1개 비트가 0인 상태</text>
+<path d="M 310.0 348 L 212 348" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="260" y="338" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">예 (비트 0)</text>
+<rect x="36" y="320" width="176" height="56" rx="6" fill="#0D1117" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="124" y="342" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">키 부재 확정</text>
+<text x="124" y="362" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">해당 SSTable에 확실히 없음</text>
+<path d="M 124 376 L 124 420" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<rect x="36" y="420" width="176" height="52" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.4"/>
+<text x="124" y="440" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">SSTable 파일 건너뜀</text>
+<text x="124" y="458" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">그 SSTable 읽기 생략</text>
+<path d="M 570.0 348 L 668 348" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<text x="620" y="338" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">아니오 (모두 1)</text>
+<rect x="668" y="320" width="176" height="56" rx="6" fill="#0D1117" stroke="#E3B341" stroke-width="1.2"/>
+<text x="756" y="342" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">키 존재 가능성 높음</text>
+<text x="756" y="362" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">sparse 인덱스 디스크 검사</text>
+<path d="M 756 376 L 756 404" fill="none" stroke="#E3B341" stroke-width="1.2" marker-end="url(#warn)"/>
+<rect x="656" y="404" width="200" height="68" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="756" y="422" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">디스크 블록 검증 결과</text>
+<text x="672" y="442" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">실제 키 존재 → 값 반환</text>
+<text x="672" y="460" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">거짓양성(1%) → 다음 탐색</text>
+<line x1="12" y1="520" x2="832" y2="520" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="542" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="532" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="542" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">해시 및 비트 확인</text>
+<rect x="274" y="532" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="296" y="542" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">부재 확정 · I/O 생략</text>
+<rect x="500" y="532" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="522" y="542" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">거짓양성 가능 · 디스크 확인</text>
+<rect x="752" y="532" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="774" y="542" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">분기 판단 (focal)</text>
+</svg>

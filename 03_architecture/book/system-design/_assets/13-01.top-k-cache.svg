@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 612" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">노드마다 상위 5 개를 들고 있으면 접두사 노드에서 바로 읽는다</title><desc id="dd">b 노드는 아래 질의 여섯 개 중 위쪽 다섯 개만 캐시하고, 질의 하나뿐인 leaf 는 자기 하나를 캐시한다.</desc>
+<rect width="960" height="612" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">SYSTEM DESIGN INTERVIEW · 13-01 §4</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">노드마다 상위 5 개를 들고 있으면 접두사 노드에서 바로 읽는다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">예시 질의 · best 35 · bet 29 · bee 20 · be 15 · buy 14 · beer 10 · k = 5</text>
+<text x="24" y="108" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#5E6B7E">노드 · 질의 빈도</text>
+<text x="464" y="108" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#5E6B7E">캐시한 상위 5</text>
+<path d="M 36 156 L 36 184 L 56 184" fill="none" stroke="#8B98A9" stroke-width="1.2"/>
+<path d="M 72 200 L 72 228 L 92 228" fill="none" stroke="#8B98A9" stroke-width="1.2"/>
+<path d="M 108 244 L 108 272 L 128 272" fill="none" stroke="#8B98A9" stroke-width="1.2"/>
+<path d="M 72 200 L 72 316 L 92 316" fill="none" stroke="#8B98A9" stroke-width="1.2"/>
+<path d="M 108 332 L 108 360 L 128 360" fill="none" stroke="#8B98A9" stroke-width="1.2"/>
+<path d="M 72 200 L 72 404 L 92 404" fill="none" stroke="#8B98A9" stroke-width="1.2"/>
+<path d="M 36 156 L 36 448 L 56 448" fill="none" stroke="#8B98A9" stroke-width="1.2"/>
+<path d="M 72 464 L 72 492 L 92 492" fill="none" stroke="#8B98A9" stroke-width="1.2"/>
+<rect x="24" y="124" width="120" height="32" rx="6" fill="#6A95D810" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="84.0" y="145" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">b</text>
+<rect x="464" y="126" width="70.6" height="28" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="499.3" y="145" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">best 35</text>
+<rect x="542.6" y="126" width="62.8" height="28" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="574.0" y="145" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">bet 29</text>
+<rect x="613.4" y="126" width="62.8" height="28" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="644.8" y="145" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">bee 20</text>
+<rect x="684.1999999999999" y="126" width="55.0" height="28" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="711.6999999999999" y="145" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">be 15</text>
+<rect x="747.1999999999999" y="126" width="62.8" height="28" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="778.5999999999999" y="145" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">buy 14</text>
+<rect x="60" y="168" width="120" height="32" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.4"/>
+<text x="120.0" y="189" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">be · 15</text>
+<rect x="464" y="170" width="70.6" height="28" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="499.3" y="189" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">best 35</text>
+<rect x="542.6" y="170" width="62.8" height="28" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="574.0" y="189" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">bet 29</text>
+<rect x="613.4" y="170" width="62.8" height="28" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="644.8" y="189" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">bee 20</text>
+<rect x="684.1999999999999" y="170" width="55.0" height="28" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="711.6999999999999" y="189" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">be 15</text>
+<rect x="747.1999999999999" y="170" width="70.6" height="28" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="782.4999999999999" y="189" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">beer 10</text>
+<rect x="96" y="212" width="120" height="32" rx="6" fill="#6A95D810" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="156.0" y="233" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">bee · 20</text>
+<rect x="464" y="214" width="62.8" height="28" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="495.4" y="233" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">bee 20</text>
+<rect x="534.8" y="214" width="70.6" height="28" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="570.0999999999999" y="233" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">beer 10</text>
+<rect x="132" y="256" width="120" height="32" rx="6" fill="#6A95D810" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="192.0" y="277" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">beer · 10</text>
+<rect x="464" y="258" width="70.6" height="28" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="499.3" y="277" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">beer 10</text>
+<rect x="96" y="300" width="120" height="32" rx="6" fill="#6A95D810" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="156.0" y="321" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">bes</text>
+<rect x="464" y="302" width="70.6" height="28" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="499.3" y="321" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">best 35</text>
+<rect x="132" y="344" width="120" height="32" rx="6" fill="#6A95D810" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="192.0" y="365" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">best · 35</text>
+<rect x="464" y="346" width="70.6" height="28" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="499.3" y="365" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">best 35</text>
+<rect x="96" y="388" width="120" height="32" rx="6" fill="#6A95D810" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="156.0" y="409" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">bet · 29</text>
+<rect x="464" y="390" width="62.8" height="28" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="495.4" y="409" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">bet 29</text>
+<rect x="60" y="432" width="120" height="32" rx="6" fill="#6A95D810" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="120.0" y="453" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">bu</text>
+<rect x="464" y="434" width="62.8" height="28" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="495.4" y="453" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">buy 14</text>
+<rect x="96" y="476" width="120" height="32" rx="6" fill="#6A95D810" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="156.0" y="497" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">buy · 14</text>
+<rect x="464" y="478" width="62.8" height="28" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="495.4" y="497" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">buy 14</text>
+<text x="830.0" y="145" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#F0616D">beer 10 탈락</text>
+<line x1="12" y1="556" x2="912" y2="556" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="578" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="568" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="578" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">노드와 캐시</text>
+<rect x="222" y="568" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="244" y="578" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">be 노드</text>
+<rect x="331" y="568" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="353" y="578" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">밀려나는 질의</text>
+</svg>

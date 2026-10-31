@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">execve 를 낸 UID 가 메시지를 고른다</title><desc id="dd">UID 501 과 0 은 config 에 항목이 있어 그 메시지를 쓰고, 항목이 없는 UID 1 은 기본 메시지 Hello World 를 쓴다.</desc>
+<rect width="960" height="500" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING EBPF · 04-01 §1</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">execve 를 낸 UID 가 메시지를 고른다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">같은 hello() 가 UID 에 따라 다른 줄을 냅니다</text>
+<rect x="232.0" y="100" width="112" height="20" rx="10" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="288.0" y="114" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">01 execve</text>
+<rect x="440.0" y="100" width="112" height="20" rx="10" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="496.0" y="114" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">02 config 조회</text>
+<rect x="630.0" y="100" width="112" height="20" rx="10" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="686.0" y="114" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">03 메시지</text>
+<rect x="806.0" y="100" width="112" height="20" rx="10" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="862.0" y="114" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">04 출력 줄</text>
+<rect x="12" y="140" width="936" height="88" fill="#F5F5F3" fill-opacity="0.025"/>
+<text x="24" y="188.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">ls</text>
+<text x="24" y="276.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">sudo ls</text>
+<rect x="12" y="316" width="936" height="88" fill="#F5F5F3" fill-opacity="0.025"/>
+<text x="24" y="364.0" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">sudo -u daemon ls</text>
+<rect x="200" y="152" width="176" height="64" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="288.0" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">uid 501</text>
+<text x="288.0" y="200" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">pid 37926 · bash</text>
+<rect x="408" y="152" width="176" height="64" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="496.0" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">lookup(501)</text>
+<text x="496.0" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">항목 있음</text>
+<rect x="616" y="152" width="140" height="64" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="686.0" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">Hi user 501!</text>
+<text x="686.0" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">config 의 값</text>
+<rect x="788" y="152" width="148" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="862.0" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">37926 501 bash</text>
+<text x="862.0" y="200" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">Hi user 501!</text>
+<path d="M 378 184 L 402 184" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<path d="M 586 184 L 610 184" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<path d="M 758 184 L 782 184" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<rect x="200" y="240" width="176" height="64" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="288.0" y="268" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">uid 0</text>
+<text x="288.0" y="288" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">pid 37929 · sudo</text>
+<rect x="408" y="240" width="176" height="64" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="496.0" y="268" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">lookup(0)</text>
+<text x="496.0" y="288" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">항목 있음</text>
+<rect x="616" y="240" width="140" height="64" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="686.0" y="268" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">Hey root!</text>
+<text x="686.0" y="288" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">config 의 값</text>
+<rect x="788" y="240" width="148" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="862.0" y="268" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">37929 0 sudo</text>
+<text x="862.0" y="288" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">Hey root!</text>
+<path d="M 378 272 L 402 272" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<path d="M 586 272 L 610 272" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<path d="M 758 272 L 782 272" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<rect x="200" y="328" width="176" height="64" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="288.0" y="356" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">uid 1</text>
+<text x="288.0" y="376" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">pid 37933 · sudo</text>
+<rect x="408" y="328" width="176" height="64" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="496.0" y="356" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#E3B341">lookup(1)</text>
+<text x="496.0" y="376" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">항목 없음</text>
+<rect x="616" y="328" width="140" height="64" rx="6" fill="#F08A591F" stroke="#F08A59" stroke-width="1.4"/>
+<text x="686.0" y="356" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">Hello World</text>
+<text x="686.0" y="376" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">기본 메시지</text>
+<rect x="788" y="328" width="148" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="862.0" y="356" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">37933 1 sudo</text>
+<text x="862.0" y="376" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">Hello World</text>
+<path d="M 378 360 L 402 360" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<path d="M 586 360 L 610 360" fill="none" stroke="#E3B341" stroke-width="1.5" marker-end="url(#warn)"/>
+<path d="M 758 360 L 782 360" fill="none" stroke="#F08A59" stroke-width="1.5" marker-end="url(#acc)"/>
+<line x1="12" y1="444" x2="912" y2="444" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="466" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="456" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="466" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">execve 호출</text>
+<rect x="261" y="456" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="283" y="466" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">조회 성공·값</text>
+<rect x="396" y="456" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="418" y="466" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">항목 없음</text>
+<rect x="505" y="456" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="527" y="466" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">기본 메시지</text>
+</svg>

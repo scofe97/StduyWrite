@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 560" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">맵 종류는 키가 무엇이고 무엇에 쓰이는지로 묶인다</title><desc id="dd">BPF 맵은 배열 계열, 해시 계열, 특수 목적, 객체 참조 네 묶음으로 나뉜다. 해시 계열에는 per-CPU 와 LRU 변형이 있고 배열에도 per-CPU 변형이 있다. 이 편의 예제는 HASH 를 쓴다.</desc>
+<rect width="920" height="560" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING EBPF · 02-01 §3</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">맵 종류는 키가 무엇이고 무엇에 쓰이는지로 묶인다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">per-CPU 변형은 배열과 해시 양쪽에 있습니다</text>
+<line x1="460.0" y1="152" x2="460.0" y2="176" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="120.0" y1="176" x2="792.0" y2="176" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="120.0" y1="176" x2="120.0" y2="196" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="32" y1="248" x2="32" y2="334" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="32" y1="290" x2="44" y2="290" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="32" y1="334" x2="44" y2="334" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="344.0" y1="176" x2="344.0" y2="196" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="256" y1="248" x2="256" y2="422" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="256" y1="290" x2="268" y2="290" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="256" y1="334" x2="268" y2="334" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="256" y1="378" x2="268" y2="378" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="256" y1="422" x2="268" y2="422" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="568.0" y1="176" x2="568.0" y2="196" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="480" y1="248" x2="480" y2="422" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="480" y1="290" x2="492" y2="290" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="480" y1="334" x2="492" y2="334" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="480" y1="378" x2="492" y2="378" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="480" y1="422" x2="492" y2="422" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="792.0" y1="176" x2="792.0" y2="196" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="704" y1="248" x2="704" y2="466" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="704" y1="290" x2="716" y2="290" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="704" y1="334" x2="716" y2="334" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="704" y1="378" x2="716" y2="378" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="704" y1="422" x2="716" y2="422" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="704" y1="466" x2="716" y2="466" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<rect x="340" y="100" width="240" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="460.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#F5F5F3">BPF 맵</text>
+<text x="460.0" y="142" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">대부분 키-값 저장소</text>
+<rect x="20" y="196" width="200" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="120.0" y="220" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">배열 계열</text>
+<text x="120.0" y="238" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">키는 4바이트 인덱스</text>
+<rect x="44" y="272" width="176" height="36" rx="5" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="52" y="295" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">ARRAY</text>
+<text x="212" y="295" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">인덱스 → 값</text>
+<rect x="44" y="316" width="176" height="36" rx="5" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.3"/>
+<text x="52" y="339" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">PERCPU_ARRAY</text>
+<text x="212" y="339" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">CPU 별 값</text>
+<rect x="244" y="196" width="200" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="344.0" y="220" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">해시 계열</text>
+<text x="344.0" y="238" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">키는 임의 타입</text>
+<rect x="268" y="272" width="176" height="36" rx="5" fill="#F08A5914" stroke="#F08A59" stroke-width="1.3"/>
+<text x="276" y="295" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F08A59">HASH</text>
+<text x="436" y="295" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">키 → 값</text>
+<rect x="268" y="316" width="176" height="36" rx="5" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.3"/>
+<text x="276" y="339" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">PERCPU_HASH</text>
+<text x="436" y="339" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">CPU 별 값</text>
+<rect x="268" y="360" width="176" height="36" rx="5" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="276" y="383" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">LRU_HASH</text>
+<text x="436" y="383" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">오래 안 쓴 것 제거</text>
+<rect x="268" y="404" width="176" height="36" rx="5" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.3"/>
+<text x="276" y="427" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">LRU_PERCPU_HASH</text>
+<text x="436" y="427" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">CPU 별 값</text>
+<rect x="468" y="196" width="200" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="568.0" y="220" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">특수 목적</text>
+<text x="568.0" y="238" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">연산에 맞춘 구조</text>
+<rect x="492" y="272" width="176" height="36" rx="5" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="500" y="295" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">QUEUE</text>
+<text x="660" y="295" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">FIFO</text>
+<rect x="492" y="316" width="176" height="36" rx="5" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="500" y="339" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">STACK</text>
+<text x="660" y="339" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">LIFO</text>
+<rect x="492" y="360" width="176" height="36" rx="5" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="500" y="383" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">LPM_TRIE</text>
+<text x="660" y="383" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">최장 접두사</text>
+<rect x="492" y="404" width="176" height="36" rx="5" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="500" y="427" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">BLOOM_FILTER</text>
+<text x="660" y="427" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">있는지 검사</text>
+<rect x="692" y="196" width="200" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="792.0" y="220" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">객체 참조</text>
+<text x="792.0" y="238" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">커널 객체를 가리킴</text>
+<rect x="716" y="272" width="176" height="36" rx="5" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="724" y="295" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">SOCKMAP</text>
+<text x="884" y="295" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">소켓</text>
+<rect x="716" y="316" width="176" height="36" rx="5" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="724" y="339" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">DEVMAP</text>
+<text x="884" y="339" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">네트워크 장치</text>
+<rect x="716" y="360" width="176" height="36" rx="5" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="724" y="383" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">PROG_ARRAY</text>
+<text x="884" y="383" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">프로그램</text>
+<rect x="716" y="404" width="176" height="36" rx="5" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="724" y="427" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">ARRAY_OF_MAPS</text>
+<text x="884" y="427" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">맵 속의 맵</text>
+<rect x="716" y="448" width="176" height="36" rx="5" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="724" y="471" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">HASH_OF_MAPS</text>
+<text x="884" y="471" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">맵 속의 맵</text>
+<line x1="12" y1="504" x2="872" y2="504" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="526" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="516" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="526" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">이 편의 해시 맵</text>
+<rect x="261" y="516" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="283" y="526" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">per-CPU 변형</text>
+</svg>

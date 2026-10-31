@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">프로그램 참조가 늘고 주는 사건의 순서</title><desc id="dd">BPF_PROG_LOAD·kprobe 부착·prog pin 이 참조를 하나씩 더하고, 프로세스 종료는 fd 와 추적 부착의 참조를 줄이며, 고정 경로를 지우면 0 이 되어 해제된다.</desc>
+<rect width="960" height="520" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING EBPF · 04-01 §4</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">프로그램 참조가 늘고 주는 사건의 순서</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">고정이 참조를 하나 쥐고 있는 동안 프로그램이 남습니다</text>
+<rect x="12" y="104" width="936" height="84" fill="#F5F5F3" fill-opacity="0.025"/>
+<line x1="12" y1="104" x2="948" y2="104" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="24" y="150.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">로더 프로세스</text>
+<line x1="12" y1="188" x2="948" y2="188" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="24" y="234.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">BPF 파일시스템</text>
+<rect x="12" y="272" width="936" height="84" fill="#F5F5F3" fill-opacity="0.025"/>
+<line x1="12" y1="272" x2="948" y2="272" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="24" y="318.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">훅 · 링크</text>
+<line x1="12" y1="356" x2="948" y2="356" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="24" y="402.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">커널 참조 증감</text>
+<line x1="12" y1="440" x2="948" y2="440" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<path d="M 234 170 L 234 370" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<path d="M 362 338 L 362 370" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<path d="M 490 254 L 490 370" fill="none" stroke="#3FB98C" stroke-width="1.5" marker-end="url(#ok)"/>
+<path d="M 618 170 L 618 370" fill="none" stroke="#E3B341" stroke-width="1.5" marker-end="url(#warn)"/>
+<path d="M 746 338 L 746 370" fill="none" stroke="#E3B341" stroke-width="1.5" marker-end="url(#warn)"/>
+<path d="M 874 254 L 874 370" fill="none" stroke="#F08A59" stroke-width="1.5" marker-end="url(#acc)"/>
+<rect x="168" y="124" width="132" height="44" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="234" y="143" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">BPF_PROG_LOAD</text>
+<text x="234" y="160" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">fd 6</text>
+<rect x="178" y="376" width="112" height="44" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="234" y="404" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#3FB98C">+1</text>
+<rect x="296" y="292" width="132" height="44" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="362" y="311" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">kprobe 부착</text>
+<text x="362" y="328" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">추적 부착</text>
+<rect x="306" y="376" width="112" height="44" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="362" y="404" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#3FB98C">+1</text>
+<rect x="424" y="208" width="132" height="44" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="490" y="227" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">prog pin</text>
+<text x="490" y="244" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">/sys/fs/bpf/hi</text>
+<rect x="434" y="376" width="112" height="44" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="490" y="404" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#3FB98C">+1</text>
+<rect x="552" y="124" width="132" height="44" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="618" y="143" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">프로세스 종료</text>
+<text x="618" y="160" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">fd 닫힘</text>
+<rect x="562" y="376" width="112" height="44" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="618" y="404" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#E3B341">−1</text>
+<rect x="680" y="292" width="132" height="44" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="746" y="311" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">부착 해제</text>
+<text x="746" y="328" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">추적 부착</text>
+<rect x="690" y="376" width="112" height="44" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="746" y="404" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#E3B341">−1</text>
+<rect x="808" y="208" width="132" height="44" rx="6" fill="#8B98A912" stroke="#8B98A9" stroke-width="1.2"/>
+<text x="874" y="227" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">rm</text>
+<text x="874" y="244" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">/sys/fs/bpf/hi</text>
+<rect x="818" y="376" width="112" height="44" rx="6" fill="#F08A591F" stroke="#F08A59" stroke-width="1.4"/>
+<text x="874" y="404" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">−1 · 해제</text>
+<line x1="12" y1="464" x2="912" y2="464" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="486" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="476" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="486" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">참조 +1</text>
+<rect x="209" y="476" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="231" y="486" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">참조 −1</text>
+<rect x="318" y="476" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="340" y="486" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">0 · 해제</text>
+</svg>

@@ -1,0 +1,52 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>JPA 읽기 최적화 — lazy/eager·JOIN·named query</title>
+  <desc>JPA 읽기 최적화는 캐시 때문에 복잡하다. JPA는 세 경우에 읽는다. find, query 실행, 관계 탐색이다. 두 방향이 있다. 안 쓸 데이터는 덜 읽고, 확실히 쓸 데이터는 더 읽는다. 덜 읽기는 lazy로 표시한다. 큰 BLOB CLOB에 쓴다. fetch group으로 여러 lazy 필드를 묶어 한 번에 로드한다. 더 읽기는 eager fetching이다. OneToOne ManyToOne은 기본 eager라 거의 안 쓰면 lazy로 반대 최적화한다. 주의할 점은 eager 관계가 JOIN을 쓰지 않는다는 것이다. 주 객체 쿼리 후 관련 객체마다 별도 SQL을 낸다. JOIN이 필요하면 JPQL에 JOIN FETCH를 쓴다. 쿼리는 fetch size를 vendor 프로퍼티로 설정한다. setFirstResult setMaxResults로 페이징한다. named query가 ad hoc보다 빠르다. PreparedStatement와 bind 파라미터를 써 statement cache를 활용하기 때문이다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">JPA 읽기 최적화 — lazy/eager·JOIN</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">캐시 때문에 복잡 — 안 쓸 데이터는 덜, 확실히 쓸 데이터는 더 읽습니다</text>
+
+  <!-- 세 경로 -->
+  <rect x="20" y="74" width="642" height="56" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="96" fill="#e8e4df" font-size="13" font-weight="bold">JPA가 읽는 세 경우</text>
+  <text x="38" y="118" fill="rgb(138,133,128)" font-size="11">① find() 호출   ② query 실행   ③ 기존 entity의 관계로 새 entity 탐색(getOptions)</text>
+
+  <!-- 덜 읽기 -->
+  <rect x="20" y="138" width="320" height="138" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="160" fill="#9cc3df" font-size="12" font-weight="bold">덜 읽기 — lazy</text>
+  <text x="38" y="180" fill="rgb(138,133,128)" font-size="10">필드를 lazy로 표시 → SQL에서 제외</text>
+  <text x="38" y="198" fill="rgb(138,133,128)" font-size="10">getter 실행 시 별도 DB 왕복</text>
+  <text x="38" y="216" fill="rgb(138,133,128)" font-size="10">큰 BLOB/CLOB에 사용(@Lob LAZY)</text>
+  <text x="38" y="236" fill="#66bb6a" font-size="10">→ SQL 빠름 + 메모리·GC 절감</text>
+  <text x="38" y="256" fill="rgb(212,168,83)" font-size="10">fetch group: 여러 lazy를 묶어 로드</text>
+
+  <!-- 더 읽기 -->
+  <rect x="350" y="138" width="312" height="138" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="368" y="160" fill="rgb(212,168,83)" font-size="12" font-weight="bold">더 읽기 — eager</text>
+  <text x="368" y="180" fill="rgb(138,133,128)" font-size="10">관련 entity를 함께 로드(EAGER)</text>
+  <text x="368" y="198" fill="rgb(138,133,128)" font-size="10">OneToOne·ManyToOne은 기본 eager</text>
+  <text x="368" y="216" fill="rgb(138,133,128)" font-size="10">거의 안 쓰면 LAZY로 반대 최적화</text>
+  <text x="368" y="236" fill="#f47f72" font-size="10">주의: eager는 JOIN을 쓰지 않음</text>
+  <text x="368" y="256" fill="#f47f72" font-size="10">주 쿼리 + 관련마다 별도 SQL</text>
+
+  <!-- JOIN FETCH -->
+  <rect x="20" y="284" width="642" height="92" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="306" fill="#66bb6a" font-size="13" font-weight="bold">JOIN이 필요하면 JPQL JOIN FETCH</text>
+  <text x="38" y="328" fill="rgb(138,133,128)" font-size="11">find()으로는 JOIN 제어 불가 → query에 JOIN을 직접 프로그래밍</text>
+  <text x="38" y="348" fill="rgb(138,133,128)" font-size="11">SELECT s FROM StockOptionImpl s JOIN FETCH s.optionsPrices</text>
+  <text x="38" y="368" fill="#f47f72" font-size="11">단 L2 캐시와 예상 밖 상호작용 — 다음 편(캐시) 참조</text>
+
+  <!-- 페이징/named query -->
+  <rect x="20" y="384" width="642" height="92" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="406" fill="#9cc3df" font-size="13" font-weight="bold">batching·페이징·named query</text>
+  <text x="38" y="428" fill="rgb(138,133,128)" font-size="11">fetch size를 vendor 프로퍼티로 (EclipseLink JDBC_FETCH_SIZE, Hibernate @BatchSize)</text>
+  <text x="38" y="448" fill="rgb(138,133,128)" font-size="11">setFirstResult(101)+setMaxResults(100) → 101~200만 가져옴(웹 페이징)</text>
+  <text x="38" y="468" fill="#66bb6a" font-size="11">named query가 ad hoc보다 빠름 — PreparedStatement+bind로 statement cache 활용</text>
+
+  <!-- 핵심 -->
+  <rect x="20" y="484" width="642" height="98" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="506" fill="rgb(212,168,83)" font-size="13" font-weight="bold">핵심</text>
+  <text x="38" y="528" fill="#e8e4df" font-size="11">자주 안 쓰는 큰 필드는 lazy, 관련 entity는 앱 필요에 따라 eager/lazy</text>
+  <text x="38" y="550" fill="#e8e4df" font-size="11">eager 로딩 시 named query로 JOIN 한 문장 — 단 L2 캐시 영향 인지(항상 최선 아님)</text>
+  <text x="38" y="572" fill="rgb(138,133,128)" font-size="11">named query가 PreparedStatement를 쉽게 써 regular query보다 빠른 경우가 많음</text>
+</svg>

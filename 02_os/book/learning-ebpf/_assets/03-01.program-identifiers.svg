@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 520" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">적재된 eBPF 프로그램의 식별자와 참조 객체 구조</title><desc id="dd">bpftool 은 프로그램을 ID·이름·태그·고정 경로로 지정하며 맵과 BTF 를 참조합니다</desc>
+<rect width="920" height="520" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING EBPF · 03-01 §4</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">적재된 eBPF 프로그램의 식별자와 참조 객체 구조</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">커널 내부 ID · 함수 이름 · 명령어 해시 태그 · 고정 경로 및 참조 맵</text>
+<rect x="360" y="100" width="200" height="48" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<text x="460" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">프로그램 hello</text>
+<text x="460" y="136" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">type xdp · bpf_prog</text>
+<rect x="140" y="184" width="260" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<text x="270" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">네 가지 식별자</text>
+<text x="270" y="218" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">ID · 이름 · 태그 · 고정 경로</text>
+<rect x="520" y="184" width="260" height="44" rx="6" fill="#6A95D815" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="650" y="204" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">참조 객체</text>
+<text x="650" y="218" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">BPF 맵 및 BTF 타입 정보</text>
+<line x1="460" y1="148" x2="460" y2="164" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="270" y1="164" x2="650" y2="164" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="270" y1="164" x2="270" y2="184" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="650" y1="164" x2="650" y2="184" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="160" y1="228" x2="160" y2="414" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="160" y1="270" x2="176" y2="270" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<rect x="176" y="250" width="300" height="40" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="188" y="268" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">ID: 540</text>
+<text x="188" y="282" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">적재마다 새로 붙음</text>
+<line x1="160" y1="318" x2="176" y2="318" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<rect x="176" y="298" width="300" height="40" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="188" y="316" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#E3B341">name: hello</text>
+<text x="188" y="330" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">함수 이름 · 겹칠 수 있음</text>
+<line x1="160" y1="366" x2="176" y2="366" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<rect x="176" y="346" width="300" height="40" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="188" y="364" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F08A59">tag: d35b94b4c0c10efb</text>
+<text x="188" y="378" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">명령 해시 앞 8바이트 · 명령이 같으면 같음</text>
+<line x1="160" y1="414" x2="176" y2="414" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<rect x="176" y="394" width="300" height="40" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="188" y="412" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">pinned: /sys/fs/bpf/hello</text>
+<text x="188" y="426" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">고정 경로 · 유일</text>
+<line x1="540" y1="228" x2="540" y2="318" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="540" y1="270" x2="556" y2="270" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<rect x="556" y="250" width="300" height="40" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="568" y="268" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">map_ids: [165, 166]</text>
+<text x="568" y="282" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">프로그램이 참조하는 맵 두 개</text>
+<line x1="540" y1="318" x2="556" y2="318" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<rect x="556" y="298" width="300" height="40" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="568" y="316" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">btf_id: 254</text>
+<text x="568" y="330" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">-g 로 만든 BTF 블록</text>
+<line x1="12" y1="474" x2="872" y2="474" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="496" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="486" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">고유 식별자</text>
+<rect x="222" y="486" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="244" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">명령어 태그</text>
+<rect x="344" y="486" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="366" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">외부 참조 객체</text>
+<rect x="492" y="486" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="514" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">중복 가능 이름</text>
+</svg>

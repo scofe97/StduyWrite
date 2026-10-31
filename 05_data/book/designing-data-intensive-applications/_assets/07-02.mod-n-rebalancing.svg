@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 530" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">mod N 방식의 노드 수 변경과 키 대이동</title><desc id="dd">노드 수가 3개에서 4개로 증가할 때 hash(key) % N 결과가 바뀌어 전체 키의 75%가 다른 노드로 불필요하게 이동한다.</desc>
+<rect width="880" height="530" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">07-02 · §2 DATA FLOW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">mod N 방식의 노드 수 변경과 키 대이동</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">노드 3개(hash % 3) vs 노드 4개(hash % 4) · 24개 키 중 18개 키(75%) 재배치 발생</text>
+<rect x="28" y="104" width="824" height="34" rx="4" fill="#F08A5914" stroke="#F08A59" stroke-width="1.0"/>
+<text x="440.0" y="126" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">문제: 노드가 3개에서 4개로 1개 늘면 전체 키의 75%(18/24)가 다른 노드로 대이동</text>
+<text x="28" y="158" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">재배치 전: 3개 노드 클러스터 (hash(key) % 3)</text>
+<rect x="28" y="172" width="264" height="110" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="44.68" y="180" width="58.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="74" y="194" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Node 0</text>
+<text x="178" y="192" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#5E6B7E">hash % 3 = 0</text>
+<line x1="38" y1="204" x2="282" y2="204" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="42" y="214" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="68" y="231" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">0</text>
+<rect x="102" y="214" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="128" y="231" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">3</text>
+<rect x="162" y="214" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="188" y="231" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">6</text>
+<rect x="222" y="214" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="248" y="231" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">9</text>
+<rect x="42" y="246" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="68" y="263" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">12</text>
+<rect x="102" y="246" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="128" y="263" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">15</text>
+<rect x="162" y="246" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="188" y="263" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">18</text>
+<rect x="222" y="246" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="248" y="263" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">21</text>
+<rect x="308" y="172" width="264" height="110" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="324.68" y="180" width="58.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="354" y="194" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Node 1</text>
+<text x="458" y="192" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#5E6B7E">hash % 3 = 1</text>
+<line x1="318" y1="204" x2="562" y2="204" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="322" y="214" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="348" y="231" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">1</text>
+<rect x="382" y="214" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="408" y="231" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">4</text>
+<rect x="442" y="214" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="468" y="231" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">7</text>
+<rect x="502" y="214" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="528" y="231" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">10</text>
+<rect x="322" y="246" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="348" y="263" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">13</text>
+<rect x="382" y="246" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="408" y="263" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">16</text>
+<rect x="442" y="246" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="468" y="263" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">19</text>
+<rect x="502" y="246" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="528" y="263" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">22</text>
+<rect x="588" y="172" width="264" height="110" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="604.68" y="180" width="58.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="634" y="194" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Node 2</text>
+<text x="738" y="192" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#5E6B7E">hash % 3 = 2</text>
+<line x1="598" y1="204" x2="842" y2="204" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="602" y="214" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="628" y="231" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">2</text>
+<rect x="662" y="214" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="688" y="231" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">5</text>
+<rect x="722" y="214" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="748" y="231" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">8</text>
+<rect x="782" y="214" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="808" y="231" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">11</text>
+<rect x="602" y="246" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="628" y="263" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">14</text>
+<rect x="662" y="246" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="688" y="263" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">17</text>
+<rect x="722" y="246" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="748" y="263" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">20</text>
+<rect x="782" y="246" width="52" height="26" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="808" y="263" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">23</text>
+<path d="M 440.0 286 L 440.0 318" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<rect x="307.0" y="290" width="266.0" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="440.0" y="304" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">Node 3 추가 (N = 3 → 4)</text>
+<text x="28" y="322" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">재배치 후: 4개 노드 클러스터 (hash(key) % 4)</text>
+<rect x="28" y="336" width="196" height="110" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="42.68" y="344" width="58.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="72" y="358" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Node 0</text>
+<text x="154" y="356" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">hash % 4 = 0</text>
+<line x1="38" y1="368" x2="214" y2="368" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="40" y="378" width="50" height="26" rx="4" fill="#3FB98C18" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="65" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">0</text>
+<rect x="98" y="378" width="50" height="26" rx="4" fill="#F0616D18" stroke="#F0616D" stroke-width="1.0"/>
+<text x="123" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">4</text>
+<rect x="156" y="378" width="50" height="26" rx="4" fill="#F0616D18" stroke="#F0616D" stroke-width="1.0"/>
+<text x="181" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">8</text>
+<rect x="40" y="410" width="50" height="26" rx="4" fill="#3FB98C18" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="65" y="427" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">12</text>
+<rect x="98" y="410" width="50" height="26" rx="4" fill="#F0616D18" stroke="#F0616D" stroke-width="1.0"/>
+<text x="123" y="427" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">16</text>
+<rect x="156" y="410" width="50" height="26" rx="4" fill="#F0616D18" stroke="#F0616D" stroke-width="1.0"/>
+<text x="181" y="427" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">20</text>
+<rect x="238" y="336" width="196" height="110" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="252.68" y="344" width="58.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="282" y="358" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Node 1</text>
+<text x="364" y="356" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">hash % 4 = 1</text>
+<line x1="248" y1="368" x2="424" y2="368" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="250" y="378" width="50" height="26" rx="4" fill="#3FB98C18" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="275" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">1</text>
+<rect x="308" y="378" width="50" height="26" rx="4" fill="#F0616D18" stroke="#F0616D" stroke-width="1.0"/>
+<text x="333" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">5</text>
+<rect x="366" y="378" width="50" height="26" rx="4" fill="#F0616D18" stroke="#F0616D" stroke-width="1.0"/>
+<text x="391" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">9</text>
+<rect x="250" y="410" width="50" height="26" rx="4" fill="#3FB98C18" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="275" y="427" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">13</text>
+<rect x="308" y="410" width="50" height="26" rx="4" fill="#F0616D18" stroke="#F0616D" stroke-width="1.0"/>
+<text x="333" y="427" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">17</text>
+<rect x="366" y="410" width="50" height="26" rx="4" fill="#F0616D18" stroke="#F0616D" stroke-width="1.0"/>
+<text x="391" y="427" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">21</text>
+<rect x="448" y="336" width="196" height="110" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="462.68" y="344" width="58.64" height="20" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="0.8"/>
+<text x="492" y="358" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Node 2</text>
+<text x="574" y="356" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">hash % 4 = 2</text>
+<line x1="458" y1="368" x2="634" y2="368" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="460" y="378" width="50" height="26" rx="4" fill="#3FB98C18" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="485" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">2</text>
+<rect x="518" y="378" width="50" height="26" rx="4" fill="#F0616D18" stroke="#F0616D" stroke-width="1.0"/>
+<text x="543" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">6</text>
+<rect x="576" y="378" width="50" height="26" rx="4" fill="#F0616D18" stroke="#F0616D" stroke-width="1.0"/>
+<text x="601" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">10</text>
+<rect x="460" y="410" width="50" height="26" rx="4" fill="#3FB98C18" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="485" y="427" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">14</text>
+<rect x="518" y="410" width="50" height="26" rx="4" fill="#F0616D18" stroke="#F0616D" stroke-width="1.0"/>
+<text x="543" y="427" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">18</text>
+<rect x="576" y="410" width="50" height="26" rx="4" fill="#F0616D18" stroke="#F0616D" stroke-width="1.0"/>
+<text x="601" y="427" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">22</text>
+<rect x="658" y="336" width="196" height="110" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.4"/>
+<rect x="672.68" y="344" width="58.64" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="702" y="358" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F08A59">Node 3</text>
+<text x="784" y="356" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">hash % 4 = 3</text>
+<line x1="668" y1="368" x2="844" y2="368" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="670" y="378" width="50" height="26" rx="4" fill="#F0616D18" stroke="#F0616D" stroke-width="1.0"/>
+<text x="695" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">3</text>
+<rect x="728" y="378" width="50" height="26" rx="4" fill="#F0616D18" stroke="#F0616D" stroke-width="1.0"/>
+<text x="753" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">7</text>
+<rect x="786" y="378" width="50" height="26" rx="4" fill="#F0616D18" stroke="#F0616D" stroke-width="1.0"/>
+<text x="811" y="395" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">11</text>
+<rect x="670" y="410" width="50" height="26" rx="4" fill="#F0616D18" stroke="#F0616D" stroke-width="1.0"/>
+<text x="695" y="427" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">15</text>
+<rect x="728" y="410" width="50" height="26" rx="4" fill="#F0616D18" stroke="#F0616D" stroke-width="1.0"/>
+<text x="753" y="427" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">19</text>
+<rect x="786" y="410" width="50" height="26" rx="4" fill="#F0616D18" stroke="#F0616D" stroke-width="1.0"/>
+<text x="811" y="427" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F0616D">23</text>
+<line x1="12" y1="474" x2="832" y2="474" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="496" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="486" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="122" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">키 이동 (75%)</text>
+<rect x="274" y="486" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="296" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">위치 유지 (25%)</text>
+<rect x="461" y="486" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="483" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">신규 노드 3</text>
+<rect x="596" y="486" width="14" height="12" rx="2" fill="#8B98A922" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="618" y="496" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">기존 노드</text>
+</svg>

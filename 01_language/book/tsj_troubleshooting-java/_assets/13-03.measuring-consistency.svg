@@ -1,0 +1,47 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>일관성 측정 — 체크섬·해시와 reconciliation job (책의 마지막 절)</title>
+  <desc>이 편의 요약이자 책의 마지막 절입니다. 분산 시스템에서 일관성은 기본으로 보장되지 않아 측정 모니터링 능동 강제해야 하며 겉보기엔 건강해도 동기화돼야 할 레코드가 서서히 어긋나는 silent data drift 가 일어나 자기만의 안전망을 만들어야 합니다. 체크섬은 CRC32 Adler-32 로 우발적 오류 bit flip 불완전 쓰기 네트워크 결함을 빠르게 잡는 1차 방어선이고 의도적 변조엔 안전하지 않습니다. 해시는 SHA-256 MD5 같은 한 방향 함수로 암호학적으로 더 강하며 두 시스템이 같은 입력에 같은 해시를 내면 동일하다는 강한 표시입니다. 둘 다 양쪽에서 계산해 비교하며 서비스 간 전송 검증 복제 캐시 일관성 감사 로그 hash 필드 blast radius 가늠에 씁니다. blast radius 는 문제가 얼마나 나쁘고 얼마나 퍼졌나로 한 레코드면 작은 반경 수천 여러 시스템이면 큰 반경이며 해시 spot-check 로 일회성인지 도처인지 봅니다. reconciliation job 은 있어야 할 것과 실제 있는 것을 비교하는 백그라운드 프로세스로 배송된 주문에 청구 paid 가 있는지 야간 배치로 보장하며 일관성을 가정 아닌 측정 대상으로 다루는 마지막 방어선이고 최종 일관성 시스템에 특히 값집니다. 수백만 레코드는 레코드나 파티션의 해시만 비교해 다를 때만 더 고운 입도로 파고드는 divide-and-conquer 로 성능을 유지하고 stateless reconciliation 도 가능하되 충돌 저항성 해시를 써야 합니다. 책은 1장 디버거 로그에서 13장 분산 일관성까지 한 줄 코드에서 시스템 전체로 시야를 넓혀 왔고 불일치는 가정하지 말고 측정하라가 13장의 메시지입니다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="38" fill="#e8e4df" font-size="18" font-weight="bold">일관성 측정</text>
+  <text x="20" y="60" fill="rgb(138,133,128)" font-size="11">Troubleshooting Java · §13.3~13.4 (책의 마지막 절)</text>
+
+  <!-- 도입 -->
+  <rect x="20" y="78" width="640" height="58" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="34" y="100" fill="#f47f72" font-size="13" font-weight="bold">일관성은 기본으로 보장되지 않는다</text>
+  <text x="34" y="121" fill="#e8e4df" font-size="11">측정·모니터링·능동 강제 필요 · 겉보기 건강해도 silent data drift(서서히 어긋남) → 자기 안전망</text>
+
+  <!-- 도구 1: 체크섬·해시 -->
+  <rect x="20" y="150" width="640" height="200" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="172" fill="rgb(212,168,83)" font-size="13" font-weight="bold">① 체크섬·해시 (§13.3.1) — 전체 안 옮기고 검증</text>
+
+  <rect x="34" y="184" width="300" height="68" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="48" y="204" fill="#9cc3df" font-size="11" font-weight="bold">체크섬 (CRC32·Adler-32)</text>
+  <text x="48" y="222" fill="#e8e4df" font-size="9.5">우발적 오류(bit flip·불완전 쓰기·네트워크)</text>
+  <text x="48" y="238" fill="rgb(138,133,128)" font-size="9">빠른 1차 방어선 · 변조엔 안전 X · 32비트</text>
+
+  <rect x="346" y="184" width="300" height="68" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="360" y="204" fill="#66bb6a" font-size="11" font-weight="bold">해시 (SHA-256·MD5)</text>
+  <text x="360" y="222" fill="#e8e4df" font-size="9.5">한 방향 함수 · 암호학적으로 더 강함</text>
+  <text x="360" y="238" fill="rgb(138,133,128)" font-size="9">같은 해시=동일 강한 표시 · 다르면 변경</text>
+
+  <text x="34" y="274" fill="#e8e4df" font-size="10.5" font-weight="bold">쓰임 — 양쪽에서 계산해 비교</text>
+  <text x="46" y="292" fill="#9cc3df" font-size="9.5">서비스 간 전송 검증 · 복제/캐시(replica·ES·Redis) 일관성 · 감사 로그 hash 필드(변조 확인)</text>
+  <text x="46" y="310" fill="#9cc3df" font-size="9.5">blast radius 가늠: 문제가 얼마나 퍼졌나(1개=작음·수천/여러 시스템=큼) → spot-check</text>
+  <text x="34" y="334" fill="rgb(138,133,128)" font-size="9">완벽 X(드물게 충돌) · 민감/대용량 데이터 안 남기고 무결성 확인 (원문 Fig 13.7·13.8)</text>
+
+  <!-- 도구 2: reconciliation -->
+  <rect x="20" y="364" width="640" height="148" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="386" fill="#9cc3df" font-size="13" font-weight="bold">② reconciliation job (§13.4) — 마지막 방어선</text>
+  <text x="34" y="407" fill="#e8e4df" font-size="10.5">*있어야 할 것* vs *실제 있는 것* 비교(백그라운드·야간 배치)</text>
+  <text x="34" y="425" fill="#e8e4df" font-size="10.5">예: shipped 주문마다 청구 paid + 고객 레코드 있나? 없으면 플래그·알림·자동교정</text>
+  <text x="34" y="445" fill="#66bb6a" font-size="10.5" font-weight="bold">일관성 = 가정 아닌 *측정·검증 대상* (최종 일관성 시스템에 특히)</text>
+  <text x="34" y="467" fill="#e8e4df" font-size="10" font-weight="bold">해시로 확장 — divide-and-conquer</text>
+  <text x="46" y="485" fill="#9cc3df" font-size="9.5">파티션 해시만 비교 → 다를 때만 per-invoice로 파고듦 → 수백만·분산 DC에서도 성능 유지</text>
+  <text x="46" y="503" fill="rgb(138,133,128)" font-size="9">stateless reconciliation(해시=지문) 가능하되 충돌 저항성 해시 필수</text>
+
+  <!-- 결론: 책을 닫으며 -->
+  <rect x="20" y="526" width="640" height="56" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="34" y="548" fill="rgb(212,168,83)" font-size="13" font-weight="bold">책을 닫으며 — 불일치는 가정하지 말고 측정하라</text>
+  <text x="34" y="569" fill="#e8e4df" font-size="11">1장 디버거·로그 → 한 JVM(5~11장) → 서비스 통신(12장) → 데이터 일관성(13장): 한 줄 → 시스템 전체</text>
+</svg>

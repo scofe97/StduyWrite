@@ -1,0 +1,57 @@
+<svg viewBox="0 0 880 320" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>API 서버 요청이 통과하는 세 관문</title>
+  <desc>Kubernetes Patterns 그림 26-1의 재현입니다. kubectl 같은 클라이언트가 보낸 모든 요청은 Kubernetes API 서버 안에서 세 단계를 차례로 통과해야 처리됩니다. 첫째 인증 단계는 요청자가 누구인지 확인하며 베어러 토큰, 클라이언트 인증서, 인증 프록시, 정적 토큰 파일, 웹훅 토큰 인증 같은 전략을 씁니다. 둘째 인가 단계는 그 신원이 요청한 동작을 할 자격이 있는지 판단하며 대부분의 클러스터가 RBAC을 씁니다. 셋째 어드미션 제어 단계는 통과한 요청을 검증하거나 변형하며 기본값을 채우거나 정책을 강제합니다. 세 관문을 모두 통과한 뒤에야 요청이 실제로 처리됩니다. 어느 단계에서든 막히면 요청은 거기서 거부됩니다.</desc>
+
+  <defs>
+    <marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="pr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#f44336"/>
+    </marker>
+  </defs>
+
+  <rect width="880" height="320" fill="#0d0d0d"/>
+  <text x="24" y="32" fill="#e8e4df" font-size="15">API 요청의 세 관문</text>
+
+  <!-- client -->
+  <rect x="24" y="112" width="110" height="56" fill="#dceaf7"/>
+  <text x="79" y="145" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">kubectl</text>
+
+  <!-- api server boundary -->
+  <rect x="176" y="76" width="680" height="128" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1.5"/>
+  <text x="516" y="98" text-anchor="middle" fill="#e8e4df" font-size="11" font-weight="700">Kubernetes API 서버</text>
+
+  <!-- stage 1 -->
+  <rect x="196" y="112" width="140" height="56" fill="#f5edda"/>
+  <text x="266" y="136" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">1. 인증</text>
+  <text x="266" y="154" text-anchor="middle" fill="#0d0d0d" font-size="9">누구인가</text>
+
+  <!-- stage 2 -->
+  <rect x="366" y="112" width="140" height="56" fill="#f2d4d4"/>
+  <text x="436" y="136" text-anchor="middle" fill="#7a1f1f" font-size="10" font-weight="700">2. 인가</text>
+  <text x="436" y="154" text-anchor="middle" fill="#7a1f1f" font-size="9">RBAC이 담당</text>
+
+  <!-- stage 3 -->
+  <rect x="536" y="112" width="140" height="56" fill="#dceaf7"/>
+  <text x="606" y="136" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">3. 어드미션</text>
+  <text x="606" y="154" text-anchor="middle" fill="#10243a" font-size="9">검증·변형</text>
+
+  <!-- process -->
+  <rect x="706" y="112" width="130" height="56" fill="#cdeccf"/>
+  <text x="771" y="136" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">요청 처리</text>
+  <text x="771" y="154" text-anchor="middle" fill="#14521d" font-size="9">통과 후에만</text>
+
+  <line x1="134" y1="140" x2="190" y2="140" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#pa)"/>
+  <line x1="336" y1="140" x2="360" y2="140" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#pa)"/>
+  <line x1="506" y1="140" x2="530" y2="140" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#pa)"/>
+  <line x1="676" y1="140" x2="700" y2="140" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#pa)"/>
+
+  <!-- rejection paths -->
+  <path d="M266 168 L266 244" fill="none" stroke="#f44336" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#pr)"/>
+  <path d="M436 168 L436 244" fill="none" stroke="#f44336" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#pr)"/>
+  <path d="M606 168 L606 244" fill="none" stroke="#f44336" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#pr)"/>
+
+  <rect x="196" y="250" width="480" height="42" fill="#f2d4d4"/>
+  <text x="436" y="276" text-anchor="middle" fill="#7a1f1f" font-size="10" font-weight="700">어느 관문에서든 막히면 거부</text>
+</svg>

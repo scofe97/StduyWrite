@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 420" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">전역 서비스와 전역 정책의 처리 흐름</title><desc id="dd">주석으로 묶인 백엔드 목록 취합부터 affinity 선택과 클러스터 라벨 정책 판정까지</desc>
+<rect width="920" height="420" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">CILIUM UP AND RUNNING · 09-02</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">전역 서비스와 전역 정책의 처리 흐름</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">주석으로 묶인 백엔드 목록 취합부터 affinity 선택과 클러스터 라벨 정책 판정까지</text>
+<rect x="22" y="96" width="200" height="36" rx="6" fill="#161B22" stroke="#5E6B7E" stroke-width="1.0"/>
+<text x="122.0" y="114" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">1. 서비스 선언</text>
+<text x="122.0" y="127" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">service.cilium.io/global</text>
+<rect x="248" y="96" width="200" height="36" rx="6" fill="#161B22" stroke="#5E6B7E" stroke-width="1.0"/>
+<text x="348.0" y="114" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">2. 엔드포인트 취합</text>
+<text x="348.0" y="127" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">로컬 eBPF 서비스 맵</text>
+<rect x="474" y="96" width="200" height="36" rx="6" fill="#161B22" stroke="#5E6B7E" stroke-width="1.0"/>
+<text x="574.0" y="114" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">3. 친화도 선택</text>
+<text x="574.0" y="127" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">service.cilium.io/affinity</text>
+<rect x="700" y="96" width="200" height="36" rx="6" fill="#161B22" stroke="#5E6B7E" stroke-width="1.0"/>
+<text x="800.0" y="114" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">4. 보안 정책 판정</text>
+<text x="800.0" y="127" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">io.cilium.k8s.policy.cluster</text>
+<rect x="22" y="152" width="200" height="230" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="122.0" y="178" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">각 클러스터 서비스</text>
+<rect x="34" y="196" width="176" height="46" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="122.0" y="216" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">kind-red · nginx</text>
+<text x="122.0" y="233" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">ClusterIP (각자 다름)</text>
+<rect x="34" y="254" width="176" height="46" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="122.0" y="274" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">kind-green · nginx</text>
+<text x="122.0" y="291" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">ClusterIP (각자 다름)</text>
+<rect x="34" y="312" width="176" height="46" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="122.0" y="332" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">kind-blue · nginx</text>
+<text x="122.0" y="349" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">ClusterIP (각자 다름)</text>
+<path d="M 226 267.0 L 242 267.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="248" y="152" width="200" height="230" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="348.0" y="178" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">전역 엔드포인트 풀</text>
+<rect x="260" y="196" width="176" height="38" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="348.0" y="220" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">red-worker:8080</text>
+<rect x="260" y="246" width="176" height="38" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="348.0" y="270" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">green-worker2:8080</text>
+<rect x="260" y="296" width="176" height="38" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="348.0" y="320" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#6A95D8">blue-worker:8080</text>
+<text x="348.0" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">독립 IP · 엔드포인트 공유</text>
+<path d="M 452 267.0 L 468 267.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="474" y="152" width="200" height="230" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.3"/>
+<text x="574.0" y="178" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">affinity 판정</text>
+<rect x="486" y="198" width="176" height="68" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="574.0" y="220" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#3FB98C">affinity=local</text>
+<text x="574.0" y="240" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">green-worker 선택</text>
+<text x="574.0" y="256" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">로컬 엔드포인트 우선</text>
+<rect x="486" y="278" width="176" height="68" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="574.0" y="300" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">로컬 백엔드 중단 시</text>
+<text x="574.0" y="320" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">원격 풀 자동 폴백</text>
+<text x="574.0" y="336" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">blue·red-worker2 전달</text>
+<path d="M 678 267.0 L 694 267.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="700" y="152" width="200" height="230" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="800.0" y="178" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">네트워크 정책 검사</text>
+<rect x="712" y="198" width="176" height="68" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="800.0" y="220" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">출발지 신원 일치</text>
+<text x="800.0" y="240" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">cluster: red 라벨 확인</text>
+<text x="800.0" y="256" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">트래픽 통과</text>
+<rect x="712" y="278" width="176" height="68" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="800.0" y="300" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">신원 미일치 또는 외부</text>
+<text x="800.0" y="320" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">nginx 인그레스 정책 불일치</text>
+<text x="800.0" y="336" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">드롭 (타임아웃)</text>
+</svg>
