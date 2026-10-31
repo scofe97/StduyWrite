@@ -4,7 +4,7 @@ tags: [moc, ai, ade, docs]
 status: draft
 related:
   - ../README.md
-updated: 2026-10-26
+updated: 2026-10-31
 ---
 
 # 10_AI/docs
@@ -28,6 +28,7 @@ updated: 2026-10-26
 | [`orca/`](orca/) | 본문 10편 + 부록 2편 | ADE(Agentic Development Environment) ORCA — 워크트리 격리, 터미널 관측, 멀티 에이전트 조율, 브라우저·데스크톱 자동화, 운영과 실패 복구 |
 | [`claude-code/`](claude-code/) | 12편 | Claude Code 기능 노트 — CLI 옵션 실측(01-01)과, claude-howto 를 바탕으로 한 슬래시 명령·메모리·스킬·서브에이전트·MCP·훅·플러그인·체크포인트·권한·세션·설정 |
 | [`herdr/`](herdr/) | 명령·단축키 3편 + 내 설정 2편 | herdr CLI·기본 단축키·reviewr 플러그인 사용법, 그리고 한글 입력·reviewr 1대2 분할 설정과 메인·저장소·작업 세션 운영 규칙 |
+| [`agent-skills/`](agent-skills/) | 1편 | 스킬 저장소 설계 — dalcom-skills 와 공개 저장소 여섯 곳을 비교해 저작물·생성물 분리, 검사 규칙 자체 시험, 커밋 관문, 발동 평가까지 다룹니다. [01-01 문서](agent-skills/01-01.dalcom-skills로%20본%20스킬%20저장소%20설계.md) |
 
 ## 경계 기준
 
