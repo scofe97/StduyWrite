@@ -1,5 +1,5 @@
 # 타입 스펙: type-dp-security-matrix — 업스트림 커널 패치·커널 모듈·eBPF 세 가지 커널 확장 방식의 특성 및 제약 비교 행렬
-# 사실 출처: 원문 ebpf1.txt 272-363(패치 채택률 33%·배포판 수년 지연·모듈 커널 패닉 위험·eBPF 검증기 안전 보장)
+# 사실 출처: 《Learning eBPF》 Ch.1 7~10쪽(업스트림 8쪽·모듈 9쪽 'loaded and unloaded on demand'·하드닝과 verifier 10쪽), 본문 §3(136~146행: 배포판 수년·재부팅·하드닝·독립 배포·머신 정지·재부팅 없는 즉시 적재), §4 156행 bpf() 적재
 import sys
 sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, INFO, BAD, SOFT, MUTED, INK, PAPER, PAPER2, RULE, KR, MONO
@@ -10,7 +10,7 @@ HDR_Y, HDR_H, ROW_Y0, STRIDE, ROW_H = 100, 44, 156, 56, 48
 
 cols = ["업스트림 커널 패치", "커널 모듈 (LKM)", "eBPF 프로그램"]
 rows = [
-    ("반영까지 걸리는 시간", "수년 (배포판 지연)", "즉시 (독립 바이너리)", "즉시 (동적 적재)"),
+    ("반영까지 걸리는 시간", "수년 (배포판 지연)", "즉시 (독립 배포)", "즉시 (동적 적재)"),
     ("커널 재부팅 필요", "필수 (새 커널 부팅)", "불필요 (동적 삽입)", "불필요 (실행 중 적재)"),
     ("시스템 충돌 안전성", "검증됨 (하드닝 거침)", "위험 (머신 전체 정지)", "안전 보장 (검증기 검사)"),
     ("배포 및 실행 방식", "배포판 커널 패키지", "모듈 적재", "bpf() 시스템 콜"),
@@ -20,7 +20,7 @@ LEG_Y = ROW_Y0 + len(rows) * STRIDE + 8
 H = LEG_Y + 54
 
 d = D(W, H, "LEARNING EBPF · 01-01 §3", "커널 확장 방식 세 가지의 특성 비교",
-      "업스트림 기여·커널 모듈·eBPF 프로그램의 배포 주기와 안전 보장 모델을 대조합니다",
+      "업스트림 기여·커널 모듈·eBPF 세 방식의 배포 주기와 안전 보장 모델 대조",
       "행 = 평가 축 · 열 = 확장 방식 · 안전성과 속도의 트레이드오프 해소")
 
 def cx(j): return LP + LBL_W + GAP + j * (COL_W + GAP)
@@ -65,7 +65,7 @@ d.legend(LEG_Y, [
     ("업스트림", INFO),
     ("커널 모듈", WARN),
     ("정지 위험", BAD),
-    ("eBPF 안전", OK),
+    ("eBPF 방식", OK),
     ("핵심 이점", ACC),
 ])
 d.save("01-01.kernel-extensibility-matrix.svg")

@@ -1,18 +1,18 @@
 # 타입 스펙: type-architecture — 사이드카 프록시 모델과 노드 커널 eBPF 모델의 패킷 경로 및 관측 범위 비교
-# 사실 출처: 원문 ebpf1.txt 433-508(단일 노드 Pod 3개 공유 커널·사이드카 4대 비용·사이드카 미주입 채굴 컨테이너 탐지)
+# 사실 출처: 《Learning eBPF》 Ch.1 12~15쪽 Figure 1-4(13쪽)·1-5(15쪽), 사이드카 비용 14쪽, 본문 §5(단일 노드 공유 커널·사이드카 4대 비용·사이드카 미주입 채굴 컨테이너 탐지)
 import sys
 sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, INFO, BAD, SOFT, MUTED, INK, PAPER, PAPER2, RULE, KR, MONO
 
 W, H = 920, 520
 d = D(W, H, "LEARNING EBPF · 01-01 §5", "사이드카 프록시 모델과 노드 커널 eBPF 모델의 구조 비교",
-      "사이드카는 프록시에 닿으려 커널 네트워크 스택을 한 번 더 지나지만 eBPF 는 단일 커널에서 모든 컨테이너를 봅니다",
+      "사이드카 프록시 경유 오버헤드와 호스트 커널 eBPF 전역 가시성 대조",
       "사이드카 4대 비용: 재기동 · YAML 주입 · 기동 레이스 · 지연 vs eBPF: 단일 커널 전역 관측")
 
 # 좌측 영역: 사이드카 모델
 Z1_X, Z1_Y, Z1_W, Z1_H = 36, 104, 404, 340
 d.box(Z1_X, Z1_Y, Z1_W, Z1_H, PAPER2, RULE, 1.0, 8)
-d.t(Z1_X + 16, Z1_Y + 24, "전통적인 사이드카 프록시 모델", 13, WARN, KR, "start", 600)
+d.t(Z1_X + 16, Z1_Y + 24, "사이드카 프록시 모델", 13, WARN, KR, "start", 600)
 d.t(Z1_X + Z1_W - 16, Z1_Y + 24, "Pod 단위 컨테이너 주입", 12, MUTED, KR, "end")
 d.line(Z1_X + 12, Z1_Y + 36, Z1_X + Z1_W - 12, Z1_Y + 36, RULE, 0.6)
 
@@ -20,12 +20,13 @@ d.line(Z1_X + 12, Z1_Y + 36, Z1_X + Z1_W - 12, Z1_Y + 36, RULE, 0.6)
 P1_Y = Z1_Y + 48
 d.box(Z1_X + 16, P1_Y, Z1_W - 32, 80, PAPER, RULE, 0.8, 6)
 d.t(Z1_X + 28, P1_Y + 20, "Pod A 트래픽 경로", 12, INK, KR, "start", 600)
+d.t(Z1_X + Z1_W - 28, P1_Y + 20, "스택 한 번 더 경유 · 지연", 12, WARN, KR, "end")
 PW, PG = 96, 30
 px = [Z1_X + 28 + k * (PW + PG) for k in range(3)]
 for k, (lab1, lab2, ec) in enumerate([("App", "컨테이너", RULE), ("커널", "네트워크 스택", INFO), ("Envoy", "사이드카", WARN)]):
     d.box(px[k], P1_Y + 28, PW, 44, PAPER2, ec, 0.8, 4)
-    d.t(px[k] + PW / 2, P1_Y + 46, lab1, 12, INK if k != 2 else WARN, KR, "middle", 600)
-    d.t(px[k] + PW / 2, P1_Y + 62, lab2, 11, MUTED, KR, "middle")
+    d.t(px[k] + PW / 2, P1_Y + 46, lab1, 12, INK if k != 2 else WARN, KR if any("가" <= ch <= "힣" for ch in lab1) else MONO, "middle", 600)
+    d.t(px[k] + PW / 2, P1_Y + 62, lab2, 12, MUTED, KR, "middle")
 for k in range(2):
     d.arrow([(px[k] + PW + 2, P1_Y + 50), (px[k + 1] - 2, P1_Y + 50)], MUTED, "ar", 1.2)
 
@@ -33,7 +34,7 @@ for k in range(2):
 P2_Y = P1_Y + 90
 d.box(Z1_X + 16, P2_Y, Z1_W - 32, 70, PAPER, RULE, 0.8, 6)
 d.t(Z1_X + 28, P2_Y + 20, "Pod B (애플리케이션 + 사이드카)", 12, INK, KR, "start", 600)
-d.t(Z1_X + 28, P2_Y + 42, "YAML 수정 필수 · 어드미션 제어 의존", 12, MUTED, KR, "start")
+d.t(Z1_X + 28, P2_Y + 42, "Pod 재기동 필수 · YAML 주입 누락 위험", 12, MUTED, KR, "start")
 d.t(Z1_X + 28, P2_Y + 58, "컨테이너 기동 순서 레이스 컨디션 발생 가능", 12, WARN, KR, "start")
 
 # 좌측 Pod 3 (채굴기 - 사이드카 미주입)
