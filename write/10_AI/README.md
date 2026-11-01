@@ -37,7 +37,7 @@ updated: 2026-06-25
 
 | 폴더 | 편수 | 다루는 범위 |
 |------|------|------------|
-| [`docs/`](docs/) | 13편 | 도구 하나를 설치본 기준으로 파고든 노트. [`docs/orca/`](docs/orca/) — ADE(Agentic Development Environment) ORCA를 격리·관측·조율 세 축으로, [`docs/claude-code/`](docs/claude-code/) — Claude Code CLI 옵션 실측 |
+| [`docs/`](docs/) | 13편 | 도구 하나를 설치본 기준으로 파고든 노트. [`docs/orca/`](docs/orca/) — ADE(Agentic Development Environment) ORCA를 격리·관측·조율 세 축으로, [`docs/claude-code/`](docs/claude-code/) — Claude Code CLI 옵션 실측, [`docs/agent-skills/`](docs/agent-skills/) — gosuda/dalcom-skills 로 본 스킬 저장소 설계(저작물·생성물 분리, 검사 규칙 자가 시험, 공개 저장소 여섯 곳 비교) |
 | [`hermes/`](hermes/) | 1편 | Hermes 에이전트 하네스 사례 — 자기개선 로컬 에이전트의 루프와 메모리 구조 |
 | [`project/flats/`](project/flats/) | 23편 + 인덱스 | gosuda/flats(v0.11.0) 학습 시리즈. 불변 artifact·content hash·SQLite WAL, WebAssembly/QuickJS 샌드박스, 오버레이 네트워크 노출, MCP 승인 모델, serve 조립·백업, 코드 리뷰까지 설치본 기준으로 따라갑니다. [portal-tunnel 시리즈](../02_os/project/portal-tunnel/README.md)와 상호 링크 |
 
