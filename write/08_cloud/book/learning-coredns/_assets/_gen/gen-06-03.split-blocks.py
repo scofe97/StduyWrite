@@ -1,5 +1,6 @@
 # 06-03 §6 — 클러스터 존을 서버 블록 앞으로 옮기면 질의가 어느 체인을 지나는지가 갈린다.
-# 원문 근거: "By moving the CLUSTER_DOMAIN and REVERSE_CIDRS to the beginning of the server block,
+# 원서 근거: 6장 "Kubernetes" p.32-33("A Better Configuration", Example 6-22).
+#            "By moving the CLUSTER_DOMAIN and REVERSE_CIDRS to the beginning of the server block,
 #            we are telling CoreDNS that it should route queries for those zones only through this
 #            set of plug-ins, which does not include the cache plug-in. Queries for other zones will
 #            go through the second stanza, and so will be cached." /
@@ -33,7 +34,7 @@ def oval(cx, y, w, h, txt, c):
     d.t(cx, y + h / 2 + 5, txt, 15, c, KR, "middle", 600)
 
 
-oval(440, 104, 300, 48, "질의가 들어온다", MUTED)
+oval(440, 104, 300, 48, "DNS 질의 도착", MUTED)
 
 DW, DH = 320, 84
 DY = 188
@@ -44,20 +45,20 @@ d.t(440, DY + 38, "블록 앞에 적어 둔", 14, INK, KR, "middle", 600)
 d.t(440, DY + 58, "클러스터 존인가", 14, INK, KR, "middle", 600)
 
 d.path(f"M {440 - DW / 2} {DY + DH / 2} L {LX} {DY + DH / 2} L {LX} 316", MUTED, 1.4, m="ar")
-d.t(LX + 12, DY + 30, "그렇다", 13, MUTED, KR, "start")
+d.t(LX + 12, DY + 30, "예", 13, MUTED, KR, "start")
 d.path(f"M {440 + DW / 2} {DY + DH / 2} L {RX} {DY + DH / 2} L {RX} 316", MUTED, 1.4, m="ar")
-d.t(RX - 12, DY + 30, "아니다", 13, MUTED, KR, "end")
+d.t(RX - 12, DY + 30, "아니오", 13, MUTED, KR, "end")
 
 step(LX, 318, "첫 블록", "kubernetes · forward · loadbalance")
 step(RX, 318, "둘째 블록", "forward · cache")
 d.path(f"M {LX} 382 L {LX} 408", MUTED, 1.4, m="ar")
 d.path(f"M {RX} 382 L {RX} 408", MUTED, 1.4, m="ar")
-step(LX, 410, "cache 가 없다", "메모리의 자원에서 즉석 생성")
-step(RX, 410, "cache 가 있다", "상류 TTL 대로 · 30초 상한 없음")
+step(LX, 410, "cache 없음", "자원이 이미 메모리에")
+step(RX, 410, "cache 적용", "상류 TTL 대로 · 30초 상한 없음")
 d.path(f"M {LX} 474 L {LX} 500", MUTED, 1.4, m="ar")
 d.path(f"M {RX} 474 L {RX} 500", MUTED, 1.4, m="ar")
-oval(LX, 502, 336, 48, "중복 저장이 사라진다", OK)
-oval(RX, 502, 336, 48, "네트워크 왕복을 아낀다", INFO)
+oval(LX, 502, 336, 48, "중복 캐싱 방지", OK)
+oval(RX, 502, 336, 48, "바깥 질의 캐시 유지", INFO)
 
 d.tone(20, 574, 840, 56, ACC, 6, "0E", 1.4)
 d.t(440, 598, "대가 · 존마다 독립 체인 · 쿠버네티스 캐시 중복", 13, ACC, KR)

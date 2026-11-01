@@ -1,7 +1,7 @@
 # 06-04 §1 — 원서가 싣는 kubernetes 플러그인 문법 항목이 어느 릴리스까지 살았는가.
-# 원문 근거: resyncperiod 는 "The default is 5 minutes in versions before 1.5.0, and never in 1.5.0
-#            and later. This option will be eliminated in later versions." / upstream 은 "obsolete in
-#            CoreDNS 1.3.0 and later" (같은 장 다른 자리는 1.4).
+# 원문 근거: 원서 6장 p.34, p.35-36. resyncperiod 는 "The default is 5 minutes in versions before 1.5.0,
+#            and never in 1.5.0 and later. This option will be eliminated in later versions." (p.35-36) /
+#            upstream 은 "obsolete in CoreDNS 1.3.0 and later" (p.36, p.34 는 1.4).
 # 릴리스 노트 근거(2026-10-03 확인): 1.5.0 "The resyncperiod option ... is deprecated", 1.6.0 "removes the
 #            resyncperiod option", 1.3.1 upstream 이 1.4.0 부터 CoreDNS 자신을 기본으로, 1.7.0 "Remove
 #            already-deprecated options resyncperiod and upstream", 1.8.0 transfer 플러그인. 현재 setup.go 는
@@ -30,7 +30,7 @@ d.line(TX, 128, TX + TW, 128, RULE, 1.0)
 # (이름, 메모, [(시작칸, 칸수, 색, 점선)], 제거 라벨 칸)
 rows = [
     ("resyncperiod", "1.5.0 폐기 예고 · 1.6.0 제거", [(0, 3, OK, None), (3, 1, WARN, None)], (4, "1.6.0 제거")),
-    ("upstream", "1.4 부터 기본 동작 · 1.7.0 제거", [(0, 1, OK, None), (1, 4, WARN, None)], (5, "1.7.0 제거")),
+    ("upstream", "1.3·1.4 부터 불필요 · 1.7.0 제거", [(0, 1, OK, None), (1, 4, WARN, None)], (5, "1.7.0 제거")),
     ("transfer to", "transfer 플러그인으로 이사", [(0, 6, OK, None)], (6, "1.8.0 이사")),
     ("나머지 열하나", "endpoint · tls · pods · ttl …", [(0, 7, OK, None)], None),
     ("원서 이후 붙은 것들", "apiserver_qps 계열 · zonal …", [(6, 1, INFO, "5 4")], None),
@@ -62,8 +62,8 @@ for k, (nm, note, segs, cut) in enumerate(rows):
         d.t(cx + 8, ry + 26, cut[1], 12, BAD, KR, "start", 600)
 
 d.t(TX + PITCH * 3, 468, "1.5.0 · resyncperiod 기본 5분 → 하지 않음", 13, ACC, KR)
-d.t(LX, 500, "제거 시점 · 릴리스 노트 1.5.0 · 1.6.0 · 1.7.0 · 1.8.0 · 지금 쓰면 모르는 속성으로 거부", 13, MUTED, KR, "start")
+d.t(LX, 500, "제거 시점 · 릴리스 노트 1.6.0 · 1.7.0 · 1.8.0 · 지금은 모르는 속성 오류", 13, MUTED, KR, "start")
 d.t(LX, 522, "원서 이후 붙은 항목 · 도입 버전 미확인 · master 문법에서 확인", 12, SOFT, KR, "start")
 
-d.legend(540, [("뜻대로 동작", OK), ("효과 없음 · 폐기 예고", WARN), ("원서 이후 추가", INFO), ("원서가 적은 경계", ACC)])
+d.legend(540, [("뜻대로 동작", OK), ("효과 없음 · 폐기 예고", WARN), ("제거 · 이사", BAD), ("원서 이후 추가", INFO), ("원서가 적은 경계", ACC)])
 d.save("06-04.option-lifespan.svg")

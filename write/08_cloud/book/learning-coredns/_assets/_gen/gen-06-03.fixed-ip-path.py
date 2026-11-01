@@ -1,7 +1,8 @@
 # 06-03 §3 — DNS 서비스의 IP 는 클러스터를 만들 때 정해져 kubelet 을 거쳐 모든 파드의 resolv.conf 로 간다.
 # 본문 근거: 이 노트 §3(원서 요지 — 클러스터 생성 시점의 고정값, 각 kubelet 에 전달, kubelet 이 파드 resolv.conf 를 만들 때 쓴다).
-#            10.7.240.10 은 원서 Example 6-17 의 예제 값. kubelet 쪽 이름 clusterDNS 는 KubeletConfiguration 필드.
+#            10.7.240.10 은 원서 Example 6-17 의 예제 값. kubelet 쪽 필드 이름은 원서·본문에 없어 "전달받은 IP" 로만 적는다.
 #            Service 이름 kube-dns 와 clusterIP 의 불변은 이 노트 §3 각주 serviceapi.
+# 원서 근거: 6장 "Kubernetes" p.26-27(Example 6-17, The kube-dns service).
 # 타입 스펙: type-data-flow — 같은 값 하나가 단계마다 다른 이름으로 실려 가는 흐름이 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
@@ -15,11 +16,11 @@ d = D(W, H, "LEARNING COREDNS · 06-03 §3",
 
 BW, GAP, X0, Y = 156, 15, 20, 116
 steps = [
-    ("클러스터 생성", [("DNS IP 를 정한다", KR), ("10.7.240.10", MONO)]),
-    ("kubelet", [("clusterDNS", MONO), ("10.7.240.10", MONO)]),
+    ("클러스터 생성", [("DNS IP 지정", KR), ("10.7.240.10", MONO)]),
+    ("kubelet", [("전달받은 IP", KR), ("10.7.240.10", MONO)]),
     ("파드 resolv.conf", [("nameserver", MONO), ("10.7.240.10", MONO)]),
     ("Service", [("kube-dns", MONO), ("10.7.240.10", MONO)]),
-    ("CoreDNS 파드", [("엔드포인트로", KR), ("질의를 받는다", KR)]),
+    ("CoreDNS 파드", [("엔드포인트로", KR), ("질의 수신", KR)]),
 ]
 for i, (title, lines) in enumerate(steps):
     x = X0 + i * (BW + GAP)
@@ -38,8 +39,8 @@ x4 = X0 + 3 * (BW + GAP)
 d.chip(x4 + BW / 2, 254, "이름 불변", ACC, 12)
 d.chip(x4 + BW / 2, 282, "clusterIP 불변", ACC, 12)
 
-d.t(20, 324, "같은 IP 가 kubelet 마다 전달된다 · ClusterFirst 파드는 이 값으로 DNS 를 찾는다", 13, MUTED, KR, "start")
-d.t(20, 346, "10.7.240.10 은 원서 예제 값 · 클러스터마다 다르다", 12, SOFT, KR, "start")
+d.t(20, 324, "kubelet 마다 같은 IP · ClusterFirst 파드의 DNS 주소", 13, MUTED, KR, "start")
+d.t(20, 346, "10.7.240.10 은 원서 예제 값 · 클러스터마다 다름", 12, SOFT, KR, "start")
 
 d.legend(362, [("바꿀 수 없는 자리", ACC)])
 d.save("06-03.fixed-ip-path.svg")

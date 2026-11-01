@@ -1,5 +1,6 @@
 # 06-03 §4 — 메모리 추정식 두 개를 파드+서비스 수 축에 그리고, 170Mi 상한과 만나는 점을 찍는다.
-# 근거: coredns/deployment kubernetes/Scaling_CoreDNS.md — "MB required (default settings) = (Pods + Services) / 1000 + 54",
+# 원서 근거: 6장 "Kubernetes" p.30("MEMORY LIMIT ESTIMATION" 상자, MiB needed formula).
+# 저장소 근거: coredns/deployment kubernetes/Scaling_CoreDNS.md — "MB required (default settings) = (Pods + Services) / 1000 + 54",
 #       "MB required (w/ autopath) = (Pods + Services) / 250 + 56", 실측표의 마지막 점 158200(2026-10-03 확인).
 #       16,000 → 70 은 원서 예제, 116,000 → 170 과 28,500 → 170 은 두 식을 170 에 대해 푼 값이다.
 # 타입 스펙: type-line — 두 직선의 기울기 차이와 상한선과의 교점이 논지다.
@@ -56,7 +57,7 @@ d.o.append(f'<circle cx="{fx(116000)}" cy="{fy(170)}" r="6" fill="{ACC}"/>')
 d.t(fx(116000) + 10, fy(170) + 26, "116,000 개 → 170Mi", 13, ACC, KR, "start", 600)
 d.t(fx(116000) + 10, fy(170) + 46, "기본 설정의 한계 추정", 12, MUTED, KR, "start")
 
-d.t(20, 504, "식은 캐시 30MB · 버퍼 5MB 를 품은 추정 · 실제 사용량은 따로 잰다", 13, MUTED, KR, "start")
+d.t(20, 504, "식은 캐시 30MB · 버퍼 5MB 를 품은 추정 · 실제 사용량은 별도 측정", 13, MUTED, KR, "start")
 
 d.legend(528, [("기본 설정 식", INFO), ("autopath 식", MUTED), ("상한", BAD), ("상한과 만나는 점", ACC)])
 d.save("06-03.memory-line.svg")

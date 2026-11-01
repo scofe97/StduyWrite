@@ -1,5 +1,6 @@
 # 06-03 §5 — cluster-proportional 오토스케일러가 클러스터 크기에서 복제본 수를 정하는 방식.
-# 원문 근거: "By default, it will always maintain at least two replicas, and will set the replicas
+# 원서 근거: 6장 "Kubernetes" p.31("Autoscaling").
+#            "By default, it will always maintain at least two replicas, and will set the replicas
 #            such that there is one per 256 cores or one per 16 nodes in the cluster, whichever is
 #            larger." 이 규칙만 원서 것이고, 노드당 코어 수는 원서에 없다.
 #            그래서 두 계열(노드당 8코어 · 32코어)을 가정으로 명시하고 그 가정 위에서만 그린다.
@@ -53,7 +54,7 @@ for cores, color, label in SERIES:
             d.o.append(f'<circle cx="{px(i):.1f}" cy="{py(replicas(n, cores)):.1f}" r="4" fill="{color}"/>')
 
 d.line(PX0, py(2), PX1, py(2), MUTED, 1.0, "5 4")
-d.t(PX1 - 6, py(2) - 10, "최소 2 — 작은 클러스터는 여기 붙어 있다", 12, MUTED, KR, "end")
+d.t(PX1 - 6, py(2) - 10, "최소 2 · 작은 클러스터의 자리", 12, MUTED, KR, "end")
 
 d.t(20, 508, "노드당 32코어 · 256코어 규칙이 8노드마다 하나 · 16노드 규칙보다 먼저", 13, MUTED, KR, "start")
 d.t(20, 532, "실제 필요는 워크로드 · 이 곡선은 출발점", 13, MUTED, KR, "start")

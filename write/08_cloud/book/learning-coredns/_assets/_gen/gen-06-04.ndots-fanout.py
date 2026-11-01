@@ -1,9 +1,9 @@
 # 06-04 §4 — ndots:5 때문에 외부 이름 하나에 질의가 여섯 번 나간다.
-# 원문 근거: Example 6-26 의 여섯 줄을 그대로 옮긴다 — example.com.default.svc.cluster.local /
+# 원문 근거: 원서 6장 p.39-40 Example 6-26 의 여섯 줄을 그대로 옮긴다 — example.com.default.svc.cluster.local /
 #            .svc.cluster.local / .cluster.local / .c.belamaric-com.internal / .google.internal /
 #            example.com. "five failed queries were made before the final successful sixth query.
 #            Each one of these was initiated by the client, sent over the network, processed, and
-#            responded to by CoreDNS."
+#            responded to by CoreDNS." (p.40)
 # 타입 스펙: type-sequence — 두 주체 사이의 시간순 왕복이고, 되풀이되는 실패 다섯이 논지다.
 #           프리미티브의 mono 하드코딩을 SeqKR 로 덮는다(계약 §프리미티브가 한글을 mono 로 내보내는 자리).
 import sys; sys.path.insert(0, ".")

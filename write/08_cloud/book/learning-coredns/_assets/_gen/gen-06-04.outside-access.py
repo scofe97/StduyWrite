@@ -1,4 +1,8 @@
 # 06-04 §1 「클러스터 밖에서 붙는 셋」 — CoreDNS 가 어디서 도느냐에 따라 API 서버에 붙는 설정 줄과 인증 수단이 갈린다.
+# 원서 근거: 원서 6장 p.35-36 endpoint ("Allows you to specify a specific API server URL to use..."),
+#            tls ("Used with endpoint to configure the TLS client parameters..."),
+#            kubeconfig ("As of version 1.5.0, CoreDNS supports client certificates, bearer tokens,
+#            HTTP Basic authentication, as well as the GCP, OpenStack, and OIDC plug-ins.").
 # README 근거(master, 2026-10-03 대조): endpoint "If omitted, it will connect to k8s in-cluster using the cluster
 #            service account." / tls "CERT KEY CACERT ... ignored if connecting in-cluster" / kubeconfig "It supports TLS,
 #            username and password, or token-based authentication. ... The cluster address in the kubeconfig is given preference."
@@ -16,9 +20,9 @@ d = D(W, H, "LEARNING COREDNS · 06-04 §1",
 COLS = [(20, 160, "CoreDNS 위치"), (190, 250, "kubernetes 블록 안 설정 줄"),
         (450, 210, "인증 수단"), (670, 190, "붙는 API 서버")]
 rows = [
-    (("클러스터 안 파드", ""), ("(설정 줄 없음)", "기본값"), ("서비스 어카운트", "자동으로 붙는다"), ("in-cluster 주소", "")),
+    (("클러스터 안 파드", ""), ("(설정 줄 없음)", "기본값"), ("서비스 어카운트", "자동 사용"), ("in-cluster 주소", "")),
     (("클러스터 밖", "URL 직접"), ("endpoint URL", "tls CERT KEY CACERT"), ("TLS 클라이언트 인증서", ""), ("endpoint 의 URL", "")),
-    (("클러스터 밖", "kubeconfig"), ("kubeconfig FILE", "[CONTEXT]"), ("TLS · 사용자·암호 · 토큰", ""), ("컨텍스트의 주소", "endpoint 보다 우선")),
+    (("클러스터 밖", "kubeconfig"), ("kubeconfig KUBECONFIG", "CONTEXT"), ("TLS · 사용자·암호 · 토큰", "지금 README"), ("컨텍스트의 주소", "endpoint 보다 우선")),
 ]
 Y0, PITCH, RH = 132, 84, 72
 
@@ -41,7 +45,7 @@ for i, cells in enumerate(rows):
         else:
             d.t(x + 12, y + 42, main, 13, col, fam, "start", 600)
 
-d.t(20, 404, "원서 · kubeconfig 에 GCP · OpenStack · OIDC 인증 플러그인 · 지금 README 는 셋만 적는다", 13, MUTED, KR, "start")
+d.t(20, 404, "원서 · GCP · OpenStack · OIDC 플러그인까지 · 지금 README · 셋뿐", 13, MUTED, KR, "start")
 
 d.legend(424, [("이 소절의 설정 줄", ACC)])
 d.save("06-04.outside-access.svg")

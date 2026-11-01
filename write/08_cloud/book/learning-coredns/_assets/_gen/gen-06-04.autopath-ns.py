@@ -1,8 +1,7 @@
 # 06-04 §5 「대가는 다시 메모리입니다」 — autopath 가 질의 하나를 받아 출발지 IP 로 네임스페이스를 찾고 검색 경로를 서버 안에서 도는 단계.
-# README 근거(autopath, master, 2026-10-03 대조): "If the autopath plugin sees a query that matches the first element of the
-#            configured search path, it will follow the chain of search path elements and return the first reply that is not
-#            NXDOMAIN. On any failures, the original reply is returned." / "it relies on the kubernetes plugin's Pod cache to
-#            resolve the client's IP address to a Pod."
+# 원서 근거: 원서 6장 p.40-41 (Example 6-27 p.40-41), autopath README (master, 2026-10-03 대조): "If the autopath
+#            plugin sees a query that matches the first element of the configured search path... it relies on the kubernetes
+#            plugin's Pod cache to resolve the client's IP address to a Pod."
 # 예시 값: 출발지 192.0.2.7(문서용 주소)·네임스페이스 default 는 설명용이다. 응답 줄은 이 노트 §5 의 원서 출력 그대로.
 # 타입 스펙: type-process — 질의가 단계 다섯을 차례로 지나고, 둘째 단계가 메모리를 요구하는 자리라는 것이 논지다.
 import sys; sys.path.insert(0, ".")
@@ -17,7 +16,7 @@ d = D(W, H, "LEARNING COREDNS · 06-04 §5",
 
 steps = [
     ("1 · 질의 도착", ["example.com.default", ".svc.cluster.local", "출발지 192.0.2.7"], False),
-    ("2 · 파드 캐시 조회", ["192.0.2.7", "= default 의 파드", "pods verified 가 채운 캐시"], True),
+    ("2 · 파드 캐시 조회", ["192.0.2.7", "= default 의 파드", "pods verified 필요"], True),
     ("3 · 검색 경로 세우기", ["default.svc.cluster.local", "svc.cluster.local", "cluster.local · 호스트"], False),
     ("4 · 서버 안에서 돌기", ["후보마다 내부 조회", "NXDOMAIN 이 아닌", "첫 답에서 멈춤"], False),
     ("5 · 응답", ["CNAME example.com.", "A 93.184.216.34", "왕복은 한 번"], False),
@@ -45,7 +44,7 @@ for i, (title, lines, focal) in enumerate(steps):
         d.path(f"M {x + BW + 1} {Y + BH / 2} L {XS[i + 1] - 2} {Y + BH / 2}", MUTED, 1.2, m="ar")
 
 d.t(20, 360, "첫 항목으로 안 끝나는 질의 · 그대로 통과 · 도중 실패 · 원래 응답", 13, MUTED, KR, "start")
-d.t(20, 386, "알려진 버그 · IP 재할당이 watch 보다 빠르면 옛 네임스페이스의 검색 경로", 13, MUTED, KR, "start")
+d.t(20, 386, "알려진 버그 · watch 전 IP 재할당 시 옛 네임스페이스의 검색 경로", 13, MUTED, KR, "start")
 
 d.legend(420, [("pods verified 를 요구하는 단계", ACC)])
 d.save("06-04.autopath-ns.svg")

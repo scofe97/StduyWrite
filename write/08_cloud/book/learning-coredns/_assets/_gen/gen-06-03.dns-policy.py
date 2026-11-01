@@ -2,6 +2,7 @@
 # 본문 근거: 이 노트 §4 「가운데 겹」(원서 요지 — Default 는 노드의 DNS 설정, 파드 기본은 ClusterFirst,
 #            CoreDNS 는 노드의 상류 네임서버로 외부 이름을 풀어야 한다)과 같은 절의 노트 추론(ClusterFirst 면 자기를 본다).
 #            CoreDNS 가 외부 이름을 forward 로 넘기는 것은 06-02 의 기본 Corefile `forward . /etc/resolv.conf`.
+# 원서 근거: 6장 "Kubernetes" p.28-29(dnsPolicy Default vs ClusterFirst, Example 6-19).
 # 타입 스펙: type-dp-security-matrix — 파드·정책(행) × nameserver·외부 이름 경로(열) 격자가 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, BAD, KR, MONO
@@ -15,9 +16,9 @@ d = D(W, H, "LEARNING COREDNS · 06-03 §4",
 
 COLS = [(20, 220, "파드 · 정책"), (250, 250, "resolv.conf 의 nameserver"), (510, 350, "외부 이름이 가는 곳")]
 rows = [
-    (("앱 파드", "ClusterFirst · 기본값"), ("10.7.240.10", "kube-dns 서비스"), ("CoreDNS 가 받는다", "forward 로 상류에 넘긴다"), None),
-    (("CoreDNS 파드", "Default"), ("노드의 nameserver", "노드 /etc/resolv.conf 내용"), ("노드의 상류 네임서버", "클러스터 밖으로 나간다"), ACC),
-    (("CoreDNS 파드라면", "ClusterFirst 일 때 · 노트의 추론"), ("10.7.240.10", "자기 자신의 서비스"), ("자기에게 되돌아온다", "상류로 나갈 길이 없다"), BAD),
+    (("앱 파드", "ClusterFirst · 기본값"), ("10.7.240.10", "kube-dns 서비스"), ("CoreDNS 파드", "forward 로 상류 전달"), None),
+    (("CoreDNS 파드", "Default"), ("노드의 nameserver", "노드 /etc/resolv.conf 내용"), ("노드 상류 네임서버", "클러스터 외부로 전달"), ACC),
+    (("CoreDNS 파드 · 가정", "ClusterFirst 일 때 · 노트 추론"), ("10.7.240.10", "자기 자신의 서비스"), ("자기 자신에게 되돌아옴", "상류로 나갈 길 막힘"), BAD),
 ]
 for x, w, head in COLS:
     d.t(x + 12, 118, head, 12, SOFT, KR, "start", 600)

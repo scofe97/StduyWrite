@@ -1,5 +1,7 @@
 # 06-03 §2 — ClusterRole 이 준 자원 다섯과 기본 설정이 실제로 쓰는 셋.
-# 원문 근거: ClusterRole 은 endpoints·services·pods·namespaces 에 list·watch 를, nodes 에 get 을 준다 /
+# 원서 근거: 6장 "Kubernetes" p.24(Example 6-15, ClusterRole rules),
+#            p.25-26("Role-Based Access Control" 안 namespaces 단락과 pods·nodes "probably not" 단락, 소제목 없음).
+#            ClusterRole 은 endpoints·services·pods·namespaces 에 list·watch 를, nodes 에 get 을 준다 /
 #            "the ability to watch and list Endpoints and Services makes sense" / 네임스페이스는
 #            NXDOMAIN 판단과 와일드카드 질의에 필요하다 / "The answer for whether it needs pods and
 #            nodes is 'probably not.'" / "CoreDNS needs to watch pods only if you enable the pods
@@ -33,7 +35,7 @@ d.t(440, 204, "배포 편의로 미리 준 것", 12, ACC, KR)
 
 d.t(440, 356, "endpoints · services", 15, OK, MONO, "middle", 600)
 d.t(440, 380, "namespaces", 15, OK, MONO, "middle", 600)
-d.t(440, 408, "레코드를 만드는 데 실제로 쓴다", 12, MUTED, KR)
+d.t(440, 408, "실제 레코드 생성에 사용", 12, MUTED, KR)
 
 # 설명 줄은 두 원 바깥에 둔다. 원 안에 두면 그 집합의 속성으로 읽힌다.
 d.t(20, 604, "원서 · nodes 만 get · 나머지 list·watch · 쓰기 동사 없음", 13, MUTED, KR, "start")

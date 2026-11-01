@@ -1,11 +1,11 @@
 # 06-04 §5 — autopath 는 검색 경로 순회를 네트워크에서 CoreDNS 내부로 옮긴다.
-# 원문 근거: "CoreDNS will figure out the search path on the server side. When it recognizes a query
+# 원문 근거: 원서 6장 p.40-41 "CoreDNS will figure out the search path on the server side. When it recognizes a query
 #            that looks like it is the first in a search ... it will iterate over that search path
 #            itself, internally. This is much, much faster because there is no network involved;
 #            it's just an internal loop. If it gets a result, it will return a CNAME pointing to that
 #            result." / 대가: "To figure out the search path, CoreDNS needs to know the namespace of
 #            the client pod. The only information it has on the client pod is the source IP address
-#            of the query ... Enabling pods verified mode does this, but it increases the memory".
+#            of the query ... Enabling pods verified mode does this, but it increases the memory" (p.41).
 # 타입 스펙: type-swimlane — 레인을 건너는 넘겨받음이 논지이고, 반복이 어느 레인에 있는지가 결론이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, BAD, OK, KR, MONO
@@ -30,7 +30,7 @@ d.line(LX, 244, 860, 244, RULE, 1.0)
 
 d.box(LX + 24, 140, 176, 60, PAPER2, RULE, 1.0)
 d.t(LX + 112, 168, "클라이언트", 14, INK, KR, "middle", 600)
-d.t(LX + 112, 188, "검색 경로를 돈다", 12, MUTED, KR)
+d.t(LX + 112, 188, "검색 경로 순회", 12, MUTED, KR)
 d.tone(LX + 264, 140, 200, 60, BAD, 6, "12", 1.4)
 d.t(LX + 364, 168, "네트워크 왕복 여섯", 14, BAD, KR, "middle", 600)
 d.t(LX + 364, 188, "실패 다섯 + 성공 하나", 12, BAD, KR)
@@ -42,7 +42,7 @@ d.arrow([(LX + 464, 170), (LX + 524, 170)], MUTED, "ar", 1.4)
 
 d.box(LX + 24, 284, 176, 60, PAPER2, RULE, 1.0)
 d.t(LX + 112, 312, "클라이언트", 14, INK, KR, "middle", 600)
-d.t(LX + 112, 332, "한 번만 묻는다", 12, MUTED, KR)
+d.t(LX + 112, 332, "질의 한 번", 12, MUTED, KR)
 d.box(LX + 264, 284, 200, 60, PAPER2, RULE, 1.0)
 d.t(LX + 364, 312, "네트워크 왕복 하나", 14, OK, KR, "middle", 600)
 d.t(LX + 364, 332, "CNAME 과 A 가 함께", 12, MUTED, KR)
@@ -54,7 +54,7 @@ d.arrow([(LX + 464, 314), (LX + 524, 314)], MUTED, "ar", 1.4)
 
 d.tone(20, 396, 840, 56, ACC, 6, "0E", 1.4)
 d.t(440, 420, "대가 · 출발지 IP → 네임스페이스 · pods verified 필요", 13, ACC, KR)
-d.t(440, 440, "그 모드의 메모리 · 두 배 안팎", 12, MUTED, KR)
+d.t(440, 440, "그 모드의 메모리 · 2~2.5배", 12, MUTED, KR)
 
 d.legend(476, [("옮겨 간 반복", ACC), ("없앤 왕복", BAD), ("남은 왕복 하나", OK)])
 d.save("06-04.autopath-move.svg")

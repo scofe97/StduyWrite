@@ -2,6 +2,7 @@
 # 본문 근거: 이 노트 §6 의 두 Corefile 코드 블록과 「두 번째 단계」 산문. upstream 의 현재 오류는
 #            plugin/kubernetes/setup.go(upstream 분기 없음, unknown property)와 1.7.0 릴리스 노트로 확인(2026-10-03).
 #            둘째 블록의 prometheus 는 2단계에서 빠지는데 원서가 이유를 적지 않는다(코드 블록 대조).
+# 원서 근거: 6장 "Kubernetes" p.32-33(Example 6-22, step 1), p.34(Example 6-23, step 2), p.34-35.
 # 타입 스펙: type-dp-security-matrix — 줄(행) × 단계(열) 격자에서 칸이 있음·뺌·추가 중 무엇인지가 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, OK, BAD, KR, MONO
@@ -19,10 +20,10 @@ first = [
     ("health", "있음", "있음", "1.5.0 부터 전역"),
     ("kubernetes · pods insecure", "있음", "뺌", "파드 레코드 폐기"),
     ("kubernetes · upstream", "있음", "뺌", "1.4 부터 기본 · 지금은 오류"),
-    ("kubernetes · fallthrough", "있음", "뺌", "CIDR 을 열거할 수 있으면"),
-    ("ready", "없음", "추가", "API 캐시가 차면 준비"),
+    ("kubernetes · fallthrough", "있음", "뺌", "CIDR 열거 가능 시"),
+    ("ready", "없음", "추가", "API 캐시 완료 즉시 준비"),
     ("prometheus :9153", "있음", "있음", ""),
-    ("forward . UPSTREAM", "있음", "뺌", "CIDR 을 열거할 수 있으면"),
+    ("forward . UPSTREAMNAMESERVER", "있음", "뺌", "CIDR 열거 가능 시"),
     ("loop · reload · loadbalance", "있음", "있음", ""),
 ]
 second = [

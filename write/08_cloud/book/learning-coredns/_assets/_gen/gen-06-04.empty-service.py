@@ -1,4 +1,6 @@
 # 06-04 §7 「NXDOMAIN 을 신호로 쓰기」 — ignore empty_service 가 어느 서비스의 응답을 어떻게 바꾸고, 클라이언트가 다음에 무엇을 하는가.
+# 원서 근거: 원서 6장 p.44 "Another way to modify how endpoints are handled is to enable the ignore empty_service
+#            option. This will reply with NXDOMAIN instead of a success response with no data... to direct traffic to a secondary cluster."
 # 소스 근거(kubernetes.go master, 2026-10-03 대조): "If "ignore empty_service" option is set and no endpoints exist, return
 #            NXDOMAIN unless it's a headless or externalName service" — ready 주소(Subsets[].Addresses)를 세고, 옵션이 없으면
 #            ClusterIP 서비스는 svc.ClusterIPs 로 바로 레코드를 만든다. README: "services without any ready endpoint addresses".
@@ -45,7 +47,7 @@ for i, cells in enumerate(rows):
         else:
             d.t(x + 12, y + 36, main, 13, col, fam, "start", 600)
 
-d.t(20, 430, "기본 응답의 함정 · 백엔드가 없어도 VIP 가 오니 접속 단계에서야 실패를 안다", 13, MUTED, KR, "start")
+d.t(20, 430, "기본 응답 · ready 엔드포인트 없어도 VIP 의 A", 13, MUTED, KR, "start")
 
 d.legend(444, [("옵션이 바꾸는 칸", ACC), ("백엔드 없는 성공 응답", BAD)])
 d.save("06-04.empty-service.svg")

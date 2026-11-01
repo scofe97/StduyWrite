@@ -1,5 +1,5 @@
 # 06-04 §2 「켜지 않는 이유가 둘」 — 두 모드의 메모리 선이 객체 수가 늘수록 벌어진다.
-# 원문 근거: 25,000 파드·1,000 서비스에서 160 / 80 MiB, 50,000 파드·2,000 서비스에서 264 / 106 MiB(이 노트 §2 표).
+# 원문 근거: 원서 6장 p.37 25,000 파드·1,000 서비스에서 160 / 80 MiB, 50,000 파드·2,000 서비스에서 264 / 106 MiB(이 노트 §2 표).
 # 선: insecure·disabled = 객체/1000 + 54 (앞 편 추정식), verified = 객체/250 + 56 (Scaling_CoreDNS.md 의 autopath 식).
 #     두 식 모두 네 실측점을 정확히 지난다(26k→80·160, 52k→106·264). 면접 7번의 32k 점은 답을 미리 보여 주지 않으려 찍지 않는다.
 # 타입 스펙: type-line — 연속 x(객체 수)에 대한 두 계열의 추이와 그 사이 간격이 논지다.
@@ -38,9 +38,11 @@ d.path(f"M {X(0)} {Y(56)} L {X(60)} {Y(240 + 56)}", MUTED, 2.0)
 
 for k, v, c in ((26, 80, INFO), (52, 106, INFO), (26, 160, INK), (52, 264, INK)):
     d.o.append(f'<circle cx="{X(k)}" cy="{Y(v)}" r="5" fill="{PAPER}" stroke="{c}" stroke-width="2"/>')
-    # 바탕 마스크 없이 선이 지나지 않는 쪽에 둔다 — verified 는 오른쪽 아래, insecure 는 위(2026-10-03: 마스크가 선을 끊었다)
+    # 바탕 마스크 없이 선이 지나지 않는 쪽에 둔다 — verified 는 오른쪽 아래, 80 은 아래, 106 은 위
     if c == INK:
         d.t(X(k) + 12, Y(v) + 20, str(v), 12, c, MONO, "start", 600)
+    elif v == 80:
+        d.t(X(k), Y(v) + 18, str(v), 12, c, MONO, "middle", 600)
     else:
         d.t(X(k), Y(v) - 14, str(v), 12, c, MONO, "middle", 600)
 
@@ -49,7 +51,7 @@ d.path(f"M {bx - 8} {Y(264)} L {bx} {Y(264)} L {bx} {Y(106)} L {bx - 8} {Y(106)}
 d.t(bx + 10, (Y(264) + Y(106)) / 2 + 5, "158 차이", 13, ACC, KR, "start", 600)
 
 d.t(X(34) - 8, Y(4 * 34 + 56) - 18, "verified · 1,000개당 4", 12, INK, KR, "end", 600)
-d.t(X(34), Y(34 + 54) + 28, "insecure · disabled · 1,000개당 1", 12, INFO, KR, "middle", 600)
+d.t(X(38), Y(38 + 54) + 28, "insecure · disabled · 1,000개당 1", 12, INFO, KR, "middle", 600)
 
 d.t(20, 462, "점 넷 · 원서 실측 · 선 · 그 점을 지나는 두 추정식", 13, MUTED, KR, "start")
 

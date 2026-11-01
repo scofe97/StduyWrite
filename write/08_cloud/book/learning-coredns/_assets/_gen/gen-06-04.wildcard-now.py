@@ -1,6 +1,6 @@
 # 06-04 §3 「쓸모가 분명한 자리가 하나」 — ClusterIP 서비스의 엔드포인트를 묻는 길이 원서 시점과 지금 어떻게 다른가.
-# 본문 근거: 이 노트 §3 — kube-dns 는 A 하나, '*.kube-dns...' 는 원서에서 엔드포인트 레코드 둘(이름은 질의 그대로).
-# 릴리스 노트 근거: 1.9.0 "Wildcard queries are no longer supported by the kubernetes plugin."
+# 원서 근거: 원서 6장 p.38 Example 6-25 (host kube-dns... -> A 하나, host '*.kube-dns...' -> 엔드포인트 둘).
+# 본문 근거: 이 노트 §3. 릴리스 노트 근거: 1.9.0 "Wildcard queries are no longer supported by the kubernetes plugin."
 # 타입 스펙: type-dp-security-matrix — 묻는 방법(행) × 시점(열) 격자에서 어느 칸이 닫혔는가가 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, BAD, OK, KR, MONO
@@ -17,7 +17,7 @@ rows = [
     (("kube-dns.kube-system", "svc.cluster.local · A"), ("VIP 하나", "ClusterIP 라서", INK), ("VIP 하나", "그대로", INK)),
     (("*.kube-dns.kube-system", "svc.cluster.local · A"), ("엔드포인트 레코드 둘", "이름은 질의 그대로", OK), ("레코드가 오지 않음", "1.9.0 에서 기능 제거", ACC)),
     (("헤드리스 서비스를 따로", "같은 셀렉터 · SRV"), ("엔드포인트별 SRV", "명세 안의 길", INK), ("엔드포인트별 SRV", "명세 안의 길", INK)),
-    (("kubectl get endpointslices", "-l kubernetes.io/service-name=kube-dns"), ("Endpoints 로 확인", "DNS 밖", MUTED), ("주소 목록", "DNS 밖", INK)),
+    (("kubectl get endpointslices", "-l kubernetes.io/service-name=kube-dns"), ("kubectl 로 확인", "DNS 밖", MUTED), ("주소 목록", "DNS 밖", INK)),
 ]
 Y0, PITCH, RH = 132, 78, 68
 

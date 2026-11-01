@@ -1,5 +1,7 @@
 # 06-03 §4 — Deployment 한 장을 바깥에서 안으로 다섯 겹으로 읽는다.
-# 원문 근거: replicas 2 와 RollingUpdate maxUnavailable 1 / serviceAccountName·볼륨·dnsPolicy Default 이고
+# 원서 근거: 6장 "Kubernetes" p.27-28(Example 6-18, Deployment part 1), p.28(Example 6-19, part 2),
+#            p.29-30(Example 6-20, part 3), p.30("MEMORY LIMIT ESTIMATION" 상자).
+#            replicas 2 와 RollingUpdate maxUnavailable 1 / serviceAccountName·볼륨·dnsPolicy Default 이고
 #            "the dnsPolicy called 'Default' is not the default for pods. The default for pods is
 #            ClusterFirst" / 컨테이너 하나에 프로세스 하나이며 "In the earlier kube-dns implementation,
 #            these different functions ran as separate processes" / "CoreDNS requests a minimum of
@@ -20,11 +22,11 @@ d = D(W, H, "LEARNING COREDNS · 06-03 §4",
 
 LX, LW, LH, Y0 = 100, 740, 68, 112
 layers = [
-    ("01", "Deployment spec", "복제본 2 (kubeadm) · RollingUpdate maxUnavailable 1", False),
+    ("01", "Deployment spec", "복제본 2 · RollingUpdate maxUnavailable 1", False),
     ("02", "파드 템플릿", "serviceAccountName · 볼륨 · dnsPolicy Default", False),
-    ("03", "컨테이너 하나", "프로세스 하나 · kube-dns 는 셋이었다", False),
+    ("03", "컨테이너 하나", "프로세스 하나 · kube-dns 는 프로세스 셋", False),
     ("04", "자원과 보안", "CPU 상한 없음 · 메모리 170Mi · NET_BIND_SERVICE", True),
-    ("05", "두 프로브", "활성 5회 실패면 재시작 · 준비 통과면 풀에 편입", False),
+    ("05", "두 프로브", "활성 5회 실패 시 재시작 · 준비 통과 시 풀 편입", False),
 ]
 
 for i, (tag, name, sub, focal) in enumerate(layers):
