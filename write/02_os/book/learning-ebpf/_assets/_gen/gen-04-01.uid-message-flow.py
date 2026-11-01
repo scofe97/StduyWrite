@@ -1,6 +1,5 @@
 # 타입 스펙: type-data-flow — 사례(레인) 셋 × 단계 넷. execve 를 낸 UID 가 config 조회를 거쳐 출력 줄이 된다. focal 은 항목이 없어 기본 메시지로 떨어지는 UID 1.
-# 사실 출처: 추출본 src/ebpf4.txt 163~175행(출력 표: 37926 501 bash Hi user 501! · 37929 0 sudo Hey root! · 37933 1 sudo Hello World)
-#   config 항목은 UID 0 "Hey root!"·501 "Hi user 501!" (같은 파일 150~152행), 기본값 "Hello World" 는 예제 저장소 chapter4/hello-buffer-config.py (HEAD 1ccef6e).
+# 사실 출처: 원서 Ch.4 4쪽(실행 및 출력 결과: 37926 501 bash Hi user 501!, 37929 0 sudo Hey root!, 37933 1 sudo Hello World), 예제 저장소 chapter4/hello-buffer-config.py, 본문 §1(108행 — sudo ls 한 번이 execve 두 번, bash 가 sudo 를 띄울 때 UID 501, sudo 가 ls 를 띄울 때 0). sudo 레인은 둘째 execve 만 그린다.
 # Layout formulas(type-data-flow §2) 변형: 레인 3 · lane_h 88 · node_h 64 · 단계 폭은 내용에 맞춰 단계별 값. 좌표 4의 배수.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, INFO, MUTED, INK, PAPER, PAPER2, RULE, SOFT, KR, MONO
@@ -8,11 +7,11 @@ from dd import D, ACC, OK, WARN, INFO, MUTED, INK, PAPER, PAPER2, RULE, SOFT, KR
 W, H = 960, 500
 d = D(W, H, "LEARNING EBPF · 04-01 §1",
       "execve 를 낸 UID 가 메시지를 고른다",
-      "UID 501 과 0 은 config 에 항목이 있어 그 메시지를 쓰고, 항목이 없는 UID 1 은 기본 메시지 Hello World 를 쓴다.",
-      "같은 hello() 가 UID 에 따라 다른 줄을 냅니다")
+      "UID 501 과 0 은 config 에 항목이 있어 그 메시지를 쓰고, 항목이 없는 UID 1 은 기본 메시지 Hello World 를 쓴다. sudo 두 레인은 sudo 가 ls 를 띄운 둘째 execve 이고, bash 가 sudo 를 띄운 첫 줄(37927·37931, UID 501)은 첫 레인과 같아 뺐다.",
+      "호출 UID 에 따른 메시지 조회와 출력 분기")
 
 TOP, LH, NH = 140, 88, 64
-LANES = ["ls", "sudo ls", "sudo -u daemon ls"]
+LANES = [("ls", None), ("sudo ls", "sudo 가 띄운 ls"), ("sudo -u daemon ls", "sudo 가 띄운 ls")]
 COLX = [200, 408, 616, 788]
 COLW = [176, 176, 140, 148]
 HEAD = ["01 execve", "02 config 조회", "03 메시지", "04 출력 줄"]
@@ -20,11 +19,13 @@ HEAD = ["01 execve", "02 config 조회", "03 메시지", "04 출력 줄"]
 for i, (x, w) in enumerate(zip(COLX, COLW)):
     d.box(x + w/2 - 56, 100, 112, 20, PAPER2, RULE, 0.9, 10)
     d.t(x + w/2, 114, HEAD[i], 13, MUTED, KR, "middle", 600)
-for k, nm in enumerate(LANES):
+for k, (nm, sub) in enumerate(LANES):
     y = TOP + k * LH
     if k % 2 == 0:
         d.o.append(f'<rect x="12" y="{y}" width="{W-24}" height="{LH}" fill="#F5F5F3" fill-opacity="0.025"/>')
-    d.t(24, y + LH/2 + 4, nm, 13, INK, MONO, "start", 600)
+    d.t(24, y + LH/2 + (4 if sub is None else -6), nm, 13, INK, MONO, "start", 600)
+    if sub:
+        d.t(24, y + LH/2 + 16, sub, 13, MUTED, KR, "start")
 
 # (pid, uid, comm, lookup 키, 항목 있음?, 메시지, 출력 둘째 줄 앞)
 CASES = [(37926, 501, "bash", 501, True, "Hi user 501!"),

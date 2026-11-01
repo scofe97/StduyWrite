@@ -1,6 +1,5 @@
-# 타입 스펙: type-swimlane — 레인 넷(로더 · BPF 파일시스템 · 훅 · 커널 참조) × 사건 여섯. 사건마다 참조 증감만 그린다. focal 은 참조가 0 이 되어 해제되는 마지막 칸.
-# 사실 출처: 추출본 src/ebpf4.txt 450~456행(fd 닫힘 → 참조 감소 → 없으면 제거)·487~494행(부착이 참조를 더함, 추적 부착은 프로세스 종료 시 감소)·1102~1111행(연습 4: bpftool prog pin name hello /sys/fs/bpf/hi, rm /sys/fs/bpf/hi)
-#   고정이 참조를 유지하고 unlink 로 풀린다는 설명은 linux v7.2 include/uapi/linux/bpf.h 줄 276~290(BPF_OBJ_PIN). 값은 절대 개수가 아니라 증감.
+# 타입 스펙: type-swimlane — 레인 넷(로더 · BPF 파일시스템 · 훅 부착 · 커널 참조) × 사건 여섯. 사건마다 참조 증감만 그린다. focal 은 참조가 0 이 되어 해제되는 마지막 칸.
+# 사실 출처: 원서 Ch.4 9~10쪽(참조 카운트와 고정, 9쪽 Pinning, 10쪽 추적 부착 수명 — kprobe 같은 추적 부착은 프로세스가 끝나면 참조가 준다), 21쪽 연습 4(bpftool prog pin name hello /sys/fs/bpf/hi, rm /sys/fs/bpf/hi), 커널 v7.2 bpf.h 줄 276~290(BPF_OBJ_PIN), 본문 §4
 # Layout conventions: 레인 높이 84·열 폭 128·단계 상자 132×44, 레인 라벨 x=24, 첫 열 x=170. 모든 좌표 4의 배수.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, INFO, MUTED, INK, PAPER, PAPER2, RULE, SOFT, KR, MONO
@@ -9,10 +8,10 @@ W, H = 960, 520
 d = D(W, H, "LEARNING EBPF · 04-01 §4",
       "프로그램 참조가 늘고 주는 사건의 순서",
       "BPF_PROG_LOAD·kprobe 부착·prog pin 이 참조를 하나씩 더하고, 프로세스 종료는 fd 와 추적 부착의 참조를 줄이며, 고정 경로를 지우면 0 이 되어 해제된다.",
-      "고정이 참조를 하나 쥐고 있는 동안 프로그램이 남습니다")
+      "고정 경로가 참조를 유지하는 동안의 프로그램 존속")
 
 LANE_Y0, LH = 104, 84
-LANES = ["로더 프로세스", "BPF 파일시스템", "훅 · 링크", "커널 참조 증감"]
+LANES = ["로더 프로세스", "BPF 파일시스템", "훅 부착", "커널 참조 증감"]
 for k, nm in enumerate(LANES):
     y = LANE_Y0 + k * LH
     if k % 2 == 0:
@@ -30,7 +29,7 @@ EV = [
     (1, 2, "kprobe 부착", "추적 부착", "+1", OK),
     (2, 1, "prog pin", "/sys/fs/bpf/hi", "+1", OK),
     (3, 0, "프로세스 종료", "fd 닫힘", "−1", WARN),
-    (4, 2, "부착 해제", "추적 부착", "−1", WARN),
+    (4, 2, "부착 해제", "프로세스 종료 시", "−1", WARN),
     (5, 1, "rm", "/sys/fs/bpf/hi", "−1 · 해제", ACC),
 ]
 MKN = {OK: "ok", WARN: "warn", ACC: "acc"}

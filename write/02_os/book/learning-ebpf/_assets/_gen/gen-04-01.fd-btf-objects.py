@@ -1,6 +1,5 @@
 # 타입 스펙: type-architecture — 존 둘(프로세스 fd 표 · 커널 객체)과 fd→객체 화살표 넷, 맵과 프로그램에서 BTF 로 가는 화살표 둘(focal).
-# 사실 출처: 추출본 src/ebpf4.txt 192~269행(BTF_LOAD=3, output PERF_EVENT_ARRAY key 4 value 4 max_entries 4 = fd 4, config HASH key 4 value 12 max_entries 10240 btf_fd=3 = fd 5)
-#   302~304행(PROG_LOAD KPROBE insn_cnt=44 license GPL prog_btf_fd=3 = fd 6), BTF 매직은 linux v7.2 include/uapi/linux/btf.h 줄 8~9(0xeB9F, version 1).
+# 사실 출처: 원서 Ch.4 5~6쪽(5쪽 BPF_BTF_LOAD=3, output PERF_EVENT_ARRAY key 4 value 4 max_entries 4 = fd 4; 6쪽 config HASH key 4 value 12 max_entries 10240 btf_fd=3 = fd 5, BPF_PROG_LOAD KPROBE insn_cnt=44 license GPL prog_btf_fd=3 = fd 6), 커널 v7.2 btf.h 줄 8~9(BTF_MAGIC 0xeB9F, version 1), 본문 §2
 # Layout conventions: 노드 높이 72·stride 92, fd 열 x=32~332, 객체 열 x=428~672, 되돌이 세로선 x=720·800. 모든 좌표 4의 배수.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, INFO, MUTED, INK, PAPER, PAPER2, RULE, SOFT, KR, MONO
@@ -9,14 +8,14 @@ W, H = 960, 620
 d = D(W, H, "LEARNING EBPF · 04-01 §2",
       "fd 번호표와 커널 객체, BTF 를 가리키는 두 화살표",
       "프로세스의 fd 3·4·5·6 은 각각 BTF·output 맵·config 맵·hello 프로그램을 가리킨다. config 는 btf_fd=3, hello 는 prog_btf_fd=3 으로 같은 BTF 를 가리킨다.",
-      "번호가 객체를 가리키고 객체 둘이 다시 BTF 를 가리킵니다")
+      "fd 번호의 커널 객체 참조와 두 객체의 BTF 연결")
 
 # 존
 UZ = (16, 100, 332, 412)
 KZ = (380, 100, 564, 412)
-for (x, y, w, h), name, fam in ((UZ, "프로세스 · fd 표", KR), (KZ, "KERNEL", MONO)):
+for (x, y, w, h), name, fam in ((UZ, "프로세스 · fd 표", KR), (KZ, "커널 객체", KR)):
     d.box(x, y, w, h, PAPER2, RULE, 0.9, 8)
-    d.t(x + 12, y + 20, name, 12 if fam == KR else 9, SOFT, fam, "start")
+    d.t(x + 12, y + 20, name, 13, SOFT, fam, "start")
 
 NH, ST, Y0 = 72, 92, 140
 UX, UW = 32, 300
