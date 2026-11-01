@@ -1,8 +1,8 @@
 # 타입 스펙: type-data-flow — 필드(레인) 네 줄 × 단계 다섯 칸. 헬퍼 호출이 채운 값이 한 항목으로 모여 화면 한 줄이 된다.
-# 사실 출처: 예제 저장소 chapter2/hello-buffer.py (HEAD 91ded4a) — struct data_t{int pid; int uid; char command[16]; char message[12];}
+# 사실 출처: 원서 Ch.2 12~15쪽 · 예제 저장소 chapter2/hello-buffer.py (HEAD 91ded4a) — struct data_t{int pid; int uid; char command[16]; char message[12];}
 #   pid = bpf_get_current_pid_tgid() >> 32 (tgid 는 상위 32비트: linux v7.2 kernel/bpf/helpers.c 줄 232)
 #   uid = bpf_get_current_uid_gid() & 0xFFFFFFFF (uid 는 하위 32비트: 같은 파일 줄 251~252)
-#   출력 한 줄은 f"{pid} {uid} {command} {message}" ; 예시 값 11654 · node · Hello World 는 추출본 ebpf2.txt 의 출력(uid 는 그 출력에 없어 숫자를 적지 않는다).
+#   출력 한 줄은 f"{pid} {uid} {command} {message}" ; 예시 값 11654 · node · Hello World 는 원서 14쪽 출력 첫 줄(본문 144행)(uid 는 그 출력에 없어 숫자를 적지 않는다).
 #   data_t 크기 36바이트 = 4 + 4 + 16 + 12 (정렬 패딩 없음)
 # Layout formulas(type-data-flow §2) 변형: 레인 4 · lane_h 76 · node_h 64 · header chip 16px. 단계 폭은 균일 112 대신 단계별 값으로 늘렸다(함수 이름이 길어서).
 import sys; sys.path.insert(0, ".")
@@ -12,7 +12,7 @@ W, H = 960, 520
 d = D(W, H, "LEARNING EBPF · 02-02 §2",
       "헬퍼가 채운 값이 항목 하나로 모여 화면 한 줄이 된다",
       "hello() 는 pid·uid·command·message 를 헬퍼로 data_t 에 채우고, perf_submit 이 그 36바이트를 output 에 밀면 print_event 가 한 줄로 찍는다.",
-      "네 필드가 한 항목으로 합쳐집니다")
+      "헬퍼 네 개 · data_t 항목 하나 · 출력 한 줄")
 
 TOP, LH, NH = 140, 76, 64
 LANES = [("pid", "int"), ("uid", "int"), ("command", "char[16]"), ("message", "char[12]")]
@@ -57,16 +57,16 @@ for k in range(4):
 # 단계 3 — output 한 항목 (네 레인에 걸침)
 OY, OH = ys[0], ys[3] + NH - ys[0]
 d.o.append(f'<rect x="{COLX[2]}" y="{OY}" width="{COLW[2]}" height="{OH}" rx="6" fill="{ACC}1F" stroke="{ACC}" stroke-width="1.4"/>')
-d.t(COLX[2] + COLW[2]/2, OY + OH/2 - 14, "output", 14, ACC, MONO, "middle", 600)
-d.t(COLX[2] + COLW[2]/2, OY + OH/2 + 6, "data_t", 12, MUTED, MONO)
-d.t(COLX[2] + COLW[2]/2, OY + OH/2 + 26, "36바이트", 12, MUTED, KR)
+my = OY + OH // 2
+d.t(COLX[2] + COLW[2]/2, my - 22, "output", 14, ACC, MONO, "middle", 600)
+d.t(COLX[2] + COLW[2]/2, my - 4, "data_t", 12, MUTED, MONO)
+d.t(COLX[2] + COLW[2]/2, my + 16, "36바이트", 13, MUTED, KR)
 
 # 단계 4·5 — 레인 가운데
-my = OY + OH // 2
 PY = my - NH // 2
-d.tone(COLX[3], PY, COLW[3], NH, OK, 6, "12", 1.2)
-d.t(COLX[3] + COLW[3]/2, PY + 28, "print_event", 13, OK, MONO, "middle", 600)
-d.t(COLX[3] + COLW[3]/2, PY + 48, "콜백", 12, MUTED, KR)
+d.tone(COLX[3], PY, COLW[3], NH, MUTED, 6, "12", 1.2)
+d.t(COLX[3] + COLW[3]/2, PY + 28, "print_event", 13, INK, MONO, "middle", 600)
+d.t(COLX[3] + COLW[3]/2, PY + 48, "콜백", 13, MUTED, KR)
 d.arrow([(COLX[2] + COLW[2] + 2, my), (COLX[3] - 6, my)], ACC, "acc", 1.8)
 
 d.tone(COLX[4], PY, COLW[4], NH, WARN, 6, "12", 1.2)
@@ -74,5 +74,5 @@ d.t(COLX[4] + COLW[4]/2, PY + 28, "11654 <uid>", 13, WARN, MONO, "middle", 600)
 d.t(COLX[4] + COLW[4]/2, PY + 48, "node Hello World", 12, MUTED, MONO)
 d.arrow([(COLX[3] + COLW[3] + 2, my), (COLX[4] - 6, my)], WARN, "warn", 1.5)
 
-d.legend(H - 56, [("헬퍼 호출", OK), ("필드 값", INFO), ("perf 버퍼 항목", ACC), ("화면 출력", WARN)])
+d.legend(H - 56, [("헬퍼 호출", OK), ("필드 값", INFO), ("perf 버퍼 항목", ACC), ("사용자 공간 콜백", MUTED), ("화면 출력", WARN)])
 d.save("02-02.field-fill.svg")

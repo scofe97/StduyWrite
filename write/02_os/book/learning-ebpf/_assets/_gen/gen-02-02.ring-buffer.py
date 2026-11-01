@@ -1,5 +1,5 @@
 # 타입 스펙: type-gantt — 한 줄 버퍼 위에서 길이가 제각각인 항목을 막대로 그리고, 같은 링의 두 상태를 위아래로 쌓는다(원형 대신 가로 펴기).
-# 사실 출처: 추출본 ebpf2.txt 477~506행(읽기·쓰기 포인터, 길이 헤더, 앞지르면 기록 안 하고 드롭 카운터 증가).
+# 사실 출처: 원서 Ch.2 11쪽 본문 · 12쪽 Figure 2-3 "A ring buffer" 및 본문 59~61행(읽기·쓰기 포인터, 길이 헤더, 앞지르면 기록 안 하고 드롭 카운터 증가).
 #   칸 수·길이는 개념 예시이며 실제 바이트 값이 아니다. 드롭 규칙은 perf 쪽: PERF_RECORD_LOST 의 lost 필드(linux v7.2 include/uapi/linux/perf_event.h 줄 914).
 # Layout conventions: 칸 폭 48, 칸 높이 40, 행 간격 160, 라벨 열 x=24~172, 타임라인 x=180~948. 좌표는 4의 배수.
 import sys; sys.path.insert(0, ".")
@@ -7,9 +7,9 @@ from dd import D, ACC, OK, WARN, BAD, INFO, MUTED, INK, PAPER, PAPER2, RULE, SOF
 
 W, H = 960, 460
 d = D(W, H, "LEARNING EBPF · 02-02 §1",
-      "링 버퍼는 읽기 지점 뒤로 쓰기를 못 넘긴다",
+      "링 버퍼의 쓰기는 읽기 지점을 앞지르지 못한다",
       "길이가 다른 항목이 쓰기 지점에서 이어 붙고 읽기 지점이 뒤따라간다. 새 항목이 남은 칸보다 길면 쓰지 않고 드롭 카운터만 올린다.",
-      "같은 16칸 버퍼의 두 시점")
+      "같은 16칸 버퍼의 두 시점 · 항목마다 길이 헤더 포함")
 
 X0, CW, CH, N = 180, 48, 40, 16
 def cx(i): return X0 + i * CW
@@ -35,8 +35,13 @@ def ptr(i, y, name, c, mk):
 def wrap(y):
     xe, xs = cx(N) - 24, cx(0) + 36
     yb = y + CH + 56
-    d.arrow([(xe, y + CH + 2), (xe, yb), (xs, yb), (xs, y + CH + 6)], SOFT, "soft", 1.2, "5 4")
-    d.chip((xe + xs) / 2, yb, "끝 → 처음", SOFT, 12)
+    xc = (xe + xs) / 2
+    hw = 42
+    d.line(xe, y + CH + 2, xe, yb, SOFT, 1.2, "5 4")
+    d.line(xe, yb, xc + hw, yb, SOFT, 1.2, "5 4")
+    d.chip(xc, yb, "끝 → 처음", SOFT, 12)
+    d.line(xc - hw, yb, xs, yb, SOFT, 1.2, "5 4")
+    d.arrow([(xs, yb), (xs, y + CH + 6)], SOFT, "soft", 1.2, "5 4")
 
 # 행 A — 읽을 항목 3개
 YA = 116
@@ -55,7 +60,7 @@ YB = 268
 d.t(24, YB + 24, "항목 4 쓴 뒤", 13, INK, KR, "start", 600)
 d.t(24, YB + 44, "읽기 3 · 쓰기 15", 12, MUTED, KR, "start")
 d.chip(98, YB + 76, "드롭 0 → 1", BAD, 12)
-strip(YB, set(range(0, 15)) | {15})
+strip(YB, set(range(0, 16)))
 rec(3, 5, YB, "항목 2 · 5칸", INFO)
 rec(8, 2, YB, "항목 3 · 2칸", INFO)
 rec(10, 5, YB, "항목 4 · 5칸", INFO)
@@ -68,5 +73,5 @@ ptr(3, YB, "읽기", INFO, "info")
 ptr(15, YB, "쓰기", OK, "ok")
 wrap(YB)
 
-d.legend(H - 56, [("남은 항목", INFO), ("쓰기 지점", OK), ("거부된 쓰기", BAD)])
+d.legend(H - 56, [("읽을 항목 · 읽기 지점", INFO), ("쓰기 지점", OK), ("거부된 쓰기", BAD)])
 d.save("02-02.ring-buffer.svg")
