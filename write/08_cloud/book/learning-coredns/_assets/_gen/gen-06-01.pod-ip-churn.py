@@ -1,22 +1,24 @@
 # 06-01 §3 — 파드 IP 를 클라이언트에 그대로 나눠 주면, 파드가 바뀔 때마다 클라이언트 목록이 낡는다.
 # 본문 근거: 이 노트 §3(파드는 뜨고 지고, 다시 만들어질 때마다 새 IP 가 할당된다 · 여럿이면 목록을 계속 고쳐야 한다).
-#            주소는 이 노트 frontmatter allow 목록에 있는 원서 예제 주소를 빌려 쓴 설명용 값이다.
+# 원서 쪽: p.4 "Kubernetes Networking... Pods are ephemeral, especially those managed by a Deployment...
+#          Each time a pod is recreated, it receives a new IP address."
+#          주소는 원서 Example 6-4(p.8, 10.5.88.4~7) 및 Example 6-5(p.9, 10.5.105.4~7) 의 실제 주소를 빌려 쓴 값이다.
 # 타입 스펙: type-process — 세 시점이 열로 진행하고, 실제 목록과 클라이언트 목록이 갈라지는 단계가 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, OK, WARN, BAD, KR, MONO
 
-W, H = 880, 430
+W, H = 880, 460
 d = D(W, H, "LEARNING COREDNS · 06-01 §3",
       "파드 IP 를 그대로 나눠 주면 목록이 낡는다",
       "Deployment 의 파드는 죽거나 업그레이드되면 새 IP 로 다시 뜬다. 처음 받은 주소 목록을 들고 있는 클라이언트는 "
       "파드가 하나 바뀌면 셋 중 둘만, 전부 바뀌면 하나도 맞추지 못한다.",
       "주황 칸이 고정된 이름이 필요한 이유입니다")
 
-COLS = [(20, 180, ""), (210, 210, "처음"), (430, 210, "파드 하나 죽음"), (650, 210, "업그레이드 뒤")]
+COLS = [(20, 180, ""), (210, 210, "초기 상태"), (430, 210, "파드 1개 교체"), (650, 210, "전체 업그레이드 뒤")]
 rows = [
     ("실제 파드 IP", ["10.5.88.4", "10.5.88.5", "10.5.88.6"], ["10.5.88.4", "10.5.88.6", "10.5.88.7"],
      ["10.5.105.4", "10.5.105.5", "10.5.105.6"]),
-    ("클라이언트 목록", ["10.5.88.4", "10.5.88.5", "10.5.88.6"], ["10.5.88.4", "10.5.88.5", "10.5.88.6"],
+    ("클라이언트 보유 목록", ["10.5.88.4", "10.5.88.5", "10.5.88.6"], ["10.5.88.4", "10.5.88.5", "10.5.88.6"],
      ["10.5.88.4", "10.5.88.5", "10.5.88.6"]),
 ]
 verdict = [("3 / 3", OK), ("2 / 3", WARN), ("0 / 3", BAD)]
@@ -35,7 +37,7 @@ for i, (nm, *cols) in enumerate(rows):
             d.t(x + 14, y + 24 + j * 22, ip, 13, BAD if stale else INK, MONO, "start")
 
 y = 132 + 2 * 92
-d.t(20, y + 30, "맞는 주소", 14, INK, KR, "start", 600)
+d.t(20, y + 30, "일치 주소 비율", 14, INK, KR, "start", 600)
 for k, (txt, c) in enumerate(verdict, start=1):
     x, w, _ = COLS[k]
     if k == 3:
@@ -44,5 +46,6 @@ for k, (txt, c) in enumerate(verdict, start=1):
         d.box(x, y, w, 48, PAPER2, RULE, 1.0, 6)
     d.t(x + 14, y + 31, txt, 15, c, MONO, "start", 600)
 
-d.t(20, 400, "붉은 주소 · 이미 없는 파드 · 주소는 설명용 예시 값", 12, SOFT, KR, "start")
+d.t(20, 394, "붉은 주소 · 소멸 파드 IP · 주소는 원서 예제(Example 6-4·6-7) 기반 예시 값", 12, SOFT, KR, "start")
+d.legend(418, [("전부 맞음", OK), ("일부 낡음", WARN), ("소멸 파드 IP", BAD), ("고정 이름 필요", ACC)])
 d.save("06-01.pod-ip-churn.svg")

@@ -1,11 +1,12 @@
 # 06-02 §3 — 파드 하나의 상태 변화가 Endpoints 객체 전체 전송을 부른다.
-# 원문 근거: "a single Endpoints resource contains all of the endpoint addresses, both ready and not,
+# 본문 근거: 이 노트 §3(L110-L140) 「Endpoints 감시가 큰 서비스에서 비싼 이유」.
+# 원문 근거: 원서 6장 p.17 "a single Endpoints resource contains all of the endpoint addresses, both ready and not,
 #            for a single service" / "watch will send the resource data whenever the resource changes.
 #            For Endpoints, this means that every time a pod for the specific service is create,
 #            destroyed, or transitions between ready and not ready, the entire Endpoints object will
 #            be sent." / "larger Endpoints are sent to watchers more often than smaller Endpoints" /
-#            규모는 "very large services containing several thousand backends" 로만 적혀 있어
-#            구체적인 수를 지어내지 않고 "수천" 으로 둔다.
+#            규모는 "very large services containing several thousand backends" (p.17).
+# 현행 근거: Kubernetes 문서 service.md Over-capacity endpoints (1000개 초과 시 truncated).
 # 타입 스펙: type-sequence — 세 주체 사이의 시간순 전달이고, 되풀이되는 전체 전송이 논지다.
 #           프리미티브의 mono 하드코딩을 SeqKR 로 덮는다(계약 §프리미티브가 한글을 mono 로 내보내는 자리).
 import sys; sys.path.insert(0, ".")
@@ -66,22 +67,22 @@ def chip(a, txt, y, c):
 
 
 d.lanes([("백엔드 파드 하나", "backend #1"),
-         ("Endpoints 컨트롤러", "endpoints"),
+         ("API 서버", "Endpoints 객체"),
          ("CoreDNS", "kubernetes plugin")], y0=104, lane_w=240)
 d.rails(444)
 
-d.msg("백엔드 파드 하나", "Endpoints 컨트롤러", "ready 로 바뀜", 196, MUTED, sub="주소 하나의 상태만 달라졌다")
-chip("Endpoints 컨트롤러", "객체를 다시 쓴다", 252, WARN)
-d.msg("Endpoints 컨트롤러", "CoreDNS", "수천 개 주소 전부", 312, BAD, mk="bad",
-      sub="바뀐 하나가 아니라 객체 전체")
-d.msg("백엔드 파드 하나", "Endpoints 컨트롤러", "다른 파드가 또 바뀜", 380, MUTED, dash="5 4",
-      sub="백엔드가 많을수록 이 일이 잦다")
-chip("CoreDNS", "메모리와 CPU 를 더 쓴다", 424, BAD)
+d.msg("백엔드 파드 하나", "API 서버", "ready 로 바뀜", 196, MUTED, sub="단일 주소 상태 변경")
+chip("API 서버", "Endpoints 객체 갱신", 252, WARN)
+d.msg("API 서버", "CoreDNS", "수천 개 주소 전부", 312, BAD, mk="bad",
+      sub="watch · 바뀐 하나가 아니라 객체 전체")
+d.msg("백엔드 파드 하나", "API 서버", "다른 파드가 또 바뀜", 380, MUTED, dash="5 4",
+      sub="백엔드가 많을수록 잦아짐")
+chip("CoreDNS", "메모리 · CPU 사용량 증가", 424, BAD)
 
 d.t(20, 488, "객체 크기 · 변경 빈도 · 두 축이 함께 커짐 · 지금은 EndpointSlice 로 완화", 13, MUTED, KR, "start")
 d.t(20, 512, "헤드리스 미사용 · noendpoints 로 watch 끄기", 13, MUTED, KR, "start")
 # 현행 쿠버네티스는 Endpoints 를 1000 개에서 자른다(service.md Over-capacity endpoints) — 원서의 "수천" 은 그 전 이야기(2026-10-03)
 d.t(20, 536, "현행 Endpoints · 1000 개에서 잘림 · 원서의 수천은 상한 이전", 13, SOFT, KR, "start")
 
-d.legend(564, [("컨트롤러가 다시 쓰는 지점", WARN), ("전체가 전송되는 경로", BAD)])
+d.legend(564, [("객체가 다시 쓰이는 지점", WARN), ("전체가 전송되는 경로", BAD)])
 d.save("06-02.endpoints-watch.svg")

@@ -1,8 +1,9 @@
 # 06-02 §4 — 역방향 존을 in-addr.arpa 전체로 잡았을 때 fallthrough 가 있고 없음에 따라 PTR 질의가 갈린다.
+# 본문 근거: 이 노트 §4(L201-L206) 「kubernetes 블록 안의 세 줄」. 10.7.240.10 은 원서의 서비스 CIDR 예 10.7.240.0/20 안의 주소다.
+# 원서 근거: 원서 6장 p.20 "fallthrough in-addr.arpa ip6.arp... passes unknown IPs down the chain where they will be picked up by the forward plug-in".
 # 소스 근거: kubernetes README fallthrough — "If a query for a record in the zones for which the plugin is authoritative
 #            results in NXDOMAIN, normally that is what the response will be. However, if you specify this option,
 #            the query will instead be passed on down the plugin chain".
-# 본문 근거: 이 노트 §4 「kubernetes 블록 안의 세 줄」. 10.7.240.10 은 원서의 서비스 CIDR 예 10.7.240.0/20 안의 주소다.
 # 타입 스펙: type-dp-security-matrix — 질의(행) × fallthrough 유무(열) 2×2 격자에서 한 칸만 결과가 갈린다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO

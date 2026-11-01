@@ -1,7 +1,8 @@
 # 06-01 §6 — 가중치는 중복 제거 전에 엔드포인트 수로 나누므로, 대상 이름이 겹치면 응답의 합이 100 에 못 미친다.
+# 본문 근거: 이 노트 §6 「원서 예제는 A 조회를 함께 끝냅니다」 의 읽기 노트.
 # 소스 근거: plugin/backend_lookup.go 의 SRV 함수 — 첫 루프에서 우선순위별 가중치 합을 내고(주석 "we may drop duplicate
 #            SRV records latter on"), 둘째 루프에서 isDuplicate(dup, srv.Target, "", srv.Port) 로 같은 대상·포트를 거른다.
-# 값 근거: 원서 Example 6-5(엔드포인트 넷 · SRV 넷 · 각 25)와 Example 6-7(hostname: myhost · SRV 한 줄 · 25).
+# 원서 쪽: p.9 Example 6-5(엔드포인트 넷 · SRV 넷 · 각 25) · p.11 Example 6-7(hostname: myhost · SRV 1줄 · 가중치 25).
 # 타입 스펙: type-process — 엔드포인트 → 대상 이름 → 가중치 계산 → 중복 제거가 열로 진행하고 경우 둘이 같은 단계를 지난다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
@@ -13,13 +14,13 @@ d = D(W, H, "LEARNING COREDNS · 06-01 §6",
       "그래서 넷이 같은 이름 myhost 를 가진 Example 6-7 은 한 줄만 남고 그 가중치는 25 다.",
       "주황 칸이 합이 100 이 아닌 응답입니다")
 
-COLS = [(20, 170, "원서 예"), (200, 100, "엔드포인트"), (310, 200, "대상 이름"),
+COLS = [(20, 170, "원서 예제"), (200, 110, "엔드포인트"), (320, 190, "대상 이름"),
         (520, 150, "가중치 계산"), (680, 180, "중복 제거 · 응답")]
 rows = [
-    (("Example 6-5", "대상이 서로 다름"), ("넷", ""), ("10-5-104-3 외 셋", "서로 다른 이름"),
-     ("100 ÷ 4 = 25", "넷 모두"), ("SRV 넷 · 각 25", "합 100")),
-    (("Example 6-7", "hostname: myhost"), ("넷", ""), ("myhost", "넷이 같은 이름"),
-     ("100 ÷ 4 = 25", "넷 모두"), ("SRV 한 줄 · 25", "합 25")),
+    (("Example 6-5", "hostname 없음"), ("4개", "엔드포인트"), ("10-5-104-3 외 셋", "상이한 대상 이름"),
+     ("100 ÷ 4 = 25", "4개 균등 분배"), ("SRV 4건 · 각 25", "합계 100")),
+    (("Example 6-7", "hostname: myhost"), ("4개", "엔드포인트"), ("myhost", "동일 대상 이름"),
+     ("100 ÷ 4 = 25", "4개 균등 분배"), ("SRV 1건 · 가중치 25", "합계 25")),
 ]
 
 for k, (x, w, head) in enumerate(COLS):
@@ -43,6 +44,6 @@ for i, cells in enumerate(rows):
             nx = COLS[k + 1][0]
             d.path(f"M {x + w + 1} {y + 40} L {nx - 2} {y + 40}", SOFT, 1.1, m="soft")
 
-d.t(20, 336, "소스 주석 · 중복 SRV 를 나중에 버리면 가중치가 어긋날 수 있다", 13, MUTED, KR, "start")
-d.legend(352, [("합이 100 이 아닌 응답", ACC)])
+d.t(20, 336, "소스 주석: 중복 제거 이전 가중치 산출로 합산 불일치 발생 가능", 13, MUTED, KR, "start")
+d.legend(352, [("가중치 합산 100 미달 응답(합 25)", ACC)])
 d.save("06-01.srv-dedup-weight.svg")

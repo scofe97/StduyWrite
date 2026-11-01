@@ -1,6 +1,7 @@
 # 06-01 §2 — 바라는 상태가 3초에 바뀌었을 때 폴링 간격별로 컨트롤러가 알아채는 시점과 요청 수.
 # 본문 근거: 이 노트 §2 「조정 루프는 세 걸음입니다」 끝 두 문단과 「watch 가 폴링을 대신합니다」.
-#            간격 10초·2초와 변경 시각 3초는 설명용 예시 값이다.
+# 원서 쪽: p.2-3 (polling tradeoffs: reaction latency vs API server load; watch persistent connection update push).
+#          간격 10초·2초와 변경 시각 3초는 원서 개념 설명에 기반한 설명용 예시 값이다.
 # 타입 스펙: type-gantt — 같은 변경 뒤 알아채기까지의 구간 길이와 요청 점의 밀도가 논지다. 가로축은 초.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, BAD, WARN, INFO, KR, MONO
@@ -25,9 +26,9 @@ d.line(X(0), 128, X(30), 128, RULE, 1.0)
 d.line(X(3), 136, X(3), 352, ACC, 1.2, "4 4")
 d.t(X(3) + 6, 146, "3s · Spec 변경", 12, ACC, KR, "start")
 
-lanes = [(190, "폴링 · 10초 간격", "요청 4번", 10, BAD, 10),
-         (260, "폴링 · 2초 간격", "요청 16번", 2, WARN, 4),
-         (330, "watch", "연결 1개", None, INFO, 3)]
+lanes = [(190, "폴링 · 10초 간격", "요청 4회", 10, BAD, 10),
+         (260, "폴링 · 2초 간격", "요청 16회", 2, WARN, 4),
+         (330, "watch", "연결 1개 유지", None, INFO, 3)]
 for cy, nm, sub, step, c, seen in lanes:
     d.t(20, cy - 2, nm, 14, INK, KR, "start", 600)
     d.t(20, cy + 18, sub, 12, MUTED, KR, "start")
@@ -38,14 +39,14 @@ for cy, nm, sub, step, c, seen in lanes:
         for t in range(0, 31, step):
             d.o.append(f'<circle cx="{X(t)}" cy="{cy}" r="4" fill="{MUTED}"/>')
         d.o.append(f'<circle cx="{X(seen)}" cy="{cy}" r="6" fill="none" stroke="{c}" stroke-width="1.6"/>')
-        d.t(X(seen) + 10, cy - 14, f"{seen - 3}초 뒤 앎", 12, c, KR, "start")
+        d.t(X(seen) + 10, cy - 14, f"{seen - 3}초 인지 지연", 12, c, KR, "start")
     else:
         d.o.append(f'<rect x="{X(0)}" y="{cy - 3}" width="{X(30) - X(0)}" height="6" rx="3" fill="{c}" fill-opacity="0.35"/>')
         d.o.append(f'<circle cx="{X(3)}" cy="{cy}" r="7" fill="{ACC}"/>')
-        d.t(X(3) + 12, cy - 12, "변경을 밀어 받음 · 바로 앎", 12, ACC, KR, "start", 600)
+        d.t(X(3) + 12, cy - 12, "즉시 푸시 수신 · 인지", 12, ACC, KR, "start", 600)
 
-d.t(20, 394, "회색 점 · API 서버로 가는 폴링 요청 · 간격을 줄일수록 반응은 빨라지고 부하는 커진다", 13, MUTED, KR, "start")
-d.t(20, 416, "간격 10초 · 2초와 변경 시각은 예시 값", 12, SOFT, KR, "start")
+d.t(20, 394, "회색 점: API 서버 대상 폴링 요청 · 간격 단축 시 반응 향상 및 부하 가중", 13, MUTED, KR, "start")
+d.t(20, 416, "간격 10초 · 2초와 변경 시각(3s)은 설명용 예시 값", 12, SOFT, KR, "start")
 
-d.legend(430, [("모르는 구간 · 10초", BAD), ("모르는 구간 · 2초", WARN), ("watch 연결", INFO), ("바로 아는 자리", ACC)])
+d.legend(430, [("미인지 구간(10초 주기)", BAD), ("미인지 구간(2초 주기)", WARN), ("watch 지속 연결", INFO), ("즉시 감지 시점", ACC)])
 d.save("06-01.poll-vs-watch.svg")

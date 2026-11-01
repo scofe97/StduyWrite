@@ -1,8 +1,9 @@
 # 06-01 §6 — SRV 대상과 ADDITIONAL 의 A 에 쓰이는 엔드포인트 이름을 CoreDNS 가 고르는 순서.
+# 본문 근거: 이 노트 §6 「대상 이름은 PodSpec 이 정합니다」.
 # 소스 근거: plugin/kubernetes/kubernetes.go 의 endpointHostname — Hostname 이 있으면 그것,
 #            endpointNameMode && TargetRefName 이면 파드 이름, 아니면 IPv4 는 '.' 를 '-' 로, IPv6 는 ':' 를 '-' 로(끝이 '-' 면 '0').
 #            README 의 endpoint_pod_names 설명(대상 파드가 없거나 63자를 넘으면 대시 형태).
-# 값 근거: 원서 Example 6-5 의 10-5-104-3, Example 6-7 의 myhost.
+# 원서 쪽: p.9 Example 6-5(10-5-104-3) · p.11 Example 6-7(myhost).
 # 타입 스펙: type-flowchart — 위에서부터 조건을 하나씩 걸러 이름이 하나로 정해지는 분기가 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, WARN, KR, MONO
@@ -12,7 +13,7 @@ d = D(W, H, "LEARNING COREDNS · 06-01 §6",
       "엔드포인트 이름은 위에서부터 걸러 정한다",
       "엔드포인트에 hostname 이 있으면 그 값을 쓴다. 없으면 endpoint_pod_names 를 켰을 때 파드 이름을, "
       "끄면 IP 를 대시로 이은 이름을 쓴다. 원서 예의 10-5-104-3 이 마지막 칸이다.",
-      "주황 칸이 원서 예제가 받은 이름입니다")
+      "주황 칸이 Example 6-5 가 받은 이름입니다")
 
 LX, LW = 40, 300
 RX, RW = 480, 380
@@ -29,11 +30,11 @@ def box(x, y, w, h, main, sub, focal=False, mono=False, q=False):
 
 
 box(LX, 110, LW, 60, "엔드포인트 하나", "원서 Example 6-5 · IP 10.5.104.3")
-box(LX, 210, LW, 60, "hostname 이 있나", "파드의 hostname · subdomain 이 맞을 때", q=True)
-box(LX, 310, LW, 60, "endpoint_pod_names 를 켰나", "kubernetes 플러그인 옵션", q=True)
-box(LX, 410, LW, 60, "10-5-104-3", "IP 를 대시로 · 기본값", focal=True, mono=True)
+box(LX, 210, LW, 60, "hostname 설정 여부", "파드 hostname 및 일치 subdomain 설정", q=True)
+box(LX, 310, LW, 60, "endpoint_pod_names 설정 여부", "kubernetes 플러그인 옵션 활성화", q=True)
+box(LX, 410, LW, 60, "10-5-104-3", "IP 대시 변환 형태(기본값)", focal=True, mono=True)
 
-box(RX, 210, RW, 60, "myhost", "hostname 값 그대로 · Example 6-7", mono=True)
+box(RX, 210, RW, 60, "myhost", "hostname 값 적용 · Example 6-7", mono=True)
 box(RX, 310, RW, 60, "파드 이름", "대상 파드가 없거나 63자를 넘으면 대시 형태")
 
 for y0, y1 in ((170, 210), (270, 310), (370, 410)):
@@ -46,5 +47,5 @@ for y in (240, 340):
 
 d.t(RX, 446, "IPv6 · ':' 를 '-' 로 · 끝이 '-' 면 0 을 붙임", 12, MUTED, KR, "start")
 
-d.legend(490, [("원서 예제가 받은 이름", ACC), ("조건", WARN)])
+d.legend(490, [("Example 6-5 가 받은 이름", ACC), ("판단 조건", WARN)])
 d.save("06-01.target-name-rule.svg")

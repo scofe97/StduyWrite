@@ -1,4 +1,6 @@
 # 06-02 §4 — cache 30 아래에서 응답이 캐시에 남는 시간: 상한 30 으로 자르고 하한 5 로 받친다.
+# 본문 근거: 이 노트 §4(L215-L220) 「나머지 여섯 줄」.
+# 원서 근거: 원서 6장 p.20 "cache 30... actual TTL used is the lesser of the TTL configured on the record or that configured on the cache".
 # 소스 근거: cache README — "TTL only caps the cache duration and does not extend it" ·
 #            "The minimum cache duration defaults to 5 seconds". kubernetes README — "ttl ... The default is 5 seconds."
 #            kubeadm 판의 ttl 30 은 manifests.go. 상류 TTL 300·2 는 설명용 예시 값이다.
@@ -46,7 +48,7 @@ for i, (name, *vals) in enumerate(rows):
             d.path(f"M {x + w + 2} {y + RH / 2} L {nx - 3} {y + RH / 2}", SOFT, 1.1, m="soft")
 
 d.t(20, 430, "원서 · 레코드 TTL 과 캐시 TTL 중 작은 쪽 · 현행 README · 최소 캐시 기간 5초 (MINTTL)", 13, MUTED, KR, "start")
-d.t(20, 454, "클러스터 이름 두 줄은 원서 판 Corefile 기준 · kubeadm 판은 cluster.local 성공 응답을 캐시하지 않음", 13, MUTED, KR, "start")
+d.t(20, 454, "클러스터 이름 두 줄은 원서 판처럼 cluster.local 도 캐시할 때 · kubeadm 판은 성공 응답을 캐시하지 않음", 13, MUTED, KR, "start")
 
 d.legend(472, [("하한이 올린 값", ACC)])
 d.save("06-02.cache-ttl.svg")

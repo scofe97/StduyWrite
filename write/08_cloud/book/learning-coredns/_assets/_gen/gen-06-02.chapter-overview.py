@@ -1,6 +1,6 @@
 # 06-02 학습 목표 뒤 전체 지도 — 질의 여섯 종류가 기본 Corefile 의 어느 줄에서 어떻게 끝나는가.
-# 본문 근거: 이 노트 §1(kubernetes 플러그인이 메모리에서 즉석 생성) · §2(cache 이득) · §3(Endpoints · noendpoints NXDOMAIN)
-#            · §4(역방향 CIDR · fallthrough · forward) · §5(최장 일치로 corp.example.com:53 블록, 10.0.0.10).
+# 본문 근거: 이 노트 §1(L72-L90) · §2(L92-L108) · §3(L110-L140) · §4(L143-L232) · §5(L243-L296) · §6(L298-L308).
+# 원서 근거: 원서 6장 p.16-23 (CoreDNS/Kubernetes integration, Default Configuration Example 6-11, Stub Domains Example 6-13).
 # 타입 스펙: type-dp-security-matrix — 질의(행) × 받는 줄·결과(열) 격자가 논지다.
 #           2026-10-03 절 제목을 이은 노드 사슬에서 실제 이름이 든 격자로 다시 그렸다.
 import sys; sys.path.insert(0, ".")
@@ -21,7 +21,7 @@ def fam(txt):
 COLS = [(20, 300, "질의"), (330, 170, "받는 줄"), (510, 260, "결과"), (780, 80, "절")]
 rows = [
     (("orders.default.svc.cluster.local", "A · 서비스"), ("kubernetes", "Services 메모리"), ("즉석에서 만든 응답", "cache 30 의 이득은 작음"), "§1 · §2"),
-    (("web-0.nginx.default.svc.cluster.local", "A · 헤드리스"), ("kubernetes", "Endpoints watch"), ("파드 IP 여럿", "noendpoints 면 NXDOMAIN"), "§3"),
+    (("nginx.default.svc.cluster.local", "A · 헤드리스"), ("kubernetes", "Endpoints watch"), ("파드 IP 여럿", "noendpoints 면 NXDOMAIN"), "§3"),
     (("10.7.240.10 의 PTR", "서비스 CIDR 안"), ("kubernetes", "역방향 존"), ("서비스 이름", ""), "§4"),
     (("8.8.8.8 의 PTR", "클러스터와 무관"), ("forward", "fallthrough 로 넘어옴"), ("상류의 PTR 응답", "fallthrough 없으면 NXDOMAIN"), "§4"),
     (("www.example.org", "A · 외부 이름"), ("forward", "/etc/resolv.conf"), ("상류 응답", "cache 30 이 실제로 일함"), "§2 · §4"),

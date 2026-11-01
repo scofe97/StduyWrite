@@ -1,16 +1,19 @@
 # 06-01 §7 — 파드를 지웠다 다시 만들 때 이름이 이어지는지가 워크로드 종류로 갈린다.
-# 원문 근거: StatefulSet 은 "sets the hostname based on an ordinal number (0, 1, 2, etc.) and keeps
-#            this name even if the pod is deleted and recreated (a Deployment would generate a new pod
-#            name in this case). This provides a stable network identity for the pod." /
-#            원서 Example 6-10 은 파드 넷을 강제로 지운 뒤 같은 서수 이름과 바뀐 IP 를 보인다.
-#            StatefulSet 행의 두 주소는 Example 6-9(10.5.109.14) 와 6-10(10.5.109.15) 의 실제 값이다.
-#            Deployment 행은 원서에 대응 값이 없어 자리표시자로 둔다 — 없는 값을 지어내지 않는다.
+# 본문 근거: 이 노트 §7 「이름이 살아남으려면 StatefulSet 이어야 한다」 및 「StatefulSet 은 서수를 이름에 박습니다」.
+# 원서 쪽: p.12 Example 6-8(A StatefulSet) · p.13 Example 6-9(10.5.109.14) ·
+#          p.14-15 Example 6-10(10.5.109.15, Stable network identity using a StatefulSet).
+#          원문: StatefulSet 은 "sets the hostname based on an ordinal number (0, 1, 2, etc.) and keeps
+#          this name even if the pod is deleted and recreated (a Deployment would generate a new pod
+#          name in this case). This provides a stable network identity for the pod."
+#          원서 Example 6-10 은 파드 넷을 강제로 지운 뒤 같은 서수 이름과 바뀐 IP 를 보인다.
+#          StatefulSet 행의 두 주소는 Example 6-9(10.5.109.14) 와 6-10(10.5.109.15) 의 실제 값이다.
+#          Deployment 행은 원서에 대응 값이 없어 자리표시자로 둔다 — 없는 값을 지어내지 않는다.
 # 타입 스펙: type-gantt — 막대가 끊기느냐 이어지느냐가 곧 그 이름의 수명이다.
 #           축약: 가로축이 날짜가 아니라 파드 생애의 네 구간이다(같은 폴더 02-01·05-01 과 같은 축약).
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, RULE, BAD, INFO, KR, MONO
 
-W, H = 1000, 616
+W, H = 1000, 540
 d = D(W, H, "LEARNING COREDNS · 06-01 §7",
       "지웠다 다시 만들면 무엇이 이어지는가",
       "가로축은 파드 생애의 네 구간이다. 삭제 경계를 관통하는 막대가 하나뿐이고, "
@@ -18,17 +21,17 @@ d = D(W, H, "LEARNING COREDNS · 06-01 §7",
       "경계를 넘는 막대가 하나뿐입니다")
 
 LX, TX, TW = 20, 240, 700
-COLS = ["처음 뜸", "운영 중", "다시 뜸", "그 뒤"]
+COLS = ["초기 기동", "운영 중", "재생성", "이후 운영"]
 PITCH = TW / len(COLS)
 
 for i, nm in enumerate(COLS):
-    d.t(TX + PITCH * i + PITCH / 2, 116, nm, 12, SOFT, KR)
+    d.t(TX + PITCH * i + PITCH / 2, 116, nm, 13, SOFT, KR)
 d.line(TX, 128, TX + TW, 128, RULE, 1.0)
 
 rows = [
     ("파드 이름", 0, 2, BAD, "headless-<해시>-<무작위>"),
     ("파드 IP", 0, 2, INFO, "할당된 주소"),
-    ("파드 이름", 0, 4, ACC, "headless-0 · 그대로"),
+    ("파드 이름", 0, 4, ACC, "headless-0 · 유지"),
     ("파드 IP", 0, 2, INFO, "10.5.109.14"),
 ]
 extra = [
@@ -54,7 +57,7 @@ def bar(ry, start, span, color, label):
     # 반투명 채움 아래로 구간 점선이 비쳐 글자를 가르므로 불투명 바탕을 먼저 깐다
     d.box(x + 6, ry + 4, w - 12, 26, PAPER, "none", 0, 4)
     d.tone(x + 6, ry + 4, w - 12, 26, color, 4, "16", 1.2)
-    d.t(x + w / 2, ry + 22, label, 12, color, KR if any("가" <= c <= "힣" for c in label) else MONO)
+    d.t(x + w / 2, ry + 22, label, 13, color, KR if any("가" <= c <= "힣" for c in label) else MONO)
 
 
 for k, (nm, start, span, color, label) in enumerate(rows):
@@ -68,9 +71,9 @@ for k, (nm, start, span, color, label) in enumerate(rows):
 for k, start, span, color, label in extra:
     bar(row_y(k), start, span, color, label)
 
-d.t(TX + PITCH * 2, 412, "삭제와 재생성 — 여기서 무엇이 끊기는가", 13, ACC, KR)
-d.t(LX, 448, "Deployment · 새 파드 이름 · IP 는 양쪽 모두 변경", 13, MUTED, KR, "start")
-d.t(LX, 472, "이름으로 상대를 고정할 워크로드 · StatefulSet", 13, MUTED, KR, "start")
+d.t(TX + PITCH * 2, 412, "삭제 및 재생성 시점", 13, ACC, KR)
+d.t(LX, 448, "Deployment: 파드 이름 · IP 모두 변경", 13, MUTED, KR, "start")
+d.t(LX, 472, "고정된 동료 집합이 필요한 워크로드: StatefulSet", 13, MUTED, KR, "start")
 
-d.legend(500, [("끊기고 새로 생긴다", BAD), ("어차피 바뀐다", INFO), ("유일하게 이어진다", ACC)])
+d.legend(500, [("파드 이름 바뀜", BAD), ("IP 주소 변경", INFO), ("파드 이름 유지", ACC)])
 d.save("06-01.name-lifespan.svg")

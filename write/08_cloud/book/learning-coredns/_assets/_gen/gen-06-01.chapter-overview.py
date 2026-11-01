@@ -1,5 +1,8 @@
 # 06-01 학습 목표 뒤 전체 지도 — 무엇을 선언하면 어떤 레코드가 나오는지를 원서 예의 실제 응답과 함께 놓는다.
 # 본문 근거: 이 노트 §4~§8 의 원서 예(Example 6-1·6-4·6-5·6-7·6-9·6-10)와 DNS 명세 §2.3·§2.4.
+# 원서 쪽: p.5(Example 6-1 Cluster IP Service) · p.8(Example 6-4 Headless service A records) ·
+#          p.9(Example 6-5 Headless service SRV records) · p.11(Example 6-7 SRV records for Deployment with hostname) ·
+#          p.13(Example 6-9 Headless service and StatefulSet) · p.14(Example 6-10 Stable network identity)
 # 타입 스펙: type-dp-security-matrix — 선언(행) × 생기는 레코드·실제 응답(열) 격자가 논지다.
 #           2026-10-03 절 제목을 이은 노드 사슬에서 실제 값이 든 격자로 다시 그렸다.
 import sys; sys.path.insert(0, ".")
@@ -14,12 +17,12 @@ d = D(W, H, "LEARNING COREDNS · 06-01",
 
 COLS = [(20, 200, "선언"), (230, 250, "생기는 레코드"), (490, 270, "원서 예의 응답"), (770, 90, "절")]
 rows = [
-    (("ClusterIP Service", ""), ("A 하나 · PTR 하나", "이름 붙은 포트마다 SRV 하나"), ("hello-world.default.svc", "A 10.0.0.100"), "§4 · §5"),
-    (("헤드리스 Service", "clusterIP: None"), ("Ready 엔드포인트마다 A", "Ready 0 이면 NXDOMAIN"), ("headless.default.svc", "A 10.5.88.4 외 셋"), "§4 · §5"),
-    (("이름 붙은 포트", ""), ("헤드리스는 엔드포인트 × 포트", "이름 없는 포트는 SRV 없음"), ("_http._tcp.headless", "SRV 0 25 80 넷"), "§6"),
-    (("Deployment + hostname", ""), ("대상 이름이 하나로 뭉침", ""), ("myhost.headless", "A 넷이 한 이름에"), "§7"),
-    (("StatefulSet", ""), ("서수 이름 · 재생성에도 유지", ""), ("headless-0 … headless-3", "IP 만 바뀜"), "§7"),
-    (("파드 A 레코드", "명세 이전 kube-dns"), ("현행 명세에서 빠짐", "CoreDNS pods 옵션으로만"), ("a-b-c-d.ns.pod", "존재 확인 없이 응답"), "§8"),
+    (("ClusterIP Service", ""), ("A 1개 · PTR 1개", "이름 붙은 포트마다 SRV 1개"), ("hello-world.default.svc", "A 10.0.0.100"), "§4 · §5"),
+    (("헤드리스 Service", "clusterIP: None"), ("Ready 엔드포인트마다 A", "Ready 0건 시 NXDOMAIN"), ("headless.default.svc", "A 10.5.88.4 외 셋"), "§4 · §5"),
+    (("이름 붙은 포트", ""), ("헤드리스: 엔드포인트 × 포트", "이름 없는 포트: SRV 없음"), ("_http._tcp.headless", "SRV 0 25 80 넷"), "§6"),
+    (("Deployment + hostname", ""), ("대상 이름 하나로 뭉침", ""), ("myhost.headless", "A 넷 동일 이름 반환"), "§7"),
+    (("StatefulSet", ""), ("서수 이름 · 재생성 시 유지", ""), ("headless-0 … headless-3", "IP 주소만 변경"), "§7"),
+    (("파드 A 레코드", "명세 이전 kube-dns"), ("현행 명세 제외", "CoreDNS pods 옵션 지원"), ("a-b-c-d.ns.pod", "존재 미확인 응답"), "§8"),
 ]
 FOCAL = 1
 Y0, PITCH, RH = 132, 64, 56
@@ -48,7 +51,7 @@ for i, cells in enumerate(rows):
         else:
             d.t(x + 12, y + 34, main, size, col, fam, "start", 600)
 
-d.t(20, 544, "1~3절 · 선언과 Service 가 왜 필요한가 · 조정 루프 · watch · 파드 IP 변동", 13, MUTED, KR, "start")
+d.t(20, 544, "1~3절 · 쿠버네티스가 먼저인 이유 · 조정 루프 · watch · 파드 IP 변동", 13, MUTED, KR, "start")
 d.t(20, 568, "원서 예의 TTL 5초 · kubeadm 기본 Corefile 은 ttl 30", 13, MUTED, KR, "start")
 
 d.legend(592, [("이 편의 갈림길", ACC)])

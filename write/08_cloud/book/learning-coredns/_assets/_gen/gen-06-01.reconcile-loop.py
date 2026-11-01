@@ -1,11 +1,10 @@
 # 06-01 §2 — 컨트롤러의 조정 루프와 그 한가운데의 API 서버.
-# 원문 근거: 조정 루프는 "1. Reads the intended resource state from the API server ... Spec field
-#            2. Observes the current state ... Status field, or by directly observing the cluster
-#            3. Attempts to reconcile any difference ... As it modifies the state, it will store the
-#            progress in the Status field" / watch 는 "create a persistent connection and ask the
-#            server to push any updates to the resources through that connection".
-#            원문 3단계 안에 "차이를 메우려 한다 · 조치한다 · 진행을 Status 에 적는다" 셋이 들어 있어
-#            다섯 정거장으로 편다. 없는 단계를 지어내지 않는다.
+# 본문 근거: 이 노트 §2 「조정 루프는 세 걸음입니다」 와 「watch 가 폴링을 대신합니다」.
+# 원서 쪽: p.2 "Controllers and the Reconciliation Loop" — 1. Reads intended state from API server (Spec),
+#          2. Observes current state (Status / cluster), 3. Attempts to reconcile difference (Status 기록) /
+#          p.3 "watch capability... persistent connection and ask the server to push any updates".
+#          원문 3단계 안에 "차이를 메우려 한다 · 조치한다 · 진행을 Status 에 적는다" 셋이 들어 있어
+#          다섯 정거장으로 편다. 없는 단계를 지어내지 않는다.
 # 타입 스펙: type-loop — 마지막 단계가 첫 단계로 돌아오고 한가운데가 상태를 쌓는 허브다.
 #           축약: 스펙의 링 커넥터는 정거장 상자와 원의 교점을 구하라고 하지만, 여기서는 상자 반각
 #                 atan(w/2 / R) 을 각도 여유로 써서 같은 원 위 호로 그린다(공식 산출, 눈대중 아님).
@@ -28,8 +27,8 @@ stations = [
     ("Spec 읽기", "의도된 상태", "WATCH", True),
     ("현재 상태 관찰", "Status 또는 클러스터", None, False),
     ("차이 계산", "의도와 현실의 간격", None, False),
-    ("조치", "파드를 만들고 지운다", None, False),
-    ("Status 기록", "진행 상황을 남긴다", "STATUS", False),
+    ("조치", "예: 파드 생성", None, False),
+    ("Status 기록", "진행 상황 기록", "STATUS", False),
 ]
 
 
@@ -85,11 +84,11 @@ for k, (name, sub, spoke, focal) in enumerate(stations):
 
 d.box(CX - HW / 2, CY - HH / 2, HW, HH, PAPER, INFO, 1.2, 8)
 d.t(CX, CY - 12, "API 서버", 16, INFO, KR, "middle", 600)
-d.t(CX, CY + 10, "etcd 가 뒤를 받친다", 12, MUTED, KR)
+d.t(CX, CY + 10, "뒤에 etcd 저장소", 12, MUTED, KR)
 d.t(CX, CY + 32, "Spec · Status", 12, MUTED, MONO)
 
-d.t(20, 636, "폴링 · 짧으면 API 서버 부하 · 길면 반응 지연", 13, MUTED, KR, "start")
-d.t(20, 660, "watch · 지속 연결로 갱신 푸시 · 맞바꿈 해소", 13, MUTED, KR, "start")
+d.t(20, 636, "폴링 · 짧은 주기 시 API 서버 부하 · 긴 주기 시 반응 지연", 13, MUTED, KR, "start")
+d.t(20, 660, "watch · 지속 연결 기반 갱신 푸시 · 지연 및 부하 동시 해소", 13, MUTED, KR, "start")
 
-d.legend(684, [("갱신이 밀려 들어오는 지점", ACC), ("상태가 쌓이는 허브", INFO)])
+d.legend(684, [("갱신 푸시 수신 지점", ACC), ("상태 저장 허브", INFO)])
 d.save("06-01.reconcile-loop.svg")

@@ -1,7 +1,8 @@
 # 06-01 §6 — 원서 SRV 응답에 ADDITIONAL 이 있어 뒤따를 A 조회를 아낀 예.
-# 원문 근거: "The ADDITIONAL SECTION of the result from the SRV query contains the A records referred
-#            to by the SRV record's targets. This allows them to be used immediately without any
-#            additional lookups for those names." / 원서 Example 6-5 의 엔드포인트는 넷이다.
+# 본문 근거: 이 노트 §6 「원서 예제는 A 조회를 함께 끝냅니다」.
+# 원서 쪽: p.9 "The ADDITIONAL SECTION of the result from the SRV query contains the A records referred
+#          to by the SRV record's targets. This allows them to be used immediately without any
+#          additional lookups for those names." / Example 6-5 (엔드포인트 넷 · SRV 넷 · A 넷).
 # 타입 스펙: type-sequence — 두 주체 사이의 시간순 왕복이고, 없어진 왕복 넷이 논지다.
 #           프리미티브의 mono 하드코딩을 SeqKR 로 덮는다(계약 §프리미티브가 한글을 mono 로 내보내는 자리).
 import sys; sys.path.insert(0, ".")
@@ -22,7 +23,7 @@ class SeqKR(Seq):
             s.LX[nm] = x
             s.box(x - lane_w / 2, y0, lane_w, 44, PAPER2, RULE, 1.0)
             s.t(x, y0 + 20, nm, 13, INK, KR, "middle", 600)
-            s.t(x, y0 + 38, sub, 11, MUTED, _kr(sub))
+            s.t(x, y0 + 38, sub, 12, MUTED, _kr(sub))
         s.lane_top = y0 + 44
         return s.LX
 
@@ -54,29 +55,29 @@ d = SeqKR(W, H, "LEARNING COREDNS · 06-01 §6",
 # 채움이 반투명이라 레인 점선이 글자 사이로 비친다. 이 책에서는 아래로 대신한다.
 def chip(a, txt, y, c):
     x = d.LX[a]
-    w = sum(11.0 if "\uac00" <= ch <= "\ud7a3" else 6.6 for ch in txt) + 20
+    w = sum(12.0 if "\uac00" <= ch <= "\ud7a3" else 7.2 for ch in txt) + 24
     for f, st, sw in ((PAPER, "none", 0), (c + "22", c, 1.1)):
-        d.o.append(f'<rect x="{x - w / 2}" y="{y - 10}" width="{w}" height="20" rx="4" '
+        d.o.append(f'<rect x="{x - w / 2}" y="{y - 11}" width="{w}" height="22" rx="4" '
                    f'fill="{f}" stroke="{st}" stroke-width="{sw}"/>')
-    d.t(x, y + 4, txt, 11, c, KR)
+    d.t(x, y + 5, txt, 12, c, KR)
 
 
 d.lanes([("파드 안 클라이언트", "dnstools"),
          ("클러스터 DNS", "CoreDNS")], y0=104, lane_w=300)
 d.rails(408)
 
-d.msg("파드 안 클라이언트", "클러스터 DNS", "SRV 질의 한 번", 192, MUTED,
+d.msg("파드 안 클라이언트", "클러스터 DNS", "SRV 질의(1회)", 192, MUTED,
       sub="_http._tcp.headless.default.svc.cluster.local")
-d.msg("클러스터 DNS", "파드 안 클라이언트", "응답 한 통 · ANSWER 구간", 252, MUTED,
-      sub="SRV 넷 — 0 25 80 <대상 이름>")
-d.msg("클러스터 DNS", "파드 안 클라이언트", "원서 응답 · ADDITIONAL 구간", 316, ACC, mk="acc",
-      sub="A 넷 — 대상 이름의 주소")
-d.msg("파드 안 클라이언트", "클러스터 DNS", "없다면 A 질의 넷", 384, BAD, mk="bad", dash="5 4")
+d.msg("클러스터 DNS", "파드 안 클라이언트", "응답 1건 · ANSWER 구간", 252, MUTED,
+      sub="SRV 4건 — 0 25 80 <대상 이름>")
+d.msg("클러스터 DNS", "파드 안 클라이언트", "같은 응답 · ADDITIONAL 구간", 316, ACC, mk="acc",
+      sub="A 4건 — 대상 이름별 IP 주소")
+d.msg("파드 안 클라이언트", "클러스터 DNS", "ADDITIONAL 부재 시 추가 A 질의(4회)", 384, BAD, mk="bad", dash="5 4")
 
-chip("파드 안 클라이언트", "이 예제는 바로 접속", 452, OK)
+chip("파드 안 클라이언트", "즉시 엔드포인트 접속", 452, OK)
 
-d.t(20, 496, "ADDITIONAL 은 선택 · 없으면 대상마다 A/AAAA 조회", 13, MUTED, KR, "start")
-d.t(20, 520, "원서 출력은 A 동봉 · 추가 왕복 절약", 13, MUTED, KR, "start")
+d.t(20, 496, "ADDITIONAL 구간은 명세상 선택 사항 · 부재 시 대상별 A/AAAA 재조회 필요", 13, MUTED, KR, "start")
+d.t(20, 520, "원서 Example 6-5 출력은 A 동봉 · 추가 질의 왕복 절약", 13, MUTED, KR, "start")
 
-d.legend(544, [("같은 응답에 실려 오는 것", ACC), ("없으면 필요한 조회", BAD), ("클라이언트가 도달한 상태", OK)])
+d.legend(544, [("ADDITIONAL 동봉 레코드", ACC), ("ADDITIONAL 부재 시 추가 질의", BAD), ("즉시 접속 가능 상태", OK)])
 d.save("06-01.srv-additional.svg")

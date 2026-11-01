@@ -1,14 +1,16 @@
 # 06-02 §1 — kubernetes 플러그인은 watch 로 받아 두고 질의가 올 때 레코드를 만든다.
-# 원문 근거: "The CoreDNS kubernetes plug-in works very much like a controller, except that it never
+# 본문 근거: 이 노트 §1(L72-L90) 「되쓰지 않는 컨트롤러」.
+# 원문 근거: 원서 6장 p.16 "The CoreDNS kubernetes plug-in works very much like a controller, except that it never
 #            writes data back to the API server. It creates a watch on the Services and Endpoints
 #            resources, and caches that data." / "The response records are not generated and stored
 #            somewhere; they are built on the fly based on the incoming request." /
 #            "CoreDNS never needs to query the API server in direct response to a DNS query."
+#            (원서 p.16 Figure 6-1 CoreDNS/Kubernetes integration 문맥 설명 참조).
 # 타입 스펙: type-architecture — 구성요소와 연결이 논지이고, 없는 연결 하나가 결론이다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, INFO, BAD, KR, MONO
 
-W, H = 880, 604
+W, H = 880, 524
 d = D(W, H, "LEARNING COREDNS · 06-02 §1",
       "watch 로 받아 두고 질의가 올 때 만든다",
       "플러그인은 컨트롤러처럼 watch 를 걸지만 API 서버로 되쓰지 않는다. 응답 레코드는 어디에도 저장되지 "
@@ -26,13 +28,13 @@ ZL = "COREDNS PROCESS"
 # 테두리 위 knockout 사각형이 shape-overlap 을 내서 라벨을 상자 안쪽 위에 둔다(2026-09-23)
 d.t(ZX + 16, ZY + 18, ZL, 9, SOFT, MONO, "start", 600)
 
-d.box(ZX + 28, 140, 332, 76, PAPER2, RULE, 1.0)
-d.t(ZX + 194, 172, "인메모리 자원 캐시", 15, INK, KR, "middle", 600)
-d.t(ZX + 194, 196, "쿠버네티스 객체 그대로", 12, MUTED, KR)
+d.box(ZX + 28, 136, 332, 72, PAPER2, RULE, 1.0)
+d.t(ZX + 194, 168, "인메모리 자원 캐시", 15, INK, KR, "middle", 600)
+d.t(ZX + 194, 192, "쿠버네티스 객체 그대로", 12, MUTED, KR)
 
-d.tone(ZX + 28, 240, 332, 76, ACC, 6, "12", 1.4)
-d.t(ZX + 194, 272, "레코드를 즉석에서 만든다", 15, ACC, KR, "middle", 600)
-d.t(ZX + 194, 296, "저장하지 않는다", 12, ACC, KR)
+d.tone(ZX + 28, 244, 332, 76, ACC, 6, "12", 1.4)
+d.t(ZX + 194, 274, "레코드 즉석 생성", 15, ACC, KR, "middle", 600)
+d.t(ZX + 194, 298, "어디에도 저장 없음", 12, ACC, KR)
 
 d.box(720, 132, 140, 96, PAPER2, RULE, 1.0)
 d.t(790, 170, "파드 안", 15, INK, KR, "middle", 600)
@@ -45,7 +47,7 @@ d.t(258, 152, "watch", 12, INFO, MONO)
 d.path(f"M {ZX + 24} 200 L 224 200", BAD, 1.2, dash="5 4")
 d.t(258, 222, "되쓰기 없음", 12, BAD, KR)
 
-d.path(f"M {ZX + 194} 216 L {ZX + 194} 236", MUTED, 1.4, m="ar")
+d.path(f"M {ZX + 194} 208 L {ZX + 194} 240", MUTED, 1.4, m="ar")
 
 d.path(f"M 790 232 L 790 278 L {ZX + 364} 278", MUTED, 1.4, m="ar")
 d.t(700, 266, "질의", 12, MUTED, KR)
