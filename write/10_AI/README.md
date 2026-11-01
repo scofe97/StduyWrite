@@ -39,8 +39,9 @@ updated: 2026-06-25
 |------|------|------------|
 | [`docs/`](docs/) | 13편 | 도구 하나를 설치본 기준으로 파고든 노트. [`docs/orca/`](docs/orca/) — ADE(Agentic Development Environment) ORCA를 격리·관측·조율 세 축으로, [`docs/claude-code/`](docs/claude-code/) — Claude Code CLI 옵션 실측 |
 | [`hermes/`](hermes/) | 1편 | Hermes 에이전트 하네스 사례 — 자기개선 로컬 에이전트의 루프와 메모리 구조 |
+| [`project/flats/`](project/flats/) | 23편 + 인덱스 | gosuda/flats(v0.11.0) 학습 시리즈. 불변 artifact·content hash·SQLite WAL, WebAssembly/QuickJS 샌드박스, 오버레이 네트워크 노출, MCP 승인 모델, serve 조립·백업, 코드 리뷰까지 설치본 기준으로 따라갑니다. [portal-tunnel 시리즈](../02_os/project/portal-tunnel/README.md)와 상호 링크 |
 
-위 "등록된 절"이 개념 본문이라면 이 셋은 제품 사례와 자가 점검입니다. 본문 개정 시 함께 보지 않아도 되도록 분리해 둡니다.
+위 "등록된 절"이 개념 본문이라면 이 폴더들은 제품 사례와 자가 점검입니다. 본문 개정 시 함께 보지 않아도 되도록 분리해 둡니다.
 
 `docs/`가 `hermes/`와 다른 점은 깊이입니다. `hermes/`가 사례 한 편짜리 읽을거리라면 `docs/`는 도구 하나를 장 단위로 끝까지 따라가고, 근거를 설치본에서 직접 뽑습니다.
 
