@@ -1,10 +1,12 @@
 # 05-01 §3 — 일반 DNS 질의·캐시 경로에서는 등록 후에도 클라이언트가 TTL 만료까지 옛 주소를 쓴다.
-# 원문 근거: "Even with this dynamic, API-based registration, clients do not find out about service
-#            location changes. They must still rely on a TTL and requery the service discovery to find
-#            out whether a service has moved" / 2019년 원서의 일반 질의·응답 경로 설명.
+# 본문 근거: 이 노트 §3 135~165줄.
+# 원서 근거: 원서 3~4쪽(문장이 3쪽 끝에서 4쪽으로 넘어간다) "Even with this dynamic, API-based registration, clients do not find out about
+#            service location changes. They must still rely on a TTL and requery the service discovery
+#            to find out whether a service has moved or whether a new instance is available".
 # 현행 구분: RFC 8765(2020)는 구독형 DNS Push Notifications를 정의한다. 이 그림은 그 구독 경로가 아니다.
 # 타입 스펙: type-sequence — 주체 셋 사이의 시간순 왕복이고, 가운데의 빈 구간이 논지다.
 #           프리미티브의 mono 하드코딩을 SeqKR 로 덮는다(계약 §프리미티브가 한글을 mono 로 내보내는 자리).
+# 2026-11-01 검증: "알린다·안다·쓴다" 문장 라벨을 명사구로 줄였다. 본문 자리는 §3 「그런데 클라이언트는 여전히 모릅니다」 설명 뒤로 옮겼다.
 import sys; sys.path.insert(0, ".")
 from dd import Seq, ACC, MUTED, BAD, OK, INK, PAPER2, RULE, KR, MONO, PAPER
 
@@ -68,13 +70,13 @@ d.lanes([("서비스 인스턴스", "self-register"),
          ("클라이언트", "resolver cache")], y0=104, lane_w=248)
 d.rails(500)
 
-d.msg("서비스 인스턴스", "레지스트리와 DNS", "등록 API 호출", 196, MUTED, sub="자기 이름과 위치를 알린다")
-chip("레지스트리와 DNS", "새 주소를 안다", 252, OK)
+d.msg("서비스 인스턴스", "레지스트리와 DNS", "등록 API 호출", 196, MUTED, sub="자기 이름 · 위치 통보")
+chip("레지스트리와 DNS", "새 주소 반영", 252, OK)
 # 일어나지 않는 전달이라 화살촉을 달지 않는다 — 화살표는 무언가 간다는 뜻으로 읽힌다(2026-10-03)
 x1, x2 = d.LX["레지스트리와 DNS"], d.LX["클라이언트"]
 d.path(f"M {x1 + 10} 312 L {x2 - 12} 312", BAD, 1.5, dash="5 4")
 d.t((x1 + x2) / 2, 302, "변경 알림 없음 · 일반 질의 경로", 13, BAD, KR, "middle", 600)
-chip("클라이언트", "옛 주소를 계속 쓴다", 372, BAD)
+chip("클라이언트", "옛 주소 계속 사용", 372, BAD)
 d.msg("클라이언트", "레지스트리와 DNS", "TTL 만료 후 재질의", 428, MUTED)
 d.msg("레지스트리와 DNS", "클라이언트", "새 주소 응답", 476, ACC, mk="acc")
 

@@ -1,6 +1,9 @@
 # 05-01 §1 — 결제 서비스 하나가 금액을 계산하려면 세 서비스의 주소가 필요하다.
-# 본문 근거: 이 노트 §1 69줄(원서 5장 도입부 소매 애플리케이션 예의 요지 — 결제가 장바구니·카탈로그·배송비에서 값을 모은다).
-#            원서 영문을 대조하지 못해 영문 인용은 싣지 않는다.
+# 본문 근거: 이 노트 §1 67~75줄.
+# 원서 근거: 원서 1쪽 "for the Checkout service to calculate the final price, it needs to gather the list
+#            of items from the Shopping Cart, the item prices from the Product Catalog, and the shipping
+#            fees from the Shipping Cost service. ... How does the Checkout service know what IP address
+#            and port to use to connect to each of these APIs? The answer is using a service discovery function".
 # 타입 스펙: type-architecture — 구성요소 넷과 호출 관계, 그리고 아직 비어 있는 주소가 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, BAD, KR, MONO

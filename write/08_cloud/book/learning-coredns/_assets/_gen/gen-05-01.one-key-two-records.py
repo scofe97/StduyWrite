@@ -1,5 +1,8 @@
 # 05-01 §5 — SkyDNS 메시지 한 줄의 필드가 A 응답과 SRV 응답의 어느 칸으로 가는가.
-# 본문 근거: 이 노트 §5 의 put 값과 두 dig 응답(원서 Example 5-3·5-7 의 값).
+# 본문 근거: 이 노트 §5 293~323줄.
+# 원서 근거: 원서 5~6쪽 Example 5-1(Sample SkyDNS Message), 원서 7쪽 Example 5-3(etcdctl put 값),
+#            원서 8쪽 Example 5-6(A 레코드 dig 응답)·원서 8~9쪽 Example 5-7(SRV 레코드 dig 응답, 답 구간은 9쪽).
+# 2026-11-01 검증: 쪽 번호만 원서 pdftotext 쪽 표지로 고쳤다. 라벨은 그대로.
 # 소스 근거: plugin/etcd/etcd.go 의 defaultTTL=300·defaultPriority=10, plugin/backend_lookup.go 의 가중치 재계산.
 # 타입 스펙: type-dp-security-matrix — 필드(행) × 응답 종류(열) 격자에서 어느 칸이 그대로이고 어느 칸이 바뀌는가가 논지다.
 import sys; sys.path.insert(0, ".")

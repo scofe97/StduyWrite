@@ -1,9 +1,11 @@
 # 05-01 §6 — 원서가 적은 etcd 옵션 일곱과 현재 master 문법의 차이를 버전 축 위에 놓는다.
-# 원문 근거(왼쪽 세 칸): stubzones 는 "only valid in versions of CoreDNS before 1.4.0",
-#            upstream 은 "obsolete in CoreDNS 1.3.0 and later", credentials 는 "available starting in
-#            CoreDNS 1.4.0", 나머지 넷(fallthrough·path·endpoint·tls)에는 버전 단서가 없다.
+# 본문 근거: 이 노트 §6 335~365줄.
+# 원서 근거(왼쪽 세 칸): 원서 9~10쪽 Complete syntax 문법 블록(번호 없음. 5장에 Example 5-9 는 없다). stubzones 는 "only valid
+#            in versions of CoreDNS before 1.4.0", upstream 은 "obsolete in CoreDNS 1.3.0 and later",
+#            credentials 는 "available starting in CoreDNS 1.4.0", 나머지 넷(fallthrough·path·endpoint·tls)에는 버전 단서가 없다.
 # 공식 근거(오른쪽 칸): master 의 plugin/etcd/README.md 문법 블록에 stubzones·upstream 이 없고
 #            no_apex_fallback 이 있으며, 블록 밖에 min-lease-ttl(기본 30초)·max-lease-ttl(기본 24시간)이 있다.
+# 2026-11-01 검증: 범례의 문장 어미 "남았다" 를 명사형으로, 주석의 없는 예제 번호를 문법 블록으로 고쳤다.
 # 타입 스펙: type-gantt — 막대의 시작점과 길이가 곧 그 옵션이 유효한 구간이다.
 #           축약: 가로축이 날짜가 아니라 CoreDNS 버전 구간이다(같은 폴더 02-01 캐시 사다리와 같은 축약).
 #           원서 이후 붙은 셋은 도입 버전을 확인하지 못해 막대를 마지막 칸에만 두고 점선으로 표시한다.
@@ -22,7 +24,8 @@ COLS = ["1.2 이전", "1.3", "1.4", "현재 (master)"]
 PITCH = TW / len(COLS)
 
 for i, nm in enumerate(COLS):
-    d.t(TX + PITCH * i + PITCH / 2, 116, nm, 12, SOFT, MONO)
+    fam = KR if any("가" <= c <= "힣" for c in nm) else MONO
+    d.t(TX + PITCH * i + PITCH / 2, 116, nm, 12, SOFT, fam)
 d.line(TX, 128, TX + TW, 128, RULE, 1.0)
 
 rows = [
@@ -44,9 +47,9 @@ def row_y(k):
 
 
 d.box(204, 136, 752, 304, PAPER, RULE, 0.8, 6)
-d.t(212, 156, "원서가 적은 일곱", 11, SOFT, MONO, "start", 600)
+d.t(212, 156, "원서가 적은 일곱", 11, SOFT, KR, "start", 600)
 d.box(204, 452, 752, 144, PAPER, RULE, 0.8, 6)
-d.t(212, 472, "원서 이후 붙은 셋", 11, SOFT, MONO, "start", 600)
+d.t(212, 472, "원서 이후 붙은 셋", 11, SOFT, KR, "start", 600)
 
 for k, (nm, start, span, color, dash) in enumerate(rows):
     ry = row_y(k)
@@ -67,5 +70,5 @@ for k, (nm, start, span, color, dash) in enumerate(rows):
 d.t(TX + PITCH * 2, 628, "1.4.0 · stubzones 끝 · credentials 시작", 13, ACC, KR)
 d.t(LX, 660, "원서 이후 셋 · master 에서 확인 · 도입 버전 미확인 · 막대 시작점은 버전이 아님", 13, MUTED, KR, "start")
 
-d.legend(684, [("README 에 없음 · 파서는 무시", BAD), ("그대로 남았다", OK), ("원서 이후 추가", INFO), ("원서가 적은 경계", ACC)])
+d.legend(684, [("README 에 없음 · 파서는 무시", BAD), ("그대로 남음", OK), ("원서 이후 추가", INFO), ("원서가 적은 경계", ACC)])
 d.save("05-01.option-lifespan.svg")

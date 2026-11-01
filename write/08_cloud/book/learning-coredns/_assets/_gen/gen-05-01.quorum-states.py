@@ -1,8 +1,12 @@
 # 05-01 §4 — etcd 셋 중 하나를 잃어도 과반이 남아 계속 동작하고, 둘을 잃으면 쿼럼을 잃는다.
-# 본문 근거: 이 노트 §4 쿼럼 문단(원서 요지 — 절반을 넘는 인스턴스가 살아 통신하면 읽기·쓰기를 받고, 셋 중 하나를 잃어도 동작).
-#            원서 영문을 대조하지 못해 영문 인용은 싣지 않는다.
+# 본문 근거: 이 노트 §4 187~195줄.
+# 원서 근거: 원서 4~5쪽 "as long as more than half of the instances are up and able to communicate with
+#            one another—etcd will keep running and accepting reads and writes. For example, if you
+#            have deployed three instances of etcd as a cluster, you can lose any one of them and the
+#            system will continue to function."
 # 타입 스펙: type-state — 살아 있는 대수가 줄어드는 세 상태와 그 사이의 전이가 논지다.
-#           셋째 상태의 "쓰기 불가"는 쿼럼 정의에서 나온 귀결이라 원문의 "계속 동작" 의 반대만 적는다.
+# 2026-11-01 검증: 셋째 상태의 "쓰기 불가" 는 본문(191줄 "쿼럼이 깨집니다")·원서에 없는 귀결이라 빼고 "쿼럼 상실" 만 둔다.
+#           주석의 영문 인용이 원서와 달라(deploy three etcd instances in a cluster ... keep operating) 원문대로 고쳤다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, OK, BAD, KR, MONO
 
@@ -16,7 +20,7 @@ d = D(W, H, "LEARNING COREDNS · 05-01 §4",
 states = [
     ("세 대 모두 정상", 3, "읽기 · 쓰기 계속", OK),
     ("한 대를 잃음", 2, "읽기 · 쓰기 계속", OK),
-    ("두 대를 잃음", 1, "쿼럼 상실 · 쓰기 불가", BAD),
+    ("두 대를 잃음", 1, "쿼럼 상실", BAD),
 ]
 XS = [20, 315, 610]
 BW, BY, BH = 250, 124, 240

@@ -1,8 +1,15 @@
 # 05-01 §2 네 번째 칸 — 호스트 IP 하나에 컨테이너 둘을 올리면 SRV 가 준 포트가 컨테이너를 가른다.
-# 본문 근거: 이 노트 §2 「네 번째 칸」 셋째 문단(원서 요지 — 호스트 IP 에만 닿고 컨테이너는 포트 포워딩으로 닿는다).
-#            원서 영문을 대조하지 못해 영문 인용은 싣지 않는다.
+# 본문 근거: 이 노트 §2 「네 번째 칸」 117~127줄.
+# 원서 근거: 원서 3쪽 "An SRV record contains a port as well as another DNS name, which can be resolved to
+#            an IP address. Using an SRV record means we do not need to follow ordinary port conventions for
+#            services, allowing us to host, for example, multiple HTTP-based microservice APIs on the same
+#            IP address. In simple containerized environments, only the host's IP address is reachable on
+#            the network, and containers are reached by forwarding ports from the host IP address to the
+#            host-local container IP addresses."
 # 타입 스펙: type-data-flow — 이름이 SRV·호스트 포트·포워딩을 거쳐 컨테이너에 닿는 단계를 열로 놓았다.
-#           포트 번호 20021 과 컨테이너 IP 는 설명용 예시 값이다(users 의 20020·192.0.2.10 은 5절 예제 값).
+#           users 의 이름·20020·192.0.2.10 은 5절 예제 값(원서 6쪽 Example 5-1, 9쪽 Example 5-7).
+# 2026-11-01 검증: 둘째 줄의 cart.services.example.com·20021·172.17.0.x:8080 은 본문·원서에 없는 지어낸 값이라 뺐다.
+#           둘째 API 와 컨테이너 주소는 값 없이 이름만 둔다. SRV 의 대상은 IP 가 아니라 이름이므로(원서 3쪽) "대상 이름" 으로 고쳤다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
@@ -16,10 +23,10 @@ d = D(W, H, "LEARNING COREDNS · 05-01 §2",
 COLS = [(20, 220, "이름"), (260, 170, "SRV 응답이 주는 것"),
         (450, 190, "호스트에서 닿는 곳"), (660, 200, "포워딩되는 컨테이너")]
 rows = [
-    [("users.services.example.com", "사용자 API", MONO), ("포트 20020", "대상 192.0.2.10", KR),
-     ("192.0.2.10:20020", "호스트 IP 에만 닿음", MONO), ("172.17.0.2:8080", "users 컨테이너", MONO)],
-    [("cart.services.example.com", "장바구니 API", MONO), ("포트 20021", "대상 192.0.2.10", KR),
-     ("192.0.2.10:20021", "같은 호스트 IP", MONO), ("172.17.0.3:8080", "cart 컨테이너", MONO)],
+    [("users.services.example.com", "사용자 API", MONO), ("포트 20020", "대상 이름 · 192.0.2.10", KR),
+     ("192.0.2.10:20020", "호스트 IP 에만 닿음", MONO), ("컨테이너 IP:포트", "users 컨테이너", KR)],
+    [("다른 HTTP API", "같은 IP 위의 둘째 API", KR), ("다른 포트", "대상 이름 · 192.0.2.10", KR),
+     ("192.0.2.10:다른 포트", "같은 호스트 IP", KR), ("컨테이너 IP:포트", "둘째 컨테이너", KR)],
 ]
 
 for k, (x, w, head) in enumerate(COLS):
@@ -41,8 +48,8 @@ for i, cells in enumerate(rows):
             ACC if k == 1 else INK, fam, "start", 600)
         d.t(x + 12, y + 56, sub, 12, MUTED, KR, "start")
 
-d.t(20, 356, "A 레코드만 쓰면 · 포트 열이 빈다 · 컨테이너 하나 또는 정적 포트 매핑", 13, MUTED, KR, "start")
-d.t(20, 378, "20021 과 컨테이너 IP 는 예시 값", 12, SOFT, KR, "start")
+d.t(20, 356, "A 레코드만으로는 포트 열 없음 · 컨테이너 하나 또는 정적 포트 매핑", 13, MUTED, KR, "start")
+d.t(20, 378, "users 값은 5절 예제 · 둘째 API 와 컨테이너 주소는 값 없이 이름만", 12, SOFT, KR, "start")
 
 d.legend(396, [("SRV 가 더하는 포트", ACC)])
 d.save("05-01.host-port.svg")

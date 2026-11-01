@@ -1,5 +1,6 @@
 # 05-01 §5 — etcd 키는 도메인 이름과 같은 계층을 반대 방향으로 읽은 것이다.
-# 원문 근거: "The format of the key is structured like a Unix directory path, going in the reverse order
+# 본문 근거: 이 노트 §5 213~241줄.
+# 원서 근거: 원서 6쪽 "The format of the key is structured like a Unix directory path, going in the reverse order
 #            of the domain name. The root of the path is, by default /skydns, although this is
 #            configurable. If we want to make our example service available as the name
 #            users.services.example.com, we populate etcd with the JSON object above, at the key
