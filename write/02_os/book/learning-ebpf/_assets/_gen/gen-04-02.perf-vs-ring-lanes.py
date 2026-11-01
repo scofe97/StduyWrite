@@ -1,7 +1,8 @@
 # 타입 스펙: type-swimlane — 레인 둘(perf 버퍼 · 링 버퍼)에 같은 방향으로 호출 네 단계를 늘어놓아, CPU 마다 반복되는 앞 세 단계와 한 번뿐인 앞 세 단계를 맞대 본다.
-# 사실 출처: 추출본 ebpf4.txt 721~772행(perf_event_open ×4 · ioctl ENABLE ×4 · BPF_MAP_UPDATE_ELEM map_fd=4 ×4 · ppoll([{fd=8…}…{fd=11…}], 4, …)),
-#   826~827행(BPF_MAP_CREATE RINGBUF key_size=0 max_entries=4096 … = 4), 867·876·884행(epoll_create1 = 8 · epoll_ctl(8, EPOLL_CTL_ADD, 4, …) · epoll_pwait(8, …)).
+# 사실 출처: 원서 Ch.4 15~17쪽 (15쪽 perf_event_open ×4 · ioctl ENABLE ×4 · BPF_MAP_UPDATE_ELEM map_fd=4 ×4 · ppoll,
+#   16~17쪽 BPF_MAP_CREATE RINGBUF key_size=0 max_entries=4096 = 4 · epoll_create1 = 8 · epoll_ctl(8, EPOLL_CTL_ADD, 4) · epoll_pwait(8)).
 #   BCC v0.37.0 src/cc/export/helpers.h 232~248행(max_entries = 페이지 수 × PAGE_SIZE).
+#   원서 14쪽은 세 호출이 한 묶음으로 네 번 나온다고 적는다(perf_event_open → ioctl ENABLE → BPF_MAP_UPDATE_ELEM 묶음). 그래서 앞 세 단계는 한 묶음의 순서로 그리고 × 4 는 묶음 괄호에만 단다. X=0~3 · Y=8~11 은 원서 14~15쪽·본문 §2.
 # Layout conventions: 단계 폭 168·높이 72, 단계 x=164·360·556·752(stride 196), 레인 y=132·316(band 160~180), 레인 라벨 열 x=24~140, 반복 고리는 마지막 단계 아래 ㄷ자. 모든 좌표 4의 배수.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, MUTED, INK, PAPER, PAPER2, RULE, SOFT, INFO, KR, MONO
@@ -44,11 +45,16 @@ def repeat(y, label, c):
 
 y1, y2 = LY
 link(y1); link(y2)
-step(XS[0], y1, "perf_event_open", "× 4 · fd 8~11", WARN)
-step(XS[1], y1, "PERF_EVENT_IOC_ENABLE", "× 4", WARN)
-step(XS[2], y1, "BPF_MAP_UPDATE_ELEM", "map_fd=4 · × 4", WARN)
+step(XS[0], y1, "perf_event_open", "CPU X → fd Y", WARN)
+step(XS[1], y1, "PERF_EVENT_IOC_ENABLE", "fd Y", WARN)
+step(XS[2], y1, "BPF_MAP_UPDATE_ELEM", "map_fd=4", WARN)
 step(XS[3], y1, "ppoll", "fd 8·9·10·11", INFO)
 repeat(y1, "반복 · fd 4개 전달", INFO)
+
+# CPU 마다 반복되는 세 호출 묶음 — 괄호 하나에 × 4
+bx0, bx1, byb = XS[0], XS[2] + SW, y1 + SH + 12
+d.path(f"M {bx0} {byb - 6} L {bx0} {byb} L {bx1} {byb} L {bx1} {byb - 6}", WARN, 1.4)
+d.chip((bx0 + bx1) / 2, byb + 24, "CPU 마다 같은 묶음 × 4 · X=0~3 · Y=8~11", WARN, 13)
 
 step(XS[0], y2, "BPF_MAP_CREATE", "4096 → fd 4", OK)
 step(XS[1], y2, "epoll_create1", "= fd 8", OK)
@@ -56,5 +62,5 @@ step(XS[2], y2, "epoll_ctl", "ADD fd 4 · 한 번", ACC)
 step(XS[3], y2, "epoll_pwait", "epoll fd 8", INFO)
 repeat(y2, "반복 · fd 8 만 전달", INFO)
 
-d.legend(H - 56, [("CPU 마다 × 4", WARN), ("한 번", OK), ("fd 등록", ACC), ("대기 호출", INFO)])
+d.legend(H - 56, [("CPU 마다 묶음 × 4", WARN), ("한 번", OK), ("fd 등록", ACC), ("대기 호출", INFO)])
 d.save("04-02.perf-vs-ring-lanes.svg")

@@ -1,5 +1,5 @@
 # 타입 스펙: type-loop — 바깥 고리. 다섯 호출이 start_id 허브를 갱신하며 ENOENT 까지 돈다(허브 하나, 스테이션 다섯, 정확한 원호).
-# 사실 출처: 추출본 ebpf4.txt 922~964행(BPF_MAP_GET_NEXT_ID {start_id=0} → BPF_MAP_GET_FD_BY_ID {map_id=48} = 3 → BPF_OBJ_GET_INFO_BY_FD {bpf_fd=3} · start_id=48 → map_id=116 · start_id=133 → -1 ENOENT),
+# 사실 출처: 원서 Ch.4 18쪽 (BPF_MAP_GET_NEXT_ID {start_id=0} → BPF_MAP_GET_FD_BY_ID {map_id=48} = 3 → BPF_OBJ_GET_INFO_BY_FD {bpf_fd=3} · start_id=48 → map_id=116 · start_id=133 → -1 ENOENT),
 #   linux v7.2 tools/bpf/bpftool/common.c 973~1011행(map_fd_by_name: get_next_id → 읽기 전용 fd → get_info_by_fd → strncmp(name, info.name) → 다르면 close(fd) · ENOENT 면 종료).
 # Layout conventions(type-loop §2): 스테이션 다섯, R=200, 스테이션 192×64, 허브 160×84, 중심 (480, 372), 12시에서 시계 방향. 원호는 모두 A R R 0 0 1, 스포크는 반지름 방향. 모든 좌표 4의 배수.
 import math
@@ -101,7 +101,7 @@ d.arrow([(sx, sy), (hx, hy)], SOFT, "soft", 1.2, "5 4")
 # 3) 종료 — ENOENT
 bx0, by0 = BOX[0]
 d.arrow([(bx0 + SW // 2, by0 - 2), (bx0 + SW // 2, by0 - 36)], WARN, "warn", 1.5)
-d.chip(bx0 + SW // 2, by0 - 48, "start_id=133 → ENOENT", WARN, 12)
+d.chip(bx0 + SW // 2, by0 - 48, "start_id=133 → ENOENT", WARN, 13)
 
 # 4) 스테이션
 for k, (title, sub, focal) in enumerate(STATIONS):
@@ -118,7 +118,7 @@ for k, (title, sub, focal) in enumerate(STATIONS):
 # 5) 허브 — 짙은 요소는 이것 하나
 d.box(CX - HW // 2, CY - HH // 2, HW, HH, INK, INK, 1.2, 6)
 d.t(CX, CY - 4, "start_id", 14, PAPER, MONO, "middle", 600)
-d.t(CX, CY + 18, "0 → 48 → … → 133", 12, PAPER2, MONO)
+d.t(CX, CY + 18, "0 → 48 → … → 133", 13, PAPER2, MONO)
 
 d.legend(H - 56, [("한 바퀴", MUTED), ("커서 갱신", SOFT), ("이름 비교", ACC), ("순회 종료", WARN)])
 d.save("04-02.map-id-walk.svg")

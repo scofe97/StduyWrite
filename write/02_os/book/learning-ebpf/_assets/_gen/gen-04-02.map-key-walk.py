@@ -1,5 +1,5 @@
 # 타입 스펙: type-loop — 안쪽 고리. 다섯 단계가 직전 키 허브를 갱신하며 ENOENT 까지 돈다(허브 하나, 스테이션 다섯, 정확한 원호).
-# 사실 출처: 추출본 ebpf4.txt 971~1023행(BPF_MAP_GET_NEXT_KEY {map_fd=3, key=NULL} → BPF_MAP_LOOKUP_ELEM → "key": 0 "Hey root!" → GET_NEXT_KEY → "key": 501 "Hi user 501!" → -1 ENOENT),
+# 사실 출처: 원서 Ch.4 18~19쪽 (BPF_MAP_GET_NEXT_KEY {map_fd=3, key=NULL} → BPF_MAP_LOOKUP_ELEM → "key": 0 "Hey root!" → GET_NEXT_KEY → "key": 501 "Hi user 501!" → -1 ENOENT),
 #   linux v7.2 tools/bpf/bpftool/map.c 826~877행(map_dump: prev_key = NULL → bpf_map_get_next_key(fd, prev_key, key) → ENOENT 면 끝 → dump_map_elem 의 bpf_map_lookup_elem → prev_key = key).
 # Layout conventions(type-loop §2): 스테이션 다섯, R=200, 스테이션 192×64, 허브 160×84, 중심 (480, 372), 12시에서 시계 방향. 원호는 모두 A R R 0 0 1, 스포크는 반지름 방향. 모든 좌표 4의 배수.
 import math
@@ -119,7 +119,7 @@ for k, (title, sub, focal) in enumerate(STATIONS):
 # 5) 허브 — 짙은 요소는 이것 하나
 d.box(CX - HW // 2, CY - HH // 2, HW, HH, INK, INK, 1.2, 6)
 d.t(CX, CY - 4, "직전 키", 14, PAPER, KR, "middle", 600)
-d.t(CX, CY + 18, "NULL → 0 → 501", 12, PAPER2, MONO)
+d.t(CX, CY + 18, "NULL → 0 → 501", 13, PAPER2, MONO)
 
 d.legend(H - 56, [("한 바퀴", MUTED), ("커서 갱신", SOFT), ("다음 키 요청", ACC), ("순회 종료", WARN)])
 d.save("04-02.map-key-walk.svg")

@@ -1,7 +1,8 @@
 # 타입 스펙: type-architecture — CPU 넷 줄마다 [CPU → output 맵 칸 → perf 링 fd]를 한 줄로 두고, 네 링을 ppoll 한 호출이 한꺼번에 감시한다.
-# 사실 출처: 추출본 ebpf4.txt 714~780행(perf_event_open … -1, X, -1 = Y · X 는 0~3, Y 는 8~11 · BPF_MAP_UPDATE_ELEM map_fd=4 · ppoll([{fd=8…}…{fd=11…}], 4, …) = 1 ([{fd=8, revents=POLLIN}])),
+# 사실 출처: 원서 Ch.4 12·15쪽 (perf_event_open … -1, X, -1 = Y · X 는 0~3, Y 는 8~11 · BPF_MAP_UPDATE_ELEM map_fd=4 · ppoll([{fd=8…}…{fd=11…}], 4, …) = 1 ([{fd=8, revents=POLLIN}])),
 #   BCC v0.37.0 src/python/bcc/table.py 986·1016행(online CPU 마다 링을 열고 Key(cpu) = Leaf(fd)), src/cc/export/helpers.h 207~214행(perf_submit 은 CUR_CPU_IDENTIFIER),
 #   linux v7.2 include/uapi/linux/bpf.h 2487~2500행(bpf_perf_event_output 의 flags 와 BPF_F_CURRENT_CPU).
+#   ppoll 상자는 범례의 perf 링 fd 색과 겹치지 않게 무채색으로 둔다(깨어난 fd 8 만 ACC).
 # Layout conventions: 노드 높이 64, 줄 stride 92(y=148·240·332·424), 열 x=24·244·524·784(폭 140·200·180·156), 열 간격 80, 존 둘(커널 · 사용자). 모든 좌표 4의 배수.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, OK, WARN, MUTED, INK, PAPER, PAPER2, RULE, SOFT, INFO, KR, MONO
@@ -50,11 +51,11 @@ for k, y in enumerate(ROWS):
 
 # ppoll — 네 줄을 가로지르는 키 큰 노드
 PX, PY, PW, PH = 784, 148, 156, 340
-d.tone(PX, PY, PW, PH, OK, 6, "12", 1.2)
-d.t(PX + PW / 2, PY + 120, "ppoll", 14, OK, MONO, "middle", 600)
-d.t(PX + PW / 2, PY + 144, "fd 8·9·10·11", 12, MUTED, MONO)
-d.t(PX + PW / 2, PY + 176, "= 1 · revents", 12, ACC, MONO)
-d.t(PX + PW / 2, PY + 196, "fd 8 만 POLLIN", 12, ACC, KR)
+d.box(PX, PY, PW, PH, PAPER2, RULE, 1.2, 6)
+d.t(PX + PW / 2, PY + 120, "ppoll", 14, INK, MONO, "middle", 600)
+d.t(PX + PW / 2, PY + 144, "fd 8·9·10·11", 13, MUTED, MONO)
+d.t(PX + PW / 2, PY + 176, "= 1 · revents", 13, ACC, MONO)
+d.t(PX + PW / 2, PY + 196, "fd 8 만 POLLIN", 13, ACC, KR)
 
 d.legend(H - 56, [("CPU", MUTED), ("output 맵 칸", INFO), ("perf 링 fd", OK), ("깨어난 링", ACC)])
 d.save("04-02.perf-ring-per-cpu.svg")
