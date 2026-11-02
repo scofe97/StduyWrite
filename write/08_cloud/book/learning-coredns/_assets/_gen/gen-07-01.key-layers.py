@@ -5,9 +5,7 @@
 #            we rolled over our ZSK. So we introduce another key pair, the KSK, which is used
 #            only to sign keys (hence, less data) and therefore doesn't need to be rolled over as
 #            frequently. Those are the keys our parent zone knows about."
-# 주기 수치: NIST SP 800-81-2 체크리스트 30 — "The recommended rollover frequency for the KSK is
-#            once every 1 to 2 years, whereas the ZSK should be rolled over every 1 to 3 months".
-#            그 문서는 2026-03-19 철회되고 SP 800-81r3 로 대체됐다.
+# 수명 수치: NIST SP 800-81r3 §3.8 — "recommended maximum lifetime of 1-3 years" (KSK·ZSK 구분 없음).
 # 타입 스펙: type-layers — 위로 갈수록 갈아 끼우는 비용이 크고 아래로 갈수록 자주 갈아야 하는
 #           계층이다. 부모 존이 아는 층(KSK)이 초점이라 그 한 층만 주황으로 둔다.
 import sys; sys.path.insert(0, ".")
@@ -23,8 +21,8 @@ d = D(W, H, "LEARNING COREDNS · 07-01 §6",
 SX, SW, RH = 170, 690, 68
 ROWS = [
     ("L1", "부모 존", "DS 레코드로 우리 키를 가리킨다", "갱신에 부모와의 협의가 필요", False),
-    ("L2", "KSK", "존 안의 키만 서명한다", "SP 800-81-2 · 1~2년마다", True),
-    ("L3", "ZSK", "나머지 레코드 전부를 서명한다", "SP 800-81-2 · 1~3개월 · ECDSA 는 12~24개월", False),
+    ("L2", "KSK", "존 안의 키만 서명한다", "갈 때마다 부모 존의 DS 도 바뀐다", True),
+    ("L3", "ZSK", "나머지 레코드 전부를 서명한다", "부모와 무관하게 갈 수 있다", False),
     ("L4", "존 레코드", "RRSIG 이 붙는 대상", "서명이 만료되기 전에 다시 서명", False),
 ]
 
@@ -49,9 +47,9 @@ d.t(58, 332, "위로 갈수록", 11, SOFT, KR, "start")
 d.t(58, 350, "커진다", 11, SOFT, KR, "start")
 
 d.box(20, 424, 840, 78, PAPER, RULE, 0.8)
-d.t(36, 448, "위 수치는 철회된 문서의 권고다", 12, INK, KR, "start", 600)
-d.t(36, 470, "NIST SP 800-81-2 는 2026-03-19 철회되고 SP 800-81r3 로 전부 대체됐다", 11, MUTED, KR, "start")
-d.t(36, 490, "개정판: KSK·ZSK 구분 없는 서명 키 최대 수명 1~3년  ·  DNSKEY 의 RRSIG 유효 기간 5~7일",
+d.t(36, 448, "서명 키 수명 권고 · NIST SP 800-81r3", 12, INK, KR, "start", 600)
+d.t(36, 470, "KSK·ZSK 구분 없는 서명 키 최대 수명 1~3년", 11, MUTED, KR, "start")
+d.t(36, 490, "DNSKEY 의 RRSIG 유효 기간은 5~7일처럼 짧게",
      11, MUTED, KR, "start")
 
 d.legend(516, [("부모 존이 아는 층", ACC)])

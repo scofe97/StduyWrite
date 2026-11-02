@@ -16,9 +16,9 @@ from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, BAD, OK, KR, MONO
 W, H = 880, 598
 d = D(W, H, "LEARNING COREDNS · 08-01 §7",
       "복구가 꺼지는 자리는 한 곳뿐이다",
-      "panic 복구는 서버 본체 한 곳에만 있고 debug 가 그 자리를 끈다. 공식 문서는 errors 가 "
-      "복구를 다시 건다고 적지만 소스에는 그 코드가 없다.",
-      "주황이 문서에만 있고 코드에는 없는 갈림입니다")
+      "panic 복구는 서버 본체 한 곳에만 있고 debug 가 그 자리를 끈다. errors 플러그인을 "
+      "함께 적어도 복구가 다시 켜지지 않는다.",
+      "주황은 errors 가 함께 있어도 복구되지 않는 경로입니다")
 
 SP = 280
 HW, HH = 136, 36
@@ -48,19 +48,18 @@ d.tone(SP - 122, 318, 244, 60, OK, 6, "12", 1.4)
 d.t(SP, 344, "복구하지 않는다", 13, OK, KR, "middle", 600)
 d.t(SP, 364, "프로세스가 죽으며 스택을 남긴다", 11, OK, KR)
 
-# 문서에만 있는 갈림 — 점선으로 그려 두고 없다고 표시한다
-# 문서에만 있는 갈림 — 사선으로 지우면 라벨이 안 읽히므로 점선과 문구로만 표시한다.
+# errors 플러그인이 있어도 복구가 동작하지 않는 갈림
 d.path("M 402 348 L 596 348", ACC, 1.4, m="acc", dash="5 4")
-d.t(499, 338, "문서만", 11, ACC, KR)
+d.t(499, 338, "errors 설정 시", 11, ACC, KR)
 d.tone(598, 318, 244, 60, ACC, 6, "0E", 1.3)
-d.t(720, 342, "errors 가 recover 를 건다", 11, ACC, MONO, "middle", 600)
-d.t(720, 362, "코드에는 이 갈림이 없다", 11, ACC, KR)
+d.t(720, 342, "errors 가 복구하지 않음", 11, ACC, MONO, "middle", 600)
+d.t(720, 362, "복구 코드는 서버 본체에만 존재", 11, ACC, KR)
 
 d.box(20, 402, 840, 106, PAPER, RULE, 0.8)
-d.t(36, 426, "소스에서 확인한 것", 12, INK, KR, "start", 600)
-d.t(36, 450, "plugin/errors/errors.go 에 recover 도 panic 도 없다", 11, MUTED, MONO, "start")
-d.t(36, 472, "core/dnsserver/server.go 의 복구 한 곳이 if !s.debug 로 감싸여 있다", 11, MUTED, MONO, "start")
-d.t(36, 494, "구조체 필드 주석이 debug bool // disable recover() 다", 11, MUTED, MONO, "start")
+d.t(36, 426, "복구와 debug 플러그인의 동작 원리", 12, INK, KR, "start", 600)
+d.t(36, 450, "plugin/errors 에는 recover() 나 panic() 복구 로직이 없다", 11, MUTED, MONO, "start")
+d.t(36, 472, "core/dnsserver 의 복구 루틴 한 곳만 if !s.debug 조건으로 제어된다", 11, MUTED, MONO, "start")
+d.t(36, 494, "errors 와 debug 를 함께 적어도 debug 의 복구 비활성화가 유지된다", 11, MUTED, MONO, "start")
 
-d.legend(536, [("문서에만 있고 코드에 없는 갈림", ACC), ("스택 트레이스를 얻는 길", OK)])
+d.legend(536, [("복구되지 않는 갈림", ACC), ("스택 트레이스를 얻는 길", OK)])
 d.save("08-01.debug-recover.svg")

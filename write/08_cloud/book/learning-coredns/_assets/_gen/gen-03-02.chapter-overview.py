@@ -20,7 +20,7 @@ cards = [
     ("§4", "forward", "응답 여부로 건강을 판정"),
     ("§5", "cache", "성공과 부정을 따로 담는다"),
     ("§6", "errors 와 log", "둘 다 표준 출력으로 간다"),
-    ("§7", "공유 옵션 셋", "fallthrough · tls · transfer to"),
+    ("§7", "공유 옵션 셋", "fallthrough · tls · transfer (플러그인)"),
     ("§8", "완성된 Corefile 셋", "캐싱 전용 · 주 서버 · 보조 서버"),
 ]
 def pos(i):

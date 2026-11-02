@@ -1,4 +1,4 @@
-# 03-01 §3 — Corefile 문법의 중첩 깊이와 그 바닥.
+# 03-01 §4 — Corefile 문법의 중첩 깊이와 그 바닥.
 # 원문 근거: "Corefiles consist of one or more entries, which themselves comprise labels and
 #            definitions" / 여는 중괄호는 라벨 줄 끝에, 닫는 중괄호는 홀로 한 줄에 / 중괄호 안 텍스트를
 #            블록이라 부른다 / "Definitions are made up of directives and optional arguments" /
@@ -11,7 +11,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, RULE, KR, MONO
 
 W, H = 880, 500
-d = D(W, H, "LEARNING COREDNS · 03-01 §3",
+d = D(W, H, "LEARNING COREDNS · 03-01 §4",
       "Corefile 문법이 품는 네 겹과 그 바닥",
       "엔트리 안에 블록이 있고, 블록 안에 지시어가 있고, 지시어의 인자가 길면 다시 중괄호로 감싼다. "
       "그 안에 서브지시어까지는 들어가지만 거기서 끝이다. 중괄호가 실제로 그리는 것은 블록과 여러 줄 인자 두 겹이다.",
@@ -37,7 +37,7 @@ for i, (x, y, w, h, label, band, brace) in enumerate(rings):
         d.t(x + w - 18, y + 26, band, 12, MUTED, KR, "end")
 
 d.t(440, 304, "새 { } 블록 열기 불가", 15, ACC, KR, "middle", 600)
-d.t(440, 332, "저자의 \"작은 자비\" · Corefile 문법의 바닥", 12, MUTED)
+d.t(440, 332, "Corefile 문법의 바닥", 12, MUTED)
 
 d.legend(456, [("더 들어갈 수 없는 층", ACC), ("중괄호로 그어지는 겹 · 점선", SOFT)])
 d.save("03-01.corefile-nesting.svg")

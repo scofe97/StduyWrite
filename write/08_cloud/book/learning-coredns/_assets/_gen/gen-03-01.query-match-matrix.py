@@ -1,4 +1,4 @@
-# 03-01 §6 — 질의 다섯이 Example 3-15 의 엔트리 다섯 가운데 어디에 붙는가.
+# 03-01 §3 — 질의 다섯이 §1 Corefile 의 엔트리 다섯 가운데 어디에 붙는가.
 # 원문 근거: "For a server block to apply to a given query, the protocol (TLS, gRPC, or plain-vanilla
 #            DNS) port on which the query was received and domain name in the query must match the
 #            label. In the event that the domain name in the query matches multiple labels, the
@@ -37,7 +37,7 @@ rows_bottom = row_y(n_comp - 1) + ROW_H
 LEGEND_Y = rows_bottom + 20
 H = LEGEND_Y + 44
 
-d = D(W, H, "LEARNING COREDNS · 03-01 §6",
+d = D(W, H, "LEARNING COREDNS · 03-01 §3",
       "질의 하나가 붙는 엔트리는 하나뿐이다",
       "행이 들어온 질의, 열이 Corefile 의 엔트리다. 프로토콜과 포트와 도메인 이름이 모두 라벨과 맞아야 하고, "
       "도메인 이름이 여러 라벨에 맞으면 가장 긴 라벨이 이긴다.",

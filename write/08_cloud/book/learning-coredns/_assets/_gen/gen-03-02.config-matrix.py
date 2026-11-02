@@ -1,4 +1,4 @@
-# 03-02 §8 — 원서가 든 세 벌의 Corefile 에 어느 플러그인이 들어가는가.
+# 03-02 §8 — 세 벌의 Corefile 에 어느 플러그인이 들어가는가.
 # 원문 근거: Example 3-37 캐싱 전용(forward · cache · errors · log),
 #            Example 3-38 주 서버(root · file · errors · log, 재귀도 맡으면 forward · cache 블록 추가),
 #            Example 3-39 보조 서버(logerrors 스니펫으로 errors·log, foo.example 은 root·file,
@@ -14,13 +14,13 @@ ROLE_COL_W, ROLE_COL_GAP = 148, 16
 HEADER_H, ROW_H, ROW_STRIDE = 52, 36, 40
 HEADER_Y = 104
 
-configs = [("캐싱 전용", "3-37"), ("주 서버", "3-38"), ("보조 서버", "3-39")]
+configs = [("캐싱 전용", "권한 없음"), ("주 서버", "파일에서 읽음"), ("보조 서버", "마스터에서 받음")]
 plugins = [("root", "파일 기준 경로"), ("file", "주 서버로"), ("secondary", "보조 서버로"),
            ("forward", "포워더로"), ("cache", "응답 캐시"), ("errors", "오류 로그"), ("log", "질의 로그")]
 cells = {
     (0, 1): ("쓴다", "full"), (0, 2): ("쓴다", "full"),
     (1, 1): ("쓴다", "full"), (1, 2): ("쓴다", "full"),
-    (2, 2): ("원서 예제에 빠짐", "focal"),
+    (2, 2): ("꼭 쓴다", "focal"),
     (3, 0): ("쓴다", "full"), (3, 1): ("재귀도 맡으면", "read"), (3, 2): ("재귀도 맡으면", "read"),
     (4, 0): ("쓴다", "full"), (4, 1): ("재귀도 맡으면", "read"), (4, 2): ("재귀도 맡으면", "read"),
     (5, 0): ("쓴다", "full"), (5, 1): ("쓴다", "full"), (5, 2): ("스니펫으로", "full"),
@@ -36,9 +36,9 @@ H = LEGEND_Y + 44
 
 d = D(W, H, "LEARNING COREDNS · 03-02 §8",
       "세 벌의 설정에 들어가는 플러그인",
-      "행이 기본 플러그인 일곱, 열이 원서가 든 세 벌의 Corefile 이다. "
+      "행이 기본 플러그인 일곱, 열이 8절의 세 벌 Corefile 이다. "
       "캐싱 전용은 권한이 없어 root·file 이 필요 없고, 주 서버와 보조 서버는 재귀까지 맡을 때만 forward·cache 를 더한다.",
-      "색이 붙은 칸이 원서 예제에서 빠진 지시어입니다")
+      "색이 붙은 칸은 보조 서버에 꼭 있어야 하는 지시어입니다")
 
 d.box(LEFT_PAD, HEADER_Y, COMP_COL_W, HEADER_H, PAPER2, RULE, 0.8, 6)
 d.t(LEFT_PAD + COMP_COL_W / 2, HEADER_Y + 24, "플러그인", 12, INK, KR, "middle", 600)
@@ -47,7 +47,7 @@ for j, (nm, ex) in enumerate(configs):
     x = role_x(j)
     d.box(x, HEADER_Y, ROLE_COL_W, HEADER_H, PAPER2, RULE, 1.4, 6)
     d.t(x + ROLE_COL_W / 2, HEADER_Y + 22, nm, 13, INK, KR, "middle", 600)
-    d.t(x + ROLE_COL_W / 2, HEADER_Y + 40, "Example " + ex, 12, SOFT, MONO)
+    d.t(x + ROLE_COL_W / 2, HEADER_Y + 40, ex, 12, SOFT, KR)
 
 for k, (nm, hint) in enumerate(plugins):
     y = row_y(k)
@@ -71,5 +71,5 @@ for k, (nm, hint) in enumerate(plugins):
             d.box(x, y, ROLE_COL_W, ROW_H, PAPER, RULE, 0.6, 4)
             d.t(x + ROLE_COL_W / 2, y + 23, val, 12, SOFT, KR)
 
-d.legend(LEGEND_Y, [("원서 예제가 빠뜨린 칸", ACC), ("그 설정에 들어간다", INK), ("조건부로 더한다", MUTED)])
+d.legend(LEGEND_Y, [("보조 서버의 필수 지시어", ACC), ("그 설정에 들어간다", INK), ("조건부로 더한다", MUTED)])
 d.save("03-02.config-matrix.svg")

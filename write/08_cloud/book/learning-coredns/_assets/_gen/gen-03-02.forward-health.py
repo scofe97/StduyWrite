@@ -13,10 +13,10 @@ from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, OK, BAD, KR, MONO
 W, H = 940, 520
 d = D(W, H, "LEARNING COREDNS · 03-02 §4",
       "포워더의 건강은 응답 여부로만 판정한다",
-      "원서(1.4.0) 기준 그림이다. CoreDNS 는 0.5초마다 각 포워더에 루트의 NS 레코드를 재귀 질의한다. "
-      "응답만 오면 그 내용이 NXDOMAIN 이든 SERVFAIL 이든 건강한 것으로 세고, 연속 두 번 응답이 없어야 죽은 것으로 본다. "
-      "지금 버전은 오류 뒤에만 이 확인을 돌리고 건강해지면 멈춘다.",
-      "원서 1.4.0 기준 · 지금은 오류 뒤에만 확인이 돕니다")
+      "오류를 만난 포워더에 0.5초 간격으로 루트의 NS 레코드를 재귀 질의한다. "
+      "응답만 오면 그 내용이 NXDOMAIN 이든 SERVFAIL 이든 건강으로 돌아와 확인을 멈추고, "
+      "연속 실패가 max_fails 를 넘으면(기본 2 → 세 번째) 죽은 것으로 본다.",
+      "오류 뒤에만 확인이 돌고, 건강해지면 멈춥니다")
 
 def state(x, y, w, nm, sub, color=None):
     if color:
@@ -30,7 +30,7 @@ d.o.append(f'<circle cx="40" cy="180" r="6" fill="{INK}"/>')
 d.path("M 48 180 L 108 180", MUTED, 1.4, m="ar")
 
 state(116, 148, 216, "건강함", "질의를 받는다", OK)
-state(412, 148, 216, "실패 1회", "연속 실패를 센다")
+state(412, 148, 216, "실패 1~2회", "연속 실패를 센다")
 state(412, 300, 216, "죽음", "제외 · round_robin·sequential", BAD)
 state(700, 148, 216, "무작위 하나에 질의", "헬스 체크를 의심", ACC)
 
@@ -42,7 +42,7 @@ d.t(372, 100, "응답 도착 · NXDOMAIN·SERVFAIL 포함", 12, MUTED, KR)
 d.t(372, 120, "건강으로 복귀", 12, SOFT, KR)
 
 d.path("M 520 212 L 520 292", MUTED, 1.4, m="ar")
-d.t(532, 258, "연속 두 번째 실패 · max_fails 기본 2", 12, MUTED, KR, "start")
+d.t(532, 258, "연속 세 번째 실패 · max_fails 기본 2 초과", 12, MUTED, KR, "start")
 
 d.path("M 412 332 C 356 332 356 212 224 212", MUTED, 1.4, m="ar", dash="5 4")
 d.t(272, 268, "다시 응답하면 복귀", 12, MUTED, KR)
@@ -50,8 +50,8 @@ d.t(272, 268, "다시 응답하면 복귀", 12, MUTED, KR)
 d.path("M 632 300 C 700 300 812 268 812 220", ACC, 1.6, m="acc")
 d.t(828, 272, "모든 포워더가 죽음", 12, ACC, KR, "start")
 
-d.t(20, 404, "주기 health_check 0.5s · 횟수 max_fails 2 · max_fails 0 은 판정 끔", 13, MUTED, KR, "start")
-d.t(20, 426, "실패로 세는 것 · 무응답과 빈 응답 · 탐색 질의는 그 포워더의 전송 방식 그대로", 13, MUTED, KR, "start")
+d.t(20, 404, "주기 health_check 0.5s · 초과 횟수 max_fails 2 · max_fails 0 은 확인·판정 끔", 13, MUTED, KR, "start")
+d.t(20, 426, "실패로 세는 것 · 응답을 받지 못한 I/O 오류 · 탐색 질의는 그 포워더의 전송 방식 그대로", 13, MUTED, KR, "start")
 
 d.legend(446, [("질의를 받을 수 있는 상태", OK), ("제외된 상태", BAD), ("판정 자체를 못 믿는 자리", ACC)])
 d.save("03-02.forward-health.svg")

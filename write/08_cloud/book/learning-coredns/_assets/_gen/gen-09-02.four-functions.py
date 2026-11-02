@@ -45,7 +45,7 @@ d.t(58, 336, "예약해 둔다", 11, SOFT, KR, "start")
 
 d.box(20, 426, 840, 62, PAPER, RULE, 0.8)
 d.t(36, 450, "Name 과 ServeDNS 가 Handler 인터페이스를 이룬다", 12, INK, KR, "start", 600)
-d.t(36, 472, "설정만 바꾸는 플러그인이라면 ServeDNS 는 한 줄이어도 된다고 저자들이 적는다",
+d.t(36, 472, "설정만 바꾸는 플러그인이라면 ServeDNS 는 한 줄이어도 된다",
      11, MUTED, KR, "start")
 
 d.legend(508, [("요청마다 불리는 층", ACC)])

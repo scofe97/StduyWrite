@@ -22,7 +22,7 @@ rows = [
     (("이름 붙은 포트", ""), ("헤드리스: 엔드포인트 × 포트", "이름 없는 포트: SRV 없음"), ("_http._tcp.headless", "SRV 0 25 80 넷"), "§6"),
     (("Deployment + hostname", ""), ("대상 이름 하나로 뭉침", ""), ("myhost.headless", "A 넷 동일 이름 반환"), "§7"),
     (("StatefulSet", ""), ("서수 이름 · 재생성 시 유지", ""), ("headless-0 … headless-3", "IP 주소만 변경"), "§7"),
-    (("파드 A 레코드", "명세 이전 kube-dns"), ("현행 명세 제외", "CoreDNS pods 옵션 지원"), ("a-b-c-d.ns.pod", "존재 미확인 응답"), "§8"),
+    (("파드 A 레코드", "보안 문제로 폐기"), ("현행 명세 제외", "CoreDNS pods 옵션 지원"), ("a-b-c-d.ns.pod", "존재 미확인 응답"), "§8"),
 ]
 FOCAL = 1
 Y0, PITCH, RH = 132, 64, 56

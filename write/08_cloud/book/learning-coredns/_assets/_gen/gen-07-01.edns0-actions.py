@@ -1,7 +1,7 @@
 # 07-01 §5 — rewrite edns0 의 액션 넷이 같은 코드의 옵션이 이미 있느냐에 따라 어떻게 갈리는가.
 # 소스 근거: plugin/rewrite/edns0.go — 일치하는 옵션을 찾으면 Replace·Set 만 덮어쓰고 끝내며, Append 는 "add option if not found"
-#            블록까지 내려가 하나 더 붙인다. Unset 은 unsetEdns0Option 으로 지운다. README: "append will add the option only if no matching option exists".
-# 타입 스펙: type-dp-security-matrix — 액션(행) × 옵션 유무(열)에서 칸마다 결과가 다르고, append 칸에서 문서와 코드가 갈린다.
+#            블록까지 내려가 하나 더 붙인다. Unset 은 unsetEdns0Option 으로 지운다.
+# 타입 스펙: type-dp-security-matrix — 액션(행) × 옵션 유무(열)에서 칸마다 결과가 다르고, append 칸에서 옵션 종류별 동작이 갈린다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
@@ -9,14 +9,14 @@ W, H = 880, 476
 d = D(W, H, "LEARNING COREDNS · 07-01 §5",
       "같은 코드의 옵션이 이미 있느냐가 액션을 가른다",
       "set 은 있든 없든 그 값으로 맞추고, replace 는 있을 때만 고친다. unset 은 지운다. "
-      "append 는 옵션이 이미 있을 때 README 와 코드가 다르게 말한다.",
-      "주황 칸이 문서와 코드가 갈리는 자리입니다")
+      "append 는 옵션이 이미 있을 때 NSID 와 고정 local 만 하나 더 붙인다.",
+      "주황 칸이 옵션 종류에 따라 동작이 갈리는 자리입니다")
 
 COLS = [(20, 150, "액션"), (180, 300, "같은 코드 옵션이 없을 때"), (490, 370, "같은 코드 옵션이 있을 때")]
 rows = [
     ("set", ("새로 붙인다", ""), ("값을 덮어쓴다", "")),
     ("replace", ("아무것도 안 한다", ""), ("값을 덮어쓴다", "")),
-    ("append", ("새로 붙인다", ""), ("README · 붙이지 않는다", "코드 · NSID·고정 local 만 하나 더")),
+    ("append", ("새로 붙인다", ""), ("옵션 종류에 따라 다름", "NSID·고정 local 만 하나 더")),
     ("unset", ("아무것도 안 한다", ""), ("지운다", "")),
 ]
 
@@ -43,5 +43,5 @@ for i, (act, *cells) in enumerate(rows):
 
 d.t(20, 412, "append 가 하나 더 붙는 것은 NSID·고정 local 뿐", 13, MUTED, KR, "start")
 
-d.legend(428, [("README 와 코드가 갈리는 칸", ACC)])
+d.legend(428, [("옵션 종류에 따라 갈리는 칸", ACC)])
 d.save("07-01.edns0-actions.svg")

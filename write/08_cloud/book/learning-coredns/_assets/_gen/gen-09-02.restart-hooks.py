@@ -42,7 +42,7 @@ d.t((T_ST + T_SD) / 2, 280, "두 인스턴스가 같이 산다", 11, ACC, KR)
 def mark(x, y, name, who):
     d.line(x, y - 8, x, y + 8, INK, 1.4)
     d.t(x, y + 26, name, 11, INK, MONO)
-    d.t(x, y + 44, who, 10, MUTED, KR)
+    d.t(x, y + 44, who, 11, MUTED, KR)
 
 mark(T_RS, 330, "OnRestart", "1. 옛 쪽")
 mark(T_ST, 330, "OnStartup", "2. 새 쪽, 뜨기 직전")

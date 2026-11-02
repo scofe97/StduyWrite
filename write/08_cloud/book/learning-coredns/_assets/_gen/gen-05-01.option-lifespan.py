@@ -15,7 +15,7 @@ from dd import D, ACC, MUTED, SOFT, INK, PAPER, RULE, OK, BAD, INFO, KR, MONO
 W, H = 1000, 748
 d = D(W, H, "LEARNING COREDNS · 05-01 §6",
       "옛 문법의 일곱 항목이 지금 어디까지 유효한가",
-      "가로축은 날짜가 아니라 CoreDNS 버전 구간이다. 막대가 끊긴 자리가 그 옵션이 문서에서 사라진 지점이고(파서는 오류 없이 무시한다), "
+      "가로축은 날짜가 아니라 CoreDNS 버전 구간이다. 막대가 끊긴 자리가 그 옵션이 문법에서 빠진 지점이고(파서는 오류 없이 무시한다), "
       "막대가 늦게 시작하는 자리가 새로 생긴 지점이다.",
       "1.4.0 경계에서 하나가 끝나고 하나가 시작합니다")
 
@@ -70,5 +70,5 @@ for k, (nm, start, span, color, dash) in enumerate(rows):
 d.t(TX + PITCH * 2, 628, "1.4.0 · stubzones 끝 · credentials 시작", 13, ACC, KR)
 d.t(LX, 660, "나중에 붙은 셋 · lease-ttl 둘은 v1.12.4 · no_apex_fallback 은 v1.15.0 도입 · 막대 시작점은 버전이 아님", 13, MUTED, KR, "start")
 
-d.legend(684, [("README 에 없음 · 파서는 무시", BAD), ("그대로 남음", OK), ("나중에 추가", INFO), ("1.4.0 경계", ACC)])
+d.legend(684, [("문법에서 빠짐 · 파서는 무시", BAD), ("그대로 남음", OK), ("나중에 추가", INFO), ("1.4.0 경계", ACC)])
 d.save("05-01.option-lifespan.svg")
