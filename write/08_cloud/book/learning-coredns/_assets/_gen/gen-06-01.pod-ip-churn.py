@@ -46,6 +46,6 @@ for k, (txt, c) in enumerate(verdict, start=1):
         d.box(x, y, w, 48, PAPER2, RULE, 1.0, 6)
     d.t(x + 14, y + 31, txt, 15, c, MONO, "start", 600)
 
-d.t(20, 394, "붉은 주소 · 소멸 파드 IP · 주소는 원서 예제(Example 6-4·6-7) 기반 예시 값", 12, SOFT, KR, "start")
+d.t(20, 394, "붉은 주소 · 소멸 파드 IP · 주소는 §5·§6 예제 기반 예시 값", 12, SOFT, KR, "start")
 d.legend(418, [("전부 맞음", OK), ("일부 낡음", WARN), ("소멸 파드 IP", BAD), ("고정 이름 필요", ACC)])
 d.save("06-01.pod-ip-churn.svg")

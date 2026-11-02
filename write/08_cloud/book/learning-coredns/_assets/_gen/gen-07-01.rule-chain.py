@@ -51,8 +51,8 @@ d.t(712, 292, "매치했는데", 11, ACC, KR, "start")
 d.t(712, 310, "continue 가 없으면 /", 11, ACC, MONO, "start")
 d.t(712, 328, "재작성 후 규칙 처리 종료", 11, ACC, KR, "start")
 d.t(712, 352, "옵션을 안 적으면 이쪽이", 11, MUTED, KR, "start")
-d.t(712, 370, "기본이다 — 원서 예제는", 11, MUTED, KR, "start")
-d.t(712, 388, "continue 를 적어 피한다", 11, MUTED, KR, "start")
+d.t(712, 370, "기본이다 — continue 를", 11, MUTED, KR, "start")
+d.t(712, 388, "적어야 이 길을 피한다", 11, MUTED, KR, "start")
 
 # 끝 점
 d.arrow([(CX, 506), (CX, 528)], MUTED, "ar", 1.4)

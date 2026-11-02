@@ -50,7 +50,7 @@ d.o.append(f'<circle cx="904" cy="332" r="8" fill="none" stroke="{ACC}" stroke-w
 d.o.append(f'<circle cx="904" cy="332" r="5" fill="{ACC}"/>')
 d.path("M 872 332 L 894 332", ACC, 1.4)
 
-d.t(20, 420, "refresh 1시간 이하 · retry 그 1/2~1/4 · expire 최소 1주", 13, MUTED, KR, "start")
+d.t(20, 420, "권고 · refresh 20분~2시간, NOTIFY 면 하루 이상 · retry 그 몇 분의 1 · expire 2~4주", 13, MUTED, KR, "start")
 d.t(20, 442, "NOTIFY 이후 refresh 비중 감소 · 확인 비용은 질의 하나", 13, MUTED, KR, "start")
 
 d.legend(462, [("존 질의가 실패하기 시작하는 상태", ACC)])

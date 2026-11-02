@@ -11,7 +11,7 @@ W, H = 880, 470
 d = D(W, H, "LEARNING COREDNS · 06-01 §5",
       "같은 질문에 두 Service 가 다르게 답한다",
       "hello-world 는 clusterIP 를 가진 Service, headless 는 clusterIP: None 인 Service 다. "
-      "레코드 종류마다 무엇이 나오는지 DNS 명세의 규칙과 원서 예의 값으로 채웠다.",
+      "레코드 종류마다 무엇이 나오는지 DNS 명세의 규칙과 예제의 값으로 채웠다.",
       "주황 칸이 이 절이 짚는 차이입니다")
 
 COLS = [(20, 190, "질의"), (220, 310, "ClusterIP · hello-world"), (540, 320, "헤드리스 · headless")]
@@ -39,6 +39,6 @@ for i, cells in enumerate(rows):
         d.t(x + 12, y + 24, main, 14 if k == 0 else 13, col, MONO if ascii_main else KR, "start", 600)
         d.t(x + 12, y + 44, sub, 12, MUTED, KR, "start")
 
-d.t(20, 412, "원서 예제는 IPv4 기준 · 이중 스택 클러스터는 A/AAAA 동시 반환", 13, MUTED, KR, "start")
+d.t(20, 412, "예제는 IPv4 기준 · 이중 스택 클러스터는 A/AAAA 동시 반환", 13, MUTED, KR, "start")
 d.legend(428, [("clusterIP: None 차이", ACC), ("엔드포인트 부재(NXDOMAIN)", BAD)])
 d.save("06-01.record-matrix.svg")

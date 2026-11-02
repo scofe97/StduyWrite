@@ -8,10 +8,10 @@ from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
 W, H = 880, 440
 d = D(W, H, "LEARNING COREDNS · 06-03 §6",
-      "존 셋을 적으면 체인도 셋이다",
-      "서버 블록 앞에 존을 여럿 나열하면 CoreDNS 는 존마다 독립적인 플러그인 체인을 만든다. "
-      "kubernetes 플러그인도 체인마다 따로 서므로 API 캐시가 존 수만큼 겹친다.",
-      "주황 띠가 같은 데이터를 겹쳐 담는 자리입니다")
+      "1.8.5 전엔 존 셋이면 체인도 셋",
+      "1.8.5 전에는 서버 블록 앞에 나열한 존마다 독립 플러그인 체인이 서서 API 캐시가 존 수만큼 겹쳤다. "
+      "1.8.5 부터는 같은 블록의 존이 플러그인 인스턴스를 공유한다.",
+      "주황 띠가 같은 데이터를 겹쳐 담던 자리입니다")
 
 d.box(20, 140, 250, 110, PAPER2, RULE, 1.0, 8)
 for j, txt in enumerate(["cluster.local", "in-addr.arpa", "ip6.arpa {"]):
@@ -32,8 +32,8 @@ for i, zone in enumerate(["cluster.local", "in-addr.arpa", "ip6.arpa"]):
     d.box(x, 266, 170, 36, PAPER2, RULE, 1.0, 6)
     d.t(x + 12, 289, "나머지 플러그인", 12, MUTED, KR, "start")
 
-d.t(20, 344, "존 수만큼 사본 · 큰 클러스터는 실제 메모리 측정", 13, MUTED, KR, "start")
-d.t(20, 366, "존 이름은 예시 · 원서 변수 CLUSTER_DOMAIN REVERSE_CIDRS 자리", 12, SOFT, KR, "start")
+d.t(20, 344, "1.8.5 전 · 존 수만큼 사본 · 1.8.5 부터는 한 벌", 13, MUTED, KR, "start")
+d.t(20, 366, "존 이름은 예시 · 변수 CLUSTER_DOMAIN REVERSE_CIDRS 자리", 12, SOFT, KR, "start")
 
-d.legend(384, [("겹치는 API 캐시", ACC)])
+d.legend(384, [("1.8.5 전에 겹치던 API 캐시", ACC)])
 d.save("06-03.zone-chains.svg")

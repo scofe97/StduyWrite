@@ -8,11 +8,11 @@ from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, BAD, OK, KR, MONO
 W, H = 880, 530
 d = D(W, H, "LEARNING COREDNS · 06-04 §3",
       "엔드포인트를 묻는 유일한 DNS 길이 닫혔다",
-      "ClusterIP 서비스 kube-dns 의 엔드포인트를 알아내는 방법을 원서 시점과 1.9.0 이후로 나눴다. "
+      "ClusterIP 서비스 kube-dns 의 엔드포인트를 알아내는 방법을 1.8 까지와 1.9.0 이후로 나눴다. "
       "와일드카드 질의 칸이 닫혀서 지금은 DNS 밖에서 보거나 헤드리스 서비스를 따로 둔다.",
       "주황 칸이 1.9.0 에서 닫힌 길입니다")
 
-COLS = [(20, 300, "묻는 방법"), (330, 260, "원서 시점 · 1.8 까지"), (600, 260, "지금 · 1.9.0 이후")]
+COLS = [(20, 300, "묻는 방법"), (330, 260, "1.8 까지"), (600, 260, "지금 · 1.9.0 이후")]
 rows = [
     (("kube-dns.kube-system", "svc.cluster.local · A"), ("VIP 하나", "ClusterIP 라서", INK), ("VIP 하나", "그대로", INK)),
     (("*.kube-dns.kube-system", "svc.cluster.local · A"), ("엔드포인트 레코드 둘", "이름은 질의 그대로", OK), ("레코드가 오지 않음", "1.9.0 에서 기능 제거", ACC)),
@@ -42,5 +42,5 @@ for i, (q, then, now) in enumerate(rows):
 
 d.t(20, 460, "엔드포인트별 레코드 · 명세가 주는 곳은 헤드리스 서비스뿐", 13, MUTED, KR, "start")
 
-d.legend(482, [("1.9.0 에서 닫힌 칸", ACC), ("원서 시점의 유일한 DNS 길", OK)])
+d.legend(482, [("1.9.0 에서 닫힌 칸", ACC), ("1.8 까지의 유일한 DNS 길", OK)])
 d.save("06-04.wildcard-now.svg")

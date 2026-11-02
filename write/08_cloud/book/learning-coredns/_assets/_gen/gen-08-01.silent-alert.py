@@ -9,13 +9,13 @@ from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, BAD, KR, MONO
 W, H = 880, 510
 d = D(W, H, "LEARNING COREDNS · 08-01 §1",
       "없는 지표를 묻는 경보는 조용히 죽는다",
-      "원서의 이름으로 쓴 경보 규칙은 지금 CoreDNS 가 내놓지 않는 시계열을 찾는다. Prometheus 는 이를 오류로 보지 않고 빈 결과로 "
+      "1.7.0 이전 이름으로 쓴 경보 규칙은 지금 CoreDNS 가 내놓지 않는 시계열을 찾는다. Prometheus 는 이를 오류로 보지 않고 빈 결과로 "
       "돌려주며, 빈 결과는 임계값을 넘을 수 없으니 경보는 울리지도 깨지지도 않는다.",
       "주황 칸이 아무 신호도 없는 끝입니다")
 
 LX, LW, VX, VW = 20, 190, 230, 630
 steps = [
-    ("경보 규칙", "원서 이름 · 예시 임계값", 'rate(coredns_dns_response_rcode_count_total{rcode="SERVFAIL"}[5m]) > 1', None, INK, False),
+    ("경보 규칙", "1.7.0 이전 이름 · 예시 임계값", 'rate(coredns_dns_response_rcode_count_total{rcode="SERVFAIL"}[5m]) > 1', None, INK, False),
     ("찾는 시계열", "지금 CoreDNS 기준", "시계열 0개", "지금 이름은 coredns_dns_responses_total (1.7.0)", BAD, False),
     ("평가 결과", "Prometheus", "빈 벡터", "오류가 아니므로 규칙 상태는 정상", INK, False),
     ("경보", "Alertmanager 로 가는 것", "아무것도 가지 않음", "울리지 않고 깨졌다는 신호도 없음", ACC, True),

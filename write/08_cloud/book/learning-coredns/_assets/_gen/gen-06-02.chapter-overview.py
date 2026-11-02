@@ -21,7 +21,7 @@ def fam(txt):
 COLS = [(20, 300, "질의"), (330, 170, "받는 줄"), (510, 260, "결과"), (780, 80, "절")]
 rows = [
     (("orders.default.svc.cluster.local", "A · 서비스"), ("kubernetes", "Services 메모리"), ("즉석에서 만든 응답", "cache 30 의 이득은 작음"), "§1 · §2"),
-    (("nginx.default.svc.cluster.local", "A · 헤드리스"), ("kubernetes", "Endpoints watch"), ("파드 IP 여럿", "noendpoints 면 NXDOMAIN"), "§3"),
+    (("nginx.default.svc.cluster.local", "A · 헤드리스"), ("kubernetes", "EndpointSlice watch"), ("파드 IP 여럿", "noendpoints 면 NXDOMAIN"), "§3"),
     (("10.7.240.10 의 PTR", "서비스 CIDR 안"), ("kubernetes", "역방향 존"), ("서비스 이름", ""), "§4"),
     (("8.8.8.8 의 PTR", "클러스터와 무관"), ("forward", "fallthrough 로 넘어옴"), ("상류의 PTR 응답", "fallthrough 없으면 NXDOMAIN"), "§4"),
     (("www.example.org", "A · 외부 이름"), ("forward", "/etc/resolv.conf"), ("상류 응답", "cache 30 이 실제로 일함"), "§2 · §4"),

@@ -3,7 +3,7 @@
 #       and at least one key with the SEP bit unset, signing will happen in split ZSK/KSK mode. DNSKEY records will be signed with all keys
 #       that have the SEP bit set. All other records will be signed with all keys that do not have the SEP bit set. In any other case,
 #       each specified key will be treated as a CSK".
-# 타입 스펙: type-dp-security-matrix — 키 구성(행) × 판정·서명 대상(열) 격자, 원서가 말하지 않은 행이 논지다.
+# 타입 스펙: type-dp-security-matrix — 키 구성(행) × 판정·서명 대상(열) 격자, KSK 하나만 있는 행이 논지다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
@@ -11,13 +11,13 @@ W, H = 880, 470
 d = D(W, H, "LEARNING COREDNS · 07-01 §7",
       "SEP 비트가 켜진 키와 꺼진 키가 다 있어야 나뉜다",
       "KSK 는 SEP 비트를 켠 키다. 켠 키와 끈 키가 함께 있을 때만 DNSKEY 는 켠 키로, 나머지는 끈 키로 나눠 서명한다. "
-      "그 밖의 조합은 모두 CSK 로 보고 각 키가 전부를 서명한다. v1.5.0 문서도 같은 규칙이다.",
-      "주황 행이 원서가 다루지 않은 경우입니다")
+      "그 밖의 조합은 모두 CSK 로 보고 각 키가 전부를 서명한다.",
+      "주황 행이 KSK 하나만 설정한 경우입니다")
 
 COLS = [(20, 260, "설정한 키"), (290, 150, "판정"), (450, 200, "DNSKEY 서명"), (660, 200, "나머지 레코드 서명")]
 rows = [
     (("KSK 하나 + ZSK 하나", "SEP 켬 · 끔"), "분리", "KSK", "ZSK"),
-    (("ZSK 하나", "SEP 끔 · 원서가 든 경우"), "CSK", "그 키", "그 키"),
+    (("ZSK 하나", "SEP 끔"), "CSK", "그 키", "그 키"),
     (("KSK 하나", "SEP 켬"), "CSK", "그 키", "그 키"),
     (("ZSK 둘", "SEP 둘 다 끔"), "CSK", "두 키 모두", "두 키 모두"),
 ]
@@ -42,7 +42,7 @@ for i, (keys, mode, k1, k2) in enumerate(rows):
             d.box(x, y, w, 58, PAPER2, RULE, 1.0, 6)
         d.t(x + 12, y + 35, v, 14, ACC if (foc and k == 1) else INK, KR if any("가" <= c <= "힣" for c in v) else MONO, "start", 600)
 
-d.t(20, 412, "원서 · KSK 플래그 없는 키 하나면 CSK · 같은 시절 README 를 줄여 옮긴 표현", 13, MUTED, KR, "start")
+d.t(20, 412, "SEP 비트가 한쪽뿐이면 키가 하나든 둘이든 모두 CSK", 13, MUTED, KR, "start")
 
-d.legend(426, [("원서가 다루지 않은 경우", ACC)])
+d.legend(426, [("KSK 하나만 설정한 경우", ACC)])
 d.save("07-01.key-mode.svg")

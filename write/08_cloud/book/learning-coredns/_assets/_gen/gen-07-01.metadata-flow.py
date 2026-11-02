@@ -37,7 +37,7 @@ for i, cells in enumerate(rows):
             nx = COLS[k + 1][0]
             d.path(f"M {x + w + 2} {y + 35} L {nx - 3} {y + 35}", MUTED, 1.2, m="ar")
 
-d.t(20, 412, "원서가 기준으로 삼은 1.5.0 · 소비자는 log 와 rewrite 둘, 저장소 안 공급자는 없음", 13, MUTED, KR, "start")
+d.t(20, 412, "이 밖의 공급자: forward · view · proxyproto 등", 13, MUTED, KR, "start")
 
 d.legend(426, [("플러그인 사이를 오가는 값", ACC)])
 d.save("07-01.metadata-flow.svg")

@@ -50,8 +50,8 @@ d.t(RX - 12, DY + 30, "예", 13, MUTED, KR, "end")
 
 rows = [
     (318, "가상 IP(VIP) 할당", "클러스터 전역 안정 주소", "가상 IP(VIP) 미할당", "엔드포인트 주소 목록 반환"),
-    (410, "kube-proxy 규칙 조작", "iptables 기반 netfilter 무작위 분배", "kube-proxy 가 무시", "netfilter 규칙 없음"),
-    (502, "단일 A 레코드 반환", "할당된 가상 IP 1개", "다중 A 레코드 반환", "Ready 엔드포인트마다 1개"),
+    (410, "kube-proxy 규칙 조작", "iptables·nftables 기반 netfilter 무작위 분배", "kube-proxy 가 무시", "netfilter 규칙 없음"),
+    (502, "단일 A/AAAA 레코드 반환", "할당된 가상 IP 1개", "다중 A/AAAA 레코드 반환", "Ready 엔드포인트마다 1개"),
 ]
 for y, lt, ls, rt, rs in rows:
     step(LX, y, lt, ls)

@@ -19,7 +19,7 @@ d = D(W, H, "LEARNING COREDNS · 06-02 §1",
 
 d.box(20, 132, 200, 96, PAPER2, RULE, 1.0)
 d.t(120, 170, "API 서버", 15, INFO, KR, "middle", 600)
-d.t(120, 194, "Services · Endpoints", 12, MUTED, MONO)
+d.t(120, 194, "Services · EndpointSlices", 12, MUTED, MONO)
 
 ZX, ZY, ZW, ZH = 296, 108, 388, 232
 d.o.append(f'<rect x="{ZX}" y="{ZY}" width="{ZW}" height="{ZH}" rx="8" fill="{PAPER}" '

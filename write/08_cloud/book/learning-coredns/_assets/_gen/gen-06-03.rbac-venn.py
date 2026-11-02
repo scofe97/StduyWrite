@@ -38,8 +38,8 @@ d.t(440, 380, "namespaces", 15, OK, MONO, "middle", 600)
 d.t(440, 408, "실제 레코드 생성에 사용", 12, MUTED, KR)
 
 # 설명 줄은 두 원 바깥에 둔다. 원 안에 두면 그 집합의 속성으로 읽힌다.
-d.t(20, 604, "원서 · nodes 만 get · 나머지 list·watch · 쓰기 동사 없음", 13, MUTED, KR, "start")
-d.t(20, 628, "지금 kubeadm · nodes 대신 endpointslices · 동사 list·watch", 13, MUTED, KR, "start")
+d.t(20, 604, "ClusterRole 다섯 · nodes 만 get · 나머지 list·watch · 쓰기 동사 없음", 13, MUTED, KR, "start")
+d.t(20, 628, "kubeadm 역할 · nodes 대신 endpointslices · 동사 list·watch", 13, MUTED, KR, "start")
 d.t(20, 652, "파드 권한 · pods verified 를 켤 때만 · 노드 권한 · federation 용(1.7.0 제거)", 13, MUTED, KR, "start")
 
 d.legend(680, [("지워도 되는 권한", ACC), ("기본 설정이 쓰는 집합", OK)])

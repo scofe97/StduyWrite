@@ -40,7 +40,7 @@ d.chip(x4 + BW / 2, 254, "이름 불변", ACC, 12)
 d.chip(x4 + BW / 2, 282, "clusterIP 불변", ACC, 12)
 
 d.t(20, 324, "kubelet 마다 같은 IP · ClusterFirst 파드의 DNS 주소", 13, MUTED, KR, "start")
-d.t(20, 346, "10.7.240.10 은 원서 예제 값 · 클러스터마다 다름", 12, SOFT, KR, "start")
+d.t(20, 346, "10.7.240.10 은 예시 값 · 클러스터마다 다름", 12, SOFT, KR, "start")
 
 d.legend(362, [("바꿀 수 없는 자리", ACC)])
 d.save("06-03.fixed-ip-path.svg")

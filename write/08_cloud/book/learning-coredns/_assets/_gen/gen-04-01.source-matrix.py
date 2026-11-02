@@ -16,14 +16,14 @@ ROLE_COL_W, ROLE_COL_GAP = 148, 16
 HEADER_H, ROW_H, ROW_STRIDE = 52, 36, 40
 HEADER_Y = 104
 
-questions = [("존 전체를 담나", "SOA 를 갖나"), ("다른 서버로 전송", "transfer to"), ("새 존 자동 편입", "Corefile 손 안 대고")]
+questions = [("존 전체를 담나", "SOA 를 갖나"), ("다른 서버로 전송", "transfer 플러그인"), ("새 존 자동 편입", "Corefile 손 안 대고")]
 methods = [("file", "존 데이터 파일"), ("auto", "디렉터리 스캔"),
            ("hosts", "호스트 테이블"), ("route53", "AWS Route 53")]
 cells = {
     (0, 0): ("담는다", "full"), (0, 1): ("된다 · 1.8부터 transfer", "full"), (0, 2): ("안 된다", "none"),
     (1, 0): ("담는다", "full"), (1, 1): ("된다 · 1.8부터 transfer", "full"), (1, 2): ("된다", "focal"),
     (2, 0): ("SOA 가 없다", "none"), (2, 1): ("못 한다", "none"), (2, 2): ("해당 없음", "none"),
-    (3, 0): ("담는다 · 동기화", "full"), (3, 1): ("원서에 없음", "read"), (3, 2): ("존:ID 를 적어야", "none"),
+    (3, 0): ("담는다 · 동기화", "full"), (3, 1): ("못 한다", "none"), (3, 2): ("존:ID 를 적어야", "none"),
 }
 
 n_roles, n_comp = len(questions), len(methods)
@@ -63,13 +63,9 @@ for k, (nm, hint) in enumerate(methods):
         elif lvl == "full":
             d.o.append(f'<rect x="{x}" y="{y}" width="{ROLE_COL_W}" height="{ROW_H}" rx="4" fill="{INK}14" stroke="{RULE}" stroke-width="0.6"/>')
             d.t(x + ROLE_COL_W / 2, y + 23, val, 12, INK, KR, "middle", 600)
-        elif lvl == "read":
-            # 원서가 말하지 않은 칸은 점선으로 — 실선 흐린 칸(안 된다)과 렌더에서 구분되지 않아 범례가 헛짚힌다
-            d.o.append(f'<rect x="{x}" y="{y}" width="{ROLE_COL_W}" height="{ROW_H}" rx="4" fill="{MUTED}14" stroke="{MUTED}" stroke-width="1.0" stroke-dasharray="5 4"/>')
-            d.t(x + ROLE_COL_W / 2, y + 23, val, 12, MUTED, KR)
         else:
             d.box(x, y, ROLE_COL_W, ROW_H, PAPER, RULE, 0.6, 4)
             d.t(x + ROLE_COL_W / 2, y + 23, val, 12, SOFT, KR)
 
-d.legend(LEGEND_Y, [("auto 만 되는 것", ACC), ("된다고 적힌 칸", INK), ("원서가 말하지 않은 칸 · 점선", MUTED)])
+d.legend(LEGEND_Y, [("auto 만 되는 것", ACC), ("된다고 적힌 칸", INK)])
 d.save("04-01.source-matrix.svg")

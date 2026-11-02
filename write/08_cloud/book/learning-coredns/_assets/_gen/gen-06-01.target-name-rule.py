@@ -12,8 +12,8 @@ W, H = 880, 530
 d = D(W, H, "LEARNING COREDNS · 06-01 §6",
       "엔드포인트 이름은 위에서부터 걸러 정한다",
       "엔드포인트에 hostname 이 있으면 그 값을 쓴다. 없으면 endpoint_pod_names 를 켰을 때 파드 이름을, "
-      "끄면 IP 를 대시로 이은 이름을 쓴다. 원서 예의 10-5-104-3 이 마지막 칸이다.",
-      "주황 칸이 Example 6-5 가 받은 이름입니다")
+      "끄면 IP 를 대시로 이은 이름을 쓴다. §6 예제의 10-5-104-3 이 마지막 칸이다.",
+      "주황 칸이 §6 예제가 받은 이름입니다")
 
 LX, LW = 40, 300
 RX, RW = 480, 380
@@ -29,12 +29,12 @@ def box(x, y, w, h, main, sub, focal=False, mono=False, q=False):
         d.t(x + 16, y + 48, sub, 12, MUTED, KR, "start")
 
 
-box(LX, 110, LW, 60, "엔드포인트 하나", "원서 Example 6-5 · IP 10.5.104.3")
+box(LX, 110, LW, 60, "엔드포인트 하나", "§6 예제 · IP 10.5.104.3")
 box(LX, 210, LW, 60, "hostname 설정 여부", "파드 hostname 및 일치 subdomain 설정", q=True)
 box(LX, 310, LW, 60, "endpoint_pod_names 설정 여부", "kubernetes 플러그인 옵션 활성화", q=True)
 box(LX, 410, LW, 60, "10-5-104-3", "IP 대시 변환 형태(기본값)", focal=True, mono=True)
 
-box(RX, 210, RW, 60, "myhost", "hostname 값 적용 · Example 6-7", mono=True)
+box(RX, 210, RW, 60, "myhost", "hostname 값 적용 · §7 예제", mono=True)
 box(RX, 310, RW, 60, "파드 이름", "대상 파드가 없거나 63자를 넘으면 대시 형태")
 
 for y0, y1 in ((170, 210), (270, 310), (370, 410)):
@@ -47,5 +47,5 @@ for y in (240, 340):
 
 d.t(RX, 446, "IPv6 · ':' 를 '-' 로 · 끝이 '-' 면 0 을 붙임", 12, MUTED, KR, "start")
 
-d.legend(490, [("Example 6-5 가 받은 이름", ACC), ("판단 조건", WARN)])
+d.legend(490, [("§6 예제가 받은 이름", ACC), ("판단 조건", WARN)])
 d.save("06-01.target-name-rule.svg")

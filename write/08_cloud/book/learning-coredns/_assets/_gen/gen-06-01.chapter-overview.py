@@ -12,10 +12,10 @@ W, H = 880, 640
 d = D(W, H, "LEARNING COREDNS · 06-01",
       "무엇을 선언하면 어떤 레코드가 나오는가",
       "Service 종류, 포트 이름, 워크로드 종류가 레코드의 개수와 이름을 정한다. "
-      "오른쪽 열은 원서 예제가 실제로 받은 응답이다.",
+      "오른쪽 열은 예제가 실제로 받은 응답이다.",
       "주황 행이 이 편 전체의 갈림길입니다")
 
-COLS = [(20, 200, "선언"), (230, 250, "생기는 레코드"), (490, 270, "원서 예의 응답"), (770, 90, "절")]
+COLS = [(20, 200, "선언"), (230, 250, "생기는 레코드"), (490, 270, "예제의 응답"), (770, 90, "절")]
 rows = [
     (("ClusterIP Service", ""), ("A 1개 · PTR 1개", "이름 붙은 포트마다 SRV 1개"), ("hello-world.default.svc", "A 10.0.0.100"), "§4 · §5"),
     (("헤드리스 Service", "clusterIP: None"), ("Ready 엔드포인트마다 A", "Ready 0건 시 NXDOMAIN"), ("headless.default.svc", "A 10.5.88.4 외 셋"), "§4 · §5"),
@@ -52,7 +52,7 @@ for i, cells in enumerate(rows):
             d.t(x + 12, y + 34, main, size, col, fam, "start", 600)
 
 d.t(20, 544, "1~3절 · 쿠버네티스가 먼저인 이유 · 조정 루프 · watch · 파드 IP 변동", 13, MUTED, KR, "start")
-d.t(20, 568, "원서 예의 TTL 5초 · kubeadm 기본 Corefile 은 ttl 30", 13, MUTED, KR, "start")
+d.t(20, 568, "예제의 TTL 5초 · kubeadm 기본 Corefile 은 ttl 30", 13, MUTED, KR, "start")
 
 d.legend(592, [("이 편의 갈림길", ACC)])
 d.save("06-01.chapter-overview.svg")

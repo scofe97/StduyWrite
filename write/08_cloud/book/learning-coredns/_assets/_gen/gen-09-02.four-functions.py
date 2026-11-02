@@ -6,7 +6,7 @@
 #            mutator plug-in, performing the actual query and response manipulation."
 # 타입 스펙: type-layers — 위에서 아래로 갈수록 호출 빈도가 커지는 층이고, 층마다 같은 슬롯
 #           (이름 · 하는 일 · 몇 번)이 반복된다. 요청마다 불리는 층 하나가 초점이다.
-#           단 Name 의 호출 빈도는 원서가 말하지 않으므로 층에 끼워 넣되 빈도를 적지 않는다.
+#           단 Name 은 호출 빈도 대신 불리는 때(이름을 물을 때)를 적는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 
@@ -21,7 +21,7 @@ SX, SW, RH = 190, 660, 68
 ROWS = [
     ("F1", "init", "지시자를 등록한다", "프로세스당 한 번", False),
     ("F2", "setup", "Corefile 을 파싱하고 훅을 건다", "서버 블록당 한 번", False),
-    ("F3", "Name", "이름 문자열을 돌려준다", "원서가 빈도를 말하지 않는다", False),
+    ("F3", "Name", "이름 문자열을 돌려준다", "이름을 물을 때", False),
     ("F4", "ServeDNS", "질의와 응답을 다룬다", "요청마다", True),
 ]
 

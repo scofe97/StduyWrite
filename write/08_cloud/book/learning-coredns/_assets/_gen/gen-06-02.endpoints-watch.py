@@ -82,7 +82,7 @@ chip("CoreDNS", "메모리 · CPU 사용량 증가", 424, BAD)
 d.t(20, 488, "객체 크기 · 변경 빈도 · 두 축이 함께 커짐 · 지금은 EndpointSlice 로 완화", 13, MUTED, KR, "start")
 d.t(20, 512, "헤드리스 미사용 · noendpoints 로 watch 끄기", 13, MUTED, KR, "start")
 # 현행 쿠버네티스는 Endpoints 를 1000 개에서 자른다(service.md Over-capacity endpoints) — 원서의 "수천" 은 그 전 이야기(2026-10-03)
-d.t(20, 536, "현행 Endpoints · 1000 개에서 잘림 · 원서의 수천은 상한 이전", 13, SOFT, KR, "start")
+d.t(20, 536, "현행 Endpoints · 1000 개에서 잘림", 13, SOFT, KR, "start")
 
 d.legend(564, [("객체가 다시 쓰이는 지점", WARN), ("전체가 전송되는 경로", BAD)])
 d.save("06-02.endpoints-watch.svg")

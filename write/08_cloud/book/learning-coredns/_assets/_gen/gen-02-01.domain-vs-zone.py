@@ -32,7 +32,7 @@ d.t(EDU[0] + EDU[2] - 18, EDU[1] + 22, "edu 존 · EDUCAUSE 관리", 12, MUTED, 
 d.tone(*BERK, ACC, 8, "14", 1.4)
 d.t(BERK[0] + 18, BERK[1] + 24, "berkeley.edu 도메인", 12, ACC, MONO, "start", 600)
 d.t(BERK[0] + 18, BERK[1] + 48, "berkeley.edu 존 · Berkeley IT 관리", 14, ACC, KR, "start", 600)
-d.chip(BERK[0] + BERK[2] - 130, BERK[1] + 64, "cs 로 가는 NS · 글루만 남음", ACC)
+d.chip(BERK[0] + BERK[2] - 130, BERK[1] + 64, "cs 로 가는 NS · 필요하면 글루", ACC)
 
 # cs.berkeley.edu — 위임받아 따로 관리. 하위 위임이 없으니 도메인 = 존
 d.box(*CS, PAPER2, INFO, 1.4, 8)

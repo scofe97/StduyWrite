@@ -45,8 +45,8 @@ class SeqKR(Seq):
 
 W, H = 880, 600
 d = SeqKR(W, H, "LEARNING COREDNS · 06-01 §6",
-          "원서 SRV 응답은 A 도 함께 준다",
-          "원서 예제에서는 ADDITIONAL 구간에 대상의 A 레코드가 실린다. "
+          "SRV 응답은 A 도 함께 준다",
+          "이 예제에서는 ADDITIONAL 구간에 대상의 A 레코드가 실린다. "
           "명세상 이 구간은 선택적이며, 없으면 대상 이름을 추가로 조회해야 한다.",
           "붉은 점선은 ADDITIONAL 이 없을 때 필요한 조회입니다")
 
@@ -77,7 +77,7 @@ d.msg("파드 안 클라이언트", "클러스터 DNS", "ADDITIONAL 부재 시 �
 chip("파드 안 클라이언트", "즉시 엔드포인트 접속", 452, OK)
 
 d.t(20, 496, "ADDITIONAL 구간은 명세상 선택 사항 · 부재 시 대상별 A/AAAA 재조회 필요", 13, MUTED, KR, "start")
-d.t(20, 520, "원서 Example 6-5 출력은 A 동봉 · 추가 질의 왕복 절약", 13, MUTED, KR, "start")
+d.t(20, 520, "이 출력은 A 동봉 · 추가 질의 왕복 절약", 13, MUTED, KR, "start")
 
 d.legend(544, [("ADDITIONAL 동봉 레코드", ACC), ("ADDITIONAL 부재 시 추가 질의", BAD), ("즉시 접속 가능 상태", OK)])
 d.save("06-01.srv-additional.svg")

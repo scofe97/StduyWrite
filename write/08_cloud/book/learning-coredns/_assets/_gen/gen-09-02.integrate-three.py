@@ -5,7 +5,7 @@
 #            care of basic integration." / metadata — "This consists of a single function,
 #            Metadata" 까지만 근거로 쓴다. 이어지는 "that accepts the same parameters as ServeDNS"
 #            는 원서의 오류이므로(실제 시그니처는 (ctx, request.Request)) 근거로 삼지 않는다.
-#            본문 §7 의 정오 블록 참조.
+#            본문 §7 의 Metadata 시그니처 설명 참조.
 # 타입 스펙: type-bar — 세 대상에 드는 구현량이 서로 다르다는 것이 비교의 본체이고, 길이로만
 #           그 차이가 한눈에 잡힌다. 다만 520/240/150 이라는 비율은 원서에 없는 이 노트의
 #           채점이므로, 캡션에서 그 사실을 밝힌다.
@@ -15,13 +15,13 @@ from dd import D, ACC, MUTED, SOFT, INK, PAPER, PAPER2, RULE, OK, KR, MONO
 W, H = 880, 540
 d = D(W, H, "LEARNING COREDNS · 09-02 §7",
       "셋에 붙는 데 드는 손의 크기가 다르다",
-      "원서가 셋에 대해 말한 구현량을 등급으로 옮긴 것이다. 막대 길이는 이 노트의 채점이지 "
-      "원서의 수치도 측정값도 아니다.",
+      "셋에 드는 구현량을 등급으로 옮긴 것이다. 막대 길이는 이 노트의 채점이지 "
+      "수치도 측정값도 아니다.",
       "주황이 가장 손이 많이 가는 자리입니다")
 
 BX, BW = 250, 520
 BARS = [
-    ("metrics", "지표 내보내기", 520, "원서: OnStartup 에서 등록 · 1.7.1 이후 promauto · 이름·라벨 규약", ACC),
+    ("metrics", "지표 내보내기", 520, "promauto 로 만들며 등록(1.7.1~) · 이름·라벨 규약", ACC),
     ("metadata", "값 공급하기", 240, "Metadata 함수 하나 · 값이 아니라 값 함수를 넣는다", MUTED),
     ("trace", "추적 붙이기", 150, "대개 할 일 없음 · NextOrFailure 가 스팬 생성", OK),
 ]

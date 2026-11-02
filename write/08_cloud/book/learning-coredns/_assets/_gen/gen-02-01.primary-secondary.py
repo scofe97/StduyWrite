@@ -34,12 +34,12 @@ step(700, 268, 224, "재시작하면 백업부터", "최신이면 전송 없음"
 d.arrow([(376, 156), (436, 156)], MUTED, "ar", 1.4)
 d.path("M 556 184 L 556 200 L 264 200 L 264 260", ACC, 1.6, m="acc")
 d.t(576, 206, "존 전송", 14, ACC, KR, "start", 600)
-d.t(576, 232, "받는 쪽이 secondary, 준 쪽이 그 master", 12, MUTED, KR, "start")
+d.t(576, 232, "받는 쪽이 secondary, 준 쪽이 그 primary(옛 master)", 12, MUTED, KR, "start")
 d.arrow([(376, 296), (436, 296)], MUTED, "ar", 1.4)
 d.arrow([(668, 296), (692, 296)], MUTED, "ar", 1.4)
 
 d.t(20, 396, "두 서버 모두 authoritative · 존 안 어떤 이름이든 확정 응답", 14, INK, KR, "start", 600)
-d.t(20, 420, "마스터 불가용에도 보조 서버 응답 · SOA expire 기간까지", 13, MUTED, KR, "start")
+d.t(20, 420, "주 서버 불가용에도 보조 서버 응답 · SOA expire 기간까지", 13, MUTED, KR, "start")
 d.t(20, 442, "캐시로 답하는 다른 서버와의 차이 · 최신 보장 없음", 13, MUTED, KR, "start")
 
 d.legend(462, [("레인을 건너는 전달", ACC)])

@@ -1,6 +1,7 @@
 # 08-01 §6 「전체 문법과 엔드포인트」 — Corefile 의 trace 줄이 실제로 어느 주소로 스팬을 보내는가.
 # 소스 근거: plugin/trace/setup.go — 인자 0개면 zipkin 기본, 1개면 ENDPOINT(유형은 zipkin), 2개면 유형·ENDPOINT.
-#            normalizeEndpoint: zipkin 이고 `!strings.Contains(ep, "http")` 일 때만 "http://" + ep + "/api/v2/spans".
+#            normalizeEndpoint(v1.15.0): zipkin 이고 소문자로 바꾼 주소가 "http://"·"https://" 로 시작하지 않을 때만 "http://" + ep + "/api/v2/spans".
+#            (v1.14.7 까지는 `!strings.Contains(ep, "http")` 였다.)
 #            supportedProviders: zipkin "localhost:9411", datadog "localhost:8126".
 # 타입 스펙: type-dp-security-matrix — 입력 줄(행) × 유형·실제 엔드포인트(열) 격자이고, 마지막 행의 함정이 논지다.
 #           tracing:9411 은 설명용 예시 호스트다.
@@ -11,14 +12,14 @@ W, H = 880, 524
 d = D(W, H, "LEARNING COREDNS · 08-01 §6",
       "trace 줄이 실제로 보내는 곳",
       "인자를 하나만 주면 그것은 유형이 아니라 엔드포인트로 읽히고 유형은 zipkin 이 된다. 엔드포인트 변환은 zipkin 에서 "
-      "주소에 http 가 없을 때만 일어나 /api/v2/spans 가 붙는다.",
+      "주소가 http:// 나 https:// 로 시작하지 않을 때만 일어나 /api/v2/spans 가 붙는다.",
       "주황 행이 의도와 다르게 읽히는 줄입니다")
 
 COLS = [(20, 330, "Corefile 줄"), (360, 110, "유형"), (480, 380, "실제 엔드포인트")]
 rows = [
     ("trace", "zipkin", "http://localhost:9411/api/v2/spans", "기본 주소에 경로가 붙음", False),
-    ("trace tracing:9411", "zipkin", "http://tracing:9411/api/v2/spans", "http 가 없어 변환", False),
-    ("trace zipkin http://tracing:9411", "zipkin", "http://tracing:9411", "http 가 있어 그대로 · 경로 없음", False),
+    ("trace tracing:9411", "zipkin", "http://tracing:9411/api/v2/spans", "http:// 로 시작하지 않아 변환", False),
+    ("trace zipkin http://tracing:9411", "zipkin", "http://tracing:9411", "http:// 로 시작해 그대로 · 경로 없음", False),
     ("trace datadog localhost:8126", "datadog", "localhost:8126", "datadog 은 변환 없음", False),
     ("trace datadog", "zipkin", "http://datadog/api/v2/spans", "인자 하나는 엔드포인트", True),
 ]

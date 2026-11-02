@@ -1,7 +1,8 @@
 # 04-01 §5 — 호스트 테이블 한 줄에서 hosts 플러그인이 만들어 내는 레코드.
 # 원문 근거: 표준 호스트 테이블 형식은 `<IP address> <canonical name> [aliases...]` 이고,
 #            읽고 나면 (1) IPv4 항목마다 정규 이름과 별칭 전부를 그 주소로 잇는 A 레코드,
-#            (2) IPv6 항목마다 같은 방식의 AAAA 레코드, (3) 주소를 정규 이름으로 되돌리는 PTR 하나를
+#            (2) IPv6 항목마다 같은 방식의 AAAA 레코드, (3) 주소를 이름으로 되돌리는 PTR(원서는 정규 이름으로 되돌린다고만 적었고,
+#            v1.15.0 코드는 hostsfile.go:315·345, hosts.go:125-130 에서 그 줄의 이름마다 하나씩)을
 #            만든다. "Note that the aliases become A or AAAA records, not canonical name (CNAME) records."
 # 타입 스펙: type-tree — 한 줄이라는 부모에서 레코드 세 갈래로 갈라지는 생성 관계다.
 import sys; sys.path.insert(0, ".")
@@ -11,7 +12,7 @@ W, H = 940, 560
 d = D(W, H, "LEARNING COREDNS · 04-01 §5",
       "호스트 테이블 한 줄이 만드는 것",
       "주소와 정규 이름과 별칭으로 된 한 줄에서 레코드 세 갈래가 나온다. "
-      "별칭까지 주소로 이어지는 쪽과 주소에서 이름으로 되돌아오는 쪽이 다르다는 점이 이 절에서 걸리는 자리다.",
+      "별칭까지 주소로 이어지는 쪽과 주소에서 이름으로 되돌아오는 쪽 모두 이름마다 레코드가 하나씩 생긴다는 점이 이 절에서 걸리는 자리다.",
       "별칭은 CNAME 이 아니라 주소 레코드가 됩니다")
 
 NW, NH = 200, 56
@@ -31,10 +32,10 @@ d.t(468, ROOT_Y + 46, "주소 · 정규 이름 · 별칭", 13, MUTED)
 
 mids = [("A 레코드", "항목이 IPv4 일 때"),
         ("AAAA 레코드", "항목이 IPv6 일 때"),
-        ("PTR 레코드", "주소당 하나")]
+        ("PTR 레코드", "이름마다 하나")]
 leaves = [("정규 이름과 별칭 전부", "별칭도 CNAME 이 아니다"),
           ("정규 이름과 별칭 전부", "A 와 같은 방식"),
-          ("정규 이름만", "별칭으로는 안 돌아온다")]
+          ("정규 이름과 별칭 전부", "주소로 물으면 이름마다")]
 for i, cx in enumerate(CX):
     nm, sub = mids[i]
     d.box(cx - NW / 2, MID_Y, NW, NH, PAPER2, RULE, 1.0)
@@ -55,5 +56,5 @@ d.t(12, LEAF_Y + 30, "누구를 가리키나", 12, SOFT, KR, "start")
 d.t(20, 416, "no_reverse · PTR 생략 · ttl 기본 3600 · 단위 없는 정수", 13, MUTED, KR, "start")
 d.t(20, 438, "SOA 없음 · 전송 불가 · 낱개 이름을 싣는 용도", 13, MUTED, KR, "start")
 
-d.legend(458, [("별칭 처리가 갈리는 자리", ACC)])
+d.legend(458, [("별칭이 주소 레코드가 되는 자리", ACC)])
 d.save("04-01.hosts-records.svg")

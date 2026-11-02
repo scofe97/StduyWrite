@@ -12,7 +12,7 @@ d = D(W, H, "LEARNING COREDNS · 06-04 §6",
       "외부 IP 를 이름으로 알리는 두 길",
       "LoadBalancer 서비스가 외부 IP 를 받은 뒤 그 이름을 바깥에 알리는 길은 둘이다. external DNS 는 바깥 DNS 서버에 레코드를 써 넣고, "
       "k8s_external 은 CoreDNS 가 위임받은 존에서 직접 답한다.",
-      "주황 상자가 원서 사이드바의 권고입니다")
+      "주황 상자가 저자들의 권고입니다")
 
 
 def node(x, y, w, h, title, sub, focal=False, mono_sub=False):
@@ -52,5 +52,5 @@ node(20, 352, 840, 68, "외부 이름 전용 CoreDNS 별도 배포",
 
 d.t(20, 448, "k8s_external · kubernetes 플러그인과 함께일 때만 동작 · 상위 존의 NS 위임 필요", 13, MUTED, KR, "start")
 
-d.legend(464, [("원서 사이드바의 권고", ACC)])
+d.legend(464, [("저자들의 권고", ACC)])
 d.save("06-04.expose-paths.svg")

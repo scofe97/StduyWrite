@@ -13,7 +13,7 @@ d = D(W, H, "LEARNING COREDNS · 06-02 §4",
       "상한 30 으로 자르고 하한 5 로 받친다",
       "cache 30 은 레코드 TTL 을 30초 위로 넘기지 않게 자를 뿐 늘리지는 않는다. 현행 cache 는 여기에 최소 캐시 기간 5초를 두어, "
       "TTL 이 2초인 응답도 5초 동안 캐시에 남긴다.",
-      "주황 칸이 원서에 없는 하한이 일하는 자리입니다")
+      "주황 칸이 하한 5초가 일하는 자리입니다")
 
 COLS = [(20, 220, "응답"), (250, 140, "레코드 TTL"), (400, 160, "상한 30 적용"),
         (570, 140, "하한 5 적용"), (720, 140, "캐시 기간")]
@@ -47,8 +47,8 @@ for i, (name, *vals) in enumerate(rows):
             nx = COLS[k + 1][0]
             d.path(f"M {x + w + 2} {y + RH / 2} L {nx - 3} {y + RH / 2}", SOFT, 1.1, m="soft")
 
-d.t(20, 430, "원서 · 레코드 TTL 과 캐시 TTL 중 작은 쪽 · 현행 README · 최소 캐시 기간 5초 (MINTTL)", 13, MUTED, KR, "start")
-d.t(20, 454, "클러스터 이름 두 줄은 원서 판처럼 cluster.local 도 캐시할 때 · kubeadm 판은 성공 응답을 캐시하지 않음", 13, MUTED, KR, "start")
+d.t(20, 430, "레코드 TTL 과 캐시 TTL 중 작은 쪽 · 최소 캐시 기간 5초 (MINTTL)", 13, MUTED, KR, "start")
+d.t(20, 454, "클러스터 이름 두 줄은 cluster.local 도 캐시할 때의 값 · kubeadm 판은 성공 응답을 캐시하지 않음", 13, MUTED, KR, "start")
 
 d.legend(472, [("하한이 올린 값", ACC)])
 d.save("06-02.cache-ttl.svg")

@@ -34,7 +34,7 @@ for i, (c0, c1, c2, mark) in enumerate(rows):
         d.t(x + 12, y + 30, m, 14, col, fam, "start", 600)
         d.t(x + 12, y + 52, sub, 12, MUTED, KR, "start")
 
-d.t(20, 402, "앱 파드는 ClusterFirst 그대로 · CoreDNS 만 Default · 10.7.240.10 은 원서 예제 값", 13, MUTED, KR, "start")
+d.t(20, 402, "앱 파드는 ClusterFirst 그대로 · CoreDNS 만 Default · 10.7.240.10 은 예시 값", 13, MUTED, KR, "start")
 
 d.legend(418, [("CoreDNS 의 실제 설정", ACC), ("상류로 못 나가는 경우", BAD)])
 d.save("06-03.dns-policy.svg")

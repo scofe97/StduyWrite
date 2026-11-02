@@ -45,7 +45,7 @@ for i, cells in enumerate(rows):
         else:
             d.t(x + 12, y + 42, main, 13, col, fam, "start", 600)
 
-d.t(20, 404, "원서 · GCP · OpenStack · OIDC 플러그인까지 · 지금 README · 셋뿐", 13, MUTED, KR, "start")
+d.t(20, 404, "예전 소스 · GCP · OpenStack · OIDC 플러그인까지 · 지금 README · 셋뿐", 13, MUTED, KR, "start")
 
 d.legend(424, [("이 소절의 설정 줄", ACC)])
 d.save("06-04.outside-access.svg")

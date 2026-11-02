@@ -42,7 +42,7 @@ d.t(SP + 12, 296, "예", 11, OK, KR, "start")
 
 d.box(598, 202, 244, 60, PAPER2, RULE, 1.0)
 d.t(720, 228, "서버가 복구한다", 13, INK, KR, "middle", 600)
-d.t(720, 248, "SERVFAIL · panic 값은 로그 한 줄", 11, MUTED, KR)
+d.t(720, 248, "SERVFAIL · 기본은 panic 값 한 줄", 11, MUTED, KR)
 
 d.tone(SP - 122, 318, 244, 60, OK, 6, "12", 1.4)
 d.t(SP, 344, "복구하지 않는다", 13, OK, KR, "middle", 600)

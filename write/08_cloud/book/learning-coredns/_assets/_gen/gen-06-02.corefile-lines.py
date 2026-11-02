@@ -18,7 +18,7 @@ cols = [("왜 거기 있나", "줄의 사연"), ("지울 수 있는 조건", "�
 lines = [
     ("errors", "오류를 로그로", ("없으면 흔적 없음", "keep"), ("유지 · 추적 필수", "keep")),
     ("health", "kubelet 감시용", ("/health 프로브", "keep"), ("유지 · 프로브용", "keep")),
-    ("kubernetes …", "클러스터 존에 권한", ("Service·Endpoints 로 응답", "keep"), ("유지 · 본체", "keep")),
+    ("kubernetes …", "클러스터 존에 권한", ("Service·EndpointSlice 로 응답", "keep"), ("유지 · 본체", "keep")),
     ("pods insecure", "kube-dns 하위 호환", ("폐기된 파드 IP 명세", "legacy"), ("파드 조회 안 쓸 때", "drop")),
     ("upstream", "CNAME 되질의", ("1.7.0 에서 제거", "legacy"), ("반드시 제거 · 기동 오류", "drop")),
     ("fallthrough …", "모르는 PTR 을 넘김", ("CIDR 누락 대비 안전장치", "keep"), ("CIDR 전부 적을 때", "cond")),
@@ -26,8 +26,8 @@ lines = [
     ("forward . …", "나머지를 상류로", ("처리 못 한 질의 전달", "keep"), ("외부 이름 안 쓸 때 (추론)", "cond")),
     ("cache 30", "응답을 메모리에", ("클러스터 내부 질의 이득 미미", "waste"), ("클러스터 안 질의만 다룰 때", "drop")),
     ("loop", "질의 루프 탐지", ("간헐 실패 방지", "keep"), ("유지 · 루프 방어", "keep")),
-    ("reload", "Corefile 재적재", ("원서 MD5 · 현행 SHA512", "keep"), ("유지 · 문법 오류 주의", "keep")),
-    ("loadbalance", "A·AAAA 섞음", ("첫 IP 편중 방지", "keep"), ("헤드리스 없으면 이득 적음 (추론)", "cond")),
+    ("reload", "Corefile 재적재", ("SHA512 체크섬 확인", "keep"), ("유지 · 문법 오류 주의", "keep")),
+    ("loadbalance", "A·AAAA·MX 섞음", ("첫 IP 편중 방지", "keep"), ("헤드리스 없으면 이득 적음 (추론)", "cond")),
 ]
 
 n_cols, n_rows = len(cols), len(lines)
@@ -49,7 +49,7 @@ d = D(W, H, "LEARNING COREDNS · 06-02 §4",
       "기본 Corefile 의 줄과 지울 수 있는 조건",
       "행이 기본 Corefile 의 지시어 열두 줄, 열이 그 줄을 판단하는 두 물음이다. "
       "지울 수 있는 줄과 지우면 안 되는 줄이 사연에 따라 갈린다.",
-      "주황 줄이 저자들이 직접 고치겠다고 예고한 자리입니다")
+      "주황 줄은 클러스터 안 질의에서 이득이 거의 없는 자리입니다")
 
 d.box(LEFT_PAD, HEADER_Y, COMP_COL_W, HEADER_H, PAPER2, RULE, 0.8, 6)
 d.t(LEFT_PAD + COMP_COL_W / 2, HEADER_Y + 24, "Corefile 의 줄", 12, INK, KR, "middle", 600)

@@ -9,7 +9,7 @@ from dd import D, ACC, MUTED, SOFT, INK, PAPER, RULE, INFO, KR, MONO
 W, H = 880, 520
 d = D(W, H, "LEARNING COREDNS · 06-04 §2",
       "객체가 늘수록 두 모드의 메모리가 벌어진다",
-      "가로축은 파드와 서비스를 더한 객체 수, 세로축은 CoreDNS 인스턴스 하나의 메모리다. 두 선 모두 원서의 실측점 둘을 지나고, "
+      "가로축은 파드와 서비스를 더한 객체 수, 세로축은 CoreDNS 인스턴스 하나의 메모리다. 두 선 모두 2절 표의 실측점 둘을 지나고, "
       "verified 의 기울기가 네 배라서 클러스터가 커질수록 차이가 커진다.",
       "주황 괄호가 52,000 개에서 벌어진 차이입니다")
 
@@ -53,7 +53,7 @@ d.t(bx + 10, (Y(264) + Y(106)) / 2 + 5, "158 차이", 13, ACC, KR, "start", 600)
 d.t(X(34) - 8, Y(4 * 34 + 56) - 18, "verified · 1,000개당 4", 12, INK, KR, "end", 600)
 d.t(X(38), Y(38 + 54) + 28, "insecure · disabled · 1,000개당 1", 12, INFO, KR, "middle", 600)
 
-d.t(20, 462, "점 넷 · 원서 실측 · 선 · 그 점을 지나는 두 추정식", 13, MUTED, KR, "start")
+d.t(20, 462, "점 넷 · 표의 실측 · 선 · 그 점을 지나는 두 추정식", 13, MUTED, KR, "start")
 
 d.legend(480, [("verified", MUTED), ("insecure · disabled", INFO), ("벌어진 차이", ACC)])
 d.save("06-04.memory-lines.svg")

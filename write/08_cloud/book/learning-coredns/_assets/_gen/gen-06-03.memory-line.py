@@ -47,7 +47,7 @@ d.line(fx(158200), Y0, fx(158200), Y0 + 8, SOFT, 1.0)
 d.t(fx(158200), Y0 - 8, "실측표 끝 158,200", 12, SOFT, KR, "end")
 
 d.o.append(f'<circle cx="{fx(16000)}" cy="{fy(70)}" r="5" fill="{INFO}"/>')
-d.t(fx(16000) + 10, fy(70) + 20, "원서 예제 · 16,000 개 → 70", 12, INFO, KR, "start")
+d.t(fx(16000) + 10, fy(70) + 20, "예제 · 16,000 개 → 70", 12, INFO, KR, "start")
 
 d.o.append(f'<circle cx="{fx(28500)}" cy="{fy(170)}" r="5" fill="{MUTED}"/>')
 # 200 눈금선과 겹치지 않게 점의 오른쪽 아래에 둔다

@@ -46,7 +46,7 @@ for i, ((vm, vs), src, why, sec) in enumerate(rows):
     d.t(815, y + 31, sec, 13, MUTED, KR)
 
 d.t(20, 576, "1~4절 · 값이 왜 그 값인가 · 5~6절 · 클러스터에 맞춰 다시 고르기", 13, MUTED, KR, "start")
-d.t(20, 600, "10.7.240.10 은 원서 예제 값 · 클러스터마다 다름", 12, SOFT, KR, "start")
+d.t(20, 600, "10.7.240.10 은 예시 값 · 클러스터마다 다름", 12, SOFT, KR, "start")
 
 d.legend(620, [("값의 출처", ACC)])
 d.save("06-03.chapter-overview.svg")

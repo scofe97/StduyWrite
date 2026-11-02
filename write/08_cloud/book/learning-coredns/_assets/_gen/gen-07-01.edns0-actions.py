@@ -16,7 +16,7 @@ COLS = [(20, 150, "액션"), (180, 300, "같은 코드 옵션이 없을 때"), (
 rows = [
     ("set", ("새로 붙인다", ""), ("값을 덮어쓴다", "")),
     ("replace", ("아무것도 안 한다", ""), ("값을 덮어쓴다", "")),
-    ("append", ("새로 붙인다", ""), ("README · 붙이지 않는다", "코드 · 하나 더 붙인다")),
+    ("append", ("새로 붙인다", ""), ("README · 붙이지 않는다", "코드 · NSID·고정 local 만 하나 더")),
     ("unset", ("아무것도 안 한다", ""), ("지운다", "")),
 ]
 
@@ -41,7 +41,7 @@ for i, (act, *cells) in enumerate(rows):
         else:
             d.t(x + 12, y + 35, a, 13, INK, KR, "start", 600)
 
-d.t(20, 412, "원서의 append 설명 \"항상 하나 더\" 는 코드 쪽과 같다 · unset 은 원서 이후 추가", 13, MUTED, KR, "start")
+d.t(20, 412, "append 가 하나 더 붙는 것은 NSID·고정 local 뿐", 13, MUTED, KR, "start")
 
 d.legend(428, [("README 와 코드가 갈리는 칸", ACC)])
 d.save("07-01.edns0-actions.svg")
