@@ -141,3 +141,17 @@
 - 학습자 말: "메모리에 저장된다 → 즉 자동으로 캐시가 쓰인다는건가?", S2 예측 "cache 를 하더라도 결국 갱신을 할 거니깐" 바로 새 주소.
 - 근거: S2 실측(CoreDNS 1.15.0) — `Successfully reloaded … 2026110204` 뒤에도 `cache` 가 옛 답을 TTL 27·17·7 로 주다가 만료 후 새 답(TTL 30).
 - 할 일: cache 절에 "`file` 이 다시 읽어도 앞의 `cache` 가 든 답은 TTL 이 다할 때까지 남는다" 한 문단과, 장애조치 전 TTL 을 옛 TTL 한 번만큼 앞서 낮추는 실무 순서(적용 관점)를 넣을지 검토.
+
+## 1~4장 실습 (S3, 2026-11-03)
+
+### 27. `02-02` 「부정 응답을 좌우하는 한 칸」 — CoreDNS 에서는 MINIMUM 이 아니라 SOA 레코드 TTL 이 부정 캐시 시간을 정함
+
+- 학습자 말: 처음 예측 "시리얼 넘버가 정한다, 30초 뒤(최대 32초)". 변형 예측 "20 은 처음부터 있었는데 30 을 따랐으니 300".
+- 근거: S3 실측(CoreDNS 1.15.0, `cache` + `file`) — `$TTL 30`·MINIMUM 20 에서 NXDOMAIN 의 SOA TTL 30 → 14·11·8·5·2 → 새 답. `$TTL 300`·MINIMUM 20 에서 SOA TTL 300 → 297. RFC 2308 §5 규칙(둘 중 작은 값)이면 20 이어야 함. `file` 은 SOA 를 레코드 TTL 그대로 실어 보내고, `cache` 는 메시지 안 레코드 TTL 의 최솟값만 씀(`plugin/pkg/dnsutil/ttl.go` `MinimalTTLWithMaximum`, MINIMUM 칸을 읽지 않음).
+- 할 일: 그 절 끝에 "CoreDNS 의 `cache` 는 MINIMUM 을 보지 않고 응답에 실린 SOA 레코드의 TTL 을 쓰므로, 부정 캐시를 줄이려면 SOA 의 TTL 을 낮추거나 `cache` 의 `denial` 로 상한을 둔다" 한 문단. MINIMUM 은 RFC 2308 을 따르는 다른 리졸버가 읽는다는 한 줄. 방법 셋(파일 앞 `$TTL 30` 뒤 `$TTL 300`, `@ 30 IN SOA`, `cache { denial 9984 30 }`)은 2026-11-03 실측 확인.
+
+### 28. 1~4장 — 응답 코드와 응답 플래그를 한곳에서 풀어 주는 자리가 없음
+
+- 학습자 말(S3 로그를 보고): "NXDOMAIN, NOERROR 등의 코드값은 어디서 설명하는지? qr,aa,rd 이건 뭐고, udp 48 은 뭐고"
+- 근거: 1~4장 노트에서 NXDOMAIN·SERVFAIL·REFUSED 는 여기저기 나오지만 네 코드를 묶은 정의가 없음(`00-01` 용어집에도 없음, 2026-11-03 grep). 플래그 `qr,rd,ra` 풀이 표는 8장 `08-01` 에만 있음. `03-02` 「6. errors 와 log」 는 Common Log Format 틀과 `false`(DO 비트)만 설명.
+- 할 일: `00-01` 용어집에 응답 코드 넷(NOERROR·NXDOMAIN·SERVFAIL·REFUSED, RFC 1035 §4.1.1)과 플래그 넷(qr·aa·rd·ra) 행을 넣을지, `03-02` §6 로그 예시 아래에 칸 풀이 표를 둘지 검토.
