@@ -10,7 +10,7 @@ related:
   - jvm-roadmap.md
   - data-roadmap.md
   - observability-roadmap.md
-updated: 2026-10-08
+updated: 2026-11-03
 ---
 
 # Spring 학습 로드맵
@@ -211,7 +211,7 @@ updated: 2026-10-08
 | 인가를 어디서 하는가 — 게이트웨이의 거친 인가와 도메인 인가 · PEP · PDP · RBAC · ABAC | 추천 | | |
 | CSRF 와 CORS | 추천 | | Spring Security 9·10장 |
 | 메서드 수준 보안 | 추천 | | Spring Security 11·12장 |
-| OAuth 2 와 OIDC | 추천 | | Spring Security 13~16장 |
+| OAuth 2 와 OIDC | 추천 | [OAuth2와 OIDC](../99_ETC/security/01_concepts/2026-05-29_OAuth2%EC%99%80%20OIDC%20%E2%80%94%20%EC%9C%84%EC%9E%84%20%EC%9D%B8%EA%B0%80%EC%99%80%20%EA%B7%B8%20%EC%9C%84%EC%9D%98%20%EC%9D%B8%EC%A6%9D.md) | Spring Security 13~16장 |
 | 액츄에이터 엔드포인트 | 필수 | | Spring in Action 15장 |
 | Micrometer 와 메트릭 | 필수 | | Spring in Action 16·17장 |
 | Prometheus 연동 | 추천 | | Cloud Native Spring 13장 |

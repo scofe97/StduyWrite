@@ -11,7 +11,7 @@ related:
   - k8s-roadmap.md
   - observability-roadmap.md
   - ../02_os/project/network-fundamentals-lab/README.md
-updated: 2026-10-28
+updated: 2026-11-03
 ---
 
 # 네트워크 학습 로드맵
@@ -95,7 +95,7 @@ updated: 2026-10-28
 | 7 · 운영 경계 | Envoy 설정 모델 | xDS · listener · filter chain · cluster · `istioctl proxy-config` |
 | 7 · 운영 경계 | 복원력 | retry · timeout · circuit breaking · outlier detection · 재시도 증폭 |
 | 7 · 운영 경계 | 신원과 기본값 | identity 와 trust 의 차이 · 인증과 인가의 차이 · mTLS · 기본값 닫아 가기 · SPIFFE · SVID · Zero Trust 전제 |
-| 7 · 운영 경계 | 사용자 신원 위임 | OAuth 2.0 · OIDC · IdP · Relying Party · SSO · Authorization Code Flow · PKCE · Redirect URI · state · nonce · Discovery |
+| 7 · 운영 경계 | 사용자 신원 위임 | OAuth 2.0 · OIDC · IdP · Relying Party · SSO · Authorization Code Flow · PKCE · Redirect URI · state · nonce · Discovery · 액세스 토큰 로그인 안티패턴 · SAML 비교 |
 | 7 · 운영 경계 | 토큰 검증 | ID Token · Access Token · Refresh Token · JWT · JWS · JWKS · claim 검증 · Token Introspection |
 | 7 · 운영 경계 | 앞단 인증 | OAuth2 Proxy · API Gateway 토큰 검증 · `RequestAuthentication` · Workload Identity |
 | 7 · 운영 경계 | 릴리스와 확장 | 배포와 릴리스의 분리 · istiod 성능 · VM 워크로드 편입 · Envoy 확장 |
@@ -439,8 +439,10 @@ updated: 2026-10-28
 | OAuth 2.0 과 OIDC — 권한 위임과 그 위의 로그인 · IdP · Relying Party · SSO | 필수 | [OAuth2와 OIDC](../99_ETC/security/01_concepts/2026-05-29_OAuth2%EC%99%80%20OIDC%20%E2%80%94%20%EC%9C%84%EC%9E%84%20%EC%9D%B8%EA%B0%80%EC%99%80%20%EA%B7%B8%20%EC%9C%84%EC%9D%98%20%EC%9D%B8%EC%A6%9D.md) | Solving Identity Management 5·6·11장 |
 | Authorization Code Flow · PKCE · Redirect URI · state · nonce | 필수 | [OAuth2와 OIDC](../99_ETC/security/01_concepts/2026-05-29_OAuth2%EC%99%80%20OIDC%20%E2%80%94%20%EC%9C%84%EC%9E%84%20%EC%9D%B8%EA%B0%80%EC%99%80%20%EA%B7%B8%20%EC%9C%84%EC%9D%98%20%EC%9D%B8%EC%A6%9D.md) | Solving Identity Management 5·6장 |
 | ID Token · Access Token · Refresh Token — 목적이 다른 세 토큰 | 필수 | [OAuth2와 OIDC](../99_ETC/security/01_concepts/2026-05-29_OAuth2%EC%99%80%20OIDC%20%E2%80%94%20%EC%9C%84%EC%9E%84%20%EC%9D%B8%EA%B0%80%EC%99%80%20%EA%B7%B8%20%EC%9C%84%EC%9D%98%20%EC%9D%B8%EC%A6%9D.md) | Solving Identity Management 6장 |
+| 액세스 토큰을 로그인에 쓰는 안티패턴 — 의사 인증 · `aud` 를 보지 않으면 다른 앱의 토큰으로 로그인됨 · 소셜 로그인 뒤 자체 세션이나 JWT 발급 | 추천 | [OAuth2와 OIDC](../99_ETC/security/01_concepts/2026-05-29_OAuth2%EC%99%80%20OIDC%20%E2%80%94%20%EC%9C%84%EC%9E%84%20%EC%9D%B8%EA%B0%80%EC%99%80%20%EA%B7%B8%20%EC%9C%84%EC%9D%98%20%EC%9D%B8%EC%A6%9D.md) | |
 | JWT · JWS · JWKS — 서명 검증과 `iss` · `aud` · `exp` 확인 | 필수 | [JWT 설계](../99_ETC/security/01_concepts/2026-05-29_JWT%20%EC%84%A4%EA%B3%84%20%E2%80%94%20%EA%B5%AC%EC%A1%B0%C2%B7%EC%84%9C%EB%AA%85%C2%B7%EC%A0%80%EC%9E%A5%EA%B3%BC%20%ED%8F%90%EA%B8%B0%EC%9D%98%20%EB%94%9C%EB%A0%88%EB%A7%88.md) | Cloud Native Data Security with OAuth 5장 |
 | Discovery · Token Introspection | 선택 | | Cloud Native Data Security with OAuth 7장 · [OIDC Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html) · [RFC 7662](https://www.rfc-editor.org/rfc/rfc7662) |
+| OIDC 와 SAML 비교 — JSON·JWT 와 XML assertion · 웹뷰가 필요한 모바일·네이티브 앱 · 기업 SSO 에 SAML 이 남는 이유 | 선택 | | Solving Identity Management 7장 · [SAML 2.0 Technical Overview](https://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0.html) |
 | OAuth2 Proxy · API Gateway — 앞단에서 인증을 대행하고 토큰을 검증 | 추천 | | Cloud Native Data Security with OAuth 8장 · [OAuth2 Proxy](https://oauth2-proxy.github.io/oauth2-proxy/) |
 | `RequestAuthentication` — 인그레스에서 최종 사용자 JWT 검증 | 추천 | [mTLS 기본값](../08_cloud/book/istio-in-action/09-01.%EA%B1%B0%EC%9D%98%20%EC%95%88%EC%A0%84%ED%95%9C%20%EA%B8%B0%EB%B3%B8%EA%B0%92%EC%9D%84%20%EB%8B%AB%EC%95%84%20%EA%B0%80%EB%8A%94%20%EC%88%9C%EC%84%9C.md) | Istio in Action 9장 |
 | Workload Identity — 사용자 신원과 워크로드 신원의 갈림 | 추천 | [신원 규격 부록](../08_cloud/book/istio-in-action/a0-03.%EB%B6%80%EB%A1%9D%20%E2%80%94%20%EC%8B%A0%EC%9B%90%EC%9D%84%20%EB%AC%B8%EC%84%9C%EB%A1%9C%20%EB%A7%8C%EB%93%9C%EB%8A%94%20%EB%84%A4%20%EA%B7%9C%EA%B2%A9.md) | Cloud Native Data Security with OAuth 10장 |
