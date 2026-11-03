@@ -56,6 +56,7 @@ updated: 2026-11-03
 | 8 · 파이프라인 보안 | 접근 통제와 시크릿 | Jenkins 인증과 인가 · RBAC · Credentials 바인딩과 마스킹 · 최소 권한 원칙 · CI OIDC 임시 자격 증명 |
 | 8 · 파이프라인 보안 | 설정의 코드화 | 설정을 코드로 JCasC · jenkins.yaml 버전 관리 · JCasC 운영과 GitOps · JCasC 시크릿과 Vault 연동 |
 | 8 · 파이프라인 보안 | 빌드 격리와 공급망 | Rootless 컨테이너 에이전트 · DinD 위험 회피 · 취약점 스캔 게이트(Xray) · SBOM · 이미지 서명 · Provenance · Attestation |
+| 8 · 파이프라인 보안 | 취약점 스캔과 조치 | CVE · 취약점 DB · OS 패키지와 라이브러리 두 층 · Trivy · --severity · --exit-code · 재빌드 패치 · 스캐너 비교 |
 | 8 · 파이프라인 보안 | 감사와 안티패턴 방지 | 규제 산업 준수 파이프라인 · 감사 추적 · Shift-Left 보안 감사 · CI/CD 안티패턴 방지 |
 
 
@@ -242,7 +243,11 @@ updated: 2026-11-03
 | JCasC 운영과 GitOps — jenkins.yaml 버전 관리와 자동 반영 | 추천 | [JCasC 운영과 GitOps](../07_devops/02_Jenkins/02_security/02-02.JCasC%20%EC%9A%B4%EC%98%81%EA%B3%BC%20GitOps.md) |  |
 | JCasC 시크릿과 실전 패턴 — 환경변수 치환과 Vault 연동 | 추천 | [JCasC 시크릿과 실전](../07_devops/02_Jenkins/02_security/02-03.JCasC%20%EC%8B%9C%ED%81%AC%EB%A6%BF%EA%B3%BC%20%EC%8B%A4%EC%A0%84%20%ED%8C%A8%ED%84%B4.md) |  |
 | 빌드 환경 격리와 권한 최소화 — Rootless 에이전트와 DinD 위험 회피 | 추천 | [VM Jenkins Docker 보안](../07_devops/02_Jenkins/03_agent/01-05.VM%20Jenkins%EC%97%90%EC%84%9C%EC%9D%98%20Docker%20%EB%B3%B4%EC%95%88%20%EB%AA%A8%EB%8D%B8.md) | DevOps Tools for Java Developers 7장 |
+| 취약점 스캔의 원리 — CVE 와 심각도 · 취약점 DB 출처(OS 배포판 피드 · GitHub Advisory) · OS 패키지와 언어 라이브러리 두 층 | 필수 | [이미지 속 소프트웨어 취약점](../08_cloud/book/container-security/07-01.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EC%86%8D%20%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4%20%EC%B7%A8%EC%95%BD%EC%A0%90%20%E2%80%94%20CVE%EB%B6%80%ED%84%B0%20%EC%8A%A4%EC%BA%94%20%EC%9A%B4%EC%98%81%EA%B9%8C%EC%A7%80.md) | Container Security 7장 |
 | 취약점 스캔 게이트 — JFrog Xray 의존성·이미지 CVE 차단 | 필수 | [Xray 보안 게이트](../07_devops/02_Jenkins/06_infra/05-06.JFrog%20Xray%EB%A1%9C%20CI%20%EB%B3%B4%EC%95%88%20%EA%B2%8C%EC%9D%B4%ED%8A%B8%20%E2%80%94%20%EC%B7%A8%EC%95%BD%EC%A0%90%20%EC%8A%A4%EC%BA%94%C2%B7xrayScan%C2%B7SonarQube%EC%99%80%20%EC%97%AD%ED%95%A0%20%EA%B5%AC%EB%B6%84.md) | Container Security 7장 · Policy as Code 14장 |
+| Trivy 와 CI 게이트 — image · fs · repo 스캔 · `--severity` · `--exit-code` · `--ignore-unfixed` · `.trivyignore` | 추천 |  | [Trivy 공식 문서](https://trivy.dev/) |
+| 스캔 결과 조치 — 설치 버전과 수정 버전 · 베이스 이미지 교체와 패키지 업그레이드 · 재빌드가 곧 패치 | 추천 | [이미지 속 소프트웨어 취약점](../08_cloud/book/container-security/07-01.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EC%86%8D%20%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4%20%EC%B7%A8%EC%95%BD%EC%A0%90%20%E2%80%94%20CVE%EB%B6%80%ED%84%B0%20%EC%8A%A4%EC%BA%94%20%EC%9A%B4%EC%98%81%EA%B9%8C%EC%A7%80.md) | Container Security 7장 |
+| 스캐너 비교 — Trivy · Grype · Docker Scout 와 스캐너마다 결과가 다른 이유 | 선택 | [이미지 속 소프트웨어 취약점](../08_cloud/book/container-security/07-01.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EC%86%8D%20%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4%20%EC%B7%A8%EC%95%BD%EC%A0%90%20%E2%80%94%20CVE%EB%B6%80%ED%84%B0%20%EC%8A%A4%EC%BA%94%20%EC%9A%B4%EC%98%81%EA%B9%8C%EC%A7%80.md) | Container Security 7장 |
 | 공급망 보안 — SBOM(Software Bill of Materials) 생성과 이미지 서명 | 추천 | [이미지 공급망 보안](../08_cloud/book/container-security/06-02.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EA%B3%B5%EA%B8%89%EB%A7%9D%20%EB%B3%B4%EC%95%88%20%E2%80%94%20%EB%B9%8C%EB%93%9C%EB%B6%80%ED%84%B0%20%EB%B0%B0%ED%8F%AC%EA%B9%8C%EC%A7%80.md) | Policy as Code 14장 |
 | Provenance 와 Attestation — 빌드 출처 증명(SLSA)과 배포 전 검증 | 추천 | [이미지 공급망 보안](../08_cloud/book/container-security/06-02.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EA%B3%B5%EA%B8%89%EB%A7%9D%20%EB%B3%B4%EC%95%88%20%E2%80%94%20%EB%B9%8C%EB%93%9C%EB%B6%80%ED%84%B0%20%EB%B0%B0%ED%8F%AC%EA%B9%8C%EC%A7%80.md) | Container Security 6장 |
 | 규제 산업 준수 파이프라인 — 감사 추적과 정책 준수 | 선택 | [규제 준수 파이프라인](../07_devops/book/cicd_cicd-patterns/08-01.Domain%20Driven%20Design%20Patterns%20for%20Regulated%20Sectors.md) | CI/CD Design Patterns 8장 |
