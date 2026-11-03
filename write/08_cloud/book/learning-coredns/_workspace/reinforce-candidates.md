@@ -155,3 +155,9 @@
 - 학습자 말(S3 로그를 보고): "NXDOMAIN, NOERROR 등의 코드값은 어디서 설명하는지? qr,aa,rd 이건 뭐고, udp 48 은 뭐고"
 - 근거: 1~4장 노트에서 NXDOMAIN·SERVFAIL·REFUSED 는 여기저기 나오지만 네 코드를 묶은 정의가 없음(`00-01` 용어집에도 없음, 2026-11-03 grep). 플래그 `qr,rd,ra` 풀이 표는 8장 `08-01` 에만 있음. `03-02` 「6. errors 와 log」 는 Common Log Format 틀과 `false`(DO 비트)만 설명.
 - 할 일: `00-01` 용어집에 응답 코드 넷(NOERROR·NXDOMAIN·SERVFAIL·REFUSED, RFC 1035 §4.1.1)과 플래그 넷(qr·aa·rd·ra) 행을 넣을지, `03-02` §6 로그 예시 아래에 칸 풀이 표를 둘지 검토.
+
+### 29. `04-01` 「hosts」 fallthrough 문단 — 넘기지 않을 때 못 찾은 이름은 NXDOMAIN 이 아니라 SERVFAIL
+
+- 학습자 말(S7): 처음엔 "파일에 둘 다 있으니 둘 다 정상"이라고 봄. `fallthrough` 를 넣은 뒤에는 "api 는 존 파일 값 .40 으로 온다"고 예측(실제는 hosts 의 .99).
+- 근거: S7 실측(CoreDNS 1.15.0) — `shop.example { hosts { 198.51.100.99 api.shop.example }  file db.shop.example }` 에서 db 는 SERVFAIL. hosts 에 SOA 가 없어 NXDOMAIN 을 만들 수 없다(`plugin/hosts/hosts.go:72-74` 주석). `03-02` 「fallthrough」 는 "없으면 NXDOMAIN 이나 빈 응답"이라고 일반화하는데, SOA 가 없는 hosts 는 이 규칙에서 벗어난다. `fallthrough` 뒤에도 api 는 hosts 답(TTL 3600, AUTHORITY 0)이었다. `04-01` 277줄은 "답을 못 찾았을 때 넘긴다"고 맞게 적었지만, 찾은 이름은 계속 hosts 가 답한다는 반대쪽은 적지 않았다.
+- 할 일: `04-01` hosts fallthrough 문단 끝에 두 문장 — "넘기지 않으면 호스트 테이블에 없는 이름은 SERVFAIL 로 끝난다. hosts 에는 SOA 가 없어 NXDOMAIN 을 만들 수 없기 때문이다." "넘기더라도 테이블에 있는 이름은 hosts 가 답하므로, 같은 이름을 존 파일 값으로 되돌리려면 그 줄을 지워야 한다." `03-02` 는 다른 창이 고치는 중이라 손대지 않고, 필요하면 "SOA 가 있는 플러그인 기준"이라는 한정만 나중에 검토.
