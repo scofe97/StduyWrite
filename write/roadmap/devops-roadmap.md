@@ -10,7 +10,7 @@ related:
   - observability-roadmap.md
   - ai-roadmap.md
   - spring-roadmap.md
-updated: 2026-10-28
+updated: 2026-11-03
 ---
 
 # DevOps 학습 로드맵
@@ -30,12 +30,13 @@ updated: 2026-10-28
 | 1 · 전달 모델 | 버전 관리와 협업 | 버전 관리 · 변경 추적 · Git · 브랜치 전략 · trunk-based development · 짧은 브랜치 수명 |
 | 1 · 전달 모델 | 환경과 성과 측정 | 다중 환경 격리 · dev · stage · prod 환경 분리 · DORA 4대 지표 · 플랫폼 엔지니어링 |
 | 2 · CI 파이프라인 | 파이프라인 정의와 제어 | CI 파이프라인 원칙 · 빌드 요청과 큐 · Scripted vs Declarative · Declarative Pipeline 핵심 구조 · Pipeline 패턴 |
-| 2 · CI 파이프라인 | 실행 환경과 에이전트 | Jenkins Agent · Docker with Pipeline · Kubernetes Jenkins · 동적 Pod 에이전트 · 실패 대응과 sh 위생 |
+| 2 · CI 파이프라인 | 실행 환경과 에이전트 | Jenkins Agent · Docker with Pipeline · Kubernetes Jenkins · 동적 Pod 에이전트 · 실패 대응과 sh 위생 · GitHub Actions runner |
 | 2 · CI 파이프라인 | 정적 분석과 품질 게이트 | SonarQube · 정적 분석 결함 · Clean as You Code · Quality Gate · withSonarQubeEnv |
+| 2 · CI 파이프라인 | 머지 게이트와 로컬 검사 | branch protection · required status checks · pre-commit hook · Gitleaks 비밀정보 탐지 |
 | 2 · CI 파이프라인 | 파이프라인 운영과 확장 | Multibranch Pipeline · Pipeline 내구성 · 공유 라이브러리 · 파이프라인 디자인 패턴 · Jenkins API · Jenkins 엔진 |
 | 3 · 산출물 | 컨테이너 실행과 점검 | `docker run` · `logs` · `exec` · `inspect` · 포트 · 볼륨 · 네트워크 · Docker Compose |
-| 3 · 산출물 | 이미지 빌드와 최적화 | 빌드 도구 비교와 선택 · 컨테이너 이미지 빌드 · multi-stage build · BuildKit · Kaniko |
-| 3 · 산출물 | 식별과 불변성 | tag 와 digest · sha256 불변 참조 · semantic versioning · 태그 변조 방지 |
+| 3 · 산출물 | 이미지 빌드와 최적화 | 빌드 도구 비교와 선택 · 컨테이너 이미지 빌드 · multi-stage build · BuildKit · Kaniko · 의존성 캐시와 레이어 캐시 |
+| 3 · 산출물 | 식별과 불변성 | tag 와 digest · sha256 불변 참조 · semantic versioning · 태그 변조 방지 · Build Once, Deploy Many |
 | 3 · 산출물 | 저장소와 레지스트리 | 아티팩트 관리 기초 · hosted · proxy · group · Nexus · Harbor · Artifactory · MinIO |
 | 4 · 패키징 | Helm 패키징 | Helm 차트 구조 · Chart.yaml · values.yaml · 템플릿 렌더링 · 릴리스 생애주기 · 훅 |
 | 4 · 패키징 | Kustomize 선언 | Kustomize 오버레이 · kustomization.yaml · base 와 overlays · Strategic Merge Patch · 리소스 패치 |
@@ -47,12 +48,14 @@ updated: 2026-10-28
 | 6 · 점진 배포 | 롤링 한계와 블루그린 | RollingUpdate 의 한계 · 트래픽 분기 불가 · Blue-Green 배포 · Service 전환 · 무중단 배포 |
 | 6 · 점진 배포 | 카나리와 롤아웃 | Canary 배포 · 점진 트래픽 이동 · Argo Rollouts · Rollout CRD · 트래픽 가중치 라우팅 |
 | 6 · 점진 배포 | 지표 분석과 전달 패턴 | AnalysisTemplate · 지표 기반 자동 분석과 롤백 · Progressive Delivery · 피처 플래그 · Dark Launch |
+| 6 · 점진 배포 | 배포 후 검증과 되돌림 | smoke test · E2E · 배포 검증 게이트 · 롤백 메커니즘 구분 |
+| 6 · 점진 배포 | DB 변경과 버전 공존 | Expand and Contract · dual write · backfill |
 | 7 · 인프라를 코드로 | 선언적 인프라 원칙 | IaC 와 Immutable Infrastructure · 고치지 않고 다시 만든다 · 파이프라인 프로비저닝 연계 |
 | 7 · 인프라를 코드로 | Terraform 핵심 운영 | Terraform state · 원격 백엔드 · state locking · drift 감지 · module · 비밀 관리 |
 | 7 · 인프라를 코드로 | 오브젝트 선언과 정책 | 클러스터를 오브젝트로 선언 · Cluster API · Crossplane · IaC 정책 검사 · Security as Code |
-| 8 · 파이프라인 보안 | 접근 통제와 시크릿 | Jenkins 인증과 인가 · RBAC · Credentials 바인딩과 마스킹 · 최소 권한 원칙 |
+| 8 · 파이프라인 보안 | 접근 통제와 시크릿 | Jenkins 인증과 인가 · RBAC · Credentials 바인딩과 마스킹 · 최소 권한 원칙 · CI OIDC 임시 자격 증명 |
 | 8 · 파이프라인 보안 | 설정의 코드화 | 설정을 코드로 JCasC · jenkins.yaml 버전 관리 · JCasC 운영과 GitOps · JCasC 시크릿과 Vault 연동 |
-| 8 · 파이프라인 보안 | 빌드 격리와 공급망 | Rootless 컨테이너 에이전트 · DinD 위험 회피 · 취약점 스캔 게이트(Xray) · SBOM · 이미지 서명 |
+| 8 · 파이프라인 보안 | 빌드 격리와 공급망 | Rootless 컨테이너 에이전트 · DinD 위험 회피 · 취약점 스캔 게이트(Xray) · SBOM · 이미지 서명 · Provenance · Attestation |
 | 8 · 파이프라인 보안 | 감사와 안티패턴 방지 | 규제 산업 준수 파이프라인 · 감사 추적 · Shift-Left 보안 감사 · CI/CD 안티패턴 방지 |
 
 
@@ -124,9 +127,12 @@ updated: 2026-10-28
 | 실행환경으로서의 Agent — 컨트롤러와 에이전트 분리 | 필수 | [실행환경 Agent](../07_devops/02_Jenkins/03_agent/01-01.%EC%8B%A4%ED%96%89%ED%99%98%EA%B2%BD%EC%9C%BC%EB%A1%9C%EC%84%9C%EC%9D%98%20Agent.md) | Learning Continuous Integration with Jenkins 5장 |
 | Docker with Pipeline — 컨테이너 기반 빌드 격리 | 필수 | [Docker with Pipeline](../07_devops/02_Jenkins/03_agent/01-02.Docker%20with%20Pipeline.md) | DevOps Tools for Java Developers 5장 |
 | Kubernetes Jenkins — 동적 Pod 에이전트 프로비저닝 | 추천 | [K8s Jenkins 구축](../07_devops/02_Jenkins/03_agent/02-01.Kubernetes%20Jenkins%20%EA%B5%AC%EC%B6%95.md) · [K8s Jenkins 운영](../07_devops/02_Jenkins/03_agent/02-02.Kubernetes%20Jenkins%20%EC%9A%B4%EC%98%81.md) |  |
+| GitHub Actions 와 runner 종류 — hosted · self-hosted · ephemeral | 선택 | [CI/CD 설정](../07_devops/book/fdsd_fundamentals-devops/05-01.How%20to%20Set%20Up%20CI%20CD.md) | Fundamentals of DevOps and Software Delivery 5장 |
 | Pipeline 내구성과 재기동 — CpsFlowExecution 영속화 | 추천 | [Pipeline 내구성과 재기동](../07_devops/02_Jenkins/05_operations/01-01.Pipeline%20%EB%82%B4%EA%B5%AC%EC%84%B1%EA%B3%BC%20%EC%9E%AC%EA%B8%B0%EB%8F%99.md) | Learning Continuous Integration with Jenkins 2장 |
 | 공유 라이브러리(Shared Library) — vars 와 src 로 파이프라인 재사용 | 추천 | [공유 라이브러리](../07_devops/02_Jenkins/05_operations/02-01.%EA%B3%B5%EC%9C%A0%20%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC.md) · [공유 라이브러리 실전](../07_devops/02_Jenkins/05_operations/02-01a.%EA%B3%B5%EC%9C%A0%20%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC%20%EC%8B%A4%EC%A0%84%20%ED%8C%A8%ED%84%B4.md) | Learning Continuous Integration with Jenkins 12장 |
 | Multibranch Pipeline — branch-source 기반 PR 자동 빌드 | 추천 | [CI 파이프라인 전체 설계](../07_devops/02_Jenkins/06_infra/05-01.CI%20%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8%20%EC%A0%84%EC%B2%B4%20%EC%84%A4%EA%B3%84%20%E2%80%94%20%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80%20%EC%88%9C%EC%84%9C%C2%B7Docker%20%EB%A0%88%EC%A7%80%EC%8A%A4%ED%8A%B8%EB%A6%AC%C2%B7%EC%9D%B8%EC%A6%9D.md) · [첫 CI Jenkinsfile 구현](../07_devops/02_Jenkins/06_infra/05-02.%EC%B2%AB%20CI%20Jenkinsfile%20%EA%B5%AC%ED%98%84%20%E2%80%94%20%EC%99%84%EC%84%B1%20%EC%BD%94%EB%93%9C%C2%B7Multibranch%C2%B7Blue%20Ocean.md) | Learning Continuous Integration with Jenkins 12장 |
+| 머지 게이트 — branch protection · required status checks 로 실패한 PR 병합 차단 | 필수 |  |  |
+| 로컬 검사와 비밀정보 탐지 — pre-commit hook · Gitleaks · CI 재검사 | 추천 |  | [Gitleaks](https://github.com/gitleaks/gitleaks) |
 | 정적 분석과 결함 탐지 — 버그 · 취약점 · 코드 스멜 | 필수 | [정적 분석이 푸는 결함](../07_devops/docs/sonarqube/01-01.%EC%A0%95%EC%A0%81%20%EB%B6%84%EC%84%9D%EC%9D%B4%20%ED%91%B8%EB%8A%94%20%EA%B2%B0%ED%95%A8.md) | Software Engineering at Google 20장 |
 | Clean as You Code — 신규 코드 중심 품질 관리 | 추천 | [Clean as You Code](../07_devops/docs/sonarqube/01-03.Clean%20as%20You%20Code%EC%99%80%20MQR.md) |  |
 | SonarQube Quality Gate — 임계치 판정과 빌드 게이트 | 필수 | [Quality Gate](../07_devops/docs/sonarqube/02-04.Quality%20Gate.md) · [Jenkins 연계](../07_devops/docs/sonarqube/04-01.Jenkins%20%EC%97%B0%EA%B3%84.md) | CI/CD Design Patterns 7장 |
@@ -145,7 +151,9 @@ updated: 2026-10-28
 | Docker Compose — 여러 컨테이너를 한 파일로 띄우는 로컬 환경 | 추천 |  | [Compose 공식 문서](https://docs.docker.com/compose/) |
 | 빌드 도구 선택과 컨테이너화 — Gradle · Maven · npm | 필수 | [빌드 도구 비교와 선택](../07_devops/02_Jenkins/03_agent/01-03.%EB%B9%8C%EB%93%9C%20%EB%8F%84%EA%B5%AC%20%EB%B9%84%EA%B5%90%EC%99%80%20%EC%84%A0%ED%83%9D.md) | DevOps Tools for Java Developers 6장 |
 | 컨테이너 이미지 빌드 — multi-stage · BuildKit · Kaniko | 필수 | [컨테이너 이미지 빌드](../07_devops/02_Jenkins/03_agent/01-04.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EB%B9%8C%EB%93%9C.md) | Container Security 6장 · DevOps Tools for Java Developers 3장 |
+| 빌드 캐시 두 종류 — 의존성 캐시와 Docker 레이어 캐시 | 추천 | [컨테이너 이미지 빌드](../07_devops/02_Jenkins/03_agent/01-04.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EB%B9%8C%EB%93%9C.md) |  |
 | tag 와 digest — 태그 가변성 한계와 sha256 불변 참조 | 필수 | [컨테이너 이미지 빌드](../07_devops/02_Jenkins/03_agent/01-04.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EB%B9%8C%EB%93%9C.md) | Container Security 6장 |
+| Build Once, Deploy Many — 같은 digest 를 staging 에서 prod 로 승격 | 필수 |  |  |
 | 아티팩트 관리 기초 — 바이너리 격리 · hosted · proxy · group | 필수 | [아티팩트 관리 기초](../07_devops/03_Nexus/01-01.%EC%95%84%ED%8B%B0%ED%8C%A9%ED%8A%B8%20%EA%B4%80%EB%A6%AC%EC%9D%98%20%EA%B8%B0%EC%B4%88.md) · [리포지토리 포맷](../07_devops/03_Nexus/02-01.%EB%A6%AC%ED%8F%AC%EC%A7%80%ED%86%A0%EB%A6%AC%20%ED%8F%AC%EB%A7%B7%EA%B3%BC%20%EA%B5%AC%EC%84%B1.md) | DevOps Tools for Java Developers 6장 |
 | 사설 Docker 레지스트리 운영 — Nexus Docker Registry | 추천 | [Docker Registry Nexus](../07_devops/03_Nexus/04-02.Docker%20Registry%EB%A1%9C%EC%84%9C%EC%9D%98%20Nexus.md) |  |
 | 클라우드 네이티브 레지스트리 — Harbor 프로젝트 격리와 복제 | 추천 | [Harbor](../08_cloud/kubernetes/11_devtools/11-04.Harbor.md) |  |
@@ -188,7 +196,7 @@ updated: 2026-10-28
 
 ### 6단계 · 점진 배포
 
-> 먼저: 이 문서 5단계 ArgoCD · Application · [Kubernetes 로드맵](k8s-roadmap.md) 2단계 RollingUpdate · Recreate · 3단계 Service
+> 먼저: 이 문서 5단계 ArgoCD · Application · [Kubernetes 로드맵](k8s-roadmap.md) 1단계 liveness · readiness · startup probe · 2단계 RollingUpdate · Recreate · 3단계 Service
 
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
@@ -199,6 +207,9 @@ updated: 2026-10-28
 | Argo Rollouts — Rollout CRD 와 트래픽 라우팅 연동 | 필수 | [Argo Rollouts와 배포 전략](../08_cloud/argocd/04-03.Argo%20Rollouts%EC%99%80%20%EB%B0%B0%ED%8F%AC%20%EC%A0%84%EB%9E%B5.md) | [Argo Rollouts](https://argo-rollouts.readthedocs.io/) |
 | AnalysisTemplate — 관측 지표 기반 자동 분석과 실패 시 자동 롤백 | 추천 | [Argo Rollouts와 배포 전략](../08_cloud/argocd/04-03.Argo%20Rollouts%EC%99%80%20%EB%B0%B0%ED%8F%AC%20%EC%A0%84%EB%9E%B5.md) | [Argo Rollouts](https://argo-rollouts.readthedocs.io/) |
 | Progressive Delivery — 피처 플래그 · Dark Launch · 비즈니스 분리 | 추천 | [배포 전략 패턴](../07_devops/book/cicd_cicd-patterns/06-01.Deployment%20Strategies%20for%20Structural%20Patterns.md) | DevOps Tools for Java Developers 10장 |
+| 배포 후 검증 — smoke test · E2E(Playwright) · 배포 검증 게이트 | 필수 | [첫 CD Jenkinsfile 구현](../07_devops/02_Jenkins/06_infra/05-05.%EC%B2%AB%20CD%20Jenkinsfile%20%EA%B5%AC%ED%98%84%20%E2%80%94%20values%20%EA%B0%B1%EC%8B%A0%C2%B7Argo%20CD%20%ED%97%AC%EC%8A%A4%EC%B2%B4%ED%81%AC%C2%B7k6%20%EA%B2%8C%EC%9D%B4%ED%8A%B8.md) |  |
+| Expand and Contract — DB 스키마 변경과 버전 공존 · dual write · backfill | 필수 |  |  |
+| 롤백 메커니즘 구분 — Argo 동기화 · ReplicaSet · Canary 중단 · Git revert · DB 비가역성 | 추천 |  |  |
 
 
 
@@ -226,12 +237,14 @@ updated: 2026-10-28
 |---|:---:|---|---|
 | Jenkins 인증과 인가 — Security Realm · Matrix / Role-Based 인가 | 필수 | [인증과 인가](../07_devops/02_Jenkins/02_security/01-01.%EC%9D%B8%EC%A6%9D%EA%B3%BC%20%EC%9D%B8%EA%B0%80%20%E2%80%94%20%EB%88%84%EA%B0%80%20%EB%AC%B4%EC%97%87%EC%9D%84%20%ED%95%A0%20%EC%88%98%20%EC%9E%88%EB%8A%94%EA%B0%80.md) | Learning Continuous Integration with Jenkins 3장 |
 | 시크릿 관리와 최소 권한 원칙 — Credentials 바인딩과 마스킹 | 필수 | [시크릿 관리와 최소 권한](../07_devops/02_Jenkins/02_security/01-02.%EC%8B%9C%ED%81%AC%EB%A6%BF%20%EA%B4%80%EB%A6%AC%EC%99%80%20%EC%B5%9C%EC%86%8C%20%EA%B6%8C%ED%95%9C%20%EC%9B%90%EC%B9%99.md) | Learning Continuous Integration with Jenkins 3장 · Fundamentals of DevOps and Software Delivery 8장 |
+| CI 의 클라우드 접근 — OIDC 임시 자격 증명 · IAM Role Trust Policy · 최소 권한 | 필수 | [CI/CD 설정](../07_devops/book/fdsd_fundamentals-devops/05-01.How%20to%20Set%20Up%20CI%20CD.md) | Fundamentals of DevOps and Software Delivery 5장 |
 | 설정을 코드로 — JCasC(Jenkins Configuration as Code) | 추천 | [설정을 코드로 JCasC](../07_devops/02_Jenkins/02_security/02-01.%EC%84%A4%EC%A0%95%EC%9D%84%20%EC%BD%94%EB%93%9C%EB%A1%9C%20%E2%80%94%20JCasC.md) |  |
 | JCasC 운영과 GitOps — jenkins.yaml 버전 관리와 자동 반영 | 추천 | [JCasC 운영과 GitOps](../07_devops/02_Jenkins/02_security/02-02.JCasC%20%EC%9A%B4%EC%98%81%EA%B3%BC%20GitOps.md) |  |
 | JCasC 시크릿과 실전 패턴 — 환경변수 치환과 Vault 연동 | 추천 | [JCasC 시크릿과 실전](../07_devops/02_Jenkins/02_security/02-03.JCasC%20%EC%8B%9C%ED%81%AC%EB%A6%BF%EA%B3%BC%20%EC%8B%A4%EC%A0%84%20%ED%8C%A8%ED%84%B4.md) |  |
 | 빌드 환경 격리와 권한 최소화 — Rootless 에이전트와 DinD 위험 회피 | 추천 | [VM Jenkins Docker 보안](../07_devops/02_Jenkins/03_agent/01-05.VM%20Jenkins%EC%97%90%EC%84%9C%EC%9D%98%20Docker%20%EB%B3%B4%EC%95%88%20%EB%AA%A8%EB%8D%B8.md) | DevOps Tools for Java Developers 7장 |
 | 취약점 스캔 게이트 — JFrog Xray 의존성·이미지 CVE 차단 | 필수 | [Xray 보안 게이트](../07_devops/02_Jenkins/06_infra/05-06.JFrog%20Xray%EB%A1%9C%20CI%20%EB%B3%B4%EC%95%88%20%EA%B2%8C%EC%9D%B4%ED%8A%B8%20%E2%80%94%20%EC%B7%A8%EC%95%BD%EC%A0%90%20%EC%8A%A4%EC%BA%94%C2%B7xrayScan%C2%B7SonarQube%EC%99%80%20%EC%97%AD%ED%95%A0%20%EA%B5%AC%EB%B6%84.md) | Container Security 7장 · Policy as Code 14장 |
-| 공급망 보안 — SBOM(Software Bill of Materials) 생성과 이미지 서명 | 추천 |  | Policy as Code 14장 |
+| 공급망 보안 — SBOM(Software Bill of Materials) 생성과 이미지 서명 | 추천 | [이미지 공급망 보안](../08_cloud/book/container-security/06-02.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EA%B3%B5%EA%B8%89%EB%A7%9D%20%EB%B3%B4%EC%95%88%20%E2%80%94%20%EB%B9%8C%EB%93%9C%EB%B6%80%ED%84%B0%20%EB%B0%B0%ED%8F%AC%EA%B9%8C%EC%A7%80.md) | Policy as Code 14장 |
+| Provenance 와 Attestation — 빌드 출처 증명(SLSA)과 배포 전 검증 | 추천 | [이미지 공급망 보안](../08_cloud/book/container-security/06-02.%EC%9D%B4%EB%AF%B8%EC%A7%80%20%EA%B3%B5%EA%B8%89%EB%A7%9D%20%EB%B3%B4%EC%95%88%20%E2%80%94%20%EB%B9%8C%EB%93%9C%EB%B6%80%ED%84%B0%20%EB%B0%B0%ED%8F%AC%EA%B9%8C%EC%A7%80.md) | Container Security 6장 |
 | 규제 산업 준수 파이프라인 — 감사 추적과 정책 준수 | 선택 | [규제 준수 파이프라인](../07_devops/book/cicd_cicd-patterns/08-01.Domain%20Driven%20Design%20Patterns%20for%20Regulated%20Sectors.md) | CI/CD Design Patterns 8장 |
 | Shift-Left 보안 감사 — 파이프라인 평가와 성숙도 모델 | 추천 | [감사와 평가](../07_devops/book/cicd_cicd-patterns/11-01.Auditing%20and%20Assessment%20of%20Design%20Patterns.md) | CI/CD Design Patterns 11장 |
 | CI/CD 안티패턴 방지 — 보안 우회 · 비밀 노출 · 수동 개입 제거 | 추천 | [안티패턴 탐색](../07_devops/book/cicd_cicd-patterns/13-01.Exploring%20Anti-Patterns%20for%20CICD%20Design%20Pattern%20Deployments.md) | CI/CD Design Patterns 13장 |
