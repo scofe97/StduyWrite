@@ -152,6 +152,6 @@ updated: 2026-10-02
 - 통합 경로: [OS 학습 로드맵](../../../roadmap/os-roadmap.md) — 성능 진단 단계의 진입점
 - 상위: [02_os/ MOC](../../README.md)
 - 이웃: [02_os/linux-kernel-programming/](../linux-kernel-programming/README.md) — 커널 개발자 관점의 리눅스 내부. 본서 3·6·7장(커널·CPU·메모리)과 메커니즘이 겹칩니다
-- 이웃: [02_os/kernel/](../../kernel/README.md) — K8s 운영 관점의 커널 메커니즘(namespace·cgroup). 본서 11장(컨테이너)과 맞닿습니다
+- 이웃: [02_os/kernel/](../../kernel/README.md) — K8s 운영 관점의 커널 메커니즘(cgroup v2 깊이·마운트 propagation·OverlayFS). 본서 11장(컨테이너)과 맞닿습니다
 - 이웃: [N&K 질문별 정본](../../../08_cloud/book/networking-and-kubernetes/README.md#%EC%A7%88%EB%AC%B8%EB%B3%84-%EC%A0%95%EB%B3%B8) — Linux 네트워크 자료구조. 본서 10장(네트워크)과 주제가 겹칩니다
 - cross-link: [06_observability/](../../../06_observability/README.md) — Grafana LGTM 스택·SLO 운영 관점. 본서가 *커널 레벨 성능 분석*(perf·Ftrace·BPF)이라면 06은 *앱·인프라 관측 운영*이라 시선이 다릅니다

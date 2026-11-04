@@ -75,4 +75,4 @@ updated: 2026-09-12
 
 - 통합 경로: [OS 학습 로드맵](../../../roadmap/os-roadmap.md) — 운영 기초 뒤 커널 개발 심화 경로
 - 상위: [02_os/ MOC](../../README.md)
-- 이웃: [02_os/kernel/](../../kernel/README.md) — K8s 운영 관점의 커널 메커니즘(namespace·cgroup·/proc). 본서 Ch 6·7·11과 주제가 겹칩니다
+- 이웃: [02_os/kernel/](../../kernel/README.md) — K8s 운영 관점의 커널 메커니즘(cgroup v2 깊이·마운트 propagation·OverlayFS). 본서 11장(cgroups v2)과 주제가 겹칩니다

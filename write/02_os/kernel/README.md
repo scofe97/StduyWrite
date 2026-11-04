@@ -12,7 +12,7 @@ updated: 2026-09-12
 
 # 02_os/kernel
 ---
-> Linux 커널이 컨테이너 동작에서 맡는 책임을 정리한다. 유저/커널 스페이스 분리, 시스템 콜, 커널 코어 영역, namespace·cgroup, /proc, K8s 노드 필수 커널 파라미터까지 — 네트워크 영역은 `08_cloud/book/networking-and-kubernetes/` 정독본에서 다루고 본 폴더는 그 외 커널 일반 메커니즘에 집중한다.
+> Linux 커널이 컨테이너 동작에서 맡는 책임을 정리한다. cgroup v2 깊이, 마운트 네임스페이스 propagation, cgroup 사례, OverlayFS와 user namespace까지 — 네트워크 영역은 `08_cloud/book/networking-and-kubernetes/` 정독본에서 다루고 본 폴더는 그 외 커널 일반 메커니즘에 집중한다.
 
 > 프로세스·시스템 콜·스케줄링·메모리·cgroup·namespace·파일시스템·보안·관측의 읽기 순서는 [OS 로드맵](../../roadmap/os-roadmap.md)에 정리했습니다.
 
@@ -22,11 +22,8 @@ updated: 2026-09-12
 
 | Ch | 제목 | 핵심 질문 |
 |----|------|----------|
-| 01-01 | [커널과 컨테이너](./01-01.커널과%20컨테이너.md) | 유저/커널 스페이스 분리, 시스템 콜, 코어 7대 영역, namespace/cgroup, /proc, K8s 노드 필수 커널 파라미터, runc create 시퀀스는 어떻게 컨테이너 동작을 만드는가? |
 | 01-02 | [cgroup v2 깊이](./01-02.cgroup%20v2%20깊이.md) | 단일 트리·컨트롤러·PSI·kubepods.slice·throttling/OOM 분석은 cgroup 파일에서 어떻게 읽는가? |
 | 01-03 | [마운트 네임스페이스와 propagation](./01-03.마운트%20네임스페이스와%20propagation.md) | private/shared/slave/unbindable 4종과 K8s `mountPropagation` 옵션은 CSI·HostPath 사고를 어떻게 결정하는가? |
-| 01-04 | [cgroup 파일시스템 실습](./01-04.cgroup%20파일시스템%20실습.md) | `/sys/fs/cgroup` 트리에서 Pod별 디렉토리를 찾아 `memory.max`·`cpu.max`와 K8s `requests`/`limits`를 어떻게 매핑하는가? |
-| 01-05 | [namespace 실습 — 8가지 격리와 unshare](./01-05.namespace%20실습%20—%208가지%20격리와%20unshare.md) | `unshare`로 PID·UTS·MNT·NET 격리를 직접 만들고 호스트(2)–Pod(3)–컨테이너(2) 그루핑으로 외울 수 있는가? |
 | 01-06 | [cgroup 사례 — Endowus OOMKilled](./01-06.cgroup%20사례%20—%20Endowus%20OOMKilled.md) | Pod 6GB·JVM 힙 4.37GB인데 OOMKilled가 반복되는 이유는? cgroup의 RSS 기준이 JVM 힙과 어떻게 다르며, jimage·Akka·Netty가 만든 사각지대 1.63GB를 어떻게 추적했는가? |
 | 01-07 | [OverlayFS와 user namespace — Netflix UID 격리](./01-07.OverlayFS와%20user%20namespace%20—%20Netflix%20UID%20격리.md) | user namespace + ID map이 보안을 어떻게 강화했고, OverlayFS lowerdir 마운트가 글로벌 락 폭주를 일으켜 노드 마비로 번진 5단계 나비 효과는? Linux 6.3 recursive bind mount의 해결 원리는? |
 
