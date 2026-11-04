@@ -1,4 +1,4 @@
-# 사실 출처: go1.25.1 src/net/sock_posix.go:150, src/internal/poll/fd_unix.go:594, RFC 793, gonet-lab 00-01
+# 사실 출처: go1.25.1 src/net/sock_posix.go:150, src/internal/poll/fd_unix.go:594, RFC 793
 # 타입 스펙: type-state
 import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))

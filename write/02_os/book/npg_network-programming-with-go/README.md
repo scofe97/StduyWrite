@@ -11,7 +11,6 @@ related:
   - ../../README.md
   - ../tii_tcp-ip-illustrated/README.md
   - ../cntd_computer-networking-top-down/README.md
-  - ../../project/gonet-lab/README.md
   - ../../../01_language/book/lgo_learning-go/README.md
   - ../../../roadmap/go-roadmap.md
   - ../../../roadmap/network-roadmap.md
@@ -39,8 +38,6 @@ updated: 2026-10-21
 [Learning Go 정독 인덱스](../../../01_language/book/lgo_learning-go/README.md)는 이 책을 문법 뒤에 읽는 서비스 구현서로 보고, 정독할 때 `02_os/book/` 에 두기로 이미 정해 두었습니다. 이 폴더는 그 결정을 따른 것입니다.
 
 같은 폴더의 다른 정독본과는 보는 방향이 다릅니다. [CNTD](../cntd_computer-networking-top-down/README.md)는 TCP 가 왜 그렇게 설계됐는지를 추상 모델로 쌓습니다. [TCP/IP Illustrated](../tii_tcp-ip-illustrated/README.md)는 같은 장치가 실제 구현과 tcpdump 출력에서 어떤 모양인지 보입니다. 이 책은 그 장치를 애플리케이션 쪽에서 다룹니다. `net.Dial` 이 핸드셰이크를 어떻게 감추는지, 데드라인을 어디에 거는지, 연결을 언제 닫아야 자원이 돌아오는지를 Go 코드로 보입니다.
-
-[gonet-lab](../../project/gonet-lab/README.md)과는 역할을 나눕니다. gonet-lab 은 primitive 를 직접 짜고 일부러 깨뜨려 커널 쪽에서 관측하는 랩입니다. 이 책은 그 랩이 기대는 표준 라이브러리 사용법의 정본입니다. 랩 문서가 이미 설명한 개념(listener 소켓과 연결 소켓, UDP 데이터그램 경계)은 이 폴더에서 다시 풀지 않고 그 문서로 링크합니다.
 
 
 

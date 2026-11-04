@@ -20,8 +20,6 @@ related:
   - ./01-01.go%20%EB%AA%85%EB%A0%B9%20%ED%95%98%EB%82%98%EB%A1%9C%20%EB%A7%8C%EB%93%A4%EA%B3%A0%20%EB%8B%A4%EB%93%AC%EA%B3%A0%20%EA%B2%80%EC%82%AC%ED%95%A9%EB%8B%88%EB%8B%A4.md
   - ../../README.md
   - ../../../roadmap/go-roadmap.md
-  - ../../../02_os/project/gonet-lab/README.md
-  - ../../../02_os/project/netpath-lab/README.md
 learning:
   topic: learning-go
   scope: durable
@@ -42,9 +40,7 @@ updated: 2026-11-03
 
 > 이 책은 네트워크 책이 아니라 언어 책입니다. 문법·관용구·표준 라이브러리를 다루므로 `01_language/book/` 에 둡니다.
 
-Go 를 쓰는 기존 문서는 모두 `02_os/project/` 의 실습 랩에 있습니다. [gonet-lab](../../../02_os/project/gonet-lab/README.md) 은 소켓과 커널 자원을, [netpath-lab](../../../02_os/project/netpath-lab/README.md) 은 에러 값이 이름표가 되는 경로를 다룹니다. 두 랩 모두 Go 문법을 안다고 보고 진행하기 때문에, 문법 자체를 차근차근 쌓을 자리가 따로 없었습니다.
-
-이 책이 그 자리를 맡습니다. slice 가 배열을 어떻게 공유하는지, 인터페이스가 왜 암묵적으로 구현되는지를 여기서 먼저 익히면, 랩 코드에서 같은 문법을 만났을 때 이 노트로 돌아와 확인할 수 있습니다.
+slice 가 배열을 어떻게 공유하는지, 인터페이스가 왜 암묵적으로 구현되는지를 여기서 먼저 익히면, 실습 코드에서 같은 문법을 만났을 때 이 노트로 돌아와 확인할 수 있습니다.
 
 『Network Programming with Go』는 문법을 다 익힌 뒤 읽는 서비스 구현서라 이 폴더에 넣지 않습니다. 그 책은 로드맵 6단계 자리이고, 나중에 정독할 때 `02_os/book/` 에 둡니다.
 

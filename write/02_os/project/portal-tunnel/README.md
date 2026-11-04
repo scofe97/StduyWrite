@@ -5,7 +5,6 @@ status: draft
 source:
   - https://github.com/gosuda/portal-tunnel/tree/129b6de5  # 2026-10-20, v2.6.4+5
 related:
-  - ../../project/gonet-lab/README.md
   - ../../project/network-fundamentals-lab/05-01.연결은 양 끝만의 일이 아니다.md
   - ../../../roadmap/network-roadmap.md
   - ../../../roadmap/go-roadmap.md
@@ -26,7 +25,7 @@ updated: 2026-10-21
 
 이 시리즈는 Go 언어로 작성된 MIT 라이선스 오픈소스 [gosuda/portal-tunnel](https://github.com/gosuda/portal-tunnel)을 코드 수준에서 정독합니다. 동작 원리를 파악하고 아키텍처 리뷰와 코드 기여(Contribution)로 나아가려고 마련했습니다.
 
-HTTP, TCP, Go 기본 문법을 이해하고 소켓 프로그래밍을 경험해 본 개발자를 독자로 삼습니다. 같은 저장소의 [gonet-lab](../../project/gonet-lab/README.md)에서 TCP echo 서버, UDP 데이터그램, DNS 클라이언트, 포트 스캐너를 직접 구현해 보았다고 가정합니다. 반면 역방향 터널의 핵심 기법인 역방향 연결 풀링, SNI 라우팅, keyless TLS, yamux 스트림 다중화, SIWE(Sign-In with Ethereum) 신원 증명은 처음 접하는 개념이라고 보고 첫 등장마다 배경과 원리를 함께 설명합니다.
+HTTP, TCP, Go 기본 문법을 이해하고 소켓 프로그래밍을 경험해 본 개발자를 독자로 삼습니다. 역방향 터널의 핵심 기법인 역방향 연결 풀링, SNI 라우팅, keyless TLS, yamux 스트림 다중화, SIWE(Sign-In with Ethereum) 신원 증명은 처음 접하는 개념이라고 보고 첫 등장마다 배경과 원리를 함께 설명합니다.
 
 기준 커밋은 129b6de5 (2026-10-20, v2.6.4 이후 5커밋)입니다.
 
@@ -111,7 +110,6 @@ e2e 하네스 변경은 04-03 편, 이슈 상태 변화는 05-01 편에 반영�
 
 역방향 터널을 깊이 이해하려면 소켓 I/O, 패킷 상태 추적, 오버레이 신뢰 모델을 먼저 알아 두어야 합니다. 아래 문서를 먼저 살펴보면 학습 효율이 높아집니다.
 
-- 소켓 프로그래밍 실습: [gonet-lab 인덱스](../../project/gonet-lab/README.md): 소켓 바인딩, TCP 에코, UDP 전송, 순수 Go 바이트 단위 DNS 클라이언트를 직접 구현하며 시스템 콜과 파일 디스크립터 수명을 확인한 실습 랩입니다.
 - 중간 장비와 NAT 동작: [연결은 양 끝만의 일이 아니다](../../project/network-fundamentals-lab/05-01.연결은%20양%20끝만의%20일이%20아니다.md): 양 끝단의 호스트뿐 아니라 패킷 경로 사이에 위치한 방화벽과 NAT 장비가 연결 상태(conntrack)를 어떻게 기억하고 변경하는지 다룹니다. 역방향 터널이 아웃바운드 연결을 먼저 맺는 이유를 이해하는 바탕이 됩니다.
 - 네트워크 학습 로드맵: [네트워크 로드맵](../../../roadmap/network-roadmap.md): 8단계 오버레이와 신뢰, 9단계 터널과 경로에서 다루는 이론적 토대와 연결됩니다. portal-tunnel은 로드맵 8·9단계의 역방향 터널과 keyless TLS를 실제 코드로 확인하는 참조 구현입니다.
 - Go 언어 학습 로드맵: [Go 로드맵](../../../roadmap/go-roadmap.md): 동시성과 고루틴, 채널 제어, 저수준 I/O 인터페이스를 활용한 네트워크 서비스 설계 단계의 심화 학습서로 연결됩니다.
@@ -148,14 +146,6 @@ curl -sk --resolve demo-<주소 40hex 소문자>.localhost:18443:127.0.0.1 https
 
 
 
-## gonet-lab 클론코딩과의 관계
-
-> 원리를 손으로 체득하는 gonet-lab 실습의 목표 지점이며 본 시리즈는 그 과정에서 길을 잃지 않게 돕는 프로덕션 참조서 역할을 맡습니다.
-
-제품 코드를 눈으로 읽기만 해서는 네트워크 배압이나 연결 수명주기의 복잡성을 온전히 체득하기 어렵습니다. 직접 코드를 작성해 보는 실습은 gonet-lab 로드맵의 Phase 8 Reverse Tunnel 및 Phase 9 Stream Multiplexing에서 portal-tunnel의 핵심 설계를 본떠 수행합니다. 빈 파일에서 시작해 아웃바운드 세션 수립과 yamux 다중화를 직접 조립하고 TLS 패스스루는 이 시리즈로 비교해 봅니다. 이 과정에서 이 시리즈는 실제 프로덕션 오픈소스가 어떤 구조와 트레이드오프를 거쳐 구현되었는지 대조하는 상세 정독 참조서 역할을 합니다.
-
-
-
 ## 기여 경로와 검증 절차
 
 > 사람과 AI 기여자의 역할 분담을 존중하며 표면 계층의 마찰 해소에서 시작해 코어 영역 검증으로 나아가는 기여 흐름을 안내합니다.
@@ -172,7 +162,7 @@ curl -sk --resolve demo-<주소 40hex 소문자>.localhost:18443:127.0.0.1 https
 
 > 이 인덱스가 가리키는 외부 실습과 로드맵입니다.
 
-- [gonet-lab 프로젝트 인덱스](../../project/gonet-lab/README.md): 소켓·TCP·UDP·DNS를 Go로 직접 짠 실습 랩
 - [연결은 양 끝만의 일이 아니다](../../project/network-fundamentals-lab/05-01.연결은%20양%20끝만의%20일이%20아니다.md): NAT와 방화벽 conntrack 중간 장비 동작
 - [네트워크 로드맵](../../../roadmap/network-roadmap.md): 8단계 오버레이와 신뢰, 9단계 터널과 경로
 - [Go 로드맵](../../../roadmap/go-roadmap.md): 네트워크 서비스와 동시성 설계
+- [flats 학습 시리즈](../../../10_AI/project/flats/README.md): portal-tunnel SDK(`keyless.Client`)를 내장해 Portal 노출을 제공하는 제품 사례. 오버레이 노출 편이 이 시리즈의 keyless TLS·SNI 라우팅 편과 상호 링크

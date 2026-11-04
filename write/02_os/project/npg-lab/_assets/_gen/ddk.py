@@ -1,4 +1,4 @@
-# gonet-lab 도식 공용 도우미 — dd.py 프리미티브 위에 한글 폰트 분기와 노드·화살표 모양만 얹는다.
+# 도식 공용 도우미 — dd.py 프리미티브 위에 한글 폰트 분기와 노드·화살표 모양만 얹는다.
 from dd import D, Seq, INK, MUTED, SOFT, RULE, PAPER2, KR, MONO
 
 

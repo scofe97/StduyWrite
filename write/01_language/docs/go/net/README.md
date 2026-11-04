@@ -36,10 +36,9 @@ updated: 2026-10-07
 
 ## 이 섹션이 다른 노트와 나누는 일
 
-> 네트워크와 Go 를 다루는 세 노트가 각자 맡은 초점입니다.
+> 네트워크와 Go 를 다루는 두 노트가 각자 맡은 초점입니다.
 
 - NPG 정독본([02_os/book/npg_network-programming-with-go/](../../../../02_os/book/npg_network-programming-with-go/README.md)) — 책의 장·절과 Listing 예제 코드를 따라가며 소켓 프로그래밍을 학습하는 정독 축입니다.
-- gonet-lab([02_os/project/gonet-lab/](../../../../02_os/project/gonet-lab/README.md)) — 커널 관측(strace, proc, tcpdump, tc netem)을 통해 네트워크 프로토콜 동작을 실험하고 실측하는 관측 축입니다.
 - 이 섹션([01_language/docs/go/net/](README.md)) — 공식 문서(`pkg.go.dev/net`)의 계약을 정본으로 삼고 Go 표준 라이브러리 소스(go1.25.1)로 내부 동작 근거를 밝히는 계약과 소스 축입니다.
 
 
@@ -51,4 +50,3 @@ updated: 2026-10-07
 - [docs MOC](../../README.md) — 언어 공식문서 정독 전체 목록
 - [net-http 섹션](../net-http/README.md) — HTTP 클라이언트·서버 표준 라이브러리 정독
 - [Network Programming with Go 정독본](../../../../02_os/book/npg_network-programming-with-go/README.md) — 네트워크 프로그래밍 책 정독
-- [gonet-lab 학습 문서](../../../../02_os/project/gonet-lab/README.md) — 소켓·패킷 커널 실측 관측

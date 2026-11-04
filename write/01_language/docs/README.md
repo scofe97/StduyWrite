@@ -59,4 +59,3 @@ updated: 2026-10-07
 - [01_language MOC](../README.md) — 대분류 지도
 - [Learning Go 정독본](../book/lgo_learning-go/README.md) — Go 문법·타입·인터페이스·동시성 기초
 - [Network Programming with Go 정독본](../../02_os/book/npg_network-programming-with-go/README.md) — TCP/IP·소켓 프로그래밍 책 정독
-- [gonet-lab 학습 문서](../../02_os/project/gonet-lab/README.md) — 리눅스 커널 소켓·패킷·시스템 콜 실측 관측

@@ -1,4 +1,4 @@
-# 사실 출처: go doc net.PacketConn, UDPConn, gonet-lab 02-01·02-03 (go1.25.1)
+# 사실 출처: go doc net.PacketConn, UDPConn (go1.25.1)
 # 타입 스펙: type-data-flow
 import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
