@@ -20,7 +20,7 @@ learning:
   level: 기본
   last_verified:
   blocked_count:
-  next_lesson: "1장 01-01 정독 노트 작성"
+  next_lesson: "2장 02-01 정독 노트 작성"
 updated: 2026-11-05
 ---
 
@@ -87,16 +87,16 @@ updated: 2026-11-05
 
 ### 시험 도메인과 장의 대응
 
-1장 본문이 밝힌 CKS 도메인 비중입니다. 저자는 책의 장 구성이 커리큘럼을 그대로 따른다고 적었으므로 도메인 하나가 장 하나에 대응합니다.
+[CNCF CKS 커리큘럼 v1.37](https://github.com/cncf/curriculum/blob/main/CKS_Curriculum%20v1.37.pdf)의 도메인 비중입니다(2026-11-05 조회). 책의 장 구성이 도메인 순서를 따르므로 도메인 하나가 장 하나에 대응합니다.
 
 | 도메인 | 비중 | 장 |
 |--------|-----:|----|
-| Cluster Setup | 10% | 2 |
+| Cluster Setup | 15% | 2 |
 | Cluster Hardening | 15% | 3 |
-| System Hardening | 15% | 4 |
+| System Hardening | 10% | 4 |
 | Minimize Microservice Vulnerabilities | 20% | 5 |
 | Supply Chain Security | 20% | 6 |
-| Monitoring, Logging, and Runtime Security | 20% | 7 |
+| Monitoring, Logging and Runtime Security | 20% | 7 |
 
 
 
@@ -106,7 +106,7 @@ updated: 2026-11-05
 
 | 편 | 제목 | 상태 |
 |----|------|------|
-| 01-01 | Exam Details and Resources (Ch1 전체, 가제) | 작성 예정 |
+| 01-01 | [CKS 시험의 범위와 준비 — 자격증 경로·출제 도메인·시험 환경](./01-01.CKS%20%EC%8B%9C%ED%97%98%EC%9D%98%20%EB%B2%94%EC%9C%84%EC%99%80%20%EC%A4%80%EB%B9%84%20%E2%80%94%20%EC%9E%90%EA%B2%A9%EC%A6%9D%20%EA%B2%BD%EB%A1%9C%C2%B7%EC%B6%9C%EC%A0%9C%20%EB%8F%84%EB%A9%94%EC%9D%B8%C2%B7%EC%8B%9C%ED%97%98%20%ED%99%98%EA%B2%BD.md) | 작성 완료 |
 | 02-01 | Cluster Setup 전반부 (Ch2 전반부, 가제) | 작성 예정 |
 | 02-02 | Cluster Setup 후반부 (Ch2 후반부, 가제) | 작성 예정 |
 | 03-01 | Cluster Hardening (Ch3 전체, 가제) | 작성 예정 |
@@ -139,13 +139,12 @@ updated: 2026-11-05
 
 | 항목 | 현재 값 |
 |------|--------|
-| 진행률 | 0/7 장 (부록은 각 장 복습 절로 흡수 예정). 정독 노트 0편 |
+| 진행률 | 1/7 장 (부록은 각 장 복습 절로 흡수 예정). 정독 노트 1편 |
 | 난이도 레벨 | 미정 |
 | 막힌 지점 | 없음 |
-| 다음 레슨 후보 | 01-01 (1장 Exam Details and Resources) |
-| 최근 검증 결과 | 이 README의 `verify-gate.sh --type=learning --style=jondae` 결과는 작성 보고서에 있습니다 (2026-11-05) |
-| 원문 정오 누적 | 0 |
-| 버전 차이 기록 | 0 |
+| 다음 레슨 후보 | 02-01 (2장 Cluster Setup 전반부) |
+| 최근 검증 결과 | 01-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0, 이 README도 0 (2026-11-05). 적대적 내용 검증 완료: 원문·공식 페이지와 대조해 노트 8곳·이 README 1곳 수정 (2026-11-05) |
+| 버전 차이 기록 | 4 (시험 기준 쿠버네티스 버전, Cluster Setup 비중, System Hardening 비중, Pod 보안 항목 표기) |
 | 복습 회차 | 0 |
 
 
@@ -156,7 +155,7 @@ updated: 2026-11-05
 
 `NN`은 책의 장 번호이고 `MM`은 그 장을 여러 편으로 나눌 때의 편 순번입니다. 정밀 도식은 `_assets/`에 SVG로 두고, 흐름·관계 중 자동 배치가 나은 것은 Mermaid로 본문에 직접 그립니다.
 
-이 책은 쿠버네티스 1.26 기준으로 쓰였다고 1장이 밝힙니다. 보안 기능은 버전에 따라 기본값과 필드가 바뀌므로, 노트에 적는 값은 반드시 쿠버네티스 버전과 함께 적습니다. 특히 PodSecurityPolicy 제거와 Pod Security Admission, AppArmor 지정 방식, seccomp 기본값, 시험이 기준으로 삼는 쿠버네티스 버전이 그렇습니다. 원문과 현재 값이 다르면 원문 정오 누적과 버전 차이 기록에 나누어 적습니다.
+이 책은 쿠버네티스 1.26 기준으로 쓰였다고 1장이 밝힙니다. 보안 기능은 버전에 따라 기본값과 필드가 바뀌므로, 노트에 적는 값은 반드시 쿠버네티스 버전과 함께 적습니다. 특히 PodSecurityPolicy 제거와 Pod Security Admission, AppArmor 지정 방식, seccomp 기본값, 시험이 기준으로 삼는 쿠버네티스 버전이 그렇습니다. 원문과 현재 값이 다르면 노트에는 현재 값만 출처와 함께 적고, 바뀐 항목은 학습 상태 표의 버전 차이 기록에만 셉니다.
 
 작성 규약은 writing 스킬의 책 요약 템플릿과 정독 노트 세션 규약을 따르되, "Spring 앱 개발 관점" 절은 접점이 자연스러운 장에만 둡니다. 이 책은 클러스터 운영자의 하드닝 절차가 본체이므로, 순수 호스트·클러스터 설정 장에 Spring을 붙이면 연결이 억지스러워집니다. 접점이 생길 수 있는 후보는 Secret 소비와 컨테이너 불변성이 나오는 5·7장 정도이며, 실제 적용 여부는 해당 편을 쓸 때 정합니다.
 
