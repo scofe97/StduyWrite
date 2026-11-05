@@ -20,7 +20,7 @@ learning:
   level: 기본
   last_verified:
   blocked_count:
-  next_lesson: "4장 04-01 정독 노트 작성"
+  next_lesson: "5장 05-01 정독 노트 작성"
 updated: 2026-11-05
 ---
 
@@ -110,7 +110,7 @@ updated: 2026-11-05
 | 02-01 | [클러스터 경계 세우기 — NetworkPolicy·CIS 벤치마크·TLS Ingress](./02-01.%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EA%B2%BD%EA%B3%84%20%EC%84%B8%EC%9A%B0%EA%B8%B0%20%E2%80%94%20NetworkPolicy%C2%B7CIS%20%EB%B2%A4%EC%B9%98%EB%A7%88%ED%81%AC%C2%B7TLS%20Ingress.md) | 작성 완료 |
 | 02-02 | [노드와 접근 지점 지키기 — 메타데이터·Dashboard·설정 인자·바이너리 검증](./02-02.%EB%85%B8%EB%93%9C%EC%99%80%20%EC%A0%91%EA%B7%BC%20%EC%A7%80%EC%A0%90%20%EC%A7%80%ED%82%A4%EA%B8%B0%20%E2%80%94%20%EB%A9%94%ED%83%80%EB%8D%B0%EC%9D%B4%ED%84%B0%C2%B7Dashboard%C2%B7%EC%84%A4%EC%A0%95%20%EC%9D%B8%EC%9E%90%C2%B7%EB%B0%94%EC%9D%B4%EB%84%88%EB%A6%AC%20%EA%B2%80%EC%A6%9D.md) | 작성 완료 |
 | 03-01 | [클러스터 굳히기 — API 접근·RBAC·ServiceAccount·업그레이드](./03-01.%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EA%B5%B3%ED%9E%88%EA%B8%B0%20%E2%80%94%20API%20%EC%A0%91%EA%B7%BC%C2%B7RBAC%C2%B7ServiceAccount%C2%B7%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C.md) | 작성 완료 |
-| 04-01 | System Hardening (Ch4 전체, 가제) | 작성 예정 |
+| 04-01 | [노드 호스트 굳히기 — 패키지·계정·포트·AppArmor·seccomp](./04-01.%EB%85%B8%EB%93%9C%20%ED%98%B8%EC%8A%A4%ED%8A%B8%20%EA%B5%B3%ED%9E%88%EA%B8%B0%20%E2%80%94%20%ED%8C%A8%ED%82%A4%EC%A7%80%C2%B7%EA%B3%84%EC%A0%95%C2%B7%ED%8F%AC%ED%8A%B8%C2%B7AppArmor%C2%B7seccomp.md) | 작성 완료 |
 | 05-01 | Minimizing Microservice Vulnerabilities 전반부 (Ch5 전반부, 가제) | 작성 예정 |
 | 05-02 | Minimizing Microservice Vulnerabilities 후반부 (Ch5 후반부, 가제) | 작성 예정 |
 | 06-01 | Supply Chain Security (Ch6 전체, 가제) | 작성 예정 |
@@ -139,11 +139,11 @@ updated: 2026-11-05
 
 | 항목 | 현재 값 |
 |------|--------|
-| 진행률 | 3/7 장 (부록은 각 장 복습 절로 흡수 예정). 정독 노트 4편 |
+| 진행률 | 4/7 장 (부록은 각 장 복습 절로 흡수 예정). 정독 노트 5편 |
 | 난이도 레벨 | 미정 |
 | 막힌 지점 | 없음 |
-| 다음 레슨 후보 | 04-01 (4장 System Hardening) |
-| 최근 검증 결과 | 01-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0, 이 README도 0 (2026-11-05). 적대적 내용 검증 완료: 원문·공식 페이지와 대조해 노트 8곳·이 README 1곳 수정 (2026-11-05). 02-01·02-02·03-01 도 게이트 실패 0, 적대적 내용 검증으로 각각 7곳·8곳·8곳 수정 (2026-11-05) |
+| 다음 레슨 후보 | 05-01 (5장 Minimizing Microservice Vulnerabilities 전반부) |
+| 최근 검증 결과 | 01-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0, 이 README도 0 (2026-11-05). 적대적 내용 검증 완료: 원문·공식 페이지와 대조해 노트 8곳·이 README 1곳 수정 (2026-11-05). 02-01·02-02·03-01 도 게이트 실패 0, 적대적 내용 검증으로 각각 7곳·8곳·8곳 수정 (2026-11-05). 04-01 도 게이트 실패 0, 적대적 내용 검증으로 7곳 수정 (2026-11-05) |
 | 버전 차이 기록 | 4 (시험 기준 쿠버네티스 버전, Cluster Setup 비중, System Hardening 비중, Pod 보안 항목 표기) |
 | 복습 회차 | 0 |
 
