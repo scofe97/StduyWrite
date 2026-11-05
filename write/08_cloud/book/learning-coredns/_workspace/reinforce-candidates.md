@@ -161,3 +161,23 @@
 - 학습자 말(S7): 처음엔 "파일에 둘 다 있으니 둘 다 정상"이라고 봄. `fallthrough` 를 넣은 뒤에는 "api 는 존 파일 값 .40 으로 온다"고 예측(실제는 hosts 의 .99).
 - 근거: S7 실측(CoreDNS 1.15.0) — `shop.example { hosts { 198.51.100.99 api.shop.example }  file db.shop.example }` 에서 db 는 SERVFAIL. hosts 에 SOA 가 없어 NXDOMAIN 을 만들 수 없다(`plugin/hosts/hosts.go:72-74` 주석). `03-02` 「fallthrough」 는 "없으면 NXDOMAIN 이나 빈 응답"이라고 일반화하는데, SOA 가 없는 hosts 는 이 규칙에서 벗어난다. `fallthrough` 뒤에도 api 는 hosts 답(TTL 3600, AUTHORITY 0)이었다. `04-01` 277줄은 "답을 못 찾았을 때 넘긴다"고 맞게 적었지만, 찾은 이름은 계속 hosts 가 답한다는 반대쪽은 적지 않았다.
 - 할 일: `04-01` hosts fallthrough 문단 끝에 두 문장 — "넘기지 않으면 호스트 테이블에 없는 이름은 SERVFAIL 로 끝난다. hosts 에는 SOA 가 없어 NXDOMAIN 을 만들 수 없기 때문이다." "넘기더라도 테이블에 있는 이름은 hosts 가 답하므로, 같은 이름을 존 파일 값으로 되돌리려면 그 줄을 지워야 한다." `03-02` 는 다른 창이 고치는 중이라 손대지 않고, 필요하면 "SOA 가 있는 플러그인 기준"이라는 한정만 나중에 검토.
+
+## 5장 Phase 1 (05-01, 2026-11-04) — 메인 보고는 5장 Phase 2 를 마칠 때 함께
+
+### 30. `05-01` §6 리스 TTL — `min-lease-ttl`·`max-lease-ttl` 이 보안 수정에서 나왔다는 배경
+
+- 학습자 말: "왜 30초인지는 모른다는데 조사 좀", 이어서 "etcd 값은 원래 한번 저장되면 굉장히 오래 쓰는데 TTL 을 도입해 극단적 캐싱을 막았다"로 오해.
+- 근거: CoreDNS 보안 권고 GHSA-93mf-426m-g6x9(CVE-2025-58063, high, 2025-09-09) — v1.2.0(#1702)부터 `TTL()` 이 리스 **ID** 를 `uint32` 로 잘라 TTL 로 써 캐시 고정(cache pinning)이 가능했음. 수정 커밋 `e1768a5d2`(v1.12.4) 메시지: "fix the TTL() function to use etcd time-to-live API … Add configurable min-lease-ttl and max-lease-ttl options to prevent extreme TTL values … 30s to 1d as the min/max." 숫자 30 의 근거는 커밋·권고 어디에도 없음.
+- 할 일: §6 "둘 다 v1.12.4 에 붙었습니다" 뒤에 한 문장 — 리스 ID 를 TTL 로 쓰던 버그의 수정으로 들어왔고, 그래서 리스 유래 TTL 은 실제 남은 시간을 30초~1일로 가둔다. 각주로 권고문 링크. 30 의 이유는 적지 않음.
+
+### 31. `05-01` 「TTL 에 기대는 클라이언트」 — 클라이언트가 어디서 캐시하는지(캐시 겹)가 없음
+
+- 학습자 말: "지금 어떤 구조로 캐싱되는 건지 궁금함", "저 DNS 캐시 계층은 문서에서 잘 다루는가? 꽤 중요해 보이는데".
+- 근거: 노트 전체 grep(2026-11-04) — JVM `networkaddress.cache.ttl` 은 `06-02`·`06-04`·`07-01`, NodeLocal DNSCache 는 6장, CoreDNS `cache` 는 `03-02` 에 흩어져 있고, OS 캐시(systemd-resolved·nscd·mDNSResponder)는 어디에도 없음. 겹을 한 그림으로 쌓은 곳도 없음. 05-01 이 "클라이언트는 TTL 을 기다린다"를 처음 꺼내는 자리.
+- 할 일: 그 절에 겹 그림 한 장(앱/런타임 → OS → 노드·중간 리졸버 → CoreDNS `cache` → `etcd` 플러그인은 매번 읽음)과 한 문단, `06-02`·`07-01` 링크. OS 캐시는 공식 문서 확인 뒤 한 줄. Go 기본 리졸버·glibc `getaddrinfo` 는 자체 캐시가 없다는 점도 소스·문서로 확인 뒤.
+
+### 32. `05-01` §4·§5 — 등록→etcd, etcd→CoreDNS, CoreDNS→클라이언트 세 구간의 속도를 한곳에서
+
+- 학습자 말: "etcd 도 사실 30초마다 갱신한다는데 …", "CoreDNS 는 결국 저 TTL 시간 동안 이전 걸 읽는다는 거네?", "결제 서비스의 30초는 etcd 리스와 별 상관없는 거 아냐?", 채점 4 재진술에서 "etcd 가 이것들(두 전제)을 해결해 줌".
+- 근거: 노트 `:194` "CoreDNS 는 etcd 에 접속해 질의 내용과 캐시 상태에 따라 필요한 만큼 데이터를 읽습니다" 와 「핵심 요약」의 두 지연 구분은 있으나, 세 구간을 나란히 보여 주는 문장·그림이 없어 TTL 을 etcd 쪽 주기로 읽음. `push-gap.svg` 는 등록과 재질의 두 점만 보임.
+- 할 일: §4 「상태 격리와 단순한 확장」 또는 「TTL 에 기대는 클라이언트」에 세 구간(즉시·질의 때 읽음·TTL 대기) 한 줄 도식, "리스 남은 시간이 TTL 숫자를 정하고 클라이언트는 그 숫자만 본다" 한 문장. CoreDNS 앞에 `cache` 를 두면 CoreDNS 도 TTL 동안 옛 답을 준다는 예외(1~4장 실습 S2)를 링크.
