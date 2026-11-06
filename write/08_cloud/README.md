@@ -11,7 +11,7 @@ related:
   - ./book/learning-coredns/README.md
   - ./book/cilium-up-and-running/README.md
   - ./book/cks-study-guide/README.md
-updated: 2026-10-10
+updated: 2026-11-06
 ---
 
 # 08_cloud
@@ -26,7 +26,7 @@ Kubernetes 를 어떤 순서로 읽을지는 [k8s-roadmap.md](../roadmap/k8s-roa
 |--------------|------|------|
 | [kubernetes/](./kubernetes/README.md) | 로컬 클러스터 운영, Helm·Operator, DB/DevTools 운영, RBAC, 오토스케일링 | 20개 장 |
 | [argocd/](./argocd/README.md) | GitOps, Application, AppProject, App of Apps, ApplicationSet, Image Updater, 운영 심화 | 14개 장 |
-| [docs/](./docs/README.md) | 쿠버네티스 공식문서(k8s.io) 정독 — 섹션 슬러그 폴더 아래 궁금한 주제만 한 편씩 | 3개 편 |
+| [docs/](./docs/README.md) | 공식 문서·제품 사이트 정독 — 제품(kubernetes·helm·kustomize)마다 폴더를 두고 궁금한 주제만 한 편씩 | 6개 편 |
 | `service-mesh/` <!-- 링크 끊김(2026-08): ./service-mesh/README.md --> | Linkerd·Istio·Cilium, 사이드카/앰비언트, mTLS, 멀티클러스터 | 26개 장 |
 | `openstack/` <!-- 링크 끊김(2026-08): ./openstack/README.md --> | IaaS 개요, AWS 서비스 대응, 오픈스택↔Kubernetes 층 관계(CMP 바닥 인프라) | 1개 장 |
 | [book/networking-and-kubernetes/](./book/networking-and-kubernetes/README.md) | 《Networking and Kubernetes》 정독 — OSI/TCP-IP, Linux 네트워킹, 컨테이너·K8s 네트워킹, Service 추상화, AWS/GCP/Azure | 정독 노트 17편 + 용어집·결정 치트시트 |

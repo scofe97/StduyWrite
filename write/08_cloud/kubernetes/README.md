@@ -10,7 +10,7 @@ related:
   - ../README.md
   - ../argocd/README.md
   - ../book/kubernetes-in-action/README.md
-updated: 2026-09-12
+updated: 2026-11-06
 ---
 
 # 08_cloud/kubernetes
@@ -35,10 +35,11 @@ updated: 2026-09-12
 |------|--------------|-----------|
 | [`06_architecture/`](06_architecture/README.md) | Cluster Architecture | Control Plane·etcd·API 보안·업그레이드 |
 | [`09_operations/`](09_operations/README.md) | Cluster Administration | 관측·트러블슈팅·kubectl 고급·CKA |
-| [`10_packaging/`](10_packaging/README.md) | (비공식) | Helm·Kustomize 패키징 도구 |
 | [`11_devtools/`](11_devtools/README.md) | (비공식) | K8s 위 CI/CD·GitOps·레지스트리 도구 |
 
-`10_packaging`과 `11_devtools`는 공식 concepts에는 없는 주제입니다. Helm·Kustomize는 매니페스트를 다루는 패키징 도구이고, Jenkins·SonarQube·ArgoCD·Harbor는 K8s 위에 올려 쓰는 CI/CD·GitOps·레지스트리 도구라, 순정 개념과 섞이지 않도록 별도 대주제로 분리했습니다.
+`11_devtools`는 공식 concepts에는 없는 주제입니다. Jenkins·SonarQube·ArgoCD·Harbor는 K8s 위에 올려 쓰는 CI/CD·GitOps·레지스트리 도구라, 순정 개념과 섞이지 않도록 별도 대주제로 분리했습니다.
+
+패키징(Helm·Kustomize)은 [`../docs/helm/`](../docs/helm/README.md)·[`../docs/kustomize/`](../docs/kustomize/README.md)로 옮겼습니다.
 
 
 
@@ -104,14 +105,6 @@ CRD와 Controller로 Kubernetes 위에 우리만의 리소스를 얹어, Statefu
 - **09-02 OOMKilled 사례 분석** — 6GB Pod가 반복 OOMKilled되는 실제 사례에서 JVM heap과 cgroup이 보는 메모리가 왜 어긋나는지 추적합니다.
 - **09-03 JSONPath와 kubectl 고급 조회** — 반복 조회·스크립팅에 필요한 출력 제어를 익힙니다.
 - **09-04 CKA 대비와 문제 풀이 전략** — 시험 범위를 실무 문서와 어떻게 잇는지 봅니다.
-
-### 10_packaging — 패키징 도구
-
-반복되는 매니페스트를 패키지로 묶어 환경별 차이를 선언적으로 관리합니다.
-
-- **10-01 Helm 기초** — 왜 생짜 매니페스트 대신 Helm을 쓰는지, 템플릿·values의 기본을 잡습니다.
-- **10-02 Helm 고급** — 재사용 가능한 차트를 어떻게 설계하는지 봅니다.
-- **10-03 Kustomize** — Helm 없이 환경별 차이를 patch로 선언적으로 관리하는 길을 봅니다.
 
 ### 11_devtools — DevTools와 GitOps
 

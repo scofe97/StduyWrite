@@ -1,5 +1,5 @@
 ---
-title: 08_cloud/docs/cluster-administration — 클러스터 운영
+title: 08_cloud/docs/kubernetes/cluster-administration — 클러스터 운영
 tags: [moc, kubernetes, official-docs, cluster-administration]
 status: final
 related:
@@ -7,7 +7,7 @@ related:
 updated: 2026-08-27
 ---
 
-# 08_cloud/docs/cluster-administration — 클러스터 운영
+# 08_cloud/docs/kubernetes/cluster-administration — 클러스터 운영
 
 ---
 
@@ -40,4 +40,4 @@ updated: 2026-08-27
 
 > 이 폴더가 딛고 서는 이웃입니다.
 
-- [docs MOC](../README.md) — 폴더 규칙과 전체 문서 목록
+- [kubernetes MOC](../README.md) — 폴더 규칙과 전체 문서 목록

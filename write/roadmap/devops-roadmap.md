@@ -173,10 +173,10 @@ updated: 2026-11-03
 
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
-| Helm 차트 구조 · Chart.yaml · values.yaml · 템플릿 렌더링 | 필수 | [Helm 기초](../08_cloud/kubernetes/10_packaging/10-01.Helm%20%EA%B8%B0%EC%B4%88.md) | [Helm 공식 문서](https://helm.sh/docs/) |
-| Helm 릴리스 생애주기 · 롤백 · 의존성 관리 · 라이프사이클 훅 | 추천 | [Helm 고급](../08_cloud/kubernetes/10_packaging/10-02.Helm%20%EA%B3%A0%EA%B8%89.md) | [Helm 공식 문서](https://helm.sh/docs/) |
-| Kustomize 오버레이 · base 와 overlays · 리소스 패치 | 필수 | [Kustomize](../08_cloud/kubernetes/10_packaging/10-03.Kustomize.md) | [Kustomize 공식 문서](https://kubectl.docs.kubernetes.io/) |
-| Helm · Kustomize | 추천 | [Helm 기초](../08_cloud/kubernetes/10_packaging/10-01.Helm%20%EA%B8%B0%EC%B4%88.md) ~ [Kustomize](../08_cloud/kubernetes/10_packaging/10-03.Kustomize.md) |  |
+| Helm 차트 구조 · Chart.yaml · values.yaml · 템플릿 렌더링 | 필수 | [Helm 기초](../08_cloud/docs/helm/01-01.Helm%20%EA%B8%B0%EC%B4%88.md) | [Helm 공식 문서](https://helm.sh/docs/) |
+| Helm 릴리스 생애주기 · 롤백 · 의존성 관리 · 라이프사이클 훅 | 추천 | [Helm 고급](../08_cloud/docs/helm/01-02.Helm%20%EA%B3%A0%EA%B8%89.md) | [Helm 공식 문서](https://helm.sh/docs/) |
+| Kustomize 오버레이 · base 와 overlays · 리소스 패치 | 필수 | [Kustomize](../08_cloud/docs/kustomize/01-01.Kustomize.md) | [Kustomize 공식 문서](https://kubectl.docs.kubernetes.io/) |
+| Helm · Kustomize | 추천 | [Helm 기초](../08_cloud/docs/helm/01-01.Helm%20%EA%B8%B0%EC%B4%88.md) ~ [Kustomize](../08_cloud/docs/kustomize/01-01.Kustomize.md) |  |
 
 ### 5단계 · GitOps
 
@@ -264,8 +264,8 @@ updated: 2026-11-03
 |---|:---:|---|
 | [로컬 Docker Jenkins](../07_devops/02_Jenkins/07_engine/01-01.%EB%A1%9C%EC%BB%AC%20Docker%20Jenkins%20%2B%20%EC%86%8C%EC%8A%A4%20%EB%94%94%EB%B2%84%EA%B9%85%20%ED%99%98%EA%B2%BD.md) | 2 | 로컬 Docker 컨테이너로 Jenkins 를 띄우고 JDWP 디버거를 붙여 jenkins-core 메서드 추적 |
 | [첫 CI Jenkinsfile 구현](../07_devops/02_Jenkins/06_infra/05-02.%EC%B2%AB%20CI%20Jenkinsfile%20%EA%B5%AC%ED%98%84%20%E2%80%94%20%EC%99%84%EC%84%B1%20%EC%BD%94%EB%93%9C%C2%B7Multibranch%C2%B7Blue%20Ocean.md) | 2 | GitHub 웹훅과 Multibranch 파이프라인으로 PR 빌드·테스트·SonarQube 게이트 자동 실행 |
-| [Helm 기초](../08_cloud/kubernetes/10_packaging/10-01.Helm%20%EA%B8%B0%EC%B4%88.md) | 4 | Helm 차트 생성·values.yaml 변수 주입·템플릿 렌더링과 릴리스 배포 |
-| [Kustomize](../08_cloud/kubernetes/10_packaging/10-03.Kustomize.md) | 4 | kustomization.yaml 오버레이로 환경별(dev·prod) 이미지 태그와 ConfigMap 패치 |
+| [Helm 기초](../08_cloud/docs/helm/01-01.Helm%20%EA%B8%B0%EC%B4%88.md) | 4 | Helm 차트 생성·values.yaml 변수 주입·템플릿 렌더링과 릴리스 배포 |
+| [Kustomize](../08_cloud/docs/kustomize/01-01.Kustomize.md) | 4 | kustomization.yaml 오버레이로 환경별(dev·prod) 이미지 태그와 ConfigMap 패치 |
 | [ArgoCD 설치와 아키텍처 실습](../08_cloud/argocd/deepdive/01-02.ArgoCD%20%EC%84%A4%EC%B9%98%EC%99%80%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98%20%EC%8B%A4%EC%8A%B5.md) | 5 | K8s 클러스터에 ArgoCD 오퍼레이터 배포 및 CLI 로그인 환경 구성 |
 | [ArgoCD 접근과 선언적 설정 실습](../08_cloud/argocd/deepdive/01-03.ArgoCD%20%EC%A0%91%EA%B7%BC%EA%B3%BC%20%EC%84%A0%EC%96%B8%EC%A0%81%20%EC%84%A4%EC%A0%95%20%EC%8B%A4%EC%8A%B5.md) | 5 | Application 매니페스트 선언으로 Git 저장소와 대상 네임스페이스 동기화 |
 | [App of Apps와 ApplicationSet 실습](../08_cloud/argocd/deepdive/02-03.App%20of%20Apps%EC%99%80%20ApplicationSet%20%EC%8B%A4%EC%8A%B5.md) | 5 | App of Apps 패턴과 ApplicationSet 생성기로 여러 마이크로서비스 일괄 프로비저닝 |
