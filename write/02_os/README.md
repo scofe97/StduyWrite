@@ -13,6 +13,7 @@ related:
   - ./book/learning-ebpf/README.md
   - ./book/paw_packet-analysis-wireshark/README.md
   - ./book/cntd_computer-networking-top-down/README.md
+  - ./book/sshm_ssh-mastery/README.md
   - ./project/network-fundamentals-lab/README.md
   - ../08_cloud/book/container-security/README.md
   - ./project/portal-tunnel/README.md
@@ -47,6 +48,7 @@ updated: 2026-11-06
 | [learning-ebpf/](./book/learning-ebpf/README.md) | eBPF 프로그램 자체의 구조 — 맵·헬퍼·`bpf()` 시스템 콜·verifier·BTF·CO-RE·부착 유형과 네트워킹·보안 활용. `systems-performance/` 가 도구로 쓰는 BCC·bpftrace 의 아래층 (책 기반) |
 | [paw_packet-analysis-wireshark/](./book/paw_packet-analysis-wireshark/README.md) | 선 위의 프레임을 떠서 프로토콜별로 읽는 법 — Wireshark 캡처·필터·TCP·TLS·응용 프로토콜·WLAN·보안 분석 (책 기반) |
 | [cntd_computer-networking-top-down/](./book/cntd_computer-networking-top-down/README.md) | 프로토콜을 위에서 아래로 훑는 규격 축 — 응용·트랜스포트·네트워크 계층의 원리와 라우팅·SDN·망 관리. `paw_` 가 캡처로 확인하는 것을 여기서 규격으로 배운다 (책 기반) |
+| [sshm_ssh-mastery/](./book/sshm_ssh-mastery/README.md) | OpenSSH 를 운영자 눈으로 다루는 축 — 호스트 키 검증·공개키 인증·SFTP·포트 포워딩·유휴 연결 유지. npg 확장 트랙 X9 리버스 터널과 ssh-bbs 가 기대는 장치를 설정과 명령으로 먼저 본다 (책 기반) |
 | [network-fundamentals-lab/](./project/network-fundamentals-lab/README.md) | 고장이 장전된 채로 뜨는 containerlab 토폴로지 18편 — 증상에서 계층을 좁히는 훈련. N&K 정독본이 맡는 메커니즘을 깨뜨려 확인하는 축이다 (랩 저장소 기반) |
 
 
