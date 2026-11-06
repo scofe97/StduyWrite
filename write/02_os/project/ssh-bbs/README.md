@@ -10,13 +10,13 @@ related:
   - ../npg-lab/README.md
   - ../portal-tunnel/README.md
   - ../../book/npg_network-programming-with-go/README.md
-updated: "2026-11-04"
+updated: "2026-11-06"
 learning:
   topic: ssh-bbs
   scope: durable
   level: 기본
   last_verified:            # 아직 단계에 들어가지 않음
-  next_lesson: "S1 SSH 서버 학습 문서(RFC 4251~4254). 시작은 npg v0.13(2026-11-29) 뒤"
+  next_lesson: "S1 SSH 서버 학습 문서(RFC 4251~4254). 시작은 npg 책 트랙 v0.13 뒤"
 ---
 
 # ssh-bbs — 프로젝트 인덱스
@@ -65,7 +65,7 @@ npg 는 책 정독 노트가 Phase 1~2 를 맡았지만 이 프로젝트에는 �
 | 항목 | 현재 값 |
 |------|--------|
 | 진행률 | 로드맵과 이슈만 있음 (2026-11-04) |
-| 시작 시점 | npg 책 트랙 v0.13(기한 2026-11-29) 뒤. npg 확장 트랙과의 순서는 그때 정합니다 |
+| 시작 시점 | npg 책 트랙 v0.13 뒤. 남은 npg 확장 단계와의 순서는 그때 정합니다 |
 | 다음 레슨 | S1 SSH 서버 학습 문서 |
 | 최근 검증 결과 | 없음 |
 | 복습 회차 | 없음 |
