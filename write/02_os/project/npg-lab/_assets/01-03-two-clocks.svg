@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 492" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">전체 시계 WriteTimeout 과 쓰기 틈 시계의 15초 동작 비교</title><desc id="dd">동일한 백엔드 검색 지연 20초 요청에서 전체 시계는 15초에 소켓을 끊어 504를 삼키고, 쓰기 틈 시계는 대기 중 시계가 돌지 않아 504 응답을 정상 전달하는 시간축</desc>
+<rect width="960" height="492" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">TIMELINE · CH09 J2 WRITE TIMEOUT VS IDLE GAP</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">전체 시계 WriteTimeout 과 쓰기 틈 시계의 15초 동작 비교</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">전체 시계는 백엔드 대기까지 합산해 504 전에 끊기지만, 틈 시계는 쓰기 마디마다 다시 재어 504를 전송합니다.</text>
+<line x1="24" y1="92" x2="936" y2="92" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="140" y="142" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">전체 시계</text>
+<text x="140" y="160" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">WriteTimeout 15s</text>
+<rect x="152" y="124" width="540" height="48" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="422.0" y="153" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">백엔드 대기 15s 합산 (server.go:1029)</text>
+<circle cx="692" cy="148" r="5" fill="#F0616D"/>
+<rect x="700" y="124" width="216" height="48" rx="6" fill="#F0616D18" stroke="#F0616D" stroke-width="1.4"/>
+<text x="808" y="144" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">15.001s 소켓 단절</text>
+<text x="808" y="162" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F0616D">손님 eof 26건 · 504 삼킴</text>
+<line x1="136" y1="224" x2="896" y2="224" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<line x1="152" y1="220" x2="152" y2="228" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="152" y="244" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">0s (헤더 완료)</text>
+<line x1="332" y1="220" x2="332" y2="228" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="332" y="244" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">5s</text>
+<line x1="512" y1="220" x2="512" y2="228" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="512" y="244" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">10s</text>
+<line x1="692" y1="220" x2="692" y2="228" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="692" y="244" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">15.0s (업스트림 만료)</text>
+<line x1="872" y1="220" x2="872" y2="228" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="872" y="244" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">20s (검색 지연)</text>
+<text x="140" y="290" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">쓰기 틈 시계</text>
+<text x="140" y="308" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">10s (ADR 0014)</text>
+<rect x="152" y="272" width="540" height="48" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="422.0" y="301" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">대기 중 쓰기 시계 미작동 (쓰기 발생 시만 10s 잼)</text>
+<circle cx="692" cy="296" r="6" fill="#F08A59"/>
+<rect x="700" y="272" width="216" height="48" rx="6" fill="#F08A5918" stroke="#F08A59" stroke-width="1.6"/>
+<text x="808" y="292" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">15.0s 에 504 전송</text>
+<text x="808" y="310" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">손님 504 33건 정상 도착</text>
+<rect x="152" y="356" width="764" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="343" y="383" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">전체 시계: 손님 eof 26건 단절</text>
+<line x1="534" y1="362" x2="534" y2="394" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="725" y="383" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">쓰기 틈 시계: 손님 504 33건 도착</text>
+<line x1="12" y1="428" x2="912" y2="428" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="450" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="440" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">쓰기 틈 504 전송</text>
+<rect x="287" y="440" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="309" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">WriteTimeout 소켓 단절</text>
+<rect x="565" y="440" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="587" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">업스트림 대기 구간</text>
+<rect x="739" y="440" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="761" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 도착</text>
+</svg>
