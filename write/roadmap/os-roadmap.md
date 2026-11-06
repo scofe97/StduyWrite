@@ -87,7 +87,7 @@ updated: 2026-09-28
 | [Container Security](../08_cloud/book/container-security/README.md) | 2~4 · 8·9장 | 필수 | 3·5단계 |
 | [Systems Performance](../02_os/book/systems-performance/README.md) | 2 · 4 · 6~9 · 13~15장 | 필수 | 4·5단계 |
 | How Linux Works | 1~8장 | 추천 | 1·2단계 |
-| OSTEP (무료 공개판) | 가상화 · 병행성 · 지속성 | 필수 | 2·4·6단계 |
+| [OSTEP (무료 공개판)](../02_os/book/ostep_operating-systems-three-easy-pieces/README.md) | 가상화 · 병행성 · 지속성 | 필수 | 2·4·6단계 |
 | Linux Kernel Docs (공식) | proc · cgroup-v2 · psi | 필수 | 3~5단계 |
 | Operating System Concepts | 1~16장 | 추천 | 1·2·4~6단계 |
 | Real-World Cryptography | 8 · 13 · 16장 | 추천 | 4·5단계 |
@@ -108,7 +108,7 @@ updated: 2026-09-28
 | Learning Modern Linux | 8장 | 2단계 관측 창 · 4단계 바깥과 안의 노트 |
 | Learning Modern Linux | 9장 | 2단계 IPC — 시그널 · 네임드 파이프 · 유닉스 도메인 소켓 |
 
-**두 자료는 책이 아니라 문서입니다.** [OSTEP](https://pages.cs.wisc.edu/~remzi/OSTEP/)은 왜 OS 가 그렇게 동작하는지를 맡습니다. Linux 공식 문서 셋인 [proc](https://docs.kernel.org/filesystems/proc.html)과 [cgroup v2](https://docs.kernel.org/admin-guide/cgroup-v2.html), [PSI](https://docs.kernel.org/accounting/psi.html)는 Linux 가 실제로 내주는 인터페이스를 맡습니다. Systems Performance 가 그 사이에서 무엇을 재고 어떻게 좁힐지를 잇습니다.
+OSTEP 은 책이고, Linux 공식 문서 셋인 proc 과 cgroup v2 와 PSI 는 문서입니다. [OSTEP](../02_os/book/ostep_operating-systems-three-easy-pieces/README.md)은 왜 OS 가 그렇게 동작하는지를 맡습니다. [proc](https://docs.kernel.org/filesystems/proc.html)과 [cgroup v2](https://docs.kernel.org/admin-guide/cgroup-v2.html), [PSI](https://docs.kernel.org/accounting/psi.html)는 Linux 가 실제로 내주는 인터페이스를 맡습니다. Systems Performance 가 그 사이에서 무엇을 재고 어떻게 좁힐지를 잇습니다.
 
 
 

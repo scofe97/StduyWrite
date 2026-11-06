@@ -7,6 +7,7 @@ related:
   - ../roadmap/os-roadmap.md
   - ./kernel/README.md
   - ./book/learning-modern-linux/README.md
+  - ./book/ostep_operating-systems-three-easy-pieces/README.md
   - ./book/linux-kernel-programming/README.md
   - ./book/systems-performance/README.md
   - ./book/learning-ebpf/README.md
@@ -17,7 +18,7 @@ related:
   - ./project/portal-tunnel/README.md
   - ../08_cloud/book/networking-and-kubernetes/README.md
   - ../08_cloud/book/learning-coredns/README.md
-updated: 2026-09-26
+updated: 2026-11-06
 ---
 
 # 02_os
@@ -38,6 +39,7 @@ updated: 2026-09-26
 | [networking-and-kubernetes/](../08_cloud/book/networking-and-kubernetes/README.md) | 커널 네트워크 메커니즘의 정본 — netns·veth·bridge·netfilter·conntrack·TC·eBPF·kube-proxy·CNI (책 기반, `08_cloud` 소재) |
 | [kernel/](./kernel/README.md) | cgroup v2 깊이, 마운트 네임스페이스 propagation, cgroup 사례, OverlayFS와 user namespace |
 | [learning-modern-linux/](./book/learning-modern-linux/README.md) | 클라우드 네이티브 환경을 전제로 리눅스를 한 바퀴 도는 개론 — 커널·셸·접근 제어·파일시스템·네트워크·관측 (책 기반) |
+| [ostep_operating-systems-three-easy-pieces/](./book/ostep_operating-systems-three-easy-pieces/README.md) | OS 가 왜 그렇게 동작하는가 — 가상화(CPU·메모리)·병행성(스레드·락)·지속성(디스크·파일 시스템)과 분산 시스템, 웹 전용 보안 장(인증·접근 통제·암호)과 가상 머신 모니터 부록을 장마다의 CRUX 질문 순서로 읽는 원리 축. 형제 책이 보여 주는 Linux 인터페이스와 구현의 아래층 (책 기반) |
 | [linux-kernel-programming/](./book/linux-kernel-programming/README.md) | 커널 개발자 관점의 리눅스 내부 — LKM 모듈 개발, 커널 빌드, 메모리 관리, CPU 스케줄러, 동기화 (책 기반) |
 | [container-security/](../08_cloud/book/container-security/README.md) | 보안 관점의 컨테이너 — 커널 기초(namespace·cgroup·root 변경) 위의 이미지·공급망·런타임·통신 보안 (책 기반) |
 | [learning-coredns/](../08_cloud/book/learning-coredns/README.md) | 이름 해석의 *서버* 편 — Corefile·플러그인 체인·존 데이터·쿠버네티스 연동. resolver 클라이언트 측(네트워크 로드맵 1단계·N&K 04-03 §5)과 편을 나눠 가진다 (책 기반) |
