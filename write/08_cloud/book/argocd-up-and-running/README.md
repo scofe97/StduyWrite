@@ -18,7 +18,7 @@ learning:
   level: 기본
   last_verified:
   blocked_count:
-  next_lesson: "1장 01-01 정독 노트 작성"
+  next_lesson: "2장 02-01 정독 노트 검증·반영"
 updated: 2026-11-06
 ---
 
@@ -93,7 +93,7 @@ updated: 2026-11-06
 
 | 편 | 제목 | 상태 | 보충 재료 |
 |----|------|------|----------|
-| 01-01 | Introduction to Argo CD (1장 전체, 가제) | 작성 예정 | [ArgoCD와 GitOps 기초](../../argocd/01-01.ArgoCD%EC%99%80%20GitOps%20%EA%B8%B0%EC%B4%88.md), [ArgoCD와 GitOps (kubernetes/11-03)](../../kubernetes/11_devtools/11-03.ArgoCD%EC%99%80%20GitOps.md) |
+| 01-01 | [Argo CD 가 푸는 문제 — GitOps 원칙과 Argo 생태계](./01-01.Argo%20CD%20%EA%B0%80%20%ED%91%B8%EB%8A%94%20%EB%AC%B8%EC%A0%9C%20%E2%80%94%20GitOps%20%EC%9B%90%EC%B9%99%EA%B3%BC%20Argo%20%EC%83%9D%ED%83%9C%EA%B3%84.md) | 작성 완료 | [ArgoCD와 GitOps 기초](../../argocd/01-01.ArgoCD%EC%99%80%20GitOps%20%EA%B8%B0%EC%B4%88.md), [ArgoCD와 GitOps (kubernetes/11-03)](../../kubernetes/11_devtools/11-03.ArgoCD%EC%99%80%20GitOps.md) |
 | 02-01 | Installing Argo CD (2장 전체, 가제) | 작성 예정 | [ArgoCD 설치와 아키텍처](../../argocd/01-02.ArgoCD%20%EC%84%A4%EC%B9%98%EC%99%80%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98.md) |
 | 03-01 | Interacting with Argo CD (3장 전체, 가제) | 작성 예정 | [ArgoCD 접근과 선언적 설정](../../argocd/01-03.ArgoCD%20%EC%A0%91%EA%B7%BC%EA%B3%BC%20%EC%84%A0%EC%96%B8%EC%A0%81%20%EC%84%A4%EC%A0%95.md) |
 | 04-01 | Managing Applications (4장 전체, 가제) | 작성 예정 | [Application과 배포 대상 관리](../../argocd/02-01.Application%EA%B3%BC%20%EB%B0%B0%ED%8F%AC%20%EB%8C%80%EC%83%81%20%EA%B4%80%EB%A6%AC.md) |
@@ -140,11 +140,11 @@ updated: 2026-11-06
 
 | 항목 | 현재 값 |
 |------|--------|
-| 진행률 | 0/14 장. 정독 노트 0편 |
+| 진행률 | 1/14 장. 정독 노트 1편 |
 | 난이도 레벨 | 미정 |
 | 막힌 지점 | 없음 |
-| 다음 레슨 후보 | 01-01 (1장 Introduction to Argo CD) |
-| 최근 검증 결과 | 이 README `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0 (2026-11-06). 긴 문장 경고 3곳은 정의·경로·링크 때문에 길어진 한 주장이라 유지 |
+| 다음 레슨 후보 | 02-01 (2장 Installing Argo CD, 작성됨·검증 중) |
+| 최근 검증 결과 | 01-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 11건 반영, agy 2차 검토 지적 없음 (2026-11-06) |
 | 원문 정오 누적 | 0 |
 | 버전 차이 기록 | 0 |
 | 복습 회차 | 0 |
