@@ -7,13 +7,13 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, OK, WARN, BAD, MUTED, SOFT, INK, PAPER, PAPER2, RULE, KR, MONO
 import ddx
 
-d = D(1240, 560, "KUBERNETES IN ACTION · 11-03",
+d = D(1000, 516, "KUBERNETES IN ACTION · 11-03",
       "상태는 연속 횟수를 채워야 바뀐다",
-      "probe 는 initialDelaySeconds 가 지난 뒤 periodSeconds 마다 돈다. 한 번의 결과로 상태가 뒤집히지 않고, "
-      "failureThreshold·successThreshold 만큼 연속돼야 명단에서 빠지거나 들어온다.",
-      "periodSeconds 5 · failureThreshold 3 · successThreshold 2")
+      "파드는 준비 안 됨으로 시작한다. probe 는 initialDelaySeconds 가 지난 뒤 periodSeconds 마다 돌고, "
+      "실패는 상태를 바꾸지 않는다. successThreshold 만큼 연속 성공해야 명단에 들어온다.",
+      "periodSeconds 5 · successThreshold 2")
 
-X = lambda t: 130 + t * 22
+X = lambda t: 100 + t * 18
 AX = 330
 
 # 상태 띠
@@ -35,27 +35,25 @@ d.t(30, AX + 4, "시간", 11, SOFT, KR, "start")
 # probe 결과
 d.t(30, 296, "probe", 11, SOFT, KR, "start")
 for t, ok in ((10, False), (15, False), (20, False), (25, True), (30, True), (35, True), (40, True)):
-    d.chip(X(t), 290, "성공" if ok else "실패", OK if ok else BAD, 9)
+    d.chip(X(t), 290, "성공" if ok else "실패", OK if ok else BAD, 11)
 
 # 이벤트와 구간
 d.line(X(22), 240, X(22), 276, ACC, 1.0, "4 4")
-d.t(X(22) + 8, 258, "/var/ready 생성", 10, ACC, KR, "start")
+d.t(X(22) + 8, 258, "/var/ready 생성", 11, ACC, KR, "start")
 
 def span(t0, t1, y, label, c):
     x0, x1 = X(t0), X(t1)
     d.path(f"M {x0} {y-7} L {x0} {y} L {x1} {y} L {x1} {y-7}", c, 1.2)
-    d.t((x0 + x1) / 2, y + 18, label, 10, c, KR)
+    d.t((x0 + x1) / 2, y + 18, label, 11, c, KR)
 
 span(0, 10, 388, "initialDelaySeconds 10 — 아직 돌지 않는다", SOFT)
-span(10, 20, 430, "failureThreshold 3 — 연속 세 번", BAD)
+span(10, 20, 430, "아직 준비 안 됨 — 실패해도 상태 그대로", BAD)
 span(25, 30, 388, "successThreshold 2 — 연속 두 번", OK)
 span(35, 40, 430, "periodSeconds 5", SOFT)
 
 d.line(X(30), 232, X(30), 276, ACC, 1.4)
 ddx.focal_tag(d, X(30) + 96, 250, "두 번째 성공에서 편입", 190)
 
-d.t(24, 490, "실패해도 컨테이너는 재시작되지 않는다. 프로세스는 그대로 두고 트래픽만 끊는 것이 readiness 이고, "
-             "그래서 명단에서 빠진 뒤에도 kubelet 은 파드 IP 로 직접 probe 를 계속 돌린다.", 11, MUTED, KR, "start")
-d.legend(512, [("명단 밖", BAD), ("명단 안", OK), ("상태가 바뀌는 순간", ACC)])
+d.legend(474, [("명단 밖", BAD), ("명단 안", OK), ("상태가 바뀌는 순간", ACC)])
 d.save("11-03-readiness-probe-timeline.svg")
 print("ok")
