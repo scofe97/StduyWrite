@@ -37,7 +37,7 @@ d.box(B_X, BOX_Y, B_W, BOX_H, PAPER2, RULE, 1.0)
 d.t(B_X + B_W / 2, BOX_Y + 38, "토큰 확인", 12.5, INK, KR, "middle", 600)
 d.t(B_X + B_W / 2, BOX_Y + 68, "프로젝트에 남아 있나", 12, MUTED)
 d.t(B_X + B_W / 2, BOX_Y + 96, "status.jwtTokensByRole", 11.5, MUTED, MONO)
-d.t(B_X + B_W / 2, BOX_Y + 120, "proj:<프로젝트>:<역할>", 11.5, MUTED, MONO)
+d.t(B_X + B_W / 2, BOX_Y + 120, "주체 proj:<프로젝트>:<역할>", 11.5, MUTED, MONO)
 
 # 역할 policies
 d.tone(C_X, BOX_Y, C_W, BOX_H, ACC, 6, "14", 1.4)
