@@ -1,6 +1,6 @@
 # 03-02 / 11-01 §Service → Endpoints — 라벨 셀렉터가 Pod 를 자동 등록
 # 본문(11-01): kubectl expose 로 ClusterIP 10.96.154.45 가 붙고, Service 는 app=kiada 라벨을
-#   가진 Pod 를 스스로 찾아 Endpoints 에 등록한다. Pod 가 늘거나 죽으면 그 목록만 갱신되고
+#   가진 Pod 를 컨트롤러가 셀렉터로 찾아 Endpoints 에 등록한다. Pod 가 늘거나 죽으면 그 목록만 갱신되고
 #   ClusterIP 는 그대로라 클라이언트는 영향을 받지 않는다.
 # 실측 Pod: 10.244.1.8 / 10.244.1.9 (worker) · 10.244.2.5 (worker2)
 # 타입 스펙: type-architecture.md — 이름표 하나가 라벨로 여럿을 물어 오는 구조라 참조 매핑. 중간의 Endpoints 가
@@ -16,8 +16,8 @@ import ddx
 
 W, H = 1000, 640
 d = D(W, H, "KUBERNETES IN ACTION · 03-02",
-      "라벨이 붙는 순간 Endpoints 가 스스로 늘어난다",
-      "Service 는 고정 IP 를 가진 이름표이고, app=kiada 라벨을 가진 Pod 를 스스로 찾아 "
+      "라벨이 붙는 순간 Endpoints 목록에 올라온다",
+      "Service 는 고정 IP 를 가진 이름표이고, 컨트롤러가 셀렉터 app=kiada 로 Pod 를 찾아 "
       "Endpoints 에 등록한다. Pod 가 바뀌면 그 목록만 갱신되고 ClusterIP 는 그대로다.",
       lead="Service 를 건드리지 않았는데 새 Pod 가 라벨을 갖자마자 목록에 들어왔다")
 
@@ -57,7 +57,7 @@ d.path(f"M {SPINE} {PODS[0][1]} L {SPINE} {PODS[2][1]}", MUTED, 1.4)
 for cx, cy in PODS:
     d.path(f"M {SPINE} {cy} L {cx-115-10} {cy}", MUTED, 1.4, m="ar")
 
-d.t(36, 520, "스케일하자 세 Pod 의 IP 를 Service 가 스스로 물었다 — Endpoints 가 자동으로 늘어난 것이다.",
+d.t(36, 520, "스케일하자 컨트롤러가 라벨로 세 Pod 의 IP 를 찾아 올렸다 — Endpoints 가 자동으로 늘어난 것이다.",
      12, MUTED, KR, "start")
 d.t(36, 544, "그중 하나는 다른 노드(worker2)에 있었다 — 라벨만 맞으면 노드는 상관하지 않는다.",
      12, MUTED, KR, "start")

@@ -19,7 +19,7 @@ BAND_Y1, LEG_Y = NOTE2_Y + 24, NOTE2_Y + 40
 W, H = 1000, LEG_Y + 40
 d = D(W, H, "KUBERNETES IN ACTION · 03-02",
       "같은 30회인데 경로에 따라 도착지가 갈린다",
-      "port-forward 는 Pod 하나에 직접 터널을 뚫어 kube-proxy 를 거치지 않으므로 30번이 한 Pod 로 "
+      "port-forward 는 Pod 하나에 직접 터널을 뚫어 Service 데이터패스를 거치지 않으므로 30번이 한 Pod 로 "
       "몰린다. 클러스터 안에서 ClusterIP 로 가면 새 연결마다 endpoint 가 선택된다.",
       lead="분산은 Service 가 아니라 노드의 데이터패스가 한다 — 그 경로를 지나야 발동한다")
 
@@ -42,7 +42,7 @@ def panel(y0, title, sub, counts, c):
         d.t(BARX + w + 12, y + 4, f"{n}회", 11, c if n else SOFT, MONO, "start")
     return y0 + 50 + 3 * 42
 
-y = panel(196, "① kubectl port-forward — kube-proxy 를 안 거친다",
+y = panel(196, "① kubectl port-forward — 노드 데이터패스(DNAT)를 안 거친다",
           "Pod 하나에 직접 터널을 뚫는다. svc/kiada 라 써도 마찬가지다.", [30, 0, 0], BAD)
 d.chip(700, 196 + 8, "한 Pod 에 고정", BAD, 11)
 
