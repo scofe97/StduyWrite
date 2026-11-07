@@ -10,15 +10,15 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, MUTED, SOFT, KR
 import ddx
 
-d = D(1180, 400, "KUBERNETES IN ACTION · 11-02",
+d = D(1000, 400, "KUBERNETES IN ACTION · 11-02",
       "밖으로 열수록 무엇 하나를 내준다",
       "ClusterIP 는 건물 안 내선이다. 노드마다 포트를 열고 그 앞에 로드밸런서를 세우면 밖에서 닿지만, "
       "그 대가로 원래 클라이언트가 누구였는지를 잃거나 일부 파드에 부하가 몰린다.",
-      "네 방식과 그 대가")
+      "닫힌 문에서 대가를 고르기까지")
 
 ddx.stage_chain(
     d, cy=232,
-    stages=["§11-01", "§1", "§2", "§3"],
+    stages=["앞 편", "1단계", "2단계", "3단계"],
     nodes=[
         ("ClusterIP", "클러스터 안에서만", "밖에서는 닿지 않는다", None),
         ("NodePort", "노드IP:30080", "모든 노드가 문이 된다", None),
@@ -26,7 +26,7 @@ ddx.stage_chain(
         ("externalTrafficPolicy", "Cluster ↔ Local", "무엇을 잃을지 고른다", ACC),
     ],
     edges=["밖으로 연다", "앞에 세운다", "대가를 고른다"],
-    bw=210, gap=84, x0=30)
+    bw=176, gap=78, x0=31, sizes=(12, 11, 11))
 
 d.legend(330, [("대가를 고르는 손잡이", ACC)])
 d.save("11-02.chapter-overview.svg")

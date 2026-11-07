@@ -6,7 +6,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, INFO, MUTED, SOFT, KR
 import ddx
 
-d = D(1074, 496, "KUBERNETES IN ACTION · 11-02",
+d = D(988, 470, "KUBERNETES IN ACTION · 11-02",
       "한 패킷에서 바뀌는 자리는 둘",
       "노드 A 로 들어온 연결이 노드 B 의 파드로 넘어갈 때 주소가 두 군데 바뀐다. 목적지는 두 정책 모두 바꾸고, "
       "출발지는 Cluster 만 바꾼다. 갈리는 자리가 소스 IP 가 지워지느냐 남느냐를 정한다.",
@@ -14,7 +14,7 @@ d = D(1074, 496, "KUBERNETES IN ACTION · 11-02",
 
 ddx.matrix(
     d, x0=24, hdr_y=148, row_h=92, gap=12, focal_col=3,
-    cols=[(190, "바뀌는 자리"), (420, "무엇에서 무엇으로"), (180, "Cluster"), (200, "Local")],
+    cols=[(160, "바뀌는 자리"), (372, "무엇에서 무엇으로"), (176, "Cluster"), (196, "Local")],
     rows=[
         ([("목적지", "DNAT"), ("172.18.0.4:30080 → 10.244.2.9:8080", "안 바꾸면 파드에 닿지 못한다"),
           ("바꾼다",), ("바꾼다",)], INFO),
