@@ -1,0 +1,58 @@
+<svg viewBox="0 0 660 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>initramfs — 부팅 시 닭과 달걀 문제 해결</title>
+  <desc>커널은 RAM에서 돌지만 루트 파일시스템 마운트에 필요한 f2fs.ko 모듈은 아직 마운트 안 된 디스크 안에 있다. initramfs 이미지가 중간자로서 그 모듈을 RAM에 미리 올려 닭-달걀 문제를 푼다. 부트로더가 커널과 initramfs를 함께 RAM에 적재하고, 커널이 임시 루트FS를 RAM에 마운트해 모듈을 적재한 뒤 pivot-root로 실제 루트FS로 전환한다.</desc>
+  <rect x="0" y="0" width="660" height="500" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">initramfs — 부팅의 닭과 달걀 문제 해결</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">CONFIG_BLK_DEV_INITRD=y (기본 on) · initramfs = 초기 RAM 파일시스템</text>
+
+  <!-- 문제 영역 -->
+  <rect x="20" y="74" width="620" height="120" fill="rgba(244,67,54,0.10)" stroke="#f44336"/>
+  <text x="38" y="98" fill="#f44336" font-size="13" font-weight="bold">문제 — 닭과 달걀</text>
+
+  <rect x="38" y="110" width="270" height="70" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="173" y="134" fill="#e8e4df" font-size="12" text-anchor="middle">커널 (RAM에서 실행 중)</text>
+  <text x="173" y="156" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">루트FS를 마운트하려면</text>
+  <text x="173" y="172" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="middle">f2fs.ko 가 필요</text>
+
+  <rect x="352" y="110" width="270" height="70" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="487" y="134" fill="#e8e4df" font-size="12" text-anchor="middle">디스크 (아직 마운트 안 됨)</text>
+  <text x="487" y="156" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">그런데 f2fs.ko 는</text>
+  <text x="487" y="172" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10" text-anchor="middle">/lib/modules/.../f2fs.ko 안에</text>
+
+  <!-- 해결 영역 -->
+  <rect x="20" y="210" width="620" height="232" fill="rgba(102,187,106,0.10)" stroke="#66bb6a"/>
+  <text x="38" y="234" fill="#66bb6a" font-size="13" font-weight="bold">해결 — initramfs 가 중간자</text>
+
+  <defs>
+    <marker id="ar3" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <!-- 단계 1 -->
+  <rect x="38" y="246" width="584" height="42" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="56" y="263" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="12">①</text>
+  <text x="80" y="263" fill="#e8e4df" font-size="12">부트로더가 커널 이미지 + initramfs 이미지를 함께 RAM 에 적재</text>
+  <text x="80" y="280" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">/boot/vmlinuz-... + /boot/initrd.img-...</text>
+
+  <!-- 단계 2 -->
+  <rect x="38" y="296" width="584" height="42" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="56" y="313" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="12">②</text>
+  <text x="80" y="313" fill="#e8e4df" font-size="12">커널이 initramfs 를 RAM 에 임시 루트FS(RAM disk)로 마운트</text>
+  <text x="80" y="330" fill="rgb(138,133,128)" font-size="10">압축 해제 후 cpio 아카이브 전개 — /etc /bin /lib + 모듈 포함</text>
+
+  <!-- 단계 3 -->
+  <rect x="38" y="346" width="584" height="42" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="56" y="363" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="12">③</text>
+  <text x="80" y="363" fill="#e8e4df" font-size="12">스크립트가 필요한 모듈(f2fs.ko)을 RAM 으로 적재</text>
+  <text x="80" y="380" fill="rgb(138,133,128)" font-size="10">이제 루트FS 드라이버가 RAM 에 있다</text>
+
+  <!-- 단계 4 -->
+  <rect x="38" y="396" width="584" height="38" fill="rgba(102,187,106,0.18)" stroke="#66bb6a"/>
+  <text x="56" y="420" fill="#66bb6a" font-family="'JetBrains Mono',monospace" font-size="12">④</text>
+  <text x="80" y="420" fill="#e8e4df" font-size="12">/sbin/init 이 pivot-root — 임시 루트FS 해제, 실제 루트FS 마운트</text>
+
+  <text x="20" y="462" fill="rgb(138,133,128)" font-size="11">initramfs 의 또 다른 쓰임: 암호화 디스크 password 입력, console font, rescue shell 등</text>
+  <text x="20" y="482" fill="rgb(138,133,128)" font-size="11">— 커널이 평소 못 돌리는 유저 모드 앱을 부팅 중에 돌릴 수 있게 해줍니다</text>
+</svg>

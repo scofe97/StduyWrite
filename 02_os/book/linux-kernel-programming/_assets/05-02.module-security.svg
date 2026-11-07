@@ -1,0 +1,47 @@
+<svg viewBox="0 0 680 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>커널 모듈 보안 계층</title>
+  <desc>모듈 적재를 둘러싼 보안 계층. info-leak 방지(dmesg_restrict, kptr_restrict sysctl과 %pK), 모듈 암호 서명(서명 안 된 모듈은 적재 거부), 모듈 적재 완전 차단(modules_disabled, CONFIG_MODULES off), lockdown LSM. 각 계층이 공격면을 좁힌다.</desc>
+  <rect x="0" y="0" width="680" height="500" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">커널 모듈 보안 계층</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">유저 공간 보안이 강해지자 커널 공간 공격이 늘었습니다 — 모듈 작성자의 역할이 큽니다</text>
+
+  <!-- 계층 1: 정보 유출 방지 -->
+  <rect x="20" y="74" width="640" height="96" fill="rgba(173,216,230,0.12)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="98" fill="#9cc3df" font-size="13" font-weight="bold">① 정보 유출(info-leak) 방지 — sysctl</text>
+  <rect x="38" y="110" width="300" height="48" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="54" y="130" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11">dmesg_restrict</text>
+  <text x="54" y="150" fill="rgb(138,133,128)" font-size="10">1 → 커널 로그를 privileged 만 조회</text>
+  <rect x="350" y="110" width="292" height="48" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="366" y="130" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11">kptr_restrict + %pK</text>
+  <text x="366" y="150" fill="rgb(138,133,128)" font-size="10">커널 주소를 0으로 마스킹 (%px 는 실주소)</text>
+
+  <!-- 계층 2: 모듈 서명 -->
+  <rect x="20" y="180" width="640" height="120" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="204" fill="rgb(212,168,83)" font-size="13" font-weight="bold">② 모듈 암호 서명 (3.7+)</text>
+  <text x="38" y="224" fill="#e8e4df" font-size="11">커널 키링의 키로 서명된 모듈만 적재 — root 라도 서명 없으면 거부 가능</text>
+  <rect x="38" y="234" width="300" height="56" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="54" y="254" fill="#e8e4df" font-size="11">Permissive (기본)</text>
+  <text x="54" y="272" fill="rgb(138,133,128)" font-size="10">SIG_FORCE off · 미서명 허용</text>
+  <text x="54" y="286" fill="rgb(138,133,128)" font-size="10">단 커널 tainted 표시</text>
+  <rect x="350" y="234" width="292" height="56" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/>
+  <text x="366" y="254" fill="#66bb6a" font-size="11">Restrictive</text>
+  <text x="366" y="272" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">SIG_FORCE=y · 서명된 것만</text>
+  <text x="366" y="286" fill="rgb(138,133,128)" font-size="10">⚠ 서명 후 strip 금지</text>
+
+  <!-- 계층 3: 적재 차단 -->
+  <rect x="20" y="310" width="640" height="96" fill="rgba(244,67,54,0.10)" stroke="#f44336" stroke-width="2"/>
+  <text x="38" y="334" fill="#f44336" font-size="13" font-weight="bold">③ 모듈 적재 완전 차단</text>
+  <rect x="38" y="346" width="300" height="48" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="54" y="366" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11">modules_disabled</text>
+  <text x="54" y="386" fill="rgb(138,133,128)" font-size="10">1 → 적재 차단 (되돌릴 수 없음)</text>
+  <rect x="350" y="346" width="292" height="48" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="366" y="366" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="11">CONFIG_MODULES off</text>
+  <text x="366" y="386" fill="rgb(138,133,128)" font-size="10">빌드 시 영구 차단 (가장 강함)</text>
+
+  <!-- 계층 4: lockdown -->
+  <rect x="20" y="416" width="640" height="60" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="440" fill="#e8e4df" font-size="13" font-weight="bold">④ lockdown LSM (5.4+)</text>
+  <text x="38" y="460" fill="rgb(138,133,128)" font-size="11">Integrity 모드: 유저가 커널 수정 차단 · Confidential 모드: 기밀 정보 추출도 차단</text>
+  <text x="38" y="474" fill="rgb(138,133,128)" font-size="10">Secure Boot 시 자동 활성화될 수 있음 (모듈 적재 실패 유발 가능)</text>
+</svg>

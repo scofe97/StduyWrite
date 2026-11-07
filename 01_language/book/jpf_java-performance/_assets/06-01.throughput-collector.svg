@@ -1,0 +1,58 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>throughput collector 이해와 튜닝</title>
+  <desc>throughput collector는 사용 안 하는 객체 찾기·메모리 해제·힙 compaction 세 연산을 같은 GC 사이클에서 한다. minor collection은 eden이 차면 일어나 eden 객체를 survivor와 old로 옮기고 나머지를 폐기한다. full GC는 old를 청소하고 살아있는 객체를 compaction한다. JDK 8 로그는 PrintGCDetails로, JDK 11은 통합 로깅으로 같은 정보를 다른 형식으로 보여준다. 튜닝은 pause 시간과 전체 힙·세대 크기의 균형이다. 두 트레이드오프가 있다. 첫째 time vs space로 큰 힙은 메모리를 더 쓰지만 throughput이 높아진다. 둘째 full GC 수는 힙을 키워 줄이지만 GC 시간이 길어져 평균 응답이 나빠질 수 있다. adaptive sizing은 MaxGCPauseMillis와 GCTimeRatio로 pause 목표를 맞춘다. MaxGCPauseMillis는 견딜 최대 pause 시간으로, 너무 작으면 old가 작아져 full GC가 잦아진다. GCTimeRatio 기본 99는 GC에 1%만 쓰는 목표다. 95는 5%가 아니라 1.94%다. 목표 작업 시간 비율로 역산하면 95%는 GCTimeRatio 19다. MaxGCPauseMillis가 우선이고 그다음 GCTimeRatio를 맞추며 최소 힙을 찾는다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">throughput collector 이해와 튜닝</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">세 연산(찾기·해제·compaction)을 한 사이클에 하며, 동작이 가장 이해하기 쉽습니다</text>
+
+  <!-- minor / full -->
+  <rect x="20" y="74" width="320" height="100" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="96" fill="#66bb6a" font-size="13" font-weight="bold">minor collection</text>
+  <text x="38" y="116" fill="#e8e4df" font-size="11">eden이 차면 발생</text>
+  <text x="38" y="134" fill="rgb(138,133,128)" font-size="10">eden 객체 → survivor·old로 이동/폐기</text>
+  <text x="38" y="152" fill="rgb(138,133,128)" font-size="10">멀티 스레드(예: 4) → user > real time</text>
+  <text x="38" y="170" fill="#66bb6a" font-size="9">eden 자동 compaction</text>
+
+  <rect x="350" y="74" width="312" height="100" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="368" y="96" fill="#f47f72" font-size="13" font-weight="bold">full GC</text>
+  <text x="368" y="116" fill="#e8e4df" font-size="11">old를 청소 + 완전 compaction</text>
+  <text x="368" y="134" fill="rgb(138,133,128)" font-size="10">young 전체 비움(survivor 포함)</text>
+  <text x="368" y="152" fill="rgb(138,133,128)" font-size="10">JDK 11: Marking·Summary·Adjust·Compaction phase</text>
+  <text x="368" y="170" fill="#f47f72" font-size="9">긴 pause (예: 1.3초 real, 4.4초 CPU)</text>
+
+  <!-- 두 트레이드오프 -->
+  <rect x="20" y="182" width="642" height="80" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="204" fill="#e8e4df" font-size="13" font-weight="bold">튜닝의 두 트레이드오프</text>
+  <text x="38" y="224" fill="rgb(138,133,128)" font-size="11">① time vs space: 큰 힙 = 메모리↑ + throughput↑ (어느 지점까지)</text>
+  <text x="38" y="242" fill="rgb(138,133,128)" font-size="11">② full GC 수는 힙↑로 줄지만, GC 시간이 길어져 평균 응답이 나빠질 수도</text>
+  <text x="38" y="258" fill="#f47f72" font-size="10">힙 256MB→1500MB throughput 급증, 4500MB 후 GC 사이클 길어져 오히려 감소</text>
+
+  <!-- adaptive sizing -->
+  <rect x="20" y="270" width="642" height="118" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="292" fill="rgb(212,168,83)" font-size="13" font-weight="bold">adaptive sizing — pause 목표로 힙 조정</text>
+  <rect x="38" y="304" width="300" height="74" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9"/>
+  <text x="50" y="324" fill="#9cc3df" font-size="11" font-weight="bold">MaxGCPauseMillis=N</text>
+  <text x="50" y="342" fill="rgb(138,133,128)" font-size="10">견딜 최대 pause (minor·full 둘 다)</text>
+  <text x="50" y="358" fill="#f47f72" font-size="10">너무 작으면 old↓ → full GC 잦음</text>
+  <text x="50" y="372" fill="rgb(138,133,128)" font-size="9">기본 미설정</text>
+  <rect x="350" y="304" width="312" height="74" fill="rgba(102,187,106,0.10)" stroke="#66bb6a"/>
+  <text x="362" y="324" fill="#66bb6a" font-size="11" font-weight="bold">GCTimeRatio=N</text>
+  <text x="362" y="342" fill="rgb(138,133,128)" font-size="10">기본 99 → GC에 1%만 (작업 99%)</text>
+  <text x="362" y="358" fill="#f47f72" font-size="10">주의: 95는 5%가 아니라 1.94%</text>
+  <text x="362" y="372" fill="rgb(138,133,128)" font-size="9">작업 95% 목표 → GCTimeRatio 19</text>
+
+  <!-- 우선순위 -->
+  <rect x="20" y="396" width="642" height="58" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="418" fill="#e8e4df" font-size="13" font-weight="bold">JVM 우선순위 (Xms~Xmx 경계 안에서)</text>
+  <text x="38" y="438" fill="rgb(138,133,128)" font-size="11">① MaxGCPauseMillis 먼저(세대 조정) → ② GCTimeRatio 맞추려 힙↑ → ③ 두 목표 맞추는 최소 힙</text>
+
+  <!-- 측정 -->
+  <rect x="20" y="462" width="642" height="122" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="484" fill="#66bb6a" font-size="13" font-weight="bold">동적 튜닝 측정 — "더 많은 게 늘 좋진 않다"</text>
+  <text x="38" y="504" fill="#e8e4df" font-size="11">작은 힙·적은 GC 앱: 기본 649MB·GC 0.9%·9.2 OPS, 2GB로 키워도 9.2 OPS (GC가 병목 아님)</text>
+  <text x="38" y="522" fill="rgb(138,133,128)" font-size="10">GC 무거운 앱: 기본 1.7GB·GC 9.3%·8.4 OPS, 비현실적 50ms 목표는 588MB·15.1%·7.9 OPS로 악화</text>
+  <text x="38" y="540" fill="rgb(212,168,83)" font-size="11">→ 현실적 time ratio(5%=19) + 적절한 힙이 손튜닝과 같은 결과</text>
+  <text x="38" y="560" fill="rgb(138,133,128)" font-size="10">저자 권장 시작점: 별 목표 없으면 time ratio 19 (GC에 5%)</text>
+  <text x="38" y="578" fill="rgb(138,133,128)" font-size="10">실측 경험: GC 3~6%면 양호, 메모리 제약 환경은 10~15%도 목표 달성 가능</text>
+</svg>

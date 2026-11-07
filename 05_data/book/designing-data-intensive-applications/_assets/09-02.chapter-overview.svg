@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 638" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">불신뢰 시계와 분산 시스템 시간 문제 전체 지도</title><desc id="dd">두 시계의 특성(§1)에서 출발해 NTP 동기화 한계(§2), 타임스탬프 순서 역전(§3), 신뢰 구간 대기(§4), 프로세스 일시 중단(§5)의 체계를 조망한다.</desc>
+<rect width="880" height="638" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">09-02 · CHAPTER OVERVIEW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">불신뢰 시계와 분산 시스템 시간 문제 전체 지도</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">단조 vs 벽시계 · NTP 드리프트와 지연 · LWW 순서 역전 · TrueTime 신뢰 구간 · 프로세스 일시 중단</text>
+<rect x="24" y="104" width="832" height="34" rx="4" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="440.0" y="126" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">분산 시스템 현실: 노드별 독립 발진기와 가변 네트워크 지연으로 절대 공통 시각 부재</text>
+<rect x="24" y="152" width="264" height="196" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="38.18" y="162" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="52" y="176" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">§1</text>
+<text x="74" y="176" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">두 종류의 시계</text>
+<text x="74" y="194" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#5E6B7E">단조 vs 벽시계</text>
+<line x1="36" y1="204" x2="276" y2="204" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="36" y="212" width="240" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="44" y="226" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">벽시계 (Time-of-Day)</text>
+<text x="44" y="241" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">1970 UTC 기점 · 뒤로 점프</text>
+<rect x="36" y="254" width="240" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="44" y="268" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">단조 시계 (Monotonic)</text>
+<text x="44" y="283" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">항상 증가 · 경과 시간 측정 · 로컬 전용</text>
+<rect x="36" y="296" width="240" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="44" y="310" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">용도 혼동 시 버그</text>
+<text x="44" y="325" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">이벤트 순서 판단에 벽시계 오용</text>
+<rect x="308" y="152" width="264" height="196" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="322.18" y="162" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="336" y="176" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#E3B341">§2</text>
+<text x="358" y="176" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">동기화 한계</text>
+<text x="358" y="194" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#5E6B7E">NTP 드리프트와 지연</text>
+<line x1="320" y1="204" x2="560" y2="204" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="320" y="212" width="240" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="328" y="226" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">쿼츠 발진기 드리프트</text>
+<text x="328" y="241" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">최대 200 ppm · 30초마다 6 ms 오차</text>
+<rect x="320" y="254" width="240" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="328" y="268" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">네트워크 왕복 지연</text>
+<text x="328" y="283" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">인터넷 최소 35 ms 오차 · 혼잡 스파이크</text>
+<rect x="320" y="296" width="240" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="328" y="310" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">가상화 환경 시계 점프</text>
+<text x="328" y="325" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">VM 재개 시 시계가 앞으로 뜀</text>
+<rect x="592" y="152" width="264" height="196" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.4"/>
+<rect x="606.18" y="162" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="620" y="176" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">§3</text>
+<text x="642" y="176" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">순서 위험</text>
+<text x="642" y="194" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#5E6B7E">타임스탬프 인과 역전</text>
+<line x1="604" y1="204" x2="844" y2="204" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="604" y="212" width="240" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="612" y="226" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">클럭 스큐 3 ms 이내</text>
+<text x="612" y="241" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">인과적으로 나중 쓰기가 작은 타임스탬프</text>
+<rect x="604" y="254" width="240" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="612" y="268" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">LWW 충돌 해소 결함</text>
+<text x="612" y="283" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">나중 쓰기 x=2 조용히 유실 (오류 없음)</text>
+<rect x="604" y="296" width="240" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="612" y="310" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">근본 대안: 논리 시계</text>
+<text x="612" y="325" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">단조 카운터로 이벤트 상대 순서 추적</text>
+<path d="M 290 176 L 304 176" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)"/>
+<path d="M 574 176 L 588 176" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#soft)"/>
+<rect x="24" y="362" width="406" height="196" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="38.18" y="372" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="52" y="386" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">§4</text>
+<text x="74" y="386" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">신뢰 구간으로서의 시계</text>
+<text x="74" y="404" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#5E6B7E">시계 읽기 = 불확실성 구간 표현</text>
+<line x1="36" y1="414" x2="418" y2="414" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="36" y="422" width="382" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="44" y="436" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">시계 읽기의 본질</text>
+<text x="44" y="451" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">특정 시점이 아닌 [earliest, latest] 불확실성 구간</text>
+<rect x="36" y="464" width="382" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="44" y="478" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">TrueTime · ClockBound</text>
+<text x="44" y="493" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">두 구간 비중첩 시 선후 보장 · GPS·원자시계 운용</text>
+<rect x="36" y="506" width="382" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="44" y="520" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">의도적 커밋 대기</text>
+<text x="44" y="535" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">신뢰 구간 폭만큼 대기해 이후 트랜잭션과 비중첩 보장</text>
+<rect x="450" y="362" width="406" height="196" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="464.18" y="372" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#F0616D" stroke-width="0.8"/>
+<text x="478" y="386" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F0616D">§5</text>
+<text x="500" y="386" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">프로세스 일시 중단</text>
+<text x="500" y="404" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#5E6B7E">비결정적 정지와 리스 만료 위험</text>
+<line x1="462" y1="414" x2="844" y2="414" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="462" y="422" width="382" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="470" y="436" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">임의 지점의 긴 정지</text>
+<text x="470" y="451" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">GC STW · VM 라이브 마이그레이션 · I/O 대기</text>
+<rect x="462" y="464" width="382" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="470" y="478" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">리스 만료 오판단</text>
+<text x="470" y="493" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">정지 중 리스 만료 인지 불가 · 타 노드로 리더십 이전</text>
+<rect x="462" y="506" width="382" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="470" y="520" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">리더라 믿고 쓰기</text>
+<text x="470" y="535" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">만료된 리스로 쓰기 수행</text>
+<path d="M 674.0 348 L 674.0 354 L 227.0 354 L 227.0 362" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<path d="M 774.0 348 L 774.0 354 L 653.0 354 L 653.0 362" fill="none" stroke="#F0616D" stroke-width="1.2" marker-end="url(#bad)"/>
+<line x1="12" y1="582" x2="832" y2="582" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="604" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="594" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="604" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">인과 역전 위험 (focal)</text>
+<rect x="352" y="594" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="374" y="604" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">시계 기초</text>
+<rect x="461" y="594" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="483" y="604" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">물리적 한계</text>
+<rect x="583" y="594" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="605" y="604" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">신뢰 구간 대기</text>
+<rect x="731" y="594" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="753" y="604" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">동작 정지 위험</text>
+</svg>

@@ -1,0 +1,61 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>ForkJoinPool — work stealing과 자동 병렬화</title>
+  <desc>ForkJoinPool은 divide-and-conquer 알고리즘용이다. 작업을 재귀적으로 부분집합으로 쪼개 병렬 처리하고 결과를 병합한다. 핵심은 적은 스레드가 많은 작업을 관리한다는 것이다. fork와 join 메서드로 부모 작업이 자식을 기다리는 동안 스레드를 일시중지하고 다른 작업을 실행한다. ThreadPoolExecutor로는 부모가 자식을 기다리며 막혀 이 재귀가 불가능하다. balanced 작업은 partition한 ThreadPoolExecutor가 빠르고, unbalanced 작업은 ForkJoinPool이 빠르다. work stealing이 그 이유다. 각 스레드가 자기 큐를 갖고, 비면 다른 스레드 큐에서 훔친다. 한 작업이 오래 걸려도 다른 스레드가 나머지를 처리해 CPU를 바쁘게 유지한다. leaf size 튜닝이 중요하다. 너무 크면 분할 이득이 없고 너무 작으면 작업 생성 오버헤드가 크다. Java quicksort는 47을 쓴다. 자동 병렬화는 common ForkJoinPool을 쓴다. parallelStream의 forEach는 실행 스레드와 common pool을 함께 써 1 스레드 설정도 2개를 쓴다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">ForkJoinPool — divide-and-conquer 전용</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">fork/join 일시중지로 적은 스레드가 수백만 작업을 관리합니다</text>
+
+  <!-- fork/join 핵심 -->
+  <rect x="20" y="74" width="642" height="84" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="96" fill="#e8e4df" font-size="13" font-weight="bold">fork/join 일시중지</text>
+  <text x="38" y="118" fill="rgb(138,133,128)" font-size="11">부모 작업이 자식을 fork하고 join으로 기다리는 동안, 스레드는 다른 대기 작업을 실행</text>
+  <text x="38" y="138" fill="#f47f72" font-size="11">ThreadPoolExecutor 불가 — 스레드가 자식을 기다리면 막혀 서브작업 실행 못 함(400만 스레드 필요)</text>
+
+  <!-- balanced vs unbalanced -->
+  <rect x="20" y="166" width="320" height="124" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="188" fill="#9cc3df" font-size="12" font-weight="bold">balanced → partition+TPE</text>
+  <text x="38" y="208" fill="rgb(138,133,128)" font-size="10">작업 시간 균등 → 단순 분할이 빠름</text>
+  <text x="38" y="226" fill="rgb(138,133,128)" font-size="10">2M 카운트(4스레드):</text>
+  <text x="38" y="244" fill="rgb(138,133,128)" font-size="10">FJP 37.7ms vs TPE 0.55ms</text>
+  <text x="38" y="264" fill="#f47f72" font-size="10">400만 task 생성·관리 오버헤드</text>
+  <text x="38" y="282" fill="rgb(138,133,128)" font-size="9">merge가 단순하면 분할이 유리</text>
+
+  <rect x="350" y="166" width="312" height="124" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="368" y="188" fill="#66bb6a" font-size="12" font-weight="bold">unbalanced → ForkJoinPool</text>
+  <text x="368" y="208" fill="rgb(138,133,128)" font-size="10">작업 시간 제각각 → FJP가 빠름</text>
+  <text x="368" y="226" fill="rgb(138,133,128)" font-size="10">불균형 부하(4스레드):</text>
+  <text x="368" y="244" fill="#66bb6a" font-size="10">FJP 5.6초 vs TPE 9.7초</text>
+  <text x="368" y="264" fill="#66bb6a" font-size="10">work stealing이 CPU를 바쁘게 유지</text>
+  <text x="368" y="282" fill="rgb(138,133,128)" font-size="9">긴 작업 1개여도 나머지가 진행</text>
+
+  <!-- work stealing -->
+  <rect x="20" y="298" width="642" height="72" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="320" fill="#66bb6a" font-size="13" font-weight="bold">work stealing</text>
+  <text x="38" y="342" fill="rgb(138,133,128)" font-size="11">각 스레드가 자기 fork 큐를 가짐 → 자기 큐 우선, 비면 다른 스레드 큐에서 훔침</text>
+  <text x="38" y="362" fill="rgb(138,133,128)" font-size="11">ThreadPoolExecutor는 한 작업이 오래 걸리면 다른 스레드가 추가 작업을 못 받음</text>
+
+  <!-- leaf 튜닝 -->
+  <rect x="20" y="378" width="320" height="120" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="400" fill="rgb(212,168,83)" font-size="12" font-weight="bold">leaf size 튜닝</text>
+  <text x="38" y="420" fill="rgb(138,133,128)" font-size="10">너무 크면 분할 이득 없음</text>
+  <text x="38" y="438" fill="rgb(138,133,128)" font-size="10">너무 작으면 task 생성 오버헤드↑</text>
+  <text x="38" y="458" fill="rgb(138,133,128)" font-size="10">불균형: 500K→9.8초, 1K→5.7초</text>
+  <text x="38" y="478" fill="#66bb6a" font-size="10">1,000~10,000에서 평탄화</text>
+  <text x="38" y="494" fill="rgb(138,133,128)" font-size="9">Java quicksort는 47 사용</text>
+
+  <!-- 자동 병렬화 -->
+  <rect x="350" y="378" width="312" height="120" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="368" y="400" fill="#9cc3df" font-size="12" font-weight="bold">자동 병렬화 — common pool</text>
+  <text x="368" y="420" fill="rgb(138,133,128)" font-size="10">Arrays 정렬·streams가 사용</text>
+  <text x="368" y="438" fill="rgb(138,133,128)" font-size="10">기본 크기 = CPU 수</text>
+  <text x="368" y="456" fill="rgb(138,133,128)" font-size="10">ForkJoinPool.common.parallelism=N</text>
+  <text x="368" y="476" fill="#f47f72" font-size="10">forEach는 실행 스레드+pool 함께 씀</text>
+  <text x="368" y="494" fill="rgb(138,133,128)" font-size="9">→ 튜닝 시 원하는 값 -1 고려</text>
+
+  <!-- 정리 -->
+  <rect x="20" y="506" width="642" height="76" fill="rgba(212,168,83,0.05)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="528" fill="rgb(212,168,83)" font-size="13" font-weight="bold">언제 ForkJoinPool인가</text>
+  <text x="38" y="550" fill="#e8e4df" font-size="11">재귀적 divide-and-conquer + 불균형 작업 + merge에 의미 있는 일이 있을 때</text>
+  <text x="38" y="572" fill="rgb(138,133,128)" font-size="11">단순 partition으로 충분(균형·merge 단순)하면 ThreadPoolExecutor가 더 빠름</text>
+</svg>

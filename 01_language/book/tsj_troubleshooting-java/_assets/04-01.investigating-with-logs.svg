@@ -1,0 +1,62 @@
+<svg viewBox="0 0 680 580" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>로그로 조사하기 (Ch.4 도입~§4.1)</title>
+  <desc>로그는 과거를 기록한 항해일지여서 디버거가 보지 못하는 지난 시간의 실행을 보여 줍니다. 좋은 로그는 설명에 더해 timestamp 와 severity 와 작성 위치를 담고 중앙 집계 환경에서는 앱 식별자까지 있어야 출처를 되짚을 수 있습니다. 조사를 시작할 땐 늘 로그부터 읽어 출발점을 얻습니다. 디버거는 멈춘 그 순간 현재에 집중하지만 로그는 지나간 일정 기간 과거에 집중하므로 둘은 시간축이 다릅니다. 타임존이 어긋나면 타임스탬프가 몇 시간씩 틀어지므로 UTC 로 표준화합니다. AI 는 수십만 줄 로그도 지치지 않고 훑어 특정 문제 관련 항목을 추려 주며 완벽한 정확도가 필요 없는 분류에서 시간을 크게 아낍니다. 네 가지 조사 기법이 있습니다. 첫째 예외 식별은 NullPointerException 등을 보되 예외 위치가 근본 원인은 아니므로 try catch 로 국소 처리하기 전에 원인을 이해합니다. 둘째 호출자 찾기는 예외를 던지지 않고 new Exception printStackTrace 로 스택 트레이스만 찍어 누가 메서드를 불렀는지 봅니다. 셋째 실행 시간 측정은 전후 currentTimeMillis 차이를 임시로 로그합니다. 넷째 멀티스레드는 디버거보다 간섭이 적은 로그로 스레드 이름과 순서를 기록합니다.</desc>
+  <rect x="0" y="0" width="680" height="580" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">로그로 조사하기 — 과거를 읽는 항해일지</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">조사를 시작할 땐 늘 로그부터 — 디버거가 못 보는 "지난 시간의 실행"을 본다 (Ch.4 §4.1)</text>
+
+  <!-- 로그 해부 -->
+  <rect x="20" y="74" width="315" height="92" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="96" fill="#9cc3df" font-size="13" font-weight="bold">로그 메시지 해부</text>
+  <text x="38" y="116" fill="#e8e4df" font-size="11">설명 + timestamp + severity + 출처</text>
+  <text x="38" y="136" fill="rgb(138,133,128)" font-size="10">중앙 집계 시 앱 식별자 필수</text>
+  <text x="38" y="156" fill="rgb(212,168,83)" font-size="10">처음 설계가 훗날 조사를 좌우</text>
+
+  <!-- 과거 vs 현재 -->
+  <rect x="345" y="74" width="315" height="92" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="363" y="96" fill="rgb(212,168,83)" font-size="13" font-weight="bold">시간축 — 로그 vs 디버거</text>
+  <text x="363" y="116" fill="#e8e4df" font-size="11">디버거 = 멈춘 순간(현재)</text>
+  <text x="363" y="136" fill="#e8e4df" font-size="11">로그 = 지나간 기간(과거)</text>
+  <text x="363" y="156" fill="#f47f72" font-size="10">타임존 어긋남 주의 → UTC 표준화</text>
+
+  <!-- AI -->
+  <rect x="20" y="178" width="640" height="50" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="200" fill="#e8e4df" font-size="12" font-weight="bold">AI — 지치지 않는 로그 분석 조수</text>
+  <text x="38" y="218" fill="rgb(138,133,128)" font-size="10">수십만 줄도 훑어 문제 관련 항목 추림 (예: DB 락 예외를 쿼리·메서드별로 그룹화). 완벽한 정확도 불필요 → 속도 이점</text>
+
+  <!-- 네 기법 -->
+  <text x="20" y="252" fill="#e8e4df" font-size="13" font-weight="bold">로그 조사 네 기법</text>
+
+  <rect x="20" y="264" width="315" height="92" fill="rgba(244,127,114,0.07)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="286" fill="#f47f72" font-size="12" font-weight="bold">① 예외 식별 — 위치 ≠ 근본 원인</text>
+  <text x="38" y="306" fill="#e8e4df" font-size="11">NPE 등은 "어디서" 잘못됐는지만</text>
+  <text x="38" y="324" fill="rgb(138,133,128)" font-size="10">예외는 다른 곳 문제의 결과일 수 있음</text>
+  <text x="38" y="344" fill="rgb(212,168,83)" font-size="10">try-catch 국소 처리 전에 원인 이해</text>
+
+  <rect x="345" y="264" width="315" height="92" fill="rgba(102,187,106,0.08)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="363" y="286" fill="#66bb6a" font-size="12" font-weight="bold">② 호출자 찾기</text>
+  <rect x="363" y="296" width="279" height="20" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="371" y="310" fill="#66bb6a" font-family="'JetBrains Mono',monospace" font-size="9">new Exception().printStackTrace()</text>
+  <text x="363" y="332" fill="rgb(138,133,128)" font-size="10">예외를 던지지 않고 스택만 출력</text>
+  <text x="363" y="350" fill="rgb(138,133,128)" font-size="10">로직에 간섭 없이 호출 경로 확인</text>
+
+  <rect x="20" y="368" width="315" height="92" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="390" fill="rgb(212,168,83)" font-size="12" font-weight="bold">③ 실행 시간 측정</text>
+  <rect x="38" y="400" width="279" height="20" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="46" y="414" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="9">after - before (currentTimeMillis)</text>
+  <text x="38" y="436" fill="rgb(138,133,128)" font-size="10">느린 쿼리의 원인 파라미터 찾기</text>
+  <text x="38" y="454" fill="#f47f72" font-size="10">조사 중 임시로만 — 끝나면 제거</text>
+
+  <rect x="345" y="368" width="315" height="92" fill="rgba(127,168,201,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="363" y="390" fill="#9cc3df" font-size="12" font-weight="bold">④ 멀티스레드 조사</text>
+  <text x="363" y="410" fill="#e8e4df" font-size="11">디버거·프로파일러는 간섭(Heisenbug)</text>
+  <text x="363" y="428" fill="rgb(138,133,128)" font-size="10">로그는 간섭 작음 → 흐름 거의 안 바뀜</text>
+  <rect x="363" y="436" width="279" height="18" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/>
+  <text x="371" y="449" fill="#9cc3df" font-family="'JetBrains Mono',monospace" font-size="9">Thread.currentThread().getName()</text>
+
+  <!-- 핵심 -->
+  <rect x="20" y="472" width="640" height="58" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="494" fill="#e8e4df" font-size="12" font-weight="bold">핵심 — 로그는 시간과 강하게 묶인다</text>
+  <text x="38" y="514" fill="rgb(138,133,128)" font-size="10">timestamp 로 순서 재구성 / 스레드 이름으로 누가 실행했나 식별 (10장 스레드 덤프와 연결)</text>
+</svg>

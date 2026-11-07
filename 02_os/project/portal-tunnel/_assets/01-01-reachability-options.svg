@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 800" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">외부 인바운드 접근 기술 선택과 실패 조건 분기</title><desc id="dd">공인 IP 보유 여부와 NAT 제어권, NAT 유형(Cone 대 대칭형)에 따른 접근 경로와 최후의 보루인 리버스 터널</desc>
+<rect width="960" height="800" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">NETWORKING · INBOUND REACHABILITY DECISION FLOW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">외부 인바운드 접근 기술 선택과 실패 조건 분기</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">포트 포워딩·UPnP·홀 펀칭이 실패하는 조건과 역방향 터널의 도달 보장 원리</text>
+<rect x="160" y="100" width="200" height="36" rx="18" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="260" y="122" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">사설망 서버 외부 노출 필요</text>
+<path d="M 260 136 L 260 160" fill="none" stroke="#6A95D8" stroke-width="1.3" marker-end="url(#info)"/>
+<path d="M 260 160 L 370 190 L 260 220 L 150 190 Z" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="260" y="186" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">공인 IP 직접 할당?</text>
+<text x="260" y="202" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#8B98A9">호스트 NIC 공인 주소</text>
+<path d="M 370 190 L 560 190" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
+<text x="390" y="182" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#3FB98C">Yes</text>
+<rect x="560" y="166" width="300" height="48" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="710" y="185" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">직접 인바운드 수신</text>
+<text x="710" y="203" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">방화벽 포트 허용만으로 직접 도달</text>
+<path d="M 260 220 L 260 280" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<text x="280" y="235" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#8B98A9">No</text>
+<path d="M 260 280 L 370 310 L 260 340 L 150 310 Z" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="260" y="306" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">포트 포워딩 가능?</text>
+<text x="260" y="322" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#8B98A9">공유기 관리 권한 보유</text>
+<path d="M 370 310 L 560 310" fill="none" stroke="#E3B341" stroke-width="1.3" marker-end="url(#warn)"/>
+<text x="390" y="302" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#E3B341">Yes</text>
+<rect x="560" y="286" width="300" height="48" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.2"/>
+<text x="710" y="305" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">공유기 정적 포트 매핑</text>
+<text x="710" y="323" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">수동 고정 설정 · CGNAT 환경 실패</text>
+<path d="M 260 340 L 260 400" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<text x="280" y="355" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#8B98A9">No</text>
+<path d="M 260 400 L 370 430 L 260 460 L 150 430 Z" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="260" y="426" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">UPnP / NAT-PMP 지원?</text>
+<text x="260" y="442" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#8B98A9">자동 포트 매핑 프로토콜</text>
+<path d="M 370 430 L 560 430" fill="none" stroke="#E3B341" stroke-width="1.3" marker-end="url(#warn)"/>
+<text x="390" y="422" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#E3B341">Yes</text>
+<rect x="560" y="406" width="300" height="48" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.2"/>
+<text x="710" y="425" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">동적 포트 자동 매핑</text>
+<text x="710" y="443" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">보안상 비활성화 흔함 · CGNAT 실패 (PCP 제외)</text>
+<path d="M 260 460 L 260 520" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<text x="280" y="475" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#8B98A9">No</text>
+<path d="M 260 520 L 370 550 L 260 580 L 150 550 Z" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="260" y="546" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">STUN 홀 펀칭 성공?</text>
+<text x="260" y="562" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#8B98A9">Cone NAT 상호 매핑 일치</text>
+<path d="M 370 550 L 560 550" fill="none" stroke="#6A95D8" stroke-width="1.3" marker-end="url(#info)"/>
+<text x="390" y="542" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#6A95D8">Yes</text>
+<rect x="560" y="526" width="300" height="48" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="710" y="545" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">P2P 직접 연결 (WebRTC 등)</text>
+<text x="710" y="563" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">대칭형↔port-restricted·대칭형 조합 실패</text>
+<path d="M 260 580 L 260 640" fill="none" stroke="#F0616D" stroke-width="1.3" marker-end="url(#bad)"/>
+<text x="280" y="595" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#F0616D">No</text>
+<rect x="80" y="640" width="740" height="64" rx="8" fill="#161B22" stroke="#F08A59" stroke-width="1.6"/>
+<text x="450" y="664" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">최후의 보루: 릴레이 및 Reverse Tunnel (portal-tunnel 방식)</text>
+<text x="450" y="686" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">내부 아웃바운드 선개설로 방화벽 우회 · 바깥 방향 연결 허용 시 NAT 종류 무관 도달</text>
+<line x1="12" y1="740" x2="912" y2="740" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="762" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="752" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="762" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">직접 수신 (공인 IP)</text>
+<rect x="313" y="752" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="335" y="762" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">로컬 매핑 (제약형)</text>
+<rect x="500" y="752" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="522" y="762" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">P2P 통신 (조건부)</text>
+<rect x="700" y="752" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="722" y="762" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">역방향 터널 (아웃바운드 허용 시)</text>
+</svg>

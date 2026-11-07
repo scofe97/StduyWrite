@@ -1,0 +1,84 @@
+<svg viewBox="0 0 880 430" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>외부 노출 세 방식이 서로 쌓이는 구조</title>
+  <desc>Kubernetes Patterns 그림 13-5, 13-6, 13-7을 층으로 겹쳐 놓은 것입니다. 왼쪽 NodePort는 모든 노드에 같은 포트를 열어 외부 클라이언트가 아무 노드에나 접속하게 합니다. 클라이언트가 건강한 노드를 직접 골라야 하고 소스 NAT로 클라이언트 IP가 노드 주소로 가려집니다. 가운데 LoadBalancer는 그 NodePort 위에 클라우드 제공자의 로드밸런서를 얹어 건강한 노드 선택과 장애 조치를 대신 처리하지만 Service마다 외부 IP를 하나씩 소비합니다. 오른쪽 Ingress는 Service 타입이 아니라 별도 리소스로 Service 앞에 서며, 외부 로드밸런서와 IP 하나를 여러 Service가 나눠 쓰게 해 HTTP 경로에 따라 다른 Service로 보냅니다. 오른쪽으로 갈수록 강력하지만 복잡해집니다.</desc>
+
+  <defs>
+    <marker id="ea" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect width="880" height="430" fill="#0d0d0d"/>
+  <text x="24" y="30" fill="#e8e4df" font-size="15">외부 노출 세 방식</text>
+
+  <!-- column 1: NodePort -->
+  <text x="145" y="88" text-anchor="middle" fill="#e8e4df" font-size="12" font-weight="700">NodePort</text>
+
+  <rect x="60" y="104" width="170" height="44" fill="#f2d4d4"/>
+  <text x="145" y="131" text-anchor="middle" fill="#7a1f1f" font-size="10" font-weight="700">외부 클라이언트</text>
+
+  <rect x="60" y="212" width="170" height="56" fill="#dceaf7"/>
+  <text x="145" y="234" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">노드 3대</text>
+  <text x="145" y="252" text-anchor="middle" fill="#10243a" font-size="9">전부 30036 개방</text>
+
+  <path d="M145 148 L145 206" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ea)"/>
+  <text x="155" y="182" fill="rgb(212,168,83)" font-size="9">노드 직접 선택</text>
+
+  <!-- column 2: LoadBalancer -->
+  <text x="440" y="88" text-anchor="middle" fill="#e8e4df" font-size="12" font-weight="700">LoadBalancer</text>
+
+  <rect x="355" y="104" width="170" height="44" fill="#f2d4d4"/>
+  <text x="440" y="131" text-anchor="middle" fill="#7a1f1f" font-size="10" font-weight="700">외부 클라이언트</text>
+
+  <rect x="355" y="160" width="170" height="44" fill="#f5edda"/>
+  <text x="440" y="180" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">클라우드 LB</text>
+  <text x="440" y="196" text-anchor="middle" fill="#0d0d0d" font-size="9">Service마다 IP 하나</text>
+
+  <rect x="355" y="212" width="170" height="56" fill="#dceaf7"/>
+  <text x="440" y="234" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">노드 3대</text>
+  <text x="440" y="252" text-anchor="middle" fill="#10243a" font-size="9">NodePort 위에 얹힘</text>
+
+  <path d="M440 148 L440 154" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ea)"/>
+  <path d="M440 204 L440 206" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ea)"/>
+
+  <!-- column 3: Ingress -->
+  <text x="735" y="88" text-anchor="middle" fill="#e8e4df" font-size="12" font-weight="700">Ingress</text>
+
+  <rect x="650" y="104" width="170" height="44" fill="#f2d4d4"/>
+  <text x="735" y="131" text-anchor="middle" fill="#7a1f1f" font-size="10" font-weight="700">외부 클라이언트</text>
+
+  <rect x="650" y="160" width="170" height="44" fill="#cdeccf"/>
+  <text x="735" y="180" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700">Ingress · L7</text>
+  <text x="735" y="196" text-anchor="middle" fill="#14521d" font-size="9">LB·IP 하나를 공유</text>
+
+  <rect x="650" y="212" width="80" height="56" fill="#f5edda"/>
+  <text x="690" y="236" text-anchor="middle" fill="#0d0d0d" font-size="9" font-weight="700">Service A</text>
+  <text x="690" y="252" text-anchor="middle" fill="#0d0d0d" font-size="9">/foo</text>
+
+  <rect x="740" y="212" width="80" height="56" fill="#f5edda"/>
+  <text x="780" y="236" text-anchor="middle" fill="#0d0d0d" font-size="9" font-weight="700">Service B</text>
+  <text x="780" y="252" text-anchor="middle" fill="#0d0d0d" font-size="9">/bar</text>
+
+  <path d="M735 148 L735 154" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ea)"/>
+  <path d="M710 204 L690 206" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ea)"/>
+  <path d="M760 204 L780 206" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ea)"/>
+
+  <!-- shared cluster layer -->
+  <rect x="60" y="320" width="760" height="90" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="440" y="344" text-anchor="middle" fill="#b8b3ad" font-size="10" font-weight="700">Kubernetes 클러스터</text>
+
+  <rect x="120" y="354" width="180" height="44" fill="#f5edda"/>
+  <text x="210" y="381" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">Service · ClusterIP</text>
+
+  <rect x="580" y="354" width="180" height="44" fill="#dceaf7"/>
+  <text x="670" y="381" text-anchor="middle" fill="#10243a" font-size="10" font-weight="700">Pod 집합</text>
+
+  <path d="M306 376 L574 376" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ea)"/>
+  <text x="440" y="368" text-anchor="middle" fill="rgb(212,168,83)" font-size="9">selector로 라우팅</text>
+
+  <path d="M145 268 L145 300 L210 300 L210 348" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ea)"/>
+  <path d="M440 268 L440 300 L240 300 L240 348" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ea)"/>
+  <path d="M690 268 L690 300 L270 300 L270 348" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ea)"/>
+
+  <!-- bottom note -->
+</svg>

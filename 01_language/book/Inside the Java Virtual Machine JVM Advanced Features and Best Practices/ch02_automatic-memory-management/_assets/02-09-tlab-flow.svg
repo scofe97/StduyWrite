@@ -1,0 +1,79 @@
+<svg viewBox="0 0 900 620" width="900" height="620" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>TLAB fast path와 공유 Eden slow path</title>
+  <desc>TLAB은 Eden 안에서 스레드별로 미리 나눠 둔 빠른 할당 버퍼다.</desc>
+  <defs>
+    <style>
+      text{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+      .title{font-size:19px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:12px;fill:#8a8580}
+      .head{font-size:14px;font-weight:800;fill:#d4a853}
+      .label{font-size:12px;font-weight:750;fill:#e8e4df}
+      .body{font-size:11px;fill:#b4afaa}
+      .note{font-size:10px;fill:#8a8580}
+      .ok{font-size:12px;font-weight:800;fill:#81c784}
+      .bad{font-size:12px;font-weight:800;fill:#e57373}
+      .code{font-size:11px;font-weight:750;fill:#d4a853;font-family:Menlo,Consolas,monospace}
+    </style>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#d4a853"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#e57373"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="620" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">TLAB - Eden 안의 스레드별 빠른 할당 구역</text>
+  <text x="28" y="60" class="sub">스레드 내부 메모리가 아니라 Eden 일부를 스레드별로 미리 떼어 둔 버퍼다.</text>
+
+  <rect x="44" y="88" width="812" height="152" rx="8" fill="#1a1a1a" stroke="#d4a853"/>
+  <text x="68" y="118" class="head">Eden 영역</text>
+
+  <rect x="78" y="146" width="170" height="58" rx="6" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="163" y="169" class="label" text-anchor="middle">Thread A TLAB</text>
+  <text x="163" y="188" class="body" text-anchor="middle">A만 top 증가</text>
+
+  <rect x="272" y="146" width="170" height="58" rx="6" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="357" y="169" class="label" text-anchor="middle">Thread B TLAB</text>
+  <text x="357" y="188" class="body" text-anchor="middle">B만 top 증가</text>
+
+  <rect x="466" y="146" width="170" height="58" rx="6" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="551" y="169" class="label" text-anchor="middle">Thread C TLAB</text>
+  <text x="551" y="188" class="body" text-anchor="middle">C만 top 증가</text>
+
+  <rect x="660" y="146" width="158" height="58" rx="6" fill="#2a2a1a" stroke="#d4a853"/>
+  <text x="739" y="169" class="label" text-anchor="middle">공유 Eden</text>
+  <text x="739" y="188" class="body" text-anchor="middle">동기화 필요 가능</text>
+
+  <text x="78" y="224" class="note">TLAB 안에서는 다른 스레드와 같은 포인터를 건드리지 않아 동기화 없이 할당한다.</text>
+
+  <rect x="44" y="278" width="812" height="246" rx="8" fill="#1a1a1a" stroke="#d4a853"/>
+  <text x="68" y="308" class="head">할당 요청 흐름</text>
+
+  <rect x="72" y="348" width="132" height="56" rx="8" fill="#1e3a4a" stroke="#4a8ab0"/>
+  <text x="138" y="372" class="label" text-anchor="middle">new 요청</text>
+  <text x="138" y="390" class="body" text-anchor="middle">객체 할당</text>
+
+  <line x1="204" y1="376" x2="286" y2="376" stroke="#d4a853" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="288" y="338" width="174" height="76" rx="8" fill="#2a2a1a" stroke="#d4a853"/>
+  <text x="375" y="366" class="head" text-anchor="middle">TLAB에 공간?</text>
+  <text x="375" y="388" class="body" text-anchor="middle">작은 객체 fast path 확인</text>
+
+  <line x1="462" y1="358" x2="586" y2="326" stroke="#d4a853" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="588" y="298" width="226" height="66" rx="8" fill="#15251a" stroke="#81c784"/>
+  <text x="701" y="324" class="ok" text-anchor="middle">공간 있음</text>
+  <text x="701" y="344" class="body" text-anchor="middle">bump-the-pointer</text>
+  <text x="701" y="358" class="note" text-anchor="middle">동기화 없음</text>
+
+  <line x1="462" y1="396" x2="586" y2="438" stroke="#e57373" stroke-width="2" marker-end="url(#arrow-red)"/>
+  <rect x="588" y="416" width="226" height="66" rx="8" fill="#2a1414" stroke="#e57373"/>
+  <text x="701" y="442" class="bad" text-anchor="middle">공간 없음 또는 큰 객체</text>
+  <text x="701" y="462" class="body" text-anchor="middle">새 TLAB 요청</text>
+  <text x="701" y="476" class="note" text-anchor="middle">공유 Eden/CAS 가능</text>
+
+  <text x="72" y="506" class="note">큰 객체는 TLAB에 넣기 어렵기 때문에 공유 Eden 또는 컬렉터별 큰 객체 경로로 빠질 수 있다.</text>
+
+  <rect x="44" y="560" width="812" height="38" rx="8" fill="#111" stroke="#333"/>
+  <text x="68" y="584" class="code">정리</text>
+  <text x="128" y="584" class="body">대부분의 작은 객체는 fast path, TLAB 재충전과 큰 객체만 slow path로 간다.</text>
+</svg>

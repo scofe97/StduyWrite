@@ -1,0 +1,100 @@
+<svg viewBox="0 0 1180 640" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>클라이언트 IP는 어느 경로에서 살아남는가 — ClusterIP·NodePort·externalTrafficPolicy Local 비교</title>
+  <desc>같은 클러스터라도 어느 경로로 들어오느냐에 따라 백엔드 파드가 보는 출발지 주소가 달라진다. 클러스터 안에서 ClusterIP로 접근하면 SNAT가 걸리지 않아 파드가 원래 클라이언트 IP를 그대로 본다. 바깥에서 NodePort나 로드밸런서로 들어오면 기본값인 externalTrafficPolicy Cluster에서 SNAT가 걸린다. 받은 노드가 다른 노드의 파드로 넘길 수 있어야 하고, 그러려면 응답이 자기에게 돌아와야 하기 때문이다. 그 대가로 파드는 클라이언트 IP 대신 노드 IP를 보게 된다. externalTrafficPolicy를 Local로 두면 받은 노드가 자기 위의 파드로만 보내므로 SNAT가 필요 없어 클라이언트 IP가 보존되지만, 해당 파드가 없는 노드로 들어온 요청은 버려지고 노드별 부하가 고르지 않게 된다.</desc>
+  <defs>
+    <style>
+      .title  { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub    { font-size: 11px; fill: rgb(138,133,128); }
+      .head   { font-size: 13.5px; font-weight: 800; }
+      .comp   { font-size: 11px; font-weight: 700; fill: #e8e4df; }
+      .desc   { font-size: 10.5px; font-weight: 600; fill: #e8e4df; }
+      .muted  { font-size: 9.5px; fill: rgb(138,133,128); }
+      .mono   { font-size: 9.5px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .darkmono { font-size: 9.5px; font-weight: 800; font-family: 'JetBrains Mono', ui-monospace, monospace; fill: #0d0d0d; }
+      .darkdesc { font-size: 10.5px; font-weight: 700; fill: #0d0d0d; }
+    </style>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/></marker>
+    <marker id="arg" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#66bb6a"/></marker>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#f44336"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="640" fill="#0d0d0d"/>
+  <text x="24" y="30" class="title">클라이언트 IP는 어느 경로에서 살아남는가</text>
+  <text x="24" y="50" class="sub">파드가 보는 출발지 주소는 경로마다 다르다. SNAT가 걸리는 순간 원래 클라이언트 IP는 노드 IP로 덮인다.</text>
+
+  <!-- 경로 1: ClusterIP -->
+  <rect x="40" y="76" width="1100" height="152" rx="12" fill="rgb(16,18,22)" stroke="#66bb6a" stroke-width="1.4"/>
+  <text x="62" y="104" class="head" style="fill:#66bb6a">① 클러스터 안에서 ClusterIP로 — SNAT 없음</text>
+
+  <rect x="62" y="120" width="160" height="56" rx="7" fill="#5b9bd5"/>
+  <text x="142" y="144" class="comp" text-anchor="middle" style="fill:#e8e4df">클라이언트 파드</text>
+  <text x="142" y="164" class="mono" text-anchor="middle" style="fill:#e8e4df">10.244.1.5</text>
+
+  <line x1="222" y1="148" x2="290" y2="148" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <rect x="298" y="120" width="180" height="56" rx="7" fill="rgb(20,22,26)" stroke="rgb(212,168,83)" stroke-width="1.1"/>
+  <text x="388" y="144" class="mono" text-anchor="middle" style="fill:rgb(212,168,83)">DNAT만 적용</text>
+  <text x="388" y="163" class="muted" text-anchor="middle">목적지만 파드 IP로</text>
+
+  <line x1="478" y1="148" x2="546" y2="148" stroke="#66bb6a" stroke-width="2" marker-end="url(#arg)"/>
+  <rect x="554" y="120" width="200" height="56" rx="7" fill="#66bb6a"/>
+  <text x="654" y="144" class="darkdesc" text-anchor="middle">백엔드 파드가 보는 src</text>
+  <text x="654" y="164" class="darkmono" text-anchor="middle">10.244.1.5 (원본 보존)</text>
+
+  <rect x="790" y="120" width="328" height="56" rx="7" fill="rgb(20,30,22)" stroke="#66bb6a" stroke-width="1"/>
+  <text x="806" y="143" class="desc" style="fill:#66bb6a">출발지를 바꿀 이유가 없다</text>
+  <text x="806" y="163" class="muted">같은 클러스터 안이라 응답 경로가 이미 성립한다</text>
+
+  <text x="62" y="204" class="muted">클라이언트 IP 기반 접근 제어나 로그 분석이 그대로 동작하는 유일한 경로다.</text>
+
+  <!-- 경로 2: NodePort/LB Cluster -->
+  <rect x="40" y="244" width="1100" height="168" rx="12" fill="rgb(16,18,22)" stroke="#f0b0b0" stroke-width="1.4"/>
+  <text x="62" y="272" class="head" style="fill:#f0b0b0">② 바깥에서 NodePort·로드밸런서로 (기본값 externalTrafficPolicy: Cluster) — SNAT 걸림</text>
+
+  <rect x="62" y="288" width="160" height="56" rx="7" fill="#5b9bd5"/>
+  <text x="142" y="312" class="comp" text-anchor="middle" style="fill:#e8e4df">외부 클라이언트</text>
+  <text x="142" y="332" class="mono" text-anchor="middle" style="fill:#e8e4df">203.0.113.9</text>
+
+  <line x1="222" y1="316" x2="290" y2="316" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <rect x="298" y="288" width="180" height="56" rx="7" fill="rgb(30,20,20)" stroke="#f0b0b0" stroke-width="1.2"/>
+  <text x="388" y="311" class="mono" text-anchor="middle" style="fill:#f0b0b0">DNAT + SNAT</text>
+  <text x="388" y="330" class="muted" text-anchor="middle" style="fill:#f0b0b0">출발지가 노드 IP로</text>
+
+  <line x1="478" y1="316" x2="546" y2="316" stroke="#f44336" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="554" y="288" width="200" height="56" rx="7" fill="rgb(30,20,20)" stroke="#f0b0b0" stroke-width="1.2"/>
+  <text x="654" y="311" class="desc" text-anchor="middle" style="fill:#f0b0b0">파드가 보는 src</text>
+  <text x="654" y="331" class="mono" text-anchor="middle" style="fill:#f0b0b0">192.168.1.7 (노드 IP)</text>
+
+  <rect x="790" y="288" width="328" height="56" rx="7" fill="rgb(20,22,26)" stroke="rgb(42,37,32)"/>
+  <text x="806" y="311" class="desc">받은 노드가 다른 노드 파드로 넘길 수 있어야 한다</text>
+  <text x="806" y="331" class="muted">응답이 자기에게 돌아와야 하니 출발지를 자기로 바꾼다</text>
+
+  <rect x="62" y="356" width="1056" height="40" rx="7" fill="rgb(30,20,20)" stroke="#f0b0b0" stroke-width="1"/>
+  <text x="80" y="381" class="desc" style="fill:#f0b0b0">대가 — 파드 로그에 찍히는 접속 주소가 전부 노드 IP가 된다. 클라이언트 IP로 차단·집계하던 로직이 조용히 무너진다.</text>
+
+  <!-- 경로 3: Local -->
+  <rect x="40" y="428" width="1100" height="168" rx="12" fill="rgb(16,18,22)" stroke="rgb(212,168,83)" stroke-width="1.4"/>
+  <text x="62" y="456" class="head" style="fill:rgb(212,168,83)">③ externalTrafficPolicy: Local — SNAT 없음, 대신 조건이 붙는다</text>
+
+  <rect x="62" y="472" width="160" height="56" rx="7" fill="#5b9bd5"/>
+  <text x="142" y="496" class="comp" text-anchor="middle" style="fill:#e8e4df">외부 클라이언트</text>
+  <text x="142" y="516" class="mono" text-anchor="middle" style="fill:#e8e4df">203.0.113.9</text>
+
+  <line x1="222" y1="500" x2="290" y2="500" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#ar)"/>
+  <rect x="298" y="472" width="180" height="56" rx="7" fill="rgb(20,22,26)" stroke="rgb(212,168,83)" stroke-width="1.1"/>
+  <text x="388" y="495" class="mono" text-anchor="middle" style="fill:rgb(212,168,83)">자기 노드 파드로만</text>
+  <text x="388" y="514" class="muted" text-anchor="middle">넘길 일이 없어 SNAT 불필요</text>
+
+  <line x1="478" y1="500" x2="546" y2="500" stroke="#66bb6a" stroke-width="2" marker-end="url(#arg)"/>
+  <rect x="554" y="472" width="200" height="56" rx="7" fill="#66bb6a"/>
+  <text x="654" y="496" class="darkdesc" text-anchor="middle">파드가 보는 src</text>
+  <text x="654" y="516" class="darkmono" text-anchor="middle">203.0.113.9 (원본 보존)</text>
+
+  <rect x="790" y="472" width="328" height="56" rx="7" fill="rgb(30,20,20)" stroke="#f0b0b0" stroke-width="1.2"/>
+  <text x="806" y="495" class="desc" style="fill:#f0b0b0">해당 파드가 없는 노드로 온 요청은 버려진다</text>
+  <text x="806" y="515" class="muted" style="fill:#f0b0b0">노드별 파드 수가 다르면 부하도 고르지 않다</text>
+
+  <rect x="62" y="540" width="1056" height="40" rx="7" fill="rgb(20,22,26)" stroke="rgb(212,168,83)" stroke-width="1"/>
+  <text x="80" y="565" class="desc" style="fill:rgb(212,168,83)">거래 조건 — 클라이언트 IP를 얻는 대신 균등 분산을 내준다. 클라이언트 IP가 꼭 필요할 때만 고르는 선택지다.</text>
+
+  <text x="24" y="620" class="muted">한계: 표준 iptables 모드 기준이다. 로드밸런서가 X-Forwarded-For 같은 L7 헤더로 원본 IP를 따로 실어 주면 그 경로는 별개로 본다.</text>
+</svg>

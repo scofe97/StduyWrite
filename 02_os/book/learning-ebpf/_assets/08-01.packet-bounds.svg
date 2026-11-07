@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 576" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">헤더를 하나 읽을 때마다 data_end 를 넘지 않는지 먼저 증명한다</title><desc id="dd">패킷 버퍼는 data 에서 data_end 까지다. 이더넷 헤더는 0~13 바이트로 h_proto 가 12~13 에 있고 값은 0x0800 이다. IP 헤더는 14~33 바이트로 protocol 이 오프셋 23 에 있고 값은 1 이다. data+14 가 data_end 이하여야 이더넷 헤더를, data+34 가 data_end 이하여야 IP 헤더를 읽을 수 있다.</desc>
+<rect width="1000" height="576" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING EBPF · 08-01 §2</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">헤더를 하나 읽을 때마다 data_end 를 넘지 않는지 먼저 증명한다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">읽기 전에 경계 안임을 보여야 verifier 가 통과시킵니다</text>
+<rect x="24" y="104" width="952" height="152" rx="8" fill="#F5F5F306" stroke="#5E6B7E" stroke-width="1.2"/>
+<text x="40" y="124" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#5E6B7E">data ~ data_end</text>
+<rect x="56" y="140" width="280" height="100" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<rect x="336" y="140" width="400" height="100" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<rect x="736" y="140" width="200" height="100" rx="6" fill="#8B98A912" stroke="#8B98A9" stroke-width="1.2"/>
+<text x="68" y="160" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">struct ethhdr</text>
+<text x="324" y="160" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">0~13</text>
+<text x="348" y="160" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">struct iphdr</text>
+<text x="724" y="160" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">14~33</text>
+<text x="748" y="160" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">L4</text>
+<text x="924" y="160" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">34~</text>
+<rect x="60" y="176" width="112" height="48" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="116.0" y="198" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">h_dest</text>
+<text x="116.0" y="214" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">0~5</text>
+<rect x="180" y="176" width="112" height="48" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="236.0" y="198" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">h_source</text>
+<text x="236.0" y="214" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">6~11</text>
+<rect x="300" y="176" width="32" height="48" rx="4" fill="#F08A591F" stroke="#F08A59" stroke-width="1.4"/>
+<rect x="340" y="176" width="172" height="48" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="426.0" y="198" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">…</text>
+<rect x="516" y="176" width="20" height="48" rx="4" fill="#F08A591F" stroke="#F08A59" stroke-width="1.4"/>
+<rect x="540" y="176" width="192" height="48" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="636.0" y="198" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">…</text>
+<rect x="740" y="176" width="192" height="48" rx="4" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="836" y="204" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">1 ICMP · 6 TCP · 17 UDP</text>
+<line x1="316" y1="224" x2="316" y2="276" stroke="#F08A59" stroke-width="1.2"/>
+<rect x="233.98" y="282" width="164.04000000000002" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="316" y="296" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">h_proto 12~13 = 0x0800</text>
+<line x1="526" y1="224" x2="526" y2="276" stroke="#F08A59" stroke-width="1.2"/>
+<rect x="523.85" y="282" width="116.30000000000001" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="582" y="296" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">protocol 23 = 1</text>
+<line x1="56" y1="348" x2="936" y2="348" stroke="#5E6B7E" stroke-width="1.2"/>
+<line x1="56" y1="342" x2="56" y2="354" stroke="#5E6B7E" stroke-width="1.2"/>
+<text x="56" y="372" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">data</text>
+<line x1="336" y1="342" x2="336" y2="354" stroke="#5E6B7E" stroke-width="1.2"/>
+<text x="336" y="372" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">data+14</text>
+<line x1="736" y1="342" x2="736" y2="354" stroke="#5E6B7E" stroke-width="1.2"/>
+<text x="736" y="372" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">data+34</text>
+<line x1="936" y1="342" x2="936" y2="354" stroke="#5E6B7E" stroke-width="1.2"/>
+<text x="936" y="372" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">data_end</text>
+<line x1="56" y1="394" x2="56" y2="406" stroke="#3FB98C" stroke-width="1.4"/>
+<line x1="336" y1="394" x2="336" y2="406" stroke="#3FB98C" stroke-width="1.4"/>
+<line x1="56" y1="400" x2="336" y2="400" stroke="#3FB98C" stroke-width="1.4"/>
+<rect x="167.0" y="390" width="58.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="196.0" y="404" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">검사 1</text>
+<text x="196.0" y="428" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">data+14 ≤ data_end</text>
+<line x1="56" y1="450" x2="56" y2="462" stroke="#3FB98C" stroke-width="1.4"/>
+<line x1="736" y1="450" x2="736" y2="462" stroke="#3FB98C" stroke-width="1.4"/>
+<line x1="56" y1="456" x2="736" y2="456" stroke="#3FB98C" stroke-width="1.4"/>
+<rect x="367.0" y="446" width="58.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="396.0" y="460" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">검사 2</text>
+<text x="396.0" y="484" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">data+34 ≤ data_end</text>
+<line x1="12" y1="520" x2="952" y2="520" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="542" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="532" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="542" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">검사 통과 조건</text>
+<rect x="248" y="532" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="270" y="542" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">읽는 필드</text>
+<rect x="357" y="532" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="379" y="542" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">헤더</text>
+</svg>

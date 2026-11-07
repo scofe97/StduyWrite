@@ -1,0 +1,70 @@
+<svg viewBox="0 0 900 500" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>JMM의 여덟 가지 연산 — 메인 메모리와 작업 메모리 사이의 흐름</title>
+  <desc>자바 메모리 모델은 변수를 메인 메모리와 스레드별 작업 메모리로 나눈다. 스레드는 메인 메모리를 직접 읽거나 쓸 수 없고 반드시 작업 메모리의 복사본을 거친다. 읽기는 read(메인에서 꺼냄)와 load(작업에 넣음)가 짝을 이루고, 쓰기는 store(작업에서 내보냄)와 write(메인에 기록)가 짝을 이룬다. 실행 엔진은 use(작업의 값을 가져감)와 assign(작업에 대입)으로 작업 메모리와 주고받는다. lock과 unlock은 메인 메모리의 변수를 한 스레드가 독점하도록 잠그고 푼다.</desc>
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #e8e4df; }
+      .sub   { font-size: 11.5px; fill: rgb(138,133,128); }
+      .zone  { font-size: 13px; font-weight: 800; fill: #0d0d0d; }
+      .zlabel{ font-size: 11px; font-weight: 700; fill: #e8e4df; }
+      .op    { font-size: 12px; font-weight: 800; fill: #0d0d0d; }
+      .opk   { font-size: 10px; fill: rgba(13,13,13,0.8); }
+      .note  { font-size: 10px; fill: #c9c4be; }
+      .pair  { font-size: 10px; font-weight: 700; fill: rgb(212,168,83); }
+    </style>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="500" fill="#0d0d0d"/>
+  <text x="28" y="38" class="title">JMM의 여덟 가지 연산 — 메인 ↔ 작업 메모리</text>
+  <text x="28" y="58" class="sub">스레드는 메인 메모리를 직접 못 만진다 · read·load와 store·write는 짝 · use·assign은 실행 엔진과 작업 메모리 사이</text>
+
+  <!-- 메인 메모리 -->
+  <rect x="28" y="92" width="200" height="340" rx="10" fill="#5b9bd5"/>
+  <text x="128" y="122" class="zone" text-anchor="middle">메인 메모리</text>
+  <text x="128" y="142" class="zlabel" text-anchor="middle" fill="rgba(13,13,13,0.78)">모든 스레드 공유</text>
+  <rect x="52" y="168" width="152" height="56" rx="7" fill="#dceaf7"/>
+  <text x="128" y="192" class="opk" text-anchor="middle" fill="#10243a">인스턴스·정적 변수</text>
+  <text x="128" y="210" class="opk" text-anchor="middle" fill="#10243a">배열 요소</text>
+  <rect x="52" y="250" width="152" height="48" rx="7" fill="#dceaf7"/>
+  <text x="128" y="270" class="op" text-anchor="middle" fill="#10243a">lock / unlock</text>
+  <text x="128" y="288" class="opk" text-anchor="middle" fill="#10243a">변수 독점·해제</text>
+
+  <!-- 작업 메모리 -->
+  <rect x="350" y="92" width="200" height="340" rx="10" fill="rgb(212,168,83)"/>
+  <text x="450" y="122" class="zone" text-anchor="middle">작업 메모리</text>
+  <text x="450" y="142" class="zlabel" text-anchor="middle" fill="rgba(13,13,13,0.78)">스레드마다 독립</text>
+  <rect x="374" y="168" width="152" height="56" rx="7" fill="#fdf3df"/>
+  <text x="450" y="192" class="opk" text-anchor="middle" fill="#5a3d0a">변수 복사본</text>
+  <text x="450" y="210" class="opk" text-anchor="middle" fill="#5a3d0a">(다른 스레드 접근 불가)</text>
+
+  <!-- 실행 엔진 -->
+  <rect x="672" y="92" width="200" height="340" rx="10" fill="#66bb6a"/>
+  <text x="772" y="122" class="zone" text-anchor="middle">실행 엔진</text>
+  <text x="772" y="142" class="zlabel" text-anchor="middle" fill="rgba(13,13,13,0.78)">스레드의 연산 수행</text>
+  <rect x="696" y="168" width="152" height="56" rx="7" fill="#e6f7e7"/>
+  <text x="772" y="192" class="opk" text-anchor="middle" fill="#14521d">바이트코드 실행</text>
+  <text x="772" y="210" class="opk" text-anchor="middle" fill="#14521d">계산·분기</text>
+
+  <!-- read → load (메인 → 작업), 위쪽 -->
+  <line x1="228" y1="320" x2="350" y2="320" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#ar)"/>
+  <text x="289" y="312" class="pair" text-anchor="middle">read → load</text>
+  <text x="289" y="338" class="note" text-anchor="middle">메인에서 꺼내 작업에 넣음 (짝)</text>
+
+  <!-- store → write (작업 → 메인), 아래쪽 -->
+  <line x1="350" y1="392" x2="228" y2="392" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#ar)"/>
+  <text x="289" y="384" class="pair" text-anchor="middle">store → write</text>
+  <text x="289" y="410" class="note" text-anchor="middle">작업에서 내보내 메인에 기록 (짝)</text>
+
+  <!-- use (작업 → 실행), 위쪽 -->
+  <line x1="550" y1="320" x2="672" y2="320" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#ar)"/>
+  <text x="611" y="312" class="pair" text-anchor="middle">use</text>
+  <text x="611" y="338" class="note" text-anchor="middle">작업의 값을 실행 엔진에 전달</text>
+
+  <!-- assign (실행 → 작업), 아래쪽 -->
+  <line x1="672" y1="392" x2="550" y2="392" stroke="rgb(212,168,83)" stroke-width="2.5" marker-end="url(#ar)"/>
+  <text x="611" y="384" class="pair" text-anchor="middle">assign</text>
+  <text x="611" y="410" class="note" text-anchor="middle">실행 결과를 작업에 대입</text>
+</svg>

@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 460" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">수신 버퍼와 슬라이딩 윈도 흐름</title><desc id="dd">패킷 블록 적재와 Go 앱 소비에 따른 수신 창 크기 광고</desc>
+<rect width="840" height="460" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">NPG CH.3 — SLIDING WINDOW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">수신 버퍼와 슬라이딩 윈도 흐름</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">패킷 수신과 앱 소비에 따른 수신 창 크기 광고</text>
+<text x="70" y="100" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">단계</text>
+<text x="210" y="100" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">송신 서버</text>
+<text x="450" y="100" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">수신 버퍼 (3 슬롯)</text>
+<text x="730" y="100" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">Go 앱</text>
+<line x1="20" y1="112" x2="820" y2="112" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="70" y="153" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">1. 초기</text>
+<rect x="165" y="135" width="90" height="36" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="0.9"/>
+<text x="210" y="158" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">송신 대기</text>
+<rect x="360.0" y="140" width="56" height="26" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<text x="388.0" y="157" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">빈 슬롯</text>
+<rect x="422.0" y="140" width="56" height="26" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<text x="450.0" y="157" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">빈 슬롯</text>
+<rect x="484.0" y="140" width="56" height="26" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<text x="512.0" y="157" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">빈 슬롯</text>
+<path d="M 345 163 L 265 163" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<text x="305" y="153" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">Win=3,072B</text>
+<rect x="685" y="135" width="90" height="36" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="730" y="158" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">Read 대기</text>
+<text x="70" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">2. 전송</text>
+<rect x="165" y="210" width="90" height="36" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="0.9"/>
+<text x="210" y="233" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">3개 송신</text>
+<path d="M 265 228 L 350 228" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<text x="307" y="220" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#E3B341">1,024B x 3</text>
+<rect x="360.0" y="215" width="56" height="26" rx="4" fill="#E3B34132" stroke="#E3B341" stroke-width="1.5"/>
+<text x="388.0" y="232" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">1,024B</text>
+<rect x="422.0" y="215" width="56" height="26" rx="4" fill="#E3B34132" stroke="#E3B341" stroke-width="1.5"/>
+<text x="450.0" y="232" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">1,024B</text>
+<rect x="484.0" y="215" width="56" height="26" rx="4" fill="#E3B34132" stroke="#E3B341" stroke-width="1.5"/>
+<text x="512.0" y="232" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">1,024B</text>
+<rect x="685" y="210" width="90" height="36" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="730" y="233" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">적재 대기</text>
+<text x="70" y="303" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">3. 소비</text>
+<rect x="165" y="285" width="90" height="36" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="0.9"/>
+<text x="210" y="308" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">ACK 대기</text>
+<rect x="360.0" y="290" width="56" height="26" rx="4" fill="#E3B34132" stroke="#E3B341" stroke-width="1.5"/>
+<text x="388.0" y="307" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">1,024B</text>
+<rect x="422.0" y="290" width="56" height="26" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<text x="450.0" y="307" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">빈 슬롯</text>
+<rect x="484.0" y="290" width="56" height="26" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<text x="512.0" y="307" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">빈 슬롯</text>
+<path d="M 550 303 L 675 303" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="612" y="295" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">Read(2,048B)</text>
+<rect x="685" y="285" width="90" height="36" rx="6" fill="#3FB98C15" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="730" y="308" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">2,048B 소비</text>
+<path d="M 345 313 L 265 313" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<text x="305" y="303" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#6A95D8">Win=2,048B</text>
+<text x="70" y="378" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">4. 전송</text>
+<rect x="165" y="360" width="90" height="36" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="0.9"/>
+<text x="210" y="383" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">2개 송신</text>
+<path d="M 265 378 L 350 378" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<text x="307" y="370" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#E3B341">1,024B x 2</text>
+<rect x="360.0" y="365" width="56" height="26" rx="4" fill="#8B98A920" stroke="#8B98A9" stroke-width="1.2" stroke-dasharray="3 2"/>
+<text x="388.0" y="382" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#5E6B7E">1,024B</text>
+<rect x="422.0" y="365" width="56" height="26" rx="4" fill="#E3B34132" stroke="#E3B341" stroke-width="1.5"/>
+<text x="450.0" y="382" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">1,024B</text>
+<rect x="484.0" y="365" width="56" height="26" rx="4" fill="#E3B34132" stroke="#E3B341" stroke-width="1.5"/>
+<text x="512.0" y="382" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">1,024B</text>
+<rect x="685" y="360" width="90" height="36" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="730" y="383" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">후속 대기</text>
+<line x1="12" y1="415" x2="792" y2="415" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="437" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="427" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="437" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">창 광고</text>
+<rect x="196" y="427" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="218" y="437" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">패킷 흐름</text>
+<rect x="305" y="427" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="327" y="437" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">앱 소비</text>
+<rect x="401" y="427" width="14" height="12" rx="2" fill="#8B98A922" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="423" y="437" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">기존 잔여</text>
+</svg>

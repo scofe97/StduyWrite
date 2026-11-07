@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 500" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">병목 링크와 ACK 시계 — 자체 클러킹의 패킷 보존 원리</title><desc id="dd">송신자가 빠른 링크로 내보낸 밀착 패킷이 병목 링크에서 직렬화 지연을 겪으며 시간 축에서 벌어진다. 수신자가 그 간격대로 ACK 를 회신하면 송신자는 별도 타이머 없이도 병목 처리율에 맞춰 새 패킷을 주입한다.</desc>
+<rect width="920" height="500" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">TCP/IP ILLUSTRATED VOL.1 · 16-01 §2</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">병목 링크와 ACK 시계 — 자체 클러킹의 패킷 보존 원리</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">도착한 ACK 가 망을 빠져나간 패킷 하나를 증명하고 새 패킷을 엽니다</text>
+<rect x="24" y="120" width="240" height="140" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="144" y="144" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">송신자 버스트 (빠른 링크)</text>
+<text x="144" y="164" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">고속 링크 (예: 1Gbps) · 밀착 전송</text>
+<rect x="44" y="184" width="46" height="32" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="1.2"/>
+<text x="67" y="204" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">P1</text>
+<rect x="100" y="184" width="46" height="32" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="1.2"/>
+<text x="123" y="204" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">P2</text>
+<rect x="156" y="184" width="46" height="32" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="1.2"/>
+<text x="179" y="204" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">P3</text>
+<text x="144" y="240" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">좁은 패킷 간격 (Δt1)</text>
+<path d="M 268 200 L 328 200" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="332" y="120" width="256" height="140" rx="8" fill="#161B22" stroke="#E3B341" stroke-width="1.2"/>
+<text x="460" y="144" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">병목 라우터 (느린 링크)</text>
+<text x="460" y="164" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">병목 링크 (예: 10Mbps) · 직렬화 L/C</text>
+<rect x="352" y="184" width="44" height="32" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="1.2"/>
+<text x="374" y="204" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#E3B341">P1</text>
+<rect x="438" y="184" width="44" height="32" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="1.2"/>
+<text x="460" y="204" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#E3B341">P2</text>
+<rect x="524" y="184" width="44" height="32" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="1.2"/>
+<text x="546" y="204" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#E3B341">P3</text>
+<text x="460" y="240" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">벌어진 간격 (Δt2 = L/C)</text>
+<path d="M 592 200 L 652 200" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="656" y="120" width="240" height="140" rx="8" fill="#161B22" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="776" y="144" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">수신자 도착 및 ACK 회신</text>
+<text x="776" y="164" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">도착 간격 = Δt2 그대로 ACK 생성</text>
+<rect x="676" y="184" width="44" height="32" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="698" y="204" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">A1</text>
+<rect x="744" y="184" width="44" height="32" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="766" y="204" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">A2</text>
+<rect x="812" y="184" width="44" height="32" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="834" y="204" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">A3</text>
+<text x="776" y="240" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">ACK 간격 = Δt2 보존</text>
+<path d="M 776 264 L 776 300 L 716 300" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<rect x="296" y="274" width="416" height="96" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="504" y="296" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">귀환 경로 (ACK 스트림)</text>
+<rect x="340" y="308" width="48" height="28" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="364" y="326" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">A3</text>
+<rect x="450" y="308" width="48" height="28" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="474" y="326" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">A2</text>
+<rect x="560" y="308" width="48" height="28" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="584" y="326" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">A1</text>
+<path d="M 336 322 L 268 322" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="504" y="358" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">동일 간격 유지 (Δt2)</text>
+<rect x="24" y="274" width="240" height="120" rx="8" fill="#161B22" stroke="#F08A59" stroke-width="1.4"/>
+<text x="144" y="300" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">송신자 자체 클러킹</text>
+<text x="144" y="322" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">ACK 1개 도착 = 패킷 1개 방출</text>
+<rect x="57" y="338" width="50" height="28" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="1.2"/>
+<text x="82" y="356" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">새 P4</text>
+<rect x="119" y="338" width="50" height="28" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="1.2"/>
+<text x="144" y="356" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">새 P5</text>
+<rect x="181" y="338" width="50" height="28" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="1.2"/>
+<text x="206" y="356" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">새 P6</text>
+<text x="144" y="382" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">병목 속도로 자동 동기화</text>
+<line x1="12" y1="452" x2="872" y2="452" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="474" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="464" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="474" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">데이터 패킷</text>
+<rect x="222" y="464" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="244" y="474" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">병목 지연</text>
+<rect x="331" y="464" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="353" y="474" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">수신자 ACK</text>
+<rect x="466" y="464" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="488" y="474" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">자체 클러킹</text>
+</svg>

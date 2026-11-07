@@ -1,0 +1,54 @@
+<svg viewBox="0 0 640 340" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>OpenSearch 쿼리 처리 4단계 — 매칭·병합·스코어링·페칭</title>
+  <desc>코디네이터가 질의를 primary 샤드 수만큼 뿌리고, 각 샤드에서 매칭(posting list), 병합(집합 연산), 스코어링(BM25), 페칭 네 단계로 처리한 뒤 결과를 합쳐 응답한다.</desc>
+
+  <rect x="0" y="0" width="640" height="340" fill="#0d0d0d"/>
+  <text x="24" y="32" fill="#e8e4df" font-size="15" font-weight="600">쿼리 처리 4단계 — 검색은 이렇게 흐른다</text>
+
+  <defs>
+    <marker id="qa" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+      <path d="M0,0 L8,3.5 L0,7 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <!-- 코디네이터 -->
+  <rect x="24" y="52" width="592" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="40" y="76" fill="#e8e4df" font-size="11">코디네이터: 질의를 primary 샤드 수(n)만큼 하위 요청으로 분배 → 각 샤드에서 4단계 처리</text>
+  <line x1="320" y1="92" x2="320" y2="108" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#qa)"/>
+
+  <!-- 4단계 (가로) -->
+  <rect x="24" y="112" width="140" height="96" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="94" y="134" fill="#e8e4df" font-size="12" text-anchor="middle" font-weight="600">① 매칭</text>
+  <text x="94" y="153" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">Lucene posting list</text>
+  <text x="94" y="167" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">절마다 매칭 문서 집합</text>
+  <text x="94" y="190" fill="rgb(138,133,128)" font-size="9" text-anchor="middle" font-family="'JetBrains Mono',monospace">O(log n)</text>
+
+  <rect x="180" y="112" width="140" height="96" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="250" y="134" fill="#e8e4df" font-size="12" text-anchor="middle" font-weight="600">② 병합</text>
+  <text x="250" y="153" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">집합 연산 → match set</text>
+  <text x="250" y="169" fill="rgb(138,133,128)" font-size="9" text-anchor="middle" font-family="'JetBrains Mono',monospace">AND=∩ OR=∪ NOT=¬</text>
+  <text x="250" y="190" fill="rgb(138,133,128)" font-size="9" text-anchor="middle" font-family="'JetBrains Mono',monospace">O(n)+C</text>
+
+  <rect x="336" y="112" width="140" height="96" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <text x="406" y="134" fill="#e8e4df" font-size="12" text-anchor="middle" font-weight="600">③ 스코어링</text>
+  <text x="406" y="153" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">BM25로 점수·정렬</text>
+  <text x="406" y="167" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">길이 정규화·saturation</text>
+  <text x="406" y="190" fill="rgb(138,133,128)" font-size="9" text-anchor="middle" font-family="'JetBrains Mono',monospace">sort O(n log k)</text>
+
+  <rect x="492" y="112" width="124" height="96" fill="rgba(102,187,106,0.13)" stroke="rgb(102,187,106)"/>
+  <text x="554" y="134" fill="#e8e4df" font-size="12" text-anchor="middle" font-weight="600">④ 페칭</text>
+  <text x="554" y="153" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">상위 결과의</text>
+  <text x="554" y="167" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">실제 문서 조회</text>
+  <text x="554" y="190" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">응답 조립</text>
+
+  <!-- 화살표 -->
+  <line x1="164" y1="160" x2="178" y2="160" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#qa)"/>
+  <line x1="320" y1="160" x2="334" y2="160" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#qa)"/>
+  <line x1="476" y1="160" x2="490" y2="160" stroke="rgb(212,168,83)" stroke-width="1.5" marker-end="url(#qa)"/>
+
+  <!-- 하단 튜닝 힌트 -->
+  <rect x="24" y="228" width="592" height="40" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="40" y="252" fill="rgb(138,133,128)" font-size="10">지연은 스코어링 비용과 매칭 수가 좌우 → 필터로 match set을 줄이거나 constant_score로 스코어링을 건너뛴다</text>
+
+  <text x="24" y="292" fill="rgb(138,133,128)" font-size="10">코디네이터가 n개 샤드 결과를 다시 병합·정렬해 최종 응답 (샤드는 데이터의 1/n씩만 처리)</text>
+</svg>

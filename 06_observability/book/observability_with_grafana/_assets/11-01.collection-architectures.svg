@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 520" width="100%" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>수집 참조 아키텍처 네 가지와 각 단계가 푸는 한계</title>
+  <desc>에이전트 없는 구성은 각 애플리케이션이 백엔드로 직접 보내며 시연에는 충분하지만 앱마다 모든 백엔드를 알아야 해 확장이 안 됩니다. 로컬 에이전트를 두면 앱 팀 부담이 줄고 가장 흔한 패턴이 됩니다. 게이트웨이는 연결이 백엔드에 몰릴 때 부하를 분산하고 SNMP 수집에도 좋습니다. 쿠버네티스는 노드 에이전트와 게이트웨이와 클러스터 에이전트 세 부분으로 나누며 클러스터 에이전트는 반드시 단독이어야 데이터가 중복되지 않습니다.</desc>
+
+  <style>
+    .code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 10px; }
+  </style>
+
+  <rect width="880" height="520" fill="#0d0d0d"/>
+
+  <text x="30" y="34" fill="#e8e4df" font-size="17" font-weight="700">한 겹씩 더한다</text>
+  <text x="30" y="55" fill="#b8b3ad" font-size="12">각 단계가 앞의 한계를 푼다</text>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <!-- 1 agentless -->
+  <rect x="30" y="76" width="820" height="94" rx="8" fill="#0d0d0d" stroke="#f44336" stroke-width="1.8"/>
+  <rect x="30" y="76" width="176" height="94" rx="8" fill="#f2b8b5"/>
+  <text x="46" y="104" fill="#5c1414" font-size="13" font-weight="700">① 에이전트 없음</text>
+  <text x="46" y="126" fill="#5c1414" font-size="11">앱 → 백엔드 직접</text>
+  <text x="46" y="150" fill="#7a1f1f" font-size="10.5" font-weight="700">시연·소규모만</text>
+
+  <rect x="226" y="94" width="100" height="26" rx="4" fill="#dceaf7"/>
+  <text x="240" y="112" fill="#10243a" font-size="11">앱 A</text>
+  <rect x="226" y="126" width="100" height="26" rx="4" fill="#dceaf7"/>
+  <text x="240" y="144" fill="#10243a" font-size="11">앱 B</text>
+
+  <path d="M330 107 L390 107" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a)"/>
+  <path d="M330 139 L390 139" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a)"/>
+
+  <rect x="394" y="106" width="120" height="28" rx="4" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1"/>
+  <text x="408" y="125" fill="#e8e4df" font-size="11">백엔드</text>
+
+  <rect x="540" y="106" width="292" height="28" rx="4" fill="#f2d4d4"/>
+  <text x="552" y="125" fill="#7a1f1f" font-size="11" font-weight="700">앱마다 백엔드를 다 알아야 한다</text>
+
+  <!-- 2 local agent -->
+  <rect x="30" y="182" width="820" height="94" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.8"/>
+  <rect x="30" y="182" width="176" height="94" rx="8" fill="#66bb6a"/>
+  <text x="46" y="210" fill="#0d0d0d" font-size="13" font-weight="700">② 로컬 에이전트</text>
+  <text x="46" y="232" fill="#1a1a1a" font-size="11">앱 곁에 하나씩</text>
+  <text x="46" y="256" fill="#14521d" font-size="10.5" font-weight="700">가장 흔한 패턴</text>
+
+  <rect x="226" y="212" width="100" height="26" rx="4" fill="#dceaf7"/>
+  <text x="240" y="230" fill="#10243a" font-size="11">앱 + 에이전트</text>
+  <path d="M330 225 L390 225" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="394" y="212" width="120" height="28" rx="4" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1"/>
+  <text x="408" y="231" fill="#e8e4df" font-size="11">백엔드</text>
+
+  <rect x="540" y="212" width="292" height="28" rx="4" fill="#e6f7e7"/>
+  <text x="552" y="231" fill="#14521d" font-size="11" font-weight="700">인스턴스가 늘면 설정을 코드로</text>
+
+  <!-- 3 gateway -->
+  <rect x="30" y="288" width="820" height="94" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.8"/>
+  <rect x="30" y="288" width="176" height="94" rx="8" fill="rgb(212,168,83)"/>
+  <text x="46" y="316" fill="#0d0d0d" font-size="13" font-weight="700">③ 게이트웨이</text>
+  <text x="46" y="338" fill="#1a1a1a" font-size="11">중간에 모은다</text>
+  <text x="46" y="362" fill="#5c4410" font-size="10.5" font-weight="700">LB · 오토스케일 권장</text>
+
+  <rect x="226" y="306" width="86" height="24" rx="4" fill="#dceaf7"/>
+  <text x="238" y="323" fill="#10243a" font-size="10.5">에이전트</text>
+  <rect x="226" y="336" width="86" height="24" rx="4" fill="#dceaf7"/>
+  <text x="238" y="353" fill="#10243a" font-size="10.5">에이전트</text>
+
+  <path d="M316 318 L346 318 L346 334 L360 334" fill="none" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a)"/>
+  <path d="M316 348 L346 348 L346 334" fill="none" stroke="rgb(212,168,83)" stroke-width="2"/>
+
+  <rect x="364" y="320" width="106" height="28" rx="4" fill="#fdf3df"/>
+  <text x="376" y="339" fill="#5c4410" font-size="11" font-weight="700">게이트웨이</text>
+  <path d="M474 334 L510 334" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="514" y="320" width="100" height="28" rx="4" fill="#0d0d0d" stroke="#b8b3ad" stroke-width="1"/>
+  <text x="526" y="339" fill="#e8e4df" font-size="11">백엔드</text>
+
+  <rect x="638" y="320" width="194" height="28" rx="4" fill="#fdf3df"/>
+  <text x="650" y="339" fill="#5c4410" font-size="10.5" font-weight="700">연결 몰림 · SNMP 수집</text>
+
+  <!-- 4 kubernetes -->
+  <rect x="30" y="394" width="820" height="106" rx="8" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.8"/>
+  <rect x="30" y="394" width="176" height="106" rx="8" fill="#5b9bd5"/>
+  <text x="46" y="422" fill="#e8e4df" font-size="13" font-weight="700">④ 쿠버네티스</text>
+  <text x="46" y="444" fill="#e8e4df" font-size="11">세 부분으로 나눈다</text>
+
+  <rect x="226" y="410" width="180" height="34" rx="4" fill="#dceaf7"/>
+  <text x="238" y="424" fill="#10243a" font-size="11" font-weight="700">노드 에이전트</text>
+  <text class="code" x="238" y="438" fill="#10243a">OTLP · kubelet · host</text>
+
+  <rect x="226" y="450" width="180" height="34" rx="4" fill="#dceaf7"/>
+  <text x="238" y="464" fill="#10243a" font-size="11" font-weight="700">클러스터 에이전트</text>
+  <text x="238" y="478" fill="#10243a" font-size="9.5">K8s API 서비스에서</text>
+
+  <path d="M410 427 L444 427 L444 447 L458 447" fill="none" stroke="#5b9bd5" stroke-width="2" marker-end="url(#a)"/>
+  <path d="M410 467 L444 467 L444 447" fill="none" stroke="#5b9bd5" stroke-width="2"/>
+
+  <rect x="462" y="433" width="110" height="28" rx="4" fill="#dceaf7"/>
+  <text x="474" y="452" fill="#10243a" font-size="11" font-weight="700">게이트웨이</text>
+
+  <rect x="596" y="410" width="236" height="34" rx="4" fill="#f2d4d4"/>
+  <text x="608" y="424" fill="#7a1f1f" font-size="10.5" font-weight="700">클러스터 에이전트는 단독</text>
+  <text x="608" y="438" fill="#7a1f1f" font-size="9.5">여러 개면 백엔드에서 중복된다</text>
+
+  <rect x="596" y="450" width="236" height="34" rx="4" fill="#dceaf7"/>
+  <text x="608" y="464" fill="#10243a" font-size="10.5" font-weight="700">host 수신기는</text>
+  <text x="608" y="478" fill="#10243a" font-size="9.5">물리 설치에서만 필요</text>
+</svg>

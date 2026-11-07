@@ -1,0 +1,55 @@
+<svg viewBox="0 0 920 410" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>스크레이프에서 메트릭·시계열·샘플이 구성되는 흐름</title>
+  <desc>Exporter가 노출한 한 줄을 Prometheus가 스크레이프하면 이름은 메트릭이 되고, 이름과 전체 라벨 셋은 하나의 시계열을 식별하며, 기록 시각과 값은 그 시계열에 추가되는 샘플이 된다. 명시된 시각이 없으면 스크레이프 시각을 쓴다. 세 층 가운데 시계열만 유일성을 요구받아, 같은 라벨 셋이 중복되면 스크레이프가 실패한다. 라벨이 하나라도 다르면 별개의 시계열이 된다.</desc>
+
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="920" height="410" fill="#0d0d0d"/>
+  <text x="28" y="36" fill="#e8e4df" font-size="16">스크레이프 한 번이 데이터 모델을 만듭니다</text>
+
+  <!-- 입력 -->
+  <text x="28" y="70" fill="#e8e4df" font-size="11">Exporter 노출</text>
+  <rect x="28" y="84" width="864" height="46" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="44" y="112" fill="#e8e4df" font-size="11" font-family="'JetBrains Mono', monospace">http_requests_total{method="GET",instance="api-1"} 42</text>
+
+  <!-- 세 층 -->
+  <line x1="460" y1="130" x2="460" y2="154" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="28" y="162" width="252" height="82" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="44" y="188" fill="#e8e4df" font-size="13">① 메트릭</text>
+  <text x="44" y="214" fill="#e8e4df" font-size="10" font-family="'JetBrains Mono', monospace">http_requests_total</text>
+  <text x="44" y="232" fill="rgb(212,168,83)" font-size="10">이름을 꺼냅니다</text>
+
+  <line x1="280" y1="203" x2="318" y2="203" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="326" y="162" width="268" height="82" fill="rgb(212,168,83)" stroke="rgb(212,168,83)"/>
+  <text x="342" y="188" fill="#0d0d0d" font-size="13" font-weight="700">② 시계열</text>
+  <text x="342" y="214" style="fill:#0d0d0d" font-size="9.5" font-family="'JetBrains Mono', monospace">__name__ + 전체 라벨 셋</text>
+  <text x="342" y="232" style="fill:#0d0d0d" font-size="10">유일한 시계열을 찾습니다</text>
+
+  <line x1="594" y1="203" x2="632" y2="203" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="640" y="162" width="252" height="82" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="656" y="188" fill="#e8e4df" font-size="13">③ 샘플</text>
+  <text x="656" y="214" fill="#e8e4df" font-size="10" font-family="'JetBrains Mono', monospace">(기록 시각, 42)</text>
+  <text x="656" y="232" fill="rgb(212,168,83)" font-size="10">시계열 끝에 붙입니다</text>
+
+  <!-- 같은 메트릭의 분기 -->
+  <text x="28" y="278" fill="#e8e4df" font-size="11">라벨이 달라지면 다른 시계열입니다</text>
+  <rect x="28" y="292" width="418" height="36" fill="#0d0d0d" stroke="#66bb6a"/>
+  <text x="44" y="315" fill="#66bb6a" font-size="10" font-weight="700">OK</text>
+  <text x="84" y="315" fill="#e8e4df" font-size="9.5" font-family="'JetBrains Mono', monospace">{method="GET", instance="api-1"}</text>
+  <rect x="474" y="292" width="418" height="36" fill="#0d0d0d" stroke="#66bb6a"/>
+  <text x="490" y="315" fill="#66bb6a" font-size="10" font-weight="700">OK</text>
+  <text x="530" y="315" fill="#e8e4df" font-size="9.5" font-family="'JetBrains Mono', monospace">{method="POST", instance="api-1"}</text>
+
+  <!-- 중복 라벨 셋은 실패 -->
+  <rect x="28" y="352" width="864" height="40" fill="#0d0d0d" stroke="#f44336"/>
+  <text x="44" y="377" fill="#f44336" font-size="10" font-weight="700">FAIL</text>
+  <text x="92" y="377" fill="#e8e4df" font-size="9.5" font-family="'JetBrains Mono', monospace">{method="GET", instance="api-1"}</text>
+  <text x="330" y="377" fill="#e8e4df" font-size="10">같은 라벨 셋이 두 번 — 스크레이프가 실패합니다</text>
+</svg>

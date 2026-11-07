@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 491" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">합의 문제와 동치인 핵심 분산 연산들</title><desc id="dd">단일 값 합의와 선형화 CAS, 공유 로그, 2노드 fetch-and-add, 원자 커밋은 상호 변환 가능한 동치 관계다.</desc>
+<rect width="880" height="491" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">10-04 · §1 EQUIVALENT PROBLEMS TO CONSENSUS</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">합의 문제와 동치인 핵심 분산 연산들</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">단일 값 합의 4대 속성 · 상호 변환 가능한 동치 문제군 · 원자 커밋 규칙 차이 · FLP 불가능성과 타임아웃</text>
+<rect x="296" y="105" width="288" height="222" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<text x="440" y="128" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F08A59">단일 값 합의 (Consensus)</text>
+<text x="440" y="146" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">하나 이상의 제안 값 중 정확히 하나를 결정</text>
+<rect x="306" y="160" width="268" height="72" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="440" y="178" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">안전성 속성 (Safety)</text>
+<text x="440" y="196" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">균일 합의: 모든 노드가 동일 값 결정</text>
+<text x="440" y="214" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">무결성·유효성: 번복 불가 및 제안 값 한정</text>
+<rect x="306" y="240" width="268" height="72" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="440" y="260" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">활동성 속성 (Liveness)</text>
+<text x="440" y="280" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">종료: 무장애 노드는 반드시 결정</text>
+<text x="440" y="298" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">과반수 쿼럼 동작 시 종료 보장</text>
+<rect x="24" y="105" width="216" height="104" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="33.769999999999996" y="115" width="28.46" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="48" y="129" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">CAS</text>
+<text x="144" y="129" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">선형화 CAS 연산</text>
+<line x1="34" y1="143" x2="230" y2="143" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="132.0" y="161" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">null 에서 새 값으로 CAS 성공</text>
+<text x="132.0" y="179" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">동시 시도 중 단 하나만 성공</text>
+<text x="132.0" y="197" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">합의 ↔ 선형화 CAS 상호 변환</text>
+<rect x="24" y="223" width="216" height="104" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="33.769999999999996" y="233" width="28.46" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="48" y="247" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">F&amp;A</text>
+<text x="144" y="247" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">선형화 Fetch-and-Add</text>
+<line x1="34" y1="261" x2="230" y2="261" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="132.0" y="279" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">원자 카운터 읽기 및 증분</text>
+<text x="132.0" y="297" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">2노드 시스템 한정 합의와 동치</text>
+<text x="132.0" y="315" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">다중 노드 시 일반 합의 불가</text>
+<rect x="640" y="105" width="216" height="104" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="649.77" y="115" width="28.46" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="664" y="129" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">TOB</text>
+<text x="760" y="129" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">공유 로그 (전체 순서)</text>
+<line x1="650" y1="143" x2="846" y2="143" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="748.0" y="161" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">신뢰 전달 + 전체 순서 보장</text>
+<text x="748.0" y="179" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">첫 번째 추가 항목 = 합의 결정</text>
+<text x="748.0" y="197" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">연속 합의 인스턴스로 구축</text>
+<rect x="640" y="223" width="216" height="104" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="649.77" y="233" width="28.46" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="664" y="247" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#E3B341">2PC</text>
+<text x="760" y="247" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">원자 커밋 (2PC)</text>
+<line x1="650" y1="261" x2="846" y2="261" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="748.0" y="279" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">전원 커밋 또는 전체 중단</text>
+<text x="748.0" y="297" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">차이점: 1개라도 거부 시 중단</text>
+<text x="748.0" y="315" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">투표 뒤 commit·abort 를 합의로 결정</text>
+<path d="M 242 148 L 294 148" fill="none" stroke="#6A95D8" stroke-width="1.2" marker-end="url(#info)"/>
+<path d="M 294 162 L 242 162" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<text x="268" y="140" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">상호 변환</text>
+<path d="M 242 266 L 294 266" fill="none" stroke="#6A95D8" stroke-width="1.2" marker-end="url(#info)"/>
+<path d="M 294 280 L 242 280" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<text x="268" y="258" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">2노드 동치</text>
+<path d="M 586 148 L 638 148" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<path d="M 638 162 L 586 162" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<text x="612" y="140" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">상호 변환</text>
+<path d="M 586 266 L 638 266" fill="none" stroke="#E3B341" stroke-width="1.2" marker-end="url(#warn)"/>
+<path d="M 638 280 L 586 280" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<text x="612" y="258" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">투표 변환</text>
+<rect x="24" y="345" width="832" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="440" y="366" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">FLP 불가능성 정리 (1985) 와 실용적 해결</text>
+<text x="440" y="386" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">결정론적 비동기 모델에서는 노드 1개 크래시 가능성만 있어도 종료를 항상 보장할 수 없음</text>
+<text x="440" y="404" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">실용 시스템(Raft·Paxos): 타임아웃을 도입해 리더 장애를 감지하고 현실적 활동성 확보</text>
+<line x1="12" y1="435" x2="832" y2="435" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="457" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="447" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="457" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">단일 값 합의 (focal)</text>
+<rect x="339" y="447" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="361" y="457" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">선형화 연산 동치</text>
+<rect x="500" y="447" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="522" y="457" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">공유 로그 동치</text>
+<rect x="648" y="447" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="670" y="457" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">원자 커밋 (abort 차이)</text>
+</svg>

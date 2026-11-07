@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 600" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">복제 로그 세 방식의 전송 데이터와 결합도 비교</title><desc id="dd">리더의 쓰기를 팔로워에 보내는 statement, WAL shipping, logical 세 방식의 로그 내용과 결합도 비교.</desc>
+<rect width="880" height="600" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">06-02 §3 · REPLICATION LOG FORMATS</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">복제 로그 세 방식의 전송 데이터와 결합도 비교</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">SQL 문 전송 · 디스크 바이트 · 행 단위 변경과 결합도 분리</text>
+<rect x="24" y="104" width="832" height="42" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<rect x="52.0" y="115" width="80.0" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="92" y="129" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">리더의 쓰기</text>
+<text x="480" y="129" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">리더가 처리한 쓰기를 팔로워에 보내는 로그 형태 셋</text>
+<rect x="24" y="158" width="264" height="330" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="156.0" y="182" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">statement 기반 복제</text>
+<rect x="83.0" y="194" width="146.0" height="20" rx="4" fill="#0D1117" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="156.0" y="208" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">SQL 문 그대로 전송</text>
+<line x1="36" y1="216" x2="276" y2="216" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="36" y="226" width="240" height="88" rx="6" fill="#0D1117" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="44" y="246" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">INSERT · UPDATE · DELETE</text>
+<text x="44" y="266" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">리더가 실행한 쓰기 문 그대로</text>
+<text x="44" y="286" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">팔로워가 SQL 파싱·실행</text>
+<text x="156.0" y="350" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#E3B341">비결정 함수(NOW, RAND) 불일치</text>
+<text x="156.0" y="374" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">autoincrement 순서 의존성</text>
+<text x="156.0" y="398" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">트리거·저장 프로시저 부작용</text>
+<text x="156.0" y="422" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">VoltDB · MySQL 5.1 전</text>
+<rect x="308" y="158" width="264" height="330" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="440.0" y="182" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">WAL shipping (물리)</text>
+<rect x="361.5" y="194" width="157.0" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="440.0" y="208" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">디스크 블록 바이트 전송</text>
+<line x1="320" y1="216" x2="560" y2="216" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="320" y="226" width="240" height="88" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="328" y="246" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">WAL 저수준 기록</text>
+<text x="328" y="266" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">어느 디스크 블록의</text>
+<text x="328" y="286" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">어느 바이트가 바뀌었나</text>
+<text x="328" y="304" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">팔로워가 동일한 파일 생성</text>
+<text x="440.0" y="350" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#E3B341">저장 엔진 내부 구조와 강결합</text>
+<text x="440.0" y="374" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">leader·follower 다른 버전 불가</text>
+<text x="440.0" y="398" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#E3B341">무중단 업그레이드 막힘</text>
+<text x="440.0" y="422" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">PostgreSQL · Oracle 물리 복제</text>
+<rect x="592" y="158" width="264" height="330" rx="6" fill="#F08A5918" stroke="#F08A59" stroke-width="1.4"/>
+<text x="724.0" y="182" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">logical (row 기반) 로그</text>
+<rect x="656.5" y="194" width="135.0" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="724.0" y="208" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">행 단위 변경 이벤트</text>
+<line x1="604" y1="216" x2="844" y2="216" stroke="#F08A59" stroke-width="0.8"/>
+<rect x="604" y="226" width="240" height="88" rx="6" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="612" y="246" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">행 단위 변경 레코드</text>
+<text x="612" y="266" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">삽입 = 모든 열의 새 값</text>
+<text x="612" y="286" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">삭제 = 행 식별 정보</text>
+<text x="612" y="304" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">갱신 = 식별 정보 + 바뀐 값</text>
+<text x="724.0" y="350" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">저장 엔진 내부 구현과 분리</text>
+<text x="724.0" y="374" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">leader·follower 버전 혼재 가능</text>
+<text x="724.0" y="398" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">최소 다운타임 업그레이드</text>
+<text x="724.0" y="422" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">외부 파싱 쉬움 → CDC(12장)</text>
+<rect x="24" y="502" width="832" height="32" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="440.0" y="522" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">logical 로그: 저장 엔진과 분리 · 최소 다운타임 업그레이드 · CDC</text>
+<line x1="12" y1="544" x2="832" y2="544" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="566" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="556" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="566" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">logical 로그 (focal)</text>
+<rect x="378" y="556" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="400" y="566" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">WAL shipping</text>
+<rect x="578" y="556" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="600" y="566" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">방식의 약점</text>
+<rect x="700" y="556" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="722" y="566" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">결합도 분리 이점</text>
+</svg>

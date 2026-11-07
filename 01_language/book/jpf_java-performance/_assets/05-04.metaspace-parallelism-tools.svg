@@ -1,0 +1,55 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>기본 튜닝 — metaspace·병렬·GC 도구</title>
+  <desc>metaspace는 클래스 메타데이터를 담는 별도 힙 영역으로, 옛 JVM의 permgen을 대체한다. 클래스 인스턴스나 리플렉션 객체가 아니라 컴파일러·런타임이 쓰는 class metadata를 담는다. 기본 최대 크기가 무제한이라 튜닝이 드물다. 초기 MetaspaceSize, 최대 MaxMetaspaceSize로 정하고, 리사이즈는 full GC를 요구해 비싸다. 시작 시 full GC가 잦으면 초기 크기를 늘리면 좋다. 클래스도 GC 대상이라, 애플리케이션 서버가 재배포마다 새 classloader를 만들면 옛 것이 GC된다. classloader leak은 옛 classloader 참조를 유지하며 metaspace를 채운다. serial을 뺀 모든 GC는 여러 스레드를 쓰고 ParallelGCThreads로 제어한다. CPU당 1스레드(8까지), 8 넘으면 1.6 CPU당 1스레드를 더한다. 여러 JVM이면 총 GC 스레드를 줄여야 한다. GC 로그는 GC 이슈 진단의 핵심 데이터다. JDK 8은 PrintGCDetails·Xloggc로, JDK 11은 통합 로깅 Xlog로 켠다. jstat -gcutil로 실시간 GC를 보고, jconsole로 힙을 실시간 그래프로 본다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">기본 튜닝 — metaspace·병렬·GC 도구</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">클래스 메타데이터 영역, GC 스레드 수, 그리고 GC 로그·도구입니다</text>
+
+  <!-- metaspace -->
+  <rect x="20" y="74" width="642" height="128" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="96" fill="#9cc3df" font-size="13" font-weight="bold">metaspace — 클래스 메타데이터 (옛 permgen)</text>
+  <text x="38" y="116" fill="#e8e4df" font-size="11">class metadata를 담음 (컴파일러·런타임용) · Class 인스턴스·리플렉션 객체는 일반 힙에</text>
+  <text x="38" y="136" fill="rgb(138,133,128)" font-size="10">기본 초기: 64bit 20.75MB · 기본 최대: 무제한 → 튜닝이 드묾</text>
+  <text x="38" y="154" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="9">-XX:MetaspaceSize · -XX:MaxMetaspaceSize</text>
+  <text x="38" y="174" fill="#f47f72" font-size="10">리사이즈는 full GC 요구 → 비쌈 · 시작 시 full GC 잦으면 초기 크기 늘리기(서버 128~192MB)</text>
+  <text x="38" y="192" fill="rgb(138,133,128)" font-size="10">classloader leak: 재배포마다 새 classloader, 옛 참조 유지 → metaspace 채움 (힙이 먼저 OOM 가능)</text>
+
+  <!-- ParallelGCThreads -->
+  <rect x="20" y="210" width="642" height="106" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="232" fill="rgb(212,168,83)" font-size="13" font-weight="bold">병렬 제어 — ParallelGCThreads</text>
+  <text x="38" y="252" fill="#e8e4df" font-size="11">serial 빼고 모두 여러 스레드 사용 (STW 단계라 pause 최소화 위해 CPU 최대 활용)</text>
+  <text x="38" y="272" fill="rgb(138,133,128)" font-size="10">CPU당 1스레드(8까지), 이후 1.6 CPU당 1 추가:</text>
+  <text x="300" y="272" fill="#9cc3df" font-family="'JetBrains Mono',monospace" font-size="10">8 + (N−8) × 5/8</text>
+  <text x="38" y="290" fill="#f47f72" font-size="10">작은 힙·많은 CPU엔 과다 · Docker CPU 한도 사용 · 여러 JVM이면 총 GC 스레드 줄이기</text>
+  <text x="38" y="308" fill="rgb(138,133,128)" font-size="9">예: 16 CPU에 4 JVM = 각 13스레드 → 동시 GC 시 52스레드 경합 → 각 4로 제한이 효율적</text>
+
+  <!-- GC 로그 -->
+  <rect x="20" y="324" width="320" height="148" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="346" fill="#e8e4df" font-size="13" font-weight="bold">GC 로그 — 진단의 핵심</text>
+  <text x="38" y="366" fill="#66bb6a" font-size="11" font-weight="bold">JDK 8</text>
+  <text x="38" y="384" fill="rgb(138,133,128)" font-size="9">PrintGCDetails + PrintGCTimeStamps</text>
+  <text x="38" y="400" fill="rgb(138,133,128)" font-size="9">-Xloggc:gc.log + 로그 로테이션</text>
+  <text x="38" y="418" fill="#9cc3df" font-size="11" font-weight="bold">JDK 11 (통합 로깅)</text>
+  <text x="38" y="436" fill="rgb(138,133,128)" font-size="9">-Xlog:gc*:file=gc.log:time:</text>
+  <text x="38" y="450" fill="rgb(138,133,128)" font-size="9">  filecount=7,filesize=8M</text>
+  <text x="38" y="466" fill="rgb(138,133,128)" font-size="9">콜론 4구획: 모듈·대상·decorator·출력</text>
+
+  <!-- 도구 -->
+  <rect x="350" y="324" width="312" height="148" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="368" y="346" fill="#66bb6a" font-size="13" font-weight="bold">실시간 도구</text>
+  <text x="368" y="366" fill="#e8e4df" font-size="11">jstat -gcutil — 스크립트용</text>
+  <text x="368" y="384" fill="rgb(138,133,128)" font-size="10">S0·S1·E·O·M + YGC·YGCT·FGC·FGCT·GCT</text>
+  <text x="368" y="402" fill="rgb(138,133,128)" font-size="10">반복 인자로 시간별 추이 관찰</text>
+  <text x="368" y="420" fill="#e8e4df" font-size="11">jconsole / jvisualvm — GUI</text>
+  <text x="368" y="438" fill="rgb(138,133,128)" font-size="10">힙 실시간 그래프(전체·eden·survivor·old 선택)</text>
+  <text x="368" y="458" fill="rgb(138,133,128)" font-size="10">로그 파싱: Censum·GCeasy(상용/무료)</text>
+
+  <!-- 정리 -->
+  <rect x="20" y="482" width="642" height="102" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="504" fill="#e8e4df" font-size="13" font-weight="bold">핵심 정리</text>
+  <text x="38" y="524" fill="rgb(138,133,128)" font-size="11">① metaspace는 class metadata 영역, classloader leak이 채울 수 있음(개발 환경서 흔함)</text>
+  <text x="38" y="544" fill="rgb(138,133,128)" font-size="11">② GC 스레드 수는 CPU 기반, 여러 JVM이면 줄여야 함</text>
+  <text x="38" y="564" fill="rgb(212,168,83)" font-size="11">③ GC 로그는 프로덕션에서도 상시 수집 — 오버헤드가 작아 켜둘 만함</text>
+  <text x="38" y="580" fill="rgb(138,133,128)" font-size="10">많은 앱은 알고리즘 선택 + 힙 크기만 정하면 adaptive sizing이 나머지를 자동 튜닝합니다</text>
+</svg>

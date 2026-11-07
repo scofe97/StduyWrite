@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" width="900" height="500" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif" role="img">
+  <title>메트릭 수집 프로토콜 비교</title>
+  <desc>Prometheus 의 pull 방식과 OTLP·Graphite·StatsD 등 push 방식이 각각 어떻게 메트릭을 수집하는지, 서비스 디스커버리가 어디에 관여하는지 보입니다.</desc>
+  <style>
+    .bg { fill: #0d0d0d; }
+    .title { fill: #e8e4df; font-size: 17px; font-weight: 700; }
+    .sub { fill: #b8b3ad; font-size: 12px; }
+    .zone { font-size: 13px; font-weight: 700; }
+    .name { font-size: 14.5px; font-weight: 700; }
+    .note { font-size: 11.5px; }
+    .mono { font-size: 11px; }
+    .code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11px; }
+  </style>
+  <rect class="bg" x="0" y="0" width="900" height="500"/>
+
+  <text class="title" x="30" y="34">메트릭 수집 — push 대 pull</text>
+  <text class="sub" x="30" y="55">이 선택이 나머지를 정한다</text>
+
+  <!-- PUSH side -->
+  <rect x="30" y="76" width="410" height="330" rx="10" fill="#0d0d0d" stroke="#5b9bd5" stroke-width="1.8"/>
+  <rect x="30" y="76" width="410" height="34" rx="10" fill="#5b9bd5"/>
+  <rect x="30" y="100" width="410" height="10" fill="#5b9bd5"/>
+  <text class="zone" x="48" y="99" fill="#e8e4df">PUSH — 목적지를 안다</text>
+
+  <rect x="48" y="124" width="374" height="122" rx="7" fill="#dceaf7"/>
+  <text class="name" x="64" y="147" fill="#10243a">StatsD · DogStatsD</text>
+  <rect x="64" y="157" width="342" height="24" rx="4" fill="#0d0d0d"/>
+  <text class="mono" x="76" y="174" fill="#5b9bd5">UDP · 기본 포트 8125</text>
+  <text class="note" x="64" y="199" fill="#1a1a1a">UDP — 속도 우선</text>
+  <text class="note" x="64" y="217" fill="#7a1f1f" font-weight="700">인증 없음 — 보안 주의</text>
+  <text class="note" x="64" y="236" fill="#1a1a1a">localhost:8125 로 제한</text>
+
+  <rect x="48" y="258" width="374" height="132" rx="7" fill="#dceaf7"/>
+  <text class="name" x="64" y="281" fill="#10243a">OTLP</text>
+  <rect x="64" y="291" width="342" height="24" rx="4" fill="#0d0d0d"/>
+  <text class="code" x="76" y="308" fill="#5b9bd5">gRPC 4317 · HTTP 4318</text>
+  <text class="note" x="64" y="333" fill="#14521d" font-weight="700">인증·수신 확인 지원</text>
+  <text class="note" x="64" y="352" fill="#1a1a1a">서버 제어 스로틀링 · GZIP 압축</text>
+  <text class="note" x="64" y="371" fill="#1a1a1a">여러 소스를 받는다</text>
+  <text class="note" x="64" y="386" fill="#1a1a1a">혼재 환경에 적합</text>
+
+  <!-- PULL side -->
+  <rect x="460" y="76" width="410" height="330" rx="10" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.8"/>
+  <rect x="460" y="76" width="410" height="34" rx="10" fill="rgb(212,168,83)"/>
+  <rect x="460" y="100" width="410" height="10" fill="rgb(212,168,83)"/>
+  <text class="zone" x="478" y="99" fill="#0d0d0d">PULL — 앱은 열어 두기만 한다</text>
+
+  <rect x="478" y="124" width="374" height="146" rx="7" fill="#fdf3df"/>
+  <text class="name" x="494" y="147" fill="#0d0d0d">Prometheus</text>
+  <rect x="494" y="157" width="342" height="40" rx="4" fill="#0d0d0d"/>
+  <text class="code" x="506" y="173" fill="rgb(212,168,83)">/metrics</text>
+  <text class="mono" x="506" y="189" fill="rgb(212,168,83)">Spring Boot 은 /actuator/prometheus</text>
+  <text class="note" x="494" y="215" fill="#14521d" font-weight="700">앱이 실행 환경을 알 필요가 줄어든다</text>
+  <text class="note" x="494" y="233" fill="#1a1a1a">읽는 쪽 수와 무관</text>
+  <text class="note" x="494" y="252" fill="#1a1a1a">liveness 와 같은 패턴</text>
+
+  <rect x="478" y="282" width="374" height="108" rx="7" fill="#fdf3df"/>
+  <text class="name" x="494" y="305" fill="#0d0d0d">SNMP</text>
+  <text class="note" x="494" y="326" fill="#1a1a1a">manager 가 agent 에 접속</text>
+  <text class="note" x="494" y="345" fill="#1a1a1a">SNMP trap 은 장비가 push</text>
+  <text class="note" x="494" y="366" fill="#7a1f1f" font-weight="700">오설정 시 공격 표면 증가</text>
+  <text class="note" x="494" y="384" fill="#1a1a1a">1988년~ 하드웨어 지원 넓음</text>
+
+  <!-- bottom -->
+  <rect x="30" y="422" width="840" height="56" rx="8" fill="#0d0d0d" stroke="rgb(42,37,32)" stroke-width="1"/>
+  <text class="note" x="50" y="445" fill="rgb(212,168,83)" font-weight="700">서비스 디스커버리가 덜어 준다</text>
+  <text class="note" x="50" y="466" fill="#e8e4df">K8s·DNS·Consul 등 지원</text>
+</svg>
