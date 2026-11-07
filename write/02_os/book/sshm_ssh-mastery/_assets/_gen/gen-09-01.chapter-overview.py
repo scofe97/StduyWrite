@@ -37,31 +37,33 @@ def harrow(i, j, label, c=SOFT, m="soft"):
     y = ny(i) + NH / 2
     x1, x2 = nx(j) + NW, nx(j + 1)
     d.arrow([(x1 + 2, y), (x2 - 4, y)], c, m, 1.3)
-    d.t((x1 + x2) / 2, y - 9, label, 11, c if c != SOFT else MUTED, kr(label), "middle", 600)
+    lines = label.split("\n")
+    for k, ln in enumerate(lines):
+        d.t((x1 + x2) / 2, y - 9 - 14 * (len(lines) - 1 - k), ln, 11, c if c != SOFT else MUTED, kr(ln), "middle", 600)
 
 for i, opt in enumerate(("-L", "-R", "-D")):
     d.chip(34, ny(i) + NH / 2 - 4, opt, MUTED, 11, 4)
 
 # local
-node(0, 0, "클라이언트의 수신 포트", "18100", INFO)
+node(0, 0, "클라이언트의 수신 포트", "127.0.0.1:18100", INFO)
 node(0, 1, "direct-tcpip 채널", "SSH 연결 1개 위", OK)
 node(0, 2, "서버가 연결하는 목적지", "127.0.0.1:18101", ACC)
-harrow(0, 0, "접속 수락")
-harrow(0, 1, "채널 열기", ACC, "acc")
+harrow(0, 0, "접속 수락 ·\n채널 열기")
+harrow(0, 1, "목적지 연결", ACC, "acc")
 
 # remote
 node(1, 0, "서버의 수신 포트", "127.0.0.1:2222", INFO)
 node(1, 1, "forwarded-tcpip 채널", "SSH 연결 1개 위", OK)
 node(1, 2, "클라이언트가 연결하는 목적지", "127.0.0.1:18099", ACC)
-harrow(1, 0, "접속 수락")
-harrow(1, 1, "채널 열기", ACC, "acc")
+harrow(1, 0, "접속 수락 ·\n채널 열기")
+harrow(1, 1, "목적지 연결", ACC, "acc")
 
 # dynamic
 node(2, 0, "클라이언트의 SOCKS 포트", "127.0.0.1:19999", INFO)
 node(2, 1, "direct-tcpip 채널", "SSH 연결 1개 위", OK)
 node(2, 2, "서버가 연결하는 목적지", "SOCKS 요청이 정한 주소", ACC)
-harrow(2, 0, "SOCKS 핸드셰이크")
-harrow(2, 1, "채널 열기", ACC, "acc")
+harrow(2, 0, "SOCKS 핸드셰이크 ·\n채널 열기")
+harrow(2, 1, "목적지 연결", ACC, "acc")
 
 d.legend(440, [("수신 지점", INFO), ("채널", OK), ("목적지", ACC)])
 svg_path = pathlib.Path(__file__).resolve().parent.parent / "09-01.chapter-overview.svg"
