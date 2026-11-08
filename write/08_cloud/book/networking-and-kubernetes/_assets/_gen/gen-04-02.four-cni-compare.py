@@ -45,7 +45,7 @@ for r, (name, rc, cells) in enumerate(ROWS):
 WY = RY0 + 3 * (RH + GAP) + 4
 d.box(X0, WY, 952, 40, PAPER, RULE, 0.9, 6)
 d.t(X0 + 20, WY + 26, "Weave Net", 13, SOFT, KR, "start", 600)
-d.t(X0 + 136, WY + 26, "저장소 아카이브 · 마지막 릴리스 v2.8.1(2021-01) · Weaveworks 2024-02 폐업 보도", 12, SOFT, KR, "start")
+d.t(X0 + 136, WY + 26, "저장소 아카이브(2024-06) · 마지막 릴리스 v2.8.1(2021-01)", 12, SOFT, KR, "start")
 
 d.legend(472, [("직접 강제", OK), ("별도 구성요소 필요", WARN), ("후보에서 빠짐", SOFT)])
 d.save("04-02.four-cni-compare.svg")
