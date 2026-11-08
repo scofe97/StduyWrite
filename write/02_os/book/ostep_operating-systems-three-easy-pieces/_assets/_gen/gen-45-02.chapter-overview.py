@@ -82,11 +82,12 @@ harrow(3, 0, "원인 분류")
 harrow(3, 1, "버전으로 한정")
 
 # §5 비밀번호와 공개 키 밖의 인증
-node(4, 0, "쿠키", "Secure · HttpOnly", INFO)
+# 세 방법을 나란히 견주는 절이라 문제·대응 색을 쓰지 않는다
+node(4, 0, "쿠키", "Secure · HttpOnly", None)
 node(4, 1, "도전 응답", "HMAC · 새 도전값", None)
-node(4, 2, "인증 서버", "Kerberos 티켓", OK)
-harrow(4, 0, "편의를 내줌")
-harrow(4, 1, "미리 나눈 비밀")
+node(4, 2, "인증 서버", "Kerberos 티켓", None)
+harrow(4, 0, "비밀번호를 대신")
+harrow(4, 1, "보증을 서버에")
 
 # §6 HTTPS 인증서와 HSTS
 node(5, 0, "인증서 확인 통과", "보증은 좁은 사실뿐", INFO)
