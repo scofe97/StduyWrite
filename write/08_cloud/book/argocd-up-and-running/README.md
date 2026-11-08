@@ -9,7 +9,6 @@ source:
 related:
   - ../cks-study-guide/README.md
   - ../kubernetes-up-and-running/README.md
-  - ../../argocd/README.md
   - ../../../roadmap/devops-roadmap.md
   - ../../README.md
 learning:
@@ -18,7 +17,7 @@ learning:
   level: 기본
   last_verified:
   blocked_count:
-  next_lesson: "11장 11-01 정독 노트 작성"
+  next_lesson: "없음 — 14장 정독 노트 작성 완료"
 updated: 2026-11-08
 ---
 
@@ -46,9 +45,9 @@ updated: 2026-11-08
 
 ### 옛 argocd/ 노트와의 관계
 
-[옛 argocd/ 노트](../../argocd/README.md) 16편은 이 책을 바탕으로 쓴 것입니다. 16편 가운데 14편은 frontmatter `source` 에 `docs/03_CloudNative/03_ArgoCD/NN_<장 이름>.md` 를 적었고, 그 장 이름이 이 책의 장 이름과 같습니다. 다만 책의 서지가 어디에도 적혀 있지 않아 출처가 끊긴 상태였습니다.
+옛 argocd/ 노트 16편은 이 책을 바탕으로 쓴 것이었습니다. 16편 가운데 14편은 frontmatter `source` 에 `docs/03_CloudNative/03_ArgoCD/NN_<장 이름>.md` 를 적었고, 그 장 이름이 이 책의 장 이름과 같습니다. 다만 책의 서지가 어디에도 적혀 있지 않아 출처가 끊긴 상태였습니다.
 
-장별 정독 노트를 쓰면서 옛 노트와 그 `deepdive/` 점검 질문, [ArgoCD와 GitOps](../../kubernetes/11_devtools/11-03.ArgoCD%EC%99%80%20GitOps.md), [ArgoCD App-of-Apps 패턴](../../../99_ETC/2026-04-19_ArgoCD%20App-of-Apps%20%ED%8C%A8%ED%84%B4.md)을 보충 재료로 흡수합니다. 모든 장이 흡수되면 옛 자리를 정리합니다. 옛 노트 04-03 Argo Rollouts 는 책에 대응하는 장이 없으므로 `docs/argo-rollouts/` 로 옮길 예정입니다.
+장별 정독 노트를 쓰면서 옛 노트와 그 `deepdive/` 점검 질문, [ArgoCD와 GitOps](../../kubernetes/11_devtools/11-03.ArgoCD%EC%99%80%20GitOps.md), [ArgoCD App-of-Apps 패턴](../../../99_ETC/2026-04-19_ArgoCD%20App-of-Apps%20%ED%8C%A8%ED%84%B4.md)을 보충 재료로 흡수했습니다. 모든 장이 흡수되어 옛 `argocd/` 폴더는 정리했습니다. 옛 노트 04-03 Argo Rollouts 는 책에 대응하는 장이 없어 [docs/argo-rollouts/](../../docs/argo-rollouts/README.md) 로 옮겼습니다.
 
 ### 로드맵 속 자리
 
@@ -89,28 +88,28 @@ updated: 2026-11-08
 
 ## 작성된 정독 노트
 
-> 편을 작성하는 대로 채우며, 아직 쓰지 않은 편은 상태만 "작성 예정"으로 둡니다. 제목 칸은 장 제목을 옮긴 가제입니다.
+> 14개 장의 정독 노트를 모두 작성했습니다. 보충 재료 칸에는 옛 argocd/ 노트 가운데 그 편이 흡수한 것을 적습니다.
 
 | 편 | 제목 | 상태 | 보충 재료 |
 |----|------|------|----------|
-| 01-01 | [Argo CD 가 푸는 문제 — GitOps 원칙과 Argo 생태계](./01-01.Argo%20CD%20%EA%B0%80%20%ED%91%B8%EB%8A%94%20%EB%AC%B8%EC%A0%9C%20%E2%80%94%20GitOps%20%EC%9B%90%EC%B9%99%EA%B3%BC%20Argo%20%EC%83%9D%ED%83%9C%EA%B3%84.md) | 작성 완료 | [ArgoCD와 GitOps 기초](../../argocd/01-01.ArgoCD%EC%99%80%20GitOps%20%EA%B8%B0%EC%B4%88.md), [ArgoCD와 GitOps (kubernetes/11-03)](../../kubernetes/11_devtools/11-03.ArgoCD%EC%99%80%20GitOps.md) |
-| 02-01 | [Argo CD 설치하기 — 구성 요소·설치 유형·매니페스트와 Helm](./02-01.Argo%20CD%20%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0%20%E2%80%94%20%EA%B5%AC%EC%84%B1%20%EC%9A%94%EC%86%8C%C2%B7%EC%84%A4%EC%B9%98%20%EC%9C%A0%ED%98%95%C2%B7%EB%A7%A4%EB%8B%88%ED%8E%98%EC%8A%A4%ED%8A%B8%EC%99%80%20Helm.md) | 작성 완료 | [ArgoCD 설치와 아키텍처](../../argocd/01-02.ArgoCD%20%EC%84%A4%EC%B9%98%EC%99%80%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98.md) |
-| 03-01 | [Argo CD 와 상호작용하기 — UI·CLI·REST API 와 선언적 구성](./03-01.Argo%20CD%20%EC%99%80%20%EC%83%81%ED%98%B8%EC%9E%91%EC%9A%A9%ED%95%98%EA%B8%B0%20%E2%80%94%20UI%C2%B7CLI%C2%B7REST%20API%20%EC%99%80%20%EC%84%A0%EC%96%B8%EC%A0%81%20%EA%B5%AC%EC%84%B1.md) | 작성 완료 | [ArgoCD 접근과 선언적 설정](../../argocd/01-03.ArgoCD%20%EC%A0%91%EA%B7%BC%EA%B3%BC%20%EC%84%A0%EC%96%B8%EC%A0%81%20%EC%84%A4%EC%A0%95.md) |
-| 04-01 | [Application 관리하기 — 소스·대상·Helm·Kustomize 와 삭제·finalizer](./04-01.Application%20%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0%20%E2%80%94%20%EC%86%8C%EC%8A%A4%C2%B7%EB%8C%80%EC%83%81%C2%B7Helm%C2%B7Kustomize%20%EC%99%80%20%EC%82%AD%EC%A0%9C%C2%B7finalizer.md) | 작성 완료 | [Application과 배포 대상 관리](../../argocd/02-01.Application%EA%B3%BC%20%EB%B0%B0%ED%8F%AC%20%EB%8C%80%EC%83%81%20%EA%B4%80%EB%A6%AC.md) |
-| 05-01 | [Application 동기화 — 자동 동기화·Sync Option·Hook·Sync Wave 와 차이 무시](./05-01.Application%20%EB%8F%99%EA%B8%B0%ED%99%94%20%E2%80%94%20%EC%9E%90%EB%8F%99%20%EB%8F%99%EA%B8%B0%ED%99%94%C2%B7Sync%20Option%C2%B7Hook%C2%B7Sync%20Wave%20%EC%99%80%20%EC%B0%A8%EC%9D%B4%20%EB%AC%B4%EC%8B%9C.md) | 작성 완료 | [Sync 전략과 배포 순서 제어](../../argocd/02-02.Sync%20%EC%A0%84%EB%9E%B5%EA%B3%BC%20%EB%B0%B0%ED%8F%AC%20%EC%88%9C%EC%84%9C%20%EC%A0%9C%EC%96%B4.md) |
-| 06-01 | [Argo CD 사용자와 인증 — admin·로컬 사용자·토큰과 SSO](./06-01.Argo%20CD%20%EC%82%AC%EC%9A%A9%EC%9E%90%EC%99%80%20%EC%9D%B8%EC%A6%9D%20%E2%80%94%20admin%C2%B7%EB%A1%9C%EC%BB%AC%20%EC%82%AC%EC%9A%A9%EC%9E%90%C2%B7%ED%86%A0%ED%81%B0%EA%B3%BC%20SSO.md) | 작성 완료 | [인증·인가와 AppProject](../../argocd/03-01.%EC%9D%B8%EC%A6%9D%C2%B7%EC%9D%B8%EA%B0%80%EC%99%80%20AppProject.md) |
-| 06-02 | [SSO 연결과 RBAC — Dex·직접 OIDC·역할과 정책](./06-02.SSO%20%EC%97%B0%EA%B2%B0%EA%B3%BC%20RBAC%20%E2%80%94%20Dex%C2%B7%EC%A7%81%EC%A0%91%20OIDC%C2%B7%EC%97%AD%ED%95%A0%EA%B3%BC%20%EC%A0%95%EC%B1%85.md) | 작성 완료 | [인증·인가와 AppProject](../../argocd/03-01.%EC%9D%B8%EC%A6%9D%C2%B7%EC%9D%B8%EA%B0%80%EC%99%80%20AppProject.md) |
-| 07-01 | [여러 클러스터 관리하기 — 허브 앤 스포크·클러스터 Secret·멀티 클러스터 배포](./07-01.%EC%97%AC%EB%9F%AC%20%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0%20%E2%80%94%20%ED%97%88%EB%B8%8C%20%EC%95%A4%20%EC%8A%A4%ED%8F%AC%ED%81%AC%C2%B7%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20Secret%C2%B7%EB%A9%80%ED%8B%B0%20%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EB%B0%B0%ED%8F%AC.md) | 작성 완료 | [멀티클러스터와 멀티테넌시](../../argocd/03-02.%EB%A9%80%ED%8B%B0%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%EC%99%80%20%EB%A9%80%ED%8B%B0%ED%85%8C%EB%84%8C%EC%8B%9C.md) (8장과 나눠 씀) |
-| 08-01 | [멀티 테넌시 — 설치 모드와 AppProject·프로젝트 역할](./08-01.%EB%A9%80%ED%8B%B0%20%ED%85%8C%EB%84%8C%EC%8B%9C%20%E2%80%94%20%EC%84%A4%EC%B9%98%20%EB%AA%A8%EB%93%9C%EC%99%80%20AppProject%C2%B7%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EC%97%AD%ED%95%A0.md) | 작성 완료 | [멀티클러스터와 멀티테넌시](../../argocd/03-02.%EB%A9%80%ED%8B%B0%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%EC%99%80%20%EB%A9%80%ED%8B%B0%ED%85%8C%EB%84%8C%EC%8B%9C.md) (7장과 나눠 씀) |
-| 09-01 | [서버와 저장소 접근 보안 — TLS 인증서·저장소 인증서·HTTPS 자격 증명](./09-01.%EC%84%9C%EB%B2%84%EC%99%80%20%EC%A0%80%EC%9E%A5%EC%86%8C%20%EC%A0%91%EA%B7%BC%20%EB%B3%B4%EC%95%88%20%E2%80%94%20TLS%20%EC%9D%B8%EC%A6%9D%EC%84%9C%C2%B7%EC%A0%80%EC%9E%A5%EC%86%8C%20%EC%9D%B8%EC%A6%9D%EC%84%9C%C2%B7HTTPS%20%EC%9E%90%EA%B2%A9%20%EC%A6%9D%EB%AA%85.md) | 작성 완료 | [보안 운영](../../argocd/03-03.%EB%B3%B4%EC%95%88%20%EC%9A%B4%EC%98%81.md) |
-| 09-02 | [SSH 인증과 배포 신뢰 — 자격 증명 템플릿·GPG 서명 검증·Sync Impersonation](./09-02.SSH%20%EC%9D%B8%EC%A6%9D%EA%B3%BC%20%EB%B0%B0%ED%8F%AC%20%EC%8B%A0%EB%A2%B0%20%E2%80%94%20%EC%9E%90%EA%B2%A9%20%EC%A6%9D%EB%AA%85%20%ED%85%9C%ED%94%8C%EB%A6%BF%C2%B7GPG%20%EC%84%9C%EB%AA%85%20%EA%B2%80%EC%A6%9D%C2%B7Sync%20Impersonation.md) | 작성 완료 | [보안 운영](../../argocd/03-03.%EB%B3%B4%EC%95%88%20%EC%9A%B4%EC%98%81.md) |
-| 10-01 | [Application 여럿을 순서대로 — 헬스 체크·App-of-Apps sync wave·Progressive Sync](./10-01.Application%20%EC%97%AC%EB%9F%BF%EC%9D%84%20%EC%88%9C%EC%84%9C%EB%8C%80%EB%A1%9C%20%E2%80%94%20%ED%97%AC%EC%8A%A4%20%EC%B2%B4%ED%81%AC%C2%B7App-of-Apps%20sync%20wave%C2%B7Progressive%20Sync.md) | 작성 완료 | [App of Apps와 ApplicationSet](../../argocd/02-03.App%20of%20Apps%EC%99%80%20ApplicationSet.md), [대규모 운영과 Progressive Sync](../../argocd/05-02.%EB%8C%80%EA%B7%9C%EB%AA%A8%20%EC%9A%B4%EC%98%81%EA%B3%BC%20Progressive%20Sync.md), [ArgoCD App-of-Apps 패턴](../../../99_ETC/2026-04-19_ArgoCD%20App-of-Apps%20%ED%8C%A8%ED%84%B4.md) |
-| 11-01 | Extending Argo CD (11장 전체, 가제) | 작성 예정 | [ArgoCD 확장과 플러그인](../../argocd/04-01.ArgoCD%20%ED%99%95%EC%9E%A5%EA%B3%BC%20%ED%94%8C%EB%9F%AC%EA%B7%B8%EC%9D%B8.md) |
-| 12-01 | Integrating CI with Argo CD (12장 전체, 가제 — 프로젝트 역할 토큰 발급은 08-01 이 다루고, 이 편은 CI 에서 토큰을 쓰는 법만 다룸) | 작성 예정 | [CI 연동과 Image Updater](../../argocd/04-02.CI%20%EC%97%B0%EB%8F%99%EA%B3%BC%20Image%20Updater.md), [마이크로서비스 CI/CD 파이프라인 통합](../../argocd/04-04.%EB%A7%88%EC%9D%B4%ED%81%AC%EB%A1%9C%EC%84%9C%EB%B9%84%EC%8A%A4%20CI_CD%20%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8%20%ED%86%B5%ED%95%A9.md) |
-| 13-01 | Operationalizing Argo CD (13장 전체, 가제) | 작성 예정 | [모니터링·알림·HA 운영](../../argocd/05-01.%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%C2%B7%EC%95%8C%EB%A6%BC%C2%B7HA%20%EC%9A%B4%EC%98%81.md) |
-| 14-01 | Future Considerations (14장 전체, 가제) | 작성 예정 | [GitOps 성숙도와 미래 고려사항](../../argocd/05-03.GitOps%20%EC%84%B1%EC%88%99%EB%8F%84%EC%99%80%20%EB%AF%B8%EB%9E%98%20%EA%B3%A0%EB%A0%A4%EC%82%AC%ED%95%AD.md) |
+| 01-01 | [Argo CD 가 푸는 문제 — GitOps 원칙과 Argo 생태계](./01-01.Argo%20CD%20%EA%B0%80%20%ED%91%B8%EB%8A%94%20%EB%AC%B8%EC%A0%9C%20%E2%80%94%20GitOps%20%EC%9B%90%EC%B9%99%EA%B3%BC%20Argo%20%EC%83%9D%ED%83%9C%EA%B3%84.md) | 작성 완료 | 흡수 완료(옛 01-01), [ArgoCD와 GitOps (kubernetes/11-03)](../../kubernetes/11_devtools/11-03.ArgoCD%EC%99%80%20GitOps.md) |
+| 02-01 | [Argo CD 설치하기 — 구성 요소·설치 유형·매니페스트와 Helm](./02-01.Argo%20CD%20%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0%20%E2%80%94%20%EA%B5%AC%EC%84%B1%20%EC%9A%94%EC%86%8C%C2%B7%EC%84%A4%EC%B9%98%20%EC%9C%A0%ED%98%95%C2%B7%EB%A7%A4%EB%8B%88%ED%8E%98%EC%8A%A4%ED%8A%B8%EC%99%80%20Helm.md) | 작성 완료 | 흡수 완료(옛 01-02) |
+| 03-01 | [Argo CD 와 상호작용하기 — UI·CLI·REST API 와 선언적 구성](./03-01.Argo%20CD%20%EC%99%80%20%EC%83%81%ED%98%B8%EC%9E%91%EC%9A%A9%ED%95%98%EA%B8%B0%20%E2%80%94%20UI%C2%B7CLI%C2%B7REST%20API%20%EC%99%80%20%EC%84%A0%EC%96%B8%EC%A0%81%20%EA%B5%AC%EC%84%B1.md) | 작성 완료 | 흡수 완료(옛 01-03) |
+| 04-01 | [Application 관리하기 — 소스·대상·Helm·Kustomize 와 삭제·finalizer](./04-01.Application%20%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0%20%E2%80%94%20%EC%86%8C%EC%8A%A4%C2%B7%EB%8C%80%EC%83%81%C2%B7Helm%C2%B7Kustomize%20%EC%99%80%20%EC%82%AD%EC%A0%9C%C2%B7finalizer.md) | 작성 완료 | 흡수 완료(옛 02-01) |
+| 05-01 | [Application 동기화 — 자동 동기화·Sync Option·Hook·Sync Wave 와 차이 무시](./05-01.Application%20%EB%8F%99%EA%B8%B0%ED%99%94%20%E2%80%94%20%EC%9E%90%EB%8F%99%20%EB%8F%99%EA%B8%B0%ED%99%94%C2%B7Sync%20Option%C2%B7Hook%C2%B7Sync%20Wave%20%EC%99%80%20%EC%B0%A8%EC%9D%B4%20%EB%AC%B4%EC%8B%9C.md) | 작성 완료 | 흡수 완료(옛 02-02) |
+| 06-01 | [Argo CD 사용자와 인증 — admin·로컬 사용자·토큰과 SSO](./06-01.Argo%20CD%20%EC%82%AC%EC%9A%A9%EC%9E%90%EC%99%80%20%EC%9D%B8%EC%A6%9D%20%E2%80%94%20admin%C2%B7%EB%A1%9C%EC%BB%AC%20%EC%82%AC%EC%9A%A9%EC%9E%90%C2%B7%ED%86%A0%ED%81%B0%EA%B3%BC%20SSO.md) | 작성 완료 | 흡수 완료(옛 03-01) |
+| 06-02 | [SSO 연결과 RBAC — Dex·직접 OIDC·역할과 정책](./06-02.SSO%20%EC%97%B0%EA%B2%B0%EA%B3%BC%20RBAC%20%E2%80%94%20Dex%C2%B7%EC%A7%81%EC%A0%91%20OIDC%C2%B7%EC%97%AD%ED%95%A0%EA%B3%BC%20%EC%A0%95%EC%B1%85.md) | 작성 완료 | 흡수 완료(옛 03-01) |
+| 07-01 | [여러 클러스터 관리하기 — 허브 앤 스포크·클러스터 Secret·멀티 클러스터 배포](./07-01.%EC%97%AC%EB%9F%AC%20%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0%20%E2%80%94%20%ED%97%88%EB%B8%8C%20%EC%95%A4%20%EC%8A%A4%ED%8F%AC%ED%81%AC%C2%B7%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20Secret%C2%B7%EB%A9%80%ED%8B%B0%20%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EB%B0%B0%ED%8F%AC.md) | 작성 완료 | 흡수 완료(옛 03-02) (8장과 나눠 씀) |
+| 08-01 | [멀티 테넌시 — 설치 모드와 AppProject·프로젝트 역할](./08-01.%EB%A9%80%ED%8B%B0%20%ED%85%8C%EB%84%8C%EC%8B%9C%20%E2%80%94%20%EC%84%A4%EC%B9%98%20%EB%AA%A8%EB%93%9C%EC%99%80%20AppProject%C2%B7%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EC%97%AD%ED%95%A0.md) | 작성 완료 | 흡수 완료(옛 03-02) (7장과 나눠 씀) |
+| 09-01 | [서버와 저장소 접근 보안 — TLS 인증서·저장소 인증서·HTTPS 자격 증명](./09-01.%EC%84%9C%EB%B2%84%EC%99%80%20%EC%A0%80%EC%9E%A5%EC%86%8C%20%EC%A0%91%EA%B7%BC%20%EB%B3%B4%EC%95%88%20%E2%80%94%20TLS%20%EC%9D%B8%EC%A6%9D%EC%84%9C%C2%B7%EC%A0%80%EC%9E%A5%EC%86%8C%20%EC%9D%B8%EC%A6%9D%EC%84%9C%C2%B7HTTPS%20%EC%9E%90%EA%B2%A9%20%EC%A6%9D%EB%AA%85.md) | 작성 완료 | 흡수 완료(옛 03-03) |
+| 09-02 | [SSH 인증과 배포 신뢰 — 자격 증명 템플릿·GPG 서명 검증·Sync Impersonation](./09-02.SSH%20%EC%9D%B8%EC%A6%9D%EA%B3%BC%20%EB%B0%B0%ED%8F%AC%20%EC%8B%A0%EB%A2%B0%20%E2%80%94%20%EC%9E%90%EA%B2%A9%20%EC%A6%9D%EB%AA%85%20%ED%85%9C%ED%94%8C%EB%A6%BF%C2%B7GPG%20%EC%84%9C%EB%AA%85%20%EA%B2%80%EC%A6%9D%C2%B7Sync%20Impersonation.md) | 작성 완료 | 흡수 완료(옛 03-03) |
+| 10-01 | [Application 여럿을 순서대로 — 헬스 체크·App-of-Apps sync wave·Progressive Sync](./10-01.Application%20%EC%97%AC%EB%9F%BF%EC%9D%84%20%EC%88%9C%EC%84%9C%EB%8C%80%EB%A1%9C%20%E2%80%94%20%ED%97%AC%EC%8A%A4%20%EC%B2%B4%ED%81%AC%C2%B7App-of-Apps%20sync%20wave%C2%B7Progressive%20Sync.md) | 작성 완료 | 흡수 완료(옛 02-03·05-02), [ArgoCD App-of-Apps 패턴](../../../99_ETC/2026-04-19_ArgoCD%20App-of-Apps%20%ED%8C%A8%ED%84%B4.md) |
+| 11-01 | [Argo CD 확장하기 — Config Management Plugin·UI 맞춤](./11-01.Argo%20CD%20%ED%99%95%EC%9E%A5%ED%95%98%EA%B8%B0%20%E2%80%94%20Config%20Management%20Plugin%C2%B7UI%20%EB%A7%9E%EC%B6%A4.md) | 작성 완료 | 흡수 완료(옛 04-01) |
+| 12-01 | [CI 와 Argo CD 잇기 — 조정 주기·Webhook·Tekton](./12-01.CI%20%EC%99%80%20Argo%20CD%20%EC%9E%87%EA%B8%B0%20%E2%80%94%20%EC%A1%B0%EC%A0%95%20%EC%A3%BC%EA%B8%B0%C2%B7Webhook%C2%B7Tekton.md) | 작성 완료 | 흡수 완료(옛 04-02·04-04) |
+| 13-01 | [Argo CD 운영하기 — 메트릭·알림·고가용성·샤딩](./13-01.Argo%20CD%20%EC%9A%B4%EC%98%81%ED%95%98%EA%B8%B0%20%E2%80%94%20%EB%A9%94%ED%8A%B8%EB%A6%AD%C2%B7%EC%95%8C%EB%A6%BC%C2%B7%EA%B3%A0%EA%B0%80%EC%9A%A9%EC%84%B1%C2%B7%EC%83%A4%EB%94%A9.md) | 작성 완료 | 흡수 완료(옛 05-01) |
+| 14-01 | [GitOps 다음 걸음 — 저장소 구조·Rendered Manifests·승격](./14-01.GitOps%20%EB%8B%A4%EC%9D%8C%20%EA%B1%B8%EC%9D%8C%20%E2%80%94%20%EC%A0%80%EC%9E%A5%EC%86%8C%20%EA%B5%AC%EC%A1%B0%C2%B7Rendered%20Manifests%C2%B7%EC%8A%B9%EA%B2%A9.md) | 작성 완료 | 흡수 완료(옛 05-03·04-02) |
 
-각 옛 노트의 [`deepdive/`](../../argocd/deepdive/) 점검·실습 파일은 같은 장의 연습 문제 재료입니다.
+각 옛 노트의 `deepdive/` 점검·실습 파일은 같은 장의 연습 문제 재료로 흡수했습니다.
 
 ### 편 나누기 계획
 
@@ -142,10 +141,10 @@ updated: 2026-11-08
 
 | 항목 | 현재 값 |
 |------|--------|
-| 진행률 | 10/14 장. 정독 노트 12편 |
+| 진행률 | 14/14 장. 정독 노트 16편 |
 | 난이도 레벨 | 미정 |
 | 막힌 지점 | 없음 |
-| 다음 레슨 후보 | 11-01 (11장 Extending Argo CD, 작성 예정) |
+| 다음 레슨 후보 | 없음 (14장 정독 노트 작성 완료) |
 | 최근 검증 결과 | 01-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 11건 반영, agy 2차 검토 지적 없음 (2026-11-06). 02-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 9건과 보강 4건 반영, agy 2차 검토 지적 없음 (2026-11-06). 03-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 14건 반영, agy 2차 검토 지적 없음 (2026-11-06). 04-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 10건 반영, agy 2차 검토 지적 없음 (2026-11-06). 05-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 12건과 메인 지적 1건 반영, agy 2차 검토 지적 없음 (2026-11-06). 06-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 4건 반영, agy 2차 검토 지적 없음 (2026-11-06). 06-02 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 7건과 agy 2차 검토 지적 1건 반영 (2026-11-06). 07-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 14건과 agy 2차 검토 지적 5건 반영 (2026-11-08). 같은 날 generator 여섯 종 표와 각주를 보강했고 agy 2차 검토 지적 3건 가운데 2건을 반영했습니다. 08-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 12건과 agy 2차 검토 지적 5건 반영 (2026-11-08). 09-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 9건과 agy 2차 검토 지적 3건 반영 (2026-11-08). 09-02 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 7건과 agy 2차 검토 지적 4건 반영 (2026-11-08). 10-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 12건과 agy 2차 검토 지적 2건 반영 (2026-11-08). |
 | 원문 정오 누적 | 0 |
 | 버전 차이 기록 | 0 |
@@ -161,7 +160,7 @@ updated: 2026-11-08
 
 Argo CD 는 버전마다 CRD 필드와 기능 상태가 바뀝니다. 그래서 노트에는 버전에 따라 바뀌는 값을 Argo CD 버전과 함께 적습니다. 대상은 Argo CD 버전, CRD 필드, 설치 매니페스트 주소, Image Updater 와 ApplicationSet 의 기능 상태입니다. 이 값들은 현재 공식 문서([argo-cd.readthedocs.io stable](https://argo-cd.readthedocs.io/en/stable/))와 대조합니다. 원문과 현재 값이 다르면 노트에는 현재 값만 출처와 함께 적고, 바뀐 항목은 학습 상태 표의 버전 차이 기록에만 셉니다.
 
-노트 끝 순서는 `## 연습 문제` → `## 정답 (자답 후 펼치기)` → `## 참고 자료` 입니다. 연습 문제 재료는 옛 노트의 `deepdive/` 파일에서 가져옵니다.
+노트 끝 순서는 `## 연습 문제` → `## 정답 (자답 후 펼치기)` → `## 참고 자료` 입니다. 연습 문제 재료는 옛 노트의 `deepdive/` 파일에서 가져왔습니다.
 
 
 
@@ -169,7 +168,7 @@ Argo CD 는 버전마다 CRD 필드와 기능 상태가 바뀝니다. 그래서 
 
 - [『CKS Study Guide』 정독본](../cks-study-guide/README.md) — 같은 `book/` 영역, 클러스터 하드닝 절차의 짝이자 9장 보안과 층이 다른 비교 대상
 - [『Kubernetes: Up and Running』 정독본](../kubernetes-up-and-running/README.md) — 오브젝트와 운영 관점의 짝, Application 이 배포하는 대상의 기초
-- [옛 argocd/ 노트](../../argocd/README.md) — 이 책을 바탕으로 쓴 옛 노트 16편, 장별 노트의 보충 재료
+- [Argo Rollouts 정독](../../docs/argo-rollouts/README.md) — 이 책에 대응하는 장이 없어 옛 argocd/ 노트에서 옮긴 Rollouts 두 편
 - [DevOps 로드맵](../../../roadmap/devops-roadmap.md) — 5단계 GitOps·6단계 점진 배포에서 이 주제가 놓인 자리
 - [08_cloud MOC](../../README.md) — 상위 카테고리 경계
 

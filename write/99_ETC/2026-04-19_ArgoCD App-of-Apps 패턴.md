@@ -9,6 +9,7 @@ updated: 2026-04-19
 # App-of-Apps
 
 ---
+> 더 깊게: [Argo CD Up and Running 정독](../08_cloud/book/argocd-up-and-running/README.md)
 
 ## 일반 ArgoCD 배포
 

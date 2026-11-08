@@ -1,13 +1,14 @@
 ---
 title: 08_cloud/docs MOC — 공식 문서·제품 사이트 정독
-tags: [moc, cloud, official-docs, kubernetes, helm, kustomize]
+tags: [moc, cloud, official-docs, kubernetes, helm, kustomize, argo-rollouts]
 status: final
 related:
   - ../README.md
   - kubernetes/README.md
   - helm/README.md
   - kustomize/README.md
-updated: 2026-11-06
+  - argo-rollouts/README.md
+updated: 2026-11-08
 ---
 
 # 08_cloud/docs — 공식 문서·제품 사이트 정독
@@ -25,6 +26,7 @@ updated: 2026-11-06
 | [kubernetes/](kubernetes/README.md) | kubernetes.io 공식 문서 |
 | [helm/](helm/README.md) | helm.sh 공식 문서 |
 | [kustomize/](kustomize/README.md) | Kustomize 공식 문서 (kubectl.docs.kubernetes.io) |
+| [argo-rollouts/](argo-rollouts/README.md) | Argo Rollouts 공식 문서 (argo-rollouts.readthedocs.io) |
 
 제품 안의 하위 폴더 규칙은 그 제품의 README 가 정합니다. 예를 들어 `kubernetes/` 는 사이트의 섹션 슬러그를 그대로 폴더 이름으로 쓰고, `helm/` 과 `kustomize/` 는 노트가 적어 폴더를 나누지 않고 파일을 바로 둡니다. 새 제품을 다루게 되면 그 제품 폴더를 만들고 이 표에 한 줄을 더합니다.
 
@@ -42,6 +44,8 @@ updated: 2026-11-06
 | helm | (바로 아래) | 01-01 | [Helm 기초](helm/01-01.Helm%20%EA%B8%B0%EC%B4%88.md) |
 | helm | (바로 아래) | 01-02 | [Helm 고급](helm/01-02.Helm%20%EA%B3%A0%EA%B8%89.md) |
 | kustomize | (바로 아래) | 01-01 | [Kustomize](kustomize/01-01.Kustomize.md) |
+| argo-rollouts | (바로 아래) | 01-01 | [Argo Rollouts와 배포 전략](argo-rollouts/01-01.Argo%20Rollouts%EC%99%80%20%EB%B0%B0%ED%8F%AC%20%EC%A0%84%EB%9E%B5.md) |
+| argo-rollouts | (바로 아래) | 01-02 | [Argo Rollouts와 배포 전략 실습](argo-rollouts/01-02.Argo%20Rollouts%EC%99%80%20%EB%B0%B0%ED%8F%AC%20%EC%A0%84%EB%9E%B5%20%EC%8B%A4%EC%8A%B5.md) |
 
 
 

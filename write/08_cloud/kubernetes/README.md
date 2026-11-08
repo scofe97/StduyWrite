@@ -8,7 +8,7 @@ source:
 related:
   - ../../roadmap/k8s-roadmap.md
   - ../README.md
-  - ../argocd/README.md
+  - ../book/argocd-up-and-running/README.md
   - ../book/kubernetes-in-action/README.md
 updated: 2026-11-06
 ---
@@ -19,7 +19,7 @@ updated: 2026-11-06
 
 공식 문서의 concepts 대분류를 뼈대로 삼고, 폴더 번호로 학습 흐름을 표시합니다. 이 카테고리는 클러스터 안에서 리소스가 선언되고 배치되고 연결되고 운영되는 과정을 다룹니다.
 
-서비스 간 L7 정책·mTLS·세밀한 트래픽 제어는 `service-mesh` <!-- 링크 끊김(2026-08): ../service-mesh/README.md --> 카테고리가 맡습니다. App of Apps·ApplicationSet·Image Updater 운영은 [`argocd`](../argocd/README.md) 카테고리에서 다룹니다.
+서비스 간 L7 정책·mTLS·세밀한 트래픽 제어는 `service-mesh` <!-- 링크 끊김(2026-08): ../service-mesh/README.md --> 카테고리가 맡습니다. App of Apps·ApplicationSet·Image Updater 운영은 [Argo CD Up and Running 정독](../book/argocd-up-and-running/README.md)에서 다룹니다.
 
 책 한 권을 저자 순서대로 따라가는 정독본은 [`book/kubernetes-in-action`](../book/kubernetes-in-action/README.md)에 따로 있습니다. 개념은 book 노트가 정본이고, 이 폴더에는 book 이 다루지 않는 운영·도구 주제만 둡니다(2026-10-29 정리, book 에 옮긴 뒤 12편 삭제).
 
@@ -108,7 +108,7 @@ CRD와 Controller로 Kubernetes 위에 우리만의 리소스를 얹어, Statefu
 
 ### 11_devtools — DevTools와 GitOps
 
-Jenkins·SonarQube·ArgoCD·Harbor를 K8s 위에 올려 개발 생산성과 배포 자동화를 얻습니다. ArgoCD 상세 운영은 별도 [`argocd`](../argocd/README.md) 카테고리로 넘깁니다.
+Jenkins·SonarQube·ArgoCD·Harbor를 K8s 위에 올려 개발 생산성과 배포 자동화를 얻습니다. ArgoCD 상세 운영은 [Argo CD Up and Running 정독](../book/argocd-up-and-running/README.md)으로 넘깁니다.
 
 - **11-01 Jenkins on K8s** — K8s 네이티브 Jenkins가 무엇이 달라지는지(동적 Agent 등) 봅니다.
 - **11-02 SonarQube on K8s** — SonarQube의 영속성 전략을 봅니다.
@@ -150,6 +150,6 @@ Jenkins·SonarQube·ArgoCD·Harbor를 K8s 위에 올려 개발 생산성과 배�
 > Kubernetes와 연결되는 네트워크·배포·정독 문서를 함께 봅니다.
 
 - `service-mesh MOC` <!-- 링크 끊김(2026-08): ../service-mesh/README.md --> — Pod 간 트래픽 제어·mTLS·관측성을 메시 계층에서 다룹니다
-- [argocd MOC](../argocd/README.md) — ArgoCD 상세 시리즈. AppProject·App of Apps·ApplicationSet·Image Updater 운영을 별도로 다룬다
+- [Argo CD Up and Running 정독](../book/argocd-up-and-running/README.md) — ArgoCD 상세 시리즈. AppProject·App of Apps·ApplicationSet·Image Updater 운영을 별도로 다룬다
 - [Kubernetes in Action 정독본](../book/kubernetes-in-action/README.md) — 같은 개념을 저자 순서대로 쌓아 올린 책-종속 노트. 개념이 겹치면 이 개념 노트로 링크를 건다
 - [devops MOC](../../07_devops/README.md) — CI/CD 파이프라인 자체 설계는 이곳

@@ -9,7 +9,7 @@ updated: 2026-07-10
 
 # 11_devtools — DevTools와 GitOps
 
-> Jenkins·SonarQube·ArgoCD·Harbor를 K8s 위에 올려 개발 생산성과 배포 자동화를 얻습니다. ArgoCD 상세 운영은 별도 [argocd](../../argocd/README.md) 카테고리로 넘깁니다.
+> Jenkins·SonarQube·ArgoCD·Harbor를 K8s 위에 올려 개발 생산성과 배포 자동화를 얻습니다. ArgoCD 상세 운영은 [Argo CD Up and Running 정독](../../book/argocd-up-and-running/README.md)으로 넘깁니다.
 
 
 
