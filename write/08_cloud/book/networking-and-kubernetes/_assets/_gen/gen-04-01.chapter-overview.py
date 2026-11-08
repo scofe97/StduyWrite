@@ -10,15 +10,17 @@
 #           semantic-patterns 의 "Stage framework with semantic slots" 한 줄이기 때문이다.
 import dd, ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, MONO
-W, H = 1000, 560
-d = D(W, H, "04-01 · POD NETWORKING MODEL", "주소를 어떻게 줄지 정하고, 그 결정을 실행하는 컴포넌트로 내려간다", "3가지 약속에서 시작해 배치를 고르고, 그 결정을 실행하는 컴포넌트까지 내려간 뒤 자격 판정으로 닫는다.", lead="3가지 약속 → 배치 선택 → 그 결정을 실행하는 컴포넌트 → 자격 판정")
-ddx.band(d, 104, 496, "약속 → 배치 → 컴포넌트 → 자격 판정")
-ddx.stage_chain(d, 316,
-  ["§1 모델", "§2 레이아웃", "§3·§4 배정과 생성", "§5 자격 판정"],
+# 2026-11-08 본문 묶음(모델·레이아웃·주소 대역·Pod 생성·프로브)에 맞춰 다섯 칸으로 다시 짰다. 절 번호는 걷었다.
+W, H = 1000, 404
+d = D(W, H, "04-01 · POD NETWORKING MODEL", "주소를 어떻게 줄지 정하고, 그 결정을 실행하는 컴포넌트로 내려간다", "3가지 약속에서 시작해 배치를 고르고, 주소 대역과 Pod 생성으로 내려간 뒤 프로브의 자격 판정으로 닫는다.", lead="3가지 약속 → 배치 선택 → 주소 대역 → Pod 생성 → 자격 판정")
+ddx.band(d, 104, 340, "약속 → 배치 → 대역 → 생성 → 자격 판정")
+ddx.stage_chain(d, 252,
+  ["모델", "레이아웃", "주소 대역", "Pod 생성", "자격 판정"],
   [("3가지 약속", "NAT 없음", "Pod 마다 고유 IP", ACC),
    ("레이아웃", "격리·평면·섬", "Pod IP 를 보일까", None),
-   ("컴포넌트", "CIDR · Kubelet", "CRI 와 CNI 를 부림", None),
-   ("프로브", "liveness·readiness", "실패 시 무엇을 하나", INFO)],
-  ["배치는", "누가 정하나", "다 뜨면"], bw=180, gap=76, x0=26, sizes=(14, 12, 12))
-d.legend(512, [("출발점이 되는 약속", ACC), ("자격 판정", INFO)])
+   ("주소 대역", "Pod·노드·Service", "누가 정하나", None),
+   ("Pod 생성", "kubelet·런타임·CNI", "어디서 막히나", None),
+   ("세 프로브", "실패 동작이 갈림", "readiness·liveness", INFO)],
+  ["배치는", "대역은", "생성은", "뜨면"], bw=148, gap=44, x0=42, sizes=(14, 12, 11))
+d.legend(356, [("출발점이 되는 약속", ACC), ("자격 판정", INFO)])
 d.save("04-01.chapter-overview.svg"); print("ok 04-01")

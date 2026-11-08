@@ -1,6 +1,7 @@
-# 04-01.readiness-propagation — 프로브 실패가 네 주체를 거쳐 다른 노드의 규칙을 바꾼다
-# 본문 요구: "Kubelet 이 Ready: False 를 쓰고 … EndpointSlice 컨트롤러가 명단에서 제외 … 각 노드의 kube-proxy 가
-#           그 Pod 줄을 빼고 확률을 다시 계산 … 그 Pod 를 아무도 건드리지 않습니다"
+# 04-01.readiness-propagation — 프로브 실패가 네 주체를 거쳐 모든 노드의 서비스 규칙을 바꾼다
+# 본문 요구: "Kubelet 이 Ready: False 를 쓰고 … EndpointSlice 컨트롤러가 항목을 지우지 않고 ready·serving 을 false 로 … 각 노드의
+#           kube-proxy 가 그 Pod 줄을 빼고 확률을 다시 계산(1/3 → 1/2) … 그 Pod 를 아무도 건드리지 않습니다"
+#           2026-11-08 kind v1.37.0 실측(항목이 남고 false 가 됨)에 맞췄다.
 # 타입 스펙: type-process — 주체 넷이 상태 한 조각을 넘겨가며 순서대로 처리한다. 아래 두 칸은
 #           그 흐름의 결과가 어디에 남고 어디에 안 남는지를 대조한다.
 #           손으로 쓴 SVG 를 2026-09-15 생성기로 옮겼다.
@@ -9,7 +10,7 @@ from dd import D, INK, MUTED, SOFT, RULE, ACC, INFO, PAPER, PAPER2, KR, MONO
 
 W, H = 1000, 456
 d = D(W, H, "READINESS · HOW A FAILED PROBE REACHES THE RULES",
-      "readiness 실패는 그 Pod 가 아니라 남의 노드 규칙을 바꾼다",
+      "readiness 실패는 그 Pod 가 아니라 서비스 규칙을 바꾼다",
       "Kubelet 의 프로브 실패가 API 서버와 EndpointSlice 컨트롤러를 거쳐 각 노드 kube-proxy 의 규칙 재작성으로 "
       "이어지며, 그 Pod 자신의 네트워크는 어느 단계에서도 바뀌지 않는다.",
       lead="네 주체를 거쳐 내려가지만 그 Pod 의 네트워크는 어느 단계에서도 그대로")
@@ -20,7 +21,7 @@ CX = [X0 + BW // 2 + i * STRIDE for i in range(4)]        # 128 376 624 872
 ACTORS = ["Kubelet · 그 노드", "API 서버", "EndpointSlice 컨트롤러", "kube-proxy · 모든 노드"]
 STEPS = [("프로브 3회 연속 실패", "failureThreshold: 3", INFO),
          ("Pod 상태 기록", "Ready: False", None),
-         ("명단에서 제외 표시", "ready: false", None),
+         ("항목은 남기고 false", "ready · serving = false", None),
          ("서비스 체인 재작성", "그 Pod 줄 삭제", ACC)]
 
 for i, (cx, actor, (t, s, c)) in enumerate(zip(CX, ACTORS, STEPS)):
@@ -43,13 +44,13 @@ for i, lab in enumerate(["write", "watch", "watch"]):
 RY, RH, RW = 264, 104, 464
 d.box(24, RY, RW, RH, PAPER2, RULE, 1.1, 8)
 d.t(48, RY + 32, "그대로인 곳 · 그 Pod", 14, INK, KR, "start", 600)
-d.t(48, RY + 60, "라우팅 · 인터페이스 변화 없음", 12, MUTED, KR, "start")
-d.t(48, RY + 84, "커넥션 풀 초기화 계속", 12, MUTED, KR, "start")
+d.t(48, RY + 60, "IP 로는 계속 닿음 · 재시작 0회", 12, MUTED, KR, "start")
+d.t(48, RY + 84, "컨테이너는 계속 실행", 12, MUTED, KR, "start")
 
 d.box(512, RY, RW, RH, PAPER2, RULE, 1.1, 8)
-d.t(536, RY + 32, "바뀌는 곳 · 다른 노드의 규칙", 14, INK, KR, "start", 600)
+d.t(536, RY + 32, "바뀌는 곳 · 모든 노드의 규칙", 14, INK, KR, "start", 600)
 d.t(536, RY + 60, "그 Pod 를 가리키던 줄 삭제", 12, MUTED, KR, "start")
-d.t(536, RY + 84, "남은 줄의 확률 재계산", 12, MUTED, KR, "start")
+d.t(536, RY + 84, "남은 줄의 확률 재계산 · 1/3 → 1/2", 12, MUTED, KR, "start")
 
 d.legend(408, [("상태가 전파되는 단계", INFO), ("규칙이 실제로 바뀌는 자리", ACC)])
 d.save("04-01.readiness-propagation.svg")
