@@ -18,7 +18,7 @@ learning:
   level: 기본
   last_verified:
   blocked_count:
-  next_lesson: "9장 09-01 정독 노트 작성"
+  next_lesson: "11장 11-01 정독 노트 작성"
 updated: 2026-11-08
 ---
 
@@ -102,8 +102,9 @@ updated: 2026-11-08
 | 06-02 | [SSO 연결과 RBAC — Dex·직접 OIDC·역할과 정책](./06-02.SSO%20%EC%97%B0%EA%B2%B0%EA%B3%BC%20RBAC%20%E2%80%94%20Dex%C2%B7%EC%A7%81%EC%A0%91%20OIDC%C2%B7%EC%97%AD%ED%95%A0%EA%B3%BC%20%EC%A0%95%EC%B1%85.md) | 작성 완료 | [인증·인가와 AppProject](../../argocd/03-01.%EC%9D%B8%EC%A6%9D%C2%B7%EC%9D%B8%EA%B0%80%EC%99%80%20AppProject.md) |
 | 07-01 | [여러 클러스터 관리하기 — 허브 앤 스포크·클러스터 Secret·멀티 클러스터 배포](./07-01.%EC%97%AC%EB%9F%AC%20%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0%20%E2%80%94%20%ED%97%88%EB%B8%8C%20%EC%95%A4%20%EC%8A%A4%ED%8F%AC%ED%81%AC%C2%B7%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20Secret%C2%B7%EB%A9%80%ED%8B%B0%20%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EB%B0%B0%ED%8F%AC.md) | 작성 완료 | [멀티클러스터와 멀티테넌시](../../argocd/03-02.%EB%A9%80%ED%8B%B0%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%EC%99%80%20%EB%A9%80%ED%8B%B0%ED%85%8C%EB%84%8C%EC%8B%9C.md) (8장과 나눠 씀) |
 | 08-01 | [멀티 테넌시 — 설치 모드와 AppProject·프로젝트 역할](./08-01.%EB%A9%80%ED%8B%B0%20%ED%85%8C%EB%84%8C%EC%8B%9C%20%E2%80%94%20%EC%84%A4%EC%B9%98%20%EB%AA%A8%EB%93%9C%EC%99%80%20AppProject%C2%B7%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EC%97%AD%ED%95%A0.md) | 작성 완료 | [멀티클러스터와 멀티테넌시](../../argocd/03-02.%EB%A9%80%ED%8B%B0%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%EC%99%80%20%EB%A9%80%ED%8B%B0%ED%85%8C%EB%84%8C%EC%8B%9C.md) (7장과 나눠 씀) |
-| 09-01 · 09-02 | Security (9장, 가제, 두 편 후보) | 작성 예정 | [보안 운영](../../argocd/03-03.%EB%B3%B4%EC%95%88%20%EC%9A%B4%EC%98%81.md) |
-| 10-01 | Applications at Scale (10장 전체, 가제) | 작성 예정 | [App of Apps와 ApplicationSet](../../argocd/02-03.App%20of%20Apps%EC%99%80%20ApplicationSet.md), [대규모 운영과 Progressive Sync](../../argocd/05-02.%EB%8C%80%EA%B7%9C%EB%AA%A8%20%EC%9A%B4%EC%98%81%EA%B3%BC%20Progressive%20Sync.md), [ArgoCD App-of-Apps 패턴](../../../99_ETC/2026-04-19_ArgoCD%20App-of-Apps%20%ED%8C%A8%ED%84%B4.md) |
+| 09-01 | [서버와 저장소 접근 보안 — TLS 인증서·저장소 인증서·HTTPS 자격 증명](./09-01.%EC%84%9C%EB%B2%84%EC%99%80%20%EC%A0%80%EC%9E%A5%EC%86%8C%20%EC%A0%91%EA%B7%BC%20%EB%B3%B4%EC%95%88%20%E2%80%94%20TLS%20%EC%9D%B8%EC%A6%9D%EC%84%9C%C2%B7%EC%A0%80%EC%9E%A5%EC%86%8C%20%EC%9D%B8%EC%A6%9D%EC%84%9C%C2%B7HTTPS%20%EC%9E%90%EA%B2%A9%20%EC%A6%9D%EB%AA%85.md) | 작성 완료 | [보안 운영](../../argocd/03-03.%EB%B3%B4%EC%95%88%20%EC%9A%B4%EC%98%81.md) |
+| 09-02 | [SSH 인증과 배포 신뢰 — 자격 증명 템플릿·GPG 서명 검증·Sync Impersonation](./09-02.SSH%20%EC%9D%B8%EC%A6%9D%EA%B3%BC%20%EB%B0%B0%ED%8F%AC%20%EC%8B%A0%EB%A2%B0%20%E2%80%94%20%EC%9E%90%EA%B2%A9%20%EC%A6%9D%EB%AA%85%20%ED%85%9C%ED%94%8C%EB%A6%BF%C2%B7GPG%20%EC%84%9C%EB%AA%85%20%EA%B2%80%EC%A6%9D%C2%B7Sync%20Impersonation.md) | 작성 완료 | [보안 운영](../../argocd/03-03.%EB%B3%B4%EC%95%88%20%EC%9A%B4%EC%98%81.md) |
+| 10-01 | [Application 여럿을 순서대로 — 헬스 체크·App-of-Apps sync wave·Progressive Sync](./10-01.Application%20%EC%97%AC%EB%9F%BF%EC%9D%84%20%EC%88%9C%EC%84%9C%EB%8C%80%EB%A1%9C%20%E2%80%94%20%ED%97%AC%EC%8A%A4%20%EC%B2%B4%ED%81%AC%C2%B7App-of-Apps%20sync%20wave%C2%B7Progressive%20Sync.md) | 작성 완료 | [App of Apps와 ApplicationSet](../../argocd/02-03.App%20of%20Apps%EC%99%80%20ApplicationSet.md), [대규모 운영과 Progressive Sync](../../argocd/05-02.%EB%8C%80%EA%B7%9C%EB%AA%A8%20%EC%9A%B4%EC%98%81%EA%B3%BC%20Progressive%20Sync.md), [ArgoCD App-of-Apps 패턴](../../../99_ETC/2026-04-19_ArgoCD%20App-of-Apps%20%ED%8C%A8%ED%84%B4.md) |
 | 11-01 | Extending Argo CD (11장 전체, 가제) | 작성 예정 | [ArgoCD 확장과 플러그인](../../argocd/04-01.ArgoCD%20%ED%99%95%EC%9E%A5%EA%B3%BC%20%ED%94%8C%EB%9F%AC%EA%B7%B8%EC%9D%B8.md) |
 | 12-01 | Integrating CI with Argo CD (12장 전체, 가제 — 프로젝트 역할 토큰 발급은 08-01 이 다루고, 이 편은 CI 에서 토큰을 쓰는 법만 다룸) | 작성 예정 | [CI 연동과 Image Updater](../../argocd/04-02.CI%20%EC%97%B0%EB%8F%99%EA%B3%BC%20Image%20Updater.md), [마이크로서비스 CI/CD 파이프라인 통합](../../argocd/04-04.%EB%A7%88%EC%9D%B4%ED%81%AC%EB%A1%9C%EC%84%9C%EB%B9%84%EC%8A%A4%20CI_CD%20%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8%20%ED%86%B5%ED%95%A9.md) |
 | 13-01 | Operationalizing Argo CD (13장 전체, 가제) | 작성 예정 | [모니터링·알림·HA 운영](../../argocd/05-01.%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%C2%B7%EC%95%8C%EB%A6%BC%C2%B7HA%20%EC%9A%B4%EC%98%81.md) |
@@ -141,11 +142,11 @@ updated: 2026-11-08
 
 | 항목 | 현재 값 |
 |------|--------|
-| 진행률 | 8/14 장. 정독 노트 9편 |
+| 진행률 | 10/14 장. 정독 노트 12편 |
 | 난이도 레벨 | 미정 |
 | 막힌 지점 | 없음 |
-| 다음 레슨 후보 | 09-01 · 09-02 (9장 Security, 작성 예정) |
-| 최근 검증 결과 | 01-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 11건 반영, agy 2차 검토 지적 없음 (2026-11-06). 02-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 9건과 보강 4건 반영, agy 2차 검토 지적 없음 (2026-11-06). 03-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 14건 반영, agy 2차 검토 지적 없음 (2026-11-06). 04-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 10건 반영, agy 2차 검토 지적 없음 (2026-11-06). 05-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 12건과 메인 지적 1건 반영, agy 2차 검토 지적 없음 (2026-11-06). 06-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 4건 반영, agy 2차 검토 지적 없음 (2026-11-06). 06-02 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 7건과 agy 2차 검토 지적 1건 반영 (2026-11-06). 07-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 14건과 agy 2차 검토 지적 5건 반영 (2026-11-08). 08-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 12건과 agy 2차 검토 지적 5건 반영 (2026-11-08). |
+| 다음 레슨 후보 | 11-01 (11장 Extending Argo CD, 작성 예정) |
+| 최근 검증 결과 | 01-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 11건 반영, agy 2차 검토 지적 없음 (2026-11-06). 02-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 9건과 보강 4건 반영, agy 2차 검토 지적 없음 (2026-11-06). 03-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 14건 반영, agy 2차 검토 지적 없음 (2026-11-06). 04-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 10건 반영, agy 2차 검토 지적 없음 (2026-11-06). 05-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 12건과 메인 지적 1건 반영, agy 2차 검토 지적 없음 (2026-11-06). 06-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 4건 반영, agy 2차 검토 지적 없음 (2026-11-06). 06-02 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 7건과 agy 2차 검토 지적 1건 반영 (2026-11-06). 07-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 14건과 agy 2차 검토 지적 5건 반영 (2026-11-08). 같은 날 generator 여섯 종 표와 각주를 보강했고 agy 2차 검토 지적 3건 가운데 2건을 반영했습니다. 08-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 12건과 agy 2차 검토 지적 5건 반영 (2026-11-08). 09-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 9건과 agy 2차 검토 지적 3건 반영 (2026-11-08). 09-02 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 7건과 agy 2차 검토 지적 4건 반영 (2026-11-08). 10-01 `verify-gate.sh --type=learning --style=jondae` 실패 항목 합계 0. 적대적 검증 지적 12건과 agy 2차 검토 지적 2건 반영 (2026-11-08). |
 | 원문 정오 누적 | 0 |
 | 버전 차이 기록 | 0 |
 | 복습 회차 | 0 |
