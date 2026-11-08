@@ -13,7 +13,7 @@ d = D(W, H, "ARGO CD UP AND RUNNING · 14-01 §5",
       "새 이미지 태그가 Application 에 반영되는 두 길",
       "Image Updater 는 레지스트리에서 새 태그를 찾고 ImageUpdater 리소스에 적은 전략으로 고른다. "
       "argocd 방식은 Application 의 helm 매개변수를 직접 고치고, git 방식은 추적 브랜치에 커밋한다. "
-      "어느 길이든 Argo CD 가 바뀐 소스를 동기화해 Deployment 의 이미지를 바꾼다.",
+      "argocd 방식은 바뀐 Application 매개변수를, git 방식은 새 Git 커밋을 Argo CD 가 받아 동기화해 Deployment 의 이미지를 바꾼다.",
       "태그 감시는 Image Updater 가, 동기화는 Argo CD 가 맡습니다")
 
 A_X, A_W = 24, 156
@@ -45,9 +45,10 @@ d.t(C_X + C_W / 2, BOT_Y + 58, "추적 브랜치에 커밋", 12, MUTED)
 d.t(C_X + C_W / 2, BOT_Y + 82, ".argocd-source-<app>.yaml", 11.5, MUTED, MONO)
 
 d.tone(D_X, 190, D_W, 120, ACC, 6, "14", 1.2)
-d.t(D_X + D_W / 2, 222, "Argo CD", 12.5, INK, KR, "middle", 600)
-d.t(D_X + D_W / 2, 252, "소스 변경 감지", 12, MUTED)
-d.t(D_X + D_W / 2, 276, "동기화", 12, MUTED)
+d.t(D_X + D_W / 2, 214, "Argo CD", 12.5, INK, KR, "middle", 600)
+d.t(D_X + D_W / 2, 240, "매개변수 변경 반영", 12, MUTED)
+d.t(D_X + D_W / 2, 268, "Git 커밋 반영", 12, MUTED)
+d.t(D_X + D_W / 2, 296, "동기화", 12, MUTED)
 
 d.path(f"M {A_X + A_W + 2} 250 L {B_X - 2} 250", MUTED, 1.4, m="ar")
 d.path(f"M {B_X + B_W + 2} 250 L 428 250 L 428 {TOP_Y + RH / 2} L {C_X - 2} {TOP_Y + RH / 2}", MUTED, 1.4, m="ar")

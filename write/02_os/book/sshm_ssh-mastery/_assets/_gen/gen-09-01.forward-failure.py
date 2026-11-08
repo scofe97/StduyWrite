@@ -1,18 +1,18 @@
 # 타입 스펙: type-flowchart
-# 사실 출처: 2026-11-07 실측 — 서버 AllowTcpForwarding local 에 -R 2224:127.0.0.1:18099 요청(경고 뒤 연결 유지, ExitOnForwardFailure=yes 면 종료 코드 255),
+# 사실 출처: 2026-11-07 실측 — 서버 AllowTcpForwarding local 에 -R 2224:127.0.0.1:18099 요청(no 면 Warning 만 내고 연결 유지, yes 면 Error 만 내고 종료 코드 255),
 #            OpenSSH V_10_6_P1 ssh_config.5 ExitOnForwardFailure.
-# 논지: 서버가 remote 포워딩을 거절하는 갈림길과, 그 뒤 ssh 가 연결을 끊을지 남길지의 갈림길.
+# 논지: 서버가 remote 포워딩을 거절하는 갈림길과, 거절 직후 ExitOnForwardFailure 가 연결을 끊을지 남길지 정하는 갈림길. ssh.c 1972~1988 (V_10_6_P1) 에서 Error(fatal)와 Warning(logit)은 서로 배타.
 import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 from dd import D, PAPER, PAPER2, RULE, INK, MUTED, SOFT, ACC, OK, WARN, BAD, KR, MONO
 
-W, H = 984, 648
+W, H = 984, 546
 CX = 300
 
 d = D(W, H, "FLOWCHART · 09-01 FORWARD FAILURE",
-      "서버가 -R 을 거절하면 ssh 는 경고를 내고 연결을 남긴다",
-      "ssh -N -R 요청이 서버에 닿으면 서버가 remote 포워딩을 허락하는지에 따라 갈립니다. 허락하면 수신 포트가 열립니다. "
-      "거절하면 ssh 는 Warning 을 내고, ExitOnForwardFailure 가 yes 이면 Error 와 종료 코드 255 로 끝나며 no 이면 포워딩 없는 연결이 남습니다.",
+      "서버가 -R 을 거절하면 ExitOnForwardFailure 가 ssh 의 행동을 정한다",
+      "ssh -N -R 요청이 서버에 닿으면 서버의 허락 여부에 따라 갈립니다. 허락하면 수신 포트가 열립니다. "
+      "거절되면 ExitOnForwardFailure 값에 따라 갈립니다. yes 이면 Error 와 종료 코드 255 로 즉시 끝나고, no(기본값)이면 Warning 을 내고 포워딩 없는 연결이 남습니다.",
       lead="갈림길은 둘입니다. 서버의 허락 여부, 그리고 ssh 의 ExitOnForwardFailure 입니다.")
 
 
@@ -47,25 +47,19 @@ diamond(CX, 224, 148, 44, "서버가 -R 을 허락하나?", "AllowTcpForwarding"
 d.arrow([(452, 224), (556, 224)], OK, "ok", 1.6)
 d.t(504, 216, "예", 12, OK, KR, "middle", 600)
 oval(560, 204, 320, 40, OK, "서버에 수신 포트가 열림")
-d.arrow([(CX, 268), (CX, 308)], SOFT, "soft", 1.4)
-d.t(CX - 8, 292, "아니오", 12, MUTED, KR, "end", 600)
+d.arrow([(CX, 268), (CX, 296)], SOFT, "soft", 1.4)
+d.t(CX - 8, 288, "아니오", 12, MUTED, KR, "end", 600)
 
-# 경고
-d.box(84, 312, 432, 60, PAPER2, RULE, 0.9)
-d.t(CX, 336, "Warning: remote port forwarding failed for listen port 2224", 11, INK, MONO, "middle", 600)
-d.t(CX, 358, "AllowTcpForwarding local 서버에서 측정 · 연결은 그대로", 11, MUTED, KR, "middle")
-d.arrow([(CX, 372), (CX, 404)], SOFT, "soft", 1.4)
+# 갈림길 2: ExitOnForwardFailure — 거절 직후 ssh 가 판단하며 Error 와 Warning 은 서로 배타다
+diamond(CX, 340, 148, 44, "ExitOnForwardFailure", "= yes ?", True, True)
+d.arrow([(452, 340), (516, 340)], BAD, "bad", 1.6)
+d.t(484, 332, "예", 12, BAD, KR, "middle", 600)
+oval(520, 308, 432, 64, BAD, "Error: remote port forwarding failed for listen port 2224", "종료 코드 255 · 연결 종료", True)
+d.arrow([(CX, 384), (CX, 420)], SOFT, "soft", 1.4)
+d.t(CX - 8, 408, "아니오", 12, MUTED, KR, "end", 600)
+oval(84, 420, 432, 64, WARN, "Warning: remote port forwarding failed for listen port 2224", "포워딩 없는 연결이 남음 · -N 이면 셸도 없는 빈 연결", True)
 
-# 갈림길 2: ExitOnForwardFailure — 본문이 짚는 한 곳
-diamond(CX, 452, 148, 44, "ExitOnForwardFailure", "= yes ?", True, True)
-d.arrow([(452, 452), (516, 452)], BAD, "bad", 1.6)
-d.t(484, 444, "예", 12, BAD, KR, "middle", 600)
-oval(520, 420, 432, 64, BAD, "Error: remote port forwarding failed for listen port 2224", "종료 코드 255 · 연결 종료", True)
-d.arrow([(CX, 496), (CX, 528)], SOFT, "soft", 1.4)
-d.t(CX - 8, 516, "아니오", 12, MUTED, KR, "end", 600)
-oval(140, 530, 320, 56, WARN, "포워딩 없는 연결이 남음", "-N 이면 셸도 없는 빈 연결")
-
-d.legend(600, [("포워딩 성공", OK), ("연결이 남음", WARN), ("ssh 가 종료", BAD), ("본문이 짚는 갈림길", ACC)])
+d.legend(498, [("포워딩 성공", OK), ("연결이 남음", WARN), ("ssh 가 종료", BAD), ("본문이 짚는 갈림길", ACC)])
 svg_path = pathlib.Path(__file__).resolve().parent.parent / "09-01.forward-failure.svg"
 d.save(str(svg_path))
 print("ok 09-01 forward-failure")

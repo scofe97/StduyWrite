@@ -1,6 +1,6 @@
 # 타입 스펙: type-architecture
 # 사실 출처: RFC 4254 §7, OpenSSH V_10_6_P1 ssh.1, 2026-11-07 실측
-# 열 머리의 절 번호는 노트 본문의 ## 번호와 맞춘다(1 세 방향, 2 리버스 터널, 3 수신 주소·허용 범위, 4 채널 메시지, 5 터널 풀)
+# 열 머리는 기능 분류(수신 지점·채널·목적지)만 쓴다. 절 대응(1 세 방향, 2 리버스 터널, 3 수신 주소·허용 범위, 4 채널 메시지, 5 터널 풀)은 본문 문단이 설명한다
 import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, INFO, KR, MONO
@@ -23,7 +23,7 @@ d = D(W, H, "ARCHITECTURE · 09-01 OVERVIEW",
       "09-01 의 개념도입니다. 첫 줄은 클라이언트가 포트를 열고 서버가 목적지에 연결하는 local 포워딩입니다. "
       "둘째 줄은 서버가 포트를 열고 클라이언트 쪽이 목적지에 연결하는 remote 포워딩입니다. "
       "셋째 줄은 클라이언트가 SOCKS 프록시로 포트를 열고 서버가 요청이 정한 주소에 연결하는 dynamic 포워딩입니다.",
-      lead="왼쪽 칩은 ssh 옵션, 열 머리의 숫자는 그 열을 다루는 절입니다.")
+      lead="왼쪽 칩은 ssh 옵션입니다.")
 
 def node(i, j, title, sub, c=None):
     x, y = nx(j), ny(i)
@@ -45,7 +45,7 @@ def harrow(i, j, label, c=SOFT, m="soft"):
 for i, opt in enumerate(("-L", "-R", "-D")):
     d.chip(34, ny(i) + NH / 2 - 4, opt, MUTED, 11, 4)
 
-for j, lab in enumerate(("수신 지점 · 3절", "채널 · 4절", "목적지 · 1절")):
+for j, lab in enumerate(("수신 지점", "채널", "목적지")):
     d.t(nx(j) + NW / 2, 100, lab, 11, SOFT, KR, "middle", 600)
 d.t(nx(0), ny(1) + NH + 24, "리버스 터널 · 2절 · 5절", 11, MUTED, KR, "start", 600)
 
