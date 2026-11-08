@@ -1,6 +1,7 @@
 # 04-01.probe-states — 프로브 결과가 컨테이너의 상태를 옮긴다
 # 본문 요구: "startup 이 성공하면 readiness 가 Ready 를 켜고, readiness 가 failureThreshold 번 연속 실패하면 Ready=False 로
-#           트래픽에서만 빠지고, liveness 나 startup 이 failureThreshold 번 실패하면 컨테이너가 재시작한다"
+#           트래픽에서만 빠지고, liveness 나 startup 이 failureThreshold 번 실패하면 컨테이너가 재시작한다.
+#           liveness 는 Ready 값과 별개로 계속 돌아 Ready=True·Ready=False 어느 쪽에서든 재시작으로 간다"
 # 타입 스펙: type-state.md — 상태와 전이 조건이 요점이라 상태도로 그린다. 컨테이너를 죽이는 재시작 상태에만 focal 을 건다.
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
@@ -8,7 +9,7 @@ from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER
 W, H = 1000, 536
 d = D(W, H, "PROBE STATES · WHAT MOVES A CONTAINER",
       "프로브 결과가 Ready 와 재시작 사이를 옮긴다",
-      "startup 이 통과한 뒤 readiness 가 성공하면 Ready=True 가 되고(readiness 프로브가 없으면 startup 통과가 곧 Ready=True), readiness 실패는 Ready=False 로 트래픽에서만 뺀다. startup 이나 liveness 가 실패 횟수를 채우면 컨테이너를 재시작한다.",
+      "startup 이 통과한 뒤 readiness 가 성공하면 Ready=True 가 되고(readiness 프로브가 없으면 startup 통과가 곧 Ready=True), readiness 실패는 Ready=False 로 트래픽에서만 뺀다. startup 이나 liveness 가 실패 횟수를 채우면 Ready 값과 상관없이 컨테이너를 재시작한다.",
       lead="readiness 는 Ready 를 오가게 하고 재시작으로 가는 길은 startup 과 liveness 뿐이다")
 
 SW, SH = 176, 64
@@ -44,6 +45,8 @@ d.arrow([(160, 252), (160, 388), (234, 388)], ACC, "acc", 1.5)
 d.t(170, 330, "startup 실패", 11, ACC, KR, "start", 600)
 d.arrow([(500, 252), (500, 388), (426, 388)], ACC, "acc", 1.5)
 d.t(510, 330, "liveness 실패", 11, ACC, KR, "start", 600)
+d.arrow([(840, 252), (840, 404), (426, 404)], ACC, "acc", 1.5)
+d.t(850, 330, "liveness 실패", 11, ACC, KR, "start", 600)
 d.arrow([(300, 356), (300, 300), (210, 300), (210, 256)], MUTED, "ar", 1.4)
 d.t(312, 330, "컨테이너 재생성", 11, MUTED, KR, "start")
 
