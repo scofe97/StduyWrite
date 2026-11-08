@@ -424,7 +424,7 @@ updated: 2026-11-03
 
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
-| dual-stack · `ipFamilyPolicy` | 추천 | [Dual Stack](../08_cloud/book/networking-and-kubernetes/04-03.NetworkPolicy%EC%99%80%20DNS%20%E2%80%94%20%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%95%88%EC%9D%98%20%EB%B0%A9%ED%99%94%EB%B2%BD%EA%B3%BC%20%EC%9D%B4%EB%A6%84.md#6-dual-stack-ipv4%EC%99%80-ipv6%EB%A5%BC-%ED%95%A8%EA%BB%98) | |
+| dual-stack · `ipFamilyPolicy` | 추천 | [Dual Stack](../08_cloud/book/networking-and-kubernetes/04-03.NetworkPolicy%EC%99%80%20DNS%20%E2%80%94%20%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%95%88%EC%9D%98%20%EB%B0%A9%ED%99%94%EB%B2%BD%EA%B3%BC%20%EC%9D%B4%EB%A6%84.md#ipfamilypolicy-%EC%99%80-%EA%B8%B0%EB%B3%B8%EA%B0%92-%EA%B7%BC%EA%B1%B0) | |
 | NAT64 · DNS64 — IPv6 단일 스택에서 IPv4 에 닿기 | 선택 | | [RFC 6146](https://www.rfc-editor.org/rfc/rfc6146) · [RFC 6147](https://www.rfc-editor.org/rfc/rfc6147) |
 | topology-aware routing · EndpointSlice hint | 추천 | [topology-aware hints](../08_cloud/book/kubernetes-in-action/11-03.%EC%97%94%EB%93%9C%ED%8F%AC%EC%9D%B8%ED%8A%B8%C2%B7DNS%C2%B7%ED%86%A0%ED%8F%B4%EB%A1%9C%EC%A7%80%C2%B7readiness.md#topology-aware-hints-%EC%A1%B4-%EC%9A%B0%EC%84%A0) | |
 | 서비스 메시가 인프라로 밀어낸 것 | 추천 | [메시가 밀어낸 것](../08_cloud/book/istio-in-action/01-01.%EC%84%9C%EB%B9%84%EC%8A%A4%20%EB%A9%94%EC%8B%9C%EB%8A%94%20%EB%AC%B4%EC%97%87%EC%9D%84%20%EC%9D%B8%ED%94%84%EB%9D%BC%EB%A1%9C%20%EB%B0%80%EC%96%B4%EB%83%88%EB%8A%94%EA%B0%80.md) | Istio in Action 1장 |

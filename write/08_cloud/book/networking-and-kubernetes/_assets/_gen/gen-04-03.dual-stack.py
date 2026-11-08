@@ -7,10 +7,10 @@ from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, BAD, INFO, PAPER, PAPER2, KR,
 
 W, H = 1000, 472
 d = D(W, H, "DUAL STACK · TWO LAYERS DECIDE TOGETHER",
-      "서비스가 어느 패밀리로 뜨는지는 두 층이 함께 정한다",
+      "서비스가 어느 계열로 뜨는지는 두 층이 함께 정한다",
       "클러스터가 dual-stack 인지와 서비스의 ipFamilyPolicy 가 무엇인지가 만나 결과가 정해지며, "
       "기본값 SingleStack 은 어느 클러스터에서도 뜨기 때문에 기본이다.",
-      lead="클러스터에 IPv6 를 켜는 결정과 서비스 하나의 패밀리 선택은 다른 층")
+      lead="클러스터에 IPv6 를 켜는 결정과 서비스 하나의 계열 선택은 다른 층")
 
 X0, GAP = 32, 16
 COLS = [(280, "서비스가 고른 값"), (304, "클러스터가 단일 스택이면"), (304, "클러스터가 dual-stack 이면")]
@@ -24,7 +24,7 @@ d.line(XS[1][0], HY + 8, XS[1][0] + XS[1][1], HY + 8, ACC, 1.4)
 
 ROWS = [("SingleStack", "기본값", OK, [("주소 하나", OK), ("주소 하나", OK)]),
         ("PreferDualStack", "옮겨 다닐 매니페스트", INFO, [("SingleStack 처럼 동작", OK), ("주소 둘", INFO)]),
-        ("RequireDualStack", "dual-stack 확인된 자리", BAD, [("할당 실패", BAD), ("주소 둘", OK)])]
+        ("RequireDualStack", "dual-stack 확인된 자리", BAD, [("생성 실패|selector 없는 headless 는 예외", BAD), ("주소 둘", OK)])]
 
 for r, (pol, sub, pc, cells) in enumerate(ROWS):
     y = RY0 + r * (RH + GAP)
@@ -35,7 +35,12 @@ for r, (pol, sub, pc, cells) in enumerate(ROWS):
     for i, (txt, c) in enumerate(cells, 1):
         cx0, cw = XS[i]
         d.o.append(f'<rect x="{cx0}" y="{y}" width="{cw}" height="{RH}" rx="6" fill="{c}12" stroke="{c}" stroke-width="1.1"/>')
-        d.t(cx0 + cw // 2, y + 41, txt, 13, c, KR, "middle", 600)
+        main, _, note = txt.partition("|")
+        if note:
+            d.t(cx0 + cw // 2, y + 34, main, 13, c, KR, "middle", 600)
+            d.t(cx0 + cw // 2, y + 56, note, 12, MUTED, KR, "middle")
+        else:
+            d.t(cx0 + cw // 2, y + 41, main, 13, c, KR, "middle", 600)
 
 d.legend(424, [("어디서나 성공", OK), ("되면 주소 둘", INFO), ("조건 불일치 시 실패", BAD), ("기본값을 가르는 열", ACC)])
 d.save("04-03.dual-stack.svg")

@@ -39,7 +39,7 @@ def links(y, ing, egr):
 STEPS = [
     ("1 · 정책 없음", OK, None, (("ingress 열림", OK), ("egress 열림", OK)), ["기본 전부 허용"], INK),
     ("2 · demo-db 선택 · 규칙 비움", BAD, "선택됨", (("ingress 막힘", BAD), ("egress 막힘", BAD)), ["규칙 0줄", "DNS 질의도 차단"], BAD),
-    ("3 · ingress 에 app=demo 허용 추가", INFO, "선택됨", (("허용된 예외 하나", OK), ("egress 막힘 유지", BAD)), ["허용만 추가 가능", "차단 규칙 표현 불가"], INFO),
+    ("3 · ingress 에 app=demo · 80 허용 추가", INFO, "선택됨", (("허용된 예외 하나", OK), ("egress 막힘 유지", BAD)), ["허용만 추가 가능", "차단 규칙 표현 불가"], INFO),
 ]
 for i, (title, tc, dbsub, (ing, egr), notes, dbc) in enumerate(STEPS):
     y = Y0 + i * STRIDE
