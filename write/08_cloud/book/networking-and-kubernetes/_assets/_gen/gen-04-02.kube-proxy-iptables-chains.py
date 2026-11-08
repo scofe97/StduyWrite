@@ -8,8 +8,9 @@ from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER
 W, H = 1000, 604
 d = D(W, H, "kube-proxy · ClusterIP TO POD",
       "ClusterIP 로 온 패킷이 실제 Pod 주소로 바뀌기까지의 체인",
-      "앞의 세 체인은 어디로 갈지만 고르고, 목적지를 실제로 바꾸는 것은 마지막 엔드포인트 체인이다.",
-      lead="앞의 셋은 고르기만 하고, 목적지를 바꾸는 것은 마지막 하나다")
+      "앞의 두 체인은 어디로 갈지만 고르고, 목적지를 실제로 바꾸는 것은 마지막 엔드포인트 체인이다. "
+      "엔드포인트의 10.0.1.141 은 원서 예의 CoreDNS Pod 주소이고 다른 도식의 주소와는 다른 클러스터 예시다.",
+      lead="앞의 둘은 고르기만 하고, 목적지를 바꾸는 것은 마지막 하나다")
 
 BW, BH, GAP = 160, 108, 28
 EP_W = 296
@@ -17,7 +18,7 @@ CX = [40 + BW // 2 + i * (BW + GAP) for i in range(3)]           # 120 308 496
 EP_X, EP_Y = 812, (280, 430)
 CY = 300
 
-def box(cx, cy, t, s, tag, c=None, focal=False, w=BW):
+def box(cx, cy, t, s, tag, c=None, focal=False, w=BW, extra=None):
     x, y = cx - w // 2, cy - BH // 2
     if focal:
         d.o.append(f'<rect x="{x}" y="{y}" width="{w}" height="{BH}" rx="6" '
@@ -27,15 +28,17 @@ def box(cx, cy, t, s, tag, c=None, focal=False, w=BW):
     d.t(cx, cy - 22, ddx.fit(t, 13, w - 18, t), 13, tc, KR, "middle", 600)
     d.t(cx, cy + 0, ddx.fit(s, 11, w - 16, s), 11, MUTED,
         MONO if all(ord(ch) < 128 or ch in ':.…-' for ch in s) else KR)
-    d.t(cx, cy + 26, ddx.fit(tag, 11, w - 14, tag), 11, SOFT, KR)
+    d.t(cx, cy + (20 if extra else 26), ddx.fit(tag, 11, w - 14, tag), 11, SOFT, KR)
+    if extra:
+        d.t(cx, cy + 38, ddx.fit(extra, 11, w - 14, extra), 11, SOFT, KR)
 
 ddx.band(d, 104, 540, "확률은 서비스 체인 · DNAT 는 엔드포인트 체인")
 for cx, s in zip(CX + [EP_X], ["1 도착", "2 진입 체인", "3 서비스 체인", "4 엔드포인트 체인"]):
     d.t(cx, 196, s, 12, SOFT, KR, "middle", 600)
 
 box(CX[0], CY, "패킷", "10.96.0.10:53", "kube-dns ClusterIP", INFO)
-box(CX[1], CY, "진입 체인", "KUBE-SERVICES", "밖 출발지 MASQ 표시")
-box(CX[2], CY, "서비스 체인", "KUBE-SVC-TCOU7…", "확률 규칙이 여기")
+box(CX[1], CY, "진입 체인", "KUBE-SERVICES", "서비스 주소로 가름")
+box(CX[2], CY, "서비스 체인", "KUBE-SVC-TCOU7…", "확률 규칙이 여기", extra="밖 출발지 MASQ 표시")
 # focal 은 한 곳 — 엔드포인트 둘을 한 묶음으로 감싸 "목적지가 바뀌는 자리" 하나로 센다
 d.tone(EP_X - EP_W // 2 - 4, EP_Y[0] - BH // 2 - 12, EP_W + 8, EP_Y[1] - EP_Y[0] + BH + 24, ACC, 8, "0A", 1.4)
 box(EP_X, EP_Y[0], "엔드포인트 A", "DNAT 10.0.1.141:53", "먼저 평가되는 규칙", w=EP_W)
