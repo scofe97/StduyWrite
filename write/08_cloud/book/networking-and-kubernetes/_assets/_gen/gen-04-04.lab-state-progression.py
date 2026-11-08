@@ -1,6 +1,6 @@
 # 04-04.lab-state-progression — 실습이 클러스터를 어느 상태로 밀고 가는가
-# 본문 요구: 실습 문서에 도식이 한 장도 없어 묶음이 서로 무관한 명령 더미로 읽힌다.
-#           묶음은 클러스터 상태를 한 칸씩 옮기는 전이이고, 지금 어디까지 왔는지가 보여야 한다.
+# 본문 요구: `### 실습 상태` — 묶음 1~5 는 클러스터 상태를 한 칸씩 옮기는 전이이고, 묶음 6~8 은 그 끝 상태에서 이름·L7·노드 밖을 관측한다.
+#           여덟 묶음이 모두 실행됐고(2026-09, 묶음 1~7 은 2026-11-08 재실행) 상태마다 실제로 본 값이 보여야 한다.
 # 타입 스펙: type-state.md — 주체 하나(클러스터)의 상태 전이. 전이 라벨은 event [guard] 꼴,
 #           coral 은 독자가 주목할 상태 하나에만 — 여기서는 실습이 실제로 도달한 마지막 상태.
 import dd, ddx
@@ -21,13 +21,13 @@ STATES = [
     ("CNI 없음", "노드 NotReady · CoreDNS Pending", True,
      "/etc/cni/net.d 비어 있음", "노드 셋 다 NotReady · 묶음 1"),
     ("CNI 설치됨", "노드 Ready · podCIDR 수령", True,
-     "10.244.0.0/24 · 10.244.2.0/24 · 10.244.1.0/24", "05-cilium.conflist 하나 · 묶음 2"),
+     "10.244.0.0/24 · 10.244.2.0/24 · 10.244.1.0/24", "05-cilium.conflist 하나 · 번호는 매번 다름 · 묶음 2"),
     ("서비스 → 규칙", "SVC 체인 하나 + SEP 체인 셋", True,
      "확률 0.33333333349 → 0.5 → 없음", "세 노드 모두 default/web 11줄 · 묶음 3"),
     ("명단에서 제외", "들어오는 길만 차단", True,
-     "낙하 8초 · 복귀 1~4초", "SEP 체인 미생성 · 묶음 4"),
+     "낙하 8초(09) · 9.9초(11-08)", "복귀 1~4초 · 3.3초 · SEP 체인 미생성 · 묶음 4"),
     ("정책 선택 · 잠김", "허용한 것만 통과", True,
-     "들어오는 쪽 000 5s · 나가는 쪽 bad address", "정책 합집합 · 묶음 5"),
+     "들어오는 쪽 000 · 나가는 쪽 bad address", "정책 합집합 · 묶음 5"),
 ]
 EVENTS = [
     "helm install cilium  [ipam.mode=kubernetes]",
@@ -63,17 +63,16 @@ for i, (title, sub, done, o1, o2) in enumerate(STATES):
 
     if i < len(EVENTS):
         y1, y2 = cy + BH / 2, CYS[i + 1] - BH / 2 - 4
-        c = SOFT if i >= 3 else MUTED
-        d.path(f"M {CXX} {y1} L {CXX} {y2}", c, 1.4, m="soft" if c == SOFT else "ar",
-               dash="4 4" if i >= 3 else None)
+        c = MUTED
+        d.path(f"M {CXX} {y1} L {CXX} {y2}", c, 1.4, m="ar")
         d.t(CXX + 14, (y1 + y2) / 2 + 4,
             ddx.fit(EVENTS[i], 11, W - 48 - (CXX + 14), f"ev {i}"), 11, c, MONO, "start")
 
-d.path(f"M {CXX} {CYS[-1]+BH/2} L {CXX} 572", SOFT, 1.4, dash="4 4")
-d.o.append(f'<circle cx="{CXX}" cy="580" r="8" fill="none" stroke="{SOFT}" stroke-width="1.2"/>')
-d.o.append(f'<circle cx="{CXX}" cy="580" r="5" fill="{SOFT}"/>')
-d.t(CXX + 20, 584, "묶음 6~8 · 이름 · L7 · 노드 밖 · 모두 완료", 12, SOFT, KR, "start")
+d.path(f"M {CXX} {CYS[-1]+BH/2} L {CXX} 572", MUTED, 1.4)
+d.o.append(f'<circle cx="{CXX}" cy="580" r="8" fill="none" stroke="{MUTED}" stroke-width="1.2"/>')
+d.o.append(f'<circle cx="{CXX}" cy="580" r="5" fill="{MUTED}"/>')
+d.t(CXX + 20, 584, "묶음 6~8 은 정책을 걷고 이름 · L7 · 노드 밖을 관측", 12, MUTED, KR, "start")
 
-d.legend(612, [("실행해서 값을 본 상태", INFO), ("지금 도달한 자리", ACC), ("아직 실행 전", SOFT)])
+d.legend(612, [("실행해서 값을 본 상태", INFO), ("마지막으로 도달한 상태", ACC)])
 d.save("04-04.lab-state-progression.svg")
 print("ok lab-state-progression")

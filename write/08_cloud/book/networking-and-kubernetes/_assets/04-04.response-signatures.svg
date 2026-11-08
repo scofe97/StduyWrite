@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">응답 코드는 어디서 멈췄는지를 알려 줍니다</title><desc id="dd">Cilium L7 정책 하나가 만드는 응답 서명 셋. cart 의 GET / 는 출발지 목록에 없어 커널에서 버려져 000 과 3.00초 타임아웃이 된다. demo 의 GET /health 는 Envoy 까지 가서 Access denied 와 403 을 받는다. demo 의 GET / 는 nginx 까지 가서 200 을 받는다. 넓은 표준 정책을 옆에 두면 /health 는 404 로 바뀐다.</desc>
+<rect width="1000" height="600" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">ARCHITECTURE · 04-04 RESPONSE SIGNATURES</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">응답 코드는 어디서 멈췄는지를 알려 줍니다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">화살표가 멈춘 존이 곧 서명입니다</text>
+<rect x="206" y="132" width="180" height="368" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="296.0" y="156" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">커널</text>
+<text x="296.0" y="176" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">출발지 판정 · L3 L4</text>
+<rect x="402" y="132" width="180" height="368" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="492.0" y="156" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F5F5F3">Envoy</text>
+<text x="492.0" y="176" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">경로 판정 · L7</text>
+<rect x="598" y="132" width="180" height="368" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="688.0" y="156" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F5F5F3">nginx</text>
+<text x="688.0" y="176" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">demo-db 서버</text>
+<text x="891.0" y="156" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">받은 서명</text>
+<text x="100.0" y="156" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">요청</text>
+<rect x="24" y="222" width="152" height="56" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="40" y="246" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">cart</text>
+<text x="40" y="267" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">GET /</text>
+<path d="M 178 250 L 288.0 250" fill="none" stroke="#8B98A9" stroke-width="1.6" marker-end="url(#ar)"/>
+<line x1="290.0" y1="243" x2="304.0" y2="257" stroke="#F0616D" stroke-width="2.0"/>
+<line x1="290.0" y1="257" x2="304.0" y2="243" stroke="#F0616D" stroke-width="2.0"/>
+<text x="296.0" y="236" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F0616D">목록에 없음 → 버림</text>
+<line x1="310.0" y1="250" x2="800" y2="250" stroke="#5E6B7E" stroke-width="1.0" stroke-dasharray="4 4"/>
+<rect x="806" y="218" width="170" height="64" rx="8" fill="#F0616D14" stroke="#F0616D" stroke-width="1.1"/>
+<text x="891.0" y="248" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="20" font-weight="600" fill="#F0616D">000</text>
+<text x="891.0" y="271" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">3.00s 타임아웃</text>
+<rect x="24" y="322" width="152" height="56" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="40" y="346" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">demo</text>
+<text x="40" y="367" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">GET /health</text>
+<path d="M 178 350 L 484.0 350" fill="none" stroke="#F08A59" stroke-width="1.6" marker-end="url(#acc)"/>
+<text x="492.0" y="336" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">정책에 없는 경로 → 거절</text>
+<line x1="506.0" y1="350" x2="800" y2="350" stroke="#5E6B7E" stroke-width="1.0" stroke-dasharray="4 4"/>
+<rect x="806" y="318" width="170" height="64" rx="8" fill="#F08A591F" stroke="#F08A59" stroke-width="1.6"/>
+<text x="891.0" y="348" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="20" font-weight="600" fill="#F08A59">403</text>
+<text x="891.0" y="371" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">Access denied · envoy</text>
+<rect x="24" y="422" width="152" height="56" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="40" y="446" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">demo</text>
+<text x="40" y="467" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">GET /</text>
+<path d="M 178 450 L 680.0 450" fill="none" stroke="#8B98A9" stroke-width="1.6" marker-end="url(#ar)"/>
+<text x="688.0" y="436" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">경로 허용 → 서버로</text>
+<line x1="702.0" y1="450" x2="800" y2="450" stroke="#5E6B7E" stroke-width="1.0" stroke-dasharray="4 4"/>
+<rect x="806" y="418" width="170" height="64" rx="8" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="891.0" y="448" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="20" font-weight="600" fill="#3FB98C">200</text>
+<text x="891.0" y="471" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">nginx 응답</text>
+<text x="24" y="528" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">넓은 표준 정책을 옆에 두면 /health 403 → 404 (nginx 응답 · L7 제약 사라짐)</text>
+<line x1="12" y1="548" x2="952" y2="548" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="570" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="560" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="570" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">서버까지 간 응답</text>
+<rect x="261" y="560" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="283" y="570" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">출발지 판정에서 버려짐</text>
+<rect x="461" y="560" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="483" y="570" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">프록시에서 끝난 응답</text>
+</svg>
