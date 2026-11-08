@@ -1,70 +1,60 @@
-# 45-02 ### 1 — 클라이언트는 지원 목록과 키 교환 값을 보내고, 서버는 선택과 키 교환 값으로 답한 뒤 그 이후 메시지를 암호화해 인증서·서명을 보내며, 양쪽이 확인값을 주고받는다.
-# 본문 근거: 이 노트 ### 1 「TLS 는 연결마다 새 대칭 키를 인증된 Diffie-Hellman 으로 만든다」.
-# 검증 근거: openssl 3.6.4 s_client -msg 로 메시지 순서를 실측 — ClientHello, ServerHello, EncryptedExtensions, Certificate, CertificateVerify, Finished(서버), Finished(클라이언트).
-# 공식 근거: RFC 9846 §2(핸드셰이크 세 단계: Key Exchange·Server Parameters·Authentication, "Everything after this phase is encrypted"), §4.4~§4.5. OSTEP 57장 §57.5.
-# 타입 스펙: type-swimlane — 두 레인(클라이언트 쪽·서버 쪽), 레인 사이 세로 전달.
+# 45-02 §3 — 클라이언트가 지원 목록과 키 교환 값을 보내고, 서버가 선택과 키 교환 값으로 답한 뒤 그 이후 메시지를 암호화해 인증서와 서명을 보내며, 양쪽이 확인값을 주고받는다.
+# 본문 근거: 이 노트 §3 「핸드셰이크 세 단계와 클라이언트 인증」의 소절 「세 단계로 나뉜 핸드셰이크」.
+# 검증 근거: 2026-11-08 openssl 3.6.4 s_client -msg 로 메시지 순서를 실측 — ClientHello, ServerHello, EncryptedExtensions, Certificate, CertificateVerify, Finished(서버), Finished(클라이언트).
+#            협상값 TLSv1.3 · TLS_AES_256_GCM_SHA384 · 그룹 X25519MLKEM768 은 같은 실측의 출력(정답 3 과 각주 grp).
+# 공식 근거: RFC 9846 §2(핸드셰이크 세 단계 Key Exchange·Server Parameters·Authentication, "Everything after this phase is encrypted"), §4.5.2(CertificateVerify).
+# 타입 스펙: type-sequence — 참여자 둘(클라이언트 · 서버)의 시간순 메시지. 틀로 세 단계를 가르고 점선 경계로 암호화가 시작되는 자리를 보인다.
 import sys; sys.path.insert(0, ".")
-from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, OK, WARN, BAD, INFO, KR, MONO
+from dd import D, ACC, INK, MUTED, SOFT, RULE, PAPER2, OK, INFO, KR, MONO
 
-W, H = 880, 440
-d = D(W, H, "OSTEP · 45-02 §1",
-      "TLS 핸드셰이크는 키 교환, 서버 매개변수, 인증의 세 단계로 흐른다",
-      "클라이언트가 지원 목록과 키 교환 값을 보내면 서버가 선택한 값과 자기 키 교환 값으로 답하고, 이 뒤의 메시지는 암호화된다. "
-      "서버는 이어서 서버 매개변수와 인증서와 서명과 확인값을 보내고, 클라이언트는 인증서와 서명을 확인한 뒤 자기 확인값을 보낸다.",
-      "서버의 서명까지 확인해야 믿을 수 있는 통로가 서고, 비밀번호는 그 안에서 보냅니다")
-
-BW, BH, PITCH, X0 = 148, 72, 172, 16
-LANE_X, LANE_W, LANE_H = 12, 856, 128
-A_Y, B_Y = 96, 244
-GAP_Y = 234
+W, H = 880, 732
+LW, LH, LY = 200, 44, 96
+X_C, X_S = 140, 740
+d = D(W, H, "OSTEP · 45-02 §3",
+      "핸드셰이크는 키 교환 뒤부터 암호화되고 서버의 서명으로 인증한다",
+      "클라이언트가 ClientHello 로 지원 목록과 키 교환 값을 보내면 서버가 ServerHello 로 고른 암호 모음과 자기 키 교환 값을 답한다. 여기까지가 키 교환 단계이고 이 뒤의 메시지는 암호화된다. "
+      "서버 매개변수 단계에서 서버가 EncryptedExtensions 를 보내고, 인증 단계에서 Certificate 와 CertificateVerify 와 Finished 를 보낸다. 클라이언트가 자기 Finished 를 보내면 끝난다. "
+      "협상된 값은 TLS 1.3 이고 암호 모음은 TLS_AES_256_GCM_SHA384 이며 키 교환 그룹은 X25519MLKEM768 이다.",
+      "서버만 서명하고, 클라이언트는 이 통로가 선 뒤에 비밀번호를 보낸다")
 
 
-def lane(y, name):
-    d.o.append(f'<rect x="{LANE_X}" y="{y}" width="{LANE_W}" height="{LANE_H}" rx="8" fill="{SOFT}0A" stroke="{SOFT}" stroke-width="0.9"/>')
-    d.t(LANE_X + 12, y + 20, name, 12, MUTED, KR, "start", 600)
+def msg(x1, x2, y, label, c=INK, mk="ar", dash=None, sub=None):
+    sgn = 1 if x2 > x1 else -1
+    d.arrow([(x1 + 10 * sgn, y), (x2 - 12 * sgn, y)], c, mk, 1.5, dash)
+    d.t((x1 + x2) / 2, y - 9, label, 12, c, MONO, "middle", 600)
+    if sub:
+        d.t((x1 + x2) / 2, y + 18, sub, 12, MUTED, KR if any("가" <= ch <= "힣" for ch in sub) else MONO)
 
 
-def box(col, y, title, sub, c):
-    x = X0 + col * PITCH
-    by = y + 40
-    d.tone(x, by, BW, BH, c, 6, "14", 1.4 if c == OK else 1.1)
-    if isinstance(sub, tuple):
-        d.t(x + BW / 2, by + 24, title, 12.5, INK, KR, "middle", 600)
-        d.t(x + BW / 2, by + 44, sub[0], 12, MUTED, KR)
-        d.t(x + BW / 2, by + 62, sub[1], 12, MUTED, KR)
-    else:
-        d.t(x + BW / 2, by + 30, title, 12.5, INK, KR, "middle", 600)
-        d.t(x + BW / 2, by + 52, sub, 12, MUTED, KR)
-    return x + BW / 2, by
+def frame(y1, y2, name, w=84):
+    d.o.append(f'<rect x="24" y="{y1}" width="832" height="{y2 - y1}" rx="4" fill="{INK}08" stroke="{SOFT}" stroke-width="0.9"/>')
+    d.o.append(f'<rect x="24" y="{y1}" width="{w}" height="22" rx="2" fill="#0D1117" stroke="{SOFT}" stroke-width="0.9"/>')
+    d.t(24 + w / 2, y1 + 16, name, 12, MUTED, KR, "middle", 600)
 
 
-def hflow(col, y):
-    x = X0 + col * PITCH
-    d.path(f"M {x + BW + 2} {y + 40 + BH / 2} L {x + PITCH - 2} {y + 40 + BH / 2}", MUTED, 1.4, m="ar")
+for x, name, sub in ((X_C, "클라이언트", "브라우저 · s_client"), (X_S, "서버", "인증서와 개인 키 보유")):
+    d.box(x - LW / 2, LY, LW, LH, PAPER2, RULE, 1.0, 6)
+    d.t(x, LY + 20, name, 13, INK, KR, "middle", 600)
+    d.t(x, LY + 37, sub, 12, MUTED, KR)
+    d.line(x, LY + LH + 6, x, H - 24, RULE, 1.0, "3 6")
 
+# 1 키 교환
+frame(160, 304, "키 교환")
+msg(X_C, X_S, 208, "ClientHello", INK, "ar", None, "supported_groups · key_share")
+msg(X_S, X_C, 268, "ServerHello", INK, "ar", None, "TLS_AES_256_GCM_SHA384 · key_share")
+d.line(24, 320, 856, 320, ACC, 1.0, "5 4")
+d.chip(440, 320, "여기서부터 암호화", ACC, 12, 8)
 
-lane(A_Y, "클라이언트 쪽")
-lane(B_Y, "서버 쪽")
+# 2 서버 매개변수
+frame(336, 412, "서버 매개변수", 108)
+msg(X_S, X_C, 384, "EncryptedExtensions", MUTED, "ar", "5 4")
 
-a0x, a0y = box(0, A_Y, "지원 목록과 키 교환 값", "ClientHello", INFO)
-b1x, b1y = box(1, B_Y, "선택과 키 교환 값", "ServerHello", INFO)
-b2x, b2y = box(2, B_Y, "서버 매개변수", "EncryptedExtensions", SOFT)
-b3x, b3y = box(3, B_Y, "인증서와 서명", ("Certificate", "CertificateVerify"), OK)
-b4x, b4y = box(4, B_Y, "서버 확인값", "Finished", OK)
-a3x, a3y = box(3, A_Y, "인증서·서명 확인", "미리 가진 CA 키", OK)
-a4x, a4y = box(4, A_Y, "클라이언트 확인값", "Finished", OK)
+# 3 인증
+frame(428, 712, "인증", 52)
+msg(X_S, X_C, 476, "Certificate", MUTED, "ar", "5 4", "서버의 공개 키가 든 인증서")
+msg(X_S, X_C, 536, "CertificateVerify", ACC, "acc", "5 4", "핸드셰이크 기록에 개인 키로 서명")
+msg(X_S, X_C, 596, "Finished", MUTED, "ar", "5 4", "확인값")
+msg(X_C, X_S, 656, "Finished", MUTED, "ar", "5 4", "확인값")
+d.chip(X_C, 696, "비밀번호는 이 뒤에", OK, 12, 8)
 
-# 클라이언트 → 서버 (ClientHello 에서 ServerHello 로, 레인 사이 틈으로 꺾어 내려감)
-d.arrow([(a0x, a0y + BH + 3), (a0x, GAP_Y), (b1x, GAP_Y), (b1x, b1y - 3)], MUTED, "ar", 1.4)
-# 서버 쪽 흐름
-hflow(1, B_Y); hflow(2, B_Y); hflow(3, B_Y)
-# 서버 → 클라이언트 (서명 확인, 확인값)
-d.arrow([(b3x, b3y - 3), (b3x, a3y + BH + 3)], MUTED, "ar", 1.4)
-d.arrow([(b4x, b4y - 3), (b4x, a4y + BH + 3)], MUTED, "ar", 1.4)
-d.path(f"M {X0 + 3 * PITCH + BW + 2} {A_Y + 40 + BH / 2} L {X0 + 4 * PITCH - 2} {A_Y + 40 + BH / 2}", MUTED, 1.4, m="ar")
-
-d.chip(b2x, B_Y + 22, "이 뒤의 메시지는 암호화", ACC, 12)
-d.chip((X0 + 1 * PITCH + X0 + 2 * PITCH + BW) / 2, A_Y + 40 + BH / 2, "클라이언트는 비밀번호를 뒤에 보냄", ACC, 12)
-
-d.legend(400, [("키 교환", INFO), ("서버 매개변수", SOFT), ("인증과 확인값", OK), ("핵심 전환", ACC)])
 d.save("45-02.tls-handshake.svg")
