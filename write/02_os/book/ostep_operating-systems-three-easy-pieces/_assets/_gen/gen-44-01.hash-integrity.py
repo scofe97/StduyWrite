@@ -1,56 +1,67 @@
-# 44-01 ### 3 — 보내는 쪽은 평문의 암호 해시를 만들어 해시만 암호화한 뒤 평문과 함께 보내고, 받는 쪽은 해시를 복호하고 받은 평문의 해시를 다시 계산해 둘을 비교해 변조를 알아챈다.
-# 본문 근거: 이 노트 ### 3 「암호 해시는 키 없이 지문을 만든다」.
-# 검증 근거: openssl 3.6.4 로 'Transfer $100 ...' 과 '$101' 두 문장의 SHA-256 을 계산해 256비트 중 126비트가 달라짐을 확인. 서명한 문장을 바꾸면 Verification failure.
-# 공식 근거: OSTEP 56장(Reiher) §56.4 및 각주 2 — 해시를 암호화하지 않으면 공격자가 메시지를 바꾸고 새 해시를 계산해 둘을 함께 바꿔치기한다.
-# 타입 스펙: type-swimlane — 두 레인(보내는 쪽·받는 쪽), 아래 레인은 오른쪽에서 왼쪽으로 읽는다.
+# 44-01 「해시를 서명하면 변조가 비교에서 드러난다」 — 받는 쪽은 서명에서 복호한 해시 S 와 받은 문장의 해시를 계산해 비교하고, 다르면 변조로 본다.
+# 본문 근거: 이 노트 「3. 해시만 서명해 무결성을 싸게 확인한다」.
+# 검증 근거: openssl 3.6.4 로 'Transfer $100 to my savings account' 와 '$101' 의 SHA-256 을 계산해 256비트 중 126비트가 달라짐을 확인.
+#   $100 -> d9f26f8ef8b97c12..., $101 -> f560acf0ee15e698... (이 도식은 앞 8자리만 쓴다).
+# 구조 근거: 보내는 쪽은 P 의 해시 S 를 서명해 P 와 함께 보낸다. 공격자가 P 를 P' 로 바꿔도 서명된 S 는 만들 수 없다.
+# 타입 스펙: type-flowchart — 입력 둘이 비교 분기 하나로 모이고, 같음과 다름으로 갈린다.
 import sys; sys.path.insert(0, ".")
-from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, OK, WARN, BAD, INFO, KR, MONO
+from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, BAD, INFO, KR, MONO
 
-W, H = 880, 432
-d = D(W, H, "OSTEP · 44-01 §3",
-      "해시만 암호화해 보내면 평문을 바꾼 흔적이 비교에서 드러난다",
-      "위 레인은 보내는 쪽이 평문 P 의 암호 해시 S 를 계산해 S 만 암호화하고 P 와 함께 보내는 흐름이다. "
-      "아래 레인은 오른쪽에서 왼쪽으로 읽으며 받는 쪽이 암호화된 S 를 복호하고 받은 P 에서 해시를 다시 계산해 두 값이 같은지 비교하는 흐름이다. 값이 다르면 변조로 본다.",
-      "해시를 암호화해야 공격자가 평문과 해시를 함께 바꿔치기하지 못한다")
+W, H = 1000, 404
+BW, BH = 192, 76
+R1, R2 = 108, 252
+LX, MX = 24, 288          # 왼쪽 열, 가운데 열
+DCX, DCY = 576, 218       # 분기 마름모 중심
+DHW, DHH = 72, 44
+FX = 716                  # 분기 뒤 갈림 지점
+OX = 792                  # 결과 열
 
-BW, BH, PITCH, X0 = 160, 76, 208, 24
-LANE_X, LANE_W, LANE_H = 12, 856, 132
-A_Y, B_Y = 96, 244
-
-
-def lane(y, name):
-    d.o.append(f'<rect x="{LANE_X}" y="{y}" width="{LANE_W}" height="{LANE_H}" rx="8" fill="{SOFT}0A" stroke="{SOFT}" stroke-width="0.9"/>')
-    d.t(LANE_X + 12, y + 20, name, 12, MUTED, KR, "start", 600)
-
-
-def box(x, y, title, sub, c):
-    d.tone(x, y, BW, BH, c, 6, "14", 1.4 if c == ACC else 1.1)
-    d.t(x + BW / 2, y + 32, title, 12.5, INK, KR, "middle", 600)
-    d.t(x + BW / 2, y + 56, sub, 12, MUTED, KR)
+d = D(W, H, "OSTEP · 44-01 HASH",
+      "서명된 해시와 다시 계산한 해시가 다르면 변조이다",
+      "위 줄은 받은 서명에서 해시 S 를 복호하는 흐름이고 아래 줄은 받은 문장 P' 의 해시를 계산하는 흐름이다. "
+      "두 값이 마름모에서 만나 같으면 변조 없음이고 다르면 변조 의심이다. 공격자가 문장을 $100 에서 $101 로 바꾸면 SHA-256 의 256비트 중 126비트가 달라진다.",
+      lead="SHA-256 으로 'Transfer $100 …' 과 'Transfer $101 …' 을 해시한 실제 값이다.")
 
 
-lane(A_Y, "보내는 쪽")
-a = [("평문 P", "보낼 내용", SOFT), ("해시 S = H(P)", "키 없이 계산", INFO),
-     ("S 만 암호화", "키 사용", INFO), ("P 와 암호화된 S", "함께 전송", ACC)]
-for i, (t, s, c) in enumerate(a):
-    x = X0 + i * PITCH
-    box(x, A_Y + 40, t, s, c)
-    if i < 3:
-        d.path(f"M {x + BW + 2} {A_Y + 40 + BH / 2} L {x + PITCH - 2} {A_Y + 40 + BH / 2}", MUTED, 1.4, m="ar")
+def cell(x, y, w, title, sub, c, mono_sub=False, focal=False):
+    d.tone(x, y, w, BH, c, 6, "14", 1.4 if focal else 1.1)
+    d.t(x + w / 2, y + 32, title, 14, INK, KR, "middle", 600)
+    d.t(x + w / 2, y + 56, sub, 13, MUTED, MONO if mono_sub else KR)
 
-lane(B_Y, "받는 쪽 (오른쪽에서 왼쪽으로)")
-b = [("S 복호", "키 사용", INFO), ("받은 P 로 H 계산", "S' 를 얻음", INFO),
-     ("S 와 S' 비교", "같은지 확인", SOFT), ("다르면 변조", "P 를 믿지 않음", OK)]
-for i, (t, s, c) in enumerate(b):
-    x = X0 + (3 - i) * PITCH
-    box(x, B_Y + 40, t, s, c)
-    if i < 3:
-        d.path(f"M {x - 2} {B_Y + 40 + BH / 2} L {x - PITCH + BW + 2} {B_Y + 40 + BH / 2}", MUTED, 1.4, m="ar")
 
-# 보내는 쪽 마지막 상자에서 받는 쪽 첫 상자로 내려오는 전송 화살표
-tx = X0 + 3 * PITCH + BW / 2
-d.path(f"M {tx} {A_Y + 40 + BH + 2} L {tx} {B_Y + 40 - 2}", ACC, 1.6, m="acc")
-d.chip(690, A_Y + 16, "아래 화살표 구간에서 P 가 바뀔 수 있음", ACC, 12)
+def hline(x1, x2, y, c=MUTED, m="ar"):
+    d.arrow([(x1 + 2, y), (x2 - 4, y)], c, m, 1.4)
 
-d.legend(392, [("평문과 전송물", SOFT), ("키가 쓰이는 단계", INFO), ("전송 구간", ACC), ("변조를 걸러내는 결과", OK)])
+
+# 위 줄: 받은 서명 -> 복호한 S
+cell(LX, R1, BW, "받은 서명", "보낸 쪽이 만든 값", SOFT)
+cell(MX, R1, 208, "서명에서 복호한 S", "d9f26f8e …", INFO, mono_sub=True)
+hline(LX + BW, MX, R1 + BH / 2)
+
+# 아래 줄: 받은 문장 -> 해시 계산
+cell(LX, R2, BW, "받은 문장 P'", "Transfer $101 …", ACC, mono_sub=True, focal=True)
+cell(MX, R2, 208, "H(P') 계산", "f560acf0 …", INFO, mono_sub=True)
+hline(LX + BW, MX, R2 + BH / 2, ACC, "acc")
+d.chip(LX + BW + 48, R2 - 16, "$100 에서 바뀜", ACC, 12)
+
+# 두 값이 마름모로 모인다
+TOPX = DCX
+d.arrow([(MX + 208 + 2, R1 + BH / 2), (TOPX, R1 + BH / 2), (TOPX, DCY - DHH - 4)], MUTED, "ar", 1.4)
+d.arrow([(MX + 208 + 2, R2 + BH / 2), (TOPX, R2 + BH / 2), (TOPX, DCY + DHH + 4)], MUTED, "ar", 1.4)
+
+d.o.append(f'<path d="M {DCX} {DCY - DHH} L {DCX + DHW} {DCY} L {DCX} {DCY + DHH} L {DCX - DHW} {DCY} Z" '
+           f'fill="{SOFT}14" stroke="{SOFT}" stroke-width="1.1"/>')
+d.t(DCX, DCY + 5, "S 와 같은가", 12, INK, KR, "middle", 600)
+
+# 갈림: 같음은 위, 다름은 아래
+d.path(f"M {DCX + DHW + 2} {DCY} L {FX} {DCY}", MUTED, 1.4)
+d.arrow([(FX, DCY), (FX, R1 + BH / 2), (OX - 4, R1 + BH / 2)], OK, "ok", 1.4)
+d.arrow([(FX, DCY), (FX, R2 + BH / 2), (OX - 4, R2 + BH / 2)], BAD, "bad", 1.4)
+d.chip(FX + 36, R1 + BH / 2 - 16, "같음", OK, 12)
+d.chip(FX + 36, R2 + BH / 2 + 16, "다름", BAD, 12)
+
+cell(OX, R1, BW, "변조 없음", "받은 문장을 받아들임", OK)
+cell(OX, R2, BW, "변조 의심", "126비트가 다름", BAD)
+
+d.legend(364, [("받은 값", SOFT), ("계산하는 연산", INFO), ("바뀐 문장", ACC), ("같음", OK), ("다름", BAD)])
 d.save("44-01.hash-integrity.svg")

@@ -13,8 +13,8 @@ def kr(t):
 d = D(W, H, "ARCHITECTURE · 09-01 REMOTE CHANNELS",
       "ssh -R 한 줄이 만드는 연결 1개와 채널 3개",
       "공개 서버에서는 요청 3건이 수신 포트 하나로 들어옵니다. 세 요청은 SSH 연결 1개 위의 forwarded-tcpip 채널 0·1·2 로 나뉘어 "
-      "NAT 뒤 안쪽 장비의 ssh 클라이언트로 갑니다. 클라이언트는 안쪽 서비스에 연결 3개를 따로 맺습니다.",
-      lead="채널 번호는 양 끝이 따로 매기므로 안쪽 번호와 서버 쪽 번호가 다를 수 있습니다.")
+      "NAT 뒤 안쪽 장비의 ssh 클라이언트로 갑니다. 클라이언트는 안쪽 서비스에 연결 3개를 따로 맺습니다. 채널 번호는 클라이언트 쪽 0·1·2, 서버 쪽 2·3·4 입니다.",
+      lead="채널 번호는 양 끝이 따로 매겨서 안쪽 번호 0·1·2 가 서버 쪽 2·3·4 와 짝을 이룹니다.")
 
 # 양쪽 패널
 d.box(24, PY, 300, PH)
@@ -40,7 +40,7 @@ d.t(492, 182, "SSH 연결 1개 (TCP 연결 1개)", 12, OK, KR, "middle", 600)
 for k in range(3):
     y = 220 + k * 30
     d.arrow([(316, y), (672, y)], ACC, "acc", 1.4)
-    d.t(492, y - 7, "채널 %d" % k, 11, ACC, KR, "middle", 600)
+    d.t(492, y - 7, "채널 %d (서버 쪽 %d)" % (k, k + 2), 11, ACC, KR, "middle", 600)
 
 # 안쪽 장비: ssh 클라이언트 → 서비스 3 연결
 d.tone(676, 195, 112, 100, OK, 6, "14", 1.1)
@@ -53,6 +53,8 @@ for k in range(3):
     y = 221 + k * 24
     d.arrow([(790, y), (832, y)], SOFT, "soft", 1.2)
 d.t(812, 316, "연결 3개", 11, MUTED, KR, "middle", 600)
+
+d.t(492, 304, "서버 쪽 0·1 번은 수신 소켓이 차지", 11, MUTED, KR, "middle")
 
 d.legend(390, [("수신 지점", INFO), ("SSH 연결", OK), ("채널·목적지", ACC)])
 svg_path = pathlib.Path(__file__).resolve().parent.parent / "09-01.reverse-channels.svg"

@@ -1,54 +1,59 @@
-# 44-02 ### 4 — 발급자가 권한·대상·만료를 담은 구조에 비밀 키로 서명해 사용자에게 주고, 자원 쪽은 서명을 검증해 접근 목록 없이 허용한다. 사용자가 권한 칸을 고치면 서명이 맞지 않아 거절된다.
-# 본문 근거: 이 노트 ### 4 「암호학적 capability 는 서명으로 위조를 막는다」.
-# 검증 근거: openssl 3.6.4 로 'user=...;res=...;rights=read;exp=...' 에 HMAC-SHA256 태그를 붙여 ACCEPT, rights=write 나 user 를 바꾸면 REJECT. 같은 구조를 RSA 개인 키로 서명하면 공개 키만으로 Verified OK, 바꾸면 Verification failure.
-# 공식 근거: OSTEP 56장(Reiher) §56.8, RFC 7519 — 클레임을 서명이나 MAC 으로 보호해 전달하는 JSON Web Token.
-# 타입 스펙: type-swimlane — 두 레인(정상 사용·위조 시도).
+# 44-02 §4 — 서명한 capability 를 자원 쪽이 공개 키로 검증한다. 권한 칸을 read 에서 write 로 고치면 같은 서명으로는 검증이 실패한다.
+# 본문 근거: 이 노트 §4 「서명한 capability」의 소절 「공개 키로 만드는 capability」.
+# 검증 근거: 2026-11-08 OpenSSL 3.6.4. RSA 2048 개인 키로 `user=alice;res=report.pdf;rights=read;exp=1893456000` 에 SHA-256 서명(서명 파일 256바이트),
+#            공개 키로 검증하면 `Verified OK`, rights 를 write 로 바꾼 내용에 같은 서명을 검증하면 `Verification failure`(정답 6).
+# 타입 스펙: type-sequence — 참여자 셋(자원 관리자 · alice · 자원)의 시간순 메시지. 점선은 응답, 틀로 정상 사용과 위조 시도를 가른다.
 import sys; sys.path.insert(0, ".")
-from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, OK, WARN, BAD, INFO, KR, MONO
+from dd import D, ACC, INK, MUTED, SOFT, RULE, PAPER2, OK, BAD, KR, MONO
 
-W, H = 880, 432
+W, H = 880, 608
+LW, LH, LY = 216, 44, 96
+X_ADM, X_ALI, X_RES = 156, 440, 724
+LANES = ((X_ADM, "자원 관리자", "개인 키 보유"), (X_ALI, "alice", "capability 소지자"), (X_RES, "자원", "공개 키 보유"))
 d = D(W, H, "OSTEP · 44-02 §4",
-      "서명이 붙은 권한 구조는 고치면 검증에서 거절된다",
-      "위 레인은 발급자가 권한 구조에 서명해 사용자에게 주고, 사용자가 자원 쪽에 내밀면 서명이 맞아 접근이 허용되는 흐름이다. "
-      "아래 레인은 사용자가 권한 칸을 직접 고쳐 내밀면 서명이 맞지 않아 접근이 거절되는 흐름이다. 두 경우 모두 자원 쪽은 접근 목록을 따로 보관하지 않는다.",
-      "자원 쪽은 서명만 검증하고 사용자별 상태는 들고 있지 않는다")
-
-BW, BH, PITCH, X0 = 160, 76, 208, 24
-LANE_X, LANE_W, LANE_H = 12, 856, 132
-A_Y, B_Y = 96, 244
+      "권한 칸을 고치면 같은 서명은 검증에 실패한다",
+      "자원 관리자가 alice 에게 읽기 권한을 담은 capability 를 개인 키로 서명해 발급한다. alice 가 그대로 자원에 내면 공개 키 검증이 Verified OK 로 통과해 읽기가 허용된다. "
+      "alice 가 rights 를 write 로 고쳐 같은 서명과 함께 내면 Verification failure 가 나와 거부된다. 자원은 서명만 검증하므로 사용자별 접근 목록을 기억하지 않는다.",
+      "자원은 서명만 확인하고, alice 는 개인 키가 없어 새 서명을 만들 수 없다")
 
 
-def lane(y, name):
-    d.o.append(f'<rect x="{LANE_X}" y="{y}" width="{LANE_W}" height="{LANE_H}" rx="8" fill="{SOFT}0A" stroke="{SOFT}" stroke-width="0.9"/>')
-    d.t(LANE_X + 12, y + 20, name, 12, MUTED, KR, "start", 600)
+def msg(x1, x2, y, label, c=MUTED, mk="ar", dash=None, subs=(), mono_sub=True):
+    sgn = 1 if x2 > x1 else -1
+    d.arrow([(x1 + 10 * sgn, y), (x2 - 12 * sgn, y)], c, mk, 1.5, dash)
+    d.t((x1 + x2) / 2, y - 9, label, 12, c if c != MUTED else INK, KR, "middle", 600)
+    for i, s in enumerate(subs):
+        d.t((x1 + x2) / 2, y + 18 + i * 16, s, 12, MUTED, MONO if mono_sub else KR)
 
 
-def lane_steps(y, items):
-    by = y + 40
-    for i, (title, sub, c) in enumerate(items):
-        x = X0 + i * PITCH
-        d.tone(x, by, BW, BH, c, 6, "14", 1.4 if c == ACC else 1.1)
-        d.t(x + BW / 2, by + 32, title, 12.5, INK, KR, "middle", 600)
-        d.t(x + BW / 2, by + 56, sub, 12, MUTED, KR)
-        if i < len(items) - 1:
-            d.path(f"M {x + BW + 2} {by + BH / 2} L {x + PITCH - 2} {by + BH / 2}", MUTED, 1.4, m="ar")
+def frame(y1, y2, name):
+    d.o.append(f'<rect x="24" y="{y1}" width="832" height="{y2 - y1}" rx="4" fill="{INK}08" stroke="{SOFT}" stroke-width="0.9"/>')
+    d.o.append(f'<rect x="24" y="{y1}" width="84" height="22" rx="2" fill="#0D1117" stroke="{SOFT}" stroke-width="0.9"/>')
+    d.t(66, y1 + 16, name, 12, MUTED, KR, "middle", 600)
 
 
-lane(A_Y, "정상 사용")
-lane_steps(A_Y, [
-    ("발급자", "권한 구조에 서명", INFO),
-    ("사용자", "구조를 들고 있음", SOFT),
-    ("자원 쪽", "서명을 검증", INFO),
-    ("접근 허용", "접근 목록 불필요", OK),
-])
+# 참여자
+for x, name, sub in LANES:
+    d.box(x - LW / 2, LY, LW, LH, PAPER2, RULE, 1.0, 6)
+    d.t(x, LY + 20, name, 13, INK, KR if any("가" <= c <= "힣" for c in name) else MONO, "middle", 600)
+    d.t(x, LY + 37, sub, 12, MUTED, KR)
+    d.line(x, LY + LH + 6, x, H - 24, RULE, 1.0, "3 6")
 
-lane(B_Y, "위조 시도")
-lane_steps(B_Y, [
-    ("사용자", "권한 칸을 고침", ACC),
-    ("자원 쪽", "서명을 검증", INFO),
-    ("서명 불일치", "고친 내용과 안 맞음", INFO),
-    ("접근 거절", "구조를 믿지 않음", OK),
-])
+# 발급
+msg(X_ADM, X_ALI, 192, "발급 · 개인 키로 서명", INK, "ar", None,
+    ("user=alice;res=report.pdf;", "rights=read;exp=1893456000"))
+d.t((X_ADM + X_ALI) / 2, 242, "+ 서명 256바이트", 12, MUTED, KR)
 
-d.legend(392, [("서명하거나 검증하는 단계", INFO), ("구조를 들고 있는 쪽", SOFT), ("허용·거절 결과", OK), ("위조가 일어나는 지점", ACC)])
+# 정상 사용
+frame(262, 404, "정상 사용")
+msg(X_ALI, X_RES, 308, "제시 · 내용과 서명", MUTED, "ar", None, ("같은 내용 · 같은 서명",), False)
+d.chip(X_RES, 348, "Verified OK", OK, 12, 8)
+msg(X_RES, X_ALI, 390, "read 허용", OK, "ok", "5 4")
+
+# 위조 시도
+frame(420, 592, "위조 시도")
+d.chip(X_ALI, 454, "rights=write 로 고침", ACC, 12, 8)
+msg(X_ALI, X_RES, 504, "제시 · 고친 내용과 원래 서명", ACC, "acc", None)
+d.chip(X_RES, 526, "Verification failure", BAD, 12, 8)
+msg(X_RES, X_ALI, 568, "거부", BAD, "bad", "5 4")
+
 d.save("44-02.crypto-capability.svg")
