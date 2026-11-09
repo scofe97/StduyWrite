@@ -17,6 +17,7 @@ related:
   - ./project/network-fundamentals-lab/README.md
   - ../08_cloud/book/container-security/README.md
   - ./project/portal-tunnel/README.md
+  - ./project/lampson-lab/README.md
   - ../08_cloud/book/networking-and-kubernetes/README.md
   - ../08_cloud/book/learning-coredns/README.md
 updated: 2026-11-06
@@ -53,6 +54,7 @@ updated: 2026-11-06
 
 
 | [portal-tunnel/](./project/portal-tunnel/README.md) | 오픈소스 Go reverse tunnel 을 빌드해 띄우고 코드를 읽으며 기여까지 가는 시리즈 — 기초 개념·transport·TLS 신뢰 경계·identity 정책·SDK·코드 리뷰 (외부 저장소 기반) |
+| [lampson-lab/](./project/lampson-lab/README.md) | SSH 고정 키 없이 워크로드 신원(SPIRE)으로 5분짜리 SSH 인증서를 받아 호스트의 역할 계정에 들어가는 참조 구현 정독 6편 — 신원 발급·step-ca 매핑·sshd 호스트·거부 테스트·만료와 열린 연결 (외부 저장소 기반) |
 
 ## 카테고리 결정 원칙
 
