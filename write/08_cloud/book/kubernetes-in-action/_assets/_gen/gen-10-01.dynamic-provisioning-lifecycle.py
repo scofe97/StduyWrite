@@ -4,35 +4,34 @@
 # 타입 스펙: type-gantt.md — PVC·PV·파드 둘 네 레인이 하나의 시간축을 공유하고, 각자 다른 지점에서 시작하고 끝난다.
 #           겹침과 어긋남이 논지이고 아래 눈금이 여섯 사건을 마일스톤으로 찍는다.
 import sys; sys.path.insert(0, ".")
-from dd import D, ACC, INFO, OK, MUTED, SOFT, INK, RULE, KR, MONO
+from dd import D, ACC, INFO, OK, MUTED, SOFT, RULE, KR
 import ddx
 
-d = D(1240, 644, "KUBERNETES IN ACTION · 10-01",
+d = D(920, 580, "KUBERNETES IN ACTION · 10-01",
       "셋의 수명이 서로 다른 지점에서 끝난다",
-      "PVC 를 만들면 PV 가 그때 만들어진다. 파드를 지워도 PVC 와 PV 는 남아, 같은 요구를 다른 파드가 "
+      "volumeBindingMode 가 Immediate 면 PVC 를 만들 때 PV 가 만들어진다. 파드를 지워도 PVC 와 PV 는 남아, 같은 요구를 다른 파드가 "
       "이어받을 수 있다.",
       "동적 프로비저닝 · reclaimPolicy: Delete")
 
-X = lambda t: 150 + t * 105
+X = lambda t: 110 + t * 84
 LANES = [("PVC", 0, 8, INFO, "만들면 남는다 — 지울 때까지"),
-         ("PV", 1, 8.6, OK, "PVC 를 만든 직후 프로비저너가 만든다"),
-         ("파드 1", 2, 4, ACC, "볼륨을 마운트해 쓴다"),
-         ("파드 2", 5, 7, ACC, "같은 PVC 를 이어받는다")]
+         ("PV", 1, 8.6, OK, "Immediate 모드면 PVC 직후 프로비저너가 만든다"),
+         ("파드 1", 2, 4, ACC, "볼륨을 마운트해 사용"),
+         ("파드 2", 5, 7, ACC, "같은 PVC 를 이어받아 사용")]
 for i, (nm, t0, t1, c, note) in enumerate(LANES):
-    y = 200 + i * 76
-    d.t(40, y + 6, nm, 11, SOFT, KR, "start")
-    d.o.append(f'<rect x="{X(t0)}" y="{y-20}" width="{X(t1)-X(t0)}" height="40" rx="5" '
+    y = 176 + i * 66
+    d.t(36, y + 5, nm, 13, SOFT, KR, "start")
+    d.o.append(f'<rect x="{X(t0)}" y="{y-18}" width="{X(t1)-X(t0)}" height="38" rx="5" '
                f'fill="{c}12" stroke="{c}" stroke-width="1.2"/>')
-    d.t((X(t0) + X(t1)) / 2, y + 6, note, 10, c, KR)
+    d.t((X(t0) + X(t1)) / 2, y + 5, note, 12, c, KR)
 
-d.line(X(0) - 12, 520, X(9) + 12, 520, RULE, 1.0)
+d.line(X(0) - 10, 448, X(9) + 10, 448, RULE, 1.0)
 for t, lab in ((0, "PVC 생성"), (2, "파드 1 생성"), (4, "파드 1 삭제"),
                (5, "파드 2 생성"), (8, "PVC 삭제"), (8.6, "PV 삭제")):
-    d.line(X(t), 496, X(t), 526, RULE, 0.9, "4 4")
-    d.t(X(t), 548, lab, 9, SOFT, KR)
+    d.line(X(t), 430, X(t), 454, RULE, 0.9, "4 4")
+    d.t(X(t), 474, lab, 12, SOFT, KR)
 
-d.t(24, 584 - 8, "파드를 지우면 밑바탕 스토리지가 노드에서 detach 되지만, 그것은 그 노드에서 그 볼륨을 쓰는 "
-                 "마지막 파드였을 때의 이야기다.", 11, MUTED, KR, "start")
-d.legend(596 - 4, [("요구", INFO), ("실체", OK), ("쓰는 쪽", ACC)])
+d.t(24, 510, "노드에서 detach 되는 때 · 그 노드에서 그 볼륨을 쓰는 마지막 파드를 지울 때", 12, MUTED, KR, "start")
+d.legend(534, [("요구", INFO), ("실체", OK), ("사용 파드", ACC)])
 d.save("10-01-dynamic-provisioning-lifecycle.svg")
 print("ok")
