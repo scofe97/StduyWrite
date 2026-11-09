@@ -16,7 +16,7 @@ learning:
   last_verified: 2026-09-23  # 1장 복습 회차 2 q3 — 01-02 방향 오류 셋 교정, 01-01 역사·용어 축(NCP 몰락 원인·PDU 이름) 2연속
   blocked_count: 2
   next_lesson: "**4장 Phase 4 게이트 미통과(2026-09-08) — 실습 연결 축 하나만 남았다.** 개념 5축은 통과했다: IP-per-Pod 의 동기(포트 충돌 제거)와 대가(IPAM·라우팅), 서비스 번역 경로(kube-proxy 는 규칙만 심고 커널이 번역), 세 레이아웃의 거래, NetworkPolicy 선택-잠금(초기 오답 뒤 재확인 통과), kube-proxy 모드 트레이드오프와 연결 편향. 미달한 것은 04-04 묶음 8 — VM 라우팅 한 줄이 연 범위(그 노드 몫뿐)와 방향별로 갈린 레이아웃을 두 번 다 추측으로 답했다. 직접 실행하고 문서에 적어 둔 내용인데 인출이 안 됐다. **다음: 묶음 8 두 문항만 표적 재확인 → 통과하면 04-01~04-04 회차 파일 4개 생성.** 그 뒤 01-01 OSI 재학습, 3장은 03-04 실습편 실행부터. 복습 미완 7편(00-03·01-03·02-01~02-06)은 별건으로 진행 가능."
-updated: 2026-09-17
+updated: 2026-11-09
 ---
 
 # Networking and Kubernetes — 정독 인덱스
@@ -82,6 +82,8 @@ updated: 2026-09-17
 | [00-01](./00-01.%EC%9A%A9%EC%96%B4%EC%A7%91.md) | 용어집 — 핵심 용어 + 한 문장 정의 + 등장 편 (시리즈 산출물) | 완료 |
 | [00-02](./00-02.%EA%B2%B0%EC%A0%95%20%EC%B9%98%ED%8A%B8%EC%8B%9C%ED%8A%B8.md) | 결정 치트시트 통합본 — 17편의 판단 규칙 모음 (시리즈 산출물) | 완료 |
 | [00-03](./00-03.%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%EC%84%A0%EC%88%98%20%EA%B0%9C%EB%85%90.md) | 네트워크 선수 개념 — 주소·인터페이스·장비 (본문이 설명 없이 쓰는 낱말) | 초안 · Phase 1 완료(2026-08-24) |
+
+4장 네 편(04-01~04-04)은 2026-11-08 에 Kubernetes v1.37 기준으로 다시 짰습니다. 04-01 과 04-04 는 kind v0.33.0 클러스터에서 다시 잰 값을 담았고, 네 편 모두 적대적 검증과 2차 검토 지적을 반영했습니다. 이때 절 번호가 바뀌어 다른 편이 가리키던 `04-02 §4`·`04-03 §5` 같은 번호를 새 번호로 고쳤고, 용어집과 결정 치트시트도 새 본문에 맞췄습니다 (2026-11-09).
 
 
 
@@ -181,8 +183,8 @@ updated: 2026-09-17
 | DNAT·SNAT·MASQUERADE 는 무엇을 바꾸는가 | [N&K 02-03](02-03.iptables%C2%B7IPVS%C2%B7eBPF%20%E2%80%94%20kube-proxy%EB%A5%BC%20%EC%9D%B4%ED%95%B4%ED%95%98%EB%8A%94%20%EC%84%B8%20%EA%B8%B0%EC%88%A0.md) §3 |
 | conntrack 은 무엇을 적고, UDP 는 왜 테이블을 먼저 채우는가 | [N&K 02-02](02-02.%EC%BB%A4%EB%84%90%EC%9D%B4%20%ED%8C%A8%ED%82%B7%EC%9D%84%20%ED%8C%90%EC%A0%95%ED%95%98%EB%8A%94%20%EC%B8%B5%20%E2%80%94%20Netfilter%C2%B7Conntrack%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85.md) §2 |
 | TC·qdisc 와 eBPF 어태치 지점은 성능을 어떻게 가르는가 | [N&K 02-03](02-03.iptables%C2%B7IPVS%C2%B7eBPF%20%E2%80%94%20kube-proxy%EB%A5%BC%20%EC%9D%B4%ED%95%B4%ED%95%98%EB%8A%94%20%EC%84%B8%20%EA%B8%B0%EC%88%A0.md) §5 |
-| kube-proxy 모드는 무엇이 다른가 | [N&K 04-02](04-02.CNI%EC%99%80%20kube-proxy%20%E2%80%94%20Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%9D%98%20%EB%B0%B0%EC%84%A0%EA%B3%B5%EA%B3%BC%20%EB%A1%9C%EB%93%9C%EB%B0%B8%EB%9F%B0%EC%84%9C.md) §4 |
-| CNI 는 Pod 에 무엇을 배선하고, Calico 노드에서는 무엇부터 보는가 | [N&K 04-02](04-02.CNI%EC%99%80%20kube-proxy%20%E2%80%94%20Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%9D%98%20%EB%B0%B0%EC%84%A0%EA%B3%B5%EA%B3%BC%20%EB%A1%9C%EB%93%9C%EB%B0%B8%EB%9F%B0%EC%84%9C.md) §1~5 |
+| kube-proxy 모드는 무엇이 다른가 | [N&K 04-02](04-02.CNI%EC%99%80%20kube-proxy%20%E2%80%94%20Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%9D%98%20%EB%B0%B0%EC%84%A0%EA%B3%B5%EA%B3%BC%20%EB%A1%9C%EB%93%9C%EB%B0%B8%EB%9F%B0%EC%84%9C.md) §3 |
+| CNI 는 Pod 에 무엇을 배선하고, Calico 노드에서는 무엇부터 보는가 | [N&K 04-02](04-02.CNI%EC%99%80%20kube-proxy%20%E2%80%94%20Pod%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EC%9D%98%20%EB%B0%B0%EC%84%A0%EA%B3%B5%EA%B3%BC%20%EB%A1%9C%EB%93%9C%EB%B0%B8%EB%9F%B0%EC%84%9C.md) §1~2 |
 | NodePort 로 들어온 클라이언트 IP 는 왜 사라지는가 | [N&K 05-02](05-02.Service%205%EC%9C%A0%ED%98%95%20%E2%80%94%20ClusterIP%EC%97%90%EC%84%9C%20LoadBalancer%EA%B9%8C%EC%A7%80.md) §3 |
 | 패킷이 안 갈 때 커널 안 어디서 멈췄는지 좁히려면 | [N&K 02-04](02-04.Linux%20%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%20%EC%A7%84%EB%8B%A8%20%EB%8F%84%EA%B5%AC%20%E2%80%94%20%EA%B3%84%EC%B8%B5%20%EC%88%9C%EC%84%9C%EB%8C%80%EB%A1%9C%20%EC%88%98%EC%82%AC%ED%95%98%EA%B8%B0.md) §6 |
 | 서브네팅·CIDR·VLSM 을 손으로 계산하려면 | [N&K 01-03](01-03.IP%C2%B7%EB%9D%BC%EC%9A%B0%ED%8C%85%C2%B7Ethernet%20%E2%80%94%20%ED%8C%A8%ED%82%B7%EC%9D%B4%20%EA%B8%B8%EC%9D%84%20%EC%B0%BE%EB%8A%94%20%EB%B2%95.md) §2 · [cntd 04-03](../../../02_os/book/cntd_computer-networking-top-down/04-03.IP%20%E2%80%94%20%EB%8D%B0%EC%9D%B4%ED%84%B0%EA%B7%B8%EB%9E%A8%EA%B3%BC%20%EC%A3%BC%EC%86%8C.md) |
