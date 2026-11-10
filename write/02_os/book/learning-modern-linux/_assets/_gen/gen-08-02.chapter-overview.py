@@ -1,29 +1,27 @@
-# 08-02 학습 목표 뒤 전체 지도 — 절 여덟을 읽는 순서로.
-# 원문 8장 서두: "Then, we'll cover monitoring for different resource types, such as CPU cycles, memory,
-#       or I/O traffic. We'll review different tools that you can use and show certain end-to-end setup
-#       you may wish to adopt."
-# 타입 스펙: type-process — 절마다 같은 의미 슬롯(번호 · 이름 · 그 절이 답하는 물음)이 반복되고
-#           읽는 순서가 화살표로 흐른다. 축약: 주체 lane 이 없어 카드 격자 stride 로 놓는다.
+# 08-02 학습 목표 뒤 전체 지도 — 절 여덟을 읽는 순서로, 절마다 그 절에서 여는 명령을 붙인다.
+# 본문 절 제목(2026-11-10 개정)과 각 절에서 직접 돌린 명령을 그대로 옮겼다.
+# 타입 스펙: type-process — 절마다 같은 의미 슬롯(번호 · 이름 · 여는 명령)이 반복되고 읽는 순서가
+#           화살표로 흐른다. 축약: 주체 lane 이 없어 카드 격자 stride 로 놓는다.
+#           §2~§5 는 기본 도구, §6~§8 은 그 위에 얹히는 층으로 색을 나눈다.
 import sys; sys.path.insert(0, ".")
-from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
+from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, PAPER2, RULE, KR, MONO
 
-W, H = 880, 588
+W, H = 880, 500
 d = D(W, H, "LEARNING MODERN LINUX · 08-02",
       "자원마다 창이 따로 나 있어 어느 창을 여느냐가 곧 진단이다",
-      "8장 둘째 구간의 절 여덟을 읽는 순서로 이은 지도. 2~5절이 리눅스 기본 도구이고 7~8절이 그 위에 "
-      "얹히는 층이다.",
-      "저자는 기본 도구만으로도 꽤 멀리 간다고 적습니다")
+      "8장 둘째 구간의 절 여덟을 읽는 순서로 이은 지도. 카드 아래 줄은 그 절에서 직접 돌린 명령이다.",
+      "원인 범주가 정해져야 다음 절의 명령이 순서를 갖습니다")
 
-CW, CH, GAPX, GAPY, X0, Y0 = 272, 96, 12, 20, 20, 116
+CW, CH, GAPX, GAPY, X0, Y0 = 272, 88, 12, 22, 20, 112
 cards = [
-    ("§1", "원인의 범주", "느리다는 증상을 어디로 나누나"),
-    ("§2", "처음 치는 세 명령", "uptime · free · vmstat 를 어떻게 읽나"),
-    ("§3", "얼마나 걸렸나", "real 과 user 와 sys 는 뭐가 다른가"),
-    ("§4", "장치와 소켓", "iostat · ss · lsof 는 무엇을 보나"),
-    ("§5", "통합 모니터", "top 화면의 네 구역은 무엇인가"),
-    ("§6", "내 코드의 계측", "메트릭을 어떻게 내보내나"),
-    ("§7", "추적과 프로파일링", "어디에 훅을 걸어 실행을 보나"),
-    ("§8", "Prometheus 와 Grafana", "언제 이 무게를 감당할 만한가"),
+    ("§1", "느린 앱의 원인 범주", "메모리 · CPU · 네트워크 I/O", ACC),
+    ("§2", "부하 평균과 메모리 열", "uptime · free · vmstat", INFO),
+    ("§3", "CPU 시간과 대기", "time → real · user · sys", INFO),
+    ("§4", "장치·소켓·열린 파일", "iostat · ss · lsof +L1", INFO),
+    ("§5", "top 화면과 배치 모드", "top -b · ps -eo", INFO),
+    ("§6", "계측의 밀기와 끌기", "UDP :8125 · GET /metrics", OK),
+    ("§7", "추적의 소스와 훅", "uprobes · kprobes · eBPF", OK),
+    ("§8", "Prometheus·Grafana", ":9100 · :9090 · :3000", OK),
 ]
 
 
@@ -36,22 +34,21 @@ for i in range(len(cards) - 1):
     if y1 == y2:
         d.arrow([(x1 + CW, y1 + CH / 2), (x2 - 2, y2 + CH / 2)], MUTED, "ar", 1.3)
     else:
-        bus = y1 + CH + 10
+        bus = y1 + CH + 11
         d.path(f"M {x1 + CW / 2} {y1 + CH} L {x1 + CW / 2} {bus} "
                f"L {x2 + CW / 2} {bus} L {x2 + CW / 2} {y2 - 2}", MUTED, 1.3, m="ar")
 
-for i, (n, title, q) in enumerate(cards):
+for i, (n, title, cmd, c) in enumerate(cards):
     x, y = pos(i)
-    focal = (i == 0)
+    focal = c is ACC
     if focal:
-        d.o.append(f'<rect x="{x}" y="{y}" width="{CW}" height="{CH}" rx="8" '
-                   f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
+        d.tone(x, y, CW, CH, ACC, 8, "12", 1.4)
     else:
-        d.box(x, y, CW, CH, PAPER2, RULE, 1.0, 8)
-    d.t(x + 16, y + 26, n, 12, ACC if focal else SOFT, MONO, "start", 600)
-    d.t(x + 16, y + 54, title, 14, ACC if focal else INK, KR, "start", 600)
-    d.t(x + 16, y + 78, q, 11.5, MUTED, KR, "start")
+        d.box(x, y, CW, CH, PAPER2, c, 1.0, 8)
+    d.t(x + 16, y + 26, n, 12, c, MONO, "start", 600)
+    d.t(x + 48, y + 26, title, 13.5, ACC if focal else INK, KR, "start", 600)
+    d.t(x + 16, y + 60, cmd, 12, MUTED, MONO, "start")
 
-d.legend(524, [("증상을 자원 범주로 나누는 자리", ACC)])
+d.legend(H - 44, [("증상을 범주로 나누는 절", ACC), ("리눅스 기본 도구", INFO), ("그 위에 얹히는 층", OK)])
 d.save("08-02.chapter-overview.svg")
 print("ok 08-02.chapter-overview")

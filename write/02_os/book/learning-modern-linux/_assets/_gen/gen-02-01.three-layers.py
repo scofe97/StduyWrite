@@ -10,7 +10,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 880, 644
+W, H = 880, 560
 d = D(W, H, "LEARNING MODERN LINUX · 02-01 §1",
       "세 층과 그 사이를 잇는 인터페이스",
       "원서가 그린 리눅스 아키텍처를 추상 수준으로 쌓은 것. 위와 아래를 잇는 두 인터페이스의 성격이 "
@@ -42,12 +42,6 @@ for kind, name, note, h, focal in rows:
         d.t(X + 20, y + 56, note, 12, MUTED, KR, "start")
     y += h + 12
 
-for _k, _line in enumerate([
-        "init 시스템과 네트워킹 같은 시스템 서비스는 커널과 유저 랜드 사이에 앉습니다.",
-        "저자는 그것들이 엄밀히 말해 커널의 일부가 아니라고 적습니다.",
-        "유저 모드는 느린 대신 안전하고 편한 추상을, 커널 모드는 빠른 대신 얇은 추상을 줍니다."]):
-    d.t(X, 512 + _k * 22, _line, 12, MUTED if _k < 2 else SOFT, KR, "start")
-
-d.legend(580, [("인터페이스", INFO), ("가장 중요한 경계", ACC), ("층", MUTED)])
+d.legend(508, [("인터페이스", INFO), ("가장 중요한 경계", ACC), ("층", MUTED)])
 d.save("02-01.three-layers.svg")
 print("ok 02-01.three-layers")

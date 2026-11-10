@@ -22,12 +22,12 @@ d = D(W, H, "LEARNING MODERN LINUX · 08-01 §6",
       "표준을 읽으면 무엇을 비워도 되는지가 보인다",
       "RFC 5424 헤더 일곱 필드를 ABNF 정의와 나란히 놓은 격자. 오른쪽 열은 그 필드에 NILVALUE 대안이 "
       "있어 하이픈 하나로 비울 수 있는지를 뜻한다.",
-      "저자가 보통 생략된다고 적은 필드가 사실은 비울 수 없는 유일한 필드입니다")
+      "VERSION 은 비울 수 없고 이 형식에서 늘 1 입니다")
 
 LX, LW = 24, 68
 CW1, CW2, CW3 = 226, 348, 158
 RH, HY, RY = 58, 152, 178
-cols = [("원문이 붙인 설명", CW1), ("RFC 5424 ABNF", CW2), ("\"-\" 로 비울 수 있나", CW3)]
+cols = [("필드 뜻", CW1), ("RFC 5424 ABNF", CW2), ("\"-\" 로 비울 수 있나", CW3)]
 x = LX + LW
 for name, cw in cols:
     d.t(x + cw / 2, HY, name, 12, MUTED, KR, "middle", 600)
@@ -36,7 +36,7 @@ d.line(LX, HY + 12, LX + LW + CW1 + CW2 + CW3, HY + 12, RULE, 1)
 
 ROWS = [
     ("PRI", "시설과 심각도", '"<" PRIVAL ">"', "못 비운다", WARN),
-    ("VER", "프로토콜 번호 — 보통 생략된다", "NONZERO-DIGIT 0*2DIGIT", "못 비운다", 9),
+    ("VER", "프로토콜 번호 — 이 형식에서 1", "NONZERO-DIGIT 0*2DIGIT", "못 비운다", 9),
     ("TS", "생성 시각 — ISO 8601", "NILVALUE / FULL-DATE ...", "비울 수 있다", OK),
     ("HN", "보낸 기계", "NILVALUE / 1*255PRINTUSASCII", "비울 수 있다", OK),
     ("APP", "보낸 애플리케이션이나 장치", "NILVALUE / 1*48PRINTUSASCII", "비울 수 있다", OK),
@@ -58,14 +58,11 @@ for r, (fld, desc, abnf, nil, code) in enumerate(ROWS):
 
 BY = RY + len(ROWS) * RH + 10
 d.line(LX, BY, LX + LW + CW1 + CW2 + CW3, BY, RULE, 1)
-d.t(LX, BY + 26, "NILVALUE 는 하이픈 한 글자입니다. 대안으로 그것을 가진 필드만 값 없이 보낼 수 있습니다.",
-    12, MUTED, KR, "start")
-d.t(LX, BY + 48, "전체 메시지는 HEADER SP STRUCTURED-DATA [SP MSG] 입니다. 값을 비우는 것과 자리가 없는 것은 다릅니다.",
-    12, SOFT, KR, "start")
-d.t(LX, BY + 70, "STRUCTURED-DATA 는 자리는 있되 - 로 비우고, MSG 는 ABNF 의 대괄호가 감싼 선택 요소라 자리 자체가 없을 수 있습니다.",
-    12, SOFT, KR, "start")
+d.t(LX, BY + 26, "NILVALUE = \"-\" · 그 대안을 가진 필드만 비움", 12, MUTED, KR, "start")
+d.t(LX, BY + 48, "SYSLOG-MSG = HEADER SP STRUCTURED-DATA [SP MSG]", 12, SOFT, MONO, "start")
+d.t(LX, BY + 70, "STRUCTURED-DATA: 자리 있음, \"-\" 로 비움 · MSG: 자리 자체가 선택", 12, SOFT, KR, "start")
 
-d.legend(696, [("원문과 표준이 어긋난 칸", ACC), ("비울 수 있는 필드", OK),
+d.legend(696, [("늘 값이 있는 VERSION", ACC), ("비울 수 있는 필드", OK),
                   ("비울 수 없는 필드", WARN)])
 d.save("08-01.syslog-fields.svg")
 print("ok 08-01.syslog-fields")

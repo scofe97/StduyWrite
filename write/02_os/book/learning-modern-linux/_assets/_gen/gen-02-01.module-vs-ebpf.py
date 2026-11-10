@@ -14,7 +14,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, KR, MONO
 
-W, H = 880, 700
+W, H = 880, 620
 d = D(W, H, "LEARNING MODERN LINUX · 02-01 §8",
       "모듈과 eBPF 가 겹치는 곳과 갈리는 곳",
       "커널을 소스에 손대지 않고 늘리는 두 길을 집합으로 놓은 것. 가운데가 둘이 공유하는 성질이고, "
@@ -51,16 +51,10 @@ for k, line in enumerate([".ko 를 필요할 때 적재",
 for k, line in enumerate(["bpf 시스템 콜로 넣는다",
                           "커널 안 가상 머신에서 실행",
                           "64비트 RISC 명령셋",
-                          "커널 3.15 이상 필요",
+                          "커널 3.18 이상 필요",
                           "안전하고 효율적으로 확장"]):
     d.t(618, 284 + k * 26, line, 12, INFO if k < 4 else MUTED, KR)
 
-for k, line in enumerate([
-        "재부팅 없이 넣는다는 점은 둘이 같습니다. 갈리는 것은 넣는 통로와 안전 장치입니다.",
-        "저자가 든 eBPF 의 쓰임새는 넷입니다. 쿠버네티스 파드 네트워킹의 CNI 플러그인(Cilium · Calico),",
-        "커널 트레이싱과 관측(bpftrace · Hubble), 보안 통제(Falco), 네트워크 부하분산(katran)."]):
-    d.t(24, 580 + k * 22, line, 12, SOFT if k == 0 else MUTED, KR, "start")
-
-d.legend(648, [("둘이 공유하는 성질", ACC), ("모듈만의 것", MUTED), ("eBPF 만의 것", INFO)])
+d.legend(572, [("둘이 공유하는 성질", ACC), ("모듈만의 것", MUTED), ("eBPF 만의 것", INFO)])
 d.save("02-01.module-vs-ebpf.svg")
 print("ok 02-01.module-vs-ebpf")

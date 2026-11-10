@@ -56,9 +56,9 @@ class SeqKR(Seq):
 
 
 W, H = 880, 640
-d = SeqKR(W, H, "LEARNING MODERN LINUX · 08-01 §7",
+d = SeqKR(W, H, "LEARNING MODERN LINUX · 08-01 §8",
           "재시작 한 번이 저널에 남기는 순서",
-          "원서가 두 터미널로 나눠 보인 장면을 한 그림으로 세운 것. 왼쪽에서 명령을 치면 오른쪽 터미널의 "
+          "두 터미널에서 벌어지는 장면을 한 그림으로 세운 것. 왼쪽에서 명령을 치면 오른쪽 터미널의 "
           "journalctl -f 에 두 주체의 줄이 섞여 흐른다.",
           "타임스탬프를 보면 마지막 두 줄만 7초 뒤입니다")
 
@@ -71,7 +71,7 @@ d.msg("터미널 1", "systemd", "systemctl restart apparmor", 216, INK,
       sub="유닛 하나만 다시 올린다")
 d.msg("systemd", "apparmor.service", "중지 요청", 258, MUTED)
 d.msg("apparmor.service", "터미널 2", "All profile caches have been cle", 296, MUTED,
-      sub="17:10:02 · apparmor[13883] · 원문이 여기서 잘림")
+      sub="17:10:02 · apparmor[13883] · 뒤 줄 생략")
 d.msg("systemd", "터미널 2", "Stopped AppArmor initialization.", 340, MUTED,
       sub="17:10:02 · systemd[1]")
 d.msg("systemd", "터미널 2", "Starting AppArmor initialization...", 384, ACC, mk="acc",
@@ -82,10 +82,8 @@ d.msg("apparmor.service", "터미널 2", "* Starting AppArmor profiles", 452, MU
 d.msg("apparmor.service", "터미널 2", "...done.", 494, OK, mk="ok",
       sub="17:10:09 · 7 초 뒤")
 
-d.t(24, 548, "PID 가 13883 에서 13904 로 바뀐 것이 재시작의 증거입니다. 같은 유닛 이름이지만 프로세스는 다른 것입니다.",
-     12, MUTED, KR, "start")
-d.t(24, 570, "-u 로 유닛 하나만 걸러 두었기 때문에 이 화면에는 다른 서비스의 줄이 섞이지 않습니다.",
-     12, SOFT, KR, "start")
+d.t(24, 548, "PID 13883 → 13904 · 같은 유닛 이름, 다른 프로세스", 12, MUTED, KR, "start")
+d.t(24, 570, "-u apparmor.service 필터 · 다른 서비스의 줄 없음", 12, SOFT, KR, "start")
 
 d.legend(596, [("저자가 짚은 자리", ACC), ("재시작 전 PID", INFO),
                   ("재시작 후 PID", WARN), ("7 초 뒤 끝난 자리", OK)])

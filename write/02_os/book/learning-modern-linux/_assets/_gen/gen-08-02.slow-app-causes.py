@@ -17,13 +17,13 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 880, 592
-CY, HEAD = 316, 700
+W, H = 880, 484
+CY, HEAD = 276, 700
 d = D(W, H, "LEARNING MODERN LINUX · 08-02 §1",
       "느리다는 증상 하나가 세 범주로 갈린다",
-      "저자가 든 느린 앱의 원인 후보를 자원 범주로 묶고, 범주마다 이 장에서 여는 창을 가지 끝에 붙인 것. "
+      "느린 앱의 원인 후보를 자원 범주로 묶고, 범주마다 이 장에서 여는 창을 가지 끝에 붙인 것. "
       "범주가 정해져야 §2 부터의 명령이 순서를 갖는다.",
-      "저자가 먼저 시험하는 가설은 메모리입니다")
+      "먼저 시험하는 가설은 메모리입니다")
 
 d.line(40, CY, HEAD - 6, CY, INK, 1.4)
 d.o.append(f'<path d="M {HEAD - 14} {CY} L {HEAD - 4} {CY}" fill="none" stroke="{INK}" '
@@ -32,21 +32,20 @@ EW, EH = 156, 84
 d.o.append(f'<rect x="{HEAD}" y="{CY - EH / 2}" width="{EW}" height="{EH}" rx="6" '
            f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
 d.t(HEAD + EW / 2, CY - 12, "앱이 느리다", 15, ACC, KR, "middle", 600)
-d.t(HEAD + EW / 2, CY + 10, "관측된 증상", 11.5, ACC, KR)
-d.t(HEAD + EW / 2, CY + 30, "원인이 아니다", 11.5, MUTED, KR)
+d.t(HEAD + EW / 2, CY + 16, "관측된 증상", 11.5, ACC, KR)
 
 BONES = [
-    ("메모리", ACC, True, ["스왑으로 밀린다 (vmstat)", "남은 메모리가 적다 (free)"]),
-    ("CPU", INFO, False, ["실행 대기가 길다 (vmstat r)", "부하 평균이 오른다 (uptime)"]),
-    ("네트워크 I/O", INFO, False, ["누가 쥐고 있나 (lsof)", "소켓 큐가 쌓인다 (ss)"]),
+    ("메모리", ACC, True, ["스왑 입출력 (vmstat si·so)", "available 감소 (free)"]),
+    ("CPU", INFO, False, ["실행 대기 (vmstat r)", "부하 평균 상승 (uptime)"]),
+    ("네트워크 I/O", INFO, False, ["포트를 쥔 프로세스 (lsof -i)", "소켓 큐 적체 (ss Recv-Q)"]),
 ]
 for k, (name, col, focal, subs) in enumerate(BONES, start=1):
     above = (k % 2 == 1)
     sgn = -1 if above else 1
     ax = HEAD - 112 - k * 112
     fx, fy = ax - 68, CY + sgn * 119
-    d.line(ax, CY, fx, fy, col, 1.6 if focal else 1.1)
     TW, TH = 152, 32
+    d.line(ax, CY, fx + 68 * (TH / 2) / 119, fy - sgn * TH / 2, col, 1.6 if focal else 1.1)
     if focal:
         d.tone(fx - TW / 2, fy - TH / 2, TW, TH, ACC, 4, "12", 1.4)
     else:
@@ -57,11 +56,7 @@ for k, (name, col, focal, subs) in enumerate(BONES, start=1):
         d.line(tx, ty, tx - 22, ty, SOFT, 1.0)
         d.t(tx - 28, ty - 4 if above else ty + 12, subs[j], 11, MUTED, KR, "end")
 
-d.t(24, 486, "모니터링에서 가장 자주 하는 일은 둘이라고 저자가 적습니다. 하나 이상의 메트릭을 시간에 걸쳐 "
-             "추적하는 것과, 조건에 알림을 거는 것입니다.", 12, MUTED, KR, "start")
-d.t(24, 510, "범주를 먼저 세워야 그 둘이 무엇을 대상으로 하는지가 정해집니다.", 12, SOFT, KR, "start")
-
-d.legend(534, [("증상과 먼저 시험할 가설", ACC), ("원문이 이름 붙인 원인", INFO),
+d.legend(H - 44, [("증상과 먼저 시험할 가설", ACC), ("자원 범주", INFO),
                ("하위 원인", MUTED), ("관측 경로", SOFT)])
 d.save("08-02.slow-app-causes.svg")
 print("ok 08-02.slow-app-causes")

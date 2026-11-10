@@ -42,7 +42,7 @@ d = D(W, H, "LEARNING MODERN LINUX · 03-03 §4",
       "세 줄이 각각 어떤 조용한 실패를 막는가",
       "스켈레톤 템플릿 맨 위의 세 줄을 켜지 않았을 때와 켰을 때로 갈라 놓은 표. "
       "저자는 bash 가 기본적으로 조용히 실패하는 쪽이라고 적는다.",
-      "가운데 행이 저자가 실제 사고로 든 자리입니다")
+      "가운데 행: 실제 사고(루트 디렉터리 삭제 위험) 방어 지점")
 
 d.box(LEFT, HEADER_Y, COMP_W, HEADER_H, PAPER2, RULE, 0.9)
 d.t(LEFT + COMP_W / 2, HEADER_Y + 24, "어떤 줄인가", 13, INK, KR, "middle", 600)
@@ -67,9 +67,9 @@ for k, (cmd, what, *cells) in enumerate(rows):
         d.t(col_x(j) + COL_W / 2, y + 54, note, 12, MUTED,
             MONO if all(ord(ch) < 128 or ch in "·" for ch in note) else KR)
 
-d.t(LEFT, bottom + 32, "저자는 이 세 줄에 더해 errtrace 까지 넣은 것을 마지막 예제의 첫머리로 씁니다.",
+d.t(LEFT, bottom + 32, "errtrace 옵션: 함수·서브셸까지 ERR 트랩 상속",
     12, MUTED, KR, "start")
-d.t(LEFT, bottom + 54, "빨리 실패하는 것이 거의 언제나 좋은 생각이라는 것이 이 절의 결론입니다.",
+d.t(LEFT, bottom + 54, "조기 실패(fail-fast)와 조용한 실패 방지 원칙",
     12, SOFT, KR, "start")
 d.legend(bottom + 72, [("막아 준다", OK), ("묻힌다", BAD), ("저자가 든 사고 예", ACC)])
 d.save("03-03.set-options.svg")

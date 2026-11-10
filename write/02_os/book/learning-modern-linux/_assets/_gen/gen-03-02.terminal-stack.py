@@ -1,4 +1,4 @@
-# 03-02 §6 끝 — 터미널·셸·멀티플렉서를 한 벌로 묶은 저자의 구성.
+# 03-02 §9 — 터미널·셸·멀티플렉서를 한 벌로 묶은 저자의 구성.
 # 원문(사이드바 "BRINGING IT ALL TOGETHER: TERMINAL, TMUX, AND SHELL"):
 #       "I'm using Alacritty as my terminal ... to configure it I'm using a YAML configuration file that
 #       I can version in Git, allowing me to use it on any target system in seconds."
@@ -14,7 +14,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, PAPER, PAPER2, RULE, KR, MONO
 
 W, H = 880, 588
-d = D(W, H, "LEARNING MODERN LINUX · 03-02 §6",
+d = D(W, H, "LEARNING MODERN LINUX · 03-02 §9",
       "터미널이 셸을 띄우고 셸이 세션에 붙는다",
       "저자가 alacritty.yml 한 파일로 묶어 둔 구성을 층으로 편 것. 터미널이 띄우는 것은 셸이고, "
       "그 셸이 시작 명령으로 tmux 세션에 붙는 순서다.",
@@ -42,10 +42,9 @@ for i, (tag, name, note, focal) in enumerate(layers):
     if i < len(layers) - 1:
         d.arrow([(X + BOX_W / 2, y + LH), (X + BOX_W / 2, y + STRIDE - 2)], MUTED, "ar", 1.2)
 
-d.t(X, 500, "여기에 tmux-continuum 플러그인이 15분 간격으로 세션을 저장하고 복원합니다.",
+d.t(X, 500, "tmux-continuum 플러그인 · 15분 간격 세션 저장·복원",
     12, MUTED, KR, "start")
-d.t(X, 522, "저자는 컴퓨터를 꺼도 다시 켜면 세션·윈도·페인이 거의 그대로 서 있다고 적습니다. "
-            "다만 셸 변수는 예외라고 단서를 붙입니다.", 12, SOFT, KR, "start")
+d.t(X, 522, "재부팅 뒤 세션·윈도·페인 복원 · 셸 변수는 예외", 12, SOFT, KR, "start")
 
 d.legend(542, [("저자가 안심의 근거로 든 층", ACC), ("나머지 층", MUTED)])
 d.save("03-02.terminal-stack.svg")

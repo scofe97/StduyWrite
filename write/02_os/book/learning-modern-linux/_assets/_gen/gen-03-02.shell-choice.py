@@ -1,4 +1,4 @@
-# 03-02 §5 — 셸을 고를 때 저자가 세우는 두 물음과, 정작 그가 답하지 않은 칸.
+# 03-02 §7 — 셸을 고를 때 저자가 세우는 두 물음과, 정작 그가 답하지 않은 칸.
 # 원문("Other Modern Shells"): "In addition to fish and zsh, there are a number of other interesting—
 #       but not necessarily always bash-compatible—shells available out there. When you have a look at
 #       those, ask yourself what the focus of the respective shell is (interactive usage vs. scripting)
@@ -24,7 +24,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
 
 W, H = 880, 696
-d = D(W, H, "LEARNING MODERN LINUX · 03-02 §5",
+d = D(W, H, "LEARNING MODERN LINUX · 03-02 §7",
       "저자는 두 가지를 물으라 하고 자기 목록에는 답하지 않는다",
       "저자가 셸을 볼 때 던지라고 한 물음을 열로 세우고, 그가 실제로 적은 것만 칸에 넣은 격자. "
       "빈 칸이 아니라 미기재라고 적어 두면 무엇을 직접 확인해야 하는지가 보인다.",
@@ -42,12 +42,12 @@ d.line(LX, HY + 12, LX + LW + CW * 3, HY + 12, RULE, 1)
 
 # (셸, 초점, 호환, 특징) — 값 뒤 코드: 1 기재 · 2 단서만 · 0 미기재 · 9 초점
 ROWS = [
-    ("fish",       ("원문 미기재", 0), ("일상 입력은 큰 차이 없다", 2), ("저자 본인이 쓰는 셸", 1)),
-    ("zsh",        ("원문 미기재", 0), ("넓은 하위 호환 유지", 1),      ("자동완성과 테마", 1)),
-    ("Oil",        ("스크립팅 쪽", 9), ("원문 미기재", 0),             ("Python·JS 사용자 대상", 1)),
-    ("murex",      ("원문 미기재", 0), ("POSIX 셸이라고만", 2),        ("테스트 틀·타입 파이프라인", 1)),
-    ("Nushell",    ("원문 미기재", 0), ("원문 미기재", 0),             ("표 형태 출력과 질의 언어", 1)),
-    ("PowerShell", ("원문 미기재", 0), ("POSIX 와 다른 의미론", 2),    ("크로스 플랫폼", 1)),
+    ("fish",       ("미기재", 0), ("일상 입력은 큰 차이 없다", 2), ("저자 본인이 쓰는 셸", 1)),
+    ("zsh",        ("미기재", 0), ("넓은 하위 호환 유지", 1),      ("자동완성과 테마", 1)),
+    ("Oil",        ("스크립팅 쪽", 9), ("미기재", 0),             ("Python·JS 사용자 대상", 1)),
+    ("murex",      ("미기재", 0), ("POSIX 셸이라고만", 2),        ("테스트 틀·타입 파이프라인", 1)),
+    ("Nushell",    ("미기재", 0), ("미기재", 0),             ("표 형태 출력과 질의 언어", 1)),
+    ("PowerShell", ("미기재", 0), ("POSIX 와 다른 의미론", 2),    ("크로스 플랫폼", 1)),
 ]
 TONE = {0: SOFT, 1: OK, 2: WARN, 9: ACC}
 
@@ -69,11 +69,11 @@ for r, (name, *cells) in enumerate(ROWS):
 d.line(LX, RY + RH * len(ROWS) + 4, LX + LW + CW * 3, RY + RH * len(ROWS) + 4, RULE, 1)
 
 d.tone(LX, 548, LW + CW * 3, 62, WARN)
-d.t(LX + 20, 574, "bash 호환은 셸마다 판정된 적이 없습니다", 13, INK, KR, "start", 600)
-d.t(LX + 20, 594, "원문은 목록 전체에 \"항상 bash 호환은 아니다\" 라는 단서 한 줄만 붙입니다.",
+d.t(LX + 20, 574, "bash 호환 · 셸별 판정 없음", 13, INK, KR, "start", 600)
+d.t(LX + 20, 594, "목록 전체에 붙은 단서 한 줄 · \"항상 bash 호환은 아니다\"",
     12, MUTED, KR, "start")
 
-d.legend(632, [("원문이 밝힌 것", OK), ("단서만 붙인 것", WARN),
-               ("원문 미기재", SOFT), ("저자의 물음에 대한 답", ACC)])
+d.legend(632, [("저자가 밝힌 것", OK), ("단서만 붙인 것", WARN),
+               ("미기재", SOFT), ("저자의 물음에 대한 답", ACC)])
 d.save("03-02.shell-choice.svg")
 print("ok 03-02.shell-choice")

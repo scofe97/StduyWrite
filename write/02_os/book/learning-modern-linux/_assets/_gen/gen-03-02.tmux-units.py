@@ -1,4 +1,4 @@
-# 03-02 §6 — tmux 가 다루는 세 단위와 그 포함 관계.
+# 03-02 §8 — tmux 가 다루는 세 단위와 그 포함 관계.
 # 원문("tmux"): "there are three core elements you're interacting with in tmux, from coarse-grained to
 #       fine-grained units" —
 #       Sessions: "A logical unit that you can think of as a working environment dedicated to a specific
@@ -16,7 +16,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, PAPER, PAPER2, RULE, KR, MONO
 
 W, H = 880, 596
-d = D(W, H, "LEARNING MODERN LINUX · 03-02 §6",
+d = D(W, H, "LEARNING MODERN LINUX · 03-02 §8",
       "세션이 윈도를 담고 윈도가 페인을 담는다",
       "tmux 의 세 단위를 큰 것에서 작은 것으로 포갠 것. 세션은 다른 모든 단위를 담는 그릇이고, "
       "실제로 셸이 도는 곳은 가장 안쪽의 페인이다.",
@@ -56,13 +56,11 @@ d.t(W2X + 16, WY + 46, "세션마다 하나만 두는 경우가 많다", 12, MUT
 d.o.append(f'<rect x="{W2X + 16}" y="{WY + 68}" width="304" height="136" rx="6" '
            f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.3"/>')
 d.t(W2X + 168, WY + 118, "페인 하나", 14, ACC, KR, "middle", 600)
-d.t(W2X + 168, WY + 142, "쪼개지 않으면 윈도 전체가", 12, MUTED, KR)
-d.t(W2X + 168, WY + 162, "페인 하나입니다", 12, MUTED, KR)
+d.t(W2X + 168, WY + 142, "쪼개지 않은 윈도 = 페인 하나", 12, MUTED, KR)
 
 d.tone(28, 452, W - 32 - 16, 76, INFO)
 d.t(48, 480, "tmux 는 서버로 돌고 내가 보는 셸이 클라이언트다", 14, INK, KR, "start", 600)
-d.t(48, 504, "그래서 세션을 만들고 들어가고 나오고 없앨 수 있습니다. Ctrl+b 다음 d 로 떼어 두면 "
-             "나중에 tmux attach -t test 로 다시 붙습니다.", 12, MUTED, KR, "start")
+d.t(48, 504, "떼기 Ctrl+b d · 다시 붙기 tmux attach -t test", 12, MUTED, KR, "start")
 
 d.legend(544, [("담는 것", INFO), ("실제로 셸이 도는 곳", ACC), ("그 사이 층", MUTED)])
 d.save("03-02.tmux-units.svg")

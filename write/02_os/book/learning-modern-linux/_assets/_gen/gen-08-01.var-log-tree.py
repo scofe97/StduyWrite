@@ -13,10 +13,10 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER2, RULE, KR, MONO
 
-W, H = 880, 732
+W, H = 880, 710
 d = D(W, H, "LEARNING MODERN LINUX · 08-01 §5",
       "/var/log 는 무엇이 어디 쌓이는지의 지도다",
-      "저자가 한 줄씩 주석한 열두 항목을 성격별로 묶어 트리로 세운 것. 묶음 이름은 원문에 없고 "
+      "저자가 한 줄씩 주석한 열두 항목을 성격별로 묶어 트리로 세운 것. 묶음 이름은 "
       "읽기 편하라고 이 노트가 붙였다.",
       "journal/ 만 디렉터리 권한이 다른데 그 이유가 다음 절로 이어집니다")
 
@@ -47,7 +47,7 @@ groups = [
 
 d.box(RX, Y0, RW, RH, PAPER2, RULE, 1.1, 6)
 d.t(RX + RW / 2, Y0 + 20, "/var/log/", 14, INK, MONO, "middle", 600)
-d.t(RX + RW / 2, Y0 + 36, "중앙 로그 디렉터리", 10.5, MUTED, KR)
+d.t(RX + RW / 2, Y0 + 36, "중앙 로그 디렉터리", 11, MUTED, KR)
 
 row = 0
 gcenters = []
@@ -79,14 +79,10 @@ for gc in gcenters:
     d.path(f"M {BUS} {gc} L {GX - 4} {gc}", MUTED, 1.1, m="ar")
 
 NY = Y0 + row * ISTRIDE + 24
-d.t(24, NY + 4, "저자는 읽기 좋게 줄인 출력이라고 밝힙니다. 파일마다 그룹이 갈려 있는 것이 눈에 띄는 대목입니다.",
-    12, MUTED, KR, "start")
-d.t(24, NY + 26, "auth.log 는 adm 그룹, btmp 는 utmp 그룹, journal/ 은 systemd-journal 그룹이 읽습니다.",
-    12, MUTED, KR, "start")
-d.t(24, NY + 48, "journal/ 의 권한 문자열 끝에 붙은 + 는 ACL 이 걸려 있다는 표시이고, 그룹 자리의 s 는 setgid 입니다.",
-    12, SOFT, KR, "start")
+d.t(24, NY + 4, "읽는 그룹: auth.log → adm · btmp → utmp · journal/ → systemd-journal", 12, MUTED, KR, "start")
+d.t(24, NY + 26, "journal/ 권한 drwxr-sr-x+ · s = setgid · + = ACL", 12, SOFT, MONO, "start")
 
-d.legend(688, [("다음 절로 이어지는 자리", ACC), ("인증과 로그인", INFO),
+d.legend(666, [("다음 절로 이어지는 자리", ACC), ("인증과 로그인", INFO),
                   ("커널과 장치", WARN), ("패키지 관리자", OK)])
 d.save("08-01.var-log-tree.svg")
 print("ok 08-01.var-log-tree")

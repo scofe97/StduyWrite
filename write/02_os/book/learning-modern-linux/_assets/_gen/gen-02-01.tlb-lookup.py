@@ -10,7 +10,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 880, 640
+W, H = 880, 464
 d = D(W, H, "LEARNING MODERN LINUX · 02-01 §4",
       "가상 주소가 물리 주소가 되는 두 갈래",
       "CPU 가 프로세스의 가상 페이지에 닿을 때마다 밟는 경로. TLB 에 있으면 한 걸음이고, "
@@ -39,30 +39,22 @@ def dia(cx, cy, w, h, txt):
 
 CX, RX = 268, 640
 
-oval(CX - 140, 108, 280, 44, "CPU 가 가상 페이지에 접근")
-dia(CX, 216, 300, 68, "TLB 에 그 매핑이 있나")
+oval(CX - 140, 108, 280, 44, "CPU 가상 주소 접근")
+dia(CX, 216, 300, 68, "TLB 매핑 존재 여부")
 d.arrow([(CX, 152), (CX, 182)], MUTED, "ar", 1.2)
 
-step(CX - 140, 316, 280, 64, "물리 주소를 바로 얻는다", "온칩 조회 한 번", OK)
+step(CX - 140, 316, 280, 64, "물리 주소 직접 획득", "온칩 조회 한 번 (히트)", OK)
 d.arrow([(CX, 250), (CX, 316)], OK, "ok", 1.2)
-d.t(CX + 14, 288, "있다", 12, OK, KR, "start")
+d.t(CX + 14, 288, "히트 (Hit)", 12, OK, KR, "start")
 
-step(RX - 148, 188, 296, 64, "페이지 테이블을 따라 계산", "여러 단계라 그만큼 느리다", ACC)
+step(RX - 148, 188, 296, 64, "페이지 테이블 탐색", "다단계 주소 계산 (미스)", ACC)
 d.arrow([(CX + 150, 216), (RX - 148, 216)], ACC, "acc", 1.4)
-d.t((CX + 150 + RX - 148) / 2, 206, "없다", 12, ACC, KR)
+d.t((CX + 150 + RX - 148) / 2, 206, "미스 (Miss)", 12, ACC, KR)
 
-step(RX - 148, 316, 296, 64, "TLB 를 그 값으로 갱신", "다음 접근은 위쪽 경로로", ACC)
+step(RX - 148, 316, 296, 64, "TLB 매핑 갱신", "다음 접근은 빠른 경로로", ACC)
 d.arrow([(RX, 252), (RX, 316)], ACC, "acc", 1.2)
 d.arrow([(RX - 148, 348), (CX + 140, 348)], ACC, "acc", 1.2)
 
-d.box(60, 420, 760, 120, PAPER, RULE, 1.0, 6)
-d.t(80, 448, "페이지는 물리 메모리와 가상 메모리를 같은 크기로 자른 조각입니다", 13, INK, KR, "start", 600)
-for _k, _line in enumerate([
-        "전통적으로 기본 크기는 4 KB 였고, 커널 v2.6.3 부터 huge page 를 지원합니다.",
-        "여러 가상 페이지가 각자의 페이지 테이블을 거쳐 같은 물리 페이지를 가리킬 수 있습니다.",
-        "64비트 리눅스는 프로세스당 128 TB 의 가상 주소 공간과 약 64 TB 의 물리 메모리를 허용합니다."]):
-    d.t(80, 472 + _k * 22, _line, 12, MUTED if _k < 2 else SOFT, KR, "start")
-
-d.legend(564, [("빠른 경로", OK), ("느린 경로와 그 뒤처리", ACC)])
+d.legend(412, [("빠른 경로 (히트)", OK), ("느린 경로와 캐시 갱신 (미스)", ACC)])
 d.save("02-01.tlb-lookup.svg")
 print("ok 02-01.tlb-lookup")

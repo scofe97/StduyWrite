@@ -36,7 +36,7 @@ d = D(W, H, "LEARNING MODERN LINUX · 03-03 §6",
       "저장소에 넣기 전에 거치는 손과 도구",
       "스크립트가 사람의 손에서 저장소와 CI 로 넘어가기까지의 절차를 역할 레인으로 가른 것. "
       "저자가 순서를 못 박은 자리는 테스트를 저장소에 넣기 전에 두라는 대목이다.",
-      "shfmt 가 고친 것은 나중에 shellcheck 가 보고할 일을 미리 없앱니다")
+      "shfmt 포맷팅: shellcheck 경고 사전 방지 효과")
 
 
 def slot_x(i):
@@ -79,9 +79,8 @@ for a, b in zip(steps, steps[1:]):
         mid = xa + 6
         d.path(f"M {xa + 4} {ya} L {mid} {ya} L {mid} {yb} L {xb - 8} {yb}", c, 1.4, m=mk)
 
-d.t(20, 496, "bats 는 Bash Automated Testing System 의 줄임말이고, 테스트 파일을 특별한 문법의 "
-             "bash 스크립트로 정의합니다.", 12, MUTED, KR, "start")
-d.t(20, 518, "테스트 케이스 하나가 설명이 붙은 bash 함수 하나입니다.", 12, SOFT, KR, "start")
+d.t(20, 496, "bats: Bash Automated Testing System 기반 테스트 프레임워크", 12, MUTED, KR, "start")
+d.t(20, 518, "테스트 케이스: 설명이 포함된 개별 bash 함수 단위 구성", 12, SOFT, KR, "start")
 
 d.legend(536, [("사람의 손", INFO), ("로컬 도구", MUTED),
                ("저장소 전에 두라는 자리", ACC), ("저장소와 CI", OK)])

@@ -10,7 +10,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, RULE, KR, MONO
 
-W, H = 880, 524
+W, H = 880, 480
 BAR_X, BAR_MAX, BAR_H, STRIDE, Y0 = 176, 520, 26, 46, 148
 
 ROWS = [
@@ -40,12 +40,7 @@ for i, (name, pct, detail, focal) in enumerate(ROWS):
     d.t(BAR_X + w + 14, y + 18, f"{pct:.2f}%", 13, c if focal else INK, MONO, "start", 600)
     d.t(BAR_X + w + 82, y + 18, detail, 12, MUTED, KR, "start")
 
-d.t(24, 424, "출력 전체의 합계는 0.119476초에 843번, 그중 11번이 오류로 끝났습니다. "
-             "여기서 읽을 것은 개별 수치가 아니라 어디에 몰렸는가입니다.", 12, MUTED, KR, "start")
-d.t(24, 446, "저자가 함께 언급한 connect 는 원문 출력이 줄여져 있어 이 표에 행이 없습니다.",
-    12, SOFT, KR, "start")
-
-d.legend(462, [("저자가 거의 절반이라 부른 둘", ACC), ("원문에 남은 나머지 행", MUTED),
+d.legend(432, [("저자가 거의 절반이라 부른 둘", ACC), ("원문에 남은 나머지 행", MUTED),
                ("생략된 행의 합", SOFT)])
 d.save("02-01.strace-cost.svg")
 print("ok 02-01.strace-cost")

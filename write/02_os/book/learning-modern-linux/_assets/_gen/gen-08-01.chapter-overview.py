@@ -1,4 +1,4 @@
-# 08-01 학습 목표 뒤 전체 지도 — 절 일곱을 읽는 순서로.
+# 08-01 학습 목표 뒤 전체 지도 — 절 아홉을 읽는 순서로.
 # 원문 8장 서두: "To establish a common vocabulary, we'll first review different signal types you might
 #       come across, such as system or application logs, metrics, and process traces. We'll also have a
 #       look at how to go about troubleshooting and measuring performance. Next, we'll focus on logs
@@ -8,10 +8,10 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
-W, H = 880, 588
+W, H = 880, 540
 d = D(W, H, "LEARNING MODERN LINUX · 08-01",
       "재는 것은 바깥이고 알고 싶은 것은 안이다",
-      "8장 첫 구간의 절 일곱을 읽는 순서로 이은 지도. 1~3절이 어휘를 세우고 4~7절이 로그 하나를 판다.",
+      "8장 첫 구간의 절 아홉을 읽는 순서로 이은 지도. 1~3절이 어휘를 세우고 4~9절이 로그 하나를 판다.",
       "저자는 이 장의 대부분을 로그에 쓰겠다고 미리 밝힙니다")
 
 CW, CH, GAPX, GAPY, X0, Y0 = 272, 96, 12, 20, 20, 116
@@ -21,8 +21,10 @@ cards = [
     ("§3", "신호 셋", "무엇을 켤지 어떻게 고르나"),
     ("§4", "로그의 해부", "무엇을 구조화하라는 말인가"),
     ("§5", "/var/log", "장애 때 어느 파일을 여나"),
-    ("§6", "Syslog 와 RFC 5424", "어느 필드가 항상 있나"),
-    ("§7", "journalctl", "tail 이 안 통하면 무엇을 치나"),
+    ("§6", "Syslog 와 rsyslog", "한 줄은 어느 파일에 떨어지나"),
+    ("§7", "logrotate", "회전 뒤 새 파일은 왜 비나"),
+    ("§8", "journalctl", "tail 이 안 통하면 무엇을 치나"),
+    ("§9", "저널 저장과 보존", "지난 부팅 기록은 어디 남나"),
 ]
 
 
@@ -51,6 +53,6 @@ for i, (n, title, q) in enumerate(cards):
     d.t(x + 16, y + 54, title, 14, ACC if focal else INK, KR, "start", 600)
     d.t(x + 16, y + 78, q, 11.5, MUTED, KR, "start")
 
-d.legend(524, [("바깥을 재서 안을 판정한다는 정의가 서는 자리", ACC)])
+d.legend(476, [("바깥을 재서 안을 판정한다는 정의가 서는 자리", ACC)])
 d.save("08-01.chapter-overview.svg")
 print("ok 08-01.chapter-overview")

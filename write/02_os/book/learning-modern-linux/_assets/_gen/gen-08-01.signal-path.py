@@ -12,7 +12,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, PAPER2, RULE, KR, MONO
 
-W, H = 880, 480
+W, H = 880, 440
 d = D(W, H, "LEARNING MODERN LINUX · 08-01 §2",
       "신호는 소스에서 나서 텔레메트리를 타고 목적지에 닿는다",
       "저자가 정의한 용어 다섯 중 셋이 경로의 자리 이름이고 하나가 그 사이를 나르는 과정의 이름이다. "
@@ -54,14 +54,11 @@ for k in range(2):
     d.arrow([(COLX[1] + CW, y), (COLX[2] - 4, y)], MUTED, "ar", 1.3)
 
 NY = Y0 + 14 + AH + 28
-d.t(24, NY + 4, "관측 가능성 자체의 정의가 이 경로 위에 있습니다.", 12.5, INK, KR, "start", 600)
-d.t(24, NY + 26, "바깥 정보를 재서 시스템의 안쪽 상태를 판정하고, 대개 그것을 근거로 조치하는 일입니다.",
-    12, MUTED, KR, "start")
-d.t(24, NY + 48, "저자의 예 — 반응이 굼뜨다고 느끼면 남은 주 메모리를 재고, 한 앱이 다 먹고 있음을 알아내",
+d.t(24, NY + 4, "관측 가능성 = 바깥 정보로 안쪽 상태 판정 → 조치", 12.5, INK, KR, "start", 600)
+d.t(24, NY + 26, "예: 굼뜬 반응 → 남은 주 메모리 측정 → 메모리를 다 먹는 앱 발견 → 종료",
     12, SOFT, KR, "start")
-d.t(24, NY + 68, "그것을 끝내기로 정합니다. 재는 것은 바깥이고 알고 싶은 것은 안입니다.", 12, SOFT, KR, "start")
 
-d.legend(440, [("신호를 나르는 과정", ACC), ("소스", INFO), ("프론트엔드", OK),
+d.legend(400, [("신호를 나르는 과정", ACC), ("소스", INFO), ("프론트엔드", OK),
                   ("보여 주지 않는 목적지", MUTED)])
 d.save("08-01.signal-path.svg")
 print("ok 08-01.signal-path")

@@ -47,7 +47,7 @@ d.arrow([(BX + BW / 2, DY - STRIDE + BH), (BX + BW / 2, DY - 2)], MUTED, "ar", 1
 YY = DY + BH + 44
 d.tone(BX, YY, BW, 52, OK, 6, "12", 1.3)
 d.t(BX + BW / 2, YY + 22, "원인 후보를 찾았다", 14, OK, KR, "middle", 600)
-d.t(BX + BW / 2, YY + 40, "저자는 확정이 아니라 후보라고 적는다", 11.5, MUTED, KR)
+d.t(BX + BW / 2, YY + 40, "확정이 아니라 후보", 11.5, MUTED, KR)
 d.path(f"M {BX + BW / 2} {DY + BH} L {BX + BW / 2} {YY - 2}", OK, 1.3, m="ok")
 d.chip(BX + BW / 2 + 34, DY + BH + 20, "예", OK)
 
@@ -58,10 +58,8 @@ d.chip(RX + 44, DY + BH / 2, "아니오", WARN)
 d.t(RX + 16, Y0 + 2 * STRIDE + BH / 2 - 24, "다음 자원으로", 12, WARN, KR, "start", 600)
 
 NY = YY + 52 + 26
-d.t(24, NY + 4, "저자는 이것을 OODA 고리라고 부릅니다 — 관찰하고, 방향을 잡고, 정하고, 행동합니다.",
-    12, MUTED, KR, "start")
-d.t(24, NY + 26, "고리인 이유는 마지막 행동이 다음 관찰의 입력이 되기 때문입니다. 한 바퀴로 끝나지 않습니다.",
-    12, SOFT, KR, "start")
+d.t(24, NY + 4, "OODA 고리: 관찰 → 방향 잡기 → 결정 → 행동", 12, MUTED, KR, "start")
+d.t(24, NY + 26, "행동의 결과 → 다음 관찰의 입력", 12, SOFT, KR, "start")
 
 d.legend(656, [("한 번에 하나만 바꾸는 자리", ACC), ("판정", WARN), ("멈추는 자리", OK),
                   ("절차의 나머지", MUTED)])

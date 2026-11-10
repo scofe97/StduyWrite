@@ -31,7 +31,7 @@ class SeqKR(Seq):
             s.LX[nm] = x
             s.box(x - lane_w / 2, y0, lane_w, 44, PAPER2, RULE, 1.0)
             s.t(x, y0 + 20, nm, 12, INK, KR, "middle", 600)
-            s.t(x, y0 + 37, sub, 11, MUTED, _kr(sub))
+            s.t(x, y0 + 37, sub, 12, MUTED, _kr(sub))
         s.lane_top = y0 + 44
         return s.LX
 
@@ -39,35 +39,35 @@ class SeqKR(Seq):
         x1, x2 = s.LX[a], s.LX[b]; dx = 1 if x2 > x1 else -1
         s.path(f"M {x1 + 10 * dx} {y} L {x2 - 12 * dx} {y}", c, 1.5, m=mk, dash=dash)
         mx = (x1 + x2) / 2
-        s.t(mx, y - 9, label, 11.5, c, _kr(label), "middle", 600)
+        s.t(mx, y - 9, label, 12, c, _kr(label), "middle", 600)
         if sub:
-            s.t(mx, y + 17, sub, 11, MUTED, _kr(sub))
+            s.t(mx, y + 17, sub, 12, MUTED, _kr(sub))
 
 
 W, H = 880, 568
-d = SeqKR(W, H, "LEARNING MODERN LINUX · 09-01 §4",
+d = SeqKR(W, H, "LEARNING MODERN LINUX · 09-01 §5",
           "믿을 수 없는 망 위에서 서로의 신원을 증명하는 네 걸음",
           "저자가 번호로 적은 네 단계를 시간축에 세운 것. 두 번째 걸음에서 KDC 가 티켓과 세션 키를 함께 "
           "내주는 것이 이 프로토콜의 중심이다.",
-          "원서 그림을 옮긴 것이 아니라 저자의 네 문장으로 다시 세운 것입니다")
+          "티켓과 세션 키를 함께 받는 2번 걸음이 중심입니다")
 
 d.lanes([("클라이언트", "노트북 위의 프로그램"), ("KDC", "Key Distribution Center"),
          ("서비스", "인쇄 · 디렉터리 등")], 116, 236)
 d.rails(430)
 
-d.msg("클라이언트", "KDC", "1 · 자격증명을 요청한다", 200, INK,
-      sub="어느 서비스에 쓸 것인지 지정한다")
-d.msg("KDC", "클라이언트", "2 · 티켓과 세션 키를 내준다", 258, ACC, mk="acc",
-      sub="세션 키는 임시 암호화 키다")
-d.msg("클라이언트", "서비스", "3 · 티켓을 건넨다", 322, MUTED,
-      sub="티켓 안에 신원과 세션 키 사본이 들어 있다")
-d.msg("서비스", "클라이언트", "4 · 세션 키로 클라이언트를 인증한다", 386, OK, mk="ok",
-      sub="선택적으로 서비스도 같은 키로 인증한다")
+d.msg("클라이언트", "KDC", "1 · 자격증명 요청", 200, INK,
+      sub="쓸 서비스 지정")
+d.msg("KDC", "클라이언트", "2 · 티켓 + 세션 키", 258, ACC, mk="acc",
+      sub="세션 키 = 임시 암호화 키")
+d.msg("클라이언트", "서비스", "3 · 티켓 전달", 322, MUTED,
+      sub="티켓 안: 클라이언트 신원 · 세션 키 사본")
+d.msg("서비스", "클라이언트", "4 · 세션 키로 클라이언트 인증", 386, OK, mk="ok",
+      sub="선택: 같은 키로 서비스도 인증")
 
 NY = 466
 d.tone(24, NY - 26, W - 48, 62, WARN, 8, "12", 1.3)
-d.t(44, NY, "저자가 든 과제도 둘입니다", 13, WARN, KR, "start", 600)
-d.t(44, NY + 20, "KDC 가 중심이라 단일 장애점이 되고, 클라이언트와 서버가 NTP 로 시계를 맞춰야 합니다.",
+d.t(44, NY, "운영 조건 둘 · KDC 단일 장애점 · 시계 동기화", 13, WARN, KR, "start", 600)
+d.t(44, NY + 20, "시계 차 > clockskew 300초   →   KRB_AP_ERR_SKEW (37, Clock skew too great)   ·   보통 NTP 로 맞춤",
     12, MUTED, KR, "start")
 
 d.legend(H - 56, [("이 프로토콜의 중심", ACC), ("양쪽이 나눠 가진 키로 끝내는 자리", OK),

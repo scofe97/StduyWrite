@@ -12,7 +12,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, PAPER2, RULE, KR, MONO
 
-W, H = 880, 612
+W, H = 880, 528
 d = D(W, H, "LEARNING MODERN LINUX · 02-01 §3",
       "세션에서 태스크까지, 이름 다섯이 한 구조체로 모인다",
       "원서가 큰 단위에서 작은 단위로 늘어놓은 다섯을 포함 관계로 세운 것. 왼쪽 넷은 사용자가 번호로 "
@@ -44,10 +44,10 @@ d.o.append(f'<rect x="{TX}" y="{TY}" width="{TW}" height="{TH}" rx="8" '
 d.t(TX + TW / 2, TY + 36, "태스크", 17, ACC, KR, "middle", 600)
 d.t(TX + TW / 2, TY + 58, "task_struct — sched.h", 12, ACC, MONO)
 for k, line in enumerate([
-        "스케줄링 정보 · 식별자(PID · TGID) · 시그널 핸들러를 담는다",
-        "성능과 보안에 관한 정보도 여기에 붙는다",
-        "왼쪽 넷은 모두 여기서 파생되거나 여기에 닻을 내린다",
-        "그러나 태스크 자체는 커널 밖으로 드러나지 않는다"]):
+        "스케줄링 정보 · 식별자(PID · TGID) · 시그널 핸들러",
+        "성능 · 보안 관리 메타데이터",
+        "왼쪽 넷이 닻을 내리는 바탕",
+        "커널 밖으로 그대로 드러나지 않음"]):
     d.t(TX + 20, TY + 96 + k * 26, line, 12, MUTED if k < 3 else ACC, KR, "start",
         600 if k == 3 else 400)
 
@@ -55,12 +55,6 @@ for i in range(len(chain)):
     y = Y0 + i * STRIDE + NH / 2
     d.path(f"M {NX + NW + 8} {y} L {TX - 10} {y}", ACC, 1.0, m="acc", dash="5 5")
 
-for _k, _line in enumerate([
-        "저자는 스레드를 표현하는 전용 자료구조가 없다고 적습니다.",
-        "스레드는 메모리나 시그널 핸들러 같은 자원을 다른 프로세스와 공유하는 프로세스입니다.",
-        "TGID 값이 같으면 그것이 멀티스레드 프로세스라는 뜻입니다."]):
-    d.t(NX, 468 + _k * 22, _line, 12, MUTED if _k < 2 else SOFT, KR, "start")
-
-d.legend(548, [("사용자가 번호로 보는 것", INFO), ("커널 안에만 있는 것", ACC)])
+d.legend(472, [("사용자가 번호로 보는 것", INFO), ("커널 안에만 있는 것", ACC)])
 d.save("02-01.task-tree.svg")
 print("ok 02-01.task-tree")

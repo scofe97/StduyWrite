@@ -15,7 +15,7 @@ d = D(W, H, "LEARNING MODERN LINUX · 03-03 §7",
       "예제 스크립트가 밟는 길과 밟지 않는 길",
       "저자의 gh-user-info.sh 를 흐름으로 편 것. 왼쪽이 실제 구현된 경로이고, "
       "오른쪽 회색 칸이 저자가 스스로 남겨 둔 네 가지 숙제다.",
-      "검사가 하나뿐이라는 것이 이 예제의 교육적 요점입니다")
+      "핵심 관찰: 의존성 검사(jq) 하나에 의존하는 스크립트 구조")
 
 
 def oval(x, y, w, h, txt, c=MUTED):
@@ -67,10 +67,9 @@ for k, line in enumerate(["JSON 이 깨졌거나 500 이면",
                           "curl 이 없으면 wget 으로",
                           "-h 로 사용법 보이기"]):
     d.t(620, 432 + k * 26, line, 12, MUTED, KR, "start")
-d.t(620, 552, "어느 것도 지금 코드에는", 12, SOFT, KR, "start")
-d.t(620, 572, "들어 있지 않습니다", 12, SOFT, KR, "start")
+d.t(620, 560, "예제 코드 미구현 방어 항목", 12, SOFT, KR, "start")
 
-d.t(20, 640, "출력은 Michael Hausenblas joined GitHub in 2009 한 줄입니다.", 12, SOFT, KR, "start")
+d.t(20, 640, "실행 결과: Michael Hausenblas joined GitHub in 2009", 12, SOFT, KR, "start")
 d.legend(660, [("검사가 있는 자리", ACC), ("실패 경로", BAD),
                ("정상 경로", OK), ("빠진 검사", WARN)])
 d.save("03-03.script-flow.svg")

@@ -1,60 +1,62 @@
-# 08-02 §3 — time 이 내놓는 세 값이 무엇을 담는가.
-# 원문("Monitoring"): `time (ls -R /etc 2&> /dev/null)` 출력이 real 0m0.022s · user 0m0.012s ·
-#       sys 0m0.007s 이고, 주석은 real("The total (wall clock) time it took"),
-#       user("How long ls itself spent on-CPU (user space)"),
-#       sys("How long ls was waiting for Linux to do something (kernel space)") 다.
-#       이어서 "taking the sum of user and sys is a good approximation, and the ratio of the two gives
-#       you a good idea where it spends most of the execution time" 라고 적는다.
-# 1차 자료(GNU time(1)): "S  Total number of CPU-seconds used by the system on behalf of the process
-#       (in kernel mode), in seconds." / "U  Total number of CPU-seconds that the process used directly
-#       (in user mode), in seconds."
-# 주의: 안쪽 세 칸의 폭은 원문 수치에 정비례한다. real 이 user+sys 를 담는 그림은 단일 스레드 프로세스일
-#       때만 성립하며, 스레드가 여럿이면 real 이 user+sys 보다 작아질 수 있다. 그 조건을 그림에 적었다.
-# 타입 스펙: type-nested — 포함 관계로 드러나는 계층. 경과 시간이라는 바깥 상자 안에 CPU 시간 두 조각과
-#           CPU 를 안 쓴 나머지가 들어간다. 축약: 세 값의 시간 순서는 그리지 않았다.
+# 08-02 §3 — 네 명령의 CPU 시간(user+sys)과 real 을 같은 시간 축에 찍는다. 두 점 사이 거리가 기다린 시간이다.
+# 실측: debian:12 컨테이너 bash `time` (2026-11-10).
+#   ls -R /usr &> /dev/null       real 0.021 user 0.002 sys 0.019
+#   sleep 1                       real 1.001 user 0.000 sys 0.001
+#   bash 반복문 30만 회           real 0.511 user 0.508 sys 0.001
+#   dd bs=1 count=400000          real 0.093 user 0.030 sys 0.063
+# 1차 자료: GNU time(1) — U "CPU-seconds that the process used directly (in user mode)",
+#           S "CPU-seconds used by the system on behalf of the process (in kernel mode)".
+# 타입 스펙: type-bar — dumbbell. 가로 방향만 쓰고 행마다 두 점(CPU 시간·real)을 선으로 잇는다.
+#           값 범위가 0.001~1초로 세 자릿수를 넘어 로그 축을 쓴다. 로그 축에는 0 이 없으므로 축 아래에 밝힌다.
+import math
 import sys; sys.path.insert(0, ".")
-from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
+from dd import D, ACC, MUTED, SOFT, INK, INFO, RULE, KR, MONO
 
-W, H = 880, 474
+W, H = 920, 452
+X0, PW = 300, 560
+LO, HI = 0.0005, 2.0
+STRIDE, Y0 = 64, 128
+
+
+def px(v):
+    return X0 + PW * (math.log10(v) - math.log10(LO)) / (math.log10(HI) - math.log10(LO))
+
+
+ROWS = [
+    ("ls -R /usr", "user 0.002 · sys 0.019", 0.021, 0.021, False),
+    ("sleep 1", "user 0.000 · sys 0.001", 0.001, 1.001, True),
+    ("bash 반복문 30만 회", "user 0.508 · sys 0.001", 0.509, 0.511, False),
+    ("dd bs=1 40만 회", "user 0.030 · sys 0.063", 0.093, 0.093, False),
+]
+
 d = D(W, H, "LEARNING MODERN LINUX · 08-02 §3",
-      "real 안에 CPU 시간 둘과 CPU 를 안 쓴 나머지가 있다",
-      "원서의 time 출력 세 값을 크기에 비례해 담은 것. 안쪽 두 칸이 CPU 시간이고 마지막 칸이 CPU 를 "
-      "쓰지 않은 시간이다. 순서가 아니라 양을 나타낸다.",
-      "저자는 sys 를 기다린 시간이라 적지만 그것도 CPU 를 쓴 시간입니다")
+      "CPU 시간과 real 사이의 거리",
+      "네 명령의 user+sys 와 real 을 로그 시간 축에 찍었다. 두 점이 겹치면 CPU 위에서 시간을 썼고, "
+      "멀면 그만큼 CPU 밖에서 기다렸다.",
+      "단일 스레드라면 real − (user+sys) 가 기다린 시간입니다")
 
-OX, OY, OW, OH = 24, 132, 832, 172
-d.box(OX, OY, OW, OH, PAPER2, INFO, 1.3, 10)
-d.t(OX + 20, OY + 28, "real 0m0.022s — 벽시계로 잰 경과 시간", 15, INFO, KR, "start", 600)
-d.t(OX + 20, OY + 50, "저자는 성능 말고는 그리 쓸모 있지 않다고 적는다", 11.5, MUTED, KR, "start")
+AXT, AXB = Y0 - 24, Y0 + 4 * STRIDE - 20
+for v, lab in ((0.001, "0.001"), (0.01, "0.01"), (0.1, "0.1"), (1, "1")):
+    x = px(v)
+    d.line(x, AXT, x, AXB, "rgba(245,245,243,0.08)", 0.8)
+    d.t(x, AXB + 18, lab, 11, SOFT, MONO)
+d.line(X0, AXB, X0 + PW, AXB, "rgba(245,245,243,0.25)", 1)
+d.t(X0 + PW + 4, AXB + 18, "초", 11, SOFT, KR, "start")
 
-IY, IH = OY + 66, 88
-TOTAL = 0.022
-segs = [("user", 0.012, "사용자 공간에서 쓴 CPU 시간", OK, False),
-        ("sys", 0.007, "커널이 이 프로세스를 위해 쓴 CPU 시간", ACC, True),
-        ("나머지", 0.003, "유도값", SOFT, False)]
-x = OX + 16
-for name, val, note, col, focal in segs:
-    w = (OW - 32) * val / TOTAL - 8
-    if focal:
-        d.tone(x, IY, w, IH, ACC, 6, "12", 1.4)
-    else:
-        d.box(x, IY, w, IH, PAPER, col, 1.2, 6)
-    d.t(x + 14, IY + 26, name, 14, col, MONO, "start", 600)
-    d.t(x + 14, IY + 48, f"0m{val:.3f}s", 12.5, INK, MONO, "start")
-    d.t(x + 14, IY + 70, note, 11, MUTED, KR, "start")
-    x += w + 8
+for i, (name, sub, cpu, real, focal) in enumerate(ROWS):
+    y = Y0 + i * STRIDE
+    c = ACC if focal else INFO
+    d.t(24, y - 2, name, 13, ACC if focal else INK, MONO, "start", 600)
+    d.t(24, y + 16, sub, 12, MUTED, MONO, "start")
+    x1, x2 = px(cpu), px(real)
+    if x2 - x1 > 2:
+        d.line(x1, y + 4, x2, y + 4, c, 2.4)
+    d.o.append(f'<circle cx="{x2}" cy="{y + 4}" r="7" fill="#0D1117" stroke="{c}" stroke-width="2"/>')
+    d.o.append(f'<circle cx="{x1}" cy="{y + 4}" r="4" fill="{c}"/>')
+    gap = real - cpu
+    d.t(x2 + 14, y + 8, f"대기 {gap:.3f}s", 12, c, KR, "start", 600 if focal else 400)
 
-NY = OY + OH + 30
-d.t(24, NY, "저자는 sys 를 \"리눅스가 무언가 해 주기를 기다린 시간\" 이라고 적습니다. 그런데 기다림은 "
-            "CPU 시간을 쓰지 않습니다.", 12, INK, KR, "start", 600)
-d.t(24, NY + 24, "GNU time(1) 은 sys 를 커널 모드에서 프로세스를 대신해 쓴 CPU 초라고 정의합니다. "
-                 "기다림은 오른쪽 마지막 칸에 있습니다.", 12, MUTED, KR, "start")
-d.t(24, NY + 48, "저자 자신의 다음 문장도 그쪽입니다. user 와 sys 의 합이 걸린 시간의 좋은 근사라고 "
-                 "적는데, 둘 다 CPU 시간이라야 합이 뜻을 갖습니다.", 12, MUTED, KR, "start")
-d.t(24, NY + 76, "이 포함 관계는 단일 스레드 프로세스일 때만 성립합니다. 스레드가 여럿이면 user 와 sys 의 "
-                 "합이 real 을 넘을 수 있습니다.", 12, SOFT, KR, "start")
-
-d.legend(434, [("원문 서술이 어긋난 칸", ACC), ("경과 시간", INFO),
-                  ("사용자 공간 CPU 시간", OK), ("real 에서 뺀 유도값", SOFT)])
+d.t(24, AXB + 18, "로그 축 · 0 은 표시 불가", 11, SOFT, KR, "start")
+d.legend(H - 48, [("CPU 시간 user+sys (채운 점)", INFO), ("real (빈 점)", INFO), ("대기가 큰 명령", ACC)])
 d.save("08-02.time-breakdown.svg")
 print("ok 08-02.time-breakdown")
