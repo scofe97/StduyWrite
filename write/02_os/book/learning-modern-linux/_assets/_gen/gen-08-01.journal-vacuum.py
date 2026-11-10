@@ -9,7 +9,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, PAPER2, RULE, KR, MONO
 
 W, H = 880, 496
-d = D(W, H, "LEARNING MODERN LINUX · 08-01 §9",
+d = D(W, H, "LEARNING MODERN LINUX · 08-01 §4",
       "저널 사용량은 rotate 뒤 vacuum 으로 줄어든다",
       "컨테이너에서 저널을 채운 뒤 --disk-usage, --rotate, --vacuum-size=16M 을 차례로 돌린 값. "
       "vacuum 은 보관 파일만 지운다.",

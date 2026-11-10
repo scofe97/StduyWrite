@@ -1,4 +1,4 @@
-# 08-01 §7 — 서비스 하나를 재시작할 때 저널에 남는 순서.
+# 08-01 §3 — 서비스 하나를 재시작할 때 저널에 남는 순서.
 # 원문("journalctl"): "in one terminal we restart the service using systemctl restart apparmor, and in
 #       another we execute the following command" 뒤의 `journalctl -f -u apparmor.service` 출력.
 #       남은 줄은 "-- Logs begin at Sun 2021-01-24 14:36:30 GMT. --",
@@ -6,7 +6,7 @@
 #       have been unload", "... Unloading profiles will leave all running processes permanently",
 #       "Sep 26 17:10:02 starlite systemd[1]: Stopped AppArmor initialization.",
 #       "Sep 26 17:10:02 starlite systemd[1]: Starting AppArmor initialization...",
-#       "Sep 26 17:10:02 starlite apparmor[13904]: * Starting AppArmor profiles",
+#       "Sep 26 17:10:03 starlite apparmor[13904]: * Starting AppArmor profiles",
 #       "Sep 26 17:10:03 starlite apparmor[13904]: Skipping profile in /etc/apparmor.d/disable: usr.sbin.rsy",
 #       "Sep 26 17:10:09 starlite apparmor[13904]: ...done.",
 #       "Sep 26 17:10:09 starlite systemd[1]: Started AppArmor initialization."
@@ -56,7 +56,7 @@ class SeqKR(Seq):
 
 
 W, H = 880, 640
-d = SeqKR(W, H, "LEARNING MODERN LINUX · 08-01 §8",
+d = SeqKR(W, H, "LEARNING MODERN LINUX · 08-01 §3",
           "재시작 한 번이 저널에 남기는 순서",
           "두 터미널에서 벌어지는 장면을 한 그림으로 세운 것. 왼쪽에서 명령을 치면 오른쪽 터미널의 "
           "journalctl -f 에 두 주체의 줄이 섞여 흐른다.",
@@ -78,7 +78,7 @@ d.msg("systemd", "터미널 2", "Starting AppArmor initialization...", 384, ACC,
       sub="17:10:02 · 저자가 짚은 자리 — 여기서 다시 올라온다")
 d.state("apparmor.service", "PID 13904", 420, WARN)
 d.msg("apparmor.service", "터미널 2", "* Starting AppArmor profiles", 452, MUTED,
-      sub="17:10:02 · apparmor[13904]")
+      sub="17:10:03 · apparmor[13904]")
 d.msg("apparmor.service", "터미널 2", "...done.", 494, OK, mk="ok",
       sub="17:10:09 · 7 초 뒤")
 

@@ -1,64 +1,90 @@
-# 05-01 §4 — VFS 가 시스템 콜과 개별 파일시스템 사이에 놓이는 자리.
-# 원문("The Virtual File System"): "Linux manages to provide a file-like access to many sorts of resources
-#       (in-memory, locally attached, or networked storage) through an abstraction called the virtual file
-#       system (VFS). The basic idea is to introduce a layer of indirection between the clients (syscalls)
-#       and the individual filesystems implementing operations for a concrete device or other kind of
-#       resource. This means that VFS separates the generic operation (open, read, seek) from the actual
-#       implementation details."
-#       "A file, in Linux, doesn't have any prescribed structure; it's just a stream of bytes. It's up to
-#       the client to decide what the bytes mean."
-#       네 갈래는 Local filesystems(ext3, XFS, FAT, NTFS) · In-memory filesystems(tmpfs) ·
-#       Pseudo filesystems(procfs) · Networked filesystems(NFS, Samba, Netware).
-#       "There are over 100 syscalls related to files."
-# 타입 스펙: type-layers — 위아래 층과 그 사이의 계약. accent 는 층 하나, 곧 간접이 실제로 일어나는 자리.
-#           축약: 시스템 콜 범주 다섯은 본문 표에 두고 도식에는 대표 셋만 적었다.
+# 05-01 §4 — read() 시스템 콜 한 번이 VFS 를 지나 ext4 와 procfs 로 갈라지는 시퀀스.
+# 타입 스펙: type-sequence — 클라이언트 시스템 콜 호출이 VFS 간접 층을 거쳐 ext4(디스크)와 procfs(RAM)로 분기하는 시퀀스.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 880, 636
+W, H = 880, 640
 d = D(W, H, "LEARNING MODERN LINUX · 05-01 §4",
-      "일반적인 연산과 실제 구현을 갈라 놓는 층",
-      "같은 open 과 read 가 SSD 로도 가고 /proc 으로도 가는 이유는 그 사이에 층이 하나 있기 때문이다. "
-      "VFS 는 파일이라는 패러다임 위에서 자원에 접근하는 공통의 방법을 준다.",
-      "리눅스에서 파일은 구조 없는 바이트 스트림입니다")
+      "단일 시스템 콜 read() 가 VFS 를 거쳐 갈라지는 흐름",
+      "같은 read() 시스템 콜이 VFS 간접 층을 지나 로컬 ext4 블록 I/O 와 "
+      "가짜 procfs 커널 메모리 직렬화로 분기하는 시퀀스.",
+      "VFS 는 시스템 콜과 파일시스템 구현 사이의 간접 층")
 
-LX, LW = 40, 800
-d.box(LX, 148, LW, 66, PAPER2, RULE, 1.0, 8)
-d.t(LX + 20, 174, "클라이언트 — 시스템 콜", 15, INK, KR, "start", 600)
-d.t(LX + 20, 196, "파일 관련 시스템 콜만 백 개가 넘습니다. open · read · seek 같은 일반적인 연산입니다.",
-    12, MUTED, KR, "start")
-
-d.arrow([(W / 2, 214), (W / 2, 244)], MUTED, "ar", 1.4)
-
-VY = 248
-d.o.append(f'<rect x="{LX}" y="{VY}" width="{LW}" height="96" rx="8" '
-           f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.5"/>')
-d.t(LX + 20, VY + 30, "VFS — 커널 안의 추상 층", 16, ACC, KR, "start", 600)
-d.t(LX + 20, VY + 54, "일반적인 연산을 실제 구현 세부와 갈라 놓습니다.", 12.5, ACC, KR, "start")
-d.t(LX + 20, VY + 76, "자료구조는 include/linux/fs.h — inode · file · dentry · super_block",
-    12, MUTED, MONO, "start")
-
-BW, GAP = 194, 8
-BY = 396
-kinds = [
-    ("로컬", "ext3 · XFS · FAT · NTFS", "드라이버로 블록 장치에", OK),
-    ("인메모리", "tmpfs", "주기억장치에 산다", INFO),
-    ("가짜", "procfs · sysfs", "커널 인터페이스를 감싼다", WARN),
-    ("네트워크", "NFS · Samba", "드라이버가 네트워크를 탄다", MUTED),
+# 6개 참여자 라이프라인
+actors = [
+    ("User App", "cat 호출", 80, INK),
+    ("VFS", "vfs_read", 230, ACC),
+    ("ext4", "read_iter 구현", 390, OK),
+    ("Block I/O", "dm-0 → sda2", 540, MUTED),
+    ("procfs", "seq_read", 680, INFO),
+    ("Kernel RAM", "내부 상태 직렬화", 815, WARN),
 ]
-for i, (name, ex, note, col) in enumerate(kinds):
-    x = LX + i * (BW + GAP)
-    d.path(f"M {x + BW / 2} {VY + 96} L {x + BW / 2} {BY - 2}", col, 1.3, m="ar")
-    d.box(x, BY, BW, 92, PAPER2, col, 1.2, 6)
-    d.t(x + BW / 2, BY + 28, name, 14, col, KR, "middle", 600)
-    d.t(x + BW / 2, BY + 52, ex, 11.5, INK, MONO)
-    d.t(x + BW / 2, BY + 74, note, 11.5, MUTED, KR)
 
-d.tone(LX, 512, LW, 44, MUTED)
-d.t(LX + 20, 540, "네트워크 갈래는 드라이버가 네트워크 연산을 포함한다는 이유로 저자가 7장으로 미룹니다.",
-    12, MUTED, KR, "start")
+TOP_Y = 120
+BOT_Y = 480
 
-d.legend(576, [("간접이 일어나는 층", ACC), ("블록 장치를 쓰는 갈래", OK),
-               ("메모리에 사는 갈래", INFO), ("커널을 감싸는 갈래", WARN)])
+for name, sub, x, col in actors:
+    d.box(x - 52, TOP_Y, 104, 44, PAPER2, col, 1.2, 6)
+    d.t(x, TOP_Y + 18, name, 12, col, MONO if col != INK else KR, "middle", 600)
+    d.t(x, TOP_Y + 34, sub, 11, MUTED, KR, "middle")
+    d.line(x, TOP_Y + 44, x, BOT_Y, RULE, 1.0, "4 4")
+
+# 1. ext4 갈래 (/myfile 읽기)
+y1 = 186
+d.t(80, y1 - 8, "1. cat 일반 파일 (로컬 블록)", 11, OK, KR, "start", 600)
+d.arrow([(80, y1), (228, y1)], OK, "ok", 1.2)
+d.t(155, y1 + 14, "read(fd_ext4)", 10, OK, MONO, "middle")
+
+y2 = 214
+d.arrow([(230, y2), (388, y2)], OK, "ok", 1.2)
+d.t(310, y2 - 4, "ext4_file_read_iter()", 10, OK, MONO, "middle")
+
+y3 = 242
+d.arrow([(390, y3), (538, y3)], MUTED, "ar", 1.2)
+d.t(465, y3 - 4, "submit_bio() 디스크 블록", 11, MUTED, KR, "middle")
+
+y4 = 270
+d.arrow([(540, y4), (392, y4)], MUTED, "ar", 1.2, dash="3 3")
+d.t(465, y4 - 4, "4096B 데이터 블록", 11, MUTED, KR, "middle")
+
+y5 = 298
+d.arrow([(390, y5), (82, y5)], OK, "ok", 1.2, dash="3 3")
+d.t(235, y5 - 4, "버퍼 데이터 반환", 11, OK, KR, "middle")
+
+# 구분 가로선
+d.line(40, 324, W - 40, 324, RULE, 0.8, "2 2")
+
+# 2. procfs 갈래 (/proc/cpuinfo 읽기)
+y6 = 348
+d.t(80, y6 - 8, "2. cat /proc/cpuinfo (가짜 파일시스템)", 11, INFO, KR, "start", 600)
+d.arrow([(80, y6), (228, y6)], INFO, "info", 1.2)
+d.t(155, y6 + 14, "read(fd_proc)", 10, INFO, MONO, "middle")
+
+y7 = 376
+d.arrow([(230, y7), (678, y7)], INFO, "info", 1.2)
+d.t(455, y7 - 4, "proc_reg_read_iter() (seq_file)", 10, INFO, MONO, "middle")
+
+y8 = 404
+d.arrow([(680, y8), (813, y8)], WARN, "warn", 1.2)
+d.t(747, y8 - 4, "RAM CPU 상태 읽기", 11, WARN, KR, "middle")
+
+y9 = 432
+d.arrow([(815, y9), (682, y9)], WARN, "warn", 1.2, dash="3 3")
+d.t(747, y9 - 4, "2664B 텍스트 직렬화", 11, WARN, KR, "middle")
+
+y10 = 460
+d.arrow([(680, y10), (82, y10)], INFO, "info", 1.2, dash="3 3")
+d.t(380, y10 - 4, "즉석 생성 텍스트 반환 (디스크 I/O 0회)", 11, INFO, KR, "middle")
+
+# 하단 요약 카드
+BY = 500
+BW = W - 48
+d.box(24, BY, BW, 72, PAPER2, ACC, 1.2, 8)
+d.t(44, BY + 24, "VFS 의 간접 층 추상화", 13.5, ACC, KR, "start", 600)
+d.t(44, BY + 46, "클라이언트 관점 — open · read · stat 균일한 시스템 콜 손잡이", 11.5, INK, KR, "start")
+d.t(44, BY + 64, "ext4 는 블록 계층으로, procfs 는 메모리 핸들러로 분기", 11, MUTED, KR, "start")
+
+d.legend(588, [("로컬 ext4 블록 I/O", OK), ("VFS 공통 추상 층", ACC),
+               ("procfs 및 커널 RAM", INFO), ("직렬화 생성", WARN)])
 d.save("05-01.vfs.svg")
 print("ok 05-01.vfs")

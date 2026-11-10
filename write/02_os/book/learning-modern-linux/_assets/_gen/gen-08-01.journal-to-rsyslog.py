@@ -1,4 +1,4 @@
-# 08-01 §6 「journald 에서 rsyslog 로 가는 두 길」 — 한 줄이 journald 를 거쳐 rsyslog 의 파일로 가는 길.
+# 08-01 §2 「journald 에서 rsyslog 로 가는 두 길」 — 한 줄이 journald 를 거쳐 rsyslog 의 파일로 가는 길.
 # 1차 자료: journald.conf(5) ForwardToSyslog= 와 "usually the second method is used by syslog daemons".
 # 실측: Debian 12 컨테이너 rsyslog.conf 의 module(load="imuxsock"), 저널의
 #       "imuxsock: Acquired UNIX socket '/run/systemd/journal/syslog'". Rocky Linux 9.3 컨테이너
@@ -10,7 +10,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, PAPER2, RULE, KR, MONO
 
 W, H = 880, 432
-d = D(W, H, "LEARNING MODERN LINUX · 08-01 §6",
+d = D(W, H, "LEARNING MODERN LINUX · 08-01 §2",
       "한 줄이 journald 를 거쳐 rsyslog 의 파일로 가는 두 길",
       "systemd 배포판에서 /dev/log 로 들어온 줄은 journald 가 먼저 받는다. rsyslog 는 Debian 에서는 "
       "소켓으로 넘겨받고 Rocky 에서는 저널 파일을 직접 읽는다.",
@@ -21,7 +21,7 @@ W0, W1, W2, W3, W4 = 132, 132, 216, 120, 136
 LH = 80
 LANES = [
     ("Debian 12", 124, INFO,
-     ("/run/systemd/journal/syslog", "ForwardToSyslog=yes (기본)"),
+     ("/run/systemd/journal/syslog", "ForwardToSyslog=yes (Debian 기본)"),
      ("imuxsock", "소켓으로 받음", None),
      ("/var/log/syslog", "/var/log/auth.log", "cron.log …")),
     ("Rocky Linux 9", 244, OK,
@@ -66,7 +66,7 @@ BY = LANES[1][1] + LH + 20
 d.line(C4, BY, C4 + W4, BY, MUTED, 1.0)
 d.line(C4, BY - 6, C4, BY, MUTED, 1.0)
 d.line(C4 + W4, BY - 6, C4 + W4, BY, MUTED, 1.0)
-d.t(C4 + W4, BY + 20, "logrotate 가 돌리는 파일 · §7", 11, MUTED, KR, "end")
+d.t(C4 + W4, BY + 20, "logrotate 가 돌리는 파일 · §4", 11, MUTED, KR, "end")
 
 d.legend(388, [("모든 줄이 먼저 지나는 자리", ACC), ("Debian 12 경로", INFO),
                ("Rocky Linux 9 경로", OK)])

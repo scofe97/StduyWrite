@@ -1,64 +1,85 @@
-# 05-01 §9 — 유니온 마운트가 만드는 합집합과, 겹치는 자리에서 생기는 문제.
-# 원문("Copy-on-Write Filesystems"): "This is the idea that you can combine (mount) multiple directories
-#       into one location so that, to the user of the resulting directory, it appears that said directory
-#       contains the combined content (or: union) of all the participating directories. With union mounts,
-#       you often come across the terms upper filesystem and lower filesystem, hinting at the layering
-#       order of the mounts."
-#       "With union mounts, the devil is in the details. You have to come up with rules around what happens
-#       when a file exists in multiple places or what writing to or removing files means."
-# 주의: 겹치는 자리에서 어느 쪽이 이기는지를 원문은 규칙으로 적지 않는다. 상위·하위라는 층 순서만
-#       밝히므로 도식도 "정해야 한다" 까지만 적고 승패를 단정하지 않는다.
-# 타입 스펙: type-venn — 두 집합과 그 교집합이 논점일 때. accent 는 교집합, 곧 저자가
-#           "세부에 악마가 있다" 고 적은 자리. 축약: 참여 디렉토리는 둘로 줄였다(원문은 여럿).
+# 05-01 §8 — 유니온 마운트(OverlayFS)의 조회 · 쓰기(copy-up) · 삭제(whiteout) 흐름.
+# 타입 스펙: type-process — 상위(upper)와 하위(lower) 층 사이의 3대 연산(조회 · 수정 복사 · 화이트아웃 삭제) 처리 흐름.
 import sys; sys.path.insert(0, ".")
-from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, PAPER, PAPER2, RULE, KR, MONO
+from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 880, 688
-d = D(W, H, "LEARNING MODERN LINUX · 05-01 §9",
-      "겹쳐 놓으면 하나로 보이고, 겹친 자리에서 규칙이 필요해진다",
-      "여러 디렉토리를 한 자리에 마운트하면 쓰는 사람에게는 합집합 하나로 보인다. "
-      "문제는 같은 이름이 양쪽에 있을 때다.",
-      "상위와 하위라는 말은 마운트의 층 순서를 가리킵니다")
+W, H = 880, 640
+d = D(W, H, "LEARNING MODERN LINUX · 05-01 §8",
+      "유니온 마운트(OverlayFS)의 조회 · 수정 · 삭제 3대 흐름",
+      "여러 디렉터리를 겹칠 때 상위(upper)와 하위(lower) 층 사이에서 일어나는 "
+      "조회 우선순위, 쓰기 시 copy-up, 삭제 시 화이트아웃(c 0 0) 처리 흐름.",
+      "하위 층은 불변으로 두고 상위 층에 변경분과 삭제 표식을 기록")
 
-CY, R = 300, 120
-LCX, RCX = 436, 606
-MID = (LCX + RCX) / 2
-d.o.append(f'<circle cx="{LCX}" cy="{CY}" r="{R}" fill="{INFO}10" stroke="{INFO}" stroke-width="1.4"/>')
-d.o.append(f'<circle cx="{RCX}" cy="{CY}" r="{R}" fill="{OK}10" stroke="{OK}" stroke-width="1.4"/>')
+# 상단 3개 연산 흐름 카드
+CW = 264
+CH = 320
+GAP = 14
+X0 = 24
+Y0 = 120
 
-d.t(LCX - 58, CY - 84, "상위 파일시스템", 13, INFO, KR, "middle", 600)
-d.t(RCX + 58, CY - 84, "하위 파일시스템", 13, OK, KR, "middle", 600)
+ops = [
+    ("1. 파일 조회 (Read)", "Upper → Lower 하향 순회", INFO, [
+        ("조회 시작", "merged 뷰에서 파일 요청", KR, INK),
+        ("1차 탐색", "상위 upperdir 먼저 확인", KR, INFO),
+        ("상위 발견 시", "upperdir 파일 즉시 반환", KR, OK),
+        ("상위 부재 시", "lowerdir 로 내려가 조회", KR, MUTED),
+        ("결론", "상위 층이 하위 층 가림", KR, ACC),
+    ]),
+    ("2. 파일 수정 (Write)", "쓰기 시점의 Copy-up", ACC, [
+        ("수정 요청", "lowerdir 파일에 쓰기 시도", KR, INK),
+        ("제약 조건", "하위 층은 읽기 전용(R/O)", KR, WARN),
+        ("복사 동작", "lowerdir → upperdir 복사", MONO, ACC),
+        ("수정 적용", "upperdir 복사본에 데이터 기록", KR, OK),
+        ("결론", "원본 훼손 없는 독립 수정", KR, ACC),
+    ]),
+    ("3. 파일 삭제 (Delete)", "화이트아웃(Whiteout) 표식", WARN, [
+        ("삭제 요청", "lowerdir 파일 삭제 시도", KR, INK),
+        ("제약 조건", "하위 파일 직접 삭제 불가", KR, WARN),
+        ("표식 생성", "upperdir 에 c 0 0 문자 노드", MONO, ACC),
+        ("은폐 효과", "merged 뷰에서 파일 감춤", KR, OK),
+        ("결론", "하위 보존 · 뷰에서만 삭제", KR, WARN),
+    ]),
+]
 
-for i, txt in enumerate(["cache/", "run.log"]):
-    d.t(LCX - 58, CY - 6 + i * 26, txt, 12, INK, MONO)
-for i, txt in enumerate(["bin/", "lib/", "etc/"]):
-    d.t(RCX + 58, CY - 18 + i * 26, txt, 12, INK, MONO)
+for i, (title, sub, col, items) in enumerate(ops):
+    x = X0 + i * (CW + GAP)
+    focal = (i == 1)
+    if focal:
+        d.o.append(f'<rect x="{x}" y="{Y0}" width="{CW}" height="{CH}" rx="8" '
+                   f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.5"/>')
+    else:
+        d.box(x, Y0, CW, CH, PAPER2, col, 1.1, 8)
 
-d.t(MID, CY - 40, "같은 이름", 12.5, ACC, KR, "middle", 600)
-d.t(MID, CY - 16, "app.conf", 12, ACC, MONO)
-d.t(MID, CY + 12, "어느 쪽이", 11.5, ACC, KR)
-d.t(MID, CY + 32, "보일지", 11.5, ACC, KR)
+    d.t(x + CW / 2, Y0 + 26, title, 14, col, KR, "middle", 600)
+    d.t(x + CW / 2, Y0 + 46, sub, 11, SOFT, KR, "middle")
+    d.line(x + 12, Y0 + 58, x + CW - 12, Y0 + 58, RULE, 0.8)
 
-d.box(32, 248, 224, 104, PAPER2, RULE, 1.0, 8)
-d.t(48, 276, "쓰는 사람이 보는 것", 14, INK, KR, "start", 600)
-d.t(48, 300, "디렉토리 하나", 12, MUTED, KR, "start")
-d.t(48, 322, "app.conf · cache/ · run.log", 11.5, SOFT, MONO, "start")
-d.t(48, 340, "bin/ · lib/ · etc/", 11.5, SOFT, MONO, "start")
-d.path(f"M 256 300 L {LCX - R - 8} 300", MUTED, 1.4, m="ar")
+    for j, (k, v, fam, c) in enumerate(items):
+        iy = Y0 + 72 + j * 48
+        d.box(x + 10, iy, CW - 20, 40, PAPER, RULE, 0.6, 5)
+        d.t(x + 18, iy + 16, k, 11, SOFT, KR, "start")
+        d.t(x + 18, iy + 30, v, 11, c, fam, "start", 600 if c in (ACC, WARN) else 400)
 
-RY = 448
-d.o.append(f'<rect x="292" y="{RY}" width="336" height="100" rx="8" '
-           f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
-d.t(312, RY + 28, "정해야 하는 규칙 둘", 13.5, ACC, KR, "start", 600)
-d.t(312, RY + 52, "파일이 여러 곳에 있을 때 어떻게 할지", 11.5, ACC, KR, "start")
-d.t(312, RY + 72, "쓰거나 지우는 것이 무슨 뜻인지", 11.5, ACC, KR, "start")
-d.t(312, RY + 92, "저자는 세부에 악마가 있다고 적습니다", 11.5, MUTED, KR, "start")
-d.path(f"M {MID} {CY + R} L {MID} {RY - 2}", ACC, 1.3, m="acc", dash="6 5")
+# 하단 OverlayFS 계층 배치 뷰
+BY = 458
+BW = W - 48
+BH = 114
+d.box(X0, BY, BW, BH, PAPER2, RULE, 1.0, 8)
+d.t(X0 + 20, BY + 24, "OverlayFS 계층 구조와 컨테이너 매핑", 13.5, INK, KR, "start", 600)
 
-d.tone(32, 568, W - 64, 44, OK)
-d.t(52, 596, "구현은 넷 — Unionfs · OverlayFS · AUFS · btrfs. 오늘날 Docker 의 기본은 overlay2 입니다.",
-    12, MUTED, KR, "start")
+layers = [
+    ("merged 뷰", "통합 마운트 지점", "컨테이너 프로세스가 바라보는 단일 파일시스템 트리", INK),
+    ("upperdir (R/W)", "상위 컨테이너 쓰기 층", "신규 생성 파일 · 수정된 파일(copy-up) · 화이트아웃(c 0 0)", ACC),
+    ("lowerdir (R/O)", "하위 베이스 이미지 층", "컨테이너들이 공유하는 읽기 전용 기본 루트 파일시스템", OK),
+]
 
-d.legend(628, [("위에 얹히는 층", INFO), ("아래에 깔리는 층", OK), ("규칙이 필요한 자리", ACC)])
+for k, (hdr, sub1, sub2, c) in enumerate(layers):
+    ly = BY + 36 + k * 24
+    d.chip(X0 + 80, ly + 8, hdr, c, 11)
+    d.t(X0 + 170, ly + 12, sub1, 11, c, KR, "start", 600)
+    d.t(X0 + 350, ly + 12, sub2, 11, MUTED, KR, "start")
+
+d.legend(588, [("조회 (Upper 우선)", INFO), ("수정 (Copy-up)", ACC),
+               ("삭제 (Whiteout)", WARN), ("불변 베이스 층", OK)])
 d.save("05-01.union-mount.svg")
 print("ok 05-01.union-mount")

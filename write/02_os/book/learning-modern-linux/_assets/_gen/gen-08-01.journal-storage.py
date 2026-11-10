@@ -9,11 +9,11 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, OK, WARN, BAD, PAPER2, RULE, KR, MONO
 
 W, H = 880, 512
-d = D(W, H, "LEARNING MODERN LINUX · 08-01 §9",
+d = D(W, H, "LEARNING MODERN LINUX · 08-01 §4",
       "Storage= 값과 디렉터리 하나가 저널의 자리를 정한다",
-      "journald.conf 의 Storage= 네 값이 저널 파일을 어디에 쓰는지. 기본값 auto 는 /var/log/journal "
+      "journald.conf 의 Storage= 네 값이 저널 파일을 어디에 쓰는지. Debian 12 기본값 auto 는 /var/log/journal "
       "디렉터리가 있는지로 영속과 휘발을 가른다.",
-      "기본값 auto 에서는 디렉터리 하나가 재부팅 뒤 기록을 정합니다")
+      "Debian 12 기본값 auto 에서는 디렉터리 하나가 재부팅 뒤 기록을 정합니다")
 
 AX, AY, AW, AH = 24, 196, 140, 56
 d.box(AX, AY, AW, AH, PAPER2, RULE, 1.1, 6)

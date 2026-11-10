@@ -23,7 +23,7 @@ d = D(W, H, "LEARNING MODERN LINUX · 07-01 §3",
       "NIC 가 바이트를 신호로 바꾸고, 이름은 위치에서 나온다",
       "링크 계층은 바이트와 전선과 전자기파와 드라이버의 세계다. 그 경계에 NIC 가 서 있고, "
       "인터페이스 이름은 그 NIC 가 꽂힌 자리를 그대로 적은 것이다.",
-      "MAC 주소는 기계가 아니라 인터페이스를 식별합니다")
+      "인터페이스 고유 48비트 식별자 및 OUI 제조사 인코딩")
 
 SW, SH, SY = 232, 96, 168
 soft = (32, "소프트웨어", "비트와 바이트", "커널 드라이버가 다루는 형태", INFO)
@@ -60,7 +60,7 @@ d.t(142, MY + 60, "OUI — 앞 24비트", 11, INFO, KR)
 d.o.append(f'<rect x="236" y="{MY + 42}" width="176" height="26" rx="4" '
            f'fill="{MUTED}18" stroke="{MUTED}" stroke-width="1.1"/>')
 d.t(324, MY + 60, "나머지 24비트", 11, MUTED, KR)
-d.t(52, MY + 88, "38:de:ad:37:32:0f — 제조사가 앞쪽에 인코딩됩니다", 11.5, SOFT, MONO, "start")
+d.t(52, MY + 88, "38:de:ad:37:32:0f — 앞 세 바이트 38:de:ad 가 OUI", 11.5, SOFT, MONO, "start")
 
 d.o.append(f'<rect x="456" y="{MY}" width="392" height="108" rx="8" '
            f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
@@ -74,10 +74,10 @@ for i, (part, mean) in enumerate([("wl", "무선 인터페이스"), ("p1", "PCI 
 
 BY = 444
 d.tone(32, BY, W - 64, 62, MUTED)
-d.t(52, BY + 26, "옛 이름 eth0 · eth1 은 재부팅하거나 카드를 꽂으면 바뀔 수 있었습니다",
+d.t(52, BY + 26, "옛 인터페이스명(eth0·eth1)의 식별 불안정성 — 재부팅이나 카드 추가 시 순서 변경 가능",
     12.5, INK, KR, "start", 600)
 d.t(52, BY + 48,
-    "MTU 는 루프백이 65,536 이고 이더넷 기본이 1,500 입니다. 9,000 짜리 점보 프레임도 쓸 수 있습니다.",
+    "MTU 기준치 — 루프백 65,536B, 이더넷 기본 1,500B, 점보 프레임 9,000B",
     11.5, MUTED, KR, "start")
 
 d.legend(536, [("소프트웨어와 물리 매체", INFO), ("경계에 선 하드웨어", OK),

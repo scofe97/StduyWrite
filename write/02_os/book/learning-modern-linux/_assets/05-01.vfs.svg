@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 636" width="100%" role="img" aria-labelledby="dt dd">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 640" width="100%" role="img" aria-labelledby="dt dd">
 <defs>
 <marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
 <marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
@@ -8,49 +8,70 @@
 <marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
 <marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
 </defs>
-<title id="dt">일반적인 연산과 실제 구현을 갈라 놓는 층</title><desc id="dd">같은 open 과 read 가 SSD 로도 가고 /proc 으로도 가는 이유는 그 사이에 층이 하나 있기 때문이다. VFS 는 파일이라는 패러다임 위에서 자원에 접근하는 공통의 방법을 준다.</desc>
-<rect width="880" height="636" fill="#0D1117"/>
+<title id="dt">단일 시스템 콜 read() 가 VFS 를 거쳐 갈라지는 흐름</title><desc id="dd">같은 read() 시스템 콜이 VFS 간접 층을 지나 로컬 ext4 블록 I/O 와 가짜 procfs 커널 메모리 직렬화로 분기하는 시퀀스.</desc>
+<rect width="880" height="640" fill="#0D1117"/>
 <text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING MODERN LINUX · 05-01 §4</text>
-<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">일반적인 연산과 실제 구현을 갈라 놓는 층</text>
-<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">리눅스에서 파일은 구조 없는 바이트 스트림입니다</text>
-<rect x="40" y="148" width="800" height="66" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
-<text x="60" y="174" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#F5F5F3">클라이언트 — 시스템 콜</text>
-<text x="60" y="196" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">파일 관련 시스템 콜만 백 개가 넘습니다. open · read · seek 같은 일반적인 연산입니다.</text>
-<path d="M 440.0 214 L 440.0 244" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
-<rect x="40" y="248" width="800" height="96" rx="8" fill="#F08A5912" stroke="#F08A59" stroke-width="1.5"/>
-<text x="60" y="278" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="16" font-weight="600" fill="#F08A59">VFS — 커널 안의 추상 층</text>
-<text x="60" y="302" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="400" fill="#F08A59">일반적인 연산을 실제 구현 세부와 갈라 놓습니다.</text>
-<text x="60" y="324" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">자료구조는 include/linux/fs.h — inode · file · dentry · super_block</text>
-<path d="M 137.0 344 L 137.0 394" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ar)"/>
-<rect x="40" y="396" width="194" height="92" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.2"/>
-<text x="137.0" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#3FB98C">로컬</text>
-<text x="137.0" y="448" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="400" fill="#F5F5F3">ext3 · XFS · FAT · NTFS</text>
-<text x="137.0" y="470" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">드라이버로 블록 장치에</text>
-<path d="M 339.0 344 L 339.0 394" fill="none" stroke="#6A95D8" stroke-width="1.3" marker-end="url(#ar)"/>
-<rect x="242" y="396" width="194" height="92" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
-<text x="339.0" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#6A95D8">인메모리</text>
-<text x="339.0" y="448" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="400" fill="#F5F5F3">tmpfs</text>
-<text x="339.0" y="470" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">주기억장치에 산다</text>
-<path d="M 541.0 344 L 541.0 394" fill="none" stroke="#E3B341" stroke-width="1.3" marker-end="url(#ar)"/>
-<rect x="444" y="396" width="194" height="92" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.2"/>
-<text x="541.0" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#E3B341">가짜</text>
-<text x="541.0" y="448" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="400" fill="#F5F5F3">procfs · sysfs</text>
-<text x="541.0" y="470" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">커널 인터페이스를 감싼다</text>
-<path d="M 743.0 344 L 743.0 394" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
-<rect x="646" y="396" width="194" height="92" rx="6" fill="#161B22" stroke="#8B98A9" stroke-width="1.2"/>
-<text x="743.0" y="424" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#8B98A9">네트워크</text>
-<text x="743.0" y="448" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="400" fill="#F5F5F3">NFS · Samba</text>
-<text x="743.0" y="470" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">드라이버가 네트워크를 탄다</text>
-<rect x="40" y="512" width="800" height="44" rx="6" fill="#8B98A914" stroke="#8B98A9" stroke-width="1.2"/>
-<text x="60" y="540" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">네트워크 갈래는 드라이버가 네트워크 연산을 포함한다는 이유로 저자가 7장으로 미룹니다.</text>
-<line x1="12" y1="576" x2="832" y2="576" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
-<text x="12" y="598" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
-<rect x="100" y="588" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
-<text x="122" y="598" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">간접이 일어나는 층</text>
-<rect x="274" y="588" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
-<text x="296" y="598" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">블록 장치를 쓰는 갈래</text>
-<rect x="474" y="588" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
-<text x="496" y="598" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">메모리에 사는 갈래</text>
-<rect x="648" y="588" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
-<text x="670" y="598" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">커널을 감싸는 갈래</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">단일 시스템 콜 read() 가 VFS 를 거쳐 갈라지는 흐름</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">VFS 는 시스템 콜과 파일시스템 구현 사이의 간접 층</text>
+<rect x="28" y="120" width="104" height="44" rx="6" fill="#161B22" stroke="#F5F5F3" stroke-width="1.2"/>
+<text x="80" y="138" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">User App</text>
+<text x="80" y="154" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">cat 호출</text>
+<line x1="80" y1="164" x2="80" y2="480" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="4 4"/>
+<rect x="178" y="120" width="104" height="44" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.2"/>
+<text x="230" y="138" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">VFS</text>
+<text x="230" y="154" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">vfs_read</text>
+<line x1="230" y1="164" x2="230" y2="480" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="4 4"/>
+<rect x="338" y="120" width="104" height="44" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="390" y="138" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">ext4</text>
+<text x="390" y="154" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">read_iter 구현</text>
+<line x1="390" y1="164" x2="390" y2="480" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="4 4"/>
+<rect x="488" y="120" width="104" height="44" rx="6" fill="#161B22" stroke="#8B98A9" stroke-width="1.2"/>
+<text x="540" y="138" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#8B98A9">Block I/O</text>
+<text x="540" y="154" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">dm-0 → sda2</text>
+<line x1="540" y1="164" x2="540" y2="480" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="4 4"/>
+<rect x="628" y="120" width="104" height="44" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="680" y="138" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">procfs</text>
+<text x="680" y="154" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">seq_read</text>
+<line x1="680" y1="164" x2="680" y2="480" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="4 4"/>
+<rect x="763" y="120" width="104" height="44" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.2"/>
+<text x="815" y="138" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#E3B341">Kernel RAM</text>
+<text x="815" y="154" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">내부 상태 직렬화</text>
+<line x1="815" y1="164" x2="815" y2="480" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="4 4"/>
+<text x="80" y="178" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">1. cat 일반 파일 (로컬 블록)</text>
+<path d="M 80 186 L 228 186" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<text x="155" y="200" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#3FB98C">read(fd_ext4)</text>
+<path d="M 230 214 L 388 214" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<text x="310" y="210" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#3FB98C">ext4_file_read_iter()</text>
+<path d="M 390 242 L 538 242" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<text x="465" y="238" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">submit_bio() 디스크 블록</text>
+<path d="M 540 270 L 392 270" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)" stroke-dasharray="3 3"/>
+<text x="465" y="266" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">4096B 데이터 블록</text>
+<path d="M 390 298 L 82 298" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)" stroke-dasharray="3 3"/>
+<text x="235" y="294" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">버퍼 데이터 반환</text>
+<line x1="40" y1="324" x2="840" y2="324" stroke="rgba(191,192,192,0.22)" stroke-width="0.8" stroke-dasharray="2 2"/>
+<text x="80" y="340" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">2. cat /proc/cpuinfo (가짜 파일시스템)</text>
+<path d="M 80 348 L 228 348" fill="none" stroke="#6A95D8" stroke-width="1.2" marker-end="url(#info)"/>
+<text x="155" y="362" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#6A95D8">read(fd_proc)</text>
+<path d="M 230 376 L 678 376" fill="none" stroke="#6A95D8" stroke-width="1.2" marker-end="url(#info)"/>
+<text x="455" y="372" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#6A95D8">proc_reg_read_iter() (seq_file)</text>
+<path d="M 680 404 L 813 404" fill="none" stroke="#E3B341" stroke-width="1.2" marker-end="url(#warn)"/>
+<text x="747" y="400" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">RAM CPU 상태 읽기</text>
+<path d="M 815 432 L 682 432" fill="none" stroke="#E3B341" stroke-width="1.2" marker-end="url(#warn)" stroke-dasharray="3 3"/>
+<text x="747" y="428" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">2664B 텍스트 직렬화</text>
+<path d="M 680 460 L 82 460" fill="none" stroke="#6A95D8" stroke-width="1.2" marker-end="url(#info)" stroke-dasharray="3 3"/>
+<text x="380" y="456" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">즉석 생성 텍스트 반환 (디스크 I/O 0회)</text>
+<rect x="24" y="500" width="832" height="72" rx="8" fill="#161B22" stroke="#F08A59" stroke-width="1.2"/>
+<text x="44" y="524" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13.5" font-weight="600" fill="#F08A59">VFS 의 간접 층 추상화</text>
+<text x="44" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#F5F5F3">클라이언트 관점 — open · read · stat 균일한 시스템 콜 손잡이</text>
+<text x="44" y="564" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">ext4 는 블록 계층으로, procfs 는 메모리 핸들러로 분기</text>
+<line x1="12" y1="588" x2="832" y2="588" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="610" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="600" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="610" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">로컬 ext4 블록 I/O</text>
+<rect x="326" y="600" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="348" y="610" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">VFS 공통 추상 층</text>
+<rect x="513" y="600" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="535" y="610" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">procfs 및 커널 RAM</text>
+<rect x="752" y="600" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="774" y="610" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">직렬화 생성</text>
 </svg>

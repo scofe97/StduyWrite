@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 580" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">LVM 스냅샷의 CoW 생명주기와 Data% 상태 전이</title><desc id="dd">스냅숏은 바뀐 블록이 없는 상태에서 시작해, 원본에 쓰기가 일어날 때마다 바뀌기 전 블록을 COW 영역에 복사하므로 Data% 가 오릅니다. 작업 후에는 롤백 병합(merge)하거나 삭제(remove)해 쓰기 오버헤드를 제거합니다.</desc>
+<rect width="880" height="580" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING MODERN LINUX · 05-02 §3</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">LVM 스냅샷의 CoW 생명주기와 Data% 상태 전이</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">COW 영역이 가득 차면 스냅숏은 무효(Invalid)가 된다 · man·커널 문서 기준, 이 환경에서는 못 잼</text>
+<rect x="32" y="140" width="240" height="150" rx="8" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="48" y="168" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13.5" font-weight="600" fill="#6A95D8">1. 스냅숏 생성 (초기 상태)</text>
+<text x="48" y="190" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">lvcreate -s -L 50M -n snap ...</text>
+<line x1="46" y1="202" x2="258" y2="202" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="48" y="224" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">Data% : 거의 0</text>
+<text x="48" y="246" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">아직 복사된 블록이 없음</text>
+<text x="48" y="266" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">COW 영역이 비어 있음</text>
+<rect x="320" y="140" width="240" height="150" rx="8" fill="#161B22" stroke="#E3B341" stroke-width="1.2"/>
+<text x="336" y="168" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13.5" font-weight="600" fill="#E3B341">2. 원본 쓰기 및 CoW 누적</text>
+<text x="336" y="190" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">원본 LV 에 쓰기</text>
+<line x1="334" y1="202" x2="546" y2="202" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="336" y="224" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#E3B341">Data% : 바뀐 양만큼 증가</text>
+<text x="336" y="246" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">수정 직전 원본 블록을 스냅숏으로 복사</text>
+<text x="336" y="266" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">쓰기마다 복사가 더해져 느려짐</text>
+<path d="M 272 215.0 L 318 215.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="296.0" y="205.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">쓰기</text>
+<rect x="608" y="118" width="240" height="104" rx="8" fill="#161B22" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="624" y="144" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">3A. 스냅숏 시점 롤백 (Merge)</text>
+<text x="624" y="164" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">lvconvert --merge vg0/snap</text>
+<line x1="622" y1="174" x2="834" y2="174" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="624" y="194" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">보존한 원래 블록을 원본에 되씀</text>
+<text x="624" y="212" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">병합이 끝나면 스냅숏은 제거됨</text>
+<rect x="608" y="234" width="240" height="104" rx="8" fill="#161B22" stroke="#F08A59" stroke-width="1.2"/>
+<text x="624" y="260" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">3B. 작업 완료 후 삭제 (Remove)</text>
+<text x="624" y="280" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">lvremove -y vg0/snap</text>
+<line x1="622" y1="290" x2="834" y2="290" stroke="rgba(191,192,192,0.22)" stroke-width="1"/>
+<text x="624" y="310" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">스냅숏 전용 PE 회수, 원본 최신본 유지</text>
+<path d="M 560 170.0 L 606 170.0" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<path d="M 560 286.0 L 606 286.0" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<rect x="32" y="370" width="816" height="56" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.2"/>
+<text x="48" y="394" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">COW 영역이 가득 차면: 스냅숏 무효</text>
+<text x="48" y="414" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">lvs 상태 칸 I(Invalid snapshot) · 크기는 예상 변경량보다 넉넉히</text>
+<rect x="32" y="446" width="816" height="50" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="48" y="466" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">이 노트의 실측 환경 (OrbStack 커널, dm 타깃 striped·linear·error 뿐)</text>
+<text x="48" y="482" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">lvcreate -s → snapshot: Required device-mapper target(s) not detected in your kernel. (exit 3)</text>
+<line x1="12" y1="524" x2="832" y2="524" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="546" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="536" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 초기 / 롤백 상태</text>
+<rect x="313" y="536" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="335" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">쓰기 누적 주의 상태</text>
+<rect x="500" y="536" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="522" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">삭제 종료 상태</text>
+<rect x="648" y="536" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="670" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">무효 위험</text>
+</svg>

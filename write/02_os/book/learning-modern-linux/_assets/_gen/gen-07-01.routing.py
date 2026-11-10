@@ -1,4 +1,4 @@
-# 07-01 §8 — 라우팅 테이블 한 장이 패킷의 다음 걸음을 정한다.
+# 07-01 §9 — 라우팅 테이블 한 장이 패킷의 다음 걸음을 정한다.
 # 원문("Routing"): "Part of the network stack in Linux is concerned with routing—that is, deciding on a
 #       per-packet basis where to send a packet. The destination could be a process on the same machine,
 #       or it could be an IP address on a different machine."
@@ -16,11 +16,11 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, PAPER, PAPER2, RULE, KR, MONO
 
 W, H = 880, 616
-d = D(W, H, "LEARNING MODERN LINUX · 07-01 §8",
+d = D(W, H, "LEARNING MODERN LINUX · 07-01 §9",
       "표의 어느 줄에도 맞지 않으면 게이트웨이로 간다",
       "route -n 과 ip route 는 같은 표의 두 표기다. 목적지가 표의 어느 줄에 드느냐가 "
       "그 패킷의 다음 걸음을 정한다.",
-      "0.0.0.0 은 명시되지 않았다는 뜻이라 게이트웨이로 갑니다")
+      "0.0.0.0 은 명시되지 않은 목적지 — 게이트웨이로 보냄")
 
 PX, PY, PW, PH = 32, 164, 216, 68
 d.box(PX, PY, PW, PH, PAPER2, INFO, 1.2, 8)
@@ -64,9 +64,9 @@ for i, (title, lines) in enumerate([
         d.t(x + 16, MY + 46 + j * 18, ln, 10, SOFT, MONO, "start")
 
 d.tone(PX, 512, W - 64, 44, MUTED)
-d.t(PX + 20, 540,
-    "이 표를 조작하는 도구가 iptables 이고, 그것이 패킷을 가로채는 데 쓰는 것이 netfilter 입니다.",
-    12, MUTED, KR, "start")
+d.t(PX + 20, 538,
+    "iptables · netfilter — 이 표와 별개, 라우팅 결정 앞뒤 훅에서 패킷 검사",
+    11.5, MUTED, KR, "start")
 
 d.legend(576, [("패킷", INFO), ("직접 보내는 줄", OK), ("아무 줄에도 안 맞을 때", ACC)])
 d.save("07-01.routing.svg")

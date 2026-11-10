@@ -1,4 +1,4 @@
-# 07-01 학습 목표 뒤 전체 지도 — 7장 첫 구간의 절 여덟을 읽는 순서로 잇는다.
+# 07-01 학습 목표 뒤 전체 지도 — 7장 첫 구간의 절 아홉을 읽는 순서로 잇는다.
 # 원문 7장 서두: "We'll first have a look at common network terms, from the hardware level all the way up
 #       to user-facing components such as HTTP and SSH. We'll also discuss the network stack, protocols,
 #       and interfaces."
@@ -10,9 +10,9 @@ from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 W, H = 880, 588
 d = D(W, H, "LEARNING MODERN LINUX · 07-01",
       "결국은 선과 공기를 타고 다니는 비트다",
-      "7장 첫 구간의 절 여덟을 읽는 순서로 이은 지도. 1~2절이 태도와 뼈대이고, "
-      "3~4절이 링크 계층, 5~8절이 인터넷 계층이다.",
-      "1절이 이 노트의 제목이 가리키는 자리입니다")
+      "7장 첫 구간의 절 아홉을 읽는 순서로 이은 지도. 1~2절이 태도와 뼈대이고, "
+      "3~4절이 링크 계층, 5~9절이 인터넷 계층과 네트워크 설정이다.",
+      "추상 아래에 놓인 네트워크 물리·커널 계층과 관리 도구 체계")
 
 CW, CH, GAPX, GAPY, X0, Y0 = 272, 96, 12, 20, 20, 116
 cards = [
@@ -21,9 +21,10 @@ cards = [
     ("§3", "링크 계층", "비트가 신호가 되는 곳"),
     ("§4", "ARP", "MAC 과 IP 를 잇는 다리"),
     ("§5", "인터넷 계층과 IPv4", "32비트를 어디에서 자르나"),
-    ("§6", "예약된 대역들", "컨테이너에서 매일 보는 셋"),
-    ("§7", "IPv6 와 ICMP", "고갈의 답과 도달 확인"),
-    ("§8", "라우팅", "이 패킷을 어디로 보낼까"),
+    ("§6", "네트워크 설정", "NetworkManager 와 영구 설정"),
+    ("§7", "예약된 대역들", "컨테이너에서 매일 보는 셋"),
+    ("§8", "IPv6 와 ICMP", "고갈의 답과 도달 확인"),
+    ("§9", "라우팅", "이 패킷을 어디로 보낼까"),
 ]
 
 

@@ -1,4 +1,4 @@
-# 08-01 §4 — 로그 하나가 무엇으로 이루어지는가.
+# 08-01 §2 — 로그 하나가 무엇으로 이루어지는가.
 # 원문("Logging"): "From a structural perspective, overall, a log comprises the following:
 #       A collection of log items, messages, or lines — Captures information about a discrete event.
 #       Metadata or context — Can be present on a per-message basis as well as on a global scope (the
@@ -14,7 +14,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, PAPER, PAPER2, RULE, KR, MONO
 
 W, H = 880, 560
-d = D(W, H, "LEARNING MODERN LINUX · 08-01 §4",
+d = D(W, H, "LEARNING MODERN LINUX · 08-01 §2",
       "로그는 항목과 문맥과 형식 셋으로 이루어진다",
       "저자가 로그를 구조 관점에서 셋으로 쪼갠 것을 포함 관계로 세운 것. 바깥 테두리가 형식인 이유는 "
       "형식이 안쪽의 각 부분에 뜻을 부여하는 규칙이기 때문이다.",

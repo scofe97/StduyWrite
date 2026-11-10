@@ -35,7 +35,7 @@ d.box(COLX[1], Y0, CW, CH, PAPER, ACC, 1.4, 8)
 d.t(COLX[1] + 16, Y0 + 28, "examplepipe", 14, ACC, MONO, "start", 600)
 d.t(COLX[1] + 16, Y0 + 52, "prw-rw-r--  첫 글자 p", 12, INK, MONO, "start")
 d.t(COLX[1] + 16, Y0 + 76, "FIFO · 들어간 순서대로", 12, MUTED, KR, "start")
-d.t(COLX[1] + 16, Y0 + 98, "pipefs 위의 이름", 12, MUTED, KR, "start")
+d.t(COLX[1] + 16, Y0 + 98, "이름은 기준점 · 데이터는 커널 안", 12, MUTED, KR, "start")
 
 d.box(COLX[2], Y0, CW, CH, PAPER2, OK, 1.2, 8)
 d.t(COLX[2] + 16, Y0 + 28, "소비 프로세스", 14, OK, KR, "start", 600)

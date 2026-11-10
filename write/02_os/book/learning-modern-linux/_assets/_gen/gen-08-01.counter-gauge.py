@@ -1,4 +1,4 @@
-# 08-01 §3 — 메트릭 세 종류 중 둘은 값이 움직이는 모양으로 갈린다.
+# 08-01 §1 — 메트릭 세 종류 중 둘은 값이 움직이는 모양으로 갈린다.
 # 원문("Metrics"): Counter("The value of a counter can only ever go up (besides resetting a counter to
 #       zero). An example of a counter metric is the total number of requests handled by a service or the
 #       bytes sent via an interface over a time period."),
@@ -16,7 +16,7 @@ from dd import D, ACC, MUTED, SOFT, INK, INFO, RULE, KR, MONO
 
 W, H = 880, 560
 PX0, PX1, PY0, PY1 = 88, 840, 124, 384
-d = D(W, H, "LEARNING MODERN LINUX · 08-01 §3",
+d = D(W, H, "LEARNING MODERN LINUX · 08-01 §1",
       "카운터는 올라가기만 하고 게이지는 오르내린다",
       "저자가 정의한 두 메트릭 종류의 값이 움직이는 모양. 세로축에 단위가 없는 것은 "
       "크기가 아니라 방향을 보이려는 그림이기 때문이다.",

@@ -13,7 +13,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, PAPER2, RULE, KR, MONO
 
 W, H = 880, 440
-d = D(W, H, "LEARNING MODERN LINUX · 08-01 §2",
+d = D(W, H, "LEARNING MODERN LINUX · 08-01 §1",
       "신호는 소스에서 나서 텔레메트리를 타고 목적지에 닿는다",
       "저자가 정의한 용어 다섯 중 셋이 경로의 자리 이름이고 하나가 그 사이를 나르는 과정의 이름이다. "
       "오른쪽 두 칸의 차이가 저자가 굳이 세운 구분이다.",

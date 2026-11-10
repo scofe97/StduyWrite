@@ -18,7 +18,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
 
 W, H = 880, 740
-d = D(W, H, "LEARNING MODERN LINUX · 08-01 §6",
+d = D(W, H, "LEARNING MODERN LINUX · 08-01 §2",
       "표준을 읽으면 무엇을 비워도 되는지가 보인다",
       "RFC 5424 헤더 일곱 필드를 ABNF 정의와 나란히 놓은 격자. 오른쪽 열은 그 필드에 NILVALUE 대안이 "
       "있어 하이픈 하나로 비울 수 있는지를 뜻한다.",

@@ -1,4 +1,4 @@
-# 08-01 §5 — /var/log 아래 무엇이 어디에 쌓이는가.
+# 08-01 §3 — /var/log 아래 무엇이 어디에 쌓이는가.
 # 원문("Logging") 의 `ls -al /var/log` 주석: auth.log("Logs of all login attempts (successful and failed)
 #       and authentication processes"), btmp("Failed login attempts"), cups/("Printing related logs"),
 #       dpkg.log("Logs of the dpkg package manager"), apt/("Logs of the apt package manager"),
@@ -9,16 +9,16 @@
 # 주의: 묶음 다섯(인증 · 커널 · 패키지 · 로깅 시스템 · 그 밖)은 원문에 없다. 저자는 열두 항목을 한 줄씩
 #       주석했을 뿐이고, 묶음은 이 노트가 읽기 쉬우라고 세운 것이라 legend 에 그렇게 적었다.
 # 타입 스펙: type-tree — 부모에서 자식으로 내려가는 포함 관계. 실제 디렉터리 구조를 닮게 그린다.
-#           직교 연결만 쓴다. accent 는 다음 절로 이어지는 자리 하나.
+#           직교 연결만 쓴다. accent 는 아래 ls 출력이 설명하는 자리 하나.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER2, RULE, KR, MONO
 
 W, H = 880, 710
-d = D(W, H, "LEARNING MODERN LINUX · 08-01 §5",
+d = D(W, H, "LEARNING MODERN LINUX · 08-01 §3",
       "/var/log 는 무엇이 어디 쌓이는지의 지도다",
       "저자가 한 줄씩 주석한 열두 항목을 성격별로 묶어 트리로 세운 것. 묶음 이름은 "
       "읽기 편하라고 이 노트가 붙였다.",
-      "journal/ 만 디렉터리 권한이 다른데 그 이유가 다음 절로 이어집니다")
+      "journal/ 만 디렉터리 권한이 다른 이유는 아래 ls 출력에서 봅니다")
 
 RX, RW, RH = 24, 132, 44
 GX, GW, GH = 196, 168, 40
@@ -82,7 +82,7 @@ NY = Y0 + row * ISTRIDE + 24
 d.t(24, NY + 4, "읽는 그룹: auth.log → adm · btmp → utmp · journal/ → systemd-journal", 12, MUTED, KR, "start")
 d.t(24, NY + 26, "journal/ 권한 drwxr-sr-x+ · s = setgid · + = ACL", 12, SOFT, MONO, "start")
 
-d.legend(666, [("다음 절로 이어지는 자리", ACC), ("인증과 로그인", INFO),
+d.legend(666, [("아래 ls 출력이 설명하는 자리", ACC), ("인증과 로그인", INFO),
                   ("커널과 장치", WARN), ("패키지 관리자", OK)])
 d.save("08-01.var-log-tree.svg")
 print("ok 08-01.var-log-tree")

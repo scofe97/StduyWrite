@@ -30,9 +30,9 @@ steps = [
     ("mkfs", "만들기", "받는 입력 둘", "파일시스템 종류 · 대상 장치",
      "mkfs -t ext4 /dev/vg/lv", "다른 OS 에서는 포맷이라 부르는 일", INFO),
     ("mount", "붙이기", "받는 입력 둘", "붙일 장치 · 트리 안의 자리",
-     "mount -t vfat /dev/sdX2 /media", "만든 종류로 붙여야 합니다", OK),
+     "mount -t vfat /dev/sdX2 /media", "생성 시점 파일시스템 지정 필수", OK),
     ("/etc/fstab", "되살리기", "한 줄에 여섯 칸", "장치 · 지점 · 종류 · 옵션 · dump",
-     "UUID=2A11-27C0 /boot/efi vfat", "디스크를 더하고 빼도 어긋나지 않습니다", MUTED),
+     "UUID=2A11-27C0 /boot/efi vfat", "디스크 추가·제거 시 장치명 불변 보장", MUTED),
 ]
 for i, (cmd, name, k1, k2, ex, note, col) in enumerate(steps):
     x = X0 + i * (CW + GAP)
@@ -53,7 +53,7 @@ BY = 368
 d.o.append(f'<rect x="{X0 + CW + GAP}" y="{BY}" width="{CW}" height="76" rx="8" '
            f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
 d.t(X0 + CW + GAP + 18, BY + 26, "--bind", 13, ACC, MONO, "start", 600)
-d.t(X0 + CW + GAP + 18, BY + 48, "디렉토리를 트리의 다른 자리에", 11.5, ACC, KR, "start")
+d.t(X0 + CW + GAP + 18, BY + 48, "디렉터리를 트리의 다른 자리에", 11.5, ACC, KR, "start")
 d.t(X0 + CW + GAP + 18, BY + 66, "붙이는 옵션 — 6장에서 다시", 11.5, MUTED, KR, "start")
 d.path(f"M {X0 + CW + GAP + CW / 2} {Y0 + CH} L {X0 + CW + GAP + CW / 2} {BY - 2}",
        ACC, 1.4, m="acc", dash="6 5")
@@ -61,7 +61,7 @@ d.path(f"M {X0 + CW + GAP + CW / 2} {Y0 + CH} L {X0 + CW + GAP + CW / 2} {BY - 2
 d.tone(X0 + 2 * (CW + GAP), BY, CW, 76, MUTED)
 d.t(X0 + 2 * (CW + GAP) + 18, BY + 26, "UUID= 로 지목하기", 13, INK, KR, "start", 600)
 d.t(X0 + 2 * (CW + GAP) + 18, BY + 48, "blkid 로 찍어서 적으면 장치 이름이", 11.5, MUTED, KR, "start")
-d.t(X0 + 2 * (CW + GAP) + 18, BY + 66, "바뀌어도 마운트가 살아 있습니다", 11.5, MUTED, KR, "start")
+d.t(X0 + 2 * (CW + GAP) + 18, BY + 66, "장치명 변경 시에도 마운트 유지", 11.5, MUTED, KR, "start")
 
 d.legend(480, [("만들기", INFO), ("붙이기", OK), ("컨테이너로 이어지는 입력", ACC)])
 d.save("05-01.mkfs-mount.svg")
