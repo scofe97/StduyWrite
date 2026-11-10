@@ -1,6 +1,6 @@
 # 07-02 §2·§3 — 헤더 필드가 곧 그 프로토콜이 무엇을 보장하는지다.
 # 원문(TCP, RFC 793 기준 저자 목록): Source port(16) · Destination port(16) · Sequence number(32) ·
-#       Acknowledgment number(32) · Flags(9) · Window(16) · Checksum(16) · Data.
+#       Acknowledgment number(32) · Flags(9, 현행 RFC 9293 은 8) · Window(16) · Checksum(16) · Data.
 #       "This number and the SYN and ACK flags are the core of the so-called TCP/IP three-way handshake."
 #       "From a security perspective, TCP is without any defense mechanisms. In other words, the payload
 #       is sent in plain text."
@@ -28,7 +28,7 @@ TCP_Y = 176
 fields_tcp = [
     ("Source port", 16, OK), ("Destination port", 16, OK),
     ("Sequence number", 32, ACC), ("Acknowledgment number", 32, ACC),
-    ("Flags", 9, ACC), ("Window", 16, ACC), ("Checksum", 16, OK),
+    ("Flags", 8, ACC), ("Window", 16, ACC), ("Checksum", 16, OK),
 ]
 fields_udp = [
     ("Source port", 16, OK), ("Destination port", 16, OK),
@@ -73,15 +73,15 @@ for i, (n, why) in enumerate([("Sequence number", "순서대로 전달"),
     d.t(RX + 20, yy + 17, why, 11.5, MUTED, KR, "start")
 
 d.tone(RX, TCP_Y + 220, 288, 84, WARN)
-d.t(RX + 20, TCP_Y + 248, "TCP 에는 방어 장치가 없습니다", 12.5, INK, KR, "start", 600)
-d.t(RX + 20, TCP_Y + 270, "페이로드가 평문으로 갑니다. 사이의", 11, MUTED, KR, "start")
-d.t(RX + 20, TCP_Y + 288, "누구든 볼 수 있으니 TLS 1.3 을 씁니다.", 11, MUTED, KR, "start")
+d.t(RX + 20, TCP_Y + 248, "보안 한계와 암호화 필요성", 12.5, INK, KR, "start", 600)
+d.t(RX + 20, TCP_Y + 270, "평문 페이로드 전송으로 인한 도청 위험", 11, MUTED, KR, "start")
+d.t(RX + 20, TCP_Y + 288, "상위 계층 TLS 1.3 암호화 적용 권고", 11, MUTED, KR, "start")
 
 RIGHT3_Y = TCP_Y + 320
 d.tone(RX, RIGHT3_Y, 288, 84, INFO)
-d.t(RX + 20, RIGHT3_Y + 28, "UDP 가 얻는 것", 12.5, INK, KR, "start", 600)
-d.t(RX + 20, RIGHT3_Y + 50, "오버헤드가 아주 적어 높은 처리량을", 11, MUTED, KR, "start")
-d.t(RX + 20, RIGHT3_Y + 68, "냅니다. NTP · DHCP · DNS 가 씁니다.", 11, MUTED, KR, "start")
+d.t(RX + 20, RIGHT3_Y + 28, "UDP 특성과 주요 활용 프로토콜", 12.5, INK, KR, "start", 600)
+d.t(RX + 20, RIGHT3_Y + 50, "연결 설정 없는 최소 오버헤드와 고처리량", 11, MUTED, KR, "start")
+d.t(RX + 20, RIGHT3_Y + 68, "NTP · DHCP · DNS 등 저지연 데이터그램 전송", 11, MUTED, KR, "start")
 
 d.legend(620, [("두 프로토콜에 공통", OK), ("TCP 에만 있는 것", ACC),
                ("UDP 고유", INFO), ("암호화가 필요한 이유", WARN)])

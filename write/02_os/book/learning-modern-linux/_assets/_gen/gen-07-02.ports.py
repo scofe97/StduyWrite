@@ -56,14 +56,14 @@ d.t(X0 + TOTW, BY + BH + 26, "16비트", 12, SOFT, MONO, "end")
 CY = 386
 d.o.append(f'<rect x="{X0}" y="{CY}" width="400" height="76" rx="8" '
            f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
-d.t(X0 + 20, CY + 28, "4장의 capability 가 여기에서 쓰입니다", 13, ACC, KR, "start", 600)
-d.t(X0 + 20, CY + 50, "웹 서버에 root 전체를 주는 대신 낮은 포트에 바인딩할", 11.5, ACC, KR, "start")
-d.t(X0 + 20, CY + 68, "권한 하나만 떼어 주면 됩니다.", 11.5, MUTED, KR, "start")
+d.t(X0 + 20, CY + 28, "4장 capability 연계 — 바인딩 권한 분리", 13, ACC, KR, "start", 600)
+d.t(X0 + 20, CY + 50, "root 전체 권한 대신 CAP_NET_BIND_SERVICE 부여", 11.5, ACC, KR, "start")
+d.t(X0 + 20, CY + 68, "1024 미만 잘 알려진 포트 바인딩 최소 권한 원칙", 11.5, MUTED, KR, "start")
 
 d.tone(X0 + 416, CY, 400, 76, INFO)
-d.t(X0 + 436, CY + 28, "앱이 접속할 때도 포트가 필요합니다", 13, INK, KR, "start", 600)
-d.t(X0 + 436, CY + 50, "여러분의 앱이 웹 서버에 접속하면 그 앱도 통신의", 11.5, MUTED, KR, "start")
-d.t(X0 + 436, CY + 68, "다른 한쪽 끝이라 임시 포트를 하나 받습니다.", 11.5, MUTED, KR, "start")
+d.t(X0 + 436, CY + 28, "리눅스가 고르는 임시 포트", 13, INK, KR, "start", 600)
+d.t(X0 + 436, CY + 50, "connect 때 커널이 ip_local_port_range 에서 고름", 11.5, MUTED, KR, "start")
+d.t(X0 + 436, CY + 68, "기본 32768 – 60999 · IANA 구간과 다름", 11.5, MUTED, KR, "start")
 
 d.legend(492, [("특권이 필요한 구간", ACC), ("IANA 가 관리하는 구간", OK),
                ("자동으로 할당되는 구간", INFO)])

@@ -50,7 +50,7 @@ for i, (kind, name, note, col) in enumerate(tlds):
 # .info 갈래를 아래로 이어 FQDN 을 만든다
 IX = 24 + 1 * (TW + TGAP)
 CHW = TW * 2 + TGAP
-chain = [(".info", "Afilias 가 관리하는 일반 TLD", 380),
+chain = [(".info", "Identity Digital 이 관리하는 일반 TLD", 380),
          ("mhausenblas.info", "저자가 산 도메인", 440),
          ("demo.mhausenblas.info", "저자가 만든 서브도메인", 500)]
 for i, (name, note, y) in enumerate(chain):
@@ -68,16 +68,16 @@ for i, (name, note, y) in enumerate(chain):
 BY = 576
 d.o.append(f'<rect x="24" y="{BY}" width="416" height="76" rx="8" '
            f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
-d.t(44, BY + 26, "허락을 구하지 않는다", 13, ACC, KR, "start", 600)
-d.t(44, BY + 48, "demo 서브도메인을 만들려고 Afilias 의 누구에게도", 11.5, ACC, KR, "start")
-d.t(44, BY + 66, "지원이나 허가를 요청할 필요가 없었습니다.", 11.5, MUTED, KR, "start")
+d.t(44, BY + 26, "도메인 위임과 분산 관리", 13, ACC, KR, "start", 600)
+d.t(44, BY + 48, "서브도메인 생성 시 상위 레지스트리 조율 불필요", 11.5, ACC, KR, "start")
+d.t(44, BY + 66, "존(Zone) 단위의 독립적 레코드 관리와 확장성", 11.5, MUTED, KR, "start")
 
 d.tone(456, BY, 400, 76, WARN)
-d.t(476, BY + 26, "원문 정오 — 인프라 TLD 의 예", 13, INK, KR, "start", 600)
-d.t(476, BY + 48, "저자는 example 과 localhost 를 드는데, IANA 루트 존에서", 11.5, MUTED, KR, "start")
-d.t(476, BY + 66, "infrastructure 로 분류된 것은 .arpa 하나뿐입니다.", 11.5, MUTED, KR, "start")
+d.t(476, BY + 26, "인프라 최상위 도메인 .arpa", 13, INK, KR, "start", 600)
+d.t(476, BY + 48, "RFC 3172 의 인프라 도메인 · IAB 관리", 11.5, MUTED, KR, "start")
+d.t(476, BY + 66, "역방향 DNS 조회(in-addr.arpa) 등 표준 기술 목적 관리", 11.5, MUTED, KR, "start")
 
-d.legend(692, [("확인이 필요한 분류", WARN), ("나머지 TLD 종류", INFO),
+d.legend(692, [("인프라 도메인", WARN), ("나머지 TLD 종류", INFO),
                ("조율 없이 각자 돌보는 자리", ACC)])
 d.save("07-02.dns-tree.svg")
 print("ok 07-02.dns-tree")
