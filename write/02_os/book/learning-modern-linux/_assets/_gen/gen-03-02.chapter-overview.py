@@ -15,7 +15,7 @@ d = D(W, H, "LEARNING MODERN LINUX · 03-02",
       "자주 치는 것일수록 짧아야 한다",
       "3장 가운데 구간 노트의 절 아홉을 읽는 순서로 이은 지도. 1~5절이 지금 쓰는 셸에서 손을 덜 쓰는 법이고, "
       "6~7절이 셸 자체를 갈아 끼우는 판단, 8~9절이 터미널을 쪼개 쓰는 법이다.",
-      "7절에서 저자가 자기 선택을 밝힙니다")
+      "7절에서 저자가 셸 선택을 밝힙니다")
 
 CW, CH, GAP, X0 = 264, 104, 20, 20
 ROWS = [104, 232, 360]
@@ -59,6 +59,6 @@ for i, (n, layer, title, q) in enumerate(cards):
     d.t(x + 18, y + 56, title, 16, ACC if focal else INK, KR, "start", 600)
     d.t(x + 18, y + 84, q, 13, MUTED, KR, "start")
 
-d.legend(492, [("저자가 자기 선택을 밝히는 자리", ACC)])
+d.legend(492, [("저자가 셸 선택을 밝히는 자리", ACC)])
 d.save("03-02.chapter-overview.svg")
 print("ok 03-02.chapter-overview")

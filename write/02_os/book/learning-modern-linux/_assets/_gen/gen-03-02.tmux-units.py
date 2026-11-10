@@ -40,14 +40,19 @@ d.box(WX, WY, WW, WH, PAPER, MUTED, 1.1, 8)
 d.t(WX + 16, WY + 26, "윈도 1", 14, INK, KR, "start", 600)
 d.t(WX + 16, WY + 46, "브라우저의 탭 같은 것 · 쓰는 것은 선택", 12, MUTED, KR, "start")
 
-panes = [("페인 A", "셸 하나가 돈다"), ("페인 B", "가로로 쪼갠 것"), ("페인 C", "세로로 쪼갠 것")]
-for i, (name, sub) in enumerate(panes):
-    px = WX + 16
-    py = WY + 68 + i * 48
-    d.o.append(f'<rect x="{px}" y="{py}" width="{WW - 32}" height="40" rx="6" '
+# 페인 A 위, 그 아래를 B·C 좌우로 — " 로 위아래, % 로 좌우
+PW = WW - 32
+panes = [("페인 A", "셸 하나가 돈다", WX + 16, WY + 68, PW, 40),
+         ("페인 B", "\" 로 위아래 쪼갬", WX + 16, WY + 116, (PW - 8) // 2, 88),
+         ("페인 C", "% 로 좌우 쪼갬", WX + 16 + (PW - 8) // 2 + 8, WY + 116, (PW - 8) // 2, 88)]
+for name, sub, px, py, pw, ph in panes:
+    d.o.append(f'<rect x="{px}" y="{py}" width="{pw}" height="{ph}" rx="6" '
                f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.3"/>')
     d.t(px + 14, py + 25, name, 13, ACC, KR, "start", 600)
-    d.t(px + WW - 46, py + 25, sub, 12, MUTED, KR, "end")
+    if ph > 40:
+        d.t(px + 14, py + 50, sub, 12, MUTED, KR, "start")
+    else:
+        d.t(px + pw - 14, py + 25, sub, 12, MUTED, KR, "end")
 
 W2X = 468
 d.box(W2X, WY, 336, WH, PAPER, MUTED, 1.1, 8)
