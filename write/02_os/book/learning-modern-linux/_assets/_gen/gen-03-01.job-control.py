@@ -50,6 +50,11 @@ d.path(f"M 240 {FG[1] + FG[3]} L 240 356 L {ST[0] - 3} 356", MUTED, 1.4, m="ar")
 d.t(252, 290, "Ctrl+Z", 12, INK, MONO, "start", 600)
 d.t(252, 308, "SIGTSTP", 12, MUTED, MONO, "start")
 
+# 백그라운드 → 멈춤 (kill -TSTP) — 본문 실험이 지나는 길
+d.path(f"M {BG[0] - 3} 215 L 600 215 L 600 {ST[1] - 3}", MUTED, 1.4, m="ar")
+d.t(588, 262, "kill -TSTP %1", 12, INK, MONO, "end", 600)
+d.t(588, 280, "SIGTSTP", 12, MUTED, MONO, "end")
+
 # 멈춤 → 포그라운드 (fg)
 d.path(f"M {ST[0]} 388 L 140 388 L 140 {FG[1] + FG[3] + 3}", MUTED, 1.4, m="ar")
 d.t(152, 410, "fg %1", 12, INK, MONO, "start", 600)
