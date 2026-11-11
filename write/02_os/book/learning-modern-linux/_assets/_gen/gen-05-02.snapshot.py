@@ -5,7 +5,7 @@ from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, BAD, PAPER, PAPER2, RUL
 
 W, H = 880, 580
 d = D(W, H, "LEARNING MODERN LINUX · 05-02 §3",
-      "LVM 스냅샷의 CoW 생명주기와 Data% 상태 전이",
+      "LVM 스냅숏의 CoW 생명주기와 Data% 상태 전이",
       "스냅숏은 바뀐 블록이 없는 상태에서 시작해, 원본에 쓰기가 일어날 때마다 바뀌기 전 블록을 COW 영역에 복사하므로 Data% 가 오릅니다. "
       "작업 후에는 롤백 병합(merge)하거나 삭제(remove)해 쓰기 오버헤드를 제거합니다.",
       "COW 영역이 가득 차면 스냅숏은 무효(Invalid)가 된다 · man·커널 문서 기준, 이 환경에서는 못 잼")
