@@ -143,6 +143,7 @@ resource 는 쓰이는 양을 재고, 여기는 쓸 수 있는 양에 한도를 
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
+| [systemctl](./service/systemctl.md) | `systemctl` | 서비스 상태를 읽고, 지금·부팅 때 켜고 끄고, drop-in 으로 설정을 바꾸고, 실패한 서비스를 추적할 때 |
 
 
 
@@ -181,6 +182,8 @@ resource 는 쓰이는 양을 재고, 여기는 쓸 수 있는 양에 한도를 
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
+| [uname·os-release·hostnamectl](./sysinfo/uname%C2%B7os-release%C2%B7hostnamectl.md) | `uname` · `/etc/os-release` · `lsb_release` · `hostnamectl` | 서버의 배포판·커널·호스트 이름을 확인하거나 호스트 이름을 바꿀 때 |
+| [dmidecode·lscpu](./sysinfo/dmidecode%C2%B7lscpu.md) | `dmidecode` · `lscpu` · `nproc` | CPU 개수·구조·캐시를 읽거나, 서버 모델·메모리 슬롯 정보를 보거나, 컨테이너 CPU 제한이 어디에 보이는지 확인할 때 |
 
 
 
