@@ -109,6 +109,9 @@ updated: 2026-11-11
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
+| [top·htop](./resource/top%C2%B7htop.md) | `top` · `htop` | 머리줄의 부하·CPU·메모리와 VIRT·RES·SHR 열을 읽거나, `top -b` 로 기록을 남길 때 |
+| [lsof](./resource/lsof.md) | `lsof` | 포트나 파일을 쥔 프로세스를 찾거나, 지운 파일이 붙든 디스크 공간을 찾을 때 |
+| [watch](./resource/watch.md) | `watch` | 명령을 몇 초마다 다시 돌려 바뀐 곳을 강조해 보거나, 출력이 바뀌면 멈출 때 |
 
 
 
