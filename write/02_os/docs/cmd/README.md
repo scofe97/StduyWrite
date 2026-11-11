@@ -28,6 +28,13 @@ updated: 2026-11-11
 - [isolate: 격리와 자원 제한](#isolate--격리와-자원-제한)
 - [net: 네트워크](#net--네트워크)
 - [service: 서비스와 로그](#service--서비스와-로그)
+- [ssh: 원격 접속과 전송](#ssh--원격-접속과-전송)
+- [storage: 디스크와 파일시스템](#storage--디스크와-파일시스템)
+- [kernel: 커널 설정과 부팅](#kernel--커널-설정과-부팅)
+- [sysinfo: 시스템 정보](#sysinfo--시스템-정보)
+- [security: SELinux·감사·인증서](#security--selinux감사인증서)
+- [pkg: 패키지](#pkg--패키지)
+- [shell: 세션과 스크립트](#shell--세션과-스크립트)
 - [time: 날짜와 시간](#time--날짜와-시간)
 
 시트마다 첫 절 「실습 준비」 에서 예가 쓰는 입력 파일을 만듭니다. 코드 블록 안의 `#` 줄은 자리에 따라 뜻이 다릅니다.
@@ -73,7 +80,9 @@ updated: 2026-11-11
 
 ## perm — 사용자와 권한
 
-> 누가 무엇을 할 수 있는지 보고 바꾸는 도구입니다. 후보는 `id`·`chmod`·`chown`·`umask`·`sudo` 입니다.
+> 누가 무엇을 할 수 있는지 보고 바꾸는 도구입니다. 후보는 `id`·`chmod`·`chown`·`chgrp`·`umask`·`getfacl`·`setfacl`·`sudo`·`visudo`·`su` 입니다.
+
+계정을 만들고 바꾸는 `useradd`·`usermod`·`userdel`·`passwd`·`chage`, 로그인 기록을 보는 `last`·`lastb`·`lastlog`·`w`·`who`, 계정 정보를 묻는 `getent`·`faillock` 도 여기에 둡니다.
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
@@ -82,16 +91,21 @@ updated: 2026-11-11
 
 ## process — 프로세스와 잡
 
-> 실행 중인 프로세스를 보고, 신호를 보내고, 터미널에서 떼어 내는 도구입니다. 후보는 `ps`·`kill`·`jobs`·`nohup`·`setsid` 입니다.
+> 실행 중인 프로세스를 보고, 신호를 보내고, 터미널에서 떼어 내는 도구입니다. 후보는 `kill`·`pgrep`·`killall`·`jobs`·`nohup`·`disown`·`setsid` 입니다.
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
+| [ps](./process/ps.md) | `ps` · `pstree` | 프로세스 목록과 상태(STAT)·부모 PID·스레드·VSZ/RSS 를 골라 보고 정렬할 때 |
+| [kill·pgrep·killall](./process/kill%C2%B7pgrep%C2%B7killall.md) | `kill` · `pgrep` · `pkill` · `killall` | 이름·사용자·명령줄로 PID 를 찾아 신호를 보내거나, 종료와 강제 종료를 가를 때 |
+| [jobs·nohup·disown](./process/jobs%C2%B7nohup%C2%B7disown.md) | `jobs` · `bg` · `fg` · `wait` · `nohup` · `disown` · `setsid` | 잡을 멈추고 앞뒤로 옮기거나, 터미널이 끊겨도 프로세스를 살려 둘 때 |
 
 
 
 ## resource — 자원과 성능 관측
 
-> CPU·메모리·디스크가 얼마나 쓰이는지 재는 도구입니다. 후보는 `free`·`df`·`du`·`vmstat`·`iostat`·`uptime` 입니다.
+> CPU·메모리·디스크가 얼마나 쓰이는지 재는 도구입니다. 후보는 `top`·`htop`·`watch`·`lsof`·`free`·`uptime`·`nproc`·`vmstat`·`iostat`·`mpstat`·`pidstat`·`sar`·`pmap`·`smem` 입니다.
+
+우선순위와 한도를 바꾸는 `nice`·`renice`·`ionice`·`ulimit` 도 여기에 둡니다. 디스크 사용량을 재는 `df`·`du` 는 storage 에 둡니다.
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
@@ -111,7 +125,9 @@ resource 는 쓰이는 양을 재고, 여기는 쓸 수 있는 양에 한도를 
 
 ## net — 네트워크
 
-> 주소와 연결을 보고, 이름을 풀고, 요청을 보내는 도구입니다. 후보는 `ip`·`ss`·`dig`·`curl`·`tcpdump` 입니다.
+> 주소와 연결을 보고, 이름을 풀고, 요청을 보내는 도구입니다. 후보는 `ip`·`ss`·`ping`·`tracepath`·`traceroute`·`mtr`·`dig`·`resolvectl`·`curl`·`nc`·`nmcli`·`tcpdump` 입니다.
+
+방화벽과 연결 추적을 다루는 `firewall-cmd`·`nft`·`iptables`·`conntrack`, NFS 를 다루는 `exportfs`·`showmount`·`nfsstat` 도 여기에 둡니다.
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
@@ -120,7 +136,74 @@ resource 는 쓰이는 양을 재고, 여기는 쓸 수 있는 양에 한도를 
 
 ## service — 서비스와 로그
 
-> 서비스를 켜고 끄고 로그를 읽는 도구입니다. 후보는 `systemctl`·`journalctl`·`systemd-run` 입니다.
+> 서비스를 켜고 끄고 로그를 읽는 도구입니다. 후보는 `systemctl`·`journalctl`·`systemd-run`·`logger`·`logrotate` 입니다.
+
+| 시트 | 다루는 명령 | 이런 때 찾습니다 |
+|------|------------|----------------|
+
+
+
+## ssh — 원격 접속과 전송
+
+> 다른 기계에 들어가고, 키를 만들어 나눠 주고, 파일을 주고받는 도구입니다. 후보는 `ssh`·`~/.ssh/config`·`ssh-keygen`·`ssh-copy-id`·`ssh-agent`·`scp`·`sftp`·`sshd`·`sshd_config` 입니다.
+
+키 교환과 호스트 키 신뢰의 원리는 책 노트가 맡고, 여기는 명령과 설정 사용법만 둡니다.
+
+| 시트 | 다루는 명령 | 이런 때 찾습니다 |
+|------|------------|----------------|
+
+
+
+## storage — 디스크와 파일시스템
+
+> 디스크와 파티션을 보고, LVM 으로 묶고 늘리고, 파일시스템을 만들고 붙이는 도구입니다. 후보는 `lsblk`·`blkid`·`findmnt`·`mount`·`umount`·`parted`·`partprobe`·`growpart`·`pvs`·`vgs`·`lvs`·`lvextend`·`mkfs`·`tune2fs`·`e2fsck`·`resize2fs`·`xfs_info`·`xfs_growfs`·`swapon`·`mkswap`·`df`·`du`·`multipath` 입니다.
+
+| 시트 | 다루는 명령 | 이런 때 찾습니다 |
+|------|------------|----------------|
+
+
+
+## kernel — 커널 설정과 부팅
+
+> 커널 매개변수와 모듈, 커널 메시지, 부팅 설정과 부팅 시간을 다루는 도구입니다. 후보는 `sysctl`·`modprobe`·`lsmod`·`modinfo`·`dmesg`·`grubby`·`dracut`·`systemd-analyze` 입니다.
+
+| 시트 | 다루는 명령 | 이런 때 찾습니다 |
+|------|------------|----------------|
+
+
+
+## sysinfo — 시스템 정보
+
+> 어떤 배포판과 커널과 하드웨어 위에서 도는지 확인하는 도구입니다. 후보는 `uname`·`/etc/os-release`·`lsb_release`·`hostnamectl`·`dmidecode`·`lscpu` 입니다.
+
+| 시트 | 다루는 명령 | 이런 때 찾습니다 |
+|------|------------|----------------|
+
+
+
+## security — SELinux·감사·인증서
+
+> 접근 제어 정책과 감사 기록을 보고, 인증서와 체크섬을 확인하는 도구입니다. 후보는 `getenforce`·`setenforce`·`sestatus`·`semanage`·`restorecon`·`setsebool`·`ausearch`·`aureport`·`audit2allow`·`openssl`·`sha256sum`·`update-ca-trust` 입니다.
+
+SELinux 와 `update-ca-trust` 는 RHEL 계열 명령이라 이 분류의 출력은 Rocky Linux 9 에서 받습니다.
+
+| 시트 | 다루는 명령 | 이런 때 찾습니다 |
+|------|------------|----------------|
+
+
+
+## pkg — 패키지
+
+> 패키지를 찾고, 설치하고, 고정하고, 설치된 파일이 바뀌지 않았는지 확인하는 도구입니다. 후보는 RHEL 계열의 `dnf`·`rpm`·`createrepo`, Debian 계열의 `apt-get`·`apt-cache`·`apt-mark`·`dpkg`·`debsums` 입니다.
+
+| 시트 | 다루는 명령 | 이런 때 찾습니다 |
+|------|------------|----------------|
+
+
+
+## shell — 세션과 스크립트
+
+> 끊겨도 이어지는 세션을 두고, 명령을 시간 제한·잠금·예약과 함께 돌리는 도구입니다. 후보는 `tmux`·`screen`·`script`·`timeout`·`flock`·`tee`·`crontab`·`loginctl` 입니다.
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
@@ -129,7 +212,7 @@ resource 는 쓰이는 양을 재고, 여기는 쓸 수 있는 양에 한도를 
 
 ## time — 날짜와 시간
 
-> 시각을 읽고, 형식을 바꾸고, 날짜 사이를 계산하는 도구입니다. 다른 후보는 `timedatectl`·`chronyc` 입니다.
+> 시각을 읽고, 형식을 바꾸고, 날짜 사이를 계산하는 도구입니다. 다른 후보는 `timedatectl`·`chronyc`·`hwclock` 입니다.
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
