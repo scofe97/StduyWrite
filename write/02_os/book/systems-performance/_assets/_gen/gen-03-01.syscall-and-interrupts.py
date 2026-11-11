@@ -19,19 +19,19 @@ class SeqKR(Seq, DK):
             s.LX[nm] = x
             s.box(x - lane_w / 2, y0, lane_w, 48, PAPER2, RULE, 1.0)
             s.t(x, y0 + 21, nm, 14, INK, _kr(nm), "middle", 600)
-            s.t(x, y0 + 39, sub, 12, MUTED, _kr(sub))
+            s.t(x, y0 + 39, sub, 13, MUTED, _kr(sub))
         s.lane_top = y0 + 48
     def msg(s, a, b, label, y, c=MUTED, mk="ar", dash=None, sub=None):
         x1, x2 = s.LX[a], s.LX[b]; k = 1 if x2 > x1 else -1
         s.path(f"M {x1 + 10 * k} {y} L {x2 - 12 * k} {y}", c, 1.5, m=mk, dash=dash)
         mx = (x1 + x2) / 2
         s.t(mx, y - 8, label, 13, c, _kr(label), "middle", 600)
-        if sub: s.t(mx, y + 18, sub, 12, MUTED, _kr(sub))
+        if sub: s.t(mx, y + 18, sub, 13, MUTED, _kr(sub))
     def selfmsg(s, a, label, y, c=MUTED, sub=None):
         x = s.LX[a]
         s.path(f"M {x + 10} {y - 8} L {x + 52} {y - 8} L {x + 52} {y + 8} L {x + 13} {y + 8}", c, 1.4, m="ar")
         s.t(x + 64, y - 2, label, 13, c, _kr(label), "start", 600)
-        if sub: s.t(x + 64, y + 16, sub, 12, MUTED, _kr(sub), "start")
+        if sub: s.t(x + 64, y + 16, sub, 13, MUTED, _kr(sub), "start")
     def head(s, y, txt):
         s.line(24, y + 8, s.w - 24, y + 8, RULE, 0.8)
         s.t(24, y, txt, 13, SOFT, KR, "start", 600)

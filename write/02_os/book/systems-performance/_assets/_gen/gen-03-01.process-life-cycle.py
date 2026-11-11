@@ -8,7 +8,7 @@ from ddk import DK
 from dd import ACC, MUTED, SOFT, INK, INFO, OK, WARN, BAD, PAPER, PAPER2, RULE, KR, MONO
 
 W, H = 976, 536
-SW, SH, CY = 140, 52, 268          # 상태 상자 폭·높이, 가운데 줄 y
+SW, SH, CY = 132, 52, 268          # 상태 상자 폭·높이, 가운데 줄 y
 XS = {"idle": 96, "ready": 288, "proc": 512, "zombie": 736}   # 상자 왼쪽 x
 SLEEP_X, SLEEP_Y = 368, 388
 
@@ -21,7 +21,7 @@ def state(key, x, y, name, sub, c=None):
     if c: d.tone(x, y, SW, SH, c, 8)
     else: d.box(x, y, SW, SH, PAPER2, RULE, 1.0, 8)
     d.t(x + SW / 2, y + 23, name, 14, c if c else INK, MONO, "middle", 600)
-    d.t(x + SW / 2, y + 41, sub, 12, MUTED, KR)
+    d.t(x + SW / 2, y + 41, sub, 13, MUTED, KR)
 
 top = CY - SH / 2
 state("idle", XS["idle"], top, "Idle", "생성 직후")
@@ -36,10 +36,10 @@ d.arrow([(56, CY), (XS["idle"] - 4, CY)], MUTED, "ar", 1.4)
 d.t(48, CY - 20, "creation", 12, SOFT, MONO)
 # Idle → ready
 d.arrow([(XS["idle"] + SW, CY), (XS["ready"] - 4, CY)], MUTED, "ar", 1.4)
-d.t((XS["idle"] + SW + XS["ready"]) / 2, CY - 12, "실행 가능", 12, SOFT, KR)
+d.t((XS["idle"] + SW + XS["ready"]) / 2, CY - 12, "실행 가능", 13, SOFT, KR, "middle")
 # ready → proc
 d.arrow([(XS["ready"] + SW, CY), (XS["proc"] - 4, CY)], MUTED, "ar", 1.4)
-d.t((XS["ready"] + SW + XS["proc"]) / 2, CY - 12, "차례가 옴", 12, SOFT, KR)
+d.t((XS["ready"] + SW + XS["proc"]) / 2, CY - 12, "차례가 옴", 13, SOFT, KR, "middle")
 # proc → ready (위로 ㄷ자)
 px, rx, yt = XS["proc"] + SW / 2, XS["ready"] + SW / 2, top - 52
 d.arrow([(px, top), (px, yt), (rx, yt), (rx, top - 4)], WARN, "warn", 1.5)

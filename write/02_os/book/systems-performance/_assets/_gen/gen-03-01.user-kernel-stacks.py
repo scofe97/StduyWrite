@@ -22,13 +22,13 @@ for i, (name, sub, c) in enumerate(LAYERS):
     if c: d.tone(LX, y, LW, LH, c, 6)
     else: d.box(LX, y, LW, LH, PAPER2, RULE, 1.0, 6)
     d.t(LX + 20, y + 34, name, 14, c if c else INK, MONO, "start", 600)
-    d.t(LX + LW - 20, y + 34, sub, 12, MUTED, KR, "end")
+    d.t(LX + LW - 20, y + 34, sub, 13, MUTED, KR, "end")
 
 # 유저/커널 경계 — Libraries 와 System Calls 사이
 BY = Y0 + 2 * ST - 4
 d.line(24, BY, LX + LW + 24, BY, WARN, 1.2, "6 4")
-d.t(LX + LW + 28, BY - 6, "유저 레벨", 12, WARN, KR, "start")
-d.t(LX + LW + 28, BY + 16, "커널 레벨", 12, WARN, KR, "start")
+d.t(LX + LW + 28, BY - 6, "유저 레벨", 13, WARN, KR, "start")
+d.t(LX + LW + 28, BY + 16, "커널 레벨", 13, WARN, KR, "start")
 
 # 왼쪽 범위 괄호
 def bracket(y1, y2, label, c):
@@ -48,7 +48,7 @@ for i, f in enumerate(FRAMES):
     d.box(FX, y, FW, FH, PAPER2, INFO if i in (0, 5) else RULE, 1.0, 4)
     d.t(FX + 12, y + 19, f, 12, INK, MONO, "start")
 d.t(FX + FW + 8, FY0 + 19, "leaf", 12, SOFT, MONO, "start")
-d.t(FX + FW + 8, FY0 + 5 * FS + 19, "입구", 12, SOFT, KR, "start")
+d.t(FX + FW + 8, FY0 + 5 * FS + 19, "입구", 13, SOFT, KR, "start")
 # 맨 아래 줄 → System Calls 층
 ly = FY0 + 5 * FS + FH / 2
 sy = Y0 + 2 * ST + LH / 2
@@ -58,5 +58,5 @@ rx = FX + FW / 2
 d.arrow([(rx, FY0 + 6 * FS + 36), (rx, FY0 + 6 * FS + 8)], MUTED, "ar", 1.4)
 d.t(rx, FY0 + 6 * FS + 56, "아래에서 위로 · 어떻게 왔나", 13, MUTED, KR, "middle", 600)
 
-d.legend(Y0 + 5 * ST + 24, [("시스템 콜 경계", ACC), ("유저 스택 범위", OK), ("커널 스택 범위", INFO)])
+d.legend(Y0 + 5 * ST + 24, [("시스템 콜 경계", ACC), ("유저 스택 범위", OK), ("커널 스택 범위", INFO), ("유저·커널 경계선", WARN)])
 d.save("03-01.user-kernel-stacks.svg")

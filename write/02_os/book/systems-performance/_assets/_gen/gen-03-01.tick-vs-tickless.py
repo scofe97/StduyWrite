@@ -21,7 +21,7 @@ d = DK(W, H, "SYSTEMS PERFORMANCE · 03-01 §6",
 def row(i, name, sub):
     y = ROW0 + i * STRIDE
     d.t(X0 - 24, y - 2, name, 14, INK, KR, "end", 600)
-    d.t(X0 - 24, y + 16, sub, 12, MUTED, KR, "end")
+    d.t(X0 - 24, y + 16, sub, 13, MUTED, KR, "end")
     d.line(X(0), y, X(20), y, RULE, 1.0)
     return y
 
@@ -32,7 +32,7 @@ def dot(x, y, c, r=5):
 y = row(0, "100Hz tick", "타이머 확인 10ms 마다")
 for ms in (0, 10, 20): dot(X(ms), y, MUTED, 4)
 d.line(X(1), y - 16, X(1), y + 16, WARN, 1.4)
-d.t(X(1), y - 22, "만료 1ms", 12, WARN, KR)
+d.t(X(1), y - 22, "만료 1ms", 13, WARN, KR)
 d.tone(X(1), y - 6, X(10) - X(1), 12, ACC, 3)
 dot(X(10), y, ACC, 6)
 d.t(X(10) + 12, y - 12, "실행 10ms", 13, ACC, KR, "start", 600)
