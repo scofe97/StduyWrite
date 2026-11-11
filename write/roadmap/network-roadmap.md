@@ -54,6 +54,7 @@ updated: 2026-11-03
 | 2 · Linux 경로 | 가상 인터페이스 | network namespace · veth · bridge · 컨테이너 네트워킹 모드 · 포트 매핑 |
 | 2 · Linux 경로 | 패킷 변형 | netfilter hook · iptables · nftables · NAT · SNAT · DNAT · MASQUERADE · conntrack |
 | 2 · Linux 경로 | NAT 너머 | NAT traversal · STUN · TURN · ICE |
+| 2 · Linux 경로 | 공유 주소 | CGNAT · RFC 6598 공유 주소 대역 · 인바운드 연결 불가 · 아웃바운드 전용 터널로 우회 |
 | 2 · Linux 경로 | 크기와 구성 | MTU · MSS · PMTUD · PMTUD 블랙홀 · `tcp_mtu_probing` · DHCP · NTP · chrony |
 | 3 · 관측 | 캡처 | tcpdump · tshark · 캡처 위치 · 캡처 필터 · 디스플레이 필터 |
 | 3 · 관측 | 판독 | RST · 재전송 · 중복 ACK · TLS 핸드셰이크 판독 |
@@ -288,6 +289,7 @@ updated: 2026-11-03
 | NAT traversal · STUN · TURN · ICE | 선택 | [portal 01-01 NAT·conntrack](../02_os/project/portal-tunnel/01-01.NAT%C2%B7conntrack%C2%B7outbound%20connection.md) | TCP/IP Illustrated 7장 |
 | bonding · LACP | 선택 |  | TCP/IP Illustrated 3장 |
 | 게이트웨이 이중화 — VRRP · keepalived · 가상 IP · gratuitous ARP | 추천 | | CompTIA Network+ 16장 · [keepalived](https://keepalived.readthedocs.io/) |
+| CGNAT — 공인 IP 를 나눠 쓰는 망에서 들어오는 연결이 막히는 이유 | 선택 |  |  |
 | policy routing · `ip rule` · VRF | 선택 |  | [ip-rule(8)](https://man7.org/linux/man-pages/man8/ip-rule.8.html) · [VRF](https://docs.kernel.org/networking/vrf.html) |
 | 동적 라우팅 · OSPF · BGP 인접과 광고 | 선택 | [랩 동적 라우팅](../02_os/project/network-fundamentals-lab/03-02.%EB%9D%BC%EC%9A%B0%ED%8A%B8%EA%B0%80%20%EC%8A%A4%EC%8A%A4%EB%A1%9C%20%EA%B1%B8%EC%96%B4%EC%98%A4%EA%B2%8C%20%ED%95%9C%EB%8B%A4.md) · [길의 계산](../02_os/book/cntd_computer-networking-top-down/05-01.%EA%B8%B8%EC%9D%80%20%EC%96%B4%EB%96%BB%EA%B2%8C%20%EA%B3%84%EC%82%B0%EB%90%98%EB%8A%94%EA%B0%80.md) | Computer Networking 5장 |
 | iBGP 풀메시 · 경로 반사기 | 선택 | [AS 안과 AS 사이](../02_os/book/cntd_computer-networking-top-down/05-02.AS%20%EC%95%88%EA%B3%BC%20AS%20%EC%82%AC%EC%9D%B4.md) · [진단 개념](../troubleshooting/_concepts/kubernetes-%EB%85%B8%EB%93%9C-%EA%B0%84-%EA%B2%BD%EB%A1%9C%EB%A5%BC-%EB%88%84%EA%B0%80-%ED%8D%BC%EB%9C%A8%EB%A6%AC%EB%8A%94%EA%B0%80.md) | Computer Networking 5장 |

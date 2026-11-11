@@ -32,6 +32,7 @@ updated: 2026-11-03
 | 2 · 프록시와 AOP | 등장 배경 | 횡단 관심사 · 필터와 인터셉터의 한계 · 템플릿·콜백 · `ThreadLocal` |
 | 2 · 프록시와 AOP | 프록시 | JDK 동적 프록시 · CGLIB · `@Configuration` 프록시 · 프록시 팩토리 · 빈 후처리기 · 어드바이저 |
 | 2 · 프록시와 AOP | 선언 | `@Aspect` · 포인트컷 표현식 · 어드바이스 다섯 · 자기 호출 문제 · 위빙 네 방식 |
+| 2 · 프록시와 AOP | 응용 사례 | 마커 어노테이션 · 변경 전후 값 스냅샷 · ThreadLocal 컨텍스트 · 감사 로그 적재 · 비동기에서 전파되지 않는 한계 |
 | 3 · 요청 처리 | 토대 | 서블릿 · WAS · 멀티스레드 · 내장 톰캣 · `SpringApplication` |
 | 3 · 요청 처리 | 흐름 | `DispatcherServlet` · 핸들러 매핑 · 핸들러 어댑터 · `ArgumentResolver` · 뷰 리졸버 |
 | 3 · 요청 처리 | 몸통 | 메시지 컨버터 · Jackson · 멀티파트 · `@JsonView` · 다형성 직렬화 |
@@ -54,6 +55,7 @@ updated: 2026-11-03
 | 8 · 보안과 운영 | 운영 | 액츄에이터 엔드포인트 · Micrometer · Counter · Gauge · Timer · JMX |
 | 9 · 테스트와 배포 | 층 | 테스트 피라미드 · 단위 · 슬라이스 · `@SpringBootTest` · `ApplicationContextRunner` |
 | 9 · 테스트와 배포 | 진짜 의존 | Testcontainers · EmbeddedKafka · WireMock · ArchUnit · 보안 설정 테스트 |
+| 9 · 테스트와 배포 | 테스트 데이터 | 정적 픽스처 · 랜덤 픽스처 · Fixture Monkey · 시드 고정 · 매퍼 단위 테스트 · MapStruct |
 | 9 · 테스트와 배포 | 산출물 | `bootJar` 와 plain jar · Boot Loader · Layered JAR · 컨테이너화 · GitOps |
 
 
@@ -109,6 +111,7 @@ updated: 2026-11-03
 | 자기 호출이 프록시를 지나침 | 필수 | [횡단 관심사와 AOP](../09_spring/05_aop/01-01.%ED%9A%A1%EB%8B%A8%20%EA%B4%80%EC%8B%AC%EC%82%AC%EC%99%80%20AOP%20%E2%80%94%20%ED%94%84%EB%A1%9D%EC%8B%9C%EB%A1%9C%20%ED%92%80%EC%96%B4%EB%82%B4%EA%B8%B0.md) | |
 | 템플릿·콜백과 ThreadLocal | 추천 | [템플릿·ThreadLocal](../09_spring/05_aop/01-03.%ED%85%9C%ED%94%8C%EB%A6%BF%C2%B7%EC%BD%9C%EB%B0%B1%EA%B3%BC%20ThreadLocal%20%E2%80%94%20AOP%20%EB%93%B1%EC%9E%A5%20%EC%A7%81%EC%A0%84%EC%9D%98%20%EB%91%90%20%EC%8B%9C%EB%8F%84.md) | |
 | 어노테이션 기반 응용 | 추천 | [어노테이션 AOP](../09_spring/05_aop/01-04.%EC%96%B4%EB%85%B8%ED%85%8C%EC%9D%B4%EC%85%98%20%EA%B8%B0%EB%B0%98%20AOP%20%EC%9D%91%EC%9A%A9%20%E2%80%94%20%40Async%C2%B7%40Cacheable%C2%B7%40Retryable.md) | |
+| 감사 로그 — 마커 어노테이션 · AOP · ThreadLocal 로 변경 전후 값 남기기 | 선택 |  |  |
 | 위빙 네 방식과 AspectJ | 선택 | | |
 
 ### 3단계 · 요청 처리
@@ -228,6 +231,7 @@ updated: 2026-11-03
 | 메시징 테스트 | 추천 | [메시징 테스트](../09_spring/04_testing/02-02.EmbeddedKafka%C2%B7Testcontainers%EB%A1%9C%20%EB%A9%94%EC%8B%9C%EC%A7%95%20%ED%85%8C%EC%8A%A4%ED%8A%B8.md) | |
 | ArchUnit 가드레일 | 추천 | [ArchUnit](../09_spring/04_testing/02-03.ArchUnit%EC%9C%BC%EB%A1%9C%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98%20%EA%B0%80%EB%93%9C%EB%A0%88%EC%9D%BC.md) | |
 | WireMock 과 외부 시스템 | 추천 | [WireMock](../09_spring/04_testing/02-04.WireMock%EA%B3%BC%20%EC%99%B8%EB%B6%80%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20E2E.md) | |
+| 테스트 데이터 — 정적·랜덤 픽스처와 매퍼 테스트 | 선택 |  |  |
 | 보안 설정 테스트 | 추천 | | Spring Security 18장 |
 | bootJar 와 Layered JAR | 필수 | [내장 톰캣](../09_spring/01_core/02-02.%EB%82%B4%EC%9E%A5%20%ED%86%B0%EC%BA%A3%EA%B3%BC%20SpringApplication%20%E2%80%94%20JAR%EB%A1%9C%20WAS%EB%A5%BC%20%ED%92%88%EB%8B%A4.md) | Spring in Action 18장 |
 | 컨테이너화와 쿠버네티스 | 추천 | [Boot 컨테이너화](../09_spring/books/cloud-native-spring-in-action/06.Spring%20Boot%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%ED%99%94.md) | Cloud Native Spring 6·7장 |

@@ -28,6 +28,7 @@ updated: 2026-11-03
 |---|---|---|
 | 1 · 전달 모델 | 전달 단위와 배포 모델 | 배포 단위 · 서버 배포 vs 로컬 배포 · Push 모델 · Pull 모델(GitOps) · Continuous Delivery vs Continuous Deployment |
 | 1 · 전달 모델 | 버전 관리와 협업 | 버전 관리 · 변경 추적 · Git · 브랜치 전략 · trunk-based development · 짧은 브랜치 수명 |
+| 1 · 전달 모델 | 저장소 조합과 이식 | submodule · subtree · cherry-pick · 원격 추가와 fetch · 경로 구조 일치 · 3-way 병합 기준 · 충돌 해결 |
 | 1 · 전달 모델 | 환경과 성과 측정 | 다중 환경 격리 · dev · stage · prod 환경 분리 · DORA 4대 지표 · 플랫폼 엔지니어링 |
 | 2 · CI 파이프라인 | 파이프라인 정의와 제어 | CI 파이프라인 원칙 · 빌드 요청과 큐 · Scripted vs Declarative · Declarative Pipeline 핵심 구조 · Pipeline 패턴 |
 | 2 · CI 파이프라인 | 실행 환경과 에이전트 | Jenkins Agent · Docker with Pipeline · Kubernetes Jenkins · 동적 Pod 에이전트 · 실패 대응과 sh 위생 · GitHub Actions runner |
@@ -110,6 +111,8 @@ updated: 2026-11-03
 | 지속적 전달(CD) vs 지속적 배포 · 빌드 사이클 5단계 | 필수 | [CI/CD 기초 패턴](../07_devops/book/cicd_cicd-patterns/01-01.Foundations%20of%20CICD%20Design%20Patterns.md) | Software Engineering at Google 24장 |
 | 배포 모델 — Push 모델 vs Pull 모델(GitOps) | 필수 | [CI/CD 기초 패턴](../07_devops/book/cicd_cicd-patterns/01-01.Foundations%20of%20CICD%20Design%20Patterns.md) | CI/CD Design Patterns 1장 |
 | 배포 환경 분리 — dev · stage · prod 다중 환경 격리 | 추천 | [다중 환경과 분할](../07_devops/book/fdsd_fundamentals-devops/06-01.How%20to%20Work%20with%20Multiple%20Teams%20and%20Environments.md) | Fundamentals of DevOps and Software Delivery 6장 |
+| 다른 저장소 코드 끌어오기 — submodule 과 subtree 의 차이 | 선택 |  |  |
+| 커밋 옮기기 — cherry-pick 이 diff 를 적용하는 원리와 충돌 | 선택 |  |  |
 | DORA 4대 지표 — 배포 빈도 · 리드 타임 · 변경 실패율 · MTTR | 추천 | [DORA와 비즈니스 정렬](../07_devops/book/cicd_cicd-patterns/04-01.Business%20Outcome%20Alignment%20with%20CICD.md) | CI/CD Design Patterns 4장 |
 | 추상화의 진화 — 플랫폼 엔지니어링과 IDP | 선택 | [DevOps의 미래](../07_devops/book/fdsd_fundamentals-devops/11-01.The%20Future%20of%20DevOps%20and%20Software%20Delivery.md) | Fundamentals of DevOps and Software Delivery 11장 |
 
