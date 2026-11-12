@@ -29,10 +29,10 @@ updated: 2026-06-10
 |------|---|------|-----------|------|
 | 점검 | 00-01 | [점검.핵심 질문과 답](00-01.점검.핵심%20질문과%20답.md) | 엔진 묶음 진입 전 자가 점검 — 9문 | P2 |
 | 환경 | 01-01 | [로컬 Docker Jenkins + 소스 디버깅 환경](01-01.로컬%20Docker%20Jenkins%20%2B%20소스%20디버깅%20환경.md) | LTS 컨테이너·원격 디버그·소스 attach — 이후 모든 실습의 전제 | **P1** |
-| Stapler | 02-01 | [Stapler URL 라우팅 스펙](02-01.Stapler%20URL%20라우팅%20스펙.md) | `/job/x/build`가 `doBuild()`로 가는 리플렉션 디스패치 | P1 |
-| Stapler | 02-02 | [Stapler 라우팅 디버깅 실습](02-02.Stapler%20라우팅%20디버깅%20실습.md) | 브레이크포인트로 URL → 객체 그래프 → 메서드 추적 | P1 |
-| 큐·실행기 | 03-01 | [Queue.Task 라이프사이클 소스편](03-01.Queue.Task%20라이프사이클%20소스편.md) | 4상태 전이와 `maintain()` 루프 (04_api 05-04 위임 + 디버거 관찰) | P1 |
-| 큐·실행기 | 03-02 | [Executor 배정 알고리즘과 TPS 대조](03-02.Executor%20배정%20알고리즘과%20TPS%20대조.md) | `LoadBalancer.map()`·label 매칭, 단일 컨트롤러 직렬화 ↔ TPS dispatch gate | **P1** |
+| Stapler | 02-01 | [Stapler URL 라우팅 스펙](../../docs/jenkins/02-01.Stapler%20와%20URL%20이%20doBuild%20에%20닿는%20길.md) | `/job/x/build`가 `doBuild()`로 가는 리플렉션 디스패치 | P1 |
+| Stapler | 02-02 | [Stapler 라우팅 디버깅 실습](../../docs/jenkins/02-01.Stapler%20와%20URL%20이%20doBuild%20에%20닿는%20길.md) | 브레이크포인트로 URL → 객체 그래프 → 메서드 추적 | P1 |
+| 큐·실행기 | 03-01 | [Queue.Task 라이프사이클 소스편](../../docs/jenkins/02-02.Queue%20상태%20전이와%20Executor%20로%20가는%20길.md) | 4상태 전이와 `maintain()` 루프 (04_api 05-04 위임 + 디버거 관찰) | P1 |
+| 큐·실행기 | 03-02 | [Executor 배정 알고리즘과 TPS 대조](../../docs/jenkins/02-03.Executor%20배정과%20동적%20Pod.md) | `LoadBalancer.map()`·label 매칭, 단일 컨트롤러 직렬화 ↔ TPS dispatch gate | **P1** |
 | 실행 | 04-01 | [FlowExecution 영속화와 재개](04-01.FlowExecution%20영속화와%20재개.md) | CPS 직렬화·`program.dat`·pickle (durability 운영은 05_operations 01-01 위임) | P2 |
 | 확장 | 05-01 | [Extension Point와 Describable 스펙](05-01.Extension%20Point와%20Describable%20스펙.md) | `@Extension`·Descriptor·GlobalConfiguration 패턴 | P2 |
 | 확장 | 05-02 | [첫 플러그인 제작 (Maven HPI)](05-02.첫%20플러그인%20제작%20%28Maven%20HPI%29.md) | Builder 하나를 만들어 hpi 빌드·로컬 설치 | P2 |
@@ -91,5 +91,5 @@ updated: 2026-06-10
 > 이 묶음은 `04_api`(호출자)에서 시작해 `05_operations`(운영 커스텀)와 경계를 나눕니다. 중복되는 주제는 정본을 링크해 깊은 설명으로 넘어가게 합니다.
 
 - [04_api MOC](../04_api/README.md) — REST 호출 관점의 정본. 이 묶음은 그 호출의 내부를 봅니다.
-- [04_api 05-04. 큐 내부 흐름과 실행 순서](../04_api/05-04.큐%20내부%20흐름과%20실행%20순서.md) — 큐 상태 전이의 정본. `03-01`이 디버거 관찰로 확장합니다.
+- [04_api 05-04. 큐 내부 흐름과 실행 순서](../../docs/jenkins/02-02.Queue%20상태%20전이와%20Executor%20로%20가는%20길.md) — 큐 상태 전이의 정본. `03-01`이 디버거 관찰로 확장합니다.
 - [05_operations MOC](../05_operations/README.md) — Groovy·Hook·Webhook 운영 커스텀. `06-01`·`07-01`의 경계 문서입니다.
