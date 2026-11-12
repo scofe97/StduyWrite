@@ -41,11 +41,11 @@ updated: 2026-09-23
 | 4 · 로그와 트레이스 | 트레이스 질의 | Tempo · TraceQL · 구조 연산자 · 전파 헤더 |
 | 4 · 로그와 트레이스 | 잇기 | exemplar · 지표에서 트레이스로 · trace 에서 로그로 · tail sampling |
 | 4 · 로그와 트레이스 | 비용 | 오버헤드 · 샘플링 전략 · 보존 기간 · 검색 백엔드의 색인과 매핑 |
-| 5 · 알림과 SLO | 알림 | Alertmanager · 라우팅 · 그룹핑 · 억제 · 침묵 · HA · 룰 단위 테스트 · 알림 피로 |
+| 5 · 알림과 SLO | 알림 | Alertmanager · 라우팅 · 그룹핑 · 억제 · 침묵 · HA · 룰 단위 테스트 · 알림 피로 · 이상 탐지 |
 | 5 · 알림과 SLO | 목표 | SLI · SLO · 에러 버짓 · 요청 기반과 윈도우 기반 · burn rate |
 | 5 · 알림과 SLO | 사고 | 사고 관리 · 온콜 · 지휘 체계 · 포스트모템 · 사고에서 배우기 |
 | 6 · 확장과 운영 | 규모 | 샤딩 · 페더레이션 · 고가용성 · 최적화 · 디버깅 |
-| 6 · 확장과 운영 | 장기 저장 | remote write · remote read · Thanos · VictoriaMetrics · Grafana Mimir |
+| 6 · 확장과 운영 | 장기 저장 | remote write · remote read · Thanos · VictoriaMetrics · Grafana Mimir · 보존 정책 · 다운샘플링 |
 | 6 · 확장과 운영 | 통합 | Prometheus 와 OpenTelemetry · OTLP 수신구 · 서버 측 보안 |
 | 7 · 플랫폼 | 표현 | 대시보드 목적 정의 · 시각화 선택 · 인지 부하 줄이기 |
 | 7 · 플랫폼 | 코드화 | Jsonnet · 모니터링 믹스인 · promtool · amtool · Pint · Helm · Terraform |

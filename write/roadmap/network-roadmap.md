@@ -80,7 +80,7 @@ updated: 2026-11-03
 | 4 · Kubernetes | 장애 구분 | 인증서 만료와 TLS 실패 구분 |
 | 5 · 클라우드 | VPC 구성 | VPC · 서브넷 · 라우트 테이블 · IGW · NAT GW |
 | 5 · 클라우드 | 경계 제어 | Security Group · NACL · stateful 과 stateless 의 갈림 · 방화벽 유형 · IDS · IPS · WAF · DDoS 완화 |
-| 5 · 클라우드 | 진입과 분배 | 클라우드 로드밸런서 · L4 · L7 |
+| 5 · 클라우드 | 진입과 분배 | 클라우드 로드밸런서 · L4 · L7 · ALB · NLB · GWLB |
 | 5 · 클라우드 | 사이트 간 연결 | VPN · IPsec · AWS Direct Connect · 전용선 · VPC 피어링 · Transit Gateway · GRE · site-to-site 와 remote-access · MPLS · SD-WAN · ZTNA · SASE |
 | 5 · 클라우드 | 서비스 연결 | PrivateLink · VPC endpoint |
 | 5 · 클라우드 | 데이터센터 축 | Clos 토폴로지 · BGP · ECMP · 3사 기본값의 갈림 · 3-tier 와 spine-leaf · anycast |
