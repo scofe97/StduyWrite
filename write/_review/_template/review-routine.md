@@ -10,14 +10,14 @@ source:
 related:
   - ./review-template.md
   - ../README.md
-updated: 2026-05-22
+updated: 2026-11-12
 ---
 
 # 학습 문서 복습 루틴 — 운영 가이드
 
 ---
 
-> 본 문서는 `write/_review/` 시스템의 *운영 SSOT*. 회차별 간격·트리거·분량·interleaving·졸업 기준의 모든 결정 로직을 한 자리에 모은다. 복습 파일 작성 형식은 [review-template.md](review-template.md), 사용자가 코워크에서 호출할 표준 프롬프트는 본 문서 §7 에 있다.
+> 본 문서는 `write/_review/` 시스템의 *운영 가이드*. 회차별 간격(개념)·트리거·분량·interleaving·졸업 기준을 설명한다. 다음 회차 날짜와 졸업 판정의 정본은 [review-template.md](review-template.md) §회차 종합 평가다. 복습 파일 작성 형식은 [review-template.md](review-template.md), 사용자가 코워크에서 호출할 표준 프롬프트는 본 문서 §7 에 있다.
 
 ## 0. 단위는 챕터, 명부는 `_queue.md`
 
@@ -34,11 +34,13 @@ updated: 2026-05-22
 | 회차 | 표준 간격 | quality 기반 조정 | 비고 |
 |------|----------|------------------|------|
 | 1 (첫 학습) | 학습 직후 | — | Phase 4 를 통과한 챕터 (§2 (A) 트리거) |
-| 2 | +3일 | quality 5: +7일 / 0~2: +1일 | 회차 1 에서 quality ≤ 4 인 문서만 |
-| 3 | +7일 | quality 5: +14일 / 0~2: +1일 | 회차 2 에서 막힌 것만 |
-| 4 | +14일 (interleaving 시작) | quality 5: 졸업 후보 | 카테고리 무관 섞기 |
-| 5 | +30일 | quality ≥ 4 면 *졸업* (장기 기억) | 미졸업만 6회차 |
+| 2 | +3일 | quality 5: +14일 / 4: +7일 / 0~2: +1일 | 회차 1 에서 quality ≤ 4 인 문서만 |
+| 3 | +7일 | quality 5: +30일 / 4: +14일 / 0~2: +1일 | 회차 2 에서 막힌 것만 |
+| 4 | +14일 (interleaving 시작) | quality 5: 졸업 후보 / 4: +30일 / 0~2: +3일 | 카테고리 무관 섞기 |
+| 5 | +30일 | quality 5: *졸업* (장기 기억) / 4: +30일 / 0~2: +7일 | 미졸업만 6회차 |
 | 6+ | 분기 1회 (90일) | 잊을 만하면 1회 | 졸업 후 유지 |
+
+다음 회차 날짜는 [review-template.md](review-template.md) §회차 종합 평가의 점수별 표로 정한다. 이 표의 표준 간격은 quality 3 기준의 개념 설명이고, 졸업 여부는 아래 §6 의 네 조건이 정한다.
 
 회차 4·5 의 *간격 길어짐* 은 망각곡선이 *완만해진* 후라 효과적. 회차 1·2 의 *짧은 간격* 은 24h 70% 망각을 차단하기 위함.
 
@@ -93,11 +95,12 @@ updated: 2026-05-22
 
 총 2시간 30분 / 5 챕터. 한 세션이 *늘어지면 다음 날로 미루기* — testing effect 유지에 낫다.
 
-## 6. 졸업 기준 (writing 스킬 §14 와 연동)
+## 6. 졸업 기준 (`02b-learning-verification.md` §14 와 연동)
 
-다음 *세 조건 모두 충족* 시 원본 학습 문서 `status: final` + 복습 졸업:
+다음 *네 조건 모두 충족* 시 원본 학습 문서 `status: final` + 복습 졸업:
 
-- [ ] 회차 4 (14일) 또는 회차 5 (30일) 에서 quality ≥ 4 — **회차 요건이 먼저다.** 회차 1~3 은 q5 여도 졸업이 아니고, 회차 3 q5 는 §1 표대로 "졸업 후보"에 머문다
+- [ ] **회차 4 이상** — 회차 요건이 먼저다. 회차 1~3 은 q5 여도 졸업이 아니고, 회차 3 q5 는 §1 표대로 "졸업 후보"에 머문다
+- [ ] 본 회차 quality ≥ 4
 - [ ] 3축 메타인지 평균 ≥ 3.6 (면접·말로설명·다른환경응용) — **AI 가 채점한다.** 사용자 자가평가로 두면 비워진 채 남는다
 - [ ] 카테고리 `_mistakes.md` 에서 해당 챕터 관련 미해결 패턴 0개
 
@@ -108,11 +111,11 @@ updated: 2026-05-22
 ## 7. 회차 진행
 
 회차를 실제로 돌리는 것은 `/learning-review` 다. 모드 판별(회차·즉석), 판단 1·2·2b·3·4, 되묻기와 채점, 동작 C 회차 종합 평가의 절차 정본은
-[`runners/review.md`](~/claude/.claude/skills/learning-method/references/runners/review.md) 에 있다.
+`~/claude/.claude/skills/learning-method/references/runners/review.md` 에 있다.
 
 여기에 복붙용 프롬프트를 두지 않는다. 2026-09-13 까지 이 자리에 있던 §7.1~7.5 는 git push 트리거·편 단위·Q1~Q5 로 짜인 구 체계였고,
 §0 의 챕터 단위 전환과 §2 (A) 의 Phase 4 트리거가 들어온 뒤에도 갱신되지 않아 같은 문서 안에서 서로 어긋나 있었다.
-절차가 두 곳에 있으면 한쪽만 고쳐지는 일이 반복된다 — 간격표(§1)·졸업 기준(§6)처럼 *수치와 판정*만 이 문서가 맡고, *진행 절차*는 러너가 맡는다.
+절차가 두 곳에 있으면 한쪽만 고쳐지는 일이 반복된다 — 간격표(§1)·졸업 기준(§6)처럼 *간격·졸업 기준의 개념*만 이 문서가 맡고, 날짜와 판정은 review-template.md 가, *진행 절차*는 러너가 맡는다.
 
 ## 8. 회차 통계 시각화 (README 와 연동)
 
@@ -130,7 +133,7 @@ updated: 2026-05-22
 
 - [review-template.md](review-template.md) — 복습 파일 5문제 표준 템플릿
 - [../README.md](../README.md) — 복습 시스템 진입점 + 회차 통계
-- `../../../claude/.claude/skills/content/writing/references/02-learned-docs.md` <!-- 링크 끊김(2026-08): ../../../claude/.claude/skills/content/writing/references/02-learned-docs.md --> §12~§15 — 학습 문서 하네스의 Stage 2 워크플로우 규약
+- `~/claude/.claude/skills/learning-method/references/02b-learning-verification.md` §12~§15 — 학습 문서 하네스의 Stage 2 워크플로우 규약
 - 학술 근거:
   - [Forgetting curve (Ebbinghaus)](https://en.wikipedia.org/wiki/Forgetting_curve)
   - [SuperMemo SM-2 algorithm](https://en.wikipedia.org/wiki/SuperMemo)
