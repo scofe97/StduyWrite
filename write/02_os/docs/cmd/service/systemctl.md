@@ -4,7 +4,7 @@ tags: [linux, cheatsheet, systemctl, systemd, service, unit, cli, reference]
 status: draft
 source:
   - systemd 259 systemctl(1) (OrbStack Ubuntu 26.04 VM 의 `man systemctl`·`systemctl --help` 원문, freedesktop.org systemctl(1))
-  - systemd.unit(5)·systemd.socket(5)·systemd.service(5) (freedesktop.org)
+  - systemd.unit(5)·systemd.socket(5)·systemd.service(5)·systemd.timer(5) (freedesktop.org)
   - Debian 12 `openssh-server` 1:9.2p1-2+deb12u10 패키지 파일 (`apt-get download` 로 받아 푼 내용)
 related:
   - ../README.md
@@ -76,6 +76,9 @@ systemctl daemon-reload
 # 실패한 유닛을 모으고 표시를 지운다 (실패한 서비스 추적)
 systemctl list-units --failed
 systemctl reset-failed 유닛
+
+# 타이머를 본다 (타이머로 서비스를 주기 실행하기)
+systemctl list-timers
 ```
 
 ### 유닛 이름과 패턴
@@ -775,17 +778,66 @@ systemctl reset-failed cmd-lab-fail
 systemctl is-failed cmd-lab-fail    # inactive (종료 코드 1)
 ```
 
+### 타이머로 서비스를 주기 실행하기
+
+> 서비스와 타이머 두 유닛을 만들고 타이머만 켜면, `list-timers` 는 다음·지난 실행 시각만 보여 주고 성공 여부는 서비스 쪽에서 읽어야 합니다.[^timer]
+
+```bash
+# 서비스: 일부러 종료 코드 3 으로 끝난다. Type=oneshot 은 메인 프로세스가 끝난 뒤에 유닛이 올라온 것으로 본다
+cat > /etc/systemd/system/cmd-lab-tick.service << 'EOF'
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'echo cmd-lab-tick: ran; exit 3'
+EOF
+
+# 타이머: 15초마다 같은 이름의 서비스를 깨운다. AccuracySec 은 깨우는 시각의 허용 오차이고 기본은 1분이다
+cat > /etc/systemd/system/cmd-lab-tick.timer << 'EOF'
+[Timer]
+OnCalendar=*:*:0/15
+AccuracySec=1s
+
+[Install]
+WantedBy=timers.target
+EOF
+
+systemctl daemon-reload
+systemctl enable --now cmd-lab-tick.timer
+
+# list-timers: 타이머를 다음에 울릴 때 순으로 보인다. 켜자마자 보면 LAST 와 PASSED 가 - 이다
+sleep 20
+systemctl list-timers 'cmd-lab*' --no-pager
+```
+
+```bash
+NEXT                        LEFT LAST                         PASSED UNIT               ACTIVATES
+Fri 2026-11-13 13:16:30 KST   3s Fri 2026-11-13 13:16:15 KST 11s ago cmd-lab-tick.timer cmd-lab-tick.service
+
+1 timers listed.
+Pass --all to see loaded but inactive timers, too.
+```
+
+NEXT 는 다음 실행, LEFT 는 남은 시간, LAST 는 지난 실행, PASSED 는 그 뒤 흐른 시간입니다. 성공 여부를 보이는 열은 없으므로 결과는 서비스 유닛에 묻습니다.
+
+```bash
+# 종료 코드 3 으로 끝난 실행이 서비스에 failed 로 남았다. 확인했으면 타이머를 멈추고 부팅 때의 시작도 끈다
+systemctl is-failed cmd-lab-tick.service      # failed (종료 코드 0)
+systemctl disable --now cmd-lab-tick.timer    # Removed '/etc/systemd/system/timers.target.wants/cmd-lab-tick.timer'.
+```
+
 ### 실습 정리
 
-> 실습이 끝나면 아래 블록으로 만든 유닛 셋과 drop-in 을 지우고 systemd 를 원래대로 되돌립니다.
+> 실습이 끝나면 아래 블록으로 만든 유닛 다섯과 drop-in 을 지우고 systemd 를 원래대로 되돌립니다.
 
 ```bash
 systemctl disable --now cmd-lab-demo; systemctl stop cmd-lab-plain cmd-lab-fail
+systemctl disable --now cmd-lab-tick.timer
 rm -rf /etc/systemd/system/cmd-lab-demo.service.d
 rm -f \
   /usr/lib/systemd/system/cmd-lab-demo.service \
   /etc/systemd/system/cmd-lab-plain.service \
   /etc/systemd/system/cmd-lab-fail.service
+rm -f /etc/systemd/system/cmd-lab-tick.service
+rm -f /etc/systemd/system/cmd-lab-tick.timer
 systemctl daemon-reload; systemctl reset-failed 'cmd-lab*'
 ```
 
@@ -820,6 +872,7 @@ systemctl daemon-reload; systemctl reset-failed 'cmd-lab*'
 - systemd 259 의 `systemctl --help`·`man systemctl` 원문 — OrbStack Ubuntu 26.04 VM 에서 2026-11-11 확인
 - [systemctl(1)](https://www.freedesktop.org/software/systemd/man/latest/systemctl.html) — freedesktop.org 최신판(문서 머리 버전 262)에서 아래 각주의 인용문 존재를 확인
 - [systemd.unit(5)](https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html) · [systemd.socket(5)](https://www.freedesktop.org/software/systemd/man/latest/systemd.socket.html) · [systemd.service(5)](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html)
+- [systemd.timer(5)](https://www.freedesktop.org/software/systemd/man/latest/systemd.timer.html) — 「타이머로 서비스를 주기 실행하기」 의 `OnCalendar=`·`AccuracySec=`
 - Debian 12 `openssh-server` 1:9.2p1-2+deb12u10 패키지 파일 — 2026-11-11 `apt-get download` 후 `dpkg -x`
 
 [^status]: systemctl(1) `status` — "This function is intended to generate human-readable output. If you are looking for computer-parsable output, use show instead." 그리고 "inactive" or "maintenance" is a white circle ("○"), "active" is a green dot ("●"), "deactivating" is a white dot, "failed" or "error" is a red cross ("×"). https://www.freedesktop.org/software/systemd/man/latest/systemctl.html
@@ -843,3 +896,4 @@ systemctl daemon-reload; systemctl reset-failed 'cmd-lab*'
 [^reset]: systemctl(1) `reset-failed` — "Reset the "failed" state of the specified units, or if no unit name is passed, reset the state of all units."
 [^exitstatus]: systemctl(1) EXIT STATUS — "On success, 0 is returned, a non-zero failure code otherwise." "systemctl uses the return codes defined by LSB" 그리고 LSB return codes 표의 0~4 행. "The mapping of LSB service states to systemd unit states is imperfect, so it is better to not rely on those return values but to look for specific unit states and substates instead." https://www.freedesktop.org/software/systemd/man/latest/systemctl.html
 [^exitother]: OrbStack Ubuntu 26.04 VM(systemd 259.9)에서 `명령; echo $?` 로 읽은 실측입니다. systemctl(1) EXIT STATUS 는 0~4 만 표로 정의하고 그 밖의 값은 "a non-zero failure code otherwise." 라고만 적으므로, 없는 유닛에 `start`·`stop`·`restart` 를 준 5 와 잘못된 서브커맨드의 1 은 매뉴얼에 값이 적혀 있지 않습니다. https://www.freedesktop.org/software/systemd/man/latest/systemctl.html
+[^timer]: systemctl(1) `list-timers` — "List timer units currently in memory, ordered by the time they elapse next." "NEXT shows the next time the timer will run. LEFT shows how long till the next time the timer runs. LAST shows the last time the timer ran. PASSED shows how long has passed since the timer last ran." systemd.timer(5) `OnCalendar=` — "Defines realtime (i.e. wallclock) timers with calendar event expressions." `AccuracySec=` — "Specify the accuracy the timer shall elapse with. Defaults to 1min." systemd.service(5) `Type=oneshot` — "the service manager will consider the unit up after the main process exits." https://www.freedesktop.org/software/systemd/man/latest/systemd.timer.html
