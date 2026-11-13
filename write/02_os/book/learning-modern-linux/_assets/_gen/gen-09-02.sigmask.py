@@ -1,4 +1,4 @@
-# 09-01 §1 「/proc/PID/status 로 배치 읽기」 — SigCgt 16진 마스크를 비트로 풀어 잡는 시그널을 읽는 길.
+# 09-02 §5 「/proc/PID/status 로 처리 방식 읽기」 — SigCgt 16진 마스크를 비트로 풀어 잡는 시그널을 읽는 길.
 # 실측(debian:12, bash 5.2.15): 같은 bash 에서 trap "" TERM; trap : USR1 HUP 전후
 #       SigCgt 0000000000010002 → 0000000000010203 (SigIgn 0000000200000004 → 0000000200004004)
 # 1차 자료 proc(5): "SigBlk, SigIgn, SigCgt: Masks (expressed in hexadecimal) indicating signals being
@@ -9,7 +9,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
 
 W, H = 880, 516
-d = D(W, H, "LEARNING MODERN LINUX · 09-01 §1",
+d = D(W, H, "LEARNING MODERN LINUX · 09-02 §5",
       "SigCgt 0x10203 을 비트로 풀면 잡는 시그널 넷이 나온다",
       "trap \"\" TERM; trap : USR1 HUP 를 건 bash 의 /proc/PID/status. 16진 한 자리가 비트 넷이고, "
       "0 부터 센 비트 n-1 이 시그널 n 이다.",
@@ -58,5 +58,5 @@ for i, (pos, hx, bits, sig, src, focal) in enumerate(cols):
 d.line(X0, 432, X0 + 5 * CW + 4 * GAP, 432, RULE, 1)
 d.t(X0, 452, "자리 k 의 1 = 비트 4k   ·   0x200 = 비트 9 = 시그널 10   ·   0x3 = 비트 0, 1 = 시그널 1, 2", 12, MUTED, KR, "start")
 d.legend(468, [("trap : USR1 로 더해진 자리", ACC)])
-d.save("09-01.sigmask.svg")
-print("ok 09-01.sigmask")
+d.save("09-02.sigmask.svg")
+print("ok 09-02.sigmask")

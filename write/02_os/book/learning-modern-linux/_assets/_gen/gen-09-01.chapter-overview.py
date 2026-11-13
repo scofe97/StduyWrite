@@ -3,7 +3,8 @@
 #       machines to security to new ways to use Linux. What the topics in this chapter have in common is
 #       that most of them are relevant for you only if you have a specific use case in mind, or if you
 #       require them in a professional setup."
-# 주의: §2~§4·§6 의 조건은 저자가 그 절에서 밝힌 것, §1·§5 는 노트가 더한 운영 상황(시그널 절·pam_limits 절 본문)이다.
+# 주의: §2~§4·§6 의 조건은 저자가 그 절에서 밝힌 것, §5 는 노트가 더한 운영 상황(pam_limits 절 본문)이다.
+#       §1 은 시그널 내용이 둘째 편(09-02)으로 옮겨 가 한 문단 안내만 남아서, 조건 한 줄을 둘째 편 표시로 바꿨다.
 # 타입 스펙: type-process — 절마다 같은 의미 슬롯(번호 · 이름 · 언제 필요해지나)이 반복되고 읽는 순서가
 #           화살표로 흐른다. 축약: 주체 lane 이 없어 카드 격자 stride 로 놓는다.
 import sys; sys.path.insert(0, ".")
@@ -18,7 +19,7 @@ d = D(W, H, "LEARNING MODERN LINUX · 09-01",
 
 CW, CH, GAPX, GAPY, X0, Y0 = 272, 108, 12, 20, 20, 112
 cards = [
-    ("§1", "시그널", "서비스 중지가 90초를 끌 때,", "종료 코드 137·143 을 읽을 때"),
+    ("§1", "시그널", "서비스 중지가 90초를 끌 때", "→ 09-02 에서 다룬다"),
     ("§2", "명명 파이프와 도메인 소켓", "같은 기계의 두 프로세스가", "데이터를 넘겨야 할 때"),
     ("§3", "가상 머신", "강한 격리가 필요할 때 —", "공용 클라우드와 데이터 센터"),
     ("§4", "현대 배포판", "기계 무리를 관리할 때 —", "불변성과 자동 업그레이드"),

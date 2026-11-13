@@ -1,4 +1,4 @@
-# 09-01 §1 「종료 코드 128+n 과 systemctl stop 의 순서」 — SIGTERM 을 무시하는 서비스를 멈출 때의 3초.
+# 09-02 §3 「128+n 종료 코드와 systemctl stop」 — SIGTERM 을 무시하는 서비스를 멈출 때의 3초.
 # 실측(debian:12 + systemd 252.39, TimeoutStopSec=3, trap 'echo "TERM 받음, 무시"' TERM), journalctl -o short-precise:
 #       05:08:01.131827 stubborn.sh[1262]: TERM 받음, 무시
 #       05:08:04.249285 systemd[1]: stubborn.service: State 'stop-sigterm' timed out. Killing.
@@ -14,7 +14,7 @@ import sys; sys.path.insert(0, ".")
 from dd import Seq, ACC, MUTED, SOFT, INK, BAD, OK, PAPER, PAPER2, RULE, KR, MONO
 
 W, H = 920, 596
-d = Seq(W, H, "LEARNING MODERN LINUX · 09-01 §1",
+d = Seq(W, H, "LEARNING MODERN LINUX · 09-02 §3",
         "SIGTERM 을 무시하는 서비스는 3초를 버티고 SIGKILL 을 맞는다",
         "TimeoutStopSec=3 인 서비스를 systemctl stop 으로 멈춘 실측. journal 의 시각을 그대로 옮겼다. "
         "기본값이었다면 같은 일이 90초 뒤에 일어난다.",
@@ -53,5 +53,5 @@ m("stubborn.sh", "systemd", "status=9/KILL  04.250047", 476, MUTED, "ar", "4 4")
 m("systemd", "systemctl", "Result=timeout", 516, MUTED, "ar", "4 4")
 
 d.legend(552, [("SIGTERM 뒤 기다리는 시간", ACC), ("강제 종료", BAD)])
-d.save("09-01.stop-sequence.svg")
-print("ok 09-01.stop-sequence")
+d.save("09-02.stop-sequence.svg")
+print("ok 09-02.stop-sequence")

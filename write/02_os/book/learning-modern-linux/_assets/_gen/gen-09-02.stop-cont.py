@@ -1,4 +1,4 @@
-# 09-01 §1 「멈춤과 재개 — STOP·TSTP·CONT」 — 멈춘 프로세스에 보낸 SIGTERM 이 기다렸다가 CONT 에 전달되는 길.
+# 09-02 §4 「멈춤과 재개」 — 멈춘 프로세스에 보낸 SIGTERM 이 기다렸다가 CONT 에 전달되는 길.
 # 실측(debian:12, procps 4.0.2, /tmp/rerun.sh): sleep 300 의 STAT S → kill -STOP 뒤 T, State: T (stopped)
 #       → kill -TERM 뒤에도 T, SigPnd 0000000000000000, ShdPnd 0000000000004000 → kill -CONT 뒤 exit=143.
 #       tstp.sh(trap … TSTP) 는 kill -TSTP 를 받고도 "끝까지 실행", exit=0.
@@ -9,7 +9,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, BAD, OK, PAPER, PAPER2, RULE, KR, MONO
 
 W, H = 880, 452
-d = D(W, H, "LEARNING MODERN LINUX · 09-01 §1",
+d = D(W, H, "LEARNING MODERN LINUX · 09-02 §4",
       "멈춘 프로세스에 보낸 SIGTERM 은 사라지지 않고 기다린다",
       "sleep 300 하나에 STOP, TERM, CONT 를 차례로 보낸 실측. 칸 아래 줄은 그 상태에서 ps 의 STAT 과 "
       "/proc/PID/status 에서 읽은 값이다.",
@@ -68,5 +68,5 @@ d.path(f"M {XS[0] + SW - 30} {SY + SH} L {XS[0] + SW - 30} {by} L {XS[2] + SW / 
 d.t((XS[1] + XS[2] + SW) / 2, by - 8, "SIGTERM [STAT S] / 곧바로 종료", 12, SOFT, KR)
 
 d.legend(408, [("TERM 이 기다리는 상태", ACC), ("핸들러로 잡은 정지 요청", OK)])
-d.save("09-01.stop-cont.svg")
-print("ok 09-01.stop-cont")
+d.save("09-02.stop-cont.svg")
+print("ok 09-02.stop-cont")

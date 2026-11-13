@@ -1,4 +1,4 @@
-# 09-01 §1 「시그널 — 커널이 프로세스를 두드리는 방법」 — SIGTERM 하나가 처리 방식 셋을 거쳐 다른 종료 상태로 끝나는 길.
+# 09-02 §1 「시그널 — 커널이 프로세스를 두드리는 방법」 — SIGTERM 하나가 처리 방식 셋을 거쳐 다른 종료 상태로 끝나는 길.
 # 1차 자료 signal(7): "A process can elect one of the following behaviors to occur on delivery of the
 #       signal: perform the default action; ignore the signal; or catch the signal with a signal handler"
 #       · "The signals SIGKILL and SIGSTOP cannot be caught, blocked, or ignored."
@@ -10,7 +10,7 @@ import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, OK, BAD, WARN, PAPER2, RULE, KR, MONO
 
 W, H = 880, 600
-d = D(W, H, "LEARNING MODERN LINUX · 09-01 §1",
+d = D(W, H, "LEARNING MODERN LINUX · 09-02 §1",
       "SIGTERM 하나가 처리 방식 셋을 지나 서로 다른 종료 상태로 끝난다",
       "같은 반복문에 처리 방식만 바꿔 kill 을 보낸 실험. 핸들러는 기본 동작을 대체하므로 핸들러 안의 exit 이 "
       "종료 상태를 정한다. SIGKILL 은 처리 방식을 보지 않는다.",
@@ -70,5 +70,5 @@ for cx, txt, c, ytop in ends:
     d.t(cx, EY + 27, txt, 14, c, MONO, "middle", 600)
 
 d.legend(556, [("기본 동작을 대체하는 핸들러", ACC), ("128+15", WARN), ("128+9, 잡을 수 없음", BAD), ("핸들러가 정한 값", OK)])
-d.save("09-01.signals.svg")
-print("ok 09-01.signals")
+d.save("09-02.signals.svg")
+print("ok 09-02.signals")
