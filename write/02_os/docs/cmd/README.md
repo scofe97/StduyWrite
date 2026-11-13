@@ -113,7 +113,9 @@ updated: 2026-11-11
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
 | [top·htop](./resource/top%C2%B7htop.md) | `top` · `htop` | 머리줄의 부하·CPU·메모리와 VIRT·RES·SHR 열을 읽거나, `top -b` 로 기록을 남길 때 |
-| [lsof](./resource/lsof.md) | `lsof` | 포트나 파일을 쥔 프로세스를 찾거나, 지운 파일이 붙든 디스크 공간을 찾을 때 |
+| [top·htop 대화형 키와 htop](./resource/top%C2%B7htop%20대화형%20키와%20htop.md) | `top` · `htop` | 스레드·명령줄을 펼치거나, 화면 키로 정렬·필터하거나, 같은 일을 `htop` 으로 할 때 |
+| [lsof](./resource/lsof.md) | `lsof` | 파일을 쥔 프로세스를 찾거나, 지운 파일이 붙든 디스크 공간을 찾을 때 |
+| [lsof 포트와 스크립트용 출력](./resource/lsof%20포트와%20스크립트용%20출력.md) | `lsof` | 포트를 듣는 프로세스와 연결 상태를 보거나, 스크립트에 넘길 PID·필드 출력을 만들 때 |
 | [watch](./resource/watch.md) | `watch` | 명령을 몇 초마다 다시 돌려 바뀐 곳을 강조해 보거나, 출력이 바뀌면 멈출 때 |
 
 
@@ -187,8 +189,10 @@ resource 는 쓰이는 양을 재고, 여기는 쓸 수 있는 양에 한도를 
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
-| [uname·os-release·hostnamectl](./sysinfo/uname%C2%B7os-release%C2%B7hostnamectl.md) | `uname` · `/etc/os-release` · `lsb_release` · `hostnamectl` | 서버의 배포판·커널·호스트 이름을 확인하거나 호스트 이름을 바꿀 때 |
-| [dmidecode·lscpu](./sysinfo/dmidecode%C2%B7lscpu.md) | `dmidecode` · `lscpu` · `nproc` | CPU 개수·구조·캐시를 읽거나, 서버 모델·메모리 슬롯 정보를 보거나, 컨테이너 CPU 제한이 어디에 보이는지 확인할 때 |
+| [uname·os-release·hostnamectl](./sysinfo/uname%C2%B7os-release%C2%B7hostnamectl.md) | `uname` · `/etc/os-release` · `lsb_release` | 서버의 배포판·커널·하드웨어 종류를 확인할 때 |
+| [uname·os-release·hostnamectl 호스트 이름 다루기](./sysinfo/uname%C2%B7os-release%C2%B7hostnamectl%20호스트%20이름%20다루기.md) | `hostnamectl` · `hostname` | 호스트 이름을 보거나 영구·임시로 바꿀 때 |
+| [dmidecode·lscpu](./sysinfo/dmidecode%C2%B7lscpu.md) | `lscpu` · `nproc` | CPU 개수·구조·캐시를 읽거나, 컨테이너 CPU 제한이 어디에 보이는지 확인할 때 |
+| [dmidecode·lscpu DMI 표와 메모리 읽기](./sysinfo/dmidecode%C2%B7lscpu%20DMI%20표와%20메모리%20읽기.md) | `dmidecode` · `lsmem` · `lshw` | 서버 모델·메모리 슬롯 정보를 보거나, DMI 표가 없을 때 대신 볼 곳을 찾을 때 |
 
 
 
