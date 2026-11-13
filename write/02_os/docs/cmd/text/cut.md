@@ -330,7 +330,7 @@ cut \
 
 > `--complement` 는 고른 칸을 뺀 나머지를, `--output-delimiter` 는 출력의 칸 사이 문자열을 정합니다.
 
-둘 다 GNU 확장입니다.[^cut]
+`--complement` 는 매뉴얼이 GNU 확장이라고 적고[^cut] `--output-delimiter` 는 POSIX `cut` 규격에 없습니다.[^cut-posix]
 
 ```bash
 # 둘째에서 일곱째를 빼면 첫 칸만 남는다
@@ -502,7 +502,7 @@ cut -b1-2 hangul.txt | od -An -tx1
  ea b0 0a ed 95 0a
 ```
 
-한글이 섞인 줄을 위치로 자를 때는 `cut` 대신 칸 구분자를 쓰거나 `awk` 의 `substr` 을 씁니다. `-d` 와 `-f` 는 구분자 글자를 찾는 방식이라 한글이 있어도 그대로 됩니다.
+한글이 섞인 줄을 위치로 자를 때는 `cut` 대신 칸 구분자를 쓰거나, 바이트를 세는 mawk 대신 UTF-8 로캘(`LC_ALL=C.UTF-8`)의 gawk 에서 `substr` 을 씁니다([awk 참조 시트](./awk.md#%ED%95%9C%EA%B8%80%EA%B3%BC-length) 「한글과 length」). `-d` 와 `-f` 는 구분자 글자를 찾는 방식이라 한글이 있어도 그대로 됩니다.
 
 ```bash
 # 구분자 기준은 한글이 있어도 된다
@@ -567,6 +567,7 @@ $
 - [GNU coreutils 매뉴얼, cut invocation](https://www.gnu.org/software/coreutils/manual/coreutils.html#cut-invocation) — 2026-11-11 조회
 
 [^cut]: GNU coreutils 매뉴얼, "cut invocation" — "-f … Also print any line that contains no delimiter character, unless the --only-delimited (-s) option is specified", "the selected input is written in the same order that it is read, and is written exactly once", "--complement: This option is a GNU extension". 조회한 매뉴얼은 최신판(9.12)이고 `-c` 를 글자 위치로 설명하지만, 이 시트의 출력은 coreutils 9.1 이며 거기서는 `-c` 가 바이트처럼 동작했습니다. <https://www.gnu.org/software/coreutils/manual/html_node/cut-invocation.html>
+[^cut-posix]: POSIX.1-2024 의 `cut` — SYNOPSIS 는 `cut -b list [-n] [file...]`, `cut -c list [file...]`, `cut -f list [-d delim] [-s] [file...]` 세 줄이고 `--output-delimiter`·`--complement` 는 없습니다. <https://pubs.opengroup.org/onlinepubs/9799919799/utilities/cut.html>
 [^cut-c]: coreutils 9.1 매뉴얼, "cut invocation" 의 `-c` — "The same as -b for now, but internationalization will change that". coreutils NEWS, 9.11 — "'cut' now supports multi-byte input and delimiters. Consequently the -c option is now honored, and no longer an alias for -b". <https://github.com/coreutils/coreutils/blob/v9.1/doc/coreutils.texi>, <https://github.com/coreutils/coreutils/blob/master/NEWS>
 [^gawk-fields]: GNU awk 매뉴얼, "Specifying How Fields Are Separated" — "Fields are separated by runs of whitespace". <https://www.gnu.org/software/gawk/manual/gawk.html#Field-Separators>
 [^cut-info]: GNU coreutils 9.1 매뉴얼(Debian 12 의 `coreutils.info`), "cut invocation" — "cut writes to standard output selected parts of each line of each input file, or standard input if no files are given or for a file name of '-'". <https://www.gnu.org/software/coreutils/manual/html_node/cut-invocation.html>

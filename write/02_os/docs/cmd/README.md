@@ -95,9 +95,12 @@ updated: 2026-11-11
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
-| [ps](./process/ps.md) | `ps` · `pstree` | 프로세스 목록과 상태(STAT)·부모 PID·스레드·VSZ/RSS 를 골라 보고 정렬할 때 |
-| [kill·pgrep·killall](./process/kill%C2%B7pgrep%C2%B7killall.md) | `kill` · `pgrep` · `pkill` · `killall` | 이름·사용자·명령줄로 PID 를 찾아 신호를 보내거나, 종료와 강제 종료를 가를 때 |
-| [jobs·nohup·disown](./process/jobs%C2%B7nohup%C2%B7disown.md) | `jobs` · `bg` · `fg` · `wait` · `nohup` · `disown` · `setsid` | 잡을 멈추고 앞뒤로 옮기거나, 터미널이 끊겨도 프로세스를 살려 둘 때 |
+| [ps](./process/ps.md) | `ps` | 프로세스 목록을 고르고 열을 골라 정렬하거나, %CPU·%MEM 을 읽을 때 |
+| [ps 트리·스레드·상태 읽기](./process/ps%20트리·스레드·상태%20읽기.md) | `ps` · `pstree` | 부모·자식 트리, 스레드, VSZ/RSS, STAT 상태 코드와 좀비를 읽을 때 |
+| [kill·pgrep·killall](./process/kill%C2%B7pgrep%C2%B7killall.md) | `kill` | 신호를 이름·번호로 보내고 종료와 강제 종료를 가를 때 |
+| [kill·pgrep·killall 이름으로 찾아 신호 보내기](./process/kill%C2%B7pgrep%C2%B7killall%20이름으로%20찾아%20신호%20보내기.md) | `pgrep` · `pkill` · `killall` | 이름·사용자·명령줄로 프로세스를 찾아 신호를 보낼 때 |
+| [jobs·nohup·disown](./process/jobs%C2%B7nohup%C2%B7disown.md) | `jobs` · `bg` · `fg` · `wait` | 잡을 멈추고 앞뒤로 옮기거나 끝나기를 기다릴 때 |
+| [jobs·nohup·disown 셸을 닫은 뒤에도 돌리기](./process/jobs%C2%B7nohup%C2%B7disown%20셸을%20닫은%20뒤에도%20돌리기.md) | `nohup` · `disown` · `setsid` | 터미널이 끊기거나 셸을 닫아도 프로세스를 살려 둘 때 |
 
 
 
