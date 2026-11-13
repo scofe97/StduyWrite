@@ -10,7 +10,7 @@ source:
   - proc_pid_status(5) (man7.org), ioctl_tty(2) (Linux man-pages 6.03, Debian bookworm)
 related:
   - ../README.md
-  - ./jobs·nohup·disown%20셸을%20닫은%20뒤에도%20돌리기.md
+  - ./nohup·disown·setsid.md
 updated: 2026-11-13
 ---
 
@@ -24,7 +24,7 @@ updated: 2026-11-13
 
 > `jobs`·`bg`·`fg`·`wait` 는 한 셸이 쥔 백그라운드 잡을 보고, 멈추고 이어 돌리고, 끝나기를 기다립니다.
 
-네 명령은 모두 bash 내장이라 `type -a` 가 `shell builtin` 이라고 답하고 외부 바이너리가 없습니다. 터미널이 끊겨도 잡을 살려 두는 `nohup`·`disown`·`setsid` 는 [nohup·disown·setsid 시트](./jobs·nohup·disown%20셸을%20닫은%20뒤에도%20돌리기.md)에서 다룹니다.
+네 명령은 모두 bash 내장이라 `type -a` 가 `shell builtin` 이라고 답하고 외부 바이너리가 없습니다. 터미널이 끊겨도 잡을 살려 두는 `nohup`·`disown`·`setsid` 는 [nohup·disown·setsid 시트](./nohup·disown·setsid.md)에서 다룹니다.
 
 출력은 Debian 12 컨테이너(GNU bash 5.2.15)에서 받았고 `pty.sh` 의 `script -qec` 는 util-linux 판 옵션이라 macOS 에서는 맞지 않으니 Linux 에서 실행합니다. 스크립트를 `bash -s` 로 돌려 받은 오류 줄에는 `bash: line 25:` 가, 대화형 셸에서는 `bash:` 만 붙고 PID 와 `PGID`·`SID` 는 실행마다 달라집니다.
 
@@ -471,7 +471,7 @@ wait
 > 이 시트의 예와 이어지는 시트입니다.
 
 - [jobs·nohup·disown 이론](../../../book/learning-modern-linux/03-01.%EC%85%B8%EC%9D%98%20%EC%8B%A4%EC%B2%B4%EB%8A%94%20%EC%8A%A4%ED%8A%B8%EB%A6%BC%EA%B3%BC%20%EB%B3%80%EC%88%98%EC%99%80%20%EC%A2%85%EB%A3%8C%20%EC%83%81%ED%83%9C%EB%8B%A4.md#잡의-상태를-옮기는-명령) — 잡 상태가 바뀌는 흐름과 상태 그림
-- [nohup·disown·setsid 시트](./jobs·nohup·disown%20셸을%20닫은%20뒤에도%20돌리기.md) — 셸을 닫은 뒤에도 잡을 살려 두는 `nohup`·`disown`·`setsid`
+- [nohup·disown·setsid 시트](./nohup·disown·setsid.md) — 셸을 닫은 뒤에도 잡을 살려 두는 `nohup`·`disown`·`setsid`
 - [리눅스 명령어 시트](../README.md) — 다른 명령 시트 목록
 
 

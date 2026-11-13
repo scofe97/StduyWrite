@@ -9,7 +9,7 @@ source:
   - setsid(1) (util-linux 2.38.1, Debian bookworm)
   - proc_pid_status(5) (man7.org), ioctl_tty(2) (Linux man-pages 6.03, Debian bookworm)
 related:
-  - ./jobs·nohup·disown.md
+  - ./jobs·bg·fg·wait.md
   - ../README.md
 updated: 2026-11-13
 ---
@@ -24,7 +24,7 @@ updated: 2026-11-13
 
 > `nohup`·`disown`·`setsid` 는 터미널이 끊겨 셸이 `SIGHUP` 을 받아도 잡이 죽지 않게 하는 세 방법입니다.
 
-이 시트는 [jobs·bg·fg·wait 참조 시트](./jobs·nohup·disown.md)에서 셸을 닫은 뒤에도 돌리는 유스케이스를 떼어 낸 것이며, 예는 그 시트의 「실습 준비」 블록을 돌린 상태에서 이어집니다. 출력은 같은 Debian 12 컨테이너(GNU bash 5.2.15)에서 받았고 `script -qec` 는 util-linux 판 옵션이라 macOS 에서는 맞지 않으니 Linux 에서 실행합니다.
+이 시트는 [jobs·bg·fg·wait 참조 시트](./jobs·bg·fg·wait.md)에서 셸을 닫은 뒤에도 돌리는 유스케이스를 떼어 낸 것이며, 예는 그 시트의 「실습 준비」 블록을 돌린 상태에서 이어집니다. 출력은 같은 Debian 12 컨테이너(GNU bash 5.2.15)에서 받았고 `script -qec` 는 util-linux 판 옵션이라 macOS 에서는 맞지 않으니 Linux 에서 실행합니다.
 
 `nohup` 은 coreutils 9.1, `setsid` 는 util-linux 2.38.1 의 외부 바이너리(`dpkg -S` 로 확인)이고 `disown` 은 bash 내장입니다.
 
@@ -124,7 +124,7 @@ setsid -w /no/such/cmd 2>&1; echo $?    # setsid: failed to execute /no/such/cmd
 
 > 이 시트의 예는 jobs 시트의 준비 블록이 만든 `slow.sh`·`pty.sh` 와 `set -m` 을 씁니다.
 
-먼저 [jobs·bg·fg·wait 참조 시트](./jobs·nohup·disown.md)의 「실습 준비」 블록을 돌립니다.
+먼저 [jobs·bg·fg·wait 참조 시트](./jobs·bg·fg·wait.md)의 「실습 준비」 블록을 돌립니다.
 
 ### nohup 으로 SIGHUP 무시하고 시작하기
 
@@ -528,7 +528,7 @@ logout
 
 > 이 시트의 예와 이어지는 시트입니다.
 
-- [jobs·bg·fg·wait 참조 시트](./jobs·nohup·disown.md) — 이 시트가 이어받는 실습 준비와 잡 제어 예
+- [jobs·bg·fg·wait 참조 시트](./jobs·bg·fg·wait.md) — 이 시트가 이어받는 실습 준비와 잡 제어 예
 - [세션과 제어 터미널](../../../book/learning-modern-linux/03-01.%EC%85%B8%EC%9D%98%20%EC%8B%A4%EC%B2%B4%EB%8A%94%20%EC%8A%A4%ED%8A%B8%EB%A6%BC%EA%B3%BC%20%EB%B3%80%EC%88%98%EC%99%80%20%EC%A2%85%EB%A3%8C%20%EC%83%81%ED%83%9C%EB%8B%A4.md#세션과-제어-터미널) — `PGID`·`SID`·제어 터미널이 무엇인지
 - [터미널이 끊길 때 살아남는 잡](../../../book/learning-modern-linux/03-01.%EC%85%B8%EC%9D%98%20%EC%8B%A4%EC%B2%B4%EB%8A%94%20%EC%8A%A4%ED%8A%B8%EB%A6%BC%EA%B3%BC%20%EB%B3%80%EC%88%98%EC%99%80%20%EC%A2%85%EB%A3%8C%20%EC%83%81%ED%83%9C%EB%8B%A4.md#터미널이-끊길-때-살아남는-잡) — 끊김이 `SIGHUP` 으로 잡에 닿는 사슬
 - [리눅스 명령어 시트](../README.md) — 다른 명령 시트 목록
