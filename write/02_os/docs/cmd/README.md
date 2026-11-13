@@ -143,7 +143,9 @@ resource 는 쓰이는 양을 재고, 여기는 쓸 수 있는 양에 한도를 
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
-| [systemctl](./service/systemctl.md) | `systemctl` | 서비스 상태를 읽고, 지금·부팅 때 켜고 끄고, drop-in 으로 설정을 바꾸고, 실패한 서비스를 추적할 때 |
+| [systemctl](./service/systemctl.md) | `systemctl` | 서비스 상태를 읽고, 지금·부팅 때 켜고 끄고, 실패한 서비스를 추적할 때 |
+| [systemctl 유닛 설정과 타이머](./service/systemctl%20유닛%20설정과%20타이머.md) | `systemctl` | drop-in 으로 유닛 설정을 바꾸고 반영하거나 타이머로 서비스를 주기 실행할 때 |
+| [systemctl 함정과 동작 원리](./service/systemctl%20함정과%20동작%20원리.md) | `systemctl` | `mask` 가 실패하거나, ssh 서비스 이름과 소켓이 헷갈리거나, `Alias=` 별칭이 어떻게 생기는지 볼 때 |
 
 
 

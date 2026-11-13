@@ -237,7 +237,7 @@ rm -rf ~/cmd-lab/crontab
 
 - [bash 는 조용히 실패하므로 시끄럽게 만들어야 한다](../../../book/learning-modern-linux/03-03.bash%20는%20조용히%20실패하므로%20시끄럽게%20만들어야%20한다.md) — cron 의 최소 환경이 조용한 실패를 만드는 이유와 최소 실행 계약
 - [flock 참조 시트](./flock.md) — 주기 작업이 겹치지 않게 막는 법
-- [systemctl 참조 시트](../service/systemctl.md) — cron 대신 쓰는 systemd 타이머의 `list-timers`
+- [systemctl 유닛 설정과 타이머](../service/systemctl%20유닛%20설정과%20타이머.md) — cron 대신 쓰는 systemd 타이머의 `list-timers`
 - [리눅스 명령어 시트](../README.md) — 다른 명령 시트 목록
 
 

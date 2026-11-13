@@ -4,11 +4,12 @@ tags: [linux, cheatsheet, systemctl, systemd, service, unit, cli, reference]
 status: draft
 source:
   - systemd 259 systemctl(1) (OrbStack Ubuntu 26.04 VM 의 `man systemctl`·`systemctl --help` 원문, freedesktop.org systemctl(1))
-  - systemd.unit(5)·systemd.socket(5)·systemd.service(5)·systemd.timer(5) (freedesktop.org)
+  - systemd.unit(5)·systemd.socket(5)·systemd.service(5) (freedesktop.org)
   - Debian 12 `openssh-server` 1:9.2p1-2+deb12u10 패키지 파일 (`apt-get download` 로 받아 푼 내용)
 related:
   - ../README.md
   - ./systemctl%20함정과%20동작%20원리.md
+  - ./systemctl%20유닛%20설정과%20타이머.md
   - ../../../book/learning-modern-linux/06-01.먼저%20켜지는%20것%20하나가%20나머지%20전부를%20켠다.md
   - ../sysinfo/uname%C2%B7os-release%C2%B7hostnamectl.md
 updated: 2026-11-13
@@ -18,11 +19,11 @@ updated: 2026-11-13
 
 ---
 
-> 서비스의 상태를 읽고, 지금 켜고 끄고, 부팅 때 켜지게 하고, 설정을 바꾸는 `systemctl` 을 따라 치면 그대로 나오는 예제로 모았습니다.
+> 서비스의 상태를 읽고, 지금 켜고 끄고, 부팅 때 켜지게 하고, 실패한 서비스를 추적하는 `systemctl` 을 따라 치면 그대로 나오는 예제로 모았습니다.
 
 ## 개요
 
-> `systemctl` 은 systemd 가 관리하는 유닛의 상태를 읽고, 지금 켜고 끄고, 부팅 때의 동작과 설정을 바꾸는 명령입니다.
+> `systemctl` 은 systemd 가 관리하는 유닛의 상태를 읽고, 지금 켜고 끄고, 부팅 때의 동작을 바꾸는 명령입니다.
 
 systemd 패키지의 외부 바이너리(`/usr/bin/systemctl`)이며 PID 1 이 systemd 인 시스템에서만 동작하므로 `docker run` 컨테이너와 macOS 에서는 쓸 수 없습니다. 이 시트의 출력은 OrbStack Ubuntu 26.04 VM(systemd 259)에서 `sudo bash` 로 받았습니다. 이 VM 이 모든 service 에 붙이는 drop-in `zzz-lxc-service.conf` 때문에 `status` 에 `Drop-In:` 줄이 항상 나옵니다.
 
@@ -69,16 +70,9 @@ systemctl disable --now 유닛
 systemctl mask 유닛
 systemctl unmask 유닛
 
-# 설정을 바꾸고 반영한다 (설정 바꾸기와 daemon-reload)
-systemctl edit 유닛
-systemctl daemon-reload
-
 # 실패한 유닛을 모으고 표시를 지운다 (실패한 서비스 추적)
 systemctl list-units --failed
 systemctl reset-failed 유닛
-
-# 타이머를 본다 (타이머로 서비스를 주기 실행하기)
-systemctl list-timers
 ```
 
 ### 유닛 이름과 패턴
@@ -86,7 +80,8 @@ systemctl list-timers
 ```bash
 # UNIT 자리에 쓰는 표기
 # cmd-lab-demo   유닛 이름. 종류 접미사를 생략하면 .service 로 읽는다
-#                systemctl status ssh 는 "Unit ssh.service could not be found." 라고 답한다
+#                systemctl status ssh 는
+#                "Unit ssh.service could not be found." 라고 답한다
 # 'cmd-lab*'     이름 패턴. 셸과 같은 glob 규칙으로 유닛 이름에 맞춘다. 따옴표로 감싸서 준다 (유닛 목록 뽑기)
 ```
 
@@ -99,16 +94,26 @@ systemctl list-timers
 5 와 잘못된 서브커맨드의 1 은 매뉴얼에 값이 없는 실측입니다.[^exitother] 아래 값은 「실습 준비」 블록을 돌린 직후, 아무것도 시작하지 않은 상태에서 잰 것입니다.
 
 ```bash
-# 0  LSB "program is running or service is OK". systemd 에서는 "unit is active"
-#    is-active 가 active 일 때, 그리고 대부분의 명령이 성공했을 때. is-enabled 는 enabled 와 static 에도 0 이고 is-failed 는 failed 일 때 0
-# 1  LSB "program is dead and /var/run pid file exists". systemd 에서는 "unit not failed (used by is-failed)"
-#    is-failed 가 failed 가 아닌 유닛에 낸다. is-enabled 의 disabled·masked, masked 유닛의 start, 잘못된 서브커맨드에도 1
-# 2  LSB "program is dead and /var/lock lock file exists". systemd 에서는 "unused"
+# 0  LSB "program is running or service is OK"
+#    systemd 에서는 "unit is active"
+#    is-active 가 active 일 때, 그리고 대부분의 명령이 성공했을 때
+#    is-enabled 는 enabled 와 static 에도 0
+#    is-failed 는 failed 일 때 0
+# 1  LSB "program is dead and /var/run pid file exists"
+#    systemd 에서는 "unit not failed (used by is-failed)"
+#    is-failed 가 failed 가 아닌 유닛에 낸다
+#    is-enabled 의 disabled·masked, masked 유닛의 start, 잘못된 서브커맨드에도 1
+# 2  LSB "program is dead and /var/lock lock file exists"
+#    systemd 에서는 "unused"
 #    쓰이지 않는 값이라 재현할 수 없다
-# 3  LSB "program is not running". systemd 에서는 "unit is not active"
-#    is-active 가 inactive 나 failed 일 때, status 가 멈춘 유닛에 낸다. ExecReload 가 없는 서비스의 reload 거절도 3
-# 4  LSB "program or service status is unknown". systemd 에서는 "no such unit"
-#    status·is-active·is-enabled·is-failed 가 없는 유닛에 낸다. 오타와 정지를 가를 때 쓴다
+# 3  LSB "program is not running"
+#    systemd 에서는 "unit is not active"
+#    is-active 가 inactive 나 failed 일 때, status 가 멈춘 유닛에 낸다
+#    ExecReload 가 없는 서비스의 reload 거절도 3
+# 4  LSB "program or service status is unknown"
+#    systemd 에서는 "no such unit"
+#    status·is-active·is-enabled·is-failed 가 없는 유닛에 낸다
+#    오타와 정지를 가를 때 쓴다
 # 5  매뉴얼 표에 없는 값. start·stop·restart 가 없는 유닛에 낸다
 # is-active·is-enabled·is-failed 의 상태별 코드는 「스크립트에서 상태로 분기하기」 를 본다
 
@@ -128,16 +133,23 @@ systemctl no-such-command > /dev/null 2>&1; echo $?                     # 1
 
 ### 실습 준비
 
-> 아래 블록을 root 셸에 한 번 붙여 넣으면 이 시트의 예가 쓰는 유닛 셋과 편집기 스크립트가 생깁니다.
+> 아래 블록을 root 셸에 한 번 붙여 넣으면 이 시트의 예가 쓰는 유닛 셋이 생깁니다.
 
 PID·시각·`Invocation` 값은 실행마다 다르므로 이 시트의 값과 같지 않아도 됩니다.
 
 ```bash
 # 실습이 끝나면 「실습 정리」 블록으로 모두 지운다
-mkdir -p ~/cmd-lab/systemctl && cd ~/cmd-lab/systemctl
 
-# cmd-lab-demo: sleep infinity 를 띄운다. ExecReload 와 [Install] 이 있어 reload 와 enable 을 모두 받는다
-# 패키지가 설치한 유닛처럼 /usr/lib/systemd/system 에 둔다. 「유닛 막기와 풀기」 의 mask 가 그 자리의 유닛에만 먹기 때문이다
+# 실습 폴더를 만들고 그 안으로 옮긴다
+# 유닛 설정과 타이머 시트가 editor.sh 를 이 폴더에 둔다
+mkdir -p ~/cmd-lab/systemctl \
+  && cd ~/cmd-lab/systemctl
+
+# cmd-lab-demo: sleep infinity 를 띄운다
+#   ExecReload 와 [Install] 이 있어 reload 와 enable 을 모두 받는다
+#   Alias 는 enable 할 때 cmd-lab-nick.service 라는 별칭 링크를 만든다
+#   패키지가 설치한 유닛처럼 /usr/lib/systemd/system 에 둔다
+#   「유닛 막기와 풀기」 의 mask 가 그 자리의 유닛에만 먹기 때문이다
 cat > /usr/lib/systemd/system/cmd-lab-demo.service << 'EOF'
 [Unit]
 Description=cmd-lab demo service
@@ -152,6 +164,7 @@ Alias=cmd-lab-nick.service
 EOF
 
 # cmd-lab-plain: ExecReload 와 [Install] 이 없는 서비스
+#   reload 거절과 is-enabled 의 static 을 보는 데 쓴다
 cat > /etc/systemd/system/cmd-lab-plain.service << 'EOF'
 [Unit]
 Description=cmd-lab service without ExecReload
@@ -161,6 +174,7 @@ ExecStart=/bin/sleep infinity
 EOF
 
 # cmd-lab-fail: 종료 코드 3 으로 곧바로 끝나는 서비스
+#   stdout 과 stderr 에 한 줄씩 남겨 failed 상태와 로그를 보는 데 쓴다
 cat > /etc/systemd/system/cmd-lab-fail.service << 'EOF'
 [Unit]
 Description=cmd-lab service that fails on purpose
@@ -169,13 +183,7 @@ Description=cmd-lab service that fails on purpose
 ExecStart=/bin/sh -c 'echo cmd-lab-fail: starting; echo cmd-lab-fail: giving up >&2; exit 3'
 EOF
 
-# 비대화형 edit 용 편집기 스크립트
-cat > editor.sh << 'EOF'
-#!/bin/sh
-for f; do :; done
-sed -i '2a [Service]\nEnvironment=GREETING=hello' "$f"
-EOF
-chmod +x editor.sh
+# 새로 둔 유닛 파일 셋을 systemd 가 읽게 한다
 systemctl daemon-reload
 ```
 
@@ -189,7 +197,8 @@ systemctl daemon-reload
 
 ```bash
 # 켜기 전의 서비스를 본다. Active: inactive (dead), 종료 코드 3
-# Drop-In: 줄은 OrbStack 이 모든 service 에 붙이는 drop-in 때문에 나오고, 다른 서버에서는 drop-in 이 하나도 없을 때만 빠진다
+# Drop-In: 줄은 OrbStack 이 모든 service 에 붙이는 drop-in 때문에 나온다
+# 다른 서버에서는 drop-in 이 하나도 없을 때만 빠진다
 #   --no-pager   출력이 길어도 pager 로 넘기지 않는다. 이 시트의 예 대부분이 붙인다
 systemctl status cmd-lab-demo --no-pager | head -5
 ```
@@ -227,7 +236,7 @@ systemctl status cmd-lab-demo --no-pager
 Nov 11 23:36:39 ubuntu systemd[1]: Started cmd-lab-demo.service - cmd-lab demo service.
 ```
 
-`Main PID` 와 `CGroup` 은 이 서비스가 실제로 쥔 프로세스를 가리키고, 맨 아래 빈 줄 뒤의 줄들이 저널에서 가져온 최근 로그입니다.
+`Main PID` 와 `CGroup` 은 이 서비스가 실제로 쥔 프로세스를 가리킵니다. 맨 아래 빈 줄 뒤의 줄들은 저널에서 가져온 최근 로그입니다.
 
 ```bash
 # 로그만 빼고 싶으면 저널 로그 줄을 0줄로 준다
@@ -324,7 +333,8 @@ Legend: LOAD   → Reflects whether the unit definition was properly loaded.
 
 ```bash
 # 머리글·범례·합계 줄을 뺀다. 사람에게는 도움이지만 awk·wc 로 넘길 때는 방해라서 뺀다
-#   --no-legend   man 의 정식 옵션은 열 머리글과 끝의 안내 줄을 켜고 끄는 --legend=BOOL 이고, 이 시트는 --no-legend 로 쓴다
+#   --no-legend   man 의 정식 옵션은 열 머리글과 끝의 안내 줄을
+#                 켜고 끄는 --legend=BOOL 이고, 이 시트는 --no-legend 로 쓴다
 systemctl list-units \
   --type=service \
   --state=running \
@@ -338,7 +348,8 @@ systemctl list-units \
 ```
 
 ```bash
-# list-unit-files: 설치된 유닛 파일과 그 enable 상태를 보인다. --state 로도 거를 수 있다 (예: --state=disabled)
+# list-unit-files: 설치된 유닛 파일과 그 enable 상태를 보인다
+# --state 로도 거를 수 있다 (예: --state=disabled)
 # PRESET 열은 배포판의 preset 정책이 이 유닛을 어떻게 켜라고 하는지다
 systemctl list-unit-files 'cmd-lab*' --no-pager
 ```
@@ -406,7 +417,7 @@ Alias=cmd-lab-nick.service
 # /run/systemd/system/service.d/zzz-lxc-service.conf
 ```
 
-첫 줄 `# /usr/lib/systemd/system/cmd-lab-demo.service` 가 본 파일 경로입니다. drop-in 이 있으면 이 뒤에 파일마다 이어 붙는데 「설정 바꾸기와 daemon-reload」 에서 봅니다.
+첫 줄 `# /usr/lib/systemd/system/cmd-lab-demo.service` 가 본 파일 경로입니다. drop-in 이 있으면 이 뒤에 파일마다 이어 붙는데 [유닛 설정과 타이머 시트](./systemctl%20유닛%20설정과%20타이머.md)의 「설정 바꾸기와 daemon-reload」 에서 봅니다.
 
 ### 지금 켜고 끄기
 
@@ -433,7 +444,8 @@ systemctl show -p MainPID --value cmd-lab-demo    # 21279
 
 ```bash
 # stop: 서비스를 지금 멈춘다
-# try-restart: 떠 있을 때만 재시작하고 꺼져 있으면 아무것도 하지 않는다. 배포 스크립트에서 "켜져 있던 것만 다시 띄운다" 를 표현할 때 쓴다
+# try-restart: 떠 있을 때만 재시작하고 꺼져 있으면 아무것도 하지 않는다
+#   배포 스크립트에서 "켜져 있던 것만 다시 띄운다" 를 표현할 때 쓴다
 systemctl stop cmd-lab-demo
 systemctl try-restart cmd-lab-demo       # 꺼져 있으므로 출력 없이 끝난다
 systemctl is-active cmd-lab-demo         # inactive (종료 코드 3)
@@ -571,125 +583,6 @@ Removed '/etc/systemd/system/cmd-lab-demo.service'.
 
 `/etc/systemd/system/` 에 같은 이름의 파일이 이미 있는 유닛에는 `mask` 가 실패합니다. 그 경우는 [함정 문서](./systemctl%20함정과%20동작%20원리.md)의 「mask 가 실패하는 경우」 에서 봅니다.
 
-### 설정 바꾸기와 daemon-reload
-
-> 유닛을 고칠 때는 원본을 건드리지 않고 drop-in 조각에 쓰며, 조각 파일을 손으로 만들었다면 `daemon-reload` 를 해야 합니다.
-
-`systemctl edit` 는 `<유닛>.d/override.conf` 라는 drop-in 을 편집기로 열고, 저장하면 `daemon-reload` 까지 알아서 합니다.[^edit] 비대화형 실습을 위해 `SYSTEMD_EDITOR` 환경 변수로 편집기를 `editor.sh` 로 바꿨습니다.[^editor]
-
-```bash
-# 편집기 창에는 템플릿이 뜬다. 첫 안내 주석 아래부터 "Edits below this comment will be discarded" 주석 위까지만 파일 내용으로 저장된다
-# editor.sh 는 템플릿의 둘째 줄 뒤에 두 줄을 끼워 넣는다. tty 가 없으면 edit 가 거부하므로 script -qec 로 가상 터미널을 준다
-#   -q   script 자신의 안내를 찍지 않는다 (--quiet)
-#   -e   자식 프로세스의 종료 코드를 돌려준다 (--return)
-#   -c   대화형 셸 대신 주어진 명령을 돌린다 (--command). 마지막 /dev/null 은 기록 파일 자리다
-script -qec \
-  "SYSTEMD_EDITOR=$PWD/editor.sh systemctl edit cmd-lab-demo" \
-  /dev/null
-```
-
-```bash
-Successfully installed edited file '/etc/systemd/system/cmd-lab-demo.service.d/override.conf'.
-```
-
-```bash
-systemctl cat cmd-lab-demo --no-pager | head -15
-```
-
-```bash
-# /usr/lib/systemd/system/cmd-lab-demo.service
-[Unit]
-Description=cmd-lab demo service
-
-[Service]
-ExecStart=/bin/sleep infinity
-ExecReload=/bin/true
-
-[Install]
-WantedBy=multi-user.target
-Alias=cmd-lab-nick.service
-
-# /etc/systemd/system/cmd-lab-demo.service.d/override.conf
-[Service]
-Environment=GREETING=hello
-```
-
-본 파일 아래에 `override.conf` 가 이어 붙어 보입니다.
-
-```bash
-# 설정은 daemon-reload 로 곧바로 유닛 정의에 반영됐지만, 이미 떠 있는 프로세스에는 restart 를 해야 닿는다
-# 떠 있는 프로세스의 환경 변수. 아직 GREETING 이 없다 (grep 이 아무것도 못 찾아 종료 코드 1)
-tr '\0' '\n' < /proc/$(systemctl show -p MainPID --value cmd-lab-demo)/environ \
-  | grep GREETING
-systemctl restart cmd-lab-demo
-tr '\0' '\n' < /proc/$(systemctl show -p MainPID --value cmd-lab-demo)/environ \
-  | grep GREETING
-# GREETING=hello
-```
-
-```bash
-# 내용을 파이프로 줘서 drop-in 을 만든다
-#   --stdin      편집기 대신 표준 입력을 파일 내용으로 쓴다
-#   --drop-in=   조각 파일 이름을 정한다. 기본은 override.conf
-printf '[Service]\nNice=5\n' \
-  | systemctl edit --stdin --drop-in=nice.conf cmd-lab-demo
-```
-
-```bash
-Successfully installed edited file '/etc/systemd/system/cmd-lab-demo.service.d/nice.conf'.
-```
-
-`daemon-reload` 는 모든 유닛 파일을 다시 읽고 의존성 트리를 새로 만듭니다. 조각 파일을 손으로 만들었다면 이것을 해야 반영됩니다.[^reloadcmd]
-
-```bash
-# 편집기를 거치지 않고 조각 파일을 직접 만든다. daemon-reload 를 빠뜨리면 status 첫 줄에 경고가 뜬다
-mkdir -p /etc/systemd/system/cmd-lab-demo.service.d
-printf '[Service]\nEnvironment=LEVEL=2\n' \
-  > /etc/systemd/system/cmd-lab-demo.service.d/manual.conf
-systemctl status cmd-lab-demo --no-pager -n 0 | head -8
-```
-
-```bash
-Warning: The unit file, source configuration file or drop-ins of cmd-lab-demo.service changed on disk. Run 'systemctl daemon-reload' to reload units.
-● cmd-lab-demo.service - cmd-lab demo service
-     Loaded: loaded (/usr/lib/systemd/system/cmd-lab-demo.service; disabled; preset: enabled)
-    Drop-In: /etc/systemd/system/cmd-lab-demo.service.d
-             └─nice.conf, override.conf
-             /run/systemd/system/service.d
-             └─zzz-lxc-service.conf
-     Active: active (running) since Wed 2026-11-11 23:36:40 KST; 118ms ago
- Invocation: d234c22bc88e4455bbcaadef6c52aea4
-```
-
-경고 줄의 문구가 해결책까지 말해 줍니다. 새 파일이 `Drop-In:` 목록에 없는 것도 확인할 수 있습니다.
-
-```bash
-# daemon-reload 전후의 DropInPaths 를 비교한다
-systemctl show -p DropInPaths cmd-lab-demo    # DropInPaths=/etc/systemd/system/cmd-lab-demo.service.d/nice.conf /etc/systemd/system/cmd-lab-demo.service.d/override.conf /run/systemd/system/service.d/zzz-lxc-service.conf
-systemctl daemon-reload
-systemctl show -p DropInPaths cmd-lab-demo    # DropInPaths=/etc/systemd/system/cmd-lab-demo.service.d/manual.conf /etc/systemd/system/cmd-lab-demo.service.d/nice.conf /etc/systemd/system/cmd-lab-demo.service.d/override.conf /run/systemd/system/service.d/zzz-lxc-service.conf
-```
-
-반영된 뒤의 `status` 는 경고가 없고 `Drop-In:` 에 `manual.conf` 가 들어 있습니다. 떠 있는 프로세스는 앞의 `GREETING` 처럼 「지금 켜고 끄기」 의 `restart` 를 해야 새 설정으로 돕니다.
-
-지금까지 만든 `override.conf`·`nice.conf`·`manual.conf` 를 `revert` 로 한 번에 정리합니다.[^revert]
-
-```bash
-# revert: drop-in 과 /etc 의 덮어쓰기 파일을 지워 유닛을 배포판 원본으로 되돌린다
-systemctl revert cmd-lab-demo
-```
-
-```bash
-Removed '/etc/systemd/system/cmd-lab-demo.service.d/override.conf'.
-Removed '/etc/systemd/system/cmd-lab-demo.service.d/nice.conf'.
-Removed '/etc/systemd/system/cmd-lab-demo.service.d/manual.conf'.
-Removed '/etc/systemd/system/cmd-lab-demo.service.d'.
-```
-
-```bash
-systemctl show -p DropInPaths cmd-lab-demo    # DropInPaths=/run/systemd/system/service.d/zzz-lxc-service.conf
-```
-
 ### 실패한 서비스 추적
 
 > 실패하면 `status` 의 `Process:` 줄과 로그 줄이 종료 코드와 이유를 알려 주고, `journalctl -u` 가 같은 로그를 따로 보여 줍니다.
@@ -735,7 +628,9 @@ Nov 11 23:36:41 ubuntu systemd[1]: cmd-lab-fail.service: Failed with result 'exi
 로그만 더 보려면 `journalctl` 을 씁니다. `journalctl` 의 다른 옵션은 이 시트에서 다루지 않습니다.
 
 ```bash
-# journalctl: 유닛이 남긴 저널 로그를 읽는다. systemd 패키지의 외부 바이너리(/usr/bin/journalctl)이고 systemctl 과 같은 VM 에서 실측했다
+# journalctl: 유닛이 남긴 저널 로그를 읽는다
+#   systemd 패키지의 외부 바이너리(/usr/bin/journalctl)이고
+#   systemctl 과 같은 VM 에서 실측했다
 #   -u   이 유닛의 로그만 본다 (--unit)
 #   -n   최근 몇 줄만 본다. status 의 -n 과 같은 뜻이다
 journalctl \
@@ -778,67 +673,20 @@ systemctl reset-failed cmd-lab-fail
 systemctl is-failed cmd-lab-fail    # inactive (종료 코드 1)
 ```
 
-### 타이머로 서비스를 주기 실행하기
-
-> 서비스와 타이머 두 유닛을 만들고 타이머만 켜면, `list-timers` 는 다음·지난 실행 시각만 보여 주고 성공 여부는 서비스 쪽에서 읽어야 합니다.[^timer]
-
-```bash
-# 서비스: 일부러 종료 코드 3 으로 끝난다. Type=oneshot 은 메인 프로세스가 끝난 뒤에 유닛이 올라온 것으로 본다
-cat > /etc/systemd/system/cmd-lab-tick.service << 'EOF'
-[Service]
-Type=oneshot
-ExecStart=/bin/sh -c 'echo cmd-lab-tick: ran; exit 3'
-EOF
-
-# 타이머: 15초마다 같은 이름의 서비스를 깨운다. AccuracySec 은 깨우는 시각의 허용 오차이고 기본은 1분이다
-cat > /etc/systemd/system/cmd-lab-tick.timer << 'EOF'
-[Timer]
-OnCalendar=*:*:0/15
-AccuracySec=1s
-
-[Install]
-WantedBy=timers.target
-EOF
-
-systemctl daemon-reload
-systemctl enable --now cmd-lab-tick.timer
-
-# list-timers: 타이머를 다음에 울릴 때 순으로 보인다. 켜자마자 보면 LAST 와 PASSED 가 - 이다
-sleep 20
-systemctl list-timers 'cmd-lab*' --no-pager
-```
-
-```bash
-NEXT                        LEFT LAST                         PASSED UNIT               ACTIVATES
-Fri 2026-11-13 13:16:30 KST   3s Fri 2026-11-13 13:16:15 KST 11s ago cmd-lab-tick.timer cmd-lab-tick.service
-
-1 timers listed.
-Pass --all to see loaded but inactive timers, too.
-```
-
-NEXT 는 다음 실행, LEFT 는 남은 시간, LAST 는 지난 실행, PASSED 는 그 뒤 흐른 시간입니다. 성공 여부를 보이는 열은 없으므로 결과는 서비스 유닛에 묻습니다.
-
-```bash
-# 종료 코드 3 으로 끝난 실행이 서비스에 failed 로 남았다. 확인했으면 타이머를 멈추고 부팅 때의 시작도 끈다
-systemctl is-failed cmd-lab-tick.service      # failed (종료 코드 0)
-systemctl disable --now cmd-lab-tick.timer    # Removed '/etc/systemd/system/timers.target.wants/cmd-lab-tick.timer'.
-```
-
 ### 실습 정리
 
-> 실습이 끝나면 아래 블록으로 만든 유닛 다섯과 drop-in 을 지우고 systemd 를 원래대로 되돌립니다.
+> 실습이 끝나면 아래 블록으로 만든 유닛 셋과 실습 폴더를 지우고 systemd 를 원래대로 되돌립니다.
+
+[유닛 설정과 타이머 시트](./systemctl%20유닛%20설정과%20타이머.md)의 예까지 돌렸다면 그 시트의 「실습 정리」 도 돌립니다.
 
 ```bash
 systemctl disable --now cmd-lab-demo; systemctl stop cmd-lab-plain cmd-lab-fail
-systemctl disable --now cmd-lab-tick.timer
-rm -rf /etc/systemd/system/cmd-lab-demo.service.d
 rm -f \
   /usr/lib/systemd/system/cmd-lab-demo.service \
   /etc/systemd/system/cmd-lab-plain.service \
   /etc/systemd/system/cmd-lab-fail.service
-rm -f /etc/systemd/system/cmd-lab-tick.service
-rm -f /etc/systemd/system/cmd-lab-tick.timer
 systemctl daemon-reload; systemctl reset-failed 'cmd-lab*'
+cd ~ && rm -rf ~/cmd-lab/systemctl
 ```
 
 
@@ -861,6 +709,7 @@ systemctl daemon-reload; systemctl reset-failed 'cmd-lab*'
 - [systemctl 함정과 동작 원리](./systemctl%20함정과%20동작%20원리.md) — `mask` 실패, ssh 이름과 소켓, `Alias=` 별칭
 - [책 노트 6장 4절, 단위로 말하기](../../../book/learning-modern-linux/06-01.먼저%20켜지는%20것%20하나가%20나머지%20전부를%20켠다.md#4-무엇을-언제-어떻게-돌릴지는-단위로-말한다) — 유닛 종류와 유닛 파일이 놓이는 세 자리
 - [책 노트 6장 5절, 손으로 만지는 도구들](../../../book/learning-modern-linux/06-01.먼저%20켜지는%20것%20하나가%20나머지%20전부를%20켠다.md#5-손으로-만지는-도구들) — `enable`·`daemon-reload` 의 기본 흐름
+- [유닛 설정과 타이머 시트](./systemctl%20유닛%20설정과%20타이머.md) — `edit`·`daemon-reload` 로 drop-in 쓰기, 타이머로 서비스 주기 실행
 - [uname·os-release·hostnamectl](../sysinfo/uname%C2%B7os-release%C2%B7hostnamectl.md) — 실습 VM 의 배포판과 커널 버전 확인
 
 
@@ -872,7 +721,6 @@ systemctl daemon-reload; systemctl reset-failed 'cmd-lab*'
 - systemd 259 의 `systemctl --help`·`man systemctl` 원문 — OrbStack Ubuntu 26.04 VM 에서 2026-11-11 확인
 - [systemctl(1)](https://www.freedesktop.org/software/systemd/man/latest/systemctl.html) — freedesktop.org 최신판(문서 머리 버전 262)에서 아래 각주의 인용문 존재를 확인
 - [systemd.unit(5)](https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html) · [systemd.socket(5)](https://www.freedesktop.org/software/systemd/man/latest/systemd.socket.html) · [systemd.service(5)](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html)
-- [systemd.timer(5)](https://www.freedesktop.org/software/systemd/man/latest/systemd.timer.html) — 「타이머로 서비스를 주기 실행하기」 의 `OnCalendar=`·`AccuracySec=`
 - Debian 12 `openssh-server` 1:9.2p1-2+deb12u10 패키지 파일 — 2026-11-11 `apt-get download` 후 `dpkg -x`
 
 [^status]: systemctl(1) `status` — "This function is intended to generate human-readable output. If you are looking for computer-parsable output, use show instead." 그리고 "inactive" or "maintenance" is a white circle ("○"), "active" is a green dot ("●"), "deactivating" is a white dot, "failed" or "error" is a red cross ("×"). https://www.freedesktop.org/software/systemd/man/latest/systemctl.html
@@ -888,12 +736,7 @@ systemctl daemon-reload; systemctl reset-failed 'cmd-lab*'
 [^enable]: systemctl(1) `is-enabled` 표 — "enabled" 는 "Enabled via .wants/, .requires/ or Alias= symlinks". 실측 출력의 `Created symlink` 두 줄이 그 링크입니다.
 [^now]: systemctl(1) `--now` — "When used with enable, disable, mask, or reenable, also start/stop/try-restart the units after the specified unit file operations succeed."
 [^mask]: systemctl(1) `mask` — "This will link these unit files to /dev/null, making it impossible to start them. This is a stronger version of disable". 같은 절 — "If a matching unit file already exists under these directories this operation will hence fail. This means that the operation is primarily useful to mask units shipped by the vendor".
-[^edit]: systemctl(1) `edit` — "After the editing is finished, configuration is reloaded, equivalent to systemctl daemon-reload --system". "If --drop-in= is specified, the given drop-in file name will be used instead of the default override.conf." `--stdin` — "If --stdin is specified, the new contents will be read from standard input."
-[^editor]: systemctl(1) ENVIRONMENT — "$SYSTEMD_EDITOR: Editor to use when editing units; overrides $EDITOR and $VISUAL."
-[^reloadcmd]: systemctl(1) `daemon-reload` — "This will rerun all generators (see systemd.generator(7)), reload all unit files, and recreate the entire dependency tree." 경고 문구 "changed on disk. Run 'systemctl daemon-reload' to reload units." 는 실측 출력에서 확인했고 매뉴얼에는 없습니다.
-[^revert]: systemctl(1) `revert` — "This command removes drop-in configuration files that modify the specified units, as well as any user-configured unit file that overrides a matching vendor supplied unit file."
 [^simple]: systemd.service(5) `Type=` — "If set to simple (the default if ExecStart= is specified but neither Type= nor BusName= are, and credentials are not used)". 같은 항목 — "systemctl start command lines for simple services will report success even if the service's binary cannot be invoked successfully". https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html
 [^reset]: systemctl(1) `reset-failed` — "Reset the "failed" state of the specified units, or if no unit name is passed, reset the state of all units."
 [^exitstatus]: systemctl(1) EXIT STATUS — "On success, 0 is returned, a non-zero failure code otherwise." "systemctl uses the return codes defined by LSB" 그리고 LSB return codes 표의 0~4 행. "The mapping of LSB service states to systemd unit states is imperfect, so it is better to not rely on those return values but to look for specific unit states and substates instead." https://www.freedesktop.org/software/systemd/man/latest/systemctl.html
 [^exitother]: OrbStack Ubuntu 26.04 VM(systemd 259.9)에서 `명령; echo $?` 로 읽은 실측입니다. systemctl(1) EXIT STATUS 는 0~4 만 표로 정의하고 그 밖의 값은 "a non-zero failure code otherwise." 라고만 적으므로, 없는 유닛에 `start`·`stop`·`restart` 를 준 5 와 잘못된 서브커맨드의 1 은 매뉴얼에 값이 적혀 있지 않습니다. https://www.freedesktop.org/software/systemd/man/latest/systemctl.html
-[^timer]: systemctl(1) `list-timers` — "List timer units currently in memory, ordered by the time they elapse next." "NEXT shows the next time the timer will run. LEFT shows how long till the next time the timer runs. LAST shows the last time the timer ran. PASSED shows how long has passed since the timer last ran." systemd.timer(5) `OnCalendar=` — "Defines realtime (i.e. wallclock) timers with calendar event expressions." `AccuracySec=` — "Specify the accuracy the timer shall elapse with. Defaults to 1min." systemd.service(5) `Type=oneshot` — "the service manager will consider the unit up after the main process exits." https://www.freedesktop.org/software/systemd/man/latest/systemd.timer.html
