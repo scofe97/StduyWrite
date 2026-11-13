@@ -11,9 +11,9 @@ source:
   - Linux kernel documentation, Control Group v2, The Unified Extensible Firmware Interface (UEFI)
 related:
   - ../README.md
-  - ./dmidecode%C2%B7lscpu%20DMI%20표와%20메모리%20읽기.md
+  - ./dmidecode%C2%B7lsmem%C2%B7lshw.md
   - ../../../book/learning-modern-linux/02-01.%EC%BB%A4%EB%84%90%EC%9D%80%20%EC%A0%84%EB%B6%80%EB%A5%BC%20%ED%95%98%EC%A7%80%EB%A7%8C%20%EC%9A%B4%EC%98%81%EC%B2%B4%EC%A0%9C%EB%8A%94%20%EC%95%84%EB%8B%88%EB%8B%A4.md
-  - ./uname%C2%B7os-release%C2%B7hostnamectl.md
+  - ./uname%C2%B7os-release%C2%B7lsb_release.md
 updated: 2026-11-13
 ---
 
@@ -31,7 +31,7 @@ updated: 2026-11-13
 
 이 시트는 Debian 12 컨테이너(util-linux 2.38.1, coreutils 9.1, dmidecode 3.4)의 root 로 실측했습니다. 출력은 Apple Silicon 위의 가상 환경이라 CPU 가 `aarch64` 이고, 물리 서버나 x86 가상 머신에서는 값과 줄이 다릅니다.
 
-펌웨어의 DMI 표를 읽는 `dmidecode` 와 메모리를 읽는 `lsmem`·`lshw` 는 [dmidecode·lsmem·lshw DMI 표와 메모리 읽기 시트](./dmidecode·lscpu%20DMI%20표와%20메모리%20읽기.md)에서 이어 다룹니다.
+펌웨어의 DMI 표를 읽는 `dmidecode` 와 메모리를 읽는 `lsmem`·`lshw` 는 [dmidecode·lsmem·lshw DMI 표와 메모리 읽기 시트](./dmidecode·lsmem·lshw.md)에서 이어 다룹니다.
 
 
 
@@ -556,9 +556,9 @@ docker run \
 > 이 시트의 예와 이어지는 시트입니다.
 
 - [리눅스 명령어 시트](../README.md) — 다른 명령 시트 목록
-- [dmidecode·lsmem·lshw DMI 표와 메모리 읽기 시트](./dmidecode·lscpu%20DMI%20표와%20메모리%20읽기.md) — 펌웨어 DMI 표를 읽는 `dmidecode` 와 메모리를 읽는 `lsmem`·`lshw`
+- [dmidecode·lsmem·lshw DMI 표와 메모리 읽기 시트](./dmidecode·lsmem·lshw.md) — 펌웨어 DMI 표를 읽는 `dmidecode` 와 메모리를 읽는 `lsmem`·`lshw`
 - [무엇을 쓰고 있는지 확인하는 법](../../../book/learning-modern-linux/02-01.%EC%BB%A4%EB%84%90%EC%9D%80%20%EC%A0%84%EB%B6%80%EB%A5%BC%20%ED%95%98%EC%A7%80%EB%A7%8C%20%EC%9A%B4%EC%98%81%EC%B2%B4%EC%A0%9C%EB%8A%94%20%EC%95%84%EB%8B%88%EB%8B%A4.md#무엇을-쓰고-있는지-확인하는-법) — CPU 계열을 `lscpu` 로 읽는 이유와 x86 출력 예
-- [uname·os-release·lsb_release 참조 시트](./uname%C2%B7os-release%C2%B7hostnamectl.md) — 커널과 배포판 이름·버전을 읽는 시트
+- [uname·os-release·lsb_release 참조 시트](./uname%C2%B7os-release%C2%B7lsb_release.md) — 커널과 배포판 이름·버전을 읽는 시트
 
 
 

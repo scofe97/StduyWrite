@@ -189,10 +189,10 @@ resource 는 쓰이는 양을 재고, 여기는 쓸 수 있는 양에 한도를 
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
-| [uname·os-release·hostnamectl](./sysinfo/uname%C2%B7os-release%C2%B7hostnamectl.md) | `uname` · `/etc/os-release` · `lsb_release` | 서버의 배포판·커널·하드웨어 종류를 확인할 때 |
-| [uname·os-release·hostnamectl 호스트 이름 다루기](./sysinfo/uname%C2%B7os-release%C2%B7hostnamectl%20호스트%20이름%20다루기.md) | `hostnamectl` · `hostname` | 호스트 이름을 보거나 영구·임시로 바꿀 때 |
-| [dmidecode·lscpu](./sysinfo/dmidecode%C2%B7lscpu.md) | `lscpu` · `nproc` | CPU 개수·구조·캐시를 읽거나, 컨테이너 CPU 제한이 어디에 보이는지 확인할 때 |
-| [dmidecode·lscpu DMI 표와 메모리 읽기](./sysinfo/dmidecode%C2%B7lscpu%20DMI%20표와%20메모리%20읽기.md) | `dmidecode` · `lsmem` · `lshw` | 서버 모델·메모리 슬롯 정보를 보거나, DMI 표가 없을 때 대신 볼 곳을 찾을 때 |
+| [uname·os-release·lsb_release](./sysinfo/uname%C2%B7os-release%C2%B7lsb_release.md) | `uname` · `/etc/os-release` · `lsb_release` | 서버의 배포판·커널·하드웨어 종류를 확인할 때 |
+| [hostnamectl·hostname](./sysinfo/hostnamectl%C2%B7hostname.md) | `hostnamectl` · `hostname` | 호스트 이름을 보거나 영구·임시로 바꿀 때 |
+| [lscpu·nproc](./sysinfo/lscpu%C2%B7nproc.md) | `lscpu` · `nproc` | CPU 개수·구조·캐시를 읽거나, 컨테이너 CPU 제한이 어디에 보이는지 확인할 때 |
+| [dmidecode·lsmem·lshw](./sysinfo/dmidecode%C2%B7lsmem%C2%B7lshw.md) | `dmidecode` · `lsmem` · `lshw` | 서버 모델·메모리 슬롯 정보를 보거나, DMI 표가 없을 때 대신 볼 곳을 찾을 때 |
 
 
 

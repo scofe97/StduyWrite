@@ -11,7 +11,7 @@ related:
   - ./systemctl%20함정과%20동작%20원리.md
   - ./systemctl%20유닛%20설정과%20타이머.md
   - ../../../book/learning-modern-linux/06-01.먼저%20켜지는%20것%20하나가%20나머지%20전부를%20켠다.md
-  - ../sysinfo/uname%C2%B7os-release%C2%B7hostnamectl.md
+  - ../sysinfo/uname%C2%B7os-release%C2%B7lsb_release.md
 updated: 2026-11-13
 ---
 
@@ -710,7 +710,7 @@ cd ~ && rm -rf ~/cmd-lab/systemctl
 - [책 노트 6장 4절, 단위로 말하기](../../../book/learning-modern-linux/06-01.먼저%20켜지는%20것%20하나가%20나머지%20전부를%20켠다.md#4-무엇을-언제-어떻게-돌릴지는-단위로-말한다) — 유닛 종류와 유닛 파일이 놓이는 세 자리
 - [책 노트 6장 5절, 손으로 만지는 도구들](../../../book/learning-modern-linux/06-01.먼저%20켜지는%20것%20하나가%20나머지%20전부를%20켠다.md#5-손으로-만지는-도구들) — `enable`·`daemon-reload` 의 기본 흐름
 - [유닛 설정과 타이머 시트](./systemctl%20유닛%20설정과%20타이머.md) — `edit`·`daemon-reload` 로 drop-in 쓰기, 타이머로 서비스 주기 실행
-- [uname·os-release·lsb_release 참조 시트](../sysinfo/uname%C2%B7os-release%C2%B7hostnamectl.md) — 실습 VM 의 배포판과 커널 버전 확인
+- [uname·os-release·lsb_release 참조 시트](../sysinfo/uname%C2%B7os-release%C2%B7lsb_release.md) — 실습 VM 의 배포판과 커널 버전 확인
 
 
 

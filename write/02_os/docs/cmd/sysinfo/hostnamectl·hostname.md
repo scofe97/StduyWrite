@@ -6,7 +6,7 @@ source:
   - systemd 252 hostnamectl(1)·hostname(5)·machine-info(5) (bookworm), OrbStack VM 의 systemd 259.9 `man hostnamectl`
   - hostname 3.23 hostname(1), gethostname(2)·proc(5) (bookworm)
 related:
-  - ./uname·os-release·hostnamectl.md
+  - ./uname·os-release·lsb_release.md
   - ../README.md
 updated: 2026-11-13
 ---
@@ -21,7 +21,7 @@ updated: 2026-11-13
 
 > `hostnamectl` 은 호스트 이름 세 종류를 한 도구로 보고 바꾸고, `hostname` 은 커널의 이름 하나만 다룹니다.
 
-이 시트는 [uname·os-release·lsb_release 참조 시트](./uname·os-release·hostnamectl.md)에서 호스트 이름을 읽고 바꾸는 유스케이스를 떼어 낸 것입니다. 원래 시트의 「실습 준비」 없이 돌아가고, 출력은 OrbStack VM `ubuntu`(systemd 259.9, hostname 3.25)에서 받았습니다.
+이 시트는 [uname·os-release·lsb_release 참조 시트](./uname·os-release·lsb_release.md)에서 호스트 이름을 읽고 바꾸는 유스케이스를 떼어 낸 것입니다. 원래 시트의 「실습 준비」 없이 돌아가고, 출력은 OrbStack VM `ubuntu`(systemd 259.9, hostname 3.25)에서 받았습니다.
 
 `hostnamectl` 은 systemd 가 도는 서버에서 쓰고, `hostname` 은 hostname 패키지의 명령입니다. 이름을 바꾸는 예는 VM 의 호스트 이름을 실제로 바꾸므로, 따라 할 때도 「실습 정리」 까지 이어서 실행합니다.
 
@@ -336,7 +336,7 @@ hostnamectl --json=short | cut -c1-100    # {"Hostname":"labhost2","StaticHostna
 
 > `hostnamectl` 한 번이 배포판과 커널 정보를 한 화면에 모으므로, 필요한 줄만 `grep` 으로 고릅니다.
 
-[uname·os-release·lsb_release 참조 시트](./uname·os-release·hostnamectl.md)의 「이 서버의 배포판과 커널을 세 줄로」 는 세 명령을 이었지만, systemd 가 도는 서버라면 이 한 번으로 됩니다. 처음 두 줄은 이 VM 의 읽기 권한 경고입니다.
+[uname·os-release·lsb_release 참조 시트](./uname·os-release·lsb_release.md)의 「이 서버의 배포판과 커널을 세 줄로」 는 세 명령을 이었지만, systemd 가 도는 서버라면 이 한 번으로 됩니다. 처음 두 줄은 이 VM 의 읽기 권한 경고입니다.
 
 ```bash
 # hostnamectl 의 Operating System 과 Kernel 줄
@@ -389,7 +389,7 @@ ls /etc/machine-info    # ls: cannot access '/etc/machine-info': No such file or
 > 이 시트의 예와 이어지는 시트입니다.
 
 - [리눅스 명령어 시트](../README.md) — 다른 명령 시트 목록
-- [uname·os-release·lsb_release 참조 시트](./uname·os-release·hostnamectl.md) — 이 시트를 떼어 낸 원래 시트, 커널과 배포판 확인
+- [uname·os-release·lsb_release 참조 시트](./uname·os-release·lsb_release.md) — 이 시트를 떼어 낸 원래 시트, 커널과 배포판 확인
 - [systemctl 참조 시트](../service/systemctl.md) — `hostnamectl` 이 속한 systemd 서비스 관리
 
 

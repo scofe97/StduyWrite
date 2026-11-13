@@ -7,7 +7,7 @@ source:
   - systemd 252 os-release(5)·hostname(5)·machine-info(5)·hostnamectl(1) (bookworm), OrbStack VM 의 systemd 259.9 `man hostnamectl`
   - lsb-release 12.0 lsb_release(1), hostname 3.23 hostname(1) (bookworm)
 related:
-  - ./uname·os-release·hostnamectl 호스트 이름 다루기.md
+  - ./hostnamectl·hostname.md
   - ../README.md
 updated: 2026-11-13
 ---
@@ -26,7 +26,7 @@ updated: 2026-11-13
 
 이 시트는 Debian 12 컨테이너(coreutils 9.1, lsb-release 12.0)로 실측했습니다. 최소 이미지에는 `lsb_release` 가 없어 처음 부르면 `not found` 가 나옵니다. macOS 에는 `/etc/os-release`·`lsb_release`·`hostnamectl` 이 없고, BSD `uname` 은 `-i` 를 받지 않아 `uname: illegal option -- i` 를 냅니다.
 
-호스트 이름을 읽고 바꾸는 `hostnamectl`·`hostname` 은 [hostnamectl·hostname 호스트 이름 다루기 시트](./uname·os-release·hostnamectl%20호스트%20이름%20다루기.md)에서 이어 다룹니다.
+호스트 이름을 읽고 바꾸는 `hostnamectl`·`hostname` 은 [hostnamectl·hostname 호스트 이름 다루기 시트](./hostnamectl·hostname.md)에서 이어 다룹니다.
 
 
 
@@ -527,7 +527,7 @@ Linux 7.2.12-orbstack-00394-gbecdd6130068 aarch64
 ubuntu
 ```
 
-systemd 가 도는 서버라면 `hostnamectl` 한 번이 같은 정보를 한 화면에 모읍니다. 그 줄만 고르는 예는 [호스트 이름 다루기 시트](./uname·os-release·hostnamectl%20호스트%20이름%20다루기.md)의 「hostnamectl 로 배포판과 커널 줄 고르기」 에 있습니다.
+systemd 가 도는 서버라면 `hostnamectl` 한 번이 같은 정보를 한 화면에 모읍니다. 그 줄만 고르는 예는 [호스트 이름 다루기 시트](./hostnamectl·hostname.md)의 「hostnamectl 로 배포판과 커널 줄 고르기」 에 있습니다.
 
 
 
@@ -586,7 +586,7 @@ cat /proc/sys/kernel/hostname    # 37d0d842ab53
 
 > 컨테이너 안의 `uname -r` 은 이미지의 배포판이 아니라 그 컨테이너를 돌리는 Linux 커널(맥에서는 OrbStack 이 띄운 Linux VM 의 커널)의 값입니다.
 
-`uname` 이 읽는 릴리스·버전·하드웨어는 커널에 들어 있는 값이고,[^uname2] 컨테이너는 이미지에서 배포판의 파일과 프로그램만 가져오므로 배포판이 달라도 커널 값은 같습니다. OrbStack 에서는 가벼운 Linux VM 하나가 커널을 쥐고 `ubuntu` 같은 머신이 그 커널을 나눠 씁니다.[^orb] `hostnamectl` 이 이 머신을 `Virtualization: lxc` 로 보이는 것도 그래서입니다([hostnamectl·hostname 호스트 이름 다루기 시트](./uname·os-release·hostnamectl%20호스트%20이름%20다루기.md)의 「상태 읽기」).
+`uname` 이 읽는 릴리스·버전·하드웨어는 커널에 들어 있는 값이고,[^uname2] 컨테이너는 이미지에서 배포판의 파일과 프로그램만 가져오므로 배포판이 달라도 커널 값은 같습니다. OrbStack 에서는 가벼운 Linux VM 하나가 커널을 쥐고 `ubuntu` 같은 머신이 그 커널을 나눠 씁니다.[^orb] `hostnamectl` 이 이 머신을 `Virtualization: lxc` 로 보이는 것도 그래서입니다([hostnamectl·hostname 호스트 이름 다루기 시트](./hostnamectl·hostname.md)의 「상태 읽기」).
 
 ```bash
 # 호스트(macOS)의 커널은 Darwin 이고 나머지 셋은 같은 Linux 커널을 보인다
@@ -637,11 +637,11 @@ cmp /etc/os-release /usr/lib/os-release && echo 내용이 같다    # 내용이 
 > 이 시트의 예와 이어지는 시트입니다.
 
 - [리눅스 명령어 시트](../README.md) — 다른 명령 시트 목록
-- [hostnamectl·hostname 호스트 이름 다루기 시트](./uname·os-release·hostnamectl%20호스트%20이름%20다루기.md) — 호스트 이름을 읽고 바꾸는 `hostnamectl`·`hostname`
+- [hostnamectl·hostname 호스트 이름 다루기 시트](./hostnamectl·hostname.md) — 호스트 이름을 읽고 바꾸는 `hostnamectl`·`hostname`
 - [하드웨어를 가리고 나면 무엇이 보일지를 정해야 한다](../../../book/learning-modern-linux/01-01.%ED%95%98%EB%93%9C%EC%9B%A8%EC%96%B4%EB%A5%BC%20%EA%B0%80%EB%A6%AC%EA%B3%A0%20%EB%82%98%EB%A9%B4%20%EB%AC%B4%EC%97%87%EC%9D%B4%20%EB%B3%B4%EC%9D%BC%EC%A7%80%EB%A5%BC%20%EC%A0%95%ED%95%B4%EC%95%BC%20%ED%95%9C%EB%8B%A4.md#명령-한-줄로-확인하는-방법) — 명령 한 줄이 시스템 콜 하나를 감싸는 예 (`id --user` 와 `getuid`)
 - [같은 자원인데 보는 자리에 따라 답이 갈린다](../../../book/learning-modern-linux/01-01.%ED%95%98%EB%93%9C%EC%9B%A8%EC%96%B4%EB%A5%BC%20%EA%B0%80%EB%A6%AC%EA%B3%A0%20%EB%82%98%EB%A9%B4%20%EB%AC%B4%EC%97%87%EC%9D%B4%20%EB%B3%B4%EC%9D%BC%EC%A7%80%EB%A5%BC%20%EC%A0%95%ED%95%B4%EC%95%BC%20%ED%95%9C%EB%8B%A4.md#4-같은-자원인데-보는-자리에-따라-답이-갈린다) — 전역으로 보이는 값과 컨테이너 안에서 갈리는 값의 구분
 - [커널은 전부를 하지만 운영체제는 아니다](../../../book/learning-modern-linux/02-01.%EC%BB%A4%EB%84%90%EC%9D%80%20%EC%A0%84%EB%B6%80%EB%A5%BC%20%ED%95%98%EC%A7%80%EB%A7%8C%20%EC%9A%B4%EC%98%81%EC%B2%B4%EC%A0%9C%EB%8A%94%20%EC%95%84%EB%8B%88%EB%8B%A4.md#무엇을-쓰고-있는지-확인하는-법) — `lscpu` 와 `uname -m` 으로 아키텍처 확인
-- [lscpu·nproc 참조 시트](./dmidecode·lscpu.md) — 하드웨어와 CPU 정보
+- [lscpu·nproc 참조 시트](./lscpu·nproc.md) — 하드웨어와 CPU 정보
 
 
 

@@ -8,10 +8,10 @@ source:
   - Linux man-pages proc(5), mem(4) (Debian 12 manpages)
   - Linux kernel documentation, The Unified Extensible Firmware Interface (UEFI)
 related:
-  - ./dmidecode%C2%B7lscpu.md
+  - ./lscpu%C2%B7nproc.md
   - ../README.md
   - ../../../book/learning-modern-linux/02-01.%EC%BB%A4%EB%84%90%EC%9D%80%20%EC%A0%84%EB%B6%80%EB%A5%BC%20%ED%95%98%EC%A7%80%EB%A7%8C%20%EC%9A%B4%EC%98%81%EC%B2%B4%EC%A0%9C%EB%8A%94%20%EC%95%84%EB%8B%88%EB%8B%A4.md
-  - ./uname%C2%B7os-release%C2%B7hostnamectl.md
+  - ./uname%C2%B7os-release%C2%B7lsb_release.md
 updated: 2026-11-13
 ---
 
@@ -25,7 +25,7 @@ updated: 2026-11-13
 
 > `dmidecode` 는 펌웨어가 적어 둔 DMI(SMBIOS) 표를 읽고, `lsmem`·`lshw` 는 표가 없을 때 메모리를 읽습니다.
 
-[lscpu·nproc 참조 시트](./dmidecode·lscpu.md)에서 펌웨어의 DMI 표와 메모리를 읽는 유스케이스를 떼어 낸 것입니다. 예는 그 시트의 「실습 준비」 블록을 돌린 상태에서 이어지고, 출력은 같은 Debian 12 컨테이너(dmidecode 3.4, util-linux 2.38.1, lshw 02.19)의 root 에서 받았습니다.
+[lscpu·nproc 참조 시트](./lscpu·nproc.md)에서 펌웨어의 DMI 표와 메모리를 읽는 유스케이스를 떼어 낸 것입니다. 예는 그 시트의 「실습 준비」 블록을 돌린 상태에서 이어지고, 출력은 같은 Debian 12 컨테이너(dmidecode 3.4, util-linux 2.38.1, lshw 02.19)의 root 에서 받았습니다.
 
 세 도구는 각각 dmidecode·util-linux·lshw 패키지의 외부 바이너리입니다. 이 환경(Apple Silicon 위 컨테이너)에는 DMI 표가 없어 `dmidecode` 가 안내 메시지만 내고, 표가 있는 서버나 x86 가상 머신에서는 표의 내용이 나옵니다.
 
@@ -147,7 +147,7 @@ Try 'lsmem --help' for more information.
 
 > 이 시트는 따로 만드는 것이 없고 원래 시트가 설치한 도구와 일반 사용자를 그대로 씁니다.
 
-먼저 [lscpu·nproc 참조 시트](./dmidecode·lscpu.md)의 「실습 준비」 블록을 돌립니다. 그 블록이 `dmidecode`·`lshw` 를 설치하고, 일반 사용자 `appuser` 는 「lshw」 와 「읽는 곳과 root 권한」 에서 씁니다.
+먼저 [lscpu·nproc 참조 시트](./lscpu·nproc.md)의 「실습 준비」 블록을 돌립니다. 그 블록이 `dmidecode`·`lshw` 를 설치하고, 일반 사용자 `appuser` 는 「lshw」 와 「읽는 곳과 root 권한」 에서 씁니다.
 
 ### 제조사·모델·BIOS 정보 읽기
 
@@ -462,7 +462,7 @@ cpus  : 8 (aarch64)
 memory: 7.8 GiB
 ```
 
-`--cpuset-cpus` 제한을 반영하려면 [lscpu·nproc 참조 시트](./dmidecode·lscpu.md)의 「컨테이너 CPU 제한이 보이는 곳」 처럼 `nproc` 을, `--cpus` 제한은 `cpu.max` 를 봅니다.
+`--cpuset-cpus` 제한을 반영하려면 [lscpu·nproc 참조 시트](./lscpu·nproc.md)의 「컨테이너 CPU 제한이 보이는 곳」 처럼 `nproc` 을, `--cpus` 제한은 `cpu.max` 를 봅니다.
 
 
 
@@ -502,10 +502,10 @@ man 은 DMI 표 정보가 "대개 부정확하거나 불완전하거나 그냥 �
 > 이 시트의 예와 이어지는 시트입니다.
 
 - [리눅스 명령어 시트](../README.md) — 다른 명령 시트 목록
-- [lscpu·nproc 참조 시트](./dmidecode·lscpu.md) — 이 시트가 이어받는 실습 준비와 `lscpu`·`nproc` 예
+- [lscpu·nproc 참조 시트](./lscpu·nproc.md) — 이 시트가 이어받는 실습 준비와 `lscpu`·`nproc` 예
 - [무엇을 쓰고 있는지 확인하는 법](../../../book/learning-modern-linux/02-01.%EC%BB%A4%EB%84%90%EC%9D%80%20%EC%A0%84%EB%B6%80%EB%A5%BC%20%ED%95%98%EC%A7%80%EB%A7%8C%20%EC%9A%B4%EC%98%81%EC%B2%B4%EC%A0%9C%EB%8A%94%20%EC%95%84%EB%8B%88%EB%8B%A4.md#무엇을-쓰고-있는지-확인하는-법) — CPU 계열을 `lscpu` 로 읽는 이유와 x86 출력 예
 - [BIOS 와 UEFI](../../../book/learning-modern-linux/02-01.%EC%BB%A4%EB%84%90%EC%9D%80%20%EC%A0%84%EB%B6%80%EB%A5%BC%20%ED%95%98%EC%A7%80%EB%A7%8C%20%EC%9A%B4%EC%98%81%EC%B2%B4%EC%A0%9C%EB%8A%94%20%EC%95%84%EB%8B%88%EB%8B%A4.md#bios-와-uefi) — `dmidecode` 가 읽는 펌웨어 표가 어디서 오는지의 배경
-- [uname·os-release·lsb_release 참조 시트](./uname%C2%B7os-release%C2%B7hostnamectl.md) — 커널과 배포판 이름·버전을 읽는 시트
+- [uname·os-release·lsb_release 참조 시트](./uname%C2%B7os-release%C2%B7lsb_release.md) — 커널과 배포판 이름·버전을 읽는 시트
 
 
 
