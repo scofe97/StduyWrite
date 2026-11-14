@@ -24,7 +24,7 @@ CLIENT = (140, 300)
 ENVOY, NODE = (630, 268), (630, 412)
 BW, BH = 380, 108
 
-ddx.band(d, 104, 564, "암호가 풀리는 자리가 Pod 안이라, 앱에는 자기 Pod 안에서 온 평문으로 보인다")
+ddx.band(d, 104, 564, "암호가 풀리는 자리는 Pod 안 — 앱에는 평문만 도착")
 
 def box(cx, cy, t, s, tag, c, w=BW):
     d.box(cx - w // 2, cy - BH // 2, w, BH, PAPER2, c, 1.1, 6)
@@ -50,9 +50,9 @@ d.path(f"M {NODE[0]+60} {NODE[1]-BH//2-6} L {ENVOY[0]+60} {ENVOY[1]+BH//2+10}", 
 d.chip(ENVOY[0] + 60, 340, "③ 평문 응답", INFO, 11)
 
 # Pod 링이 y 490 까지 내려온다 — 산문은 그 아래로
-d.t(36, 512, "앱이 보는 Client IP 는 127.0.0.1 이다 — 같은 Pod 안 Envoy 가 localhost 로 넘겼기 때문이다.",
+d.t(36, 512, "앱이 보는 Client IP 127.0.0.1 — 같은 Pod 의 Envoy 가 localhost 로 넘긴 요청",
      12, MUTED, KR, "start")
-d.t(36, 536, "레거시 앱에 HTTPS 를 붙이는 표준 수단이 이것이다 — 붙이는 것은 프로세스 하나뿐이다.",
+d.t(36, 536, "앱 코드 수정 없이 HTTPS 추가 — 붙이는 것은 프록시 컨테이너 하나",
      12, MUTED, KR, "start")
 d.legend(580, [("암호화된 구간", WARN), ("TLS 가 끝나는 자리와 평문 구간", ACC),
                ("Pod 경계와 평문만 아는 앱", INFO)])

@@ -28,10 +28,10 @@ ddx.matrix(
           ("여기가 진짜 차이다", "노출면이 좁다")], ACC),
     ])
 
-d.t(24, 480, "앞의 두 축은 이름과 형식의 흔적이지만, 마지막 축은 지금도 유효한 실질적 차이다 — "
-             "그래서 비밀은 Secret 에 담는다.", 11, MUTED, KR, "start")
-d.t(24, 502, "다만 Secret 도 기본 설정에서는 etcd 에 평문으로 저장된다. 저장 시 암호화는 따로 켜야 한다.",
-     11, MUTED, KR, "start")
+d.t(24, 480, "필드 구조 · type 은 진화의 흔적 · 쿠버네티스 취급(필요한 노드에만 · 메모리에만)은 지금도 유효한 차이 — 비밀은 Secret 에",
+    11, MUTED, KR, "start")
+d.t(24, 502, "단, Secret 도 기본 설정에서는 etcd 에 평문 저장 · 저장 시 암호화(EncryptionConfiguration)는 따로 켜야 함",
+    11, MUTED, KR, "start")
 d.legend(528, [("남은 흔적", INFO), ("지금도 유효한 차이", ACC)])
 d.save("08-03-secret-vs-configmap.svg")
 print("ok")

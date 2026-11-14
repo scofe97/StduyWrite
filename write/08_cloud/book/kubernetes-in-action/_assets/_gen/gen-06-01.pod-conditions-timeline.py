@@ -24,7 +24,7 @@ TICK_LABELS = ["① 생성", "② 스케줄링", "③ 샌드박스 준비", "④
                "⑤ 컨테이너 준비", "⑥ gate 통과", "⑦ 하나가 실패"]
 ROW_H, BAR_H = 44, 26
 
-ddx.band(d, 104, 500, "성격이 갈리므로 진단할 때 보는 자리도 다르다")
+ddx.band(d, 104, 500, "condition 두 갈래 — 한 번 충족 뒤 유지 · 생애 내내 여러 번 바뀜")
 
 for x, lab in zip(TICKS, TICK_LABELS):
     d.t(x, 168, lab, 10, SOFT, KR)
@@ -62,9 +62,8 @@ for x in TICKS[1:]:
     d.line(x, 190, x, 436, RULE, 0.8, "4 6")
 
 # 12px 한글 한 줄은 950px 을 넘기지 못한다 — 넘치면 overflow-check 가 잡는다. 두 줄로 나눈다.
-d.t(36, 466, "PodReadyToStartContainers 는 1.29 에서 더해진 다섯 번째다 — 책 표에는 없고 "
-             "실측(v1.35)에만 보인다.", 12, MUTED, KR, "start")
-d.t(36, 486, "쿠버네티스는 새 관측 축이 필요할 때 기존 것을 바꾸지 않고 목록에 더한다.",
+d.t(36, 466, "PodReadyToStartContainers · v1.29 부터 기본 활성 · 샌드박스 준비 표시 · 책 표에는 없음", 12, MUTED, KR, "start")
+d.t(36, 486, "새 관측 축 · 기존 condition 변경 없이 목록에 추가",
      12, MUTED, KR, "start")
 d.legend(516, [("True", OK), ("False", BAD), ("본문이 짚는 행", ACC)])
 d.save("06-01-pod-conditions-timeline.svg")

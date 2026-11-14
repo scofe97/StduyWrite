@@ -20,7 +20,7 @@ CY, BW, BH = 250, 200, 84
 WAIT, RUNN, TERM = 220, 500, 780
 ZONE_Y = 336
 
-ddx.band(d, 104, 656, "state 는 고정 목록이고 reason 은 kubelet 이 정의한다 — 외울 것은 층 구조뿐이다")
+ddx.band(d, 104, 656, "고정 state 3종 · kubelet 정의 reason 계층 구조")
 
 def state(cx, name, sub, c, focal=False):
     x, y = cx - BW // 2, CY - BH // 2
@@ -52,7 +52,7 @@ d.o.append(f'<circle cx="940" cy="{CY}" r="5" fill="{MUTED}"/>')
 BACK = CY - BH // 2 - 28
 d.path(f"M {TERM} {CY-BH//2-6} L {TERM} {BACK} L {WAIT} {BACK} L {WAIT} {CY-BH//2-10}",
        WARN, 1.4, m="warn", dash="6 5")
-d.t(500, BACK - 10, "↺ 재시작 (restartPolicy 허용 시) — 이때도 Pod phase 는 Running 그대로", 11, WARN, KR)
+d.t(500, BACK - 10, "↺ 재시작 (restartPolicy 허용 시) · Pod phase 는 Running 유지", 11, WARN, KR)
 
 # reason 층 — state 가 아니므로 아래로 내려 붙인다
 # 4 단짜리 Waiting 열이 가장 길다 — 존 높이는 그 열(34 + 4*40 + 3*8 = 218)에 맞춘다
@@ -82,10 +82,8 @@ for cx, items in REASONS.items():
         d.t(cx - RW // 2 + 12, y + 17, ddx.fit(name, 11, RW - 24, name), 11, c, MONO, "start", 600)
         d.t(cx - RW // 2 + 12, y + 32, ddx.fit(sub, 10, RW - 24, name), 10, SOFT, KR, "start")
 
-d.t(36, 604, "kubectl get 의 STATUS 칸에 뜨는 이름이 대부분 이 reason 이다 — state 이름이 아니다.",
-     12, MUTED, KR, "start")
-d.t(36, 624, "Terminated 는 이름일 뿐 실패가 아니다 — 성공·실패는 exitCode 와 reason 이 정하고, "
-             "reason 목록은 대표값이다.", 12, MUTED, KR, "start")
+d.t(36, 604, "kubectl get 의 STATUS 열 · 대부분 state 이름이 아닌 reason 값", 12, MUTED, KR, "start")
+d.t(36, 624, "Terminated ≠ 실패 · 성패는 exitCode·reason 기준 · reason 목록은 대표값", 12, MUTED, KR, "start")
 d.legend(672, [("시작 대기", WARN), ("정상", OK), ("실패", BAD),
                ("이름이 뜻을 정하지 않는 자리", ACC)])
 d.save("06-01-state-reason-map.svg")

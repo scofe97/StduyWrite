@@ -22,7 +22,7 @@ X0, XEND = 240, 940
 GATE = 660
 ROW_H, BAR_H = 52, 30
 
-ddx.band(d, 104, 528, "마지막 init 이 성공해야 이 문이 열린다 — 실패하면 주 컨테이너는 시작조차 못 한다")
+ddx.band(d, 104, 528, "마지막 init 이 성공해야 주 컨테이너 시작 — 실패 시 시작조차 못 함")
 
 d.t(X0, 190, "시간 →", 10, SOFT, KR, "start")
 d.line(60, 204, XEND, 204, RULE, 0.8)
@@ -48,8 +48,7 @@ ddx.bracket(d, 52, 229, 363, "순차", INFO)
 ddx.bracket(d, 52, 385, 467, "병렬", OK)
 
 # 마지막 행 막대가 437~467 을 쓴다 — 산문은 그 아래로
-d.t(36, 496, "init 이 도는 동안 주 컨테이너의 state 는 waiting/PodInitializing 이다 — "
-             "아직 시작 전이라는 뜻이다", 12, MUTED, KR, "start")
+d.t(36, 496, "init 실행 중 주 컨테이너 상태: waiting(PodInitializing, 시작 대기)", 12, MUTED, KR, "start")
 d.legend(544, [("순차로 도는 init", INFO), ("한꺼번에 뜨는 주 컨테이너", OK), ("문이 열리는 시점", ACC)])
 d.save("05-03-init-container-sequence.svg")
 print("ok init-container-sequence")

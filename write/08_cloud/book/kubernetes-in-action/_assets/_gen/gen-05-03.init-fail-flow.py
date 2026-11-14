@@ -20,7 +20,7 @@ OKBOX, ERR, LOOP = (560, 372), (200, 500), (200, 610)
 STUCK = (660, 610)
 BW, BH = 240, 80
 
-ddx.band(d, 104, 730, "문이 열리지 않으면 주 컨테이너는 기다리기만 한다 — Pod 는 살아 있고 로그도 남는다")
+ddx.band(d, 104, 730, "init 미완료 시 주 컨테이너는 대기 — Pod 는 남고 로그도 남음")
 
 def step(cx, cy, t, s, c, w=BW, h=BH):
     d.box(cx - w // 2, cy - h // 2, w, h, PAPER2, c, 1.1, 6)
@@ -62,9 +62,9 @@ d.o.append(f'<circle cx="880" cy="{OKBOX[1]}" r="8" fill="none" stroke="{OK}" st
 d.o.append(f'<circle cx="880" cy="{OKBOX[1]}" r="5" fill="{OK}"/>')
 d.path(f"M {OKBOX[0]+BW//2+6} {OKBOX[1]} L 868 {OKBOX[1]}", OK, 1.4, m="ok")
 
-d.t(36, 682, "정상 전이는 Init:0/2 → Init:1/2 → PodInitializing → Running 이고, 실패는 "
-             "Init:Error → 재시도 → Init:CrashLoopBackOff 다.", 12, MUTED, KR, "start")
-d.t(36, 706, "컨테이너가 죽어도 Pod 가 살아 있는 한 로그는 조회된다 — 사인을 찾을 때 먼저 볼 곳이다.",
+d.t(36, 682, "정상 전이: Init:0/2 → Init:1/2 → PodInitializing → Running / "
+             "실패 전이: Init:Error → 재시도 → Init:CrashLoopBackOff", 12, MUTED, KR, "start")
+d.t(36, 706, "Pod 유지 시 종료된 컨테이너 로그도 조회 가능 — 실패 원인을 먼저 볼 곳",
      12, MUTED, KR, "start")
 d.legend(746, [("준비 단계", INFO), ("문이 열린 뒤", OK), ("실패 경로", BAD),
                ("갇힌 주 컨테이너", WARN), ("판정", ACC)])
