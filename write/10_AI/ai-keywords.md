@@ -1,14 +1,14 @@
 ---
 title: AI 개발 키워드 — DevOps 축
-tags: [landscape, ai, llm, agent, mcp, gitops, devops]
+tags: [keywords, ai, llm, agent, mcp, gitops, devops]
 status: final
 source:
   - ../10_AI/README.md
   - ../07_devops/book/aic_ai-infra-claude/README.md
 related:
-  - README.md
-  - k8s-keywords.md
-  - observability-keywords.md
+  - ../README.md
+  - ../08_cloud/k8s-keywords.md
+  - ../06_observability/observability-keywords.md
 updated: 2026-10-10
 ---
 
@@ -79,7 +79,7 @@ updated: 2026-10-10
 | 사람이 끼는 지점 | 필수 | [AI Agentization](../10_AI/02-05.AI%20Agentization%20%E2%80%94%20%EC%9B%8C%ED%81%AC%ED%94%8C%EB%A1%9C%EC%9A%B0%EC%99%80%20%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8%20%EC%82%AC%EC%9D%B4.md) | AI Agents 13장 |
 | 완료 검증과 루브릭 | 필수 | [AI Agentization](../10_AI/02-05.AI%20Agentization%20%E2%80%94%20%EC%9B%8C%ED%81%AC%ED%94%8C%EB%A1%9C%EC%9A%B0%EC%99%80%20%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8%20%EC%82%AC%EC%9D%B4.md) | AI Agents 9장 |
 | 하네스 사례 하나 뜯어보기 | 선택 | 자료 미연결 | |
-| ReAct — 추론과 도구 호출을 번갈아 반복 | 추천 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [ReAct 논문](https://arxiv.org/abs/2210.03629) |
+| ReAct — 추론과 도구 호출을 번갈아 반복 | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [ReAct 논문](https://arxiv.org/abs/2210.03629) |
 
 
 
@@ -154,7 +154,7 @@ updated: 2026-10-10
 | 모델 거버넌스 | 추천 | | Introducing MLOps 8장 |
 | 추론 서빙 비용 | 선택 | | AI Engineering 9장 |
 | 아키텍처와 사용자 피드백 | 선택 | | AI Engineering 10장 |
-| 운영 에이전트 협업 — 경보 분석에서 수정 PR 까지 | 선택 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
+| 운영 에이전트 협업 — 경보 분석에서 수정 PR 까지 | 선택 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
 
 
 
@@ -168,8 +168,8 @@ updated: 2026-10-10
 | 모델 아키텍처와 어텐션 내부 | 같은 이유입니다. 모델은 이 로드맵에서 고르고 부르는 대상입니다. AI Engineering 2장도 걸지 않았습니다 |
 | 임베딩 모델 학습과 벡터 DB 운영 | 2단계는 검색을 쓰는 쪽만 봅니다. 벡터 DB 자체의 운영은 자료가 생기면 별도로 답니다 |
 | 에이전트 제품의 화면 설계 | AI Agents 3·7장은 사용자 경험과 학습 루프 쪽입니다. 직무 축이 다릅니다 |
-| 쿠버네티스 오브젝트와 내부 구조 | [Kubernetes 로드맵](k8s-keywords.md)이 맡습니다. 6단계는 그 위에 배포 흐름을 얹는 자리입니다 |
-| 지표 · 로그 · 트레이스의 일반 이론 | [관측 가능성 로드맵](observability-keywords.md)이 맡습니다. 8단계는 에이전트 고유 축만 봅니다 |
+| 쿠버네티스 오브젝트와 내부 구조 | [Kubernetes 로드맵](../08_cloud/k8s-keywords.md)이 맡습니다. 6단계는 그 위에 배포 흐름을 얹는 자리입니다 |
+| 지표 · 로그 · 트레이스의 일반 이론 | [관측 가능성 로드맵](../06_observability/observability-keywords.md)이 맡습니다. 8단계는 에이전트 고유 축만 봅니다 |
 | MLOps 의 모델 개발 절차 | Introducing MLOps 4장과 9~11장 사례는 모델을 만드는 팀의 일입니다 |
 | GPU 스케줄링과 학습 클러스터 | 소장 자료가 없습니다. 추론 서빙 인프라를 실제로 맡게 되면 그때 엽니다 |
 | ML 플랫폼 — 피처 스토어 | 백엔드 키워드 목록이 백엔드 밖 심화로 따로 뺀 키워드 |

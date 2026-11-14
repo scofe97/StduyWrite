@@ -1,15 +1,15 @@
 ---
 title: 관측 가능성 개발 키워드
-tags: [landscape, observability, monitoring, prometheus, grafana, opentelemetry, slo]
+tags: [keywords, observability, monitoring, prometheus, grafana, opentelemetry, slo]
 status: final
 source:
   - ../06_observability/book/mastering_prometheus/README.md
   - ../06_observability/book/observability_with_grafana/README.md
 related:
-  - README.md
-  - os-keywords.md
-  - k8s-keywords.md
-  - network-keywords.md
+  - ../README.md
+  - ../02_os/os-keywords.md
+  - ../08_cloud/k8s-keywords.md
+  - ../02_os/network-keywords.md
 updated: 2026-10-14
 ---
 
@@ -66,7 +66,7 @@ updated: 2026-10-14
 | range query · step · 시간 창 | 추천 | | Prometheus Up & Running 13장 |
 | 레코딩 룰 | 추천 | | Prometheus Up & Running 17장 |
 | 서비스 디스커버리와 relabeling | 필수 | [SD와 relabeling](../06_observability/book/mastering_prometheus/04-01.%EC%84%9C%EB%B9%84%EC%8A%A4%20%EB%94%94%EC%8A%A4%EC%BB%A4%EB%B2%84%EB%A6%AC%EC%99%80%20relabeling.md) | Mastering Prometheus 4장 |
-| 컨테이너와 Kubernetes 지표 | 필수 | [k8s 로드맵](k8s-keywords.md) | Prometheus Up & Running 9장 |
+| 컨테이너와 Kubernetes 지표 | 필수 | [k8s 로드맵](../08_cloud/k8s-keywords.md) | Prometheus Up & Running 9장 |
 | Node Exporter 해부와 collector | 추천 | [Node Exporter](../06_observability/book/mastering_prometheus/08-01.Node%20Exporter%20%E2%80%94%20exporter%20%EC%9D%98%20%ED%95%B4%EB%B6%80%EC%99%80%20collector.md) | Mastering Prometheus 8장 |
 | Prometheus 배포와 Operator | 추천 | [Prometheus 배포](../06_observability/book/mastering_prometheus/02-01.Prometheus%20%EB%B0%B0%ED%8F%AC%20%E2%80%94%20%EC%8A%A4%ED%83%9D%20%EA%B5%AC%EC%84%B1%EC%9A%94%EC%86%8C%EC%99%80%20Operator.md) | Mastering Prometheus 2장 |
 
@@ -102,7 +102,7 @@ updated: 2026-10-14
 | 사고에서 배우기 · 포스트모템 | 추천 | | Site Reliability Engineering 10장 |
 | 근거의 출처를 함께 남기기 | 추천 | | |
 | SLO 기반 신뢰성 | 추천 | | Observability Engineering 11장 |
-| 에이전트 기반 원인 분석 · 맥락 비용 | 선택 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) · [AI 로드맵](ai-keywords.md) | |
+| 에이전트 기반 원인 분석 · 맥락 비용 | 선택 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) · [AI 로드맵](../10_AI/ai-keywords.md) | |
 
 
 
@@ -135,8 +135,8 @@ updated: 2026-10-14
 | RUM — Faro SDK · Web Vitals | 선택 | [RUM](../06_observability/book/observability_with_grafana/12-01.RUM%20%E2%80%94%20Faro%20SDK%C2%B7Web%20Vitals%C2%B7%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%90%EC%84%9C%20%EB%B0%B1%EC%97%94%EB%93%9C%EB%A1%9C.md) | Observability with Grafana 12장 |
 | 관측 가능성 주도 개발 | 선택 | | Observability Engineering 9장 |
 | AI 에이전트의 자리 | 선택 | | Observability Engineering 10장 |
-| 드릴다운 계층 · 서비스 맵 | 추천 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
-| 노드와 Pod 수명 이벤트를 지표와 한 시간축에 | 추천 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
+| 드릴다운 계층 · 서비스 맵 | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
+| 노드와 Pod 수명 이벤트를 지표와 한 시간축에 | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
 
 
 
@@ -146,10 +146,10 @@ updated: 2026-10-14
 
 | 대상 | 이유 |
 |---|---|
-| perf · Ftrace · eBPF 의 커널 관측 | [OS 로드맵](os-keywords.md) 5단계가 맡습니다. 여기는 애플리케이션이 스스로 내보내는 신호입니다 |
-| 이벤트 · `kubectl` 로 좁히는 오브젝트 진단 | [Kubernetes 로드맵](k8s-keywords.md) 7단계가 맡습니다 |
-| 패킷 캡처와 Hubble 의 흐름 관측 | [네트워크 로드맵](network-keywords.md) 3·6단계가 맡습니다 |
-| JVM 프로파일과 힙 덤프 | [JVM 로드맵](jvm-keywords.md) 6·7단계가 맡습니다 |
+| perf · Ftrace · eBPF 의 커널 관측 | [OS 로드맵](../02_os/os-keywords.md) 5단계가 맡습니다. 여기는 애플리케이션이 스스로 내보내는 신호입니다 |
+| 이벤트 · `kubectl` 로 좁히는 오브젝트 진단 | [Kubernetes 로드맵](../08_cloud/k8s-keywords.md) 7단계가 맡습니다 |
+| 패킷 캡처와 Hubble 의 흐름 관측 | [네트워크 로드맵](../02_os/network-keywords.md) 3·6단계가 맡습니다 |
+| JVM 프로파일과 힙 덤프 | [JVM 로드맵](../01_language/jvm-keywords.md) 6·7단계가 맡습니다 |
 | `06_observability` 의 프로젝트 노트 | LGTM 스택 구축 기록입니다. 순서를 정하는 근거가 아니라 사례입니다 |
 | OpenSearch 의 검색 애플리케이션 축 | 9·10장은 검색 제품을 만드는 쪽입니다. 4단계는 로그 백엔드로만 씁니다 |
 | Grafana Pyroscope · k6 | 소장 책에 장은 있지만 정독 노트가 없습니다. 프로파일링과 부하 시험이 필요해질 때 엽니다 |

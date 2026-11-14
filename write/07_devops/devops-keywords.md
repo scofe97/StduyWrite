@@ -1,15 +1,15 @@
 ---
 title: DevOps 개발 키워드
-tags: [landscape, devops, ci-cd, jenkins, gitops, argocd, helm, kustomize, iac, terraform]
+tags: [keywords, devops, ci-cd, jenkins, gitops, argocd, helm, kustomize, iac, terraform]
 status: draft
 source:
   - ../07_devops/README.md
 related:
-  - README.md
-  - k8s-keywords.md
-  - observability-keywords.md
-  - ai-keywords.md
-  - spring-keywords.md
+  - ../README.md
+  - ../08_cloud/k8s-keywords.md
+  - ../06_observability/observability-keywords.md
+  - ../10_AI/ai-keywords.md
+  - ../09_spring/spring-keywords.md
 updated: 2026-11-03
 ---
 
@@ -186,9 +186,9 @@ updated: 2026-11-03
 
 | 대상 | 이유 |
 |---|---|
-| 클러스터 오브젝트 · admission 정책 · 런타임 보안 | [Kubernetes 로드맵](k8s-keywords.md) 6단계가 맡습니다 |
-| Jenkins 메트릭 대시보드 · 관측 설정 코드화 | [관측 가능성 로드맵](observability-keywords.md) 7단계가 맡습니다 |
-| GitAIOps — AI 와 함께 선언하고 배포하기 | [AI 로드맵](ai-keywords.md) 6단계가 맡습니다 |
-| bootJar · Layered JAR 등 프레임워크 빌드 산출물 | [Spring 로드맵](spring-keywords.md) 9단계가 맡습니다 |
-| cgroup · namespace 의 커널 격리 구현 | [OS 로드맵](os-keywords.md) 3단계가 맡습니다 |
-| Istio 및 서비스 메시 트래픽 관리 | [네트워크 로드맵](network-keywords.md) 7단계가 맡습니다 |
+| 클러스터 오브젝트 · admission 정책 · 런타임 보안 | [Kubernetes 로드맵](../08_cloud/k8s-keywords.md) 6단계가 맡습니다 |
+| Jenkins 메트릭 대시보드 · 관측 설정 코드화 | [관측 가능성 로드맵](../06_observability/observability-keywords.md) 7단계가 맡습니다 |
+| GitAIOps — AI 와 함께 선언하고 배포하기 | [AI 로드맵](../10_AI/ai-keywords.md) 6단계가 맡습니다 |
+| bootJar · Layered JAR 등 프레임워크 빌드 산출물 | [Spring 로드맵](../09_spring/spring-keywords.md) 9단계가 맡습니다 |
+| cgroup · namespace 의 커널 격리 구현 | [OS 로드맵](../02_os/os-keywords.md) 3단계가 맡습니다 |
+| Istio 및 서비스 메시 트래픽 관리 | [네트워크 로드맵](../02_os/network-keywords.md) 7단계가 맡습니다 |

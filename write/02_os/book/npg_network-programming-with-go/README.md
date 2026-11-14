@@ -6,14 +6,14 @@ source:
   - 《Network Programming with Go》 (Adam Woodbeck, No Starch Press, 2021-03) ISBN 978-1-7185-0088-4 — 서문과 장 단위 PDF 14편. 저자·출판 정보는 https://nostarch.com/networkprogrammingwithgo 에서 2026-10-06 확인
   - https://learning.oreilly.com/library/view/network-programming-with/9781098128890/  # 챕터 PDF 를 뜬 O'Reilly 판
   - 챕터 PDF 폴더 — GoogleDrive/내 드라이브/book/Network Programming with Go/
-  - ../../../landscape/go-keywords.md  # 이 책을 6단계 필수로 둔 로드맵
+  - ../../../01_language/go-keywords.md  # 이 책을 6단계 필수로 둔 로드맵
 related:
   - ../../README.md
   - ../tii_tcp-ip-illustrated/README.md
   - ../cntd_computer-networking-top-down/README.md
   - ../../../01_language/book/lgo_learning-go/README.md
-  - ../../../landscape/go-keywords.md
-  - ../../../landscape/network-keywords.md
+  - ../../../01_language/go-keywords.md
+  - ../../network-keywords.md
   - ../../../01_language/docs/go/net/README.md  # net·net/http 세부 스펙 정본 (공식문서+go1.25.1 소스)
 learning:
   topic: network-programming-with-go
@@ -47,7 +47,7 @@ updated: 2026-10-21
 
 서문 "What's in This Book" 은 책을 4부로 나눕니다. 1·2장이 네트워크 기초를 깔고, 3~7장이 TCP·UDP·Unix 소켓을 짭니다. 8~11장은 HTTP 와 TLS 를, 12~14장은 직렬화·관측·클라우드 배포를 다룹니다. 아래 표의 "원문이 밝힌 목표"는 서문의 장 소개 문장을 옮긴 것입니다.
 
-"로드맵에서 받치는 개념" 칸은 그 장이 로드맵의 어느 개념 행을 채우는지와 그 행의 우선순위를 적습니다. 선행 조건이 아닙니다. 예를 들어 "Go 6단계 TCP 스트림 · 필수"는 [Go 로드맵](../../../landscape/go-keywords.md) 6단계(서비스)의 "TCP 스트림" 개념을 이 장으로 배우고, 그 개념을 빼면 뒤가 막힌다는 뜻입니다.
+"로드맵에서 받치는 개념" 칸은 그 장이 로드맵의 어느 개념 행을 채우는지와 그 행의 우선순위를 적습니다. 선행 조건이 아닙니다. 예를 들어 "Go 6단계 TCP 스트림 · 필수"는 [Go 로드맵](../../../01_language/go-keywords.md) 6단계(서비스)의 "TCP 스트림" 개념을 이 장으로 배우고, 그 개념을 빼면 뒤가 막힌다는 뜻입니다.
 
 이 책을 펴기 전에 갖출 것은 서문이 밝힌 대로 Go 문법과 모듈 사용 경험이고, 로드맵에서는 [Learning Go](../../../01_language/book/lgo_learning-go/README.md)가 맡는 1~5단계가 그 자리입니다.
 

@@ -1,14 +1,14 @@
 ---
 title: 데이터 개발 키워드
-tags: [landscape, data, database, storage, replication, consensus, stream]
+tags: [keywords, data, database, storage, replication, consensus, stream]
 status: final
 source:
   - ../05_data/book/designing-data-intensive-applications/README.md
 related:
-  - README.md
-  - spring-keywords.md
-  - jvm-keywords.md
-  - observability-keywords.md
+  - ../README.md
+  - ../09_spring/spring-keywords.md
+  - ../01_language/jvm-keywords.md
+  - ../06_observability/observability-keywords.md
   - ../05_data/README.md
 updated: 2026-10-14
 ---
@@ -91,7 +91,7 @@ updated: 2026-10-14
 | 컬럼 지향 저장 | 추천 | [컬럼 지향 저장](../05_data/book/designing-data-intensive-applications/04-05.%EB%B6%84%EC%84%9D%EC%9A%A9%20%EC%BB%AC%EB%9F%BC%20%EC%A7%80%ED%96%A5%20%EC%A0%80%EC%9E%A5.md) | DDIA 4장 |
 | 다차원 · 전문 · 벡터 인덱스 | 추천 | [다차원·전문·벡터 인덱스](../05_data/book/designing-data-intensive-applications/04-06.%EB%8B%A4%EC%B0%A8%EC%9B%90%C2%B7%EC%A0%84%EB%AC%B8%C2%B7%EB%B2%A1%ED%84%B0%20%EC%9D%B8%EB%8D%B1%EC%8A%A4.md) | DDIA 4장 |
 | 전문 검색 엔진의 색인 | 선택 | | Elasticsearch 3·4 · 7장 |
-| 검색 엔진 캐시와 cold start — 파일시스템 캐시 · 노드 쿼리 캐시 · 샤드 요청 캐시 | 추천 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [검색 속도 조정](https://www.elastic.co/docs/deploy-manage/production-guidance/optimize-performance/search-speed) |
+| 검색 엔진 캐시와 cold start — 파일시스템 캐시 · 노드 쿼리 캐시 · 샤드 요청 캐시 | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [검색 속도 조정](https://www.elastic.co/docs/deploy-manage/production-guidance/optimize-performance/search-speed) |
 | 데이터베이스 인덱스 · B-트리 · 해시 인덱스 · 비트맵 인덱스 · 클러스터드 인덱스 · 논클러스터드 인덱스 | 선택 | [데이터베이스 인덱스](../05_data/01_foundation/01-05.%EC%9D%B8%EB%8D%B1%EC%8A%A4%20%EC%9D%B4%EB%A1%A0.md) · [B-트리](../05_data/book/designing-data-intensive-applications/04-03.B-tree%EC%99%80%20LSM%20%EB%B9%84%EA%B5%90.md) · [해시 인덱스](../05_data/book/designing-data-intensive-applications/04-01.OLTP%20%EC%A0%80%EC%9E%A5%EA%B3%BC%20%EC%9D%B8%EB%8D%B1%EC%8A%A4%20%EA%B8%B0%EC%B4%88.md) · [비트맵 인덱스](../05_data/book/designing-data-intensive-applications/04-05.%EB%B6%84%EC%84%9D%EC%9A%A9%20%EC%BB%AC%EB%9F%BC%20%EC%A7%80%ED%96%A5%20%EC%A0%80%EC%9E%A5.md) · [논클러스터드 인덱스](../05_data/book/designing-data-intensive-applications/07-04.%EB%B3%B4%EC%A1%B0%20%EC%9D%B8%EB%8D%B1%EC%8A%A4%EC%99%80%207%EC%9E%A5%20%EC%A2%85%ED%95%A9.md) | |
 | 커버링 인덱스 · 부분 인덱스 · 표현식 인덱스 · 컴포지트·멀티컬럼 인덱스 · 인덱스 인터섹션 | 선택 | [커버링 인덱스](../05_data/01_foundation/01-05.%EC%9D%B8%EB%8D%B1%EC%8A%A4%20%EC%9D%B4%EB%A1%A0.md) · [부분 인덱스](../05_data/01_foundation/01-05.%EC%9D%B8%EB%8D%B1%EC%8A%A4%20%EC%9D%B4%EB%A1%A0.md) · [표현식 인덱스](../05_data/01_foundation/01-05.%EC%9D%B8%EB%8D%B1%EC%8A%A4%20%EC%9D%B4%EB%A1%A0.md) · [컴포지트·멀티컬럼 인덱스](../05_data/01_foundation/01-05.%EC%9D%B8%EB%8D%B1%EC%8A%A4%20%EC%9D%B4%EB%A1%A0.md) | |
 | EXPLAIN ANALYZE · 쿼리 플래너 · 코스트 기반 옵티마이저 · 규칙 기반 옵티마이저 · 통계 정보 · 히스토그램 · 카디널리티 추정 · 통계 갱신 | 선택 | [EXPLAIN ANALYZE](../05_data/01_foundation/01-05.%EC%9D%B8%EB%8D%B1%EC%8A%A4%20%EC%9D%B4%EB%A1%A0.md) | |
@@ -138,7 +138,7 @@ updated: 2026-10-14
 | 요청 라우팅과 리밸런싱 | 필수 | [요청 라우팅과 리밸런싱](../05_data/book/designing-data-intensive-applications/07-03.%EC%9A%94%EC%B2%AD%20%EB%9D%BC%EC%9A%B0%ED%8C%85%EA%B3%BC%20%EB%A6%AC%EB%B0%B8%EB%9F%B0%EC%8B%B1.md) | DDIA 7장 · PoDS 19장 |
 | 샤딩과 보조 인덱스 | 추천 | [샤딩과 보조 인덱스](../05_data/book/designing-data-intensive-applications/07-04.%EB%B3%B4%EC%A1%B0%20%EC%9D%B8%EB%8D%B1%EC%8A%A4%EC%99%80%207%EC%9E%A5%20%EC%A2%85%ED%95%A9.md) | DDIA 7장 |
 | 복제 일관성의 구현 | 추천 | [N·W·R 정족수](../03_architecture/book/system-design/06-01.%ED%82%A4-%EA%B0%92%20%EC%A0%80%EC%9E%A5%EC%86%8C%EB%8A%94%20CAP%20%EC%84%A0%ED%83%9D%20%EC%95%84%EB%9E%98%20%EC%95%88%EC%A0%95%20%ED%95%B4%EC%8B%9C%EB%A1%9C%20%EB%82%98%EB%88%84%EA%B3%A0%20N%C2%B7W%C2%B7R%20%EC%A0%95%EC%A1%B1%EC%88%98%EB%A1%9C%20%EB%B3%B5%EC%A0%9C%20%EC%9D%BC%EA%B4%80%EC%84%B1%EC%9D%84%20%EA%B3%A0%EB%A5%B8%EB%8B%A4.md) · [벡터 시계·가십·머클 트리](../03_architecture/book/system-design/06-02.%EB%B2%A1%ED%84%B0%20%EC%8B%9C%EA%B3%84%C2%B7%EA%B0%80%EC%8B%AD%C2%B7%EC%9E%84%EC%8B%9C%20%EC%9C%84%ED%83%81%C2%B7%EB%A8%B8%ED%81%B4%20%ED%8A%B8%EB%A6%AC%EA%B0%80%20%EC%B6%A9%EB%8F%8C%EA%B3%BC%20%EC%9E%A5%EC%95%A0%EB%A5%BC%20%EB%8B%A4%EB%A3%A8%EA%B3%A0%20%EC%93%B0%EA%B8%B0%EC%99%80%20%EC%9D%BD%EA%B8%B0%EB%8A%94%20SSTable%20%EC%9D%84%20%EC%A7%80%EB%82%9C%EB%8B%A4.md) | Database Internals 11·12장 · System Design Interview 6장 |
-| 무중단 클러스터 이전 — 쓰기 복제 · shadow read · 응답 전환 | 추천 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
+| 무중단 클러스터 이전 — 쓰기 복제 · shadow read · 응답 전환 | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
 | 읽기 복제본 | 선택 | [읽기 복제본](../03_architecture/book/bytebytego-system-design/01-02.%ED%8C%8C%ED%8B%B0%EC%85%94%EB%8B%9D%EA%B3%BC%20%EC%9D%BD%EA%B8%B0%20%EB%B3%B5%EC%A0%9C%EB%B3%B8%EC%9D%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4%EB%A5%BC%20%EB%84%93%ED%9E%88%EA%B3%A0%20%EC%A0%84%EC%97%AD%20%EC%9C%A0%EC%9D%BC%20ID%20%EB%8A%94%20%EB%82%98%EB%89%9C%20%EB%8D%B0%EC%9D%B4%ED%84%B0%EC%97%90%20%EC%88%9C%EC%84%9C%EB%A5%BC%20%EC%A4%80%EB%8B%A4.md) | |
 | 물리적 복제 · 논리적 복제 · 스트리밍 복제 · 비동기 복제 · 반동기 복제 · 동기 복제 · 멀티 소스 복제 · 그룹 복제 · 갈레라 | 선택 | [반동기 복제](../05_data/book/designing-data-intensive-applications/06-01.%EB%B3%B5%EC%A0%9C%20%EA%B0%9C%EC%9A%94%EC%99%80%20%EB%8B%A8%EC%9D%BC%20%EB%A6%AC%EB%8D%94.md) | |
 | 아카이브 로그 · 바이너리 로그 · 릴레이 로그 · GTID · 포지션 기반 복제 | 선택 | | |
@@ -245,8 +245,8 @@ updated: 2026-10-14
 | 대상 | 이유 |
 |---|---|
 | SQL 문법 · MySQL 실행 계획 · 인덱스 튜닝 | 소장 책에 없고, 이 저장소에도 아직 노트가 없습니다 |
-| JDBC · 커넥션 풀 · JPA · QueryDSL | 도구를 익히는 축입니다. `05_data/03_persistence` 와 [Spring 로드맵](spring-keywords.md) 4단계가 맡고, 커넥션 풀 고갈은 [JVM 로드맵](jvm-keywords.md) 7단계가 봅니다 |
-| `@Transactional` 과 전파 · 롤백 규칙 | [Spring 로드맵](spring-keywords.md) 4단계가 맡습니다. 6단계는 격리 수준까지입니다 |
+| JDBC · 커넥션 풀 · JPA · QueryDSL | 도구를 익히는 축입니다. `05_data/03_persistence` 와 [Spring 로드맵](../09_spring/spring-keywords.md) 4단계가 맡고, 커넥션 풀 고갈은 [JVM 로드맵](../01_language/jvm-keywords.md) 7단계가 봅니다 |
+| `@Transactional` 과 전파 · 롤백 규칙 | [Spring 로드맵](../09_spring/spring-keywords.md) 4단계가 맡습니다. 6단계는 격리 수준까지입니다 |
 | DB 덤프 · 로컬 이관 · 마이그레이션 도구 | `05_data/06_operations` 가 맡습니다. 순서를 말할 대상이 아닙니다 |
 | Kafka 브로커 설계와 운영 | `04_messaging` 이 정본입니다. 9단계는 로그 기반 브로커의 원리까지입니다 |
 | 검색 애플리케이션 만들기 | Elasticsearch in Action 의 절반은 제품을 만드는 쪽입니다. 3단계는 색인 구조만 봅니다 |

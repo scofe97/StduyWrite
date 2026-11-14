@@ -4,7 +4,7 @@ tags: [moc, os, linux, kernel, networking]
 status: final
 related:
   - ../README.md
-  - ../landscape/os-keywords.md
+  - os-keywords.md
   - ./kernel/README.md
   - ./book/learning-modern-linux/README.md
   - ./book/ostep_operating-systems-three-easy-pieces/README.md
@@ -54,7 +54,7 @@ updated: 2026-11-14
 
 ### os-keywords.md
 
-키워드 파일: [os-keywords.md](../landscape/os-keywords.md)
+키워드 파일: [os-keywords.md](os-keywords.md)
 
 | 묶음 | 다룬 문서 | 빈 필수 키워드 |
 |---|---|---|
@@ -67,7 +67,7 @@ updated: 2026-11-14
 
 ### network-keywords.md
 
-키워드 파일: [network-keywords.md](../landscape/network-keywords.md)
+키워드 파일: [network-keywords.md](network-keywords.md)
 
 | 묶음 | 다룬 문서 | 빈 필수 키워드 |
 |---|---|---|
@@ -87,7 +87,7 @@ updated: 2026-11-14
 
 | 경로 | 범위 |
 |------|------|
-| [OS 로드맵](../landscape/os-keywords.md) | 백엔드·Kubernetes 운영자가 OS 문제를 해석하는 학습 순서 |
+| [OS 로드맵](os-keywords.md) | 백엔드·Kubernetes 운영자가 OS 문제를 해석하는 학습 순서 |
 | [networking-and-kubernetes/](../08_cloud/book/networking-and-kubernetes/README.md) | 커널 네트워크 메커니즘의 정본 — netns·veth·bridge·netfilter·conntrack·TC·eBPF·kube-proxy·CNI (책 기반, `08_cloud` 소재) |
 | [kernel/](./kernel/README.md) | cgroup v2 깊이, 마운트 네임스페이스 propagation, cgroup 사례, OverlayFS와 user namespace |
 | [learning-modern-linux/](./book/learning-modern-linux/README.md) | 클라우드 네이티브 환경을 전제로 리눅스를 한 바퀴 도는 개론 — 커널·셸·접근 제어·파일시스템·네트워크·관측 (책 기반) |
@@ -108,7 +108,7 @@ updated: 2026-11-14
 
 ## 추천 읽기 경로
 
-백엔드·Kubernetes 운영자는 [OS 로드맵](../landscape/os-keywords.md)의 1~4단계를 먼저 따릅니다. OOMKilled·CPU throttling은 `kernel/`, Pod 격리는 [container-security](../08_cloud/book/container-security/README.md) 04-01을 봅니다. DNS·Service·NAT 문제는 [N&K 정독본](../08_cloud/book/networking-and-kubernetes/README.md), 성능 병목은 `book/systems-performance/`으로 확장합니다.
+백엔드·Kubernetes 운영자는 [OS 로드맵](os-keywords.md)의 1~4단계를 먼저 따릅니다. OOMKilled·CPU throttling은 `kernel/`, Pod 격리는 [container-security](../08_cloud/book/container-security/README.md) 04-01을 봅니다. DNS·Service·NAT 문제는 [N&K 정독본](../08_cloud/book/networking-and-kubernetes/README.md), 성능 병목은 `book/systems-performance/`으로 확장합니다.
 
 커널 모듈 작성이나 커널 소스 자체가 목적일 때만 `book/linux-kernel-programming/`을 별도 정독합니다. 컨테이너 보안 옵션과 공급망 위험을 판단하려면 1~2단계 뒤 `book/container-security/`으로 이동합니다.
 
@@ -116,6 +116,6 @@ updated: 2026-11-14
 
 ## 관련 문서
 
-- [OS 학습 로드맵](../landscape/os-keywords.md) — OS 전체를 가로지르는 추천 순서
+- [OS 학습 로드맵](os-keywords.md) — OS 전체를 가로지르는 추천 순서
 - [write/ MOC](../README.md) — 전체 카테고리 지도
 - [08_cloud/kubernetes/](../08_cloud/kubernetes/README.md) — 본 카테고리의 활용처

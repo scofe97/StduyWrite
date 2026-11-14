@@ -19,7 +19,7 @@ related:
   - ../../book/cntd_computer-networking-top-down/README.md
   - ../../book/paw_packet-analysis-wireshark/README.md
   - ../../../troubleshooting/README.md
-  - ../../../landscape/network-keywords.md
+  - ../../network-keywords.md
 learning:
   topic: network-fundamentals-lab
   scope: durable

@@ -1,15 +1,15 @@
 ---
 title: Spring 개발 키워드
-tags: [landscape, spring, spring-boot, aop, transaction, webflux, security]
+tags: [keywords, spring, spring-boot, aop, transaction, webflux, security]
 status: final
 source:
   - ../09_spring/README.md
   - ../09_spring/books/spring-start-here/README.md
 related:
-  - README.md
-  - jvm-keywords.md
-  - data-keywords.md
-  - observability-keywords.md
+  - ../README.md
+  - ../01_language/jvm-keywords.md
+  - ../05_data/data-keywords.md
+  - ../06_observability/observability-keywords.md
 updated: 2026-11-03
 ---
 
@@ -229,11 +229,11 @@ updated: 2026-11-03
 
 | 대상 | 이유 |
 |---|---|
-| GC · 클래스 로딩 · 힙 덤프 | [JVM 로드맵](jvm-keywords.md)이 맡습니다. Spring 이 느린 것과 JVM 이 멈춘 것은 다른 층입니다 |
-| 인덱스 자료구조 · 분산 일관성 | [데이터 로드맵](data-keywords.md)이 맡습니다. 4단계는 트랜잭션 경계까지만 봅니다 |
+| GC · 클래스 로딩 · 힙 덤프 | [JVM 로드맵](../01_language/jvm-keywords.md)이 맡습니다. Spring 이 느린 것과 JVM 이 멈춘 것은 다른 층입니다 |
+| 인덱스 자료구조 · 분산 일관성 | [데이터 로드맵](../05_data/data-keywords.md)이 맡습니다. 4단계는 트랜잭션 경계까지만 봅니다 |
 | SQL 실행 계획 · 인덱스 튜닝 | 소장 책에 없고, 이 저장소에도 아직 노트가 없습니다 |
-| PromQL · SLO · 알림 설계 | [관측 가능성 로드맵](observability-keywords.md)이 맡습니다. 8단계는 내보내는 쪽만 봅니다 |
-| 쿠버네티스 오브젝트와 내부 구조 | [Kubernetes 로드맵](k8s-keywords.md)이 맡습니다. 9단계는 배포 산출물까지입니다 |
+| PromQL · SLO · 알림 설계 | [관측 가능성 로드맵](../06_observability/observability-keywords.md)이 맡습니다. 8단계는 내보내는 쪽만 봅니다 |
+| 쿠버네티스 오브젝트와 내부 구조 | [Kubernetes 로드맵](../08_cloud/k8s-keywords.md)이 맡습니다. 9단계는 배포 산출물까지입니다 |
 | Kafka 프로듀서 · 컨슈머 설계 | `04_messaging` 이 정본입니다. `@KafkaListener` 는 그 주제 축 안에 둡니다 |
 | QueryDSL 과 동적 쿼리 | `05_data/03_persistence/querydsl` 이 정본입니다 |
 | 뷰 템플릿과 서버 렌더링 | Thymeleaf 로 화면을 그리는 축은 다룰 일이 없습니다. 3단계는 REST 응답까지입니다 |

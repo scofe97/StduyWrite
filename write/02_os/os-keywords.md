@@ -1,15 +1,15 @@
 ---
 title: OS 개발 키워드
-tags: [landscape, linux, os, kernel, container, performance, security]
+tags: [keywords, linux, os, kernel, container, performance, security]
 status: final
 source:
   - ../02_os/README.md
   - ../02_os/kernel/README.md
   - ../02_os/book/systems-performance/README.md
 related:
-  - README.md
+  - ../README.md
   - network-keywords.md
-  - k8s-keywords.md
+  - ../08_cloud/k8s-keywords.md
   - ../02_os/README.md
 updated: 2026-10-10
 ---
@@ -116,7 +116,7 @@ updated: 2026-10-10
 | steal time · noisy neighbor · CPU quota · 워밍업 | 추천 | [하드웨어 가상화](../02_os/book/systems-performance/11-02.%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C%20%EC%BB%B4%ED%93%A8%ED%8C%85%20%E2%80%94%20%ED%95%98%EB%93%9C%EC%9B%A8%EC%96%B4%20%EA%B0%80%EC%83%81%ED%99%94.md) | Systems Performance 11장 |
 | blk-cgroup · `io.max` | 선택 |  | [cgroup v2 — IO](https://docs.kernel.org/admin-guide/cgroup-v2.html) |
 | IRQ affinity · `irqbalance` | 선택 |  | [SMP IRQ affinity](https://docs.kernel.org/core-api/irq/irq-affinity.html) |
-| 사건 시점 스냅샷 — 상시 기록하고 경보 때 꺼내기 | 선택 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
+| 사건 시점 스냅샷 — 상시 기록하고 경보 때 꺼내기 | 선택 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
 
 
 
@@ -145,9 +145,9 @@ updated: 2026-10-10
 | AppArmor · SELinux · 보호와 보안 | 선택 | [컨테이너 격리 강화](../08_cloud/book/container-security/08-01.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EA%B2%A9%EB%A6%AC%20%EA%B0%95%ED%99%94%20%E2%80%94%20%EC%83%8C%EB%93%9C%EB%B0%95%EC%8B%B1%EC%9D%98%20%EC%84%B8%20%EA%B0%88%EB%9E%98.md) | Operating System Concepts 14·15장 |
 | eBPF 보안 활용 | 선택 | [LSM 훅·TOCTOU](../02_os/book/learning-ebpf/09-01.%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%BD%9C%20%EC%9E%85%EA%B5%AC%20%EA%B2%80%EC%82%AC%EB%8A%94%20TOCTOU%20%EC%97%90%20%EB%9A%AB%EB%A0%A4%20%EB%B3%B4%EC%95%88%20%EB%8F%84%EA%B5%AC%EB%8A%94%20LSM%20%ED%9B%85%EA%B3%BC%20%EC%BB%A4%EB%84%90%20%ED%95%A8%EC%88%98%EC%97%90%EC%84%9C%20%ED%8C%90%EC%A0%95%ED%95%98%EA%B3%A0%20SIGKILL%20%EB%A1%9C%20%EB%A7%89%EB%8A%94%EB%8B%A4.md) | Learning eBPF 9장 |
 | Landlock | 선택 |  | [Landlock](https://docs.kernel.org/userspace-api/landlock.html) |
-| BPF map 용량과 유형 — 가득 찰 때의 동작 · 용도별 맵 분리 | 추천 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [BPF maps](https://docs.kernel.org/bpf/maps.html) |
-| 스택 심볼 해석 — `/proc/PID/maps` · ELF 심볼 · strip 된 바이너리 | 추천 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
-| eBPF 오버헤드 측정 — `kernel.bpf_stats_enabled` | 선택 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [kernel sysctl](https://docs.kernel.org/admin-guide/sysctl/kernel.html) |
+| BPF map 용량과 유형 — 가득 찰 때의 동작 · 용도별 맵 분리 | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [BPF maps](https://docs.kernel.org/bpf/maps.html) |
+| 스택 심볼 해석 — `/proc/PID/maps` · ELF 심볼 · strip 된 바이너리 | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
+| eBPF 오버헤드 측정 — `kernel.bpf_stats_enabled` | 선택 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [kernel sysctl](https://docs.kernel.org/admin-guide/sysctl/kernel.html) |
 | 제로 트러스트 · 권한 에스컬레이션 | 선택 | [권한 에스컬레이션](../08_cloud/book/container-security/02-01.Linux%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%BD%9C%C2%B7%EA%B6%8C%ED%95%9C%C2%B7capability%20%E2%80%94%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%B3%B4%EC%95%88%EC%9D%98%20%EB%B0%94%EB%8B%A5.md) | |
 | 멀티 계정 전략 · 랜딩 존 · 계정 벤딩 · 조직 단위 · 서비스 컨트롤 정책 · 퍼미션 바운더리 | 선택 | [랜딩 존](../07_devops/book/cicd_cicd-patterns/10-01.Deployment%20Strategies%20Creational%20CICD%20with%20Cloud%20Providers.md) | |
 | 특권 접근 관리 · 저스트 인 타임 접근 · 세션 레코딩 | 선택 | | |
@@ -191,10 +191,10 @@ updated: 2026-10-10
 | Container Security 6·7장 | 이미지와 공급망. `07_devops` 소관입니다 |
 | Operating System Concepts 17~20장 | 분산 시스템과 특정 OS 사례. 이 로드맵의 축이 아닙니다 |
 | How Linux Works 9~17장 | 네트워크 · 데스크톱 · 컴파일. 다른 로드맵이거나 축 밖입니다 |
-| JVM heap · G1GC · ZGC · native memory | [JVM 로드맵](jvm-keywords.md) 소관입니다. 3단계는 cgroup 이 재는 RSS 까지만 봅니다 |
+| JVM heap · G1GC · ZGC · native memory | [JVM 로드맵](../01_language/jvm-keywords.md) 소관입니다. 3단계는 cgroup 이 재는 RSS 까지만 봅니다 |
 | The Linux Programming Interface | 정독용이 아니라 사전입니다. 시스템 콜과 API 가 왜 그 모양인지 궁금할 때만 펴 봅니다 |
 | BPF Performance Tools | 5단계 다음의 tracing 심화입니다. `/proc` · cgroup · PSI · perf 를 지난 뒤에 엽니다 |
-| Below · OpenMetrics · exporter | Below 는 위 인터페이스를 프로그램이 어떻게 수집하는지 보는 코드입니다. 수집한 뒤 시각화는 [관측 가능성 로드맵](observability-keywords.md)이 맡습니다 |
+| Below · OpenMetrics · exporter | Below 는 위 인터페이스를 프로그램이 어떻게 수집하는지 보는 코드입니다. 수집한 뒤 시각화는 [관측 가능성 로드맵](../06_observability/observability-keywords.md)이 맡습니다 |
 | AVX-512 · ARM SVE 명령어 개별 규격 | 소장본에 장이 없습니다. 어떤 확장이 있는지까지만 알고, 개별 명령은 필요할 때 [Intel Intrinsics Guide](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html)에서 찾습니다 |
 | dead store elimination 의 컴파일러 구현 | 소장본에 장이 없습니다. `memset` 이 지워진다는 사실과 `explicit_bzero` 로 막는다는 대응까지가 이 로드맵의 몫이고, 최적화 패스 자체는 컴파일러 축입니다 |
 | HBM · CoWoS 같은 메모리 패키징 | 하드웨어 설계 축입니다. 연산보다 데이터 이동이 병목이라는 memory wall 개념까지가 4단계의 몫입니다 |

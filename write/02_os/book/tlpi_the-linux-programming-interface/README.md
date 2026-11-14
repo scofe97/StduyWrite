@@ -11,7 +11,7 @@ related:
   - ../linux-kernel-programming/README.md
   - ../npg_network-programming-with-go/README.md
   - ../../README.md
-  - ../../../landscape/os-keywords.md
+  - ../../os-keywords.md
 updated: 2026-11-11
 ---
 
@@ -185,7 +185,7 @@ updated: 2026-11-11
 - [Learning Modern Linux 정독 인덱스](../learning-modern-linux/README.md) — 같은 주제의 명령 층
 - [Linux Kernel Programming 정독 인덱스](../linux-kernel-programming/README.md) — 같은 주제의 커널 구현 층
 - [Network Programming with Go 정독 인덱스](../npg_network-programming-with-go/README.md) — 소켓 묶음을 Go 로
-- [OS 로드맵](../../../landscape/os-keywords.md)
+- [OS 로드맵](../../os-keywords.md)
 - [02_os MOC](../../README.md)
 
 

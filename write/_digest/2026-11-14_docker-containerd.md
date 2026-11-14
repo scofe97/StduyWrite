@@ -4,15 +4,15 @@
 
 | 키워드 | 한 줄 | 이미 있음 |
 | :--- | :--- | :--- |
-| Docker Engine | CLI·API·빌드·볼륨·네트워크를 묶은 올인원 컨테이너 플랫폼 | [컨테이너의 탄생](../../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
-| containerd | 이미지 관리·수명주기 감독을 전담하는 CNCF 표준 컨테이너 런타임 | [컨테이너의 탄생](../../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
-| runc | OCI 런타임 명세대로 리눅스 커널 격리(namespace·cgroups)를 실행하는 저수준 바이너리 | [컨테이너의 탄생](../../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
-| CRI | Kubelet과 컨테이너 런타임 사이의 통신 규약을 정의한 gRPC 인터페이스 | [컨테이너의 탄생](../../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
-| OCI | 컨테이너 이미지 규격과 실행 방식을 정의한 개방형 산업 표준 | [컨테이너의 탄생](../../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
-| dockershim | CRI 이전의 Docker 데몬을 Kubelet에 연결하던 임시 어댑터 계층 | [컨테이너의 탄생](../../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
+| Docker Engine | CLI·API·빌드·볼륨·네트워크를 묶은 올인원 컨테이너 플랫폼 | [컨테이너의 탄생](../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
+| containerd | 이미지 관리·수명주기 감독을 전담하는 CNCF 표준 컨테이너 런타임 | [컨테이너의 탄생](../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
+| runc | OCI 런타임 명세대로 리눅스 커널 격리(namespace·cgroups)를 실행하는 저수준 바이너리 | [컨테이너의 탄생](../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
+| CRI | Kubelet과 컨테이너 런타임 사이의 통신 규약을 정의한 gRPC 인터페이스 | [컨테이너의 탄생](../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
+| OCI | 컨테이너 이미지 규격과 실행 방식을 정의한 개방형 산업 표준 | [컨테이너의 탄생](../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
+| dockershim | CRI 이전의 Docker 데몬을 Kubelet에 연결하던 임시 어댑터 계층 | [컨테이너의 탄생](../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
 | ctr | containerd에 내장된 저수준 네이티브 디버깅 CLI | |
 | nerdctl | containerd 위에서 Docker CLI 문법과 동일한 사용자 경험을 제공하는 도구 | |
-| crictl | Kubernetes CRI 호환 런타임을 점검하고 노드를 디버깅하는 전용 CLI | [Service 5유형](../../08_cloud/book/networking-and-kubernetes/05-02.Service 5유형 — ClusterIP에서 LoadBalancer까지.md) |
+| crictl | Kubernetes CRI 호환 런타임을 점검하고 노드를 디버깅하는 전용 CLI | [Service 5유형](../08_cloud/book/networking-and-kubernetes/05-02.Service 5유형 — ClusterIP에서 LoadBalancer까지.md) |
 
 
 

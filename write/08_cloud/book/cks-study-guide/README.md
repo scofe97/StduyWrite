@@ -12,7 +12,7 @@ related:
   - ../container-security/README.md
   - ../kubernetes-in-action/README.md
   - ../kubernetes-up-and-running/README.md
-  - ../../../landscape/k8s-keywords.md
+  - ../../k8s-keywords.md
   - ../../README.md
 learning:
   topic: cks-study-guide
@@ -66,7 +66,7 @@ updated: 2026-11-05
 
 ### 로드맵 속 자리
 
-[쿠버네티스 로드맵](../../../landscape/k8s-keywords.md)에서는 자료 표에 우선순위 추천, 읽을 범위 2~7장, 자리 6단계로 올라 있습니다. 6단계 「보안과 확장」의 개념 표에서는 API 접근 하드닝(3장), 감사 로그(7장)처럼 형제 책에 대응 노트가 없는 행의 출처 칸이 이 책을 가리킵니다.
+[쿠버네티스 로드맵](../../k8s-keywords.md)에서는 자료 표에 우선순위 추천, 읽을 범위 2~7장, 자리 6단계로 올라 있습니다. 6단계 「보안과 확장」의 개념 표에서는 API 접근 하드닝(3장), 감사 로그(7장)처럼 형제 책에 대응 노트가 없는 행의 출처 칸이 이 책을 가리킵니다.
 
 
 
@@ -167,7 +167,7 @@ updated: 2026-11-05
 - [『Container Security』 정독본](../container-security/README.md) — 같은 `book/` 영역, 격리 경계 중심 관점의 짝이자 샌드박싱·공급망·런타임 탐지 원리의 위임 대상
 - [『Kubernetes in Action, 2판』 정독본](../kubernetes-in-action/README.md) — 오브젝트 중심 관점, Secret·SecurityContext 사용법의 짝
 - [『Kubernetes: Up and Running』 정독본](../kubernetes-up-and-running/README.md) — RBAC와 Gatekeeper 정책 운영의 위임 대상
-- [쿠버네티스 로드맵](../../../landscape/k8s-keywords.md) — 6단계 보안 개념 표에서 이 책이 출처로 걸린 행
+- [쿠버네티스 로드맵](../../k8s-keywords.md) — 6단계 보안 개념 표에서 이 책이 출처로 걸린 행
 - [08_cloud MOC](../../README.md) — 상위 카테고리 경계
 
 [^author]: 저자 Benjamin Muschko가 쓴 『Certified Kubernetes Administrator (CKA) Study Guide』를 1장이 선행 학습 자료로 가리킵니다. 저자 서지와 출판일은 위 `source`의 서점 목록 페이지에서 확인했고, 출판사 O'Reilly의 제품 페이지는 접근이 막혀(HTTP 403) 직접 읽지 못했습니다.

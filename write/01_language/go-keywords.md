@@ -1,11 +1,11 @@
 ---
 title: Go 개발 키워드
-tags: [landscape, go, concurrency, testing, network, cloud-native]
+tags: [keywords, go, concurrency, testing, network, cloud-native]
 status: final
 related:
-  - README.md
-  - os-keywords.md
-  - network-keywords.md
+  - ../README.md
+  - ../02_os/os-keywords.md
+  - ../02_os/network-keywords.md
 updated: 2026-10-14
 ---
 
@@ -95,7 +95,7 @@ updated: 2026-10-14
 | `sync.Once` — 중복 close 막기 | 추천 | [Once](../01_language/book/lgo_learning-go/12-03.%EB%B2%84%ED%8D%BC%20%EC%B1%84%EB%84%90%EC%9D%80%20%EA%B0%9C%EC%88%98%EB%A5%BC%20%EC%95%8C%20%EB%95%8C%20%EC%93%B0%EA%B3%A0%20WaitGroup%20%EA%B3%BC%20Once%20%EA%B0%80%20%EA%B8%B0%EB%8B%A4%EB%A6%BC%EA%B3%BC%20%ED%95%9C%20%EB%B2%88%20%EC%8B%A4%ED%96%89%EC%9D%84%20%EB%A7%A1%EC%8A%B5%EB%8B%88%EB%8B%A4.md) | Learning Go 12장 |
 | `sync.Map` · `sync.Pool` — 언제 map 과 mutex 보다 나은가 | 선택 | | [sync](https://pkg.go.dev/sync) |
 | atomic · spin lock · futex | 추천 | | Learn Concurrent Programming with Go 12장 |
-| netpoller — 블로킹처럼 쓰는 I/O 가 epoll 위에서 도는 법 | 추천 | [OS 로드맵](os-keywords.md) | |
+| netpoller — 블로킹처럼 쓰는 I/O 가 epoll 위에서 도는 법 | 추천 | [OS 로드맵](../02_os/os-keywords.md) | |
 
 
 
@@ -113,9 +113,9 @@ updated: 2026-10-14
 | `runtime/trace` · 스케줄러 추적 | 추천 | | [Go Diagnostics](https://go.dev/doc/diagnostics) |
 | escape analysis · 할당 줄이기 | 추천 | [스택과 힙](../01_language/book/lgo_learning-go/06-03.%EA%B0%92%EC%9D%84%20%EC%8A%A4%ED%83%9D%EC%97%90%20%EB%91%90%EB%A9%B4%20%EA%B0%80%EB%B9%84%EC%A7%80%EA%B0%80%20%EC%A4%84%EA%B3%A0%20GOGC%20%EC%99%80%20GOMEMLIMIT%20%EA%B0%80%20%ED%9E%99%EC%9D%84%20%EC%A1%B0%EC%A0%88%ED%95%A9%EB%8B%88%EB%8B%A4.md) | Learning Go 6장 |
 | GC · `GOGC` · `GOMEMLIMIT` | 추천 | [GOGC·GOMEMLIMIT](../01_language/book/lgo_learning-go/06-03.%EA%B0%92%EC%9D%84%20%EC%8A%A4%ED%83%9D%EC%97%90%20%EB%91%90%EB%A9%B4%20%EA%B0%80%EB%B9%84%EC%A7%80%EA%B0%80%20%EC%A4%84%EA%B3%A0%20GOGC%20%EC%99%80%20GOMEMLIMIT%20%EA%B0%80%20%ED%9E%99%EC%9D%84%20%EC%A1%B0%EC%A0%88%ED%95%A9%EB%8B%88%EB%8B%A4.md) | Learning Go 6장 · [Go GC Guide](https://go.dev/doc/gc-guide) |
-| 컨테이너 CPU 한도와 `GOMAXPROCS` — 1.25 이전은 논리 CPU 수 · 1.25 부터 cgroup 한도 반영 · automaxprocs | 추천 | [OS 로드맵](os-keywords.md) | [Go 1.25 릴리스 노트](https://go.dev/doc/go1.25) |
+| 컨테이너 CPU 한도와 `GOMAXPROCS` — 1.25 이전은 논리 CPU 수 · 1.25 부터 cgroup 한도 반영 · automaxprocs | 추천 | [OS 로드맵](../02_os/os-keywords.md) | [Go 1.25 릴리스 노트](https://go.dev/doc/go1.25) |
 | 디버거 — Delve (`dlv`) · goroutine 별 stack | 선택 | | [Delve](https://github.com/go-delve/delve/tree/master/Documentation) |
-| 측정의 함정 — 워밍업 · noisy neighbor | 추천 | [OS 로드맵](os-keywords.md) | |
+| 측정의 함정 — 워밍업 · noisy neighbor | 추천 | [OS 로드맵](../02_os/os-keywords.md) | |
 
 
 
@@ -123,10 +123,10 @@ updated: 2026-10-14
 
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
-| 네트워크 개요 · 주소 해석 · 라우팅 | 필수 | [네트워크 로드맵](network-keywords.md) | Network Programming with Go 1·2장 |
+| 네트워크 개요 · 주소 해석 · 라우팅 | 필수 | [네트워크 로드맵](../02_os/network-keywords.md) | Network Programming with Go 1·2장 |
 | TCP 스트림 · 데이터 전송 · half-close | 필수 | [net](../01_language/docs/go/net/README.md) | Network Programming with Go 3·4장 |
 | HTTP 클라이언트 · 타임아웃 · 재시도 경계 · resty | 필수 | [net/http](../01_language/book/lgo_learning-go/13-04.net-http%20%EB%8A%94%20%ED%83%80%EC%9E%84%EC%95%84%EC%9B%83%EC%9D%84%20%EC%A7%81%EC%A0%91%20%EC%A0%95%ED%95%98%EA%B3%A0%20%EB%AF%B8%EB%93%A4%EC%9B%A8%EC%96%B4%EB%8A%94%20Handler%20%EB%A5%BC%20%EA%B0%90%EC%8B%B8%EB%A9%B0%20slog%20%EB%A1%9C%20%EA%B5%AC%EC%A1%B0%ED%99%94%20%EB%A1%9C%EA%B7%B8%EB%A5%BC%20%EB%82%A8%EA%B9%81%EB%8B%88%EB%8B%A4.md) · [net/http 클라이언트](../01_language/docs/go/net-http/02-01.Client%C2%B7Transport.md) | Network Programming with Go 8장 |
-| 재시도 구현 — 지수 백오프 · 지터 · 재시도 불가 오류 구분 · context 취소와 결합 · 최대 경과 시간 · backoff 라이브러리 | 추천 | [네트워크 로드맵](network-keywords.md) | |
+| 재시도 구현 — 지수 백오프 · 지터 · 재시도 불가 오류 구분 · context 취소와 결합 · 최대 경과 시간 · backoff 라이브러리 | 추천 | [네트워크 로드맵](../02_os/network-keywords.md) | |
 | HTTP 서비스 · 라우팅 · graceful shutdown · 종료 신호 `signal.Notify` · 컴포넌트별 종료 순서 | 필수 | [net/http](../01_language/book/lgo_learning-go/13-04.net-http%20%EB%8A%94%20%ED%83%80%EC%9E%84%EC%95%84%EC%9B%83%EC%9D%84%20%EC%A7%81%EC%A0%91%20%EC%A0%95%ED%95%98%EA%B3%A0%20%EB%AF%B8%EB%93%A4%EC%9B%A8%EC%96%B4%EB%8A%94%20Handler%20%EB%A5%BC%20%EA%B0%90%EC%8B%B8%EB%A9%B0%20slog%20%EB%A1%9C%20%EA%B5%AC%EC%A1%B0%ED%99%94%20%EB%A1%9C%EA%B7%B8%EB%A5%BC%20%EB%82%A8%EA%B9%81%EB%8B%88%EB%8B%A4.md) · [net/http 서버](../01_language/docs/go/net-http/03-01.Server%C2%B7ServeMux%C2%B7Handler.md) | Network Programming with Go 9장 |
 | 종료 신호를 요청까지 전파 — `signal.NotifyContext` · `http.Server.BaseContext` · `RegisterOnShutdown` | 추천 | | Cloud Native Go 9장 · [NotifyContext](https://pkg.go.dev/os/signal#NotifyContext) · [http.Server](https://pkg.go.dev/net/http#Server) |
 | 요청 본문 크기 제한 — `http.MaxBytesReader` · `http.MaxBytesHandler` | 추천 | | [MaxBytesReader](https://pkg.go.dev/net/http#MaxBytesReader) |
@@ -139,7 +139,7 @@ updated: 2026-10-14
 | 직렬화 · `log/slog` · 지표 · Counter · Gauge · Histogram · `/metrics` 노출 | 추천 | [JSON](../01_language/book/lgo_learning-go/13-03.encoding-json%20%EC%9D%80%20%EA%B5%AC%EC%A1%B0%EC%B2%B4%20%ED%83%9C%EA%B7%B8%EB%A1%9C%20%EC%9D%B4%EB%A6%84%EC%9D%84%20%EC%A0%95%ED%95%98%EA%B3%A0%20Decoder%20%EC%99%80%20Encoder%20%EB%A1%9C%20%EC%8A%A4%ED%8A%B8%EB%A6%BC%EC%9D%84%20%EB%8B%A4%EB%A3%B9%EB%8B%88%EB%8B%A4.md) · [slog](../01_language/book/lgo_learning-go/13-04.net-http%20%EB%8A%94%20%ED%83%80%EC%9E%84%EC%95%84%EC%9B%83%EC%9D%84%20%EC%A7%81%EC%A0%91%20%EC%A0%95%ED%95%98%EA%B3%A0%20%EB%AF%B8%EB%93%A4%EC%9B%A8%EC%96%B4%EB%8A%94%20Handler%20%EB%A5%BC%20%EA%B0%90%EC%8B%B8%EB%A9%B0%20slog%20%EB%A1%9C%20%EA%B5%AC%EC%A1%B0%ED%99%94%20%EB%A1%9C%EA%B7%B8%EB%A5%BC%20%EB%82%A8%EA%B9%81%EB%8B%88%EB%8B%A4.md) | Network Programming with Go 12·13장 |
 | 구조화 로깅 라이브러리 — zap · zerolog 와 slog 의 갈림 | 선택 | | [slog](https://pkg.go.dev/log/slog) |
 | 로그 파일 회전 — 크기 · 보관 개수 · 보관 기간 · 압축 · 파일과 stdout 동시 기록 · lumberjack | 선택 | | |
-| 관측 SDK 구성 — TracerProvider · MeterProvider · OTLP exporter 의 gRPC 와 HTTP 갈림 · propagator 설정 · 클라이언트 라이브러리 계측 훅 · OpenTelemetry Go | 선택 | [관측 가능성 로드맵](observability-keywords.md) | |
+| 관측 SDK 구성 — TracerProvider · MeterProvider · OTLP exporter 의 gRPC 와 HTTP 갈림 · propagator 설정 · 클라이언트 라이브러리 계측 훅 · OpenTelemetry Go | 선택 | [관측 가능성 로드맵](../06_observability/observability-keywords.md) | |
 | 바이트 파싱 — `[]byte` · `encoding/binary` · 엔디언 · 경계 검사 · `io.ReadFull` 부분 읽기 | 추천 | | |
 | 와이어 프로토콜 설계 — framing · 메시지 타입 · 핸드셰이크 · 버전 협상 · 상태 머신 | 추천 | | |
 | framing 의 갈림 — 구분자 대 길이 접두 · 체크섬 · 잘못된 메시지 거절 | 추천 | | |
@@ -187,10 +187,10 @@ updated: 2026-10-14
 
 | 대상 | 이유 |
 |---|---|
-| TCP · TLS · HTTP 의 프로토콜 동작 | [네트워크 로드맵](network-keywords.md) 1단계가 맡습니다. 여기는 Go 로 다루는 법입니다 |
-| epoll · 스케줄러 · 프로파일 방법론 | [OS 로드맵](os-keywords.md) 2·4단계가 맡습니다 |
+| TCP · TLS · HTTP 의 프로토콜 동작 | [네트워크 로드맵](../02_os/network-keywords.md) 1단계가 맡습니다. 여기는 Go 로 다루는 법입니다 |
+| epoll · 스케줄러 · 프로파일 방법론 | [OS 로드맵](../02_os/os-keywords.md) 2·4단계가 맡습니다 |
 | Cloud Native Go 1~3장 | 클라우드 네이티브 개론과 Go 소개입니다. 순서에 넣을 축이 아닙니다 |
-| P2P · 익명 오버레이 구현 | [네트워크 로드맵](network-keywords.md) 8·9단계가 개념을 맡습니다 |
+| P2P · 익명 오버레이 구현 | [네트워크 로드맵](../02_os/network-keywords.md) 8·9단계가 개념을 맡습니다 |
 | lexer · parser · AST 로 DSL 만들기 | 컴파일러 축입니다. 코드 생성은 3단계 `go generate` 까지만 봅니다 |
 | plugin 동적 로딩 · `goto` | 쓸 자리가 드뭅니다. `plugin` 은 플랫폼 제약이 커서 별도 프로세스와 RPC 로 대신합니다 |
 | Beego · Centrifugo · Melody 같은 개별 프레임워크 | 제품 사용법입니다. 6단계는 `net/http` 와 프레임워크의 갈림까지 봅니다 |

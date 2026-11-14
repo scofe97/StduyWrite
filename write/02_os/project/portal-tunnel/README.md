@@ -6,8 +6,8 @@ source:
   - https://github.com/gosuda/portal-tunnel/tree/129b6de5  # 2026-10-20, v2.6.4+5
 related:
   - ../../project/network-fundamentals-lab/05-01.연결은 양 끝만의 일이 아니다.md
-  - ../../../landscape/network-keywords.md
-  - ../../../landscape/go-keywords.md
+  - ../../network-keywords.md
+  - ../../../01_language/go-keywords.md
 updated: 2026-10-21
 ---
 
@@ -111,8 +111,8 @@ e2e 하네스 변경은 04-03 편, 이슈 상태 변화는 05-01 편에 반영�
 역방향 터널을 깊이 이해하려면 소켓 I/O, 패킷 상태 추적, 오버레이 신뢰 모델을 먼저 알아 두어야 합니다. 아래 문서를 먼저 살펴보면 학습 효율이 높아집니다.
 
 - 중간 장비와 NAT 동작: [연결은 양 끝만의 일이 아니다](../../project/network-fundamentals-lab/05-01.연결은%20양%20끝만의%20일이%20아니다.md): 양 끝단의 호스트뿐 아니라 패킷 경로 사이에 위치한 방화벽과 NAT 장비가 연결 상태(conntrack)를 어떻게 기억하고 변경하는지 다룹니다. 역방향 터널이 아웃바운드 연결을 먼저 맺는 이유를 이해하는 바탕이 됩니다.
-- 네트워크 학습 로드맵: [네트워크 로드맵](../../../landscape/network-keywords.md): 8단계 오버레이와 신뢰, 9단계 터널과 경로에서 다루는 이론적 토대와 연결됩니다. portal-tunnel은 로드맵 8·9단계의 역방향 터널과 keyless TLS를 실제 코드로 확인하는 참조 구현입니다.
-- Go 언어 학습 로드맵: [Go 로드맵](../../../landscape/go-keywords.md): 동시성과 고루틴, 채널 제어, 저수준 I/O 인터페이스를 활용한 네트워크 서비스 설계 단계의 심화 학습서로 연결됩니다.
+- 네트워크 학습 로드맵: [네트워크 로드맵](../../network-keywords.md): 8단계 오버레이와 신뢰, 9단계 터널과 경로에서 다루는 이론적 토대와 연결됩니다. portal-tunnel은 로드맵 8·9단계의 역방향 터널과 keyless TLS를 실제 코드로 확인하는 참조 구현입니다.
+- Go 언어 학습 로드맵: [Go 로드맵](../../../01_language/go-keywords.md): 동시성과 고루틴, 채널 제어, 저수준 I/O 인터페이스를 활용한 네트워크 서비스 설계 단계의 심화 학습서로 연결됩니다.
 
 
 
@@ -163,6 +163,6 @@ curl -sk --resolve demo-<주소 40hex 소문자>.localhost:18443:127.0.0.1 https
 > 이 인덱스가 가리키는 외부 실습과 로드맵입니다.
 
 - [연결은 양 끝만의 일이 아니다](../../project/network-fundamentals-lab/05-01.연결은%20양%20끝만의%20일이%20아니다.md): NAT와 방화벽 conntrack 중간 장비 동작
-- [네트워크 로드맵](../../../landscape/network-keywords.md): 8단계 오버레이와 신뢰, 9단계 터널과 경로
-- [Go 로드맵](../../../landscape/go-keywords.md): 네트워크 서비스와 동시성 설계
+- [네트워크 로드맵](../../network-keywords.md): 8단계 오버레이와 신뢰, 9단계 터널과 경로
+- [Go 로드맵](../../../01_language/go-keywords.md): 네트워크 서비스와 동시성 설계
 - [flats 학습 시리즈](../../../10_AI/project/flats/README.md): portal-tunnel SDK(`keyless.Client`)를 내장해 Portal 노출을 제공하는 제품 사례. 오버레이 노출 편이 이 시리즈의 keyless TLS·SNI 라우팅 편과 상호 링크

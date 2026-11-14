@@ -1,15 +1,15 @@
 ---
 title: 네트워크 개발 키워드
-tags: [landscape, linux, networking, kubernetes, cloud, ebpf, cilium, dns, security]
+tags: [keywords, linux, networking, kubernetes, cloud, ebpf, cilium, dns, security]
 status: final
 source:
   - ../02_os/project/network-fundamentals-lab/README.md
   - ../08_cloud/book/networking-and-kubernetes/README.md
 related:
-  - README.md
+  - ../README.md
   - os-keywords.md
-  - k8s-keywords.md
-  - observability-keywords.md
+  - ../08_cloud/k8s-keywords.md
+  - ../06_observability/observability-keywords.md
   - ../02_os/project/network-fundamentals-lab/README.md
 updated: 2026-11-03
 ---
@@ -214,8 +214,8 @@ updated: 2026-11-03
 | GSLB · DNS 로드밸런싱 · failover | 추천 |  | [Cloudflare GSLB](https://www.cloudflare.com/ko-kr/learning/cdn/glossary/global-server-load-balancing-gslb/) · [DNS 로드밸런싱](https://www.cloudflare.com/ko-kr/learning/performance/what-is-dns-load-balancing/) |
 | MPLS · SD-WAN — 사업자 망과 소프트웨어 WAN | 선택 | | CompTIA Network+ 17장 |
 | VPC 피어링 · Transit Gateway | 선택 |  | System Design on AWS 9장 |
-| LB 대상 유형 — instance 는 노드 NodePort, ip 는 Pod IP 를 등록 | 추천 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [AWS LB Controller 주석](https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/ingress/annotations/) |
-| NAT 게이트웨이 포트 고갈 — 목적지당 동시 연결 55,000 · `ErrorPortAllocation` | 추천 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [NAT gateway 기본](https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-basics.html) |
+| LB 대상 유형 — instance 는 노드 NodePort, ip 는 Pod IP 를 등록 | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [AWS LB Controller 주석](https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/ingress/annotations/) |
+| NAT 게이트웨이 포트 고갈 — 목적지당 동시 연결 55,000 · `ErrorPortAllocation` | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [NAT gateway 기본](https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-basics.html) |
 | 로드 밸런싱 · 리버스 프록시 · NLB · GWLB | 선택 | | |
 
 
@@ -282,10 +282,10 @@ updated: 2026-11-03
 | 설정 자동화 — NETCONF · RESTCONF · gNMI | 선택 | | Network Programmability and Automation 10장 |
 | 데이터 모델 — YANG | 선택 | | Network Programmability and Automation 8장 |
 | 자동화 도구 — Ansible · Netmiko · NAPALM · Nornir | 선택 | | Network Programmability and Automation 12장 |
-| Envoy response flag — NC · UH · UF 로 실패 층 가르기 | 추천 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [Envoy 액세스 로그](https://www.envoyproxy.io/docs/envoy/v1.20.0/configuration/observability/access_log/usage) |
-| ServiceEntry — 메시 밖 목적지를 서비스 목록에 등록 | 추천 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [ServiceEntry](https://istio.io/latest/docs/reference/config/networking/service-entry/) |
-| 앱과 사이드카의 재시도가 겹칠 때 — RST 뒤 새 SYN · SYN 재전송 · SYN flood 오인 | 추천 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
-| traffic mirroring — 응답을 버리는 복제 트래픽 | 추천 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [Istio Mirroring](https://istio.io/latest/docs/tasks/traffic-management/mirroring/) |
+| Envoy response flag — NC · UH · UF 로 실패 층 가르기 | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [Envoy 액세스 로그](https://www.envoyproxy.io/docs/envoy/v1.20.0/configuration/observability/access_log/usage) |
+| ServiceEntry — 메시 밖 목적지를 서비스 목록에 등록 | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [ServiceEntry](https://istio.io/latest/docs/reference/config/networking/service-entry/) |
+| 앱과 사이드카의 재시도가 겹칠 때 — RST 뒤 새 SYN · SYN 재전송 · SYN flood 오인 | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
+| traffic mirroring — 응답을 버리는 복제 트래픽 | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [Istio Mirroring](https://istio.io/latest/docs/tasks/traffic-management/mirroring/) |
 | 토큰 버킷 · 리키 버킷 · 고정 윈도우 · 고정 윈도우 카운터 · 슬라이딩 윈도우 로그 · 슬라이딩 윈도우 카운터 | 선택 | [토큰 버킷](../03_architecture/book/system-design/04-01.%EC%B2%98%EB%A6%AC%EC%9C%A8%20%EC%A0%9C%ED%95%9C%EA%B8%B0%EB%8A%94%20%ED%86%A0%ED%81%B0%20%EB%B2%84%ED%82%B7%C2%B7%EB%88%84%EC%B6%9C%20%EB%B2%84%ED%82%B7%C2%B7%EA%B3%A0%EC%A0%95%20%EC%9C%88%EB%8F%84%C2%B7%EC%9D%B4%EB%8F%99%20%EC%9C%88%EB%8F%84%20%EB%A1%9C%EA%B7%B8%C2%B7%EC%9D%B4%EB%8F%99%20%EC%9C%88%EB%8F%84%20%EC%B9%B4%EC%9A%B4%ED%84%B0%EB%A1%9C%20%EC%9A%94%EC%B2%AD%EC%9D%84%20%EC%84%BC%EB%8B%A4.md) · [리키 버킷](../03_architecture/book/system-design/04-01.%EC%B2%98%EB%A6%AC%EC%9C%A8%20%EC%A0%9C%ED%95%9C%EA%B8%B0%EB%8A%94%20%ED%86%A0%ED%81%B0%20%EB%B2%84%ED%82%B7%C2%B7%EB%88%84%EC%B6%9C%20%EB%B2%84%ED%82%B7%C2%B7%EA%B3%A0%EC%A0%95%20%EC%9C%88%EB%8F%84%C2%B7%EC%9D%B4%EB%8F%99%20%EC%9C%88%EB%8F%84%20%EB%A1%9C%EA%B7%B8%C2%B7%EC%9D%B4%EB%8F%99%20%EC%9C%88%EB%8F%84%20%EC%B9%B4%EC%9A%B4%ED%84%B0%EB%A1%9C%20%EC%9A%94%EC%B2%AD%EC%9D%84%20%EC%84%BC%EB%8B%A4.md) · [고정 윈도우 카운터](../03_architecture/book/system-design/04-01.%EC%B2%98%EB%A6%AC%EC%9C%A8%20%EC%A0%9C%ED%95%9C%EA%B8%B0%EB%8A%94%20%ED%86%A0%ED%81%B0%20%EB%B2%84%ED%82%B7%C2%B7%EB%88%84%EC%B6%9C%20%EB%B2%84%ED%82%B7%C2%B7%EA%B3%A0%EC%A0%95%20%EC%9C%88%EB%8F%84%C2%B7%EC%9D%B4%EB%8F%99%20%EC%9C%88%EB%8F%84%20%EB%A1%9C%EA%B7%B8%C2%B7%EC%9D%B4%EB%8F%99%20%EC%9C%88%EB%8F%84%20%EC%B9%B4%EC%9A%B4%ED%84%B0%EB%A1%9C%20%EC%9A%94%EC%B2%AD%EC%9D%84%20%EC%84%BC%EB%8B%A4.md) · [슬라이딩 윈도우 로그](../03_architecture/book/system-design/04-01.%EC%B2%98%EB%A6%AC%EC%9C%A8%20%EC%A0%9C%ED%95%9C%EA%B8%B0%EB%8A%94%20%ED%86%A0%ED%81%B0%20%EB%B2%84%ED%82%B7%C2%B7%EB%88%84%EC%B6%9C%20%EB%B2%84%ED%82%B7%C2%B7%EA%B3%A0%EC%A0%95%20%EC%9C%88%EB%8F%84%C2%B7%EC%9D%B4%EB%8F%99%20%EC%9C%88%EB%8F%84%20%EB%A1%9C%EA%B7%B8%C2%B7%EC%9D%B4%EB%8F%99%20%EC%9C%88%EB%8F%84%20%EC%B9%B4%EC%9A%B4%ED%84%B0%EB%A1%9C%20%EC%9A%94%EC%B2%AD%EC%9D%84%20%EC%84%BC%EB%8B%A4.md) · [슬라이딩 윈도우 카운터](../03_architecture/book/system-design/04-01.%EC%B2%98%EB%A6%AC%EC%9C%A8%20%EC%A0%9C%ED%95%9C%EA%B8%B0%EB%8A%94%20%ED%86%A0%ED%81%B0%20%EB%B2%84%ED%82%B7%C2%B7%EB%88%84%EC%B6%9C%20%EB%B2%84%ED%82%B7%C2%B7%EA%B3%A0%EC%A0%95%20%EC%9C%88%EB%8F%84%C2%B7%EC%9D%B4%EB%8F%99%20%EC%9C%88%EB%8F%84%20%EB%A1%9C%EA%B7%B8%C2%B7%EC%9D%B4%EB%8F%99%20%EC%9C%88%EB%8F%84%20%EC%B9%B4%EC%9A%B4%ED%84%B0%EB%A1%9C%20%EC%9A%94%EC%B2%AD%EC%9D%84%20%EC%84%BC%EB%8B%A4.md) | |
 | API 스로틀링 · 스로틀링 · 분산 레이트 리밋 · 글로벌 레이트 리밋 · 로컬 레이트 리밋 · 사용자 기반 · IP 기반 · API 키 기반 · 버스트 리밋 · 버스트 허용 · 소프트 리밋 · 하드 리밋 | 선택 | [API 스로틀링](../03_architecture/book/system-design/04-01.%EC%B2%98%EB%A6%AC%EC%9C%A8%20%EC%A0%9C%ED%95%9C%EA%B8%B0%EB%8A%94%20%ED%86%A0%ED%81%B0%20%EB%B2%84%ED%82%B7%C2%B7%EB%88%84%EC%B6%9C%20%EB%B2%84%ED%82%B7%C2%B7%EA%B3%A0%EC%A0%95%20%EC%9C%88%EB%8F%84%C2%B7%EC%9D%B4%EB%8F%99%20%EC%9C%88%EB%8F%84%20%EB%A1%9C%EA%B7%B8%C2%B7%EC%9D%B4%EB%8F%99%20%EC%9C%88%EB%8F%84%20%EC%B9%B4%EC%9A%B4%ED%84%B0%EB%A1%9C%20%EC%9A%94%EC%B2%AD%EC%9D%84%20%EC%84%BC%EB%8B%A4.md) · [분산 레이트 리밋](../03_architecture/book/system-design/04-01.%EC%B2%98%EB%A6%AC%EC%9C%A8%20%EC%A0%9C%ED%95%9C%EA%B8%B0%EB%8A%94%20%ED%86%A0%ED%81%B0%20%EB%B2%84%ED%82%B7%C2%B7%EB%88%84%EC%B6%9C%20%EB%B2%84%ED%82%B7%C2%B7%EA%B3%A0%EC%A0%95%20%EC%9C%88%EB%8F%84%C2%B7%EC%9D%B4%EB%8F%99%20%EC%9C%88%EB%8F%84%20%EB%A1%9C%EA%B7%B8%C2%B7%EC%9D%B4%EB%8F%99%20%EC%9C%88%EB%8F%84%20%EC%B9%B4%EC%9A%B4%ED%84%B0%EB%A1%9C%20%EC%9A%94%EC%B2%AD%EC%9D%84%20%EC%84%BC%EB%8B%A4.md) | |
 | 동시성 리밋 · 버스트 동시성 · 큐 기반 스로틀링 · 거부 기반 스로틀링 · 우선순위 기반 스케줄링 · 공정 큐잉 · 가중 공정 큐잉 | 선택 | [동시성 리밋](../04_messaging/05_ConsistencyPattern/06-02.Retry%20Storm%20%EB%B0%A9%EC%A7%80%20%E2%80%94%20%EB%B0%B1%EC%98%A4%ED%94%84%20jitter%C2%B7%EB%8F%99%EC%8B%9C%EC%84%B1%20%EC%A0%9C%ED%95%9C%C2%B7%EC%84%9C%ED%82%B7.md) | |
@@ -354,11 +354,11 @@ updated: 2026-11-03
 
 | 대상 | 이유 |
 |---|---|
-| Kubernetes 오브젝트의 배포와 운영 | [Kubernetes 로드맵](k8s-keywords.md)이 맡습니다 |
+| Kubernetes 오브젝트의 배포와 운영 | [Kubernetes 로드맵](../08_cloud/k8s-keywords.md)이 맡습니다 |
 | socket · epoll · io_uring 의 커널 구현 | [OS 로드맵](os-keywords.md) 2·6단계가 맡습니다 |
 | tail latency · coordinated omission · 프로파일 | [OS 로드맵](os-keywords.md) 4단계의 성능 방법론 축입니다 |
-| metrics · logs · traces · OpenTelemetry | [관측 가능성 로드맵](observability-keywords.md)이 맡습니다 |
-| Go 로 프록시·로드밸런서를 구현하는 일 | [Go 로드맵](go-keywords.md) 6단계가 맡습니다. 여기는 개념까지입니다 |
+| metrics · logs · traces · OpenTelemetry | [관측 가능성 로드맵](../06_observability/observability-keywords.md)이 맡습니다 |
+| Go 로 프록시·로드밸런서를 구현하는 일 | [Go 로드맵](../01_language/go-keywords.md) 6단계가 맡습니다. 여기는 개념까지입니다 |
 | Computer Networking 7장 | 무선과 이동성. 서버 운영과 접점이 적습니다 |
 | Packet Analysis with Wireshark 6·7장 | 무선 캡처와 공격 분석. 판독 축이 아닙니다 |
 | Learning CoreDNS 9장 | 플러그인을 *만드는* 쪽입니다. 필요가 생기면 3단계 뒤에 붙입니다 |
@@ -367,9 +367,9 @@ updated: 2026-11-03
 | 자격증 — CCNA · CCNP · Network+ | 순서가 아니라 시험입니다. CompTIA Network+ 는 보완 참조로만 씁니다 |
 | 시뮬레이터 — GNS3 · EVE-NG · Packet Tracer | 랩 도구는 containerlab 하나로 둡니다 |
 | FTP | 응용 프로토콜 개별 동작입니다. 1단계 HTTP · DNS · TLS 와 메일이 축입니다 |
-| 웹 응용 보안 — OWASP Top 10 · XSS · SQL injection · 봇 관리 · 피싱 | 응용 계층 보안입니다. CSRF 와 Spring Security 로 OAuth 클라이언트를 짜는 일은 [Spring 로드맵](spring-keywords.md)이 맡습니다. OIDC 규격과 앞단 인증은 7단계에 있습니다 |
-| 영상 전송 HLS · DASH · 서버리스 · 프라이버시 규제 · AI | 이 로드맵의 축 밖입니다. AI 는 [AI 로드맵](ai-keywords.md)이 맡습니다 |
-| 상용 관측 SaaS — Datadog · Dynatrace | 제품 사용법입니다. 관측 원리는 [관측 가능성 로드맵](observability-keywords.md)이 맡습니다 |
+| 웹 응용 보안 — OWASP Top 10 · XSS · SQL injection · 봇 관리 · 피싱 | 응용 계층 보안입니다. CSRF 와 Spring Security 로 OAuth 클라이언트를 짜는 일은 [Spring 로드맵](../09_spring/spring-keywords.md)이 맡습니다. OIDC 규격과 앞단 인증은 7단계에 있습니다 |
+| 영상 전송 HLS · DASH · 서버리스 · 프라이버시 규제 · AI | 이 로드맵의 축 밖입니다. AI 는 [AI 로드맵](../10_AI/ai-keywords.md)이 맡습니다 |
+| 상용 관측 SaaS — Datadog · Dynatrace | 제품 사용법입니다. 관측 원리는 [관측 가능성 로드맵](../06_observability/observability-keywords.md)이 맡습니다 |
 | 네트워크 엔지니어링 — QoS · DSCP · 네트워크 우선순위 · 유니캐스트 · 멀티캐스트 | 백엔드 키워드 목록이 백엔드 밖 심화로 따로 뺀 키워드 |
 | 고급 암호·블록체인 — 제로 날리지(Zero Knowledge) 증명 · zk-SNARK · zk-STARK · 동형 암호화 · 부분 동형 암호화 · 완전 동형 암호화 · 안전한 다자간 연산·MPC · 임계값 서명 · 멀티시그 · 콜드 월렛 · 핫 월렛 | 백엔드 키워드 목록이 백엔드 밖 심화로 따로 뺀 키워드 |
 | 커널 바이패스·NIC 오프로드 — 커널 바이패스 · DPDK · RDMA · 인피니밴드 · RoCE · 네트워크·TCP·체크섬·세그먼테이션 오프로드 · 인터럽트 코얼레싱 · NAPI · 폴링 모드 · 인터럽트 모드 | 백엔드 키워드 목록이 백엔드 밖 심화로 따로 뺀 키워드 |

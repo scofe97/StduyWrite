@@ -33,7 +33,7 @@ updated: 2026-11-14
 
 ### data-keywords.md
 
-키워드 파일: [data-keywords.md](../landscape/data-keywords.md)
+키워드 파일: [data-keywords.md](data-keywords.md)
 
 | 묶음 | 다룬 문서 | 빈 필수 키워드 |
 |---|---|---|
@@ -51,7 +51,7 @@ updated: 2026-11-14
 
 ## 하위 폴더·문서 목록
 
-읽는 순서는 [데이터 학습 로드맵](../landscape/data-keywords.md)이 정합니다. DDIA 2판을 척추로 삼아 원리 축만 세운 문서라, SQL·JDBC·JPA·QueryDSL 을 익히는 도구 축은 아래 주제군 표가 맡습니다.
+읽는 순서는 [데이터 학습 로드맵](data-keywords.md)이 정합니다. DDIA 2판을 척추로 삼아 원리 축만 세운 문서라, SQL·JDBC·JPA·QueryDSL 을 익히는 도구 축은 아래 주제군 표가 맡습니다.
 
 | 주제군 | 범위 | 진입점 |
 |---|---|---|
@@ -70,6 +70,6 @@ MinIO 같은 오브젝트 스토리지는 분산 파일시스템·오브젝트 �
 
 ## 관련 문서
 
-- [데이터 학습 로드맵](../landscape/data-keywords.md) — 소장 책과 정독 노트로 세운 원리 축 읽기 순서
+- [데이터 학습 로드맵](data-keywords.md) — 소장 책과 정독 노트로 세운 원리 축 읽기 순서
 - [04_messaging](../04_messaging/README.md) — Kafka·Redpanda·CDC 구현과 운영
 - [09_spring](../09_spring/README.md) — Spring 프레임워크 전반의 진입점

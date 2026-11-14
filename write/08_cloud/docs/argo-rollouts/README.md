@@ -5,7 +5,7 @@ status: final
 related:
   - ../README.md
   - ../../book/argocd-up-and-running/README.md
-  - ../../../landscape/devops-keywords.md
+  - ../../../07_devops/devops-keywords.md
 updated: 2026-11-08
 ---
 
@@ -43,4 +43,4 @@ updated: 2026-11-08
 - [docs MOC](../README.md) — 제품별 폴더 규칙과 전체 문서 목록
 - [GitOps 다음 걸음](../../book/argocd-up-and-running/14-01.GitOps%20%EB%8B%A4%EC%9D%8C%20%EA%B1%B8%EC%9D%8C%20%E2%80%94%20%EC%A0%80%EC%9E%A5%EC%86%8C%20%EA%B5%AC%EC%A1%B0%C2%B7Rendered%20Manifests%C2%B7%EC%8A%B9%EA%B2%A9.md#argo-rollouts-%EC%99%80-%EC%A0%90%EC%A7%84-%EB%B0%B0%ED%8F%AC) — Argo CD 가 점진 배포를 직접 하지 않고 Rollouts 같은 도구에 맡긴다는 책의 서술
 - [Application 여럿을 순서대로](../../book/argocd-up-and-running/10-01.Application%20%EC%97%AC%EB%9F%BF%EC%9D%84%20%EC%88%9C%EC%84%9C%EB%8C%80%EB%A1%9C%20%E2%80%94%20%ED%97%AC%EC%8A%A4%20%EC%B2%B4%ED%81%AC%C2%B7App-of-Apps%20sync%20wave%C2%B7Progressive%20Sync.md) — ApplicationSet 의 Progressive Sync 는 트래픽을 나누는 점진 배포와 다른 기능입니다
-- [DevOps 로드맵](../../../landscape/devops-keywords.md) — 6단계 점진 배포에서 이 폴더가 놓인 자리
+- [DevOps 로드맵](../../../07_devops/devops-keywords.md) — 6단계 점진 배포에서 이 폴더가 놓인 자리

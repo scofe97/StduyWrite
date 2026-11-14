@@ -45,7 +45,7 @@ related:
   - ./../paw_packet-analysis-wireshark/README.md
   - ../../../08_cloud/book/networking-and-kubernetes/README.md
   - ./../../README.md
-  - ./../../../landscape/network-keywords.md
+  - ../../network-keywords.md
 learning:
   topic: computer-networking-top-down
   scope: durable
@@ -74,7 +74,7 @@ updated: 2026-09-09
 
 경계를 한 문장으로 그으면 이렇습니다. **N&K 정독본은 커널의 구현을, Wireshark 책은 관측을, 이 책은 규격과 원리를 맡습니다.** 같은 TCP 를 세 각도에서 보게 되므로 겹치는 자리에는 교차 참조를 답니다.
 
-읽는 순서를 정하는 일은 이 문서가 하지 않습니다. Kubernetes 를 향한 책 순서는 [`write/landscape/network-keywords.md`](../../../landscape/network-keywords.md) 가 맡고, 이 폴더는 그 로드맵 밖의 이론 축입니다.
+읽는 순서를 정하는 일은 이 문서가 하지 않습니다. Kubernetes 를 향한 책 순서는 [`write/02_os/network-keywords.md`](../../network-keywords.md) 가 맡고, 이 폴더는 그 로드맵 밖의 이론 축입니다.
 
 
 

@@ -22,7 +22,7 @@ updated: 2026-11-14
 
 ## 경계 기준
 
-Kubernetes 를 어떤 순서로 읽을지는 [k8s-keywords.md](../landscape/k8s-keywords.md) 가 정합니다. 네트워크 데이터패스는 [`network-keywords.md`](../landscape/network-keywords.md) 가 따로 다룹니다.
+Kubernetes 를 어떤 순서로 읽을지는 [k8s-keywords.md](k8s-keywords.md) 가 정합니다. 네트워크 데이터패스는 [`network-keywords.md`](../02_os/network-keywords.md) 가 따로 다룹니다.
 
 CI/CD 파이프라인 작성 자체는 [`07_devops/`](../07_devops/)로 갑니다. 반대로 K8s 매니페스트 설계, 네트워크 정책, 서비스 메시 사이드카처럼 "클러스터 내부에서 어떻게 돌아가는가"는 여기서 다룹니다.
 
@@ -36,7 +36,7 @@ GitOps 도구 중에서도 ArgoCD는 문서 양과 운영 주제가 커서 [`boo
 
 ### k8s-keywords.md
 
-키워드 파일: [k8s-keywords.md](../landscape/k8s-keywords.md)
+키워드 파일: [k8s-keywords.md](k8s-keywords.md)
 
 | 묶음 | 다룬 문서 | 빈 필수 키워드 |
 |---|---|---|

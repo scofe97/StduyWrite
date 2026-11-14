@@ -1,16 +1,16 @@
 ---
 title: Kubernetes 개발 키워드
-tags: [landscape, kubernetes, k8s, cloud-native, operations, security, eks, iac]
+tags: [keywords, kubernetes, k8s, cloud-native, operations, security, eks, iac]
 status: final
 source:
   - ../08_cloud/kubernetes/README.md
   - ../08_cloud/book/kubernetes-in-action/README.md
 related:
-  - README.md
-  - os-keywords.md
-  - network-keywords.md
-  - observability-keywords.md
-  - devops-keywords.md
+  - ../README.md
+  - ../02_os/os-keywords.md
+  - ../02_os/network-keywords.md
+  - ../06_observability/observability-keywords.md
+  - ../07_devops/devops-keywords.md
   - ../08_cloud/kubernetes/README.md
 updated: 2026-10-28
 ---
@@ -36,7 +36,7 @@ updated: 2026-10-28
 | `command` · `args` · 환경변수 | 필수 | [command·args](../08_cloud/book/kubernetes-in-action/08-01.command%C2%B7args%EC%99%80%20%ED%99%98%EA%B2%BD%EB%B3%80%EC%88%98.md) · [EnvVar Configuration](../08_cloud/book/kubernetes-patterns/19-01.EnvVar%20Configuration%20%E2%80%94%20%ED%99%98%EA%B2%BD%EB%B3%80%EC%88%98%EB%A1%9C%20%EC%84%A4%EC%A0%95%EC%9D%84%20%EC%99%B8%EB%B6%80%ED%99%94%ED%95%98%EA%B8%B0.md) | Kubernetes Patterns 19장 |
 | ConfigMap · Secret · Downward API | 필수 | [ConfigMap](../08_cloud/book/kubernetes-in-action/08-02.ConfigMap%EC%9C%BC%EB%A1%9C%20%EC%84%A4%EC%A0%95%20%EB%B6%84%EB%A6%AC%ED%95%98%EA%B8%B0.md) · [Secret과 Downward API](../08_cloud/book/kubernetes-in-action/08-03.Secret%EA%B3%BC%20Downward%20API.md) · [Configuration Resource](../08_cloud/book/kubernetes-patterns/20-01.Configuration%20Resource%20%E2%80%94%20ConfigMap%EA%B3%BC%20Secret%EC%9C%BC%EB%A1%9C%20%EC%84%A4%EC%A0%95%20%EB%B6%84%EB%A6%AC.md) · [Immutable Configuration](../08_cloud/book/kubernetes-patterns/21-01.Immutable%20Configuration%20%E2%80%94%20%EC%84%A4%EC%A0%95%EC%9D%84%20%EB%B6%88%EB%B3%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%A1%9C.md) · [Configuration Template](../08_cloud/book/kubernetes-patterns/22-01.Configuration%20Template%20%E2%80%94%20%ED%81%B0%20%EC%84%A4%EC%A0%95%EC%9D%84%20%EC%8B%9C%EC%9E%91%20%EC%8B%9C%20%ED%85%9C%ED%94%8C%EB%A6%BF%EC%9C%BC%EB%A1%9C%20%EC%83%9D%EC%84%B1.md) | Kubernetes Patterns 20~22장 |
 | kubectl 기본 조회 | 필수 | | Kubernetes: Up and Running 4장 |
-| 컨테이너 격리 — namespace · cgroup | 추천 | [namespace·cgroup 격리](../08_cloud/book/kubernetes-in-action/02-03.%EB%84%A4%EC%9E%84%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4%EC%99%80%20cgroup%EC%9C%BC%EB%A1%9C%20%EB%B3%B4%EB%8A%94%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EA%B2%A9%EB%A6%AC.md) · [OS 로드맵](os-keywords.md) · [컨테이너와 가상머신](../08_cloud/book/kubernetes-in-action/02-01.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%EC%99%80%20%EA%B0%80%EC%83%81%EB%A8%B8%EC%8B%A0.md) | Kubernetes in Action 2장 |
+| 컨테이너 격리 — namespace · cgroup | 추천 | [namespace·cgroup 격리](../08_cloud/book/kubernetes-in-action/02-03.%EB%84%A4%EC%9E%84%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4%EC%99%80%20cgroup%EC%9C%BC%EB%A1%9C%20%EB%B3%B4%EB%8A%94%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EA%B2%A9%EB%A6%AC.md) · [OS 로드맵](../02_os/os-keywords.md) · [컨테이너와 가상머신](../08_cloud/book/kubernetes-in-action/02-01.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%EC%99%80%20%EA%B0%80%EC%83%81%EB%A8%B8%EC%8B%A0.md) | Kubernetes in Action 2장 |
 | 12-Factor App · 설정 관리 | 선택 | [설정 관리](../09_spring/books/cloud-native-spring-in-action/04.%EC%99%B8%EB%B6%80%ED%99%94%20%EC%84%A4%EC%A0%95%20%EA%B4%80%EB%A6%AC.md) | |
 | 불변 인프라 | 선택 | [불변 인프라](../99_ETC/2026-04-19_Reconciliation%20Loop%EC%9D%98%20%EA%B3%84%EB%B3%B4%20%E2%80%94%20%EC%A0%9C%EC%96%B4%EC%9D%B4%EB%A1%A0%EC%97%90%EC%84%9C%20GitOps%EA%B9%8C%EC%A7%80.md) | |
 | 타입 1 하이퍼바이저 · 타입 2 하이퍼바이저 | 선택 | [타입 1 하이퍼바이저](../08_cloud/book/container-security/05-01.%EA%B0%80%EC%83%81%EB%A8%B8%EC%8B%A0%20%E2%80%94%20%EC%99%9C%20VM%20%EA%B2%A9%EB%A6%AC%EA%B0%80%20%EB%8D%94%20%EA%B0%95%ED%95%98%EB%8B%A4%EA%B3%A0%20%ED%95%98%EB%8A%94%EA%B0%80.md) · [타입 2 하이퍼바이저](../08_cloud/book/container-security/05-01.%EA%B0%80%EC%83%81%EB%A8%B8%EC%8B%A0%20%E2%80%94%20%EC%99%9C%20VM%20%EA%B2%A9%EB%A6%AC%EA%B0%80%20%EB%8D%94%20%EA%B0%95%ED%95%98%EB%8B%A4%EA%B3%A0%20%ED%95%98%EB%8A%94%EA%B0%80.md) | |
@@ -95,9 +95,9 @@ updated: 2026-10-28
 | 외부 저장소 통합 · 복제하지 않는 선택지 | 선택 | [저장소 통합 랩](../08_cloud/book/kubernetes-up-and-running/16-01.Integrating%20Storage%20%E2%80%94%20%EB%B3%B5%EC%A0%9C%ED%95%98%EC%A7%80%20%EC%95%8A%EB%8A%94%20%EC%84%A0%ED%83%9D%EC%A7%80%EC%99%80%20MySQL%20%EC%8B%B1%EA%B8%80%ED%84%B4%20%EB%9E%A9.md) | Kubernetes: Up and Running 16장 |
 | HPA · VPA · Cluster Autoscaler · KEDA | 추천 | [Elastic Scale](../08_cloud/book/kubernetes-patterns/29-01.Elastic%20Scale%20%E2%80%94%20%EB%B6%80%ED%95%98%EC%97%90%20%EB%A7%9E%EC%B6%B0%20%EC%84%B8%20%EC%B0%A8%EC%9B%90%EC%9C%BC%EB%A1%9C%20%EC%9E%90%EB%8F%99%20%ED%99%95%EC%9E%A5.md) | Production Kubernetes 13장 |
 | 노드 오토스케일링 두 방식 — Cluster Autoscaler 와 Karpenter | 선택 | | [Karpenter](https://karpenter.sh/docs/) |
-| CA 가 AZ 를 고르지 못하는 이유 — AZ 별 노드 그룹 · `--balance-similar-node-groups` | 추천 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [CA FAQ](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md) |
-| Karpenter NodePool · EC2NodeClass · weight · consolidation 정책 | 선택 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [Karpenter NodePools](https://karpenter.sh/docs/concepts/nodepools/) |
-| overprovisioning — 낮은 PriorityClass 의 자리 표시 Pod | 선택 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [CA FAQ](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#how-can-i-configure-overprovisioning-with-cluster-autoscaler) |
+| CA 가 AZ 를 고르지 못하는 이유 — AZ 별 노드 그룹 · `--balance-similar-node-groups` | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [CA FAQ](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md) |
+| Karpenter NodePool · EC2NodeClass · weight · consolidation 정책 | 선택 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [Karpenter NodePools](https://karpenter.sh/docs/concepts/nodepools/) |
+| overprovisioning — 낮은 PriorityClass 의 자리 표시 Pod | 선택 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [CA FAQ](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#how-can-i-configure-overprovisioning-with-cluster-autoscaler) |
 | Self Awareness — 자기 메타데이터 | 선택 | [Self Awareness](../08_cloud/book/kubernetes-patterns/14-01.Self%20Awareness%20%E2%80%94%20downward%20API%EB%A1%9C%20%EC%9E%90%EA%B8%B0%20%EB%A9%94%ED%83%80%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%96%BB%EA%B8%B0.md) | Kubernetes Patterns 14장 |
 | 장애 도메인 · 가용 영역 · 리전 · 멀티 AZ · 크로스 리전 · 멀티 리전 · 지역 복제 | 선택 | [가용 영역](../08_cloud/book/production-kubernetes/02-01.Deployment%20Models%20%E2%80%94%20%EB%B0%B0%ED%8F%AC%20%EB%AA%A8%EB%8D%B8%EA%B3%BC%20%EA%B3%A0%EA%B0%80%EC%9A%A9%EC%84%B1%20%EC%9D%B8%ED%94%84%EB%9D%BC%20%EA%B5%AC%EC%B6%95.md) · [멀티 AZ](../08_cloud/book/production-kubernetes/02-01.Deployment%20Models%20%E2%80%94%20%EB%B0%B0%ED%8F%AC%20%EB%AA%A8%EB%8D%B8%EA%B3%BC%20%EA%B3%A0%EA%B0%80%EC%9A%A9%EC%84%B1%20%EC%9D%B8%ED%94%84%EB%9D%BC%20%EA%B5%AC%EC%B6%95.md) | |
 
@@ -175,11 +175,11 @@ updated: 2026-10-28
 | kubectl 고급 조회 · JSONPath | 필수 | [JSONPath 조회](../08_cloud/kubernetes/09_operations/09-03.JSONPath%EC%99%80%20kubectl%20%EA%B3%A0%EA%B8%89%20%EC%A1%B0%ED%9A%8C.md) | |
 | kubelet 지표 엔드포인트 — `/stats/summary` 직접 호출 · `nodes/stats` 와 `nodes/proxy` RBAC | 추천 | [kubelet 이 재는 것](../08_cloud/docs/kubernetes/03-01.%EC%9E%90%EC%9B%90%20%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%20%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8%20%E2%80%94%20kubelet%EC%9D%B4%20%EC%9E%AC%EB%8A%94%20%EA%B2%83%EA%B3%BC%20kubectl%20top%EC%9D%B4%20%EC%9D%BD%EB%8A%94%20%EA%B2%83.md) | Kubernetes Best Practices 3장 · [Node metrics](https://kubernetes.io/docs/reference/instrumentation/node-metrics/) · [Kubelet 인증·인가](https://kubernetes.io/docs/reference/access-authn-authz/kubelet-authn-authz/) |
 | ephemeral container · `kubectl debug` | 추천 | | [Debug Running Pods](https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/) |
-| OOMKilled · exit code 137 · CPU throttling | 필수 | [OOMKilled 사례 분석](../08_cloud/kubernetes/09_operations/09-02.OOMKilled%20%EC%82%AC%EB%A1%80%20%EB%B6%84%EC%84%9D.md) · [OS 로드맵](os-keywords.md) | |
+| OOMKilled · exit code 137 · CPU throttling | 필수 | [OOMKilled 사례 분석](../08_cloud/kubernetes/09_operations/09-02.OOMKilled%20%EC%82%AC%EB%A1%80%20%EB%B6%84%EC%84%9D.md) · [OS 로드맵](../02_os/os-keywords.md) | |
 | SIGTERM · PID 1 · PreStop · `terminationGracePeriodSeconds` | 필수 | [Kubernetes 장애 기록](../troubleshooting/kubernetes/README.md) | |
 | node pressure · eviction · NodeNotReady | 추천 | [Kubernetes 장애 기록](../troubleshooting/kubernetes/README.md) | |
 | 노드 추가·제거 — cordon · drain · PDB 와의 맞물림 | 필수 | | [Safely Drain a Node](https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/) |
-| 노드 회수를 막는 PDB · `maxSurge` 로 배포 중 노드 급증 제어 | 추천 | [당근 발표 정리](_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [Karpenter Disruption](https://karpenter.sh/docs/concepts/disruption/) |
+| 노드 회수를 막는 PDB · `maxSurge` 로 배포 중 노드 급증 제어 | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [Karpenter Disruption](https://karpenter.sh/docs/concepts/disruption/) |
 | OS 자동 업데이트 — 파이프라인 밖에서 노드를 바꾸는 장치 | 선택 | [진단 개념](../troubleshooting/_concepts/os-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8-%EB%B0%96%EC%97%90%EC%84%9C-%EB%85%B8%EB%93%9C%EB%A5%BC-%EB%B0%94%EA%BE%B8%EB%8A%94-%EC%9E%A5%EC%B9%98.md) |  |
 | 멀티테넌시 | 추천 | | Production Kubernetes 12장 |
 | 가상 컨트롤 플레인 — tenant 와 host 를 잇는 sync 방향 | 선택 | | Production Kubernetes 12장 |
@@ -187,7 +187,7 @@ updated: 2026-10-28
 | 멀티클러스터 세 모델 | 추천 | [멀티클러스터 세 모델](../08_cloud/book/kubernetes-up-and-running/21-01.Multicluster%20%E2%80%94%20%EB%8A%98%EB%A6%AC%EA%B8%B0%20%EC%A0%84%EC%97%90%20%EA%B0%96%EC%B6%9C%20%EA%B2%83%EA%B3%BC%20%EB%8A%98%EB%A6%B0%20%EB%92%A4%20%EA%B0%88%EB%A6%AC%EB%8A%94%20%EC%84%B8%20%EB%AA%A8%EB%8D%B8.md) | Kubernetes: Up and Running 21장 |
 | 관리형 대 자체 운영 — EKS · GKE · AKS 를 고르는 기준 | 추천 | | Production Kubernetes 2장 |
 | OpenShift — Route · SCC · 설치 방식 | 선택 | | Operating OpenShift 2·3장 |
-| 서비스 메시를 쓸 것인가 | 선택 | [서비스 메시 판단](../08_cloud/book/kubernetes-up-and-running/15-01.Service%20Meshes%20%E2%80%94%20%EC%93%B8%20%EA%B2%83%EC%9D%B8%EA%B0%80%EB%A5%BC%20%EB%A8%BC%EC%A0%80%20%EB%94%B0%EC%A7%84%EB%8B%A4.md) · [네트워크 로드맵](network-keywords.md) | Kubernetes: Up and Running 15장 |
+| 서비스 메시를 쓸 것인가 | 선택 | [서비스 메시 판단](../08_cloud/book/kubernetes-up-and-running/15-01.Service%20Meshes%20%E2%80%94%20%EC%93%B8%20%EA%B2%83%EC%9D%B8%EA%B0%80%EB%A5%BC%20%EB%A8%BC%EC%A0%80%20%EB%94%B0%EC%A7%84%EB%8B%A4.md) · [네트워크 로드맵](../02_os/network-keywords.md) | Kubernetes: Up and Running 15장 |
 | CKA 대비와 문제 풀이 | 추천 | [CKA 대비](../08_cloud/kubernetes/09_operations/09-04.CKA%20%EB%8C%80%EB%B9%84%EC%99%80%20%EB%AC%B8%EC%A0%9C%20%ED%92%80%EC%9D%B4%20%EC%A0%84%EB%9E%B5.md) | |
 | CKAD 대비 — 시험 범위는 1~4단계 워크로드 · 연결 · 저장 | 선택 |  | [CKAD 커리큘럼](https://github.com/cncf/curriculum) |
 | 액티브-액티브 · 액티브-패시브 · 페일오버 · 페일오버 자동화 · 페일백 · 리플리카 승격 | 선택 | [액티브-액티브](../07_devops/03_Nexus/05-04.%ED%94%84%EB%A1%9C%EB%8D%95%EC%85%98%20%EC%9A%B4%EC%98%81%20%ED%8C%A8%ED%84%B4.md) | |
@@ -206,11 +206,11 @@ updated: 2026-10-28
 
 | 대상 | 이유 |
 |---|---|
-| 패킷 경로 · CNI 데이터패스 · eBPF · Cilium · CNI 구현체 비교 | [네트워크 로드맵](network-keywords.md)이 맡습니다 |
-| cgroup · namespace 의 커널 구현 | [OS 로드맵](os-keywords.md) 3단계가 맡습니다 |
-| Prometheus · Grafana · OpenTelemetry | [관측 가능성 로드맵](observability-keywords.md)이 맡습니다 |
-| 이미지 빌드 · CI 파이프라인 · Helm · GitOps · 점진 배포 · IaC | [DevOps 로드맵](devops-keywords.md)이 맡습니다 |
-| Istio 의 트래픽 관리와 mTLS | [네트워크 로드맵](network-keywords.md) 7단계가 맡습니다. 여기는 "쓸 것인가"까지입니다 |
-| VPC · Security Group · 클라우드 네트워크 경계 | [네트워크 로드맵](network-keywords.md) 5단계가 맡습니다 |
+| 패킷 경로 · CNI 데이터패스 · eBPF · Cilium · CNI 구현체 비교 | [네트워크 로드맵](../02_os/network-keywords.md)이 맡습니다 |
+| cgroup · namespace 의 커널 구현 | [OS 로드맵](../02_os/os-keywords.md) 3단계가 맡습니다 |
+| Prometheus · Grafana · OpenTelemetry | [관측 가능성 로드맵](../06_observability/observability-keywords.md)이 맡습니다 |
+| 이미지 빌드 · CI 파이프라인 · Helm · GitOps · 점진 배포 · IaC | [DevOps 로드맵](../07_devops/devops-keywords.md)이 맡습니다 |
+| Istio 의 트래픽 관리와 mTLS | [네트워크 로드맵](../02_os/network-keywords.md) 7단계가 맡습니다. 여기는 "쓸 것인가"까지입니다 |
+| VPC · Security Group · 클라우드 네트워크 경계 | [네트워크 로드맵](../02_os/network-keywords.md) 5단계가 맡습니다 |
 | Kubernetes in Action 3장 | 클러스터를 띄우는 절차입니다. 순서가 아니라 준비 단계입니다 |
 | Kubernetes 대안 — Nomad · ECS · Cloud Run | 오케스트레이터를 고르는 축입니다. 이 로드맵은 Kubernetes 를 쓰기로 한 뒤의 순서입니다 |

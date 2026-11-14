@@ -3,7 +3,7 @@ title: Spring 학습 통합 MOC
 tags: [moc, spring, spring-boot]
 status: final
 related:
-  - ../landscape/spring-keywords.md
+  - spring-keywords.md
   - ../README.md
   - ../03_architecture/README.md
   - ../04_messaging/README.md
@@ -42,7 +42,7 @@ updated: 2026-11-14
 
 ### spring-keywords.md
 
-키워드 파일: [spring-keywords.md](../landscape/spring-keywords.md)
+키워드 파일: [spring-keywords.md](spring-keywords.md)
 
 | 묶음 | 다룬 문서 | 빈 필수 키워드 |
 |---|---|---|
@@ -90,7 +90,7 @@ updated: 2026-11-14
 
 ## Spring 딥다이브 전체 지도
 
-위의 "하위 폴더·문서 목록"이 어떤 폴더에 무엇이 있는지를, "학습 경로 추천"이 어떤 순서로 읽는지를 답한다면, 이 절은 Spring 본질을 어디까지 깊게 파야 하는가를 답합니다. 읽는 순서는 [Spring 학습 로드맵](../landscape/spring-keywords.md)이 정합니다. 컨테이너, 프록시, 요청 처리, 트랜잭션을 지나 부트, 통신, 보안, 운영, 테스트까지 9단계입니다. 각 단계와 짝을 맞춰 보유 문서와 미작성 갭을 연결한 네비게이션입니다.
+위의 "하위 폴더·문서 목록"이 어떤 폴더에 무엇이 있는지를, "학습 경로 추천"이 어떤 순서로 읽는지를 답한다면, 이 절은 Spring 본질을 어디까지 깊게 파야 하는가를 답합니다. 읽는 순서는 [Spring 학습 로드맵](spring-keywords.md)이 정합니다. 컨테이너, 프록시, 요청 처리, 트랜잭션을 지나 부트, 통신, 보안, 운영, 테스트까지 9단계입니다. 각 단계와 짝을 맞춰 보유 문서와 미작성 갭을 연결한 네비게이션입니다.
 
 Spring Container가 Bean을 만들고 Proxy가 부가 기능을 감쌉니다. DispatcherServlet이 요청을 흘려보내고 TransactionManager가 DB 경계를 관리합니다. Boot AutoConfiguration이 설정을 조립하며 Actuator와 Test가 운영성과 검증 가능성을 엽니다.
 
@@ -103,6 +103,6 @@ Spring Container가 Bean을 만들고 Proxy가 부가 기능을 감쌉니다. Di
 | 5 | Validation / Binding / Conversion (대주제 11) | [02_data-binding/](02_data-binding/) | Converter / Formatter / ConversionService 전용편 |
 | 6 | Spring Boot 자동구성·외부설정 (대주제 12~14) | [07_autoconfig/](07_autoconfig/) | 7편으로 충분 — 신규 후보 없음 |
 | 7 | 운영·연동·테스트 (대주제 15~24) | Event [06_events/](06_events/), Async/Scheduling [05_aop/01-02](05_aop/01-02.스프링%20스케줄링%20—%20@Scheduled에서%20Quartz까지.md)·01-04, Test [04_testing/](04_testing/), Data [../05_data/](../05_data/) | Cache Abstraction 전용편, MyBatis 연동 전용편, 성능 튜닝·장애 분석편 |
-| 8 | 빌드·패키징·Tomcat 배포 ([로드맵 9단계](../landscape/spring-keywords.md)) | [01_core/02-02](01_core/02-02.내장%20톰캣과%20SpringApplication%20—%20JAR로%20WAS를%20품다.md) | bootJar vs plain jar·Boot Loader(JarLauncher/WarLauncher)·외부 WAR(SpringBootServletInitializer·providedRuntime)·Layered JAR·Docker layer cache·CI/CD 산출물 관리 전용편 |
+| 8 | 빌드·패키징·Tomcat 배포 ([로드맵 9단계](spring-keywords.md)) | [01_core/02-02](01_core/02-02.내장%20톰캣과%20SpringApplication%20—%20JAR로%20WAS를%20품다.md) | bootJar vs plain jar·Boot Loader(JarLauncher/WarLauncher)·외부 WAR(SpringBootServletInitializer·providedRuntime)·Layered JAR·Docker layer cache·CI/CD 산출물 관리 전용편 |
 
-단계별 개념 표와 우선순위, 책의 읽을 장은 [로드맵](../landscape/spring-keywords.md)이 정본입니다. 미작성 갭은 위 표의 "갭" 열에 모았습니다. 코어 영역은 BeanPostProcessor와 순환 참조 전용편, AOP는 Weaving 4종과 AspectJ 실험편을 다룹니다. 데이터와 웹은 MyBatis Connection 바인딩, Custom ArgumentResolver, Converter/ConversionService 편이 후보입니다. 운영과 배포는 Cache Abstraction, 성능 튜닝, Tomcat 배포 전용편을 보강 대상으로 둡니다.
+단계별 개념 표와 우선순위, 책의 읽을 장은 [로드맵](spring-keywords.md)이 정본입니다. 미작성 갭은 위 표의 "갭" 열에 모았습니다. 코어 영역은 BeanPostProcessor와 순환 참조 전용편, AOP는 Weaving 4종과 AspectJ 실험편을 다룹니다. 데이터와 웹은 MyBatis Connection 바인딩, Custom ArgumentResolver, Converter/ConversionService 편이 후보입니다. 운영과 배포는 Cache Abstraction, 성능 튜닝, Tomcat 배포 전용편을 보강 대상으로 둡니다.

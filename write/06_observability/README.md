@@ -24,7 +24,7 @@ Alert 룰 설계와 SLO는 본 디렉토리에 속합니다. 같은 룰을 CI/CD
 
 ### observability-keywords.md
 
-키워드 파일: [observability-keywords.md](../landscape/observability-keywords.md)
+키워드 파일: [observability-keywords.md](observability-keywords.md)
 
 | 묶음 | 다룬 문서 | 빈 필수 키워드 |
 |---|---|---|

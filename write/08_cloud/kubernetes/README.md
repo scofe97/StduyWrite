@@ -6,7 +6,7 @@ source:
   - ../../../poc/03_CloudNative/02-kubernetes/README.md@8ac9e97
   - https://kubernetes.io/docs/concepts/
 related:
-  - ../../landscape/k8s-keywords.md
+  - ../k8s-keywords.md
   - ../README.md
   - ../book/argocd-up-and-running/README.md
   - ../book/kubernetes-in-action/README.md
@@ -119,7 +119,7 @@ Jenkins·SonarQube·ArgoCD·Harbor를 K8s 위에 올려 개발 생산성과 배�
 
 ## 학습 로드맵
 
-> [Kubernetes 학습 로드맵](../../landscape/k8s-keywords.md)은 이 폴더의 문서를 오브젝트, 워크로드, 연결, 자원과 저장, 내부 구조, 보안과 확장, 운영 순서로 연결합니다.
+> [Kubernetes 학습 로드맵](../k8s-keywords.md)은 이 폴더의 문서를 오브젝트, 워크로드, 연결, 자원과 저장, 내부 구조, 보안과 확장, 운영 순서로 연결합니다.
 
 로드맵의 단계별 표에서 키워드에 대응하는 현재 문서와 완료 기준을 함께 확인합니다.
 

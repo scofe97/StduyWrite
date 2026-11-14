@@ -9,7 +9,7 @@ source:
 related:
   - ../cks-study-guide/README.md
   - ../kubernetes-up-and-running/README.md
-  - ../../../landscape/devops-keywords.md
+  - ../../../07_devops/devops-keywords.md
   - ../../README.md
 learning:
   topic: argocd-up-and-running
@@ -51,7 +51,7 @@ updated: 2026-11-08
 
 ### 로드맵 속 자리
 
-[DevOps 로드맵](../../../landscape/devops-keywords.md)의 5단계 GitOps 는 개념 행 네 개로 나뉩니다. 대응하는 장은 다음과 같습니다. GitOps 원칙과 선언은 1~3장, 동기화와 배포 제어는 4·5장, 대규모 배포와 테넌시는 7·8·10장입니다. 환경 승격과 연계는 12장과 14장의 GitOps Promotions 절에 대응합니다.
+[DevOps 로드맵](../../../07_devops/devops-keywords.md)의 5단계 GitOps 는 개념 행 네 개로 나뉩니다. 대응하는 장은 다음과 같습니다. GitOps 원칙과 선언은 1~3장, 동기화와 배포 제어는 4·5장, 대규모 배포와 테넌시는 7·8·10장입니다. 환경 승격과 연계는 12장과 14장의 GitOps Promotions 절에 대응합니다.
 
 6단계 점진 배포의 Argo Rollouts 행에는 대응하는 장이 없습니다. 14장은 Argo CD 가 점진 배포를 직접 하지 않고 Argo Rollouts 같은 다른 도구에 맡긴다고 짧게 밝힙니다. 세부는 책의 범위 밖이라고 선을 긋습니다. 10장의 Progressive Sync 는 ApplicationSet 이 Application 을 단계적으로 동기화하는 기능입니다. 트래픽을 나누는 점진 배포와는 다른 것입니다.
 
@@ -169,7 +169,7 @@ Argo CD 는 버전마다 CRD 필드와 기능 상태가 바뀝니다. 그래서 
 - [『CKS Study Guide』 정독본](../cks-study-guide/README.md) — 같은 `book/` 영역, 클러스터 하드닝 절차의 짝이자 9장 보안과 층이 다른 비교 대상
 - [『Kubernetes: Up and Running』 정독본](../kubernetes-up-and-running/README.md) — 오브젝트와 운영 관점의 짝, Application 이 배포하는 대상의 기초
 - [Argo Rollouts 정독](../../docs/argo-rollouts/README.md) — 이 책에 대응하는 장이 없어 옛 argocd/ 노트에서 옮긴 Rollouts 두 편
-- [DevOps 로드맵](../../../landscape/devops-keywords.md) — 5단계 GitOps·6단계 점진 배포에서 이 주제가 놓인 자리
+- [DevOps 로드맵](../../../07_devops/devops-keywords.md) — 5단계 GitOps·6단계 점진 배포에서 이 주제가 놓인 자리
 - [08_cloud MOC](../../README.md) — 상위 카테고리 경계
 
 [^author]: 저자 소개는 서점 목록 페이지(https://www.schweitzer-online.de/en/buch/Block/Argo-CD-Up-Running/9781098142001/A71915297/, 2026-11-06 조회)에 실린 소개문을 따릅니다. Andrew Block 은 Helm 의 핵심 메인테이너이자 『Managing Kubernetes Resources Using Helm』 등 클라우드 네이티브 책을 쓴 저자이고, Christian Hernandez 는 OpenGitOps 프로젝트 메인테이너이자 Argo Project 구성원입니다. 서문의 감사의 말도 두 사람이 Argo 프로젝트와 GitOps 커뮤니티에서 오래 활동했다고 밝힙니다.

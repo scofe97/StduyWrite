@@ -22,7 +22,7 @@ Jenkins 파이프라인 그루비 작성법은 여기로 배치합니다. 반면
 
 ### devops-keywords.md
 
-키워드 파일: [devops-keywords.md](../landscape/devops-keywords.md)
+키워드 파일: [devops-keywords.md](devops-keywords.md)
 
 | 묶음 | 다룬 문서 | 빈 필수 키워드 |
 |---|---|---|

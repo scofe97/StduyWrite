@@ -40,7 +40,7 @@ updated: 2026-09-05
 | [`2026-04-19_Spring Boot 버전 업그레이드와 Gradle·라이브러리 호환성.md`](./2026-04-19_Spring%20Boot%20%EB%B2%84%EC%A0%84%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C%EC%99%80%20Gradle%C2%B7%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC%20%ED%98%B8%ED%99%98%EC%84%B1.md) | Spring Boot 를 올릴 때 Gradle·의존 라이브러리가 함께 걸리는 지점 정리 |
 | [`2026-04-19_ArgoCD App-of-Apps 패턴.md`](./2026-04-19_ArgoCD%20App-of-Apps%20%ED%8C%A8%ED%84%B4.md) | 루트 Application 하나가 자식 Application 을 렌더링해 만드는 구조. 서비스 20여 개를 UI 수동 등록에서 Git 추적으로 옮기려던 기록 |
 
-외부 AI 결과를 줄인 요약은 [roadmap 「AI 요약」](../landscape/README.md#ai-요약-_digest) 에 모았습니다.
+외부 AI 결과를 줄인 요약은 [AI 요약](../_digest/README.md) 에 모았습니다.
 
 ## 하위 폴더
 

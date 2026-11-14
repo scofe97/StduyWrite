@@ -22,7 +22,7 @@ Kotlin·Scala 문서가 5개 이상 쌓이는 시점에 `02_runtime/`을 다시 
 
 ### go-keywords.md
 
-키워드 파일: [go-keywords.md](../landscape/go-keywords.md)
+키워드 파일: [go-keywords.md](go-keywords.md)
 
 | 묶음 | 다룬 문서 | 빈 필수 키워드 |
 |---|---|---|
@@ -36,7 +36,7 @@ Kotlin·Scala 문서가 5개 이상 쌓이는 시점에 `02_runtime/`을 다시 
 
 ### jvm-keywords.md
 
-키워드 파일: [jvm-keywords.md](../landscape/jvm-keywords.md)
+키워드 파일: [jvm-keywords.md](jvm-keywords.md)
 
 | 묶음 | 다룬 문서 | 빈 필수 키워드 |
 |---|---|---|

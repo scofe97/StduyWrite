@@ -1,16 +1,16 @@
 ---
 title: JVM 개발 키워드
-tags: [landscape, jvm, java, gc, jit, concurrency, performance, troubleshooting]
+tags: [keywords, jvm, java, gc, jit, concurrency, performance, troubleshooting]
 status: final
 source:
   - ../01_language/book/Inside the Java Virtual Machine JVM Advanced Features and Best Practices/README.md
   - ../01_language/book/jpf_java-performance/README.md
   - ../01_language/book/tsj_troubleshooting-java/README.md
 related:
-  - README.md
-  - os-keywords.md
-  - spring-keywords.md
-  - data-keywords.md
+  - ../README.md
+  - ../02_os/os-keywords.md
+  - ../09_spring/spring-keywords.md
+  - ../05_data/data-keywords.md
   - ../troubleshooting/runtime/README.md
 updated: 2026-09-23
 ---
@@ -30,7 +30,7 @@ updated: 2026-09-23
 | 객체 레이아웃 · 헤더 · 접근 방식 | 필수 | [핫스팟 객체 구조](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch02_automatic-memory-management/01-02.%ED%95%AB%EC%8A%A4%ED%8C%9F%EC%9D%98%20%EA%B0%9D%EC%B2%B4%20%EB%93%A4%EC%97%AC%EB%8B%A4%EB%B3%B4%EA%B8%B0.md) | 심층 자바 가상 머신 2장 |
 | 스택 프레임 · 지역 변수 테이블 · 피연산자 스택 | 필수 | [스택 프레임 구조](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch03_class-loading-mechanism/03-01.%EB%9F%B0%ED%83%80%EC%9E%84%20%EC%8A%A4%ED%83%9D%20%ED%94%84%EB%A0%88%EC%9E%84%20%EA%B5%AC%EC%A1%B0.md) | 심층 자바 가상 머신 8장 |
 | 영역별 `OutOfMemoryError` 재현 | 필수 | [OOM 재현 실습](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch02_automatic-memory-management/01-03.%EC%8B%A4%EC%A0%84%20%E2%80%94%20OutOfMemoryError%20%EC%9E%AC%ED%98%84.md) | 심층 자바 가상 머신 2장 |
-| 컨테이너 네이티브 메모리와 OOMKilled | 필수 | [컨테이너 OOMKilled 실습](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch02_automatic-memory-management/01-05.%EC%8B%A4%EC%A0%84%20%E2%80%94%20Docker%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%84%A4%EC%9D%B4%ED%8B%B0%EB%B8%8C%20%EB%A9%94%EB%AA%A8%EB%A6%AC%EC%99%80%20OOMKilled.md) · [OS 로드맵](os-keywords.md) | |
+| 컨테이너 네이티브 메모리와 OOMKilled | 필수 | [컨테이너 OOMKilled 실습](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch02_automatic-memory-management/01-05.%EC%8B%A4%EC%A0%84%20%E2%80%94%20Docker%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%84%A4%EC%9D%B4%ED%8B%B0%EB%B8%8C%20%EB%A9%94%EB%AA%A8%EB%A6%AC%EC%99%80%20OOMKilled.md) · [OS 로드맵](../02_os/os-keywords.md) | |
 | 힙 밖 — Metaspace · 스레드 스택 · direct buffer | 추천 | [footprint](../01_language/book/jpf_java-performance/08-01.footprint%20%E2%80%94%20committed%20vs%20reserved%EC%99%80%20%EC%B8%A1%EC%A0%95%C2%B7%EC%B5%9C%EC%86%8C%ED%99%94.md) · [힙 밖에서 쌓이는 메모리](../troubleshooting/_concepts/runtime-%ED%9E%99-%EB%B0%96%EC%97%90%EC%84%9C-%EC%8C%93%EC%9D%B4%EB%8A%94-%EB%A9%94%EB%AA%A8%EB%A6%AC.md) | Java Performance 8장 |
 | 자바 기술의 자리와 성능 진화사 | 선택 | [JVM 성능 진화사](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch01_java-tech/03-01.Java%EC%99%80%20JVM%EC%9D%98%20%EC%84%B1%EB%8A%A5%20%EC%A7%84%ED%99%94%EC%82%AC.md) | 심층 자바 가상 머신 1장 |
 
@@ -48,7 +48,7 @@ updated: 2026-09-23
 | JPMS · 모듈 시스템과 로더 변화 | 추천 | [모듈 시스템과 로더](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch03_class-loading-mechanism/02-05.%EC%9E%90%EB%B0%94%20%EB%AA%A8%EB%93%88%20%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B3%BC%20%ED%81%B4%EB%9E%98%EC%8A%A4%20%EB%A1%9C%EB%8D%94%20%EB%B3%80%ED%99%94.md) · [모놀리식에서 모듈러로](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch03_class-loading-mechanism/02-07.%EB%AA%A8%EB%86%80%EB%A6%AC%EC%8B%9D%EC%97%90%EC%84%9C%20%EB%AA%A8%EB%93%88%EB%9F%AC%EB%A1%9C%20%E2%80%94%20JPMS%EC%99%80%20%EB%AA%A8%EB%93%88%20%EC%8B%9C%EC%8A%A4%ED%85%9C.md) | 심층 자바 가상 머신 7장 |
 | 리플렉션과 동적 클래스 처리 | 추천 | [리플렉션과 동적 클래스](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch03_class-loading-mechanism/02-06.%EB%A6%AC%ED%94%8C%EB%A0%89%EC%85%98%EA%B3%BC%20%EB%8F%99%EC%A0%81%20%ED%81%B4%EB%9E%98%EC%8A%A4%20%EC%B2%98%EB%A6%AC.md) | 심층 자바 가상 머신 7장 |
 | 톰캣 로더 아키텍처 · 격리 · TCCL · 로더 누수 | 추천 | [톰캣 로더 아키텍처](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch03_class-loading-mechanism/04-01.%ED%86%B0%EC%BA%A3%EC%9D%98%20%ED%81%B4%EB%9E%98%EC%8A%A4%20%EB%A1%9C%EB%8D%94%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98.md) · [로더 누수 실습](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch03_class-loading-mechanism/04-01d.%ED%86%B0%EC%BA%A3%20%ED%81%B4%EB%9E%98%EC%8A%A4%20%EB%A1%9C%EB%8D%94%20%EC%8B%A4%EC%8A%B5%20%E2%80%94%20ClassLoader%20Leak%EA%B3%BC%20Metaspace%20OOM.md) | 심층 자바 가상 머신 9장 |
-| Spring Boot 실행 JAR 와 클래스 로딩 | 추천 | [부트 실행 JAR 로딩](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch03_class-loading-mechanism/04-05.Spring%20Boot%20%EC%8B%A4%ED%96%89%20JAR%EC%99%80%20%ED%81%B4%EB%9E%98%EC%8A%A4%20%EB%A1%9C%EB%94%A9.md) · [Spring 로드맵](spring-keywords.md) | 심층 자바 가상 머신 9장 |
+| Spring Boot 실행 JAR 와 클래스 로딩 | 추천 | [부트 실행 JAR 로딩](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch03_class-loading-mechanism/04-05.Spring%20Boot%20%EC%8B%A4%ED%96%89%20JAR%EC%99%80%20%ED%81%B4%EB%9E%98%EC%8A%A4%20%EB%A1%9C%EB%94%A9.md) · [Spring 로드맵](../09_spring/spring-keywords.md) | 심층 자바 가상 머신 9장 |
 | OSGi · 동적 로딩과 핫스왑 | 선택 | [OSGi 로더](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch03_class-loading-mechanism/04-02.OSGi%EC%9D%98%20%EC%9C%A0%EC%97%B0%ED%95%9C%20%ED%81%B4%EB%9E%98%EC%8A%A4%20%EB%A1%9C%EB%8D%94%EC%99%80%20%EB%B0%94%EC%9D%B4%ED%8A%B8%EC%BD%94%EB%93%9C%20%EC%83%9D%EC%84%B1.md) · [동적 로딩과 핫스왑](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch03_class-loading-mechanism/04-04.%EB%8F%99%EC%A0%81%20%EB%A1%9C%EB%94%A9%EA%B3%BC%20%ED%95%AB%EC%8A%A4%EC%99%91%20%EB%8F%84%EA%B5%AC.md) | 심층 자바 가상 머신 9장 |
 
 
@@ -112,7 +112,7 @@ updated: 2026-09-23
 | 벤치마크 종류와 성능 지표 | 필수 | [벤치마크와 성능 지표](../01_language/book/jpf_java-performance/02-01.%EB%AC%B4%EC%97%87%EC%9D%84%20%EC%B8%A1%EC%A0%95%ED%95%A0%EA%B9%8C%20%E2%80%94%20%EB%B2%A4%EC%B9%98%EB%A7%88%ED%81%AC%20%EC%A2%85%EB%A5%98%EC%99%80%20%EC%84%B1%EB%8A%A5%20%EC%A7%80%ED%91%9C.md) | Java Performance 2장 |
 | 변동성과 통계 · 일찍 자주 | 필수 | [변동성과 통계](../01_language/book/jpf_java-performance/02-02.%EA%B2%B0%EA%B3%BC%EB%A5%BC%20%EC%96%B4%EB%96%BB%EA%B2%8C%20%EB%AF%BF%EC%9D%84%EA%B9%8C%20%E2%80%94%20%EB%B3%80%EB%8F%99%EC%84%B1%EA%B3%BC%20%ED%86%B5%EA%B3%84%2C%20%EC%9D%BC%EC%B0%8D%20%EC%9E%90%EC%A3%BC.md) | Java Performance 2장 |
 | JMH 로 마이크로벤치마크 | 필수 | [JMH 실전](../01_language/book/jpf_java-performance/02-03.%EB%B2%A4%EC%B9%98%EB%A7%88%ED%81%AC%20%EC%8B%A4%EC%A0%84%20%E2%80%94%20jmh%EC%99%80%20%EA%B3%B5%ED%86%B5%20%EC%98%88%EC%A0%9C%20%EC%BD%94%EB%93%9C.md) · [JMH와 측정 방법론](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch02_automatic-memory-management/02-02.Java%20%EC%84%B1%EB%8A%A5%20%E2%80%94%20JMH%EC%99%80%20%EC%B8%A1%EC%A0%95%20%EB%B0%A9%EB%B2%95%EB%A1%A0.md) | Java Performance 2장 |
-| OS 레벨 도구 · JDK 기본 도구 · 튜닝 플래그 | 필수 | [OS 레벨 도구](../01_language/book/jpf_java-performance/03-01.OS%20%EB%A0%88%EB%B2%A8%20%EB%8F%84%EA%B5%AC%20%E2%80%94%20CPU%C2%B7%EB%94%94%EC%8A%A4%ED%81%AC%C2%B7%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC.md) · [JDK 도구와 튜닝 플래그](../01_language/book/jpf_java-performance/03-02.JDK%20%EA%B8%B0%EB%B3%B8%20%EB%8F%84%EA%B5%AC%EC%99%80%20VM%20%EC%A0%95%EB%B3%B4%C2%B7%ED%8A%9C%EB%8B%9D%20%ED%94%8C%EB%9E%98%EA%B7%B8.md) · [OS 로드맵](os-keywords.md) | Java Performance 3장 |
+| OS 레벨 도구 · JDK 기본 도구 · 튜닝 플래그 | 필수 | [OS 레벨 도구](../01_language/book/jpf_java-performance/03-01.OS%20%EB%A0%88%EB%B2%A8%20%EB%8F%84%EA%B5%AC%20%E2%80%94%20CPU%C2%B7%EB%94%94%EC%8A%A4%ED%81%AC%C2%B7%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC.md) · [JDK 도구와 튜닝 플래그](../01_language/book/jpf_java-performance/03-02.JDK%20%EA%B8%B0%EB%B3%B8%20%EB%8F%84%EA%B5%AC%EC%99%80%20VM%20%EC%A0%95%EB%B3%B4%C2%B7%ED%8A%9C%EB%8B%9D%20%ED%94%8C%EB%9E%98%EA%B7%B8.md) · [OS 로드맵](../02_os/os-keywords.md) | Java Performance 3장 |
 | 프로파일러 — sampling · instrumented · native | 필수 | [프로파일러](../01_language/book/jpf_java-performance/03-03.%ED%94%84%EB%A1%9C%ED%8C%8C%EC%9D%BC%EB%9F%AC%20%E2%80%94%20sampling%C2%B7instrumented%C2%B7native.md) | Java Performance 3장 |
 | Java Flight Recorder · JMC | 추천 | [JFR과 JMC](../01_language/book/jpf_java-performance/03-04.Java%20Flight%20Recorder%EC%99%80%20JMC.md) | Java Performance 3장 |
 | 상태를 읽는 명령 — `jps` · `jstat` · `jinfo` · `jmap` · `jstack` · `jcmd` | 필수 | [명령줄 진단 도구](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch02_automatic-memory-management/03-01.%EA%B8%B0%EB%B3%B8%20%EB%AC%B8%EC%A0%9C%20%ED%95%B4%EA%B2%B0%20%EB%8F%84%EA%B5%AC%20%E2%80%94%20%EB%AA%85%EB%A0%B9%EC%A4%84%20%EB%8F%84%EA%B5%AC.md) · [시각화 진단 도구](../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch02_automatic-memory-management/03-02.%EC%8B%9C%EA%B0%81%ED%99%94%20%EB%AC%B8%EC%A0%9C%20%ED%95%B4%EA%B2%B0%20%EB%8F%84%EA%B5%AC.md) | 심층 자바 가상 머신 4장 |
@@ -120,7 +120,7 @@ updated: 2026-09-23
 | 힙 분석 · retained 메모리 · OOM 원인 넷 | 필수 | [힙 분석](../01_language/book/jpf_java-performance/07-01.%ED%9E%99%20%EB%B6%84%EC%84%9D%20%E2%80%94%20%ED%9E%88%EC%8A%A4%ED%86%A0%EA%B7%B8%EB%9E%A8%C2%B7%ED%9E%99%20%EB%8D%A4%ED%94%84%C2%B7retained%20%EB%A9%94%EB%AA%A8%EB%A6%AC.md) · [OOM 진단](../01_language/book/jpf_java-performance/07-02.OutOfMemoryError%20%EC%A7%84%EB%8B%A8%20%E2%80%94%20%EB%84%A4%20%EA%B0%80%EC%A7%80%20%EC%9B%90%EC%9D%B8%EA%B3%BC%20%EC%9E%90%EB%8F%99%20%EB%8D%A4%ED%94%84.md) | Java Performance 7장 |
 | 메모리 적게 쓰기 · 객체 재사용 · compressed oops | 추천 | [메모리 적게 쓰기](../01_language/book/jpf_java-performance/07-03.%EB%A9%94%EB%AA%A8%EB%A6%AC%20%EC%A0%81%EA%B2%8C%20%EC%93%B0%EA%B8%B0%20%E2%80%94%20%EA%B0%9D%EC%B2%B4%20%ED%81%AC%EA%B8%B0%C2%B7lazy%20init%C2%B7canonical.md) · [compressed oops](../01_language/book/jpf_java-performance/07-05.indefinite%20reference%EC%99%80%20compressed%20oops.md) | Java Performance 7장 |
 | footprint · Native Memory Tracking · large pages | 추천 | [Native Memory Tracking](../01_language/book/jpf_java-performance/08-02.Native%20Memory%20Tracking%20%E2%80%94%20NMT%EC%99%80%20shared%20library%20%ED%95%9C%EA%B3%84.md) · [large pages](../01_language/book/jpf_java-performance/08-03.large%20pages%20%E2%80%94%20TLB%EC%99%80%20OS%EB%B3%84%20huge%20page%20%EC%84%A4%EC%A0%95.md) | Java Performance 8장 |
-| JDBC · JPA 비용 — 커넥션 풀 · 배치 · lazy | 추천 | [JDBC 기초](../01_language/book/jpf_java-performance/11-01.JDBC%20%EA%B8%B0%EC%B4%88%20%E2%80%94%20%EB%93%9C%EB%9D%BC%EC%9D%B4%EB%B2%84%C2%B7connection%20pool%C2%B7prepared%20statement.md) · [JPA 읽기 최적화](../01_language/book/jpf_java-performance/11-04.JPA%20%EC%9D%BD%EA%B8%B0%20%EC%B5%9C%EC%A0%81%ED%99%94%20%E2%80%94%20lazy%C2%B7eager%C2%B7JOIN%C2%B7named%20query.md) · [데이터 로드맵](data-keywords.md) | Java Performance 11장 |
+| JDBC · JPA 비용 — 커넥션 풀 · 배치 · lazy | 추천 | [JDBC 기초](../01_language/book/jpf_java-performance/11-01.JDBC%20%EA%B8%B0%EC%B4%88%20%E2%80%94%20%EB%93%9C%EB%9D%BC%EC%9D%B4%EB%B2%84%C2%B7connection%20pool%C2%B7prepared%20statement.md) · [JPA 읽기 최적화](../01_language/book/jpf_java-performance/11-04.JPA%20%EC%9D%BD%EA%B8%B0%20%EC%B5%9C%EC%A0%81%ED%99%94%20%E2%80%94%20lazy%C2%B7eager%C2%B7JOIN%C2%B7named%20query.md) · [데이터 로드맵](../05_data/data-keywords.md) | Java Performance 11장 |
 | String · 컬렉션 · 람다 · 스트림 · 직렬화 비용 | 추천 | [String 비용](../01_language/book/jpf_java-performance/12-01.String%20%E2%80%94%20compact%20string%C2%B7interning%C2%B7concatenation.md) · [Lambda·Stream](../01_language/book/jpf_java-performance/12-05.Lambda%C2%B7Stream%C2%B7Serialization.md) | Java Performance 12장 |
 | NIO · 비동기 outbound 호출 | 선택 | [NIO와 서버 스레드](../01_language/book/jpf_java-performance/10-01.NIO%EC%99%80%20%EC%84%9C%EB%B2%84%20%EC%8A%A4%EB%A0%88%EB%93%9C%20%ED%92%80%20%E2%80%94%20selector%C2%B7worker%C2%B7async%20REST.md) · [비동기 outbound 호출](../01_language/book/jpf_java-performance/10-02.%EB%B9%84%EB%8F%99%EA%B8%B0%20outbound%20%ED%98%B8%EC%B6%9C%20%E2%80%94%20HTTP%20client%EC%99%80%20DB.md) | Java Performance 10장 |
 
@@ -155,8 +155,8 @@ updated: 2026-09-23
 
 | 대상 | 이유 |
 |---|---|
-| DI · AOP · 트랜잭션 · Bean 생명주기 | [Spring 로드맵](spring-keywords.md)이 맡습니다. 여기는 Spring Boot 실행 JAR 의 클래스 로딩까지입니다 |
-| JDBC · JPA 의 쿼리와 트랜잭션 설계 | [데이터 로드맵](data-keywords.md)이 맡습니다. 여기는 6단계의 성능 비용 축만 봅니다 |
-| cgroup 이 재는 RSS 와 커널 메모리 | [OS 로드맵](os-keywords.md) 3단계가 맡습니다. 1단계의 OOMKilled 가 그 이음매입니다 |
+| DI · AOP · 트랜잭션 · Bean 생명주기 | [Spring 로드맵](../09_spring/spring-keywords.md)이 맡습니다. 여기는 Spring Boot 실행 JAR 의 클래스 로딩까지입니다 |
+| JDBC · JPA 의 쿼리와 트랜잭션 설계 | [데이터 로드맵](../05_data/data-keywords.md)이 맡습니다. 여기는 6단계의 성능 비용 축만 봅니다 |
+| cgroup 이 재는 RSS 와 커널 메모리 | [OS 로드맵](../02_os/os-keywords.md) 3단계가 맡습니다. 1단계의 OOMKilled 가 그 이음매입니다 |
 | 언어 문법 · 컬렉션 · 디자인 패턴 · 테스트 | `01_language/java/` 가 맡습니다. JVM 동작이 아니라 언어 사용입니다 |
 | Exotic Hardware · Project Panama | 소장 노트가 두 편뿐이고 선후 관계가 없습니다. 필요가 생겼을 때 엽니다 |
