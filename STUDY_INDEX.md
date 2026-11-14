@@ -28,7 +28,6 @@ Spring 문서는 주제별로 분산 배치된다. 전 카테고리 집계는 [`
 
 ## 예약 폴더
 
-- [`write/_meta/`](write/_meta/) — 저장소 컨벤션, 워크플로우 가이드
 - `write/_company/` — 사내 전용 분석 (`.gitignore` 보호)
 - [`write/_archive/`](write/_archive/) — 6개월 무갱신·무참조 문서 보관
 
@@ -52,7 +51,6 @@ grep -rl "status: final" write/ --include="*.md" \
 
 - 하네스: `~/.claude/skills/writing/references/second-brain-harness.md`
 - 작성 스타일: `~/.claude/skills/writing/SKILL.md`
-- 이 저장소의 한 페이지 요약: [`write/_meta/conventions.md`](write/_meta/conventions.md)
 
 ## 이관 진척
 

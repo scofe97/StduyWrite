@@ -21,7 +21,7 @@ updated: 2026-09-05
 └─ 날짜 ─┘ └───────── 문서 주제 ─────────┘
 ```
 
-이 규칙은 99_ETC 안에서만 적용됩니다. [`_meta/conventions.md`](../_meta/conventions.md) 의 "파일명 날짜 prefix 금지" 는 카테고리 폴더를 향한 조항이고, 여기가 그 예외입니다. 하위 폴더(`security/`)의 문서에도 같이 적용합니다 — 폴더 이름은 그대로 두고 파일명만 바꿉니다.
+이 규칙은 99_ETC 안에서만 적용됩니다. 다른 카테고리 폴더는 파일명에 날짜 prefix 를 붙이지 않고, 여기가 그 예외입니다. 하위 폴더(`security/`)의 문서에도 같이 적용합니다 — 폴더 이름은 그대로 두고 파일명만 바꿉니다.
 
 ## 체류 기간
 
@@ -35,7 +35,7 @@ updated: 2026-09-05
 | [`2026-09-05_Herdr와 에이전트 터미널 런타임 조사.md`](./2026-09-05_Herdr%EC%99%80%20%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8%20%ED%84%B0%EB%AF%B8%EB%84%90%20%EB%9F%B0%ED%83%80%EC%9E%84%20%EC%A1%B0%EC%82%AC.md) | tmux·Ghostty·Herdr 중 무엇이 에이전트 터미널의 어느 계층을 막는지 비교한 조사. 도입은 보류했고 재검토 트리거를 함께 적어 뒀습니다 |
 | [`2026-09-01_bd-mirae 환경을 로컬 k9s에 붙이기.md`](./2026-09-01_bd-mirae%20%ED%99%98%EA%B2%BD%EC%9D%84%20%EB%A1%9C%EC%BB%AC%20k9s%EC%97%90%20%EB%B6%99%EC%9D%B4%EA%B8%B0.md) | bd-mirae OpenShift 클러스터를 로컬 k9s 에 kube context 로 등록하는 절차. 인프라 성격이라 `07_devops/` 이동 후보입니다 |
 | [`2026-05-16_테스트 코드 시작과 Mock 활용.md`](./2026-05-16_%ED%85%8C%EC%8A%A4%ED%8A%B8%20%EC%BD%94%EB%93%9C%20%EC%8B%9C%EC%9E%91%EA%B3%BC%20Mock%20%ED%99%9C%EC%9A%A9.md) | Test Double 5종과 Mock·Stub 의 경계. 테스트 문서가 다섯 편 쌓이면 `12_testing/` 신설 후보입니다 |
-| [`2026-04-19_하네스 엔지니어링 — AI 코딩 에이전트의 마구.md`](./2026-04-19_%ED%95%98%EB%84%A4%EC%8A%A4%20%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81%20%E2%80%94%20AI%20%EC%BD%94%EB%94%A9%20%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8%EC%9D%98%20%EB%A7%88%EA%B5%AC.md) | 에이전트가 보는 세계를 설계하는 관점. 메타 성격이라 `_meta/` 이관 후보입니다 |
+| [`2026-04-19_하네스 엔지니어링 — AI 코딩 에이전트의 마구.md`](./2026-04-19_%ED%95%98%EB%84%A4%EC%8A%A4%20%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81%20%E2%80%94%20AI%20%EC%BD%94%EB%94%A9%20%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8%EC%9D%98%20%EB%A7%88%EA%B5%AC.md) | 에이전트가 보는 세계를 설계하는 관점. |
 | [`2026-04-19_Reconciliation Loop의 계보 — 제어이론에서 GitOps까지.md`](./2026-04-19_Reconciliation%20Loop%EC%9D%98%20%EA%B3%84%EB%B3%B4%20%E2%80%94%20%EC%A0%9C%EC%96%B4%EC%9D%B4%EB%A1%A0%EC%97%90%EC%84%9C%20GitOps%EA%B9%8C%EC%A7%80.md) | 제어이론의 피드백 루프가 쿠버네티스 컨트롤러와 ArgoCD 로 이어진 계보 |
 | [`2026-04-19_Spring Boot 버전 업그레이드와 Gradle·라이브러리 호환성.md`](./2026-04-19_Spring%20Boot%20%EB%B2%84%EC%A0%84%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C%EC%99%80%20Gradle%C2%B7%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC%20%ED%98%B8%ED%99%98%EC%84%B1.md) | Spring Boot 를 올릴 때 Gradle·의존 라이브러리가 함께 걸리는 지점 정리 |
 | [`2026-04-19_ArgoCD App-of-Apps 패턴.md`](./2026-04-19_ArgoCD%20App-of-Apps%20%ED%8C%A8%ED%84%B4.md) | 루트 Application 하나가 자식 Application 을 렌더링해 만드는 구조. 서비스 20여 개를 UI 수동 등록에서 Git 추적으로 옮기려던 기록 |

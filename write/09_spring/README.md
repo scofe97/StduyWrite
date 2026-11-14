@@ -19,7 +19,7 @@ updated: 2026-11-14
 
 ## 경계 기준
 
-`_meta/conventions.md`의 카테고리 결정 원칙은 "주제 중심"입니다. Spring Kafka 문서를 `04_messaging/`이 아닌 `09_spring/` 전용 폴더에 두면, "Kafka로 메시징을 구현하는 방법 비교"라는 주제 축이 깨집니다. 따라서 도메인 결합도가 큰 Spring 문서(`@KafkaListener`, QueryDSL, Filter Chain 등)는 해당 주제 카테고리에 그대로 두고, 본 페이지가 논리층에서 모든 Spring 문서를 엮습니다.
+이 저장소의 카테고리 결정 원칙은 "주제 중심"입니다. Spring Kafka 문서를 `04_messaging/`이 아닌 `09_spring/` 전용 폴더에 두면, "Kafka로 메시징을 구현하는 방법 비교"라는 주제 축이 깨집니다. 따라서 도메인 결합도가 큰 Spring 문서(`@KafkaListener`, QueryDSL, Filter Chain 등)는 해당 주제 카테고리에 그대로 두고, 본 페이지가 논리층에서 모든 Spring 문서를 엮습니다.
 
 본 폴더(`write/09_spring/`)는 프레임워크의 자체 동작을 다루는 Spring 본질 이론만 모읍니다.
 
