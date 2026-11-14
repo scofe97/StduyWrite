@@ -73,6 +73,7 @@ updated: 2026-10-14
 | 시계열 데이터 모델 · 보존 정책 · 다운샘플링 · 쓰기 증폭 | 선택 | | |
 | 리드 모델 · 라이트 모델 · 프로젝션 · 이벤트 스토어 · 스냅샷 스토어 · 이벤트 업캐스팅 | 선택 | [이벤트 스토어](../04_messaging/07_CQRS_EventSourcing/01-02.Event%20Sourcing.md) | |
 | ORM | 선택 | [ORM](../05_data/03_persistence/jpa/01-01.ORM%20%EA%B0%9C%EB%85%90.md) | |
+| DB 트리거 | 선택 | | |
 
 
 
@@ -201,6 +202,7 @@ updated: 2026-10-14
 | CAP 정리 · 최종 일관성 · 선형화 가능성 · 인과 일관성 · 읽기-자신의-쓰기 · 단조 읽기 · CRDT | 선택 | [CAP 정리](../05_data/book/designing-data-intensive-applications/10-02.%EC%84%A0%ED%98%95%EC%84%B1%EC%9D%98%20%EB%B9%84%EC%9A%A9%EA%B3%BC%20CAP.md) · [최종 일관성](../03_architecture/03_distributed/01-04.%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98%20%EA%B2%BD%EA%B3%84%EC%99%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%9D%BC%EA%B4%80%EC%84%B1.md) · [선형화 가능성](../05_data/book/designing-data-intensive-applications/10-02.%EC%84%A0%ED%98%95%EC%84%B1%EC%9D%98%20%EB%B9%84%EC%9A%A9%EA%B3%BC%20CAP.md) · [인과 일관성](../05_data/book/designing-data-intensive-applications/13-01.%EB%8D%B0%EC%9D%B4%ED%84%B0%20%ED%86%B5%ED%95%A9%20%E2%80%94%20%ED%8C%8C%EC%83%9D%20%EB%8D%B0%EC%9D%B4%ED%84%B0%EC%99%80%20%EC%A0%84%EC%88%9C%EC%84%9C%EC%9D%98%20%ED%95%9C%EA%B3%84.md) · [읽기-자신의-쓰기](../05_data/book/designing-data-intensive-applications/06-03.%EB%B3%B5%EC%A0%9C%20%EC%A7%80%EC%97%B0%20%EB%AC%B8%EC%A0%9C%EC%99%80%20%EC%9D%BC%EA%B4%80%EC%84%B1%20%EB%B3%B4%EC%9E%A5.md) · [CRDT](../05_data/book/designing-data-intensive-applications/06-05.%EC%93%B0%EA%B8%B0%20%EC%B6%A9%EB%8F%8C%20%ED%95%B4%EC%86%8C.md) | |
 | 논리적 시계 · 물리적 시계 · 벡터 클록 · 시계 동기화 | 선택 | [논리적 시계](../05_data/book/designing-data-intensive-applications/10-03.ID%20%EC%83%9D%EC%84%B1%EA%B8%B0%EC%99%80%20%EB%85%BC%EB%A6%AC%20%EC%8B%9C%EA%B3%84.md) · [물리적 시계](../05_data/book/designing-data-intensive-applications/09-02.%EB%B6%88%EC%8B%A0%EB%A2%B0%20%EC%8B%9C%EA%B3%84.md) · [벡터 클록](../03_architecture/book/system-design/06-02.%EB%B2%A1%ED%84%B0%20%EC%8B%9C%EA%B3%84%C2%B7%EA%B0%80%EC%8B%AD%C2%B7%EC%9E%84%EC%8B%9C%20%EC%9C%84%ED%83%81%C2%B7%EB%A8%B8%ED%81%B4%20%ED%8A%B8%EB%A6%AC%EA%B0%80%20%EC%B6%A9%EB%8F%8C%EA%B3%BC%20%EC%9E%A5%EC%95%A0%EB%A5%BC%20%EB%8B%A4%EB%A3%A8%EA%B3%A0%20%EC%93%B0%EA%B8%B0%EC%99%80%20%EC%9D%BD%EA%B8%B0%EB%8A%94%20SSTable%20%EC%9D%84%20%EC%A7%80%EB%82%9C%EB%8B%A4.md) | |
 | 분산 락 · 분산 락 서비스 · 리스 기반 락 · 펜싱 토큰 · 펜싱 · 레드락 · 주키퍼 락 · etcd 락 · 컨센서스 기반 락 | 선택 | [분산 락](../05_data/book/designing-data-intensive-applications/09-03.%EC%A7%84%EC%8B%A4%C2%B7%EA%B1%B0%EC%A7%93%C2%B7%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EB%AA%A8%EB%8D%B8.md) · [분산 락 서비스](../05_data/book/designing-data-intensive-applications/10-04.%ED%95%A9%EC%9D%98%EC%99%80%20%EC%BD%94%EB%94%94%EB%84%A4%EC%9D%B4%EC%85%98%20%EC%84%9C%EB%B9%84%EC%8A%A4.md) · [펜싱 토큰](../05_data/book/designing-data-intensive-applications/09-03.%EC%A7%84%EC%8B%A4%C2%B7%EA%B1%B0%EC%A7%93%C2%B7%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EB%AA%A8%EB%8D%B8.md) · [펜싱](../05_data/book/designing-data-intensive-applications/09-03.%EC%A7%84%EC%8B%A4%C2%B7%EA%B1%B0%EC%A7%93%C2%B7%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EB%AA%A8%EB%8D%B8.md) | |
+| BASE · 머클 트리 | 선택 | [BASE](../05_data/01_foundation/01-06.NoSQL%20%EB%B9%84%EA%B5%90.md) · [머클 트리](../03_architecture/book/system-design/06-02.%EB%B2%A1%ED%84%B0%20%EC%8B%9C%EA%B3%84%C2%B7%EA%B0%80%EC%8B%AD%C2%B7%EC%9E%84%EC%8B%9C%20%EC%9C%84%ED%83%81%C2%B7%EB%A8%B8%ED%81%B4%20%ED%8A%B8%EB%A6%AC%EA%B0%80%20%EC%B6%A9%EB%8F%8C%EA%B3%BC%20%EC%9E%A5%EC%95%A0%EB%A5%BC%20%EB%8B%A4%EB%A3%A8%EA%B3%A0%20%EC%93%B0%EA%B8%B0%EC%99%80%20%EC%9D%BD%EA%B8%B0%EB%8A%94%20SSTable%20%EC%9D%84%20%EC%A7%80%EB%82%9C%EB%8B%A4.md) | |
 
 
 
@@ -232,3 +234,19 @@ updated: 2026-10-14
 | 블룸 필터 · 카운팅 블룸 필터 · 쿠쿠 필터 · 하이퍼로그로그 · 카운트 민 스케치 · 탑K · 퀀타일 추정 | 선택 | [블룸 필터](../03_architecture/book/bytebytego-system-design/08-01.%ED%8A%B8%EC%9C%84%ED%84%B0%20%ED%83%80%EC%9E%84%EB%9D%BC%EC%9D%B8%C2%B7%EA%B5%AC%EA%B8%80%20%EB%8F%85%EC%8A%A4%20%EB%8F%99%EC%8B%9C%20%ED%8E%B8%EC%A7%91%C2%B7%EC%8A%AC%EB%9E%99%20%EC%95%8C%EB%A6%BC%20%ED%8C%90%EC%A0%95%C2%B7%ED%81%AC%EB%A1%A4%EB%9F%AC%20%EC%A4%91%EB%B3%B5%20%EC%A0%9C%EA%B1%B0%EB%8A%94%20%ED%8C%AC%EC%95%84%EC%9B%83%C2%B7OT%C2%B7%ED%9D%90%EB%A6%84%EB%8F%84%C2%B7%EB%B8%94%EB%A3%B8%20%ED%95%84%ED%84%B0%EB%A1%9C%20%ED%91%BC%EB%8B%A4.md) · [퀀타일 추정](../02_os/book/npg_network-programming-with-go/13-03.%EB%A9%94%ED%8A%B8%EB%A6%AD%EC%9D%80%20%EC%B9%B4%EC%9A%B4%ED%84%B0%C2%B7%EA%B2%8C%EC%9D%B4%EC%A7%80%C2%B7%ED%9E%88%EC%8A%A4%ED%86%A0%EA%B7%B8%EB%9E%A8%EC%9C%BC%EB%A1%9C%20%EC%84%9C%EB%B2%84%EB%A5%BC%20%EC%9E%AC%EA%B3%A0%20Prometheus%20%EA%B0%80%20%EA%B7%B8%20%EA%B0%92%EC%9D%84%20%EA%B8%81%EC%96%B4%20%EA%B0%84%EB%8B%A4.md) | |
 | 랭킹 시스템 · 실시간 랭킹 | 선택 | | |
 | ETL · ELT | 선택 | [ETL](../05_data/book/designing-data-intensive-applications/01-01.%EC%9A%B4%EC%98%81%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20vs%20%EB%B6%84%EC%84%9D%20%EC%8B%9C%EC%8A%A4%ED%85%9C.md) | |
+| 오프셋 커밋 | 선택 | [오프셋 커밋](../04_messaging/04_BrokerArchitecture/01-05.%EC%98%A4%ED%94%84%EC%85%8B%20%EC%BB%A4%EB%B0%8B%20API.md) | |
+
+
+
+## 넣지 않은 것
+
+> 다른 문서가 정본이거나 이 로드맵의 축과 다른 것들입니다.
+
+| 대상 | 이유 |
+|---|---|
+| SQL 문법 · MySQL 실행 계획 · 인덱스 튜닝 | 소장 책에 없고, 이 저장소에도 아직 노트가 없습니다 |
+| JDBC · 커넥션 풀 · JPA · QueryDSL | 도구를 익히는 축입니다. `05_data/03_persistence` 와 [Spring 로드맵](spring-keywords.md) 4단계가 맡고, 커넥션 풀 고갈은 [JVM 로드맵](jvm-keywords.md) 7단계가 봅니다 |
+| `@Transactional` 과 전파 · 롤백 규칙 | [Spring 로드맵](spring-keywords.md) 4단계가 맡습니다. 6단계는 격리 수준까지입니다 |
+| DB 덤프 · 로컬 이관 · 마이그레이션 도구 | `05_data/06_operations` 가 맡습니다. 순서를 말할 대상이 아닙니다 |
+| Kafka 브로커 설계와 운영 | `04_messaging` 이 정본입니다. 9단계는 로그 기반 브로커의 원리까지입니다 |
+| 검색 애플리케이션 만들기 | Elasticsearch in Action 의 절반은 제품을 만드는 쪽입니다. 3단계는 색인 구조만 봅니다 |

@@ -146,3 +146,17 @@ updated: 2026-09-23
 | 분산 추적 · trace ID 와 span | 추천 | [분산 추적](../01_language/book/tsj_troubleshooting-java/12-01.%EB%B6%84%EC%82%B0%20%EC%B6%94%EC%A0%81%20%E2%80%94%20trace%20ID%EC%99%80%20span.md) | Troubleshooting Java 12장 |
 | cascading · retry · timeout 실패 모드 | 추천 | [시스템 장애 모드](../01_language/book/tsj_troubleshooting-java/12-03.%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%9E%A5%EC%95%A0%20%EB%AA%A8%EB%93%9C%20%E2%80%94%20cascading%C2%B7retry%C2%B7timeout.md) | Troubleshooting Java 12장 |
 | 서비스 간 데이터 불일치 · 감사 로그 · 재생 | 선택 | [데이터 불일치](../01_language/book/tsj_troubleshooting-java/13-01.%EC%84%9C%EB%B9%84%EC%8A%A4%20%EA%B0%84%20%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EB%B6%88%EC%9D%BC%EC%B9%98%20%E2%80%94%20%EC%8B%9C%EA%B0%84%20%EC%9D%B4%EC%83%81%EA%B3%BC%20%EB%8F%84%EB%A9%94%EC%9D%B8%20%EB%B6%88%EB%B3%80%EC%8B%9D.md) ~ [일관성 측정](../01_language/book/tsj_troubleshooting-java/13-03.%EC%9D%BC%EA%B4%80%EC%84%B1%20%EC%B8%A1%EC%A0%95%20%E2%80%94%20%EC%B2%B4%ED%81%AC%EC%84%AC%C2%B7%ED%95%B4%EC%8B%9C%EC%99%80%20reconciliation.md) | Troubleshooting Java 13장 |
+
+
+
+## 넣지 않은 것
+
+> 다른 문서가 정본이거나 이 로드맵의 축과 다른 것들입니다.
+
+| 대상 | 이유 |
+|---|---|
+| DI · AOP · 트랜잭션 · Bean 생명주기 | [Spring 로드맵](spring-keywords.md)이 맡습니다. 여기는 Spring Boot 실행 JAR 의 클래스 로딩까지입니다 |
+| JDBC · JPA 의 쿼리와 트랜잭션 설계 | [데이터 로드맵](data-keywords.md)이 맡습니다. 여기는 6단계의 성능 비용 축만 봅니다 |
+| cgroup 이 재는 RSS 와 커널 메모리 | [OS 로드맵](os-keywords.md) 3단계가 맡습니다. 1단계의 OOMKilled 가 그 이음매입니다 |
+| 언어 문법 · 컬렉션 · 디자인 패턴 · 테스트 | `01_language/java/` 가 맡습니다. JVM 동작이 아니라 언어 사용입니다 |
+| Exotic Hardware · Project Panama | 소장 노트가 두 편뿐이고 선후 관계가 없습니다. 필요가 생겼을 때 엽니다 |

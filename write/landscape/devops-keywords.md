@@ -177,3 +177,18 @@ updated: 2026-11-03
 | 의존성 취약점 스캔 · SAST · DAST · IAST | 선택 | [의존성 취약점 스캔](../07_devops/02_Jenkins/06_infra/05-06.JFrog%20Xray%EB%A1%9C%20CI%20%EB%B3%B4%EC%95%88%20%EA%B2%8C%EC%9D%B4%ED%8A%B8%20%E2%80%94%20%EC%B7%A8%EC%95%BD%EC%A0%90%20%EC%8A%A4%EC%BA%94%C2%B7xrayScan%C2%B7SonarQube%EC%99%80%20%EC%97%AD%ED%95%A0%20%EA%B5%AC%EB%B6%84.md) · [SAST](../07_devops/docs/sonarqube/06-02.Advanced%20Security%EC%99%80%20AI%20%EA%B8%B0%EB%8A%A5.md) | |
 | RASP | 선택 | | |
 | SCA | 선택 | [SCA](../07_devops/02_Jenkins/06_infra/05-06.JFrog%20Xray%EB%A1%9C%20CI%20%EB%B3%B4%EC%95%88%20%EA%B2%8C%EC%9D%B4%ED%8A%B8%20%E2%80%94%20%EC%B7%A8%EC%95%BD%EC%A0%90%20%EC%8A%A4%EC%BA%94%C2%B7xrayScan%C2%B7SonarQube%EC%99%80%20%EC%97%AD%ED%95%A0%20%EA%B5%AC%EB%B6%84.md) | |
+
+
+
+## 넣지 않은 것
+
+> 다른 문서가 정본이거나 이 로드맵의 축과 다른 것들입니다.
+
+| 대상 | 이유 |
+|---|---|
+| 클러스터 오브젝트 · admission 정책 · 런타임 보안 | [Kubernetes 로드맵](k8s-keywords.md) 6단계가 맡습니다 |
+| Jenkins 메트릭 대시보드 · 관측 설정 코드화 | [관측 가능성 로드맵](observability-keywords.md) 7단계가 맡습니다 |
+| GitAIOps — AI 와 함께 선언하고 배포하기 | [AI 로드맵](ai-keywords.md) 6단계가 맡습니다 |
+| bootJar · Layered JAR 등 프레임워크 빌드 산출물 | [Spring 로드맵](spring-keywords.md) 9단계가 맡습니다 |
+| cgroup · namespace 의 커널 격리 구현 | [OS 로드맵](os-keywords.md) 3단계가 맡습니다 |
+| Istio 및 서비스 메시 트래픽 관리 | [네트워크 로드맵](network-keywords.md) 7단계가 맡습니다 |

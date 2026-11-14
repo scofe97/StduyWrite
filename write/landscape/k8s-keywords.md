@@ -196,3 +196,21 @@ updated: 2026-10-28
 | 사용량 추적 · 빌링 미터링 · 사용량 기반 과금 | 선택 | | |
 | FinOps · 리소스 태깅 · 코스트 할당 · 차지백 · 쇼백 | 선택 | | |
 | 이그레스 비용 | 선택 | | |
+| 멀티 테넌시 | 선택 | [멀티 테넌시](../08_cloud/book/argocd-up-and-running/08-01.%EB%A9%80%ED%8B%B0%20%ED%85%8C%EB%84%8C%EC%8B%9C%20%E2%80%94%20%EC%84%A4%EC%B9%98%20%EB%AA%A8%EB%93%9C%EC%99%80%20AppProject%C2%B7%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EC%97%AD%ED%95%A0.md) | |
+
+
+
+## 넣지 않은 것
+
+> 다른 문서가 정본이거나 이 로드맵의 축과 다른 것들입니다.
+
+| 대상 | 이유 |
+|---|---|
+| 패킷 경로 · CNI 데이터패스 · eBPF · Cilium · CNI 구현체 비교 | [네트워크 로드맵](network-keywords.md)이 맡습니다 |
+| cgroup · namespace 의 커널 구현 | [OS 로드맵](os-keywords.md) 3단계가 맡습니다 |
+| Prometheus · Grafana · OpenTelemetry | [관측 가능성 로드맵](observability-keywords.md)이 맡습니다 |
+| 이미지 빌드 · CI 파이프라인 · Helm · GitOps · 점진 배포 · IaC | [DevOps 로드맵](devops-keywords.md)이 맡습니다 |
+| Istio 의 트래픽 관리와 mTLS | [네트워크 로드맵](network-keywords.md) 7단계가 맡습니다. 여기는 "쓸 것인가"까지입니다 |
+| VPC · Security Group · 클라우드 네트워크 경계 | [네트워크 로드맵](network-keywords.md) 5단계가 맡습니다 |
+| Kubernetes in Action 3장 | 클러스터를 띄우는 절차입니다. 순서가 아니라 준비 단계입니다 |
+| Kubernetes 대안 — Nomad · ECS · Cloud Run | 오케스트레이터를 고르는 축입니다. 이 로드맵은 Kubernetes 를 쓰기로 한 뒤의 순서입니다 |

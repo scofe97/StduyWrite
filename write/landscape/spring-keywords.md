@@ -38,6 +38,7 @@ updated: 2026-11-03
 | 플라이웨이트 패턴 · 컴포지트 패턴 | 선택 | | |
 | 빌더 패턴 · 싱글턴 패턴 | 선택 | | |
 | 함수형 프로그래밍 · 객체지향 프로그래밍 · 순수 함수 · 불변성 · 고차 함수 · 함수 합성 · 참조 투명성 · 부수 효과 제어 · 메서드 체이닝 · 객체 수명주기 | 선택 | | |
+| 전략 패턴 | 선택 | [전략 패턴](../01_language/java/03_DesignPatterns/01-04.%ED%96%89%EB%8F%99%20%ED%8C%A8%ED%84%B4.md) | |
 
 
 
@@ -218,3 +219,24 @@ updated: 2026-11-03
 | 유닛 테스트 · 통합 테스트 · 테스트 더블 목·스텁·페이크 · 엔드투엔드 테스트 · 컨트랙트 테스팅 · 컨슈머 주도 컨트랙트 · 프로퍼티 기반 테스트 · 뮤테이션 테스팅 | 선택 | [유닛 테스트](../09_spring/04_testing/01-02.JUnit%205%20%2B%20AssertJ%EB%A1%9C%20%EB%8B%A8%EC%9C%84%20%ED%85%8C%EC%8A%A4%ED%8A%B8%20%EC%9E%91%EC%84%B1.md) · [통합 테스트](../09_spring/04_testing/02-01.Testcontainers%EC%99%80%20%EC%A7%84%EC%A7%9C%20DB%20%ED%86%B5%ED%95%A9%20%ED%85%8C%EC%8A%A4%ED%8A%B8.md) · [테스트 더블 목·스텁·페이크](../09_spring/04_testing/01-03.Mockito%EC%99%80%20MockMvc%20%EC%8A%AC%EB%9D%BC%EC%9D%B4%EC%8A%A4.md) · [엔드투엔드 테스트](../03_architecture/book/bmf_building-micro-frontends/06-05.E2E%20%ED%85%8C%EC%8A%A4%ED%8A%B8%20%E2%80%94%20%EA%B2%BD%EA%B3%84%EB%A5%BC%20%EB%84%98%EB%8A%94%20%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4%EB%8A%94%20%EB%88%84%EA%B5%AC%20%EA%B2%83%EC%9D%B8%EA%B0%80.md) · [컨슈머 주도 컨트랙트](../04_messaging/08_advanced/01_variants/01-04.%EC%8A%A4%ED%82%A4%EB%A7%88%20%EA%B1%B0%EB%B2%84%EB%84%8C%EC%8A%A4.md) | |
 | 부하 테스트 · 스트레스 테스트 · 소크 테스트 · 카오스 엔지니어링 · 장애 주입 | 선택 | [카오스 엔지니어링](../09_spring/04_testing/02-04.WireMock%EA%B3%BC%20%EC%99%B8%EB%B6%80%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20E2E.md) · [장애 주입](../07_devops/02_Jenkins/05_operations/01-02.%EA%B0%80%EC%9A%A9%EC%84%B1%20%ED%85%8C%EC%8A%A4%ED%8A%B8%20%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4.md) | |
 | 정적 분석 | 선택 | [정적 분석](../07_devops/docs/sonarqube/01-01.%EC%A0%95%EC%A0%81%20%EB%B6%84%EC%84%9D%EC%9D%B4%20%ED%91%B8%EB%8A%94%20%EA%B2%B0%ED%95%A8.md) | |
+| 퍼징 | 선택 | [퍼징](../01_language/book/lgo_learning-go/15-03.%ED%8D%BC%EC%A7%95%EC%9D%80%20%EC%8B%9C%EB%93%9C%EB%A5%BC%20%EB%B9%84%ED%8B%80%EC%96%B4%20%EB%86%93%EC%B9%9C%20%EC%9E%85%EB%A0%A5%EC%9D%84%20%EC%B0%BE%EA%B3%A0%20%EB%B2%A4%EC%B9%98%EB%A7%88%ED%81%AC%EB%8A%94%20b.Loop%20%EB%A1%9C%20%ED%95%9C%20%EB%B2%88%EC%9D%98%20%EB%B9%84%EC%9A%A9%EC%9D%84%20%EC%9E%BD%EB%8B%88%EB%8B%A4.md) | |
+
+
+
+## 넣지 않은 것
+
+> 다른 문서가 정본이거나 이 로드맵의 축과 다른 것들입니다.
+
+| 대상 | 이유 |
+|---|---|
+| GC · 클래스 로딩 · 힙 덤프 | [JVM 로드맵](jvm-keywords.md)이 맡습니다. Spring 이 느린 것과 JVM 이 멈춘 것은 다른 층입니다 |
+| 인덱스 자료구조 · 분산 일관성 | [데이터 로드맵](data-keywords.md)이 맡습니다. 4단계는 트랜잭션 경계까지만 봅니다 |
+| SQL 실행 계획 · 인덱스 튜닝 | 소장 책에 없고, 이 저장소에도 아직 노트가 없습니다 |
+| PromQL · SLO · 알림 설계 | [관측 가능성 로드맵](observability-keywords.md)이 맡습니다. 8단계는 내보내는 쪽만 봅니다 |
+| 쿠버네티스 오브젝트와 내부 구조 | [Kubernetes 로드맵](k8s-keywords.md)이 맡습니다. 9단계는 배포 산출물까지입니다 |
+| Kafka 프로듀서 · 컨슈머 설계 | `04_messaging` 이 정본입니다. `@KafkaListener` 는 그 주제 축 안에 둡니다 |
+| QueryDSL 과 동적 쿼리 | `05_data/03_persistence/querydsl` 이 정본입니다 |
+| 뷰 템플릿과 서버 렌더링 | Thymeleaf 로 화면을 그리는 축은 다룰 일이 없습니다. 3단계는 REST 응답까지입니다 |
+| XML 설정과 레거시 마이그레이션 | 소장본에 부록으로 있지만 새로 쓸 일이 없습니다 |
+| 비관계형 데이터 · Spring Integration · RSocket | Spring in Action 4·10·14장입니다. 쓰게 될 때 그 장만 폅니다 |
+| GraalVM 네이티브 이미지와 Knative | Cloud Native Spring 16장입니다. 기동 시간이 문제가 되면 엽니다 |

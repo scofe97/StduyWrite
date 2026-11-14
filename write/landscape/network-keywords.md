@@ -345,3 +345,31 @@ updated: 2026-11-03
 | 터널 풀 — 연결마다 새로 여는 방식과의 갈림 | 추천 | [portal 01-04 reverse pool](../02_os/project/portal-tunnel/01-04.reverse_pool%C2%B7reverse_framing.md) | [I2P Tunnel Routing](https://i2p.net/en/docs/overview/tunnel-routing/) |
 | 예비 터널 — 준비 비용 · 전환 시간 · 자원 사용량 | 추천 |  | [I2P Tunnel Routing](https://i2p.net/en/docs/overview/tunnel-routing/) |
 | 터널 수명과 교체 — 자주 바꾸면 비싸고 드물게 바꾸면 트래픽이 묶인다 | 추천 |  | [I2P Tunnel Routing](https://i2p.net/en/docs/overview/tunnel-routing/) · [Tor 설계 논문](https://www.usenix.org/conference/13th-usenix-security-symposium/tor-second-generation-onion-router) |
+
+
+
+## 넣지 않은 것
+
+> 다른 문서가 정본이거나 이 로드맵의 축과 다른 것들입니다.
+
+| 대상 | 이유 |
+|---|---|
+| Kubernetes 오브젝트의 배포와 운영 | [Kubernetes 로드맵](k8s-keywords.md)이 맡습니다 |
+| socket · epoll · io_uring 의 커널 구현 | [OS 로드맵](os-keywords.md) 2·6단계가 맡습니다 |
+| tail latency · coordinated omission · 프로파일 | [OS 로드맵](os-keywords.md) 4단계의 성능 방법론 축입니다 |
+| metrics · logs · traces · OpenTelemetry | [관측 가능성 로드맵](observability-keywords.md)이 맡습니다 |
+| Go 로 프록시·로드밸런서를 구현하는 일 | [Go 로드맵](go-keywords.md) 6단계가 맡습니다. 여기는 개념까지입니다 |
+| Computer Networking 7장 | 무선과 이동성. 서버 운영과 접점이 적습니다 |
+| Packet Analysis with Wireshark 6·7장 | 무선 캡처와 공격 분석. 판독 축이 아닙니다 |
+| Learning CoreDNS 9장 | 플러그인을 *만드는* 쪽입니다. 필요가 생기면 3단계 뒤에 붙입니다 |
+| 무선 — Wi-Fi · WPA · AP 배치 · Bluetooth · Zigbee · LoRaWAN | 캠퍼스·현장 망 축입니다. 서버와 클러스터 운영과 접점이 적습니다 |
+| 캠퍼스·벤더 라우팅 — EIGRP · RIP · HSRP · GLBP | 벤더 전용이거나 옛 프로토콜입니다. 표준 쪽 OSPF · BGP · VRRP 만 2단계에 걸었습니다 |
+| 자격증 — CCNA · CCNP · Network+ | 순서가 아니라 시험입니다. CompTIA Network+ 는 보완 참조로만 씁니다 |
+| 시뮬레이터 — GNS3 · EVE-NG · Packet Tracer | 랩 도구는 containerlab 하나로 둡니다 |
+| FTP | 응용 프로토콜 개별 동작입니다. 1단계 HTTP · DNS · TLS 와 메일이 축입니다 |
+| 웹 응용 보안 — OWASP Top 10 · XSS · SQL injection · 봇 관리 · 피싱 | 응용 계층 보안입니다. CSRF 와 Spring Security 로 OAuth 클라이언트를 짜는 일은 [Spring 로드맵](spring-keywords.md)이 맡습니다. OIDC 규격과 앞단 인증은 7단계에 있습니다 |
+| 영상 전송 HLS · DASH · 서버리스 · 프라이버시 규제 · AI | 이 로드맵의 축 밖입니다. AI 는 [AI 로드맵](ai-keywords.md)이 맡습니다 |
+| 상용 관측 SaaS — Datadog · Dynatrace | 제품 사용법입니다. 관측 원리는 [관측 가능성 로드맵](observability-keywords.md)이 맡습니다 |
+| 네트워크 엔지니어링 — QoS · DSCP · 네트워크 우선순위 · 유니캐스트 · 멀티캐스트 | 백엔드 키워드 목록이 백엔드 밖 심화로 따로 뺀 키워드 |
+| 고급 암호·블록체인 — 제로 날리지(Zero Knowledge) 증명 · zk-SNARK · zk-STARK · 동형 암호화 · 부분 동형 암호화 · 완전 동형 암호화 · 안전한 다자간 연산·MPC · 임계값 서명 · 멀티시그 · 콜드 월렛 · 핫 월렛 | 백엔드 키워드 목록이 백엔드 밖 심화로 따로 뺀 키워드 |
+| 커널 바이패스·NIC 오프로드 — 커널 바이패스 · DPDK · RDMA · 인피니밴드 · RoCE · 네트워크·TCP·체크섬·세그먼테이션 오프로드 · 인터럽트 코얼레싱 · NAPI · 폴링 모드 · 인터럽트 모드 | 백엔드 키워드 목록이 백엔드 밖 심화로 따로 뺀 키워드 |
