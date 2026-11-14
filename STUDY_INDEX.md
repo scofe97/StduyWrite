@@ -29,7 +29,6 @@ Spring 문서는 주제별로 분산 배치된다. 전 카테고리 집계는 [`
 ## 예약 폴더
 
 - `write/_company/` — 사내 전용 분석 (`.gitignore` 보호)
-- [`write/_archive/`](write/_archive/) — 6개월 무갱신·무참조 문서 보관
 
 ## 최근 추가된 final 문서
 
