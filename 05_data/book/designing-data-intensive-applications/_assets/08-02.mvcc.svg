@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 556" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">MVCC 다중 버전 행 구조와 스냅샷 가시성</title><desc id="dd">각 행의 inserted_by와 deleted_by 필드를 대조해 시작 시점 스냅샷을 선별한다.</desc>
+<rect width="880" height="556" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">08-02 · §3 MVCC ROW VERSIONS</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">MVCC 다중 버전 행 구조와 스냅샷 가시성</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">txid 태깅 · inserted_by · deleted_by · 가시성 판정</text>
+<rect x="24" y="104" width="404" height="44" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<rect x="34.31" y="116" width="75.38" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="72" y="130" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">txid = 12</text>
+<text x="136" y="130" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">읽기 트랜잭션 (시작 시점 t12 스냅샷 기준)</text>
+<rect x="452" y="104" width="404" height="44" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.2"/>
+<rect x="462.31" y="116" width="75.38" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="500" y="130" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">txid = 13</text>
+<text x="564" y="130" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">이체 쓰기 트랜잭션 (계좌 2 → 계좌 1 100달러)</text>
+<rect x="24" y="160" width="832" height="260" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="36" y="172" width="808" height="28" rx="4" fill="#5E6B7E12" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="48" y="190" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F5F5F3">ACCOUNTS 테이블 다중 버전</text>
+<text x="240" y="190" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">UPDATE = 구 행 deleted_by 기록 + 신규 행 INSERT</text>
+<rect x="36" y="208" width="96" height="92" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="84" y="248" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">계좌 1</text>
+<text x="84" y="266" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">id = 1</text>
+<rect x="140" y="208" width="692" height="42" rx="4" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="152" y="226" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">inserted_by = 3 · deleted_by = 13 · balance = 500</text>
+<text x="152" y="241" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">가시: 생성(3 &lt; 12) 완료 · 삭제(13 &gt; 12) 미반영</text>
+<text x="812" y="233" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">가시 (500)</text>
+<rect x="140" y="258" width="692" height="42" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="152" y="276" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">inserted_by = 13 · deleted_by = null · balance = 600</text>
+<text x="152" y="291" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">비가시: 생성(13 &gt; 12) t12 시점 이후 쓰기</text>
+<text x="812" y="283" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">비가시</text>
+<rect x="36" y="312" width="96" height="92" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="84" y="352" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">계좌 2</text>
+<text x="84" y="370" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">id = 2</text>
+<rect x="140" y="312" width="692" height="42" rx="4" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="152" y="330" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">inserted_by = 5 · deleted_by = 13 · balance = 500</text>
+<text x="152" y="345" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">가시: 생성(5 &lt; 12) 완료 · 삭제(13 &gt; 12) 미반영</text>
+<text x="812" y="337" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">가시 (500)</text>
+<rect x="140" y="362" width="692" height="42" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="152" y="380" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">inserted_by = 13 · deleted_by = null · balance = 400</text>
+<text x="152" y="395" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">비가시: 생성(13 &gt; 12) t12 시점 이후 쓰기</text>
+<text x="812" y="387" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">비가시</text>
+<rect x="24" y="432" width="832" height="36" rx="4" fill="#3FB98C16" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="440.0" y="455" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">txid = 12 읽기 결과: 계좌 1 $500 + 계좌 2 $500 = 총액 $1,000 일관 스냅샷 유지</text>
+<line x1="12" y1="500" x2="832" y2="500" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="522" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="512" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="522" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">가시 버전 (focal)</text>
+<rect x="313" y="512" width="14" height="12" rx="2" fill="#8B98A922" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="335" y="522" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">비가시 미래 버전</text>
+<rect x="474" y="512" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="496" y="522" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">쓰기 트랜잭션</text>
+<rect x="609" y="512" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="631" y="522" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">읽기 트랜잭션</text>
+</svg>

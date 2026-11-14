@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 504" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">B-tree와 LSM 디스크 쓰기 증폭 경로</title><desc id="dd">애플리케이션 쓰기 하나가 두 저장 엔진에서 디스크 쓰기 여러 번으로 늘어나는 경로를 따라간다.</desc>
+<rect width="880" height="504" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">04-03 · WRITE AMPLIFICATION DATA FLOW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">B-tree와 LSM 디스크 쓰기 증폭 경로</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">애플리케이션 요청 → WAL 기록 → 디스크 페이지 덮어쓰기 / SSTable 압축 플러시 → 증폭 결과</text>
+<rect x="24" y="104" width="832" height="148" rx="6" fill="#0D1117" stroke="#E3B341" stroke-width="1.1"/>
+<text x="40" y="128" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">B-tree 경로 — 고정 페이지 덮어쓰기</text>
+<rect x="343.0" y="116" width="234.0" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="460" y="130" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">최소 2회 쓰기 · 페이지 단위 증폭</text>
+<rect x="40" y="148" width="164" height="80" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="122.0" y="174" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">앱 쓰기 요청</text>
+<text x="122.0" y="194" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">몇 바이트 키 갱신</text>
+<text x="122.0" y="212" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">단일 레코드 수정</text>
+<rect x="234" y="148" width="172" height="80" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="320.0" y="174" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">1. WAL 선행 기록</text>
+<text x="320.0" y="194" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">로그에 한 번 append</text>
+<text x="320.0" y="212" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">디스크 fsync 1회</text>
+<rect x="436" y="148" width="176" height="80" rx="6" fill="#E3B34118" stroke="#E3B341" stroke-width="1.2"/>
+<text x="524.0" y="174" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">2. 페이지 제자리 덮어쓰기</text>
+<text x="524.0" y="194" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">4~16 KiB 전체 페이지</text>
+<text x="524.0" y="212" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">소규모 수정도 전체 쓰기</text>
+<rect x="642" y="148" width="198" height="80" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.3"/>
+<text x="741.0" y="174" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">최소 두 번 디스크 쓰기</text>
+<text x="741.0" y="194" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">몇 바이트에도 전체 페이지</text>
+<text x="741.0" y="212" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">분할 시 추가 페이지 덮어쓰기</text>
+<path d="M 208 188.0 L 230 188.0" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 410 188.0 L 432 188.0" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 616 188.0 L 638 188.0" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<rect x="24" y="272" width="832" height="148" rx="6" fill="#0D1117" stroke="#F08A59" stroke-width="1.3"/>
+<text x="40" y="296" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">LSM 경로 — 불변 파일 압축 순차 쓰기</text>
+<rect x="348.5" y="284" width="223.0" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="460" y="298" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">압축 청크 순차 기록 · 낮은 증폭</text>
+<rect x="40" y="316" width="164" height="80" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="122.0" y="342" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">앱 쓰기 요청</text>
+<text x="122.0" y="362" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">키 하나 쓰기</text>
+<text x="122.0" y="380" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">단일 레코드 추가</text>
+<rect x="234" y="316" width="172" height="80" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="320.0" y="342" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">1. WAL 선행 기록</text>
+<text x="320.0" y="362" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">로그에 한 번 append</text>
+<text x="320.0" y="380" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">디스크 순차 플러시</text>
+<rect x="436" y="316" width="176" height="80" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="524.0" y="342" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">2. SSTable 순차 플러시</text>
+<text x="524.0" y="362" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">청크 압축 일괄 쓰기</text>
+<text x="524.0" y="380" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">compaction 마다 다시 쓰기</text>
+<rect x="642" y="316" width="198" height="80" rx="6" fill="#F08A5920" stroke="#F08A59" stroke-width="1.4"/>
+<text x="741.0" y="342" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">상대적 낮은 디스크 증폭</text>
+<text x="741.0" y="362" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">청크 압축으로 공간 절감</text>
+<text x="741.0" y="380" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">SSD 마모 덜함</text>
+<path d="M 208 356.0 L 230 356.0" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 410 356.0 L 432 356.0" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<path d="M 616 356.0 L 638 356.0" fill="none" stroke="#F08A59" stroke-width="1.3" marker-end="url(#acc)"/>
+<line x1="12" y1="448" x2="832" y2="448" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="470" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="460" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="470" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">LSM 압축 완화</text>
+<rect x="261" y="460" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="283" y="470" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">B-tree 페이지 증폭</text>
+<rect x="474" y="460" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="496" y="470" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">WAL 선행 기록</text>
+<rect x="635" y="460" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="657" y="470" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 쓰기 경로</text>
+</svg>

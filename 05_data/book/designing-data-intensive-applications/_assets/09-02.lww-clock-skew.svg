@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 664" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">다중 리더 쓰기의 타임스탬프 역전과 LWW 유실 시퀀스</title><desc id="dd">클라이언트 B의 x=2 증분이 인과적으로 나중이지만 클럭 스큐로 작은 타임스탬프가 붙어 조용히 유실되는 과정.</desc>
+<rect width="880" height="664" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">09-02 · §3 TIMESTAMP ORDERING RISK</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">다중 리더 쓰기의 타임스탬프 역전과 LWW 유실 시퀀스</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">선행 쓰기 x=1 · 후행 증분 x=2 · 클럭 스큐 역전 · LWW 충돌 해소 오판단 · 데이터 유실</text>
+<rect x="28.0" y="104" width="130" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="93.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">클라이언트 A</text>
+<text x="93.0" y="142" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">Client A</text>
+<rect x="201.5" y="104" width="130" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="266.5" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">노드 1</text>
+<text x="266.5" y="142" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">Node 1</text>
+<rect x="375.0" y="104" width="130" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="440.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">노드 3</text>
+<text x="440.0" y="142" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">Node 3 (스큐 3 ms 이하)</text>
+<rect x="548.5" y="104" width="130" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="613.5" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">클라이언트 B</text>
+<text x="613.5" y="142" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#E3B341">Client B</text>
+<rect x="722.0" y="104" width="130" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="787.0" y="124" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">노드 2</text>
+<text x="787.0" y="142" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F0616D">Node 2</text>
+<line x1="93.0" y1="156" x2="93.0" y2="566" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="266.5" y1="156" x2="266.5" y2="566" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="440.0" y1="156" x2="440.0" y2="566" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="613.5" y1="156" x2="613.5" y2="566" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="787.0" y1="156" x2="787.0" y2="566" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<path d="M 103.0 168 L 254.5 168" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<text x="179.75" y="160" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">쓰기: x = 1</text>
+<text x="179.75" y="184" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">선행 쓰기 요청</text>
+<path d="M 276.5 202 L 312.5 202 L 312.5 222 L 278.5 222" fill="none" stroke="#6A95D8" stroke-width="1.3" marker-end="url(#ar)"/>
+<text x="320.5" y="208" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#6A95D8">t = 42.004 s</text>
+<text x="320.5" y="227" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">벽시계 타임스탬프 부여</text>
+<path d="M 276.5 256 L 428.0 256" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="353.25" y="248" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">복제: x = 1</text>
+<text x="353.25" y="272" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">t = 42.004 s 전달</text>
+<path d="M 603.5 304 L 452.0 304" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<text x="526.75" y="296" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">증분: x = 2</text>
+<text x="526.75" y="320" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">인과적 후행 쓰기</text>
+<path d="M 430.0 338 L 394.0 338 L 394.0 358 L 428.0 358" fill="none" stroke="#E3B341" stroke-width="1.3" marker-end="url(#ar)"/>
+<text x="386.0" y="344" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#E3B341">t = 42.003 s</text>
+<text x="386.0" y="363" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">클럭 스큐로 과거 시각 기록</text>
+<path d="M 276.5 400 L 775.0 400" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="526.75" y="392" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">복제: x = 1 (42.004 s)</text>
+<text x="526.75" y="416" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">노드 1 쓰기 전파</text>
+<path d="M 450.0 452 L 775.0 452" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<text x="613.5" y="444" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">복제: x = 2 (42.003 s)</text>
+<text x="613.5" y="468" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">노드 3 쓰기 전파</text>
+<path d="M 777.0 494 L 741.0 494 L 741.0 514 L 775.0 514" fill="none" stroke="#F0616D" stroke-width="1.3" marker-end="url(#ar)"/>
+<text x="733.0" y="500" text-anchor="end" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="600" fill="#F0616D">LWW: 42.004 &gt; 42.003</text>
+<text x="733.0" y="519" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">큰 타임스탬프 x=1 선택</text>
+<rect x="622" y="540" width="230" height="26" rx="4" fill="#F08A5918" stroke="#F08A59" stroke-width="1.4"/>
+<text x="737.0" y="557" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#F08A59">x = 2 유실 · x = 1 보존 (역전)</text>
+<line x1="12" y1="608" x2="832" y2="608" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="630" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="620" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="630" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">데이터 유실 (focal)</text>
+<rect x="326" y="620" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="348" y="630" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">선행 쓰기 A</text>
+<rect x="461" y="620" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="483" y="630" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">후행 쓰기 B</text>
+<rect x="596" y="620" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="618" y="630" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 복제</text>
+<rect x="705" y="620" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="727" y="630" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">LWW 오판단</text>
+</svg>

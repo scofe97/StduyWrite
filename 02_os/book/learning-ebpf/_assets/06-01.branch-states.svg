@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 472" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">조건 점프 하나가 만드는 두 경로</title><desc id="dd">점프하는 쪽의 상태 사본은 스택에 들어가고, 이어지는 쪽이 먼저 끝까지 간다. 한 경로라도 걸리면 프로그램 전체가 거부된다.</desc>
+<rect width="960" height="472" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING EBPF · 06-01 §1</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">조건 점프 하나가 만드는 두 경로</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">30번 명령의 비교 r1 &gt; 12 가 두 경로를 가른다</text>
+<rect x="336" y="108" width="288" height="48" rx="6" fill="#F08A5918" stroke="#F08A59" stroke-width="1.4"/>
+<text x="480.0" y="138" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">30: if r1 &gt; 0xc goto pc+10</text>
+<rect x="104" y="208" width="320" height="64" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="264" y="236" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#6A95D8">31 → 34</text>
+<text x="264" y="256" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">r1 ≤ 12 · 이어지는 쪽</text>
+<rect x="536" y="208" width="320" height="64" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="696" y="236" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">41 · 가지치기 지점</text>
+<text x="696" y="256" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">r1 &gt; 12 · push 된 사본</text>
+<rect x="136" y="328" width="256" height="48" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.2"/>
+<text x="264" y="358" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F0616D">34: off=16 size=1</text>
+<rect x="568" y="328" width="256" height="48" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="696" y="358" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">꺼내지 못함</text>
+<path d="M 376 156 L 376 184 L 264 184 L 264 208" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<path d="M 584 156 L 584 184 L 696 184 L 696 208" fill="none" stroke="#E3B341" stroke-width="1.5" marker-end="url(#warn)"/>
+<path d="M 264 272 L 264 328" fill="none" stroke="#F0616D" stroke-width="1.5" marker-end="url(#bad)"/>
+<path d="M 696 272 L 696 328" fill="none" stroke="#E3B341" stroke-width="1.5" marker-end="url(#warn)"/>
+<line x1="12" y1="416" x2="912" y2="416" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="438" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="428" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="438" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">갈래</text>
+<rect x="170" y="428" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="192" y="438" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">push · 가지치기</text>
+<rect x="357" y="428" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="379" y="438" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">실패</text>
+<rect x="427" y="428" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="449" y="438" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">분기 명령</text>
+</svg>

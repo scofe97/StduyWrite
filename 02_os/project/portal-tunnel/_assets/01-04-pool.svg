@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">리버스 풀 데이터 흐름 — 연결 사전 개설·대기 풀 보관·클레임 인출</title><desc id="dd">터널 슬롯 루프가 아웃바운드 연결을 공급하고 릴레이 ReversePool 은 최대 8개까지 보관하며 인그레스 요청 시 즉시 인출합니다</desc>
+<rect width="1000" height="560" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">DATA FLOW · REVERSE CONNECTION POOLING</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">리버스 풀 데이터 흐름 — 연결 사전 개설·대기 풀 보관·클레임 인출</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">터널 슬롯(2개) → 101 하이잭 → ReversePool(최대 8개) → Acquire 인출 → 클라이언트 브리지</text>
+<rect x="20" y="104" width="206" height="396" rx="8" fill="rgba(245,245,245,0.02)" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="4 4"/>
+<text x="36" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">터널 에이전트 (NAT 내부)</text>
+<rect x="296" y="104" width="368" height="396" rx="8" fill="rgba(245,245,245,0.02)" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="4 4"/>
+<text x="312" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">릴레이 ReversePool (중계 서버)</text>
+<rect x="710" y="104" width="270" height="396" rx="8" fill="rgba(245,245,245,0.02)" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="4 4"/>
+<text x="726" y="124" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">공개 인그레스 및 브리지</text>
+<rect x="34" y="160" width="178" height="88" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="48" y="188" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">작업 슬롯 1 (Slot 1)</text>
+<text x="48" y="212" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">runReverseSessionLoop</text>
+<text x="48" y="232" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">openRaw() 호출 대기</text>
+<rect x="34" y="280" width="178" height="88" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="48" y="308" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">작업 슬롯 2 (Slot 2)</text>
+<text x="48" y="332" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">defaultReadyTarget = 2</text>
+<text x="48" y="352" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">핸드셰이크·인계 후 보충</text>
+<path d="M 212 204 L 312 204" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<path d="M 212 324 L 312 324" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<text x="256" y="196" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#6A95D8">GET /connect</text>
+<text x="256" y="316" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#6A95D8">101 Upgrade</text>
+<rect x="312" y="150" width="336" height="74" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="328" y="174" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">Offer 단계 (동시성 제어)</text>
+<text x="328" y="196" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">ReserveOffer: 슬롯 한도 선점 예약</text>
+<text x="328" y="214" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">Commit: pooledConn 생성 및 대기열 등록</text>
+<rect x="312" y="248" width="336" height="106" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="328" y="272" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">대기 큐 (readyLimit = 8)</text>
+<rect x="328" y="284" width="68" height="36" rx="4" fill="#3FB98C20" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="362" y="300" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#3FB98C">conn-1</text>
+<text x="362" y="314" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#F5F5F3">ready</text>
+<rect x="404" y="284" width="68" height="36" rx="4" fill="#3FB98C20" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="438" y="300" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#3FB98C">conn-2</text>
+<text x="438" y="314" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#F5F5F3">ready</text>
+<rect x="480" y="284" width="68" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="514" y="306" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">empty</text>
+<rect x="556" y="284" width="68" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="590" y="306" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">empty</text>
+<text x="328" y="340" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#3FB98C">keepIdle 루프: 15s 주기 0x00 하트비트</text>
+<path d="M 480 224 L 480 248" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<rect x="312" y="376" width="336" height="68" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.2"/>
+<text x="328" y="400" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">Acquire(ctx) 인출</text>
+<text x="328" y="420" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">close(c.stop) 호출로 유휴 하트비트 중단</text>
+<text x="328" y="436" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">죽은 소켓 감지 시 폐기 후 다음 연결 인출</text>
+<path d="M 480 354 L 480 376" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<rect x="724" y="160" width="242" height="94" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="740" y="186" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">외부 공개 요청 도착</text>
+<text x="740" y="210" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">SNI ClientHello 또는 TCP 연결</text>
+<text x="740" y="232" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">defaultClaimTimeout = 10s</text>
+<rect x="724" y="290" width="242" height="114" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.2"/>
+<text x="740" y="316" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">활성 브리지 결합</text>
+<text x="740" y="340" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">WriteTLSStart / WriteRawStart</text>
+<text x="740" y="362" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">양방향 바이트 스트림 중계</text>
+<text x="740" y="386" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#3FB98C">활성화 마커로 ReadStart 해제</text>
+<path d="M 845 254 L 845 272 L 648 272 L 648 402" fill="none" stroke="#6A95D8" stroke-width="1.3" marker-end="url(#info)" stroke-dasharray="4 3"/>
+<text x="688" y="264" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#6A95D8">Acquire</text>
+<path d="M 648 424 L 724 346" fill="none" stroke="#F08A59" stroke-width="1.6" marker-end="url(#acc)"/>
+<text x="688" y="430" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F08A59">Conn</text>
+<path d="M 784 404 L 784 474 L 123 474 L 123 368" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)" stroke-dasharray="4 3"/>
+<text x="450" y="466" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#3FB98C">핸드셰이크 후 슬롯 보충 (readyCount = 2 유지)</text>
+<line x1="12" y1="516" x2="952" y2="516" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="538" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="528" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">사전 연결·개설</text>
+<rect x="248" y="528" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="270" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">대기 풀·하트비트</text>
+<rect x="409" y="528" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="431" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">인출·브리지 결합</text>
+<rect x="570" y="528" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="592" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">한도·타임아웃</text>
+</svg>

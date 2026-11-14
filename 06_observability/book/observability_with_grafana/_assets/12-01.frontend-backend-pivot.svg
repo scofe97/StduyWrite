@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 440" width="100%" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>세션 하나에서 시작해 백엔드 로그까지 건너가는 경로</title>
+  <desc>Sessions 탭에는 페이지 URL 과 세션 ID 가 함께 나옵니다. 세션 ID 를 누르면 그 방문자의 Web Vitals 와 예외와 트레이스 링크가 있는 상세 화면으로 갑니다. 트레이스를 고르면 시스템 전체 트레이스의 Explore 화면으로 가고 거기서 백엔드 Loki 로그로 이어집니다. 이 이동이 가능한 조건은 나머지 시스템도 계측되어 있다는 것이며, 세션 식별자가 이 모든 연결의 접착제입니다. 기본 세션은 방문자가 페이지로 이동해 Faro 가 초기화될 때 시작하고 방문자가 떠나면 파기되며 종료 이벤트는 기본적으로 전송되지 않습니다.</desc>
+
+  <style>
+    .code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 10px; }
+  </style>
+
+  <rect width="880" height="440" fill="#0d0d0d"/>
+
+  <text x="30" y="34" fill="#e8e4df" font-size="17" font-weight="700">세션 ID 가 접착제다</text>
+  <text x="30" y="55" fill="#b8b3ad" font-size="12">한 방문자에서 백엔드 로그까지</text>
+
+  <defs>
+    <marker id="p" markerWidth="9" markerHeight="9" refX="8" refY="3.5" orient="auto">
+      <path d="M0,0 L0,7 L9,3.5 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <!-- step 1 -->
+  <rect x="30" y="80" width="196" height="120" rx="8" fill="#5b9bd5"/>
+  <text x="46" y="106" fill="#e8e4df" font-size="12.5" font-weight="700">① Sessions 탭</text>
+  <rect x="46" y="118" width="164" height="22" rx="3" fill="#dceaf7"/>
+  <text class="code" x="54" y="133" fill="#10243a">page URL + session ID</text>
+  <text x="46" y="160" fill="#e8e4df" font-size="10.5">여러 요청이 나열된다</text>
+  <text x="46" y="182" fill="#e8e4df" font-size="10.5" font-weight="700">세션 ID 를 누른다</text>
+
+  <path d="M232 140 L262 140" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#p)"/>
+
+  <!-- step 2 -->
+  <rect x="266" y="80" width="196" height="120" rx="8" fill="rgb(212,168,83)"/>
+  <text x="282" y="106" fill="#0d0d0d" font-size="12.5" font-weight="700">② 세션 상세</text>
+  <text x="282" y="128" fill="#1a1a1a" font-size="10.5">그 방문자의 Web Vitals</text>
+  <text x="282" y="150" fill="#1a1a1a" font-size="10.5">연관된 예외</text>
+  <rect x="282" y="160" width="164" height="24" rx="3" fill="#fdf3df"/>
+  <text x="292" y="177" fill="#5c4410" font-size="10.5" font-weight="700">Traces 링크</text>
+
+  <path d="M468 140 L498 140" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#p)"/>
+
+  <!-- step 3 -->
+  <rect x="502" y="80" width="172" height="120" rx="8" fill="#66bb6a"/>
+  <text x="518" y="106" fill="#0d0d0d" font-size="12.5" font-weight="700">③ Explore</text>
+  <text x="518" y="128" fill="#1a1a1a" font-size="10.5">시스템 전체 트레이스</text>
+  <rect x="518" y="140" width="140" height="24" rx="3" fill="#e6f7e7"/>
+  <text x="528" y="157" fill="#14521d" font-size="10.5" font-weight="700">Tempo 가 답한다</text>
+  <text x="518" y="182" fill="#1a1a1a" font-size="10.5">스팬을 따라간다</text>
+
+  <path d="M680 140 L710 140" stroke="rgb(212,168,83)" stroke-width="2.2" marker-end="url(#p)"/>
+
+  <!-- step 4 -->
+  <rect x="714" y="80" width="136" height="120" rx="8" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.8"/>
+  <text x="730" y="106" fill="#66bb6a" font-size="12.5" font-weight="700">④ 백엔드 로그</text>
+  <text x="730" y="128" fill="#e8e4df" font-size="10.5">Loki 로 이어진다</text>
+  <rect x="730" y="140" width="104" height="24" rx="3" fill="#e6f7e7"/>
+  <text x="740" y="157" fill="#14521d" font-size="10.5" font-weight="700">끝까지 본다</text>
+  <text x="730" y="182" fill="#b8b3ad" font-size="10.5">원인에 닿는다</text>
+
+  <!-- condition -->
+  <rect x="30" y="220" width="820" height="60" rx="8" fill="#0d0d0d" stroke="#f44336" stroke-width="1.8"/>
+  <text x="50" y="245" fill="#f44336" font-size="12.5" font-weight="700">전제가 있다</text>
+  <rect x="160" y="230" width="330" height="28" rx="4" fill="#f2d4d4"/>
+  <text x="172" y="249" fill="#7a1f1f" font-size="11" font-weight="700">나머지 시스템도 계측돼 있어야 한다</text>
+  <text x="512" y="249" fill="#e8e4df" font-size="11">프론트만 붙이면 ③에서 길이 끊긴다</text>
+  <text x="50" y="270" fill="#b8b3ad" font-size="10.5">끝에서 끝까지 계측한 값어치다</text>
+
+  <!-- session lifecycle -->
+  <text x="30" y="312" fill="#e8e4df" font-size="13" font-weight="700">기본 세션의 수명</text>
+
+  <rect x="30" y="324" width="400" height="96" rx="8" fill="#66bb6a"/>
+  <text x="48" y="350" fill="#0d0d0d" font-size="12" font-weight="700">시작</text>
+  <text x="48" y="372" fill="#1a1a1a" font-size="10.5">방문자가 페이지로 이동한다</text>
+  <rect x="48" y="382" width="364" height="24" rx="4" fill="#e6f7e7"/>
+  <text x="58" y="399" fill="#14521d" font-size="10.5" font-weight="700">Faro 초기화 → 새 세션 시작</text>
+
+  <rect x="450" y="324" width="400" height="96" rx="8" fill="rgb(212,168,83)"/>
+  <text x="468" y="350" fill="#0d0d0d" font-size="12" font-weight="700">종료</text>
+  <text x="468" y="372" fill="#1a1a1a" font-size="10.5">방문자가 떠나면 파기된다</text>
+  <rect x="468" y="382" width="364" height="24" rx="4" fill="#fdf3df"/>
+  <text x="478" y="399" fill="#5c4410" font-size="10.5" font-weight="700">기본은 종료 이벤트를 안 보낸다</text>
+</svg>

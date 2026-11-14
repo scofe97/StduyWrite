@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 512" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">파생 데이터 서빙 패턴과 직접 쓰기 한계</title><desc id="dd">수천 개 병렬 태스크의 레코드별 직접 쓰기 병목을 방지하기 위한 Kafka 버퍼 수집 패턴 및 SST 파일 bulk import 패턴 대조.</desc>
+<rect width="880" height="512" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">11-04 · §4 SERVING BATCH OUTPUTS</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">파생 데이터 서빙 패턴과 직접 쓰기 한계</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">레코드별 직접 쓰기 병목 vs Kafka 토픽 버퍼 수집 · DB 파일 빌드 후 원자적 bulk import</text>
+<rect x="24" y="96" width="832" height="96" rx="6" fill="#161B22" stroke="#F0616D" stroke-width="1.0"/>
+<rect x="43.5" y="106" width="69.0" height="20" rx="4" fill="#0D1117" stroke="#F0616D" stroke-width="0.8"/>
+<text x="78" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">직접 쓰기</text>
+<text x="248" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">피해야 할 패턴 — 레코드별 DB 직접 쓰기</text>
+<line x1="34" y1="134" x2="846" y2="134" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<rect x="36" y="144" width="200" height="36" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="136" y="166" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">배치 태스크 (수천 개 병렬)</text>
+<path d="M 236 162 L 316 162" fill="none" stroke="#F0616D" stroke-width="1.2" marker-end="url(#bad)"/>
+<text x="276" y="152" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">개별 INSERT</text>
+<rect x="316" y="144" width="180" height="36" rx="6" fill="#F0616D14" stroke="#F0616D" stroke-width="1.2"/>
+<text x="406" y="166" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F0616D">프로덕션 서빙 DB</text>
+<text x="660" y="166" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">위험: 네트워크 왕복 지연 · DB 연결 및 I/O 포화</text>
+<rect x="24" y="204" width="832" height="112" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<rect x="49.0" y="214" width="58.0" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="78" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">패턴 1</text>
+<text x="248" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">Kafka 토픽 버퍼 푸시 및 독립 소비자 수집</text>
+<line x1="34" y1="242" x2="846" y2="242" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<rect x="36" y="252" width="172" height="50" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="122" y="272" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">배치 잡 클러스터</text>
+<text x="122" y="290" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">대용량 순차 쓰기</text>
+<path d="M 208 277 L 268 277" fill="none" stroke="#6A95D8" stroke-width="1.2" marker-end="url(#info)"/>
+<rect x="268" y="252" width="208" height="50" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="372" y="272" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">Kafka 토픽 (버퍼 · DMZ)</text>
+<text x="372" y="290" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">순차 로그 저장 · 보안 경계 분리</text>
+<path d="M 476 277 L 536 277" fill="none" stroke="#6A95D8" stroke-width="1.2" marker-end="url(#info)"/>
+<rect x="536" y="252" width="288" height="50" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="680" y="272" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">서빙 시스템 (Elasticsearch · Pinot · Druid)</text>
+<text x="680" y="290" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">소비자 자체 속도 수집 · 복수 소비자 독립 읽기</text>
+<rect x="24" y="328" width="832" height="116" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<rect x="49.0" y="338" width="58.0" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="78" y="352" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">패턴 2</text>
+<text x="248" y="352" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">배치 내부 DB 파일 빌드 및 원자적 Bulk Import</text>
+<line x1="34" y1="366" x2="846" y2="366" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<rect x="36" y="376" width="200" height="52" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="136" y="396" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">배치 잡 내부 생성</text>
+<text x="136" y="414" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">SST 파일 · Pinot 세그먼트</text>
+<path d="M 236 402 L 296 402" fill="none" stroke="#3FB98C" stroke-width="1.2" marker-end="url(#ok)"/>
+<rect x="296" y="376" width="200" height="52" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="396" y="396" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">완성된 DB 파일셋</text>
+<text x="396" y="414" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">오브젝트 스토어 · DFS 적재</text>
+<path d="M 496 402 L 556 402" fill="none" stroke="#F08A59" stroke-width="1.2" marker-end="url(#acc)"/>
+<rect x="556" y="376" width="268" height="52" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="690" y="396" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">서빙 스토어 (TiDB Lightning · RocksDB)</text>
+<text x="690" y="414" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">원자적 버전 전환 (all-or-nothing)</text>
+<line x1="12" y1="456" x2="832" y2="456" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="478" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="468" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="478" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Bulk Import (focal)</text>
+<rect x="391" y="468" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="413" y="478" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Kafka 버퍼</text>
+<rect x="539" y="468" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="561" y="478" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 적재</text>
+<rect x="648" y="468" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="670" y="478" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">직접 쓰기 병목</text>
+</svg>

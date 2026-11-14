@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">openat 과 fchmodat 이 내려가는 길 위의 판정 지점 셋</title><desc id="dd">syscall 입구는 인자를 읽어도 커널이 읽을 때 바뀔 수 있다. fd_install 은 파일 구조체가 채워진 뒤, security_path_chmod 는 inode 를 바꾸기 직전에 불린다. 결과는 허용 · EPERM · SIGKILL · 이벤트 넷이다.</desc>
+<rect width="960" height="520" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING EBPF · 09-01</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">openat 과 fchmodat 이 내려가는 길 위의 판정 지점 셋</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">같은 호출을 어느 자리에서 보느냐가 막을 수 있는지를 가른다</text>
+<rect x="24" y="108" width="200" height="320" rx="8" fill="#F5F5F3" fill-opacity="0.025" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="36" y="128" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">USER SPACE</text>
+<rect x="264" y="108" width="488" height="320" rx="8" fill="#F5F5F3" fill-opacity="0.025" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="276" y="128" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">KERNEL</text>
+<rect x="776" y="108" width="160" height="320" rx="8" fill="#F5F5F3" fill-opacity="0.025" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="788" y="128" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">OUTCOME</text>
+<rect x="40" y="148" width="168" height="64" rx="6" fill="#8B98A912" stroke="#8B98A9" stroke-width="1.2"/>
+<text x="124.0" y="176" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#8B98A9">openat</text>
+<text x="124.0" y="196" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">257 · /etc/shadow</text>
+<rect x="40" y="292" width="168" height="64" rx="6" fill="#8B98A912" stroke="#8B98A9" stroke-width="1.2"/>
+<text x="124.0" y="320" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#8B98A9">fchmodat</text>
+<text x="124.0" y="340" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">268 · 0777</text>
+<rect x="280" y="156" width="200" height="180" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="380" y="184" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">1 · syscall 입구</text>
+<text x="380" y="210" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">seccomp-bpf</text>
+<text x="380" y="230" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">값 인자 판정</text>
+<line x1="292" y1="244" x2="468" y2="244" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="380" y="266" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#F5F5F3">raw_syscalls:sys_enter</text>
+<text x="380" y="286" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">syscall 추적 도구</text>
+<rect x="327.5" y="306" width="105.0" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="380" y="320" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#E3B341">인자 복사 전</text>
+<rect x="520" y="148" width="200" height="64" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="620.0" y="176" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#3FB98C">fd_install</text>
+<text x="620.0" y="196" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">2 · Tetragon kprobe</text>
+<rect x="520" y="292" width="200" height="64" rx="6" fill="#F08A591F" stroke="#F08A59" stroke-width="1.4"/>
+<text x="620.0" y="320" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">security_path_chmod</text>
+<text x="620.0" y="340" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">3 · lsm/path_chmod</text>
+<rect x="776" y="148" width="160" height="48" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.2"/>
+<text x="856.0" y="177" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F0616D">SIGKILL</text>
+<rect x="776" y="212" width="160" height="56" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="856.0" y="240" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">이벤트</text>
+<text x="856.0" y="260" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#8B98A9">사용자 공간 · SIEM</text>
+<rect x="776" y="292" width="160" height="48" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.2"/>
+<text x="856.0" y="321" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F0616D">EPERM</text>
+<rect x="776" y="364" width="160" height="48" rx="6" fill="#8B98A912" stroke="#8B98A9" stroke-width="1.2"/>
+<text x="856.0" y="393" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#8B98A9">허용</text>
+<path d="M 208 180 L 274 180" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 208 324 L 274 324" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 480 180 L 514 180" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 480 324 L 514 324" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 722 172 L 770 172" fill="none" stroke="#F0616D" stroke-width="1.5" marker-end="url(#bad)"/>
+<path d="M 722 200 L 748 200 L 748 240 L 770 240" fill="none" stroke="#6A95D8" stroke-width="1.5" marker-end="url(#info)"/>
+<path d="M 722 316 L 770 316" fill="none" stroke="#F0616D" stroke-width="1.5" marker-end="url(#bad)"/>
+<path d="M 722 340 L 748 340 L 748 388 L 770 388" fill="none" stroke="#8B98A9" stroke-width="1.5" marker-end="url(#ar)"/>
+<line x1="12" y1="464" x2="912" y2="464" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="486" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="476" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="122" y="486" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">인자 복사 전</text>
+<rect x="235" y="476" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="257" y="486" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">커널 함수</text>
+<rect x="344" y="476" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="366" y="486" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">LSM 훅</text>
+<rect x="453" y="476" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="475" y="486" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">차단</text>
+<rect x="523" y="476" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="545" y="486" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">이벤트</text>
+</svg>

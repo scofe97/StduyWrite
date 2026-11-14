@@ -1,0 +1,44 @@
+<svg viewBox="0 0 680 580" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>메모리 샘플링으로 할당 문제 찾기 — da-ch9-ex1 1M 객체·2스텝·두 상황·정렬과 필터</title>
+  <desc>이 편의 요약입니다. 5~8장은 CPU 소비를 다뤘고 9장은 메모리 할당을 다룹니다. 앱이 CPU 는 별로 안 쓰는데 메모리를 과하게 쓰면 JVM 이 GC 를 돌려 CPU 까지 더 소비합니다. VisualVM Monitor 탭 메모리 위젯이 비정상 시점을 짚어 줍니다. 예제 da-ch9-ex1 은 엔드포인트 /products/1000000 을 호출하면 백만 개 객체 인스턴스를 만들어 메모리를 채웁니다. 조사는 두 스텝으로 메모리 샘플링으로 큰 그림을 보고 메모리 프로파일링으로 세부를 봅니다. Sampler 탭 Memory 버튼으로 샘플링하면 할당된 객체가 뜨고, 메모리를 차지하는 건 보통 다수의 소형 인스턴스이거나 소수의 대형 인스턴스입니다. Live Bytes 와 Live Objects 로 내림차순 정렬하고 프리미티브 문자열 배열 JDK 객체는 건너뛰어 내 코드베이스의 첫 타입을 찾으면 Product 가 백만 인스턴스로 범인입니다.</desc>
+  <rect x="0" y="0" width="680" height="580" fill="#0d0d0d"/>
+
+  <text x="20" y="38" fill="#e8e4df" font-size="18" font-weight="bold">메모리 샘플링으로 할당 문제 찾기</text>
+  <text x="20" y="60" fill="rgb(138,133,128)" font-size="11">Troubleshooting Java · 9장 도입~§9.1 · da-ch9-ex1</text>
+
+  <!-- 신호 -->
+  <rect x="20" y="78" width="640" height="80" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="34" y="100" fill="#f47f72" font-size="13" font-weight="bold">메모리 문제의 신호 (5~8장 CPU → 9장 메모리)</text>
+  <text x="34" y="124" fill="#e8e4df" font-size="11">CPU 는 별로 안 쓰는데 메모리를 과하게 씀 → JVM 이 GC 를 돌려 CPU 까지 더 소비</text>
+  <text x="34" y="146" fill="rgb(138,133,128)" font-size="10.5">Monitor 탭 메모리 위젯(5장)이 비정상 시점을 짚어 다음 조사 안내</text>
+
+  <!-- 예제 -->
+  <rect x="20" y="172" width="640" height="64" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="194" fill="rgb(212,168,83)" font-size="13" font-weight="bold">da-ch9-ex1 — /products/1000000</text>
+  <text x="34" y="218" fill="#e8e4df" font-size="11">숫자만큼 객체 인스턴스 생성 → 백만 개 요청 → 한 기능이 메모리 큰 몫 잡아먹는 상황 흉내</text>
+
+  <!-- 2스텝 -->
+  <rect x="20" y="250" width="640" height="60" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="272" fill="#e8e4df" font-size="12" font-weight="bold">조사 2스텝 (CPU 때와 같음)</text>
+  <text x="34" y="294" fill="#e8e4df" font-size="11">① 메모리 샘플링: 저장하는 객체의 큰 그림   →   ② 메모리 프로파일링: 특정 코드 세부(09-02)</text>
+
+  <!-- 두 상황 -->
+  <rect x="20" y="324" width="640" height="90" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="34" y="346" fill="#e8e4df" font-size="13" font-weight="bold">메모리를 차지하는 두 상황</text>
+  <rect x="34" y="356" width="300" height="48" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9"/>
+  <text x="48" y="376" fill="#9cc3df" font-size="11" font-weight="bold">① 다수의 소형 인스턴스</text>
+  <text x="48" y="396" fill="rgb(138,133,128)" font-size="10">특정 타입이 많이 생성돼 채움 (이 시나리오)</text>
+  <rect x="346" y="356" width="300" height="48" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)"/>
+  <text x="360" y="376" fill="rgb(212,168,83)" font-size="11" font-weight="bold">② 소수의 대형 인스턴스</text>
+  <text x="360" y="396" fill="rgb(138,133,128)" font-size="10">수는 적은데 각각 큼 (예: 비디오 파일)</text>
+
+  <!-- 정렬·필터 -->
+  <rect x="20" y="428" width="640" height="80" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <text x="34" y="450" fill="rgb(212,168,83)" font-size="13" font-weight="bold">정렬과 필터 — 내 코드의 첫 타입</text>
+  <text x="34" y="474" fill="#e8e4df" font-size="11">Live Bytes(차지 메모리) · Live Objects(인스턴스 수)로 내림차순 정렬</text>
+  <text x="34" y="496" fill="#e8e4df" font-size="11">프리미티브·문자열·배열·JDK 객체는 건너뜀(부수 효과) → 내 코드베이스 첫 타입 찾기</text>
+
+  <!-- 범인 -->
+  <rect x="20" y="522" width="640" height="40" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="34" y="547" fill="#f47f72" font-size="12" font-weight="bold">범인 = Product 타입 · 백만 인스턴스 (생성 지점은 09-02 프로파일링으로)</text>
+</svg>

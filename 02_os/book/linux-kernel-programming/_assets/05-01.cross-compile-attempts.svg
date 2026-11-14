@@ -1,0 +1,39 @@
+<svg viewBox="0 0 680 530" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>모듈 크로스 컴파일 4번 시도와 커널 ABI 호환성 규칙</title>
+  <desc>x86_64 호스트에서 AArch64 타깃으로 모듈을 크로스 컴파일하는 4번의 시도. 1차는 호스트 커널 소스를 가리켜 실패, 2차는 Module.symvers 없어 MODPOST 실패, 3차는 ABI 불일치로 Invalid module format, 4차는 타깃을 커스텀 커널로 부팅하고 같은 커널에 빌드해 성공. 핵심은 커널 ABI 규칙 — 모듈은 빌드된 바로 그 커널에만 적재된다.</desc>
+  <rect x="0" y="0" width="680" height="530" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">모듈 크로스 컴파일 — 4번 시도와 ABI 규칙</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">x86_64 호스트 → AArch64(Raspberry Pi 4) 타깃 · 성공까지 4번 걸립니다</text>
+
+  <!-- 시도 1 (실패) -->
+  <rect x="20" y="74" width="640" height="78" fill="rgba(244,67,54,0.10)" stroke="#f44336"/>
+  <text x="38" y="96" fill="#f44336" font-size="13" font-weight="bold">시도 1 — 실패</text>
+  <text x="38" y="116" fill="#e8e4df" font-size="11">ARCH=arm64 CROSS_COMPILE=... 설정만 했으나, Makefile 이 호스트 커널 소스를 가리킴</text>
+  <text x="38" y="136" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">No such file or directory → 고침: KDIR 을 타깃 커널 소스로</text>
+
+  <!-- 시도 2 (실패) -->
+  <rect x="20" y="160" width="640" height="78" fill="rgba(244,67,54,0.10)" stroke="#f44336"/>
+  <text x="38" y="182" fill="#f44336" font-size="13" font-weight="bold">시도 2 — 실패</text>
+  <text x="38" y="202" fill="#e8e4df" font-size="11">KDIR 은 맞췄으나 타깃 커널 트리에 Module.symvers 없음 (MODPOST 단계 실패)</text>
+  <text x="38" y="222" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">modpost: "_printk" undefined → 고침: 타깃 커널을 먼저 설정·빌드</text>
+
+  <!-- 시도 3 (실패) -->
+  <rect x="20" y="246" width="640" height="78" fill="rgba(244,67,54,0.10)" stroke="#f44336"/>
+  <text x="38" y="268" fill="#f44336" font-size="13" font-weight="bold">시도 3 — 실패</text>
+  <text x="38" y="288" fill="#e8e4df" font-size="11">빌드 성공, 그러나 보드에서 insmod 실패 — 커널 버전 불일치</text>
+  <text x="38" y="308" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">Invalid module format · 보드 6.1.21 vs 모듈 빌드 6.1.34</text>
+
+  <!-- 시도 4 (성공) -->
+  <rect x="20" y="332" width="640" height="78" fill="rgba(102,187,106,0.13)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="354" fill="#66bb6a" font-size="13" font-weight="bold">시도 4 — 성공</text>
+  <text x="38" y="374" fill="#e8e4df" font-size="11">보드를 커스텀 6.1.34 커널로 부팅 + 같은 커널에 모듈 빌드 → insmod 성공</text>
+  <text x="38" y="394" fill="rgb(138,133,128)" font-family="'JetBrains Mono',monospace" font-size="10">보드 커널 == 모듈 빌드 커널 (vermagic 일치)</text>
+
+  <!-- ABI 규칙 -->
+  <rect x="20" y="424" width="640" height="86" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="448" fill="rgb(212,168,83)" font-size="13" font-weight="bold">커널 ABI 규칙 (핵심)</text>
+  <text x="38" y="470" fill="#e8e4df" font-size="12">모듈은 빌드된 바로 그 커널에만 적재됩니다 — 버전·빌드 플래그·설정이 모두 일치해야 함</text>
+  <text x="38" y="490" fill="#e8e4df" font-size="11">바이너리 호환성 없음 (.ko 는 다른 커널에 안 됨) · 소스 호환성 있음 (재빌드하면 됨)</text>
+  <text x="38" y="506" fill="rgb(138,133,128)" font-size="10">DKMS = 새 커널 설치 시 모듈 자동 재빌드 프레임워크 (이 규칙을 증명)</text>
+</svg>

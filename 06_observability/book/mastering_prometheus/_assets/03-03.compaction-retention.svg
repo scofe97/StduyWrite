@@ -1,0 +1,80 @@
+<svg viewBox="0 0 860 470" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>컴팩션과 보존이 디렉토리에 일으키는 변화</title>
+  <desc>컴팩션은 기존 블록 디렉토리를 고치지 않는다. 2시간짜리 블록 디렉토리 셋을 읽어 6시간짜리 새 디렉토리를 통째로 쓰고, 원본 디렉토리 셋을 지운다. 새 디렉토리의 meta.json 에는 level 이 2로 오르고 sources 에 부모 셋의 ULID 가 남아 추적할 수 있다. 블록의 시간 범위는 2시간에서 6시간, 18시간, 54시간으로 3배씩 늘어난다. 삭제는 단위가 둘로 갈린다. 사용자 삭제 요청은 시계열과 시간 범위라는 블록 일부가 대상이라 블록이 불변인 탓에 도려내지 못하고 tombstones 파일에 표시만 남긴 뒤 컴팩션 때 실제로 제거된다. 보존 만료는 블록 전체가 대상이라 디렉토리를 통째로 지운다.</desc>
+
+  <defs>
+    <marker id="cp-arrow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="860" height="470" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="15">컴팩션과 보존이 디렉토리에 일으키는 변화</text>
+
+  <!-- ================= 컴팩션: 디렉토리 관점 ================= -->
+  <text x="24" y="64" fill="#b8b3ad" font-size="10.5">컴팩션 — 고치지 않고 새로 쓴 뒤 옛것을 지웁니다</text>
+
+  <!-- Before -->
+  <text x="24" y="90" fill="#b8b3ad" font-size="10">before</text>
+  <rect x="24" y="98" width="250" height="112" fill="#0d0d0d" stroke="rgb(92,84,74)"/>
+  <text x="38" y="120" fill="#e8e4df" font-size="9.5" font-family="'JetBrains Mono', monospace">01KWAP7NZ.../</text>
+  <text x="248" y="120" fill="#b8b3ad" font-size="9" text-anchor="end">2h</text>
+  <text x="38" y="146" fill="#e8e4df" font-size="9.5" font-family="'JetBrains Mono', monospace">01KWAX7BA.../</text>
+  <text x="248" y="146" fill="#b8b3ad" font-size="9" text-anchor="end">2h</text>
+  <text x="38" y="172" fill="#e8e4df" font-size="9.5" font-family="'JetBrains Mono', monospace">01KWB1V3V.../</text>
+  <text x="248" y="172" fill="#b8b3ad" font-size="9" text-anchor="end">2h</text>
+  <text x="38" y="196" fill="#b8b3ad" font-size="9.5">디렉토리 셋</text>
+
+  <!-- 화살표 -->
+  <line x1="286" y1="154" x2="330" y2="154" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#cp-arrow)"/>
+  <text x="308" y="144" fill="rgb(212,168,83)" font-size="9" text-anchor="middle">합침</text>
+
+  <!-- After -->
+  <text x="342" y="90" fill="#b8b3ad" font-size="10">after</text>
+  <rect x="342" y="98" width="268" height="112" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)"/>
+  <text x="356" y="122" fill="rgb(212,168,83)" font-size="9.5" font-family="'JetBrains Mono', monospace">01KYPGY9S4.../</text>
+  <text x="596" y="122" fill="rgb(212,168,83)" font-size="9" text-anchor="end">6h</text>
+  <text x="356" y="148" fill="#e8e4df" font-size="9" font-family="'JetBrains Mono', monospace">meta.json</text>
+  <text x="356" y="170" fill="#b8b3ad" font-size="9" font-family="'JetBrains Mono', monospace">  level: 2</text>
+  <text x="356" y="190" fill="#b8b3ad" font-size="9" font-family="'JetBrains Mono', monospace">  sources: [3]</text>
+
+  <!-- 삭제 표시 -->
+  <line x1="24" y1="210" x2="274" y2="210" stroke="rgb(224,108,108)" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="149" y="228" fill="rgb(224,108,108)" font-size="9.5" text-anchor="middle">원본 셋은 삭제</text>
+
+  <!-- 사다리 -->
+  <text x="640" y="122" fill="#b8b3ad" font-size="9.5">3배씩</text>
+  <text x="640" y="144" fill="#e8e4df" font-size="10" font-family="'JetBrains Mono', monospace">2h → 6h</text>
+  <text x="640" y="164" fill="#e8e4df" font-size="10" font-family="'JetBrains Mono', monospace">→ 18h → 54h</text>
+  <text x="640" y="190" fill="#b8b3ad" font-size="9.5">1분마다 계획</text>
+
+  <line x1="24" y1="252" x2="836" y2="252" stroke="rgb(92,84,74)"/>
+
+  <!-- ================= 삭제 두 단위 ================= -->
+  <text x="24" y="278" fill="#b8b3ad" font-size="10.5">삭제 — 단위가 다르면 방법도 갈립니다</text>
+
+  <!-- 왼쪽: 사용자 삭제 -->
+  <rect x="24" y="292" width="398" height="152" fill="none" stroke="rgb(224,108,108)"/>
+  <text x="40" y="316" fill="rgb(224,108,108)" font-size="11" font-weight="700">사용자 삭제 — 블록 일부</text>
+
+  <rect x="40" y="330" width="366" height="44" fill="rgba(212,168,83,0.13)" stroke="rgb(212,168,83)"/>
+  <rect x="156" y="338" width="90" height="28" fill="rgba(224,108,108,0.32)" stroke="rgb(224,108,108)"/>
+  <text x="201" y="357" fill="#e8e4df" font-size="9" text-anchor="middle">지울 구간</text>
+  <text x="98" y="357" fill="#b8b3ad" font-size="9" text-anchor="middle">남김</text>
+  <text x="326" y="357" fill="#b8b3ad" font-size="9" text-anchor="middle">남김</text>
+
+  <text x="40" y="398" fill="#b8b3ad" font-size="10">단위 · 시계열 × 시간 범위</text>
+  <text x="40" y="418" fill="#e8e4df" font-size="10">방법 · <tspan font-family="'JetBrains Mono', monospace">tombstones</tspan> 에 표시</text>
+  <text x="40" y="436" fill="#b8b3ad" font-size="9.5">실제 제거는 컴팩션 때</text>
+
+  <!-- 오른쪽: 보존 만료 -->
+  <rect x="438" y="292" width="398" height="152" fill="none" stroke="rgb(92,84,74)"/>
+  <text x="454" y="316" fill="#e8e4df" font-size="11" font-weight="700">보존 만료 — 블록 전체</text>
+
+  <rect x="454" y="330" width="366" height="44" fill="rgba(102,102,102,0.15)" stroke="#b8b3ad" stroke-dasharray="5 4"/>
+  <text x="637" y="357" fill="#b8b3ad" font-size="9.5" text-anchor="middle">디렉토리째 사라짐</text>
+
+  <text x="454" y="398" fill="#b8b3ad" font-size="10">단위 · 블록 전체</text>
+  <text x="454" y="418" fill="#e8e4df" font-size="10">방법 · <tspan font-family="'JetBrains Mono', monospace">rm -r</tspan> 와 다르지 않음</text>
+  <text x="454" y="436" fill="#b8b3ad" font-size="9.5">끊어질 참조가 없음</text>
+</svg>

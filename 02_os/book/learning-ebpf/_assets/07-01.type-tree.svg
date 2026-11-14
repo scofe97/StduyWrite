@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">프로그램 유형이 컨텍스트와 반환값과 헬퍼를 한꺼번에 정한다</title><desc id="dd">kprobe 는 pt_regs 를 받고 0 이나 1 을 돌려 이벤트 기록 여부를 정하며, tracepoint 는 이벤트 레코드를, tracing 은 함수 인자를, XDP 는 xdp_md 를 받고 패킷 처리 방식을 돌려준다. XDP 전용 헬퍼 bpf_xdp_adjust_head 는 kprobe 에서 쓸 수 없다.</desc>
+<rect width="960" height="540" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING EBPF · 07-01 §1</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">프로그램 유형이 컨텍스트와 반환값과 헬퍼를 한꺼번에 정한다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">유형마다 받는 구조체와 돌려주는 값이 다릅니다</text>
+<line x1="200" y1="268" x2="224" y2="268" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="224" y1="138" x2="224" y2="438" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="224" y1="138" x2="244" y2="138" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="508" y1="138" x2="540" y2="138" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="224" y1="238" x2="244" y2="238" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="508" y1="238" x2="540" y2="238" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="224" y1="338" x2="244" y2="338" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="508" y1="338" x2="540" y2="338" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<line x1="224" y1="438" x2="244" y2="438" stroke="#8B98A9" stroke-width="1.2"/>
+<line x1="508" y1="438" x2="540" y2="438" stroke="rgba(191,192,192,0.22)" stroke-width="1.2"/>
+<rect x="20" y="236" width="180" height="64" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="110.0" y="264" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#F5F5F3">프로그램 유형</text>
+<text x="110.0" y="284" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">prog_type</text>
+<rect x="244" y="104" width="264" height="68" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="376.0" y="132" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">BPF_PROG_TYPE_KPROBE</text>
+<text x="376.0" y="154" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">kprobe·kretprobe</text>
+<rect x="540" y="104" width="400" height="68" rx="5" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="554" y="128" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">ctx: struct pt_regs *</text>
+<text x="554" y="146" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">반환 0·1 = 기록 여부</text>
+<text x="554" y="162" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">bpf_xdp_adjust_head ✗ · kfunc 유형별 등록</text>
+<rect x="244" y="204" width="264" height="68" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="376.0" y="232" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">BPF_PROG_TYPE_TRACEPOINT</text>
+<text x="376.0" y="254" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">tp/…</text>
+<rect x="540" y="204" width="400" height="68" rx="5" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="554" y="228" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">ctx: 이벤트 레코드 구조체</text>
+<text x="554" y="246" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">공통 필드 4개 읽기 ✗</text>
+<text x="554" y="262" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">헬퍼 · kfunc 유형별 목록</text>
+<rect x="244" y="304" width="264" height="68" rx="6" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="376.0" y="332" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">BPF_PROG_TYPE_TRACING</text>
+<text x="376.0" y="354" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">fentry·fexit·tp_btf</text>
+<rect x="540" y="304" width="400" height="68" rx="5" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="554" y="328" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">ctx: u64 인자 배열</text>
+<text x="554" y="346" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">attach type 으로 다시 갈림</text>
+<text x="554" y="362" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">헬퍼 · kfunc 유형별 목록</text>
+<rect x="244" y="404" width="264" height="68" rx="6" fill="#F08A591F" stroke="#F08A59" stroke-width="1.4"/>
+<text x="376.0" y="432" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">BPF_PROG_TYPE_XDP</text>
+<text x="376.0" y="454" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="400" fill="#8B98A9">xdp</text>
+<rect x="540" y="404" width="400" height="68" rx="5" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="554" y="428" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">ctx: struct xdp_md *</text>
+<text x="554" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">반환 XDP_PASS·XDP_DROP…</text>
+<text x="554" y="462" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">bpf_xdp_adjust_head ✓ · pid 헬퍼 ✓ (v6.10~)</text>
+<line x1="12" y1="484" x2="912" y2="484" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="506" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="496" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="506" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">트레이싱 유형</text>
+<rect x="235" y="496" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="257" y="506" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">네트워크 유형</text>
+</svg>

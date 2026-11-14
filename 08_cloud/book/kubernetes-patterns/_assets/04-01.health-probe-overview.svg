@@ -1,0 +1,87 @@
+<svg viewBox="0 0 900 430" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>세 프로브가 실패했을 때 각각 무엇이 일어나는가</title>
+  <desc>이 장 전체의 구조를 한 장으로 요약합니다. 출발점은 kubelet이 컨테이너에 정기적으로 건강을 묻는 것이고 그 아래 바탕에는 프로세스 헬스 체크가 늘 깔려 있습니다. 프로세스가 죽으면 컨테이너가 재시작되지만 프로세스가 살아 있어도 앱이 멈출 수 있어 그 위에 세 프로브가 필요합니다. 세 프로브는 확인 방식 네 가지와 타이밍 파라미터를 공유하며 오직 실패했을 때의 교정 조치로 갈립니다. startup 프로브가 실패하면 컨테이너가 재시작되고 성공하기 전까지는 나머지 두 프로브가 아예 시작되지 않아 느린 기동이 조기 재시작을 당하지 않게 보호합니다. liveness 프로브가 실패하면 컨테이너가 재시작됩니다. readiness 프로브가 실패하면 재시작하지 않고 Pod의 IP가 Service의 EndpointSlice에서 빠져 새 트래픽이 오지 않습니다. 오른쪽에 적힌 것이 각각의 의도로 startup은 시간을 벌어 주고 liveness는 재시작으로 회복을 노리고 readiness는 앱이 스스로 회복하기를 기다립니다.</desc>
+
+  <rect width="900" height="430" fill="#0d0d0d"/>
+
+  <text x="24" y="30" fill="#e8e4df" font-size="15" font-weight="700">실패했을 때가 다릅니다</text>
+
+  <!-- kubelet source -->
+  <rect x="24" y="52" width="150" height="52" fill="rgb(212,168,83)"/>
+  <text x="99" y="74" text-anchor="middle" fill="#0d0d0d" font-size="12" font-weight="700">kubelet 이 묻습니다</text>
+  <text x="99" y="92" text-anchor="middle" fill="#0d0d0d" font-size="10">앱 밖에서 확인</text>
+
+  <!-- shared checks -->
+  <rect x="24" y="116" width="150" height="60" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="99" y="136" text-anchor="middle" fill="#b8b3ad" font-size="9" font-weight="700">셋이 공유합니다</text>
+  <text x="99" y="152" text-anchor="middle" fill="#b8b3ad" font-size="8" font-family="'JetBrains Mono', monospace">HTTP TCP Exec gRPC</text>
+  <text x="99" y="167" text-anchor="middle" fill="#b8b3ad" font-size="8" font-family="'JetBrains Mono', monospace">timing params</text>
+
+  <!-- arrows to three probes : trunk runs right of the shared box -->
+  <path d="M 178 78 L 214 78" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#am)"/>
+  <line x1="190" y1="78" x2="190" y2="316" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <path d="M 190 216 L 214 216" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#am)"/>
+  <path d="M 190 316 L 214 316" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#am)"/>
+
+  <!-- ===== startup ===== -->
+  <rect x="218" y="56" width="176" height="44" fill="#f5edda"/>
+  <text x="306" y="74" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700">startup</text>
+  <text x="306" y="91" text-anchor="middle" fill="#0d0d0d" font-size="9">먼저 혼자 돕니다</text>
+
+  <path d="M 398 78 L 434 78" stroke="#f44336" stroke-width="2" marker-end="url(#rm)"/>
+  <rect x="438" y="56" width="200" height="44" fill="#f2d4d4"/>
+  <text x="538" y="82" text-anchor="middle" fill="#7a1f1f" font-size="11" font-weight="700">재시작합니다</text>
+
+  <rect x="662" y="56" width="214" height="44" fill="#0d0d0d" stroke="#f5edda"/>
+  <text x="769" y="74" text-anchor="middle" fill="#f5edda" font-size="10" font-weight="700">시간을 벌어 줍니다</text>
+  <text x="769" y="91" text-anchor="middle" fill="#f5edda" font-size="9">성공 전엔 둘을 막습니다</text>
+
+  <!-- ===== liveness ===== -->
+  <rect x="218" y="194" width="176" height="44" fill="#f2d4d4"/>
+  <text x="306" y="212" text-anchor="middle" fill="#7a1f1f" font-size="11" font-weight="700">liveness</text>
+  <text x="306" y="229" text-anchor="middle" fill="#7a1f1f" font-size="9">아직 건강한가</text>
+
+  <path d="M 398 216 L 434 216" stroke="#f44336" stroke-width="2" marker-end="url(#rm)"/>
+  <rect x="438" y="194" width="200" height="44" fill="#f2d4d4"/>
+  <text x="538" y="220" text-anchor="middle" fill="#7a1f1f" font-size="11" font-weight="700">재시작합니다</text>
+
+  <rect x="662" y="194" width="214" height="44" fill="#0d0d0d" stroke="#f2d4d4"/>
+  <text x="769" y="212" text-anchor="middle" fill="#f2d4d4" font-size="10" font-weight="700">재시작으로 회복</text>
+  <text x="769" y="229" text-anchor="middle" fill="#f2d4d4" font-size="9">안 고쳐지면 무의미합니다</text>
+
+  <!-- ===== readiness ===== -->
+  <rect x="218" y="294" width="176" height="44" fill="#dceaf7"/>
+  <text x="306" y="312" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">readiness</text>
+  <text x="306" y="329" text-anchor="middle" fill="#10243a" font-size="9">지금 받을 수 있나</text>
+
+  <path d="M 398 316 L 434 316" stroke="#5b9bd5" stroke-width="2" marker-end="url(#bm)"/>
+  <rect x="438" y="294" width="200" height="44" fill="#dceaf7"/>
+  <text x="538" y="313" text-anchor="middle" fill="#10243a" font-size="11" font-weight="700">트래픽만 끊습니다</text>
+  <text x="538" y="330" text-anchor="middle" fill="#10243a" font-size="9">EndpointSlice 에서 제거</text>
+
+  <rect x="662" y="294" width="214" height="44" fill="#0d0d0d" stroke="#dceaf7"/>
+  <text x="769" y="312" text-anchor="middle" fill="#dceaf7" font-size="10" font-weight="700">스스로 회복하길</text>
+  <text x="769" y="329" text-anchor="middle" fill="#dceaf7" font-size="9">재시작하지 않습니다</text>
+
+  <!-- foundation -->
+  <rect x="218" y="352" width="658" height="30" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="547" y="371" text-anchor="middle" fill="#b8b3ad" font-size="10" font-weight="700">바탕 · 죽으면 재시작합니다</text>
+
+  <rect x="24" y="392" width="852" height="30" fill="rgb(212,168,83)"/>
+  <text x="450" y="411" text-anchor="middle" fill="#0d0d0d" font-size="10" font-weight="700">살아 있어도 멈출 수 있습니다</text>
+
+  <defs>
+    <marker id="am" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="rgb(212,168,83)"/>
+    </marker>
+    <marker id="rm" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#f44336"/>
+    </marker>
+    <marker id="bm" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#5b9bd5"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,38 @@
+<svg viewBox="0 0 680 380" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>데드락 기제 — 두 스레드가 바깥 락은 잡고 안쪽 락을 서로 기다림 (원문 Figure 8.1 개념도)</title>
+  <desc>원문 Figure 8.1 의 개념을 도식으로 옮긴 것입니다. 두 스레드가 모두 바깥 synchronized 블록에는 들어갔지만 안쪽 블록에는 들어가지 못한 채 서로를 기다리면 교착 상태에 빠집니다. _Consumer 는 listA 모니터를 잡은 채 listB 모니터를 기다리고, _Producer 는 listB 모니터를 잡은 채 listA 모니터를 기다립니다. 둘 다 자기가 잡은 락을 놓지 않으면서 상대가 잡은 락을 원하므로 어느 쪽도 진행할 수 없고 앱이 얼어붙습니다. 이것을 데드락이라 합니다.</desc>
+  <rect x="0" y="0" width="680" height="380" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">데드락 기제 — 잡은 락은 안 놓고 상대 락을 기다림</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 Figure 8.1 개념도 — 바깥 락은 획득, 안쪽 락에서 교착 (da-ch8-ex1)</text>
+
+  <!-- _Consumer -->
+  <rect x="20" y="80" width="300" height="120" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="34" y="102" fill="#66bb6a" font-size="13" font-weight="bold">_Consumer</text>
+  <rect x="34" y="114" width="272" height="34" fill="rgba(102,187,106,0.22)" stroke="#66bb6a"/>
+  <text x="48" y="135" fill="#e8e4df" font-size="11" font-weight="bold">listA 락 보유 (잡음)</text>
+  <rect x="34" y="154" width="272" height="34" fill="rgb(30,30,30)" stroke="#f47f72" stroke-dasharray="3 3"/>
+  <text x="48" y="175" fill="#f47f72" font-size="11" font-weight="bold">listB 락 대기 (못 들어감)</text>
+
+  <!-- _Producer -->
+  <rect x="360" y="80" width="300" height="120" fill="rgba(127,168,201,0.06)" stroke="#7fa8c9" stroke-width="1.5"/>
+  <text x="374" y="102" fill="#9cc3df" font-size="13" font-weight="bold">_Producer</text>
+  <rect x="374" y="114" width="272" height="34" fill="rgba(127,168,201,0.22)" stroke="#7fa8c9"/>
+  <text x="388" y="135" fill="#e8e4df" font-size="11" font-weight="bold">listB 락 보유 (잡음)</text>
+  <rect x="374" y="154" width="272" height="34" fill="rgb(30,30,30)" stroke="#f47f72" stroke-dasharray="3 3"/>
+  <text x="388" y="175" fill="#f47f72" font-size="11" font-weight="bold">listA 락 대기 (못 들어감)</text>
+
+  <!-- 교차 화살표 -->
+  <path d="M 306 131 Q 480 230 388 171" fill="none" stroke="#66bb6a" stroke-width="1.5"/>
+  <polygon points="388,171 396,168 393,177" fill="#66bb6a"/>
+  <path d="M 374 131 Q 200 230 306 171" fill="none" stroke="#7fa8c9" stroke-width="1.5"/>
+  <polygon points="306,171 298,168 301,177" fill="#7fa8c9"/>
+  <text x="340" y="244" fill="rgb(212,168,83)" font-size="11" font-weight="bold" text-anchor="middle">서로가 잡은 락을 원함 → 영원한 교착</text>
+
+  <!-- 해석 -->
+  <rect x="20" y="266" width="640" height="96" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="288" fill="#e8e4df" font-size="12" font-weight="bold">왜 풀리지 않나</text>
+  <text x="34" y="312" fill="#e8e4df" font-size="11">_Consumer 는 listB 를, _Producer 는 listA 를 기다리는데, 각자 상대가 원하는 락을 쥐고 안 놓음</text>
+  <text x="34" y="334" fill="#e8e4df" font-size="11">→ 어느 쪽도 안쪽 블록에 못 들어가고 진행 불가 → 앱이 얼어붙음(콘솔 출력 멈춤)</text>
+  <text x="34" y="354" fill="rgb(138,133,128)" font-size="9.5">중첩 synchronized 의 락 획득 순서가 반대인 게 근본 원인. 세마포어·래치·배리어 오용도 같은 결과</text>
+</svg>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 320" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif" role="img" aria-label="순환 의존 교착 도식">
+  <title>순환 의존 — 서로를 기다리다 교착에 빠집니다</title>
+  <desc>Person을 만들려면 Parrot이 먼저 필요한데, 그 Parrot을 만들려면 다시 Person이 필요하다. Spring은 둘 중 어느 것도 먼저 만들지 못해 BeanCurrentlyInCreationException으로 실패한다. 해결은 한쪽 의존을 끊도록 클래스 설계를 다시 하는 것이다</desc>
+  <rect x="0" y="0" width="760" height="320" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="16" font-weight="bold">순환 의존 — 서로를 기다리다 아무도 못 만듭니다</text>
+  <text x="24" y="56" fill="rgb(138,133,128)" font-size="12">Person은 Parrot을, Parrot은 Person을 생성자에서 요구 → Spring이 시작점을 못 잡습니다</text>
+
+  <!-- Person 박스 -->
+  <rect x="90" y="110" width="200" height="96" rx="8" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="190" y="140" fill="#e8e4df" font-size="14" font-weight="bold" text-anchor="middle">Person</text>
+  <text x="190" y="164" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">@Autowired</text>
+  <text x="190" y="182" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">Person(Parrot p)</text>
+
+  <!-- Parrot 박스 -->
+  <rect x="470" y="110" width="200" height="96" rx="8" fill="rgba(212,168,83,0.12)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="570" y="140" fill="#e8e4df" font-size="14" font-weight="bold" text-anchor="middle">Parrot</text>
+  <text x="570" y="164" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">@Autowired</text>
+  <text x="570" y="182" fill="rgb(138,133,128)" font-size="11" text-anchor="middle">Parrot(Person p)</text>
+
+  <!-- 서로를 가리키는 화살표 -->
+  <path d="M290,140 C360,120 400,120 470,140" fill="none" stroke="#f44336" stroke-width="1.8" marker-end="url(#arCd)"/>
+  <text x="380" y="112" fill="#f44336" font-size="11" text-anchor="middle">① Parrot이 필요</text>
+
+  <path d="M470,176 C400,196 360,196 290,176" fill="none" stroke="#f44336" stroke-width="1.8" marker-end="url(#arCd)"/>
+  <text x="380" y="216" fill="#f44336" font-size="11" text-anchor="middle">② 그런데 Person이 필요</text>
+
+  <!-- 데드락 라벨 -->
+  <text x="380" y="252" fill="#f44336" font-size="13" font-weight="bold" text-anchor="middle">✗ 교착 (deadlock) — 시작점이 없음</text>
+  <text x="380" y="274" fill="rgb(230,115,107)" font-size="11" text-anchor="middle">BeanCurrentlyInCreationException</text>
+
+  <text x="24" y="306" fill="#66bb6a" font-size="11">✓ 해결: 한쪽 의존을 끊도록 클래스 설계를 다시 합니다 (순환 의존은 설계 결함 신호)</text>
+
+  <defs>
+    <marker id="arCd" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#f44336"/></marker>
+  </defs>
+</svg>

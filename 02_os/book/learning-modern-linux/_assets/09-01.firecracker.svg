@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 480" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">HTTP API 로 microVM 을 띄우고 격리와 가상 장치를 묶는다</title><desc id="dd">Firecracker 의 구성. 호스트는 HTTP API 로 VMM 에 요청하고, VMM 은 seccomp·cgroups 와 가상 장치·관측 통로를 묶어 KVM 위의 microVM 을 띄웁니다.</desc>
+<rect width="880" height="480" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING MODERN LINUX · 09-01 §3</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">HTTP API 로 microVM 을 띄우고 격리와 가상 장치를 묶는다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">호스트는 HTTP API 로 요청하고 VMM 이 microVM 을 띄웁니다</text>
+<rect x="24" y="110" width="176" height="290" rx="8" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="40" y="138" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#5E6B7E">호스트 제어</text>
+<rect x="38" y="158" width="148" height="80" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.1"/>
+<text x="112.0" y="184" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F5F5F3">HTTP API</text>
+<text x="112.0" y="206" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">microVM 띄우기</text>
+<text x="112.0" y="224" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">조회 · 멈춤 제어</text>
+<rect x="38" y="258" width="148" height="120" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="50" y="282" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">개발 배경</text>
+<text x="50" y="306" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">• AWS 가 개발</text>
+<text x="50" y="330" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">• 주로 서버리스용</text>
+<text x="50" y="352" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11.5" font-weight="400" fill="#8B98A9">  Lambda · Fargate</text>
+<rect x="248" y="110" width="384" height="290" rx="8" fill="#0D1117" stroke="#F08A59" stroke-width="1.2"/>
+<text x="264" y="138" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F08A59">Firecracker VMM (Rust)</text>
+<rect x="264" y="154" width="168" height="62" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.1"/>
+<text x="348.0" y="178" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">seccomp 필터</text>
+<text x="348.0" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#F5F5F3">시스템 콜 사용 제한</text>
+<rect x="448" y="154" width="168" height="62" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.1"/>
+<text x="532.0" y="178" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#E3B341">cgroups</text>
+<text x="532.0" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#F5F5F3">함께 쓸 수 있음</text>
+<rect x="264" y="234" width="110" height="68" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="319.0" y="258" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12.5" font-weight="600" fill="#6A95D8">TUN/TAP</text>
+<text x="319.0" y="278" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#F5F5F3">네트워크</text>
+<text x="319.0" y="292" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">에뮬레이션</text>
+<rect x="385" y="234" width="110" height="68" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="440.0" y="258" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12.5" font-weight="600" fill="#6A95D8">Virtio</text>
+<text x="440.0" y="278" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#F5F5F3">호스트 파일 기반</text>
+<text x="440.0" y="292" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">블록 장치</text>
+<rect x="506" y="234" width="110" height="68" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="561.0" y="258" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#6A95D8">명명 파이프</text>
+<text x="561.0" y="278" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#F5F5F3">로그 · 메트릭</text>
+<text x="561.0" y="292" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">수집 통로</text>
+<rect x="264" y="318" width="352" height="66" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="440.0" y="342" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">KVM 인스턴스를 관리하는 VMM</text>
+<text x="440.0" y="364" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">HTTP API 요청을 받아 microVM 을 띄우고 멈춤</text>
+<rect x="680" y="110" width="176" height="290" rx="8" fill="#0D1117" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="696" y="138" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">microVM 실행</text>
+<rect x="694" y="158" width="148" height="114" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="768.0" y="184" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13.5" font-weight="600" fill="#3FB98C">microVM</text>
+<text x="768.0" y="206" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#3FB98C">KVM 인스턴스</text>
+<text x="768.0" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#F5F5F3">VMM 이 관리하는 VM</text>
+<text x="768.0" y="250" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">테넌트 워크로드</text>
+<rect x="694" y="288" width="148" height="96" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="706" y="312" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#5E6B7E">설계 목표</text>
+<text x="706" y="336" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">• 같은 물리 기계</text>
+<text x="706" y="358" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">• 여러 테넌트를 안전하게</text>
+<path d="M 200 198.0 L 244 198.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<text x="224.0" y="188.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">요청</text>
+<path d="M 632 215.0 L 676 215.0" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="656.0" y="205.0" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#3FB98C">띄움</text>
+<line x1="12" y1="428" x2="832" y2="428" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="450" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="440" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">VMM</text>
+<rect x="183" y="440" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="205" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">격리 장치 seccomp·cgroups</text>
+<rect x="500" y="440" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="522" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">호스트가 흉내 내는 장치·관측 통로</text>
+<rect x="791" y="440" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="813" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">microVM</text>
+</svg>

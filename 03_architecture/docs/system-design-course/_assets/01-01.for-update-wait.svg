@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">FOR UPDATE 로 두 번째 트랜잭션이 기다린 뒤 110 을 보고 거절된다</title><desc id="dd">Tx1 이 SELECT FOR UPDATE 로 배타 잠금을 획득해 Tx2 가 대기하고, Tx1 이 110 으로 커밋한 뒤 110 을 읽은 Tx2 가 상한 초과로 거절되어 롤백하는 흐름</desc>
+<rect width="960" height="600" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">SYSTEM DESIGN COURSE · 01-01 §5</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">FOR UPDATE 로 두 번째 트랜잭션이 기다린 뒤 110 을 보고 거절된다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">같은 재고 행 갱신을 한 줄로 세워 상한 초과 방지</text>
+<rect x="80" y="104" width="200" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="180" y="123" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">Tx1 (사용자 A)</text>
+<text x="180" y="140" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">트랜잭션 1</text>
+<rect x="370" y="104" width="220" height="44" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="480" y="123" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">재고 행 (2026-12-26)</text>
+<text x="480" y="140" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#6A95D8">정원 100 · 상한 110</text>
+<rect x="680" y="104" width="200" height="44" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="780" y="123" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">Tx2 (사용자 B)</text>
+<text x="780" y="140" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">트랜잭션 2</text>
+<line x1="180" y1="148" x2="180" y2="528" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="480" y1="148" x2="480" y2="528" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<line x1="780" y1="148" x2="780" y2="528" stroke="rgba(191,192,192,0.22)" stroke-width="1.0" stroke-dasharray="3 6"/>
+<rect x="376" y="164" width="208" height="36" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="480" y="179" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">초기 total_reserved: 109</text>
+<text x="480" y="193" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">잔여 1실 (상한까지 여유 1실)</text>
+<path d="M 192 216 L 372 216" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="278" y="206" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">1 · SELECT FOR UPDATE</text>
+<rect x="376" y="236" width="208" height="36" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="480" y="251" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">배타 잠금 획득 (X-Lock)</text>
+<text x="480" y="265" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">행 잠금 완료 · 109 반환</text>
+<path d="M 372 244 L 192 244" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)" stroke-dasharray="4 4"/>
+<path d="M 768 292 L 588 292" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<text x="682" y="282" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">2 · SELECT FOR UPDATE 시도</text>
+<rect x="376" y="308" width="208" height="36" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.0"/>
+<text x="480" y="323" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">잠금 충돌 · 대기 큐 등록</text>
+<text x="480" y="337" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Tx1 커밋 완료 시점까지 보류</text>
+<rect x="772" y="304" width="16" height="120" rx="3" fill="#E3B34122" stroke="#E3B341" stroke-width="1.2"/>
+<text x="798" y="356" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">잠금 대기</text>
+<text x="798" y="374" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#E3B341">Lock Wait</text>
+<path d="M 192 372 L 372 372" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="278" y="362" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">3 · UPDATE (+1) 및 커밋</text>
+<rect x="376" y="380" width="208" height="40" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="480" y="397" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">total_reserved: 109 → 110</text>
+<text x="480" y="412" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Tx1 커밋 완료 · 행 잠금 해제</text>
+<path d="M 588 448 L 768 448" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)" stroke-dasharray="4 4"/>
+<text x="678" y="438" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">4 · 대기 해제 · 최신 110 반환</text>
+<rect x="676" y="468" width="208" height="48" rx="6" fill="#F08A5918" stroke="#F08A59" stroke-width="1.4"/>
+<text x="780" y="487" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">110 + 1 = 111 &gt; 110 (매진)</text>
+<text x="780" y="505" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">예약 거절 및 롤백 (초과 방지)</text>
+<line x1="12" y1="548" x2="912" y2="548" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="570" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="560" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="570" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">배타 잠금 획득 및 커밋</text>
+<rect x="313" y="560" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="335" y="570" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">행 잠금 대기 (Lock Wait)</text>
+<rect x="604" y="560" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="626" y="570" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">매진 감지 및 예약 거절 (focal)</text>
+</svg>

@@ -1,0 +1,57 @@
+<svg viewBox="0 0 900 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>재진입 vs 편향 락 — 중첩이냐 반복이냐</title>
+  <desc>재진입은 같은 스레드가 락을 쥔 채 중첩으로 다시 잡는 것으로 재진입 카운터로 처리되며 항상 동작한다. 편향 락은 같은 스레드가 락을 잡았다 풀고 다시 잡기를 반복할 때 CAS 비용을 없애려는 별개 최적화로 Java 21에서 제거됐다.</desc>
+  <rect x="0" y="0" width="900" height="420" fill="#0d0d0d"/>
+
+  <text x="450" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#e8e4df">재진입 vs 편향 락 — 다른 메커니즘</text>
+  <text x="450" y="54" text-anchor="middle" font-size="12.5" fill="#8a857f">핵심 차이: "중첩이냐 반복이냐". 편향 락이 제거돼도 재진입은 그대로 동작</text>
+
+  <!-- ===== 왼쪽: 재진입 ===== -->
+  <rect x="30" y="74" width="400" height="312" rx="12" fill="#0d0d0d" stroke="#66bb6a" stroke-width="2"/>
+  <text x="230" y="100" text-anchor="middle" font-size="16" font-weight="700" fill="#66bb6a">재진입 (reentrancy)</text>
+  <text x="230" y="120" text-anchor="middle" font-size="12" fill="#8a857f">락을 쥔 채 안에서 또 잡음 (중첩)</text>
+
+  <!-- 중첩 박스 (락 안의 락) -->
+  <rect x="62" y="138" width="336" height="120" rx="8" fill="#e6f7e7"/>
+  <text x="82" y="160" font-size="12.5" font-weight="700" fill="#14521d">outer() — 락 획득 (카운트 1)</text>
+  <rect x="92" y="172" width="276" height="70" rx="7" fill="#cdeccf"/>
+  <text x="112" y="194" font-size="12" fill="#14521d">inner() — 같은 락 또 잡음</text>
+  <text x="112" y="214" font-size="12" font-weight="700" fill="#14521d">카운트 2 (안 막힘)</text>
+  <text x="112" y="232" font-size="11" fill="#14521d">빠져나오며 2→1→0, 0이면 해제</text>
+
+  <rect x="62" y="270" width="336" height="40" rx="6" fill="#0d0d0d" stroke="#66bb6a" stroke-width="1.2"/>
+  <text x="230" y="294" text-anchor="middle" font-size="12" fill="#e8e4df">구현: 재진입 카운터 (+1 / −1)</text>
+
+  <rect x="62" y="320" width="336" height="48" rx="6" fill="#66bb6a"/>
+  <text x="230" y="341" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0d0d0d">항상 동작 — 락 종류·자바 버전 무관</text>
+  <text x="230" y="358" text-anchor="middle" font-size="11" fill="#0d0d0d">Java 21에서도 멀쩡</text>
+
+  <!-- ===== 오른쪽: 편향 락 ===== -->
+  <rect x="470" y="74" width="400" height="312" rx="12" fill="#0d0d0d" stroke="#c0504d" stroke-width="2"/>
+  <text x="670" y="100" text-anchor="middle" font-size="16" font-weight="700" fill="#e08a87">편향 락 (biased)</text>
+  <text x="670" y="120" text-anchor="middle" font-size="12" fill="#8a857f">잡았다 풀고 또 잡기를 반복</text>
+
+  <!-- 반복 박스 (시간순) -->
+  <rect x="502" y="138" width="100" height="50" rx="7" fill="#fdf3df"/>
+  <text x="552" y="160" text-anchor="middle" font-size="11.5" fill="#5a3d0a">잡음→풂</text>
+  <text x="552" y="177" text-anchor="middle" font-size="10.5" fill="#5a3d0a">ID 기록</text>
+  <text x="618" y="167" text-anchor="middle" font-size="14" fill="#d4a853">→</text>
+  <rect x="634" y="138" width="100" height="50" rx="7" fill="#fdf3df"/>
+  <text x="684" y="160" text-anchor="middle" font-size="11.5" fill="#5a3d0a">또 잡음</text>
+  <text x="684" y="177" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5a3d0a">CAS 생략</text>
+  <text x="750" y="167" text-anchor="middle" font-size="14" fill="#d4a853">→</text>
+  <rect x="766" y="138" width="80" height="50" rx="7" fill="#fdf3df"/>
+  <text x="806" y="160" text-anchor="middle" font-size="11.5" fill="#5a3d0a">또…</text>
+  <text x="806" y="177" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5a3d0a">생략</text>
+
+  <rect x="502" y="200" width="344" height="58" rx="6" fill="#0d0d0d" stroke="#c0504d" stroke-width="1.2"/>
+  <text x="674" y="222" text-anchor="middle" font-size="12" fill="#e8e4df">구현: Mark Word에 스레드 ID 기록</text>
+  <text x="674" y="242" text-anchor="middle" font-size="11.5" fill="#e8e4df">→ ID 같으면 CAS조차 생략 (반복 획득 최적화)</text>
+
+  <rect x="502" y="270" width="344" height="40" rx="6" fill="#f2d4d4"/>
+  <text x="674" y="294" text-anchor="middle" font-size="12" fill="#7a1f1f">다른 스레드 오면 편향 해제(revoke) 비용</text>
+
+  <rect x="502" y="320" width="344" height="48" rx="6" fill="#c0504d"/>
+  <text x="674" y="341" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0d0d0d">Java 15 폐기 → 21 제거</text>
+  <text x="674" y="358" text-anchor="middle" font-size="11" fill="#0d0d0d">스레드 풀에선 해제 비용 > 이득</text>
+</svg>

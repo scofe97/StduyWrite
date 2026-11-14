@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="620" viewBox="0 0 900 620" font-family="-apple-system, 'Helvetica Neue', sans-serif">
+  <rect x="0" y="0" width="900" height="620" fill="#0d0d0d"/>
+
+  <text x="450" y="38" text-anchor="middle" font-size="22" font-weight="700" style="fill:#e8e4df">왜 스레드가 죽는가 — ArrayList의 size가 깨지는 순간</text>
+  <text x="450" y="62" text-anchor="middle" font-size="13" style="fill:#8a8580">Consumer 둘이 size&gt;0 확인 사이에 끼어들어 size를 -1로 만든다 (check-then-act race)</text>
+
+  <!-- 시작: list에 원소 1개 -->
+  <rect x="350" y="88" width="200" height="52" rx="8" fill="#dceaf7" stroke="#4a78a0" stroke-width="1.5"/>
+  <text x="450" y="112" text-anchor="middle" font-size="14" font-weight="700" style="fill:#10243a">list 상태: [42]</text>
+  <text x="450" y="130" text-anchor="middle" font-size="12" style="fill:#10243a">size = 1 (원소 한 개 남음)</text>
+
+  <!-- 두 갈래 화살표 -->
+  <line x1="450" y1="140" x2="230" y2="180" stroke="#8a8580" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="450" y1="140" x2="670" y2="180" stroke="#8a8580" stroke-width="1.5" marker-end="url(#ar)"/>
+
+  <!-- Consumer A -->
+  <rect x="70" y="184" width="320" height="84" rx="8" fill="#fce0b8" stroke="#9a7320" stroke-width="1.5"/>
+  <text x="90" y="208" font-size="14" font-weight="700" style="fill:#5a3d0a">① Consumer A</text>
+  <text x="90" y="230" font-size="12.5" style="fill:#1a1a1a">if (size &gt; 0) → 통과 (size=1 이니까 true)</text>
+  <text x="90" y="250" font-size="12.5" style="fill:#1a1a1a">아직 remove 안 함 — 여기서 잠깐 멈칫</text>
+
+  <!-- Consumer B -->
+  <rect x="510" y="184" width="320" height="84" rx="8" fill="#fce0b8" stroke="#9a7320" stroke-width="1.5"/>
+  <text x="530" y="208" font-size="14" font-weight="700" style="fill:#5a3d0a">② Consumer B (거의 동시)</text>
+  <text x="530" y="230" font-size="12.5" style="fill:#1a1a1a">if (size &gt; 0) → 통과 (아직 size=1)</text>
+  <text x="530" y="250" font-size="12.5" style="fill:#1a1a1a">remove(0) 실행 → size = 0, list 비움</text>
+
+  <!-- 합류 화살표 -->
+  <line x1="230" y1="268" x2="430" y2="312" stroke="#8a8580" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="670" y1="268" x2="470" y2="312" stroke="#8a8580" stroke-width="1.5" marker-end="url(#ar)"/>
+
+  <!-- 충돌: A가 뒤늦게 remove -->
+  <rect x="150" y="316" width="600" height="88" rx="8" fill="#f5c6c0" stroke="#a04038" stroke-width="1.5"/>
+  <text x="450" y="340" text-anchor="middle" font-size="14" font-weight="700" style="fill:#5a1410">③ Consumer A가 뒤늦게 remove(0) 실행</text>
+  <text x="450" y="362" text-anchor="middle" font-size="12.5" style="fill:#1a1a1a">하지만 B가 이미 비웠다 → list는 [], size=0</text>
+  <text x="450" y="384" text-anchor="middle" font-size="12.5" style="fill:#1a1a1a">remove 내부에서 size를 또 1 줄임 → <tspan font-weight="700" style="fill:#5a1410">size = -1 로 깨짐</tspan></text>
+
+  <!-- 결과: 예외 -->
+  <line x1="450" y1="404" x2="450" y2="440" stroke="#8a8580" stroke-width="1.5" marker-end="url(#ar)"/>
+  <rect x="210" y="444" width="480" height="60" rx="8" fill="#f2d4d4" stroke="#a04038" stroke-width="1.5"/>
+  <text x="450" y="468" text-anchor="middle" font-size="13.5" font-weight="700" style="fill:#5a1410">ArrayIndexOutOfBoundsException: Index -1</text>
+  <text x="450" y="488" text-anchor="middle" font-size="12" style="fill:#1a1a1a">음수 인덱스로 배열 접근 → 그 스레드 사망 (Threads 탭에서 사라짐)</text>
+
+  <!-- 핵심 한 줄 -->
+  <rect x="120" y="528" width="660" height="64" rx="8" fill="#cdeccf" stroke="#3f7a43" stroke-width="1.5"/>
+  <text x="450" y="552" text-anchor="middle" font-size="13" font-weight="700" style="fill:#14401a">핵심: 확인(if size&gt;0)과 실행(remove) 사이에 다른 스레드가 끼어든다</text>
+  <text x="450" y="574" text-anchor="middle" font-size="12" style="fill:#14401a">ArrayList는 size를 동기화 없이 공유 → 동시 변경 시 음수로 깨짐 → 예외 → 사망</text>
+
+  <defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#8a8580"/>
+    </marker>
+  </defs>
+</svg>

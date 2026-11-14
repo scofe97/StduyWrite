@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 430" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">키 범위 샤드 분할과 재배치 프로세스</title><desc id="dd">샤드가 설정 크기(HBase 기본 10 GB)나 쓰기 처리량 임계치를 넘으면 하위 범위로 나누고, 새 파일 재작성 비용을 치른 뒤 작은 샤드를 여러 노드로 분산한다.</desc>
+<rect width="880" height="430" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">07-01 · §5 PROCESS</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">키 범위 샤드 분할과 재배치 프로세스</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">설정 크기·처리량 초과 · 하위 범위 분할 · 새 파일 재작성 · 여러 노드로 분산</text>
+<rect x="36" y="104" width="192" height="186" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="64.5" y="112" width="135.0" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="132.0" y="126" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">01 · 임계치 도달</text>
+<text x="132.0" y="148" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">크기 또는 처리량 초과</text>
+<line x1="48" y1="158" x2="216" y2="158" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="46" y="170" width="172" height="48" rx="4" fill="#E3B34112" stroke="#E3B341" stroke-width="0.9"/>
+<text x="132.0" y="190" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">설정 크기 초과</text>
+<text x="132.0" y="206" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">HBase 기본 10 GB</text>
+<rect x="46" y="226" width="172" height="48" rx="4" fill="#E3B34112" stroke="#E3B341" stroke-width="0.9"/>
+<text x="132.0" y="246" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">쓰기 처리량 임계치 초과</text>
+<text x="132.0" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">작은 핫 샤드도 분할</text>
+<path d="M 230 122 L 240 122" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<rect x="242" y="104" width="192" height="186" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="276.0" y="112" width="124.0" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="338.0" y="126" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">02 · 하위 분할</text>
+<text x="338.0" y="148" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">연속 하위 범위</text>
+<line x1="254" y1="158" x2="422" y2="158" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="252" y="170" width="172" height="48" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="0.9"/>
+<text x="338.0" y="190" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">하위 범위 둘로 분할</text>
+<text x="338.0" y="206" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">각자 연속 키 구간</text>
+<rect x="252" y="226" width="172" height="48" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="0.9"/>
+<text x="338.0" y="246" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">B-tree 상위 수준</text>
+<text x="338.0" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">비슷한 분할 과정</text>
+<path d="M 436 122 L 446 122" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<rect x="448" y="104" width="192" height="186" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.4"/>
+<rect x="476.5" y="112" width="135.0" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="544.0" y="126" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">03 · 파일 재작성</text>
+<text x="544.0" y="148" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">고비용 작업</text>
+<line x1="460" y1="158" x2="628" y2="158" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="458" y="170" width="172" height="48" rx="4" fill="#F08A5912" stroke="#F08A59" stroke-width="0.9"/>
+<text x="544.0" y="190" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">모든 데이터 새 파일로</text>
+<text x="544.0" y="206" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">컴팩션과 비슷한 재작성</text>
+<rect x="458" y="226" width="172" height="48" rx="4" fill="#F08A5912" stroke="#F08A59" stroke-width="0.9"/>
+<text x="544.0" y="246" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">핫 샤드 분할</text>
+<text x="544.0" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">과부하 악화 위험</text>
+<path d="M 642 122 L 652 122" fill="none" stroke="#8B98A9" stroke-width="1.3" marker-end="url(#ar)"/>
+<rect x="654" y="104" width="192" height="186" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="688.0" y="112" width="124.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="750.0" y="126" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">04 · 노드 분산</text>
+<text x="750.0" y="148" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">작은 샤드 재배치</text>
+<line x1="666" y1="158" x2="834" y2="158" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="664" y="170" width="172" height="48" rx="4" fill="#3FB98C12" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="750.0" y="190" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">작은 샤드들</text>
+<text x="750.0" y="206" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">여러 노드로 분산</text>
+<rect x="664" y="226" width="172" height="48" rx="4" fill="#3FB98C12" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="750.0" y="246" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">분할 중 서빙</text>
+<text x="750.0" y="262" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">기존 할당으로 읽기·쓰기</text>
+<rect x="36" y="304" width="808" height="40" rx="4" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="48" y="321" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#6A95D8">사전 분할 (Pre-splitting)</text>
+<text x="48" y="335" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#F5F5F3">빈 데이터베이스 · 초기 샤드 미리 설정 · 예상 키 분포 필요</text>
+<line x1="12" y1="384" x2="832" y2="384" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="406" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="396" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="122" y="406" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">임계치 도달</text>
+<rect x="222" y="396" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="244" y="406" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">하위 범위 분할</text>
+<rect x="370" y="396" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="392" y="406" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">파일 재작성</text>
+<rect x="492" y="396" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="514" y="406" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">노드 분산</text>
+</svg>

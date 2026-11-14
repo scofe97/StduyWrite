@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 420" width="100%" role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Loki 로그 항목의 세 구성과 색인 대상</title>
+  <desc>Loki 의 로그 항목은 타임스탬프와 라벨과 내용 셋으로 이뤄집니다. 이 중 라벨만 색인되어 인덱스가 되고, 원본 로그 내용은 색인되지 않은 채 압축된 청크로 저장됩니다. 고유한 라벨과 값의 조합 하나가 로그 스트림 하나를 만들기 때문에, 값의 가짓수가 많은 라벨을 넣으면 스트림이 곱셈으로 늘어납니다.</desc>
+
+  <style>
+    .code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 10.5px; }
+  </style>
+
+  <rect width="880" height="420" fill="#0d0d0d"/>
+
+  <text x="30" y="34" fill="#e8e4df" font-size="17" font-weight="700">로그 하나의 구조 — 무엇이 색인되나</text>
+  <text x="30" y="55" fill="#b8b3ad" font-size="12">라벨만 색인된다</text>
+
+  <!-- three parts -->
+  <rect x="30" y="76" width="265" height="150" rx="8" fill="#0d0d0d" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+  <text x="48" y="102" fill="#e8e4df" font-size="13" font-weight="700">Timestamp</text>
+  <text x="48" y="124" fill="#b8b3ad" font-size="11.5">나노초 정밀도</text>
+  <rect x="48" y="180" width="229" height="26" rx="4" fill="#0d0d0d" stroke="rgb(42,37,32)"/>
+  <text x="58" y="197" fill="#b8b3ad" font-size="11.5">색인 대상 아님</text>
+
+  <rect x="308" y="76" width="265" height="150" rx="8" fill="rgb(212,168,83)"/>
+  <text x="326" y="102" fill="#0d0d0d" font-size="13" font-weight="700">Labels</text>
+  <text x="326" y="124" fill="#1a1a1a" font-size="11.5">키-값 쌍</text>
+  <rect x="326" y="136" width="229" height="34" rx="4" fill="#fdf3df"/>
+  <text class="code" x="336" y="157" fill="#5c4410">{app="api", env="prod"}</text>
+  <rect x="326" y="180" width="229" height="26" rx="4" fill="#fdf3df"/>
+  <text x="336" y="197" fill="#5c4410" font-size="11.5" font-weight="700">색인된다 — 이것이 인덱스</text>
+
+  <rect x="586" y="76" width="264" height="150" rx="8" fill="#0d0d0d" stroke="rgb(42,37,32)" stroke-width="1.5"/>
+  <text x="604" y="102" fill="#e8e4df" font-size="13" font-weight="700">Content</text>
+  <text x="604" y="124" fill="#b8b3ad" font-size="11.5">원본 로그 라인</text>
+  <rect x="604" y="136" width="228" height="34" rx="4" fill="#0d0d0d" stroke="rgb(42,37,32)"/>
+  <text class="code" x="614" y="157" fill="#b8b3ad">level=info msg="..."</text>
+  <rect x="604" y="180" width="228" height="26" rx="4" fill="#0d0d0d" stroke="#b8b3ad"/>
+  <text x="614" y="197" fill="#e8e4df" font-size="11.5">압축 청크로 저장</text>
+
+  <!-- combination -> stream -->
+  <path d="M440 226 L440 252" stroke="rgb(212,168,83)" stroke-width="2" marker-end="url(#a)"/>
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="rgb(212,168,83)"/>
+    </marker>
+  </defs>
+
+  <rect x="30" y="256" width="820" height="76" rx="8" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.8"/>
+  <text x="50" y="282" fill="rgb(212,168,83)" font-size="13" font-weight="700">조합 하나 = 스트림 하나</text>
+  <text x="50" y="304" fill="#e8e4df" font-size="12">batch·압축되어 청크가 된다</text>
+  <rect x="560" y="270" width="272" height="44" rx="5" fill="#fdf3df"/>
+  <text class="code" x="572" y="288" fill="#5c4410">{app="api", env="prod"}</text>
+  <text class="code" x="572" y="305" fill="#5c4410">{app="api", env="dev"}</text>
+  <text x="726" y="305" fill="#5c4410" font-size="10.5">← 다른 스트림</text>
+
+  <!-- cardinality warning -->
+  <rect x="30" y="348" width="820" height="56" rx="8" fill="#0d0d0d" stroke="#f44336" stroke-width="1.5"/>
+  <text x="50" y="372" fill="#f44336" font-size="12.5" font-weight="700">그래서 카디널리티가 문제다</text>
+  <text x="50" y="392" fill="#e8e4df" font-size="12">가짓수 많은 라벨 → 스트림 폭증</text>
+</svg>

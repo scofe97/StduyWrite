@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="740" height="350" viewBox="0 0 740 350" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" role="img" aria-label="remote write 는 Prometheus 에서 외부 저장소로 데이터를 보내는 단방향이고, remote read 는 외부 저장소를 로컬과 나란히 질의한다. Thanos Sidecar 는 remote read 를 반대로 써서 Prometheus 에서 데이터를 꺼내 간다. 한 Prometheus 가 두 API 의 클라이언트도 서버도 된다">
+  <rect width="740" height="350" fill="#0d0d0d"/>
+  <text x="370" y="32" text-anchor="middle" font-size="17" font-weight="700" fill="#e8e4df">remote write vs remote read — 누가 client·server 인가</text>
+
+  <defs>
+    <marker id="aw" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#66bb6a"/></marker>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#5b9bd5"/></marker>
+  </defs>
+
+  <!-- Row 1: remote write -->
+  <text x="40" y="70" font-size="14" font-weight="700" fill="#8fdc93">① remote write — 단방향, 흔함</text>
+  <rect x="60" y="84" width="150" height="52" rx="8" fill="#dceaf7"/>
+  <text x="135" y="106" text-anchor="middle" font-size="13" font-weight="700" fill="#10243a">Prometheus</text>
+  <text x="135" y="124" text-anchor="middle" font-size="10.5" fill="#10243a">client (보냄)</text>
+  <line x1="215" y1="110" x2="475" y2="110" stroke="#66bb6a" stroke-width="2" marker-end="url(#aw)"/>
+  <text x="345" y="102" text-anchor="middle" font-size="11" fill="#8fdc93">protobuf + snappy · 기본 전부 보냄</text>
+  <rect x="480" y="84" width="180" height="52" rx="8" fill="#66bb6a"/>
+  <text x="570" y="106" text-anchor="middle" font-size="13" font-weight="700" fill="#0d0d0d">외부 저장소</text>
+  <text x="570" y="124" text-anchor="middle" font-size="10.5" fill="#14330a">VM·Mimir·Cortex · server</text>
+
+  <!-- Row 2: remote read -->
+  <text x="40" y="176" font-size="14" font-weight="700" fill="#8ab6e0">② remote read — 로컬과 나란히 질의, 실무선 드묾</text>
+  <rect x="60" y="190" width="150" height="52" rx="8" fill="#dceaf7"/>
+  <text x="135" y="212" text-anchor="middle" font-size="13" font-weight="700" fill="#10243a">Prometheus</text>
+  <text x="135" y="230" text-anchor="middle" font-size="10.5" fill="#10243a">client (읽음)</text>
+  <line x1="215" y1="210" x2="475" y2="210" stroke="#5b9bd5" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="345" y="202" text-anchor="middle" font-size="11" fill="#8ab6e0">쿼리 시점 통제 불가 → 알림 쿼리 실패 위험</text>
+  <rect x="480" y="190" width="180" height="52" rx="8" fill="#5b9bd5"/>
+  <text x="570" y="212" text-anchor="middle" font-size="13" font-weight="700" fill="#e8e4df">외부 저장소</text>
+  <text x="570" y="230" text-anchor="middle" font-size="10.5" fill="#dceaf7">InfluxDB·SQL 어댑터 · server</text>
+
+  <!-- Row 3: Thanos reverse -->
+  <rect x="40" y="264" width="660" height="70" rx="10" fill="#0d0d0d" stroke="#f5c451" stroke-width="1.4"/>
+  <text x="60" y="288" font-size="13" font-weight="700" fill="#f5c451">③ Thanos Sidecar — read 를 반대로</text>
+  <text x="60" y="310" font-size="12" fill="#c9c4be">Prometheus 가 남의 데이터를 읽는 게 아니라, Thanos 가 remote read 로 Prometheus 에서 꺼내 감</text>
+  <text x="60" y="328" font-size="11.5" font-weight="700" fill="#f5c451">→ 그래서 한 Prometheus 가 두 API 의 client 도 server 도 된다</text>
+</svg>

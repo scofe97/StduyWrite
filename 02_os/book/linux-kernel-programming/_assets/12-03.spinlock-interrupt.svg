@@ -1,0 +1,61 @@
+<svg viewBox="0 0 680 580" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>spinlock과 인터럽트 — API 변형·sleep-in-atomic·_irq/_irqsave/_bh</title>
+  <desc>spinlock은 spinlock_t 타입으로 DEFINE_SPINLOCK/spin_lock_init로 초기화하고 spin_lock/spin_unlock으로 (un)lock한다. 임계 구역은 반드시 non-blocking이어야 한다. atomic 컨텍스트에서 sleep(schedule)하면 BUG: scheduling while atomic이 발생한다(CONFIG_DEBUG_ATOMIC_SLEEP이 catch, preempt depth 표시). 프로세스 컨텍스트와 인터럽트 핸들러가 같은 공유 데이터를 같은 spinlock으로 보호해야 한다. UP에서는 process가 락을 쥔 채 인터럽트가 같은 락을 spin하면 self-deadlock이므로 spin_lock_irq(인터럽트+선점 마스킹)를 쓴다. 인터럽트 마스크를 보존하려면 spin_lock_irqsave/irqrestore를, bottom half와 race하면 spin_lock_bh를 쓴다.</desc>
+  <rect x="0" y="0" width="680" height="580" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">spinlock 과 인터럽트</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">임계 구역은 non-blocking · 인터럽트와 race 하면 _irq 변형을 씁니다</text>
+
+  <!-- spinlock 기본 -->
+  <rect x="20" y="74" width="320" height="118" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="38" y="96" fill="rgb(212,168,83)" font-size="13" font-weight="bold">spinlock 기본 사용</text>
+  <text x="38" y="116" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">DEFINE_SPINLOCK(l) // 정적</text>
+  <text x="38" y="132" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">spin_lock_init(&amp;l) // 동적</text>
+  <text x="38" y="150" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">spin_lock(&amp;l)</text>
+  <text x="38" y="166" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">spin_unlock(&amp;l)</text>
+  <text x="38" y="186" fill="#f47f72" font-size="10">임계 구역은 반드시 non-blocking! (destroy 없음)</text>
+
+  <!-- sleep-in-atomic 버그 -->
+  <rect x="350" y="74" width="312" height="118" fill="rgba(244,67,54,0.10)" stroke="#f44336" stroke-width="2"/>
+  <text x="368" y="96" fill="#f44336" font-size="13" font-weight="bold">⚠ sleep-in-atomic 버그</text>
+  <text x="368" y="116" fill="#e8e4df" font-size="11">spinlock 쥔 채 schedule() 호출 = 버그</text>
+  <text x="368" y="134" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="9">BUG: scheduling while atomic</text>
+  <text x="368" y="152" fill="rgb(138,133,128)" font-size="10">CONFIG_DEBUG_ATOMIC_SLEEP 가 catch</text>
+  <text x="368" y="170" fill="rgb(138,133,128)" font-size="10">preempt depth &gt; 0 이면 atomic 컨텍스트</text>
+  <text x="368" y="186" fill="rgb(138,133,128)" font-size="9">copy_to_user 같은 blocking 은 mutex 로만</text>
+
+  <!-- UP self-deadlock + _irq -->
+  <rect x="20" y="204" width="642" height="120" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="226" fill="#e8e4df" font-size="13" font-weight="bold">인터럽트와 race — _irq 변형이 해결</text>
+  <text x="38" y="246" fill="#e8e4df" font-size="11">프로세스·인터럽트 핸들러가 같은 공유 데이터 → 같은 spinlock 으로 보호 필수</text>
+
+  <rect x="38" y="256" width="300" height="56" fill="rgba(244,67,54,0.10)" stroke="#f44336"/>
+  <text x="52" y="276" fill="#f47f72" font-size="11">UP: process 가 락 쥔 채 인터럽트 발생</text>
+  <text x="52" y="292" fill="rgb(138,133,128)" font-size="10">인터럽트가 같은 락 spin → process 못 돌아옴</text>
+  <text x="52" y="306" fill="rgb(138,133,128)" font-size="10">→ self-deadlock!</text>
+
+  <rect x="346" y="256" width="298" height="56" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/>
+  <text x="360" y="276" fill="#66bb6a" font-size="11">해결: spin_lock_irq()</text>
+  <text x="360" y="292" fill="rgb(138,133,128)" font-size="10">local core 의 인터럽트 + 선점 마스킹</text>
+  <text x="360" y="306" fill="rgb(138,133,128)" font-size="10">UP·SMP 모두 안전 · spin_unlock_irq 짝</text>
+
+  <!-- _irqsave -->
+  <rect x="20" y="336" width="642" height="96" fill="rgba(173,216,230,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="358" fill="#9cc3df" font-size="13" font-weight="bold">_irqsave — 인터럽트 마스크 보존</text>
+  <text x="38" y="378" fill="#e8e4df" font-size="11">_irq 는 모든 인터럽트를 켜버림 → 누가 일부 IRQ 를 막아둔 설정을 덮어쓸 위험</text>
+  <text x="38" y="396" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">spin_lock_irqsave(&amp;l, flags)   ...   spin_unlock_irqrestore(&amp;l, flags)</text>
+  <text x="38" y="414" fill="#66bb6a" font-size="11">CPU 상태(인터럽트 마스크)를 save·restore → 기존 설정 보존. 가장 안전</text>
+  <text x="38" y="428" fill="rgb(138,133,128)" font-size="9">x86 은 [R/E]FLAGS · AArch64 는 DAIF 레지스터 save/restore</text>
+
+  <!-- bottom half + 요약 -->
+  <rect x="20" y="444" width="642" height="128" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="466" fill="#e8e4df" font-size="13" font-weight="bold">bottom half 와 API 선택 요약</text>
+  <text x="38" y="486" fill="#e8e4df" font-size="11">top half(hardirq): 인터럽트 끈 채 실행 · bottom half(softirq/tasklet): 인터럽트 켠 채 · 둘 다 atomic</text>
+
+  <rect x="38" y="496" width="606" height="22" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/>
+  <text x="52" y="511" fill="#66bb6a" font-size="10">spin_lock — 인터럽트 무관(process, 또는 top↔bottom half) · 최저 오버헤드</text>
+  <rect x="38" y="520" width="606" height="22" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/>
+  <text x="52" y="535" fill="rgb(212,168,83)" font-size="10">spin_lock_irq / _bh — 인터럽트·bottom half 와 race 시 · 중간 오버헤드</text>
+  <rect x="38" y="544" width="606" height="22" fill="rgba(244,67,54,0.10)" stroke="#f44336"/>
+  <text x="52" y="559" fill="#f47f72" font-size="10">spin_lock_irqsave — 마스크 보존 필요 시 · 가장 안전 · UP 에선 인터럽트·선점 마스킹만</text>
+</svg>

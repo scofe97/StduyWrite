@@ -1,0 +1,44 @@
+<svg viewBox="0 0 680 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>da-ch6-ex1 지연 시나리오 — /demo 호출이 httpbin.org를 거쳐 5초 뒤 응답 (원문 Figure 6.1 개념도)</title>
+  <desc>원문 Figure 6.1 의 개념을 도식으로 옮긴 것입니다. 조사 대상 앱은 엔드포인트 /demo 를 노출합니다. cURL 이나 Postman 으로 이 엔드포인트를 호출하면 앱은 다시 httpbin.org 의 mock 엔드포인트 /delay/n 을 부릅니다. httpbin.org 가 5초 지연 뒤 응답하도록 설정돼 있어 호출자는 응답을 받기까지 약 5초를 기다립니다. 우리는 이 5초가 왜 걸리는지를 프로파일러로 조사하려 합니다. httpbin.org 가 지연의 근본 원인 역할을 맡고, 앱 자체는 응답을 기다릴 뿐입니다.</desc>
+  <rect x="0" y="0" width="680" height="360" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="16" font-weight="bold">/demo 엔드포인트의 5초 지연 시나리오</text>
+  <text x="20" y="55" fill="rgb(138,133,128)" font-size="11">원문 Figure 6.1 개념도 — da-ch6-ex1 (앱은 기다릴 뿐, 원인은 httpbin.org)</text>
+
+  <!-- 호출자 -->
+  <rect x="20" y="120" width="140" height="80" fill="rgb(20,20,20)" stroke="rgb(60,55,50)" stroke-width="1.5"/>
+  <text x="90" y="152" fill="#e8e4df" font-size="12" font-weight="bold" text-anchor="middle">호출자</text>
+  <text x="90" y="174" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">cURL · Postman</text>
+
+  <!-- 화살표 1 -->
+  <text x="190" y="150" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">GET /demo</text>
+  <line x1="160" y1="160" x2="250" y2="160" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <polygon points="250,160 242,156 242,164" fill="rgb(212,168,83)"/>
+
+  <!-- 앱 -->
+  <rect x="252" y="120" width="160" height="80" fill="rgba(212,168,83,0.08)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="332" y="150" fill="rgb(212,168,83)" font-size="12" font-weight="bold" text-anchor="middle">조사 대상 앱</text>
+  <text x="332" y="170" fill="#e8e4df" font-size="10" text-anchor="middle">/demo (da-ch6-ex1)</text>
+  <text x="332" y="188" fill="rgb(138,133,128)" font-size="9" text-anchor="middle">OpenFeign 으로 호출</text>
+
+  <!-- 화살표 2 -->
+  <text x="470" y="150" fill="rgb(138,133,128)" font-size="10" text-anchor="middle">POST /delay/5</text>
+  <line x1="412" y1="160" x2="510" y2="160" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <polygon points="510,160 502,156 502,164" fill="rgb(212,168,83)"/>
+
+  <!-- httpbin -->
+  <rect x="512" y="120" width="148" height="80" fill="rgba(244,127,114,0.08)" stroke="#f47f72" stroke-width="2"/>
+  <text x="586" y="150" fill="#f47f72" font-size="12" font-weight="bold" text-anchor="middle">httpbin.org</text>
+  <text x="586" y="170" fill="#e8e4df" font-size="10" text-anchor="middle">mock 엔드포인트</text>
+  <text x="586" y="188" fill="#f47f72" font-size="10" text-anchor="middle">5초 지연 응답</text>
+
+  <!-- 대기 표시 -->
+  <rect x="252" y="232" width="408" height="40" fill="rgba(244,127,114,0.06)" stroke="#f47f72"/>
+  <text x="456" y="257" fill="#f47f72" font-size="12" font-weight="bold" text-anchor="middle">⟳ 앱은 응답이 올 때까지 약 5초 대기 (CPU 안 씀)</text>
+
+  <!-- 조사 목표 -->
+  <rect x="20" y="294" width="640" height="48" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="34" y="316" fill="#e8e4df" font-size="11" font-weight="bold">조사 목표</text>
+  <text x="34" y="334" fill="rgb(138,133,128)" font-size="10.5">이상적으로 1초 미만이어야 하는데 5초가 걸린다 → 지연이 앱인지 다른 무엇인지 프로파일러로 가린다</text>
+</svg>

@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 560" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">SetLinger 인자별 종료 동작과 데이터 처리</title><desc id="dd">SetLinger(sec) 값(음수·0·양수)에 따른 잔여 데이터 처리 방식과 RST·FIN 분기 흐름</desc>
+<rect width="880" height="560" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">NPG CH.4 — SETLINGER MODES</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">SetLinger 인자별 종료 동작과 데이터 처리</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">음수(기본 백그라운드 FIN) vs 0(즉시 폐기 및 RST) vs 양수(지정 초 대기)</text>
+<rect x="310" y="96" width="260" height="36" rx="18" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="440" y="114" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">tcpConn.Close() 호출</text>
+<text x="440" y="126" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">송신 버퍼 잔여 데이터 존재</text>
+<path d="M 440 132 L 440 156" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<polygon points="440,156 530,180 440,204 350,180" fill="#161B22" stroke="#E3B341" stroke-width="1.2"/>
+<text x="440" y="184" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">SetLinger(sec) 설정값</text>
+<line x1="350" y1="180" x2="175" y2="180" stroke="#3FB98C" stroke-width="1.2"/>
+<path d="M 175 180 L 175 230" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="255" y="172" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">sec &lt; 0 (기본값)</text>
+<rect x="70" y="230" width="210" height="42" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="175" y="247" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">Close() 즉시 반환</text>
+<text x="175" y="263" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">비차단 즉시 복귀</text>
+<path d="M 175 272 L 175 298" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="70" y="298" width="210" height="42" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="175" y="315" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">백그라운드 전송</text>
+<text x="175" y="331" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">잔여 데이터 전송 및 FIN</text>
+<path d="M 175 340 L 175 368" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<rect x="70" y="368" width="210" height="42" rx="21" fill="#161B22" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="175" y="386" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">우아한 종료 (FIN)</text>
+<text x="175" y="401" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 4-way 완결</text>
+<rect x="70" y="426" width="210" height="34" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="175" y="447" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">서버 수신 미확인 (크래시 시 유실)</text>
+<path d="M 440 204 L 440 230" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#bad)"/>
+<text x="456" y="216" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F0616D">sec == 0</text>
+<rect x="335" y="230" width="210" height="42" rx="6" fill="#161B22" stroke="#F0616D" stroke-width="0.9"/>
+<text x="440" y="247" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F0616D">미전송 잔여 데이터 폐기</text>
+<text x="440" y="263" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">송신 버퍼 즉시 파기</text>
+<path d="M 440 272 L 440 298" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#bad)"/>
+<rect x="335" y="298" width="210" height="42" rx="6" fill="#161B22" stroke="#F0616D" stroke-width="0.9"/>
+<text x="440" y="315" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F0616D">정상 FIN 생략 · RST 송신</text>
+<text x="440" y="331" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">강제 종료 (Abortive Close)</text>
+<path d="M 440 340 L 440 368" fill="none" stroke="#F0616D" stroke-width="1.4" marker-end="url(#bad)"/>
+<rect x="335" y="368" width="210" height="42" rx="21" fill="#161B22" stroke="#F0616D" stroke-width="0.9"/>
+<text x="440" y="386" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F0616D">소켓 즉시 파괴</text>
+<text x="440" y="401" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">상대: reset by peer 오류</text>
+<rect x="335" y="426" width="210" height="34" rx="6" fill="#161B22" stroke="#F0616D" stroke-width="0.9"/>
+<text x="440" y="447" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">데이터 유실 필수 통보 (규격 강제)</text>
+<line x1="530" y1="180" x2="705" y2="180" stroke="#E3B341" stroke-width="1.2"/>
+<path d="M 705 180 L 705 230" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<text x="620" y="172" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#E3B341">sec &gt; 0 (양수)</text>
+<rect x="600" y="230" width="210" height="42" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="705" y="247" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F5F5F3">Close() sec초 블로킹 대기</text>
+<text x="705" y="263" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">잔여 데이터 전송 및 ACK 대기</text>
+<path d="M 705 272 L 705 298" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<polygon points="705,298 760,318 705,338 650,318" fill="#161B22" stroke="#E3B341" stroke-width="1.2"/>
+<text x="705" y="322" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">ACK 완료?</text>
+<line x1="650" y1="318" x2="645" y2="318" stroke="#3FB98C" stroke-width="1.2"/>
+<path d="M 645 318 L 645 368" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="630" y="336" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">완료</text>
+<rect x="595" y="368" width="100" height="42" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="0.9"/>
+<text x="645" y="386" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">정상 FIN</text>
+<text x="645" y="400" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">전송 완료</text>
+<line x1="760" y1="318" x2="765" y2="318" stroke="#E3B341" stroke-width="1.2"/>
+<path d="M 765 318 L 765 368" fill="none" stroke="#E3B341" stroke-width="1.4" marker-end="url(#warn)"/>
+<text x="780" y="336" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">초과</text>
+<rect x="715" y="368" width="100" height="42" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="0.9"/>
+<text x="765" y="386" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">잔여 폐기</text>
+<text x="765" y="400" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">데이터 버림</text>
+<rect x="600" y="426" width="210" height="34" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="705" y="447" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">OS 커널 지원 여부 의존</text>
+<line x1="12" y1="516" x2="832" y2="516" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="538" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="528" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">우아한 정상 종료 (FIN)</text>
+<rect x="339" y="528" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="361" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">강제 즉시 파괴 (RST)</text>
+<rect x="565" y="528" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="587" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">시한부 대기 / 전송 검증</text>
+</svg>

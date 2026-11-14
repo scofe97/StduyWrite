@@ -1,0 +1,77 @@
+<svg viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <title>정적 디스패치 vs 동적 디스패치 — 정적 타입/컴파일 때 vs 실제 타입/실행 때</title>
+  <desc>정적 디스패치는 오버로딩으로, 인자의 정적 타입(선언 타입)을 보고 컴파일 시점에 호출 버전을 고른다. Human man = new Man()에서 정적 타입이 Human이라 sayHello(Human)이 선택된다. 동적 디스패치는 오버라이딩으로, 수신자 객체의 실제 타입을 보고 실행 시점에 invokevirtual이 버전을 고른다. 같은 man이라도 실제 타입이 Man이면 Man.sayHello가 불린다. 정적은 컴파일러가, 동적은 JVM이 실행 중에 결정한다.</desc>
+  <defs>
+    <style>
+      .title{font-size:18px;font-weight:800;fill:#e8e4df}
+      .sub{font-size:11px;fill:rgb(160,155,150)}
+      .lab{font-size:10px;font-weight:700;fill:#10243a;font-family:'JetBrains Mono',monospace}
+      .labs{font-size:9px;font-weight:700;fill:#10243a;font-family:'JetBrains Mono',monospace}
+      .code{font-size:9.5px;font-weight:700;fill:#e6c878;font-family:'JetBrains Mono',monospace}
+      .hdr{font-size:13px;font-weight:800;fill:#0d0d0d}
+      .note{font-size:9px;fill:#cfd6dd}
+      .pick{font-size:8.5px;font-weight:800;fill:#0d0d0d;font-family:'JetBrains Mono',monospace}
+          .cap{font-size:10px;font-weight:800;fill:#c8ccd0}
+    </style>
+  </defs>
+  <rect x="0" y="0" width="900" height="560" fill="#0d0d0d"/>
+  <text x="28" y="36" class="title">정적 디스패치 vs 동적 디스패치</text>
+  <text x="28" y="58" class="sub">무엇을 보고 / 언제 / 무엇이 버전을 고르는가 — 오버로딩 vs 오버라이딩</text>
+
+  <!-- ===== 좌: 정적 디스패치 ===== -->
+  <rect x="28" y="76" width="406" height="404" rx="10" fill="#0d0d0d" stroke="rgb(91,155,213)" stroke-width="1.5"/>
+  <rect x="28" y="76" width="406" height="40" rx="10" fill="#5b9bd5"/>
+  <text x="231" y="103" class="hdr" text-anchor="middle">정적 디스패치 = 오버로딩</text>
+
+  <rect x="44" y="128" width="374" height="64" rx="6" fill="#0d0d0d" stroke="rgb(91,155,213)"/>
+  <text x="58" y="148" class="code">void sayHello(Human g){...}</text>
+  <text x="58" y="164" class="code">void sayHello(Man g){...}     // 이름 같고 인자 타입 다름</text>
+  <text x="58" y="180" class="code">Human man = new Man();  sayHello(man);</text>
+
+  <text x="231" y="220" class="cap" text-anchor="middle">무엇을 보나</text>
+  <rect x="44" y="228" width="374" height="34" rx="5" fill="#dceaf7"/>
+  <text x="231" y="250" class="lab" text-anchor="middle">인자의 정적 타입 (선언 타입) = Human</text>
+
+  <text x="231" y="290" class="cap" text-anchor="middle">언제 / 누가</text>
+  <rect x="44" y="298" width="374" height="34" rx="5" fill="#dceaf7"/>
+  <text x="231" y="320" class="lab" text-anchor="middle">컴파일 시점 · 컴파일러가 결정</text>
+
+  <text x="231" y="360" class="cap" text-anchor="middle">고른 버전</text>
+  <rect x="44" y="368" width="374" height="40" rx="6" fill="#f3d9a0"/>
+  <rect x="60" y="376" width="342" height="24" rx="4" fill="#fdf3df"/>
+  <text x="231" y="392" class="pick" text-anchor="middle">sayHello(Human) — 실제 타입 Man은 무시됨</text>
+
+  <text x="231" y="438" class="note" text-anchor="middle">정적 타입은 컴파일 때 알 수 있고 변하지 않는다.</text>
+  <text x="231" y="456" class="note" text-anchor="middle">그래서 컴파일러가 미리 버전을 못 박을 수 있다.</text>
+
+  <!-- ===== 우: 동적 디스패치 ===== -->
+  <rect x="466" y="76" width="406" height="404" rx="10" fill="#0d0d0d" stroke="rgb(212,168,83)" stroke-width="1.5"/>
+  <rect x="466" y="76" width="406" height="40" rx="10" fill="rgb(212,168,83)"/>
+  <text x="669" y="103" class="hdr" text-anchor="middle">동적 디스패치 = 오버라이딩</text>
+
+  <rect x="482" y="128" width="374" height="64" rx="6" fill="#0d0d0d" stroke="rgb(212,168,83)"/>
+  <text x="496" y="148" class="code">class Man extends Human {</text>
+  <text x="496" y="164" class="code">  @Override void sayHello(){...} }   // 부모 것 재정의</text>
+  <text x="496" y="180" class="code">Human man = new Man();  man.sayHello();</text>
+
+  <text x="669" y="220" class="cap" text-anchor="middle">무엇을 보나</text>
+  <rect x="482" y="228" width="374" height="34" rx="5" fill="#dceaf7"/>
+  <text x="669" y="250" class="lab" text-anchor="middle">수신자 객체의 실제 타입 = Man</text>
+
+  <text x="669" y="290" class="cap" text-anchor="middle">언제 / 누가</text>
+  <rect x="482" y="298" width="374" height="34" rx="5" fill="#dceaf7"/>
+  <text x="669" y="320" class="lab" text-anchor="middle">실행 시점 · invokevirtual 이 결정</text>
+
+  <text x="669" y="360" class="cap" text-anchor="middle">고른 버전</text>
+  <rect x="482" y="368" width="374" height="40" rx="6" fill="#f3d9a0"/>
+  <rect x="498" y="376" width="342" height="24" rx="4" fill="#fdf3df"/>
+  <text x="669" y="392" class="pick" text-anchor="middle">Man.sayHello() — 실제 타입을 따라감</text>
+
+  <text x="669" y="438" class="note" text-anchor="middle">실제 타입은 실행 중에야 정해진다.</text>
+  <text x="669" y="456" class="note" text-anchor="middle">그래서 JVM이 실행 시점에 수신자를 보고 고른다.</text>
+
+  <!-- 하단 한 줄 -->
+  <rect x="28" y="498" width="844" height="42" rx="8" fill="#f5edda"/>
+  <text x="231" y="524" class="lab" text-anchor="middle">오버로딩 = 정적 타입 · 컴파일 때</text>
+  <text x="669" y="524" class="lab" text-anchor="middle">오버라이딩 = 실제 타입 · 실행 때</text>
+</svg>

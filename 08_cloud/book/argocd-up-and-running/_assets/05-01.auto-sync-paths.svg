@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 458" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">자동 동기화가 세 변경을 처리하는 길</title><desc id="dd">맨 위 줄은 Git 에 push 한 변경이다. 자동 동기화를 켜면 OutOfSync 로 판정된 뒤 Git 값이 클러스터에 적용된다. 가운데 줄은 Git 에서 지운 리소스이고 prune 이 켜져 있으면 클러스터에서 지워지며 꺼져 있으면 남는다. 맨 아래 줄은 클러스터에서 직접 바꾼 값이고 selfHeal 이 켜져 있으면 Git 값으로 돌아오며 꺼져 있으면 OutOfSync 로 남는다.</desc>
+<rect width="880" height="458" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">ARGO CD UP AND RUNNING · 05-01 §1</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">자동 동기화가 세 변경을 처리하는 길</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">스위치마다 갈리는 결과</text>
+<text x="113.0" y="108" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">변경의 원인</text>
+<text x="321.0" y="108" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">판정</text>
+<text x="515.0" y="108" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">결과를 가르는 스위치</text>
+<text x="740.0" y="108" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#8B98A9">결과</text>
+<rect x="24" y="120" width="178" height="78" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="113.0" y="152" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#F5F5F3">Git 에 push 한 변경</text>
+<text x="113.0" y="175" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">매니페스트 수정</text>
+<rect x="236" y="120" width="170" height="78" rx="6" fill="#5E6B7E14" stroke="#5E6B7E" stroke-width="1.1"/>
+<text x="321.0" y="152" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#F5F5F3">OutOfSync 판정</text>
+<text x="321.0" y="175" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">저장소 조회 뒤</text>
+<rect x="440" y="120" width="150" height="78" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<text x="515.0" y="152" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12.5" font-weight="600" fill="#F5F5F3">automated</text>
+<text x="515.0" y="175" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">자동 동기화 켜짐</text>
+<path d="M 204 159.0 L 234 159.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 408 159.0 L 438 159.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="624" y="120" width="232" height="78" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="740.0" y="152" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#F5F5F3">Git 값을 클러스터에 적용</text>
+<text x="740.0" y="175" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">sync 명령 없이</text>
+<path d="M 592 159.0 L 622 159.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="24" y="218" width="178" height="78" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="113.0" y="250" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#F5F5F3">Git 에서 지운 리소스</text>
+<text x="113.0" y="273" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">클러스터에는 남아 있음</text>
+<rect x="236" y="218" width="170" height="78" rx="6" fill="#5E6B7E14" stroke="#5E6B7E" stroke-width="1.1"/>
+<text x="321.0" y="250" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#F5F5F3">OutOfSync 판정</text>
+<text x="321.0" y="273" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">저장소 조회 뒤</text>
+<rect x="440" y="218" width="150" height="78" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<text x="515.0" y="250" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12.5" font-weight="600" fill="#F5F5F3">prune</text>
+<text x="515.0" y="273" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">기본은 꺼짐</text>
+<path d="M 204 257.0 L 234 257.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 408 257.0 L 438 257.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="624" y="218" width="232" height="36" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="740.0" y="241" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">켜짐: 클러스터에서 삭제</text>
+<path d="M 592 257.0 L 607 257.0 L 607 236 L 622 236" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="624" y="260" width="232" height="36" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.2"/>
+<text x="740.0" y="283" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">꺼짐: 클러스터에 남음</text>
+<path d="M 592 257.0 L 607 257.0 L 607 278 L 622 278" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="24" y="316" width="178" height="78" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="113.0" y="348" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#F5F5F3">클러스터에서 바꾼 값</text>
+<text x="113.0" y="371" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">kubectl 로 직접 수정</text>
+<rect x="236" y="316" width="170" height="78" rx="6" fill="#5E6B7E14" stroke="#5E6B7E" stroke-width="1.1"/>
+<text x="321.0" y="348" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#F5F5F3">OutOfSync 판정</text>
+<text x="321.0" y="371" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">변경 감지 뒤</text>
+<rect x="440" y="316" width="150" height="78" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.4"/>
+<text x="515.0" y="348" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12.5" font-weight="600" fill="#F5F5F3">selfHeal</text>
+<text x="515.0" y="371" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">기본은 꺼짐</text>
+<path d="M 204 355.0 L 234 355.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<path d="M 408 355.0 L 438 355.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="624" y="316" width="232" height="36" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="740.0" y="339" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">켜짐: Git 값으로 복구</text>
+<path d="M 592 355.0 L 607 355.0 L 607 334 L 622 334" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="624" y="358" width="232" height="36" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.2"/>
+<text x="740.0" y="381" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">꺼짐: OutOfSync 로 남음</text>
+<path d="M 592 355.0 L 607 355.0 L 607 376 L 622 376" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<line x1="12" y1="414" x2="832" y2="414" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="436" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="426" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="436" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">변경 원인</text>
+<rect x="209" y="426" width="14" height="12" rx="2" fill="#5E6B7E22" stroke="#5E6B7E" stroke-width="1.1"/>
+<text x="231" y="436" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">판정</text>
+<rect x="279" y="426" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="301" y="436" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">스위치</text>
+<rect x="362" y="426" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="384" y="436" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">반영됨</text>
+<rect x="445" y="426" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="467" y="436" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">그대로 남음</text>
+</svg>

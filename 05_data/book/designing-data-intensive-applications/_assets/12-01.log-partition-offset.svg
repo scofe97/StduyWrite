@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 572" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">토픽 파티션과 오프셋 기반 순차 읽기 구조</title><desc id="dd">프로듀서가 토픽의 각 파티션 끝에 메시지를 추가(append)하고, 컨슈머 그룹의 클라이언트가 파티션별 오프셋을 순차적으로 읽는 아키텍처.</desc>
+<rect width="880" height="572" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">12-01 · §3 LOG-BASED MESSAGE BROKER</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">토픽 파티션과 오프셋 기반 순차 읽기 구조</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">토픽 샤딩(파티션) · 단조 증가 오프셋 · 프로듀서 추가(append) · 컨슈머 그룹 파티션 할당과 오프셋 진도</text>
+<text x="88" y="106" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">프로듀서 (발행)</text>
+<rect x="24" y="120" width="128" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="88" y="142" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">프로듀서 클라이언트</text>
+<text x="88" y="158" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">Producer Client 1</text>
+<rect x="24" y="276" width="128" height="52" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="88" y="298" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">프로듀서 클라이언트</text>
+<text x="88" y="314" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">Producer Client 2</text>
+<text x="436" y="106" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">브로커 저장소: 토픽별 append-only 파티션 로그</text>
+<rect x="180" y="120" width="480" height="120" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="196" y="144" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">토픽 A</text>
+<text x="210" y="172" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">파티션 0</text>
+<rect x="268" y="158" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="282.0" y="175" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">1</text>
+<rect x="300" y="158" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="314.0" y="175" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">2</text>
+<rect x="332" y="158" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="346.0" y="175" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">3</text>
+<rect x="364" y="158" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="378.0" y="175" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">4</text>
+<rect x="396" y="158" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="410.0" y="175" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">5</text>
+<rect x="428" y="158" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="442.0" y="175" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">6</text>
+<rect x="460" y="158" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="474.0" y="175" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">7</text>
+<rect x="492" y="158" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="506.0" y="175" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">8</text>
+<rect x="524" y="158" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="538.0" y="175" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">9</text>
+<rect x="556" y="158" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="570.0" y="175" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">10</text>
+<rect x="588" y="158" width="28" height="26" rx="3" fill="#0D1117" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="602.0" y="175" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">11</text>
+<text x="602.0" y="196" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">추가 (append)</text>
+<text x="210" y="222" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">파티션 1</text>
+<rect x="268" y="208" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="282.0" y="225" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">1</text>
+<rect x="300" y="208" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="314.0" y="225" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">2</text>
+<rect x="332" y="208" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="346.0" y="225" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">3</text>
+<rect x="364" y="208" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="378.0" y="225" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">4</text>
+<rect x="396" y="208" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="410.0" y="225" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">5</text>
+<rect x="428" y="208" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="442.0" y="225" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">6</text>
+<rect x="460" y="208" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="474.0" y="225" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">7</text>
+<rect x="492" y="208" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="506.0" y="225" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">8</text>
+<path d="M 152 136 L 170 136 L 170 114 L 602.0 114 L 602.0 154" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<rect x="180" y="252" width="480" height="232" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="196" y="276" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">토픽 B</text>
+<text x="210" y="304" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">파티션 0</text>
+<rect x="268" y="290" width="28" height="26" rx="3" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="282.0" y="307" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">1</text>
+<rect x="300" y="290" width="28" height="26" rx="3" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="314.0" y="307" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">2</text>
+<rect x="332" y="290" width="28" height="26" rx="3" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="346.0" y="307" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">3</text>
+<rect x="364" y="290" width="28" height="26" rx="3" fill="#F08A5922" stroke="#F08A59" stroke-width="1.2"/>
+<text x="378.0" y="307" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">4</text>
+<text x="210" y="356" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">파티션 1</text>
+<rect x="268" y="342" width="28" height="26" rx="3" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="282.0" y="359" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">1</text>
+<rect x="300" y="342" width="28" height="26" rx="3" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="314.0" y="359" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">2</text>
+<rect x="332" y="342" width="28" height="26" rx="3" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="346.0" y="359" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">3</text>
+<rect x="364" y="342" width="28" height="26" rx="3" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="378.0" y="359" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">4</text>
+<rect x="396" y="342" width="28" height="26" rx="3" fill="#F08A5922" stroke="#F08A59" stroke-width="1.2"/>
+<text x="410.0" y="359" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">5</text>
+<rect x="428" y="342" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="442.0" y="359" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">6</text>
+<rect x="460" y="342" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="474.0" y="359" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">7</text>
+<rect x="492" y="342" width="28" height="26" rx="3" fill="#0D1117" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="506.0" y="359" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">8</text>
+<text x="506.0" y="380" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">추가 (append)</text>
+<path d="M 152 292 L 170 292 L 170 246 L 506.0 246 L 506.0 338" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="210" y="420" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">파티션 2</text>
+<rect x="268" y="406" width="28" height="26" rx="3" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="282.0" y="423" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">1</text>
+<rect x="300" y="406" width="28" height="26" rx="3" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="314.0" y="423" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">2</text>
+<rect x="332" y="406" width="28" height="26" rx="3" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="346.0" y="423" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">3</text>
+<rect x="364" y="406" width="28" height="26" rx="3" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="378.0" y="423" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">4</text>
+<rect x="396" y="406" width="28" height="26" rx="3" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="410.0" y="423" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">5</text>
+<rect x="428" y="406" width="28" height="26" rx="3" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="442.0" y="423" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">6</text>
+<rect x="460" y="406" width="28" height="26" rx="3" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="474.0" y="423" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">7</text>
+<rect x="492" y="406" width="28" height="26" rx="3" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="506.0" y="423" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">8</text>
+<rect x="524" y="406" width="28" height="26" rx="3" fill="#F08A5922" stroke="#F08A59" stroke-width="1.2"/>
+<text x="538.0" y="423" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">9</text>
+<rect x="556" y="406" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="570.0" y="423" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">10</text>
+<rect x="588" y="406" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="602.0" y="423" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">11</text>
+<rect x="620" y="406" width="28" height="26" rx="3" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="634.0" y="423" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">12</text>
+<text x="770.0" y="238" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">컨슈머 그룹 (구독)</text>
+<rect x="684" y="252" width="172" height="232" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<rect x="696" y="268" width="148" height="88" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="770.0" y="288" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">컨슈머 클라이언트 1</text>
+<text x="770.0" y="308" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">파티션 B.0 오프셋 = 4</text>
+<text x="770.0" y="328" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">파티션 B.1 오프셋 = 5</text>
+<text x="770.0" y="344" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">순차 읽기 (read)</text>
+<rect x="696" y="376" width="148" height="88" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="770.0" y="398" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">컨슈머 클라이언트 2</text>
+<text x="770.0" y="420" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">파티션 B.2 오프셋 = 9</text>
+<text x="770.0" y="442" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">단일 컨슈머 독점 할당</text>
+<path d="M 378.0 316 L 378.0 324 L 696 324" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<path d="M 410.0 368 L 410.0 396 L 672 396 L 672 340 L 696 340" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<path d="M 538.0 432 L 538.0 456 L 672 456 L 672 420 L 696 420" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<line x1="12" y1="516" x2="832" y2="516" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="538" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="528" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">프로듀서 추가 (append)</text>
+<rect x="352" y="528" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="374" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">처리 완료 오프셋</text>
+<rect x="513" y="528" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="535" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">소비자 오프셋 (focal)</text>
+<rect x="752" y="528" width="14" height="12" rx="2" fill="#8B98A922" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="774" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">미처리 오프셋</text>
+</svg>

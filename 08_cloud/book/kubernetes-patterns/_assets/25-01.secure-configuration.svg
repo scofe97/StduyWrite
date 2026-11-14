@@ -1,0 +1,80 @@
+<svg viewBox="0 0 900 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>Secure Configuration — 민감한 설정을 안전하게 다루기</title>
+  <desc>Kubernetes Patterns 25장. Secure Configuration은 비밀번호·토큰·인증서 같은 민감한 설정을 안전하게 저장·배포·주입하는 패턴입니다. Kubernetes Secret은 기본이 base64 인코딩일 뿐 암호화가 아니므로(누구나 디코딩 가능) 그 자체로는 안전하지 않습니다. 세 가지 보완 축이 있습니다. 저장(at rest) — etcd 저장 시 암호화(EncryptionConfiguration)로 디스크 유출을 막고, 접근은 RBAC으로 제한합니다. GitOps로 Secret을 다루려면 평문을 Git에 올리면 안 되므로 out-of-cluster 암호화가 필요합니다 — Sealed Secrets(controller의 공개키로 암호화한 SealedSecret CR을 Git에 커밋, 클러스터 안 controller만 복호화), External Secrets Operator(Vault·AWS Secrets Manager 등 외부 저장소를 참조해 Secret으로 동기화), sops(파일 단위 암호화). 주입(injection) — 앱에 전달하는 방법으로 볼륨 마운트(Secret을 파일로, 회전 시 자동 갱신 — 환경변수보다 권장), Secrets Store CSI Driver(외부 저장소를 CSI 볼륨으로 직접 마운트, Kubernetes Secret을 안 거침), Vault Agent 사이드카 주입(init/사이드카가 Vault에서 받아 공유 볼륨에 씀)이 있습니다. 원칙 — Secret은 이미지·Git·로그에 평문으로 남기지 않고, 최소 권한으로 접근을 좁히며, 가능하면 짧게 사는 동적 시크릿을 씁니다.</desc>
+
+  <rect x="0" y="0" width="900" height="600" fill="#0d0d0d"/>
+  <text x="24" y="34" fill="#e8e4df" font-size="16">Secure Configuration — 민감한 설정을 안전하게 다루기</text>
+  <text x="24" y="57" fill="rgb(138,133,128)" font-size="11">Kubernetes Secret은 <tspan fill="#e57373">base64 인코딩일 뿐 암호화가 아니다</tspan>. 누구나 디코딩 가능 — 그 자체로는 안전하지 않다.</text>
+
+  <!-- axis 1: at rest -->
+  <text x="24" y="88" fill="#e8e4df" font-size="12">① 저장 (at rest) — 클러스터 안에서 지키기</text>
+  <rect x="24" y="98" width="418" height="66" fill="#dceaf7"/>
+  <text x="36" y="117" fill="#10243a" font-size="9" font-weight="700">etcd 암호화 + RBAC</text>
+  <text x="36" y="134" fill="#10243a" font-size="8.5">EncryptionConfiguration으로 etcd 저장 시 암호화(디스크 유출 방어).</text>
+  <text x="36" y="150" fill="#10243a" font-size="8.5">Secret 접근을 RBAC으로 좁힘 — 아무 ServiceAccount나 못 읽게.</text>
+
+  <rect x="458" y="98" width="418" height="66" fill="#f2d4d4"/>
+  <text x="470" y="117" fill="#7a1f1f" font-size="9" font-weight="700">주의 — 기본 Secret은 안전하지 않다</text>
+  <text x="470" y="134" fill="#7a1f1f" font-size="8.5">암호화 안 켜면 etcd에 평문에 가깝게 저장.</text>
+  <text x="470" y="150" fill="#7a1f1f" font-size="8.5">평문 Secret을 Git에 절대 커밋하지 않는다.</text>
+
+  <!-- axis 2: GitOps / out-of-cluster -->
+  <text x="24" y="192" fill="#e8e4df" font-size="12">② GitOps로 다루기 — out-of-cluster 암호화 (Git에 안전하게 올리기)</text>
+  <rect x="24" y="202" width="276" height="86" fill="#f5edda"/>
+  <text x="36" y="221" fill="#0d0d0d" font-size="9.5" font-weight="700">Sealed Secrets</text>
+  <text x="36" y="238" fill="#0d0d0d" font-size="8.5">controller 공개키로 암호화한</text>
+  <text x="36" y="251" fill="#0d0d0d" font-size="8.5">SealedSecret CR을 Git에 커밋.</text>
+  <text x="36" y="266" fill="#0d0d0d" font-size="8.5">클러스터 안 controller만 복호화</text>
+  <text x="36" y="279" fill="#0d0d0d" font-size="8.5">→ 평소 Secret으로 풀림.</text>
+
+  <rect x="312" y="202" width="276" height="86" fill="#f5edda"/>
+  <text x="324" y="221" fill="#0d0d0d" font-size="9.5" font-weight="700">External Secrets Operator</text>
+  <text x="324" y="238" fill="#0d0d0d" font-size="8.5">Vault·AWS Secrets Manager 등</text>
+  <text x="324" y="251" fill="#0d0d0d" font-size="8.5">외부 저장소를 참조(ExternalSecret CR).</text>
+  <text x="324" y="266" fill="#0d0d0d" font-size="8.5">외부의 진짜 값을 K8s Secret으로</text>
+  <text x="324" y="279" fill="#0d0d0d" font-size="8.5">동기화. Git엔 참조만.</text>
+
+  <rect x="600" y="202" width="276" height="86" fill="#f5edda"/>
+  <text x="612" y="221" fill="#0d0d0d" font-size="9.5" font-weight="700">sops</text>
+  <text x="612" y="238" fill="#0d0d0d" font-size="8.5">파일 단위 암호화(KMS·age·PGP).</text>
+  <text x="612" y="251" fill="#0d0d0d" font-size="8.5">YAML의 값만 암호화, 키는 평문 →</text>
+  <text x="612" y="266" fill="#0d0d0d" font-size="8.5">diff 가독. CI/CD에서 복호화해</text>
+  <text x="612" y="279" fill="#0d0d0d" font-size="8.5">적용.</text>
+
+  <!-- axis 3: injection -->
+  <text x="24" y="316" fill="#e8e4df" font-size="12">③ 주입 (injection) — 앱에 전달하기</text>
+  <rect x="24" y="326" width="276" height="94" fill="#cdeccf"/>
+  <text x="36" y="345" fill="#14521d" font-size="9.5" font-weight="700">볼륨 마운트 (권장)</text>
+  <text x="36" y="362" fill="#14521d" font-size="8.5">Secret을 파일로 마운트.</text>
+  <text x="36" y="376" fill="#14521d" font-size="8.5">회전 시 파일 자동 갱신.</text>
+  <text x="36" y="390" fill="#14521d" font-size="8.5">환경변수보다 나음 — env는</text>
+  <text x="36" y="404" fill="#14521d" font-size="8.5">로그·크래시 덤프·자식 프로세스로</text>
+  <text x="36" y="416" fill="#14521d" font-size="8.5">새기 쉽다.</text>
+
+  <rect x="312" y="326" width="276" height="94" fill="#dceaf7"/>
+  <text x="324" y="345" fill="#10243a" font-size="9.5" font-weight="700">Secrets Store CSI Driver</text>
+  <text x="324" y="362" fill="#10243a" font-size="8.5">외부 저장소(Vault·클라우드 KMS)를</text>
+  <text x="324" y="376" fill="#10243a" font-size="8.5">CSI 볼륨으로 직접 마운트.</text>
+  <text x="324" y="390" fill="#10243a" font-size="8.5">Kubernetes Secret을 안 거침 →</text>
+  <text x="324" y="404" fill="#10243a" font-size="8.5">etcd에 시크릿이 아예 안 남을 수도.</text>
+
+  <rect x="600" y="326" width="276" height="94" fill="#dceaf7"/>
+  <text x="612" y="345" fill="#10243a" font-size="9.5" font-weight="700">Vault Agent 사이드카</text>
+  <text x="612" y="362" fill="#10243a" font-size="8.5">init/사이드카가 Vault에서 받아</text>
+  <text x="612" y="376" fill="#10243a" font-size="8.5">공유 볼륨(emptyDir)에 씀.</text>
+  <text x="612" y="390" fill="#10243a" font-size="8.5">앱은 그 파일만 읽음 —</text>
+  <text x="612" y="404" fill="#10243a" font-size="8.5">앱 코드는 Vault를 몰라도 됨(15·16장).</text>
+
+  <!-- principles -->
+  <rect x="24" y="434" width="852" height="76" fill="#f5edda"/>
+  <text x="36" y="454" fill="#0d0d0d" font-size="10.5" font-weight="700">원칙</text>
+  <text x="36" y="473" fill="#0d0d0d" font-size="9">평문으로 남기지 않기 — <tspan font-weight="700">이미지·Git·로그</tspan>에 시크릿 평문 금지.</text>
+  <text x="36" y="489" fill="#0d0d0d" font-size="9">최소 권한 — RBAC으로 <tspan font-weight="700">"이 Secret을 누가 읽는가"</tspan>를 좁게.</text>
+  <text x="36" y="505" fill="#0d0d0d" font-size="9">짧게 살기 — 가능하면 <tspan font-weight="700">동적 시크릿</tspan>(짧은 TTL, 자동 회전)으로 유출 시 피해 창을 줄인다.</text>
+
+  <!-- bottom line -->
+  <rect x="24" y="522" width="852" height="56" fill="#dceaf7"/>
+  <text x="36" y="542" fill="#10243a" font-size="9.5" font-weight="700">요지</text>
+  <text x="36" y="560" fill="#10243a" font-size="9">Secret 리소스는 "설정을 분리하는" 20장의 연장이지만, 민감 데이터는 <tspan font-weight="700">저장·전송·주입 전 구간</tspan>에서 별도로 지켜야 한다.</text>
+  <text x="36" y="573" fill="#10243a" font-size="8.5">base64는 인코딩이지 보안이 아니다 — 이 문장 하나가 25장의 출발점.</text>
+</svg>

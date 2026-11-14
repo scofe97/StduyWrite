@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 484" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">배치 처리 개요와 Unix 도구 전체 지도</title><desc id="dd">처리 방식의 세 갈래(§1)에서 출발해 Unix 파이프라인 원리(§2), 파이프라인과 프로그램 비교(§3), 정렬과 인메모리 집계(§4), 분산 운영체제 유추(§5)로 이어지는 흐름을 조망한다.</desc>
+<rect width="880" height="484" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">11-01 · CHAPTER OVERVIEW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">배치 처리 개요와 Unix 도구 전체 지도</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">처리 패러다임 구분 · 단일 책임 파이프라인 · 집계 구조와 워킹셋 · 외장 정렬 스필 · 분산 운영체제 유추</text>
+<rect x="28" y="104" width="824" height="36" rx="4" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="440.0" y="127" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">배치 처리의 본질: 불변 입력을 읽어 새 출력을 생성하며, 단일 머신 파이프라인 원리를 분산 환경으로 확장</text>
+<rect x="28" y="156" width="152" height="248" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<rect x="36.18" y="166" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="50" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">§1</text>
+<text x="116.0" y="180" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">처리 모델</text>
+<text x="104.0" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">온라인 · 배치 · 스트림</text>
+<line x1="36" y1="210" x2="172" y2="210" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="36" y="220" width="136" height="50" rx="4" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="104.0" y="240" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">온라인 시스템</text>
+<text x="104.0" y="258" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">응답 시간 지표</text>
+<rect x="36" y="278" width="136" height="50" rx="4" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="104.0" y="298" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">배치 처리 잡</text>
+<text x="104.0" y="316" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">처리량 · 불변 입력</text>
+<rect x="36" y="336" width="136" height="50" rx="4" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="104.0" y="356" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">인간 결함 내성</text>
+<text x="104.0" y="374" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">롤백 후 재실행</text>
+<path d="M 181 280.0 L 195 280.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="196" y="156" width="152" height="248" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.2"/>
+<rect x="204.18" y="166" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="218" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">§2</text>
+<text x="284.0" y="180" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">Unix 도구</text>
+<text x="272.0" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">단일 책임 파이프</text>
+<line x1="204" y1="210" x2="340" y2="210" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="204" y="220" width="136" height="50" rx="4" fill="#3FB98C10" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="272.0" y="240" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">표준 인터페이스</text>
+<text x="272.0" y="258" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">stdin · stdout</text>
+<rect x="204" y="278" width="136" height="50" rx="4" fill="#3FB98C10" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="272.0" y="298" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">단일 책임 명령</text>
+<text x="272.0" y="316" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">cat awk sort uniq</text>
+<rect x="204" y="336" width="136" height="50" rx="4" fill="#3FB98C10" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="272.0" y="356" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">조합 가능성</text>
+<text x="272.0" y="374" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">파이프라인 연결</text>
+<path d="M 349 280.0 L 363 280.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="364" y="156" width="152" height="248" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.2"/>
+<rect x="372.18" y="166" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="386" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#E3B341">§3</text>
+<text x="452.0" y="180" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">프로그램</text>
+<text x="440.0" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">집계 구조와 메모리</text>
+<line x1="372" y1="210" x2="508" y2="210" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="372" y="220" width="136" height="50" rx="4" fill="#E3B34110" stroke="#E3B341" stroke-width="0.8"/>
+<text x="440.0" y="240" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">Python 커스텀</text>
+<text x="440.0" y="258" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">인메모리 해시 집계</text>
+<rect x="372" y="278" width="136" height="50" rx="4" fill="#E3B34110" stroke="#E3B341" stroke-width="0.8"/>
+<text x="440.0" y="298" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">워킹셋 정의</text>
+<text x="440.0" y="316" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">고유 키 수 × 크기</text>
+<rect x="372" y="336" width="136" height="50" rx="4" fill="#E3B34110" stroke="#E3B341" stroke-width="0.8"/>
+<text x="440.0" y="356" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">메모리 초과</text>
+<text x="440.0" y="374" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">초과 시 OOM 발생</text>
+<path d="M 517 280.0 L 531 280.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="532" y="156" width="152" height="248" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.2"/>
+<rect x="540.18" y="166" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="554" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#E3B341">§4</text>
+<text x="620.0" y="180" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">정렬 vs 해시</text>
+<text x="608.0" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">외장 정렬과 스필</text>
+<line x1="540" y1="210" x2="676" y2="210" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="540" y="220" width="136" height="50" rx="4" fill="#E3B34110" stroke="#E3B341" stroke-width="0.8"/>
+<text x="608.0" y="240" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">인메모리 해시</text>
+<text x="608.0" y="258" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">워킹셋 적합 시 O(1)</text>
+<rect x="540" y="278" width="136" height="50" rx="4" fill="#E3B34110" stroke="#E3B341" stroke-width="0.8"/>
+<text x="608.0" y="298" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">외장 병합 정렬</text>
+<text x="608.0" y="316" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">디스크 스필 처리</text>
+<rect x="540" y="336" width="136" height="50" rx="4" fill="#E3B34110" stroke="#E3B341" stroke-width="0.8"/>
+<text x="608.0" y="356" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">I/O 병목</text>
+<text x="608.0" y="374" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">파일 순차 읽기 속도</text>
+<path d="M 685 280.0 L 699 280.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="700" y="156" width="152" height="248" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.2"/>
+<rect x="708.18" y="166" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="722" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">§5</text>
+<text x="788.0" y="180" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">분산 OS 유추</text>
+<text x="776.0" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">단일 머신에서 분산</text>
+<line x1="708" y1="210" x2="844" y2="210" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="708" y="220" width="136" height="50" rx="4" fill="#F08A5910" stroke="#F08A59" stroke-width="0.8"/>
+<text x="776.0" y="240" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">분산 파일시스템</text>
+<text x="776.0" y="258" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">HDFS · S3 저장소</text>
+<rect x="708" y="278" width="136" height="50" rx="4" fill="#F08A5910" stroke="#F08A59" stroke-width="0.8"/>
+<text x="776.0" y="298" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">잡 오케스트레이터</text>
+<text x="776.0" y="316" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">Airflow · 커널 역할</text>
+<rect x="708" y="336" width="136" height="50" rx="4" fill="#F08A5910" stroke="#F08A59" stroke-width="0.8"/>
+<text x="776.0" y="356" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">처리 프레임워크</text>
+<text x="776.0" y="374" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">Spark · Flink 엔진</text>
+<line x1="12" y1="432" x2="832" y2="432" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="454" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="444" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">기본 패러다임</text>
+<rect x="235" y="444" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="257" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Unix 파이프라인</text>
+<rect x="409" y="444" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="431" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">집계와 정렬 구조</text>
+<rect x="570" y="444" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="592" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">분산 시스템 유추</text>
+</svg>

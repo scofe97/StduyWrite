@@ -1,0 +1,63 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>lock-free(per-CPU·RCU)와 lockdep·memory barrier</title>
+  <desc>lock-free 기법은 락 없이 성능을 올린다. per-CPU 변수는 CPU 코어마다 사본을 두어 공유를 없애고, get_cpu_var/put_cpu_var 사이는 선점 비활성 atomic 구역이다. RCU(Read-Copy-Update)는 read-mostly에 최적이다. reader는 rcu_read_lock/unlock으로 락 없이 동시 읽고, writer는 데이터 사본을 만들어(Copy) 수정(Update)하고 rcu_assign_pointer로 포인터를 교체한 뒤, RCU grace period(모든 pre-existing reader가 quiescent state를 지나는 시간)를 synchronize_rcu로 기다린 후 옛 객체를 free한다. lockdep은 락 순서 검증으로 self/AB-BA deadlock을 런타임에 수학적으로 100% 잡는다. lock statistics는 contention을 측정한다. memory barrier(rmb/wmb/mb)는 컴파일러·CPU의 reorder를 막아 순서를 보장한다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">lock-free 와 lockdep·memory barrier</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">per-CPU·RCU 로 락 없이, lockdep 으로 deadlock 을 잡습니다</text>
+
+  <!-- per-CPU -->
+  <rect x="20" y="74" width="320" height="120" fill="rgba(102,187,106,0.10)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="96" fill="#66bb6a" font-size="13" font-weight="bold">per-CPU 변수</text>
+  <text x="38" y="116" fill="#e8e4df" font-size="11">CPU 코어마다 사본 → 공유 자체를 없앰</text>
+  <text x="38" y="134" fill="rgb(138,133,128)" font-size="10">DEFINE_PER_CPU(정적) · alloc_percpu(동적)</text>
+  <text x="38" y="152" fill="rgb(138,133,128)" font-size="10">get_cpu_var/put_cpu_var · per_cpu(var,cpu)</text>
+  <text x="38" y="170" fill="#f47f72" font-size="10">{get,put}_cpu_var 사이는 선점 비활성 atomic 구역</text>
+  <text x="38" y="186" fill="rgb(138,133,128)" font-size="9">예: x86 current 매크로 · 네트워크 softnet_data</text>
+
+  <!-- RCU 개념 -->
+  <rect x="350" y="74" width="312" height="120" fill="rgba(212,168,83,0.10)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="368" y="96" fill="rgb(212,168,83)" font-size="13" font-weight="bold">RCU — read-mostly 최적</text>
+  <text x="368" y="116" fill="#e8e4df" font-size="11">reader: 락 없이 동시 읽기 (매우 빠름)</text>
+  <text x="368" y="132" fill="rgb(138,133,128)" font-size="10">writer: 사본 Copy → Update → 포인터 교체</text>
+  <text x="368" y="150" fill="rgb(138,133,128)" font-size="10">→ grace period 대기 후 옛 객체 free</text>
+  <text x="368" y="168" fill="#66bb6a" font-size="10">읽기 90%+ · stale 읽기 허용될 때 적합</text>
+  <text x="368" y="186" fill="rgb(138,133,128)" font-size="9">rwlock 대체 · "synchronization by social engineering"</text>
+
+  <!-- RCU core API -->
+  <rect x="20" y="202" width="642" height="96" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="224" fill="#e8e4df" font-size="13" font-weight="bold">RCU 핵심 5 API</text>
+  <rect x="38" y="236" width="190" height="24" fill="rgba(102,187,106,0.13)" stroke="#66bb6a"/><text x="133" y="252" fill="#66bb6a" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle">rcu_read_lock/unlock</text>
+  <rect x="234" y="236" width="190" height="24" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="329" y="252" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle">rcu_dereference (read)</text>
+  <rect x="430" y="236" width="214" height="24" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="537" y="252" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle">rcu_assign_pointer (write)</text>
+  <rect x="38" y="264" width="280" height="24" fill="rgba(212,168,83,0.15)" stroke="rgb(212,168,83)"/><text x="178" y="280" fill="rgb(212,168,83)" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle">synchronize_rcu (GP 대기·동기)</text>
+  <rect x="324" y="264" width="320" height="24" fill="rgb(13,13,13)" stroke="rgb(42,37,32)"/><text x="484" y="280" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle">call_rcu (async 콜백) · writer 는 spinlock 으로 직렬화</text>
+
+  <!-- lockdep -->
+  <rect x="20" y="316" width="320" height="140" fill="rgba(173,216,230,0.10)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="338" fill="#9cc3df" font-size="13" font-weight="bold">lockdep — 락 정확성 검증</text>
+  <text x="38" y="358" fill="#e8e4df" font-size="11">CONFIG_PROVE_LOCKING · 모든 락 시퀀스 추적</text>
+  <text x="38" y="376" fill="rgb(138,133,128)" font-size="10">락 순서 규칙 위반을 런타임에 100% 수학적 검증</text>
+  <text x="38" y="394" fill="rgb(138,133,128)" font-size="10">deadlock 실제 발생 전에 경고(WARN)</text>
+  <text x="38" y="412" fill="#f47f72" font-size="11">self-deadlock · AB-BA 순환 deadlock 검출</text>
+  <text x="38" y="430" fill="rgb(138,133,128)" font-size="10">lock class 단위 · 시퀀스당 1회만 검증(64bit hash)</text>
+  <text x="38" y="448" fill="rgb(138,133,128)" font-size="9">lockdep_assert_held · lock statistics(contention 측정)</text>
+
+  <!-- memory barrier -->
+  <rect x="350" y="316" width="312" height="140" fill="rgba(244,67,54,0.10)" stroke="#f44336" stroke-width="2"/>
+  <text x="368" y="338" fill="#f44336" font-size="13" font-weight="bold">memory barrier</text>
+  <text x="368" y="358" fill="#e8e4df" font-size="11">CPU·컴파일러의 read/write reorder 를 막음</text>
+  <text x="368" y="376" fill="rgb(138,133,128)" font-size="10">의도한 load/store 순서를 강제</text>
+  <text x="368" y="394" fill="#e8e4df" font-family="'JetBrains Mono',monospace" font-size="10">rmb() · wmb() · mb()</text>
+  <text x="368" y="412" fill="rgb(138,133,128)" font-size="10">필요: 코어 경계·atomic·주변장치 I/O·DMA·인터럽트</text>
+  <text x="368" y="430" fill="rgb(138,133,128)" font-size="10">예: DMA 디스크립터 설정 시 wmb() 로 순서 보장</text>
+  <text x="368" y="448" fill="#66bb6a" font-size="9">보통 락/lock-free API 가 내부에서 알아서 처리</text>
+
+  <!-- marked access / volatile -->
+  <rect x="20" y="476" width="642" height="108" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="498" fill="#e8e4df" font-size="13" font-weight="bold">marked access 와 volatile 주의</text>
+  <text x="38" y="518" fill="#e8e4df" font-size="11">READ_ONCE/WRITE_ONCE — 컴파일러 최적화 차단 + 캐시 일관성 보장</text>
+  <text x="38" y="536" fill="#f47f72" font-size="11">⚠ data race 를 이걸로 "고치지" 말 것 — KCSAN 이 진짜 race 를 못 잡게 됨</text>
+  <text x="38" y="554" fill="rgb(138,133,128)" font-size="10">plain C 접근 유지 + 설계로 보호(mutex·spinlock·refcount·RCU·per-CPU)</text>
+  <text x="38" y="572" fill="rgb(138,133,128)" font-size="10">volatile 은 최적화만 막을 뿐 atomicity·동시성 보장 아님 (MMIO 용)</text>
+</svg>

@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 580" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">가짜 파일시스템의 동적 내용 생성 흐름</title><desc id="dd">cat /proc/cpuinfo 실행 시 디스크 블록 I/O 없이 커널 RAM 상태를 그 시점에 직렬화해 돌려주는 온디맨드 읽기 과정.</desc>
+<rect width="880" height="580" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING MODERN LINUX · 05-01 §7</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">가짜 파일시스템의 동적 내용 생성 흐름</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">디스크 블록이 없다는 것이 가짜 파일시스템의 본질</text>
+<rect x="20" y="120" width="158" height="220" rx="8" fill="#161B22" stroke="#F5F5F3" stroke-width="1.1"/>
+<text x="99.0" y="144" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">1. openat 호출</text>
+<text x="99.0" y="164" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">fd 할당</text>
+<line x1="30" y1="174" x2="168" y2="174" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="28" y="194" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="34" y="206" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">명령</text>
+<text x="34" y="220" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">cat /proc/cpuinfo</text>
+<rect x="28" y="230" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="34" y="242" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">시스템 콜</text>
+<text x="34" y="256" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">openat(O_RDONLY)</text>
+<rect x="28" y="266" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="34" y="278" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">반환</text>
+<text x="34" y="292" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">fd = 3</text>
+<rect x="28" y="302" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="34" y="314" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">VFS 상태</text>
+<text x="34" y="328" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">가상 dentry 연결</text>
+<path d="M 178 230.0 L 190 230.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="192" y="120" width="158" height="220" rx="8" fill="#161B22" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="271.0" y="144" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">2. read 진입</text>
+<text x="271.0" y="164" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">VFS 라우팅</text>
+<line x1="202" y1="174" x2="340" y2="174" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="200" y="194" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="206" y="206" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">시스템 콜</text>
+<text x="206" y="220" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">read(3, buf, 131072)</text>
+<rect x="200" y="230" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="206" y="242" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">핸들러</text>
+<text x="206" y="256" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">proc_reg_read_iter()</text>
+<rect x="200" y="266" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="206" y="278" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">인터페이스</text>
+<text x="206" y="292" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">seq_file 기반 순회</text>
+<rect x="200" y="302" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="206" y="314" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">특징</text>
+<text x="206" y="328" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">디스크 요청 전무</text>
+<path d="M 350 230.0 L 362 230.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="364" y="120" width="158" height="220" rx="8" fill="#161B22" stroke="#E3B341" stroke-width="1.1"/>
+<text x="443.0" y="144" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">3. RAM 상태 조회</text>
+<text x="443.0" y="164" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">자료구조 탐색</text>
+<line x1="374" y1="174" x2="512" y2="174" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="372" y="194" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="378" y="206" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">대상</text>
+<text x="378" y="220" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">CPU별 정보 구조체</text>
+<rect x="372" y="230" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="378" y="242" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">위치</text>
+<text x="378" y="256" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">커널 주기억장치(RAM)</text>
+<rect x="372" y="266" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="378" y="278" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">수집 정보</text>
+<text x="378" y="292" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">프로세서별 항목</text>
+<rect x="372" y="302" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="378" y="314" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">성격</text>
+<text x="378" y="328" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">실시간 커널 변수</text>
+<path d="M 522 230.0 L 534 230.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="536" y="120" width="158" height="220" rx="8" fill="#F08A5912" stroke="#F08A59" stroke-width="1.5"/>
+<text x="615.0" y="144" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">4. 텍스트 직렬화</text>
+<text x="615.0" y="164" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">온디맨드 렌더링</text>
+<line x1="546" y1="174" x2="684" y2="174" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="544" y="194" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="550" y="206" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">함수</text>
+<text x="550" y="220" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F08A59">seq_printf() 포맷</text>
+<rect x="544" y="230" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="550" y="242" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">출력 크기</text>
+<text x="550" y="256" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">2664바이트 생성</text>
+<rect x="544" y="266" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="550" y="278" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">복사</text>
+<text x="550" y="292" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">커널 → 유저 버퍼</text>
+<rect x="544" y="302" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="550" y="314" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">핵심</text>
+<text x="550" y="328" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">읽는 순간 바이트 생성</text>
+<path d="M 694 230.0 L 706 230.0" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="708" y="120" width="158" height="220" rx="8" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="787.0" y="144" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">5. stdout 출력</text>
+<text x="787.0" y="164" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#5E6B7E">사용자 화면 전달</text>
+<line x1="718" y1="174" x2="856" y2="174" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="716" y="194" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="722" y="206" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">시스템 콜</text>
+<text x="722" y="220" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">write(1, buf, 2664)</text>
+<rect x="716" y="230" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="722" y="242" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">결과</text>
+<text x="722" y="256" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">터미널 텍스트 표시</text>
+<rect x="716" y="266" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="722" y="278" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">디스크 I/O</text>
+<text x="722" y="292" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">0회 (물리 블록 없음)</text>
+<rect x="716" y="302" width="142" height="30" rx="4" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.6"/>
+<text x="722" y="314" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">공간 점유</text>
+<text x="722" y="328" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">디스크 용량 0 바이트</text>
+<rect x="20" y="368" width="840" height="130" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="40" y="394" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13.5" font-weight="600" fill="#F5F5F3">물리 블록 기반 파일시스템 vs 가짜 파일시스템 비교</text>
+<rect x="36" y="408" width="196" height="76" rx="6" fill="#0D1117" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="46" y="426" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#3FB98C">일반 파일시스템 (ext4 / XFS)</text>
+<text x="46" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">물리 매체 블록 I/O</text>
+<text x="46" y="466" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">du -sh 로 실제 크기 확인</text>
+<rect x="242" y="408" width="196" height="76" rx="6" fill="#0D1117" stroke="#F08A59" stroke-width="1.0"/>
+<text x="252" y="426" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F08A59">procfs (/proc)</text>
+<text x="252" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">커널 자료구조를 텍스트로</text>
+<text x="252" y="466" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">du -sh /proc 결과 0 · 읽을 때 생성</text>
+<rect x="448" y="408" width="196" height="76" rx="6" fill="#0D1117" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="458" y="426" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#6A95D8">sysfs (/sys)</text>
+<text x="458" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">장치 모델 계층</text>
+<text x="458" y="466" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">block · bus · class 트리</text>
+<rect x="654" y="408" width="196" height="76" rx="6" fill="#0D1117" stroke="#E3B341" stroke-width="1.0"/>
+<text x="664" y="426" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#E3B341">devtmpfs (/dev)</text>
+<text x="664" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">커널이 만드는 장치 노드</text>
+<text x="664" y="466" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">udev 가 권한·링크 보조</text>
+<line x1="12" y1="524" x2="832" y2="524" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="546" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="536" width="14" height="12" rx="2" fill="#F5F5F322" stroke="#F5F5F3" stroke-width="1.1"/>
+<text x="122" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">시스템 콜 호출</text>
+<rect x="248" y="536" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="270" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">VFS 인터페이스</text>
+<rect x="409" y="536" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="431" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">커널 RAM 상태</text>
+<rect x="570" y="536" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="592" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">온디맨드 직렬화 (핵심)</text>
+</svg>

@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 484" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">선형성의 비용과 CAP 정리 전체 지도</title><desc id="dd">네트워크 파티션 장애(§1)와 CAP 한계(§2), PACELC(§3), CPU 캐시(§4), 성능 하한(§5)의 체계를 정리한다.</desc>
+<rect width="880" height="484" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">10-02 · CHAPTER OVERVIEW</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">선형성의 비용과 CAP 정리 전체 지도</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">불가피한 네트워크 파티션 · CAP의 역사와 한계 · 정상 시 지연 트레이드오프 · 하드웨어의 성능 비선형화 · 지연 불확실성 하한</text>
+<rect x="28" y="104" width="824" height="36" rx="4" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="440.0" y="127" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">선형성의 두 가지 비용 원천: 불가피한 장애인 네트워크 파티션과 가변적 지연이라는 일상적 현실</text>
+<rect x="22" y="156" width="156" height="248" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="86.18" y="166" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="100.0" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">§1</text>
+<text x="100.0" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">파티션 충돌</text>
+<text x="100.0" y="218" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">선형성과 가용성 충돌</text>
+<line x1="32" y1="228" x2="168" y2="228" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="30" y="238" width="140" height="42" rx="4" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="100.0" y="255" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#F5F5F3">단일 리더</text>
+<text x="100.0" y="270" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">리더 A vs 팔로워 B</text>
+<rect x="30" y="288" width="140" height="42" rx="4" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="100.0" y="305" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#F5F5F3">CP 선택</text>
+<text x="100.0" y="320" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">선형성 유지·가용성 희생</text>
+<rect x="30" y="338" width="140" height="42" rx="4" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="100.0" y="355" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#F5F5F3">AP 선택</text>
+<text x="100.0" y="370" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">가용성 유지·선형성 희생</text>
+<rect x="192" y="156" width="156" height="248" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="256.18" y="166" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="270.0" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#E3B341">§2</text>
+<text x="270.0" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">CAP 정리</text>
+<text x="270.0" y="218" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">역사적 의의와 한계</text>
+<line x1="202" y1="228" x2="338" y2="228" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="200" y="238" width="140" height="42" rx="4" fill="#E3B34110" stroke="#E3B341" stroke-width="0.8"/>
+<text x="270.0" y="255" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#F5F5F3">선형성만 한정</text>
+<text x="270.0" y="270" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">타 일관성 모델 배제</text>
+<rect x="200" y="288" width="140" height="42" rx="4" fill="#E3B34110" stroke="#E3B341" stroke-width="0.8"/>
+<text x="270.0" y="305" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#F5F5F3">파티션 8% 미만</text>
+<text x="270.0" y="320" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">90% 이상 장애는 범위 밖</text>
+<rect x="200" y="338" width="140" height="42" rx="4" fill="#E3B34110" stroke="#E3B341" stroke-width="0.8"/>
+<text x="270.0" y="355" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#F5F5F3">지연 무시</text>
+<text x="270.0" y="370" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">평시 트레이드오프 배제</text>
+<rect x="362" y="156" width="156" height="248" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.4"/>
+<rect x="426.18" y="166" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="440.0" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F08A59">§3</text>
+<text x="440.0" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">PACELC</text>
+<text x="440.0" y="218" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">정상 시 지연 트레이드오프</text>
+<line x1="372" y1="228" x2="508" y2="228" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="370" y="238" width="140" height="42" rx="4" fill="#F08A5910" stroke="#F08A59" stroke-width="0.8"/>
+<text x="440.0" y="255" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#F5F5F3">P 분기</text>
+<text x="440.0" y="270" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">A(가용성) vs C(일관성)</text>
+<rect x="370" y="288" width="140" height="42" rx="4" fill="#F08A5910" stroke="#F08A59" stroke-width="0.8"/>
+<text x="440.0" y="305" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#F5F5F3">E 분기</text>
+<text x="440.0" y="320" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">L(지연) vs C(일관성)</text>
+<rect x="370" y="338" width="140" height="42" rx="4" fill="#F08A5910" stroke="#F08A59" stroke-width="0.8"/>
+<text x="440.0" y="355" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#F5F5F3">시스템 분류</text>
+<text x="440.0" y="370" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">PA/EL 및 PC/EC</text>
+<rect x="532" y="156" width="156" height="248" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="596.18" y="166" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="610.0" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#6A95D8">§4</text>
+<text x="610.0" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">CPU 캐시</text>
+<text x="610.0" y="218" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">성능을 위한 비선형화</text>
+<line x1="542" y1="228" x2="678" y2="228" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="540" y="238" width="140" height="42" rx="4" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="610.0" y="255" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#F5F5F3">멀티코어 캐시</text>
+<text x="610.0" y="270" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">L1·L2 및 스토어 버퍼</text>
+<rect x="540" y="288" width="140" height="42" rx="4" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="610.0" y="305" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#F5F5F3">비선형화 허용</text>
+<text x="610.0" y="320" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">메모리 배리어 통제</text>
+<rect x="540" y="338" width="140" height="42" rx="4" fill="#6A95D810" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="610.0" y="355" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#F5F5F3">포기 이유</text>
+<text x="610.0" y="370" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">순수 성능 (CAP 무관)</text>
+<rect x="702" y="156" width="156" height="248" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="766.18" y="166" width="27.64" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="780.0" y="180" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">§5</text>
+<text x="780.0" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">성능 하한</text>
+<text x="780.0" y="218" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">Attiya·Welch 하한</text>
+<line x1="712" y1="228" x2="848" y2="228" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="710" y="238" width="140" height="42" rx="4" fill="#3FB98C10" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="780.0" y="255" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#F5F5F3">Attiya 하한</text>
+<text x="780.0" y="270" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">지연 불확실성 비례</text>
+<rect x="710" y="288" width="140" height="42" rx="4" fill="#3FB98C10" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="780.0" y="305" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#F5F5F3">돌파 불가 제약</text>
+<text x="780.0" y="320" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">더 빠른 알고리즘 없음</text>
+<rect x="710" y="338" width="140" height="42" rx="4" fill="#3FB98C10" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="780.0" y="355" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#F5F5F3">약한 일관성</text>
+<text x="780.0" y="370" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">최종·인과 일관성 우회</text>
+<line x1="12" y1="432" x2="832" y2="432" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="454" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="444" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">구조 및 기본 사례</text>
+<rect x="274" y="444" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="296" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">이론적 한계와 비판</text>
+<rect x="448" y="444" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="470" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">실용적 확장 모델</text>
+<rect x="609" y="444" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="631" y="454" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">수학적 하한과 우회</text>
+</svg>

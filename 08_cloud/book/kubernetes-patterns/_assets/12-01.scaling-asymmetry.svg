@@ -1,0 +1,70 @@
+<svg viewBox="0 0 880 360" width="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>StatefulSet 스케일의 순차 진행과 PVC 비대칭 동작</title>
+  <desc>StatefulSet을 replicas 2에서 3으로 늘렸다가 다시 2로 줄일 때 무엇이 생기고 무엇이 남는지를 보입니다. 스케일 업은 인덱스 0부터 위로 순차 진행하며 앞 Pod가 running과 ready 상태가 된 뒤에야 다음 Pod를 스케줄하고, 새 Pod마다 전용 PVC를 함께 만듭니다. 스케일 다운은 가장 높은 인덱스부터 0 방향으로 역순 진행하는데, 이때 Pod는 삭제되지만 PVC와 PersistentVolume은 삭제되지 않고 그대로 남습니다. 이 비대칭은 실수로 인한 스케일 다운이 데이터 손실로 이어지지 않게 하려는 설계상의 의도이며, 스토리지를 회수하려면 관리자가 PVC를 직접 삭제해야 합니다.</desc>
+
+  <rect width="880" height="360" fill="#0d0d0d"/>
+
+  <!-- ============ SCALE UP ============ -->
+  <text x="24" y="30" fill="#66bb6a" font-size="13" font-weight="700">스케일 업 — 0부터 위로 순차</text>
+
+  <rect x="24" y="44" width="120" height="52" fill="#cdeccf"/>
+  <text x="84" y="66" text-anchor="middle" fill="#14521d" font-size="11" font-weight="700" font-family="'JetBrains Mono', monospace">rg-0</text>
+  <text x="84" y="85" text-anchor="middle" fill="#14521d" font-size="9">ready</text>
+
+  <path d="M 148 70 L 190 70" stroke="#66bb6a" stroke-width="2" marker-end="url(#g)"/>
+  <text x="169" y="60" text-anchor="middle" fill="#b8b3ad" font-size="9">그 뒤에</text>
+
+  <rect x="194" y="44" width="120" height="52" fill="#cdeccf"/>
+  <text x="254" y="66" text-anchor="middle" fill="#14521d" font-size="11" font-weight="700" font-family="'JetBrains Mono', monospace">rg-1</text>
+  <text x="254" y="85" text-anchor="middle" fill="#14521d" font-size="9">ready</text>
+
+  <path d="M 318 70 L 360 70" stroke="#66bb6a" stroke-width="2" marker-end="url(#g)"/>
+  <text x="339" y="60" text-anchor="middle" fill="#b8b3ad" font-size="9">그 뒤에</text>
+
+  <rect x="364" y="44" width="120" height="52" fill="#cdeccf"/>
+  <text x="424" y="66" text-anchor="middle" fill="#14521d" font-size="11" font-weight="700" font-family="'JetBrains Mono', monospace">rg-2</text>
+  <text x="424" y="85" text-anchor="middle" fill="#14521d" font-size="9">신규</text>
+
+  <path d="M 424 100 L 424 124" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#g)"/>
+  <rect x="364" y="128" width="120" height="30" fill="#e6f7e7"/>
+  <text x="424" y="148" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700" font-family="'JetBrains Mono', monospace">logs-rg-2</text>
+
+  <text x="504" y="80" fill="#e8e4df" font-size="10">Pod와 PVC가 함께 생성됩니다.</text>
+  <text x="504" y="99" fill="#b8b3ad" font-size="10">앞 Pod가 ready 되기 전에는</text>
+  <text x="504" y="115" fill="#b8b3ad" font-size="10">다음 Pod를 스케줄하지 않습니다.</text>
+
+  <line x1="24" y1="180" x2="856" y2="180" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- ============ SCALE DOWN ============ -->
+  <text x="24" y="208" fill="rgb(212,168,83)" font-size="13" font-weight="700">스케일 다운 — n-1부터 역순</text>
+
+  <rect x="24" y="222" width="120" height="52" fill="#f5edda"/>
+  <text x="84" y="244" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700" font-family="'JetBrains Mono', monospace">rg-0</text>
+  <text x="84" y="263" text-anchor="middle" fill="#0d0d0d" font-size="9">유지</text>
+
+  <rect x="194" y="222" width="120" height="52" fill="#f5edda"/>
+  <text x="254" y="244" text-anchor="middle" fill="#0d0d0d" font-size="11" font-weight="700" font-family="'JetBrains Mono', monospace">rg-1</text>
+  <text x="254" y="263" text-anchor="middle" fill="#0d0d0d" font-size="9">유지</text>
+
+  <rect x="364" y="222" width="120" height="52" fill="#0d0d0d" stroke="#f44336" stroke-dasharray="4 3"/>
+  <text x="424" y="244" text-anchor="middle" fill="#f44336" font-size="11" font-weight="700" font-family="'JetBrains Mono', monospace">rg-2</text>
+  <text x="424" y="263" text-anchor="middle" fill="#f44336" font-size="9">삭제됨</text>
+
+  <path d="M 424 278 L 424 300" stroke="#f44336" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <rect x="364" y="304" width="120" height="30" fill="#cdeccf"/>
+  <text x="424" y="324" text-anchor="middle" fill="#14521d" font-size="10" font-weight="700" font-family="'JetBrains Mono', monospace">logs-rg-2</text>
+
+  <text x="504" y="258" fill="#f44336" font-size="11" font-weight="700">비대칭 — PVC는 남습니다.</text>
+  <text x="504" y="279" fill="#e8e4df" font-size="10">실수로 줄여도 데이터가 사라지지</text>
+  <text x="504" y="295" fill="#e8e4df" font-size="10">않게 하려는 설계상의 의도입니다.</text>
+  <text x="504" y="318" fill="#b8b3ad" font-size="10">회수하려면 PVC를 직접 삭제합니다.</text>
+
+  <defs>
+    <marker id="g" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#66bb6a"/>
+    </marker>
+  </defs>
+</svg>

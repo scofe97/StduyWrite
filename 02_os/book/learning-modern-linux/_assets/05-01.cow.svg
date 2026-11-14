@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 576" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">복사할 때는 메타데이터 포인터만, 수정할 때에야 신규 블록 할당</title><desc id="dd">CoW 메커니즘의 전후 상태. 1단계에서는 블록 포인터만 복제해 공간을 아끼고, 2단계에서 쓰기 발생 시에만 수정 블록 C' 이 신규 생성되는 과정.</desc>
+<rect width="880" height="576" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING MODERN LINUX · 05-01 §8</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">복사할 때는 메타데이터 포인터만, 수정할 때에야 신규 블록 할당</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">빠른 입출력과 디스크 공간 절약의 핵심 기법</text>
+<rect x="24" y="120" width="404" height="260" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="44" y="146" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">1단계 — 초기 복사 (cp file1 file2)</text>
+<text x="44" y="166" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">물리 블록 복제 없이 메타데이터 포인터만 복제</text>
+<rect x="44" y="190" width="124" height="32" rx="5" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="106" y="211" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">file1 (원본)</text>
+<rect x="224" y="190" width="124" height="32" rx="5" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="286" y="211" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">file2 (복사본)</text>
+<rect x="44" y="280" width="80" height="72" rx="6" fill="#0D1117" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="84.0" y="308" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">Block A</text>
+<text x="84.0" y="330" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">4096B</text>
+<rect x="134" y="280" width="80" height="72" rx="6" fill="#0D1117" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="174.0" y="308" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">Block B</text>
+<text x="174.0" y="330" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">4096B</text>
+<rect x="224" y="280" width="80" height="72" rx="6" fill="#0D1117" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="264.0" y="308" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">Block C</text>
+<text x="264.0" y="330" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">4096B</text>
+<path d="M 106 222 L 84.0 278" fill="none" stroke="#6A95D8" stroke-width="1.0" stroke-dasharray="4 4"/>
+<path d="M 106 222 L 174.0 278" fill="none" stroke="#6A95D8" stroke-width="1.0" stroke-dasharray="4 4"/>
+<path d="M 106 222 L 264.0 278" fill="none" stroke="#6A95D8" stroke-width="1.0" stroke-dasharray="4 4"/>
+<path d="M 286 222 L 84.0 278" fill="none" stroke="#3FB98C" stroke-width="1.2"/>
+<path d="M 286 222 L 174.0 278" fill="none" stroke="#3FB98C" stroke-width="1.2"/>
+<path d="M 286 222 L 264.0 278" fill="none" stroke="#3FB98C" stroke-width="1.2"/>
+<rect x="452" y="120" width="404" height="260" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="472" y="146" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">2단계 — file2 블록 C 수정</text>
+<text x="472" y="166" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">수정 대상 블록 C 만 복사(C′) · 블록 A·B 는 공유 유지</text>
+<rect x="472" y="190" width="124" height="32" rx="5" fill="#6A95D812" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="534" y="211" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">file1 (원본)</text>
+<rect x="652" y="190" width="124" height="32" rx="5" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="714" y="211" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">file2 (복사본)</text>
+<rect x="472" y="280" width="80" height="72" rx="6" fill="#0D1117" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="512.0" y="308" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">Block A</text>
+<text x="512.0" y="330" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">4096B</text>
+<rect x="562" y="280" width="80" height="72" rx="6" fill="#0D1117" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="602.0" y="308" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">Block B</text>
+<text x="602.0" y="330" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">4096B</text>
+<rect x="652" y="280" width="80" height="72" rx="6" fill="#0D1117" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="692.0" y="308" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F5F5F3">Block C</text>
+<text x="692.0" y="330" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">4096B</text>
+<rect x="742" y="280" width="80" height="72" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.5"/>
+<text x="782.0" y="306" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="13" font-weight="600" fill="#F08A59">Block C′</text>
+<text x="782.0" y="326" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">4096B 신규</text>
+<text x="782.0" y="342" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">쓰기 복사본</text>
+<path d="M 534 222 L 512.0 278" fill="none" stroke="#6A95D8" stroke-width="1.0" stroke-dasharray="4 4"/>
+<path d="M 534 222 L 602.0 278" fill="none" stroke="#6A95D8" stroke-width="1.0" stroke-dasharray="4 4"/>
+<path d="M 534 222 L 692.0 278" fill="none" stroke="#6A95D8" stroke-width="1.0" stroke-dasharray="4 4"/>
+<path d="M 714 222 L 512.0 278" fill="none" stroke="#3FB98C" stroke-width="1.2"/>
+<path d="M 714 222 L 602.0 278" fill="none" stroke="#3FB98C" stroke-width="1.2"/>
+<path d="M 714 222 L 782.0 278" fill="none" stroke="#F08A59" stroke-width="1.2"/>
+<path d="M 432 240 L 448 240" fill="none" stroke="#8B98A9" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="24" y="400" width="832" height="104" rx="8" fill="#161B22" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="44" y="426" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13.5" font-weight="600" fill="#F5F5F3">컨테이너 이미지와 CoW 메커니즘 연결</text>
+<text x="44" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#3FB98C">읽기 전용 베이스 이미지 — 컨테이너 간 기본 레이어 공유</text>
+<text x="44" y="470" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#F08A59">쓰기 시점의 copy-up — 고칠 파일 전체를 상위 층으로 복사</text>
+<text x="44" y="490" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">저장 공간 절약 — 고치지 않은 파일은 하위 층을 그대로 공유</text>
+<line x1="12" y1="524" x2="832" y2="524" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="546" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="536" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">file1 참조 포인터</text>
+<rect x="300" y="536" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="322" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">file2 참조 포인터</text>
+<rect x="500" y="536" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="522" y="546" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">수정 시 신규 할당 블록</text>
+</svg>

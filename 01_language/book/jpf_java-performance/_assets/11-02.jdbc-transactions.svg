@@ -1,0 +1,57 @@
+<svg viewBox="0 0 680 600" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Pretendard', -apple-system, 'Noto Sans KR', sans-serif">
+  <title>JDBC 트랜잭션 — autocommit·batch·격리 수준·락</title>
+  <desc>트랜잭션은 두 성능 페널티가 있다. commit이 비싸고, 락이 확장성을 막는다. 둘은 적대적이라 commit을 미루면 락을 오래 쥔다. 엄격한 격리일수록 자주 commit하는 쪽으로 균형을 잡는다. autocommit이 켜지면 각 statement가 트랜잭션이다. autocommit을 끄고 끝에 명시적 commit하면 빨라진다. batch는 statement를 모아 한 원격 호출로 보낸다. 256 stock 40만 행 삽입에서 autocommit+no batch는 537초, batch+commit은 3.8초다. 40만 commit이 537초의 원인이고, batch가 호출을 1로 줄이는 게 핵심이다. 1 commit과 256 commit 차이는 무시할 만하다. 격리 수준은 비싼 순으로 SERIALIZABLE, REPEATABLE_READ, READ_COMMITTED, READ_UNCOMMITTED다. 세밀한 제어는 READ_UNCOMMITTED로 두고 필요한 데이터만 명시 락한다. FOR UPDATE는 pessimistic 락이고, version 컬럼은 optimistic이다. optimistic은 충돌 시 예외가 나고 자동 재시도하지 않아 애플리케이션이 처리한다.</desc>
+  <rect x="0" y="0" width="680" height="600" fill="#0d0d0d"/>
+
+  <text x="20" y="34" fill="#e8e4df" font-size="17" font-weight="bold">JDBC 트랜잭션 — commit과 락</text>
+  <text x="20" y="56" fill="rgb(138,133,128)" font-size="12">commit이 비싸고 락이 확장성을 막아 적대적 — 엄격한 격리일수록 자주 commit</text>
+
+  <!-- autocommit / batch -->
+  <rect x="20" y="74" width="642" height="72" fill="rgb(26,26,26)" stroke="rgb(42,37,32)"/>
+  <text x="38" y="96" fill="#e8e4df" font-size="13" font-weight="bold">두 최적화 — autocommit off + batch</text>
+  <text x="38" y="118" fill="rgb(138,133,128)" font-size="11">autocommit off + 끝에 명시적 commit() → 트랜잭션 수↓</text>
+  <text x="38" y="138" fill="rgb(138,133,128)" font-size="11">batch: statement를 모아 한 원격 JDBC 호출로 전송 (addBatch → executeBatch)</text>
+
+  <!-- batch 표 -->
+  <rect x="20" y="154" width="642" height="148" fill="rgba(102,187,106,0.06)" stroke="#66bb6a" stroke-width="2"/>
+  <text x="38" y="176" fill="#66bb6a" font-size="13" font-weight="bold">256 stock 40만 행 삽입 (DB 호출 / commit)</text>
+  <text x="38" y="198" fill="#f47f72" font-size="11">autocommit, no batch</text>
+  <text x="320" y="198" fill="#f47f72" font-size="11">537초 (40만 / 40만)</text>
+  <text x="38" y="218" fill="rgb(138,133,128)" font-size="11">stock당 1 commit</text>
+  <text x="320" y="218" fill="rgb(138,133,128)" font-size="11">57초 (40만 / 256)</text>
+  <text x="38" y="238" fill="rgb(138,133,128)" font-size="11">전체 1 commit</text>
+  <text x="320" y="238" fill="rgb(138,133,128)" font-size="11">56초 (40만 / 1)</text>
+  <text x="38" y="258" fill="#66bb6a" font-size="11">stock당 batch+commit</text>
+  <text x="320" y="258" fill="#66bb6a" font-size="11">4.6초 (256 / 256)</text>
+  <text x="38" y="278" fill="#66bb6a" font-size="11">전체 batch / 1 commit</text>
+  <text x="320" y="278" fill="#66bb6a" font-size="11">3.8초 (1 / 1)</text>
+  <text x="38" y="296" fill="rgb(212,168,83)" font-size="10">핵심: batch가 40만 호출을 1로 줄임. 1 vs 256 commit 차이는 무시할 만함</text>
+
+  <!-- 격리 수준 사다리 -->
+  <rect x="20" y="310" width="320" height="160" fill="rgba(127,168,201,0.08)" stroke="#7fa8c9" stroke-width="2"/>
+  <text x="38" y="332" fill="#9cc3df" font-size="12" font-weight="bold">격리 수준 (비싼 → 싼 순)</text>
+  <text x="38" y="354" fill="#f47f72" font-size="10">SERIALIZABLE — 모든 접근 데이터 락</text>
+  <text x="38" y="374" fill="rgb(212,168,83)" font-size="10">REPEATABLE_READ — 락, 단 phantom read</text>
+  <text x="38" y="394" fill="rgb(138,133,128)" font-size="10">READ_COMMITTED — 쓴 행만 락, nonrepeatable</text>
+  <text x="38" y="414" fill="#66bb6a" font-size="10">READ_UNCOMMITTED — 락 없음, dirty read</text>
+  <text x="38" y="436" fill="rgb(138,133,128)" font-size="9">MySQL 기본 REPEATABLE_READ</text>
+  <text x="38" y="452" fill="rgb(138,133,128)" font-size="9">Oracle·Db2 기본 READ_COMMITTED</text>
+
+  <!-- pessimistic vs optimistic -->
+  <rect x="350" y="310" width="312" height="160" fill="rgba(212,168,83,0.06)" stroke="rgb(212,168,83)" stroke-width="2"/>
+  <text x="368" y="332" fill="rgb(212,168,83)" font-size="12" font-weight="bold">pessimistic vs optimistic 락</text>
+  <text x="368" y="354" fill="rgb(138,133,128)" font-size="10">pessimistic: SELECT ... FOR UPDATE</text>
+  <text x="368" y="372" fill="rgb(138,133,128)" font-size="10">→ 다른 트랜잭션 접근 능동 차단</text>
+  <text x="368" y="392" fill="rgb(138,133,128)" font-size="10">optimistic: version 컬럼</text>
+  <text x="368" y="410" fill="rgb(138,133,128)" font-size="10">SET version=1013 WHERE version=1012</text>
+  <text x="368" y="430" fill="#66bb6a" font-size="10">비경쟁이면 큰 성능 이득</text>
+  <text x="368" y="450" fill="#f47f72" font-size="10">충돌 빈번하면 역효과(주식 데이터)</text>
+
+  <!-- optimistic 재시도 -->
+  <rect x="20" y="478" width="642" height="104" fill="rgba(244,127,114,0.06)" stroke="#f47f72" stroke-width="2"/>
+  <text x="38" y="500" fill="#f47f72" font-size="13" font-weight="bold">optimistic — 자동 재시도하지 않는다</text>
+  <text x="38" y="522" fill="rgb(138,133,128)" font-size="11">두 트랜잭션이 version 1012를 읽음 → 먼저 끝난 쪽만 1013으로 갱신 성공</text>
+  <text x="38" y="542" fill="rgb(138,133,128)" font-size="11">둘째는 version 1012 행이 없어 update 실패 → 예외, 롤백</text>
+  <text x="38" y="562" fill="#f47f72" font-size="11">Java atomic(무한 자동 재시도)과 차이: JDBC는 SQLException, JPA는 OptimisticLockException</text>
+  <text x="38" y="578" fill="rgb(212,168,83)" font-size="10">→ 애플리케이션이 재시도/사용자 안내 결정 · 세밀 제어는 READ_UNCOMMITTED + 명시 락</text>
+</svg>

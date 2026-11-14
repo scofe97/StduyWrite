@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 516" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Avro 맥락별 writer 스키마 전달 방식</title><desc id="dd">대용량 파일·DB 레지스트리·RPC 연결 협상이라는 세 맥락으로 스키마를 전달하고, 기본값 규칙으로 호환성을 유지한다.</desc>
+<rect width="880" height="516" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">05-03 · AVRO SCHEMA DELIVERY</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Avro 맥락별 writer 스키마 전달 방식</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">큰 파일 헤더 전달 · DB 버전 번호와 레지스트리 · RPC 연결 협상 · 스키마 진화 규칙</text>
+<rect x="24" y="104" width="268" height="206" rx="6" fill="#161B22" stroke="#F08A59" stroke-width="1.2"/>
+<rect x="29.0" y="114" width="58.0" height="20" rx="4" fill="#0D1117" stroke="#F08A59" stroke-width="0.8"/>
+<text x="58" y="128" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F08A59">맥락 1</text>
+<text x="96" y="128" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#F5F5F3">대용량 컨테이너 파일</text>
+<line x1="32" y1="138" x2="284" y2="138" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="32" y="146" width="252" height="32" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="38" y="161" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#F08A59">파일 헤더</text>
+<text x="278" y="161" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#5E6B7E">writer 스키마 1회 포함</text>
+<rect x="32" y="184" width="252" height="32" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="38" y="199" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#6A95D8">데이터 블록</text>
+<text x="278" y="199" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#5E6B7E">수백만 레코드 연속 기록</text>
+<line x1="32" y1="226" x2="284" y2="226" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="38" y="245" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">· 파일 시작 시점에 스키마 1회 기록</text>
+<text x="38" y="267" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">· 수백만 레코드 데이터 공간 절감</text>
+<text x="38" y="289" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">· 같은 스키마로 쓴 레코드 묶음</text>
+<rect x="306" y="104" width="268" height="206" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="0.9"/>
+<rect x="311.0" y="114" width="58.0" height="20" rx="4" fill="#0D1117" stroke="#3FB98C" stroke-width="0.8"/>
+<text x="340" y="128" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#3FB98C">맥락 2</text>
+<text x="378" y="128" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#F5F5F3">개별 레코드 DB·스트림</text>
+<line x1="314" y1="138" x2="566" y2="138" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="314" y="146" width="252" height="32" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="320" y="161" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#3FB98C">레코드 선두</text>
+<text x="560" y="161" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#5E6B7E">스키마 버전 번호</text>
+<rect x="314" y="184" width="252" height="32" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="320" y="199" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#6A95D8">중앙 DB</text>
+<text x="560" y="199" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#5E6B7E">Schema Registry 스키마 조회</text>
+<line x1="314" y1="226" x2="566" y2="226" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="320" y="245" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">· 레코드 앞에 버전 번호 포함</text>
+<text x="320" y="267" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">· 중앙 레지스트리에서 스키마 조회</text>
+<text x="320" y="289" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">· 다른 시점 작성 레코드 공존 지원</text>
+<rect x="588" y="104" width="268" height="206" rx="6" fill="#161B22" stroke="#6A95D8" stroke-width="0.9"/>
+<rect x="593.0" y="114" width="58.0" height="20" rx="4" fill="#0D1117" stroke="#6A95D8" stroke-width="0.8"/>
+<text x="622" y="128" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">맥락 3</text>
+<text x="660" y="128" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#F5F5F3">네트워크 RPC 연결</text>
+<line x1="596" y1="138" x2="848" y2="138" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="596" y="146" width="252" height="32" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="602" y="161" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#6A95D8">연결 수립</text>
+<text x="842" y="161" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#5E6B7E">스키마 버전 협상</text>
+<rect x="596" y="184" width="252" height="32" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="602" y="199" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#F08A59">세션 수명</text>
+<text x="842" y="199" text-anchor="end" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#5E6B7E">동일 협상 스키마 재사용</text>
+<line x1="596" y1="226" x2="848" y2="226" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="602" y="245" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">· 연결 설정 시 스키마 버전 협상</text>
+<text x="602" y="267" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">· 연결 지속 동안 스키마 재전송 없음</text>
+<text x="602" y="289" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">· 양방향 네트워크 연결에서 사용</text>
+<rect x="24" y="326" width="832" height="86" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<rect x="32.25" y="334" width="71.5" height="20" rx="4" fill="#0D1117" stroke="#E3B341" stroke-width="0.8"/>
+<text x="68" y="348" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#E3B341">진화 규칙</text>
+<text x="108" y="348" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="600" fill="#F5F5F3">Avro 스키마 진화 제약과 동적 생성 친화성</text>
+<line x1="32" y1="358" x2="848" y2="358" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="32" y="366" width="264" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="164.0" y="382" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#E3B341">기본값 필수 원칙</text>
+<text x="164.0" y="395" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">기본값 정의 필드만 추가·삭제 허용</text>
+<rect x="308" y="366" width="264" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="440.0" y="382" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#6A95D8">union null 명시</text>
+<text x="440.0" y="395" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">null 기본값은 union 첫 분기일 때</text>
+<rect x="584" y="366" width="264" height="36" rx="6" fill="#0D1117" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="716.0" y="382" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#3FB98C">동적 스키마 친화</text>
+<text x="716.0" y="395" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#8B98A9">DB 스키마 덤프 시 자동 Avro 스키마 생성</text>
+<line x1="12" y1="460" x2="832" y2="460" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="482" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="472" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="482" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">스키마 전달 위치</text>
+<rect x="261" y="472" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="283" y="482" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">레코드 바이너리 데이터</text>
+<rect x="461" y="472" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="483" y="482" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">스키마 레지스트리 관리</text>
+<rect x="661" y="472" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="683" y="482" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">스키마 기본값 제약</text>
+</svg>
