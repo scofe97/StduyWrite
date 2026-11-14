@@ -162,6 +162,9 @@ resource 는 쓰이는 양을 재고, 여기는 쓸 수 있는 양에 한도를 
 | [systemctl](./service/systemctl.md) | `systemctl` | 서비스 상태를 읽고, 지금·부팅 때 켜고 끄고, 실패한 서비스를 추적할 때 |
 | [systemctl 유닛 설정과 타이머](./service/systemctl%20유닛%20설정과%20타이머.md) | `systemctl` | drop-in 으로 유닛 설정을 바꾸고 반영하거나 타이머로 서비스를 주기 실행할 때 |
 | [systemctl 함정과 동작 원리](./service/systemctl%20함정과%20동작%20원리.md) | `systemctl` | `mask` 가 실패하거나, ssh 서비스 이름과 소켓이 헷갈리거나, `Alias=` 별칭이 어떻게 생기는지 볼 때 |
+| [journalctl](./service/journalctl.md) | `journalctl` | 유닛·시각·부팅·심각도·필드로 로그를 좁혀 읽을 때 |
+| [journalctl 저장 공간과 읽기 권한](./service/journalctl%20저장%20공간과%20읽기%20권한.md) | `journalctl` | 저널 크기·저장 위치·복사본 정리와 일반 사용자의 읽기 권한을 볼 때 |
+| [journalctl 출력 모양과 jq](./service/journalctl%20출력%20모양과%20jq.md) | `journalctl` · `jq` | 로그를 ISO 시각·필드·JSON 으로 바꿔 보거나, `-o json` 을 `jq` 로 넘겨 필드를 뽑을 때 |
 
 
 
@@ -173,6 +176,10 @@ resource 는 쓰이는 양을 재고, 여기는 쓸 수 있는 양에 한도를 
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
+| [ssh 접속·config·포트 포워딩](./ssh/ssh.md) | `ssh` · `~/.ssh/config` | 서버에 접속하거나 점프 호스트를 거치거나 터널을 열 때 |
+| [ssh-keygen·ssh-copy-id·ssh-agent](./ssh/ssh-keygen%C2%B7ssh-copy-id%C2%B7ssh-agent.md) | `ssh-keygen` · `ssh-copy-id` · `ssh-agent` · `ssh-add` | 키를 만들어 올리고, 비밀번호 없이 접속하고, `known_hosts` 를 정리할 때 |
+| [scp·sftp](./ssh/scp%C2%B7sftp.md) | `scp` · `sftp` | 서버와 파일을 주고받거나 서버 사이로 옮길 때 |
+| [sshd·sshd_config](./ssh/sshd%C2%B7sshd_config.md) | `sshd` · `sshd_config` | 접속이 거절된 이유를 찾거나 서버 설정을 조일 때 |
 
 
 

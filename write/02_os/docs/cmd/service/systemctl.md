@@ -625,7 +625,7 @@ Nov 11 23:36:41 ubuntu systemd[1]: cmd-lab-fail.service: Main process exited, co
 Nov 11 23:36:41 ubuntu systemd[1]: cmd-lab-fail.service: Failed with result 'exit-code'.
 ```
 
-로그만 더 보려면 `journalctl` 을 씁니다. `journalctl` 의 다른 옵션은 이 시트에서 다루지 않습니다.
+로그만 더 보려면 `journalctl` 을 씁니다. `journalctl` 의 다른 옵션은 [journalctl 참조 시트](./journalctl.md)에 있습니다.
 
 ```bash
 # journalctl: 유닛이 남긴 저널 로그를 읽는다
@@ -711,6 +711,7 @@ cd ~ && rm -rf ~/cmd-lab/systemctl
 - [책 노트 6장 5절, 손으로 만지는 도구들](../../../book/learning-modern-linux/06-01.먼저%20켜지는%20것%20하나가%20나머지%20전부를%20켠다.md#5-손으로-만지는-도구들) — `enable`·`daemon-reload` 의 기본 흐름
 - [유닛 설정과 타이머 시트](./systemctl%20유닛%20설정과%20타이머.md) — `edit`·`daemon-reload` 로 drop-in 쓰기, 타이머로 서비스 주기 실행
 - [uname·os-release·lsb_release 참조 시트](../sysinfo/uname%C2%B7os-release%C2%B7lsb_release.md) — 실습 VM 의 배포판과 커널 버전 확인
+- [journalctl 참조 시트](./journalctl.md) — `status` 꼬리 로그보다 길게, 시각·부팅·심각도로 좁혀 읽기
 
 
 

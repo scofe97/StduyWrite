@@ -147,6 +147,7 @@ Removed '/etc/systemd/system/cmd-lab-nick.service'.
 
 - [systemctl 참조 시트](./systemctl.md) — 이 문서가 이어받는 실습 준비와 유스케이스의 예
 - [리눅스 명령어 시트](../README.md) — 다른 명령 시트 목록
+- [sshd·sshd_config 참조 시트](../ssh/sshd%C2%B7sshd_config.md) — ssh 서버 데몬의 설정과 접속 거절 로그
 
 
 
