@@ -10,7 +10,7 @@ related:
   - ../five-lines-of-code/README.md
   - ../Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/README.md
   - ../../README.md
-  - ../../../roadmap/jvm-roadmap.md
+  - ../../../landscape/jvm-keywords.md
 updated: 2026-09-23
 ---
 
@@ -88,7 +88,7 @@ Scheme판에는 3판이 없습니다. JavaScript판은 새 판이 아니라 번�
 
 ## 로드맵과 닿는 자리
 
-> 이 책은 로드맵 한 편에 속하지 않지만, 4·5장이 만드는 부품이 [JVM 로드맵](../../../roadmap/jvm-roadmap.md)의 실제 구현과 짝을 이룹니다. 원리를 여기서 손으로 만들고, 실물은 그 단계에서 봅니다.
+> 이 책은 로드맵 한 편에 속하지 않지만, 4·5장이 만드는 부품이 [JVM 로드맵](../../../landscape/jvm-keywords.md)의 실제 구현과 짝을 이룹니다. 원리를 여기서 손으로 만들고, 실물은 그 단계에서 봅니다.
 
 JVM 을 공부하다가 "왜 이렇게 만들었나"에서 막히면 이 책의 해당 절로 내려오고, 반대로 여기서 만든 장난감 부품이 실제로 어떻게 커졌는지는 JVM 로드맵의 해당 단계로 올라갑니다.
 

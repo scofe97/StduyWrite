@@ -3,7 +3,7 @@ title: README
 tags: [moc, index]
 status: final
 related:
-  - roadmap/README.md
+  - landscape/README.md
 updated: 2026-10-06
 ---
 
@@ -42,27 +42,27 @@ updated: 2026-10-06
 
 
 
-## 학습 로드맵
+## 개발 키워드와 AI 요약
 
-> 무엇을 어떤 순서로 읽을지는 [`roadmap/`](roadmap/) 이 정합니다. 카테고리 README 는 자료가 *어디에* 있는지를 맡고, 로드맵은 *무엇부터* 열지를 맡습니다.
+> 분야별 개발 키워드 표와 외부 AI 요약은 [`landscape/`](landscape/) 에 둡니다. 카테고리 README 는 자료가 *어디에* 있는지를 맡고, 키워드 표는 문서를 쓸 때 *어떤 개념이 있는지* 를 짚습니다.
 
 로드맵을 카테고리 안에 두지 않는 이유는 하나입니다 — **학습 주제가 카테고리 경계를 지키지 않습니다.** 네트워크는 `02_os`·`08_cloud`·`99_ETC` 에 걸쳐 있고, Kubernetes 로드맵은 커널·분산 합의·관측을 각각 다른 카테고리에서 끌어옵니다. 로드맵을 폴더에 두면 문서마다 "이건 저쪽" 위임 각주를 달아야 하고 그 각주가 서로를 가리킵니다. 한곳에 모으면 그 조율을 문서 사이에서 한 번만 합니다.
 
-| 로드맵 | 무엇을 정하나 | 상태 |
+| 키워드 표 | 다루는 범위 | 상태 |
 |---|---|---|
-| [go-roadmap.md](roadmap/go-roadmap.md) | 문법을 빨리 통과하고 동시성·서비스·터미널 세션에 시간을 몰아주는 순서 | `final` |
-| [network-roadmap.md](roadmap/network-roadmap.md) | socket과 Linux 패킷 경로에서 클라우드 underlay와 오버레이 터널까지 | `final` |
-| [os-roadmap.md](roadmap/os-roadmap.md) | DevOps 로서 쓰는 OS 지식부터 커널 내부까지 | `final` |
-| [k8s-roadmap.md](roadmap/k8s-roadmap.md) | 오브젝트를 굴려 보고 안 될 때 한 층씩 안으로 | `final` |
-| [data-roadmap.md](roadmap/data-roadmap.md) | 데이터 시스템의 축에서 저장 엔진·복제·합의·스트림까지 | `final` |
-| [observability-roadmap.md](roadmap/observability-roadmap.md) | 계측과 세 신호에서 SLO·확장·플랫폼까지 | `final` |
-| [jvm-roadmap.md](roadmap/jvm-roadmap.md) | 런타임 데이터 영역에서 GC·동시성·장애 진단까지 | `final` |
-| [ai-roadmap.md](roadmap/ai-roadmap.md) | 모델을 도구로 부리는 법에서 GitAIOps 운영까지 | `final` |
-| [spring-roadmap.md](roadmap/spring-roadmap.md) | 컨테이너와 프록시에서 부트·보안·운영·배포까지 | `final` |
+| [go-keywords.md](landscape/go-keywords.md) | 문법·타입 설계·동시성·서비스·터미널 세션 | `final` |
+| [network-keywords.md](landscape/network-keywords.md) | socket과 Linux 패킷 경로에서 클라우드 underlay와 오버레이 터널까지 | `final` |
+| [os-keywords.md](landscape/os-keywords.md) | DevOps 로서 쓰는 OS 지식부터 커널 내부까지 | `final` |
+| [k8s-keywords.md](landscape/k8s-keywords.md) | 오브젝트에서 내부 구조·보안·운영까지 | `final` |
+| [data-keywords.md](landscape/data-keywords.md) | 데이터 시스템의 축에서 저장 엔진·복제·합의·스트림까지 | `final` |
+| [observability-keywords.md](landscape/observability-keywords.md) | 계측과 세 신호에서 SLO·확장·플랫폼까지 | `final` |
+| [jvm-keywords.md](landscape/jvm-keywords.md) | 런타임 데이터 영역에서 GC·동시성·장애 진단까지 | `final` |
+| [ai-keywords.md](landscape/ai-keywords.md) | 모델을 도구로 부리는 법에서 GitAIOps 운영까지 | `final` |
+| [spring-keywords.md](landscape/spring-keywords.md) | 컨테이너와 프록시에서 부트·보안·운영·배포까지 | `final` |
 
-로드맵은 단계마다 배우는 개념 표와 우선순위, 그 개념을 다루는 책의 읽을 장을 함께 둡니다.
+키워드 표는 개념마다 우선순위와 그 개념을 다루는 노트·책을 함께 둡니다. 외부 AI 요약은 `landscape/_digest/` 에 `YYYY-MM-DD_주제.md` 로 둡니다. 출처·날짜·분야·미검증을 머리 한 줄에 적고, Pages 에는 올라가지 않습니다.
 
-OS 기반은 `os-roadmap.md`, Kubernetes 오브젝트와 운영은 `k8s-roadmap.md`, 패킷 경로는 `network-roadmap.md`를 정본으로 봅니다.
+OS 기반은 `os-keywords.md`, Kubernetes 오브젝트와 운영은 `k8s-keywords.md`, 패킷 경로는 `network-keywords.md`를 정본으로 봅니다.
 
 
 

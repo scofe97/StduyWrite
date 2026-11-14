@@ -8,16 +8,50 @@ related:
   - ./roadmap.md
   - ../04_messaging/README.md
   - ../09_spring/README.md
-updated: 2026-07-15
+updated: 2026-11-14
 ---
 
 # 05_data
----
-> 데이터 모델과 관계형 DB부터 JDBC·JPA·QueryDSL, Redis, 배치 처리, 분산 데이터 이론과 DB 운영까지를 다룹니다. Kafka·Redpanda·CDC의 구체 구현과 운영은 `04_messaging/`에 두고, 이 카테고리에서는 데이터의 저장·조회·처리·일관성 원리를 다룹니다.
 
-읽는 순서는 [데이터 학습 로드맵](../roadmap/data-roadmap.md)이 정합니다. DDIA 2판을 척추로 삼아 원리 축만 세운 문서라, SQL·JDBC·JPA·QueryDSL 을 익히는 도구 축은 이 MOC 의 주제군 표가 맡습니다.
+> 데이터 모델과 관계형 DB부터 JDBC·JPA·QueryDSL, Redis, 배치 처리, 분산 데이터 이론과 DB 운영까지를 다룹니다.
 
-## 주제군
+
+
+## 경계 기준
+
+데이터의 저장·조회·처리·일관성 원리를 다루며, Kafka·Redpanda·CDC의 구체 구현과 운영은 `04_messaging/`에 둡니다.
+
+`01_foundation/`은 책 장에 매이지 않는 기초(트랜잭션과 격리 수준·인덱스 이론·NoSQL 비교·캐싱 전략·WAL)를 담당합니다. 관계형 DB를 Spring 애플리케이션에서 다루는 방식은 `03_persistence/`에 둡니다.
+
+`book/`은 주제군이 아니라 **출처 단위** 묶음입니다. 번호 폴더가 주제로 자료를 모은다면, `book/`은 책 한 권을 장 순서대로 끝까지 따라간 정독 노트를 그 책 이름 아래 둡니다. DDIA 이론은 2판 정독 노트 `book/designing-data-intensive-applications/`가 정본입니다. 1판 요약 노트는 대부분 주제가 겹쳐 2026-10-28 에 지웠고, 2판에 없는 PostgreSQL MVCC 설명이 든 `01_foundation/01-04` 만 남겼습니다. 같은 구조를 `08_cloud/book/`이 이미 쓰고 있습니다.
+
+스트림 처리의 일반 이론은 `book/designing-data-intensive-applications/` 12장, 브로커·Kafka Streams·CDC의 구현은 `04_messaging/`이 SSOT입니다.
+
+
+
+## 키워드
+
+### data-keywords.md
+
+키워드 파일: [data-keywords.md](../landscape/data-keywords.md)
+
+| 묶음 | 다룬 문서 | 빈 필수 키워드 |
+|---|---|---|
+| 1단계 · 데이터 시스템의 축 | 13편 | — |
+| 2단계 · 데이터 모델 | 9편 | — |
+| 3단계 · 저장 엔진과 인덱스 | 11편 | B-tree 기초와 구현 |
+| 4단계 · 인코딩과 데이터플로우 | 5편 | — |
+| 5단계 · 복제와 샤딩 | 11편 | — |
+| 6단계 · 트랜잭션과 격리 | 5편 | — |
+| 7단계 · 분산의 문제 | 4편 | 장애 감지 · 리더 선출 |
+| 8단계 · 일관성과 합의 | 9편 | 합의 알고리즘 |
+| 9단계 · 배치와 스트림 | 12편 | — |
+
+
+
+## 하위 폴더·문서 목록
+
+읽는 순서는 [데이터 학습 로드맵](../landscape/data-keywords.md)이 정합니다. DDIA 2판을 척추로 삼아 원리 축만 세운 문서라, SQL·JDBC·JPA·QueryDSL 을 익히는 도구 축은 아래 주제군 표가 맡습니다.
 
 | 주제군 | 범위 | 진입점 |
 |---|---|---|
@@ -26,20 +60,16 @@ updated: 2026-07-15
 | [06_operations/](./06_operations/README.md) | 덤프·로컬 이관·테스트 DB·테스트 트랜잭션 | [README](./06_operations/README.md) |
 | [book/](./book/designing-data-intensive-applications/README.md) | 책 한 권을 장 단위로 정독한 노트 묶음 | [DDIA 2판](./book/designing-data-intensive-applications/README.md) |
 
-## 경계 기준
 
-`01_foundation/`은 책 장에 매이지 않는 기초(트랜잭션과 격리 수준·인덱스 이론·NoSQL 비교·캐싱 전략·WAL)를 담당합니다. 관계형 DB를 Spring 애플리케이션에서 다루는 방식은 `03_persistence/`에 둡니다.
-
-`book/`은 주제군이 아니라 **출처 단위** 묶음입니다. 번호 폴더가 주제로 자료를 모은다면, `book/`은 책 한 권을 장 순서대로 끝까지 따라간 정독 노트를 그 책 이름 아래 둡니다. DDIA 이론은 2판 정독 노트 `book/designing-data-intensive-applications/`가 정본입니다. 1판 요약 노트는 대부분 주제가 겹쳐 2026-10-28 에 지웠고, 2판에 없는 PostgreSQL MVCC 설명이 든 `01_foundation/01-04` 만 남겼습니다. 같은 구조를 `08_cloud/book/`이 이미 쓰고 있습니다.
-
-스트림 처리의 일반 이론은 `book/designing-data-intensive-applications/` 12장, 브로커·Kafka Streams·CDC의 구현은 `04_messaging/`이 SSOT입니다.
 
 ## 후속 후보
 
 MinIO 같은 오브젝트 스토리지는 분산 파일시스템·오브젝트 스토어 이론을 넘어 제품 운영 문서가 다섯 편 이상 쌓일 때 별도 묶음으로 승격합니다. 그 전까지는 DDIA 2판 11장 정독 노트와 다른 카테고리의 활용 사례를 교차참조합니다.
 
+
+
 ## 관련 문서
 
-- [데이터 학습 로드맵](../roadmap/data-roadmap.md) — 소장 책과 정독 노트로 세운 원리 축 읽기 순서
+- [데이터 학습 로드맵](../landscape/data-keywords.md) — 소장 책과 정독 노트로 세운 원리 축 읽기 순서
 - [04_messaging](../04_messaging/README.md) — Kafka·Redpanda·CDC 구현과 운영
 - [09_spring](../09_spring/README.md) — Spring 프레임워크 전반의 진입점

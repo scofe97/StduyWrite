@@ -12,7 +12,7 @@ related:
   - ../learning-modern-linux/README.md
   - ../linux-kernel-programming/README.md
   - ../systems-performance/README.md
-  - ../../../roadmap/os-roadmap.md
+  - ../../../landscape/os-keywords.md
   - ../../README.md
 learning:
   topic: ostep
@@ -48,7 +48,7 @@ updated: 2026-11-06
 
 ### 로드맵 속 자리
 
-[OS 로드맵](../../../roadmap/os-roadmap.md)은 OSTEP 을 가상화·병행성·지속성 범위의 필수 책으로 두고 2·4·6단계에 걸칩니다. 로드맵의 개념 단어 가운데 이 책의 절 제목이 직접 받치는 것만 아래에 짝지었습니다.
+[OS 로드맵](../../../landscape/os-keywords.md)은 OSTEP 을 가상화·병행성·지속성 범위의 필수 책으로 두고 2·4·6단계에 걸칩니다. 로드맵의 개념 단어 가운데 이 책의 절 제목이 직접 받치는 것만 아래에 짝지었습니다.
 
 | 단계 | 로드맵 개념 | 이 책의 장과 절 |
 |------|------------|---------------|
@@ -363,7 +363,7 @@ OSTEP 은 장이 푸는 문제를 `THE CRUX OF THE PROBLEM`(또는 `THE CRUX`, `
 - [『Systems Performance』 정독본](../systems-performance/README.md) — 같은 `book/` 영역, 무엇을 어떻게 잴지의 짝이자 4단계에서 이 책의 CPU·메모리·저장 원리와 이어지는 책
 - [『Learning Modern Linux』 정독본](../learning-modern-linux/README.md) — Linux 가 실제로 내주는 인터페이스의 짝
 - [『Linux Kernel Programming』 정독본](../linux-kernel-programming/README.md) — 스케줄러·메모리 관리·동기화의 Linux 구현, 6단계에서 이 책과 맞물리는 책
-- [OS 로드맵](../../../roadmap/os-roadmap.md) — 2·4·6단계에서 이 책이 놓인 자리
+- [OS 로드맵](../../../landscape/os-keywords.md) — 2·4·6단계에서 이 책이 놓인 자리
 - [02_os MOC](../../README.md) — 상위 카테고리 경계
 
 [^sec]: 보안 장이 웹 전용이라는 근거는 https://pages.cs.wisc.edu/~remzi/OSTEP/combined.html 의 판 이력 문구("included only on the webpage and not in printed form or in the entire PDF")입니다(2026-11-06 조회). 장 PDF 첫머리에 UCLA 소속 별도 저자가 쓴 장이라고 적혀 있습니다.

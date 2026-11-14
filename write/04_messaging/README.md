@@ -4,22 +4,32 @@ tags: [moc, messaging, kafka]
 status: final
 related:
   - roadmap.md
-updated: 2026-06-25
+updated: 2026-11-14
 ---
 
 # 04_messaging — 이벤트 기반 메시징
 
-> Kafka·Redpanda·Avro·Schema Registry 같은 메시징 구현 기술과 EDA 적용 문서를 모은 영역입니다. 분산 시스템의 일반 이론(CAP, Saga 보상 트랜잭션의 구조 일반론)은 `05_data/`로, EDA 원칙·결정 기준 같은 이론은 [`../03_architecture/05_edd/`](../03_architecture/05_edd/)로 분리돼 있습니다. 여기서는 도구 레벨의 구체적 선택(예: Producer idempotent 옵션 튜닝, Confluent wire format, Spring Kafka concurrency 운영)을 다룹니다.
+> Kafka·Redpanda·Avro·Schema Registry 같은 메시징 구현 기술과 EDA 적용 문서를 모은 영역입니다.
 
-## 학습 흐름
 
-01 커넥터 → 02 메시지 모델·계약 → 03 토픽 설계 → 04 브로커 아키텍처 → 05 일관성 패턴 → 06 스트림 처리 → 07 CQRS·이벤트 소싱 → (심화) [`08_advanced/`](08_advanced/)
 
-각 폴더 안에서는 카테고리 안 첫 두 자리(예: `01-01`, `01-02` …) 순서로 읽으면 개념에서 코드 디테일을 거쳐 운영으로 진행이 자연스럽습니다. 처음 읽을 때는 각 폴더의 `01` 문서만 따라가도 전체 골격이 잡힙니다.
+## 경계 기준
 
-> EDA 사고 모델·요청-응답 통합 같은 EDA 도입부는 이 폴더에서 제외되어 [`../03_architecture/05_edd/`](../03_architecture/05_edd/)로 이동했습니다(2026-05-23 재구성). 이론 측 `05_edd`와 한 자리에서 같이 봅니다.
+| 영역 | 다루는 것 |
+|------|----------|
+| 본 폴더 (`04_messaging/`) | Kafka·Redpanda·Avro 도구 레벨 선택과 Spring Kafka 운영. EDA·DDD를 도구로 적용할 때의 패턴 |
+| [`../03_architecture/05_edd/`](../03_architecture/05_edd/) | EDA 이론·원칙·결정 기준 (Why 토폴로지·단일 작성자·CQRS 모델). EDA의 적용 측은 `05_edd/`에 같이 둠 |
+| `05_data/` | 분산 시스템 일반 이론 (CAP, Saga 보상 트랜잭션 구조 일반론) |
 
-## 폴더 구조와 인덱스
+
+
+## 키워드
+
+키워드 파일 없음
+
+
+
+## 하위 폴더·문서 목록
 
 ### 01_Connect — 커넥터와 데이터 통합
 
@@ -125,26 +135,26 @@ updated: 2026-06-25
 - [01-01.Kafka CQRS](07_CQRS_EventSourcing/01-01.Kafka%20CQRS.md) — 읽기와 쓰기 모델의 분리
 - [01-02.Event Sourcing](07_CQRS_EventSourcing/01-02.Event%20Sourcing.md) — 상태 대신 이벤트의 시계열을 진실의 출처로
 
+### 08_advanced — 메시징 심화
+
+- [`08_advanced/`](08_advanced/) — `01_variants/`(Outbox·Saga·스트림·스키마 변종 비교)와 `02_workflow/`(Temporal 워크플로우 깊이) 두 갈래
+
+
+
+## 학습 흐름
+
+01 커넥터 → 02 메시지 모델·계약 → 03 토픽 설계 → 04 브로커 아키텍처 → 05 일관성 패턴 → 06 스트림 처리 → 07 CQRS·이벤트 소싱 → (심화) [`08_advanced/`](08_advanced/)
+
+각 폴더 안에서는 카테고리 안 첫 두 자리(예: `01-01`, `01-02` …) 순서로 읽으면 개념에서 코드 디테일을 거쳐 운영으로 진행이 자연스럽습니다. 처음 읽을 때는 각 폴더의 `01` 문서만 따라가도 전체 골격이 잡힙니다.
+
+
+
 ## 실 사용 코드
 
-이 학습 트리의 패턴은 `okestro/tps-gitlab2`의 다음 모듈에서 실제로 동작합니다.
+이 학습 트리의 패턴은 okestro/tps-gitlab2의 다음 모듈에서 실제로 동작합니다.
 
 - `message-lib`: Outbox 라이브러리, `EventPublisher`, `AvroSerializer` (TPS 공통 의존)
 - `executor`: 결과 이벤트 발행 측
 - `operator`: 명령 발행·결과 소비 측 (Saga 오케스트레이터 역할)
 
-상세 매핑은 각 문서 말미의 "TPS 적용 사례" 박스를 참조합니다. message-lib 코드 디테일은 본 폴더 안에 주제별로 흡수돼 있습니다(옛 `spring/` 서브폴더는 2026-05-23 해체 후 삭제 — 04_BrokerArchitecture·05_ConsistencyPattern·02_MessageContract 등으로 흩어짐).
-
-## 하위 컬렉션
-
-- [`08_advanced/`](08_advanced/) — 메시징 심화. `01_variants/`(Outbox·Saga·스트림·스키마 변종 비교)와 `02_workflow/`(Temporal 워크플로우 깊이) 두 갈래
-
-## 경계 기준 (2026-05-23 재정의)
-
-| 영역 | 다루는 것 |
-|------|----------|
-| 본 폴더 (`04_messaging/`) | Kafka·Redpanda·Avro 도구 레벨 선택과 Spring Kafka 운영. EDA·DDD를 도구로 적용할 때의 패턴 |
-| [`../03_architecture/05_edd/`](../03_architecture/05_edd/) | EDA 이론·원칙·결정 기준 (Why 토폴로지·단일 작성자·CQRS 모델). EDA의 적용 측은 `05_edd/`에 같이 둠 |
-| `05_data/` | 분산 시스템 일반 이론 (CAP, Saga 보상 트랜잭션 구조 일반론) |
-
-> 2026-05-23 변경 요약: `01_MessageContract`와 `01_Connect`가 둘 다 `01` prefix로 충돌해 `01_Connect`를 빼고 나머지 카테고리를 한 칸씩 밀어 prefix 유일성을 확보했습니다(02_MessageContract … 07_CQRS_EventSourcing). 옛 `08_workflow`와 `09_advanced`는 둘 다 심화 성격이라 `08_advanced/` 한 폴더로 흡수했습니다(`01_variants/`, `02_workflow/` 두 갈래). 단행본 실습 폴더 명명은 `_code/`에서 `_practice/`로 통일했습니다.
+상세 매핑은 각 문서 말미의 "TPS 적용 사례" 박스를 참조합니다. message-lib 코드 디테일은 본 폴더 안에 주제별로 흡수돼 있습니다. 옛 `spring/` 서브폴더는 2026-05-23 해체 후 삭제되어 04_BrokerArchitecture·05_ConsistencyPattern·02_MessageContract 등으로 흩어졌습니다.

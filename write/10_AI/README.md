@@ -4,20 +4,47 @@ tags: [moc, ai, llm]
 status: final
 related:
   - roadmap.md
-updated: 2026-06-25
+updated: 2026-11-14
 ---
 
 # 10_AI
----
+
 > AI 모델과 도구를 다루는 카테고리입니다. LLM 모델 릴리스 정리, 에이전트 도구, 프롬프트 설계 같은 주제를 모읍니다.
 
-주요 LLM 모델의 특성과 활용 방식을 이해하고, AI 기반 개발 환경에서 요구되는 Harness Engineering, Token Optimization, MCP 설계 등 핵심 AI 엔지니어링 기술을 습득하여 AI Agentization하는 실무 역량을 함양하고자 함
 
-> 읽는 순서는 [AI 학습 로드맵](../roadmap/ai-roadmap.md)이 정합니다. DevOps 직무 축으로 여덟 단계를 세우고, 아래 "등록된 절"을 1~4·7단계의 자료로 겁니다. 모델을 만드는 쪽(사전학습·파인튜닝·데이터셋 구축)은 그 로드맵의 대상이 아닙니다.
 
-## 등록된 절
+## 경계 기준
 
-`01-xx`는 모델별 릴리스 정리, `02-xx`는 AI Engineering 핵심 개념입니다. 02-01~05는 Claude 관점 5축(모델특성·Harness·Token·MCP·Agentization), 02-06~10은 roadmap 18주제의 나머지 갭을 벤더 중립으로 메운 5편(Prompt·Context·RAG·Evaluation·Guardrail/Observability)입니다.
+특정 프레임워크에 종속된 AI 활용(예: Spring AI, LangChain4j 연동)은 해당 언어나 프레임워크 카테고리로 보냅니다. 모델 자체의 특성·릴리스·API와 모델 독립적인 에이전트 도구만 여기에 둡니다. Claude Code 같은 CLI 도구도 *모델 능력·API 동작* 축에서 다루고 설치·키맵 수준의 설정은 다루지 않습니다.
+
+
+
+## 키워드
+
+### ai-keywords.md
+
+키워드 파일: [ai-keywords.md](../landscape/ai-keywords.md)
+
+| 묶음 | 다룬 문서 | 빈 필수 키워드 |
+|---|---|---|
+| 1단계 · 모델을 도구로 쓰기 | 3편 | — |
+| 2단계 · 프롬프트와 컨텍스트 | 4편 | — |
+| 3단계 · 도구 연결과 MCP | 6편 | — |
+| 4단계 · 하네스와 에이전트 | 3편 | — |
+| 5단계 · AI 개발 환경 | 7편 | 행동 규칙 · 스킬 · 훅 |
+| 6단계 · GitAIOps — 인프라를 AI 와 짓기 | 0편 | — |
+| 7단계 · 평가와 가드레일 | 3편 | — |
+| 8단계 · 운영 | 2편 | — |
+
+
+
+## 하위 폴더·문서 목록
+
+읽는 순서는 [AI 학습 로드맵](../landscape/ai-keywords.md)이 정합니다. DevOps 직무 축으로 여덟 단계를 세우고, 등록된 절을 1~4·7단계의 자료로 겁니다. 모델을 만드는 쪽(사전학습·파인튜닝·데이터셋 구축)은 로드맵의 대상이 아닙니다.
+
+### 등록된 절
+
+`01-xx`는 모델별 릴리스 정리이며, `02-xx`는 AI Engineering 핵심 개념입니다. 02-01~05는 Claude 관점 5축(모델특성·Harness·Token·MCP·Agentization)을 다룹니다. 02-06~10은 로드맵 18개 주제의 간극을 벤더 중립으로 보완한 5편(Prompt·Context·RAG·Evaluation·Guardrail·Observability)입니다.
 
 | 절 | 제목 | 다루는 범위 |
 |----|------|-----------|
@@ -33,7 +60,7 @@ updated: 2026-06-25
 | 02-09 | [Evaluation · Test Harness](./02-09.Evaluation%20·%20Test%20Harness%20—%20비결정적%20시스템을%20채점하기.md) | 골든 데이터셋·회귀 테스트, groundedness↔faithfulness↔answer relevance, task success rate·latency·cost, LLM-as-a-judge, CI gate |
 | 02-10 | [Guardrail · Safety & Observability](./02-10.Guardrail%20·%20Safety%20&%20Observability%20—%20권한·방어·관측.md) | 주입 3종(prompt/tool/data exfiltration), 권한 경계(read-only↔write↔approval gate), redaction·PII masking·sandbox·budget limit, 관측 지표, audit log·trace |
 
-## 하위 폴더
+### 하위 폴더
 
 | 폴더 | 편수 | 다루는 범위 |
 |------|------|------------|
@@ -41,21 +68,19 @@ updated: 2026-06-25
 | [`hermes/`](hermes/) | 1편 | Hermes 에이전트 하네스 사례 — 자기개선 로컬 에이전트의 루프와 메모리 구조 |
 | [`project/flats/`](project/flats/) | 23편 + 인덱스 | gosuda/flats(v0.11.0) 학습 시리즈. 불변 artifact·content hash·SQLite WAL, WebAssembly/QuickJS 샌드박스, 오버레이 네트워크 노출, MCP 승인 모델, serve 조립·백업, 코드 리뷰까지 설치본 기준으로 따라갑니다. [portal-tunnel 시리즈](../02_os/project/portal-tunnel/README.md)와 상호 링크 |
 
-위 "등록된 절"이 개념 본문이라면 이 폴더들은 제품 사례와 자가 점검입니다. 본문 개정 시 함께 보지 않아도 되도록 분리해 둡니다.
+위 등록된 절이 개념 본문이라면 하위 폴더들은 제품 사례와 자가 점검입니다. 본문 개정 시 함께 보지 않아도 되도록 분리해 둡니다.
 
 `docs/`가 `hermes/`와 다른 점은 깊이입니다. `hermes/`가 사례 한 편짜리 읽을거리라면 `docs/`는 도구 하나를 장 단위로 끝까지 따라가고, 근거를 설치본에서 직접 뽑습니다.
 
 
 
-## 경계 기준
-
-특정 프레임워크에 종속된 AI 활용(예: Spring AI, LangChain4j 연동)은 해당 언어·프레임워크 카테고리로 보내고, 모델 자체의 특성·릴리스·API와 모델 독립적인 에이전트 도구만 여기에 둡니다. Claude Code 같은 CLI 도구도 *모델 능력·API 동작* 축에서 다루고, 설치·키맵 수준의 설정은 다루지 않습니다.
-
 ## 향후 추가 후보
 
-> 02-06~10 신규 5편으로 roadmap 18주제의 개념 갭(Prompt·Context·RAG·Evaluation·Guardrail·Observability)은 메웠습니다. 2026-08-26 [`docs/orca/`](docs/orca/) 12편으로 Agentization·Harness의 *제품 구현 사례* 축을 추가했습니다 — 개념편이 답하지 못하던 "실제로 어떤 명령과 상태 모델로 떨어지는가"를 봅니다. RAG↔롱컨텍스트 트레이드오프는 02-08 §7에, 프롬프트 구조화 출력은 02-06 §4에 흡수됐습니다. 남은 후보는 아래와 같습니다.
+> 로드맵 18개 주제의 개념 보완 이후 남은 후보 목록입니다.
+
+2026-08-26 [`docs/orca/`](docs/orca/) 12편으로 Agentization과 Harness의 제품 구현 사례 축을 추가했습니다. 개념편이 다루지 못한 실제 명령과 상태 모델을 살펴봅니다. RAG와 롱컨텍스트의 트레이드오프는 02-08 7절에, 프롬프트 구조화 출력은 02-06 4절에 흡수되었습니다.
 
 - 01-02: 다른 LLM 벤더(OpenAI·Gemini) 모델 라인업·가격 비교 — 벤더별 모델명 문제 대비
-- 02-11: Tool/Function Calling 심화 전용편 — 현재 02-02(tool_use)·02-08(retrieval tool)·02-10(permission)에 분산 흡수. 시험이 tool schema·retry·timeout을 깊게 물으면 분리
+- 02-11: Tool/Function Calling 심화 전용편 — 현재 02-02(tool_use)·02-08(retrieval tool)·02-10(permission)에 분산 흡수되었습니다. 시험이 tool schema·retry·timeout을 깊게 물으면 분리합니다.
 - 02-12: 비용·지연 운영 — 스트리밍·캐시 프리워밍·에러 재시도 (횡단 주제, 02-03 심화)
 - 추천 프로젝트 5종(roadmap §16) 실습 노트 — 코드 리뷰/Jenkins 분석/MCP 서버/Token Optimizer/Eval Harness

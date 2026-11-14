@@ -5,7 +5,7 @@ status: draft
 source:
   - 《TCP/IP Illustrated, Volume 1: The Protocols》 2nd ed. (Kevin R. Fall · W. Richard Stevens, Addison-Wesley, 2011) ISBN 978-0-321-33631-6 — 장 단위 PDF 18편
   - 챕터 PDF 폴더 — GoogleDrive/내 드라이브/book/TCP:IP Illustrated/
-  - ../../../roadmap/network-roadmap.md  # 이 책을 1·2단계 필수로 둔 로드맵
+  - ../../../landscape/network-keywords.md  # 이 책을 1·2단계 필수로 둔 로드맵
 related:
   - ./12-01.TCP%20의%20신뢰성은%20재전송·번호·창으로%20만든다.md
   - ./13-01.TCP%20연결은%20세%20세그먼트로%20열고%20네%20세그먼트로%20닫는다.md
@@ -27,7 +27,7 @@ related:
   - ../../README.md
   - ../cntd_computer-networking-top-down/README.md
   - ../paw_packet-analysis-wireshark/README.md
-  - ../../../roadmap/network-roadmap.md
+  - ../../../landscape/network-keywords.md
 learning:
   topic: tcp-ip-illustrated
   scope: durable
@@ -48,7 +48,7 @@ updated: 2026-11-06
 
 > 같은 폴더의 [CNTD 정독본](../cntd_computer-networking-top-down/README.md) 이 TCP 를 교과서의 원리로 세웠다면, 이 책은 그 원리가 실제 구현과 패킷에서 어떤 모양인지를 맡습니다.
 
-`02_os` 는 커널과 그 위의 자원·네트워크 메커니즘을 모으는 카테고리입니다. [네트워크 로드맵](../../../roadmap/network-roadmap.md) 은 이 책을 1·2단계의 필수 자료로 두고 읽을 범위를 2~8장과 10~17장으로 적습니다.
+`02_os` 는 커널과 그 위의 자원·네트워크 메커니즘을 모으는 카테고리입니다. [네트워크 로드맵](../../../landscape/network-keywords.md) 은 이 책을 1·2단계의 필수 자료로 두고 읽을 범위를 2~8장과 10~17장으로 적습니다.
 
 다만 2~8장과 10·11장이 받치는 행(주소·ARP·라우팅·NAT·MTU·ICMP·UDP·DNS)은 이미 CNTD·N&K·network-fundamentals-lab 노트가 채우고 있습니다. 비어 있는 행은 TCP 연결 관리와 운영 쪽에 몰려 있습니다. 4-tuple · 듣는 소켓과 연결 소켓, TIME_WAIT · SYN cookies, EPIPE · SIGPIPE · RST, half-close, keepalive, Nagle · delayed ACK 가 그 행들이라 12~17장부터 시작합니다.
 

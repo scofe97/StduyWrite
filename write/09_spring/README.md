@@ -3,27 +3,62 @@ title: Spring 학습 통합 MOC
 tags: [moc, spring, spring-boot]
 status: final
 related:
-  - ../roadmap/spring-roadmap.md
+  - ../landscape/spring-keywords.md
   - ../README.md
   - ../03_architecture/README.md
   - ../04_messaging/README.md
   - ../05_data/README.md
-updated: 2026-09-26
+updated: 2026-11-14
 ---
 
 # Spring 학습 통합 MOC
 
-> Spring 문서는 주제별로 분산 배치된다. 이 페이지가 전 카테고리 집계점이 되어 Spring 공부자의 진입점 역할을 한다.
+> Spring 본질 이론과 프레임워크 자체 동작을 다루며, 전 카테고리 Spring 문서의 집계점 역할을 합니다.
 
-## 왜 분산 배치인가
 
-`_meta/conventions.md`의 카테고리 결정 원칙은 "주제 중심"이다. Spring Kafka 문서를 `04_messaging/`이 아닌 `09_spring/` 전용 폴더에 두면, "Kafka로 메시징을 구현하는 방법 비교"라는 주제 축이 깨진다. 따라서 도메인 결합도가 큰 Spring 문서(`@KafkaListener`, QueryDSL, Filter Chain 등)는 해당 주제 카테고리에 그대로 두고, 본 페이지가 논리층에서 모든 Spring 문서를 엮는다.
 
-본 폴더(`write/09_spring/`)는 정식 카테고리(번호 12)로 등재되어 Spring 본질 이론 — 프레임워크의 자체 동작을 다루는 — 만 모은다.
+## 경계 기준
 
-## 카테고리별 배치
+`_meta/conventions.md`의 카테고리 결정 원칙은 "주제 중심"입니다. Spring Kafka 문서를 `04_messaging/`이 아닌 `09_spring/` 전용 폴더에 두면, "Kafka로 메시징을 구현하는 방법 비교"라는 주제 축이 깨집니다. 따라서 도메인 결합도가 큰 Spring 문서(`@KafkaListener`, QueryDSL, Filter Chain 등)는 해당 주제 카테고리에 그대로 두고, 본 페이지가 논리층에서 모든 Spring 문서를 엮습니다.
 
-### 여기 (`09_spring/`) — Spring 본질 이론
+본 폴더(`write/09_spring/`)는 프레임워크의 자체 동작을 다루는 Spring 본질 이론만 모읍니다.
+
+도메인별 통합 대상 카테고리 경계는 다음과 같습니다.
+
+| 주제 | 경로 | 다루는 내용 |
+|------|------|------------|
+| 설계 철학 | [`03_architecture/`](../03_architecture/README.md) "10. 후속 주제" | IoC를 설계 패턴 관점으로, AOP의 Decorator 해석 (예정) |
+| 메시징 | [`04_messaging/`](../04_messaging/) | `@KafkaListener`, Producer Config, Error Handler (스프링 부분은 04_BrokerArchitecture·05_ConsistencyPattern 등 주제별로 흡수) |
+| 영속성 | [`05_data/`](../05_data/) | [QueryDSL 6.12 학습 묶음](../05_data/03_persistence/querydsl/README.md) (Spring Data JPA, R2DBC, `@Transactional` 예정) |
+
+- Boot 자체는 [`07_autoconfig/`](07_autoconfig/), 내장 톰캣은 [`01_core/02-02`](01_core/), 액츄에이터·메트릭은 `06_observability/05_SpringActuator/`에 정식 문서로 작성되었습니다.
+- 트랜잭션 본체는 [`05_data/03_persistence/jpa/04-01`](../05_data/03_persistence/jpa/04-01.%EC%8A%A4%ED%94%84%EB%A7%81%20%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98.md)에 두고, 검증은 [`02_data-binding/`](02_data-binding/)에서 다룹니다.
+- 도메인 결합도가 큰 주제는 기존 위치 그대로 두고, Spring 본질 영역에 신설할 후보만 여기에 둡니다.
+- 현재 검토 중인 신설 후보는 없습니다. 신설 시점은 최소 5편 확보 시 신설, 미만이면 기존 카테고리 하위에서 시작한다는 기준을 따릅니다.
+
+
+
+## 키워드
+
+### spring-keywords.md
+
+키워드 파일: [spring-keywords.md](../landscape/spring-keywords.md)
+
+| 묶음 | 다룬 문서 | 빈 필수 키워드 |
+|---|---|---|
+| 1단계 · 컨테이너와 빈 | 7편 | — |
+| 2단계 · 프록시와 AOP | 4편 | — |
+| 3단계 · 요청 처리 | 11편 | — |
+| 4단계 · 트랜잭션과 이벤트 | 4편 | — |
+| 5단계 · 부트가 조립하는 세계 | 8편 | — |
+| 6단계 · 외부 통신과 회복탄력성 | 11편 | — |
+| 7단계 · 비동기와 실시간 | 8편 | — |
+| 8단계 · 보안과 운영 | 0편 | 필터 체인이 먼저다 · 인증과 사용자 · 비밀번호 · 엔드포인트 인가 · 액츄에이터 엔드포인트 · Micrometer 와 메트릭 |
+| 9단계 · 테스트와 배포 | 10편 | — |
+
+
+
+## 하위 폴더·문서 목록
 
 | 폴더 | 편수 | 범위 |
 |------|------|------|
@@ -35,55 +70,29 @@ updated: 2026-09-26
 | [06_events/](06_events/) | 4편 | 스프링 이벤트 — @EventListener vs @TransactionalEventListener·트랜잭션 Phase·전파 조합·내부 동작·동기/비동기(@Async) |
 | [07_autoconfig/](07_autoconfig/) | 7편 | 스프링 부트 자동 구성·외부 설정 — 스타터/BOM·@AutoConfiguration·@Conditional·커스텀 스타터·외부 설정·@ConfigurationProperties·프로필 |
 
-> 편수는 2026-06-25 실측. 폴더별 신설·재편 이력(통합·분할·이관 날짜)은 `STUDY_INDEX.md` 이관 표와 각 폴더 README 에서 관리한다.
 
-> Boot 자체(auto-config/Properties/Profile)는 [`07_autoconfig/`](07_autoconfig/), 내장 톰캣은 [`01_core/02-02`](01_core/), 액츄에이터·메트릭은 `06_observability/05_SpringActuator/` 에 정식 문서로 작성됐다(2026-05-25, 김영한 스프링 부트 강의 기반). 노션 import raw 는 `_notion_import/` <!-- 링크 끊김(2026-08): _notion_import/ --> 에 있으며, 재작성이 끝난 묶음부터 위 표에 행을 추가한다.
-
-### 예정 카테고리
-
-도메인 결합도가 큰 주제(메시징·영속성)는 기존 위치 그대로 두고, Spring 본질 영역에 신설할 후보만 여기에 둔다. 현재 검토 중인 후보는 없다. 신설 시점은 second-brain-harness §4.4 — 최소 5편 확보 시 신설, 미만이면 기존 카테고리 하위에서 시작 — 을 따른다.
-
-> 2026-05-29 — 검토하던 `08_transaction` 과 `09_validation` 을 신설 완료했다. 두 건 모두 당초 명분이 실제 자산과 어긋나 방향을 정정했다. ① `08_transaction`: 트랜잭션 본체(추상화·동기화·AOP·전파·락)는 이미 [`05_data/03_persistence/jpa/04-01`](../05_data/03_persistence/jpa/04-01.%EC%8A%A4%ED%94%84%EB%A7%81%20%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98.md)·`04-01b`·`04-02` 에 final 로 있어, 본체를 새로 쓰지 않고 집계 MOC + 격리 수준·테스트 2편만 보강했다. ② `09_validation`: "6~8편 분량" 이라 적었지만 실제로는 `02_data-binding/02-01` 단일 편(583줄)이 거의 전 범위를 다루고 있었다. 그래서 그 단일 편을 수동 검증·Bean Validation 두 편으로 분할해 옮기고, 목차에 없던 커스텀 `ConstraintValidator` 1편만 신규로 보강했다(분할 2 + 신규 1).
-
-### 도메인별 통합 (다른 카테고리)
-
-| 주제 | 경로 | 다루는 내용 |
-|------|------|------------|
-| 설계 철학 | [`03_architecture/`](../03_architecture/README.md) "10. 후속 주제" | IoC를 설계 패턴 관점으로, AOP의 Decorator 해석 (예정) |
-| 메시징 | [`04_messaging/`](../04_messaging/) | `@KafkaListener`, Producer Config, Error Handler (스프링 부분은 04_BrokerArchitecture·05_ConsistencyPattern 등 주제별로 흡수) |
-| 영속성 | [`05_data/`](../05_data/) | [QueryDSL 6.12 학습 묶음](../05_data/03_persistence/querydsl/README.md) (Spring Data JPA, R2DBC, `@Transactional` 예정) |
-
-## 전체 Spring 문서 목록 집계
-
-태그 기반으로 전 카테고리에서 Spring 문서를 집계한다.
-
-```bash
-grep -rl "^  - spring$\|tags:.*spring" write/ --include="*.md" | sort
-```
-
-결과는 월간 리뷰에서 이 MOC 하단에 스냅샷으로 기록한다.
 
 ## 학습 경로 추천
 
-대상자에 따라 진입점이 다르다.
+대상자에 따라 진입점이 다릅니다.
 
-1. **`01_core/`** — Spring 입문자. 컨테이너(IoC/DI·빈 생명주기·스코프, 01장) → 서블릿(WAS·멀티스레드·내장톰캣, 02장) → MVC(FrontController·DispatcherServlet·예외 처리, 03장)를 한 폴더에서 의존 순서대로 묶었다. 요청 한 건이 톰캣에서 컨트롤러까지 도달하는 척추를 한 흐름으로 본다.
-2. **`02_data-binding/`** — `01_core/` MVC 다음 단계. DispatcherServlet 이 받은 요청 본문을 객체로 바인딩하고 응답을 직렬화하는 과정 — 메시지 컨버터·파일 업로드·Validation·국제화.
-3. **`07_autoconfig/`** — 스프링 부트의 자체 동작. "라이브러리만 넣으면 빈이 생기는" 자동 구성과 "한 번 빌드, 환경마다 다른 설정"을 만드는 외부 설정·프로필. `01_core/` 가 빈을 직접 등록하는 세계라면 여기는 부트가 자동 등록하는 세계다.
-4. **`05_aop/`** — 프록시·AOP·스케줄링. 인터셉터·필터로 풀리지 않는 횡단 관심사와 `@Scheduled`·Quartz. `01_core/` 01장의 CGLIB 프록시가 출발점.
-5. **`06_events/`** — 스프링 이벤트. `@TransactionalEventListener` 의 Phase·전파 조합·내부 동작. 트랜잭션 경계와 외부 연동 분리를 다룬다.
-6. **`03_network/`** — 외부·실시간 통신. 클라이언트 두 갈래(`webflux/` WebClient, `feign/` OpenFeign)에 더해 전송 엔진(`reactive-net/`), 실시간(`realtime/` SSE·WebSocket·STOMP), 회복탄력성(`resilience/`)까지. RestTemplate 경험자는 `webflux/01-01` 부터, 신규 MSA 설계자는 `feign/01-01` 부터 진입.
-7. **`04_testing/`** — 단위·통합·E2E 전 범위. Spring Boot 3.x 기준.
-8. **운영·모니터링** — `06_observability/05_SpringActuator/` 액츄에이터·마이크로미터·프로메테우스로 스프링 앱 메트릭을 노출·시각화.
-9. **도메인별** — 본인 관심 영역. 메시징이면 [`04_messaging/`](../04_messaging/), 데이터·ORM 이면 [`05_data/03_persistence/querydsl/`](../05_data/03_persistence/querydsl/).
+1. **`01_core/`**: Spring 입문자를 위한 출발점입니다. 컨테이너(IoC/DI·빈 생명주기·스코프, 01장) → 서블릿(WAS·멀티스레드·내장톰캣, 02장) → MVC(FrontController·DispatcherServlet·예외 처리, 03장)를 의존 순서대로 묶었습니다. 요청 한 건이 톰캣에서 컨트롤러까지 도달하는 척추를 한 흐름으로 봅니다.
+2. **`02_data-binding/`**: `01_core/` MVC 다음 단계입니다. DispatcherServlet이 받은 요청 본문을 객체로 바인딩하고 응답을 직렬화하는 과정을 다룹니다. 메시지 컨버터, 파일 업로드, Validation, 국제화를 포함합니다.
+3. **`07_autoconfig/`**: 스프링 부트의 자체 동작을 다룹니다. 라이브러리만 넣으면 빈이 생기는 자동 구성과 환경마다 다른 설정을 만드는 외부 설정·프로필을 설명합니다. `01_core/`가 빈을 직접 등록하는 세계라면 여기는 부트가 자동 등록하는 세계입니다.
+4. **`05_aop/`**: 프록시와 AOP 및 스케줄링을 다룹니다. 인터셉터나 필터로 풀리지 않는 횡단 관심사와 `@Scheduled`·Quartz를 설명합니다. `01_core/` 01장의 CGLIB 프록시가 출발점입니다.
+5. **`06_events/`**: 스프링 이벤트를 다룹니다. `@TransactionalEventListener`의 Phase와 전파 조합 및 내부 동작을 다룹니다. 트랜잭션 경계와 외부 연동 분리를 다룹니다.
+6. **`03_network/`**: 외부 통신과 실시간 통신을 다룹니다. 클라이언트 두 갈래(`webflux/` WebClient, `feign/` OpenFeign)와 전송 엔진(`reactive-net/`), 실시간 통신(`realtime/` SSE·WebSocket·STOMP), 회복탄력성(`resilience/`)을 포함합니다. RestTemplate 경험자는 `webflux/01-01`부터, 신규 MSA 설계자는 `feign/01-01`부터 진입합니다.
+7. **`04_testing/`**: 단위 테스트부터 통합·E2E 테스트까지 전 범위를 다룹니다. Spring Boot 3.x 기준입니다.
+8. **운영·모니터링**: `06_observability/05_SpringActuator/` 액츄에이터, 마이크로미터, 프로메테우스로 스프링 앱 메트릭을 노출하고 시각화합니다.
+9. **도메인별**: 특정 도메인은 해당 카테고리로 진입합니다. 메시징은 [`04_messaging/`](../04_messaging/), 데이터와 ORM은 [`05_data/03_persistence/querydsl/`](../05_data/03_persistence/querydsl/)입니다.
 
 
 
 ## Spring 딥다이브 전체 지도
 
-위의 "카테고리별 배치"가 *어떤 폴더에 무엇이 있나*를, "학습 경로 추천"이 *어떤 순서로 읽나*를 답한다면, 이 절은 *Spring 본질을 어디까지 깊게 파야 하는가*를 답한다. 읽는 순서는 [Spring 학습 로드맵](../roadmap/spring-roadmap.md)이 정한다 — 컨테이너·프록시·요청 처리·트랜잭션을 지나 부트·통신·보안·운영·테스트까지 9단계다. 아래는 그 단계와 짝을 맞춰 우리 보유 문서·미작성 갭을 연결한 네비게이션이다.
+위의 "하위 폴더·문서 목록"이 어떤 폴더에 무엇이 있는지를, "학습 경로 추천"이 어떤 순서로 읽는지를 답한다면, 이 절은 Spring 본질을 어디까지 깊게 파야 하는가를 답합니다. 읽는 순서는 [Spring 학습 로드맵](../landscape/spring-keywords.md)이 정합니다. 컨테이너, 프록시, 요청 처리, 트랜잭션을 지나 부트, 통신, 보안, 운영, 테스트까지 9단계입니다. 각 단계와 짝을 맞춰 보유 문서와 미작성 갭을 연결한 네비게이션입니다.
 
-한 문장으로 줄이면, Spring Container가 Bean을 만들고, Proxy가 부가기능을 감싸고, DispatcherServlet이 요청을 흘려보내고, TransactionManager가 DB 경계를 관리하고, Boot AutoConfiguration이 설정을 조립하며, Actuator와 Test가 운영성과 검증 가능성을 열어준다.
+Spring Container가 Bean을 만들고 Proxy가 부가 기능을 감쌉니다. DispatcherServlet이 요청을 흘려보내고 TransactionManager가 DB 경계를 관리합니다. Boot AutoConfiguration이 설정을 조립하며 Actuator와 Test가 운영성과 검증 가능성을 엽니다.
 
 | 단계 | 대주제 | 진입 문서 | 갭(미작성) |
 |------|--------|----------|-----------|
@@ -94,12 +103,6 @@ grep -rl "^  - spring$\|tags:.*spring" write/ --include="*.md" | sort
 | 5 | Validation / Binding / Conversion (대주제 11) | [02_data-binding/](02_data-binding/) | Converter / Formatter / ConversionService 전용편 |
 | 6 | Spring Boot 자동구성·외부설정 (대주제 12~14) | [07_autoconfig/](07_autoconfig/) | 7편으로 충분 — 신규 후보 없음 |
 | 7 | 운영·연동·테스트 (대주제 15~24) | Event [06_events/](06_events/), Async/Scheduling [05_aop/01-02](05_aop/01-02.스프링%20스케줄링%20—%20@Scheduled에서%20Quartz까지.md)·01-04, Test [04_testing/](04_testing/), Data [../05_data/](../05_data/) | Cache Abstraction 전용편, MyBatis 연동 전용편, 성능 튜닝·장애 분석편 |
-| 8 | 빌드·패키징·Tomcat 배포 ([로드맵 9단계](../roadmap/spring-roadmap.md)) | [01_core/02-02](01_core/02-02.내장%20톰캣과%20SpringApplication%20—%20JAR로%20WAS를%20품다.md) | bootJar vs plain jar·Boot Loader(JarLauncher/WarLauncher)·외부 WAR(SpringBootServletInitializer·providedRuntime)·Layered JAR·Docker layer cache·CI/CD 산출물 관리 전용편 |
+| 8 | 빌드·패키징·Tomcat 배포 ([로드맵 9단계](../landscape/spring-keywords.md)) | [01_core/02-02](01_core/02-02.내장%20톰캣과%20SpringApplication%20—%20JAR로%20WAS를%20품다.md) | bootJar vs plain jar·Boot Loader(JarLauncher/WarLauncher)·외부 WAR(SpringBootServletInitializer·providedRuntime)·Layered JAR·Docker layer cache·CI/CD 산출물 관리 전용편 |
 
-단계별 개념 표와 우선순위, 책의 읽을 장은 [로드맵](../roadmap/spring-roadmap.md)이 정본이다. 우리 자료의 미작성 갭은 위 표의 "갭" 열에 모았다 — BeanPostProcessor·순환 참조 전용편, Weaving 4종+AspectJ 실험편, MyBatis Connection 바인딩편, Custom ArgumentResolver 실습편, Converter/ConversionService편, Cache Abstraction·성능 튜닝·장애 분석편, 빌드·패키징·Tomcat 배포 전용편(bootJar vs plain jar·Boot Loader·외부 WAR·Layered/Docker).
-
-
-
-## 이관 진척
-
-`poc/10_Spring/` → 여기로의 이관은 청크 단위로 진행한다. 진척 상태는 `STUDY_INDEX.md` 하단의 이관 표에서 확인한다.
+단계별 개념 표와 우선순위, 책의 읽을 장은 [로드맵](../landscape/spring-keywords.md)이 정본입니다. 미작성 갭은 위 표의 "갭" 열에 모았습니다. 코어 영역은 BeanPostProcessor와 순환 참조 전용편, AOP는 Weaving 4종과 AspectJ 실험편을 다룹니다. 데이터와 웹은 MyBatis Connection 바인딩, Custom ArgumentResolver, Converter/ConversionService 편이 후보입니다. 운영과 배포는 Cache Abstraction, 성능 튜닝, Tomcat 배포 전용편을 보강 대상으로 둡니다.

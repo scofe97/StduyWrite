@@ -3,7 +3,7 @@ title: 02_os/kernel — 커널과 컨테이너
 tags: [moc, linux, kernel, syscall, namespace, cgroup, proc, runtime]
 status: final
 related:
-  - ../../roadmap/os-roadmap.md
+  - ../../landscape/os-keywords.md
   - ../README.md
   - ../../08_cloud/book/networking-and-kubernetes/README.md
   - ../../08_cloud/kubernetes/README.md
@@ -14,7 +14,7 @@ updated: 2026-09-12
 ---
 > Linux 커널이 컨테이너 동작에서 맡는 책임을 정리한다. cgroup v2 깊이, 마운트 네임스페이스 propagation, cgroup 사례, OverlayFS와 user namespace까지 — 네트워크 영역은 `08_cloud/book/networking-and-kubernetes/` 정독본에서 다루고 본 폴더는 그 외 커널 일반 메커니즘에 집중한다.
 
-> 프로세스·시스템 콜·스케줄링·메모리·cgroup·namespace·파일시스템·보안·관측의 읽기 순서는 [OS 로드맵](../../roadmap/os-roadmap.md)에 정리했습니다.
+> 프로세스·시스템 콜·스케줄링·메모리·cgroup·namespace·파일시스템·보안·관측의 읽기 순서는 [OS 로드맵](../../landscape/os-keywords.md)에 정리했습니다.
 
 
 
@@ -31,7 +31,7 @@ updated: 2026-09-12
 
 ## 상위·이웃·활용처
 
-- 통합 경로: [OS 학습 로드맵](../../roadmap/os-roadmap.md) — 자원·격리 단계의 진입점
+- 통합 경로: [OS 학습 로드맵](../../landscape/os-keywords.md) — 자원·격리 단계의 진입점
 - 상위: [02_os/ MOC](../README.md)
 - 이웃: [N&K 질문별 정본](../../08_cloud/book/networking-and-kubernetes/README.md#%EC%A7%88%EB%AC%B8%EB%B3%84-%EC%A0%95%EB%B3%B8) — netns·veth·bridge·netfilter·conntrack·TC·eBPF 깊이
 - 활용처: [08_cloud/kubernetes/](../../08_cloud/kubernetes/README.md) — Pod·자원 관리·보안 운영

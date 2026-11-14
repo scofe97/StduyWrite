@@ -4,55 +4,33 @@ tags: [moc, architecture, spring-boot]
 status: final
 related:
   - ../09_spring/README.md
-updated: 2026-08-31
+updated: 2026-11-14
 ---
 
 # 아키텍처 시리즈
----
-> Spring Boot 4.x와 Java 25 기준으로 애플리케이션 아키텍처를 정리한다. 하나의 도메인을 여러 아키텍처 관점으로 반복 해석한다.
 
-예시 프로젝트는 로그라이크 덱빌딩 게임 `Slay the Spire 2` 스타일의 단일 런(run) 관리 서비스다. 플레이어가 런을 시작하고, 전투를 진행하고, 보상을 선택하고, 다음 노드로 이동하는 흐름을 중심으로 설명한다. 단순 쇼핑몰 예제보다 규칙 변화와 상태 전이가 풍부해 객체지향·DDD·이벤트 소싱 같은 주제를 설명하기에 적합하다.
-
-## 1. 공통 도메인
-
-시리즈 전체에서 사용하는 핵심 용어는 다음과 같다:
-
-- `Run`: 플레이어의 단일 게임 세션
-- `Battle`: 턴 기반 전투 단위
-- `Deck`, `Hand`, `DrawPile`, `DiscardPile`: 카드 상태 집합
-- `Relic`, `Potion`, `Reward`: 런 중 획득 가능한 보조 요소
-- `ActProgress`: 맵 진행 상태와 보스 도달 여부
+> Spring Boot 4.x와 Java 25 기준으로 애플리케이션 아키텍처를 정리하고 도메인을 여러 아키텍처 관점으로 반복 해석합니다.
 
 
 
-## 2. 기준 기술 스택
+## 경계 기준
 
-본 시리즈는 다음 전제 위에 작성한다:
+01번대 설계 언어와 품질 속성, 02번대 애플리케이션 내부 구조, 03번대 서비스 경계와 이벤트 일관성으로 책임을 나눕니다.
 
-- 프레임워크: Spring Boot `4.x`
-- 언어: Java `25` (record, sealed type, virtual thread 활용)
-- 아키텍처 스타일: 모듈러 모놀리스 우선, 필요 시 서비스 분리
-- 비동기 처리: 메시징 기반 확장 가능
-
-Spring Boot 4.x는 최신 Jakarta 스택과 관측성, 모듈화, AOT 친화성을 전제한다. Java 25는 현대적 언어/런타임 기능을 안정적으로 활용하는 기준점이다.
+- 도메인 주도 설계(DDD)는 `04_ddd/`, 이벤트 기반 아키텍처(EDA)는 `05_edd/`에 둡니다.
+- 이벤트 기반 아키텍처의 구체적 구현 디테일과 브로커 운영은 [`04_messaging/`](../04_messaging/)에 위임합니다.
+- Spring Framework의 구현 디테일은 [`09_spring/`](../09_spring/)에 속하며 본 카테고리는 아키텍처 원칙과의 연결만 다룹니다.
+- 마이크로 프론트엔드는 프론트엔드를 소재로 삼지만 경계 설정과 소유권을 다루므로 본 카테고리에 둡니다.
 
 
 
-## 3. 읽는 순서
+## 키워드
 
-> 번호 순서대로 읽으면 개념이 자연스럽게 이어진다. 01번대는 기초, 02번대는 애플리케이션 내부, 03번대는 서비스 경계와 이벤트 흐름이다.
-
-```mermaid
-flowchart TD
-    A[01번대<br/>설계 언어·원칙·트레이드오프] --> B[02번대<br/>패키지·모듈·내부 구조]
-    B --> C[03번대<br/>서비스 경계·이벤트·일관성]
-```
-
-01번대에서 설계 언어와 품질 속성, 아키텍트 관점을 맞춘다. 02번대에서 한 애플리케이션 내부를 어떻게 나눌지 결정한다. 03번대에서 서비스 경계를 어디에 두고 어떻게 통신·일관성을 유지할지 다룬다.
+키워드 파일 없음
 
 
 
-## 4. 문서 목록
+## 하위 폴더·문서 목록
 
 ### 01번대 — 아키텍처 기초와 아키텍트 관점 (`01_foundation/`)
 
@@ -63,7 +41,7 @@ flowchart TD
 | 01-03 | [아키텍트의 관점과 품질 속성 트레이드오프](01_foundation/01-03.%EC%95%84%ED%82%A4%ED%85%8D%ED%8A%B8%EC%9D%98%20%EA%B4%80%EC%A0%90%EA%B3%BC%20%ED%92%88%EC%A7%88%20%EC%86%8D%EC%84%B1%20%ED%8A%B8%EB%A0%88%EC%9D%B4%EB%93%9C%EC%98%A4%ED%94%84.md) | 어떤 결정이 무엇을 희생하는가 |
 | 01-04 | [ADR과 Spring Boot 아키텍처 의사결정](01_foundation/01-04.ADR%EA%B3%BC%20Spring%20Boot%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98%20%EC%9D%98%EC%82%AC%EA%B2%B0%EC%A0%95.md) | 결정을 어떻게 남길 것인가 |
 
-> 유비쿼터스 언어와 도메인 모델은 [`04_ddd/`](04_ddd/) 서브폴더로 이동했다. (01_foundation은 빈칸을 메워 01-01~01-04로 연속 재번호)
+> 유비쿼터스 언어와 도메인 모델은 [`04_ddd/`](04_ddd/) 서브폴더로 이동했습니다. (01_foundation은 빈칸을 메워 01-01~01-04로 연속 재번호)
 
 ### 02번대 — 애플리케이션 내부 구조 (`02_application/`)
 
@@ -78,7 +56,7 @@ flowchart TD
 | 01-07 | [다중 엔티티 조회 API 설계](02_application/01-07.%EB%8B%A4%EC%A4%91%20%EC%97%94%ED%8B%B0%ED%8B%B0%20%EC%A1%B0%ED%9A%8C%20API%20%EC%84%A4%EA%B3%84.md) | API Composition·BFF·GraphQL 중 어느 것 |
 | 01-08 | [실용적 아키텍처 패턴 — 5계층 절충형](02_application/01-08.%EC%8B%A4%EC%9A%A9%EC%A0%81%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98%20%ED%8C%A8%ED%84%B4%20%E2%80%94%205%EA%B3%84%EC%B8%B5%20%EC%A0%88%EC%B6%A9%ED%98%95.md) | 유스케이스를 1급 계층으로, 나머지는 필요할 때만 |
 
-> DDD 전략적·전술적 패턴, 헥사고날 변형 TPS 사례, 도메인 책임 분리는 [`04_ddd/`](04_ddd/) 서브폴더로 이동했다. (02_application은 빈칸을 메워 01-01~01-08로 연속 재번호)
+> DDD 전략적·전술적 패턴, 헥사고날 변형 TPS 사례, 도메인 책임 분리는 [`04_ddd/`](04_ddd/) 서브폴더로 이동했습니다. (02_application은 빈칸을 메워 01-01~01-08로 연속 재번호)
 
 ### 03번대 — 서비스 경계와 이벤트 기반 확장 (`03_distributed/`)
 
@@ -92,65 +70,107 @@ flowchart TD
 
 ### 04번대 — 도메인 주도 설계 시리즈
 
-DDD 4개 절(전략·전술·진화·사례) 을 독립 시리즈로 묶었다. SSOT: `docs/02_Architecture/02_DDD/` 13편.
+DDD 4개 절(전략·전술·진화·사례)을 독립 시리즈로 묶었습니다. SSOT: `docs/02_Architecture/02_DDD/` 13편.
 
-→ [`04_ddd/`](04_ddd/) — 절 체계와 문서 목록은 서브폴더 README 참조. 갭은 [`04_ddd/GAP.md`](04_ddd/GAP.md).
+→ [`04_ddd/`](04_ddd/) — 절 체계와 문서 목록은 서브폴더 README 참조. 갭은 [`04_ddd/GAP.md`](04_ddd/GAP.md)입니다.
 
 ### 05번대 — 이벤트 기반 아키텍처 시리즈
 
-EDA 4개 절(기초·처리 모델·워크플로우·운영) 을 독립 시리즈로 묶었다. SSOT: `docs/02_Architecture/03_EventDriven/` 17편. 구현 디테일은 [`../04_messaging/`](../04_messaging/) 에 위임.
+EDA 4개 절(기초·처리 모델·워크플로우·운영)을 독립 시리즈로 묶었습니다. SSOT: `docs/02_Architecture/03_EventDriven/` 17편. 구현 디테일은 [`../04_messaging/`](../04_messaging/)에 위임합니다.
 
-→ [`05_edd/`](05_edd/) — 절 체계와 문서 목록은 서브폴더 README 참조. 갭은 [`05_edd/GAP.md`](05_edd/GAP.md).
+→ [`05_edd/`](05_edd/) — 절 체계와 문서 목록은 서브폴더 README 참조. 갭은 [`05_edd/GAP.md`](05_edd/GAP.md)입니다.
 
 ### 06번대 — 『클린 아키텍처 핵심 가이드』 학습 + TPS approval 실습 (`06_clean-arch-book/`)
 
-한승희 저 『클린 아키텍처 핵심 가이드』(위키북스 2026)를 1장씩 읽고, 같은 장의 개념으로 운영 중인 TPS `operator-api / approval` 모듈을 진단하는 시리즈다. 챕터마다 두 파일(요약 노트 + TPS 진단)이 짝을 이룬다. 1챕터/세션 cadence.
+한승희 저 『클린 아키텍처 핵심 가이드』(위키북스 2026)를 1장씩 읽고 운영 중인 모듈을 진단하는 시리즈입니다. 챕터마다 요약 노트와 진단 두 파일이 짝을 이룹니다.
 
-→ [`06_clean-arch-book/`](06_clean-arch-book/) — 책 정보·진행 절차·10개 장 인덱스는 서브폴더 README 참조.
-
+→ [`06_clean-arch-book/`](06_clean-arch-book/) — 책 정보·진행 절차·10개 장 인덱스는 서브폴더 README를 참조합니다.
 
 ### 단행본 정독 (`book/`)
 
-→ [`book/system-design/`](book/system-design/) — Alex Xu 『System Design Interview – An Insider's Guide』(2판, Volume 1, 국내판 『가상 면접 사례로 배우는 대규모 시스템 설계 기초』) 정독 노트 19편. 1~15장을 장 단위로 쓰고 긴 장 넷은 두 편으로 나눴으며, 참고 자료 목록인 16장은 인덱스에서만 다룬다.
+→ [`book/system-design/`](book/system-design/) — Alex Xu 『System Design Interview』(2판 Volume 1) 정독 노트 19편입니다. 1~15장을 장 단위로 쓰고 긴 장 넷은 두 편으로 나눴으며 16장은 인덱스에서만 다룹니다.
 
-→ [`book/bytebytego-system-design/`](book/bytebytego-system-design/) — ByteByteGo 「System Design」 그림 해설 모음을 주제별로 묶은 정독 노트. 데이터베이스·캐시·네트워크·API 보안·저장소·메시징·클라우드·결제·사례 설계를 짧은 글 여러 편씩 묶어 한 편으로 쓰고, 책 목록 같은 목록형 글은 인덱스에서만 다룬다.
+→ [`book/bytebytego-system-design/`](book/bytebytego-system-design/) — ByteByteGo 「System Design」 그림 해설 모음을 주제별로 묶은 정독 노트입니다. DB·캐시·네트워크·보안·저장소·메시징 등을 주제별로 묶었습니다.
 
-→ [`book/sdp_system-design-primer/`](book/sdp_system-design-primer/) — Donne Martin 의 The System Design Primer 정독 인덱스. 로드 밸런서·캐시·복제 같은 부품 개념을 primer 순서로 따라가며, 지금은 기존 문서로 가는 매핑 표와 공백 목록만 둔다. 사례 중심인 위 Alex Xu 시리즈와 짝을 이룬다.
+→ [`book/sdp_system-design-primer/`](book/sdp_system-design-primer/) — The System Design Primer 정독 인덱스입니다. 로드 밸런서·캐시·복제 부품 개념을 Primer 순서로 따라가며 기존 문서 매핑 표와 공백 목록을 둡니다.
 
-→ [`book/bmf_building-micro-frontends/`](book/bmf_building-micro-frontends/) — Luca Mezzalira 『Building Micro-Frontends, 2nd Edition』(O'Reilly) 정독 노트. 프론트엔드를 소재로 삼지만 다루는 것은 경계를 어디에 긋고 누가 소유하느냐이므로 이 카테고리에 둔다.
-
-
-
-## 5. 관련 참고
-
-본 시리즈는 `poc/02_Architecture/01-event-driven`의 학습 자료와 연결된다. 특히 CQRS, 이벤트 소싱, Saga, Request-Response Bridge 문서는 해당 PoC 개념 흐름을 Spring Boot 애플리케이션 설계 관점으로 가져온 것이다.
-
-문서 형식은 `write/` 하네스를 따른다. 한 문서 안에서는 번호 있는 `##` 섹션을 유지하고, 문체는 한다체로 통일한다.
+→ [`book/bmf_building-micro-frontends/`](book/bmf_building-micro-frontends/) — Luca Mezzalira 『Building Micro-Frontends』(2판) 정독 노트입니다. 경계를 어디에 긋고 누가 소유하는지를 다룹니다.
 
 
 
-## 6. 최종 구현 흐름
+## 공통 도메인
 
-이 시리즈의 내용을 모두 반영해 구현하면 프로그램은 대체로 다음 흐름으로 동작한다:
+예시 프로젝트는 로그라이크 덱빌딩 게임 `Slay the Spire 2` 스타일의 단일 런(run) 관리 서비스입니다.
+플레이어가 런을 시작하고 전투를 진행하며 보상을 선택해 다음 노드로 이동하는 흐름을 중심으로 설명합니다.
+규칙 변화와 상태 전이가 풍부해 객체지향·DDD·이벤트 소싱 같은 아키텍처 주제를 다루기에 적합합니다.
+
+시리즈 전체에서 사용하는 핵심 용어는 다음과 같습니다:
+
+- `Run`: 플레이어의 단일 게임 세션
+- `Battle`: 턴 기반 전투 단위
+- `Deck`, `Hand`, `DrawPile`, `DiscardPile`: 카드 상태 집합
+- `Relic`, `Potion`, `Reward`: 런 중 획득 가능한 보조 요소
+- `ActProgress`: 맵 진행 상태와 보스 도달 여부
+
+
+
+## 기준 기술 스택
+
+본 시리즈는 다음 전제 위에 작성합니다:
+
+- 프레임워크: Spring Boot `4.x`
+- 언어: Java `25` (record, sealed type, virtual thread 활용)
+- 아키텍처 스타일: 모듈러 모놀리스 우선, 필요 시 서비스 분리
+- 비동기 처리: 메시징 기반 확장 가능
+
+Spring Boot 4.x는 최신 Jakarta 스택과 관측성, 모듈화, AOT 친화성을 전제합니다. Java 25는 현대적 언어와 런타임 기능을 안정적으로 활용하는 기준점입니다.
+
+
+
+## 읽는 순서
+
+> 번호 순서대로 읽으면 개념이 자연스럽게 이어집니다. 01번대는 기초, 02번대는 애플리케이션 내부, 03번대는 서비스 경계와 이벤트 흐름입니다.
 
 ```mermaid
 flowchart TD
-    Client[Player Client]
-    Api[REST API<br/>Run Controller / Battle Controller]
-    App[Application Layer<br/>Use Cases]
-    RunDomain[Run Module<br/>Run Aggregate / ActProgress]
-    BattleDomain[Battle Module<br/>Battle / CardEffect / Policy]
-    Catalog[Catalog Module<br/>Card, Relic, Enemy Definitions]
-    Progression[Progression Module<br/>Unlock / Meta Progress]
-    Repo[Persistence Adapters<br/>JPA or JDBC]
-    MainDb[(Main DB)]
-    Outbox[Outbox Table]
-    Publisher[Outbox Publisher]
-    Broker[(Message Broker)]
-    Replay[Replay / Projection Consumer]
-    Analytics[Analytics Consumer]
-    QueryModel[(Read Models / Replay View)]
-    Ops[Observability<br/>Logs / Metrics / Traces]
+    A["01번대<br/>설계 언어·원칙·트레이드오프"] --> B["02번대<br/>패키지·모듈·내부 구조"]
+    B --> C["03번대<br/>서비스 경계·이벤트·일관성"]
+```
+
+01번대에서 설계 언어와 품질 속성, 아키텍트 관점을 맞춥니다.
+02번대에서 한 애플리케이션 내부를 어떻게 나눌지 결정합니다.
+03번대에서 서비스 경계를 어디에 두고 어떻게 통신·일관성을 유지할지 다룹니다.
+
+
+
+## 관련 참고
+
+본 시리즈는 `poc/02_Architecture/01-event-driven`의 학습 자료와 연결됩니다. 특히 CQRS, 이벤트 소싱, Saga, Request-Response Bridge 문서는 해당 PoC 개념 흐름을 Spring Boot 애플리케이션 설계 관점으로 가져온 것입니다.
+
+
+
+## 최종 구현 흐름
+
+이 시리즈의 내용을 모두 반영해 구현하면 프로그램은 대체로 다음 흐름으로 동작합니다:
+
+```mermaid
+flowchart TD
+    Client["Player Client"]
+    Api["REST API<br/>Run Controller / Battle Controller"]
+    App["Application Layer<br/>Use Cases"]
+    RunDomain["Run Module<br/>Run Aggregate / ActProgress"]
+    BattleDomain["Battle Module<br/>Battle / CardEffect / Policy"]
+    Catalog["Catalog Module<br/>Card, Relic, Enemy Definitions"]
+    Progression["Progression Module<br/>Unlock / Meta Progress"]
+    Repo["Persistence Adapters<br/>JPA or JDBC"]
+    MainDb[("Main DB")]
+    Outbox["Outbox Table"]
+    Publisher["Outbox Publisher"]
+    Broker[("Message Broker")]
+    Replay["Replay / Projection Consumer"]
+    Analytics["Analytics Consumer"]
+    QueryModel[("Read Models / Replay View")]
+    Ops["Observability<br/>Logs / Metrics / Traces"]
 
     Client --> Api
     Api --> App
@@ -182,24 +202,15 @@ flowchart TD
     Analytics --> Ops
 ```
 
-핵심 게임플레이는 `Run`과 `Battle` 모듈이 같은 애플리케이션 안에서 강한 일관성으로 처리한다. 전투 완료, 보상 선택, 런 종료 같은 사실은 Outbox를 거쳐 메시지 브로커로 전달되고, 리플레이 뷰와 분석 모델은 이를 비동기로 소비해 별도 읽기 모델을 만든다.
+핵심 게임플레이는 `Run`과 `Battle` 모듈이 같은 애플리케이션 안에서 강한 일관성으로 처리합니다.
+전투 완료, 보상 선택, 런 종료 같은 사실은 Outbox를 거쳐 메시지 브로커로 전달되고 리플레이 뷰와 분석 모델은 이를 비동기로 소비해 별도 읽기 모델을 만듭니다.
 
 
 
-## 7. 후속 주제 (예정)
+## 후속 주제 (예정)
 
-Spring의 **설계 철학** 관점은 별도 추가가 예정되어 있다. Spring Framework의 구현 디테일은 [`09_spring/`](../09_spring/)에 속하며, 본 시리즈는 아키텍처 원칙과의 연결만 다룬다.
+Spring의 **설계 철학** 관점은 별도 추가가 예정되어 있습니다. Spring Framework의 구현 디테일은 [`09_spring/`](../09_spring/)에 속하며 본 시리즈는 아키텍처 원칙과의 연결만 다룹니다.
 
 - `IoC를 GoF·DIP 관점으로 해석` — IoC가 풀고자 했던 설계 문제
 - `AOP가 해결하는 횡단 관심사` — Decorator 패턴의 프레임워크화
 - `Convention over Configuration` — Spring Boot의 철학적 기반
-
-
-
-## 8. 작성 메모
-
-02-06~02-10과 03-05는 2026-05-16에 표준 패턴(PoEAA, DDD, Hexagonal, BFF/GraphQL) 관점으로 신규 작성되었다. 02-06은 TPS 결재 도메인을 사례로 헥사고날 변형 결정을, 02-08~02-10과 03-05는 클라이언트·서버 책임 분담 문제를 차례로 다룬다.
-
-02-11은 2026-05-24에 mangkyu/455 "실용적 아키텍처 패턴"을 정리해 신규 작성되었다. 레이어드·클린·헥사고날·도구 레이어의 장점만 절충해 유스케이스를 1급 계층으로 끌어올린 5계층 패턴으로, 같은 폴더의 01-01·01-02·01-03·01-06과 cross-link된다.
-
-2026-05-24에 루트에 평면으로 흩어져 있던 17편을 README 그룹대로 세 서브폴더(`01_foundation/`·`02_application/`·`03_distributed/`)로 묶고, 각 폴더 안에서 빈칸을 메워 `01-NN`으로 연속 재번호했다. 옛 번호(예: 02-11)는 새 폴더 안 `01-08`처럼 바뀌었고, 표의 `#` 열·인바운드 링크·관련 문서 라벨을 모두 새 번호로 갱신했다. 04_ddd/04_edd가 이미 서브폴더였으므로 이 정리로 03_architecture의 모든 카테고리가 서브폴더 구조로 통일됐다.

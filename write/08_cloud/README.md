@@ -11,16 +11,46 @@ related:
   - ./book/argocd-up-and-running/README.md
   - ./book/cilium-up-and-running/README.md
   - ./book/cks-study-guide/README.md
-updated: 2026-11-06
+updated: 2026-11-14
 ---
 
 # 08_cloud
----
-> 인프라 추상화와 오케스트레이션 관점의 지식 저장소. Kubernetes, Service Mesh, Helm, GitOps 같은 "클러스터 내부 구조"를 다룬다. 여기에 더해, 그 클러스터가 딛고 선 아래층인 IaaS(오픈스택)까지 조망 범위에 둔다.
 
-Kubernetes 를 어떤 순서로 읽을지는 [k8s-roadmap.md](../roadmap/k8s-roadmap.md) 가 정한다. 이 README 는 자료가 *어디에* 있는지를 맡고, 로드맵은 *무엇부터* 열지를 맡는다. 네트워크 데이터패스는 [`network-roadmap.md`](../roadmap/network-roadmap.md) 가 따로 가져간다.
+> 인프라 추상화와 오케스트레이션 관점에서 Kubernetes, Service Mesh, Helm, GitOps 등 클러스터 내부 구조와 IaaS(오픈스택)를 다룹니다.
 
-## 구성
+
+
+## 경계 기준
+
+Kubernetes 를 어떤 순서로 읽을지는 [k8s-keywords.md](../landscape/k8s-keywords.md) 가 정합니다. 네트워크 데이터패스는 [`network-keywords.md`](../landscape/network-keywords.md) 가 따로 다룹니다.
+
+CI/CD 파이프라인 작성 자체는 [`07_devops/`](../07_devops/)로 갑니다. 반대로 K8s 매니페스트 설계, 네트워크 정책, 서비스 메시 사이드카처럼 "클러스터 내부에서 어떻게 돌아가는가"는 여기서 다룹니다.
+
+GitOps 도구 중에서도 ArgoCD는 문서 양과 운영 주제가 커서 [`book/argocd-up-and-running/`](./book/argocd-up-and-running/README.md)에서 따로 다룹니다. 메시징 미들웨어(Kafka, Redpanda) 자체는 [`04_messaging/`](../04_messaging/)에 있고, 그것을 K8s 위에 올리는 Operator 패턴 관점은 `kubernetes/03-09`, `06-06`에서 다룹니다.
+
+층으로 보면 `openstack/` <!-- 링크 끊김(2026-08): ./openstack/README.md -->(IaaS)이 인프라를 만드는 아래층이고, `kubernetes/`·`service-mesh/`는 그 위에서 컨테이너를 굴리는 층입니다. 오픈스택은 컨테이너가 딛고 선 바닥이라, 서비스 내부 딥다이브가 아니라 개발자가 바닥을 조망하는 개요 범위로 둡니다.
+
+
+
+## 키워드
+
+### k8s-keywords.md
+
+키워드 파일: [k8s-keywords.md](../landscape/k8s-keywords.md)
+
+| 묶음 | 다룬 문서 | 빈 필수 키워드 |
+|---|---|---|
+| 1단계 · 오브젝트 | 26편 | kubectl 기본 조회 |
+| 2단계 · 워크로드 | 24편 | — |
+| 3단계 · 연결 | 12편 | — |
+| 4단계 · 자원과 저장 | 14편 | — |
+| 5단계 · 내부 구조 | 6편 | 조정 루프 · watch · informer · client-go · List·Watch 와 resourceVersion · 410 Gone · level-driven 과 edge-driven 의 차이 |
+| 6단계 · 보안과 확장 | 23편 | — |
+| 7단계 · 운영 | 7편 | 노드 추가·제거 — cordon · drain · PDB 와의 맞물림 |
+
+
+
+## 하위 폴더·문서 목록
 
 | 서브카테고리 | 범위 | 문서 |
 |--------------|------|------|
@@ -35,6 +65,8 @@ Kubernetes 를 어떤 순서로 읽을지는 [k8s-roadmap.md](../roadmap/k8s-roa
 | [book/cilium-up-and-running/](./book/cilium-up-and-running/README.md) | 《Cilium: Up and Running》(Vibert·Nikolic·Laverack) 정독 — eBPF 데이터패스로 CNI·서비스 부하 분산·정책·관측을 맡는 Cilium 의 설계와 구성 요소 | 정독 노트 24편 / 16장 |
 | [book/cks-study-guide/](./book/cks-study-guide/README.md) | 《Certified Kubernetes Security Specialist (CKS) Study Guide》(Muschko, 1판) 정독 — CKS 시험 여섯 도메인 순서로 클러스터 설정·API 접근·호스트·Pod·공급망·런타임 하드닝 절차를 다룸 | 정독 노트 0편 / 7장 (작성 예정) |
 
+
+
 ## 예정 주제 — Spring Cloud 스택 (TBD)
 
 > 옛 `spring/` 서브폴더 placeholder를 본 README로 흡수 (2026-05-23). 작성 분량이 커지면 그 시점에 별도 `spring/` 서브폴더 신설.
@@ -44,14 +76,4 @@ Kubernetes 를 어떤 순서로 읽을지는 [k8s-roadmap.md](../roadmap/k8s-roa
 - Spring Cloud Stream (Kafka·RabbitMQ 추상화) — 단, 메시징 도메인 측면은 [`../04_messaging/`](../04_messaging/) 확인
 - K8s 친화적 설정 — `application-k8s.yml`, probes, graceful shutdown
 
-경계: K8s 매니페스트·Helm 차트 설계는 [`kubernetes/`](./kubernetes/README.md). Service Mesh 개념도 `service-mesh/` <!-- 링크 끊김(2026-08): ./service-mesh/README.md -->. *Spring 애플리케이션이 이들 위에서 돌 때 필요한 Spring 스택*만 위의 예정 주제 범위.
-
-## 경계 기준
-
-CI/CD 파이프라인 작성 자체는 [`07_devops/`](../07_devops/)로 간다. 반대로 K8s 매니페스트 설계, 네트워크 정책, 서비스 메시 사이드카처럼 "클러스터 내부에서 어떻게 돌아가는가"는 여기다. GitOps 도구 중에서도 ArgoCD는 문서 양과 운영 주제가 커서 [`book/argocd-up-and-running/`](./book/argocd-up-and-running/README.md)에서 따로 다룬다. 메시징 미들웨어(Kafka, Redpanda) 자체는 [`04_messaging/`](../04_messaging/)에 있고, 그것을 K8s 위에 올리는 Operator 패턴 관점은 `kubernetes/03-09` `06-06`에서 다룬다.
-
-층으로 보면 `openstack/` <!-- 링크 끊김(2026-08): ./openstack/README.md -->(IaaS)이 인프라를 *만드는* 아래층이고, `kubernetes/`·`service-mesh/`는 그 위에서 컨테이너를 *굴리는* 층이다. 오픈스택은 회사 CMP·컨테이너가 딛고 선 바닥이라, 서비스 내부 딥다이브가 아니라 개발자가 바닥을 조망하는 개요 범위로 둔다.
-
-## 이관 연혁
-
-과거 `03_Cloud Native/` 아래 Kafka·Redpanda 문서는 내용상 메시징이라 `04_messaging/`로 이관됐다. 2026-04-19에 `poc/03_CloudNative/02-kubernetes`와 `03-service-mesh` 총 92개 학습 문서를 세컨드 브레인 하네스 기준으로 경량 손질하여 각 서브카테고리로 편입했다.
+경계: K8s 매니페스트·Helm 차트 설계는 [`kubernetes/`](./kubernetes/README.md). Service Mesh 개념도 `service-mesh/` <!-- 링크 끊김(2026-08): ./service-mesh/README.md -->. *Spring 애플리케이션이 이들 위에서 돌 때 필요한 Spring 스택*만 위의 예정 주제 범위에 해당합니다.

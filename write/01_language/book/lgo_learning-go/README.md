@@ -19,7 +19,7 @@ related:
   - ./02-02.var%20%EC%99%80%20%EC%A7%A7%EC%9D%80%20%EC%84%A0%EC%96%B8%EC%9D%80%20%EC%9D%98%EB%8F%84%EB%A5%BC%20%EB%93%9C%EB%9F%AC%EB%82%B4%EB%8A%94%20%EC%84%A0%ED%83%9D%EC%9E%85%EB%8B%88%EB%8B%A4.md
   - ./01-01.go%20%EB%AA%85%EB%A0%B9%20%ED%95%98%EB%82%98%EB%A1%9C%20%EB%A7%8C%EB%93%A4%EA%B3%A0%20%EB%8B%A4%EB%93%AC%EA%B3%A0%20%EA%B2%80%EC%82%AC%ED%95%A9%EB%8B%88%EB%8B%A4.md
   - ../../README.md
-  - ../../../roadmap/go-roadmap.md
+  - ../../../landscape/go-keywords.md
 learning:
   topic: learning-go
   scope: durable
@@ -48,7 +48,7 @@ slice 가 배열을 어떻게 공유하는지, 인터페이스가 왜 암묵적�
 
 ## 장 구성과 로드맵 단계 대응
 
-> 본문 16장 중 1~15장이 필수이고, 16장(reflect·unsafe·cgo)은 선택입니다. 단계는 [Go 학습 로드맵](../../../roadmap/go-roadmap.md)의 단계별 표를 그대로 따릅니다.
+> 본문 16장 중 1~15장이 필수이고, 16장(reflect·unsafe·cgo)은 선택입니다. 단계는 [Go 학습 로드맵](../../../landscape/go-keywords.md)의 단계별 표를 그대로 따릅니다.
 
 단어 수는 장별 PDF 를 `pdftotext` 로 추출해 센 값이라 웹 판형의 머리글·꼬리글이 조금 섞여 있습니다. 편을 몇 개로 나눌지 정하는 참고값으로만 씁니다.
 

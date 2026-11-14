@@ -3,18 +3,41 @@ title: 07_devops MOC
 tags: [moc, devops, jenkins, nexus]
 status: final
 related: []
-updated: 2026-08-22
+updated: 2026-11-14
 ---
 
 # 07_devops
----
-> CI/CD, 아티팩트 저장소, 정적 분석 도구의 운영·확장 문서를 모은다. Jenkins 중심이다.
+
+> CI/CD, 아티팩트 저장소, 정적 분석 도구의 운영·확장 문서를 모읍니다. Jenkins 중심입니다.
+
+
 
 ## 경계 기준
 
-Jenkins 파이프라인 그루비 작성법은 여기로 온다. 반면 Jenkins가 만들어낸 메트릭을 해석하는 대시보드 구성은 [`06_observability/`](../06_observability/)다.
+Jenkins 파이프라인 그루비 작성법은 여기로 배치합니다. 반면 Jenkins가 만들어 낸 메트릭을 해석하는 대시보드 구성은 [`06_observability/`](../06_observability/)로 분류합니다.
 
-## 하위
+
+
+## 키워드
+
+### devops-keywords.md
+
+키워드 파일: [devops-keywords.md](../landscape/devops-keywords.md)
+
+| 묶음 | 다룬 문서 | 빈 필수 키워드 |
+|---|---|---|
+| 1단계 · 전달 모델 | 7편 | — |
+| 2단계 · CI 파이프라인 | 27편 | 머지 게이트 — branch protection · required status checks 로 실패한 PR 병합 차단 |
+| 3단계 · 산출물 | 7편 | 컨테이너 실행과 점검 — `docker run` · `logs` · `exec` · `inspect` · 포트 · 볼륨 · 네트워크 · Build Once, Deploy Many — 같은 digest 를 staging 에서 prod 로 승격 |
+| 4단계 · 패키징 | 0편 | — |
+| 5단계 · GitOps | 5편 | — |
+| 6단계 · 점진 배포 | 5편 | Expand and Contract — DB 스키마 변경과 버전 공존 · dual write · backfill |
+| 7단계 · 인프라를 코드로 | 2편 | — |
+| 8단계 · 파이프라인 보안 | 13편 | — |
+
+
+
+## 하위 폴더·문서 목록
 
 - [`02_Jenkins/`](02_Jenkins/) — 7개 주제 묶음 (2026-06-10 [`07_engine`](02_Jenkins/07_engine/) 신설)
   - [`01_core/`](02_Jenkins/01_core/) — Jenkins 제어 영역과 Declarative Pipeline 기초
