@@ -53,22 +53,21 @@ d.line(RX + 16, Y0 + 44, RX + 208, Y0 + 44, RULE, 1)
 for i, (name, size) in enumerate([("greeter:1", "72.8MB"), ("ubuntu:20.04", "72.8MB")]):
     d.t(RX + 20, Y0 + 72 + i * 26, name, 11.5, INK, MONO, "start")
     d.t(RX + 204, Y0 + 72 + i * 26, size, 11.5, MUTED, MONO, "end")
-d.t(RX + 112, Y0 + 132, "더해서 145.6MB 가 아닙니다", 11.5, OK, KR)
+d.t(RX + 112, Y0 + 132, "합산 145.6MB 가 아닌 크기", 11.5, OK, KR)
 
 d.o.append(f'<rect x="{RX}" y="{Y0 + 168}" width="224" height="120" rx="8" '
            f'fill="{ACC}06" stroke="{ACC}" stroke-width="1.2" stroke-dasharray="7 6"/>')
 d.t(RX + 20, Y0 + 198, "5장의 CoW 가", 12.5, ACC, KR, "start", 600)
-d.t(RX + 20, Y0 + 218, "여기에서 관측됩니다", 12.5, ACC, KR, "start", 600)
-d.t(RX + 20, Y0 + 244, "greeter 가 베이스의 층을", 11.5, MUTED, KR, "start")
-d.t(RX + 20, Y0 + 262, "공유하고 자기 층만 얹었기", 11.5, MUTED, KR, "start")
-d.t(RX + 20, Y0 + 280, "때문입니다.", 11.5, MUTED, KR, "start")
+d.t(RX + 20, Y0 + 218, "보이는 자리", 12.5, ACC, KR, "start", 600)
+d.t(RX + 20, Y0 + 244, "greeter 는 베이스의 층을 공유", 11.5, MUTED, KR, "start")
+d.t(RX + 20, Y0 + 262, "자기 층만 얹은 구조", 11.5, MUTED, KR, "start")
 
 WY = 572
 d.tone(LX, WY, W - 64, 56, WARN)
-d.t(LX + 20, WY + 26, "원문 정오 — 목록은 ENTRYPOINT 인데 빌드 출력은 CMD 입니다",
+d.t(LX + 20, WY + 26, "원문 정오 — 목록 ENTRYPOINT, 빌드 출력 CMD",
     12.5, INK, KR, "start", 600)
 d.t(LX + 20, WY + 46,
-    "ENTRYPOINT 는 인자를 덧붙이고 CMD 는 명령 자체를 대체합니다. 저자의 설명은 ENTRYPOINT 를 전제합니다.",
+    "ENTRYPOINT 는 인자를 덧붙임 · CMD 는 명령 자체를 대체",
     11.5, MUTED, KR, "start")
 
 d.legend(WY + 76, [("베이스", INFO), ("빌드 시점 — 층이 된다", OK),

@@ -45,7 +45,7 @@ for i, (y, label, ver) in enumerate([
     d.t(PX1 + 40, y + 24, label, 11.5, INK, KR, "start")
     d.t(PX1 + PW - 40, y + 24, ver, 11, SOFT, MONO, "end")
 
-d.t(PX1 + 20, PY + 244, "계층이 여럿이고 각 계층이 시스템의 모든 태스크를 나눕니다", 11.5, MUTED, KR, "start")
+d.t(PX1 + 20, PY + 244, "계층 여럿 · 각 계층이 모든 태스크를 나눈 것", 11.5, MUTED, KR, "start")
 
 d.arrow([(432, PY + PH / 2), (448, PY + PH / 2)], MUTED, "ar", 1.5)
 
@@ -67,8 +67,8 @@ d.t(PX2 + 20, PY + 244, "Arch · Fedora 31+ · Ubuntu 21.10 은 이미 기본이
     11.5, MUTED, KR, "start")
 
 d.tone(24, 448, W - 48, 62, INFO)
-d.t(44, 476, "메모리 컨트롤러가 다루는 것에 dentry 와 inode 가 들어 있습니다", 12.5, INK, KR, "start", 600)
-d.t(44, 498, "5장에서 본 VFS 자료구조 이름이 그대로 자원 제한의 대상으로 나오는 자리입니다.",
+d.t(44, 476, "메모리 컨트롤러의 대상 — dentry · inode", 12.5, INK, KR, "start", 600)
+d.t(44, 498, "5장의 VFS 자료구조가 자원 제한의 대상으로 나오는 자리",
     11.5, MUTED, KR, "start")
 
 d.legend(534, [("그때그때 붙인 쪽", WARN), ("v2 컨트롤러", OK), ("구조가 바뀐 자리", ACC)])

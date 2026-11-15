@@ -25,7 +25,7 @@ d.lanes([("나", "셸"), ("systemd", "PID 1"),
          ("greeter.sh", "oneshot"), ("저널", "journald")], y0=116, lane_w=190)
 
 d.msg("나", "systemd", "cp 단위파일 → /run/systemd/system/", 184, INFO,
-      sub="복사만 하면 systemd 가 알아서 집어 든다")
+      sub="복사만으로 systemd 가 인식")
 d.state("systemd", "greeter.timer — active (waiting)", 226, INFO)
 d.selfmsg("systemd", "OnCalendar=hourly — 다음 발동까지 49분", 268, MUTED)
 d.msg("systemd", "greeter.sh", "Type=oneshot · ExecStart", 312, ACC, mk="acc",
@@ -38,9 +38,9 @@ d.msg("저널", "나", "journalctl -f -u greeter.service", 460, INFO, mk="info")
 d.rails(492)
 
 d.tone(24, 508, W - 48, 62, ACC)
-d.t(44, 536, "배포판이 여기에서 갈립니다", 12.5, INK, KR, "start", 600)
-d.t(44, 558, "Debian 계열은 service 단위를 기본으로 활성화하고 시작하지만, "
-             "Red Hat 계열은 명시적인 systemctl start 와 enable 을 요구합니다.",
+d.t(44, 536, "배포판별 기본 동작", 12.5, INK, KR, "start", 600)
+d.t(44, 558, "Debian 계열 — service 단위를 기본으로 활성화 · 시작  /  "
+             "Red Hat 계열 — 명시적인 systemctl start · enable 필요",
     11.5, MUTED, KR, "start")
 
 d.legend(586, [("사람이 하는 일", INFO), ("systemd 가 앱을 부르는 자리", ACC),

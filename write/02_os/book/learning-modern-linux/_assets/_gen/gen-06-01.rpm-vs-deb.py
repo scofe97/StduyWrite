@@ -60,7 +60,7 @@ for r, (name, tools, distros, col, cells) in enumerate(lanes):
 AY = 500
 d.tone(X0, AY, LW + 3 * (CW + GAP) - GAP, 46, ACC)
 d.t(X0 + 20, AY + 28,
-    "고수준과 저수준을 가르는 기준은 의존성입니다. dpkg 는 deb 를 다루지만 의존성을 해결하지 않습니다.",
+    "고수준 · 저수준의 기준 — 의존성 해결 여부 (dpkg 는 저수준)",
     12, MUTED, KR, "start")
 
 d.legend(572, [("RPM 계보", INFO), ("deb 계보", OK), ("두 계보가 같은 자리", ACC)])

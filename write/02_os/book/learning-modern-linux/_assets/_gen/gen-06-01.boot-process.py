@@ -21,7 +21,7 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 880, 684
+W, H = 880, 716
 d = D(W, H, "LEARNING MODERN LINUX · 06-01 §2",
       "제어권이 세 번 넘어가고, 마지막 하나는 끝나지 않는다",
       "전원 버튼에서 셸 프롬프트까지의 다섯 단계. 펌웨어가 부트로더에, 부트로더가 커널에, "
@@ -31,6 +31,7 @@ d = D(W, H, "LEARNING MODERN LINUX · 06-01 §2",
 X0, CW, CH = 40, 800, 58
 Y = 148
 GAP = 18
+SH = 88  # 2~5단계 상자 높이: 셋째 줄 아래 여백을 첫 줄 위 여백(약 15px)과 맞춘다
 
 # 1단계 — 갈래 둘
 d.t(X0 + 12, Y - 8, "1단계 — 펌웨어", 13, INFO, KR, "start", 600)
@@ -58,19 +59,15 @@ for name, body, sub, col in steps:
     d.arrow([(W / 2, y - GAP), (W / 2, y - 2)], MUTED, "ar", 1.4)
     focal = (col is ACC)
     if focal:
-        d.o.append(f'<rect x="{X0}" y="{y}" width="{CW}" height="{CH + 16}" rx="8" '
+        d.o.append(f'<rect x="{X0}" y="{y}" width="{CW}" height="{SH}" rx="8" '
                    f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.5"/>')
     else:
-        d.box(X0, y, CW, CH + 16, PAPER2, col, 1.2, 8)
+        d.box(X0, y, CW, SH, PAPER2, col, 1.2, 8)
     d.t(X0 + 16, y + 26, name, 14, col if col is not MUTED else INK, KR, "start", 600)
     d.t(X0 + 16, y + 50, body, 12, INK if focal else MUTED, KR, "start")
     d.t(X0 + 16, y + 70, sub, 11.5, MUTED, KR, "start")
-    y += CH + 16 + GAP
+    y += SH + GAP
 
-d.tone(X0, y - GAP + 8, CW, 44, INFO)
-d.t(X0 + 20, y - GAP + 36,
-    "저자는 이 다섯 중 넷째와 다섯째가 이 책의 문맥에서 가장 중요하다고 적습니다.", 12, MUTED, KR, "start")
-
-d.legend(y + 40, [("제어를 넘기는 쪽", INFO), ("커널까지", OK), ("끝나지 않는 단계", ACC)])
+d.legend(y + 16, [("제어를 넘기는 쪽", INFO), ("커널까지", OK), ("끝나지 않는 단계", ACC)])
 d.save("06-01.boot-process.svg")
 print("ok 06-01.boot-process")

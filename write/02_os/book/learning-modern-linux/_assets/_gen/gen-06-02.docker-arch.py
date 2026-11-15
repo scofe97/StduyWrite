@@ -58,7 +58,8 @@ d.o.append(f'<rect x="{KX}" y="{KY}" width="{KW}" height="{KH}" rx="8" '
 d.t(KX + KW / 2, KY + 28, "커널에 시키는 일", 14, ACC, KR, "middle", 600)
 d.t(KX + KW / 2, KY + 52, "필요한 네임스페이스와", 11.5, ACC, KR)
 d.t(KX + KW / 2, KY + 72, "cgroups 를 만든다", 11.5, ACC, KR)
-d.path(f"M {DX + DW} {DY + 60} L {KX + KW / 2} {DY + 60} L {KX + KW / 2} {KY - 2}",
+# 레지스트리 상자를 피해 데몬 아래 띠(y 244~296)로 돌아 커널 상자 위로 들어간다
+d.path(f"M {DX + DW - 40} {DY + DH} L {DX + DW - 40} 276 L {KX + KW / 2} 276 L {KX + KW / 2} {KY - 2}",
        ACC, 1.4, m="acc")
 
 TX, TY, TW, TH = 32, 296, 240, 96
@@ -66,7 +67,8 @@ d.box(TX, TY, TW, TH, PAPER2, MUTED, 1.2, 8)
 d.t(TX + TW / 2, TY + 28, "런타임 입력", 14, INK, KR, "middle", 600)
 d.t(TX + TW / 2, TY + 52, "환경 변수 · 노출할 포트", 11.5, MUTED, KR)
 d.t(TX + TW / 2, TY + 72, "마운트할 볼륨", 11.5, MUTED, KR)
-d.path(f"M {TX + TW} {TY + 48} L {DX + DW / 2} {TY + 48} L {DX + DW / 2} {DY + DH + 2}",
+# 이미지 상자를 지나지 않게 위로 올라가 데몬 아래 띠(y 244~296)로 들어간다
+d.path(f"M {TX + TW / 2} {TY} L {TX + TW / 2} 260 L {DX + 80} 260 L {DX + 80} {DY + DH + 2}",
        MUTED, 1.3, m="ar", dash="6 5")
 
 BX, BY, BW, BH = 320, 428, 240, 76
@@ -75,8 +77,8 @@ d.t(BX + BW / 2, BY + 30, "컨테이너", 15, OK, KR, "middle", 600)
 d.t(BX + BW / 2, BY + 54, "start · stop · kill · rm", 11.5, MUTED, MONO)
 d.path(f"M {IX + IW / 2} {IY + IH} L {BX + BW / 2} {BY - 2}", OK, 1.4, m="ok")
 
-d.tone(32, 428, 240, 76, MUTED)
-d.t(52, 456, "재료는 Docker 이전에도 있었습니다", 12, INK, KR, "start", 600)
+d.tone(32, 428, 240, 88, MUTED)
+d.t(52, 456, "Docker 이전에도 있던 재료", 12, INK, KR, "start", 600)
 d.t(52, 478, "네임스페이스 · cgroups", 11.5, MUTED, MONO, "start")
 d.t(52, 496, "CoW 파일시스템 · 바인드 마운트", 11.5, MUTED, KR, "start")
 

@@ -65,10 +65,10 @@ BY = RY + len(rows) * RH + 12
 d.line(LX, BY - 6, LX + LW + C1 + C2 + C3, BY - 6, RULE, 1)
 d.o.append(f'<rect x="{LX}" y="{BY}" width="{LW + C1 + C2 + C3}" height="72" rx="8" '
            f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
-d.t(LX + 20, BY + 28, "파드가 성립하는 근거가 이 표의 두 줄 차이입니다", 13.5, ACC, KR, "start", 600)
-d.t(LX + 20, BY + 50, "한 파드의 컨테이너들은 CLONE_NEWNET 을 공유하므로 localhost 로 서로를 부릅니다.",
+d.t(LX + 20, BY + 26, "파드의 근거 — 이 표의 두 줄 차이", 13.5, ACC, KR, "start", 600)
+d.t(LX + 20, BY + 46, "CLONE_NEWNET 공유 → localhost 로 서로 호출",
     12, ACC, KR, "start")
-d.t(LX + 20, BY + 68, "그런데 CLONE_NEWNS 는 공유하지 않으므로 파일시스템은 따로 봅니다.",
+d.t(LX + 20, BY + 64, "CLONE_NEWNS 미공유 → 파일시스템은 따로",
     11.5, MUTED, KR, "start")
 
 d.legend(BY + 104, [("관측되는 커널 버전", OK), ("파드가 공유하는 것", ACC)])
