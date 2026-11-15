@@ -4,7 +4,7 @@ tags: [keywords, linux, os, kernel, container, performance, security]
 status: final
 source:
   - ../02_os/README.md
-  - ../02_os/kernel/README.md
+  - ../02_os/docs/kernel/README.md
   - ../02_os/book/systems-performance/README.md
 related:
   - ../README.md
@@ -70,14 +70,14 @@ updated: 2026-10-10
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
 | namespace 여덟 가지 · `unshare` | 필수 | [나머지 namespace](../08_cloud/book/container-security/04-02.%EB%82%98%EB%A8%B8%EC%A7%80%20namespace%EC%99%80%20%ED%98%B8%EC%8A%A4%ED%8A%B8%EC%97%90%EC%84%9C%20%EB%B3%B8%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88.md) · [namespace와 루트](../08_cloud/book/container-security/04-01.namespace%EC%99%80%20%EB%A3%A8%ED%8A%B8%20%EB%94%94%EB%A0%89%ED%86%A0%EB%A6%AC%20%E2%80%94%20%EA%B2%A9%EB%A6%AC%EB%A5%BC%20%EB%A7%8C%EB%93%9C%EB%8A%94%20%EB%91%90%20%EC%9E%A5%EC%B9%98.md) | Container Security 4장 |
-| cgroup v2 — controller · PSI | 필수 | [cgroup v2 깊이](../02_os/kernel/01-02.cgroup%20v2%20%EA%B9%8A%EC%9D%B4.md) · [Control Group](../08_cloud/book/container-security/03-01.Control%20Group%20%E2%80%94%20%EC%9E%90%EC%9B%90%EC%9D%84%20%EC%A0%9C%ED%95%9C%ED%95%B4%20%EA%B5%B6%EA%B8%B0%EA%B8%B0%EB%A5%BC%20%EB%A7%89%EB%8B%A4.md) | Container Security 3장 |
+| cgroup v2 — controller · PSI | 필수 | [cgroup v2](../02_os/docs/kernel/01-01.cgroup%20v2.md) · [Control Group](../08_cloud/book/container-security/03-01.Control%20Group%20%E2%80%94%20%EC%9E%90%EC%9B%90%EC%9D%84%20%EC%A0%9C%ED%95%9C%ED%95%B4%20%EA%B5%B6%EA%B8%B0%EA%B8%B0%EB%A5%BC%20%EB%A7%89%EB%8B%A4.md) | Container Security 3장 |
 | cgroup 경로와 컨테이너 · Pod 신원의 연결 | 추천 | | Container Security 3장 |
 | 한도의 출처 — 사람이 정한 값 · 기계가 유도한 값 · 상속된 값 | 필수 | [진단 개념](../troubleshooting/_concepts/common-%ED%95%9C%EB%8F%84%EB%8A%94-%EC%96%B4%EB%94%94%EC%84%9C-%EC%98%A4%EB%8A%94%EA%B0%80.md) | Linux Kernel Docs — cgroup v2 |
-| `memory.max` · `memory.events` · OOM Killer | 필수 | [namespace와 cgroup으로 보는 격리](../08_cloud/book/kubernetes-in-action/02-03.%EB%84%A4%EC%9E%84%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4%EC%99%80%20cgroup%EC%9C%BC%EB%A1%9C%20%EB%B3%B4%EB%8A%94%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EA%B2%A9%EB%A6%AC.md) · [Endowus OOMKilled](../02_os/kernel/01-06.cgroup%20%EC%82%AC%EB%A1%80%20%E2%80%94%20Endowus%20OOMKilled.md) | |
-| `cpu.max` · `cpu.stat` · throttling | 필수 | [cgroup v2 깊이](../02_os/kernel/01-02.cgroup%20v2%20%EA%B9%8A%EC%9D%B4.md) | |
-| mount propagation 네 가지 | 필수 | [마운트 네임스페이스와 propagation](../02_os/kernel/01-03.%EB%A7%88%EC%9A%B4%ED%8A%B8%20%EB%84%A4%EC%9E%84%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4%EC%99%80%20propagation.md) | |
-| OverlayFS · copy-on-write | 필수 | [OverlayFS와 user namespace](../02_os/kernel/01-07.OverlayFS%EC%99%80%20user%20namespace%20%E2%80%94%20Netflix%20UID%20%EA%B2%A9%EB%A6%AC.md) | |
-| user namespace · rootless | 추천 | [OverlayFS와 user namespace](../02_os/kernel/01-07.OverlayFS%EC%99%80%20user%20namespace%20%E2%80%94%20Netflix%20UID%20%EA%B2%A9%EB%A6%AC.md) · [나머지 namespace](../08_cloud/book/container-security/04-02.%EB%82%98%EB%A8%B8%EC%A7%80%20namespace%EC%99%80%20%ED%98%B8%EC%8A%A4%ED%8A%B8%EC%97%90%EC%84%9C%20%EB%B3%B8%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88.md) | Container Security 4장 |
+| `memory.max` · `memory.events` · OOM Killer | 필수 | [namespace와 cgroup으로 보는 격리](../08_cloud/book/kubernetes-in-action/02-03.%EB%84%A4%EC%9E%84%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4%EC%99%80%20cgroup%EC%9C%BC%EB%A1%9C%20%EB%B3%B4%EB%8A%94%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EA%B2%A9%EB%A6%AC.md) · [Endowus OOMKilled](../01_language/book/Inside the Java Virtual Machine JVM Advanced Features and Best Practices/ch02_automatic-memory-management/01-05.실전 — Docker 컨테이너 네이티브 메모리와 OOMKilled.md#64-컨테이너-힙-비율과-오프힙-예산) | |
+| `cpu.max` · `cpu.stat` · throttling | 필수 | [cgroup v2](../02_os/docs/kernel/01-01.cgroup%20v2.md) | |
+| mount propagation 네 가지 | 필수 | [mount propagation](../02_os/docs/kernel/01-02.mount%20propagation.md) | |
+| OverlayFS · copy-on-write | 필수 | [OverlayFS와 user namespace](../02_os/docs/kernel/OverlayFS%20%EC%99%80%20idmapped%20mount%20%E2%80%94%20Netflix%20%EC%82%AC%EB%A1%80.md) | |
+| user namespace · rootless | 추천 | [OverlayFS와 user namespace](../02_os/docs/kernel/OverlayFS%20%EC%99%80%20idmapped%20mount%20%E2%80%94%20Netflix%20%EC%82%AC%EB%A1%80.md) · [나머지 namespace](../08_cloud/book/container-security/04-02.%EB%82%98%EB%A8%B8%EC%A7%80%20namespace%EC%99%80%20%ED%98%B8%EC%8A%A4%ED%8A%B8%EC%97%90%EC%84%9C%20%EB%B3%B8%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88.md) | Container Security 4장 |
 | VM 대 컨테이너 — 격리 강도의 차이 | 추천 | [가상머신 격리](../08_cloud/book/container-security/05-01.%EA%B0%80%EC%83%81%EB%A8%B8%EC%8B%A0%20%E2%80%94%20%EC%99%9C%20VM%20%EA%B2%A9%EB%A6%AC%EA%B0%80%20%EB%8D%94%20%EA%B0%95%ED%95%98%EB%8B%A4%EA%B3%A0%20%ED%95%98%EB%8A%94%EA%B0%80.md) | Container Security 5장 |
 | 컨테이너 = namespace · cgroup · 파일시스템 — 재료가 아니라 조합 | 추천 | [컨테이너는 조합](../02_os/book/learning-modern-linux/06-02.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%EC%9D%98%20%EC%83%88%EB%A1%9C%EC%9B%80%EC%9D%80%20%EC%9E%AC%EB%A3%8C%EA%B0%80%20%EC%95%84%EB%8B%88%EB%9D%BC%20%EC%A1%B0%ED%95%A9%EC%97%90%20%EC%9E%88%EB%8B%A4.md) |  |
 | cgroup namespace | 선택 |  | [cgroup_namespaces(7)](https://man7.org/linux/man-pages/man7/cgroup_namespaces.7.html) |
