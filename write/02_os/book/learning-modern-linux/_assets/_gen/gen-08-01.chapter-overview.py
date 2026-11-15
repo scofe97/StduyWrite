@@ -1,54 +1,121 @@
-# 08-01 학습 목표 뒤 전체 지도 — 새 5절을 문제 흐름으로 읽는 순서로.
+# 08-01 전체 지도 — 로그 한 줄의 일생 다섯 단계 파이프라인.
 # 원문 8장 서두: "To establish a common vocabulary, we'll first review different signal types you might
 #       come across, such as system or application logs, metrics, and process traces. We'll also have a
 #       look at how to go about troubleshooting and measuring performance. Next, we'll focus on logs
 #       specifically, reviewing different options and semantics."
-# 타입 스펙: type-process — 절마다 같은 의미 슬롯(번호 · 이름 · 그 절이 답하는 물음)이 반복되고
-#           읽는 순서가 화살표로 흐른다. 축약: 주체 lane 이 없어 카드 격자 stride 로 놓는다.
+# 타입 스펙: type-data-flow — 파이프라인 단계마다 누가 무엇을 하고 데이터가 어디로 흐르는지 보인다.
 import sys; sys.path.insert(0, ".")
-from dd import D, ACC, MUTED, SOFT, INK, PAPER2, RULE, KR, MONO
+from dd import D, ACC, MUTED, SOFT, INK, OK, INFO, PAPER2, RULE, KR, MONO
 
-W, H = 880, 410
+W, H = 880, 416
 d = D(W, H, "LEARNING MODERN LINUX · 08-01",
-      "재는 것은 바깥이고 알고 싶은 것은 안이다",
-      "8장 첫 구간의 다섯 절을 문제 흐름으로 이은 지도. 문제 제기에서 원인 분석, 두 해결책과 비교까지 이어진다.",
-      "1절이 이 노트의 제목이 가리키는 자리입니다")
+      "로그 한 줄의 일생 — 다섯 단계 흐름",
+      "로그 한 줄이 생산에서 수집·분배·조회·정리까지 다섯 단계를 거치는 전체 경로.",
+      "journald 가 모든 줄을 먼저 받고 rsyslog 가 텍스트 파일로 나눕니다")
 
-CW, CH, GAPX, GAPY, X0, Y0 = 272, 96, 12, 24, 20, 116
+# 상단 파이프라인 카드 5개 (생산 → 수집 → 분배 → 조회 → 정리)
+X0, Y0 = 24, 104
+CW, CH = 144, 88
+GAPX = 28
+pos_x = [X0 + i * (CW + GAPX) for i in range(5)]  # [24, 196, 368, 540, 712]
+
 cards = [
-    ("§1", "바깥 신호와 어휘", "앱이 이상할 때 바깥에서 무엇을 보나"),
-    ("§2", "저널과 파일의 분기", "한 줄은 왜 저널과 파일로 갈라지나"),
-    ("§3", "필요한 줄 찾기", "저널과 파일에서 원하는 줄을 어떻게 찾나"),
-    ("§4", "로그와 디스크 보존", "로그가 디스크를 채우지 않게 어떻게 줄이나"),
-    ("§5", "텍스트 로그와 저널", "장애 때 둘 중 어느 쪽을 먼저 여나"),
+    ("1 생산", "앱과 커널", "/dev/log 소켓"),
+    ("2 수집", "journald", "바이너리 저널"),
+    ("3 분배", "rsyslog", "규칙 기반 라우팅"),
+    ("4 조회", "사람", "필드 · 문자열 검색"),
+    ("5 정리", "디스크 상한 관리", "회전과 정리"),
 ]
 
-
-def pos(i):
-    return X0 + (i % 3) * (CW + GAPX), Y0 + (i // 3) * (CH + GAPY)
-
-
-for i in range(len(cards) - 1):
-    x1, y1 = pos(i); x2, y2 = pos(i + 1)
-    if y1 == y2:
-        d.arrow([(x1 + CW, y1 + CH / 2), (x2 - 2, y2 + CH / 2)], MUTED, "ar", 1.3)
-    else:
-        bus = y1 + CH + 12
-        d.path(f"M {x1 + CW / 2} {y1 + CH} L {x1 + CW / 2} {bus} "
-               f"L {x2 + CW / 2} {bus} L {x2 + CW / 2} {y2 - 2}", MUTED, 1.3, m="ar")
-
-for i, (n, title, q) in enumerate(cards):
-    x, y = pos(i)
-    focal = (i == 0)
+for i, (tag, who, where) in enumerate(cards):
+    x = pos_x[i]
+    focal = (i == 1)  # journald 수집이 focal
     if focal:
-        d.o.append(f'<rect x="{x}" y="{y}" width="{CW}" height="{CH}" rx="8" '
-                   f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
+        d.tone(x, Y0, CW, CH, ACC, 6, "14", 1.4)
+        d.t(x + 14, Y0 + 24, tag, 11, ACC, KR, "start", 600)
+        d.t(x + 14, Y0 + 48, who, 13, ACC, MONO, "start", 600)
+        d.t(x + 14, Y0 + 70, where, 11, MUTED, KR, "start")
     else:
-        d.box(x, y, CW, CH, PAPER2, RULE, 1.0, 8)
-    d.t(x + 16, y + 26, n, 12, ACC if focal else SOFT, MONO, "start", 600)
-    d.t(x + 16, y + 54, title, 14, ACC if focal else INK, KR, "start", 600)
-    d.t(x + 16, y + 78, q, 11.5, MUTED, KR, "start")
+        d.box(x, Y0, CW, CH, PAPER2, RULE, 1.0, 6)
+        d.t(x + 14, Y0 + 24, tag, 11, SOFT, KR, "start", 600)
+        d.t(x + 14, Y0 + 48, who, 13, INK, KR if i != 2 else MONO, "start", 600)
+        d.t(x + 14, Y0 + 70, where, 11, MUTED, KR, "start")
 
-d.legend(362, [("바깥을 재서 안을 판정한다는 정의가 서는 자리", ACC)])
+# 카드 사이 수평 흐름 화살표 (축 정렬 148px)
+for i in range(4):
+    d.arrow([(pos_x[i] + CW, Y0 + CH / 2), (pos_x[i + 1] - 4, Y0 + CH / 2)], MUTED, "ar", 1.4)
+
+# 하단 세부 상자 및 분기 (Y1 = 232, DH = 60)
+Y1, DH = 232, 60
+
+# 1 생산 세부 (직하 화살표)
+cx0 = pos_x[0] + CW / 2
+d.arrow([(cx0, Y0 + CH), (cx0, Y1 - 4)], MUTED, "ar", 1.3)
+d.box(pos_x[0], Y1, CW, DH, PAPER2, RULE, 1.0, 6)
+d.t(cx0, Y1 + 24, "앱 → /dev/log", 11, INK, MONO, "middle")
+d.t(cx0, Y1 + 44, "커널 → dmesg 버퍼", 11, MUTED, KR, "middle")
+
+# 2 수집 분기 (/run 메모리 vs /var/log/journal 디스크)
+cx1 = pos_x[1] + CW / 2
+b1_w, b2_w = 72, 84
+b1_cx = pos_x[1] + b1_w / 2
+b2_x = pos_x[1] + b1_w + 6
+b2_cx = b2_x + b2_w / 2
+
+d.line(cx1, Y0 + CH, cx1, Y0 + CH + 20, MUTED, 1.2)
+d.line(b1_cx, Y0 + CH + 20, b2_cx, Y0 + CH + 20, MUTED, 1.2)
+d.arrow([(b1_cx, Y0 + CH + 20), (b1_cx, Y1 - 4)], INFO, "info", 1.3)
+d.arrow([(b2_cx, Y0 + CH + 20), (b2_cx, Y1 - 4)], INFO, "info", 1.3)
+
+d.box(pos_x[1], Y1, b1_w, DH, PAPER2, INFO, 1.0, 6)
+d.t(b1_cx, Y1 + 24, "/run", 10.5, INFO, MONO, "middle", 600)
+d.t(b1_cx, Y1 + 44, "메모리(휘발)", 11, MUTED, KR, "middle")
+
+d.box(b2_x, Y1, b2_w, DH, PAPER2, INFO, 1.0, 6)
+d.t(b2_cx, Y1 + 24, "/var/log/journal", 8.0, INFO, MONO, "middle", 600)
+d.t(b2_cx, Y1 + 44, "디스크(영속)", 11, MUTED, KR, "middle")
+
+# 3 분배 세부 (/var/log/* 텍스트 파일)
+cx2 = pos_x[2] + CW / 2
+d.arrow([(cx2, Y0 + CH), (cx2, Y1 - 4)], MUTED, "ar", 1.3)
+d.box(pos_x[2], Y1, CW, DH, PAPER2, INFO, 1.0, 6)
+d.t(cx2, Y1 + 24, "/var/log/* 파일", 11.5, INFO, MONO, "middle", 600)
+d.t(cx2, Y1 + 44, "syslog · messages", 10.5, MUTED, MONO, "middle")
+
+# 4 조회 세부 (저널 필드 매칭 vs 텍스트 검색)
+cx3 = pos_x[3] + CW / 2
+d.arrow([(cx3, Y0 + CH), (cx3, Y1 - 4)], MUTED, "ar", 1.3)
+d.box(pos_x[3], Y1, CW, DH, PAPER2, RULE, 1.0, 6)
+d.t(cx3, Y1 + 24, "journalctl 필드 매칭", 11, INK, KR, "middle")
+d.t(cx3, Y1 + 44, "grep · zgrep 문자열", 11, MUTED, KR, "middle")
+
+# 5 정리 분기 (텍스트 logrotate vs 저널 vacuum)
+cx4 = pos_x[4] + CW / 2
+d.line(cx4, Y0 + CH, cx4, Y0 + CH + 20, MUTED, 1.2)
+d.line(pos_x[4] + 34, Y0 + CH + 20, pos_x[4] + 110, Y0 + CH + 20, MUTED, 1.2)
+d.arrow([(pos_x[4] + 34, Y0 + CH + 20), (pos_x[4] + 34, Y1 - 4)], OK, "ok", 1.3)
+d.arrow([(pos_x[4] + 110, Y0 + CH + 20), (pos_x[4] + 110, Y1 - 4)], OK, "ok", 1.3)
+
+d.box(pos_x[4], Y1, 68, DH, PAPER2, OK, 1.0, 6)
+d.t(pos_x[4] + 34, Y1 + 24, "logrotate", 11, OK, MONO, "middle", 600)
+d.t(pos_x[4] + 34, Y1 + 44, "텍스트 회전", 11, MUTED, KR, "middle")
+
+d.box(pos_x[4] + 76, Y1, 68, DH, PAPER2, OK, 1.0, 6)
+d.t(pos_x[4] + 110, Y1 + 24, "journald", 11, OK, MONO, "middle", 600)
+d.t(pos_x[4] + 110, Y1 + 44, "vacuum 정리", 11, MUTED, KR, "middle")
+
+# 절 번호 라벨 (작게 표시)
+Y2 = 318
+d.t(cx0, Y2, "§2 첫 문단", 11, SOFT, KR, "middle")
+d.t(cx1, Y2, "§2 · §4", 11, SOFT, KR, "middle")
+d.t(cx2, Y2, "§2 · §3", 11, SOFT, KR, "middle")
+d.t(cx3, Y2, "§3 · §5", 11, SOFT, KR, "middle")
+d.t(cx4, Y2, "§4", 11, SOFT, KR, "middle")
+
+# 범례
+d.legend(356, [("최초 수집 주체 (journald)", ACC),
+               ("저장소 및 분배 경로", INFO),
+               ("정리 주체 분리 (텍스트 ≠ 저널)", OK)])
+
 d.save("08-01.chapter-overview.svg")
 print("ok 08-01.chapter-overview")
