@@ -72,6 +72,18 @@ updated: 2026-11-14
 
 
 
+## 예정 주제 — Spring Cloud 스택 (TBD)
+
+> 2026-11-15 `08_cloud/README.md` 에서 옮겨 왔습니다. 아직 쓴 노트는 없고, 쓰기 시작하면 주제에 맞는 폴더를 그때 만듭니다.
+
+- Spring Cloud Gateway — 라우팅·필터·Circuit Breaker 통합
+- Spring Cloud Config — 중앙 설정 저장소
+- Spring Cloud Stream (Kafka·RabbitMQ 추상화) — 메시징 도메인 측면은 [`../04_messaging/`](../04_messaging/) 확인
+- K8s 친화적 설정 — `application-k8s.yml`, probes, graceful shutdown
+
+경계: 매니페스트·클러스터 운영은 [`08_cloud/`](../08_cloud/README.md) 몫이고, 여기에는 *Spring 애플리케이션이 그 위에서 돌 때 필요한 Spring 스택*만 둡니다.
+
+
 ## 학습 경로 추천
 
 대상자에 따라 진입점이 다릅니다.
