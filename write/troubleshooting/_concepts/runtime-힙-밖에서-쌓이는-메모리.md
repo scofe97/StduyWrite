@@ -170,8 +170,8 @@ MALLOC_ARENA_MAX=4       # 코어 수에서 유도되지 않게 개수 상한을
 - [개념 노트 지도](./README.md) — 무엇이 여기 오고 무엇이 문항에 남나
 - [Native Memory Tracking — NMT와 shared library 한계](../../01_language/book/jpf_java-performance/08-02.Native%20Memory%20Tracking%20%E2%80%94%20NMT%EC%99%80%20shared%20library%20%ED%95%9C%EA%B3%84.md) — NMT 가 무엇을 세고 무엇을 못 보는지, `MALLOC_ARENA_MAX` 가 나오는 자리
 - [실전 — Docker 컨테이너 네이티브 메모리와 OOMKilled](../../01_language/book/Inside%20the%20Java%20Virtual%20Machine%20JVM%20Advanced%20Features%20and%20Best%20Practices/ch02_automatic-memory-management/01-05.%EC%8B%A4%EC%A0%84%20%E2%80%94%20Docker%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%84%A4%EC%9D%B4%ED%8B%B0%EB%B8%8C%20%EB%A9%94%EB%AA%A8%EB%A6%AC%EC%99%80%20OOMKilled.md) — 힙은 멀쩡한데 RSS 가 터진 다른 사례. 거기는 닫지 않은 `Inflater` 의 네이티브 메모리였습니다
-- [cgroup 사례 — Endowus OOMKilled](../../02_os/kernel/01-06.cgroup%20%EC%82%AC%EB%A1%80%20%E2%80%94%20Endowus%20OOMKilled.md) — RSS 와 힙의 관계, `MaxRAMPercentage` 로 한도에서 힙을 잡는 구성
-- [cgroup v2 깊이](../../02_os/kernel/01-02.cgroup%20v2%20%EA%B9%8A%EC%9D%B4.md) — CPU 한도가 시간의 몫으로 잘리는 방식과 메모리 한도의 계정
-- [OOMKilled 사례 분석](../../08_cloud/kubernetes/09_operations/09-02.OOMKilled%20%EC%82%AC%EB%A1%80%20%EB%B6%84%EC%84%9D.md) — 쿠버네티스 쪽에서 같은 증상을 읽는 순서
+- [Endowus OOMKilled 사례 (ITJVM 01-05)](../../01_language/book/Inside the Java Virtual Machine JVM Advanced Features and Best Practices/ch02_automatic-memory-management/01-05.실전 — Docker 컨테이너 네이티브 메모리와 OOMKilled.md#64-컨테이너-힙-비율과-오프힙-예산) — RSS 와 힙의 관계, `MaxRAMPercentage` 로 한도에서 힙을 잡는 구성
+- [cgroup v2](../../02_os/docs/kernel/01-01.cgroup%20v2.md) — CPU 한도가 시간의 몫으로 잘리는 방식과 메모리 한도의 계정
+- [OOMKilled 사례](../../08_cloud/docs/kubernetes/03_operations/OOMKilled%20%EC%82%AC%EB%A1%80%20%E2%80%94%20Endowus%20Rebalance%20%EC%84%9C%EB%B9%84%EC%8A%A4.md) — 쿠버네티스 쪽에서 같은 증상을 읽는 순서
 - [바이트 버퍼](../../09_spring/03_network/reactive-net/01-05.%EB%B0%94%EC%9D%B4%ED%8A%B8%20%EB%B2%84%ED%8D%BC.md) — Netty 가 힙 바깥 버퍼를 다루는 방식
 - [무엇을 보려면 무엇을 치는가](./common-%EB%AC%B4%EC%97%87%EC%9D%84-%EB%B3%B4%EB%A0%A4%EB%A9%B4-%EB%AC%B4%EC%97%87%EC%9D%84-%EC%B9%98%EB%8A%94%EA%B0%80.md) — 알고 싶은 단위가 도구를 정한다

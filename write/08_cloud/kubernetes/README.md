@@ -1,155 +1,40 @@
 ---
-title: 08_cloud/kubernetes — Kubernetes 개념 딥다이브
-tags: [moc, kubernetes, helm, operator, argocd]
+title: 08_cloud/kubernetes — Kubernetes 데브툴스 운영
+tags: [moc, kubernetes, devtools, jenkins, sonarqube, argocd, harbor]
 status: final
-source:
-  - ../../../poc/03_CloudNative/02-kubernetes/README.md@8ac9e97
-  - https://kubernetes.io/docs/concepts/
 related:
-  - ../k8s-keywords.md
   - ../README.md
+  - ../docs/kubernetes/README.md
+  - 11_devtools/README.md
   - ../book/argocd-up-and-running/README.md
-  - ../book/kubernetes-in-action/README.md
-updated: 2026-11-06
+updated: 2026-11-14
 ---
 
-# 08_cloud/kubernetes
+# 08_cloud/kubernetes — Kubernetes 데브툴스 운영
+
 ---
-> Kubernetes를 개념 축으로 정리한 딥다이브 노트입니다. 워크로드에서 시작해 설정·저장소·네트워크·내부 구조·보안·확장·Day-2 운영까지 잇습니다.
 
-공식 문서의 concepts 대분류를 뼈대로 삼고, 폴더 번호로 학습 흐름을 표시합니다. 이 카테고리는 클러스터 안에서 리소스가 선언되고 배치되고 연결되고 운영되는 과정을 다룹니다.
+> Kubernetes 위에서 동작하는 CI/CD·GitOps·레지스트리 데브툴스 운영 노트를 다룹니다.
 
-서비스 간 L7 정책·mTLS·세밀한 트래픽 제어는 `service-mesh` <!-- 링크 끊김(2026-08): ../service-mesh/README.md --> 카테고리가 맡습니다. App of Apps·ApplicationSet·Image Updater 운영은 [Argo CD Up and Running 정독](../book/argocd-up-and-running/README.md)에서 다룹니다.
-
-책 한 권을 저자 순서대로 따라가는 정독본은 [`book/kubernetes-in-action`](../book/kubernetes-in-action/README.md)에 따로 있습니다. 개념은 book 노트가 정본이고, 이 폴더에는 book 이 다루지 않는 운영·도구 주제만 둡니다(2026-10-29 정리, book 에 옮긴 뒤 12편 삭제).
-
-
+쿠버네티스 핵심 개념과 순정 아키텍처·운영 문서는 [`../docs/kubernetes/`](../docs/kubernetes/README.md) 및 [`../book/`](../book/)으로 이관되었습니다. 현재 이 폴더에는 쿠버네티스 클러스터 위에 배포해 사용하는 개발 생산성 도구 모음인 [`11_devtools/`](11_devtools/README.md)만 남겨 운영합니다.
 
 ## 폴더 구조
 
-> 공식 concepts 대분류를 대주제 폴더로 둡니다. 폴더 번호(`NN_`)와 파일 번호(`NN-MM`)가 읽기 순서를 나타냅니다.
+| 폴더 | 다루는 것 | 문서 |
+|------|-----------|------|
+| [`11_devtools/`](11_devtools/README.md) | K8s 기반 CI/CD·GitOps·레지스트리 도구 운영 | 4편 |
 
-각 폴더의 `README.md`는 해당 대주제의 진입 안내 역할을 합니다. 새 문서는 대응하는 대주제에 바로 배치합니다.
+## 문서 목록 (11_devtools)
 
-| 폴더 | 공식 concepts | 한 줄 요약 |
-|------|--------------|-----------|
-| [`06_architecture/`](06_architecture/README.md) | Cluster Architecture | Control Plane·etcd·API 보안·업그레이드 |
-| [`09_operations/`](09_operations/README.md) | Cluster Administration | 관측·트러블슈팅·kubectl 고급·CKA |
-| [`11_devtools/`](11_devtools/README.md) | (비공식) | K8s 위 CI/CD·GitOps·레지스트리 도구 |
-
-`11_devtools`는 공식 concepts에는 없는 주제입니다. Jenkins·SonarQube·ArgoCD·Harbor는 K8s 위에 올려 쓰는 CI/CD·GitOps·레지스트리 도구라, 순정 개념과 섞이지 않도록 별도 대주제로 분리했습니다.
-
-패키징(Helm·Kustomize)은 [`../docs/helm/`](../docs/helm/README.md)·[`../docs/kustomize/`](../docs/kustomize/README.md)로 옮겼습니다.
-
-
-
-## 대주제별 소개
-
-> 위 표가 *어디에 무엇이 있나*를 짚는다면, 이 절은 각 폴더가 *무엇을 왜 다루는가*를 한 단계 풀어 소개합니다. 파일 한 줄 소개는 본문을 읽기 전 "이 문서에서 무엇을 얻는가"를 미리 잡아 줍니다.
-
-### 00_overview — 개요
-
-클러스터를 직접 띄워 보고, 이후 모든 폴더가 딛고 설 실습 토대를 만듭니다.
-
-- **00-01 로컬 클러스터 구성** — minikube·kind·k3d·kubeadm으로 프로덕션 유사 환경을 로컬에서 빠르게 재현해, 뒤 문서의 실습 바닥을 깝니다.
-
-### 01_workloads — 워크로드
-
-애플리케이션을 감싸 실행하는 리소스를 봅니다. 상시 실행되는 워크로드부터 끝나는 배치 작업까지 한 묶음입니다.
-
-- **01-01 핵심 워크로드** — Pod·Deployment·Service가 각각 무엇을 책임지는지, 셋의 역할 분담으로 애플리케이션이 어떻게 굴러가는지 봅니다.
-- **01-02 배치 워크로드** — Job·CronJob·DaemonSet·InitContainer·Sidecar가 각각 어떤 의도를 표현하는지, 일회성·주기성·노드별 워크로드를 한 묶음으로 봅니다.
-
-### 02_configuration — 설정
-
-애플리케이션에 설정과 자원 한도를 주입하는 방법을 봅니다.
-
-- **02-01 K8s 환경변수와 Spring 설정 주입** — ConfigMap 환경변수가 Spring `application.yml`에 어떻게 적용되는지, 설정 주입의 두 세계를 잇습니다.
-- **02-02 자원 관리** — Requests/Limits와 QoS로 안정성을 어떻게 확보하는지, cgroup이 보는 메모리와 애플리케이션이 보는 메모리의 관계를 봅니다.
-
-### 03_storage — 저장소
-
-파드가 사라져도 데이터를 남기는 스토리지 모델을 봅니다.
-
-- **03-01 스토리지와 상태** — Stateless와 Stateful이 스토리지를 다루는 방식이 어떻게 갈리는지, Volume·PV·PVC로 상태를 어디에 두는지 봅니다.
-
-### 06_architecture — 클러스터 내부 구조
-
-Control Plane과 노드가 어떻게 맞물려 돌아가는지, 그 상태를 어떻게 지키고 복구하는지를 봅니다.
-
-- **06-01 클러스터 업그레이드와 ETCD 백업·복구** — kubeadm 업그레이드와 etcd 재해 복구를 어떤 절차로 다루는지, etcd Raft 합의가 일관성을 어떻게 지키는지 봅니다.
-- **06-02 TLS와 API 접근 보안** — 컨트롤 플레인 PKI(API 서버·etcd·kubelet 인증서)가 어떻게 연결되는지 봅니다.
-
-### 07_security — 보안
-
-누가 무엇을 할 수 있는지, 권한을 어떻게 좁히는지를 봅니다.
-
-- **07-01 RBAC과 보안** — RBAC·ServiceAccount 토큰·Admission(Webhook/VAP)·NetworkPolicy를 어떻게 묶는지 봅니다.
-
-### 08_extending — 확장
-
-CRD와 Controller로 Kubernetes 위에 우리만의 리소스를 얹어, Stateful 워크로드의 Day-2 운영을 자동화합니다.
-
-- **08-01 Operator 패턴** — CRD와 컨트롤러가 어떻게 연동돼 "원하는 상태"를 코드로 표현하는지 봅니다.
-- **08-02 MySQL Operator** — MySQL HA를 어떻게 선언적으로 자동화하는지 봅니다.
-- **08-03 PostgreSQL Operator** — CloudNativePG의 복제·백업 전략을 봅니다.
-- **08-04 Redis Operator** — Cluster와 Sentinel이 언제 갈라지는지 봅니다.
-- **08-05 Kafka Operator** — Strimzi로 Kafka를 선언적으로 관리하는 법을 봅니다.
-- **08-06 Redpanda Operator** — Strimzi와 Redpanda Operator의 차이를 봅니다.
-
-### 09_operations — Day-2 운영
-
-클러스터를 안정적으로 굴리기 위한 관측·진단·조회 주제를 모았습니다.
-
-- **09-01 모니터링과 트러블슈팅** — 클러스터 장애를 어떻게 체계적으로 진단하는지 봅니다.
-- **09-02 OOMKilled 사례 분석** — 6GB Pod가 반복 OOMKilled되는 실제 사례에서 JVM heap과 cgroup이 보는 메모리가 왜 어긋나는지 추적합니다.
-- **09-03 JSONPath와 kubectl 고급 조회** — 반복 조회·스크립팅에 필요한 출력 제어를 익힙니다.
-- **09-04 CKA 대비와 문제 풀이 전략** — 시험 범위를 실무 문서와 어떻게 잇는지 봅니다.
-
-### 11_devtools — DevTools와 GitOps
-
-Jenkins·SonarQube·ArgoCD·Harbor를 K8s 위에 올려 개발 생산성과 배포 자동화를 얻습니다. ArgoCD 상세 운영은 [Argo CD Up and Running 정독](../book/argocd-up-and-running/README.md)으로 넘깁니다.
-
-- **11-01 Jenkins on K8s** — K8s 네이티브 Jenkins가 무엇이 달라지는지(동적 Agent 등) 봅니다.
-- **11-02 SonarQube on K8s** — SonarQube의 영속성 전략을 봅니다.
-- **11-03 ArgoCD와 GitOps** — Git을 단일 진실 공급원으로 삼는 배포 모델을 입문 수준으로 봅니다.
-- **11-04 Harbor** — 이미지와 OCI Helm chart를 어디서 통합 관리하는지 봅니다.
-
-
-
-## 학습 로드맵
-
-> [Kubernetes 학습 로드맵](../k8s-keywords.md)은 이 폴더의 문서를 오브젝트, 워크로드, 연결, 자원과 저장, 내부 구조, 보안과 확장, 운영 순서로 연결합니다.
-
-로드맵의 단계별 표에서 키워드에 대응하는 현재 문서와 완료 기준을 함께 확인합니다.
-
-
-
-## 점검 질문 절 (`## N. 점검 질문`)
-
-> 점검 질문은 별도 문서가 아니라 각 본문 끝의 한 절로 들어 있습니다.
-
-각 본문은 마지막 콘텐츠 절 뒤에 `## N. 점검 질문`을 둡니다. 해당 장의 심화 Q&A를 개념 설명과 같은 문서에서 이어 읽습니다. 예를 들어 `01_workloads/01-02.배치 워크로드.md`에는 `## 8. 점검 질문`이 있습니다.
-
-기존의 `{제목} 점검.md` 짝 파일은 복습할 때 파일을 오가는 비용을 줄이기 위해 본문에 흡수했습니다. 실습은 각 본문의 `실습 환경`에 따라 GCP K8s 클러스터에서 수행합니다.
-
-`00_overview`의 로컬 클러스터 구성, `01_workloads/01-01.핵심 워크로드`, `03_storage/03-01.스토리지와 상태`처럼 원래 점검 질문이 없던 입문 편은 본문만 있습니다.
-
-
-
-## 실습 환경
-
-> 개인 GCP K8s 클러스터를 기준으로 하되, 본문은 가능한 한 범용 명령으로 유지합니다.
-
-현재 기준 실습은 개인 GCP K8s 클러스터(dev-server 1~3, asia-northeast3-a, kubeadm v1.31.14)에서 수행합니다. 환경이 바뀌어도 본문이 유지되도록 환경 특화 명령은 각 본문의 `실습 환경`·`실습 기록` 서술로 몰아 두고, 개념 본문은 `kubectl`·Helm 범용 명령으로 씁니다. 환경 상세는 `gcp` 스킬 문서에서 관리합니다.
-
-
+| 번호 | 제목 | 한 줄 소개 |
+|------|------|-----------|
+| 11-01 | [Jenkins on K8s](11_devtools/11-01.Jenkins%20on%20K8s.md) | K8s 네이티브 Jenkins가 무엇이 달라지는지(동적 Agent 등) 봅니다. |
+| 11-02 | [SonarQube on K8s](11_devtools/11-02.SonarQube%20on%20K8s.md) | SonarQube의 영속성 전략을 봅니다. |
+| 11-03 | [ArgoCD와 GitOps](11_devtools/11-03.ArgoCD%EC%99%80%20GitOps.md) | Git을 단일 진실 공급원으로 삼는 배포 모델을 입문 수준으로 봅니다. |
+| 11-04 | [Harbor](11_devtools/11-04.Harbor.md) | 이미지와 OCI Helm chart를 어디서 통합 관리하는지 봅니다. |
 
 ## 관련 문서
 
-> Kubernetes와 연결되는 네트워크·배포·정독 문서를 함께 봅니다.
-
-- `service-mesh MOC` <!-- 링크 끊김(2026-08): ../service-mesh/README.md --> — Pod 간 트래픽 제어·mTLS·관측성을 메시 계층에서 다룹니다
-- [Argo CD Up and Running 정독](../book/argocd-up-and-running/README.md) — ArgoCD 상세 시리즈. AppProject·App of Apps·ApplicationSet·Image Updater 운영을 별도로 다룬다
-- [Kubernetes in Action 정독본](../book/kubernetes-in-action/README.md) — 같은 개념을 저자 순서대로 쌓아 올린 책-종속 노트. 개념이 겹치면 이 개념 노트로 링크를 건다
-- [devops MOC](../../07_devops/README.md) — CI/CD 파이프라인 자체 설계는 이곳
+- [08_cloud MOC](../README.md) — 클라우드·인프라 대분류 지도
+- [docs/kubernetes MOC](../docs/kubernetes/README.md) — 쿠버네티스 공식 문서 정독 및 클러스터 운영 노트
+- [Argo CD Up and Running 정독](../book/argocd-up-and-running/README.md) — ArgoCD 상세 운영 시리즈

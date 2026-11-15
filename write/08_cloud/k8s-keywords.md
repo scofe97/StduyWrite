@@ -117,11 +117,11 @@ updated: 2026-10-28
 | SharedInformer 와 resync | 추천 | | Programming Kubernetes 3장 |
 | 이벤트 병합과 upsert — 감사 로그가 아니다 | 추천 | | Programming Kubernetes 1장 |
 | 여러 주체가 한 필드를 다툴 때 — Server-Side Apply · field manager · 충돌 | 추천 | | [Server-Side Apply](https://kubernetes.io/docs/reference/using-api/server-side-apply/) |
-| authentication · authorization · admission | 필수 | [TLS와 API 접근 보안](../08_cloud/kubernetes/06_architecture/06-02.TLS%EC%99%80%20API%20%EC%A0%91%EA%B7%BC%20%EB%B3%B4%EC%95%88.md) | Production Kubernetes 8장 |
+| authentication · authorization · admission | 필수 | [TLS와 API 접근 보안](../08_cloud/docs/kubernetes/04-02.TLS%EC%99%80%20API%20%EC%A0%91%EA%B7%BC%20%EB%B3%B4%EC%95%88.md) | Production Kubernetes 8장 |
 | OIDC 사용자 인증 — API server 가 IdP 토큰을 검증 · Dex 로 여러 IdP 묶기 | 추천 | [Access Control](../08_cloud/book/kubernetes-patterns/26-01.Access%20Control%20%E2%80%94%20RBAC%EC%9C%BC%EB%A1%9C%20%EB%88%84%EA%B0%80%20%EB%AC%B4%EC%97%87%EC%9D%84%20%ED%95%A0%20%EC%88%98%20%EC%9E%88%EB%8A%94%EC%A7%80.md) | Production Kubernetes 10장 · [Authenticating](https://kubernetes.io/docs/reference/access-authn-authz/authentication/) |
-| TLS · PKI · 인증서 수명 | 필수 | [TLS와 API 접근 보안](../08_cloud/kubernetes/06_architecture/06-02.TLS%EC%99%80%20API%20%EC%A0%91%EA%B7%BC%20%EB%B3%B4%EC%95%88.md) | |
-| etcd quorum · Raft · 백업 · 복구 | 필수 | [업그레이드·etcd 백업](../08_cloud/kubernetes/06_architecture/06-01.%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C%EC%99%80%20ETCD%20%EB%B0%B1%EC%97%85%C2%B7%EB%B3%B5%EA%B5%AC.md) | |
-| 클러스터 업그레이드 | 추천 | [업그레이드·etcd 백업](../08_cloud/kubernetes/06_architecture/06-01.%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C%EC%99%80%20ETCD%20%EB%B0%B1%EC%97%85%C2%B7%EB%B3%B5%EA%B5%AC.md) | |
+| TLS · PKI · 인증서 수명 | 필수 | [TLS와 API 접근 보안](../08_cloud/docs/kubernetes/04-02.TLS%EC%99%80%20API%20%EC%A0%91%EA%B7%BC%20%EB%B3%B4%EC%95%88.md) | |
+| etcd quorum · Raft · 백업 · 복구 | 필수 | [업그레이드·etcd 백업](../08_cloud/docs/kubernetes/03_operations/03-03.%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C%EC%99%80%20ETCD%20%EB%B0%B1%EC%97%85%C2%B7%EB%B3%B5%EA%B5%AC.md) | |
+| 클러스터 업그레이드 | 추천 | [업그레이드·etcd 백업](../08_cloud/docs/kubernetes/03_operations/03-03.%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C%EC%99%80%20ETCD%20%EB%B0%B1%EC%97%85%C2%B7%EB%B3%B5%EA%B5%AC.md) | |
 | 클러스터 세우기 — kubeadm · static pod · kubeconfig · 부트스트랩 토큰 | 추천 | | Production Kubernetes 2장 · [kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm/) |
 | 로컬 클러스터 — kind · minikube · k3s | 선택 | | [kind](https://kind.sigs.k8s.io/) · [k3s](https://docs.k3s.io/) |
 | kubectl 뒤의 HTTP — 클라이언트가 감추는 요청 | 선택 | [클라이언트와 HTTP](../08_cloud/book/kubernetes-up-and-running/18-01.Accessing%20Kubernetes%20%E2%80%94%20%ED%81%B4%EB%9D%BC%EC%9D%B4%EC%96%B8%ED%8A%B8%EA%B0%80%20%EA%B0%90%EC%B6%94%EB%8A%94%20HTTP%EC%99%80%20%EC%9B%90%EC%84%9C%20%EC%BD%94%EB%93%9C%20%EC%8B%A4%EC%A6%9D%20%EB%9E%A9.md) | Kubernetes: Up and Running 18장 |
@@ -171,11 +171,11 @@ updated: 2026-10-28
 
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
-| 이벤트 · 로그 · 지표를 한 시간축에 | 필수 | [모니터링과 트러블슈팅](../08_cloud/kubernetes/09_operations/09-01.%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%EA%B3%BC%20%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85.md) | Kubernetes Best Practices 3장 |
-| kubectl 고급 조회 · JSONPath | 필수 | [JSONPath 조회](../08_cloud/kubernetes/09_operations/09-03.JSONPath%EC%99%80%20kubectl%20%EA%B3%A0%EA%B8%89%20%EC%A1%B0%ED%9A%8C.md) | |
-| kubelet 지표 엔드포인트 — `/stats/summary` 직접 호출 · `nodes/stats` 와 `nodes/proxy` RBAC | 추천 | [kubelet 이 재는 것](../08_cloud/docs/kubernetes/03-01.%EC%9E%90%EC%9B%90%20%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%20%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8%20%E2%80%94%20kubelet%EC%9D%B4%20%EC%9E%AC%EB%8A%94%20%EA%B2%83%EA%B3%BC%20kubectl%20top%EC%9D%B4%20%EC%9D%BD%EB%8A%94%20%EA%B2%83.md) | Kubernetes Best Practices 3장 · [Node metrics](https://kubernetes.io/docs/reference/instrumentation/node-metrics/) · [Kubelet 인증·인가](https://kubernetes.io/docs/reference/access-authn-authz/kubelet-authn-authz/) |
+| 이벤트 · 로그 · 지표를 한 시간축에 | 필수 | [모니터링 개요와 트러블슈팅 루틴](../08_cloud/docs/kubernetes/03_operations/03-04.%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%20%EA%B0%9C%EC%9A%94%EC%99%80%20%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85%20%EB%A3%A8%ED%8B%B4.md) | Kubernetes Best Practices 3장 |
+| kubectl 고급 조회 · JSONPath | 필수 | [JSONPath 조회](../08_cloud/docs/kubernetes/04-03.JSONPath%EC%99%80%20kubectl%20%EA%B3%A0%EA%B8%89%20%EC%A1%B0%ED%9A%8C.md) | |
+| kubelet 지표 엔드포인트 — `/stats/summary` 직접 호출 · `nodes/stats` 와 `nodes/proxy` RBAC | 추천 | [kubelet 이 재는 것](../08_cloud/docs/kubernetes/03_operations/03-01.%EC%9E%90%EC%9B%90%20%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%20%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8%20%E2%80%94%20kubelet%EC%9D%B4%20%EC%9E%AC%EB%8A%94%20%EA%B2%83%EA%B3%BC%20kubectl%20top%EC%9D%B4%20%EC%9D%BD%EB%8A%94%20%EA%B2%83.md) | Kubernetes Best Practices 3장 · [Node metrics](https://kubernetes.io/docs/reference/instrumentation/node-metrics/) · [Kubelet 인증·인가](https://kubernetes.io/docs/reference/access-authn-authz/kubelet-authn-authz/) |
 | ephemeral container · `kubectl debug` | 추천 | | [Debug Running Pods](https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/) |
-| OOMKilled · exit code 137 · CPU throttling | 필수 | [OOMKilled 사례 분석](../08_cloud/kubernetes/09_operations/09-02.OOMKilled%20%EC%82%AC%EB%A1%80%20%EB%B6%84%EC%84%9D.md) · [OS 로드맵](../02_os/os-keywords.md) | |
+| OOMKilled · exit code 137 · CPU throttling | 필수 | [OOMKilled 사례](../08_cloud/docs/kubernetes/03_operations/OOMKilled%20%EC%82%AC%EB%A1%80%20%E2%80%94%20Endowus%20Rebalance%20%EC%84%9C%EB%B9%84%EC%8A%A4.md) · [OS 로드맵](../02_os/os-keywords.md) | |
 | SIGTERM · PID 1 · PreStop · `terminationGracePeriodSeconds` | 필수 | [Kubernetes 장애 기록](../troubleshooting/kubernetes/README.md) | |
 | node pressure · eviction · NodeNotReady | 추천 | [Kubernetes 장애 기록](../troubleshooting/kubernetes/README.md) | |
 | 노드 추가·제거 — cordon · drain · PDB 와의 맞물림 | 필수 | | [Safely Drain a Node](https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/) |
@@ -188,7 +188,7 @@ updated: 2026-10-28
 | 관리형 대 자체 운영 — EKS · GKE · AKS 를 고르는 기준 | 추천 | | Production Kubernetes 2장 |
 | OpenShift — Route · SCC · 설치 방식 | 선택 | | Operating OpenShift 2·3장 |
 | 서비스 메시를 쓸 것인가 | 선택 | [서비스 메시 판단](../08_cloud/book/kubernetes-up-and-running/15-01.Service%20Meshes%20%E2%80%94%20%EC%93%B8%20%EA%B2%83%EC%9D%B8%EA%B0%80%EB%A5%BC%20%EB%A8%BC%EC%A0%80%20%EB%94%B0%EC%A7%84%EB%8B%A4.md) · [네트워크 로드맵](../02_os/network-keywords.md) | Kubernetes: Up and Running 15장 |
-| CKA 대비와 문제 풀이 | 추천 | [CKA 대비](../08_cloud/kubernetes/09_operations/09-04.CKA%20%EB%8C%80%EB%B9%84%EC%99%80%20%EB%AC%B8%EC%A0%9C%20%ED%92%80%EC%9D%B4%20%EC%A0%84%EB%9E%B5.md) | |
+| CKA 대비와 문제 풀이 | 추천 | [CKA 대비](../08_cloud/docs/cncf-certification/01-01.CKA%20%EB%8C%80%EB%B9%84%EC%99%80%20%EB%AC%B8%EC%A0%9C%20%ED%92%80%EC%9D%B4%20%EC%A0%84%EB%9E%B5.md) | |
 | CKAD 대비 — 시험 범위는 1~4단계 워크로드 · 연결 · 저장 | 선택 |  | [CKAD 커리큘럼](https://github.com/cncf/curriculum) |
 | 액티브-액티브 · 액티브-패시브 · 페일오버 · 페일오버 자동화 · 페일백 · 리플리카 승격 | 선택 | [액티브-액티브](../07_devops/03_Nexus/05-04.%ED%94%84%EB%A1%9C%EB%8D%95%EC%85%98%20%EC%9A%B4%EC%98%81%20%ED%8C%A8%ED%84%B4.md) | |
 | 재해 복구 · 전체 백업 · 증분 백업 · 스냅샷 복원 · 포인트 인 타임 복구 | 선택 | [재해 복구](../06_observability/book/dgos_opensearch/03-01.%EB%B0%B0%ED%8F%AC%20%EC%98%B5%EC%85%98%20%E2%80%94%20Amazon%20OpenSearch%20Service%EC%99%80%20Serverless.md) · [증분 백업](../07_devops/03_Nexus/05-02.%EB%B0%B1%EC%97%85%20%EB%B3%B5%EA%B5%AC%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C.md) | |
