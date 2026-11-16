@@ -1,4 +1,5 @@
-# 06-02 §2 — 네임스페이스 일곱이 각각 무엇을 가리고 어디에서 관측되는가.
+# 06-02 §2 — 네임스페이스가 만들어지는 실제 길(시스템 콜 → 커널 함수)과, 그렇게 만들어진 것이
+#           호스트에 실제로 어떻게 놓여 있는지(sudo lsns 출력)를 한 장에 둔다.
 # 원문("Linux Namespaces") 플래그 목록 축자:
 #   CLONE_NEWNS      "Use for filesystem mount points. Visible via /proc/$PID/mounts. Supported since
 #                     Linux 2.4.19."
@@ -14,63 +15,129 @@
 #                     /proc/$PID/gid_map. Supported since Linux 3.8."
 #   CLONE_NEWCGROUP  "Use to manage cgroups in a namespace ... /sys/fs/cgroup, /proc/cgroups, and
 #                     /proc/$PID/cgroup. Supported since Linux 4.6."
-#   저자 단서 — "Isolation in this context is mostly about what a process sees, not necessarily a hard
-#   boundary (from a security perspective)."
-# 타입 스펙: type-dp-security-matrix — 행(네임스페이스) × 열(무엇을 가리나 · 어디서 보나 · 커널)의
-#           격자. accent 는 파드의 성립 조건이 되는 두 행 중 공유되는 쪽. 축약: 관측 경로는 저자가
-#           든 것 중 대표 하나씩만 적었다.
+#   시스템 콜 셋 — clone(자식 프로세스), unshare(공유된 실행 컨텍스트를 떼어 냄), setns(기존 네임스페이스에 합류).
+# 커널 경로(본문 각주 [^nsproxy], kernel/fork.c · kernel/nsproxy.c): clone → copy_process() →
+#   copy_namespaces(), unshare → ksys_unshare() → unshare_nsproxy_namespaces(), 둘 다
+#   create_new_namespaces() 로 들어간다. 본문 kubectl 경로의 마지막 사용자 공간 단계가 runc 다.
+# 값: 본문 `sudo lsns` 출력 그대로 — PID 1 의 기본 일곱(NS 번호·NPROCS)과 NPROCS 1 짜리 셋.
+# 타입 스펙: type-layers — 위 층(사용자 공간 → 시스템 콜 → 커널 함수)에서 만들어진 것이 아래 층(호스트의
+#           실제 네임스페이스 목록)으로 쌓인다. accent 는 본문이 "실제로 태어나는 순간" 이라 한
+#           create_new_namespaces() 하나.
+# 축약: 관측 경로는 저자가 든 것 중 하나씩만, 커널 버전 열은 본문 표에 있어 뺐다. setns 를 부르는 쪽은
+#       본문이 "기존 프로세스" 라고만 적어 도구 이름을 붙이지 않았다. lsns 출력의 kdevtmpfs·udevd 줄은 생략.
 import sys; sys.path.insert(0, ".")
-from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, PAPER, PAPER2, RULE, KR, MONO
+from dd import D, ACC, MUTED, SOFT, INK, INFO, WARN, PAPER2, RULE, KR, MONO
 
-W, H = 880, 712
+W, H = 880, 816
 d = D(W, H, "LEARNING MODERN LINUX · 06-02 §2",
-      "일곱 개의 커튼과, 그 커튼을 확인하는 파일들",
-      "네임스페이스는 온전히 자원 가시성에 관한 것이다. 무엇을 가렸는지 확인하는 방법이 "
-      "거의 전부 파일을 읽는 일이라는 점이 5장과 이어진다.",
-      "저자는 이 격리가 보안 관점의 단단한 경계는 아니라고 단서를 답니다")
+      "도구가 무엇이든 같은 커널 함수에서 태어난다",
+      "runc 와 unshare 가 각각 clone()·unshare() 시스템 콜을 부르면 커널의 copy_namespaces()·"
+      "unshare_nsproxy_namespaces() 를 지나 둘 다 create_new_namespaces() 로 들어간다. setns() 는 "
+      "새로 만들지 않고 기존 네임스페이스에 합류한다. 아래는 sudo lsns 출력 그대로로, PID 1 이 쓰는 "
+      "기본 네임스페이스 일곱과 그 번호·프로세스 수, 그리고 프로세스 하나짜리 mnt·user 네임스페이스다.",
+      "보이는 것을 가리는 커튼이지 보안의 단단한 벽은 아닙니다")
 
-LX, LW = 24, 208
-C1, C2, C3 = 268, 240, 92
-HY, RY, RH = 172, 196, 48
-cols = [("무엇을 가리는가", C1), ("어디에서 보나", C2), ("커널", C3)]
-x = LX + LW
-for name, w in cols:
-    d.t(x + w / 2, HY, name, 12, MUTED, KR, "middle", 600)
-    x += w
-d.line(LX, HY + 12, LX + LW + C1 + C2 + C3, HY + 12, RULE, 1)
+# ── 위: 만드는 길 ─────────────────────────────────────────
+C1, C1W = 24, 140          # 사용자 공간
+C2, C2W = 196, 132         # 시스템 콜
+C3, C3W = 360, 228         # 커널 함수
+C4, C4W = 620, 236         # 합류 지점
+R0, RS, RH = 136, 56, 44   # 행 y, stride, 높이
 
-rows = [
-    ("CLONE_NEWNS", "파일시스템 마운트 지점", "/proc/$PID/mounts", "2.4.19", 0),
-    ("CLONE_NEWUTS", "호스트명과 NIS 도메인명", "uname -n", "2.6.19", 0),
-    ("CLONE_NEWIPC", "System V IPC · POSIX 메시지 큐", "/proc/sysvipc", "2.6.19", 0),
-    ("CLONE_NEWPID", "PID 번호 공간", "/proc/$PID/status", "2.6.24", 0),
-    ("CLONE_NEWNET", "장치 · IP · 라우팅 · 포트", "ip netns list", "2.6.29", 1),
-    ("CLONE_NEWUSER", "안팎의 UID·GID 매핑", "/proc/$PID/uid_map", "3.8", 0),
-    ("CLONE_NEWCGROUP", "네임스페이스 안의 cgroups", "/proc/$PID/cgroup", "4.6", 0),
-]
-for r, (flag, what, where, ver, focal) in enumerate(rows):
-    y = RY + r * RH
-    if focal:
-        d.o.append(f'<rect x="{LX}" y="{y}" width="{LW + C1 + C2 + C3}" height="{RH}" rx="6" '
-                   f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.3"/>')
-    elif r % 2 == 0:
-        d.box(LX, y, LW + C1 + C2 + C3, RH, PAPER2, "none", 0, 4)
-    col = ACC if focal else INK
-    d.t(LX + 14, y + RH / 2 + 5, flag, 12.5, col, MONO, "start", 600)
-    d.t(LX + LW + C1 / 2, y + RH / 2 + 5, what, 12, ACC if focal else MUTED, KR)
-    d.t(LX + LW + C1 + C2 / 2, y + RH / 2 + 5, where, 11.5, SOFT, MONO)
-    d.t(LX + LW + C1 + C2 + C3 / 2, y + RH / 2 + 5, ver, 12, OK, MONO)
+d.t(C1, R0 - 16, "사용자 공간", 12, SOFT, KR, "start", 600)
+d.t(C2, R0 - 16, "시스템 콜", 12, SOFT, KR, "start", 600)
+d.t(C3, R0 - 16, "커널 함수", 12, SOFT, KR, "start", 600)
+d.line(C2 - 16, R0 - 28, C2 - 16, R0 + 2 * RS + RH + 4, SOFT, 1, "4 4")
 
-BY = RY + len(rows) * RH + 12
-d.line(LX, BY - 6, LX + LW + C1 + C2 + C3, BY - 6, RULE, 1)
-d.o.append(f'<rect x="{LX}" y="{BY}" width="{LW + C1 + C2 + C3}" height="72" rx="8" '
+rows = [("runc", "OCI 런타임", "clone()", "copy_namespaces()"),
+        ("unshare bash", "명령 한 줄", "unshare()", "unshare_nsproxy_namespaces()"),
+        ("기존 프로세스", "", "setns()", None)]
+# 연결선은 글자보다 먼저 그린다
+for i, (who, sub, sc, kf) in enumerate(rows):
+    y = R0 + i * RS + RH / 2
+    d.arrow([(C1 + C1W, y), (C2 - 4, y)], MUTED, "ar", 1.3)
+    if kf:
+        d.arrow([(C2 + C2W, y), (C3 - 4, y)], INFO, "info", 1.3)
+        d.arrow([(C3 + C3W, y), (C4 - 4, y)], ACC, "acc", 1.4)
+    else:
+        d.arrow([(C2 + C2W, y), (C4 - 4, y)], MUTED, "ar", 1.3, "5 4")
+
+for i, (who, sub, sc, kf) in enumerate(rows):
+    y = R0 + i * RS
+    d.box(C1, y, C1W, RH, PAPER2, MUTED, 1.0, 6)
+    fam = KR if any('가' <= ch <= '힣' for ch in who) else MONO
+    if sub:
+        d.t(C1 + C1W / 2, y + 19, who, 13, INK, fam, "middle", 600)
+        d.t(C1 + C1W / 2, y + 36, sub, 11, MUTED, KR)
+    else:
+        d.t(C1 + C1W / 2, y + 27, who, 13, INK, fam, "middle", 600)
+    d.tone(C2, y, C2W, RH, INFO)
+    d.t(C2 + C2W / 2, y + 27, sc, 13, INFO, MONO, "middle", 600)
+    if kf:
+        d.box(C3, y, C3W, RH, PAPER2, INFO, 1.0, 6)
+        d.t(C3 + C3W / 2, y + 27, kf, 12, INK, MONO)
+
+# 합류 지점: 위 두 행을 덮는 focal, 아래 행은 기존 네임스페이스
+FY, FH = R0, RS + RH
+d.o.append(f'<rect x="{C4}" y="{FY}" width="{C4W}" height="{FH}" rx="8" '
            f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
-d.t(LX + 20, BY + 26, "파드의 근거 — 이 표의 두 줄 차이", 13.5, ACC, KR, "start", 600)
-d.t(LX + 20, BY + 46, "CLONE_NEWNET 공유 → localhost 로 서로 호출",
-    12, ACC, KR, "start")
-d.t(LX + 20, BY + 64, "CLONE_NEWNS 미공유 → 파일시스템은 따로",
-    11.5, MUTED, KR, "start")
+d.t(C4 + C4W / 2, FY + 40, "create_new_namespaces()", 13, ACC, MONO, "middle", 600)
+d.t(C4 + C4W / 2, FY + 62, "새 네임스페이스가 생기는 곳", 12, INK, KR)
+SY = R0 + 2 * RS
+d.o.append(f'<rect x="{C4}" y="{SY}" width="{C4W}" height="{RH}" rx="6" fill="none" '
+           f'stroke="{MUTED}" stroke-width="1.0" stroke-dasharray="5 4"/>')
+d.t(C4 + C4W / 2, SY + 27, "기존 네임스페이스에 합류", 12, MUTED, KR)
 
-d.legend(BY + 104, [("관측되는 커널 버전", OK), ("파드가 공유하는 것", ACC)])
+# ── 아래: 호스트에 실제로 있는 네임스페이스 (sudo lsns) ────────────
+TY = SY + RH + 48
+d.t(24, TY, "PID 1 /sbin/init 의 네임스페이스 일곱", 13, INK, KR, "start", 600)
+d.t(W - 24, TY, "sudo lsns", 12, SOFT, MONO, "end")
+XT, XN, XP, XF, XW, XO = 32, 88, 236, 256, 404, 644
+HY = TY + 28
+for x, lab, a in ((XT, "TYPE", "start"), (XN, "NS", "start"), (XP, "NPROCS", "end"),
+                  (XF, "clone 플래그", "start"), (XW, "가리는 것", "start"), (XO, "어디서 보나", "start")):
+    d.t(x, HY, lab, 11, SOFT, KR if any('가' <= ch <= '힣' for ch in lab) else MONO, a, 600)
+d.line(24, HY + 10, W - 24, HY + 10, RULE, 1)
+
+ns = [("cgroup", "4026531835", "251", "CLONE_NEWCGROUP", "네임스페이스 안의 cgroups", "/proc/$PID/cgroup"),
+      ("pid", "4026531836", "245", "CLONE_NEWPID", "PID 번호 공간", "/proc/$PID/status"),
+      ("user", "4026531837", "245", "CLONE_NEWUSER", "안팎의 UID·GID 매핑", "/proc/$PID/uid_map"),
+      ("uts", "4026531838", "251", "CLONE_NEWUTS", "호스트명 · NIS 도메인명", "uname -n"),
+      ("ipc", "4026531839", "251", "CLONE_NEWIPC", "System V IPC · 메시지 큐", "/proc/sysvipc"),
+      ("mnt", "4026531840", "241", "CLONE_NEWNS", "파일시스템 마운트 지점", "/proc/$PID/mounts"),
+      ("net", "4026531992", "244", "CLONE_NEWNET", "장치 · IP · 라우팅 · 포트", "/proc/net")]
+RY, RR = HY + 16, 32
+for i, (ty, no, np, fl, what, where) in enumerate(ns):
+    y = RY + i * RR
+    if i % 2 == 0:
+        d.box(24, y, W - 48, RR, PAPER2, "none", 0, 4)
+    by = y + RR / 2 + 5
+    d.t(XT, by, ty, 12.5, INK, MONO, "start", 600)
+    d.t(XN, by, no, 12, INFO, MONO, "start")
+    d.t(XP, by, np, 12, MUTED, MONO, "end")
+    d.t(XF, by, fl, 12, MUTED, MONO, "start")
+    d.t(XW, by, what, 12, INK, KR, "start")
+    d.t(XO, by, where, 12, SOFT, MONO, "start")
+
+# NPROCS 1 짜리 — 같은 종류의 다른 칸
+OY = RY + len(ns) * RR + 36
+d.t(24, OY, "같은 종류의 다른 칸 — 프로세스 하나짜리", 13, INK, KR, "start", 600)
+one = [("mnt", "4026532316", "1", "684", "systemd-timesync"),
+       ("mnt", "4026532491", "1", "688", "systemd-resolve"),
+       ("user", "4026532250", "1", "5319", "/opt/google/chrome/nacl_he")]
+for i, (ty, no, np, pid, cmd) in enumerate(one):
+    y = OY + 14 + i * RR
+    d.o.append(f'<rect x="24" y="{y}" width="{W - 48}" height="{RR - 4}" rx="4" '
+               f'fill="{WARN}0D" stroke="{WARN}" stroke-width="0.8"/>')
+    by = y + (RR - 4) / 2 + 5
+    d.t(XT, by, ty, 12.5, WARN, MONO, "start", 600)
+    d.t(XN, by, no, 12, INFO, MONO, "start")
+    d.t(XP, by, np, 12, MUTED, MONO, "end")
+    d.t(XF, by, f"PID {pid}", 12, MUTED, MONO, "start")
+    d.t(XW, by, cmd, 12, INK, MONO, "start")
+
+LY = OY + 14 + len(one) * RR + 16
+d.legend(LY, [("사용자 공간", MUTED), ("시스템 콜 · 커널", INFO), ("생기는 자리", ACC),
+              ("프로세스 하나짜리", WARN)])
 d.save("06-02.namespaces.svg")
-print("ok 06-02.namespaces")
+print("ok 06-02.namespaces", LY)

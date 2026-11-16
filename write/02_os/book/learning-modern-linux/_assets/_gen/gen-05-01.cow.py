@@ -1,76 +1,104 @@
-# 05-01 §8 — CoW(Copy-on-Write) 의 2단계 상태 전이.
-# 타입 스펙: type-state — 복사 시점(포인터 공유)과 수정 시점(신규 블록 분기)의 전후 상태 비교.
+# 05-01 §8 — CoW(Copy-on-Write). 두 파일의 메타데이터가 디스크의 같은 데이터 블록 A·B·C 를
+#           가리키다가, file2 가 C 를 고치는 순간 C 만 새 블록 C′ 으로 갈라지는 실제 구조.
+# 타입 스펙: type-architecture-delta — 같은 블록 배치의 전(복사 직후)·후(file2 수정 뒤) 두 컷.
+#           생긴 것(C′, +)과 다시 이어진 것(file2 의 세 번째 포인터)을 표시한다. accent 는 C′.
+# 근거: 본문 §8 「CoW — 복사 없는 복사」의 두 단계(블록 A·B·C 로 된 file1, 포인터만 복제,
+#       수정 때 대상 블록만 복사되어 C′, file1 은 기존 블록 유지). 블록 크기·번호는 본문에 없어
+#       적지 않는다. 디스크 띠에서 블록의 자리와 빈 칸은 예시다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 880, 576
+W, H = 880, 792
 d = D(W, H, "LEARNING MODERN LINUX · 05-01 §8",
-      "복사할 때는 메타데이터 포인터만, 수정할 때에야 신규 블록 할당",
-      "CoW 메커니즘의 전후 상태. 1단계에서는 블록 포인터만 복제해 공간을 아끼고, "
-      "2단계에서 쓰기 발생 시에만 수정 블록 C' 이 신규 생성되는 과정.",
-      "빠른 입출력과 디스크 공간 절약의 핵심 기법")
+      "복사는 포인터만, 쓰기는 고친 블록 하나만",
+      "위 컷은 file1 을 file2 로 복사한 직후다. 두 파일의 메타데이터가 디스크의 같은 블록 "
+      "A·B·C 를 가리킨다. 아래 컷은 file2 가 C 를 고친 뒤다. C 의 사본 C′ 이 빈 블록에 "
+      "새로 생기고 file2 의 세 번째 포인터만 C′ 으로 옮겨 간다. file1 은 그대로 A·B·C 를 가리킨다.",
+      "데이터 블록은 그대로 두고 메타데이터의 블록 포인터만 복제했다가, 쓰는 블록만 갈라 낸다")
 
-PW, PX1, PX2 = 404, 24, 452
-PY, PH = 120, 260
-BW, BGAP, BY, BH = 80, 10, 280, 72
-FY, FH = 190, 32
+LX = 24                      # 컷 이름 열
+CX0, CX1 = 184, 576          # 메타데이터 카드의 가로 범위
+X0, CW, NC = 360, 72, 7      # 디스크 띠: 칸 7개(A·B·C·빈·C′자리·빈·빈)
+CARD_H, STRIP_H, GAP = 44, 44, 48
 
 
-def panel(x, title, sub, changed):
-    d.box(x, PY, PW, PH, PAPER2, RULE, 1.0, 8)
-    d.t(x + 20, PY + 26, title, 14, INK, KR, "start", 600)
-    d.t(x + 20, PY + 46, sub, 11, MUTED, KR, "start")
+def cx(i):
+    return X0 + i * CW + CW / 2
 
-    for fx, name, col in [(x + 20, "file1 (원본)", INFO), (x + 200, "file2 (복사본)", OK)]:
-        d.o.append(f'<rect x="{fx}" y="{FY}" width="124" height="{FH}" rx="5" '
-                   f'fill="{col}12" stroke="{col}" stroke-width="1.2"/>')
-        d.t(fx + 62, FY + 21, name, 12, col, KR, "middle", 600)
 
-    labels = [("Block A", "4096B"), ("Block B", "4096B"),
-              ("Block C", "4096B"), ("Block C′", "4096B 신규")] if changed else [
-        ("Block A", "4096B"), ("Block B", "4096B"), ("Block C", "4096B")]
-    xs = []
-    for j, (b, note) in enumerate(labels):
-        bx = x + 20 + j * (BW + BGAP)
-        xs.append(bx + BW / 2)
-        focal = changed and j == 3
-        if focal:
-            d.o.append(f'<rect x="{bx}" y="{BY}" width="{BW}" height="{BH}" rx="6" '
-                       f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.5"/>')
-            d.t(bx + BW / 2, BY + 26, b, 13, ACC, MONO, "middle", 600)
-            d.t(bx + BW / 2, BY + 46, note, 11, ACC, KR)
-            d.t(bx + BW / 2, BY + 62, "쓰기 복사본", 11, ACC, KR)
+def card(y, name, slots, c):
+    """파일 메타데이터 카드. slots: (칸 번호, 라벨, 색)"""
+    d.box(CX0, y, CX1 - CX0, CARD_H, PAPER2, c, 1.2, 6)
+    d.t(CX0 + 14, y + 20, name, 14, c, MONO, "start", 600)
+    d.t(CX0 + 14, y + 36, "메타데이터", 12, MUTED, KR, "start")
+    for i, lab, sc in slots:
+        x = X0 + i * CW + 8
+        d.o.append(f'<rect x="{x}" y="{y + 8}" width="{CW - 16}" height="{CARD_H - 16}" rx="4" '
+                   f'fill="{sc}1F" stroke="{sc}" stroke-width="1"/>')
+        d.t(cx(i), y + 27, "→ " + lab, 13, sc, MONO, "middle", 600)
+
+
+def strip(y, cells):
+    """디스크 데이터 블록 띠. cells: 칸 번호 → (라벨, 종류)"""
+    d.t(CX0, y + 20, "데이터 블록", 13, INK, KR, "start", 600)
+    d.t(CX0, y + 36, "디스크", 12, SOFT, KR, "start")
+    for i in range(NC):
+        x = X0 + i * CW + 2
+        lab, kind = cells.get(i, ("", "free"))
+        if kind == "free":
+            d.o.append(f'<rect x="{x}" y="{y}" width="{CW - 4}" height="{STRIP_H}" rx="4" fill="none" '
+                       f'stroke="{SOFT}" stroke-width="0.9" stroke-dasharray="4 3"/>')
+            d.t(cx(i), y + 27, "빈", 12, SOFT, KR)
+        elif kind == "new":
+            d.o.append(f'<rect x="{x}" y="{y}" width="{CW - 4}" height="{STRIP_H}" rx="4" '
+                       f'fill="{ACC}1F" stroke="{ACC}" stroke-width="1.4"/>')
+            d.t(cx(i), y + 28, lab, 15, ACC, MONO, "middle", 600)
         else:
-            d.box(bx, BY, BW, BH, PAPER, MUTED, 1.1, 6)
-            d.t(bx + BW / 2, BY + 28, b, 13, INK, MONO, "middle", 600)
-            d.t(bx + BW / 2, BY + 50, note, 10, MUTED, MONO)
-
-    f1_targets = xs[:3]
-    f2_targets = (xs[:2] + [xs[3]]) if changed else xs[:3]
-    for tx in f1_targets:
-        d.path(f"M {x + 82} {FY + FH} L {tx} {BY - 2}", INFO, 1.0, dash="4 4")
-    for k, tx in enumerate(f2_targets):
-        col = ACC if (changed and k == 2) else OK
-        d.path(f"M {x + 262} {FY + FH} L {tx} {BY - 2}", col, 1.2)
+            d.box(x, y, CW - 4, STRIP_H, PAPER, MUTED, 1.1, 4)
+            d.t(cx(i), y + 28, lab, 15, INK, MONO, "middle", 600)
 
 
-panel(PX1, "1단계 — 초기 복사 (cp file1 file2)", "물리 블록 복제 없이 메타데이터 포인터만 복제", False)
-panel(PX2, "2단계 — file2 블록 C 수정", "수정 대상 블록 C 만 복사(C′) · 블록 A·B 는 공유 유지", True)
+def cut(top, title, sub, after):
+    d.t(LX, top + 14, title, 14, INK, KR, "start", 600)
+    d.t(LX, top + 34, sub, 12, MUTED, KR, "start")
+    f1y = top + 52
+    sy = f1y + CARD_H + GAP
+    f2y = sy + STRIP_H + GAP
+    # 포인터 화살표는 칸·카드보다 먼저 그린다(글자를 덮지 않게)
+    for i in range(3):
+        d.arrow([(cx(i), f1y + CARD_H + 2), (cx(i), sy - 3)], INFO, "info", 1.3)
+    for i in range(2):
+        d.arrow([(cx(i), f2y - 2), (cx(i), sy + STRIP_H + 3)], OK, "ok", 1.3)
+    if after:
+        ry = f2y - 22
+        d.arrow([(cx(2), f2y - 2), (cx(2), ry), (cx(4), ry), (cx(4), sy + STRIP_H + 3)],
+                ACC, "acc", 1.5)
+        # C 를 읽어 C′ 에 복사한 뒤 고친다
+        cy = sy - 18
+        d.arrow([(cx(2) + 16, sy - 2), (cx(2) + 16, cy), (cx(4), cy), (cx(4), sy - 3)],
+                ACC, "acc", 1.2, "4 3")
+        d.t(cx(4) + 12, cy - 6, "복사 후 쓰기", 12, ACC, KR, "start")
+    else:
+        d.arrow([(cx(2), f2y - 2), (cx(2), sy + STRIP_H + 3)], OK, "ok", 1.3)
 
-d.arrow([(432, 240), (448, 240)], MUTED, "ar", 1.4)
+    card(f1y, "file1", [(0, "A", INFO), (1, "B", INFO), (2, "C", INFO)], INFO)
+    cells = {0: ("A", "data"), 1: ("B", "data"), 2: ("C", "data")}
+    if after:
+        cells[4] = ("C′", "new")
+    strip(sy, cells)
+    slots = [(0, "A", OK), (1, "B", OK), (2, "C′" if after else "C", ACC if after else OK)]
+    card(f2y, "file2", slots, OK)
+    if after:
+        d.t(CX1 + 14, f2y + 27, "← 이 포인터만 바뀜", 12, ACC, KR, "start")
+    return f2y + CARD_H
 
-# 하단 컨테이너 이미지 연결 카드
-BY2 = 400
-d.box(PX1, BY2, W - 48, 104, PAPER2, INFO, 1.2, 8)
-d.t(PX1 + 20, BY2 + 26, "컨테이너 이미지와 CoW 메커니즘 연결", 13.5, INK, KR, "start", 600)
-d.t(PX1 + 20, BY2 + 50, "읽기 전용 베이스 이미지 — 컨테이너 간 기본 레이어 공유",
-    11.5, OK, KR, "start")
-d.t(PX1 + 20, BY2 + 70, "쓰기 시점의 copy-up — 고칠 파일 전체를 상위 층으로 복사",
-    11.5, ACC, KR, "start")
-d.t(PX1 + 20, BY2 + 90, "저장 공간 절약 — 고치지 않은 파일은 하위 층을 그대로 공유",
-    11, MUTED, KR, "start")
 
-d.legend(524, [("file1 참조 포인터", INFO), ("file2 참조 포인터", OK),
-               ("수정 시 신규 할당 블록", ACC)])
+end1 = cut(104, "1. 복사 직후", "포인터만 복제 · 블록 A·B·C 공유", False)
+end2 = cut(end1 + 40, "2. file2 가 C 를 고친 뒤", "C 만 C′ 으로 갈라짐 · A·B 는 계속 공유", True)
+d.line(LX, end1 + 20, W - 24, end1 + 20, RULE, 0.8, "2 4")
+
+d.t(LX, end2 + 30, "블록 이름 A·B·C 는 본문 그대로 · 디스크 띠의 자리와 빈 칸은 예시", 11, SOFT, KR, "start")
+d.legend(end2 + 48, [("file1 포인터", INFO), ("file2 포인터", OK), ("새로 생긴 블록 C′", ACC)])
+assert end2 + 48 + 40 <= H, (end2, H)
 d.save("05-01.cow.svg")
 print("ok 05-01.cow")

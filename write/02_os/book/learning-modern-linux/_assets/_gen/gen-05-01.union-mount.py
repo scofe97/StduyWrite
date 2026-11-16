@@ -1,85 +1,98 @@
-# 05-01 §8 — 유니온 마운트(OverlayFS)의 조회 · 쓰기(copy-up) · 삭제(whiteout) 흐름.
-# 타입 스펙: type-process — 상위(upper)와 하위(lower) 층 사이의 3대 연산(조회 · 수정 복사 · 화이트아웃 삭제) 처리 흐름.
+# 05-01 §8 — 유니온 마운트(OverlayFS). lowerdir·upperdir 두 디렉터리가 merged 한 곳으로 겹쳐
+#           보이는 실제 배치를, 파일 세 개로 조회·수정(copy-up)·삭제(whiteout)를 나란히 보인다.
+# 타입 스펙: type-layers — 아래(lowerdir)에서 위(merged)로 겹치는 디렉터리 층. accent 는 copy-up 된 b.txt.
+# 근거: 본문 §8 「유니온 마운트와 OverlayFS」의 세 연산과 각주 [^whiteout](c 0 0 문자 장치, copy_up),
+#       같은 절의 "읽기 전용 기본 이미지 레이어를 공유 · 각자 격리된 쓰기 층". 파일 이름 a·b·c.txt 와
+#       열 머리의 명령은 본문에 없는 예시라 도식 아래 한 줄에 밝힌다.
 import sys; sys.path.insert(0, ".")
-from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
+from dd import D, ACC, MUTED, SOFT, INK, INFO, WARN, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 880, 640
+W, H = 880, 600
 d = D(W, H, "LEARNING MODERN LINUX · 05-01 §8",
-      "유니온 마운트(OverlayFS)의 조회 · 수정 · 삭제 3대 흐름",
-      "여러 디렉터리를 겹칠 때 상위(upper)와 하위(lower) 층 사이에서 일어나는 "
-      "조회 우선순위, 쓰기 시 copy-up, 삭제 시 화이트아웃(c 0 0) 처리 흐름.",
-      "하위 층은 불변으로 두고 상위 층에 변경분과 삭제 표식을 기록")
+      "두 디렉터리를 겹쳐 merged 하나로 보인다",
+      "아래에 읽기 전용 lowerdir, 그 위에 쓰기 층 upperdir, 맨 위에 둘을 겹친 merged 마운트 지점이 있다. "
+      "a.txt 는 upperdir 에 없어 lowerdir 의 것이 보인다. b.txt 는 쓰기로 열리는 순간 upperdir 로 "
+      "통째로 복사(copy-up)되고 merged 는 그 복사본을 보인다. c.txt 를 지우면 upperdir 에 같은 이름의 "
+      "화이트아웃(c 0 0 문자 장치)이 생겨 lowerdir 의 원본을 가린다.",
+      "lowerdir 은 바뀌지 않는다 — 조회는 위층부터, 쓰기와 삭제는 upperdir 에만 남는다")
 
-# 상단 3개 연산 흐름 카드
-CW = 264
-CH = 320
-GAP = 14
-X0 = 24
-Y0 = 120
+BX0, BX1 = 176, 856                 # 층 띠의 가로 범위
+COLS = (288, 516, 744)              # 열 = 파일 하나 = 연산 하나
+CELL_W, CELL_H = 176, 44
+BAND_H, BAND_GAP = 72, 56
+HY = 112                            # 열 머리
+MY = 168                            # merged 띠
+UY = MY + BAND_H + BAND_GAP         # upperdir 띠
+LY = UY + BAND_H + BAND_GAP         # lowerdir 띠
 
-ops = [
-    ("1. 파일 조회 (Read)", "Upper → Lower 하향 순회", INFO, [
-        ("조회 시작", "merged 뷰에서 파일 요청", KR, INK),
-        ("1차 탐색", "상위 upperdir 먼저 확인", KR, INFO),
-        ("상위 발견 시", "upperdir 파일 즉시 반환", KR, OK),
-        ("상위 부재 시", "lowerdir 로 내려가 조회", KR, MUTED),
-        ("결론", "상위 층이 하위 층 가림", KR, ACC),
-    ]),
-    ("2. 파일 수정 (Write)", "쓰기 시점의 Copy-up", ACC, [
-        ("수정 요청", "lowerdir 파일에 쓰기 시도", KR, INK),
-        ("제약 조건", "하위 층은 읽기 전용(R/O)", KR, WARN),
-        ("복사 동작", "lowerdir → upperdir 복사", MONO, ACC),
-        ("수정 적용", "upperdir 복사본에 데이터 기록", KR, OK),
-        ("결론", "원본 훼손 없는 독립 수정", KR, ACC),
-    ]),
-    ("3. 파일 삭제 (Delete)", "화이트아웃(Whiteout) 표식", WARN, [
-        ("삭제 요청", "lowerdir 파일 삭제 시도", KR, INK),
-        ("제약 조건", "하위 파일 직접 삭제 불가", KR, WARN),
-        ("표식 생성", "upperdir 에 c 0 0 문자 노드", MONO, ACC),
-        ("은폐 효과", "merged 뷰에서 파일 감춤", KR, OK),
-        ("결론", "하위 보존 · 뷰에서만 삭제", KR, WARN),
-    ]),
-]
 
-for i, (title, sub, col, items) in enumerate(ops):
-    x = X0 + i * (CW + GAP)
-    focal = (i == 1)
-    if focal:
-        d.o.append(f'<rect x="{x}" y="{Y0}" width="{CW}" height="{CH}" rx="8" '
-                   f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.5"/>')
+def cy(band_y):
+    return band_y + (BAND_H - CELL_H) / 2
+
+
+def cell(col, band_y, name, sub, c, kind="solid"):
+    x, y = COLS[col] - CELL_W / 2, cy(band_y)
+    if kind == "empty":
+        d.o.append(f'<rect x="{x}" y="{y}" width="{CELL_W}" height="{CELL_H}" rx="5" fill="none" '
+                   f'stroke="{c}" stroke-width="1" stroke-dasharray="4 3"/>')
+        d.t(COLS[col], y + 27, name, 12, c, KR)
+        return
+    if kind == "focal":
+        d.o.append(f'<rect x="{x}" y="{y}" width="{CELL_W}" height="{CELL_H}" rx="5" '
+                   f'fill="{ACC}1F" stroke="{ACC}" stroke-width="1.4"/>')
+    elif kind == "tone":
+        d.tone(x, y, CELL_W, CELL_H, c, 5)
     else:
-        d.box(x, Y0, CW, CH, PAPER2, col, 1.1, 8)
+        d.box(x, y, CELL_W, CELL_H, PAPER, c, 1.1, 5)
+    d.t(COLS[col], y + 19, name, 13, INK if c == MUTED else c, MONO, "middle", 600)
+    d.t(COLS[col], y + 36, sub, 12, MUTED, MONO if sub.isascii() else KR)
 
-    d.t(x + CW / 2, Y0 + 26, title, 14, col, KR, "middle", 600)
-    d.t(x + CW / 2, Y0 + 46, sub, 11, SOFT, KR, "middle")
-    d.line(x + 12, Y0 + 58, x + CW - 12, Y0 + 58, RULE, 0.8)
 
-    for j, (k, v, fam, c) in enumerate(items):
-        iy = Y0 + 72 + j * 48
-        d.box(x + 10, iy, CW - 20, 40, PAPER, RULE, 0.6, 5)
-        d.t(x + 18, iy + 16, k, 11, SOFT, KR, "start")
-        d.t(x + 18, iy + 30, v, 11, c, fam, "start", 600 if c in (ACC, WARN) else 400)
+# 층 띠와 층 이름
+for y, name, sub, note in ((MY, "merged", "마운트 지점", "하나의 디렉터리로 보임"),
+                           (UY, "upperdir", "쓰기 층", "컨테이너마다 따로"),
+                           (LY, "lowerdir", "읽기 전용", "이미지 층 · 공유")):
+    d.box(BX0, y, BX1 - BX0, BAND_H, PAPER2, RULE, 0.9, 8)
+    d.t(24, y + 26, name, 14, INK, MONO, "start", 600)
+    d.t(24, y + 44, sub, 12, MUTED, KR, "start")
+    d.t(24, y + 60, note, 12, SOFT, KR, "start")
 
-# 하단 OverlayFS 계층 배치 뷰
-BY = 458
-BW = W - 48
-BH = 114
-d.box(X0, BY, BW, BH, PAPER2, RULE, 1.0, 8)
-d.t(X0 + 20, BY + 24, "OverlayFS 계층 구조와 컨테이너 매핑", 13.5, INK, KR, "start", 600)
+# 열 머리 — 연산과 예시 명령
+for col, (op, cmd, c) in enumerate((("1. 조회", "cat a.txt", INFO),
+                                    ("2. 수정", "echo x >> b.txt", ACC),
+                                    ("3. 삭제", "rm c.txt", WARN))):
+    d.t(COLS[col] - 8, HY + 14, op, 14, c, KR, "end", 600)
+    d.t(COLS[col], HY + 14, cmd, 12, MUTED, MONO, "start")
+    d.line(COLS[col] - CELL_W / 2, HY + 28, COLS[col] + CELL_W / 2, HY + 28, c, 1.0)
 
-layers = [
-    ("merged 뷰", "통합 마운트 지점", "컨테이너 프로세스가 바라보는 단일 파일시스템 트리", INK),
-    ("upperdir (R/W)", "상위 컨테이너 쓰기 층", "신규 생성 파일 · 수정된 파일(copy-up) · 화이트아웃(c 0 0)", ACC),
-    ("lowerdir (R/O)", "하위 베이스 이미지 층", "컨테이너들이 공유하는 읽기 전용 기본 루트 파일시스템", OK),
-]
+# 화살표 — 칸보다 먼저 그린다
+top_of = lambda band_y: cy(band_y) - 2
+bot_of = lambda band_y: cy(band_y) + CELL_H + 2
+# 1. a.txt: upperdir 에 없으니 lowerdir 의 것이 merged 로 올라온다
+d.arrow([(COLS[0], top_of(LY)), (COLS[0], bot_of(MY) + 1)], INFO, "info", 1.4)
+d.t(COLS[0] + 16, UY + 32, "upper 에 없음", 12, INFO, KR, "start")
+d.t(COLS[0] + 16, UY + 50, "→ lower 로", 12, INFO, KR, "start")
+# 2. b.txt: copy-up 뒤 merged 는 upper 의 것을 본다
+d.arrow([(COLS[1], top_of(LY)), (COLS[1], bot_of(UY) + 1)], ACC, "acc", 1.6)
+d.t(COLS[1] + 12, UY + BAND_H + BAND_GAP / 2 + 4, "copy-up", 13, ACC, MONO, "start", 600)
+d.arrow([(COLS[1], top_of(UY)), (COLS[1], bot_of(MY) + 1)], ACC, "acc", 1.4)
+# 3. c.txt: 화이트아웃이 lower 원본을 가린다
+d.arrow([(COLS[2], top_of(UY)), (COLS[2], bot_of(MY) + 1)], WARN, "warn", 1.4, "4 3")
+d.t(COLS[2] + 12, MY + BAND_H + BAND_GAP / 2 + 4, "가림", 12, WARN, KR, "start")
 
-for k, (hdr, sub1, sub2, c) in enumerate(layers):
-    ly = BY + 36 + k * 24
-    d.chip(X0 + 80, ly + 8, hdr, c, 11)
-    d.t(X0 + 170, ly + 12, sub1, 11, c, KR, "start", 600)
-    d.t(X0 + 350, ly + 12, sub2, 11, MUTED, KR, "start")
+# 칸
+cell(0, MY, "a.txt", "lower 의 것", INFO, "tone")
+cell(1, MY, "b.txt", "upper 의 것", ACC, "tone")
+cell(2, MY, "c.txt 안 보임", "", WARN, "empty")
+cell(1, UY, "b.txt", "복사본 · 변경 기록", ACC, "focal")
+cell(2, UY, "c.txt", "화이트아웃 c 0 0", WARN, "tone")
+for col, name in enumerate(("a.txt", "b.txt", "c.txt")):
+    cell(col, LY, name, "원본 그대로", MUTED)
 
-d.legend(588, [("조회 (Upper 우선)", INFO), ("수정 (Copy-up)", ACC),
-               ("삭제 (Whiteout)", WARN), ("불변 베이스 층", OK)])
+d.t(BX0, LY + BAND_H + 28, "파일 이름 a·b·c.txt 와 열 머리의 명령은 예시 · c 0 0 = 장치 번호 0/0 인 문자 장치",
+    11, SOFT, KR, "start")
+LEG = LY + BAND_H + 48
+d.legend(LEG, [("조회 경로", INFO), ("copy-up", ACC), ("화이트아웃", WARN), ("lowerdir 원본", MUTED)])
+assert LEG + 40 <= H, (LEG, H)
 d.save("05-01.union-mount.svg")
 print("ok 05-01.union-mount")
