@@ -26,7 +26,7 @@ updated: 2026-09-12
 |----|------|----------|
 | 01-01 | [cgroup v2](./01-01.cgroup%20v2.md) | 단일 트리·컨트롤러·PSI·kubepods.slice·throttling/OOM 분석은 cgroup 파일에서 어떻게 읽는가? |
 | 01-02 | [mount propagation](./01-02.mount%20propagation.md) | private/shared/slave/unbindable 4종과 K8s `mountPropagation` 옵션은 CSI·HostPath 사고를 어떻게 결정하는가? |
-| — | [OverlayFS 와 idmapped mount — Netflix 사례](./OverlayFS%20와%20idmapped%20mount%20%E2%80%94%20Netflix%20%EC%82%AC%EB%A1%80.md) | user namespace + ID map이 보안을 어떻게 강화했고, OverlayFS lowerdir 마운트가 글로벌 락 폭주를 일으켜 노드 마비로 번진 5단계 나비 효과는? Linux 6.3 recursive bind mount의 해결 원리는? |
+| — | [OverlayFS 와 idmapped mount — Netflix 사례](./OverlayFS%20와%20idmapped%20mount%20%E2%80%94%20Netflix%20%EC%82%AC%EB%A1%80.md) | 컨테이너마다 ID 를 매핑하면 마운트 연산이 어떻게 20,200회로 불어나고, 전역 마운트 락과 CPU 구조가 그것을 어떻게 키우며, 부모 디렉터리 한 번 idmap 으로 어떻게 푸는가? |
 
 > 기존 01-06 Endowus OOMKilled 사례는 [ITJVM ch02 01-05](../../../01_language/book/Inside the Java Virtual Machine JVM Advanced Features and Best Practices/ch02_automatic-memory-management/01-05.실전 — Docker 컨테이너 네이티브 메모리와 OOMKilled.md#64-컨테이너-힙-비율과-오프힙-예산)에 고유 사실을 흡수했습니다.
 
