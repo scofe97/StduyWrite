@@ -459,6 +459,41 @@ ps -o pid,vsz,rss,%mem,comm -C bash,python3,worker
 
 `VSZ` 는 주소 공간에 잡아 둔 크기를, `RSS` 는 물리 메모리에 올라온 크기를 재므로 잡아 두기만 하고 쓰지 않은 영역이 많으면 둘의 차이가 벌어집니다. 왜 잡아 둔 것과 올라온 것이 갈리는지는 [프로세스 메모리 노트의 「2. 가상 메모리와 페이지 테이블」](../../../book/tlpi_the-linux-programming-interface/06-02.%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4%20%EB%A9%94%EB%AA%A8%EB%A6%AC%EB%8A%94%20%EC%84%B8%EA%B7%B8%EB%A8%BC%ED%8A%B8%EC%99%80%20%ED%8E%98%EC%9D%B4%EC%A7%80%EB%A1%9C%20%EB%82%98%EB%89%9C%EB%8B%A4.md#2-가상-메모리와-페이지-테이블)에 있습니다.
 
+`RSS` 는 다른 프로세스와 같이 쓰는 페이지도 프로세스마다 통째로 셉니다. 그래서 `fork` 로 갈라진 프로세스끼리 같은 페이지를 나눠 쓰면 `RSS` 를 더한 값이 실제 메모리보다 커지고, 이때는 공유한 몫을 나눠 센 `pss` 열을 읽습니다.[^pss]
+
+```bash
+# 40MB 를 잡은 python3 이 자식 셋을 fork 한 채 잠든다. 자식은 그 40MB 를 부모와 나눠 쓴다
+#   pgrep -d, -f   이름에 shared.py 가 든 프로세스의 PID 를 쉼표로 이어 낸다
+#   pss            공유 메모리를 그것을 매핑한 프로세스들에 나눠 센 크기 (KiB)
+cat > /tmp/shared.py << 'EOF2'
+import os, time
+buf = bytearray(b'x' * (40 * 1024 * 1024))
+for _ in range(3):
+    if os.fork() == 0:
+        time.sleep(60)
+        os._exit(0)
+time.sleep(60)
+EOF2
+python3 /tmp/shared.py &
+sleep 2
+ps -o pid,rss,pss,comm -p "$(pgrep -d, -f /tmp/shared.py)"
+ps -o rss=,pss= -p "$(pgrep -d, -f /tmp/shared.py)" \
+  | awk '{r += $1; p += $2} END {print "rss 합", r, "pss 합", p}'
+pkill -f /tmp/shared.py
+rm /tmp/shared.py
+```
+
+```bash
+    PID   RSS   PSS COMMAND
+   3097 48420 13424 python3
+   3099 46124 11577 python3
+   3100 46124 11577 python3
+   3101 46124 11567 python3
+rss 합 186792 pss 합 48035
+```
+
+네 프로세스의 `RSS` 합은 약 182MB 인데 `PSS` 합은 약 47MB 라서, 40MB 를 잡은 프로세스 하나의 메모리와 비슷한 쪽이 `PSS` 합입니다.
+
 ### 실습 정리
 
 > 실습이 끝나면 [ps 참조 시트](./ps.md)가 띄운 프로세스를 아래 블록으로 지웁니다.
@@ -498,6 +533,7 @@ pkill -9 -x 'worker|yes|sleep|python3'
 [^fmt]: `man ps` OUTPUT FORMAT CONTROL — `-f` "Do full-format listing. This option can be combined with many other UNIX-style options to add additional columns. It also causes the command arguments to be printed.", `-F` "Extra full format.", `-j` "Jobs format.", `-o` "Headers may be renamed (ps -o pid,ruser=RealUser -o comm=Command) as desired. If all column headers are empty (ps -o pid= -o comm=) then the header line will not be output."
 [^forest]: `man ps` OUTPUT MODIFIERS — `--forest` "ASCII art process tree.", `f` "ASCII art process hierarchy (forest).", `-H` "Show process hierarchy (forest)."
 [^pstree]: `man pstree` (psmisc 23.6) — `-p` "Show PIDs. PIDs are shown as decimal numbers in parentheses after each process name. -p implicitly disables compaction.", `-s` "Show parent processes of the specified process." https://manpages.debian.org/bookworm/psmisc/pstree.1.en.html
+[^pss]: `man ps` (procps-ng 4.0.2) STANDARD FORMAT SPECIFIERS — rss "resident set size, the non-swapped physical memory that a task has used (in kiloBytes).", pss "Proportional share size, the non-swapped physical memory, with shared memory proportionally accounted to all tasks mapping it."; `man proc` (Debian bookworm) /proc/pid/smaps — "the amount of the mapping that is currently resident in RAM ("Rss"), the process's proportional share of this mapping ("Pss")". RSS 가 공유 페이지를 겹쳐 센다는 것은 위 실측(네 프로세스의 RSS 합이 PSS 합의 약 3.9배)에서 읽은 것입니다. <https://manpages.debian.org/bookworm/procps/ps.1.en.html>, <https://manpages.debian.org/bookworm/manpages/proc.5.en.html>
 [^pgrep]: `man pgrep` (procps-ng 4.0.2) — `-x, --exact` "Only match processes whose names (or command lines if -f is specified) exactly match the pattern.", `-f, --full` "The pattern is normally only matched against the process name. When -f is set, the full command line is used." https://manpages.debian.org/bookworm/procps/pgrep.1.en.html
 [^thread]: `man ps` THREAD DISPLAY — `-L` "Show threads, possibly with LWP and NLWP columns.", `-T` "Show threads, possibly with SPID column."; STANDARD FORMAT SPECIFIERS `lwp` "light weight process (thread) ID of the dispatchable entity", `spid` "see lwp."; OUTPUT FORMAT CONTROL `-f` "When used with -L, the NLWP (number of threads) and LWP (thread ID) columns will be added."; STANDARD FORMAT SPECIFIERS `nlwp` "number of lwps (threads) in the process."
 [^stat]: `man ps` PROCESS STATE CODES — "D uninterruptible sleep (usually IO)", "I Idle kernel thread", "R running or runnable (on run queue)", "S interruptible sleep (waiting for an event to complete)", "T stopped by job control signal", "t stopped by debugger during the tracing", "Z defunct ("zombie") process, terminated but not reaped by its parent". "For BSD formats and when the stat keyword is used, additional characters may be displayed: < high-priority (not nice to other users), N low-priority (nice to other users), L has pages locked into memory, s is a session leader, l is multi-threaded (using CLONE_THREAD, like NPTL pthreads do), + is in the foreground process group".

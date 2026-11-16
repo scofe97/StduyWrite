@@ -205,6 +205,24 @@ COMMAND  PID    USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
 python3 3161 appuser    3u  IPv4 406324      0t0  TCP 127.0.0.1:8081 (LISTEN)
 ```
 
+```bash
+# 1024 이하 포트(특권 포트)를 듣거나 잇는 소켓을 포트 범위로 고른다
+# 이 환경에는 그런 소켓이 없어 출력이 비고 종료 코드가 1 이다
+lsof -nP -i TCP:1-1024; echo "exit $?"    # exit 1
+```
+
+다른 사용자의 프로세스는 root 가 아니면 `-i` 로도 보이지 않습니다.[^root] 아래 블록은 `appuser` 로 낮춰 8080 포트를 찾습니다.
+
+```bash
+# root 가 띄운 http.server 의 8080 소켓이 보이지 않아 출력이 비고 종료 코드가 1 이다
+#   setpriv --reuid --regid --init-groups   lsof 를 appuser 권한으로 돌린다
+setpriv \
+  --reuid=appuser \
+  --regid=appuser \
+  --init-groups \
+  lsof -nP -i TCP:8080; echo "exit $?"    # exit 1
+```
+
 ### 상태로 좁히기
 
 > `-s` 로 연결 상태를 고르면 듣는 소켓과 맺은 연결을 따로 봅니다.
@@ -381,3 +399,4 @@ exit 0
 [^t]: `man lsof` OPTIONS — `-t` "produce terse output comprising only process identifiers (without a header), so that it is easy to use programmatically. e.g. # reload anything using old SSL lsof -t /lib/*/libssl.so.* | xargs -r kill -HUP", "The -t option implies the -w option."
 [^f]: `man lsof` OPTIONS — `-F f` "specifies a character list, f, that selects the fields to be output for processing by another program, and the character that terminates each output field. ... The field terminator defaults to NL, but may be changed to NUL (000).", "When the field selection character list contains only a zero (0), all fields are selected (except the raw device field for compatibility reasons) and the NUL terminator character is used."; OUTPUT FOR OTHER PROGRAMS "A process set begins with a field whose identifier is p (for process IDentifier (PID))", field identifiers "c process command name", "f file descriptor", "n file name, comment, Internet address", "p process ID (always selected)".
 [^r]: `man lsof` OPTIONS — `+|-r [t[c<N>][m<fmt>]]` "puts lsof in repeat mode. There lsof lists open files as selected by other options, delays t seconds (default fifteen), then repeats the listing", "If the prefix is a -, repeat mode is endless.", "`c<N>` is for specifying the limits of repeating; if the number of iterations reaches at <N>, Lsof stops itself.", "If the prefix is +, repeat mode will end the first cycle no open files are listed", "otherwise the default marker is ========". man 은 `=` 여덟 개로 적지만 이 환경의 4.95.0 이 실제로 찍는 줄은 일곱 개입니다.
+[^root]: `man lsof` (lsof 4.95.0) SECURITY — "When HASSECURITY is defined, lsof will allow only the root user to list all open files. The non-root user may list only open files of processes with the same user IDentification number as the real user ID number of the lsof process (the one that its user logged on with)." 같은 절은 HASNOSOCKSECURITY 도 정의된 빌드에서는 `-i` 로 누구나 소켓을 볼 수 있다고 적지만, Debian 12 의 lsof 4.95.0 에서는 `appuser` 로 낮춰 root 의 8080 소켓을 찾으면 출력이 비고 종료 코드가 1 이었습니다. <https://man7.org/linux/man-pages/man8/lsof.8.html>

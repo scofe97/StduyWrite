@@ -417,6 +417,49 @@ ps \
    3097 worker
 ```
 
+`NI` 는 nice 값이고 `%CPU` 는 지금 순간의 사용률이 아닙니다.[^nicecpu]
+
+```bash
+# NI 의 범위는 19(가장 양보)부터 -20(남에게 양보하지 않음)까지다
+# 19 는 누구나 줄 수 있어 root 컨테이너에서도 그대로 나온다
+#   nice -n 19   nice 값 19 로 띄운다
+nice -n 19 sleep 60 &
+ps -o pid,ni,comm -p $!
+kill $!
+```
+
+```bash
+    PID  NI COMMAND
+   3091  19 sleep
+```
+
+0 보다 낮추려면 권한(`CAP_SYS_NICE`)이 필요합니다. `docker run -it --rm debian:12` 의 root 에서는 `nice -n -20 sleep 20` 이 `nice: cannot set niceness: Permission denied` 를 내고 값이 0 으로 남았습니다. OrbStack VM 의 root 에서는 `NI` 가 `-20` 으로 나왔습니다.
+
+```bash
+# %CPU 는 CPU 를 쓴 시간을 프로세스가 산 시간으로 나눈 비율이다
+# 2초 동안 CPU 를 쓰고 잠드는 프로세스를 4초 뒤와 10초 뒤에 읽는다
+#   etimes   프로세스가 뜬 뒤 지난 초
+python3 -c '
+import time
+t = time.time()
+while time.time() - t < 2: pass
+time.sleep(60)' &
+sleep 4
+ps -o pid,etimes,%cpu,comm -p $!
+sleep 6
+ps -o pid,etimes,%cpu,comm -p $!
+kill $!
+```
+
+```bash
+    PID ELAPSED %CPU COMMAND
+   3091       4 49.8 python3
+    PID ELAPSED %CPU COMMAND
+   3091      10 19.9 python3
+```
+
+CPU 를 쓴 시간은 2초로 그대로인데 산 시간이 4초에서 10초로 늘어 값이 49.8 에서 19.9 로 내려갔습니다. 프로세스마다 자기 수명 전체로 나눈 비율이라 모든 프로세스의 `%CPU` 를 더해도 100 이 되지 않습니다.
+
 ### 정렬
 
 > `--sort` 로 CPU 나 메모리 순으로 늘어놓으면 무엇이 자원을 쓰는지 한눈에 보입니다.
@@ -639,4 +682,5 @@ root           1  0.5  0.0   3784  2792 pts/0    Ss   12:23   0:00 bash /s/run.s
 [^list]: `man ps` PROCESS SELECTION BY LIST — `-C cmdlist` "NOTE: The command name is not the same as the command line.", `-q pidlist` "No additional selection options, sorting and forest type listings are allowed in this mode.", `-t ttylist` "A plain "-" may be used to select processes not attached to any terminal.", `-u userlist` "Select by effective user ID (EUID) or name.", `-U userlist` "Select by real user ID (RUID) or name.", "The real user ID identifies the user who created the process, see getuid(2).", `-u` "The effective user ID describes the user whose file access permissions are used by the process (see geteuid(2)).", `--ppid pidlist` "That is, it selects processes that are children of those listed in pidlist."
 [^pgrep]: `man pgrep` (procps-ng 4.0.2) — `-x, --exact` "Only match processes whose names (or command lines if -f is specified) exactly match the pattern.", `-f, --full` "The pattern is normally only matched against the process name. When -f is set, the full command line is used." https://manpages.debian.org/bookworm/procps/pgrep.1.en.html
 [^bashm]: `help set` (bash 5.2) — `-m` "Job control is enabled."
+[^nicecpu]: `man ps` (procps-ng 4.0.2) STANDARD FORMAT SPECIFIERS — ni "nice value. This ranges from 19 (nicest) to -20 (not nice to others), see nice (1).", %cpu "cpu utilization of the process in "##.#" format. Currently, it is the CPU time used divided by the time the process has been running (cputime/realtime ratio), expressed as a percentage. It will not add up to 100% unless you are lucky."; NOTES "CPU usage is currently expressed as the percentage of time spent running during the entire lifetime of a process. This is not ideal, and it does not conform to the standards that ps otherwise conforms to. CPU usage is unlikely to add up to exactly 100%." <https://manpages.debian.org/bookworm/procps/ps.1.en.html>
 [^ps-exit]: `man ps` (procps-ng 4.0.2) 의 절 제목 — "NAME", "SYNOPSIS", "DESCRIPTION", "EXAMPLES", "SIMPLE PROCESS SELECTION", "PROCESS SELECTION BY LIST", "OUTPUT FORMAT CONTROL", "OUTPUT MODIFIERS", "THREAD DISPLAY", "OTHER INFORMATION", "NOTES", "PROCESS FLAGS", "PROCESS STATE CODES", "OBSOLETE SORT KEYS", "AIX FORMAT DESCRIPTORS", "STANDARD FORMAT SPECIFIERS", "ENVIRONMENT VARIABLES", "PERSONALITY", "SEE ALSO", "STANDARDS", "AUTHOR". 이 가운데 종료 코드를 적은 절은 없습니다. https://manpages.debian.org/bookworm/procps/ps.1.en.html

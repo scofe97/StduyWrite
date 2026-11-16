@@ -5,7 +5,7 @@ status: draft
 related:
   - ../../README.md
   - ../../book/learning-modern-linux/README.md
-updated: 2026-11-11
+updated: 2026-11-16
 ---
 
 # 리눅스 명령어 시트
@@ -128,6 +128,10 @@ updated: 2026-11-11
 | [lsof](./resource/lsof.md) | `lsof` | 파일을 쥔 프로세스를 찾거나, 지운 파일이 붙든 디스크 공간을 찾을 때 |
 | [lsof 포트와 스크립트용 출력](./resource/lsof%20포트와%20스크립트용%20출력.md) | `lsof` | 포트를 듣는 프로세스와 연결 상태를 보거나, 스크립트에 넘길 PID·필드 출력을 만들 때 |
 | [watch](./resource/watch.md) | `watch` | 명령을 몇 초마다 다시 돌려 바뀐 곳을 강조해 보거나, 출력이 바뀌면 멈출 때 |
+| [uptime·free](./resource/uptime%C2%B7free.md) | `uptime` · `free` | 부하 평균을 CPU 수와 견주거나, 메모리 열(`used`·`buff/cache`·`available`)을 `/proc/meminfo` 필드와 맞춰 읽을 때 |
+| [vmstat](./resource/vmstat.md) | `vmstat` | 프로세스·메모리·스왑·입출력·CPU 를 간격 표본으로 찍고 `r`·`si`·`so`·`bi`·`bo`·`wa` 를 읽을 때 |
+| [iostat](./resource/iostat.md) | `iostat` | 디스크마다 초당 요청·대기 시간·큐 길이를 `-x` 로 보고, 지금 값과 부팅 뒤 누계를 가를 때 |
+| [time](./resource/time.md) | `time` · `/usr/bin/time` | 명령이 CPU 를 썼는지 기다렸는지 `real`·`user`·`sys` 로 가리거나, 최대 메모리와 문맥 전환까지 잴 때 |
 
 
 
@@ -150,6 +154,7 @@ resource 는 쓰이는 양을 재고, 여기는 쓸 수 있는 양에 한도를 
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
+| [ss](./net/ss.md) | `ss` | 듣는 포트와 연결 상태를 보고, 필터로 좁히고, 소켓 큐와 그 소켓을 쥔 프로세스를 찾을 때 |
 
 
 
@@ -165,6 +170,8 @@ resource 는 쓰이는 양을 재고, 여기는 쓸 수 있는 양에 한도를 
 | [journalctl](./service/journalctl.md) | `journalctl` | 유닛·시각·부팅·심각도·필드로 로그를 좁혀 읽을 때 |
 | [journalctl 저장 공간과 읽기 권한](./service/journalctl%20저장%20공간과%20읽기%20권한.md) | `journalctl` | 저널 크기·저장 위치·복사본 정리와 일반 사용자의 읽기 권한을 볼 때 |
 | [journalctl 출력 모양과 jq](./service/journalctl%20출력%20모양과%20jq.md) | `journalctl` · `jq` | 로그를 ISO 시각·필드·JSON 으로 바꿔 보거나, `-o json` 을 `jq` 로 넘겨 필드를 뽑을 때 |
+| [rsyslog·logger](./service/rsyslog·logger.md) | `logger` · `rsyslogd` | 시설·심각도를 붙여 시험 줄을 보내고, rsyslog 분배 규칙을 더하고 문법을 검사할 때 |
+| [logrotate](./service/logrotate.md) | `logrotate` | 텍스트 로그를 회전·압축하는 설정을 시험하고, 회전 뒤 앱이 옛 파일에 쓰는 문제를 막을 때 |
 
 
 
