@@ -17,15 +17,18 @@
 #       저자 자신이 "Destination in user@host format" 이라 적으므로 도식은 고친 형태를 쓰고 표시한다.
 # 타입 스펙: type-flowchart — 조건에 따라 갈라지는 선택. accent 는 조용히 실패하는 자리.
 #           축약: NFS·SMB 는 복사가 아니라 마운트라 이 갈래에 넣지 않고 별도 띠로 표시.
+# 2026-11-17: 제목이 셋이라면서 상자가 넷이던 것을 고쳤다 — NFS 는 §6 의 copy-sync-mount 가 맡으므로
+#       여기서 뺐다. 콜론 경고 상자는 노트가 rsync 시트로 넘겼으므로 지웠다. SSH 위라는 표시는
+#       왼쪽 산문 상자 대신 각 행의 머리표로 옮겼다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 880, 660
+W, H = 880, 496
 d = D(W, H, "LEARNING MODERN LINUX · 07-03 §5",
-      "셋 다 SSH 위에 있거나, 아예 다른 길이다",
-      "파일을 옮기는 도구는 상황이 정한다. scp 와 rsync 는 SSH 위에 얹히고, "
-      "S3 는 그것과 무관한 길이며, NFS 는 복사 대신 마운트다.",
-      "저자는 FTP 를 이제 쓸 이유가 없다고 못 박습니다")
+      "둘은 SSH 위에 있고, 하나는 아예 다른 길이다",
+      "파일을 옮기는 도구는 상황이 정한다. scp 와 rsync 는 SSH 위에 얹히고 "
+      "S3 는 그것과 무관한 길이다. 복사 대신 마운트하는 NFS 는 §6 에서 따로 본다.",
+      "FTP 는 더는 권하지 않는 길")
 
 QX, QY, QW, QH = 32, 164, 208, 76
 d.box(QX, QY, QW, QH, PAPER2, INFO, 1.2, 8)
@@ -37,7 +40,6 @@ opts = [
     ("scp", "파일 하나를 한 번", "scp copyme user@host:/path/", OK, 0),
     ("rsync -avz", "디렉토리를 반복해서 맞출 때", "더해지거나 바뀐 파일만 복사한다", ACC, 1),
     ("aws s3 sync", "공개 S3 버킷에서 받을 때", "--no-sign-request 로 인증을 건너뛴다", INFO, 0),
-    ("NFS 마운트", "복사하지 않고 그대로 쓸 때", "sudo mount nfs.example.com:/dir /opt/target", MUTED, 0),
 ]
 for i, (name, when, how, col, focal) in enumerate(opts):
     y = QY + i * (BH2 + BGAP)
@@ -49,26 +51,12 @@ for i, (name, when, how, col, focal) in enumerate(opts):
     d.t(BX + 18, y + 28, name, 13.5, col, MONO, "start", 600)
     d.t(BX + 18, y + 50, when, 11.5, MUTED, KR, "start")
     d.t(BX + BW - 18, y + 60, how, 11.5, SOFT, MONO, "end")
+    if col is not INFO:
+        d.t(BX + BW - 18, y + 28, "SSH 위 · 키 인증 먼저", 11.5, OK, KR, "end", 600)
     d.path(f"M {QX + QW} {QY + 38} L {(QX + QW + BX) / 2} {QY + 38} "
            f"L {(QX + QW + BX) / 2} {y + 38} L {BX - 8} {y + 38}",
            col, 1.3, m="acc" if focal else "ar")
 
-SX, SY = 32, 408
-d.o.append(f'<rect x="{SX}" y="{SY}" width="208" height="{QY + 3 * (BH2 + BGAP) + BH2 - SY}" rx="8" '
-           f'fill="{OK}06" stroke="{OK}" stroke-width="1.2" stroke-dasharray="7 6"/>')
-d.t(SX + 104, SY + 26, "앞의 둘은", 12.5, OK, KR, "middle", 600)
-d.t(SX + 104, SY + 46, "SSH 위에 얹힙니다", 12.5, OK, KR, "middle", 600)
-d.t(SX + 104, SY + 70, "키 기반 인증을", 11.5, MUTED, KR)
-d.t(SX + 104, SY + 88, "먼저 갖춰야 합니다", 11.5, MUTED, KR)
-
-WY = 528
-d.o.append(f'<rect x="32" y="{WY}" width="{W - 64}" height="52" rx="8" '
-           f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.4"/>')
-d.t(52, WY + 24, "조용히 실패하는 자리 — 호스트 뒤의 콜론", 13, ACC, KR, "start", 600)
-d.t(52, WY + 44,
-    "빠뜨리면 rsync 가 그것을 로컬 디렉토리로 해석합니다. 명령은 잘 도는데 파일이 로컬에 남습니다.",
-    11.5, MUTED, KR, "start")
-
-d.legend(596, [("SSH 위의 도구", OK), ("그 밖의 길", INFO), ("실수가 잦은 곳", ACC)])
+d.legend(446, [("SSH 위 · 한 번", OK), ("SSH 위 · 반복해서 맞춤", ACC), ("SSH 와 무관한 길", INFO)])
 d.save("07-03.file-transfer.svg")
 print("ok 07-03.file-transfer")

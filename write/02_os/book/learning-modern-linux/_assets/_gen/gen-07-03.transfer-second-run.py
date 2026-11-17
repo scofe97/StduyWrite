@@ -12,6 +12,7 @@
 #       레인을 가르는 것은 액터(도구)이고 열을 가르는 것은 회차다. 하이라이트는 두 레인이
 #       갈리는 그 한 칸. coral 은 하나뿐이다.
 #       축약: 파일 개수는 설명을 위한 예시 숫자다 — 원서 출력의 값이 아니라 그렇게 표시한다.
+# 2026-11-17: 아래 기준 설명 두 줄을 명사구로 줄였다(라벨 산문).
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, PAPER2, RULE, KR, MONO
 
@@ -20,7 +21,7 @@ d = D(W, H, "LEARNING MODERN LINUX · 07-03 §5",
       "첫 전송은 같고 두 번째에서 갈린다",
       "받는 쪽이 비어 있는 첫 회차에는 둘 다 전부 보낸다. 두 번째부터 scp 는 여전히 통째로 "
       "보내고 rsync 는 양쪽을 견주어 바뀐 것만 보낸다.",
-      "파일 개수는 설명을 위한 예시입니다")
+      "파일 개수는 설명용 예시")
 
 LABX, LABW = 24, 150
 C1X, CW, GAPX = 190, 323, 20
@@ -64,9 +65,9 @@ d.line(LABX, LANE_Y + LANE_H + LANE_GAP / 2, W - 24, LANE_Y + LANE_H + LANE_GAP 
 BY = LANE_Y + 2 * LANE_H + LANE_GAP + 22
 d.tone(24, BY, W - 48, 96, ACC)
 d.t(44, BY + 28, "견주는 기준이 무엇인가", 13, INK, KR, "start", 600)
-d.t(44, BY + 52, "기본은 quick check 입니다. 크기나 최종 수정 시각이 달라진 파일을 찾고 둘 다 그대로면 건너뜁니다.",
+d.t(44, BY + 52, "기본 quick check — 크기 · 최종 수정 시각, 둘 다 같으면 건너뜀",
     12, MUTED, KR, "start")
-d.t(44, BY + 74, "-c 를 켜면 크기가 같은 파일의 체크섬까지 견주는데, 그러려면 양쪽이 파일 전체를 읽어야 합니다.",
+d.t(44, BY + 74, "-c — 크기가 같은 파일의 체크섬까지 · 대가는 양쪽의 파일 전체 읽기",
     12, MUTED, KR, "start")
 
 d.legend(BY + 118, [("복사만 한다", INFO), ("견주고 보낸다", OK), ("두 회차가 갈리는 자리", ACC)])

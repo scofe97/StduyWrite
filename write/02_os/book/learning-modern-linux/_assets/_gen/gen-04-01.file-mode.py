@@ -1,31 +1,29 @@
 # 04-01 §4 — r·w·x 가 일반 파일에서와 디렉토리에서 각각 무엇을 허용하는가.
-# 원문("File Permissions"):
-#       Read (r): "For a normal file, this allows a user to view the contents of the file. For a
-#                 directory, it allows a user to view the names of files in the directory."
-#       Write (w): "For a normal file, this allows a user to modify and delete the file. For a directory,
-#                  it allows a user to create, rename, and delete files in the directory."
-#       Execute (x): "For a normal file, this allows a user to execute the file if the user also has read
-#                    permissions on it. For a directory, it allows a user to access file information in
-#                    the directory, effectively permitting them to change into it (cd) or list its
-#                    content (ls)."
-#       그리고 대상은 좁은 것에서 넓은 것으로 User(소유자) · Group · Other 셋이다.
-# 타입 스펙: type-dp-security-matrix — 격자 문법을 대조 행렬로 쓴다. 행 = 접근 종류, 열 = 대상 종류.
-#           accent 는 뜻이 가장 많이 갈리는 한 행.
+# 근거(원서의 file w "modify and delete", file x "if the user also has read", dir x "list" 는 매뉴얼과
+#       2026-11-17 데비안 실측에 맞춰 고쳤다):
+#       path_resolution(7): "execute permission in case of ordinary files, or search permission in case
+#                            of directories"
+#       unlink(2): "EACCES Write access to the directory containing path is not allowed ..., or one of
+#                  the directories in path did not allow search permission" — 삭제는 디렉토리의 w+x.
+#       실측: 디렉토리 r-- 는 이름만 보이고 cd 불가, --x 는 ls 불가·cd 와 이름으로 열기 가능.
+#             바이너리는 --x 로 실행, 셸 스크립트는 r 도 있어야 한다.
+# 타입 스펙: type-dp-security-matrix — 격자 문법을 대조 행렬로 쓴다. 행 = 비트, 열 = 대상 종류.
+#           accent 는 뜻이 가장 많이 갈리는 한 칸(디렉토리의 x).
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, PAPER, PAPER2, RULE, KR, MONO
 
 rows = [
-    ("r", "읽기 · 8진수 4",
-     ("내용을 본다", "파일 안을 읽는다", OK),
-     ("이름을 본다", "안에 있는 파일 이름을 본다", INFO)),
-    ("w", "쓰기 · 8진수 2",
-     ("고치고 지운다", "파일 자체를 수정·삭제", OK),
-     ("만들고 바꾸고 지운다", "그 안의 파일을 대상으로", INFO)),
-    ("x", "실행 · 8진수 1",
-     ("실행한다", "읽기 권한도 함께 있어야 한다", ACC),
-     ("들어가고 나열한다", "cd 와 ls 가 가능해진다", ACC)),
+    ("r", "읽기 · 4",
+     ("내용 읽기", "cat 으로 열기", OK),
+     ("이름 목록 읽기", "ls 로 이름만", INFO)),
+    ("w", "쓰기 · 2",
+     ("내용 고치기", "삭제는 디렉토리 몫", OK),
+     ("항목 만들기 · 지우기", "x 도 함께 필요", INFO)),
+    ("x", "실행 · 1",
+     ("프로그램으로 실행", "스크립트는 r 도 필요", OK),
+     ("들어가기 · 이름으로 열기", "검색 권한 · cd", ACC)),
 ]
-cols = [("일반 파일에서", "touch 로 만든 것"), ("디렉토리에서", "같은 글자, 다른 뜻")]
+cols = [("일반 파일에서", "내용에 대한 접근"), ("디렉토리에서", "안의 이름에 대한 접근")]
 
 LEFT, RIGHT = 16, 48
 COMP_W, GAP, COL_W, COL_GAP = 268, 12, 268, 16
@@ -37,17 +35,17 @@ W = LEFT + COMP_W + GAP + n * COL_W + (n - 1) * COL_GAP + RIGHT
 row_y = lambda k: ROW0 + k * STRIDE
 col_x = lambda j: LEFT + COMP_W + GAP + j * (COL_W + COL_GAP)
 bottom = row_y(len(rows) - 1) + ROW_H
-H = bottom + 146
+H = bottom + 72
 
 d = D(W, H, "LEARNING MODERN LINUX · 04-01 §4",
-      "같은 글자가 파일과 디렉토리에서 다른 것을 허용한다",
-      "세 접근 종류가 일반 파일에서와 디렉토리에서 각각 무엇을 허용하는지 갈라 놓은 표. "
-      "실행 비트가 두 경우에 가장 크게 갈린다.",
+      "같은 비트가 파일과 디렉토리에서 다른 것을 허용한다",
+      "세 비트가 일반 파일에서와 디렉토리에서 각각 무엇을 허용하는지 갈라 놓은 표. "
+      "디렉토리의 x 는 실행이 아니라 검색 권한이다.",
       "디렉토리의 x 는 실행이 아니라 들어가기입니다")
 
 d.box(LEFT, HEADER_Y, COMP_W, HEADER_H, PAPER2, RULE, 0.9)
-d.t(LEFT + COMP_W / 2, HEADER_Y + 24, "어떤 접근인가", 13, INK, KR, "middle", 600)
-d.t(LEFT + COMP_W / 2, HEADER_Y + 42, "vs. 무엇에 붙었나", 12, MUTED, KR)
+d.t(LEFT + COMP_W / 2, HEADER_Y + 24, "비트", 13, INK, KR, "middle", 600)
+d.t(LEFT + COMP_W / 2, HEADER_Y + 42, "이름 · 8진수 값", 12, MUTED, KR)
 
 for j, (name, sub) in enumerate(cols):
     d.box(col_x(j), HEADER_Y, COL_W, HEADER_H, PAPER2, RULE, 1.0)
@@ -57,8 +55,8 @@ for j, (name, sub) in enumerate(cols):
 for k, (bit, what, *cells) in enumerate(rows):
     y = row_y(k)
     d.box(LEFT, y, COMP_W, ROW_H, PAPER2, RULE, 0.9, r=4)
-    d.t(LEFT + 18, y + 34, bit, 20, INK, MONO, "start", 600)
-    d.t(LEFT + 52, y + 34, what, 13, MUTED, KR, "start")
+    d.t(LEFT + 18, y + 44, bit, 20, INK, MONO, "start", 600)
+    d.t(LEFT + 52, y + 42, what, 13, MUTED, KR, "start")
     for j, (val, note, c) in enumerate(cells):
         if c is ACC:
             d.tone(col_x(j), y, COL_W, ROW_H, ACC, r=4)
@@ -67,12 +65,6 @@ for k, (bit, what, *cells) in enumerate(rows):
         d.t(col_x(j) + COL_W / 2, y + 32, val, 13, c, KR, "middle", 600)
         d.t(col_x(j) + COL_W / 2, y + 54, note, 12, MUTED, KR)
 
-d.t(LEFT, bottom + 34, "대상은 좁은 것에서 넓은 것으로 셋입니다 — 소유자(user) · 그룹(group) · 그 밖의 모두(other).",
-    12, MUTED, KR, "start")
-d.t(LEFT, bottom + 56, "그래서 -rw-r--r-- 는 앞 한 칸이 파일 종류이고 나머지 아홉 칸이 셋 곱하기 셋입니다.",
-    12, MUTED, KR, "start")
-d.t(LEFT, bottom + 78, "숫자로 적으면 rwx 가 7, rw- 가 6, r-x 가 5, r-- 가 4 입니다.",
-    12, SOFT, KR, "start")
-d.legend(bottom + 96, [("파일에서의 뜻", OK), ("디렉토리에서의 뜻", INFO), ("가장 많이 갈리는 비트", ACC)])
+d.legend(bottom + 24, [("파일에서의 뜻", OK), ("디렉토리에서의 뜻", INFO), ("가장 많이 갈리는 칸", ACC)])
 d.save("04-01.file-mode.svg")
 print("ok 04-01.file-mode")

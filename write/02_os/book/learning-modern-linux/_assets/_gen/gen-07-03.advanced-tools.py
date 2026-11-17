@@ -17,6 +17,7 @@
 # 주의: DHCP 와 NTP 는 애플리케이션 계층이다. 원문이 UDP 절에서 "There are a number of
 #       application-level protocols, such as NTP and DHCP ... as well as DNS, that use UDP" 라고
 #       명시하므로 L7 에 놓는다. UDP 를 쓴다는 사실이 그것을 전송 계층으로 만들지 않는다.
+# 2026-11-17: BitTorrent 는 애플리케이션 계층 프로토콜이라 L3 에서 L7 로 옮겼다. 오른쪽·아래 설명은 명사구로 줄였다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
 
@@ -25,13 +26,13 @@ d = D(W, H, "LEARNING MODERN LINUX · 07-03 §7",
       "고급 도구도 결국 네 층 어딘가를 본다",
       "저자가 고급으로 묶은 것들을 07-01 에서 세운 네 층 위에 얹은 것. 하나만 층을 가로지르는데, "
       "그것이 이 장 전체를 한 화면에 보이는 도구다.",
-      "tshark 한 화면에 네 층이 다 있습니다")
+      "tshark 한 화면에 네 층")
 
 LX, LW, LH, GAP, Y0 = 32, 560, 78, 10, 168
 layers = [
-    ("애플리케이션 · L7", "whois · DHCP(dhcpdump) · NTP(ntpq)", "등록 정보 · IP 자동 배정 · 시계 동기화", WARN),
+    ("애플리케이션 · L7", "whois · DHCP(dhcpdump) · NTP(ntpq) · BitTorrent", "등록 정보 · IP 자동 배정 · 시계 동기화 · P2P 파일 공유", WARN),
     ("전송 · L4", "socat · 터널(inlets)", "양방향 바이트 스트림 · VPN 의 대안", OK),
-    ("인터넷 · L3", "geoiplookup · BitTorrent", "IP 를 지리에 대응 · 개인 간 전송", INFO),
+    ("인터넷 · L3", "geoiplookup", "IP 주소를 지리에 대응", INFO),
     ("링크 · L2", "ip link 로 고른 인터페이스", "캡처가 시작되는 자리", MUTED),
 ]
 for i, (name, tools, note, col) in enumerate(layers):
@@ -47,23 +48,19 @@ d.o.append(f'<rect x="{TX}" y="{Y0}" width="{W - TX - 32}" height="{TH}" rx="8" 
            f'fill="{ACC}12" stroke="{ACC}" stroke-width="1.5"/>')
 d.t(TX + (W - TX - 32) / 2, Y0 + 40, "tshark", 17, ACC, MONO, "middle", 600)
 d.t(TX + (W - TX - 32) / 2, Y0 + 64, "wireshark", 12, ACC, MONO)
-d.t(TX + (W - TX - 32) / 2, Y0 + 104, "네 층을", 12, ACC, KR)
-d.t(TX + (W - TX - 32) / 2, Y0 + 124, "한꺼번에", 12, ACC, KR)
-d.t(TX + (W - TX - 32) / 2, Y0 + 144, "가로지릅니다", 12, ACC, KR)
-d.t(TX + (W - TX - 32) / 2, Y0 + 184, "-i 로 인터페이스를", 11.5, MUTED, KR)
-d.t(TX + (W - TX - 32) / 2, Y0 + 202, "고르고 필터로", 11.5, MUTED, KR)
-d.t(TX + (W - TX - 32) / 2, Y0 + 220, "층을 좁힙니다", 11.5, MUTED, KR)
-d.t(TX + (W - TX - 32) / 2, Y0 + 258, "tcpdump 로도", 11.5, MUTED, KR)
-d.t(TX + (W - TX - 32) / 2, Y0 + 276, "같은 일을 합니다", 11.5, MUTED, KR)
+d.t(TX + (W - TX - 32) / 2, Y0 + 114, "네 층 동시 관찰", 12, ACC, KR, "middle", 600)
+d.t(TX + (W - TX - 32) / 2, Y0 + 184, "-i 인터페이스 선택", 11.5, MUTED, KR)
+d.t(TX + (W - TX - 32) / 2, Y0 + 202, "필터로 층 좁히기", 11.5, MUTED, KR)
+d.t(TX + (W - TX - 32) / 2, Y0 + 258, "같은 일 — tcpdump", 11.5, MUTED, KR)
 
 BY = Y0 + TH + 20
 d.tone(LX, BY, W - 64, 84, ACC)
-d.t(LX + 20, BY + 26, "출력 한 줄에 네 층이 다 있습니다", 13, INK, KR, "start", 600)
+d.t(LX + 20, BY + 26, "tshark 출력 한 줄의 네 층", 13, INK, KR, "start", 600)
 d.t(LX + 20, BY + 48,
-    "192.168.178.40 → 185.199.109.153 이 인터넷 계층이고, 47618 → 443 이 전송 계층이며,",
+    "192.168.178.40 → 185.199.109.153 — 인터넷 · 47618 → 443 — 전송",
     11.5, MUTED, MONO, "start")
 d.t(LX + 20, BY + 68,
-    "GET / HTTP/1.1 이 애플리케이션 계층, -i wlp1s0 이 링크 계층입니다.",
+    "GET / HTTP/1.1 — 애플리케이션 · -i wlp1s0 — 링크",
     11.5, MUTED, MONO, "start")
 
 d.legend(BY + 112, [("사용자를 만나는 층", WARN), ("포트가 있는 층", OK),

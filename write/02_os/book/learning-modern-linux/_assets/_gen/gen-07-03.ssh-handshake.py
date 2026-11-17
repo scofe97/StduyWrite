@@ -13,6 +13,10 @@
 #       대가 — "The connection still provides protection against passive listening; however, it becomes
 #       vulnerable to active man-in-the-middle attacks."
 #       (RFC 는 'TOFU' 라는 이름을 쓰지 않는다. 전략만 서술한다.)
+# 2026-11-17 사실 정정 — RFC 4253 §8: 호스트 키 K_S 와 H 에 대한 서명은 키 교환 응답에 함께 온다.
+#       "호스트 키 제시 → 세션 키 합의" 순서가 아니라 키 교환 안에서 확인하고 NEWKEYS(§7.3) 뒤 암호화된다.
+#       RFC 4252 §7: 사용자 인증 서명은 "a signature created with a private key of the user" — 공개키가 아니라
+#       개인 키로 만든다. 라벨을 고치고 아래 설명은 명사구로 줄였다.
 # 타입 스펙: type-sequence — 시간축 위의 주고받음. 참여자 3(상한 5), 메시지 9(상한 12),
 #       프래그먼트 1(상한 1, opt). 반환은 점선 + 채운 마커. coral 은 하나뿐이며 첫 접속에만 있는
 #       그 한 걸음이다. 두 인증 축은 칩이 아니라 *색* 이 나르고 범례가 그 뜻을 적는다 —
@@ -25,8 +29,8 @@ W, H = 880, 830
 d = Seq(W, H, "LEARNING MODERN LINUX · 07-03 §4",
         "서버를 믿는 걸음과 나를 증명하는 걸음은 다르다",
         "SSH 접속 한 번에 인증이 두 번 일어난다. 서버가 호스트 키로 자기를 증명하고, "
-        "그다음에 내가 공개키로 나를 증명한다. 저자는 뒤의 것만 적는다.",
-        "첫 접속의 그 한 걸음이 이 방식의 값이자 구멍입니다")
+        "그다음에 사용자가 개인 키로 만든 서명으로 자기를 증명한다.",
+        "첫 접속의 그 한 걸음 — 이 방식의 값이자 구멍")
 
 USER, CLI, SRV = "사용자", "ssh 클라이언트", "sshd 서버"
 LX = d.lanes([(USER, "터미널 앞"), (CLI, "~/.ssh"), (SRV, "원격 22번")],
@@ -34,10 +38,10 @@ LX = d.lanes([(USER, "터미널 앞"), (CLI, "~/.ssh"), (SRV, "원격 22번")],
 
 # ── 서버가 자기를 증명하는 구간 (OK) ────────────────────────────────
 d.msg(USER, CLI, "ssh db", 196, MUTED, sub="접속을 시작한다")
-d.msg(CLI, SRV, "TCP 22 · 버전 교환", 240, MUTED)
-d.msg(SRV, CLI, "호스트 키 제시", 284, OK, mk="ok", dash="5 4",
+d.msg(CLI, SRV, "TCP 22 · 버전 · 키 교환 시작", 240, MUTED)
+d.msg(SRV, CLI, "키 교환 응답 · 호스트 키 + 서명", 284, OK, mk="ok", dash="5 4",
       sub="서버가 자기를 증명한다")
-d.selfmsg(CLI, "known_hosts 대조", 330, OK, sub="적힌 키와 같은가")
+d.selfmsg(CLI, "known_hosts 대조 · 서명 검증", 330, OK, sub="적힌 키와 같은가")
 
 # ── opt: 처음 보는 호스트라면 (coral 하나) ──────────────────────────
 FX0, FX1 = LX[USER] - 96, LX[CLI] + 96
@@ -47,24 +51,23 @@ d.box(FX0, FY0, 44, 16, PAPER, "rgba(245,245,245,0.22)", 1, 2)
 d.t(FX0 + 22, FY0 + 12, "OPT", 11, MUTED, MONO)
 d.t(FX0 + 12, FY0 + 36, "[처음 보는 호스트]", 11, MUTED, MONO, "start")
 
-d.msg(CLI, USER, "지문 이대로 맞습니까", 424, MUTED, dash="5 4")
-d.msg(USER, CLI, "yes", 470, ACC, sub="known_hosts 에 한 줄이 적힌다")
+d.msg(CLI, USER, "지문 확인 요청", 424, MUTED, dash="5 4")
+d.msg(USER, CLI, "yes", 470, ACC, sub="known_hosts 에 한 줄 추가")
 
 # ── 내가 나를 증명하는 구간 (INFO) ──────────────────────────────────
-d.msg(CLI, SRV, "세션 키 합의", 540, MUTED, sub="여기부터 암호화된다")
-d.msg(CLI, SRV, "공개키로 서명해 보인다", 590, INFO, mk="info",
-      sub="내가 나를 증명한다")
-d.msg(SRV, CLI, "인증 성공 · 셸을 연다", 640, INFO, mk="info", dash="5 4")
+d.msg(CLI, SRV, "NEWKEYS", 540, MUTED, sub="이후 모든 메시지 암호화")
+d.msg(CLI, SRV, "사용자 개인 키로 만든 서명", 590, INFO, mk="info",
+      sub="사용자가 자기를 증명한다")
+d.msg(SRV, CLI, "authorized_keys 로 검증 · 셸", 640, INFO, mk="info", dash="5 4")
 
 d.rails(672)
 
 d.tone(24, 690, W - 48, 74, ACC)
-d.t(44, 716, "취약한 구간은 첫 접속 한 번뿐입니다", 13, INK, KR, "start", 600)
-d.t(44, 738, "그 한 번에 가짜 서버가 끼어들면 그 뒤의 모든 접속이 가짜 키를 믿습니다. "
-             "수동적인 엿듣기는 막지만", 12, MUTED, KR, "start")
-d.t(44, 756, "능동적인 중간자 공격에는 취약하다고 RFC 4251 이 적습니다.", 12, MUTED, KR, "start")
+d.t(44, 716, "취약 구간 — 첫 접속 한 번", 13, INK, KR, "start", 600)
+d.t(44, 738, "그 한 번의 가짜 서버 → 이후 모든 접속이 가짜 키를 신뢰", 12, MUTED, KR, "start")
+d.t(44, 756, "막는 것: 수동적 엿듣기 · 못 막는 것: 능동적 중간자 공격 (RFC 4251 §4.1)", 12, MUTED, KR, "start")
 
-d.legend(774, [("서버가 자기를 증명한다", OK), ("내가 나를 증명한다", INFO),
+d.legend(774, [("서버의 자기 증명", OK), ("사용자의 자기 증명", INFO),
                ("첫 접속에만 있는 걸음", ACC)])
 d.save("07-03.ssh-handshake.svg")
 print("ok 07-03.ssh-handshake")

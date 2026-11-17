@@ -1,23 +1,15 @@
-# 04-01 §5 — passwd 를 실행할 때 UID 넷이 어떻게 움직이는가.
-# 원문("Process Permissions"): credentials(7) 을 인용해 네 가지를 가른다 —
-#       Real UID: "the UID of the user that launched the process ... The process itself can obtain its
-#                 real UID via getuid(2)".
-#       Effective UID: "The Linux kernel uses the effective UID to determine permissions the process has
-#                      when accessing shared resources ... A process can obtain its effective UID via
-#                      geteuid(2)."
-#       Saved set-user-ID: "used in suid cases where a process can assume privileges by switching its
-#                          effective UID between the real UID and the saved set-user-ID."
-#       Filesystem UID: "used to determine permissions for file access ... usually the filesystem UID is
-#                       the same as the effective UID but can be changed via setfsuid(2)."
-#       전이 규칙 — "when a child process is created via fork(2), it inherits copies of its parent's UIDs,
-#       and during an execve(2) syscall, the process's real UID is preserved, whereas the effective UID
-#       and saved set-user-ID may change."
-#       예시 — "when you run the passwd command, your effective UID is your UID, let's say 1000. Now,
-#       passwd has suid set enabled, which means when you run it, your effective UID is 0 (aka root)."
-# 주의: 마지막 쓰기 대상이 /etc/shadow 라는 것은 원문이 이 절에서 잇지 않는다. 저자가 앞 절에
-#       "passwords are stored ... in the /etc/shadow file" 라 적은 것과 이 절의 suid 설명을
-#       노트가 이은 것이라 도식에는 대상 파일 이름을 적지 않는다.
-# 타입 스펙: type-sequence — 주체 셋 사이의 시간순 왕복. accent 는 유효 UID 가 뒤집히는 한 줄.
+# 04-01 §5 — passwd 를 실행할 때 프로세스의 UID 넷이 어떻게 움직이는가.
+# 근거: credentials(7) "A child process created by fork(2) inherits copies of its parent's user and
+#       groups IDs. During an execve(2), a process's real user and group ID and supplementary group IDs
+#       are preserved; the effective and saved set IDs may be changed",
+#       "Whenever a process's effective user (group) ID is changed, the kernel also automatically changes
+#       the filesystem user (group) ID".
+#       execve(2) "the effective user ID of the calling process is changed to that of the owner of the
+#       program file", "The effective user ID of the process is copied to the saved set-user-ID".
+#       proc_pid_status(5) "Uid, Gid: Real, effective, saved set, and filesystem UIDs (GIDs)" — 칩의 순서.
+#       passwd(1) FILES 에 /etc/shadow 가 있다. 2026-11-17 데비안 실측으로 suid 사본이
+#       "Uid: 501 0 0 0" 을 보인 것을 확인했다.
+# 타입 스펙: type-sequence — 주체 셋 사이의 시간순 왕복. accent 는 유효 UID 가 0 이 되는 한 줄.
 import sys; sys.path.insert(0, ".")
 from dd import Seq, PAPER2, INK, MUTED, SOFT, RULE, ACC, OK, INFO, WARN, KR, MONO
 
@@ -58,33 +50,29 @@ class SeqKR(Seq):
         s.t(x, y + 5, txt, 12, c, _kr(txt))
 
 
-d = SeqKR(880, 620, "LEARNING MODERN LINUX · 04-01 §5",
-          "passwd 를 실행하면 유효 UID 가 뒤집힌다",
-          "자식 프로세스가 부모의 UID 사본을 물려받고, execve 에서 실제 UID 는 보존되지만 "
-          "유효 UID 와 저장된 set-user-ID 는 바뀔 수 있다는 규칙을 시간순으로 편 것.",
-          "권한 판정에 쓰이는 것은 실제 UID 가 아니라 유효 UID 입니다")
+d = SeqKR(880, 560, "LEARNING MODERN LINUX · 04-01 §5",
+          "passwd 를 실행하면 유효 UID 가 0 이 된다",
+          "fork 로 만든 자식은 부모의 UID 사본을 물려받고, setuid 가 켜진 root 소유 파일을 execve 하면 "
+          "실제 UID 는 남고 유효·저장·파일시스템 UID 가 0 이 된다.",
+          "칩의 Uid 네 값은 실제 · 유효 · 저장 · 파일시스템 순서입니다")
 
 d.lanes([("셸", "uid 1000"),
-         ("passwd 프로세스", "suid 가 켜진 실행 파일"),
-         ("커널", "권한을 판정한다")])
-d.rails(492)
+         ("자식 프로세스", "exec 뒤 passwd"),
+         ("커널", "권한 판정")])
+d.rails(488)
 
-d.msg("셸", "passwd 프로세스", "fork(2)", 172, INFO,
-      sub="부모의 UID 사본을 그대로 물려받는다")
-d.state("passwd 프로세스", "real 1000 · effective 1000", 216, INFO)
-d.msg("passwd 프로세스", "커널", "execve(2)", 268, ACC, mk="acc",
-      sub="real UID 는 보존되고 effective 와 saved 는 바뀔 수 있다")
-d.state("passwd 프로세스", "real 1000 · effective 0", 312, ACC)
-d.msg("passwd 프로세스", "커널", "root 만 닿는 곳에 쓴다", 372, WARN, mk="warn",
-      sub="판정 기준은 effective UID · 대상은 노트가 채운 것")
+d.msg("셸", "자식 프로세스", "fork(2)", 172, INFO,
+      sub="부모 UID 사본 상속")
+d.state("자식 프로세스", "Uid: 1000 1000 1000 1000", 216, INFO)
+d.msg("자식 프로세스", "커널", "execve(2) /usr/bin/passwd", 268, ACC, mk="acc",
+      sub="setuid · root 소유")
+d.state("자식 프로세스", "Uid: 1000 0 0 0", 312, ACC)
+d.msg("자식 프로세스", "커널", "/etc/shadow 쓰기", 372, WARN, mk="warn",
+      sub="파일시스템 UID 0 으로 판정")
 d.state("커널", "허용", 416, OK)
-d.msg("커널", "셸", "비밀번호가 바뀌었다", 464, OK, mk="ok")
+d.msg("커널", "셸", "비밀번호 변경 완료", 464, OK, mk="ok")
 
-d.t(24, 528, "저장된 set-user-ID 는 프로세스가 실제 UID 와 그 값 사이에서 유효 UID 를 오갈 때 씁니다.",
-    12, SOFT, KR, "start")
-d.t(24, 550, "파일시스템 UID 는 보통 유효 UID 와 같고 커널이 자동으로 따라 바꿉니다.",
-    12, SOFT, KR, "start")
-d.legend(568, [("물려받음", INFO), ("권한이 뒤집히는 자리", ACC),
+d.legend(508, [("물려받음", INFO), ("유효 UID 가 바뀌는 자리", ACC),
                ("판정 대상", WARN), ("결과", OK)])
 d.save("04-01.uid-at-exec.svg")
 print("ok 04-01.uid-at-exec")

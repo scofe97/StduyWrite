@@ -11,6 +11,7 @@
 #       (OrbStack ubuntu, backlog 3 · accept 안 함 · 클라이언트 여섯 — ss 의 LISTEN 행 Recv-Q 4 · Send-Q 3).
 #       논점은 0 ms 와 6005 ms 다. 즉시 실패는 상대가 대답했다는 뜻이라 도달에는 성공한 것이고,
 #       한도를 다 채운 실패는 아무도 대답하지 않은 것이라 길이나 중간을 봐야 한다.
+# 2026-11-17: 아래 설명 문장을 명사구로 줄이고, accept 큐 확인을 순서의 다섯째 칸으로 올렸다.
 # 타입 스펙: type-process — 요청이 지나는 단계를 왼쪽에서 오른쪽으로 늘어놓고 각 단계에서
 #       빠져나가는 실패를 아래로 떨군다. 07-03.chapter-overview 도 같은 타입이지만 그쪽은
 #       문서의 읽는 순서를 그리고 이쪽은 요청의 진행 단계를 그린다 — 대상이 다르다.
@@ -19,12 +20,12 @@
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 1000, 726
+W, H = 1000, 644
 d = D(W, H, "LEARNING MODERN LINUX · 07-03 §3",
       "종료 코드가 요청이 어디까지 갔는지를 말해 준다",
       "curl 한 방이면 어느 층에서 끊겼는지 부류가 갈린다. 6 은 이름에서, 7 은 포트에서, "
       "28 은 아무 대답도 못 받고 한도까지 기다린 것이다. 35·60 은 TLS 에서, 22·52·47 은 응답에서 끊긴 것이다.",
-      "0 ms 와 6005 ms 가 갈라 줍니다")
+      "0 ms 와 6005 ms 의 차이")
 
 SX, SW, SGAP, SY, SH = 24, 140, 20, 168, 62
 stages = [
@@ -74,10 +75,10 @@ for idx, code, msg, ms, col, nxt in exits:
 
 BY = FY + 116
 d.tone(24, BY, W - 48, 78, ACC)
-d.t(44, BY + 26, "0 ms 는 상대가 대답했다는 뜻입니다", 13, INK, KR, "start", 600)
-d.t(44, BY + 48, "즉시 거절당하려면 패킷이 거기까지 갔다 와야 합니다. 도달에는 성공했고 그 포트만 안 열린 것입니다.",
+d.t(44, BY + 26, "0 ms 와 한도 초과의 차이", 13, INK, KR, "start", 600)
+d.t(44, BY + 48, "0 ms — 상대의 즉시 거절(RST) · 패킷 도달 성공, 포트만 닫힘",
     12, MUTED, KR, "start")
-d.t(44, BY + 68, "한도를 다 채웠다면 아무도 대답하지 않은 것이라, 길이 없거나 중간의 무엇이 조용히 버린 것입니다.",
+d.t(44, BY + 68, "6005 ms — 대답 없음 · 길 없음 또는 중간의 조용한 폐기",
     12, MUTED, KR, "start")
 
 OY = BY + 96
@@ -87,8 +88,9 @@ steps = [
     ("2", "route -n get", "길이 있는지 (28 일 때)"),
     ("3", "ping", "상대가 살아 있는지"),
     ("4", "traceroute", "어디까지 갔는지 좁힌다"),
+    ("5", "ss -tln", "상대의 accept 큐 포화"),
 ]
-OW, OG = 190, 24
+OW, OG = 170, 22
 for i, (n, cmd, why) in enumerate(steps):
     x = 24 + i * (OW + OG)
     d.box(x, OY + 14, OW, 52, PAPER2, RULE, 1.0, 6)
@@ -98,9 +100,6 @@ for i, (n, cmd, why) in enumerate(steps):
     if i < len(steps) - 1:
         d.arrow([(x + OW + 1, OY + 40), (x + OW + OG - 2, OY + 40)], SOFT, "soft", 1.2)
 
-d.t(24, OY + 90, "넷이 다 멀쩡한데 28 이 나면 마지막 후보가 accept 큐 포화입니다 — 상대에서 ss -tln 의 Recv-Q 가 Send-Q 를 넘었는지 봅니다.",
-    11.5, MUTED, KR, "start")
-
-d.legend(OY + 110, [("이름에서 끊김", INFO), ("도달했고 포트만", OK), ("아무 대답 없음", ACC), ("연결 뒤에서 끊김", WARN)])
+d.legend(OY + 92, [("이름에서 끊김", INFO), ("도달했고 포트만", OK), ("아무 대답 없음", ACC), ("연결 뒤에서 끊김", WARN)])
 d.save("07-03.curl-exit-triage.svg")
 print("ok 07-03.curl-exit-triage")
