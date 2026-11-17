@@ -1,8 +1,8 @@
 # 02-01 §QoS 3등급 — 조합이 생사 순서를 정한다
 # 본문: requests·limits 를 어떻게 적었는가(행)가 등급을 정하고, 그 등급이 축출에서
 #   무엇을 뜻하는가(열)로 이어진다. 본문이 정정하는 두 가지를 그림도 같이 정정해야 한다 —
-#   ① requests 만 적고 limits 를 생략한 흔한 경우도 Burstable 이다("서로 다름"이 아니다).
-#   ② kubelet 은 QoS 등급으로 축출 순서를 정하지 않는다. 1번 기준은 "request 를 넘겼는가"다.
+#   1) requests 만 적고 limits 를 생략한 흔한 경우도 Burstable 이다("서로 다름"이 아니다).
+#   2) kubelet 은 QoS 등급으로 축출 순서를 정하지 않는다. 1번 기준은 "request 를 넘겼는가"다.
 #   근거: kubernetes/website node-pressure-eviction.md — "The kubelet does not use the pod's
 #   QoS class to determine the eviction order." + pod-qos.md 의 3등급 판정 조건.
 # 타입 스펙: type-dp-security-matrix — 행(선언 조합) × 열(판정·결과)의 격자로,
@@ -63,11 +63,11 @@ for j, (name, code) in enumerate(ROLES):
 # ── 데이터행 ────────────────────────────────────────────────────────────
 # (등급, 등급색), (축출 의미, 색), (초과 시, 색), focal 여부
 CELLS = [
-    (("Best-Effort", BAD),   ("request 가 없어 항상 초과", BAD),   ("메모리는 죽습니다", BAD),   False),
-    (("Burstable", WARN),    ("request 안이면 늦게 나갑니다", OK), ("CPU 는 스로틀", WARN),      True),
-    (("Burstable", WARN),    ("넘긴 만큼 먼저 나갑니다", BAD),     ("limit 까지 자랍니다", WARN), False),
-    (("Burstable", WARN),    ("메모리는 넘길 수 없습니다", OK),    ("CPU 만 스로틀", OK),        False),
-    (("Guaranteed", INFO),   ("마지막에 나갑니다", OK),            ("CFS 스로틀을 떠안습니다", WARN), False),
+    (("Best-Effort", BAD),   ("request 가 없어 항상 초과", BAD),   ("메모리 초과 시 종료", BAD),   False),
+    (("Burstable", WARN),    ("request 안이면 축출 후순위", OK), ("CPU 는 경합 시 분배", WARN),      False),
+    (("Burstable", WARN),    ("초과량 큰 순 축출", BAD),     ("limit 까지 증가", WARN), False),
+    (("Burstable", WARN),    ("메모리 limit 초과 불가", OK),    ("남는 CPU 사용", OK),        True),
+    (("Guaranteed", INFO),   ("마지막 축출", OK),            ("CFS 스로틀 부담", WARN), False),
 ]
 
 for k, (label, sub) in enumerate(ROWS):
@@ -82,7 +82,7 @@ for k, (label, sub) in enumerate(ROWS):
         if focal and j == 0:
             d.tone(x, y, ROLE_COL_W, ROW_H, ACC, 4, "12", 1.4)
             d.t(role_col_cx(j), y + 25, txt, 13, ACC, KR, "middle", 600)
-            d.t(role_col_cx(j), y + 44, "이 책의 권장이 여기입니다", 12, ACC, KR)
+            d.t(role_col_cx(j), y + 44, "권장 구성", 12, ACC, KR)
         else:
             d.tone(x, y, ROLE_COL_W, ROW_H, c, 4, "10", 0.9)
             d.t(role_col_cx(j), y + (34 if len(txt) < 14 else 27), txt,
@@ -93,7 +93,7 @@ for k, (label, sub) in enumerate(ROWS):
 # ── 바닥 주석 ───────────────────────────────────────────────────────────
 d.line(LEFT_PAD, ROWS_BOTTOM + 18, W - RIGHT_PAD, ROWS_BOTTOM + 18, RULE, 0.8)
 d.t(LEFT_PAD, LEGEND_Y - 4,
-    "kubelet 이 보는 순서는 ① request 초과 여부 ② Pod Priority ③ 초과량입니다. 등급은 그 결과의 추정치로만 씁니다.",
+    "kubelet 이 보는 순서는 1. request 초과 여부 2. Pod Priority 3. 초과량입니다. 등급은 그 결과의 추정치로만 씁니다.",
     12, MUTED, KR, "start")
 d.legend(LEGEND_Y + 8, [("가장 먼저", BAD), ("중간", WARN), ("늦게", OK), ("권장 조합", ACC)])
 
