@@ -12,7 +12,7 @@ related:
   - ./systemctl%20유닛%20설정과%20타이머.md
   - ../../../book/learning-modern-linux/06-01.먼저%20켜지는%20것%20하나가%20나머지%20전부를%20켠다.md
   - ../sysinfo/uname%C2%B7os-release%C2%B7lsb_release.md
-updated: 2026-11-13
+updated: 2026-11-17
 ---
 
 # systemctl 참조 시트
@@ -61,6 +61,10 @@ systemctl cat 유닛
 systemctl start 유닛
 systemctl stop 유닛
 systemctl restart 유닛
+
+# 프로세스에 신호를 보낸다. 유닛 상태를 직접 바꾸지는 않는다 (서비스에 신호 보내기)
+systemctl kill 유닛
+systemctl kill -s SIGKILL 유닛
 
 # 부팅 때 켜고 끈다. --now 를 붙이면 지금도 함께 바꾼다 (부팅 때 켜고 끄기)
 systemctl enable --now 유닛
@@ -481,6 +485,127 @@ systemctl show -p MainPID --value cmd-lab-plain    # 21308
 systemctl stop cmd-lab-plain
 ```
 
+### 서비스에 신호 보내기
+
+> `kill` 은 유닛의 프로세스에 신호만 보내므로, 유닛이 어떤 상태가 되는지는 프로세스가 그 신호로 끝나는 방식과 `Restart=` 설정이 정합니다.
+
+신호를 주지 않으면 SIGTERM 을, 대상을 주지 않으면 유닛의 모든 프로세스를 고릅니다.[^kill] 신호 자체는 [kill·pgrep·pkill·killall 참조 시트](../process/kill%C2%B7pgrep%C2%B7killall.md)에서 다룹니다.
+
+```bash
+# kill: 유닛의 프로세스에 신호를 보낸다. 앞 절 끝에서 cmd-lab-demo 는 떠 있다
+systemctl kill cmd-lab-demo
+sleep 1
+systemctl is-active cmd-lab-demo    # inactive (종료 코드 3)
+```
+
+SIGTERM 으로 끝난 프로세스는 정상 종료로 치므로 유닛은 `failed` 가 아니라 `inactive` 가 됩니다.[^killclean]
+
+```bash
+# -s: 보낼 신호 (--signal=). SIGKILL 처럼 이름으로 준다
+systemctl start cmd-lab-demo
+systemctl kill -s SIGKILL cmd-lab-demo
+sleep 1
+systemctl is-active cmd-lab-demo    # failed (종료 코드 3)
+systemctl status cmd-lab-demo --no-pager -n 0
+```
+
+```bash
+× cmd-lab-demo.service - cmd-lab demo service
+     Loaded: loaded (/usr/lib/systemd/system/cmd-lab-demo.service; disabled; preset: enabled)
+    Drop-In: /run/systemd/system/service.d
+             └─zzz-lxc-service.conf
+     Active: failed (Result: signal) since Tue 2026-11-17 10:28:10 KST; 1s ago
+   Duration: 3ms
+ Invocation: ab3a383745a8471fb9b022e260e5a20c
+    Process: 1845 ExecStart=/bin/sleep infinity (code=killed, signal=KILL)
+   Main PID: 1845 (code=killed, signal=KILL)
+   Mem peak: 1.7M
+        CPU: 3ms
+```
+
+```bash
+# failed 에서도 start 는 그대로 받고, 다시 뜨면 Result 가 success 로 돌아온다
+systemctl start cmd-lab-demo
+systemctl show -p Result --value cmd-lab-demo    # success
+```
+
+`Restart=` 가 있는 서비스는 `kill` 로 끊어도 다시 뜹니다. `cmd-lab-demo` 는 `Restart=` 가 없으므로 유닛 파일 없이 임시 서비스를 만드는 `systemd-run` 으로 확인합니다.
+
+```bash
+# systemd-run: 유닛 파일 없이 명령을 임시 서비스로 띄운다
+#   --quiet            실행 안내 출력을 끈다
+#   --unit=            임시 유닛 이름
+#   -p Restart=always  유닛 속성을 준다. 프로세스가 끝나면 항상 다시 띄운다
+#   -p RestartSec=1    다시 띄우기 전에 1초 기다린다
+systemd-run \
+  --quiet \
+  --unit=cmd-lab-again \
+  -p Restart=always \
+  -p RestartSec=1 \
+  /bin/sleep infinity
+
+# kill 앞뒤로 PID 를 읽는다. 유닛은 계속 active 이고 PID 만 바뀐다
+systemctl show -p MainPID --value cmd-lab-again    # 1856
+systemctl kill cmd-lab-again
+sleep 2
+systemctl show -p MainPID --value cmd-lab-again    # 1861
+systemctl is-active cmd-lab-again                  # active
+systemctl stop cmd-lab-again
+```
+
+`--kill-whom=` 은 신호를 받을 프로세스를 main·control·cgroup·all 중에서 고릅니다. 기본값은 `all` 이고 `main` 은 유닛 수명을 정하는 프로세스 하나입니다.[^killwhom]
+
+```bash
+# main 프로세스 sh 와 그 자식 sleep 300 을 가진 임시 서비스를 띄운다
+systemd-run --quiet --unit=cmd-lab-multi /bin/sh -c 'sleep 300 & wait'
+pids=$(paste -sd, /sys/fs/cgroup/system.slice/cmd-lab-multi.service/cgroup.procs)
+
+# --kill-whom=main: main 에만 SIGSTOP 을 보낸다. STAT 의 T 는 멈춘 프로세스다
+systemctl kill --kill-whom=main -s SIGSTOP cmd-lab-multi
+ps -o pid,stat,args -p $pids
+```
+
+```bash
+    PID STAT COMMAND
+   1867 Ts   /bin/sh -c sleep 300 & wait
+   1869 S    sleep 300
+```
+
+```bash
+# --kill-whom=all: 유닛의 모든 프로세스에 SIGCONT 를 보낸다. main 이 다시 돈다
+systemctl kill --kill-whom=all -s SIGCONT cmd-lab-multi
+ps -o pid,stat,args -p $pids
+```
+
+```bash
+    PID STAT COMMAND
+   1867 Ss   /bin/sh -c sleep 300 & wait
+   1869 S    sleep 300
+```
+
+```bash
+# main 에 SIGTERM 을 보내면 유닛이 멈추고, 남아 있던 sleep 300 도 함께 사라진다
+systemctl kill --kill-whom=main cmd-lab-multi
+sleep 1
+systemctl is-active cmd-lab-multi    # inactive (종료 코드 3)
+ps -o pid,stat,args -p $pids
+```
+
+```bash
+    PID STAT COMMAND
+```
+
+```bash
+# 꺼져 있는 유닛에는 보낼 대상이 없어 종료 코드 1 로 실패한다
+systemctl kill cmd-lab-multi
+```
+
+```bash
+Failed to kill unit cmd-lab-multi.service: Unit cmd-lab-multi.service not loaded.
+```
+
+임시 서비스는 멈추면 메모리에서 사라지므로 따로 지울 파일이 없습니다. 앞 절의 `cmd-lab-demo` 는 다시 떠 있는 채로 둡니다.
+
 ### 부팅 때 켜고 끄기
 
 > `enable` 은 유닛 파일 안의 `[Install]` 내용대로 심볼릭 링크를 만들 뿐 서비스를 지금 시작하지는 않습니다.
@@ -734,6 +859,9 @@ cd ~ && rm -rf ~/cmd-lab/systemctl
 [^restart]: systemctl(1) `restart` — "Stop and then start one or more units specified on the command line. If the units are not running yet, they will be started." `try-restart` — "This does nothing if units are not running."
 [^reload]: systemctl(1) `reload` — "Note that this will reload the service-specific configuration, not the unit configuration file of systemd." `reload-or-restart` — "Reload one or more units if they support it. If not, stop and then start them instead."
 [^stop]: systemctl(1) `stop` — "It will not fail if any of the commands configured to stop the unit (ExecStop=, etc.) fail, because the manager will still forcibly terminate the unit."
+[^kill]: systemctl(1) `kill` — "Send a UNIX process signal to one or more processes of the unit. Use --kill-whom= to select which process to send the signal to. Use --signal= to select the signal to send." `-s, --signal=` — "If omitted, defaults to SIGTERM." 이 절의 출력은 OrbStack Ubuntu 26.04 VM(`systemctl --version` 첫 줄 `systemd 259 (259.9-0ubuntu0.1)`)에서 2026-11-17 `sudo bash` 로 받았습니다. https://www.freedesktop.org/software/systemd/man/latest/systemctl.html
+[^killclean]: systemd.service(5) `SuccessExitStatus=` — "in addition to the normal successful exit status 0 and, except for Type=oneshot, the signals SIGHUP, SIGINT, SIGTERM, and SIGPIPE." SIGKILL 은 이 목록에 없어 `Result: signal` 로 failed 가 되는 것을 실측에서 봤습니다. https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html
+[^killwhom]: systemctl(1) `--kill-whom=` — "Must be one of main, control, cgroup or all to select whether to kill only the main process, the control process, all processes in the unit's control group or all processes of the unit." "If omitted, defaults to all, except if --kill-subgroup= is used in which case defaults to cgroup." "Added in version 252."
 [^enable]: systemctl(1) `is-enabled` 표 — "enabled" 는 "Enabled via .wants/, .requires/ or Alias= symlinks". 실측 출력의 `Created symlink` 두 줄이 그 링크입니다.
 [^now]: systemctl(1) `--now` — "When used with enable, disable, mask, or reenable, also start/stop/try-restart the units after the specified unit file operations succeed."
 [^mask]: systemctl(1) `mask` — "This will link these unit files to /dev/null, making it impossible to start them. This is a stronger version of disable". 같은 절 — "If a matching unit file already exists under these directories this operation will hence fail. This means that the operation is primarily useful to mask units shipped by the vendor".
