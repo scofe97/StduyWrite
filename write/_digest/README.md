@@ -35,7 +35,7 @@ updated: 2026-11-15
 | `network/` | network-keywords | 8 |
 | `k8s/` | k8s-keywords | 13 |
 | `devops/` | devops-keywords | 7 |
-| `os/` | os-keywords | 3 |
+| `os/` | os-keywords | 4 |
 | `data/` | data-keywords | 4 |
 | `spring/` | spring-keywords | 2 |
 | `ai/` | ai-keywords | 3 |
