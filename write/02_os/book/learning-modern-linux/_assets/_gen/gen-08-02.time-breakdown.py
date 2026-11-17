@@ -8,12 +8,16 @@
 #           S "CPU-seconds used by the system on behalf of the process (in kernel mode)".
 # 타입 스펙: type-bar — dumbbell. 가로 방향만 쓰고 행마다 두 점(CPU 시간·real)을 선으로 잇는다.
 #           값 범위가 0.001~1초로 세 자릿수를 넘어 로그 축을 쓴다. 로그 축에는 0 이 없으므로 축 아래에 밝힌다.
+#           왼쪽 띠는 행마다 real 을 100% 로 두고 user(사용자 모드 CPU) · sys(커널 모드 CPU) ·
+#           대기(CPU 밖) 세 조각으로 가른 몫이다. 로그 축에서 사라지는 user 와 sys 의 비율
+#           (dd 의 sys 가 user 의 두 배, 반복문은 거의 user)을 이 띠가 보인다. 띠의 몫은 위 실측값의 나눗셈이다.
 import math
 import sys; sys.path.insert(0, ".")
-from dd import D, ACC, MUTED, SOFT, INK, INFO, RULE, KR, MONO
+from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
 
 W, H = 920, 452
-X0, PW = 300, 560
+X0, PW = 320, 520
+BX, BW, BHT = 208, 88, 14          # real 의 몫 띠
 LO, HI = 0.0005, 2.0
 STRIDE, Y0 = 64, 128
 
@@ -23,16 +27,17 @@ def px(v):
 
 
 ROWS = [
-    ("ls -R /usr", "user 0.002 · sys 0.019", 0.021, 0.021, False),
-    ("sleep 1", "user 0.000 · sys 0.001", 0.001, 1.001, True),
-    ("bash 반복문 30만 회", "user 0.508 · sys 0.001", 0.509, 0.511, False),
-    ("dd bs=1 40만 회", "user 0.030 · sys 0.063", 0.093, 0.093, False),
+    ("ls -R /usr", "user 0.002 · sys 0.019", 0.002, 0.019, 0.021, False),
+    ("sleep 1", "user 0.000 · sys 0.001", 0.000, 0.001, 1.001, True),
+    ("bash 반복문 30만 회", "user 0.508 · sys 0.001", 0.508, 0.001, 0.511, False),
+    ("dd bs=1 40만 회", "user 0.030 · sys 0.063", 0.030, 0.063, 0.093, False),
 ]
 
 d = D(W, H, "LEARNING MODERN LINUX · 08-02 §3",
       "CPU 시간과 real 사이의 거리",
       "네 명령의 user+sys 와 real 을 로그 시간 축에 찍었다. 두 점이 겹치면 CPU 위에서 시간을 썼고, "
-      "멀면 그만큼 CPU 밖에서 기다렸다.",
+      "멀면 그만큼 CPU 밖에서 기다렸다. 왼쪽 띠는 real 을 user · sys · 대기로 가른 몫이다. "
+      "ls 는 거의 sys, sleep 은 거의 대기, 반복문은 거의 user, dd 는 sys 가 user 의 두 배다.",
       "단일 스레드라면 real − (user+sys) 가 기다린 시간입니다")
 
 AXT, AXB = Y0 - 24, Y0 + 4 * STRIDE - 20
@@ -43,20 +48,32 @@ for v, lab in ((0.001, "0.001"), (0.01, "0.01"), (0.1, "0.1"), (1, "1")):
 d.line(X0, AXB, X0 + PW, AXB, "rgba(245,245,243,0.25)", 1)
 d.t(X0 + PW + 4, AXB + 18, "초", 11, SOFT, KR, "start")
 
-for i, (name, sub, cpu, real, focal) in enumerate(ROWS):
+d.t(BX + BW / 2, AXT - 4, "real 의 몫", 12, SOFT, KR)
+for i, (name, sub, usr, sysv, real, focal) in enumerate(ROWS):
     y = Y0 + i * STRIDE
-    c = ACC if focal else INFO
+    cpu = max(usr + sysv, 0.001)
+    c = ACC if focal else INK
     d.t(24, y - 2, name, 13, ACC if focal else INK, MONO, "start", 600)
     d.t(24, y + 16, sub, 12, MUTED, MONO, "start")
+    # real 을 user · sys · 대기로 가른 띠
+    bx = BX
+    for v, col in ((usr, INFO), (sysv, OK), (max(real - usr - sysv, 0), WARN)):
+        w = BW * v / real
+        if w > 0.4:
+            d.o.append(f'<rect x="{bx:.1f}" y="{y + 4 - BHT / 2}" width="{w:.1f}" height="{BHT}" fill="{col}99"/>')
+        bx += w
+    d.o.append(f'<rect x="{BX}" y="{y + 4 - BHT / 2}" width="{BW}" height="{BHT}" rx="2" fill="none" '
+               f'stroke="{RULE}" stroke-width="0.8"/>')
+    # 로그 축의 두 점
     x1, x2 = px(cpu), px(real)
     if x2 - x1 > 2:
-        d.line(x1, y + 4, x2, y + 4, c, 2.4)
-    d.o.append(f'<circle cx="{x2}" cy="{y + 4}" r="7" fill="#0D1117" stroke="{c}" stroke-width="2"/>')
+        d.line(x1, y + 4, x2, y + 4, ACC if focal else WARN, 2.4)
+    d.o.append(f'<circle cx="{x2}" cy="{y + 4}" r="7" fill="{PAPER}" stroke="{c}" stroke-width="2"/>')
     d.o.append(f'<circle cx="{x1}" cy="{y + 4}" r="4" fill="{c}"/>')
-    gap = real - cpu
-    d.t(x2 + 14, y + 8, f"대기 {gap:.3f}s", 12, c, KR, "start", 600 if focal else 400)
+    d.t(x2 + 14, y + 8, f"대기 {real - usr - sysv:.3f}s", 12, ACC if focal else MUTED, KR, "start",
+        600 if focal else 400)
 
-d.t(24, AXB + 18, "로그 축 · 0 은 표시 불가", 11, SOFT, KR, "start")
-d.legend(H - 48, [("CPU 시간 user+sys (채운 점)", INFO), ("real (빈 점)", INFO), ("대기가 큰 명령", ACC)])
+d.t(24, AXB + 18, "로그 축 · 0 은 표시 불가 · 채운 점 user+sys · 빈 점 real", 11, SOFT, KR, "start")
+d.legend(H - 48, [("user", INFO), ("sys", OK), ("대기 = real − (user+sys)", WARN), ("대기가 큰 명령", ACC)])
 d.save("08-02.time-breakdown.svg")
 print("ok 08-02.time-breakdown")

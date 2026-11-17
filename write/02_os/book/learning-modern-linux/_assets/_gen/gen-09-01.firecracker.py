@@ -7,109 +7,81 @@
 #       "네트워크 인터페이스는 호스트의 TUN/TAP 장치로 흉내 냅니다. 블록 장치는 호스트의 파일이 뒤를 받치며 Virtio 장치를 지원합니다."
 #       "seccomp 필터를 써서 자신이 쓸 수 있는 호스트 시스템 콜을 제한하며, cgroups 도 함께 쓸 수 있습니다."
 #       "관측 쪽에서는 로그와 메트릭을 §2 의 명명 파이프로 모을 수 있습니다."
-# 타입 스펙: type-architecture — 호스트 제어, VMM 핵심과 통제 장치, microVM 실행 영역의 구성요소 연결.
+# 타입 스펙: type-architecture — 호스트 위의 실제 구성요소(Firecracker 프로세스 · microVM · KVM · TUN/TAP ·
+#           호스트 파일 · 명명 파이프)와 그 사이 연결. microVM 의 가상 장치가 호스트의 어느 객체로 내려가는지,
+#           그 길이 seccomp 필터를 지난다는 것을 수직 연결로 보인다. accent 는 Firecracker 프로세스 하나.
+# 축약: 호출하는 쪽은 본문이 이름을 대지 않아 점선 "(예)" 로 두었다. cgroups 는 본문이 "함께 쓸 수
+#       있다" 고만 해서 점선이다. microVM 은 하나만 그렸다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 880, 480
+W, H = 880, 600
 d = D(W, H, "LEARNING MODERN LINUX · 09-01 §3",
       "HTTP API 로 microVM 을 띄우고 격리와 가상 장치를 묶는다",
-      "Firecracker 의 구성. 호스트는 HTTP API 로 VMM 에 요청하고, VMM 은 seccomp·cgroups 와 "
-      "가상 장치·관측 통로를 묶어 KVM 위의 microVM 을 띄웁니다.",
-      "호스트는 HTTP API 로 요청하고 VMM 이 microVM 을 띄웁니다")
+      "Firecracker 를 호스트 위의 실제 구성요소로 나눈 것. 호스트의 호출자가 HTTP API 로 microVM 의 "
+      "생성, 조회, 중지를 요청하고, Firecracker 프로세스는 microVM 을 KVM 인스턴스로 돌린다. microVM 의 "
+      "네트워크는 호스트 TUN/TAP 장치로, 블록 장치는 호스트 파일과 Virtio 로 이어진다. 호스트로 내려가는 "
+      "시스템 콜은 seccomp 필터가 제한하고, 로그와 메트릭은 명명 파이프로 모은다.",
+      "microVM 의 장치는 하나씩 호스트의 실제 객체로 내려갑니다")
 
-# 존 3개 (호스트 제어, Firecracker VMM, microVM 실행)
-# 1. 왼쪽: 호스트 제어
-ZX1, ZY, ZW, ZH = 24, 110, 176, 290
-d.box(ZX1, ZY, ZW, ZH, PAPER, RULE, 1.0, 8)
-d.t(ZX1 + 16, ZY + 28, "호스트 제어", 13, SOFT, KR, "start", 600)
+LX, X0, X1 = 24, 136, 836
+PX0 = 336                      # Firecracker 프로세스 왼쪽
+for y0, y1, name, sub in ((100, 352, "유저 공간", "호스트"), (396, 492, "호스트", "커널 · 파일")):
+    d.o.append(f'<rect x="{LX}" y="{y0}" width="{X1 + 20 - LX}" height="{y1 - y0}" rx="8" '
+               f'fill="{PAPER2}" fill-opacity="0.45" stroke="{RULE}" stroke-width="0.8"/>')
+    d.t(LX + 14, y0 + 26, name, 13, INK, KR, "start", 600)
+    d.t(LX + 14, y0 + 44, sub, 12, SOFT, KR, "start")
 
-BX1, BY1, BW1, BH1 = ZX1 + 14, ZY + 48, ZW - 28, 80
-d.box(BX1, BY1, BW1, BH1, PAPER2, RULE, 1.1, 6)
-d.t(BX1 + BW1 / 2, BY1 + 26, "HTTP API", 14, INK, MONO, "middle", 600)
-d.t(BX1 + BW1 / 2, BY1 + 48, "microVM 띄우기", 12, MUTED, KR, "middle")
-d.t(BX1 + BW1 / 2, BY1 + 66, "조회 · 멈춤 제어", 12, MUTED, KR, "middle")
+KX = (396, 536, 696)           # KVM · TUN/TAP · 호스트 파일 중심
 
-BX1_sub, BY1_sub = ZX1 + 14, ZY + 148
-d.box(BX1_sub, BY1_sub, BW1, 120, PAPER2, RULE, 0.9, 6)
-d.t(BX1_sub + 12, BY1_sub + 24, "개발 배경", 12, SOFT, KR, "start", 600)
-d.t(BX1_sub + 12, BY1_sub + 48, "• AWS 가 개발", 11.5, MUTED, KR, "start")
-d.t(BX1_sub + 12, BY1_sub + 72, "• 주로 서버리스용", 11.5, MUTED, KR, "start")
-d.t(BX1_sub + 12, BY1_sub + 94, "  Lambda · Fargate", 11.5, MUTED, MONO, "start")
+# 선 먼저
+d.arrow([(276, 176), (348, 176)], MUTED, "ar", 1.3)
+d.arrow([(PX0, 284), (280, 284)], MUTED, "ar", 1.3)
+d.arrow([(KX[0], 332), (KX[0], 408)], OK, "ok", 1.4)
+d.arrow([(KX[1], 324), (KX[1], 408)], INFO, "info", 1.4)
+d.arrow([(KX[2], 324), (KX[2], 408)], INFO, "info", 1.4)
+d.line(368, 374, X1, 374, WARN, 1.4, "6 4")
 
-# 2. 가운데: Firecracker VMM (FOCAL)
-ZX2, ZW2 = 248, 384
-d.box(ZX2, ZY, ZW2, ZH, PAPER, ACC, 1.2, 8)
-d.t(ZX2 + 16, ZY + 28, "Firecracker VMM (Rust)", 14, ACC, MONO, "start", 600)
+# 왼쪽 — 호출자 · 명명 파이프 · cgroups
+d.o.append(f'<rect x="{X0}" y="152" width="140" height="48" rx="6" fill="none" '
+           f'stroke="{SOFT}" stroke-width="1" stroke-dasharray="4 3"/>')
+d.t(X0 + 70, 172, "호출자 (예)", 12, SOFT, KR)
+d.t(X0 + 70, 190, "호스트 쪽", 12, SOFT, KR)
+d.box(X0 + 4, 260, 140, 48, PAPER, MUTED, 1.0, 6)
+d.t(X0 + 74, 280, "명명 파이프", 12, INK, KR, "middle", 600)
+d.t(X0 + 74, 298, "로그 · 메트릭", 12, MUTED, KR)
+d.o.append(f'<rect x="{X0}" y="420" width="160" height="48" rx="6" fill="none" '
+           f'stroke="{WARN}" stroke-width="1" stroke-dasharray="4 3"/>')
+d.t(X0 + 80, 440, "cgroups", 12, WARN, MONO, "middle", 600)
+d.t(X0 + 80, 458, "함께 쓸 수 있음", 12, MUTED, KR)
 
-# 보안 격리 (상단 2개)
-SW, SH = 168, 62
-SX1, SY1 = ZX2 + 16, ZY + 44
-d.tone(SX1, SY1, SW, SH, WARN, 6, "12", 1.1)
-d.t(SX1 + SW / 2, SY1 + 24, "seccomp 필터", 13, WARN, KR, "middle", 600)
-d.t(SX1 + SW / 2, SY1 + 46, "시스템 콜 사용 제한", 11.5, INK, KR, "middle")
+# Firecracker 프로세스
+d.tone(PX0, 116, X1 - PX0, 228, ACC, 8, "10", 1.4)
+d.t(PX0 + 16, 138, "Firecracker 프로세스", 13, ACC, KR, "start", 600)
+d.t(PX0 + 168, 138, "Rust VMM", 12, INK, MONO, "start")
+d.box(352, 152, 220, 48, PAPER, ACC, 1.0, 6)
+d.t(366, 172, "HTTP API", 12, INK, MONO, "start", 600)
+d.t(366, 190, "생성 · 조회 · 중지", 12, MUTED, KR, "start")
+d.tone(352, 212, X1 - 368, 120, OK, 6, "10", 1.2)
+d.t(368, 234, "microVM", 13, OK, MONO, "start", 600)
+d.t(440, 234, "KVM 인스턴스 · 테넌트 워크로드", 12, MUTED, KR, "start")
+for cx, lab in ((KX[1], "네트워크 장치"), (KX[2], "Virtio 블록")):
+    d.box(cx - 68, 280, 136, 44, PAPER, INFO, 1.0, 6)
+    d.t(cx, 307, lab, 12, INK, KR)
 
-SX2 = ZX2 + ZW2 - 16 - SW
-d.tone(SX2, SY1, SW, SH, WARN, 6, "12", 1.1)
-d.t(SX2 + SW / 2, SY1 + 24, "cgroups", 13, WARN, MONO, "middle", 600)
-d.t(SX2 + SW / 2, SY1 + 46, "함께 쓸 수 있음", 11.5, INK, KR, "middle")
+# seccomp
+d.t(X0, 379, "seccomp · 시스템 콜 제한 (기본)", 12, WARN, KR, "start")
 
-# 가상 장치 & 관측 (하단 3개)
-DW, DH = 110, 68
-DY = ZY + 124
-DX1 = ZX2 + 16
-d.box(DX1, DY, DW, DH, PAPER2, INFO, 1.0, 6)
-d.t(DX1 + DW / 2, DY + 24, "TUN/TAP", 12.5, INFO, MONO, "middle", 600)
-d.t(DX1 + DW / 2, DY + 44, "네트워크", 11.5, INK, KR, "middle")
-d.t(DX1 + DW / 2, DY + 58, "에뮬레이션", 11.5, MUTED, KR, "middle")
+# 호스트 객체
+for cx, name, sub, c, fam in ((KX[0], "KVM", "microVM 실행", OK, MONO),
+                              (KX[1], "TUN/TAP", "가상 네트워크", INFO, MONO),
+                              (KX[2], "호스트 파일", "블록 장치 뒤", INFO, KR)):
+    d.box(cx - 60, 412, 120, 56, PAPER, c, 1.1, 6)
+    d.t(cx, 436, name, 12, c, fam, "middle", 600)
+    d.t(cx, 456, sub, 12, MUTED, KR)
 
-DX2 = DX1 + DW + 11
-d.box(DX2, DY, DW, DH, PAPER2, INFO, 1.0, 6)
-d.t(DX2 + DW / 2, DY + 24, "Virtio", 12.5, INFO, MONO, "middle", 600)
-d.t(DX2 + DW / 2, DY + 44, "호스트 파일 기반", 11.5, INK, KR, "middle")
-d.t(DX2 + DW / 2, DY + 58, "블록 장치", 11.5, MUTED, KR, "middle")
-
-DX3 = DX2 + DW + 11
-d.box(DX3, DY, DW, DH, PAPER2, INFO, 1.0, 6)
-d.t(DX3 + DW / 2, DY + 24, "명명 파이프", 12.5, INFO, KR, "middle", 600)
-d.t(DX3 + DW / 2, DY + 44, "로그 · 메트릭", 11.5, INK, KR, "middle")
-d.t(DX3 + DW / 2, DY + 58, "수집 통로", 11.5, MUTED, KR, "middle")
-
-# VMM 핵심 설명 줄
-d.box(ZX2 + 16, ZY + 208, ZW2 - 32, 66, PAPER2, RULE, 1.0, 6)
-d.t(ZX2 + ZW2 / 2, ZY + 232, "KVM 인스턴스를 관리하는 VMM", 13, INK, KR, "middle", 600)
-d.t(ZX2 + ZW2 / 2, ZY + 254, "HTTP API 요청을 받아 microVM 을 띄우고 멈춤", 12, MUTED, KR, "middle")
-
-# 3. 오른쪽: microVM 실행
-ZX3, ZW3 = 680, 176
-d.box(ZX3, ZY, ZW3, ZH, PAPER, OK, 1.2, 8)
-d.t(ZX3 + 16, ZY + 28, "microVM 실행", 13, OK, KR, "start", 600)
-
-BX3, BY3, BW3, BH3 = ZX3 + 14, ZY + 48, ZW3 - 28, 114
-d.tone(BX3, BY3, BW3, BH3, OK, 6, "12", 1.2)
-d.t(BX3 + BW3 / 2, BY3 + 26, "microVM", 13.5, OK, MONO, "middle", 600)
-d.t(BX3 + BW3 / 2, BY3 + 48, "KVM 인스턴스", 12, OK, KR, "middle")
-d.t(BX3 + BW3 / 2, BY3 + 70, "VMM 이 관리하는 VM", 11.5, INK, KR, "middle")
-d.t(BX3 + BW3 / 2, BY3 + 92, "테넌트 워크로드", 11.5, MUTED, KR, "middle")
-
-BX3_sub = ZX3 + 14
-BY3_sub = ZY + 178
-d.box(BX3_sub, BY3_sub, BW3, 96, PAPER2, RULE, 0.9, 6)
-d.t(BX3_sub + 12, BY3_sub + 24, "설계 목표", 12, SOFT, KR, "start", 600)
-d.t(BX3_sub + 12, BY3_sub + 48, "• 같은 물리 기계", 11.5, MUTED, KR, "start")
-d.t(BX3_sub + 12, BY3_sub + 70, "• 여러 테넌트를 안전하게", 11.5, MUTED, KR, "start")
-
-# 연결 화살표 (수평 직교)
-y_arr1 = BY1 + BH1 / 2
-d.arrow([(ZX1 + ZW, y_arr1), (ZX2 - 4, y_arr1)], MUTED, "ar", 1.4)
-d.t((ZX1 + ZW + ZX2) / 2, y_arr1 - 10, "요청", 11.5, MUTED, KR)
-
-y_arr2 = BY3 + BH3 / 2
-d.arrow([(ZX2 + ZW2, y_arr2), (ZX3 - 4, y_arr2)], OK, "ok", 1.4)
-d.t((ZX2 + ZW2 + ZX3) / 2, y_arr2 - 10, "띄움", 11.5, OK, KR)
-
-d.legend(428, [("VMM", ACC), ("격리 장치 seccomp·cgroups", WARN),
-               ("호스트가 흉내 내는 장치·관측 통로", INFO), ("microVM", OK)])
-
+d.t(LX, 520, "AWS 가 Lambda · Fargate 용으로 개발 · 목표 = 한 물리 기계에서 다중 테넌트 격리 · 점선 = 예시 또는 선택",
+    11, SOFT, KR, "start")
+d.legend(548, [("Firecracker", ACC), ("microVM · KVM", OK), ("호스트 장치", INFO), ("격리 장치", WARN)])
 d.save("09-01.firecracker.svg")
 print("ok 09-01.firecracker")

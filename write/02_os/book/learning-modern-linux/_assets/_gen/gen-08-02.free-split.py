@@ -8,6 +8,8 @@
 #           will be shown as Shmem in /proc/meminfo and Shared in free(1)".
 # 타입 스펙: type-bar — stacked bars. 조각을 total 까지 쌓고 focal 조각(B)만 accent, 나머지는 muted tint.
 #           가로 방향만 쓰고 값 축은 왼쪽→오른쪽(0 → 8004 MiB)이다.
+#           B 안의 진한 칸이 shared(Shmem)이고, 둘째 행 왼쪽에 그 칸을 키운 실제 파일(dd 가 쓴
+#           /dev/shm/blob)을 적는다. 파일 이름·크기는 본문 실험 명령 그대로다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, RULE, KR, MONO
 
@@ -16,9 +18,9 @@ X0, PW, TOTAL, BH = 168, 760, 8004, 40
 K = PW / TOTAL
 
 ROWS = [
-    ("쓰기 전", "shared 79", 150, dict(A=1744, B=283, C=1078, D=4899, sh=79,
+    ("쓰기 전", "shared 79", None, 150, dict(A=1744, B=283, C=1078, D=4899, sh=79,
                                        used=2026, bc=1361, av=5977)),
-    ("400MiB 쓴 뒤", "shared 479", 316, dict(A=1747, B=683, C=1079, D=4495, sh=479,
+    ("400MiB 쓴 뒤", "shared 479", "+ /dev/shm/blob", 316, dict(A=1747, B=683, C=1079, D=4495, sh=479,
                                             used=2429, bc=1762, av=5574)),
 ]
 SEG = [("A", INFO, "2E"), ("B", ACC, "2E"), ("C", SOFT, "3A"), ("D", OK, "22")]
@@ -36,9 +38,11 @@ def bracket(x1, x2, y, up, label, c):
     d.t((x1 + x2) / 2, y - 8 if up else y + 18, label, 12, c, MONO, "middle", 600)
 
 
-for name, sub, y, v in ROWS:
-    d.t(24, y + 18, name, 13, INK, KR, "start", 600)
-    d.t(24, y + 36, sub, 12, ACC, MONO, "start")
+for name, sub, obj, y, v in ROWS:
+    d.t(24, y + 14, name, 13, INK, KR, "start", 600)
+    d.t(24, y + 32, sub, 12, ACC, MONO, "start")
+    if obj:
+        d.t(24, y + 50, obj, 12, MUTED, MONO, "start")
     x = X0
     xs = {}
     for key, c, op in SEG:
@@ -68,7 +72,7 @@ for m in (0, 2000, 4000, 6000, 8004):
     d.t(xx, AY + 16, str(m), 11, SOFT, MONO)
 d.t(X0 - 16, AY + 16, "MiB", 11, SOFT, MONO, "end")
 
-d.legend(H - 44, [("프로세스·커널", INFO), ("내어 줄 수 없는 캐시", ACC), ("내어 줄 캐시", SOFT),
+d.legend(H - 44, [("프로세스·커널", INFO), ("내어 줄 수 없는 캐시 · 진한 칸 shared", ACC), ("내어 줄 캐시", SOFT),
                   ("free", OK)])
 d.save("08-02.free-split.svg")
 print("ok 08-02.free-split")

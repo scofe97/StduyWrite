@@ -9,14 +9,18 @@
 #       example, filter or downsample).").
 # 타입 스펙: type-data-flow — 파이프라인 단계마다 누가 무엇을 하는지. 단계 사이를 건너가는 것이
 #           신호이므로 process 가 아니라 data-flow 다. 축약: 신호 유형 셋은 §3 도식이 맡는다.
+# 근거(본문 §1 「소스·텔레메트리·목적지 경로」): 목적지 중 UI 를 드러내는 것만 프론트엔드(GUI·TUI·CLI),
+#       S3 버킷은 UI 가 없는 목적지. 아래 띠의 세 자리는 본문 첫 문장 "앱이 내지 않은 것인지, 나르는 쪽이
+#       거른 것인지, 저장소가 못 그린 것인지" 를 칸마다 놓은 것이다. 원문의 로그 뷰어·대시보드 예와
+#       Observability 의 메모리 예는 본문에 없어 그리지 않는다.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, PAPER2, RULE, KR, MONO
 
-W, H = 880, 440
+W, H = 880, 476
 d = D(W, H, "LEARNING MODERN LINUX · 08-01 §1",
       "신호는 소스에서 나서 텔레메트리를 타고 목적지에 닿는다",
       "저자가 정의한 용어 다섯 중 셋이 경로의 자리 이름이고 하나가 그 사이를 나르는 과정의 이름이다. "
-      "오른쪽 두 칸의 차이가 저자가 굳이 세운 구분이다.",
+      "오른쪽 두 칸의 차이가 저자가 굳이 세운 구분이다. 아래 띠는 신호가 화면에 안 보일 때 끊겼을 수 있는 자리 셋을 경로의 칸마다 놓은 것이다.",
       "목적지라고 다 프론트엔드는 아닙니다")
 
 CW, CH, Y0 = 232, 76, 128
@@ -39,7 +43,7 @@ d.t(COLX[1] + CW / 2, AY + 32, "에이전트", 15, ACC, KR, "middle", 600)
 for k, line in enumerate(["모아서(collect)", "미리 손질해서(filter · downsample)", "실어 보낸다(ship · route)"]):
     d.t(COLX[1] + CW / 2, AY + 58 + k * 24, line, 11.5, MUTED, KR)
 
-dsts = [("프론트엔드", "로그 뷰어 · 대시보드", OK, "사용자 인터페이스가 있다"),
+dsts = [("프론트엔드", "GUI · TUI · CLI", OK, "사용자 인터페이스가 있다"),
         ("프론트엔드가 아닌 목적지", "S3 버킷", MUTED, "받아 두지만 보여 주지는 않는다")]
 for k, (nm, ex, col, sub) in enumerate(dsts):
     y = Y0 + 14 + k * (CH + 20)
@@ -53,12 +57,19 @@ for k in range(2):
     d.arrow([(COLX[0] + CW, y), (COLX[1] - 4, y)], MUTED, "ar", 1.3)
     d.arrow([(COLX[1] + CW, y), (COLX[2] - 4, y)], MUTED, "ar", 1.3)
 
-NY = Y0 + 14 + AH + 28
-d.t(24, NY + 4, "관측 가능성 = 바깥 정보로 안쪽 상태 판정 → 조치", 12.5, INK, KR, "start", 600)
-d.t(24, NY + 26, "예: 굼뜬 반응 → 남은 주 메모리 측정 → 메모리를 다 먹는 앱 발견 → 종료",
-    12, SOFT, KR, "start")
+# 신호가 안 보일 때 끊겼을 수 있는 자리 — 경로의 칸마다 하나
+BY = Y0 + 14 + AH + 28
+d.t(24, BY, "화면에 안 보일 때 끊긴 자리", 12, SOFT, KR, "start", 600)
+GAPS = [("소스가 내지 않음", "앱 · 운영체제"), ("나르며 거름", "filter · downsample"),
+        ("쌓였지만 안 그림", "UI 없는 목적지")]
+for i, (nm, sub) in enumerate(GAPS):
+    x, y = COLX[i], BY + 14
+    d.o.append(f'<rect x="{x}" y="{y}" width="{CW}" height="44" rx="6" fill="none" '
+               f'stroke="{SOFT}" stroke-width="1" stroke-dasharray="4 3"/>')
+    d.t(x + 16, y + 19, f"{i + 1}  {nm}", 12.5, INK, KR, "start", 600)
+    d.t(x + 16, y + 36, sub, 11, MUTED, MONO if sub.isascii() else KR, "start")
 
-d.legend(400, [("신호를 나르는 과정", ACC), ("소스", INFO), ("프론트엔드", OK),
+d.legend(BY + 76, [("신호를 나르는 과정", ACC), ("소스", INFO), ("프론트엔드", OK),
                   ("보여 주지 않는 목적지", MUTED)])
 d.save("08-01.signal-path.svg")
 print("ok 08-01.signal-path")

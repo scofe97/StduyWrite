@@ -4,109 +4,103 @@
 #       "imuxsock: Acquired UNIX socket '/run/systemd/journal/syslog'". Rocky Linux 9.3 컨테이너
 #       rsyslog.conf 의 module(load="imjournal" StateFile="imjournal.state"), imuxsock SysSock.Use="off".
 # 타입 스펙: type-architecture — 존으로 묶은 노드 그래프에 번호 붙은 화살표로 순서를 싣는다.
-#           Debian 12 와 Rocky Linux 9 두 존으로 나누고, journald(focal)에서 소켓으로 밀어 주는 길과
-#           저널 파일을 직접 읽어 가는 길의 차이를 보인다.
+#           앞부분(앱 → /dev/log → journald → 저널 파일)은 두 배포판이 같아 가운데 한 줄로 한 번만
+#           그리고, 거기서 나가는 길을 위(Debian 12, journald 가 소켓으로 밀어 줌)와 아래(Rocky Linux 9,
+#           rsyslog 가 저널 파일을 읽어 감)로 가른다. 위는 journald 에서, 아래는 저널 파일에서 출발하는
+#           것이 두 길의 차이다.
+# 값: 본문 §2 — /dev/log·/run/systemd/journal/dev-log 는 journald 가 듣는 소켓, 저널 파일
+#     /run/log/journal 또는 /var/log/journal(Storage=), ForwardToSyslog=yes 와
+#     /run/systemd/journal/syslog, 저널 한 줄 "rsyslogd[50]: imuxsock: Acquired UNIX socket ... (fd 3)",
+#     imjournal 과 SysSock.Use="off", 위치를 적는 상태 파일. 파일 이름은 §3 표(syslog·auth.log /
+#     messages·secure)와 정답 4 의 /var/log/auth.log·/var/log/secure.
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, OK, INFO, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 880, 472
+W, H = 960, 568
 d = D(W, H, "LEARNING MODERN LINUX · 08-01 §2",
       "한 줄이 journald 를 거쳐 rsyslog 의 파일로 가는 두 길",
-      "systemd 배포판에서 /dev/log 로 들어온 줄은 journald 가 먼저 받는다. rsyslog 는 Debian 에서는 "
-      "소켓으로 넘겨받고 Rocky 에서는 저널 파일을 직접 읽는다.",
+      "systemd 배포판에서 /dev/log 로 들어온 줄은 journald 가 먼저 받아 저널 파일에 쓴다. 여기까지는 "
+      "두 배포판이 같다. Debian 12 에서는 journald 가 ForwardToSyslog=yes 로 /run/systemd/journal/syslog "
+      "소켓에 밀어 주고 rsyslogd 의 imuxsock 이 받는다. Rocky Linux 9 에서는 rsyslogd 의 imjournal 이 "
+      "저널 파일을 직접 읽고 읽은 위치를 상태 파일에 적는다. 그 뒤 rsyslog 규칙이 줄을 /var/log 의 "
+      "텍스트 파일로 나눈다.",
       "Debian 은 소켓으로 넘겨받고 Rocky 는 저널 파일을 직접 읽습니다")
 
-def zone(x, y, w, h, label, col):
-    d.o.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="8" '
+# 열 — 왼쪽부터 앱, /dev/log, journald, 저널 파일·소켓, rsyslogd, 텍스트 파일
+C = [(24, 88), (136, 104), (264, 148), (436, 212), (672, 112), (808, 128)]
+def cx(i): return C[i][0] + C[i][1] / 2
+def rx(i): return C[i][0] + C[i][1]
+
+NH = 60
+Y_DEB, Y_MID, Y_RKY = 132, 260, 412       # 세 줄의 상자 윗변
+def cy(y): return y + NH / 2
+
+
+def zone(x, y, h, label, col, label_y):
+    """존은 배포판마다 갈라지는 부분만 감싼다. 공통 줄은 존 밖에 둔다."""
+    d.o.append(f'<rect x="{x}" y="{y}" width="{W - 12 - x}" height="{h}" rx="8" '
                f'fill="{col}08" stroke="{col}" stroke-width="0.8" stroke-dasharray="5 4"/>')
-    lw = len(label) * 8 + 20
-    d.o.append(f'<rect x="{x + 16}" y="{y + 4}" width="{lw}" height="16" rx="2" fill="{PAPER}"/>')
-    d.t(x + 16 + lw / 2, y + 16, label, 11, SOFT, KR, "middle", 600)
+    d.t(x + 16, label_y, label, 12, col, KR, "start", 600)
 
-def node(x, y, w, h, name, sub=None, fill=PAPER2, stroke=RULE, sw=0.9, fam=KR, name_size=11.5, sub_size=10):
-    d.box(x, y, w, h, fill, stroke, sw)
-    if sub:
-        d.t(x + w / 2, y + 21, name, name_size, INK, fam, "middle", 600)
-        d.t(x + w / 2, y + 38, sub, sub_size, MUTED, MONO if any(c.isascii() and c.isalnum() for c in sub) else KR)
-    else:
-        d.t(x + w / 2, y + 29, name, name_size, INK, fam, "middle", 600)
 
-def num_label(x, y, txt, c=MUTED):
-    d.t(x, y, txt, 11, c, KR, "middle", 600)
+def node(i, y, lines, stroke=RULE, sw=0.9, fill=PAPER2):
+    """lines: (글자, 크기, 색, 글꼴, 굵기) 목록. 상자 안에 세로로 고르게 놓는다."""
+    x, w = C[i]
+    d.box(x, y, w, NH, fill, stroke, sw)
+    n = len(lines)
+    step = 16 if n == 3 else 18
+    y0 = y + NH / 2 - step * (n - 1) / 2 + 4
+    for k, (txt, size, col, fam, wt) in enumerate(lines):
+        d.t(x + w / 2, y0 + k * step, txt, size, col, fam, "middle", wt)
 
-def alabel(x, y, txt, c=MUTED):
-    w = 66
-    d.o.append(f'<rect x="{x - w / 2}" y="{y - 10}" width="{w}" height="15" rx="2" fill="{PAPER}"/>')
-    d.t(x, y + 2, txt, 11, c, KR, "middle", 600)
 
-# Zones
-zone(24, 96, 832, 152, "Debian 12", INFO)
-zone(24, 260, 832, 152, "Rocky Linux 9", OK)
+zone(C[2][0] - 12, Y_DEB - 32, NH + 68, "Debian 12 — journald 가 밀어 줌", INFO, Y_DEB - 14)
+zone(C[3][0] - 12, Y_RKY - 32, NH + 64, "Rocky Linux 9 — rsyslog 가 읽어 감", OK, Y_RKY + NH + 18)
 
-# Debian 12 nodes
-# Row 1 (y = 120, cy = 144)
-node(36, 120, 68, 48, "앱 · logger", "사용자 공간", name_size=11, sub_size=11)
-node(124, 120, 78, 48, "/dev/log", "수신 소켓", fam=MONO, name_size=10.5, sub_size=11)
-d.tone(222, 120, 114, 48, ACC, op="14", sw=1.2)
-d.t(279, 141, "systemd-journald", 10.5, ACC, MONO, "middle", 600)
-d.t(279, 158, "모든 줄 먼저 수집", 11, MUTED, KR, "middle")
-node(428, 120, 110, 48, "저널 파일", "/var/log/journal", fam=KR, name_size=11, sub_size=9.0)
+# 가운데 줄 — 두 배포판 공통
+d.t(C[0][0], Y_MID - 12, "두 배포판 공통", 11, SOFT, KR, "start", 600)
+node(0, Y_MID, [("앱 · logger", 12.5, INK, KR, 600), ("syslog(3)", 11, MUTED, MONO, 400)])
+node(1, Y_MID, [("/dev/log", 12.5, INK, MONO, 600), ("journald 가 들음", 11, MUTED, KR, 400)])
+d.tone(C[2][0], Y_MID, C[2][1], NH, ACC, 6, "14", 1.4)
+d.t(cx(2), Y_MID + 26, "systemd-journald", 12, ACC, MONO, "middle", 600)
+d.t(cx(2), Y_MID + 44, "모든 줄을 먼저 받음", 11, MUTED, KR)
+node(3, Y_MID, [("저널 파일 · Storage=", 12, INK, KR, 600), ("/var/log/journal", 11, INFO, MONO, 400),
+                ("또는 /run/log/journal", 11, MUTED, MONO, 400)])
 
-# Row 2 (y = 180, cy = 204)
-node(428, 180, 110, 48, "/run/.../syslog", "ForwardToSyslog", fam=MONO, name_size=10, sub_size=9.0)
-node(630, 180, 88, 48, "rsyslog", "imuxsock", fam=MONO, name_size=11, sub_size=9.5)
-node(740, 180, 106, 48, "/var/log/syslog", "auth.log · §3", fam=MONO, name_size=9.5, sub_size=9.0)
+for i, n in ((0, "1"), (1, "2")):
+    d.arrow([(rx(i) + 2, cy(Y_MID)), (C[i + 1][0] - 4, cy(Y_MID))], MUTED, "ar", 1.3)
+    d.t((rx(i) + C[i + 1][0]) / 2, cy(Y_MID) - 8, n, 11, MUTED, MONO, "middle", 600)
+d.arrow([(rx(2) + 2, cy(Y_MID)), (C[3][0] - 4, cy(Y_MID))], MUTED, "ar", 1.3)
+d.t((rx(2) + C[3][0]) / 2, cy(Y_MID) - 8, "씀", 11, MUTED, KR, "middle", 600)
 
-# Debian arrows
-d.arrow([(104, 144), (120, 144)], MUTED, "ar", 1.3)
-num_label(112, 136, "1")
-d.arrow([(202, 144), (218, 144)], MUTED, "ar", 1.3)
-num_label(210, 136, "2")
-d.arrow([(336, 136), (424, 136)], MUTED, "ar", 1.2)
-d.t(382, 129, "기록", 11, MUTED, KR, "middle")
+# 위 — Debian 12: journald 에서 소켓으로
+node(3, Y_DEB, [("/run/systemd/journal/syslog", 11.5, INK, MONO, 600), ("유닉스 소켓", 11, MUTED, KR, 400)],
+     INFO, 1.1)
+node(4, Y_DEB, [("rsyslogd", 13, INK, MONO, 600), ("imuxsock · fd 3", 11, INFO, MONO, 400)], INFO, 1.1)
+node(5, Y_DEB, [("/var/log/syslog", 11, INK, MONO, 600), ("/var/log/auth.log", 11, INK, MONO, 600)])
+XU = cx(2)
+d.path(f"M {XU} {Y_MID} L {XU} {cy(Y_DEB)} L {C[3][0] - 4} {cy(Y_DEB)}", INFO, 1.4, m="info")
+d.t(XU + 8, Y_DEB + NH + 24, "3 ForwardToSyslog=yes", 11.5, INFO, MONO, "start", 600)
+d.arrow([(rx(3) + 2, cy(Y_DEB)), (C[4][0] - 4, cy(Y_DEB))], INFO, "info", 1.3)
+d.arrow([(rx(4) + 2, cy(Y_DEB)), (C[5][0] - 4, cy(Y_DEB))], MUTED, "ar", 1.3)
+d.t((rx(4) + C[5][0]) / 2, cy(Y_DEB) - 8, "4", 11, MUTED, MONO, "middle", 600)
 
-# Elbow arrow to socket (mid = 382)
-d.path("M 336 152 H 374 Q 382 152 382 160 V 196 Q 382 204 390 204 H 424", INFO, 1.4, m="info")
-alabel(382, 178, "3 밀어 줌", INFO)
+# 아래 — Rocky Linux 9: 저널 파일에서 rsyslog 가 읽어 감
+XD = cx(3)
+d.path(f"M {XD} {Y_MID + NH} L {XD} {cy(Y_RKY)} L {C[4][0] - 4} {cy(Y_RKY)}", OK, 1.4, m="ok")
+d.t(XD + 8, Y_MID + NH + 28, "3 직접 읽어 감", 12, OK, KR, "start", 600)
+d.t(XD + 8, Y_MID + NH + 46, "Storage= 가 파일을 남겨야", 11, SOFT, KR, "start")
+node(4, Y_RKY, [("rsyslogd", 13, INK, MONO, 600), ("imjournal", 11, OK, MONO, 400),
+                ("위치 → 상태 파일", 11, MUTED, KR, 400)], OK, 1.1)
+d.t(cx(4), Y_RKY + NH + 18, 'SysSock.Use="off"', 11, SOFT, MONO)
+node(5, Y_RKY, [("/var/log/messages", 11, INK, MONO, 600), ("/var/log/secure", 11, INK, MONO, 600)])
+d.arrow([(rx(4) + 2, cy(Y_RKY)), (C[5][0] - 4, cy(Y_RKY))], MUTED, "ar", 1.3)
+d.t((rx(4) + C[5][0]) / 2, cy(Y_RKY) - 8, "4", 11, MUTED, MONO, "middle", 600)
 
-d.arrow([(538, 204), (626, 204)], INFO, "info", 1.3)
-d.arrow([(718, 204), (736, 204)], MUTED, "ar", 1.3)
-num_label(727, 196, "4")
+d.t(C[5][0] + C[5][1], Y_RKY + NH + 18, "4 = rsyslog 규칙 · §3", 11, SOFT, KR, "end")
 
-# Rocky Linux 9 nodes
-# Row 1 (y = 284, cy = 308)
-node(36, 284, 68, 48, "앱 · logger", "사용자 공간", name_size=11, sub_size=11)
-node(124, 284, 78, 48, "/dev/log", "수신 소켓", fam=MONO, name_size=10.5, sub_size=11)
-d.tone(222, 284, 114, 48, ACC, op="14", sw=1.2)
-d.t(279, 305, "systemd-journald", 10.5, ACC, MONO, "middle", 600)
-d.t(279, 322, "모든 줄 먼저 수집", 11, MUTED, KR, "middle")
-node(428, 284, 110, 48, "저널 파일", "/var/log/journal", fam=KR, name_size=11, sub_size=9.0)
-
-# Row 2 (y = 344, cy = 368)
-d.box(428, 344, 110, 48, fill=PAPER2, stroke=RULE, sw=0.8)
-d.t(483, 365, "소켓 미사용", 11, SOFT, KR, "middle", 500)
-d.t(483, 382, 'SysSock.Use="off"', 9.0, SOFT, MONO, "middle")
-
-node(630, 344, 88, 48, "rsyslog", "imjournal", fam=MONO, name_size=11, sub_size=9.5)
-node(740, 344, 106, 48, "/var/log/messages", "secure · §3", fam=MONO, name_size=8.8, sub_size=9.0)
-
-# Rocky arrows
-d.arrow([(104, 308), (120, 308)], MUTED, "ar", 1.3)
-num_label(112, 300, "1")
-d.arrow([(202, 308), (218, 308)], MUTED, "ar", 1.3)
-num_label(210, 300, "2")
-d.arrow([(336, 308), (424, 308)], MUTED, "ar", 1.2)
-d.t(382, 301, "기록", 11, MUTED, KR, "middle")
-
-# Elbow arrow from journal file to rsyslog (mid = 584)
-d.path("M 538 308 H 576 Q 584 308 584 316 V 360 Q 584 368 592 368 H 626", OK, 1.4, m="ok")
-alabel(584, 338, "3 읽어 감", OK)
-
-d.arrow([(718, 368), (736, 368)], MUTED, "ar", 1.3)
-num_label(727, 360, "4")
-
-d.legend(428, [("journald (모든 줄 수집)", ACC),
-               ("Debian 12 (소켓 전달)", INFO),
-               ("Rocky Linux 9 (저널 읽기)", OK)])
+d.legend(Y_RKY + NH + 52, [("journald (모든 줄 수집)", ACC),
+                           ("Debian 12 (소켓 전달)", INFO),
+                           ("Rocky Linux 9 (저널 읽기)", OK)])
 d.save("08-01.journal-to-rsyslog.svg")
 print("ok 08-01.journal-to-rsyslog")

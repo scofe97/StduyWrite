@@ -1,5 +1,7 @@
 # 08-02 학습 목표 뒤 전체 지도 — 절 여덟을 읽는 순서로, 절마다 그 절에서 여는 명령을 붙인다.
-# 본문 절 제목(2026-11-10 개정)과 각 절에서 직접 돌린 명령을 그대로 옮겼다.
+# 본문 절 제목(2026-11-16 대조)과 각 절에서 직접 돌린 명령을 옮겼다. 카드 폭(272) 때문에 §8 제목만
+#   "Prometheus·Grafana 단일 기계 구성" 을 "Prometheus·Grafana" 로 줄였다. §6 의 HTTP /metrics 는
+#   본문의 "HTTP 엔드포인트" 와 :9100/metrics 를 합친 표기다.
 # 타입 스펙: type-process — 절마다 같은 의미 슬롯(번호 · 이름 · 여는 명령)이 반복되고 읽는 순서가
 #           화살표로 흐른다. 축약: 주체 lane 이 없어 카드 격자 stride 로 놓는다.
 #           §2~§5 는 기본 도구, §6~§8 은 그 위에 얹히는 층으로 색을 나눈다.
@@ -14,12 +16,12 @@ d = D(W, H, "LEARNING MODERN LINUX · 08-02",
 
 CW, CH, GAPX, GAPY, X0, Y0 = 272, 88, 12, 22, 20, 112
 cards = [
-    ("§1", "느린 앱의 원인 범주", "메모리 · CPU · 네트워크 I/O", ACC),
+    ("§1", "느린 앱의 세 원인 범주", "메모리 · CPU · 네트워크 I/O", ACC),
     ("§2", "부하 평균과 메모리 열", "uptime · free · vmstat", INFO),
-    ("§3", "CPU 시간과 대기", "time → real · user · sys", INFO),
-    ("§4", "장치·소켓·열린 파일", "iostat · ss · lsof +L1", INFO),
-    ("§5", "top 화면과 배치 모드", "top -b · ps -eo", INFO),
-    ("§6", "계측의 밀기와 끌기", "UDP :8125 · GET /metrics", OK),
+    ("§3", "time 의 CPU 시간과 대기", "time → real · user · sys", INFO),
+    ("§4", "장치·소켓·열린 파일의 창", "iostat · ss · lsof +L1", INFO),
+    ("§5", "top 화면 구역과 배치 모드", "top -b · ps -eo", INFO),
+    ("§6", "계측의 밀기와 끌기", "UDP :8125 · HTTP /metrics", OK),
     ("§7", "추적의 소스와 훅", "uprobes · kprobes · eBPF", OK),
     ("§8", "Prometheus·Grafana", ":9100 · :9090 · :3000", OK),
 ]

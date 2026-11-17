@@ -1,91 +1,135 @@
-# 08-01 §3 — 서비스 하나를 재시작할 때 저널에 남는 순서.
+# 08-01 §3 「배운 것을 한 장면에 합치기」 — 서비스 하나를 재시작할 때 어느 프로세스가 어느 줄을 남기는가.
 # 원문("journalctl"): "in one terminal we restart the service using systemctl restart apparmor, and in
 #       another we execute the following command" 뒤의 `journalctl -f -u apparmor.service` 출력.
-#       남은 줄은 "-- Logs begin at Sun 2021-01-24 14:36:30 GMT. --",
-#       "Sep 26 17:10:02 starlite apparmor[13883]: All profile caches have been cleared, but no profiles
-#       have been unload", "... Unloading profiles will leave all running processes permanently",
-#       "Sep 26 17:10:02 starlite systemd[1]: Stopped AppArmor initialization.",
-#       "Sep 26 17:10:02 starlite systemd[1]: Starting AppArmor initialization...",
-#       "Sep 26 17:10:03 starlite apparmor[13904]: * Starting AppArmor profiles",
-#       "Sep 26 17:10:03 starlite apparmor[13904]: Skipping profile in /etc/apparmor.d/disable: usr.sbin.rsy",
-#       "Sep 26 17:10:09 starlite apparmor[13904]: ...done.",
-#       "Sep 26 17:10:09 starlite systemd[1]: Started AppArmor initialization."
-#       저자가 붙인 주석은 "After systemd has stopped the service, here it comes back up again" 이다.
-# 주의: PID 가 13883 에서 13904 로 바뀌는 것은 출력에 그대로 있는 사실이고, 그것이 재시작의 증거다.
-#       첫 메시지 라벨이 cle 에서 끊긴 것은 원서 지면이 자른 자리다. 본문이 그 절단을 보존하므로
-#       도식도 채우지 않는다. 채우면 같은 노트 안에서 본문과 도식이 어긋난다.
-#       원문 출력은 편집됐다고 밝혀져 있어 Skipping profile 줄은 이 도식에서 생략했다.
-# 타입 스펙: type-sequence — 주체 넷 사이의 시간순 메시지. 같은 초 안에 여러 줄이 오고 마지막 두 줄만
-#           7초 뒤라는 것이 이 그림에서만 보인다. 축약: 원문의 편집된 줄임표 줄은 담지 않았다.
+#       저자 주석은 "After systemd has stopped the service, here it comes back up again" 이다.
+# 실제 값: 본문 출력 블록의 줄을 그대로 쓴다. 줄 끝 잘림(cle·al·rsy)과 줄임표 줄(...)은 원서 지면이
+#       자르고 줄인 자리라 본문이 보존한 대로 둔다. 줄이 접힌 자리(Skipping profile in /
+#       /etc/apparmor.d/disable: …)도 본문처럼 두 줄로 쓴다.
+#       PID 13883 → 13904 와 타임스탬프 17:10:02 → 17:10:09 의 7초는 본문 해설이 짚은 값이다.
+# 구조: 줄을 남기는 주체를 실제 프로세스 셋(systemd[1]·apparmor[13883]·apparmor[13904])으로 나눴다.
+#       옛 프로세스는 자기 줄을 남기고 끝나고(×), 새 프로세스는 systemd 가 다시 올린 자리에서 생긴다.
+#       오른쪽 창이 터미널 2 의 journalctl -f 화면이고, 줄마다 그 줄을 낸 프로세스에서 화살표가 온다.
+# 축약: 행 간격은 시각에 비례하지 않는다(같은 초 안은 출력 순서만). 17:10:03 과 17:10:09 사이는
+#       점선 끊김으로 표시했다. 줄이 journald 를 거쳐 저널에 쓰이는 단계는 §2 도식이 맡아 생략했다.
+#       옛 프로세스의 끝(×)은 Stopped 줄보다 앞에 두었다 — 출력이 끝난 시각만 보여 줄 뿐 종료
+#       시각 자체는 출력에 없다.
+# 타입 스펙: type-sequence — 주체 넷 사이의 시간순 메시지. 프로세스 생성(13904)과 끝(13883)을
+#           수명선의 시작과 끝으로 그린다. accent 는 systemd 가 다시 올리는 줄 하나.
 import sys; sys.path.insert(0, ".")
-from dd import Seq, D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER2, RULE, KR, MONO
+from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, WARN, PAPER, PAPER2, RULE, KR, MONO
+
+W, H = 960, 700
+d = D(W, H, "LEARNING MODERN LINUX · 08-01 §3",
+      "재시작 한 번이 저널에 남기는 순서",
+      "systemctl restart apparmor 를 친 뒤 journalctl -f -u apparmor.service 화면에 줄이 쌓이는 순서. "
+      "옛 프로세스 apparmor[13883] 가 두 줄을 남기고 끝나고, systemd[1] 가 Stopped 와 Starting 을 남긴 뒤 "
+      "새 프로세스 apparmor[13904] 를 올린다. 새 프로세스의 ...done. 은 Starting 에서 7초 뒤인 17:10:09 에 온다.",
+      "같은 유닛 이름 아래 PID 가 13883 에서 13904 로 바뀐 자리가 재시작이다")
+
+HY, HH, BW = 104, 44, 104
+LX = {"t1": 96, "sd": 220, "old": 344, "new": 468}
+PX0, PX1 = 556, 936                      # 터미널 2 창
+ROW0, RS = 188, 34
 
 
-def _kr(txt):
-    return KR if any("가" <= c <= "힣" for c in str(txt)) else MONO
+def head(x, y, name, sub, col):
+    d.box(x - BW / 2, y, BW, HH, PAPER2, col, 1.1, 6)
+    d.t(x, y + 19, name, 12, INK if col == RULE else col,
+        KR if any("가" <= c <= "힣" for c in name) else MONO, "middle", 600)
+    d.t(x, y + 36, sub, 11, MUTED, KR if any("가" <= c <= "힣" for c in sub) else MONO)
 
 
-class SeqKR(Seq):
-    def lanes(s, names, y0=104, lane_w=210):
-        s.LX = {}; n = len(names)
-        span = (s.w - 48 - 24) - lane_w
-        for i, (nm, sub) in enumerate(names):
-            x = 24 + lane_w / 2 + (span * i / (n - 1) if n > 1 else 0)
-            s.LX[nm] = x
-            s.box(x - lane_w / 2, y0, lane_w, 44, PAPER2, RULE, 1.0)
-            s.t(x, y0 + 20, nm, 12, INK, KR, "middle", 600)
-            s.t(x, y0 + 37, sub, 11, MUTED, _kr(sub))
-        s.lane_top = y0 + 44
-        return s.LX
+# 행 y — 같은 초 안은 출력 순서대로 한 칸씩, 17:10:03 과 17:10:09 사이만 끊김 한 칸
+Y = {}
+y = ROW0
+for k in ("restart", "c1", "c2", "dots", "stop", "start", "spawn", "p1", "p2"):
+    Y[k] = y
+    y += RS + (14 if k == "p2" else 0)
+Y["gap"] = y + 4
+y += RS + 10
+for k in ("done", "started"):
+    Y[k] = y
+    y += RS
+RAIL_END = Y["started"] + 16
 
-    def msg(s, a, b, label, y, c=MUTED, mk="ar", dash=None, sub=None):
-        x1, x2 = s.LX[a], s.LX[b]; dx = 1 if x2 > x1 else -1
-        s.path(f"M {x1 + 10 * dx} {y} L {x2 - 12 * dx} {y}", c, 1.5, m=mk, dash=dash)
-        mx = (x1 + x2) / 2
-        s.t(mx, y - 9, label, 11, c, _kr(label), "middle", 600)
-        if sub:
-            s.t(mx, y + 17, sub, 11, MUTED, _kr(sub))
+# 수명선 — 먼저 그린다(글자와 화살표가 위에 오게)
+d.line(LX["t1"], HY + HH, LX["t1"], Y["restart"] + 14, RULE, 1.0, "3 6")
+d.line(LX["sd"], HY + HH, LX["sd"], RAIL_END, RULE, 1.0, "3 6")
+OLD_END = Y["c2"] + 22
+d.line(LX["old"], HY + HH, LX["old"], OLD_END, INFO, 1.2, "3 4")
+d.line(LX["old"] - 7, OLD_END - 7, LX["old"] + 7, OLD_END + 7, INFO, 1.6)
+d.line(LX["old"] - 7, OLD_END + 7, LX["old"] + 7, OLD_END - 7, INFO, 1.6)
+d.t(LX["old"] + 14, OLD_END + 5, "끝", 12, INFO, KR, "start")
+NEW_TOP = Y["spawn"] - HH / 2
+d.line(LX["new"], NEW_TOP + HH, LX["new"], Y["done"] + 14, WARN, 1.2, "3 4")
 
-    def state(s, a, txt, y, c):
-        x = s.LX[a]
-        kr = any("가" <= ch <= "힣" for ch in str(txt))
-        w = len(txt) * (11.0 if kr else 7.0) + 18
-        s.o.append(f'<rect x="{x - w / 2}" y="{y - 10}" width="{w}" height="20" rx="4" '
-                   f'fill="{c}22" stroke="{c}" stroke-width="1.1"/>')
-        s.t(x, y + 4, txt, 11, c, KR if kr else MONO)
+head(LX["t1"], HY, "터미널 1", "명령을 친다", RULE)
+head(LX["sd"], HY, "systemd[1]", "PID 1", RULE)
+head(LX["old"], HY, "apparmor", "PID 13883", INFO)
+head(LX["new"], NEW_TOP, "apparmor", "PID 13904", WARN)
+
+# 터미널 2 창
+PY0 = HY
+PY1 = RAIL_END + 8
+d.box(PX0, PY0, PX1 - PX0, PY1 - PY0, PAPER, RULE, 1.2, 8)
+d.t(PX0 + 14, PY0 + 19, "터미널 2", 12, INK, KR, "start", 600)
+d.t(PX0 + 80, PY0 + 19, "journalctl -f -u apparmor.service", 12, MUTED, MONO, "start")
+d.line(PX0, PY0 + HH - 14, PX1, PY0 + HH - 14, RULE, 0.8)
+TX = PX0 + 14
 
 
-W, H = 880, 640
-d = SeqKR(W, H, "LEARNING MODERN LINUX · 08-01 §3",
-          "재시작 한 번이 저널에 남기는 순서",
-          "두 터미널에서 벌어지는 장면을 한 그림으로 세운 것. 왼쪽에서 명령을 치면 오른쪽 터미널의 "
-          "journalctl -f 에 두 주체의 줄이 섞여 흐른다.",
-          "타임스탬프를 보면 마지막 두 줄만 7초 뒤입니다")
+def pane(yy, txt, col=MUTED, w=400):
+    d.t(TX, yy + 4, txt, 12, col, MONO, "start", w)
 
-d.lanes([("터미널 1", "systemctl"), ("systemd", "PID 1"),
-         ("apparmor.service", "유닛"), ("터미널 2", "journalctl -f -u")], 108, 190)
-d.rails(520)
 
-d.state("apparmor.service", "PID 13883", 176, INFO)
-d.msg("터미널 1", "systemd", "systemctl restart apparmor", 216, INK,
-      sub="유닛 하나만 다시 올린다")
-d.msg("systemd", "apparmor.service", "중지 요청", 258, MUTED)
-d.msg("apparmor.service", "터미널 2", "All profile caches have been cle", 296, MUTED,
-      sub="17:10:02 · apparmor[13883] · 뒤 줄 생략")
-d.msg("systemd", "터미널 2", "Stopped AppArmor initialization.", 340, MUTED,
-      sub="17:10:02 · systemd[1]")
-d.msg("systemd", "터미널 2", "Starting AppArmor initialization...", 384, ACC, mk="acc",
-      sub="17:10:02 · 저자가 짚은 자리 — 여기서 다시 올라온다")
-d.state("apparmor.service", "PID 13904", 420, WARN)
-d.msg("apparmor.service", "터미널 2", "* Starting AppArmor profiles", 452, MUTED,
-      sub="17:10:03 · apparmor[13904]")
-d.msg("apparmor.service", "터미널 2", "...done.", 494, OK, mk="ok",
-      sub="17:10:09 · 7 초 뒤")
+def emit(src, yy, txt, col, mk, w=400):
+    d.arrow([(LX[src] + 8, yy), (PX0 - 6, yy)], col, mk, 1.3)
+    d.o.append(f'<circle cx="{LX[src]}" cy="{yy}" r="4" fill="{col}"/>')
+    pane(yy, txt, col if col != MUTED else INK, w)
 
-d.t(24, 548, "PID 13883 → 13904 · 같은 유닛 이름, 다른 프로세스", 12, MUTED, KR, "start")
-d.t(24, 570, "-u apparmor.service 필터 · 다른 서비스의 줄 없음", 12, SOFT, KR, "start")
 
-d.legend(596, [("저자가 짚은 자리", ACC), ("재시작 전 PID", INFO),
-                  ("재시작 후 PID", WARN), ("7 초 뒤 끝난 자리", OK)])
+pane(Y["restart"] - 22, "-- Logs begin at Sun 2021-01-24 14:36:30 GMT. --", SOFT)
+
+# 터미널 1 → systemd
+d.arrow([(LX["t1"] + 8, Y["restart"]), (LX["sd"] - 8, Y["restart"])], INK, "ar", 1.4)
+d.t(24, Y["restart"] + 22, "systemctl restart apparmor", 11, MUTED, MONO, "start")
+
+emit("old", Y["c1"], "17:10:02 All profile caches have been cle", INFO, "info")
+emit("old", Y["c2"], "17:10:02 Unloading profiles will leave al", INFO, "info")
+pane(Y["dots"], "...", SOFT)
+emit("sd", Y["stop"], "17:10:02 Stopped AppArmor initialization.", MUTED, "ar")
+emit("sd", Y["start"], "17:10:02 Starting AppArmor initialization...", ACC, "acc", 600)
+
+# systemd 가 새 프로세스를 올림
+d.arrow([(LX["sd"] + 8, Y["spawn"]), (LX["new"] - BW / 2 - 4, Y["spawn"])], WARN, "warn", 1.3)
+d.t((LX["sd"] + LX["new"] - BW / 2) / 2, Y["spawn"] - 8, "다시 올림", 12, WARN, KR, "middle", 600)
+
+emit("new", Y["p1"], "17:10:03 * Starting AppArmor profiles", WARN, "warn")
+emit("new", Y["p2"], "17:10:03 Skipping profile in", WARN, "warn")
+d.t(TX + 9 * 7.2, Y["p2"] + 20, "/etc/apparmor.d/disable: usr.sbin.rsy", 12, WARN, MONO, "start")
+
+# 17:10:03 → 17:10:09 끊김
+d.line(PX0 + 12, Y["gap"], PX1 - 12, Y["gap"], SOFT, 1.0, "2 5")
+d.o.append(f'<rect x="{(PX0 + PX1) / 2 - 44}" y="{Y["gap"] - 10}" width="88" height="20" '
+           f'rx="4" fill="{PAPER}" stroke="none"/>')
+d.t((PX0 + PX1) / 2, Y["gap"] + 4, "6 초 뒤", 12, SOFT, KR)
+d.line(LX["new"] - 10, Y["gap"], LX["new"] + 10, Y["gap"], SOFT, 1.2)
+
+emit("new", Y["done"], "17:10:09 ...done.", OK, "ok", 600)
+emit("sd", Y["started"], "17:10:09 Started AppArmor initialization.", MUTED, "ar")
+
+# Starting → ...done. 의 7초
+BX = 40
+d.line(BX, Y["start"], BX, Y["done"], ACC, 1.2)
+d.line(BX, Y["start"], BX + 8, Y["start"], ACC, 1.2)
+d.line(BX, Y["done"], BX + 8, Y["done"], OK, 1.2)
+MY = (Y["start"] + Y["done"]) / 2
+d.t(BX + 10, MY - 4, "7 초", 14, INK, KR, "start", 600)
+d.t(BX + 10, MY + 16, "프로파일 적재", 12, MUTED, KR, "start")
+
+NY = PY1 + 26
+d.t(24, NY, "줄 내용·잘림·줄임표는 본문 출력 그대로 · 행 간격은 시각 비례가 아니라 출력 순서", 11, SOFT, KR, "start")
+d.legend(NY + 16, [("다시 올리는 줄", ACC), ("옛 PID 13883", INFO),
+                   ("새 PID 13904", WARN), ("끝난 자리", OK)])
 d.save("08-01.journal-restart.svg")
 print("ok 08-01.journal-restart")
