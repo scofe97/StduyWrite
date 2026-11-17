@@ -79,7 +79,7 @@ updated: 2026-10-10
 | 사람이 끼는 지점 | 필수 | [AI Agentization](../10_AI/02-05.AI%20Agentization%20%E2%80%94%20%EC%9B%8C%ED%81%AC%ED%94%8C%EB%A1%9C%EC%9A%B0%EC%99%80%20%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8%20%EC%82%AC%EC%9D%B4.md) | AI Agents 13장 |
 | 완료 검증과 루브릭 | 필수 | [AI Agentization](../10_AI/02-05.AI%20Agentization%20%E2%80%94%20%EC%9B%8C%ED%81%AC%ED%94%8C%EB%A1%9C%EC%9A%B0%EC%99%80%20%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8%20%EC%82%AC%EC%9D%B4.md) | AI Agents 9장 |
 | 하네스 사례 하나 뜯어보기 | 선택 | 자료 미연결 | |
-| ReAct — 추론과 도구 호출을 번갈아 반복 | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [ReAct 논문](https://arxiv.org/abs/2210.03629) |
+| ReAct — 추론과 도구 호출을 번갈아 반복 | 추천 | [당근 발표 정리](../_digest/devops/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [ReAct 논문](https://arxiv.org/abs/2210.03629) |
 
 
 
@@ -154,7 +154,7 @@ updated: 2026-10-10
 | 모델 거버넌스 | 추천 | | Introducing MLOps 8장 |
 | 추론 서빙 비용 | 선택 | | AI Engineering 9장 |
 | 아키텍처와 사용자 피드백 | 선택 | | AI Engineering 10장 |
-| 운영 에이전트 협업 — 경보 분석에서 수정 PR 까지 | 선택 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
+| 운영 에이전트 협업 — 경보 분석에서 수정 PR 까지 | 선택 | [당근 발표 정리](../_digest/devops/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
 
 
 

@@ -95,9 +95,9 @@ updated: 2026-10-28
 | 외부 저장소 통합 · 복제하지 않는 선택지 | 선택 | [저장소 통합 랩](../08_cloud/book/kubernetes-up-and-running/16-01.Integrating%20Storage%20%E2%80%94%20%EB%B3%B5%EC%A0%9C%ED%95%98%EC%A7%80%20%EC%95%8A%EB%8A%94%20%EC%84%A0%ED%83%9D%EC%A7%80%EC%99%80%20MySQL%20%EC%8B%B1%EA%B8%80%ED%84%B4%20%EB%9E%A9.md) | Kubernetes: Up and Running 16장 |
 | HPA · VPA · Cluster Autoscaler · KEDA | 추천 | [Elastic Scale](../08_cloud/book/kubernetes-patterns/29-01.Elastic%20Scale%20%E2%80%94%20%EB%B6%80%ED%95%98%EC%97%90%20%EB%A7%9E%EC%B6%B0%20%EC%84%B8%20%EC%B0%A8%EC%9B%90%EC%9C%BC%EB%A1%9C%20%EC%9E%90%EB%8F%99%20%ED%99%95%EC%9E%A5.md) | Production Kubernetes 13장 |
 | 노드 오토스케일링 두 방식 — Cluster Autoscaler 와 Karpenter | 선택 | | [Karpenter](https://karpenter.sh/docs/) |
-| CA 가 AZ 를 고르지 못하는 이유 — AZ 별 노드 그룹 · `--balance-similar-node-groups` | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [CA FAQ](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md) |
-| Karpenter NodePool · EC2NodeClass · weight · consolidation 정책 | 선택 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [Karpenter NodePools](https://karpenter.sh/docs/concepts/nodepools/) |
-| overprovisioning — 낮은 PriorityClass 의 자리 표시 Pod | 선택 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [CA FAQ](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#how-can-i-configure-overprovisioning-with-cluster-autoscaler) |
+| CA 가 AZ 를 고르지 못하는 이유 — AZ 별 노드 그룹 · `--balance-similar-node-groups` | 추천 | [당근 발표 정리](../_digest/devops/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [CA FAQ](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md) |
+| Karpenter NodePool · EC2NodeClass · weight · consolidation 정책 | 선택 | [당근 발표 정리](../_digest/devops/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [Karpenter NodePools](https://karpenter.sh/docs/concepts/nodepools/) |
+| overprovisioning — 낮은 PriorityClass 의 자리 표시 Pod | 선택 | [당근 발표 정리](../_digest/devops/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [CA FAQ](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#how-can-i-configure-overprovisioning-with-cluster-autoscaler) |
 | Self Awareness — 자기 메타데이터 | 선택 | [Self Awareness](../08_cloud/book/kubernetes-patterns/14-01.Self%20Awareness%20%E2%80%94%20downward%20API%EB%A1%9C%20%EC%9E%90%EA%B8%B0%20%EB%A9%94%ED%83%80%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%96%BB%EA%B8%B0.md) | Kubernetes Patterns 14장 |
 | 장애 도메인 · 가용 영역 · 리전 · 멀티 AZ · 크로스 리전 · 멀티 리전 · 지역 복제 | 선택 | [가용 영역](../08_cloud/book/production-kubernetes/02-01.Deployment%20Models%20%E2%80%94%20%EB%B0%B0%ED%8F%AC%20%EB%AA%A8%EB%8D%B8%EA%B3%BC%20%EA%B3%A0%EA%B0%80%EC%9A%A9%EC%84%B1%20%EC%9D%B8%ED%94%84%EB%9D%BC%20%EA%B5%AC%EC%B6%95.md) · [멀티 AZ](../08_cloud/book/production-kubernetes/02-01.Deployment%20Models%20%E2%80%94%20%EB%B0%B0%ED%8F%AC%20%EB%AA%A8%EB%8D%B8%EA%B3%BC%20%EA%B3%A0%EA%B0%80%EC%9A%A9%EC%84%B1%20%EC%9D%B8%ED%94%84%EB%9D%BC%20%EA%B5%AC%EC%B6%95.md) | |
 
@@ -179,7 +179,7 @@ updated: 2026-10-28
 | SIGTERM · PID 1 · PreStop · `terminationGracePeriodSeconds` | 필수 | [Kubernetes 장애 기록](../troubleshooting/kubernetes/README.md) | |
 | node pressure · eviction · NodeNotReady | 추천 | [Kubernetes 장애 기록](../troubleshooting/kubernetes/README.md) | |
 | 노드 추가·제거 — cordon · drain · PDB 와의 맞물림 | 필수 | | [Safely Drain a Node](https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/) |
-| 노드 회수를 막는 PDB · `maxSurge` 로 배포 중 노드 급증 제어 | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [Karpenter Disruption](https://karpenter.sh/docs/concepts/disruption/) |
+| 노드 회수를 막는 PDB · `maxSurge` 로 배포 중 노드 급증 제어 | 추천 | [당근 발표 정리](../_digest/devops/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [Karpenter Disruption](https://karpenter.sh/docs/concepts/disruption/) |
 | OS 자동 업데이트 — 파이프라인 밖에서 노드를 바꾸는 장치 | 선택 | [진단 개념](../troubleshooting/_concepts/os-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8-%EB%B0%96%EC%97%90%EC%84%9C-%EB%85%B8%EB%93%9C%EB%A5%BC-%EB%B0%94%EA%BE%B8%EB%8A%94-%EC%9E%A5%EC%B9%98.md) |  |
 | 멀티테넌시 | 추천 | | Production Kubernetes 12장 |
 | 가상 컨트롤 플레인 — tenant 와 host 를 잇는 sync 방향 | 선택 | | Production Kubernetes 12장 |

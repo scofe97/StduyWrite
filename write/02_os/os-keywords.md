@@ -116,7 +116,7 @@ updated: 2026-10-10
 | steal time · noisy neighbor · CPU quota · 워밍업 | 추천 | [하드웨어 가상화](../02_os/book/systems-performance/11-02.%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C%20%EC%BB%B4%ED%93%A8%ED%8C%85%20%E2%80%94%20%ED%95%98%EB%93%9C%EC%9B%A8%EC%96%B4%20%EA%B0%80%EC%83%81%ED%99%94.md) | Systems Performance 11장 |
 | blk-cgroup · `io.max` | 선택 |  | [cgroup v2 — IO](https://docs.kernel.org/admin-guide/cgroup-v2.html) |
 | IRQ affinity · `irqbalance` | 선택 |  | [SMP IRQ affinity](https://docs.kernel.org/core-api/irq/irq-affinity.html) |
-| 사건 시점 스냅샷 — 상시 기록하고 경보 때 꺼내기 | 선택 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
+| 사건 시점 스냅샷 — 상시 기록하고 경보 때 꺼내기 | 선택 | [당근 발표 정리](../_digest/devops/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
 
 
 
@@ -145,9 +145,9 @@ updated: 2026-10-10
 | AppArmor · SELinux · 보호와 보안 | 선택 | [컨테이너 격리 강화](../08_cloud/book/container-security/08-01.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EA%B2%A9%EB%A6%AC%20%EA%B0%95%ED%99%94%20%E2%80%94%20%EC%83%8C%EB%93%9C%EB%B0%95%EC%8B%B1%EC%9D%98%20%EC%84%B8%20%EA%B0%88%EB%9E%98.md) | Operating System Concepts 14·15장 |
 | eBPF 보안 활용 | 선택 | [LSM 훅·TOCTOU](../02_os/book/learning-ebpf/09-01.%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%BD%9C%20%EC%9E%85%EA%B5%AC%20%EA%B2%80%EC%82%AC%EB%8A%94%20TOCTOU%20%EC%97%90%20%EB%9A%AB%EB%A0%A4%20%EB%B3%B4%EC%95%88%20%EB%8F%84%EA%B5%AC%EB%8A%94%20LSM%20%ED%9B%85%EA%B3%BC%20%EC%BB%A4%EB%84%90%20%ED%95%A8%EC%88%98%EC%97%90%EC%84%9C%20%ED%8C%90%EC%A0%95%ED%95%98%EA%B3%A0%20SIGKILL%20%EB%A1%9C%20%EB%A7%89%EB%8A%94%EB%8B%A4.md) | Learning eBPF 9장 |
 | Landlock | 선택 |  | [Landlock](https://docs.kernel.org/userspace-api/landlock.html) |
-| BPF map 용량과 유형 — 가득 찰 때의 동작 · 용도별 맵 분리 | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [BPF maps](https://docs.kernel.org/bpf/maps.html) |
-| 스택 심볼 해석 — `/proc/PID/maps` · ELF 심볼 · strip 된 바이너리 | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
-| eBPF 오버헤드 측정 — `kernel.bpf_stats_enabled` | 선택 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [kernel sysctl](https://docs.kernel.org/admin-guide/sysctl/kernel.html) |
+| BPF map 용량과 유형 — 가득 찰 때의 동작 · 용도별 맵 분리 | 추천 | [당근 발표 정리](../_digest/devops/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [BPF maps](https://docs.kernel.org/bpf/maps.html) |
+| 스택 심볼 해석 — `/proc/PID/maps` · ELF 심볼 · strip 된 바이너리 | 추천 | [당근 발표 정리](../_digest/devops/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
+| eBPF 오버헤드 측정 — `kernel.bpf_stats_enabled` | 선택 | [당근 발표 정리](../_digest/devops/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | [kernel sysctl](https://docs.kernel.org/admin-guide/sysctl/kernel.html) |
 | 제로 트러스트 · 권한 에스컬레이션 | 선택 | [권한 에스컬레이션](../08_cloud/book/container-security/02-01.Linux%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%BD%9C%C2%B7%EA%B6%8C%ED%95%9C%C2%B7capability%20%E2%80%94%20%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%B3%B4%EC%95%88%EC%9D%98%20%EB%B0%94%EB%8B%A5.md) | |
 | 멀티 계정 전략 · 랜딩 존 · 계정 벤딩 · 조직 단위 · 서비스 컨트롤 정책 · 퍼미션 바운더리 | 선택 | [랜딩 존](../07_devops/book/cicd_cicd-patterns/10-01.Deployment%20Strategies%20Creational%20CICD%20with%20Cloud%20Providers.md) | |
 | 특권 접근 관리 · 저스트 인 타임 접근 · 세션 레코딩 | 선택 | | |

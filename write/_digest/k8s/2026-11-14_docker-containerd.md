@@ -1,22 +1,8 @@
-> 출처: Gemini · 2026-11-14 · Docker vs containerd 및 Kubernetes 런타임 생태계 심층 분석 리포트 · 분야: k8s · 미검증
-
-## 핵심 키워드
-
-| 키워드 | 한 줄 | 이미 있음 |
-| :--- | :--- | :--- |
-| Docker Engine | CLI·API·빌드·볼륨·네트워크를 묶은 올인원 컨테이너 플랫폼 | [컨테이너의 탄생](../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
-| containerd | 이미지 관리·수명주기 감독을 전담하는 CNCF 표준 컨테이너 런타임 | [컨테이너의 탄생](../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
-| runc | OCI 런타임 명세대로 리눅스 커널 격리(namespace·cgroups)를 실행하는 저수준 바이너리 | [컨테이너의 탄생](../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
-| CRI | Kubelet과 컨테이너 런타임 사이의 통신 규약을 정의한 gRPC 인터페이스 | [컨테이너의 탄생](../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
-| OCI | 컨테이너 이미지 규격과 실행 방식을 정의한 개방형 산업 표준 | [컨테이너의 탄생](../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
-| dockershim | CRI 이전의 Docker 데몬을 Kubelet에 연결하던 임시 어댑터 계층 | [컨테이너의 탄생](../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
-| ctr | containerd에 내장된 저수준 네이티브 디버깅 CLI | |
-| nerdctl | containerd 위에서 Docker CLI 문법과 동일한 사용자 경험을 제공하는 도구 | |
-| crictl | Kubernetes CRI 호환 런타임을 점검하고 노드를 디버깅하는 전용 CLI | [Service 5유형](../08_cloud/book/networking-and-kubernetes/05-02.Service 5유형 — ClusterIP에서 LoadBalancer까지.md) |
-
-
+> 출처: Gemini · 2026-11-14 · Docker vs containerd 및 Kubernetes 런타임 생태계 심층 분석 리포트 · 분야: k8s-keywords · 미검증
 
 ## 요점
+
+한 줄: Docker 는 개발용 종합 도구이고 Kubernetes 프로덕션은 dockershim 없이 `kubelet -> CRI -> containerd -> runc` 로 이어지므로, 노드 진단은 `crictl` 로 한다는 내용입니다.
 
 - 플랫폼과 런타임 분리: Docker는 개발 생산성 중심의 종합 도구이며, Kubernetes 프로덕션은 containerd와 runc 계층만 직결합니다.
 - dockershim 제거 효과: 중간 Docker 데몬을 거치지 않고 `kubelet -> CRI -> containerd -> runc`로 연결해 메모리와 지연을 줄입니다.
@@ -26,6 +12,22 @@
   - `nerdctl`: Docker CLI 호환 명령어와 BuildKit 연동을 제공하며 기본 네임스페이스(`default`)를 조회합니다.
   - `crictl`: CRI gRPC 소켓과 통신하며 Kubelet과 동일한 시야(`k8s.io` 네임스페이스의 Pod 및 컨테이너)를 조회합니다.
 - 노드 트러블슈팅: 제어 평면 장애 시 노드에 접속해 `crictl pods`, `crictl ps`, `crictl logs`, `crictl exec`로 진단합니다.
+
+
+
+## 핵심 키워드
+
+| 키워드 | 한 줄 | 이미 있음 |
+| :--- | :--- | :--- |
+| Docker Engine | CLI·API·빌드·볼륨·네트워크를 묶은 올인원 컨테이너 플랫폼 | [컨테이너의 탄생](../../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
+| containerd | 이미지 관리·수명주기 감독을 전담하는 CNCF 표준 컨테이너 런타임 | [컨테이너의 탄생](../../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
+| runc | OCI 런타임 명세대로 리눅스 커널 격리(namespace·cgroups)를 실행하는 저수준 바이너리 | [컨테이너의 탄생](../../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
+| CRI | Kubelet과 컨테이너 런타임 사이의 통신 규약을 정의한 gRPC 인터페이스 | [컨테이너의 탄생](../../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
+| OCI | 컨테이너 이미지 규격과 실행 방식을 정의한 개방형 산업 표준 | [컨테이너의 탄생](../../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
+| dockershim | CRI 이전의 Docker 데몬을 Kubelet에 연결하던 임시 어댑터 계층 | [컨테이너의 탄생](../../08_cloud/book/networking-and-kubernetes/03-01.컨테이너의 탄생 — 앱 실행의 진화와 격리 프리미티브.md) |
+| ctr | containerd에 내장된 저수준 네이티브 디버깅 CLI | |
+| nerdctl | containerd 위에서 Docker CLI 문법과 동일한 사용자 경험을 제공하는 도구 | |
+| crictl | Kubernetes CRI 호환 런타임을 점검하고 노드를 디버깅하는 전용 CLI | [Service 5유형](../../08_cloud/book/networking-and-kubernetes/05-02.Service 5유형 — ClusterIP에서 LoadBalancer까지.md) (일부: pause 샌드박스 점검 예시만, 도구 설명 없음) |
 
 
 

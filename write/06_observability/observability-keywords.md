@@ -102,7 +102,7 @@ updated: 2026-10-14
 | 사고에서 배우기 · 포스트모템 | 추천 | | Site Reliability Engineering 10장 |
 | 근거의 출처를 함께 남기기 | 추천 | | |
 | SLO 기반 신뢰성 | 추천 | | Observability Engineering 11장 |
-| 에이전트 기반 원인 분석 · 맥락 비용 | 선택 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) · [AI 로드맵](../10_AI/ai-keywords.md) | |
+| 에이전트 기반 원인 분석 · 맥락 비용 | 선택 | [당근 발표 정리](../_digest/devops/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) · [AI 로드맵](../10_AI/ai-keywords.md) | |
 
 
 
@@ -135,8 +135,8 @@ updated: 2026-10-14
 | RUM — Faro SDK · Web Vitals | 선택 | [RUM](../06_observability/book/observability_with_grafana/12-01.RUM%20%E2%80%94%20Faro%20SDK%C2%B7Web%20Vitals%C2%B7%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%90%EC%84%9C%20%EB%B0%B1%EC%97%94%EB%93%9C%EB%A1%9C.md) | Observability with Grafana 12장 |
 | 관측 가능성 주도 개발 | 선택 | | Observability Engineering 9장 |
 | AI 에이전트의 자리 | 선택 | | Observability Engineering 10장 |
-| 드릴다운 계층 · 서비스 맵 | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
-| 노드와 Pod 수명 이벤트를 지표와 한 시간축에 | 추천 | [당근 발표 정리](../_digest/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
+| 드릴다운 계층 · 서비스 맵 | 추천 | [당근 발표 정리](../_digest/devops/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
+| 노드와 Pod 수명 이벤트를 지표와 한 시간축에 | 추천 | [당근 발표 정리](../_digest/devops/2026-10-10_당근_빌더_밋업_2026_인프라_발표_5편.md) | |
 
 
 
