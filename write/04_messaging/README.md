@@ -4,7 +4,8 @@ tags: [moc, messaging, kafka]
 status: final
 related:
   - roadmap.md
-updated: 2026-11-14
+  - docs/README.md
+updated: 2026-11-18
 ---
 
 # 04_messaging — 이벤트 기반 메시징
@@ -138,6 +139,10 @@ updated: 2026-11-14
 ### 08_advanced — 메시징 심화
 
 - [`08_advanced/`](08_advanced/) — `01_variants/`(Outbox·Saga·스트림·스키마 변종 비교)와 `02_workflow/`(Temporal 워크플로우 깊이) 두 갈래
+
+### docs — 공식 문서 정독
+
+- [`docs/`](docs/README.md) — 제품 공식 문서를 1차 자료로 삼는 자리. 지금은 [`flink/`](docs/flink/README.md)의 Apache Flink 2.3 읽기 지도 한 편
 
 
 
