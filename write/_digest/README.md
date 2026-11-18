@@ -39,6 +39,6 @@ updated: 2026-11-15
 | `data/` | data-keywords | 4 |
 | `spring/` | spring-keywords | 2 |
 | `ai/` | ai-keywords | 3 |
-| `jvm/` | jvm-keywords | 1 |
+| `jvm/` | jvm-keywords | 2 |
 | `observability/` | observability-keywords | 1 |
 | `architecture/` | 키워드 파일 없음 | 1 |
