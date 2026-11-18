@@ -4,7 +4,7 @@
 #       "READY 1/2" · "Service 가 이 Pod 로 요청을 보내지 않습니다"
 # 타입 스펙: 여럿이 하나로 모이는 종합(AND)이라 fan-in 이 요점이다. type-tree 의 관례를
 #           뒤집어 쓴다 — 잎에서 뿌리로 모으고, 연결선은 직각 엘보로만 긋는다("never diagonal").
-#           단계 머리를 얹어 ①②③ 이 어느 층인지 이름을 준다.
+#           단계 머리를 얹어 1·2·3 이 어느 층인지 이름을 준다.
 import sys; sys.path.insert(0, ".")
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 import ddx
@@ -23,7 +23,7 @@ SPINE = 300
 
 ddx.band(d, 104, 516, "컨테이너 ready 는 각자의 readiness probe(06-02)가 정하고, 종합은 AND 다")
 
-for cx, s in ((C1, "① 컨테이너별 ready"), (C2, "② 종합 — AND"), (C3, "③ Pod 전체")):
+for cx, s in ((C1, "1 컨테이너별 ready"), (C2, "2 종합 — AND"), (C3, "3 Pod 전체")):
     d.t(cx, 168, s, 12, SOFT, KR, "middle", 600)
 
 def box(cx, cy, name, sub, c, focal=False):

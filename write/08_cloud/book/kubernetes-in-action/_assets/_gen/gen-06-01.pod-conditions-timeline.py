@@ -1,4 +1,4 @@
-# 06-01 §3 — condition 넷은 성격이 갈린다
+# 06-01 §3 — condition 은 성격이 갈린다
 # 본문: "PodScheduled 와 Initialized 는 ... 곧 충족되고 남은 생애 동안 그대로 유지됩니다.
 #        반면 Ready 와 ContainersReady 는 생애 동안 여러 번 바뀔 수 있습니다."
 # 타입 스펙: type-gantt.md — 시간축 위의 스팬이라 간트 골격을 빌린다(왼쪽 라벨 열 180px ·
@@ -11,7 +11,7 @@ import ddx
 
 W, H = 1000, 556
 d = D(W, H, "KUBERNETES IN ACTION · 06-01",
-      "condition 넷은 성격이 갈린다 — 한 번 서면 유지 vs 여러 번 바뀜",
+      "condition 은 성격이 갈린다 — 한 번 서면 유지 vs 여러 번 바뀜",
       "PodScheduled 와 Initialized 는 한 번 True 가 되면 Pod 의 남은 생애 동안 유지된다. "
       "ContainersReady 와 Ready 는 생애 동안 여러 번 바뀐다.",
       lead="phase 만 보면 '돌고 있네'지만, conditions 를 봐야 '트래픽 받을 준비는 안 됐네'를 안다")
@@ -20,8 +20,8 @@ d = D(W, H, "KUBERNETES IN ACTION · 06-01",
 # 설명할 근거가 없어진다 — 계약이 금지하는 눈대중이다. stride 108px.
 X0, X1 = 240, 952
 TICKS = [240, 348, 456, 564, 672, 780, 888]
-TICK_LABELS = ["① 생성", "② 스케줄링", "③ 샌드박스 준비", "④ init 완료",
-               "⑤ 컨테이너 준비", "⑥ gate 통과", "⑦ 하나가 실패"]
+TICK_LABELS = ["1 생성", "2 스케줄링", "3 샌드박스 준비", "4 init 완료",
+               "5 컨테이너 준비", "6 gate 통과", "7 하나가 실패"]
 ROW_H, BAR_H = 44, 26
 
 ddx.band(d, 104, 500, "condition 두 갈래 — 한 번 충족 뒤 유지 · 생애 내내 여러 번 바뀜")
@@ -31,7 +31,7 @@ for x, lab in zip(TICKS, TICK_LABELS):
 d.line(40, 184, X1, 184, RULE, 0.8)
 
 # 존 둘 — 본문이 말하는 성격의 갈림을 구조로 만든다
-ZONES = [(196, 3, "한 번 True 가 되면 그대로 유지된다"),
+ZONES = [(196, 3, "한 번 True 가 되면 대체로 유지된다"),
          (348, 2, "생애 동안 여러 번 바뀔 수 있다")]
 for zy, n, lab in ZONES:
     d.o.append(f'<rect x="40" y="{zy}" width="{X1-40}" height="{n*ROW_H}" rx="8" '
@@ -62,8 +62,8 @@ for x in TICKS[1:]:
     d.line(x, 190, x, 436, RULE, 0.8, "4 6")
 
 # 12px 한글 한 줄은 950px 을 넘기지 못한다 — 넘치면 overflow-check 가 잡는다. 두 줄로 나눈다.
-d.t(36, 466, "PodReadyToStartContainers · v1.29 부터 기본 활성 · 샌드박스 준비 표시 · 책 표에는 없음", 12, MUTED, KR, "start")
-d.t(36, 486, "새 관측 축 · 기존 condition 변경 없이 목록에 추가",
+d.t(36, 466, "PodReadyToStartContainers · v1.29 부터 기본 활성 · 노드 재부팅 등으로 샌드박스가 사라지면 False 로 돌아간다", 12, MUTED, KR, "start")
+d.t(36, 486, "init 컨테이너가 없는 Pod 는 Initialized 가 샌드박스 준비보다 먼저 True 가 된다",
      12, MUTED, KR, "start")
 d.legend(516, [("True", OK), ("False", BAD), ("본문이 짚는 행", ACC)])
 d.save("06-01-pod-conditions-timeline.svg")

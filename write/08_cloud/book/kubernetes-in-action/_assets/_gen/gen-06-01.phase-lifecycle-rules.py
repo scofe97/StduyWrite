@@ -34,7 +34,7 @@ d.box(LX, 104, LW, 404, PAPER2, RULE, 0.9, 8)
 d.t(LX + 14, 126, "무엇이 죽었느냐가 대응 주체와 phase 를 가른다", 12, SOFT, KR, "start")
 
 # 열 머리 — 1열은 사건이지 레인 주체의 동작이 아님을 여기서 밝힌다
-for cx, h in zip(CX, ["① 무엇이 죽었나 (사건)", "② 대응 동작", "③ Pod 오브젝트는", "④ phase 는"]):
+for cx, h in zip(CX, ["1 무엇이 죽었나 (사건)", "2 대응 동작", "3 Pod 오브젝트는", "4 phase 는"]):
     d.t(cx, 154, fit(h, 12, CW, h), 12, SOFT, KR, "middle", 600)
 
 def lane(y, cy, tag, sub, c, cells, focal_last=False):

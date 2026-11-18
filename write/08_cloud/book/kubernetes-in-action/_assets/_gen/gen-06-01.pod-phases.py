@@ -15,7 +15,7 @@ W, H = 1000, 624
 d = D(W, H, "KUBERNETES IN ACTION · 06-01",
       "Pod 는 어느 순간이든 다섯 phase 중 하나에 있다",
       "Pending 에서 시작해 Running 을 거쳐 Succeeded 또는 Failed 로 끝난다. Unknown 은 흐름 위의 "
-      "한 칸이 아니라 kubelet 보고가 끊길 때 어느 phase에서든 일어나는 일이다.",
+      "한 칸이 아니라 노드와 통신이 안 될 때 어느 phase에서든 보이는 값이다.",
       lead="Pending → Running → Succeeded 또는 Failed · Unknown 은 흐름 밖에 있다")
 
 BW, BH = 176, 88
@@ -68,12 +68,12 @@ d.o.append(f'<rect x="48" y="404" width="904" height="120" rx="8" '
 ddx.ring_label(d, 48, 404, "흐름 밖 — 어느 phase에서든 일어난다", 11, WARN, off=16)
 d.chip(176, UNKN[1], "* 어느 phase에 있든", WARN, 11)
 d.path(f"M 270 {UNKN[1]} L {UNKN[0]-BW//2-6} {UNKN[1]}", WARN, 1.4, m="warn")
-d.t(484, UNKN[1] - 16, "kubelet 이 API 서버 보고를 멈추면", 11, WARN, KR)
-state(*UNKN, "Unknown", "kubelet 보고 두절", "노드 장애·네트워크 단절", WARN)
+d.t(484, UNKN[1] - 16, "노드와 통신 오류가 나면", 11, WARN, KR)
+state(*UNKN, "Unknown", "상태를 얻지 못함", "노드와 통신 오류", WARN)
 
 d.t(36, 548, "phase 는 엄밀한 상태 머신이 아니라 한 단어 요약이다 — Succeeded·Failed 는 "
              "무한정 돌 의도가 아닌 Pod 에만 해당한다", 12, MUTED, KR, "start")
 d.legend(584, [("도달 중", INFO), ("성공 종료", OK), ("실패 종료", BAD),
-               ("보고 두절", WARN), ("본문이 짚는 자리", ACC)])
+               ("통신 오류", WARN), ("본문이 짚는 자리", ACC)])
 d.save("06-01-pod-phases.svg")
 print("ok pod-phases")
