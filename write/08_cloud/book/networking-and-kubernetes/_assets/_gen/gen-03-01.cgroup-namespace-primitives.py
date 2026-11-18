@@ -33,8 +33,8 @@ d.o.append(f'<rect x="{rx}" y="{ry}" width="{rw}" height="{rh}" rx="8" '
 ddx.ring_label(d, rx, ry, "Linux 커널 프리미티브 — 의사 파일시스템으로 노출", 11, INFO, off=16)
 
 box(*RUNC, PW, PH, "runC", "생성 시점에 둘 다 만듦", "OCI low-level 런타임", ACC)
-box(*CG, BW, BH, "cgroup", "CPU·Memory·Disk I/O·net_cls", "얼마나 쓸 수 있는가", WARN)
-box(*NS, BW, BH, "namespace", "PID·Net·IPC·Mount·UTS·User", "무엇을 볼 수 있는가", INFO)
+box(*CG, BW, BH, "cgroup", "CPU·Memory·Disk I/O·Network", "얼마나 쓸 수 있는가", WARN)
+box(*NS, BW, BH, "namespace", "8종 — PID·Net·Mount·User 외", "무엇을 볼 수 있는가", INFO)
 box(*PROC, PW, PH, "컨테이너 프로세스", "호스트 커널을 공유", "게스트 OS 없음")
 
 # RUNC(330~670)·PROC(330~670) 의 x 범위가 CG(150~450)·NS(550~850) 와 겹치므로

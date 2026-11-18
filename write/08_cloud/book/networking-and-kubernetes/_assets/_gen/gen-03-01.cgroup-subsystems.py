@@ -10,7 +10,7 @@ from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER2, KR, 
 
 W, H = 1000, 620
 X0, GAP, ROW_H, HDR_Y = 32, 12, 84, 140
-COLS = [(180, "자원"), (264, "무엇을 정하는가"), (224, "cgroup v1 — 책 기준"), (224, "cgroup v2 — 현재 기본")]
+COLS = [(180, "자원"), (264, "무엇을 정하는가"), (224, "cgroup v1"), (224, "cgroup v2 — 현재 기본")]
 
 ROWS = [
     ([("CPU", "프로세서 시간"),
@@ -18,7 +18,7 @@ ROWS = [
       ("cpu + cpuacct", "제한과 계량이 따로"),
       ("cpu", "둘이 하나로 통합")], INFO),
     ([("Memory", "메모리"),
-      ("상한 초과 → 커널이 종료", "K8s limits.memory 가 내려오는 자리"),
+      ("상한 도달 → OOM killer 실행", "v2 는 memory.max 가 상한 파일"),
       ("memory", "이름 그대로"),
       ("memory", "역할도 그대로")], OK),
     ([("Disk I/O", "블록 장치"),
@@ -40,7 +40,7 @@ d = D(W, H, "CGROUP SUBSYSTEMS · V1 - V2",
 ddx.matrix(d, X0, COLS, ROWS, HDR_Y, row_h=ROW_H, gap=GAP, focal_col=3)
 
 BOTTOM = HDR_Y + 24 + len(ROWS) * (ROW_H + GAP)
-# 책 목록이 v1 기준이라는 경고는 본문 §3 목록이 맡는다
+# v1·v2 이름 차이는 본문 §3 목록이 맡는다
 d.legend(BOTTOM + 16, [("통합됨", INFO), ("그대로", OK), ("이름 바뀜", WARN), ("v2 에 없음", BAD)])
 d.save("03-01.cgroup-subsystems.svg")
 print("ok cgroup-subsystems")

@@ -1,25 +1,29 @@
-# 03-02.cnm-driver-split — 조율이 필요한가가 드라이버를 가르고, 그 끝에 CNM 이 안 주는 것이 있다
+# 03-02.cnm-driver-split — 조율이 필요한가가 드라이버를 가르고, 그 끝에 CNM 이 주지 않던 것이 있다
 # 본문 요구: §3 이 드라이버를 local·global 로 가르고 "global 은 libkv 라는 키-값 저장소 추상화에
-#           의존한다", "CNM 은 저장소를 제공하지 않아 Consul·etcd·Zookeeper 가 필요하다"까지
-#           말하는데 산문에만 있다. §5 에서 Kubernetes 가 갈라서는 이유의 절반이 그 의존이다.
+#           의존했다", "저장소는 Consul·etcd·Zookeeper 중 하나를 따로 세워야 했다"까지 말한다.
+#           §5 에서 Kubernetes 가 갈라서는 이유의 절반이 그 의존이다.
 #           2026-09-02 사용자 요청 — 이 축을 도식으로.
 # 타입 스펙: type-flowchart.md — 판단 한 곳이 두 갈래를 만들고 한쪽만 CNM 경계 밖으로 나간다.
 #           같은 문서의 cnm-structure(type-nested)가 세 부품의 구조를 맡으므로 이 장은 갈림만 본다.
-#           비교 행렬(type-dp-security-matrix)은 isolation-spectrum 이 이미 쓰고 있어 피했다.
+# 근거: Kubernetes 블로그 2016-01-14 「Why Kubernetes doesn't use libnetwork」(local·global·libkv),
+#       docker/cli v28.5.2 docs/deprecated.md(외부 키-값 저장소 오버레이는 v20.10 폐기 · v23.0 제거).
+# 이력: 2026-11-18 — 이 구조가 2016년 무렵의 것임을 머리글과 저장소 상자에 밝혔다. 지금의 overlay 는
+#       swarm mode 가 상태를 맡는다. 범례를 다섯 색에서 네 색으로 줄였고 local 드라이버 예시를
+#       1차 자료가 드는 bridge 하나로 좁혔다.
 # 좌표: Layout conventions 타입이라 공식이 없다. 가로 stride 236 하나, 갈래 y 오프셋 ±84. 전부 4의 배수.
 import ddx
 from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, BAD, INFO, PAPER, PAPER2, KR, MONO
 
 W, H = 1000, 468
 BW, BH, MID = 188, 80, 244
-CX = [124, 352, 616, 856]                                        # 첫 칸 왼끝(30)이 CNM 링(x=24) 안에 들게 — 이전 116 은 링을 2px 넘었다
+CX = [124, 352, 616, 856]                                        # 첫 칸 왼끝(30)이 CNM 링(x=24) 안에 들게
 ARM = 84
 
-d = D(W, H, "CNM DRIVERS · WHERE THE MODEL STOPS",
-      "조율이 필요한가 — 그 한 물음이 드라이버를 가른다",
-      "libnetwork 의 드라이버가 local 과 global 로 갈리는 판단과 그 뒤의 결과. "
-      "global 갈래만 CNM 경계 밖의 키-값 저장소를 요구하며, 그 빈자리가 Kubernetes 가 갈라서는 지점이다.",
-      lead="CNM 은 저장소 인터페이스만 정하고 저장소 자체는 주지 않습니다")
+d = D(W, H, "CNM DRIVERS · WHERE THE MODEL STOPPED (2016)",
+      "global 드라이버만 CNM 밖의 저장소를 요구했다",
+      "2016년 무렵 libnetwork 의 드라이버가 local 과 global 로 갈리는 판단과 그 결과. "
+      "global 갈래만 CNM 경계 밖의 키-값 저장소를 요구했고, 이 외부 저장소 방식은 Docker 23.0 에서 제거됐다.",
+      lead="2016년 무렵의 구조입니다 · 외부 저장소 방식은 Docker 23.0 에서 빠졌습니다")
 
 
 def box(cx, cy, t, sub, tag, c=None, focal=False, w=None):
@@ -44,8 +48,8 @@ d.o.append(f'<rect x="24" y="104" width="712" height="288" rx="10" '
            f'fill="{INFO}06" stroke="{INFO}" stroke-width="1.2" stroke-dasharray="7 6"/>')
 ddx.ring_label(d, 24, 104, "CNM · libnetwork 가 제공하는 범위", 11, INFO, off=16)
 
-box(CX[0], MID, "네트워크를 만든다", "docker network create", "드라이버 선택", INFO)
-box(CX[1], MID, "노드 간 조율이 필요한가", "옆 노드의 대역을 알아야 하나", "이 물음이 가름", WARN, w=220)
+box(CX[0], MID, "네트워크를 만든다", "docker network create", "드라이버 선택")
+box(CX[1], MID, "노드 간 조율이 필요한가", "옆 노드의 대역을 알아야 하나", "이 물음이 가름", w=220)
 
 d.path(f"M {CX[0]+BW//2+8} {MID} L {CX[1]-BW//2-10} {MID}", MUTED, 1.5, m="ar")
 
@@ -57,15 +61,15 @@ d.path(f"M {BR} {MID} L {BR} {MID+ARM} L {CX[2]-BW//2-10} {MID+ARM}", BAD, 1.5, 
 d.t(BR, MID - ARM - 16, "아니오", 11, OK, KR, "middle")
 d.t(BR, MID + ARM + 24, "예", 11, BAD, KR, "middle")
 
-box(CX[2], MID - ARM, "local 드라이버", "bridge · host · none", "한 호스트에서 끝남", OK)
-box(CX[2], MID + ARM, "global 드라이버", "overlay", "libkv 추상화에 의존", BAD)
+box(CX[2], MID - ARM, "local 드라이버", "bridge 등", "한 호스트에서 끝남", OK)
+box(CX[2], MID + ARM, "global 드라이버", "overlay 등", "libkv 추상화에 의존", BAD)
 
 d.path(f"M {CX[2]+BW//2+8} {MID+ARM} L {CX[3]-BW//2-10} {MID+ARM}", ACC, 1.6, m="acc")
-box(CX[3], MID + ARM, "키-값 저장소", "Consul · etcd · Zookeeper", "CNM 이 주지 않음", focal=True)
+box(CX[3], MID + ARM, "키-값 저장소", "Consul · etcd · Zookeeper", "따로 세워야 했음", focal=True)
 d.t(CX[3], MID - ARM, "밖에서 가져올 것 없음", 12, OK, KR)
 
 # 저장소를 따로 세우는 부담이 Kubernetes 에게 중복이었다는 설명은 본문으로 옮겼다
-d.legend(412, [("CNM 밖에서 가져올 것", ACC), ("자족한다", OK), ("밖을 요구한다", BAD),
-               ("가르는 물음", WARN), ("CNM 경계 안", INFO)])
+d.legend(412, [("CNM 밖에서 가져와야 했던 것", ACC), ("한 호스트에서 끝남", OK),
+               ("밖을 요구함", BAD), ("CNM 경계 안", INFO)])
 d.save("03-02.cnm-driver-split.svg")
 print("ok cnm-driver-split")
