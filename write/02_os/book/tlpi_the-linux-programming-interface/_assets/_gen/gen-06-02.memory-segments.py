@@ -1,65 +1,71 @@
 # 06-02 §1 프로세스 메모리 배치 — x86-32 가상 메모리 세그먼트와 경계 심볼
-# 근거: TLPI 6.3 Figure 6-1, 06.txt 310-335, 367; end(3) man page
-# 타입 스펙: type-layers — 가상 주소 공간의 세그먼트들을 수직 띠로 배치하고 경계 주소 및 심볼 표기
+# 근거: TLPI 6.3 Figure 6-1 (PDF 8쪽 그림 대조), end(3) man page
+# 값 근거: 그림 6-1 의 주소 0xC0000000·0x08048000·0x00000000 과 경계 심볼 &etext·&edata·&end, 표지 Top of stack·Program break.
+# 타입 스펙: type-layers — 가상 주소 공간의 세그먼트를 위아래로 쌓고 경계 주소·심볼을 왼쪽 표지로 단다
 import sys; sys.path.insert(0, ".")
 from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 940, 548
+W, H = 940, 544
+BX, BW = 236, 690
 d = D(W, H, "TLPI · 06-02 §1",
       "프로세스 가상 메모리 세그먼트 배치",
-      "리눅스 x86-32 환경에서 각 프로세스가 바라보는 4GB 가상 주소 공간의 세그먼트 구조와 경계 심볼",
-      "낮은 주소(0x08048000)부터 높은 주소(0xC0000000 이상)까지의 전형적인 배치 · 주소는 커널 설정과 링크 옵션에 따라 다름")
+      "리눅스 x86-32 에서 프로세스가 보는 가상 주소 공간. 위쪽이 높은 주소이고 왼쪽 표지는 경계 주소와 심볼이다.",
+      "책의 x86-32 기준 배치입니다. 주소는 커널 설정과 링크 옵션에 따라 달라집니다.")
 
-# 좌측 주소 증가 화살표
-AX = 26
-d.line(AX, 110, AX, 450, MUTED, 1.4)
-d.arrow([(AX, 120), (AX, 104)], MUTED, "ar", 1.4)
-d.t(AX + 10, 280, "가상 주소 증가", 10, MUTED, KR, "start", 400)
 
-BX = 210
-BW = 700
+def kr(t):
+    return KR if any("가" <= c <= "힣" for c in t) else MONO
 
-# 박스 배치 정의 (위에서 아래로 높은 주소 -> 낮은 주소)
-layers = [
-    # (y, h, name, addr_left, desc_right, symbol_right, color, is_focal)
-    (110, 42, "커널 공간 (Kernel)", "0xC0000000~", "사용자 접근 차단 · 시스템 콜 실행", "/proc/kallsyms", SOFT, False),
-    (156, 36, "인자·환경 변수 (argv, environ)", "0xC0000000 직하", "명령행 인자 문자열 및 환경 목록", "ARG_MAX", PAPER2, False),
-    (196, 52, "스택 세그먼트 (Stack)", "고위 주소 → 저위 주소", "함수 프레임 · 지역 변수 · 호출 연결 정보", "ESP 레지스터", ACC, True),
-    (252, 40, "미할당 가상 주소 공간", "미매핑 영역", "스택 하향 및 힙 상향 확장 대역", "SIGSEGV 발생", PAPER, False),
-    (296, 48, "힙 세그먼트 (Heap)", "저위 주소 → 고위 주소", "동적 메모리 할당 (malloc / brk)", "program break", INFO, False),
-    (348, 36, "BSS 세그먼트 (Uninitialized)", "&edata ~ &end", "미초기화 전역·정적 변수 (0 초기화)", "&end", OK, False),
-    (388, 36, "초기화된 데이터 세그먼트 (Data)", "&etext ~ &edata", "명시적 초기화된 전역·정적 변수", "&edata", PAPER2, False),
-    (428, 40, "텍스트 세그먼트 (Text)", "0x08048000~", "프로그램 기계어 코드 (읽기 전용 · 공유 가능)", "&etext", PAPER2, False),
+
+# (이름, 높이, 설명, 칩, 색, 종류) — 위(높은 주소)에서 아래로
+rows = [
+    ("커널 (Kernel)", 48, "프로세스에 매핑되지만 프로그램은 접근 못 함", "/proc/kallsyms", SOFT, "soft"),
+    ("argv, environ", 32, "명령행 인자와 환경 목록", None, PAPER2, "plain"),
+    ("스택 (Stack)", 52, "아래 방향으로 자람 · 프레임이 쌓임", None, ACC, "focal"),
+    ("미할당 영역", 44, "페이지 테이블 엔트리 없음", "SIGSEGV", PAPER, "gap"),
+    ("힙 (Heap)", 52, "위 방향으로 자람 · 동적 할당", None, INFO, "tone"),
+    ("미초기화 데이터 (BSS)", 36, "시작 전에 0 으로 채움", None, OK, "tone"),
+    ("초기화된 데이터", 36, "실행 파일에서 초기값을 읽음", None, PAPER2, "plain"),
+    ("텍스트 (프로그램 코드)", 40, "읽기 전용 · 프로세스끼리 공유", None, PAPER2, "plain"),
+    ("미매핑", 32, "페이지 테이블 없음", None, PAPER, "gap"),
 ]
+# 경계 표지: 행 번호(그 행의 위쪽 경계) → 라벨
+marks = {1: "0xC0000000", 3: "스택 top", 4: "program break", 5: "&end", 6: "&edata", 7: "&etext", 8: "0x08048000"}
 
-for y, h, name, addr, desc, sym, c, focal in layers:
-    if focal:
-        d.tone(BX, y, BW, h, c, 4, "1F", 1.5)
-        d.t(BX + 18, y + h/2 + 5, name, 13, INK, KR, "start", 600)
-    elif c == PAPER:
-        d.box(BX, y, BW, h, PAPER, RULE, 1.0, 4)
-        d.line(BX, y, BX + BW, y, RULE, 0.8, "3 3")
-        d.line(BX, y + h, BX + BW, y + h, RULE, 0.8, "3 3")
-        d.t(BX + 18, y + h/2 + 5, name, 12, SOFT, KR, "start", 500)
-    elif c == SOFT:
-        d.box(BX, y, BW, h, PAPER2, SOFT, 1.0, 4)
-        d.t(BX + 18, y + h/2 + 5, name, 13, INK, KR, "start", 600)
+y = 104
+bounds = []
+for idx, (name, h, desc, chip, c, kind) in enumerate(rows):
+    bounds.append(y)
+    if kind == "focal":
+        d.tone(BX, y, BW, h, c, 0, "1F", 1.5)
+    elif kind == "tone":
+        d.tone(BX, y, BW, h, c, 0, "1A", 1.0)
+    elif kind == "gap":
+        d.box(BX, y, BW, h, PAPER, RULE, 1.0, 0)
+    elif kind == "soft":
+        d.box(BX, y, BW, h, PAPER2, SOFT, 1.0, 0)
     else:
-        d.box(BX, y, BW, h, PAPER2, RULE, 1.0, 4)
-        d.t(BX + 18, y + h/2 + 5, name, 13, INK, KR, "start", 600)
+        d.box(BX, y, BW, h, PAPER2, RULE, 1.0, 0)
+    ink = SOFT if kind == "gap" else INK
+    d.t(BX + 16, y + h / 2 + 5, name, 13, ink, KR, "start", 600 if kind != "gap" else 500)
+    d.t(BX + 262, y + h / 2 + 5, desc, 12, MUTED, KR, "start")
+    if chip:
+        d.chip(BX + BW - 18 - (len(chip) * 7.4 + 14) / 2, y + h / 2, chip, SOFT if kind != "gap" else MUTED, 12, 7)
+    y += h
+bounds.append(y)
+for idx, label in marks.items():
+    by = bounds[idx]
+    d.line(BX - 12, by, BX, by, MUTED, 1.0)
+    d.t(BX - 18, by + 4, label, 12, MUTED, kr(label), "end")
+d.t(BX - 18, bounds[-1] + 4, "0x00000000", 12, MUTED, MONO, "end")
+d.line(BX - 12, bounds[-1], BX, bounds[-1], MUTED, 1.0)
 
-    # 좌측 주소 범위
-    d.t(BX - 14, y + h/2 + 4, addr, 10, MUTED, MONO, "end")
-    # 중간 설명
-    d.t(BX + 245, y + h/2 + 4, desc, 11, MUTED, KR, "start")
-    # 최우측 심볼 / 마커
-    d.chip(BX + BW - 65, y + h/2, sym, c if focal or c in (OK, INFO) else MUTED, 10, 6)
+# 주소 증가 화살표
+AX = 26
+d.arrow([(AX, bounds[-1] - 8), (AX, 112)], MUTED, "ar", 1.4)
+d.t(AX + 12, 290, "주소", 12, MUTED, KR, "start", 500)
+d.t(AX + 12, 308, "증가", 12, MUTED, KR, "start", 500)
 
-# 하단 미매핑 0 주소 표기
-d.line(BX, 496, BX + BW, 496, RULE, 0.8, "2 4")
-d.t(BX - 14, 500, "0x00000000", 10, SOFT, MONO, "end")
-d.t(BX + 18, 487, "미매핑 영역 (NULL 포인터 역참조 방지)", 11, SOFT, KR, "start")
-
-d.legend(516, [("스택 (하향 확장)", ACC), ("힙 (상향 확장)", INFO), ("BSS 세그먼트", OK), ("커널 보호 영역", SOFT)])
+d.legend(H - 40, [("스택", ACC), ("힙", INFO), ("BSS", OK), ("커널 영역", SOFT)])
 d.save("06-02.memory-segments.svg")
 print("ok 06-02.memory-segments.svg")

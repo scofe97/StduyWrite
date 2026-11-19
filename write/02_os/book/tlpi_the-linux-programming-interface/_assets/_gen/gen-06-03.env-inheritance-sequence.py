@@ -1,55 +1,39 @@
-# 06-03 §3 환경 변수의 상속과 단방향 전달 (one-way and once-only)
-# 근거: TLPI 6.7 (06.txt 700-717 줄)
-#      "When a new process is created, it inherits a copy of its parent's environment."
-#      "Since the child gets a copy of its parent's environment at the time it is created, this transfer of information is one-way and once-only."
-#      "After the child process has been created, either process may change its own environment, and these changes are not seen by the other process."
-# 타입 스펙: type-sequence
-import sys
-from pathlib import Path
+# 06-03 §3 환경 목록의 상속 — 부모가 환경을 정하고 자식을 만든 뒤, 두 프로세스가 각자 값을 고쳐도 서로 보이지 않는 순서.
+# 근거: TLPI 6.7 「When a new process is created, it inherits a copy of its parent's environment.」
+#      「this transfer of information is one-way and once-only. After the child process has been created, either process may change its own environment, and these changes are not seen by the other process.」
+# 값 근거: TARGET 과 alpha·beta·gamma 는 순서를 보이려고 고른 예시 값이다. 실행해서 얻은 값이 아니다.
+# 타입 스펙: type-sequence — 참여자 둘(부모 · 자식)의 시간순 사건. 복사는 메시지 하나, 각자의 수정은 레인 옆 자기 호출로 보인다.
+import sys; sys.path.insert(0, ".")
+from dd import Seq, ACC, MUTED, SOFT, INK, INFO, OK, WARN, KR, MONO
 
-sys.path.insert(0, ".")
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from dd import Seq, ACC, MUTED, SOFT, INK, INFO, OK, BAD, PAPER, PAPER2, RULE, KR, MONO
-
-W, H = 880, 460
+W, H = 880, 520
 s = Seq(W, H, "TLPI · 06-03 §3",
-        "환경 목록의 상속과 단방향 전달 (one-way and once-only)",
-        "자식 프로세스는 생성 시점에 부모의 환경 사본을 한 번만 복사받으며 이후 어느 쪽이 환경을 고쳐도 상대방에게 보이지 않습니다.",
-        "부모 PID 1000 에서 TARGET=alpha 를 export 한 뒤 자식 PID 1001 이 값을 바꿔도 부모에 영향이 없는 흐름")
+        "자식은 생성 때 환경의 사본을 받고 그 뒤 두 환경은 따로 논다",
+        "부모가 TARGET=alpha 를 정한 뒤 fork() 로 자식을 만들면 자식에게 사본이 한 번 전달된다. 이후 부모가 gamma 로, 자식이 beta 로 바꿔도 서로 보이지 않는다.",
+        "TARGET 의 값이 시점마다 어떻게 갈라지는지를 보입니다.")
 
-# 레인 설정 (부모 셸 vs 자식 프로세스)
 LX = s.lanes([
-    ("부모 프로세스", "PID 1000 · bash"),
-    ("자식 프로세스", "PID 1001 · subshell / myprog")
+    ("부모 프로세스", "parent"),
+    ("자식 프로세스", "child"),
 ], y0=104, lane_w=240)
+s.rails(470)
 
-# 레일 끝 y
-Y_BOT = 390
-s.rails(Y_BOT)
+s.selfmsg("부모 프로세스", "TARGET=alpha 를 환경에 등록", 186, INFO)
+s.state("부모 프로세스", "TARGET=alpha", 222, INFO)
 
-# 1. 부모 환경 변수 정의 및 export
-s.selfmsg("부모 프로세스", "TARGET=alpha 설정 및 export", 170, INFO, "환경 목록에 TARGET=alpha 등록")
-s.state("부모 프로세스", "TARGET=alpha", 200, INFO)
+s.msg("부모 프로세스", "자식 프로세스", "fork()", 268, ACC, "acc", None, "자식 생성 · 환경 사본을 한 번 전달")
+s.state("자식 프로세스", "TARGET=alpha (사본)", 304, ACC)
 
-# 2. fork & exec 생성 호출
-s.msg("부모 프로세스", "자식 프로세스", "fork() 시스템 콜 (환경 목록 복사)", 230, ACC, "acc", None, "부모 환경 사본 1회 전달")
+s.selfmsg("부모 프로세스", "TARGET=gamma 로 변경", 352, INFO)
+s.state("부모 프로세스", "TARGET=gamma", 388, INFO)
 
-# 3. 자식 시작 시점 상태
-s.state("자식 프로세스", "TARGET=alpha (사본)", 260, ACC)
-
-# 4. 자식 내부에서 환경 변수 수정 (레인 안쪽으로 루프 배치)
 cx = s.LX["자식 프로세스"]
-s.path(f"M {cx-10} {295-10} L {cx-48} {295-10} L {cx-48} {295+10} L {cx-13} {295+10}", OK, 1.4, m="ok")
-s.t(cx - 56, 295 - 4, "TARGET=beta 수정 (setenv)", 11, OK, MONO, "end")
-s.t(cx - 56, 295 + 13, "자식 메모리의 환경 목록만 갱신", 11, MUTED, KR, "end")
-s.state("자식 프로세스", "TARGET=beta", 325, OK)
+s.path(f"M {cx-10} {352-10} L {cx-48} {352-10} L {cx-48} {352+10} L {cx-13} {352+10}", OK, 1.4, m="ok")
+s.t(cx - 56, 352 - 4, "TARGET=beta 로 변경", 11, OK, MONO, "end")
+s.state("자식 프로세스", "TARGET=beta", 388, OK)
 
-# 5. 자식 프로세스 종료
-s.msg("자식 프로세스", "부모 프로세스", "exit(0) 종료 (자식 주소공간 소멸)", 350, MUTED, "ar", "3 3", "부모 환경에 전달되는 변경사항 없음")
+s.t(440, 440, "서로의 변경은 상대 환경에 나타나지 않음", 12, MUTED, KR, "middle", 600)
 
-# 6. 부모의 최종 상태 확인
-s.state("부모 프로세스", "TARGET=alpha (불변)", 375, INFO)
-
-s.legend(415, [("부모 환경 상태", INFO), ("복사 및 생성 전달", ACC), ("자식 독립 수정", OK)])
+s.legend(480, [("부모의 환경", INFO), ("복사 · 생성", ACC), ("자식의 환경", OK)])
 s.save("06-03.env-inheritance-sequence.svg")
-print("ok 06-03.env-inheritance-sequence.svg")
+print("ok 06-03 env-inheritance-sequence")

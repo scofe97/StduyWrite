@@ -1,97 +1,82 @@
-# 06-03 절 지도 — 셸 명령 줄에서 argv 배열과 환경 목록이 생성되어 새 프로그램으로 전달되는 흐름
-# 근거: TLPI 6.6, 6.7 (06.txt 557-1131 줄), execve(2) "Limits on size of arguments and environment"
-#      "When the program is executed, the command-line arguments ... are made available via two arguments to main()"
-#      "When a new process is created, it inherits a copy of its parent's environment"
-# 타입 스펙: type-data-flow
-import sys
-from pathlib import Path
+# 06-03 개념도 — 인자 목록과 환경 목록은 execve() 가 새 프로그램에 건네고, 환경 목록은 자식이 생성 때 사본으로 물려받으며, 프로그램은 putenv()·setenv() 로 그 목록을 고친다.
+# 본문 요구(06-03 「학습 목표」 개념도 문단): 1행 명령 줄·argc·argv·NULL 종단(§1), 2행 인자·환경 문자열 영역·ARG_MAX·E2BIG(§2),
+#           3행 부모 환경·자식의 사본·단방향 일회성(§3), 4행 environ·putenv()·setenv()(§4).
+# 값 근거: 개념도라 값은 없다.
+# 공식 근거: TLPI 6.6~6.7, execve(2) 「Limits on size of arguments and environment」, putenv(3)·setenv(3).
+# 타입 스펙: type-architecture — 키워드 개념도. 4행 × 3열 노드 격자(열 x = 56 + j·300, 노드 200×64), 행 안은 가로 화살표.
+import sys; sys.path.insert(0, ".")
+from dd import D, INK, MUTED, SOFT, RULE, ACC, OK, WARN, INFO, KR, MONO
 
-sys.path.insert(0, ".")
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, BAD, PAPER, PAPER2, RULE, KR, MONO
+COL_X, STRIDE, NW, NH = 56, 300, 200, 64
+ROW_Y, ROW_STRIDE = 112, 104
+W, H = 880, 560
 
-W, H = 880, 460
-d = D(W, H, "TLPI · 06-03 절 지도",
-      "명령행 인자와 환경 목록의 전달 흐름",
-      "셸이 파싱한 인자 배열과 부모의 환경 목록 사본이 execve 시스템 콜을 거쳐 새 프로세스의 main 진입점까지 전달되는 과정",
-      "실제 인자 necho hello world 와 환경 변수 SHELL=/bin/bash 가 전달되는 데이터 흐름")
 
-# 1. 왼쪽: 셸 명령 입력 및 파싱 (입력 단계)
-SX, SY, SW, SH = 24, 104, 246, 280
-d.box(SX, SY, SW, SH, PAPER2, RULE, 1.0, 6)
-d.t(SX + SW / 2, SY + 24, "1. 셸 명령 입력 · 파싱", 14, INK, KR, "middle", 600)
-d.t(SX + SW / 2, SY + 44, "$ necho hello world", 12, INFO, MONO)
-d.line(SX + 12, SY + 56, SX + SW - 12, SY + 56, RULE, 0.8)
+def kr(t):
+    return KR if any("가" <= c <= "힣" for c in t) else MONO
 
-shell_rows = [
-    ("명령 파싱", "공백 기준 3단어 분리"),
-    ("argv[0]", "\"necho\" (프로그램 이름)"),
-    ("argv[1]", "\"hello\" (첫째 인자)"),
-    ("argv[2]", "\"world\" (둘째 인자)"),
-    ("부모 환경", "SHELL=/bin/bash 외")
-]
-for i, (head, val) in enumerate(shell_rows):
-    iy = SY + 72 + i * 33
-    d.box(SX + 12, iy - 11, SW - 24, 26, PAPER, RULE, 0.8, 4)
-    d.t(SX + 22, iy + 6, head, 11, SOFT, MONO if "[" in head else KR, "start", 500)
-    d.t(SX + SW - 20, iy + 6, val, 11, INK, MONO if '"' in val or '=' in val or '/' in val else KR, "end")
 
-# 2. 중앙: 커널 execve 전달 및 스택 적재 (전달 단계)
-KX, KY, KW, KH = 316, 104, 248, 280
-d.tone(KX, KY, KW, KH, ACC, 6, "12", 1.2)
-d.t(KX + KW / 2, KY + 24, "2. execve 시스템 콜 · 적재", 14, INK, KR, "middle", 600)
-d.t(KX + KW / 2, KY + 44, "execve(path, argv, envp)", 12, ACC, MONO)
-d.line(KX + 12, KY + 56, KX + KW - 12, KY + 56, RULE, 0.8)
+def nx(j):
+    return COL_X + j * STRIDE
 
-kernel_rows = [
-    ("상한 점검", "RLIMIT_STACK 의 1/4"),
-    ("argc 산출", "인자 개수 3 기록"),
-    ("argv 배열", "3개 포인터 + NULL"),
-    ("envp 배열", "환경 포인터 + NULL"),
-    ("문자열 복사", "인자·NAME=value"),
-    ("적재 위치", "스택 바로 위 영역")
-]
-for i, (head, val) in enumerate(kernel_rows):
-    iy = KY + 72 + i * 33
-    d.box(KX + 12, iy - 11, KW - 24, 26, PAPER, RULE, 0.8, 4)
-    d.t(KX + 22, iy + 6, head, 11, ACC, KR, "start", 500)
-    d.t(KX + KW - 20, iy + 6, val, 11, INK, KR, "end")
 
-# 3. 오른쪽: C 프로그램 실행 진입점 (수신 및 조작 단계)
-PX, PY, PW, PH = 610, 104, 246, 280
-d.box(PX, PY, PW, PH, PAPER2, RULE, 1.0, 6)
-d.t(PX + PW / 2, PY + 24, "3. C 런타임 및 main 진입", 14, INK, KR, "middle", 600)
-d.t(PX + PW / 2, PY + 44, "main(argc, argv)", 12, OK, MONO)
-d.line(PX + 12, PY + 56, PX + PW - 12, PY + 56, RULE, 0.8)
+def ny(i):
+    return ROW_Y + i * ROW_STRIDE
 
-prog_rows = [
-    ("인자 순회", "argv[0]~argv[2] 확인"),
-    ("전역 변수", "extern char **environ"),
-    ("단건 조회", "getenv(\"SHELL\")"),
-    ("안전 등록", "setenv(\"GREET\", \"hi\", 1)"),
-    ("포인터 편입", "putenv(str) 주의"),
-    ("외부 확인", "/proc/PID/cmdline")
-]
-for i, (head, val) in enumerate(prog_rows):
-    iy = PY + 72 + i * 33
-    d.box(PX + 12, iy - 11, PW - 24, 26, PAPER, RULE, 0.8, 4)
-    d.t(PX + 22, iy + 6, head, 11, OK, KR, "start", 500)
-    d.t(PX + PW - 20, iy + 6, val, 10, INK, MONO if '(' in val or '/' in val or '*' in val else KR, "end")
 
-# 화살표 연결 (셸 → 커널)
-d.arrow([(SX + SW + 4, SY + 80), (KX - 6, KY + 80)], ACC, "acc", 1.4)
-d.t((SX + SW + KX) / 2, SY + 70, "호출", 11, ACC, KR)
+d = D(W, H, "TLPI · 06-03",
+      "인자와 환경은 execve() 가 건네고 자식은 환경의 사본을 받는다",
+      "06-03 의 키워드 개념도. 1행은 셸이 쪼갠 명령 줄이 argc 와 argv 로 main() 에 건네지고 argv 가 NULL 로 끝난다는 흐름이다. "
+      "2행은 인자와 환경 문자열이 스택 위 한 영역에 놓이고 ARG_MAX 한도를 넘으면 execve() 가 E2BIG 로 실패한다는 흐름이다. "
+      "3행은 부모의 환경 목록이 자식 생성 때 한 번 복사되고 이후 수정이 서로 보이지 않는다는 흐름이다. "
+      "4행은 environ 을 고치는 putenv() 가 포인터를 그대로 등록해 위험하고 setenv() 는 문자열을 복사해 안전하다는 흐름이다.",
+      lead="화살표 위 글자는 두 키워드의 관계, 왼쪽 칩은 그 줄을 다루는 절입니다.")
 
-d.arrow([(SX + SW + 4, SY + 190), (KX - 6, KY + 190)], MUTED, "ar", 1.2)
-d.t((SX + SW + KX) / 2, SY + 180, "복사", 11, MUTED, KR)
 
-# 화살표 연결 (커널 → C 프로그램)
-d.arrow([(KX + KW + 4, KY + 80), (PX - 6, PY + 80)], OK, "ok", 1.4)
-d.t((KX + KW + PX) / 2, KY + 70, "진입", 11, OK, KR)
+def node(i, j, title, sub, c=None):
+    x, y = nx(j), ny(i)
+    if c:
+        d.tone(x, y, NW, NH, c, 6, "14", 1.4 if c == ACC else 1.1)
+    else:
+        d.box(x, y, NW, NH)
+    d.t(x + NW / 2, y + 27, title, 14, c or INK, kr(title), "middle", 600)
+    d.t(x + NW / 2, y + 48, sub, 13, MUTED, kr(sub), "middle")
 
-d.arrow([(KX + KW + 4, KY + 190), (PX - 6, PY + 190)], MUTED, "ar", 1.2)
-d.t((KX + KW + PX) / 2, KY + 180, "전달", 11, MUTED, KR)
 
-d.legend(410, [("셸 파싱 및 입력", INFO), ("커널 전달 및 스택 적재", ACC), ("C 프로그램 수신 및 조작", OK)])
+def harrow(i, j, label, c=SOFT, m="soft"):
+    y = ny(i) + NH / 2
+    x1, x2 = nx(j) + NW, nx(j + 1)
+    d.arrow([(x1 + 2, y), (x2 - 4, y)], c, m, 1.3)
+    d.t((x1 + x2) / 2, y - 9, label, 13, MUTED, kr(label), "middle", 600)
+
+
+for i, sec in enumerate(("§1", "§2", "§3", "§4")):
+    d.chip(28, ny(i) + NH / 2 - 4, sec, MUTED, 12)
+
+node(0, 0, "명령 줄", "셸이 단어로 쪼갬", INFO)
+node(0, 1, "argc · argv", "개수와 포인터 배열", ACC)
+node(0, 2, "argv[argc]", "항상 NULL", OK)
+harrow(0, 0, "건네는 값")
+harrow(0, 1, "배열의 끝")
+
+node(1, 0, "인자 · 환경", "스택 위 한 영역", INFO)
+node(1, 1, "ARG_MAX", "RLIMIT_STACK 의 1/4", INFO)
+node(1, 2, "E2BIG", "한도를 넘으면 실패", WARN)
+harrow(1, 0, "크기 상한")
+harrow(1, 1, "넘으면")
+
+node(2, 0, "부모 환경", "NAME=value 목록", INFO)
+node(2, 1, "자식의 사본", "생성 때 한 번 복사", ACC)
+node(2, 2, "단방향 일회성", "이후 수정은 안 보임", OK)
+harrow(2, 0, "물려줌")
+harrow(2, 1, "그 뒤로")
+
+node(3, 0, "environ", "NULL 로 끝나는 배열", INFO)
+node(3, 1, "putenv()", "포인터를 그대로 등록", WARN)
+node(3, 2, "setenv()", "문자열을 복사해 등록", OK)
+harrow(3, 0, "고치는 길")
+harrow(3, 1, "안전한 쪽")
+
+d.legend(H - 56, [("호출 · 동작", INFO), ("결과 · 이점", OK), ("대가 · 위험", WARN), ("핵심 개념", ACC)])
 d.save("06-03.chapter-overview.svg")
-print("ok 06-03.chapter-overview.svg")
+print("ok 06-03 overview")

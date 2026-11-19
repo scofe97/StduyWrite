@@ -1,92 +1,68 @@
-# 06-01 §1 프로그램과 프로세스의 구분 — 디스크 파일 하나에서 독립된 프로세스 둘이 뜨는 구조
-# 근거: TLPI 6.1 (06.txt 13-79 줄)
-#      "a process is an abstract entity, defined by the kernel, to which system resources are allocated in order to execute a program"
-#      "A program is a file containing a range of information that describes how to construct a process at run time."
-#      "One program may be used to construct many processes"
-# 타입 스펙: type-architecture
+# 06-01 §1 「커널이 자원을 할당한 동적 실체」 — 디스크의 프로그램 파일 하나를 커널이 실행하면 PID·메모리·파일 서술자 테이블이 각자인 프로세스가 둘 생긴다.
+# 본문 근거: 이 노트 「1. 프로그램과 프로세스의 구분」.
+# 값 근거: 개념 도식이라 값은 없다. 프로세스 이름 A·B 는 구별용 표기다.
+# 공식 근거: TLPI 6.1 — 프로그램은 런타임에 프로세스를 어떻게 구성할지 서술한 파일이고, 프로세스는 커널이 정의하며 시스템 자원이 할당되는 추상 개체다.
+#           프로세스는 유저 공간 메모리와, 식별 번호·가상 메모리 테이블·열린 파일 서술자 테이블·시그널 정보·자원 한도·현재 작업 디렉터리를 담은 커널 자료구조로 이뤄진다.
+# 타입 스펙: type-architecture — 왼쪽 디스크의 파일, 가운데 커널, 오른쪽 프로세스 둘. 연결은 직각 경로, focal 은 첫 프로세스 하나.
 import sys
 from pathlib import Path
 
 sys.path.insert(0, ".")
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from dd import D, ACC, MUTED, SOFT, INK, INFO, OK, BAD, PAPER, PAPER2, RULE, KR, MONO
+from dd import D, ACC, MUTED, INK, INFO, PAPER, PAPER2, RULE, KR, MONO
 
-W, H = 880, 440
+W, H = 960, 500
 d = D(W, H, "TLPI · 06-01 §1",
-      "프로그램 파일 하나에서 독립된 프로세스 둘이 뜨는 구조",
-      "디스크의 실행 파일은 정적 명세이고, 프로세스는 커널이 PID와 독립된 주소 공간 및 자원을 부여한 동적 실체입니다.",
-      "디스크 파일 /usr/bin/myprog 을 두 번 실행해 fork 로 PID 1042 와 PID 1043 이 생기고 execve 로 같은 프로그램이 적재되는 과정")
+      "프로그램 파일 하나에서 독립된 프로세스 둘이 뜬다",
+      "디스크의 프로그램 파일은 정적 명세이고, 커널이 실행하면 PID 와 자원을 따로 받은 프로세스가 생긴다.",
+      "프로그램 파일 하나를 두 번 실행해 프로세스 A 와 B 가 생기는 구조")
 
-# 1. 왼쪽: 디스크의 프로그램 파일 (정적 명세)
-DX, DY, DW, DH = 24, 104, 260, 260
-d.box(DX, DY, DW, DH, PAPER2, RULE, 1.0, 6)
-d.t(DX + DW / 2, DY + 26, "디스크 파일 (정적 명세)", 14, INK, KR, "middle", 600)
-d.t(DX + DW / 2, DY + 46, "/usr/bin/myprog (ELF)", 12, INFO, MONO)
-d.line(DX + 12, DY + 58, DX + DW - 12, DY + 58, RULE, 0.8)
+# 왼쪽: 프로그램 파일
+DX, DY, DW, DH = 24, 104, 272, 304
+d.tone(DX, DY, DW, DH, MUTED, 6, "14", 1.0)
+d.t(DX + DW / 2, DY + 28, "프로그램 파일", 14, INK, KR, "middle", 600)
+d.t(DX + DW / 2, DY + 48, "디스크에 저장된 ELF 파일", 12, MUTED, KR)
+d.line(DX + 12, DY + 60, DX + DW - 12, DY + 60, RULE, 0.8)
+items = ["바이너리 형식 식별 정보", "기계어 인스트럭션", "진입점 주소", "초기화 데이터와 상수",
+         "심볼·재배치 테이블", "공유 라이브러리 정보"]
+for i, name in enumerate(items):
+    iy = DY + 72 + i * 38
+    d.box(DX + 12, iy, DW - 24, 30, PAPER, RULE, 0.8, 4)
+    d.t(DX + 24, iy + 20, name, 13, INK, KR, "start", 500)
 
-file_items = [
-    ("ELF 바이너리 헤더", "형식 식별 메타정보"),
-    ("기계어 인스트럭션", "알고리즘 구현 (.text)"),
-    ("진입점 주소", "시작 위치 (0x00401000)"),
-    ("초기화 데이터·상수", "변수 초기값·리터럴"),
-    ("심볼·재배치 테이블", "함수·변수 주소 해석"),
-    ("공유 라이브러리 정보", "라이브러리·링커 경로")
-]
-for i, (head, sub) in enumerate(file_items):
-    iy = DY + 76 + i * 29
-    d.box(DX + 10, iy - 12, DW - 20, 25, PAPER, RULE, 0.8, 4)
-    d.t(DX + 18, iy + 4, head, 11, INK, KR, "start", 500)
-    d.t(DX + DW - 18, iy + 4, sub, 11, MUTED, KR, "end")
+# 가운데: 커널
+CX, BW, BH = 410, 116, 60
+MY = DY + DH / 2
+d.arrow([(DX + DW + 6, MY), (CX - BW / 2 - 4, MY)], MUTED, "ar", 1.4)
+d.box(CX - BW / 2, MY - BH / 2, BW, BH, PAPER2, RULE, 1.0, 6)
+d.t(CX, MY - 4, "커널", 14, INK, KR, "middle", 600)
+d.t(CX, MY + 16, "PID·자원 부여", 12, MUTED, KR)
 
-# 2. 가운데: fork() 로 PID 를 받고 execve() 로 적재
-CX = 396
-BOX_W, BOX_H = 104, 56
-d.arrow([(DX + DW + 6, DY + DH / 2), (CX - BOX_W / 2 - 4, DY + DH / 2)], MUTED, "ar", 1.4)
-d.box(CX - BOX_W / 2, DY + DH / 2 - BOX_H / 2, BOX_W, BOX_H, PAPER2, RULE, 1.0, 6)
-d.t(CX, DY + DH / 2 - 8, "fork · execve", 12, INK, KR, "middle", 600)
-d.t(CX, DY + DH / 2 + 12, "PID 부여·적재", 11, MUTED, KR)
+PX, PW, PH = 568, 368, 132
+P1Y, P2Y = DY, DY + DH - PH
+mid1, mid2 = P1Y + PH / 2, P2Y + PH / 2
+d.path(f"M {CX + BW / 2 + 4} {MY - 12} H {PX - 36} Q {PX - 24} {MY - 12} {PX - 24} {MY - 24} V {mid1 + 12} "
+       f"Q {PX - 24} {mid1} {PX - 12} {mid1} H {PX - 6}", ACC, 1.4, m="acc")
+d.path(f"M {CX + BW / 2 + 4} {MY + 12} H {PX - 36} Q {PX - 24} {MY + 12} {PX - 24} {MY + 24} V {mid2 - 12} "
+       f"Q {PX - 24} {mid2} {PX - 12} {mid2} H {PX - 6}", INFO, 1.4, m="info")
+d.t(PX - 36, mid1 + 28, "처음 실행", 13, ACC, KR, "end")
+d.t(PX - 36, mid2 - 20, "한 번 더 실행", 13, INFO, KR, "end")
 
-# 분기 화살표 (직교 경로)
-P1_Y = 104
-P2_Y = 244
-PW, PH = 320, 120
-PX = 536
+rows = [("유저 메모리", "텍스트 · 데이터 · 힙 · 스택"),
+        ("커널 자료구조", "가상 메모리 테이블 · 파일 서술자"),
+        ("", "시그널 정보 · 작업 디렉터리")]
+for py, name, c, pid in ((P1Y, "프로세스 A", ACC, "PID A"), (P2Y, "프로세스 B", INFO, "PID B")):
+    d.tone(PX, py, PW, PH, c, 6, "18", 1.4)
+    d.t(PX + 16, py + 28, name, 14, INK, KR, "start", 600)
+    d.chip(PX + PW - 48, py + 24, pid, c, 12)
+    d.line(PX + 12, py + 42, PX + PW - 12, py + 42, RULE, 0.8)
+    for k, (lab, val) in enumerate(rows):
+        ry = py + 66 + k * 26
+        d.t(PX + 16, ry, lab, 12, MUTED, KR, "start")
+        d.t(PX + 108, ry, val, 13, INK, KR, "start")
 
-# CX -> P1
-d.path(f"M {CX + BOX_W / 2 + 4} {DY + DH / 2 - 12} H {PX - 36} Q {PX - 20} {DY + DH / 2 - 12} {PX - 20} {DY + DH / 2 - 28} V {P1_Y + PH / 2 + 16} Q {PX - 20} {P1_Y + PH / 2} {PX - 8} {P1_Y + PH / 2}",
-       ACC, 1.4, m="acc")
-d.t(PX - 56, P1_Y + PH / 2 + 20, "1차 실행", 11, ACC, KR, "end")
+d.t(PX + PW / 2, (P1Y + PH + P2Y) / 2 + 5, "텍스트 영역은 공유 가능 · 나머지는 프로세스마다 독립", 13, MUTED, KR)
 
-# CX -> P2
-d.path(f"M {CX + BOX_W / 2 + 4} {DY + DH / 2 + 12} H {PX - 36} Q {PX - 20} {DY + DH / 2 + 12} {PX - 20} {DY + DH / 2 + 28} V {P2_Y + PH / 2 - 16} Q {PX - 20} {P2_Y + PH / 2} {PX - 8} {P2_Y + PH / 2}",
-       INFO, 1.4, m="info")
-d.t(PX - 56, P2_Y + PH / 2 - 12, "2차 실행", 11, INFO, KR, "end")
-
-# 3. 오른쪽: 프로세스 1 (PID 1042)
-d.tone(PX, P1_Y, PW, PH, ACC, 6, "18", 1.4)
-d.t(PX + 16, P1_Y + 24, "프로세스 1 (동적 실체)", 13, INK, KR, "start", 600)
-d.chip(PX + PW - 56, P1_Y + 22, "PID 1042", ACC, 11)
-d.line(PX + 12, P1_Y + 38, PX + PW - 12, P1_Y + 38, RULE, 0.8)
-d.t(PX + 16, P1_Y + 58, "가상 메모리", 11, MUTED, KR, "start")
-d.t(PX + 88, P1_Y + 58, "Text(공유) · Data·Heap·Stack(독립)", 11, INK, MONO, "start")
-d.t(PX + 16, P1_Y + 80, "커널 구조체", 11, MUTED, KR, "start")
-d.t(PX + 88, P1_Y + 80, "task_struct · 가상 메모리 테이블", 11, INK, MONO, "start")
-d.t(PX + 16, P1_Y + 102, "할당된 자원", 11, MUTED, KR, "start")
-d.t(PX + 88, P1_Y + 102, "FD 테이블 (0,1,2) · CWD · 시그널", 11, INK, MONO, "start")
-
-# 4. 오른쪽: 프로세스 2 (PID 1043)
-d.tone(PX, P2_Y, PW, PH, INFO, 6, "18", 1.4)
-d.t(PX + 16, P2_Y + 24, "프로세스 2 (동적 실체)", 13, INK, KR, "start", 600)
-d.chip(PX + PW - 56, P2_Y + 22, "PID 1043", INFO, 11)
-d.line(PX + 12, P2_Y + 38, PX + PW - 12, P2_Y + 38, RULE, 0.8)
-d.t(PX + 16, P2_Y + 58, "가상 메모리", 11, MUTED, KR, "start")
-d.t(PX + 88, P2_Y + 58, "Text(공유) · Data·Heap·Stack(독립)", 11, INK, MONO, "start")
-d.t(PX + 16, P2_Y + 80, "커널 구조체", 11, MUTED, KR, "start")
-d.t(PX + 88, P2_Y + 80, "task_struct · 가상 메모리 테이블", 11, INK, MONO, "start")
-d.t(PX + 16, P2_Y + 102, "할당된 자원", 11, MUTED, KR, "start")
-d.t(PX + 88, P2_Y + 102, "FD 테이블 (0,1,2) · CWD · 시그널", 11, INK, MONO, "start")
-
-d.legend(390, [("정적 명세 (디스크)", MUTED), ("1차 인스턴스 (PID 1042)", ACC), ("2차 인스턴스 (PID 1043)", INFO)])
-out = "06-01.program-vs-process.svg"
-d.save(out)
-print("ok", out)
+d.legend(H - 52, [("정적 명세 (디스크)", MUTED), ("프로세스 A", ACC), ("프로세스 B", INFO)])
+d.save("06-01.program-vs-process.svg")
+print("ok 06-01 program-vs-process")
