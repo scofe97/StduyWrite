@@ -224,8 +224,8 @@ OSTEP 은 장이 푸는 문제를 `THE CRUX OF THE PROBLEM`(또는 `THE CRUX`, `
 | 17-01 | 21장 | Beyond Physical Memory: Mechanisms (가제) | 작성 예정 | 있음 — 측정 (`vm-beyondphys/`) |
 | 18-01 | 22장 | Beyond Physical Memory: Policies (가제) | 작성 예정 | 있음 — 시뮬레이터 (`vm-beyondphys-policy/`) |
 | 19-01 · 19-02 | 23장 | Complete Virtual Memory Systems (가제, 두 편 후보) | 작성 예정 | 없음 |
-| 20-01 | 26장 | Concurrency: An Introduction (가제) | 작성 예정 | 있음 — 시뮬레이터 (`threads-intro/`) |
-| 21-01 | 27장 | Interlude: Thread API (가제) | 작성 예정 | 있음 — 코드 (`threads-api/`) |
+| 20-01 | 26장 | [스레드가 한 주소 공간을 나눠 쓸 때 생기는 일 — 경쟁 상태·임계 구역·원자성](./20-01.%EC%8A%A4%EB%A0%88%EB%93%9C%EA%B0%80%20%ED%95%9C%20%EC%A3%BC%EC%86%8C%20%EA%B3%B5%EA%B0%84%EC%9D%84%20%EB%82%98%EB%88%A0%20%EC%93%B8%20%EB%95%8C%20%EC%83%9D%EA%B8%B0%EB%8A%94%20%EC%9D%BC%20%E2%80%94%20%EA%B2%BD%EC%9F%81%20%EC%83%81%ED%83%9C%C2%B7%EC%9E%84%EA%B3%84%20%EA%B5%AC%EC%97%AD%C2%B7%EC%9B%90%EC%9E%90%EC%84%B1.md) | 작성 완료 | 있음 — 시뮬레이터 (`threads-intro/`) |
+| 21-01 | 27장 | [스레드를 만들고 기다리고 막는 법 — pthread 의 생성·join·락·조건 변수](./21-01.%EC%8A%A4%EB%A0%88%EB%93%9C%EB%A5%BC%20%EB%A7%8C%EB%93%A4%EA%B3%A0%20%EA%B8%B0%EB%8B%A4%EB%A6%AC%EA%B3%A0%20%EB%A7%89%EB%8A%94%20%EB%B2%95%20%E2%80%94%20pthread%20%EC%9D%98%20%EC%83%9D%EC%84%B1%C2%B7join%C2%B7%EB%9D%BD%C2%B7%EC%A1%B0%EA%B1%B4%20%EB%B3%80%EC%88%98.md) | 작성 완료 | 있음 — 코드 (`threads-api/`) |
 | 22-01 · 22-02 | 28장 | Locks (가제, 두 편 후보) | 작성 예정 | 있음 — 시뮬레이터 (`threads-locks/`) |
 | 23-01 | 29장 | Lock-based Concurrent Data Structures (가제) | 작성 예정 | 있음 — 코드 (저장소 폴더 없음, 직접 작성) |
 | 24-01 | 30장 | Condition Variables (가제) | 작성 예정 | 있음 — 코드 (`threads-cv/`) |
@@ -325,7 +325,7 @@ OSTEP 은 장이 푸는 문제를 `THE CRUX OF THE PROBLEM`(또는 `THE CRUX`, `
 
 | 항목 | 현재 값 |
 |------|--------|
-| 진행률 | 7/46 장. 정독 노트 10편(02-01 원문 4장, 03-01 원문 5장, 04-01 원문 6장, 27-01 원문 33장, 43-01·43-02 원문 55장, 44-01·44-02 원문 56장, 45-01·45-02 원문 57장). 분모는 위 표의 장 수인 46이고 본문 40장에 보안 5장과 부록 B 를 더한 값입니다. 대화 장과 부록 D·F~H 는 넣지 않았습니다 |
+| 진행률 | 9/46 장. 정독 노트 12편(02-01 원문 4장, 03-01 원문 5장, 04-01 원문 6장, 20-01 원문 26장, 21-01 원문 27장, 27-01 원문 33장, 43-01·43-02 원문 55장, 44-01·44-02 원문 56장, 45-01·45-02 원문 57장). 분모는 위 표의 장 수인 46이고 본문 40장에 보안 5장과 부록 B 를 더한 값입니다. 대화 장과 부록 D·F~H 는 넣지 않았습니다 |
 | 난이도 레벨 | 기본 |
 | 막힌 지점 | 없음 |
 | 다음 레슨 후보 | 01-01 (원문 2장 Introduction to Operating Systems, 1장 대화를 도입으로 흡수) |
