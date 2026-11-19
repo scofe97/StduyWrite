@@ -21,7 +21,7 @@ learning:
   last_verified:
   blocked_count:
   next_lesson: "01-01 (원문 2장) 정독 노트 작성"
-updated: 2026-11-06
+updated: 2026-11-19
 ---
 
 # OSTEP — 정독 인덱스
@@ -206,9 +206,9 @@ OSTEP 은 장이 푸는 문제를 `THE CRUX OF THE PROBLEM`(또는 `THE CRUX`, `
 | 편 | 원문 장 | 제목 | 상태 | 숙제 |
 |----|--------|------|------|------|
 | 01-01 · 01-02 | 2장 | Introduction to Operating Systems (가제, 두 편 후보) | 작성 예정 | 없음 (Homework 절은 숙제 형식 안내) |
-| 02-01 | 4장 | The Abstraction: The Process (가제) | 작성 예정 | 있음 — 시뮬레이터 (`cpu-intro/`) |
-| 03-01 | 5장 | Interlude: Process API (가제) | 작성 예정 | 있음 — 시뮬레이터 (`cpu-api/` 의 `fork.py`·`generator.py`) + 코드 (직접 작성) |
-| 04-01 | 6장 | Mechanism: Limited Direct Execution (가제) | 작성 예정 | 있음 — 측정 (저장소 폴더 없음, 직접 작성) |
+| 02-01 | 4장 | [CPU 가 끝없이 있는 듯 보이게 하는 법 — 프로세스 추상·상태 전이·프로세스 목록](./02-01.CPU%20%EA%B0%80%20%EB%81%9D%EC%97%86%EC%9D%B4%20%EC%9E%88%EB%8A%94%20%EB%93%AF%20%EB%B3%B4%EC%9D%B4%EA%B2%8C%20%ED%95%98%EB%8A%94%20%EB%B2%95%20%E2%80%94%20%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4%20%EC%B6%94%EC%83%81%C2%B7%EC%83%81%ED%83%9C%20%EC%A0%84%EC%9D%B4%C2%B7%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4%20%EB%AA%A9%EB%A1%9D.md) | 작성 완료 | 있음 — 시뮬레이터 (`cpu-intro/`) |
+| 03-01 | 5장 | [프로세스 생성을 fork 와 exec 으로 쪼갠 이유 — wait·셸 리다이렉션·시그널](./03-01.%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4%20%EC%83%9D%EC%84%B1%EC%9D%84%20fork%20%EC%99%80%20exec%20%EC%9C%BC%EB%A1%9C%20%EC%AA%BC%EA%B0%A0%20%EC%9D%B4%EC%9C%A0%20%E2%80%94%20wait%C2%B7%EC%85%B8%20%EB%A6%AC%EB%8B%A4%EC%9D%B4%EB%A0%89%EC%85%98%C2%B7%EC%8B%9C%EA%B7%B8%EB%84%90.md) | 작성 완료 | 있음 — 시뮬레이터 (`cpu-api/` 의 `fork.py`·`generator.py`) + 코드 (직접 작성) |
+| 04-01 | 6장 | [CPU 를 직접 쓰게 하면서 통제권을 지키는 법 — 제한된 직접 실행·trap·타이머 인터럽트](./04-01.CPU%20%EB%A5%BC%20%EC%A7%81%EC%A0%91%20%EC%93%B0%EA%B2%8C%20%ED%95%98%EB%A9%B4%EC%84%9C%20%ED%86%B5%EC%A0%9C%EA%B6%8C%EC%9D%84%20%EC%A7%80%ED%82%A4%EB%8A%94%20%EB%B2%95%20%E2%80%94%20%EC%A0%9C%ED%95%9C%EB%90%9C%20%EC%A7%81%EC%A0%91%20%EC%8B%A4%ED%96%89%C2%B7trap%C2%B7%ED%83%80%EC%9D%B4%EB%A8%B8%20%EC%9D%B8%ED%84%B0%EB%9F%BD%ED%8A%B8.md) | 작성 완료 | 있음 — 측정 (저장소 폴더 없음, 직접 작성) |
 | 05-01 | 7장 | Scheduling: Introduction (가제) | 작성 예정 | 있음 — 시뮬레이터 (`cpu-sched/`) |
 | 06-01 | 8장 | Scheduling: The Multi-Level Feedback Queue (가제) | 작성 예정 | 있음 — 시뮬레이터 (`cpu-sched-mlfq/`) |
 | 07-01 | 9장 | Scheduling: Proportional Share (가제) | 작성 예정 | 있음 — 시뮬레이터 (`cpu-sched-lottery/`) |
@@ -247,7 +247,7 @@ OSTEP 은 장이 푸는 문제를 `THE CRUX OF THE PROBLEM`(또는 `THE CRUX`, `
 | 40-01 | 50장 | The Andrew File System (AFS) (가제) | 작성 예정 | 있음 — 시뮬레이터 (`dist-afs/`) |
 | 41-01 | 53장 | Introduction to Operating System Security (가제) | 작성 예정 | 없음 (PDF 에 숙제 절이 없고, 저장소에 해당 폴더도 없음) |
 | 42-01 · 42-02 | 54장 | Authentication (가제, 두 편 후보) | 작성 예정 | 없음 (PDF 에 숙제 절이 없고, 저장소에 해당 폴더도 없음) |
-| 43-01 · 43-02 | 55장 | Access Control (가제, 두 편 후보) | 작성 예정 | 없음 (PDF 에 숙제 절이 없고, 저장소에 해당 폴더도 없음) |
+| 43-01 · 43-02 | 55장 | [접근 요청 하나를 예·아니오로 바꾸는 법 — 주체·객체·접근과 ACL·capability](./43-01.%EC%A0%91%EA%B7%BC%20%EC%9A%94%EC%B2%AD%20%ED%95%98%EB%82%98%EB%A5%BC%20%EC%98%88%C2%B7%EC%95%84%EB%8B%88%EC%98%A4%EB%A1%9C%20%EB%B0%94%EA%BE%B8%EB%8A%94%20%EB%B2%95%20%E2%80%94%20%EC%A3%BC%EC%B2%B4%C2%B7%EA%B0%9D%EC%B2%B4%C2%B7%EC%A0%91%EA%B7%BC%EA%B3%BC%20ACL%C2%B7capability.md) · [권한은 누가 정하는가 — 임의·강제 접근 통제와 역할 기반 통제, setuid 권한 상승](./43-02.%EA%B6%8C%ED%95%9C%EC%9D%80%20%EB%88%84%EA%B0%80%20%EC%A0%95%ED%95%98%EB%8A%94%EA%B0%80%20%E2%80%94%20%EC%9E%84%EC%9D%98%C2%B7%EA%B0%95%EC%A0%9C%20%EC%A0%91%EA%B7%BC%20%ED%86%B5%EC%A0%9C%EC%99%80%20%EC%97%AD%ED%95%A0%20%EA%B8%B0%EB%B0%98%20%ED%86%B5%EC%A0%9C%2C%20setuid%20%EA%B6%8C%ED%95%9C%20%EC%83%81%EC%8A%B9.md) | 작성 완료 | 없음 (PDF 에 숙제 절이 없고, 저장소에 해당 폴더도 없음) |
 | 44-01 | 56장 | [OS 가 통제하지 못하는 데이터는 무엇으로 지키는가 — 대칭 암호·공개 키 암호·암호 해시](./44-01.OS%20%EA%B0%80%20%ED%86%B5%EC%A0%9C%ED%95%98%EC%A7%80%20%EB%AA%BB%ED%95%98%EB%8A%94%20%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%8A%94%20%EB%AC%B4%EC%97%87%EC%9C%BC%EB%A1%9C%20%EC%A7%80%ED%82%A4%EB%8A%94%EA%B0%80%20%E2%80%94%20%EB%8C%80%EC%B9%AD%20%EC%95%94%ED%98%B8%C2%B7%EA%B3%B5%EA%B0%9C%20%ED%82%A4%20%EC%95%94%ED%98%B8%C2%B7%EC%95%94%ED%98%B8%20%ED%95%B4%EC%8B%9C.md) | 작성 완료 | 없음 (PDF 에 숙제 절이 없고, 저장소에 해당 폴더도 없음) |
 | 44-02 | 56장 | [암호는 어디서 깨지고 OS 는 어디에 암호를 쓰는가 — 키 유출·저장 데이터 암호화·암호학적 capability](./44-02.%EC%95%94%ED%98%B8%EB%8A%94%20%EC%96%B4%EB%94%94%EC%84%9C%20%EA%B9%A8%EC%A7%80%EA%B3%A0%20OS%20%EB%8A%94%20%EC%96%B4%EB%94%94%EC%97%90%20%EC%95%94%ED%98%B8%EB%A5%BC%20%EC%93%B0%EB%8A%94%EA%B0%80%20%E2%80%94%20%ED%82%A4%20%EC%9C%A0%EC%B6%9C%C2%B7%EC%A0%80%EC%9E%A5%20%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%95%94%ED%98%B8%ED%99%94%C2%B7%EC%95%94%ED%98%B8%ED%95%99%EC%A0%81%20capability.md) | 작성 완료 | 없음 (PDF 에 숙제 절이 없고, 저장소에 해당 폴더도 없음) |
 | 45-01 | 57장 | [원격 기계는 무엇으로 믿는가 — 인증서의 서명과 비밀번호 해시](./45-01.%EC%9B%90%EA%B2%A9%20%EA%B8%B0%EA%B3%84%EB%8A%94%20%EB%AC%B4%EC%97%87%EC%9C%BC%EB%A1%9C%20%EB%AF%BF%EB%8A%94%EA%B0%80%20%E2%80%94%20%EC%9D%B8%EC%A6%9D%EC%84%9C%EC%9D%98%20%EC%84%9C%EB%AA%85%EA%B3%BC%20%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%20%ED%95%B4%EC%8B%9C.md) | 작성 완료 | 없음 (PDF 에 숙제 절이 없고, 저장소에 해당 폴더도 없음) |
@@ -325,7 +325,7 @@ OSTEP 은 장이 푸는 문제를 `THE CRUX OF THE PROBLEM`(또는 `THE CRUX`, `
 
 | 항목 | 현재 값 |
 |------|--------|
-| 진행률 | 3/46 장. 정독 노트 5편(27-01 원문 33장, 44-01·44-02 원문 56장, 45-01·45-02 원문 57장). 분모는 위 표의 장 수인 46이고 본문 40장에 보안 5장과 부록 B 를 더한 값입니다. 대화 장과 부록 D·F~H 는 넣지 않았습니다 |
+| 진행률 | 7/46 장. 정독 노트 10편(02-01 원문 4장, 03-01 원문 5장, 04-01 원문 6장, 27-01 원문 33장, 43-01·43-02 원문 55장, 44-01·44-02 원문 56장, 45-01·45-02 원문 57장). 분모는 위 표의 장 수인 46이고 본문 40장에 보안 5장과 부록 B 를 더한 값입니다. 대화 장과 부록 D·F~H 는 넣지 않았습니다 |
 | 난이도 레벨 | 기본 |
 | 막힌 지점 | 없음 |
 | 다음 레슨 후보 | 01-01 (원문 2장 Introduction to Operating Systems, 1장 대화를 도입으로 흡수) |

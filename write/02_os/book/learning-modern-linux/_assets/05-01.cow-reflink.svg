@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 940" width="100%" role="img" aria-labelledby="dt dd">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 1064" width="100%" role="img" aria-labelledby="dt dd">
 <defs>
 <marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
 <marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
@@ -8,80 +8,385 @@
 <marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
 <marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
 </defs>
-<title id="dt">reflink 복사는 extent 를 함께 쓰고, 덮어쓴 4 KiB 만 갈라진다</title><desc id="dd">btrfs 실측이다. 위 컷은 64 MiB 파일 orig.bin 을 cp --reflink=always 로 copy.bin 에 복사한 직후다. 두 파일 모두 논리 블록 0..16383 이 물리 블록 5282848..5299231 한 extent 를 가리키고 filefrag 가 shared 로 표시한다. 아래 컷은 copy.bin 의 블록 8192 를 4 KiB 덮어쓴 뒤다. copy.bin 은 extent 셋으로 갈라져 블록 8192 만 물리 6602470 을 가리키고, 0..8191 과 8193..16383 은 여전히 원래 extent 를 shared 로 가리킨다. orig.bin 은 그대로다. df 사용량은 reflink 복사에 0 바이트, 덮어쓰기에 4096 바이트, cp --reflink=never 복사에 67108864 바이트 늘었다.</desc>
-<rect width="880" height="940" fill="#0D1117"/>
+<title id="dt">reflink 복사는 디스크 칸을 함께 쓰고, 덮어쓴 한 칸만 갈라진다</title><desc id="dd">btrfs 에서 64 MiB 파일 orig.bin 을 cp --reflink=always 로 copy.bin 에 복사한 실측이다. 칸 하나는 4 KiB 이고, 파일 칸 번호는 파일 안에서의 순서, 디스크 칸 번호는 filefrag 가 보여 주는 디스크 위치다. 복사 직후에는 두 파일의 파일 칸 0 부터 16383 이 모두 디스크 칸 5282848 부터 5299231 을 함께 가리킨다. copy.bin 의 파일 칸 8192 를 4 KiB 덮어쓰면 그 한 칸만 새 디스크 칸 6602470 을 가리키고, 나머지는 계속 같은 디스크 칸을 함께 쓴다. orig.bin 은 그대로다. df 사용량은 reflink 복사에 0 바이트, 덮어쓰기에 4096 바이트(1칸), cp --reflink=never 복사에 67108864 바이트(64 MiB)가 늘었다.</desc>
+<rect width="880" height="1064" fill="#0D1117"/>
 <text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">LEARNING MODERN LINUX · 05-01 §8</text>
-<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">reflink 복사는 extent 를 함께 쓰고, 덮어쓴 4 KiB 만 갈라진다</text>
-<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">btrfs · 64 MiB 파일 · filefrag -v 와 df -B1 실측 — 공유는 그대로, 쓴 블록 하나만 새 자리로</text>
-<text x="24" y="118" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">1. reflink 복사 직후</text>
-<text x="24" y="138" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">cp --reflink=always · 두 파일이 extent 하나를 공유</text>
-<path d="M 416.0 202 L 416.0 245" fill="none" stroke="#6A95D8" stroke-width="1.3" marker-end="url(#info)"/>
-<path d="M 416.0 338 L 416.0 295" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
-<text x="24" y="176" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#6A95D8">orig.bin</text>
-<text x="24" y="192" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">논리 블록</text>
-<rect x="200" y="156" width="432" height="44" rx="4" fill="#6A95D81F" stroke="#6A95D8" stroke-width="1.1"/>
-<text x="416.0" y="183" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">0..16383 → 5282848..5299231 · shared</text>
-<text x="24" y="268" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">물리 extent</text>
-<text x="24" y="284" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">디스크</text>
-<rect x="200" y="248" width="432" height="44" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="1.1"/>
-<text x="416.0" y="275" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">5282848..5299231 · 16384 블록 · shared</text>
-<text x="668.0" y="275" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="400" fill="#5E6B7E">⋯</text>
-<rect x="704" y="248" width="104" height="44" rx="4" fill="none" stroke="#5E6B7E" stroke-width="0.9" stroke-dasharray="4 3"/>
-<text x="756.0" y="275" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">빈</text>
-<text x="24" y="360" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#3FB98C">copy.bin</text>
-<text x="24" y="376" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">논리 블록</text>
-<rect x="200" y="340" width="432" height="44" rx="4" fill="#3FB98C1F" stroke="#3FB98C" stroke-width="1.1"/>
-<text x="416.0" y="367" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">0..16383 → 5282848..5299231 · shared</text>
-<line x1="24" y1="404" x2="856" y2="404" stroke="rgba(191,192,192,0.22)" stroke-width="0.8" stroke-dasharray="2 4"/>
-<text x="24" y="438" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">2. copy.bin 블록 8192 를 4 KiB 덮어쓴 뒤</text>
-<text x="24" y="458" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">dd seek=8192 conv=notrunc · 그 블록만 6602470 · 나머지는 계속 shared</text>
-<path d="M 416.0 522 L 416.0 565" fill="none" stroke="#6A95D8" stroke-width="1.3" marker-end="url(#info)"/>
-<path d="M 305.0 658 L 305.0 615" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
-<path d="M 527.0 658 L 527.0 615" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
-<path d="M 416.0 658 L 416.0 638 L 756.0 638 L 756.0 615" fill="none" stroke="#F08A59" stroke-width="1.6" marker-end="url(#acc)"/>
-<text x="24" y="496" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#6A95D8">orig.bin</text>
-<text x="24" y="512" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">논리 블록</text>
-<rect x="200" y="476" width="432" height="44" rx="4" fill="#6A95D81F" stroke="#6A95D8" stroke-width="1.1"/>
-<text x="416.0" y="503" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">0..16383 → 5282848..5299231 · shared</text>
-<text x="24" y="588" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">물리 extent</text>
-<text x="24" y="604" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">디스크</text>
-<rect x="200" y="568" width="210" height="44" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="1.1"/>
-<text x="305.0" y="595" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">5282848..5291039 · shared</text>
-<rect x="410" y="568" width="12" height="44" rx="2" fill="#6A95D855" stroke="#6A95D8" stroke-width="1.1"/>
-<rect x="422" y="568" width="210" height="44" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="1.1"/>
-<text x="527.0" y="595" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">5291041..5299231 · shared</text>
-<rect x="704" y="568" width="104" height="44" rx="4" fill="#F08A591F" stroke="#F08A59" stroke-width="1.4"/>
-<text x="756.0" y="596" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#F08A59">6602470</text>
-<text x="668.0" y="595" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="400" fill="#5E6B7E">⋯</text>
-<text x="24" y="680" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#3FB98C">copy.bin</text>
-<text x="24" y="696" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">논리 블록</text>
-<rect x="200" y="660" width="210" height="44" rx="4" fill="#3FB98C1F" stroke="#3FB98C" stroke-width="1.1"/>
-<text x="305.0" y="687" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">0..8191 · shared</text>
-<rect x="410" y="660" width="12" height="44" rx="4" fill="#F08A591F" stroke="#F08A59" stroke-width="1.1"/>
-<rect x="422" y="660" width="210" height="44" rx="4" fill="#3FB98C1F" stroke="#3FB98C" stroke-width="1.1"/>
-<text x="527.0" y="687" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">8193..16383 · shared</text>
-<text x="648" y="687" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">블록 8192 만 새 자리</text>
-<text x="24" y="758" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">df 증가량</text>
-<text x="24" y="778" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">df -B1 used 차이</text>
-<rect x="200" y="744" width="200" height="56" rx="6" fill="#161B22" stroke="#3FB98C" stroke-width="1.1"/>
-<text x="300.0" y="765" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">reflink 복사</text>
-<text x="300.0" y="788" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="15" font-weight="600" fill="#3FB98C">+0 B</text>
-<rect x="420" y="744" width="200" height="56" rx="6" fill="#161B22" stroke="#8B98A9" stroke-width="1.1"/>
-<text x="520.0" y="765" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">블록 하나 덮어씀</text>
-<text x="520.0" y="788" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="15" font-weight="600" fill="#F5F5F3">+4,096 B</text>
-<rect x="640" y="744" width="200" height="56" rx="6" fill="#161B22" stroke="#E3B341" stroke-width="1.1"/>
-<text x="740.0" y="765" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">--reflink=never</text>
-<text x="740.0" y="788" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="15" font-weight="600" fill="#E3B341">+67,108,864 B</text>
-<text x="24" y="836" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">OverlayFS copy-up 은 파일 단위 복사 · btrfs·XFS 위에서는 이 reflink 로 블록 공유</text>
-<text x="24" y="858" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">물리 번호는 4 KiB 블록 번호 · 가로 축은 논리 블록에 비례, 블록 8192 칸만 키움</text>
-<line x1="12" y1="880" x2="832" y2="880" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
-<text x="12" y="902" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
-<rect x="100" y="892" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
-<text x="122" y="902" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">orig.bin 포인터</text>
-<rect x="300" y="892" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
-<text x="322" y="902" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">copy.bin 포인터</text>
-<rect x="500" y="892" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
-<text x="522" y="902" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">새로 쓴 블록</text>
-<rect x="635" y="892" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
-<text x="657" y="902" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">전체 복사 비용</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">reflink 복사는 디스크 칸을 함께 쓰고, 덮어쓴 한 칸만 갈라진다</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">btrfs 실측 · 64 MiB 파일 · 한 칸 = 4 KiB — 공유는 그대로 두고 쓴 칸 하나만 새 자리로</text>
+<rect x="24" y="96" width="264" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="38" y="118" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">파일 칸 번호</text>
+<text x="38" y="138" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">0 ~ 16,383 · 16,384칸</text>
+<text x="38" y="157" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">파일 안 순서 · 한 칸 = 4 KiB</text>
+<rect x="308" y="96" width="264" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="322" y="118" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">디스크 칸 번호</text>
+<text x="322" y="138" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">5,282,848 ~ 5,299,231</text>
+<text x="322" y="157" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">filefrag 가 보여 주는 디스크 위치</text>
+<rect x="592" y="96" width="264" height="72" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="606" y="118" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">df 증가량</text>
+<text x="606" y="138" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#F5F5F3">0 · 4 KiB · 64 MiB</text>
+<text x="606" y="157" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">디스크 사용량이 늘어난 양</text>
+<text x="24" y="206" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">1. reflink 복사 직후</text>
+<text x="24" y="226" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">cp --reflink=always · 두 파일의 모든 칸이 같은 디스크 칸을 가리킴</text>
+<path d="M 296.0 286 L 296.0 329" fill="none" stroke="#6A95D8" stroke-width="1.3" marker-end="url(#info)"/>
+<path d="M 432.0 286 L 432.0 329" fill="none" stroke="#6A95D8" stroke-width="1.3" marker-end="url(#info)"/>
+<path d="M 568.0 286 L 568.0 329" fill="none" stroke="#6A95D8" stroke-width="1.3" marker-end="url(#info)"/>
+<path d="M 296.0 422 L 296.0 379" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
+<path d="M 568.0 422 L 568.0 379" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
+<path d="M 432.0 422 L 432.0 379" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
+<text x="680" y="312.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">가리킴</text>
+<text x="680" y="404.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">가리킴</text>
+<text x="24" y="260" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#6A95D8">orig.bin</text>
+<text x="24" y="276" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">파일 칸 번호</text>
+<rect x="200" y="240" width="192" height="44" rx="4" fill="#6A95D81F" stroke="#6A95D8" stroke-width="1.1"/>
+<line x1="216" y1="241" x2="216" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="216" y1="277" x2="216" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="232" y1="241" x2="232" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="232" y1="277" x2="232" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="248" y1="241" x2="248" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="248" y1="277" x2="248" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="264" y1="241" x2="264" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="264" y1="277" x2="264" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="280" y1="241" x2="280" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="280" y1="277" x2="280" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="296" y1="241" x2="296" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="296" y1="277" x2="296" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="312" y1="241" x2="312" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="312" y1="277" x2="312" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="328" y1="241" x2="328" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="328" y1="277" x2="328" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="344" y1="241" x2="344" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="344" y1="277" x2="344" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="360" y1="241" x2="360" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="360" y1="277" x2="360" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="376" y1="241" x2="376" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="376" y1="277" x2="376" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="296.0" y="267" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">0 ~ 8,191</text>
+<rect x="392" y="240" width="80" height="44" rx="4" fill="#6A95D81F" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="432.0" y="267" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">8,192</text>
+<rect x="472" y="240" width="192" height="44" rx="4" fill="#6A95D81F" stroke="#6A95D8" stroke-width="1.1"/>
+<line x1="488" y1="241" x2="488" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="488" y1="277" x2="488" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="504" y1="241" x2="504" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="504" y1="277" x2="504" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="520" y1="241" x2="520" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="520" y1="277" x2="520" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="536" y1="241" x2="536" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="536" y1="277" x2="536" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="552" y1="241" x2="552" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="552" y1="277" x2="552" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="568" y1="241" x2="568" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="568" y1="277" x2="568" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="584" y1="241" x2="584" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="584" y1="277" x2="584" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="600" y1="241" x2="600" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="600" y1="277" x2="600" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="616" y1="241" x2="616" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="616" y1="277" x2="616" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="632" y1="241" x2="632" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="632" y1="277" x2="632" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="648" y1="241" x2="648" y2="247" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="648" y1="277" x2="648" y2="283" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="568.0" y="267" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">8,193 ~ 16,383</text>
+<text x="24" y="352" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">디스크</text>
+<text x="24" y="368" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">디스크 칸 번호</text>
+<rect x="200" y="332" width="192" height="44" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="1.1"/>
+<line x1="216" y1="333" x2="216" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="216" y1="369" x2="216" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="232" y1="333" x2="232" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="232" y1="369" x2="232" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="248" y1="333" x2="248" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="248" y1="369" x2="248" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="264" y1="333" x2="264" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="264" y1="369" x2="264" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="280" y1="333" x2="280" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="280" y1="369" x2="280" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="296" y1="333" x2="296" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="296" y1="369" x2="296" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="312" y1="333" x2="312" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="312" y1="369" x2="312" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="328" y1="333" x2="328" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="328" y1="369" x2="328" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="344" y1="333" x2="344" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="344" y1="369" x2="344" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="360" y1="333" x2="360" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="360" y1="369" x2="360" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="376" y1="333" x2="376" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="376" y1="369" x2="376" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="296.0" y="359" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">5,282,848 ~ 5,291,039</text>
+<rect x="392" y="332" width="80" height="44" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="432.0" y="359" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">5,291,040</text>
+<rect x="472" y="332" width="192" height="44" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="1.1"/>
+<line x1="488" y1="333" x2="488" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="488" y1="369" x2="488" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="504" y1="333" x2="504" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="504" y1="369" x2="504" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="520" y1="333" x2="520" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="520" y1="369" x2="520" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="536" y1="333" x2="536" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="536" y1="369" x2="536" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="552" y1="333" x2="552" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="552" y1="369" x2="552" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="568" y1="333" x2="568" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="568" y1="369" x2="568" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="584" y1="333" x2="584" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="584" y1="369" x2="584" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="600" y1="333" x2="600" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="600" y1="369" x2="600" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="616" y1="333" x2="616" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="616" y1="369" x2="616" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="632" y1="333" x2="632" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="632" y1="369" x2="632" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="648" y1="333" x2="648" y2="339" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="648" y1="369" x2="648" y2="375" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="568.0" y="359" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">5,291,041 ~ 5,299,231</text>
+<text x="24" y="444" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#3FB98C">copy.bin</text>
+<text x="24" y="460" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">파일 칸 번호</text>
+<rect x="200" y="424" width="192" height="44" rx="4" fill="#3FB98C1F" stroke="#3FB98C" stroke-width="1.1"/>
+<line x1="216" y1="425" x2="216" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="216" y1="461" x2="216" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="232" y1="425" x2="232" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="232" y1="461" x2="232" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="248" y1="425" x2="248" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="248" y1="461" x2="248" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="264" y1="425" x2="264" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="264" y1="461" x2="264" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="280" y1="425" x2="280" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="280" y1="461" x2="280" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="296" y1="425" x2="296" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="296" y1="461" x2="296" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="312" y1="425" x2="312" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="312" y1="461" x2="312" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="328" y1="425" x2="328" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="328" y1="461" x2="328" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="344" y1="425" x2="344" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="344" y1="461" x2="344" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="360" y1="425" x2="360" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="360" y1="461" x2="360" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="376" y1="425" x2="376" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="376" y1="461" x2="376" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="296.0" y="451" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">0 ~ 8,191</text>
+<rect x="392" y="424" width="80" height="44" rx="4" fill="#3FB98C1F" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="432.0" y="451" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">8,192</text>
+<rect x="472" y="424" width="192" height="44" rx="4" fill="#3FB98C1F" stroke="#3FB98C" stroke-width="1.1"/>
+<line x1="488" y1="425" x2="488" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="488" y1="461" x2="488" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="504" y1="425" x2="504" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="504" y1="461" x2="504" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="520" y1="425" x2="520" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="520" y1="461" x2="520" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="536" y1="425" x2="536" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="536" y1="461" x2="536" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="552" y1="425" x2="552" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="552" y1="461" x2="552" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="568" y1="425" x2="568" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="568" y1="461" x2="568" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="584" y1="425" x2="584" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="584" y1="461" x2="584" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="600" y1="425" x2="600" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="600" y1="461" x2="600" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="616" y1="425" x2="616" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="616" y1="461" x2="616" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="632" y1="425" x2="632" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="632" y1="461" x2="632" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="648" y1="425" x2="648" y2="431" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="648" y1="461" x2="648" y2="467" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="568.0" y="451" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">8,193 ~ 16,383</text>
+<line x1="24" y1="488" x2="856" y2="488" stroke="rgba(191,192,192,0.22)" stroke-width="0.8" stroke-dasharray="2 4"/>
+<text x="24" y="522" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">2. copy.bin 의 8,192번 칸을 4 KiB 덮어쓴 뒤</text>
+<text x="24" y="542" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">dd seek=8192 conv=notrunc · 그 한 칸만 새 디스크 칸 6,602,470 · 나머지는 계속 같은 칸</text>
+<path d="M 296.0 602 L 296.0 645" fill="none" stroke="#6A95D8" stroke-width="1.3" marker-end="url(#info)"/>
+<path d="M 432.0 602 L 432.0 645" fill="none" stroke="#6A95D8" stroke-width="1.3" marker-end="url(#info)"/>
+<path d="M 568.0 602 L 568.0 645" fill="none" stroke="#6A95D8" stroke-width="1.3" marker-end="url(#info)"/>
+<path d="M 296.0 738 L 296.0 695" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
+<path d="M 568.0 738 L 568.0 695" fill="none" stroke="#3FB98C" stroke-width="1.3" marker-end="url(#ok)"/>
+<path d="M 432.0 738 L 432.0 716 L 756.0 716 L 756.0 695" fill="none" stroke="#F08A59" stroke-width="1.8" marker-end="url(#acc)"/>
+<text x="680" y="628.0" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">가리킴</text>
+<text x="24" y="576" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#6A95D8">orig.bin</text>
+<text x="24" y="592" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">파일 칸 번호</text>
+<rect x="200" y="556" width="192" height="44" rx="4" fill="#6A95D81F" stroke="#6A95D8" stroke-width="1.1"/>
+<line x1="216" y1="557" x2="216" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="216" y1="593" x2="216" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="232" y1="557" x2="232" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="232" y1="593" x2="232" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="248" y1="557" x2="248" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="248" y1="593" x2="248" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="264" y1="557" x2="264" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="264" y1="593" x2="264" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="280" y1="557" x2="280" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="280" y1="593" x2="280" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="296" y1="557" x2="296" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="296" y1="593" x2="296" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="312" y1="557" x2="312" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="312" y1="593" x2="312" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="328" y1="557" x2="328" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="328" y1="593" x2="328" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="344" y1="557" x2="344" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="344" y1="593" x2="344" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="360" y1="557" x2="360" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="360" y1="593" x2="360" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="376" y1="557" x2="376" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="376" y1="593" x2="376" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="296.0" y="583" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">0 ~ 8,191</text>
+<rect x="392" y="556" width="80" height="44" rx="4" fill="#6A95D81F" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="432.0" y="583" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">8,192</text>
+<rect x="472" y="556" width="192" height="44" rx="4" fill="#6A95D81F" stroke="#6A95D8" stroke-width="1.1"/>
+<line x1="488" y1="557" x2="488" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="488" y1="593" x2="488" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="504" y1="557" x2="504" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="504" y1="593" x2="504" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="520" y1="557" x2="520" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="520" y1="593" x2="520" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="536" y1="557" x2="536" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="536" y1="593" x2="536" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="552" y1="557" x2="552" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="552" y1="593" x2="552" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="568" y1="557" x2="568" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="568" y1="593" x2="568" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="584" y1="557" x2="584" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="584" y1="593" x2="584" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="600" y1="557" x2="600" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="600" y1="593" x2="600" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="616" y1="557" x2="616" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="616" y1="593" x2="616" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="632" y1="557" x2="632" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="632" y1="593" x2="632" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="648" y1="557" x2="648" y2="563" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="648" y1="593" x2="648" y2="599" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="568.0" y="583" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">8,193 ~ 16,383</text>
+<text x="24" y="668" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">디스크</text>
+<text x="24" y="684" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">디스크 칸 번호</text>
+<rect x="200" y="648" width="192" height="44" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="1.1"/>
+<line x1="216" y1="649" x2="216" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="216" y1="685" x2="216" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="232" y1="649" x2="232" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="232" y1="685" x2="232" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="248" y1="649" x2="248" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="248" y1="685" x2="248" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="264" y1="649" x2="264" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="264" y1="685" x2="264" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="280" y1="649" x2="280" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="280" y1="685" x2="280" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="296" y1="649" x2="296" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="296" y1="685" x2="296" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="312" y1="649" x2="312" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="312" y1="685" x2="312" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="328" y1="649" x2="328" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="328" y1="685" x2="328" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="344" y1="649" x2="344" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="344" y1="685" x2="344" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="360" y1="649" x2="360" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="360" y1="685" x2="360" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="376" y1="649" x2="376" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="376" y1="685" x2="376" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="296.0" y="675" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">5,282,848 ~ 5,291,039</text>
+<rect x="392" y="648" width="80" height="44" rx="4" fill="#6A95D833" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="432.0" y="668" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#6A95D8">5,291,040</text>
+<text x="432.0" y="684" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#6A95D8">orig 전용</text>
+<rect x="472" y="648" width="192" height="44" rx="4" fill="#0D1117" stroke="#8B98A9" stroke-width="1.1"/>
+<line x1="488" y1="649" x2="488" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="488" y1="685" x2="488" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="504" y1="649" x2="504" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="504" y1="685" x2="504" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="520" y1="649" x2="520" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="520" y1="685" x2="520" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="536" y1="649" x2="536" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="536" y1="685" x2="536" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="552" y1="649" x2="552" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="552" y1="685" x2="552" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="568" y1="649" x2="568" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="568" y1="685" x2="568" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="584" y1="649" x2="584" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="584" y1="685" x2="584" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="600" y1="649" x2="600" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="600" y1="685" x2="600" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="616" y1="649" x2="616" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="616" y1="685" x2="616" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="632" y1="649" x2="632" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="632" y1="685" x2="632" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="648" y1="649" x2="648" y2="655" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="648" y1="685" x2="648" y2="691" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="568.0" y="675" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F5F5F3">5,291,041 ~ 5,299,231</text>
+<text x="684.0" y="675" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="400" fill="#5E6B7E">⋯</text>
+<rect x="704" y="648" width="104" height="44" rx="4" fill="#F08A591F" stroke="#F08A59" stroke-width="1.6"/>
+<text x="756.0" y="668" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">6,602,470</text>
+<text x="756.0" y="684" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F08A59">새 디스크 칸</text>
+<text x="24" y="760" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="14" font-weight="600" fill="#3FB98C">copy.bin</text>
+<text x="24" y="776" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">파일 칸 번호</text>
+<rect x="200" y="740" width="192" height="44" rx="4" fill="#3FB98C1F" stroke="#3FB98C" stroke-width="1.1"/>
+<line x1="216" y1="741" x2="216" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="216" y1="777" x2="216" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="232" y1="741" x2="232" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="232" y1="777" x2="232" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="248" y1="741" x2="248" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="248" y1="777" x2="248" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="264" y1="741" x2="264" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="264" y1="777" x2="264" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="280" y1="741" x2="280" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="280" y1="777" x2="280" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="296" y1="741" x2="296" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="296" y1="777" x2="296" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="312" y1="741" x2="312" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="312" y1="777" x2="312" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="328" y1="741" x2="328" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="328" y1="777" x2="328" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="344" y1="741" x2="344" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="344" y1="777" x2="344" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="360" y1="741" x2="360" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="360" y1="777" x2="360" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="376" y1="741" x2="376" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="376" y1="777" x2="376" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="296.0" y="767" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">0 ~ 8,191</text>
+<rect x="392" y="740" width="80" height="44" rx="4" fill="#F08A591F" stroke="#F08A59" stroke-width="1.6"/>
+<text x="432.0" y="767" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#F08A59">8,192</text>
+<rect x="472" y="740" width="192" height="44" rx="4" fill="#3FB98C1F" stroke="#3FB98C" stroke-width="1.1"/>
+<line x1="488" y1="741" x2="488" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="488" y1="777" x2="488" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="504" y1="741" x2="504" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="504" y1="777" x2="504" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="520" y1="741" x2="520" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="520" y1="777" x2="520" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="536" y1="741" x2="536" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="536" y1="777" x2="536" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="552" y1="741" x2="552" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="552" y1="777" x2="552" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="568" y1="741" x2="568" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="568" y1="777" x2="568" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="584" y1="741" x2="584" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="584" y1="777" x2="584" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="600" y1="741" x2="600" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="600" y1="777" x2="600" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="616" y1="741" x2="616" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="616" y1="777" x2="616" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="632" y1="741" x2="632" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="632" y1="777" x2="632" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="648" y1="741" x2="648" y2="747" stroke="#5E6B7E" stroke-width="0.8"/>
+<line x1="648" y1="777" x2="648" y2="783" stroke="#5E6B7E" stroke-width="0.8"/>
+<text x="568.0" y="767" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="600" fill="#3FB98C">8,193 ~ 16,383</text>
+<text x="680" y="767" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F08A59">덮어쓴 칸 (4 KiB)</text>
+<text x="24" y="838" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="600" fill="#F5F5F3">디스크 사용량이 늘어난 양</text>
+<text x="24" y="858" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">df -B1 used 의 전후 차이</text>
+<rect x="24" y="870" width="264" height="76" rx="6" fill="#161B22" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="156.0" y="890" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">reflink 복사</text>
+<text x="156.0" y="916" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="20" font-weight="600" fill="#F5F5F3">0 B</text>
+<text x="156.0" y="936" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">df 증가 +0 B</text>
+<rect x="308" y="870" width="264" height="76" rx="6" fill="#F08A591F" stroke="#F08A59" stroke-width="1.6"/>
+<text x="440.0" y="890" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">한 칸 덮어쓴 뒤</text>
+<text x="440.0" y="916" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="20" font-weight="600" fill="#F08A59">4 KiB</text>
+<text x="440.0" y="936" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">df 증가 +4,096 B · 1칸</text>
+<rect x="592" y="870" width="264" height="76" rx="6" fill="#161B22" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="724.0" y="890" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">일반 복사 (--reflink=never)</text>
+<text x="724.0" y="916" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="20" font-weight="600" fill="#F5F5F3">64 MiB</text>
+<text x="724.0" y="936" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="12" font-weight="400" fill="#8B98A9">df 증가 +67,108,864 B · 16,384칸</text>
+<text x="24" y="980" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">OverlayFS copy-up 은 파일을 통째로 복사 · btrfs 의 reflink 는 블록을 공유</text>
+<text x="24" y="1002" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#5E6B7E">눈금·칸 폭은 축척이 아님 · 8,192번 칸만 확대 · ⋯ 은 번호가 떨어져 있다는 표시</text>
+<line x1="12" y1="1022" x2="832" y2="1022" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="1044" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="1034" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="1044" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">orig.bin 칸</text>
+<rect x="274" y="1034" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="296" y="1044" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">copy.bin 칸</text>
+<rect x="448" y="1034" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="470" y="1044" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">새로 쓴 칸</text>
+<rect x="570" y="1034" width="14" height="12" rx="2" fill="#8B98A922" stroke="#8B98A9" stroke-width="1.1"/>
+<text x="592" y="1044" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">함께 쓰는 디스크 칸</text>
 </svg>
