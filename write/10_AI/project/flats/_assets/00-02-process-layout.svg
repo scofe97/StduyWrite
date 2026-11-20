@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">flats serve 프로세스 구조와 격리 경계</title><desc id="dd">단일 Go 바이너리가 메타데이터와 관리 서버를 직접 품고, 동적 서버 플랫은 독립 워커로 격리합니다</desc>
+<rect width="1000" height="560" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">ARCHITECTURE · COMPONENT BOUNDARIES</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">flats serve 프로세스 구조와 격리 경계</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">flats serve (127.0.0.1:7878 관리 / 7879 콘텐츠) ── Unix Socket ──&gt; flats worker 서브프로세스</text>
+<rect x="20" y="104" width="566" height="400" rx="8" fill="rgba(245,245,245,0.02)" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="4 4"/>
+<text x="36" y="126" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">flats serve 메인 데몬 (단일 롱러닝 프로세스)</text>
+<text x="36" y="141" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">launchd / systemd 관리 · host.data_dir lock</text>
+<rect x="34" y="150" width="226" height="140" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.2"/>
+<text x="50" y="176" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#6A95D8">management server (관리 서버)</text>
+<text x="50" y="200" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F5F5F3">127.0.0.1:7878 리스너 바인딩</text>
+<text x="50" y="220" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">REST API (/api) + 웹 콘솔 (/)</text>
+<text x="50" y="240" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">MCP 엔드포인트 (/mcp, 36개 도구)</text>
+<text x="50" y="262" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">HostGuard: DNS rebinding 방어</text>
+<rect x="34" y="308" width="226" height="180" rx="6" fill="#6A95D814" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="50" y="332" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#6A95D8">provider manager (제공자 관리)</text>
+<text x="50" y="352" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#F5F5F3">8대 네트워크 제공자 수명주기 총괄</text>
+<text x="50" y="372" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">local (127.0.0.1:7879 루프백)</text>
+<text x="50" y="390" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">tailscale / tailscale-funnel</text>
+<text x="50" y="408" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">portal (역방향 터널 릴레이)</text>
+<text x="50" y="426" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">zrok / cloudflare-quick</text>
+<text x="50" y="444" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">netbird / netbird-expose</text>
+<text x="50" y="466" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8.5" font-weight="400" fill="#5E6B7E">internal/expose/provider/manager.go:207</text>
+<rect x="330" y="150" width="240" height="140" rx="6" fill="#F08A5914" stroke="#F08A59" stroke-width="1.2"/>
+<text x="346" y="176" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">core.Service (핵심 도메인)</text>
+<text x="346" y="200" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">수명주기 · Draft · Version · Deploy</text>
+<text x="346" y="220" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">승인 큐 동결 (approval: pending)</text>
+<text x="346" y="240" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">미리보기 개설 및 사이트 라우팅</text>
+<text x="346" y="262" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">internal/core/service.go:114</text>
+<rect x="330" y="308" width="240" height="88" rx="6" fill="#3FB98C14" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="346" y="332" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">store (SQLite 메타데이터)</text>
+<text x="346" y="352" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#F5F5F3">flats.db (WAL 모드)</text>
+<text x="346" y="368" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">modernc.org/sqlite</text>
+<text x="346" y="384" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#8B98A9">버전 번호 · 해시 · 승인 레코드 영속화</text>
+<rect x="330" y="412" width="240" height="76" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="346" y="436" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">design instances (인-프로세스)</text>
+<text x="346" y="456" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">캔버스 아트보드 핸들러 (internal/design)</text>
+<text x="346" y="474" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#5E6B7E">실시간 리비전 저장 및 SSE 브로드캐스트</text>
+<rect x="660" y="104" width="320" height="400" rx="8" fill="rgba(245,245,245,0.02)" stroke="rgba(191,192,192,0.22)" stroke-width="0.9" stroke-dasharray="4 4"/>
+<text x="676" y="126" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5E6B7E">격리 서브프로세스 (flats worker)</text>
+<text x="676" y="141" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#8B98A9">re-exec · OS 프로세스 격리</text>
+<rect x="680" y="150" width="280" height="150" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.2"/>
+<text x="696" y="176" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">flats worker (서버 플랫)</text>
+<text x="696" y="200" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">QuickJS / WASI 런타임 구동</text>
+<text x="696" y="220" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">핸들러 fetch(request, env) 실행</text>
+<text x="696" y="240" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="400" fill="#8B98A9">JS: env.DB / env.FILES 격리</text>
+<text x="696" y="260" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#E3B341">10s 타임아웃 · 메모리 64MB 상한</text>
+<text x="696" y="280" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#5E6B7E">internal/runtime/worker.go:52</text>
+<rect x="680" y="320" width="280" height="130" rx="6" fill="#E3B34114" stroke="#E3B341" stroke-width="1.1"/>
+<text x="696" y="346" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">flats worker (문서 편집기)</text>
+<text x="696" y="370" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">internal/apps/docs 내장 JS 앱</text>
+<text x="696" y="390" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#8B98A9">실시간 마크다운 렌더링 엔진</text>
+<text x="696" y="410" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="400" fill="#3FB98C">저장 즉시 반영 (배포 승인 없음)</text>
+<text x="696" y="432" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#5E6B7E">서버 플랫 워커와 동일 구조</text>
+<path d="M 260 195 L 330 195" fill="none" stroke="#F08A59" stroke-width="1.4" marker-end="url(#acc)"/>
+<text x="295" y="187" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#F08A59">API 호출</text>
+<path d="M 330 255 L 295 255 L 295 345 L 260 345" fill="none" stroke="#6A95D8" stroke-width="1.4" marker-end="url(#info)"/>
+<text x="295" y="247" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8.5" font-weight="400" fill="#6A95D8">Serve / Stop</text>
+<path d="M 430 290 L 430 308" fill="none" stroke="#3FB98C" stroke-width="1.4" marker-end="url(#ok)"/>
+<text x="438" y="299" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="9" font-weight="400" fill="#3FB98C">SQL 메타데이터</text>
+<path d="M 570 225 L 680 225" fill="none" stroke="#E3B341" stroke-width="1.5" marker-end="url(#warn)"/>
+<text x="623" y="214" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="9" font-weight="400" fill="#E3B341">Unix Socket</text>
+<text x="623" y="202" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#8B98A9">w&lt;hex&gt;.sock</text>
+<line x1="12" y1="516" x2="952" y2="516" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="538" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="528" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">핵심 도메인 (core)</text>
+<rect x="313" y="528" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="335" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">스토리지 (store)</text>
+<rect x="513" y="528" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="535" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">관리 및 네트워크 인터페이스</text>
+<rect x="752" y="528" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="774" y="538" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">격리 워커 (worker)</text>
+</svg>
