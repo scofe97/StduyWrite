@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">능동 헬스체크와 수동 실패 감지의 상태 판정 경로</title><desc id="dd">HAProxy 의 주기적 프로브와 카운터 기반 상태 전이, 그리고 Nginx 오픈소스의 실제 트래픽 기반 수동 판정과 탐침 복구 메커니즘</desc>
+<rect width="960" height="520" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">02_OS / REVERSE-PROXY · 01-03</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">능동 헬스체크와 수동 실패 감지의 상태 판정 경로</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">HAProxy 백그라운드 프로브(inter·fall·rise)와 Nginx 오픈소스 트래픽 관측(max_fails·fail_timeout)의 동작 차이</text>
+<rect x="28" y="100" width="436" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="246.0" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">HAProxy 능동 검사 (Active Health Check)</text>
+<text x="246.0" y="136" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">트래픽과 무관한 백그라운드 타이머 프로브</text>
+<rect x="496" y="100" width="436" height="46" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="1.0"/>
+<text x="714.0" y="120" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">Nginx 오픈소스 수동 판정 (Passive Detection)</text>
+<text x="714.0" y="136" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">실제 클라이언트 트래픽 처리 중 실패 집계</text>
+<rect x="28" y="160" width="436" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="42" y="180" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">1. 백그라운드 주기적 프로브 전송</text>
+<text x="42" y="198" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">check inter 2000ms | option httpchk GET /healthz HTTP/1.1</text>
+<rect x="40" y="206" width="412" height="28" rx="4" fill="#161B22" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="50" y="224" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#6A95D8">L4 TCP 연결 또는 L7 HTTP 2xx/3xx 응답을 주기적으로 독립 검증</text>
+<rect x="28" y="256" width="436" height="96" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="42" y="276" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">2. 카운터 누적에 따른 UP / DOWN 전이</text>
+<text x="42" y="294" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">fall 3 (연속 3회 실패 시 DOWN) | rise 2 (연속 2회 성공 시 UP)</text>
+<rect x="40" y="302" width="198" height="40" rx="4" fill="#161B22" stroke="#F0616D" stroke-width="1.0"/>
+<text x="50" y="318" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#F0616D">장애 발생: 3회 실패 시</text>
+<text x="50" y="334" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#F0616D">UP → DOWN (풀에서 제외)</text>
+<rect x="254" y="302" width="198" height="40" rx="4" fill="#161B22" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="264" y="318" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">정상 복구: 2회 성공 시</text>
+<text x="264" y="334" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#3FB98C">DOWN → UP (풀에 재투입)</text>
+<rect x="28" y="364" width="436" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="42" y="384" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">3. 클라이언트 트래픽 격리 및 사용자 영향</text>
+<text x="42" y="402" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">기본값에서 DOWN 판정까지 약 4~6초 (그 사이 요청 실패 위험)</text>
+<text x="42" y="420" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#3FB98C">복구 시 실제 트래픽 노출 없이 백그라운드 프로브로 사전 검증 완료</text>
+<rect x="496" y="160" width="436" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="510" y="180" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">1. 실제 클라이언트 요청 처리 중 실패 감지</text>
+<text x="510" y="198" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">proxy_next_upstream error timeout invalid_header http_500 ...</text>
+<rect x="508" y="206" width="412" height="28" rx="4" fill="#161B22" stroke="#F0616D" stroke-width="1.0"/>
+<text x="518" y="224" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F0616D">사전 프로브 없음: 실제 사용자 요청이 직접 실패를 겪어야 감지 시작</text>
+<rect x="496" y="256" width="436" height="96" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="510" y="276" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">2. 윈도우 내 실패 집계 및 일시 격리</text>
+<text x="510" y="294" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="400" fill="#8B98A9">server backend:8080 max_fails=1 fail_timeout=10s;</text>
+<rect x="508" y="302" width="198" height="40" rx="4" fill="#161B22" stroke="#E3B341" stroke-width="1.0"/>
+<text x="518" y="318" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">fail_timeout(10초) 동안</text>
+<text x="518" y="334" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#E3B341">max_fails(1회) 도달 시 비가용</text>
+<rect x="722" y="302" width="198" height="40" rx="4" fill="#161B22" stroke="#F08A59" stroke-width="1.0"/>
+<text x="732" y="318" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="11" font-weight="600" fill="#F08A59">proxy_next_upstream:</text>
+<text x="732" y="334" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">실패 요청은 다음 서버로 우회</text>
+<rect x="496" y="364" width="436" height="84" rx="6" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.9"/>
+<text x="510" y="384" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#F5F5F3">3. fail_timeout 경과 후 점진적 탐침 복구</text>
+<text x="510" y="402" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#E3B341">10초 후 들어오는 실제 클라이언트 요청 1개를 시험 삼아 전송 (Live Probe)</text>
+<text x="510" y="420" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">성공 시 정상 가용 복귀 / 재실패 시 다시 10초 동안 비가용 격리</text>
+<line x1="480" y1="100" x2="480" y2="448" stroke="rgba(191,192,192,0.22)" stroke-width="0.8" stroke-dasharray="4 4"/>
+<line x1="12" y1="476" x2="912" y2="476" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="498" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="488" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="498" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 경로 / 사전 검증 성공</text>
+<rect x="352" y="488" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="374" y="498" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">능동 프로브 / 상태 전이 규약</text>
+<rect x="617" y="488" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="639" y="498" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">수동 판정 / 실패 집계 및 일시 격리</text>
+</svg>

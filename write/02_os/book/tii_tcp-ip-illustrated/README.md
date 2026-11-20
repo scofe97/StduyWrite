@@ -35,7 +35,7 @@ learning:
   last_verified:            # Phase 4 자답·_review 회차 미실시 — 원문 대조일로 대신 채우지 않는다
   blocked_count:
   next_lesson: "18장 후보 — 이 폴더의 범위(12~17장) 밖이라 착수 전에 범위를 다시 정한다"
-updated: 2026-11-06
+updated: 2026-11-09
 ---
 
 # TCP/IP Illustrated — 정독 인덱스
@@ -53,6 +53,33 @@ updated: 2026-11-06
 다만 2~8장과 10·11장이 받치는 행(주소·ARP·라우팅·NAT·MTU·ICMP·UDP·DNS)은 이미 CNTD·N&K·network-fundamentals-lab 노트가 채우고 있습니다. 비어 있는 행은 TCP 연결 관리와 운영 쪽에 몰려 있습니다. 4-tuple · 듣는 소켓과 연결 소켓, TIME_WAIT · SYN cookies, EPIPE · SIGPIPE · RST, half-close, keepalive, Nagle · delayed ACK 가 그 행들이라 12~17장부터 시작합니다.
 
 CNTD 와의 경계는 한 문장으로 그을 수 있습니다. CNTD 는 왜 그렇게 설계했는지를 rdt 같은 추상 모델로 쌓습니다. 이 책은 같은 장치를 실제 TCP 구현과 tcpdump 출력으로 보입니다. 그래서 두 정독본은 같은 개념을 두 번 쓰지 않으며 겹치는 자리는 서로의 절로 링크합니다.
+
+
+
+## 전체 목차
+
+> 책은 18장으로, 1~11장이 링크·IP·UDP·DNS 를, 12~17장이 TCP 를, 18장이 보안 프로토콜을 다룹니다. 이 폴더는 12~17장만 정독했습니다.
+
+| 장 | 원제 | 다루는 것 | 이 폴더 |
+|---|---|---|---|
+| 1 | Introduction | 계층 구조와 인터넷 설계 원칙 | 범위 밖 |
+| 2 | The Internet Address Architecture | IPv4·IPv6 주소 체계 | 범위 밖 |
+| 3 | Link Layer | 이더넷·무선 LAN 등 링크 계층 | 범위 밖 |
+| 4 | ARP: Address Resolution Protocol | IP 주소를 링크 주소로 바꾸기 | 범위 밖 |
+| 5 | The Internet Protocol (IP) | IPv4·IPv6 헤더와 포워딩 | 범위 밖 |
+| 6 | System Configuration: DHCP and Autoconfiguration | DHCP 와 주소 자동 설정 | 범위 밖 |
+| 7 | Firewalls and Network Address Translation (NAT) | 방화벽과 NAT | 범위 밖 |
+| 8 | ICMPv4 and ICMPv6: Internet Control Message Protocol | 오류·진단 메시지 | 범위 밖 |
+| 9 | Broadcasting and Local Multicasting (IGMP and MLD) | 브로드캐스트와 멀티캐스트 | 범위 밖 |
+| 10 | User Datagram Protocol (UDP) and IP Fragmentation | UDP 와 IP 단편화 | 범위 밖 |
+| 11 | Name Resolution and the Domain Name System (DNS) | 이름 풀이와 DNS | 범위 밖 |
+| 12 | TCP: The Transmission Control Protocol (Preliminaries) | 신뢰 전달 원리와 TCP 헤더 | 1편 |
+| 13 | TCP Connection Management | 연결 맺기·끊기·상태 | 4편 |
+| 14 | TCP Timeout and Retransmission | RTO 와 재전송 | 3편 |
+| 15 | TCP Data Flow and Window Management | 대화형 전송과 창 관리 | 3편 |
+| 16 | TCP Congestion Control | 혼잡 제어 | 5편 |
+| 17 | TCP Keepalive | 유휴 연결 확인 | 1편 |
+| 18 | Security: EAP, IPsec, TLS, DNSSEC, and DKIM | 인증·IPsec·TLS·DNSSEC·메일 서명 | 범위 밖 |
 
 
 

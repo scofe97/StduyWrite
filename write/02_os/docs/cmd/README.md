@@ -87,6 +87,7 @@ updated: 2026-11-16
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
 | [ls](./file/ls.md) | `ls` | 디렉터리를 나열하고 `-l` 열(종류·권한·`s`·`t`·`+`·링크 수·크기·시각)을 읽거나 정렬·시각 형식을 바꿀 때 |
+| [rsync](./file/rsync.md) | `rsync` | 원본 끝 슬래시에 따라 복사 위치가 바뀌는 것을 알고 동기화하거나, `-a` 에 들지 않는 `-A`·`-X`·`-H` 를 붙이거나, `--delete` 를 `-n` 으로 먼저 볼 때 |
 
 
 
@@ -98,6 +99,8 @@ updated: 2026-11-16
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
+| [umask](./perm/umask.md) | `umask` | 새 파일·디렉터리의 기본 권한을 계산하거나, 영구 설정 자리(`~/.profile`·`/etc/login.defs`·systemd `UMask=`)를 찾을 때 |
+| [getfacl·setfacl](./perm/getfacl%C2%B7setfacl.md) | `getfacl` · `setfacl` | 특정 계정에만 권한을 더하거나, mask 에 깎인 실효 권한(`#effective`)을 읽거나, 기본 ACL 을 물려줄 때 |
 
 
 
@@ -158,6 +161,7 @@ resource 는 쓰이는 양을 재고, 여기는 쓸 수 있는 양에 한도를 
 |------|------------|----------------|
 | [ss](./net/ss.md) | `ss` | 듣는 포트와 연결 상태를 보고, 필터로 좁히고, 소켓 큐와 그 소켓을 쥔 프로세스를 찾을 때 |
 | [netstat](./net/netstat.md) | `netstat` | 듣는 포트·연결·라우팅 표를 옛 도구로 볼 때와 `ss`·`ip` 로 바꿔 쓸 때 |
+| [firewall-cmd](./net/firewall-cmd.md) | `firewall-cmd` | firewalld 의 zone·서비스·포트 규칙을 보고 넣고, runtime 과 permanent 를 나눠 다룰 때 |
 
 
 
@@ -223,6 +227,7 @@ resource 는 쓰이는 양을 재고, 여기는 쓸 수 있는 양에 한도를 
 | [hostnamectl·hostname](./sysinfo/hostnamectl%C2%B7hostname.md) | `hostnamectl` · `hostname` | 호스트 이름을 보거나 영구·임시로 바꿀 때 |
 | [lscpu·nproc](./sysinfo/lscpu%C2%B7nproc.md) | `lscpu` · `nproc` | CPU 개수·구조·캐시를 읽거나, 컨테이너 CPU 제한이 어디에 보이는지 확인할 때 |
 | [dmidecode·lsmem·lshw](./sysinfo/dmidecode%C2%B7lsmem%C2%B7lshw.md) | `dmidecode` · `lsmem` · `lshw` | 서버 모델·메모리 슬롯 정보를 보거나, DMI 표가 없을 때 대신 볼 곳을 찾을 때 |
+| [sysctl](./sysinfo/sysctl.md) | `sysctl` | 커널 매개변수를 읽고, 지금 바꾸고, 설정 파일로 부팅 뒤에도 남길 때 |
 
 
 
@@ -234,6 +239,9 @@ SELinux 와 `update-ca-trust` 는 RHEL 계열 명령이라 이 분류의 출력�
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
+| [getenforce·setenforce·sestatus](./security/getenforce%C2%B7setenforce%C2%B7sestatus.md) | `getenforce`·`setenforce`·`sestatus` | SELinux 모드를 읽고 enforcing·permissive 로 바꿀 때 |
+| [semanage·restorecon·setsebool](./security/semanage%C2%B7restorecon%C2%B7setsebool.md) | `semanage`·`restorecon`·`setsebool` | 경로·포트 규칙, boolean, permissive 도메인을 고치고 라벨을 되돌릴 때 |
+| [ausearch·audit2why·audit2allow](./security/ausearch%C2%B7audit2why%C2%B7audit2allow.md) | `ausearch`·`audit2why`·`audit2allow` | SELinux 거절(AVC)을 찾아 원인을 가르고 정책 모듈을 만들 때 |
 
 
 

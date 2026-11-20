@@ -55,6 +55,9 @@ ps -T
 # 상태 열을 STAT 순으로 늘어놓는다 (STAT 글자 읽기)
 ps -e -o stat,pid,args --sort=stat
 
+# D 상태인 프로세스를 찾아 기다리는 커널 함수를 함께 본다 (D 상태 읽기)
+ps -eo pid,stat,wchan:32,cmd | awk '$2 ~ /^D/'
+
 # 멈춘 프로세스를 이어서 실행한다 (멈춤에서 풀기)
 kill -CONT PID
 
@@ -364,6 +367,44 @@ T       3100 sleep 603
 Z       3125 [bash] <defunct>
 ```
 
+### D 상태 읽기
+
+> `D` 는 커널이 기다리던 일을 끝내기 전에는 시그널로 깨우지 않는 잠이라서, 봐야 할 곳은 프로세스가 아니라 기다리는 대상입니다.
+
+`man ps` 는 `D` 를 "uninterruptible sleep (usually IO)" 로만 적습니다.[^stat] 시그널을 무시하는 일반적인 `D` 는 기다리던 일이 끝나 커널이 깨워야 돌아오므로, `kill -9` 를 보내도 그때까지 프로세스가 남습니다.[^dsleep] 그래서 풀 곳은 프로세스가 아니라 기다리는 디스크나 NFS 서버입니다.
+
+이 시트의 실습 프로세스에는 `D` 가 없고 컨테이너에서도 재현하지 못해서, 아래 명령은 출력을 싣지 않고 꼴만 보입니다.
+
+```bash
+# D 상태인 프로세스와, 그것이 자고 있는 커널 함수 이름을 함께 본다
+#   wchan:32   WCHAN 열을 32자 폭으로 찍는다
+#   awk        두 번째 열 STAT 이 D 로 시작하는 줄만 남긴다
+ps -eo pid,stat,wchan:32,cmd | awk '$2 ~ /^D/'
+```
+
+```bash
+# 찾은 PID 하나의 대기 위치를 직접 읽는다. 아래 PID 는 자리표시다
+# wchan 은 자고 있는 커널 함수 이름이다. 파일 끝에 줄바꿈이 없어 echo 로 줄을 바꾼다
+cat /proc/PID/wchan; echo
+
+# stack 은 그 함수를 부른 호출 순서까지 보인다. ptrace 권한 검사가 걸려 root 로 읽는다
+cat /proc/PID/stack
+
+# State 줄이 D 이면 State: D (disk sleep) 으로 찍힌다
+grep ^State /proc/PID/status
+
+# load average 는 R 과 D 를 함께 센 값이다
+cat /proc/loadavg
+```
+
+`wchan` 과 `stack` 의 정의는 `man ps`·`man proc` 에 있습니다.[^wchan] `stack` 은 `CONFIG_STACKTRACE` 로 빌드한 커널에만 있어서 없을 수 있습니다. 새로 띄운 Debian 12 컨테이너의 root 로 읽었을 때는 `Permission denied` 가 나왔습니다.
+
+`D` 는 load average 에도 들어갑니다.[^loadavg] 그래서 CPU 가 놀고 있어도 `D` 프로세스가 쌓이면 load average 가 높게 나옵니다.
+
+흔한 원인은 응답하지 않는 NFS 서버와 느려진 디스크·스토리지입니다. `hard` 마운트는 시간 초과 뒤에도 요청을 무한히 재시도하고, `soft` 마운트는 `retrans` 번 재전송한 뒤 오류를 돌려줍니다.[^nfs-hard] 서버가 응답하지 않으면 `hard` 마운트를 읽은 프로세스는 요청이 성공할 때까지 `D` 로 기다립니다.
+
+`D` 로 보이는 잠 가운데에는 시그널에 깨어나는 것도 있습니다. 커널에는 치명적 시그널이 오면 깨어나는 `TASK_KILLABLE` 이 있고, 이 잠도 `ps` 에는 같은 `D` 로 보입니다.[^killable] NFS 클라이언트의 RPC 대기도 `TASK_KILLABLE` 로 잡으므로, `D` 를 무엇으로도 죽일 수 없는 상태로 단정하지 않습니다. 글자만으로는 두 잠을 가를 수 없으니 `wchan` 으로 기다리는 위치부터 확인합니다.
+
 ### 멈춤에서 풀기
 
 > `T` 인 `sleep 603` 에 `SIGCONT` 를 보내면 다시 `S` 가 됩니다.
@@ -529,6 +570,9 @@ pkill -9 -x 'worker|yes|sleep|python3'
 - [ps(1) — Debian bookworm](https://manpages.debian.org/bookworm/procps/ps.1.en.html)
 - [pstree(1) — Debian bookworm](https://manpages.debian.org/bookworm/psmisc/pstree.1.en.html)
 - [pgrep(1) — Debian bookworm](https://manpages.debian.org/bookworm/procps/pgrep.1.en.html)
+- [proc(5) — Debian bookworm](https://manpages.debian.org/bookworm/manpages/proc.5.en.html)
+- [nfs(5) — Debian bookworm](https://manpages.debian.org/bookworm/nfs-common/nfs.5.en.html)
+- [TASK_KILLABLE — LWN.net, 2008-07-01](https://lwn.net/Articles/288056/)
 
 [^fmt]: `man ps` OUTPUT FORMAT CONTROL — `-f` "Do full-format listing. This option can be combined with many other UNIX-style options to add additional columns. It also causes the command arguments to be printed.", `-F` "Extra full format.", `-j` "Jobs format.", `-o` "Headers may be renamed (ps -o pid,ruser=RealUser -o comm=Command) as desired. If all column headers are empty (ps -o pid= -o comm=) then the header line will not be output."
 [^forest]: `man ps` OUTPUT MODIFIERS — `--forest` "ASCII art process tree.", `f` "ASCII art process hierarchy (forest).", `-H` "Show process hierarchy (forest)."
@@ -539,4 +583,9 @@ pkill -9 -x 'worker|yes|sleep|python3'
 [^stat]: `man ps` PROCESS STATE CODES — "D uninterruptible sleep (usually IO)", "I Idle kernel thread", "R running or runnable (on run queue)", "S interruptible sleep (waiting for an event to complete)", "T stopped by job control signal", "t stopped by debugger during the tracing", "Z defunct ("zombie") process, terminated but not reaped by its parent". "For BSD formats and when the stat keyword is used, additional characters may be displayed: < high-priority (not nice to other users), N low-priority (nice to other users), L has pages locked into memory, s is a session leader, l is multi-threaded (using CLONE_THREAD, like NPTL pthreads do), + is in the foreground process group".
 [^zombie]: `man ps` NOTES — "Processes marked <defunct> are dead processes (so-called "zombies") that remain because their parent has not destroyed them properly. These processes will be destroyed by init(8) if the parent process exits."
 [^rss]: `man ps` STANDARD FORMAT SPECIFIERS — `vsz` "virtual memory size of the process in KiB (1024-byte units). Device mappings are currently excluded; this is subject to change.", `rss` "resident set size, the non-swapped physical memory that a task has used (in kiloBytes)."
+[^dsleep]: Jonathan Corbet, "TASK_KILLABLE", LWN.net, 2008-07-01 — "The TASK_UNINTERRUPTIBLE state, instead, ignores signals; processes in that state will require an explicit wakeup before they can run again.", "This is the source of the dreaded, unkillable process which is shown to be in the "D" state by ps." 2026-11-17 조회. <https://lwn.net/Articles/288056/>
+[^wchan]: `man ps` (procps-ng 4.0.2) STANDARD FORMAT SPECIFIERS — wchan "name of the kernel function in which the process is sleeping."; `man proc` (Debian bookworm) — "/proc/pid/wchan (since Linux 2.6.0) The symbolic name corresponding to the location in the kernel where the process is sleeping.", "/proc/pid/stack (since Linux 2.6.29) This file provides a symbolic trace of the function calls in this process's kernel stack. This file is provided only if the kernel was built with the CONFIG_STACKTRACE configuration option." 접근은 "ptrace access mode PTRACE_MODE_ATTACH_FSCREDS check" 가 정합니다. `State:` 줄의 `D (disk sleep)` 문구는 Linux v6.1 `fs/proc/array.c` 의 `task_state_array` 에서 확인했습니다. 2026-11-17 조회. <https://manpages.debian.org/bookworm/manpages/proc.5.en.html>, <https://github.com/torvalds/linux/blob/v6.1/fs/proc/array.c>
+[^loadavg]: `man proc` (Debian bookworm) /proc/loadavg — "The first three fields in this file are load average figures giving the number of jobs in the run queue (state R) or waiting for disk I/O (state D) averaged over 1, 5, and 15 minutes." 2026-11-17 조회. <https://manpages.debian.org/bookworm/manpages/proc.5.en.html>
+[^nfs-hard]: `man 5 nfs` (Debian bookworm, nfs-common) soft / hard — "If neither option is specified (or if the hard option is specified), NFS requests are retried indefinitely. If the soft option is specified, then the NFS client fails an NFS request after retrans retransmissions have been sent, causing the NFS client to return an error to the calling application.", "NB: A so-called "soft" timeout can cause silent data corruption in certain cases. As such, use the soft option only when client responsiveness is more important than data integrity." 2026-11-17 조회. <https://manpages.debian.org/bookworm/nfs-common/nfs.5.en.html>
+[^killable]: Linux v6.1 `include/linux/sched.h` — `#define TASK_KILLABLE (TASK_WAKEKILL | TASK_UNINTERRUPTIBLE)`. 상태 글자를 정하는 `TASK_REPORT` 마스크에는 `TASK_WAKEKILL` 이 들어 있지 않아 `TASK_KILLABLE` 도 `D` 로 보고됩니다. `net/sunrpc/sched.c` 의 `rpc_wait_bit_killable` 대기는 `TASK_KILLABLE` 로 잡습니다. LWN "TASK_KILLABLE" (2008-07-01) — "it behaves like TASK_UNINTERRUPTIBLE with the exception that fatal signals will interrupt the sleep", "The NFS client code has been converted" (2.6.26-rc8 기준). `man proc` 은 `K Wakekill (Linux 2.6.33 to 3.13 only)` 를 따로 적습니다. 2026-11-17 조회. <https://github.com/torvalds/linux/blob/v6.1/include/linux/sched.h>, <https://github.com/torvalds/linux/blob/v6.1/net/sunrpc/sched.c>, <https://lwn.net/Articles/288056/>
 [^pstree-exit]: `man pstree` (psmisc 23.6) 의 절 제목 — "NAME", "SYNOPSIS", "DESCRIPTION", "OPTIONS", "FILES", "BUGS", "SEE ALSO". 이 가운데 종료 코드를 적은 절은 없습니다. https://manpages.debian.org/bookworm/psmisc/pstree.1.en.html
