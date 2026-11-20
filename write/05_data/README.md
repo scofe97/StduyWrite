@@ -59,6 +59,7 @@ updated: 2026-11-14
 | [03_persistence/](./03_persistence/README.md) | JDBC·JPA·Spring Data JPA·MyBatis·QueryDSL의 애플리케이션 영속성 계층 | [README](./03_persistence/README.md) |
 | [06_operations/](./06_operations/README.md) | 덤프·로컬 이관·테스트 DB·테스트 트랜잭션 | [README](./06_operations/README.md) |
 | [book/](./book/designing-data-intensive-applications/README.md) | 책 한 권을 장 단위로 정독한 노트 묶음 | [DDIA 2판](./book/designing-data-intensive-applications/README.md) |
+| [docs/](./docs/README.md) | 책이 다루지 않는 주제를 공식 문서·소스로 쓴 노트(커넥션 풀 계획) | [README](./docs/README.md) |
 
 
 

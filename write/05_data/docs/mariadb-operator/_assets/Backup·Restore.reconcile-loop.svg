@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">선언적 CR 과 Operator 리콘사일 제어 루프</title><desc id="dd">CRD 선언부터 컨트롤러 감시, 복구 및 백업 작업 Pod 생성, 스토리지 연동 구조</desc>
+<rect width="960" height="480" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">MARIADB OPERATOR · RECONCILE LOOP ARCHITECTURE</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">선언적 CR 과 Operator 리콘사일 제어 루프</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">사용자 선언 명세와 클러스터 실제 상태를 일치시키는 리콘사일 루프 및 작업 격리 실행</text>
+<rect x="24" y="104" width="202" height="176" rx="8" fill="#6A95D810" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="125" y="128" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#6A95D8">LAYER 1</text>
+<text x="125" y="152" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">선언 계층 (API)</text>
+<text x="125" y="172" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">Custom Resource</text>
+<line x1="36" y1="184" x2="214" y2="184" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="125" y="208" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Backup / Restore CR</text>
+<text x="125" y="230" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">스토리지·주기 정의</text>
+<text x="125" y="252" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Secret 자격 증명 참조</text>
+<path d="M 230 192 L 246 192" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="250" y="104" width="202" height="176" rx="8" fill="#F08A5918" stroke="#F08A59" stroke-width="1.6"/>
+<text x="351" y="128" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#F08A59">LAYER 2</text>
+<text x="351" y="152" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">제어 루프 (Operator)</text>
+<text x="351" y="172" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">Reconcile Controller</text>
+<line x1="262" y1="184" x2="440" y2="184" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="351" y="208" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">API Server Watch 이벤트</text>
+<text x="351" y="230" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">바라는 상태 대조 분석</text>
+<text x="351" y="252" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Job 생성 및 상태 갱신</text>
+<path d="M 456 192 L 472 192" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="476" y="104" width="202" height="176" rx="8" fill="#3FB98C10" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="577" y="128" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#3FB98C">LAYER 3</text>
+<text x="577" y="152" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">작업 실행 (Job)</text>
+<text x="577" y="172" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">Ephemeral Runner</text>
+<line x1="488" y1="184" x2="666" y2="184" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="577" y="208" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">독립 Pod 격리 실행</text>
+<text x="577" y="230" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">mariadb-dump/backup</text>
+<text x="577" y="252" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">메인 DB 부하 분리</text>
+<path d="M 682 192 L 698 192" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="702" y="104" width="202" height="176" rx="8" fill="#E3B34110" stroke="#E3B341" stroke-width="1.0"/>
+<text x="803" y="128" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#E3B341">LAYER 4</text>
+<text x="803" y="152" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">영속 스토리지 계층</text>
+<text x="803" y="172" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">Backup Target</text>
+<line x1="714" y1="184" x2="892" y2="184" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="803" y="208" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">S3 호환 오브젝트 스토리지</text>
+<text x="803" y="230" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">영속 볼륨 (PVC)</text>
+<text x="803" y="252" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">임시 스테이징 PVC</text>
+<rect x="24" y="296" width="912" height="104" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="40" y="310" width="428" height="76" rx="6" fill="#F08A5912" stroke="#F08A59" stroke-width="1.2"/>
+<text x="60" y="332" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F08A59">선언적 리소스 동기화와 생명주기 관리</text>
+<text x="60" y="352" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">일회성 백업은 Job, 주기 백업은 CronJob 으로 리콘사일</text>
+<text x="60" y="370" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">Job 결과를 status.conditions 의 Complete 조건으로 기록</text>
+<rect x="492" y="310" width="428" height="76" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="512" y="332" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">격리된 백업 실행과 데이터베이스 안정성 보호</text>
+<text x="512" y="352" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#F5F5F3">DB 파드 내부 접속 대신 전용 Job Pod 로 덤프 및 복원 수행</text>
+<text x="512" y="370" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="400" fill="#8B98A9">대용량 처리 시 스테이징 PVC 로 노드 로컬 디스크 고갈 방지</text>
+<line x1="12" y1="424" x2="912" y2="424" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="446" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="436" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="122" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">선언 및 스펙</text>
+<rect x="235" y="436" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="257" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">핵심 제어 루프</text>
+<rect x="383" y="436" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="405" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">작업 실행자</text>
+<rect x="505" y="436" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="527" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">스토리지 백엔드</text>
+</svg>

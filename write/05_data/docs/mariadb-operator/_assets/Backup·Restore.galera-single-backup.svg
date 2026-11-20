@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">Galera 단일 노드 백업 원칙과 비복제 테이블 예외 처리</title><desc id="dd">동기 복제 데이터 동일성에 기반한 단일 백업과 MyISAM 및 wsrep 시스템 테이블 예외 제어</desc>
+<rect width="960" height="480" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">GALERA CLUSTER · SINGLE NODE BACKUP ARCHITECTURE</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">Galera 단일 노드 백업 원칙과 비복제 테이블 예외 처리</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">노드 하나의 백업이 클러스터 스냅샷이 되는 이유와 Galera 덤프에서 빼는 세 가지</text>
+<rect x="28" y="104" width="280" height="168" rx="8" fill="#F08A5918" stroke="#F08A59" stroke-width="1.6"/>
+<text x="168" y="128" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#F08A59">BACKUP TARGET NODE</text>
+<text x="168" y="152" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">galera-0 (단일 백업 대상)</text>
+<text x="168" y="172" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">MariaDB 수동 절차 기준</text>
+<line x1="40" y1="184" x2="296" y2="184" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="168" y="208" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">wsrep_desync=ON 복제 적용 멈춤</text>
+<text x="168" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">mariadb-backup 실행</text>
+<text x="168" y="248" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">OFF 로 되돌린 뒤 IST 로 따라잡기</text>
+<rect x="336" y="104" width="280" height="168" rx="8" fill="#6A95D810" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="476" y="128" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#6A95D8">NORMAL TRAFFIC NODE</text>
+<text x="476" y="152" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">galera-1 (서비스 노드)</text>
+<text x="476" y="172" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">클러스터 쿼럼 유지</text>
+<line x1="348" y1="184" x2="604" y2="184" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="476" y="208" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">백업 작업을 맡지 않음</text>
+<text x="476" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 애플리케이션 쿼리 처리</text>
+<text x="476" y="248" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">동기식 인증 복제 유지</text>
+<rect x="644" y="104" width="280" height="168" rx="8" fill="#6A95D810" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="784" y="128" text-anchor="middle" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="10" font-weight="600" fill="#6A95D8">NORMAL TRAFFIC NODE</text>
+<text x="784" y="152" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">galera-2 (서비스 노드)</text>
+<text x="784" y="172" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">클러스터 쿼럼 유지</text>
+<line x1="656" y1="184" x2="912" y2="184" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="784" y="208" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">백업 작업을 맡지 않음</text>
+<text x="784" y="228" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 애플리케이션 쿼리 처리</text>
+<text x="784" y="248" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Primary Component 과반 유지</text>
+<path d="M 312 188 L 332 188" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#ar)"/>
+<path d="M 620 188 L 640 188" fill="none" stroke="#5E6B7E" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="28" y="296" width="904" height="104" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="44" y="310" width="276" height="76" rx="6" fill="#F0616D12" stroke="#F0616D" stroke-width="1.2"/>
+<text x="60" y="332" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">mysql.global_priv 예외</text>
+<text x="60" y="350" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">MyISAM 비복제 테이블 유실 방지</text>
+<text x="60" y="368" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">ignoreGlobalPriv 로 덤프 제외</text>
+<rect x="340" y="310" width="276" height="76" rx="6" fill="#E3B34112" stroke="#E3B341" stroke-width="1.2"/>
+<text x="356" y="332" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#E3B341">mysql.wsrep_* 예외</text>
+<text x="356" y="350" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">복원 때 DROP 거부(ERROR 1142) 회피</text>
+<text x="356" y="368" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">--ignore-table 로 덤프에서 자동 제외</text>
+<rect x="636" y="310" width="276" height="76" rx="6" fill="#3FB98C12" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="652" y="332" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">LOCK TABLES 호환성</text>
+<text x="652" y="350" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">Galera 와 호환되지 않는 구문</text>
+<text x="652" y="368" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">dump 시 --skip-add-locks 주입</text>
+<line x1="12" y1="424" x2="912" y2="424" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="446" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="436" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="122" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">단일 백업 대상 노드</text>
+<rect x="287" y="436" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="309" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 서비스 노드</text>
+<rect x="448" y="436" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="470" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">인증 테이블 위험 예방</text>
+<rect x="648" y="436" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="670" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">클러스터 테이블 보호</text>
+<rect x="835" y="436" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="857" y="446" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">호환성 옵션</text>
+</svg>

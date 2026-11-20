@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="100%" role="img" aria-labelledby="dt dd">
+<defs>
+<marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8B98A9"/></marker>
+<marker id="ok" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3FB98C"/></marker>
+<marker id="warn" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#E3B341"/></marker>
+<marker id="bad" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F0616D"/></marker>
+<marker id="info" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#6A95D8"/></marker>
+<marker id="acc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#F08A59"/></marker>
+<marker id="soft" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#5E6B7E"/></marker>
+</defs>
+<title id="dt">IST 와 SST 의 상태 전송 경로와 Donor 영향</title><desc id="dd">빠진 트랜잭션만 전달하는 증분 전송과 전체 스냅샷 복사 방식의 데이터 흐름 및 잠금 차이</desc>
+<rect width="960" height="480" fill="#0D1117"/>
+<text x="12" y="26" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" letter-spacing="0.18em" fill="#5E6B7E">GALERA REPLICATION · STATE TRANSFERS</text>
+<text x="12" y="52" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="600" fill="#F5F5F3">IST 와 SST 의 상태 전송 경로와 Donor 영향</text>
+<text x="12" y="74" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" fill="#8B98A9">GCache 기반 비차단 증분 전송(IST)과 스냅샷 백업 전송(SST)의 분기 구조</text>
+<rect x="36" y="104" width="888" height="144" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="52" y="120" width="120" height="28" rx="4" fill="#3FB98C18" stroke="#3FB98C" stroke-width="1.2"/>
+<text x="112" y="138" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">IST (증분 전송)</text>
+<rect x="52" y="156" width="216" height="76" rx="6" fill="#6A95D810" stroke="#6A95D8" stroke-width="1.0"/>
+<text x="160" y="178" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">Joiner 재연결</text>
+<text x="160" y="198" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">마지막 seqno 전달</text>
+<text x="160" y="216" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">클러스터 UUID 대조</text>
+<path d="M 272 194 L 292 194" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="296" y="156" width="216" height="76" rx="6" fill="#F08A5918" stroke="#F08A59" stroke-width="1.6"/>
+<text x="404" y="178" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">Donor GCache 조회</text>
+<text x="404" y="198" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">누락 write-set 추출</text>
+<text x="404" y="216" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">캐시 링 버퍼 범위 확인</text>
+<path d="M 516 194 L 536 194" fill="none" stroke="#8B98A9" stroke-width="1.2" marker-end="url(#ar)"/>
+<rect x="540" y="156" width="216" height="76" rx="6" fill="#3FB98C10" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="648" y="178" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F5F5F3">증분 스트리밍 적용</text>
+<text x="648" y="198" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#5E6B7E">Joiner 동기화 완료</text>
+<text x="648" y="216" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">Donor 정상 쿼리 수용</text>
+<rect x="776" y="156" width="132" height="76" rx="6" fill="#3FB98C08" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="842" y="180" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#3FB98C">Donor 상태 영향</text>
+<text x="842" y="200" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">읽기·쓰기 차단 없음</text>
+<text x="842" y="218" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">고속 상태 동기화</text>
+<rect x="36" y="264" width="888" height="144" rx="8" fill="#161B22" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<rect x="52" y="280" width="120" height="28" rx="4" fill="#E3B34118" stroke="#E3B341" stroke-width="1.2"/>
+<text x="112" y="298" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">SST (스냅샷 전송)</text>
+<rect x="52" y="316" width="340" height="76" rx="6" fill="#F0616D10" stroke="#F0616D" stroke-width="1.0"/>
+<text x="72" y="338" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#F0616D">rsync 방식 (기본값, 차단형 전송)</text>
+<text x="72" y="358" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">Donor 에 읽기 잠금</text>
+<text x="72" y="376" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">전송 내내 Donor 쓰기 차단</text>
+<rect x="420" y="316" width="340" height="76" rx="6" fill="#3FB98C10" stroke="#3FB98C" stroke-width="1.0"/>
+<text x="440" y="338" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#3FB98C">mariadb-backup 방식 (비차단형 물리 백업)</text>
+<text x="440" y="358" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">복사 중에도 쿼리 수용</text>
+<text x="440" y="376" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">백업 끝에만 잠깐 전역 잠금</text>
+<rect x="780" y="316" width="128" height="76" rx="6" fill="#E3B34108" stroke="#E3B341" stroke-width="1.0"/>
+<text x="844" y="340" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#E3B341">전환 발생 조건</text>
+<text x="844" y="360" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#F5F5F3">GCache 이력 누락 시</text>
+<text x="844" y="378" text-anchor="middle" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">신규 노드 최초 합류</text>
+<line x1="12" y1="428" x2="912" y2="428" stroke="rgba(191,192,192,0.22)" stroke-width="0.8"/>
+<text x="12" y="450" text-anchor="start" font-family="'Geist Mono','Noto Sans Mono CJK KR',monospace" font-size="8" font-weight="400" fill="#5E6B7E">LEGEND</text>
+<rect x="100" y="440" width="14" height="12" rx="2" fill="#3FB98C22" stroke="#3FB98C" stroke-width="1.1"/>
+<text x="122" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">정상 수용 및 비차단</text>
+<rect x="287" y="440" width="14" height="12" rx="2" fill="#F08A5922" stroke="#F08A59" stroke-width="1.1"/>
+<text x="309" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">핵심 캐시 추출</text>
+<rect x="435" y="440" width="14" height="12" rx="2" fill="#6A95D822" stroke="#6A95D8" stroke-width="1.1"/>
+<text x="457" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">식별자 및 순번 대조</text>
+<rect x="622" y="440" width="14" height="12" rx="2" fill="#E3B34122" stroke="#E3B341" stroke-width="1.1"/>
+<text x="644" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">조건부 전송</text>
+<rect x="744" y="440" width="14" height="12" rx="2" fill="#F0616D22" stroke="#F0616D" stroke-width="1.1"/>
+<text x="766" y="450" text-anchor="start" font-family="'Geist','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#8B98A9">잠금 및 쿼리 차단</text>
+</svg>
