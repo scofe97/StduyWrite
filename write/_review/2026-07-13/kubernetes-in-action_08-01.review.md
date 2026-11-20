@@ -58,4 +58,4 @@ quality 3을 기준으로 2026-07-16에 다시 확인합니다. 다음 회차에
 ## 관련 자료
 
 - [원본 학습 문서](../../08_cloud/book/kubernetes-in-action/08-01.command%C2%B7args%EC%99%80%20%ED%99%98%EA%B2%BD%EB%B3%80%EC%88%98.md)
-- 실습: `study/k8s_in_action/08-configuring-apps/command-env/`
+- 실습: `study/runners-lab/k8s/k8s-in-action/08-configuring-apps/command-env/`

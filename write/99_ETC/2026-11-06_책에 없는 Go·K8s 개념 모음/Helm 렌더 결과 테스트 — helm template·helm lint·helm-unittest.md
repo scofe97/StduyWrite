@@ -238,5 +238,5 @@ steps:
 
 ## 관련 문서
 
-- [Helm 고급](../../08_cloud/docs/helm/01-02.Helm 고급.md) — `helm template` 워크플로우와 `kubeconform`
-- [Helm 기초](../../08_cloud/docs/helm/01-01.Helm 기초.md) — `helm template` 과 `--dry-run` 차이
+- [Helm 고급](../../07_devops/docs/iac/01-02.Helm 고급.md) — `helm template` 워크플로우와 `kubeconform`
+- [Helm 기초](../../07_devops/docs/iac/01-01.Helm 기초.md) — `helm template` 과 `--dry-run` 차이

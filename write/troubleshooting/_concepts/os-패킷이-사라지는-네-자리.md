@@ -241,6 +241,8 @@ sudo sysctl --system
 
 이름 규칙 하나를 알면 외울 것이 줄어듭니다. `sysctl` 의 점은 `/proc/sys/` 아래 슬래시와 1:1 로 대응합니다. `net.netfilter.nf_conntrack_max` 는 곧 `/proc/sys/net/netfilter/nf_conntrack_max` 입니다.
 
+`--system` 은 `/etc/sysctl.d/` 와 `/usr/lib/sysctl.d/` 의 파일을 디렉터리와 상관없이 이름 순서로 읽습니다. 같은 키를 적은 파일이 둘이면 이름이 뒤인 파일의 값이 이깁니다. 이름 앞 번호는 `/etc` 에서 60~90 을 쓰라고 권합니다([sysctl.d(5)](https://www.freedesktop.org/software/systemd/man/latest/sysctl.d.html), 2026-11-17 확인). 명령 옵션과 읽는 순서 실측은 [sysctl 참조 시트](../../02_os/docs/cmd/sysinfo/sysctl.md)에 있습니다.
+
 컨테이너 안에서 읽으면 안 됩니다. conntrack 테이블은 노드 커널의 것이라 Pod 에서는 값이 없거나 다르게 보입니다. 증상이 나는 노드에 직접 들어가서 읽습니다.
 
 ### 한도를 커널이 하드웨어에서 유도합니다

@@ -155,7 +155,7 @@ quality ≤ 3인 질문을 `write/08_cloud/book/kubernetes-in-action/_mistakes.m
 
 - [원본 학습 문서](../../08_cloud/book/kubernetes-in-action/08-01.command%C2%B7args%EC%99%80%20%ED%99%98%EA%B2%BD%EB%B3%80%EC%88%98.md)
 - 이전 회차: [회차 1 (2026-07-13)](../2026-07-13/kubernetes-in-action_08-01.review.md)
-- 실습: `study/k8s_in_action/08-configuring-apps/command-env/`
+- 실습: `study/runners-lab/k8s/k8s-in-action/08-configuring-apps/command-env/`
 
 
 ## 정답 (자답 후 펼치기)

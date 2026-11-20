@@ -231,5 +231,5 @@ return newVals, nil
 
 ## 관련 문서
 
-- [Helm 기초](../../08_cloud/docs/helm/01-01.Helm 기초.md) — values 우선순위와 `--reuse-values` 비권장 언급
-- [Helm 고급](../../08_cloud/docs/helm/01-02.Helm 고급.md)
+- [Helm 기초](../../07_devops/docs/iac/01-01.Helm 기초.md) — values 우선순위와 `--reuse-values` 비권장 언급
+- [Helm 고급](../../07_devops/docs/iac/01-02.Helm 고급.md)

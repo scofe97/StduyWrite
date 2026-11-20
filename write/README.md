@@ -61,7 +61,7 @@ updated: 2026-10-06
 | [ai-keywords.md](10_AI/ai-keywords.md) | 모델을 도구로 부리는 법에서 GitAIOps 운영까지 | `final` |
 | [spring-keywords.md](09_spring/spring-keywords.md) | 컨테이너와 프록시에서 부트·보안·운영·배포까지 | `final` |
 
-키워드 표는 개념마다 우선순위와 그 개념을 다루는 노트·책을 함께 둡니다. 외부 AI 요약은 `_digest/` 에 `YYYY-MM-DD_주제.md` 로 둡니다. 출처·날짜·분야·미검증을 머리 한 줄에 적고, Pages 에는 올라가지 않습니다.
+키워드 표는 개념마다 우선순위와 그 개념을 다루는 노트·책을 함께 둡니다. 외부 AI 요약은 `_digest/<분야>/` 에 `YYYY-MM-DD_주제.md` 로 둡니다. 출처·날짜·분야·미검증을 머리 한 줄에 적고, Pages 에는 올라가지 않습니다.
 
 OS 기반은 `os-keywords.md`, Kubernetes 오브젝트와 운영은 `k8s-keywords.md`, 패킷 경로는 `network-keywords.md`를 정본으로 봅니다.
 

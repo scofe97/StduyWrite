@@ -281,4 +281,4 @@ kubectl get --raw "/api/v1/nodes/<노드>/proxy/metrics/resource" | head -20
 
 ## 관련 문서
 
-- [자원 모니터링 파이프라인 — kubelet이 재는 것과 kubectl top이 읽는 것](../../08_cloud/docs/kubernetes/03_operations/03-01.자원%20모니터링%20파이프라인%20—%20kubelet이%20재는%20것과%20kubectl%20top이%20읽는%20것.md) — cAdvisor → kubelet → metrics-server → `kubectl top` 흐름
+- [자원 모니터링 파이프라인 — kubelet이 재는 것과 kubectl top이 읽는 것](../../08_cloud/docs/kubernetes/operations/자원%20모니터링%20파이프라인.md) — cAdvisor → kubelet → metrics-server → `kubectl top` 흐름

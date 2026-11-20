@@ -148,7 +148,7 @@ quality ≤ 3인 질문을 `write/08_cloud/book/kubernetes-in-action/_mistakes.m
 
 - [원본 학습 문서](../../08_cloud/book/kubernetes-in-action/08-02.ConfigMap%EC%9C%BC%EB%A1%9C%20%EC%84%A4%EC%A0%95%20%EB%B6%84%EB%A6%AC%ED%95%98%EA%B8%B0.md)
 - 이전 회차: [회차 1 (2026-07-14)](../2026-07-14/kubernetes-in-action_08-02.review.md)
-- 실습: `study/k8s_in_action/08-configuring-apps/configmap/`
+- 실습: `study/runners-lab/k8s/k8s-in-action/08-configuring-apps/configmap/`
 
 
 ## 정답 (자답 후 펼치기)
