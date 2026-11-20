@@ -36,7 +36,7 @@
 | 특권 DaemonSet | 노드마다 한 개씩 떠서 다른 파드의 네임스페이스에 들어가 일하는 인프라 파드 | [Daemon Service](../../08_cloud/book/kubernetes-patterns/09-01.Daemon Service — 노드마다 도는 인프라 Pod.md) (일부: 노드마다 도는 DaemonSet, 특권으로 남의 네임스페이스를 조작하는 경우 없음) |
 | `tc`·netem | 인터페이스 큐(qdisc)에 지연·손실·차단 규칙을 거는 Linux 트래픽 제어 | [iptables·IPVS·eBPF](../../08_cloud/book/networking-and-kubernetes/02-03.iptables·IPVS·eBPF — kube-proxy를 이해하는 세 기술.md) (일부: TC 훅과 qdisc 확인, netem 지연 주입 없음) |
 | 네트워크 네임스페이스·nsenter | 파드마다 따로인 네트워크 공간과 그 안에 들어가 명령을 실행하는 도구 | [커널이 패킷을 주고받는 자리](../../08_cloud/book/networking-and-kubernetes/02-01.커널이 패킷을 주고받는 자리 — 소켓·인터페이스·veth·브리지.md) |
-| Finalizer 원복 보장 | 정리 작업이 끝날 때까지 리소스 삭제를 막아 두는 표시 | [Application 관리하기](../../08_cloud/book/argocd-up-and-running/04-01.Application 관리하기 — 소스·대상·Helm·Kustomize 와 삭제·finalizer.md) (일부: Argo CD 삭제 finalizer, 커널 규칙 원복 뒤 삭제 없음) |
+| Finalizer 원복 보장 | 정리 작업이 끝날 때까지 리소스 삭제를 막아 두는 표시 | [Application 관리하기](../../07_devops/book/argocd-up-and-running/04-01.Application 관리하기 — 소스·대상·Helm·Kustomize 와 삭제·finalizer.md) (일부: Argo CD 삭제 finalizer, 커널 규칙 원복 뒤 삭제 없음) |
 | Chaos Workflow 시점 고정 | 병렬·대기 노드로 두 장애가 겹치는 순간을 매번 같게 만드는 실험 정의 | |
 | Lease 리더 선출 | Lease 객체를 잡은 파드 하나만 리더로 일하는 Active-Standby 방식 | [Singleton Service](../../08_cloud/book/kubernetes-patterns/10-01.Singleton Service — 한 번에 하나만 활성이되 고가용.md) |
 | Failover·Split-Brain·펜싱 | 리더 장애 때 승격하되 옛 리더가 계속 쓰지 못하게 막는 문제 | [노드 장애 처리와 복제 로그](../../05_data/book/designing-data-intensive-applications/06-02.노드 장애 처리와 복제 로그.md) |

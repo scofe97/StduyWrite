@@ -6,8 +6,8 @@ source:
   - ../../../poc/03_CloudNative/02-kubernetes/learning/06-helm-advanced/LEARN.md@8ac9e97
   - https://helm.sh/docs/chart_template_guide/
 related:
-  - 01-01.Helm%20%EA%B8%B0%EC%B4%88.md
-  - 02-01.Kustomize.md
+  - Helm%20%EA%B8%B0%EC%B4%88.md
+  - Kustomize.md
   - ../../kubernetes/08_extending/08-01.Operator%20%ED%8C%A8%ED%84%B4.md
 updated: 2026-07-11
 ---
@@ -719,6 +719,6 @@ Ch07에서는 Operator 패턴을 다룹니다. Helm이 배포 패키지화를 �
 
 
 ## 관련 문서
-> 기초 장, 다음 장, 점검 문서를 함께 둡니다.
+> 기초 편, 다음 편, 점검 문서를 함께 둡니다.
 
-- [Helm 기초](01-01.Helm%20%EA%B8%B0%EC%B4%88.md) — 이전 장, install·upgrade·rollback 워크플로우
+- [Helm 기초](Helm%20%EA%B8%B0%EC%B4%88.md) — 이전 편, install·upgrade·rollback 워크플로우

@@ -7,7 +7,8 @@ related:
   - kubernetes/README.md
   - cncf-certification/README.md
   - istio/README.md
-updated: 2026-11-15
+  - cmd/README.md
+updated: 2026-11-21
 ---
 
 # 08_cloud/docs — 공식 문서·제품 사이트 정독
@@ -27,6 +28,8 @@ updated: 2026-11-15
 | [istio/](istio/README.md) | istio.io 공식 문서 |
 
 Helm·Kustomize 와 Argo Rollouts 는 쿠버네티스 위에서 쓰지만 플랫폼보다 전달 절차에 속해서 [07_devops/docs](../../07_devops/README.md) 로 옮겼습니다. 각각 [`iac/`](../../07_devops/docs/iac/README.md) 와 [`deployment/`](../../07_devops/docs/deployment/README.md) 개념 폴더에 있습니다.
+
+[`cmd/`](cmd/README.md) 는 제품 폴더가 아니라 컨테이너·쿠버네티스 명령어 시트 자리입니다. 지금은 docker 이미지 반입 시트 한 편이 있고, 나머지는 분류와 후보 명령만 정해 두었습니다.
 
 제품 안의 하위 폴더 규칙은 그 폴더의 README 가 정합니다. `kubernetes/` 는 파일명에 번호를 붙이지 않고 문서를 묶음 폴더 넷(`architecture/`·`scheduling/`·`operations/`·`api/`)에 나눠 둡니다. 새 제품을 다루게 되면 그 제품 폴더를 만들고 이 표에 한 줄을 더합니다.
 

@@ -27,8 +27,8 @@ updated: 2026-10-06
 | 04 | [`04_messaging/`](04_messaging/) | Kafka·Redpanda·Avro·Schema Registry, 이벤트 기반 아키텍처 구현 |
 | 05 | [`05_data/`](05_data/) | 분산 이론(CAP·합의·트랜잭션)부터 DB·CDC·QueryDSL까지 |
 | 06 | [`06_observability/`](06_observability/) | 로깅·트레이싱·메트릭·OpenTelemetry |
-| 07 | [`07_devops/`](07_devops/) | CI/CD·Jenkins·Nexus·SonarQube |
-| 08 | [`08_cloud/`](08_cloud/) | Kubernetes·Service Mesh·ArgoCD·OpenStack |
+| 07 | [`07_devops/`](07_devops/) | CI/CD·Jenkins·Nexus·SonarQube·ArgoCD |
+| 08 | [`08_cloud/`](08_cloud/) | Kubernetes·Service Mesh·OpenStack |
 | — | [`99_ETC/security/`](99_ETC/security/) | OAuth/JWT·OWASP·Spring Security |
 | 09 | [`09_spring/`](09_spring/) | Spring 본질 이론. 도메인과 얽힌 Spring 문서는 각 카테고리에 흩어져 있고, 이 폴더가 집계점 |
 | 10 | [`10_AI/`](10_AI/) | 생성형 AI·에이전트 활용 |

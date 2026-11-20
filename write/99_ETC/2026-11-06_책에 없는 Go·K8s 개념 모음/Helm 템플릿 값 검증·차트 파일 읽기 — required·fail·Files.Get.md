@@ -255,5 +255,5 @@ cfg: {{ .Files.Get "config/app.properties" | quote }} => cfg: "log.level=info\n"
 
 ## 관련 문서
 
-- [Helm 고급](../../07_devops/docs/iac/01-02.Helm 고급.md) — `values.schema.json`·`helm template` 워크플로우
-- [Helm 기초](../../07_devops/docs/iac/01-01.Helm 기초.md)
+- [Helm 고급](../../07_devops/docs/iac/Helm 고급.md) — `values.schema.json`·`helm template` 워크플로우
+- [Helm 기초](../../07_devops/docs/iac/Helm 기초.md)

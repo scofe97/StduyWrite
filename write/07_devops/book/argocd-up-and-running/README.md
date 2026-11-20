@@ -7,9 +7,9 @@ source:
   - 챕터 PDF 폴더 — GoogleDrive/내 드라이브/book/Argo CD Up and Running/ (서문 + 14개 장)
   - https://www.schweitzer-online.de/en/buch/Block/Argo-CD-Up-Running/9781098142001/A71915297/  # 저자·출판사·출판일(2025-07-01 표기)·ISBN-13·280쪽·저자 소개 확인 (2026-11-06 조회)
 related:
-  - ../cks-study-guide/README.md
-  - ../kubernetes-up-and-running/README.md
-  - ../../../07_devops/devops-keywords.md
+  - ../../../08_cloud/book/cks-study-guide/README.md
+  - ../../../08_cloud/book/kubernetes-up-and-running/README.md
+  - ../../devops-keywords.md
   - ../../README.md
 learning:
   topic: argocd-up-and-running
@@ -18,7 +18,7 @@ learning:
   last_verified:
   blocked_count:
   next_lesson: "없음 — 14장 정독 노트 작성 완료"
-updated: 2026-11-08
+updated: 2026-11-21
 ---
 
 # Argo CD Up and Running — 정독 인덱스
@@ -31,15 +31,15 @@ updated: 2026-11-08
 
 ### 클러스터 위에 놓이는 GitOps·CD 계층
 
-`08_cloud`는 "클러스터 내부에서 어떻게 돌아가는가"를 다루는 카테고리입니다. 이 책은 그 위에서 **GitOps**(Git 저장소에 적어 둔 선언을 기준 상태로 삼아 인프라와 애플리케이션을 관리하는 방식)를 실현하는 도구 Argo CD 를 다룹니다.
+`08_cloud`는 "클러스터 내부에서 어떻게 돌아가는가"를 다루고, `07_devops`는 만든 것을 클러스터까지 전달하는 절차를 다룹니다. 이 책은 그 전달 절차 가운데 **GitOps**(Git 저장소에 적어 둔 선언을 기준 상태로 삼아 인프라와 애플리케이션을 관리하는 방식)를 실현하는 도구 Argo CD 를 다룹니다.
 
 저자 두 사람은 각각 Helm 과 OpenGitOps 쪽 메인테이너로 소개됩니다.[^author] 서문은 GitOps 가 쿠버네티스에서 플랫폼 관리의 초석이 되었다고 설명합니다. 그 방식을 구현하는 도구로는 Argo CD 가 가장 널리 쓰인다고 덧붙입니다. 그래서 이 책은 개념 소개에 머물지 않습니다. 설치와 Application 에서 출발해 동기화, 인증, 멀티테넌시, 보안, 대규모 배포, 확장, CI 연동, 운영 순서로 한 도구를 따라갑니다.
 
 ### 형제 책과 보는 층의 차이
 
-[『Kubernetes: Up and Running』](../kubernetes-up-and-running/README.md)은 쿠버네티스 오브젝트와 클러스터 운영을 다룹니다. 무엇을 클러스터에 올리는가가 질문입니다.
+[『Kubernetes: Up and Running』](../../../08_cloud/book/kubernetes-up-and-running/README.md)은 쿠버네티스 오브젝트와 클러스터 운영을 다룹니다. 무엇을 클러스터에 올리는가가 질문입니다.
 
-[『CKS Study Guide』](../cks-study-guide/README.md)는 기본 설정이 열어 둔 공격 표면을 닫는 하드닝 절차를 다룹니다. 이 책의 9장 보안은 Argo CD 자신의 TLS, 저장소 자격 증명, 서명 검증, 동기화 권한을 다루므로 클러스터 하드닝은 그쪽에 맡깁니다.
+[『CKS Study Guide』](../../../08_cloud/book/cks-study-guide/README.md)는 기본 설정이 열어 둔 공격 표면을 닫는 하드닝 절차를 다룹니다. 이 책의 9장 보안은 Argo CD 자신의 TLS, 저장소 자격 증명, 서명 검증, 동기화 권한을 다루므로 클러스터 하드닝은 그쪽에 맡깁니다.
 
 이 책의 질문은 올릴 대상을 Git 에 적어 두고, 클러스터가 그 선언을 계속 따라가게 하려면 무엇이 필요한가입니다.
 
@@ -47,11 +47,11 @@ updated: 2026-11-08
 
 옛 argocd/ 노트 16편은 이 책을 바탕으로 쓴 것이었습니다. 16편 가운데 14편은 frontmatter `source` 에 `docs/03_CloudNative/03_ArgoCD/NN_<장 이름>.md` 를 적었고, 그 장 이름이 이 책의 장 이름과 같습니다. 다만 책의 서지가 어디에도 적혀 있지 않아 출처가 끊긴 상태였습니다.
 
-장별 정독 노트를 쓰면서 옛 노트와 그 `deepdive/` 점검 질문, [ArgoCD와 GitOps](../../kubernetes/11_devtools/11-03.ArgoCD%EC%99%80%20GitOps.md), [ArgoCD App-of-Apps 패턴](../../../99_ETC/2026-04-19_ArgoCD%20App-of-Apps%20%ED%8C%A8%ED%84%B4.md)을 보충 재료로 흡수했습니다. 모든 장이 흡수되어 옛 `argocd/` 폴더는 정리했습니다. 옛 노트 04-03 Argo Rollouts 는 책에 대응하는 장이 없어 [docs/deployment/](../../../07_devops/docs/deployment/README.md) 로 옮겼습니다.
+장별 정독 노트를 쓰면서 옛 노트와 그 `deepdive/` 점검 질문, [ArgoCD와 GitOps](../../docs/deployment/ArgoCD%C2%B7GitOps.md), [ArgoCD App-of-Apps 패턴](../../../99_ETC/2026-04-19_ArgoCD%20App-of-Apps%20%ED%8C%A8%ED%84%B4.md)을 보충 재료로 흡수했습니다. 모든 장이 흡수되어 옛 `argocd/` 폴더는 정리했습니다. 옛 노트 04-03 Argo Rollouts 는 책에 대응하는 장이 없어 [docs/deployment/](../../docs/deployment/README.md) 로 옮겼습니다.
 
 ### 로드맵 속 자리
 
-[DevOps 로드맵](../../../07_devops/devops-keywords.md)의 5단계 GitOps 는 개념 행 네 개로 나뉩니다. 대응하는 장은 다음과 같습니다. GitOps 원칙과 선언은 1~3장, 동기화와 배포 제어는 4·5장, 대규모 배포와 테넌시는 7·8·10장입니다. 환경 승격과 연계는 12장과 14장의 GitOps Promotions 절에 대응합니다.
+[DevOps 로드맵](../../devops-keywords.md)의 5단계 GitOps 는 개념 행 네 개로 나뉩니다. 대응하는 장은 다음과 같습니다. GitOps 원칙과 선언은 1~3장, 동기화와 배포 제어는 4·5장, 대규모 배포와 테넌시는 7·8·10장입니다. 환경 승격과 연계는 12장과 14장의 GitOps Promotions 절에 대응합니다.
 
 6단계 점진 배포의 Argo Rollouts 행에는 대응하는 장이 없습니다. 14장은 Argo CD 가 점진 배포를 직접 하지 않고 Argo Rollouts 같은 다른 도구에 맡긴다고 짧게 밝힙니다. 세부는 책의 범위 밖이라고 선을 긋습니다. 10장의 Progressive Sync 는 ApplicationSet 이 Application 을 단계적으로 동기화하는 기능입니다. 트래픽을 나누는 점진 배포와는 다른 것입니다.
 
@@ -92,7 +92,7 @@ updated: 2026-11-08
 
 | 편 | 제목 | 상태 | 보충 재료 |
 |----|------|------|----------|
-| 01-01 | [Argo CD 가 푸는 문제 — GitOps 원칙과 Argo 생태계](./01-01.Argo%20CD%20%EA%B0%80%20%ED%91%B8%EB%8A%94%20%EB%AC%B8%EC%A0%9C%20%E2%80%94%20GitOps%20%EC%9B%90%EC%B9%99%EA%B3%BC%20Argo%20%EC%83%9D%ED%83%9C%EA%B3%84.md) | 작성 완료 | 흡수 완료(옛 01-01), [ArgoCD와 GitOps (kubernetes/11-03)](../../kubernetes/11_devtools/11-03.ArgoCD%EC%99%80%20GitOps.md) |
+| 01-01 | [Argo CD 가 푸는 문제 — GitOps 원칙과 Argo 생태계](./01-01.Argo%20CD%20%EA%B0%80%20%ED%91%B8%EB%8A%94%20%EB%AC%B8%EC%A0%9C%20%E2%80%94%20GitOps%20%EC%9B%90%EC%B9%99%EA%B3%BC%20Argo%20%EC%83%9D%ED%83%9C%EA%B3%84.md) | 작성 완료 | 흡수 완료(옛 01-01), [ArgoCD와 GitOps (docs/deployment, 옛 kubernetes/11-03)](../../docs/deployment/ArgoCD%C2%B7GitOps.md) |
 | 02-01 | [Argo CD 설치하기 — 구성 요소·설치 유형·매니페스트와 Helm](./02-01.Argo%20CD%20%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0%20%E2%80%94%20%EA%B5%AC%EC%84%B1%20%EC%9A%94%EC%86%8C%C2%B7%EC%84%A4%EC%B9%98%20%EC%9C%A0%ED%98%95%C2%B7%EB%A7%A4%EB%8B%88%ED%8E%98%EC%8A%A4%ED%8A%B8%EC%99%80%20Helm.md) | 작성 완료 | 흡수 완료(옛 01-02) |
 | 03-01 | [Argo CD 와 상호작용하기 — UI·CLI·REST API 와 선언적 구성](./03-01.Argo%20CD%20%EC%99%80%20%EC%83%81%ED%98%B8%EC%9E%91%EC%9A%A9%ED%95%98%EA%B8%B0%20%E2%80%94%20UI%C2%B7CLI%C2%B7REST%20API%20%EC%99%80%20%EC%84%A0%EC%96%B8%EC%A0%81%20%EA%B5%AC%EC%84%B1.md) | 작성 완료 | 흡수 완료(옛 01-03) |
 | 04-01 | [Application 관리하기 — 소스·대상·Helm·Kustomize 와 삭제·finalizer](./04-01.Application%20%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0%20%E2%80%94%20%EC%86%8C%EC%8A%A4%C2%B7%EB%8C%80%EC%83%81%C2%B7Helm%C2%B7Kustomize%20%EC%99%80%20%EC%82%AD%EC%A0%9C%C2%B7finalizer.md) | 작성 완료 | 흡수 완료(옛 02-01) |
@@ -166,11 +166,11 @@ Argo CD 는 버전마다 CRD 필드와 기능 상태가 바뀝니다. 그래서 
 
 ## 관련 문서
 
-- [『CKS Study Guide』 정독본](../cks-study-guide/README.md) — 같은 `book/` 영역, 클러스터 하드닝 절차의 짝이자 9장 보안과 층이 다른 비교 대상
-- [『Kubernetes: Up and Running』 정독본](../kubernetes-up-and-running/README.md) — 오브젝트와 운영 관점의 짝, Application 이 배포하는 대상의 기초
-- [Argo Rollouts 정독](../../../07_devops/docs/deployment/README.md) — 이 책에 대응하는 장이 없어 옛 argocd/ 노트에서 옮긴 Rollouts 두 편
-- [DevOps 로드맵](../../../07_devops/devops-keywords.md) — 5단계 GitOps·6단계 점진 배포에서 이 주제가 놓인 자리
-- [08_cloud MOC](../../README.md) — 상위 카테고리 경계
+- [『CKS Study Guide』 정독본](../../../08_cloud/book/cks-study-guide/README.md) — 08_cloud 의 `book/` 영역, 클러스터 하드닝 절차의 짝이자 9장 보안과 층이 다른 비교 대상
+- [『Kubernetes: Up and Running』 정독본](../../../08_cloud/book/kubernetes-up-and-running/README.md) — 오브젝트와 운영 관점의 짝, Application 이 배포하는 대상의 기초
+- [Argo Rollouts 정독](../../docs/deployment/README.md) — 이 책에 대응하는 장이 없어 옛 argocd/ 노트에서 옮긴 Rollouts 두 편
+- [DevOps 로드맵](../../devops-keywords.md) — 5단계 GitOps·6단계 점진 배포에서 이 주제가 놓인 자리
+- [07_devops MOC](../../README.md) — 상위 카테고리 경계
 
 [^author]: 저자 소개는 서점 목록 페이지(https://www.schweitzer-online.de/en/buch/Block/Argo-CD-Up-Running/9781098142001/A71915297/, 2026-11-06 조회)에 실린 소개문을 따릅니다. Andrew Block 은 Helm 의 핵심 메인테이너이자 『Managing Kubernetes Resources Using Helm』 등 클라우드 네이티브 책을 쓴 저자이고, Christian Hernandez 는 OpenGitOps 프로젝트 메인테이너이자 Argo Project 구성원입니다. 서문의 감사의 말도 두 사람이 Argo 프로젝트와 GitOps 커뮤니티에서 오래 활동했다고 밝힙니다.
 

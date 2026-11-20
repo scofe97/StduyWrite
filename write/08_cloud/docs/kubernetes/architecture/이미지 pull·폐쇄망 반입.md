@@ -17,7 +17,7 @@ related:
   - ../../../book/kubernetes-in-action/08-03.Secret과%20Downward%20API.md
   - ../../../book/cks-study-guide/06-02.믿을%20수%20있는%20이미지만%20들이기%20—%20서명·digest·레지스트리%20허용%20목록·Trivy.md
   - ../../../book/container-security/06-01.컨테이너%20이미지%20해부%20—%20두%20부분과%20층과%20식별자.md
-  - ../../../book/argocd-up-and-running/README.md
+  - ../../../../07_devops/book/argocd-up-and-running/README.md
 updated: 2026-11-15
 ---
 
@@ -51,7 +51,7 @@ kubelet 이 CRI 소켓으로 containerd 를 부르는 경로는 [컨테이너 �
 
 > Sync 는 매니페스트를 클러스터에 적용하는 일이고, 이미지를 받는 일은 그 뒤 노드에서 따로 일어납니다. 둘이 서로 다른 시점의 다른 컴포넌트라서 Sync 가 성공해도 pull 은 실패할 수 있습니다.
 
-Argo CD 에서 Sync 는 Git 의 매니페스트를 API 서버에 적용하는 동작입니다. API 서버가 Deployment 를 받아들이면 적용은 끝납니다. 컨테이너 이미지는 그 Pod 가 놓인 노드에서 kubelet 이 받습니다. Sync 상태와 앱의 동작 상태(Health)가 따로 표시되는 이유는 [Argo CD 정독 노트](../../../book/argocd-up-and-running/README.md)가 다룹니다.
+Argo CD 에서 Sync 는 Git 의 매니페스트를 API 서버에 적용하는 동작입니다. API 서버가 Deployment 를 받아들이면 적용은 끝납니다. 컨테이너 이미지는 그 Pod 가 놓인 노드에서 kubelet 이 받습니다. Sync 상태와 앱의 동작 상태(Health)가 따로 표시되는 이유는 [Argo CD 정독 노트](../../../../07_devops/book/argocd-up-and-running/README.md)가 다룹니다.
 
 노드가 이미지를 받지 못하면 Pod 는 시작하지 못하고 `ImagePullBackOff` 가 됩니다. 쿠버네티스 문서는 이 상태를 이미지를 받지 못해 컨테이너가 시작하지 못한 것으로 설명합니다.[^images] 이름이 틀렸거나 비공개 레지스트리에 `imagePullSecret` 없이 접근한 경우가 그 이유의 예입니다.[^images] `BackOff` 는 쿠버네티스가 재시도를 계속하되 간격을 늘린다는 뜻이고, 간격의 상한은 300초입니다.[^images]
 
@@ -451,7 +451,7 @@ Sync 는 매니페스트를 API 서버에 적용하는 일이고, 이미지는 �
 - [Secret과 Downward API](../../../book/kubernetes-in-action/08-03.Secret%EA%B3%BC%20Downward%20API.md) — `dockerconfigjson` Secret 과 `imagePullSecrets`
 - [믿을 수 있는 이미지만 들이기](../../../book/cks-study-guide/06-02.%EB%AF%BF%EC%9D%84%20%EC%88%98%20%EC%9E%88%EB%8A%94%20%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%A7%8C%20%EB%93%A4%EC%9D%B4%EA%B8%B0%20%E2%80%94%20%EC%84%9C%EB%AA%85%C2%B7digest%C2%B7%EB%A0%88%EC%A7%80%EC%8A%A4%ED%8A%B8%EB%A6%AC%20%ED%97%88%EC%9A%A9%20%EB%AA%A9%EB%A1%9D%C2%B7Trivy.md) — digest 고정과 레지스트리 허용 목록
 - [컨테이너 이미지 해부](../../../book/container-security/06-01.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EC%9D%B4%EB%AF%B8%EC%A7%80%20%ED%95%B4%EB%B6%80%20%E2%80%94%20%EB%91%90%20%EB%B6%80%EB%B6%84%EA%B3%BC%20%EC%B8%B5%EA%B3%BC%20%EC%8B%9D%EB%B3%84%EC%9E%90.md) — 매니페스트·레이어·skopeo
-- [Argo CD 정독 노트](../../../book/argocd-up-and-running/README.md) — Sync 상태와 Health 상태가 따로 보이는 쪽
+- [Argo CD 정독 노트](../../../../07_devops/book/argocd-up-and-running/README.md) — Sync 상태와 Health 상태가 따로 보이는 쪽
 
 [^images]: Kubernetes — Images. "The status `ImagePullBackOff` means that a container could not start because Kubernetes could not pull a container image." / "The container runtime contacts the registry, resolves the image tag or name to a digest, and downloads any layers that are not already cached locally." <https://kubernetes.io/docs/concepts/containers/images/> (2026-11-15 조회)
 

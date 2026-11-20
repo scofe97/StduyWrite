@@ -5,9 +5,9 @@ status: final
 source:
   - ../../../poc/03_CloudNative/02-kubernetes/learning/14-argocd-gitops/LEARN.md@8ac9e97
 related:
-  - 11-02.SonarQube%20on%20K8s.md
-  - 11-04.Harbor.md
-  - ../../docs/kubernetes/operations/%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%20%EA%B0%9C%EC%9A%94%C2%B7%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85%20%EB%A3%A8%ED%8B%B4.md
+  - ../../../08_cloud/kubernetes/11_devtools/11-02.SonarQube%20on%20K8s.md
+  - ../../../08_cloud/kubernetes/11_devtools/11-04.Harbor.md
+  - ../../../08_cloud/docs/kubernetes/operations/%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%20%EA%B0%9C%EC%9A%94%C2%B7%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85%20%EB%A3%A8%ED%8B%B4.md
   - ../../book/argocd-up-and-running/README.md
   - ../../book/argocd-up-and-running/10-01.Application%20%EC%97%AC%EB%9F%BF%EC%9D%84%20%EC%88%9C%EC%84%9C%EB%8C%80%EB%A1%9C%20%E2%80%94%20%ED%97%AC%EC%8A%A4%20%EC%B2%B4%ED%81%AC%C2%B7App-of-Apps%20sync%20wave%C2%B7Progressive%20Sync.md
   - ../../book/argocd-up-and-running/12-01.CI%20%EC%99%80%20Argo%20CD%20%EC%9E%87%EA%B8%B0%20%E2%80%94%20%EC%A1%B0%EC%A0%95%20%EC%A3%BC%EA%B8%B0%C2%B7Webhook%C2%B7Tekton.md
@@ -16,6 +16,8 @@ updated: 2026-07-11
 ---
 
 # ArgoCD와 GitOps
+
+---
 
 > GitOps는 "Git이 인프라의 단일 진실 공급원"이라는 원칙 위에 섭니다. ArgoCD는 이 원칙을 Kubernetes 위에서 구현한 CD 도구로, Git 상태를 클러스터에 지속적으로 반영합니다.
 
@@ -51,7 +53,9 @@ updated: 2026-07-11
 
 ### 1.2 Pull 모델: ArgoCD의 접근법
 
-ArgoCD는 Pull 모델로 동작합니다. 클러스터 안에 ArgoCD Controller가 상주하며 Git 저장소를 주기적으로 폴링합니다. Git에 변경이 생기면 Controller가 이를 감지하고 클러스터에 동기화합니다. CI 서버는 이미지를 빌드하고 Git에 매니페스트를 커밋하는 역할만 합니다. 클러스터 자격증명이 외부에 노출되지 않으며, Git 커밋 히스토리가 배포 감사 로그를 겸합니다. 드리프트(drift) — Git과 클러스터 상태의 불일치 — 도 ArgoCD가 지속 감시해 자동으로 수정하거나 경고할 수 있습니다.
+ArgoCD는 Pull 모델로 동작합니다. 클러스터 안에 ArgoCD Controller가 상주하며 Git 저장소를 주기적으로 폴링합니다. Git에 변경이 생기면 Controller가 이를 감지하고 클러스터에 동기화합니다. CI 서버는 이미지를 빌드하고 Git에 매니페스트를 커밋하는 역할만 합니다.
+
+클러스터 자격증명이 외부에 노출되지 않으며, Git 커밋 히스토리가 배포 감사 로그를 겸합니다. Git과 클러스터 상태의 불일치인 드리프트(drift)도 ArgoCD가 지속 감시해 자동으로 수정하거나 경고할 수 있습니다.
 
 ```mermaid
 graph LR
@@ -62,12 +66,12 @@ graph LR
     ArgoCD["ArgoCD Controller<br/>(클러스터 내부)"]
     K8s["Kubernetes 클러스터"]
 
-    Dev -->|"① 코드 Push"| Git
-    Git -->|"② 트리거"| CI
-    CI -->|"③ 이미지 Push"| Registry
-    CI -->|"④ 매니페스트 커밋"| Git
-    ArgoCD -->|"⑤ 폴링"| Git
-    ArgoCD -->|"⑥ Apply"| K8s
+    Dev -->|"(1) 코드 Push"| Git
+    Git -->|"(2) 트리거"| CI
+    CI -->|"(3) 이미지 Push"| Registry
+    CI -->|"(4) 매니페스트 커밋"| Git
+    ArgoCD -->|"(5) 폴링"| Git
+    ArgoCD -->|"(6) Apply"| K8s
 
     style Git fill:#FFE4B5,stroke:#333,color:#000
     style ArgoCD fill:#ADD8E6,stroke:#333,color:#000
@@ -126,7 +130,9 @@ Sync Hook은 배포 전후에 Job을 실행합니다. `PreSync`는 배포 전 �
 
 ### 2.4 Helm과의 관계: 템플릿 엔진 vs 배포 이력
 
-ArgoCD는 Helm chart를 소스로 사용할 수 있지만, Helm release를 직접 운영하는 방식과는 다릅니다. 공식 문서 기준으로 ArgoCD는 Helm을 `helm template` 단계에만 사용하고, 애플리케이션의 라이프사이클은 ArgoCD가 관리합니다. 그래서 ArgoCD로 배포한 Helm 기반 애플리케이션은 일반적으로 `helm ls`, `helm history` 같은 명령으로 추적되지 않습니다.
+ArgoCD는 Helm chart를 소스로 사용할 수 있습니다. 다만 Helm release를 직접 운영하는 방식과는 다릅니다. 공식 문서 기준으로 ArgoCD는 Helm을 `helm template` 단계에만 사용합니다. 애플리케이션의 라이프사이클은 ArgoCD가 관리합니다.
+
+그래서 ArgoCD로 배포한 Helm 기반 애플리케이션은 일반적으로 `helm ls`, `helm history` 같은 명령으로 추적되지 않습니다.
 
 ```mermaid
 flowchart LR
@@ -146,7 +152,7 @@ flowchart LR
 
 애플리케이션이 10개, 20개로 늘어나면 각각을 수동으로 등록하는 방식이 한계에 달합니다. App of Apps 패턴은 이를 해결합니다. 최상위 Application CR이 여러 하위 Application CR을 가리키는 Git 경로를 소스로 지정합니다. ArgoCD가 최상위를 Sync하면 하위 Application들이 자동으로 생성되고, 각 하위 Application이 실제 서비스를 배포합니다.
 
-```
+```bash
 apps/
   app-of-apps.yaml          # 최상위 Application (ArgoCD에 직접 등록)
   apps/
@@ -182,7 +188,11 @@ Blue-Green 배포와 Canary 배포는 ArgoCD Rollouts를 별도로 설치해 활
 
 ArgoCD는 자체 RBAC 시스템을 가집니다. `argocd-rbac-cm` ConfigMap에 역할과 정책을 정의합니다. 정책은 `p, <role>, <resource>, <action>, <scope>, <allow|deny>` 형태입니다.
 
-실무에서는 Dex를 통해 GitHub/Google/LDAP SSO와 연동합니다. 조직의 팀이나 그룹을 ArgoCD 역할에 매핑하면 별도의 계정 관리가 필요 없습니다. `admin` 역할은 모든 애플리케이션을 관리하고, `readonly` 역할은 조회만 허용하며, 팀별 역할은 자신의 네임스페이스 애플리케이션만 제어하도록 범위를 제한합니다.
+실무에서는 Dex를 통해 GitHub/Google/LDAP SSO와 연동합니다. 조직의 팀이나 그룹을 ArgoCD 역할에 매핑하면 별도의 계정 관리가 필요 없습니다.
+
+- `admin` 역할: 모든 애플리케이션을 관리합니다.
+- `readonly` 역할: 조회만 허용합니다.
+- 팀별 역할: 자신의 네임스페이스 애플리케이션만 제어하도록 범위를 제한합니다.
 
 
 
@@ -360,6 +370,6 @@ Ch15에서는 클러스터 모니터링과 트러블슈팅을 다룹니다. Argo
 - [Argo CD Up and Running 정독](../../book/argocd-up-and-running/README.md) — ArgoCD 상세 시리즈 전체
 - [Application 여럿을 순서대로](../../book/argocd-up-and-running/10-01.Application%20%EC%97%AC%EB%9F%BF%EC%9D%84%20%EC%88%9C%EC%84%9C%EB%8C%80%EB%A1%9C%20%E2%80%94%20%ED%97%AC%EC%8A%A4%20%EC%B2%B4%ED%81%AC%C2%B7App-of-Apps%20sync%20wave%C2%B7Progressive%20Sync.md) — 여러 애플리케이션 구조화(App of Apps·ApplicationSet)
 - [CI 와 Argo CD 잇기](../../book/argocd-up-and-running/12-01.CI%20%EC%99%80%20Argo%20CD%20%EC%9E%87%EA%B8%B0%20%E2%80%94%20%EC%A1%B0%EC%A0%95%20%EC%A3%BC%EA%B8%B0%C2%B7Webhook%C2%B7Tekton.md), [Image Updater 설정과 write-back](../../book/argocd-up-and-running/14-01.GitOps%20%EB%8B%A4%EC%9D%8C%20%EA%B1%B8%EC%9D%8C%20%E2%80%94%20%EC%A0%80%EC%9E%A5%EC%86%8C%20%EA%B5%AC%EC%A1%B0%C2%B7Rendered%20Manifests%C2%B7%EC%8A%B9%EA%B2%A9.md#image-updater-%EC%84%A4%EC%A0%95%EA%B3%BC-write-back) — 자주 쓰는 자동화 확장
-- [SonarQube on K8s](11-02.SonarQube%20on%20K8s.md) — 이전 장
-- [Harbor](11-04.Harbor.md) — 이미지와 OCI Helm chart를 함께 관리하는 레지스트리
-- [모니터링 개요와 트러블슈팅 루틴](../../docs/kubernetes/operations/%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%20%EA%B0%9C%EC%9A%94%C2%B7%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85%20%EB%A3%A8%ED%8B%B4.md) — 다음 장ㅇ
+- [SonarQube on K8s](../../../08_cloud/kubernetes/11_devtools/11-02.SonarQube%20on%20K8s.md) — 이전 장
+- [Harbor](../../../08_cloud/kubernetes/11_devtools/11-04.Harbor.md) — 이미지와 OCI Helm chart를 함께 관리하는 레지스트리
+- [모니터링 개요와 트러블슈팅 루틴](../../../08_cloud/docs/kubernetes/operations/%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%20%EA%B0%9C%EC%9A%94%C2%B7%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85%20%EB%A3%A8%ED%8B%B4.md) — 다음 장ㅇ
