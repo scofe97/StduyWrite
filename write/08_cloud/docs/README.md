@@ -1,14 +1,12 @@
 ---
 title: 08_cloud/docs MOC — 공식 문서·제품 사이트 정독
-tags: [moc, cloud, official-docs, kubernetes, helm, kustomize, argo-rollouts, cncf-certification]
+tags: [moc, cloud, official-docs, kubernetes, cncf-certification]
 status: final
 related:
   - ../README.md
   - kubernetes/README.md
   - cncf-certification/README.md
-  - helm/README.md
-  - kustomize/README.md
-  - argo-rollouts/README.md
+  - istio/README.md
 updated: 2026-11-15
 ---
 
@@ -26,11 +24,11 @@ updated: 2026-11-15
 |------|----------|
 | [kubernetes/](kubernetes/README.md) | kubernetes.io 공식 문서 |
 | [cncf-certification/](cncf-certification/README.md) | CNCF·Linux Foundation 자격증 커리큘럼·시험 안내 |
-| [helm/](helm/README.md) | helm.sh 공식 문서 |
-| [kustomize/](kustomize/README.md) | Kustomize 공식 문서 (kubectl.docs.kubernetes.io) |
-| [argo-rollouts/](argo-rollouts/README.md) | Argo Rollouts 공식 문서 (argo-rollouts.readthedocs.io) |
+| [istio/](istio/README.md) | istio.io 공식 문서 |
 
-제품 안의 하위 폴더 규칙은 그 제품의 README 가 정합니다. 예를 들어 `kubernetes/`·`helm/`·`kustomize/` 는 폴더를 나누지 않고 파일을 바로 두며, `kubernetes/` 는 묶음을 파일 번호의 장 자리로 나눕니다. 한 묶음이 5편이 되면 그때 폴더로 올립니다. 새 제품을 다루게 되면 그 제품 폴더를 만들고 이 표에 한 줄을 더합니다.
+Helm·Kustomize 와 Argo Rollouts 는 쿠버네티스 위에서 쓰지만 플랫폼보다 전달 절차에 속해서 [07_devops/docs](../../07_devops/README.md) 로 옮겼습니다. 각각 [`iac/`](../../07_devops/docs/iac/README.md) 와 [`deployment/`](../../07_devops/docs/deployment/README.md) 개념 폴더에 있습니다.
+
+제품 안의 하위 폴더 규칙은 그 폴더의 README 가 정합니다. `kubernetes/` 는 파일명에 번호를 붙이지 않고 문서를 묶음 폴더 넷(`architecture/`·`scheduling/`·`operations/`·`api/`)에 나눠 둡니다. 새 제품을 다루게 되면 그 제품 폴더를 만들고 이 표에 한 줄을 더합니다.
 
 
 
@@ -38,27 +36,24 @@ updated: 2026-11-15
 
 > 제품별 현재 문서입니다. 각 제품 README 에 그 제품의 읽기 순서가 있습니다.
 
-| 제품 | 폴더 | 번호 | 제목 |
+| 제품 | 폴더 | 묶음·번호 | 제목 |
 |------|------|------|------|
-| kubernetes | (바로 아래) | 01-01 | [노드와 클러스터의 소속](kubernetes/01-01.%EB%85%B8%EB%93%9C%EC%99%80%20%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%EC%9D%98%20%EC%86%8C%EC%86%8D%20%E2%80%94%20%EA%B2%B9%EC%B3%90%20%EB%B3%B4%EC%9D%B4%EB%8A%94%20%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%EB%8A%94%20%EC%96%B4%EB%8A%90%20%EC%B8%B5%EC%97%90%EC%84%9C%20%EA%B2%B9%EC%B9%98%EB%8A%94%EA%B0%80.md) |
-| kubernetes | (바로 아래) | 01-02 | [컨테이너 런타임 인터페이스·crictl](kubernetes/01-02.%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%9F%B0%ED%83%80%EC%9E%84%20%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%C2%B7crictl.md) |
-| kubernetes | (바로 아래) | 02-01 | [노드 압박 축출과 디스크 관리](kubernetes/02-01.%EB%85%B8%EB%93%9C%20%EC%95%95%EB%B0%95%20%EC%B6%95%EC%B6%9C%EA%B3%BC%20%EB%94%94%EC%8A%A4%ED%81%AC%20%EA%B4%80%EB%A6%AC%20%E2%80%94%20DiskPressure%EB%8A%94%20%EB%AC%B4%EC%97%87%EC%9D%84%20%EB%B3%B4%EA%B3%A0%20%EC%BC%9C%EC%A7%80%EB%8A%94%EA%B0%80.md) |
-| kubernetes | 03_operations | 03-01 | [자원 모니터링 파이프라인](kubernetes/03_operations/03-01.%EC%9E%90%EC%9B%90%20%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%20%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8%20%E2%80%94%20kubelet%EC%9D%B4%20%EC%9E%AC%EB%8A%94%20%EA%B2%83%EA%B3%BC%20kubectl%20top%EC%9D%B4%20%EC%9D%BD%EB%8A%94%20%EA%B2%83.md) |
-| kubernetes | 03_operations | 03-02 | [etcd 헬스와 유지보수](kubernetes/03_operations/03-02.etcd%20%ED%97%AC%EC%8A%A4%EC%99%80%20%EC%9C%A0%EC%A7%80%EB%B3%B4%EC%88%98%20%E2%80%94%20%EC%83%81%ED%83%9C%20%ED%8C%90%EB%8F%85%EA%B3%BC%20compaction%C2%B7defrag%C2%B7quota.md) |
-| kubernetes | 03_operations | 03-03 | [클러스터 업그레이드와 ETCD 백업·복구](kubernetes/03_operations/03-03.%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C%EC%99%80%20ETCD%20%EB%B0%B1%EC%97%85%C2%B7%EB%B3%B5%EA%B5%AC.md) |
-| kubernetes | 03_operations | 03-04 | [모니터링 개요와 트러블슈팅 루틴](kubernetes/03_operations/03-04.%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%20%EA%B0%9C%EC%9A%94%EC%99%80%20%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85%20%EB%A3%A8%ED%8B%B4.md) |
-| kubernetes | 03_operations | 03-05 | [노드 추가와 제거](kubernetes/03_operations/03-05.%EB%85%B8%EB%93%9C%20%EC%B6%94%EA%B0%80%EC%99%80%20%EC%A0%9C%EA%B1%B0.md) |
-| kubernetes | 03_operations | 사례 | [OOMKilled 사례](kubernetes/03_operations/OOMKilled%20%EC%82%AC%EB%A1%80%20%E2%80%94%20Endowus%20Rebalance%20%EC%84%9C%EB%B9%84%EC%8A%A4.md) |
-| kubernetes | (바로 아래) | 04-01 | [API 서버 헬스 엔드포인트](kubernetes/04-01.API%20%EC%84%9C%EB%B2%84%20%ED%97%AC%EC%8A%A4%20%EC%97%94%EB%93%9C%ED%8F%AC%EC%9D%B8%ED%8A%B8%20%E2%80%94%20livez%EC%99%80%20readyz%EB%8A%94%20%EB%AC%B4%EC%97%87%EC%9D%84%20%EB%82%98%EB%88%A0%20%EB%AC%BB%EB%8A%94%EA%B0%80.md) |
-| kubernetes | (바로 아래) | 04-02 | [TLS와 API 접근 보안](kubernetes/04-02.TLS%EC%99%80%20API%20%EC%A0%91%EA%B7%BC%20%EB%B3%B4%EC%95%88.md) |
-| kubernetes | (바로 아래) | 04-03 | [JSONPath와 kubectl 고급 조회](kubernetes/04-03.JSONPath%EC%99%80%20kubectl%20%EA%B3%A0%EA%B8%89%20%EC%A1%B0%ED%9A%8C.md) |
-| kubernetes | (바로 아래) | 04-04 | [kubeconfig·여러 클러스터 접근](kubernetes/04-04.kubeconfig%C2%B7%EC%97%AC%EB%9F%AC%20%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%A0%91%EA%B7%BC.md) |
+| kubernetes | architecture | 아키텍처 | [노드·클러스터 소속](kubernetes/architecture/%EB%85%B8%EB%93%9C%C2%B7%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%86%8C%EC%86%8D.md) |
+| kubernetes | architecture | 아키텍처 | [컨테이너 런타임 인터페이스·crictl](kubernetes/architecture/%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%20%EB%9F%B0%ED%83%80%EC%9E%84%20%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%C2%B7crictl.md) |
+| kubernetes | architecture | 아키텍처 | [이미지 pull·폐쇄망 반입](kubernetes/architecture/%EC%9D%B4%EB%AF%B8%EC%A7%80%20pull%C2%B7%ED%8F%90%EC%87%84%EB%A7%9D%20%EB%B0%98%EC%9E%85.md) |
+| kubernetes | scheduling | 스케줄링·축출 | [노드 압박 축출·디스크 관리](kubernetes/scheduling/%EB%85%B8%EB%93%9C%20%EC%95%95%EB%B0%95%20%EC%B6%95%EC%B6%9C%C2%B7%EB%94%94%EC%8A%A4%ED%81%AC%20%EA%B4%80%EB%A6%AC.md) |
+| kubernetes | operations | 클러스터 운영 | [자원 모니터링 파이프라인](kubernetes/operations/%EC%9E%90%EC%9B%90%20%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%20%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8.md) |
+| kubernetes | operations | 클러스터 운영 | [etcd 헬스·유지보수](kubernetes/operations/etcd%20%ED%97%AC%EC%8A%A4%C2%B7%EC%9C%A0%EC%A7%80%EB%B3%B4%EC%88%98.md) |
+| kubernetes | operations | 클러스터 운영 | [클러스터 업그레이드·ETCD 백업·복구](kubernetes/operations/%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%97%85%EA%B7%B8%EB%A0%88%EC%9D%B4%EB%93%9C%C2%B7ETCD%20%EB%B0%B1%EC%97%85%C2%B7%EB%B3%B5%EA%B5%AC.md) |
+| kubernetes | operations | 클러스터 운영 | [모니터링 개요·트러블슈팅 루틴](kubernetes/operations/%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%20%EA%B0%9C%EC%9A%94%C2%B7%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85%20%EB%A3%A8%ED%8B%B4.md) |
+| kubernetes | operations | 클러스터 운영 | [노드 추가·제거](kubernetes/operations/%EB%85%B8%EB%93%9C%20%EC%B6%94%EA%B0%80%C2%B7%EC%A0%9C%EA%B1%B0.md) |
+| kubernetes | operations | 클러스터 운영(사례) | [OOMKilled 사례](kubernetes/operations/OOMKilled%20%EC%82%AC%EB%A1%80%20%E2%80%94%20Endowus%20Rebalance%20%EC%84%9C%EB%B9%84%EC%8A%A4.md) |
+| kubernetes | api | API | [API 서버 헬스 엔드포인트](kubernetes/api/API%20%EC%84%9C%EB%B2%84%20%ED%97%AC%EC%8A%A4%20%EC%97%94%EB%93%9C%ED%8F%AC%EC%9D%B8%ED%8A%B8.md) |
+| kubernetes | api | API | [TLS·API 접근 보안](kubernetes/api/TLS%C2%B7API%20%EC%A0%91%EA%B7%BC%20%EB%B3%B4%EC%95%88.md) |
+| kubernetes | api | API | [JSONPath·kubectl 고급 조회](kubernetes/api/JSONPath%C2%B7kubectl%20%EA%B3%A0%EA%B8%89%20%EC%A1%B0%ED%9A%8C.md) |
+| kubernetes | api | API | [kubeconfig·여러 클러스터 접근](kubernetes/api/kubeconfig%C2%B7%EC%97%AC%EB%9F%AC%20%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%20%EC%A0%91%EA%B7%BC.md) |
 | cncf-certification | (바로 아래) | 01-01 | [CKA 대비와 문제 풀이 전략](cncf-certification/01-01.CKA%20%EB%8C%80%EB%B9%84%EC%99%80%20%EB%AC%B8%EC%A0%9C%20%ED%92%80%EC%9D%B4%20%EC%A0%84%EB%9E%B5.md) |
-| helm | (바로 아래) | 01-01 | [Helm 기초](helm/01-01.Helm%20%EA%B8%B0%EC%B4%88.md) |
-| helm | (바로 아래) | 01-02 | [Helm 고급](helm/01-02.Helm%20%EA%B3%A0%EA%B8%89.md) |
-| kustomize | (바로 아래) | 01-01 | [Kustomize](kustomize/01-01.Kustomize.md) |
-| argo-rollouts | (바로 아래) | 01-01 | [Argo Rollouts와 배포 전략](argo-rollouts/01-01.Argo%20Rollouts%EC%99%80%20%EB%B0%B0%ED%8F%AC%20%EC%A0%84%EB%9E%B5.md) |
-| argo-rollouts | (바로 아래) | 01-02 | [Argo Rollouts와 배포 전략 실습](argo-rollouts/01-02.Argo%20Rollouts%EC%99%80%20%EB%B0%B0%ED%8F%AC%20%EC%A0%84%EB%9E%B5%20%EC%8B%A4%EC%8A%B5.md) |
+| istio | (바로 아래) | — | [Ambient 모드·ztunnel·waypoint](istio/Ambient%20%EB%AA%A8%EB%93%9C%C2%B7ztunnel%C2%B7waypoint.md) |
 
 
 

@@ -52,3 +52,5 @@ Jenkins 파이프라인 그루비 작성법은 여기로 배치합니다. 반면
 - [`book/`](book/) — 단행본 정독 노트
 - [`docs/`](docs/) — 공식 문서 기반 노트
   - [`sonarqube/`](docs/sonarqube/) — 정적 분석, Quality Gate, CI 연계, Web API (2026.1 LTA 기준 19편)
+  - [`iac/`](docs/iac/README.md) — IaC 개념 폴더. Helm 기초·고급, Kustomize (4단계 패키징·7단계 인프라를 코드로)
+  - [`deployment/`](docs/deployment/README.md) — 배포 전략 개념 폴더. Argo Rollouts 의 Blue-Green·Canary (6단계 점진 배포)

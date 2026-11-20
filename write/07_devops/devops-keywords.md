@@ -89,16 +89,16 @@ updated: 2026-11-03
 
 | 개념 | 우선순위 | 노트 | 책 |
 |---|:---:|---|---|
-| Helm 차트 구조 · Chart.yaml · values.yaml · 템플릿 렌더링 | 필수 | [Helm 기초](../08_cloud/docs/helm/01-01.Helm%20%EA%B8%B0%EC%B4%88.md) | [Helm 공식 문서](https://helm.sh/docs/) |
-| Helm 릴리스 생애주기 · 롤백 · 의존성 관리 · 라이프사이클 훅 | 추천 | [Helm 고급](../08_cloud/docs/helm/01-02.Helm%20%EA%B3%A0%EA%B8%89.md) | [Helm 공식 문서](https://helm.sh/docs/) |
+| Helm 차트 구조 · Chart.yaml · values.yaml · 템플릿 렌더링 | 필수 | [Helm 기초](docs/iac/01-01.Helm%20%EA%B8%B0%EC%B4%88.md) | [Helm 공식 문서](https://helm.sh/docs/) |
+| Helm 릴리스 생애주기 · 롤백 · 의존성 관리 · 라이프사이클 훅 | 추천 | [Helm 고급](docs/iac/01-02.Helm%20%EA%B3%A0%EA%B8%89.md) | [Helm 공식 문서](https://helm.sh/docs/) |
 | Helm 값 검증 — `required` · `fail` 로 렌더링 단계에서 실패시키기 | 추천 | | [Helm 차트 팁](https://helm.sh/docs/howto/charts_tips_and_tricks/) |
 | Helm 설정 변경 시 파드 롤링 — Deployment 의 `checksum/config` annotation | 추천 | | Kubernetes Best Practices 4장 · [Helm 차트 팁](https://helm.sh/docs/howto/charts_tips_and_tricks/) |
-| Helm `helm.sh/resource-policy: keep` — 삭제·롤백에서 리소스 남기기 | 선택 | [Helm 고급](../08_cloud/docs/helm/01-02.Helm%20%EA%B3%A0%EA%B8%89.md) | [Helm 차트 팁](https://helm.sh/docs/howto/charts_tips_and_tricks/) |
-| Helm `.Files.Get` — 차트 안 파일 읽기 | 선택 | [Helm 고급](../08_cloud/docs/helm/01-02.Helm%20%EA%B3%A0%EA%B8%89.md) | [Accessing Files](https://helm.sh/docs/chart_template_guide/accessing_files/) |
-| `helm upgrade --reset-then-reuse-values` · `--reuse-values` 와의 갈림 | 추천 | [Helm 기초](../08_cloud/docs/helm/01-01.Helm%20%EA%B8%B0%EC%B4%88.md) | [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) |
-| Helm 렌더 결과 테스트 — `helm template` + 셸·단위 테스트로 RBAC·매니페스트 고정 · helm-unittest | 추천 | [Helm 기초](../08_cloud/docs/helm/01-01.Helm%20%EA%B8%B0%EC%B4%88.md) | [helm template](https://helm.sh/docs/helm/helm_template/) · [helm-unittest](https://github.com/helm-unittest/helm-unittest) |
-| Kustomize 오버레이 · base 와 overlays · 리소스 패치 | 필수 | [Kustomize](../08_cloud/docs/kustomize/01-01.Kustomize.md) | [Kustomize 공식 문서](https://kubectl.docs.kubernetes.io/) |
-| Helm · Kustomize | 추천 | [Helm 기초](../08_cloud/docs/helm/01-01.Helm%20%EA%B8%B0%EC%B4%88.md) ~ [Kustomize](../08_cloud/docs/kustomize/01-01.Kustomize.md) |  |
+| Helm `helm.sh/resource-policy: keep` — 삭제·롤백에서 리소스 남기기 | 선택 | [Helm 고급](docs/iac/01-02.Helm%20%EA%B3%A0%EA%B8%89.md) | [Helm 차트 팁](https://helm.sh/docs/howto/charts_tips_and_tricks/) |
+| Helm `.Files.Get` — 차트 안 파일 읽기 | 선택 | [Helm 고급](docs/iac/01-02.Helm%20%EA%B3%A0%EA%B8%89.md) | [Accessing Files](https://helm.sh/docs/chart_template_guide/accessing_files/) |
+| `helm upgrade --reset-then-reuse-values` · `--reuse-values` 와의 갈림 | 추천 | [Helm 기초](docs/iac/01-01.Helm%20%EA%B8%B0%EC%B4%88.md) | [helm upgrade](https://helm.sh/docs/iac/helm_upgrade/) |
+| Helm 렌더 결과 테스트 — `helm template` + 셸·단위 테스트로 RBAC·매니페스트 고정 · helm-unittest | 추천 | [Helm 기초](docs/iac/01-01.Helm%20%EA%B8%B0%EC%B4%88.md) | [helm template](https://helm.sh/docs/iac/helm_template/) · [helm-unittest](https://github.com/helm-unittest/helm-unittest) |
+| Kustomize 오버레이 · base 와 overlays · 리소스 패치 | 필수 | [Kustomize](docs/iac/02-01.Kustomize.md) | [Kustomize 공식 문서](https://kubectl.docs.kubernetes.io/) |
+| Helm · Kustomize | 추천 | [Helm 기초](docs/iac/01-01.Helm%20%EA%B8%B0%EC%B4%88.md) ~ [Kustomize](docs/iac/02-01.Kustomize.md) |  |
 
 
 
@@ -127,8 +127,8 @@ updated: 2026-11-03
 | Blue-Green 배포 — Service / Gateway API 스위칭과 무중단 전환 | 필수 | [Blue-Green 무중단 전환](../07_devops/book/aic_ai-infra-claude/05-02.Blue-Green%20%EB%AC%B4%EC%A4%91%EB%8B%A8%20%EC%A0%84%ED%99%98%EA%B3%BC%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98%20%EA%B2%B0%EC%A0%95%20%EA%B8%B0%EB%A1%9D.md) | CI/CD Design Patterns 6·10장 · DevOps Tools for Java Developers 10장 |
 | Canary 배포 — 소량 트래픽 점진 이동과 위험 최소화 | 필수 | [점진적 배포 Canary](../07_devops/book/aic_ai-infra-claude/06-02.%EC%A0%90%EC%A7%84%EC%A0%81%20%EB%B0%B0%ED%8F%AC%20Canary%EC%99%80%20claude-context.md) | CI/CD Design Patterns 6·10장 |
 | 점진 배포 — canary · blue-green · Argo Rollouts · progressive delivery | 추천 |  | [Argo Rollouts](https://argo-rollouts.readthedocs.io/) |
-| Argo Rollouts — Rollout CRD 와 트래픽 라우팅 연동 | 필수 | [Argo Rollouts와 배포 전략](../08_cloud/docs/argo-rollouts/01-01.Argo%20Rollouts%EC%99%80%20%EB%B0%B0%ED%8F%AC%20%EC%A0%84%EB%9E%B5.md) | [Argo Rollouts](https://argo-rollouts.readthedocs.io/) |
-| AnalysisTemplate — 관측 지표 기반 자동 분석과 실패 시 자동 롤백 | 추천 | [Argo Rollouts와 배포 전략](../08_cloud/docs/argo-rollouts/01-01.Argo%20Rollouts%EC%99%80%20%EB%B0%B0%ED%8F%AC%20%EC%A0%84%EB%9E%B5.md) | [Argo Rollouts](https://argo-rollouts.readthedocs.io/) |
+| Argo Rollouts — Rollout CRD 와 트래픽 라우팅 연동 | 필수 | [Argo Rollouts와 배포 전략](docs/deployment/01-01.Argo%20Rollouts%EC%99%80%20%EB%B0%B0%ED%8F%AC%20%EC%A0%84%EB%9E%B5.md) | [Argo Rollouts](https://argo-rollouts.readthedocs.io/) |
+| AnalysisTemplate — 관측 지표 기반 자동 분석과 실패 시 자동 롤백 | 추천 | [Argo Rollouts와 배포 전략](docs/deployment/01-01.Argo%20Rollouts%EC%99%80%20%EB%B0%B0%ED%8F%AC%20%EC%A0%84%EB%9E%B5.md) | [Argo Rollouts](https://argo-rollouts.readthedocs.io/) |
 | Progressive Delivery — 피처 플래그 · Dark Launch · 비즈니스 분리 | 추천 | [배포 전략 패턴](../07_devops/book/cicd_cicd-patterns/06-01.Deployment%20Strategies%20for%20Structural%20Patterns.md) | DevOps Tools for Java Developers 10장 |
 | 배포 후 검증 — smoke test · E2E(Playwright) · 배포 검증 게이트 | 필수 | [첫 CD Jenkinsfile 구현](../07_devops/02_Jenkins/06_infra/05-05.%EC%B2%AB%20CD%20Jenkinsfile%20%EA%B5%AC%ED%98%84%20%E2%80%94%20values%20%EA%B0%B1%EC%8B%A0%C2%B7Argo%20CD%20%ED%97%AC%EC%8A%A4%EC%B2%B4%ED%81%AC%C2%B7k6%20%EA%B2%8C%EC%9D%B4%ED%8A%B8.md) |  |
 | Expand and Contract — DB 스키마 변경과 버전 공존 · dual write · backfill | 필수 |  |  |
