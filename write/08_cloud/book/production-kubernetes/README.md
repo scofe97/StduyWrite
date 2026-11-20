@@ -11,7 +11,7 @@ related:
   - ../networking-and-kubernetes/README.md
   - ../cks-study-guide/README.md
   - ../../kubernetes/README.md
-updated: 2026-11-09
+updated: 2026-11-18
 ---
 
 # Production Kubernetes — 정독 인덱스
@@ -57,13 +57,13 @@ updated: 2026-11-09
 
 ## 작성 현황
 
-> 2장 노트가 있고 나머지 장은 예정입니다.
+> 2장과 3장 노트가 있고 나머지 장은 예정입니다.
 
 | 편 | 대상 장 | 상태 |
 |----|---------|------|
 | 01-01 (1장 A Path to Production) | A Path to Production | 예정 |
 | [02-01](./02-01.Deployment%20Models%20%E2%80%94%20%EB%B0%B0%ED%8F%AC%20%EB%AA%A8%EB%8D%B8%EA%B3%BC%20%EA%B3%A0%EA%B0%80%EC%9A%A9%EC%84%B1%20%EC%9D%B8%ED%94%84%EB%9D%BC%20%EA%B5%AC%EC%B6%95.md) | Deployment Models | 완료 · 정독 |
-| 03-01 (3장 Container Runtime) | Container Runtime | 예정 |
+| [03-01](./03-01.Container%20Runtime%20%E2%80%94%20OCI%20%EB%AA%85%EC%84%B8%C2%B7CRI%20%ED%86%B5%EC%8B%A0%EA%B3%BC%20%EB%9F%B0%ED%83%80%EC%9E%84%20%EC%84%A0%ED%83%9D.md) | Container Runtime | 완료 · 정독 |
 | 04-01 (4장 Container Storage) | Container Storage | 예정 |
 | 05-01 (5장 Pod Networking) | Pod Networking | 예정 |
 | 06-01 (6장 Service Routing) | Service Routing | 예정 |

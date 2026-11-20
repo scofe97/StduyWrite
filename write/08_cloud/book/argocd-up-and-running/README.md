@@ -47,7 +47,7 @@ updated: 2026-11-08
 
 옛 argocd/ 노트 16편은 이 책을 바탕으로 쓴 것이었습니다. 16편 가운데 14편은 frontmatter `source` 에 `docs/03_CloudNative/03_ArgoCD/NN_<장 이름>.md` 를 적었고, 그 장 이름이 이 책의 장 이름과 같습니다. 다만 책의 서지가 어디에도 적혀 있지 않아 출처가 끊긴 상태였습니다.
 
-장별 정독 노트를 쓰면서 옛 노트와 그 `deepdive/` 점검 질문, [ArgoCD와 GitOps](../../kubernetes/11_devtools/11-03.ArgoCD%EC%99%80%20GitOps.md), [ArgoCD App-of-Apps 패턴](../../../99_ETC/2026-04-19_ArgoCD%20App-of-Apps%20%ED%8C%A8%ED%84%B4.md)을 보충 재료로 흡수했습니다. 모든 장이 흡수되어 옛 `argocd/` 폴더는 정리했습니다. 옛 노트 04-03 Argo Rollouts 는 책에 대응하는 장이 없어 [docs/argo-rollouts/](../../docs/argo-rollouts/README.md) 로 옮겼습니다.
+장별 정독 노트를 쓰면서 옛 노트와 그 `deepdive/` 점검 질문, [ArgoCD와 GitOps](../../kubernetes/11_devtools/11-03.ArgoCD%EC%99%80%20GitOps.md), [ArgoCD App-of-Apps 패턴](../../../99_ETC/2026-04-19_ArgoCD%20App-of-Apps%20%ED%8C%A8%ED%84%B4.md)을 보충 재료로 흡수했습니다. 모든 장이 흡수되어 옛 `argocd/` 폴더는 정리했습니다. 옛 노트 04-03 Argo Rollouts 는 책에 대응하는 장이 없어 [docs/deployment/](../../../07_devops/docs/deployment/README.md) 로 옮겼습니다.
 
 ### 로드맵 속 자리
 
@@ -168,7 +168,7 @@ Argo CD 는 버전마다 CRD 필드와 기능 상태가 바뀝니다. 그래서 
 
 - [『CKS Study Guide』 정독본](../cks-study-guide/README.md) — 같은 `book/` 영역, 클러스터 하드닝 절차의 짝이자 9장 보안과 층이 다른 비교 대상
 - [『Kubernetes: Up and Running』 정독본](../kubernetes-up-and-running/README.md) — 오브젝트와 운영 관점의 짝, Application 이 배포하는 대상의 기초
-- [Argo Rollouts 정독](../../docs/argo-rollouts/README.md) — 이 책에 대응하는 장이 없어 옛 argocd/ 노트에서 옮긴 Rollouts 두 편
+- [Argo Rollouts 정독](../../../07_devops/docs/deployment/README.md) — 이 책에 대응하는 장이 없어 옛 argocd/ 노트에서 옮긴 Rollouts 두 편
 - [DevOps 로드맵](../../../07_devops/devops-keywords.md) — 5단계 GitOps·6단계 점진 배포에서 이 주제가 놓인 자리
 - [08_cloud MOC](../../README.md) — 상위 카테고리 경계
 
