@@ -144,6 +144,7 @@ resource 는 쓰이는 양을 재고, 여기는 쓸 수 있는 양에 한도를 
 
 | 시트 | 다루는 명령 | 이런 때 찾습니다 |
 |------|------------|----------------|
+| [nerdctl](./isolate/nerdctl.md) | `nerdctl` | containerd 위의 컨테이너·이미지를 docker 문법으로 보고 실행하고, namespace 를 가르고, tar 로 반입한 이미지를 저장소에 올릴 때 |
 
 
 
